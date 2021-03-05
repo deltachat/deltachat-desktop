@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- Fix qrcode unscanable in darktheme #2163
+
 ## [1.15.2] - 2021-03-03
 
 ### Fixed

@@ -83,7 +83,7 @@ export function QrCodeShowQrInner({
   return (
     <>
       <DeltaDialogBody>
-        <DeltaDialogContent noOverflow noPadding style={{height:'500px'}}>
+        <DeltaDialogContent noOverflow noPadding style={{ height: '500px' }}>
           <qr.QRCode
             bgColor='#FFFFFF'
             fgColor='#000000'
