@@ -62,13 +62,11 @@ export function QrCodeShowQrInner({
   description,
   onClose,
   onBack,
-  noPaddingTop = undefined,
 }: {
   qrCode: string
   description: string
   onClose?: todo
   onBack?: todo
-  noPaddingTop?: boolean
 }) {
   const { userFeedback } = useContext(ScreenContext)
   const tx = useTranslationFunction()
@@ -85,19 +83,15 @@ export function QrCodeShowQrInner({
   return (
     <>
       <DeltaDialogBody>
-        <DeltaDialogContent
-          noOverflow
-          noPadding
-          style={{ paddingTop: noPaddingTop ? '0px' : '20px' }}
-        >
+        <DeltaDialogContent noOverflow noPadding style={{height:'500px'}}>
           <qr.QRCode
             bgColor='#FFFFFF'
             fgColor='#000000'
             level='Q'
             value={qrCode}
             style={{
-              height: noPaddingTop ? 'auto' : 'calc(500px - 58px)',
-              padding: '0px 20px',
+              height: 'auto',
+              padding: '30px',
               backgroundColor: 'white',
             }}
           />
