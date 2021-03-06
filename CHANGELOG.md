@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- add experimental setting to disable font ligatures, see https://support.delta.chat/t/disabling-font-ligatures/1490
+
 ## [1.15.2] - 2021-03-03
 
 ### Fixed

@@ -129,12 +129,23 @@ function SettingsContextWrapper({
 }) {
   const [desktopSettings, _setDesktopSettings] = useState<DesktopSettings>(null)
 
+  const applyCssSettings = (desktopSettings: DesktopSettings) => {
+    // apply disable Font Ligatures
+    const body = document.querySelector('body')
+    if (desktopSettings['disableFontLigatures']) {
+      body.classList.add('disable_font_ligatures')
+    } else {
+      body.classList.remove('disable_font_ligatures')
+    }
+  }
+
   useEffect(() => {
     ;(async () => {
       const desktopSettings = await DeltaBackend.call(
         'settings.getDesktopSettings'
       )
       _setDesktopSettings(desktopSettings)
+      applyCssSettings(desktopSettings)
     })()
   }, [])
 
@@ -147,7 +158,9 @@ function SettingsContextWrapper({
       true
     ) {
       _setDesktopSettings((prevState: DesktopSettings) => {
-        return { ...prevState, [key]: value }
+        const newState = { ...prevState, [key]: value }
+        applyCssSettings(newState)
+        return newState
       })
     }
   }

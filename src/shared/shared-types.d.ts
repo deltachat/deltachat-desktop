@@ -42,6 +42,7 @@ export interface DesktopSettings {
   /** adress to the active theme file scheme: "custom:name" or "dc:name" */
   activeTheme: string
   minimizeToTray: boolean
+  disableFontLigatures: boolean
 }
 
 export interface AppState {

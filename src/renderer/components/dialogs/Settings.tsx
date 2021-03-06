@@ -303,6 +303,10 @@ export default function Settings(props: DialogProps) {
                 </>
               )}
               <br />
+              {renderDTSettingSwitch(
+                'disableFontLigatures',
+                tx('pref_disable_fontligatures')
+              )}
               <H5>{tx('pref_imap_folder_handling')}</H5>
               {renderDeltaSwitch('inbox_watch', tx('pref_watch_inbox_folder'))}
               {renderDeltaSwitch('sentbox_watch', tx('pref_watch_sent_folder'))}

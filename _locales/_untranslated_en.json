@@ -64,5 +64,8 @@
   },
   "forwared_by": {
     "message": "Forwarded by %1$s"
+  },
+  "pref_disable_fontligatures": {
+    "message": "Disable Font Ligatures (visually connected letters)"
   }
 }
