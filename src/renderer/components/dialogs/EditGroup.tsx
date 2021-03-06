@@ -161,7 +161,6 @@ function EditGroupInner(props: {
             }}
             qrCode={qrCode}
             description={tx('qrshow_join_group_hint', [groupName])}
-            noPaddingTop={true}
           />
         </>
       )}
