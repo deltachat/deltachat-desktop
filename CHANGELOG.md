@@ -5,6 +5,9 @@
 ### Fixed
 - Fix qrcode unscanable in darktheme #2163
 
+### Changed
+- Disable fontligatures completely
+
 ## [1.15.2] - 2021-03-03
 
 ### Fixed
