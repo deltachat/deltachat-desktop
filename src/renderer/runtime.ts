@@ -128,11 +128,7 @@ class Electron implements Runtime {
   }
   private rc_config: RC_Config = null
   transformBlobURL(blob: string): string {
-    if (!blob) {
-      log.warn('transformBlobURL: received a null/undefined blob string ')
-      return null
-    }
-    return 'dc-blob://' + blob.substring(blob.indexOf('accounts') + 9)
+    return blob
   }
   async showOpenFileDialog(
     options: Electron.OpenDialogOptions

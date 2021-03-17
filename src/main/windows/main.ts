@@ -2,10 +2,11 @@ import debounce from 'debounce'
 import electron, { BrowserWindow, Rectangle, session } from 'electron'
 import { appWindowTitle } from '../../shared/constants'
 import { getLogger } from '../../shared/logger'
-import { appIcon, windowDefaults } from '../application-constants'
+import { appIcon, windowDefaults, htmlDistDir } from '../application-constants'
 import { showDeltaChat } from '../tray'
 import { ExtendedAppMainProcess } from '../types'
 import type { EventEmitter } from 'events'
+import { join } from 'path'
 const log = getLogger('main/mainWindow')
 
 export let window: (BrowserWindow & { hidden?: boolean }) | null = null
@@ -39,6 +40,9 @@ export function init(
       nodeIntegration: false,
       preload: defaults.preload,
       spellcheck: false, // until we can load a local dictionary, see https://github.com/electron/electron/issues/22995
+      webSecurity: true,
+      allowRunningInsecureContent: false,
+      contextIsolation: false,
     },
   })
 
@@ -47,7 +51,7 @@ export function init(
   // feature request for local dictionary: https://github.com/electron/electron/issues/22995
   session.defaultSession.setSpellCheckerDictionaryDownloadURL('https://00.00/')
 
-  window.loadURL('dc://deltachat/' + defaults.main)
+  window.loadFile(join(htmlDistDir(), defaults.main))
 
   let frontend_ready = false
   ;(app as EventEmitter).once('frontendReady', () => {

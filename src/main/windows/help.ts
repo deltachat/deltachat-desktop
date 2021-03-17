@@ -1,5 +1,5 @@
 import { app as rawApp, BrowserWindow, Menu, shell } from 'electron'
-import { appIcon } from '../application-constants'
+import { appIcon, htmlDistDir } from '../application-constants'
 import { getLogger } from '../../shared/logger'
 import { ExtendedAppMainProcess } from '../types'
 import { join } from 'path'
@@ -14,7 +14,7 @@ async function getHelpFileForLang(locale: string) {
 
   const contentFilePath = join(appPath, `/html-dist/help/${locale}/help.html`)
   if (await pathExists(contentFilePath)) {
-    return `dc://deltachat/help/${locale}/help.html`
+    return join(htmlDistDir(), `help/${locale}/help.html`)
   } else {
     log.warn(
       `Did not found help file for language ${locale}, falling back to english`
@@ -63,7 +63,7 @@ export async function openHelpWindow(locale: string) {
 
   log.debug(url)
 
-  win.loadURL(url)
+  win.loadFile(url)
 
   win.once('ready-to-show', () => {
     win.show()

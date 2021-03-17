@@ -38,9 +38,7 @@ export default class DCStickers extends SplitOut {
         const stickerPackImagePath = path.join(stickerPackPath, sticker)
         if (!sticker.endsWith('.png') || !(await isFile(stickerPackImagePath)))
           continue
-        stickerImages.push(
-          'dc-blob://' + path.relative(accountsFolder, stickerPackImagePath)
-        )
+        stickerImages.push('file://' + stickerPackImagePath)
       }
       if (stickerImages.length === 0) continue
       stickers[stickerPack] = stickerImages
