@@ -7,6 +7,7 @@
 
 ### Changed
 - Disable fontligatures completely
+- Switch back to file scheme #2171 fixes audio and video seeking issues
 
 ## [1.15.2] - 2021-03-03
 
