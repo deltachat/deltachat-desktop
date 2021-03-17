@@ -4,6 +4,7 @@
 
 ### Fixed
 - Fix qrcode unscanable in darktheme #2163
+- choose better default locations for file open dialogs #2133
 
 ### Changed
 - Disable fontligatures completely
