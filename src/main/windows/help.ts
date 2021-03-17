@@ -19,7 +19,7 @@ async function getHelpFileForLang(locale: string) {
     log.warn(
       `Did not found help file for language ${locale}, falling back to english`
     )
-    return 'dc://deltachat/help/en/help.html'
+    return join(htmlDistDir(), `help/en/help.html`)
   }
 }
 
