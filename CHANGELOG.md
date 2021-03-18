@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.15.3] - 2021-03-18
+
 ### Fixed
 - Fix qrcode unscanable in darktheme #2163
 - choose better default locations for file open dialogs #2133
