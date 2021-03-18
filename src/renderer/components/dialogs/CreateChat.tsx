@@ -184,6 +184,7 @@ export function useGroupImage(image?: string) {
       title: tx('select_group_image_desktop'),
       filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }],
       properties: ['openFile'],
+      defaultPath: runtime.getAppPath('pictures'),
     })
     if (file) {
       setGroupImage(file)

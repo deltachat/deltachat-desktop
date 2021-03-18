@@ -108,6 +108,7 @@ const ImportButton = function ImportButton(_props: any) {
       title: tx('import_backup_title'),
       properties: ['openFile'],
       filters: [{ name: '.tar or .bak', extensions: ['tar', 'bak'] }],
+      defaultPath: runtime.getAppPath('downloads'),
     })
     if (file) {
       window.__openDialog(ImportBackupProgressDialog, {

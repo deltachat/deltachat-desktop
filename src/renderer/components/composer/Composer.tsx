@@ -118,7 +118,10 @@ const Composer = forwardRef<
   }
 
   const addFilename = async () => {
-    const file = await runtime.showOpenFileDialog({ properties: ['openFile'] })
+    const file = await runtime.showOpenFileDialog({
+      properties: ['openFile'],
+      defaultPath: runtime.getAppPath('home'),
+    })
     if (file) {
       addFileToDraft(file)
     }
