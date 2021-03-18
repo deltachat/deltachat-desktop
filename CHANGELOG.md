@@ -7,6 +7,7 @@
 
 ### Changed
 - Disable fontligatures completely
+- Rename message context menu entry "Copy" to "Copy Text" #2294 
 
 ## [1.15.2] - 2021-03-03
 
