@@ -179,7 +179,7 @@ function buildContextMenu(
           },
         }
       : {
-          label: tx('global_menu_edit_copy_desktop'),
+          label: tx('menu_copy_text_to_clipboard'),
           action: () => {
             runtime.writeClipboardText(text)
           },

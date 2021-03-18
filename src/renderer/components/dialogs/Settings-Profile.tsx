@@ -84,6 +84,7 @@ export function ProfileImageSelector({
       title: tx('select_your_new_profile_image'),
       filters: [{ name: tx('images'), extensions: ['jpg', 'png', 'gif'] }],
       properties: ['openFile'],
+      defaultPath: runtime.getAppPath('pictures'),
     })
     if (file) setProfilePicture(file)
   }

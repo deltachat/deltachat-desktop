@@ -2,12 +2,18 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- Switch back to file scheme #2171 fixes audio and video seeking issues
+
+## [1.15.3] - 2021-03-18
+
 ### Fixed
 - Fix qrcode unscanable in darktheme #2163
+- choose better default locations for file open dialogs #2133
 
 ### Changed
 - Disable fontligatures completely
-- Switch back to file scheme #2171 fixes audio and video seeking issues
+- Rename message context menu entry "Copy" to "Copy Text" #2294 
 
 ## [1.15.2] - 2021-03-03
 
