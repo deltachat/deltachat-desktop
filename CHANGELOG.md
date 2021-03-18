@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- Switch back to file scheme #2171 fixes audio and video seeking issues
+
 ## [1.15.3] - 2021-03-18
 
 ### Fixed

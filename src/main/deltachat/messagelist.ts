@@ -14,8 +14,7 @@ import {
   MessageTypeAttachment,
   msgStatus,
 } from '../../shared/shared-types'
-import { getAccountsPath } from '../application-constants'
-import { join } from 'path'
+
 export default class DCMessageList extends SplitOut {
   sendMessage(
     chatId: number,
@@ -50,13 +49,9 @@ export default class DCMessageList extends SplitOut {
     return [messageId, this.getMessage(messageId)]
   }
 
-  sendSticker(chatId: number, rawStickerPath: string) {
+  sendSticker(chatId: number, stickerPath: string) {
     const viewType = C.DC_MSG_STICKER
     const msg = this._dc.messageNew(viewType)
-    const stickerPath = join(
-      getAccountsPath(),
-      rawStickerPath.replace('dc-blob://', '')
-    )
     msg.setFile(stickerPath, undefined)
     this._dc.sendMessage(chatId, msg)
   }

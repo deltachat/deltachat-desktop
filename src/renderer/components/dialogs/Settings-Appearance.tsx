@@ -102,7 +102,7 @@ function BackgroundSelector({
                 backgroundImage: desktopSettings.chatViewBgImg?.startsWith(
                   'url('
                 )
-                  ? `url("misc://background/${desktopSettings.chatViewBgImg.slice(
+                  ? `url("file://${desktopSettings.chatViewBgImg.slice(
                       5,
                       desktopSettings.chatViewBgImg.length - 2
                     )}")`

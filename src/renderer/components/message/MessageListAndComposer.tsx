@@ -165,7 +165,7 @@ export default function MessageListAndComposer({
   const bgImg = settings['chatViewBgImg']
   if (bgImg) {
     if (bgImg && bgImg.indexOf('url') !== -1) {
-      style.backgroundImage = `url("misc://background/${bgImg.slice(
+      style.backgroundImage = `url("file://${bgImg.slice(
         5,
         bgImg.length - 2
       )}")`
