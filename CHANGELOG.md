@@ -23,6 +23,8 @@
 
 - update translations (02.05.2021)
 - Update deltachat-node to `v1.54.0`
+- Update to electron `12.0.1`
+- Update electron-builder to `22.10.5`
 
 ## [1.15.5] - 2021-03-27
 
