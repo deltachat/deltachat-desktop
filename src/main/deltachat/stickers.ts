@@ -2,7 +2,6 @@ import fsExtra from 'fs-extra'
 import path from 'path'
 import { getLogger } from '../../shared/logger'
 import SplitOut from './splitout'
-import { getAccountsPath } from '../application-constants'
 
 const log = getLogger('main/deltachat/stickers')
 
@@ -28,7 +27,6 @@ export default class DCStickers extends SplitOut {
     }
 
     const stickers: { [key: string]: string[] } = {}
-    const accountsFolder = getAccountsPath()
     const list = await fsExtra.readdir(stickerFolder)
     for (const stickerPack of list) {
       const stickerPackPath: string = path.join(stickerFolder, stickerPack)

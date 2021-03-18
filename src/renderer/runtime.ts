@@ -1,10 +1,8 @@
 import { ipcBackend } from './ipc'
 import { RC_Config } from '../shared/shared-types'
-import { getLogger, setLogHandler } from '../shared/logger'
+import { setLogHandler } from '../shared/logger'
 import type { dialog, app, shell, clipboard } from 'electron'
 import { basename, join } from 'path'
-
-const log = getLogger('renderer/runtime')
 
 const {
   openExternal,

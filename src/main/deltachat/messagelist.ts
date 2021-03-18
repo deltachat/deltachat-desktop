@@ -14,8 +14,7 @@ import {
   MessageTypeAttachment,
   msgStatus,
 } from '../../shared/shared-types'
-import { getAccountsPath } from '../application-constants'
-import { join } from 'path'
+
 export default class DCMessageList extends SplitOut {
   sendMessage(
     chatId: number,
