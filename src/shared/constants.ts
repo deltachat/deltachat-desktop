@@ -42,7 +42,7 @@ export const enum AutodeleteDuration {
   ONE_YEAR = Timespans.ONE_YEAR_IN_SECONDS,
 }
 
-export const DAYS_UNTIL_UPDATE_SUGGESTION = 90
+export const DAYS_UNTIL_UPDATE_SUGGESTION = 120
 
 export enum QrState {
   AskVerifyContact = C.DC_QR_ASK_VERIFYCONTACT,
