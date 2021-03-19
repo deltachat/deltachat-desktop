@@ -172,21 +172,25 @@ export default class MapComponent extends React.Component<
     const currentContacts: JsonContact[] = []
     ;(this.mapDataStore as any).locationCount = locations.length
     if (locations.length > 0) {
-      const contacts = selectedChat.contacts;
+      const contacts = selectedChat.contacts
 
       if (!selectedChat.isGroup || !selectedChat.selfInGroup) {
         // add current account to contact list to see own location and path
         contacts.push({
-           id: C.DC_CONTACT_ID_SELF,
-           address: this.context.account.address,
-           displayName: this.context.account.displayname,
-           firstName: this.context.account.displayname,
-           name: this.context.account.displayname,
-           color: this.context.account.color,
-           nameAndAddr: this.context.account.displayname + '(' + this.context.account.addr + ')',
-           profileImage: this.context.account.profileImage,
-           isBlocked: false,
-           isVerified: true
+          id: C.DC_CONTACT_ID_SELF,
+          address: this.context.account.address,
+          displayName: this.context.account.displayname,
+          firstName: this.context.account.displayname,
+          name: this.context.account.displayname,
+          color: this.context.account.color,
+          nameAndAddr:
+            this.context.account.displayname +
+            '(' +
+            this.context.account.addr +
+            ')',
+          profileImage: this.context.account.profileImage,
+          isBlocked: false,
+          isVerified: true,
         })
       }
       contacts.forEach(contact => {
