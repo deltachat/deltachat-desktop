@@ -4,6 +4,7 @@
 
 ### Changed
 - Switch back to file scheme #2171 fixes audio and video seeking issues
+- adjust warning/hint color of before-login-hint
 
 ## [1.15.3] - 2021-03-18
 
