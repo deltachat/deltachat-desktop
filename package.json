@@ -137,7 +137,7 @@
     "@typescript-eslint/parser": "^4.8.2",
     "depcheck": "^0.8.4",
     "electron": "^11.3.0",
-    "electron-builder": "^22.9.1",
+    "electron-builder": "^22.10.5",
     "electron-devtools-installer": "^3.1.1",
     "electron-notarize": "^1.0.0",
     "esbuild": "^0.8.33",
