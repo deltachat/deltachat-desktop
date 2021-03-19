@@ -1,4 +1,5 @@
-name: Run unit & integration tests on Linux
+# Run unit & integration tests on Linux
+name: Linux
 
 on: [push]
 

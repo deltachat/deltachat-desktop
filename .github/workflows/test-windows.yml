@@ -1,4 +1,5 @@
-name: Run unit & integration tests on Windows
+# Run unit & integration tests on Windows
+name: Windows
 
 on: 
   pull_request:
