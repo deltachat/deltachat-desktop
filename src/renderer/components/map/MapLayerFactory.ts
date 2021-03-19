@@ -37,7 +37,7 @@ export default class MapLayerFactory {
         'line-cap': 'round',
       },
       paint: {
-        'line-color': '#' + color.toString(16),
+        'line-color': color.indexOf('#') > -1 ? color : '#' + color.toString(16),
         'line-opacity': 0.7,
         'line-width': 4,
       },
