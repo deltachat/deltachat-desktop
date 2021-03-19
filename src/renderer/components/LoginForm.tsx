@@ -177,7 +177,9 @@ export default function LoginForm({
           {providerInfo?.before_login_hint && (
             <div
               className={`before-login-hint ${
-                providerInfo.status === C.DC_PROVIDER_STATUS_BROKEN && 'broken'
+                providerInfo.status === C.DC_PROVIDER_STATUS_BROKEN
+                  ? 'broken'
+                  : ''
               }`}
             >
               <p>{providerInfo.before_login_hint}</p>
