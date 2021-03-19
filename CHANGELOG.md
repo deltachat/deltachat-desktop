@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- Fix dragging out file attachments #2177
+
 ### Changed
 - Switch back to file scheme #2171 fixes audio and video seeking issues
 
