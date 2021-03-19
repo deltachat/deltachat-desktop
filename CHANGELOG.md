@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- increase `DAYS_UNTIL_UPDATE_SUGGESTION` to 120 days
+
 ## [1.15.3] - 2021-03-18
 
 ### Fixed

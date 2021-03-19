@@ -305,7 +305,7 @@ export default class DeltaChatController extends EventEmitter {
     ) {
       this._dc.addDeviceMessage(
         `update-suggestion-${VERSION}`,
-        `This build is over ${DAYS_UNTIL_UPDATE_SUGGESTION} days old - There might be a new version availible. -> https://get.delta.chat`
+        `This build is over ${DAYS_UNTIL_UPDATE_SUGGESTION} days old - There might be a new version available. -> https://get.delta.chat`
       )
     }
   }
