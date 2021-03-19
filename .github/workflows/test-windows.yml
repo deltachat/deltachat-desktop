@@ -1,5 +1,4 @@
-# documentation: https://github.com/deltachat/sysadmin/tree/master/download.delta.chat
-name: Windows
+name: Run unit & integration tests on Windows
 
 on: 
   pull_request:
