@@ -64,7 +64,7 @@ const files = [
   // 'node_modules/emoji-mart/css/emoji-mart.css',
   // 'node_modules/mapbox-gl/dist/mapbox-gl.css',
   // cleanup deltachat-node
-  //'!node_modules/deltachat-node/deltachat-core-rust/', - todo only exclude what is not needed (if no prebuilds are availible)
+  //'!node_modules/deltachat-node/deltachat-core-rust/', - todo only exclude what is not needed (if no prebuilds are available)
   '!node_modules/deltachat-node/src',
 ]
 const env = process.env

@@ -21,7 +21,7 @@ const {
 }
 
 /**
- * Offers an abstaction Layer to make it easier to make browser client in the future
+ * Offers an abstraction Layer to make it easier to make browser client in the future
  */
 interface Runtime {
   /**

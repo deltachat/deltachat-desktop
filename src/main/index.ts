@@ -180,7 +180,7 @@ app.on('activate', () => {
     log.debug("app.on('activate') showing main window")
     showDeltaChat()
   } else {
-    log.debug("app.on('activate') mainWindow is visibile, no need to show it")
+    log.debug("app.on('activate') mainWindow is visible, no need to show it")
   }
 })
 app.on('before-quit', e => quit(e))

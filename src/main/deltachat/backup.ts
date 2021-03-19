@@ -80,7 +80,7 @@ export default class DCBackup extends SplitOut {
         const accountPath = getNewAccountPath()
 
         try {
-          // future compatibiliy: remove a symlink if it exists
+          // future compatibility: remove a symlink if it exists
           if ((await fs.lstat(accountPath)).isSymbolicLink()) {
             await fs
               .remove(accountPath)

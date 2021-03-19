@@ -13,7 +13,7 @@ const State = Object.assign(new EventEmitter(), {
   load,
   // state.save() calls are rate-limited. Use state.saveImmediate() to skip limit.
   save: function (state: Partial<AppState>, cb?: (err: any) => void) {
-    // After first State.save() invokation, future calls go straight to the
+    // After first State.save() invocation, future calls go straight to the
     // debounced function
     State.save = debounce(saveImmediate, SAVE_DEBOUNCE_INTERVAL)
     saveImmediate(state, cb)
