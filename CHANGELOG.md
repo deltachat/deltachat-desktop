@@ -2,6 +2,11 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- upgrade dependencies:
+  - electron to `^11.3.0`
+  - electron-builder to `^22.10.5`
+
 ## [1.15.3] - 2021-03-18
 
 ### Fixed
