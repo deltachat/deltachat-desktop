@@ -27,7 +27,10 @@ export default class MapLayerFactory {
     }
   }
 
-  static getGeoJSONLineLayer(pathLayerId: string, color: todo): mapboxgl.Layer {
+  static getGeoJSONLineLayer(
+    pathLayerId: string,
+    color: string
+  ): mapboxgl.Layer {
     return {
       id: pathLayerId,
       type: 'line',
@@ -37,8 +40,7 @@ export default class MapLayerFactory {
         'line-cap': 'round',
       },
       paint: {
-        'line-color':
-          color.indexOf('#') > -1 ? color : '#' + color.toString(16),
+        'line-color': color,
         'line-opacity': 0.7,
         'line-width': 4,
       },
