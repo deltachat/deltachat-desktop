@@ -55,7 +55,7 @@ export default class DeltaChatController extends EventEmitter {
     super()
     this._resetState()
     setInterval(
-      // If the dc is allways on
+      // If the dc is always on
       this.hintUpdateIfNessesary.bind(this),
       Timespans.ONE_DAY_IN_SECONDS * 1000
     )
@@ -147,7 +147,7 @@ export default class DeltaChatController extends EventEmitter {
     if (!eventType) {
       log.error(
         'Tried to send an undefined event to the renderer.\n' +
-          'This is not allowed and will normaly produce a crash of electron'
+          'This is not allowed and will normally produce a crash of electron'
       )
       return
     }
@@ -305,7 +305,7 @@ export default class DeltaChatController extends EventEmitter {
     ) {
       this._dc.addDeviceMessage(
         `update-suggestion-${VERSION}`,
-        `This build is over ${DAYS_UNTIL_UPDATE_SUGGESTION} days old - There might be a new version availible. -> https://get.delta.chat`
+        `This build is over ${DAYS_UNTIL_UPDATE_SUGGESTION} days old - There might be a new version available. -> https://get.delta.chat`
       )
     }
   }

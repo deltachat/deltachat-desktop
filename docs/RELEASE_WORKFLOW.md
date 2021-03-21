@@ -36,5 +36,5 @@ git push --tags
 
 ## What if the master branch changed in the meantime
 
-rebase your pr and redo the steps as nessesary.
+rebase your pr and redo the steps as necessary.
 If you are unsure ask another contributor on how to proceed in your case.

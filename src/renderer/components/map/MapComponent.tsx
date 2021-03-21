@@ -1,4 +1,5 @@
 import { DeltaBackend, sendMessageParams } from '../../delta-remote'
+import { C } from 'deltachat-node/dist/constants'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import ReactDOM from 'react-dom'
@@ -171,7 +172,28 @@ export default class MapComponent extends React.Component<
     const currentContacts: JsonContact[] = []
     ;(this.mapDataStore as any).locationCount = locations.length
     if (locations.length > 0) {
-      selectedChat.contacts.map(contact => {
+      const contacts = selectedChat.contacts
+
+      if (!selectedChat.isGroup || !selectedChat.selfInGroup) {
+        // add current account to contact list to see own location and path
+        contacts.push({
+          id: C.DC_CONTACT_ID_SELF,
+          address: this.context.account.address,
+          displayName: this.context.account.displayname,
+          firstName: this.context.account.displayname,
+          name: this.context.account.displayname,
+          color: this.context.account.color,
+          nameAndAddr:
+            this.context.account.displayname +
+            '(' +
+            this.context.account.addr +
+            ')',
+          profileImage: this.context.account.profileImage,
+          isBlocked: false,
+          isVerified: true,
+        })
+      }
+      contacts.forEach(contact => {
         const locationsForContact = locations.filter(
           location =>
             location.contactId === contact.id && !location.isIndependent

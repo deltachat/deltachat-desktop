@@ -74,24 +74,24 @@ function log(
   const variant = LoggerVariants[level]
   if (!handler) {
     /* ignore-console-log */
-    console.log('Failed to log message - Handler not initilized yet')
+    console.log('Failed to log message - Handler not initialized yet')
     /* ignore-console-log */
     console.log(`Log Message: ${channel} ${level} ${args.join(' ')}`)
-    throw Error('Failed to log message - Handler not initilized yet')
+    throw Error('Failed to log message - Handler not initialized yet')
   }
   handler(channel, variant.level, stacktrace, ...args)
   if (rc['log-to-console']) {
     if (isMainProcess) {
-      const begining = `${Math.round((Date.now() - startTime) / 100) / 10}s ${
+      const beginning = `${Math.round((Date.now() - startTime) / 100) / 10}s ${
         LoggerVariants[level].symbol
       }${grey(channel)}:`
       if (!stacktrace) {
         /* ignore-console-log */
-        console.log(begining, ...args)
+        console.log(beginning, ...args)
       } else {
         /* ignore-console-log */
         console.log(
-          begining,
+          beginning,
           ...args,
           red(
             Array.isArray(stacktrace)

@@ -17,7 +17,7 @@ export const i18nContext = React.createContext<getMessageFunction>(
   key => key as any
 )
 
-/** convinence wrapper function for `useContext(i18nContext)`
+/** convenience wrapper function for `useContext(i18nContext)`
  *
  * This is a react hook, make sure you only use it where you can use reactHooks,
  * as example in functional components.
