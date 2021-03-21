@@ -2,7 +2,7 @@ import { getLogger } from '../shared/logger'
 const log = getLogger('main/dev')
 
 /**
- * Only works when it's installed (aka when its a dev enviroment)
+ * Only works when it's installed (aka when its a dev environment)
  */
 export async function tryInstallReactDevTools() {
   return

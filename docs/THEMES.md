@@ -1,19 +1,19 @@
 ## Information how the experimental theme system works
 
-Themes are css files that act as themes by containing many differnt css variables.
+Themes are css files that act as themes by containing many different css variables.
 
 Most of these variables are small variations of the base colors of the theme so using scss allows us to generate them from the base colors to save us work.
-But of course we can overwrite those variables manualy too, we can even overwrite css classes if our theme needs it.
+But of course we can overwrite those variables manually too, we can even overwrite css classes if our theme needs it.
 
 ## Theme codes
 
-There are two types of themes `dc`(build-in) and `custom` themes.
-DeltaChat Desktop searches in two places for themes, the theme folder contained in the deltachat instalation and the theme folder in the deltachat userdata folder of the users account (custom themes).
+There are two types of themes `dc`(built-in) and `custom` themes.
+DeltaChat Desktop searches in two places for themes, the theme folder contained in the deltachat installation and the theme folder in the deltachat userdata folder of the users account (custom themes).
 
 The actual theme code is build as follows:
 
 ```
-[location/type]:[name of themefile without extention]
+[location/type]:[name of themefile without extension]
 ```
 
 Some examples:
@@ -50,7 +50,7 @@ We use scss to create themes, because it allows us to save work by using its col
 
 ### **Method A** - When you have a deltachat desktop checkout
 
-0. make sure deltachat desktop is up to date and checked out to the version you want to make your theme for, normaly checking out master is suffientent for making themes for the newest version.
+0. make sure deltachat desktop is up to date and checked out to the version you want to make your theme for, normally checking out master is suffientent for making themes for the newest version.
 
 1. copy the light or dark theme and save it to your user deltachat folder `DeltaChat/custom-themes/my_theme.scss`
 
@@ -83,7 +83,7 @@ Read the comments in the theme files for additional information.
 
 0. install the sass compiler via `npm i -g node-sass` (if it says that npm was not found, then you need to install nodejs first)
 
-1. Download all files starting with `_` from https://github.com/deltachat/deltachat-desktop/tree/master/themes and put them in a `./themes/` folder in your working directory (or alternativly download the folder to your working directory).
+1. Download all files starting with `_` from https://github.com/deltachat/deltachat-desktop/tree/master/themes and put them in a `./themes/` folder in your working directory (or alternatively download the folder to your working directory).
 
 2. copy the light or dark theme and save it to your user deltachat folder `DeltaChat/custom-themes/my_theme.scss`
 

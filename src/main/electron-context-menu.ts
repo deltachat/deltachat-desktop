@@ -14,7 +14,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 /*
 modifications:
-- remove unnessesary functionality
+- remove unnecessary functionality
 - add use of our translation system
 */
 
