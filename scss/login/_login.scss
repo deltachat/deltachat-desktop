@@ -45,9 +45,15 @@
     margin-top: 20px;
     margin-bottom: 20px;
     padding: 10px;
-    background-color: #f9d7d7;
-    color: #c70404;
     border-radius: 5px;
+
+    background-color: #fdf7b2;
+    color: #101010;
+
+    &.broken {
+      background-color: #f9d7d7;
+      color: #c70404;
+    }
 
     p {
       user-select: text;
