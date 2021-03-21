@@ -98,7 +98,7 @@ export default class DCChatList extends SplitOut {
     const isGroup = isGroupChat(chat)
     const contactIds = await this._getChatContactIds(chatId)
     /**
-     * This is NOT the Chat Oject, it's a smaller version for use as ChatListItem in the ChatList
+     * This is NOT the Chat Object, it's a smaller version for use as ChatListItem in the ChatList
      */
     const chatListItem = {
       id: chat.id,

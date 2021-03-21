@@ -2,7 +2,7 @@
 
 ## Table of Contents
 
-> table of contents is comming soon [TODO]
+> table of contents is coming soon [TODO]
 
 <details><summary>Click to expand</summary>
 
@@ -29,7 +29,7 @@
 ## Quick Tipps <!-- TODO find a better name for this section --> <a id="quick-tipps"></a>
 
 - We use `prettier` for code formatting,
-  use `npm run fix-formatting` before commiting to format the code.
+  use `npm run fix-formatting` before committing to format the code.
 - if you work with scss make sure you read [docs/STYLES.md](./STYLES.md)
 
 ## How to Contribute <a id="how-to-contribute"></a>
@@ -110,7 +110,7 @@ Running `npm test` does the following:
 Run `npm run test-e2e` for end to end testing.
 In E2E testing testcafe clicks through the app an simulates normal usage.
 
-You need to provide a temp email account generation token via the enviroment variable `DCC_NEW_TMP_EMAIL`. (ask contributers on how to get one of these tokens)
+You need to provide a temp email account generation token via the environment variable `DCC_NEW_TMP_EMAIL`. (ask contributors on how to get one of these tokens)
 
 ### Translations <a id="translations"></a>
 
@@ -176,7 +176,7 @@ Build in production mode (development tools disabled and minified frontend code)
 NODE_ENV=production npm run build
 ```
 
-(for building on windows you need an other command to set the enviroment variable)
+(for building on windows you need an other command to set the environment variable)
 
 #### 1. Generate Electron-Builder Configuration
 
@@ -184,7 +184,7 @@ Generate the `electron-builder.json5` file with `npm run pack:generate_config`.
 
 Possible options for `npm run pack:generate_config`:
 
-| Enviroment var | Effect                          |
+| Environment var | Effect                          |
 | -------------- | ------------------------------- |
 | `NO_ASAR=true` | Disable asar, used for flatpack |
 
@@ -244,9 +244,9 @@ Some important folders and files:
 
 ### VS Code users <a id="vscode"></a>
 
-Problem: Strange Typscript errors that are only visible in vscode but the project compiles normaly
+Problem: Strange Typscript errors that are only visible in vscode but the project compiles normally
 
-Solution: Tell VS Code to use the workspace version of typescript intead af an buildt-in version [more info](https://code.visualstudio.com/docs/typescript/typescript-compiling#_why-do-i-get-different-errors-and-warnings-with-vs-code-than-when-i-compile-my-typescript-project)
+Solution: Tell VS Code to use the workspace version of typescript instead af an buildt-in version [more info](https://code.visualstudio.com/docs/typescript/typescript-compiling#_why-do-i-get-different-errors-and-warnings-with-vs-code-than-when-i-compile-my-typescript-project)
 
 ### URI Schemes on linux <a id="linux-uri-schemes"></a>
 

@@ -39,7 +39,7 @@ export interface DesktopSettings {
   showNotificationContent: boolean
   lastChats: { [account_addr: string]: number }
   zoomFactor: number
-  /** adress to the active theme file scheme: "custom:name" or "dc:name" */
+  /** address to the active theme file scheme: "custom:name" or "dc:name" */
   activeTheme: string
   minimizeToTray: boolean
 }

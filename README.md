@@ -137,7 +137,7 @@ You can access the log folder and the current log file under the `View->Develope
 
 <center><img src="README_ASSETS/devMenu.png"/></center>
 
-Read [docs/LOGGING.md](docs/LOGGING.md) for an explaination about our logging system. (availible **options**, log **location** and information abour the used Log-**Format**)
+Read [docs/LOGGING.md](docs/LOGGING.md) for an explanation about our logging system. (available **options**, log **location** and information abour the used Log-**Format**)
 
 ## License <a id="license"></a>
 

@@ -6,6 +6,7 @@ import { LogHandler } from './log-handler'
 import { ExtendedAppMainProcess } from './types'
 import * as mainWindow from './windows/main'
 import { openHelpWindow } from './windows/help'
+import { join } from 'path'
 
 const log = getLogger('main/ipc')
 const DeltaChatController: typeof import('./deltachat/controller').default = (() => {
@@ -81,7 +82,10 @@ export function init(cwd: string, logHandler: LogHandler) {
   )
 
   ipcMain.on('ondragstart', (event, filePath) => {
-    event.sender.startDrag({ file: filePath, icon: null })
+    event.sender.startDrag({
+      file: filePath,
+      icon: join(__dirname, '../../images/electron-file-drag-out.png'),
+    })
   })
 
   ipcMain.on('saveLastChatId', (_e, chatId) => {

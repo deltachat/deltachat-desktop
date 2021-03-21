@@ -46,7 +46,7 @@ export function init(
     },
   })
 
-  // disable nework request to fetch dictionary
+  // disable network request to fetch dictionary
   // issue: https://github.com/electron/electron/issues/22995
   // feature request for local dictionary: https://github.com/electron/electron/issues/22995
   session.defaultSession.setSpellCheckerDictionaryDownloadURL('https://00.00/')
