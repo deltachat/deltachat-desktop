@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- own location and path in maps is not visible in single chats
+
 ### Changed
 - Switch back to file scheme #2171 fixes audio and video seeking issues
 
