@@ -185,8 +185,8 @@ Generate the `electron-builder.json5` file with `npm run pack:generate_config`.
 Possible options for `npm run pack:generate_config`:
 
 | Environment var | Effect                          |
-| -------------- | ------------------------------- |
-| `NO_ASAR=true` | Disable asar, used for flatpack |
+| --------------- | ------------------------------- |
+| `NO_ASAR=true`  | Disable asar, used for flatpack |
 
 #### 2. Run Electron-Builder
 
