@@ -8,8 +8,6 @@ import { ExtendedAppMainProcess } from './types'
 export default function (dc: DeltaChatController, settings: any) {
   if (!Notification.isSupported()) return
 
-  let notifications: Notification[] = []
-
   async function isMuted(chatId: number) {
     return await dc.callMethod(null, 'chatList.isChatMuted', [chatId])
   }
@@ -41,14 +39,9 @@ export default function (dc: DeltaChatController, settings: any) {
         dc.sendToRenderer('ClickOnNotification', { chatId, msgId })
         mainWindow.show()
         app.focus()
-        notifications = notifications.filter(n => n === notify)
       })
-      notify.on('close', () => {
-        notifications = notifications.filter(n => n === notify)
-      })
+      notify.on('close', () => {})
       notify.show()
-
-      notifications.push(notify)
     }
   })
 }
