@@ -9,6 +9,7 @@ import {
   FullChat,
 } from '../../shared/shared-types'
 import SplitOut from './splitout'
+import { set_has_unread } from '../tray'
 
 const log = getLogger('main/deltachat/chatlist')
 
@@ -24,7 +25,9 @@ export default class DCChatList extends SplitOut {
       this.selectedAccountContext.markNoticedChat(chat.id)
       this.controller.emit('DESKTOP_CLEAR_NOTIFICATIONS_FOR_CHAT', chat.id)
       chat.freshMessageCounter = 0
-      app.setBadgeCount(this.getGeneralFreshMessageCounter())
+      const count = this.getGeneralFreshMessageCounter()
+      app.setBadgeCount(count)
+      set_has_unread(count !== 0)
     }
 
     return chat

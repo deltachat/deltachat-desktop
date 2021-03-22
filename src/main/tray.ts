@@ -1,9 +1,8 @@
-import { app as rawApp, Menu, Tray, nativeImage } from 'electron'
+import { app as rawApp, Menu, Tray, nativeImage, NativeImage } from 'electron'
 import { globalShortcut } from 'electron'
 import * as mainWindow from './windows/main'
 import { ExtendedAppMainProcess } from './types'
 import { getLogger } from '../shared/logger'
-import { appIcon } from './application-constants'
 import { join } from 'path'
 
 let tray: Tray = null
@@ -11,6 +10,32 @@ let contextMenu: Menu = null
 
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/tray')
+
+let has_unread = false
+
+export function set_has_unread(new_has_unread: boolean) {
+  has_unread = new_has_unread
+  if (tray) {
+    tray.setImage(TrayImage())
+  }
+}
+
+export function TrayImage(): string | NativeImage {
+  const trayIconFolder = join(__dirname, '..', '..', 'images/tray')
+  if (process.platform === 'darwin') {
+    const image = nativeImage
+      .createFromPath(join(trayIconFolder, 'trayIconTemplate.png'))
+      .resize({ width: 24 })
+    image.setTemplateImage(true)
+    return image
+  } else {
+    const iconFormat = process.platform === 'win32' ? '.ico' : '.png'
+    return `${join(
+      trayIconFolder,
+      (has_unread ? 'deltachat_has_unread' : 'deltachat') + iconFormat
+    )}`
+  }
+}
 
 export function mainWindowIsVisible() {
   if (process.platform === 'darwin' || process.platform === 'win32') {
@@ -127,20 +152,7 @@ export function getTrayMenu() {
 }
 
 export function TrayIcon() {
-  let tray
-  if (process.platform === 'darwin') {
-    const image = nativeImage
-      .createFromPath(
-        join(__dirname, '..', '..', 'images', 'trayIconTemplate.png')
-      )
-      .resize({ width: 24 })
-    image.setTemplateImage(true)
-    tray = new Tray(image)
-  } else {
-    tray = new Tray(appIcon())
-  }
-
-  return tray
+  return new Tray(TrayImage())
 }
 
 export function renderTrayIcon() {

@@ -1,6 +1,7 @@
 import * as mainWindow from './windows/main'
 import { app, ipcMain } from 'electron'
 import DeltaChatController from './deltachat/controller'
+import { set_has_unread } from './tray'
 
 export default function setupUnreadBadge(dc: DeltaChatController) {
   if (process.platform !== 'linux' && process.platform !== 'darwin') return
@@ -13,6 +14,7 @@ export default function setupUnreadBadge(dc: DeltaChatController) {
       'chatList.getGeneralFreshMessageCounter'
     )
     app.setBadgeCount(count)
+    set_has_unread(count !== 0)
   }
 
   dc.on(
