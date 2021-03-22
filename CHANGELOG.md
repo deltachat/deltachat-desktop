@@ -5,7 +5,7 @@
 ### Fixed
 - Fix dragging out file attachments #2177
 - own location and path in maps is not visible in single chats
-
+- Fix crash in settings-profile if account object is empty
 
 ### Changed
 - Switch back to file scheme #2171 fixes audio and video seeking issues
