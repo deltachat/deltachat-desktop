@@ -32,7 +32,7 @@ export default function (dc: DeltaChatController, settings: any) {
       if (await isMuted(chatId)) {
         return
       }
-      let notify = new Notification({
+      const notify = new Notification({
         title: appName,
         body: await getMsgBody(msgId),
         icon: appIcon(),
