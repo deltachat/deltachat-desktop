@@ -6,6 +6,9 @@ import DeltaChatController from './deltachat/controller'
 import { ExtendedAppMainProcess } from './types'
 import { FullChat, MessageType } from '../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
+import { getLogger } from '../shared/logger'
+
+const log = getLogger('main/notifications')
 
 export default function (dc: DeltaChatController, settings: any) {
   if (!Notification.isSupported()) return
@@ -54,14 +57,21 @@ export default function (dc: DeltaChatController, settings: any) {
         icon = nativeImage.createFromPath(appIcon())
       }
 
-      return new Notification({
+      let notificationOptions: Electron.NotificationConstructorOptions = {
         title: `${chatInfo.name} | ${appName}`,
         body: summary.text1
           ? `${summary.text1}: ${summary.text2}`
           : summary.text2,
         icon,
-        timeoutType: 'never',
-      })
+        timeoutType: 'default',
+      }
+
+      if (process.platform === 'win32') {
+        // Workaround for disabling close button on windows. Undefined electron behaviour. Yey.
+        notificationOptions.closeButtonText = null
+      }
+
+      return new Notification(notificationOptions)
     }
   }
 
@@ -113,7 +123,13 @@ export default function (dc: DeltaChatController, settings: any) {
         return
       }
       const notify = await createNotification(chatId, msgId)
-      notify.on('click', onClickNotification.bind(null, chatId, msgId))
+      notify.on('click', (Event) => {
+        console.log(Event.type)
+        onClickNotification(chatId, msgId, Event)
+      })
+      notify.on('close', (Event) => {
+        log.debug(`Closing notification for chatId: ${chatId} msgId: ${msgId}`)
+      })
       // notify.on('close', () => {})
       addNotificationForChat(chatId, notify)
       notify.show()
