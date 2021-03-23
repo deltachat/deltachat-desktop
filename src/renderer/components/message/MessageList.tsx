@@ -110,7 +110,7 @@ export default function MessageList({
   useEffect(() => {
     const composerTextarea = refComposer.current.childNodes[1]
     composerTextarea && composerTextarea.focus()
-    chatStoreDispatch({ type: 'SHOW_MESSAGE_LIST' })
+    messageListRef.current.scrollTop = messageListRef.current.scrollHeight
   }, [])
 
   const [fetchMore] = useDebouncedCallback(
