@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.15.4] - 2021-03-24
+
 ### Fixed
 - Fix dragging out file attachments #2177
 - own location and path in maps is not visible in single chats
@@ -1152,7 +1154,15 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.15.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.15.4...HEAD
+
+[1.15.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.15.3...v1.15.4
+
+[1.15.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.15.2...v1.15.3
+
+[1.15.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.15.1...v1.15.2
+
+[1.15.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.15.0...v1.15.1
 
 [1.15.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.14.1...v1.15.0
 

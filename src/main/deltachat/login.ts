@@ -156,6 +156,16 @@ export default class DCLoginController extends SplitOut {
 
 [Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#11500---2020-02-11)` as any
     )
+
+    this._dc.addDeviceMessage(
+      'changelog-version-1.15.4-3',
+      `Changes in 1.15.4
+✨ Notifications should now look better and be more reliable 
+🐞 Bugs bugs bugs!
+
+
+[Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#11504---2020-03-24)` as any
+    )
   }
 
   async getLogins() {
