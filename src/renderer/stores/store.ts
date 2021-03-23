@@ -41,6 +41,7 @@ export class Store<S> {
   dispatch(action: Action) {
     this.log.debug('DISPATCH of type', action.type)
     //this.log.debug('DISPATCH:', action)
+
     let state = this.state
     this.reducers.forEach(reducer => {
       state = reducer(action, state)
