@@ -52,7 +52,6 @@ export default function (dc: DeltaChatController, settings: any) {
       if (!icon || icon.isEmpty()) {
         // fallback: show app icon instead
         icon = nativeImage.createFromPath(appIcon())
-        console.log(icon.isEmpty())
       }
 
       return new Notification({
@@ -90,8 +89,6 @@ export default function (dc: DeltaChatController, settings: any) {
     msgId: number,
     _ev: Electron.Event
   ) {
-    console.log('onClickNotification', chatId, msgId)
-
     dc.sendToRenderer('ClickOnNotification', { chatId, msgId })
     clearNotificationsForChat(chatId)
     mainWindow.show()
