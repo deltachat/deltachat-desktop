@@ -6,11 +6,13 @@
 - Fix dragging out file attachments #2177
 - own location and path in maps is not visible in single chats
 - Fix crash in settings-profile if account object is empty
+- make notifications more reliable and allow multiple ones at a time
 
 ### Changed
 - Switch back to file scheme #2171 fixes audio and video seeking issues
 - adjust warning/hint color of before-login-hint
 - increase `DAYS_UNTIL_UPDATE_SUGGESTION` to 120 days
+- improve notifications (show chat name and avatar)
 
 ## [1.15.3] - 2021-03-18
 

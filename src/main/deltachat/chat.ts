@@ -74,6 +74,7 @@ export default class DCChat extends SplitOut {
     log.debug(`action - deleting chat ${chatId}`)
     this._dc.deleteChat(chatId)
     this._controller.chatList.updateChatList()
+    this._controller.emit('DESKTOP_CLEAR_NOTIFICATIONS_FOR_CHAT', chatId)
   }
 
   setVisibility(
