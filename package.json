@@ -38,7 +38,7 @@
     "watch:frontend:ts": "npm run build:frontend:ts -- -w",
     "watch:frontend:static": "npm run build:frontend:static -- -w",
     "watch:frontend:scss": "npm run build:frontend:scss -- --watch",
-    "build4production": "npm run check-types && NODE_ENV=\"production\" npm run build",
+    "build4production": "NODE_ENV=\"production\" npm run build && npm run check-types",
     "translations-pull": "tx pull -l en && tx pull -f --parallel",
     "translations-update": "npm run translations-pull && npm run build:shared:translations",
     "hallmark": "hallmark --fix",
