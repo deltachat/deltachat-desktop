@@ -65,7 +65,7 @@ export default function (dc: DeltaChatController, settings: any) {
     }
   }
 
-  const notifications: { [key: number]: Notification[] } = {}
+  let notifications: { [key: number]: Notification[] } = {}
 
   function clearNotificationsForChat(chatId: number) {
     if (notifications[chatId]) {
@@ -74,6 +74,15 @@ export default function (dc: DeltaChatController, settings: any) {
       }
       notifications[chatId] = null
     }
+  }
+
+  function clearAllNotifications() {
+    for (const chatId of Object.keys(notifications)) {
+      if (isNaN(Number(chatId))) {
+        clearNotificationsForChat(Number(chatId))
+      }
+    }
+    notifications = {}
   }
 
   function addNotificationForChat(chatId: number, notify: Notification) {
@@ -109,5 +118,13 @@ export default function (dc: DeltaChatController, settings: any) {
       addNotificationForChat(chatId, notify)
       notify.show()
     }
+  })
+
+  dc.on('DESKTOP_CLEAR_NOTIFICATIONS_FOR_CHAT', (_ev, chatId) => {
+    clearNotificationsForChat(chatId)
+  })
+
+  dc.on('DESKTOP_CLEAR_ALL_NOTIFICATIONS', _ev => {
+    clearAllNotifications()
   })
 }

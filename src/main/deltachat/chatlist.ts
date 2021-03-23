@@ -21,6 +21,7 @@ export default class DCChatList extends SplitOut {
     }
     if (chat.id !== C.DC_CHAT_ID_DEADDROP && chat.freshMessageCounter > 0) {
       this._dc.markNoticedChat(chat.id)
+      this._controller.emit('DESKTOP_CLEAR_NOTIFICATIONS_FOR_CHAT', chat.id)
       chat.freshMessageCounter = 0
       app.setBadgeCount(this.getGeneralFreshMessageCounter())
     }

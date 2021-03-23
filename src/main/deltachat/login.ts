@@ -133,6 +133,7 @@ export default class DCLoginController extends SplitOut {
   }
 
   close() {
+    this._controller.emit('DESKTOP_CLEAR_ALL_NOTIFICATIONS')
     if (!this._dc) return
     this._dc.stopIO()
     this._controller.unregisterEventHandler(this._dc)
