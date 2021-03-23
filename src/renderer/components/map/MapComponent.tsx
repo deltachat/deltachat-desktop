@@ -181,7 +181,7 @@ export default class MapComponent extends React.Component<
           address: this.context.account.address,
           displayName: this.context.account.displayname,
           authName: this.context.account.displayname,
-          status: "",
+          status: '',
           name: this.context.account.displayname,
           color: this.context.account.color,
           nameAndAddr:
