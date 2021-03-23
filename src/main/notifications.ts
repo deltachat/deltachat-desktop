@@ -60,7 +60,6 @@ export default function (dc: DeltaChatController, settings: any) {
           ? `${summary.text1}: ${summary.text2}`
           : summary.text2,
         icon,
-        timeoutType: 'never',
       })
     }
   }
