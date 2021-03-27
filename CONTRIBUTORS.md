@@ -5,8 +5,8 @@
 | **Simon Laux**          | [**@Simon-Laux**](https://github.com/Simon-Laux)             |
 | **Lars-Magnus Skog**    |                                                              |
 | **Nico de Haen**        |                                                              |
-| **Karissa McKelvey**    | [**@karissa**](https://github.com/karissa)                   |
 | **Jikstra**             | [**@Jikstra**](https://github.com/Jikstra)                   |
+| **Karissa McKelvey**    | [**@karissa**](https://github.com/karissa)                   |
 | **Alexander Krotov**    |                                                              |
 | **holger krekel**       |                                                              |
 | **Emil Lefherz**        |                                                              |
@@ -20,17 +20,18 @@
 | **Tobias Mueller**      |                                                              |
 | **Hansal Bachkaniwala** |                                                              |
 | **jankass**             |                                                              |
-| **Asiel Díaz Benítez**  |                                                              |
-| **Ozancan Karataş**     |                                                              |
 | **Alberto Luaces**      |                                                              |
+| **Asiel Díaz Benítez**  |                                                              |
+| **dependabot\[bot]**    | [**@dependabot\[bot\]**](https://github.com/dependabot[bot]) |
+| **Ozancan Karataş**     |                                                              |
 | **alfaslash**           |                                                              |
 | **bb**                  |                                                              |
 | **Clemens Tolboom**     |                                                              |
-| **dependabot\[bot]**    | [**@dependabot\[bot\]**](https://github.com/dependabot[bot]) |
 | **developer**           |                                                              |
 | **Harald H**            |                                                              |
 | **hnrd**                |                                                              |
 | **Hugo**                |                                                              |
+| **missytake**           |                                                              |
 | **NeoRon**              |                                                              |
 | **Noah**                |                                                              |
 | **Oliver Bestwalter**   |                                                              |

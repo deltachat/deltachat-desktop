@@ -163,6 +163,13 @@ function getMenuTemplate(logHandler: LogHandler): rawMenuItem[] {
         { role: 'hideOthers' },
         { role: 'unhide' },
         { type: 'separator' },
+        {
+          // because menubar stays when it's closed and apple wants that the user can reopen it via the menu bar
+          translate: 'mac_show_windows',
+          click: () => {
+            mainWindow.show()
+          },
+        },
         { translate: 'global_menu_file_quit_desktop', role: 'quit' },
       ],
     },

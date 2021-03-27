@@ -2,16 +2,24 @@
 
 ## [Unreleased][unreleased]
 
+## [1.15.5] - 2021-03-27
+
+### Added
+
+- add Menu item on macOS to show the main window
+
 ## [1.15.4] - 2021-03-24
 
 ### Fixed
-- Fix dragging out file attachments #2177
+
+- Fix dragging out file attachments [#2177](https://github.com/deltachat/deltachat-desktop/issues/2177)
 - own location and path in maps is not visible in single chats
 - Fix crash in settings-profile if account object is empty
 - make notifications more reliable and allow multiple ones at a time
 
 ### Changed
-- Switch back to file scheme #2171 fixes audio and video seeking issues
+
+- Switch back to file scheme [#2171](https://github.com/deltachat/deltachat-desktop/issues/2171) fixes audio and video seeking issues
 - adjust warning/hint color of before-login-hint
 - increase `DAYS_UNTIL_UPDATE_SUGGESTION` to 120 days
 - improve notifications (show chat name and avatar)
@@ -19,57 +27,66 @@
 ## [1.15.3] - 2021-03-18
 
 ### Fixed
-- Fix qrcode unscanable in darktheme #2163
-- choose better default locations for file open dialogs #2133
+
+- Fix qrcode unscanable in darktheme [#2163](https://github.com/deltachat/deltachat-desktop/issues/2163)
+- choose better default locations for file open dialogs [#2133](https://github.com/deltachat/deltachat-desktop/issues/2133)
 
 ### Changed
+
 - Disable fontligatures completely
-- Rename message context menu entry "Copy" to "Copy Text" #2294 
+- Rename message context menu entry "Copy" to "Copy Text" [#2294](https://github.com/deltachat/deltachat-desktop/issues/2294) 
 
 ## [1.15.2] - 2021-03-03
 
 ### Fixed
+
 - Fix disable contact name edit field on device message
-- Fix right click on image mesage opens both context menus #2122
-- Fix Attachment sometimes not being displayed (#2144)
-- Fix possible backup corruption (pause io while doing a backup) (#2148)
-- Fix some react warnings (#2152)
+- Fix right click on image mesage opens both context menus [#2122](https://github.com/deltachat/deltachat-desktop/issues/2122)
+- Fix Attachment sometimes not being displayed ([#2144](https://github.com/deltachat/deltachat-desktop/issues/2144))
+- Fix possible backup corruption (pause io while doing a backup) ([#2148](https://github.com/deltachat/deltachat-desktop/issues/2148))
+- Fix some react warnings ([#2152](https://github.com/deltachat/deltachat-desktop/issues/2152))
 - Fix crash in settings
 - Fix enabling/disabling notifications
 
 ### Changed
+
 - update translations (02.03.2021)
 - change "Download attachment" to "Export attachment"
 
 ### Added
+
 - translations for Khmer, Kurdish, Sardu, Slovak and Norwegian
 
 ## [1.15.1] - 2021-02-13
 
 ### Fixed
+
 - Package Problems
 
 ### Changed
+
 - Update `electron-builder` to `22.9.1`
 - Update `electron-notarize` to `1.0.0`
 
 ## [1.15.0] - 2021-02-11
 
 ### Added
+
 - open message info when clicking on the error status icon of a message
 - add deltachat desktop version & build info to the logfiles
 - Add warn dialog for urls containing punycode
 - add a minimalistic theme featuring an irc like message view
-- add a context menu for electron (adds copy/paste options to composer #1997, #2047)
+- add a context menu for electron (adds copy/paste options to composer [#1997](https://github.com/deltachat/deltachat-desktop/issues/1997), [#2047](https://github.com/deltachat/deltachat-desktop/issues/2047))
 - Add copy button to qrcode text/url result dialog
 - Add a confirmation dialog when starting a new videochat
 
 ### Changed
+
 - always show timestamp and padlock/nopadlock on messages (previously padlock and timestamp were hidden on error)
 - update translations (10.02.2021)
 - add Farsi translation
 - Try to always focus composer textarea
-- Store relative instead of absolute path to last Account #2028
+- Store relative instead of absolute path to last Account [#2028](https://github.com/deltachat/deltachat-desktop/issues/2028)
 - replace parcel bunder with esbuild bundler (faster bundle speed)
 - turn "theme not found" error from the `--theme` cli option from process exit into normal init fail with a user readable error message in an dialog.
 - loghandler: warn on non-writable stream
@@ -85,17 +102,19 @@
 - ux: indicate who forwarded the message in groups
 
 ### Removed
+
 - Remove intergrated BasicWebRTC, because it was broken and we currently lack the resources to fix and maintain it
 - Disable React Devtools as they are broken in the newer electron versions
 - remove terser minification, the minfication of esbuild is sufficient and faster
 
 ### Fixed
-- correctly display RTL text inside of the message input field (see #2036)
+
+- correctly display RTL text inside of the message input field (see [#2036](https://github.com/deltachat/deltachat-desktop/issues/2036))
 - performance: only mark messages read on the currently fetched page instead of all when selecting a chat
 - show right default background for theme in background preview in settings
 - handle invalid theme metadata better (don't display no themes anymore when one has invalid metadata)
 - Fix copy of labeled links
-- Fix hard to alter text in the middle of "Video chat instance" input field (see #2016)
+- Fix hard to alter text in the middle of "Video chat instance" input field (see [#2016](https://github.com/deltachat/deltachat-desktop/issues/2016))
 - Add missing options (at once, one minute...) for autodelete from server
 - Update failed messages also in messagelist
 - Fix crash on upgrading from v1.12 or earlier
@@ -1154,7 +1173,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.15.4...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.15.5...HEAD
+
+[1.15.5]: https://github.com/deltachat/deltachat-desktop/compare/v1.15.4...v1.15.5
 
 [1.15.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.15.3...v1.15.4
 
