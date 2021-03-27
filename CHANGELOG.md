@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- add Menu item on macOS to show the main window
+
 ## [1.15.4] - 2021-03-24
 
 ### Fixed

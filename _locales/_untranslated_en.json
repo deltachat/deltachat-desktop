@@ -67,5 +67,8 @@
   },
   "menu_copy_text_to_clipboard": {
     "message": "Copy Text"
+  },
+  "mac_show_windows": {
+    "message": "Show Window"
   }
 }
