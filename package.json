@@ -1,6 +1,6 @@
 {
   "name": "deltachat-desktop",
-  "version": "1.15.5",
+  "version": "1.16.0-alpha.0",
   "description": "Desktop Application for delta.chat",
   "main": "index.js",
   "scripts": {
@@ -85,7 +85,7 @@
     "array-differ": "^3.0.0",
     "classnames": "^2.2.6",
     "debounce": "^1.2.0",
-    "deltachat-node": "^1.50.0",
+    "deltachat-node": "https://github.com/deltachat/deltachat-node/releases/download/v1.51.1/deltachat-node.tgz",
     "emoji-js-clean": "^4.0.0",
     "emoji-mart": "^3.0.0",
     "emoji-regex": "^9.2.0",

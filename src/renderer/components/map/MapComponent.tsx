@@ -180,7 +180,8 @@ export default class MapComponent extends React.Component<
           id: C.DC_CONTACT_ID_SELF,
           address: this.context.account.address,
           displayName: this.context.account.displayname,
-          firstName: this.context.account.displayname,
+          authName: this.context.account.displayname,
+          status: '',
           name: this.context.account.displayname,
           color: this.context.account.color,
           nameAndAddr:
