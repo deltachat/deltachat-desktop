@@ -274,6 +274,10 @@ class DeltaRemote {
     fnName: 'messageList.msgIds2SearchResultItems',
     msgIds: number[]
   ): Promise<{ [id: number]: MessageSearchResult }>
+  call(
+    fnName: 'messageList.saveMessageHTML2Disk',
+    messageId: number
+  ): Promise<string>
   // settings -----------------------------------------------------------
   call(
     fnName: 'settings.setConfig',

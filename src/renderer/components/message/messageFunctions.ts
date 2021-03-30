@@ -68,3 +68,11 @@ export async function privateReply(msg: JsonMessage) {
   // select chat
   selectChat(chatId)
 }
+
+export async function openMessageHTML(messageId: number) {
+  const filepath = await DeltaBackend.call(
+    'messageList.saveMessageHTML2Disk',
+    messageId
+  )
+  runtime.openPath(filepath)
+}

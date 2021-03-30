@@ -70,5 +70,8 @@
   },
   "mac_show_windows": {
     "message": "Show Window"
+  },
+  "show_full_message_in_browser": {
+    "message": "Show full message in browser…"
   }
 }
