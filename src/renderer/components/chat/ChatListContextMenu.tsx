@@ -119,8 +119,8 @@ export function useChatListContextMenu() {
             action: onViewProfile,
           },
           // Encryption Info
-          !chatListItem.isGroup &&
-            !chatListItem.isDeviceTalk && {
+          !chatListItem.isDeviceTalk &&
+            !chatListItem.isSelfTalk && {
               label: tx('encryption_info_desktop'),
               action: onEncrInfo,
             },

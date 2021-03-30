@@ -76,6 +76,7 @@ import type { Contact } from 'deltachat-node'
 
 export type ContactJSON = ReturnType<typeof Contact.prototype.toJson>
 export interface ChatListItemType {
+  /** chat id */
   id: number
   name: string
   avatarPath: string
