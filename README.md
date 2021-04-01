@@ -54,7 +54,7 @@ Otherwise you can still do it manually:
 
 ```sh
 # Download the latest snapshot of the PKGBUILD
-wget https://aur.archlinux.org/cgit/aur.git/snapshot/deltachat-desktop-git.tar.gz
+wget --no-config https://aur.archlinux.org/cgit/aur.git/snapshot/deltachat-desktop-git.tar.gz
 
 # extract the archive and rm the archive file afterwards
 tar xzfv deltachat-desktop-git.tar.gz && rm deltachat-desktop-git.tar.gz
