@@ -51,9 +51,10 @@ export default class DCMessageList extends SplitOut {
     return [messageId, this.getMessage(messageId)]
   }
 
-  sendSticker(chatId: number, stickerPath: string) {
+  sendSticker(chatId: number, fileStickerPath: string) {
     const viewType = C.DC_MSG_STICKER
     const msg = this._dc.messageNew(viewType)
+    const stickerPath = fileStickerPath.replace('file://', '')
     msg.setFile(stickerPath, undefined)
     this._dc.sendMessage(chatId, msg)
   }
