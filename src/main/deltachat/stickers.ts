@@ -34,7 +34,10 @@ export default class DCStickers extends SplitOut {
       const stickerImages = []
       for (const sticker of await fsExtra.readdir(stickerPackPath)) {
         const stickerPackImagePath = path.join(stickerPackPath, sticker)
-        if (!sticker.endsWith('.png') || !(await isFile(stickerPackImagePath)))
+        if (
+          !(sticker.endsWith('.png') || sticker.endsWith('.webp')) ||
+          !(await isFile(stickerPackImagePath))
+        )
           continue
         stickerImages.push('file://' + stickerPackImagePath)
       }
