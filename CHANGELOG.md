@@ -10,6 +10,7 @@
 ## Fixed
 - hide show encryption info for saved messages (resulted in error)
 - remove "file://" scheme from filenames before calling `dc_msg_set_file` for stickers
+- initialize name field in contact profile dialog with previouly manually set name and use authname as a placeholder
 
 ## [1.15.5] - 2021-03-27
 
