@@ -318,6 +318,7 @@ const Message = (props: {
         <div className='break' />
         <div
           className='info-button'
+          onContextMenu={showMenu}
           onClick={joinCall.bind(null, screenContext, id)}
         >
           {direction === 'incoming'
