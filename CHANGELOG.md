@@ -6,6 +6,7 @@
 - add option to open message html in browser
 - encryption info for groups
 - allow sending of ".webp" stickers
+- allow starting a viedochat in groups
 
 ## Fixed
 - hide show encryption info for saved messages (resulted in error)
