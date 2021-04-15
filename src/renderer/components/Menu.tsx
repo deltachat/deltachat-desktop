@@ -68,10 +68,7 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
     })
   const onVideoChat = () => {
     screenContext.openDialog('ConfirmationDialog', {
-      header: tx(
-        'videochat_invite_user_to_videochat',
-        selectedChat.name
-      ),
+      header: tx('videochat_invite_user_to_videochat', selectedChat.name),
       message: tx('videochat_invite_user_hint'),
       confirmLabel: tx('ok'),
       cb: (yes: boolean) => {
@@ -121,14 +118,13 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
           }
         />
       ),
-        settingsContext.desktopSettings.enableAVCalls &&
-        !isReadOnlyChat && (
-          <DeltaMenuItem
-            key='call'
-            text={tx('videochat')}
-            onClick={onVideoChat}
-          />
-        ),
+      settingsContext.desktopSettings.enableAVCalls && !isReadOnlyChat && (
+        <DeltaMenuItem
+          key='call'
+          text={tx('videochat')}
+          onClick={onVideoChat}
+        />
+      ),
       <DeltaMenuItem
         key='delete'
         text={tx('menu_delete_chat')}
