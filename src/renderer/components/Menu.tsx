@@ -70,7 +70,7 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
     screenContext.openDialog('ConfirmationDialog', {
       header: tx(
         'videochat_invite_user_to_videochat',
-        selectedChat.contacts[0]?.displayName
+        selectedChat.name
       ),
       message: tx('videochat_invite_user_hint'),
       confirmLabel: tx('ok'),
@@ -121,7 +121,6 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
           }
         />
       ),
-      !isGroup &&
         settingsContext.desktopSettings.enableAVCalls &&
         !isReadOnlyChat && (
           <DeltaMenuItem
