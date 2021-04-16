@@ -43,7 +43,7 @@ export default function DeadDrop(props: {
       case C.DC_DECISION_NOT_NOW:
         break
       case C.DC_DECISION_BLOCK:
-        chatStoreDispatch({ type: 'UI_DELETE_MESSAGE', payload: msg.id })
+        // do not delete the message, even if we want that in the future, the core should handle it.
         break
     }
     onClose()
