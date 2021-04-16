@@ -7,6 +7,7 @@
 - encryption info for groups
 - allow sending of ".webp" stickers
 - allow starting a viedochat in groups
+- add local help for zh_CN and fr
 
 ## Fixed
 - hide show encryption info for saved messages (resulted in error)
