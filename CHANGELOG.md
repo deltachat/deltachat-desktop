@@ -15,6 +15,10 @@
 - initialize name field in contact profile dialog with previouly manually set name and use authname as a placeholder
 - show context menu also for videochat messages
 
+### Changed
+
+- update translations (02.05.2021)
+
 ## [1.15.5] - 2021-03-27
 
 ### Added
