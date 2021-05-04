@@ -247,8 +247,8 @@
     <string name="videochat_tap_to_open">点击来打开</string>
     <string name="videochat_instance">视频聊天实例</string>
     <string name="videochat_instance_placeholder">您的视频聊天实例</string>
-    <string name="videochat_instance_explain">定义了视频聊天实例之后，您可以从一对一聊天中启动视频聊天。视频聊天的两端都需要有兼容的应用或兼容的浏览器。\n\n示例: https://meet.jit.si/$ROOM 或 basicwebrtc:https://your-server</string>
-    <string name="videochat_instance_from_qr">使用“%1$s”邀请其他人加入视频聊天吗？\n\n设置好后，您可以从每个一对一聊天中开始视频聊天。 这会取代之前的视频聊天设置（如果有的话）。</string>
+    <string name="videochat_instance_explain">定义了视频聊天实例之后，您可以在聊天里发起视频聊天。视频聊天的两端都需要有兼容的应用或兼容的浏览器。\n\n示例: https://meet.jit.si/$ROOM 或 basicwebrtc:https://your-server</string>
+    <string name="videochat_instance_from_qr">使用“%1$s”邀请其他人加入视频聊天吗？\n\n设置好后，您就可以在聊天里发起视频聊天了。 这会取代之前的视频聊天设置（如果有的话）。</string>
     <string name="videochat_invitation">视频聊天邀请</string>
     <string name="videochat_invitation_body">您被邀请参加视频聊天，点击 %1$s 来加入。</string>
 
@@ -318,11 +318,12 @@
     <string name="send_failed">无法发送消息</string>
     <!-- reasons for a disabled message composer -->
     <string name="messaging_disabled_not_in_group">您无法编写消息，因为您不在此群组中。要加入，请询问其他成员。</string>
-    <string name="messaging_disabled_device_chat">此聊天包含本地生成的消息。因此您不能编写任何消息。</string>
+    <string name="messaging_disabled_device_chat">此聊天包含本地生成的消息。您不能在这里编写消息。</string>
     <string name="messaging_disabled_deaddrop">点击消息来接受或拒绝联系人请求</string>
     <string name="cannot_display_unsuported_file_type">无法显示此类文件：%s</string>
     <string name="attachment_failed_to_load">加载附件失败</string>
-
+    <!-- For recording Voice messages: Description for the "Lock" button allowing to lift the thumb from the record button while recording continues -->
+    <string name="lock_recording">锁定录音</string>
 
     <!-- mailing lists -->
     <string name="mailing_list">邮件列表</string>
@@ -751,8 +752,8 @@
     <string name="me_desktop">我</string>
     <string name="in_this_group_desktop">群组成员</string>
     <string name="not_in_this_group_desktop">潜在的群组成员（不在群组中）</string>
-    <string name="message_detail_sent_desktop">已发送</string>
-    <string name="message_detail_received_desktop">已接收</string>
+    <string name="message_detail_sent_desktop">发送于</string>
+    <string name="message_detail_received_desktop">接收于</string>
     <string name="message_detail_from_desktop">从</string>
     <string name="message_detail_to_desktop">到</string>
     <string name="menu.view.developer.open.log.folder">打开日志文件夹</string>
@@ -782,7 +783,7 @@
 
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
     <string name="pref_background_notifications">后台通知</string>
-    <string name="pref_background_notifications_explain">使用与服务器的后台连接，并且需要忽略电池优化。</string>
+    <string name="pref_background_notifications_explain">使用与服务器的后台连接。需要忽略电池优化。</string>
     <string name="pref_background_notifications_rationale">要保持与您的电子邮件服务器的连接并在后台接收消息，请在下一步中忽略电池优化。\n\nDelta Chat 仅使用少量的资源并且会注意不去耗尽电池电量。</string>
     <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
     <string name="pref_reliable_service">可靠后台连接</string>

@@ -244,7 +244,7 @@
     </plurals>
     <string name="file_saved_to">File salvato su \"%1$s\".</string>
 
-    <string name="videochat">Chat video</string>
+    <string name="videochat">Video chat</string>
     <string name="videochat_invite_user_to_videochat">Invito %1$s a una chat video?</string>
     <string name="videochat_invite_user_hint">Questo richiede un\'app compatibile o un browser compatibile da entrambe le parti.</string>
     <string name="videochat_contact_invited_hint">%1$s ti ha invitato a una chat video.</string>
@@ -334,7 +334,8 @@
     <string name="messaging_disabled_deaddrop">Fare clic su un messaggio per accettare o rifiutare la richiesta di contatto</string>
     <string name="cannot_display_unsuported_file_type">Impossibile visualizzare questo tipo di file: %s</string>
     <string name="attachment_failed_to_load">Impossibile caricare l\'allegato</string>
-
+    <!-- For recording Voice messages: Description for the "Lock" button allowing to lift the thumb from the record button while recording continues -->
+    <string name="lock_recording">Blocca la registrazione</string>
 
     <!-- mailing lists -->
     <string name="mailing_list">Mailing list</string>
