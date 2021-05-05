@@ -2,7 +2,12 @@ import debounce from 'debounce'
 import electron, { BrowserWindow, Rectangle, session } from 'electron'
 import { appWindowTitle } from '../../shared/constants'
 import { getLogger } from '../../shared/logger'
-import { appIcon, windowDefaults, htmlDistDir } from '../application-constants'
+import {
+  appIcon,
+  windowDefaults,
+  htmlDistDir,
+  supportedURISchemes,
+} from '../application-constants'
 import { showDeltaChat } from '../tray'
 import { ExtendedAppMainProcess } from '../types'
 import type { EventEmitter } from 'events'
@@ -62,6 +67,7 @@ export function init(
   // These calls are for mac and windows, on linux it uses the desktop file.
   app.setAsDefaultProtocolClient('openpgp4fpr')
   app.setAsDefaultProtocolClient('OPENPGP4FPR')
+  // do not forcefully set DC as standard email handler to not annoy users
 
   app.on('open-url', function (event: Event, url: string) {
     if (event) event.preventDefault()
@@ -87,15 +93,27 @@ export function init(
 
   // Iterate over arguments and look out for uris
   const openUrlFromArgv = (argv: string[]) => {
-    for (let i = 1; i < argv.length; i++) {
+    args_loop: for (let i = 1; i < argv.length; i++) {
       const arg = argv[i]
-      if (!arg.startsWith('OPENPGP4FPR:') && !arg.startsWith('openpgp4fpr:')) {
-        log.debug("open-url: URI doesn't start with OPENPGP4FPR:", arg)
+
+      if (!arg.includes(':')) {
         continue
       }
 
-      log.debug('open-url: Detected URI: ', arg)
-      app.emit('open-url', null, arg)
+      log.debug(
+        'open-url: process something that looks like it could be a scheme:',
+        arg
+      )
+      for (let expectedScheme of supportedURISchemes) {
+        if (
+          arg.startsWith(expectedScheme.toUpperCase()) ||
+          arg.startsWith(expectedScheme.toLowerCase())
+        ) {
+          log.debug('open-url: Detected URI: ', arg)
+          app.emit('open-url', null, arg)
+          continue args_loop
+        }
+      }
     }
   }
 

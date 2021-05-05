@@ -58,3 +58,8 @@ export function getAccountsPath() {
 export function getCustomThemesPath() {
   return join(getConfigPath(), 'custom-themes')
 }
+
+export const supportedURISchemes = [
+  'OPENPGP4FPR:',
+  'MAILTO:'
+]

@@ -70,11 +70,19 @@ const env = process.env
 
 const build = {}
 build['appId'] = 'chat.delta.desktop.electron'
-build['protocols'] = {
-  name: 'QR code data',
-  role: 'Viewer',
-  schemes: ['openpgp4fpr'],
-}
+build['protocols'] = [
+  {
+    name: 'Send Mails via MailTo Scheme',
+    // https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html#//apple_ref/doc/uid/TP40009249-102207-TPXREF115
+    role: 'Viewer',
+    schemes: ['mailto'],
+  },
+  {
+    name: 'QR code data',
+    role: 'Viewer',
+    schemes: ['openpgp4fpr'],
+  },
+]
 
 build['files'] = files
 build['asarUnpack'] = ['node_modules/deltachat-node/']
@@ -82,7 +90,7 @@ build['asarUnpack'] = ['node_modules/deltachat-node/']
 build['afterPack'] = './build/afterPackHook.js'
 build['afterSign'] = './build/afterSignHook.js'
 
-if(typeof env.NO_ASAR !== "undefined" && env.NO_ASAR != "false") {
+if (typeof env.NO_ASAR !== 'undefined' && env.NO_ASAR != 'false') {
   build['asar'] = false
 }
 
