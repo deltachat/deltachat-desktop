@@ -103,8 +103,6 @@ Running `npm test` does the following:
 - runs the unit tests
 - checks for illegal use of console.log()
 
-<!-- TODO write something about the integration tests -->
-
 #### E2E testing <a id="tests-e2e"></a>
 
 Run `npm run test-e2e` for end to end testing.
@@ -234,7 +232,6 @@ Some important folders and files:
 │   ├── help/                 # the in-app help
 │   └── main.html             # main html file in renderer process
 ├── test/
-│   ├── integration/          # integration tests
 │   ├── testcafe/             # testcafe tests
 │   └── unit/                 # unit tests
 └── themes/                   # default themes
