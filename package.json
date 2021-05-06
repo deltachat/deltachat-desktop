@@ -85,7 +85,7 @@
     "array-differ": "^3.0.0",
     "classnames": "^2.2.6",
     "debounce": "^1.2.0",
-    "deltachat-node": "https://github.com/deltachat/deltachat-node/releases/download/v1.51.1/deltachat-node.tgz",
+    "deltachat-node": "1.54.0",
     "emoji-js-clean": "^4.0.0",
     "emoji-mart": "^3.0.0",
     "emoji-regex": "^9.2.0",
