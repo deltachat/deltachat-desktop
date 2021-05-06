@@ -1,13 +1,21 @@
-# Run unit & integration tests on Linux
-name: Linux
-
-on: [push]
+# Run unit & integration tests
+on: 
+  push:
+    paths-ignore:
+      - 'docs/**'  # only trigger build if a file outside of /docs was changed
+      - '_locales/*.xml'
+      - '.vscode/**'
+      - 'README_ASSETS/**'
+      - 'README.md'
 
 jobs:
   test:
-    name: Test
-    runs-on: ubuntu-latest
-
+    name: Tests and E2E Tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-16.04, macos-latest, windows-latest]
+      fail-fast: true
     steps:
     - uses: actions/checkout@v1
     - name: Use Node.js 12.x
