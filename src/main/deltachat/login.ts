@@ -297,6 +297,7 @@ export function txCoreStrings() {
     'systemmsg_chat_protection_disabled'
   )
   strings[C.DC_STR_REPLY_NOUN] = tx('reply_noun')
+  strings[C.DC_STR_FORWARDED] = tx('forwarded')
 
   return strings
 }
