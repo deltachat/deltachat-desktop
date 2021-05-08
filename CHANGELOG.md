@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+## Changed
+- use new `decideOnContactRequest` api
+
 ### Added
 - add option to open message html in browser
 - encryption info for groups
@@ -13,6 +16,7 @@
 
 ## Fixed
 - Fix soure-mapped stacktrace on crashscreen in bundled production builds
+- Don't delete Contactrequest messages, that are blocked - answered with never. #2225
 - hide show encryption info for saved messages (resulted in error)
 - Make text of elments like timestamps, chat list summaries etc. non selectable
 - remove "file://" scheme from filenames before calling `dc_msg_set_file` for stickers

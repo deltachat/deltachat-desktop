@@ -86,16 +86,6 @@ class DeltaRemote {
     name: string
   ): Promise<number>
   call(
-    fnName: 'contacts.acceptContactRequest',
-    {
-      messageId,
-      contactId,
-    }: {
-      messageId: number
-      contactId: number
-    }
-  ): Promise<number>
-  call(
     fnName: 'contacts.createContact',
     email: string,
     name?: string
@@ -119,7 +109,6 @@ class DeltaRemote {
     listFlags: number,
     queryStr: string
   ): Promise<DCContact[]>
-  call(fnName: 'contacts.markNoticedContact', contactId: number): Promise<void>
   call(
     fnName: 'contacts.getChatIdByContactId',
     contactId: number
@@ -182,6 +171,14 @@ class DeltaRemote {
     ephemeralTimer: number
   ): Promise<void>
   call(fnName: 'chat.sendVideoChatInvitation', chatId: number): Promise<number>
+  call(
+    fnName: 'chat.decideOnContactRequest',
+    messageId: number,
+    decision:
+      | C.DC_DECISION_START_CHAT
+      | C.DC_DECISION_NOT_NOW
+      | C.DC_DECISION_BLOCK
+  ): Promise<number>
   // locations ----------------------------------------------------------
   call(
     fnName: 'locations.setLocation',

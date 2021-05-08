@@ -1,14 +1,15 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import classNames from 'classnames'
 import Timestamp from '../conversations/Timestamp'
 import MessageBody from '../message/MessageBody'
 import { C } from 'deltachat-node/dist/constants'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
+import { useTranslationFunction } from '../../contexts'
 import {
   ChatListItemType,
   MessageSearchResult,
 } from '../../../shared/shared-types'
 import { Avatar } from '../Avatar'
+import { openDeadDropDecisionDialog } from '../dialogs/DeadDrop'
 
 const FreshMessageCounter = React.memo(({ counter }: { counter: number }) => {
   if (counter === 0) return null
@@ -123,8 +124,7 @@ const ChatListItemNormal = React.memo<ChatListItemProps>(props => {
 
 const ChatListItemDeaddrop = React.memo(
   ({ chatListItem }: { chatListItem: ChatListItemType }) => {
-    const { openDialog } = useContext(ScreenContext)
-    const onClick = () => openDialog('DeadDrop', chatListItem.deaddrop)
+    const onClick = () => openDeadDropDecisionDialog(chatListItem.deaddrop)
     const tx = useTranslationFunction()
     return (
       <div

@@ -34,24 +34,6 @@ export default class DCContacts extends SplitOut {
     return result
   }
 
-  acceptContactRequest({
-    messageId,
-    contactId,
-  }: {
-    messageId: number
-    contactId: number
-  }) {
-    log.info(`chat with dead drop ${contactId}:${messageId}`)
-    const contact = this._dc.getContact(contactId)
-    const address = contact.getAddress()
-    this._dc.createContact('', address)
-    log.info(`Added contact ${contact.getNameAndAddress()}`)
-    const chatId = this._dc.createChatByMessageId(messageId)
-
-    if (chatId) this._controller.chatList.updateChatList()
-    return chatId
-  }
-
   createContact(email: string, name?: string) {
     if (!DeltaChat.maybeValidAddr(email)) {
       throw new Error(this._controller.translate('bad_email_address'))
@@ -79,10 +61,6 @@ export default class DCContacts extends SplitOut {
 
   getContact(contactId: number) {
     return this._dc.getContact(contactId).toJson()
-  }
-
-  markNoticedContact(contactId: number) {
-    return this._dc.markNoticedContact(contactId)
   }
 
   getChatIdByContactId(contactId: number) {
