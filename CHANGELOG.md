@@ -22,6 +22,7 @@
 ### Changed
 
 - update translations (02.05.2021)
+- Update deltachat-node to `v1.54.0`
 
 ## [1.15.5] - 2021-03-27
 
