@@ -8,6 +8,7 @@
 
 ## Fixed
 - hide show encryption info for saved messages (resulted in error)
+- Make text of elments like timestamps, chat list summaries etc. non selectable
 
 ## [1.15.5] - 2021-03-27
 
