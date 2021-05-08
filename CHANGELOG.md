@@ -14,6 +14,7 @@
 ## Fixed
 - Fix soure-mapped stacktrace on crashscreen in bundled production builds
 - hide show encryption info for saved messages (resulted in error)
+- Make text of elments like timestamps, chat list summaries etc. non selectable
 - remove "file://" scheme from filenames before calling `dc_msg_set_file` for stickers
 - initialize name field in contact profile dialog with previouly manually set name and use authname as a placeholder
 - show context menu also for videochat messages

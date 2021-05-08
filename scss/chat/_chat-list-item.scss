@@ -36,6 +36,9 @@
 
         font-weight: 200;
         font-size: medium;
+        & > span {
+          user-select: none;
+        }
       }
 
       & > div > .timestamp {
@@ -48,6 +51,7 @@
         white-space: nowrap;
         text-overflow: ellipsis;
         text-transform: uppercase;
+        user-select: none;
       }
     }
 
@@ -69,6 +73,7 @@
         white-space: nowrap;
         text-overflow: ellipsis;
         color: var(--chat-list-item-summary-text);
+        user-select: none;
 
         & > .summary {
           float: left;
