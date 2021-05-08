@@ -20,7 +20,9 @@ export class CrashScreen extends React.Component {
   errorToText(error: any) {
     if (error instanceof Error) {
       // TODO parse the stack and map the sourcemap to provide a usefull stacktrace
-      return error.stack.replace(/file:\/\/\/[\w\W]+?\/html-dist\//g, '')
+      return error.stack
+        .replace(/file:\/\/\/[\w\W]+?\/html-dist\//g, '') // for development
+        .replace(/\(file:\/\/.*?app.asar./g, '(') // for production (packaged)
     } else {
       return JSON.stringify(error)
     }
