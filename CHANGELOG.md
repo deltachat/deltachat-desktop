@@ -5,6 +5,7 @@
 ### Added
 - add option to open message html in browser
 - encryption info for groups
+- Add status text to profile view
 - allow sending of ".webp" stickers
 - allow starting a viedochat in groups
 - add local help for zh_CN and fr

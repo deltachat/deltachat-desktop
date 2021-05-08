@@ -154,6 +154,18 @@ export default function ViewProfile(props: {
                   </button>
                 )}
               </div>
+              {contact.status != '' && (
+                <>
+                  <DeltaDialogContentTextSeperator
+                    text={tx('pref_default_status_label')}
+                  />
+                  <div
+                    className='status-text'
+                  >
+                    {contact.status}
+                  </div>
+                </>
+              )}
               <DeltaDialogContentTextSeperator
                 text={tx('profile_shared_chats')}
               />
