@@ -360,7 +360,8 @@
     <string name="messaging_disabled_deaddrop">Нажмите на сообщение, чтобы принять или отклонить запрос контакта</string>
     <string name="cannot_display_unsuported_file_type">Невозможно отобразить этот тип файла: %s</string>
     <string name="attachment_failed_to_load">Не удалось загрузить вложение</string>
-
+    <!-- For recording Voice messages: Description for the "Lock" button allowing to lift the thumb from the record button while recording continues -->
+    <string name="lock_recording">Заблокировать запись</string>
 
     <!-- mailing lists -->
     <string name="mailing_list">Список рассылки</string>

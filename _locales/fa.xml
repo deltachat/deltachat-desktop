@@ -308,7 +308,7 @@
     <string name="chat_share_with_title">اشتراک گذاری با</string>
     <string name="chat_input_placeholder">پیام</string>
     <string name="chat_archived_label">بایگانی شد</string>
-    <string name="chat_no_messages">پبامی نیست. </string>
+    <string name="chat_no_messages">پیامی نیست. </string>
     <string name="chat_self_talk_subtitle">پیام‌هایی که برای خودم  ارسال کرده‌ام. </string>
     <string name="saved_messages">پیام‌های ذخیره شده. </string>
     <string name="saved_messages_explain">برای دسترسی راحت‌تر پیام‌ها را به اینجا هدایت کنید\n\n• می‌توانید یادداشت متنی یا صوتی تهیه کنید\n\n• برای ذخیره رسانه‌ آن را ضمیمه کنید. </string>
@@ -324,8 +324,6 @@
     <string name="messaging_disabled_deaddrop">برای رد یا قبول درخواست تماس روی یک پیام کلیک کنید</string>
     <string name="cannot_display_unsuported_file_type">امکان نمایش این نوع فایل وجود ندارد: %s</string>
     <string name="attachment_failed_to_load">ناموفق در بارگیری ضمیمه</string>
-
-
     <!-- map -->
     <string name="filter_map_on_time">نمایش موقعیت‌های مکانی در چارچوب زمان</string>
     <string name="show_location_traces">نمایش ردپاها</string>

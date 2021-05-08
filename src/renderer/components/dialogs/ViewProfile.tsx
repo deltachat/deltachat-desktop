@@ -19,19 +19,21 @@ import { useLogicVirtualChatList, ChatListPart } from '../chat/ChatList'
 import { AutoSizer } from 'react-virtualized'
 
 const ProfileInfoName = ({
-  displayName,
-  setDisplayName,
+  name,
+  authName,
+  setName,
   address,
   disabled,
 }: {
-  displayName: string
-  setDisplayName: (displayName: string) => void
+  name: string
+  authName: string
+  setName: (name: string) => void
   address: string
   disabled: boolean
 }) => {
   const onChange = async (ev: React.ChangeEvent<HTMLInputElement>) => {
     const newName = ev.target.value
-    setDisplayName(newName)
+    setName(newName)
   }
 
   return (
@@ -39,8 +41,8 @@ const ProfileInfoName = ({
       <div>
         <input
           className='group-name-input'
-          placeholder={displayName}
-          value={displayName}
+          placeholder={authName}
+          value={name}
           onChange={onChange}
           disabled={disabled}
           autoFocus
@@ -73,9 +75,7 @@ export default function ViewProfile(props: {
   const { isOpen, onClose, contact } = props
   const { openDialog } = useContext(ScreenContext)
 
-  const [displayName, setDisplayName] = useState<string>(
-    props.contact.displayName
-  )
+  const [name, setName] = useState<string>(props.contact.name)
 
   const { chatListIds } = useChatList(0, '', contact.id)
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
@@ -93,7 +93,7 @@ export default function ViewProfile(props: {
   }
 
   const onUpdateContact = async () => {
-    await DeltaBackend.call('contacts.changeNickname', contact.id, displayName)
+    await DeltaBackend.call('contacts.changeNickname', contact.id, name)
     onClose()
   }
 
@@ -130,8 +130,9 @@ export default function ViewProfile(props: {
                     contact.id === C.DC_CONTACT_ID_SELF ||
                     contact.id === C.DC_CONTACT_ID_DEVICE
                   }
-                  displayName={displayName}
-                  setDisplayName={setDisplayName}
+                  authName={props.contact.authName}
+                  name={name}
+                  setName={setName}
                   address={contact.address}
                 />
               </div>

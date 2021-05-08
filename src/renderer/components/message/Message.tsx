@@ -66,15 +66,14 @@ const Avatar = (
 }
 
 const ContactName = (props: {
-  email: string
   name: string
   profileName?: string
   color: string
   onClick: (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void
 }) => {
-  const { email, name, profileName, color, onClick } = props
+  const { name, profileName, color, onClick } = props
 
-  const title = name || email
+  const title = name
   const shouldShowProfile = Boolean(profileName && !name)
   const profileElement = shouldShowProfile ? (
     <span style={{ color: color }}>~{profileName || ''}</span>
@@ -93,12 +92,11 @@ const Author = (
   contact: DCContact,
   onContactClick: (contact: DCContact) => void
 ) => {
-  const { color, name, address } = contact
+  const { color, displayName } = contact
 
   return (
     <ContactName
-      email={address}
-      name={name}
+      name={displayName}
       color={color}
       onClick={() => onContactClick(contact)}
     />
@@ -189,6 +187,11 @@ function buildContextMenu(
     link !== '' && {
       label: tx('menu_copy_link_to_clipboard'),
       action: () => runtime.writeClipboardText(link),
+    },
+    // Copy videocall link to clipboard
+    message.msg.videochatUrl !== '' && {
+      label: tx('menu_copy_link_to_clipboard'),
+      action: () => runtime.writeClipboardText(message.msg.videochatUrl),
     },
     // Open Attachment
     showAttachmentOptions &&
@@ -320,6 +323,7 @@ const Message = (props: {
         <div className='break' />
         <div
           className='info-button'
+          onContextMenu={showMenu}
           onClick={joinCall.bind(null, screenContext, id)}
         >
           {direction === 'incoming'

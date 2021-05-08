@@ -39,6 +39,12 @@
     <string name="profile">Profil</string>
     <string name="main_menu">Hlavní menu</string>
     <string name="start_chat">Začni hovor</string>
+    <string name="show_full_message">Zobraz celou zprávu…</string>
+    <string name="load_remote_content">Nahraj vzdálené obrázky</string>
+    <!-- possible answers to the question are: Never, Always, Once -->
+    <string name="load_remote_content_ask">Vzdálené obrázky mohou umožnit sledování vaší činnosti.\n\nNastavení také povolí stahování fontů a dalšího obsahu. Obrázky z vyrovnávací paměti nebo součásti zprávy uvidíš i při vyptutí tohoto nastavení.\n\nNahrávat vzdálené obrázky?</string>
+    <string name="always">Vždy</string>
+    <string name="once">Jednou</string>
     <string name="show_password">Zobraz heslo</string>
     <string name="hide_password">Skrýt heslo</string>
     <string name="not_now">Teď ne</string>
@@ -119,6 +125,8 @@
     <string name="audio">Zvukový záznam</string>
     <string name="voice_message">Hlasová zpráva</string>
     <string name="forwarded_message">Přeposlaná zpráva</string>
+    <!-- %1$s will be replaced by the name or the email-address of the person who has forwarded the message -->
+    <string name="forwarded_by">Přeposlal %1$s</string>
     <string name="video">Video</string>
     <string name="documents">Dokumenty</string>
     <string name="contact">Kontakt</string>
@@ -191,6 +199,8 @@
     <!-- menu entry that opens eg. a gallery image or a document in the chat at the correct position -->
     <string name="show_in_chat">Ukaž v hovoru</string>
     <string name="menu_share">Sdílet</string>
+    <!-- this is the action "to block sth." usually a mailing list or a contact. this is NOT "a large solid piece of hard material" :) -->
+    <string name="block">Zablokovat</string>
     <string name="menu_block_contact">Zablokuj kontakt</string>
     <string name="menu_unblock_contact">Odblokuj kontakt</string>
     <string name="menu_play">Přehrát</string>
@@ -279,7 +289,7 @@
     </plurals>
     <string name="ask_forward">Přepošli zprávy na adresu %1$s?</string>
     <string name="ask_forward_multiple">Přepošli zprávy do %1$d hovorů?</string>
-    <string name="ask_export_attachment">Uložit přílohu? Uložení příloh je zpřístupní ostatním aplikacím na tomto přístroji.\n\Pokračovat?</string>
+    <string name="ask_export_attachment">Uložit přílohu? Uložení příloh je zpřístupní ostatním aplikacím na tomto přístroji.\n\nPokračovat?</string>
     <string name="ask_block_contact">Zablokovat tento kontakt? Další zprávy od tohoto kontaktu již nebudete přijímat.</string>
     <string name="ask_unblock_contact">Odblokovat tento kontakt? Zprávy od tohoto kontaktu budete opět přijímat.</string>
     <string name="ask_delete_contacts">Vymazat kontakty?\n\nKontakty v nastavených hovorech a kontakty ze systémového adresáře nelze nadobro vymazat.</string>
@@ -348,6 +358,9 @@
     <string name="messaging_disabled_deaddrop">K povolení nebo zamítnutí kontaktu stiskni jeho zprávu</string>
     <string name="cannot_display_unsuported_file_type">Nelze zobrazit tento typ souboru: %s</string>
     <string name="attachment_failed_to_load">Nezdařilo se načíst přílohu</string>
+    <!-- mailing lists -->
+    <string name="mailing_list">Hromadná zpráva</string>
+    <string name="ask_show_mailing_list">Zobraz seznam hromadné zprávy \"%1$s\"?</string>
 
 
     <!-- map -->
@@ -576,10 +589,13 @@
     <string name="autodel_at_once">Ihned</string>
     <string name="after_30_seconds">Po 30ti sekundách</string>
     <string name="after_1_minute">Po 1 minutě</string>
+    <string name="after_5_minutes">Po 5 minutách</string>
+    <string name="after_30_minutes">Po 30 minutách</string>
     <string name="autodel_after_1_hour">Po 1 hodině</string>
     <string name="autodel_after_1_day">Po 1 dni</string>
     <string name="autodel_after_1_week">Po 1 týdnu</string>
     <string name="autodel_after_4_weeks">Po 4 týdnech</string>
+    <string name="after_5_weeks">Po 5 týdnech</string>
     <string name="autodel_after_1_year">Po 1 roce</string>
 
     <!-- autocrypt -->
@@ -625,6 +641,11 @@
     <string name="systemmsg_ephemeral_timer_day">Časovač samomazacích zpráv na 1 den.</string>
     <string name="systemmsg_ephemeral_timer_week">Časovač samomazacích zpráv na 1 týden.</string>
     <string name="systemmsg_ephemeral_timer_four_weeks">Časovač samomazacích zpráv na 4 týdny.</string>
+    <string name="systemmsg_ephemeral_timer_minutes">Samomazací zprávy vyprší po %1$s minutách.</string>
+    <string name="systemmsg_ephemeral_timer_hours">Samomazací zprávy vyprší po %1$s hodinách.</string>
+    <string name="systemmsg_ephemeral_timer_days">Samomazací zprávy vyprší po %1$s dnech.</string>
+    <string name="systemmsg_ephemeral_timer_weeks">Samomazací zprávy vyprší po %1$s týdnech.</string>
+
     <!-- Translators: Protection disabled/enabled messages may be displayed together with a "big shield" and may be suffixed by systemmsg_action_by_user or systemmsg_action_by_me -->
     <string name="systemmsg_chat_protection_disabled">Ochrana rozhovoru vypnuta.</string>
     <string name="systemmsg_chat_protection_enabled">Ochrana rozhovoru zapnuta.</string>

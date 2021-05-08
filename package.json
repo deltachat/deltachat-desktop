@@ -150,9 +150,9 @@
     "spectron": "^12.0.0",
     "tape": "^4.12.0",
     "tempy": "^0.3.0",
-    "testcafe": "^1.10.1",
+    "testcafe": "^1.14.0",
     "testcafe-browser-provider-electron": "0.0.16",
-    "testcafe-react-selectors": "^4.0.0",
+    "testcafe-react-selectors": "^4.1.5",
     "typescript": "^3.9.7",
     "walk": "^2.3.14",
     "xml-js": "^1.6.8"

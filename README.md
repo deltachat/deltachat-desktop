@@ -131,6 +131,10 @@ Each database is a sqlite file that represents the account for a given email add
 
 Read [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)
 
+For translations see our transifex page: https://www.transifex.com/delta-chat/public/
+
+For other ways to contribute: https://delta.chat/en/contribute
+
 ## Logging <a id="logging"></a>
 
 You can access the log folder and the current log file under the `View->Developer` menu:
