@@ -472,7 +472,9 @@ export const Quote = ({
       >
         {message && message.contact.displayName}
       </div>
-      <p>{quotedText}</p>
+      <div className='quoted-text'>
+        <MessageBody text={quotedText} />
+      </div>
     </div>
   )
 }

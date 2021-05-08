@@ -386,7 +386,7 @@
     font-weight: 300;
   }
 
-  p {
+  .quoted-text {
     font-size: 12px;
     line-height: 12px;
     margin: 0;
@@ -402,6 +402,7 @@
     overflow: hidden;
     color: var(--messageQuotedText);
     white-space: pre-line;
+    user-select: text;
   }
 }
 
