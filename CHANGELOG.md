@@ -5,6 +5,7 @@
 ### Added
 - add option to open message html in browser
 - encryption info for groups
+- Add status text to profile view
 
 ## Fixed
 - hide show encryption info for saved messages (resulted in error)

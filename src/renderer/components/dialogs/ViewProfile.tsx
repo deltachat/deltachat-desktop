@@ -135,18 +135,6 @@ export default function ViewProfile(props: {
                   address={contact.address}
                 />
               </div>
-              {contact.status != '' && (
-                <div
-                  style={{
-                    display: 'flex',
-                    margin: '20px 0px',
-                    justifyContent: 'center',
-                    color: 'grey',
-                  }}
-                >
-                  <p>{contact.status}</p>
-                </div>
-              )}
               <div
                 style={{
                   display: 'flex',
@@ -165,6 +153,18 @@ export default function ViewProfile(props: {
                   </button>
                 )}
               </div>
+              {contact.status != '' && (
+                <>
+                  <DeltaDialogContentTextSeperator
+                    text={tx('pref_default_status_label')}
+                  />
+                  <div
+                    className='status-text'
+                  >
+                    {contact.status}
+                  </div>
+                </>
+              )}
               <DeltaDialogContentTextSeperator
                 text={tx('profile_shared_chats')}
               />
