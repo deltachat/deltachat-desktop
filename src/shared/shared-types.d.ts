@@ -183,7 +183,7 @@ export interface MessageType {
   setupCodeBegin?: string
 }
 
-export type DCContact = Omit<JsonContact, 'color'> & { color: string }
+export type DCContact = JsonContact
 
 export type Theme = {
   name: string
