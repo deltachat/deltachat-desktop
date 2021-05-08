@@ -65,6 +65,9 @@
   "forwared_by": {
     "message": "Forwarded by %1$s"
   },
+  "forwarded":{
+    "message": "Forwarded"
+  },
   "menu_copy_text_to_clipboard": {
     "message": "Copy Text"
   },
