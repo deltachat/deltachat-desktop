@@ -159,11 +159,7 @@ export default function ViewProfile(props: {
                   <DeltaDialogContentTextSeperator
                     text={tx('pref_default_status_label')}
                   />
-                  <div
-                    className='status-text'
-                  >
-                    {contact.status}
-                  </div>
+                  <div className='status-text'>{contact.status}</div>
                 </>
               )}
               <DeltaDialogContentTextSeperator
