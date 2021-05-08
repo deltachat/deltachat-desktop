@@ -3,7 +3,7 @@ import { DeltaBackend } from '../../delta-remote'
 import { Classes } from '@blueprintjs/core'
 import { useChatStore } from '../../stores/chat'
 import { DialogProps } from './DialogController'
-import { DCContact, MessageType } from '../../../shared/shared-types'
+import { DCContact, MessageType, FullChat } from '../../../shared/shared-types'
 import { SmallDialog } from './DeltaDialog'
 import { useTranslationFunction } from '../../contexts'
 import { C } from 'deltachat-node/dist/constants'
@@ -14,9 +14,10 @@ import { C } from 'deltachat-node/dist/constants'
 export default function DeadDrop(props: {
   contact: DCContact
   msg: MessageType['msg']
+  chat: FullChat
   onClose: DialogProps['onClose']
 }) {
-  const { contact, msg, onClose } = props
+  const { contact, msg, chat, onClose } = props
   const chatStoreDispatch = useChatStore()[1]
 
   const decide = async (
@@ -54,10 +55,18 @@ export default function DeadDrop(props: {
 
   const tx = useTranslationFunction()
 
+  console.log({ props })
+
+  const isMailingList = chat.type === C.DC_CHAT_TYPE_MAILINGLIST
+
   return (
     <SmallDialog isOpen={isOpen} onClose={onClose}>
       <div className='bp3-dialog-body-with-padding'>
-        <p>{tx('ask_start_chat_with', nameAndAddr)}</p>
+        <p>
+          {isMailingList
+            ? tx('ask_show_mailing_list', chat.name)
+            : tx('ask_start_chat_with', nameAndAddr)}
+        </p>
         <div className={Classes.DIALOG_FOOTER}>
           <div
             className={Classes.DIALOG_FOOTER_ACTIONS}
@@ -67,7 +76,7 @@ export default function DeadDrop(props: {
               className='delta-button danger'
               onClick={decide.bind(null, C.DC_DECISION_BLOCK)}
             >
-              {tx('never').toUpperCase()}
+              {tx(isMailingList ? 'block' : 'menu_block_contact').toUpperCase()}
             </p>
             <p
               className='delta-button'
@@ -86,4 +95,16 @@ export default function DeadDrop(props: {
       </div>
     </SmallDialog>
   )
+}
+
+export async function openDeadDropDecisionDialog(message: MessageType) {
+  const chat = await DeltaBackend.call(
+    'chatList.getFullChatById',
+    message.msg.realChatId
+  )
+  window.__openDialog('DeadDrop', {
+    contact: message.contact,
+    chat,
+    msg: message.msg,
+  })
 }
