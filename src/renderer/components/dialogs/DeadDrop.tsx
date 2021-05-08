@@ -55,8 +55,6 @@ export default function DeadDrop(props: {
 
   const tx = useTranslationFunction()
 
-  console.log({ props })
-
   const isMailingList = chat.type === C.DC_CHAT_TYPE_MAILINGLIST
 
   return (
