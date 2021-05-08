@@ -9,6 +9,7 @@ on:
       - 'test/**'
       - '*.md'
       - '.prettierrc.yml'
+      - '.vscode/**'
 
 jobs:
   upload-preview:

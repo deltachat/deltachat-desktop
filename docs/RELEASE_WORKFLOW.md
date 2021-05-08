@@ -6,7 +6,7 @@
 
 2. Pull translations: `npm run translations-update`
 
-3. Update the help file. (TODO: information on how do that)
+3. Update the local help files. (TODO: information on how do that)
 
 ## Releasing
 
@@ -18,21 +18,18 @@
 
 4. run `npm install` to update `package-lock.json`
 
-5. Update, commit and push `static/chat.delta.desktop.appdata.xml`
-   with the new release information (TODO make script to automate this step #1697)
+5. open a pr for your branch and get it reviewed
 
-6. open a pr for your branch and get it reviewed
-
-7. as soon as your pr is approved / before merging: tag the latest commit with your version number:
+6. as soon as your pr is approved / before merging: tag the latest commit with your version number:
 
 ```
 git tag <tagname>
 git push --tags
 ```
 
-9. After the pr is merged create a github release for your tag an copy the relevant part of the changelog into the description field.
+7. After the pr is merged create a github release for your tag an copy the relevant part of the changelog into the description field.
 
-10. Done as soon as the new tag is merged to master our build machine should pick it up, build the new release and upload it to `https://download.delta.chat/desktop/[version_code]`
+8. Done as soon as the new tag is merged to master our build machine should pick it up, build the new release and upload it to `https://download.delta.chat/desktop/[version_code]`
 
 ## What if the master branch changed in the meantime
 

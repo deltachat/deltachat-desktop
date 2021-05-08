@@ -38,7 +38,6 @@ const files = [
   // Build artifacts
   '!tsc-dist/renderer/',
   '!**/*.tsbuildinfo',
-  '!**/*.js.map',
   '!**/*.css.map',
   '!html-dist/report.htm',
   '!node_modules/typescript/',

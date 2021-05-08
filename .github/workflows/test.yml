@@ -1,0 +1,40 @@
+# Run unit & integration tests
+on: 
+  push:
+    paths-ignore:
+      - 'docs/**'  # only trigger build if a file outside of /docs was changed
+      - '_locales/*.xml'
+      - '.vscode/**'
+      - 'README_ASSETS/**'
+      - 'README.md'
+
+jobs:
+  test:
+    name: Tests and E2E Tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-16.04, windows-latest] # macos-latest doesn't work currently: ERROR UnableToAccessScreenRecordingAPIError: The find-window process cannot access the Screen Recording API.
+      fail-fast: false # don't fail fast, because some tests can be flaky so better we get all results
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js 12.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: npm ci
+      run: |
+        npm ci
+    - name: npm run build
+      run: |
+        npm run build
+    - name: npm test
+      run: |
+        npm test
+    - uses: DevExpress/testcafe-action@latest
+      with:
+        version: "1.14.0"
+        args: "--skip-js-errors electron:. ./test/testcafe/test.js"
+      env:
+        DCC_NEW_TMP_EMAIL: ${{secrets.DCC_NEW_TMP_EMAIL}}
+        NODE_ENV: test
