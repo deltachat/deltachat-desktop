@@ -69,7 +69,9 @@ export default function MainScreen() {
   const onTitleClick = () => {
     if (!selectedChat) return
 
-    if (selectedChat.isGroup) {
+    if (selectedChat.type === C.DC_CHAT_TYPE_MAILINGLIST) {
+      return
+    } else if (selectedChat.isGroup) {
       openEditGroupDialog(screenContext, selectedChat)
     } else {
       openViewProfileDialog(screenContext, selectedChat.contacts[0].id)
