@@ -100,5 +100,14 @@
   },
   "explain_desktop_minimized_disabled_tray_pref": {
     "message": "Tray icon cannot be disabled as Delta Chat was started with the --minimized option"
+  },
+  "mailto_dialog_header_select_chat": {
+    "message": "Select chat to send the message to"
+  },
+  "mailto_dialog_confirm_replace_draft": {
+    "message": "%1$s already has a draft message, do you want to replace it?"
+  },
+  "mailto_link_could_not_be_decoded": {
+    "message": "mailto link could not be decoded: %1$s"
   }
 }

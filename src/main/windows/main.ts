@@ -104,7 +104,7 @@ export function init(
         'open-url: process something that looks like it could be a scheme:',
         arg
       )
-      for (let expectedScheme of supportedURISchemes) {
+      for (const expectedScheme of supportedURISchemes) {
         if (
           arg.startsWith(expectedScheme.toUpperCase()) ||
           arg.startsWith(expectedScheme.toLowerCase())

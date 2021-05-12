@@ -1,0 +1,23 @@
+.mailto-dialog {
+  .select-chat-chat-list {
+    height: 100%;
+
+    $search-input-height: 32px;
+    $search-input-margin: 12px;
+
+    .search-input {
+      height: 32px;
+      margin: $search-input-margin;
+      width: calc(100% - #{$search-input-margin * 2});
+    }
+
+    div.results {
+      height: calc(100% - #{$search-input-height + $search-input-margin * 2});
+    }
+
+    .chat-list-item {
+      padding-right: 20px;
+      padding-left: 20px;
+    }
+  }
+}

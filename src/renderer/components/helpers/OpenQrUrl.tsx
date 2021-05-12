@@ -16,6 +16,12 @@ import {
 import { Spinner } from '@blueprintjs/core'
 import { DialogProps } from '../dialogs/DialogController'
 import { runtime } from '../../runtime'
+import { parseMailto } from './parse_mailto'
+import MailtoDialog, { doMailtoAction } from '../dialogs/MailtoDialog'
+import { getLogger } from '../../../shared/logger'
+import { selectChat } from '../../stores/chat'
+
+const log = getLogger('renderer/processOpenUrl')
 
 export function ProcessQrCodeDialog({
   onCancel: _onCancel,
@@ -53,6 +59,50 @@ export default async function processOpenQrUrl(
   callback: any = null
 ) {
   const tx = window.static_translate
+
+  if (url.toLowerCase().startsWith('mailto:')) {
+    log.debug('processing mailto url:', url)
+    try {
+      const mailto = parseMailto(url)
+      const messageText = mailto.subject
+        ? mailto.subject + (mailto.body ? '\n\n' + mailto.body : '')
+        : mailto.body
+
+      if (mailto.to) {
+        let contactId = await DeltaBackend.call(
+          'contacts.lookupContactIdByAddr',
+          mailto.to
+        )
+        if (contactId == 0) {
+          contactId = await DeltaBackend.call(
+            'contacts.createContact',
+            mailto.to
+          )
+        }
+        const chatId = await DeltaBackend.call(
+          'contacts.getDMChatId',
+          contactId
+        )
+        if (messageText) {
+          await doMailtoAction(chatId, messageText)
+        } else {
+          selectChat(chatId)
+        }
+      } else {
+        if (messageText) {
+          window.__openDialog(MailtoDialog, { messageText })
+        }
+      }
+      callback && callback()
+    } catch (error) {
+      log.error('mailto decoding error', error)
+      window.__openDialog('AlertDialog', {
+        message: tx('mailto_link_could_not_be_decoded', url),
+        cb: callback,
+      })
+    }
+    return
+  }
 
   const screen = window.__screen
 

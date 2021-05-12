@@ -59,7 +59,4 @@ export function getCustomThemesPath() {
   return join(getConfigPath(), 'custom-themes')
 }
 
-export const supportedURISchemes = [
-  'OPENPGP4FPR:',
-  'MAILTO:'
-]
+export const supportedURISchemes = ['OPENPGP4FPR:', 'MAILTO:']

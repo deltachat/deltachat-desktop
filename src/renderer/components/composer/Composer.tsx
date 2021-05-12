@@ -275,9 +275,7 @@ export function useDraft(
   const draftRef = useRef<draftObject>()
   draftRef.current = draftState
 
-  useEffect(() => {
-    log.debug('reloading chat because id changed', chatId)
-    //load
+  const loadDraft = (chatId: number) => {
     DeltaBackend.call('messageList.getDraft', chatId).then(newDraft => {
       if (!newDraft) {
         log.debug('no draft')
@@ -296,6 +294,14 @@ export function useDraft(
         inputRef.current?.setText(newDraft.msg.text)
       }
     })
+  }
+
+  useEffect(() => {
+    log.debug('reloading chat because id changed', chatId)
+    //load
+    loadDraft(chatId)
+    window.__reloadDraft = loadDraft.bind(this, chatId)
+    return () => (window.__reloadDraft = null)
   }, [chatId])
 
   const saveDraft = async () => {
