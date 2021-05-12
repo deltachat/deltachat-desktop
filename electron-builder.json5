@@ -2,7 +2,14 @@
 // run "pack:generate_config" to re-generate it
 {
   appId: 'chat.delta.desktop.electron',
-  protocols: { name: 'QR code data', role: 'Viewer', schemes: ['openpgp4fpr'] },
+  protocols: [
+    { name: 'QR code data', role: 'Viewer', schemes: ['openpgp4fpr'] },
+    {
+      name: 'Send Mails via MailTo Scheme',
+      role: 'Viewer',
+      schemes: ['mailto'],
+    },
+  ],
   files: [
     '**/*',
     '!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}',
@@ -134,8 +141,8 @@
     target: ['AppImage', 'deb'],
     category: 'Network;Chat;InstantMessaging;',
     desktop: {
-      comment: 'Delta Chat email-based messenger',
-      keywords: 'dc;chat;delta;messaging;messenger;email',
+      Comment: 'Delta Chat email-based messenger',
+      Keywords: 'dc;chat;delta;messaging;messenger;email',
     },
     files: [
       '**/*',
