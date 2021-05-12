@@ -72,15 +72,15 @@ const build = {}
 build['appId'] = 'chat.delta.desktop.electron'
 build['protocols'] = [
   {
+    name: 'QR code data',
+    role: 'Viewer',
+    schemes: ['openpgp4fpr'],
+  },
+  {
     name: 'Send Mails via MailTo Scheme',
     // https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html#//apple_ref/doc/uid/TP40009249-102207-TPXREF115
     role: 'Viewer',
     schemes: ['mailto'],
-  },
-  {
-    name: 'QR code data',
-    role: 'Viewer',
-    schemes: ['openpgp4fpr'],
   },
 ]
 
@@ -145,8 +145,8 @@ build['linux'] = {
   target: ['AppImage', 'deb'],
   category: 'Network;Chat;InstantMessaging;',
   desktop: {
-    comment: 'Delta Chat email-based messenger',
-    keywords: 'dc;chat;delta;messaging;messenger;email',
+    Comment: 'Delta Chat email-based messenger',
+    Keywords: 'dc;chat;delta;messaging;messenger;email',
   },
   files: [...files, PREBUILD_FILTERS.NOT_MAC, PREBUILD_FILTERS.NOT_WINDOWS],
   icon: 'build/icon.icns', // electron builder gets the icon out of the mac icon archive
