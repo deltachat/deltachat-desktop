@@ -16,7 +16,7 @@ import {
 import { Spinner } from '@blueprintjs/core'
 import { DialogProps } from '../dialogs/DialogController'
 import { runtime } from '../../runtime'
-import { parseMailto } from './parse_mailto'
+import { parseMailto } from '../../../shared/parse_mailto'
 import MailtoDialog, { doMailtoAction } from '../dialogs/MailtoDialog'
 import { getLogger } from '../../../shared/logger'
 import { selectChat } from '../../stores/chat'
