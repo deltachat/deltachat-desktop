@@ -101,4 +101,11 @@ export default class DCContacts extends SplitOut {
   getEncryptionInfo(contactId: number) {
     return this._dc.getContactEncryptionInfo(contactId)
   }
+
+  lookupContactIdByAddr(email: string): number {
+    if (!DeltaChat.maybeValidAddr(email)) {
+      throw new Error(this._controller.translate('bad_email_address'))
+    }
+    return this._dc.lookupContactIdByAddr(email)
+  }
 }

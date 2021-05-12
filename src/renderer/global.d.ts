@@ -28,5 +28,6 @@ declare global {
     __contextMenuActive: boolean
     __settingsOpened: boolean
     __setQuoteInDraft: ((msgId: number) => void) | null
+    __reloadDraft: () => {} | null
   }
 }
