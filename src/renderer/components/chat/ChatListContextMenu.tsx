@@ -16,6 +16,7 @@ import { ChatListItemType } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
 import { DeltaBackend } from '../../delta-remote'
 import { ContextMenuItem } from '../ContextMenu'
+import MessageListProfile from '../dialogs/MessageListProfile'
 
 // const log = getLogger('renderer/ChatListContextMenu')
 
@@ -84,7 +85,13 @@ export function useChatListContextMenu() {
         'chatList.getFullChatById',
         chatListItem.id
       )
-      openViewProfileDialog(screenContext, fullChat.contacts[0].id)
+      if (fullChat.type !== C.DC_CHAT_TYPE_MAILINGLIST) {
+        openViewProfileDialog(screenContext, fullChat.contacts[0].id)
+      } else {
+        screenContext.openDialog(MessageListProfile, {
+          chat: fullChat,
+        })
+      }
     }
     const onLeaveGroup = () =>
       openLeaveChatDialog(screenContext, chatListItem.id)

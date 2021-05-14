@@ -32,6 +32,7 @@ import { Avatar } from './Avatar'
 import OfflineToast from './OfflineToast'
 import { C } from 'deltachat-node/dist/constants'
 import MapComponent from './map/MapComponent'
+import MessageListProfile from './dialogs/MessageListProfile'
 
 enum View {
   MessageList,
@@ -70,7 +71,9 @@ export default function MainScreen() {
     if (!selectedChat) return
 
     if (selectedChat.type === C.DC_CHAT_TYPE_MAILINGLIST) {
-      return
+      screenContext.openDialog(MessageListProfile, {
+        chat: selectedChat,
+      })
     } else if (selectedChat.isGroup) {
       openEditGroupDialog(screenContext, selectedChat)
     } else {
