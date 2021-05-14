@@ -46,7 +46,6 @@ export default function MessageListProfile(props: {
             color: chat.color,
             isVerified: chat.isProtected,
           })}
-          <div className='group-seperator'>{tx('info')}</div>
           <div style={{ padding: '15px 0px' }}>
             {tx('mailing_list_profile_info')}
           </div>

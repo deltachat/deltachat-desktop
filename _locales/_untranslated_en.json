@@ -81,6 +81,6 @@
     "message": "Sending Messages in Mailinglists is not supported yet"
   },
   "mailing_list_profile_info": {
-    "message": "The name change and list-avatar change is only local and not synced when using multi device"
+    "message": "These settings (chat name and image) apply to this device only and are not applied to other devices."
   }
 }
