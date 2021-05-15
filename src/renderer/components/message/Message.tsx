@@ -329,6 +329,10 @@ const Message = (props: {
 
   const hasQuote = message.msg.quotedText !== null
 
+  /** Whether to show author name and avatar */
+  const showAuthor =
+    conversationType.hasMultipleParticipants || message?.msg.overrideSenderName
+
   return (
     <div
       onContextMenu={showMenu}
@@ -341,7 +345,7 @@ const Message = (props: {
         { 'has-html': hasHTML }
       )}
     >
-      {conversationType.hasMultipleParticipants &&
+      {showAuthor &&
         direction === 'incoming' &&
         Avatar(message.contact, onContactClick)}
       <div
@@ -359,9 +363,7 @@ const Message = (props: {
         {!message.msg.isForwarded && (
           <div
             className={classNames('author-wrapper', {
-              'can-hide':
-                direction === 'outgoing' ||
-                !conversationType.hasMultipleParticipants,
+              'can-hide': direction === 'outgoing' || !showAuthor,
             })}
           >
             {AuthorName(
