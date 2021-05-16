@@ -1,4 +1,4 @@
-# Troubleshooting
+# Troubleshooting For Users
 
 This document describes common problems that are encountered by users and their solution.
 Only end-user related stuff should be documented here, development related content should be written somewhere else.
