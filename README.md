@@ -81,7 +81,7 @@ $ brew install --cask deltachat
 
 Simply install the `.dmg` file as you do it with all other software on mac.
 
-If you are getting an openssl error message at the first start up you need to install openssl.
+If you are getting an OpenSSL error message at the first start up you need to install OpenSSL.
 
 ```
 $ brew install openssl
@@ -90,7 +90,7 @@ $ brew install openssl
 ### From Source <a id="source"></a>
 
 > ⚠ This is mostly for development purposes, this won't install/integrate deltachat into your system.
-> So unless you know what you are doing, we recomment to stick to the methods above if possible.
+> So unless you know what you are doing, we recommend to stick to the methods above if possible.
 
 ```sh
 # Get the code
@@ -123,9 +123,9 @@ deltachat-rust-core README files to set things up **or write an issue**.
 
 ## Configuration and Databases <a id="config-and-db"></a>
 
-The configuration files and database are stored at [application-config's default filepaths](https://www.npmjs.com/package/application-config#config-location).
+The configuration files and database are stored at [application-config's default file paths](https://www.npmjs.com/package/application-config#config-location).
 
-Each database is a sqlite file that represents the account for a given email address.
+Each database is a SQLite file that represents the account for a given email address.
 
 ## How to Contribute <a id="how-to-contribute"></a>
 
@@ -141,7 +141,7 @@ You can access the log folder and the current log file under the `View->Develope
 
 <center><img src="README_ASSETS/devMenu.png"/></center>
 
-Read [docs/LOGGING.md](docs/LOGGING.md) for an explaination about our logging system. (available **options**, log **location** and information abour the used Log-**Format**)
+Read [docs/LOGGING.md](docs/LOGGING.md) for an explanation about our logging system. (available **options**, log **location** and information about the used Log-**Format**)
 
 ## License <a id="license"></a>
 

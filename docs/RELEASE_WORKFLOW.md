@@ -12,13 +12,13 @@
 
 1. create a new branch for the new version (you could name it `prepare_versioncode`, for example `prepare_1.3.0`)
 
-2. update the changelog (put the stuff in unreleased under a section with your new version code)
+2. update the change log (put the stuff in unreleased under a section with your new version code)
 
 3. Change `version` field in `package.json` to `X.Y.Z`.
 
 4. run `npm install` to update `package-lock.json`
 
-5. open a pr for your branch and get it reviewed
+5. open a pr for your branch and get it reviewed.
 
 6. as soon as your pr is approved / before merging: tag the latest commit with your version number:
 
@@ -27,11 +27,10 @@ git tag <tagname>
 git push --tags
 ```
 
-7. After the pr is merged create a github release for your tag an copy the relevant part of the changelog into the description field.
+7. After the pr is merged create a GitHub release for your tag an copy the relevant part of the change log into the description field.
 
 8. Done as soon as the new tag is merged to master our build machine should pick it up, build the new release and upload it to `https://download.delta.chat/desktop/[version_code]`
 
 ## What if the master branch changed in the meantime
 
-rebase your pr and redo the steps as necessary.
-If you are unsure ask another contributor on how to proceed in your case.
+Rebase your pr and redo the steps as necessary, If you are unsure ask another contributor on how to proceed in your case.

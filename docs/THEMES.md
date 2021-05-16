@@ -1,6 +1,6 @@
 ## Information how the experimental theme system works
 
-Themes are css files that act as themes by containing many different css variables.
+Themes are CSS files that act as themes by containing many different css variables.
 
 Most of these variables are small variations of the base colors of the theme so using scss allows us to generate them from the base colors to save us work.
 But of course we can overwrite those variables manually too, we can even overwrite css classes if our theme needs it.
@@ -8,12 +8,12 @@ But of course we can overwrite those variables manually too, we can even overwri
 ## Theme codes
 
 There are two types of themes `dc`(built-in) and `custom` themes.
-DeltaChat Desktop searches in two places for themes, the theme folder contained in the deltachat installation and the theme folder in the deltachat userdata folder of the users account (custom themes).
+DeltaChat Desktop searches in two places for themes, the theme folder contained in the deltachat installation and the theme folder in the deltachat user data folder of the users account (custom themes).
 
 The actual theme code is build as follows:
 
 ```
-[location/type]:[name of themefile without extension]
+[location/type]:[name of theme file without extension]
 ```
 
 Some examples:
@@ -24,7 +24,7 @@ dc:light -> ./themes/light.css
 custom:mytheme -> ~/.config/DeltaChat/custom-themes/mytheme.css
 ```
 
-There is a special code that is an exception to this: `system` it gets translated into `dc:dark` or `dc:light` depending on the system theme of the host os.
+There is a special code that is an exception to this: `system` it gets translated into `dc:dark` or `dc:light` depending on the system theme of the host OS.
 
 ## Setting a theme from CLI
 
@@ -46,17 +46,17 @@ npm run start -- --theme dc:dark --theme-watch
 
 ## Creating your own Theme:
 
-We use scss to create themes, because it allows us to save work by using its color transformation functions (such as `lighten` or `darken`)
+We use SCSS to create themes, because it allows us to save work by using its color transformation functions (such as `lighten` or `darken`)
 
 ### **Method A** - When you have a deltachat desktop checkout
 
-0. make sure deltachat desktop is up to date and checked out to the version you want to make your theme for, normally checking out master is suffientent for making themes for the newest version.
+0. make sure deltachat desktop is up to date and checked out to the version you want to make your theme for, normally checking out master is sufficient for making themes for the newest version.
 
 1. copy the light or dark theme and save it to your user deltachat folder `DeltaChat/custom-themes/my_theme.scss`
 
 2. run `npm i`
 
-3. compile the theme to css in watchmode
+3. compile the theme to CSS in watch mode.
 
 ```sh
 npx sass --watch path/to/Deltachat/config/folder/custom-themes/my_theme.scss path/to/Deltachat/config/folder/custom-themes/my_theme.css -I themes/ --no-source-map
@@ -64,7 +64,7 @@ npx sass --watch path/to/Deltachat/config/folder/custom-themes/my_theme.scss pat
 npx sass --watch ~/.config/DeltaChat/custom-themes/my_theme.scss ~/.config/DeltaChat/custom-themes/my_theme.css -I themes/ --no-source-map
 ```
 
-> Note: you have to set `-I` to the theme folder in an deltachat-desktop git checkout, otherwise you'll get an error!
+> Note: you have to set `-I` to the theme folder in a deltachat-desktop git checkout, otherwise you'll get an error!
 
 4. open a new terminal window/tab
 
@@ -87,7 +87,7 @@ Read the comments in the theme files for additional information.
 
 2. copy the light or dark theme and save it to your user deltachat folder `DeltaChat/custom-themes/my_theme.scss`
 
-3. compile the theme to css in watchmode
+3. compile the theme to CSS in watch mode.
 
 ```sh
 node-sass -w path/to/Deltachat/config/folder/custom-themes/my_theme.scss path/to/Deltachat/config/folder/custom-themes/my_theme.css --include-path path/to/deltachat-desktop-git-folder/themes/

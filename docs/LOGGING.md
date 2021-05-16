@@ -7,8 +7,8 @@ Debug messages are disabled by default, enable them with the `--log-debug` flag.
 | Flag                            | Effect                                        |
 | ------------------------------- | --------------------------------------------- |
 | `--log-debug`                   | Log debug messages                            |
-| `--log-to-console`              | Output the log to stdout / chrome dev console |
-| `--machine-readable-stacktrace` | Enable JSON stacktrace                        |
+| `--log-to-console`              | Output the log to stdout / Chrome dev console |
+| `--machine-readable-stacktrace` | Enable JSON stack trace                       |
 | `--no-color`                    | Disable colors in the output of main process  |
 
 > as of 1.3.0 `--debug` enables both `--log-debug` and `--log-to-console`
@@ -29,7 +29,7 @@ You can also access the log folder and the current log file under the `View->Dev
 ##### Format
 
 The log files have the extension `.log`, the file name represents the point in time the log started.
-Basically the log files are **tab separated** `csv`-files(also known as `tsv`):
+Basically the log files are **tab separated** `CSV`-files(also known as `TSV`):
 
 ```
 "2019-01-27T13:46:31.801Z"	"main/deltachat"	"INFO"	[]	"dc_get_info"
