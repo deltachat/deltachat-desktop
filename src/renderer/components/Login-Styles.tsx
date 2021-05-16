@@ -157,3 +157,55 @@ export const DeltaProgressBar = function (
     </div>
   )
 }
+
+export const DeltaTextarea = React.memo(
+  (
+    props: React.PropsWithChildren<{
+      id?: string
+      value: string
+      placeholder?: string
+      onChange: ((event: FormEvent<HTMLElement>) => void) &
+        ((event: ChangeEvent<HTMLTextAreaElement>) => void)
+    }>
+  ) => {
+    const [isFocused, setIsFocused] = useState(false)
+
+    const onFocus = () => setIsFocused(true)
+    const onBlur = () => setIsFocused(false)
+    const showLabel = isFocused || props.value.length > 0
+
+    return (
+      <div className='delta-form-group delta-input'>
+        <FormGroup>
+          <div
+            className={`label ${isFocused && 'focus'}`}
+            style={{
+              visibility: !showLabel ? 'hidden' : 'visible',
+              paddingBottom: '6px',
+            }}
+          >
+            {props.placeholder}
+          </div>
+          <div className='bp3-input-group'>
+            <textarea
+              id={props.id}
+              placeholder={props.placeholder}
+              className='bp3-input'
+              style={{
+                paddingRight: '10px',
+                lineHeight: '22px',
+                resize: 'vertical',
+                minHeight: '44px'
+              }}
+              onFocus={onFocus}
+              onBlur={onBlur}
+              onChange={props.onChange}
+            >
+              {props.value}
+            </textarea>
+          </div>
+        </FormGroup>
+      </div>
+    )
+  }
+)
