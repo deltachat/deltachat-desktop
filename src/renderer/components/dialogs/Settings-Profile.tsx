@@ -1,11 +1,11 @@
 import { Card, Elevation } from '@blueprintjs/core'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, FormEvent, ChangeEvent } from 'react'
 import { DeltaChatAccount } from '../../../shared/shared-types'
 import { useTranslationFunction } from '../../contexts'
 
 import { DeltaBackend } from '../../delta-remote'
 import { avatarInitial } from '../Avatar'
-import { DeltaInput } from '../Login-Styles'
+import { DeltaInput, DeltaTextarea } from '../Login-Styles'
 import { DeltaDialogBody, DeltaDialogOkCancelFooter } from './DeltaDialog'
 import { SettingsButton } from './Settings'
 import { runtime } from '../../runtime'
@@ -177,14 +177,13 @@ export function SettingsEditProfile({
               setDisplayname(event.target.value)
             }}
           />
-          <DeltaInput
+          <DeltaTextarea
             key='status'
             id='status'
             placeholder={tx('pref_default_status_label')}
             value={selfstatus}
             onChange={(
-              event: React.FormEvent<HTMLElement> &
-                React.ChangeEvent<HTMLInputElement>
+              event: FormEvent<HTMLElement> & ChangeEvent<HTMLTextAreaElement>
             ) => {
               setSelfstatus(event.target.value)
             }}
