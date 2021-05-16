@@ -65,7 +65,7 @@ const Message = React.memo(
             {window.static_translate('chat_archived_label')}
           </div>
         )}
-        {!archived && summary.state && (
+        {!archived && summary.state !== 0 && (
           <div
             className={classNames(
               'status-icon',

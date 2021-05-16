@@ -103,6 +103,7 @@ export class PageStore extends Store<PageStoreState> {
     return this.dispatch(
       'selectChat',
       async (state: PageStoreState, setState) => {
+        log.debug('xxx0')
         const {
           unreadMessageIds,
           firstUnreadMessageId,
@@ -114,6 +115,20 @@ export class PageStore extends Store<PageStoreState> {
           PageStoreState['pages'],
           PageStoreState['pageOrdering']
         ] = [{}, []]
+        
+        if (messageIds.length === 0) {
+          setState({
+            pages,
+            pageOrdering,
+            chatId,
+            messageIds,
+            unreadMessageIds,
+            markerOne,
+            loading: false,
+          })
+          return
+
+        }
 
         if (firstUnreadMessageId !== -1) {
           const firstUnreadMessageIdIndex = messageIds.indexOf(
