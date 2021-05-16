@@ -352,12 +352,6 @@ const Message = (props: {
 
   const hasQuote = message.msg.quotedText !== null
 
-  const onMessageDoubleClick = (event: React.MouseEvent<HTMLInputElement>) => {
-    event.preventDefault()
-    setQuoteInDraft(message.msg.id)
-    window.getSelection().empty()
-  }
-
   return (
     <div
       onContextMenu={showMenu}
@@ -369,7 +363,6 @@ const Message = (props: {
         { forwarded: message.msg.isForwarded },
         { 'has-html': hasHTML }
       )}
-      onDoubleClick={onMessageDoubleClick}
     >
       {conversationType === 'group' &&
         direction === 'incoming' &&
