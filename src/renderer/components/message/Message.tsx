@@ -366,7 +366,8 @@ const Message = (props: {
         direction,
         { 'type-sticker': viewType === C.DC_MSG_STICKER },
         { error: status === 'error' },
-        { forwarded: message.msg.isForwarded }
+        { forwarded: message.msg.isForwarded },
+        { 'has-html': hasHTML }
       )}
       onDoubleClick={onMessageDoubleClick}
     >
@@ -421,7 +422,10 @@ const Message = (props: {
           )}
           {content}
           {hasHTML && (
-            <button onClick={openMessageHTML.bind(null, message.id)}>
+            <button
+              onClick={openMessageHTML.bind(null, message.id)}
+              className='show-html'
+            >
               {tx('show_full_message_in_browser')}
             </button>
           )}

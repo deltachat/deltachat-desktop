@@ -150,6 +150,13 @@
     max-width: 100%;
     min-height: unset;
   }
+
+  button.show-html {
+    border: none;
+    background-color: transparent;
+    padding-left: 0;
+    color: var(--colorPrimary);
+  }
 }
 
 // States that modify the message buble appearance
@@ -272,6 +279,12 @@
   .status-icon.read,
   .status-icon.delivered {
     background-color: white;
+  }
+}
+
+.message.has-html {
+  .text {
+    padding-bottom: 10px;
   }
 }
 
