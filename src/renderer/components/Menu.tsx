@@ -17,6 +17,7 @@ import {
   openMuteChatDialog,
   unMuteChat,
   sendCallInvitation,
+  selectChat,
 } from './helpers/ChatMethods'
 import { FullChat } from '../../shared/shared-types'
 import { runtime } from '../runtime'
@@ -60,8 +61,7 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
   const onUnmuteChat = () => unMuteChat(selectedChat.id)
   const onUnblockContacts = () =>
     screenContext.openDialog('UnblockContacts', {})
-  const onContactRequests = () =>
-    chatStoreDispatch({ type: 'SELECT_CHAT', payload: C.DC_CHAT_ID_DEADDROP })
+  const onContactRequests = () => selectChat(C.DC_CHAT_ID_DEADDROP)
   const onDisappearingMessages = () =>
     screenContext.openDialog('DisappearingMessages', {
       chatId: selectedChat.id,
