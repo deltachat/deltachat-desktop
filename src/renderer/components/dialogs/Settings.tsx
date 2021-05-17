@@ -228,8 +228,8 @@ export default function Settings(props: DialogProps) {
     const { settings } = state
 
     if (
-      Object.keys(settings).length === 0 ||
-      Object.keys(account).length === 0
+      Object.keys(settings || {}).length === 0 ||
+      Object.keys(account || {}).length === 0
     ) {
       return null
     }

@@ -24,6 +24,7 @@
 - remove "file://" scheme from filenames before calling `dc_msg_set_file` for stickers
 - initialize name field in contact profile dialog with previously manually set name and use authname as a placeholder
 - show context menu also for video chat messages
+- Fix a bug where the settings crashed
 
 ### Changed
 
