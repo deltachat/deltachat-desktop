@@ -669,7 +669,6 @@ export class PageStore extends Store<PageStoreState> {
   onMessagesChanged(chatId: number, messageId: number) {
     this.dispatch('onMessagesChanged', async (_state, _setState) => {
       log.debug(`onMessagesChanged: chatId: ${chatId} messageId: ${messageId}`)
-      //this.pushLayoutEffect({type:'INCOMING_MESSAGES', payload: messageIdsIncoming.length, id: chatId})
     })
   }
 

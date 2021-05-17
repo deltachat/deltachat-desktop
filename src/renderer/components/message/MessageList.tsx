@@ -3,7 +3,7 @@ import MessageListStore, {
   MessageId,
   MessageListPage,
 } from '../../stores/MessageListStore'
-import { Action } from '../../stores/store2'
+import { Action, ActionObject } from '../../stores/store2'
 import { MessageWrapper } from './MessageWrapper'
 import {
   MessageType,
@@ -55,7 +55,7 @@ const MessageList = React.memo(function MessageList({
     onePageAwayFromNewestMessage,
     setOnePageAwayFromNewestMessage,
   ] = useState(false)
-  const onMessageListStoreEffect = (action: Action) => {
+  const onMessageListStoreEffect = (action: ActionObject) => {
     if (action.type === 'SCROLL_BEFORE_LAST_PAGE') {
       log.debug(`SCROLL_BEFORE_LAST_PAGE`)
       setTimeout(() => {
@@ -76,7 +76,7 @@ const MessageList = React.memo(function MessageList({
     }
   }
 
-  const onMessageListStoreLayoutEffect = (action: Action) => {
+  const onMessageListStoreLayoutEffect = (action: ActionObject) => {
     if (action.type === 'SCROLL_TO_BOTTOM_AND_CHECK_IF_WE_NEED_TO_LOAD_MORE') {
       const { scrollTop, scrollHeight } = messageListRef.current
       log.debug(

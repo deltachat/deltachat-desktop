@@ -5,11 +5,13 @@ import { getLogger } from '../../shared/logger'
 export type ActionType = string
 export type ActionPayload = any | undefined
 export type ActionId = number | undefined
-export interface Action {
+export interface ActionObject {
   type: ActionType
   payload: ActionPayload
   id: ActionId
 }
+
+export type Action = ActionObject | (() => void)
 
 export interface EffectInterface<S> {
   (action: Action, state: S, log: ReturnType<typeof getLogger>): Promise<S>
@@ -205,7 +207,7 @@ export default class Store2<S> {
   }
 
   async pushEffect(action: Action, forceUpdate?: boolean) {
-    this.log.info(`pushEffect: pushed effect ${action.type} ${action}`)
+    this.log.info(`pushEffect: pushed effect ${typeof action !== 'function' ? action.type : ''} ${action}`)
     for (const listener of this.listeners) {
       listener.onPushEffect(action)
     }
@@ -218,7 +220,7 @@ export default class Store2<S> {
 
   async pushLayoutEffect(action: Action, forceUpdate?: boolean) {
     this.log.info(
-      `pushLayoutEffect: pushed layout effect ${action.type} ${action}`
+      `pushLayoutEffect: pushed layout effect ${typeof action !== 'function' ? action.type : ''} ${action}`
     )
     for (const listener of this.listeners) {
       listener.onPushLayoutEffect(action)
@@ -260,22 +262,31 @@ export default class Store2<S> {
 
       while (effectQueue.current.length > 0) {
         const effect = effectQueue.current.pop()
-        if (effect.type === 'DECREASE_CURRENTLY_DISPATCHED_COUNTER') {
-          this.currentlyDispatchedCounter--
-          this.log.debug(
-            'useEffect: DECREASE_CURRENTLY_DISPATCHED_COUNTER',
-            this.currentlyDispatchedCounter
-          )
-          continue
+        if (typeof effect === 'function') {
+          effect()
+        } else {
+          if (effect.type === 'DECREASE_CURRENTLY_DISPATCHED_COUNTER') {
+            this.currentlyDispatchedCounter--
+            this.log.debug(
+              'useEffect: DECREASE_CURRENTLY_DISPATCHED_COUNTER',
+              this.currentlyDispatchedCounter
+            )
+            continue
+          }
+          onAction(effect)
         }
-        onAction(effect)
       }
     }, [state, forceTriggerEffect])
 
     useLayoutEffect(() => {
       this.log.debug('useLayoutEffect')
       while (layoutEffectQueue.current.length > 0) {
-        onLayoutAction(layoutEffectQueue.current.pop())
+        const effect = layoutEffectQueue.current.pop()
+        if (typeof effect === 'function') {
+          effect()
+        } else {
+          onLayoutAction(effect)
+        }
       }
     }, [state, forceTriggerEffect])
 
