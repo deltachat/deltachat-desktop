@@ -76,5 +76,11 @@
   },
   "show_full_message_in_browser": {
     "message": "Show full message in browser…"
+  },
+  "mailing_list_diabled_composer": {
+    "message": "Sending Messages in Mailinglists is not supported yet"
+  },
+  "mailing_list_profile_info": {
+    "message": "These settings (chat name and image) apply to this device only."
   }
 }

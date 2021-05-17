@@ -31,6 +31,7 @@ import { DeltaBackend } from '../../delta-remote'
 import { runtime } from '../../runtime'
 import { AvatarFromContact } from '../Avatar'
 import { openDeadDropDecisionDialog } from '../dialogs/DeadDrop'
+import { ConversationType } from './MessageList'
 // const log = getLogger('renderer/message')
 
 const Avatar = (
@@ -66,41 +67,21 @@ const Avatar = (
   }
 }
 
-const ContactName = (props: {
-  name: string
-  profileName?: string
-  color: string
-  onClick: (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void
-}) => {
-  const { name, profileName, color, onClick } = props
-
-  const title = name
-  const shouldShowProfile = Boolean(profileName && !name)
-  const profileElement = shouldShowProfile ? (
-    <span style={{ color: color }}>~{profileName || ''}</span>
-  ) : null
-
-  return (
-    <span className='author' style={{ color: color }} onClick={onClick}>
-      {title}
-      {shouldShowProfile ? ' ' : null}
-      {profileElement}
-    </span>
-  )
-}
-
-const Author = (
+const AuthorName = (
   contact: DCContact,
-  onContactClick: (contact: DCContact) => void
+  onContactClick: (contact: DCContact) => void,
+  overrideSenderName?: string
 ) => {
   const { color, displayName } = contact
 
   return (
-    <ContactName
-      name={displayName}
-      color={color}
+    <span
+      className='author'
+      style={{ color: color }}
       onClick={() => onContactClick(contact)}
-    />
+    >
+      {overrideSenderName ? `~${overrideSenderName}` : displayName}
+    </span>
   )
 }
 
@@ -108,7 +89,7 @@ const ForwardedTitle = (
   contact: DCContact,
   onContactClick: (contact: DCContact) => void,
   direction: string,
-  conversationType: string
+  conversationType: ConversationType
 ) => {
   const tx = useTranslationFunction()
 
@@ -117,7 +98,7 @@ const ForwardedTitle = (
       className='forwarded-indicator'
       onClick={() => onContactClick(contact)}
     >
-      {conversationType === 'group' && direction !== 'outgoing'
+      {conversationType.hasMultipleParticipants && direction !== 'outgoing'
         ? tx('forwared_by', contact.displayName)
         : tx('forwarded_message')}
     </div>
@@ -132,7 +113,6 @@ function buildContextMenu(
     message,
     text,
     conversationType,
-    isDeviceChat,
   }: // onRetrySend,
   {
     attachment: MessageTypeAttachment
@@ -140,8 +120,7 @@ function buildContextMenu(
     status: msgStatus
     message: MessageType | { msg: null }
     text?: string
-    conversationType: 'group' | 'direct'
-    isDeviceChat: boolean
+    conversationType: ConversationType
     // onRetrySend: Function
   },
   link: string,
@@ -159,12 +138,12 @@ function buildContextMenu(
 
   return [
     // Reply
-    !isDeviceChat && {
+    !conversationType.isDeviceChat && {
       label: tx('reply_noun'),
       action: setQuoteInDraft.bind(null, message.msg.id),
     },
     // Reply privately -> only show in groups, don't show on info messages or outgoing messages
-    conversationType === 'group' &&
+    conversationType.chatType === C.DC_CHAT_TYPE_GROUP &&
       message.msg.fromId > C.DC_CONTACT_ID_LAST_SPECIAL && {
         label: tx('reply_privately'),
         action: privateReply.bind(null, message.msg),
@@ -229,11 +208,10 @@ function buildContextMenu(
 
 const Message = (props: {
   message: MessageType
-  conversationType: 'group' | 'direct'
-  isDeviceChat: boolean
+  conversationType: ConversationType
   /* onRetrySend */
 }) => {
-  const { message, conversationType, isDeviceChat } = props
+  const { message, conversationType } = props
   const {
     id,
     direction,
@@ -265,7 +243,6 @@ const Message = (props: {
         message,
         text,
         conversationType,
-        isDeviceChat,
       },
       link,
       chatStoreDispatch
@@ -352,6 +329,10 @@ const Message = (props: {
 
   const hasQuote = message.msg.quotedText !== null
 
+  /** Whether to show author name and avatar */
+  const showAuthor =
+    conversationType.hasMultipleParticipants || message?.msg.overrideSenderName
+
   return (
     <div
       onContextMenu={showMenu}
@@ -364,7 +345,7 @@ const Message = (props: {
         { 'has-html': hasHTML }
       )}
     >
-      {conversationType === 'group' &&
+      {showAuthor &&
         direction === 'incoming' &&
         Avatar(message.contact, onContactClick)}
       <div
@@ -382,11 +363,14 @@ const Message = (props: {
         {!message.msg.isForwarded && (
           <div
             className={classNames('author-wrapper', {
-              'can-hide':
-                direction === 'outgoing' || conversationType === 'direct',
+              'can-hide': direction === 'outgoing' || !showAuthor,
             })}
           >
-            {Author(message.contact, onContactClick)}
+            {AuthorName(
+              message.contact,
+              onContactClick,
+              message?.msg.overrideSenderName
+            )}
           </div>
         )}
         <div
@@ -464,11 +448,9 @@ export const Quote = ({
       className='quote has-message'
       style={{ borderLeftColor: message && message.contact.color }}
     >
-      <div
-        className='quote-author'
-        style={{ color: message && message.contact.color }}
-      >
-        {message && message.contact.displayName}
+      <div className='quote-author'>
+        {message &&
+          AuthorName(message.contact, () => {}, message.msg.overrideSenderName)}
       </div>
       <div className='quoted-text'>
         <MessageBody text={quotedText} />

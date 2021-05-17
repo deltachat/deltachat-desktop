@@ -13,6 +13,8 @@
 - allow starting a video chat in groups
 - add local help for zh_CN and fr
 - add missing Czech translation #2218
+- add Mailinglist support
+- add support for overwritten sender name (also sometimes referred to as impersonation)
 
 ## Fixed
 - Fix source-mapped stack trace on crash screen in bundled production builds
