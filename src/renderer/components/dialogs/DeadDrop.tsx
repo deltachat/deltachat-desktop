@@ -2,11 +2,11 @@ import React from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import { Classes } from '@blueprintjs/core'
 import { DialogProps } from './DialogController'
-import { DCContact, MessageType, FullChat } from '../../../shared/shared-types'
+import { DCContact, MessageType, FullChat, Message, MessageTypeIs } from '../../../shared/shared-types'
 import { SmallDialog } from './DeltaDialog'
 import { useTranslationFunction } from '../../contexts'
 import { C } from 'deltachat-node/dist/constants'
-import { deleteMessage, selectChat } from '../helpers/ChatMethods'
+import { selectChat } from '../helpers/ChatMethods'
 
 /**
  * handle contact requests
@@ -17,8 +17,7 @@ export default function DeadDrop(props: {
   message: Message
   onClose: DialogProps['onClose']
 }) {
-  const { contact, msg, chat, onClose } = props
-  const chatStoreDispatch = useChatStore()[1]
+  const { contact, message, chat, onClose } = props
 
   const decide = async (
     action:
@@ -28,7 +27,7 @@ export default function DeadDrop(props: {
   ) => {
     const chatId = await DeltaBackend.call(
       'chat.decideOnContactRequest',
-      msg.id,
+      message.id,
       action
     )
     // do additional update events so the ui behaves as expected
@@ -37,7 +36,7 @@ export default function DeadDrop(props: {
         // setTimeOut 0 to render on next iteration of the js event loop
         // this should prevent the new chatlistitem from being in placeholder mode.
         setTimeout(
-          () => chatStoreDispatch({ type: 'SELECT_CHAT', payload: chatId }),
+          () => selectChat(chatId),
           0
         )
         break
@@ -47,26 +46,6 @@ export default function DeadDrop(props: {
         // do not delete the message, even if we want that in the future, the core should handle it.
         break
     }
-  const never = () => {
-    DeltaBackend.call('contacts.blockContact', contact.id)
-    deleteMessage(message.id)
-    onClose()
-  }
-
-  const notNow = async () => {
-    const contactId = contact.id
-    await DeltaBackend.call('contacts.markNoticedContact', contactId)
-    onClose()
-  }
-
-  const yes = async () => {
-    const messageId = message.id
-    const contactId = contact.id
-    const chatId = await DeltaBackend.call('contacts.acceptContactRequest', {
-      messageId,
-      contactId,
-    })
-    selectChat(chatId)
     onClose()
   }
 
@@ -116,13 +95,17 @@ export default function DeadDrop(props: {
 }
 
 export async function openDeadDropDecisionDialog(message: MessageType) {
+  if (message.type !== MessageTypeIs.Message) {
+    return
+  }
+  message = message as Message
   const chat = await DeltaBackend.call(
     'chatList.getFullChatById',
-    message.msg.realChatId
+    message.chatId
   )
   window.__openDialog('DeadDrop', {
     contact: message.contact,
     chat,
-    msg: message.msg,
+    message: message,
   })
 }

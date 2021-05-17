@@ -349,7 +349,7 @@ const MessageComponent = (props: {
         direction,
         { 'type-sticker': viewType === C.DC_MSG_STICKER },
         { error: status === 'error' },
-        { 'has-html': hasHTML }
+        { 'has-html': hasHTML },
         { forwarded: message.isForwarded }
       )}
     >
