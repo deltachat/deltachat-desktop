@@ -105,7 +105,7 @@ export async function doMailtoAction(chatId: number, messageText: string) {
           'mailto_dialog_confirm_replace_draft',
           chat.name
         ),
-        confirmLabel: 'replace_draft',
+        confirmLabel: window.static_translate('replace_draft'),
         cb: resolve,
       })
     })

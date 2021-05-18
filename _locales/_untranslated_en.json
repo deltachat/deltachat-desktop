@@ -109,5 +109,8 @@
   },
   "mailto_link_could_not_be_decoded": {
     "message": "mailto link could not be decoded: %1$s"
+  },
+  "replace_draft": {
+    "message": "replace draft"
   }
 }
