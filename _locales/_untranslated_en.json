@@ -47,25 +47,25 @@
   "puny_code_warning_header": {
     "message": "Suspicious Link detected"
   },
-  "puny_code_warning_question":{
+  "puny_code_warning_question": {
     "message": "Are you sure you want to visit $$asciiHostname$$?"
   },
   "puny_code_warning_description": {
     "message": "You followed a link which could be misrepresenting characters by using similarly looking ones from different alphabets. Following the link labelled $$originalHostname$$ will lead to $$asciiHostname$$ which is normal for non-Latin characters. If you did not expect such characters this link could be harmful."
   },
-  "menu_learn_spelling":{
+  "menu_learn_spelling": {
     "message": "Learn Spelling"
   },
   "menu_copy_image_to_clipboard": {
     "message": "Copy Image"
   },
-  "no_spellcheck_suggestions_found":{
+  "no_spellcheck_suggestions_found": {
     "message": "No Spelling Suggestions found"
   },
   "forwared_by": {
     "message": "Forwarded by %1$s"
   },
-  "forwarded":{
+  "forwarded": {
     "message": "Forwarded"
   },
   "menu_copy_text_to_clipboard": {
@@ -82,5 +82,20 @@
   },
   "mailing_list_profile_info": {
     "message": "These settings (chat name and image) apply to this device only."
+  },
+  "menu_item_chat_audit_log": {
+    "message": "Chat Audit Log"
+  },
+  "loading": {
+    "message": "Loading"
+  },
+  "chat_audit_log_empty_message": {
+    "message": "System messages of this chat would appear here"
+  },
+  "chat_audit_log_title": {
+    "message": "Audit Log for %1$s"
+  },
+  "chat_audit_log_description": {
+    "message": "This view shows only System- and Info-Messages. Useful for finding the last chat actions without scrolling through many normal messages."
   }
 }

@@ -292,6 +292,10 @@ export default function Settings(props: DialogProps) {
                 'minimizeToTray',
                 tx('pref_show_tray_icon')
               )}
+              {renderDTSettingSwitch(
+                'enableChatAuditLog',
+                tx('menu_item_chat_audit_log')
+              )}
               {renderDTSettingSwitch('enableAVCalls', tx('videochat'))}
               {desktopSettings['enableAVCalls'] === true && (
                 <>

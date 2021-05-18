@@ -14,6 +14,7 @@ export function getDefaultState(): AppState {
       credentials: undefined,
       lastAccount: undefined,
       enableAVCalls: false,
+      enableChatAuditLog: false,
       enableOnDemandLocationStreaming: false,
       chatViewBgImg: undefined,
       lastChats: {},
