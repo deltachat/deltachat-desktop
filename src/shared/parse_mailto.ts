@@ -24,7 +24,7 @@ export function parseMailto(
   const address = mailto_url.pathname || query.to || null
 
   return {
-    to: address,
+    to: address && decodeURIComponent(address).trim(),
     subject: query.subject,
     body: query.body,
   }
