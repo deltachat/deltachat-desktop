@@ -96,7 +96,6 @@ export default function ChatAuditLogDialog(props: {
       C.DC_GCM_ADDDAYMARKER | C.DC_GCM_INFO_ONLY
     )
     const messages = await DeltaBackend.call('messageList.getMessages', msgIds)
-    console.log({ msgIds, messages })
     setMsgIds(msgIds)
     setMessages(messages)
     setLoading(false)
