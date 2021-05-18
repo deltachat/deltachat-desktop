@@ -110,7 +110,7 @@ async function findInvalidDeltaAccounts() {
 
   const isConfigured = async (dir: string) => {
     const dc = new DeltaChat()
-    await dc.open(dir)
+    await dc.open(dir, false)
     const isConfigured = dc.isConfigured()
     dc.close()
     return { isConfigured, path: dir }
@@ -126,7 +126,7 @@ async function getConfig(
   keys: string[]
 ): Promise<{ [key: string]: string }> {
   const dc = new DeltaChat()
-  await dc.open(dir)
+  await dc.open(dir, false)
   let config: { [key: string]: string } = {}
   if (!dc.isConfigured()) {
     config = null
