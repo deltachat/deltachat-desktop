@@ -46,7 +46,7 @@ export function quitDeltaChat() {
 
 export function updateTrayIcon() {
   // User doesn't want tray icon => destroy it
-  if (app.state.saved.minimizeToTray !== true) {
+  if (!app.rc['minimized'] && app.state.saved.minimizeToTray !== true) {
     if (tray != null) destroyTrayIcon()
     return
   }

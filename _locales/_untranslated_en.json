@@ -97,5 +97,8 @@
   },
   "chat_audit_log_description": {
     "message": "This view shows only System- and Info-Messages. Useful for finding the last chat actions without scrolling through many normal messages."
+  },
+  "explain_desktop_minimized_disabled_tray_pref": {
+    "message": "Tray icon is shown because Deltachat was started in with the `--minimized` option."
   }
 }

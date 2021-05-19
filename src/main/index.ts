@@ -103,7 +103,7 @@ function onReady([logins, _appReady, loadedState]: [
   log.info(`cwd ${cwd}`)
   ipc.init(cwd, logHandler)
 
-  mainWindow.init(app, { hidden: false })
+  mainWindow.init(app, { hidden: app.rc['minimized'] })
   initMenu(logHandler)
 
   if (rc.debug) {
@@ -138,7 +138,7 @@ function onReady([logins, _appReady, loadedState]: [
     log.debug("mainWindow.window.on('close')")
     if (!app.isQuitting) {
       e.preventDefault()
-      if (app.state.saved.minimizeToTray) {
+      if (app.rc['minimized'] || app.state.saved.minimizeToTray) {
         log.debug("mainWindow.window.on('close') Hiding main window")
         hideDeltaChat()
       } else {
