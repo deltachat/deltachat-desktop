@@ -195,11 +195,12 @@ export default function Settings(props: DialogProps) {
   const renderDTSettingSwitch = (
     configKey: keyof DesktopSettings,
     label: string,
-    disabled = false
+    disabled = false,
+    disabled_is_checked = false
   ) => {
     return (
       <Switch
-        checked={desktopSettings[configKey] === true}
+        checked={desktopSettings[configKey] === true || disabled_is_checked}
         className={desktopSettings[configKey] ? 'active' : 'inactive'}
         label={label}
         disabled={disabled}
@@ -295,6 +296,7 @@ export default function Settings(props: DialogProps) {
               {renderDTSettingSwitch(
                 'minimizeToTray',
                 tx('pref_show_tray_icon'),
+                state.rc?.minimized,
                 state.rc?.minimized
               )}
               {state.rc?.minimized && (
