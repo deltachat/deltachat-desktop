@@ -59,6 +59,7 @@ export interface RC_Config {
   'theme-watch': boolean
   debug: boolean
   'translation-watch': boolean
+  minimized: boolean
 }
 
 import { App } from 'electron'
