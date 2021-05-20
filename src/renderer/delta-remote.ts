@@ -257,7 +257,11 @@ class DeltaRemote {
     fnName: 'messageList.messageIdToJson',
     id: number
   ): Promise<{ msg: null } | MessageType>
-  call(fnName: 'messageList.getMessageIds', chatid: number): Promise<number[]>
+  call(
+    fnName: 'messageList.getMessageIds',
+    chatid: number,
+    flags?: number
+  ): Promise<number[]>
   call(
     fnName: 'messageList.forwardMessage',
     msgId: number,

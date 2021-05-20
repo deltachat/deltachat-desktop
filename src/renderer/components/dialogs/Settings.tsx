@@ -6,7 +6,7 @@ import { Elevation, H5, Card, Classes, Switch, Label } from '@blueprintjs/core'
 const { ipcRenderer } = window.electron_functions
 import { SettingsContext, useTranslationFunction } from '../../contexts'
 
-import { DesktopSettings } from '../../../shared/shared-types'
+import { DesktopSettings, RC_Config } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
 import SettingsAutodelete from './Settings-Autodelete'
 import SettingsManageKeys from './Settings-ManageKeys'
@@ -23,6 +23,7 @@ import SettingsAppearance from './Settings-Appearance'
 import SettingsProfile, { SettingsEditProfile } from './Settings-Profile'
 import { getLogger } from '../../../shared/logger'
 import SettingsCommunication from './Settings-Communication'
+import { runtime } from '../../runtime'
 
 const log = getLogger('renderer/dialogs/Settings')
 
@@ -111,11 +112,13 @@ export default function Settings(props: DialogProps) {
     settings: any
     show: string
     selfContact: todo
+    rc: RC_Config
   }>({
     showSettingsDialog: false,
     settings: {},
     show: 'main',
     selfContact: {},
+    rc: ({} as any) as RC_Config,
   })
   const setState = (updatedState: any) => {
     _setState((prevState: any) => {
@@ -144,8 +147,10 @@ export default function Settings(props: DialogProps) {
       'delete_server_after',
       'webrtc_instance',
     ])
-
     setState({ settings })
+
+    const rc = await runtime.getRC_Config()
+    setState({ rc })
   }
 
   /*
@@ -189,17 +194,16 @@ export default function Settings(props: DialogProps) {
    */
   const renderDTSettingSwitch = (
     configKey: keyof DesktopSettings,
-    label: string
+    label: string,
+    disabled = false,
+    disabled_is_checked = false
   ) => {
     return (
       <Switch
-        checked={desktopSettings[configKey] === true}
+        checked={desktopSettings[configKey] === true || disabled_is_checked}
         className={desktopSettings[configKey] ? 'active' : 'inactive'}
         label={label}
-        disabled={
-          configKey === 'showNotificationContent' &&
-          !desktopSettings['notifications']
-        }
+        disabled={disabled}
         onChange={() =>
           handleDesktopSettingsChange(configKey, !desktopSettings[configKey])
         }
@@ -279,7 +283,8 @@ export default function Settings(props: DialogProps) {
               )}
               {renderDTSettingSwitch(
                 'showNotificationContent',
-                tx('pref_show_notification_content_explain')
+                tx('pref_show_notification_content_explain'),
+                !desktopSettings['notifications']
               )}
             </Card>
             <Card elevation={Elevation.ONE}>
@@ -290,7 +295,18 @@ export default function Settings(props: DialogProps) {
               )}
               {renderDTSettingSwitch(
                 'minimizeToTray',
-                tx('pref_show_tray_icon')
+                tx('pref_show_tray_icon'),
+                state.rc?.minimized,
+                state.rc?.minimized
+              )}
+              {state.rc?.minimized && (
+                <div className='bp3-callout'>
+                  {tx('explain_desktop_minimized_disabled_tray_pref')}
+                </div>
+              )}
+              {renderDTSettingSwitch(
+                'enableChatAuditLog',
+                tx('menu_item_chat_audit_log')
               )}
               {renderDTSettingSwitch('enableAVCalls', tx('videochat'))}
               {desktopSettings['enableAVCalls'] === true && (

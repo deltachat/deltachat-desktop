@@ -32,6 +32,7 @@ export interface DesktopSettings {
   /** path to last used/selected Account */
   lastAccount: string
   enableAVCalls: boolean
+  enableChatAuditLog: boolean
   enableOnDemandLocationStreaming: boolean
   enterKeySends: boolean
   locale: string | null
@@ -58,6 +59,7 @@ export interface RC_Config {
   'theme-watch': boolean
   debug: boolean
   'translation-watch': boolean
+  minimized: boolean
 }
 
 import { App } from 'electron'

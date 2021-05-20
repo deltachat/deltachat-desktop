@@ -37,7 +37,7 @@ export const DeltaDialogBase = React.memo<
   )
 })
 
-function DeltaDialogCloseButton(
+export function DeltaDialogCloseButton(
   props: React.ButtonHTMLAttributes<HTMLButtonElement>
 ) {
   return (

@@ -10,6 +10,7 @@ const defaults: RC_Config = {
   debug: false,
   'translation-watch': false,
   'theme-watch': false,
+  minimized: false,
 }
 
 const config = rc('DeltaChat', defaults) as RC_Config

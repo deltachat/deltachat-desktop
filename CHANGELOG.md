@@ -15,6 +15,8 @@
 - add missing Czech translation #2218
 - add Mailinglist support
 - add support for overwritten sender name (also sometimes referred to as impersonation)
+- add experimental audit log to chats (view where only info/system messages are shown such as member added/removed)
+- add `--minimized` CLI option to start DeltaChat minimized as a tray icon. This is useful for setting DeltaChat as a startup application that starts up with your computer.
 
 ## Fixed
 - Fix source-mapped stack trace on crash screen in bundled production builds
@@ -25,11 +27,12 @@
 - initialize name field in contact profile dialog with previously manually set name and use authname as a placeholder
 - show context menu also for video chat messages
 - Fix a bug where the settings crashed
+- Fix a startup crash that sometimes appeared when you had multiple accounts setup.
 
 ### Changed
 
 - update translations (02.05.2021)
-- Update deltachat-node to `v1.54.0`
+- Update deltachat-node to `v1.55.0`
 - Remove double-click to quote → this allows users to properly use double and triple click to select stuff again
 
 ## [1.15.5] - 2021-03-27
