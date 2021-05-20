@@ -99,6 +99,6 @@
     "message": "This view shows only System- and Info-Messages. Useful for finding the last chat actions without scrolling through many normal messages."
   },
   "explain_desktop_minimized_disabled_tray_pref": {
-    "message": "Tray icon is shown because Deltachat was started with the `--minimized` option."
+    "message": "Tray icon cannot be disabled as Delta Chat was started with the --minimized option"
   }
 }
