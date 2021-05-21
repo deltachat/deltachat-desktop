@@ -215,7 +215,7 @@ export function QrCodeScanQrInner({ onClose }: { onClose: () => void }) {
       <DeltaDialogFooter>
         <DeltaDialogFooterActions style={{ justifyContent: 'space-between' }}>
           <p className={'delta-button bold primary'} onClick={openMenu}>
-            {tx('more_options')}
+            {tx('menu_more_options')}
           </p>
           <p className={'delta-button bold primary'} onClick={onClose}>
             {tx('close')}

@@ -114,7 +114,7 @@ export default async function processOpenQrUrl(
   if (checkQr === null || checkQr.state === QrState.Error) {
     closeProcessDialog()
     window.__openDialog('AlertDialog', {
-      message: tx('import_qr_error'),
+      message: tx('qrscan_failed'),
       cb: callback,
     })
     return
@@ -165,7 +165,7 @@ export default async function processOpenQrUrl(
     } catch (err) {
       closeProcessDialog()
       window.__openDialog('AlertDialog', {
-        message: tx('import_qr_error') + ': ' + err,
+        message: tx('qrscan_failed') + ': ' + err,
         cb: callback,
       })
       return
