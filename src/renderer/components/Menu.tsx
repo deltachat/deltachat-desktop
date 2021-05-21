@@ -173,7 +173,7 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
         settingsContext.desktopSettings.enableChatAuditLog && (
           <DeltaMenuItem
             key='chat-audit-log'
-            text={tx('menu_item_chat_audit_log')}
+            text={tx('menu_chat_audit_log')}
             onClick={openChatAuditLog}
           />
         ),

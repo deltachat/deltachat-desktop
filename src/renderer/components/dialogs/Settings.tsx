@@ -306,7 +306,7 @@ export default function Settings(props: DialogProps) {
               )}
               {renderDTSettingSwitch(
                 'enableChatAuditLog',
-                tx('menu_item_chat_audit_log')
+                tx('menu_chat_audit_log')
               )}
               {renderDTSettingSwitch('enableAVCalls', tx('videochat'))}
               {desktopSettings['enableAVCalls'] === true && (

@@ -152,7 +152,7 @@ export default function MessageListAndComposer({
     } else if (chat.isDeviceChat === true) {
       return [true, 'messaging_disabled_device_chat']
     } else if (chat.type === C.DC_CHAT_TYPE_MAILINGLIST) {
-      return [true, 'mailing_list_diabled_composer']
+      return [true, 'messaging_disabled_mailing_list']
     } else if (isGroup && !selfInGroup) {
       return [true, 'messaging_disabled_not_in_group']
     } else {
