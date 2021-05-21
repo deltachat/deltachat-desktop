@@ -1,21 +1,21 @@
 import { useState, useEffect } from 'react'
 import { ipcBackend } from '../../ipc'
-import debounce from 'debounce'
 import { getLogger } from '../../../shared/logger'
 import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/dist/constants'
+import { useDebounced } from '../helpers/useDebounced'
 
 const log = getLogger('renderer/helpers/ChatList')
 
-const debouncedSearchMessages = debounce(
-  (queryStr: string, chatId: number, cb: (value: number[]) => void) => {
-    DeltaBackend.call('messageList.searchMessages', queryStr, chatId).then(cb)
-  },
-  200
-)
-
 export function useMessageResults(queryStr: string, chatId = 0) {
   const [ids, setIds] = useState<number[]>([])
+
+  const debouncedSearchMessages = useDebounced(
+    (queryStr: string, chatId: number, cb: (value: number[]) => void) => {
+      DeltaBackend.call('messageList.searchMessages', queryStr, chatId).then(cb)
+    },
+    200
+  )
 
   const updateContacts = (queryStr: string, chatId = 0) =>
     debouncedSearchMessages(queryStr, chatId, setIds)
@@ -29,23 +29,6 @@ export function useMessageResults(queryStr: string, chatId = 0) {
   return [ids, updateContacts] as [number[], typeof updateContacts]
 }
 
-const debouncedGetChatListEntries = debounce(
-  (
-    listFlags: number,
-    queryStr: string,
-    queryContactId: number,
-    cb: (...args: any) => void
-  ) => {
-    DeltaBackend.call(
-      'chatList.getChatListEntries',
-      listFlags,
-      queryStr,
-      queryContactId
-    ).then(cb)
-  },
-  200
-)
-
 export function useChatList(
   _listFlags?: number,
   _queryStr?: string,
@@ -57,6 +40,23 @@ export function useChatList(
   const [queryStr, setQueryStr] = useState(_queryStr)
   const [queryContactId, setQueryContactId] = useState(_queryContactId)
   const [chatListEntries, setChatListEntries] = useState<[number, number][]>([])
+
+  const debouncedGetChatListEntries = useDebounced(
+    (
+      listFlags: number,
+      queryStr: string,
+      queryContactId: number,
+      cb: (...args: any) => void
+    ) => {
+      DeltaBackend.call(
+        'chatList.getChatListEntries',
+        listFlags,
+        queryStr,
+        queryContactId
+      ).then(cb)
+    },
+    200
+  )
 
   const getAndSetChatListEntries = (immediatly = false) => {
     if (immediatly === true) {
