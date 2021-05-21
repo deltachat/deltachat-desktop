@@ -55,7 +55,7 @@ export default function ForwardMessage(props: {
       >
         <Card style={{ padding: '0px' }}>
           <div className='forward-message-list-chat-list'>
-            {noResults && PseudoListItemNoSearchResults({ queryStr })}
+            {noResults && <PseudoListItemNoSearchResults queryStr={queryStr} />}
             <div style={{ height: noResults ? '0px' : '100%' }}>
               <AutoSizer>
                 {({ width, height }) => (

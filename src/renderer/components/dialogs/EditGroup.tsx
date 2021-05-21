@@ -169,17 +169,17 @@ function EditGroupInner(props: {
           <DeltaDialogHeader title={tx('menu_edit_group')} />
           <div className={Classes.DIALOG_BODY}>
             <Card>
-              {GroupSettingsSetNameAndProfileImage({
-                groupImage,
-                onSetGroupImage,
-                onUnsetGroupImage,
-                groupName,
-                setGroupName,
-                errorMissingGroupName,
-                setErrorMissingGroupName,
-                color: chat.color,
-                isVerified: chat.isProtected,
-              })}
+              <GroupSettingsSetNameAndProfileImage
+                groupImage={groupImage}
+                onSetGroupImage={onSetGroupImage}
+                onUnsetGroupImage={onUnsetGroupImage}
+                groupName={groupName}
+                setGroupName={setGroupName}
+                errorMissingGroupName={errorMissingGroupName}
+                setErrorMissingGroupName={setErrorMissingGroupName}
+                color={chat.color}
+                isVerified={chat.isProtected}
+              />
               <div className='group-seperator'>
                 {tx(
                   'n_members',
@@ -214,9 +214,9 @@ function EditGroupInner(props: {
                     />
                   </>
                 )}
-                {queryStr !== '' &&
-                  searchContacts.length === 0 &&
-                  PseudoListItemNoSearchResults({ queryStr })}
+                {queryStr !== '' && searchContacts.length === 0 && (
+                  <PseudoListItemNoSearchResults queryStr={queryStr} />
+                )}
               </div>
             </Card>
           </div>
