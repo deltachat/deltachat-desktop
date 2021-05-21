@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import debounce from 'debounce'
 import { ContactListItem } from './ContactListItem'
 import { DeltaBackend } from '../../delta-remote'
 import { DCContact } from '../../../shared/shared-types'
+import { useDebounced } from '../helpers/useDebounced'
 
 export function ContactList2(props: {
   contacts: DCContact[]
@@ -43,16 +43,15 @@ export function ContactList2(props: {
   )
 }
 
-const debouncedGetContacts2 = debounce(
-  (listFlags: number, queryStr: string, cb: (value: DCContact[]) => void) => {
-    DeltaBackend.call('getContacts2', listFlags, queryStr).then(cb)
-  },
-  200
-)
-
 export function useContacts(listFlags: number, queryStr: string) {
   const [contacts, setContacts] = useState<DCContact[]>([])
 
+  const debouncedGetContacts2 = useDebounced(
+    (listFlags: number, queryStr: string, cb: (value: DCContact[]) => void) => {
+      DeltaBackend.call('getContacts2', listFlags, queryStr).then(cb)
+    },
+    200
+  )
   const updateContacts = (queryStr: string) =>
     debouncedGetContacts2(listFlags, queryStr, setContacts)
 
@@ -63,16 +62,15 @@ export function useContacts(listFlags: number, queryStr: string) {
   return [contacts, updateContacts] as [typeof contacts, typeof updateContacts]
 }
 
-const debouncedGetContactsIds = debounce(
-  (listFlags: number, queryStr: string, cb: (value: number[]) => void) => {
-    DeltaBackend.call('contacts.getContactIds', listFlags, queryStr).then(cb)
-  },
-  200
-)
-
 export function useContactIds(listFlags: number, queryStr: string) {
   const [contactIds, setContacts] = useState<number[]>([])
 
+  const debouncedGetContactsIds = useDebounced(
+    (listFlags: number, queryStr: string, cb: (value: number[]) => void) => {
+      DeltaBackend.call('contacts.getContactIds', listFlags, queryStr).then(cb)
+    },
+    200
+  )
   const updateContacts = (queryStr: string) =>
     debouncedGetContactsIds(listFlags, queryStr, setContacts)
 
