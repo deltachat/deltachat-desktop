@@ -103,11 +103,13 @@ export default function CreateChat(props: {
     ) {
       return null
     }
-    return PseudoListItemAddContact({
-      queryStr,
-      queryStrIsEmail,
-      onClick: addContactOnClick,
-    })
+    return (
+      <PseudoListItemAddContact
+        queryStr={queryStr}
+        queryStrIsEmail={queryStrIsEmail}
+        onClick={addContactOnClick}
+      />
+    )
   }
 
   return (
@@ -357,9 +359,9 @@ export function AddMemberInnerDialog({
               isChecked={({ id }) => addMembers.indexOf(id) !== -1}
               onCheckboxClick={addOrRemoveMember}
             />
-            {queryStr !== '' &&
-              searchContacts.length === 0 &&
-              PseudoListItemNoSearchResults({ queryStr })}
+            {queryStr !== '' && searchContacts.length === 0 && (
+              <PseudoListItemNoSearchResults queryStr={queryStr} />
+            )}
           </div>
         </Card>
       </DeltaDialogBody>
@@ -516,15 +518,15 @@ function CreateGroupInner(props: {
           />
           <div className={Classes.DIALOG_BODY}>
             <Card>
-              {GroupSettingsSetNameAndProfileImage({
-                groupImage,
-                onSetGroupImage,
-                onUnsetGroupImage,
-                groupName,
-                setGroupName,
-                errorMissingGroupName,
-                setErrorMissingGroupName,
-              })}
+              <GroupSettingsSetNameAndProfileImage
+                groupImage={groupImage}
+                onSetGroupImage={onSetGroupImage}
+                onUnsetGroupImage={onUnsetGroupImage}
+                groupName={groupName}
+                setGroupName={setGroupName}
+                errorMissingGroupName={errorMissingGroupName}
+                setErrorMissingGroupName={setErrorMissingGroupName}
+              />
               <div className='group-seperator'>
                 {tx(
                   'n_members',
@@ -560,9 +562,9 @@ function CreateGroupInner(props: {
                     />
                   </>
                 )}
-                {queryStr !== '' &&
-                  searchContacts.length === 0 &&
-                  PseudoListItemNoSearchResults({ queryStr })}
+                {queryStr !== '' && searchContacts.length === 0 && (
+                  <PseudoListItemNoSearchResults queryStr={queryStr} />
+                )}
               </div>
             </Card>
           </div>

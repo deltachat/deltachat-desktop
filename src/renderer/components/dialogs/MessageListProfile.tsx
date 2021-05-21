@@ -35,17 +35,17 @@ export default function MessageListProfile(props: {
       <DeltaDialogHeader title={tx('mailing_list')} />
       <div className={Classes.DIALOG_BODY}>
         <Card>
-          {GroupSettingsSetNameAndProfileImage({
-            groupImage,
-            onSetGroupImage,
-            onUnsetGroupImage,
-            groupName,
-            setGroupName,
-            errorMissingGroupName,
-            setErrorMissingGroupName,
-            color: chat.color,
-            isVerified: chat.isProtected,
-          })}
+          <GroupSettingsSetNameAndProfileImage
+            groupImage={groupImage}
+            onSetGroupImage={onSetGroupImage}
+            onUnsetGroupImage={onUnsetGroupImage}
+            groupName={groupName}
+            setGroupName={setGroupName}
+            errorMissingGroupName={errorMissingGroupName}
+            setErrorMissingGroupName={setErrorMissingGroupName}
+            color={chat.color}
+            isVerified={chat.isProtected}
+          />
           <div style={{ padding: '15px 0px' }}>
             {tx('mailing_list_profile_info')}
           </div>
