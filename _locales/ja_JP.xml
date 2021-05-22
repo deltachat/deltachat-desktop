@@ -4,6 +4,7 @@
     <string name="app_name">Delta Chat</string>
     <string name="ok">了承</string>
     <string name="cancel">取消</string>
+    <string name="clear_search">検索履歴を消す</string>
     <string name="yes">はい</string>
     <string name="no">いいえ</string>
     <string name="select">選択</string>
@@ -114,6 +115,8 @@
     <string name="contact">連絡先</string>
     <string name="verified_contact">確認済みの連絡先</string>
     <string name="camera">カメラ</string>
+    <string name="switch_camera">カメラを切り替える</string>
+    <string name="toggle_fullscreen">フルスクリーン</string>
     <string name="location">場所</string>
     <string name="gallery">画像</string>
     <string name="images_and_videos">画像・映像</string>
@@ -190,6 +193,7 @@
     <string name="menu_scroll_to_bottom">一番下までスクロールする</string>
     <string name="menu_scroll_to_top">一番上までスクロールする</string>
     <string name="menu_help">ヘルプ</string>
+    <string name="privacy_policy">プライバシーについて</string>
     <string name="menu_select_all">全選択</string>
     <string name="select_more">さらに選択</string>
     <string name="menu_expand">広げる</string>
@@ -248,7 +252,7 @@
     <string name="videochat_tap_to_open">タップして開く</string>
     <string name="videochat_instance">ビデオ通話サーバー</string>
     <string name="videochat_instance_placeholder">選んだビデオ通話サーバー</string>
-    <string name="videochat_instance_explain">ビデオ通話サーバーが入力されたらチャットでビデオ通話を開始することができます。互換性のあるブラウザ又はアプリが必要です。\n\n例えば　https://meet.jit.si/$ROOM 或いは basicwebrtc://https://your-server</string>
+    <string name="videochat_instance_explain">ビデオ通話サーバーが入力されたらチャットでビデオ通話を開始することができます。互換性のあるブラウザ又はアプリが必要です。\n\n例えば　https://meet.jit.si/$ROOM 或いは basicwebrtc:https://your-server</string>
     <string name="videochat_instance_from_qr">%1$sで他人をビデオ通話に招待しますか？設定次第に各チャットからビデオ通話を開始することができます。以前の設定も置き換えます。</string>
     <string name="videochat_invitation">ビデオ通話に招待</string>
     <string name="videochat_invitation_body">ビデオ通話に招待されて、%1$sで参加</string>
@@ -323,10 +327,14 @@
     <string name="messaging_disabled_deaddrop">メッセージを押して連絡先リクエストを承認・拒否します</string>
     <string name="cannot_display_unsuported_file_type">%s形式のファイルは表示できません</string>
     <string name="attachment_failed_to_load">添付ファイルの読み込みに失敗しました</string>
+    <!-- For recording Voice messages: Description for the "Lock" button allowing to lift the thumb from the record button while recording continues -->
+    <string name="lock_recording">ずっと録音</string>
+
     <!-- mailing lists -->
     <string name="mailing_list">メーリングリスト</string>
     <string name="ask_show_mailing_list">%1$sのメーリングリストを表示しますか？</string>
-
+    <string name="show_location_traces">トレースを表示する</string>
+    <string name="add_poi">指定位置を送る</string>
 
     <!-- search -->
     <string name="search">検索</string>
@@ -382,6 +390,7 @@
     <string name="login_oauth2_checking_addr">%1$sが確認中</string>
     <string name="login_info_oauth2_title">簡単セットアップを使用しましょうか？</string>
     <string name="login_info_oauth2_text">入力されたメールアドレスは、簡易セットアップ（OAuth 2.0）に対応しています。次に「メールでチャット」を許可してください。Delta Chatにはサーバーがなく、テーダはデバイスにあります。</string>
+    <string name="login_certificate_checks">有効な証明書です</string>
     <string name="login_error_mail">有効なメールアドレスを入力してください</string>
     <string name="login_error_server">有効なサーバー或いはIPアドレスを入力してください</string>
     <string name="login_error_port">有効なポート（１〜６５５３５）を入力してください</string>
@@ -411,6 +420,10 @@
     <string name="forward_to">転送</string>
     <string name="share_multiple_attachments">%1$dをチャットに送りますか。\n\nファイルは圧縮されずに送られます。</string>
     <string name="share_multiple_attachments_multiple_chats">%1$dつのファイルを%2$d個のチャットに送りますか。\n\nファイルは圧縮されずに送られます。</string>
+    <string name="share_text_multiple_chats">%2$sを%1$d個のチャットに送りますか。</string>
+    <string name="share_abort">権限エラー：共有が一時中断されました。</string>
+
+
     <!-- preferences -->
     <string name="pref_using_custom">カスタムを使う：%s</string>
     <string name="pref_using_default">デフォルトを使う：%s</string>
@@ -420,6 +433,7 @@
     <string name="blocked_empty_hint">ブロックされた連絡先がここに表示されます。</string>
     <string name="pref_profile_photo_remove_ask">アイコン画像を削除しますか？</string>
     <string name="pref_password_and_account_settings">パスワードとアカウント</string>
+    <string name="pref_who_can_see_profile_explain">アイコン画像や名前は他のユーザーに連絡するとメッセージとともに表示されます。既に送信された情報を削除することができます。</string>
     <string name="pref_your_name">あなたの名前</string>
     <!-- Translators: The value entered here is visible only to recipients who DO NOT use Deltachat, so its not a "Status" but the last line in the E-Mail. -->
     <string name="pref_default_status_label">署名</string>
@@ -432,9 +446,12 @@ https://delta.chat</string>
     <string name="pref_outgoing_balanced">普通</string>
     <string name="pref_outgoing_worse">低画質・サイズが小さい</string>
     <string name="pref_vibrate">振動</string>
+    <string name="pref_change_secret">秘密の変更</string>
+    <string name="pref_change_secret_explain">PIN・パターン・指紋はシステム設定で変更できます</string>
     <string name="pref_screen_security">画面セキュリティ</string>
     <!-- Translators: The wording must indicate that we can't guarantee that, its a System flag that we set. But the System in question must honor it. -->
     <string name="pref_screen_security_explain">アプリ内や「最近使ったアプリ」でスクリーンショットを禁止する</string>
+    <string name="pref_screen_security_please_restart_hint">画面のセキュリティ設定を適用してアプリを再起動してください。</string>
     <string name="pref_notifications">通知</string>
     <string name="pref_notifications_show">表示</string>
     <string name="pref_notifications_priority">優先度</string>
@@ -473,6 +490,7 @@ https://delta.chat</string>
     <string name="pref_other">その他</string>
     <string name="pref_backup">バックアップ</string>
     <string name="pref_backup_explain">外部記憶装置へチャットをバックアップする</string>
+    <string name="pref_backup_export_explain">バックアップは、本デバイスまたは別のデバイスに新たにインストールする際に役立ちます。\n\nこのバックアップには、すべてのメッセージ、連絡先、チャット、およびエンドツーエンドの自動暗号化設定が含まれます。バックアップファイルは安全な場所に保管するか、できるだけ早く削除してください。</string>
     <string name="pref_backup_export_start_button">バックアップを開始する</string>
     <string name="pref_backup_written_to_x">バックアップは%1$sに正常に完了しました。</string>
     <string name="pref_managekeys_menu_title">暗号鍵の管理</string>
@@ -495,6 +513,7 @@ https://delta.chat</string>
     <string name="pref_show_emails_accepted_contacts">許可されたユーザーのみ</string>
     <string name="pref_show_emails_all">全部</string>
     <string name="pref_experimental_features">実験的な機能</string>
+    <string name="pref_on_demand_location_streaming">オンデマンドの位置情報配信</string>
     <string name="pref_background_default">デフォルトの壁紙</string>
     <string name="pref_background_default_color">デフォルト色</string>
     <string name="pref_background_custom_image">画像</string>
@@ -503,8 +522,6 @@ https://delta.chat</string>
     <string name="profile_image_select">アイコン画像を選択する</string>
     <string name="select_your_new_profile_image">新しいアイコン画像を選択してください</string>
     <string name="profile_image_delete">アイコン画像を削除する</string>
-
-
     <!-- Emoji picker and categories -->
     <string name="emoji_search_results">検索結果</string>
     <string name="emoji_not_found">絵文字がみつかりません</string>
@@ -584,6 +601,8 @@ https://delta.chat</string>
     <string name="screenlock_explain">Delta Chatを画面ロックや指紋認証でロックする。以前のコンテンツを表示しないように、「画面のセキュリティ」も有効にしてください。</string>
     <string name="screenlock_authentication_failed">認証に失敗しました。</string>
     <string name="screenlock_unlock_title">Delta Chatを解錠する</string>
+    <string name="screenlock_inactivity_timeout">無操作によるロック</string>
+    <string name="screenlock_inactivity_timeout_explain">一定時間操作がなかったら自動でDelta Chatをロックする</string>
     <!-- qr code stuff -->
     <string name="qr_code">QRコード</string>
     <string name="load_qr_code_as_image">QRコードを画像として読み込む</string>
@@ -603,6 +622,7 @@ https://delta.chat</string>
     <string name="qrshow_join_contact_title">自分のQRｺｰﾄﾞ</string>
     <string name="qrshow_join_contact_hint">スキャンして%1$sに連絡します。</string>
     <string name="qrshow_join_contact_no_connection_toast">インターネットに接続されていないので、QRコードの設定ができません。</string>
+    <string name="qraccount_ask_create_and_login">%1$sに新しいメールアドレスを作ってログしますか。</string>
     <string name="contact_verified">%1$sを確認しました。</string>
     <string name="contact_not_verified">%1$sを確認できません。</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
@@ -622,6 +642,12 @@ https://delta.chat</string>
     <!-- permissions -->
     <string name="perm_required_title">アクセス許可が必要です</string>
     <string name="perm_continue">続行</string>
+    <string name="ImageEditorHud_add_text">テキストを作成</string>
+    <string name="ImageEditorHud_blur">ぼかし</string>
+    <string name="ImageEditorHud_crop">切り抜き</string>
+    <string name="ImageEditorHud_flip">反転</string>
+    <string name="ImageEditorHud_rotate">回転</string>
+
     <!-- dc_str_* resources -->
     <string name="encrypted_message">暗号化されたメッセージ</string>
 
@@ -682,8 +708,8 @@ https://delta.chat</string>
     <string name="message_detail_from_desktop">差出人</string>
     <string name="message_detail_to_desktop">宛先</string>
     <string name="menu.view.developer.open.log.folder">ログフォルダを開く</string>
+    <string name="menu.view.developer.open.current.log.file">現在のログファイルを開く</string>
     <string name="user_location_permission_explanation">Delta Chatは位置情報を共有出来る様にする為権限が必要です</string>
-
     <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">送信状態：エラー</string>
     <string name="a11y_delivery_status_sending">送信状態：送信中</string>

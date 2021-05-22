@@ -16,6 +16,7 @@
     <string name="open">Άνοιγμα</string>
     <string name="delete">Διαγραφή</string>
     <string name="info">Πληροφορίες</string>
+    <string name="update">Ενημέρωση</string>
     <string name="back">Πίσω</string>
     <string name="close">Κλείσιμο</string>
     <string name="forward">Προώθηση</string>
@@ -24,6 +25,8 @@
     <string name="ephemeral_messages">Μηνύματα που εξαφανίζονται</string>
     <string name="save">Αποθήκευση</string>
     <string name="media">Πολυμέσα</string>
+    <string name="profile">Προφίλ</string>
+    <string name="always">Πάντα</string>
     <string name="show_password">Εμφάνιση κωδικού πρόσβασης</string>
     <string name="not_now">Όχι τώρα</string>
     <string name="never">Ποτέ</string>
@@ -52,6 +55,8 @@
 
     <string name="draft">Πρόχειρο</string>
     <string name="image">Εικόνα</string>
+    <!-- Translators: Used in summaries as "Draft: Reply", similar as "Draft: Image". Use a noun here, not a verb (not: "to reply") -->
+    <string name="reply_noun">Απάντηση</string>
     <string name="gif">Gif</string>
     <string name="images">Εικόνες</string>
     <string name="audio">Ήχοι</string>
@@ -60,6 +65,8 @@
     <string name="documents">Αρχεία</string>
     <string name="contact">Επαφή</string>
     <string name="camera">Κάμερα</string>
+    <!-- "capture" here means "start a video recording" or "take a photo"; eg. the description of the "shutter button" in the camera controls -->
+    <string name="capture">Λήψη</string>
     <string name="location">Τοποθεσία</string>
     <string name="gallery">Πινακοθήκη</string>
     <string name="file">Αρχείο</string>
@@ -102,8 +109,11 @@
     <string name="menu_unmute">Αποσίγαση</string>
     <string name="menu_all_media">Όλα τα πολυμέσα</string>
     <string name="menu_share">Μοιράσου</string>
+    <!-- this is the action "to block sth." usually a mailing list or a contact. this is NOT "a large solid piece of hard material" :) -->
+    <string name="block">Φραγή</string>
     <string name="menu_play">Αναπαραγωγή</string>
     <string name="menu_pause">Παύση</string>
+    <string name="menu_scroll_to_bottom">Πήγαινε στο τέρμα</string>
     <string name="menu_help">Βοήθεια</string>
     <string name="menu_select_all">Επιλογή όλων</string>
     <string name="menu_settings">Ρυθμίσεις</string>
@@ -121,6 +131,8 @@
     <string name="chat_record_explain">Πάτα και κράτα πατημένο για να ηχογραφήσεις ένα φωνητικό μήνυμα, άφησε το κουμπί για αποστολή</string>
     <string name="chat_input_placeholder">Μήνυμα</string>
     <string name="chat_archived_label">Αρχειοθετημένα</string>
+    <!-- this "Saved" should match the "Saved" from "Saved messages" -->
+    <string name="saved">Αποθηκεύτηκε</string>
     <!-- search -->
     <string name="search">Αναζήτηση</string>
     <!-- create/edit groups, contact/group profile -->

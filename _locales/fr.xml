@@ -196,6 +196,7 @@
     <string name="menu_scroll_to_bottom">Faites défiler jusqu\'en bas</string>
     <string name="menu_scroll_to_top">Faites défiler jusqu\'en haut</string>
     <string name="menu_help">Aide</string>
+    <string name="privacy_policy">Politique de confidentialité</string>
     <string name="menu_select_all">Tout sélectionner</string>
     <string name="select_more">Sélectionner plus</string>
     <string name="menu_expand">Étendre</string>
@@ -337,13 +338,10 @@
     <!-- mailing lists -->
     <string name="mailing_list">Liste de diffusion</string>
     <string name="ask_show_mailing_list">Montrer la liste de diffusion « %1$s » ?</string>
-
-
     <!-- map -->
     <string name="filter_map_on_time">Afficher les positions dans le temps</string>
     <string name="show_location_traces">Afficher les traces</string>
     <string name="add_poi">Afficher les points d\'intérêt</string>
-
 
     <!-- search -->
     <string name="search">Chercher</string>
@@ -533,8 +531,6 @@
     <string name="profile_image_select">Sélectionnez l\'image de profil</string>
     <string name="select_your_new_profile_image">Sélectionnez votre nouvelle image de profil</string>
     <string name="profile_image_delete">Effacer l\'image de profil</string>
-
-
     <!-- Emoji picker and categories -->
     <string name="emoji_search_results">Résultats de la recherche</string>
     <string name="emoji_not_found">Pas d\'emoji trouvé</string>
@@ -671,8 +667,6 @@
     <string name="contact_setup_changed">Configuration modifiée pour %1$s</string>
     <string name="verified_group_explain">Les groupes vérifiés (fonction expérimentale) offrent une sécurité contre les attaques actives. Les membres sont vérifiés avec un second facteur par d\'autres membres et les messages sont toujours chiffrés de bout en bout.</string>
     <string name="copy_qr_data_success">L\'URL du code QR a été copié dans le presse-papiers</string>
-
-
     <!-- notifications  -->
     <string name="notify_n_messages_in_m_chats">%1$d nouveaux messages dans %2$d tchats</string>
     <string name="notify_mark_read">Marquer comme lu</string>
@@ -696,7 +690,6 @@
 
     <!-- ImageEditorHud -->
     <string name="ImageEditorHud_draw_anywhere_to_blur">Dessinez n\'importe où pour flouter</string>
-
     <!-- dc_str_* resources -->
     <string name="encrypted_message">Message chiffré</string>
 
@@ -768,7 +761,6 @@
     <string name="menu.view.developer.open.log.folder">Ouvrir le dossier Journal</string>
     <string name="menu.view.developer.open.current.log.file">Ouvrir le fichier Journal courant</string>
     <string name="user_location_permission_explanation">DeltaChat a besoin de l\'autorisation de votre position pour l\'afficher et la partager.</string>
-
     <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">État de la livraison : Erreur</string>
     <string name="a11y_encryption_padlock">Cadenas de chiffrement</string>
@@ -799,6 +791,4 @@
     <string name="pref_reliable_service_explain">Requiert une notification permanente</string>
     <string name="perm_enable_bg_reminder_title">Touchez ici pour recevoir des messages pendant que DeltaChat est en arrière-plan.</string>
     <string name="perm_enable_bg_already_done">Vous avez déjà autorisé Delta Chat à recevoir des messages en arrière plan.\n\nSi vous ne les recevez toujours pas en arrière plan, vérifiez les paramètres de votre système.</string>
-    <string name="update_1_14_android">Quelques points forts de la mise à jour 1.14 :\n\n🧹 Glisser pour répondre : pour répondre à un message précis, glissez-le juste vers la droite – pas ici ! vous ne pouvez pas répondre là 😛 Vous verrez une citation au-dessus de la ligne de rédaction et pourrez continuer d\'écrire votre message comme d\'habitude.\n\n🔥 Messages éphémères – le temps est venu 😀 Toute discussion peut maintenant être configurée pour effacer les messages envoyés et reçus après un certain temps. Sélectionnez juste « Messages éphémères » dans le menu de discussion – encore une fois, pas ici.\n\n👆 Les discussions s\'ouvrent au premier message non-lu.\n\n💾 Transférez des choses dans les « Messages sauvegardés » directement et plus rapidement – cela peut être essayé ici : appuyez longtemps sur ce message puis sur la flèche en haut à droite.\n\n🎃 Enfin, nous avons encore effrayés de nombreux bugs ! Beaucoup ont eu tellement peur qu\'ils ne reviendront jamais.</string>
-
-</resources>
+    </resources>

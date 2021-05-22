@@ -328,7 +328,6 @@
     <string name="show_location_traces">Exibir pegadas</string>
     <string name="add_poi">Enviar ponto de interesse</string>
 
-
     <!-- search -->
     <string name="search">Procurar</string>
     <string name="search_explain">Procurar conversas, contatos e mensagens</string>
@@ -517,8 +516,6 @@
     <string name="profile_image_select">Selecione a imagem do perfil</string>
     <string name="select_your_new_profile_image">Selecione sua nova imagem do perfil</string>
     <string name="profile_image_delete">Excluir imagem do perfil</string>
-
-
     <!-- Emoji picker and categories -->
     <string name="emoji_search_results">Resultados da busca</string>
     <string name="emoji_not_found">Nenhum emoji encontrado</string>
@@ -647,8 +644,6 @@
     <string name="contact_setup_changed">A configuração Autocrypt mudou para %1$s</string>
     <string name="verified_group_explain">Grupos verificados (experimental) fornecem segurança contra ataques ativos. Os membros são verificados com um segundo fator por outros membros e as mensagens são sempre criptografadas de ponta a ponta.</string>
     <string name="copy_qr_data_success">Endereço do código QR copiado para a área de transferência</string>
-
-
     <!-- notifications  -->
     <string name="notify_n_messages_in_m_chats">%1$d novas mensagens em %2$d conversas</string>
     <string name="notify_mark_read">Marcar como lida</string>
@@ -672,7 +667,6 @@
 
     <!-- ImageEditorHud -->
     <string name="ImageEditorHud_draw_anywhere_to_blur">Desenhe em qualquer lugar para desfocar</string>
-
     <!-- dc_str_* resources -->
     <string name="encrypted_message">Mensagem criptografada</string>
 
@@ -744,7 +738,6 @@
     <string name="menu.view.developer.open.log.folder">Abrir pasta de relatórios</string>
     <string name="menu.view.developer.open.current.log.file">Abrir relatório atual</string>
     <string name="user_location_permission_explanation">O Delta Chat precisa acessar sua localização para que você possa exibi-la e compartilhá-la.</string>
-
     <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">Status de entrega: Erro</string>
     <string name="a11y_encryption_padlock">Cadeado de criptografia</string>
@@ -775,6 +768,4 @@
     <string name="pref_reliable_service_explain">Requer uma notificação permanente</string>
     <string name="perm_enable_bg_reminder_title">Toque aqui para receber mensagens enquanto o Delta Chat estiver em segundo plano.</string>
     <string name="perm_enable_bg_already_done">Você já permitiu que o Delta Chat receba mensagens em segundo plano.\n\nSe as mensagens ainda não chegarem em segundo plano, verifique também as configurações do sistema.</string>
-    <string name="update_1_14_android">Alguns destaques da atualização 1.14:\n\n🧹 Deslize para responder: para responder a uma mensagem concreta, basta deslizar para a direita (não aqui! Você não pode responder aqui 😛) Você verá uma citação acima da linha de composição e poderá continuar escrevendo sua mensagem como de costume.\n\n🔥 Mensagens que desaparecem - chegou a hora 😀. Qualquer conversa agora pode ser configurada para excluir mensagens enviadas e recebidas após algum tempo. Basta selecionar \"Mensagens desaparecendo\" no menu da conversa (de novo: não aqui)\n\n👆 Conversas abrem na primeira mensagem não vista\n\n💾 Encaminhe para \"Mensagens salvas\" diretamente e mais rápido (pode ser tentado aqui: longo-toque nesta mensagem e depois na seta em cima à direita)\n\n🎃 Finalmente, mais uma vez assustamos muitos \"bugs\"! Muitos ficaram com tanto medo que não vão voltar.</string>
-
-</resources>
+    </resources>

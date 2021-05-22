@@ -4,6 +4,7 @@
     <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
     <string name="cancel">Anuloje</string>
+    <string name="clear_search">Spastroje kërkimin</string>
     <string name="yes">Po</string>
     <string name="no">Jo</string>
     <string name="select">Përzgjidhni</string>
@@ -120,6 +121,8 @@
     <string name="contact">Kontakt</string>
     <string name="verified_contact">Kontakt i verifikuar</string>
     <string name="camera">Kamerë</string>
+    <string name="switch_camera">Ndërro kamera</string>
+    <string name="toggle_fullscreen">Kalo në / Dil nga mënyra sa krejt ekrani</string>
     <string name="location">Vendndodhje</string>
     <string name="gallery">Galeri</string>
     <string name="images_and_videos">Figura dhe video</string>
@@ -195,6 +198,7 @@
     <string name="menu_scroll_to_bottom">Rrëshqit drejt fundit</string>
     <string name="menu_scroll_to_top">Rrëshqit sipër në krye</string>
     <string name="menu_help">Nidhmë</string>
+    <string name="privacy_policy">Rregulla Privatësie</string>
     <string name="menu_select_all">Përzgjidhi krejt</string>
     <string name="select_more">Përzgjidhni më tepër</string>
     <string name="menu_expand">Zgjeroje</string>
@@ -333,16 +337,16 @@
     <string name="messaging_disabled_deaddrop">Që të pranoni apo hidhni tej një kërkesë kontakti, klikoni mbi një mesazh</string>
     <string name="cannot_display_unsuported_file_type">S’mund të shfaqet ky lloj kartelash: %s</string>
     <string name="attachment_failed_to_load">S’u arrit të ngarkohet bashkëngjitje</string>
+    <!-- For recording Voice messages: Description for the "Lock" button allowing to lift the thumb from the record button while recording continues -->
+    <string name="lock_recording">Kyçe incizimin</string>
+
     <!-- mailing lists -->
     <string name="mailing_list">Listë postimesh</string>
     <string name="ask_show_mailing_list">Të shfaqet lista e postimeve \"%1$s\"?</string>
-
-
     <!-- map -->
     <string name="filter_map_on_time">Shfaq vendndodhje në rrjedhë kohore</string>
     <string name="show_location_traces">Shfaq gjurmë</string>
     <string name="add_poi">Dërgo pikë interesi</string>
-
 
     <!-- search -->
     <string name="search">Kërko</string>
@@ -531,8 +535,6 @@
     <string name="profile_image_select">Përzgjidhni figurë profili</string>
     <string name="select_your_new_profile_image">Përzgjidhni figurën tuaj të re të profilit</string>
     <string name="profile_image_delete">Fshini figurën e profilit</string>
-
-
     <!-- Emoji picker and categories -->
     <string name="emoji_search_results">Përfundime kërkimi</string>
     <string name="emoji_not_found">S’u gjetën emoji</string>
@@ -669,8 +671,6 @@
     <string name="contact_setup_changed">U ndryshua rregullimi për %1$s</string>
     <string name="verified_group_explain">Grupet e verifikuara (eksperimentale) furnizojnë siguri kundër sulmesh aktive. Anëtarët janë të verifikuar me një faktor të dytë nga anëtarë të tjerë dhe mesazhet janë përherë të fshehtëzuara skaj më skaj.</string>
     <string name="copy_qr_data_success">URL-ja QR u kopjua në të papastër</string>
-
-
     <!-- notifications  -->
     <string name="notify_n_messages_in_m_chats">%1$d mesazhe të rinj në %2$d fjalosje</string>
     <string name="notify_mark_read">Vëri shenjë si i lexuar</string>
@@ -694,6 +694,11 @@
 
     <!-- ImageEditorHud -->
     <string name="ImageEditorHud_draw_anywhere_to_blur">Që të turbullohet, vizatoni kudo qoftë</string>
+    <string name="ImageEditorHud_add_text">Shtoni tekst</string>
+    <string name="ImageEditorHud_blur">Turbulloje</string>
+    <string name="ImageEditorHud_crop">Qethe</string>
+    <string name="ImageEditorHud_flip">Ktheje në anë tjetër</string>
+    <string name="ImageEditorHud_rotate">Rrotulloje</string>
 
     <!-- dc_str_* resources -->
     <string name="encrypted_message">Mesazh i fshehtëzuar</string>
@@ -766,7 +771,6 @@
     <string name="menu.view.developer.open.log.folder">Hap Dosje Regjistrash</string>
     <string name="menu.view.developer.open.current.log.file">Hap Kartelën Regjistër të Tanishme</string>
     <string name="user_location_permission_explanation">Që të mund të shfaqë dhe ndajë me të tjerët vendndodhjen tuaj, Delta Chat lyp lejen vendore.</string>
-
     <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">Gjendje dërgimi: Gabim</string>
     <string name="a11y_encryption_padlock">Dry fshehtëzimi</string>
@@ -797,6 +801,6 @@
     <string name="pref_reliable_service_explain">Lyp një njoftim permanent</string>
     <string name="perm_enable_bg_reminder_title">Prekeni këtu që të merrni mesazhe, teksa Delta Chat rri në prapaskenë.</string>
     <string name="perm_enable_bg_already_done">E keni lejuar tashmë Delta Chat-in të marrë mesazhe në prapaskenë.\n\nNëse mesazhet prapë nuk mbërrijnë në prapaskenë, ju lutemi, kontrolloni edhe rregullimet e sistemit tuaj.</string>
-    <string name="update_1_14_android">Disa gjëra për t’u theksuar te përditësimi 1.14:\n\n🧹 Fërkojeni për t’u përgjigjur: Për t’ju përgjigjur një mesazhi të caktuar, fërkojeni për djathtas (jo këtu! këtu s’përgjigjeni dot 😛) Do të shihni një si punë citimi sipër rreshtit të hartuesit dhe mund të vazhdoni të shkruani mesazhin tuaj si zakonisht.\n\n🔥 Mesazhe që treten ­- ka ardhur koha 😀. Çfarëdo fjalosje tanimë mund të formësohet që të fshijë pas njëfarë kohe mesazhet e dërguar dhe të marrë. Thjesht përzgjidhni \"Tretje mesazhesh\" që nga menuja e fjalosjes (sërish: jo këtu)\n\n👆 Fjalosjet hapen me mesazhin e parë të palexuar\n\n💾 Përcillni gjëra te \"Mesazhe të ruajtur\" drejtpërdrejt dhe më shpejt (kjo mund të provohet këtu: prekeni paksa më gjatë këtë mesazh dhe mandej shigjetën sipër djathtas)\n\n🎃 Së fundi, kemi tmerruar shumë të meta! Shumë prej tyre qenë kaq shumë të tmerruara, sa s’do të kthehen më.</string>
+    <string name="update_1_20">U përmirësua përputhshmëri email-i në versionin 1.20:\n\n📫 Lexoni lista postimesh\n📭 Lexoni email-e HTML\n📪 Trajtim i bukur adresash asistence\n📫 U ndreqën mjaft yçkla të mëdha dhe vockla\n\nLexoni postimin tonë të ri në blog mbi këto hapa të para drejt email-it dhe më tepër:</string>
 
 </resources>

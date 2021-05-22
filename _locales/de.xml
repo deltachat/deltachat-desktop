@@ -4,6 +4,7 @@
     <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
     <string name="cancel">Abbruch</string>
+    <string name="clear_search">Suche löschen</string>
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
     <string name="select">Auswählen</string>
@@ -112,6 +113,7 @@
     <string name="images">Bilder</string>
     <string name="audio">Audio</string>
     <string name="voice_message">Sprachnachricht</string>
+    <string name="forwarded">Weitergeleitet</string>
     <string name="forwarded_message">Weitergeleitete Nachricht</string>
     <!-- %1$s will be replaced by the name or the email-address of the person who has forwarded the message -->
     <string name="forwarded_by">Weitergeleitet von %1$s</string>
@@ -120,6 +122,10 @@
     <string name="contact">Kontakt</string>
     <string name="verified_contact">Verifizierter Kontakt</string>
     <string name="camera">Kamera</string>
+    <!-- "capture" here means "start a video recording" or "take a photo"; eg. the description of the "shutter button" in the camera controls -->
+    <string name="capture">Aufnehmen</string>
+    <string name="switch_camera">Kamera wechseln</string>
+    <string name="toggle_fullscreen">Vollbildmodus umschalten</string>
     <string name="location">Ort</string>
     <string name="gallery">Galerie</string>
     <string name="images_and_videos">Bilder und Videos</string>
@@ -196,6 +202,7 @@
     <string name="menu_scroll_to_bottom">Zum Ende scrollen</string>
     <string name="menu_scroll_to_top">Zum Anfang scrollen</string>
     <string name="menu_help">Hilfe</string>
+    <string name="privacy_policy">Datenschutzerklärung</string>
     <string name="menu_select_all">Alles auswählen</string>
     <string name="select_more">Mehr auswählen</string>
     <string name="menu_expand">Erweitern</string>
@@ -340,13 +347,10 @@
     <!-- mailing lists -->
     <string name="mailing_list">Mailingliste</string>
     <string name="ask_show_mailing_list">Mailingliste \"%1$s\" anzeigen?</string>
-
-
     <!-- map -->
     <string name="filter_map_on_time">Standorte im Zeitrahmen anzeigen</string>
     <string name="show_location_traces">Spuren anzeigen</string>
     <string name="add_poi">Sende eine Ortsmarkierung. </string>
-
 
     <!-- search -->
     <string name="search">Suchen</string>
@@ -538,8 +542,6 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="profile_image_select">Profilbild auswählen</string>
     <string name="select_your_new_profile_image">Wählen Sie Ihr Profilbild aus</string>
     <string name="profile_image_delete">Profilbild löschen</string>
-
-
     <!-- Emoji picker and categories -->
     <string name="emoji_search_results">Suchergebnisse</string>
     <string name="emoji_not_found">Keine Emoji gefunden</string>
@@ -678,8 +680,6 @@ Ihr bisheriges E-Mail-Konto wird dabei nicht gelöscht. Sie können mit der Opti
     <string name="contact_setup_changed">Geändertes Setup für %1$s</string>
     <string name="verified_group_explain">Verifizierte Gruppen (experimentell) bieten Schutz gegen aktive Angriffe mittels Zwei-Faktor-Authentifizierung aller Mitglieder und immer aktiver Ende-zu-Ende-Verschlüsselung.</string>
     <string name="copy_qr_data_success">QR-Code auf die Zwischenablage kopiert</string>
-
-
     <!-- notifications  -->
     <string name="notify_n_messages_in_m_chats">%1$d neue Nachrichten in %2$d Chats</string>
     <string name="notify_mark_read">Als gelesen markieren</string>
@@ -703,6 +703,13 @@ Ihr bisheriges E-Mail-Konto wird dabei nicht gelöscht. Sie können mit der Opti
 
     <!-- ImageEditorHud -->
     <string name="ImageEditorHud_draw_anywhere_to_blur">Zeichne zum Verwischen in beliebige Bereiche</string>
+    <string name="ImageEditorHud_add_text">Text hinzufügen</string>
+    <string name="ImageEditorHud_blur">Verwischen</string>
+    <string name="ImageEditorHud_brush_marker">Markieren</string>
+    <string name="ImageEditorHud_brush_highlight">Hervorheben</string>
+    <string name="ImageEditorHud_crop">Zuschneiden</string>
+    <string name="ImageEditorHud_flip">Spiegeln</string>
+    <string name="ImageEditorHud_rotate">Drehen</string>
 
     <!-- dc_str_* resources -->
     <string name="encrypted_message">Verschlüsselte Nachricht</string>
@@ -775,7 +782,6 @@ Ihr bisheriges E-Mail-Konto wird dabei nicht gelöscht. Sie können mit der Opti
     <string name="menu.view.developer.open.log.folder">Logdatei öffnen</string>
     <string name="menu.view.developer.open.current.log.file">Aktuelle Logdatei öffnen</string>
     <string name="user_location_permission_explanation">Delta Chat benötigt die Standortberechtigung, um Ihren Standort anzuzeigen und zu teilen.</string>
-
     <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">Übertragungsstatus: Fehler</string>
     <string name="a11y_encryption_padlock">Verschlüsselungsschloss</string>
@@ -806,6 +812,6 @@ Ihr bisheriges E-Mail-Konto wird dabei nicht gelöscht. Sie können mit der Opti
     <string name="pref_reliable_service_explain">Erfordert immer sichtbaren Hinweis</string>
     <string name="perm_enable_bg_reminder_title">Tippen Sie hier, um Nachrichten zu empfangen, während Delta Chat im Hintergrund läuft.</string>
     <string name="perm_enable_bg_already_done">Sie haben Delta Chat bereits erlaubt, Nachrichten im Hintergrund zu empfangen.\n\nFalls keine Nachrichten eingehen, überprüfen Sie bitte auch Ihre Systemeinstellungen.</string>
-    <string name="update_1_14_android">Neues im 1.14 Update:\n\n🧹 Wischen zum Antworten: Um eine konkrete Nachricht zu beantworten, wischen Sie diese einfach nach rechts (nicht hier! hier kann man nicht antworten 😛) Die Antwort selbst erstellen Sie dann wie gewohnt.\n\n🔥 Verschwindende Nachrichten: Chats können jetzt so konfiguriert werden, dass gesendete und empfangene Nachrichten nach einiger Zeit gelöscht werden. Wählen Sie einfach \"Verschwindende Nachrichten\" aus dem Chat-Menü (wieder: nicht hier)\n\n👆 Chats öffnen sich bei der ersten ungelesenen Nachricht.\n\n💾 Legen Sie Dinge direkt und schnell in den \"Gespeicherte Nachrichten\" ab (dies kann hier versucht werden: Tippen Sie lange auf diese Nachricht und dann auf den Pfeil oben rechts)\n\n🎃 Ausserdem haben wir viele Bugs verschreckt! Die meisten werden kaum zurückkommen.</string>
+    <string name="update_1_20">Verbesserte E-Mail-Kompatibilität in Version 1.20:\n\n📫 Mailinglisten lesen\n📭 HTML-Mails anzeigen\n📪 Bessere Unterstützung von Support-Adressen\n📫 Viele weitere Probleme behoben\n\nLesen Sie unseren neuen Blog-Beitrag über diese ersten Schritte Richtung E-Mail und mehr:</string>
 
 </resources>
