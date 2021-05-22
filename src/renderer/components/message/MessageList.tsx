@@ -444,13 +444,6 @@ const MessageList = React.memo(function MessageList({
         messageElement.getAttribute('id')
       )
 	
-    const conversationType: ConversationType = {
-      hasMultipleParticipants:
-        chat.type === C.DC_CHAT_TYPE_GROUP ||
-        chat.type === C.DC_CHAT_TYPE_MAILINGLIST,
-      isDeviceChat: chat.isDeviceChat,
-      chatType: chat.type,
-    }
 
       const messageIndex = messageIds.indexOf(messageId)
       if (messageId <= 9 && oldMessageIndex !== messageIndex) {
@@ -636,14 +629,19 @@ if (realMessageIndex === -1) continue
                 />
               )
             } else if (message.type === MessageTypeIs.Message) {
+			  const conversationType: ConversationType = {
+			    hasMultipleParticipants:
+				  chat.type === C.DC_CHAT_TYPE_GROUP ||
+				  chat.type === C.DC_CHAT_TYPE_MAILINGLIST,
+				  isDeviceChat: chat.isDeviceChat,
+				  chatType: chat.type,
+			  }
               return (
                 <MessageWrapper
                   key={key}
                   key2={key}
                   message={message as Message}
-                  conversationType={
-                    chat.type === C.DC_CHAT_TYPE_GROUP ? 'group' : 'direct'
-                  }
+                  conversationType={conversationType}
                   isDeviceChat={chat.isDeviceChat}
                   unreadMessageInViewIntersectionObserver={
                     unreadMessageInViewIntersectionObserver

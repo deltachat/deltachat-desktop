@@ -177,6 +177,7 @@ export type MessageQuote = {
   text: string
   displayName: string
   displayColor: string
+  overrideSenderName: string
 } | null
 
 export interface Message {
@@ -223,6 +224,7 @@ export interface Message {
   contact: DCContact
   setupCodeBegin?: string
   hasHTML: boolean
+  overrideSenderName: string
 }
 
 export enum MessageTypeIs {

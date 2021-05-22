@@ -375,6 +375,7 @@ export function useDraft(
         text: message.text,
         displayName: contact.displayName,
         displayColor: contact.color,
+        overrideSenderName: message.overrideSenderName
       }
       saveDraft()
       inputRef.current.focus()

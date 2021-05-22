@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 import { DeltaDialogBase, DeltaDialogCloseButton } from './DeltaDialog'
 import { DialogProps } from './DialogController'
-import type { FullChat, MessageType } from '../../../shared/shared-types'
+import { FullChat, Message, MessageType, MessageTypeIs } from '../../../shared/shared-types'
 import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/dist/constants'
 import { getLogger } from '../../../shared/logger'
@@ -16,7 +16,7 @@ import {
 const log = getLogger('render/ChatAuditLog')
 
 function buildContextMenu(
-  message: MessageType | { msg: null },
+  message: Message,
   isGroup: boolean,
   closeDialogCallback: DialogProps['onClose']
 ) {
@@ -26,16 +26,16 @@ function buildContextMenu(
     {
       label: tx('reply_noun'),
       action: () => {
-        setQuoteInDraft(message.msg.id)
+        setQuoteInDraft(message.id)
         closeDialogCallback()
       },
     },
     // Reply privately -> only show in groups, don't show on info messages or outgoing messages
     isGroup &&
-      message.msg.fromId > C.DC_CONTACT_ID_LAST_SPECIAL && {
+      message.fromId > C.DC_CONTACT_ID_LAST_SPECIAL && {
         label: tx('reply_privately'),
         action: () => {
-          privateReply(message.msg)
+          privateReply(message)
           closeDialogCallback()
         },
       },
@@ -43,7 +43,7 @@ function buildContextMenu(
     {
       label: tx('global_menu_edit_copy_desktop'),
       action: () => {
-        navigator.clipboard.writeText(message.msg.text)
+        navigator.clipboard.writeText(message.text)
       },
     },
     // Message details
@@ -63,19 +63,13 @@ export default function ChatAuditLogDialog(props: {
 
   const [loading, setLoading] = useState(true)
   const [msgIds, setMsgIds] = useState<number[]>([])
-  const [messages, setMessages] = useState<{
-    [key: number]:
-      | MessageType
-      | {
-          msg: null
-        }
-  }>({})
+  const [messages, setMessages] = useState<MessageType[]>([])
 
   const listView = useRef<HTMLDivElement>()
 
   const { openContextMenu } = useContext(ScreenContext)
   const showMenu = (
-    message: MessageType,
+    message: Message,
     event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement, MouseEvent>
   ) => {
     const items = buildContextMenu(message, selectedChat.isGroup, onClose)
@@ -90,12 +84,14 @@ export default function ChatAuditLogDialog(props: {
 
   async function refresh() {
     setLoading(true)
+    // TODO: Fix getting correct message ids
     const msgIds = await DeltaBackend.call(
       'messageList.getMessageIds',
       selectedChat.id,
-      C.DC_GCM_ADDDAYMARKER | C.DC_GCM_INFO_ONLY
+      //C.DC_GCM_ADDDAYMARKER | C.DC_GCM_INFO_ONLY,
+      {}
     )
-    const messages = await DeltaBackend.call('messageList.getMessages', msgIds)
+    const messages = await DeltaBackend.call('messageList.getMessages', selectedChat.id, 0, msgIds.length)
     setMsgIds(msgIds)
     setMessages(messages)
     setLoading(false)
@@ -143,12 +139,13 @@ export default function ChatAuditLogDialog(props: {
             {msgIds.map((id, index) => {
               if (id === C.DC_MSG_ID_DAYMARKER) {
                 const key = 'magic' + id + '_' + specialMessageIdCounter++
-                const nextMessage = messages[msgIds[index + 1]]
-                if (!nextMessage) return null
+                let message = messages[index]
+                if (message.type !== MessageTypeIs.Message) return null
+                message = message as Message
                 return (
                   <li key={key} className='time'>
                     <div>
-                      {moment.unix(nextMessage.msg.timestamp).calendar(null, {
+                      {moment.unix(message.timestamp).calendar(null, {
                         sameDay: `[${tx('today')}]`,
                         lastDay: `[${tx('yesterday')}]`,
                         lastWeek: 'LL',
@@ -159,16 +156,16 @@ export default function ChatAuditLogDialog(props: {
                 )
               }
               const message = messages[id]
-              if (!message || message.msg == null) {
+              if (!message || message == null) {
                 log.debug(`Missing message with id ${id}`)
                 return
               }
               const {
                 text,
                 direction,
-                status,
+                state,
                 timestamp,
-              } = (message as MessageType).msg
+              } = (message as Message)
               return (
                 <li
                   key={id}
