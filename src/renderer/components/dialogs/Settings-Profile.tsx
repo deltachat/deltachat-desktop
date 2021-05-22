@@ -103,19 +103,19 @@ export function ProfileImageSelector({
       )}
       <>
         <button
-          aria-label={tx('pref_set_profile_photo')}
+          aria-label={tx('profile_image_select')}
           onClick={onClickSelectPicture}
           className={'delta-button-round'}
         >
-          {tx('pref_set_profile_photo')}
+          {tx('profile_image_select')}
         </button>
         <button
-          aria-label={tx('pref_remove_profile_photo')}
+          aria-label={tx('profile_image_delete')}
           onClick={onClickRemovePicture}
           className={'delta-button-round'}
           disabled={!profilePicture}
         >
-          {tx('pref_remove_profile_photo')}
+          {tx('profile_image_delete')}
         </button>
       </>
     </div>

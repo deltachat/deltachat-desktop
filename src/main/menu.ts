@@ -165,7 +165,7 @@ function getMenuTemplate(logHandler: LogHandler): rawMenuItem[] {
         { type: 'separator' },
         {
           // because menubar stays when it's closed and apple wants that the user can reopen it via the menu bar
-          translate: 'mac_show_windows',
+          translate: 'show_window',
           click: () => {
             mainWindow.show()
           },
