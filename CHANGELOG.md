@@ -32,7 +32,7 @@
 
 ### Changed
 
-- update translations (02.05.2021)
+- update translations (22.05.2021)
 - Update deltachat-node to `v1.55.0`
 - Remove double-click to quote → this allows users to properly use double and triple click to select stuff again
 

@@ -4,6 +4,7 @@
     <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
     <string name="cancel">Скасувати</string>
+    <string name="clear_search">Очистити пошук</string>
     <string name="yes">Так</string>
     <string name="no">Ні</string>
     <string name="select">Обрати</string>
@@ -124,6 +125,7 @@
     <string name="images">Зображення</string>
     <string name="audio">Аудіо</string>
     <string name="voice_message">Голосове повідомлення</string>
+    <string name="forwarded">Переслане</string>
     <string name="forwarded_message">Переслане повідомлення</string>
     <!-- %1$s will be replaced by the name or the email-address of the person who has forwarded the message -->
     <string name="forwarded_by">Переслано від %1$s</string>
@@ -132,6 +134,10 @@
     <string name="contact">Контакт</string>
     <string name="verified_contact">Перевірений контакт</string>
     <string name="camera">Камера</string>
+    <!-- "capture" here means "start a video recording" or "take a photo"; eg. the description of the "shutter button" in the camera controls -->
+    <string name="capture">Захопити</string>
+    <string name="switch_camera">Перемкнути камеру</string>
+    <string name="toggle_fullscreen">Перейти в повноекранний режим</string>
     <string name="location">Розташування</string>
     <string name="gallery">Галерея</string>
     <string name="images_and_videos">Зображення та відео</string>
@@ -208,6 +214,7 @@
     <string name="menu_scroll_to_bottom">Перейти в кінець</string>
     <string name="menu_scroll_to_top">Прокрутити на початок</string>
     <string name="menu_help">Допомога</string>
+    <string name="privacy_policy">Політика конфіденційності</string>
     <string name="menu_select_all">Вибрати все</string>
     <string name="select_more">Вибрати ще</string>
     <string name="menu_expand">Розширити</string>
@@ -364,13 +371,10 @@
     <!-- mailing lists -->
     <string name="mailing_list">Список адресатів</string>
     <string name="ask_show_mailing_list">Показати список адресатів \"%1$s\"?</string>
-
-
     <!-- map -->
     <string name="filter_map_on_time">Показати місця у часовому проміжку</string>
     <string name="show_location_traces">Показати треки</string>
     <string name="add_poi">Надіслати точку інтересу</string>
-
 
     <!-- search -->
     <string name="search">Пошук</string>
@@ -560,8 +564,6 @@
     <string name="profile_image_select">Вибрати зображення профілю</string>
     <string name="select_your_new_profile_image">Вибрати ваше нове зображення профілю</string>
     <string name="profile_image_delete">Видалити зображення профілю</string>
-
-
     <!-- Emoji picker and categories -->
     <string name="emoji_search_results">Результати пошуку</string>
     <string name="emoji_not_found">Емодзі не знайдено</string>
@@ -698,8 +700,6 @@
     <string name="contact_setup_changed">Змінені параметри для %1$s</string>
     <string name="verified_group_explain">Перевірені групи (експеримент) надають захист від активних атак. Члени таких груп перевірені через другий фактор іншими членами групи, а повідомлення завжди наскрізно зашифровані.</string>
     <string name="copy_qr_data_success">URL з QR-коду скопійовано в буфер</string>
-
-
     <!-- notifications  -->
     <string name="notify_n_messages_in_m_chats">%1$d нових повідомлень з %2$d чатів</string>
     <string name="notify_mark_read">Позначити прочитаним</string>
@@ -723,6 +723,13 @@
 
     <!-- ImageEditorHud -->
     <string name="ImageEditorHud_draw_anywhere_to_blur">Малюйте де завгодно для розмиття</string>
+    <string name="ImageEditorHud_add_text">Додати текст</string>
+    <string name="ImageEditorHud_blur">Розмити</string>
+    <string name="ImageEditorHud_brush_marker">Маркер</string>
+    <string name="ImageEditorHud_brush_highlight">Виділення</string>
+    <string name="ImageEditorHud_crop">Обрізати</string>
+    <string name="ImageEditorHud_flip">Обернути</string>
+    <string name="ImageEditorHud_rotate">Обертати</string>
 
     <!-- dc_str_* resources -->
     <string name="encrypted_message">Зашифроване повідомлення</string>
@@ -795,7 +802,6 @@
     <string name="menu.view.developer.open.log.folder">Відкрити папку журналів</string>
     <string name="menu.view.developer.open.current.log.file">Відкрити поточний файл журналу</string>
     <string name="user_location_permission_explanation">Delta Chat потребує дозволу на доступ до геоданих щоб ділитися вашим місцезнаходженням.</string>
-
     <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">Статус доставки: Помилка</string>
     <string name="a11y_encryption_padlock">Замок шифрування</string>
@@ -826,6 +832,6 @@
     <string name="pref_reliable_service_explain">Потребує перманентного сповіщення</string>
     <string name="perm_enable_bg_reminder_title">Натисніть тут, щоб отримувати повідомлення, коли Delta Chat знаходиться у фоновому режимі.</string>
     <string name="perm_enable_bg_already_done">Ви вже дозволили Delta Chat отримувати повідомлення у фоні.\n\nЯкщо повідомлення досі не приходять у фоні, перевірте налаштування вашої системи.</string>
-    <string name="update_1_14_android">Кілька моментів оновлення 1.14:\n\n🧹 Свайп для відповіді: Для відповіді на повідомлення, просто свайпніть його вправо (не тут! тут не можна відповідати 😛) Ви побачите цитату над рядком написання повідомлення, і зможете продовжувати писати своє повідомлення, як зазвичай.\n\n🔥 Зникаючі повідомлення - час настав 😀. Будь-який чат тепер можна налаштувати на видалення надісланих та отриманих повідомлень через деякий час. Просто виберіть \"Зникаючі повідомлення\" в меню чату (знов-таки, не тут)\n\n👆 Чати відкриваються на першому непрочитаному повідомленні\n\n💾 Пересилати в \"Збережені повідомлення\" безпосередньо та швидше (це можна спробувати тут: довго торкайтеся цього повідомлення, а потім стрілки вгорі праворуч)\n\n🎃 І нарешті, ми перелякали безліч багів! Багато налякались так, що більше не повернуться.</string>
+    <string name="update_1_20">Поліпшена сумісність з електронною поштою у версії 1.20:\n\n📫 Читання списків розсилки\n📭 Читання HTML-листів\n📪 Приємна робота з адресами підтримки\n📫 Виправлено багато значних та незначних неприємностей\n\nПрочитайте наш новий допис у блозі про ці перші кроки до електронної пошти та багато іншого: </string>
 
 </resources>

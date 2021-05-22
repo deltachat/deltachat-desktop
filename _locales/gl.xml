@@ -4,6 +4,7 @@
     <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancelar</string>
+    <string name="clear_search">Eliminar busca</string>
     <string name="yes">Si</string>
     <string name="no">Non</string>
     <string name="select">Seleccionar</string>
@@ -112,6 +113,7 @@
     <string name="images">Imaxes</string>
     <string name="audio">Audio</string>
     <string name="voice_message">Mensaxe de voz</string>
+    <string name="forwarded">Reenviada</string>
     <string name="forwarded_message">Mensaxe reenviado</string>
     <!-- %1$s will be replaced by the name or the email-address of the person who has forwarded the message -->
     <string name="forwarded_by">Reenviado por %1$s</string>
@@ -120,6 +122,10 @@
     <string name="contact">Contacto</string>
     <string name="verified_contact">Contacto verificado</string>
     <string name="camera">Cámara</string>
+    <!-- "capture" here means "start a video recording" or "take a photo"; eg. the description of the "shutter button" in the camera controls -->
+    <string name="capture">Capturar</string>
+    <string name="switch_camera">Cambiar de cámara</string>
+    <string name="toggle_fullscreen">Activar modo de pantalla completa</string>
     <string name="location">Localización</string>
     <string name="gallery">Galería</string>
     <string name="images_and_videos">Imaxes e vídeos</string>
@@ -196,6 +202,7 @@
     <string name="menu_scroll_to_bottom">Moverse abaixo</string>
     <string name="menu_scroll_to_top">Moverse arriba</string>
     <string name="menu_help">Axuda</string>
+    <string name="privacy_policy">Política de Privacidade</string>
     <string name="menu_select_all">Escoller todo</string>
     <string name="select_more">Elexir máis</string>
     <string name="menu_expand">Despregar</string>
@@ -340,13 +347,10 @@
     <!-- mailing lists -->
     <string name="mailing_list">Lista de correo</string>
     <string name="ask_show_mailing_list">Mostrar lista de correo \"%1$s\"?</string>
-
-
     <!-- map -->
     <string name="filter_map_on_time">Mostrar localizacións no marco temporal</string>
     <string name="show_location_traces">Mostrar trazas</string>
     <string name="add_poi">Enviar punto de interese</string>
-
 
     <!-- search -->
     <string name="search">Buscar</string>
@@ -536,8 +540,6 @@
     <string name="profile_image_select">Elixe imaxe de perfil</string>
     <string name="select_your_new_profile_image">Elixe a túa nova imaxe de perfil</string>
     <string name="profile_image_delete">Elimina a imaxe de perfil</string>
-
-
     <!-- Emoji picker and categories -->
     <string name="emoji_search_results">Resultados da busca</string>
     <string name="emoji_not_found">Non se atopan emojis</string>
@@ -674,8 +676,6 @@
     <string name="contact_setup_changed">Cambiaron os axustes para %1$s.</string>
     <string name="verified_group_explain">Os grupos verificados (experimental) proporcionan seguridade contra ataques activos. As integrantes son verificadas cun segundo factor por outros membros e as mensaxes van sempre cifradas E2E.</string>
     <string name="copy_qr_data_success">Copiado o url do QR ao portapapeis</string>
-
-
     <!-- notifications  -->
     <string name="notify_n_messages_in_m_chats">%1$d novas mensaxes en %2$d conversas</string>
     <string name="notify_mark_read">Marcar como lido</string>
@@ -699,6 +699,13 @@
 
     <!-- ImageEditorHud -->
     <string name="ImageEditorHud_draw_anywhere_to_blur">Debuxa para esborranchar</string>
+    <string name="ImageEditorHud_add_text">Engadir texto</string>
+    <string name="ImageEditorHud_blur">Esborranchar</string>
+    <string name="ImageEditorHud_brush_marker">Pincel marcador</string>
+    <string name="ImageEditorHud_brush_highlight">Pincel resaltar</string>
+    <string name="ImageEditorHud_crop">Recortar</string>
+    <string name="ImageEditorHud_flip">Voltear</string>
+    <string name="ImageEditorHud_rotate">Rotar</string>
 
     <!-- dc_str_* resources -->
     <string name="encrypted_message">Mensaxe cifrada</string>
@@ -771,7 +778,6 @@
     <string name="menu.view.developer.open.log.folder">Abrir cartafol do rexistro</string>
     <string name="menu.view.developer.open.current.log.file">Abrir ficheiro actual do rexistro</string>
     <string name="user_location_permission_explanation">Delta Chat precisa permiso para poder mostrar e compartir a túa localización.</string>
-
     <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">Estado da entrega: Fallo</string>
     <string name="a11y_encryption_padlock">Cadeado do cifrado</string>
@@ -802,6 +808,6 @@
     <string name="pref_reliable_service_explain">Require unha notificación permanente</string>
     <string name="perm_enable_bg_reminder_title">Toca aquí para recibir mensaxes mentras Delta Chat está en segundo plano.</string>
     <string name="perm_enable_bg_already_done">Xa permitiches que Delta Chat reciba mensaxes en segundo plano\n\nSe aínda así non recibes as mensaxes, por favor comproba os axustes do sistema.</string>
-    <string name="update_1_14_android">Destacados da actualización 1.14:\n\n🧹 Despraza para responder: para responder a unha mensaxe concreta, despraza hacia á dereita (non aquí! non podes responder aquí 😛) Verás a cita na parte superior da caixa de texto e poderás escribir como sempre.\n\n🔥 Mensaxes efémeras - chegou a hora 😀. Calquera conversa pódese configurar para eliminar as mensaxes enviadas e recibidas após un tempo. Elixe \"Mensaxes efémeras\" desde o menú da conversa (non aquí!)\n\n👆 Abrir conversa na primeira mensaxe non lida\n\n💾 Enviar cousas a \"Mensaxes gardadas\" directamente e máis rápido (esto pódelo probar aquí: mantén presa esta mensaxe e despois toca a flecha arriba-a-dereita)\n\n🎃 Para rematar, arranxamos moitos fallos! Moitos eran arrepiantes, non volverán.</string>
+    <string name="update_1_20">Na versión 1.20 melloramos a compatibilidade co email:\n\n📫 Ler listaxes de correo\n📭 Ler emails HTML\n📪 Mellor xestión dos enderezo de axuda\n📫 Arranxamos problemas e problemiños molestos\n\nLe o artigo no blog acerca destas melloras e máis:</string>
 
 </resources>
