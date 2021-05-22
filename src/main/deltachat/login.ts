@@ -145,26 +145,29 @@ export default class DCLoginController extends SplitOut {
     this._controller.hintUpdateIfNessesary()
 
     this._dc.addDeviceMessage(
-      'changelog-version-1.15.0-12',
-      `Changes in 1.15
+      'changelog-version-1.20_part1_0',
+      `Improved e-mail compatibility in version 1.20:
 
-🐭 Message bar is now focused automagically. This saves you time and probably lots of mouse kilometers ;)
-👁️ You're looking for a less distracting experience? Give the new “Minimal“ theme a try
-🦋 Support for languages written from right to left, added translations for فارسی (Farsi) 
-✨ We polished the UI, fixed bugs and improved performance 
+📫 Read mailing lists
+📭 Read HTML-mails
+📪 Nice handling of support addresses
+✒️💭 Read Signatures of your Contacts and use yours to express yourself, share your status or your Bio.
+📞 experimental video chat can now be used in groups
+🔧 Bug fixes and stability improvements.
 
-
-[Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#11500---2020-02-11)` as any
+[Full Change log](https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#12000---2021-03-22)` as any
     )
 
     this._dc.addDeviceMessage(
-      'changelog-version-1.15.4-3',
-      `Changes in 1.15.4
-✨ Notifications should now look better and be more reliable 
-🐞 Bugs bugs bugs!
+      'changelog-version-1.20_part2_0',
+      `With this release we are reaching out to early adopters who are willing to face some challenges and want to help bring a convenient automatically end-to-end encrypting e-mail app to all platforms. It's about time, isn't it?
+And don't worry .... Delta Chat also remains a decentralized messenger with the largest addressable user base ;)
 
+💡 We welcome your feedback and suggestions in our forum:
+https://support.delta.chat/
 
-[Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#11504---2020-03-24)` as any
+ℹ️ You can find more information about this release in our blog post about it:
+https://delta.chat/en/2021-05-05-email-compat` as any
     )
   }
 

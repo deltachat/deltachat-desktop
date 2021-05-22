@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.20.0] - 2021-03-22
+
 ## Changed
 - use new `decideOnContactRequest` api
 
@@ -1207,7 +1209,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.15.5...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.20.0...HEAD
+
+[1.20.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.15.5...v1.20.0
 
 [1.15.5]: https://github.com/deltachat/deltachat-desktop/compare/v1.15.4...v1.15.5
 
