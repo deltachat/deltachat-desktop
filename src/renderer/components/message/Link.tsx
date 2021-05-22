@@ -113,10 +113,12 @@ function labeledLinkConfirmationDialog(
           <div style={{ display: 'flex' }}>
             <DeltaCheckbox checked={isChecked} onClick={toggleIsChecked} />
             <div style={{ alignSelf: 'center' }}>
-            {reactStringReplace(
+              {reactStringReplace(
                 tx('open_external_url_trust_domain', '$$hostname$$'),
                 '$$hostname$$',
-                () => <i>{hostname}</i>
+                () => (
+                  <i>{hostname}</i>
+                )
               )}
             </div>
           </div>
@@ -225,7 +227,10 @@ function openPunycodeUrlConfirmationDialog(
           <p>
             {reactStringReplace(
               reactStringReplace(
-                tx('puny_code_warning_description', ['$$originalHostname$$', '$$asciiHostname$$']),
+                tx('puny_code_warning_description', [
+                  '$$originalHostname$$',
+                  '$$asciiHostname$$',
+                ]),
                 '$$originalHostname$$',
                 () => <b>{originalHostname}</b>
               ),
