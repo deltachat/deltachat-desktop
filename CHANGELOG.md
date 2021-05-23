@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- Fix archiving/unarchiving chat deselection issues (see #2262)
+
 ## [1.20.0] - 2021-03-22
 
 ## Changed
