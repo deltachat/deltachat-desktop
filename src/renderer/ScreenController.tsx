@@ -82,6 +82,10 @@ export default class ScreenController extends Component {
     log.debug('Changing screen to:', screen)
     this.setState({ screen })
     window.__screen = screen
+    if (Screens.Login) {
+      // remove user feedback error message - https://github.com/deltachat/deltachat-desktop/issues/2261
+      this.userFeedback(false)
+    }
   }
 
   componentDidMount() {
