@@ -58,9 +58,7 @@ function ImportBackupProgressDialog({
         return
       }
       onClose()
-      if ((await DeltaBackend.call('login.loadAccount', account)) === true) {
-        window.__changeScreen(Screens.Main)
-      }
+      window.__loadAccount(account)
     })()
 
     ipcBackend.on('ALL', onAll)

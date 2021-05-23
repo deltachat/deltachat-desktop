@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- fix empty settings after importing backup
+
 ## [1.20.0] - 2021-03-22
 
 ## Changed
@@ -21,7 +24,7 @@
 - add `--minimized` CLI option to start DeltaChat minimized as a tray icon. This is useful for setting DeltaChat as a startup application that starts up with your computer.
 - add support for handling `mailto:` links.
 
-## Fixed
+### Fixed
 - Fix source-mapped stack trace on crash screen in bundled production builds
 - Don't delete Contact request messages, that are blocked - answered with never. #2225
 - hide show encryption info for saved messages (resulted in error)
