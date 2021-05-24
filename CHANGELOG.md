@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- clear userfeedback on account switch / logout (see #2261)
+
 ## [1.20.0] - 2021-03-22
 
 ## Changed
