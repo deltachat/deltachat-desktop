@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Fixed
+- Fix archiving/unarchiving chat deselection issues (see #2262)
 - clear userfeedback on account switch / logout (see #2261)
 
 ## [1.20.0] - 2021-03-22

@@ -25,8 +25,7 @@ export async function setChatVisibility(
   shouldUnselectChat = false
 ) {
   await DeltaBackend.call('chat.setVisibility', chatId, visibility)
-  if (shouldUnselectChat || visibility === C.DC_CHAT_VISIBILITY_ARCHIVED)
-    unselectChat()
+  if (shouldUnselectChat) unselectChat()
 }
 
 export function openLeaveChatDialog(
