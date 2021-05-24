@@ -116,11 +116,6 @@
         white-space: pre-wrap;
         cursor: default;
 
-        a {
-          text-decoration: underline;
-          color: var(--messageTextLink);
-        }
-
         margin-right: 10px;
 
         .double-line-break {
@@ -417,6 +412,14 @@
     color: var(--messageQuotedText);
     white-space: pre-line;
     user-select: text;
+  }
+}
+
+.quoted-text,
+.msg-body > .text {
+  a {
+    text-decoration: underline;
+    color: var(--messageTextLink);
   }
 }
 
