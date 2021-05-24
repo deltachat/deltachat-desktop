@@ -170,7 +170,7 @@ export default function ChatAuditLogDialog(props: {
                 log.debug(`Missing message with id ${id}`)
                 return
               }
-              const { text, direction, state, timestamp } = message as Message
+              const { text, direction, timestamp } = message as Message
               return (
                 <li
                   key={id}

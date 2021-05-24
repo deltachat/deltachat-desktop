@@ -214,14 +214,15 @@ class _MessageListStore extends Store<
       'jumpToMessage',
       async (state: MessageListStoreState, setState) => {
         log.debug(`jumpToMessage: chatId: ${chatId} messageId: ${messageId}`)
-        const {
-          unreadMessageIds,
-          messageIds,
-          markerOne,
-        } = await getUnreadMessageIdsMarkerOneAndMessageIds(chatId, {})
+        let { unreadMessageIds, messageIds, markerOne } = state
+        if (chatId !== state.chatId) {
+          const result = await getUnreadMessageIdsMarkerOneAndMessageIds(chatId, {})
+          unreadMessageIds = result.unreadMessageIds
+          messageIds = result.messageIds
+          markerOne = result.markerOne
+        }
 
         const jumpToMessageIndex = messageIds.indexOf(messageId)
-
         const { pages, pageOrdering } = await loadPageWithMessageIndexInMiddle(
           chatId,
           messageIds,

@@ -56,7 +56,6 @@ const MessageList = React.memo(function MessageList({
     setOnePageAwayFromNewestMessage,
   ] = useState(false)
 
-  const scrollPositionBeforeSetState = useRef(-1)
   const { state: messageListStore } = MessageListStore.useStore({
     messageListRef,
     messageListWrapperRef,

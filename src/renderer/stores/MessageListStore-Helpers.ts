@@ -1,10 +1,8 @@
-import { Message } from 'deltachat-node'
 import { getLogger, getSubLogger } from '../../shared/logger'
 import { MarkerOneParams, MessageType } from '../../shared/shared-types'
 import {
   isScrolledToBottom,
   withoutTopPages,
-  withoutBottomPages,
 } from '../components/message/MessageList-Helpers'
 import { DeltaBackend } from '../delta-remote'
 import MessageListStore, {
@@ -475,7 +473,7 @@ export function scrollToBottomAndCheckIfWeNeedToLoadMore(chatId: number) {
   )
   return function (
     context: MessageListStoreContext,
-    state: MessageListStoreState
+    _state: MessageListStoreState
   ) {
     const { scrollTop, scrollHeight } = context.messageListRef.current
     subLog.debug(`scrollTop: ${scrollTop} scrollHeight ${scrollHeight}`)
@@ -506,7 +504,7 @@ export function scrollToTopOfPageAndCheckIfWeNeedToLoadMore(pageKey: string) {
     _log,
     'scrollToTopOfPageAndCheckIfWeNeedToLoadMore()'
   )
-  return (context: MessageListStoreContext, state: MessageListStoreState) => {
+  return (context: MessageListStoreContext, _state: MessageListStoreState) => {
     const { scrollTop, scrollHeight } = context.messageListRef.current
     subLog.debug(`scrollTop: ${scrollTop} scrollHeight ${scrollHeight}`)
 
@@ -526,7 +524,7 @@ export function scrollToTopOfPageAndCheckIfWeNeedToLoadMore(pageKey: string) {
 
 export function scrollBeforeFirstPage(chatId: number) {
   const subLog = getSubLogger(_log, 'scrollBeforeFirstPage()')
-  return (context: MessageListStoreContext, state: MessageListStoreState) => {
+  return (_context: MessageListStoreContext, state: MessageListStoreState) => {
     if (chatId !== MessageListStore.state.chatId) {
       subLog.debug('action id mismatches state.chatId. Returning.')
       return
@@ -546,7 +544,7 @@ export function scrollBeforeFirstPage(chatId: number) {
 
 export function incomingMessages(chatId: number) {
   const subLog = getSubLogger(_log, 'incomingMessages()')
-  return (context: MessageListStoreContext, state: MessageListStoreState) => {
+  return (context: MessageListStoreContext, _state: MessageListStoreState) => {
     if (chatId !== MessageListStore.state.chatId) {
       subLog.debug(
         `INCOMING_MESSAS: action id mismatches state.chatId. Returning.`
@@ -604,28 +602,13 @@ export function incomingMessages(chatId: number) {
   }
 }
 
-export function restoreScrollPosition(chatId: number) {
-  const subLog = getSubLogger(_log, 'restoreScrollPosition()')
-  return (context: MessageListStoreContext, state: MessageListStoreState) => {
-    if (chatId !== MessageListStore.state.chatId) {
-      subLog.debug(`action id mismatches state.chatId. Returning.`)
-      return
-    }
-    // TODO: Fix?
-    //context.messageListRef.current.scrollTop = context.scrollPositionBeforeSetState.current
-    //log.debug(
-    //  `RESTORE_SCROLL_POSITION: restored scrollPosition to ${action.payload}`
-    //)
-  }
-}
-
 export function scrollToMessage(
   chatId: number,
   messageKey: string,
   relativeScrollPosition: number
 ) {
   const subLog = getSubLogger(_log, 'scrollToMessage()')
-  return (context: MessageListStoreContext, state: MessageListStoreState) => {
+  return (context: MessageListStoreContext, _state: MessageListStoreState) => {
     if (chatId !== MessageListStore.state.chatId) {
       subLog.debug(
         `SCROLL_TO_MESSAGE: action id mismatches state.chatId. Returning.`

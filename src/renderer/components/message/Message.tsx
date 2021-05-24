@@ -38,7 +38,6 @@ import { ConversationType } from './MessageList'
 // const log = getLogger('renderer/message')
 import moment from 'moment'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
-import { DeltaBackend } from '../../delta-remote'
 
 const Avatar = (
   contact: DCContact,
@@ -438,7 +437,11 @@ export const Quote = ({ quote }: { quote: MessageQuote }) => {
       style={{ borderLeftColor: quote.displayColor }}
       onClick={() => jumpToMessage(quote.messageId)}
     >
-      <div className='quote-author' style={{ color: quote.displayColor }}>
+      <div
+        className='quote-author'
+        style={{ color: quote.displayColor }}
+        onClick={onContactClick}
+      >
         {quote && quote.overrideSenderName}
       </div>
       <p>{quote.text}</p>
