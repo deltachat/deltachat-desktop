@@ -1,4 +1,5 @@
 import { C } from 'deltachat-node/dist/constants'
+import React from 'react'
 import { getLogger } from '../../shared/logger'
 import {
   MessageType,
@@ -20,6 +21,9 @@ import {
   loadPageWithFirstMessageIndex,
   loadPageWithMessageIndexInMiddle,
   safeMessageIdIndex,
+  scrollToBottomAndCheckIfWeNeedToLoadMore,
+  scrollToMessage,
+  scrollToMessageAndCheckIfWeNeedToLoadMore,
   updateMessage,
   withoutPages,
 } from './MessageListStore-Helpers'
@@ -43,7 +47,7 @@ export class MessageListPage {
   key: string
 }
 
-export interface PageStoreState {
+export interface MessageListStoreState {
   pages: { [key: string]: MessageListPage }
   pageOrdering: string[]
   chatId: number
@@ -53,7 +57,7 @@ export interface PageStoreState {
   loading: boolean
 }
 
-export function defaultPageStoreState(): PageStoreState {
+export function defaultMessageListStoreState(): MessageListStoreState {
   return {
     pages: {},
     pageOrdering: [],
@@ -66,16 +70,29 @@ export function defaultPageStoreState(): PageStoreState {
 }
 
 export interface DispatchAfter {
-  action: Action
+  action: Action<MessageListStoreState, MessageListStoreContext>
   isLayoutEffect: boolean
 }
 export type DispatchesAfter = DispatchAfter[]
 
-export class PageStore extends Store<PageStoreState> {
+export type MessageListStoreContext = {
+  messageListRef: React.MutableRefObject<HTMLDivElement>
+  messageListWrapperRef: React.MutableRefObject<HTMLDivElement>
+  messageListTopRef: React.MutableRefObject<HTMLDivElement>
+  messageListBottomRef: React.MutableRefObject<HTMLDivElement>
+}
+
+class _MessageListStore extends Store<
+  MessageListStoreState,
+  MessageListStoreContext
+> {
   public currentlyLoadingPage = false
 
   public ignoreDcEventMsgsChanged = 0
-  updatePage(pageKey: string, updateObj: Partial<PageStoreState['pages']>) {
+  updatePage(
+    pageKey: string,
+    updateObj: Partial<MessageListStoreState['pages']>
+  ) {
     return {
       ...this.state,
       pages: {
@@ -102,7 +119,7 @@ export class PageStore extends Store<PageStoreState> {
   selectChat(chatId: number) {
     return this.dispatch(
       'selectChat',
-      async (state: PageStoreState, setState) => {
+      async (state: MessageListStoreState, setState) => {
         log.debug('xxx0')
         const {
           unreadMessageIds,
@@ -112,10 +129,10 @@ export class PageStore extends Store<PageStoreState> {
         } = await getUnreadMessageIdsMarkerOneAndMessageIds(chatId, {})
 
         let [pages, pageOrdering]: [
-          PageStoreState['pages'],
-          PageStoreState['pageOrdering']
+          MessageListStoreState['pages'],
+          MessageListStoreState['pageOrdering']
         ] = [{}, []]
-        
+
         if (messageIds.length === 0) {
           setState({
             pages,
@@ -127,7 +144,6 @@ export class PageStore extends Store<PageStoreState> {
             loading: false,
           })
           return
-
         }
 
         if (firstUnreadMessageId !== -1) {
@@ -154,14 +170,13 @@ export class PageStore extends Store<PageStoreState> {
             messageIdIndexToFocus = Math.max(0, messageIdIndexToFocus - 1)
           }
 
-          this.pushLayoutEffect({
-            type: 'SCROLL_TO_MESSAGE_AND_CHECK_IF_WE_NEED_TO_LOAD_MORE',
-            payload: {
-              pageKey: pageOrdering[0],
-              messageIdIndex: messageIdIndexToFocus,
-            },
-            id: chatId,
-          })
+          this.pushLayoutEffect(
+            scrollToMessageAndCheckIfWeNeedToLoadMore(
+              chatId,
+              pageOrdering[0],
+              messageIdIndexToFocus
+            )
+          )
         } else {
           const [
             firstMessageIdIndexOnLastPage,
@@ -176,11 +191,9 @@ export class PageStore extends Store<PageStoreState> {
           )
           pages = tmp.pages
           pageOrdering = tmp.pageOrdering
-          this.pushLayoutEffect({
-            type: 'SCROLL_TO_BOTTOM_AND_CHECK_IF_WE_NEED_TO_LOAD_MORE',
-            payload: {},
-            id: chatId,
-          })
+          this.pushLayoutEffect(
+            scrollToBottomAndCheckIfWeNeedToLoadMore(chatId)
+          )
         }
 
         setState({
@@ -199,7 +212,7 @@ export class PageStore extends Store<PageStoreState> {
   async jumpToMessage(chatId: number, messageId: number) {
     return this.dispatch(
       'jumpToMessage',
-      async (state: PageStoreState, setState) => {
+      async (state: MessageListStoreState, setState) => {
         log.debug(`jumpToMessage: chatId: ${chatId} messageId: ${messageId}`)
         const {
           unreadMessageIds,
@@ -216,14 +229,13 @@ export class PageStore extends Store<PageStoreState> {
           markerOne
         )
 
-        this.pushLayoutEffect({
-          type: 'SCROLL_TO_MESSAGE_AND_CHECK_IF_WE_NEED_TO_LOAD_MORE',
-          payload: {
-            pageKey: pageOrdering[0],
-            messageIdIndex: jumpToMessageIndex,
-          },
-          id: chatId,
-        })
+        this.pushLayoutEffect(
+          scrollToMessageAndCheckIfWeNeedToLoadMore(
+            chatId,
+            pageOrdering[0],
+            jumpToMessageIndex
+          )
+        )
 
         setState({
           pages,
@@ -245,7 +257,7 @@ export class PageStore extends Store<PageStoreState> {
   ) {
     return this.dispatch(
       'loadPageBefore',
-      async (state: PageStoreState, setState) => {
+      async (state: MessageListStoreState, setState) => {
         if (chatId !== state.chatId) {
           log.debug(
             `loadPageBefore: chatId ${chatId} doesn't match with state.chatId ${state.chatId} returning`
@@ -312,7 +324,7 @@ export class PageStore extends Store<PageStoreState> {
   ) {
     return this.dispatch(
       'loadPageAfter',
-      async (state: PageStoreState, setState) => {
+      async (state: MessageListStoreState, setState) => {
         if (chatId !== state.chatId) {
           log.debug(
             `loadPageAfter: chatId ${chatId} doesn't match with state.chatId ${state.chatId} returning`
@@ -410,11 +422,9 @@ export class PageStore extends Store<PageStoreState> {
         markerOne
       )
 
-      this.pushLayoutEffect({
-        type: 'SCROLL_TO_BOTTOM_AND_CHECK_IF_WE_NEED_TO_LOAD_MORE',
-        payload: null,
-        id: state.chatId,
-      })
+      this.pushLayoutEffect(
+        scrollToBottomAndCheckIfWeNeedToLoadMore(state.chatId)
+      )
 
       const newState = {
         pages,
@@ -506,20 +516,13 @@ export class PageStore extends Store<PageStoreState> {
             newState,
             firstMessageOnScreenIndex
           )
-          this.pushLayoutEffect({
-            type: 'SCROLL_TO_MESSAGE',
-            payload: {
-              messageKey,
-              relativeScrollPosition,
-            },
-            id: state.chatId,
-          })
+          this.pushLayoutEffect(
+            scrollToMessage(chatId, messageKey, relativeScrollPosition)
+          )
         } else {
-          this.pushLayoutEffect({
-            type: 'SCROLL_TO_BOTTOM_AND_CHECK_IF_WE_NEED_TO_LOAD_MORE',
-            payload: null,
-            id: state.chatId,
-          })
+          this.pushLayoutEffect(
+            scrollToBottomAndCheckIfWeNeedToLoadMore(chatId)
+          )
         }
         setState(newState)
       }
@@ -694,8 +697,8 @@ export class PageStore extends Store<PageStoreState> {
   }
 }
 
-const MessageListStore = new PageStore(
-  defaultPageStoreState(),
+const MessageListStore = new _MessageListStore(
+  defaultMessageListStoreState(),
   'MessageListStore'
 )
 

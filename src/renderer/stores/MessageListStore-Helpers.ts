@@ -1,6 +1,20 @@
+import { Message } from 'deltachat-node'
+import { getLogger, getSubLogger } from '../../shared/logger'
 import { MarkerOneParams, MessageType } from '../../shared/shared-types'
+import {
+  isScrolledToBottom,
+  withoutTopPages,
+  withoutBottomPages,
+} from '../components/message/MessageList-Helpers'
 import { DeltaBackend } from '../delta-remote'
-import { MessageListPage, PageStoreState, PAGE_SIZE } from './MessageListStore'
+import MessageListStore, {
+  MessageListPage,
+  MessageListStoreContext,
+  MessageListStoreState,
+  PAGE_SIZE,
+} from './MessageListStore'
+
+const _log = getLogger('renderer/store/MessageListStore-Helpers')
 
 export async function loadPageWithFirstMessageIndex(
   chatId: number,
@@ -9,8 +23,8 @@ export async function loadPageWithFirstMessageIndex(
   endMessageIdIndex: number,
   markerOne: MarkerOneParams
 ): Promise<{
-  pages: PageStoreState['pages']
-  pageOrdering: PageStoreState['pageOrdering']
+  pages: MessageListStoreState['pages']
+  pageOrdering: MessageListStoreState['pageOrdering']
 }> {
   if (
     startMessageIdIndex < 0 ||
@@ -162,11 +176,11 @@ export async function loadPageWithMessageIndexInMiddle(
 }
 
 export function withoutPages(
-  state: PageStoreState,
+  state: MessageListStoreState,
   withoutPageKeys: string[]
-): PageStoreState {
-  const pages: Partial<PageStoreState['pages']> = {}
-  const pageOrdering: Partial<PageStoreState['pageOrdering']> = []
+): MessageListStoreState {
+  const pages: Partial<MessageListStoreState['pages']> = {}
+  const pageOrdering: Partial<MessageListStoreState['pageOrdering']> = []
 
   let modified = false
   for (const pageKey of state.pageOrdering) {
@@ -188,7 +202,7 @@ export function withoutPages(
 }
 
 export function indexOfMessageId(
-  state: PageStoreState,
+  state: MessageListStoreState,
   messageId: number,
   iterateFromback?: boolean
 ): number {
@@ -207,7 +221,7 @@ export function indexOfMessageId(
 }
 
 export function findPageWithMessageId(
-  state: PageStoreState,
+  state: MessageListStoreState,
   messageId: number,
   iterateFromback?: boolean
 ): {
@@ -222,7 +236,7 @@ export function findPageWithMessageId(
 }
 
 export function findPageWithMessageIndex(
-  state: PageStoreState,
+  state: MessageListStoreState,
   messageIdIndex: number
 ): {
   pageKey: string
@@ -257,11 +271,11 @@ export function findPageWithMessageIndex(
 }
 
 export function updateMessage(
-  state: PageStoreState,
+  state: MessageListStoreState,
   pageKey: string,
   indexOnPage: number,
   updatedMessage: MessageType
-): PageStoreState {
+): MessageListStoreState {
   return {
     ...state,
     pages: {
@@ -357,4 +371,275 @@ export function safeMessageIdIndex(
     return messageIdsLength - 1
   }
   return messageIdIndex
+}
+
+export function scrollToMessageAndCheckIfWeNeedToLoadMore(
+  chatId: number,
+  pageKey: string,
+  messageIdIndex: number
+) {
+  const subLog = getSubLogger(_log, 'scrollToMessage()')
+  return (context: MessageListStoreContext, state: MessageListStoreState) => {
+    const pageElement = document.querySelector('#' + pageKey)
+    if (!pageElement) {
+      subLog.warn(`pageElement is null, returning`)
+      return
+    }
+
+    const messageKey = calculateMessageKey(
+      pageKey,
+      state.messageIds[messageIdIndex],
+      messageIdIndex
+    )
+
+    const messageElement = pageElement.querySelector('#' + messageKey)
+    if (!messageElement) {
+      subLog.warn(`messageElement is null, returning`)
+      return
+    }
+    //messageElement.setAttribute('style', 'background-color: yellow')
+
+    let { scrollTop } = context.messageListRef.current
+    const { scrollHeight, clientHeight } = context.messageListRef.current
+    scrollTop = context.messageListRef.current.scrollTop = ((messageElement as unknown) as any).offsetTop
+    if (scrollTop === 0 && MessageListStore.canLoadPageBefore(pageKey)) {
+      subLog.debug(`scrollTop === 0, load page before`)
+
+      MessageListStore.loadPageBefore(
+        chatId,
+        [],
+        [
+          {
+            action: scrollToMessageAndCheckIfWeNeedToLoadMore(
+              chatId,
+              pageKey,
+              messageIdIndex
+            ),
+            isLayoutEffect: true,
+          },
+        ]
+      )
+    } else if (
+      scrollHeight - scrollTop <= clientHeight &&
+      MessageListStore.canLoadPageAfter(pageKey)
+    ) {
+      subLog.debug(
+        `((scrollHeight - scrollTop) <= clientHeight) === true, load page after`
+      )
+      MessageListStore.loadPageAfter(
+        chatId,
+        [],
+        [
+          {
+            isLayoutEffect: true,
+            action: scrollToMessageAndCheckIfWeNeedToLoadMore(
+              chatId,
+              pageKey,
+              messageIdIndex
+            ),
+          },
+        ]
+      )
+    } else {
+      subLog.debug(`no need to load anything`)
+    }
+  }
+}
+
+export function scrollBeforeLastPage(chatId: number) {
+  const subLog = getSubLogger(_log, 'scrollBeforeLastPage()')
+  return (context: MessageListStoreContext, state: MessageListStoreState) => {
+    if (chatId !== MessageListStore.state.chatId) {
+      subLog.debug('action id mismatches state.chatId. Returning.')
+      return
+    }
+    subLog.debug(` hello :)`)
+    setTimeout(() => {
+      const lastPage =
+        state.pages[state.pageOrdering[state.pageOrdering.length - 1]]
+
+      if (!lastPage) {
+        subLog.debug(`lastPage is null, returning`)
+        return
+      }
+
+      subLog.debug(`lastPage ${lastPage.key}`)
+    })
+  }
+}
+
+export function scrollToBottomAndCheckIfWeNeedToLoadMore(chatId: number) {
+  const subLog = getSubLogger(
+    _log,
+    'scrollToBottomAndCheckIfWeNeedToLoadMore()'
+  )
+  return function (
+    context: MessageListStoreContext,
+    state: MessageListStoreState
+  ) {
+    const { scrollTop, scrollHeight } = context.messageListRef.current
+    subLog.debug(`scrollTop: ${scrollTop} scrollHeight ${scrollHeight}`)
+
+    context.messageListRef.current.scrollTop = scrollHeight
+    const messageListWrapperHeight =
+      context.messageListWrapperRef.current.clientHeight
+    subLog.debug(
+      `messageListWrapperHeight: ${messageListWrapperHeight} scrollHeight: ${scrollHeight}`
+    )
+    if (scrollHeight <= messageListWrapperHeight) {
+      MessageListStore.loadPageBefore(
+        chatId,
+        [],
+        [
+          {
+            isLayoutEffect: true,
+            action: scrollToBottomAndCheckIfWeNeedToLoadMore(chatId),
+          },
+        ]
+      )
+    }
+  }
+}
+
+export function scrollToTopOfPageAndCheckIfWeNeedToLoadMore(pageKey: string) {
+  const subLog = getSubLogger(
+    _log,
+    'scrollToTopOfPageAndCheckIfWeNeedToLoadMore()'
+  )
+  return (context: MessageListStoreContext, state: MessageListStoreState) => {
+    const { scrollTop, scrollHeight } = context.messageListRef.current
+    subLog.debug(`scrollTop: ${scrollTop} scrollHeight ${scrollHeight}`)
+
+    const pageElement = document.querySelector('#' + pageKey)
+    if (!pageElement) {
+      subLog.warn(`pageElement is null, returning`)
+      return
+    }
+    pageElement.scrollIntoView(true)
+    const firstChild = pageElement.firstElementChild
+    if (!firstChild) {
+      subLog.warn(`firstChild is null, returning`)
+      return
+    }
+  }
+}
+
+export function scrollBeforeFirstPage(chatId: number) {
+  const subLog = getSubLogger(_log, 'scrollBeforeFirstPage()')
+  return (context: MessageListStoreContext, state: MessageListStoreState) => {
+    if (chatId !== MessageListStore.state.chatId) {
+      subLog.debug('action id mismatches state.chatId. Returning.')
+      return
+    }
+
+    subLog.debug(`hello :)`)
+    const beforeFirstPage = state.pages[state.pageOrdering[1]]
+
+    if (!beforeFirstPage) {
+      subLog.debug(`beforeLastPage is null, returning`)
+      return
+    }
+
+    document.querySelector('#' + beforeFirstPage.key).scrollIntoView()
+  }
+}
+
+export function incomingMessages(chatId: number) {
+  const subLog = getSubLogger(_log, 'incomingMessages()')
+  return (context: MessageListStoreContext, state: MessageListStoreState) => {
+    if (chatId !== MessageListStore.state.chatId) {
+      subLog.debug(
+        `INCOMING_MESSAS: action id mismatches state.chatId. Returning.`
+      )
+      return
+    }
+
+    const { scrollTop, scrollHeight } = context.messageListRef.current
+    const { clientHeight } = context.messageListWrapperRef.current
+
+    const lastPageKey =
+      MessageListStore.state.pageOrdering[
+        MessageListStore.state.pageOrdering.length - 1
+      ]
+    const lastPage = MessageListStore.state.pages[lastPageKey]
+
+    const isPreviousMessageLoaded =
+      lastPage.messageIds[lastPage.messageIds.length - 1] ===
+      MessageListStore.state.messageIds[
+        MessageListStore.state.messageIds.length - 2
+      ]
+
+    subLog.debug(
+      `scrollHeight: ${scrollHeight} scrollTop: ${scrollTop} clientHeight: ${clientHeight}`
+    )
+
+    const scrolledToBottom = isScrolledToBottom(
+      scrollTop,
+      scrollHeight,
+      clientHeight
+    )
+
+    const scrollToTopOfMessage = scrolledToBottom && isPreviousMessageLoaded
+    subLog.debug(
+      `scrollToTopOfMessage ${scrollToTopOfMessage} scrolledToBottom: ${scrolledToBottom} isPreviousMessageLoaded: ${isPreviousMessageLoaded}`
+    )
+
+    if (scrollToTopOfMessage) {
+      const withoutPages = withoutTopPages(
+        context.messageListRef,
+        context.messageListWrapperRef
+      )
+      //const messageId =
+      //  MessageListStore.state.messageIds[
+      //    MessageListStore.state.messageIds.length - 1
+      //  ]
+
+      MessageListStore.loadPageAfter(chatId, withoutPages, [
+        {
+          isLayoutEffect: true,
+          action: scrollToBottomAndCheckIfWeNeedToLoadMore(chatId),
+        },
+      ])
+    }
+  }
+}
+
+export function restoreScrollPosition(chatId: number) {
+  const subLog = getSubLogger(_log, 'restoreScrollPosition()')
+  return (context: MessageListStoreContext, state: MessageListStoreState) => {
+    if (chatId !== MessageListStore.state.chatId) {
+      subLog.debug(`action id mismatches state.chatId. Returning.`)
+      return
+    }
+    // TODO: Fix?
+    //context.messageListRef.current.scrollTop = context.scrollPositionBeforeSetState.current
+    //log.debug(
+    //  `RESTORE_SCROLL_POSITION: restored scrollPosition to ${action.payload}`
+    //)
+  }
+}
+
+export function scrollToMessage(
+  chatId: number,
+  messageKey: string,
+  relativeScrollPosition: number
+) {
+  const subLog = getSubLogger(_log, 'scrollToMessage()')
+  return (context: MessageListStoreContext, state: MessageListStoreState) => {
+    if (chatId !== MessageListStore.state.chatId) {
+      subLog.debug(
+        `SCROLL_TO_MESSAGE: action id mismatches state.chatId. Returning.`
+      )
+      return
+    }
+
+    const messageElement = document.querySelector(
+      '#' + messageKey
+    ) as HTMLElement
+
+    const scrollPosition = messageElement.offsetTop + relativeScrollPosition
+    context.messageListRef.current.scrollTop = scrollPosition
+
+    subLog.debug(`restored scrollPosition to ${scrollPosition}`)
+  }
 }

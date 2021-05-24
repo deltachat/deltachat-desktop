@@ -105,7 +105,7 @@ const ForwardedTitle = (
       onClick={() => onContactClick(contact)}
     >
       {conversationType.hasMultipleParticipants && direction !== 'outgoing'
-        ? tx('forwared_by', contact.displayName)
+        ? tx('forwarded_by', contact.displayName)
         : tx('forwarded_message')}
     </div>
   )

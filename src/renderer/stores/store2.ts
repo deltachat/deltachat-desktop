@@ -2,26 +2,23 @@ import { useRef } from 'react'
 import { useState, useEffect, useLayoutEffect } from 'react'
 import { getLogger } from '../../shared/logger'
 
-export type ActionType = string
-export type ActionPayload = any | undefined
-export type ActionId = number | undefined
-export interface ActionObject {
-  type: ActionType
-  payload: ActionPayload
-  id: ActionId
+export type Action<S, C> =
+  | ((context: C, state: S) => void)
+  | 'DECREASE_CURRENTLY_DISPATCHED_COUNTER'
+
+export interface EffectInterface<S, C> {
+  (
+    action: Action<S, C>,
+    state: S,
+    log: ReturnType<typeof getLogger>
+  ): Promise<S>
 }
 
-export type Action = ActionObject | (() => void)
-
-export interface EffectInterface<S> {
-  (action: Action, state: S, log: ReturnType<typeof getLogger>): Promise<S>
-}
-
-export interface StoreListener<S> {
+export interface StoreListener<S, C> {
   onStateChange: (state: S) => void
   onForceTriggerEffect: () => void
-  onPushEffect: (a: Action) => void
-  onPushLayoutEffect: (a: Action) => void
+  onPushEffect: (a: Action<S, C>) => void
+  onPushLayoutEffect: (a: Action<S, C>) => void
 }
 
 export interface StoreDispatchSetState<S> {
@@ -70,9 +67,9 @@ export function OnlySetStateIfIncrementingDispatchedCounterDidntIncrease(
 // A store focused on tight communication between store and render cycle.
 // This stores allows sending "effects" to the component that can be executed
 // after the store updated. Respectively on useEffect or useLayoutEffect.
-export default class Store2<S> {
-  private listeners: StoreListener<S>[] = []
-  private effects: { [key: string]: EffectInterface<S> } = {}
+export default class Store2<S, C> {
+  private listeners: StoreListener<S, C>[] = []
+  private effects: { [key: string]: EffectInterface<S, C> } = {}
   private _log: ReturnType<typeof getLogger>
   public currentlyDispatchedCounter = 0
   public incrementingDispatchedCounter = 0
@@ -90,7 +87,7 @@ export default class Store2<S> {
     return this._log
   }
 
-  getState() {
+  getState(): S {
     return this.state
   }
 
@@ -164,11 +161,7 @@ export default class Store2<S> {
           return
         }
       }
-      this.pushEffect({
-        id: null,
-        payload: null,
-        type: 'DECREASE_CURRENTLY_DISPATCHED_COUNTER',
-      })
+      this.pushEffect('DECREASE_CURRENTLY_DISPATCHED_COUNTER')
       await this.setState(async _state => {
         return updatedState
       })
@@ -183,12 +176,12 @@ export default class Store2<S> {
     if (!calledSetState) this.currentlyDispatchedCounter--
   }
 
-  private subscribe(listener: StoreListener<S>) {
+  private subscribe(listener: StoreListener<S, C>) {
     this.listeners.push(listener)
     return this.unsubscribe.bind(this, listener)
   }
 
-  private unsubscribe(listener: StoreListener<S>) {
+  private unsubscribe(listener: StoreListener<S, C>) {
     const index = this.listeners.indexOf(listener)
     this.listeners.splice(index, 1)
   }
@@ -206,8 +199,12 @@ export default class Store2<S> {
     }
   }
 
-  async pushEffect(action: Action, forceUpdate?: boolean) {
-    this.log.info(`pushEffect: pushed effect ${typeof action !== 'function' ? action.type : ''} ${action}`)
+  async pushEffect(action: Action<S, C>, forceUpdate?: boolean) {
+    this.log.info(
+      `pushEffect: pushed effect ${
+        typeof action !== 'function' ? action : action.name
+      } ${action}`
+    )
     for (const listener of this.listeners) {
       listener.onPushEffect(action)
     }
@@ -218,9 +215,11 @@ export default class Store2<S> {
     }
   }
 
-  async pushLayoutEffect(action: Action, forceUpdate?: boolean) {
+  async pushLayoutEffect(action: Action<S, C>, forceUpdate?: boolean) {
     this.log.info(
-      `pushLayoutEffect: pushed layout effect ${typeof action !== 'function' ? action.type : ''} ${action}`
+      `pushLayoutEffect: pushed layout effect ${
+        typeof action !== 'function' ? action : action.name
+      } ${action}`
     )
     for (const listener of this.listeners) {
       listener.onPushLayoutEffect(action)
@@ -233,18 +232,17 @@ export default class Store2<S> {
   }
 
   useStore(
-    onAction?: (action: Action) => void,
-    onLayoutAction?: (action: Action) => void,
+    context: C,
     beforeSetState?: () => void
-  ): { state: S; layoutEffectQueue: React.MutableRefObject<Action[]> } {
+  ): { state: S; layoutEffectQueue: React.MutableRefObject<Action<S, C>[]> } {
     const [state, _setState] = useState(this.getState())
     const [forceTriggerEffect, setForceTriggerEffect] = useState(false)
-    const effectQueue = useRef<Action[]>([])
-    const layoutEffectQueue = useRef<Action[]>([])
+    const effectQueue = useRef<Action<S, C>[]>([])
+    const layoutEffectQueue = useRef<Action<S, C>[]>([])
 
-    const setState = (args: React.SetStateAction<S>) => {
+    const setState = (state: S) => {
       if (beforeSetState) beforeSetState()
-      _setState(args)
+      _setState(state)
     }
 
     useEffect(() => {
@@ -263,17 +261,14 @@ export default class Store2<S> {
       while (effectQueue.current.length > 0) {
         const effect = effectQueue.current.pop()
         if (typeof effect === 'function') {
-          effect()
-        } else {
-          if (effect.type === 'DECREASE_CURRENTLY_DISPATCHED_COUNTER') {
-            this.currentlyDispatchedCounter--
-            this.log.debug(
-              'useEffect: DECREASE_CURRENTLY_DISPATCHED_COUNTER',
-              this.currentlyDispatchedCounter
-            )
-            continue
-          }
-          onAction(effect)
+          effect(context, state)
+        } else if (effect === 'DECREASE_CURRENTLY_DISPATCHED_COUNTER') {
+          this.currentlyDispatchedCounter--
+          this.log.debug(
+            'useEffect: DECREASE_CURRENTLY_DISPATCHED_COUNTER',
+            this.currentlyDispatchedCounter
+          )
+          continue
         }
       }
     }, [state, forceTriggerEffect])
@@ -283,9 +278,7 @@ export default class Store2<S> {
       while (layoutEffectQueue.current.length > 0) {
         const effect = layoutEffectQueue.current.pop()
         if (typeof effect === 'function') {
-          effect()
-        } else {
-          onLayoutAction(effect)
+          effect(context, state)
         }
       }
     }, [state, forceTriggerEffect])

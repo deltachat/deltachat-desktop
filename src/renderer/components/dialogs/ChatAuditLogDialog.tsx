@@ -1,7 +1,12 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 import { DeltaDialogBase, DeltaDialogCloseButton } from './DeltaDialog'
 import { DialogProps } from './DialogController'
-import { FullChat, Message, MessageType, MessageTypeIs } from '../../../shared/shared-types'
+import {
+  FullChat,
+  Message,
+  MessageType,
+  MessageTypeIs,
+} from '../../../shared/shared-types'
 import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/dist/constants'
 import { getLogger } from '../../../shared/logger'
@@ -91,7 +96,12 @@ export default function ChatAuditLogDialog(props: {
       //C.DC_GCM_ADDDAYMARKER | C.DC_GCM_INFO_ONLY,
       {}
     )
-    const messages = await DeltaBackend.call('messageList.getMessages', selectedChat.id, 0, msgIds.length)
+    const messages = await DeltaBackend.call(
+      'messageList.getMessages',
+      selectedChat.id,
+      0,
+      msgIds.length
+    )
     setMsgIds(msgIds)
     setMessages(messages)
     setLoading(false)
@@ -160,12 +170,7 @@ export default function ChatAuditLogDialog(props: {
                 log.debug(`Missing message with id ${id}`)
                 return
               }
-              const {
-                text,
-                direction,
-                state,
-                timestamp,
-              } = (message as Message)
+              const { text, direction, state, timestamp } = message as Message
               return (
                 <li
                   key={id}

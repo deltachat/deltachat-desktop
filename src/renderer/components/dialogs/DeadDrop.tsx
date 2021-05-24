@@ -2,7 +2,13 @@ import React from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import { Classes } from '@blueprintjs/core'
 import { DialogProps } from './DialogController'
-import { DCContact, MessageType, FullChat, Message, MessageTypeIs } from '../../../shared/shared-types'
+import {
+  DCContact,
+  MessageType,
+  FullChat,
+  Message,
+  MessageTypeIs,
+} from '../../../shared/shared-types'
 import { SmallDialog } from './DeltaDialog'
 import { useTranslationFunction } from '../../contexts'
 import { C } from 'deltachat-node/dist/constants'
@@ -35,10 +41,7 @@ export default function DeadDrop(props: {
       case C.DC_DECISION_START_CHAT:
         // setTimeOut 0 to render on next iteration of the js event loop
         // this should prevent the new chatlistitem from being in placeholder mode.
-        setTimeout(
-          () => selectChat(chatId),
-          0
-        )
+        setTimeout(() => selectChat(chatId), 0)
         break
       case C.DC_DECISION_NOT_NOW:
         break

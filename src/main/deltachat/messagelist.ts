@@ -207,7 +207,7 @@ export default class DCMessageList extends SplitOut {
         text: quotedMessage.getText(),
         displayName: _contact.getDisplayName(),
         displayColor: _contact.color,
-        overrideSenderName: quotedMessage.overrideSenderName
+        overrideSenderName: quotedMessage.overrideSenderName,
       }
     }
 
@@ -249,7 +249,7 @@ export default class DCMessageList extends SplitOut {
       contact: (contact ? { ...contact } : {}) as any,
       setupCodeBegin,
       hasHTML: msg.hasHTML,
-      overrideSenderName: msg.overrideSenderName
+      overrideSenderName: msg.overrideSenderName,
     }
   }
 

@@ -3,7 +3,6 @@ import MessageListStore, {
   MessageId,
   MessageListPage,
 } from '../../stores/MessageListStore'
-import { Action, ActionObject } from '../../stores/store2'
 import { MessageWrapper } from './MessageWrapper'
 import {
   MessageType,
@@ -16,17 +15,17 @@ import { DayMarkerInfoMessage, UnreadMessagesMarker } from './Message'
 import { ChatStoreState } from '../../stores/chat'
 import { C } from 'deltachat-node/dist/constants'
 import type { ChatTypes } from 'deltachat-node'
-import moment from 'moment'
 import { jumpToMessage, selectChat } from '../helpers/ChatMethods'
 import { ipcBackend } from '../../ipc'
 import { DeltaBackend } from '../../delta-remote'
 import {
   calculateMessageKey,
   parseMessageKey,
+  scrollBeforeFirstPage,
+  scrollBeforeLastPage,
 } from '../../stores/MessageListStore-Helpers'
 import {
   isScrolledToBottom,
-  withoutTopPages,
   withoutBottomPages,
   messagesInView,
   rotateAwayFromIndex,
@@ -47,271 +46,23 @@ const MessageList = React.memo(function MessageList({
 }: {
   chat: ChatStoreState
 }) {
-  const messageListRef = useRef(null)
-  const messageListWrapperRef = useRef(null)
-  const messageListTopRef = useRef(null)
-  const messageListBottomRef = useRef(null)
+  const messageListRef = useRef<HTMLDivElement>(null)
+  const messageListWrapperRef = useRef<HTMLDivElement>(null)
+  const messageListTopRef = useRef<HTMLDivElement>(null)
+  const messageListBottomRef = useRef<HTMLDivElement>(null)
+
   const [
     onePageAwayFromNewestMessage,
     setOnePageAwayFromNewestMessage,
   ] = useState(false)
-  const onMessageListStoreEffect = (action: ActionObject) => {
-    if (action.type === 'SCROLL_BEFORE_LAST_PAGE') {
-      log.debug(`SCROLL_BEFORE_LAST_PAGE`)
-      setTimeout(() => {
-        const lastPage =
-          messageListStore.pages[
-            messageListStore.pageOrdering[
-              messageListStore.pageOrdering.length - 1
-            ]
-          ]
-
-        if (!lastPage) {
-          log.debug(`SCROLL_BEFORE_LAST_PAGE: lastPage is null, returning`)
-          return
-        }
-
-        log.debug(`SCROLL_BEFORE_LAST_PAGE lastPage ${lastPage.key}`)
-      })
-    }
-  }
-
-  const onMessageListStoreLayoutEffect = (action: ActionObject) => {
-    if (action.type === 'SCROLL_TO_BOTTOM_AND_CHECK_IF_WE_NEED_TO_LOAD_MORE') {
-      const { scrollTop, scrollHeight } = messageListRef.current
-      log.debug(
-        `SCROLL_TO_BOTTOM_AND_CHECK_IF_WE_NEED_TO_LOAD_MORE scrollTop: ${scrollTop} scrollHeight ${scrollHeight}`
-      )
-
-      messageListRef.current.scrollTop = scrollHeight
-      const messageListWrapperHeight =
-        messageListWrapperRef.current.clientHeight
-      log.debug(
-        `SCROLL_TO_BOTTOM_AND_CHECK_IF_WE_NEED_TO_LOAD_MORE: messageListWrapperHeight: ${messageListWrapperHeight} scrollHeight: ${scrollHeight}`
-      )
-      if (scrollHeight <= messageListWrapperHeight) {
-        MessageListStore.loadPageBefore(
-          messageListStore.chatId,
-          [],
-          [
-            {
-              isLayoutEffect: true,
-              action: {
-                type: 'SCROLL_TO_BOTTOM_AND_CHECK_IF_WE_NEED_TO_LOAD_MORE',
-                payload: {},
-                id: messageListStore.chatId,
-              },
-            },
-          ]
-        )
-      }
-    } else if (
-      action.type === 'SCROLL_TO_TOP_OF_PAGE_AND_CHECK_IF_WE_NEED_TO_LOAD_MORE'
-    ) {
-      const { pageKey } = action.payload
-      const { scrollTop, scrollHeight } = messageListRef.current
-      log.debug(
-        `SCROLL_TO_TOP_OF_PAGE_AND_CHECK_IF_WE_NEED_TO_LOAD_MORE scrollTop: ${scrollTop} scrollHeight ${scrollHeight}`
-      )
-
-      const pageElement = document.querySelector('#' + pageKey)
-      if (!pageElement) {
-        log.warn(
-          `SCROLL_TO_TOP_OF_PAGE_AND_CHECK_IF_WE_NEED_TO_LOAD_MORE pageElement is null, returning`
-        )
-        return
-      }
-      pageElement.scrollIntoView(true)
-      const firstChild = pageElement.firstElementChild
-      if (!firstChild) {
-        log.warn(
-          `SCROLL_TO_TOP_OF_PAGE_AND_CHECK_IF_WE_NEED_TO_LOAD_MORE firstChild is null, returning`
-        )
-        return
-      }
-    } else if (
-      action.type === 'SCROLL_TO_MESSAGE_AND_CHECK_IF_WE_NEED_TO_LOAD_MORE'
-    ) {
-      const { pageKey, messageIdIndex } = action.payload
-      const pageElement = document.querySelector('#' + pageKey)
-      if (!pageElement) {
-        log.warn(
-          `SCROLL_TO_MESSAGE_AND_CHECK_IF_WE_NEED_TO_LOAD_MORE pageElement is null, returning`
-        )
-        return
-      }
-
-      const messageKey = calculateMessageKey(
-        pageKey,
-        messageListStore.messageIds[messageIdIndex],
-        messageIdIndex
-      )
-
-      const messageElement = pageElement.querySelector('#' + messageKey)
-      if (!messageElement) {
-        log.warn(
-          `SCROLL_TO_MESSAGE_AND_CHECK_IF_WE_NEED_TO_LOAD_MORE messageElement is null, returning`
-        )
-        return
-      }
-      //messageElement.setAttribute('style', 'background-color: yellow')
-
-      let { scrollTop } = messageListRef.current
-      const { scrollHeight, clientHeight } = messageListRef.current
-      scrollTop = messageListRef.current.scrollTop = ((messageElement as unknown) as any).offsetTop
-      if (scrollTop === 0 && MessageListStore.canLoadPageBefore(pageKey)) {
-        log.debug(
-          `SCROLL_TO_MESSAGE_AND_CHECK_IF_WE_NEED_TO_LOAD_MORE: scrollTop === 0, load page before`
-        )
-
-        MessageListStore.loadPageBefore(
-          action.id,
-          [],
-          [
-            {
-              isLayoutEffect: true,
-              action: {
-                type: 'SCROLL_TO_MESSAGE_AND_CHECK_IF_WE_NEED_TO_LOAD_MORE',
-                payload: action.payload,
-                id: messageListStore.chatId,
-              },
-            },
-          ]
-        )
-      } else if (
-        scrollHeight - scrollTop <= clientHeight &&
-        MessageListStore.canLoadPageAfter(pageKey)
-      ) {
-        log.debug(
-          `SCROLL_TO_MESSAGE_AND_CHECK_IF_WE_NEED_TO_LOAD_MORE: ((scrollHeight - scrollTop) <= clientHeight) === true, load page after`
-        )
-        MessageListStore.loadPageAfter(
-          action.id,
-          [],
-          [
-            {
-              isLayoutEffect: true,
-              action: {
-                type: 'SCROLL_TO_MESSAGE_AND_CHECK_IF_WE_NEED_TO_LOAD_MORE',
-                payload: action.payload,
-                id: messageListStore.chatId,
-              },
-            },
-          ]
-        )
-      } else {
-        log.debug(
-          `SCROLL_TO_MESSAGE_AND_CHECK_IF_WE_NEED_TO_LOAD_MORE no need to load anything`
-        )
-      }
-    } else if (action.type === 'SCROLL_BEFORE_FIRST_PAGE') {
-      log.debug(`SCROLL_BEFORE_FIRST_PAGE`)
-      const beforeFirstPage =
-        messageListStore.pages[messageListStore.pageOrdering[1]]
-
-      if (!beforeFirstPage) {
-        log.debug(`SCROLL_BEFORE_FIRST_PAGE: beforeLastPage is null, returning`)
-        return
-      }
-
-      document.querySelector('#' + beforeFirstPage.key).scrollIntoView()
-    } else if (action.type === 'INCOMING_MESSAGES') {
-      if (action.id !== MessageListStore.state.chatId) {
-        log.debug(
-          `INCOMING_MESSAGES: action id mismatches state.chatId. Returning.`
-        )
-        return
-      }
-
-      const { scrollTop, scrollHeight } = messageListRef.current
-      const { wrapperHeight } = messageListWrapperRef.current
-
-      const lastPageKey =
-        MessageListStore.state.pageOrdering[
-          MessageListStore.state.pageOrdering.length - 1
-        ]
-      const lastPage = MessageListStore.state.pages[lastPageKey]
-
-      const isPreviousMessageLoaded =
-        lastPage.messageIds[lastPage.messageIds.length - 1] ===
-        MessageListStore.state.messageIds[
-          MessageListStore.state.messageIds.length - 2
-        ]
-
-      log.debug(
-        `INCOMING_MESSAGES: scrollHeight: ${scrollHeight} scrollTop: ${scrollTop} wrapperHeight: ${wrapperHeight}`
-      )
-
-      const scrolledToBottom = isScrolledToBottom(
-        scrollTop,
-        scrollHeight,
-        wrapperHeight
-      )
-
-      const scrollToTopOfMessage = scrolledToBottom && isPreviousMessageLoaded
-      log.debug(
-        `INCOMING_MESSAGES: scrollToTopOfMessage ${scrollToTopOfMessage} scrolledToBottom: ${scrolledToBottom} isPreviousMessageLoaded: ${isPreviousMessageLoaded}`
-      )
-
-      if (scrollToTopOfMessage) {
-        const withoutPages = withoutTopPages(
-          messageListRef,
-          messageListWrapperRef
-        )
-        const messageId =
-          MessageListStore.state.messageIds[
-            MessageListStore.state.messageIds.length - 1
-          ]
-
-        MessageListStore.loadPageAfter(action.id, withoutPages, [
-          {
-            isLayoutEffect: true,
-            action: {
-              type: 'SCROLL_TO_BOTTOM_AND_CHECK_IF_WE_NEED_TO_LOAD_MORE',
-              payload: messageId,
-              id: messageListStore.chatId,
-            },
-          },
-        ])
-      }
-    } else if (action.type === 'RESTORE_SCROLL_POSITION') {
-      if (action.id !== MessageListStore.state.chatId) {
-        log.debug(
-          `RESTORE_SCROLL_POSITION: action id mismatches state.chatId. Returning.`
-        )
-        return
-      }
-      messageListRef.current.scrollTop = scrollPositionBeforeSetState.current
-      log.debug(
-        `RESTORE_SCROLL_POSITION: restored scrollPosition to ${action.payload}`
-      )
-    } else if (action.type === 'SCROLL_TO_MESSAGE') {
-      if (action.id !== MessageListStore.state.chatId) {
-        log.debug(
-          `SCROLL_TO_MESSAGE: action id mismatches state.chatId. Returning.`
-        )
-        return
-      }
-
-      const messageElement = document.querySelector(
-        '#' + action.payload.messageKey
-      ) as HTMLElement
-
-      messageListRef.current.scrollTop =
-        messageElement.offsetTop + action.payload.relativeScrollPosition
-      log.debug(
-        `SCROLL_TO_MESSAGE: restored scrollPosition to ${action.payload}`
-      )
-    }
-  }
 
   const scrollPositionBeforeSetState = useRef(-1)
-
-  const { state: messageListStore } = MessageListStore.useStore(
-    onMessageListStoreEffect,
-    onMessageListStoreLayoutEffect
-  )
-
+  const { state: messageListStore } = MessageListStore.useStore({
+    messageListRef,
+    messageListWrapperRef,
+    messageListTopRef,
+    messageListBottomRef,
+  })
 
   const onMessageListTop: IntersectionObserverCallback = entries => {
     const chatId = MessageListStore.state.chatId
@@ -331,7 +82,7 @@ const MessageList = React.memo(function MessageList({
     MessageListStore.loadPageBefore(chatId, withoutPages, [
       {
         isLayoutEffect: true,
-        action: { type: 'SCROLL_BEFORE_FIRST_PAGE', payload: {}, id: chatId },
+        action: scrollBeforeFirstPage(chatId),
       },
     ])
   }
@@ -364,7 +115,7 @@ const MessageList = React.memo(function MessageList({
     MessageListStore.loadPageAfter(chatId, withoutPages, [
       {
         isLayoutEffect: false,
-        action: { type: 'SCROLL_BEFORE_LAST_PAGE', payload: {}, id: chatId },
+        action: scrollBeforeLastPage(chatId),
       },
     ])
   }
@@ -443,7 +194,6 @@ const MessageList = React.memo(function MessageList({
       const { messageId, messageIndex: oldMessageIndex } = parseMessageKey(
         messageElement.getAttribute('id')
       )
-	
 
       const messageIndex = messageIds.indexOf(messageId)
       if (messageId <= 9 && oldMessageIndex !== messageIndex) {
@@ -494,7 +244,7 @@ const MessageList = React.memo(function MessageList({
         continue
       }
 
-if (realMessageIndex === -1) continue
+      if (realMessageIndex === -1) continue
 
       // In theory it would be better/more accurate to jump to the bottom if firstMessageIndexInView < indexOfFirstMessageInView
       // and to the top of the message if firstMessageIndexInView > indexOfFirstMessageInView
@@ -629,13 +379,13 @@ if (realMessageIndex === -1) continue
                 />
               )
             } else if (message.type === MessageTypeIs.Message) {
-			  const conversationType: ConversationType = {
-			    hasMultipleParticipants:
-				  chat.type === C.DC_CHAT_TYPE_GROUP ||
-				  chat.type === C.DC_CHAT_TYPE_MAILINGLIST,
-				  isDeviceChat: chat.isDeviceChat,
-				  chatType: chat.type,
-			  }
+              const conversationType: ConversationType = {
+                hasMultipleParticipants:
+                  chat.type === C.DC_CHAT_TYPE_GROUP ||
+                  chat.type === C.DC_CHAT_TYPE_MAILINGLIST,
+                isDeviceChat: chat.isDeviceChat,
+                chatType: chat.type,
+              }
               return (
                 <MessageWrapper
                   key={key}

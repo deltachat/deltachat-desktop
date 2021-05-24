@@ -1,5 +1,7 @@
 import { getLogger } from '../../../shared/logger'
-import MessageListStore, { PageStoreState } from '../../stores/MessageListStore'
+import MessageListStore, {
+  MessageListStoreState,
+} from '../../stores/MessageListStore'
 
 const log = getLogger('renderer/message/MessageList-Helpers')
 
@@ -110,7 +112,7 @@ export function* messagesInView(
 }
 
 export function isOnePageOrMoreAwayFromNewestMessage(
-  messageListStore: PageStoreState,
+  messageListStore: MessageListStoreState,
   messageListRef: React.MutableRefObject<HTMLElement>
 ) {
   const debug = (str: String) =>
@@ -156,9 +158,9 @@ export function mathInBetween(
 export function isScrolledToBottom(
   scrollTop: number,
   scrollHeight: number,
-  wrapperHeight: number
+  clientHeight: number
 ) {
-  return scrollTop >= scrollHeight - wrapperHeight
+  return scrollTop >= scrollHeight - clientHeight
 }
 
 export function* rotateAwayFromIndex(index: number, length: number) {
