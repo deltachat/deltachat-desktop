@@ -154,7 +154,7 @@ const MessageList = React.memo(function MessageList({
       messageListRef,
       messageListBottomRef,
       messageListTopRef,
-      messageListWrapperRef
+      messageListWrapperRef,
     })
   }
 

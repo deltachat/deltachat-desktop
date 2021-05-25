@@ -7,7 +7,11 @@ import {
   Message,
   MarkerOneParams,
 } from '../../shared/shared-types'
-import { isScrolledToBottom, messagesInView, rotateAwayFromIndex } from '../components/message/MessageList-Helpers'
+import {
+  isScrolledToBottom,
+  messagesInView,
+  rotateAwayFromIndex,
+} from '../components/message/MessageList-Helpers'
 import { DeltaBackend, sendMessageParams } from '../delta-remote'
 import { ipcBackend } from '../ipc'
 import {
@@ -218,7 +222,10 @@ class _MessageListStore extends Store<
         log.debug(`jumpToMessage: chatId: ${chatId} messageId: ${messageId}`)
         let { unreadMessageIds, messageIds, markerOne } = state
         if (chatId !== state.chatId) {
-          const result = await getUnreadMessageIdsMarkerOneAndMessageIds(chatId, {})
+          const result = await getUnreadMessageIdsMarkerOneAndMessageIds(
+            chatId,
+            {}
+          )
           unreadMessageIds = result.unreadMessageIds
           messageIds = result.messageIds
           markerOne = result.markerOne
@@ -738,7 +745,8 @@ class _MessageListStore extends Store<
       return
     }
 
-    const firstMessageInView = messagesInView(context.messageListRef).next().value
+    const firstMessageInView = messagesInView(context.messageListRef).next()
+      .value
     if (!firstMessageInView) {
       log.debug(
         `onMessagesChanged: No message in view. Should normally not happen. Let's just select the chat again?`

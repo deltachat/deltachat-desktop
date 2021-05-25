@@ -94,7 +94,7 @@ export default function ChatAuditLogDialog(props: {
       0,
       -1,
       {},
-      C.DC_GCM_ADDDAYMARKER | C.DC_GCM_INFO_ONLY,
+      C.DC_GCM_ADDDAYMARKER | C.DC_GCM_INFO_ONLY
     )
     setMessages(messages)
     setLoading(false)
@@ -159,13 +159,15 @@ export default function ChatAuditLogDialog(props: {
                 log.debug(`Missing message with index ${index}`)
                 return
               }
-              
+
               const { text, direction, timestamp, id } = message
               return (
                 <li
                   key={index}
                   className='info'
-                  onClick={() => {openMessageInfo(message)}}
+                  onClick={() => {
+                    openMessageInfo(message)
+                  }}
                   onContextMenu={showMenu.bind(null, message)}
                 >
                   <p>

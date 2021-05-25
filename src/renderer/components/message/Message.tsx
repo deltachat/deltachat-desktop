@@ -73,19 +73,22 @@ const Avatar = (
   }
 }
 
-export function getAuthorName(displayName: string, overrideSenderName?: string) {
+export function getAuthorName(
+  displayName: string,
+  overrideSenderName?: string
+) {
   return overrideSenderName ? `~${overrideSenderName}` : displayName
 }
 
-
 export function AuthorName({
-  contact, onContactClick, overrideSenderName
+  contact,
+  onContactClick,
+  overrideSenderName,
 }: {
-  contact: DCContact,
-  onContactClick: (contact: DCContact) => void,
+  contact: DCContact
+  onContactClick: (contact: DCContact) => void
   overrideSenderName?: string
 }) {
-
   const { color, displayName } = contact
 
   return (
@@ -159,7 +162,7 @@ function buildContextMenu(
     },
     // Reply privately -> only show in groups, don't show on info messages or outgoing messages
     conversationType.chatType === C.DC_CHAT_TYPE_GROUP &&
- message.fromId > C.DC_CONTACT_ID_LAST_SPECIAL && {
+      message.fromId > C.DC_CONTACT_ID_LAST_SPECIAL && {
         label: tx('reply_privately'),
         action: privateReply.bind(null, message),
       },
@@ -439,10 +442,15 @@ export default MessageComponent
 export const Quote = ({ quote }: { quote: MessageQuote }) => {
   const screenContext = useContext(ScreenContext)
 
-  const onContactClick = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const onContactClick = async (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
     event.stopPropagation()
     event.preventDefault()
-    const message = await DeltaBackend.call('messageList.getMessage', quote.messageId)
+    const message = await DeltaBackend.call(
+      'messageList.getMessage',
+      quote.messageId
+    )
     const contact = message.contact
     openViewProfileDialog(screenContext, contact.id)
   }
@@ -453,7 +461,6 @@ export const Quote = ({ quote }: { quote: MessageQuote }) => {
       style={{ borderLeftColor: quote.displayColor }}
       onClick={() => jumpToMessage(quote.messageId)}
     >
-    
       <div
         className='quote-author'
         style={{ color: quote.displayColor }}

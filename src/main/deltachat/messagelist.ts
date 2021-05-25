@@ -259,17 +259,17 @@ export default class DCMessageList extends SplitOut {
     this._controller.chatList.selectChat(chatId)
   }
 
-  getMessageIds(chatId: number, markerOne: MarkerOneParams={}, flags: number=C.DC_GCM_ADDDAYMARKER) {
+  getMessageIds(
+    chatId: number,
+    markerOne: MarkerOneParams = {},
+    flags: number = C.DC_GCM_ADDDAYMARKER
+  ) {
     log.debug(
       `getMessageIds: chatId: ${chatId} markerOne: ${JSON.stringify(markerOne)}`
     )
     const messageIds = []
 
-    for (const messageId of this._dc.getChatMessages(
-      chatId,
-      flags,
-      0
-    )) {
+    for (const messageId of this._dc.getChatMessages(chatId, flags, 0)) {
       if (markerOne && markerOne[messageId]) {
         messageIds.push(C.DC_MSG_ID_MARKER1)
       }
@@ -283,8 +283,8 @@ export default class DCMessageList extends SplitOut {
     chatId: number,
     indexStart: number,
     indexEnd: number,
-    markerOne: MarkerOneParams={},
-    flags: number=C.DC_GCM_ADDDAYMARKER
+    markerOne: MarkerOneParams = {},
+    flags: number = C.DC_GCM_ADDDAYMARKER
   ): Promise<MessageType[]> {
     log.debug(
       `getMessages: chatId: ${chatId} markerOne: ${JSON.stringify(markerOne)}`
@@ -293,7 +293,7 @@ export default class DCMessageList extends SplitOut {
     console.log(messageIds)
 
     if (indexEnd === -1) indexEnd = messageIds.length - 1
-    
+
     const messages: MessageType[] = []
     for (
       let messageIndex = indexStart;
