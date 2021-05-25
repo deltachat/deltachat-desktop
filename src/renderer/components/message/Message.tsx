@@ -38,6 +38,7 @@ import { ConversationType } from './MessageList'
 // const log = getLogger('renderer/message')
 import moment from 'moment'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
+import { DeltaBackend } from '../../delta-remote'
 
 const Avatar = (
   contact: DCContact,
@@ -72,11 +73,19 @@ const Avatar = (
   }
 }
 
-const AuthorName = (
+export function getAuthorName(displayName: string, overrideSenderName?: string) {
+  return overrideSenderName ? `~${overrideSenderName}` : displayName
+}
+
+
+export function AuthorName({
+  contact, onContactClick, overrideSenderName
+}: {
   contact: DCContact,
   onContactClick: (contact: DCContact) => void,
   overrideSenderName?: string
-) => {
+}) {
+
   const { color, displayName } = contact
 
   return (
@@ -85,7 +94,7 @@ const AuthorName = (
       style={{ color: color }}
       onClick={() => onContactClick(contact)}
     >
-      {overrideSenderName ? `~${overrideSenderName}` : displayName}
+      {getAuthorName(displayName, overrideSenderName)}
     </span>
   )
 }
@@ -150,7 +159,7 @@ function buildContextMenu(
     },
     // Reply privately -> only show in groups, don't show on info messages or outgoing messages
     conversationType.chatType === C.DC_CHAT_TYPE_GROUP &&
-      message.fromId > C.DC_CONTACT_ID_LAST_SPECIAL && {
+ message.fromId > C.DC_CONTACT_ID_LAST_SPECIAL && {
         label: tx('reply_privately'),
         action: privateReply.bind(null, message),
       },
@@ -374,11 +383,11 @@ const MessageComponent = (props: {
               'can-hide': direction === 'outgoing' || !showAuthor,
             })}
           >
-            {AuthorName(
-              message.contact,
-              onContactClick,
-              message?.overrideSenderName
-            )}
+            <AuthorName
+              contact={message.contact}
+              onContactClick={onContactClick}
+              overrideSenderName={message?.overrideSenderName}
+            />
           </div>
         )}
         <div
@@ -428,21 +437,29 @@ const MessageComponent = (props: {
 export default MessageComponent
 
 export const Quote = ({ quote }: { quote: MessageQuote }) => {
-  const onContactClick = () => {
-    // TODO: implement
+  const screenContext = useContext(ScreenContext)
+
+  const onContactClick = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    event.stopPropagation()
+    event.preventDefault()
+    const message = await DeltaBackend.call('messageList.getMessage', quote.messageId)
+    const contact = message.contact
+    openViewProfileDialog(screenContext, contact.id)
   }
+
   return (
     <div
       className='quote has-message'
       style={{ borderLeftColor: quote.displayColor }}
       onClick={() => jumpToMessage(quote.messageId)}
     >
+    
       <div
         className='quote-author'
         style={{ color: quote.displayColor }}
         onClick={onContactClick}
       >
-        {quote && quote.overrideSenderName}
+        {getAuthorName(quote.displayName, quote.overrideSenderName)}
       </div>
       <p>{quote.text}</p>
     </div>
