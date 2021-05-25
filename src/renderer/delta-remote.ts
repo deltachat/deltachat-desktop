@@ -229,7 +229,8 @@ class DeltaRemote {
     chatId: number,
     indexStart: number,
     indexEnd: number,
-    marker1Before?: MarkerOneParams
+    marker1Before?: MarkerOneParams,
+    flags?: number
   ): Promise<MessageType[]>
   call(fnName: 'messageList.getMessageInfo', msgId: number): Promise<string>
   call(fnName: 'messageList.getDraft', chatId: number): Promise<Message>
@@ -249,7 +250,8 @@ class DeltaRemote {
   call(
     fnName: 'messageList.getMessageIds',
     chatid: number,
-    marker1Before?: MarkerOneParams
+    marker1Before?: MarkerOneParams,
+    flags?: number
   ): Promise<number[]>
   call(
     fnName: 'messageList.forwardMessage',

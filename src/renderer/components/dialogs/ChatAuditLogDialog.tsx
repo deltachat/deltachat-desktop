@@ -67,7 +67,6 @@ export default function ChatAuditLogDialog(props: {
   const isOpen = !!selectedChat
 
   const [loading, setLoading] = useState(true)
-  const [msgIds, setMsgIds] = useState<number[]>([])
   const [messages, setMessages] = useState<MessageType[]>([])
 
   const listView = useRef<HTMLDivElement>()
@@ -89,20 +88,14 @@ export default function ChatAuditLogDialog(props: {
 
   async function refresh() {
     setLoading(true)
-    // TODO: Fix getting correct message ids
-    const msgIds = await DeltaBackend.call(
-      'messageList.getMessageIds',
-      selectedChat.id,
-      //C.DC_GCM_ADDDAYMARKER | C.DC_GCM_INFO_ONLY,
-      {}
-    )
     const messages = await DeltaBackend.call(
       'messageList.getMessages',
       selectedChat.id,
       0,
-      msgIds.length
+      -1,
+      {},
+      C.DC_GCM_ADDDAYMARKER | C.DC_GCM_INFO_ONLY,
     )
-    setMsgIds(msgIds)
     setMessages(messages)
     setLoading(false)
 
@@ -140,18 +133,15 @@ export default function ChatAuditLogDialog(props: {
         <div>{tx('loading')}</div>
       ) : (
         <div style={{ overflowY: 'scroll' }} ref={listView}>
-          {msgIds.length === 0 && (
+          {messages.length === 0 && (
             <div className='no-content' key='no-content-msg'>
               <div>{tx('chat_audit_log_empty_message')}</div>
             </div>
           )}
           <ul key='info-message-list'>
-            {msgIds.map((id, index) => {
-              if (id === C.DC_MSG_ID_DAYMARKER) {
-                const key = 'magic' + id + '_' + specialMessageIdCounter++
-                let message = messages[index]
-                if (message.type !== MessageTypeIs.Message) return null
-                message = message as Message
+            {messages.map((message, index) => {
+              if (message.type === MessageTypeIs.DayMarker) {
+                const key = 'magic' + index + '_' + specialMessageIdCounter++
                 return (
                   <li key={key} className='time'>
                     <div>
@@ -165,17 +155,17 @@ export default function ChatAuditLogDialog(props: {
                   </li>
                 )
               }
-              const message = messages[id]
-              if (!message || message == null) {
-                log.debug(`Missing message with id ${id}`)
+              if (message.type !== MessageTypeIs.Message) {
+                log.debug(`Missing message with index ${index}`)
                 return
               }
-              const { text, direction, timestamp } = message as Message
+              
+              const { text, direction, timestamp, id } = message
               return (
                 <li
-                  key={id}
+                  key={index}
                   className='info'
-                  onClick={openMessageInfo.bind(null, message)}
+                  onClick={() => {openMessageInfo(message)}}
                   onContextMenu={showMenu.bind(null, message)}
                 >
                   <p>

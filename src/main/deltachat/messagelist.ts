@@ -22,6 +22,7 @@ import {
 
 import { writeFile } from 'fs-extra'
 import tempy from 'tempy'
+import { Marker } from 'mapbox-gl'
 export default class DCMessageList extends SplitOut {
   sendMessage(
     chatId: number,
@@ -258,7 +259,7 @@ export default class DCMessageList extends SplitOut {
     this._controller.chatList.selectChat(chatId)
   }
 
-  getMessageIds(chatId: number, markerOne?: MarkerOneParams) {
+  getMessageIds(chatId: number, markerOne: MarkerOneParams={}, flags: number=C.DC_GCM_ADDDAYMARKER) {
     log.debug(
       `getMessageIds: chatId: ${chatId} markerOne: ${JSON.stringify(markerOne)}`
     )
@@ -266,7 +267,7 @@ export default class DCMessageList extends SplitOut {
 
     for (const messageId of this._dc.getChatMessages(
       chatId,
-      C.DC_GCM_ADDDAYMARKER,
+      flags,
       0
     )) {
       if (markerOne && markerOne[messageId]) {
@@ -282,13 +283,17 @@ export default class DCMessageList extends SplitOut {
     chatId: number,
     indexStart: number,
     indexEnd: number,
-    markerOne?: MarkerOneParams
+    markerOne: MarkerOneParams={},
+    flags: number=C.DC_GCM_ADDDAYMARKER
   ): Promise<MessageType[]> {
     log.debug(
       `getMessages: chatId: ${chatId} markerOne: ${JSON.stringify(markerOne)}`
     )
-    const messageIds = this.getMessageIds(chatId, markerOne)
+    const messageIds = this.getMessageIds(chatId, markerOne, flags)
+    console.log(messageIds)
 
+    if (indexEnd === -1) indexEnd = messageIds.length - 1
+    
     const messages: MessageType[] = []
     for (
       let messageIndex = indexStart;

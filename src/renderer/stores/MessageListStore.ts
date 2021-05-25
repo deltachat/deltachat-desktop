@@ -7,7 +7,7 @@ import {
   Message,
   MarkerOneParams,
 } from '../../shared/shared-types'
-import { isScrolledToBottom, messagesInView } from '../components/message/MessageList-Helpers'
+import { isScrolledToBottom, messagesInView, rotateAwayFromIndex } from '../components/message/MessageList-Helpers'
 import { DeltaBackend, sendMessageParams } from '../delta-remote'
 import { ipcBackend } from '../ipc'
 import {
