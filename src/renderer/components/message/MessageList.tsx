@@ -150,112 +150,12 @@ const MessageList = React.memo(function MessageList({
   }
 
   const onMsgsChanged = async () => {
-    if (MessageListStore.ignoreDcEventMsgsChanged > 0) {
-      MessageListStore.ignoreDcEventMsgsChanged--
-      log.debug(
-        'onMsgsChanged: MessageListSotre.ignoreDcEventMsgsChanged is > 0, so we do. returning'
-      )
-      return
-    }
-    const chatId = MessageListStore.state.chatId
-
-    const scrollTop = messageListRef.current.scrollTop
-    const scrollHeight = messageListRef.current.scrollHeight
-    const wrapperHeight = messageListWrapperRef.current.clientHeight
-
-    if (isScrolledToBottom(scrollTop, scrollHeight, wrapperHeight)) {
-      MessageListStore.selectChat(chatId)
-      return
-    }
-
-    const unreadMessageIds = await DeltaBackend.call(
-      'messageList.getUnreadMessageIds',
-      chatId
-    )
-    const firstUnreadMessageId =
-      unreadMessageIds.length > 0 ? unreadMessageIds[0] : -1
-    const marker1MessageId = firstUnreadMessageId || 0
-    const marker1Counter = unreadMessageIds.length
-    const markerOne = {
-      ...MessageListStore.state.markerOne,
-      [marker1MessageId]: marker1Counter,
-    }
-
-    const messageIds = await DeltaBackend.call(
-      'messageList.getMessageIds',
-      chatId,
-      markerOne
-    )
-
-    for (const { messageElement, messageOffsetTop } of messagesInView(
-      messageListRef
-    )) {
-      const { messageId, messageIndex: oldMessageIndex } = parseMessageKey(
-        messageElement.getAttribute('id')
-      )
-
-      const messageIndex = messageIds.indexOf(messageId)
-      if (messageId <= 9 && oldMessageIndex !== messageIndex) {
-        continue
-      }
-
-      if (messageIndex === -1) continue
-
-      // Position of messageBottom on screen
-      const relativeScrollPosition = scrollTop - messageOffsetTop
-
-      if (MessageListStore.currentlyDispatchedCounter > 0) return
-      MessageListStore.refresh(
-        chatId,
-        messageIds,
-        messageIndex,
-        relativeScrollPosition
-      )
-
-      return
-    }
-
-    const firstMessageInView = messagesInView(messageListRef).next().value
-    if (!firstMessageInView) {
-      log.debug(
-        `onMsgsChanged: No message in view. Should normally not happen. Let's just select the chat again?`
-      )
-
-      return selectChat(MessageListStore.state.chatId)
-    }
-
-    const { messageIndex: indexOfFirstMessageInView } = parseMessageKey(
-      firstMessageInView.messageElement.getAttribute('id')
-    )
-    log.debug(
-      `onMsgsChanged: No message in view is in changed messageIds. Trying to find closest still existing message. indexOfFirstMessageInView: ${indexOfFirstMessageInView}`
-    )
-    const oldMessageIds = MessageListStore.state.messageIds
-
-    // Find closest still existing messageId and jump there
-    for (const oldMessageIndex of rotateAwayFromIndex(
-      indexOfFirstMessageInView,
-      messageIds.length
-    )) {
-      const messageId = oldMessageIds[oldMessageIndex]
-      const realMessageIndex = messageIds.indexOf(messageId)
-      if (messageId <= 9 && oldMessageIndex !== realMessageIndex) {
-        continue
-      }
-
-      if (realMessageIndex === -1) continue
-
-      // In theory it would be better/more accurate to jump to the bottom if firstMessageIndexInView < indexOfFirstMessageInView
-      // and to the top of the message if firstMessageIndexInView > indexOfFirstMessageInView
-      // But this should be good enough for now
-      MessageListStore.jumpToMessage(chatId, messageId)
-      return
-    }
-
-    log.debug(
-      'onMsgsChanged: Could not find a message to restore from. Reloading chat.'
-    )
-    MessageListStore.selectChat(chatId)
+    MessageListStore.onMessagesChanged({
+      messageListRef,
+      messageListBottomRef,
+      messageListTopRef,
+      messageListWrapperRef
+    })
   }
 
   const onIncomingMessage = async (

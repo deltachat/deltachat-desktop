@@ -7,6 +7,7 @@ import {
   Message,
   MarkerOneParams,
 } from '../../shared/shared-types'
+import { isScrolledToBottom, messagesInView } from '../components/message/MessageList-Helpers'
 import { DeltaBackend, sendMessageParams } from '../delta-remote'
 import { ipcBackend } from '../ipc'
 import {
@@ -20,6 +21,7 @@ import {
   getUnreadMessageIdsMarkerOneAndMessageIds,
   loadPageWithFirstMessageIndex,
   loadPageWithMessageIndexInMiddle,
+  parseMessageKey,
   safeMessageIdIndex,
   scrollToBottomAndCheckIfWeNeedToLoadMore,
   scrollToMessage,
@@ -670,10 +672,113 @@ class _MessageListStore extends Store<
     })
   }
 
-  onMessagesChanged(chatId: number, messageId: number) {
-    this.dispatch('onMessagesChanged', async (_state, _setState) => {
-      log.debug(`onMessagesChanged: chatId: ${chatId} messageId: ${messageId}`)
-    })
+  async onMessagesChanged(context: MessageListStoreContext) {
+    if (MessageListStore.ignoreDcEventMsgsChanged > 0) {
+      MessageListStore.ignoreDcEventMsgsChanged--
+      log.debug(
+        'onMessagesChanged: MessageListSotre.ignoreDcEventMsgsChanged is > 0, so we do. returning'
+      )
+      return
+    }
+    const chatId = MessageListStore.state.chatId
+
+    const scrollTop = context.messageListRef.current.scrollTop
+    const scrollHeight = context.messageListRef.current.scrollHeight
+    const wrapperHeight = context.messageListWrapperRef.current.clientHeight
+
+    if (isScrolledToBottom(scrollTop, scrollHeight, wrapperHeight)) {
+      MessageListStore.selectChat(chatId)
+      return
+    }
+
+    const unreadMessageIds = await DeltaBackend.call(
+      'messageList.getUnreadMessageIds',
+      chatId
+    )
+    const firstUnreadMessageId =
+      unreadMessageIds.length > 0 ? unreadMessageIds[0] : -1
+    const marker1MessageId = firstUnreadMessageId || 0
+    const marker1Counter = unreadMessageIds.length
+    const markerOne = {
+      ...MessageListStore.state.markerOne,
+      [marker1MessageId]: marker1Counter,
+    }
+
+    const messageIds = await DeltaBackend.call(
+      'messageList.getMessageIds',
+      chatId,
+      markerOne
+    )
+
+    for (const { messageElement, messageOffsetTop } of messagesInView(
+      context.messageListRef
+    )) {
+      const { messageId, messageIndex: oldMessageIndex } = parseMessageKey(
+        messageElement.getAttribute('id')
+      )
+
+      const messageIndex = messageIds.indexOf(messageId)
+      if (messageId <= 9 && oldMessageIndex !== messageIndex) {
+        continue
+      }
+
+      if (messageIndex === -1) continue
+
+      // Position of messageBottom on screen
+      const relativeScrollPosition = scrollTop - messageOffsetTop
+
+      if (MessageListStore.currentlyDispatchedCounter > 0) return
+      MessageListStore.refresh(
+        chatId,
+        messageIds,
+        messageIndex,
+        relativeScrollPosition
+      )
+
+      return
+    }
+
+    const firstMessageInView = messagesInView(context.messageListRef).next().value
+    if (!firstMessageInView) {
+      log.debug(
+        `onMessagesChanged: No message in view. Should normally not happen. Let's just select the chat again?`
+      )
+
+      return this.selectChat(MessageListStore.state.chatId)
+    }
+
+    const { messageIndex: indexOfFirstMessageInView } = parseMessageKey(
+      firstMessageInView.messageElement.getAttribute('id')
+    )
+    log.debug(
+      `onMessagesChanged: No message in view is in changed messageIds. Trying to find closest still existing message. indexOfFirstMessageInView: ${indexOfFirstMessageInView}`
+    )
+    const oldMessageIds = MessageListStore.state.messageIds
+
+    // Find closest still existing messageId and jump there
+    for (const oldMessageIndex of rotateAwayFromIndex(
+      indexOfFirstMessageInView,
+      messageIds.length
+    )) {
+      const messageId = oldMessageIds[oldMessageIndex]
+      const realMessageIndex = messageIds.indexOf(messageId)
+      if (messageId <= 9 && oldMessageIndex !== realMessageIndex) {
+        continue
+      }
+
+      if (realMessageIndex === -1) continue
+
+      // In theory it would be better/more accurate to jump to the bottom if firstMessageIndexInView < indexOfFirstMessageInView
+      // and to the top of the message if firstMessageIndexInView > indexOfFirstMessageInView
+      // But this should be good enough for now
+      MessageListStore.jumpToMessage(chatId, messageId)
+      return
+    }
+
+    log.debug(
+      'onMessagesChanged: Could not find a message to restore from. Reloading chat.'
+    )
+    MessageListStore.selectChat(chatId)
   }
 
   deleteMessage(messageId: number) {
