@@ -153,9 +153,9 @@ export async function joinCall(
   }
 }
 
-export const selectChat = (chatId: number) => {
-  chatStore.dispatch({ type: 'SELECT_CHAT', payload: chatId })
+export const selectChat = async (chatId: number) => {
   MessageListStore.selectChat(chatId)
+  chatStore.dispatch({ type: 'SELECT_CHAT', payload: chatId })
 }
 
 export const jumpToMessage = async (messageId: number) => {
