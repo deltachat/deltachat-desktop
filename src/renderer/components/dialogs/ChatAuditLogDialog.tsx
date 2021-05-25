@@ -160,7 +160,7 @@ export default function ChatAuditLogDialog(props: {
                 return
               }
 
-              const { text, direction, timestamp, id } = message
+              const { text, direction, timestamp } = message
               return (
                 <li
                   key={index}

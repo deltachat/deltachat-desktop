@@ -22,7 +22,6 @@ import {
 
 import { writeFile } from 'fs-extra'
 import tempy from 'tempy'
-import { Marker } from 'mapbox-gl'
 export default class DCMessageList extends SplitOut {
   sendMessage(
     chatId: number,

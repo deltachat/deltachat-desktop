@@ -15,20 +15,16 @@ import { DayMarkerInfoMessage, UnreadMessagesMarker } from './Message'
 import { ChatStoreState } from '../../stores/chat'
 import { C } from 'deltachat-node/dist/constants'
 import type { ChatTypes } from 'deltachat-node'
-import { jumpToMessage, selectChat } from '../helpers/ChatMethods'
+import { jumpToMessage } from '../helpers/ChatMethods'
 import { ipcBackend } from '../../ipc'
-import { DeltaBackend } from '../../delta-remote'
 import {
   calculateMessageKey,
-  parseMessageKey,
   scrollBeforeFirstPage,
   scrollBeforeLastPage,
 } from '../../stores/MessageListStore-Helpers'
 import {
-  isScrolledToBottom,
   withoutBottomPages,
   messagesInView,
-  rotateAwayFromIndex,
   isOnePageOrMoreAwayFromNewestMessage,
 } from './MessageList-Helpers'
 
