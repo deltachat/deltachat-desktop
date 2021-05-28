@@ -19,8 +19,8 @@
     <string name="strict">Строгий</string>
     <string name="open">Открыть</string>
     <string name="open_attachment">Открыть вложение</string>
-    <string name="join">Зайти</string>
-    <string name="rejoin">Перезайти</string>
+    <string name="join">Присоединиться</string>
+    <string name="rejoin">Пересоединиться</string>
     <string name="delete">Удалить</string>
     <string name="info">Информация</string>
     <string name="update">Обновить</string>
@@ -40,8 +40,13 @@
     <string name="profile">Профиль</string>
     <string name="main_menu">Главное меню</string>
     <string name="start_chat">Начать чат</string>
-    <string name="show_full_message">Показать сообщение…</string>
-    <string name="load_remote_content">Загружать удаленные изображения</string>
+    <string name="show_full_message">Показать сообщение полностью…</string>
+    <string name="show_full_message_in_browser">Показать сообщение полностью в браузере...</string>
+    <!-- this is shown as placeholder when something is loading at some places -->
+    <string name="loading">Загрузка...</string>
+    <string name="hide">Скрыть</string>
+    <string name="activate">Активировать</string>
+    <string name="load_remote_content">Загружать удалённые изображения</string>
     <!-- possible answers to the question are: Never, Always, Once -->
     <string name="load_remote_content_ask">Удалённые изображения могут использоваться для отслеживания вас.\n\nЭта настройка также позволяет загружать удалённые шрифты и другое содержимое. Даже если она отключена, вы все равно сможете видеть встроенные или кешированные изображения.\n\nЗагружать удалённые изображения?</string>
     <string name="always">Всегда</string>
@@ -136,8 +141,8 @@
     <string name="camera">Камера</string>
     <!-- "capture" here means "start a video recording" or "take a photo"; eg. the description of the "shutter button" in the camera controls -->
     <string name="capture">Захват</string>
-    <string name="switch_camera">Сменить камеру</string>
-    <string name="toggle_fullscreen">Переключить полноэкранный режим</string>
+    <string name="switch_camera">Переключить камеру</string>
+    <string name="toggle_fullscreen">Переключить в полноэкранный режим</string>
     <string name="location">Местоположение</string>
     <string name="gallery">Галерея</string>
     <string name="images_and_videos">Изображения и видео</string>
@@ -184,7 +189,7 @@
     <string name="menu_add_attachment">Прикрепить вложение</string>
     <string name="menu_leave_group">Покинуть группу</string>
     <string name="menu_delete_chat">Удалить чат</string>
-    <string name="ask_delete_named_chat">Вы уверены, что хотите удалить «%1$s»?</string>
+    <string name="ask_delete_named_chat">Вы уверены, что хотите удалить \"%1$s\"?</string>
     <string name="menu_delete_messages">Удалить сообщения</string>
     <string name="menu_delete_image">Удалить изображение</string>
     <string name="delete_contact">Удалить контакт</string>
@@ -192,8 +197,10 @@
     <string name="menu_delete_location">Удалить местоположение?</string>
     <string name="menu_message_details">Подробности сообщения</string>
     <string name="menu_copy_to_clipboard">Скопировать в буфер обмена</string>
-    <string name="menu_copy_selection_to_clipboard">Скопировать выделенное</string>
-    <string name="menu_copy_link_to_clipboard">Скопировать ссылку</string>
+    <string name="menu_copy_selection_to_clipboard">Копировать выделенное</string>
+    <string name="menu_copy_link_to_clipboard">Копировать ссылку</string>
+    <string name="menu_copy_text_to_clipboard">Копировать текст</string>
+    <string name="menu_copy_image_to_clipboard">Копировать изображение</string>
     <string name="paste_from_clipboard">Вставить из буфера обмена</string>
     <string name="menu_forward">Переслать сообщение</string>
     <string name="menu_resend">Продублировать сообщение</string>
@@ -227,6 +234,12 @@
     <string name="menu_zoom_in">Увеличить масштаб</string>
     <string name="menu_zoom_out">Уменьшить масштаб</string>
     <string name="menu_save_log">Сохранить журнал</string>
+    <string name="menu_more_options">Больше опций</string>
+    <string name="menu_learn_spelling">Учить правописание </string>
+    <string name="menu_chat_audit_log">Chat Audit Log</string>
+    <string name="jump_to_message">Перейти в сообщение</string>
+    <string name="copy_json">Копировать JSON</string>
+    <string name="replace_draft">Заменить черновик</string>
     <string name="title_share_location">Делиться местоположением со всеми участниками группы</string>
     <string name="device_talk">Сообщения устройства</string>
     <string name="device_talk_subtitle">Локально сгенерированные сообщения</string>
@@ -261,15 +274,15 @@
         <item quantity="one">Отправить следующий файл %s?</item>
         <item quantity="few">Отправить следующие %d файла %s?</item>
         <item quantity="many">Отправить следующие %d файлов %s?</item>
-        <item quantity="other">Отправить следующие %d файлов %s?</item>
+        <item quantity="other">Отправить следующие %d файлы %s?</item>
     </plurals>
     <string name="file_saved_to">Файл сохранён в «%1$s».</string>
 
     <string name="videochat">Видеочат</string>
     <string name="videochat_invite_user_to_videochat">Пригласить %1$s в видеочат?</string>
     <string name="videochat_invite_user_hint">Это требует совместимого приложения или совместимого браузера на обоих концах.</string>
-    <string name="videochat_contact_invited_hint">%1$s приглашает вас в видеочат.</string>
-    <string name="videochat_you_invited_hint">Вас пригласили в видеочат.</string>
+    <string name="videochat_contact_invited_hint">%1$s приглашено в видеочат.</string>
+    <string name="videochat_you_invited_hint">Вы приглашены в видеочат.</string>
     <string name="videochat_will_open_in_your_browser">Этот видеочат будет открываться в браузере</string>
     <string name="videochat_tap_to_join">Нажмите, чтобы зайти.</string>
     <string name="videochat_tap_to_open">Нажмите, чтобы открыть.</string>
@@ -290,6 +303,7 @@
         <item quantity="many">Удалить %d чатов? Они больше не будут отображаться в списке чатов, их сообщения останутся на сервере.</item>
         <item quantity="other">Удалить %d чатов? Они больше не будут отображаться в списке чатов, их сообщения останутся на сервере.</item>
     </plurals>
+    <string name="ask_delete_message">Вы уверены, что хотите удалить это сообщение?</string>
     <plurals name="ask_delete_messages">
         <item quantity="one">Delete %d message here and on the server?</item>
         <item quantity="few">Удалить %d сообщений здесь и на сервере?</item>
@@ -365,6 +379,7 @@
     <string name="messaging_disabled_not_in_group">Вы не можете писать, потому что вы не в этой группе. Чтобы присоединиться, попросите другого участника.</string>
     <string name="messaging_disabled_device_chat">Этот чат содержит локально сгенерированные сообщения. Поэтому вы не можете писать сообщения.</string>
     <string name="messaging_disabled_deaddrop">Нажмите на сообщение, чтобы принять или отклонить запрос контакта</string>
+    <string name="messaging_disabled_mailing_list">Отправка сообщений в списках рассылки пока не поддерживается </string>
     <string name="cannot_display_unsuported_file_type">Невозможно отобразить этот тип файла: %s</string>
     <string name="attachment_failed_to_load">Не удалось загрузить вложение</string>
     <!-- For recording Voice messages: Description for the "Lock" button allowing to lift the thumb from the record button while recording continues -->
@@ -373,10 +388,26 @@
     <!-- mailing lists -->
     <string name="mailing_list">Список рассылки</string>
     <string name="ask_show_mailing_list">Показывать список рассылки «%1$s»?</string>
+    <string name="mailing_list_profile_info">Изменения названия и изображения списка рассылки применяются только к этому устройству.</string>
+
     <!-- map -->
     <string name="filter_map_on_time">Показать местоположения с интервалом времени</string>
     <string name="show_location_traces">Показывать маршруты</string>
     <string name="add_poi">Отправить интересующий вопрос</string>
+
+    <!-- chat audit log -->
+    <string name="chat_audit_log_empty_message">Здесь будут появляться системные сообщения этого чата</string>
+    <string name="chat_audit_log_title">Chat Audit Log для %1$s</string>
+    <string name="chat_audit_log_description">Здесь отображаются только системные и информационные сообщения. Полезно для поиска последних действий в чате без прокрутки множества обычных сообщений. </string>
+
+    <!-- punycode warning / labeled links -->
+    <!-- placeholder is domain/hostname that should be trusted -->
+    <string name="open_external_url_trust_domain">Больше не спрашивать  %1$s</string>
+    <string name="puny_code_warning_header">Обнаружена подозрительная ссылка</string>
+    <!-- placeholder contains the hostname converted to ascii -->
+    <string name="puny_code_warning_question">Вы уверены, что хотите посетить %1$s?</string>
+    <!-- this message is shown whenever a link with non-latin characters is clicked. first placeholder is original hostname with special chars, second placeholder is hostname encoded in ascii -->
+    <string name="puny_code_warning_description">Вы перешли по ссылке, которая может искажать символы, используя одинаковые символы из разных алфавитов. Переход по ссылке отмеченной %1$s  приведет к переходу по ней к %2$s что является нормальным для нелатинских символов. Если вы не ожидали появления таких символов, эта ссылка может быть опасной.</string>
 
     <!-- search -->
     <string name="search">Поиск</string>
@@ -566,6 +597,9 @@
     <string name="profile_image_select">Выбрать фото профиля</string>
     <string name="select_your_new_profile_image">Выбрать новое изображение профиля</string>
     <string name="profile_image_delete">Удалить фото профиля</string>
+    <string name="pref_show_tray_icon">Показать значок в трее</string>
+    <string name="pref_edit_profile">Редактировать профиль</string>
+
     <!-- Emoji picker and categories -->
     <string name="emoji_search_results">Результаты поиска</string>
     <string name="emoji_not_found">Эмодзи не найдено</string>
@@ -702,6 +736,11 @@
     <string name="contact_setup_changed">Изменены параметры для %1$s</string>
     <string name="verified_group_explain">Проверенные группы (экспериментально) защищены от активных атак. Участники проверяются с помощью второго фактора другими участниками и сообщения всегда передаются посредством cквозного шифрования .</string>
     <string name="copy_qr_data_success">Ссылка из QR-кода скопирована в буфер обмена</string>
+    <string name="mailto_dialog_header_select_chat">Выберите чат для отправки сообщение</string>
+    <!-- first placeholder is the name of the chat -->
+    <string name="mailto_dialog_confirm_replace_draft">%1$s уже существует в черновике, вы хотите его заменить? </string>
+    <string name="mailto_link_could_not_be_decoded">ссылка mailto не может быть декодирована: %1$s</string>
+
     <!-- notifications  -->
     <string name="notify_n_messages_in_m_chats">%1$d новых сообщений в %2$d чатах.</string>
     <string name="notify_mark_read">Отметить как прочитанное</string>
@@ -759,6 +798,8 @@
     <string name="global_menu_help_contribute_desktop">Присоединиться к разработке на GitHub</string>
     <string name="global_menu_help_report_desktop">Сообщить о проблеме</string>
     <string name="global_menu_help_about_desktop">О Delta Chat</string>
+    <string name="global_menu_file_open_desktop">Открыть Delta Chat</string>
+    <string name="global_menu_minimize_to_tray">Свернуть</string>
     <string name="no_chat_selected_suggestion_desktop">Выберите чат или создайте новый</string>
     <string name="write_message_desktop">Напишите сообщение</string>
     <string name="encryption_info_title_desktop">Информация о шифровании</string>
@@ -804,6 +845,10 @@
     <string name="menu.view.developer.open.log.folder">Открыть Папку Логов</string>
     <string name="menu.view.developer.open.current.log.file">Открыть Текущий Файл Журнала Log</string>
     <string name="user_location_permission_explanation">Для отображения и публикации вашего местоположения Delta Chat необходимо разрешение на местоположение.</string>
+    <string name="explain_desktop_minimized_disabled_tray_pref">Значок в трее нельзя отключить, так как Delta Chat был запущен с параметром --свернуть</string>
+    <string name="no_spellcheck_suggestions_found">Предложений по правописанию не найдено. </string>
+    <string name="show_window">Показать Окно</string>
+
     <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">Статус доставки: Ошибка</string>
     <string name="a11y_encryption_padlock">Значок шифрования</string>
