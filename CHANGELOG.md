@@ -3,10 +3,15 @@
 ## [Unreleased][unreleased]
 
 ### Fixed
+
 - fix empty settings after importing backup
 - fix archiving/unarchiving chat deselection issues (see #2262)
 - clear userfeedback on account switch / logout (see #2261)
 - fix link color in quotes
+
+### Changed
+
+- update translations (28.05.2021)
 
 ## [1.20.0] - 2021-03-22
 

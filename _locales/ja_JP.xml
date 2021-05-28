@@ -115,6 +115,8 @@
     <string name="contact">連絡先</string>
     <string name="verified_contact">確認済みの連絡先</string>
     <string name="camera">カメラ</string>
+    <!-- "capture" here means "start a video recording" or "take a photo"; eg. the description of the "shutter button" in the camera controls -->
+    <string name="capture">撮影</string>
     <string name="switch_camera">カメラを切り替える</string>
     <string name="toggle_fullscreen">フルスクリーン</string>
     <string name="location">場所</string>
