@@ -335,6 +335,7 @@ class DeltaRemote {
   }>
   // context ------------------------------------------------------------
   call(fnName: 'context.maybeNetwork'): Promise<void>
+  call(fnName: 'context.requestQuotaReport'): Promise<void>
   // burner accounts ------------------------------------------------------------
   call(
     fnName: 'burnerAccounts.create',
