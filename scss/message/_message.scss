@@ -237,18 +237,39 @@
 .message.type-sticker {
   .msg-container {
     background-color: transparent !important;
+
+    .author-wrapper,
+    .forwarded-indicator {
+      display: none;
+    }
+
+    .quote-background {
+      background: #01010159;
+      padding: 5px;
+      padding-left: 6px;
+      border-radius: 7px;
+
+      & > .quote {
+        margin: 0;
+
+        .quoted-text {
+          color: white;
+        }
+      }
+    }
   }
 
   .message-attachment-media {
     background-color: transparent;
     & > .attachment-content {
       margin-bottom: 20px;
+      cursor: default;
     }
   }
 
   .metadata {
     float: right;
-    padding: 4px 10px 1px 10px;
+    padding: 4px 8px 1px 8px;
     margin-bottom: -7px;
     background-color: #01010159;
     border-radius: 4px;

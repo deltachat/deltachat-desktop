@@ -9,6 +9,7 @@ import {
   openMessageHTML,
 } from './messageFunctions'
 import React, { useContext, useState, useEffect } from 'react'
+import reactStringReplace from 'react-string-replace'
 
 import classNames from 'classnames'
 import MessageBody from './MessageBody'
@@ -89,9 +90,12 @@ const ForwardedTitle = (
   contact: DCContact,
   onContactClick: (contact: DCContact) => void,
   direction: string,
-  conversationType: ConversationType
+  conversationType: ConversationType,
+  overrideSenderName?: string
 ) => {
   const tx = useTranslationFunction()
+
+  const { displayName, color } = contact
 
   return (
     <div
@@ -99,7 +103,15 @@ const ForwardedTitle = (
       onClick={() => onContactClick(contact)}
     >
       {conversationType.hasMultipleParticipants && direction !== 'outgoing'
-        ? tx('forwared_by', contact.displayName)
+        ? reactStringReplace(
+            tx('forwarded_by', '$$forwarder$$'),
+            '$$forwarder$$',
+            () => (
+              <span style={{ color: color }}>
+                {overrideSenderName ? `~${overrideSenderName}` : displayName}
+              </span>
+            )
+          )
         : tx('forwarded_message')}
     </div>
   )
@@ -358,7 +370,8 @@ const Message = (props: {
             message.contact,
             onContactClick,
             direction,
-            conversationType
+            conversationType,
+            message?.msg.overrideSenderName
           )}
         {!message.msg.isForwarded && (
           <div
@@ -444,16 +457,22 @@ export const Quote = ({
   }, [quotedMessageId])
 
   return (
-    <div
-      className='quote has-message'
-      style={{ borderLeftColor: message && message.contact.color }}
-    >
-      <div className='quote-author'>
-        {message &&
-          AuthorName(message.contact, () => {}, message.msg.overrideSenderName)}
-      </div>
-      <div className='quoted-text'>
-        <MessageBody text={quotedText} />
+    <div className='quote-background'>
+      <div
+        className='quote has-message'
+        style={{ borderLeftColor: message && message.contact.color }}
+      >
+        <div className='quote-author'>
+          {message &&
+            AuthorName(
+              message.contact,
+              () => {},
+              message.msg.overrideSenderName
+            )}
+        </div>
+        <div className='quoted-text'>
+          <MessageBody text={quotedText} />
+        </div>
       </div>
     </div>
   )

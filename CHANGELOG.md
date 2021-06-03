@@ -2,6 +2,14 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- Fix "Forwarded by $author" in message and add support for overwritten sender name to it.
+- Fix cursor type on hovering over sticker
+
+### Changed
+
+- Adjust sticker styling (quote styling).
+
 ## [1.20.1] - 2021-05-28
 
 ### Fixed
