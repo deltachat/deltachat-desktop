@@ -147,7 +147,6 @@
     "hallmark": "^2.0.0",
     "pngjs": "^3.3.3",
     "prettier": "2.2.1",
-    "spectron": "^12.0.0",
     "tape": "^4.12.0",
     "tempy": "^0.3.0",
     "testcafe": "^1.14.0",

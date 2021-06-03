@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Removed
+- remove unused dependency `spectron`, which also removes `chromedriver` dependency.
+
 ## [1.20.1] - 2021-05-28
 
 ### Fixed
