@@ -161,7 +161,7 @@ export default function ViewProfile(props: {
                     text={tx('pref_default_status_label')}
                   />
                   <div className='status-text'>
-                    {MessageBody({text: contact.status})}
+                    {MessageBody({ text: contact.status })}
                   </div>
                 </>
               )}
