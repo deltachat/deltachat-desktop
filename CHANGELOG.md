@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.20.2] - 2021-06-04
+
 ### Added
 
 - Add env option `VERSION_INFO_GIT_REF` to manualy set the git-ref on the version info, so that you can set it manually if needed. (interesting for packagers only)
@@ -1240,7 +1242,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.20.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.20.2...HEAD
+
+[1.20.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.20.1...v1.20.2
 
 [1.20.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.20.0...v1.20.1
 
