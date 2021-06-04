@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+
+- Add env option `VERSION_INFO_GIT_REF` to manualy set the git-ref on the version info, so that you can set it manually if needed. (interesting for packagers only)
+
 ### Fixed
 
 - Fix "Forwarded by $author" in message and add support for overwritten sender name to it.
