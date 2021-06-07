@@ -391,7 +391,7 @@ const MessageComponent = (props: {
             onContactClick,
             direction,
             conversationType,
-            message?.msg.overrideSenderName
+            message?.overrideSenderName
           )}
         {!message.isForwarded && (
           <div
@@ -476,7 +476,7 @@ export const Quote = ({ quote }: { quote: MessageQuote }) => {
     >
       <div
         className='quote has-message'
-        style={{ borderLeftColor: message && message.contact.color }}
+        style={{ borderLeftColor: quote.displayColor }}
       >
         <div
           className='quote-author'
@@ -486,10 +486,9 @@ export const Quote = ({ quote }: { quote: MessageQuote }) => {
           {getAuthorName(quote.displayName, quote.overrideSenderName)}
         </div>
         <div className='quoted-text'>
-          <MessageBody text={quotedText} />
+          <MessageBody text={quote.text} />
         </div>
       </div>
-      <p>{quote.text}</p>
     </div>
   )
 }
