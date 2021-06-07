@@ -17,6 +17,7 @@ import { Avatar } from '../Avatar'
 import { useLogicVirtualChatList, ChatListPart } from '../chat/ChatList'
 import { AutoSizer } from 'react-virtualized'
 import { selectChat } from '../helpers/ChatMethods'
+import MessageBody from '../message/MessageBody'
 
 const ProfileInfoName = ({
   name,
@@ -159,7 +160,9 @@ export default function ViewProfile(props: {
                   <DeltaDialogContentTextSeperator
                     text={tx('pref_default_status_label')}
                   />
-                  <div className='status-text'>{contact.status}</div>
+                  <div className='status-text'>
+                    {MessageBody({ text: contact.status })}
+                  </div>
                 </>
               )}
               <DeltaDialogContentTextSeperator

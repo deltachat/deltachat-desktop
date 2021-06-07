@@ -2,9 +2,42 @@
 
 ## [Unreleased][unreleased]
 
+## [1.20.2] - 2021-06-04
+
+### Added
+
+- Add env option `VERSION_INFO_GIT_REF` to manualy set the git-ref on the version info, so that you can set it manually if needed. (interesting for packagers only)
+
+### Fixed
+
+- Fix "Forwarded by $author" in message and add support for overwritten sender name to it.
+- Fix cursor type on hovering over sticker
+- Fix links in status (profile view)
+
+### Changed
+
+- Adjust sticker styling (quote styling).
+
+### Removed
+
+- remove unused dependency `spectron`, which also removes `chromedriver` dependency.
+
+## [1.20.1] - 2021-05-28
+
+### Fixed
+
+- fix empty settings after importing backup
+- fix archiving/unarchiving chat deselection issues (see #2262)
+- clear userfeedback on account switch / logout (see #2261)
+- fix link color in quotes
+
+### Changed
+
+- update translations (28.05.2021)
+
 ## [1.20.0] - 2021-03-22
 
-## Changed
+### Changed
 - use new `decideOnContactRequest` api
 
 ### Added
@@ -21,7 +54,7 @@
 - add `--minimized` CLI option to start DeltaChat minimized as a tray icon. This is useful for setting DeltaChat as a startup application that starts up with your computer.
 - add support for handling `mailto:` links.
 
-## Fixed
+### Fixed
 - Fix source-mapped stack trace on crash screen in bundled production builds
 - Don't delete Contact request messages, that are blocked - answered with never. #2225
 - hide show encryption info for saved messages (resulted in error)
@@ -1209,7 +1242,11 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.20.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.20.2...HEAD
+
+[1.20.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.20.1...v1.20.2
+
+[1.20.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.20.0...v1.20.1
 
 [1.20.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.15.5...v1.20.0
 

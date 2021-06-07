@@ -22,16 +22,26 @@ import MessageListProfile from '../dialogs/MessageListProfile'
 
 function archiveStateMenu(
   chat: ChatListItemType,
-  tx: ReturnType<typeof useTranslationFunction>
+  tx: ReturnType<typeof useTranslationFunction>,
+  isTheSelectedChat: boolean
 ): ContextMenuItem[] {
   const archive: ContextMenuItem = {
     label: tx('menu_archive_chat'),
     action: () =>
-      setChatVisibility(chat.id, C.DC_CHAT_VISIBILITY_ARCHIVED, true),
+      setChatVisibility(
+        chat.id,
+        C.DC_CHAT_VISIBILITY_ARCHIVED,
+        isTheSelectedChat
+      ),
   }
   const unArchive: ContextMenuItem = {
     label: tx('menu_unarchive_chat'),
-    action: () => setChatVisibility(chat.id, C.DC_CHAT_VISIBILITY_NORMAL, true),
+    action: () =>
+      setChatVisibility(
+        chat.id,
+        C.DC_CHAT_VISIBILITY_NORMAL,
+        isTheSelectedChat
+      ),
   }
   const pin: ContextMenuItem = {
     label: tx('pin_chat'),
@@ -103,7 +113,11 @@ export function useChatListContextMenu() {
     const menu: ContextMenuItem[] = chatListItem
       ? [
           // Archive & Pin
-          ...archiveStateMenu(chatListItem, tx),
+          ...archiveStateMenu(
+            chatListItem,
+            tx,
+            selectedChatId === chatListItem.id
+          ),
           // Mute
           !chatListItem.muted
             ? {

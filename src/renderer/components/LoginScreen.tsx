@@ -21,7 +21,6 @@ import { DeltaChatAccount } from '../../shared/shared-types'
 import filesizeConverter from 'filesize'
 import { DialogProps } from './dialogs/DialogController'
 import { DeltaBackend } from '../delta-remote'
-import { Screens } from '../ScreenController'
 import { IpcRendererEvent } from 'electron'
 import { Avatar } from './Avatar'
 import { PseudoContact } from './contact/Contact'
@@ -58,9 +57,7 @@ function ImportBackupProgressDialog({
         return
       }
       onClose()
-      if ((await DeltaBackend.call('login.loadAccount', account)) === true) {
-        window.__changeScreen(Screens.Main)
-      }
+      window.__loadAccount(account)
     })()
 
     ipcBackend.on('ALL', onAll)
