@@ -8,7 +8,7 @@ import {
   openMessageHTML,
   deleteMessageWithConfirm,
 } from './messageFunctions'
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext } from 'react'
 import reactStringReplace from 'react-string-replace'
 
 import classNames from 'classnames'
@@ -482,7 +482,7 @@ export const Quote = ({ quote }: { quote: MessageQuote }) => {
           className='quote-author'
           style={{ color: quote.displayColor }}
           onClick={onContactClick}
-        >         
+        >
           {getAuthorName(quote.displayName, quote.overrideSenderName)}
         </div>
         <div className='quoted-text'>
