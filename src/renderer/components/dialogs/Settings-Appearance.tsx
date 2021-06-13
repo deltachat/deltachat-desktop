@@ -99,14 +99,14 @@ function BackgroundSelector({
           {({ desktopSettings }) => (
             <div
               style={{
-                backgroundImage: desktopSettings.chatViewBgImg?.startsWith(
-                  'url('
-                )
-                  ? `url("file://${desktopSettings.chatViewBgImg.slice(
-                      5,
-                      desktopSettings.chatViewBgImg.length - 2
-                    )}")`
-                  : desktopSettings.chatViewBgImg,
+                ...(desktopSettings.chatViewBgImg?.startsWith('url(')
+                  ? {
+                      backgroundImage: `url("file://${desktopSettings.chatViewBgImg.slice(
+                        5,
+                        desktopSettings.chatViewBgImg.length - 2
+                      )}")`,
+                    }
+                  : { backgroundColor: desktopSettings.chatViewBgImg }),
                 backgroundSize: 'cover',
               }}
               aria-label={tx('a11y_background_preview_label')}
