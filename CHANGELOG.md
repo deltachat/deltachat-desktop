@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- allow brackets in links (see #2238)
+
 ## [1.20.2] - 2021-06-04
 
 ### Added
