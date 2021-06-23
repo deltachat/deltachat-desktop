@@ -88,6 +88,9 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
     screenContext.changeScreen(Screens.Login)
   }
 
+  const requestQuotaReport = async () =>
+    await DeltaBackend.call('context.requestQuotaReport')
+
   if (selectedChat && selectedChat.id && !selectedChat.isDeaddrop) {
     const { isGroup, selfInGroup, isSelfTalk, isDeviceChat } = selectedChat
 
@@ -167,6 +170,13 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
           key='disappearing'
           text={tx('ephemeral_messages')}
           onClick={onDisappearingMessages}
+        />
+      ),
+      isDeviceChat && (
+        <DeltaMenuItem
+          key='req_quota'
+          text={tx('request_quota_report')}
+          onClick={requestQuotaReport}
         />
       ),
       !(isSelfTalk || isDeviceChat) &&

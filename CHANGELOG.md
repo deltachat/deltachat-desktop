@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+
+- Add `Request Quota Report` button menu (shows up when in devicechat)
+
 ## [1.20.3] - 2021-06-30
 
 ### Fixed
