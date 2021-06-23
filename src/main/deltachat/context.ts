@@ -5,7 +5,7 @@ export default class DCContext extends SplitOut {
     this._dc.maybeNetwork()
   }
 
-  requestQuotaReport(){
+  requestQuotaReport() {
     this._dc.requestQuotaReport()
   }
 }
