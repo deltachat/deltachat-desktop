@@ -16,9 +16,10 @@ function BackgroundSelector({
 }: {
   onChange: (value: string) => void
 }) {
-  const colorInput = document.getElementById('color-input') // located in index.html outside of react
+  // the #color-input element is located in index.html outside of react
+  const colorInput = document.getElementById('color-input') as HTMLInputElement
 
-  const { setDesktopSetting } = useContext(SettingsContext)
+  const { setDesktopSetting, desktopSettings } = useContext(SettingsContext)
 
   const onColor = (ev: any) => setValue(ev.target.value)
   colorInput.onchange = (ev: any) => onColor.bind(this)(ev)
@@ -37,6 +38,9 @@ function BackgroundSelector({
         'style',
         `position:absolute;top:${y}px;left:${ev.clientX}px;`
       )
+      if (!desktopSettings.chatViewBgImg?.startsWith('url(')) {
+        colorInput.value = desktopSettings.chatViewBgImg
+      }
       setTimeout(() => colorInput.click(), 0)
     }
   }
@@ -99,14 +103,17 @@ function BackgroundSelector({
           {({ desktopSettings }) => (
             <div
               style={{
-                backgroundImage: desktopSettings.chatViewBgImg?.startsWith(
-                  'url('
-                )
-                  ? `url("file://${desktopSettings.chatViewBgImg.slice(
-                      5,
-                      desktopSettings.chatViewBgImg.length - 2
-                    )}")`
-                  : desktopSettings.chatViewBgImg,
+                ...(desktopSettings.chatViewBgImg?.startsWith('url(')
+                  ? {
+                      backgroundImage: `url("file://${desktopSettings.chatViewBgImg.slice(
+                        5,
+                        desktopSettings.chatViewBgImg.length - 2
+                      )}")`,
+                    }
+                  : {
+                      backgroundColor: desktopSettings.chatViewBgImg,
+                      backgroundImage: 'unset',
+                    }),
                 backgroundSize: 'cover',
               }}
               aria-label={tx('a11y_background_preview_label')}
