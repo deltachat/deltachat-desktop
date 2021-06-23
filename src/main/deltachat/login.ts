@@ -301,6 +301,10 @@ export function txCoreStrings() {
   )
   strings[C.DC_STR_REPLY_NOUN] = tx('reply_noun')
   strings[C.DC_STR_FORWARDED] = tx('forwarded')
+  strings[C.DC_STR_QUOTA_MAILBOX_NEARLY_FULL] = tx('quota_mailbox_full_message')
+  strings[C.DC_STR_QUOTA_NOT_SUPPORTED] = tx('quota_not_supported_message')
+  strings[C.DC_STR_QUOTA_MESSAGES] = tx('quota_resource_message')
+  strings[C.DC_STR_QUOTA_STORAGE] = tx('quota_resource_storage')
 
   return strings
 }
