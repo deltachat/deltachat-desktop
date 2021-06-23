@@ -4,6 +4,7 @@
 
 ### Fixed
 - Chat Background fixes (fix black border on bee background, fix preview of background in settings and color picker now is set to the current color when its opened)
+- allow brackets in links (see #2238)
 
 ## [1.20.2] - 2021-06-04
 
