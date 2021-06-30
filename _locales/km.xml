@@ -53,7 +53,7 @@
     <string name="done">រួចរាល់</string>
     <string name="undo">ធ្វើឡើងវិញ</string>
     <string name="offline">ក្រៅបណ្តាញ</string>
-    <!-- Translators: used eg. for the next view, could also be "continue" or so. as used in ios headers, the string should be as short as possible, though. -->
+    <!-- Translators: used eg. for the next view, could also be "continue" or so. as used in iOS headers, the string should be as short as possible, though. -->
     <string name="next">បន្ទាប់</string>
     <string name="error">កំហុស</string>
     <string name="error_x">កំហុស: %1$s</string>
@@ -107,7 +107,7 @@
     <string name="audio">សម្លេង</string>
     <string name="voice_message">សារជាសម្លេង</string>
     <string name="forwarded_message">សារដែលបានបញ្ជូនបន្ត</string>
-    <!-- %1$s will be replaced by the name or the email-address of the person who has forwarded the message -->
+    <!-- %1$s will be replaced by the name or the e-mail address of the person who has forwarded the message -->
     <string name="forwarded_by">បញ្ជូនបន្តពី %1$s</string>
     <string name="video">វីដេអូ</string>
     <string name="documents">ឯកសារ</string>
@@ -380,7 +380,7 @@
     <string name="login_smtp_port">ច្រករបស SMTP</string>
     <string name="login_smtp_security">សន្តិសុខ SMTP</string>
     <string name="login_auth_method">ការចុះបញ្ជី</string>
-    <!-- Translators: %1$s will be replaced by an email address -->
+    <!-- Translators: %1$s will be replaced by an e-mail address -->
     <string name="login_oauth2_checking_addr">ត្រួតពិនិត្យ %1$s</string>
     <string name="login_info_oauth2_title">បន្តជាមួយការដំឡើងសាមញ្ញ?</string>
     <string name="login_info_oauth2_text">អស័យដ្ឋានអុីម៉េលដែលបានបញ្ចូល គាំទ្រការដំឡើងសាមញ្ញ (OAuth 2.0)\n\nនៅជំហានបន្ទាប់ សូមអនុញ្ញាតឲ្យសាហារីសង្ឃ ដើរតួជាការសន្ទនារបស់អ្នកនៅលើកម្មវិធីអុីម៉េល។\n\nមិនមាន ម៉ាសុីនមេ សាហារីសង្ឃទេ។ ទិន្ន័យរបស់អ្នកស្ថិតនៅលើឧបករណ៍របស់អ្នក។</string>
@@ -392,7 +392,7 @@
     <string name="import_backup_title">នាំចូលពត៌មានចម្លងទុក</string>
     <string name="import_backup_ask">រកឃើញពត៌មានចម្លងទុកនៅ \"%1s\".\n\nតើអ្នកចង់នាំចូល និងប្រើប្រាស់ទិន្នន័យទាំងអស់ និងការកំណត់ពីវា?</string>
     <string name="import_backup_no_backup_found">រក​មិន​ឃើញពត៌មានចម្លងទុកទេ\n\nចម្លង ពត៌មានចម្លងទុកទៅ \"%1$s\" និងសាកល្បងម្តងទៀត\n\nចុច \"ចាប់ផ្តើមផ្ញើសារ\" ដើម្បីបន្តជាមួយដំណើរការរៀបចំធម្មតា។</string>
-    <!-- Translators: %1$s will be replaced by the email address -->
+    <!-- Translators: %1$s will be replaced by the e-mail address -->
     <string name="login_error_cannot_login">មិនអាចកត់ចូលជា \"%1$s\" ។ សូមផ្ទៀតផ្ទាត់មើលអស័យដ្ឋានអុីម៉េល និងពាក្យសម្ងាត់ឲ្យបានត្រឹមត្រូវ។</string>
     <!-- Translators: %1$s will be replaced by the server name (eg. imap.somewhere.org) and %2$s will be replaced by the human-readable response from the server. this response may be a single word or some sentences and may or may not be localized. -->
     <string name="login_error_server_response">ឆ្លើយតបពី %1$s: %2$s\n\nអ្នកផ្តល់សេវាខ្លះអាចអ៊ីម៉េលមកអ្នក នូវពត៌មានបន្ថែមអំពីបញ្ហានេះ។ អ្នកគួរតែអាចត្រួតពិនិត្យប្រអប់ចូលរបស់អ្នក ប្រើបាស័យដ្ឋានអ៊ីម៉េលទៀងទាត់ប្រាស់កម្មវិធី ឬវេបសាយ។ ពិគ្រោះជាមួយអ្នកផ្តល់សេវា ឬមិត្តរបស់អ្នក ប្រសិនបើអ្នកមានបញ្ហា។</string>
@@ -439,8 +439,6 @@
     <string name="pref_outgoing_balanced">មានតុល្យភាព</string>
     <string name="pref_outgoing_worse">គុណភាពកាន់តែអាក្រក់ ទំហំតូច</string>
     <string name="pref_vibrate">ញ័រ</string>
-    <string name="pref_change_secret">ផ្លាស់ប្តូរសម្ងាត់</string>
-    <string name="pref_change_secret_explain">ប្តូរ PIN / លំនាំ/ ស្នាមម្រាម របស់អ្នក ដៃ តាមរយះការកំណត់ប្រពន្ធ័។</string>
     <string name="pref_screen_security">សុវត្ថិភាពអេក្រង់</string>
     <!-- Translators: The wording must indicate that we can't guarantee that, its a System flag that we set. But the System in question must honor it. -->
     <string name="pref_screen_security_explain">ស្នើសុំរារាំងរូបថតអេក្រង់ នៅក្នុងបញ្ជីបច្ចុប្បន្ន និងខាងក្នុងកម្មវិធី។</string>
@@ -608,17 +606,6 @@
     <!-- Translators: Protection disabled/enabled messages may be displayed together with a "big shield" and may be suffixed by systemmsg_action_by_user or systemmsg_action_by_me -->
     <string name="systemmsg_chat_protection_disabled">ការការពារសន្ទនាត្រូវបានបិទ</string>
     <string name="systemmsg_chat_protection_enabled">ការការពារសន្ទនាត្រូវបានបើក</string>
-
-    <!-- screen lock -->
-    <string name="screenlock_title">ចាក់អេក្រង់</string>
-    <string name="screenlock_explain">ចាក់សោរដំណើរការជាមួយ Android ចាក់សោរអេក្រង់ ឬស្នាមម្រាមដៃ ដើម្បីចៀសវាងការបង្ហាញមាតិកាមុន។ សូមបើកដំណើរការ \"អេក្រង់សុវត្ថិភាព\" ផងដែរ។</string>
-    <string name="screenlock_authentication_failed">ការផ្ទៀងផ្ទាត់បានបរាជ័យ</string>
-    <string name="screenlock_unlock_title">ដោះសោរសា Delta Chat</string>
-    <string name="screenlock_unlock_description">សូមបញ្ចូលការកំណត់ប្រព័ន្ធសុវត្ថិភាពសម្ងាត់របស់អ្នក ដើម្បីដោះសោរ សា Delta Chat ។</string>
-    <string name="screenlock_inactivity_timeout">ចាក់សោរពីព្រោះអស់ពេលអសកម្ម</string>
-    <string name="screenlock_inactivity_timeout_explain">សា Delta Chat បិទដោយស្វ័យប្រវត្តិ បន្ទាប់ពីបានបញ្ជាក់រយះពេលនៃអសកម្ម។</string>
-    <string name="screenlock_inactivity_timeout_interval">ពេលវេលាដើម្បីឲ្យសកម្ម</string>
-
 
     <!-- qr code stuff -->
     <string name="qr_code">QR កូដ</string>
