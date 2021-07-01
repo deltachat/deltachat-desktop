@@ -31,12 +31,11 @@
     <string name="not_now">Όχι τώρα</string>
     <string name="never">Ποτέ</string>
     <string name="done">Τέλος</string>
-    <!-- Translators: used eg. for the next view, could also be "continue" or so. as used in ios headers, the string should be as short as possible, though. -->
+    <!-- Translators: used eg. for the next view, could also be "continue" or so. as used in iOS headers, the string should be as short as possible, though. -->
     <string name="next">Επόμενο</string>
     <string name="no_browser_installed">Δεν υπάρχει εγκατεστημένος φυλλομετρητής</string>
     <string name="copied_to_clipboard">Αντιγράφηκε στο πρόχειρο</string>
     <string name="contacts_headline">Επαφές</string>
-    <string name="email_address">Διεύθυνση email</string>
     <string name="password">Συνθηματικό</string>
     <string name="now">Τώρα</string>
     <string name="today">Σήμερα</string>
@@ -196,11 +195,6 @@
     <string name="pref_other">Άλλο</string>
     <string name="pref_show_emails_all">Όλα</string>
     <string name="autocrypt_continue_transfer_retry">Επανάληψη</string>
-    <!-- screen lock -->
-    <string name="screenlock_title">Κλείδωμα οθόνης</string>
-    <string name="screenlock_explain">Κλείδωμα της πρόσβασης στο Delta Chat με την οθόνη κλειδώματος του Android ή με δακτυλικό αποτύπωμα</string>
-    <string name="screenlock_unlock_title">Ξεκλείδωσε το Delta Chat</string>
-    <string name="screenlock_inactivity_timeout_explain">υτόματο κλείδωμα του Delta Chat μετά απο κάποιο συγκεκριμένο χρόνο αδράνειας</string>
     <string name="notify_mark_read">Σημείωση ως αναγνωσμένο</string>
     <string name="notify_reply_button">Απάντηση</string>
     <string name="notify_new_message">Νέο μήνυμα</string>

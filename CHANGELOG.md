@@ -2,9 +2,16 @@
 
 ## [Unreleased][unreleased]
 
+## [1.20.3] - 2021-06-30
+
 ### Fixed
 - Chat Background fixes (fix black border on bee background, fix preview of background in settings and color picker now is set to the current color when its opened)
 - allow brackets in links (see #2238)
+
+### Changed
+
+- Update translations (30.06.2021)
+- Update deltachat-node to `v1.56.0`
 
 ## [1.20.2] - 2021-06-04
 

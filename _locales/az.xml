@@ -302,7 +302,7 @@
     <string name="login_error_required_fields">Xahiş edirik düzgün bir e-poçt ünvanı və parol daxil et</string>
     <string name="import_backup_title">Nüsxənin importu</string>
     <string name="import_backup_ask">\"%1$s\" - də ehtiyat nüsxəsi tapıldı.\n\nİndi bütün məlumatları və parametrləri idxal etmək və istifadə etmək istəyirsiniz?</string>
-    <!-- Translators: %1$s will be replaced by the email address -->
+    <!-- Translators: %1$s will be replaced by the e-mail address -->
     <string name="login_error_cannot_login"> \"%1$s\" kimi giriş alınmadı. E-poçt ünvanı və parolun düzgün olub olmadığını yoxlayın.</string>
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
@@ -329,8 +329,6 @@
     <string name="pref_outgoing_balanced">Balanslıdır</string>
     <string name="pref_outgoing_worse">Daha pis keyfiyyət, kiçik ölçülü</string>
     <string name="pref_vibrate">Vibrasiya</string>
-    <string name="pref_change_secret">Kodu dəyişdir</string>
-    <string name="pref_change_secret_explain">Sistem tənzimləmələri ilə pin-kod / model / barmaq izinizi dəyişdir</string>
     <string name="pref_screen_security">Ekran təhlükəsizliyi</string>
     <!-- Translators: The wording must indicate that we can't guarantee that, its a System flag that we set. But the System in question must honor it. -->
     <string name="pref_screen_security_explain">Son proqramlar siyahısında və proqramın daxilində ekran çəkməyi qadağan etmə</string>
@@ -427,17 +425,6 @@
     <string name="systemmsg_action_by_me">%1$s məndən. </string>
     <!-- Translators: %1$s will be replaced by sth. as "member xy added" (trailing full-stop removed). %2$s will be replaced by the name/addr of the person who did this action. -->
     <string name="systemmsg_action_by_user">%1$s ilə %2$s.</string>
-    <!-- screen lock -->
-    <string name="screenlock_title">Ekran kilidi</string>
-    <string name="screenlock_explain">Android ekran kilidi və ya barmaq izi ilə daxil olmaq; əvvəlki məzmunun görünməməsi üçün \"Ekran təhlükəsizliyi\"</string>
-    <string name="screenlock_authentication_failed">Daxilolma uğursuz oldu.</string>
-    <string name="screenlock_unlock_title">Delta Chat-ın kilidini aç</string>
-    <string name="screenlock_unlock_description">Delta Chat-ı blokdan açmaq üçün sistem parolunu daxil edin. </string>
-    <string name="screenlock_inactivity_timeout">Ğeyri aktiv olan zaman blok vaxtı</string>
-    <string name="screenlock_inactivity_timeout_explain">Delta Chat-ın avtomatik olaraq işləməməsi müəyyən bir vaxt aralığından sonra</string>
-    <string name="screenlock_inactivity_timeout_interval">Ğeyri aktiv gözləmə intervalı. </string>
-
-
     <string name="qrscan_title">Qr kodu skan edin</string>
     <string name="qrscan_hint">QR kodu kamera ilə izləyin</string>
     <string name="qrscan_ask_join_group">\"%1$s\" qrupa qoşulmaq istəyirsinizmi?</string>

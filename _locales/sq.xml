@@ -59,7 +59,7 @@
     <string name="done">U bë</string>
     <string name="undo">Zhbëje</string>
     <string name="offline">Jo në linjë</string>
-    <!-- Translators: used eg. for the next view, could also be "continue" or so. as used in ios headers, the string should be as short as possible, though. -->
+    <!-- Translators: used eg. for the next view, could also be "continue" or so. as used in iOS headers, the string should be as short as possible, though. -->
     <string name="next">Pasuesja</string>
     <string name="error">Gabim</string>
     <string name="error_x">Gabim: %1$s</string>
@@ -120,7 +120,7 @@
     <string name="voice_message">Mesazh zanor</string>
     <string name="forwarded">Përcjellë</string>
     <string name="forwarded_message">Mesazhi u përcoll</string>
-    <!-- %1$s will be replaced by the name or the email-address of the person who has forwarded the message -->
+    <!-- %1$s will be replaced by the name or the e-mail address of the person who has forwarded the message -->
     <string name="forwarded_by">Përcjellë nga %1$s</string>
     <string name="video">Video</string>
     <string name="documents">Dokumente</string>
@@ -430,7 +430,7 @@
     <string name="login_smtp_port">Portë SMTP</string>
     <string name="login_smtp_security">Siguri SMTP</string>
     <string name="login_auth_method">Metodë autorizimi</string>
-    <!-- Translators: %1$s will be replaced by an email address -->
+    <!-- Translators: %1$s will be replaced by an e-mail address -->
     <string name="login_oauth2_checking_addr">Po kontrollohet %1$s</string>
     <string name="login_info_oauth2_title">Të vazhdohet me rregullimin e thjeshtuar?</string>
     <string name="login_info_oauth2_text">Adresa email e dhënë mbulon një ujdisje të thjeshtuar (OAuth2).\n\nNë hapin pasues, ju lutemi, lejojeni Delta Chat-in të veprojë si aplikacioni juaj për Fjalosje Përmes Email-i.\n\nS\’ka shërbyes Delta Chat, të dhënat tuaja rrinë në pajisjen tuaj!</string>
@@ -442,7 +442,7 @@
     <string name="import_backup_title">Importo kopjeruajtje</string>
     <string name="import_backup_ask">U gjet kopjeruajtje te \"%1$s\".\n\nDoni të importohen dhe përdoren krejt të dhënat dhe rregullimet prej atij?</string>
     <string name="import_backup_no_backup_found">S\’u gjetën kopjeruajtje.\n\nKopjojeni kopjeruajtjen te \"%1$s\" dhe riprovoni. Ndryshe, shtypni \"Filloni të shkëmbeni mesazhe\", që të vazhdoni me procesin normal të rregullimit.</string>
-    <!-- Translators: %1$s will be replaced by the email address -->
+    <!-- Translators: %1$s will be replaced by the e-mail address -->
     <string name="login_error_cannot_login">S\’bëhet dot hyrja si %1$s. Ju lutemi, shihni nëse adresa email dhe fjalëkalimi janë të saktë.</string>
     <!-- Translators: %1$s will be replaced by the server name (eg. imap.somewhere.org) and %2$s will be replaced by the human-readable response from the server. this response may be a single word or some sentences and may or may not be localized. -->
     <string name="login_error_server_response">Përgjigje nga %1$s: %2$s\n\nDisa shërbime vendosin të dhëna shtesë te kutia juaj e mesazheve të marrë; mund t\’i shihni, për shembull, te pjesa e dukshme web. Nëse hasni probleme, këshillohuni me shërbimin tuaj ose shokë.</string>
@@ -489,8 +489,6 @@
     <string name="pref_outgoing_balanced">E baraspeshuar</string>
     <string name="pref_outgoing_worse">Cilësia më e ulët, madhësi e vogël</string>
     <string name="pref_vibrate">Dridhu</string>
-    <string name="pref_change_secret">Ndryshoni të fshehtën</string>
-    <string name="pref_change_secret_explain">Ndryshojeni pin-in / rregullsinë / shenjat tuaja të gishtave përmes rregullimeve të sistemit</string>
     <string name="pref_screen_security">Siguri ekrani</string>
     <!-- Translators: The wording must indicate that we can't guarantee that, its a System flag that we set. But the System in question must honor it. -->
     <string name="pref_screen_security_explain">Kërko të bllokohen foto ekrani në lista të freskëta dhe brenda aplikacionit</string>
@@ -661,16 +659,8 @@
     <string name="systemmsg_chat_protection_disabled">Mbrojtja e fjalosjes u çaktivizua.</string>
     <string name="systemmsg_chat_protection_enabled">Mbrojtja e fjalosjes u aktivizua.</string>
 
-    <!-- screen lock -->
-    <string name="screenlock_title">Kyçje ekrani</string>
-    <string name="screenlock_explain">Kyçni hyrjen me kyçje ekrani apo shenja gishtas Android; për të shmangur shfaqje të lëndës së mëparshme, ju lutemi, aktivizoni edhe \"Siguri ekrani\"</string>
-    <string name="screenlock_authentication_failed">Mirëfilltësimi dështoi.</string>
-    <string name="screenlock_unlock_title">Shkyçe Delta Chat-in</string>
-    <string name="screenlock_unlock_description">Që të shkyçet Delta Chat-i, ju lutemi, jepni të fshehtën e përcaktuar nga sistemi juaj.</string>
-    <string name="screenlock_inactivity_timeout">Kyçje pas afati mosveprimtarie</string>
-    <string name="screenlock_inactivity_timeout_explain">Vetëkyçje Delta Chat-i pas një intervali të caktuar kohe mosveprimtarie</string>
-    <string name="screenlock_inactivity_timeout_interval">Interval afati mosveprimtarie</string>
-
+    <!-- Some options as "Manage keys" or "Backup" may require the system PIN/Fingerprint/Gesture/Etc. to be entered in a system dialog. This hint is added to the system dialog, below a title as "Manage keys" or "Backup". -->
+    <string name="enter_system_secret_to_continue">Që të vazhdohet, ju lutemi, jepni të fshehtën tuaj të përcaktuar nga sistemi.</string>
 
     <!-- qr code stuff -->
     <string name="qr_code">Kod QR</string>

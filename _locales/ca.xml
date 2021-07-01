@@ -50,7 +50,7 @@
     <string name="one_moment">Espereu...</string>
     <string name="done">Fet</string>
     <string name="undo">Desfés</string>
-    <!-- Translators: used eg. for the next view, could also be "continue" or so. as used in ios headers, the string should be as short as possible, though. -->
+    <!-- Translators: used eg. for the next view, could also be "continue" or so. as used in iOS headers, the string should be as short as possible, though. -->
     <string name="next">Següent</string>
     <string name="error">Error</string>
     <string name="error_x">Error: %1$s</string>
@@ -110,7 +110,7 @@
     <string name="audio">Àudio</string>
     <string name="voice_message">Missatge de veu</string>
     <string name="forwarded_message">Missatge reenviat</string>
-    <!-- %1$s will be replaced by the name or the email-address of the person who has forwarded the message -->
+    <!-- %1$s will be replaced by the name or the e-mail address of the person who has forwarded the message -->
     <string name="forwarded_by">Reenviat per %1$s</string>
     <string name="video">Vídeo</string>
     <string name="documents">Documents</string>
@@ -321,7 +321,7 @@
     <string name="import_backup_title">Importa una còpia de seguretat</string>
     <string name="import_backup_ask">S\'ha trobat una còpia de seguretat a \"%1$s\".\n\nVoleu importar-la i fer-ne servir les dades i els paràmetres de configuració?</string>
     <string name="import_backup_no_backup_found">No s\'han trobat còpies de seguretat.\n\nCopieu la còpia de seguretat a \"%1$s\" i torneu-ho a provar. Com a alternativa, premeu \"Comença a escriure\" per encetar el procés de configuració habitual.</string>
-    <!-- Translators: %1$s will be replaced by the email address -->
+    <!-- Translators: %1$s will be replaced by the e-mail address -->
     <string name="login_error_cannot_login">No es pot iniciar la sessió com a \"%1$s\". Comproveu que l\'adreça electrònica i la contrasenya són correctes.</string>
     <!-- Translators: %1$s will be replaced by the server name (eg. imap.somewhere.org) and %2$s will be replaced by the human-readable response from the server. this response may be a single word or some sentences and may or may not be localized. -->
     <string name="login_error_server_response">La resposta de%1$s ha sigut: %2$s\n\nHi ha proveïdors que posen informació addicional a la vostra safata d\'entrada; podeu trobar-la allà p. ex. usant la interfície de correu web. Consulteu el vostre proveïdor o els vostres amics si teniu problemes.</string>
@@ -347,8 +347,6 @@
     <string name="pref_enter_sends">La tecla \"Intro\" envia</string>
     <string name="pref_enter_sends_explain">Els missatges s\'enviaran prement la tecla \"Intro\"</string>
     <string name="pref_vibrate">Vibració</string>
-    <string name="pref_change_secret">Canvieu el secret</string>
-    <string name="pref_change_secret_explain">Canvieu el vostre pin / patró / empremta digital via preferències del sistema</string>
     <string name="pref_screen_security">Seguretat de la pantalla</string>
     <!-- Translators: The wording must indicate that we can't guarantee that, its a System flag that we set. But the System in question must honor it. -->
     <string name="pref_screen_security_explain">Demana de bloquejar les captures de pantalla al llistat de recents i dins de l\'app </string>
@@ -441,17 +439,6 @@
     <string name="systemmsg_action_by_me">%1$s per mi.</string>
     <!-- Translators: %1$s will be replaced by sth. as "member xy added" (trailing full-stop removed). %2$s will be replaced by the name/addr of the person who did this action. -->
     <string name="systemmsg_action_by_user">%1$s per %2$s.</string>
-    <!-- screen lock -->
-    <string name="screenlock_title">Bloqueja la pantalla</string>
-    <string name="screenlock_explain">Bloqueja l’accés amb el bloqueig de la pantalla d’Android o amb l’empremta digital; per evitar que aparegui el contingut anterior, habiliteu també \"Seguretat de pantalla\"</string>
-    <string name="screenlock_authentication_failed">L\'autenticació ha fallat.</string>
-    <string name="screenlock_unlock_title">Desbloqueja Delta Chat</string>
-    <string name="screenlock_unlock_description">Introduïu el sistema secret definit per desbloquejar el Delta Chat.</string>
-    <string name="screenlock_inactivity_timeout">Bloqueig per temps d\'inactivitat</string>
-    <string name="screenlock_inactivity_timeout_explain">Bloqueja automàticament Delta Chat després d\'un període específic d\'inactivitat</string>
-    <string name="screenlock_inactivity_timeout_interval">Interval de temps d\'inactivitat </string>
-
-
     <string name="qrscan_title">Escaneja codi QR</string>
     <string name="qrscan_hint">Poseu la càmera davant del codi QR</string>
     <string name="qrscan_ask_join_group">Voleu unir-vos al grup \"%1$s\"?</string>
