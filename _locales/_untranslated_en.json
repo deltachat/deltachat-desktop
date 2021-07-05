@@ -1,17 +1,20 @@
 {
-  "request_quota_report": {
-    "message": "Request Quota Report"
-  },
-  "quota_mailbox_full_message": {
-    "message": "Your mailbox on your email account is running full!\nPossible Solutions:\n- Delete old messages on the server\n- or enable \"Delete old messages from server\" in the deltachat settings\n- or upgrade your plan with your email provider\nIf you don't take action you will soon be unable to receive messages."
-  },
-  "quota_not_supported_message": {
-    "message": "Your email server does not support the quota extension"
-  },
-  "quota_resource_message": {
-    "message": "Message"
-  },
-  "quota_resource_storage": {
-    "message": "Storage"
-  }
+    "request_quota_report": {
+        "message": "Request Quota Report"
+    },
+    "quota_mailbox_full_message": {
+        "message": "Your mailbox on your email account is running full!\nPossible Solutions:\n- Delete old messages on the server\n- or enable \"Delete old messages from server\" in the deltachat settings\n- or upgrade your plan with your email provider\nIf you don't take action you will soon be unable to receive messages."
+    },
+    "quota_not_supported_message": {
+        "message": "Your email server does not support the quota extension"
+    },
+    "quota_resource_message": {
+        "message": "Message"
+    },
+    "quota_resource_storage": {
+        "message": "Storage"
+    },
+    "pref_disable_quota_check": {
+        "message": "Disable daily Quota-Check"
+    }
 }
