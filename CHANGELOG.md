@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- Windows installer: Allow user to choose the instalation path.
+
 ## [1.20.3] - 2021-06-30
 
 ### Fixed
