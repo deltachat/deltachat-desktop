@@ -21,11 +21,10 @@ function BackgroundSelector({
 
   const { setDesktopSetting, desktopSettings } = useContext(SettingsContext)
 
-  const onColor = (ev: any) => setValue(ev.target.value)
-  colorInput.onchange = (ev: any) => onColor.bind(this)(ev)
   useEffect(() => {
+    colorInput.onchange = (ev: any) => onChange(ev.target.value)
     return () => (colorInput.onchange = null)
-  }, [])
+  }, [onChange, colorInput])
 
   const openColorInput = (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     // opens the color input and sets its offset so it lines up with the button
@@ -45,8 +44,6 @@ function BackgroundSelector({
     }
   }
 
-  const setValue = (val: string) => onChange(val)
-
   const onButton = async (
     type: string,
     ev: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -54,10 +51,10 @@ function BackgroundSelector({
     let url
     switch (type) {
       case 'def':
-        setValue(undefined)
+        onChange(undefined)
         break
       case 'def_color':
-        setValue('var(--chatViewBg)')
+        onChange('var(--chatViewBg)')
         break
       case 'image':
         url = await runtime.showOpenFileDialog({

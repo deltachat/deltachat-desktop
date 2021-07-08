@@ -34,8 +34,6 @@ const Timestamp = React.memo(function Timestamp(props: TimestampProps) {
   const { direction, timestamp, extended } = props
   const moduleName = props.module || ''
 
-  if (timestamp === null || timestamp === undefined) return null
-
   const calculateRelativeTime = () =>
     formatRelativeTime(timestamp, { extended })
   const [relativeTime, setRelativeTime] = useState(() =>
@@ -49,6 +47,8 @@ const Timestamp = React.memo(function Timestamp(props: TimestampProps) {
 
   // trigger a rerender that will be detected as a language change by the useEffect function above (window.localeData.locale)
   useTranslationFunction()
+
+  if (timestamp === null || timestamp === undefined) return null
 
   return (
     <span

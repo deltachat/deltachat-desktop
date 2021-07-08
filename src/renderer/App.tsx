@@ -98,11 +98,11 @@ export default function App(_props: any) {
     moment.locale(locale)
   }
 
-  const onChooseLanguage = async (_e: any, locale: string) => {
-    await DeltaBackend.call('extras.setLocale', locale)
-    await reloadLocaleData(locale)
-  }
   useEffect(() => {
+    const onChooseLanguage = async (_e: any, locale: string) => {
+      await DeltaBackend.call('extras.setLocale', locale)
+      await reloadLocaleData(locale)
+    }
     ipcBackend.on('chooseLanguage', onChooseLanguage)
     return () => {
       ipcBackend.removeListener('chooseLanguage', onChooseLanguage)
