@@ -12,7 +12,7 @@
 - Update testcafe to `1.15.0`
 - Upgrade `react` and `react-dom` to `17.0.2`
 - refresh theme if there is an update event by electron
-- Update to electron `12.0.4`
+- Update to electron `13.1.6`
 
 ## [1.20.3] - 2021-06-30
 
