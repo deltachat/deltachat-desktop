@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- refresh theme if there is an update event by electron
+- Update to electron `13.1.6`
+
 ## [1.20.3] - 2021-06-30
 
 ### Fixed

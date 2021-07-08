@@ -2,7 +2,7 @@ import { readFile, existsSync, watchFile, readdir } from 'fs-extra'
 import { join, basename } from 'path'
 import { Theme } from '../shared/shared-types'
 import { getCustomThemesPath } from './application-constants'
-import { app as rawApp, systemPreferences } from 'electron'
+import { app as rawApp, nativeTheme } from 'electron'
 import { ExtendedAppMainProcess } from './types'
 import * as mainWindow from './windows/main'
 
@@ -99,7 +99,7 @@ export async function loadTheme(
 }
 
 function systemDefault() {
-  if (systemPreferences.isDarkMode()) {
+  if (nativeTheme.shouldUseDarkColors) {
     return ['dc', 'dark']
   } else {
     return ['dc', 'light']
@@ -162,4 +162,7 @@ If you have question or need help, feel free to ask in our forum https://support
       })
     }
   }
+  nativeTheme.on('updated', () => {
+    mainWindow.send('theme-update')
+  })
 }
