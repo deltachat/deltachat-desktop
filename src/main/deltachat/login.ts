@@ -305,6 +305,7 @@ export function txCoreStrings() {
   strings[C.DC_STR_QUOTA_NOT_SUPPORTED] = tx('quota_not_supported_message')
   strings[C.DC_STR_QUOTA_MESSAGES] = tx('quota_resource_message')
   strings[C.DC_STR_QUOTA_STORAGE] = tx('quota_resource_storage')
+  strings[C.DC_STR_QUOTA_USAGE] = tx('quota_resource_usage_format')
 
   return strings
 }
