@@ -54,7 +54,6 @@ const files = [
   '!node_modules/react-transition-group/',
   '!node_modules/css-to-react-native',
   '!node_modules/simple-markdown',
-  '!node_modules/wolfy87-eventemitter',
   // re-add needed css stuff -> re-adding doesn't seem to work at this point in time
   // 'node_modules/normalize.css/normalize.css',
   // 'node_modules/@blueprintjs/core/lib/css/blueprint.css',

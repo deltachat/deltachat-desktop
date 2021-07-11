@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- Update some dependencies (`classnames`, `emoji-regex`, `mime-types`, `use-debounce`) and remove unused ones (`immutability-helper`, `@blueprintjs/select`, `wolfy87-eventemitter`, `@types/classnames`, `@types/css`, `@types/sass`, `depcheck`, `pngjs`)
+
 ## [1.20.3] - 2021-06-30
 
 ### Fixed
