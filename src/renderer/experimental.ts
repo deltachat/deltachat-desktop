@@ -31,6 +31,10 @@ These functions are highly experimental, use at your own risk.
     }
     log.info(`Imported ${contacts.length - error_count} contacts`)
   }
+
+  async requestQuotaReport() {
+    await DeltaBackend.call('context.requestQuotaReport')
+  }
 }
 
 export const exp = new Experimental()

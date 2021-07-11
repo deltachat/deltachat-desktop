@@ -146,6 +146,7 @@ export default function Settings(props: DialogProps) {
       'delete_device_after',
       'delete_server_after',
       'webrtc_instance',
+      'disable_quota_check'
     ])
     setState({ settings })
 
@@ -328,6 +329,7 @@ export default function Settings(props: DialogProps) {
               {renderDeltaSwitch('mvbox_watch', tx('pref_watch_mvbox_folder'))}
               {renderDeltaSwitch('bcc_self', tx('pref_send_copy_to_self'))}
               {renderDeltaSwitch('mvbox_move', tx('pref_auto_folder_moves'))}
+              {renderDeltaSwitch('disable_quota_check', tx('pref_disable_quota_check'))}
             </Card>
             <SettingsManageKeys />
             <SettingsBackup />
