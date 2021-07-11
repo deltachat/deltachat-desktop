@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+
+- Update testcafe to `1.15.0`
+
 ## [1.20.3] - 2021-06-30
 
 ### Fixed
