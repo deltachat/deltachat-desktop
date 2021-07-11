@@ -11,6 +11,7 @@ import { DeltaBackend } from '../../delta-remote'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { useTranslationFunction } from '../../contexts'
 
+/** this function has no option for cleanup unlike the usual useEffect */
 export const useAsyncEffect = (
   asyncEffect: () => {},
   deps?: React.DependencyList
