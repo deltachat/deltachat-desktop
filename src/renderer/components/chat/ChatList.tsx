@@ -1,4 +1,10 @@
-import React, { useRef, useEffect, useState, useContext } from 'react'
+import React, {
+  useRef,
+  useEffect,
+  useState,
+  useContext,
+  useCallback,
+} from 'react'
 import { useChatListContextMenu } from './ChatListContextMenu'
 import { useMessageResults, useChatList } from './ChatListHelpers'
 import ChatListItem, {
@@ -152,32 +158,27 @@ export default function ChatList(props: {
   // scroll to selected chat ---
   const [scrollToChatIndex, setScrollToChatIndex] = useState<number>(-1)
 
-  const scrollSelectedChatIntoView = () => {
-    const index = chatListIds.findIndex(
-      ([chatId, _messageId]) => chatId === selectedChatId
-    )
+  const selectedChatIndex = chatListIds.findIndex(
+    ([chatId, _messageId]) => chatId === selectedChatId
+  )
+
+  const scrollSelectedChatIntoView = useCallback((index: number) => {
     if (index !== -1) {
       setScrollToChatIndex(index)
       setTimeout(() => setScrollToChatIndex(-1), 0)
     }
-  }
+  }, [])
   // on select chat - scroll to selected chat - chatView
-  useEffect(() => {
-    scrollSelectedChatIntoView()
-  }, [selectedChatId])
   // follow chat after loading or when it's position in the chatlist changes
-  const selectedChatIndex = chatListIds.findIndex(
-    ([chatId, _messageId]) => chatId === selectedChatId
-  )
   useEffect(() => {
-    !isSearchActive && scrollSelectedChatIntoView()
-  }, [selectedChatIndex])
+    !isSearchActive && scrollSelectedChatIntoView(selectedChatIndex)
+  }, [selectedChatIndex, isSearchActive, scrollSelectedChatIntoView])
 
   const selectFirstChat = () => selectChat(chatListIds[0][0])
 
   // KeyboardShortcuts ---------
   useKeyBindingAction(KeybindAction.ChatList_ScrollToSelectedChat, () =>
-    scrollSelectedChatIntoView()
+    scrollSelectedChatIntoView(selectedChatIndex)
   )
 
   useKeyBindingAction(KeybindAction.ChatList_SelectNextChat, () => {
@@ -483,7 +484,7 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
   useEffect(() => {
     // force refresh of inital data
     loadChats({ startIndex: 0, stopIndex: Math.min(chatListIds.length, 10) })
-  }, [chatListIds])
+  }, [chatListIds]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return { isChatLoaded, loadChats, chatCache }
 }
@@ -497,22 +498,22 @@ function useLogicChatPart(queryStr: string, showArchivedChats: boolean) {
   // effects
   useEffect(() => {
     setQueryStr(queryStr)
-  }, [queryStr])
+  }, [queryStr, setQueryStr])
 
   useEffect(
     () =>
       showArchivedChats && queryStr.length === 0
         ? setListFlags(C.DC_GCL_ARCHIVED_ONLY)
         : setListFlags(0),
-    [showArchivedChats, queryStr]
+    [showArchivedChats, queryStr, setListFlags]
   )
 
   return { chatListIds, isChatLoaded, loadChats, chatCache }
 }
 
 function useContactAndMessageLogic(queryStr: string) {
-  const [contactIds, updateContactSearch] = useContactIds(0, queryStr)
-  const [messageResultIds, updateMessageResult] = useMessageResults(queryStr, 0)
+  const contactIds = useContactIds(0, queryStr)
+  const messageResultIds = useMessageResults(queryStr)
 
   // Contacts ----------------
   const [contactCache, setContactCache] = useState<{
@@ -573,12 +574,6 @@ function useContactAndMessageLogic(queryStr: string) {
     })
   }
 
-  // effects
-  useEffect(() => {
-    updateContactSearch(queryStr)
-    updateMessageResult(queryStr)
-  }, [queryStr])
-
   useEffect(() => {
     // force refresh of inital data
     loadContact({ startIndex: 0, stopIndex: Math.min(contactIds.length, 10) })
@@ -586,7 +581,7 @@ function useContactAndMessageLogic(queryStr: string) {
       startIndex: 0,
       stopIndex: Math.min(messageResultIds.length, 10),
     })
-  }, [contactIds, messageResultIds])
+  }, [contactIds, messageResultIds]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     // contacts
