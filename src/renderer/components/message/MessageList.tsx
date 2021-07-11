@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useCallback } from 'react'
 import { MessageWrapper } from './MessageWrapper'
 import { useChatStore, ChatStoreState } from '../../stores/chat'
 import { useDebouncedCallback } from 'use-debounce'
@@ -46,6 +46,33 @@ export default function MessageList({
   const lastKnownScrollHeight = useRef<number>(null)
   const isFetching = useRef(false)
 
+  const [fetchMore] = useDebouncedCallback(
+    () => {
+      chatStoreDispatch({
+        type: 'FETCH_MORE_MESSAGES',
+        payload: { scrollHeight: messageListRef.current.scrollHeight },
+      })
+    },
+    30,
+    { leading: true }
+  )
+
+  const onScroll = useCallback(
+    (Event: React.UIEvent<HTMLDivElement>) => {
+      lastKnownScrollHeight.current = messageListRef.current.scrollHeight
+      if (messageListRef.current.scrollTop !== 0) return
+      if (isFetching.current === false) {
+        isFetching.current = true
+        log.debug('Scrolled to top, fetching more messsages!')
+        fetchMore()
+      }
+      Event?.preventDefault()
+      Event?.stopPropagation()
+      return false
+    },
+    [fetchMore]
+  )
+
   useEffect(() => {
     if (scrollToBottom === false) return
 
@@ -62,7 +89,7 @@ export default function MessageList({
 
     // Try fetching more messages if needed
     onScroll(null)
-  }, [scrollToBottom])
+  }, [chatStoreDispatch, onScroll, scrollToBottom])
 
   useEffect(() => {
     if (scrollToBottomIfClose === false) return
@@ -87,7 +114,7 @@ export default function MessageList({
       type: 'FINISHED_SCROLL',
       payload: 'SCROLLED_TO_BOTTOM',
     })
-  }, [scrollToBottomIfClose])
+  }, [chatStoreDispatch, scrollToBottomIfClose])
 
   useEffect(() => {
     if (scrollToLastPage === false) return
@@ -99,44 +126,20 @@ export default function MessageList({
       payload: 'SCROLLED_TO_LAST_PAGE',
     })
     isFetching.current = false
-  }, [scrollToLastPage, scrollHeight])
+  }, [chatStoreDispatch, scrollToLastPage, scrollHeight])
 
   useEffect(() => {
     isFetching.current = false
 
     const composerTextarea = refComposer.current.childNodes[1]
     composerTextarea && composerTextarea.focus()
-  }, [chat.id])
+  }, [refComposer, chat.id])
 
   useEffect(() => {
     const composerTextarea = refComposer.current.childNodes[1]
     composerTextarea && composerTextarea.focus()
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
-  }, [])
-
-  const [fetchMore] = useDebouncedCallback(
-    () => {
-      chatStoreDispatch({
-        type: 'FETCH_MORE_MESSAGES',
-        payload: { scrollHeight: messageListRef.current.scrollHeight },
-      })
-    },
-    30,
-    { leading: true }
-  )
-
-  const onScroll = (Event: React.UIEvent<HTMLDivElement>) => {
-    lastKnownScrollHeight.current = messageListRef.current.scrollHeight
-    if (messageListRef.current.scrollTop !== 0) return
-    if (isFetching.current === false) {
-      isFetching.current = true
-      log.debug('Scrolled to top, fetching more messsages!')
-      fetchMore()
-    }
-    Event?.preventDefault()
-    Event?.stopPropagation()
-    return false
-  }
+  }, [refComposer])
 
   return (
     <MessageListInner

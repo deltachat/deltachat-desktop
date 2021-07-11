@@ -27,7 +27,7 @@ export default function EncryptionInfo({
         )
       : DeltaBackend.call('chat.getEncryptionInfo', chatListItem.id)
     ).then(setEncryptionInfo)
-  })
+  }, [chatListItem])
 
   const tx = window.static_translate
   return (
