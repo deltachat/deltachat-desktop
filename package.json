@@ -149,7 +149,7 @@
     "prettier": "2.2.1",
     "tape": "^4.12.0",
     "tempy": "^0.3.0",
-    "testcafe": "^1.14.0",
+    "testcafe": "^1.15.0",
     "testcafe-browser-provider-electron": "0.0.16",
     "testcafe-react-selectors": "^4.1.5",
     "typescript": "^3.9.7",
