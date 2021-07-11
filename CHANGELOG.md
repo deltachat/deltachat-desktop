@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- Upgrade esbuild to `0.12.15`
+
 ## [1.20.3] - 2021-06-30
 
 ### Fixed
