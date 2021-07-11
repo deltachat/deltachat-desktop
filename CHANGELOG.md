@@ -16,6 +16,7 @@
 
 - Update translations (30.06.2021)
 - Update deltachat-node to `v1.56.0`
+- Upgrade `react` and `react-dom` to `17.0.2`
 
 ## [1.20.2] - 2021-06-04
 
