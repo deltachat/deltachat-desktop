@@ -39,10 +39,10 @@ export default function Attachment({
   hasQuote,
 }: AttachmentProps) {
   const tx = useTranslationFunction()
+  const { openDialog } = useContext(ScreenContext)
   if (!attachment) {
     return null
   }
-  const { openDialog } = useContext(ScreenContext)
   const msg = message.msg
   const onClickAttachment = (ev: any) => {
     if (msg.viewType === C.DC_MSG_STICKER) return

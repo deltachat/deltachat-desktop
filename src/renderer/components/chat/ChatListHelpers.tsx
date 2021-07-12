@@ -1,32 +1,48 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { ipcBackend } from '../../ipc'
 import { getLogger } from '../../../shared/logger'
 import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/dist/constants'
-import { useDebounced } from '../helpers/useDebounced'
+import { debounce } from 'debounce'
 
 const log = getLogger('renderer/helpers/ChatList')
 
-export function useMessageResults(queryStr: string, chatId = 0) {
+function debounceWithInit<ARGS extends Array<any>>(
+  fn: (...args: ARGS) => void,
+  delay_ms: number
+): (...args: ARGS) => void {
+  const dfn = debounce(fn, delay_ms)
+  let first_run = true
+
+  return (...args: ARGS) => {
+    if (first_run) {
+      first_run = false
+      fn(...args)
+    } else {
+      dfn(...args)
+    }
+  }
+}
+
+export function useMessageResults(queryStr: string) {
   const [ids, setIds] = useState<number[]>([])
 
-  const debouncedSearchMessages = useDebounced(
-    (queryStr: string, chatId: number, cb: (value: number[]) => void) => {
-      DeltaBackend.call('messageList.searchMessages', queryStr, chatId).then(cb)
-    },
-    200
+  const debouncedSearchMessages = useMemo(
+    () =>
+      debounceWithInit((queryStr: string) => {
+        DeltaBackend.call('messageList.searchMessages', queryStr, 0).then(
+          setIds
+        )
+      }, 200),
+    []
   )
 
-  const updateContacts = (queryStr: string, chatId = 0) =>
-    debouncedSearchMessages(queryStr, chatId, setIds)
+  useEffect(() => debouncedSearchMessages(queryStr), [
+    queryStr,
+    debouncedSearchMessages,
+  ])
 
-  useEffect(() => {
-    DeltaBackend.call('messageList.searchMessages', queryStr, chatId).then(
-      setIds
-    )
-  }, [])
-
-  return [ids, updateContacts] as [number[], typeof updateContacts]
+  return ids
 }
 
 export function useChatList(
@@ -41,48 +57,31 @@ export function useChatList(
   const [queryContactId, setQueryContactId] = useState(_queryContactId)
   const [chatListEntries, setChatListEntries] = useState<[number, number][]>([])
 
-  const debouncedGetChatListEntries = useDebounced(
-    (
-      listFlags: number,
-      queryStr: string,
-      queryContactId: number,
-      cb: (...args: any) => void
-    ) => {
-      DeltaBackend.call(
-        'chatList.getChatListEntries',
-        listFlags,
-        queryStr,
-        queryContactId
-      ).then(cb)
-    },
-    200
+  const debouncedGetChatListEntries = useMemo(
+    () =>
+      debounce(
+        (listFlags: number, queryStr: string, queryContactId: number) => {
+          DeltaBackend.call(
+            'chatList.getChatListEntries',
+            listFlags,
+            queryStr,
+            queryContactId
+          ).then(setChatListEntries)
+        },
+        200
+      ),
+    []
   )
 
-  const getAndSetChatListEntries = (immediatly = false) => {
-    if (immediatly === true) {
-      DeltaBackend.call(
-        'chatList.getChatListEntries',
-        listFlags,
-        queryStr,
-        queryContactId
-      ).then(setChatListEntries)
-      return
-    }
-    debouncedGetChatListEntries(
-      listFlags,
-      queryStr,
-      queryContactId,
-      setChatListEntries
-    )
-  }
-
-  const refetchChatlist = () => {
-    log.debug('useChatList: refetchingChatlist')
-    getAndSetChatListEntries()
-  }
-
   useEffect(() => {
-    log.debug('useChatList: onComponentDidMount')
+    log.debug(
+      'useChatList: listFlags, queryStr or queryContactId changed, refetching chatlistids'
+    )
+
+    const refetchChatlist = () => {
+      log.debug('useChatList: refetchingChatlist')
+      debouncedGetChatListEntries(listFlags, queryStr, queryContactId)
+    }
     const onMsgNotice = (_event: any, [chatId]: [number, number]) => {
       if (chatId === C.DC_CHAT_ID_DEADDROP) {
         refetchChatlist()
@@ -91,18 +90,12 @@ export function useChatList(
 
     ipcBackend.on('DD_EVENT_CHATLIST_CHANGED', refetchChatlist)
     ipcBackend.on('DC_EVENT_MSGS_NOTICED', onMsgNotice)
+    debouncedGetChatListEntries(listFlags, queryStr, queryContactId)
     return () => {
       ipcBackend.removeListener('DD_EVENT_CHATLIST_CHANGED', refetchChatlist)
       ipcBackend.removeListener('DC_EVENT_MSGS_NOTICED', onMsgNotice)
     }
-  }, [listFlags, queryStr, queryContactId])
-
-  useEffect(() => {
-    log.debug(
-      'useChatList: listFlags, queryStr or queryContactId changed, refetching chatlistids'
-    )
-    getAndSetChatListEntries()
-  }, [listFlags, queryStr, queryContactId])
+  }, [listFlags, queryStr, queryContactId, debouncedGetChatListEntries])
 
   return {
     chatListIds: chatListEntries,

@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { DeltaBackend } from '../delta-remote'
 import { onDCEvent } from '../ipc'
 
 import { getLogger } from '../../shared/logger'
 import { useTranslationFunction } from '../contexts'
 import { useKeyBindingAction, KeybindAction } from '../keybindings'
+
+import { debounce } from 'debounce'
 
 const log = getLogger('renderer/components/OfflineToast')
 
@@ -25,42 +27,51 @@ export default function OfflineToast() {
   ])
   const [tryConnectCooldown, setTryConnectCooldown] = useState(true)
 
+  const maybeNetwork = useMemo(
+    () =>
+      debounce(DeltaBackend.call.bind(null, 'context.maybeNetwork'), 140, true),
+    []
+  )
+
   const onBrowserOffline = () => {
     log.debug("Browser knows we're offline")
     setNetworkState(() => [false, "Browser knows we're offline"])
   }
 
-  const tryMaybeNetworkIfOfflineAfterXms = (ms: number) => {
-    setTimeout(() => {
-      // This is a hack to get the current network state by abusing the setNetworkState function.
-      // Not pretty but works.
-      setNetworkState(([online, error]: [boolean, string]) => {
-        if (!online) {
-          log.debug(
-            `We are still not online after ${ms}  milli seconds, try maybeNetwork again`
-          )
-          DeltaBackend.call('context.maybeNetwork')
-        } else if (ms < 30000) {
-          tryMaybeNetworkIfOfflineAfterXms(2 * ms)
-        } else {
-          log.debug(
-            `We tried reconnecting with waiting for more then 30 seconds, now stop`
-          )
-        }
+  const tryMaybeNetworkIfOfflineAfterXms = useCallback(
+    (ms: number) => {
+      setTimeout(() => {
+        // This is a hack to get the current network state by abusing the setNetworkState function.
+        // Not pretty but works.
+        setNetworkState(([online, error]: [boolean, string]) => {
+          if (!online) {
+            log.debug(
+              `We are still not online after ${ms}  milli seconds, try maybeNetwork again`
+            )
+            maybeNetwork()
+          } else if (ms < 30000) {
+            tryMaybeNetworkIfOfflineAfterXms(2 * ms)
+          } else {
+            log.debug(
+              `We tried reconnecting with waiting for more then 30 seconds, now stop`
+            )
+          }
 
-        // Keep state unchanged
-        return [online, error]
-      })
-    }, ms)
-  }
+          // Keep state unchanged
+          return [online, error]
+        })
+      }, ms)
+    },
+    [maybeNetwork]
+  )
 
-  const onBrowserOnline = () => {
+  const onBrowserOnline = useCallback(() => {
     log.debug("Browser thinks we're back online, telling rust core")
     setNetworkState(() => [true, "Browser thinks we're online"])
-    DeltaBackend.call('context.maybeNetwork')
+    maybeNetwork()
 
     tryMaybeNetworkIfOfflineAfterXms(150)
-  }
+  }, [tryMaybeNetworkIfOfflineAfterXms, maybeNetwork])
 
   const onDeltaNetworkError = (data1: string, data2: string) => {
     setNetworkState(() => [false, data1 + data2])
@@ -68,10 +79,6 @@ export default function OfflineToast() {
 
   const onDeltaNetworkSuccess = () => {
     setNetworkState(() => [true, ''])
-  }
-
-  const maybeNetwork = () => {
-    DeltaBackend.call('context.maybeNetwork')
   }
 
   useKeyBindingAction(KeybindAction.Debug_MaybeNetwork, maybeNetwork)
@@ -99,12 +106,12 @@ export default function OfflineToast() {
       removeEventListenerDCNetworkError()
       removeEventListenerDCNetworkSuccess()
     }
-  }, [])
+  }, [onBrowserOnline, maybeNetwork])
 
   const onTryReconnectClick = () => {
     setTryConnectCooldown(false)
     setTimeout(() => setTryConnectCooldown(true), 15000)
-    setTimeout(() => DeltaBackend.call('context.maybeNetwork'), 100)
+    setTimeout(() => maybeNetwork(), 100)
   }
 
   const tx = useTranslationFunction()

@@ -131,28 +131,6 @@ export default function Settings(props: DialogProps) {
 
   const tx = useTranslationFunction()
 
-  const loadSettings = async () => {
-    const settings = await DeltaBackend.call('settings.getConfigFor', [
-      'inbox_watch',
-      'sentbox_watch',
-      'mvbox_watch',
-      'mvbox_move',
-      'e2ee_enabled',
-      'displayname',
-      'selfstatus',
-      'mdns_enabled',
-      'show_emails',
-      'bcc_self',
-      'delete_device_after',
-      'delete_server_after',
-      'webrtc_instance',
-    ])
-    setState({ settings })
-
-    const rc = await runtime.getRC_Config()
-    setState({ rc })
-  }
-
   /*
    * Saves settings for the Deltachat Desktop
    * persisted in ~/.config/DeltaChat/deltachat.json
@@ -359,6 +337,27 @@ export default function Settings(props: DialogProps) {
   }
 
   useEffect(() => {
+    const loadSettings = async () => {
+      const settings = await DeltaBackend.call('settings.getConfigFor', [
+        'inbox_watch',
+        'sentbox_watch',
+        'mvbox_watch',
+        'mvbox_move',
+        'e2ee_enabled',
+        'displayname',
+        'selfstatus',
+        'mdns_enabled',
+        'show_emails',
+        'bcc_self',
+        'delete_device_after',
+        'delete_server_after',
+        'webrtc_instance',
+      ])
+      setState({ settings })
+
+      const rc = await runtime.getRC_Config()
+      setState({ rc })
+    }
     ;(async () => {
       await loadSettings()
       const selfContact = await DeltaBackend.call(

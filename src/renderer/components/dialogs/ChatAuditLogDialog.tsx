@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useContext } from 'react'
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useContext,
+  useCallback,
+} from 'react'
 import { DeltaDialogBase, DeltaDialogCloseButton } from './DeltaDialog'
 import { DialogProps } from './DialogController'
 import type { FullChat, MessageType } from '../../../shared/shared-types'
@@ -88,26 +94,32 @@ export default function ChatAuditLogDialog(props: {
     })
   }
 
-  async function refresh() {
-    setLoading(true)
-    const msgIds = await DeltaBackend.call(
-      'messageList.getMessageIds',
-      selectedChat.id,
-      C.DC_GCM_ADDDAYMARKER | C.DC_GCM_INFO_ONLY
-    )
-    const messages = await DeltaBackend.call('messageList.getMessages', msgIds)
-    setMsgIds(msgIds)
-    setMessages(messages)
-    setLoading(false)
+  const refresh = useCallback(
+    async function () {
+      setLoading(true)
+      const msgIds = await DeltaBackend.call(
+        'messageList.getMessageIds',
+        selectedChat.id,
+        C.DC_GCM_ADDDAYMARKER | C.DC_GCM_INFO_ONLY
+      )
+      const messages = await DeltaBackend.call(
+        'messageList.getMessages',
+        msgIds
+      )
+      setMsgIds(msgIds)
+      setMessages(messages)
+      setLoading(false)
 
-    setTimeout(() => {
-      listView.current.scrollTop = listView.current?.scrollHeight
-    }, 0)
-  }
+      setTimeout(() => {
+        listView.current.scrollTop = listView.current?.scrollHeight
+      }, 0)
+    },
+    [selectedChat.id]
+  )
 
   useEffect(() => {
     refresh()
-  }, [selectedChat.id])
+  }, [selectedChat.id, refresh])
 
   let specialMessageIdCounter = 0
 

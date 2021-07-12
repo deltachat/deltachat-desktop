@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import classNames from 'classnames'
 import moment from 'moment'
 import formatRelativeTime from './formatRelativeTime'
@@ -34,21 +34,30 @@ const Timestamp = React.memo(function Timestamp(props: TimestampProps) {
   const { direction, timestamp, extended } = props
   const moduleName = props.module || ''
 
-  if (timestamp === null || timestamp === undefined) return null
-
-  const calculateRelativeTime = () =>
-    formatRelativeTime(timestamp, { extended })
+  const calculateRelativeTime = useCallback(
+    () => formatRelativeTime(timestamp, { extended }),
+    [timestamp, extended]
+  )
   const [relativeTime, setRelativeTime] = useState(() =>
     calculateRelativeTime()
   )
 
   // Update relative time every UPDATE_FREQUENCY ms
-  const recalculateRelativeTime = () => setRelativeTime(calculateRelativeTime())
+  const recalculateRelativeTime = useCallback(
+    () => setRelativeTime(calculateRelativeTime()),
+    [calculateRelativeTime]
+  )
   useInterval(recalculateRelativeTime, UPDATE_FREQUENCY)
-  useEffect(recalculateRelativeTime, [timestamp, window.localeData.locale])
+  useEffect(recalculateRelativeTime, [
+    timestamp,
+    window.localeData.locale,
+    recalculateRelativeTime,
+  ])
 
   // trigger a rerender that will be detected as a language change by the useEffect function above (window.localeData.locale)
   useTranslationFunction()
+
+  if (timestamp === null || timestamp === undefined) return null
 
   return (
     <span

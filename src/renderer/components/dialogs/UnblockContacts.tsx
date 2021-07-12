@@ -16,16 +16,16 @@ export default function UnblockContacts(props: {
   const [hadBlockedContacts, setHadBlockedContacts] = useState(null)
   const screenContext = useContext(ScreenContext)
 
-  const onContactsUpdate = ({ blockedContacts }: contactsStoreState) => {
-    if (hadBlockedContacts === null)
-      setHadBlockedContacts(blockedContacts.length !== 0)
-    setBlockedContacts(blockedContacts)
-  }
   useEffect(() => {
+    const onContactsUpdate = ({ blockedContacts }: contactsStoreState) => {
+      if (hadBlockedContacts === null)
+        setHadBlockedContacts(blockedContacts.length !== 0)
+      setBlockedContacts(blockedContacts)
+    }
     contactsStore.subscribe(onContactsUpdate)
     DeltaBackend.call('updateBlockedContacts')
     return () => contactsStore.unsubscribe(onContactsUpdate)
-  }, [])
+  }, [hadBlockedContacts])
 
   const blockContact = (id: number) => {
     contactsStore.dispatch({ type: 'UI_UNBLOCK_CONTACT', payload: id })

@@ -2,7 +2,7 @@
 
 import type { DeltaChat } from 'deltachat-node'
 import { C } from 'deltachat-node/dist/constants'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import {
   DeltaInput,
   DeltaPasswordInput,
@@ -346,10 +346,14 @@ export function ConfigureProgressDialog({
     onClose()
   }
 
-  const onConfigureSuccessful = (account: DeltaChatAccount) => {
-    onClose()
-    onSuccess && onSuccess(account)
-  }
+  const onConfigureSuccessful = useCallback(
+    (account: DeltaChatAccount) => {
+      onClose()
+      onSuccess && onSuccess(account)
+    },
+    [onClose, onSuccess]
+  )
+
   const onConfigureError = (_: null, [_data1, data2]: [null, string]) =>
     setError(data2)
 
@@ -374,7 +378,9 @@ export function ConfigureProgressDialog({
         if (account !== null) onConfigureSuccessful(account)
       }
     })()
+  }, [mode, credentials, onConfigureSuccessful])
 
+  useEffect(() => {
     ipcBackend.on('DC_EVENT_CONFIGURE_PROGRESS', onConfigureProgress)
     ipcBackend.on('DCN_EVENT_CONFIGURE_FAILED', onConfigureFailed)
     ipcBackend.on('DC_EVENT_ERROR', onConfigureError)
