@@ -33,18 +33,12 @@ async function run(command, args, options, listener = undefined) {
   })
 }
 
-async function bundle(production, minify=false) {
-  //--- Workaround for broken "react-virtualized" import (patch file)
-  const fpath = "node_modules/react-virtualized/dist/es/WindowScroller/utils/onScroll.js"
-  const content = await readFile(fpath, "utf-8")
-  await writeFile(fpath, content.replace(/^(import { bpfrpt_proptype_WindowScroller })/m, "// $1"))
-  //---
-
+async function bundle(production, minify = false) {
   const bundleArgs = [
     'esbuild',
     'src/renderer/main.tsx',
     '--bundle',
-    ...(minify?['--minify']:[]),
+    ...(minify ? ['--minify'] : []),
     '--sourcemap',
     '--outfile=html-dist/bundle.js',
     production

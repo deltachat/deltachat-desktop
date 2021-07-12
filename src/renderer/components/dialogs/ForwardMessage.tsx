@@ -10,7 +10,7 @@ import { MessageType } from '../../../shared/shared-types'
 
 import { C } from 'deltachat-node/dist/constants'
 import { ChatListPart, useLogicVirtualChatList } from '../chat/ChatList'
-import { AutoSizer } from 'react-virtualized'
+import AutoSizer from 'react-virtualized-auto-sizer'
 import { useChatList } from '../chat/ChatListHelpers'
 
 export default function ForwardMessage(props: {
@@ -65,11 +65,12 @@ export default function ForwardMessage(props: {
                     rowCount={chatListIds.length}
                     width={width}
                     height={height}
+                    itemKey={index => 'key' + chatListIds[index]}
                   >
-                    {({ index, key, style }) => {
+                    {({ index, style }) => {
                       const [chatId] = chatListIds[index]
                       return (
-                        <div style={style} key={key}>
+                        <div style={style}>
                           <ChatListItem
                             chatListItem={chatCache[chatId] || undefined}
                             onClick={onChatClick.bind(null, chatId)}

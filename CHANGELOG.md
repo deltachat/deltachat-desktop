@@ -18,6 +18,7 @@
 - Upgrade `error-stack-parser` to `2.0.6`
 - Make `sass` and `@types/debounce` development dependencies
 - Remove dependency `array-differ`
+- replace `react-virtualized` with `react-window`
 
 ## [1.20.3] - 2021-06-30
 
