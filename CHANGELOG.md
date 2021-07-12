@@ -6,6 +6,7 @@
 
 - Update testcafe to `1.15.0`
 - Upgrade `react` and `react-dom` to `17.0.2`
+- replace `react-virtualized` with `react-window`
 
 ## [1.20.3] - 2021-06-30
 
