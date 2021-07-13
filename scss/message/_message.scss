@@ -193,6 +193,8 @@
 }
 
 .message.outgoing {
+  margin-left: auto;
+  justify-content: flex-end;
   float: right;
   margin-right: 0;
   margin-left: 32px;
@@ -418,9 +420,7 @@
 
   .quoted-text {
     font-size: 12px;
-    line-height: 12px;
     margin: 0;
-    max-height: 40px;
     overflow: hidden;
     line-clamp: 3;
     display: -webkit-box;

@@ -1,7 +1,7 @@
 import { C } from 'deltachat-node/dist/constants'
-import { msgStatus } from '../../../shared/shared-types'
+import { MessageStateString } from '../../../shared/shared-types'
 
-export function mapCoreMsgStatus2String(state: number): msgStatus {
+export function mapCoreMsgStatus2String(state: number): MessageStateString {
   switch (state) {
     case C.DC_STATE_OUT_FAILED:
       return 'error'

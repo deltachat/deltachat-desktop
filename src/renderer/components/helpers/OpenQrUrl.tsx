@@ -19,7 +19,7 @@ import { runtime } from '../../runtime'
 import { parseMailto } from '../../../shared/parse_mailto'
 import MailtoDialog, { doMailtoAction } from '../dialogs/MailtoDialog'
 import { getLogger } from '../../../shared/logger'
-import { selectChat } from '../../stores/chat'
+import { selectChat } from '../helpers/ChatMethods'
 
 const log = getLogger('renderer/processOpenUrl')
 

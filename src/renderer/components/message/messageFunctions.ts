@@ -1,45 +1,40 @@
 import { getLogger } from '../../../shared/logger'
 const log = getLogger('render/msgFunctions')
-import type { Message } from 'deltachat-node'
-import { MessageType, JsonMessage } from '../../../shared/shared-types'
-import { ChatStoreDispatch, selectChat } from '../../stores/chat'
+import { Message } from '../../../shared/shared-types'
+import { ChatStoreDispatch } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
 import { runtime } from '../../runtime'
-/**
- * json representation of the message object we get from the backend
- */
-type MsgObject = ReturnType<typeof Message.prototype.toJson>
+import { deleteMessage, selectChat } from '../helpers/ChatMethods'
 
-export function onDownload(msg: MsgObject) {
-  runtime.downloadFile(msg.file)
+export function onDownload(message: Message) {
+  runtime.downloadFile(message.file)
 }
 
-export function openAttachmentInShell(msg: MsgObject) {
-  if (!runtime.openPath(msg.file)) {
+export function openAttachmentInShell(message: Message) {
+  if (!runtime.openPath(message.file)) {
     log.info(
       "file couldn't be opened, try saving it in a different place and try to open it from there"
     )
   }
 }
 
-export function forwardMessage(message: MessageType) {
+export function forwardMessage(message: Message) {
   window.__openDialog('ForwardMessage', { message })
 }
 
-export function deleteMessage(
-  msg: MsgObject,
-  chatStoreDispatch: ChatStoreDispatch
+export function deleteMessageWithConfirm(
+  message: Message,
+  _chatStoreDispatch: ChatStoreDispatch
 ) {
   const tx = window.static_translate
   window.__openDialog('ConfirmationDialog', {
     message: tx('ask_delete_message'),
     confirmLabel: tx('delete'),
-    cb: (yes: boolean) =>
-      yes && chatStoreDispatch({ type: 'UI_DELETE_MESSAGE', payload: msg.id }),
+    cb: (yes: boolean) => yes && deleteMessage(message.id),
   })
 }
 
-export function openMessageInfo(message: MessageType) {
+export function openMessageInfo(message: Message) {
   window.__openDialog('MessageDetail', { id: message.id })
 }
 
@@ -51,17 +46,17 @@ export function setQuoteInDraft(messageId: number) {
   }
 }
 
-export async function privateReply(msg: JsonMessage) {
-  const quotedMessageId = msg.id
-  const contactId = msg.fromId
+export async function privateReply(message: Message) {
+  const quotedMessageId = message.id
+  const contactId = message.fromId
   const chatId = await DeltaBackend.call('contacts.getDMChatId', contactId) // getDMChatId creates the dm chat if it doesn't exist
 
   // retrieve existing draft to append the quotedMessageId
   const oldDraft = await DeltaBackend.call('messageList.getDraft', chatId)
 
   await DeltaBackend.call('messageList.setDraft', chatId, {
-    text: oldDraft?.msg.text,
-    file: oldDraft?.msg.file,
+    text: oldDraft?.text,
+    file: oldDraft?.file,
     quotedMessageId,
   })
 

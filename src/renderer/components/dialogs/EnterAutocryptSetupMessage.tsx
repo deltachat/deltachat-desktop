@@ -3,7 +3,7 @@ import { Card, Callout, Spinner, Classes } from '@blueprintjs/core'
 import InputTransferKey from './AutocryptSetupMessage'
 import DeltaDialog from './DeltaDialog'
 import { ScreenContext } from '../../contexts'
-import { MessageType } from '../../../shared/shared-types'
+import { Message } from '../../../shared/shared-types'
 import { DeltaBackend } from '../../delta-remote'
 import { getLogger } from '../../../shared/logger'
 
@@ -81,7 +81,7 @@ export default function EnterAutocryptSetupMessage({
   message,
 }: {
   onClose: () => void
-  message: MessageType
+  message: Message
 }) {
   const { userFeedback } = useContext(ScreenContext)
   const [loading, setLoading] = useState<boolean>(false)
@@ -96,7 +96,7 @@ export default function EnterAutocryptSetupMessage({
 
     const result = await DeltaBackend.call(
       'autocrypt.continueKeyTransfer',
-      message.msg.id,
+      message.id,
       key
     )
     setLoading(false)

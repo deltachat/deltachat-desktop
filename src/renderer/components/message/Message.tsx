@@ -2,13 +2,13 @@ import {
   onDownload,
   openAttachmentInShell,
   forwardMessage,
-  deleteMessage,
   openMessageInfo,
   setQuoteInDraft,
   privateReply,
   openMessageHTML,
+  deleteMessageWithConfirm,
 } from './messageFunctions'
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext } from 'react'
 import reactStringReplace from 'react-string-replace'
 
 import classNames from 'classnames'
@@ -17,23 +17,29 @@ import MessageMetaData from './MessageMetaData'
 
 import Attachment from '../attachment/messageAttachment'
 import {
-  MessageType,
+  Message,
   DCContact,
-  MessageTypeAttachment,
-  msgStatus,
+  MessageAttachment,
+  MessageState,
+  MessageQuote,
 } from '../../../shared/shared-types'
 import { isGenericAttachment } from '../attachment/Attachment'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
-import { joinCall, openViewProfileDialog } from '../helpers/ChatMethods'
+import {
+  joinCall,
+  jumpToMessage,
+  openViewProfileDialog,
+} from '../helpers/ChatMethods'
 import { C } from 'deltachat-node/dist/constants'
-// import { getLogger } from '../../../shared/logger'
 import { useChatStore2, ChatStoreDispatch } from '../../stores/chat'
-import { DeltaBackend } from '../../delta-remote'
 import { runtime } from '../../runtime'
 import { AvatarFromContact } from '../Avatar'
 import { openDeadDropDecisionDialog } from '../dialogs/DeadDrop'
 import { ConversationType } from './MessageList'
 // const log = getLogger('renderer/message')
+import moment from 'moment'
+import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
+import { DeltaBackend } from '../../delta-remote'
 
 const Avatar = (
   contact: DCContact,
@@ -68,11 +74,22 @@ const Avatar = (
   }
 }
 
-const AuthorName = (
-  contact: DCContact,
-  onContactClick: (contact: DCContact) => void,
+export function getAuthorName(
+  displayName: string,
   overrideSenderName?: string
-) => {
+) {
+  return overrideSenderName ? `~${overrideSenderName}` : displayName
+}
+
+export function AuthorName({
+  contact,
+  onContactClick,
+  overrideSenderName,
+}: {
+  contact: DCContact
+  onContactClick: (contact: DCContact) => void
+  overrideSenderName?: string
+}) {
   const { color, displayName } = contact
 
   return (
@@ -81,7 +98,7 @@ const AuthorName = (
       style={{ color: color }}
       onClick={() => onContactClick(contact)}
     >
-      {overrideSenderName ? `~${overrideSenderName}` : displayName}
+      {getAuthorName(displayName, overrideSenderName)}
     </span>
   )
 }
@@ -121,16 +138,16 @@ function buildContextMenu(
   {
     attachment,
     direction,
-    status,
+    state,
     message,
     text,
     conversationType,
   }: // onRetrySend,
   {
-    attachment: MessageTypeAttachment
+    attachment: MessageAttachment
     direction: 'incoming' | 'outgoing'
-    status: msgStatus
-    message: MessageType | { msg: null }
+    state: MessageState
+    message: Message
     text?: string
     conversationType: ConversationType
     // onRetrySend: Function
@@ -141,8 +158,9 @@ function buildContextMenu(
   const tx = window.static_translate // don't use the i18n context here for now as this component is inefficient (rendered one menu for every message)
 
   // eslint-disable-next-line
-  const showRetry = status === 'error' && direction === 'outgoing'
-  const showAttachmentOptions = attachment && !message.msg.isSetupmessage
+  const showRetry =
+    state === MessageState.OUT_FAILED && direction === 'outgoing'
+  const showAttachmentOptions = attachment && !message.isSetupmessage
 
   const textSelected: boolean = window.getSelection().toString() !== ''
   // grab selected text before clicking, otherwise the selection might be already gone
@@ -152,13 +170,13 @@ function buildContextMenu(
     // Reply
     !conversationType.isDeviceChat && {
       label: tx('reply_noun'),
-      action: setQuoteInDraft.bind(null, message.msg.id),
+      action: setQuoteInDraft.bind(null, message.id),
     },
     // Reply privately -> only show in groups, don't show on info messages or outgoing messages
     conversationType.chatType === C.DC_CHAT_TYPE_GROUP &&
-      message.msg.fromId > C.DC_CONTACT_ID_LAST_SPECIAL && {
+      message.fromId > C.DC_CONTACT_ID_LAST_SPECIAL && {
         label: tx('reply_privately'),
-        action: privateReply.bind(null, message.msg),
+        action: privateReply.bind(null, message),
       },
 
     // Copy [selection] to clipboard
@@ -181,20 +199,20 @@ function buildContextMenu(
       action: () => runtime.writeClipboardText(link),
     },
     // Copy videocall link to clipboard
-    message.msg.videochatUrl !== '' && {
+    message.videochatUrl !== '' && {
       label: tx('menu_copy_link_to_clipboard'),
-      action: () => runtime.writeClipboardText(message.msg.videochatUrl),
+      action: () => runtime.writeClipboardText(message.videochatUrl),
     },
     // Open Attachment
     showAttachmentOptions &&
       isGenericAttachment(attachment) && {
         label: tx('open_attachment'),
-        action: openAttachmentInShell.bind(null, message.msg),
+        action: openAttachmentInShell.bind(null, message),
       },
     // Download attachment
     showAttachmentOptions && {
       label: tx('menu_export_attachment'),
-      action: onDownload.bind(null, message.msg),
+      action: onDownload.bind(null, message),
     },
     // Forward message
     {
@@ -209,7 +227,7 @@ function buildContextMenu(
     // Delete message
     {
       label: tx('delete_message_desktop'),
-      action: deleteMessage.bind(null, message.msg, chatStoreDispatch),
+      action: deleteMessageWithConfirm.bind(null, message, chatStoreDispatch),
     },
     // showRetry && {
     //   label:tx('retry_send'),
@@ -218,23 +236,24 @@ function buildContextMenu(
   ]
 }
 
-const Message = (props: {
-  message: MessageType
+const MessageComponent = (props: {
+  message: Message
   conversationType: ConversationType
+  isDeviceChat: boolean
   /* onRetrySend */
 }) => {
   const { message, conversationType } = props
   const {
     id,
     direction,
-    status,
+    state,
     viewType,
     text,
     hasLocation,
     attachment,
     isSetupmessage,
     hasHTML,
-  } = message.msg
+  } = message
   const tx = useTranslationFunction()
 
   const screenContext = useContext(ScreenContext)
@@ -251,7 +270,7 @@ const Message = (props: {
       {
         attachment,
         direction,
-        status,
+        state,
         message,
         text,
         conversationType,
@@ -268,6 +287,7 @@ const Message = (props: {
       items,
     })
   }
+  const status = mapCoreMsgStatus2String(state)
 
   // Info Message
   if (message.isInfo)
@@ -292,7 +312,7 @@ const Message = (props: {
   }
 
   let onClickMessageBody
-  const isDeadDrop = message.msg.chatId === C.DC_CHAT_ID_DEADDROP
+  const isDeadDrop = message.chatId === C.DC_CHAT_ID_DEADDROP
   if (isSetupmessage) {
     onClickMessageBody = () =>
       openDialog('EnterAutocryptSetupMessage', { message })
@@ -303,7 +323,7 @@ const Message = (props: {
   }
 
   let content
-  if (message.msg.viewType === C.DC_MSG_VIDEOCHAT_INVITATION) {
+  if (message.viewType === C.DC_MSG_VIDEOCHAT_INVITATION) {
     return (
       <div className='videochat-invitation'>
         <div className='videochat-icon'>
@@ -330,7 +350,7 @@ const Message = (props: {
   } else {
     content = (
       <div dir='auto' className='text'>
-        {message.msg.isSetupmessage ? (
+        {message.isSetupmessage ? (
           tx('autocrypt_asm_click_body')
         ) : (
           <MessageBody text={text || ''} />
@@ -339,11 +359,11 @@ const Message = (props: {
     )
   }
 
-  const hasQuote = message.msg.quotedText !== null
+  const hasQuote = message.quote !== null
 
   /** Whether to show author name and avatar */
   const showAuthor =
-    conversationType.hasMultipleParticipants || message?.msg.overrideSenderName
+    conversationType.hasMultipleParticipants || message?.overrideSenderName
 
   return (
     <div
@@ -353,8 +373,8 @@ const Message = (props: {
         direction,
         { 'type-sticker': viewType === C.DC_MSG_STICKER },
         { error: status === 'error' },
-        { forwarded: message.msg.isForwarded },
-        { 'has-html': hasHTML }
+        { 'has-html': hasHTML },
+        { forwarded: message.isForwarded }
       )}
     >
       {showAuthor &&
@@ -365,25 +385,25 @@ const Message = (props: {
         className='msg-container'
         style={{ borderColor: message.contact.color }}
       >
-        {message.msg.isForwarded &&
+        {message.isForwarded &&
           ForwardedTitle(
             message.contact,
             onContactClick,
             direction,
             conversationType,
-            message?.msg.overrideSenderName
+            message?.overrideSenderName
           )}
-        {!message.msg.isForwarded && (
+        {!message.isForwarded && (
           <div
             className={classNames('author-wrapper', {
               'can-hide': direction === 'outgoing' || !showAuthor,
             })}
           >
-            {AuthorName(
-              message.contact,
-              onContactClick,
-              message?.msg.overrideSenderName
-            )}
+            <AuthorName
+              contact={message.contact}
+              onContactClick={onContactClick}
+              overrideSenderName={message?.overrideSenderName}
+            />
           </div>
         )}
         <div
@@ -392,12 +412,7 @@ const Message = (props: {
           })}
           onClick={onClickMessageBody}
         >
-          {hasQuote && (
-            <Quote
-              quotedText={message.msg.quotedText}
-              quotedMessageId={message.msg.quotedMessageId}
-            />
-          )}
+          {hasQuote && <Quote quote={message.quote} />}
           {attachment && !isSetupmessage && (
             <Attachment
               {...{
@@ -422,11 +437,11 @@ const Message = (props: {
           <MessageMetaData
             attachment={!isSetupmessage && attachment}
             direction={direction}
-            status={status}
+            state={state}
             text={text}
             hasLocation={hasLocation}
-            timestamp={message.msg.sentAt}
-            padlock={message.msg.showPadlock}
+            timestamp={message.sentAt}
+            padlock={message.showPadlock}
             onClickError={openMessageInfo.bind(null, message)}
           />
         </div>
@@ -435,45 +450,83 @@ const Message = (props: {
   )
 }
 
-export default Message
+export default MessageComponent
 
-export const Quote = ({
-  quotedText,
-  quotedMessageId,
-}: {
-  quotedText: string | null
-  quotedMessageId: number
-}) => {
-  const [message, setMessage] = useState<MessageType>(null)
+export const Quote = ({ quote }: { quote: MessageQuote }) => {
+  const screenContext = useContext(ScreenContext)
 
-  useEffect(() => {
-    if (quotedMessageId) {
-      DeltaBackend.call('messageList.getMessage', quotedMessageId).then(msg => {
-        if (msg.msg !== null) {
-          setMessage(msg as MessageType)
-        }
-      })
-    }
-  }, [quotedMessageId])
+  const onContactClick = async (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    event.stopPropagation()
+    event.preventDefault()
+    const message = await DeltaBackend.call(
+      'messageList.getMessage',
+      quote.messageId
+    )
+    const contact = message.contact
+    openViewProfileDialog(screenContext, contact.id)
+  }
 
   return (
-    <div className='quote-background'>
+    <div
+      className='quote-background'
+      style={{ borderLeftColor: quote.displayColor }}
+      onClick={() => jumpToMessage(quote.messageId)}
+    >
       <div
         className='quote has-message'
-        style={{ borderLeftColor: message && message.contact.color }}
+        style={{ borderLeftColor: quote.displayColor }}
       >
-        <div className='quote-author'>
-          {message &&
-            AuthorName(
-              message.contact,
-              () => {},
-              message.msg.overrideSenderName
-            )}
+        <div
+          className='quote-author'
+          style={{ color: quote.displayColor }}
+          onClick={onContactClick}
+        >
+          {getAuthorName(quote.displayName, quote.overrideSenderName)}
         </div>
         <div className='quoted-text'>
-          <MessageBody text={quotedText} />
+          <MessageBody text={quote.text} />
         </div>
       </div>
     </div>
+  )
+}
+
+export function DayMarkerInfoMessage(props: {
+  timestamp: number
+  key2: string
+}) {
+  const { timestamp, key2 } = props
+  const tx = useTranslationFunction()
+  return (
+    <li id={key2}>
+      <div className='info-message'>
+        <p style={{ textTransform: 'capitalize' }}>
+          {moment.unix(timestamp).calendar(null, {
+            sameDay: `[${tx('today')}]`,
+            lastDay: `[${tx('yesterday')}]`,
+            lastWeek: 'LL',
+            sameElse: 'LL',
+          })}
+        </p>
+      </div>
+    </li>
+  )
+}
+
+export function UnreadMessagesMarker(props: { count: number; key2: string }) {
+  const { count, key2 } = props
+  const tx = useTranslationFunction()
+  return (
+    <li id={key2}>
+      <div className='info-message'>
+        <p style={{ textTransform: 'capitalize' }}>
+          {tx('chat_n_new_messages', String(count), {
+            quantity: count === 1 ? 'one' : 'other',
+          })}
+        </p>
+      </div>
+    </li>
   )
 }

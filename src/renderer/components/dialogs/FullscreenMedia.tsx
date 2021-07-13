@@ -2,18 +2,18 @@ import { onDownload } from '../message/messageFunctions'
 import React from 'react'
 import { Icon, Overlay } from '@blueprintjs/core'
 import { DialogProps } from './DialogController'
-import { MessageType } from '../../../shared/shared-types'
+import { Message } from '../../../shared/shared-types'
 import { runtime } from '../../runtime'
 
 export default function FullscreenMedia(props: {
-  msg: MessageType['msg']
+  message: Message
   onClose: DialogProps['onClose']
 }) {
   const tx = window.static_translate
-  const { msg, onClose } = props
+  const { message, onClose } = props
   let elm = <div />
-  if (!msg || !msg.attachment) return elm
-  const attachment = msg.attachment
+  if (!message || !message.attachment) return elm
+  const attachment = message.attachment
   const url = attachment.url
   const contentType = attachment.contentType
 
@@ -45,7 +45,7 @@ export default function FullscreenMedia(props: {
           <div className='btn-wrapper'>
             <div
               role='button'
-              onClick={onDownload.bind(null, msg)}
+              onClick={onDownload.bind(null, message)}
               className='download-btn'
               aria-label={tx('save')}
             />

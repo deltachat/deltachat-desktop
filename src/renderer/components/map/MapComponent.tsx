@@ -1,4 +1,4 @@
-import { DeltaBackend, sendMessageParams } from '../../delta-remote'
+import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/dist/constants'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
@@ -14,18 +14,17 @@ import { Slider, Button, Collapse } from '@blueprintjs/core'
 import PopupMessage from './PopupMessage'
 import * as SessionStorage from '../helpers/SessionStorage'
 import { SettingsContext } from '../../contexts'
-import chatStore from '../../stores/chat'
 
 import { state as LocationStoreState } from '../../stores/locations'
 
 import ContextMenu from './ContextMenu'
 import {
   FullChat,
-  MessageType,
-  JsonMessage,
+  Message,
   JsonContact,
   JsonLocations,
 } from '../../../shared/shared-types'
+import { sendMessage } from '../helpers/ChatMethods'
 
 type MapData = {
   contact: JsonContact
@@ -400,7 +399,7 @@ export default class MapComponent extends React.Component<
   }
 
   async onMapClick(event: mapboxgl.MapMouseEvent & mapboxgl.EventData) {
-    let message: JsonMessage
+    let message: Message
     const features = this.map.queryRenderedFeatures(event.point)
     const contactFeature = features.find(f => {
       return f.properties.contact !== undefined || f.properties.isPoi
@@ -410,9 +409,9 @@ export default class MapComponent extends React.Component<
         DeltaBackend.call(
           'messageList.getMessage',
           contactFeature.properties.msgId
-        ).then((messageObj: MessageType) => {
+        ).then((messageObj: Message) => {
           if (messageObj) {
-            message = messageObj.msg
+            message = messageObj
           }
           const markup = this.renderPopupMessage(
             contactFeature.properties.contact,
@@ -451,13 +450,7 @@ export default class MapComponent extends React.Component<
       return
     }
     const latLng = Object.assign({}, this.poiLocation)
-    chatStore.dispatch({
-      type: 'SEND_MESSAGE',
-      payload: [
-        selectedChat.id,
-        { text: message, location: latLng } as sendMessageParams,
-      ],
-    })
+    sendMessage(selectedChat.id, { text: message, location: latLng })
 
     if (this.contextMenuPopup) {
       this.contextMenuPopup.remove()
@@ -579,7 +572,7 @@ export default class MapComponent extends React.Component<
   renderPopupMessage(
     contactName: string,
     formattedDate: string,
-    message: JsonMessage
+    message: Message
   ) {
     return ReactDOMServer.renderToStaticMarkup(
       <PopupMessage
