@@ -186,7 +186,7 @@ export default function MessageListAndComposer({
       onDragOver={onDragOver}
     >
       <div className='message-list-and-composer__message-list'>
-        <MessageList chat={chat} refComposer={refComposer} />
+        <MessageList chat={chat} />
       </div>
       <Composer
         ref={refComposer}

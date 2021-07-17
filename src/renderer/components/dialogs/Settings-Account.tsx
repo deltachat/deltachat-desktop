@@ -56,6 +56,11 @@ export default function SettingsAccount({
       'send_port',
       'send_security',
       'smtp_certificate_checks',
+      'socks5_enabled',
+      'socks5_host',
+      'socks5_port',
+      'socks5_user',
+      'socks5_password'
     ])
     setInitialAccountSettings(accountSettings)
     _setAccountSettings(accountSettings)

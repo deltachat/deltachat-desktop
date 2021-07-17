@@ -2,10 +2,12 @@
   background-color: var(--composerBg);
   border-left: 1px solid rgba(16, 22, 26, 0.1);
   &.composer--disabled-message-input {
-    text-align: center;
-    padding: 0.5rem;
-    color: #999;
+    height: 40px;
+    padding: calc(0.5rem + 3px);
     overflow: hidden;
+
+    text-align: center;
+    color: #999;
 
     @media only screen and (max-width: 830px) {
       padding: 0px 3px;

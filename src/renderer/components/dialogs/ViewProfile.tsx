@@ -9,7 +9,6 @@ import {
 } from './DeltaDialog'
 import ChatListItem from '../chat/ChatListItem'
 import { useChatList } from '../chat/ChatListHelpers'
-import { selectChat } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
 import { JsonContact } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
@@ -17,6 +16,7 @@ import { ScreenContext } from '../../contexts'
 import { Avatar } from '../Avatar'
 import { useLogicVirtualChatList, ChatListPart } from '../chat/ChatList'
 import { AutoSizer } from 'react-virtualized'
+import { selectChat } from '../helpers/ChatMethods'
 import MessageBody from '../message/MessageBody'
 
 const ProfileInfoName = ({
@@ -111,7 +111,7 @@ export default function ViewProfile(props: {
                 <div
                   onClick={() => {
                     openDialog('FullscreenMedia', {
-                      msg: {
+                      message: {
                         attachment: {
                           url: contact.profileImage,
                           contentType: 'image/x',

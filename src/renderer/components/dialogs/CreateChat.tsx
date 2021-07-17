@@ -4,7 +4,6 @@ import { C } from 'deltachat-node/dist/constants'
 
 import { DeltaBackend } from '../../delta-remote'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
-import { selectChat } from '../../stores/chat'
 import { useContacts, ContactList2 } from '../contact/ContactList'
 import {
   PseudoListItem,
@@ -30,6 +29,7 @@ import { DialogProps } from './DialogController'
 import { isValidEmail } from '../../../shared/util'
 import { QrCodeShowQrInner } from './QrCode'
 import { runtime } from '../../runtime'
+import { selectChat } from '../helpers/ChatMethods'
 
 export default function CreateChat(props: {
   isOpen: DialogProps['isOpen']

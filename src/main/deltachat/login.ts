@@ -1,7 +1,6 @@
 import { DeltaChat, C } from 'deltachat-node'
 import { app as rawApp } from 'electron'
 import { getLogger } from '../../shared/logger'
-import { setupMarkseenFix } from '../markseenFix'
 import setupNotifications from '../notifications'
 import setupUnreadBadgeCounter from '../unread-badge'
 import SplitOut from './splitout'
@@ -83,7 +82,6 @@ export default class DCLoginController extends SplitOut {
 
     setupNotifications(this._controller, (app as any).state.saved)
     setupUnreadBadgeCounter(this._controller)
-    setupMarkseenFix(this._controller)
     this._controller.ready = true
     return true
   }

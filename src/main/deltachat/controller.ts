@@ -3,7 +3,6 @@ import { app as rawApp } from 'electron'
 import { EventEmitter } from 'events'
 import { getLogger } from '../../shared/logger'
 import { JsonContact, Credentials, AppState } from '../../shared/shared-types'
-import { maybeMarkSeen } from '../markseenFix'
 import * as mainWindow from '../windows/main'
 import DCAutocrypt from './autocrypt'
 import DCBackup from './backup'
@@ -64,7 +63,6 @@ export default class DeltaChatController extends EventEmitter {
     this.onChatlistUpdated = this.onChatlistUpdated.bind(this)
     this.onMsgsChanged = this.onMsgsChanged.bind(this)
     this.onIncomingMsg = this.onIncomingMsg.bind(this)
-    this.onChatModified = this.onChatModified.bind(this)
   }
 
   readonly autocrypt = new DCAutocrypt(this)
@@ -167,6 +165,7 @@ export default class DeltaChatController extends EventEmitter {
       logCoreEvent.warn(event, data1, data2)
     } else if (event === 'DC_EVENT_INFO') {
       logCoreEvent.info(event, data1, data2)
+      return
     } else if (event.startsWith('DC_EVENT_ERROR')) {
       logCoreEvent.error(event, data1, data2)
     } else if (app.rc['log-debug']) {
@@ -177,23 +176,19 @@ export default class DeltaChatController extends EventEmitter {
     this.sendToRenderer(event, [data1, data2])
   }
 
-  onMsgsChanged(chatId: number, _msgId: number) {
+  onMsgsChanged(_chatId: number, _msgId: number) {
     this.onChatlistUpdated()
     // chatListItem listens to this in the frontend
-    this.chatList.onChatModified(chatId)
   }
 
-  onIncomingMsg(chatId: number, msgId: number) {
-    maybeMarkSeen(chatId, msgId)
+  onIncomingMsg(_chatId: number, _msgId: number) {
     this.onChatlistUpdated()
     // chatListItem listens to this in the frontend
-    this.chatList.onChatModified(chatId)
   }
 
-  onChatModified(chatId: number, _msgId: number) {
+  onChatModified(_chatId: number, _msgId: number) {
     this.onChatlistUpdated()
     // chatListItem listens to this in the frontend
-    this.chatList.onChatModified(chatId)
   }
 
   registerEventHandler(dc: DeltaChat) {

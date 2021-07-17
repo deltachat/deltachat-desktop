@@ -9,17 +9,17 @@ import {
   dragAttachmentOut,
 } from './Attachment'
 import Timestamp from '../conversations/Timestamp'
-import { MessageType } from '../../../shared/shared-types'
+import { Message } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
 import { makeContextMenu } from '../ContextMenu'
 import { OpenDialogFunctionType } from '../dialogs/DialogController'
 import { runtime } from '../../runtime'
 
-export default function MediaAttachment({ message }: { message: MessageType }) {
-  if (!message.msg.attachment) {
+export default function MediaAttachment({ message }: { message: Message }) {
+  if (!message.attachment) {
     return null
   }
-  switch (message.msg.viewType) {
+  switch (message.viewType) {
     case C.DC_MSG_GIF:
     case C.DC_MSG_IMAGE:
       return <ImageAttachment message={message} />
@@ -43,19 +43,19 @@ const hideOpenInShellTypes = [
 ]
 
 const contextMenuFactory = (
-  message: MessageType,
+  message: Message,
   openDialog: OpenDialogFunctionType
 ) => {
   const tx = window.static_translate
-  const { id: msgId, viewType } = message.msg
+  const { id: msgId, viewType } = message
   return [
     !hideOpenInShellTypes.includes(viewType) && {
       label: tx('open'),
-      action: openAttachmentInShell.bind(null, message.msg),
+      action: openAttachmentInShell.bind(null, message),
     },
     {
       label: tx('save'),
-      action: onDownload.bind(null, message.msg),
+      action: onDownload.bind(null, message),
     },
     // {
     //   label: tx('jump_to_message'),
@@ -69,19 +69,16 @@ const contextMenuFactory = (
 }
 
 /** provides a quick link to comonly used functions to save a few duplicated lines  */
-const useMediaActions = (message: MessageType) => {
+const useMediaActions = (message: Message) => {
   const { openDialog, openContextMenu } = useContext(ScreenContext)
-  const { msg } = message
   return {
     openContextMenu: makeContextMenu(
       contextMenuFactory.bind(null, message, openDialog),
       openContextMenu
     ),
-    openFullscreenMedia: openDialog.bind(null, 'FullscreenMedia', {
-      msg,
-    }),
-    downloadMedia: onDownload.bind(null, msg),
-    openInShell: openAttachmentInShell.bind(null, msg),
+    openFullscreenMedia: openDialog.bind(null, 'FullscreenMedia', { message }),
+    downloadMedia: onDownload.bind(null, message),
+    openInShell: openAttachmentInShell.bind(null, message),
   }
 }
 
@@ -99,11 +96,11 @@ function squareBrokenMediaContent(
   )
 }
 
-function ImageAttachment({ message }: { message: MessageType }) {
+function ImageAttachment({ message }: { message: Message }) {
   const { openContextMenu, openFullscreenMedia, openInShell } = useMediaActions(
     message
   )
-  const { attachment } = message.msg
+  const { attachment } = message
   const hasSupportedFormat = isImage(attachment)
   const isBroken = !attachment.url || !hasSupportedFormat
   return (
@@ -124,11 +121,11 @@ function ImageAttachment({ message }: { message: MessageType }) {
   )
 }
 
-function VideoAttachment({ message }: { message: MessageType }) {
+function VideoAttachment({ message }: { message: Message }) {
   const { openContextMenu, openFullscreenMedia, openInShell } = useMediaActions(
     message
   )
-  const { attachment } = message.msg
+  const { attachment } = message
   const hasSupportedFormat = isVideo(attachment)
   const isBroken = !attachment.url || !hasSupportedFormat
   return (
@@ -155,16 +152,16 @@ function VideoAttachment({ message }: { message: MessageType }) {
   )
 }
 
-function AudioAttachment({ message }: { message: MessageType }) {
+function AudioAttachment({ message }: { message: Message }) {
   const { openContextMenu } = useMediaActions(message)
-  const { attachment } = message.msg
+  const { attachment } = message
   const hasSupportedFormat = isAudio(attachment)
   return (
     <div className='media-attachment-audio' onContextMenu={openContextMenu}>
       <div className='heading'>
         <div className='name'>{message?.contact.displayName}</div>
         <Timestamp
-          timestamp={message?.msg.timestamp * 1000}
+          timestamp={message?.timestamp * 1000}
           extended
           module='date'
         />
@@ -185,11 +182,11 @@ function AudioAttachment({ message }: { message: MessageType }) {
   )
 }
 
-function FileAttachment({ message }: { message: MessageType }) {
+function FileAttachment({ message }: { message: Message }) {
   const { openContextMenu, downloadMedia, openInShell } = useMediaActions(
     message
   )
-  const { attachment } = message.msg
+  const { attachment } = message
   const { fileName, fileSize, contentType } = attachment
   const extension = getExtension(attachment)
   return (
