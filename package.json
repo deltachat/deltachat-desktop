@@ -4,8 +4,6 @@
   "description": "Desktop Application for delta.chat",
   "main": "index.js",
   "scripts": {
-    "install": "npm run install:submodules",
-    "install:submodules": "git submodule update --recursive --init",
     "test": "npm run check-types && npm run lint && npm run check-formatting && npm run test-log-conventions && npm run test-unit && npm run test-misc",
     "test-misc": "node ./bin/test_package_lock_version",
     "test-log-conventions": "node ./bin/log-conventions",
@@ -149,7 +147,7 @@
     "prettier": "2.2.1",
     "tape": "^4.12.0",
     "tempy": "^0.3.0",
-    "testcafe": "^1.14.0",
+    "testcafe": "^1.15.0",
     "testcafe-browser-provider-electron": "0.0.16",
     "testcafe-react-selectors": "^4.1.5",
     "typescript": "^3.9.7",
