@@ -141,7 +141,7 @@
     "esbuild": "^0.8.33",
     "eslint": "^7.14.0",
     "eslint-config-prettier": "^6.15.0",
-    "glob-watcher": "^5.0.1",
+    "glob-watcher": "^5.0.5",
     "hallmark": "^2.0.0",
     "pngjs": "^3.3.3",
     "prettier": "2.2.1",
