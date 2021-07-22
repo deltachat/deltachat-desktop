@@ -204,7 +204,7 @@ const Composer = forwardRef<
             <Button
               minimal
               icon='paperclip'
-              onClick={addFilename.bind(this)}
+              onClick={addFilename.bind(null)}
               aria-label={tx('attachment')}
             />
           </div>
