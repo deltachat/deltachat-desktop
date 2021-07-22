@@ -82,7 +82,12 @@ export default class DCContacts extends SplitOut {
   }
 
   getContactIds(listFlags: number, queryStr: string): number[] {
-    return this._dc.getContacts(listFlags, queryStr)
+    return this._dc
+      .getContacts(listFlags, queryStr)
+      // deduplicate the items here until its fixed in the core: see https://github.com/deltachat/deltachat-core-rust/issues/2552
+      .filter(function (item: number, pos: number, ary: number[]) {
+        return !pos || item != ary[pos - 1]
+      })
   }
 
   _getDCContact(id: number) {
