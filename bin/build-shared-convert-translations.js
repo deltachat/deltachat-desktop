@@ -1,7 +1,7 @@
 const converter = require('xml-js')
 const path = require('path')
 const fs = require('fs')
-const globWatcher = require('glob-watcher')
+globWatcher = null
 
 function xmlToJson (filename) {
   const xml = fs.readFileSync(filename, 'utf-8').toString()
@@ -101,6 +101,7 @@ function main() {
             break
         } else if (arg == "--watch" || arg === "-w") {
             options.watch = true
+            globWatcher = require('glob-watcher')
         } else if (options.pathLocales === false) {
             options.pathLocales = arg
         } else {

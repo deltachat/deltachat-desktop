@@ -3,7 +3,7 @@
 const fsExtra = require('fs-extra')
 const fs = require('fs')
 const {  resolve, join } = require('path')
-const globWatcher = require('glob-watcher')
+globWatcher = null
 
 async function copy(source, destination, watch=false) {
     await fsExtra.ensureDir(destination)
@@ -48,6 +48,7 @@ function main() {
             break
         } else if (arg == "--watch" || arg === "-w") {
             options.watch = true
+            globWatcher = require('glob-watcher')
         } else if (options.source === false) {
             options.source = arg
         } else if (options.destination === false) {
