@@ -7,6 +7,7 @@ import { ExtendedAppMainProcess } from './types'
 import * as mainWindow from './windows/main'
 import { openHelpWindow } from './windows/help'
 import { join } from 'path'
+import mimeTypes from 'mime-types'
 
 const log = getLogger('main/ipc')
 const DeltaChatController: typeof import('./deltachat/controller').default = (() => {
@@ -135,23 +136,20 @@ export function init(cwd: string, logHandler: LogHandler) {
     }
   })
 
-  ipcMain.handle('writeClipboardToTempFile', async (_ev, pathToFile) => {
-    // readBuffer() exists, but labeled experimental.
-    // It seems to support a lot of different kinds of things.
-    // https://github.com/electron/electron/blob/2585e6d5fa5e185d52d51217970c1cde26cf36b3/shell/common/api/electron_api_clipboard.cc#L52
-    // https://github.com/chromium/chromium/blob/master/ui/base/clipboard/clipboard_format_type.h
+  ipcMain.handle('writeClipboardToTempFile', async (_ev) => {
     const formats = clipboard.availableFormats().sort()
-    if (formats.length > 0) {
-      const buf = clipboard.readBuffer(formats[0])
-      log.info(`Writing clipboard ${formats[0]} to file ${pathToFile}`)
-      await ensureFile(pathToFile)
-      await writeFile(pathToFile, buf, 'binary')
+    log.debug('Clipboard available formats:', formats)
+    if (formats.length <= 0) {
+      throw new Error('No files to write')
     }
-
-    // Can use readImage() for a more stable but limited API
-    // const buf = clipboard.readImage()
-    // log.info('Writing clipboard image to file ' + pathToFile, buf)
-    // await ensureFile(pathToFile)
-    // await writeFile(pathToFile, buf.toPNG(), 'binary')
+    const pathToFile = join(
+      rawApp.getPath('temp'),
+      `paste.${mimeTypes.extension(formats[0]) || 'bin'}`,
+    )
+    const buf = clipboard.readBuffer(formats[0])
+    log.debug(`Writing clipboard ${formats[0]} to file ${pathToFile}`)
+    await ensureFile(pathToFile)
+    await writeFile(pathToFile, buf, 'binary')
+    return pathToFile
   })
 }

@@ -19,7 +19,6 @@ import { Quote } from '../message/Message'
 import { DeltaBackend, sendMessageParams } from '../../delta-remote'
 import { DraftAttachment } from '../attachment/messageAttachment'
 import { runtime } from '../../runtime'
-import mimeTypes from 'mime-types'
 
 const log = getLogger('renderer/composer')
 
@@ -182,9 +181,7 @@ const Composer = forwardRef<
 
     try {
       // Write clipboard to file then attach it to the draft
-      const tmpFileName = `paste.${mimeTypes.extension(file.type) || 'bin'}`
-      const tmpFilePath = await runtime.writeClipboardToTempFile(tmpFileName)
-      addFileToDraft(tmpFilePath)
+      addFileToDraft(await runtime.writeClipboardToTempFile())
     } catch (err) {
       log.error('Failed to paste file.', err)
     }
