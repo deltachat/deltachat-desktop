@@ -136,15 +136,22 @@ export function init(cwd: string, logHandler: LogHandler) {
   })
 
   ipcMain.handle('writeClipboardToTempFile', async (_ev, pathToFile) => {
-    const buf = clipboard.readImage()
-    log.info('Writing clipboard to file ' + pathToFile, buf)
-    await ensureFile(pathToFile)
-    await writeFile(pathToFile, buf.toPNG(), 'binary')
-  })
+    // readBuffer() exists, but labeled experimental.
+    // It seems to support a lot of different kinds of things.
+    // https://github.com/electron/electron/blob/2585e6d5fa5e185d52d51217970c1cde26cf36b3/shell/common/api/electron_api_clipboard.cc#L52
+    // https://github.com/chromium/chromium/blob/master/ui/base/clipboard/clipboard_format_type.h
+    const formats = clipboard.availableFormats().sort()
+    if (formats.length > 0) {
+      const buf = clipboard.readBuffer(formats[0])
+      log.info(`Writing clipboard ${formats[0]} to file ${pathToFile}`)
+      await ensureFile(pathToFile)
+      await writeFile(pathToFile, buf, 'binary')
+    }
 
-  ipcMain.handle('saveTmpFile', async (_ev, pathToFile, data) => {
-    log.info('GOT DATA IN IPC MAIN', data)
-    await ensureFile(pathToFile)
-    await writeFile(pathToFile, data, 'binary')
+    // Can use readImage() for a more stable but limited API
+    // const buf = clipboard.readImage()
+    // log.info('Writing clipboard image to file ' + pathToFile, buf)
+    // await ensureFile(pathToFile)
+    // await writeFile(pathToFile, buf.toPNG(), 'binary')
   })
 }

@@ -37,20 +37,6 @@ export const insideBoundingRect = (
   )
 }
 
-// export const getBinary = async (readStream: ReadableStream, asBuffer = false) => {
-//   // set stream encoding to binary so chunks are kept in binary
-//   readStream.setEncoding('binary')
-//   readStream.once('error', err => {
-//     return cb(err)
-//   })
-//   readStream.on('data', chunk => (data += chunk))
-//   readStream.on('end', () => {
-//     // If you need the binary data as a Buffer
-//     // create one from data chunks
-//     return cb(null, asBuffer ? Buffer.from(data, 'binary') : data)
-//   })
-// }
-
 const QuoteOrDraftRemoveButton = ({ onClick }: { onClick: () => void }) => {
   return (
     <button
@@ -179,32 +165,28 @@ const Composer = forwardRef<
   // https://github.com/deltachat/deltachat-desktop/issues/2108
   const handlePaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
 
-    // If there is no file, do the normal thing
+    // Skip if no file
     if (!e.clipboardData.files.length) {
       return
     }
 
-    // Can get access to the file's full binary via text() or stream:
-    // console.log('FILE PASTE', JSON.stringify(await e.clipboardData.files[0].text()))
+    // File object
+    // https://www.electronjs.org/docs/api/file-object
     const file = e.clipboardData.files[0];
 
-    // Unfortunately file.path is not populated here in my testing, even when
-    // pasting a file copied from nemo.
-    // if (file.path) {
-    //   addFileToDraft(file.path)
-    //   return
-    // }
+    // file.path is always set to empty string?
+    if (file.path) {
+      addFileToDraft(file.path)
+      return
+    }
 
-    // Write a temp file and then pass that in the draft
-    if (file.stream) {
-      // const fileData = await file.text()
-      // console.log('Got pasted file', fileData)
+    try {
+      // Write clipboard to file then attach it to the draft
       const tmpFileName = `paste.${mimeTypes.extension(file.type) || 'bin'}`
       const tmpFilePath = await runtime.writeClipboardToTempFile(tmpFileName)
-      // const tmpFilePath = await runtime.saveTmpFile(tmpFileName, fileData)
-      // const tmpFilePath = await runtime.saveTmpFile(tmpFileName, file.stream().getReader)
-      console.log(`Saved temp file of type ${file.type} to ${tmpFilePath}`)
       addFileToDraft(tmpFilePath)
+    } catch (err) {
+      log.error('Failed to paste file.', err)
     }
   };
 
