@@ -19,6 +19,7 @@ import { Quote } from '../message/Message'
 import { DeltaBackend, sendMessageParams } from '../../delta-remote'
 import { DraftAttachment } from '../attachment/messageAttachment'
 import { runtime } from '../../runtime'
+import {app} from 'electron'
 
 const log = getLogger('renderer/composer')
 
@@ -160,6 +161,26 @@ const Composer = forwardRef<
     }
   }, [showEmojiPicker, emojiAndStickerRef])
 
+  // Paste file functionality
+  // https://github.com/deltachat/deltachat-desktop/issues/2108
+  const handlePaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+
+    // If there is no file, do the normal thing
+    if (!e.clipboardData.files.length) {
+      return
+    }
+
+    // Can get access to the file's full binary via text() or stream:
+    // console.log('FILE PASTE', JSON.stringify(await e.clipboardData.files[0].text()))
+    const file = e.clipboardData.files[0];
+
+    // Unfortunately file.path is not populated here in my testing, even when
+    // pasting a file copied from nemo.
+    if (file.path) {
+      addFileToDraft(file.path)
+    }
+  };
+
   const tx = useTranslationFunction()
 
   useLayoutEffect(() => {
@@ -216,6 +237,7 @@ const Composer = forwardRef<
                 sendMessage={sendMessage}
                 chatId={chatId}
                 updateDraftText={updateDraftText}
+                onPaste={handlePaste}
               />
             )}
           </SettingsContext.Consumer>
