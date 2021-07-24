@@ -1,5 +1,5 @@
 import { app as rawApp, dialog, ipcMain } from 'electron'
-import { copyFile } from 'fs-extra'
+import { copyFile } from 'fs/promises'
 import { getLogger } from '../shared/logger'
 import { getLogsPath } from './application-constants'
 import { LogHandler } from './log-handler'

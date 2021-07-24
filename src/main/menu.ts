@@ -10,7 +10,7 @@ import { getLogsPath } from './application-constants'
 import { LogHandler } from './log-handler'
 import { ExtendedAppMainProcess } from './types'
 import * as mainWindow from './windows/main'
-import { readJsonSync } from 'fs-extra'
+import { readFileSync } from 'fs'
 import { join } from 'path'
 
 const log = getLogger('main/menu')
@@ -19,8 +19,9 @@ const languages: {
   locale: string
   name: string
 }[] = (() => {
-  const rawLanguageList: { [locale: string]: string } = readJsonSync(
-    join(__dirname, '../../_locales/_languages.json')
+  const languagesFile = join(__dirname, '../../_locales/_languages.json')
+  const rawLanguageList: { [locale: string]: string } = JSON.parse(
+    readFileSync(languagesFile, 'utf8')
   )
 
   return Object.keys(rawLanguageList)

@@ -1,6 +1,8 @@
-const { readJsonSync } = require('fs-extra')
+const { readFileSync } = require('fs')
 
-const sha = readJsonSync(process.env['GITHUB_EVENT_PATH']).pull_request.head.sha
+const sha = JSON.parse(
+  readFileSync(process.env['GITHUB_EVENT_PATH'], 'utf8')
+).pull_request.head.sha
 
 const base_url =
   'https://download.delta.chat/desktop/preview/deltachat-desktop-'
