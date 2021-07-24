@@ -7,7 +7,7 @@ import { debounce } from 'debounce'
 
 const log = getLogger('renderer/helpers/ChatList')
 
-function debounceWithInit<ARGS extends Array<any>>(
+export function debounceWithInit<ARGS extends Array<any>>(
   fn: (...args: ARGS) => void,
   delay_ms: number
 ): (...args: ARGS) => void {

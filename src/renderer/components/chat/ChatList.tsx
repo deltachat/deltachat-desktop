@@ -15,7 +15,6 @@ import { PseudoListItemAddContact } from '../helpers/PseudoListItem'
 import { C } from 'deltachat-node/dist/constants'
 import { selectChat } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
-import { isValidEmail } from '../../../shared/util'
 import { ContactListItem } from '../contact/ContactListItem'
 import { useContactIds } from '../contact/ContactList'
 import {
@@ -96,7 +95,6 @@ export default function ChatList(props: {
 }) {
   const { selectedChatId, showArchivedChats, onChatClick, queryStr } = props
   const isSearchActive = queryStr !== ''
-  const queryStrIsEmail = isValidEmail(queryStr)
 
   const {
     contactIds,
@@ -107,6 +105,7 @@ export default function ChatList(props: {
     isContactLoaded,
     loadContact,
     contactCache,
+    queryStrIsValidEmail,
   } = useContactAndMessageLogic(queryStr)
 
   const { chatListIds, isChatLoaded, loadChats, chatCache } = useLogicChatPart(
@@ -117,7 +116,7 @@ export default function ChatList(props: {
   const openContextMenu = useChatListContextMenu()
 
   const addContactOnClick = async () => {
-    if (!queryStrIsEmail) return
+    if (!queryStrIsValidEmail) return
 
     const contactId = await DeltaBackend.call(
       'contacts.createContact',
@@ -280,11 +279,11 @@ export default function ChatList(props: {
                       )
                     }}
                   </ChatListPart>
-                  {chatListIds.length === 0 && queryStrIsEmail && (
+                  {chatListIds.length === 0 && queryStrIsValidEmail && (
                     <div style={{ width: '30vw' }}>
                       <PseudoListItemAddContact
                         queryStr={queryStr}
-                        queryStrIsEmail={queryStrIsEmail}
+                        queryStrIsEmail={queryStrIsValidEmail}
                         onClick={addContactOnClick}
                       />
                     </div>
@@ -512,7 +511,7 @@ function useLogicChatPart(queryStr: string, showArchivedChats: boolean) {
 }
 
 function useContactAndMessageLogic(queryStr: string) {
-  const contactIds = useContactIds(0, queryStr)
+  const { contactIds, queryStrIsValidEmail } = useContactIds(0, queryStr)
   const messageResultIds = useMessageResults(queryStr)
 
   // Contacts ----------------
@@ -594,5 +593,6 @@ function useContactAndMessageLogic(queryStr: string) {
     isMessageLoaded,
     loadMessages,
     messageCache,
+    queryStrIsValidEmail,
   }
 }
