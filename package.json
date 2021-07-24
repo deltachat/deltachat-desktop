@@ -95,7 +95,6 @@
     "mime-types": "^2.1.25",
     "moment": "^2.27.0",
     "node-fetch": "^2.6.1",
-    "package-lock.json": "^1.0.0",
     "path-browserify": "^1.0.1",
     "punycode": "^2.1.1",
     "rc": "^1.2.8",
