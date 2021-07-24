@@ -32,7 +32,7 @@
     "watch": "npm run watch:shared & npm run watch:frontend",
     "watch:shared": "npm run watch:shared:translations",
     "watch:shared:translations": "npm run build:shared:translations -- -w",
-    "watch:frontend": "npm run build:frontend:source_map_support && npm run watch:frontend:ts & npm run watch:frontend:static & npm run watch:frontend:scss",
+    "watch:frontend": "npm run build:frontend:source-map-support && npm run watch:frontend:ts & npm run watch:frontend:static & npm run watch:frontend:scss",
     "watch:frontend:ts": "npm run build:frontend:ts -- -w",
     "watch:frontend:static": "npm run build:frontend:static -- -w",
     "watch:frontend:scss": "npm run build:frontend:scss -- --watch",
