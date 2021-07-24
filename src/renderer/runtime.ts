@@ -48,9 +48,11 @@ interface Runtime {
     options: Electron.OpenDialogOptions
   ): Promise<string | null>
   downloadFile(pathToFile: string): Promise<void>
+  saveTmpFile(pathToFile: string, data: any): Promise<string>
   transformBlobURL(blob: string): string
   readClipboardText(): Promise<string>
   writeClipboardText(text: string): Promise<void>
+  writeClipboardToTempFile(pathToFile: string): Promise<string>
   getAppPath(name: Parameters<typeof app.getPath>[0]): string
   openPath(path: string): Promise<string>
 }
@@ -65,12 +67,18 @@ class Browser implements Runtime {
   downloadFile(_pathToFile: string): Promise<void> {
     throw new Error('Method not implemented.')
   }
+  async saveTmpFile(_pathToFile: string, _data: any): Promise<string> {
+    throw new Error('Method not implemented.')
+  }
   async readClipboardText(): Promise<string> {
     // return await navigator.clipboard.readText
     throw new Error('Method not implemented.')
   }
   writeClipboardText(_text: string): Promise<void> {
     // navigator.clipboard.writeText(text)
+    throw new Error('Method not implemented.')
+  }
+  async writeClipboardToTempFile(_pathToFile: string): Promise<string> {
     throw new Error('Method not implemented.')
   }
   transformBlobURL(_blob: string): string {
@@ -117,6 +125,17 @@ class Electron implements Runtime {
     await ipcBackend.invoke('saveFile', pathToFile, {
       defaultPath: join(app_getPath('downloads'), basename(pathToFile)),
     })
+  }
+  async writeClipboardToTempFile(pathToFile: string): Promise<string> {
+    console.log('Runtime writeClipboardToTempFile')
+    const dest = join(app_getPath('temp'), basename(pathToFile))
+    await ipcBackend.invoke('writeClipboardToTempFile', dest)
+    return dest
+  }
+  async saveTmpFile(pathToFile: string, data: any): Promise<string> {
+    const dest = join(app_getPath('temp'), basename(pathToFile))
+    await ipcBackend.invoke('saveTmpFile', dest, data)
+    return dest
   }
   readClipboardText(): Promise<string> {
     return Promise.resolve(read_clipboard_text())

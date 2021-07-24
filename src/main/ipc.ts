@@ -1,5 +1,5 @@
-import { app as rawApp, dialog, ipcMain } from 'electron'
-import { copyFile } from 'fs-extra'
+import { app as rawApp, clipboard, dialog, ipcMain } from 'electron'
+import { copyFile, writeFile, ensureFile } from 'fs-extra'
 import { getLogger } from '../shared/logger'
 import { getLogsPath } from './application-constants'
 import { LogHandler } from './log-handler'
@@ -133,5 +133,18 @@ export function init(cwd: string, logHandler: LogHandler) {
     if (!canceled && filePath) {
       await copyFile(source, filePath)
     }
+  })
+
+  ipcMain.handle('writeClipboardToTempFile', async (_ev, pathToFile) => {
+    const buf = clipboard.readImage()
+    log.info('Writing clipboard to file ' + pathToFile, buf)
+    await ensureFile(pathToFile)
+    await writeFile(pathToFile, buf.toPNG(), 'binary')
+  })
+
+  ipcMain.handle('saveTmpFile', async (_ev, pathToFile, data) => {
+    log.info('GOT DATA IN IPC MAIN', data)
+    await ensureFile(pathToFile)
+    await writeFile(pathToFile, data, 'binary')
   })
 }
