@@ -40,6 +40,7 @@ class DeltaRemote {
     overview_page: any
     status: any
   }>
+  call(fnName: 'checkValidEmail', email: string): Promise<boolean>
   call(fnName: 'joinSecurejoin', qrCode: string): Promise<number>
   call(fnName: 'stopOngoingProcess'): Promise<number>
   call(fnName: 'checkQrCode', qrCode: string): Promise<QrCodeResponse>

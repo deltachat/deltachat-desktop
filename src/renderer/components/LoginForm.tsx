@@ -18,7 +18,6 @@ import { DeltaDialogContent, DeltaDialogFooter } from './dialogs/DeltaDialog'
 import { Credentials, DeltaChatAccount } from '../../shared/shared-types'
 import { useTranslationFunction, i18nContext } from '../contexts'
 import { useDebouncedCallback } from 'use-debounce/lib'
-import { isValidEmail } from '../../shared/util'
 
 const getDefaultPort = (credentials: Credentials, protocol: string) => {
   const SendSecurityPortMap = {
@@ -132,7 +131,7 @@ export default function LoginForm({
   ) => {
     handleCredentialsChange(event)
     const email = event.target.value
-    isValidEmail(email) && debouncedGetProviderInfo(email)
+    debouncedGetProviderInfo(email)
   }
 
   const {

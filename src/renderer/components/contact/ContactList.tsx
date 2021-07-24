@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react'
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { ContactListItem } from './ContactListItem'
 import { DeltaBackend } from '../../delta-remote'
 import { DCContact } from '../../../shared/shared-types'
 import { debounce } from 'debounce'
 import { useInitEffect } from '../helpers/useInitEffect'
+import { debounceWithInit } from '../chat/ChatListHelpers'
 
 export function ContactList2(props: {
   contacts: DCContact[]
@@ -64,17 +65,66 @@ export function useContacts(listFlags: number, queryStr: string) {
   return [contacts, updateContacts] as [typeof contacts, typeof updateContacts]
 }
 
+export function useContactsNew(listFlags: number, initialQueryStr: string) {
+  const [state, setState] = useState<{
+    contacts: DCContact[]
+    queryStrIsValidEmail: boolean
+  }>({ contacts: [], queryStrIsValidEmail: false })
+
+  const debouncedGetContacts2 = useMemo(
+    () =>
+      debounceWithInit(async (listFlags: number, queryStr: string) => {
+        const contacts = await DeltaBackend.call(
+          'getContacts2',
+          listFlags,
+          queryStr
+        )
+        const queryStrIsValidEmail = await DeltaBackend.call(
+          'checkValidEmail',
+          queryStr
+        )
+        setState({ contacts, queryStrIsValidEmail })
+      }, 200),
+    []
+  )
+
+  const search = useCallback(
+    (queryStr: string) => {
+      debouncedGetContacts2(listFlags, queryStr)
+    },
+    [listFlags, debouncedGetContacts2]
+  )
+
+  useEffect(() => debouncedGetContacts2(listFlags, initialQueryStr), [
+    listFlags,
+    initialQueryStr,
+    debouncedGetContacts2,
+  ])
+
+  return [state, search] as [typeof state, typeof search]
+}
+
 export function useContactIds(listFlags: number, queryStr: string) {
-  const [contactIds, setContacts] = useState<number[]>([])
+  const [state, setState] = useState<{
+    contactIds: number[]
+    queryStrIsValidEmail: boolean
+  }>({ contactIds: [], queryStrIsValidEmail: false })
 
   const debouncedGetContactsIds = useMemo(
     () =>
-      debounce((listFlags: number, queryStr: string) => {
-        DeltaBackend.call('contacts.getContactIds', listFlags, queryStr).then(
-          setContacts
+      debounce(async (listFlags: number, queryStr: string) => {
+        const contactIds = await DeltaBackend.call(
+          'contacts.getContactIds',
+          listFlags,
+          queryStr
         )
+        const queryStrIsValidEmail = await DeltaBackend.call(
+          'checkValidEmail',
+          queryStr
+        )
+        setState({ contactIds, queryStrIsValidEmail })
       }, 200),
-    [setContacts]
+    [setState]
   )
 
   const init = useRef(false)
@@ -88,5 +138,5 @@ export function useContactIds(listFlags: number, queryStr: string) {
     }
   }, [debouncedGetContactsIds, listFlags, queryStr])
 
-  return contactIds
+  return state
 }
