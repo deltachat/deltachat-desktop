@@ -51,6 +51,7 @@ interface Runtime {
   transformBlobURL(blob: string): string
   readClipboardText(): Promise<string>
   writeClipboardText(text: string): Promise<void>
+  writeClipboardToTempFile(): Promise<string>
   getAppPath(name: Parameters<typeof app.getPath>[0]): string
   openPath(path: string): Promise<string>
 }
@@ -71,6 +72,9 @@ class Browser implements Runtime {
   }
   writeClipboardText(_text: string): Promise<void> {
     // navigator.clipboard.writeText(text)
+    throw new Error('Method not implemented.')
+  }
+  async writeClipboardToTempFile(): Promise<string> {
     throw new Error('Method not implemented.')
   }
   transformBlobURL(_blob: string): string {
@@ -117,6 +121,9 @@ class Electron implements Runtime {
     await ipcBackend.invoke('saveFile', pathToFile, {
       defaultPath: join(app_getPath('downloads'), basename(pathToFile)),
     })
+  }
+  async writeClipboardToTempFile(): Promise<string> {
+    return await ipcBackend.invoke('writeClipboardToTempFile')
   }
   readClipboardText(): Promise<string> {
     return Promise.resolve(read_clipboard_text())

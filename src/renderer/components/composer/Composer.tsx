@@ -160,6 +160,32 @@ const Composer = forwardRef<
     }
   }, [showEmojiPicker, emojiAndStickerRef])
 
+  // Paste file functionality
+  // https://github.com/deltachat/deltachat-desktop/issues/2108
+  const handlePaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    // Skip if no file
+    if (!e.clipboardData.files.length) {
+      return
+    }
+
+    // File object
+    // https://www.electronjs.org/docs/api/file-object
+    const file = e.clipboardData.files[0]
+
+    // file.path is always set to empty string?
+    if (file.path) {
+      addFileToDraft(file.path)
+      return
+    }
+
+    try {
+      // Write clipboard to file then attach it to the draft
+      addFileToDraft(await runtime.writeClipboardToTempFile())
+    } catch (err) {
+      log.error('Failed to paste file.', err)
+    }
+  }
+
   const tx = useTranslationFunction()
 
   useLayoutEffect(() => {
@@ -216,6 +242,7 @@ const Composer = forwardRef<
                 sendMessage={sendMessage}
                 chatId={chatId}
                 updateDraftText={updateDraftText}
+                onPaste={handlePaste}
               />
             )}
           </SettingsContext.Consumer>

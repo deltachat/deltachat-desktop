@@ -9,6 +9,7 @@ type ComposerMessageInputProps = {
   chatId: number
   sendMessage: () => void
   enterKeySends: boolean
+  onPaste?: (e: React.ClipboardEvent<HTMLTextAreaElement>) => void
   updateDraftText: (text: string, InputChatId: number) => void
 }
 
@@ -211,6 +212,7 @@ export default class ComposerMessageInput extends React.Component<
         value={this.state.text}
         onKeyDown={this.onKeyDown}
         onChange={this.onChange}
+        onPaste={this.props.onPaste}
         placeholder={window.static_translate('write_message_desktop')}
         disabled={this.state.loadingDraft}
         dir='auto'
