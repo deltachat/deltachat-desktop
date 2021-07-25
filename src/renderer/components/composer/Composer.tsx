@@ -163,7 +163,6 @@ const Composer = forwardRef<
   // Paste file functionality
   // https://github.com/deltachat/deltachat-desktop/issues/2108
   const handlePaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
-
     // Skip if no file
     if (!e.clipboardData.files.length) {
       return
@@ -171,7 +170,7 @@ const Composer = forwardRef<
 
     // File object
     // https://www.electronjs.org/docs/api/file-object
-    const file = e.clipboardData.files[0];
+    const file = e.clipboardData.files[0]
 
     // file.path is always set to empty string?
     if (file.path) {
@@ -185,7 +184,7 @@ const Composer = forwardRef<
     } catch (err) {
       log.error('Failed to paste file.', err)
     }
-  };
+  }
 
   const tx = useTranslationFunction()
 

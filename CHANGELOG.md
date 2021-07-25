@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+
+- Copy-paste images into chat
+
 ### Changed
 - Upgrade esbuild to `0.12.15`
 - Update testcafe to `1.15.0`

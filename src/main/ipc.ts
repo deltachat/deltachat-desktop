@@ -136,7 +136,7 @@ export function init(cwd: string, logHandler: LogHandler) {
     }
   })
 
-  ipcMain.handle('writeClipboardToTempFile', async (_ev) => {
+  ipcMain.handle('writeClipboardToTempFile', async _ev => {
     const formats = clipboard.availableFormats().sort()
     log.debug('Clipboard available formats:', formats)
     if (formats.length <= 0) {
@@ -144,7 +144,7 @@ export function init(cwd: string, logHandler: LogHandler) {
     }
     const pathToFile = join(
       rawApp.getPath('temp'),
-      `paste.${mimeTypes.extension(formats[0]) || 'bin'}`,
+      `paste.${mimeTypes.extension(formats[0]) || 'bin'}`
     )
     const buf = clipboard.readBuffer(formats[0])
     log.debug(`Writing clipboard ${formats[0]} to file ${pathToFile}`)
