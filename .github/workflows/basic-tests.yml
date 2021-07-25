@@ -1,6 +1,13 @@
 name: Basic Code Checks
 
-on: [push]
+on:
+  push:
+  pull_request:
+    paths-ignore:
+      - 'docs/**'  # only trigger build if a file outside of /docs was changed
+      - 'README_ASSETS/**'
+      - '.prettierrc.yml'
+      - '.vscode/**'
 
 jobs:
   test:
