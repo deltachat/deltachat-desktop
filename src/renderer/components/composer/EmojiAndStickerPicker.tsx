@@ -42,7 +42,7 @@ export const StickerDiv = (props: {
             >
               <img
                 src={filePath}
-                onClick={onClickSticker.bind(this, filePath)}
+                onClick={onClickSticker.bind(null, filePath)}
               />
             </div>
           )
