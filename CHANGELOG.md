@@ -4,6 +4,7 @@
 
 ### Added
 
+- Windows installer: Allow user to choose the instalation path.
 - Copy-paste images into chat
 
 ### Changed

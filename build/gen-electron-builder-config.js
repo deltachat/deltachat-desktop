@@ -163,6 +163,12 @@ build['appx'] = {
   identityName: 'merlinux.DeltaChat',
 }
 
+// see https://www.electron.build/configuration/nsis
+build['nsis'] = {
+  oneClick: false,
+  allowToChangeInstallationDirectory: true
+}
+
 // module.exports = build
 // using this as a js module doesn#t work on windows
 // because electron builder asks windows to open it as file instead of reading it.
