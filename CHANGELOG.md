@@ -2,9 +2,13 @@
 
 ## [Unreleased][unreleased]
 
-### Changed
+### Added
 
 - Windows installer: Allow user to choose the instalation path.
+- Copy-paste images into chat
+
+### Changed
+- Upgrade esbuild to `0.12.15`
 - Update testcafe to `1.15.0`
 
 ## [1.20.3] - 2021-06-30
