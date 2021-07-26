@@ -5,7 +5,11 @@ import { C } from 'deltachat-node/dist/constants'
 import { DeltaBackend } from '../../delta-remote'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { selectChat } from '../../stores/chat'
-import { useContacts, ContactList2 } from '../contact/ContactList'
+import {
+  useContacts,
+  ContactList2,
+  useContactsNew,
+} from '../contact/ContactList'
 import {
   PseudoListItem,
   PseudoListItemNoSearchResults,
@@ -27,7 +31,6 @@ import { GroupImage } from './Edit-Group-Image'
 
 import { JsonContact, DCContact } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
-import { isValidEmail } from '../../../shared/util'
 import { QrCodeShowQrInner } from './QrCode'
 import { runtime } from '../../runtime'
 
@@ -40,9 +43,11 @@ export default function CreateChat(props: {
   const { userFeedback } = useContext(ScreenContext)
   const [viewMode, setViewMode] = useState('main')
 
-  const [contacts, updateContacts] = useContacts(C.DC_GCL_ADD_SELF, '')
+  const [{ contacts, queryStrIsValidEmail }, updateContacts] = useContactsNew(
+    C.DC_GCL_ADD_SELF,
+    ''
+  )
   const [queryStr, onSearchChange] = useContactSearch(updateContacts)
-  const queryStrIsEmail = isValidEmail(queryStr)
 
   const closeDialogAndSelectChat = (chatId: number) => {
     selectChat(chatId)
@@ -82,7 +87,7 @@ export default function CreateChat(props: {
   }
 
   const addContactOnClick = async () => {
-    if (!queryStrIsEmail) return
+    if (!queryStrIsValidEmail) return
 
     const contactId = await DeltaBackend.call(
       'contacts.createContact',
@@ -106,7 +111,7 @@ export default function CreateChat(props: {
     return (
       <PseudoListItemAddContact
         queryStr={queryStr}
-        queryStrIsEmail={queryStrIsEmail}
+        queryStrIsEmail={queryStrIsValidEmail}
         onClick={addContactOnClick}
       />
     )

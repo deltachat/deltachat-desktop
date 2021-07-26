@@ -190,8 +190,9 @@ app.on('web-contents-created', (_e, contents) => {
   contents.on('will-navigate', (e, _navigationUrl) => {
     e.preventDefault()
   })
-  contents.on('new-window', (e, _navigationUrl) => {
-    e.preventDefault()
+  contents.setWindowOpenHandler(_details => {
+    // prevent new windows from being created when clicking on links
+    return { action: 'deny' }
   })
 })
 

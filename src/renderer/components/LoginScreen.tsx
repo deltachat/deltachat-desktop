@@ -69,7 +69,7 @@ function ImportBackupProgressDialog({
       ipcBackend.removeListener('DC_EVENT_IMEX_PROGRESS', onImexProgress)
       ipcBackend.removeListener('DC_EVENT_ERROR', onError)
     }
-  }, [])
+  }, [backupFile, onClose])
 
   const tx = useTranslationFunction()
   return (

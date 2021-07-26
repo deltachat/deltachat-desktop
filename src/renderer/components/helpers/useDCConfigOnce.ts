@@ -6,6 +6,6 @@ export function useDCConfigOnce(key: string) {
   const [value, setValue] = useState<string>(undefined)
   useEffect(() => {
     DeltaBackend.call('settings.getConfig', key).then(setValue)
-  }, [])
+  }, [key])
   return value
 }

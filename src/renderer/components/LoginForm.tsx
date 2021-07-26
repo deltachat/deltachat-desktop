@@ -2,7 +2,7 @@
 
 import type { DeltaChat } from 'deltachat-node'
 import { C } from 'deltachat-node/dist/constants'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import {
   DeltaInput,
   DeltaPasswordInput,
@@ -18,7 +18,6 @@ import { DeltaDialogContent, DeltaDialogFooter } from './dialogs/DeltaDialog'
 import { Credentials, DeltaChatAccount } from '../../shared/shared-types'
 import { useTranslationFunction, i18nContext } from '../contexts'
 import { useDebouncedCallback } from 'use-debounce/lib'
-import { isValidEmail } from '../../shared/util'
 
 const getDefaultPort = (credentials: Credentials, protocol: string) => {
   const SendSecurityPortMap = {
@@ -132,7 +131,7 @@ export default function LoginForm({
   ) => {
     handleCredentialsChange(event)
     const email = event.target.value
-    isValidEmail(email) && debouncedGetProviderInfo(email)
+    debouncedGetProviderInfo(email)
   }
 
   const {
@@ -346,10 +345,14 @@ export function ConfigureProgressDialog({
     onClose()
   }
 
-  const onConfigureSuccessful = (account: DeltaChatAccount) => {
-    onClose()
-    onSuccess && onSuccess(account)
-  }
+  const onConfigureSuccessful = useCallback(
+    (account: DeltaChatAccount) => {
+      onClose()
+      onSuccess && onSuccess(account)
+    },
+    [onClose, onSuccess]
+  )
+
   const onConfigureError = (_: null, [_data1, data2]: [null, string]) =>
     setError(data2)
 
@@ -374,7 +377,9 @@ export function ConfigureProgressDialog({
         if (account !== null) onConfigureSuccessful(account)
       }
     })()
+  }, [mode, credentials, onConfigureSuccessful])
 
+  useEffect(() => {
     ipcBackend.on('DC_EVENT_CONFIGURE_PROGRESS', onConfigureProgress)
     ipcBackend.on('DCN_EVENT_CONFIGURE_FAILED', onConfigureFailed)
     ipcBackend.on('DC_EVENT_ERROR', onConfigureError)

@@ -4,6 +4,7 @@ import React, {
   useEffect,
   forwardRef,
   useLayoutEffect,
+  useCallback,
 } from 'react'
 import { Button } from '@blueprintjs/core'
 
@@ -160,12 +161,38 @@ const Composer = forwardRef<
     }
   }, [showEmojiPicker, emojiAndStickerRef])
 
+  // Paste file functionality
+  // https://github.com/deltachat/deltachat-desktop/issues/2108
+  const handlePaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    // Skip if no file
+    if (!e.clipboardData.files.length) {
+      return
+    }
+
+    // File object
+    // https://www.electronjs.org/docs/api/file-object
+    const file = e.clipboardData.files[0]
+
+    // file.path is always set to empty string?
+    if (file.path) {
+      addFileToDraft(file.path)
+      return
+    }
+
+    try {
+      // Write clipboard to file then attach it to the draft
+      addFileToDraft(await runtime.writeClipboardToTempFile())
+    } catch (err) {
+      log.error('Failed to paste file.', err)
+    }
+  }
+
   const tx = useTranslationFunction()
 
   useLayoutEffect(() => {
     // focus composer on chat change
     messageInputRef.current?.focus()
-  }, [chatId])
+  }, [chatId, messageInputRef])
 
   if (isDisabled) {
     if (disabledReason) {
@@ -216,6 +243,7 @@ const Composer = forwardRef<
                 sendMessage={sendMessage}
                 chatId={chatId}
                 updateDraftText={updateDraftText}
+                onPaste={handlePaste}
               />
             )}
           </SettingsContext.Consumer>
@@ -275,26 +303,42 @@ export function useDraft(
   const draftRef = useRef<draftObject>()
   draftRef.current = draftState
 
-  const loadDraft = (chatId: number) => {
-    DeltaBackend.call('messageList.getDraft', chatId).then(newDraft => {
-      if (!newDraft) {
-        log.debug('no draft')
-        clearDraft()
-        inputRef.current?.setText('')
-      } else {
-        _setDraft(old => ({
-          ...old,
-          text: newDraft.msg.text,
-          file: newDraft.msg.file,
-          attachment: newDraft.msg.attachment,
-          viewType: newDraft.msg.viewType,
-          quotedMessageId: newDraft.msg.quotedMessageId,
-          quotedText: newDraft.msg.quotedText,
-        }))
-        inputRef.current?.setText(newDraft.msg.text)
-      }
-    })
-  }
+  const clearDraft = useCallback(() => {
+    _setDraft(_ => ({
+      chatId,
+      text: '',
+      file: null,
+      attachment: null,
+      viewType: null,
+      quotedMessageId: 0,
+      quotedText: null,
+    }))
+    inputRef.current?.focus()
+  }, [chatId, inputRef])
+
+  const loadDraft = useCallback(
+    (chatId: number) => {
+      DeltaBackend.call('messageList.getDraft', chatId).then(newDraft => {
+        if (!newDraft) {
+          log.debug('no draft')
+          clearDraft()
+          inputRef.current?.setText('')
+        } else {
+          _setDraft(old => ({
+            ...old,
+            text: newDraft.msg.text,
+            file: newDraft.msg.file,
+            attachment: newDraft.msg.attachment,
+            viewType: newDraft.msg.viewType,
+            quotedMessageId: newDraft.msg.quotedMessageId,
+            quotedText: newDraft.msg.quotedText,
+          }))
+          inputRef.current?.setText(newDraft.msg.text)
+        }
+      })
+    },
+    [clearDraft, inputRef]
+  )
 
   useEffect(() => {
     log.debug('reloading chat because id changed', chatId)
@@ -302,9 +346,9 @@ export function useDraft(
     loadDraft(chatId)
     window.__reloadDraft = loadDraft.bind(this, chatId)
     return () => (window.__reloadDraft = null)
-  }, [chatId])
+  }, [chatId, loadDraft])
 
-  const saveDraft = async () => {
+  const saveDraft = useCallback(async () => {
     const draft = draftRef.current
     const oldChatId = chatId
     await DeltaBackend.call('messageList.setDraft', chatId, {
@@ -331,7 +375,7 @@ export function useDraft(
     } else {
       clearDraft()
     }
-  }
+  }, [chatId, clearDraft])
 
   const updateDraftText = (text: string, InputChatId: number) => {
     if (chatId !== InputChatId) {
@@ -342,33 +386,23 @@ export function useDraft(
     }
   }
 
-  const removeQuote = () => {
+  const removeQuote = useCallback(() => {
     draftRef.current.quotedMessageId = null
     saveDraft()
-  }
+  }, [saveDraft])
 
-  const removeFile = () => {
+  const removeFile = useCallback(() => {
     draftRef.current.file = null
     saveDraft()
-  }
+  }, [saveDraft])
 
-  const addFileToDraft = (file: string) => {
-    draftRef.current.file = file
-    saveDraft()
-  }
-
-  const clearDraft = () => {
-    _setDraft(_ => ({
-      chatId,
-      text: '',
-      file: null,
-      attachment: null,
-      viewType: null,
-      quotedMessageId: 0,
-      quotedText: null,
-    }))
-    inputRef.current?.focus()
-  }
+  const addFileToDraft = useCallback(
+    (file: string) => {
+      draftRef.current.file = file
+      saveDraft()
+    },
+    [saveDraft]
+  )
 
   useEffect(() => {
     window.__setQuoteInDraft = (messageId: number) => {
@@ -379,7 +413,7 @@ export function useDraft(
     return () => {
       window.__setQuoteInDraft = null
     }
-  })
+  }, [draftRef, inputRef, saveDraft])
 
   return {
     draftState,
