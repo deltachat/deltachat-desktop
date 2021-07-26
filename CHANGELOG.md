@@ -15,6 +15,7 @@
 - Update to electron `13.1.6`
 - Update some dependencies (`classnames`, `emoji-regex`, `mime-types`, `use-debounce`) and remove unused ones (`immutability-helper`, `@blueprintjs/select`, `wolfy87-eventemitter`, `@types/classnames`, `@types/css`, `@types/sass`, `depcheck`, `pngjs`)
 - use core method to validate email addresses, this will make tld email addresses possible
+- upgrade minimum nodejs to version `14`
 
 ## [1.20.3] - 2021-06-30
 

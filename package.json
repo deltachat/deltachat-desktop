@@ -67,7 +67,7 @@
     "url": "https://github.com/deltachat/deltachat-desktop/issues"
   },
   "engines": {
-    "node": ">=10.7.0"
+    "node": ">=14.0.0"
   },
   "productName": "DeltaChat",
   "homepage": "https://delta.chat",
