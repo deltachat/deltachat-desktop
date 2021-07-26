@@ -106,7 +106,7 @@ export default function DisappearingMessage({
       setDisappearingMessageDuration(ephemeralTimer)
       setLoading(false)
     })()
-  }, [])
+  }, [chatId])
 
   const saveAndClose = async () => {
     await DeltaBackend.call(

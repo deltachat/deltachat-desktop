@@ -9,7 +9,7 @@ export function useStore<T extends Store<any>>(
   useEffect(() => {
     StoreInstance.subscribe(setState)
     return () => StoreInstance.unsubscribe(setState)
-  }, [])
+  }, [StoreInstance])
   // TODO: better return an object to allow destructuring
   return [state, StoreInstance.dispatch.bind(StoreInstance)]
 }

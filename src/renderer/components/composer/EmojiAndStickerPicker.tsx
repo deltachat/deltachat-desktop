@@ -11,14 +11,6 @@ import { DeltaBackend } from '../../delta-remote'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { useTranslationFunction } from '../../contexts'
 
-export const useAsyncEffect = (
-  asyncEffect: () => {},
-  deps?: React.DependencyList
-) =>
-  useEffect(() => {
-    asyncEffect()
-  }, deps)
-
 export const StickerDiv = (props: {
   stickerPackName: string
   stickerPackImages: string[]
@@ -120,9 +112,10 @@ export const EmojiAndStickerPicker = forwardRef<
   const disableStickers =
     stickers === null || Object.keys(stickers).length === 0
 
-  useAsyncEffect(async () => {
-    const stickers = await DeltaBackend.call('stickers.getStickers')
-    setStickers(stickers)
+  useEffect(() => {
+    DeltaBackend.call('stickers.getStickers').then(stickers =>
+      setStickers(stickers)
+    )
   }, [])
 
   useLayoutEffect(() => {

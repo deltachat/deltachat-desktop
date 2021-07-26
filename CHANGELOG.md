@@ -10,6 +10,7 @@
 ### Changed
 - Upgrade esbuild to `0.12.15`
 - Update testcafe to `1.15.0`
+- Upgrade `react` and `react-dom` to `17.0.2`
 
 ## [1.20.3] - 2021-06-30
 
