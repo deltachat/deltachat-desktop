@@ -40,7 +40,7 @@ async function getGitRef() {
 }
 
 async function gatherBuildInfo() {
-  const packageJSON = join(__dirname, '../../package.json')
+  const packageJSON = join(__dirname, '../package.json')
   const package = JSON.parse(await readFile(packageJSON, 'utf8'))
   return {
     VERSION: package.version,

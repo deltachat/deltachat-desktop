@@ -6,7 +6,7 @@ const globWatcher = require('glob-watcher')
 
 async function copyRecursive(source, destination) {
     if ((await stat(source)).isDirectory()) {
-        mkdir(destination)
+        mkdir(destination, {recursive:true})
         const files = await readdir(source)
         for (const file of files) {
             copyRecursive(join(source, file), join(destination, file))

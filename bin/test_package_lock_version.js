@@ -1,4 +1,4 @@
-const { readFile } = require('fs-extra')
+const { readFile } = require('fs/promises')
 const { join } = require('path')
 
 const colorize = (light, code) => str =>

@@ -27,10 +27,10 @@ import {
   getAccountsPath,
   getCustomThemesPath,
 } from './application-constants'
-mkdirSync(getConfigPath())
-mkdirSync(getLogsPath())
-mkdirSync(getAccountsPath())
-mkdirSync(getCustomThemesPath())
+mkdirSync(getConfigPath(), { recursive: true })
+mkdirSync(getLogsPath(), { recursive: true })
+mkdirSync(getAccountsPath(), { recursive: true })
+mkdirSync(getCustomThemesPath(), { recursive: true })
 
 // Setup Logger
 import { cleanupLogFolder, createLogHandler } from './log-handler'

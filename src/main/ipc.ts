@@ -1,6 +1,5 @@
-import { copyFile } from 'fs/promises'
+import { copyFile, writeFile } from 'fs/promises'
 import { app as rawApp, clipboard, dialog, ipcMain } from 'electron'
-import { copyFile, writeFile, ensureFile } from 'fs-extra'
 import { getLogger } from '../shared/logger'
 import { getLogsPath } from './application-constants'
 import { LogHandler } from './log-handler'
@@ -149,7 +148,6 @@ export function init(cwd: string, logHandler: LogHandler) {
     )
     const buf = clipboard.readBuffer(formats[0])
     log.debug(`Writing clipboard ${formats[0]} to file ${pathToFile}`)
-    await ensureFile(pathToFile)
     await writeFile(pathToFile, buf, 'binary')
     return pathToFile
   })

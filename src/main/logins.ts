@@ -86,10 +86,16 @@ async function readDeltaAccounts(accountFolderPath: string) {
   )
   const accountFolders = paths.filter(path => {
     // isDeltaAccountFolder
-    return (
-      lstatSync(join(path, 'db.sqlite')).isFile() &&
-      !lstatSync(path).isSymbolicLink()
-    )
+    try {
+      return (
+        lstatSync(path).isDirectory() &&
+        lstatSync(join(path, 'db.sqlite')).isFile() &&
+        !lstatSync(path).isSymbolicLink()
+      )
+    } catch (error) {
+      log.warn(error)
+      return false
+    }
   })
 
   return (await Promise.all(accountFolders.map(getAccountInfo))).filter(
@@ -103,10 +109,16 @@ async function findInvalidDeltaAccounts() {
   )
   const accountFolders = paths.filter(path => {
     // isDeltaAccountFolder
-    return (
-      lstatSync(join(path, 'db.sqlite')).isFile() &&
-      !lstatSync(path).isSymbolicLink()
-    )
+    try {
+      return (
+        lstatSync(path).isDirectory() &&
+        lstatSync(join(path, 'db.sqlite')).isFile() &&
+        !lstatSync(path).isSymbolicLink()
+      )
+    } catch (error) {
+      log.warn(error)
+      return false
+    }
   })
 
   const isConfigured = async (dir: string) => {
