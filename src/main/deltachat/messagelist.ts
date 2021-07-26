@@ -15,7 +15,7 @@ import {
   msgStatus,
 } from '../../shared/shared-types'
 
-import { writeFile } from 'fs-extra'
+import { writeFile } from 'fs/promises'
 import tempy from 'tempy'
 export default class DCMessageList extends SplitOut {
   sendMessage(

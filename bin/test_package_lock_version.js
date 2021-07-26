@@ -1,4 +1,4 @@
-const { readJson } = require('fs-extra')
+const { readFile } = require('fs-extra')
 const { join } = require('path')
 
 const colorize = (light, code) => str =>
@@ -7,8 +7,12 @@ const red = colorize(1, 31)
 const grey = colorize(1, 37)
 
 ;(async () => {
-  const package = await readJson(join(__dirname, '../package.json'))
-  const packageLock = await readJson(join(__dirname, '../package-lock.json'))
+  const package = JSON.parse(
+    await readFile(join(__dirname, '../package.json'), 'utf8')
+  )
+  const packageLock = JSON.parse(
+    await readFile(join(__dirname, '../package-lock.json'), 'utf8')
+  )
 
   if (package['version'] !== packageLock['version']) {
     console.error(

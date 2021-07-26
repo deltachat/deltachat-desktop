@@ -1,15 +1,15 @@
-const fs = require('fs-extra')
+const { readdir, readFile, writeFile } = require('fs/promises')
 const sass = require('sass')
 const { join } = require('path')
 
 const dc_theme_dir = join(__dirname, '../themes')
 ;(async () => {
-  const files = await fs.readdir(dc_theme_dir)
+  const files = await readdir(dc_theme_dir)
   const themes = files.filter(f => f.includes('.scss') && f.charAt(0) !== '_')
   try {
     const result = await Promise.all(
       themes.map(async theme => {
-        const theme_data = await fs.readFile(join(dc_theme_dir, theme), 'utf-8')
+        const theme_data = await readFile(join(dc_theme_dir, theme), 'utf-8')
 
         return new Promise((res, rej) => {
           sass.render(
@@ -23,7 +23,7 @@ const dc_theme_dir = join(__dirname, '../themes')
               if (err) return rej(err)
               try {
                 const resulting_filename = theme.replace('.scss', '.css')
-                await fs.writeFile(
+                await writeFile(
                   join(dc_theme_dir, resulting_filename),
                   result.css
                 )

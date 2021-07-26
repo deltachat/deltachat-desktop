@@ -1,4 +1,5 @@
-import { readFile, existsSync, watchFile, readdir } from 'fs-extra'
+import { existsSync, watchFile } from 'fs'
+import { readFile, readdir } from 'fs/promises'
 import { join, basename } from 'path'
 import { Theme } from '../shared/shared-types'
 import { getCustomThemesPath } from './application-constants'

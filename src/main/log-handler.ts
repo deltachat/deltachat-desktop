@@ -62,7 +62,7 @@ export function createLogHandler() {
 }
 export type LogHandler = ReturnType<typeof createLogHandler>
 
-import { readdir, lstat, unlink } from 'fs-extra'
+import { readdir, lstat, unlink } from 'fs/promises'
 import { getLogger } from '../shared/logger'
 
 export async function cleanupLogFolder() {

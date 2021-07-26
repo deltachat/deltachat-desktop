@@ -1,6 +1,6 @@
 //@ts-check
 const child = require('child_process')
-const { readFile, writeFile } = require('fs-extra')
+const { readFile, writeFile } = require('fs/promises')
 /**
  *
  * @param {string[]} args arguments for the command

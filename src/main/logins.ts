@@ -1,5 +1,6 @@
 import { join, basename } from 'path'
-import fs from 'fs-extra'
+import { existsSync, lstatSync, readdirSync } from 'fs'
+import { access, readdir, rename, rm, stat } from 'fs/promises'
 //@ts-ignore
 import DeltaChat, { C } from 'deltachat-node'
 import { getLogger } from '../shared/logger'
@@ -32,7 +33,7 @@ async function migrate(dir: string) {
     log.info('Old accounts detected, trying to move them', oldAccounts)
     for (const account of oldAccounts) {
       try {
-        await fs.move(
+        await rename(
           join(dir, basename(account.path)),
           join(dir, '/accounts/', basename(account.path))
         )
@@ -80,14 +81,14 @@ export async function getAccountInfo(path: string): Promise<DeltaChatAccount> {
 }
 
 async function readDeltaAccounts(accountFolderPath: string) {
-  const paths = (await fs.readdir(accountFolderPath)).map(filename =>
+  const paths = (await readdir(accountFolderPath)).map(filename =>
     join(accountFolderPath, filename)
   )
   const accountFolders = paths.filter(path => {
     // isDeltaAccountFolder
     return (
-      fs.existsSync(join(path, 'db.sqlite')) &&
-      !fs.lstatSync(path).isSymbolicLink()
+      lstatSync(join(path, 'db.sqlite')).isFile() &&
+      !lstatSync(path).isSymbolicLink()
     )
   })
 
@@ -97,14 +98,14 @@ async function readDeltaAccounts(accountFolderPath: string) {
 }
 
 async function findInvalidDeltaAccounts() {
-  const paths = (await fs.readdir(getAccountsPath())).map(filename =>
+  const paths = (await readdir(getAccountsPath())).map(filename =>
     join(getAccountsPath(), filename)
   )
   const accountFolders = paths.filter(path => {
     // isDeltaAccountFolder
     return (
-      fs.existsSync(join(path, 'db.sqlite')) &&
-      !fs.lstatSync(path).isSymbolicLink()
+      lstatSync(join(path, 'db.sqlite')).isFile() &&
+      !lstatSync(path).isSymbolicLink()
     )
   })
 
@@ -148,14 +149,14 @@ async function getConfig(
 }
 
 async function _getAccountSize(path: string) {
-  const db_size = (await fs.stat(join(path, 'db.sqlite'))).size
-  const blob_files = await fs.readdir(join(path, 'db.sqlite-blobs'))
+  const db_size = (await stat(join(path, 'db.sqlite'))).size
+  const blob_files = await readdir(join(path, 'db.sqlite-blobs'))
   let blob_size = 0
   if (blob_files.length > 0) {
     const blob_file_sizes = await Promise.all(
       blob_files.map(
         async blob_file =>
-          (await fs.stat(join(path, 'db.sqlite-blobs', blob_file))).size
+          (await stat(join(path, 'db.sqlite-blobs', blob_file))).size
       )
     )
     blob_size = blob_file_sizes.reduce(
@@ -170,22 +171,25 @@ export async function removeAccount(accountPath: string) {
   const account = (await getLogins()).find(({ path }) => accountPath === path)
   if (!account) {
     throw new Error('Removing account failed: Account not found')
-  } else if (!(await fs.pathExists(account.path))) {
+  }
+  try {
+    access(account.path)
+  } catch {
     log.error('Removing account failed: path does not exist', account)
     throw new Error(
       'Removing account failed: path does not exist: ' + account.path
     )
   }
-  await fs.remove(account.path)
+  await rm(account.path, { recursive: true })
 }
 
 export function getNewAccountPath() {
-  let init_count = fs.readdirSync(getAccountsPath()).length
+  let init_count = readdirSync(getAccountsPath()).length
 
   const constructName = (num: number) =>
     join(getAccountsPath(), 'ac' + String(num))
 
-  while (fs.pathExistsSync(constructName(init_count))) {
+  while (existsSync(constructName(init_count))) {
     init_count++
   }
 

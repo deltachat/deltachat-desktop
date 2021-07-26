@@ -1,3 +1,4 @@
+import { copyFile } from 'fs/promises'
 import { app as rawApp, clipboard, dialog, ipcMain } from 'electron'
 import { copyFile, writeFile, ensureFile } from 'fs-extra'
 import { getLogger } from '../shared/logger'
