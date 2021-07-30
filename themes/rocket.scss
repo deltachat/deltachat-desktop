@@ -397,11 +397,6 @@ div.group-image-wrapper div.group-image-edit-button {
   bottom: unset;
 }
 
-.message .metadata > .date
-{
-
-}
-
 .message .msg-container .metadata .padlock-icon, 
 .message .msg-container .metadata .status-icon.read {
 
@@ -561,6 +556,13 @@ div.group-image-wrapper div.group-image-edit-button {
     textarea.message-input-area {
 
       order: 2;
+      margin-top: 0;
+      margin-bottom: 0;
+
+      &::placeholder {
+
+        color: hsl(0, 0%, 75%);
+      }
     }
 
     .emoji-button, 
@@ -582,12 +584,29 @@ div.group-image-wrapper div.group-image-edit-button {
       order: 3;
       display: none;
     }
+
+    .attachment-button .bp3-button.bp3-minimal,
+    .emoji-button {
+  
+      min-height: 0;
+      height: 24px;
+      margin-top: 0;
+    }
+  
+    .emoji-button span {
+  
+      margin-top: calc(24px - 21px);
+      height: 21px;
+      width: 21px;
+      background-repeat: no-repeat;
+    }
   }
+
 
   .emoji-sticker-picker {
     
     right: unset;
-    bottom: calc(24px + 1.50rem + 2px + 2px + 24px + 8px + 8px);
+    bottom: calc(24px + 2px + 12px + 34px + 12px + 2px);
   }
 }
 
