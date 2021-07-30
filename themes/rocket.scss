@@ -60,6 +60,8 @@ $scrollbarTransparency: 0.5;
   --messageQuotedText: var(--globalText);
   
   --chat-list-width: 280px;
+
+  --attachment-topbar-height: 50px;
 }
 
 /* overwrite css */
@@ -137,10 +139,6 @@ $scrollbarTransparency: 0.5;
   border-top: 1px solid $borderColor;
 }
 
-.bp3-overlay-backdrop {
-  backdrop-filter: blur(0.7px) grayscale(1);
-  background-color: transparent;
-}
 
 .bp3-dialog {
   box-shadow: 0 0 0 1px rgba(16,22,26,.1), 0 4px 8px rgba(16,22,26,.2), 0 0 30px 0px rgba(16,22,26,.2);
@@ -182,22 +180,57 @@ $scrollbarTransparency: 0.5;
 
 
 
-.attachment-overlay .attachment-view {
-  background-color: rgba(255, 255, 255, 0.96);
-}
-.attachment-overlay .btn-wrapper {
-  top: 9px;
-  background-color: unset;
-  padding: 0px;
-}
-.attachment-overlay .btn-wrapper .download-btn {
-  background-color: rgb(160, 160, 160);
-  &:hover {
-    background-color: rgb(160, 160, 160);
+
+.attachment-overlay {
+
+  .bp3-overlay-backdrop {
+    backdrop-filter: blur(2px);
+    background-color: transparent;
   }
-}
-.attachment-overlay .bp3-icon > svg {
-  fill: rgb(160, 160, 160);
+
+  .btn-wrapper {
+    
+    padding: 5px;
+    width: 100%;
+    background: rgba(0,0,0,0.75);
+    text-align: right;
+    height: var(--attachment-topbar-height);
+    box-sizing: border-box;
+    border-radius: 0;
+    float: none;
+    position: static;
+
+    .download-btn {
+      background-color: rgb(160, 160, 160);
+      &:hover {
+        background-color: rgb(160, 160, 160);
+      }
+    }
+  }
+
+  .attachment-view {
+    background-color: hsla(0, 0%, 0%, 0.7);
+    width: 100vw;
+    height: calc(100vh - var(--attachment-topbar-height));
+    display: block;
+
+    .image-container {
+
+      height: calc(100% - var(--attachment-topbar-height));
+      text-align: center;
+    }
+
+    img, video {
+  
+      max-width: calc(100vw - 200px);
+      height: 100%;
+    }
+  }
+
+  .bp3-icon > svg {
+    fill: rgb(160, 160, 160);
+  }
+  
 }
 
 .message-attachment-media {
@@ -235,9 +268,6 @@ $scrollbarTransparency: 0.5;
   width: 100%;
 }
 
-.attachment-overlay .attachment-view img, .attachment-overlay .attachment-view video {
-  max-width: calc(100vw - 200px);
-}
 
 .message-attachment-media>.attachment-content {
   object-fit: unset;
@@ -494,6 +524,12 @@ div.group-image-wrapper div.group-image-edit-button {
   }
 
   &.incoming {
+
+    /* When avatar is set */
+    
+    & > :nth-child(2) .author-wrapper {
+      display: none;
+    }
 
     .author-wrapper .author {
 
