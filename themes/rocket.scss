@@ -622,3 +622,17 @@ div.group-image-wrapper div.group-image-edit-button {
   }
 
 }
+
+.chat-list-item {
+  
+  &.selected {
+
+    background-color: hsla(214.3, 6.1%, 45.1%, 0.3);
+  }
+
+  &:hover {
+    
+    background-color: hsl(216, 13.9%, 14.1%) !important;
+  }
+}
+
