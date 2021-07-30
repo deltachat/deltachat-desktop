@@ -155,16 +155,32 @@ $scrollbarTransparency: 0.5;
   padding: 0px;
 }
 
-.info-message p {
-  border-radius: 0px;
+.info-message {
+  border-bottom: 1px solid hsl(0, 0%, 91.8%);
+  position: relative;
+  top: -32px;
+  width: calc(100% - 2 * 24px);
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: calc(16px + 26px);
+
+  p {
+
+    border-radius: 0px;
+    font-style: unset;
+    background-color: unset; 
+    position: relative;
+    top: 16px;
+    background-color: white;
+    opacity: 1;
+    margin-bottom: 0;
+    color: hsl(0, 0%, 26.7%);
+    font-weight: bold;
+    font-size: 0.75rem;
+  }
 }
 
-.info-message p {
-  font-style: unset;
-  font-weight: unset;
-  background-color: unset; 
-  color: hsl(0, 0%, 50%);
-}
+
 
 .attachment-overlay .attachment-view {
   background-color: rgba(255, 255, 255, 0.96);
@@ -475,6 +491,7 @@ div.group-image-wrapper div.group-image-edit-button {
         color: hsl(0, 0%, 66%);
         text-align: left;
         text-decoration: underline;
+        display: none;
       }
     }
     
