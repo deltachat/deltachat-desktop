@@ -1,4 +1,4 @@
-import { parse } from 'error-stack-parser'
+import { parse, StackFrame } from 'error-stack-parser'
 import { RC_Config } from './shared-types'
 const startTime = Date.now()
 
@@ -113,7 +113,7 @@ function log(
   }
 }
 
-function getStackTrace() {
+function getStackTrace(): StackFrame[] | string {
   const rawStack = parse(new Error('Get Stacktrace'))
   const stack = rawStack.slice(2, rawStack.length)
   return rc['machine-readable-stacktrace']
@@ -131,7 +131,7 @@ export class Logger {
     }
   }
 
-  getStackTrace() {
+  getStackTrace(): StackFrame[] | string {
     const rawStack = parse(new Error('Get Stacktrace'))
     const stack = rawStack.slice(2, rawStack.length)
     return rc['machine-readable-stacktrace']
