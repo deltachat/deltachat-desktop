@@ -80,7 +80,7 @@ export default async function processOpenQrUrl(
           )
         }
         const chatId = await DeltaBackend.call(
-          'contacts.getDMChatId',
+          'contacts.createChatByContactId',
           contactId
         )
         if (messageText) {

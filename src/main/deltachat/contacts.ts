@@ -1,4 +1,4 @@
-import DeltaChat, { C } from 'deltachat-node'
+import DeltaChat from 'deltachat-node'
 import { getLogger } from '../../shared/logger'
 
 import SplitOut from './splitout'
@@ -27,7 +27,7 @@ export default class DCContacts extends SplitOut {
     const result = this._dc.createContact(name, address)
 
     // trigger interface updates
-    const chatId = this.getChatIdByContactId(contactId)
+    const chatId = this._dc.getChatIdByContactId(contactId)
     this._controller.chatList.onChatModified(chatId)
 
     // TODO implement chat changed event in the core on name change
@@ -41,34 +41,13 @@ export default class DCContacts extends SplitOut {
     return this._dc.createContact(name || '', email)
   }
 
+  /** Gets the direct message chat id with this contact and creates it if it doesn't exist yet */
   createChatByContactId(contactId: number) {
     const contact = this._dc.getContact(contactId)
     if (!contact) {
       log.warn(`no contact could be found with id ${contactId}`)
       return 0
     }
-    const chatId = this._dc.createChatByContactId(contactId)
-    log.debug(`created chat ${chatId} with contact' ${contactId}`)
-    const chat = this._dc.getChat(chatId)
-    if (chat && chat.getVisibility() === C.DC_CHAT_VISIBILITY_ARCHIVED) {
-      log.debug('chat was archived, unarchiving it')
-      this._dc.setChatVisibility(chatId, C.DC_CHAT_VISIBILITY_NORMAL)
-    }
-    this._controller.chatList.updateChatList()
-    this._controller.chatList.selectChat(chatId)
-    return chatId
-  }
-
-  getContact(contactId: number) {
-    return this._dc.getContact(contactId).toJson()
-  }
-
-  getChatIdByContactId(contactId: number) {
-    return this._dc.getChatIdByContactId(contactId)
-  }
-
-  /** Gets the direct message chat id with this contact and creates it if it doesn't exist yet */
-  getDMChatId(contactId: number) {
     const existingChatId = this._dc.getChatIdByContactId(contactId)
     if (existingChatId !== 0) {
       return existingChatId
@@ -79,6 +58,10 @@ export default class DCContacts extends SplitOut {
     } else {
       throw new Error('Could not create chat with contact ' + contactId)
     }
+  }
+
+  getContact(contactId: number) {
+    return this._dc.getContact(contactId).toJson()
   }
 
   getContactIds(listFlags: number, queryStr: string): number[] {

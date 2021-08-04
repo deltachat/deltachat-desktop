@@ -33,6 +33,7 @@ import { JsonContact, DCContact } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
 import { QrCodeShowQrInner } from './QrCode'
 import { runtime } from '../../runtime'
+import { createChatByContactIdAndSelectIt } from '../helpers/ChatMethods'
 
 export default function CreateChat(props: {
   isOpen: DialogProps['isOpen']
@@ -49,21 +50,16 @@ export default function CreateChat(props: {
   )
   const [queryStr, onSearchChange] = useContactSearch(updateContacts)
 
-  const closeDialogAndSelectChat = (chatId: number) => {
-    selectChat(chatId)
-    onClose()
-  }
-
   const chooseContact = async ({ id }: DCContact) => {
-    const chatId = await DeltaBackend.call('contacts.createChatByContactId', id)
-
-    if (!chatId) {
+    try {
+      await createChatByContactIdAndSelectIt(id)
+    } catch (error) {
       return userFeedback({
         type: 'error',
-        text: tx('create_chat_error_desktop'),
+        text: error && (error.message || error),
       })
     }
-    closeDialogAndSelectChat(chatId)
+    onClose()
   }
 
   const renderAddGroupIfNeeded = () => {
@@ -93,11 +89,8 @@ export default function CreateChat(props: {
       'contacts.createContact',
       queryStr
     )
-    const chatId = await DeltaBackend.call(
-      'contacts.createChatByContactId',
-      contactId
-    )
-    closeDialogAndSelectChat(chatId)
+    await createChatByContactIdAndSelectIt(contactId)
+    onClose()
   }
 
   const renderAddContactIfNeeded = () => {
