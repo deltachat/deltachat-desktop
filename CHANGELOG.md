@@ -17,6 +17,7 @@
 - use core method to validate email addresses, this will make tld email addresses possible
 - Upgrade `error-stack-parser` to `2.0.6`
 - Make `sass` and `@types/debounce` development dependencies
+- cleanup backend / main process (remove unused functions / variables)
 
 ## [1.20.3] - 2021-06-30
 
