@@ -120,6 +120,7 @@ class DeltaRemote {
   // chat ---------------------------------------------------------------
   call(
     fnName: 'chat.getChatMedia',
+    chatId: number,
     msgType1: number,
     msgType2: number
   ): Promise<MessageType[]>
