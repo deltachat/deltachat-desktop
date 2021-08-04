@@ -42,14 +42,9 @@ export default class DeltaChatController extends EventEmitter {
    */
   _dc: DeltaChat = undefined
   accountDir: string
-  configuring = false
-  updating = false
   ready = false // used for the about screen
   credentials: Credentials = { addr: '', mail_pw: '' }
   _selectedChatId: number | null = null
-  _showArchivedChats = false
-  _pages = 0
-  _query = ''
   _sendStateToRenderer: () => void
   constructor(public cwd: string) {
     super()
@@ -320,11 +315,7 @@ export default class DeltaChatController extends EventEmitter {
    */
   _resetState() {
     this.ready = false
-    this.configuring = false
     this.credentials = { addr: '' }
     this._selectedChatId = null
-    this._showArchivedChats = false
-    this._pages = 0
-    this._query = ''
   }
 }

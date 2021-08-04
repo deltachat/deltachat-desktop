@@ -161,7 +161,6 @@ export default class DCChatList extends SplitOut {
   async getFullChatById(chatId: number): Promise<FullChat> {
     const chat = await this._getChatById(chatId)
     if (chat === null) return null
-    this._controller._pages = 0
 
     const isGroup = isGroupChat(chat)
     const contactIds = await this._getChatContactIds(chatId)
