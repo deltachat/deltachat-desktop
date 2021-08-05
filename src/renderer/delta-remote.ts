@@ -277,7 +277,7 @@ class DeltaRemote {
     fnName: 'settings.setConfig',
     key: string,
     value: string
-  ): Promise<number>
+  ): Promise<boolean>
   call(fnName: 'settings.getConfig', key: string): Promise<string>
   call(
     fnName: 'settings.getConfigFor',
@@ -303,11 +303,6 @@ class DeltaRemote {
     value: string | number | boolean
   ): Promise<boolean>
   call(fnName: 'settings.getDesktopSettings'): Promise<DesktopSettings>
-  call(
-    fnName: 'settings.setConfig',
-    key: string,
-    value: string | boolean
-  ): Promise<boolean>
   call(
     fnName: 'settings.saveBackgroundImage',
     file: string,

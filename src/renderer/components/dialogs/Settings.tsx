@@ -152,7 +152,10 @@ export default function Settings(props: DialogProps) {
     key: string,
     value: string | boolean
   ) => {
-    if ((await DeltaBackend.call('settings.setConfig', key, value)) === true) {
+    if (
+      (await DeltaBackend.call('settings.setConfig', key, String(value))) ===
+      true
+    ) {
       _setState((settings: any) => {
         return {
           ...settings,

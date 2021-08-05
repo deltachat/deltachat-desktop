@@ -30,7 +30,7 @@ export default class DCSettings extends SplitOut {
       this._dc.startIO()
     }
 
-    return result
+    return Boolean(result)
   }
 
   getConfig(key: string) {
