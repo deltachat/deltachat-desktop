@@ -232,7 +232,7 @@
     <string name="device_talk">Systemnachrichten</string>
     <string name="device_talk_subtitle">Lokal erzeugte Nachrichten</string>
     <string name="device_talk_explain">Nachrichten in diesem Chat werden lokal von der Delta Chat App erzeugt, um auf Neuigkeiten und Probleme hinzuweisen.</string>
-    <string name="device_talk_welcome_message">Willkommen – Delta Chat sieht aus und funktioniert wie andere populäre Messenger - aber ohne zentrale Überwachung, ohne Tracking, ohne die Daten von Ihnen, Ihren FreundInnen, KollegInnen oder Familienmitgliedern an irgendwelche Firmen zu verkaufen.\n\nTechnisch gesehen ist Delta Chat ein E-Mail-Programm unter einer modernen Chat-Oberfläche - sozusagen E-Mail in neuem Gewand 👻\n\nMit Delta Chat haben Sie Milliarden potentieller ChatpartnerInnen: Verwenden Sie einfach deren E-Mail-Adresse - die EmpfängerInnen selbst müssen Delta Chat dazu nicht installieren oder sich irgendwo anmelden. Sie können sie aber natürlich gerne auf 👉 https://get.delta.chat hinweisen</string>
+    <string name="device_talk_welcome_message">Willkommen – Delta Chat sieht aus und funktioniert wie andere populäre Messenger - aber ohne zentrale Überwachung, ohne Tracking, ohne die Daten von Ihnen, Ihren Freunden, Kollegen oder Familienmitgliedern an irgendwelche Firmen zu verkaufen.\n\nTechnisch gesehen ist Delta Chat ein E-Mail-Programm unter einer modernen Chat-Oberfläche - sozusagen E-Mail in neuem Gewand 👻\n\nMit Delta Chat haben Sie Milliarden potentieller Chatpartner: Verwenden Sie einfach deren E-Mail-Adresse - die Empfänger selbst müssen Delta Chat dazu nicht installieren oder sich irgendwo anmelden. Sie können sie aber natürlich gerne auf 👉 https://get.delta.chat hinweisen</string>
     <string name="edit_contact">Kontakt bearbeiten</string>
     <!-- Translators: "Pin" here is the verb for pinning, making sth. sticky. this is NOT the appreviation for "pin number". -->
     <string name="pin_chat">Chat anheften</string>
@@ -334,7 +334,7 @@
     <string name="chat_record_slide_to_cancel">Schieben, um abzubrechen</string>
     <string name="chat_record_explain">Tippen und halten, um eine Sprachnachricht aufzunehmen, loslassen um zu senden. </string>
     <string name="chat_no_chats_yet_title">Posteingang ist leer.\n\"+\" drücken, um einen neuen Chat zu starten.</string>
-    <string name="chat_no_chats_yet_hint">Es kann mit anderen Delta Chat BenutzerInnen und mit jeder E-Mail-Adresse gechattet werden.</string>
+    <string name="chat_no_chats_yet_hint">Es kann mit anderen Delta Chat Benutzern und mit jeder E-Mail-Adresse gechattet werden.</string>
     <string name="chat_all_archived">Alle Chats archiviert.\n\"+\" drücken, um einen neuen Chat zu starten.</string>
     <string name="chat_share_with_title">Teilen mit</string>
     <string name="chat_input_placeholder">Nachricht</string>
@@ -450,7 +450,7 @@
     <!-- Translators: %1$s will be replaced by the server name (eg. imap.somewhere.org) and %2$s will be replaced by the human-readable response from the server. this response may be a single word or some sentences and may or may not be localized. -->
     <string name="login_error_server_response">Antwort von %1$s: %2$s
 
-Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.B. im Web-Frontend abrufen können. Bitten Sie Ihren Anbieter oder FreundInnen um Rat, wenn es Probleme gibt.</string>
+Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.B. im Web-Frontend abrufen können. Bitten Sie Ihren Anbieter oder Freunde um Rat, wenn es Probleme gibt.</string>
     <!-- TLS certificate checks -->
     <string name="accept_invalid_certificates">Ungültige Zertifikate akzeptieren</string>
     <string name="used_settings">Verwendete Einstellungen:</string>
@@ -640,7 +640,7 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="systemmsg_group_left">Gruppe verlassen.</string>
     <string name="systemmsg_read_receipt_subject">Empfangsbestätigung</string>
     <string name="systemmsg_read_receipt_body">Ihre Nachricht \"%1$s\" wurde auf dem Empfangsgerät angezeigt.\n\nDas ist keine Garantie dafür, dass sie auch gelesen wurde.</string>
-    <string name="systemmsg_cannot_decrypt">Diese Nachricht kann nicht entschlüsselt werden.\n\n• Es könnte bereits helfen, einfach auf diese Nachricht zu antworten und die/den AbsenderIn zu bitten, die Nachricht erneut zu senden.\n\n• Falls Delta Chat oder ein anderes E-Mail-Programm auf diesem oder einem anderen Gerät neu installiert wurde, kann von dort aus eine Autocrypt Setup-Nachricht gesendet werden.</string>
+    <string name="systemmsg_cannot_decrypt">Diese Nachricht kann nicht entschlüsselt werden.\n\n• Es könnte bereits helfen, einfach auf diese Nachricht zu antworten und den Absender zu bitten, die Nachricht erneut zu senden.\n\n• Falls Delta Chat oder ein anderes E-Mail-Programm auf diesem oder einem anderen Gerät neu installiert wurde, kann von dort aus eine Autocrypt Setup-Nachricht gesendet werden.</string>
     <!-- Translators: %1$s will be replaced by sth. as "member xy added" (trailing full-stop removed). -->
     <string name="systemmsg_action_by_me">%1$s von mir.</string>
     <!-- Translators: %1$s will be replaced by sth. as "member xy added" (trailing full-stop removed). %2$s will be replaced by the name/addr of the person who did this action. -->
@@ -676,7 +676,7 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="qrscan_failed">QR-Code kann nicht dekodiert werden.</string>
     <string name="qrscan_ask_join_group">Der Gruppe \"%1$s\" beitreten?</string>
     <string name="qrscan_fingerprint_mismatch">Der gescannte Fingerabdruck stimmt nicht mit dem zuletzt für %1$s gesehenen Fingerabdruck überein.</string>
-    <string name="qrscan_no_addr_found">Dieser QR-Code enthält einen Fingerabdruck, aber keine E-Mail-Adresse.\n\nFür eine Out-of-Band-Verifizierung bitte zuerst eine verschlüsselte Verbindung zur EmpfängerIn herstellen.</string>
+    <string name="qrscan_no_addr_found">Dieser QR-Code enthält einen Fingerabdruck, aber keine E-Mail-Adresse.\n\nFür eine Out-of-Band-Verifizierung bitte zuerst eine verschlüsselte Verbindung zum Empfänger herstellen.</string>
     <string name="qrscan_contains_text">Gescannter QR-Code text:\n\n%1$s</string>
     <string name="qrscan_contains_url">Gescannter QR-Code URL:\n\n%1$s</string>
     <string name="qrscan_fingerprint_label">Fingerabdruck</string>
@@ -695,7 +695,7 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="qraccount_ask_create_and_login_another">E-Mail-Konto auf \"%1$s\" erzeugen und dort anmelden?
 
 Ihr bisheriges E-Mail-Konto wird dabei nicht gelöscht. Sie können mit der Option \"E-Mail-Konto wechseln\" jederzeit zwischen den Konten hin- und herschalten.</string>
-    <string name="qraccount_success_enter_name">Anmeldung erfolgreich — Ihre E-Mail-Adresse ist %1$s\n\nWenn Sie mögen, können Sie nun einen Namen und ein Profilbild festlegen, der den ChatpartnerInnen angezeigt wird.</string>
+    <string name="qraccount_success_enter_name">Anmeldung erfolgreich — Ihre E-Mail-Adresse ist %1$s\n\nWenn Sie mögen, können Sie nun einen Namen und ein Profilbild festlegen, der den Chatpartnern angezeigt wird.</string>
     <string name="qraccount_qr_code_cannot_be_used">Der eingescannte QR-Code kann nicht dazu verwendet werden, eine neues E-Mail-Konto zu erzeugen.</string>
     <string name="qraccount_use_on_new_install">Der gescannte QR-Code ist zum Erstellen eines neuen E-Mail-Kontos. Sie können den QR-Code nur bei einer neuen Delta Chat Installation verwenden.</string>
     <string name="contact_verified">%1$s verifiziert.</string>
@@ -759,7 +759,7 @@ Ihr bisheriges E-Mail-Konto wird dabei nicht gelöscht. Sie können mit der Opti
     <string name="global_menu_edit_paste_desktop">Einfügen</string>
     <string name="global_menu_view_desktop">Ansicht</string>
     <string name="global_menu_view_floatontop_desktop">Im Vordergrund halten</string>
-    <string name="global_menu_view_developer_desktop">EntwicklerIn</string>
+    <string name="global_menu_view_developer_desktop">Entwickler</string>
     <string name="global_menu_view_developer_tools_desktop">Entwicklungswerkzeug</string>
     <string name="global_menu_help_desktop">Hilfe</string>
     <string name="global_menu_help_learn_desktop">Mehr über Delta Chat erfahren</string>
