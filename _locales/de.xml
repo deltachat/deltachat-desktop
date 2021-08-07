@@ -348,7 +348,7 @@
     <string name="chat_contact_request">Kontaktanfrage</string>
     <string name="chat_no_contact_requests">Keine Kontaktanfragen.\n\nWenn normale E-Mails hier erscheinen sollen, müssen Sie die entsprechende erweiterte Einstellung ändern.</string>
     <string name="retry_send">Nachricht erneut senden</string>
-    <string name="send_failed">Nachricht senden fehlgeschlagen</string>
+    <string name="send_failed">Senden der Nachricht fehlgeschlagen</string>
     <!-- reasons for a disabled message composer -->
     <string name="messaging_disabled_not_in_group">Sie können nicht schreiben, da Sie kein Mitglied dieser Gruppe sind. Bitten Sie ein anderes Mitglied, Sie hinzuzufügen.</string>
     <string name="messaging_disabled_device_chat">Dieser Chat entält lokal generierte Nachrichten. Sie können hier keine Nachrichten schreiben.</string>
@@ -410,7 +410,7 @@
     <string name="tab_map">Karte</string>
     <string name="tab_gallery_empty_hint">In diesem Chat geteilte Bilder und Videos werden hier angezeigt.</string>
     <string name="tab_docs_empty_hint">In diesem Chat geteilte Dokumente, Musik und Dateien werden hier angezeigt.</string>
-    <string name="media_preview">Media-Vorschau</string>
+    <string name="media_preview">Medien-Vorschau</string>
     <string name="send_message">Nachricht senden</string>
 
 
@@ -446,7 +446,7 @@
     <string name="import_backup_ask">Backup \"%1$s\" gefunden.\n\nDieses einlesen und alle Daten und Einstellungen daraus verwenden?</string>
     <string name="import_backup_no_backup_found">Kein Backup gefunden.\n\nDie Sicherung nach \"%1$s\" kopieren und es erneut versuchen. Alternativ \"Jetzt beginnen\" wählen, um den normalen Einrichtungsprozess fortzusetzen.</string>
     <!-- Translators: %1$s will be replaced by the e-mail address -->
-    <string name="login_error_cannot_login">Login als \"%1$s\" nicht möglich. Bitte E-Mail Adresse und Passwort auf Richtigkeit überprüfen.</string>
+    <string name="login_error_cannot_login">Login als \"%1$s\" nicht möglich. Bitte E-Mail-Adresse und Passwort auf Richtigkeit überprüfen.</string>
     <!-- Translators: %1$s will be replaced by the server name (eg. imap.somewhere.org) and %2$s will be replaced by the human-readable response from the server. this response may be a single word or some sentences and may or may not be localized. -->
     <string name="login_error_server_response">Antwort von %1$s: %2$s
 
@@ -496,7 +496,7 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="pref_vibrate">Vibrieren</string>
     <string name="pref_screen_security">Bildschirmsicherheit</string>
     <!-- Translators: The wording must indicate that we can't guarantee that, its a System flag that we set. But the System in question must honor it. -->
-    <string name="pref_screen_security_explain">Aufforderung zum Sperren von Screenshots in der Kürzlich erstellten Liste und in der App</string>
+    <string name="pref_screen_security_explain">Aufforderung zum Sperren von Screenshots in der kürzlich erstellten Liste und in der App</string>
     <string name="pref_screen_security_please_restart_hint">Um die Bildschirmsicherheitseinstellungen anzuwenden, bitte App neu starten.</string>
     <string name="pref_notifications">Benachrichtigungen</string>
     <string name="pref_notifications_show">Anzeigen</string>
@@ -527,7 +527,7 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="pref_app_access">App-Zugriff</string>
     <string name="pref_communication">Kommunikation</string>
     <string name="pref_chats">Chats</string>
-    <string name="pref_in_chat_sounds">In-Chat Klänge</string>
+    <string name="pref_in_chat_sounds">In-Chat-Klänge</string>
     <string name="pref_message_text_size">Schriftgröße</string>
     <string name="pref_view_log">Protokoll anzeigen</string>
     <string name="pref_saved_log">Die Logdatei wurde im Downloads Ordner gespeichert.</string>
@@ -801,7 +801,7 @@ Ihr bisheriges E-Mail-Konto wird dabei nicht gelöscht. Sie können mit der Opti
     <string name="create_chat_error_desktop">Konnte Chat nicht erstellen.</string>
     <string name="ask_delete_chat_desktop">Chat wirklich löschen?</string>
     <string name="email_validation_failed_desktop">E-Mail-Adresse benötigt.</string>
-    <string name="forget_login_confirmation_desktop">Dieses Login löschen? Alles wird gelöscht, einschließlich des Ende-zu-Ende-Setups, der Kontakte, Chats, Nachrichten und Medien. Diese Aktion ist endgültig und kann nicht rückgängig gemacht werden.</string>
+    <string name="forget_login_confirmation_desktop">Login löschen? Alles wird gelöscht, einschließlich des Ende-zu-Ende-Setups, der Kontakte, Chats, Nachrichten und Medien. Diese Aktion ist endgültig und kann nicht rückgängig gemacht werden.</string>
     <string name="account_info_hover_tooltip_desktop">E-Mail: %1$s\nGröße: %2$s\nPfad: %3$s</string>
     <string name="me_desktop">ich</string>
     <string name="in_this_group_desktop">Gruppenmitglieder</string>
