@@ -36,8 +36,8 @@ class DeltaRemote {
     fnName: 'getProviderInfo',
     email: string
   ): Promise<{
-    before_login_hint: any
-    overview_page: any
+    before_login_hint: string
+    overview_page: string
     status: any
   }>
   call(fnName: 'checkValidEmail', email: string): Promise<boolean>
