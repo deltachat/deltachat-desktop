@@ -96,7 +96,7 @@ export function useChatListContextMenu() {
         chatListItem.id
       )
       if (fullChat.type !== C.DC_CHAT_TYPE_MAILINGLIST) {
-        openViewProfileDialog(screenContext, fullChat.contacts[0].id)
+        openViewProfileDialog(screenContext, fullChat.contactIds[0])
       } else {
         screenContext.openDialog(MessageListProfile, {
           chat: fullChat,
