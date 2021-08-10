@@ -140,7 +140,7 @@ export default class DCMessageList extends SplitOut {
       direction,
       status: convertMessageStatus(jsonMSG.state),
       attachment,
-      contact: (contact ? { ...contact } : {}) as any,
+      sender: (contact ? { ...contact } : {}) as any,
       setupCodeBegin,
     })
   }
