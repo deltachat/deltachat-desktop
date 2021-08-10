@@ -17,6 +17,9 @@
 - use core method to validate email addresses, this will make tld email addresses possible
 - upgrade minimum nodejs to version `14`
 - remove dependencies that are now not needed anymore (`fs-extra`)
+- Upgrade `error-stack-parser` to `2.0.6`
+- Make `sass` and `@types/debounce` development dependencies
+- Remove dependency `array-differ`
 
 ## [1.20.3] - 2021-06-30
 
