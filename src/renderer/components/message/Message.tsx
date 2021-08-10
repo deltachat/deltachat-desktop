@@ -270,7 +270,7 @@ const Message = (props: {
   }
 
   // Info Message
-  if (message.isInfo)
+  if (message.msg.isInfo)
     return (
       <div className='info-message' onContextMenu={showMenu}>
         <p>
@@ -425,7 +425,7 @@ const Message = (props: {
             status={status}
             text={text}
             hasLocation={hasLocation}
-            timestamp={message.msg.sentAt}
+            timestamp={message.msg.timestamp * 1000}
             padlock={message.msg.showPadlock}
             onClickError={openMessageInfo.bind(null, message)}
           />

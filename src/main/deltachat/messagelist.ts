@@ -115,7 +115,6 @@ export default class DCMessageList extends SplitOut {
     const filemime = msg.getFilemime()
     const filename = msg.getFilename()
     const filesize = msg.getFilebytes()
-    const viewType = msg.getViewType()
     const fromId = msg.getFromId()
     const isMe = fromId === C.DC_CONTACT_ID_SELF
     const setupCodeBegin = msg.getSetupcodebegin()
@@ -140,20 +139,11 @@ export default class DCMessageList extends SplitOut {
     return {
       id: msg.getId(),
       msg: Object.assign(jsonMSG, {
-        sentAt: jsonMSG.timestamp * 1000,
-        receivedAt: jsonMSG.receivedTimestamp * 1000,
         direction,
         status: convertMessageStatus(jsonMSG.state),
         attachment,
       }),
-      filemime,
-      filename,
-      filesize,
-      viewType,
-      fromId,
-      isMe,
       contact: (contact ? { ...contact } : {}) as any,
-      isInfo: msg.isInfo(),
       setupCodeBegin,
     }
   }

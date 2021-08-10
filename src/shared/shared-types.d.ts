@@ -168,20 +168,11 @@ export type msgStatus =
 export interface MessageType {
   id: number
   msg: JsonMessage & {
-    sentAt: number
-    receivedAt: number
     direction: 'outgoing' | 'incoming'
     status: msgStatus
     attachment?: MessageTypeAttachment
   }
-  filemime: string
-  filename: string
-  filesize: todo
-  viewType: todo
-  fromId: number
-  isMe: boolean
   contact: DCContact
-  isInfo: boolean
   setupCodeBegin?: string
 }
 

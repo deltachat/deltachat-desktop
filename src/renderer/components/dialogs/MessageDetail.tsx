@@ -45,8 +45,8 @@ class MessageInfo extends React.Component<
     this.setState({
       loading: false,
       content: info,
-      sentAt: message?.msg?.sentAt,
-      receivedAt: message?.msg?.receivedAt,
+      sentAt: message?.msg?.timestamp * 1000,
+      receivedAt: message?.msg?.receivedTimestamp * 1000,
     })
     this.forceUpdate()
   }
