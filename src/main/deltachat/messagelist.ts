@@ -16,6 +16,8 @@ import {
 
 import { writeFile } from 'fs-extra'
 import tempy from 'tempy'
+
+import { getDirection } from '../../shared/util'
 export default class DCMessageList extends SplitOut {
   sendMessage(
     chatId: number,
@@ -114,12 +116,8 @@ export default class DCMessageList extends SplitOut {
     const filename = msg.getFilename()
     const filesize = msg.getFilebytes()
     const fromId = msg.getFromId()
-    const isMe = fromId === C.DC_CONTACT_ID_SELF
     const setupCodeBegin = msg.getSetupcodebegin()
     const contact = fromId && this._controller.contacts.getContact(fromId)
-    const direction = (isMe ? 'outgoing' : 'incoming') as
-      | 'outgoing'
-      | 'incoming'
 
     const jsonMSG = msg.toJson()
 
@@ -131,7 +129,6 @@ export default class DCMessageList extends SplitOut {
     }
 
     return Object.assign(jsonMSG, {
-      direction,
       status: convertMessageStatus(jsonMSG.state),
       attachment,
       sender: (contact ? { ...contact } : {}) as any,
@@ -158,7 +155,7 @@ export default class DCMessageList extends SplitOut {
       if (messageId <= C.DC_MSG_ID_LAST_SPECIAL) return
       const message = this.messageIdToJson(messageId)
       if (
-        message.direction === 'incoming' &&
+        getDirection(message) === 'incoming' &&
         message.state !== C.DC_STATE_IN_SEEN
       ) {
         markMessagesRead.push(messageId)

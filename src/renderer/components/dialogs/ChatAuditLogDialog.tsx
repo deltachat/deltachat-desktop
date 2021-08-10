@@ -18,6 +18,7 @@ import {
   setQuoteInDraft,
   privateReply,
 } from '../message/messageFunctions'
+import { getDirection } from '../../../shared/util'
 
 const log = getLogger('render/ChatAuditLog')
 
@@ -171,7 +172,8 @@ export default function ChatAuditLogDialog(props: {
                 log.debug(`Missing message with id ${id}`)
                 return
               }
-              const { text, direction, status, timestamp } = message
+              const { text, status, timestamp } = message
+              const direction = getDirection(message)
               return (
                 <li
                   key={id}

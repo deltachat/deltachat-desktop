@@ -166,7 +166,6 @@ export type msgStatus =
   | ''
 
 export type MessageType = JsonMessage & {
-  direction: 'outgoing' | 'incoming'
   status: msgStatus
   attachment?: MessageTypeAttachment
   sender: DCContact

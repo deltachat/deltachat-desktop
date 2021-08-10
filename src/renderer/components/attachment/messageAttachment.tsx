@@ -17,6 +17,7 @@ import {
 } from '../../../shared/shared-types'
 import { runtime } from '../../runtime'
 import { ConversationType } from '../message/MessageList'
+import { getDirection } from '../../../shared/util'
 
 // const MINIMUM_IMG_HEIGHT = 150
 // const MAXIMUM_IMG_HEIGHT = 300
@@ -25,7 +26,6 @@ type AttachmentProps = {
   attachment: MessageTypeAttachment
   text?: string
   conversationType: ConversationType
-  direction: MessageType['direction']
   message: MessageType
   hasQuote: boolean
 }
@@ -34,7 +34,6 @@ export default function Attachment({
   attachment,
   text,
   conversationType,
-  direction,
   message,
   hasQuote,
 }: AttachmentProps) {
@@ -43,6 +42,7 @@ export default function Attachment({
   if (!attachment) {
     return null
   }
+  const direction = getDirection(message)
   const onClickAttachment = (ev: any) => {
     if (message.viewType === C.DC_MSG_STICKER) return
     ev.stopPropagation()

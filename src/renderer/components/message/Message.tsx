@@ -35,6 +35,8 @@ import { openDeadDropDecisionDialog } from '../dialogs/DeadDrop'
 import { ConversationType } from './MessageList'
 // const log = getLogger('renderer/message')
 
+import { getDirection } from '../../../shared/util'
+
 const Avatar = (
   contact: DCContact,
   onContactClick: (contact: DCContact) => void
@@ -89,7 +91,7 @@ const AuthorName = (
 const ForwardedTitle = (
   contact: DCContact,
   onContactClick: (contact: DCContact) => void,
-  direction: string,
+  direction: 'incoming' | 'outgoing',
   conversationType: ConversationType,
   overrideSenderName?: string
 ) => {
@@ -226,7 +228,6 @@ const Message = (props: {
   const { message, conversationType } = props
   const {
     id,
-    direction,
     status,
     viewType,
     text,
@@ -235,6 +236,7 @@ const Message = (props: {
     isSetupmessage,
     hasHTML,
   } = message
+  const direction = getDirection(message)
   const tx = useTranslationFunction()
 
   const screenContext = useContext(ScreenContext)
