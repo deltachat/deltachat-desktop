@@ -63,8 +63,8 @@ export async function privateReply(msg: JsonMessage) {
   const oldDraft = await DeltaBackend.call('messageList.getDraft', chatId)
 
   await DeltaBackend.call('messageList.setDraft', chatId, {
-    text: oldDraft?.msg.text,
-    file: oldDraft?.msg.file,
+    text: oldDraft?.text,
+    file: oldDraft?.file,
     quotedMessageId,
   })
 

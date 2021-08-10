@@ -30,7 +30,7 @@ class state implements FullChat {
   isDeaddrop = false
 
   messageIds: number[] = []
-  messages: { [key: number]: MessageType | { msg: null } } = {}
+  messages: { [key: number]: MessageType | null } = {}
   oldestFetchedMessageIndex = -1
   scrollToBottom = false // if true the UI will scroll to bottom
   scrollToBottomIfClose = false
@@ -121,10 +121,7 @@ chatStore.attachReducer(({ type, payload, id }, state) => {
       ...state.messages,
       [payload]: {
         ...state.messages[payload],
-        msg: {
-          ...state.messages[payload].msg,
-          status: 'delivered',
-        },
+        status: 'delivered',
       },
     }
     return { ...state, messages }
@@ -133,10 +130,7 @@ chatStore.attachReducer(({ type, payload, id }, state) => {
       ...state.messages,
       [payload]: {
         ...state.messages[payload],
-        msg: {
-          ...state.messages[payload].msg,
-          status: 'error',
-        },
+        status: 'error',
       },
     }
     return { ...state, messages }
@@ -145,10 +139,7 @@ chatStore.attachReducer(({ type, payload, id }, state) => {
       ...state.messages,
       [payload]: {
         ...state.messages[payload],
-        msg: {
-          ...state.messages[payload].msg,
-          status: 'read',
-        },
+        status: 'read',
       },
     }
     return { ...state, messages }

@@ -278,7 +278,7 @@ type draftObject = { chatId: number } & Pick<
   JsonMessage,
   'text' | 'file' | 'quotedMessageId' | 'quotedText'
 > &
-  Pick<MessageType['msg'], 'attachment' | 'viewType'>
+  Pick<MessageType, 'attachment' | 'viewType'>
 
 export function useDraft(
   chatId: number,
@@ -326,14 +326,14 @@ export function useDraft(
         } else {
           _setDraft(old => ({
             ...old,
-            text: newDraft.msg.text,
-            file: newDraft.msg.file,
-            attachment: newDraft.msg.attachment,
-            viewType: newDraft.msg.viewType,
-            quotedMessageId: newDraft.msg.quotedMessageId,
-            quotedText: newDraft.msg.quotedText,
+            text: newDraft.text,
+            file: newDraft.file,
+            attachment: newDraft.attachment,
+            viewType: newDraft.viewType,
+            quotedMessageId: newDraft.quotedMessageId,
+            quotedText: newDraft.quotedText,
           }))
-          inputRef.current?.setText(newDraft.msg.text)
+          inputRef.current?.setText(newDraft.text)
         }
       })
     },
@@ -365,11 +365,11 @@ export function useDraft(
     if (newDraft) {
       _setDraft(old => ({
         ...old,
-        file: newDraft.msg.file,
-        attachment: newDraft.msg.attachment,
-        viewType: newDraft.msg.viewType,
-        quotedMessageId: newDraft.msg.quotedMessageId,
-        quotedText: newDraft.msg.quotedText,
+        file: newDraft.file,
+        attachment: newDraft.attachment,
+        viewType: newDraft.viewType,
+        quotedMessageId: newDraft.quotedMessageId,
+        quotedText: newDraft.quotedText,
       }))
       // don't load text to prevent bugging back
     } else {

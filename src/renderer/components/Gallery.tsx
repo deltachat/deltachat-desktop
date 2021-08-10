@@ -100,13 +100,10 @@ export default class Gallery extends Component<
                   ''
                 )}
                 {medias
-                  .sort(
-                    ({ msg: a }, { msg: b }) =>
-                      b.sortTimestamp - a.sortTimestamp
-                  )
+                  .sort((a, b) => b.sortTimestamp - a.sortTimestamp)
                   .map(message => {
                     return (
-                      <div className='item' key={message.msg.id}>
+                      <div className='item' key={message.id}>
                         <MediaAttachment message={message} />
                       </div>
                     )

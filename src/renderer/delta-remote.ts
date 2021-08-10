@@ -206,17 +206,7 @@ class DeltaRemote {
     fnName: 'messageList.sendMessage',
     chatId: number,
     params: sendMessageParams
-  ): Promise<
-    [
-      number,
-      (
-        | MessageType
-        | {
-            msg: null
-          }
-      )
-    ]
-  >
+  ): Promise<[number, MessageType | null]>
   call(
     fnName: 'messageList.sendSticker',
     chatId: number,
@@ -226,11 +216,11 @@ class DeltaRemote {
   call(
     fnName: 'messageList.getMessage',
     msgId: number
-  ): Promise<{ msg: null } | MessageType>
+  ): Promise<MessageType | null>
   call(
     fnName: 'messageList.getMessages',
     messageIds: number[]
-  ): Promise<{ [key: number]: MessageType | { msg: null } }>
+  ): Promise<{ [key: number]: MessageType | null }>
   call(fnName: 'messageList.getMessageInfo', msgId: number): Promise<string>
   call(
     fnName: 'messageList.getDraft',
@@ -248,7 +238,7 @@ class DeltaRemote {
   call(
     fnName: 'messageList.messageIdToJson',
     id: number
-  ): Promise<{ msg: null } | MessageType>
+  ): Promise<MessageType | null>
   call(
     fnName: 'messageList.getMessageIds',
     chatid: number,

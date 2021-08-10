@@ -140,11 +140,11 @@ export async function joinCall(
   try {
     const message = await DeltaBackend.call('messageList.getMessage', messageId)
 
-    if (message.msg.viewType !== C.DC_MSG_VIDEOCHAT_INVITATION) {
+    if (message.viewType !== C.DC_MSG_VIDEOCHAT_INVITATION) {
       throw new Error('Message is not a video chat invitation')
     }
 
-    return runtime.openLink(message.msg.videochatUrl)
+    return runtime.openLink(message.videochatUrl)
   } catch (error) {
     log.error('failed to join call', error)
     screenContext.openDialog(AlertDialog, { message: error.toString() })

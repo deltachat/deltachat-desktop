@@ -165,13 +165,11 @@ export type msgStatus =
   | 'sent'
   | ''
 
-export interface MessageType {
+export type MessageType = JsonMessage & {
   id: number
-  msg: JsonMessage & {
-    direction: 'outgoing' | 'incoming'
-    status: msgStatus
-    attachment?: MessageTypeAttachment
-  }
+  direction: 'outgoing' | 'incoming'
+  status: msgStatus
+  attachment?: MessageTypeAttachment
   contact: DCContact
   setupCodeBegin?: string
 }

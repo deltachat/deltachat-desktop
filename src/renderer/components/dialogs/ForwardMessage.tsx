@@ -27,7 +27,7 @@ export default function ForwardMessage(props: {
   )
 
   const onChatClick = (chatid: number) => {
-    DeltaBackend.call('messageList.forwardMessage', message.msg.id, chatid)
+    DeltaBackend.call('messageList.forwardMessage', message.id, chatid)
     onClose()
   }
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>

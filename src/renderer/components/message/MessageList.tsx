@@ -204,12 +204,10 @@ export const MessageListInner = React.memo(
               const key = 'magic' + messageId + '_' + specialMessageIdCounter++
               const nextMessage = messages[_messageIdsToShow[i + 1]]
               if (!nextMessage) return null
-              return (
-                <DayMarker key={key} timestamp={nextMessage.msg.timestamp} />
-              )
+              return <DayMarker key={key} timestamp={nextMessage.timestamp} />
             }
             const message = messages[messageId]
-            if (!message || message.msg == null) {
+            if (!message) {
               log.debug(`Missing message with id ${messageId}`)
               return
             }

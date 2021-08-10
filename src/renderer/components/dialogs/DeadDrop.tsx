@@ -13,7 +13,7 @@ import { C } from 'deltachat-node/dist/constants'
  */
 export default function DeadDrop(props: {
   contact: DCContact
-  msg: MessageType['msg']
+  msg: MessageType
   chat: FullChat
   onClose: DialogProps['onClose']
 }) {
@@ -98,11 +98,11 @@ export default function DeadDrop(props: {
 export async function openDeadDropDecisionDialog(message: MessageType) {
   const chat = await DeltaBackend.call(
     'chatList.getFullChatById',
-    message.msg.realChatId
+    message.realChatId
   )
   window.__openDialog('DeadDrop', {
     contact: message.contact,
     chat,
-    msg: message.msg,
+    msg: message,
   })
 }

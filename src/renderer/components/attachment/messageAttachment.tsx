@@ -25,7 +25,7 @@ type AttachmentProps = {
   attachment: MessageTypeAttachment
   text?: string
   conversationType: ConversationType
-  direction: MessageType['msg']['direction']
+  direction: MessageType['direction']
   message: MessageType
   hasQuote: boolean
 }
@@ -43,14 +43,13 @@ export default function Attachment({
   if (!attachment) {
     return null
   }
-  const msg = message.msg
   const onClickAttachment = (ev: any) => {
-    if (msg.viewType === C.DC_MSG_STICKER) return
+    if (message.viewType === C.DC_MSG_STICKER) return
     ev.stopPropagation()
-    if (isDisplayableByFullscreenMedia(msg.attachment)) {
-      openDialog('FullscreenMedia', { msg })
+    if (isDisplayableByFullscreenMedia(message.attachment)) {
+      openDialog('FullscreenMedia', { msg: message })
     } else {
-      openAttachmentInShell(msg)
+      openAttachmentInShell(message)
     }
   }
   const withCaption = Boolean(text)

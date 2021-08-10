@@ -31,7 +31,7 @@ export default class DCMessageList extends SplitOut {
       location?: { lat: number; lng: number }
       quoteMessageId?: number
     }
-  ): [number, MessageType | { msg: null }] {
+  ): [number, MessageType | null] {
     const viewType = filename ? C.DC_MSG_FILE : C.DC_MSG_TEXT
     const msg = this._dc.messageNew(viewType)
     if (filename) msg.setFile(filename, undefined)
@@ -101,12 +101,11 @@ export default class DCMessageList extends SplitOut {
     this._dc.setDraft(chatId, draft)
   }
 
-  messageIdToJson(id: number) {
+  messageIdToJson(id: number): MessageType | null {
     const msg = this._dc.getMessage(id)
     if (!msg) {
       log.warn('No message found for ID ' + id)
-      const empty: { msg: null } = { msg: null }
-      return empty
+      return null
     }
     return this._messageToJson(msg)
   }
@@ -136,16 +135,14 @@ export default class DCMessageList extends SplitOut {
       fileSize: filesizeConverter(filesize),
     }
 
-    return {
+    return Object.assign(jsonMSG, {
       id: msg.getId(),
-      msg: Object.assign(jsonMSG, {
-        direction,
-        status: convertMessageStatus(jsonMSG.state),
-        attachment,
-      }),
+      direction,
+      status: convertMessageStatus(jsonMSG.state),
+      attachment,
       contact: (contact ? { ...contact } : {}) as any,
       setupCodeBegin,
-    }
+    })
   }
 
   forwardMessage(msgId: number, chatId: number) {
@@ -167,8 +164,8 @@ export default class DCMessageList extends SplitOut {
       if (messageId <= C.DC_MSG_ID_LAST_SPECIAL) return
       const message = this.messageIdToJson(messageId)
       if (
-        message.msg.direction === 'incoming' &&
-        message.msg.state !== C.DC_STATE_IN_SEEN
+        message.direction === 'incoming' &&
+        message.state !== C.DC_STATE_IN_SEEN
       ) {
         markMessagesRead.push(messageId)
       }
@@ -176,7 +173,7 @@ export default class DCMessageList extends SplitOut {
     })
 
     if (markMessagesRead.length > 0) {
-      const chatId = messages[markMessagesRead[0]].msg.chatId
+      const chatId = messages[markMessagesRead[0]].chatId
 
       log.debug(
         `markMessagesRead ${markMessagesRead.length} messages for chat ${chatId}`

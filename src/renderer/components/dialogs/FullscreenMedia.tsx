@@ -6,7 +6,7 @@ import { MessageType } from '../../../shared/shared-types'
 import { runtime } from '../../runtime'
 
 export default function FullscreenMedia(props: {
-  msg: MessageType['msg']
+  msg: MessageType
   onClose: DialogProps['onClose']
 }) {
   const tx = window.static_translate
