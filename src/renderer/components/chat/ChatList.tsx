@@ -161,7 +161,9 @@ export default function ChatList(props: {
     (DIVIDER_HEIGHT * 3 +
       chatsHeight(height) +
       contactsHeight(height) +
-      (chatListIds.length == 0 && queryStrIsValidEmail ? CHATLISTITEM_HEIGHT : 0))
+      (chatListIds.length == 0 && queryStrIsValidEmail
+        ? CHATLISTITEM_HEIGHT
+        : 0))
 
   // scroll to selected chat ---
   const listRefRef = useRef<List<any>>()
