@@ -30,7 +30,7 @@ export const GroupImage = (props: {
       msg: {
         attachment: {
           url: groupImage,
-          contentType: 'image/x',
+          filemime: 'image/x',
         },
         file: groupImage,
       },

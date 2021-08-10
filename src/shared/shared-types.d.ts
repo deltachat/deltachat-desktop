@@ -151,7 +151,7 @@ type todo = any
 
 export interface MessageTypeAttachment {
   url: string
-  contentType: string
+  filemime: string | null
   fileName: string
   fileSize: string
 }

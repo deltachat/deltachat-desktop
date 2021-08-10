@@ -35,9 +35,8 @@ const SUPPORTED_VIDEO_MIME_TYPES = Object.freeze([
 
 export function isImage(attachment: MessageTypeAttachment) {
   return (
-    attachment &&
-    attachment.contentType &&
-    SUPPORTED_IMAGE_MIME_TYPES.includes(attachment.contentType)
+    attachment?.filemime &&
+    SUPPORTED_IMAGE_MIME_TYPES.includes(attachment.filemime)
   )
 }
 
@@ -47,18 +46,13 @@ export function hasAttachment(attachment: MessageTypeAttachment) {
 
 export function isVideo(attachment: MessageTypeAttachment) {
   return (
-    attachment &&
-    attachment.contentType &&
-    SUPPORTED_VIDEO_MIME_TYPES.includes(attachment.contentType)
+    attachment?.filemime &&
+    SUPPORTED_VIDEO_MIME_TYPES.includes(attachment.filemime)
   )
 }
 
 export function isAudio(attachment: MessageTypeAttachment) {
-  return (
-    attachment &&
-    attachment.contentType &&
-    attachment.contentType.startsWith('audio/')
-  )
+  return attachment?.filemime && attachment.filemime.startsWith('audio/')
 }
 
 export function isDisplayableByFullscreenMedia(
@@ -67,7 +61,7 @@ export function isDisplayableByFullscreenMedia(
   return isImage(attachment) || isAudio(attachment) || isVideo(attachment)
 }
 
-export function getExtension({ fileName, contentType }: MessageTypeAttachment) {
+export function getExtension({ fileName, filemime }: MessageTypeAttachment) {
   if (fileName && fileName.indexOf('.') >= 0) {
     const lastPeriod = fileName.lastIndexOf('.')
     const extension = fileName.slice(lastPeriod + 1)
@@ -76,7 +70,7 @@ export function getExtension({ fileName, contentType }: MessageTypeAttachment) {
     }
   }
 
-  return mimeTypes.extension(contentType) || null
+  return mimeTypes.extension(filemime) || null
 }
 
 export function dragAttachmentOut(

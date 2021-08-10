@@ -112,7 +112,7 @@ function ImageAttachment({ message }: { message: MessageType }) {
       onContextMenu={openContextMenu}
     >
       {isBroken ? (
-        squareBrokenMediaContent(hasSupportedFormat, attachment.contentType)
+        squareBrokenMediaContent(hasSupportedFormat, attachment.filemime)
       ) : (
         <img
           className='attachment-content'
@@ -137,7 +137,7 @@ function VideoAttachment({ message }: { message: MessageType }) {
       onContextMenu={openContextMenu}
     >
       {isBroken ? (
-        squareBrokenMediaContent(hasSupportedFormat, attachment.contentType)
+        squareBrokenMediaContent(hasSupportedFormat, attachment.filemime)
       ) : (
         <>
           <video
@@ -176,7 +176,7 @@ function AudioAttachment({ message }: { message: MessageType }) {
         <div>
           {window.static_translate(
             'cannot_display_unsuported_file_type',
-            attachment.contentType
+            attachment.filemime
           )}
         </div>
       )}
@@ -189,7 +189,7 @@ function FileAttachment({ message }: { message: MessageType }) {
     message
   )
   const { attachment } = message
-  const { fileName, fileSize, contentType } = attachment
+  const { fileName, fileSize, filemime } = attachment
   const extension = getExtension(attachment)
   return (
     <div
@@ -206,11 +206,11 @@ function FileAttachment({ message }: { message: MessageType }) {
           openInShell()
         }}
         onDragStart={dragAttachmentOut.bind(null, attachment)}
-        title={contentType}
+        title={filemime}
       >
         {extension ? (
           <div className='file-extension'>
-            {contentType === 'application/octet-stream' ? '' : extension}
+            {filemime === 'application/octet-stream' ? '' : extension}
           </div>
         ) : null}
       </div>

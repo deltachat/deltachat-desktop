@@ -13,11 +13,10 @@ export default function FullscreenMedia(props: {
   const { msg, onClose } = props
   let elm = <div />
   if (!msg || !msg.attachment) return elm
-  const attachment = msg.attachment
-  const url = attachment.url
-  const contentType = attachment.contentType
+  const { attachment } = msg
+  const { url, filemime } = attachment
 
-  switch (contentType.split('/')[0]) {
+  switch (filemime.split('/')[0]) {
     case 'image':
       elm = (
         <div className='image-container'>

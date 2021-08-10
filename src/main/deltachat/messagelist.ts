@@ -4,7 +4,6 @@ import { getLogger } from '../../shared/logger'
 const log = getLogger('main/deltachat/messagelist')
 
 import filesizeConverter from 'filesize'
-import mime from 'mime-types'
 
 import SplitOut from './splitout'
 import { Message } from 'deltachat-node'
@@ -126,11 +125,7 @@ export default class DCMessageList extends SplitOut {
 
     const attachment: MessageTypeAttachment = jsonMSG.file && {
       url: jsonMSG.file,
-      contentType: convertContentType({
-        filemime,
-        viewType: jsonMSG.viewType,
-        file: jsonMSG.file,
-      }),
+      filemime,
       fileName: filename || jsonMSG.text,
       fileSize: filesizeConverter(filesize),
     }
@@ -242,29 +237,5 @@ function convertMessageStatus(s: number): msgStatus {
       return 'sending'
     case C.DC_STATE_UNDEFINED:
       return 'error'
-  }
-}
-
-function convertContentType({
-  filemime,
-  viewType,
-  file,
-}: {
-  filemime: string
-  viewType: number
-  file: string
-}) {
-  if (!filemime) return 'application/octet-stream'
-  if (filemime !== 'application/octet-stream') return filemime
-
-  switch (viewType) {
-    case C.DC_MSG_IMAGE:
-      return 'image/jpg'
-    case C.DC_MSG_VOICE:
-      return 'audio/ogg'
-    case C.DC_MSG_FILE:
-      return mime.lookup(file) || 'application/octet-stream'
-    default:
-      return 'application/octet-stream'
   }
 }

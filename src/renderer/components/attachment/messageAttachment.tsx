@@ -130,7 +130,7 @@ export default function Attachment({
       </audio>
     )
   } else {
-    const { fileName, fileSize, contentType } = attachment
+    const { fileName, fileSize, filemime } = attachment
     const extension = getExtension(attachment)
     return (
       <div
@@ -145,11 +145,11 @@ export default function Attachment({
           className='file-icon'
           draggable='true'
           onDragStart={dragAttachmentOut.bind(null, attachment)}
-          title={contentType}
+          title={filemime}
         >
           {extension ? (
             <div className='file-extension'>
-              {contentType === 'application/octet-stream' ? '' : extension}
+              {filemime === 'application/octet-stream' ? '' : extension}
             </div>
           ) : null}
         </div>
@@ -196,7 +196,7 @@ export function DraftAttachment({
       </audio>
     )
   } else {
-    const { fileName, fileSize, contentType } = attachment
+    const { fileName, fileSize, filemime } = attachment
     const extension = getExtension(attachment)
     return (
       <div className={classNames('message-attachment-generic')}>
@@ -204,11 +204,11 @@ export function DraftAttachment({
           className='file-icon'
           draggable='true'
           onDragStart={dragAttachmentOut.bind(null, attachment)}
-          title={contentType}
+          title={filemime}
         >
           {extension ? (
             <div className='file-extension'>
-              {contentType === 'application/octet-stream' ? '' : extension}
+              {filemime === 'application/octet-stream' ? '' : extension}
             </div>
           ) : null}
         </div>

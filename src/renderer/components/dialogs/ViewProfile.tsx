@@ -117,7 +117,7 @@ export default function ViewProfile(props: {
                       msg: {
                         attachment: {
                           url: contact.profileImage,
-                          contentType: 'image/x',
+                          filemime: 'image/x',
                         },
                         file: contact.profileImage,
                       },
