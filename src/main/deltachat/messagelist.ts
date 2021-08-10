@@ -11,7 +11,6 @@ import {
   MessageType,
   MessageSearchResult,
   MessageTypeAttachment,
-  msgStatus,
 } from '../../shared/shared-types'
 
 import { writeFile } from 'fs-extra'
@@ -129,7 +128,6 @@ export default class DCMessageList extends SplitOut {
     }
 
     return Object.assign(jsonMSG, {
-      status: convertMessageStatus(jsonMSG.state),
       attachment,
       sender: (contact ? { ...contact } : {}) as any,
       setupCodeBegin,
@@ -213,26 +211,5 @@ export default class DCMessageList extends SplitOut {
     const pathToFile = tempy.file({ extension: 'html' })
     await writeFile(pathToFile, message_html_content, { encoding: 'utf-8' })
     return pathToFile
-  }
-}
-
-function convertMessageStatus(s: number): msgStatus {
-  switch (s) {
-    case C.DC_STATE_IN_FRESH:
-      return 'sent'
-    case C.DC_STATE_OUT_FAILED:
-      return 'error'
-    case C.DC_STATE_IN_SEEN:
-      return 'read'
-    case C.DC_STATE_IN_NOTICED:
-      return 'read'
-    case C.DC_STATE_OUT_DELIVERED:
-      return 'delivered'
-    case C.DC_STATE_OUT_MDN_RCVD:
-      return 'read'
-    case C.DC_STATE_OUT_PENDING:
-      return 'sending'
-    case C.DC_STATE_UNDEFINED:
-      return 'error'
   }
 }

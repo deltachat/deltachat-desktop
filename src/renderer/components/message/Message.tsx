@@ -36,6 +36,7 @@ import { ConversationType } from './MessageList'
 // const log = getLogger('renderer/message')
 
 import { getDirection } from '../../../shared/util'
+import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 
 const Avatar = (
   contact: DCContact,
@@ -123,7 +124,6 @@ function buildContextMenu(
   {
     attachment,
     direction,
-    status,
     message,
     text,
     conversationType,
@@ -131,7 +131,6 @@ function buildContextMenu(
   {
     attachment: MessageTypeAttachment
     direction: 'incoming' | 'outgoing'
-    status: msgStatus
     message: MessageType | null
     text?: string
     conversationType: ConversationType
@@ -143,6 +142,7 @@ function buildContextMenu(
   const tx = window.static_translate // don't use the i18n context here for now as this component is inefficient (rendered one menu for every message)
 
   // eslint-disable-next-line
+  const status = mapCoreMsgStatus2String(message.state)
   const showRetry = status === 'error' && direction === 'outgoing'
   const showAttachmentOptions = attachment && !message.isSetupmessage
 
@@ -228,7 +228,6 @@ const Message = (props: {
   const { message, conversationType } = props
   const {
     id,
-    status,
     viewType,
     text,
     hasLocation,
@@ -237,6 +236,7 @@ const Message = (props: {
     hasHTML,
   } = message
   const direction = getDirection(message)
+  const status = mapCoreMsgStatus2String(message.state)
   const tx = useTranslationFunction()
 
   const screenContext = useContext(ScreenContext)
@@ -253,7 +253,6 @@ const Message = (props: {
       {
         attachment,
         direction,
-        status,
         message,
         text,
         conversationType,

@@ -19,6 +19,7 @@ import {
   privateReply,
 } from '../message/messageFunctions'
 import { getDirection } from '../../../shared/util'
+import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 
 const log = getLogger('render/ChatAuditLog')
 
@@ -172,8 +173,9 @@ export default function ChatAuditLogDialog(props: {
                 log.debug(`Missing message with id ${id}`)
                 return
               }
-              const { text, status, timestamp } = message
+              const { text, timestamp } = message
               const direction = getDirection(message)
+              const status = mapCoreMsgStatus2String(message.state)
               return (
                 <li
                   key={id}

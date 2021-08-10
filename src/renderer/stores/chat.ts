@@ -4,6 +4,7 @@ import { JsonContact, FullChat, MessageType } from '../../shared/shared-types'
 import { DeltaBackend } from '../delta-remote'
 import { runtime } from '../runtime'
 import { ActionEmitter, KeybindAction } from '../keybindings'
+import { C } from 'deltachat-node/dist/constants'
 
 export const PAGE_SIZE = 10
 
@@ -121,7 +122,7 @@ chatStore.attachReducer(({ type, payload, id }, state) => {
       ...state.messages,
       [payload]: {
         ...state.messages[payload],
-        status: 'delivered',
+        state: C.DC_STATE_OUT_DELIVERED,
       },
     }
     return { ...state, messages }
@@ -130,7 +131,7 @@ chatStore.attachReducer(({ type, payload, id }, state) => {
       ...state.messages,
       [payload]: {
         ...state.messages[payload],
-        status: 'error',
+        state: C.DC_STATE_OUT_FAILED,
       },
     }
     return { ...state, messages }
@@ -139,7 +140,7 @@ chatStore.attachReducer(({ type, payload, id }, state) => {
       ...state.messages,
       [payload]: {
         ...state.messages[payload],
-        status: 'read',
+        state: C.DC_STATE_OUT_MDN_RCVD,
       },
     }
     return { ...state, messages }
