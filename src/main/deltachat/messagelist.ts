@@ -3,15 +3,9 @@ import { getLogger } from '../../shared/logger'
 
 const log = getLogger('main/deltachat/messagelist')
 
-import filesizeConverter from 'filesize'
-
 import SplitOut from './splitout'
 import { Message } from 'deltachat-node'
-import {
-  MessageType,
-  MessageSearchResult,
-  MessageTypeAttachment,
-} from '../../shared/shared-types'
+import { MessageType, MessageSearchResult } from '../../shared/shared-types'
 
 import { writeFile } from 'fs-extra'
 import tempy from 'tempy'
@@ -111,26 +105,22 @@ export default class DCMessageList extends SplitOut {
   }
 
   _messageToJson(msg: Message): MessageType {
-    const filemime = msg.getFilemime()
-    const filename = msg.getFilename()
-    const filesize = msg.getFilebytes()
+    const file_mime = msg.getFilemime()
+    const file_name = msg.getFilename()
+    const file_bytes = msg.getFilebytes()
     const fromId = msg.getFromId()
     const setupCodeBegin = msg.getSetupcodebegin()
     const contact = fromId && this._controller.contacts.getContact(fromId)
 
     const jsonMSG = msg.toJson()
 
-    const attachment: MessageTypeAttachment = jsonMSG.file && {
-      url: jsonMSG.file,
-      filemime,
-      fileName: filename || jsonMSG.text,
-      fileSize: filesizeConverter(filesize),
-    }
-
     return Object.assign(jsonMSG, {
-      attachment,
       sender: (contact ? { ...contact } : {}) as any,
       setupCodeBegin,
+      // extra attachment fields
+      file_mime,
+      file_bytes,
+      file_name,
     })
   }
 

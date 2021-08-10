@@ -1,14 +1,14 @@
 import React from 'react'
 import classNames from 'classnames'
 import Timestamp from '../conversations/Timestamp'
-import { isImage, isVideo, hasAttachment } from '../attachment/Attachment'
+import { isImage, isVideo } from '../attachment/Attachment'
 import { i18nContext } from '../../contexts'
-import { MessageTypeAttachment, msgStatus } from '../../../shared/shared-types'
+import { msgStatus } from '../../../shared/shared-types'
 
 export default class MessageMetaData extends React.Component<{
   padlock: boolean
   username?: string
-  attachment?: MessageTypeAttachment
+  file_mime?: string | null
   direction?: 'incoming' | 'outgoing'
   status: msgStatus
   text?: string
@@ -20,7 +20,7 @@ export default class MessageMetaData extends React.Component<{
     const {
       padlock,
       username,
-      attachment,
+      file_mime,
       direction,
       status,
       text,
@@ -30,9 +30,7 @@ export default class MessageMetaData extends React.Component<{
     } = this.props
 
     const withImageNoCaption = Boolean(
-      !text &&
-        ((isImage(attachment) && hasAttachment(attachment)) ||
-          isVideo(attachment))
+      !text && (isImage(file_mime) || isVideo(file_mime))
     )
 
     return (

@@ -15,8 +15,10 @@ import { makeContextMenu } from '../ContextMenu'
 import { OpenDialogFunctionType } from '../dialogs/DialogController'
 import { runtime } from '../../runtime'
 
+import filesizeConverter from 'filesize'
+
 export default function MediaAttachment({ message }: { message: MessageType }) {
-  if (!message.attachment) {
+  if (!message.file) {
     return null
   }
   switch (message.viewType) {
@@ -102,9 +104,9 @@ function ImageAttachment({ message }: { message: MessageType }) {
   const { openContextMenu, openFullscreenMedia, openInShell } = useMediaActions(
     message
   )
-  const { attachment } = message
-  const hasSupportedFormat = isImage(attachment)
-  const isBroken = !attachment.url || !hasSupportedFormat
+  const { file, file_mime } = message
+  const hasSupportedFormat = isImage(file_mime)
+  const isBroken = !file || !hasSupportedFormat
   return (
     <div
       className={`media-attachment-media${isBroken ? ` broken` : ''}`}
@@ -112,11 +114,11 @@ function ImageAttachment({ message }: { message: MessageType }) {
       onContextMenu={openContextMenu}
     >
       {isBroken ? (
-        squareBrokenMediaContent(hasSupportedFormat, attachment.filemime)
+        squareBrokenMediaContent(hasSupportedFormat, file_mime)
       ) : (
         <img
           className='attachment-content'
-          src={runtime.transformBlobURL(attachment.url)}
+          src={runtime.transformBlobURL(file)}
         />
       )}
     </div>
@@ -127,9 +129,9 @@ function VideoAttachment({ message }: { message: MessageType }) {
   const { openContextMenu, openFullscreenMedia, openInShell } = useMediaActions(
     message
   )
-  const { attachment } = message
-  const hasSupportedFormat = isVideo(attachment)
-  const isBroken = !attachment.url || !hasSupportedFormat
+  const { file_mime, file } = message
+  const hasSupportedFormat = isVideo(file_mime)
+  const isBroken = !file || !hasSupportedFormat
   return (
     <div
       className={`media-attachment-media${isBroken ? ` broken` : ''}`}
@@ -137,12 +139,12 @@ function VideoAttachment({ message }: { message: MessageType }) {
       onContextMenu={openContextMenu}
     >
       {isBroken ? (
-        squareBrokenMediaContent(hasSupportedFormat, attachment.filemime)
+        squareBrokenMediaContent(hasSupportedFormat, file_mime)
       ) : (
         <>
           <video
             className='attachment-content'
-            src={runtime.transformBlobURL(attachment.url)}
+            src={runtime.transformBlobURL(file)}
             controls={false}
           />
           <div className='video-play-btn'>
@@ -156,8 +158,8 @@ function VideoAttachment({ message }: { message: MessageType }) {
 
 function AudioAttachment({ message }: { message: MessageType }) {
   const { openContextMenu } = useMediaActions(message)
-  const { attachment } = message
-  const hasSupportedFormat = isAudio(attachment)
+  const { file_mime, file } = message
+  const hasSupportedFormat = isAudio(file_mime)
   return (
     <div className='media-attachment-audio' onContextMenu={openContextMenu}>
       <div className='heading'>
@@ -170,13 +172,13 @@ function AudioAttachment({ message }: { message: MessageType }) {
       </div>
       {hasSupportedFormat ? (
         <audio controls>
-          <source src={runtime.transformBlobURL(attachment.url)} />
+          <source src={runtime.transformBlobURL(file)} />
         </audio>
       ) : (
         <div>
           {window.static_translate(
             'cannot_display_unsuported_file_type',
-            attachment.filemime
+            file_mime
           )}
         </div>
       )}
@@ -188,9 +190,8 @@ function FileAttachment({ message }: { message: MessageType }) {
   const { openContextMenu, downloadMedia, openInShell } = useMediaActions(
     message
   )
-  const { attachment } = message
-  const { fileName, fileSize, filemime } = attachment
-  const extension = getExtension(attachment)
+  const { file_name, file_bytes, file_mime, file } = message
+  const extension = getExtension(message)
   return (
     <div
       className='media-attachment-generic'
@@ -205,18 +206,18 @@ function FileAttachment({ message }: { message: MessageType }) {
           ev.stopPropagation()
           openInShell()
         }}
-        onDragStart={dragAttachmentOut.bind(null, attachment)}
-        title={filemime}
+        onDragStart={dragAttachmentOut.bind(null, file)}
+        title={file_mime}
       >
         {extension ? (
           <div className='file-extension'>
-            {filemime === 'application/octet-stream' ? '' : extension}
+            {file_mime === 'application/octet-stream' ? '' : extension}
           </div>
         ) : null}
       </div>
       <div className='text-part'>
-        <div className='name'>{fileName}</div>
-        <div className='size'>{fileSize}</div>
+        <div className='name'>{file_name}</div>
+        <div className='size'>{filesizeConverter(file_bytes)}</div>
       </div>
     </div>
   )

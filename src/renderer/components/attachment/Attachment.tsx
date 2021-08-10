@@ -1,6 +1,6 @@
 const { ipcRenderer } = window.electron_functions
 import mimeTypes from 'mime-types'
-import { MessageTypeAttachment } from '../../../shared/shared-types'
+import { MessageTypeAttachmentSubset } from '../../../shared/shared-types'
 
 /* Section - Data Copied in part from Signal */
 // Supported media types in google chrome
@@ -33,54 +33,49 @@ const SUPPORTED_VIDEO_MIME_TYPES = Object.freeze([
 // TODO define this correctly
 // (maybe inside shared module??, but that depends on wether its also used in the backend or just exists in the frontend)
 
-export function isImage(attachment: MessageTypeAttachment) {
-  return (
-    attachment?.filemime &&
-    SUPPORTED_IMAGE_MIME_TYPES.includes(attachment.filemime)
-  )
+export function isImage(filemime: string) {
+  return SUPPORTED_IMAGE_MIME_TYPES.includes(filemime)
 }
 
-export function hasAttachment(attachment: MessageTypeAttachment) {
-  return attachment && attachment.url
+export function hasAttachment(attachment: MessageTypeAttachmentSubset | null) {
+  return attachment && attachment.file
 }
 
-export function isVideo(attachment: MessageTypeAttachment) {
-  return (
-    attachment?.filemime &&
-    SUPPORTED_VIDEO_MIME_TYPES.includes(attachment.filemime)
-  )
+export function isVideo(filemime: string) {
+  return SUPPORTED_VIDEO_MIME_TYPES.includes(filemime)
 }
 
-export function isAudio(attachment: MessageTypeAttachment) {
-  return attachment?.filemime && attachment.filemime.startsWith('audio/')
+export function isAudio(filemime: string) {
+  return filemime.startsWith('audio/')
 }
 
-export function isDisplayableByFullscreenMedia(
-  attachment: MessageTypeAttachment
-) {
-  return isImage(attachment) || isAudio(attachment) || isVideo(attachment)
+export function isDisplayableByFullscreenMedia(filemime: string) {
+  return isImage(filemime) || isAudio(filemime) || isVideo(filemime)
 }
 
-export function getExtension({ fileName, filemime }: MessageTypeAttachment) {
-  if (fileName && fileName.indexOf('.') >= 0) {
-    const lastPeriod = fileName.lastIndexOf('.')
-    const extension = fileName.slice(lastPeriod + 1)
+export function isGenericAttachment(filemime: string) {
+  return !(isImage(filemime) || isVideo(filemime) || isAudio(filemime))
+}
+
+export function getExtension({
+  file_name,
+  file_mime,
+}: MessageTypeAttachmentSubset) {
+  if (file_name && file_name.indexOf('.') >= 0) {
+    const lastPeriod = file_name.lastIndexOf('.')
+    const extension = file_name.slice(lastPeriod + 1)
     if (extension.length) {
       return extension
     }
   }
 
-  return mimeTypes.extension(filemime) || null
+  return mimeTypes.extension(file_mime) || null
 }
 
 export function dragAttachmentOut(
-  { url }: MessageTypeAttachment,
+  { file }: MessageTypeAttachmentSubset,
   dragEvent: DragEvent
 ) {
   dragEvent.preventDefault()
-  ipcRenderer.send('ondragstart', url)
-}
-
-export function isGenericAttachment(attachment: MessageTypeAttachment) {
-  return !(isImage(attachment) || isVideo(attachment) || isAudio(attachment))
+  ipcRenderer.send('ondragstart', file)
 }

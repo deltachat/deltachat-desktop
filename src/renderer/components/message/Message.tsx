@@ -16,11 +16,7 @@ import MessageBody from './MessageBody'
 import MessageMetaData from './MessageMetaData'
 
 import Attachment from '../attachment/messageAttachment'
-import {
-  MessageType,
-  DCContact,
-  MessageTypeAttachment,
-} from '../../../shared/shared-types'
+import { MessageType, DCContact } from '../../../shared/shared-types'
 import { isGenericAttachment } from '../attachment/Attachment'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
 import { joinCall, openViewProfileDialog } from '../helpers/ChatMethods'
@@ -121,13 +117,11 @@ const ForwardedTitle = (
 
 function buildContextMenu(
   {
-    attachment,
     message,
     text,
     conversationType,
   }: // onRetrySend,
   {
-    attachment: MessageTypeAttachment
     message: MessageType | null
     text?: string
     conversationType: ConversationType
@@ -138,7 +132,7 @@ function buildContextMenu(
 ) {
   const tx = window.static_translate // don't use the i18n context here for now as this component is inefficient (rendered one menu for every message)
 
-  const showAttachmentOptions = attachment && !message.isSetupmessage
+  const showAttachmentOptions = message.file && !message.isSetupmessage
 
   const textSelected: boolean = window.getSelection().toString() !== ''
   // grab selected text before clicking, otherwise the selection might be already gone
@@ -183,7 +177,7 @@ function buildContextMenu(
     },
     // Open Attachment
     showAttachmentOptions &&
-      isGenericAttachment(attachment) && {
+      isGenericAttachment(message.file_mime) && {
         label: tx('open_attachment'),
         action: openAttachmentInShell.bind(null, message),
       },
@@ -220,15 +214,7 @@ const Message = (props: {
   /* onRetrySend */
 }) => {
   const { message, conversationType } = props
-  const {
-    id,
-    viewType,
-    text,
-    hasLocation,
-    attachment,
-    isSetupmessage,
-    hasHTML,
-  } = message
+  const { id, viewType, text, hasLocation, isSetupmessage, hasHTML } = message
   const direction = getDirection(message)
   const status = mapCoreMsgStatus2String(message.state)
   const tx = useTranslationFunction()
@@ -245,7 +231,6 @@ const Message = (props: {
       target?.getAttribute('x-target-url') || target?.href || ''
     const items = buildContextMenu(
       {
-        attachment,
         message,
         text,
         conversationType,
@@ -392,10 +377,9 @@ const Message = (props: {
               quotedMessageId={message.quotedMessageId}
             />
           )}
-          {attachment && !isSetupmessage && (
+          {message.file && !isSetupmessage && (
             <Attachment
               {...{
-                attachment,
                 text,
                 conversationType,
                 direction,
@@ -414,7 +398,7 @@ const Message = (props: {
             </button>
           )}
           <MessageMetaData
-            attachment={!isSetupmessage && attachment}
+            file_mime={!isSetupmessage && message.file_mime}
             direction={direction}
             status={status}
             text={text}
