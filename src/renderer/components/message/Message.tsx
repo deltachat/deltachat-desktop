@@ -20,7 +20,6 @@ import {
   MessageType,
   DCContact,
   MessageTypeAttachment,
-  msgStatus,
 } from '../../../shared/shared-types'
 import { isGenericAttachment } from '../attachment/Attachment'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
@@ -123,14 +122,12 @@ const ForwardedTitle = (
 function buildContextMenu(
   {
     attachment,
-    direction,
     message,
     text,
     conversationType,
   }: // onRetrySend,
   {
     attachment: MessageTypeAttachment
-    direction: 'incoming' | 'outgoing'
     message: MessageType | null
     text?: string
     conversationType: ConversationType
@@ -141,9 +138,6 @@ function buildContextMenu(
 ) {
   const tx = window.static_translate // don't use the i18n context here for now as this component is inefficient (rendered one menu for every message)
 
-  // eslint-disable-next-line
-  const status = mapCoreMsgStatus2String(message.state)
-  const showRetry = status === 'error' && direction === 'outgoing'
   const showAttachmentOptions = attachment && !message.isSetupmessage
 
   const textSelected: boolean = window.getSelection().toString() !== ''
@@ -252,7 +246,6 @@ const Message = (props: {
     const items = buildContextMenu(
       {
         attachment,
-        direction,
         message,
         text,
         conversationType,

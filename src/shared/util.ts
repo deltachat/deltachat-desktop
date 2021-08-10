@@ -1,4 +1,4 @@
-import { MessageType, msgStatus } from './shared-types'
+import { MessageType } from './shared-types'
 
 import { C } from 'deltachat-node/dist/constants'
 
