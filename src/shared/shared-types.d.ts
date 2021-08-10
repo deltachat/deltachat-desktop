@@ -170,7 +170,7 @@ export type MessageType = JsonMessage & {
   direction: 'outgoing' | 'incoming'
   status: msgStatus
   attachment?: MessageTypeAttachment
-  contact: DCContact
+  sender: DCContact
   setupCodeBegin?: string
 }
 

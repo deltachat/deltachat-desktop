@@ -161,7 +161,7 @@ function AudioAttachment({ message }: { message: MessageType }) {
   return (
     <div className='media-attachment-audio' onContextMenu={openContextMenu}>
       <div className='heading'>
-        <div className='name'>{message?.contact.displayName}</div>
+        <div className='name'>{message?.sender.displayName}</div>
         <Timestamp
           timestamp={message?.timestamp * 1000}
           extended

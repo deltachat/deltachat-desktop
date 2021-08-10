@@ -309,7 +309,7 @@ const Message = (props: {
         <div className='videochat-icon'>
           <span className='icon videocamera' />
         </div>
-        <AvatarFromContact contact={message.contact} onClick={onContactClick} />
+        <AvatarFromContact contact={message.sender} onClick={onContactClick} />
         <div className='break' />
         <div
           className='info-button'
@@ -317,7 +317,7 @@ const Message = (props: {
           onClick={joinCall.bind(null, screenContext, id)}
         >
           {direction === 'incoming'
-            ? tx('videochat_contact_invited_hint', message.contact.displayName)
+            ? tx('videochat_contact_invited_hint', message.sender.displayName)
             : tx('videochat_you_invited_hint')}
           <div className='join-button'>
             {direction === 'incoming'
@@ -359,15 +359,15 @@ const Message = (props: {
     >
       {showAuthor &&
         direction === 'incoming' &&
-        Avatar(message.contact, onContactClick)}
+        Avatar(message.sender, onContactClick)}
       <div
         onContextMenu={showMenu}
         className='msg-container'
-        style={{ borderColor: message.contact.color }}
+        style={{ borderColor: message.sender.color }}
       >
         {message.isForwarded &&
           ForwardedTitle(
-            message.contact,
+            message.sender,
             onContactClick,
             direction,
             conversationType,
@@ -380,7 +380,7 @@ const Message = (props: {
             })}
           >
             {AuthorName(
-              message.contact,
+              message.sender,
               onContactClick,
               message?.overrideSenderName
             )}
@@ -460,11 +460,11 @@ export const Quote = ({
     <div className='quote-background'>
       <div
         className='quote has-message'
-        style={{ borderLeftColor: message && message.contact.color }}
+        style={{ borderLeftColor: message && message.sender.color }}
       >
         <div className='quote-author'>
           {message &&
-            AuthorName(message.contact, () => {}, message.overrideSenderName)}
+            AuthorName(message.sender, () => {}, message.overrideSenderName)}
         </div>
         <div className='quoted-text'>
           <MessageBody text={quotedText} />

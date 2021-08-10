@@ -101,7 +101,7 @@ export async function openDeadDropDecisionDialog(message: MessageType) {
     message.realChatId
   )
   window.__openDialog('DeadDrop', {
-    contact: message.contact,
+    contact: message.sender,
     chat,
     msg: message,
   })
