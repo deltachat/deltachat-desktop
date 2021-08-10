@@ -136,7 +136,6 @@ export default class DCMessageList extends SplitOut {
     }
 
     return Object.assign(jsonMSG, {
-      id: msg.getId(),
       direction,
       status: convertMessageStatus(jsonMSG.state),
       attachment,
