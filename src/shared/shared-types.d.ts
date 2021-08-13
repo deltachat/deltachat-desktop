@@ -27,10 +27,7 @@ export interface DesktopSettings {
       }
     | {}
   chatViewBgImg: string
-  /** @deprecated replaced by lastAccount */
-  credentials: Credentials
-  /** path to last used/selected Account */
-  lastAccount: string
+  lastAccount: number
   enableAVCalls: boolean
   enableChatAuditLog: boolean
   enableOnDemandLocationStreaming: boolean
@@ -204,7 +201,6 @@ export type MessageSearchResult = {
 }
 
 export type DeltaChatAccount = {
-  path: string
   displayname: string
   addr: string
   size: number

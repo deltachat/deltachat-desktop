@@ -6,10 +6,7 @@ import setupNotifications from '../notifications'
 import setupUnreadBadgeCounter from '../unread-badge'
 import SplitOut from './splitout'
 import { Credentials, DeltaChatAccount } from '../../shared/shared-types'
-import { getNewAccountPath, getLogins, removeAccount } from '../logins'
 import { ExtendedAppMainProcess } from '../types'
-import { remove } from 'fs-extra'
-import { basename } from 'path'
 const log = getLogger('main/deltachat/login')
 
 const app = rawApp as ExtendedAppMainProcess
@@ -26,59 +23,27 @@ export default class DCLoginController extends SplitOut {
    * locale changes
    */
   setCoreStrings(strings: { [key: number]: string }) {
-    if (!this._dc) return
-    setCoreStrings(this._dc, strings)
+    if (!this.dc) return
+    setCoreStrings(this.dc, strings)
   }
 
-  async login(
-    accountDir: string,
-    credentials: Credentials,
-    updateConfiguration = false
+  async selectAccount(
+    accountId: number,
   ) {
-    if (this._controller._dc) {
-      log.info('already logged in, logging out first')
-      await this.logout()
-    }
-    log.info(`Using deltachat instance ${this._controller.accountDir}`)
-    const dc = new DeltaChat()
-
-    if (!DeltaChat.maybeValidAddr(credentials.addr)) {
-      throw new Error(this._controller.translate('bad_email_address'))
-    }
-
-    this._controller.registerEventHandler(dc)
-
-    await dc.open(accountDir)
-
-    setCoreStrings(dc, txCoreStrings())
-
-    this._controller._dc = dc
-    if (!dc.isConfigured() || updateConfiguration) {
-      try {
-        await dc.configure(credentials)
-      } catch (err) {
-        this._controller.unregisterEventHandler(dc)
-        await dc.close()
-        this._controller._dc = null
-        throw err
-      }
-    }
-
+    this._controller.selectedAccountId = accountId
+    this._controller.selectedAccountContext = this.dc.accountContext(accountId)
+    
     log.info('Ready, starting io...')
-    await dc.startIO()
+
+    await this.dc.startIO()
     log.debug('Started IO')
 
     this._controller.emit('ready')
-    // save last logged in account
-    delete app.state.saved.credentials
-    app.state.saved.lastAccount = basename(accountDir)
+    app.state.saved.lastAccount = accountId
 
-    log.info('dc_get_info', dc.getInfo())
+    log.info('dc_get_info', this._controller.selectedAccountContext.getInfo())
 
-    this._controller.accountDir = accountDir
-    this._controller._dc = dc
-    this._controller.credentials = credentials
-
+    
     this.updateDeviceChats()
 
     setupNotifications(this._controller, (app as any).state.saved)
@@ -89,62 +54,62 @@ export default class DCLoginController extends SplitOut {
   }
 
   async updateCredentials(credentials: Credentials): Promise<boolean> {
-    await this._dc.stopIO()
+    await this.dc.stopIO()
     try {
-      await this._dc.configure(credentials)
+      await this.selectedAccountContext.configure(credentials)
     } catch (err) {
-      await this._dc.startIO()
+      await this.dc.startIO()
       return false
     }
-    await this._dc.startIO()
+    await this.dc.startIO()
     return true
   }
 
   logout() {
-    this.close()
-    this._controller._resetState()
-
-    app.state.saved.credentials = null
     app.state.saved.lastAccount = null
     app.saveState()
 
     log.info('Logged out')
-    this._controller._resetState()
-    this._controller.emit('logout')
+    
     if (typeof this._controller._sendStateToRenderer === 'function')
       this._controller._sendStateToRenderer()
   }
 
-  async newLogin(credentials: Credentials): Promise<DeltaChatAccount> {
-    const newAccountPath = getNewAccountPath()
+  async addAccount(credentials: Credentials): Promise<number> {
+    const accountId = this.dc.addAccount()
+    const accountContext = this.dc.accountContext(accountId)
+
     try {
-      await this.login(newAccountPath, credentials)
-    } catch (error) {
+      accountContext.configure(credentials)
+    } catch(error) {
       log.debug(
-        'Detected account creation error, deleting unfinished account',
-        newAccountPath
+        'Detected account creation error'
       )
-      await remove(newAccountPath)
+      this.dc.removeAccount(accountId)
       throw error
     }
-    const logins = await this.getLogins()
 
-    return logins.find(account => account.path === newAccountPath)
+    return accountId
   }
+
+  async removeAccount(accountId: number) {
+    this.dc.removeAccount(accountId)
+  }
+
 
   close() {
     this._controller.emit('DESKTOP_CLEAR_ALL_NOTIFICATIONS')
-    if (!this._dc) return
-    this._dc.stopIO()
-    this._controller.unregisterEventHandler(this._dc)
-    this._dc.close()
-    this._controller._dc = null
+    if (!this.dc) return
+    this.dc.stopIO()
+    this._controller.unregisterEventHandler(this.dc)
+    this.dc.close()
+    this._controller.dc = null
   }
 
   updateDeviceChats() {
     this._controller.hintUpdateIfNessesary()
 
-    this._dc.addDeviceMessage(
+    this.selectedAccountContext.addDeviceMessage(
       'changelog-version-1.20_part1_0',
       `Improved e-mail compatibility in version 1.20:
 
@@ -158,7 +123,7 @@ export default class DCLoginController extends SplitOut {
 [Full Change log](https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#12000---2021-03-22)` as any
     )
 
-    this._dc.addDeviceMessage(
+    this.selectedAccountContext.addDeviceMessage(
       'changelog-version-1.20_part2_0',
       `With this release we are reaching out to early adopters who are willing to face some challenges and want to help bring a convenient automatically end-to-end encrypting e-mail app to all platforms. It's about time, isn't it?
 And don't worry .... Delta Chat also remains a decentralized messenger with the largest addressable user base ;)
@@ -171,61 +136,27 @@ https://delta.chat/en/2021-05-05-email-compat` as any
     )
   }
 
-  async getLogins() {
-    return await getLogins()
+  async accounts(): Promise<DeltaChatAccount[]> {
+    const accountIds: number[] = this.dc.accounts()
+    
+    const accounts: DeltaChatAccount[] = accountIds.map((accountId: number) => {
+      const accountContext = this.dc.accountContext(accountId)
+      const selfContact = accountContext.getContact(C.DC_CONTACT_ID_SELF)
+      return {
+        displayname: selfContact.getDisplayName(),
+        addr: selfContact.getAddress(),
+        size: 0,
+        profileImage: selfContact.getProfileImage(),
+        color: selfContact.color
+      }
+    })
+    return accounts
   }
 
-  async loadAccount(login: DeltaChatAccount) {
-    return await this.login(login.path, { addr: login.addr })
-  }
 
-  async forgetAccount(login: DeltaChatAccount) {
-    try {
-      await removeAccount(login.path)
-    } catch (error) {
-      this._controller.sendToRenderer('error', error.message)
-    }
-  }
 
   async getLastLoggedInAccount() {
-    const savedCredentials = app.state.saved.credentials
-    let selectedAccount: DeltaChatAccount | null = null
-    const lastAccount = app.state.saved.lastAccount
-    if (typeof lastAccount === 'string' && lastAccount.length >= 1) {
-      selectedAccount = app.state.logins.find(
-        account => account.path.indexOf(lastAccount) !== -1
-      )
-      if (!selectedAccount) {
-        log.error(
-          'Previous account not found!',
-          app.state.saved.lastAccount,
-          'is not in the list of found logins:',
-          app.state.logins
-        )
-      }
-    } else if (
-      savedCredentials &&
-      typeof savedCredentials === 'object' &&
-      Object.keys(savedCredentials).length !== 0
-    ) {
-      // (fallback to old system)
-      // if we find saved credentials we login in with these
-      // which will create a new Deltachat instance which
-      // is bound to a certain account
-      selectedAccount = app.state.logins.find(
-        account => account.addr === savedCredentials.addr
-      )
-
-      if (!selectedAccount) {
-        log.warn(
-          'Previous account not found!',
-          app.state.saved.credentials,
-          'is not in the list of found logins:',
-          app.state.logins
-        )
-      }
-    }
-    return selectedAccount
+    return app.state.saved.lastAccount
   }
 }
 
@@ -237,7 +168,6 @@ export function txCoreStrings() {
   strings[C.DC_STR_SELF] = tx('self')
   strings[C.DC_STR_DRAFT] = tx('draft')
   strings[C.DC_STR_VOICEMESSAGE] = tx('voice_message')
-  strings[C.DC_STR_DEADDROP] = tx('chat_contact_request')
   strings[C.DC_STR_IMAGE] = tx('image')
   strings[C.DC_STR_GIF] = tx('gif')
   strings[C.DC_STR_VIDEO] = tx('video')
@@ -264,7 +194,6 @@ export function txCoreStrings() {
   strings[C.DC_STR_AC_SETUP_MSG_SUBJECT] = tx('autocrypt_asm_subject')
   strings[C.DC_STR_AC_SETUP_MSG_BODY] = tx('autocrypt_asm_general_body')
   strings[C.DC_STR_CANNOT_LOGIN] = tx('login_error_cannot_login')
-  strings[C.DC_STR_SERVER_RESPONSE] = tx('login_error_server_response')
   strings[C.DC_STR_DEVICE_MESSAGES] = tx('device_talk')
   strings[C.DC_STR_SAVED_MESSAGES] = tx('saved_messages')
   strings[C.DC_STR_CONTACT_VERIFIED] = tx('contact_verified')

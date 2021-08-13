@@ -24,6 +24,7 @@ import { EventId2EventName as eventStrings } from 'deltachat-node/dist/constants
 import { VERSION, BUILD_TIMESTAMP } from '../../shared/build-info'
 import { Timespans, DAYS_UNTIL_UPDATE_SUGGESTION } from '../../shared/constants'
 import tempy from 'tempy'
+import { Context } from 'deltachat-node/dist/context'
 
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat')
@@ -40,12 +41,12 @@ export default class DeltaChatController extends EventEmitter {
   /**
    * Created and owned by ipc on the backend
    */
-  _dc: DeltaChat = undefined
-  accountDir: string
+  dc: DeltaChat = undefined
+  selectedAccountContext: Context = undefined
+  selectedAccountId: number
   configuring = false
   updating = false
   ready = false // used for the about screen
-  credentials: Credentials = { addr: '', mail_pw: '' }
   _selectedChatId: number | null = null
   _showArchivedChats = false
   _pages = 0
