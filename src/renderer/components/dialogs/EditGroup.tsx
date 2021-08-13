@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/dist/constants'
-import differ from 'array-differ'
 import { Card, Classes } from '@blueprintjs/core'
 import {
   DeltaDialogBase,
@@ -49,8 +48,8 @@ export const useEditGroup = (
 ) => {
   const [initialGroupMembers] = useState(groupMembers)
   const updateGroup = async () => {
-    const remove = differ(initialGroupMembers, groupMembers)
-    const add = differ(groupMembers, initialGroupMembers)
+    const remove = initialGroupMembers.filter(m => !groupMembers.includes(m))
+    const add = groupMembers.filter(m => !initialGroupMembers.includes(m))
     await DeltaBackend.call(
       'chat.modifyGroup',
       groupId,

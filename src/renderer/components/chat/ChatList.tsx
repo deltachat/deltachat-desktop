@@ -4,41 +4,40 @@ import React, {
   useState,
   useContext,
   useCallback,
+  ComponentType,
+  useMemo,
 } from 'react'
 import { useChatListContextMenu } from './ChatListContextMenu'
 import { useMessageResults, useChatList } from './ChatListHelpers'
-import ChatListItem, {
-  ChatListItemMessageResult,
-  PlaceholderChatListItem,
-} from './ChatListItem'
+import {
+  ChatListItemRowChat,
+  ChatListItemRowContact,
+  ChatListItemRowMessage,
+} from './ChatListItemRow'
 import { PseudoListItemAddContact } from '../helpers/PseudoListItem'
 import { C } from 'deltachat-node/dist/constants'
 import { selectChat } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
-import { ContactListItem } from '../contact/ContactListItem'
 import { useContactIds } from '../contact/ContactList'
 import {
   ChatListItemType,
   MessageSearchResult,
   DCContact,
 } from '../../../shared/shared-types'
-
+import AutoSizer from 'react-virtualized-auto-sizer'
 import {
-  AutoSizer,
-  List,
-  InfiniteLoader,
-  Index,
-  IndexRange,
-  ListRowRenderer,
-} from 'react-virtualized'
+  FixedSizeList as List,
+  ListChildComponentProps,
+  ListItemKeySelector,
+} from 'react-window'
+import InfiniteLoader from 'react-window-infinite-loader'
+
 import { ipcBackend } from '../../ipc'
 import { ScreenContext } from '../../contexts'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
 import { getLogger } from '../../../shared/logger'
-import {
-  createChatByContactIdAndSelectIt,
-  openViewProfileDialog,
-} from '../helpers/ChatMethods'
+
+import { createChatByContactIdAndSelectIt } from '../helpers/ChatMethods'
 
 const log = getLogger('renderer/chatlist')
 
@@ -57,34 +56,43 @@ export function ChatListPart({
   width,
   children,
   height,
-  scrollToIndex,
+  itemKey,
+  setListRef,
+  itemData,
 }: {
-  isRowLoaded: (params: Index) => boolean
-  loadMoreRows: (params: IndexRange) => Promise<any>
+  isRowLoaded: (index: number) => boolean
+  loadMoreRows: (startIndex: number, stopIndex: number) => Promise<any>
   rowCount: number
   width: number
-  children: ListRowRenderer
+  children: ComponentType<ListChildComponentProps<any>>
   height: number
-  scrollToIndex?: number
+  itemKey: ListItemKeySelector<any>
+  setListRef?: (ref: List<any>) => void
+  itemData?: any
 }) {
   return (
     <InfiniteLoader
-      isRowLoaded={isRowLoaded}
-      loadMoreRows={loadMoreRows}
-      rowCount={rowCount}
-      minimumBatchSize={1}
+      isItemLoaded={isRowLoaded}
+      itemCount={rowCount}
+      loadMoreItems={loadMoreRows}
     >
-      {({ onRowsRendered, registerChild }) => (
+      {({ onItemsRendered, ref }) => (
         <List
-          ref={registerChild}
-          rowHeight={CHATLISTITEM_HEIGHT}
+          className=''
           height={height}
-          onRowsRendered={onRowsRendered}
-          rowRenderer={children}
-          rowCount={rowCount}
+          itemCount={rowCount}
+          itemSize={CHATLISTITEM_HEIGHT}
+          onItemsRendered={onItemsRendered}
+          ref={r => {
+            ;(ref as any)(r)
+            setListRef && setListRef(r)
+          }}
           width={width}
-          scrollToIndex={scrollToIndex}
-        />
+          itemKey={itemKey}
+          itemData={itemData}
+        >
+          {children}
+        </List>
       )}
     </InfiniteLoader>
   )
@@ -151,19 +159,19 @@ export default function ChatList(props: {
     (DIVIDER_HEIGHT * 3 +
       chatsHeight(height) +
       contactsHeight(height) +
-      (chatListIds.length == 0 ? CHATLISTITEM_HEIGHT : 0))
+      (chatListIds.length == 0 && queryStrIsValidEmail
+        ? CHATLISTITEM_HEIGHT
+        : 0))
 
   // scroll to selected chat ---
-  const [scrollToChatIndex, setScrollToChatIndex] = useState<number>(-1)
-
+  const listRefRef = useRef<List<any>>()
   const selectedChatIndex = chatListIds.findIndex(
     ([chatId, _messageId]) => chatId === selectedChatId
   )
 
   const scrollSelectedChatIntoView = useCallback((index: number) => {
     if (index !== -1) {
-      setScrollToChatIndex(index)
-      setTimeout(() => setScrollToChatIndex(-1), 0)
+      listRefRef.current?.scrollToItem(index)
     }
   }, [])
   // on select chat - scroll to selected chat - chatView
@@ -205,6 +213,28 @@ export default function ChatList(props: {
     selectFirstChat()
   )
 
+  const chatlistData = useMemo(() => {
+    return {
+      selectedChatId,
+      chatListIds,
+      chatCache,
+      onChatClick,
+      openContextMenu,
+    }
+  }, [selectedChatId, chatListIds, chatCache, onChatClick, openContextMenu])
+
+  const contactlistData = useMemo(() => {
+    return {
+      contactCache,
+      contactIds,
+      screenContext,
+    }
+  }, [contactCache, contactIds, screenContext])
+
+  const messagelistData = useMemo(() => {
+    return { messageResultIds, messageCache, openDialog, queryStr }
+  }, [messageResultIds, messageCache, openDialog, queryStr])
+
   // Render --------------------
   return (
     <>
@@ -223,24 +253,11 @@ export default function ChatList(props: {
                 rowCount={chatListIds.length}
                 width={width}
                 height={chatsHeight(height)}
-                scrollToIndex={scrollToChatIndex}
+                setListRef={(ref: List<any>) => (listRefRef.current = ref)}
+                itemKey={index => 'key' + chatListIds[index]}
+                itemData={chatlistData}
               >
-                {({ index, key, style }) => {
-                  const [chatId] = chatListIds[index]
-                  return (
-                    <div style={style} key={key}>
-                      <ChatListItem
-                        isSelected={selectedChatId === chatId}
-                        chatListItem={chatCache[chatId] || undefined}
-                        onClick={onChatClick.bind(null, chatId)}
-                        onContextMenu={event => {
-                          const chat = chatCache[chatId]
-                          openContextMenu(event, chat, selectedChatId)
-                        }}
-                      />
-                    </div>
-                  )
-                }}
+                {ChatListItemRowChat}
               </ChatListPart>
               {isSearchActive && (
                 <>
@@ -256,30 +273,13 @@ export default function ChatList(props: {
                     rowCount={contactIds.length}
                     width={width}
                     height={contactsHeight(height)}
+                    itemKey={index => 'key' + contactIds[index]}
+                    itemData={contactlistData}
                   >
-                    {({ index, key, style }) => {
-                      const contactId = contactIds[index]
-                      return (
-                        <div key={key} style={style}>
-                          {contactCache[contactId] ? (
-                            <ContactListItem
-                              contact={contactCache[contactId]}
-                              showCheckbox={false}
-                              checked={false}
-                              showRemove={false}
-                              onClick={async _ => {
-                                openViewProfileDialog(screenContext, contactId)
-                              }}
-                            />
-                          ) : (
-                            <PlaceholderChatListItem />
-                          )}
-                        </div>
-                      )
-                    }}
+                    {ChatListItemRowContact}
                   </ChatListPart>
                   {chatListIds.length === 0 && queryStrIsValidEmail && (
-                    <div style={{ width: '30vw' }}>
+                    <div style={{ width: width }}>
                       <PseudoListItemAddContact
                         queryStr={queryStr}
                         queryStrIsEmail={queryStrIsValidEmail}
@@ -303,27 +303,10 @@ export default function ChatList(props: {
                       // take remaining space
                       messagesHeight(height)
                     }
+                    itemKey={index => 'key' + messageResultIds[index]}
+                    itemData={messagelistData}
                   >
-                    {({ index, key, style }) => {
-                      const msrId = messageResultIds[index]
-                      return (
-                        <div style={style} key={key}>
-                          {messageCache[msrId] ? (
-                            <ChatListItemMessageResult
-                              queryStr={queryStr}
-                              msr={messageCache[msrId]}
-                              onClick={() => {
-                                openDialog('MessageDetail', {
-                                  id: msrId,
-                                })
-                              }}
-                            />
-                          ) : (
-                            <div className='pseudo-chat-list-item skeleton' />
-                          )}
-                        </div>
-                      )
-                    }}
+                    {ChatListItemRowMessage}
                   </ChatListPart>
                 </>
               )}
@@ -362,12 +345,12 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
     [id: number]: undefined | LoadStatus.FETCHING | LoadStatus.LOADED
   }>({})
 
-  const isChatLoaded: (params: Index) => boolean = ({ index }) =>
+  const isChatLoaded: (index: number) => boolean = index =>
     !!chatLoadState[chatListIds[index][0]]
-  const loadChats: (params: IndexRange) => Promise<void> = async ({
-    startIndex,
-    stopIndex,
-  }) => {
+  const loadChats: (
+    startIndex: number,
+    stopIndex: number
+  ) => Promise<void> = async (startIndex, stopIndex) => {
     const entries = chatListIds.slice(startIndex, stopIndex + 1)
     setChatLoading(state => {
       entries.forEach(
@@ -481,7 +464,7 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
 
   useEffect(() => {
     // force refresh of inital data
-    loadChats({ startIndex: 0, stopIndex: Math.min(chatListIds.length, 10) })
+    loadChats(0, Math.min(chatListIds.length, 10))
   }, [chatListIds]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return { isChatLoaded, loadChats, chatCache }
@@ -521,12 +504,12 @@ function useContactAndMessageLogic(queryStr: string) {
     [id: number]: undefined | LoadStatus.FETCHING | LoadStatus.LOADED
   }>({})
 
-  const isContactLoaded: (params: Index) => boolean = ({ index }) =>
+  const isContactLoaded: (index: number) => boolean = index =>
     !!contactLoadState[contactIds[index]]
-  const loadContact: (params: IndexRange) => Promise<void> = async ({
-    startIndex,
-    stopIndex,
-  }) => {
+  const loadContact: (
+    startIndex: number,
+    stopIndex: number
+  ) => Promise<void> = async (startIndex, stopIndex) => {
     const ids = contactIds.slice(startIndex, stopIndex + 1)
 
     setContactLoading(state => {
@@ -549,12 +532,12 @@ function useContactAndMessageLogic(queryStr: string) {
     [id: number]: undefined | LoadStatus.FETCHING | LoadStatus.LOADED
   }>({})
 
-  const isMessageLoaded: (params: Index) => boolean = ({ index }) =>
+  const isMessageLoaded: (index: number) => boolean = index =>
     !!messageLoadState[messageResultIds[index]]
-  const loadMessages: (params: IndexRange) => Promise<void> = async ({
-    startIndex,
-    stopIndex,
-  }) => {
+  const loadMessages: (
+    startIndex: number,
+    stopIndex: number
+  ) => Promise<void> = async (startIndex, stopIndex) => {
     const ids = messageResultIds.slice(startIndex, stopIndex + 1)
 
     setMessageLoading(state => {
@@ -574,11 +557,8 @@ function useContactAndMessageLogic(queryStr: string) {
 
   useEffect(() => {
     // force refresh of inital data
-    loadContact({ startIndex: 0, stopIndex: Math.min(contactIds.length, 10) })
-    loadMessages({
-      startIndex: 0,
-      stopIndex: Math.min(messageResultIds.length, 10),
-    })
+    loadContact(0, Math.min(contactIds.length, 10))
+    loadMessages(0, Math.min(messageResultIds.length, 10))
   }, [contactIds, messageResultIds]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return {

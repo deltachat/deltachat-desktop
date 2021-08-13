@@ -4,13 +4,17 @@ img.verified-icon {
   margin-right: 2px;
 }
 
+.chat-list .contact-list-item#newcontact div.contact {
+  width: 30vw;
+}
+
 .contact-list-item div.contact {
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 300px;
   .chat-list & {
-    width: 30vw;
+    width: unset; // otherwise you can scroll sidewards sometimes
     padding: 0px 10px;
   }
 

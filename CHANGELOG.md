@@ -18,6 +18,11 @@
 - Upgrade `error-stack-parser` to `2.0.6`
 - Make `sass` and `@types/debounce` development dependencies
 - cleanup backend / main process (remove unused functions / variables)
+- Remove dependency `array-differ`
+- replace `react-virtualized` with `react-window`
+
+### Fixed
+- fix duplicated contacts in search
 
 ## [1.20.3] - 2021-06-30
 
