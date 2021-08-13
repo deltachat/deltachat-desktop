@@ -15,30 +15,30 @@ import SplitOut from './splitout'
 import { DeltaChatAccount } from '../../shared/shared-types'
 export default class DCBackup extends SplitOut {
   async export(dir: string) {
-    this._dc.stopIO()
+    this.dc.stopIO()
     try {
       await this._internal_export(dir)
     } catch (err) {
-      this._dc.startIO()
+      this.dc.startIO()
       throw err
     }
-    this._dc.startIO()
+    this.dc.startIO()
   }
 
   private async _internal_export(dir: string) {
-    return new Promise((resolve, reject) => {
-      this._dc.importExport(C.DC_IMEX_EXPORT_BACKUP, dir, undefined)
+    return new Promise<void>((resolve, reject) => {
+      this.selectedAccountContext.importExport(C.DC_IMEX_EXPORT_BACKUP, dir, undefined)
       const onEventImexProgress = (data1: number) => {
         if (data1 === 0) {
-          this._dc.removeListener('DC_EVENT_IMEX_PROGRESS', onEventImexProgress)
+          this.dc.removeListener('DC_EVENT_IMEX_PROGRESS', onEventImexProgress)
           reject('Backup export failed (progress==0)')
         } else if (data1 === 1000) {
-          this._dc.removeListener('DC_EVENT_IMEX_PROGRESS', onEventImexProgress)
+          this.dc.removeListener('DC_EVENT_IMEX_PROGRESS', onEventImexProgress)
           resolve()
         }
       }
 
-      this._dc.on('DC_EVENT_IMEX_PROGRESS', onEventImexProgress)
+      this.dc.on('DC_EVENT_IMEX_PROGRESS', onEventImexProgress)
     })
   }
 
