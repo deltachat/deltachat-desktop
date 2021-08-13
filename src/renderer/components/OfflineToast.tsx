@@ -28,8 +28,7 @@ export default function OfflineToast() {
   const [tryConnectCooldown, setTryConnectCooldown] = useState(true)
 
   const maybeNetwork = useMemo(
-    () =>
-      debounce(DeltaBackend.call.bind(null, 'context.maybeNetwork'), 140, true),
+    () => debounce(() => DeltaBackend.call('context.maybeNetwork'), 140, true),
     []
   )
 

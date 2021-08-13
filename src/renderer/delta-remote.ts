@@ -328,6 +328,7 @@ class DeltaRemote {
   call(fnName: 'extras.setThemeFilePath', address: string): void
   call(fnName: 'extras.getAvailableThemes'): Promise<Theme[]>
   call(fnName: 'extras.setTheme', address: string): Promise<boolean>
+  call(fnName: 'extras.writeClipboardToTempFile'): Promise<string>
   // catchall: ----------------------------------------------------------
   call(fnName: string): Promise<any>
   call(fnName: string, ...args: any[]): Promise<any> {

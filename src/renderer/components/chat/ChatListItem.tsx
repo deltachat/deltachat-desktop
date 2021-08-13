@@ -132,7 +132,7 @@ const ChatListItemDeaddrop = React.memo(
         onClick={onClick}
         className='chat-list-item is-deaddrop'
       >
-        <Avatar displayName={chatListItem.deaddrop.contact.address} />
+        <Avatar displayName={chatListItem.deaddrop?.contact?.address} />
         <div className='content'>
           <Header
             chatListItem={{ ...chatListItem, name: tx('chat_contact_request') }}
