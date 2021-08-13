@@ -4,7 +4,7 @@ import { C } from 'deltachat-node'
 import binding from 'deltachat-node/binding'
 import { EventId2EventName } from 'deltachat-node/dist/constants'
 import tempy from 'tempy'
-import fs from 'fs-extra'
+import { lstat, rename, rm } from 'fs/promises'
 import path from 'path'
 import { getNewAccountPath, getAccountInfo } from '../logins'
 
@@ -50,9 +50,9 @@ export default class DCBackup extends SplitOut {
         overwrite = false
       ) {
         if (overwrite === true) {
-          await fs.remove(newPath)
+          await rm(newPath, { recursive: true })
         }
-        await fs.move(tmpConfigPath, newPath)
+        await rename(tmpConfigPath, newPath)
         log.debug(
           `backupImport: ${tmpConfigPath} successfully copied to ${newPath}`
         )
@@ -81,10 +81,10 @@ export default class DCBackup extends SplitOut {
 
         try {
           // future compatibility: remove a symlink if it exists
-          if ((await fs.lstat(accountPath)).isSymbolicLink()) {
-            await fs
-              .remove(accountPath)
-              .catch(log.error.bind(null, 'symlink removing failed'))
+          if ((await lstat(accountPath)).isSymbolicLink()) {
+            await rm(accountPath).catch(
+              log.error.bind(null, 'symlink removing failed')
+            )
           }
         } catch (error) {
           /* but we don't care about the error of a not found symlink */

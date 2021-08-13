@@ -1,6 +1,6 @@
 console.time('init')
 
-import { ensureDirSync, watchFile } from 'fs-extra'
+import { mkdirSync, Stats, watchFile } from 'fs'
 import { app as rawApp, dialog } from 'electron'
 import rc from './rc'
 import { VERSION, GIT_REF, BUILD_TIMESTAMP } from '../shared/build-info'
@@ -27,10 +27,10 @@ import {
   getAccountsPath,
   getCustomThemesPath,
 } from './application-constants'
-ensureDirSync(getConfigPath())
-ensureDirSync(getLogsPath())
-ensureDirSync(getAccountsPath())
-ensureDirSync(getCustomThemesPath())
+mkdirSync(getConfigPath(), { recursive: true })
+mkdirSync(getLogsPath(), { recursive: true })
+mkdirSync(getAccountsPath(), { recursive: true })
+mkdirSync(getCustomThemesPath(), { recursive: true })
 
 // Setup Logger
 import { cleanupLogFolder, createLogHandler } from './log-handler'
@@ -112,7 +112,7 @@ function onReady([logins, _appReady, loadedState]: [
   }
 
   if (app.rc['translation-watch']) {
-    watchFile('_locales/_untranslated_en.json', (curr, prev) => {
+    watchFile('_locales/_untranslated_en.json', (curr: Stats, prev: Stats) => {
       if (curr.mtime !== prev.mtime) {
         log.info('translation-watch: File changed reloading translation data')
         mainWindow.chooseLanguage(app.localeData.locale)

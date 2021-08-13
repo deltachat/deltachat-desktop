@@ -7,7 +7,7 @@ import SplitOut from './splitout'
 import { Message } from 'deltachat-node'
 import { MessageType, MessageSearchResult } from '../../shared/shared-types'
 
-import { writeFile } from 'fs-extra'
+import { writeFile } from 'fs/promises'
 import tempy from 'tempy'
 
 import { getDirection } from '../../shared/util'

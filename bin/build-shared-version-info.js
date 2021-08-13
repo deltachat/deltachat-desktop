@@ -1,5 +1,6 @@
 const { spawnSync } = require('child_process')
-const fs = require('fs-extra')
+const { writeFileSync } = require('fs')
+const { readFile } = require('fs/promises')
 const { join } = require('path')
 
 function gatherProcessStdout(cmd, args) {
@@ -39,7 +40,8 @@ async function getGitRef() {
 }
 
 async function gatherBuildInfo() {
-  const package = await fs.readJSON(join(__dirname, '../package.json'))
+  const packageJSON = join(__dirname, '../package.json')
+  const package = JSON.parse(await readFile(packageJSON, 'utf8'))
   return {
     VERSION: package.version,
     BUILD_TIMESTAMP: Date.now(),
@@ -50,7 +52,7 @@ async function gatherBuildInfo() {
 // write file
 
 gatherBuildInfo().then(build_info => {
-  fs.writeFileSync(
+  writeFileSync(
     join(__dirname, '../src/shared/build-info.ts'),
     '/// GENERATED FILE run `npm run build` to refresh\n' +
       Object.keys(build_info)

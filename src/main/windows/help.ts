@@ -3,7 +3,7 @@ import { appIcon, htmlDistDir } from '../application-constants'
 import { getLogger } from '../../shared/logger'
 import { ExtendedAppMainProcess } from '../types'
 import { join } from 'path'
-import { pathExists } from 'fs-extra'
+import { stat } from 'fs/promises'
 import { appWindowTitle } from '../../shared/constants'
 
 const log = getLogger('main/help')
@@ -13,11 +13,11 @@ async function getHelpFileForLang(locale: string) {
   const appPath = app.getAppPath()
 
   const contentFilePath = join(appPath, `/html-dist/help/${locale}/help.html`)
-  if (await pathExists(contentFilePath)) {
+  if ((await stat(contentFilePath)).isFile()) {
     return join(htmlDistDir(), `help/${locale}/help.html`)
   } else {
     log.warn(
-      `Did not found help file for language ${locale}, falling back to english`
+      `Did not find help file for language ${locale}, falling back to english`
     )
     return join(htmlDistDir(), `help/en/help.html`)
   }

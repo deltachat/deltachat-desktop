@@ -18,10 +18,10 @@ jobs:
       fail-fast: false # don't fail fast, because some tests can be flaky so better we get all results
     steps:
     - uses: actions/checkout@v1
-    - name: Use Node.js 12.x
+    - name: Use Node.js 14.x
       uses: actions/setup-node@v1
       with:
-        node-version: 12.x
+        node-version: 14.x
     - name: npm ci
       run: |
         npm ci

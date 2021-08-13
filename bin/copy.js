@@ -1,25 +1,39 @@
 #!/usr/bin/env node
 
-const fsExtra = require('fs-extra')
-const fs = require('fs')
-const {  resolve, join } = require('path')
+const { copyFile, mkdir, readdir, stat } = require('fs/promises')
+const { resolve, join } = require('path')
 const globWatcher = require('glob-watcher')
 
-async function copy(source, destination, watch=false) {
-    await fsExtra.ensureDir(destination)
-
-    fs.readdir(source, async (err, files) => {
-        if (err) return console.error('- Unable to scan directory: ' + err);
-        for (let f of files) {
-            const pathSource = join(source, f)
-            const pathDestination = join(destination, f)
-            try {
-                await fsExtra.copy(pathSource, pathDestination)
-            } catch(err) {
-                console.error(`- Couldn't copy "${pathSource}" -> "${pathDestination}" because of:\n  ${err}`)
-            }
+async function copyRecursive(source, destination) {
+    if ((await stat(source)).isDirectory()) {
+        mkdir(destination, {recursive:true})
+        const files = await readdir(source)
+        for (const file of files) {
+            copyRecursive(join(source, file), join(destination, file))
         }
-    })
+    } else {
+        copyFile(source, destination)
+    }
+}
+
+async function copy(source, destination, watch=false) {
+    await mkdir(destination, { recursive: true })
+
+    let files
+    try {
+        files = await readdir(source)
+    } catch (err) {
+        return console.error('- Unable to scan directory: ' + err)
+    }
+    for (let f of files) {
+        const pathSource = join(source, f)
+        const pathDestination = join(destination, f)
+        try {
+            await copyRecursive(pathSource, pathDestination)
+        } catch(err) {
+            console.error(`- Couldn't copy "${pathSource}" -> "${pathDestination}" because of:\n  ${err}`)
+        }
+    }
 
     console.log(`+ copied all source files to "${destination}"`)
 

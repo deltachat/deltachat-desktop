@@ -8,7 +8,7 @@ const log = getLogger('main/deltachat/settings')
 import SplitOut from './splitout'
 import { ExtendedAppMainProcess } from '../types'
 import { DesktopSettings } from '../../shared/shared-types'
-import { ensureDir, emptyDir, copyFile } from 'fs-extra'
+import { copyFile, mkdir, rm } from 'fs/promises'
 import { join, extname } from 'path'
 import { getConfigPath } from '../application-constants'
 import { updateTrayIcon } from '../tray'
@@ -76,11 +76,12 @@ export default class DCSettings extends SplitOut {
       ? file
       : join(__dirname, '../../../images/backgrounds/', file)
 
-    await ensureDir(join(getConfigPath(), 'background/'))
-    await emptyDir(join(getConfigPath(), 'background/'))
+    const bgDir = join(getConfigPath(), 'background')
+    await rm(bgDir, { recursive: true, force: true })
+    await mkdir(bgDir, { recursive: true })
     const newPath = join(
       getConfigPath(),
-      'background/',
+      'background',
       `background_${Date.now()}` + extname(originalFilePath)
     )
     try {
