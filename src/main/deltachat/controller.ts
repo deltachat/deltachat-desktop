@@ -2,7 +2,7 @@ import DeltaChat, { C, DeltaChat as DeltaChatNode } from 'deltachat-node'
 import { app as rawApp } from 'electron'
 import { EventEmitter } from 'events'
 import { getLogger } from '../../shared/logger'
-import { JsonContact, Credentials, AppState } from '../../shared/shared-types'
+import { AppState } from '../../shared/shared-types'
 import { maybeMarkSeen } from '../markseenFix'
 import * as mainWindow from '../windows/main'
 import DCAutocrypt from './autocrypt'
@@ -23,7 +23,6 @@ import { EventId2EventName as eventStrings } from 'deltachat-node/dist/constants
 
 import { VERSION, BUILD_TIMESTAMP } from '../../shared/build-info'
 import { Timespans, DAYS_UNTIL_UPDATE_SUGGESTION } from '../../shared/constants'
-import tempy from 'tempy'
 import { Context } from 'deltachat-node/dist/context'
 
 const app = rawApp as ExtendedAppMainProcess
@@ -217,13 +216,6 @@ export default class DeltaChatController extends EventEmitter {
     this.sendToRenderer('DD_EVENT_CHATLIST_CHANGED', {})
   }
 
-  updateBlockedContacts() {
-    const blockedContacts = this._blockedContacts()
-    this.sendToRenderer('DD_EVENT_BLOCKED_CONTACTS_UPDATED', {
-      blockedContacts,
-    })
-  }
-
   /**
    * Returns the state in json format
    */
@@ -235,61 +227,43 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   async checkQrCode(qrCode: string) {
-    if (!this._dc) {
-      const dc = new DeltaChat()
+    if (!this.dc) {
+      const { dc, context } = DeltaChat.newTemporary()
       this.registerEventHandler(dc)
-      await dc.open(tempy.directory())
-      const checkQr = await dc.checkQrCode(qrCode)
+      const checkQr = await context.checkQrCode(qrCode)
       this.unregisterEventHandler(dc)
       dc.close()
 
       return checkQr
     }
-    return this._dc.checkQrCode(qrCode)
+    return this.selectedAccountContext.checkQrCode(qrCode)
   }
 
   async joinSecurejoin(qrCode: string) {
-    return await this._dc.joinSecurejoin(qrCode)
+    return await this.selectedAccountContext.joinSecurejoin(qrCode)
   }
 
   stopOngoingProcess() {
-    this._dc.stopOngoingProcess()
+    this.selectedAccountContext.stopOngoingProcess()
   }
 
-  // ToDo: Deprecated, use contacts.getContact
-  _getContact(id: number) {
-    const contact = this._dc.getContact(id).toJson()
-    return { ...contact }
-  }
-
-  // ToDo: move to contacts.
-  _blockedContacts(): JsonContact[] {
-    if (!this._dc) return []
-    return this._dc.getBlockedContacts().map(this._getContact.bind(this))
-  }
-
-  // ToDo: move to contacts.
-  getContacts2(listFlags: number, queryStr: string) {
-    const distinctIds = Array.from(
-      new Set(this._dc.getContacts(listFlags, queryStr))
-    )
-    const contacts = distinctIds.map(this._getContact.bind(this))
-    return contacts
-  }
 
   setProfilePicture(newImage: string) {
-    this._dc.setConfig('selfavatar', newImage)
+    this.selectedAccountContext.setConfig('selfavatar', newImage)
   }
 
   getProfilePicture() {
-    return this._dc.getContact(C.DC_CONTACT_ID_SELF).getProfileImage()
+    return this.selectedAccountContext.getContact(C.DC_CONTACT_ID_SELF).getProfileImage()
   }
 
   getInfo() {
     if (this.ready === true) {
-      return this._dc.getInfo()
+      return this.selectedAccountContext.getInfo()
     } else {
-      return DeltaChatNode.getSystemInfo()
+      // TODO: Fix
+      //return DeltaChatNode.getSystemInfo()
+      return null
+      
     }
   }
 
@@ -303,12 +277,12 @@ export default class DeltaChatController extends EventEmitter {
 
   hintUpdateIfNessesary() {
     if (
-      this._dc &&
+      this.selectedAccountContext &&
       Date.now() >
         Timespans.ONE_DAY_IN_SECONDS * DAYS_UNTIL_UPDATE_SUGGESTION * 1000 +
           BUILD_TIMESTAMP
     ) {
-      this._dc.addDeviceMessage(
+      this.selectedAccountContext.addDeviceMessage(
         `update-suggestion-${VERSION}`,
         `This build is over ${DAYS_UNTIL_UPDATE_SUGGESTION} days old - There might be a new version available. -> https://get.delta.chat`
       )
@@ -322,7 +296,6 @@ export default class DeltaChatController extends EventEmitter {
   _resetState() {
     this.ready = false
     this.configuring = false
-    this.credentials = { addr: '' }
     this._selectedChatId = null
     this._showArchivedChats = false
     this._pages = 0
