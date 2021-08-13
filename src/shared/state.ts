@@ -11,7 +11,6 @@ export function getDefaultState(): AppState {
       notifications: true,
       showNotificationContent: true,
       locale: null, // if this is null, the system chooses the system language electron reports
-      credentials: undefined,
       lastAccount: undefined,
       enableAVCalls: false,
       enableChatAuditLog: false,

@@ -136,20 +136,22 @@ https://delta.chat/en/2021-05-05-email-compat` as any
     )
   }
 
+  accountInfo(accountId: number): DeltaChatAccount {
+    const accountContext = this.dc.accountContext(accountId)
+    const selfContact = accountContext.getContact(C.DC_CONTACT_ID_SELF)
+    return {
+      displayname: selfContact.getDisplayName(),
+      addr: selfContact.getAddress(),
+      size: 0,
+      profileImage: selfContact.getProfileImage(),
+      color: selfContact.color
+    }
+  }
+
   async accounts(): Promise<DeltaChatAccount[]> {
     const accountIds: number[] = this.dc.accounts()
     
-    const accounts: DeltaChatAccount[] = accountIds.map((accountId: number) => {
-      const accountContext = this.dc.accountContext(accountId)
-      const selfContact = accountContext.getContact(C.DC_CONTACT_ID_SELF)
-      return {
-        displayname: selfContact.getDisplayName(),
-        addr: selfContact.getAddress(),
-        size: 0,
-        profileImage: selfContact.getProfileImage(),
-        color: selfContact.color
-      }
-    })
+    const accounts: DeltaChatAccount[] = accountIds.map(this.accountInfo)
     return accounts
   }
 

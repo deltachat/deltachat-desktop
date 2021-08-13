@@ -58,7 +58,6 @@ process.on('uncaughtException', err => {
 })
 
 import setLanguage from './load-translations'
-import { getLogins } from './logins'
 import * as ipc from './ipc'
 import { init as initMenu } from './menu'
 import State from './state'
@@ -73,7 +72,6 @@ app.ipcReady = false
 app.isQuitting = false
 
 Promise.all([
-  getLogins(),
   new Promise((resolve, _reject) => app.on('ready', resolve)),
   State.load(),
 ])
@@ -84,13 +82,11 @@ Promise.all([
     process.exit(1)
   })
 
-function onReady([logins, _appReady, loadedState]: [
-  DeltaChatAccount[],
+function onReady([_appReady, loadedState]: [
   any,
   AppState
 ]) {
   const state = (app.state = loadedState)
-  state.logins = logins
 
   app.saveState = () => State.save({ saved: state.saved })
 

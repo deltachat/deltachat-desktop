@@ -35,7 +35,7 @@ export interface DesktopSettings {
   locale: string | null
   notifications: boolean
   showNotificationContent: boolean
-  lastChats: { [account_addr: string]: number }
+  lastChats: { [accountId: number]: number }
   zoomFactor: number
   /** address to the active theme file scheme: "custom:name" or "dc:name" */
   activeTheme: string

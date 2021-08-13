@@ -111,7 +111,7 @@ export default function (dc: DeltaChatController, settings: any) {
     app.focus()
   }
 
-  dc._dc.on('DC_EVENT_INCOMING_MSG', async (chatId: number, msgId: number) => {
+  dc.on('DC_EVENT_INCOMING_MSG', async (chatId: number, msgId: number) => {
     if (
       settings.notifications &&
       (mainWindow.window.hidden || !mainWindow.window.isVisible())

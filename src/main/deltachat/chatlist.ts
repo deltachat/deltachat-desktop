@@ -1,5 +1,5 @@
 import DeltaChat, { C, Chat, ChatList } from 'deltachat-node'
-import { ChatJSON } from 'deltachat-node/dist/chat'
+import { ChatJSON } from 'deltachat-node/dist/types'
 import { Context } from 'deltachat-node/dist/context'
 import { app } from 'electron'
 import { getLogger } from '../../shared/logger'
