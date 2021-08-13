@@ -1,4 +1,4 @@
-import { copyFile, writeFile } from 'fs/promises'
+import { copyFile } from 'fs/promises'
 import { app as rawApp, clipboard, dialog, ipcMain } from 'electron'
 import { getLogger } from '../shared/logger'
 import { getLogsPath } from './application-constants'
@@ -7,7 +7,6 @@ import { ExtendedAppMainProcess } from './types'
 import * as mainWindow from './windows/main'
 import { openHelpWindow } from './windows/help'
 import { join } from 'path'
-import mimeTypes from 'mime-types'
 
 const log = getLogger('main/ipc')
 const DeltaChatController: typeof import('./deltachat/controller').default = (() => {
@@ -136,19 +135,5 @@ export function init(cwd: string, logHandler: LogHandler) {
     }
   })
 
-  ipcMain.handle('writeClipboardToTempFile', async _ev => {
-    const formats = clipboard.availableFormats().sort()
-    log.debug('Clipboard available formats:', formats)
-    if (formats.length <= 0) {
-      throw new Error('No files to write')
-    }
-    const pathToFile = join(
-      rawApp.getPath('temp'),
-      `paste.${mimeTypes.extension(formats[0]) || 'bin'}`
-    )
-    const buf = clipboard.readBuffer(formats[0])
-    log.debug(`Writing clipboard ${formats[0]} to file ${pathToFile}`)
-    await writeFile(pathToFile, buf, 'binary')
-    return pathToFile
-  })
+
 }

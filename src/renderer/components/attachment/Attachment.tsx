@@ -1,6 +1,7 @@
 const { ipcRenderer } = window.electron_functions
 import mimeTypes from 'mime-types'
 import { MessageTypeAttachmentSubset } from '../../../shared/shared-types'
+import { DraftObject } from '../composer/Composer'
 
 /* Section - Data Copied in part from Signal */
 // Supported media types in google chrome
@@ -45,7 +46,8 @@ export function isVideo(filemime: string) {
   return SUPPORTED_VIDEO_MIME_TYPES.includes(filemime)
 }
 
-export function isAudio(filemime: string) {
+export function isAudio(filemime: DraftObject["file_mime"]) {
+  if (!filemime) return false
   return filemime.startsWith('audio/')
 }
 

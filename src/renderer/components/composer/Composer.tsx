@@ -57,7 +57,7 @@ const Composer = forwardRef<
     disabledReason: string
     chatId: number
     messageInputRef: React.MutableRefObject<ComposerMessageInput>
-    draftState: draftObject
+    draftState: DraftObject
     removeQuote: () => void
     updateDraftText: (text: string, InputChatId: number) => void
     addFileToDraft: (file: string) => void
@@ -176,6 +176,8 @@ const Composer = forwardRef<
     // https://www.electronjs.org/docs/api/file-object
     const file = e.clipboardData.files[0]
 
+    log.debug(`paste: received file: "${file.path}" "${file.name}"`)
+
     // file.path is always set to empty string?
     if (file.path) {
       addFileToDraft(file.path)
@@ -184,7 +186,7 @@ const Composer = forwardRef<
 
     try {
       // Write clipboard to file then attach it to the draft
-      addFileToDraft(await runtime.writeClipboardToTempFile())
+      addFileToDraft(await DeltaBackend.call('extras.writeClipboardToTempFile'))
     } catch (err) {
       log.error('Failed to paste file.', err)
     }
@@ -277,7 +279,7 @@ const Composer = forwardRef<
 
 export default Composer
 
-type draftObject = { chatId: number } & Pick<
+export type DraftObject = { chatId: number } & Pick<
   JsonMessage,
   'text' | 'file' | 'quotedMessageId' | 'quotedText'
 > &
@@ -287,14 +289,14 @@ export function useDraft(
   chatId: number,
   inputRef: React.MutableRefObject<ComposerMessageInput>
 ): {
-  draftState: draftObject
+  draftState: DraftObject
   removeQuote: () => void
   updateDraftText: (text: string, InputChatId: number) => void
   addFileToDraft: (file: string) => void
   removeFile: () => void
   clearDraft: () => void
 } {
-  const [draftState, _setDraft] = useState<draftObject>({
+  const [draftState, _setDraft] = useState<DraftObject>({
     chatId,
     text: '',
     file: null,
@@ -304,7 +306,7 @@ export function useDraft(
     quotedMessageId: 0,
     quotedText: null,
   })
-  const draftRef = useRef<draftObject>()
+  const draftRef = useRef<DraftObject>()
   draftRef.current = draftState
 
   const clearDraft = useCallback(() => {
