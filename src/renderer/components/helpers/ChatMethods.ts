@@ -1,5 +1,5 @@
 import { DeltaBackend } from '../../delta-remote'
-import chatStore from '../../stores/chat'
+import chatStore, { selectChat } from '../../stores/chat'
 import { ScreenContext, unwrapContext } from '../../contexts'
 import { ChatListItemType, FullChat } from '../../../shared/shared-types'
 import { MuteDuration } from '../../../shared/constants'
@@ -140,13 +140,41 @@ export async function joinCall(
   try {
     const message = await DeltaBackend.call('messageList.getMessage', messageId)
 
-    if (message.msg.viewType !== C.DC_MSG_VIDEOCHAT_INVITATION) {
+    if (message.viewType !== C.DC_MSG_VIDEOCHAT_INVITATION) {
       throw new Error('Message is not a video chat invitation')
     }
 
-    return runtime.openLink(message.msg.videochatUrl)
+    return runtime.openLink(message.videochatUrl)
   } catch (error) {
     log.error('failed to join call', error)
     screenContext.openDialog(AlertDialog, { message: error.toString() })
   }
+}
+
+export async function createChatByContactIdAndSelectIt(
+  contactId: number
+): Promise<void> {
+  const chatId = await DeltaBackend.call(
+    'contacts.createChatByContactId',
+    contactId
+  )
+
+  if (!chatId) {
+    throw new Error(window.static_translate('create_chat_error_desktop'))
+  }
+
+  const chat = await DeltaBackend.call('chatList.getFullChatById', chatId)
+
+  if (chat && chat.archived) {
+    log.debug('chat was archived, unarchiving it')
+    await DeltaBackend.call(
+      'chat.setVisibility',
+      chatId,
+      C.DC_CHAT_VISIBILITY_NORMAL
+    )
+  }
+
+  // TODO update chatlist if its needed
+
+  selectChat(chatId)
 }

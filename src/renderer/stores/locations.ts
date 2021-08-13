@@ -1,11 +1,11 @@
-import { JsonLocations } from '../../shared/shared-types'
+import { FullChat, JsonLocations } from '../../shared/shared-types'
 import { DeltaBackend } from '../delta-remote'
 import { Store } from './store'
 
 const { ipcRenderer } = window.electron_functions
 
 export class state {
-  selectedChat: { [key: string]: todo; contacts: todo[] } = null
+  selectedChat: FullChat = null
   mapSettings = {
     timestampFrom: 0,
     timestampTo: 0,
@@ -40,10 +40,8 @@ ipcRenderer.on('DC_EVENT_LOCATION_CHANGED', (_evt, contactId) => {
     // this means all locations were deleted
     getLocations(selectedChat.id, mapSettings)
   }
-  if (selectedChat && selectedChat.contacts) {
-    const isMemberOfSelectedChat = selectedChat.contacts.find(
-      contact => contact.id === contactId
-    )
+  if (selectedChat && selectedChat.contactIds) {
+    const isMemberOfSelectedChat = selectedChat.contactIds.includes(contactId)
     if (isMemberOfSelectedChat) {
       getLocations(selectedChat.id, mapSettings)
     }

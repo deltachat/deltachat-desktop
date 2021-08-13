@@ -400,7 +400,7 @@ export default class MapComponent extends React.Component<
   }
 
   async onMapClick(event: mapboxgl.MapMouseEvent & mapboxgl.EventData) {
-    let message: JsonMessage
+    let message: MessageType
     const features = this.map.queryRenderedFeatures(event.point)
     const contactFeature = features.find(f => {
       return f.properties.contact !== undefined || f.properties.isPoi
@@ -412,7 +412,7 @@ export default class MapComponent extends React.Component<
           contactFeature.properties.msgId
         ).then((messageObj: MessageType) => {
           if (messageObj) {
-            message = messageObj.msg
+            message = messageObj
           }
           const markup = this.renderPopupMessage(
             contactFeature.properties.contact,

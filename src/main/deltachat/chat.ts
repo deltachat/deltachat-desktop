@@ -5,10 +5,13 @@ import { MessageType } from '../../shared/shared-types'
 
 const log = getLogger('main/deltachat/chat')
 export default class DCChat extends SplitOut {
-  getChatMedia(msgType1: number, msgType2: number): MessageType[] {
-    if (!this._controller._selectedChatId) return
+  getChatMedia(
+    chatId: number,
+    msgType1: number,
+    msgType2: number
+  ): MessageType[] {
     const mediaMessages = this._dc.getChatMedia(
-      this._controller._selectedChatId,
+      chatId,
       msgType1,
       msgType2,
       null

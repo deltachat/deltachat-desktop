@@ -149,13 +149,6 @@ export interface FullChat {
 
 type todo = any
 
-export interface MessageTypeAttachment {
-  url: string
-  contentType: string
-  fileName: string
-  fileSize: string
-}
-
 export type msgStatus =
   | 'error'
   | 'sending'
@@ -165,25 +158,18 @@ export type msgStatus =
   | 'sent'
   | ''
 
-export interface MessageType {
-  id: number
-  msg: JsonMessage & {
-    sentAt: number
-    receivedAt: number
-    direction: 'outgoing' | 'incoming'
-    status: msgStatus
-    attachment?: MessageTypeAttachment
-  }
-  filemime: string
-  filename: string
-  filesize: todo
-  viewType: todo
-  fromId: number
-  isMe: boolean
-  contact: DCContact
-  isInfo: boolean
+export type MessageType = JsonMessage & {
+  sender: DCContact
   setupCodeBegin?: string
+  file_mime: string | null
+  file_bytes: number | null
+  file_name: string | null
 }
+
+export type MessageTypeAttachmentSubset = Pick<
+  MessageType,
+  'file' | 'file_mime' | 'file_bytes' | 'file_name'
+>
 
 export type DCContact = JsonContact
 

@@ -37,6 +37,8 @@ import { ScreenContext } from '../../contexts'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
 import { getLogger } from '../../../shared/logger'
 
+import { createChatByContactIdAndSelectIt } from '../helpers/ChatMethods'
+
 const log = getLogger('renderer/chatlist')
 
 const CHATLISTITEM_HEIGHT = 64
@@ -131,11 +133,7 @@ export default function ChatList(props: {
       'contacts.createContact',
       queryStr
     )
-    const chatId = await DeltaBackend.call(
-      'contacts.createChatByContactId',
-      contactId
-    )
-    selectChat(chatId)
+    await createChatByContactIdAndSelectIt(contactId)
   }
   const screenContext = useContext(ScreenContext)
   const { openDialog } = screenContext

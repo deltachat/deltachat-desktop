@@ -30,18 +30,18 @@ export default function (dc: DeltaChatController, settings: any) {
     } else {
       const [chatInfo, message_json]: [
         FullChat,
-        { msg: null } | MessageType
+        MessageType | null
       ] = await Promise.all([
         dc.callMethod(null, 'chatList.getFullChatById', [chatId]),
         dc.callMethod(null, 'messageList.messageIdToJson', [msgId]),
       ])
 
-      const summary = message_json.msg.summary
+      const summary = message_json.summary
 
       let icon: NativeImage
-      if (message_json.msg?.viewType === C.DC_MSG_IMAGE) {
+      if (message_json?.viewType === C.DC_MSG_IMAGE) {
         // if is image
-        icon = nativeImage.createFromPath(message_json.msg.file)
+        icon = nativeImage.createFromPath(message_json?.file)
         // idea - maybe needs resize
         // issue/idea - does not work with all imagetypes - idea: have something reliable for thumbnail generation
       } else if (chatInfo.profileImage) {

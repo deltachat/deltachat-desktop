@@ -18,11 +18,13 @@ import {
   setQuoteInDraft,
   privateReply,
 } from '../message/messageFunctions'
+import { getDirection } from '../../../shared/util'
+import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 
 const log = getLogger('render/ChatAuditLog')
 
 function buildContextMenu(
-  message: MessageType | { msg: null },
+  message: MessageType | null,
   isGroup: boolean,
   closeDialogCallback: DialogProps['onClose']
 ) {
@@ -32,16 +34,16 @@ function buildContextMenu(
     {
       label: tx('reply_noun'),
       action: () => {
-        setQuoteInDraft(message.msg.id)
+        setQuoteInDraft(message.id)
         closeDialogCallback()
       },
     },
     // Reply privately -> only show in groups, don't show on info messages or outgoing messages
     isGroup &&
-      message.msg.fromId > C.DC_CONTACT_ID_LAST_SPECIAL && {
+      message.fromId > C.DC_CONTACT_ID_LAST_SPECIAL && {
         label: tx('reply_privately'),
         action: () => {
-          privateReply(message.msg)
+          privateReply(message)
           closeDialogCallback()
         },
       },
@@ -49,7 +51,7 @@ function buildContextMenu(
     {
       label: tx('global_menu_edit_copy_desktop'),
       action: () => {
-        navigator.clipboard.writeText(message.msg.text)
+        navigator.clipboard.writeText(message.text)
       },
     },
     // Message details
@@ -70,11 +72,7 @@ export default function ChatAuditLogDialog(props: {
   const [loading, setLoading] = useState(true)
   const [msgIds, setMsgIds] = useState<number[]>([])
   const [messages, setMessages] = useState<{
-    [key: number]:
-      | MessageType
-      | {
-          msg: null
-        }
+    [key: number]: MessageType | null
   }>({})
 
   const listView = useRef<HTMLDivElement>()
@@ -160,7 +158,7 @@ export default function ChatAuditLogDialog(props: {
                 return (
                   <li key={key} className='time'>
                     <div>
-                      {moment.unix(nextMessage.msg.timestamp).calendar(null, {
+                      {moment.unix(nextMessage.timestamp).calendar(null, {
                         sameDay: `[${tx('today')}]`,
                         lastDay: `[${tx('yesterday')}]`,
                         lastWeek: 'LL',
@@ -171,16 +169,13 @@ export default function ChatAuditLogDialog(props: {
                 )
               }
               const message = messages[id]
-              if (!message || message.msg == null) {
+              if (!message || message == null) {
                 log.debug(`Missing message with id ${id}`)
                 return
               }
-              const {
-                text,
-                direction,
-                status,
-                timestamp,
-              } = (message as MessageType).msg
+              const { text, timestamp } = message
+              const direction = getDirection(message)
+              const status = mapCoreMsgStatus2String(message.state)
               return (
                 <li
                   key={id}

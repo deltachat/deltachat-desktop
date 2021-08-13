@@ -43,18 +43,6 @@ export default class DCChatList extends SplitOut {
     return list.getChatId(index)
   }
 
-  async getChatListIds(
-    ...args: Parameters<typeof DeltaChat.prototype.getChatList>
-  ) {
-    const chatList = this._dc.getChatList(...args)
-    const chatListIds = []
-    for (let counter = 0; counter < chatList.getCount(); counter++) {
-      const chatId = await this._chatListGetChatId(chatList, counter)
-      chatListIds.push(chatId)
-    }
-    return chatListIds
-  }
-
   async getChatListEntries(
     ...args: Parameters<typeof DeltaChat.prototype.getChatList>
   ) {
@@ -161,7 +149,6 @@ export default class DCChatList extends SplitOut {
   async getFullChatById(chatId: number): Promise<FullChat> {
     const chat = await this._getChatById(chatId)
     if (chat === null) return null
-    this._controller._pages = 0
 
     const isGroup = isGroupChat(chat)
     const contactIds = await this._getChatContactIds(chatId)

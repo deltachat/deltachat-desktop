@@ -77,7 +77,7 @@ export default function MainScreen() {
     } else if (selectedChat.isGroup) {
       openEditGroupDialog(screenContext, selectedChat)
     } else {
-      openViewProfileDialog(screenContext, selectedChat.contacts[0].id)
+      openViewProfileDialog(screenContext, selectedChat.contactIds[0])
     }
   }
 

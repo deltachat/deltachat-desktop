@@ -15,7 +15,10 @@ import { EmojiAndStickerPicker } from './EmojiAndStickerPicker'
 import { useChatStore } from '../../stores/chat'
 import { EmojiData, BaseEmoji } from 'emoji-mart'
 import { replaceColonsSafe } from '../conversations/emoji'
-import { JsonMessage, MessageType } from '../../../shared/shared-types'
+import {
+  JsonMessage,
+  MessageTypeAttachmentSubset,
+} from '../../../shared/shared-types'
 import { Quote } from '../message/Message'
 import { DeltaBackend, sendMessageParams } from '../../delta-remote'
 import { DraftAttachment } from '../attachment/messageAttachment'
@@ -221,7 +224,7 @@ const Composer = forwardRef<
             <div className='attachment-quote-section is-attachment'>
               {/* TODO make this pretty: draft image/video/attachment */}
               {/* <p>file: {draftState.file}</p> */}
-              <DraftAttachment attachment={draftState.attachment} />
+              <DraftAttachment attachment={draftState} />
               <QuoteOrDraftRemoveButton onClick={removeFile} />
             </div>
           )}
@@ -278,7 +281,7 @@ type draftObject = { chatId: number } & Pick<
   JsonMessage,
   'text' | 'file' | 'quotedMessageId' | 'quotedText'
 > &
-  Pick<MessageType['msg'], 'attachment' | 'viewType'>
+  MessageTypeAttachmentSubset
 
 export function useDraft(
   chatId: number,
@@ -295,8 +298,9 @@ export function useDraft(
     chatId,
     text: '',
     file: null,
-    attachment: null,
-    viewType: null,
+    file_bytes: null,
+    file_mime: null,
+    file_name: null,
     quotedMessageId: 0,
     quotedText: null,
   })
@@ -308,8 +312,9 @@ export function useDraft(
       chatId,
       text: '',
       file: null,
-      attachment: null,
-      viewType: null,
+      file_bytes: null,
+      file_mime: null,
+      file_name: null,
       quotedMessageId: 0,
       quotedText: null,
     }))
@@ -326,14 +331,16 @@ export function useDraft(
         } else {
           _setDraft(old => ({
             ...old,
-            text: newDraft.msg.text,
-            file: newDraft.msg.file,
-            attachment: newDraft.msg.attachment,
-            viewType: newDraft.msg.viewType,
-            quotedMessageId: newDraft.msg.quotedMessageId,
-            quotedText: newDraft.msg.quotedText,
+            text: newDraft.text,
+            file: newDraft.file,
+            file_bytes: newDraft.file_bytes,
+            file_mime: newDraft.file_mime,
+            file_name: newDraft.file_name,
+            viewType: newDraft.viewType,
+            quotedMessageId: newDraft.quotedMessageId,
+            quotedText: newDraft.quotedText,
           }))
-          inputRef.current?.setText(newDraft.msg.text)
+          inputRef.current?.setText(newDraft.text)
         }
       })
     },
@@ -365,11 +372,13 @@ export function useDraft(
     if (newDraft) {
       _setDraft(old => ({
         ...old,
-        file: newDraft.msg.file,
-        attachment: newDraft.msg.attachment,
-        viewType: newDraft.msg.viewType,
-        quotedMessageId: newDraft.msg.quotedMessageId,
-        quotedText: newDraft.msg.quotedText,
+        file: newDraft.file,
+        file_bytes: newDraft.file_bytes,
+        file_mime: newDraft.file_mime,
+        file_name: newDraft.file_name,
+        viewType: newDraft.viewType,
+        quotedMessageId: newDraft.quotedMessageId,
+        quotedText: newDraft.quotedText,
       }))
       // don't load text to prevent bugging back
     } else {

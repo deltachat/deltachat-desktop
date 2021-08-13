@@ -36,8 +36,8 @@ class DeltaRemote {
     fnName: 'getProviderInfo',
     email: string
   ): Promise<{
-    before_login_hint: any
-    overview_page: any
+    before_login_hint: string
+    overview_page: string
     status: any
   }>
   call(fnName: 'checkValidEmail', email: string): Promise<boolean>
@@ -58,12 +58,6 @@ class DeltaRemote {
   call(fnName: 'chatList.selectChat', chatId: number): Promise<FullChat>
   call(fnName: 'chatList.getSelectedChatId'): Promise<number>
   call(fnName: 'chatList.onChatModified', chatId: number): Promise<void>
-  call(
-    fnName: 'chatList.getChatListIds',
-    listFlags: number,
-    queryStr: string,
-    queryContactId: number
-  ): Promise<number[]>
   call(
     fnName: 'chatList.getChatListEntries',
     listFlags: number,
@@ -110,16 +104,12 @@ class DeltaRemote {
     listFlags: number,
     queryStr: string
   ): Promise<DCContact[]>
-  call(
-    fnName: 'contacts.getChatIdByContactId',
-    contactId: number
-  ): Promise<number>
-  call(fnName: 'contacts.getDMChatId', contactId: number): Promise<number>
   call(fnName: 'contacts.getEncryptionInfo', contactId: number): Promise<string>
   call(fnName: 'contacts.lookupContactIdByAddr', email: string): Promise<number>
   // chat ---------------------------------------------------------------
   call(
     fnName: 'chat.getChatMedia',
+    chatId: number,
     msgType1: number,
     msgType2: number
   ): Promise<MessageType[]>
@@ -216,17 +206,7 @@ class DeltaRemote {
     fnName: 'messageList.sendMessage',
     chatId: number,
     params: sendMessageParams
-  ): Promise<
-    [
-      number,
-      (
-        | MessageType
-        | {
-            msg: null
-          }
-      )
-    ]
-  >
+  ): Promise<[number, MessageType | null]>
   call(
     fnName: 'messageList.sendSticker',
     chatId: number,
@@ -236,11 +216,11 @@ class DeltaRemote {
   call(
     fnName: 'messageList.getMessage',
     msgId: number
-  ): Promise<{ msg: null } | MessageType>
+  ): Promise<MessageType | null>
   call(
     fnName: 'messageList.getMessages',
     messageIds: number[]
-  ): Promise<{ [key: number]: MessageType | { msg: null } }>
+  ): Promise<{ [key: number]: MessageType | null }>
   call(fnName: 'messageList.getMessageInfo', msgId: number): Promise<string>
   call(
     fnName: 'messageList.getDraft',
@@ -258,7 +238,7 @@ class DeltaRemote {
   call(
     fnName: 'messageList.messageIdToJson',
     id: number
-  ): Promise<{ msg: null } | MessageType>
+  ): Promise<MessageType | null>
   call(
     fnName: 'messageList.getMessageIds',
     chatid: number,
@@ -287,7 +267,7 @@ class DeltaRemote {
     fnName: 'settings.setConfig',
     key: string,
     value: string
-  ): Promise<number>
+  ): Promise<boolean>
   call(fnName: 'settings.getConfig', key: string): Promise<string>
   call(
     fnName: 'settings.getConfigFor',
@@ -313,11 +293,6 @@ class DeltaRemote {
     value: string | number | boolean
   ): Promise<boolean>
   call(fnName: 'settings.getDesktopSettings'): Promise<DesktopSettings>
-  call(
-    fnName: 'settings.setConfig',
-    key: string,
-    value: string | boolean
-  ): Promise<boolean>
   call(
     fnName: 'settings.saveBackgroundImage',
     file: string,

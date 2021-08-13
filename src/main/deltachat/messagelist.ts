@@ -3,20 +3,14 @@ import { getLogger } from '../../shared/logger'
 
 const log = getLogger('main/deltachat/messagelist')
 
-import filesizeConverter from 'filesize'
-import mime from 'mime-types'
-
 import SplitOut from './splitout'
 import { Message } from 'deltachat-node'
-import {
-  MessageType,
-  MessageSearchResult,
-  MessageTypeAttachment,
-  msgStatus,
-} from '../../shared/shared-types'
+import { MessageType, MessageSearchResult } from '../../shared/shared-types'
 
 import { writeFile } from 'fs-extra'
 import tempy from 'tempy'
+
+import { getDirection } from '../../shared/util'
 export default class DCMessageList extends SplitOut {
   sendMessage(
     chatId: number,
@@ -31,7 +25,7 @@ export default class DCMessageList extends SplitOut {
       location?: { lat: number; lng: number }
       quoteMessageId?: number
     }
-  ): [number, MessageType | { msg: null }] {
+  ): [number, MessageType | null] {
     const viewType = filename ? C.DC_MSG_FILE : C.DC_MSG_TEXT
     const msg = this._dc.messageNew(viewType)
     if (filename) msg.setFile(filename, undefined)
@@ -101,61 +95,33 @@ export default class DCMessageList extends SplitOut {
     this._dc.setDraft(chatId, draft)
   }
 
-  messageIdToJson(id: number) {
+  messageIdToJson(id: number): MessageType | null {
     const msg = this._dc.getMessage(id)
     if (!msg) {
       log.warn('No message found for ID ' + id)
-      const empty: { msg: null } = { msg: null }
-      return empty
+      return null
     }
     return this._messageToJson(msg)
   }
 
   _messageToJson(msg: Message): MessageType {
-    const filemime = msg.getFilemime()
-    const filename = msg.getFilename()
-    const filesize = msg.getFilebytes()
-    const viewType = msg.getViewType()
+    const file_mime = msg.getFilemime()
+    const file_name = msg.getFilename()
+    const file_bytes = msg.getFilebytes()
     const fromId = msg.getFromId()
-    const isMe = fromId === C.DC_CONTACT_ID_SELF
     const setupCodeBegin = msg.getSetupcodebegin()
     const contact = fromId && this._controller.contacts.getContact(fromId)
-    const direction = (isMe ? 'outgoing' : 'incoming') as
-      | 'outgoing'
-      | 'incoming'
 
     const jsonMSG = msg.toJson()
 
-    const attachment: MessageTypeAttachment = jsonMSG.file && {
-      url: jsonMSG.file,
-      contentType: convertContentType({
-        filemime,
-        viewType: jsonMSG.viewType,
-        file: jsonMSG.file,
-      }),
-      fileName: filename || jsonMSG.text,
-      fileSize: filesizeConverter(filesize),
-    }
-
-    return {
-      id: msg.getId(),
-      msg: Object.assign(jsonMSG, {
-        sentAt: jsonMSG.timestamp * 1000,
-        receivedAt: jsonMSG.receivedTimestamp * 1000,
-        direction,
-        status: convertMessageStatus(jsonMSG.state),
-        attachment,
-      }),
-      filemime,
-      filename,
-      filesize,
-      viewType,
-      fromId,
-      isMe,
-      contact: (contact ? { ...contact } : {}) as any,
-      isInfo: msg.isInfo(),
+    return Object.assign(jsonMSG, {
+      sender: (contact ? { ...contact } : {}) as any,
       setupCodeBegin,
-    }
+      // extra attachment fields
+      file_mime,
+      file_bytes,
+      file_name,
+    })
   }
 
   forwardMessage(msgId: number, chatId: number) {
@@ -177,8 +143,8 @@ export default class DCMessageList extends SplitOut {
       if (messageId <= C.DC_MSG_ID_LAST_SPECIAL) return
       const message = this.messageIdToJson(messageId)
       if (
-        message.msg.direction === 'incoming' &&
-        message.msg.state !== C.DC_STATE_IN_SEEN
+        getDirection(message) === 'incoming' &&
+        message.state !== C.DC_STATE_IN_SEEN
       ) {
         markMessagesRead.push(messageId)
       }
@@ -186,7 +152,7 @@ export default class DCMessageList extends SplitOut {
     })
 
     if (markMessagesRead.length > 0) {
-      const chatId = messages[markMessagesRead[0]].msg.chatId
+      const chatId = messages[markMessagesRead[0]].chatId
 
       log.debug(
         `markMessagesRead ${markMessagesRead.length} messages for chat ${chatId}`
@@ -235,50 +201,5 @@ export default class DCMessageList extends SplitOut {
     const pathToFile = tempy.file({ extension: 'html' })
     await writeFile(pathToFile, message_html_content, { encoding: 'utf-8' })
     return pathToFile
-  }
-}
-
-function convertMessageStatus(s: number): msgStatus {
-  switch (s) {
-    case C.DC_STATE_IN_FRESH:
-      return 'sent'
-    case C.DC_STATE_OUT_FAILED:
-      return 'error'
-    case C.DC_STATE_IN_SEEN:
-      return 'read'
-    case C.DC_STATE_IN_NOTICED:
-      return 'read'
-    case C.DC_STATE_OUT_DELIVERED:
-      return 'delivered'
-    case C.DC_STATE_OUT_MDN_RCVD:
-      return 'read'
-    case C.DC_STATE_OUT_PENDING:
-      return 'sending'
-    case C.DC_STATE_UNDEFINED:
-      return 'error'
-  }
-}
-
-function convertContentType({
-  filemime,
-  viewType,
-  file,
-}: {
-  filemime: string
-  viewType: number
-  file: string
-}) {
-  if (!filemime) return 'application/octet-stream'
-  if (filemime !== 'application/octet-stream') return filemime
-
-  switch (viewType) {
-    case C.DC_MSG_IMAGE:
-      return 'image/jpg'
-    case C.DC_MSG_VOICE:
-      return 'audio/ogg'
-    case C.DC_MSG_FILE:
-      return mime.lookup(file) || 'application/octet-stream'
-    default:
-      return 'application/octet-stream'
   }
 }

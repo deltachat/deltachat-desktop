@@ -96,7 +96,7 @@ export default function EnterAutocryptSetupMessage({
 
     const result = await DeltaBackend.call(
       'autocrypt.continueKeyTransfer',
-      message.msg.id,
+      message.id,
       key
     )
     setLoading(false)

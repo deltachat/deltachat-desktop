@@ -89,7 +89,10 @@ export default function ViewProfile(props: {
     onClose()
   }
   const onSendMessage = async () => {
-    const dmChatId = await DeltaBackend.call('contacts.getDMChatId', contact.id)
+    const dmChatId = await DeltaBackend.call(
+      'contacts.createChatByContactId',
+      contact.id
+    )
     onChatClick(dmChatId)
   }
 
@@ -114,7 +117,7 @@ export default function ViewProfile(props: {
                       msg: {
                         attachment: {
                           url: contact.profileImage,
-                          contentType: 'image/x',
+                          filemime: 'image/x',
                         },
                         file: contact.profileImage,
                       },

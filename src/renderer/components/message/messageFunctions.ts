@@ -54,14 +54,17 @@ export function setQuoteInDraft(messageId: number) {
 export async function privateReply(msg: JsonMessage) {
   const quotedMessageId = msg.id
   const contactId = msg.fromId
-  const chatId = await DeltaBackend.call('contacts.getDMChatId', contactId) // getDMChatId creates the dm chat if it doesn't exist
+  const chatId = await DeltaBackend.call(
+    'contacts.createChatByContactId',
+    contactId
+  )
 
   // retrieve existing draft to append the quotedMessageId
   const oldDraft = await DeltaBackend.call('messageList.getDraft', chatId)
 
   await DeltaBackend.call('messageList.setDraft', chatId, {
-    text: oldDraft?.msg.text,
-    file: oldDraft?.msg.file,
+    text: oldDraft?.text,
+    file: oldDraft?.file,
     quotedMessageId,
   })
 

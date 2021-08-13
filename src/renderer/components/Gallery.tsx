@@ -5,6 +5,7 @@ import { DeltaBackend } from '../delta-remote'
 import { ScreenContext } from '../contexts'
 import MediaAttachment from './attachment/mediaAttachment'
 import { MessageType } from '../../shared/shared-types'
+import { ChatStoreState } from '../stores/chat'
 
 type MediaTabKey = 'images' | 'video' | 'audio' | 'documents'
 
@@ -27,7 +28,7 @@ const MediaTabs: Readonly<
   },
 })
 
-type mediaProps = { chat: any }
+type mediaProps = { chat: ChatStoreState }
 
 export default class Gallery extends Component<
   mediaProps,
@@ -54,12 +55,15 @@ export default class Gallery extends Component<
 
   onSelect(id: MediaTabKey) {
     const msgTypes = MediaTabs[id].values
-    DeltaBackend.call('chat.getChatMedia', msgTypes[0], msgTypes[1]).then(
-      medias => {
-        this.setState({ id, msgTypes, medias })
-        this.forceUpdate()
-      }
-    )
+    DeltaBackend.call(
+      'chat.getChatMedia',
+      this.props.chat.id,
+      msgTypes[0],
+      msgTypes[1]
+    ).then(medias => {
+      this.setState({ id, msgTypes, medias })
+      this.forceUpdate()
+    })
   }
 
   render() {
@@ -96,13 +100,10 @@ export default class Gallery extends Component<
                   ''
                 )}
                 {medias
-                  .sort(
-                    ({ msg: a }, { msg: b }) =>
-                      b.sortTimestamp - a.sortTimestamp
-                  )
+                  .sort((a, b) => b.sortTimestamp - a.sortTimestamp)
                   .map(message => {
                     return (
-                      <div className='item' key={message.msg.id}>
+                      <div className='item' key={message.id}>
                         <MediaAttachment message={message} />
                       </div>
                     )

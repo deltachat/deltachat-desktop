@@ -6,37 +6,35 @@ import { MessageType } from '../../../shared/shared-types'
 import { runtime } from '../../runtime'
 
 export default function FullscreenMedia(props: {
-  msg: MessageType['msg']
+  msg: MessageType
   onClose: DialogProps['onClose']
 }) {
   const tx = window.static_translate
   const { msg, onClose } = props
   let elm = <div />
-  if (!msg || !msg.attachment) return elm
-  const attachment = msg.attachment
-  const url = attachment.url
-  const contentType = attachment.contentType
+  if (!msg || !msg.file) return elm
+  const { file, file_mime } = msg
 
-  switch (contentType.split('/')[0]) {
+  switch (file_mime.split('/')[0]) {
     case 'image':
       elm = (
         <div className='image-container'>
-          <img src={runtime.transformBlobURL(url)} />
+          <img src={runtime.transformBlobURL(file)} />
         </div>
       )
       break
     case 'audio':
-      elm = <audio src={runtime.transformBlobURL(url)} controls />
+      elm = <audio src={runtime.transformBlobURL(file)} controls />
       break
     case 'video':
-      elm = <video src={runtime.transformBlobURL(url)} controls autoPlay />
+      elm = <video src={runtime.transformBlobURL(file)} controls autoPlay />
       break
     default:
       elm = null
   }
   return (
     <Overlay
-      isOpen={Boolean(url)}
+      isOpen={Boolean(file)}
       className='attachment-overlay'
       onClose={onClose}
     >

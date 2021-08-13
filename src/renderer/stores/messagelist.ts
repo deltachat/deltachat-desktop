@@ -3,7 +3,7 @@ import { MessageType } from '../../shared/shared-types'
 
 class MessageListStoreState {
   messageIds: number[] = []
-  messages: { [key: number]: MessageType | { msg: null } } = {}
+  messages: { [key: number]: MessageType | null } = {}
 }
 
 const messageListStore = new Store<MessageListStoreState>(
