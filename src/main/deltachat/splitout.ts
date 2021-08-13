@@ -1,13 +1,17 @@
 import DeltaChatController from './controller'
 
 export default class SplitOut {
-  _controller: DeltaChatController
+  controller: DeltaChatController
 
   constructor(controller: DeltaChatController) {
-    this._controller = controller
+    this.controller = controller
   }
 
-  get _dc() {
-    return this._controller._dc
+  get dc() {
+    return this.controller.dc
+  }
+
+  get selectedAccountContext() {
+    return this.controller.selectedAccountContext
   }
 }

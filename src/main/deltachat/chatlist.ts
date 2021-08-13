@@ -13,7 +13,7 @@ const log = getLogger('main/deltachat/chatlist')
 
 export default class DCChatList extends SplitOut {
   async selectChat(chatId: number) {
-    this._controller._selectedChatId = chatId
+    this._controller.selectedChatId = chatId
     const chat = await this.getFullChatById(chatId)
     if (!chat) {
       log.debug(`Error: selected chat not found: ${chatId}`)
@@ -30,7 +30,7 @@ export default class DCChatList extends SplitOut {
   }
 
   getSelectedChatId() {
-    return this._controller._selectedChatId
+    return this._controller.selectedChatId
   }
 
   async onChatModified(chatId: number) {
