@@ -33,13 +33,13 @@ export default class DCMessageList extends SplitOut {
     }
   ): [number, MessageType | { msg: null }] {
     const viewType = filename ? C.DC_MSG_FILE : C.DC_MSG_TEXT
-    const msg = this._dc.messageNew(viewType)
+    const msg = this.selectedAccountContext.messageNew(viewType)
     if (filename) msg.setFile(filename, undefined)
     if (text) msg.setText(text)
     if (location) msg.setLocation(location.lat, location.lng)
 
     if (quoteMessageId) {
-      const quotedMessage = this._dc.getMessage(quoteMessageId)
+      const quotedMessage = this.selectedAccountContext.getMessage(quoteMessageId)
       if (!quotedMessage) {
         log.error('sendMessage: Message to quote not found')
       } else {
@@ -47,21 +47,21 @@ export default class DCMessageList extends SplitOut {
       }
     }
 
-    const messageId = this._dc.sendMessage(chatId, msg)
+    const messageId = this.selectedAccountContext.sendMessage(chatId, msg)
     return [messageId, this.getMessage(messageId)]
   }
 
   sendSticker(chatId: number, fileStickerPath: string) {
     const viewType = C.DC_MSG_STICKER
-    const msg = this._dc.messageNew(viewType)
+    const msg = this.selectedAccountContext.messageNew(viewType)
     const stickerPath = fileStickerPath.replace('file://', '')
     msg.setFile(stickerPath, undefined)
-    this._dc.sendMessage(chatId, msg)
+    this.selectedAccountContext.sendMessage(chatId, msg)
   }
 
   deleteMessage(id: number) {
     log.info(`deleting messages ${id}`)
-    this._dc.deleteMessages([id])
+    this.selectedAccountContext.deleteMessages([id])
   }
 
   getMessage(msgId: number) {
@@ -69,11 +69,11 @@ export default class DCMessageList extends SplitOut {
   }
 
   getMessageInfo(msgId: number) {
-    return this._dc.getMessageInfo(msgId)
+    return this.selectedAccountContext.getMessageInfo(msgId)
   }
 
   async getDraft(chatId: number): Promise<MessageType | null> {
-    const draft = this._dc.getDraft(chatId)
+    const draft = this.selectedAccountContext.getDraft(chatId)
     return draft ? this._messageToJson(draft) : null
   }
 
@@ -86,11 +86,11 @@ export default class DCMessageList extends SplitOut {
     }: { text?: string; file?: string; quotedMessageId?: number }
   ) {
     const viewType = file ? C.DC_MSG_FILE : C.DC_MSG_TEXT
-    const draft = this._dc.messageNew(viewType)
+    const draft = this.selectedAccountContext.messageNew(viewType)
     if (file) draft.setFile(file, undefined)
     if (text) draft.setText(text)
     if (quotedMessageId) {
-      const quotedMessage = this._dc.getMessage(quotedMessageId)
+      const quotedMessage = this.selectedAccountContext.getMessage(quotedMessageId)
       if (!quotedMessage) {
         log.error('setDraftquote: Message to quote not found')
       } else {
@@ -98,11 +98,11 @@ export default class DCMessageList extends SplitOut {
       }
     }
 
-    this._dc.setDraft(chatId, draft)
+    this.selectedAccountContext.setDraft(chatId, draft)
   }
 
   messageIdToJson(id: number) {
-    const msg = this._dc.getMessage(id)
+    const msg = this.selectedAccountContext.getMessage(id)
     if (!msg) {
       log.warn('No message found for ID ' + id)
       const empty: { msg: null } = { msg: null }
@@ -159,12 +159,12 @@ export default class DCMessageList extends SplitOut {
   }
 
   forwardMessage(msgId: number, chatId: number) {
-    this._dc.forwardMessages([msgId], chatId)
+    this.selectedAccountContext.forwardMessages([msgId], chatId)
     this._controller.chatList.selectChat(chatId)
   }
 
   getMessageIds(chatId: number, flags: number = C.DC_GCM_ADDDAYMARKER) {
-    const messageIds = this._dc.getChatMessages(chatId, flags, 0)
+    const messageIds = this.selectedAccountContext.getChatMessages(chatId, flags, 0)
     return messageIds
   }
 
@@ -192,23 +192,23 @@ export default class DCMessageList extends SplitOut {
         `markMessagesRead ${markMessagesRead.length} messages for chat ${chatId}`
       )
       // TODO: move mark seen logic to frontend
-      setTimeout(() => this._dc.markSeenMessages(markMessagesRead))
+      setTimeout(() => this.selectedAccountContext.markSeenMessages(markMessagesRead))
     }
     return messages
   }
 
   markSeenMessages(messageIds: number[]) {
-    this._dc.markSeenMessages(messageIds)
+    this.selectedAccountContext.markSeenMessages(messageIds)
   }
 
   searchMessages(query: string, chatId = 0): number[] {
-    return this._dc.searchMessages(chatId, query)
+    return this.selectedAccountContext.searchMessages(chatId, query)
   }
 
   private _msgId2SearchResultItem(msgId: number): MessageSearchResult {
-    const message = this._dc.getMessage(msgId)
-    const chat = this._dc.getChat(message.getChatId())
-    const author = this._dc.getContact(message.getFromId())
+    const message = this.selectedAccountContext.getMessage(msgId)
+    const chat = this.selectedAccountContext.getChat(message.getChatId())
+    const author = this.selectedAccountContext.getContact(message.getFromId())
 
     return {
       id: msgId,
@@ -231,7 +231,7 @@ export default class DCMessageList extends SplitOut {
 
   /** @returns file path to html file */
   async saveMessageHTML2Disk(messageId: number): Promise<string> {
-    const message_html_content = this._dc.getMessageHTML(messageId)
+    const message_html_content = this.selectedAccountContext.getMessageHTML(messageId)
     const pathToFile = tempy.file({ extension: 'html' })
     await writeFile(pathToFile, message_html_content, { encoding: 'utf-8' })
     return pathToFile
