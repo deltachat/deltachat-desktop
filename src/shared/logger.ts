@@ -115,7 +115,9 @@ function log(
 }
 
 function getStackTrace(): StackFrame[] | string {
-  const rawStack: StackFrame[] = errorStackParser.parse(new Error('Get Stacktrace'))
+  const rawStack: StackFrame[] = errorStackParser.parse(
+    new Error('Get Stacktrace')
+  )
   const stack = rawStack.slice(2, rawStack.length)
   return rc['machine-readable-stacktrace']
     ? stack
@@ -133,7 +135,9 @@ export class Logger {
   }
 
   getStackTrace(): StackFrame[] | string {
-    const rawStack: StackFrame[] = errorStackParser.parse(new Error('Get Stacktrace'))
+    const rawStack: StackFrame[] = errorStackParser.parse(
+      new Error('Get Stacktrace')
+    )
     const stack = rawStack.slice(2, rawStack.length)
     return rc['machine-readable-stacktrace']
       ? stack

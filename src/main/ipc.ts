@@ -134,6 +134,4 @@ export function init(cwd: string, logHandler: LogHandler) {
       await copyFile(source, filePath)
     }
   })
-
-
 }

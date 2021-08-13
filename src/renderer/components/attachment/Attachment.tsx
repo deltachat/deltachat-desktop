@@ -46,7 +46,7 @@ export function isVideo(filemime: string) {
   return SUPPORTED_VIDEO_MIME_TYPES.includes(filemime)
 }
 
-export function isAudio(filemime: DraftObject["file_mime"]) {
+export function isAudio(filemime: DraftObject['file_mime']) {
   if (!filemime) return false
   return filemime.startsWith('audio/')
 }
