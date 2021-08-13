@@ -137,7 +137,7 @@ export interface FullChat {
   color: string
   freshMessageCounter: number
   isGroup: boolean
-  isDeaddrop: boolean
+  isContactRequest: boolean
   isDeviceChat: boolean
   selfInGroup: boolean
   muted: boolean
