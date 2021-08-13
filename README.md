@@ -8,8 +8,6 @@
 [![npm test](https://github.com/deltachat/deltachat-desktop/workflows/npm%20test/badge.svg)](https://github.com/deltachat/deltachat-desktop/actions?query=workflow%3A%22npm+test%22+branch%3Amaster)
 [![Build Status](https://travis-ci.org/deltachat/deltachat-desktop.svg?branch=master)](https://travis-ci.org/deltachat/deltachat-desktop)
 
-**If you are upgrading:** please see [`UPGRADING.md`](UPGRADING.md).
-
 ## Table of Contents
 
 <details><summary>Click to expand</summary>
