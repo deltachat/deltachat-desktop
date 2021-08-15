@@ -12,6 +12,7 @@ import { ChatListPart, useLogicVirtualChatList } from '../chat/ChatList'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { useChatList } from '../chat/ChatListHelpers'
 import { selectChat } from '../../stores/chat'
+import { useThemeCssVar } from '../../ThemeManager'
 
 export default function MailtoDialog(props: {
   messageText: string
@@ -33,6 +34,9 @@ export default function MailtoDialog(props: {
 
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setQueryStr(e.target.value)
+
+  const CHATLISTITEM_CHAT_HEIGHT =
+    Number(useThemeCssVar('--SPECIAL-chatlist-item-chat-height')) || 64
 
   const noResults = chatListIds.length === 0 && queryStr !== ''
   return (
@@ -69,6 +73,7 @@ export default function MailtoDialog(props: {
                     width={width}
                     height={height}
                     itemKey={index => 'key' + chatListIds[index]}
+                    itemHeight={CHATLISTITEM_CHAT_HEIGHT}
                   >
                     {({ index, style }) => {
                       const [chatId] = chatListIds[index]

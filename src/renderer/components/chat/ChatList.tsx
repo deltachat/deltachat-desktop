@@ -38,11 +38,9 @@ import { KeybindAction, useKeyBindingAction } from '../../keybindings'
 import { getLogger } from '../../../shared/logger'
 
 import { createChatByContactIdAndSelectIt } from '../helpers/ChatMethods'
+import { useThemeCssVar } from '../../ThemeManager'
 
 const log = getLogger('renderer/chatlist')
-
-const CHATLISTITEM_HEIGHT = 64
-const DIVIDER_HEIGHT = 40
 
 const enum LoadStatus {
   FETCHING = 1,
@@ -59,6 +57,7 @@ export function ChatListPart({
   itemKey,
   setListRef,
   itemData,
+  itemHeight,
 }: {
   isRowLoaded: (index: number) => boolean
   loadMoreRows: (startIndex: number, stopIndex: number) => Promise<any>
@@ -69,6 +68,7 @@ export function ChatListPart({
   itemKey: ListItemKeySelector<any>
   setListRef?: (ref: List<any>) => void
   itemData?: any
+  itemHeight: number
 }) {
   return (
     <InfiniteLoader
@@ -81,7 +81,7 @@ export function ChatListPart({
           className=''
           height={height}
           itemCount={rowCount}
-          itemSize={CHATLISTITEM_HEIGHT}
+          itemSize={itemHeight}
           onItemsRendered={onItemsRendered}
           ref={r => {
             ;(ref as any)(r)
@@ -138,20 +138,29 @@ export default function ChatList(props: {
   const screenContext = useContext(ScreenContext)
   const { openDialog } = screenContext
 
+  const CHATLISTITEM_CHAT_HEIGHT =
+    Number(useThemeCssVar('--SPECIAL-chatlist-item-chat-height')) || 64
+  const CHATLISTITEM_CONTACT_HEIGHT =
+    Number(useThemeCssVar('--SPECIAL-chatlist-item-contact-height')) || 64
+  const CHATLISTITEM_MESSAGE_HEIGHT =
+    Number(useThemeCssVar('--SPECIAL-chatlist-item-message-height')) || 64
+  const DIVIDER_HEIGHT =
+    Number(useThemeCssVar('--SPECIAL-chatlist-divider-height')) || 40
+
   // divider height ------------
 
   const chatsHeight = (height: number) =>
     isSearchActive
       ? Math.min(
           height / 3 - DIVIDER_HEIGHT,
-          chatListIds.length * CHATLISTITEM_HEIGHT
+          chatListIds.length * CHATLISTITEM_CHAT_HEIGHT
         )
       : height
 
   const contactsHeight = (height: number) =>
     Math.min(
       height / 3 - DIVIDER_HEIGHT,
-      contactIds.length * CHATLISTITEM_HEIGHT
+      contactIds.length * CHATLISTITEM_CONTACT_HEIGHT
     )
 
   const messagesHeight = (height: number) =>
@@ -160,7 +169,7 @@ export default function ChatList(props: {
       chatsHeight(height) +
       contactsHeight(height) +
       (chatListIds.length == 0 && queryStrIsValidEmail
-        ? CHATLISTITEM_HEIGHT
+        ? CHATLISTITEM_MESSAGE_HEIGHT
         : 0))
 
   // scroll to selected chat ---
@@ -256,6 +265,7 @@ export default function ChatList(props: {
                 setListRef={(ref: List<any>) => (listRefRef.current = ref)}
                 itemKey={index => 'key' + chatListIds[index]}
                 itemData={chatlistData}
+                itemHeight={CHATLISTITEM_CHAT_HEIGHT}
               >
                 {ChatListItemRowChat}
               </ChatListPart>
@@ -275,6 +285,7 @@ export default function ChatList(props: {
                     height={contactsHeight(height)}
                     itemKey={index => 'key' + contactIds[index]}
                     itemData={contactlistData}
+                    itemHeight={CHATLISTITEM_CONTACT_HEIGHT}
                   >
                     {ChatListItemRowContact}
                   </ChatListPart>
@@ -305,6 +316,7 @@ export default function ChatList(props: {
                     }
                     itemKey={index => 'key' + messageResultIds[index]}
                     itemData={messagelistData}
+                    itemHeight={CHATLISTITEM_MESSAGE_HEIGHT}
                   >
                     {ChatListItemRowMessage}
                   </ChatListPart>

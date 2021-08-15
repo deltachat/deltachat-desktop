@@ -12,6 +12,7 @@ import { C } from 'deltachat-node/dist/constants'
 import { ChatListPart, useLogicVirtualChatList } from '../chat/ChatList'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { useChatList } from '../chat/ChatListHelpers'
+import { useThemeCssVar } from '../../ThemeManager'
 
 export default function ForwardMessage(props: {
   message: MessageType
@@ -35,6 +36,9 @@ export default function ForwardMessage(props: {
 
   const isOpen = !!message
   const noResults = chatListIds.length === 0 && queryStr !== ''
+
+  const CHATLISTITEM_CHAT_HEIGHT =
+    Number(useThemeCssVar('--SPECIAL-chatlist-item-chat-height')) || 64
   return (
     <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
       <DeltaDialogHeader onClose={onClose}>
@@ -66,6 +70,7 @@ export default function ForwardMessage(props: {
                     width={width}
                     height={height}
                     itemKey={index => 'key' + chatListIds[index]}
+                    itemHeight={CHATLISTITEM_CHAT_HEIGHT}
                   >
                     {({ index, style }) => {
                       const [chatId] = chatListIds[index]

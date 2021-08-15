@@ -13,15 +13,12 @@ import { translate, LocaleData } from '../shared/localize'
 // import { getLogger } from '../shared/logger'
 // const log = getLogger('renderer/App')
 import { DeltaBackend } from './delta-remote'
-import { ThemeManager } from './ThemeManager'
+import { ThemeManager, ThemeContext } from './ThemeManager'
 
 import moment from 'moment'
 import { CrashScreen } from './components/CrashScreen'
 
 attachKeybindingsListener()
-
-// This export is just used to activate the theme manager for now
-export const theme_manager = ThemeManager
 
 export default function App(_props: any) {
   const [state, setState] = useState<AppState>(null)
@@ -152,13 +149,21 @@ function SettingsContextWrapper({
     }
   }
 
+  /** on each theme change this var changes */
+  const [theme_rand, setThemeRand] = useState(0)
+  useEffect(() => {
+    ThemeManager.setUpdateHook(() => setThemeRand(Math.random()))
+  }, [])
+
   if (!desktopSettings) return null
 
   return (
     <SettingsContext.Provider
       value={{ desktopSettings, setDesktopSetting, account }}
     >
-      {children}
+      <ThemeContext.Provider value={theme_rand}>
+        {children}
+      </ThemeContext.Provider>
     </SettingsContext.Provider>
   )
 }

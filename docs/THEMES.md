@@ -109,3 +109,15 @@ deltachat --theme custom:my_theme --theme-watch
    when you save it your changes should be applied 1-2 seconds later.
 
 Read the comments in the theme files for additional information.
+
+## Special variables for theming
+
+Some theming requires the javascript code to know how it should behave, for this purpose we have some css vars that are read by the javascript of the app:
+
+```scss
+# the chatlist is virtualized so the js needs to know the item height
+  --SPECIAL-chatlist-item-chat-height: 64;
+  --SPECIAL-chatlist-item-contact-height: 64;
+  --SPECIAL-chatlist-item-message-height: 64;
+  --SPECIAL-chatlist-divider-height: 50;
+```
