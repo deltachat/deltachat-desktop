@@ -387,6 +387,13 @@ div.group-image-wrapper div.group-image-edit-button {
   }
 }
 
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+}
 
 .bp3-navbar-group > .clear-button:before {
   color: var(--textNavBar) !important;
