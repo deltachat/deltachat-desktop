@@ -37,7 +37,7 @@ export const ThemeContext = React.createContext<number>(0)
 export const useThemeCssVar = (css_var_name: string) => {
   const tc = useContext(ThemeContext)
   const result = useMemo(() => {
-    tc;
+    tc // this does nothing, but without it eslint will complain, and if we followed eslint the code would not behave as it should.
     return getComputedStyle(document.firstElementChild)
       .getPropertyValue(css_var_name)
       .trim()
