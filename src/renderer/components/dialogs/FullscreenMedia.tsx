@@ -6,6 +6,7 @@ import { MessageType } from '../../../shared/shared-types'
 import { runtime } from '../../runtime'
 import { isImage, isVideo, isAudio } from '../attachment/Attachment'
 import { getLogger } from '../../../shared/logger'
+import { gitHubIssuesUrl } from '../../../shared/constants'
 
 const log = getLogger('renderer/fullscreen_media')
 
@@ -34,7 +35,12 @@ export default function FullscreenMedia(props: {
     elm = (
       <div>
         <p>Error: Unknown mime_type for {runtime.transformBlobURL(file)}</p>
-        <p>Please report this bug on github</p>
+        <p>
+          Please report this bug on{' '}
+          <a href='#' onClick={() => runtime.openLink(gitHubIssuesUrl)}>
+            github
+          </a>
+        </p>
       </div>
     )
     log.warn('Unknown mime type', { file, file_mime })
@@ -46,7 +52,12 @@ export default function FullscreenMedia(props: {
           Error: Desktop issue: Unknown media type for{' '}
           {runtime.transformBlobURL(file)} (mime_type: {file_mime})
         </p>
-        <p>Please report this bug on github</p>
+        <p>
+          Please report this bug on{' '}
+          <a href='#' onClick={() => runtime.openLink(gitHubIssuesUrl)}>
+            github
+          </a>
+        </p>
       </div>
     )
     log.warn('Unknown media type for fullscreen media', { file, file_mime })
