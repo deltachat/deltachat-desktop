@@ -23,7 +23,7 @@ export default class Extras extends SplitOut {
   }
   setLocale(locale: string) {
     setLanguage(locale)
-    this._controller.login.setCoreStrings(txCoreStrings())
+    this.controller.login._setCoreStrings(txCoreStrings())
     refreshMenu()
   }
   async getActiveTheme() {

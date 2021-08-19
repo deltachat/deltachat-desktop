@@ -30,7 +30,7 @@ export interface DesktopSettings {
   /** @deprecated replaced by lastAccount */
   credentials: Credentials
   /** path to last used/selected Account */
-  lastAccount: string
+  lastAccount: number
   enableAVCalls: boolean
   enableChatAuditLog: boolean
   enableOnDemandLocationStreaming: boolean
@@ -38,7 +38,7 @@ export interface DesktopSettings {
   locale: string | null
   notifications: boolean
   showNotificationContent: boolean
-  lastChats: { [account_addr: string]: number }
+  lastChats: { [accountId: number]: number }
   zoomFactor: number
   /** address to the active theme file scheme: "custom:name" or "dc:name" */
   activeTheme: string
@@ -140,7 +140,7 @@ export interface FullChat {
   color: string
   freshMessageCounter: number
   isGroup: boolean
-  isDeaddrop: boolean
+  isContactRequest: boolean
   isDeviceChat: boolean
   selfInGroup: boolean
   muted: boolean
@@ -190,7 +190,6 @@ export type MessageSearchResult = {
 }
 
 export type DeltaChatAccount = {
-  path: string
   displayname: string
   addr: string
   size: number

@@ -24,6 +24,7 @@ import { EventId2EventName as eventStrings } from 'deltachat-node/dist/constants
 import { VERSION, BUILD_TIMESTAMP } from '../../shared/build-info'
 import { Timespans, DAYS_UNTIL_UPDATE_SUGGESTION } from '../../shared/constants'
 import { Context } from 'deltachat-node/dist/context'
+import { join } from 'path'
 
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat')
@@ -42,9 +43,14 @@ export default class DeltaChatController extends EventEmitter {
    */
   dc: DeltaChat = undefined
   selectedAccountContext: Context = undefined
+  selectedAccountId: number | null = null
   selectedChatId: number | null = null
+  
 
-  accountDir: string
+  get accountDir() {
+    return join(this.selectedAccountContext.getBlobdir(), '..')
+  }
+  
   ready = false // used for the about screen
   _sendStateToRenderer: () => void
   constructor(public cwd: string) {

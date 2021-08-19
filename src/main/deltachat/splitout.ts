@@ -14,4 +14,8 @@ export default class SplitOut {
   get selectedAccountContext() {
     return this.controller.selectedAccountContext
   }
+
+  get selectedAccountId() {
+    return this.controller.selectedAccountId
+  }
 }

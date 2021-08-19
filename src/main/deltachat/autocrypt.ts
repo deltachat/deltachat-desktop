@@ -4,10 +4,10 @@ import SplitOut from './splitout'
 
 export default class DCAutocrypt extends SplitOut {
   initiateKeyTransfer(): Promise<string> {
-    return this._dc.initiateKeyTransfer()
+    return this.selectedAccountContext.initiateKeyTransfer()
   }
 
   continueKeyTransfer(messageId: number, setupCode: string): Promise<unknown> {
-    return this._dc.continueKeyTransfer(messageId, setupCode)
+    return this.selectedAccountContext.continueKeyTransfer(messageId, setupCode)
   }
 }

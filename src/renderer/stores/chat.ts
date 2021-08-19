@@ -28,7 +28,7 @@ class state implements FullChat {
   // summary = undefined
   freshMessageCounter = 0
   isGroup = false
-  isDeaddrop = false
+  isContactRequest = false
 
   messageIds: number[] = []
   messages: { [key: number]: MessageType | null } = {}

@@ -17,7 +17,7 @@ async function isFile(path: string) {
 export default class DCStickers extends SplitOut {
   async getStickers() {
     const stickerFolder = path.join(
-      String(this._controller.accountDir),
+      this.controller.context.getAccountDir(),
       'stickers'
     )
 

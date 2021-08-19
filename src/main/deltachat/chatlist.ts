@@ -1,4 +1,5 @@
 import DeltaChat, { C, ChatList } from 'deltachat-node'
+import { Context } from 'deltachat-node/dist/context'
 import { app } from 'electron'
 import { getLogger } from '../../shared/logger'
 import {
@@ -13,15 +14,15 @@ const log = getLogger('main/deltachat/chatlist')
 
 export default class DCChatList extends SplitOut {
   async selectChat(chatId: number) {
-    this._controller.selectedChatId = chatId
+    this.controller.selectedChatId = chatId
     const chat = await this.getFullChatById(chatId)
     if (!chat) {
       log.debug(`Error: selected chat not found: ${chatId}`)
       return null
     }
-    if (chat.id !== C.DC_CHAT_ID_DEADDROP && chat.freshMessageCounter > 0) {
-      this._dc.markNoticedChat(chat.id)
-      this._controller.emit('DESKTOP_CLEAR_NOTIFICATIONS_FOR_CHAT', chat.id)
+    if (chat.isContactRequest && chat.freshMessageCounter > 0) {
+      this.selectedAccountContext.markNoticedChat(chat.id)
+      this.controller.emit('DESKTOP_CLEAR_NOTIFICATIONS_FOR_CHAT', chat.id)
       chat.freshMessageCounter = 0
       app.setBadgeCount(this.getGeneralFreshMessageCounter())
     }
@@ -30,13 +31,13 @@ export default class DCChatList extends SplitOut {
   }
 
   getSelectedChatId() {
-    return this._controller.selectedChatId
+    return this.controller.selectedChatId
   }
 
   async onChatModified(chatId: number) {
     // TODO: move event handling to store
     const chat = await this.getFullChatById(chatId)
-    this._controller.sendToRenderer('DD_EVENT_CHAT_MODIFIED', { chatId, chat })
+    this.controller.sendToRenderer('DD_EVENT_CHAT_MODIFIED', { chatId, chat })
   }
 
   _chatListGetChatId(list: ChatList, index: number) {
@@ -44,9 +45,9 @@ export default class DCChatList extends SplitOut {
   }
 
   async getChatListEntries(
-    ...args: Parameters<typeof DeltaChat.prototype.getChatList>
+    ...args: Parameters<typeof Context.prototype.getChatList>
   ) {
-    const chatList = this._dc.getChatList(...args)
+    const chatList = this.selectedAccountContext.getChatList(...args)
     const chatListJson: [number, number][] = []
     for (let counter = 0; counter < chatList.getCount(); counter++) {
       const chatId = await chatList.getChatId(counter)
@@ -76,11 +77,11 @@ export default class DCChatList extends SplitOut {
     if (chat === null) return null
 
     let deaddrop
-    if (chat.id === C.DC_CHAT_ID_DEADDROP) {
-      deaddrop = this._controller.messageList.getMessage(messageId)
+    if (chat.isContactRequest) {
+      deaddrop = this.controller.messageList.getMessage(messageId)
     }
 
-    const summary = this._dc.getChatlistItemSummary(chatId, messageId).toJson()
+    const summary = this.selectedAccountContext.getChatlistItemSummary(chatId, messageId).toJson()
     const lastUpdated = summary.timestamp ? summary.timestamp * 1000 : null
 
     const name = chat.name || summary.text1
@@ -103,7 +104,7 @@ export default class DCChatList extends SplitOut {
       deaddrop,
       isProtected: chat.isProtected,
       isGroup: isGroup,
-      freshMessageCounter: this._dc.getFreshMessageCount(chatId),
+      freshMessageCounter: this.selectedAccountContext.getFreshMessageCount(chatId),
       isArchiveLink: chat.id === C.DC_CHAT_ID_ARCHIVED_LINK,
       contactIds,
       isSelfTalk: chat.isSelfTalk,
@@ -119,17 +120,17 @@ export default class DCChatList extends SplitOut {
 
   async _getChatById(chatId: number): Promise<JsonChat> {
     if (!chatId) return null
-    const rawChat = this._dc.getChat(chatId)
+    const rawChat = this.selectedAccountContext.getChat(chatId)
     if (!rawChat) return null
     return rawChat.toJson()
   }
 
   async _getChatContactIds(chatId: number) {
-    return this._dc.getChatContacts(chatId)
+    return this.selectedAccountContext.getChatContacts(chatId)
   }
 
   async _getChatContact(contactId: number) {
-    return this._dc.getContact(contactId).toJson()
+    return this.selectedAccountContext.getContact(contactId).toJson()
   }
 
   async _getChatContacts(contactIds: number[]): Promise<JsonContact[]> {
@@ -154,7 +155,7 @@ export default class DCChatList extends SplitOut {
     const contactIds = await this._getChatContactIds(chatId)
 
     const contacts = await this._getChatContacts(contactIds)
-    const ephemeralTimer = this._dc.getChatEphemeralTimer(chatId)
+    const ephemeralTimer = this.selectedAccountContext.getChatEphemeralTimer(chatId)
 
     // This object is NOT created with object assign to promote consistency and to be easier to understand
     return {
@@ -172,9 +173,9 @@ export default class DCChatList extends SplitOut {
       contacts: contacts,
       contactIds,
       color: chat.color,
-      freshMessageCounter: this._dc.getFreshMessageCount(chatId),
+      freshMessageCounter: this.selectedAccountContext.getFreshMessageCount(chatId),
       isGroup: isGroup,
-      isDeaddrop: chatId === C.DC_CHAT_ID_DEADDROP,
+      isContactRequest: chat.isContactRequest,
       isDeviceChat: chat.isDeviceTalk,
       selfInGroup: isGroup && contactIds.indexOf(C.DC_CONTACT_ID_SELF) !== -1,
       muted: chat.muted,
@@ -183,7 +184,7 @@ export default class DCChatList extends SplitOut {
   }
 
   _chatSubtitle(chat: JsonChat, contacts: JsonContact[]) {
-    const tx = this._controller.translate
+    const tx = this.controller.translate
     if (chat.id > C.DC_CHAT_ID_LAST_SPECIAL) {
       if (isGroupChat(chat)) {
         return tx('n_members', [String(contacts.length)], {
@@ -199,22 +200,19 @@ export default class DCChatList extends SplitOut {
         }
         return contacts[0].address
       }
-    } else {
-      switch (chat.id) {
-        case C.DC_CHAT_ID_DEADDROP:
-          return tx('menu_deaddrop_subtitle')
-      }
+    } else if(chat.isContactRequest) {
+      return tx('menu_deaddrop_subtitle')
     }
     return 'ErrTitle'
   }
 
   getGeneralFreshMessageCounter() {
-    return this._dc.getFreshMessages().length
+    return this.selectedAccountContext.getFreshMessages().length
   }
 
   updateChatList() {
     log.debug('updateChatList')
-    this._controller.sendToRenderer('DD_EVENT_CHATLIST_UPDATED')
+    this.controller.sendToRenderer('DD_EVENT_CHATLIST_UPDATED')
   }
 }
 // section: Internal functions
