@@ -10,34 +10,34 @@ export default class DCChat extends SplitOut {
     msgType1: number,
     msgType2: number
   ): MessageType[] {
-    const mediaMessages = this._dc.getChatMedia(
+    const mediaMessages = this.selectedAccountContext.getChatMedia(
       chatId,
       msgType1,
       msgType2,
       null
     )
     return mediaMessages.map(
-      this._controller.messageList.messageIdToJson.bind(
-        this._controller.messageList
+      this.controller.messageList.messageIdToJson.bind(
+        this.controller.messageList
       )
     )
   }
 
   getEncryptionInfo(chatId: number) {
-    return this._dc.getChatEncrytionInfo(chatId)
+    return this.selectedAccountContext.getChatEncrytionInfo(chatId)
   }
 
   getQrCode(chatId = 0) {
-    return this._dc.getSecurejoinQrCode(chatId)
+    return this.selectedAccountContext.getSecurejoinQrCode(chatId)
   }
 
   leaveGroup(chatId: number) {
     log.debug(`action - leaving chat ${chatId}`)
-    this._dc.removeContactFromChat(chatId, C.DC_CONTACT_ID_SELF)
+    this.selectedAccountContext.removeContactFromChat(chatId, C.DC_CONTACT_ID_SELF)
   }
 
   setName(chatId: number, name: string) {
-    return this._dc.setChatName(chatId, name)
+    return this.selectedAccountContext.setChatName(chatId, name)
   }
 
   modifyGroup(
@@ -48,36 +48,36 @@ export default class DCChat extends SplitOut {
     add: number[]
   ) {
     log.debug('action - modify group', { chatId, name, image, remove, add })
-    this._dc.setChatName(chatId, name)
-    const chat = this._dc.getChat(chatId)
+    this.selectedAccountContext.setChatName(chatId, name)
+    const chat = this.selectedAccountContext.getChat(chatId)
     if (chat.getProfileImage() !== image) {
-      this._dc.setChatProfileImage(chatId, image || '')
+      this.selectedAccountContext.setChatProfileImage(chatId, image || '')
     }
-    remove.forEach(id => this._dc.removeContactFromChat(chatId, id))
-    add.forEach(id => this._dc.addContactToChat(chatId, id))
+    remove.forEach(id => this.selectedAccountContext.removeContactFromChat(chatId, id))
+    add.forEach(id => this.selectedAccountContext.addContactToChat(chatId, id))
     return true
   }
 
   addContactToChat(chatId: number, contactId: number) {
-    return this._dc.addContactToChat(chatId, contactId)
+    return this.selectedAccountContext.addContactToChat(chatId, contactId)
   }
 
   setProfileImage(chatId: number, newImage: string) {
-    return this._dc.setChatProfileImage(chatId, newImage)
+    return this.selectedAccountContext.setChatProfileImage(chatId, newImage)
   }
 
   /**
    * @returns id of the created chat
    */
   createGroupChat(verified: boolean, name: string) {
-    return this._dc.createGroupChat(name, verified)
+    return this.selectedAccountContext.createGroupChat(name, verified)
   }
 
   delete(chatId: number) {
     log.debug(`action - deleting chat ${chatId}`)
-    this._dc.deleteChat(chatId)
-    this._controller.chatList.updateChatList()
-    this._controller.emit('DESKTOP_CLEAR_NOTIFICATIONS_FOR_CHAT', chatId)
+    this.selectedAccountContext.deleteChat(chatId)
+    this.controller.chatList.updateChatList()
+    this.controller.emit('DESKTOP_CLEAR_NOTIFICATIONS_FOR_CHAT', chatId)
   }
 
   setVisibility(
@@ -88,44 +88,42 @@ export default class DCChat extends SplitOut {
       | C.DC_CHAT_VISIBILITY_PINNED
   ) {
     log.debug(`action - set chat ${chatId} visibility ${visibility}`)
-    this._dc.setChatVisibility(chatId, visibility)
+    this.selectedAccountContext.setChatVisibility(chatId, visibility)
   }
 
   setMuteDuration(chatId: number, duration: number) {
     log.debug(`action - set chat ${chatId} muteduration ${duration}`)
-    return this._dc.setChatMuteDuration(chatId, duration)
+    return this.selectedAccountContext.setChatMuteDuration(chatId, duration)
   }
 
   getChatContacts(chatId: number) {
-    return this._dc.getChatContacts(chatId)
+    return this.selectedAccountContext.getChatContacts(chatId)
   }
 
   /**
    * @param {number} chatId
    */
   markNoticedChat(chatId: number) {
-    this._dc.markNoticedChat(chatId)
+    this.selectedAccountContext.markNoticedChat(chatId)
   }
 
   getChatEphemeralTimer(chatId: number) {
-    return this._dc.getChatEphemeralTimer(chatId)
+    return this.selectedAccountContext.getChatEphemeralTimer(chatId)
   }
 
   setChatEphemeralTimer(chatId: number, timer: number) {
-    return this._dc.setChatEphemeralTimer(chatId, timer)
+    return this.selectedAccountContext.setChatEphemeralTimer(chatId, timer)
   }
 
   async sendVideoChatInvitation(chatId: number) {
-    return await this._dc.sendVideochatInvitation(chatId)
+    return await this.selectedAccountContext.sendVideochatInvitation(chatId)
   }
 
-  decideOnContactRequest(
-    messageId: number,
-    decision:
-      | C.DC_DECISION_START_CHAT
-      | C.DC_DECISION_NOT_NOW
-      | C.DC_DECISION_BLOCK
-  ) {
-    return this._dc.decideOnContactRequest(messageId, decision)
+  accept(chatId: number) {
+    return this.selectedAccountContext.acceptChat(chatId)
+  }
+
+  block(chatId: number) {
+    return this.selectedAccountContext.blockChat(chatId)
   }
 }

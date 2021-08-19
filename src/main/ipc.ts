@@ -90,7 +90,7 @@ export function init(cwd: string, logHandler: LogHandler) {
 
   ipcMain.on('saveLastChatId', (_e, chatId) => {
     const { lastChats } = app.state.saved
-    lastChats[dcController.credentials.addr] = chatId
+    lastChats[this.controller.selectedAccountId] = chatId
     // don't save to disk, because this is already done on close and it might block
     // we can ignore the crash case, because a crash isn't supposed to happen
     // and it's not important data
@@ -98,7 +98,7 @@ export function init(cwd: string, logHandler: LogHandler) {
 
   ipcMain.on('getLastSelectedChatId', e => {
     const { lastChats } = app.state.saved
-    e.returnValue = lastChats[dcController.credentials.addr]
+    e.returnValue = lastChats[this.controller.selectedAccountId]
   })
 
   ipcMain.on('help', async (_ev, locale) => {

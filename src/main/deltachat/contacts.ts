@@ -8,27 +8,27 @@ const log = getLogger('main/deltachat/contacts')
 
 export default class DCContacts extends SplitOut {
   unblockContact(contactId: number) {
-    const contact = this._dc.getContact(contactId)
-    this._dc.blockContact(contactId, false)
+    const contact = this.selectedAccountContext.getContact(contactId)
+    this.selectedAccountContext.blockContact(contactId, false)
     const name = contact.getNameAndAddress()
     log.info(`Unblocked contact ${name} (id = ${contactId})`)
   }
 
   blockContact(contactId: number) {
-    const contact = this._dc.getContact(contactId)
-    this._dc.blockContact(contactId, true)
+    const contact = this.selectedAccountContext.getContact(contactId)
+    this.selectedAccountContext.blockContact(contactId, true)
     const name = contact.getNameAndAddress()
     log.debug(`Blocked contact ${name} (id = ${contactId})`)
   }
 
   changeNickname(contactId: number, name: string) {
-    const contact = this._dc.getContact(contactId)
+    const contact = this.selectedAccountContext.getContact(contactId)
     const address = contact.getAddress()
-    const result = this._dc.createContact(name, address)
+    const result = this.selectedAccountContext.createContact(name, address)
 
     // trigger interface updates
-    const chatId = this._dc.getChatIdByContactId(contactId)
-    this._controller.chatList.onChatModified(chatId)
+    const chatId = this.selectedAccountContext.getChatIdByContactId(contactId)
+    this.controller.chatList.onChatModified(chatId)
 
     // TODO implement chat changed event in the core on name change
     return result
@@ -36,22 +36,22 @@ export default class DCContacts extends SplitOut {
 
   createContact(email: string, name?: string) {
     if (!DeltaChat.maybeValidAddr(email)) {
-      throw new Error(this._controller.translate('bad_email_address'))
+      throw new Error(this.controller.translate('bad_email_address'))
     }
-    return this._dc.createContact(name || '', email)
+    return this.selectedAccountContext.createContact(name || '', email)
   }
 
   /** Gets the direct message chat id with this contact and creates it if it doesn't exist yet */
   createChatByContactId(contactId: number) {
-    const contact = this._dc.getContact(contactId)
+    const contact = this.selectedAccountContext.getContact(contactId)
     if (!contact) {
       throw new Error(`no contact could be found with id ${contactId}`)
     }
-    const existingChatId = this._dc.getChatIdByContactId(contactId)
+    const existingChatId = this.selectedAccountContext.getChatIdByContactId(contactId)
     if (existingChatId !== 0) {
       return existingChatId
     }
-    const newChatId = this._dc.createChatByContactId(contactId)
+    const newChatId = this.selectedAccountContext.createChatByContactId(contactId)
     if (newChatId !== 0) {
       return newChatId
     } else {
@@ -60,12 +60,12 @@ export default class DCContacts extends SplitOut {
   }
 
   getContact(contactId: number) {
-    return this._dc.getContact(contactId).toJson()
+    return this.selectedAccountContext.getContact(contactId).toJson()
   }
 
   getContactIds(listFlags: number, queryStr: string): number[] {
     return (
-      this._dc
+      this.selectedAccountContext
         .getContacts(listFlags, queryStr)
         // deduplicate the items here until its fixed in the core: see https://github.com/deltachat/deltachat-core-rust/issues/2552
         .filter(function (item: number, pos: number, ary: number[]) {
@@ -75,7 +75,7 @@ export default class DCContacts extends SplitOut {
   }
 
   _getDCContact(id: number) {
-    const contact = this._dc.getContact(id).toJson()
+    const contact = this.selectedAccountContext.getContact(id).toJson()
     return { ...contact }
   }
 
@@ -88,13 +88,13 @@ export default class DCContacts extends SplitOut {
   }
 
   getEncryptionInfo(contactId: number) {
-    return this._dc.getContactEncryptionInfo(contactId)
+    return this.selectedAccountContext.getContactEncryptionInfo(contactId)
   }
 
   lookupContactIdByAddr(email: string): number {
     if (!DeltaChat.maybeValidAddr(email)) {
-      throw new Error(this._controller.translate('bad_email_address'))
+      throw new Error(this.controller.translate('bad_email_address'))
     }
-    return this._dc.lookupContactIdByAddr(email)
+    return this.selectedAccountContext.lookupContactIdByAddr(email)
   }
 }
