@@ -23,7 +23,8 @@ declare global {
     __userFeedback: (message: userFeedback | false) => {}
     __closeDialog: CloseDialogFunctionType
     __changeScreen: (screen: Screens) => {}
-    __loadAccount: (account: DeltaChatAccount) => {}
+    __selectAccount: (accountId: number) => {}
+    __removeAccount: (accountId: number) => {}
     __screen: Screens
     __contextMenuActive: boolean
     __settingsOpened: boolean

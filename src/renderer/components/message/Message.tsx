@@ -26,7 +26,6 @@ import { useChatStore2, ChatStoreDispatch } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
 import { runtime } from '../../runtime'
 import { AvatarFromContact } from '../Avatar'
-import { openDeadDropDecisionDialog } from '../dialogs/DeadDrop'
 import { ConversationType } from './MessageList'
 // const log = getLogger('renderer/message')
 
@@ -271,14 +270,9 @@ const Message = (props: {
   }
 
   let onClickMessageBody
-  const isDeadDrop = message.chatId === C.DC_CHAT_ID_DEADDROP
   if (isSetupmessage) {
     onClickMessageBody = () =>
       openDialog('EnterAutocryptSetupMessage', { message })
-  } else if (isDeadDrop) {
-    onClickMessageBody = () => {
-      openDeadDropDecisionDialog(message)
-    }
   }
 
   let content

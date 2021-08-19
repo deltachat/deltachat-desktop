@@ -47,11 +47,15 @@ export default class DCContacts extends SplitOut {
     if (!contact) {
       throw new Error(`no contact could be found with id ${contactId}`)
     }
-    const existingChatId = this.selectedAccountContext.getChatIdByContactId(contactId)
+    const existingChatId = this.selectedAccountContext.getChatIdByContactId(
+      contactId
+    )
     if (existingChatId !== 0) {
       return existingChatId
     }
-    const newChatId = this.selectedAccountContext.createChatByContactId(contactId)
+    const newChatId = this.selectedAccountContext.createChatByContactId(
+      contactId
+    )
     if (newChatId !== 0) {
       return newChatId
     } else {

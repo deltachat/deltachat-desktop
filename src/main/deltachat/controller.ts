@@ -45,12 +45,11 @@ export default class DeltaChatController extends EventEmitter {
   selectedAccountContext: Context = undefined
   selectedAccountId: number | null = null
   selectedChatId: number | null = null
-  
 
   get accountDir() {
     return join(this.selectedAccountContext.getBlobdir(), '..')
   }
-  
+
   ready = false // used for the about screen
   _sendStateToRenderer: () => void
   constructor(public cwd: string) {
@@ -266,7 +265,9 @@ export default class DeltaChatController extends EventEmitter {
   // ToDo: move to contacts.
   _blockedContacts(): JsonContact[] {
     if (!this.selectedAccountContext) return []
-    return this.selectedAccountContext.getBlockedContacts().map(this._getContact.bind(this))
+    return this.selectedAccountContext
+      .getBlockedContacts()
+      .map(this._getContact.bind(this))
   }
 
   // ToDo: move to contacts.
@@ -283,7 +284,9 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   getProfilePicture() {
-    return this.selectedAccountContext.getContact(C.DC_CONTACT_ID_SELF).getProfileImage()
+    return this.selectedAccountContext
+      .getContact(C.DC_CONTACT_ID_SELF)
+      .getProfileImage()
   }
 
   getInfo() {

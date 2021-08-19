@@ -15,6 +15,7 @@ import processOpenQrUrl from './components/helpers/OpenQrUrl'
 
 import { getLogger } from '../shared/logger'
 import { ContextMenuLayer, showFnType } from './components/ContextMenu'
+import { timeStamp } from 'console'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -37,7 +38,8 @@ export default class ScreenController extends Component {
   constructor(
     public props: {
       account: DeltaChatAccount
-      loadAccount: (login: DeltaChatAccount) => {}
+      selectAccount: (accountId: number) => {}
+      removeAccount: (accountId: number) => {}
     }
   ) {
     super(props)
@@ -61,12 +63,17 @@ export default class ScreenController extends Component {
     window.__userFeedback = this.userFeedback.bind(this)
     window.__closeDialog = this.closeDialog.bind(this)
     window.__changeScreen = this.changeScreen.bind(this)
-    window.__loadAccount = this.loadAccount.bind(this)
+    window.__selectAccount = this.selectAccount.bind(this)
+    window.__removeAccount = this.removeAccount.bind(this)
     window.__screen = this.state.screen
   }
 
-  loadAccount(account: DeltaChatAccount) {
-    this.props.loadAccount(account)
+  removeAccount(accountId: number) {
+    this.props.removeAccount(accountId)
+  }
+
+  selectAccount(accountId: number) {
+    this.props.selectAccount(accountId)
   }
 
   userFeedback(message: userFeedback | false) {
@@ -150,7 +157,7 @@ export default class ScreenController extends Component {
       case Screens.Main:
         return <MainScreen />
       case Screens.Login:
-        return <LoginScreen loadAccount={this.props.loadAccount} />
+        return <LoginScreen />
     }
   }
 

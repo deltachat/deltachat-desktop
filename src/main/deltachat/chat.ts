@@ -33,7 +33,10 @@ export default class DCChat extends SplitOut {
 
   leaveGroup(chatId: number) {
     log.debug(`action - leaving chat ${chatId}`)
-    this.selectedAccountContext.removeContactFromChat(chatId, C.DC_CONTACT_ID_SELF)
+    this.selectedAccountContext.removeContactFromChat(
+      chatId,
+      C.DC_CONTACT_ID_SELF
+    )
   }
 
   setName(chatId: number, name: string) {
@@ -53,7 +56,9 @@ export default class DCChat extends SplitOut {
     if (chat.getProfileImage() !== image) {
       this.selectedAccountContext.setChatProfileImage(chatId, image || '')
     }
-    remove.forEach(id => this.selectedAccountContext.removeContactFromChat(chatId, id))
+    remove.forEach(id =>
+      this.selectedAccountContext.removeContactFromChat(chatId, id)
+    )
     add.forEach(id => this.selectedAccountContext.addContactToChat(chatId, id))
     return true
   }

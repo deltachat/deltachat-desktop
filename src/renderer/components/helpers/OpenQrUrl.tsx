@@ -149,7 +149,7 @@ export default async function processOpenQrUrl(
         }
 
         const onSuccess = (account: DeltaChatAccount) => {
-          window.__loadAccount(account)
+          window.__selectAccount(account.accountId)
           callback()
         }
         closeProcessDialog()

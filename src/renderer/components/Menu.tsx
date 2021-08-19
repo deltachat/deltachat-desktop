@@ -60,8 +60,6 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
   const onUnmuteChat = () => unMuteChat(selectedChat.id)
   const onUnblockContacts = () =>
     screenContext.openDialog('UnblockContacts', {})
-  const onContactRequests = () =>
-    chatStoreDispatch({ type: 'SELECT_CHAT', payload: C.DC_CHAT_ID_DEADDROP })
   const onDisappearingMessages = () =>
     screenContext.openDialog('DisappearingMessages', {
       chatId: selectedChat.id,
@@ -88,7 +86,7 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
     screenContext.changeScreen(Screens.Login)
   }
 
-  if (selectedChat && selectedChat.id && !selectedChat.isDeaddrop) {
+  if (selectedChat && selectedChat.id) {
     const { isGroup, selfInGroup, isSelfTalk, isDeviceChat } = selectedChat
 
     const isReadOnlyChat = (isGroup && !selfInGroup) || isDeviceChat // setting this as var because we plan to have more readonly chats in the future
@@ -189,11 +187,6 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
         key='chat'
         text={tx('menu_new_chat')}
         onClick={onCreateChat}
-      />
-      <DeltaMenuItem
-        key='request'
-        text={tx('menu_deaddrop')}
-        onClick={onContactRequests}
       />
       <DeltaMenuItem
         key='qr'

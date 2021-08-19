@@ -27,14 +27,10 @@ export default class DCLoginController extends SplitOut {
     setCoreStrings(this.dc, strings)
   }
 
-
-
-  async selectAccount(
-    accountId: number,
-  ) {
+  async selectAccount(accountId: number) {
     this.controller.selectedAccountId = accountId
     this.controller.selectedAccountContext = this.dc.accountContext(accountId)
-    
+
     log.info('Ready, starting io...')
 
     await this.dc.startIO()
@@ -45,7 +41,6 @@ export default class DCLoginController extends SplitOut {
 
     log.info('dc_get_info', this.selectedAccountContext.getInfo())
 
-    
     this.updateDeviceChats()
 
     setupNotifications(this.controller, (app as any).state.saved)
@@ -72,7 +67,7 @@ export default class DCLoginController extends SplitOut {
     app.saveState()
 
     log.info('Logged out')
-    
+
     if (typeof this.controller._sendStateToRenderer === 'function')
       this.controller._sendStateToRenderer()
   }
@@ -83,10 +78,8 @@ export default class DCLoginController extends SplitOut {
 
     try {
       accountContext.configure(credentials)
-    } catch(error) {
-      log.debug(
-        'Detected account creation error'
-      )
+    } catch (error) {
+      log.debug('Detected account creation error')
       this.dc.removeAccount(accountId)
       throw error
     }
@@ -97,7 +90,6 @@ export default class DCLoginController extends SplitOut {
   async removeAccount(accountId: number) {
     this.dc.removeAccount(accountId)
   }
-
 
   close() {
     this.controller.emit('DESKTOP_CLEAR_ALL_NOTIFICATIONS')
@@ -138,22 +130,22 @@ https://delta.chat/en/2021-05-05-email-compat` as any
     const accountContext = this.dc.accountContext(accountId)
     const selfContact = accountContext.getContact(C.DC_CONTACT_ID_SELF)
     return {
+      accountId,
       displayname: selfContact.getDisplayName(),
       addr: selfContact.getAddress(),
+      path: '/dev/null',
       size: 0,
       profileImage: selfContact.getProfileImage(),
-      color: selfContact.color
+      color: selfContact.color,
     }
   }
 
   async accounts(): Promise<DeltaChatAccount[]> {
     const accountIds: number[] = this.dc.accounts()
-    
+
     const accounts: DeltaChatAccount[] = accountIds.map(this.accountInfo)
     return accounts
   }
-
-
 
   async getLastLoggedInAccount() {
     return app.state.saved.lastAccount

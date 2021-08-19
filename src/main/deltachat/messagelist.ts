@@ -33,7 +33,9 @@ export default class DCMessageList extends SplitOut {
     if (location) msg.setLocation(location.lat, location.lng)
 
     if (quoteMessageId) {
-      const quotedMessage = this.selectedAccountContext.getMessage(quoteMessageId)
+      const quotedMessage = this.selectedAccountContext.getMessage(
+        quoteMessageId
+      )
       if (!quotedMessage) {
         log.error('sendMessage: Message to quote not found')
       } else {
@@ -84,7 +86,9 @@ export default class DCMessageList extends SplitOut {
     if (file) draft.setFile(file, undefined)
     if (text) draft.setText(text)
     if (quotedMessageId) {
-      const quotedMessage = this.selectedAccountContext.getMessage(quotedMessageId)
+      const quotedMessage = this.selectedAccountContext.getMessage(
+        quotedMessageId
+      )
       if (!quotedMessage) {
         log.error('setDraftquote: Message to quote not found')
       } else {
@@ -130,7 +134,11 @@ export default class DCMessageList extends SplitOut {
   }
 
   getMessageIds(chatId: number, flags: number = C.DC_GCM_ADDDAYMARKER) {
-    const messageIds = this.selectedAccountContext.getChatMessages(chatId, flags, 0)
+    const messageIds = this.selectedAccountContext.getChatMessages(
+      chatId,
+      flags,
+      0
+    )
     return messageIds
   }
 
@@ -158,7 +166,9 @@ export default class DCMessageList extends SplitOut {
         `markMessagesRead ${markMessagesRead.length} messages for chat ${chatId}`
       )
       // TODO: move mark seen logic to frontend
-      setTimeout(() => this.selectedAccountContext.markSeenMessages(markMessagesRead))
+      setTimeout(() =>
+        this.selectedAccountContext.markSeenMessages(markMessagesRead)
+      )
     }
     return messages
   }
@@ -197,7 +207,9 @@ export default class DCMessageList extends SplitOut {
 
   /** @returns file path to html file */
   async saveMessageHTML2Disk(messageId: number): Promise<string> {
-    const message_html_content = this.selectedAccountContext.getMessageHTML(messageId)
+    const message_html_content = this.selectedAccountContext.getMessageHTML(
+      messageId
+    )
     const pathToFile = tempy.file({ extension: 'html' })
     await writeFile(pathToFile, message_html_content, { encoding: 'utf-8' })
     return pathToFile
