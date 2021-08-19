@@ -36,15 +36,15 @@ $scrollbarTransparency: 0.5;
   --scrollbarThumb: black;
   --scrollbarThumbHover: black;
   --bp3DialogBgSecondary: #ececec;
-  --chatListItemBgHover: transparent;
   --cli-search-result-divider: var(--delta-dialog-seperator);
   --cli-search-result-divider-border-width: 0px;
   --emojiMartSelect: var(--chatListItemBgHover);
-
+  
+  --chatListItemBgHover: hsl(216, 13.9%, 14.1%);
   --chatListItemBgPinned: var(--bgPrimary);
-  --chatListItemBgPinnedHover: transparent;
-  --chatListItemSelectedBg: black;
-  --chatListItemSelectedBgHover: var(--chatListItemSelectedBg);
+  --chatListItemBgPinnedHover: hsl(216, 13.9%, 14.1%);
+  --chatListItemSelectedBg: rgba(108,114,122,.3);
+  --chatListItemSelectedBgHover: hsl(216, 13.9%, 14.1%);
   --chatListItemSelectedText: white;
   --chat-list-item-summary-text: var(--globalText);
   --composerSendButton: var(--scrollbarThumb);
@@ -62,6 +62,11 @@ $scrollbarTransparency: 0.5;
   --chat-list-width: 280px;
 
   --attachment-topbar-height: 50px;
+
+  --SPECIAL-chatlist-item-chat-height: 42;
+  --SPECIAL-chatlist-item-contact-height: 50;
+  --SPECIAL-chatlist-item-message-height: 50;
+  --SPECIAL-chatlist-divider-height: 40;
 }
 
 /* overwrite css */
@@ -382,6 +387,13 @@ div.group-image-wrapper div.group-image-edit-button {
   }
 }
 
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+}
 
 .bp3-navbar-group > .clear-button:before {
   color: var(--textNavBar) !important;
@@ -659,16 +671,7 @@ div.group-image-wrapper div.group-image-edit-button {
 
 }
 
+
 .chat-list-item {
-  
-  &.selected {
-
-    background-color: hsla(214.3, 6.1%, 45.1%, 0.3);
-  }
-
-  &:hover {
-    
-    background-color: hsl(216, 13.9%, 14.1%) !important;
-  }
+  height: 42px;
 }
-

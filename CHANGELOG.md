@@ -6,6 +6,8 @@
 
 - Windows installer: Allow user to choose the instalation path.
 - Copy-paste images into chat
+- make chatlist item height changeable by themes.
+- "rocket chat"-like experimental theme
 
 ### Changed
 - Upgrade esbuild to `0.12.15`

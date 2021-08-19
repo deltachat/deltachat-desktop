@@ -1,9 +1,11 @@
 import { DeltaBackend } from './delta-remote'
 import { Theme } from '../shared/shared-types'
 import { ipcBackend } from './ipc'
+import React, { useContext, useMemo } from 'react'
 
 export namespace ThemeManager {
   let currentThemeMetaData: Theme
+  let currentThemeChangeHook: () => void = () => {}
 
   export async function refresh() {
     const theme: {
@@ -13,6 +15,7 @@ export namespace ThemeManager {
     if (theme) {
       currentThemeMetaData = theme.theme
       window.document.getElementById('theme-vars').innerText = theme.data
+      currentThemeChangeHook()
     }
   }
 
@@ -22,4 +25,22 @@ export namespace ThemeManager {
   export function getCurrentThemeMetaData() {
     return currentThemeMetaData
   }
+
+  export function setUpdateHook(hook: typeof currentThemeChangeHook) {
+    currentThemeChangeHook = hook
+  }
+}
+
+/** contains a theme identifier so we can get a rerender if it changes */
+export const ThemeContext = React.createContext<number>(0)
+
+export const useThemeCssVar = (css_var_name: string) => {
+  const tc = useContext(ThemeContext)
+  const result = useMemo(() => {
+    tc // this does nothing, but without it eslint will complain, and if we followed eslint the code would not behave as it should.
+    return getComputedStyle(document.firstElementChild)
+      .getPropertyValue(css_var_name)
+      .trim()
+  }, [tc, css_var_name])
+  return result
 }
