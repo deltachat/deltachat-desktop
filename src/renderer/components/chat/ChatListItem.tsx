@@ -9,7 +9,6 @@ import {
   MessageSearchResult,
 } from '../../../shared/shared-types'
 import { Avatar } from '../Avatar'
-import { openDeadDropDecisionDialog } from '../dialogs/DeadDrop'
 
 const FreshMessageCounter = React.memo(({ counter }: { counter: number }) => {
   if (counter === 0) return null
@@ -122,27 +121,6 @@ const ChatListItemNormal = React.memo<ChatListItemProps>(props => {
   )
 })
 
-const ChatListItemDeaddrop = React.memo(
-  ({ chatListItem }: { chatListItem: ChatListItemType }) => {
-    const onClick = () => openDeadDropDecisionDialog(chatListItem.deaddrop)
-    const tx = useTranslationFunction()
-    return (
-      <div
-        role='button'
-        onClick={onClick}
-        className='chat-list-item is-deaddrop'
-      >
-        <Avatar displayName={chatListItem.deaddrop?.contact?.address} />
-        <div className='content'>
-          <Header
-            chatListItem={{ ...chatListItem, name: tx('chat_contact_request') }}
-          />
-          <Message chatListItem={chatListItem} />
-        </div>
-      </div>
-    )
-  }
-)
 
 type ChatListItemProps = {
   chatListItem: ChatListItemType
@@ -156,8 +134,6 @@ const ChatListItem = React.memo<ChatListItemProps>(
     const { chatListItem, onClick } = props
     if (chatListItem === null) return null
     if (typeof chatListItem === 'undefined') return <PlaceholderChatListItem />
-    if (chatListItem.id === C.DC_CHAT_ID_DEADDROP)
-      return <ChatListItemDeaddrop chatListItem={chatListItem} />
     if (chatListItem.id === C.DC_CHAT_ID_ARCHIVED_LINK)
       return (
         <ChatListItemArchiveLink

@@ -18,7 +18,8 @@ const app = rawApp as ExtendedAppMainProcess
 export default class DCSettings extends SplitOut {
   setConfig(key: string, value: string): boolean {
     log.info(`Setting config ${key}:${value}`)
-    const result = this.selectedAccountContext.setConfig(key, String(value)) === 1
+    const result =
+      this.selectedAccountContext.setConfig(key, String(value)) === 1
 
     if (
       key === 'inbox_watch' ||
@@ -64,11 +65,19 @@ export default class DCSettings extends SplitOut {
   }
 
   keysImport(directory: string) {
-    this.selectedAccountContext.importExport(C.DC_IMEX_IMPORT_SELF_KEYS, directory, undefined)
+    this.selectedAccountContext.importExport(
+      C.DC_IMEX_IMPORT_SELF_KEYS,
+      directory,
+      undefined
+    )
   }
 
   keysExport(directory: string) {
-    this.selectedAccountContext.importExport(C.DC_IMEX_EXPORT_SELF_KEYS, directory, undefined)
+    this.selectedAccountContext.importExport(
+      C.DC_IMEX_EXPORT_SELF_KEYS,
+      directory,
+      undefined
+    )
   }
 
   async saveBackgroundImage(file: string, isDefaultPicture: boolean) {
@@ -94,6 +103,9 @@ export default class DCSettings extends SplitOut {
   }
 
   estimateAutodeleteCount(fromServer: boolean, seconds: number) {
-    return this.selectedAccountContext.estimateDeletionCount(fromServer, seconds)
+    return this.selectedAccountContext.estimateDeletionCount(
+      fromServer,
+      seconds
+    )
   }
 }

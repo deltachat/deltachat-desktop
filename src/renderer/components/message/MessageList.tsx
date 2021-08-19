@@ -242,7 +242,7 @@ function EmptyChatMessage() {
 
   const showAllEmail = useDCConfigOnce('show_emails')
 
-  if (chat.isGroup && !chat.isDeaddrop) {
+  if (chat.isGroup && !chat.isContactRequest) {
     emptyChatMessage = chat.isUnpromoted
       ? tx('chat_new_group_hint')
       : tx('chat_no_messages')
@@ -250,7 +250,7 @@ function EmptyChatMessage() {
     emptyChatMessage = tx('saved_messages_explain')
   } else if (chat.isDeviceChat) {
     emptyChatMessage = tx('device_talk_explain')
-  } else if (chat.isDeaddrop) {
+  } else if (chat.isContactRequest) {
     emptyChatMessage =
       Number(showAllEmail) !== C.DC_SHOW_EMAILS_ALL
         ? tx('chat_no_contact_requests')

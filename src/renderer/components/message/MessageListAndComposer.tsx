@@ -8,8 +8,6 @@ import { C } from 'deltachat-node/dist/constants'
 import { ChatStoreState } from '../../stores/chat'
 import ComposerMessageInput from '../composer/ComposerMessageInput'
 
-const { DC_CHAT_ID_DEADDROP } = C
-
 const log = getLogger('renderer/MessageListAndComposer')
 
 export default function MessageListAndComposer({
@@ -147,7 +145,7 @@ export default function MessageListAndComposer({
     isGroup,
     selfInGroup,
   }): [boolean, string] => {
-    if (id === DC_CHAT_ID_DEADDROP) {
+    if (chat.isContactRequest) {
       return [true, 'messaging_disabled_deaddrop']
     } else if (chat.isDeviceChat === true) {
       return [true, 'messaging_disabled_device_chat']

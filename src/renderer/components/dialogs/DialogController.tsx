@@ -1,7 +1,6 @@
 import React from 'react'
 import MessageDetail from './MessageDetail'
 import FullscreenMedia from './FullscreenMedia'
-import DeadDrop from './DeadDrop'
 import EnterAutocryptSetupMessage from './EnterAutocryptSetupMessage'
 import About from './About'
 import Settings from './Settings'
@@ -22,7 +21,6 @@ import { DeltaChatAccount } from '../../../shared/shared-types'
 import { getLogger } from '../../../shared/logger'
 
 export const allDialogs: { [key: string]: any } = {
-  DeadDrop,
   FullscreenMedia,
   MessageDetail,
   EnterAutocryptSetupMessage,

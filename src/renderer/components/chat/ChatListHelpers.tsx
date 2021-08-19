@@ -82,18 +82,11 @@ export function useChatList(
       log.debug('useChatList: refetchingChatlist')
       debouncedGetChatListEntries(listFlags, queryStr, queryContactId)
     }
-    const onMsgNotice = (_event: any, [chatId]: [number, number]) => {
-      if (chatId === C.DC_CHAT_ID_DEADDROP) {
-        refetchChatlist()
-      }
-    }
 
     ipcBackend.on('DD_EVENT_CHATLIST_CHANGED', refetchChatlist)
-    ipcBackend.on('DC_EVENT_MSGS_NOTICED', onMsgNotice)
     debouncedGetChatListEntries(listFlags, queryStr, queryContactId)
     return () => {
       ipcBackend.removeListener('DD_EVENT_CHATLIST_CHANGED', refetchChatlist)
-      ipcBackend.removeListener('DC_EVENT_MSGS_NOTICED', onMsgNotice)
     }
   }, [listFlags, queryStr, queryContactId, debouncedGetChatListEntries])
 

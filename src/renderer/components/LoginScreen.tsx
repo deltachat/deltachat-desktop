@@ -57,7 +57,7 @@ function ImportBackupProgressDialog({
         return
       }
       onClose()
-      window.__loadAccount(account)
+      window.__selectAccount(account.accountId)
     })()
 
     ipcBackend.on('ALL', onAll)
@@ -137,11 +137,7 @@ const ScanQRCodeButton = React.memo(function ScanQRCode(_) {
   )
 })
 
-export default function LoginScreen({
-  loadAccount,
-}: {
-  loadAccount: (account: DeltaChatAccount) => {}
-}) {
+export default function LoginScreen() {
   const tx = useTranslationFunction()
   const { openDialog } = useContext(ScreenContext)
 
@@ -152,14 +148,14 @@ export default function LoginScreen({
   const [view, setView] = useState('main')
 
   const refreshAccounts = async () => {
-    const logins = await DeltaBackend.call('login.getLogins')
+    const logins = await DeltaBackend.call('login.accounts')
     setLogins(logins)
   }
 
   useEffect(() => {
     let mounted = true
     ;(async () => {
-      const logins = await DeltaBackend.call('login.getLogins')
+      const logins = await DeltaBackend.call('login.accounts')
       if (mounted === true) {
         setLogins(logins)
       }
@@ -172,7 +168,7 @@ export default function LoginScreen({
 
   const onClickLogin = () => {
     const onSuccess = (account: DeltaChatAccount) => {
-      loadAccount(account)
+      window.__selectAccount(account.accountId)
     }
     openDialog(ConfigureProgressDialog, { credentials, onSuccess })
   }
@@ -252,7 +248,7 @@ export default function LoginScreen({
                   <DeltaDialogBody>
                     <DeltaDialogContent noPadding={true}>
                       <AccountSelection
-                        {...{ refreshAccounts, setView, logins, loadAccount }}
+                        {...{ refreshAccounts, setView, logins }}
                       />
                     </DeltaDialogContent>
                   </DeltaDialogBody>
@@ -278,12 +274,10 @@ function AccountSelection({
   refreshAccounts,
   setView,
   logins,
-  loadAccount,
 }: {
   refreshAccounts: () => Promise<void>
   setView: React.Dispatch<React.SetStateAction<string>>
   logins: any
-  loadAccount: (account: DeltaChatAccount) => void
 }) {
   const tx = useTranslationFunction()
   const { openDialog } = useContext(ScreenContext)
@@ -298,7 +292,7 @@ function AccountSelection({
       isConfirmDanger: true,
       cb: async (yes: boolean) => {
         if (yes) {
-          await DeltaBackend.call('login.forgetAccount', login)
+          await DeltaBackend.call('login.removeAccount', login.accountId)
           refreshAccounts()
         }
       },
@@ -348,8 +342,6 @@ function AccountSelection({
         <AccountItem
           key={`login-${index}`}
           login={login}
-          loadAccount={loadAccount}
-          removeAccount={removeAccount}
         />
       ))}
     </div>
@@ -358,16 +350,12 @@ function AccountSelection({
 
 function AccountItem({
   login,
-  loadAccount,
-  removeAccount,
 }: {
   login: DeltaChatAccount
-  loadAccount: (account: DeltaChatAccount) => void
-  removeAccount: (account: DeltaChatAccount) => void
 }) {
   const removeAction = (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     ev?.stopPropagation()
-    removeAccount(login)
+    window.__removeAccount(login.accountId)
   }
 
   const title = window.static_translate('account_info_hover_tooltip_desktop', [
@@ -380,7 +368,7 @@ function AccountItem({
     <div
       role='menu-item'
       className='contact-list-item'
-      onClick={() => loadAccount(login)}
+      onClick={() => window.__selectAccount(login.accountId)}
       tabIndex={0}
     >
       <div className='contact'>

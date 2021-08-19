@@ -366,7 +366,10 @@ export function ConfigureProgressDialog({
       } else {
         let account: DeltaChatAccount = null
         try {
-          account = await DeltaBackend.call('login.newLogin', credentials)
+          const accountId = await DeltaBackend.call('login.addAccount')
+          await DeltaBackend.call('login.selectAccount', accountId)
+          DeltaBackend.call('login.updateCredentials', credentials)
+          account = await DeltaBackend.call('login.accountInfo')
         } catch (err) {
           if (err) {
             onConfigureError(null, [null, err])

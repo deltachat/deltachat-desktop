@@ -56,8 +56,9 @@ export default function App(_props: any) {
     })
   }, [])
 
-  const loadAccount = async (account: DeltaChatAccount) => {
-    await DeltaBackend.call('login.loadAccount', account)
+  const selectAccount = async (accountId: number) => {
+    await DeltaBackend.call('login.selectAccount', accountId)
+    const account = await DeltaBackend.call('login.accountInfo')
     setAccount(account)
     if (typeof window.__changeScreen === 'function') {
       window.__changeScreen(Screens.Main)
@@ -68,16 +69,20 @@ export default function App(_props: any) {
     }
   }
 
+  const removeAccount = async (accountId: number) => {
+    await DeltaBackend.call('login.removeAccount', accountId)
+  } 
+
   useLayoutEffect(() => {
     startBackendLogging()
     ;(async () => {
       const state = await DeltaBackend.call('getState')
       await reloadLocaleData(state.saved.locale)
-      const lastLoggedInAccount: DeltaChatAccount = await DeltaBackend.call(
+      const lastLoggedInAccountId = await DeltaBackend.call(
         'login.getLastLoggedInAccount'
       )
 
-      if (lastLoggedInAccount) loadAccount(lastLoggedInAccount)
+      if (lastLoggedInAccountId) selectAccount(lastLoggedInAccountId)
 
       setState(state)
     })()
@@ -111,7 +116,7 @@ export default function App(_props: any) {
     <CrashScreen>
       <SettingsContextWrapper account={account}>
         <i18nContext.Provider value={window.static_translate}>
-          <ScreenController account={account} loadAccount={loadAccount} />
+          <ScreenController account={account} selectAccount={selectAccount} removeAccount={removeAccount} />
         </i18nContext.Provider>
       </SettingsContextWrapper>
     </CrashScreen>

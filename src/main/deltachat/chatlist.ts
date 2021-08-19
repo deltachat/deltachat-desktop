@@ -81,7 +81,9 @@ export default class DCChatList extends SplitOut {
       deaddrop = this.controller.messageList.getMessage(messageId)
     }
 
-    const summary = this.selectedAccountContext.getChatlistItemSummary(chatId, messageId).toJson()
+    const summary = this.selectedAccountContext
+      .getChatlistItemSummary(chatId, messageId)
+      .toJson()
     const lastUpdated = summary.timestamp ? summary.timestamp * 1000 : null
 
     const name = chat.name || summary.text1
@@ -104,7 +106,9 @@ export default class DCChatList extends SplitOut {
       deaddrop,
       isProtected: chat.isProtected,
       isGroup: isGroup,
-      freshMessageCounter: this.selectedAccountContext.getFreshMessageCount(chatId),
+      freshMessageCounter: this.selectedAccountContext.getFreshMessageCount(
+        chatId
+      ),
       isArchiveLink: chat.id === C.DC_CHAT_ID_ARCHIVED_LINK,
       contactIds,
       isSelfTalk: chat.isSelfTalk,
@@ -155,7 +159,9 @@ export default class DCChatList extends SplitOut {
     const contactIds = await this._getChatContactIds(chatId)
 
     const contacts = await this._getChatContacts(contactIds)
-    const ephemeralTimer = this.selectedAccountContext.getChatEphemeralTimer(chatId)
+    const ephemeralTimer = this.selectedAccountContext.getChatEphemeralTimer(
+      chatId
+    )
 
     // This object is NOT created with object assign to promote consistency and to be easier to understand
     return {
@@ -173,7 +179,9 @@ export default class DCChatList extends SplitOut {
       contacts: contacts,
       contactIds,
       color: chat.color,
-      freshMessageCounter: this.selectedAccountContext.getFreshMessageCount(chatId),
+      freshMessageCounter: this.selectedAccountContext.getFreshMessageCount(
+        chatId
+      ),
       isGroup: isGroup,
       isContactRequest: chat.isContactRequest,
       isDeviceChat: chat.isDeviceTalk,
@@ -200,7 +208,7 @@ export default class DCChatList extends SplitOut {
         }
         return contacts[0].address
       }
-    } else if(chat.isContactRequest) {
+    } else if (chat.isContactRequest) {
       return tx('menu_deaddrop_subtitle')
     }
     return 'ErrTitle'

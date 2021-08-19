@@ -178,19 +178,19 @@ class DeltaRemote {
     timestampTo: number
   ): Promise<JsonLocations>
   // login ----------------------------------------------------
-  call(
-    fnName: 'login.newLogin',
-    credentials: Credentials
-  ): Promise<DeltaChatAccount>
-  call(fnName: 'login.getLogins'): Promise<any>
-  call(fnName: 'login.loadAccount', login: DeltaChatAccount): Promise<boolean>
-  call(fnName: 'login.logout'): Promise<void>
-  call(fnName: 'login.forgetAccount', login: DeltaChatAccount): Promise<void>
-  call(fnName: 'login.getLastLoggedInAccount'): Promise<DeltaChatAccount>
+  call(fnName: 'login.selectAccount', accountId: number): Promise<boolean>
   call(
     fnName: 'login.updateCredentials',
     credentials: Credentials
   ): Promise<boolean>
+  call(fnName: 'login.addAccount', credentials: Credentials): Promise<number>
+  call(fnName: 'login.removeAccount', accountId: number): Promise<void>
+  call(
+    fnName: 'login.accountInfo',
+    accountId: number
+  ): Promise<DeltaChatAccount>
+  call(fnName: 'login.getLastLoggedInAccount'): Promise<number>
+  call(fnName: 'login.accounts'): Promise<DeltaChatAccount[]>
 
   // NOTHING HERE that is called directly from the frontend, yet
   // messageList --------------------------------------------------------

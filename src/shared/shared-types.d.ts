@@ -190,11 +190,13 @@ export type MessageSearchResult = {
 }
 
 export type DeltaChatAccount = {
+  accountId: number,
   displayname: string
   addr: string
   size: number
   profileImage: string
   color: string
+  path: string
 }
 
 export declare type QrCodeResponse = {
