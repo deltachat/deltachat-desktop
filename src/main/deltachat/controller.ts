@@ -61,6 +61,11 @@ export default class DeltaChatController extends EventEmitter {
       Timespans.ONE_DAY_IN_SECONDS * 1000
     )
 
+    log.debug('Initiating DeltaChatNode')
+    this.dc = new DeltaChatNode(cwd, 'deltachat-desktop')
+    log.debug('Starting event handler')
+    this.dc.startEvents()
+
     this.onAll = this.onAll.bind(this)
     this.onChatlistUpdated = this.onChatlistUpdated.bind(this)
     this.onMsgsChanged = this.onMsgsChanged.bind(this)

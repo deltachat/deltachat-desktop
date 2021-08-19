@@ -58,7 +58,7 @@ export default function App(_props: any) {
 
   const selectAccount = async (accountId: number) => {
     await DeltaBackend.call('login.selectAccount', accountId)
-    const account = await DeltaBackend.call('login.accountInfo')
+    const account = await DeltaBackend.call('login.accountInfo', accountId)
     setAccount(account)
     if (typeof window.__changeScreen === 'function') {
       window.__changeScreen(Screens.Main)
