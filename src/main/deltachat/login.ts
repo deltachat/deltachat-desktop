@@ -6,10 +6,7 @@ import setupNotifications from '../notifications'
 import setupUnreadBadgeCounter from '../unread-badge'
 import SplitOut from './splitout'
 import { Credentials, DeltaChatAccount } from '../../shared/shared-types'
-import { getNewAccountPath, getLogins, removeAccount } from '../logins'
 import { ExtendedAppMainProcess } from '../types'
-import { rm } from 'fs/promises'
-import { basename } from 'path'
 const log = getLogger('main/deltachat/login')
 
 const app = rawApp as ExtendedAppMainProcess

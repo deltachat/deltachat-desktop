@@ -83,7 +83,7 @@ Promise.all([
     process.exit(1)
   })
 
-function onReady([logins, _appReady, loadedState]: [
+function onReady([ _appReady, loadedState]: [
   //DeltaChatAccount[],
   any,
   AppState
