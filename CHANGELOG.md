@@ -24,6 +24,7 @@
 - cleanup backend / main process (remove unused functions / variables)
 - Remove dependency `array-differ`
 - replace `react-virtualized` with `react-window`
+- show user-visible error in fullscreen media view if mimetype isn't set or not supported
 
 ### Fixed
 - fix duplicated contacts in search

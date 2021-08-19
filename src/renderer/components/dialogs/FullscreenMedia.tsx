@@ -4,6 +4,11 @@ import { Icon, Overlay } from '@blueprintjs/core'
 import { DialogProps } from './DialogController'
 import { MessageType } from '../../../shared/shared-types'
 import { runtime } from '../../runtime'
+import { isImage, isVideo, isAudio } from '../attachment/Attachment'
+import { getLogger } from '../../../shared/logger'
+import { gitHubIssuesUrl } from '../../../shared/constants'
+
+const log = getLogger('renderer/fullscreen_media')
 
 export default function FullscreenMedia(props: {
   msg: MessageType
@@ -15,23 +20,49 @@ export default function FullscreenMedia(props: {
   if (!msg || !msg.file) return elm
   const { file, file_mime } = msg
 
-  switch (file_mime.split('/')[0]) {
-    case 'image':
-      elm = (
-        <div className='image-container'>
-          <img src={runtime.transformBlobURL(file)} />
-        </div>
-      )
-      break
-    case 'audio':
-      elm = <audio src={runtime.transformBlobURL(file)} controls />
-      break
-    case 'video':
-      elm = <video src={runtime.transformBlobURL(file)} controls autoPlay />
-      break
-    default:
-      elm = null
+  if (isImage(file_mime)) {
+    elm = (
+      <div className='image-container'>
+        <img src={runtime.transformBlobURL(file)} />
+      </div>
+    )
+  } else if (isAudio(file_mime)) {
+    elm = <audio src={runtime.transformBlobURL(file)} controls />
+  } else if (isVideo(file_mime)) {
+    elm = <video src={runtime.transformBlobURL(file)} controls autoPlay />
+  } else if (!file_mime) {
+    // no file mime
+    elm = (
+      <div>
+        <p>Error: Unknown mime_type for {runtime.transformBlobURL(file)}</p>
+        <p>
+          Please report this bug on{' '}
+          <a href='#' onClick={() => runtime.openLink(gitHubIssuesUrl)}>
+            github
+          </a>
+        </p>
+      </div>
+    )
+    log.warn('Unknown mime type', { file, file_mime })
+  } else {
+    // can not be displayed by fullscreen media
+    elm = (
+      <div>
+        <p>
+          Error: Desktop issue: Unknown media type for{' '}
+          {runtime.transformBlobURL(file)} (mime_type: {file_mime})
+        </p>
+        <p>
+          Please report this bug on{' '}
+          <a href='#' onClick={() => runtime.openLink(gitHubIssuesUrl)}>
+            github
+          </a>
+        </p>
+      </div>
+    )
+    log.warn('Unknown media type for fullscreen media', { file, file_mime })
   }
+
   return (
     <Overlay
       isOpen={Boolean(file)}

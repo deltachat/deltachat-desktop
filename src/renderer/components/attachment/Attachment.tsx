@@ -22,6 +22,8 @@ const SUPPORTED_IMAGE_MIME_TYPES = Object.freeze([
   // PNG
   'image/apng',
   'image/png',
+  // for opening avatars
+  'image/x',
 ])
 // See: https://www.chromium.org/audio-video
 const SUPPORTED_VIDEO_MIME_TYPES = Object.freeze([
