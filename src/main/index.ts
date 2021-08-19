@@ -29,7 +29,6 @@ import {
 } from './application-constants'
 mkdirSync(getConfigPath(), { recursive: true })
 mkdirSync(getLogsPath(), { recursive: true })
-mkdirSync(getAccountsPath(), { recursive: true })
 mkdirSync(getCustomThemesPath(), { recursive: true })
 
 // Setup Logger
@@ -98,7 +97,7 @@ function onReady([_appReady, loadedState]: [
 
   setLanguage(state.saved.locale || app.getLocale())
 
-  const cwd = getConfigPath()
+  const cwd = getAccountsPath()
   log.info(`cwd ${cwd}`)
   ipc.init(cwd, logHandler)
 

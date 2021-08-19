@@ -28,6 +28,7 @@ export default class DCLoginController extends SplitOut {
   }
 
   async selectAccount(accountId: number) {
+    log.debug('selectAccount', accountId)
     this.controller.selectedAccountId = accountId
     this.controller.selectedAccountContext = this.dc.accountContext(accountId)
 
@@ -126,7 +127,8 @@ https://delta.chat/en/2021-05-05-email-compat` as any
     )
   }
 
-  accountInfo(accountId: number): DeltaChatAccount {
+  async accountInfo(accountId: number): Promise<DeltaChatAccount> {
+    console.log(this)
     const accountContext = this.dc.accountContext(accountId)
     const selfContact = accountContext.getContact(C.DC_CONTACT_ID_SELF)
     return {
@@ -143,7 +145,12 @@ https://delta.chat/en/2021-05-05-email-compat` as any
   async accounts(): Promise<DeltaChatAccount[]> {
     const accountIds: number[] = this.dc.accounts()
 
-    const accounts: DeltaChatAccount[] = accountIds.map(this.accountInfo)
+    const accounts: DeltaChatAccount[] = new Array(accountIds.length)
+    
+    for(let i = 0; i < accountIds.length; i++) {
+      accounts[i] = await this.accountInfo(accountIds[i])
+    }
+    
     return accounts
   }
 
