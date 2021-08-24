@@ -342,6 +342,7 @@ function AccountSelection({
         <AccountItem
           key={`login-${index}`}
           login={login}
+          removeAccount={removeAccount}
         />
       ))}
     </div>
@@ -350,12 +351,14 @@ function AccountSelection({
 
 function AccountItem({
   login,
+  removeAccount
 }: {
-  login: DeltaChatAccount
+  login: DeltaChatAccount,
+  removeAccount: (account: DeltaChatAccount) => void
 }) {
   const removeAction = (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     ev?.stopPropagation()
-    window.__removeAccount(login.accountId)
+    removeAccount(login)
   }
 
   const title = window.static_translate('account_info_hover_tooltip_desktop', [
