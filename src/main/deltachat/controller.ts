@@ -64,7 +64,7 @@ export default class DeltaChatController extends EventEmitter {
     log.debug('Initiating DeltaChatNode')
     this.dc = new DeltaChatNode(cwd, 'deltachat-desktop')
     log.debug('Starting event handler')
-    this.dc.startEvents()
+    this.registerEventHandler(this.dc)
 
     this.onAll = this.onAll.bind(this)
     this.onChatlistUpdated = this.onChatlistUpdated.bind(this)
@@ -157,6 +157,7 @@ export default class DeltaChatController extends EventEmitter {
       )
       return
     }
+    if (!payload) payload = null
     mainWindow.send(eventType, payload)
   }
 
@@ -166,9 +167,9 @@ export default class DeltaChatController extends EventEmitter {
     return (app as any).translate(...args)
   }
 
-  onAll(_event: any, data1: any, data2: any) {
-    const event: string = !isNaN(_event) ? eventStrings[_event] : String(_event)
-
+  onAll(event: string, accountId: number, data1: any, data2: any) {
+    
+    console.log('hallo from desktop', this.sendToRenderer, event, accountId, data1, data2)
     if (event === 'DC_EVENT_WARNING') {
       logCoreEvent.warn(event, data1, data2)
     } else if (event === 'DC_EVENT_INFO') {
@@ -180,34 +181,37 @@ export default class DeltaChatController extends EventEmitter {
       logCoreEvent.debug(event, data1, data2)
     }
 
-    this.sendToRenderer(event, [data1, data2])
+    console.log('sending to renderer')
+    if (accountId === this.selectedAccountId) this.sendToRenderer(event, [data1, data2])
   }
 
-  onMsgsChanged(chatId: number, _msgId: number) {
+  onMsgsChanged(accountId: number, chatId: number, _msgId: number) {
     this.onChatlistUpdated()
     // chatListItem listens to this in the frontend
     this.chatList.onChatModified(chatId)
   }
 
-  onIncomingMsg(chatId: number, msgId: number) {
+  onIncomingMsg(accountId: number, chatId: number, msgId: number) {
     maybeMarkSeen(chatId, msgId)
     this.onChatlistUpdated()
     // chatListItem listens to this in the frontend
     this.chatList.onChatModified(chatId)
   }
 
-  onChatModified(chatId: number, _msgId: number) {
+  onChatModified(accountId: number, chatId: number, _msgId: number) {
     this.onChatlistUpdated()
     // chatListItem listens to this in the frontend
     this.chatList.onChatModified(chatId)
   }
 
   registerEventHandler(dc: DeltaChat) {
-    dc.on('ALL', this.onAll)
+    dc.startEvents()
+    dc.on('ALL', (...args) => this.onAll.bind(this)(...args))
     dc.on('DD_EVENT_CHATLIST_UPDATED', this.onChatlistUpdated)
     dc.on('DC_EVENT_MSGS_CHANGED', this.onMsgsChanged)
     dc.on('DC_EVENT_INCOMING_MSG', this.onIncomingMsg)
     dc.on('DC_EVENT_CHAT_MODIFIED', this.onChatModified)
+    
   }
 
   unregisterEventHandler(dc: DeltaChat) {
@@ -219,7 +223,7 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   onChatlistUpdated() {
-    this.sendToRenderer('DD_EVENT_CHATLIST_CHANGED', {})
+    this.sendToRenderer('DD_EVENT_CHATLIST_CHANGED')
   }
 
   updateBlockedContacts() {
