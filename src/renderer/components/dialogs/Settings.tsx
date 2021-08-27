@@ -315,7 +315,7 @@ export default function Settings(props: DialogProps) {
               {renderDeltaSwitch('mvbox_move', tx('pref_auto_folder_moves'))}
             </Card>
             <SettingsManageKeys />
-            <SettingsBackup />            
+            <SettingsBackup />
           </DeltaDialogBody>
           <DeltaDialogCloseFooter onClose={onClose} />
         </>

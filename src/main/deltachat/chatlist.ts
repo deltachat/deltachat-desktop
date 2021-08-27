@@ -1,4 +1,4 @@
-import DeltaChat, { C, ChatList } from 'deltachat-node'
+import { C, ChatList } from 'deltachat-node'
 import { Context } from 'deltachat-node/dist/context'
 import { app } from 'electron'
 import { getLogger } from '../../shared/logger'

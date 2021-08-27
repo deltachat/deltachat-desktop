@@ -1,11 +1,5 @@
 import { C } from 'deltachat-node'
 
-// @ts-ignore
-import binding from 'deltachat-node/binding'
-import { EventId2EventName } from 'deltachat-node/dist/constants'
-import tempy from 'tempy'
-import { lstat, rename, rm } from 'fs/promises'
-import path from 'path'
 import { getLogger } from '../../shared/logger'
 const log = getLogger('main/deltachat/backup')
 

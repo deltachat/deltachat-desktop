@@ -126,7 +126,7 @@ export default class DCChat extends SplitOut {
 
   accept(chatId: number) {
     this.selectedAccountContext.acceptChat(chatId)
-    this.controller.chatList.updateChatList()    
+    this.controller.chatList.updateChatList()
   }
 
   block(chatId: number) {

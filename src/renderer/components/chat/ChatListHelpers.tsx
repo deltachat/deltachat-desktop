@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo } from 'react'
 import { ipcBackend } from '../../ipc'
 import { getLogger } from '../../../shared/logger'
 import { DeltaBackend } from '../../delta-remote'
-import { C } from 'deltachat-node/dist/constants'
 import { debounce } from 'debounce'
 
 const log = getLogger('renderer/helpers/ChatList')

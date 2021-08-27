@@ -1,4 +1,4 @@
-import { DeltaChat, C } from 'deltachat-node'
+import { C } from 'deltachat-node'
 import { app as rawApp } from 'electron'
 import { getLogger } from '../../shared/logger'
 import { setupMarkseenFix } from '../markseenFix'

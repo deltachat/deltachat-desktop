@@ -15,7 +15,6 @@ import processOpenQrUrl from './components/helpers/OpenQrUrl'
 
 import { getLogger } from '../shared/logger'
 import { ContextMenuLayer, showFnType } from './components/ContextMenu'
-import { timeStamp } from 'console'
 
 const log = getLogger('renderer/ScreenController')
 
