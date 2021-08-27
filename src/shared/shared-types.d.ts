@@ -91,7 +91,7 @@ export interface ChatListItemType {
         status: string
       }
     | undefined
-  deaddrop: any
+  isContactRequest: boolean
   isProtected: boolean
   isGroup: boolean
   freshMessageCounter: number

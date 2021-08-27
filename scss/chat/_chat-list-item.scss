@@ -83,8 +83,9 @@
           }
         }
       }
+      
 
-      .archived-label {
+      .label {
         border: 1px solid var(--chat-list-item-archived-label-border);
         color: var(--chat-list-item-archived-label);
         border-radius: 2px;
@@ -179,9 +180,10 @@
   background-color: var(--chatListItemSelectedBg);
   color: var(--chatListItemSelectedText);
 
-  .archived-label,
+  & > .content > .chat-list-item-message > .label,
   & > .content > .chat-list-item-message > .text {
     color: var(--chatListItemSelectedText);
+    border-color: var(--chatListItemSelectedText);
   }
 
   &:hover {
