@@ -216,7 +216,9 @@ const Composer = forwardRef<
         </div>
         <div
           className='contact-request-button accept'
-          onClick={() => DeltaBackend.call('chat.accept', chatId)}
+          onClick={() => {
+            DeltaBackend.call('chat.accept', chatId)
+          }}
         >
           {tx('accept')}
         </div>
@@ -310,6 +312,7 @@ export type DraftObject = { chatId: number } & Pick<
 
 export function useDraft(
   chatId: number,
+  isContactRequest,
   inputRef: React.MutableRefObject<ComposerMessageInput>
 ): {
   draftState: DraftObject
@@ -378,7 +381,7 @@ export function useDraft(
     loadDraft(chatId)
     window.__reloadDraft = loadDraft.bind(this, chatId)
     return () => (window.__reloadDraft = null)
-  }, [chatId, loadDraft])
+  }, [chatId, loadDraft, isContactRequest])
 
   const saveDraft = useCallback(async () => {
     const draft = draftRef.current
