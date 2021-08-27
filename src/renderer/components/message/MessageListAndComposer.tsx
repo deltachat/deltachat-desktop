@@ -27,7 +27,7 @@ export default function MessageListAndComposer({
     addFileToDraft,
     removeFile,
     clearDraft,
-  } = useDraft(chat.id, messageInputRef)
+  } = useDraft(chat.id, chat.isContactRequest, messageInputRef)
 
   const onDrop = (e: React.DragEvent<any>) => {
     e.preventDefault()
