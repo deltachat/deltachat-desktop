@@ -8,9 +8,12 @@
 - Copy-paste images into chat
 - make chatlist item height changeable by themes.
 - "rocket chat"-like experimental theme
+- Implement new contact request ui/ux
+- Implement new connectivity view
 
 ### Changed
 - Upgrade electron-builder to `22.12.0`
+- Upgrade deltachat-node to xxx
 - Upgrade esbuild to `0.12.15`
 - Update testcafe to `1.15.0`
 - Upgrade `react` and `react-dom` to `17.0.2`
@@ -26,6 +29,7 @@
 - Remove dependency `array-differ`
 - replace `react-virtualized` with `react-window`
 - show user-visible error in fullscreen media view if mimetype isn't set or not supported
+
 
 ### Fixed
 - rename `--debug` flag to `--devmode` (in order to fix #2315)
