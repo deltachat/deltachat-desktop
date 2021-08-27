@@ -191,6 +191,7 @@ export default function MessageListAndComposer({
         chatId={chat.id}
         isDisabled={disabled}
         disabledReason={disabledReason}
+        isContactRequest={chat.isContactRequest}
         messageInputRef={messageInputRef}
         draftState={draftState}
         updateDraftText={updateDraftText}
