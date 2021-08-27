@@ -134,8 +134,6 @@ export default class DeltaChatController extends EventEmitter {
         lastChats: {},
       },
     })
-
-    console.log(app.state.saved)
   }
 
   readonly autocrypt = new DCAutocrypt(this)
@@ -233,14 +231,6 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   onAll(event: string, accountId: number, data1: any, data2: any) {
-    console.log(
-      'hallo from desktop',
-      this.sendToRenderer,
-      event,
-      accountId,
-      data1,
-      data2
-    )
     if (event === 'DC_EVENT_WARNING') {
       logCoreEvent.warn(event, data1, data2)
     } else if (event === 'DC_EVENT_INFO') {
@@ -252,7 +242,6 @@ export default class DeltaChatController extends EventEmitter {
       logCoreEvent.debug(event, data1, data2)
     }
 
-    console.log('sending to renderer')
     if (accountId === this.selectedAccountId)
       this.sendToRenderer(event, [data1, data2])
   }

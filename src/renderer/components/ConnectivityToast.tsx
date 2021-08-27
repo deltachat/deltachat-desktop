@@ -137,7 +137,6 @@ export default function ConnectivityToast() {
 
   const tx = useTranslationFunction()
 
-  console.log('xxx', networkState)
   return (
     <>
       {networkState[0] === Connectivity.NOT_CONNECTED && (
