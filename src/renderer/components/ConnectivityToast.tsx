@@ -15,14 +15,14 @@ enum Connectivity {
   NOT_CONNECTED,
   CONNECTING,
   WORKING,
-  CONNECTED
+  CONNECTED,
 }
 
 export default function ConnectivityToast() {
-  const [networkState, setNetworkState]: [[Connectivity, string], todo] = useState([
-    Connectivity.CONNECTED,
-    '',
-  ])
+  const [networkState, setNetworkState]: [
+    [Connectivity, string],
+    todo
+  ] = useState([Connectivity.CONNECTED, ''])
   const [tryConnectCooldown, setTryConnectCooldown] = useState(true)
 
   const maybeNetwork = useMemo(
@@ -32,7 +32,10 @@ export default function ConnectivityToast() {
 
   const onBrowserOffline = () => {
     log.debug("Browser knows we're offline")
-    setNetworkState(() => [Connectivity.NOT_CONNECTED, "Browser knows we're offline"])
+    setNetworkState(() => [
+      Connectivity.NOT_CONNECTED,
+      "Browser knows we're offline",
+    ])
   }
 
   const tryMaybeNetworkIfOfflineAfterXms = useCallback(
@@ -64,7 +67,10 @@ export default function ConnectivityToast() {
 
   const onBrowserOnline = useCallback(() => {
     log.debug("Browser thinks we're back online, telling rust core")
-    setNetworkState(() => [Connectivity.CONNECTED, "Browser thinks we're online"])
+    setNetworkState(() => [
+      Connectivity.CONNECTED,
+      "Browser thinks we're online",
+    ])
     maybeNetwork()
 
     tryMaybeNetworkIfOfflineAfterXms(150)
@@ -72,19 +78,31 @@ export default function ConnectivityToast() {
 
   const onConnectivityChanged = async (_data1: any, _data2: any) => {
     const connectivity = await DeltaBackend.call('context.getConnectivity')
-    
+
     if (connectivity >= C.DC_CONNECTIVITY_CONNECTED) {
       log.debug("Core thinks we're back online and connected")
-      setNetworkState(() => [Connectivity.CONNECTED, "Core thinks we're connected"])
+      setNetworkState(() => [
+        Connectivity.CONNECTED,
+        "Core thinks we're connected",
+      ])
     } else if (connectivity >= C.DC_CONNECTIVITY_WORKING) {
       log.debug("Core thinks we're back online and connected")
-      setNetworkState(() => [Connectivity.WORKING, "Core thinks we're connected and working"])    
+      setNetworkState(() => [
+        Connectivity.WORKING,
+        "Core thinks we're connected and working",
+      ])
     } else if (connectivity >= C.DC_CONNECTIVITY_CONNECTING) {
       log.debug("Core thinks we're back online and connected")
-      setNetworkState(() => [Connectivity.CONNECTING, "Core thinks we're connecting"])
+      setNetworkState(() => [
+        Connectivity.CONNECTING,
+        "Core thinks we're connecting",
+      ])
     } else if (connectivity >= C.DC_CONNECTIVITY_NOT_CONNECTED) {
       log.debug("Core thinks we're not connected")
-      setNetworkState(() => [Connectivity.NOT_CONNECTED, "Core thinks we're not connected"])
+      setNetworkState(() => [
+        Connectivity.NOT_CONNECTED,
+        "Core thinks we're not connected",
+      ])
     }
   }
 
@@ -120,27 +138,25 @@ export default function ConnectivityToast() {
   const tx = useTranslationFunction()
 
   console.log('xxx', networkState)
-  return <>
-    {networkState[0] === Connectivity.NOT_CONNECTED && (
-      <div className='ConnectivityToast'>
-        <a title={networkState[1]}>{tx('offline')}</a>
-        <div
-          className={tryConnectCooldown ? '' : 'disabled'}
-          onClick={onTryReconnectClick}
-        >
-          {tx('try_connect_now')}
+  return (
+    <>
+      {networkState[0] === Connectivity.NOT_CONNECTED && (
+        <div className='ConnectivityToast'>
+          <a title={networkState[1]}>{tx('offline')}</a>
+          <div
+            className={tryConnectCooldown ? '' : 'disabled'}
+            onClick={onTryReconnectClick}
+          >
+            {tx('try_connect_now')}
+          </div>
         </div>
-      </div>
-    )}
-    {networkState[0] === Connectivity.CONNECTING && (
-      <div className='ConnectivityToast'>
-        {tx('connectivity_connecting')}
-      </div>
-    )}
-    {networkState[0] === Connectivity.WORKING && (
-      <div className='ConnectivityToast'>
-        {tx('connectivity_updating')}
-      </div>
-    )}
-  </>
+      )}
+      {networkState[0] === Connectivity.CONNECTING && (
+        <div className='ConnectivityToast'>{tx('connectivity_connecting')}</div>
+      )}
+      {networkState[0] === Connectivity.WORKING && (
+        <div className='ConnectivityToast'>{tx('connectivity_updating')}</div>
+      )}
+    </>
+  )
 }

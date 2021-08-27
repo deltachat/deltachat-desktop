@@ -141,7 +141,6 @@ export default function MessageListAndComposer({
   }, [])
 
   const [disabled, disabledReason] = (({
-    id,
     isGroup,
     selfInGroup,
   }): [boolean, string] => {

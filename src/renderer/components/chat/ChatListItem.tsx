@@ -3,7 +3,6 @@ import classNames from 'classnames'
 import Timestamp from '../conversations/Timestamp'
 import MessageBody from '../message/MessageBody'
 import { C } from 'deltachat-node/dist/constants'
-import { useTranslationFunction } from '../../contexts'
 import {
   ChatListItemType,
   MessageSearchResult,
@@ -40,7 +39,12 @@ const Header = React.memo(
 
 const Message = React.memo(
   ({ chatListItem }: { chatListItem: ChatListItemType }) => {
-    const { summary, freshMessageCounter, archived, isContactRequest } = chatListItem
+    const {
+      summary,
+      freshMessageCounter,
+      archived,
+      isContactRequest,
+    } = chatListItem
     if (!summary) return null
 
     return (

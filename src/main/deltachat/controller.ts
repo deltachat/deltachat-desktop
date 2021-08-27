@@ -2,7 +2,7 @@ import DeltaChat, { C, DeltaChat as DeltaChatNode } from 'deltachat-node'
 import { app as rawApp } from 'electron'
 import { EventEmitter } from 'events'
 import { getLogger } from '../../shared/logger'
-import { JsonContact, Credentials, AppState } from '../../shared/shared-types'
+import { JsonContact, AppState } from '../../shared/shared-types'
 import { maybeMarkSeen } from '../markseenFix'
 import * as mainWindow from '../windows/main'
 import DCAutocrypt from './autocrypt'
@@ -19,13 +19,12 @@ import DCStickers from './stickers'
 import DCBurnerAccounts from './burnerAccounts'
 import { ExtendedAppMainProcess } from '../types'
 import Extras from './extras'
-import { EventId2EventName as eventStrings } from 'deltachat-node/dist/constants'
 
 import { VERSION, BUILD_TIMESTAMP } from '../../shared/build-info'
 import { Timespans, DAYS_UNTIL_UPDATE_SUGGESTION } from '../../shared/constants'
 import { Context } from 'deltachat-node/dist/context'
 import path, { join } from 'path'
-import { existsSync, fstat } from 'fs'
+import { existsSync } from 'fs'
 import { stat, rename, readdir } from 'fs/promises'
 
 const app = rawApp as ExtendedAppMainProcess
@@ -106,7 +105,6 @@ export default class DeltaChatController extends EventEmitter {
     this.registerEventHandler(tmp_dc)
 
     // Next, iterate over all folders in accounts_old
-    let i = 0
     for (const entry of await readdir(path_accounts_old)) {
       const stat_result = await stat(join(path_accounts_old, entry))
       if (!stat_result.isDirectory()) continue

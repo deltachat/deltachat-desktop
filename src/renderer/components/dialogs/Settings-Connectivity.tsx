@@ -1,8 +1,8 @@
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useState } from 'react'
 import { Card, Elevation } from '@blueprintjs/core'
 import React from 'react'
 
-import { DeltaDialogBody, DeltaDialogCloseFooter, DeltaDialogFooter, DeltaDialogOkCancelFooter } from './DeltaDialog'
+import { DeltaDialogBody, DeltaDialogCloseFooter } from './DeltaDialog'
 import { DeltaBackend } from '../../delta-remote'
 import { onDCEvent } from '../../ipc'
 
@@ -14,24 +14,21 @@ export default function SettingsConnectivity({
   onClose: any
 }) {
   const [connectivityHTML, setConnectivityHTML] = useState('')
- 
+
   const updateConnectivity = async () => {
     setConnectivityHTML(await DeltaBackend.call('context.getConnectivityHTML'))
   }
 
   useEffect(() => {
-      updateConnectivity()
-      return onDCEvent(
-        'DC_EVENT_CONNECTIVITY_CHANGED',
-        updateConnectivity
-      )
+    updateConnectivity()
+    return onDCEvent('DC_EVENT_CONNECTIVITY_CHANGED', updateConnectivity)
   }, [])
 
   return (
     <>
       <DeltaDialogBody noFooter>
-        <Card elevation={Elevation.ONE} style={{paddingTop: '0px'}}>
-          <div dangerouslySetInnerHTML={{__html: connectivityHTML}} />
+        <Card elevation={Elevation.ONE} style={{ paddingTop: '0px' }}>
+          <div dangerouslySetInnerHTML={{ __html: connectivityHTML }} />
         </Card>
       </DeltaDialogBody>
       <DeltaDialogCloseFooter onClose={() => setShow('main')} />

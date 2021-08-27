@@ -205,10 +205,19 @@ const Composer = forwardRef<
   if (isContactRequest) {
     return (
       <div ref={ref} className='composer contact-request'>
-        <div className='contact-request-button delete' onClick={() => { DeltaBackend.call('chat.delete', chatId); unselectChat()}}>
+        <div
+          className='contact-request-button delete'
+          onClick={() => {
+            DeltaBackend.call('chat.delete', chatId)
+            unselectChat()
+          }}
+        >
           {tx('delete')}
         </div>
-        <div className='contact-request-button accept' onClick={() => DeltaBackend.call('chat.accept', chatId)}>
+        <div
+          className='contact-request-button accept'
+          onClick={() => DeltaBackend.call('chat.accept', chatId)}
+        >
           {tx('accept')}
         </div>
       </div>

@@ -26,17 +26,20 @@ export default function SettingsProfile({
   const [profileImagePreview, setProfileImagePreview] = useState('')
   const [connectivityString, setConnectivityString] = useState('')
 
-
   const updateConnectivity = async () => {
     const connectivity = await DeltaBackend.call('context.getConnectivity')
-  
+
     let connectivityString = ''
     if (connectivity >= C.DC_CONNECTIVITY_CONNECTED) {
       connectivityString = window.static_translate('connectivity_connected')
     } else if (connectivity >= C.DC_CONNECTIVITY_WORKING) {
-      connectivityString = window.static_translate('connectivity_updating').replace('…', '')
+      connectivityString = window
+        .static_translate('connectivity_updating')
+        .replace('…', '')
     } else if (connectivity >= C.DC_CONNECTIVITY_CONNECTING) {
-      connectivityString = window.static_translate('connectivity_connecting').replace('…', '')
+      connectivityString = window
+        .static_translate('connectivity_connecting')
+        .replace('…', '')
     } else if (connectivity >= C.DC_CONNECTIVITY_NOT_CONNECTED) {
       connectivityString = window.static_translate('connectivity_not_connected')
     }
@@ -48,10 +51,7 @@ export default function SettingsProfile({
     updateConnectivity()
 
     DeltaBackend.call('getProfilePicture').then(setProfileImagePreview)
-    return onDCEvent(
-      'DC_EVENT_CONNECTIVITY_CHANGED',
-      updateConnectivity
-    )
+    return onDCEvent('DC_EVENT_CONNECTIVITY_CHANGED', updateConnectivity)
     // return nothing because reacts wants it like that
   }, [profileImagePreview])
   const tx = useTranslationFunction()
