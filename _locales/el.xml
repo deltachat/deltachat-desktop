@@ -22,12 +22,10 @@
     <string name="forward">Προώθηση</string>
     <string name="archive">Αρχειοθέτηση</string>
     <string name="mute">Σίγαση</string>
-    <string name="ephemeral_messages">Μηνύματα που εξαφανίζονται</string>
     <string name="save">Αποθήκευση</string>
     <string name="media">Πολυμέσα</string>
     <string name="profile">Προφίλ</string>
     <string name="always">Πάντα</string>
-    <string name="show_password">Εμφάνιση κωδικού πρόσβασης</string>
     <string name="not_now">Όχι τώρα</string>
     <string name="never">Ποτέ</string>
     <string name="done">Τέλος</string>
@@ -59,7 +57,6 @@
     <string name="gif">Gif</string>
     <string name="images">Εικόνες</string>
     <string name="audio">Ήχοι</string>
-    <string name="voice_message">Μήνυμα φωνής</string>
     <string name="video">Βίντεο</string>
     <string name="documents">Αρχεία</string>
     <string name="contact">Επαφή</string>
@@ -92,29 +89,14 @@
     <string name="message_read">Το μήνυμα διαβάστηκε</string>
 
 
-    <string name="menu_new_group">Νέα ομάδα</string>
     <string name="menu_send">Αποστολή</string>
-    <string name="menu_toggle_keyboard">Εναλλαγή πληκτρολογίου emoji</string>
-    <string name="menu_edit_group">Επεξεργασία ομάδας</string>
-    <string name="menu_group_name_and_image">Επεξεργασία ονόματος και φωτογραφίας ομάδας</string>
-    <string name="menu_add_attachment">Προσθήκη συνημμένου</string>
-    <string name="menu_leave_group">Αποχώρηση απ\' την ομάδα</string>
-    <string name="menu_message_details">Λεπτομέρειες μηνύματος</string>
-    <string name="menu_copy_to_clipboard">Αντιγραφή στο πρόχειρο</string>
-    <string name="menu_forward">Προώθηση μηνύματος</string>
-    <string name="menu_resend">Αποστολή ξανά</string>
-    <string name="menu_reply">Απάντηση στο μήνυμα</string>
-    <string name="menu_mute">Σίγαση ειδοποιήσεων</string>
     <string name="menu_unmute">Αποσίγαση</string>
-    <string name="menu_all_media">Όλα τα πολυμέσα</string>
     <string name="menu_share">Μοιράσου</string>
     <!-- this is the action "to block sth." usually a mailing list or a contact. this is NOT "a large solid piece of hard material" :) -->
     <string name="block">Φραγή</string>
     <string name="menu_play">Αναπαραγωγή</string>
     <string name="menu_pause">Παύση</string>
-    <string name="menu_scroll_to_bottom">Πήγαινε στο τέρμα</string>
     <string name="menu_help">Βοήθεια</string>
-    <string name="menu_select_all">Επιλογή όλων</string>
     <string name="menu_settings">Ρυθμίσεις</string>
     <string name="menu_advanced">Για προχωρημένους</string>
     <string name="mute_for_one_hour">Σίγαση για 1 ώρα</string>
@@ -134,45 +116,21 @@
     <string name="saved">Αποθηκεύτηκε</string>
     <!-- search -->
     <string name="search">Αναζήτηση</string>
-    <!-- create/edit groups, contact/group profile -->
-    <string name="group_name">Όνομα ομάδας</string>
-    <string name="group_create_button">Δημιουργία ομάδας</string>
-    <string name="group_add_members">Προσθήκη μελών</string>
     <string name="tab_contact">Επαφή</string>
     <string name="tab_members">Μέλη</string>
     <string name="tab_gallery">Εικόνα ή βίντεο</string>
-    <string name="media_preview">Προεπισκόπιση</string>
     <string name="login_inbox">Εισερχόμενα</string>
-    <string name="login_imap_login">Όνομα χρήστη IMAP</string>
-    <string name="login_imap_server">Εξυπηρέτης IMAP</string>
-    <string name="login_imap_port">Θύρα IMAP</string>
-    <string name="login_imap_security">Ασφάλεια IMAP</string>
     <string name="login_outbox">Εξερχόμενα</string>
-    <string name="login_smtp_login">Όνομα χρήστη SMTP</string>
-    <string name="login_smtp_password">Συνθηματικό SMTP</string>
-    <string name="login_smtp_server">Εξυπηρέτης SMTP</string>
-    <string name="login_smtp_port">Θύρα SMTP</string>
-    <string name="login_smtp_security">Ασφάλεια SMTP</string>
-    <string name="add_account">Προσθήκη λογαριασμού</string>
-    <string name="delete_account">Διαγραφή λογαριασμού</string>
-    <string name="pref_blocked_contacts">Φραγμένες επαφές</string>
-    <string name="pref_your_name">Το όνομά σου</string>
-    <!-- Translators: The value entered here is visible only to recipients who DO NOT use Deltachat, so its not a "Status" but the last line in the E-Mail. -->
-    <string name="pref_default_status_label">Υπογραφή</string>
-    <string name="pref_enter_sends">Το Enter στέλνει</string>
     <string name="pref_enter_sends_explain">Τα μηνύματα θα στέλνονται με το πάτημα του Enter</string>
     <string name="pref_vibrate">Δόνηση</string>
-    <string name="pref_screen_security">Ασφάλεια οθόνης</string>
     <!-- Translators: The wording must indicate that we can't guarantee that, its a System flag that we set. But the System in question must honor it. -->
     <string name="pref_screen_security_explain">Να μην επιτρέπεται η καταγραφή της οθόνης (screenshots) στη λίστα με τα πρόσφατα και μέσα στην εφαρμογή</string>
     <string name="pref_notifications">Ειδοποιήσεις</string>
     <string name="pref_notifications_show">Εμφάνιση</string>
     <string name="pref_notifications_priority">Προτεραιότητα</string>
-    <string name="pref_led_color">Χρώμα LED</string>
     <string name="pref_sound">Ήχος</string>
     <string name="pref_silent">Σε σίγαση</string>
     <string name="pref_privacy">Ιδιωτικότητα</string>
-    <string name="pref_chats_and_media">Chats and media</string>
     <string name="pref_system_default">Προκαθορισμένο του συστήματος</string>
     <!-- Translators: "light" in the meaning "opposite of dark" -->
     <string name="pref_light_theme">Φωτεινό</string>
@@ -180,22 +138,15 @@
     <string name="pref_appearance">Εμφάνιση</string>
     <string name="pref_theme">Θέμα</string>
     <string name="pref_language">Γλώσσα</string>
-    <string name="pref_incognito_keyboard">Κρυφό πληκτρολόγιο</string>
     <!-- Translators: Keep in mind that this is a Request - it must be clear in the wording that this cannot be enforced. -->
     <string name="pref_incognito_keyboard_explain">Αίτηση πληκτρολογίου για να απενεργοποιηθεί η προσωποποιημένη εκμάθηση</string>
-    <string name="pref_read_receipts">Αποδεικτικά ανάγνωσης</string>
     <string name="pref_read_receipts_explain">Αν τα αποδεικτικά ανάγνωσης είναι απενεργοποιημένα, δε θα μπορείς να δεις αποδεικτικά ανάγνωσης από άλλους/ες.</string>
-    <string name="pref_use_system_emoji">Χρήση emoji συστήματος</string>
     <string name="pref_use_system_emoji_explain">Απενεργοποίηση της ενσωματωμένης υποστήριξης για emoji του Delta Chat</string>
-    <string name="pref_app_access">Πρόσβαση εφαρμογής</string>
     <string name="pref_communication">Επικοινωνία</string>
     <string name="pref_chats">Συνομιλίες</string>
-    <string name="pref_in_chat_sounds">Ήχοι μέσα στη συνομιλία</string>
-    <string name="pref_message_text_size">Μέγεθος γραμματοσειράς μηνύματος</string>
     <string name="pref_other">Άλλο</string>
     <string name="pref_show_emails_all">Όλα</string>
     <string name="autocrypt_continue_transfer_retry">Επανάληψη</string>
-    <string name="notify_mark_read">Σημείωση ως αναγνωσμένο</string>
     <string name="notify_reply_button">Απάντηση</string>
     <string name="notify_new_message">Νέο μήνυμα</string>
     <string name="notify_priority_high">Υψηλή</string>
@@ -212,10 +163,7 @@
     <string name="global_menu_file_desktop">Αρχείο</string>
     <string name="global_menu_edit_desktop">Eπεξεργασία</string>
     <string name="global_menu_help_desktop">Βοήθεια</string>
-    <string name="delete_message_desktop">Διαγραφή μηνύματος</string>
-    <string name="more_info_desktop">Περισσότερες πληροφορίες</string>
     <string name="remove_desktop">Αφαίρεση</string>
     <string name="save_desktop">Αποθήκευση</string>
-    <string name="reply_to_message_desktop">Απάντηση στο μήνυμα</string>
     <string name="none_blocked_desktop">Καμία φραγμένη επαφή</string>
     </resources>
