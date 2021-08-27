@@ -24,7 +24,9 @@ import { EventId2EventName as eventStrings } from 'deltachat-node/dist/constants
 import { VERSION, BUILD_TIMESTAMP } from '../../shared/build-info'
 import { Timespans, DAYS_UNTIL_UPDATE_SUGGESTION } from '../../shared/constants'
 import { Context } from 'deltachat-node/dist/context'
-import { join } from 'path'
+import path, { join } from 'path'
+import { existsSync, fstat } from 'fs'
+import { stat, rename, readdir} from 'fs/promises'
 
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat')
@@ -41,6 +43,7 @@ export default class DeltaChatController extends EventEmitter {
   /**
    * Created and owned by ipc on the backend
    */
+  cwd: string = undefined
   dc: DeltaChat = undefined
   selectedAccountContext: Context = undefined
   selectedAccountId: number | null = null
@@ -52,25 +55,88 @@ export default class DeltaChatController extends EventEmitter {
 
   ready = false // used for the about screen
   _sendStateToRenderer: () => void
-  constructor(public cwd: string) {
+  constructor(cwd: string) {
     super()
-    this._resetState()
-    setInterval(
-      // If the dc is always on
-      this.hintUpdateIfNessesary.bind(this),
-      Timespans.ONE_DAY_IN_SECONDS * 1000
-    )
-
-    log.debug('Initiating DeltaChatNode')
-    this.dc = new DeltaChatNode(cwd, 'deltachat-desktop')
-    log.debug('Starting event handler')
-    this.registerEventHandler(this.dc)
+    this.cwd = cwd
 
     this.onAll = this.onAll.bind(this)
     this.onChatlistUpdated = this.onChatlistUpdated.bind(this)
     this.onMsgsChanged = this.onMsgsChanged.bind(this)
     this.onIncomingMsg = this.onIncomingMsg.bind(this)
     this.onChatModified = this.onChatModified.bind(this)
+  }
+
+  async init() {
+    this._resetState()
+
+    await this.migrateToAccountsApiIfNeeded()
+
+    setInterval(
+      // If the dc is always on
+      this.hintUpdateIfNessesary.bind(this),
+      Timespans.ONE_DAY_IN_SECONDS * 1000
+    )
+
+
+    log.debug('Initiating DeltaChatNode')
+    this.dc = new DeltaChatNode(this.cwd, 'deltachat-desktop')
+
+
+
+    log.debug('Starting event handler')
+    this.registerEventHandler(this.dc)
+  }
+
+  async migrateToAccountsApiIfNeeded() {
+    const new_accounts_format = existsSync(path.join(this.cwd, 'accounts.toml'))
+
+    if(new_accounts_format) return
+
+    log.info('migrateToAccountsApiIfNeeded: found old accounts format, we need to migrate.')
+
+    const path_accounts_old = join(this.cwd, '..', 'accounts_old')
+
+    // this is the same as this.cwd, but for clarity added ../accounts
+    const path_accounts = join(this.cwd, '..', 'accounts')
+ 
+    // First, rename accounts folder to accounts_old
+    await rename(path_accounts, path_accounts_old)
+
+    // Next, open temporary dc instance
+    const tmp_dc = new DeltaChat(path_accounts)
+    this.registerEventHandler(tmp_dc)
+
+
+    // Next, iterate over all folders in accounts_old
+    let i = 0
+    for (const entry of await readdir(path_accounts_old)) {
+      const stat_result = await stat(join(path_accounts_old, entry))
+      if (!stat_result.isDirectory()) continue
+
+      const path_dbfile = path.join(path_accounts_old, entry, 'db.sqlite')
+      if (!existsSync(path_dbfile)) {
+        log.warn('migrateToAccountsApiIfNeeded: found an old accounts folder without a db.sqlite file, skipping')
+        continue
+      }
+
+      const account_id = tmp_dc.migrateAccount(path_dbfile)
+      if (account_id == 0) {
+        log.error(`migrateToAccountsApiIfNeeded: Failed to migrate account at path "${path_dbfile}"`)
+      }
+    }
+
+    tmp_dc.close()
+    // Clear some settings that we cant migrate
+    app.saveState({
+      saved: {
+        ...app.state.saved,
+        lastAccount: -1,
+        lastChats: {}
+      }
+    })
+
+    console.log(app.state.saved)
+
   }
 
   readonly autocrypt = new DCAutocrypt(this)

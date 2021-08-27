@@ -82,7 +82,7 @@ Promise.all([
     process.exit(1)
   })
 
-function onReady([_appReady, loadedState]: [
+async function onReady([_appReady, loadedState]: [
   //DeltaChatAccount[],
   any,
   AppState
@@ -99,7 +99,7 @@ function onReady([_appReady, loadedState]: [
 
   const cwd = getAccountsPath()
   log.info(`cwd ${cwd}`)
-  ipc.init(cwd, logHandler)
+  await ipc.init(cwd, logHandler)
 
   mainWindow.init(app, { hidden: app.rc['minimized'] })
   initMenu(logHandler)
