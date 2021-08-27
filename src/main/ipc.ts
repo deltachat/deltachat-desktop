@@ -27,9 +27,10 @@ const DeltaChatController: typeof import('./deltachat/controller').default = (()
 
 const app = rawApp as ExtendedAppMainProcess
 
-export function init(cwd: string, logHandler: LogHandler) {
+export async function init(cwd: string, logHandler: LogHandler) {
   const main = mainWindow
   const dcController = new DeltaChatController(cwd)
+  await dcController.init()
 
   ipcMain.once('ipcReady', _e => {
     app.ipcReady = true
