@@ -351,9 +351,9 @@ function AccountSelection({
 
 function AccountItem({
   login,
-  removeAccount
+  removeAccount,
 }: {
-  login: DeltaChatAccount,
+  login: DeltaChatAccount
   removeAccount: (account: DeltaChatAccount) => void
 }) {
   const removeAction = (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

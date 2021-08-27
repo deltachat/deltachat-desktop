@@ -121,7 +121,6 @@ const ChatListItemNormal = React.memo<ChatListItemProps>(props => {
   )
 })
 
-
 type ChatListItemProps = {
   chatListItem: ChatListItemType
   onClick: () => void

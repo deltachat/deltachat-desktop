@@ -26,7 +26,7 @@ import { Timespans, DAYS_UNTIL_UPDATE_SUGGESTION } from '../../shared/constants'
 import { Context } from 'deltachat-node/dist/context'
 import path, { join } from 'path'
 import { existsSync, fstat } from 'fs'
-import { stat, rename, readdir} from 'fs/promises'
+import { stat, rename, readdir } from 'fs/promises'
 
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat')
@@ -77,11 +77,8 @@ export default class DeltaChatController extends EventEmitter {
       Timespans.ONE_DAY_IN_SECONDS * 1000
     )
 
-
     log.debug('Initiating DeltaChatNode')
     this.dc = new DeltaChatNode(this.cwd, 'deltachat-desktop')
-
-
 
     log.debug('Starting event handler')
     this.registerEventHandler(this.dc)
@@ -90,22 +87,23 @@ export default class DeltaChatController extends EventEmitter {
   async migrateToAccountsApiIfNeeded() {
     const new_accounts_format = existsSync(path.join(this.cwd, 'accounts.toml'))
 
-    if(new_accounts_format) return
+    if (new_accounts_format) return
 
-    log.info('migrateToAccountsApiIfNeeded: found old accounts format, we need to migrate.')
+    log.info(
+      'migrateToAccountsApiIfNeeded: found old accounts format, we need to migrate.'
+    )
 
     const path_accounts_old = join(this.cwd, '..', 'accounts_old')
 
     // this is the same as this.cwd, but for clarity added ../accounts
     const path_accounts = join(this.cwd, '..', 'accounts')
- 
+
     // First, rename accounts folder to accounts_old
     await rename(path_accounts, path_accounts_old)
 
     // Next, open temporary dc instance
     const tmp_dc = new DeltaChat(path_accounts)
     this.registerEventHandler(tmp_dc)
-
 
     // Next, iterate over all folders in accounts_old
     let i = 0
@@ -115,13 +113,17 @@ export default class DeltaChatController extends EventEmitter {
 
       const path_dbfile = path.join(path_accounts_old, entry, 'db.sqlite')
       if (!existsSync(path_dbfile)) {
-        log.warn('migrateToAccountsApiIfNeeded: found an old accounts folder without a db.sqlite file, skipping')
+        log.warn(
+          'migrateToAccountsApiIfNeeded: found an old accounts folder without a db.sqlite file, skipping'
+        )
         continue
       }
 
       const account_id = tmp_dc.migrateAccount(path_dbfile)
       if (account_id == 0) {
-        log.error(`migrateToAccountsApiIfNeeded: Failed to migrate account at path "${path_dbfile}"`)
+        log.error(
+          `migrateToAccountsApiIfNeeded: Failed to migrate account at path "${path_dbfile}"`
+        )
       }
     }
 
@@ -131,12 +133,11 @@ export default class DeltaChatController extends EventEmitter {
       saved: {
         ...app.state.saved,
         lastAccount: -1,
-        lastChats: {}
-      }
+        lastChats: {},
+      },
     })
 
     console.log(app.state.saved)
-
   }
 
   readonly autocrypt = new DCAutocrypt(this)
@@ -234,8 +235,14 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   onAll(event: string, accountId: number, data1: any, data2: any) {
-    
-    console.log('hallo from desktop', this.sendToRenderer, event, accountId, data1, data2)
+    console.log(
+      'hallo from desktop',
+      this.sendToRenderer,
+      event,
+      accountId,
+      data1,
+      data2
+    )
     if (event === 'DC_EVENT_WARNING') {
       logCoreEvent.warn(event, data1, data2)
     } else if (event === 'DC_EVENT_INFO') {
@@ -248,7 +255,8 @@ export default class DeltaChatController extends EventEmitter {
     }
 
     console.log('sending to renderer')
-    if (accountId === this.selectedAccountId) this.sendToRenderer(event, [data1, data2])
+    if (accountId === this.selectedAccountId)
+      this.sendToRenderer(event, [data1, data2])
   }
 
   onMsgsChanged(accountId: number, chatId: number, _msgId: number) {
@@ -277,7 +285,6 @@ export default class DeltaChatController extends EventEmitter {
     dc.on('DC_EVENT_MSGS_CHANGED', this.onMsgsChanged)
     dc.on('DC_EVENT_INCOMING_MSG', this.onIncomingMsg)
     dc.on('DC_EVENT_CHAT_MODIFIED', this.onChatModified)
-    
   }
 
   unregisterEventHandler(dc: DeltaChat) {

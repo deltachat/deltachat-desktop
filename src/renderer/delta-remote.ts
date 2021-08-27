@@ -303,6 +303,8 @@ class DeltaRemote {
   }>
   // context ------------------------------------------------------------
   call(fnName: 'context.maybeNetwork'): Promise<void>
+  call(fnName: 'context.getConnectivity'): Promise<number>
+  call(fnName: 'context.getConnectivityHTML'): Promise<string>
   // burner accounts ------------------------------------------------------------
   call(
     fnName: 'burnerAccounts.create',

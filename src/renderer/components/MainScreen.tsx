@@ -29,7 +29,7 @@ import {
 import { getLastSelectedChatId } from '../ipc'
 import { useKeyBindingAction, KeybindAction } from '../keybindings'
 import { Avatar } from './Avatar'
-import OfflineToast from './OfflineToast'
+import ConnectivityToast from './ConnectivityToast'
 import { C } from 'deltachat-node/dist/constants'
 import MapComponent from './map/MapComponent'
 import MessageListProfile from './dialogs/MessageListProfile'
@@ -261,7 +261,7 @@ export default function MainScreen() {
         />
         {MessageListView}
       </div>
-      <OfflineToast />
+      <ConnectivityToast />
     </div>
   )
 }
