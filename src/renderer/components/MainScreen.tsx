@@ -8,7 +8,7 @@ import {
 import Gallery from './Gallery'
 import Menu from './Menu'
 import ChatList from './chat/ChatList'
-import MessageListAndComposer from './message/MessageListAndComposer'
+import MessageListAndComposer, { getBackgroundImageStyle } from './message/MessageListAndComposer'
 import SearchInput from './SearchInput'
 import { useChatStore } from '../stores/chat'
 import {
@@ -107,9 +107,21 @@ export default function MainScreen() {
         MessageListView = <MessageListAndComposer chat={selectedChat} />
     }
   } else {
+    const settings = useContext(SettingsContext).desktopSettings
+    const style: React.CSSProperties = getBackgroundImageStyle(settings)
+
     MessageListView = (
-      <div className='no-chat-selected-screen'>
-        <h2>{tx('no_chat_selected_suggestion_desktop')}</h2>
+      <div
+        className='message-list-and-composer'
+        style={style}
+      >
+        <div className='message-list-and-composer__message-list'></div>
+          <li>
+            <div className='info-message big'>
+              <p>{tx('no_chat_selected_suggestion_desktop')}</p>
+            </div>
+          </li>
+        <h2></h2>
       </div>
     )
   }

@@ -381,6 +381,8 @@
   }
 
   &.big > p {
+    position: relative;
+    top: -33vh;
     max-width: 550px;
     font-size: 1rem;
     padding: 2rem;
