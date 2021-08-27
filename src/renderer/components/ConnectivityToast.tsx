@@ -134,12 +134,12 @@ export default function ConnectivityToast() {
     )}
     {networkState[0] === Connectivity.CONNECTING && (
       <div className='ConnectivityToast'>
-        Connecting
+        {tx('connectivity_connecting')}
       </div>
     )}
     {networkState[0] === Connectivity.WORKING && (
       <div className='ConnectivityToast'>
-        Working
+        {tx('connectivity_updating')}
       </div>
     )}
   </>
