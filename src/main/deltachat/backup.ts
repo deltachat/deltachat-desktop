@@ -40,15 +40,18 @@ export default class DCBackup extends SplitOut {
 
   import(file: string): Promise<DeltaChatAccount> {
     return new Promise((resolve, reject) => {
+      this.dc.stopIO()
       const accountId = this.dc.addAccount()
       const dcnContext = this.dc.accountContext(accountId)
 
       const onFail = (reason: String) => {
         this.dc.removeAccount(accountId)
+        this.dc.startIO()
         reject(reason)
       }
 
       const onSuccess = () =>
+      this.dc.startIO()
         resolve(this.controller.login.accountInfo(accountId))
 
       this.controller.on(

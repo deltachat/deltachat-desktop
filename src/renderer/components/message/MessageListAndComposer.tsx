@@ -7,8 +7,29 @@ import { SettingsContext, ScreenContext } from '../../contexts'
 import { C } from 'deltachat-node/dist/constants'
 import { ChatStoreState } from '../../stores/chat'
 import ComposerMessageInput from '../composer/ComposerMessageInput'
+import { DesktopCapturer } from 'electron'
+import { DesktopSettings } from '../../../shared/shared-types'
 
 const log = getLogger('renderer/MessageListAndComposer')
+
+export function getBackgroundImageStyle(settings: DesktopSettings):  React.CSSProperties {
+  const style: React.CSSProperties = {
+    backgroundSize: 'cover',
+  }
+  const bgImg = settings['chatViewBgImg']
+  if (bgImg) {
+    if (bgImg && bgImg.indexOf('url') !== -1) {
+      style.backgroundImage = `url("file://${bgImg.slice(
+        5,
+        bgImg.length - 2
+      )}")`
+    } else {
+      style.backgroundColor = bgImg
+      style.backgroundImage = 'none'
+    }
+  }
+  return style
+}
 
 export default function MessageListAndComposer({
   chat,
@@ -158,21 +179,7 @@ export default function MessageListAndComposer({
   })(chat)
 
   const settings = useContext(SettingsContext).desktopSettings
-  const style: React.CSSProperties = {
-    backgroundSize: 'cover',
-  }
-  const bgImg = settings['chatViewBgImg']
-  if (bgImg) {
-    if (bgImg && bgImg.indexOf('url') !== -1) {
-      style.backgroundImage = `url("file://${bgImg.slice(
-        5,
-        bgImg.length - 2
-      )}")`
-    } else {
-      style.backgroundColor = bgImg
-      style.backgroundImage = 'none'
-    }
-  }
+  const style = getBackgroundImageStyle(settings)
 
   return (
     <div
