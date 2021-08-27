@@ -5,24 +5,22 @@ import { onDCEvent } from '../ipc'
 import { getLogger } from '../../shared/logger'
 import { useTranslationFunction } from '../contexts'
 import { useKeyBindingAction, KeybindAction } from '../keybindings'
+import { C } from 'deltachat-node/dist/constants'
 
 import { debounce } from 'debounce'
 
-const log = getLogger('renderer/components/OfflineToast')
+const log = getLogger('renderer/components/ConnectivityToast')
 
-// Array holding all events on which we know that we have some online connectivity
-const DC_NETWORK_SUCCESS_EVENTS = [
-  'DC_EVENT_SMTP_CONNECTED',
-  'DC_EVENT_IMAP_CONNECTED',
-  'DC_EVENT_INCOMING_MSG',
-  'DC_EVENT_MSG_DELIVERED',
-  'DC_EVENT_IMAP_MESSAGE_MOVED',
-  'DC_EVENT_IMAP_MESSAGE_DELETED',
-]
+enum Connectivity {
+  NOT_CONNECTED,
+  CONNECTING,
+  WORKING,
+  CONNECTED
+}
 
-export default function OfflineToast() {
-  const [networkState, setNetworkState]: [[boolean, string], todo] = useState([
-    true,
+export default function ConnectivityToast() {
+  const [networkState, setNetworkState]: [[Connectivity, string], todo] = useState([
+    Connectivity.CONNECTED,
     '',
   ])
   const [tryConnectCooldown, setTryConnectCooldown] = useState(true)
@@ -34,7 +32,7 @@ export default function OfflineToast() {
 
   const onBrowserOffline = () => {
     log.debug("Browser knows we're offline")
-    setNetworkState(() => [false, "Browser knows we're offline"])
+    setNetworkState(() => [Connectivity.NOT_CONNECTED, "Browser knows we're offline"])
   }
 
   const tryMaybeNetworkIfOfflineAfterXms = useCallback(
@@ -42,8 +40,8 @@ export default function OfflineToast() {
       setTimeout(() => {
         // This is a hack to get the current network state by abusing the setNetworkState function.
         // Not pretty but works.
-        setNetworkState(([online, error]: [boolean, string]) => {
-          if (!online) {
+        setNetworkState(([connectivity, error]: [Connectivity, string]) => {
+          if (connectivity === Connectivity.NOT_CONNECTED) {
             log.debug(
               `We are still not online after ${ms}  milli seconds, try maybeNetwork again`
             )
@@ -57,7 +55,7 @@ export default function OfflineToast() {
           }
 
           // Keep state unchanged
-          return [online, error]
+          return [connectivity, error]
         })
       }, ms)
     },
@@ -66,18 +64,28 @@ export default function OfflineToast() {
 
   const onBrowserOnline = useCallback(() => {
     log.debug("Browser thinks we're back online, telling rust core")
-    setNetworkState(() => [true, "Browser thinks we're online"])
+    setNetworkState(() => [Connectivity.CONNECTED, "Browser thinks we're online"])
     maybeNetwork()
 
     tryMaybeNetworkIfOfflineAfterXms(150)
   }, [tryMaybeNetworkIfOfflineAfterXms, maybeNetwork])
 
-  const onDeltaNetworkError = (data1: string, data2: string) => {
-    setNetworkState(() => [false, data1 + data2])
-  }
-
-  const onDeltaNetworkSuccess = () => {
-    setNetworkState(() => [true, ''])
+  const onConnectivityChanged = async (_data1: any, _data2: any) => {
+    const connectivity = await DeltaBackend.call('context.getConnectivity')
+    
+    if (connectivity >= C.DC_CONNECTIVITY_CONNECTED) {
+      log.debug("Core thinks we're back online and connected")
+      setNetworkState(() => [Connectivity.CONNECTED, "Core thinks we're connected"])
+    } else if (connectivity >= C.DC_CONNECTIVITY_WORKING) {
+      log.debug("Core thinks we're back online and connected")
+      setNetworkState(() => [Connectivity.WORKING, "Core thinks we're connected and working"])    
+    } else if (connectivity >= C.DC_CONNECTIVITY_CONNECTING) {
+      log.debug("Core thinks we're back online and connected")
+      setNetworkState(() => [Connectivity.CONNECTING, "Core thinks we're connecting"])
+    } else if (connectivity >= C.DC_CONNECTIVITY_NOT_CONNECTED) {
+      log.debug("Core thinks we're not connected")
+      setNetworkState(() => [Connectivity.NOT_CONNECTED, "Core thinks we're not connected"])
+    }
   }
 
   useKeyBindingAction(KeybindAction.Debug_MaybeNetwork, maybeNetwork)
@@ -88,22 +96,18 @@ export default function OfflineToast() {
     window.addEventListener('online', onBrowserOnline)
     window.addEventListener('offline', onBrowserOffline)
     window.addEventListener('focus', maybeNetwork)
-    const removeEventListenerDCNetworkError = onDCEvent(
-      'DC_EVENT_ERROR_NETWORK',
-      onDeltaNetworkError
-    )
-    const removeEventListenerDCNetworkSuccess = onDCEvent(
-      DC_NETWORK_SUCCESS_EVENTS,
-      onDeltaNetworkSuccess
+
+    const removeOnConnectivityChanged = onDCEvent(
+      'DC_EVENT_CONNECTIVITY_CHANGED',
+      onConnectivityChanged
     )
 
     return () => {
-      window.removeEventListener('online', onBrowserOffline)
-      window.removeEventListener('offline', onBrowserOnline)
+      window.removeEventListener('online', onBrowserOnline)
+      window.removeEventListener('offline', onBrowserOffline)
       window.removeEventListener('focus', maybeNetwork)
 
-      removeEventListenerDCNetworkError()
-      removeEventListenerDCNetworkSuccess()
+      removeOnConnectivityChanged()
     }
   }, [onBrowserOnline, maybeNetwork])
 
@@ -115,9 +119,10 @@ export default function OfflineToast() {
 
   const tx = useTranslationFunction()
 
-  return (
-    networkState[0] === false && (
-      <div className='OfflineToast'>
+  console.log('xxx', networkState)
+  return <>
+    {networkState[0] === Connectivity.NOT_CONNECTED && (
+      <div className='ConnectivityToast'>
         <a title={networkState[1]}>{tx('offline')}</a>
         <div
           className={tryConnectCooldown ? '' : 'disabled'}
@@ -126,6 +131,16 @@ export default function OfflineToast() {
           {tx('try_connect_now')}
         </div>
       </div>
-    )
-  )
+    )}
+    {networkState[0] === Connectivity.CONNECTING && (
+      <div className='ConnectivityToast'>
+        Connecting
+      </div>
+    )}
+    {networkState[0] === Connectivity.WORKING && (
+      <div className='ConnectivityToast'>
+        Working
+      </div>
+    )}
+  </>
 }

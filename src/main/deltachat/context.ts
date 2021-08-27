@@ -9,4 +9,12 @@ export default class DCContext extends SplitOut {
   getAccountDir() {
     return join(this.selectedAccountContext.getBlobdir(), '..')
   }
+
+  getConnectivity() {
+    return this.selectedAccountContext.getConnectivity()
+  }
+
+  getConnectivityHTML() {
+    return this.selectedAccountContext.getConnectivityHTML()
+  }
 }

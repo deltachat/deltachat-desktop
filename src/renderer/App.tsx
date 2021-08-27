@@ -71,7 +71,7 @@ export default function App(_props: any) {
 
   const removeAccount = async (accountId: number) => {
     await DeltaBackend.call('login.removeAccount', accountId)
-  } 
+  }
 
   useLayoutEffect(() => {
     startBackendLogging()
@@ -116,7 +116,11 @@ export default function App(_props: any) {
     <CrashScreen>
       <SettingsContextWrapper account={account}>
         <i18nContext.Provider value={window.static_translate}>
-          <ScreenController account={account} selectAccount={selectAccount} removeAccount={removeAccount} />
+          <ScreenController
+            account={account}
+            selectAccount={selectAccount}
+            removeAccount={removeAccount}
+          />
         </i18nContext.Provider>
       </SettingsContextWrapper>
     </CrashScreen>

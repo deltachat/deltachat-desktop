@@ -146,11 +146,11 @@ https://delta.chat/en/2021-05-05-email-compat` as any
     const accountIds: number[] = this.dc.accounts()
 
     const accounts: DeltaChatAccount[] = new Array(accountIds.length)
-    
-    for(let i = 0; i < accountIds.length; i++) {
+
+    for (let i = 0; i < accountIds.length; i++) {
       accounts[i] = await this.accountInfo(accountIds[i])
     }
-    
+
     return accounts
   }
 

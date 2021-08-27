@@ -190,7 +190,7 @@ export type MessageSearchResult = {
 }
 
 export type DeltaChatAccount = {
-  accountId: number,
+  accountId: number
   displayname: string
   addr: string
   size: number
