@@ -24,6 +24,7 @@ import SettingsProfile, { SettingsEditProfile } from './Settings-Profile'
 import { getLogger } from '../../../shared/logger'
 import SettingsCommunication from './Settings-Communication'
 import { runtime } from '../../runtime'
+import SettingsConnectivity from './Settings-Connectivity'
 
 const log = getLogger('renderer/dialogs/Settings')
 
@@ -126,7 +127,10 @@ export default function Settings(props: DialogProps) {
     })
   }
 
-  const setShow = (show: string) => setState({ show })
+  const setShow = (show: string) => {
+    log.debug('Setting show to ' + show)
+    setState({ show })
+  }
   const { desktopSettings, setDesktopSetting } = useContext(SettingsContext)
 
   const tx = useTranslationFunction()
@@ -311,7 +315,7 @@ export default function Settings(props: DialogProps) {
               {renderDeltaSwitch('mvbox_move', tx('pref_auto_folder_moves'))}
             </Card>
             <SettingsManageKeys />
-            <SettingsBackup />
+            <SettingsBackup />            
           </DeltaDialogBody>
           <DeltaDialogCloseFooter onClose={onClose} />
         </>
@@ -329,6 +333,14 @@ export default function Settings(props: DialogProps) {
     } else if (state.show === 'login') {
       return (
         <SettingsAccount
+          show={state.show}
+          setShow={setShow}
+          onClose={props.onClose}
+        />
+      )
+    } else if (state.show === 'connectivity') {
+      return (
+        <SettingsConnectivity
           show={state.show}
           setShow={setShow}
           onClose={props.onClose}
@@ -380,6 +392,8 @@ export default function Settings(props: DialogProps) {
     title = tx('pref_password_and_account_settings')
   } else if (state.show === 'edit-profile') {
     title = tx('pref_edit_profile')
+  } else if (state.show === 'connectivity') {
+    title = tx('connectivity')
   }
 
   return (

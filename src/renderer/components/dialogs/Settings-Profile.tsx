@@ -9,6 +9,8 @@ import { DeltaInput } from '../Login-Styles'
 import { DeltaDialogBody, DeltaDialogOkCancelFooter } from './DeltaDialog'
 import { SettingsButton } from './Settings'
 import { runtime } from '../../runtime'
+import { C } from 'deltachat-node/dist/constants'
+import { onDCEvent } from '../../ipc'
 
 export default function SettingsProfile({
   setShow,
@@ -22,10 +24,34 @@ export default function SettingsProfile({
   state: any
 }) {
   const [profileImagePreview, setProfileImagePreview] = useState('')
+  const [connectivityString, setConnectivityString] = useState('')
+
+
+  const updateConnectivity = async () => {
+    const connectivity = await DeltaBackend.call('context.getConnectivity')
+  
+    let connectivityString = ''
+    if (connectivity >= C.DC_CONNECTIVITY_CONNECTED) {
+      connectivityString = window.static_translate('connectivity_connected')
+    } else if (connectivity >= C.DC_CONNECTIVITY_WORKING) {
+      connectivityString = window.static_translate('connectivity_updating').replace('…', '')
+    } else if (connectivity >= C.DC_CONNECTIVITY_CONNECTING) {
+      connectivityString = window.static_translate('connectivity_connecting').replace('…', '')
+    } else if (connectivity >= C.DC_CONNECTIVITY_NOT_CONNECTED) {
+      connectivityString = window.static_translate('connectivity_not_connected')
+    }
+    setConnectivityString(`(${connectivityString})`)
+  }
 
   const initial = avatarInitial(account.displayname, account.addr)
   useEffect(() => {
+    updateConnectivity()
+
     DeltaBackend.call('getProfilePicture').then(setProfileImagePreview)
+    return onDCEvent(
+      'DC_EVENT_CONNECTIVITY_CHANGED',
+      updateConnectivity
+    )
     // return nothing because reacts wants it like that
   }, [profileImagePreview])
   const tx = useTranslationFunction()
@@ -58,6 +84,9 @@ export default function SettingsProfile({
         </SettingsButton>
         <SettingsButton onClick={() => setShow('login')}>
           {tx('pref_password_and_account_settings')}
+        </SettingsButton>
+        <SettingsButton onClick={() => setShow('connectivity')}>
+          {tx('connectivity') + ' ' + connectivityString}
         </SettingsButton>
       </Card>
     </>
