@@ -163,6 +163,8 @@ class DeltaRemote {
     ephemeralTimer: number
   ): Promise<void>
   call(fnName: 'chat.sendVideoChatInvitation', chatId: number): Promise<number>
+  call(fnName: 'chat.accept', chatId: number): Promise<void>
+  call(fnName: 'chat.block', chatId: number): Promise<void>
   // locations ----------------------------------------------------------
   call(
     fnName: 'locations.setLocation',

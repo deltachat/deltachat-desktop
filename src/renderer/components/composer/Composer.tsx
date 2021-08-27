@@ -23,6 +23,7 @@ import { Quote } from '../message/Message'
 import { DeltaBackend, sendMessageParams } from '../../delta-remote'
 import { DraftAttachment } from '../attachment/messageAttachment'
 import { runtime } from '../../runtime'
+import { unselectChat } from '../helpers/ChatMethods'
 
 const log = getLogger('renderer/composer')
 
@@ -55,6 +56,7 @@ const Composer = forwardRef<
   {
     isDisabled: boolean
     disabledReason: string
+    isContactRequest: boolean
     chatId: number
     messageInputRef: React.MutableRefObject<ComposerMessageInput>
     draftState: DraftObject
@@ -68,6 +70,7 @@ const Composer = forwardRef<
   const {
     isDisabled,
     disabledReason,
+    isContactRequest,
     chatId,
     messageInputRef,
     draftState,
@@ -199,7 +202,18 @@ const Composer = forwardRef<
     messageInputRef.current?.focus()
   }, [chatId, messageInputRef])
 
-  if (isDisabled) {
+  if (isContactRequest) {
+    return (
+      <div ref={ref} className='composer contact-request'>
+        <div className='contact-request-button delete' onClick={() => { DeltaBackend.call('chat.delete', chatId); unselectChat()}}>
+          {tx('delete')}
+        </div>
+        <div className='contact-request-button accept' onClick={() => DeltaBackend.call('chat.accept', chatId)}>
+          {tx('accept')}
+        </div>
+      </div>
+    )
+  } else if (isDisabled) {
     if (disabledReason) {
       return (
         <div ref={ref} className='composer composer--disabled-message-input'>

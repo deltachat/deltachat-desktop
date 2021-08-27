@@ -12,7 +12,7 @@ const log = getLogger('renderer/message')
 
 type Chat = ChatListItemType | FullChat
 
-const unselectChat = () => {
+export const unselectChat = () => {
   chatStore.dispatch({ type: 'UI_UNSELECT_CHAT' })
 }
 

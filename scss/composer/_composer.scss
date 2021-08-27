@@ -12,6 +12,24 @@
     }
   }
 
+  &.contact-request {
+    display: flex;
+    justify-content: space-around;
+    padding: 15px 0px;
+
+    & > .contact-request-button {     
+      background-color: var(--chatListItemSelectedBg);
+      border-radius: 10px;
+      padding: 10px 15px;
+      color: #fff;
+      text-transform: uppercase;
+      font-weight: bold;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
   .upper-bar {
     & > .attachment-quote-section {
       display: flex;

@@ -296,7 +296,7 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   onChatlistUpdated() {
-    this.sendToRenderer('DD_EVENT_CHATLIST_CHANGED')
+    this.sendToRenderer('DD_EVENT_CHATLIST_CHANGED', {})
   }
 
   updateBlockedContacts() {
