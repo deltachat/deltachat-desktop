@@ -40,7 +40,7 @@ const Header = React.memo(
 
 const Message = React.memo(
   ({ chatListItem }: { chatListItem: ChatListItemType }) => {
-    const { summary, freshMessageCounter, archived } = chatListItem
+    const { summary, freshMessageCounter, archived, isContactRequest } = chatListItem
     if (!summary) return null
 
     return (
@@ -58,11 +58,16 @@ const Message = React.memo(
           <MessageBody text={summary.text2 || ''} disableJumbomoji preview />
         </div>
         {archived && (
-          <div className='archived-label'>
+          <div className='label'>
             {window.static_translate('chat_archived_label')}
           </div>
         )}
-        {!archived && summary.status && (
+        {isContactRequest && (
+          <div className='label'>
+            {window.static_translate('chat_request_label')}
+          </div>
+        )}
+        {!archived && !isContactRequest && summary.status && (
           <div className={classNames('status-icon', summary.status)} />
         )}
         <FreshMessageCounter counter={freshMessageCounter} />

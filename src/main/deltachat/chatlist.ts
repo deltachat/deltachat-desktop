@@ -76,11 +76,6 @@ export default class DCChatList extends SplitOut {
     const chat = await this._getChatById(chatId)
     if (chat === null) return null
 
-    let deaddrop
-    if (chat.isContactRequest) {
-      deaddrop = this.controller.messageList.getMessage(messageId)
-    }
-
     const summary = this.selectedAccountContext
       .getChatlistItemSummary(chatId, messageId)
       .toJson()
@@ -103,12 +98,12 @@ export default class DCChatList extends SplitOut {
         text2: summary.text2,
         status: mapCoreMsgStatus2String(summary.state),
       },
-      deaddrop,
       isProtected: chat.isProtected,
       isGroup: isGroup,
       freshMessageCounter: this.selectedAccountContext.getFreshMessageCount(
         chatId
       ),
+      isContactRequest: chat.isContactRequest,
       isArchiveLink: chat.id === C.DC_CHAT_ID_ARCHIVED_LINK,
       contactIds,
       isSelfTalk: chat.isSelfTalk,
