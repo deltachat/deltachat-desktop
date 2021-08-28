@@ -17,6 +17,9 @@ export function getBackgroundImageStyle(
   const style: React.CSSProperties = {
     backgroundSize: 'cover',
   }
+
+  if (!settings) return style
+
   const bgImg = settings['chatViewBgImg']
   if (bgImg) {
     if (bgImg && bgImg.indexOf('url') !== -1) {
