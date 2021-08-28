@@ -7,12 +7,13 @@ import { SettingsContext, ScreenContext } from '../../contexts'
 import { C } from 'deltachat-node/dist/constants'
 import { ChatStoreState } from '../../stores/chat'
 import ComposerMessageInput from '../composer/ComposerMessageInput'
-import { DesktopCapturer } from 'electron'
 import { DesktopSettings } from '../../../shared/shared-types'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
-export function getBackgroundImageStyle(settings: DesktopSettings):  React.CSSProperties {
+export function getBackgroundImageStyle(
+  settings: DesktopSettings
+): React.CSSProperties {
   const style: React.CSSProperties = {
     backgroundSize: 'cover',
   }

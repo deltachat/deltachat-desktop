@@ -2,7 +2,6 @@ import React from 'react'
 import debounce from 'debounce'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { getLogger } from '../../../shared/logger'
-import LoginForm from '../LoginForm'
 
 const log = getLogger('renderer/composer/ComposerMessageInput')
 
@@ -74,7 +73,7 @@ export default class ComposerMessageInput extends React.Component<
   }
 
   setText(text: string) {
-    this.setState({ text, loadingDraft: false })          
+    this.setState({ text, loadingDraft: false })
   }
 
   setComposerSize(size: number) {
@@ -199,8 +198,6 @@ export default class ComposerMessageInput extends React.Component<
 
     this.setState({ text: updatedText })
   }
-
-  
 
   render() {
     log.debug('state', this.state)

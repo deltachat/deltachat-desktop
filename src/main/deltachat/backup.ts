@@ -44,15 +44,23 @@ export default class DCBackup extends SplitOut {
       const accountId = this.dc.addAccount()
       const dcnContext = this.dc.accountContext(accountId)
 
+      this.controller.selectedAccountId = accountId
+      this.controller.selectedAccountContext = dcnContext
+
       const onFail = (reason: String) => {
         this.dc.removeAccount(accountId)
+        this.controller.selectedAccountId = null
+        this.controller.selectedAccountContext = null
         this.dc.startIO()
         reject(reason)
       }
 
-      const onSuccess = () =>
-      this.dc.startIO()
+      const onSuccess = () => {
+        this.controller.selectedAccountId = null
+        this.controller.selectedAccountContext = null
+        this.dc.startIO()
         resolve(this.controller.login.accountInfo(accountId))
+      }
 
       this.controller.on(
         'DC_EVENT_IMEX_PROGRESS',

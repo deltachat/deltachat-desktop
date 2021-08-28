@@ -312,7 +312,7 @@ export type DraftObject = { chatId: number } & Pick<
 
 export function useDraft(
   chatId: number,
-  isContactRequest,
+  isContactRequest: boolean,
   inputRef: React.MutableRefObject<ComposerMessageInput>
 ): {
   draftState: DraftObject
