@@ -1,4 +1,5 @@
 import { getMessageFunction, LocaleData } from '../shared/localize'
+import { DesktopSettings } from '../shared/shared-types'
 
 import {
   OpenDialogFunctionType,
@@ -29,5 +30,6 @@ declare global {
     __settingsOpened: boolean
     __setQuoteInDraft: ((msgId: number) => void) | null
     __reloadDraft: () => {} | null
+    __desktopSettings: DesktopSettings | null
   }
 }

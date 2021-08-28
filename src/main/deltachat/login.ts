@@ -128,7 +128,6 @@ https://delta.chat/en/2021-05-05-email-compat` as any
   }
 
   async accountInfo(accountId: number): Promise<DeltaChatAccount> {
-    console.log(this)
     const accountContext = this.dc.accountContext(accountId)
     const selfContact = accountContext.getContact(C.DC_CONTACT_ID_SELF)
     return {
