@@ -242,6 +242,9 @@ export default class DeltaChatController extends EventEmitter {
       logCoreEvent.debug(event, data1, data2)
     }
 
+    this.emit('ALL', event, accountId, data1, data2)
+    this.emit(event, accountId, data1, data2)
+
     if (accountId === this.selectedAccountId) {
       this.sendToRenderer(event, [data1, data2])
     }

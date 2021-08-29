@@ -40,8 +40,9 @@ function ImportBackupProgressDialog({
     log.debug('ALL core events: ', eventName, data1, data2)
   }
   const onImexProgress = (_evt: any, [progress, _data2]: [number, any]) => {
-    log.debug('DC_EVENT_IMEX_PROGRESS xxx', progress)
     setImportProgress(progress)
+    if (progress === 1000) {
+    }
   }
 
   const onError = (_data1: any, data2: string) => {
@@ -54,6 +55,7 @@ function ImportBackupProgressDialog({
       try {
         account = await DeltaBackend.call('backup.import', backupFile)
       } catch (err) {
+        setError(err)
         return
       }
       onClose()
