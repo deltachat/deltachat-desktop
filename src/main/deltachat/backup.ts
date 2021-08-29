@@ -62,16 +62,21 @@ export default class DCBackup extends SplitOut {
         resolve(this.controller.login.accountInfo(accountId))
       }
 
-      this.controller.on(
+      this.controller.dc.on(
         'DC_EVENT_IMEX_PROGRESS',
-        async (event, eventAccountId, data1, data2) => {
+        async (eventAccountId, data1, data2) => {
+          console.log(
+            'xxx DC_EVENT_IMEX_PRGORESS',
+            accountId,
+            eventAccountId,
+            data1,
+            data2
+          )
           if (eventAccountId !== accountId) return
-          if (event === 'DC_EVENT_IMEX_PROGRESS') {
-            if (data1 === 0) {
-              onFail(data2)
-            } else if (data1 === 1000) {
-              onSuccess()
-            }
+          if (data1 === 0) {
+            onFail(data2)
+          } else if (data1 === 1000) {
+            onSuccess()
           }
         }
       )
