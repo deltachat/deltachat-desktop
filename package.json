@@ -80,7 +80,7 @@
     "application-config": "^1.0.1",
     "classnames": "^2.3.1",
     "debounce": "^1.2.0",
-    "deltachat-node": "git+https://github.com/deltachat/deltachat-node.git#feat_accounts_api",
+    "deltachat-node": "1.60.0",
     "emoji-js-clean": "^4.0.0",
     "emoji-mart": "^3.0.0",
     "emoji-regex": "^9.2.2",
