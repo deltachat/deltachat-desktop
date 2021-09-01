@@ -15,7 +15,7 @@ export default function setupUnreadBadge(dc: DeltaChatController) {
     app.setBadgeCount(count)
   }
 
-  dc.on('DC_EVENT_INCOMING_MSG', (_chatId: number, _msgId: number) => {
+  dc.on('DC_EVENT_INCOMING_MSG', (_accountId: number, _chatId: number, _msgId: number) => {
     // don't update immediately if the app is in focused
     if (mainWindow.window.hidden) update()
 

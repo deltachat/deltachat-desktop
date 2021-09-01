@@ -6,6 +6,9 @@ import DeltaChatController from './deltachat/controller'
 import { ExtendedAppMainProcess } from './types'
 import { FullChat, MessageType } from '../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
+import { getLogger } from '../shared/logger'
+
+const log = getLogger('main/notifications')
 
 export default function (dc: DeltaChatController, settings: any) {
   if (!Notification.isSupported()) return
@@ -111,14 +114,19 @@ export default function (dc: DeltaChatController, settings: any) {
     app.focus()
   }
 
-  dc.on('DC_EVENT_INCOMING_MSG', async (chatId: number, msgId: number) => {
+  dc.on('DC_EVENT_INCOMING_MSG', async (accountId: number, chatId: number, msgId: number) => {
     if (
       settings.notifications &&
       (mainWindow.window.hidden || !mainWindow.window.isVisible())
     ) {
+      if (accountId !== this.controller.selectedAccountId) {
+        return
+      }
+      
       if (await isMuted(chatId)) {
         return
       }
+      log.debug('Creating notification for chat:', chatId, 'with msgId:', msgId)
       const notify = await createNotification(chatId, msgId)
       notify.on('click', Event => {
         onClickNotification(chatId, msgId, Event)
