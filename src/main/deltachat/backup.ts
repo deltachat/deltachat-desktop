@@ -24,7 +24,7 @@ export default class DCBackup extends SplitOut {
         dir,
         undefined
       )
-      const onEventImexProgress = (data1: number) => {
+      const onEventImexProgress = (_accountId: number, data1: number, _data2: number) => {
         if (data1 === 0) {
           this.dc.removeListener('DC_EVENT_IMEX_PROGRESS', onEventImexProgress)
           reject('Backup export failed (progress==0)')
