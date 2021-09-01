@@ -114,28 +114,36 @@ export default function (dc: DeltaChatController, settings: any) {
     app.focus()
   }
 
-  dc.on('DC_EVENT_INCOMING_MSG', async (accountId: number, chatId: number, msgId: number) => {
-    if (
-      settings.notifications &&
-      (mainWindow.window.hidden || !mainWindow.window.isVisible())
-    ) {
-      if (accountId !== this.controller.selectedAccountId) {
-        return
+  dc.on(
+    'DC_EVENT_INCOMING_MSG',
+    async (accountId: number, chatId: number, msgId: number) => {
+      if (
+        settings.notifications &&
+        (mainWindow.window.hidden || !mainWindow.window.isVisible())
+      ) {
+        if (accountId !== this.controller.selectedAccountId) {
+          return
+        }
+
+        if (await isMuted(chatId)) {
+          return
+        }
+        log.debug(
+          'Creating notification for chat:',
+          chatId,
+          'with msgId:',
+          msgId
+        )
+        const notify = await createNotification(chatId, msgId)
+        notify.on('click', Event => {
+          onClickNotification(chatId, msgId, Event)
+        })
+        // notify.on('close', () => {})
+        addNotificationForChat(chatId, notify)
+        notify.show()
       }
-      
-      if (await isMuted(chatId)) {
-        return
-      }
-      log.debug('Creating notification for chat:', chatId, 'with msgId:', msgId)
-      const notify = await createNotification(chatId, msgId)
-      notify.on('click', Event => {
-        onClickNotification(chatId, msgId, Event)
-      })
-      // notify.on('close', () => {})
-      addNotificationForChat(chatId, notify)
-      notify.show()
     }
-  })
+  )
 
   dc.on('DESKTOP_CLEAR_NOTIFICATIONS_FOR_CHAT', (_ev, chatId) => {
     clearNotificationsForChat(chatId)
