@@ -15,16 +15,19 @@ export default function setupUnreadBadge(dc: DeltaChatController) {
     app.setBadgeCount(count)
   }
 
-  dc.on('DC_EVENT_INCOMING_MSG', (_accountId: number, _chatId: number, _msgId: number) => {
-    // don't update immediately if the app is in focused
-    if (mainWindow.window.hidden) update()
+  dc.on(
+    'DC_EVENT_INCOMING_MSG',
+    (_accountId: number, _chatId: number, _msgId: number) => {
+      // don't update immediately if the app is in focused
+      if (mainWindow.window.hidden) update()
 
-    // update after a delay again to make sure its up to date
-    if (reUpdateTimeOut) clearTimeout(reUpdateTimeOut)
-    reUpdateTimeOut = setTimeout(() => {
-      update()
-    }, 4000)
-  })
+      // update after a delay again to make sure its up to date
+      if (reUpdateTimeOut) clearTimeout(reUpdateTimeOut)
+      reUpdateTimeOut = setTimeout(() => {
+        update()
+      }, 4000)
+    }
+  )
 
   dc.on('ready', () => {
     // for start and after account switch

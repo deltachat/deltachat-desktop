@@ -24,7 +24,11 @@ export default class DCBackup extends SplitOut {
         dir,
         undefined
       )
-      const onEventImexProgress = (_accountId: number, data1: number, _data2: number) => {
+      const onEventImexProgress = (
+        _accountId: number,
+        data1: number,
+        _data2: number
+      ) => {
         if (data1 === 0) {
           this.dc.removeListener('DC_EVENT_IMEX_PROGRESS', onEventImexProgress)
           reject('Backup export failed (progress==0)')
@@ -65,13 +69,6 @@ export default class DCBackup extends SplitOut {
       this.controller.dc.on(
         'DC_EVENT_IMEX_PROGRESS',
         async (eventAccountId, data1, data2) => {
-          console.log(
-            'xxx DC_EVENT_IMEX_PRGORESS',
-            accountId,
-            eventAccountId,
-            data1,
-            data2
-          )
           if (eventAccountId !== accountId) return
           if (data1 === 0) {
             onFail(data2)

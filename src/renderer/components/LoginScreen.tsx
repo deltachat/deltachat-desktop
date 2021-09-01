@@ -41,8 +41,6 @@ function ImportBackupProgressDialog({
   }
   const onImexProgress = (_evt: any, [progress, _data2]: [number, any]) => {
     setImportProgress(progress)
-    if (progress === 1000) {
-    }
   }
 
   const onError = (_data1: any, data2: string) => {
