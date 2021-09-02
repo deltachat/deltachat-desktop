@@ -369,7 +369,7 @@ export function ConfigureProgressDialog({
           const accountId = await DeltaBackend.call('login.addAccount')
           await DeltaBackend.call('login.selectAccount', accountId)
           DeltaBackend.call('login.updateCredentials', credentials)
-          account = await DeltaBackend.call('login.accountInfo')
+          account = await DeltaBackend.call('login.accountInfo', accountId)
         } catch (err) {
           if (err) {
             onConfigureError(null, [null, err])
@@ -377,7 +377,8 @@ export function ConfigureProgressDialog({
           }
           return
         }
-        if (account !== null) onConfigureSuccessful(account)
+        if (account !== null) return onConfigureSuccessful(account)
+        onConfigureFailed(null, [null, 'account is null'])
       }
     })()
   }, [mode, credentials, onConfigureSuccessful])
