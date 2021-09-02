@@ -13,7 +13,7 @@
 
 ### Changed
 - Upgrade electron-builder to `22.12.0`
-- Upgrade deltachat-node to xxx
+- Upgrade deltachat-node to `v1.60.0`
 - Upgrade esbuild to `0.12.15`
 - Update testcafe to `1.15.0`
 - Upgrade `react` and `react-dom` to `17.0.2`
