@@ -141,7 +141,7 @@ export default function ConnectivityToast() {
     <>
       {networkState[0] === Connectivity.NOT_CONNECTED && (
         <div className='ConnectivityToast'>
-          <a title={networkState[1]}>{tx('offline')}</a>
+          <a title={networkState[1]}>{tx('connectivity_not_connected')}</a>
           <div
             className={tryConnectCooldown ? '' : 'disabled'}
             onClick={onTryReconnectClick}
