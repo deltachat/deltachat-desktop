@@ -27,8 +27,8 @@ export default class DCSettings extends SplitOut {
       key === 'mvbox_watch'
     ) {
       log.info(`It's a watch config, restarting IO...`)
-      this.dc.stopIO()
-      this.dc.startIO()
+      this.accounts.stopIO()
+      this.accounts.startIO()
     }
 
     return Boolean(result)

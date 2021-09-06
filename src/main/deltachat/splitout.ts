@@ -7,8 +7,8 @@ export default class SplitOut {
     this.controller = controller
   }
 
-  get dc() {
-    return this.controller.dc
+  get accounts() {
+    return this.controller.account_manager
   }
 
   get selectedAccountContext() {

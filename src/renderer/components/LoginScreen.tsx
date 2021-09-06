@@ -148,14 +148,14 @@ export default function LoginScreen() {
   const [view, setView] = useState('main')
 
   const refreshAccounts = async () => {
-    const logins = await DeltaBackend.call('login.accounts')
+    const logins = await DeltaBackend.call('login.getAllAccounts')
     setLogins(logins)
   }
 
   useEffect(() => {
     let mounted = true
     ;(async () => {
-      const logins = await DeltaBackend.call('login.accounts')
+      const logins = await DeltaBackend.call('login.getAllAccounts')
       if (mounted === true) {
         setLogins(logins)
       }
