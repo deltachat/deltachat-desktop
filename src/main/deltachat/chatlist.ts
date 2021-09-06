@@ -20,7 +20,7 @@ export default class DCChatList extends SplitOut {
       log.debug(`Error: selected chat not found: ${chatId}`)
       return null
     }
-    if (chat.isContactRequest && chat.freshMessageCounter > 0) {
+    if (!chat.isContactRequest && chat.freshMessageCounter > 0) {
       this.selectedAccountContext.markNoticedChat(chat.id)
       this.controller.emit('DESKTOP_CLEAR_NOTIFICATIONS_FOR_CHAT', chat.id)
       chat.freshMessageCounter = 0
