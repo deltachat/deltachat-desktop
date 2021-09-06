@@ -134,7 +134,7 @@ function SettingsContextWrapper({
   children: React.ReactChild
 }) {
   const [desktopSettings, _setDesktopSettings] = useState<DesktopSettings>(null)
-  window.__desktopSettings = null
+  window.__desktopSettings = desktopSettings
 
   useEffect(() => {
     ;(async () => {
