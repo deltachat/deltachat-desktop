@@ -7,6 +7,8 @@ import setupUnreadBadgeCounter from '../unread-badge'
 import SplitOut from './splitout'
 import { Credentials, DeltaChatAccount } from '../../shared/shared-types'
 import { ExtendedAppMainProcess } from '../types'
+import { stat, readdir } from 'fs/promises'
+import { join } from 'path'
 const log = getLogger('main/deltachat/login')
 
 const app = rawApp as ExtendedAppMainProcess
@@ -142,7 +144,7 @@ https://delta.chat/en/2021-05-05-email-compat` as any
       accountId,
       displayname,
       addr,
-      size: 0,
+      size: await _getAccountSize(join(accountContext.getBlobdir(), '..')),
       profileImage,
       color,
     }
@@ -237,4 +239,28 @@ export function txCoreStrings() {
   strings[C.DC_STR_FORWARDED] = tx('forwarded')
 
   return strings
+}
+
+async function _getAccountSize(path: string) {
+  try {
+    const db_size = (await stat(join(path, 'dc.db'))).size
+    const blob_dir = join(path, 'dc.db-blobs')
+    const blob_files = await readdir(blob_dir)
+    let blob_size = 0
+    if (blob_files.length > 0) {
+      const blob_file_sizes = await Promise.all(
+        blob_files.map(
+          async blob_file => (await stat(join(blob_dir, blob_file))).size
+        )
+      )
+      blob_size = blob_file_sizes.reduce(
+        (totalSize, currentBlobSize) => totalSize + currentBlobSize
+      )
+    }
+
+    return db_size + blob_size
+  } catch (error) {
+    log.warn(error)
+    return 0
+  }
 }
