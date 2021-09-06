@@ -43,7 +43,7 @@ export default class DeltaChatController extends EventEmitter {
    * Created and owned by ipc on the backend
    */
   cwd: string = undefined
-  dc: DeltaChat = undefined
+  account_manager: DeltaChat = undefined
   selectedAccountContext: Context = undefined
   selectedAccountId: number | null = null
   selectedChatId: number | null = null
@@ -77,10 +77,10 @@ export default class DeltaChatController extends EventEmitter {
     )
 
     log.debug('Initiating DeltaChatNode')
-    this.dc = new DeltaChatNode(this.cwd, 'deltachat-desktop')
+    this.account_manager = new DeltaChatNode(this.cwd, 'deltachat-desktop')
 
     log.debug('Starting event handler')
-    this.registerEventHandler(this.dc)
+    this.registerEventHandler(this.account_manager)
   }
 
   async migrateToAccountsApiIfNeeded() {

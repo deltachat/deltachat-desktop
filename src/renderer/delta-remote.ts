@@ -192,7 +192,7 @@ class DeltaRemote {
     accountId: number
   ): Promise<DeltaChatAccount>
   call(fnName: 'login.getLastLoggedInAccount'): Promise<number>
-  call(fnName: 'login.accounts'): Promise<DeltaChatAccount[]>
+  call(fnName: 'login.getAllAccounts'): Promise<DeltaChatAccount[]>
 
   // NOTHING HERE that is called directly from the frontend, yet
   // messageList --------------------------------------------------------

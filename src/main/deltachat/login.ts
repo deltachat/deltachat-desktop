@@ -23,18 +23,20 @@ export default class DCLoginController extends SplitOut {
    * locale changes
    */
   _setCoreStrings(strings: { [key: number]: string }) {
-    if (!this.dc) return
-    setCoreStrings(this.dc, strings)
+    if (!this.accounts) return
+    setCoreStrings(this.accounts, strings)
   }
 
   async selectAccount(accountId: number) {
     log.debug('selectAccount', accountId)
     this.controller.selectedAccountId = accountId
-    this.controller.selectedAccountContext = this.dc.accountContext(accountId)
+    this.controller.selectedAccountContext = this.accounts.accountContext(
+      accountId
+    )
 
     log.info('Ready, starting io...')
 
-    await this.dc.startIO()
+    await this.accounts.startIO()
     log.debug('Started IO')
 
     this.controller.emit('ready')
@@ -52,14 +54,14 @@ export default class DCLoginController extends SplitOut {
   }
 
   async updateCredentials(credentials: Credentials): Promise<boolean> {
-    await this.dc.stopIO()
+    await this.accounts.stopIO()
     try {
       await this.selectedAccountContext.configure(credentials)
     } catch (err) {
-      await this.dc.startIO()
+      await this.accounts.startIO()
       return false
     }
-    await this.dc.startIO()
+    await this.accounts.startIO()
     return true
   }
 
@@ -74,14 +76,14 @@ export default class DCLoginController extends SplitOut {
   }
 
   async addAccount(credentials: Credentials): Promise<number> {
-    const accountId = this.dc.addAccount()
-    const accountContext = this.dc.accountContext(accountId)
+    const accountId = this.accounts.addAccount()
+    const accountContext = this.accounts.accountContext(accountId)
 
     try {
       accountContext.configure(credentials)
     } catch (error) {
       log.debug('Detected account creation error')
-      this.dc.removeAccount(accountId)
+      this.accounts.removeAccount(accountId)
       throw error
     }
 
@@ -89,16 +91,16 @@ export default class DCLoginController extends SplitOut {
   }
 
   async removeAccount(accountId: number) {
-    this.dc.removeAccount(accountId)
+    this.accounts.removeAccount(accountId)
   }
 
   close() {
     this.controller.emit('DESKTOP_CLEAR_ALL_NOTIFICATIONS')
-    if (!this.dc) return
-    this.dc.stopIO()
-    this.controller.unregisterEventHandler(this.dc)
-    this.dc.close()
-    this.controller.dc = null
+    if (!this.accounts) return
+    this.accounts.stopIO()
+    this.controller.unregisterEventHandler(this.accounts)
+    this.accounts.close()
+    this.controller.account_manager = null
   }
 
   updateDeviceChats() {
@@ -128,7 +130,7 @@ https://delta.chat/en/2021-05-05-email-compat` as any
   }
 
   async accountInfo(accountId: number): Promise<DeltaChatAccount> {
-    const accountContext = this.dc.accountContext(accountId)
+    const accountContext = this.accounts.accountContext(accountId)
     const selfContact = accountContext.getContact(C.DC_CONTACT_ID_SELF)
     return {
       accountId,
@@ -141,8 +143,8 @@ https://delta.chat/en/2021-05-05-email-compat` as any
     }
   }
 
-  async accounts(): Promise<DeltaChatAccount[]> {
-    const accountIds: number[] = this.dc.accounts()
+  async getAllAccounts(): Promise<DeltaChatAccount[]> {
+    const accountIds: number[] = super.accounts.accounts()
 
     const accounts: DeltaChatAccount[] = new Array(accountIds.length)
 
