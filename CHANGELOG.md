@@ -29,6 +29,7 @@
 
 ### Fixed
 - fix duplicated contacts in search
+- fix going into archived view starts at bottom
 
 ## [1.20.3] - 2021-06-30
 
