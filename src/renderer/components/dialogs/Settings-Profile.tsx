@@ -1,6 +1,5 @@
 import { Card, Elevation } from '@blueprintjs/core'
 import React, { useEffect, useState } from 'react'
-import { DeltaChatAccount } from '../../../shared/shared-types'
 import { useTranslationFunction } from '../../contexts'
 
 import { DeltaBackend } from '../../delta-remote'
@@ -14,13 +13,15 @@ import { onDCEvent } from '../../ipc'
 
 export default function SettingsProfile({
   setShow,
-  account,
+  addr,
+  displayname,
   state,
 }: {
   show: string
   setShow: (show: string) => void
   onClose: any
-  account: DeltaChatAccount
+  addr: string | undefined
+  displayname: string | undefined
   state: any
 }) {
   const [profileImagePreview, setProfileImagePreview] = useState('')
@@ -46,7 +47,7 @@ export default function SettingsProfile({
     setConnectivityString(`(${connectivityString})`)
   }
 
-  const initial = avatarInitial(account.displayname, account.addr)
+  const initial = avatarInitial(displayname, addr)
   useEffect(() => {
     updateConnectivity()
 
@@ -75,7 +76,7 @@ export default function SettingsProfile({
           </div>
           <div className='profile-displayname-addr'>
             <div className='displayname'>{state.settings.displayname}</div>
-            <div className='addr'>{account.addr}</div>
+            <div className='addr'>{addr}</div>
           </div>
         </div>
         <SettingsButton onClick={() => setShow('edit-profile')}>

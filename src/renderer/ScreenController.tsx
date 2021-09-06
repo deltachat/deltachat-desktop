@@ -1,5 +1,3 @@
-import { DeltaChatAccount } from '../shared/shared-types'
-
 import React from 'react'
 import { Component, createRef } from 'react'
 const { ipcRenderer } = window.electron_functions
@@ -36,7 +34,6 @@ export default class ScreenController extends Component {
 
   constructor(
     public props: {
-      account: DeltaChatAccount
       selectAccount: (accountId: number) => {}
     }
   ) {
@@ -179,7 +176,6 @@ export default class ScreenController extends Component {
           {this.renderScreen()}
           <DialogController
             ref={this.dialogController}
-            account={this.props.account}
             userFeedback={this.userFeedback}
           />
         </ScreenContext.Provider>

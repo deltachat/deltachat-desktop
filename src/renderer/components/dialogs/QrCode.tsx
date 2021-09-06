@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from 'react'
+import React, { useState, useContext, useRef, useEffect } from 'react'
 import {
   DeltaDialogBase,
   DeltaDialogFooter,
@@ -16,16 +16,17 @@ import processOpenQrUrl from '../helpers/OpenQrUrl'
 import { getLogger } from '../../../shared/logger'
 import { useContextMenu } from '../ContextMenu'
 import { runtime } from '../../runtime'
+import { DeltaBackend } from '../../delta-remote'
 
 const log = getLogger('renderer/dialogs/QrCode')
 
-export default function QrCode({
-  isOpen,
-  onClose,
-  qrCode,
-  account,
-}: DialogProps) {
+export default function QrCode({ isOpen, onClose, qrCode }: DialogProps) {
   const [showQrCode, setShowQrCode] = useState(true)
+
+  const [addr, setAddr] = useState('')
+  useEffect(() => {
+    DeltaBackend.call('settings.getConfig', 'addr').then(setAddr)
+  }, [])
 
   const tx = useTranslationFunction()
 
@@ -47,7 +48,7 @@ export default function QrCode({
       </div>
       {showQrCode && (
         <QrCodeShowQrInner
-          description={tx('qrshow_join_contact_hint', [account.addr])}
+          description={tx('qrshow_join_contact_hint', [addr])}
           qrCode={qrCode}
           onClose={onClose}
         />

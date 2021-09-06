@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { DesktopSettings, DeltaChatAccount } from '../shared/shared-types'
+import { DesktopSettings } from '../shared/shared-types'
 import { userFeedback, Screens } from './ScreenController'
 import { getMessageFunction } from '../shared/localize'
 import { showFnType } from './components/ContextMenu'
@@ -33,11 +33,9 @@ export const SettingsContext: React.Context<{
     key: keyof DesktopSettings,
     value: string | number | boolean
   ) => {}
-  account: DeltaChatAccount
 }> = React.createContext({
   desktopSettings: null,
   setDesktopSetting: null,
-  account: null,
 })
 
 export type unwrapContext<T> = T extends import('react').Context<infer R>
