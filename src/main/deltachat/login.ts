@@ -132,14 +132,19 @@ https://delta.chat/en/2021-05-05-email-compat` as any
   async accountInfo(accountId: number): Promise<DeltaChatAccount> {
     const accountContext = this.accounts.accountContext(accountId)
     const selfContact = accountContext.getContact(C.DC_CONTACT_ID_SELF)
+    const [displayname, addr, profileImage, color] = [
+      accountContext.getConfig('displayname'),
+      accountContext.getConfig('addr'),
+      selfContact.getProfileImage(),
+      selfContact.color,
+    ]
     return {
       accountId,
-      displayname: selfContact.getDisplayName(),
-      addr: selfContact.getAddress(),
-      path: '/dev/null',
+      displayname,
+      addr,
       size: 0,
-      profileImage: selfContact.getProfileImage(),
-      color: selfContact.color,
+      profileImage,
+      color,
     }
   }
 

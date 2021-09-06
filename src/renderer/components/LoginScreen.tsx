@@ -364,7 +364,7 @@ function AccountItem({
   const title = window.static_translate('account_info_hover_tooltip_desktop', [
     login.addr,
     filesizeConverter(login.size),
-    'accounts' + login.path.split('accounts')[1],
+    String(login.accountId),
   ])
 
   return (
