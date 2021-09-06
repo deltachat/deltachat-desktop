@@ -29,6 +29,7 @@
 - Remove dependency `array-differ`
 - replace `react-virtualized` with `react-window`
 - show user-visible error in fullscreen media view if mimetype isn't set or not supported
+- migrate to core account system
 
 
 ### Fixed
