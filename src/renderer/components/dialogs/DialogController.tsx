@@ -17,7 +17,6 @@ import MuteChat from './MuteChat'
 import QrCode from './QrCode'
 import DisappearingMessages from './DisappearingMessages'
 import ChatAuditLogDialog from './ChatAuditLogDialog'
-import { DeltaChatAccount } from '../../../shared/shared-types'
 import { getLogger } from '../../../shared/logger'
 
 export const allDialogs: { [key: string]: any } = {
@@ -56,7 +55,6 @@ export type DialogProps = {
   isOpen: boolean
   onClose: () => void
   userFeedback: todo
-  account: DeltaChatAccount
   key: string
   openDialog: todo
   closeDialog: todo
@@ -130,7 +128,7 @@ export default class DialogController extends React.Component<
   }
 
   render() {
-    const { userFeedback, account } = this.props
+    const { userFeedback } = this.props
     const { dialogs } = this.state
     // ToDo: This is shit. We can't alway renders all Dialogs and show them if something happens. We need to hook them up if they are needed, not always
 
@@ -143,7 +141,6 @@ export default class DialogController extends React.Component<
             isOpen: true,
             onClose: () => this.closeDialog(id),
             userFeedback,
-            account,
             key: name,
             openDialog: this.openDialog.bind(this),
             closeDialog: this.closeDialog.bind(this),

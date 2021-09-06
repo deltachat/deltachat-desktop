@@ -3,11 +3,7 @@ import { SettingsContext, i18nContext } from './contexts'
 import ScreenController, { Screens } from './ScreenController'
 import { sendToBackend, ipcBackend, startBackendLogging } from './ipc'
 import attachKeybindingsListener from './keybindings'
-import {
-  AppState,
-  DeltaChatAccount,
-  DesktopSettings,
-} from '../shared/shared-types'
+import { AppState, DesktopSettings } from '../shared/shared-types'
 
 import { translate, LocaleData } from '../shared/localize'
 // import { getLogger } from '../shared/logger'
@@ -24,7 +20,6 @@ export default function App(_props: any) {
   const [state, setState] = useState<AppState>(null)
 
   const [localeData, setLocaleData] = useState<LocaleData | null>(null)
-  const [account, setAccount] = useState<DeltaChatAccount>(null)
 
   useEffect(() => {
     sendToBackend('ipcReady')
@@ -58,8 +53,6 @@ export default function App(_props: any) {
 
   const selectAccount = async (accountId: number) => {
     await DeltaBackend.call('login.selectAccount', accountId)
-    const account = await DeltaBackend.call('login.accountInfo', accountId)
-    setAccount(account)
     if (typeof window.__changeScreen === 'function') {
       window.__changeScreen(Screens.Main)
     } else {
@@ -110,21 +103,15 @@ export default function App(_props: any) {
   if (!localeData || !state) return null
   return (
     <CrashScreen>
-      <SettingsContextWrapper account={account}>
+      <SettingsContextWrapper>
         <i18nContext.Provider value={window.static_translate}>
-          <ScreenController account={account} selectAccount={selectAccount} />
+          <ScreenController selectAccount={selectAccount} />
         </i18nContext.Provider>
       </SettingsContextWrapper>
     </CrashScreen>
   )
 }
-function SettingsContextWrapper({
-  account,
-  children,
-}: {
-  account: DeltaChatAccount
-  children: React.ReactChild
-}) {
+function SettingsContextWrapper({ children }: { children: React.ReactChild }) {
   const [desktopSettings, _setDesktopSettings] = useState<DesktopSettings>(null)
   window.__desktopSettings = desktopSettings
 
@@ -163,9 +150,7 @@ function SettingsContextWrapper({
   if (!desktopSettings) return null
 
   return (
-    <SettingsContext.Provider
-      value={{ desktopSettings, setDesktopSetting, account }}
-    >
+    <SettingsContext.Provider value={{ desktopSettings, setDesktopSetting }}>
       <ThemeContext.Provider value={theme_rand}>
         {children}
       </ThemeContext.Provider>

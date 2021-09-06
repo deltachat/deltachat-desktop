@@ -213,13 +213,9 @@ export default function Settings(props: DialogProps) {
   }
 
   const renderDialogContent = () => {
-    const { account } = props
     const { settings } = state
 
-    if (
-      Object.keys(settings || {}).length === 0 ||
-      Object.keys(account || {}).length === 0
-    ) {
+    if (Object.keys(settings || {}).length === 0) {
       return null
     }
 
@@ -231,7 +227,8 @@ export default function Settings(props: DialogProps) {
               show={state.show}
               setShow={setShow}
               onClose={props.onClose}
-              account={account}
+              addr={settings['addr']}
+              displayname={settings['displayname']}
               state={state}
             />
             <Card elevation={Elevation.ONE}>
@@ -359,6 +356,7 @@ export default function Settings(props: DialogProps) {
         'mvbox_watch',
         'mvbox_move',
         'e2ee_enabled',
+        'addr',
         'displayname',
         'selfstatus',
         'mdns_enabled',
@@ -381,6 +379,9 @@ export default function Settings(props: DialogProps) {
       )
       setState({ selfContact })
     })()
+  }, [state.show])
+
+  useEffect(() => {
     return () => ipcRenderer.removeAllListeners('DC_EVENT_IMEX_FILE_WRITTEN')
   }, [])
 
