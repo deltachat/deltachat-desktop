@@ -121,7 +121,6 @@ export default function MainScreen() {
             <p>{tx('no_chat_selected_suggestion_desktop')}</p>
           </div>
         </li>
-        <h2></h2>
       </div>
     )
   }

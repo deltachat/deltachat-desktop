@@ -38,7 +38,6 @@ export default class ScreenController extends Component {
     public props: {
       account: DeltaChatAccount
       selectAccount: (accountId: number) => {}
-      removeAccount: (accountId: number) => {}
     }
   ) {
     super(props)
@@ -63,12 +62,7 @@ export default class ScreenController extends Component {
     window.__closeDialog = this.closeDialog.bind(this)
     window.__changeScreen = this.changeScreen.bind(this)
     window.__selectAccount = this.selectAccount.bind(this)
-    window.__removeAccount = this.removeAccount.bind(this)
     window.__screen = this.state.screen
-  }
-
-  removeAccount(accountId: number) {
-    this.props.removeAccount(accountId)
   }
 
   selectAccount(accountId: number) {

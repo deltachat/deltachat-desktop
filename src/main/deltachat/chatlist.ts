@@ -203,8 +203,6 @@ export default class DCChatList extends SplitOut {
         }
         return contacts[0].address
       }
-    } else if (chat.isContactRequest) {
-      return tx('menu_deaddrop_subtitle')
     }
     return 'ErrTitle'
   }

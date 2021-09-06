@@ -24,7 +24,6 @@ declare global {
     __closeDialog: CloseDialogFunctionType
     __changeScreen: (screen: Screens) => {}
     __selectAccount: (accountId: number) => {}
-    __removeAccount: (accountId: number) => {}
     __screen: Screens
     __contextMenuActive: boolean
     __settingsOpened: boolean
