@@ -11,7 +11,8 @@ Debug messages are disabled by default, enable them with the `--log-debug` flag.
 | `--machine-readable-stacktrace` | Enable JSON stack trace                       |
 | `--no-color`                    | Disable colors in the output of main process  |
 
-> as of 1.3.0 `--debug` enables both `--log-debug` and `--log-to-console`
+> as of 1.21.0 `--devmode` enables both `--log-debug` and `--log-to-console` (formerly `--debug`)
+> ~as of 1.3.0 `--debug` enables both `--log-debug` and `--log-to-console`~
 
 #### Log locations
 

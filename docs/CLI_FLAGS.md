@@ -7,7 +7,7 @@ Options:
 | `--multiple-instances` | [Possible unstable] allows you do open multiple deltachat instances\* |
 | **Development Options** | |
 | `--translation-watch` | enable auto-reload for `_locales/_untranslated_en.json` |
-| `--debug` | opens electron devtools and activates `--log-debug` & `--log-to-console` |
+| `--devmode` | opens electron devtools and activates `--log-debug` & `--log-to-console` |
 | **Theme** | |
 | `--theme <themeid>` | set a specific theme (see [THEMES.md](./THEMES.md)) |
 | `--theme-watch` | enable auto-reload for the active theme |

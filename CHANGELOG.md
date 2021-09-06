@@ -28,6 +28,7 @@
 - show user-visible error in fullscreen media view if mimetype isn't set or not supported
 
 ### Fixed
+- rename `--debug` flag to `--devmode` (in order to fix #2315)
 - fix duplicated contacts in search
 - fix going into archived view starts at bottom
 

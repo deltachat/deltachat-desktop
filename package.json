@@ -16,7 +16,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix-format": "eslint . --ext .js,.jsx,.ts,.tsx --fix || true && npm run fix-formatting",
     "dev": "npm run build && npm run start --",
-    "start": "electron . --debug --log-debug --log-to-console --disable-http-cache --translation-watch",
+    "start": "electron . --devmode --disable-http-cache --translation-watch",
     "clean": "rm -rf ./tsc-dist ./html-dist ./dist",
     "build": "npm run build:shared && npm run build:backend && npm run build:frontend",
     "build:shared": "npm run build:shared:translations && npm run build:shared:version",
