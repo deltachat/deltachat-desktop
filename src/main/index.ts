@@ -71,7 +71,6 @@ app.ipcReady = false
 app.isQuitting = false
 
 Promise.all([
-  //getLogins(),
   new Promise((resolve, _reject) => app.on('ready', resolve)),
   State.load(),
 ])
@@ -83,12 +82,10 @@ Promise.all([
   })
 
 async function onReady([_appReady, loadedState]: [
-  //DeltaChatAccount[],
   any,
   AppState
 ]) {
   const state = (app.state = loadedState)
-  //state.logins = logins
 
   app.saveState = () => State.save({ saved: state.saved })
 
