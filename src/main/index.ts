@@ -106,7 +106,7 @@ function onReady([logins, _appReady, loadedState]: [
   mainWindow.init(app, { hidden: app.rc['minimized'] })
   initMenu(logHandler)
 
-  if (rc.debug) {
+  if (rc.devmode) {
     devTools.tryInstallReactDevTools()
     mainWindow.toggleDevTools()
   }

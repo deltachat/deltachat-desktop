@@ -57,7 +57,7 @@ export interface RC_Config {
   'multiple-instances': boolean
   theme: string | undefined
   'theme-watch': boolean
-  debug: boolean
+  devmode: boolean
   'translation-watch': boolean
   minimized: boolean
 }

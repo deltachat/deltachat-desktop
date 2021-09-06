@@ -7,7 +7,7 @@ const defaults: RC_Config = {
   'machine-readable-stacktrace': false,
   'multiple-instances': false,
   theme: undefined,
-  debug: false,
+  devmode: false,
   'translation-watch': false,
   'theme-watch': false,
   minimized: false,
@@ -15,7 +15,7 @@ const defaults: RC_Config = {
 
 const config = rc('DeltaChat', defaults) as RC_Config
 
-if (config.debug) {
+if (config.devmode) {
   config['log-debug'] = true
   config['log-to-console'] = true
 }
