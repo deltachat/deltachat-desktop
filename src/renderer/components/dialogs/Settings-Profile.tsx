@@ -52,7 +52,6 @@ export default function SettingsProfile({
 
     DeltaBackend.call('getProfilePicture').then(setProfileImagePreview)
     return onDCEvent('DC_EVENT_CONNECTIVITY_CHANGED', updateConnectivity)
-    // return nothing because reacts wants it like that
   }, [profileImagePreview])
   const tx = useTranslationFunction()
   return (
