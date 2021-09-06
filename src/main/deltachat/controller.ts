@@ -251,12 +251,18 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   onMsgsChanged(accountId: number, chatId: number, _msgId: number) {
+    if (this.selectedAccountId !== accountId) {
+      return
+    }
     this.onChatlistUpdated()
     // chatListItem listens to this in the frontend
     this.chatList.onChatModified(chatId)
   }
 
   onIncomingMsg(accountId: number, chatId: number, msgId: number) {
+    if (this.selectedAccountId !== accountId) {
+      return
+    }
     maybeMarkSeen(chatId, msgId)
     this.onChatlistUpdated()
     // chatListItem listens to this in the frontend
@@ -264,6 +270,9 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   onChatModified(accountId: number, chatId: number, _msgId: number) {
+    if (this.selectedAccountId !== accountId) {
+      return
+    }
     this.onChatlistUpdated()
     // chatListItem listens to this in the frontend
     this.chatList.onChatModified(chatId)
