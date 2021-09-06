@@ -1,1 +1,5 @@
-{}
+{
+  "account_info_hover_tooltip_desktop": {
+    "message": "E-Mail: %1$s\nSize: %2$s\nAccount Id: %3$s"
+  }
+}

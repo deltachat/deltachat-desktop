@@ -196,7 +196,6 @@ export type DeltaChatAccount = {
   size: number
   profileImage: string
   color: string
-  path: string
 }
 
 export declare type QrCodeResponse = {
