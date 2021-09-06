@@ -12,6 +12,7 @@
 - Implement new connectivity view
 
 ### Changed
+- Update translations (06.09.2021)
 - Upgrade electron-builder to `22.12.0`
 - Upgrade deltachat-node to `v1.60.0`
 - Upgrade esbuild to `0.12.15`
