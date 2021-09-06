@@ -81,10 +81,7 @@ Promise.all([
     process.exit(1)
   })
 
-async function onReady([_appReady, loadedState]: [
-  any,
-  AppState
-]) {
+async function onReady([_appReady, loadedState]: [any, AppState]) {
   const state = (app.state = loadedState)
 
   app.saveState = () => State.save({ saved: state.saved })
