@@ -3,8 +3,8 @@ import { Component, createRef } from 'react'
 const { ipcRenderer } = window.electron_functions
 
 import { ScreenContext } from './contexts'
-import LoginScreen from './components/LoginScreen'
-import MainScreen from './components/MainScreen'
+import AccountsScreen from './components/screens/AccountsScreen'
+import MainScreen from './components/screens/MainScreen'
 import DialogController, {
   OpenDialogFunctionType,
   CloseDialogFunctionType,
@@ -13,6 +13,8 @@ import processOpenQrUrl from './components/helpers/OpenQrUrl'
 
 import { getLogger } from '../shared/logger'
 import { ContextMenuLayer, showFnType } from './components/ContextMenu'
+import { DeltaBackend } from './delta-remote'
+import AccountSetupScreen from './components/screens/AccountSetupScreen'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -22,6 +24,7 @@ export interface userFeedback {
 }
 
 export enum Screens {
+  Accounts = 'accounts',
   Main = 'main',
   Login = 'login',
 }
@@ -31,16 +34,13 @@ export default class ScreenController extends Component {
   contextMenuShowFn: showFnType = null
   state: { message: userFeedback | false; screen: Screens }
   onShowAbout: any
+  selectedAccountId: number
 
-  constructor(
-    public props: {
-      selectAccount: (accountId: number) => {}
-    }
-  ) {
+  constructor(public props: {}) {
     super(props)
     this.state = {
       message: false,
-      screen: Screens.Login,
+      screen: Screens.Accounts,
     }
 
     this.onError = this.onError.bind(this)
@@ -53,6 +53,7 @@ export default class ScreenController extends Component {
     this.closeDialog = this.closeDialog.bind(this)
     this.onShowAbout = this.showAbout.bind(this, true)
     this.dialogController = createRef()
+    this.selectAccount = this.selectAccount.bind(this)
 
     window.__openDialog = this.openDialog.bind(this)
     window.__userFeedback = this.userFeedback.bind(this)
@@ -62,8 +63,24 @@ export default class ScreenController extends Component {
     window.__screen = this.state.screen
   }
 
-  selectAccount(accountId: number) {
-    this.props.selectAccount(accountId)
+  private async startup() {
+    const lastLoggedInAccountId = await DeltaBackend.call(
+      'login.getLastLoggedInAccount'
+    )
+    if (lastLoggedInAccountId) {
+      await this.selectAccount(lastLoggedInAccountId)
+    }
+  }
+
+  async selectAccount(accountId: number) {
+    await DeltaBackend.call('login.selectAccount', accountId)
+    this.selectedAccountId = accountId
+    const account = await DeltaBackend.call('login.accountInfo', accountId)
+    if (account.type === 'configured') {
+      this.changeScreen(Screens.Main)
+    } else {
+      this.changeScreen(Screens.Login)
+    }
   }
 
   userFeedback(message: userFeedback | false) {
@@ -79,7 +96,7 @@ export default class ScreenController extends Component {
     log.debug('Changing screen to:', screen)
     this.setState({ screen })
     window.__screen = screen
-    if (Screens.Login) {
+    if (Screens.Accounts) {
       // remove user feedback error message - https://github.com/deltachat/deltachat-desktop/issues/2261
       this.userFeedback(false)
     }
@@ -94,6 +111,8 @@ export default class ScreenController extends Component {
 
     ipcRenderer.send('frontendReady')
     window.dispatchEvent(new Event('frontendReady'))
+
+    this.startup()
   }
 
   componentWillUnmount() {
@@ -105,7 +124,7 @@ export default class ScreenController extends Component {
   }
 
   onError(_event: any, [data1, data2]: [string | number, string]) {
-    if (this.state.screen === Screens.Login) return
+    if (this.state.screen === Screens.Accounts) return
     if (data1 === 0) data1 = ''
     const text = data1 + data2
     this.userFeedback({ type: 'error', text })
@@ -143,7 +162,14 @@ export default class ScreenController extends Component {
       case Screens.Main:
         return <MainScreen />
       case Screens.Login:
-        return <LoginScreen />
+        return (
+          <AccountSetupScreen
+            selectAccount={this.selectAccount}
+            accountId={this.selectedAccountId}
+          />
+        )
+      case Screens.Accounts:
+        return <AccountsScreen selectAccount={this.selectAccount} />
     }
   }
 

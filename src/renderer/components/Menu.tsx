@@ -83,7 +83,7 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
       chatStoreDispatch({ type: 'UI_UNSELECT_CHAT' })
     }
     DeltaBackend.call('login.logout')
-    screenContext.changeScreen(Screens.Login)
+    screenContext.changeScreen(Screens.Accounts)
   }
 
   if (selectedChat && selectedChat.id) {

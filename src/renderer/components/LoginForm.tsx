@@ -2,7 +2,7 @@
 
 import type { DeltaChat } from 'deltachat-node'
 import { C } from 'deltachat-node/dist/constants'
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   DeltaInput,
   DeltaPasswordInput,
@@ -15,9 +15,12 @@ import ClickableLink from './helpers/ClickableLink'
 import { DialogProps } from './dialogs/DialogController'
 import { ipcBackend } from '../ipc'
 import { DeltaDialogContent, DeltaDialogFooter } from './dialogs/DeltaDialog'
-import { Credentials, DeltaChatAccount } from '../../shared/shared-types'
+import { Credentials } from '../../shared/shared-types'
 import { useTranslationFunction, i18nContext } from '../contexts'
 import { useDebouncedCallback } from 'use-debounce/lib'
+import { getLogger } from '../../shared/logger'
+
+const log = getLogger('renderer/loginForm')
 
 const getDefaultPort = (credentials: Credentials, protocol: string) => {
   const SendSecurityPortMap = {
@@ -325,7 +328,6 @@ export function ConfigureProgressDialog({
   onClose,
   credentials,
   onSuccess,
-  mode,
 }: DialogProps) {
   const [progress, setProgress] = useState(0)
   const [progressComment, setProgressComment] = useState('')
@@ -345,55 +347,41 @@ export function ConfigureProgressDialog({
     onClose()
   }
 
-  const onConfigureSuccessful = useCallback(
-    (account: DeltaChatAccount) => {
-      onClose()
-      onSuccess && onSuccess(account)
-    },
-    [onClose, onSuccess]
-  )
-
   const onConfigureError = (_: null, [_data1, data2]: [null, string]) =>
     setError(data2)
 
   const onConfigureFailed = (_: null, [_data1, _data2]: [null, string]) =>
     setConfigureFailed(true)
 
-  useEffect(() => {
-    ;(async () => {
-      if (mode === 'update') {
-        DeltaBackend.call('login.updateCredentials', credentials)
-      } else {
-        let account: DeltaChatAccount = null
+  useEffect(
+    () => {
+      ;(async () => {
         try {
-          const accountId = await DeltaBackend.call('login.addAccount')
-          await DeltaBackend.call('login.selectAccount', accountId)
-          DeltaBackend.call('login.updateCredentials', credentials)
-          account = await DeltaBackend.call('login.accountInfo', accountId)
+          await DeltaBackend.call('login.updateCredentials', credentials)
+          // on successful configure:
+          onClose()
+          onSuccess && onSuccess()
         } catch (err) {
+          log.error('configure error')
           if (err) {
             onConfigureError(null, [null, err])
             onConfigureFailed(null, [null, null])
           }
-          return
         }
-        if (account !== null) return onConfigureSuccessful(account)
-        onConfigureFailed(null, [null, 'account is null'])
-      }
-    })()
-  }, [mode, credentials, onConfigureSuccessful])
+      })()
+    },
+    [] // eslint-disable-line react-hooks/exhaustive-deps
+  )
 
   useEffect(() => {
     ipcBackend.on('DC_EVENT_CONFIGURE_PROGRESS', onConfigureProgress)
     ipcBackend.on('DCN_EVENT_CONFIGURE_FAILED', onConfigureFailed)
-    ipcBackend.on('DC_EVENT_ERROR', onConfigureError)
     return () => {
       ipcBackend.removeListener(
         'DC_EVENT_CONFIGURE_PROGRESS',
         onConfigureProgress
       )
       ipcBackend.removeListener('DCN_EVENT_CONFIGURE_FAILED', onConfigureFailed)
-      ipcBackend.removeListener('DC_EVENT_ERROR', onConfigureError)
     }
   }, [])
 

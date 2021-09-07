@@ -71,7 +71,6 @@ export default function SettingsAccount({
     openDialog(ConfigureProgressDialog, {
       credentials: accountSettings,
       onSuccess,
-      mode: 'update',
     })
   }
 

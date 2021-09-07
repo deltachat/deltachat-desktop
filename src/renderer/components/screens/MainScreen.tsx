@@ -3,20 +3,20 @@ import {
   ScreenContext,
   SettingsContext,
   useTranslationFunction,
-} from '../contexts'
+} from '../../contexts'
 
-import Gallery from './Gallery'
-import Menu from './Menu'
-import ChatList from './chat/ChatList'
+import Gallery from '../Gallery'
+import Menu from '../Menu'
+import ChatList from '../chat/ChatList'
 import MessageListAndComposer, {
   getBackgroundImageStyle,
-} from './message/MessageListAndComposer'
-import SearchInput from './SearchInput'
-import { useChatStore } from '../stores/chat'
+} from '../message/MessageListAndComposer'
+import SearchInput from '../SearchInput'
+import { useChatStore } from '../../stores/chat'
 import {
   openEditGroupDialog,
   openViewProfileDialog,
-} from './helpers/ChatMethods'
+} from '../helpers/ChatMethods'
 
 import {
   Alignment,
@@ -28,13 +28,13 @@ import {
   Popover,
   Button,
 } from '@blueprintjs/core'
-import { getLastSelectedChatId } from '../ipc'
-import { useKeyBindingAction, KeybindAction } from '../keybindings'
-import { Avatar } from './Avatar'
-import ConnectivityToast from './ConnectivityToast'
+import { getLastSelectedChatId } from '../../ipc'
+import { useKeyBindingAction, KeybindAction } from '../../keybindings'
+import { Avatar } from '../Avatar'
+import ConnectivityToast from '../ConnectivityToast'
 import { C } from 'deltachat-node/dist/constants'
-import MapComponent from './map/MapComponent'
-import MessageListProfile from './dialogs/MessageListProfile'
+import MapComponent from '../map/MapComponent'
+import MessageListProfile from '../dialogs/MessageListProfile'
 
 enum View {
   MessageList,

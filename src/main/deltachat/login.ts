@@ -55,16 +55,17 @@ export default class DCLoginController extends SplitOut {
     return true
   }
 
-  async updateCredentials(credentials: Credentials): Promise<boolean> {
-    await this.accounts.stopIO()
+  async updateCredentials(credentials: Credentials): Promise<void> {
+    await this.selectedAccountContext.stopIO()
     try {
       await this.selectedAccountContext.configure(credentials)
     } catch (err) {
-      await this.accounts.startIO()
-      return false
+      if (this.selectedAccountContext.isConfigured()) {
+        await this.selectedAccountContext.startIO()
+      }
+      throw err
     }
-    await this.accounts.startIO()
-    return true
+    await this.selectedAccountContext.startIO()
   }
 
   logout() {
@@ -77,18 +78,8 @@ export default class DCLoginController extends SplitOut {
       this.controller._sendStateToRenderer()
   }
 
-  async addAccount(credentials: Credentials): Promise<number> {
+  async addAccount(): Promise<number> {
     const accountId = this.accounts.addAccount()
-    const accountContext = this.accounts.accountContext(accountId)
-
-    try {
-      accountContext.configure(credentials)
-    } catch (error) {
-      log.debug('Detected account creation error')
-      this.accounts.removeAccount(accountId)
-      throw error
-    }
-
     return accountId
   }
 
@@ -133,21 +124,38 @@ https://delta.chat/en/2021-05-05-email-compat` as any
 
   async accountInfo(accountId: number): Promise<DeltaChatAccount> {
     const accountContext = this.accounts.accountContext(accountId)
-    const selfContact = accountContext.getContact(C.DC_CONTACT_ID_SELF)
-    const [displayname, addr, profileImage, color] = [
-      accountContext.getConfig('displayname'),
-      accountContext.getConfig('addr'),
-      selfContact.getProfileImage(),
-      selfContact.color,
-    ]
-    return {
-      accountId,
-      displayname,
-      addr,
-      size: await _getAccountSize(join(accountContext.getBlobdir(), '..')),
-      profileImage,
-      color,
+
+    if (accountContext.isConfigured()) {
+      const selfContact = accountContext.getContact(C.DC_CONTACT_ID_SELF)
+      const [display_name, addr, profile_image, color] = [
+        accountContext.getConfig('displayname'),
+        accountContext.getConfig('addr'),
+        selfContact.getProfileImage(),
+        selfContact.color,
+      ]
+      return {
+        type: 'configured',
+        id: accountId,
+        display_name,
+        addr,
+        profile_image,
+        color,
+      }
+    } else {
+      return {
+        type: 'unconfigured',
+        id: accountId,
+      }
     }
+  }
+
+  async getAccountSize(accountId: number): Promise<number> {
+    const accountContext = this.accounts.accountContext(accountId)
+    return await _getAccountSize(join(accountContext.getBlobdir(), '..'))
+  }
+
+  getAllAccountIds(): number[] {
+    return super.accounts.accounts()
   }
 
   async getAllAccounts(): Promise<DeltaChatAccount[]> {

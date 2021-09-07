@@ -184,13 +184,15 @@ class DeltaRemote {
   call(
     fnName: 'login.updateCredentials',
     credentials: Credentials
-  ): Promise<boolean>
-  call(fnName: 'login.addAccount', credentials: Credentials): Promise<number>
+  ): Promise<void>
+  call(fnName: 'login.addAccount'): Promise<number>
   call(fnName: 'login.removeAccount', accountId: number): Promise<void>
   call(
     fnName: 'login.accountInfo',
     accountId: number
   ): Promise<DeltaChatAccount>
+  call(fnName: 'login.getAccountSize', accountId: number): Promise<number>
+  call(fnName: 'login.getAllAccountIds'): Promise<number[]>
   call(fnName: 'login.getLastLoggedInAccount'): Promise<number>
   call(fnName: 'login.getAllAccounts'): Promise<DeltaChatAccount[]>
 
