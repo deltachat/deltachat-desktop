@@ -81,6 +81,10 @@ export default class DeltaChatController extends EventEmitter {
 
     log.debug('Starting event handler')
     this.registerEventHandler(this.account_manager)
+
+    log.info('Ready, starting accounts io...')
+    this.account_manager.startIO()
+    log.info('Started accounts io.')
   }
 
   async migrateToAccountsApiIfNeeded() {
