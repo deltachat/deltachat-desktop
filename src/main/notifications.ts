@@ -121,7 +121,7 @@ export default function (dc: DeltaChatController, settings: any) {
         settings.notifications &&
         (mainWindow.window.hidden || !mainWindow.window.isVisible())
       ) {
-        if (accountId !== this.controller.selectedAccountId) {
+        if (accountId !== dc.selectedAccountId) {
           return
         }
 
