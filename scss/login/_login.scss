@@ -249,6 +249,29 @@ div.delta-form-group {
       }
     }
 
+    .unread-badge-container {
+      align-self: center;
+      margin-right: 9px;
+
+      .fresh-message-counter {
+        color: var(--unreadCountLabel);
+        background-color: var(--unreadCountBg);
+        text-align: center;
+        font-size: 9pt;
+        height: 20px;
+        padding: 0 5pt;
+        line-height: 20px;
+        border-radius: 10px;
+        font-weight: bold;
+      }
+    }
+
+    .remove-icon {
+      margin-top: 0;
+      margin-right: 8px;
+      align-self: center;
+    }
+
     .remove-icon:hover {
       .bp3-icon {
         background-color: rgba(125, 125, 125, 0.2);

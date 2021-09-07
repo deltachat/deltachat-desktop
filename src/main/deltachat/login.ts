@@ -86,6 +86,11 @@ export default class DCLoginController extends SplitOut {
     this.accounts.removeAccount(accountId)
   }
 
+  async getFreshMessageCounter(accountId: number) {
+    const accountContext = this.accounts.accountContext(accountId)
+    return accountContext.getFreshMessages().length
+  }
+
   close() {
     this.controller.emit('DESKTOP_CLEAR_ALL_NOTIFICATIONS')
     if (!this.accounts) return
