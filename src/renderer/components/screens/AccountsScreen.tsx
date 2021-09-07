@@ -165,7 +165,12 @@ export default function AccountsScreen({
     selectAccount(accountId)
   }
 
-  if (logins === null) return null
+  if (logins === null)
+    return (
+      <div className='login-screen'>
+        <div className='window'></div>
+      </div>
+    )
 
   return (
     <div className='login-screen'>
