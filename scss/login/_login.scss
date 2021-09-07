@@ -241,6 +241,12 @@ div.delta-form-group {
   .contact-list-item {
     .contact {
       width: 100%;
+      overflow: hidden;
+
+      .email {
+        display: inline-block;
+        width: 100%;
+      }
     }
 
     .remove-icon:hover {

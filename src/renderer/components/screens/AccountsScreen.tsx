@@ -367,11 +367,7 @@ function AccountItem({
         />
         <div className='contact-name'>
           <div className='display-name'>{login.display_name || login.addr}</div>
-          <div
-            className='email'
-            style={{ display: 'inline-block' }}
-            title={title}
-          >
+          <div className='email' title={title}>
             {login.addr}
           </div>
         </div>
