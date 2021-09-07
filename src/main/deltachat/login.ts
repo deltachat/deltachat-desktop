@@ -37,8 +37,7 @@ export default class DCLoginController extends SplitOut {
     )
 
     log.info('Ready, starting io...')
-
-    await this.accounts.startIO()
+    this.controller.selectedAccountContext.startIO()
     log.debug('Started IO')
 
     this.controller.emit('ready')
@@ -56,16 +55,16 @@ export default class DCLoginController extends SplitOut {
   }
 
   async updateCredentials(credentials: Credentials): Promise<void> {
-    await this.selectedAccountContext.stopIO()
+    this.selectedAccountContext.stopIO()
     try {
       await this.selectedAccountContext.configure(credentials)
     } catch (err) {
       if (this.selectedAccountContext.isConfigured()) {
-        await this.selectedAccountContext.startIO()
+        this.selectedAccountContext.startIO()
       }
       throw err
     }
-    await this.selectedAccountContext.startIO()
+    this.selectedAccountContext.startIO()
   }
 
   logout() {
