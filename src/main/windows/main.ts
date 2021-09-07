@@ -8,7 +8,7 @@ import {
   htmlDistDir,
   supportedURISchemes,
 } from '../application-constants'
-import { showDeltaChat } from '../tray'
+import { refreshTrayContextMenu, showDeltaChat } from '../tray'
 import { ExtendedAppMainProcess } from '../types'
 import type { EventEmitter } from 'events'
 import { join } from 'path'
@@ -166,9 +166,11 @@ export function init(
   window.on('close', () => {})
   window.on('blur', () => {
     window.hidden = true
+    refreshTrayContextMenu()
   })
   window.on('focus', () => {
     window.hidden = false
+    refreshTrayContextMenu()
   })
 }
 
