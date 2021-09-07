@@ -165,8 +165,10 @@ export function renderTrayIcon() {
     tray.on('click', hideOrShowDeltaChat)
     tray.on('double-click', hideOrShowDeltaChat)
 
-    tray.setContextMenu(getTrayMenu())
-    mainWindow.window.on('blur', () => tray.setContextMenu(getTrayMenu()))
-    mainWindow.window.on('focus', () => tray.setContextMenu(getTrayMenu()))
+    refreshTrayContextMenu()
   }
+}
+
+export function refreshTrayContextMenu() {
+  tray?.setContextMenu(getTrayMenu())
 }
