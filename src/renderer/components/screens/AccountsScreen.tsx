@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useMemo } from 'react'
 import { ipcBackend } from '../../ipc'
 import { Classes, Elevation, Intent, Card, Icon } from '@blueprintjs/core'
 import { DeltaProgressBar } from '../Login-Styles'
@@ -21,6 +21,7 @@ import { Avatar } from '../Avatar'
 import { PseudoContact } from '../contact/Contact'
 import { runtime } from '../../runtime'
 import type ScreenController from '../../ScreenController'
+import debounce from 'debounce'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
@@ -337,7 +338,6 @@ function AccountItem({
   }
 
   const [account_size, setSize] = useState<string>('?')
-
   useEffect(() => {
     DeltaBackend.call('login.getAccountSize', login.id)
       .catch(log.error)
@@ -345,6 +345,32 @@ function AccountItem({
         bytes && setSize(filesizeConverter(bytes))
       })
   }, [login.id])
+
+  const [unreadCount, setUnreadCount] = useState(0)
+
+  const updateUnreadCount = useMemo(
+    () =>
+      debounce((_ev: any, account_id: number) => {
+        if (account_id === login.id) {
+          DeltaBackend.call('login.getFreshMessageCounter', login.id)
+            .catch(log.error)
+            .then(u => setUnreadCount(u || 0))
+        }
+      }, 200),
+    [login.id]
+  )
+
+  useEffect(() => {
+    updateUnreadCount(null, login.id)
+
+    // TODO: events need to be changed for this to work!
+    // (be always sent not just for selected account)
+    //
+    // ipcBackend.on('DC_EVENT_INCOMING_MSG', updateUnreadCount)
+    // return () => {
+    //   ipcBackend.removeListener('DC_EVENT_INCOMING_MSG', updateUnreadCount)
+    // }
+  }, [login.id, updateUnreadCount])
 
   const tx = window.static_translate
 
@@ -356,22 +382,31 @@ function AccountItem({
       String(login.id),
     ])
     inner = (
-      <div className='contact'>
-        <Avatar
-          {...{
-            avatarPath: login.profile_image,
-            color: login.color,
-            displayName: login.display_name,
-            addr: login.addr,
-          }}
-        />
-        <div className='contact-name'>
-          <div className='display-name'>{login.display_name || login.addr}</div>
-          <div className='email' title={title}>
-            {login.addr}
+      <>
+        <div className='contact'>
+          <Avatar
+            {...{
+              avatarPath: login.profile_image,
+              color: login.color,
+              displayName: login.display_name,
+              addr: login.addr,
+            }}
+          />
+          <div className='contact-name'>
+            <div className='display-name'>
+              {login.display_name || login.addr}
+            </div>
+            <div className='email' title={title}>
+              {login.addr}
+            </div>
           </div>
         </div>
-      </div>
+        {unreadCount > 0 && (
+          <div className='unread-badge-container'>
+            <div className='fresh-message-counter'>{unreadCount}</div>
+          </div>
+        )}
+      </>
     )
   } else {
     inner = (
