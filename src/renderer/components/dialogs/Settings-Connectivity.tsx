@@ -5,6 +5,7 @@ import React from 'react'
 import { DeltaDialogBody, DeltaDialogCloseFooter } from './DeltaDialog'
 import { DeltaBackend } from '../../delta-remote'
 import { onDCEvent } from '../../ipc'
+import { debounceWithInit } from '../chat/ChatListHelpers'
 
 const INHERIT_STYLES = ['line-height', 'background-color', 'color', 'font-size']
 const OverwrittenStyles =
@@ -21,25 +22,26 @@ export default function SettingsConnectivity({
   const styleSensor = useRef<HTMLDivElement | null>(null)
 
   const updateConnectivity = useMemo(
-    () => async () => {
-      let cHTML = await DeltaBackend.call('context.getConnectivityHTML')
+    () =>
+      debounceWithInit(async () => {
+        let cHTML = await DeltaBackend.call('context.getConnectivityHTML')
 
-      if (styleSensor.current) {
-        const cstyle = window.getComputedStyle(styleSensor.current)
-        let resulting_style = ''
-        for (const property of INHERIT_STYLES) {
-          resulting_style += `${property}: ${cstyle.getPropertyValue(
-            property
-          )};`
+        if (styleSensor.current) {
+          const cstyle = window.getComputedStyle(styleSensor.current)
+          let resulting_style = ''
+          for (const property of INHERIT_STYLES) {
+            resulting_style += `${property}: ${cstyle.getPropertyValue(
+              property
+            )};`
+          }
+          cHTML = cHTML.replace(
+            '</style>',
+            `</style><style> html {${resulting_style}${OverwrittenStyles}}</style>`
+          )
         }
-        cHTML = cHTML.replace(
-          '</style>',
-          `</style><style> html {${resulting_style}${OverwrittenStyles}}</style>`
-        )
-      }
 
-      setConnectivityHTML(cHTML)
-    },
+        setConnectivityHTML(cHTML)
+      }, 240),
     [!styleSensor.current] // eslint-disable-line react-hooks/exhaustive-deps
   )
 
