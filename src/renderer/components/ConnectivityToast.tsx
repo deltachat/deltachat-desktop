@@ -8,6 +8,7 @@ import { useKeyBindingAction, KeybindAction } from '../keybindings'
 import { C } from 'deltachat-node/dist/constants'
 
 import { debounce } from 'debounce'
+import { debounceWithInit } from './chat/ChatListHelpers'
 
 const log = getLogger('renderer/components/ConnectivityToast')
 
@@ -76,35 +77,39 @@ export default function ConnectivityToast() {
     tryMaybeNetworkIfOfflineAfterXms(150)
   }, [tryMaybeNetworkIfOfflineAfterXms, maybeNetwork])
 
-  const onConnectivityChanged = async (_data1: any, _data2: any) => {
-    const connectivity = await DeltaBackend.call('context.getConnectivity')
+  const onConnectivityChanged = useMemo(
+    () =>
+      debounceWithInit(async (_data1: any, _data2: any) => {
+        const connectivity = await DeltaBackend.call('context.getConnectivity')
 
-    if (connectivity >= C.DC_CONNECTIVITY_CONNECTED) {
-      log.debug("Core thinks we're back online and connected")
-      setNetworkState(() => [
-        Connectivity.CONNECTED,
-        "Core thinks we're connected",
-      ])
-    } else if (connectivity >= C.DC_CONNECTIVITY_WORKING) {
-      log.debug("Core thinks we're back online and connected")
-      setNetworkState(() => [
-        Connectivity.WORKING,
-        "Core thinks we're connected and working",
-      ])
-    } else if (connectivity >= C.DC_CONNECTIVITY_CONNECTING) {
-      log.debug("Core thinks we're back online and connected")
-      setNetworkState(() => [
-        Connectivity.CONNECTING,
-        "Core thinks we're connecting",
-      ])
-    } else if (connectivity >= C.DC_CONNECTIVITY_NOT_CONNECTED) {
-      log.debug("Core thinks we're not connected")
-      setNetworkState(() => [
-        Connectivity.NOT_CONNECTED,
-        "Core thinks we're not connected",
-      ])
-    }
-  }
+        if (connectivity >= C.DC_CONNECTIVITY_CONNECTED) {
+          log.debug("Core thinks we're back online and connected")
+          setNetworkState(() => [
+            Connectivity.CONNECTED,
+            "Core thinks we're connected",
+          ])
+        } else if (connectivity >= C.DC_CONNECTIVITY_WORKING) {
+          log.debug("Core thinks we're back online and connected")
+          setNetworkState(() => [
+            Connectivity.WORKING,
+            "Core thinks we're connected and working",
+          ])
+        } else if (connectivity >= C.DC_CONNECTIVITY_CONNECTING) {
+          log.debug("Core thinks we're back online and connected")
+          setNetworkState(() => [
+            Connectivity.CONNECTING,
+            "Core thinks we're connecting",
+          ])
+        } else if (connectivity >= C.DC_CONNECTIVITY_NOT_CONNECTED) {
+          log.debug("Core thinks we're not connected")
+          setNetworkState(() => [
+            Connectivity.NOT_CONNECTED,
+            "Core thinks we're not connected",
+          ])
+        }
+      }, 300),
+    []
+  )
 
   useKeyBindingAction(KeybindAction.Debug_MaybeNetwork, maybeNetwork)
 
@@ -127,7 +132,7 @@ export default function ConnectivityToast() {
 
       removeOnConnectivityChanged()
     }
-  }, [onBrowserOnline, maybeNetwork])
+  }, [onBrowserOnline, maybeNetwork, onConnectivityChanged])
 
   const onTryReconnectClick = () => {
     setTryConnectCooldown(false)
