@@ -189,14 +189,16 @@ export type MessageSearchResult = {
   timestamp: number
 }
 
-export type DeltaChatAccount = {
-  accountId: number
-  displayname: string
-  addr: string
-  size: number
-  profileImage: string
-  color: string
-}
+export type DeltaChatAccount =
+  | { id: number; type: 'unconfigured' }
+  | {
+      id: number
+      type: 'configured'
+      display_name: string | null
+      addr: string | null
+      profile_image: string | null
+      color: string
+    }
 
 export declare type QrCodeResponse = {
   state: QrState

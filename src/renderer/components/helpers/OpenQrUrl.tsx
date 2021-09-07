@@ -127,7 +127,7 @@ export default async function processOpenQrUrl(
       cb: callback,
     })
     return
-  } else if (checkQr.state === QrState.Account && screen !== Screens.Login) {
+  } else if (checkQr.state === QrState.Account && screen !== Screens.Accounts) {
     closeProcessDialog()
     window.__openDialog('AlertDialog', {
       message: tx('Please logout first'),
@@ -149,7 +149,7 @@ export default async function processOpenQrUrl(
         }
 
         const onSuccess = (account: DeltaChatAccount) => {
-          window.__selectAccount(account.accountId)
+          window.__selectAccount(account.id)
           callback()
         }
         closeProcessDialog()

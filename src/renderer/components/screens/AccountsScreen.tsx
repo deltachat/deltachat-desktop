@@ -1,14 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { ipcBackend } from '../ipc'
-import { Credentials } from '../../shared/shared-types'
-import LoginForm, {
-  defaultCredentials,
-  ConfigureProgressDialog,
-} from './LoginForm'
+import { ipcBackend } from '../../ipc'
 import { Classes, Elevation, Intent, Card, Icon } from '@blueprintjs/core'
-import { DeltaProgressBar } from './Login-Styles'
-import { getLogger } from '../../shared/logger'
-import { ScreenContext, useTranslationFunction } from '../contexts'
+import { DeltaProgressBar } from '../Login-Styles'
+import { getLogger } from '../../../shared/logger'
+import { ScreenContext, useTranslationFunction } from '../../contexts'
 import DeltaDialog, {
   DeltaDialogFooter,
   DeltaDialogFooterActions,
@@ -16,17 +11,18 @@ import DeltaDialog, {
   DeltaDialogBody,
   DeltaDialogContent,
   DeltaDialogHeader,
-} from './dialogs/DeltaDialog'
-import { DeltaChatAccount } from '../../shared/shared-types'
+} from '../dialogs/DeltaDialog'
+import { DeltaChatAccount } from '../../../shared/shared-types'
 import filesizeConverter from 'filesize'
-import { DialogProps } from './dialogs/DialogController'
-import { DeltaBackend } from '../delta-remote'
+import { DialogProps } from '../dialogs/DialogController'
+import { DeltaBackend } from '../../delta-remote'
 import { IpcRendererEvent } from 'electron'
-import { Avatar } from './Avatar'
-import { PseudoContact } from './contact/Contact'
-import { runtime } from '../runtime'
+import { Avatar } from '../Avatar'
+import { PseudoContact } from '../contact/Contact'
+import { runtime } from '../../runtime'
+import type ScreenController from '../../ScreenController'
 
-const log = getLogger('renderer/components/LoginScreen')
+const log = getLogger('renderer/components/AccountsScreen')
 
 function ImportBackupProgressDialog({
   onClose,
@@ -57,7 +53,7 @@ function ImportBackupProgressDialog({
         return
       }
       onClose()
-      window.__selectAccount(account.accountId)
+      window.__selectAccount(account.id)
     })()
 
     ipcBackend.on('ALL', onAll)
@@ -137,15 +133,13 @@ const ScanQRCodeButton = React.memo(function ScanQRCode(_) {
   )
 })
 
-export default function LoginScreen() {
+export default function AccountsScreen({
+  selectAccount,
+}: {
+  selectAccount: typeof ScreenController.prototype.selectAccount
+}) {
   const tx = useTranslationFunction()
-  const { openDialog } = useContext(ScreenContext)
-
-  const [credentials, setCredentials] = useState<Credentials>(
-    defaultCredentials()
-  )
   const [logins, setLogins] = useState(null)
-  const [view, setView] = useState('main')
 
   const refreshAccounts = async () => {
     const logins = await DeltaBackend.call('login.getAllAccounts')
@@ -166,11 +160,9 @@ export default function LoginScreen() {
     }
   }, [])
 
-  const onClickLogin = () => {
-    const onSuccess = (account: DeltaChatAccount) => {
-      window.__selectAccount(account.accountId)
-    }
-    openDialog(ConfigureProgressDialog, { credentials, onSuccess })
+  const addAccount = async () => {
+    const accountId = await DeltaBackend.call('login.addAccount')
+    selectAccount(accountId)
   }
 
   if (logins === null) return null
@@ -184,86 +176,53 @@ export default function LoginScreen() {
           onClose={() => {}}
           fixed={true}
         >
-          {view === 'login' && (
-            <>
-              <DeltaDialogHeader title={tx('add_account')} />
+          <>
+            {(!logins || logins.length === 0) && (
               <DeltaDialogBody>
                 <DeltaDialogContent>
-                  <div className='login'>
-                    <LoginForm
-                      credentials={credentials}
-                      setCredentials={setCredentials}
-                    />
+                  <div className='welcome-deltachat'>
+                    <img className='delta-icon' src='../images/deltachat.png' />
+                    <p className='f1'>{tx('welcome_desktop')}</p>
+                    <p className='f2'>{tx('welcome_intro1_message')}</p>
+                    <div
+                      id='action-go-to-login'
+                      className='welcome-button'
+                      onClick={addAccount}
+                    >
+                      {tx('login_header')}
+                    </div>
                   </div>
                 </DeltaDialogContent>
               </DeltaDialogBody>
-              <DeltaDialogFooter>
-                <DeltaDialogFooterActions>
-                  <p
-                    className={'delta-button bold primary'}
-                    onClick={() => setView('main')}
-                  >
-                    {tx('cancel')}
-                  </p>
-                  <p
-                    id='action-login'
-                    className={'delta-button bold primary'}
-                    onClick={onClickLogin}
-                  >
-                    {tx('login_title')}
-                  </p>
-                </DeltaDialogFooterActions>
-              </DeltaDialogFooter>
-            </>
-          )}
-
-          {view === 'main' && (
-            <>
-              {(!logins || logins.length === 0) && (
+            )}
+            {logins && logins.length > 0 && (
+              <>
+                <DeltaDialogHeader
+                  title={tx('login_known_accounts_title_desktop')}
+                />
                 <DeltaDialogBody>
-                  <DeltaDialogContent>
-                    <div className='welcome-deltachat'>
-                      <img
-                        className='delta-icon'
-                        src='../images/deltachat.png'
-                      />
-                      <p className='f1'>{tx('welcome_desktop')}</p>
-                      <p className='f2'>{tx('welcome_intro1_message')}</p>
-                      <div
-                        id='action-go-to-login'
-                        className='welcome-button'
-                        onClick={() => setView('login')}
-                      >
-                        {tx('login_header')}
-                      </div>
-                    </div>
+                  <DeltaDialogContent noPadding={true}>
+                    <AccountSelection
+                      {...{
+                        refreshAccounts,
+                        addAccount,
+                        selectAccount,
+                        logins,
+                      }}
+                    />
                   </DeltaDialogContent>
                 </DeltaDialogBody>
-              )}
-              {logins && logins.length > 0 && (
-                <>
-                  <DeltaDialogHeader
-                    title={tx('login_known_accounts_title_desktop')}
-                  />
-                  <DeltaDialogBody>
-                    <DeltaDialogContent noPadding={true}>
-                      <AccountSelection
-                        {...{ refreshAccounts, setView, logins }}
-                      />
-                    </DeltaDialogContent>
-                  </DeltaDialogBody>
-                </>
-              )}
-              <DeltaDialogFooter style={{ padding: '10px' }}>
-                <DeltaDialogFooterActions
-                  style={{ justifyContent: 'space-between' }}
-                >
-                  <ScanQRCodeButton />
-                  <ImportButton />
-                </DeltaDialogFooterActions>
-              </DeltaDialogFooter>
-            </>
-          )}
+              </>
+            )}
+            <DeltaDialogFooter style={{ padding: '10px' }}>
+              <DeltaDialogFooterActions
+                style={{ justifyContent: 'space-between' }}
+              >
+                <ScanQRCodeButton />
+                <ImportButton />
+              </DeltaDialogFooterActions>
+            </DeltaDialogFooter>
+          </>
         </DeltaDialogBase>
       </div>
     </div>
@@ -272,19 +231,27 @@ export default function LoginScreen() {
 
 function AccountSelection({
   refreshAccounts,
-  setView,
+  addAccount,
+  selectAccount,
   logins,
 }: {
   refreshAccounts: () => Promise<void>
-  setView: React.Dispatch<React.SetStateAction<string>>
+  addAccount: () => {}
+  selectAccount: typeof ScreenController.prototype.selectAccount
   logins: any
 }) {
   const tx = useTranslationFunction()
   const { openDialog } = useContext(ScreenContext)
 
-  const removeAccount = (login: DeltaChatAccount) => {
-    const header = tx('ask_delete_value', login.addr)
-    const message = tx('delete_account_explain_with_name', login.addr)
+  const removeAccount = (account: DeltaChatAccount) => {
+    const header = tx(
+      'ask_delete_value',
+      account.type == 'configured' ? account.addr : '[unconfigured]'
+    )
+    const message = tx(
+      'delete_account_explain_with_name',
+      account.type == 'configured' ? account.addr : '[unconfigured]'
+    )
     openDialog('ConfirmationDialog', {
       header,
       message,
@@ -292,7 +259,7 @@ function AccountSelection({
       isConfirmDanger: true,
       cb: async (yes: boolean) => {
         if (yes) {
-          await DeltaBackend.call('login.removeAccount', login.accountId)
+          await DeltaBackend.call('login.removeAccount', account.id)
           refreshAccounts()
         }
       },
@@ -333,7 +300,7 @@ function AccountSelection({
         role='menu-item'
         id='action-go-to-login'
         className='contact-list-item'
-        onClick={() => setView('login')}
+        onClick={addAccount}
         tabIndex={0}
       >
         <PseudoContact cutoff='+' text={tx('add_account')}></PseudoContact>
@@ -342,6 +309,7 @@ function AccountSelection({
         <AccountItem
           key={`login-${index}`}
           login={login}
+          selectAccount={selectAccount}
           removeAccount={removeAccount}
         />
       ))}
@@ -351,9 +319,11 @@ function AccountSelection({
 
 function AccountItem({
   login,
+  selectAccount,
   removeAccount,
 }: {
   login: DeltaChatAccount
+  selectAccount: typeof ScreenController.prototype.selectAccount
   removeAccount: (account: DeltaChatAccount) => void
 }) {
   const removeAction = (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -361,30 +331,37 @@ function AccountItem({
     removeAccount(login)
   }
 
-  const title = window.static_translate('account_info_hover_tooltip_desktop', [
-    login.addr,
-    filesizeConverter(login.size),
-    String(login.accountId),
-  ])
+  const [account_size, setSize] = useState<string>('?')
 
-  return (
-    <div
-      role='menu-item'
-      className='contact-list-item'
-      onClick={() => window.__selectAccount(login.accountId)}
-      tabIndex={0}
-    >
+  useEffect(() => {
+    DeltaBackend.call('login.getAccountSize', login.id)
+      .catch(log.error)
+      .then(bytes => {
+        bytes && setSize(filesizeConverter(bytes))
+      })
+  }, [login.id])
+
+  const tx = window.static_translate
+
+  let inner
+  if (login.type === 'configured') {
+    const title = tx('account_info_hover_tooltip_desktop', [
+      login.addr,
+      account_size,
+      String(login.id),
+    ])
+    inner = (
       <div className='contact'>
         <Avatar
           {...{
-            avatarPath: login.profileImage,
+            avatarPath: login.profile_image,
             color: login.color,
-            displayName: login.displayname,
+            displayName: login.display_name,
             addr: login.addr,
           }}
         />
         <div className='contact-name'>
-          <div className='display-name'>{login.displayname || login.addr}</div>
+          <div className='display-name'>{login.display_name || login.addr}</div>
           <div
             className='email'
             style={{ display: 'inline-block' }}
@@ -394,6 +371,29 @@ function AccountItem({
           </div>
         </div>
       </div>
+    )
+  } else {
+    inner = (
+      <div className='contact'>
+        <Avatar displayName={null} addr={'?'} />
+        <div className='contact-name'>
+          <div className='display-name'>{tx('unconfigured_account')}</div>
+          <div className='email' style={{ display: 'inline-block' }}>
+            {tx('unconfigured_account_subtitle')}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div
+      role='menu-item'
+      className='contact-list-item'
+      onClick={() => selectAccount(login.id)}
+      tabIndex={0}
+    >
+      {inner}
       <div
         role='button'
         aria-label={window.static_translate('delete_account')}

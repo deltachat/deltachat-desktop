@@ -141,7 +141,7 @@ export default class DialogController extends React.Component<
             isOpen: true,
             onClose: () => this.closeDialog(id),
             userFeedback,
-            key: name,
+            key: id,
             openDialog: this.openDialog.bind(this),
             closeDialog: this.closeDialog.bind(this),
             ...dialog.additionalProps,

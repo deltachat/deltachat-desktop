@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react'
 import { SettingsContext, i18nContext } from './contexts'
-import ScreenController, { Screens } from './ScreenController'
+import ScreenController from './ScreenController'
 import { sendToBackend, ipcBackend, startBackendLogging } from './ipc'
 import attachKeybindingsListener from './keybindings'
 import { AppState, DesktopSettings } from '../shared/shared-types'
@@ -12,7 +12,7 @@ import { DeltaBackend } from './delta-remote'
 import { ThemeManager, ThemeContext } from './ThemeManager'
 
 import moment from 'moment'
-import { CrashScreen } from './components/CrashScreen'
+import { CrashScreen } from './components/screens/CrashScreen'
 
 attachKeybindingsListener()
 
@@ -51,27 +51,11 @@ export default function App(_props: any) {
     })
   }, [])
 
-  const selectAccount = async (accountId: number) => {
-    await DeltaBackend.call('login.selectAccount', accountId)
-    if (typeof window.__changeScreen === 'function') {
-      window.__changeScreen(Screens.Main)
-    } else {
-      window.addEventListener('frontendReady', () => {
-        window.__changeScreen(Screens.Main)
-      })
-    }
-  }
-
   useLayoutEffect(() => {
     startBackendLogging()
     ;(async () => {
       const state = await DeltaBackend.call('getState')
       await reloadLocaleData(state.saved.locale)
-      const lastLoggedInAccountId = await DeltaBackend.call(
-        'login.getLastLoggedInAccount'
-      )
-
-      if (lastLoggedInAccountId) selectAccount(lastLoggedInAccountId)
 
       setState(state)
     })()
@@ -105,7 +89,7 @@ export default function App(_props: any) {
     <CrashScreen>
       <SettingsContextWrapper>
         <i18nContext.Provider value={window.static_translate}>
-          <ScreenController selectAccount={selectAccount} />
+          <ScreenController />
         </i18nContext.Provider>
       </SettingsContextWrapper>
     </CrashScreen>
