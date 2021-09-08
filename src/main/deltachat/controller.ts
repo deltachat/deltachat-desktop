@@ -178,6 +178,26 @@ export default class DeltaChatController extends EventEmitter {
         if (account_id == 0) {
           logMigrate.error(`Failed to migrate account at path "${path_dbfile}"`)
         } else {
+          // check if there are stickers
+          const old_sticker_folder = join(path_accounts_old, entry, 'stickers')
+          if (existsSync(old_sticker_folder)) {
+            logMigrate.debug(
+              'found stickers, migrating them',
+              old_sticker_folder
+            )
+            try {
+              const blobdir = tmp_dc.accountContext(account_id).getBlobdir()
+              const new_sticker_folder = join(blobdir, '../stickers')
+              await rename(old_sticker_folder, new_sticker_folder)
+            } catch (error) {
+              logMigrate.error(
+                'stickers migration failed',
+                old_sticker_folder,
+                error
+              )
+            }
+          }
+
           // if successful remove old account folder too
           old_folders_to_delete.push(path.join(path_accounts_old, entry))
         }
