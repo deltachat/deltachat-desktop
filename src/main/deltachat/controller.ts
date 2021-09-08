@@ -302,14 +302,14 @@ export default class DeltaChatController extends EventEmitter {
 
   onAll(event: string, accountId: number, data1: any, data2: any) {
     if (event === 'DC_EVENT_WARNING') {
-      logCoreEvent.warn(event, data1, data2)
+      logCoreEvent.warn(accountId, event, data1, data2)
     } else if (event === 'DC_EVENT_INFO') {
-      logCoreEvent.info(event, data1, data2)
+      logCoreEvent.info(accountId, event, data1, data2)
     } else if (event.startsWith('DC_EVENT_ERROR')) {
-      logCoreEvent.error(event, data1, data2)
+      logCoreEvent.error(accountId, event, data1, data2)
     } else if (app.rc['log-debug']) {
       // in debug mode log all core events
-      logCoreEvent.debug(event, data1, data2)
+      logCoreEvent.debug(accountId, event, data1, data2)
     }
 
     this.emit('ALL', event, accountId, data1, data2)
