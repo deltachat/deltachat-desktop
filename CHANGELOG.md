@@ -1290,7 +1290,7 @@ This section is only relevant to contributors.
 **Historical Note** We decided to change the versionining scheme to be more in line with the android app.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
-1.21.0
+
 [unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.21.0...HEAD
 
 [1.21.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.20.2...v1.21.0
