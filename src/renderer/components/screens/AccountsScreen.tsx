@@ -372,7 +372,7 @@ function AccountItem({
     // }
   }, [login.id, updateUnreadCount])
 
-  const tx = window.static_translate
+  const tx = useTranslationFunction()
 
   let inner
   if (login.type === 'configured') {
