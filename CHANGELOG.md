@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.21.0] - 2021-09-08
+
 ### Added
 
 - Windows installer: Allow user to choose the instalation path.
@@ -1288,8 +1290,10 @@ This section is only relevant to contributors.
 **Historical Note** We decided to change the versionining scheme to be more in line with the android app.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
+1.21.0
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.21.0...HEAD
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.20.2...HEAD
+[1.21.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.20.2...v1.21.0
 
 [1.20.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.20.1...v1.20.2
 

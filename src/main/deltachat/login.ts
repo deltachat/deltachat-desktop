@@ -105,25 +105,20 @@ export default class DCLoginController extends SplitOut {
     this.controller.hintUpdateIfNessesary()
 
     this.selectedAccountContext.addDeviceMessage(
-      'changelog-version-1.20_part1_0',
-      `Improved e-mail compatibility in version 1.20:
-📫 Read mailing lists
-📭 Read HTML-mails
-📪 Nice handling of support addresses
-✒️💭 Read Signatures of your Contacts and use yours to express yourself, share your status or your Bio.
-📞 experimental video chat can now be used in groups
-🔧 Bug fixes and stability improvements.
-[Full Change log](https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#12000---2021-03-22)` as any
-    )
+      'changelog-version-1.21',
+      `What's new in 1.21?
 
-    this.selectedAccountContext.addDeviceMessage(
-      'changelog-version-1.20_part2_0',
-      `With this release we are reaching out to early adopters who are willing to face some challenges and want to help bring a convenient automatically end-to-end encrypting e-mail app to all platforms. It's about time, isn't it?
-And don't worry .... Delta Chat also remains a decentralized messenger with the largest addressable user base ;)
-💡 We welcome your feedback and suggestions in our forum:
-https://support.delta.chat/
-ℹ️ You can find more information about this release in our blog post about it:
-https://delta.chat/en/2021-05-05-email-compat` as any
+👋 Chat Requests now pop up as single chats and can be inspected in detail before accepting or blocking
+
+🗄️ You'll also find your old requests in the Archive
+
+📮📮📮 Multi-account improved: Switching accounts is now faster and less often blocked by lengthy updates
+
+🤔 Know what's going on: Info about Connection problems can be found in the settings
+
+📋Copy-Paste Images into chat
+
+[Full Change log](https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1210---2021-09-08)` as any
     )
   }
 
