@@ -16,6 +16,7 @@ import {
 
 import type ScreenController from '../../ScreenController'
 import { Screens } from '../../ScreenController'
+import { DeltaBackend } from '../../delta-remote'
 
 export default function AccountSetupScreen({
   selectAccount,
@@ -36,6 +37,14 @@ export default function AccountSetupScreen({
       credentials,
       onSuccess: () => selectAccount(accountId),
     })
+
+  const onCancel = async () => {
+    const acInfo = await DeltaBackend.call('login.accountInfo', accountId)
+    if (acInfo.type == 'unconfigured') {
+      await DeltaBackend.call('login.removeAccount', accountId)
+    }
+    window.__changeScreen(Screens.Accounts)
+  }
 
   return (
     <div className='login-screen'>
@@ -61,7 +70,7 @@ export default function AccountSetupScreen({
             <DeltaDialogFooterActions>
               <p
                 className={'delta-button bold primary'}
-                onClick={() => window.__changeScreen(Screens.Accounts)}
+                onClick={() => onCancel()}
               >
                 {tx('cancel')}
               </p>
