@@ -9,11 +9,12 @@ import { Credentials, DeltaChatAccount } from '../../shared/shared-types'
 import { ExtendedAppMainProcess } from '../types'
 import { stat, readdir } from 'fs/promises'
 import { join } from 'path'
+import { Context } from 'deltachat-node/dist/context'
 const log = getLogger('main/deltachat/login')
 
 const app = rawApp as ExtendedAppMainProcess
 
-function setCoreStrings(dc: any, strings: { [key: number]: string }) {
+function setCoreStrings(dc: Context, strings: { [key: number]: string }) {
   Object.keys(strings).forEach(key => {
     dc.setStockTranslation(Number(key), strings[Number(key)])
   })
@@ -25,8 +26,8 @@ export default class DCLoginController extends SplitOut {
    * locale changes
    */
   _setCoreStrings(strings: { [key: number]: string }) {
-    if (!this.accounts) return
-    setCoreStrings(this.accounts, strings)
+    if (!this.controller.selectedAccountContext) return
+    setCoreStrings(this.controller.selectedAccountContext, strings)
   }
 
   async selectAccount(accountId: number) {
