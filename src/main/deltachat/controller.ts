@@ -24,12 +24,16 @@ import { VERSION, BUILD_TIMESTAMP } from '../../shared/build-info'
 import { Timespans, DAYS_UNTIL_UPDATE_SUGGESTION } from '../../shared/constants'
 import { Context } from 'deltachat-node/dist/context'
 import path, { join } from 'path'
-import { existsSync } from 'fs'
+import { existsSync, lstatSync } from 'fs'
 import { stat, rename, readdir } from 'fs/promises'
+import { getConfigPath } from '../application-constants'
+import { rmdir } from 'fs/promises'
+import { rm } from 'fs/promises'
 
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat')
 const logCoreEvent = getLogger('core/event')
+const logMigrate = getLogger('main/migrate')
 
 /**
  * DeltaChatController
@@ -89,43 +93,94 @@ export default class DeltaChatController extends EventEmitter {
 
   async migrateToAccountsApiIfNeeded() {
     const new_accounts_format = existsSync(path.join(this.cwd, 'accounts.toml'))
-
     if (new_accounts_format) return
 
-    log.info(
-      'migrateToAccountsApiIfNeeded: found old accounts format, we need to migrate.'
+    logMigrate.debug(
+      'accounts.toml not found, checking if there is previous data'
     )
 
-    const path_accounts_old = join(this.cwd, '..', 'accounts_old')
+    // findLegacyAccounts
+    const paths = (await readdir(getConfigPath())).map(filename =>
+      join(getConfigPath(), filename)
+    )
+    const accountFolders = paths.filter(path => {
+      // isDeltaAccountFolder
+      try {
+        return (
+          lstatSync(path).isDirectory() &&
+          lstatSync(join(path, 'db.sqlite')).isFile() &&
+          !lstatSync(path).isSymbolicLink()
+        )
+      } catch (error) {
+        return false
+      }
+    })
+
+    const migrate_from_format_1 = accountFolders.length !== 0
+    const migrate_from_format_2 = existsSync(this.cwd)
+
+    if (!migrate_from_format_1 && !migrate_from_format_2) {
+      logMigrate.info('nothing to migrate')
+      return
+    }
 
     // this is the same as this.cwd, but for clarity added ../accounts
     const path_accounts = join(this.cwd, '..', 'accounts')
 
-    // First, rename accounts folder to accounts_old
-    await rename(path_accounts, path_accounts_old)
+    const path_accounts_old = join(this.cwd, '..', 'accounts_old')
 
-    // Next, open temporary dc instance
+    if (migrate_from_format_2) {
+      logMigrate.info('found old accounts (2), we need to migrate...')
+
+      // First, rename accounts folder to accounts_old
+      await rename(path_accounts, path_accounts_old)
+    }
+
+    // Next, create temporary account manger to migrate accounts
     const tmp_dc = new DeltaChat(path_accounts)
     this.registerEventHandler(tmp_dc)
 
-    // Next, iterate over all folders in accounts_old
-    for (const entry of await readdir(path_accounts_old)) {
-      const stat_result = await stat(join(path_accounts_old, entry))
-      if (!stat_result.isDirectory()) continue
+    const old_folders_to_delete = []
 
-      const path_dbfile = path.join(path_accounts_old, entry, 'db.sqlite')
-      if (!existsSync(path_dbfile)) {
-        log.warn(
-          'migrateToAccountsApiIfNeeded: found an old accounts folder without a db.sqlite file, skipping'
-        )
-        continue
+    if (migrate_from_format_1) {
+      logMigrate.info('found old legacy accounts (1), we need to migrate...')
+
+      // Next, iterate over all folders in accounts_old
+      for (const folder of accountFolders) {
+        logMigrate.debug(`migrating legacy account "${folder}"`)
+        const path_dbfile = path.join(folder, 'db.sqlite')
+        const account_id = tmp_dc.migrateAccount(path_dbfile)
+        if (account_id == 0) {
+          logMigrate.error(`Failed to migrate account at path "${path_dbfile}"`)
+        } else {
+          old_folders_to_delete.push(folder)
+        }
       }
+    }
 
-      const account_id = tmp_dc.migrateAccount(path_dbfile)
-      if (account_id == 0) {
-        log.error(
-          `migrateToAccountsApiIfNeeded: Failed to migrate account at path "${path_dbfile}"`
+    if (migrate_from_format_2) {
+      // Next, iterate over all folders in accounts_old
+      for (const entry of await readdir(path_accounts_old)) {
+        const stat_result = await stat(join(path_accounts_old, entry))
+        if (!stat_result.isDirectory()) continue
+        logMigrate.debug(
+          `migrating account "${join(path_accounts_old, entry)}"`
         )
+        const path_dbfile = path.join(path_accounts_old, entry, 'db.sqlite')
+        if (!existsSync(path_dbfile)) {
+          logMigrate.warn(
+            'found an old accounts folder without a db.sqlite file, skipping'
+          )
+          continue
+        }
+
+        const account_id = tmp_dc.migrateAccount(path_dbfile)
+        if (account_id == 0) {
+          logMigrate.error(`Failed to migrate account at path "${path_dbfile}"`)
+        } else {
+          // if successful remove old account folder too
+          old_folders_to_delete.push(path.join(path_accounts_old, entry))
+        }
       }
     }
 
@@ -138,6 +193,17 @@ export default class DeltaChatController extends EventEmitter {
         lastChats: {},
       },
     })
+
+    // cleanup
+    for (const old_folder of old_folders_to_delete) {
+      try {
+        await rm(join(old_folder, '.DS_Store'))
+        await rmdir(old_folder)
+      } catch (error) {
+        logMigrate.error('Failed to cleanup old folder:', old_folder, error)
+      }
+    }
+    logMigrate.info('migration completed')
   }
 
   readonly autocrypt = new DCAutocrypt(this)
