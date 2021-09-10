@@ -24,6 +24,6 @@
     "message": "Socks5 user" 
   },
   "login_socks5_password": {
-    "message": "Socks5 user" 
+    "message": "Socks5 password" 
   }
 }
