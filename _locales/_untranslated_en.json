@@ -9,21 +9,21 @@
     "message": "Open account to configure it"
   },
   "login_socks5": {
-    "message": "Socks5"
+    "message": "SOCKS5"
   },
   "login_socks5_enabled": {
-    "message": "Socks5 enabled" 
+    "message": "SOCKS5 enabled" 
   },
   "login_socks5_host": {
-    "message": "Socks5 host" 
+    "message": "SOCKS5 host" 
   },
   "login_socks5_port": {
-    "message": "Socks5 port" 
+    "message": "SOCKS5 port" 
   },
   "login_socks5_login": {
-    "message": "Socks5 user" 
+    "message": "SOCKS5 user" 
   },
   "login_socks5_password": {
-    "message": "Socks5 password" 
+    "message": "SOCKS5 password" 
   }
 }
