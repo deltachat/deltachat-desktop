@@ -7,5 +7,23 @@
   },
   "unconfigured_account_subtitle": {
     "message": "Open account to configure it"
+  },
+  "login_socks5": {
+    "message": "Socks5"
+  },
+  "login_socks5_enabled": {
+    "message": "Socks5 enabled" 
+  },
+  "login_socks5_host": {
+    "message": "Socks5 host" 
+  },
+  "login_socks5_port": {
+    "message": "Socks5 port" 
+  },
+  "login_socks5_login": {
+    "message": "Socks5 user" 
+  },
+  "login_socks5_password": {
+    "message": "Socks5 user" 
   }
 }

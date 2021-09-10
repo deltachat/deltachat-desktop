@@ -56,6 +56,7 @@ export default class DCLoginController extends SplitOut {
   }
 
   async updateCredentials(credentials: Credentials): Promise<void> {
+    console.log('xxx', credentials)
     this.selectedAccountContext.stopIO()
     try {
       await this.selectedAccountContext.configure(credentials)

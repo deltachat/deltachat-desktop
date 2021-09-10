@@ -65,7 +65,7 @@ export const DeltaInput = React.memo(
     const onBlur = () => setIsFocused(false)
     const showLabel =
       isFocused ||
-      props.value.length > 0 ||
+      props.value?.length > 0 ||
       (props.label !== undefined && props.label.length > 0)
 
     return (

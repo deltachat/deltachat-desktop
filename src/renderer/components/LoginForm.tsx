@@ -63,22 +63,27 @@ const getDefaultPort = (credentials: Credentials, protocol: string) => {
 }
 
 export function defaultCredentials(credentials?: Credentials): Credentials {
-  credentials = !credentials ? {} : credentials
-  return {
-    addr: credentials.addr || '',
-    mail_user: credentials.mail_user || '',
-    mail_pw: credentials.mail_pw || '',
-    mail_server: credentials.mail_server || '',
-    mail_port: credentials.mail_port || '',
-    mail_security: credentials.mail_security || '',
-    imap_certificate_checks: credentials.imap_certificate_checks || '',
-    send_user: credentials.send_user || '',
-    send_pw: credentials.send_pw || '',
-    send_server: credentials.send_server || '',
-    send_port: credentials.send_port || '',
-    send_security: credentials.send_security || '',
-    smtp_certificate_checks: credentials.smtp_certificate_checks || '',
+  const defaultCredentials: Credentials = {
+    addr: '',
+    mail_user: '',
+    mail_pw: '',
+    mail_server: '',
+    mail_port: '',
+    mail_security: '',
+    imap_certificate_checks: '',
+    send_user: '',
+    send_pw: '',
+    send_server: '',
+    send_port: '',
+    send_security: '',
+    smtp_certificate_checks: '',
+    socks5_enabled: '',
+    socks5_host: '',
+    socks5_port: '',
+    socks5_user: '',
+    socks5_password: '',
   }
+  return { ...defaultCredentials, ...credentials }
 }
 
 type LoginProps = React.PropsWithChildren<{
@@ -319,21 +324,22 @@ export default function LoginForm({
                 {tx('accept_invalid_certificates')}
               </option>
             </DeltaSelect>
-            {/** SOCKS5 */}
+            <br />
+            <p className='delta-headline'>{tx('login_socks5')}</p>
             <DeltaSelect
               id='socks5_enabled'
-              label={'Socks5 enabled'}
+              label={tx('login_socks5_enabled')}
               value={socks5_enabled === '1' ? '1' : '0'}
               onChange={handleCredentialsChange as any}
             >
-              <option value={'0'}>{tx('false')}</option>
-              <option value={'1'}>{tx('true')}</option>
+              <option value={'0'}>{tx('no')}</option>
+              <option value={'1'}>{tx('yes')}</option>
             </DeltaSelect>
             <DeltaInput
               key='socks5_host'
               id='socks5_host'
               placeholder={tx('default_value', 'localhost')}
-              label={'Socks5 host'}
+              label={tx('login_socks5_host')}
               value={socks5_host}
               onChange={handleCredentialsChange}
             />
@@ -341,7 +347,7 @@ export default function LoginForm({
               key='socks5_port'
               id='socks5_port'
               placeholder={tx('default_value', '9150')}
-              label={'Socks5 port'}
+              label={tx('login_socks5_port')}
               type='number'
               min='0'
               max='65535'
@@ -351,14 +357,14 @@ export default function LoginForm({
             <DeltaInput
               key='socks5_user'
               id='socks5_user'
-              label={'Socks5 user'}
+              label={tx('login_socks5_login')}
               value={socks5_user}
               onChange={handleCredentialsChange}
             />
             <DeltaInput
               key='socks5_password'
               id='socks5_password'
-              label={'Socks5 password'}
+              label={tx('login_socks5_password')}
               value={socks5_password}
               onChange={handleCredentialsChange}
             />
