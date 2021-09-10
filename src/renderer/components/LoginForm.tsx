@@ -150,6 +150,11 @@ export default function LoginForm({
     send_server,
     send_port,
     send_security,
+    socks5_enabled,
+    socks5_host,
+    socks5_port,
+    socks5_user,
+    socks5_password,
   } = credentials
 
   // We assume that smtp_certificate_checks has the same value.
@@ -314,6 +319,49 @@ export default function LoginForm({
                 {tx('accept_invalid_certificates')}
               </option>
             </DeltaSelect>
+            {/** SOCKS5 */}
+            <DeltaSelect
+              id='socks5_enabled'
+              label={'Socks5 enabled'}
+              value={socks5_enabled === '1' ? '1' : '0'}
+              onChange={handleCredentialsChange as any}
+            >
+              <option value={'0'}>{tx('false')}</option>
+              <option value={'1'}>{tx('true')}</option>
+            </DeltaSelect>
+            <DeltaInput
+              key='socks5_host'
+              id='socks5_host'
+              placeholder={tx('default_value', 'localhost')}
+              label={'Socks5 host'}
+              value={socks5_host}
+              onChange={handleCredentialsChange}
+            />
+            <DeltaInput
+              key='socks5_port'
+              id='socks5_port'
+              placeholder={tx('default_value', '9150')}
+              label={'Socks5 port'}
+              type='number'
+              min='0'
+              max='65535'
+              value={socks5_port}
+              onChange={handleCredentialsChange}
+            />
+            <DeltaInput
+              key='socks5_user'
+              id='socks5_user'
+              label={'Socks5 user'}
+              value={socks5_user}
+              onChange={handleCredentialsChange}
+            />
+            <DeltaInput
+              key='socks5_password'
+              id='socks5_password'
+              label={'Socks5 password'}
+              value={socks5_password}
+              onChange={handleCredentialsChange}
+            />
           </Collapse>
           <br />
           <p className='text'>{tx('login_subheader')}</p>
