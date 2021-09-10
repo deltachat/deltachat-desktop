@@ -2,6 +2,7 @@
 
 ## [Unreleased][unreleased]
 
+
 ## [1.21.0] - 2021-09-08
 
 ### Added
@@ -12,6 +13,7 @@
 - "rocket chat"-like experimental theme
 - Implement new contact request ui/ux
 - Implement new connectivity view
+- Implement settings for socks5 proxy
 
 ### Changed
 - Update translations (06.09.2021)
