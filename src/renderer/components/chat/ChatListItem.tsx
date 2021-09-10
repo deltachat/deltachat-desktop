@@ -61,20 +61,22 @@ const Message = React.memo(
           )}
           <MessageBody text={summary.text2 || ''} disableJumbomoji preview />
         </div>
-        {archived && (
-          <div className='label'>
-            {window.static_translate('chat_archived_label')}
-          </div>
-        )}
         {isContactRequest && (
           <div className='label'>
             {window.static_translate('chat_request_label')}
           </div>
         )}
+        {archived && (
+          <div className='label'>
+            {window.static_translate('chat_archived_label')}
+          </div>
+        )}
         {!archived && !isContactRequest && summary.status && (
           <div className={classNames('status-icon', summary.status)} />
         )}
-        <FreshMessageCounter counter={freshMessageCounter} />
+        {!isContactRequest && (
+          <FreshMessageCounter counter={freshMessageCounter} />
+        )}
       </div>
     )
   }
