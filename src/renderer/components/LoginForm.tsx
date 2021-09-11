@@ -333,47 +333,47 @@ export default function LoginForm({
               id='socks5_enabled'
               label={tx('login_socks5_use_socks5')}
               value={socks5_enabled}
-              onChange={isTrue => _handleCredentialsChange('socks5_enabled', isTrue ? '1' : '0')}
+              onChange={isTrue =>
+                _handleCredentialsChange('socks5_enabled', isTrue ? '1' : '0')
+              }
             />
             {socks5_enabled === '1' && (
               <>
-              <DeltaInput
-              key='socks5_host'
-              id='socks5_host'
-              placeholder={tx('default_value', 'localhost')}
-              label={tx('login_socks5_host')}
-              value={socks5_host}
-              onChange={handleCredentialsChange}
-            />
-            <DeltaInput
-              key='socks5_port'
-              id='socks5_port'
-              placeholder={tx('default_value', '9150')}
-              label={tx('login_socks5_port')}
-              type='number'
-              min='0'
-              max='65535'
-              value={socks5_port}
-              onChange={handleCredentialsChange}
-            />
-            <DeltaInput
-              key='socks5_user'
-              id='socks5_user'
-              label={tx('login_socks5_login')}
-              value={socks5_user}
-              onChange={handleCredentialsChange}
-            />
-            <DeltaInput
-              key='socks5_password'
-              id='socks5_password'
-              label={tx('login_socks5_password')}
-              value={socks5_password}
-              onChange={handleCredentialsChange}
-            />
+                <DeltaInput
+                  key='socks5_host'
+                  id='socks5_host'
+                  placeholder={tx('default_value', 'localhost')}
+                  label={tx('login_socks5_host')}
+                  value={socks5_host}
+                  onChange={handleCredentialsChange}
+                />
+                <DeltaInput
+                  key='socks5_port'
+                  id='socks5_port'
+                  placeholder={tx('default_value', '9150')}
+                  label={tx('login_socks5_port')}
+                  type='number'
+                  min='0'
+                  max='65535'
+                  value={socks5_port}
+                  onChange={handleCredentialsChange}
+                />
+                <DeltaInput
+                  key='socks5_user'
+                  id='socks5_user'
+                  label={tx('login_socks5_login')}
+                  value={socks5_user}
+                  onChange={handleCredentialsChange}
+                />
+                <DeltaInput
+                  key='socks5_password'
+                  id='socks5_password'
+                  label={tx('login_socks5_password')}
+                  value={socks5_password}
+                  onChange={handleCredentialsChange}
+                />
               </>
-              
             )}
-            
           </Collapse>
           <br />
           <p className='text'>{tx('login_subheader')}</p>

@@ -1,4 +1,8 @@
-import React, { useState, FormEvent, ChangeEvent, FormEventHandler } from 'react'
+import React, {
+  useState,
+  FormEvent,
+  ChangeEvent,
+} from 'react'
 import {
   Button,
   InputGroup,
@@ -45,37 +49,32 @@ export const DeltaSelect = React.memo(
 )
 
 export const DeltaSwitch = React.memo(
- (
-  props: React.PropsWithChildren<{
-    label: string
-    id: any
-    value: any
-    disabled?: boolean
-    onChange: (isTrue: boolean) => void
-  }>
-) => {
-  const [isFocused, setIsFocused] = useState(false)
-
-  const onFocus = () => setIsFocused(true)
-  const onBlur = () => setIsFocused(false)
-
-  return (
-    <div className='delta-form-group delta-switch'>
-      <FormGroup>
-        <Switch
+  (
+    props: React.PropsWithChildren<{
+      label: string
+      id: any
+      value: any
+      disabled?: boolean
+      onChange: (isTrue: boolean) => void
+    }>
+  ) => {
+    return (
+      <div className='delta-form-group delta-switch'>
+        <FormGroup>
+          <Switch
             label={props.label}
-            id= {props.id}
+            id={props.id}
             disabled={props.disabled}
-            onChange={ev => {props.onChange(ev.currentTarget.checked)}}
-            onFocus={onFocus}
-            onBlur={onBlur}
+            onChange={ev => {
+              props.onChange(ev.currentTarget.checked)
+            }}
             alignIndicator='right'
             checked={props.value === '1'}
           />
-      </FormGroup>
-    </div>
-  )
-}
+        </FormGroup>
+      </div>
+    )
+  }
 )
 
 export const DeltaInput = React.memo(

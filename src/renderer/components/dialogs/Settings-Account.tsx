@@ -8,12 +8,12 @@ import LoginForm, {
 } from '../LoginForm'
 
 import { DeltaDialogBody, DeltaDialogOkCancelFooter } from './DeltaDialog'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
+import { ScreenContext } from '../../contexts'
 import { Credentials } from '../../../shared/shared-types'
 
 export default function SettingsAccount({
   setShow,
-  onClose
+  onClose,
 }: {
   show: string
   setShow: (show: string) => void
@@ -34,8 +34,7 @@ export default function SettingsAccount({
     _setAccountSettings(value)
   }
 
-  const { openDialog, userFeedback } = useContext(ScreenContext)
-  const tx = useTranslationFunction()
+  const { openDialog } = useContext(ScreenContext)
 
   const loadSettings = async () => {
     const accountSettings: Credentials = ((await DeltaBackend.call(
