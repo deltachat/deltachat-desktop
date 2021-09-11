@@ -8,6 +8,7 @@ import {
   DeltaPasswordInput,
   DeltaSelect,
   DeltaProgressBar,
+  DeltaSwitch,
 } from './Login-Styles'
 import { Collapse, Dialog } from '@blueprintjs/core'
 import { DeltaBackend } from '../delta-remote'
@@ -102,10 +103,7 @@ export default function LoginForm({
     ReturnType<typeof DeltaChat.getProviderFromEmail>
   >(null)
 
-  const handleCredentialsChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const { id, value } = event.target
+  const _handleCredentialsChange = (id: string, value: string) => {
     let changeCredentials = {}
     if (id === 'certificate_checks') {
       // Change to certificate_checks updates certificate checks configuration
@@ -123,6 +121,13 @@ export default function LoginForm({
 
     const updatedCredentials = { ...credentials, ...changeCredentials }
     setCredentials(updatedCredentials)
+  }
+
+  const handleCredentialsChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { id, value } = event.target
+    _handleCredentialsChange(id, value)
   }
 
   const [debouncedGetProviderInfo] = useDebouncedCallback(
@@ -324,18 +329,15 @@ export default function LoginForm({
                 {tx('accept_invalid_certificates')}
               </option>
             </DeltaSelect>
-            <br />
-            <p className='delta-headline'>{tx('login_socks5')}</p>
-            <DeltaSelect
+            <DeltaSwitch
               id='socks5_enabled'
-              label={tx('login_socks5_enabled')}
-              value={socks5_enabled === '1' ? '1' : '0'}
-              onChange={handleCredentialsChange as any}
-            >
-              <option value={'0'}>{tx('no')}</option>
-              <option value={'1'}>{tx('yes')}</option>
-            </DeltaSelect>
-            <DeltaInput
+              label={tx('login_socks5_use_socks5')}
+              value={socks5_enabled}
+              onChange={isTrue => _handleCredentialsChange('socks5_enabled', isTrue ? '1' : '0')}
+            />
+            {socks5_enabled === '1' && (
+              <>
+              <DeltaInput
               key='socks5_host'
               id='socks5_host'
               placeholder={tx('default_value', 'localhost')}
@@ -368,6 +370,10 @@ export default function LoginForm({
               value={socks5_password}
               onChange={handleCredentialsChange}
             />
+              </>
+              
+            )}
+            
           </Collapse>
           <br />
           <p className='text'>{tx('login_subheader')}</p>

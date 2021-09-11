@@ -11,8 +11,8 @@
   "login_socks5": {
     "message": "SOCKS5"
   },
-  "login_socks5_enabled": {
-    "message": "SOCKS5 enabled" 
+  "login_socks5_use_socks5": {
+    "message": "Use SOCKS5" 
   },
   "login_socks5_host": {
     "message": "SOCKS5 host" 

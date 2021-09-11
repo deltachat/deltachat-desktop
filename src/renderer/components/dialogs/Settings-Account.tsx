@@ -13,10 +13,11 @@ import { Credentials } from '../../../shared/shared-types'
 
 export default function SettingsAccount({
   setShow,
+  onClose
 }: {
   show: string
   setShow: (show: string) => void
-  onClose: any
+  onClose: () => void
 }) {
   const [, setInitialAccountSettings] = useState<Credentials>(
     defaultCredentials()
@@ -75,7 +76,8 @@ export default function SettingsAccount({
 
   const onUpdate = () => {
     if (disableUpdate) return
-    const onSuccess = () => userFeedback({ type: 'success', text: tx('ok') })
+    const onSuccess = () => onClose()
+
     openDialog(ConfigureProgressDialog, {
       credentials: accountSettings,
       onSuccess,
