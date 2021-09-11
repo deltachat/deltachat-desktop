@@ -96,7 +96,13 @@ export function QrCodeShowQrInner({
               backgroundColor: 'white',
             }}
           />
-          <p style={{ textAlign: 'center', marginTop: '10px' }}>
+          <p
+            style={{
+              textAlign: 'center',
+              marginTop: '10px',
+              overflowWrap: 'break-word',
+            }}
+          >
             {description}
           </p>
         </DeltaDialogContent>
