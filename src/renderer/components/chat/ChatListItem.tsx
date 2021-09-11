@@ -111,6 +111,7 @@ const ChatListItemNormal = React.memo<ChatListItemProps>(props => {
       onContextMenu={onContextMenu}
       className={classNames('chat-list-item', {
         'has-unread': chatListItem.freshMessageCounter > 0,
+        'is-contact-request': chatListItem.isContactRequest,
         pinned: chatListItem.pinned,
         muted: chatListItem.muted,
         selected: isSelected,
