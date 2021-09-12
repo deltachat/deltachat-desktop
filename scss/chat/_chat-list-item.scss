@@ -135,7 +135,7 @@
   opacity: 0.1;
 }
 
-.chat-list-item.has-unread {
+.chat-list-item.has-unread:not(.is-contact-request) {
   & > .content {
     & > .header {
       .name,
