@@ -166,7 +166,6 @@ export default class DCChatList extends SplitOut {
       profileImage: chat.profileImage,
 
       archived: chat.archived,
-      subtitle: await this._chatSubtitle(chat, contacts),
       type: chat.type,
       isUnpromoted: chat.isUnpromoted, // new chat but no initial message sent
       isSelfTalk: chat.isSelfTalk,
@@ -184,27 +183,6 @@ export default class DCChatList extends SplitOut {
       muted: chat.muted,
       ephemeralTimer,
     }
-  }
-
-  _chatSubtitle(chat: JsonChat, contacts: JsonContact[]) {
-    const tx = this.controller.translate
-    if (chat.id > C.DC_CHAT_ID_LAST_SPECIAL) {
-      if (isGroupChat(chat)) {
-        return tx('n_members', [String(contacts.length)], {
-          quantity: contacts.length,
-        })
-      } else if (chat.type === C.DC_CHAT_TYPE_MAILINGLIST) {
-        return tx('mailing_list')
-      } else if (contacts.length >= 1) {
-        if (chat.isSelfTalk) {
-          return tx('chat_self_talk_subtitle')
-        } else if (chat.isDeviceTalk) {
-          return tx('device_talk_subtitle')
-        }
-        return contacts[0].address
-      }
-    }
-    return 'ErrTitle'
   }
 
   getGeneralFreshMessageCounter() {
