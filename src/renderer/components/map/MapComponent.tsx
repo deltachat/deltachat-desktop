@@ -63,8 +63,8 @@ export default class MapComponent extends React.Component<
     1000
   )
   map: mapboxgl.Map
-  currentUserAddress: string
   stateFromSession: boolean
+  currentUser: JsonContact
   constructor(props: MapProps) {
     super(props)
     this.state = {
@@ -83,17 +83,20 @@ export default class MapComponent extends React.Component<
     this.onRangeChange = this.onRangeChange.bind(this)
     this.changeMapStyle = this.changeMapStyle.bind(this)
     this.renderContactCheckbox = this.renderContactCheckbox.bind(this)
+
+    this.currentUser = this.props.selectedChat.contacts.find(
+      c => c.id === C.DC_CONTACT_ID_SELF
+    )
   }
 
   componentDidMount() {
     const { selectedChat } = this.props
-    this.currentUserAddress = this.context.account.addr
     let mapSettings: { zoom: number; center: mapboxgl.LngLatLike } = {
       zoom: 4,
       center: [8, 48],
     } // <- default
     const savedData = SessionStorage.getItem(
-      this.currentUserAddress,
+      this.currentUser.address,
       `${selectedChat.id}_map`
     )
     if (savedData !== undefined) {
@@ -131,7 +134,7 @@ export default class MapComponent extends React.Component<
     // save parts of the state we wanna keep
     const { selectedChat } = this.props
     SessionStorage.storeItem(
-      this.currentUserAddress,
+      this.currentUser.address,
       `${selectedChat.id}_map`,
       {
         savedMapSettings: this.map && {
@@ -178,18 +181,15 @@ export default class MapComponent extends React.Component<
         // add current account to contact list to see own location and path
         contacts.push({
           id: C.DC_CONTACT_ID_SELF,
-          address: this.context.account.address,
-          displayName: this.context.account.displayname,
-          authName: this.context.account.displayname,
+          address: this.currentUser.address,
+          displayName: this.currentUser.displayName,
+          authName: this.currentUser.displayName,
           status: '',
-          name: this.context.account.displayname,
-          color: this.context.account.color,
+          name: this.currentUser.displayName,
+          color: this.currentUser.color,
           nameAndAddr:
-            this.context.account.displayname +
-            '(' +
-            this.context.account.addr +
-            ')',
-          profileImage: this.context.account.profileImage,
+            this.currentUser.displayName + '(' + this.currentUser.address + ')',
+          profileImage: this.currentUser.profileImage,
           isBlocked: false,
           isVerified: true,
         })
