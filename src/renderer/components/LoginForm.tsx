@@ -135,8 +135,7 @@ export default function LoginForm({
       const result: any = await DeltaBackend.call('getProviderInfo', addr)
       setProviderInfo(result || null)
     },
-    300,
-    { trailing: true }
+    500
   )
 
   const onEmailChange = (
@@ -144,6 +143,10 @@ export default function LoginForm({
   ) => {
     handleCredentialsChange(event)
     const email = event.target.value
+    if (email === '') { 
+      setProviderInfo(null)
+      return
+    }
     debouncedGetProviderInfo(email)
   }
 
@@ -339,6 +342,7 @@ export default function LoginForm({
             />
             {socks5_enabled === '1' && (
               <>
+                <p className='text'>{tx('login_socks5_experimental_warning')}</p>
                 <DeltaInput
                   key='socks5_host'
                   id='socks5_host'

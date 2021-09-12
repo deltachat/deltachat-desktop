@@ -25,5 +25,8 @@
   },
   "login_socks5_password": {
     "message": "SOCKS5 password" 
+  },
+  "login_socks5_experimental_warning": {
+    "message": "SOCKS5 support is currently experimental. Please use at your own risk. If you type in an adress in the e-mail field, there will be DNS lookup that won't get tunneld through SOCKS5."
   }
 }
