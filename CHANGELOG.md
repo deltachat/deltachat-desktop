@@ -5,6 +5,11 @@
 ### Added
 
 - add switch to toggle simultaneous account syncing off
+
+### Fixed
+
+- fix flashing up account list on startup
+
 ## [1.21.0] - 2021-09-08
 
 ### Added
