@@ -62,6 +62,7 @@
 .profile-image-username {
   display: flex;
   flex-direction: row;
+  overflow: hidden;
   &.center {
     align-items: center;
     flex-direction: column;
@@ -100,6 +101,9 @@
     .addr {
       color: #969696;
       margin-top: 5px;
+      text-overflow: ellipsis;
+      overflow-wrap: break-word;
+      overflow-wrap: anywhere;
     }
   }
 }

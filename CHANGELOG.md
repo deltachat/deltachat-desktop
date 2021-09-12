@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- fix yggmail emailaddress text overflow in qrcode dialog & settings
+
 ## [1.21.0] - 2021-09-08
 
 ### Added

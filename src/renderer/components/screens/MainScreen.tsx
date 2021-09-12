@@ -115,12 +115,14 @@ export default function MainScreen() {
 
     MessageListView = (
       <div className='message-list-and-composer' style={style}>
-        <div className='message-list-and-composer__message-list'></div>
-        <li>
-          <div className='info-message big'>
+        <div
+          className='message-list-and-composer__message-list'
+          style={{ display: 'flex' }}
+        >
+          <div className='info-message big' style={{ alignSelf: 'center' }}>
             <p>{tx('no_chat_selected_suggestion_desktop')}</p>
           </div>
-        </li>
+        </div>
       </div>
     )
   }
