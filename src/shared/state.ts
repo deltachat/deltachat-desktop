@@ -21,6 +21,7 @@ export function getDefaultState(): AppState {
       zoomFactor: 1,
       activeTheme: 'system',
       minimizeToTray: false,
+      syncAllAccounts: true,
     },
     logins: [],
   }
