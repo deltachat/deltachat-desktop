@@ -150,14 +150,14 @@ export default function AccountsScreen({
   const tx = useTranslationFunction()
   const [logins, setLogins] = useState(null)
 
-  const [sync_all_accounts, set_sync_all_accounts] = useState(null)
+  const [syncAllAccounts, setSyncAllAccounts] = useState(null)
 
   useEffect(() => {
     ;(async () => {
       const desktopSettings = await DeltaBackend.call(
         'settings.getDesktopSettings'
       )
-      set_sync_all_accounts(desktopSettings.syncAllAccounts)
+      setSyncAllAccounts(desktopSettings.syncAllAccounts)
     })()
   }, [])
 
@@ -232,16 +232,16 @@ export default function AccountsScreen({
                     {tx('login_known_accounts_title_desktop')}
                   </h4>
                   <Switch
-                    checked={sync_all_accounts}
-                    label='Sync all'
+                    checked={syncAllAccounts}
+                    label={tx('sync_all')}
                     onChange={async () => {
-                      const new_state = !sync_all_accounts
+                      const new_state = !syncAllAccounts
                       await DeltaBackend.call(
                         'settings.setDesktopSetting',
                         'syncAllAccounts',
                         new_state
                       )
-                      set_sync_all_accounts(new_state)
+                      setSyncAllAccounts(new_state)
                     }}
                     alignIndicator={Alignment.RIGHT}
                   />
@@ -254,7 +254,7 @@ export default function AccountsScreen({
                         addAccount,
                         selectAccount,
                         logins,
-                        showUnread: sync_all_accounts,
+                        showUnread: syncAllAccounts,
                       }}
                     />
                   </DeltaDialogContent>
