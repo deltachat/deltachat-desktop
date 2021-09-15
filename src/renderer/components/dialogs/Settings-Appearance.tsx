@@ -10,6 +10,7 @@ import { ThemeManager } from '../../ThemeManager'
 import { SettingsSelector } from './Settings'
 import { SmallSelectDialog } from './DeltaDialog'
 import { runtime } from '../../runtime'
+import { RC_Config, Theme } from '../../../shared/shared-types'
 
 function BackgroundSelector({
   onChange,
@@ -176,23 +177,29 @@ function BackgroundSelector({
 
 export default function SettingsAppearance({
   handleDesktopSettingsChange,
+  rc
 }: {
   handleDesktopSettingsChange: todo
+  rc: RC_Config
 }) {
   const { desktopSettings, setDesktopSetting } = useContext(SettingsContext)
   const { activeTheme } = desktopSettings
 
   const { openDialog } = useContext(ScreenContext)
 
-  const [availableThemes, setAvailableThemes] = useState<
-    { [key: string]: any }[]
-  >([])
+  const [availableThemes, setAvailableThemes] = useState<Theme[]>([])
   useEffect(() => {
     ;(async () => {
       const availableThemes = await DeltaBackend.call(
         'extras.getAvailableThemes'
       )
-      setAvailableThemes(availableThemes)
+      console.log({availableThemes, rc});
+      
+      setAvailableThemes(
+        availableThemes.filter(
+          t => !t.is_prototype || t.address === activeTheme || rc.devmode
+        )
+      )
     })()
   }, [])
 
@@ -209,14 +216,14 @@ export default function SettingsAppearance({
   const onOpenSelectThemeDialog = async () => {
     const values = [
       ['system', tx('automatic')],
-      ...availableThemes.map(
-        ({ address, name }: { address: string; name: string }) => {
-          return [
-            address,
-            `${name}${address.startsWith('custom') ? ' (Custom)' : ''}`,
-          ]
-        }
-      ),
+      ...availableThemes.map(({ address, name, is_prototype }: Theme) => {
+        return [
+          address,
+          `${name}${address.startsWith('custom') ? ' (Custom)' : ''}${
+            is_prototype ? ' (prototype)' : ''
+          }`,
+        ]
+      }),
     ]
 
     openDialog(SmallSelectDialog, {

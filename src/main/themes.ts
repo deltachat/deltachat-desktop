@@ -43,6 +43,8 @@ function parseThemeMetaData(
   return <any>meta
 }
 
+const hidden_theme_prefix = "dev_"
+
 async function readThemeDir(path: string, prefix: string): Promise<Theme[]> {
   const files = await readdir(path)
   return Promise.all(
@@ -57,6 +59,7 @@ async function readThemeDir(path: string, prefix: string): Promise<Theme[]> {
             name: theme_meta.name,
             description: theme_meta.description,
             address,
+            is_prototype: f.startsWith(hidden_theme_prefix)
           }
         } catch (error) {
           log.error('Error while parsing theme ${address}: ', error)
@@ -64,6 +67,7 @@ async function readThemeDir(path: string, prefix: string): Promise<Theme[]> {
             name: address + ' [Invalid Meta]',
             description: '[missing description]',
             address: prefix + ':' + basename(f, '.css'),
+            is_prototype: f.startsWith(hidden_theme_prefix)
           }
         }
       })
@@ -94,6 +98,7 @@ export async function loadTheme(
       name: theme_meta.name,
       description: theme_meta.description,
       address: theme_address,
+      is_prototype: basename(effective_path).startsWith(hidden_theme_prefix)
     },
     data: themedata,
   }

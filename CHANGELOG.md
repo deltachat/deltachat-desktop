@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+## Changed
+- hide unfinished themes with the prefix `dev_` from the theme selection, unless `--devmode` is active.
+- hide rocket theme
+
 ### Fixed
 - fix yggmail emailaddress text overflow in qrcode dialog & settings
 
