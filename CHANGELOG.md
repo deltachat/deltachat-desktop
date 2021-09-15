@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+
+- fix update/load core translation strings
+
 ## [1.21.0] - 2021-09-08
 
 ### Added
