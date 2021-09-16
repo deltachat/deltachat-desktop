@@ -48,6 +48,7 @@ export interface DesktopSettings {
   /** address to the active theme file scheme: "custom:name" or "dc:name" */
   activeTheme: string
   minimizeToTray: boolean
+  syncAllAccounts: boolean
 }
 
 export interface AppState {

@@ -3,7 +3,12 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- add switch to toggle simultaneous account syncing off
 - Implement settings for socks5 proxy
+
+### Fixed
+
+- fix flashing up account list on startup
 
 
 ### Fixed

@@ -72,6 +72,12 @@ export default class DCLoginController extends SplitOut {
     app.state.saved.lastAccount = null
     app.saveState()
 
+    if (!app.state.saved.syncAllAccounts) {
+      this.selectedAccountContext.stopIO()
+    }
+    this.controller.selectedAccountId = null
+    this.controller.selectedAccountContext = null
+
     log.info('Logged out')
 
     if (typeof this.controller._sendStateToRenderer === 'function')
