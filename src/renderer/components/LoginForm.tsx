@@ -8,6 +8,7 @@ import {
   DeltaPasswordInput,
   DeltaSelect,
   DeltaProgressBar,
+  DeltaSwitch,
 } from './Login-Styles'
 import { Collapse, Dialog } from '@blueprintjs/core'
 import { DeltaBackend } from '../delta-remote'
@@ -63,22 +64,27 @@ const getDefaultPort = (credentials: Credentials, protocol: string) => {
 }
 
 export function defaultCredentials(credentials?: Credentials): Credentials {
-  credentials = !credentials ? {} : credentials
-  return {
-    addr: credentials.addr || '',
-    mail_user: credentials.mail_user || '',
-    mail_pw: credentials.mail_pw || '',
-    mail_server: credentials.mail_server || '',
-    mail_port: credentials.mail_port || '',
-    mail_security: credentials.mail_security || '',
-    imap_certificate_checks: credentials.imap_certificate_checks || '',
-    send_user: credentials.send_user || '',
-    send_pw: credentials.send_pw || '',
-    send_server: credentials.send_server || '',
-    send_port: credentials.send_port || '',
-    send_security: credentials.send_security || '',
-    smtp_certificate_checks: credentials.smtp_certificate_checks || '',
+  const defaultCredentials: Credentials = {
+    addr: '',
+    mail_user: '',
+    mail_pw: '',
+    mail_server: '',
+    mail_port: '',
+    mail_security: '',
+    imap_certificate_checks: '',
+    send_user: '',
+    send_pw: '',
+    send_server: '',
+    send_port: '',
+    send_security: '',
+    smtp_certificate_checks: '',
+    socks5_enabled: '',
+    socks5_host: '',
+    socks5_port: '',
+    socks5_user: '',
+    socks5_password: '',
   }
+  return { ...defaultCredentials, ...credentials }
 }
 
 type LoginProps = React.PropsWithChildren<{
@@ -97,10 +103,7 @@ export default function LoginForm({
     ReturnType<typeof DeltaChat.getProviderFromEmail>
   >(null)
 
-  const handleCredentialsChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const { id, value } = event.target
+  const _handleCredentialsChange = (id: string, value: string) => {
     let changeCredentials = {}
     if (id === 'certificate_checks') {
       // Change to certificate_checks updates certificate checks configuration
@@ -120,13 +123,19 @@ export default function LoginForm({
     setCredentials(updatedCredentials)
   }
 
+  const handleCredentialsChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { id, value } = event.target
+    _handleCredentialsChange(id, value)
+  }
+
   const [debouncedGetProviderInfo] = useDebouncedCallback(
     async (addr: string) => {
       const result: any = await DeltaBackend.call('getProviderInfo', addr)
       setProviderInfo(result || null)
     },
-    300,
-    { trailing: true }
+    500
   )
 
   const onEmailChange = (
@@ -134,6 +143,10 @@ export default function LoginForm({
   ) => {
     handleCredentialsChange(event)
     const email = event.target.value
+    if (email === '') {
+      setProviderInfo(null)
+      return
+    }
     debouncedGetProviderInfo(email)
   }
 
@@ -150,6 +163,11 @@ export default function LoginForm({
     send_server,
     send_port,
     send_security,
+    socks5_enabled,
+    socks5_host,
+    socks5_port,
+    socks5_user,
+    socks5_password,
   } = credentials
 
   // We assume that smtp_certificate_checks has the same value.
@@ -314,6 +332,54 @@ export default function LoginForm({
                 {tx('accept_invalid_certificates')}
               </option>
             </DeltaSelect>
+            <DeltaSwitch
+              id='socks5_enabled'
+              label={tx('login_socks5_use_socks5')}
+              value={socks5_enabled}
+              onChange={isTrue =>
+                _handleCredentialsChange('socks5_enabled', isTrue ? '1' : '0')
+              }
+            />
+            {socks5_enabled === '1' && (
+              <>
+                <p className='text'>
+                  {tx('login_socks5_experimental_warning')}
+                </p>
+                <DeltaInput
+                  key='socks5_host'
+                  id='socks5_host'
+                  placeholder={tx('default_value', 'localhost')}
+                  label={tx('login_socks5_host')}
+                  value={socks5_host}
+                  onChange={handleCredentialsChange}
+                />
+                <DeltaInput
+                  key='socks5_port'
+                  id='socks5_port'
+                  placeholder={tx('default_value', '9150')}
+                  label={tx('login_socks5_port')}
+                  type='number'
+                  min='0'
+                  max='65535'
+                  value={socks5_port}
+                  onChange={handleCredentialsChange}
+                />
+                <DeltaInput
+                  key='socks5_user'
+                  id='socks5_user'
+                  label={tx('login_socks5_login')}
+                  value={socks5_user}
+                  onChange={handleCredentialsChange}
+                />
+                <DeltaInput
+                  key='socks5_password'
+                  id='socks5_password'
+                  label={tx('login_socks5_password')}
+                  value={socks5_password}
+                  onChange={handleCredentialsChange}
+                />
+              </>
+            )}
           </Collapse>
           <br />
           <p className='text'>{tx('login_subheader')}</p>
