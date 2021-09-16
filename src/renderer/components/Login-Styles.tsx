@@ -1,8 +1,4 @@
-import React, {
-  useState,
-  FormEvent,
-  ChangeEvent,
-} from 'react'
+import React, { useState, FormEvent, ChangeEvent } from 'react'
 import {
   Button,
   InputGroup,
