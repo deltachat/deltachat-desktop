@@ -57,6 +57,14 @@ export default class DCSettings extends SplitOut {
 
     if (key === 'minimizeToTray') updateTrayIcon()
 
+    if (key === 'syncAllAccounts') {
+      if (value) {
+        this.accounts.startIO()
+      } else {
+        this.accounts.stopIO()
+      }
+    }
+
     return true
   }
 

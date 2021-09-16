@@ -2,11 +2,17 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- add switch to toggle simultaneous account syncing off
+- Implement settings for socks5 proxy
+
 ## Changed
 - hide unfinished themes with the prefix `dev_` from the theme selection, unless `--devmode` is active.
 - hide rocket theme
 
 ### Fixed
+- fix flashing up account list on startup
+- fix update/load core translation strings
 - fix yggmail emailaddress text overflow in qrcode dialog & settings
 
 ## [1.21.0] - 2021-09-08

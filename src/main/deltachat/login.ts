@@ -52,6 +52,7 @@ export default class DCLoginController extends SplitOut {
     setupUnreadBadgeCounter(this.controller)
     setupMarkseenFix(this.controller)
     this.controller.ready = true
+    this.controller.login._setCoreStrings(txCoreStrings())
     return true
   }
 
@@ -71,6 +72,12 @@ export default class DCLoginController extends SplitOut {
   logout() {
     app.state.saved.lastAccount = null
     app.saveState()
+
+    if (!app.state.saved.syncAllAccounts) {
+      this.selectedAccountContext.stopIO()
+    }
+    this.controller.selectedAccountId = null
+    this.controller.selectedAccountContext = null
 
     log.info('Logged out')
 
@@ -105,7 +112,7 @@ export default class DCLoginController extends SplitOut {
     this.controller.hintUpdateIfNessesary()
 
     this.selectedAccountContext.addDeviceMessage(
-      'changelog-version-1.21',
+      'changelog-version-1.21-version2',
       `What's new in 1.21?
 
 👋 Chat Requests now pop up as single chats and can be inspected in detail before accepting or blocking
@@ -118,7 +125,7 @@ export default class DCLoginController extends SplitOut {
 
 📋Copy-Paste Images into chat
 
-[Full Change log](https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1210---2021-09-08)` as any
+More on the blog: https://delta.chat/en/2021-08-24-updates` as any
     )
   }
 
