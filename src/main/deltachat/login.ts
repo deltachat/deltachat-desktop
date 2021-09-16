@@ -52,6 +52,7 @@ export default class DCLoginController extends SplitOut {
     setupUnreadBadgeCounter(this.controller)
     setupMarkseenFix(this.controller)
     this.controller.ready = true
+    this.controller.login._setCoreStrings(txCoreStrings())
     return true
   }
 
