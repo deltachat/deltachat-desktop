@@ -121,3 +121,8 @@ Some theming requires the javascript code to know how it should behave, for this
   --SPECIAL-chatlist-item-message-height: 64;
   --SPECIAL-chatlist-divider-height: 50;
 ```
+
+## Hidden prototype themes with `dev_`
+
+Themes can be hidden in production mode:
+When their filename is prefixed with `dev_` they won't show up in the theme selection unless they are selected or `--devmode` is active.

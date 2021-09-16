@@ -182,6 +182,8 @@ export type Theme = {
   name: string
   description: string
   address: string
+  /** whether the theme is a prototype and should be hidden in the selection unless deltachat is started in devmode */
+  is_prototype: boolean
 }
 
 export type MessageSearchResult = {

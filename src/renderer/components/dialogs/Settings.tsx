@@ -212,9 +212,7 @@ export default function Settings(props: DialogProps) {
     )
   }
 
-  const renderDialogContent = () => {
-    const { settings } = state
-
+  const renderDialogContent = ({ settings, rc }: typeof state) => {
     if (Object.keys(settings || {}).length === 0) {
       return null
     }
@@ -251,6 +249,7 @@ export default function Settings(props: DialogProps) {
             </Card>
             <SettingsAppearance
               handleDesktopSettingsChange={handleDesktopSettingsChange}
+              rc={rc}
             />
             <SettingsEncryption renderDeltaSwitch={renderDeltaSwitch} />
             <Card elevation={Elevation.ONE}>
@@ -278,10 +277,10 @@ export default function Settings(props: DialogProps) {
               {renderDTSettingSwitch(
                 'minimizeToTray',
                 tx('pref_show_tray_icon'),
-                state.rc?.minimized,
-                state.rc?.minimized
+                rc?.minimized,
+                rc?.minimized
               )}
-              {state.rc?.minimized && (
+              {rc?.minimized && (
                 <div className='bp3-callout'>
                   {tx('explain_desktop_minimized_disabled_tray_pref')}
                 </div>
@@ -366,10 +365,8 @@ export default function Settings(props: DialogProps) {
         'delete_server_after',
         'webrtc_instance',
       ])
-      setState({ settings })
-
       const rc = await runtime.getRC_Config()
-      setState({ rc })
+      setState({ settings, rc })
     }
     ;(async () => {
       await loadSettings()
@@ -408,7 +405,7 @@ export default function Settings(props: DialogProps) {
       fixed
     >
       <DeltaDialogHeader title={title} />
-      {renderDialogContent()}
+      {renderDialogContent(state)}
     </DeltaDialogBase>
   )
 }
