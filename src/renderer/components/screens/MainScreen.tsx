@@ -35,6 +35,7 @@ import ConnectivityToast from '../ConnectivityToast'
 import { C } from 'deltachat-node/dist/constants'
 import MapComponent from '../map/MapComponent'
 import MessageListProfile from '../dialogs/MessageListProfile'
+import { FullChat } from '../../../shared/shared-types'
 
 enum View {
   MessageList,
@@ -115,12 +116,14 @@ export default function MainScreen() {
 
     MessageListView = (
       <div className='message-list-and-composer' style={style}>
-        <div className='message-list-and-composer__message-list'></div>
-        <li>
-          <div className='info-message big'>
+        <div
+          className='message-list-and-composer__message-list'
+          style={{ display: 'flex' }}
+        >
+          <div className='info-message big' style={{ alignSelf: 'center' }}>
             <p>{tx('no_chat_selected_suggestion_desktop')}</p>
           </div>
-        </li>
+        </div>
       </div>
     )
   }
@@ -204,7 +207,7 @@ export default function MainScreen() {
                     )}
                   </div>
                   <div className='navbar-chat-subtile'>
-                    {selectedChat.subtitle}
+                    {chatSubtitle(selectedChat)}
                   </div>
                 </div>
               </NavbarHeading>
@@ -275,4 +278,25 @@ export default function MainScreen() {
       <ConnectivityToast />
     </div>
   )
+}
+
+function chatSubtitle(chat: FullChat) {
+  const tx = window.static_translate
+  if (chat.id > C.DC_CHAT_ID_LAST_SPECIAL) {
+    if (chat.type === C.DC_CHAT_TYPE_GROUP) {
+      return tx('n_members', [String(chat.contacts.length)], {
+        quantity: chat.contacts.length,
+      })
+    } else if (chat.type === C.DC_CHAT_TYPE_MAILINGLIST) {
+      return tx('mailing_list')
+    } else if (chat.contacts.length >= 1) {
+      if (chat.isSelfTalk) {
+        return tx('chat_self_talk_subtitle')
+      } else if (chat.isDeviceChat) {
+        return tx('device_talk_subtitle')
+      }
+      return chat.contacts[0].address
+    }
+  }
+  return 'ErrTitle'
 }

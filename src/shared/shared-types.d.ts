@@ -136,7 +136,6 @@ export interface FullChat {
   isProtected: boolean
   profileImage: string
   archived: boolean
-  subtitle: any
   type: number
   isUnpromoted: boolean
   isSelfTalk: boolean
