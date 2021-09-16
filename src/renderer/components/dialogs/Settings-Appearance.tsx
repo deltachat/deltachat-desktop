@@ -177,7 +177,7 @@ function BackgroundSelector({
 
 export default function SettingsAppearance({
   handleDesktopSettingsChange,
-  rc
+  rc,
 }: {
   handleDesktopSettingsChange: todo
   rc: RC_Config
@@ -193,8 +193,7 @@ export default function SettingsAppearance({
       const availableThemes = await DeltaBackend.call(
         'extras.getAvailableThemes'
       )
-      console.log({availableThemes, rc});
-      
+
       setAvailableThemes(
         availableThemes.filter(
           t => !t.is_prototype || t.address === activeTheme || rc.devmode
