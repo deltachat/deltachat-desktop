@@ -27,6 +27,7 @@ export enum Screens {
   Accounts = 'accounts',
   Main = 'main',
   Login = 'login',
+  Loading = 'loading',
 }
 
 export default class ScreenController extends Component {
@@ -40,7 +41,7 @@ export default class ScreenController extends Component {
     super(props)
     this.state = {
       message: false,
-      screen: Screens.Accounts,
+      screen: Screens.Loading,
     }
 
     this.onError = this.onError.bind(this)
@@ -69,6 +70,8 @@ export default class ScreenController extends Component {
     )
     if (lastLoggedInAccountId) {
       await this.selectAccount(lastLoggedInAccountId)
+    } else {
+      this.changeScreen(Screens.Accounts)
     }
   }
 
@@ -170,6 +173,8 @@ export default class ScreenController extends Component {
         )
       case Screens.Accounts:
         return <AccountsScreen selectAccount={this.selectAccount} />
+      default:
+        return null
     }
   }
 

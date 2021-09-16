@@ -1,6 +1,14 @@
 import React, { useState, useEffect, useContext, useMemo } from 'react'
 import { ipcBackend } from '../../ipc'
-import { Classes, Elevation, Intent, Card, Icon } from '@blueprintjs/core'
+import {
+  Classes,
+  Elevation,
+  Intent,
+  Card,
+  Icon,
+  Switch,
+  Alignment,
+} from '@blueprintjs/core'
 import { DeltaProgressBar } from '../Login-Styles'
 import { getLogger } from '../../../shared/logger'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
@@ -10,7 +18,6 @@ import DeltaDialog, {
   DeltaDialogBase,
   DeltaDialogBody,
   DeltaDialogContent,
-  DeltaDialogHeader,
 } from '../dialogs/DeltaDialog'
 import { DeltaChatAccount } from '../../../shared/shared-types'
 import filesizeConverter from 'filesize'
@@ -22,6 +29,7 @@ import { PseudoContact } from '../contact/Contact'
 import { runtime } from '../../runtime'
 import type ScreenController from '../../ScreenController'
 import debounce from 'debounce'
+import classNames from 'classnames'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
@@ -142,6 +150,17 @@ export default function AccountsScreen({
   const tx = useTranslationFunction()
   const [logins, setLogins] = useState(null)
 
+  const [syncAllAccounts, setSyncAllAccounts] = useState(null)
+
+  useEffect(() => {
+    ;(async () => {
+      const desktopSettings = await DeltaBackend.call(
+        'settings.getDesktopSettings'
+      )
+      setSyncAllAccounts(desktopSettings.syncAllAccounts)
+    })()
+  }, [])
+
   const refreshAccounts = async () => {
     const logins = await DeltaBackend.call('login.getAllAccounts')
     setLogins(logins)
@@ -203,9 +222,30 @@ export default function AccountsScreen({
             )}
             {logins && logins.length > 0 && (
               <>
-                <DeltaDialogHeader
-                  title={tx('login_known_accounts_title_desktop')}
-                />
+                <div
+                  className={classNames(
+                    Classes.DIALOG_HEADER,
+                    'bp3-dialog-header-border-bottom'
+                  )}
+                >
+                  <h4 className='bp3-heading'>
+                    {tx('login_known_accounts_title_desktop')}
+                  </h4>
+                  <Switch
+                    checked={syncAllAccounts}
+                    label={tx('sync_all')}
+                    onChange={async () => {
+                      const new_state = !syncAllAccounts
+                      await DeltaBackend.call(
+                        'settings.setDesktopSetting',
+                        'syncAllAccounts',
+                        new_state
+                      )
+                      setSyncAllAccounts(new_state)
+                    }}
+                    alignIndicator={Alignment.RIGHT}
+                  />
+                </div>
                 <DeltaDialogBody>
                   <DeltaDialogContent noPadding={true}>
                     <AccountSelection
@@ -214,6 +254,7 @@ export default function AccountsScreen({
                         addAccount,
                         selectAccount,
                         logins,
+                        showUnread: syncAllAccounts,
                       }}
                     />
                   </DeltaDialogContent>
@@ -240,11 +281,13 @@ function AccountSelection({
   addAccount,
   selectAccount,
   logins,
+  showUnread,
 }: {
   refreshAccounts: () => Promise<void>
   addAccount: () => {}
   selectAccount: typeof ScreenController.prototype.selectAccount
   logins: any
+  showUnread: boolean
 }) {
   const tx = useTranslationFunction()
   const { openDialog } = useContext(ScreenContext)
@@ -317,6 +360,7 @@ function AccountSelection({
           login={login}
           selectAccount={selectAccount}
           removeAccount={removeAccount}
+          showUnread={showUnread}
         />
       ))}
     </div>
@@ -327,10 +371,12 @@ function AccountItem({
   login,
   selectAccount,
   removeAccount,
+  showUnread,
 }: {
   login: DeltaChatAccount
   selectAccount: typeof ScreenController.prototype.selectAccount
   removeAccount: (account: DeltaChatAccount) => void
+  showUnread: boolean
 }) {
   const removeAction = (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     ev?.stopPropagation()
@@ -401,7 +447,7 @@ function AccountItem({
             </div>
           </div>
         </div>
-        {unreadCount > 0 && (
+        {showUnread && unreadCount > 0 && (
           <div className='unread-badge-container'>
             <div className='fresh-message-counter'>{unreadCount}</div>
           </div>

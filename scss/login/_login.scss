@@ -7,6 +7,10 @@
     color: var(--deltaChatPrimaryFgLight);
   }
 
+  p.delta-headline {
+    font-weight: bold;
+  }
+
   div.advanced {
     -webkit-appearance: button-bevel;
     background-color: transparent;
@@ -182,9 +186,11 @@ div.delta-form-group {
       }
     }
 
-    .bp3-button.bp3-minimal.bp3-intent-warning,
-    .bp3-button.bp3-minimal.bp3-intent-warning:hover {
+    .bp3-button.bp3-minimal.bp3-intent-warning {
       color: #62656a !important;
+      &:hover {
+        color: white !important;
+      }
     }
 
     .bp3-button.bp3-minimal.bp3-intent-warning:hover {

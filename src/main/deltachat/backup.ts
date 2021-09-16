@@ -7,14 +7,14 @@ import SplitOut from './splitout'
 import { DeltaChatAccount } from '../../shared/shared-types'
 export default class DCBackup extends SplitOut {
   async export(dir: string) {
-    this.accounts.stopIO()
+    this.selectedAccountContext.stopIO()
     try {
       await this._internal_export(dir)
     } catch (err) {
-      this.accounts.startIO()
+      this.selectedAccountContext.startIO()
       throw err
     }
-    this.accounts.startIO()
+    this.selectedAccountContext.startIO()
   }
 
   private async _internal_export(dir: string) {
@@ -50,7 +50,6 @@ export default class DCBackup extends SplitOut {
 
   import(file: string): Promise<DeltaChatAccount> {
     return new Promise((resolve, reject) => {
-      this.accounts.stopIO()
       const accountId = this.accounts.addAccount()
       const dcnContext = this.accounts.accountContext(accountId)
 
@@ -61,14 +60,12 @@ export default class DCBackup extends SplitOut {
         this.accounts.removeAccount(accountId)
         this.controller.selectedAccountId = null
         this.controller.selectedAccountContext = null
-        this.accounts.startIO()
         reject(reason)
       }
 
       const onSuccess = () => {
         this.controller.selectedAccountId = null
         this.controller.selectedAccountContext = null
-        this.accounts.startIO()
         resolve(this.controller.login.accountInfo(accountId))
       }
 

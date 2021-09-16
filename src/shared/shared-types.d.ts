@@ -15,6 +15,11 @@ export type Credentials = {
   send_port?: string
   send_security?: 'automatic' | '' | 'ssl' | 'starttls' | 'plain'
   smtp_certificate_checks?: any
+  socks5_enabled: string
+  socks5_host: string
+  socks5_port: string
+  socks5_user: string
+  socks5_password: string
 }
 
 export interface DesktopSettings {
@@ -43,6 +48,7 @@ export interface DesktopSettings {
   /** address to the active theme file scheme: "custom:name" or "dc:name" */
   activeTheme: string
   minimizeToTray: boolean
+  syncAllAccounts: boolean
 }
 
 export interface AppState {
@@ -131,7 +137,6 @@ export interface FullChat {
   isProtected: boolean
   profileImage: string
   archived: boolean
-  subtitle: any
   type: number
   isUnpromoted: boolean
   isSelfTalk: boolean
