@@ -5,6 +5,7 @@ import {
   FormGroup,
   Intent,
   ProgressBar,
+  Switch,
 } from '@blueprintjs/core'
 import { useTranslationFunction } from '../contexts'
 
@@ -43,6 +44,35 @@ export const DeltaSelect = React.memo(
   }
 )
 
+export const DeltaSwitch = React.memo(
+  (
+    props: React.PropsWithChildren<{
+      label: string
+      id: any
+      value: any
+      disabled?: boolean
+      onChange: (isTrue: boolean) => void
+    }>
+  ) => {
+    return (
+      <div className='delta-form-group delta-switch'>
+        <FormGroup>
+          <Switch
+            label={props.label}
+            id={props.id}
+            disabled={props.disabled}
+            onChange={ev => {
+              props.onChange(ev.currentTarget.checked)
+            }}
+            alignIndicator='right'
+            checked={props.value === '1'}
+          />
+        </FormGroup>
+      </div>
+    )
+  }
+)
+
 export const DeltaInput = React.memo(
   (
     props: React.PropsWithChildren<{
@@ -65,7 +95,7 @@ export const DeltaInput = React.memo(
     const onBlur = () => setIsFocused(false)
     const showLabel =
       isFocused ||
-      props.value.length > 0 ||
+      props.value?.length > 0 ||
       (props.label !== undefined && props.label.length > 0)
 
     return (

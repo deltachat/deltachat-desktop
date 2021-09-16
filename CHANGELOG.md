@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- Implement settings for socks5 proxy
+
+
 ### Fixed
 - fix yggmail emailaddress text overflow in qrcode dialog & settings
 
