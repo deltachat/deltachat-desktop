@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.21.1] - 2021-09-18
+
 ### Added
 - add switch to toggle simultaneous account syncing off
 - Implement settings for socks5 proxy
@@ -1304,7 +1306,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.21.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.21.1...HEAD
+
+[1.21.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.21.0...v1.21.1
 
 [1.21.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.20.2...v1.21.0
 
