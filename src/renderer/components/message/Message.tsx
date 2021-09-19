@@ -138,6 +138,11 @@ function buildContextMenu(
   const selectedText = window.getSelection()?.toString()
 
   return [
+    // Copy link to clipboard
+    link !== '' && {
+      label: tx('menu_copy_link_to_clipboard'),
+      action: () => runtime.writeClipboardText(link),
+    },
     // Reply
     !conversationType.isDeviceChat && {
       label: tx('reply_noun'),
@@ -164,11 +169,6 @@ function buildContextMenu(
             runtime.writeClipboardText(text)
           },
         },
-    // Copy link to clipboard
-    link !== '' && {
-      label: tx('menu_copy_link_to_clipboard'),
-      action: () => runtime.writeClipboardText(link),
-    },
     // Copy videocall link to clipboard
     message.videochatUrl !== '' && {
       label: tx('menu_copy_link_to_clipboard'),
