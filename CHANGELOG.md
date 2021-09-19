@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- move "Copy link to clipboard" to top in message context menu
+
 ## [1.21.1] - 2021-09-18
 
 ### Added
