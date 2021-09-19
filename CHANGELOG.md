@@ -2,6 +2,11 @@
 
 ## [Unreleased][unreleased]
 
+### Removed
+
+- Windows installer: don't allow user to choose the instalation path. (because user could install to data path and loose data on uninstalation, see #2356)
+- Windows installer: enable logging for installer
+
 ## [1.21.1] - 2021-09-18
 
 ### Added
