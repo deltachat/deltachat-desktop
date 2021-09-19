@@ -5,6 +5,8 @@
 ### Removed
 
 - Windows installer: don't allow user to choose the instalation path. (because user could install to data path and loose data on uninstalation, see #2356)
+
+### Added
 - Windows installer: enable logging for installer
 
 ## [1.21.1] - 2021-09-18
@@ -13,7 +15,7 @@
 - add switch to toggle simultaneous account syncing off
 - Implement settings for socks5 proxy
 
-## Changed
+### Changed
 - hide unfinished themes with the prefix `dev_` from the theme selection, unless `--devmode` is active.
 - hide rocket theme
 
