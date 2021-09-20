@@ -1,6 +1,7 @@
 import appConfig from './application-config'
 import { dirname, join } from 'path'
 import { screen } from 'electron'
+import { appx } from './isAppx'
 
 export function appIcon() {
   const iconFormat = process.platform === 'win32' ? '.ico' : '.png'
@@ -44,7 +45,14 @@ export function windowDefaults() {
 }
 
 export function getConfigPath() {
-  return dirname(appConfig.filePath)
+  if (appx) {
+    return join(
+      dirname(appConfig),
+      '../Packages/merlinux.DeltaChat_v2ry5hvxhdhyy/LocalCache/Local/DeltaChat'
+    )
+  } else {
+    return dirname(appConfig.filePath)
+  }
 }
 
 export function getLogsPath() {
