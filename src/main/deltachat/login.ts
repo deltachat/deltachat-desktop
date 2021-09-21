@@ -10,6 +10,7 @@ import { ExtendedAppMainProcess } from '../types'
 import { stat, readdir } from 'fs/promises'
 import { join } from 'path'
 import { Context } from 'deltachat-node/dist/context'
+import { platform } from 'os'
 const log = getLogger('main/deltachat/login')
 
 const app = rawApp as ExtendedAppMainProcess
@@ -91,7 +92,22 @@ export default class DCLoginController extends SplitOut {
   }
 
   async removeAccount(accountId: number) {
-    this.accounts.removeAccount(accountId)
+    if (platform() == 'win32') {
+      throw new Error(
+        "Unfortunately account removal is broken in this version on windows, we'll fix it in the next version"
+      )
+    }
+
+    if (this.selectedAccountId === accountId) {
+      log.warn(
+        'account that should be removed is still selected, unselecting it first..'
+      )
+      await this.logout()
+    }
+
+    if (this.accounts.removeAccount(accountId) !== 1) {
+      throw new Error('Account deletion failed')
+    }
   }
 
   async getFreshMessageCounter(accountId: number) {
