@@ -10,6 +10,8 @@
 - Windows installer: enable logging for installer
 
 ### Fixed
+- fix unreadable POI message in map in dark themes
+- fix map crash on maps in DM chats
 - fix account removal on windows
 
 ## [1.21.1] - 2021-09-18
