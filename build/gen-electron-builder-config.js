@@ -166,7 +166,6 @@ build['appx'] = {
 build['nsis'] = {
   oneClick: false,
   allowToChangeInstallationDirectory: false,
-  debugLogging: true,
 }
 
 // module.exports = build

@@ -2,6 +2,11 @@
 
 ## [Unreleased][unreleased]
 
+## [1.22.1] - 2021-09-22
+
+### Removed
+- remove nsis logging again because it breaks the release build
+
 ## [1.22.0] - 2021-09-22
 
 ### Removed
@@ -1320,7 +1325,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.22.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.22.1...HEAD
+
+[1.22.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.22.0...v1.22.1
 
 [1.22.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.21.1...v1.22.0
 
