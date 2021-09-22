@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.22.0] - 2021-09-22
+
 ### Removed
 
 - Windows installer: don't allow user to choose the instalation path. (because user could install to data path and loose data on uninstalation, see #2356)
@@ -1318,7 +1320,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.21.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.22.0...HEAD
+
+[1.22.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.21.1...v1.22.0
 
 [1.21.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.21.0...v1.21.1
 
