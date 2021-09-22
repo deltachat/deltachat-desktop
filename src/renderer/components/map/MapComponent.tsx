@@ -64,7 +64,7 @@ export default class MapComponent extends React.Component<
   )
   map: mapboxgl.Map
   stateFromSession: boolean
-  currentUser: JsonContact
+  currentUser: JsonContact | null
   constructor(props: MapProps) {
     super(props)
     this.state = {
@@ -83,13 +83,18 @@ export default class MapComponent extends React.Component<
     this.onRangeChange = this.onRangeChange.bind(this)
     this.changeMapStyle = this.changeMapStyle.bind(this)
     this.renderContactCheckbox = this.renderContactCheckbox.bind(this)
-
-    this.currentUser = this.props.selectedChat.contacts.find(
-      c => c.id === C.DC_CONTACT_ID_SELF
-    )
   }
 
   componentDidMount() {
+    this.init()
+  }
+
+  async init() {
+    this.currentUser = await DeltaBackend.call(
+      'contacts.getContact',
+      C.DC_CONTACT_ID_SELF
+    )
+
     const { selectedChat } = this.props
     let mapSettings: { zoom: number; center: mapboxgl.LngLatLike } = {
       zoom: 4,
@@ -133,17 +138,19 @@ export default class MapComponent extends React.Component<
   componentWillUnmount() {
     // save parts of the state we wanna keep
     const { selectedChat } = this.props
-    SessionStorage.storeItem(
-      this.currentUser.address,
-      `${selectedChat.id}_map`,
-      {
-        savedMapSettings: this.map && {
-          zoom: this.map.getZoom(),
-          center: this.map.getCenter(),
-        },
-        savedState: this.state,
-      }
-    )
+    if (this.currentUser) {
+      SessionStorage.storeItem(
+        this.currentUser.address,
+        `${selectedChat.id}_map`,
+        {
+          savedMapSettings: this.map && {
+            zoom: this.map.getZoom(),
+            center: this.map.getCenter(),
+          },
+          savedState: this.state,
+        }
+      )
+    }
     locationStore.unsubscribe(this.onLocationsUpdate)
   }
 
