@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- don't show logo twice in notifications (because macOS already shows applogo)
+
 ## [1.22.1] - 2021-09-22
 
 ### Removed
