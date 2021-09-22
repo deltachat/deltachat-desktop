@@ -129,8 +129,8 @@ export default class DCLoginController extends SplitOut {
     this.controller.hintUpdateIfNessesary()
 
     this.selectedAccountContext.addDeviceMessage(
-      'changelog-version-1.21-version2',
-      `What's new in 1.21?
+      'changelog-version-1.22-version1',
+      `What's new in 1.22?
 
 👋 Chat Requests now pop up as single chats and can be inspected in detail before accepting or blocking
 
