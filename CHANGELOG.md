@@ -9,6 +9,9 @@
 ### Added
 - Windows installer: enable logging for installer
 
+### Fixed
+- fix account removal on windows
+
 ## [1.21.1] - 2021-09-18
 
 ### Added
