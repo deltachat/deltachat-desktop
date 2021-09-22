@@ -11,7 +11,7 @@
 
 ### Removed
 
-- Windows installer: don't allow user to choose the instalation path. (because user could install to data path and loose data on uninstalation, see #2356)
+- Windows installer: don't allow user to choose the installation path. (because user could install to data path and loose data on uninstallation, see #2356)
 
 ### Added
 - Windows installer: enable logging for installer
@@ -40,7 +40,7 @@
 
 ### Added
 
-- Windows installer: Allow user to choose the instalation path.
+- Windows installer: Allow user to choose the installation path.
 - Copy-paste images into chat
 - make chatlist item height changeable by themes.
 - "rocket chat"-like experimental theme
