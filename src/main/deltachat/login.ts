@@ -33,6 +33,9 @@ export default class DCLoginController extends SplitOut {
   async selectAccount(accountId: number) {
     log.debug('selectAccount', accountId)
     this.controller.selectedAccountId = accountId
+    if (this.controller.selectedAccountContext) {
+      this.controller.selectedAccountContext.unref()
+    }
     this.controller.selectedAccountContext = this.accounts.accountContext(
       accountId
     )
@@ -76,6 +79,9 @@ export default class DCLoginController extends SplitOut {
     if (!app.state.saved.syncAllAccounts) {
       this.selectedAccountContext.stopIO()
     }
+    if (this.controller.selectedAccountContext) {
+      this.controller.selectedAccountContext.unref()
+    }
     this.controller.selectedAccountId = null
     this.controller.selectedAccountContext = null
 
@@ -91,12 +97,23 @@ export default class DCLoginController extends SplitOut {
   }
 
   async removeAccount(accountId: number) {
-    this.accounts.removeAccount(accountId)
+    if (this.selectedAccountId === accountId) {
+      log.warn(
+        'account that should be removed is still selected, unselecting it first..'
+      )
+      await this.logout()
+    }
+
+    if (this.accounts.removeAccount(accountId) !== 1) {
+      throw new Error('Account deletion failed')
+    }
   }
 
   async getFreshMessageCounter(accountId: number) {
     const accountContext = this.accounts.accountContext(accountId)
-    return accountContext.getFreshMessages().length
+    const result = accountContext.getFreshMessages().length
+    accountContext.unref()
+    return result
   }
 
   close() {
@@ -140,6 +157,7 @@ More on the blog: https://delta.chat/en/2021-08-24-updates` as any
         selfContact.getProfileImage(),
         selfContact.color,
       ]
+      accountContext.unref()
       return {
         type: 'configured',
         id: accountId,
@@ -149,6 +167,7 @@ More on the blog: https://delta.chat/en/2021-08-24-updates` as any
         color,
       }
     } else {
+      accountContext.unref()
       return {
         type: 'unconfigured',
         id: accountId,
@@ -158,7 +177,9 @@ More on the blog: https://delta.chat/en/2021-08-24-updates` as any
 
   async getAccountSize(accountId: number): Promise<number> {
     const accountContext = this.accounts.accountContext(accountId)
-    return await _getAccountSize(join(accountContext.getBlobdir(), '..'))
+    const account_dir = join(accountContext.getBlobdir(), '..')
+    accountContext.unref()
+    return await _getAccountSize(account_dir)
   }
 
   getAllAccountIds(): number[] {

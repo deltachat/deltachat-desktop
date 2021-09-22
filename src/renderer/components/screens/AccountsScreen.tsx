@@ -308,8 +308,17 @@ function AccountSelection({
       isConfirmDanger: true,
       cb: async (yes: boolean) => {
         if (yes) {
-          await DeltaBackend.call('login.removeAccount', account.id)
-          refreshAccounts()
+          try {
+            await DeltaBackend.call('login.removeAccount', account.id)
+            refreshAccounts()
+          } catch (error) {
+            window.__openDialog('AlertDialog', {
+              message: error?.message || error,
+              cb: () => {
+                refreshAccounts()
+              },
+            })
+          }
         }
       },
     })
