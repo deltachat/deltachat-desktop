@@ -4,6 +4,7 @@
 
 ### Fixed
 - fix copy image to clipboard compatibility on windows (see #2323)
+- fix whitescreen crash on startup
 
 ## [1.22.1] - 2021-09-22
 
