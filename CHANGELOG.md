@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- fix copy image to clipboard compatibility on windows (see #2323)
+
 ## [1.22.1] - 2021-09-22
 
 ### Removed

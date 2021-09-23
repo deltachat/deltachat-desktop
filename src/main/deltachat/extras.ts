@@ -61,7 +61,10 @@ export default class Extras extends SplitOut {
       rawApp.getPath('temp'),
       `paste.${mimeTypes.extension(formats[0]) || 'bin'}`
     )
-    const buf = clipboard.readBuffer(formats[0])
+    const buf =
+      mimeTypes.extension(formats[0]) === 'png'
+        ? clipboard.readImage().toPNG()
+        : clipboard.readBuffer(formats[0])
     log.debug(`Writing clipboard ${formats[0]} to file ${pathToFile}`)
     await writeFile(pathToFile, buf, 'binary')
     return pathToFile
