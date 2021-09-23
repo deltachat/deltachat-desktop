@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.22.2] - 2021-09-23
+
 ### Fixed
 - fix copy image to clipboard compatibility on windows (see #2323)
 - fix whitescreen crash on startup
@@ -1329,7 +1331,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.22.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.22.2...HEAD
+
+[1.22.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.22.1...v1.22.2
 
 [1.22.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.22.0...v1.22.1
 
