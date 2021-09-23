@@ -33,6 +33,9 @@ async function load() {
     log.info('Missing configuration file. Using default values.')
   }
   state.saved = Object.assign(state.saved, saved)
+  if (typeof state.saved.lastAccount !== 'number') {
+    state.saved.lastAccount = null
+  }
   return state
 }
 
