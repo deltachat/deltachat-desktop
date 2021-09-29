@@ -160,7 +160,18 @@ function EditGroupInner(props: {
       cb: (yes: boolean) => {
         if (yes) {
           removeGroupMember(contact)
-          onUpdateGroup()
+        }
+      },
+    })
+  }
+
+  const showAddGroupMemberConfirmationDialog = (contact: JsonContact) => {
+    openDialog('ConfirmationDialog', {
+      message: tx('ask_add_members_desktop', contact.nameAndAddr),
+      confirmLabel: tx('ok'),
+      cb: (yes: boolean) => {
+        if (yes) {
+          addGroupMember(contact)
         }
       },
     })
@@ -310,7 +321,7 @@ function EditGroupInner(props: {
                     </div>
                     <ContactList2
                       contacts={searchContactsToAdd}
-                      onClick={addGroupMember}
+                      onClick={showAddGroupMemberConfirmationDialog}
                     />
                   </>
                 )}
