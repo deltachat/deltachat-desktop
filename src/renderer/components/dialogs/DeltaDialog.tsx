@@ -21,7 +21,11 @@ export const DeltaDialogBase = React.memo<
       <Dialog
         isOpen={props.isOpen}
         onClose={props.onClose}
-        canOutsideClickClose={typeof props.canOutsideClickClose === 'undefined' ? true : props.canOutsideClickClose}
+        canOutsideClickClose={
+          typeof props.canOutsideClickClose === 'undefined'
+            ? true
+            : props.canOutsideClickClose
+        }
         isCloseButtonShown={props.showCloseButton}
         canEscapeKeyClose={true}
         backdropProps={props.backdropProps}

@@ -218,7 +218,7 @@ export function useGroupMembers(initialMemebers: number[]) {
       return [...prevMembers, ...ids]
     })
   }
-    
+
   return [
     groupMembers,
     removeGroupMember,
@@ -485,7 +485,12 @@ function CreateGroupInner(props: {
       {viewMode.startsWith(viewPrefix + '-addMember') && (
         <AddMemberInnerDialog
           {...{
-            onClose: () => {
+            onOk: async addMembers => {
+              updateSearch('')
+              setViewMode(viewPrefix + '-main')
+              await addGroupMembers(addMembers)
+            },
+            onCancel: () => {
               updateSearch('')
               setViewMode(viewPrefix + '-main')
             },
