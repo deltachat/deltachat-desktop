@@ -7,7 +7,7 @@ export const DeltaDialogBase = React.memo<
   React.PropsWithChildren<{
     isOpen: boolean
     onClose: () => void
-    isCloseButtonShown?: boolean
+    showCloseButton?: boolean
     fixed?: boolean
     className?: string
     style?: React.CSSProperties
@@ -21,7 +21,7 @@ export const DeltaDialogBase = React.memo<
         isOpen={props.isOpen}
         onClose={props.onClose}
         canOutsideClickClose={true}
-        isCloseButtonShown={props.isCloseButtonShown}
+        isCloseButtonShown={props.showCloseButton}
         canEscapeKeyClose={true}
         backdropProps={props.backdropProps}
         className={classNames(
@@ -72,7 +72,7 @@ const DeltaDialog = React.memo<
     style?: React.CSSProperties
     onClickBack?: () => void
     showBackButton?: boolean
-    isCloseButtonShown?: boolean
+    showCloseButton?: boolean
   }>
 >(props => {
   return (
@@ -82,13 +82,13 @@ const DeltaDialog = React.memo<
       fixed={props.fixed}
       className={props.className}
       style={props.style}
-      isCloseButtonShown={props.isCloseButtonShown}
+      showCloseButton={props.showCloseButton}
     >
       <DeltaDialogHeader
         onClose={props.onClose}
         onClickBack={props.onClickBack}
         showBackButton={props.showBackButton}
-        isCloseButtonShown={props.isCloseButtonShown}
+        showCloseButton={props.showCloseButton}
         title={props.title}
       />
       {props.children}
@@ -128,9 +128,9 @@ export function DeltaDialogHeader(props: {
   onClose?: DialogProps['onClose']
   children?: React.ReactNode
   showBackButton?: boolean
-  isCloseButtonShown?: boolean
+  showCloseButton?: boolean
 }) {
-  const { onClickBack, title, onClose, children, isCloseButtonShown } = props
+  const { onClickBack, title, onClose, children, showCloseButton } = props
   let { showBackButton } = props
   if (typeof showBackButton === 'undefined')
     showBackButton = typeof onClickBack === 'function'
@@ -144,7 +144,7 @@ export function DeltaDialogHeader(props: {
       {showBackButton && <DeltaDialogBackButton onClick={onClickBack} />}
       {title && <h4 className='bp3-heading'>{title}</h4>}
       {children}
-      {typeof onClose === 'function' && isCloseButtonShown !== false && (
+      {typeof onClose === 'function' && showCloseButton !== false && (
         <DeltaDialogCloseButton onClick={onClose} />
       )}
     </div>

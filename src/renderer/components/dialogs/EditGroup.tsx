@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/dist/constants'
 import { Card, Classes } from '@blueprintjs/core'
@@ -26,6 +26,7 @@ import {
 import { DialogProps } from './DialogController'
 import { FullChat, JsonContact } from '../../../shared/shared-types'
 import { ViewProfileInner } from './ViewProfile'
+import {ScreenContext} from '../../contexts'
 
 export default function EditGroup(props: {
   isOpen: DialogProps['isOpen']
@@ -80,6 +81,7 @@ function EditGroupInner(props: {
   onClose: DialogProps['onClose']
   chat: FullChat
 }) {
+  const { openDialog } = useContext(ScreenContext)
   const { viewMode, setViewMode, onClose, chat } = props
   const tx = window.static_translate
 
@@ -102,6 +104,19 @@ function EditGroupInner(props: {
     chat.id,
     onClose
   )
+
+  const showRemoveGroupMemberConfirmationDialog = (contact: JsonContact) => {
+    openDialog('ConfirmationDialog', {
+      message: tx('ask_remove_members', contact.nameAndAddr),
+      confirmLabel: tx('delete'),
+      cb: (yes: boolean) => {
+        if (yes) {
+          removeGroupMember(contact)
+          onUpdateGroup()
+        }
+      },
+    })
+  }
 
   const [qrCode, setQrCode] = useState('')
   const listFlags = chat.isProtected
@@ -158,12 +173,14 @@ function EditGroupInner(props: {
       )}
       {viewMode === 'showQrCode' && (
         <>
-          <DeltaDialogHeader title={tx('qrshow_title')} />
+          <DeltaDialogHeader
+            title={tx('qrshow_title')}
+            showBackButton={true}
+            onClickBack={() => setViewMode('main')}
+            showCloseButton={true}
+            onClose={onClose}
+          />
           <QrCodeShowQrInner
-            onBack={() => {
-              updateSearch('')
-              setViewMode('main')
-            }}
             qrCode={qrCode}
             description={tx('qrshow_join_group_hint', [groupName])}
           />
@@ -171,7 +188,11 @@ function EditGroupInner(props: {
       )}
       {viewMode === 'main' && (
         <>
-          <DeltaDialogHeader title={tx('menu_edit_group')} />
+          <DeltaDialogHeader 
+            title={tx('menu_edit_group')}
+            showCloseButton={true}
+            onClose={onClose}
+          />
           <div className={Classes.DIALOG_BODY}>
             <Card>
               <GroupSettingsSetNameAndProfileImage
@@ -210,7 +231,7 @@ function EditGroupInner(props: {
                     setProfileContact(contact)
                     setViewMode('profile')
                   }}
-                  onRemoveClick={removeGroupMember}
+                  onRemoveClick={showRemoveGroupMemberConfirmationDialog}
                 />
                 {queryStr !== '' && searchContactsToAdd.length !== 0 && (
                   <>
@@ -229,7 +250,6 @@ function EditGroupInner(props: {
               </div>
             </Card>
           </div>
-          <DeltaDialogOkCancelFooter onCancel={onClose} onOk={onUpdateGroup} />
         </>
       )}
       {viewMode === 'profile' && (
@@ -238,6 +258,8 @@ function EditGroupInner(props: {
             title={tx('menu_view_profile')}
             showBackButton={true}
             onClickBack={() => setViewMode('main')}
+            showCloseButton={true}
+            onClose={onClose}
           />
           <DeltaDialogBody noFooter>
             <DeltaDialogContent noPadding>

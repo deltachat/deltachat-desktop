@@ -16,7 +16,7 @@ export default function ImportQrCode({
       title={tx('qrscan_title')}
       isOpen={isOpen}
       onClose={onClose}
-      isCloseButtonShown={false}
+      showCloseButton={false}
     >
       <QrCodeScanQrInner onClose={onClose} />
     </DeltaDialog>

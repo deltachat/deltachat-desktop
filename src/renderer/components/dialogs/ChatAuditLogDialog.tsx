@@ -130,7 +130,7 @@ export default function ChatAuditLogDialog(props: {
       fixed
       className={'audit-log-dialog'}
       style={{ width: 'calc(100vw - 50px)', maxWidth: '733px' }}
-      isCloseButtonShown={true}
+      showCloseButton={true}
     >
       <div className='bp3-dialog-header bp3-dialog-header-border-bottom'>
         <div className='heading'>
