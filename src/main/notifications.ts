@@ -7,8 +7,11 @@ import { ExtendedAppMainProcess } from './types'
 import { FullChat, MessageType } from '../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
 import { getLogger } from '../shared/logger'
+import { platform } from 'os'
 
 const log = getLogger('main/notifications')
+
+const isMac = platform() === 'darwin'
 
 export default function (dc: DeltaChatController, settings: any) {
   if (!Notification.isSupported()) return
@@ -53,8 +56,10 @@ export default function (dc: DeltaChatController, settings: any) {
       }
 
       if (!icon || icon.isEmpty()) {
-        // fallback: show app icon instead
-        icon = nativeImage.createFromPath(appIcon())
+        // fallback: show app icon instead (if not on mac, because mac aready shows the app icon)
+        if (!isMac) {
+          icon = nativeImage.createFromPath(appIcon())
+        }
       }
 
       const notificationOptions: Electron.NotificationConstructorOptions = {
