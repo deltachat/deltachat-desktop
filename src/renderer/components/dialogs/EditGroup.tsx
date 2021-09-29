@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/dist/constants'
 import { Card, Classes } from '@blueprintjs/core'
-import {
+import DeltaDialog, {
   DeltaDialogBase,
   DeltaDialogHeader,
   DeltaDialogOkCancelFooter,
@@ -26,7 +26,7 @@ import {
 import { DialogProps } from './DialogController'
 import { FullChat, JsonContact } from '../../../shared/shared-types'
 import { ViewProfileInner } from './ViewProfile'
-import {ScreenContext} from '../../contexts'
+import {ScreenContext, useTranslationFunction} from '../../contexts'
 
 export default function EditGroup(props: {
   isOpen: DialogProps['isOpen']
@@ -37,7 +37,10 @@ export default function EditGroup(props: {
   const [viewMode, setViewMode] = useState('main')
 
   return (
-    <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
+    <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed style={{
+      maxHeight: 'unset',
+      height: 'calc(100vh - 50px)'
+    }}>
       <EditGroupInner {...{ viewMode, setViewMode, onClose, chat }} />
     </DeltaDialogBase>
   )
@@ -83,7 +86,7 @@ function EditGroupInner(props: {
 }) {
   const { openDialog } = useContext(ScreenContext)
   const { viewMode, setViewMode, onClose, chat } = props
-  const tx = window.static_translate
+  const tx = useTranslationFunction()
 
   const [groupName, setGroupName] = useState(chat.name)
   const [errorMissingGroupName, setErrorMissingGroupName] = useState(false)
@@ -118,6 +121,17 @@ function EditGroupInner(props: {
     })
   }
 
+  const showAddMemberDialog = () => {
+    openDialog(AddMemberDialog, {
+      groupMembers,
+      addRemoveGroupMember,
+      addGroupMembers,
+      searchContacts,
+      onSearchChange,
+      queryStr,
+    })
+  }
+
   const [qrCode, setQrCode] = useState('')
   const listFlags = chat.isProtected
     ? C.DC_GCL_VERIFIED_ONLY | C.DC_GCL_ADD_SELF
@@ -141,7 +155,7 @@ function EditGroupInner(props: {
     if (queryStr !== '') return null
     return (
       <>
-        <PseudoListItemAddMember onClick={() => setViewMode('addMember')} />
+        <PseudoListItemAddMember onClick={() => showAddMemberDialog()} />
         <PseudoListItemShowQrCode
           onClick={async () => {
             const qrCode = await DeltaBackend.call('chat.getQrCode', groupId)
@@ -155,22 +169,6 @@ function EditGroupInner(props: {
 
   return (
     <>
-      {viewMode === 'addMember' && (
-        <AddMemberInnerDialog
-          {...{
-            onClickBack: () => {
-              updateSearch('')
-              setViewMode('main')
-            },
-            onSearchChange,
-            queryStr,
-            searchContacts,
-            groupMembers,
-            addRemoveGroupMember,
-            addGroupMembers,
-          }}
-        />
-      )}
       {viewMode === 'showQrCode' && (
         <>
           <DeltaDialogHeader
@@ -269,5 +267,39 @@ function EditGroupInner(props: {
         </>
       )}
     </>
+  )
+}
+
+function AddMemberDialog({
+  onClose,
+  isOpen,
+  groupMembers,
+  addRemoveGroupMember,
+  addGroupMembers,
+  searchContacts,
+  onSearchChange,
+  queryStr,
+}: DialogProps) {
+  return (
+    <DeltaDialogBase
+      onClose={onClose}
+      isOpen={isOpen}
+      canOutsideClickClose={false}
+      style={{
+        maxHeight: 'calc(100vh - 130px)'
+      }}
+    >
+      <AddMemberInnerDialog
+        {...{
+          onCancel: () => {},
+          onSearchChange,
+          queryStr,
+          searchContacts,
+          groupMembers,
+          addRemoveGroupMember,
+          addGroupMembers,
+        }}
+      />
+    </DeltaDialogBase>
   )
 }

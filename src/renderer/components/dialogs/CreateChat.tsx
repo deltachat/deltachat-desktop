@@ -300,14 +300,14 @@ export const GroupSettingsSetNameAndProfileImage = ({
 }
 
 export function AddMemberInnerDialog({
-  onClickBack,
+  onCancel,
   onSearchChange,
   queryStr,
   searchContacts,
   groupMembers,
   addGroupMembers,
 }: {
-  onClickBack: Parameters<typeof DeltaDialogHeader>[0]['onClickBack']
+  onCancel: Parameters<typeof DeltaDialogHeader>[0]['onClickBack']
   onSearchChange: ReturnType<typeof useContactSearch>[1]
   queryStr: string
   searchContacts: JsonContact[]
@@ -363,7 +363,7 @@ export function AddMemberInnerDialog({
           </div>
         </Card>
       </DeltaDialogBody>
-      <DeltaDialogOkCancelFooter onCancel={onClickBack} onOk={onOk} />
+      <DeltaDialogOkCancelFooter onCancel={onCancel} onOk={onOk} />
     </>
   )
 }

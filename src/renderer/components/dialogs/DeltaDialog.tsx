@@ -12,6 +12,7 @@ export const DeltaDialogBase = React.memo<
     className?: string
     style?: React.CSSProperties
     backdropProps?: any
+    canOutsideClickClose?: boolean
   }>
 >(props => {
   const isFixed = props.fixed
@@ -20,7 +21,7 @@ export const DeltaDialogBase = React.memo<
       <Dialog
         isOpen={props.isOpen}
         onClose={props.onClose}
-        canOutsideClickClose={true}
+        canOutsideClickClose={typeof props.canOutsideClickClose === 'undefined' ? true : props.canOutsideClickClose}
         isCloseButtonShown={props.showCloseButton}
         canEscapeKeyClose={true}
         backdropProps={props.backdropProps}
