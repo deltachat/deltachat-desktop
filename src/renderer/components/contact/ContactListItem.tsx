@@ -1,7 +1,7 @@
 import React from 'react'
 import Contact from './Contact'
 import { Icon } from '@blueprintjs/core'
-import { DCContact } from '../../../shared/shared-types'
+import { JsonContact } from '../../../shared/shared-types'
 
 export const DeltaCheckbox = (props: {
   checked: boolean
@@ -35,13 +35,13 @@ export const DeltaCheckbox = (props: {
   )
 }
 export function ContactListItem(props: {
-  contact: DCContact
-  onClick: (contact: DCContact) => void
+  contact: JsonContact
+  onClick: (contact: JsonContact) => void
   showCheckbox: boolean
   checked: boolean
   showRemove: boolean
-  onCheckboxClick?: (contact: DCContact) => void
-  onRemoveClick?: (contact: DCContact) => void
+  onCheckboxClick?: (contact: JsonContact) => void
+  onRemoveClick?: (contact: JsonContact) => void
 }) {
   const { contact, onClick, showCheckbox, checked, showRemove } = props
   const onCheckboxClick = (e?: React.SyntheticEvent) => {

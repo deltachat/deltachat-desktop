@@ -6,6 +6,8 @@ import {
   DeltaDialogBase,
   DeltaDialogHeader,
   DeltaDialogOkCancelFooter,
+  DeltaDialogBody,
+  DeltaDialogContent,
 } from './DeltaDialog'
 import {
   useGroupImage,
@@ -22,7 +24,8 @@ import {
   PseudoListItemAddMember,
 } from '../helpers/PseudoListItem'
 import { DialogProps } from './DialogController'
-import { FullChat } from '../../../shared/shared-types'
+import { FullChat, JsonContact } from '../../../shared/shared-types'
+import { ViewProfileInner } from './ViewProfile'
 
 export default function EditGroup(props: {
   isOpen: DialogProps['isOpen']
@@ -109,6 +112,9 @@ function EditGroupInner(props: {
   const [queryStr, onSearchChange, updateSearch] = useContactSearch(
     updateSearchContacts
   )
+
+  const [profileContact, setProfileContact] = useState<JsonContact>(null)
+
   const searchContactsToAdd =
     queryStr !== ''
       ? searchContacts
@@ -200,6 +206,10 @@ function EditGroupInner(props: {
                     ({ id }) => groupMembers.indexOf(id) !== -1
                   )}
                   showRemove
+                  onClick={(contact: JsonContact) => {
+                    setProfileContact(contact)
+                    setViewMode('profile')
+                  }}
                   onRemoveClick={removeGroupMember}
                 />
                 {queryStr !== '' && searchContactsToAdd.length !== 0 && (
@@ -220,6 +230,20 @@ function EditGroupInner(props: {
             </Card>
           </div>
           <DeltaDialogOkCancelFooter onCancel={onClose} onOk={onUpdateGroup} />
+        </>
+      )}
+      {viewMode === 'profile' && (
+        <>
+          <DeltaDialogHeader
+            title={tx('menu_view_profile')}
+            showBackButton={true}
+            onClickBack={() => setViewMode('main')}
+          />
+          <DeltaDialogBody noFooter>
+            <DeltaDialogContent noPadding>
+              <ViewProfileInner contact={profileContact} onClose={onClose} />
+            </DeltaDialogContent>
+          </DeltaDialogBody>
         </>
       )}
     </>

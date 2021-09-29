@@ -6,7 +6,7 @@ import {
   MessageType,
   JsonLocations,
   Theme,
-  DCContact,
+  JsonContact,
   MessageSearchResult,
   Credentials,
   DeltaChatAccount,
@@ -89,7 +89,7 @@ class DeltaRemote {
     fnName: 'contacts.createChatByContactId',
     contactId: number
   ): Promise<number>
-  call(fnName: 'contacts.getContact', contactId: number): Promise<DCContact>
+  call(fnName: 'contacts.getContact', contactId: number): Promise<JsonContact>
   call(
     fnName: 'contacts.getContactIds',
     listFlags: number,
@@ -98,12 +98,12 @@ class DeltaRemote {
   call(
     fnName: 'contacts.getContacts',
     ids: number[]
-  ): Promise<{ [id: number]: DCContact }>
+  ): Promise<{ [id: number]: JsonContact }>
   call(
     fnName: 'getContacts2',
     listFlags: number,
     queryStr: string
-  ): Promise<DCContact[]>
+  ): Promise<JsonContact[]>
   call(fnName: 'contacts.getEncryptionInfo', contactId: number): Promise<string>
   call(fnName: 'contacts.lookupContactIdByAddr', email: string): Promise<number>
   // chat ---------------------------------------------------------------

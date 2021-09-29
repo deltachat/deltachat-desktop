@@ -22,7 +22,7 @@ import { useContactIds } from '../contact/ContactList'
 import {
   ChatListItemType,
   MessageSearchResult,
-  DCContact,
+  JsonContact,
 } from '../../../shared/shared-types'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import {
@@ -520,7 +520,7 @@ function useContactAndMessageLogic(queryStr: string) {
 
   // Contacts ----------------
   const [contactCache, setContactCache] = useState<{
-    [id: number]: DCContact
+    [id: number]: JsonContact
   }>({})
   const [contactLoadState, setContactLoading] = useState<{
     [id: number]: undefined | LoadStatus.FETCHING | LoadStatus.LOADED

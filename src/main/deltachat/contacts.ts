@@ -2,11 +2,11 @@ import DeltaChat from 'deltachat-node'
 import { getLogger } from '../../shared/logger'
 
 import SplitOut from './splitout'
-import { DCContact } from '../../shared/shared-types'
+import { JsonContact } from '../../shared/shared-types'
 
 const log = getLogger('main/deltachat/contacts')
 
-export default class DCContacts extends SplitOut {
+export default class JsonContacts extends SplitOut {
   unblockContact(contactId: number) {
     const contact = this.selectedAccountContext.getContact(contactId)
     this.selectedAccountContext.blockContact(contactId, false)
@@ -78,15 +78,15 @@ export default class DCContacts extends SplitOut {
     )
   }
 
-  _getDCContact(id: number) {
+  _getJsonContact(id: number) {
     const contact = this.selectedAccountContext.getContact(id).toJson()
     return { ...contact }
   }
 
   getContacts(ids: number[]) {
-    const result: { [id: number]: DCContact } = {}
+    const result: { [id: number]: JsonContact } = {}
     for (const id of ids) {
-      result[id] = this._getDCContact(id)
+      result[id] = this._getJsonContact(id)
     }
     return result
   }

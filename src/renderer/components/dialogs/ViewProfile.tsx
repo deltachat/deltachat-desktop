@@ -75,9 +75,37 @@ export default function ViewProfile(props: {
   contact: JsonContact
 }) {
   const { isOpen, onClose, contact } = props
+
+  const tx = window.static_translate
+
+  const onUpdateContact = async () => {
+    await DeltaBackend.call('contacts.changeNickname', contact.id, name)
+    onClose()
+  }
+
+  return (
+    <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
+      <DeltaDialogHeader title={tx('menu_view_profile')} />
+      <DeltaDialogBody noFooter>
+        <DeltaDialogContent noPadding>
+          <ViewProfileInner contact={contact} onClose={onClose} />
+        </DeltaDialogContent>
+      </DeltaDialogBody>
+      <DeltaDialogOkCancelFooter onCancel={onClose} onOk={onUpdateContact} />
+    </DeltaDialogBase>
+  )
+}
+
+export function ViewProfileInner({
+  contact,
+  onClose,
+}: {
+  contact: JsonContact
+  onClose: () => void
+}) {
   const { openDialog } = useContext(ScreenContext)
 
-  const [name, setName] = useState<string>(props.contact.name)
+  const [name, setName] = useState<string>(contact.name)
 
   const { chatListIds } = useChatList(0, '', contact.id)
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
@@ -97,113 +125,98 @@ export default function ViewProfile(props: {
     onChatClick(dmChatId)
   }
 
-  const onUpdateContact = async () => {
-    await DeltaBackend.call('contacts.changeNickname', contact.id, name)
-    onClose()
-  }
-
   const CHATLISTITEM_CHAT_HEIGHT =
     Number(useThemeCssVar('--SPECIAL-chatlist-item-chat-height')) || 64
 
   return (
-    <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
-      <DeltaDialogHeader title={tx('menu_view_profile')} />
-      <DeltaDialogBody noFooter>
-        <DeltaDialogContent noPadding>
-          <div
-            style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
-          >
-            <div>
-              <div className='profile-info-container'>
-                <div
-                  onClick={() => {
-                    openDialog('FullscreenMedia', {
-                      msg: {
-                        file_mime: 'image/x',
-                        file: contact.profileImage,
-                      },
-                    })
-                  }}
-                  style={{
-                    cursor: contact.profileImage ? 'pointer' : 'default',
-                  }}
-                >
-                  <ProfileInfoAvatar contact={contact} />
-                </div>
-                <ProfileInfoName
-                  disabled={
-                    contact.id === C.DC_CONTACT_ID_SELF ||
-                    contact.id === C.DC_CONTACT_ID_DEVICE
-                  }
-                  authName={props.contact.authName}
-                  name={name}
-                  setName={setName}
-                  address={contact.address}
-                />
-              </div>
-              <div
-                style={{
-                  display: 'flex',
-                  margin: '20px 0px',
-                  justifyContent: 'center',
-                }}
-              >
-                {contact.id !== C.DC_CONTACT_ID_DEVICE && (
-                  <button
-                    aria-label={tx('send_message')}
-                    onClick={onSendMessage}
-                    className={'delta-button-round'}
-                    style={{ marginTop: '0px' }}
-                  >
-                    {tx('send_message')}
-                  </button>
-                )}
-              </div>
-              {contact.status != '' && (
-                <>
-                  <DeltaDialogContentTextSeperator
-                    text={tx('pref_default_status_label')}
-                  />
-                  <div className='status-text'>
-                    {MessageBody({ text: contact.status })}
-                  </div>
-                </>
-              )}
-              <DeltaDialogContentTextSeperator
-                text={tx('profile_shared_chats')}
-              />
+    <>
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <div>
+          <div className='profile-info-container'>
+            <div
+              onClick={() => {
+                openDialog('FullscreenMedia', {
+                  msg: {
+                    file_mime: 'image/x',
+                    file: contact.profileImage,
+                  },
+                })
+              }}
+              style={{
+                cursor: contact.profileImage ? 'pointer' : 'default',
+              }}
+            >
+              <ProfileInfoAvatar contact={contact} />
             </div>
-            <div className='mutual-chats' style={{ flexGrow: 1 }}>
-              <AutoSizer>
-                {({ width, height }) => (
-                  <ChatListPart
-                    isRowLoaded={isChatLoaded}
-                    loadMoreRows={loadChats}
-                    rowCount={chatListIds.length}
-                    width={width}
-                    height={height}
-                    itemKey={index => 'key' + chatListIds[index]}
-                    itemHeight={CHATLISTITEM_CHAT_HEIGHT}
-                  >
-                    {({ index, style }) => {
-                      const [chatId] = chatListIds[index]
-                      return (
-                        <div style={style}>
-                          <ChatListItem
-                            chatListItem={chatCache[chatId] || undefined}
-                            onClick={onChatClick.bind(null, chatId)}
-                          />
-                        </div>
-                      )
-                    }}
-                  </ChatListPart>
-                )}
-              </AutoSizer>
-            </div>
+            <ProfileInfoName
+              disabled={
+                contact.id === C.DC_CONTACT_ID_SELF ||
+                contact.id === C.DC_CONTACT_ID_DEVICE
+              }
+              authName={contact.authName}
+              name={name}
+              setName={setName}
+              address={contact.address}
+            />
           </div>
-        </DeltaDialogContent>
-      </DeltaDialogBody>
-      <DeltaDialogOkCancelFooter onCancel={onClose} onOk={onUpdateContact} />
-    </DeltaDialogBase>
+          <div
+            style={{
+              display: 'flex',
+              margin: '20px 0px',
+              justifyContent: 'center',
+            }}
+          >
+            {contact.id !== C.DC_CONTACT_ID_DEVICE && (
+              <button
+                aria-label={tx('send_message')}
+                onClick={onSendMessage}
+                className={'delta-button-round'}
+                style={{ marginTop: '0px' }}
+              >
+                {tx('send_message')}
+              </button>
+            )}
+          </div>
+          {contact.status != '' && (
+            <>
+              <DeltaDialogContentTextSeperator
+                text={tx('pref_default_status_label')}
+              />
+              <div className='status-text'>
+                {MessageBody({ text: contact.status })}
+              </div>
+            </>
+          )}
+          <DeltaDialogContentTextSeperator text={tx('profile_shared_chats')} />
+        </div>
+        <div className='mutual-chats' style={{ flexGrow: 1 }}>
+          <AutoSizer>
+            {({ width, height }) => (
+              <ChatListPart
+                isRowLoaded={isChatLoaded}
+                loadMoreRows={loadChats}
+                rowCount={chatListIds.length}
+                width={width}
+                height={height}
+                itemKey={index => 'key' + chatListIds[index]}
+                itemHeight={CHATLISTITEM_CHAT_HEIGHT}
+              >
+                {({ index, style }) => {
+                  const [chatId] = chatListIds[index]
+                  return (
+                    <div style={style}>
+                      <ChatListItem
+                        chatListItem={chatCache[chatId] || undefined}
+                        onClick={onChatClick.bind(null, chatId)}
+                      />
+                    </div>
+                  )
+                }}
+              </ChatListPart>
+            )}
+          </AutoSizer>
+        </div>
+      </div>
+    </>
   )
 }

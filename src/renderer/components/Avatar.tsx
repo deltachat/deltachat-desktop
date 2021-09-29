@@ -1,6 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
-import { DCContact } from '../../shared/shared-types'
+import { JsonContact } from '../../shared/shared-types'
 
 export function QRAvatar() {
   return (
@@ -64,7 +64,7 @@ export function Avatar(props: {
 }
 
 export function AvatarFromContact(
-  props: { contact: DCContact; onClick?: (contact: DCContact) => void },
+  props: { contact: JsonContact; onClick?: (contact: JsonContact) => void },
   large?: boolean,
   small?: boolean
 ) {

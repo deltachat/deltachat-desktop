@@ -29,7 +29,7 @@ import {
 
 import { GroupImage } from './Edit-Group-Image'
 
-import { JsonContact, DCContact } from '../../../shared/shared-types'
+import { JsonContact } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
 import { QrCodeShowQrInner } from './QrCode'
 import { runtime } from '../../runtime'
@@ -50,7 +50,7 @@ export default function CreateChat(props: {
   )
   const [queryStr, onSearchChange] = useContactSearch(updateContacts)
 
-  const chooseContact = async ({ id }: DCContact) => {
+  const chooseContact = async ({ id }: JsonContact) => {
     try {
       await createChatByContactIdAndSelectIt(id)
     } catch (error) {
@@ -310,7 +310,7 @@ export function AddMemberInnerDialog({
   onClickBack: Parameters<typeof DeltaDialogHeader>[0]['onClickBack']
   onSearchChange: ReturnType<typeof useContactSearch>[1]
   queryStr: string
-  searchContacts: DCContact[]
+  searchContacts: JsonContact[]
   groupMembers: number[]
   addGroupMembers: ReturnType<typeof useGroupMembers>[4]
 }) {
@@ -320,7 +320,7 @@ export function AddMemberInnerDialog({
 
   const [addMembers, setAddMembers] = useState([])
 
-  const addOrRemoveMember = (contact: DCContact) => {
+  const addOrRemoveMember = (contact: JsonContact) => {
     if (addMembers.indexOf(contact.id) === -1) {
       setAddMembers([...addMembers, contact.id])
     } else {
