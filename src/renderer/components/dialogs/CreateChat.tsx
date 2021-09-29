@@ -18,7 +18,7 @@ import {
   PseudoListItemAddContact,
 } from '../helpers/PseudoListItem'
 
-import {
+import DeltaDialog, {
   DeltaDialogBase,
   DeltaDialogHeader,
   DeltaDialogBody,
@@ -212,8 +212,13 @@ export function useGroupMembers(initialMemebers: number[]) {
       ? removeGroupMember({ id })
       : addGroupMember({ id })
   }
-  const addGroupMembers = (ids: number[]) =>
-    setGroupMembers(prevMembers => [...prevMembers, ...ids])
+  const addGroupMembers = (ids: number[]) => {
+    setGroupMembers(prevMembers => {
+      console.log('addGroupMembers', prevMembers, [...prevMembers, ...ids])
+      return [...prevMembers, ...ids]
+    })
+  }
+    
   return [
     groupMembers,
     removeGroupMember,
@@ -301,18 +306,18 @@ export const GroupSettingsSetNameAndProfileImage = ({
 
 export function AddMemberInnerDialog({
   onCancel,
+  onOk,
   onSearchChange,
   queryStr,
   searchContacts,
   groupMembers,
-  addGroupMembers,
 }: {
-  onCancel: Parameters<typeof DeltaDialogHeader>[0]['onClickBack']
+  onOk: (addMembers: number[]) => void
+  onCancel: Parameters<typeof DeltaDialogOkCancelFooter>[0]['onCancel']
   onSearchChange: ReturnType<typeof useContactSearch>[1]
   queryStr: string
   searchContacts: JsonContact[]
   groupMembers: number[]
-  addGroupMembers: ReturnType<typeof useGroupMembers>[4]
 }) {
   const contactsNotInGroup = searchContacts.filter(
     contact => groupMembers.indexOf(contact.id) === -1
@@ -330,9 +335,8 @@ export function AddMemberInnerDialog({
 
   const tx = window.static_translate
 
-  const onOk = () => {
-    addGroupMembers(addMembers)
-    onClickBack()
+  const _onOk = () => {
+    onOk(addMembers)
   }
 
   return (
@@ -363,7 +367,7 @@ export function AddMemberInnerDialog({
           </div>
         </Card>
       </DeltaDialogBody>
-      <DeltaDialogOkCancelFooter onCancel={onCancel} onOk={onOk} />
+      <DeltaDialogOkCancelFooter onCancel={onCancel} onOk={_onOk} />
     </>
   )
 }
@@ -481,7 +485,7 @@ function CreateGroupInner(props: {
       {viewMode.startsWith(viewPrefix + '-addMember') && (
         <AddMemberInnerDialog
           {...{
-            onClickBack: () => {
+            onClose: () => {
               updateSearch('')
               setViewMode(viewPrefix + '-main')
             },
