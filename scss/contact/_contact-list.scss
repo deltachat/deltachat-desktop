@@ -20,16 +20,6 @@
       cursor: 'default';
     }
   }
-
-  .remove-icon {
-    margin-top: calc((64px - 20px) / 2);
-    margin-right: 10px;
-    .bp3-icon > svg {
-      width: 20px;
-      height: 20px;
-      fill: grey;
-    }
-  }
 }
 
 div.create-chat-contact-list-wrapper {
