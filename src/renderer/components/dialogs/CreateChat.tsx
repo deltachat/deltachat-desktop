@@ -18,7 +18,7 @@ import {
   PseudoListItemAddContact,
 } from '../helpers/PseudoListItem'
 
-import DeltaDialog, {
+import {
   DeltaDialogBase,
   DeltaDialogHeader,
   DeltaDialogBody,
@@ -214,7 +214,6 @@ export function useGroupMembers(initialMemebers: number[]) {
   }
   const addGroupMembers = (ids: number[]) => {
     setGroupMembers(prevMembers => {
-      console.log('addGroupMembers', prevMembers, [...prevMembers, ...ids])
       return [...prevMembers, ...ids]
     })
   }

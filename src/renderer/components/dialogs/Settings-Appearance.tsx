@@ -200,7 +200,7 @@ export default function SettingsAppearance({
         )
       )
     })()
-  }, [])
+  }, [activeTheme, rc.devmode])
 
   const setTheme = async (theme: string) => {
     if (await DeltaBackend.call('extras.setTheme', theme)) {

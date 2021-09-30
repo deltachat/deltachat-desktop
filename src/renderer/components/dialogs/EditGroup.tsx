@@ -1,17 +1,9 @@
-import React, {
-  useState,
-  useContext,
-  useEffect,
-  useCallback,
-  useRef,
-} from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/dist/constants'
 import { Card, Classes } from '@blueprintjs/core'
-import DeltaDialog, {
+import {
   DeltaDialogBase,
   DeltaDialogHeader,
-  DeltaDialogOkCancelFooter,
   DeltaDialogBody,
   DeltaDialogContent,
 } from './DeltaDialog'
@@ -33,6 +25,8 @@ import { DialogProps } from './DialogController'
 import { FullChat, JsonContact } from '../../../shared/shared-types'
 import { ViewProfileInner } from './ViewProfile'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
+import { useState, useContext, useEffect } from 'react'
+import React from 'react'
 
 export default function EditGroup(props: {
   isOpen: DialogProps['isOpen']
@@ -77,7 +71,6 @@ export const useEditGroup = (
     )
   }
   const onUpdateGroup = async () => {
-    console.log('onUpdateGroup', groupMembers)
     if (groupName === '') return
     await updateGroup()
   }
@@ -86,38 +79,6 @@ export const useEditGroup = (
     typeof onUpdateGroup,
     typeof updateGroup
   ]
-}
-
-export function useStateWithPromise<T>(
-  initialState: T
-): [T, React.Dispatch<React.SetStateAction<T>>] {
-  const [state, setState] = useState<T>(initialState)
-  const resolverRefs = useRef([])
-
-  useEffect(() => {
-    if (resolverRefs.current) {
-      resolverRefs.current.map(r => r(state))
-      resolverRefs.current = []
-    }
-    /**
-     * Since a state update could be triggered with the exact same state again,
-     * it's not enough to specify state as the only dependency of this useEffect.
-     * That's why resolverRef.current is also a dependency, because it will guarantee,
-     * that handleSetState was called in previous render
-     */
-  }, [resolverRefs.current, state])
-
-  const handleSetState = useCallback(
-    (...args: Parameters<typeof setState>) => {
-      setState(...args)
-      return new Promise(resolve => {
-        resolverRefs.current.push(resolve)
-      })
-    },
-    [setState]
-  )
-
-  return [state, handleSetState]
 }
 
 function EditGroupInner(props: {
@@ -139,7 +100,7 @@ function EditGroupInner(props: {
     groupMembers,
     removeGroupMember,
     addGroupMember,
-    addRemoveGroupMember,
+    ,
     addGroupMembers,
   ] = useGroupMembers(chat.contacts.map(({ id }) => id))
   const [groupId, onUpdateGroup] = useEditGroup(
@@ -151,7 +112,7 @@ function EditGroupInner(props: {
 
   useEffect(() => {
     onUpdateGroup()
-  }, [groupMembers])
+  }, [groupMembers, onUpdateGroup])
 
   const showRemoveGroupMemberConfirmationDialog = (contact: JsonContact) => {
     openDialog('ConfirmationDialog', {
@@ -183,45 +144,14 @@ function EditGroupInner(props: {
     : C.DC_GCL_ADD_SELF
 
   const [searchContacts, updateSearchContacts] = useContacts(listFlags, '')
-  const [queryStr, onSearchChange, updateSearch] = useContactSearch(
-    updateSearchContacts
-  )
+  const [queryStr, onSearchChange] = useContactSearch(updateSearchContacts)
 
   const showAddMemberDialog = () => {
-    openDialog(({ onClose, isOpen }: DialogProps) => {
-      const [searchContacts, updateSearchContacts] = useContacts(listFlags, '')
-      const [queryStr, onSearchChange, updateSearch] = useContactSearch(
-        updateSearchContacts
-      )
-      return (
-        <DeltaDialogBase
-          onClose={onClose}
-          isOpen={isOpen}
-          canOutsideClickClose={false}
-          style={{
-            top: '15vh',
-            width: '500px',
-            maxHeight: '70vh',
-          }}
-          fixed
-        >
-          {AddMemberInnerDialog({
-            onOk: async addMembers => {
-              await addGroupMembers(addMembers)
-
-              onUpdateGroup()
-              onClose()
-            },
-            onCancel: () => {
-              onClose()
-            },
-            onSearchChange,
-            queryStr,
-            searchContacts,
-            groupMembers,
-          })}
-        </DeltaDialogBase>
-      )
+    openDialog(AddMemberDialog, {
+      listFlags,
+      addGroupMembers,
+      onUpdateGroup,
+      groupMembers,
     })
   }
 
@@ -350,5 +280,46 @@ function EditGroupInner(props: {
         </>
       )}
     </>
+  )
+}
+
+export function AddMemberDialog({
+  onClose,
+  isOpen,
+  listFlags,
+  addGroupMembers,
+  onUpdateGroup,
+  groupMembers,
+}: DialogProps) {
+  const [searchContacts, updateSearchContacts] = useContacts(listFlags, '')
+  const [queryStr, onSearchChange] = useContactSearch(updateSearchContacts)
+  return (
+    <DeltaDialogBase
+      onClose={onClose}
+      isOpen={isOpen}
+      canOutsideClickClose={false}
+      style={{
+        top: '15vh',
+        width: '500px',
+        maxHeight: '70vh',
+      }}
+      fixed
+    >
+      {AddMemberInnerDialog({
+        onOk: async addMembers => {
+          addGroupMembers(addMembers)
+
+          onUpdateGroup()
+          onClose()
+        },
+        onCancel: () => {
+          onClose()
+        },
+        onSearchChange,
+        queryStr,
+        searchContacts,
+        groupMembers,
+      })}
+    </DeltaDialogBase>
   )
 }

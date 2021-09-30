@@ -210,102 +210,102 @@ export default function Settings(props: DialogProps) {
       return null
     }
 
-      return (
-        <>
-          <DeltaDialogBody>
-            <SettingsProfile
-              onClose={props.onClose}
-              addr={settings['addr']}
-              displayname={settings['displayname']}
-              state={state}
-              handleDeltaSettingsChange={handleDeltaSettingsChange}
+    return (
+      <>
+        <DeltaDialogBody>
+          <SettingsProfile
+            onClose={props.onClose}
+            addr={settings['addr']}
+            displayname={settings['displayname']}
+            state={state}
+            handleDeltaSettingsChange={handleDeltaSettingsChange}
+          />
+          <Card elevation={Elevation.ONE}>
+            <SettingsCommunication
+              {...{
+                handleDeltaSettingsChange: handleDeltaSettingsChange,
+                settings,
+              }}
             />
-            <Card elevation={Elevation.ONE}>
-              <SettingsCommunication
-                {...{
-                  handleDeltaSettingsChange: handleDeltaSettingsChange,
-                  settings,
-                }}
-              />
-              <br />
-              <H5>{tx('pref_privacy')}</H5>
-              {renderDeltaSwitch('mdns_enabled', tx('pref_read_receipts'))}
-              <br />
-              <SettingsAutodelete
-                {...{
-                  handleDeltaSettingsChange: handleDeltaSettingsChange,
-                  settings,
-                }}
-              />
-            </Card>
-            <SettingsAppearance
-              handleDesktopSettingsChange={handleDesktopSettingsChange}
-              rc={rc}
+            <br />
+            <H5>{tx('pref_privacy')}</H5>
+            {renderDeltaSwitch('mdns_enabled', tx('pref_read_receipts'))}
+            <br />
+            <SettingsAutodelete
+              {...{
+                handleDeltaSettingsChange: handleDeltaSettingsChange,
+                settings,
+              }}
             />
-            <SettingsEncryption renderDeltaSwitch={renderDeltaSwitch} />
-            <Card elevation={Elevation.ONE}>
-              <H5>{tx('pref_chats_and_media')}</H5>
-              {renderDTSettingSwitch(
-                'enterKeySends',
-                tx('pref_enter_sends_explain')
-              )}
-              {renderDTSettingSwitch(
-                'notifications',
-                tx('pref_notifications_explain')
-              )}
-              {renderDTSettingSwitch(
-                'showNotificationContent',
-                tx('pref_show_notification_content_explain'),
-                !desktopSettings['notifications']
-              )}
-            </Card>
-            <Card elevation={Elevation.ONE}>
-              <H5>{tx('pref_experimental_features')}</H5>
-              {renderDTSettingSwitch(
-                'enableOnDemandLocationStreaming',
-                tx('pref_on_demand_location_streaming')
-              )}
-              {renderDTSettingSwitch(
-                'minimizeToTray',
-                tx('pref_show_tray_icon'),
-                rc?.minimized,
-                rc?.minimized
-              )}
-              {rc?.minimized && (
+          </Card>
+          <SettingsAppearance
+            handleDesktopSettingsChange={handleDesktopSettingsChange}
+            rc={rc}
+          />
+          <SettingsEncryption renderDeltaSwitch={renderDeltaSwitch} />
+          <Card elevation={Elevation.ONE}>
+            <H5>{tx('pref_chats_and_media')}</H5>
+            {renderDTSettingSwitch(
+              'enterKeySends',
+              tx('pref_enter_sends_explain')
+            )}
+            {renderDTSettingSwitch(
+              'notifications',
+              tx('pref_notifications_explain')
+            )}
+            {renderDTSettingSwitch(
+              'showNotificationContent',
+              tx('pref_show_notification_content_explain'),
+              !desktopSettings['notifications']
+            )}
+          </Card>
+          <Card elevation={Elevation.ONE}>
+            <H5>{tx('pref_experimental_features')}</H5>
+            {renderDTSettingSwitch(
+              'enableOnDemandLocationStreaming',
+              tx('pref_on_demand_location_streaming')
+            )}
+            {renderDTSettingSwitch(
+              'minimizeToTray',
+              tx('pref_show_tray_icon'),
+              rc?.minimized,
+              rc?.minimized
+            )}
+            {rc?.minimized && (
+              <div className='bp3-callout'>
+                {tx('explain_desktop_minimized_disabled_tray_pref')}
+              </div>
+            )}
+            {renderDTSettingSwitch(
+              'enableChatAuditLog',
+              tx('menu_chat_audit_log')
+            )}
+            {renderDTSettingSwitch('enableAVCalls', tx('videochat'))}
+            {desktopSettings['enableAVCalls'] === true && (
+              <>
+                <DeltaSettingsInput
+                  configKey='webrtc_instance'
+                  label={tx('videochat_instance')}
+                  style={{ width: '100%' }}
+                />
                 <div className='bp3-callout'>
-                  {tx('explain_desktop_minimized_disabled_tray_pref')}
+                  {tx('videochat_instance_explain')}
                 </div>
-              )}
-              {renderDTSettingSwitch(
-                'enableChatAuditLog',
-                tx('menu_chat_audit_log')
-              )}
-              {renderDTSettingSwitch('enableAVCalls', tx('videochat'))}
-              {desktopSettings['enableAVCalls'] === true && (
-                <>
-                  <DeltaSettingsInput
-                    configKey='webrtc_instance'
-                    label={tx('videochat_instance')}
-                    style={{ width: '100%' }}
-                  />
-                  <div className='bp3-callout'>
-                    {tx('videochat_instance_explain')}
-                  </div>
-                </>
-              )}
-              <br />
-              <H5>{tx('pref_imap_folder_handling')}</H5>
-              {renderDeltaSwitch('inbox_watch', tx('pref_watch_inbox_folder'))}
-              {renderDeltaSwitch('sentbox_watch', tx('pref_watch_sent_folder'))}
-              {renderDeltaSwitch('mvbox_watch', tx('pref_watch_mvbox_folder'))}
-              {renderDeltaSwitch('bcc_self', tx('pref_send_copy_to_self'))}
-              {renderDeltaSwitch('mvbox_move', tx('pref_auto_folder_moves'))}
-            </Card>
-            <SettingsManageKeys />
-            <SettingsBackup />
-          </DeltaDialogBody>
-        </>
-      )
+              </>
+            )}
+            <br />
+            <H5>{tx('pref_imap_folder_handling')}</H5>
+            {renderDeltaSwitch('inbox_watch', tx('pref_watch_inbox_folder'))}
+            {renderDeltaSwitch('sentbox_watch', tx('pref_watch_sent_folder'))}
+            {renderDeltaSwitch('mvbox_watch', tx('pref_watch_mvbox_folder'))}
+            {renderDeltaSwitch('bcc_self', tx('pref_send_copy_to_self'))}
+            {renderDeltaSwitch('mvbox_move', tx('pref_auto_folder_moves'))}
+          </Card>
+          <SettingsManageKeys />
+          <SettingsBackup />
+        </DeltaDialogBody>
+      </>
+    )
   }
 
   useEffect(() => {

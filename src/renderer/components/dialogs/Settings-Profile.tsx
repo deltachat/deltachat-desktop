@@ -17,9 +17,7 @@ import { C } from 'deltachat-node/dist/constants'
 import { DialogProps } from './DialogController'
 import { onDCEvent } from '../../ipc'
 import SettingsAccountDialog from './Settings-Account'
-import SettingsConnectivityDialog, {
-  getConnectivityHTML,
-} from './Settings-Connectivity'
+import SettingsConnectivityDialog from './Settings-Connectivity'
 
 export default function SettingsProfile({
   addr,
@@ -111,11 +109,9 @@ export default function SettingsProfile({
         </SettingsButton>
         <SettingsButton
           onClick={async () => {
-            const connectivityHTML = await getConnectivityHTML()
             openDialog(SettingsConnectivityDialog, {
               state,
               handleDeltaSettingsChange,
-              connectivityHTML,
             })
           }}
         >

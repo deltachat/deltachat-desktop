@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState, useRef } from 'react'
 import { Card, Elevation } from '@blueprintjs/core'
 import React from 'react'
 
@@ -21,11 +21,9 @@ const OverwrittenStyles =
 export default function SettingsConnectivityDialog({
   onClose,
   isOpen,
-  connectivityHTML,
 }: {
   isOpen: DialogProps['isOpen']
   onClose: DialogProps['onClose']
-  connectivityHTML: string
 }) {
   const tx = useTranslationFunction()
 
@@ -40,47 +38,65 @@ export default function SettingsConnectivityDialog({
       }}
     >
       <DeltaDialogHeader title={tx('pref_edit_profile')} />
-      {SettingsConnectivityInner(connectivityHTML)}
+      {SettingsConnectivityInner()}
       <DeltaDialogCloseFooter onClose={onClose} />
     </DeltaDialogBase>
   )
 }
 
-export async function getConnectivityHTML(): Promise<string> {
+export async function getConnectivityHTML(
+  styleSensor: React.MutableRefObject<HTMLDivElement> | null
+): Promise<string> {
   let cHTML = await DeltaBackend.call('context.getConnectivityHTML')
+
+  if (styleSensor !== null && styleSensor.current) {
+    const cstyle = window.getComputedStyle(styleSensor.current)
+    let resulting_style = ''
+    for (const property of INHERIT_STYLES) {
+      resulting_style += `${property}: ${cstyle.getPropertyValue(property)};`
+    }
+    cHTML = cHTML.replace(
+      '</style>',
+      `</style><style> html {${resulting_style}${OverwrittenStyles}}</style>`
+    )
+  }
   return cHTML
 }
 
-export function SettingsConnectivityInner(_connectivityHTML: string) {
-  const [connectivityHTML, setConnectivityHTML] = useState(_connectivityHTML)
+export function SettingsConnectivityInner() {
+  const [connectivityHTML, setConnectivityHTML] = useState('')
+  const styleSensor = useRef<HTMLDivElement | null>(null)
 
   const updateConnectivity = useMemo(
     () =>
       debounceWithInit(async () => {
-        const cHTML = await getConnectivityHTML()
+        const cHTML = await getConnectivityHTML(styleSensor)
         setConnectivityHTML(cHTML)
       }, 240),
     [] // eslint-disable-line react-hooks/exhaustive-deps
   )
 
   useEffect(() => {
+    updateConnectivity()
     return onDCEvent('DC_EVENT_CONNECTIVITY_CHANGED', updateConnectivity)
-  }, [])
+  })
 
   return (
     <>
       <DeltaDialogBody noFooter>
         <Card elevation={Elevation.ONE} style={{ paddingTop: '0px' }}>
-          <iframe
-            style={{
-              border: 0,
-              height: '100%',
-              width: '100%',
-              minHeight: '320px',
-            }}
-            srcDoc={connectivityHTML}
-            sandbox={''}
-          />
+          <div ref={styleSensor} style={{ height: '100%', width: '100%' }}>
+            <iframe
+              style={{
+                border: 0,
+                height: '100%',
+                width: '100%',
+                minHeight: '320px',
+              }}
+              srcDoc={connectivityHTML}
+              sandbox={''}
+            />
+          </div>
         </Card>
       </DeltaDialogBody>
     </>
