@@ -15,16 +15,13 @@ import {
   DeltaDialogBase,
   DeltaDialogHeader,
   DeltaDialogBody,
-  DeltaDialogCloseFooter,
 } from './DeltaDialog'
 import SettingsBackup from './Settings-Backup'
-import SettingsAccount from './Settings-Account'
 import SettingsAppearance from './Settings-Appearance'
-import SettingsProfile, { SettingsEditProfile } from './Settings-Profile'
+import SettingsProfile from './Settings-Profile'
 import { getLogger } from '../../../shared/logger'
 import SettingsCommunication from './Settings-Communication'
 import { runtime } from '../../runtime'
-import SettingsConnectivity from './Settings-Connectivity'
 
 const log = getLogger('renderer/dialogs/Settings')
 
@@ -127,10 +124,6 @@ export default function Settings(props: DialogProps) {
     })
   }
 
-  const setShow = (show: string) => {
-    log.debug('Setting show to ' + show)
-    setState({ show })
-  }
   const { desktopSettings, setDesktopSetting } = useContext(SettingsContext)
 
   const tx = useTranslationFunction()
@@ -217,17 +210,15 @@ export default function Settings(props: DialogProps) {
       return null
     }
 
-    if (state.show === 'main') {
       return (
         <>
           <DeltaDialogBody>
             <SettingsProfile
-              show={state.show}
-              setShow={setShow}
               onClose={props.onClose}
               addr={settings['addr']}
               displayname={settings['displayname']}
               state={state}
+              handleDeltaSettingsChange={handleDeltaSettingsChange}
             />
             <Card elevation={Elevation.ONE}>
               <SettingsCommunication
@@ -313,38 +304,8 @@ export default function Settings(props: DialogProps) {
             <SettingsManageKeys />
             <SettingsBackup />
           </DeltaDialogBody>
-          <DeltaDialogCloseFooter onClose={onClose} />
         </>
       )
-    } else if (state.show === 'edit-profile') {
-      return (
-        <SettingsEditProfile
-          show={state.show}
-          setShow={setShow}
-          onClose={props.onClose}
-          state={state}
-          handleDeltaSettingsChange={handleDeltaSettingsChange}
-        />
-      )
-    } else if (state.show === 'login') {
-      return (
-        <SettingsAccount
-          show={state.show}
-          setShow={setShow}
-          onClose={props.onClose}
-        />
-      )
-    } else if (state.show === 'connectivity') {
-      return (
-        <SettingsConnectivity
-          show={state.show}
-          setShow={setShow}
-          onClose={props.onClose}
-        />
-      )
-    } else {
-      throw new Error('Invalid state name: ' + state.show)
-    }
   }
 
   useEffect(() => {
@@ -383,16 +344,7 @@ export default function Settings(props: DialogProps) {
   }, [])
 
   const { onClose } = props
-  let title
-  if (state.show === 'main') {
-    title = tx('menu_settings')
-  } else if (state.show === 'login') {
-    title = tx('pref_password_and_account_settings')
-  } else if (state.show === 'edit-profile') {
-    title = tx('pref_edit_profile')
-  } else if (state.show === 'connectivity') {
-    title = tx('connectivity')
-  }
+  const title = tx('menu_settings')
 
   return (
     <DeltaDialogBase
@@ -404,7 +356,11 @@ export default function Settings(props: DialogProps) {
       className='SettingsDialog'
       fixed
     >
-      <DeltaDialogHeader title={title} />
+      <DeltaDialogHeader
+        title={title}
+        onClose={onClose}
+        showCloseButton={true}
+      />
       {renderDialogContent(state)}
     </DeltaDialogBase>
   )
