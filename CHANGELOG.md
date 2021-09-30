@@ -2,6 +2,13 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- Clicking on member in group dialog shows the profile of member
+
+### Changed
+- Bring back the back and close button in dialogs, move actions that need an ok/cancel button
+  into it's own dialogs
+
 ### Fixed
 - don't show logo twice in notifications (because macOS already shows applogo)
 
