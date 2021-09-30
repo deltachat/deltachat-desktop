@@ -253,5 +253,5 @@
     publisherDisplayName: 'merlinux',
     identityName: 'merlinux.DeltaChat',
   },
-  nsis: { oneClick: false, allowToChangeInstallationDirectory: true },
+  nsis: { oneClick: false, allowToChangeInstallationDirectory: false },
 }

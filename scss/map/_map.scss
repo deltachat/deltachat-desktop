@@ -27,6 +27,7 @@ $color-map-overlay-bg: var(--mapOverlayBg);
 
 div.context-menu {
   width: 200px;
+  background-color: var(--mapMessageBg);
   label {
     display: block;
     font-size: 13px;
@@ -135,6 +136,18 @@ div.context-menu {
 
 .map-popup {
   font-family: $roboto; // fix that emojis get displayed right in the popups
+}
+
+.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
+  border-top-color: var(--mapMessageBg);
+}
+
+.mapboxgl-popup-content {
+  background-color: var(--mapMessageBg);
+}
+
+.mapboxgl-popup-close-button {
+  color: var(--globalText);
 }
 
 .mapboxgl-ctrl-top-right .mapboxgl-ctrl {

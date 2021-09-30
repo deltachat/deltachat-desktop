@@ -158,6 +158,7 @@ $hover-contrast-change: 2%;
   --globalBackground: #{$bgPrimary};
   --globalText: #{$textPrimary};
   --mapOverlayBg: #{$bgPrimary};
+  --mapMessageBg: #{$bgPrimary};
   --videoPlayBtnIcon: #{$accentColor};
   --videoPlayBtnBg: #ffffff; // Manual value: This will not get generated in the future
   --videoPlayBtnBorder: #eaeaea;

@@ -39,11 +39,18 @@ export default function AccountSetupScreen({
     })
 
   const onCancel = async () => {
-    const acInfo = await DeltaBackend.call('login.accountInfo', accountId)
-    if (acInfo.type == 'unconfigured') {
-      await DeltaBackend.call('login.removeAccount', accountId)
+    try {
+      const acInfo = await DeltaBackend.call('login.accountInfo', accountId)
+      if (acInfo.type == 'unconfigured') {
+        await DeltaBackend.call('login.removeAccount', accountId)
+      }
+      window.__changeScreen(Screens.Accounts)
+    } catch (error) {
+      window.__openDialog('AlertDialog', {
+        message: error?.message || error,
+        cb: () => {},
+      })
     }
-    window.__changeScreen(Screens.Accounts)
   }
 
   return (

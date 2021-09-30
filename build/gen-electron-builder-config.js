@@ -165,7 +165,7 @@ build['appx'] = {
 // see https://www.electron.build/configuration/nsis
 build['nsis'] = {
   oneClick: false,
-  allowToChangeInstallationDirectory: true
+  allowToChangeInstallationDirectory: false,
 }
 
 // module.exports = build

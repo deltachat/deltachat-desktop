@@ -2,11 +2,41 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- don't show logo twice in notifications (because macOS already shows applogo)
+
+## [1.22.2] - 2021-09-23
+
+### Fixed
+- fix copy image to clipboard compatibility on windows (see #2323)
+- fix whitescreen crash on startup
+
+## [1.22.1] - 2021-09-22
+
+### Removed
+- remove nsis logging again because it breaks the release build
+
+## [1.22.0] - 2021-09-22
+
+### Removed
+
+- Windows installer: don't allow user to choose the installation path. (because user could install to data path and loose data on uninstallation, see #2356)
+
+### Added
+- Windows installer: enable logging for installer
+
+### Fixed
+- fix unreadable POI message in map in dark themes
+- fix map crash on maps in DM chats
+- fix account removal on windows
+
+## [1.21.1] - 2021-09-18
+
 ### Added
 - add switch to toggle simultaneous account syncing off
 - Implement settings for socks5 proxy
 
-## Changed
+### Changed
 - hide unfinished themes with the prefix `dev_` from the theme selection, unless `--devmode` is active.
 - hide rocket theme
 
@@ -19,7 +49,7 @@
 
 ### Added
 
-- Windows installer: Allow user to choose the instalation path.
+- Windows installer: Allow user to choose the installation path.
 - Copy-paste images into chat
 - make chatlist item height changeable by themes.
 - "rocket chat"-like experimental theme
@@ -1304,7 +1334,15 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.21.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.22.2...HEAD
+
+[1.22.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.22.1...v1.22.2
+
+[1.22.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.22.0...v1.22.1
+
+[1.22.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.21.1...v1.22.0
+
+[1.21.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.21.0...v1.21.1
 
 [1.21.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.20.2...v1.21.0
 

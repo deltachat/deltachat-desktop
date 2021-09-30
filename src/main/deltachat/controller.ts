@@ -187,8 +187,10 @@ export default class DeltaChatController extends EventEmitter {
               'found stickers, migrating them',
               old_sticker_folder
             )
+            let ctx: null | Context
             try {
-              const blobdir = tmp_dc.accountContext(account_id).getBlobdir()
+              ctx = tmp_dc.accountContext(account_id)
+              const blobdir = ctx.getBlobdir()
               const new_sticker_folder = join(blobdir, '../stickers')
               await rename(old_sticker_folder, new_sticker_folder)
             } catch (error) {
@@ -197,6 +199,8 @@ export default class DeltaChatController extends EventEmitter {
                 old_sticker_folder,
                 error
               )
+            } finally {
+              ctx?.unref()
             }
           }
 
