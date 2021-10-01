@@ -8,7 +8,9 @@
     "module": "commonjs",
     "target": "es6",
     "allowJs": false,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "strictNullChecks": true,
+    "strict": true
   },
   "include": ["./**/*.ts", "./**/*.js"]
 }

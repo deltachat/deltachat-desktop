@@ -31,11 +31,11 @@ export interface DesktopSettings {
         y: number
       }
     | {}
-  chatViewBgImg: string
+  chatViewBgImg?: string
   /** @deprecated replaced by lastAccount */
-  credentials: Credentials
+  credentials?: Credentials
   /** path to last used/selected Account */
-  lastAccount: number
+  lastAccount?: number
   enableAVCalls: boolean
   enableChatAuditLog: boolean
   enableOnDemandLocationStreaming: boolean
