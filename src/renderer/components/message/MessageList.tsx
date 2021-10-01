@@ -42,12 +42,15 @@ export default function MessageList({
     },
     chatStoreDispatch,
   ] = useChatStore()
-  const messageListRef = useRef(null)
-  const lastKnownScrollHeight = useRef<number>(null)
+  const messageListRef = useRef<HTMLDivElement | null>(null)
+  const lastKnownScrollHeight = useRef<number>(0)
   const isFetching = useRef(false)
 
   const [fetchMore] = useDebouncedCallback(
     () => {
+      if (!messageListRef.current) {
+        return
+      }
       chatStoreDispatch({
         type: 'FETCH_MORE_MESSAGES',
         payload: { scrollHeight: messageListRef.current.scrollHeight },
@@ -58,8 +61,11 @@ export default function MessageList({
   )
 
   const onScroll = useCallback(
-    (Event: React.UIEvent<HTMLDivElement>) => {
-      lastKnownScrollHeight.current = messageListRef.current.scrollHeight
+    (Event: React.UIEvent<HTMLDivElement> | null) => {
+      if (!messageListRef.current) {
+        return
+      }
+      ;(lastKnownScrollHeight.current as any) = messageListRef.current.scrollHeight
       if (messageListRef.current.scrollTop !== 0) return
       if (isFetching.current === false) {
         isFetching.current = true
@@ -74,7 +80,12 @@ export default function MessageList({
   )
 
   useEffect(() => {
-    if (scrollToBottom === false) return
+    if (!messageListRef.current) {
+      return
+    }
+    if (scrollToBottom === false) {
+      return
+    }
 
     log.debug(
       'scrollToBottom',
@@ -92,6 +103,9 @@ export default function MessageList({
   }, [chatStoreDispatch, onScroll, scrollToBottom])
 
   useEffect(() => {
+    if (!messageListRef.current) {
+      return
+    }
     if (scrollToBottomIfClose === false) return
     const scrollHeight = lastKnownScrollHeight.current
     const { scrollTop, clientHeight } = messageListRef.current
@@ -117,6 +131,9 @@ export default function MessageList({
   }, [chatStoreDispatch, scrollToBottomIfClose])
 
   useEffect(() => {
+    if (!messageListRef.current) {
+      return
+    }
     if (scrollToLastPage === false) return
     // restore old scroll position after new messages are rendered
     messageListRef.current.scrollTop =
@@ -136,6 +153,9 @@ export default function MessageList({
   }, [refComposer, chat.id])
 
   useEffect(() => {
+    if (!messageListRef.current) {
+      return
+    }
     const composerTextarea = refComposer.current.childNodes[1]
     composerTextarea && composerTextarea.focus()
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
@@ -167,7 +187,7 @@ export const MessageListInner = React.memo(
     oldestFetchedMessageIndex: number
     messageIds: number[]
     messages: ChatStoreState['messages']
-    messageListRef: todo
+    messageListRef: React.MutableRefObject<HTMLDivElement | null>
     chat: ChatStoreState
   }) => {
     const {
@@ -180,6 +200,10 @@ export const MessageListInner = React.memo(
       chat,
     } = props
 
+    if (!chat.id) {
+      throw new Error('no chat id')
+    }
+
     const _messageIdsToShow = messageIdsToShow(
       oldestFetchedMessageIndex,
       messageIds
@@ -191,8 +215,8 @@ export const MessageListInner = React.memo(
       hasMultipleParticipants:
         chat.type === C.DC_CHAT_TYPE_GROUP ||
         chat.type === C.DC_CHAT_TYPE_MAILINGLIST,
-      isDeviceChat: chat.isDeviceChat,
-      chatType: chat.type,
+      isDeviceChat: chat.isDeviceChat as boolean,
+      chatType: chat.type as number,
     }
 
     return (

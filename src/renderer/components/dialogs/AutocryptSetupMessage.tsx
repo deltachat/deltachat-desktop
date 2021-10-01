@@ -5,12 +5,16 @@ export default function InputTransferKey(
   props:
     | {
         autocryptkey: string[]
-        onChange: ((event: React.FormEvent<HTMLElement>) => void) &
-          ((event: React.ChangeEvent<HTMLInputElement>) => void)
+        onChange: (
+          event:
+            | React.FormEvent<HTMLElement>
+            | React.ChangeEvent<HTMLInputElement>
+        ) => void
       }
     | {
         autocryptkey: string[]
         disabled: true
+        onChange: undefined
       }
 ) {
   const inputs = []
@@ -22,7 +26,7 @@ export default function InputTransferKey(
           data-index={i}
           id={'autocrypt-input-' + i}
           disabled={(props as any).disabled || false}
-          onChange={(props as any).onChange}
+          onChange={props.onChange}
           value={props.autocryptkey[i]}
         />
         {i !== 8 && i !== 2 && i !== 5 && (

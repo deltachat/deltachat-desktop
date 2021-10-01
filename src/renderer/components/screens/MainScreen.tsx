@@ -12,7 +12,7 @@ import MessageListAndComposer, {
   getBackgroundImageStyle,
 } from '../message/MessageListAndComposer'
 import SearchInput from '../SearchInput'
-import { useChatStore } from '../../stores/chat'
+import { useChatStore, ChatStoreState } from '../../stores/chat'
 import {
   openViewGroupDialog,
   openViewProfileDialog,
@@ -34,8 +34,11 @@ import { Avatar } from '../Avatar'
 import ConnectivityToast from '../ConnectivityToast'
 import { C } from 'deltachat-node/dist/constants'
 import MapComponent from '../map/MapComponent'
-import MessageListProfile from '../dialogs/MessageListProfile'
+import MailingListProfile from '../dialogs/MessageListProfile'
 import { FullChat } from '../../../shared/shared-types'
+import { getLogger } from '../../../shared/logger'
+
+const log = getLogger('renderer/main-screen')
 
 enum View {
   MessageList,
@@ -46,7 +49,7 @@ enum View {
 export default function MainScreen() {
   const [queryStr, setQueryStr] = useState('')
   const [view, setView] = useState(View.MessageList)
-  const [showArchivedChats, setShowArchivedChats] = useState(null)
+  const [showArchivedChats, setShowArchivedChats] = useState(false)
   // Small hack/misuse of keyBindingAction to setShowArchivedChats from other components (especially
   // ViewProfile when selecting a shared chat/group)
   useKeyBindingAction(KeybindAction.ChatList_SwitchToArchiveView, () =>
@@ -68,19 +71,21 @@ export default function MainScreen() {
     setView(View.MessageList)
   }
   const searchChats = (queryStr: string) => setQueryStr(queryStr)
-  const handleSearchChange = (event: { target: { value: '' } }) =>
+  const handleSearchChange = (event: { target: { value: string } }) =>
     searchChats(event.target.value)
   const onTitleClick = () => {
     if (!selectedChat) return
 
     if (selectedChat.type === C.DC_CHAT_TYPE_MAILINGLIST) {
-      screenContext.openDialog(MessageListProfile, {
-        chat: selectedChat,
+      screenContext.openDialog(MailingListProfile, {
+        chat: selectedChat as FullChat,
       })
     } else if (selectedChat.isGroup) {
       openViewGroupDialog(screenContext, selectedChat)
     } else {
-      openViewProfileDialog(screenContext, selectedChat.contactIds[0])
+      if (selectedChat.contactIds && selectedChat.contactIds[0]) {
+        openViewProfileDialog(screenContext, selectedChat.contactIds[0])
+      }
     }
   }
 
@@ -94,6 +99,11 @@ export default function MainScreen() {
   }
 
   const tx = useTranslationFunction()
+
+  if (!selectedChat) {
+    log.error('selectedChat is undefined')
+    return null
+  }
 
   const menu = <Menu selectedChat={selectedChat} />
   let MessageListView
@@ -110,9 +120,9 @@ export default function MainScreen() {
         MessageListView = <MessageListAndComposer chat={selectedChat} />
     }
   } else {
-    const style: React.CSSProperties = getBackgroundImageStyle(
-      window.__desktopSettings
-    )
+    const style: React.CSSProperties = window.__desktopSettings
+      ? getBackgroundImageStyle(window.__desktopSettings)
+      : {}
 
     MessageListView = (
       <div className='message-list-and-composer' style={style}>
@@ -192,7 +202,7 @@ export default function MainScreen() {
                     displayName={selectedChat.name}
                     color={selectedChat.color}
                     isVerified={selectedChat.isProtected}
-                    avatarPath={selectedChat.profileImage}
+                    avatarPath={selectedChat.profileImage || undefined}
                     small
                   />
                 )}
@@ -234,7 +244,7 @@ export default function MainScreen() {
                 />
                 <SettingsContext.Consumer>
                   {({ desktopSettings }) =>
-                    desktopSettings.enableOnDemandLocationStreaming && (
+                    desktopSettings?.enableOnDemandLocationStreaming && (
                       <Button
                         minimal
                         large
@@ -280,9 +290,9 @@ export default function MainScreen() {
   )
 }
 
-function chatSubtitle(chat: FullChat) {
+function chatSubtitle(chat: ChatStoreState | FullChat) {
   const tx = window.static_translate
-  if (chat.id > C.DC_CHAT_ID_LAST_SPECIAL) {
+  if (chat.id && chat.id > C.DC_CHAT_ID_LAST_SPECIAL) {
     if (chat.type === C.DC_CHAT_TYPE_GROUP) {
       return tx('n_members', [String(chat.contacts.length)], {
         quantity: chat.contacts.length,

@@ -8,9 +8,17 @@ import { H5, H6, Card, Elevation, Icon } from '@blueprintjs/core'
 import { DeltaBackend } from '../../delta-remote'
 import { ThemeManager } from '../../ThemeManager'
 import { SettingsSelector } from './Settings'
-import { SmallSelectDialog } from './DeltaDialog'
+import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
 import { runtime } from '../../runtime'
 import { RC_Config, Theme } from '../../../shared/shared-types'
+
+const enum SetBackgroundAction {
+  default,
+  defaultColor,
+  customImage,
+  presetImage,
+  customColor,
+}
 
 function BackgroundSelector({
   onChange,
@@ -24,7 +32,9 @@ function BackgroundSelector({
 
   useEffect(() => {
     colorInput.onchange = (ev: any) => onChange(ev.target.value)
-    return () => (colorInput.onchange = null)
+    return () => {
+      colorInput.onchange = null
+    }
   }, [onChange, colorInput])
 
   const openColorInput = (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -38,26 +48,26 @@ function BackgroundSelector({
         'style',
         `position:absolute;top:${y}px;left:${ev.clientX}px;`
       )
-      if (!desktopSettings.chatViewBgImg?.startsWith('url(')) {
-        colorInput.value = desktopSettings.chatViewBgImg
+      if (!desktopSettings?.chatViewBgImg?.startsWith('url(')) {
+        colorInput.value = desktopSettings?.chatViewBgImg || ''
       }
       setTimeout(() => colorInput.click(), 0)
     }
   }
 
   const onButton = async (
-    type: string,
+    type: SetBackgroundAction,
     ev: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     let url
     switch (type) {
-      case 'def':
-        onChange(undefined)
+      case SetBackgroundAction.default:
+        onChange('')
         break
-      case 'def_color':
+      case SetBackgroundAction.defaultColor:
         onChange('var(--chatViewBg)')
         break
-      case 'image':
+      case SetBackgroundAction.customImage:
         url = await runtime.showOpenFileDialog({
           title: 'Select Background Image',
           filters: [
@@ -74,7 +84,7 @@ function BackgroundSelector({
           await DeltaBackend.call('settings.saveBackgroundImage', url, false)
         )
         break
-      case 'pimage':
+      case SetBackgroundAction.presetImage:
         setDesktopSetting(
           'chatViewBgImg',
           await DeltaBackend.call(
@@ -84,7 +94,7 @@ function BackgroundSelector({
           )
         )
         break
-      case 'color':
+      case SetBackgroundAction.customColor:
         openColorInput(ev)
         break
       default:
@@ -98,30 +108,32 @@ function BackgroundSelector({
     <div>
       <div className={'bg-option-wrap'}>
         <SettingsContext.Consumer>
-          {({ desktopSettings }) => (
-            <div
-              style={{
-                ...(desktopSettings.chatViewBgImg?.startsWith('url(')
-                  ? {
-                      backgroundImage: `url("file://${desktopSettings.chatViewBgImg.slice(
-                        5,
-                        desktopSettings.chatViewBgImg.length - 2
-                      )}")`,
-                    }
-                  : {
-                      backgroundColor: desktopSettings.chatViewBgImg,
-                      backgroundImage: 'unset',
-                    }),
-                backgroundSize: 'cover',
-              }}
-              aria-label={tx('a11y_background_preview_label')}
-              className={'background-preview'}
-            />
-          )}
+          {({ desktopSettings }) =>
+            desktopSettings && (
+              <div
+                style={{
+                  ...(desktopSettings.chatViewBgImg?.startsWith('url(')
+                    ? {
+                        backgroundImage: `url("file://${desktopSettings.chatViewBgImg.slice(
+                          5,
+                          desktopSettings.chatViewBgImg.length - 2
+                        )}")`,
+                      }
+                    : {
+                        backgroundColor: desktopSettings.chatViewBgImg,
+                        backgroundImage: 'unset',
+                      }),
+                  backgroundSize: 'cover',
+                }}
+                aria-label={tx('a11y_background_preview_label')}
+                className={'background-preview'}
+              />
+            )
+          }
         </SettingsContext.Consumer>
         <div className={'background-options'}>
           <div
-            onClick={onButton.bind(this, 'def')}
+            onClick={onButton.bind(null, SetBackgroundAction.default)}
             style={{
               backgroundImage: 'var(--chatViewBgImgPath)',
               backgroundColor: 'var(--chatViewBg)',
@@ -130,19 +142,19 @@ function BackgroundSelector({
             aria-label={tx('pref_background_default')}
           />
           <div
-            onClick={onButton.bind(this, 'def_color')}
+            onClick={onButton.bind(null, SetBackgroundAction.defaultColor)}
             style={{ backgroundColor: 'var(--chatViewBg)' }}
             aria-label={tx('pref_background_default_color')}
           />
           <div
-            onClick={onButton.bind(this, 'image')}
+            onClick={onButton.bind(null, SetBackgroundAction.customImage)}
             className='custom-image'
             aria-label={tx('pref_background_custom_image')}
           >
             <Icon icon='media' iconSize={30} />
           </div>
           <div
-            onClick={onButton.bind(this, 'color')}
+            onClick={onButton.bind(null, SetBackgroundAction.customColor)}
             className='custom-color'
             aria-label={tx('pref_background_custom_color')}
           >
@@ -162,7 +174,7 @@ function BackgroundSelector({
           'petito-moreno.webp',
         ].map(elem => (
           <div
-            onClick={onButton.bind(this, 'pimage')}
+            onClick={onButton.bind(null, SetBackgroundAction.presetImage)}
             style={{
               backgroundImage: `url(../images/backgrounds/thumb/${elem})`,
             }}
@@ -183,6 +195,11 @@ export default function SettingsAppearance({
   rc: RC_Config
 }) {
   const { desktopSettings, setDesktopSetting } = useContext(SettingsContext)
+  if (!desktopSettings) {
+    throw new Error(
+      'desktop settings not initialiyed yet, this should not happen'
+    )
+  }
   const { activeTheme } = desktopSettings
 
   const { openDialog } = useContext(ScreenContext)
@@ -213,7 +230,7 @@ export default function SettingsAppearance({
   const onSelect = setTheme
 
   const onOpenSelectThemeDialog = async () => {
-    const values = [
+    const values: SelectDialogOption[] = [
       ['system', tx('automatic')],
       ...availableThemes.map(({ address, name, is_prototype }: Theme) => {
         return [
@@ -221,7 +238,7 @@ export default function SettingsAppearance({
           `${name}${address.startsWith('custom') ? ' (Custom)' : ''}${
             is_prototype ? ' (prototype)' : ''
           }`,
-        ]
+        ] as SelectDialogOption
       }),
     ]
 

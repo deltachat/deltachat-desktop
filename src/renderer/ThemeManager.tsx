@@ -11,10 +11,14 @@ export namespace ThemeManager {
     const theme: {
       theme: Theme
       data: string
-    } = await DeltaBackend.call('extras.getActiveTheme')
+    } | null = await DeltaBackend.call('extras.getActiveTheme')
     if (theme) {
       currentThemeMetaData = theme.theme
-      window.document.getElementById('theme-vars').innerText = theme.data
+      let themeVars = window.document.getElementById('theme-vars')
+      if (!themeVars) {
+        throw new Error('#theme-vars element not found')
+      }
+      themeVars.innerText = theme.data
       currentThemeChangeHook()
     }
   }
@@ -38,7 +42,7 @@ export const useThemeCssVar = (css_var_name: string) => {
   const tc = useContext(ThemeContext)
   const result = useMemo(() => {
     tc // this does nothing, but without it eslint will complain, and if we followed eslint the code would not behave as it should.
-    return getComputedStyle(document.firstElementChild)
+    return getComputedStyle(document.firstElementChild as Element)
       .getPropertyValue(css_var_name)
       .trim()
   }, [tc, css_var_name])

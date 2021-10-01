@@ -108,9 +108,10 @@ export const EmojiAndStickerPicker = forwardRef<
   const tx = useTranslationFunction()
 
   const [showSticker, setShowSticker] = useState(false)
-  const [stickers, setStickers] = useState(null)
-  const disableStickers =
-    stickers === null || Object.keys(stickers).length === 0
+  const [stickers, setStickers] = useState<{
+    [key: string]: string[]
+  }>({})
+  const disableStickers = Object.keys(stickers).length === 0
 
   useEffect(() => {
     DeltaBackend.call('stickers.getStickers').then(stickers =>
@@ -178,7 +179,7 @@ export const EmojiAndStickerPicker = forwardRef<
             />
           </div>
         )}
-        {showSticker && stickers !== null && typeof stickers === 'object' && (
+        {showSticker && (
           <StickerPicker
             chatId={chatId}
             stickers={stickers}

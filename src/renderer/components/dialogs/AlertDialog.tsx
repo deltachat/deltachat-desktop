@@ -11,9 +11,9 @@ export default function AlertDialog({
   onClose,
   cb,
 }: {
-  cb: () => {}
+  cb?: () => void
   message: string
-  onClose: () => {}
+  onClose: () => void
 }) {
   const tx = useTranslationFunction()
   const isOpen = !!message

@@ -6,12 +6,12 @@ import {
   useTranslationFunction,
   SettingsContext,
 } from '../contexts'
-import { useChatStore } from '../stores/chat'
+import { useChatStore, ChatStoreState } from '../stores/chat'
 import { Menu } from '@blueprintjs/core'
 import {
   openLeaveChatDialog,
   openDeleteChatDialog,
-  openBlockContactDialog,
+  openBlockFirstContactOfChatDialog,
   openViewGroupDialog,
   setChatVisibility,
   openMuteChatDialog,
@@ -38,7 +38,7 @@ export function DeltaMenuItem({
   )
 }
 
-export default function DeltaMenu(props: { selectedChat: FullChat }) {
+export default function DeltaMenu(props: { selectedChat: ChatStoreState }) {
   const { selectedChat } = props
   const chatStoreDispatch = useChatStore()[1]
 
@@ -51,13 +51,16 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
 
   const onCreateChat = () => screenContext.openDialog('CreateChat', {})
   const onViewGroup = () => openViewGroupDialog(screenContext, selectedChat)
-  const onLeaveGroup = () => openLeaveChatDialog(screenContext, selectedChat.id)
+  const onLeaveGroup = () =>
+    selectedChat.id && openLeaveChatDialog(screenContext, selectedChat.id)
   const onBlockContact = () =>
-    openBlockContactDialog(screenContext, selectedChat)
+    openBlockFirstContactOfChatDialog(screenContext, selectedChat)
   const onDeleteChat = () =>
+    selectedChat.id &&
     openDeleteChatDialog(screenContext, selectedChat, selectedChat.id)
-  const onMuteChat = () => openMuteChatDialog(screenContext, selectedChat.id)
-  const onUnmuteChat = () => unMuteChat(selectedChat.id)
+  const onMuteChat = () =>
+    selectedChat.id && openMuteChatDialog(screenContext, selectedChat.id)
+  const onUnmuteChat = () => selectedChat.id && unMuteChat(selectedChat.id)
   const onUnblockContacts = () =>
     screenContext.openDialog('UnblockContacts', {})
   const onDisappearingMessages = () =>
@@ -65,13 +68,17 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
       chatId: selectedChat.id,
     })
   const onVideoChat = () => {
+    const chatId = selectedChat.id
+    if (!chatId) {
+      return
+    }
     screenContext.openDialog('ConfirmationDialog', {
       header: tx('videochat_invite_user_to_videochat', selectedChat.name),
       message: tx('videochat_invite_user_hint'),
       confirmLabel: tx('ok'),
       cb: (yes: boolean) => {
         if (yes) {
-          sendCallInvitation(screenContext, selectedChat.id)
+          sendCallInvitation(screenContext, chatId)
         }
       },
     })
@@ -87,7 +94,13 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
   }
 
   if (selectedChat && selectedChat.id) {
-    const { isGroup, selfInGroup, isSelfTalk, isDeviceChat } = selectedChat
+    const {
+      isGroup,
+      selfInGroup,
+      isSelfTalk,
+      isDeviceChat,
+      id: chatId,
+    } = selectedChat
 
     const isReadOnlyChat = (isGroup && !selfInGroup) || isDeviceChat // setting this as var because we plan to have more readonly chats in the future
 
@@ -98,11 +111,7 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
           key='unarchive'
           text={tx('menu_unarchive_chat')}
           onClick={() =>
-            setChatVisibility(
-              selectedChat.id,
-              C.DC_CHAT_VISIBILITY_NORMAL,
-              true
-            )
+            setChatVisibility(chatId, C.DC_CHAT_VISIBILITY_NORMAL, true)
           }
         />
       ) : (
@@ -110,15 +119,11 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
           key='archive'
           text={tx('menu_archive_chat')}
           onClick={() =>
-            setChatVisibility(
-              selectedChat.id,
-              C.DC_CHAT_VISIBILITY_ARCHIVED,
-              true
-            )
+            setChatVisibility(chatId, C.DC_CHAT_VISIBILITY_ARCHIVED, true)
           }
         />
       ),
-      settingsContext.desktopSettings.enableAVCalls && !isReadOnlyChat && (
+      settingsContext.desktopSettings?.enableAVCalls && !isReadOnlyChat && (
         <DeltaMenuItem
           key='call'
           text={tx('videochat')}
@@ -168,7 +173,7 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
         />
       ),
       !(isSelfTalk || isDeviceChat) &&
-        settingsContext.desktopSettings.enableChatAuditLog && (
+        settingsContext.desktopSettings?.enableChatAuditLog && (
           <DeltaMenuItem
             key='chat-audit-log'
             text={tx('menu_chat_audit_log')}

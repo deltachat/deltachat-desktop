@@ -6,8 +6,8 @@ import attachKeybindingsListener from './keybindings'
 import { AppState, DesktopSettings } from '../shared/shared-types'
 
 import { translate, LocaleData } from '../shared/localize'
-// import { getLogger } from '../shared/logger'
-// const log = getLogger('renderer/App')
+import { getLogger } from '../shared/logger'
+const log = getLogger('renderer/App')
 import { DeltaBackend } from './delta-remote'
 import { ThemeManager, ThemeContext } from './ThemeManager'
 
@@ -17,7 +17,7 @@ import { CrashScreen } from './components/screens/CrashScreen'
 attachKeybindingsListener()
 
 export default function App(_props: any) {
-  const [state, setState] = useState<AppState>(null)
+  const [state, setState] = useState<AppState | null>(null)
 
   const [localeData, setLocaleData] = useState<LocaleData | null>(null)
 
@@ -96,7 +96,10 @@ export default function App(_props: any) {
   )
 }
 function SettingsContextWrapper({ children }: { children: React.ReactChild }) {
-  const [desktopSettings, _setDesktopSettings] = useState<DesktopSettings>(null)
+  const [
+    desktopSettings,
+    _setDesktopSettings,
+  ] = useState<DesktopSettings | null>(null)
   window.__desktopSettings = desktopSettings
 
   useEffect(() => {
@@ -117,7 +120,13 @@ function SettingsContextWrapper({ children }: { children: React.ReactChild }) {
       (await DeltaBackend.call('settings.setDesktopSetting', key, value)) ===
       true
     ) {
-      _setDesktopSettings((prevState: DesktopSettings) => {
+      _setDesktopSettings((prevState: DesktopSettings | null) => {
+        if (prevState === null) {
+          log.warn(
+            'trying to update local version of desktop settings object, but it was not loaded yet'
+          )
+          return prevState
+        }
         const newState = { ...prevState, [key]: value }
         window.__desktopSettings = newState
         return newState

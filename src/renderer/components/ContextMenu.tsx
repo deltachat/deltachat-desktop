@@ -7,7 +7,7 @@ export type ContextMenuItem = { label: string; action: () => void }
 type showFnArguments = {
   cursorX: number
   cursorY: number
-  items: ContextMenuItem[]
+  items: (ContextMenuItem | false)[]
 }
 
 export type showFnType = (args: showFnArguments) => void
@@ -40,7 +40,7 @@ export function ContextMenuLayer({
     // Filter out empty null items
     // (can happen when constructing the array with inline conditions,
     // look at the chatlistitem context menu for an example)
-    const items = rawItems.filter(item => !!item)
+    const items = rawItems.filter(item => !!item) as ContextMenuItem[]
     // Get required information
     const style = window.getComputedStyle(layerRef.current)
 
@@ -163,7 +163,7 @@ function estimateOverflowingLines(items: ContextMenuItem[]) {
 export function ContextMenu(props: {
   top: number
   left: number
-  items: ContextMenuItem[]
+  items: (ContextMenuItem | false)[]
   closeCallback: () => void
 }) {
   useLayoutEffect(() => {
@@ -203,7 +203,7 @@ export function ContextMenu(props: {
       }
     }
 
-    const onOutsideClick = (ev: MouseEvent) => {
+    const onOutsideClick = (ev: MouseEvent | TouchEvent) => {
       const parent = document.querySelector('div.dc-context-menu')
       if (!parent) {
         return
@@ -235,6 +235,8 @@ export function ContextMenu(props: {
     }
   })
 
+  const items = props.items.filter(val => val !== false) as ContextMenuItem[]
+
   return (
     <div
       className='dc-context-menu'
@@ -245,7 +247,7 @@ export function ContextMenu(props: {
       role='menu'
       tabIndex={-1}
     >
-      {props.items.map((item, index) => (
+      {items.map((item, index) => (
         <div
           className='item'
           onClick={() => {
@@ -263,7 +265,7 @@ export function ContextMenu(props: {
   )
 }
 
-type ItemsFactoryFn = () => ContextMenuItem[]
+type ItemsFactoryFn = () => (ContextMenuItem | false)[]
 
 /**
  *
@@ -271,7 +273,7 @@ type ItemsFactoryFn = () => ContextMenuItem[]
  * @param openContextMenu reference to the ScreenContext's openContextMenu function
  */
 export function makeContextMenu(
-  itemsOrItemsFactoryFn: ContextMenuItem[] | ItemsFactoryFn,
+  itemsOrItemsFactoryFn: (ContextMenuItem | false)[] | ItemsFactoryFn,
   openContextMenu: unwrapContext<typeof ScreenContext>['openContextMenu']
 ) {
   return (ev: React.MouseEvent<any, MouseEvent>) => {

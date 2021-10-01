@@ -44,7 +44,7 @@ export default function MessageListAndComposer({
   const refComposer = useRef(null)
   const { openDialog } = useContext(ScreenContext)
 
-  const messageInputRef: React.MutableRefObject<ComposerMessageInput> = useRef<ComposerMessageInput>()
+  const messageInputRef = useRef<ComposerMessageInput>(null)
   const {
     draftState,
     updateDraftText,
@@ -55,6 +55,12 @@ export default function MessageListAndComposer({
   } = useDraft(chat.id, chat.isContactRequest, messageInputRef)
 
   const onDrop = (e: React.DragEvent<any>) => {
+    if (chat.id === null) {
+      log.warn('droped something, but no chat is selected')
+      return
+    }
+    const chatId = chat.id as number
+
     e.preventDefault()
     e.stopPropagation()
     const sanitizedFileList: Pick<File, 'name' | 'path'>[] = []
@@ -108,7 +114,7 @@ export default function MessageListAndComposer({
       cb: (yes: boolean) =>
         yes &&
         sanitizedFileList.forEach(({ path }) =>
-          DeltaBackend.call('messageList.sendMessage', chat.id, {
+          DeltaBackend.call('messageList.sendMessage', chatId, {
             filename: path,
           })
         ),
@@ -123,7 +129,9 @@ export default function MessageListAndComposer({
   const onMouseUp = (e: MouseEvent) => {
     const selection = window.getSelection()
 
-    if (selection.type === 'Range' && selection.rangeCount > 0) return
+    if (selection?.type === 'Range' && selection.rangeCount > 0) {
+      return
+    }
     const targetTagName = ((e.target as unknown) as any)?.tagName
 
     if (targetTagName === 'INPUT' || targetTagName === 'TEXTAREA') {
@@ -139,8 +147,8 @@ export default function MessageListAndComposer({
     const selection = window.getSelection()
 
     if (
-      selection.type === 'Caret' ||
-      (selection.type === 'Range' && selection.rangeCount > 0)
+      selection?.type === 'Caret' ||
+      (selection?.type === 'Range' && selection.rangeCount > 0)
     )
       return
 
@@ -168,7 +176,7 @@ export default function MessageListAndComposer({
   const [disabled, disabledReason] = isChatReadonly(chat)
 
   const settings = useContext(SettingsContext).desktopSettings
-  const style = getBackgroundImageStyle(settings)
+  const style = settings ? getBackgroundImageStyle(settings) : {}
 
   return (
     <div

@@ -65,7 +65,7 @@ export default function Contact(props: {
 }
 
 export function PseudoContact(
-  props: PropsWithChildren<{ cutoff: string; text: string; subText?: string }>
+  props: PropsWithChildren<{ cutoff?: string; text: string; subText?: string }>
 ) {
   const { cutoff, text, subText } = props
   return (
@@ -73,7 +73,11 @@ export function PseudoContact(
       {props.children ? (
         props.children
       ) : (
-        <Avatar avatarPath={null} color={'#505050'} displayName={cutoff} />
+        <Avatar
+          avatarPath={undefined}
+          color={'#505050'}
+          displayName={cutoff || ''}
+        />
       )}
       {!subText && (
         <div className='contact-name'>

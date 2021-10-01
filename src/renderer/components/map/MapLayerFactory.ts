@@ -88,7 +88,7 @@ export default class MapLayerFactory {
           })
         }
         return features
-      }, []),
+      }, [] as todo),
     }
   }
 

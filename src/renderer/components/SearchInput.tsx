@@ -23,7 +23,7 @@ export function ClearButton(props: {
 
 export default function SearchInput(props: {
   onChange: (
-    event: React.ChangeEvent<HTMLInputElement> & { target: { value: '' } }
+    event: React.ChangeEvent<HTMLInputElement> | { target: { value: '' } }
   ) => void
   value: string
   className: string

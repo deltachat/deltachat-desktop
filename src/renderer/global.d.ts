@@ -20,15 +20,15 @@ declare global {
       ipcRenderer: import('electron').IpcRenderer
     }
     __openDialog: OpenDialogFunctionType
-    __userFeedback: (message: userFeedback | false) => {}
+    __userFeedback: (message: userFeedback | false) => void
     __closeDialog: CloseDialogFunctionType
-    __changeScreen: (screen: Screens) => {}
-    __selectAccount: (accountId: number) => {}
+    __changeScreen: (screen: Screens) => void
+    __selectAccount: (accountId: number) => void
     __screen: Screens
     __contextMenuActive: boolean
     __settingsOpened: boolean
     __setQuoteInDraft: ((msgId: number) => void) | null
-    __reloadDraft: () => {} | null
+    __reloadDraft: (() => void) | null
     __desktopSettings: DesktopSettings | null
   }
 }

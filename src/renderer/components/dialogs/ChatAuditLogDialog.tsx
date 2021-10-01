@@ -24,7 +24,7 @@ import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 const log = getLogger('render/ChatAuditLog')
 
 function buildContextMenu(
-  message: MessageType | null,
+  message: MessageType,
   isGroup: boolean,
   closeDialogCallback: DialogProps['onClose']
 ) {
@@ -75,12 +75,15 @@ export default function ChatAuditLogDialog(props: {
     [key: number]: MessageType | null
   }>({})
 
-  const listView = useRef<HTMLDivElement>()
+  const listView = useRef<HTMLDivElement>(null)
 
   const { openContextMenu } = useContext(ScreenContext)
   const showMenu = (
     message: MessageType,
-    event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement, MouseEvent>
+    event: React.MouseEvent<
+      HTMLDivElement | HTMLAnchorElement | HTMLLIElement,
+      MouseEvent
+    >
   ) => {
     const items = buildContextMenu(message, selectedChat.isGroup, onClose)
     const [cursorX, cursorY] = [event.clientX, event.clientY]
@@ -109,7 +112,8 @@ export default function ChatAuditLogDialog(props: {
       setLoading(false)
 
       setTimeout(() => {
-        listView.current.scrollTop = listView.current?.scrollHeight
+        if (listView.current)
+          listView.current.scrollTop = listView.current.scrollHeight
       }, 0)
     },
     [selectedChat.id]
@@ -181,7 +185,7 @@ export default function ChatAuditLogDialog(props: {
                   key={id}
                   className='info'
                   onClick={openMessageInfo.bind(null, message)}
-                  onContextMenu={showMenu.bind(null, message)}
+                  onContextMenu={ev => message && showMenu(message, ev)}
                 >
                   <p>
                     <div className='timestamp'>

@@ -57,8 +57,8 @@ const Composer = forwardRef<
     isDisabled: boolean
     disabledReason: string
     isContactRequest: boolean
-    chatId: number
-    messageInputRef: React.MutableRefObject<ComposerMessageInput>
+    chatId: number | null
+    messageInputRef: React.MutableRefObject<ComposerMessageInput | null>
     draftState: DraftObject
     removeQuote: () => void
     updateDraftText: (text: string, InputChatId: number) => void
@@ -83,12 +83,20 @@ const Composer = forwardRef<
   const chatStoreDispatch = useChatStore()[1]
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 
-  const emojiAndStickerRef = useRef<HTMLDivElement>()
-  const pickerButtonRef = useRef()
+  const emojiAndStickerRef = useRef<HTMLDivElement>(null)
+  const pickerButtonRef = useRef<HTMLDivElement>(null)
 
   const sendMessage = () => {
+    if (chatId === null) {
+      throw new Error('chat id is undefined')
+    }
+    if (!messageInputRef.current) {
+      throw new Error('messageInputRef is undefined')
+    }
     const textareaRef = messageInputRef.current.textareaRef.current
-    textareaRef.disabled = true
+    if (textareaRef) {
+      textareaRef.disabled = true
+    }
     try {
       const message = messageInputRef.current.getText()
       if (message.match(/^\s*$/) && !draftState.file) {
@@ -110,8 +118,8 @@ const Composer = forwardRef<
       /* clear it here to make sure the draft is cleared */
       DeltaBackend.call('messageList.setDraft', chatId, {
         text: '',
-        file: null,
-        quotedMessageId: null,
+        file: '',
+        quotedMessageId: undefined,
       })
       /* update the state to reflect the removed draft */
       clearDraft()
@@ -119,7 +127,9 @@ const Composer = forwardRef<
     } catch (error) {
       log.error(error)
     } finally {
-      textareaRef.disabled = false
+      if (textareaRef) {
+        textareaRef.disabled = false
+      }
       messageInputRef.current.focus()
     }
   }
@@ -137,7 +147,7 @@ const Composer = forwardRef<
   const onEmojiIconClick = () => setShowEmojiPicker(!showEmojiPicker)
   const onEmojiSelect = (emoji: EmojiData) => {
     log.debug(`EmojiPicker: Selected ${emoji.id}`)
-    messageInputRef.current.insertStringAtCursorPosition(
+    messageInputRef.current?.insertStringAtCursorPosition(
       (emoji as BaseEmoji).native
     )
   }
@@ -201,6 +211,10 @@ const Composer = forwardRef<
     // focus composer on chat change
     messageInputRef.current?.focus()
   }, [chatId, messageInputRef])
+
+  if (chatId === null) {
+    return <div ref={ref}>Error, chatid missing</div>
+  }
 
   if (isContactRequest) {
     return (
@@ -266,16 +280,18 @@ const Composer = forwardRef<
             />
           </div>
           <SettingsContext.Consumer>
-            {({ desktopSettings }) => (
-              <ComposerMessageInput
-                ref={messageInputRef}
-                enterKeySends={desktopSettings.enterKeySends}
-                sendMessage={sendMessage}
-                chatId={chatId}
-                updateDraftText={updateDraftText}
-                onPaste={handlePaste}
-              />
-            )}
+            {({ desktopSettings }) =>
+              desktopSettings && (
+                <ComposerMessageInput
+                  ref={messageInputRef}
+                  enterKeySends={desktopSettings.enterKeySends}
+                  sendMessage={sendMessage}
+                  chatId={chatId}
+                  updateDraftText={updateDraftText}
+                  onPaste={handlePaste}
+                />
+              )
+            }
           </SettingsContext.Consumer>
           <div
             className='emoji-button'
@@ -311,9 +327,9 @@ export type DraftObject = { chatId: number } & Pick<
   MessageTypeAttachmentSubset
 
 export function useDraft(
-  chatId: number,
+  chatId: number | null,
   isContactRequest: boolean,
-  inputRef: React.MutableRefObject<ComposerMessageInput>
+  inputRef: React.MutableRefObject<ComposerMessageInput | null>
 ): {
   draftState: DraftObject
   removeQuote: () => void
@@ -323,28 +339,37 @@ export function useDraft(
   clearDraft: () => void
 } {
   const [draftState, _setDraft] = useState<DraftObject>({
-    chatId,
+    chatId: chatId || 0,
     text: '',
-    file: null,
+    file: '',
     file_bytes: null,
     file_mime: null,
     file_name: null,
     quotedMessageId: 0,
-    quotedText: null,
+    quotedText: '',
   })
-  const draftRef = useRef<DraftObject>()
+  const draftRef = useRef<DraftObject>({
+    chatId: chatId || 0,
+    text: '',
+    file: '',
+    file_bytes: null,
+    file_mime: null,
+    file_name: null,
+    quotedMessageId: 0,
+    quotedText: '',
+  })
   draftRef.current = draftState
 
   const clearDraft = useCallback(() => {
     _setDraft(_ => ({
-      chatId,
+      chatId: chatId || 0,
       text: '',
-      file: null,
+      file: '',
       file_bytes: null,
       file_mime: null,
       file_name: null,
       quotedMessageId: 0,
-      quotedText: null,
+      quotedText: '',
     }))
     inputRef.current?.focus()
   }, [chatId, inputRef])
@@ -378,25 +403,32 @@ export function useDraft(
   useEffect(() => {
     log.debug('reloading chat because id changed', chatId)
     //load
-    loadDraft(chatId)
-    window.__reloadDraft = loadDraft.bind(this, chatId)
-    return () => (window.__reloadDraft = null)
+    loadDraft(chatId || 0)
+    window.__reloadDraft = loadDraft.bind(null, chatId || 0)
+    return () => {
+      window.__reloadDraft = null
+    }
   }, [chatId, loadDraft, isContactRequest])
 
   const saveDraft = useCallback(async () => {
+    if (chatId === null) {
+      return
+    }
     const draft = draftRef.current
     const oldChatId = chatId
     await DeltaBackend.call('messageList.setDraft', chatId, {
       text: draft.text,
       file: draft.file,
-      quotedMessageId: draft.quotedMessageId,
+      quotedMessageId: draft.quotedMessageId || undefined,
     })
 
     if (oldChatId !== chatId) {
       log.debug('switched chat no reloading of draft required')
       return
     }
-    const newDraft = await DeltaBackend.call('messageList.getDraft', chatId)
+    const newDraft = chatId
+      ? await DeltaBackend.call('messageList.getDraft', chatId)
+      : null
     if (newDraft) {
       _setDraft(old => ({
         ...old,
@@ -418,18 +450,22 @@ export function useDraft(
     if (chatId !== InputChatId) {
       log.warn("chat Id and InputChatId don't match, do nothing")
     } else {
-      draftRef.current.text = text // don't need to rerender on text change
+      if (draftRef.current) {
+        draftRef.current.text = text // don't need to rerender on text change
+      }
       saveDraft()
     }
   }
 
   const removeQuote = useCallback(() => {
-    draftRef.current.quotedMessageId = null
+    if (draftRef.current) {
+      draftRef.current.quotedMessageId = null
+    }
     saveDraft()
   }, [saveDraft])
 
   const removeFile = useCallback(() => {
-    draftRef.current.file = null
+    draftRef.current.file = ''
     saveDraft()
   }, [saveDraft])
 
@@ -445,7 +481,7 @@ export function useDraft(
     window.__setQuoteInDraft = (messageId: number) => {
       draftRef.current.quotedMessageId = messageId
       saveDraft()
-      inputRef.current.focus()
+      inputRef.current?.focus()
     }
     return () => {
       window.__setQuoteInDraft = null

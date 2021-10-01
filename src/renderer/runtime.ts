@@ -124,7 +124,7 @@ class Electron implements Runtime {
   writeClipboardText(text: string): Promise<void> {
     return Promise.resolve(write_clipboard_text(text))
   }
-  private rc_config: RC_Config = null
+  private rc_config: RC_Config | null = null
   transformBlobURL(blob: string): string {
     return blob
   }
@@ -143,7 +143,7 @@ class Electron implements Runtime {
     if (!this.rc_config) {
       this.rc_config = ipcBackend.sendSync('get-rc-config')
     }
-    return this.rc_config
+    return this.rc_config as RC_Config
   }
   initialize() {
     setLogHandler((...args: any[]) => {

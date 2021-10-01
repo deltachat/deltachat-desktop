@@ -46,13 +46,13 @@ export default class DCChat extends SplitOut {
   modifyGroup(
     chatId: number,
     name: string,
-    image: string,
+    image: string | undefined,
     members: number[] | null
   ) {
     log.debug('action - modify group', { chatId, name, image, members })
     this.selectedAccountContext.setChatName(chatId, name)
     const chat = this.selectedAccountContext.getChat(chatId)
-    if (chat.getProfileImage() !== image) {
+    if (typeof image !== 'undefined' && chat.getProfileImage() !== image) {
       this.selectedAccountContext.setChatProfileImage(chatId, image || '')
     }
 

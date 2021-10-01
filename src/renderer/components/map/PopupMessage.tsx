@@ -6,7 +6,7 @@ import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 export default class PopupMessage extends React.Component<{
   username: string
   formattedDate: string
-  message: JsonMessage
+  message: JsonMessage | null
 }> {
   render() {
     const { username, formattedDate, message } = this.props

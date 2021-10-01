@@ -1,4 +1,4 @@
-import { SmallSelectDialog } from './DeltaDialog'
+import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
 import React from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import { MuteDuration } from '../../../shared/constants'
@@ -14,7 +14,7 @@ export default function MuteChat({
 }) {
   const tx = window.static_translate
 
-  const MUTE_DURATION_OPTIONS: [string, string][] = [
+  const MUTE_DURATION_OPTIONS: SelectDialogOption[] = [
     [String(MuteDuration.OFF), tx('off')],
     [String(MuteDuration.ONE_HOUR), tx('mute_for_one_hour')],
     [String(MuteDuration.TWO_HOURS), tx('mute_for_two_hours')],

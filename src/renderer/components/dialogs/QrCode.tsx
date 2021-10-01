@@ -138,7 +138,7 @@ export function QrCodeScanQrInner({ onClose }: { onClose: () => void }) {
     processingQrCode.current = false
   }
 
-  const handleScanResult = (chatId: number = null) => {
+  const handleScanResult = (chatId: number | null = null) => {
     chatId && selectChat(chatId)
     onDone()
   }

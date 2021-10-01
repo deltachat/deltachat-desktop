@@ -24,10 +24,11 @@ export function replaceColons(str: string) {
       .map((c: string) => parseInt(c, 16))
     if (codePoints) {
       if (skintoneString) {
-        const skintoneNumber = Number(
-          /^skin-tone-([2-6])$/.exec(skintoneString)[1]
-        )
-        codePoints.push(0x1f3fb + (skintoneNumber - 2))
+        const skintoneResult = /^skin-tone-([2-6])$/.exec(skintoneString)
+        if (skintoneResult) {
+          const skintoneNumber = Number(skintoneResult[1])
+          codePoints.push(0x1f3fb + (skintoneNumber - 2))
+        }
       }
 
       return String.fromCodePoint(...codePoints)
@@ -52,7 +53,7 @@ export function getSizeClass(str: string) {
     // has normal characters?
     return ''
   }
-  const emojiCount = conv.match(/-/g)?.length
+  const emojiCount = conv.match(/-/g)?.length || 0
 
   if (emojiCount > 8) {
     return ''

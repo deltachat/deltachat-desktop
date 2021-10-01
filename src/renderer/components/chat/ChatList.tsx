@@ -66,7 +66,7 @@ export function ChatListPart({
   children: ComponentType<ListChildComponentProps<any>>
   height: number
   itemKey: ListItemKeySelector<any>
-  setListRef?: (ref: List<any>) => void
+  setListRef?: (ref: List<any> | null) => void
   itemData?: any
   itemHeight: number
 }) {
@@ -99,7 +99,7 @@ export function ChatListPart({
 }
 
 export default function ChatList(props: {
-  selectedChatId: number
+  selectedChatId: number | null
   showArchivedChats: boolean
   queryStr?: string
   onChatClick: (chatId: number) => void
@@ -127,7 +127,7 @@ export default function ChatList(props: {
   const openContextMenu = useChatListContextMenu()
 
   const addContactOnClick = async () => {
-    if (!queryStrIsValidEmail) return
+    if (!queryStrIsValidEmail || !queryStr) return
 
     const contactId = await DeltaBackend.call(
       'contacts.createContact',
@@ -173,7 +173,7 @@ export default function ChatList(props: {
         : 0))
 
   // scroll to selected chat ---
-  const listRefRef = useRef<List<any>>()
+  const listRefRef = useRef<List<any>>(null)
   const selectedChatIndex = chatListIds.findIndex(
     ([chatId, _messageId]) => chatId === selectedChatId
   )
@@ -272,7 +272,9 @@ export default function ChatList(props: {
                 rowCount={chatListIds.length}
                 width={width}
                 height={chatsHeight(height)}
-                setListRef={(ref: List<any>) => (listRefRef.current = ref)}
+                setListRef={(ref: List<any> | null) =>
+                  ((listRefRef.current as any) = ref)
+                }
                 itemKey={index => 'key' + chatListIds[index]}
                 itemData={chatlistData}
                 itemHeight={CHATLISTITEM_CHAT_HEIGHT}
@@ -302,7 +304,7 @@ export default function ChatList(props: {
                   {chatListIds.length === 0 && queryStrIsValidEmail && (
                     <div style={{ width: width }}>
                       <PseudoListItemAddContact
-                        queryStr={queryStr}
+                        queryStr={queryStr || ''}
                         queryStrIsEmail={queryStrIsValidEmail}
                         onClick={addContactOnClick}
                       />
@@ -360,7 +362,7 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
     [id: number]: ChatListItemType
   }>({})
   /** referrence to newest chat cache for use in useEffect functions that listen for events */
-  const chatCacheRef = useRef<typeof chatCache>()
+  const chatCacheRef = useRef<typeof chatCache>({})
   chatCacheRef.current = chatCache
 
   const [chatLoadState, setChatLoading] = useState<{
@@ -442,8 +444,8 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
     if (contactId !== 0) {
       const chatListItems = await DeltaBackend.call(
         'chatList.getChatListEntries',
-        null,
-        '',
+        undefined,
+        undefined,
         contactId
       )
       const inCurrentCache = Object.keys(chatCacheRef.current).map(v =>
@@ -492,7 +494,10 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
   return { isChatLoaded, loadChats, chatCache }
 }
 
-function useLogicChatPart(queryStr: string, showArchivedChats: boolean) {
+function useLogicChatPart(
+  queryStr: string | undefined,
+  showArchivedChats: boolean
+) {
   const { chatListIds, setQueryStr, setListFlags } = useChatList()
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
     chatListIds
@@ -505,7 +510,7 @@ function useLogicChatPart(queryStr: string, showArchivedChats: boolean) {
 
   useEffect(
     () =>
-      showArchivedChats && queryStr.length === 0
+      showArchivedChats && queryStr?.length === 0
         ? setListFlags(C.DC_GCL_ARCHIVED_ONLY)
         : setListFlags(0),
     [showArchivedChats, queryStr, setListFlags]
@@ -514,7 +519,7 @@ function useLogicChatPart(queryStr: string, showArchivedChats: boolean) {
   return { chatListIds, isChatLoaded, loadChats, chatCache }
 }
 
-function useContactAndMessageLogic(queryStr: string) {
+function useContactAndMessageLogic(queryStr: string | undefined) {
   const { contactIds, queryStrIsValidEmail } = useContactIds(0, queryStr)
   const messageResultIds = useMessageResults(queryStr)
 

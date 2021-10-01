@@ -31,7 +31,11 @@ export function KeyViewPanel({
         <Card>
           <Callout>{tx('show_key_transfer_message_desktop')}</Callout>
           <div className={Classes.DIALOG_BODY}>
-            <InputTransferKey autocryptkey={autocryptKey.split('-')} disabled />
+            <InputTransferKey
+              autocryptkey={autocryptKey.split('-')}
+              disabled
+              onChange={undefined}
+            />
           </div>
         </Card>
       </div>
@@ -82,7 +86,7 @@ export function SendAutocryptSetupMessage({
   isOpen: boolean
 }) {
   const [loading, setLoading] = useState<boolean>(false)
-  const [key, setKey] = useState<string>(null)
+  const [key, setKey] = useState<string | null>(null)
 
   const onClose = () => {
     setKey(null)

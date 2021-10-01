@@ -31,6 +31,7 @@ import { ConversationType } from './MessageList'
 
 import { getDirection } from '../../../shared/util'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
+import { ContextMenuItem } from '../ContextMenu'
 
 const Avatar = (
   contact: JsonContact,
@@ -128,14 +129,18 @@ function buildContextMenu(
   },
   link: string,
   chatStoreDispatch: ChatStoreDispatch
-) {
+): (false | ContextMenuItem)[] {
   const tx = window.static_translate // don't use the i18n context here for now as this component is inefficient (rendered one menu for every message)
 
-  const showAttachmentOptions = message.file && !message.isSetupmessage
+  if (!message) {
+    throw new Error('connot show context menu for undefined message')
+  }
 
-  const textSelected: boolean = window.getSelection().toString() !== ''
+  const showAttachmentOptions = !!message.file && !message.isSetupmessage
+
   // grab selected text before clicking, otherwise the selection might be already gone
   const selectedText = window.getSelection()?.toString()
+  const textSelected: boolean = selectedText !== null && selectedText !== ''
 
   return [
     // Reply
@@ -155,13 +160,13 @@ function buildContextMenu(
       ? {
           label: tx('menu_copy_selection_to_clipboard'),
           action: () => {
-            runtime.writeClipboardText(selectedText)
+            runtime.writeClipboardText(selectedText as string)
           },
         }
       : {
           label: tx('menu_copy_text_to_clipboard'),
           action: () => {
-            runtime.writeClipboardText(text)
+            text && runtime.writeClipboardText(text)
           },
         },
     // Copy link to clipboard
@@ -392,7 +397,7 @@ const Message = (props: {
             </button>
           )}
           <MessageMetaData
-            file_mime={!isSetupmessage && message.file_mime}
+            file_mime={(!isSetupmessage && message.file_mime) || null}
             direction={direction}
             status={status}
             text={text}
@@ -414,9 +419,9 @@ export const Quote = ({
   quotedMessageId,
 }: {
   quotedText: string | null
-  quotedMessageId: number
+  quotedMessageId: number | null
 }) => {
-  const [message, setMessage] = useState<MessageType>(null)
+  const [message, setMessage] = useState<MessageType | null>(null)
 
   useEffect(() => {
     if (quotedMessageId) {
@@ -432,14 +437,16 @@ export const Quote = ({
     <div className='quote-background'>
       <div
         className='quote has-message'
-        style={{ borderLeftColor: message && message.sender.color }}
+        style={{
+          borderLeftColor: (message && message.sender.color) || undefined,
+        }}
       >
         <div className='quote-author'>
           {message &&
             AuthorName(message.sender, () => {}, message.overrideSenderName)}
         </div>
         <div className='quoted-text'>
-          <MessageBody text={quotedText} />
+          <MessageBody text={quotedText || ''} />
         </div>
       </div>
     </div>

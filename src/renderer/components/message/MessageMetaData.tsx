@@ -30,7 +30,7 @@ export default class MessageMetaData extends React.Component<{
     } = this.props
 
     const withImageNoCaption = Boolean(
-      !text && (isImage(file_mime) || isVideo(file_mime))
+      !text && (isImage(file_mime || null) || isVideo(file_mime || null))
     )
 
     return (

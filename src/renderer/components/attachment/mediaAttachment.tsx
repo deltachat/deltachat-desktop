@@ -88,14 +88,14 @@ const useMediaActions = (message: MessageType) => {
 
 function squareBrokenMediaContent(
   hasSupportedFormat: boolean,
-  contentType: string
+  contentType: string | null
 ) {
   const tx = window.static_translate
   return (
     <div className='attachment-content'>
       {hasSupportedFormat
         ? tx('attachment_failed_to_load')
-        : tx('cannot_display_unsuported_file_type', contentType)}
+        : tx('cannot_display_unsuported_file_type', contentType || 'null')}
     </div>
   )
 }
@@ -105,7 +105,7 @@ function ImageAttachment({ message }: { message: MessageType }) {
     message
   )
   const { file, file_mime } = message
-  const hasSupportedFormat = isImage(file_mime)
+  const hasSupportedFormat = isImage(file_mime || '')
   const isBroken = !file || !hasSupportedFormat
   return (
     <div
@@ -114,7 +114,7 @@ function ImageAttachment({ message }: { message: MessageType }) {
       onContextMenu={openContextMenu}
     >
       {isBroken ? (
-        squareBrokenMediaContent(hasSupportedFormat, file_mime)
+        squareBrokenMediaContent(hasSupportedFormat, file_mime || '')
       ) : (
         <img
           className='attachment-content'
@@ -178,7 +178,7 @@ function AudioAttachment({ message }: { message: MessageType }) {
         <div>
           {window.static_translate(
             'cannot_display_unsuported_file_type',
-            file_mime
+            file_mime || 'null'
           )}
         </div>
       )}
@@ -207,7 +207,7 @@ function FileAttachment({ message }: { message: MessageType }) {
           openInShell()
         }}
         onDragStart={dragAttachmentOut.bind(null, file)}
-        title={file_mime}
+        title={file_mime || 'null'}
       >
         {extension ? (
           <div className='file-extension'>
@@ -217,7 +217,9 @@ function FileAttachment({ message }: { message: MessageType }) {
       </div>
       <div className='text-part'>
         <div className='name'>{file_name}</div>
-        <div className='size'>{filesizeConverter(file_bytes)}</div>
+        <div className='size'>
+          {file_bytes ? filesizeConverter(file_bytes) : '?'}
+        </div>
       </div>
     </div>
   )

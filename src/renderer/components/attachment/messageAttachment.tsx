@@ -144,8 +144,8 @@ export default function Attachment({
         <div
           className='file-icon'
           draggable='true'
-          onDragStart={dragAttachmentOut.bind(null, message)}
-          title={file_mime}
+          onDragStart={dragAttachmentOut.bind(null, message.file)}
+          title={file_mime || 'null'}
         >
           {extension ? (
             <div className='file-extension'>
@@ -155,7 +155,9 @@ export default function Attachment({
         </div>
         <div className='text-part'>
           <div className='name'>{file_name}</div>
-          <div className='size'>{filesizeConverter(file_bytes)}</div>
+          <div className='size'>
+            {file_bytes ? filesizeConverter(file_bytes) : '?'}
+          </div>
         </div>
       </div>
     )
@@ -203,8 +205,8 @@ export function DraftAttachment({
         <div
           className='file-icon'
           draggable='true'
-          onDragStart={dragAttachmentOut.bind(null, attachment)}
-          title={file_mime}
+          onDragStart={ev => file_name && dragAttachmentOut(file_name, ev)}
+          title={file_mime || 'null'}
         >
           {extension ? (
             <div className='file-extension'>
@@ -214,7 +216,9 @@ export function DraftAttachment({
         </div>
         <div className='text-part'>
           <div className='name'>{file_name}</div>
-          <div className='size'>{filesizeConverter(file_bytes)}</div>
+          <div className='size'>
+            {file_bytes ? filesizeConverter(file_bytes) : '?'}
+          </div>
         </div>
       </div>
     )

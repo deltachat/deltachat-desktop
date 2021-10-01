@@ -36,16 +36,16 @@ const SUPPORTED_VIDEO_MIME_TYPES = Object.freeze([
 // TODO define this correctly
 // (maybe inside shared module??, but that depends on wether its also used in the backend or just exists in the frontend)
 
-export function isImage(filemime: string) {
-  return SUPPORTED_IMAGE_MIME_TYPES.includes(filemime)
+export function isImage(filemime: string | null) {
+  return SUPPORTED_IMAGE_MIME_TYPES.includes(filemime || '')
 }
 
 export function hasAttachment(attachment: MessageTypeAttachmentSubset | null) {
   return attachment && attachment.file
 }
 
-export function isVideo(filemime: string) {
-  return SUPPORTED_VIDEO_MIME_TYPES.includes(filemime)
+export function isVideo(filemime: string | null) {
+  return SUPPORTED_VIDEO_MIME_TYPES.includes(filemime || '')
 }
 
 export function isAudio(filemime: DraftObject['file_mime']) {
@@ -53,11 +53,11 @@ export function isAudio(filemime: DraftObject['file_mime']) {
   return filemime.startsWith('audio/')
 }
 
-export function isDisplayableByFullscreenMedia(filemime: string) {
+export function isDisplayableByFullscreenMedia(filemime: string | null) {
   return isImage(filemime) || isAudio(filemime) || isVideo(filemime)
 }
 
-export function isGenericAttachment(filemime: string) {
+export function isGenericAttachment(filemime: string | null) {
   return !(isImage(filemime) || isVideo(filemime) || isAudio(filemime))
 }
 
@@ -73,12 +73,12 @@ export function getExtension({
     }
   }
 
-  return mimeTypes.extension(file_mime) || null
+  return mimeTypes.extension(file_mime || '') || null
 }
 
 export function dragAttachmentOut(
-  { file }: MessageTypeAttachmentSubset,
-  dragEvent: DragEvent
+  file: MessageTypeAttachmentSubset['file'],
+  dragEvent: React.DragEvent<HTMLDivElement>
 ) {
   dragEvent.preventDefault()
   ipcRenderer.send('ondragstart', file)

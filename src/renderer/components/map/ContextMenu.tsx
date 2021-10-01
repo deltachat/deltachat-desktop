@@ -13,8 +13,10 @@ export default class ContextMenu extends React.Component<ContextMenuProps> {
   }
 
   onClick() {
-    this.props.onSetPoi(this.poiLabel.current.value)
-    this.poiLabel.current.value = ''
+    if (this.poiLabel.current) {
+      this.props.onSetPoi(this.poiLabel.current.value)
+      this.poiLabel.current.value = ''
+    }
   }
 
   render() {
