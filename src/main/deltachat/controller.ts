@@ -476,7 +476,7 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   getProviderInfo(email: string) {
-    return DeltaChatNode.getProviderFromEmail(email)
+    return this.selectedAccountContext.getProviderFromEmail(email)
   }
 
   checkValidEmail(email: string) {

@@ -183,11 +183,11 @@ More on the blog: https://delta.chat/en/2021-08-24-updates` as any
   }
 
   getAllAccountIds(): number[] {
-    return super.accounts.accounts()
+    return super.accounts.getAllAccountIds()
   }
 
   async getAllAccounts(): Promise<DeltaChatAccount[]> {
-    const accountIds: number[] = super.accounts.accounts()
+    const accountIds: number[] = super.accounts.getAllAccountIds()
 
     const accounts: DeltaChatAccount[] = new Array(accountIds.length)
 
