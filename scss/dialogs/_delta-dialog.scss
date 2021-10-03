@@ -133,6 +133,19 @@
       }
     }
 
+    &.edit-btn {
+      & > div {
+        width: 24px;
+        height: 24px;
+        -webkit-mask: url(../images/lead-pencil.svg) no-repeat center;
+        -webkit-mask-size: 80%;
+        background-color: var(--scrollbarThumb);
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+
     &.back-btn {
       button::before {
         margin-left: -13px !important;

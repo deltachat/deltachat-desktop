@@ -66,6 +66,15 @@ function DeltaDialogBackButton(props: React.HTMLAttributes<HTMLButtonElement>) {
     </div>
   )
 }
+function DeltaDialogEditButton(props: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div className='header-button-wrapper edit-btn'>
+      <div
+        {...props}
+      />
+    </div>
+  )
+}
 
 const DeltaDialog = React.memo<
   React.PropsWithChildren<{
@@ -128,14 +137,16 @@ export function useDialog<T extends (props: any) => JSX.Element>(
 }
 
 export function DeltaDialogHeader(props: {
-  onClickBack?: () => void
   title?: string
+  onClickBack?: () => void
+  onClickEdit?: () => void
   onClose?: DialogProps['onClose']
   children?: React.ReactNode
   showBackButton?: boolean
+  showEditButton?: boolean
   showCloseButton?: boolean
 }) {
-  const { onClickBack, title, onClose, children, showCloseButton } = props
+  const { onClickBack, title, onClose, onClickEdit, children, showCloseButton, showEditButton } = props
   let { showBackButton } = props
   if (typeof showBackButton === 'undefined')
     showBackButton = typeof onClickBack === 'function'
@@ -149,6 +160,7 @@ export function DeltaDialogHeader(props: {
       {showBackButton && <DeltaDialogBackButton onClick={onClickBack} />}
       {title && <h4 className='bp3-heading'>{title}</h4>}
       {children}
+      {showEditButton && <DeltaDialogEditButton onClick={onClickEdit} />}
       {typeof onClose === 'function' && showCloseButton !== false && (
         <DeltaDialogCloseButton onClick={onClose} />
       )}
