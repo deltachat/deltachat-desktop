@@ -13,43 +13,32 @@ import { selectChat } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
 import { JsonContact } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
-import { ScreenContext } from '../../contexts'
+import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { Avatar } from '../Avatar'
 import { useLogicVirtualChatList, ChatListPart } from '../chat/ChatList'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import MessageBody from '../message/MessageBody'
 import { useThemeCssVar } from '../../ThemeManager'
+import {DialogProps} from './DialogController'
+import {Card, Elevation} from '@blueprintjs/core'
+import {DeltaInput} from '../Login-Styles'
 
 const ProfileInfoName = ({
   name,
-  authName,
-  setName,
   address,
-  disabled,
 }: {
   name: string
-  authName: string
-  setName: (name: string) => void
   address: string
-  disabled: boolean
 }) => {
-  const onChange = async (ev: React.ChangeEvent<HTMLInputElement>) => {
-    const newName = ev.target.value
-    setName(newName)
-  }
-
   return (
     <div className='profile-info-name-container'>
       <div>
-        <input
-          className='group-name-input'
-          placeholder={authName}
-          value={name}
-          onChange={onChange}
-          disabled={disabled}
-          autoFocus
+        <p
+          className='group-name'
           style={{ marginLeft: '0px', marginBottom: '10px' }}
-        />
+        >
+          {name}
+        </p>
       </div>
       <div className='address'>{address}</div>
     </div>
@@ -74,24 +63,30 @@ export default function ViewProfile(props: {
   onClose: () => void
   contact: JsonContact
 }) {
-  const { isOpen, onClose, contact } = props
+  const { isOpen, onClose } = props
 
   const tx = window.static_translate
+  const { openDialog } = useContext(ScreenContext)
+  const [contact, setContact] = useState<JsonContact>(props.contact)
 
-  const onUpdateContact = async () => {
-    await DeltaBackend.call('contacts.changeNickname', contact.id, name)
-    onClose()
+  const onClickEdit = () => {
+    openDialog(EditContactNameDialog, {
+      contactName: contact.name,
+      onOk: async (contactName: string) => {
+        await DeltaBackend.call('contacts.changeNickname', contact.id, contactName)
+        setContact({...contact, name: contactName})
+      }
+    })
   }
 
   return (
     <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
-      <DeltaDialogHeader title={tx('menu_view_profile')} />
+      <DeltaDialogHeader title={tx('menu_view_profile')} onClickEdit={onClickEdit} showEditButton={true} showCloseButton={true} onClose={onClose}/>
       <DeltaDialogBody noFooter>
         <DeltaDialogContent noPadding>
-          <ViewProfileInner contact={contact} onClose={onClose} />
+          <ViewProfileInner contact={contact} onClose={onClose}/>
         </DeltaDialogContent>
       </DeltaDialogBody>
-      <DeltaDialogOkCancelFooter onCancel={onClose} onOk={onUpdateContact} />
     </DeltaDialogBase>
   )
 }
@@ -105,7 +100,6 @@ export function ViewProfileInner({
 }) {
   const { openDialog } = useContext(ScreenContext)
 
-  const [name, setName] = useState<string>(contact.name)
 
   const { chatListIds } = useChatList(0, '', contact.id)
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
@@ -149,13 +143,7 @@ export function ViewProfileInner({
               <ProfileInfoAvatar contact={contact} />
             </div>
             <ProfileInfoName
-              disabled={
-                contact.id === C.DC_CONTACT_ID_SELF ||
-                contact.id === C.DC_CONTACT_ID_DEVICE
-              }
-              authName={contact.authName}
-              name={name}
-              setName={setName}
+              name={contact.name}
               address={contact.address}
             />
           </div>
@@ -218,5 +206,59 @@ export function ViewProfileInner({
         </div>
       </div>
     </>
+  )
+}
+
+
+export function EditContactNameDialog({
+  isOpen,
+  onClose,
+  onOk,
+  onCancel,
+  contactName: initialGroupName
+}: DialogProps) {
+  const [contactName, setContactName] = useState(initialGroupName)
+  const tx = useTranslationFunction()
+
+  const onClickCancel = () => {
+    onClose()
+    onCancel && onCancel()
+  }
+  const onClickOk = () => {
+    onClose()
+    onOk(contactName)
+  }
+  return (
+    <DeltaDialogBase
+      onClose={onClose}
+      isOpen={isOpen}
+      canOutsideClickClose={false}
+      style={{
+        top: '15vh',
+        width: '500px',
+        maxHeight: '70vh',
+        height: 'auto',
+      }}
+      fixed
+    >
+      <DeltaDialogHeader title={tx('menu_edit_name')} />
+      <DeltaDialogBody>
+        <Card elevation={Elevation.ONE}>
+          <DeltaInput
+            key='contactname'
+            id='contactname'
+            placeholder={tx('name_desktop')}
+            value={contactName}
+            onChange={(
+              event: React.FormEvent<HTMLElement> &
+                React.ChangeEvent<HTMLInputElement>
+            ) => {
+              setContactName(event.target.value)
+            }}
+          />
+        </Card>
+      </DeltaDialogBody>
+      <DeltaDialogOkCancelFooter onCancel={onClickCancel} onOk={onClickOk} />
+    </DeltaDialogBase>
   )
 }

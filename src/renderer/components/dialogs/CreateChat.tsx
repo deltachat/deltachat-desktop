@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useContext } from 'react'
+import React, { Fragment, useState, useContext, useRef, useLayoutEffect } from 'react'
 import { Card, Classes } from '@blueprintjs/core'
 import { C } from 'deltachat-node/dist/constants'
 
@@ -338,12 +338,16 @@ export function AddMemberInnerDialog({
     onOk(addMembers)
   }
 
+  const inputRef = useRef(null)
+  useLayoutEffect(() => inputRef?.current?.focus(), [contactsNotInGroup]) 
+
   return (
     <>
       <DeltaDialogHeader title={tx('group_add_members')} />
       <DeltaDialogBody noFooter>
         <Card style={{ padding: '0px 20px' }}>
           <input
+            ref={inputRef}
             className='search-input group-member-search'
             style={{ marginLeft: '0px' }}
             onChange={onSearchChange}

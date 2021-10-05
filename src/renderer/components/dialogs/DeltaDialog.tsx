@@ -7,6 +7,7 @@ export const DeltaDialogBase = React.memo<
   React.PropsWithChildren<{
     isOpen: boolean
     onClose: () => void
+    canEscapeKeyClose?: boolean
     showCloseButton?: boolean
     fixed?: boolean
     className?: string
@@ -69,9 +70,7 @@ function DeltaDialogBackButton(props: React.HTMLAttributes<HTMLButtonElement>) {
 function DeltaDialogEditButton(props: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div className='header-button-wrapper edit-btn'>
-      <div
-        {...props}
-      />
+      <div {...props} />
     </div>
   )
 }
@@ -146,7 +145,15 @@ export function DeltaDialogHeader(props: {
   showEditButton?: boolean
   showCloseButton?: boolean
 }) {
-  const { onClickBack, title, onClose, onClickEdit, children, showCloseButton, showEditButton } = props
+  const {
+    onClickBack,
+    title,
+    onClose,
+    onClickEdit,
+    children,
+    showCloseButton,
+    showEditButton,
+  } = props
   let { showBackButton } = props
   if (typeof showBackButton === 'undefined')
     showBackButton = typeof onClickBack === 'function'

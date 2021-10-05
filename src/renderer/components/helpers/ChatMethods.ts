@@ -89,11 +89,11 @@ export function openEncryptionInfoDialog(
   screenContext.openDialog('EncryptionInfo', { chatListItem })
 }
 
-export function openEditGroupDialog(
+export function openViewGroupDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
   selectedChat: FullChat
 ) {
-  screenContext.openDialog('EditGroup', { chat: selectedChat })
+  screenContext.openDialog('ViewGroup', { chat: selectedChat })
 }
 
 export async function openViewProfileDialog(

@@ -122,8 +122,7 @@ class DeltaRemote {
     chatId: number,
     name: string,
     image: string,
-    remove: number[],
-    add: number[]
+    members: number[] | null
   ): Promise<boolean>
   call(
     fnName: 'chat.addContactToChat',
