@@ -1,4 +1,10 @@
-import React, { Fragment, useState, useContext, useRef, useLayoutEffect } from 'react'
+import React, {
+  Fragment,
+  useState,
+  useContext,
+  useRef,
+  useLayoutEffect,
+} from 'react'
 import { Card, Classes } from '@blueprintjs/core'
 import { C } from 'deltachat-node/dist/constants'
 
@@ -339,7 +345,7 @@ export function AddMemberInnerDialog({
   }
 
   const inputRef = useRef(null)
-  useLayoutEffect(() => inputRef?.current?.focus(), [contactsNotInGroup]) 
+  useLayoutEffect(() => inputRef?.current?.focus(), [contactsNotInGroup])
 
   return (
     <>

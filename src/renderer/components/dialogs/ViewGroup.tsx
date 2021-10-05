@@ -55,18 +55,27 @@ export default function ViewGroup(props: {
 
 export const useGroup = (chat: FullChat) => {
   const [groupName, setGroupName] = useState(chat.name)
-  const [groupMembers, setGroupMembers] = useState(chat.contacts.map(({ id }) => id))
+  const [groupMembers, setGroupMembers] = useState(
+    chat.contacts.map(({ id }) => id)
+  )
   const [groupImage, setGroupImage] = useState(chat.profileImage)
-
 
   useEffect(() => {
     ;(async () => {
-      DeltaBackend.call('chat.modifyGroup', chat.id, groupName, groupImage, groupMembers) 
+      DeltaBackend.call(
+        'chat.modifyGroup',
+        chat.id,
+        groupName,
+        groupImage,
+        groupMembers
+      )
     })()
   }, [groupName, groupImage, groupMembers])
 
-  const removeGroupMember = (contactId: number) => setGroupMembers(members => members.filter(mId => mId !== contactId))
-  const addGroupMember = (contactId: number) => setGroupMembers(members => [...members, contactId])
+  const removeGroupMember = (contactId: number) =>
+    setGroupMembers(members => members.filter(mId => mId !== contactId))
+  const addGroupMember = (contactId: number) =>
+    setGroupMembers(members => [...members, contactId])
 
   return {
     groupName,
@@ -79,7 +88,6 @@ export const useGroup = (chat: FullChat) => {
     setGroupImage,
   }
 }
-
 
 function ViewGroupInner(props: {
   viewMode: string
@@ -101,7 +109,6 @@ function ViewGroupInner(props: {
     groupImage,
     setGroupImage,
   } = useGroup(chat)
-
 
   const showRemoveGroupMemberConfirmationDialog = (contact: JsonContact) => {
     openDialog('ConfirmationDialog', {
@@ -151,7 +158,7 @@ function ViewGroupInner(props: {
     openDialog(AddMemberDialog, {
       listFlags,
       groupMembers,
-      onOk: (members: number[]) => members.forEach(addGroupMember)
+      onOk: (members: number[]) => members.forEach(addGroupMember),
     })
   }
 
@@ -299,7 +306,7 @@ export function AddMemberDialog({
   isOpen,
   listFlags,
   groupMembers,
-  onOk
+  onOk,
 }: DialogProps) {
   const [searchContacts, updateSearchContacts] = useContacts(listFlags, '')
   const [queryStr, onSearchChange] = useContactSearch(updateSearchContacts)

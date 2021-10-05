@@ -19,9 +19,9 @@ import { useLogicVirtualChatList, ChatListPart } from '../chat/ChatList'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import MessageBody from '../message/MessageBody'
 import { useThemeCssVar } from '../../ThemeManager'
-import {DialogProps} from './DialogController'
-import {Card, Elevation} from '@blueprintjs/core'
-import {DeltaInput} from '../Login-Styles'
+import { DialogProps } from './DialogController'
+import { Card, Elevation } from '@blueprintjs/core'
+import { DeltaInput } from '../Login-Styles'
 
 const ProfileInfoName = ({
   name,
@@ -73,18 +73,28 @@ export default function ViewProfile(props: {
     openDialog(EditContactNameDialog, {
       contactName: contact.name,
       onOk: async (contactName: string) => {
-        await DeltaBackend.call('contacts.changeNickname', contact.id, contactName)
-        setContact({...contact, name: contactName})
-      }
+        await DeltaBackend.call(
+          'contacts.changeNickname',
+          contact.id,
+          contactName
+        )
+        setContact({ ...contact, name: contactName })
+      },
     })
   }
 
   return (
     <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
-      <DeltaDialogHeader title={tx('menu_view_profile')} onClickEdit={onClickEdit} showEditButton={true} showCloseButton={true} onClose={onClose}/>
+      <DeltaDialogHeader
+        title={tx('menu_view_profile')}
+        onClickEdit={onClickEdit}
+        showEditButton={true}
+        showCloseButton={true}
+        onClose={onClose}
+      />
       <DeltaDialogBody noFooter>
         <DeltaDialogContent noPadding>
-          <ViewProfileInner contact={contact} onClose={onClose}/>
+          <ViewProfileInner contact={contact} onClose={onClose} />
         </DeltaDialogContent>
       </DeltaDialogBody>
     </DeltaDialogBase>
@@ -99,7 +109,6 @@ export function ViewProfileInner({
   onClose: () => void
 }) {
   const { openDialog } = useContext(ScreenContext)
-
 
   const { chatListIds } = useChatList(0, '', contact.id)
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
@@ -142,10 +151,7 @@ export function ViewProfileInner({
             >
               <ProfileInfoAvatar contact={contact} />
             </div>
-            <ProfileInfoName
-              name={contact.name}
-              address={contact.address}
-            />
+            <ProfileInfoName name={contact.name} address={contact.address} />
           </div>
           <div
             style={{
@@ -209,13 +215,12 @@ export function ViewProfileInner({
   )
 }
 
-
 export function EditContactNameDialog({
   isOpen,
   onClose,
   onOk,
   onCancel,
-  contactName: initialGroupName
+  contactName: initialGroupName,
 }: DialogProps) {
   const [contactName, setContactName] = useState(initialGroupName)
   const tx = useTranslationFunction()

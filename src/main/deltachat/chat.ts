@@ -57,12 +57,18 @@ export default class DCChat extends SplitOut {
     }
 
     if (members !== null) {
-      const previousMembers = [...this.selectedAccountContext.getChatContacts(chatId)]
+      const previousMembers = [
+        ...this.selectedAccountContext.getChatContacts(chatId),
+      ]
       const remove = previousMembers.filter(m => !members.includes(m))
       const add = members.filter(m => !previousMembers.includes(m))
 
-      remove.forEach(id => this.selectedAccountContext.removeContactFromChat(chatId, id))
-      add.forEach(id => this.selectedAccountContext.addContactToChat(chatId, id))
+      remove.forEach(id =>
+        this.selectedAccountContext.removeContactFromChat(chatId, id)
+      )
+      add.forEach(id =>
+        this.selectedAccountContext.addContactToChat(chatId, id)
+      )
     }
     return true
   }
