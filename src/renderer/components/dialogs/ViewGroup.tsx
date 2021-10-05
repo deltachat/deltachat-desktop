@@ -8,11 +8,7 @@ import {
   DeltaDialogContent,
   DeltaDialogOkCancelFooter,
 } from './DeltaDialog'
-import {
-  useContactSearch,
-  AddMemberInnerDialog,
-  useGroupMembers,
-} from './CreateChat'
+import { useContactSearch, AddMemberInnerDialog } from './CreateChat'
 import { QrCodeShowQrInner } from './QrCode'
 import { useContacts, ContactList2 } from '../contact/ContactList'
 import {
@@ -70,7 +66,7 @@ export const useGroup = (chat: FullChat) => {
         groupMembers
       )
     })()
-  }, [groupName, groupImage, groupMembers])
+  }, [groupName, groupImage, groupMembers, chat.id])
 
   const removeGroupMember = (contactId: number) =>
     setGroupMembers(members => members.filter(mId => mId !== contactId))
@@ -103,7 +99,6 @@ function ViewGroupInner(props: {
     groupName,
     setGroupName,
     groupMembers,
-    setGroupMembers,
     addGroupMember,
     removeGroupMember,
     groupImage,
