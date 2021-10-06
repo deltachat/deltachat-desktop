@@ -7,7 +7,7 @@ import Settings from './Settings'
 import ForwardMessage from './ForwardMessage'
 import EncryptionInfo from './EncryptionInfo'
 import CreateChat from './CreateChat'
-import EditGroup from './EditGroup'
+import ViewGroup from './ViewGroup'
 import ViewProfile from './ViewProfile'
 import ImportQrCode from './ImportQrCode'
 import AlertDialog from './AlertDialog'
@@ -28,7 +28,7 @@ export const allDialogs: { [key: string]: any } = {
   ForwardMessage,
   EncryptionInfo,
   CreateChat,
-  EditGroup,
+  ViewGroup,
   ViewProfile,
   ImportQrCode,
   ConfirmationDialog,

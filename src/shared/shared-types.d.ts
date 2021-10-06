@@ -164,7 +164,7 @@ export type msgStatus =
   | ''
 
 export type MessageType = JsonMessage & {
-  sender: DCContact
+  sender: JsonContact
   setupCodeBegin?: string
   file_mime: string | null
   file_bytes: number | null
@@ -175,8 +175,6 @@ export type MessageTypeAttachmentSubset = Pick<
   MessageType,
   'file' | 'file_mime' | 'file_bytes' | 'file_name'
 >
-
-export type DCContact = JsonContact
 
 export type Theme = {
   name: string

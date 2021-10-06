@@ -1,19 +1,19 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { ContactListItem } from './ContactListItem'
 import { DeltaBackend } from '../../delta-remote'
-import { DCContact } from '../../../shared/shared-types'
+import { JsonContact } from '../../../shared/shared-types'
 import { debounce } from 'debounce'
 import { useInitEffect } from '../helpers/useInitEffect'
 import { debounceWithInit } from '../chat/ChatListHelpers'
 
 export function ContactList2(props: {
-  contacts: DCContact[]
-  onClick?: (contact: DCContact) => void
+  contacts: JsonContact[]
+  onClick?: (contact: JsonContact) => void
   showCheckbox?: boolean
-  isChecked?: (contact: DCContact) => boolean
-  onCheckboxClick?: (contact: DCContact) => void
+  isChecked?: (contact: JsonContact) => boolean
+  onCheckboxClick?: (contact: JsonContact) => void
   showRemove?: boolean
-  onRemoveClick?: (contact: DCContact) => void
+  onRemoveClick?: (contact: JsonContact) => void
 }) {
   const {
     contacts,
@@ -46,7 +46,7 @@ export function ContactList2(props: {
 }
 
 export function useContacts(listFlags: number, queryStr: string) {
-  const [contacts, setContacts] = useState<DCContact[]>([])
+  const [contacts, setContacts] = useState<JsonContact[]>([])
 
   const debouncedGetContacts2 = useMemo(
     () =>
@@ -67,7 +67,7 @@ export function useContacts(listFlags: number, queryStr: string) {
 
 export function useContactsNew(listFlags: number, initialQueryStr: string) {
   const [state, setState] = useState<{
-    contacts: DCContact[]
+    contacts: JsonContact[]
     queryStrIsValidEmail: boolean
   }>({ contacts: [], queryStrIsValidEmail: false })
 

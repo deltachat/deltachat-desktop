@@ -271,19 +271,5 @@ div.delta-form-group {
         font-weight: bold;
       }
     }
-
-    .remove-icon {
-      margin-top: 0;
-      margin-right: 8px;
-      align-self: center;
-    }
-
-    .remove-icon:hover {
-      .bp3-icon {
-        & > svg {
-          fill: #bf0000;
-        }
-      }
-    }
   }
 }

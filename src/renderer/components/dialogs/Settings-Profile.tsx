@@ -1,29 +1,37 @@
 import { Card, Elevation } from '@blueprintjs/core'
-import React, { useEffect, useState } from 'react'
-import { useTranslationFunction } from '../../contexts'
+import React, { useEffect, useState, useContext } from 'react'
+import { useTranslationFunction, ScreenContext } from '../../contexts'
 
 import { DeltaBackend } from '../../delta-remote'
 import { avatarInitial } from '../Avatar'
 import { DeltaInput } from '../Login-Styles'
-import { DeltaDialogBody, DeltaDialogOkCancelFooter } from './DeltaDialog'
+import {
+  DeltaDialogBody,
+  DeltaDialogOkCancelFooter,
+  DeltaDialogBase,
+  DeltaDialogHeader,
+} from './DeltaDialog'
 import { SettingsButton } from './Settings'
 import { runtime } from '../../runtime'
 import { C } from 'deltachat-node/dist/constants'
+import { DialogProps } from './DialogController'
 import { onDCEvent } from '../../ipc'
+import SettingsAccountDialog from './Settings-Account'
+import SettingsConnectivityDialog from './Settings-Connectivity'
 
 export default function SettingsProfile({
-  setShow,
   addr,
   displayname,
   state,
+  handleDeltaSettingsChange,
 }: {
-  show: string
-  setShow: (show: string) => void
   onClose: any
   addr: string | undefined
   displayname: string | undefined
   state: any
+  handleDeltaSettingsChange: (key: string, value: string) => void
 }) {
+  const { openDialog } = useContext(ScreenContext)
   const [profileImagePreview, setProfileImagePreview] = useState('')
   const [connectivityString, setConnectivityString] = useState('')
 
@@ -79,13 +87,34 @@ export default function SettingsProfile({
             <div className='addr'>{addr}</div>
           </div>
         </div>
-        <SettingsButton onClick={() => setShow('edit-profile')}>
+        <SettingsButton
+          onClick={() =>
+            openDialog(SettingsProfileDialog, {
+              state,
+              handleDeltaSettingsChange,
+            })
+          }
+        >
           {tx('pref_edit_profile')}
         </SettingsButton>
-        <SettingsButton onClick={() => setShow('login')}>
+        <SettingsButton
+          onClick={() =>
+            openDialog(SettingsAccountDialog, {
+              state,
+              handleDeltaSettingsChange,
+            })
+          }
+        >
           {tx('pref_password_and_account_settings')}
         </SettingsButton>
-        <SettingsButton onClick={() => setShow('connectivity')}>
+        <SettingsButton
+          onClick={async () => {
+            openDialog(SettingsConnectivityDialog, {
+              state,
+              handleDeltaSettingsChange,
+            })
+          }}
+        >
           {tx('connectivity') + ' ' + connectivityString}
         </SettingsButton>
       </Card>
@@ -151,14 +180,12 @@ export function ProfileImageSelector({
   )
 }
 
-export function SettingsEditProfile({
-  setShow,
+export function SettingsEditProfileDialogInner({
+  onClose,
   state,
   handleDeltaSettingsChange,
 }: {
-  show: string
-  setShow: (show: string) => void
-  onClose: any
+  onClose: DialogProps['onClose']
   state: any
   handleDeltaSettingsChange: (key: string, value: string) => void
 }) {
@@ -171,12 +198,13 @@ export function SettingsEditProfile({
     DeltaBackend.call('getProfilePicture').then(setProfilePicture)
   }, [])
 
-  const onCancel = () => setShow('main')
+  const onCancel = () => {
+    onClose()
+  }
   const onOk = async () => {
     await DeltaBackend.call('setProfilePicture', profilePicture)
     handleDeltaSettingsChange('displayname', displayname)
-    handleDeltaSettingsChange('selfstatus', selfstatus)
-    setShow('main')
+    onClose()
   }
   return (
     <>
@@ -222,5 +250,37 @@ export function SettingsEditProfile({
       </DeltaDialogBody>
       <DeltaDialogOkCancelFooter onCancel={onCancel} onOk={onOk} />
     </>
+  )
+}
+
+export function SettingsProfileDialog({
+  onClose,
+  isOpen,
+  state,
+  handleDeltaSettingsChange,
+}: {
+  isOpen: DialogProps['isOpen']
+  onClose: DialogProps['onClose']
+  state: any
+  handleDeltaSettingsChange: (key: string, value: string) => void
+}) {
+  const tx = useTranslationFunction()
+  return (
+    <DeltaDialogBase
+      onClose={onClose}
+      isOpen={isOpen}
+      canOutsideClickClose={false}
+      style={{
+        maxHeight: 'calc(100% - 100px)',
+        width: '500px',
+      }}
+    >
+      <DeltaDialogHeader title={tx('pref_edit_profile')} />
+      {SettingsEditProfileDialogInner({
+        state,
+        handleDeltaSettingsChange,
+        onClose,
+      })}
+    </DeltaDialogBase>
   )
 }

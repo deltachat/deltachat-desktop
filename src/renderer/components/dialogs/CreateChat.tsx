@@ -1,4 +1,10 @@
-import React, { Fragment, useState, useContext } from 'react'
+import React, {
+  Fragment,
+  useState,
+  useContext,
+  useRef,
+  useLayoutEffect,
+} from 'react'
 import { Card, Classes } from '@blueprintjs/core'
 import { C } from 'deltachat-node/dist/constants'
 
@@ -29,7 +35,7 @@ import {
 
 import { GroupImage } from './Edit-Group-Image'
 
-import { JsonContact, DCContact } from '../../../shared/shared-types'
+import { JsonContact } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
 import { QrCodeShowQrInner } from './QrCode'
 import { runtime } from '../../runtime'
@@ -50,7 +56,7 @@ export default function CreateChat(props: {
   )
   const [queryStr, onSearchChange] = useContactSearch(updateContacts)
 
-  const chooseContact = async ({ id }: DCContact) => {
+  const chooseContact = async ({ id }: JsonContact) => {
     try {
       await createChatByContactIdAndSelectIt(id)
     } catch (error) {
@@ -212,8 +218,12 @@ export function useGroupMembers(initialMemebers: number[]) {
       ? removeGroupMember({ id })
       : addGroupMember({ id })
   }
-  const addGroupMembers = (ids: number[]) =>
-    setGroupMembers(prevMembers => [...prevMembers, ...ids])
+  const addGroupMembers = (ids: number[]) => {
+    setGroupMembers(prevMembers => {
+      return [...prevMembers, ...ids]
+    })
+  }
+
   return [
     groupMembers,
     removeGroupMember,
@@ -300,19 +310,19 @@ export const GroupSettingsSetNameAndProfileImage = ({
 }
 
 export function AddMemberInnerDialog({
-  onClickBack,
+  onCancel,
+  onOk,
   onSearchChange,
   queryStr,
   searchContacts,
   groupMembers,
-  addGroupMembers,
 }: {
-  onClickBack: Parameters<typeof DeltaDialogHeader>[0]['onClickBack']
+  onOk: (addMembers: number[]) => void
+  onCancel: Parameters<typeof DeltaDialogOkCancelFooter>[0]['onCancel']
   onSearchChange: ReturnType<typeof useContactSearch>[1]
   queryStr: string
-  searchContacts: DCContact[]
+  searchContacts: JsonContact[]
   groupMembers: number[]
-  addGroupMembers: ReturnType<typeof useGroupMembers>[4]
 }) {
   const contactsNotInGroup = searchContacts.filter(
     contact => groupMembers.indexOf(contact.id) === -1
@@ -320,7 +330,7 @@ export function AddMemberInnerDialog({
 
   const [addMembers, setAddMembers] = useState([])
 
-  const addOrRemoveMember = (contact: DCContact) => {
+  const addOrRemoveMember = (contact: JsonContact) => {
     if (addMembers.indexOf(contact.id) === -1) {
       setAddMembers([...addMembers, contact.id])
     } else {
@@ -330,10 +340,12 @@ export function AddMemberInnerDialog({
 
   const tx = window.static_translate
 
-  const onOk = () => {
-    addGroupMembers(addMembers)
-    onClickBack()
+  const _onOk = () => {
+    onOk(addMembers)
   }
+
+  const inputRef = useRef(null)
+  useLayoutEffect(() => inputRef?.current?.focus(), [contactsNotInGroup])
 
   return (
     <>
@@ -341,6 +353,7 @@ export function AddMemberInnerDialog({
       <DeltaDialogBody noFooter>
         <Card style={{ padding: '0px 20px' }}>
           <input
+            ref={inputRef}
             className='search-input group-member-search'
             style={{ marginLeft: '0px' }}
             onChange={onSearchChange}
@@ -363,7 +376,7 @@ export function AddMemberInnerDialog({
           </div>
         </Card>
       </DeltaDialogBody>
-      <DeltaDialogOkCancelFooter onCancel={onClickBack} onOk={onOk} />
+      <DeltaDialogOkCancelFooter onCancel={onCancel} onOk={_onOk} />
     </>
   )
 }
@@ -481,7 +494,12 @@ function CreateGroupInner(props: {
       {viewMode.startsWith(viewPrefix + '-addMember') && (
         <AddMemberInnerDialog
           {...{
-            onClickBack: () => {
+            onOk: async addMembers => {
+              updateSearch('')
+              setViewMode(viewPrefix + '-main')
+              await addGroupMembers(addMembers)
+            },
+            onCancel: () => {
               updateSearch('')
               setViewMode(viewPrefix + '-main')
             },

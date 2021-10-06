@@ -7,18 +7,46 @@ import LoginForm, {
   defaultCredentials,
 } from '../LoginForm'
 
-import { DeltaDialogBody, DeltaDialogOkCancelFooter } from './DeltaDialog'
-import { ScreenContext } from '../../contexts'
+import {
+  DeltaDialogBody,
+  DeltaDialogOkCancelFooter,
+  DeltaDialogBase,
+  DeltaDialogHeader,
+} from './DeltaDialog'
+import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { Credentials } from '../../../shared/shared-types'
+import { DialogProps } from './DialogController'
 
-export default function SettingsAccount({
-  setShow,
+export default function SettingsAccountDialog({
+  isOpen,
   onClose,
+  setShow,
 }: {
-  show: string
+  isOpen: DialogProps['isOpen']
+  onClose: DialogProps['onClose']
   setShow: (show: string) => void
-  onClose: () => void
 }) {
+  const tx = useTranslationFunction()
+  return (
+    <DeltaDialogBase
+      onClose={onClose}
+      isOpen={isOpen}
+      canOutsideClickClose={false}
+      style={{
+        maxHeight: 'calc(100% - 100px)',
+        width: '500px',
+      }}
+    >
+      <DeltaDialogHeader title={tx('pref_password_and_account_settings')} />
+      {SettingsAccountInner(setShow, onClose)}
+    </DeltaDialogBase>
+  )
+}
+
+export function SettingsAccountInner(
+  setShow: (show: string) => void,
+  onClose: () => void
+) {
   const [, setInitialAccountSettings] = useState<Credentials>(
     defaultCredentials()
   )
@@ -97,10 +125,7 @@ export default function SettingsAccount({
           )}
         </Card>
       </DeltaDialogBody>
-      <DeltaDialogOkCancelFooter
-        onCancel={() => setShow('main')}
-        onOk={onUpdate}
-      />
+      <DeltaDialogOkCancelFooter onCancel={() => onClose()} onOk={onUpdate} />
     </>
   )
 }

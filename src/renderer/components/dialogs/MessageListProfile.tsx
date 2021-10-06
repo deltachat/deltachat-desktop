@@ -68,8 +68,7 @@ const useEdit = (
       groupId,
       groupName,
       groupImage,
-      [],
-      []
+      null
     )
   }
   const onUpdateGroup = async () => {

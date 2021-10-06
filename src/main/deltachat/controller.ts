@@ -9,7 +9,7 @@ import DCAutocrypt from './autocrypt'
 import DCBackup from './backup'
 import DCChat from './chat'
 import DCChatList from './chatlist'
-import DCContacts from './contacts'
+import JsonContacts from './contacts'
 import DCContext from './context'
 import DCLocations from './locations'
 import DCLoginController from './login'
@@ -235,7 +235,7 @@ export default class DeltaChatController extends EventEmitter {
   readonly autocrypt = new DCAutocrypt(this)
   readonly backup = new DCBackup(this)
   readonly chatList = new DCChatList(this)
-  readonly contacts = new DCContacts(this)
+  readonly contacts = new JsonContacts(this)
   readonly chat = new DCChat(this)
   readonly locations = new DCLocations(this)
   readonly login = new DCLoginController(this)

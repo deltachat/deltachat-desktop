@@ -12,7 +12,7 @@ import {
   openLeaveChatDialog,
   openDeleteChatDialog,
   openBlockContactDialog,
-  openEditGroupDialog,
+  openViewGroupDialog,
   setChatVisibility,
   openMuteChatDialog,
   unMuteChat,
@@ -50,7 +50,7 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
   let chatMenu: any = <div />
 
   const onCreateChat = () => screenContext.openDialog('CreateChat', {})
-  const onEditGroup = () => openEditGroupDialog(screenContext, selectedChat)
+  const onViewGroup = () => openViewGroupDialog(screenContext, selectedChat)
   const onLeaveGroup = () => openLeaveChatDialog(screenContext, selectedChat.id)
   const onBlockContact = () =>
     openBlockContactDialog(screenContext, selectedChat)
@@ -135,7 +135,7 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
           <DeltaMenuItem
             key='edit'
             text={tx('menu_edit_group')}
-            onClick={onEditGroup}
+            onClick={onViewGroup}
           />
           <DeltaMenuItem
             key='leave'

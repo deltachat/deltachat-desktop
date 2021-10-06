@@ -14,7 +14,7 @@ import MessageListAndComposer, {
 import SearchInput from '../SearchInput'
 import { useChatStore } from '../../stores/chat'
 import {
-  openEditGroupDialog,
+  openViewGroupDialog,
   openViewProfileDialog,
 } from '../helpers/ChatMethods'
 
@@ -78,7 +78,7 @@ export default function MainScreen() {
         chat: selectedChat,
       })
     } else if (selectedChat.isGroup) {
-      openEditGroupDialog(screenContext, selectedChat)
+      openViewGroupDialog(screenContext, selectedChat)
     } else {
       openViewProfileDialog(screenContext, selectedChat.contactIds[0])
     }

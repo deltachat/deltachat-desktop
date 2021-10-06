@@ -5,7 +5,7 @@ import {
   openDeleteChatDialog,
   openBlockContactDialog,
   openEncryptionInfoDialog,
-  openEditGroupDialog,
+  openViewGroupDialog,
   openViewProfileDialog,
   setChatVisibility,
   openMuteChatDialog,
@@ -83,12 +83,12 @@ export function useChatListContextMenu() {
       openDeleteChatDialog(screenContext, chatListItem, selectedChatId)
     const onEncrInfo = () =>
       openEncryptionInfoDialog(screenContext, chatListItem)
-    const onEditGroup = async () => {
+    const onViewGroup = async () => {
       const fullChat = await DeltaBackend.call(
         'chatList.getFullChatById',
         chatListItem.id
       )
-      openEditGroupDialog(screenContext, fullChat)
+      openViewGroupDialog(screenContext, fullChat)
     }
     const onViewProfile = async () => {
       const fullChat = await DeltaBackend.call(
@@ -132,7 +132,7 @@ export function useChatListContextMenu() {
           chatListItem.isGroup &&
             chatListItem.selfInGroup && {
               label: tx('menu_edit_group'),
-              action: onEditGroup,
+              action: onViewGroup,
             },
           // View Profile
           !chatListItem.isGroup && {

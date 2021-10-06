@@ -16,7 +16,7 @@ import MessageBody from './MessageBody'
 import MessageMetaData from './MessageMetaData'
 
 import Attachment from '../attachment/messageAttachment'
-import { MessageType, DCContact } from '../../../shared/shared-types'
+import { MessageType, JsonContact } from '../../../shared/shared-types'
 import { isGenericAttachment } from '../attachment/Attachment'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
 import { joinCall, openViewProfileDialog } from '../helpers/ChatMethods'
@@ -33,8 +33,8 @@ import { getDirection } from '../../../shared/util'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 
 const Avatar = (
-  contact: DCContact,
-  onContactClick: (contact: DCContact) => void
+  contact: JsonContact,
+  onContactClick: (contact: JsonContact) => void
 ) => {
   const { profileImage, color, displayName } = contact
 
@@ -66,8 +66,8 @@ const Avatar = (
 }
 
 const AuthorName = (
-  contact: DCContact,
-  onContactClick: (contact: DCContact) => void,
+  contact: JsonContact,
+  onContactClick: (contact: JsonContact) => void,
   overrideSenderName?: string
 ) => {
   const { color, displayName } = contact
@@ -84,8 +84,8 @@ const AuthorName = (
 }
 
 const ForwardedTitle = (
-  contact: DCContact,
-  onContactClick: (contact: DCContact) => void,
+  contact: JsonContact,
+  onContactClick: (contact: JsonContact) => void,
   direction: 'incoming' | 'outgoing',
   conversationType: ConversationType,
   overrideSenderName?: string
@@ -265,7 +265,7 @@ const Message = (props: {
     )
 
   // Normal Message
-  const onContactClick = async (contact: DCContact) => {
+  const onContactClick = async (contact: JsonContact) => {
     openViewProfileDialog(screenContext, contact.id)
   }
 

@@ -1,16 +1,18 @@
+p.group-name,
 input.group-name-input {
   margin-left: 0px;
   margin-bottom: 10px;
   font-size: x-large;
   width: 100%;
   border: 0;
-  border-bottom: solid;
-  border-color: var(--loginInputFocusColor);
   height: 33px;
   background-color: transparent;
   color: var(--bp3MenuText);
 }
-
+input.group-name-input {
+  border-bottom: solid;
+  border-color: var(--loginInputFocusColor);
+}
 div.group-seperator {
   margin: 20px -20px 0px -20px;
   padding: 10px 15px;
