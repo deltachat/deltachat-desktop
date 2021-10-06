@@ -12,7 +12,6 @@ import { useContactSearch, AddMemberInnerDialog } from './CreateChat'
 import { QrCodeShowQrInner } from './QrCode'
 import { useContacts, ContactList2 } from '../contact/ContactList'
 import {
-  PseudoListItemNoSearchResults,
   PseudoListItemShowQrCode,
   PseudoListItemAddMember,
 } from '../helpers/PseudoListItem'
@@ -25,6 +24,7 @@ import React from 'react'
 import { Avatar, avatarInitial } from '../Avatar'
 import { runtime } from '../../runtime'
 import { DeltaInput } from '../Login-Styles'
+import { isChatDisabled } from '../message/MessageListAndComposer'
 
 export default function ViewGroup(props: {
   isOpen: DialogProps['isOpen']
@@ -33,7 +33,6 @@ export default function ViewGroup(props: {
 }) {
   const { isOpen, onClose, chat } = props
   const [viewMode, setViewMode] = useState('main')
-  console.log('xxx', chat)
 
   return (
     <DeltaDialogBase
@@ -96,6 +95,8 @@ function ViewGroupInner(props: {
   const { viewMode, setViewMode, onClose, chat } = props
   const tx = useTranslationFunction()
 
+  const chatDisabled = isChatDisabled(chat)[0]
+
   const {
     groupName,
     setGroupName,
@@ -113,18 +114,6 @@ function ViewGroupInner(props: {
       cb: (yes: boolean) => {
         if (yes) {
           removeGroupMember(contact.id)
-        }
-      },
-    })
-  }
-
-  const showAddGroupMemberConfirmationDialog = (contact: JsonContact) => {
-    openDialog('ConfirmationDialog', {
-      message: tx('ask_add_members_desktop', contact.nameAndAddr),
-      confirmLabel: tx('ok'),
-      cb: (yes: boolean) => {
-        if (yes) {
-          addGroupMember(contact.id)
         }
       },
     })
@@ -179,7 +168,7 @@ function ViewGroupInner(props: {
           <DeltaDialogHeader
             title={tx('menu_edit_group')}
             onClickEdit={showViewGroupDialog}
-            showEditButton={true}
+            showEditButton={!chatDisabled}
             showCloseButton={true}
             onClose={onClose}
           />
@@ -213,19 +202,23 @@ function ViewGroupInner(props: {
                 )}
               </div>
               <div className='group-member-contact-list-wrapper'>
-                <PseudoListItemAddMember
-                  onClick={() => showAddMemberDialog()}
-                />
-                <PseudoListItemShowQrCode
-                  onClick={async () => {
-                    const qrCode = await DeltaBackend.call(
-                      'chat.getQrCode',
-                      chat.id
-                    )
-                    setQrCode(qrCode)
-                    setViewMode('showQrCode')
-                  }}
-                />
+                {!chatDisabled && (
+                  <>
+                    <PseudoListItemAddMember
+                      onClick={() => showAddMemberDialog()}
+                    />
+                    <PseudoListItemShowQrCode
+                      onClick={async () => {
+                        const qrCode = await DeltaBackend.call(
+                          'chat.getQrCode',
+                          chat.id
+                        )
+                        setQrCode(qrCode)
+                        setViewMode('showQrCode')
+                      }}
+                    />
+                  </>
+                )}
                 <ContactList2
                   contacts={chat.contacts}
                   showRemove
