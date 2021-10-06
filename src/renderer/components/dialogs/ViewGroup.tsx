@@ -33,6 +33,7 @@ export default function ViewGroup(props: {
 }) {
   const { isOpen, onClose, chat } = props
   const [viewMode, setViewMode] = useState('main')
+  console.log('xxx', chat)
 
   return (
     <DeltaDialogBase
@@ -146,9 +147,6 @@ function ViewGroupInner(props: {
     ? C.DC_GCL_VERIFIED_ONLY | C.DC_GCL_ADD_SELF
     : C.DC_GCL_ADD_SELF
 
-  const [searchContacts, updateSearchContacts] = useContacts(listFlags, '')
-  const [queryStr, onSearchChange] = useContactSearch(updateSearchContacts)
-
   const showAddMemberDialog = () => {
     openDialog(AddMemberDialog, {
       listFlags,
@@ -158,29 +156,6 @@ function ViewGroupInner(props: {
   }
 
   const [profileContact, setProfileContact] = useState<JsonContact>(null)
-
-  const searchContactsToAdd =
-    queryStr !== ''
-      ? searchContacts
-          .filter(({ id }) => groupMembers.indexOf(id) === -1)
-          .filter((_, i) => i < 5)
-      : []
-
-  const renderAddMemberIfNeeded = () => {
-    if (queryStr !== '') return null
-    return (
-      <>
-        <PseudoListItemAddMember onClick={() => showAddMemberDialog()} />
-        <PseudoListItemShowQrCode
-          onClick={async () => {
-            const qrCode = await DeltaBackend.call('chat.getQrCode', chat.id)
-            setQrCode(qrCode)
-            setViewMode('showQrCode')
-          }}
-        />
-      </>
-    )
-  }
 
   return (
     <>
@@ -238,18 +213,21 @@ function ViewGroupInner(props: {
                 )}
               </div>
               <div className='group-member-contact-list-wrapper'>
-                <input
-                  className='search-input group-member-search'
-                  onChange={onSearchChange}
-                  value={queryStr}
-                  placeholder={tx('search')}
-                  spellCheck={false}
+                <PseudoListItemAddMember
+                  onClick={() => showAddMemberDialog()}
                 />
-                {renderAddMemberIfNeeded()}
+                <PseudoListItemShowQrCode
+                  onClick={async () => {
+                    const qrCode = await DeltaBackend.call(
+                      'chat.getQrCode',
+                      chat.id
+                    )
+                    setQrCode(qrCode)
+                    setViewMode('showQrCode')
+                  }}
+                />
                 <ContactList2
-                  contacts={searchContacts.filter(
-                    ({ id }) => groupMembers.indexOf(id) !== -1
-                  )}
+                  contacts={chat.contacts}
                   showRemove
                   onClick={(contact: JsonContact) => {
                     setProfileContact(contact)
@@ -257,20 +235,6 @@ function ViewGroupInner(props: {
                   }}
                   onRemoveClick={showRemoveGroupMemberConfirmationDialog}
                 />
-                {queryStr !== '' && searchContactsToAdd.length !== 0 && (
-                  <>
-                    <div className='group-seperator no-margin'>
-                      {tx('group_add_members')}
-                    </div>
-                    <ContactList2
-                      contacts={searchContactsToAdd}
-                      onClick={showAddGroupMemberConfirmationDialog}
-                    />
-                  </>
-                )}
-                {queryStr !== '' && searchContacts.length === 0 && (
-                  <PseudoListItemNoSearchResults queryStr={queryStr} />
-                )}
               </div>
             </Card>
           </div>
