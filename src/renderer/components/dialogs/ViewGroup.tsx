@@ -131,7 +131,6 @@ function ViewGroupInner(props: {
     })
   }
 
-  const [qrCode, setQrCode] = useState('')
   const listFlags = chat.isProtected
     ? C.DC_GCL_VERIFIED_ONLY | C.DC_GCL_ADD_SELF
     : C.DC_GCL_ADD_SELF
@@ -144,25 +143,18 @@ function ViewGroupInner(props: {
     })
   }
 
+  const showQRDialog = async () => {
+    const qrCode = await DeltaBackend.call('chat.getQrCode', chat.id)
+    openDialog(ShowQRDialog, {
+      qrCode,
+      groupName,
+    })
+  }
+
   const [profileContact, setProfileContact] = useState<JsonContact>(null)
 
   return (
     <>
-      {viewMode === 'showQrCode' && (
-        <>
-          <DeltaDialogHeader
-            title={tx('qrshow_title')}
-            showBackButton={true}
-            onClickBack={() => setViewMode('main')}
-            showCloseButton={true}
-            onClose={onClose}
-          />
-          <QrCodeShowQrInner
-            qrCode={qrCode}
-            description={tx('qrshow_join_group_hint', [groupName])}
-          />
-        </>
-      )}
       {viewMode === 'main' && (
         <>
           <DeltaDialogHeader
@@ -207,16 +199,7 @@ function ViewGroupInner(props: {
                     <PseudoListItemAddMember
                       onClick={() => showAddMemberDialog()}
                     />
-                    <PseudoListItemShowQrCode
-                      onClick={async () => {
-                        const qrCode = await DeltaBackend.call(
-                          'chat.getQrCode',
-                          chat.id
-                        )
-                        setQrCode(qrCode)
-                        setViewMode('showQrCode')
-                      }}
-                    />
+                    <PseudoListItemShowQrCode onClick={() => showQRDialog()} />
                   </>
                 )}
                 <ContactList2
@@ -287,6 +270,35 @@ export function AddMemberDialog({
         searchContacts,
         groupMembers,
       })}
+    </DeltaDialogBase>
+  )
+}
+
+export function ShowQRDialog({
+  onClose,
+  isOpen,
+  qrCode,
+  groupName,
+}: DialogProps) {
+  const tx = useTranslationFunction()
+
+  return (
+    <DeltaDialogBase
+      onClose={onClose}
+      isOpen={isOpen}
+      canOutsideClickClose={false}
+      style={{
+        top: '15vh',
+        width: '500px',
+        maxHeight: '70vh',
+      }}
+      fixed
+    >
+      <DeltaDialogHeader title={tx('qrshow_title')} onClose={onClose} />
+      <QrCodeShowQrInner
+        qrCode={qrCode}
+        description={tx('qrshow_join_group_hint', [groupName])}
+      />
     </DeltaDialogBase>
   )
 }
