@@ -174,15 +174,7 @@ function ViewGroupInner(props: {
                   color={chat.color}
                   large
                 />
-                <p
-                  className='group-name'
-                  style={{
-                    marginLeft: '17px',
-                    width: 'calc(100% - 65px - 17px)',
-                    top: '10px',
-                    position: 'relative',
-                  }}
-                >
+                <p className='group-name' style={{ marginLeft: '17px' }}>
                   {groupName}
                 </p>
               </div>

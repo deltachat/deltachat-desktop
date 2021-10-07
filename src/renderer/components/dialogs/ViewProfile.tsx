@@ -33,12 +33,7 @@ const ProfileInfoName = ({
   return (
     <div className='profile-info-name-container'>
       <div>
-        <p
-          className='group-name'
-          style={{ marginLeft: '0px', marginBottom: '10px' }}
-        >
-          {name}
-        </p>
+        <p className='group-name'>{name}</p>
       </div>
       <div className='address'>{address}</div>
     </div>
