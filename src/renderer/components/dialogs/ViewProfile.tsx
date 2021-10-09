@@ -40,9 +40,7 @@ const ProfileInfoName = ({
   )
 }
 
-const ProfileInfoAvatar = ContactAvatar
-
-function ContactAvatar({ contact }: { contact: JsonContact }) {
+function ProfileInfoAvatar({ contact }: { contact: JsonContact }) {
   const { displayName, profileImage } = contact
   const color = contact.color
   return Avatar({
@@ -146,7 +144,10 @@ export function ViewProfileInner({
             >
               <ProfileInfoAvatar contact={contact} />
             </div>
-            <ProfileInfoName name={contact.name} address={contact.address} />
+            <ProfileInfoName
+              name={contact.displayName}
+              address={contact.address}
+            />
           </div>
           <div
             style={{
