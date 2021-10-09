@@ -1,14 +1,15 @@
 p.group-name,
 input.group-name-input {
   margin-left: 0px;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
   font-size: x-large;
   width: 100%;
   border: 0;
-  height: 33px;
+  height: auto;
   background-color: transparent;
   color: var(--bp3MenuText);
 }
+
 input.group-name-input {
   border-bottom: solid;
   border-color: var(--loginInputFocusColor);

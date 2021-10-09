@@ -33,21 +33,14 @@ const ProfileInfoName = ({
   return (
     <div className='profile-info-name-container'>
       <div>
-        <p
-          className='group-name'
-          style={{ marginLeft: '0px', marginBottom: '10px' }}
-        >
-          {name}
-        </p>
+        <p className='group-name'>{name}</p>
       </div>
       <div className='address'>{address}</div>
     </div>
   )
 }
 
-const ProfileInfoAvatar = ContactAvatar
-
-function ContactAvatar({ contact }: { contact: JsonContact }) {
+function ProfileInfoAvatar({ contact }: { contact: JsonContact }) {
   const { displayName, profileImage } = contact
   const color = contact.color
   return Avatar({
@@ -151,7 +144,10 @@ export function ViewProfileInner({
             >
               <ProfileInfoAvatar contact={contact} />
             </div>
-            <ProfileInfoName name={contact.name} address={contact.address} />
+            <ProfileInfoName
+              name={contact.displayName}
+              address={contact.address}
+            />
           </div>
           <div
             style={{

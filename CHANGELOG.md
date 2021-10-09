@@ -11,6 +11,8 @@
 
 ### Fixed
 - don't show logo twice in notifications (because macOS already shows applogo)
+- disable editing of left/readonly groups
+- fix member list being incomplete in chat requests
 
 ## [1.22.2] - 2021-09-23
 

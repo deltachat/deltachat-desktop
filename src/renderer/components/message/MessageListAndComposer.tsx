@@ -7,7 +7,7 @@ import { SettingsContext, ScreenContext } from '../../contexts'
 import { C } from 'deltachat-node/dist/constants'
 import { ChatStoreState } from '../../stores/chat'
 import ComposerMessageInput from '../composer/ComposerMessageInput'
-import { DesktopSettings } from '../../../shared/shared-types'
+import { DesktopSettings, FullChat } from '../../../shared/shared-types'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -165,22 +165,7 @@ export default function MessageListAndComposer({
     }
   }, [])
 
-  const [disabled, disabledReason] = (({
-    isGroup,
-    selfInGroup,
-  }): [boolean, string] => {
-    if (chat.isContactRequest) {
-      return [true, 'messaging_disabled_deaddrop']
-    } else if (chat.isDeviceChat === true) {
-      return [true, 'messaging_disabled_device_chat']
-    } else if (chat.type === C.DC_CHAT_TYPE_MAILINGLIST) {
-      return [true, 'messaging_disabled_mailing_list']
-    } else if (isGroup && !selfInGroup) {
-      return [true, 'messaging_disabled_not_in_group']
-    } else {
-      return [false, '']
-    }
-  })(chat)
+  const [disabled, disabledReason] = isChatReadonly(chat)
 
   const settings = useContext(SettingsContext).desktopSettings
   const style = getBackgroundImageStyle(settings)
@@ -212,4 +197,18 @@ export default function MessageListAndComposer({
       />
     </div>
   )
+}
+
+export function isChatReadonly(chat: FullChat): [boolean, string] {
+  if (chat.isContactRequest) {
+    return [true, 'messaging_disabled_deaddrop']
+  } else if (chat.isDeviceChat === true) {
+    return [true, 'messaging_disabled_device_chat']
+  } else if (chat.type === C.DC_CHAT_TYPE_MAILINGLIST) {
+    return [true, 'messaging_disabled_mailing_list']
+  } else if (chat.isGroup && !chat.selfInGroup) {
+    return [true, 'messaging_disabled_not_in_group']
+  } else {
+    return [false, '']
+  }
 }

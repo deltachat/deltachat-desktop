@@ -12,7 +12,6 @@ import { useContactSearch, AddMemberInnerDialog } from './CreateChat'
 import { QrCodeShowQrInner } from './QrCode'
 import { useContacts, ContactList2 } from '../contact/ContactList'
 import {
-  PseudoListItemNoSearchResults,
   PseudoListItemShowQrCode,
   PseudoListItemAddMember,
 } from '../helpers/PseudoListItem'
@@ -25,6 +24,7 @@ import React from 'react'
 import { Avatar, avatarInitial } from '../Avatar'
 import { runtime } from '../../runtime'
 import { DeltaInput } from '../Login-Styles'
+import { isChatReadonly } from '../message/MessageListAndComposer'
 
 export default function ViewGroup(props: {
   isOpen: DialogProps['isOpen']
@@ -95,6 +95,8 @@ function ViewGroupInner(props: {
   const { viewMode, setViewMode, onClose, chat } = props
   const tx = useTranslationFunction()
 
+  const chatDisabled = isChatReadonly(chat)[0]
+
   const {
     groupName,
     setGroupName,
@@ -117,18 +119,6 @@ function ViewGroupInner(props: {
     })
   }
 
-  const showAddGroupMemberConfirmationDialog = (contact: JsonContact) => {
-    openDialog('ConfirmationDialog', {
-      message: tx('ask_add_members_desktop', contact.nameAndAddr),
-      confirmLabel: tx('ok'),
-      cb: (yes: boolean) => {
-        if (yes) {
-          addGroupMember(contact.id)
-        }
-      },
-    })
-  }
-
   const showViewGroupDialog = () => {
     openDialog(ViewGroupDialog, {
       groupName,
@@ -141,13 +131,9 @@ function ViewGroupInner(props: {
     })
   }
 
-  const [qrCode, setQrCode] = useState('')
   const listFlags = chat.isProtected
     ? C.DC_GCL_VERIFIED_ONLY | C.DC_GCL_ADD_SELF
     : C.DC_GCL_ADD_SELF
-
-  const [searchContacts, updateSearchContacts] = useContacts(listFlags, '')
-  const [queryStr, onSearchChange] = useContactSearch(updateSearchContacts)
 
   const showAddMemberDialog = () => {
     openDialog(AddMemberDialog, {
@@ -157,54 +143,24 @@ function ViewGroupInner(props: {
     })
   }
 
-  const [profileContact, setProfileContact] = useState<JsonContact>(null)
-
-  const searchContactsToAdd =
-    queryStr !== ''
-      ? searchContacts
-          .filter(({ id }) => groupMembers.indexOf(id) === -1)
-          .filter((_, i) => i < 5)
-      : []
-
-  const renderAddMemberIfNeeded = () => {
-    if (queryStr !== '') return null
-    return (
-      <>
-        <PseudoListItemAddMember onClick={() => showAddMemberDialog()} />
-        <PseudoListItemShowQrCode
-          onClick={async () => {
-            const qrCode = await DeltaBackend.call('chat.getQrCode', chat.id)
-            setQrCode(qrCode)
-            setViewMode('showQrCode')
-          }}
-        />
-      </>
-    )
+  const showQRDialog = async () => {
+    const qrCode = await DeltaBackend.call('chat.getQrCode', chat.id)
+    openDialog(ShowQRDialog, {
+      qrCode,
+      groupName,
+    })
   }
+
+  const [profileContact, setProfileContact] = useState<JsonContact>(null)
 
   return (
     <>
-      {viewMode === 'showQrCode' && (
-        <>
-          <DeltaDialogHeader
-            title={tx('qrshow_title')}
-            showBackButton={true}
-            onClickBack={() => setViewMode('main')}
-            showCloseButton={true}
-            onClose={onClose}
-          />
-          <QrCodeShowQrInner
-            qrCode={qrCode}
-            description={tx('qrshow_join_group_hint', [groupName])}
-          />
-        </>
-      )}
       {viewMode === 'main' && (
         <>
           <DeltaDialogHeader
             title={tx('menu_edit_group')}
             onClickEdit={showViewGroupDialog}
-            showEditButton={true}
+            showEditButton={!chatDisabled}
             showCloseButton={true}
             onClose={onClose}
           />
@@ -218,15 +174,7 @@ function ViewGroupInner(props: {
                   color={chat.color}
                   large
                 />
-                <p
-                  className='group-name'
-                  style={{
-                    marginLeft: '17px',
-                    width: 'calc(100% - 65px - 17px)',
-                    top: '10px',
-                    position: 'relative',
-                  }}
-                >
+                <p className='group-name' style={{ marginLeft: '17px' }}>
                   {groupName}
                 </p>
               </div>
@@ -238,39 +186,23 @@ function ViewGroupInner(props: {
                 )}
               </div>
               <div className='group-member-contact-list-wrapper'>
-                <input
-                  className='search-input group-member-search'
-                  onChange={onSearchChange}
-                  value={queryStr}
-                  placeholder={tx('search')}
-                  spellCheck={false}
-                />
-                {renderAddMemberIfNeeded()}
+                {!chatDisabled && (
+                  <>
+                    <PseudoListItemAddMember
+                      onClick={() => showAddMemberDialog()}
+                    />
+                    <PseudoListItemShowQrCode onClick={() => showQRDialog()} />
+                  </>
+                )}
                 <ContactList2
-                  contacts={searchContacts.filter(
-                    ({ id }) => groupMembers.indexOf(id) !== -1
-                  )}
-                  showRemove
+                  contacts={chat.contacts}
+                  showRemove={!isChatReadonly}
                   onClick={(contact: JsonContact) => {
                     setProfileContact(contact)
                     setViewMode('profile')
                   }}
                   onRemoveClick={showRemoveGroupMemberConfirmationDialog}
                 />
-                {queryStr !== '' && searchContactsToAdd.length !== 0 && (
-                  <>
-                    <div className='group-seperator no-margin'>
-                      {tx('group_add_members')}
-                    </div>
-                    <ContactList2
-                      contacts={searchContactsToAdd}
-                      onClick={showAddGroupMemberConfirmationDialog}
-                    />
-                  </>
-                )}
-                {queryStr !== '' && searchContacts.length === 0 && (
-                  <PseudoListItemNoSearchResults queryStr={queryStr} />
-                )}
               </div>
             </Card>
           </div>
@@ -330,6 +262,35 @@ export function AddMemberDialog({
         searchContacts,
         groupMembers,
       })}
+    </DeltaDialogBase>
+  )
+}
+
+export function ShowQRDialog({
+  onClose,
+  isOpen,
+  qrCode,
+  groupName,
+}: DialogProps) {
+  const tx = useTranslationFunction()
+
+  return (
+    <DeltaDialogBase
+      onClose={onClose}
+      isOpen={isOpen}
+      canOutsideClickClose={false}
+      style={{
+        top: '15vh',
+        width: '500px',
+        maxHeight: '70vh',
+      }}
+      fixed
+    >
+      <DeltaDialogHeader title={tx('qrshow_title')} onClose={onClose} />
+      <QrCodeShowQrInner
+        qrCode={qrCode}
+        description={tx('qrshow_join_group_hint', [groupName])}
+      />
     </DeltaDialogBase>
   )
 }
