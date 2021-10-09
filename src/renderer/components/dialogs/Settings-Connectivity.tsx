@@ -45,7 +45,7 @@ export default function SettingsConnectivityDialog({
 }
 
 export async function getConnectivityHTML(
-  styleSensor: React.MutableRefObject<HTMLDivElement| null>
+  styleSensor: React.MutableRefObject<HTMLDivElement | null>
 ): Promise<string> {
   let cHTML = await DeltaBackend.call('context.getConnectivityHTML')
 

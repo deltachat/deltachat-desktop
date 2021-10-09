@@ -41,9 +41,7 @@ export default function SettingsAccountDialog({
   )
 }
 
-export function SettingsAccountInner(
-  onClose: () => void
-) {
+export function SettingsAccountInner(onClose: () => void) {
   const [, setInitialAccountSettings] = useState<Credentials>(
     defaultCredentials()
   )
