@@ -6,7 +6,7 @@ import MessageList from './MessageList'
 import { SettingsContext, ScreenContext } from '../../contexts'
 import { ChatStoreState } from '../../stores/chat'
 import ComposerMessageInput from '../composer/ComposerMessageInput'
-import { DesktopSettings } from '../../../shared/shared-types'
+import { DesktopSettings, FullChat } from '../../../shared/shared-types'
 import { isChatReadonly } from '../../../shared/util'
 
 const log = getLogger('renderer/MessageListAndComposer')
@@ -173,7 +173,7 @@ export default function MessageListAndComposer({
     }
   }, [])
 
-  const [disabled, disabledReason] = isChatReadonly(chat)
+  const [disabled, disabledReason] = isChatReadonly(chat as FullChat)
 
   const settings = useContext(SettingsContext).desktopSettings
   const style = settings ? getBackgroundImageStyle(settings) : {}

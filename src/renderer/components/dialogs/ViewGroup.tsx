@@ -151,7 +151,7 @@ function ViewGroupInner(props: {
     })
   }
 
-  const [profileContact, setProfileContact] = useState<JsonContact>(null)
+  const [profileContact, setProfileContact] = useState<JsonContact | null>(null)
 
   return (
     <>
@@ -219,7 +219,9 @@ function ViewGroupInner(props: {
           />
           <DeltaDialogBody noFooter>
             <DeltaDialogContent noPadding>
-              <ViewProfileInner contact={profileContact} onClose={onClose} />
+              {profileContact && (
+                <ViewProfileInner contact={profileContact} onClose={onClose} />
+              )}
             </DeltaDialogContent>
           </DeltaDialogBody>
         </>

@@ -344,7 +344,7 @@ export function AddMemberInnerDialog({
     onOk(addMembers)
   }
 
-  const inputRef = useRef(null)
+  const inputRef = useRef<HTMLInputElement>(null)
   useLayoutEffect(() => inputRef?.current?.focus(), [contactsNotInGroup])
 
   return (
