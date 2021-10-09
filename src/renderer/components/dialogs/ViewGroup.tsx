@@ -24,7 +24,7 @@ import React from 'react'
 import { Avatar, avatarInitial } from '../Avatar'
 import { runtime } from '../../runtime'
 import { DeltaInput } from '../Login-Styles'
-import { isChatDisabled } from '../message/MessageListAndComposer'
+import { isChatReadonly } from '../message/MessageListAndComposer'
 
 export default function ViewGroup(props: {
   isOpen: DialogProps['isOpen']
@@ -95,7 +95,7 @@ function ViewGroupInner(props: {
   const { viewMode, setViewMode, onClose, chat } = props
   const tx = useTranslationFunction()
 
-  const chatDisabled = isChatDisabled(chat)[0]
+  const chatDisabled = isChatReadonly(chat)[0]
 
   const {
     groupName,
@@ -196,7 +196,7 @@ function ViewGroupInner(props: {
                 )}
                 <ContactList2
                   contacts={chat.contacts}
-                  showRemove
+                  showRemove={!isChatReadonly}
                   onClick={(contact: JsonContact) => {
                     setProfileContact(contact)
                     setViewMode('profile')

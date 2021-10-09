@@ -165,7 +165,7 @@ export default function MessageListAndComposer({
     }
   }, [])
 
-  const [disabled, disabledReason] = isChatDisabled(chat)
+  const [disabled, disabledReason] = isChatReadonly(chat)
 
   const settings = useContext(SettingsContext).desktopSettings
   const style = getBackgroundImageStyle(settings)
@@ -199,7 +199,7 @@ export default function MessageListAndComposer({
   )
 }
 
-export function isChatDisabled(chat: FullChat): [boolean, string] {
+export function isChatReadonly(chat: FullChat): [boolean, string] {
   if (chat.isContactRequest) {
     return [true, 'messaging_disabled_deaddrop']
   } else if (chat.isDeviceChat === true) {
