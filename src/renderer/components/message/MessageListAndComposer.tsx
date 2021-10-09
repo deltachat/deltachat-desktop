@@ -4,10 +4,10 @@ import Composer, { useDraft } from '../composer/Composer'
 import { getLogger } from '../../../shared/logger'
 import MessageList from './MessageList'
 import { SettingsContext, ScreenContext } from '../../contexts'
-import { C } from 'deltachat-node/dist/constants'
 import { ChatStoreState } from '../../stores/chat'
 import ComposerMessageInput from '../composer/ComposerMessageInput'
-import { DesktopSettings, FullChat } from '../../../shared/shared-types'
+import { DesktopSettings } from '../../../shared/shared-types'
+import { isChatReadonly } from '../../../shared/util'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -205,18 +205,4 @@ export default function MessageListAndComposer({
       />
     </div>
   )
-}
-
-export function isChatReadonly(chat: FullChat): [boolean, string] {
-  if (chat.isContactRequest) {
-    return [true, 'messaging_disabled_deaddrop']
-  } else if (chat.isDeviceChat === true) {
-    return [true, 'messaging_disabled_device_chat']
-  } else if (chat.type === C.DC_CHAT_TYPE_MAILINGLIST) {
-    return [true, 'messaging_disabled_mailing_list']
-  } else if (chat.isGroup && !chat.selfInGroup) {
-    return [true, 'messaging_disabled_not_in_group']
-  } else {
-    return [false, '']
-  }
 }
