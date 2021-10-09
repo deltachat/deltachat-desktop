@@ -38,7 +38,7 @@ export const SettingsContext: React.Context<{
   setDesktopSetting: setDesktopSetting
 }> = React.createContext({
   desktopSettings: null as DesktopSettings | null,
-  setDesktopSetting: ((key, value) => {}) as setDesktopSetting,
+  setDesktopSetting: ((_key, _value) => {}) as setDesktopSetting,
 })
 
 export type unwrapContext<T> = T extends import('react').Context<infer R>

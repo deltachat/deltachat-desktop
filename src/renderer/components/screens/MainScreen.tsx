@@ -100,6 +100,20 @@ export default function MainScreen() {
 
   const tx = useTranslationFunction()
 
+  const searchRef = useRef<HTMLInputElement>(null)
+
+  useKeyBindingAction(KeybindAction.ChatList_FocusSearchInput, () => {
+    searchRef.current?.focus()
+  })
+
+  useKeyBindingAction(KeybindAction.ChatList_ClearSearchInput, () => {
+    if (!searchRef.current) {
+      return
+    }
+    searchRef.current.value = ''
+    searchChats('')
+  })
+
   if (!selectedChat) {
     log.error('selectedChat is undefined')
     return null
@@ -137,20 +151,6 @@ export default function MainScreen() {
       </div>
     )
   }
-
-  const searchRef = useRef<HTMLInputElement>(null)
-
-  useKeyBindingAction(KeybindAction.ChatList_FocusSearchInput, () => {
-    searchRef.current?.focus()
-  })
-
-  useKeyBindingAction(KeybindAction.ChatList_ClearSearchInput, () => {
-    if (!searchRef.current) {
-      return
-    }
-    searchRef.current.value = ''
-    searchChats('')
-  })
 
   // StandardJS won't let me use '&& { } || { }', so the following code
   // compares with showArchivedChats twice.

@@ -18,7 +18,6 @@ import {
   unMuteChat,
   sendCallInvitation,
 } from './helpers/ChatMethods'
-import { FullChat } from '../../shared/shared-types'
 import { runtime } from '../runtime'
 import { Screens } from '../ScreenController'
 

@@ -14,7 +14,7 @@ export namespace ThemeManager {
     } | null = await DeltaBackend.call('extras.getActiveTheme')
     if (theme) {
       currentThemeMetaData = theme.theme
-      let themeVars = window.document.getElementById('theme-vars')
+      const themeVars = window.document.getElementById('theme-vars')
       if (!themeVars) {
         throw new Error('#theme-vars element not found')
       }

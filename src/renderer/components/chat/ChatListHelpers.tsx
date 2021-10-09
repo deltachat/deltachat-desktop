@@ -45,7 +45,7 @@ export function useMessageResults(queryStr: string | undefined) {
 }
 
 export function useChatList(
-  _listFlags: number = 0,
+  _listFlags = 0,
   _queryStr?: string,
   _queryContactId?: number
 ) {
