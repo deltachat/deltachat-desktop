@@ -32,10 +32,10 @@ export enum Screens {
 
 export default class ScreenController extends Component {
   dialogController: React.RefObject<DialogController>
-  contextMenuShowFn: showFnType = null
+  contextMenuShowFn: showFnType | null = null
   state: { message: userFeedback | false; screen: Screens }
   onShowAbout: any
-  selectedAccountId: number
+  selectedAccountId: number | undefined
 
   constructor(public props: {}) {
     super(props)
@@ -146,11 +146,17 @@ export default class ScreenController extends Component {
   }
 
   openDialog(...args: Parameters<OpenDialogFunctionType>) {
+    if (!this.dialogController.current) {
+      throw new Error('dialog controller not ready')
+    }
     return this.dialogController.current.openDialog(...args)
   }
 
   closeDialog(...args: Parameters<CloseDialogFunctionType>) {
-    this.dialogController.current.closeDialog(...args)
+    if (!this.dialogController.current) {
+      throw new Error('dialog controller not ready')
+    }
+    this.dialogController.current?.closeDialog(...args)
   }
 
   openContextMenu(...args: Parameters<showFnType>) {
@@ -165,6 +171,9 @@ export default class ScreenController extends Component {
       case Screens.Main:
         return <MainScreen />
       case Screens.Login:
+        if (this.selectedAccountId === undefined) {
+          throw new Error('Selected account not defined')
+        }
         return (
           <AccountSetupScreen
             selectAccount={this.selectAccount}

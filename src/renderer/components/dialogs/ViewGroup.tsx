@@ -24,7 +24,7 @@ import React from 'react'
 import { Avatar, avatarInitial } from '../Avatar'
 import { runtime } from '../../runtime'
 import { DeltaInput } from '../Login-Styles'
-import { isChatReadonly } from '../message/MessageListAndComposer'
+import { isChatReadonly } from '../../../shared/util'
 
 export default function ViewGroup(props: {
   isOpen: DialogProps['isOpen']
@@ -151,7 +151,7 @@ function ViewGroupInner(props: {
     })
   }
 
-  const [profileContact, setProfileContact] = useState<JsonContact>(null)
+  const [profileContact, setProfileContact] = useState<JsonContact | null>(null)
 
   return (
     <>
@@ -196,7 +196,7 @@ function ViewGroupInner(props: {
                 )}
                 <ContactList2
                   contacts={chat.contacts}
-                  showRemove={!isChatReadonly}
+                  showRemove={!isChatReadonly(chat)[0]}
                   onClick={(contact: JsonContact) => {
                     setProfileContact(contact)
                     setViewMode('profile')
@@ -219,7 +219,9 @@ function ViewGroupInner(props: {
           />
           <DeltaDialogBody noFooter>
             <DeltaDialogContent noPadding>
-              <ViewProfileInner contact={profileContact} onClose={onClose} />
+              {profileContact && (
+                <ViewProfileInner contact={profileContact} onClose={onClose} />
+              )}
             </DeltaDialogContent>
           </DeltaDialogBody>
         </>

@@ -33,7 +33,7 @@ async function onKeysImport() {
         if (progress !== 1000) {
           return
         }
-        this.props.userFeedback({ type: 'success', text })
+        window.__userFeedback({ type: 'success', text })
       })
       DeltaBackend.call('settings.keysImport', filename)
     },
@@ -68,7 +68,7 @@ async function onKeysExport() {
         return
       }
       ipcBackend.once('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
-        this.props.userFeedback({
+        window.__userFeedback({
           type: 'success',
           text: tx('pref_managekeys_secret_keys_exported_to_x', filename),
         })

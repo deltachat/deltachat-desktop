@@ -1,4 +1,4 @@
-import React, { useState, FormEvent, ChangeEvent } from 'react'
+import React, { useState } from 'react'
 import {
   Button,
   InputGroup,
@@ -85,8 +85,10 @@ export const DeltaInput = React.memo(
       max?: string
       rightElement?: JSX.Element
       disabled?: boolean
-      onChange: ((event: FormEvent<HTMLElement>) => void) &
-        ((event: ChangeEvent<HTMLInputElement>) => void)
+      onChange: (
+        event: React.FormEvent<HTMLElement> &
+          React.ChangeEvent<HTMLInputElement>
+      ) => void
     }>
   ) => {
     const [isFocused, setIsFocused] = useState(false)
@@ -135,8 +137,10 @@ export const DeltaPasswordInput = React.memo(
       id?: string
       label?: string
       placeholder?: string
-      onChange: ((event: FormEvent<HTMLElement>) => void) &
-        ((event: ChangeEvent<HTMLInputElement>) => void)
+      onChange: (
+        event: React.FormEvent<HTMLElement> &
+          React.ChangeEvent<HTMLInputElement>
+      ) => void
     }>
   ) => {
     const tx = useTranslationFunction()

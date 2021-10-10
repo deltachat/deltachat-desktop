@@ -250,7 +250,7 @@ export const GroupSettingsSetNameAndProfileImage = ({
   color,
   isVerified,
 }: {
-  groupImage: string
+  groupImage?: string
   onSetGroupImage: () => void
   onUnsetGroupImage: () => void
   groupName: string
@@ -328,7 +328,7 @@ export function AddMemberInnerDialog({
     contact => groupMembers.indexOf(contact.id) === -1
   )
 
-  const [addMembers, setAddMembers] = useState([])
+  const [addMembers, setAddMembers] = useState<number[]>([])
 
   const addOrRemoveMember = (contact: JsonContact) => {
     if (addMembers.indexOf(contact.id) === -1) {
@@ -344,7 +344,7 @@ export function AddMemberInnerDialog({
     onOk(addMembers)
   }
 
-  const inputRef = useRef(null)
+  const inputRef = useRef<HTMLInputElement>(null)
   useLayoutEffect(() => inputRef?.current?.focus(), [contactsNotInGroup])
 
   return (
@@ -384,7 +384,7 @@ export function AddMemberInnerDialog({
 const useCreateGroup = (
   verified: boolean,
   groupName: string,
-  groupImage: string,
+  groupImage: string | undefined,
   groupMembers: number[],
   onClose: DialogProps['onClose']
 ) => {
@@ -399,7 +399,7 @@ const useCreateGroup = (
       await DeltaBackend.call('chat.setName', gId, groupName)
     }
     if (finishing === true) {
-      if (groupImage !== '') {
+      if (groupImage !== '' && groupImage !== undefined) {
         await DeltaBackend.call('chat.setProfileImage', gId, groupImage)
       }
       for (const contactId of groupMembers) {

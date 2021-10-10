@@ -127,7 +127,7 @@ export function useDialog<T extends (props: any) => JSX.Element>(
   }
   const onClose = dismissDialog
 
-  const renderDialog: () => JSX.Element = () => {
+  const renderDialog: () => JSX.Element | null = () => {
     if (!isOpen) return null
     const Component = DialogComponent as (props: any) => JSX.Element
     return <Component {...{ ...props, isOpen, onClose }} />
@@ -273,6 +273,8 @@ export function SmallDialog(
   )
 }
 
+export type SelectDialogOption = [string, string]
+
 export function SmallSelectDialog({
   selectedValue,
   values,
@@ -285,7 +287,7 @@ export function SmallSelectDialog({
 }: {
   title: string
   selectedValue: string
-  values: [string, string][]
+  values: SelectDialogOption[]
 
   isOpen: DialogProps['isOpen']
   onClose: DialogProps['onClose']

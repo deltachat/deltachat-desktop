@@ -1,5 +1,5 @@
 import { DeltaBackend } from '../../delta-remote'
-import chatStore, { selectChat } from '../../stores/chat'
+import chatStore, { selectChat, ChatStoreState } from '../../stores/chat'
 import { ScreenContext, unwrapContext } from '../../contexts'
 import { ChatListItemType, FullChat } from '../../../shared/shared-types'
 import { MuteDuration } from '../../../shared/constants'
@@ -44,7 +44,7 @@ export function openLeaveChatDialog(
 
 export function openDeleteChatDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
-  chat: Chat,
+  chat: Chat | ChatStoreState,
   selectedChatId: number
 ) {
   const tx = window.static_translate
@@ -54,6 +54,7 @@ export function openDeleteChatDialog(
     isConfirmDanger: true,
     cb: (yes: boolean) =>
       yes &&
+      chat.id &&
       DeltaBackend.call('chat.delete', chat.id).then(() => {
         if (selectedChatId === chat.id) {
           unselectChat()
@@ -62,22 +63,29 @@ export function openDeleteChatDialog(
   })
 }
 
-export function openBlockContactDialog(
+/**
+ * used to block contacts based on a DM chat/chatlistentry with that contact
+ */
+export function openBlockFirstContactOfChatDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
-  selectedChat: Chat
+  selectedChat: Chat | ChatStoreState
 ) {
   const tx = window.static_translate
-  if (selectedChat && selectedChat.contactIds.length) {
+  const contactIds = selectedChat?.contactIds
+
+  // TODO: CHECK IF THE CHAT IS DM CHAT
+
+  if (contactIds?.length) {
     screenContext.openDialog('ConfirmationDialog', {
       message: tx('ask_block_contact'),
       confirmLabel: tx('menu_block_contact'),
       isConfirmDanger: true,
       cb: (yes: boolean) =>
         yes &&
-        DeltaBackend.call(
-          'contacts.blockContact',
-          selectedChat.contactIds[0]
-        ).then(unselectChat),
+        contactIds !== null &&
+        DeltaBackend.call('contacts.blockContact', contactIds[0]).then(
+          unselectChat
+        ),
     })
   }
 }
@@ -91,7 +99,7 @@ export function openEncryptionInfoDialog(
 
 export function openViewGroupDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
-  selectedChat: FullChat
+  selectedChat: FullChat | ChatStoreState
 ) {
   screenContext.openDialog('ViewGroup', { chat: selectedChat })
 }
@@ -139,6 +147,10 @@ export async function joinCall(
 ) {
   try {
     const message = await DeltaBackend.call('messageList.getMessage', messageId)
+
+    if (!message) {
+      throw new Error('Message not found')
+    }
 
     if (message.viewType !== C.DC_MSG_VIDEOCHAT_INVITATION) {
       throw new Error('Message is not a video chat invitation')

@@ -14,7 +14,7 @@ const log = getLogger('renderer/dialogs/About')
 
 export function DCInfo(_props: any) {
   const tx = useTranslationFunction()
-  const [content, setContent] = useState(undefined)
+  const [content, setContent] = useState<{ [key: string]: any }>({})
 
   useEffect(function fetchContent() {
     DeltaBackend.call('getInfo').then(info => {

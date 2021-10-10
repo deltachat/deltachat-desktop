@@ -8,6 +8,7 @@ import {
   DeltaDialogHeader,
   SmallDialog,
   SmallSelectDialog,
+  SelectDialogOption,
 } from './DeltaDialog'
 import { DialogProps } from './DialogController'
 import { DeltaBackend } from '../../delta-remote'
@@ -135,7 +136,7 @@ export default function SettingsAutodelete(props: any) {
     AutodeleteDuration.ONE_WEEK,
     AutodeleteDuration.FOUR_WEEKS,
     AutodeleteDuration.ONE_YEAR,
-  ].map(value => [String(value), durationToString(value)])
+  ].map(value => [String(value), durationToString(value)] as SelectDialogOption)
 
   const AUTODELETE_DURATION_OPTIONS_DEVICE = [
     AutodeleteDuration.NEVER,
@@ -144,7 +145,7 @@ export default function SettingsAutodelete(props: any) {
     AutodeleteDuration.ONE_WEEK,
     AutodeleteDuration.FOUR_WEEKS,
     AutodeleteDuration.ONE_YEAR,
-  ].map(value => [String(value), durationToString(value)])
+  ].map(value => [String(value), durationToString(value)] as SelectDialogOption)
 
   const onOpenDialog = async (fromServer: boolean) => {
     openDialog(SmallSelectDialog, {
@@ -187,13 +188,13 @@ export default function SettingsAutodelete(props: any) {
     <>
       <H5>{tx('delete_old_messages')}</H5>
       <SettingsSelector
-        onClick={onOpenDialog.bind(this, false)}
+        onClick={onOpenDialog.bind(null, false)}
         currentValue={durationToString(settings['delete_device_after'])}
       >
         {tx('autodel_device_title')}
       </SettingsSelector>
       <SettingsSelector
-        onClick={onOpenDialog.bind(this, true)}
+        onClick={onOpenDialog.bind(null, true)}
         currentValue={durationToString(settings['delete_server_after'])}
       >
         {tx('autodel_server_title')}

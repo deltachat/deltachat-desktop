@@ -13,9 +13,9 @@ class MessageInfo extends React.Component<
   MessageInfoProps,
   {
     loading: boolean
-    content: string
-    receivedAt: number
-    sentAt: number
+    content?: string
+    receivedAt?: number
+    sentAt?: number
   }
 > {
   constructor(props: MessageInfoProps) {
@@ -45,8 +45,8 @@ class MessageInfo extends React.Component<
     this.setState({
       loading: false,
       content: info,
-      sentAt: message?.timestamp * 1000,
-      receivedAt: message?.receivedTimestamp * 1000,
+      sentAt: (message?.timestamp || 0) * 1000,
+      receivedAt: (message?.receivedTimestamp || 0) * 1000,
     })
     this.forceUpdate()
   }

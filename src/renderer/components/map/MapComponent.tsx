@@ -14,7 +14,7 @@ import { Slider, Button, Collapse } from '@blueprintjs/core'
 import PopupMessage from './PopupMessage'
 import * as SessionStorage from '../helpers/SessionStorage'
 import { SettingsContext } from '../../contexts'
-import chatStore from '../../stores/chat'
+import chatStore, { ChatStoreState } from '../../stores/chat'
 
 import { state as LocationStoreState } from '../../stores/locations'
 
@@ -40,7 +40,7 @@ type Point = [number, number]
 type Contact = JsonContact & { hidden?: boolean }
 
 type MapProps = {
-  selectedChat: FullChat
+  selectedChat: FullChat | ChatStoreState
 }
 
 export default class MapComponent extends React.Component<
@@ -62,9 +62,9 @@ export default class MapComponent extends React.Component<
     this.getLocations,
     1000
   )
-  map: mapboxgl.Map
-  stateFromSession: boolean
-  currentUser: JsonContact | null
+  map: mapboxgl.Map | undefined
+  stateFromSession: boolean | undefined
+  currentUser: JsonContact | undefined
   constructor(props: MapProps) {
     super(props)
     this.state = {
@@ -174,6 +174,13 @@ export default class MapComponent extends React.Component<
   }
 
   renderLayers(locations: LocationStoreState['locations']) {
+    if (!this.currentUser) {
+      return
+    }
+    const map = this.map
+    if (!map) {
+      throw new Error('this.map is unset')
+    }
     // remove all layer since source update does not remove existing points
     this.removeAllLayer()
     this.mapDataStore.clear()
@@ -219,19 +226,16 @@ export default class MapComponent extends React.Component<
         location => location.isIndependent && !location.marker
       )
       if (poiLocations.length > 0) {
-        if (!this.map.hasImage('poi-marker')) {
-          this.map.loadImage(
-            './icons/poi-marker.png',
-            (error: any, image: any) => {
-              if (!error) {
-                this.map.addImage('poi-marker', image)
-              }
+        if (!map.hasImage('poi-marker')) {
+          map.loadImage('./icons/poi-marker.png', (error: any, image: any) => {
+            if (!error) {
+              map.addImage('poi-marker', image)
             }
-          )
+          })
         }
         const poiLayer = MapLayerFactory.getPOILayer(poiLocations)
         this.mapDataStore.set('poi-layer', poiLayer)
-        this.map.addLayer(poiLayer)
+        map.addLayer(poiLayer)
       }
       const poiWithMarker = locations.filter(
         location => location.isIndependent && location.marker
@@ -245,7 +249,7 @@ export default class MapComponent extends React.Component<
           // make a marker for each feature and add to the map
           const m = new mapboxgl.Marker(el)
             .setLngLat([location.longitude, location.latitude])
-            .addTo(this.map)
+            .addTo(map)
           ;(m as any).location = location
           poiMarker.push(m)
         })
@@ -257,7 +261,7 @@ export default class MapComponent extends React.Component<
         this.changeMapStyle(this.state.mapStyle)
       } else {
         if (allPoints.length > 0) {
-          this.map.fitBounds(
+          map.fitBounds(
             geojsonExtent({ type: 'Point', coordinates: allPoints }),
             { padding: 100, maxZoom: this.maxZoomAfterFitBounds }
           )
@@ -267,6 +271,9 @@ export default class MapComponent extends React.Component<
   }
 
   renderContactLayer(contact: Contact, locationsForContact: JsonLocations) {
+    if (!this.map) {
+      throw new Error('this.map is unset')
+    }
     let pointsForLayer: [number, number][] = []
     let lastPoint: todo | null = null
     if (locationsForContact && locationsForContact.length) {
@@ -287,7 +294,7 @@ export default class MapComponent extends React.Component<
         item => item.id === contact.id
       )
       if (existingContact) {
-        mapData.hidden = existingContact.hidden
+        mapData.hidden = existingContact.hidden || false
       }
       this.mapDataStore.set(contact.id, mapData)
       this.addOrUpdateLayerForContact(mapData, locationsForContact)
@@ -320,23 +327,27 @@ export default class MapComponent extends React.Component<
   }
 
   removeAllLayer() {
+    const map = this.map
+    if (!map) {
+      throw new Error('this.map is unset')
+    }
     if (this.mapDataStore.has('poi-marker')) {
       this.mapDataStore.get('poi-marker').map((m: todo) => m.remove())
       this.mapDataStore.delete('poi-marker')
     }
-    if (this.map.getLayer('poi-layer')) {
-      this.map.removeLayer('poi-layer')
-      this.map.removeSource('poi-layer')
+    if (map.getLayer('poi-layer')) {
+      map.removeLayer('poi-layer')
+      map.removeSource('poi-layer')
       this.mapDataStore.delete('poi-layer')
     }
     this.mapDataStore.forEach(mapDataItem => {
-      if (this.map.getLayer(mapDataItem.pathLayerId)) {
-        this.map.removeLayer(mapDataItem.pathLayerId)
-        this.map.removeSource(mapDataItem.pathLayerId)
+      if (map.getLayer(mapDataItem.pathLayerId)) {
+        map.removeLayer(mapDataItem.pathLayerId)
+        map.removeSource(mapDataItem.pathLayerId)
       }
-      if (this.map.getLayer(mapDataItem.pointsLayerId)) {
-        this.map.removeLayer(mapDataItem.pointsLayerId)
-        this.map.removeSource(mapDataItem.pointsLayerId)
+      if (map.getLayer(mapDataItem.pointsLayerId)) {
+        map.removeLayer(mapDataItem.pointsLayerId)
+        map.removeSource(mapDataItem.pointsLayerId)
       }
       if (mapDataItem.marker) {
         mapDataItem.marker.remove()
@@ -348,6 +359,9 @@ export default class MapComponent extends React.Component<
     mapData: MapData,
     locationsForContact: JsonLocations
   ) {
+    if (!this.map) {
+      throw new Error('this.map is unset')
+    }
     if (!this.map.getSource(mapData.pathLayerId)) {
       this.addPathLayer(locationsForContact, mapData)
     } else {
@@ -372,6 +386,9 @@ export default class MapComponent extends React.Component<
   }
 
   addPathLayer(locationsForContact: JsonLocations, mapData: MapData) {
+    if (!this.map) {
+      throw new Error('this.map is unset')
+    }
     const source: mapboxgl.GeoJSONSourceRaw = {
       type: 'geojson',
       data: MapLayerFactory.getGeoJSONLineSourceData(
@@ -390,6 +407,9 @@ export default class MapComponent extends React.Component<
   }
 
   addPathJointsLayer(locationsForContact: JsonLocations, data: MapData) {
+    if (!this.map) {
+      throw new Error('this.map is unset')
+    }
     const source: mapboxgl.GeoJSONSourceRaw = {
       type: 'geojson',
       data: MapLayerFactory.getGeoJSONPointsLayerSourceData(
@@ -407,23 +427,30 @@ export default class MapComponent extends React.Component<
   }
 
   async onMapClick(event: mapboxgl.MapMouseEvent & mapboxgl.EventData) {
+    const map = this.map
+    if (!map) {
+      throw new Error('this.map is unset')
+    }
     let message: MessageType
-    const features = this.map.queryRenderedFeatures(event.point)
+    const features = map.queryRenderedFeatures(event.point)
     const contactFeature = features.find(f => {
-      return f.properties.contact !== undefined || f.properties.isPoi
+      return (
+        f.properties &&
+        (f.properties.contact !== undefined || f.properties.isPoi)
+      )
     })
     if (contactFeature) {
-      if (contactFeature.properties.msgId) {
+      if (contactFeature.properties?.msgId) {
         DeltaBackend.call(
           'messageList.getMessage',
           contactFeature.properties.msgId
-        ).then((messageObj: MessageType) => {
+        ).then((messageObj: MessageType | null) => {
           if (messageObj) {
             message = messageObj
           }
           const markup = this.renderPopupMessage(
-            contactFeature.properties.contact,
-            formatRelativeTime(contactFeature.properties.reported * 1000, {
+            contactFeature.properties?.contact,
+            formatRelativeTime(contactFeature.properties?.reported * 1000, {
               extended: true,
             }),
             message
@@ -431,20 +458,27 @@ export default class MapComponent extends React.Component<
           new mapboxgl.Popup({ offset: [0, -15] })
             .setHTML(markup)
             .setLngLat((contactFeature.geometry as any).coordinates)
-            .addTo(this.map)
+            .addTo(map)
         })
       }
     }
   }
 
   onMapRightClick(event: mapboxgl.MapMouseEvent & mapboxgl.EventData) {
+    if (!this.map) {
+      throw new Error('this.map is unset')
+    }
+    const contextMenu = ReactDOM.findDOMNode(this.contextMenu.current)
+    if (!contextMenu) {
+      throw new Error('contextMenu is unset')
+    }
     if (this.contextMenuPopup) {
       this.contextMenuPopup.remove()
     }
     this.poiLocation = event.lngLat
     this.contextMenuPopup = new mapboxgl.Popup({ offset: [0, -15] })
       .setLngLat(event.lngLat)
-      .setDOMContent(ReactDOM.findDOMNode(this.contextMenu.current))
+      .setDOMContent(contextMenu)
       .addTo(this.map)
       .on('close', () => {
         this.contextMenuPopup = null
@@ -478,6 +512,9 @@ export default class MapComponent extends React.Component<
     this.setState({ showPathLayer: !this.state.showPathLayer })
     const newVisibility = this.state.showPathLayer ? 'none' : 'visible'
     this.mapDataStore.forEach(mapDataItem => {
+      if (!this.map) {
+        throw new Error('this.map is unset')
+      }
       if (!mapDataItem.hidden && mapDataItem.contact) {
         this.map.setLayoutProperty(
           mapDataItem.pathLayerId,
@@ -494,6 +531,9 @@ export default class MapComponent extends React.Component<
   }
 
   changeMapStyle(style: 'default' | 'satellite') {
+    if (!this.map) {
+      throw new Error('this.map is unset')
+    }
     this.setState({ mapStyle: style })
     const visibility = style === 'satellite' ? 'visible' : 'none'
 
@@ -501,6 +541,9 @@ export default class MapComponent extends React.Component<
       this.map.addLayer(MapLayerFactory.getSatelliteMapLayer('satellite'))
       // move other layers to top
       this.mapDataStore.forEach(mapDataItem => {
+        if (!this.map) {
+          throw new Error('this.map is unset')
+        }
         if (this.map.getLayer(mapDataItem.pathLayerId)) {
           this.map.moveLayer(mapDataItem.pathLayerId)
         }
@@ -530,6 +573,10 @@ export default class MapComponent extends React.Component<
   }
 
   toggleContactLayer(contactId: number, isHidden: boolean) {
+    if (!this.map) {
+      throw new Error('this.map is unset')
+    }
+
     const mapDataItem = this.mapDataStore.get(contactId)
     const visibility = isHidden ? 'visible' : 'none' // set visibility to...
     if (!isHidden) {
@@ -568,6 +615,9 @@ export default class MapComponent extends React.Component<
   }
 
   setBoundToMarker() {
+    if (!this.map) {
+      throw new Error('this.map is unset')
+    }
     const markerCoordinates: Point[] = []
     this.mapDataStore.forEach(mapDataitem => {
       if (mapDataitem.marker && !mapDataitem.hidden) {
@@ -586,7 +636,7 @@ export default class MapComponent extends React.Component<
   renderPopupMessage(
     contactName: string,
     formattedDate: string,
-    message: JsonMessage
+    message: JsonMessage | null
   ) {
     return ReactDOMServer.renderToStaticMarkup(
       <PopupMessage
@@ -603,7 +653,9 @@ export default class MapComponent extends React.Component<
         <input
           type='checkbox'
           name={'contact-' + contact.id}
-          onChange={() => this.toggleContactLayer(contact.id, contact.hidden)}
+          onChange={() =>
+            this.toggleContactLayer(contact.id, contact.hidden || false)
+          }
           checked={contact.hidden}
         />
         <label style={{ color: contact.color }}>{contact.displayName} </label>

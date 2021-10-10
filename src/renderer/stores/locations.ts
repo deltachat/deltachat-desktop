@@ -1,11 +1,12 @@
 import { FullChat, JsonLocations } from '../../shared/shared-types'
 import { DeltaBackend } from '../delta-remote'
 import { Store } from './store'
+import { ChatStoreState } from './chat'
 
 const { ipcRenderer } = window.electron_functions
 
 export class state {
-  selectedChat: FullChat = null
+  selectedChat: FullChat | ChatStoreState | null = null
   mapSettings = {
     timestampFrom: 0,
     timestampTo: 0,
@@ -36,6 +37,9 @@ const onLocationChange = (_evt: any, [chatId]: [number]) => {
 
 ipcRenderer.on('DC_EVENT_LOCATION_CHANGED', (_evt, contactId) => {
   const { selectedChat, mapSettings } = locationStore.getState()
+  if (!selectedChat || !selectedChat.id) {
+    return
+  }
   if (contactId === 0) {
     // this means all locations were deleted
     getLocations(selectedChat.id, mapSettings)
@@ -58,6 +62,8 @@ locationStore.attachReducer((action, state) => {
     state = { ...state, mapSettings: { timestampFrom, timestampTo } }
     return state
   }
+
+  throw new Error('unknown action for location store:' + action.type)
 })
 
 locationStore.attachEffect((action, state) => {

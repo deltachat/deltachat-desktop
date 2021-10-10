@@ -97,7 +97,7 @@ export default class ComposerMessageInput extends React.Component<
     _prevProps: ComposerMessageInputProps,
     prevState: ComposerMessageInputState
   ) {
-    if (this.setCursorPosition) {
+    if (this.setCursorPosition && this.textareaRef.current) {
       this.textareaRef.current.selectionStart = this.setCursorPosition
       this.textareaRef.current.selectionEnd = this.setCursorPosition
 
@@ -158,6 +158,10 @@ export default class ComposerMessageInput extends React.Component<
 
     const el = this.textareaRef.current
 
+    if (!el) {
+      return
+    }
+
     // We need to set the textarea height first to `auto` to get the real needed
     // scrollHeight. Ugly hack.
     el.style.height = 'auto'
@@ -186,6 +190,9 @@ export default class ComposerMessageInput extends React.Component<
 
   insertStringAtCursorPosition(str: string) {
     const textareaElem = this.textareaRef.current
+    if (!textareaElem) {
+      throw new Error('textareaElem missing')
+    }
     const { selectionStart, selectionEnd } = textareaElem
     const textValue = this.state.text
 

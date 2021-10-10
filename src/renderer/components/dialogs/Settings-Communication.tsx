@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { H5 } from '@blueprintjs/core'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
-import { SmallSelectDialog } from './DeltaDialog'
+import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
 import { SettingsSelector } from './Settings'
 import { C } from 'deltachat-node/dist/constants'
 
@@ -25,7 +25,7 @@ export default function SettingsCommunication(props: any) {
   const { handleDeltaSettingsChange, settings } = props
 
   const tx = useTranslationFunction()
-  const SHOW_EMAIL_OPTIONS = [
+  const SHOW_EMAIL_OPTIONS: SelectDialogOption[] = [
     [String(C.DC_SHOW_EMAILS_OFF), tx('pref_show_emails_no')],
     [
       String(C.DC_SHOW_EMAILS_ACCEPTED_CONTACTS),
@@ -51,7 +51,7 @@ export default function SettingsCommunication(props: any) {
     <>
       <H5>{tx('pref_communication')}</H5>
       <SettingsSelector
-        onClick={onOpenDialog.bind(this, false)}
+        onClick={onOpenDialog.bind(null, false)}
         currentValue={showToString(settings['show_emails'])}
       >
         {tx('pref_show_emails')}

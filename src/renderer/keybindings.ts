@@ -35,7 +35,7 @@ export namespace ActionEmitter {
     if (!Array.isArray(handlers[action])) {
       handlers[action] = []
     }
-    handlers[action].push(handler)
+    ;(handlers[action] as any[]).push(handler)
   }
 
   export function unRegisterHandler(
@@ -45,7 +45,7 @@ export namespace ActionEmitter {
     if (!Array.isArray(handlers[action])) {
       return
     }
-    handlers[action] = handlers[action].filter(h => h !== handler)
+    handlers[action] = (handlers[action] as any[]).filter(h => h !== handler)
   }
 
   export function emitAction(action: KeybindAction) {
@@ -53,7 +53,7 @@ export namespace ActionEmitter {
       return
     }
     log.debug('fire action', action, 'handlers:', handlers[action])
-    handlers[action].forEach(handler => handler())
+    ;(handlers[action] as any[]).forEach(handler => handler())
   }
 }
 
@@ -67,7 +67,7 @@ export function useKeyBindingAction(
   })
 }
 
-function keyDownEvent2Action(ev: KeyboardEvent): KeybindAction {
+function keyDownEvent2Action(ev: KeyboardEvent): KeybindAction | undefined {
   if (window.__contextMenuActive) {
     return
   }

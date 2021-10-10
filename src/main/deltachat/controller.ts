@@ -467,7 +467,7 @@ export default class DeltaChatController extends EventEmitter {
       .getProfileImage()
   }
 
-  getInfo() {
+  getInfo(): { [key: string]: any } {
     if (this.selectedAccountContext) {
       return this.selectedAccountContext.getInfo()
     } else {

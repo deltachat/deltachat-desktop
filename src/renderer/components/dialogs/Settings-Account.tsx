@@ -20,11 +20,9 @@ import { DialogProps } from './DialogController'
 export default function SettingsAccountDialog({
   isOpen,
   onClose,
-  setShow,
 }: {
   isOpen: DialogProps['isOpen']
   onClose: DialogProps['onClose']
-  setShow: (show: string) => void
 }) {
   const tx = useTranslationFunction()
   return (
@@ -38,15 +36,12 @@ export default function SettingsAccountDialog({
       }}
     >
       <DeltaDialogHeader title={tx('pref_password_and_account_settings')} />
-      {SettingsAccountInner(setShow, onClose)}
+      {SettingsAccountInner(onClose)}
     </DeltaDialogBase>
   )
 }
 
-export function SettingsAccountInner(
-  setShow: (show: string) => void,
-  onClose: () => void
-) {
+export function SettingsAccountInner(onClose: () => void) {
   const [, setInitialAccountSettings] = useState<Credentials>(
     defaultCredentials()
   )

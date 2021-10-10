@@ -23,13 +23,13 @@ export function debounceWithInit<ARGS extends Array<any>>(
   }
 }
 
-export function useMessageResults(queryStr: string) {
+export function useMessageResults(queryStr: string | undefined) {
   const [ids, setIds] = useState<number[]>([])
 
   const debouncedSearchMessages = useMemo(
     () =>
-      debounceWithInit((queryStr: string) => {
-        DeltaBackend.call('messageList.searchMessages', queryStr, 0).then(
+      debounceWithInit((queryStr: string | undefined) => {
+        DeltaBackend.call('messageList.searchMessages', queryStr || '', 0).then(
           setIds
         )
       }, 200),
@@ -45,21 +45,25 @@ export function useMessageResults(queryStr: string) {
 }
 
 export function useChatList(
-  _listFlags?: number,
+  _listFlags = 0,
   _queryStr?: string,
   _queryContactId?: number
 ) {
   if (!_queryStr) _queryStr = ''
 
   const [listFlags, setListFlags] = useState(_listFlags)
-  const [queryStr, setQueryStr] = useState(_queryStr)
+  const [queryStr, setQueryStr] = useState<string | undefined>(_queryStr)
   const [queryContactId, setQueryContactId] = useState(_queryContactId)
   const [chatListEntries, setChatListEntries] = useState<[number, number][]>([])
 
   const debouncedGetChatListEntries = useMemo(
     () =>
       debounce(
-        (listFlags: number, queryStr: string, queryContactId: number) => {
+        (
+          listFlags: number,
+          queryStr: string | undefined,
+          queryContactId: number | undefined
+        ) => {
           DeltaBackend.call(
             'chatList.getChatListEntries',
             listFlags,

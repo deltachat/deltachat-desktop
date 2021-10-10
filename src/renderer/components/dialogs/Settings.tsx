@@ -64,8 +64,10 @@ function DeltaSettingsInput({
       input.current.disabled = true
     }
     DeltaBackend.call('settings.getConfigFor', [configKey]).then(res => {
-      input.current.value = res[configKey]
-      input.current.disabled = false
+      if (input.current) {
+        input.current.value = res[configKey]
+        input.current.disabled = false
+      }
     })
   }, [configKey])
 
@@ -176,6 +178,9 @@ export default function Settings(props: DialogProps) {
     disabled = false,
     disabled_is_checked = false
   ) => {
+    if (!desktopSettings) {
+      return
+    }
     return (
       <Switch
         checked={desktopSettings[configKey] === true || disabled_is_checked}
@@ -206,7 +211,7 @@ export default function Settings(props: DialogProps) {
   }
 
   const renderDialogContent = ({ settings, rc }: typeof state) => {
-    if (Object.keys(settings || {}).length === 0) {
+    if (Object.keys(settings || {}).length === 0 || !desktopSettings) {
       return null
     }
 
@@ -340,7 +345,9 @@ export default function Settings(props: DialogProps) {
   }, [state.show])
 
   useEffect(() => {
-    return () => ipcRenderer.removeAllListeners('DC_EVENT_IMEX_FILE_WRITTEN')
+    return () => {
+      ipcRenderer.removeAllListeners('DC_EVENT_IMEX_FILE_WRITTEN')
+    }
   }, [])
 
   const { onClose } = props

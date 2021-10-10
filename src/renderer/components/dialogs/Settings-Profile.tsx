@@ -55,7 +55,7 @@ export default function SettingsProfile({
     setConnectivityString(`(${connectivityString})`)
   }
 
-  const initial = avatarInitial(displayname, addr)
+  const initial = avatarInitial(displayname || '', addr)
   useEffect(() => {
     updateConnectivity()
 

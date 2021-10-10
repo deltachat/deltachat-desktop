@@ -20,6 +20,7 @@ import { Credentials } from '../../shared/shared-types'
 import { useTranslationFunction, i18nContext } from '../contexts'
 import { useDebouncedCallback } from 'use-debounce/lib'
 import { getLogger } from '../../shared/logger'
+import { IpcRendererEvent } from 'electron/renderer'
 
 const log = getLogger('renderer/loginForm')
 
@@ -101,7 +102,7 @@ export default function LoginForm({
   const [uiShowAdvanced, setUiShowAdvanced] = useState<boolean>(false)
   const [providerInfo, setProviderInfo] = useState<
     ReturnType<typeof DeltaChat.getProviderFromEmail>
-  >(null)
+  >()
 
   const _handleCredentialsChange = (id: string, value: string) => {
     let changeCredentials = {}
@@ -144,7 +145,7 @@ export default function LoginForm({
     handleCredentialsChange(event)
     const email = event.target.value
     if (email === '') {
-      setProviderInfo(null)
+      setProviderInfo(undefined)
       return
     }
     debouncedGetProviderInfo(email)
@@ -190,7 +191,7 @@ export default function LoginForm({
             key='mail_pw'
             id='mail_pw'
             placeholder={tx('password')}
-            password={mail_pw}
+            password={mail_pw || ''}
             onChange={handleCredentialsChange}
           />
 
@@ -282,7 +283,7 @@ export default function LoginForm({
               id='send_pw'
               label={tx('login_smtp_password')}
               placeholder={tx('default_value_as_above')}
-              password={send_pw}
+              password={send_pw || ''}
               onChange={handleCredentialsChange}
             />
             <DeltaInput
@@ -401,8 +402,8 @@ export function ConfigureProgressDialog({
   const [configureFailed, setConfigureFailed] = useState(false)
 
   const onConfigureProgress = (
-    _: null,
-    [progress, comment]: [number, null]
+    _: IpcRendererEvent | null,
+    [progress, comment]: [number, string]
   ) => {
     progress !== 0 && setProgress(progress)
     setProgressComment(comment)
@@ -413,11 +414,15 @@ export function ConfigureProgressDialog({
     onClose()
   }
 
-  const onConfigureError = (_: null, [_data1, data2]: [null, string]) =>
-    setError(data2)
+  const onConfigureError = (
+    _: IpcRendererEvent | null,
+    [_data1, data2]: [null, string]
+  ) => setError(data2)
 
-  const onConfigureFailed = (_: null, [_data1, _data2]: [null, string]) =>
-    setConfigureFailed(true)
+  const onConfigureFailed = (
+    _: IpcRendererEvent | null,
+    [_data1, _data2]: [null, string]
+  ) => setConfigureFailed(true)
 
   useEffect(
     () => {
@@ -431,7 +436,7 @@ export function ConfigureProgressDialog({
           log.error('configure error')
           if (err) {
             onConfigureError(null, [null, err])
-            onConfigureFailed(null, [null, null])
+            onConfigureFailed(null, [null, ''])
           }
         }
       })()

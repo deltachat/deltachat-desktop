@@ -31,7 +31,7 @@ class DeltaRemote {
   call(fnName: 'updateBlockedContacts'): Promise<void>
   call(fnName: 'setProfilePicture', newImage: string): Promise<void>
   call(fnName: 'getProfilePicture'): Promise<string>
-  call(fnName: 'getInfo'): Promise<any>
+  call(fnName: 'getInfo'): Promise<{ [key: string]: any }>
   call(
     fnName: 'getProviderInfo',
     email: string
@@ -60,9 +60,9 @@ class DeltaRemote {
   call(fnName: 'chatList.onChatModified', chatId: number): Promise<void>
   call(
     fnName: 'chatList.getChatListEntries',
-    listFlags: number,
-    queryStr: string,
-    queryContactId: number
+    listFlags?: number,
+    queryStr?: string,
+    queryContactId?: number
   ): Promise<[number, number][]>
   call(
     fnName: 'chatList.getChatListItemsByEntries',
@@ -121,7 +121,7 @@ class DeltaRemote {
     fnName: 'chat.modifyGroup',
     chatId: number,
     name: string,
-    image: string,
+    image: string | undefined,
     members: number[] | null
   ): Promise<boolean>
   call(

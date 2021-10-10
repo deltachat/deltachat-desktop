@@ -39,7 +39,7 @@ function ImportBackupProgressDialog({
   backupFile,
 }: DialogProps) {
   const [importProgress, setImportProgress] = useState(0.0)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<string | null>(null)
 
   const onAll = (eventName: IpcRendererEvent, data1: string, data2: string) => {
     log.debug('ALL core events: ', eventName, data1, data2)
@@ -94,7 +94,7 @@ function ImportBackupProgressDialog({
           )}
           <DeltaProgressBar
             progress={importProgress}
-            intent={error === false ? Intent.SUCCESS : Intent.DANGER}
+            intent={!error ? Intent.SUCCESS : Intent.DANGER}
           />
         </Card>
       </div>
@@ -148,9 +148,9 @@ export default function AccountsScreen({
   selectAccount: typeof ScreenController.prototype.selectAccount
 }) {
   const tx = useTranslationFunction()
-  const [logins, setLogins] = useState(null)
+  const [logins, setLogins] = useState<DeltaChatAccount[] | null>(null)
 
-  const [syncAllAccounts, setSyncAllAccounts] = useState(null)
+  const [syncAllAccounts, setSyncAllAccounts] = useState<boolean | null>(null)
 
   useEffect(() => {
     ;(async () => {
@@ -231,20 +231,22 @@ export default function AccountsScreen({
                   <h4 className='bp3-heading'>
                     {tx('login_known_accounts_title_desktop')}
                   </h4>
-                  <Switch
-                    checked={syncAllAccounts}
-                    label={tx('sync_all')}
-                    onChange={async () => {
-                      const new_state = !syncAllAccounts
-                      await DeltaBackend.call(
-                        'settings.setDesktopSetting',
-                        'syncAllAccounts',
-                        new_state
-                      )
-                      setSyncAllAccounts(new_state)
-                    }}
-                    alignIndicator={Alignment.RIGHT}
-                  />
+                  {syncAllAccounts !== null && (
+                    <Switch
+                      checked={syncAllAccounts}
+                      label={tx('sync_all')}
+                      onChange={async () => {
+                        const new_state = !syncAllAccounts
+                        await DeltaBackend.call(
+                          'settings.setDesktopSetting',
+                          'syncAllAccounts',
+                          new_state
+                        )
+                        setSyncAllAccounts(new_state)
+                      }}
+                      alignIndicator={Alignment.RIGHT}
+                    />
+                  )}
                 </div>
                 <DeltaDialogBody>
                   <DeltaDialogContent noPadding={true}>
@@ -254,7 +256,7 @@ export default function AccountsScreen({
                         addAccount,
                         selectAccount,
                         logins,
-                        showUnread: syncAllAccounts,
+                        showUnread: syncAllAccounts || false,
                       }}
                     />
                   </DeltaDialogContent>
@@ -295,11 +297,11 @@ function AccountSelection({
   const removeAccount = (account: DeltaChatAccount) => {
     const header = tx(
       'ask_delete_value',
-      account.type == 'configured' ? account.addr : '[unconfigured]'
+      account.type == 'configured' ? account.addr || '?' : '[unconfigured]'
     )
     const message = tx(
       'delete_account_explain_with_name',
-      account.type == 'configured' ? account.addr : '[unconfigured]'
+      account.type == 'configured' ? account.addr || '?' : '[unconfigured]'
     )
     openDialog('ConfirmationDialog', {
       header,
@@ -432,7 +434,7 @@ function AccountItem({
   let inner
   if (login.type === 'configured') {
     const title = tx('account_info_hover_tooltip_desktop', [
-      login.addr,
+      login.addr || 'null',
       account_size,
       String(login.id),
     ])
@@ -441,10 +443,10 @@ function AccountItem({
         <div className='contact'>
           <Avatar
             {...{
-              avatarPath: login.profile_image,
+              avatarPath: login.profile_image || undefined,
               color: login.color,
-              displayName: login.display_name,
-              addr: login.addr,
+              displayName: login.display_name || '',
+              addr: login.addr || undefined,
             }}
           />
           <div className='contact-name'>
@@ -466,7 +468,7 @@ function AccountItem({
   } else {
     inner = (
       <div className='contact'>
-        <Avatar displayName={null} addr={'?'} />
+        <Avatar displayName={'?'} addr={'?'} />
         <div className='contact-name'>
           <div className='display-name'>{tx('unconfigured_account')}</div>
           <div className='email' style={{ display: 'inline-block' }}>

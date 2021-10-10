@@ -8,17 +8,17 @@ import { C } from 'deltachat-node/dist/constants'
 
 export const PAGE_SIZE = 10
 
-class state implements FullChat {
-  contactIds: number[]
-  isDeviceChat: boolean
-  selfInGroup: boolean
+class state {
+  contactIds: number[] | null = null
+  isDeviceChat: boolean | null = null
+  selfInGroup: boolean | null = null
   id: number | null = null
   name = ''
   isProtected = false
-  profileImage: string = null
+  profileImage: string | null = null
 
   archived = false
-  type: number = null
+  type: number | null = null
   isUnpromoted = false
   isSelfTalk = false
 
@@ -40,8 +40,6 @@ class state implements FullChat {
   muted = false
   ephemeralTimer = 0
 }
-
-export { state as ChatStoreState }
 
 const defaultState = new state()
 
@@ -351,6 +349,9 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
   log.debug('DC_EVENT_MSGS_CHANGED', id, messageId)
   if (id === 0 && messageId === 0) {
     const chatId = chatStore.state.id
+    if (chatId === null) {
+      return
+    }
     const messageIds = await DeltaBackend.call(
       'messageList.getMessageIds',
       chatId
@@ -421,3 +422,5 @@ export const selectChat = (chatId: number) =>
 export default chatStore
 
 export type ChatStoreDispatch = Store<state>['dispatch']
+
+export type ChatStoreState = typeof state.prototype

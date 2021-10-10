@@ -3,7 +3,7 @@ import { ScreenContext, useTranslationFunction } from '../../contexts'
 import {
   openLeaveChatDialog,
   openDeleteChatDialog,
-  openBlockContactDialog,
+  openBlockFirstContactOfChatDialog,
   openEncryptionInfoDialog,
   openViewGroupDialog,
   openViewProfileDialog,
@@ -16,7 +16,7 @@ import { ChatListItemType } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
 import { DeltaBackend } from '../../delta-remote'
 import { ContextMenuItem } from '../ContextMenu'
-import MessageListProfile from '../dialogs/MessageListProfile'
+import MailingListProfile from '../dialogs/MessageListProfile'
 
 // const log = getLogger('renderer/ChatListContextMenu')
 
@@ -98,7 +98,7 @@ export function useChatListContextMenu() {
       if (fullChat.type !== C.DC_CHAT_TYPE_MAILINGLIST) {
         openViewProfileDialog(screenContext, fullChat.contactIds[0])
       } else {
-        screenContext.openDialog(MessageListProfile, {
+        screenContext.openDialog(MailingListProfile, {
           chat: fullChat,
         })
       }
@@ -106,11 +106,11 @@ export function useChatListContextMenu() {
     const onLeaveGroup = () =>
       openLeaveChatDialog(screenContext, chatListItem.id)
     const onBlockContact = () =>
-      openBlockContactDialog(screenContext, chatListItem)
+      openBlockFirstContactOfChatDialog(screenContext, chatListItem)
     const onMuteChat = () => openMuteChatDialog(screenContext, chatListItem.id)
     const onUnmuteChat = () => unMuteChat(chatListItem.id)
 
-    const menu: ContextMenuItem[] = chatListItem
+    const menu: (ContextMenuItem | false)[] = chatListItem
       ? [
           // Archive & Pin
           ...archiveStateMenu(

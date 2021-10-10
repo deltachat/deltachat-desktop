@@ -12,8 +12,12 @@ export default function UnblockContacts(props: {
   onClose: DialogProps['onClose']
 }) {
   const { isOpen, onClose } = props
-  const [blockedContacts, setBlockedContacts] = useState(null)
-  const [hadBlockedContacts, setHadBlockedContacts] = useState(null)
+  const [blockedContacts, setBlockedContacts] = useState<
+    contactsStoreState['blockedContacts'] | null
+  >(null)
+  const [hadBlockedContacts, setHadBlockedContacts] = useState<boolean | null>(
+    null
+  )
   const screenContext = useContext(ScreenContext)
 
   useEffect(() => {

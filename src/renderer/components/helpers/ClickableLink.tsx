@@ -2,9 +2,12 @@ import React, { PropsWithChildren } from 'react'
 import { runtime } from '../../runtime'
 
 export default class ClickableLink extends React.Component<
-  PropsWithChildren<{ href: string; onClick?: (ev: MouseEvent) => void }>
+  PropsWithChildren<{
+    href: string
+    onClick?: (ev: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void
+  }>
 > {
-  onClick(event: MouseEvent) {
+  onClick(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
     event.preventDefault()
     runtime.openLink(this.props.href)
   }

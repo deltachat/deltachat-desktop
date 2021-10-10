@@ -14,7 +14,7 @@ import {
 import { DialogProps } from './DialogController'
 import { FullChat } from '../../../shared/shared-types'
 
-export default function MessageListProfile(props: {
+export default function MailingListProfile(props: {
   isOpen: DialogProps['isOpen']
   onClose: DialogProps['onClose']
   chat: FullChat
@@ -58,7 +58,7 @@ export default function MessageListProfile(props: {
 
 const useEdit = (
   groupName: string,
-  groupImage: string,
+  groupImage: string | undefined,
   groupId: number,
   onClose: DialogProps['onClose']
 ) => {

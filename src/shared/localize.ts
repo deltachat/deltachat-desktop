@@ -38,7 +38,7 @@ export function translate(
       return key
     }
 
-    let message = entry.message
+    let message: string | undefined = entry.message
     if (typeof opts.quantity !== 'undefined') {
       if (typeof opts.quantity === 'string') {
         message = entry[opts.quantity]
@@ -63,7 +63,10 @@ export function translate(
 
       let c = 0
       return message.replace(/(?:%\d\$[\w\d])|(?:%[\w\d])/g, () => {
-        if (typeof substitutions[c] === 'undefined') {
+        if (
+          substitutions === undefined ||
+          typeof substitutions[c] === 'undefined'
+        ) {
           log.error(`Missing ${c} argument for key %c'${key}'`)
           return ''
         }

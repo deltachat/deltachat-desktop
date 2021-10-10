@@ -130,7 +130,7 @@ export class Logger {
     if (channel === 'core/event') {
       // disable js stacktrace for core events
       // as it is useless information (always pointing to the event emitter)
-      this.getStackTrace = () => undefined
+      this.getStackTrace = () => ''
     }
   }
 
@@ -146,11 +146,11 @@ export class Logger {
 
   debug(...args: any[]) {
     if (!rc['log-debug']) return
-    log(this, 0, undefined, args)
+    log(this, 0, '', args)
   }
 
   info(...args: any[]) {
-    log(this, 1, undefined, args)
+    log(this, 1, '', args)
   }
 
   warn(...args: any[]) {

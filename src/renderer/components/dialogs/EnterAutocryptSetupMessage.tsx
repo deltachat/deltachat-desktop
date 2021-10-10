@@ -22,11 +22,15 @@ export function SetupMessagePanel({
   ])
 
   const handleChangeKey = (
-    event: React.FormEvent<HTMLElement> & React.ChangeEvent<HTMLInputElement>
+    event: React.FormEvent<HTMLElement> | React.ChangeEvent<HTMLInputElement>
   ) => {
-    const value = event.target.value
+    if (!(event.target as any).value) {
+      return
+    }
+    const eventTarget = event.target as HTMLInputElement
+    const value = eventTarget.value
     const valueNumber = Number(value)
-    const index = Number(event.target.getAttribute('data-index'))
+    const index = Number(eventTarget.getAttribute('data-index'))
 
     log.debug(`handleChangeKey: data-index ${index} value: ${value}`)
     if (
@@ -45,7 +49,7 @@ export function SetupMessagePanel({
     setKey(updatedKey)
     if (value.length === 4) {
       const next = index + 1
-      if (next <= 8) document.getElementById('autocrypt-input-' + next).focus()
+      if (next <= 8) document.getElementById('autocrypt-input-' + next)?.focus()
     }
   }
 
@@ -128,6 +132,10 @@ export default function EnterAutocryptSetupMessage({
       </div>
     )
   } else {
+    if (!setupCodeBegin) {
+      throw new Error('setupCodeBegin is missing')
+    }
+
     body = (
       <SetupMessagePanel
         setupCodeBegin={setupCodeBegin}

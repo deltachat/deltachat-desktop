@@ -62,7 +62,9 @@ export default function MailtoDialog(props: {
               autoFocus
               spellCheck={false}
             />
-            {noResults && <PseudoListItemNoSearchResults queryStr={queryStr} />}
+            {noResults && queryStr && (
+              <PseudoListItemNoSearchResults queryStr={queryStr} />
+            )}
             <div style={noResults ? { height: '0px' } : {}} className='results'>
               <AutoSizer>
                 {({ width, height }) => (

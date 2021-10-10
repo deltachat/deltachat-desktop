@@ -2,7 +2,7 @@ import UrlParser from 'url-parse'
 
 export function parseMailto(
   mailtoURL: string
-): { to?: string; subject?: string; body?: string } {
+): { to?: string | null; subject?: string; body?: string } {
   const mailto_url = UrlParser(mailtoURL)
 
   if (mailto_url.protocol.toLowerCase() !== 'mailto:') {

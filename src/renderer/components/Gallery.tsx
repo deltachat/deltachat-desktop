@@ -54,6 +54,9 @@ export default class Gallery extends Component<
   }
 
   onSelect(id: MediaTabKey) {
+    if (!this.props.chat.id) {
+      throw new Error('chat id missing')
+    }
     const msgTypes = MediaTabs[id].values
     DeltaBackend.call(
       'chat.getChatMedia',
@@ -77,7 +80,8 @@ export default class Gallery extends Component<
       <div className='media-view'>
         <div className='bp3-tabs' style={{ minWidth: 200 }}>
           <ul className='bp3-tab-list .modifier' role='tablist'>
-            {Object.keys(MediaTabs).map((id: MediaTabKey) => {
+            {Object.keys(MediaTabs).map(realId => {
+              const id = realId as MediaTabKey
               return (
                 <li
                   key={id}

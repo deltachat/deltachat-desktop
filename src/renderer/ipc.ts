@@ -54,7 +54,7 @@ let callDcMethodIdentifier = 0
 function callDcMethod(
   methodName: string,
   args: any[],
-  cb?: (err: Error, returnValue: any) => void
+  cb?: (err: Error | null, returnValue: any) => void
 ) {
   const identifier = callDcMethodIdentifier++
   if (identifier >= Number.MAX_SAFE_INTEGER - 1) callDcMethodIdentifier = 0
@@ -72,7 +72,9 @@ function callDcMethod(
       err
     )
     removeListeners()
-    cb(err, null)
+    if (cb) {
+      cb(err, null)
+    }
   }
 
   const onSuccess = (_ev: any, returnValue: any) => {
@@ -86,7 +88,9 @@ function callDcMethod(
       returnValue
     )*/
     removeListeners()
-    cb(null, returnValue)
+    if (cb) {
+      cb(null, returnValue)
+    }
   }
 
   const removeListeners = () => {
@@ -113,7 +117,7 @@ export function _callDcMethodAsync(
   ...args: any[]
 ): Promise<any> {
   return new Promise((resolve, reject) =>
-    callDcMethod(fnName, args, (err: Error, returnValue: any) => {
+    callDcMethod(fnName, args, (err: Error | null, returnValue: any) => {
       if (err) return reject(err)
       resolve(returnValue)
     })

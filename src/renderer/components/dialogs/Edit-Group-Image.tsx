@@ -4,13 +4,13 @@ import { Avatar } from '../Avatar'
 import { useContextMenu } from '../ContextMenu'
 
 export const GroupImage = (props: {
-  groupImage: string
+  groupImage?: string
   onSetGroupImage: () => void
   onUnsetGroupImage: () => void
   style?: React.CSSProperties
   groupName?: string
   isVerified?: boolean
-  color: string
+  color?: string
 }) => {
   const tx = window.static_translate
   const {
@@ -35,7 +35,7 @@ export const GroupImage = (props: {
 
   const openContextMenu = useContextMenu([
     { label: tx('select_group_image_desktop'), action: onSetGroupImage },
-    groupImage && {
+    typeof groupImage === 'string' && {
       label: tx('remove_group_image'),
       action: onUnsetGroupImage,
     },
@@ -43,9 +43,9 @@ export const GroupImage = (props: {
 
   return (
     <div className='group-image-wrapper'>
-      <div onClick={groupImage && showAvatarFullscreen}>
+      <div onClick={() => groupImage && showAvatarFullscreen()}>
         <Avatar
-          displayName={groupName}
+          displayName={groupName || ''}
           avatarPath={groupImage}
           isVerified={isVerified}
           color={color}

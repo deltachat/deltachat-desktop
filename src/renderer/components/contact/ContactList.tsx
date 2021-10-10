@@ -27,17 +27,17 @@ export function ContactList2(props: {
   return (
     <div>
       {contacts.map(contact => {
-        let checked = null
+        let checked = false
         if (showCheckbox && typeof isChecked === 'function') {
           checked = isChecked(contact)
         }
         return ContactListItem({
           contact,
           onClick,
-          showCheckbox,
+          showCheckbox: showCheckbox || false,
           checked,
           onCheckboxClick,
-          showRemove,
+          showRemove: showRemove || false,
           onRemoveClick,
         })
       })}
@@ -104,7 +104,7 @@ export function useContactsNew(listFlags: number, initialQueryStr: string) {
   return [state, search] as [typeof state, typeof search]
 }
 
-export function useContactIds(listFlags: number, queryStr: string) {
+export function useContactIds(listFlags: number, queryStr: string | undefined) {
   const [state, setState] = useState<{
     contactIds: number[]
     queryStrIsValidEmail: boolean
@@ -112,15 +112,15 @@ export function useContactIds(listFlags: number, queryStr: string) {
 
   const debouncedGetContactsIds = useMemo(
     () =>
-      debounce(async (listFlags: number, queryStr: string) => {
+      debounce(async (listFlags: number, queryStr: string | undefined) => {
         const contactIds = await DeltaBackend.call(
           'contacts.getContactIds',
           listFlags,
-          queryStr
+          queryStr || ''
         )
         const queryStrIsValidEmail = await DeltaBackend.call(
           'checkValidEmail',
-          queryStr
+          queryStr || ''
         )
         setState({ contactIds, queryStrIsValidEmail })
       }, 200),

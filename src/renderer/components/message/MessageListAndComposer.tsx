@@ -4,10 +4,10 @@ import Composer, { useDraft } from '../composer/Composer'
 import { getLogger } from '../../../shared/logger'
 import MessageList from './MessageList'
 import { SettingsContext, ScreenContext } from '../../contexts'
-import { C } from 'deltachat-node/dist/constants'
 import { ChatStoreState } from '../../stores/chat'
 import ComposerMessageInput from '../composer/ComposerMessageInput'
 import { DesktopSettings, FullChat } from '../../../shared/shared-types'
+import { isChatReadonly } from '../../../shared/util'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -44,7 +44,7 @@ export default function MessageListAndComposer({
   const refComposer = useRef(null)
   const { openDialog } = useContext(ScreenContext)
 
-  const messageInputRef: React.MutableRefObject<ComposerMessageInput> = useRef<ComposerMessageInput>()
+  const messageInputRef = useRef<ComposerMessageInput>(null)
   const {
     draftState,
     updateDraftText,
@@ -55,6 +55,12 @@ export default function MessageListAndComposer({
   } = useDraft(chat.id, chat.isContactRequest, messageInputRef)
 
   const onDrop = (e: React.DragEvent<any>) => {
+    if (chat.id === null) {
+      log.warn('droped something, but no chat is selected')
+      return
+    }
+    const chatId = chat.id as number
+
     e.preventDefault()
     e.stopPropagation()
     const sanitizedFileList: Pick<File, 'name' | 'path'>[] = []
@@ -108,7 +114,7 @@ export default function MessageListAndComposer({
       cb: (yes: boolean) =>
         yes &&
         sanitizedFileList.forEach(({ path }) =>
-          DeltaBackend.call('messageList.sendMessage', chat.id, {
+          DeltaBackend.call('messageList.sendMessage', chatId, {
             filename: path,
           })
         ),
@@ -123,7 +129,9 @@ export default function MessageListAndComposer({
   const onMouseUp = (e: MouseEvent) => {
     const selection = window.getSelection()
 
-    if (selection.type === 'Range' && selection.rangeCount > 0) return
+    if (selection?.type === 'Range' && selection.rangeCount > 0) {
+      return
+    }
     const targetTagName = ((e.target as unknown) as any)?.tagName
 
     if (targetTagName === 'INPUT' || targetTagName === 'TEXTAREA') {
@@ -139,8 +147,8 @@ export default function MessageListAndComposer({
     const selection = window.getSelection()
 
     if (
-      selection.type === 'Caret' ||
-      (selection.type === 'Range' && selection.rangeCount > 0)
+      selection?.type === 'Caret' ||
+      (selection?.type === 'Range' && selection.rangeCount > 0)
     )
       return
 
@@ -165,10 +173,10 @@ export default function MessageListAndComposer({
     }
   }, [])
 
-  const [disabled, disabledReason] = isChatReadonly(chat)
+  const [disabled, disabledReason] = isChatReadonly(chat as FullChat)
 
   const settings = useContext(SettingsContext).desktopSettings
-  const style = getBackgroundImageStyle(settings)
+  const style = settings ? getBackgroundImageStyle(settings) : {}
 
   return (
     <div
@@ -197,18 +205,4 @@ export default function MessageListAndComposer({
       />
     </div>
   )
-}
-
-export function isChatReadonly(chat: FullChat): [boolean, string] {
-  if (chat.isContactRequest) {
-    return [true, 'messaging_disabled_deaddrop']
-  } else if (chat.isDeviceChat === true) {
-    return [true, 'messaging_disabled_device_chat']
-  } else if (chat.type === C.DC_CHAT_TYPE_MAILINGLIST) {
-    return [true, 'messaging_disabled_mailing_list']
-  } else if (chat.isGroup && !chat.selfInGroup) {
-    return [true, 'messaging_disabled_not_in_group']
-  } else {
-    return [false, '']
-  }
 }

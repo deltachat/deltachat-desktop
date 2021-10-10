@@ -36,7 +36,7 @@ export const DeltaCheckbox = (props: {
 }
 export function ContactListItem(props: {
   contact: JsonContact
-  onClick: (contact: JsonContact) => void
+  onClick?: (contact: JsonContact) => void
   showCheckbox: boolean
   checked: boolean
   showRemove: boolean
@@ -60,7 +60,7 @@ export function ContactListItem(props: {
       className='contact-list-item'
       key={contact.id}
       onClick={() => {
-        onClick(contact)
+        onClick && onClick(contact)
         onCheckboxClick()
       }}
     >

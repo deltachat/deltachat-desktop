@@ -3,14 +3,15 @@ import { DesktopSettings } from '../shared/shared-types'
 import { userFeedback, Screens } from './ScreenController'
 import { getMessageFunction } from '../shared/localize'
 import { showFnType } from './components/ContextMenu'
+import { OpenDialogFunctionType } from './components/dialogs/DialogController'
 
 export const ScreenContext = React.createContext({
-  openDialog: (_fnc: any, _props?: any) => {},
+  openDialog: ((_fnc: any, _props?: any) => {}) as OpenDialogFunctionType,
   openContextMenu: (..._args: Parameters<showFnType>) => {},
   closeDialog: (_id: number) => {},
   userFeedback: (_message: false | userFeedback) => {},
   changeScreen: (_screen: Screens) => {},
-  screen: null,
+  screen: null as Screens | null,
 })
 
 export const i18nContext = React.createContext<getMessageFunction>(
@@ -27,15 +28,17 @@ export const i18nContext = React.createContext<getMessageFunction>(
  */
 export const useTranslationFunction = () => useContext(i18nContext)
 
+type setDesktopSetting = (
+  key: keyof DesktopSettings,
+  value: string | number | boolean
+) => {}
+
 export const SettingsContext: React.Context<{
-  desktopSettings: DesktopSettings
-  setDesktopSetting: (
-    key: keyof DesktopSettings,
-    value: string | number | boolean
-  ) => {}
+  desktopSettings: DesktopSettings | null
+  setDesktopSetting: setDesktopSetting
 }> = React.createContext({
-  desktopSettings: null,
-  setDesktopSetting: null,
+  desktopSettings: null as DesktopSettings | null,
+  setDesktopSetting: ((_key, _value) => {}) as setDesktopSetting,
 })
 
 export type unwrapContext<T> = T extends import('react').Context<infer R>
