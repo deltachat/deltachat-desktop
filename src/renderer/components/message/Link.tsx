@@ -61,7 +61,8 @@ export const LabeledLink = ({
   const onClick = (ev: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     ev.preventDefault()
     ev.stopPropagation()
-    const { isDeviceChat } = chatStore.getState()
+    const isDeviceChat = chatStore.getState().chat?.isDeviceChat
+
     //check if domain is trusted
     if (isDeviceChat || isDomainTrusted(url.hostname)) {
       runtime.openLink(target)

@@ -5,7 +5,6 @@ import { DeltaBackend } from '../delta-remote'
 import { ScreenContext } from '../contexts'
 import MediaAttachment from './attachment/mediaAttachment'
 import { MessageType } from '../../shared/shared-types'
-import { ChatStoreState } from '../stores/chat'
 
 type MediaTabKey = 'images' | 'video' | 'audio' | 'documents'
 
@@ -28,7 +27,7 @@ const MediaTabs: Readonly<
   },
 })
 
-type mediaProps = { chat: ChatStoreState }
+type mediaProps = { chatId: number }
 
 export default class Gallery extends Component<
   mediaProps,
@@ -48,19 +47,19 @@ export default class Gallery extends Component<
   }
 
   componentDidUpdate(prevProps: mediaProps) {
-    if (!prevProps.chat || this.props.chat.id !== prevProps.chat.id) {
+    if (this.props.chatId !== prevProps.chatId) {
       this.onSelect(this.state.id)
     }
   }
 
   onSelect(id: MediaTabKey) {
-    if (!this.props.chat.id) {
+    if (!this.props.chatId) {
       throw new Error('chat id missing')
     }
     const msgTypes = MediaTabs[id].values
     DeltaBackend.call(
       'chat.getChatMedia',
-      this.props.chat.id,
+      this.props.chatId,
       msgTypes[0],
       msgTypes[1]
     ).then(medias => {
