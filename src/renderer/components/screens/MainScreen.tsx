@@ -12,7 +12,7 @@ import MessageListAndComposer, {
   getBackgroundImageStyle,
 } from '../message/MessageListAndComposer'
 import SearchInput from '../SearchInput'
-import { useChatStore, ChatStoreState } from '../../stores/chat'
+import { useChatStore, ChatStoreStateWithChatSet } from '../../stores/chat'
 import {
   openViewGroupDialog,
   openViewProfileDialog,
@@ -65,7 +65,7 @@ export default function MainScreen() {
   const onChatClick = (chatId: number) => {
     if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) return setShowArchivedChats(true)
     // avoid double clicks
-    if (chatId === selectedChat.id) return
+    if (chatId === selectedChat.chat?.id) return
 
     chatStoreDispatch({ type: 'SELECT_CHAT', payload: chatId })
     setView(View.MessageList)
@@ -74,17 +74,17 @@ export default function MainScreen() {
   const handleSearchChange = (event: { target: { value: string } }) =>
     searchChats(event.target.value)
   const onTitleClick = () => {
-    if (!selectedChat) return
+    if (!selectedChat.chat) return
 
-    if (selectedChat.type === C.DC_CHAT_TYPE_MAILINGLIST) {
+    if (selectedChat.chat.type === C.DC_CHAT_TYPE_MAILINGLIST) {
       screenContext.openDialog(MailingListProfile, {
-        chat: selectedChat as FullChat,
+        chat: selectedChat.chat,
       })
-    } else if (selectedChat.isGroup) {
+    } else if (selectedChat.chat.isGroup) {
       openViewGroupDialog(screenContext, selectedChat)
     } else {
-      if (selectedChat.contactIds && selectedChat.contactIds[0]) {
-        openViewProfileDialog(screenContext, selectedChat.contactIds[0])
+      if (selectedChat.chat.contactIds && selectedChat.chat.contactIds[0]) {
+        openViewProfileDialog(screenContext, selectedChat.chat.contactIds[0])
       }
     }
   }
@@ -119,19 +119,23 @@ export default function MainScreen() {
     return null
   }
 
-  const menu = <Menu selectedChat={selectedChat} />
+  const menu = <Menu selectedChat={selectedChat.chat} />
   let MessageListView
-  if (selectedChat.id !== null) {
+  if (selectedChat.chat !== null) {
     switch (view) {
       case View.Media:
-        MessageListView = <Gallery chat={selectedChat} />
+        MessageListView = <Gallery chatId={selectedChat.chat.id} />
         break
       case View.Map:
-        MessageListView = <MapComponent selectedChat={selectedChat} />
+        MessageListView = <MapComponent selectedChat={selectedChat.chat} />
         break
       case View.MessageList:
       default:
-        MessageListView = <MessageListAndComposer chat={selectedChat} />
+        MessageListView = (
+          <MessageListAndComposer
+            chatStore={selectedChat as ChatStoreStateWithChatSet}
+          />
+        )
     }
   } else {
     const style: React.CSSProperties = window.__desktopSettings
@@ -187,7 +191,7 @@ export default function MainScreen() {
             )}
           </NavbarGroup>
           <NavbarGroup align={Alignment.RIGHT}>
-            {selectedChat && selectedChat.id && (
+            {selectedChat.chat && (
               <NavbarHeading
                 style={{
                   cursor: 'pointer',
@@ -197,19 +201,17 @@ export default function MainScreen() {
                 }}
                 onClick={onTitleClick}
               >
-                {selectedChat && (
-                  <Avatar
-                    displayName={selectedChat.name}
-                    color={selectedChat.color}
-                    isVerified={selectedChat.isProtected}
-                    avatarPath={selectedChat.profileImage || undefined}
-                    small
-                  />
-                )}
+                <Avatar
+                  displayName={selectedChat.chat.name}
+                  color={selectedChat.chat.color}
+                  isVerified={selectedChat.chat.isProtected}
+                  avatarPath={selectedChat.chat.profileImage || undefined}
+                  small
+                />
                 <div style={{ marginLeft: '7px' }}>
                   <div className='navbar-chat-name'>
-                    {selectedChat.name}
-                    {selectedChat.ephemeralTimer !== 0 && (
+                    {selectedChat.chat.name}
+                    {selectedChat.chat.ephemeralTimer !== 0 && (
                       <div
                         className={'disapearing-messages-icon'}
                         aria-label={tx('a11y_disappearing_messages_activated')}
@@ -217,12 +219,12 @@ export default function MainScreen() {
                     )}
                   </div>
                   <div className='navbar-chat-subtile'>
-                    {chatSubtitle(selectedChat)}
+                    {chatSubtitle(selectedChat.chat)}
                   </div>
                 </div>
               </NavbarHeading>
             )}
-            {selectedChat && selectedChat.id && (
+            {selectedChat.chat && (
               <span className='views'>
                 <Button
                   onClick={() => setView(View.MessageList)}
@@ -260,7 +262,8 @@ export default function MainScreen() {
             )}
             <span
               style={{
-                marginLeft: selectedChat && selectedChat.id ? 0 : 'auto',
+                marginLeft:
+                  selectedChat.chat && selectedChat.chat.id ? 0 : 'auto',
               }}
             >
               <Popover content={menu} position={Position.RIGHT_TOP}>
@@ -281,7 +284,7 @@ export default function MainScreen() {
           queryStr={queryStr}
           showArchivedChats={showArchivedChats}
           onChatClick={onChatClick}
-          selectedChatId={selectedChat ? selectedChat.id : null}
+          selectedChatId={selectedChat.chat ? selectedChat.chat.id : null}
         />
         {MessageListView}
       </div>
@@ -290,7 +293,7 @@ export default function MainScreen() {
   )
 }
 
-function chatSubtitle(chat: ChatStoreState | FullChat) {
+function chatSubtitle(chat: FullChat) {
   const tx = window.static_translate
   if (chat.id && chat.id > C.DC_CHAT_ID_LAST_SPECIAL) {
     if (chat.type === C.DC_CHAT_TYPE_GROUP) {

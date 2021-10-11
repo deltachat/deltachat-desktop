@@ -14,7 +14,7 @@ import { Slider, Button, Collapse } from '@blueprintjs/core'
 import PopupMessage from './PopupMessage'
 import * as SessionStorage from '../helpers/SessionStorage'
 import { SettingsContext } from '../../contexts'
-import chatStore, { ChatStoreState } from '../../stores/chat'
+import chatStore from '../../stores/chat'
 
 import { state as LocationStoreState } from '../../stores/locations'
 
@@ -40,7 +40,7 @@ type Point = [number, number]
 type Contact = JsonContact & { hidden?: boolean }
 
 type MapProps = {
-  selectedChat: FullChat | ChatStoreState
+  selectedChat: FullChat
 }
 
 export default class MapComponent extends React.Component<

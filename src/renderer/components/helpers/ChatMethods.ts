@@ -44,7 +44,7 @@ export function openLeaveChatDialog(
 
 export function openDeleteChatDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
-  chat: Chat | ChatStoreState,
+  chat: Chat,
   selectedChatId: number
 ) {
   const tx = window.static_translate
@@ -68,7 +68,7 @@ export function openDeleteChatDialog(
  */
 export function openBlockFirstContactOfChatDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
-  selectedChat: Chat | ChatStoreState
+  selectedChat: Chat | ChatListItemType
 ) {
   const tx = window.static_translate
   const contactIds = selectedChat?.contactIds

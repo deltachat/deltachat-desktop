@@ -1,13 +1,17 @@
 import React, { useRef, useEffect, useCallback } from 'react'
 import { MessageWrapper } from './MessageWrapper'
-import { useChatStore, ChatStoreState } from '../../stores/chat'
+import {
+  useChatStore,
+  ChatStoreState,
+  ChatStoreStateWithChatSet,
+} from '../../stores/chat'
 import { useDebouncedCallback } from 'use-debounce'
 import { C } from 'deltachat-node/dist/constants'
 import type { ChatTypes } from 'deltachat-node'
 import moment from 'moment'
 
 import { getLogger } from '../../../shared/logger'
-import { MessageType } from '../../../shared/shared-types'
+import { MessageType, FullChat } from '../../../shared/shared-types'
 import { useTranslationFunction } from '../../contexts'
 import { useDCConfigOnce } from '../helpers/useDCConfigOnce'
 const log = getLogger('render/msgList')
@@ -24,10 +28,10 @@ const messageIdsToShow = (
 }
 
 export default function MessageList({
-  chat,
+  chatStore,
   refComposer,
 }: {
-  chat: ChatStoreState
+  chatStore: ChatStoreStateWithChatSet
   refComposer: todo
 }) {
   const [
@@ -150,7 +154,7 @@ export default function MessageList({
 
     const composerTextarea = refComposer.current.childNodes[1]
     composerTextarea && composerTextarea.focus()
-  }, [refComposer, chat.id])
+  }, [refComposer, chatStore.chat.id])
 
   useEffect(() => {
     if (!messageListRef.current) {
@@ -168,7 +172,7 @@ export default function MessageList({
       messageIds={messageIds}
       messages={messages}
       messageListRef={messageListRef}
-      chat={chat}
+      chatStore={chatStore}
     />
   )
 }
@@ -188,7 +192,7 @@ export const MessageListInner = React.memo(
     messageIds: number[]
     messages: ChatStoreState['messages']
     messageListRef: React.MutableRefObject<HTMLDivElement | null>
-    chat: ChatStoreState
+    chatStore: ChatStoreStateWithChatSet
   }) => {
     const {
       onScroll,
@@ -197,10 +201,10 @@ export const MessageListInner = React.memo(
       messages,
       messageListRef,
 
-      chat,
+      chatStore,
     } = props
 
-    if (!chat.id) {
+    if (!chatStore.chat.id) {
       throw new Error('no chat id')
     }
 
@@ -213,10 +217,10 @@ export const MessageListInner = React.memo(
 
     const conversationType: ConversationType = {
       hasMultipleParticipants:
-        chat.type === C.DC_CHAT_TYPE_GROUP ||
-        chat.type === C.DC_CHAT_TYPE_MAILINGLIST,
-      isDeviceChat: chat.isDeviceChat as boolean,
-      chatType: chat.type as number,
+        chatStore.chat.type === C.DC_CHAT_TYPE_GROUP ||
+        chatStore.chat.type === C.DC_CHAT_TYPE_MAILINGLIST,
+      isDeviceChat: chatStore.chat.isDeviceChat as boolean,
+      chatType: chatStore.chat.type as number,
     }
 
     return (
@@ -260,7 +264,8 @@ export const MessageListInner = React.memo(
 
 function EmptyChatMessage() {
   const tx = useTranslationFunction()
-  const [chat] = useChatStore()
+  const [chatStore] = useChatStore()
+  const chat = chatStore.chat as FullChat
 
   let emptyChatMessage = tx('chat_no_messages_hint', [chat.name, chat.name])
 

@@ -1,6 +1,6 @@
 import { ipcBackend, saveLastChatId } from '../ipc'
 import { Store, useStore } from './store'
-import { JsonContact, FullChat, MessageType } from '../../shared/shared-types'
+import { FullChat, MessageType } from '../../shared/shared-types'
 import { DeltaBackend } from '../delta-remote'
 import { runtime } from '../runtime'
 import { ActionEmitter, KeybindAction } from '../keybindings'
@@ -9,25 +9,7 @@ import { C } from 'deltachat-node/dist/constants'
 export const PAGE_SIZE = 10
 
 class state {
-  contactIds: number[] | null = null
-  isDeviceChat: boolean | null = null
-  selfInGroup: boolean | null = null
-  id: number | null = null
-  name = ''
-  isProtected = false
-  profileImage: string | null = null
-
-  archived = false
-  type: number | null = null
-  isUnpromoted = false
-  isSelfTalk = false
-
-  contacts: JsonContact[] = []
-  color = ''
-  // summary = undefined
-  freshMessageCounter = 0
-  isGroup = false
-  isContactRequest = false
+  chat: FullChat | null = null
 
   messageIds: number[] = []
   messages: { [key: number]: MessageType | null } = {}
@@ -37,8 +19,6 @@ class state {
   scrollToLastPage = false // after fetching more messages reset scroll bar to old position
   scrollHeight = 0
   countFetchedMessages = 0
-  muted = false
-  ephemeralTimer = 0
 }
 
 const defaultState = new state()
@@ -51,7 +31,7 @@ chatStore.attachReducer(({ type, payload, id }, state) => {
     return { ...defaultState, ...payload }
   }
 
-  if (typeof id !== 'undefined' && id !== state.id) {
+  if (typeof id !== 'undefined' && id !== state.chat?.id) {
     log.debug(
       'REDUCER',
       'seems like an old action because the chatId changed in between'
@@ -180,13 +160,13 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
     chatStore.dispatch({
       type: 'SELECTED_CHAT',
       payload: {
-        ...chat,
+        chat,
         id: chatId,
         messageIds,
         messages,
         oldestFetchedMessageIndex,
         scrollToBottom: true,
-      },
+      } as Partial<state>,
     })
     ActionEmitter.emitAction(
       chat.archived
@@ -236,7 +216,7 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
       },
     })
   } else if (type === 'SEND_MESSAGE') {
-    if (payload[0] !== chatStore.state.id) return
+    if (payload[0] !== chatStore.state.chat?.id) return
     const messageObj = await DeltaBackend.call(
       'messageList.sendMessage',
       payload[0],
@@ -251,7 +231,7 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
       id: payload[0],
     })
   } else if (type === 'MUTE') {
-    if (payload[0] !== chatStore.state.id) return
+    if (payload[0] !== chatStore.state.chat?.id) return
     if (
       !(await DeltaBackend.call('chat.setMuteDuration', payload[0], payload[1]))
     ) {
@@ -263,20 +243,23 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
 ipcBackend.on('DD_EVENT_CHAT_MODIFIED', (_evt, payload) => {
   const { chatId, chat } = payload
   const state = chatStore.getState()
-  if (state.id !== chatId) {
+  if (state.chat?.id !== chatId) {
     return
   }
   chatStore.dispatch({
     type: 'MODIFIED_CHAT',
     payload: {
-      profileImage: chat.profileImage,
-      name: chat.name,
-      contacts: chat.contacts,
-      selfInGroup: chat.selfInGroup,
-      muted: chat.muted,
-      ephemeralTimer: chat.ephemeralTimer,
-      isContactRequest: chat.isContactRequest,
-    },
+      chat: {
+        ...state.chat,
+        profileImage: chat.profileImage,
+        name: chat.name,
+        contacts: chat.contacts,
+        selfInGroup: chat.selfInGroup,
+        muted: chat.muted,
+        ephemeralTimer: chat.ephemeralTimer,
+        isContactRequest: chat.isContactRequest,
+      },
+    } as Partial<state>,
   })
 })
 
@@ -290,7 +273,7 @@ ipcBackend.on('DC_EVENT_MSG_DELIVERED', (_evt, [id, msgId]) => {
 
 ipcBackend.on('DC_EVENT_MSG_FAILED', async (_evt, [chatId, msgId]) => {
   const state = chatStore.getState()
-  if (state.id !== chatId) return
+  if (state.chat?.id !== chatId) return
   if (!state.messageIds.includes(msgId)) {
     // Hacking around https://github.com/deltachat/deltachat-desktop/issues/1361#issuecomment-776291299
     const messageObj = [
@@ -311,9 +294,9 @@ ipcBackend.on('DC_EVENT_MSG_FAILED', async (_evt, [chatId, msgId]) => {
 })
 
 ipcBackend.on('DC_EVENT_INCOMING_MSG', async (_, [chatId, _messageId]) => {
-  if (chatId !== chatStore.state.id) {
+  if (chatId !== chatStore.state.chat?.id) {
     log.debug(
-      `DC_EVENT_INCOMING_MSG chatId of event (${chatId}) doesn't match id of selected chat (${chatStore.state.id}). Skipping.`
+      `DC_EVENT_INCOMING_MSG chatId of event (${chatId}) doesn't match id of selected chat (${chatStore.state.chat?.id}). Skipping.`
     )
     return
   }
@@ -348,8 +331,8 @@ ipcBackend.on('DC_EVENT_MSG_READ', (_evt, [id, msgId]) => {
 ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
   log.debug('DC_EVENT_MSGS_CHANGED', id, messageId)
   if (id === 0 && messageId === 0) {
-    const chatId = chatStore.state.id
-    if (chatId === null) {
+    const chatId = chatStore.state.chat?.id
+    if (chatId === null || chatId === undefined) {
       return
     }
     const messageIds = await DeltaBackend.call(
@@ -364,7 +347,7 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
     })
     return
   }
-  if (id !== chatStore.state.id) return
+  if (id !== chatStore.state.chat?.id) return
   if (chatStore.state.messageIds.indexOf(messageId) !== -1) {
     log.debug(
       'DC_EVENT_MSGS_CHANGED',
@@ -424,3 +407,7 @@ export default chatStore
 export type ChatStoreDispatch = Store<state>['dispatch']
 
 export type ChatStoreState = typeof state.prototype
+
+export type ChatStoreStateWithChatSet = {
+  chat: NonNullable<ChatStoreState['chat']>
+} & Exclude<ChatStoreState, 'chat'>

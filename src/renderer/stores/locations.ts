@@ -1,12 +1,11 @@
 import { FullChat, JsonLocations } from '../../shared/shared-types'
 import { DeltaBackend } from '../delta-remote'
 import { Store } from './store'
-import { ChatStoreState } from './chat'
 
 const { ipcRenderer } = window.electron_functions
 
 export class state {
-  selectedChat: FullChat | ChatStoreState | null = null
+  selectedChat: FullChat | null = null
   mapSettings = {
     timestampFrom: 0,
     timestampTo: 0,

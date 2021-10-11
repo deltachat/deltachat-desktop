@@ -6,7 +6,7 @@ import {
   useTranslationFunction,
   SettingsContext,
 } from '../contexts'
-import { useChatStore, ChatStoreState } from '../stores/chat'
+import { useChatStore } from '../stores/chat'
 import { Menu } from '@blueprintjs/core'
 import {
   openLeaveChatDialog,
@@ -20,6 +20,7 @@ import {
 } from './helpers/ChatMethods'
 import { runtime } from '../runtime'
 import { Screens } from '../ScreenController'
+import { FullChat } from '../../shared/shared-types'
 
 export function DeltaMenuItem({
   text,
@@ -37,7 +38,7 @@ export function DeltaMenuItem({
   )
 }
 
-export default function DeltaMenu(props: { selectedChat: ChatStoreState }) {
+export default function DeltaMenu(props: { selectedChat: FullChat | null }) {
   const { selectedChat } = props
   const chatStoreDispatch = useChatStore()[1]
 
@@ -49,41 +50,9 @@ export default function DeltaMenu(props: { selectedChat: ChatStoreState }) {
   let chatMenu: any = <div />
 
   const onCreateChat = () => screenContext.openDialog('CreateChat', {})
-  const onViewGroup = () => openViewGroupDialog(screenContext, selectedChat)
-  const onLeaveGroup = () =>
-    selectedChat.id && openLeaveChatDialog(screenContext, selectedChat.id)
-  const onBlockContact = () =>
-    openBlockFirstContactOfChatDialog(screenContext, selectedChat)
-  const onDeleteChat = () =>
-    selectedChat.id &&
-    openDeleteChatDialog(screenContext, selectedChat, selectedChat.id)
-  const onMuteChat = () =>
-    selectedChat.id && openMuteChatDialog(screenContext, selectedChat.id)
-  const onUnmuteChat = () => selectedChat.id && unMuteChat(selectedChat.id)
   const onUnblockContacts = () =>
     screenContext.openDialog('UnblockContacts', {})
-  const onDisappearingMessages = () =>
-    screenContext.openDialog('DisappearingMessages', {
-      chatId: selectedChat.id,
-    })
-  const onVideoChat = () => {
-    const chatId = selectedChat.id
-    if (!chatId) {
-      return
-    }
-    screenContext.openDialog('ConfirmationDialog', {
-      header: tx('videochat_invite_user_to_videochat', selectedChat.name),
-      message: tx('videochat_invite_user_hint'),
-      confirmLabel: tx('ok'),
-      cb: (yes: boolean) => {
-        if (yes) {
-          sendCallInvitation(screenContext, chatId)
-        }
-      },
-    })
-  }
-  const openChatAuditLog = () =>
-    screenContext.openDialog('ChatAuditLogDialog', { selectedChat })
+
   const logout = () => {
     if (selectedChat) {
       chatStoreDispatch({ type: 'UI_UNSELECT_CHAT' })
@@ -93,6 +62,40 @@ export default function DeltaMenu(props: { selectedChat: ChatStoreState }) {
   }
 
   if (selectedChat && selectedChat.id) {
+    const onViewGroup = () =>
+      openViewGroupDialog(screenContext, selectedChat as FullChat)
+    const onLeaveGroup = () =>
+      selectedChat && openLeaveChatDialog(screenContext, selectedChat.id)
+    const onBlockContact = () =>
+      openBlockFirstContactOfChatDialog(screenContext, selectedChat)
+    const onDeleteChat = () =>
+      openDeleteChatDialog(screenContext, selectedChat, selectedChat.id)
+    const onMuteChat = () => openMuteChatDialog(screenContext, selectedChat.id)
+    const onUnmuteChat = () => unMuteChat(selectedChat.id)
+
+    const onDisappearingMessages = () =>
+      screenContext.openDialog('DisappearingMessages', {
+        chatId: selectedChat.id,
+      })
+    const onVideoChat = () => {
+      const chatId = selectedChat.id
+      if (!chatId) {
+        return
+      }
+      screenContext.openDialog('ConfirmationDialog', {
+        header: tx('videochat_invite_user_to_videochat', selectedChat.name),
+        message: tx('videochat_invite_user_hint'),
+        confirmLabel: tx('ok'),
+        cb: (yes: boolean) => {
+          if (yes) {
+            sendCallInvitation(screenContext, chatId)
+          }
+        },
+      })
+    }
+    const openChatAuditLog = () =>
+      screenContext.openDialog('ChatAuditLogDialog', { selectedChat })
+
     const {
       isGroup,
       selfInGroup,
