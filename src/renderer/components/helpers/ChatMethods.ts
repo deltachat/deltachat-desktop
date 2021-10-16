@@ -99,7 +99,7 @@ export function openEncryptionInfoDialog(
 
 export function openViewGroupDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
-  selectedChat: FullChat | ChatStoreState
+  selectedChat: FullChat
 ) {
   screenContext.openDialog('ViewGroup', { chat: selectedChat })
 }

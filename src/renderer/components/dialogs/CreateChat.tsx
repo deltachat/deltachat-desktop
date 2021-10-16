@@ -40,6 +40,7 @@ import { DialogProps } from './DialogController'
 import { QrCodeShowQrInner } from './QrCode'
 import { runtime } from '../../runtime'
 import { createChatByContactIdAndSelectIt } from '../helpers/ChatMethods'
+import { Avatar } from '../Avatar'
 
 export default function CreateChat(props: {
   isOpen: DialogProps['isOpen']
@@ -324,34 +325,46 @@ export function AddMemberInnerDialog({
   searchContacts: JsonContact[]
   groupMembers: number[]
 }) {
-  const contactsNotInGroup = searchContacts.filter(
-    contact => groupMembers.indexOf(contact.id) === -1
-  )
+  const contactIdsInGroup = searchContacts
+    .filter(contact => groupMembers.indexOf(contact.id) !== -1)
+    .map(contact => contact.id)
 
-  const [addMembers, setAddMembers] = useState<number[]>([])
+  const [addMembers, setAddMembers] = useState<
+    Record<number, JsonContact | undefined>
+  >({})
 
   const addOrRemoveMember = (contact: JsonContact) => {
-    if (addMembers.indexOf(contact.id) === -1) {
-      setAddMembers([...addMembers, contact.id])
+    if (addMembers[contact.id] === undefined) {
+      setAddMembers({ ...addMembers, [contact.id]: contact })
     } else {
-      setAddMembers(addMembers.filter(id => id !== contact.id))
+      setAddMembers({ ...addMembers, [contact.id]: undefined })
     }
   }
 
   const tx = window.static_translate
 
   const _onOk = () => {
-    onOk(addMembers)
+    onOk(Object.keys(addMembers).map(k => Number.parseInt(k)))
   }
 
   const inputRef = useRef<HTMLInputElement>(null)
-  useLayoutEffect(() => inputRef?.current?.focus(), [contactsNotInGroup])
 
   return (
     <>
       <DeltaDialogHeader title={tx('group_add_members')} />
       <DeltaDialogBody noFooter>
         <Card style={{ padding: '0px 20px' }}>
+          <div className='AddMemberChips'>
+            {Object.keys(addMembers).map(_contactId => {
+              const contactId = Number.parseInt(_contactId)
+              const contact = addMembers[contactId]
+              if (contact === undefined) return null
+              return AddMemberChip({
+                contact,
+                onRemoveClick: addOrRemoveMember,
+              })
+            })}
+          </div>
           <input
             ref={inputRef}
             className='search-input group-member-search'
@@ -364,10 +377,14 @@ export function AddMemberInnerDialog({
           />
           <div className='group-member-contact-list-wrapper'>
             <ContactList2
-              contacts={contactsNotInGroup}
+              contacts={searchContacts}
               onClick={() => {}}
               showCheckbox
-              isChecked={({ id }) => addMembers.indexOf(id) !== -1}
+              isChecked={({ id }) =>
+                addMembers[id] !== undefined ||
+                contactIdsInGroup.indexOf(id) !== -1
+              }
+              disabledContacts={contactIdsInGroup}
               onCheckboxClick={addOrRemoveMember}
             />
             {queryStr !== '' && searchContacts.length === 0 && (
@@ -378,6 +395,30 @@ export function AddMemberInnerDialog({
       </DeltaDialogBody>
       <DeltaDialogOkCancelFooter onCancel={onCancel} onOk={_onOk} />
     </>
+  )
+}
+
+const AddMemberChip = (props: {
+  contact: JsonContact
+  onRemoveClick: (contact: JsonContact) => void
+}) => {
+  const { contact, onRemoveClick } = props
+  return (
+    <div
+      key={contact.id}
+      className='AddMemberChip'
+      onClick={() => onRemoveClick(contact)}
+    >
+      <div className='Avatar'>
+        <Avatar
+          displayName={contact.displayName}
+          avatarPath={contact.profileImage}
+          color={contact.color}
+          isVerified={contact.isVerified}
+        />
+      </div>
+      <div className='DisplayName'>{contact.displayName}</div>
+    </div>
   )
 }
 

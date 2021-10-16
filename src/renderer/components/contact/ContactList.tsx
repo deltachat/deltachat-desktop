@@ -14,6 +14,7 @@ export function ContactList2(props: {
   onCheckboxClick?: (contact: JsonContact) => void
   showRemove?: boolean
   onRemoveClick?: (contact: JsonContact) => void
+  disabledContacts?: number[]
 }) {
   const {
     contacts,
@@ -23,6 +24,7 @@ export function ContactList2(props: {
     onCheckboxClick,
     showRemove,
     onRemoveClick,
+    disabledContacts,
   } = props
   return (
     <div>
@@ -31,6 +33,7 @@ export function ContactList2(props: {
         if (showCheckbox && typeof isChecked === 'function') {
           checked = isChecked(contact)
         }
+        let disabled = disabledContacts?.indexOf(contact.id) !== -1
         return ContactListItem({
           contact,
           onClick,
@@ -39,6 +42,7 @@ export function ContactList2(props: {
           onCheckboxClick,
           showRemove: showRemove || false,
           onRemoveClick,
+          disabled,
         })
       })}
     </div>

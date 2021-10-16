@@ -33,6 +33,7 @@ export default function ViewGroup(props: {
 }) {
   const { isOpen, onClose, chat } = props
   const [viewMode, setViewMode] = useState('main')
+  console.log('ViewGroup', chat)
 
   return (
     <DeltaDialogBase
@@ -50,9 +51,10 @@ export default function ViewGroup(props: {
 }
 
 export const useGroup = (chat: FullChat) => {
+  console.log(chat)
   const [groupName, setGroupName] = useState(chat.name)
   const [groupMembers, setGroupMembers] = useState(
-    chat.contacts.map(({ id }) => id)
+    chat.contacts?.map(({ id }) => id)
   )
   const [groupImage, setGroupImage] = useState(chat.profileImage)
 
