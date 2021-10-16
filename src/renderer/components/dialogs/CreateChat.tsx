@@ -352,8 +352,8 @@ export function AddMemberInnerDialog({
   return (
     <>
       <DeltaDialogHeader title={tx('group_add_members')} />
-      <DeltaDialogBody noFooter>
-        <Card style={{ padding: '0px 20px' }}>
+      <DeltaDialogBody style={{overflow: 'hidden'}}>
+        <Card style={{ padding: '0px 20px', height: '100%' }}>
           <div className='AddMemberChips'>
             {Object.keys(addMembers).map(_contactId => {
               const contactId = Number.parseInt(_contactId)
@@ -375,7 +375,10 @@ export function AddMemberInnerDialog({
             autoFocus
             spellCheck={false}
           />
-          <div className='group-member-contact-list-wrapper'>
+          <div className='group-member-contact-list-wrapper' style={{
+            overflow: 'scroll',
+            maxHeight: '100%'
+          }}>
             <ContactList2
               contacts={searchContacts}
               onClick={() => {}}

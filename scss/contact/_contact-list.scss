@@ -80,3 +80,43 @@ div.create-chat-contact-list-wrapper {
     }
   }
 }
+
+.disabled > .delta-checkbox > input {
+  border-color: var(--delta-dialog-seperator-text);
+  background-color: var(--delta-dialog-seperator-text);
+}
+
+.AddMemberChips {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  margin-left: -5px;
+  margin-right: -5px;
+
+  .AddMemberChip {
+    display: flex;
+    width: auto;
+    max-width: fit-content;
+    margin: 5px;
+    .DisplayName {
+      line-height: 68px;
+      margin-left: -24px;
+      padding-left: 30px;
+      padding-right: 22px;
+      height: 48px;
+      background-color: #e6e6e6;
+      line-height: 48px;
+      border-top-right-radius: 48px;
+      border-bottom-right-radius: 48px;
+      max-width: 130px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .Avatar {
+      .content {
+        margin: 0px !important;
+      }
+    }
+  }
+}
