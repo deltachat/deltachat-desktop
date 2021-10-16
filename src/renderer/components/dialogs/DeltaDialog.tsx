@@ -198,7 +198,7 @@ export function DeltaDialogFooter(
 }
 
 export function DeltaDialogBody(
-  props: React.PropsWithChildren<{ noFooter?: boolean; ref?: todo, style: any}>
+  props: React.PropsWithChildren<{ noFooter?: boolean; ref?: todo, style?: any}>
 ) {
   const { noFooter, children, style } = props
   return (

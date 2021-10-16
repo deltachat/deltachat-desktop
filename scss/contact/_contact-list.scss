@@ -86,37 +86,66 @@ div.create-chat-contact-list-wrapper {
   background-color: var(--delta-dialog-seperator-text);
 }
 
-.AddMemberChips {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  margin-left: -5px;
-  margin-right: -5px;
+.AddMemberChipsWrapper {
+  max-height: 33%;
+  overflow: scroll;
+  border-bottom: solid 1px #d3d3d3;
+  margin-left: -20px;
+  margin-right: -20px;
+  padding-left: 20px;
+  padding-right: 20px;
 
-  .AddMemberChip {
+  .AddMemberChips {
     display: flex;
-    width: auto;
-    max-width: fit-content;
-    margin: 5px;
-    .DisplayName {
-      line-height: 68px;
-      margin-left: -24px;
-      padding-left: 30px;
-      padding-right: 22px;
-      height: 48px;
-      background-color: #e6e6e6;
-      line-height: 48px;
-      border-top-right-radius: 48px;
-      border-bottom-right-radius: 48px;
-      max-width: 130px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .Avatar {
-      .content {
-        margin: 0px !important;
+    flex-wrap: wrap;
+    flex-direction: row;
+    margin-left: -5px;
+    margin-right: -5px;
+    --local-height: 34px;
+
+    .AddMemberChip {
+      display: flex;
+      width: auto;
+      max-width: fit-content;
+      margin: 5px;
+
+      .DisplayName {
+        line-height: 68px;
+        margin-left: -24px;
+        padding-left: 30px;
+        padding-right: 22px;
+        height: var(--local-height);
+        background-color: #e6e6e6;
+        line-height: var(--local-height);
+        border-top-right-radius: 48px;
+        border-bottom-right-radius: 48px;
+        max-width: 130px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
+      .Avatar {
+        .avatar {
+          --local-avatar-size: var(--local-height);
+          --local-avatar-font-size: 22px;
+          --local-avatar-vertical-margin: -2px;
+          width: var(--local-height);
+          height: var(--local-height);
+        }
+        .content {
+          margin: 0px !important;
+        }
+
+      }
+    }
+
+    .group-member-search {
+      display: flex;
+      line-height: var(--local-height);
+      height: var(--local-height);
+      width: 90px;
+      margin: 5px;
     }
   }
 }
+

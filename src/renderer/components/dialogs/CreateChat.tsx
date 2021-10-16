@@ -4,6 +4,7 @@ import React, {
   useContext,
   useRef,
   useLayoutEffect,
+  useEffect,
 } from 'react'
 import { Card, Classes } from '@blueprintjs/core'
 import { C } from 'deltachat-node/dist/constants'
@@ -348,37 +349,48 @@ export function AddMemberInnerDialog({
   }
 
   const inputRef = useRef<HTMLInputElement>(null)
+  const contactListRef = useRef<HTMLDivElement>(null)
+  const applyCSSHacks = () => {
+    setTimeout(() => inputRef.current?.focus(), 0)
+   
+   //@ts-ignore
+    const offsetHeight = document.querySelector('.AddMemberChipsWrapper')?.offsetHeight
+    if (!offsetHeight) return
+    contactListRef.current?.style.setProperty('max-height', `calc(100% - ${offsetHeight}px)`)
+  }
+
+  useLayoutEffect(applyCSSHacks, [inputRef, addMembers])
+  useEffect(applyCSSHacks, [])
+
 
   return (
     <>
       <DeltaDialogHeader title={tx('group_add_members')} />
       <DeltaDialogBody style={{overflow: 'hidden'}}>
         <Card style={{ padding: '0px 20px', height: '100%' }}>
-          <div className='AddMemberChips'>
-            {Object.keys(addMembers).map(_contactId => {
-              const contactId = Number.parseInt(_contactId)
-              const contact = addMembers[contactId]
-              if (contact === undefined) return null
-              return AddMemberChip({
-                contact,
-                onRemoveClick: addOrRemoveMember,
-              })
-            })}
+          <div className='AddMemberChipsWrapper'>
+            <div className='AddMemberChips'>
+              {Object.keys(addMembers).map(_contactId => {
+                const contactId = Number.parseInt(_contactId)
+                const contact = addMembers[contactId]
+                if (contact === undefined) return null
+                return AddMemberChip({
+                  contact,
+                  onRemoveClick: addOrRemoveMember,
+                })
+              })}
+              <input
+                ref={inputRef}
+                className='search-input group-member-search'
+                onChange={onSearchChange}
+                value={queryStr}
+                placeholder={tx('search')}
+                autoFocus
+                spellCheck={false}
+              />
+            </div>
           </div>
-          <input
-            ref={inputRef}
-            className='search-input group-member-search'
-            style={{ marginLeft: '0px' }}
-            onChange={onSearchChange}
-            value={queryStr}
-            placeholder={tx('search')}
-            autoFocus
-            spellCheck={false}
-          />
-          <div className='group-member-contact-list-wrapper' style={{
-            overflow: 'scroll',
-            maxHeight: '100%'
-          }}>
+          <div className='group-member-contact-list-wrapper' ref={contactListRef}>
             <ContactList2
               contacts={searchContacts}
               onClick={() => {}}

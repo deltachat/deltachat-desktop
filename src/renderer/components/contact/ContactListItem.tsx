@@ -54,13 +54,14 @@ export function ContactListItem(props: {
     disabled,
   } = props
   const onCheckboxClick = (e?: React.SyntheticEvent) => {
-    if (!showCheckbox) return
+    console.log('xxx', disabled)
+    if (!showRemove || disabled === true) return
     e && e.stopPropagation()
     typeof props.onCheckboxClick === 'function' &&
       props.onCheckboxClick(contact)
   }
   const onRemoveClick = (e?: React.SyntheticEvent) => {
-    if (!showRemove) return
+    if (!showRemove || disabled === true) return
     e && e.stopPropagation()
     typeof props.onRemoveClick === 'function' && props.onRemoveClick(contact)
   }
@@ -69,7 +70,7 @@ export function ContactListItem(props: {
       className={classNames('contact-list-item', { disabled })}
       key={contact.id}
       onClick={() => {
-        onClick && onClick(contact)
+        onClick && disabled !== false && onClick(contact)
         onCheckboxClick()
       }}
     >

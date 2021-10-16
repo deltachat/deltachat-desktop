@@ -34,6 +34,8 @@ div.group-settings-container {
 }
 
 div.group-member-contact-list-wrapper {
+  overflow: scroll;
+  max-height: calc(100% - 46px);
   margin-left: -20px;
   margin-right: -20px;
 }
