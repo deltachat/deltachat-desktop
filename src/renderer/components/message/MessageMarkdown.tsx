@@ -1,7 +1,12 @@
 import React from 'react'
 import { LabeledLink, Link } from './Link'
-import { parse, ParsedElement } from '@deltachat/message_parser_wasm/message_parser_wasm'
+import {
+  parse,
+  ParsedElement,
+} from '@deltachat/message_parser_wasm/message_parser_wasm'
 import { getLogger } from '../../../shared/logger'
+import { DeltaBackend } from '../../delta-remote'
+import { selectChat } from '../../stores/chat'
 
 const log = getLogger('renderer/message-markdown')
 
@@ -68,15 +73,7 @@ function renderElement(elm: ParsedElement, key?: number): JSX.Element {
 
     case 'EmailAddress': {
       const email = elm.c
-      return (
-        <a
-          key={key}
-          href={'#'}
-          onClick={() => log.info('email clicked', email)}
-        >
-          {email}
-        </a>
-      )
+      return <EmailLink key={key} email={email} />
     }
 
     case 'Linebreak':
@@ -90,6 +87,29 @@ function renderElement(elm: ParsedElement, key?: number): JSX.Element {
       log.error(`type ${elm.t} not known/implemented yet`, elm)
       return <span style={{ color: 'red' }}>{JSON.stringify(elm)}</span>
   }
+}
+
+function EmailLink({ email }: { email: string }): JSX.Element {
+  const openChatWithEmail = async () => {
+    let contactId = await DeltaBackend.call(
+      'contacts.lookupContactIdByAddr',
+      email
+    )
+    if (contactId == 0) {
+      contactId = await DeltaBackend.call('contacts.createContact', email)
+    }
+    const chatId = await DeltaBackend.call(
+      'contacts.createChatByContactId',
+      contactId
+    )
+    selectChat(chatId)
+  }
+
+  return (
+    <a href={'#'} onClick={openChatWithEmail}>
+      {email}
+    </a>
+  )
 }
 
 export function message2React(message: string): JSX.Element {
