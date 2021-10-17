@@ -1,108 +1,107 @@
 import React from 'react'
-import { defaultRules, blockRegex, anyScopeRegex } from 'simple-markdown'
 import { LabeledLink, Link } from './Link'
+import { parse, ParsedElement } from '@deltachat/message_parser_wasm/message_parser_wasm'
+import { getLogger } from '../../../shared/logger'
 
-const ignoreCapture = function () {
-  return {}
+const log = getLogger('renderer/message-markdown')
+
+const parseMessage: (message: string) => ParsedElement[] = parse
+
+function renderElement(elm: ParsedElement, key?: number): JSX.Element {
+  switch (elm.t) {
+    case 'CodeBlock':
+      return (
+        <code className={'mm-code mm-code-' + elm.c.language} key={key}>
+          {elm.c.language && <span>{elm.c.language}</span>}
+          {elm.c.content}
+        </code>
+      )
+
+    case 'InlineCode':
+      return (
+        <code className='mm-inline-code' key={key}>
+          {elm.c.content}
+        </code>
+      )
+
+    case 'StrikeThrough':
+      return <s key={key}>{elm.c.map(renderElement)}</s>
+
+    case 'Italics':
+      return <i key={key}>{elm.c.map(renderElement)}</i>
+
+    case 'Bold':
+      return <b key={key}>{elm.c.map(renderElement)}</b>
+
+    case 'Tag':
+      return (
+        <a
+          key={key}
+          href={'#'}
+          onClick={() =>
+            log.info(
+              `Clicked on a hastag, this should open search for the text "${
+                '#' + elm.c
+              }"`
+            )
+          }
+        >
+          {'#' + elm.c}
+        </a>
+      )
+
+    case 'Link': {
+      const { destination } = elm.c
+      return <Link target={destination} key={key} />
+    }
+
+    case 'LabeledLink':
+      return (
+        <>
+          <LabeledLink
+            key={key}
+            target={elm.c.destination}
+            label={<>{elm.c.label.map(renderElement)}</>}
+          />{' '}
+        </>
+      )
+
+    case 'EmailAddress': {
+      const email = elm.c
+      return (
+        <a
+          key={key}
+          href={'#'}
+          onClick={() => log.info('email clicked', email)}
+        >
+          {email}
+        </a>
+      )
+    }
+
+    case 'Linebreak':
+      return <div key={key} className='line-break' />
+
+    case 'Text':
+      return <>{elm.c}</>
+
+    default:
+      //@ts-ignore
+      log.error(`type ${elm.t} not known/implemented yet`, elm)
+      return <span style={{ color: 'red' }}>{JSON.stringify(elm)}</span>
+  }
 }
 
-function assign(rule: any, order: any, object = {}) {
-  return Object.assign({}, rule, { order }, object)
+export function message2React(message: string): JSX.Element {
+  const elements = parseMessage(message)
+  return <>{elements.map(renderElement)}</>
 }
 
-// function ignoreScope (rule) {
-//   return Object.assign(rule, {
-//     match: anyScopeRegex(rule.match.regex)
-//   })
-// }
-
-// function ignoreScopeAssign (rule, order, object = {}) {
-//   return ignoreScope(assign(rule, order, object))
-// }
-
-export const previewRules: SimpleMarkdown.ParserRules = {
-  Array: defaultRules.Array,
-  // strong: ignoreScopeAssign(defaultRules.strong, 1), // bold
-  // em: ignoreScopeAssign(defaultRules.em, 1), // italics
-  // ubold: assign(ignoreScope(defaultRules.u), 2, { react: defaultRules.strong.react }),
-  // del: ignoreScopeAssign(defaultRules.del, 3),
-  // inlineCode: ignoreScopeAssign(defaultRules.inlineCode, 12),
-  text: assign(defaultRules.text, 100),
-}
-export const rules: SimpleMarkdown.ParserRules = Object.assign(
-  {
-    // new mailto (open chat in dc?)
-    // blockQuote ? (requires css; could be used for replies)
-    // mentions? (this component requires somekind of access to the chat memberlist)
-    // codeBlock: assign(defaultRules.codeBlock, 11, {
-    //   react: function (node, output, state) {
-    //     var className = node.lang
-    //       ? 'markdown-code markdown-code-' + node.lang
-    //       : undefined
-    //     // code with syntax highlighting (?)
-    //     return <code className={className} key={state.key}>
-    //       {node.content}
-    //     </code>
-    //   }
-    // }),
-    // fence: assign(defaultRules.fence, 11, {
-    //   match: blockRegex(/^ *(`{3,}|~{3,})(\S+)? *\n?([\s\S]+?)\s*\1\n*/)
-    // }), // uses style of codeBlock
-    labeled_link: {
-      order: 18,
-      match: anyScopeRegex(
-        // eslint-disable-next-line no-useless-escape
-        /^\[([^\]]*)\]\((\w+:\/\/[^<>,;"'\[\]\)\s]{3,1000})\)/
-      ),
-      parse: function (
-        capture: RegExpMatchArray,
-        _recurseParse: any,
-        _state: any
-      ) {
-        const link = {
-          label: capture[1],
-          target: capture[2],
-        }
-        return link
-      },
-      react: function (node: any, _output: any, state: any) {
-        return (
-          <>
-            <LabeledLink
-              key={state.key}
-              target={node.target}
-              label={node.label}
-            />{' '}
-          </>
-        )
-      },
-    },
-    normal_link: {
-      order: 18,
-      match: anyScopeRegex(/^(https?:\/\/[^\s<]+[^<>.,:;"'\s])/),
-      parse: function (capture: any[], _recurseParse: any, _state: any) {
-        return { content: capture[1] }
-      },
-      react: function (node: any, output: any, state: any) {
-        return <Link target={node.content} key={state.key} />
-      },
-    },
-    newlinePlus: {
-      order: 19,
-      match: blockRegex(/^(?:\n *){2,}\n/),
-      parse: ignoreCapture,
-      react: function (_node: any, _output: any, state: any) {
-        return <div key={state.key} className='double-line-break' />
-      },
-    },
-    newline: {
-      order: 20,
-      match: blockRegex(/^(?:\n *)\n/),
-      parse: ignoreCapture,
-      react: function (_node: any, _output: any, state: any) {
-        return <div key={state.key} className='line-break' />
-      },
-    },
-  },
-  previewRules
-)
+// newlinePlus: {
+//   order: 19,
+//   match: blockRegex(/^(?:\n *){2,}\n/),
+//   parse: ignoreCapture,
+//   react: function (_node: any, _output: any, state: any) {
+//     return <div key={state.key} className='double-line-break' />
+//   },
+// },

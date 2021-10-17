@@ -41,7 +41,7 @@ function punycodeCheck(url: string) {
     asciiUrl: URL.toString(),
     originalHostname,
     asciiHostname: URL.hostname,
-    hasPunycode: URL.toString() != url,
+    hasPunycode: originalHostname != URL.hostname,
   }
 }
 
@@ -49,7 +49,7 @@ export const LabeledLink = ({
   label,
   target,
 }: {
-  label: string
+  label: string | JSX.Element | JSX.Element[]
   target: string
 }) => {
   const { openDialog } = useContext(ScreenContext)
@@ -83,7 +83,7 @@ export const LabeledLink = ({
       title={url.toString()}
       onClick={onClick}
     >
-      {String(label)}
+      {label}
     </a>
   )
 }
@@ -167,6 +167,13 @@ export const Link = ({ target }: { target: string }) => {
     hasPunycode,
     asciiUrl,
   } = punycodeCheck(target)
+
+  log.info({
+    originalHostname,
+    asciiHostname,
+    hasPunycode,
+    asciiUrl,
+  })
 
   const onClick = (ev: any) => {
     ev.preventDefault()

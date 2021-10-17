@@ -24,7 +24,7 @@
     "build:shared:version": "node ./bin/build-shared-version-info.js",
     "build:backend": "tsc --build src/main",
     "build:frontend": "npm run build:frontend:ts && npm run build:frontend:themes && npm run build:frontend:static && npm run build:frontend:source-map-support && npm run build:frontend:scss",
-    "build:frontend:ts": "node ./bin/build-frontend-ts.js",
+    "build:frontend:ts": "node ./bin/build-frontend-ts.mjs",
     "build:frontend:themes": "sass themes/light.scss static/fallback-theme.css --style=compressed --embed-source-map && node ./bin/build-frontend-themes.js",
     "build:frontend:static": "node ./bin/copy.js ./static ./html-dist",
     "build:frontend:source-map-support": "node ./bin/build-frontend-source_map_support.js",
@@ -76,6 +76,7 @@
   },
   "dependencies": {
     "@blueprintjs/core": "^3.22.3",
+    "@deltachat/message_parser_wasm": "file:../message-parser/message_parser_wasm/pkg",
     "@mapbox/geojson-extent": "^1.0.0",
     "application-config": "^1.0.1",
     "classnames": "^2.3.1",

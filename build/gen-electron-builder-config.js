@@ -64,6 +64,7 @@ const files = [
   // cleanup deltachat-node
   //'!node_modules/deltachat-node/deltachat-core-rust/', - todo only exclude what is not needed (if no prebuilds are available)
   '!node_modules/deltachat-node/src',
+  '!node_modules/@deltachat/message_parser_wasm'
 ]
 const env = process.env
 
