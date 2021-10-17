@@ -30,5 +30,6 @@ declare global {
     __setQuoteInDraft: ((msgId: number) => void) | null
     __reloadDraft: (() => void) | null
     __desktopSettings: DesktopSettings | null
+    __chatlistSetSearch: ((searchTerm: string) => void) | undefined
   }
 }

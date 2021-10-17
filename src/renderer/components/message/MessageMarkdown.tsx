@@ -7,6 +7,7 @@ import {
 import { getLogger } from '../../../shared/logger'
 import { DeltaBackend } from '../../delta-remote'
 import { selectChat } from '../../stores/chat'
+import { ActionEmitter, KeybindAction } from '../../keybindings'
 
 const log = getLogger('renderer/message-markdown')
 
@@ -39,21 +40,7 @@ function renderElement(elm: ParsedElement, key?: number): JSX.Element {
       return <b key={key}>{elm.c.map(renderElement)}</b>
 
     case 'Tag':
-      return (
-        <a
-          key={key}
-          href={'#'}
-          onClick={() =>
-            log.info(
-              `Clicked on a hastag, this should open search for the text "${
-                '#' + elm.c
-              }"`
-            )
-          }
-        >
-          {'#' + elm.c}
-        </a>
-      )
+      return <TagLink key={key} tag={elm.c} />
 
     case 'Link': {
       const { destination } = elm.c
@@ -89,6 +76,20 @@ function renderElement(elm: ParsedElement, key?: number): JSX.Element {
   }
 }
 
+export function message2React(message: string): JSX.Element {
+  const elements = parseMessage(message)
+  return <>{elements.map(renderElement)}</>
+}
+
+// newlinePlus: {
+//   order: 19,
+//   match: blockRegex(/^(?:\n *){2,}\n/),
+//   parse: ignoreCapture,
+//   react: function (_node: any, _output: any, state: any) {
+//     return <div key={state.key} className='double-line-break' />
+//   },
+// },
+
 function EmailLink({ email }: { email: string }): JSX.Element {
   const openChatWithEmail = async () => {
     let contactId = await DeltaBackend.call(
@@ -112,16 +113,23 @@ function EmailLink({ email }: { email: string }): JSX.Element {
   )
 }
 
-export function message2React(message: string): JSX.Element {
-  const elements = parseMessage(message)
-  return <>{elements.map(renderElement)}</>
-}
+function TagLink({ tag }: { tag: string }) {
+  const setSearch = () => {
+    const searchTerm = '#' + tag
+    log.debug(
+      `Clicked on a hastag, this should open search for the text "${searchTerm}"`
+    )
+    if (window.__chatlistSetSearch) {
+      window.__chatlistSetSearch(searchTerm)
+      ActionEmitter.emitAction(KeybindAction.ChatList_FocusSearchInput)
+      // TODO: If you wonder why the focus doesn't work - its because of jikstra's composer focus hacks
+      // Which transfer the focus back to the composer instantly
+    }
+  }
 
-// newlinePlus: {
-//   order: 19,
-//   match: blockRegex(/^(?:\n *){2,}\n/),
-//   parse: ignoreCapture,
-//   react: function (_node: any, _output: any, state: any) {
-//     return <div key={state.key} className='double-line-break' />
-//   },
-// },
+  return (
+    <a href={'#'} onClick={setSearch}>
+      {'#' + tag}
+    </a>
+  )
+}

@@ -89,6 +89,8 @@ export default function MainScreen() {
     }
   }
 
+  window.__chatlistSetSearch = searchChats
+
   const [isFirstLoad, setFirstLoad] = useState(true)
   if (isFirstLoad) {
     setFirstLoad(false)
