@@ -10,7 +10,11 @@ import {
 } from './DeltaDialog'
 import { useContactSearch, AddMemberInnerDialog } from './CreateChat'
 import { QrCodeShowQrInner } from './QrCode'
-import { useContacts, ContactList2, useContactsMap } from '../contact/ContactList'
+import {
+  useContacts,
+  ContactList2,
+  useContactsMap,
+} from '../contact/ContactList'
 import {
   PseudoListItemShowQrCode,
   PseudoListItemAddMember,

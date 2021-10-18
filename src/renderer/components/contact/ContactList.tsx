@@ -76,12 +76,18 @@ export function useContactsMap(listFlags: number, queryStr: string) {
   const [contacts, setContacts] = useState<Map<number, JsonContact>>(new Map())
 
   const contactArrayToMap = (contactArray: JsonContact[]) => {
-    return new Map(contactArray.map((contact: JsonContact) => {
-      return [contact.id, contact]
-    }))
+    return new Map(
+      contactArray.map((contact: JsonContact) => {
+        return [contact.id, contact]
+      })
+    )
   }
   const getAndSetContacts = async (listFlags: number, queryStr: string) => {
-    const contactArray = await DeltaBackend.call('getContacts2', listFlags, queryStr)
+    const contactArray = await DeltaBackend.call(
+      'getContacts2',
+      listFlags,
+      queryStr
+    )
     setContacts(contactArrayToMap(contactArray))
   }
   const debouncedGetContacts = useMemo(

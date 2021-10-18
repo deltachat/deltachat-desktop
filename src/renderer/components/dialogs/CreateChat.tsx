@@ -43,8 +43,8 @@ import { QrCodeShowQrInner } from './QrCode'
 import { runtime } from '../../runtime'
 import { createChatByContactIdAndSelectIt } from '../helpers/ChatMethods'
 import { Avatar } from '../Avatar'
-import {AddMemberDialog} from './ViewGroup'
-import {AddMemberDialog} from './ViewGroup'
+import { AddMemberDialog } from './ViewGroup'
+import { AddMemberDialog } from './ViewGroup'
 
 export default function CreateChat(props: {
   isOpen: DialogProps['isOpen']
@@ -329,18 +329,20 @@ export function AddMemberInnerDialog({
   searchContacts: Map<number, JsonContact>
   groupMembers: number[]
 }) {
-
   const contactIdsInGroup: number[] = [...searchContacts]
-    .filter(([contactId, _contact]) => groupMembers.indexOf(contactId) !== -1).map(([contactId, _contact]) => contactId)
+    .filter(([contactId, _contact]) => groupMembers.indexOf(contactId) !== -1)
+    .map(([contactId, _contact]) => contactId)
 
   const [contactIdsToAdd, setContactIdsToAdd] = useState<number[]>([])
 
   const addOrRemoveMember = (contact: JsonContact) => {
     console.log(contactIdsToAdd)
     if (contactIdsToAdd.indexOf(contact.id) === -1) {
-      setContactIdsToAdd([ ...contactIdsToAdd, contact.id])
+      setContactIdsToAdd([...contactIdsToAdd, contact.id])
     } else {
-      setContactIdsToAdd(contactIdsToAdd.filter(contactId => contactId !== contact.id))
+      setContactIdsToAdd(
+        contactIdsToAdd.filter(contactId => contactId !== contact.id)
+      )
     }
   }
 
@@ -354,27 +356,32 @@ export function AddMemberInnerDialog({
   const contactListRef = useRef<HTMLDivElement>(null)
   const applyCSSHacks = () => {
     setTimeout(() => inputRef.current?.focus(), 0)
-   
-   //@ts-ignore
-    const offsetHeight = document.querySelector('.AddMemberChipsWrapper')?.offsetHeight
+
+    //@ts-ignore
+    const offsetHeight = document.querySelector('.AddMemberChipsWrapper')
+      ?.offsetHeight
     if (!offsetHeight) return
-    contactListRef.current?.style.setProperty('max-height', `calc(100% - ${offsetHeight}px)`)
+    contactListRef.current?.style.setProperty(
+      'max-height',
+      `calc(100% - ${offsetHeight}px)`
+    )
   }
 
   useLayoutEffect(applyCSSHacks, [inputRef, contactIdsToAdd])
   useEffect(applyCSSHacks, [])
 
-
   return (
     <>
       <DeltaDialogHeader title={tx('group_add_members')} />
-      <DeltaDialogBody style={{overflow: 'hidden'}}>
+      <DeltaDialogBody style={{ overflow: 'hidden' }}>
         <Card style={{ padding: '0px 20px', height: '100%' }}>
           <div className='AddMemberChipsWrapper'>
             <div className='AddMemberChips'>
               {contactIdsToAdd.map(contactId => {
                 return AddMemberChip({
-                  contact: searchContacts.get(contactId) as unknown as JsonContact,
+                  contact: (searchContacts.get(
+                    contactId
+                  ) as unknown) as JsonContact,
                   onRemoveClick: addOrRemoveMember,
                 })
               })}
@@ -389,15 +396,19 @@ export function AddMemberInnerDialog({
               />
             </div>
           </div>
-          <div className='group-member-contact-list-wrapper' ref={contactListRef}>
+          <div
+            className='group-member-contact-list-wrapper'
+            ref={contactListRef}
+          >
             <ContactList2
               contacts={Array.from(searchContacts.values())}
               onClick={() => {}}
               showCheckbox
-              isChecked={(contact) => {
-                return contactIdsToAdd.indexOf(contact.id) !== -1 ||
+              isChecked={contact => {
+                return (
+                  contactIdsToAdd.indexOf(contact.id) !== -1 ||
                   contactIdsInGroup.indexOf(contact.id) !== -1
-
+                )
               }}
               disabledContacts={contactIdsInGroup}
               onCheckboxClick={addOrRemoveMember}
@@ -531,9 +542,8 @@ function CreateGroupInner(props: {
     openDialog(AddMemberDialog, {
       listFlags,
       groupMembers,
-      onOk: (members: number[]) => members.forEach(
-       contactId => addGroupMember({id: contactId})
-      ),
+      onOk: (members: number[]) =>
+        members.forEach(contactId => addGroupMember({ id: contactId })),
     })
   }
   return (
@@ -577,9 +587,7 @@ function CreateGroupInner(props: {
                 )}
               </div>
               <div className='group-member-contact-list-wrapper'>
-                <PseudoListItemAddMember
-                  onClick={showAddMemberDialog}
-                />
+                <PseudoListItemAddMember onClick={showAddMemberDialog} />
                 <PseudoListItemShowQrCode
                   onClick={async () => {
                     if (groupId === -1 && groupName === '') {
@@ -587,7 +595,10 @@ function CreateGroupInner(props: {
                       return
                     }
                     const gId = await lazilyCreateOrUpdateGroup(false)
-                    const qrCode = await DeltaBackend.call('chat.getQrCode', gId)
+                    const qrCode = await DeltaBackend.call(
+                      'chat.getQrCode',
+                      gId
+                    )
                     setQrCode(qrCode)
                     setViewMode(viewPrefix + '-showQrCode')
                   }}
@@ -598,7 +609,7 @@ function CreateGroupInner(props: {
                   )}
                   onClick={() => {}}
                   showRemove
-                  onRemoveClick={(c) => {
+                  onRemoveClick={c => {
                     console.log(c)
                     removeGroupMember(c)
                   }}

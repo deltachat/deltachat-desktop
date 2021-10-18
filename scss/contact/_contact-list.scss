@@ -125,7 +125,7 @@ div.create-chat-contact-list-wrapper {
         text-overflow: ellipsis;
       }
       .Avatar {
-         height: var(--local-height);
+        height: var(--local-height);
         .avatar {
           --local-avatar-size: var(--local-height);
           --local-avatar-font-size: 22px;
@@ -136,7 +136,6 @@ div.create-chat-contact-list-wrapper {
         .content {
           margin: 0px !important;
         }
-
       }
     }
 
@@ -149,4 +148,3 @@ div.create-chat-contact-list-wrapper {
     }
   }
 }
-
