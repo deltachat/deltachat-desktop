@@ -69,6 +69,35 @@ export function useContacts(listFlags: number, queryStr: string) {
   return [contacts, updateContacts] as [typeof contacts, typeof updateContacts]
 }
 
+export function useContactsMap(listFlags: number, queryStr: string) {
+  const [contacts, setContacts] = useState<Map<number, JsonContact>>(new Map())
+
+  const contactArrayToMap = (contactArray: JsonContact[]) => {
+    return new Map(contactArray.map((contact: JsonContact) => {
+      return [contact.id, contact]
+    }))
+  }
+  const getAndSetContacts = async (listFlags: number, queryStr: string) => {
+    const contactArray = await DeltaBackend.call('getContacts2', listFlags, queryStr)
+    setContacts(contactArrayToMap(contactArray))
+  }
+  const debouncedGetContacts = useMemo(
+    () =>
+      debounce((listFlags: number, queryStr: string) => {
+        getAndSetContacts(listFlags, queryStr)
+      }, 200),
+    []
+  )
+  const updateContacts = (queryStr: string) =>
+    debouncedGetContacts(listFlags, queryStr)
+
+  useInitEffect(() => {
+    getAndSetContacts(listFlags, queryStr)
+  })
+
+  return [contacts, updateContacts] as [typeof contacts, typeof updateContacts]
+}
+
 export function useContactsNew(listFlags: number, initialQueryStr: string) {
   const [state, setState] = useState<{
     contacts: JsonContact[]

@@ -10,7 +10,7 @@ import {
 } from './DeltaDialog'
 import { useContactSearch, AddMemberInnerDialog } from './CreateChat'
 import { QrCodeShowQrInner } from './QrCode'
-import { useContacts, ContactList2 } from '../contact/ContactList'
+import { useContacts, ContactList2, useContactsMap } from '../contact/ContactList'
 import {
   PseudoListItemShowQrCode,
   PseudoListItemAddMember,
@@ -239,7 +239,7 @@ export function AddMemberDialog({
   groupMembers,
   onOk,
 }: DialogProps) {
-  const [searchContacts, updateSearchContacts] = useContacts(listFlags, '')
+  const [searchContacts, updateSearchContacts] = useContactsMap(listFlags, '')
   const [queryStr, onSearchChange] = useContactSearch(updateSearchContacts)
   return (
     <DeltaDialogBase

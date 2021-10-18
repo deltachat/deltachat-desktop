@@ -16,6 +16,7 @@ import {
   useContacts,
   ContactList2,
   useContactsNew,
+  useContactsMap,
 } from '../contact/ContactList'
 import {
   PseudoListItem,
@@ -323,29 +324,28 @@ export function AddMemberInnerDialog({
   onCancel: Parameters<typeof DeltaDialogOkCancelFooter>[0]['onCancel']
   onSearchChange: ReturnType<typeof useContactSearch>[1]
   queryStr: string
-  searchContacts: JsonContact[]
+  searchContacts: Map<number, JsonContact>
   groupMembers: number[]
 }) {
-  const contactIdsInGroup = searchContacts
-    .filter(contact => groupMembers.indexOf(contact.id) !== -1)
-    .map(contact => contact.id)
 
-  const [addMembers, setAddMembers] = useState<
-    Record<number, JsonContact | undefined>
-  >({})
+  const contactIdsInGroup: number[] = [...searchContacts]
+    .filter(([contactId, _contact]) => groupMembers.indexOf(contactId) !== -1).map(([contactId, _contact]) => contactId)
+
+  const [contactIdsToAdd, setContactIdsToAdd] = useState<number[]>([])
 
   const addOrRemoveMember = (contact: JsonContact) => {
-    if (addMembers[contact.id] === undefined) {
-      setAddMembers({ ...addMembers, [contact.id]: contact })
+    console.log(contactIdsToAdd)
+    if (contactIdsToAdd.indexOf(contact.id) === -1) {
+      setContactIdsToAdd([ ...contactIdsToAdd, contact.id])
     } else {
-      setAddMembers({ ...addMembers, [contact.id]: undefined })
+      setContactIdsToAdd(contactIdsToAdd.filter(contactId => contactId !== contact.id))
     }
   }
 
   const tx = window.static_translate
 
   const _onOk = () => {
-    onOk(Object.keys(addMembers).map(k => Number.parseInt(k)))
+    onOk(contactIdsToAdd)
   }
 
   const inputRef = useRef<HTMLInputElement>(null)
@@ -359,7 +359,7 @@ export function AddMemberInnerDialog({
     contactListRef.current?.style.setProperty('max-height', `calc(100% - ${offsetHeight}px)`)
   }
 
-  useLayoutEffect(applyCSSHacks, [inputRef, addMembers])
+  useLayoutEffect(applyCSSHacks, [inputRef, contactIdsToAdd])
   useEffect(applyCSSHacks, [])
 
 
@@ -370,12 +370,9 @@ export function AddMemberInnerDialog({
         <Card style={{ padding: '0px 20px', height: '100%' }}>
           <div className='AddMemberChipsWrapper'>
             <div className='AddMemberChips'>
-              {Object.keys(addMembers).map(_contactId => {
-                const contactId = Number.parseInt(_contactId)
-                const contact = addMembers[contactId]
-                if (contact === undefined) return null
+              {contactIdsToAdd.map(contactId => {
                 return AddMemberChip({
-                  contact,
+                  contact: searchContacts.get(contactId) as unknown as JsonContact,
                   onRemoveClick: addOrRemoveMember,
                 })
               })}
@@ -392,17 +389,18 @@ export function AddMemberInnerDialog({
           </div>
           <div className='group-member-contact-list-wrapper' ref={contactListRef}>
             <ContactList2
-              contacts={searchContacts}
+              contacts={Array.from(searchContacts.values())}
               onClick={() => {}}
               showCheckbox
-              isChecked={({ id }) =>
-                addMembers[id] !== undefined ||
-                contactIdsInGroup.indexOf(id) !== -1
-              }
+              isChecked={(contact) => {
+                return contactIdsToAdd.indexOf(contact.id) !== -1 ||
+                  contactIdsInGroup.indexOf(contact.id) !== -1
+
+              }}
               disabledContacts={contactIdsInGroup}
               onCheckboxClick={addOrRemoveMember}
             />
-            {queryStr !== '' && searchContacts.length === 0 && (
+            {queryStr !== '' && searchContacts.size === 0 && (
               <PseudoListItemNoSearchResults queryStr={queryStr} />
             )}
           </div>
@@ -548,6 +546,7 @@ function CreateGroupInner(props: {
   return (
     <>
       {viewMode.startsWith(viewPrefix + '-addMember') && (
+        { /*
         <AddMemberInnerDialog
           {...{
             onOk: async addMembers => {
@@ -567,6 +566,8 @@ function CreateGroupInner(props: {
             addGroupMembers,
           }}
         />
+        */
+        }
       )}
       {viewMode.startsWith(viewPrefix + '-showQrCode') && (
         <>
