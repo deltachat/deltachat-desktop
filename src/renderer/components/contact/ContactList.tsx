@@ -33,7 +33,10 @@ export function ContactList2(props: {
         if (showCheckbox && typeof isChecked === 'function') {
           checked = isChecked(contact)
         }
-        let disabled = disabledContacts?.indexOf(contact.id) !== -1
+        let disabled = false
+        if (disabledContacts !== undefined) {
+          disabled = disabledContacts.indexOf(contact.id) !== -1
+        }
         return ContactListItem({
           contact,
           onClick,

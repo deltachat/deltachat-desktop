@@ -43,6 +43,8 @@ import { QrCodeShowQrInner } from './QrCode'
 import { runtime } from '../../runtime'
 import { createChatByContactIdAndSelectIt } from '../helpers/ChatMethods'
 import { Avatar } from '../Avatar'
+import {AddMemberDialog} from './ViewGroup'
+import {AddMemberDialog} from './ViewGroup'
 
 export default function CreateChat(props: {
   isOpen: DialogProps['isOpen']
@@ -483,6 +485,7 @@ function CreateGroupInner(props: {
   onClose: DialogProps['onClose']
   isVerified: boolean
 }) {
+  const { openDialog } = useContext(ScreenContext)
   const { viewMode, setViewMode, onClose, isVerified } = props
   const tx = useTranslationFunction()
 
@@ -520,55 +523,21 @@ function CreateGroupInner(props: {
           .filter((_, i) => i < 5)
       : []
 
-  const renderAddMemberIfNeeded = () => {
-    if (queryStr !== '') return null
-    return (
-      <>
-        <PseudoListItemAddMember
-          onClick={() => setViewMode(viewPrefix + '-addMember')}
-        />
-        <PseudoListItemShowQrCode
-          onClick={async () => {
-            if (groupId === -1 && groupName === '') {
-              setErrorMissingGroupName(true)
-              return
-            }
-            const gId = await lazilyCreateOrUpdateGroup(false)
-            const qrCode = await DeltaBackend.call('chat.getQrCode', gId)
-            setQrCode(qrCode)
-            setViewMode(viewPrefix + '-showQrCode')
-          }}
-        />
-      </>
-    )
-  }
+  const showAddMemberDialog = () => {
+    const listFlags = isVerified
+      ? C.DC_GCL_VERIFIED_ONLY | C.DC_GCL_ADD_SELF
+      : C.DC_GCL_ADD_SELF
 
+    openDialog(AddMemberDialog, {
+      listFlags,
+      groupMembers,
+      onOk: (members: number[]) => members.forEach(
+       contactId => addGroupMember({id: contactId})
+      ),
+    })
+  }
   return (
     <>
-      {viewMode.startsWith(viewPrefix + '-addMember') && (
-        { /*
-        <AddMemberInnerDialog
-          {...{
-            onOk: async addMembers => {
-              updateSearch('')
-              setViewMode(viewPrefix + '-main')
-              await addGroupMembers(addMembers)
-            },
-            onCancel: () => {
-              updateSearch('')
-              setViewMode(viewPrefix + '-main')
-            },
-            onSearchChange,
-            queryStr,
-            searchContacts,
-            groupMembers,
-            addRemoveGroupMember,
-            addGroupMembers,
-          }}
-        />
-        */
-        }
-      )}
       {viewMode.startsWith(viewPrefix + '-showQrCode') && (
         <>
           <DeltaDialogHeader title={tx('qrshow_title')} />
@@ -608,36 +577,32 @@ function CreateGroupInner(props: {
                 )}
               </div>
               <div className='group-member-contact-list-wrapper'>
-                <input
-                  className='search-input group-member-search'
-                  onChange={onSearchChange}
-                  value={queryStr}
-                  placeholder={tx('search')}
-                  spellCheck={false}
+                <PseudoListItemAddMember
+                  onClick={showAddMemberDialog}
                 />
-                {renderAddMemberIfNeeded()}
+                <PseudoListItemShowQrCode
+                  onClick={async () => {
+                    if (groupId === -1 && groupName === '') {
+                      setErrorMissingGroupName(true)
+                      return
+                    }
+                    const gId = await lazilyCreateOrUpdateGroup(false)
+                    const qrCode = await DeltaBackend.call('chat.getQrCode', gId)
+                    setQrCode(qrCode)
+                    setViewMode(viewPrefix + '-showQrCode')
+                  }}
+                />
                 <ContactList2
                   contacts={searchContacts.filter(
                     ({ id }) => groupMembers.indexOf(id) !== -1
                   )}
                   onClick={() => {}}
                   showRemove
-                  onRemoveClick={removeGroupMember}
+                  onRemoveClick={(c) => {
+                    console.log(c)
+                    removeGroupMember(c)
+                  }}
                 />
-                {queryStr !== '' && searchContactsToAdd.length !== 0 && (
-                  <>
-                    <div className='group-seperator no-margin'>
-                      {tx('group_add_members')}
-                    </div>
-                    <ContactList2
-                      contacts={searchContactsToAdd}
-                      onClick={addGroupMember}
-                    />
-                  </>
-                )}
-                {queryStr !== '' && searchContacts.length === 0 && (
-                  <PseudoListItemNoSearchResults queryStr={queryStr} />
-                )}
               </div>
             </Card>
           </div>
