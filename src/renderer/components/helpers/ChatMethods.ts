@@ -1,5 +1,5 @@
 import { DeltaBackend } from '../../delta-remote'
-import chatStore, { selectChat, ChatStoreState } from '../../stores/chat'
+import chatStore, { selectChat } from '../../stores/chat'
 import { ScreenContext, unwrapContext } from '../../contexts'
 import { ChatListItemType, FullChat } from '../../../shared/shared-types'
 import { MuteDuration } from '../../../shared/constants'

@@ -16,7 +16,6 @@ import {
   useContacts,
   ContactList2,
   useContactsNew,
-  useContactsMap,
 } from '../contact/ContactList'
 import {
   PseudoListItem,
@@ -43,7 +42,6 @@ import { QrCodeShowQrInner } from './QrCode'
 import { runtime } from '../../runtime'
 import { createChatByContactIdAndSelectIt } from '../helpers/ChatMethods'
 import { Avatar } from '../Avatar'
-import { AddMemberDialog } from './ViewGroup'
 import { AddMemberDialog } from './ViewGroup'
 
 export default function CreateChat(props: {
@@ -336,7 +334,6 @@ export function AddMemberInnerDialog({
   const [contactIdsToAdd, setContactIdsToAdd] = useState<number[]>([])
 
   const addOrRemoveMember = (contact: JsonContact) => {
-    console.log(contactIdsToAdd)
     if (contactIdsToAdd.indexOf(contact.id) === -1) {
       setContactIdsToAdd([...contactIdsToAdd, contact.id])
     } else {
@@ -357,9 +354,9 @@ export function AddMemberInnerDialog({
   const applyCSSHacks = () => {
     setTimeout(() => inputRef.current?.focus(), 0)
 
-    //@ts-ignore
-    const offsetHeight = document.querySelector('.AddMemberChipsWrapper')
-      ?.offsetHeight
+    const offsetHeight =
+      //@ts-ignore
+      document.querySelector('.AddMemberChipsWrapper')?.offsetHeight
     if (!offsetHeight) return
     contactListRef.current?.style.setProperty(
       'max-height',
@@ -502,13 +499,7 @@ function CreateGroupInner(props: {
 
   const [groupName, setGroupName] = useState('')
   const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage()
-  const [
-    groupMembers,
-    removeGroupMember,
-    addGroupMember,
-    addRemoveGroupMember,
-    addGroupMembers,
-  ] = useGroupMembers([1])
+  const [groupMembers, removeGroupMember, addGroupMember] = useGroupMembers([1])
   const [
     groupId,
     lazilyCreateOrUpdateGroup,
@@ -520,19 +511,10 @@ function CreateGroupInner(props: {
   const [qrCode, setQrCode] = useState('')
   const [errorMissingGroupName, setErrorMissingGroupName] = useState(false)
 
-  const [searchContacts, updateSearchContacts] = useContacts(
+  const searchContacts = useContacts(
     isVerified ? C.DC_GCL_VERIFIED_ONLY | C.DC_GCL_ADD_SELF : C.DC_GCL_ADD_SELF,
     ''
-  )
-  const [queryStr, onSearchChange, updateSearch] = useContactSearch(
-    updateSearchContacts
-  )
-  const searchContactsToAdd =
-    queryStr !== ''
-      ? searchContacts
-          .filter(({ id }) => groupMembers.indexOf(id) === -1)
-          .filter((_, i) => i < 5)
-      : []
+  )[0]
 
   const showAddMemberDialog = () => {
     const listFlags = isVerified
@@ -553,7 +535,6 @@ function CreateGroupInner(props: {
           <DeltaDialogHeader title={tx('qrshow_title')} />
           <QrCodeShowQrInner
             onBack={() => {
-              updateSearch('')
               setViewMode(viewPrefix + '-main')
             }}
             qrCode={qrCode}
@@ -610,7 +591,6 @@ function CreateGroupInner(props: {
                   onClick={() => {}}
                   showRemove
                   onRemoveClick={c => {
-                    console.log(c)
                     removeGroupMember(c)
                   }}
                 />

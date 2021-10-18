@@ -10,11 +10,7 @@ import {
 } from './DeltaDialog'
 import { useContactSearch, AddMemberInnerDialog } from './CreateChat'
 import { QrCodeShowQrInner } from './QrCode'
-import {
-  useContacts,
-  ContactList2,
-  useContactsMap,
-} from '../contact/ContactList'
+import { ContactList2, useContactsMap } from '../contact/ContactList'
 import {
   PseudoListItemShowQrCode,
   PseudoListItemAddMember,
@@ -37,7 +33,6 @@ export default function ViewGroup(props: {
 }) {
   const { isOpen, onClose, chat } = props
   const [viewMode, setViewMode] = useState('main')
-  console.log('ViewGroup', chat)
 
   return (
     <DeltaDialogBase
@@ -55,7 +50,6 @@ export default function ViewGroup(props: {
 }
 
 export const useGroup = (chat: FullChat) => {
-  console.log(chat)
   const [groupName, setGroupName] = useState(chat.name)
   const [groupMembers, setGroupMembers] = useState(
     chat.contacts?.map(({ id }) => id)
