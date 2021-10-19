@@ -1,4 +1,4 @@
-import { C } from 'deltachat-node'
+import { C, Message } from 'deltachat-node'
 import { getLogger } from '../../shared/logger'
 import SplitOut from './splitout'
 import { MessageType } from '../../shared/shared-types'
@@ -142,5 +142,9 @@ export default class DCChat extends SplitOut {
   block(chatId: number) {
     this.selectedAccountContext.blockChat(chatId)
     this.controller.chatList.updateChatList()
+  }
+
+  getNextMedia(messageId: number, direction: 1 | -1): number {
+    return this.selectedAccountContext._getNextMedia(messageId, direction, 0, 0, 0)
   }
 }

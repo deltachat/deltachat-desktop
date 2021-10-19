@@ -13,6 +13,7 @@
       width: 100vw;
       max-height: 100vh;
       object-fit: contain;
+      user-select: none;
     }
 
     video {
@@ -57,4 +58,26 @@
       cursor: pointer;
     }
   }
+}
+
+.media-previous-button, .media-next-button {
+  position: absolute;
+  top: calc(50vh - (60px /2));
+  background-color: #3131316b;
+  border-radius: 8%;
+
+  .bp3-icon > svg:not([fill]) {
+    fill: var(--bp3ButtonHoverBg);
+    &:hover {
+      fill: white;
+    }
+  }
+}
+
+.media-previous-button {
+  left: 20px;
+}
+
+.media-next-button {
+  right: 20px;
 }
