@@ -60,9 +60,10 @@
   }
 }
 
-.media-previous-button, .media-next-button {
+.media-previous-button,
+.media-next-button {
   position: absolute;
-  top: calc(50vh - (60px /2));
+  top: calc(50vh - (60px / 2));
   background-color: #3131316b;
   border-radius: 8%;
 

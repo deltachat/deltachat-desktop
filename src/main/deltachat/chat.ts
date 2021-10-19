@@ -145,6 +145,12 @@ export default class DCChat extends SplitOut {
   }
 
   getNextMedia(messageId: number, direction: 1 | -1): number {
-    return this.selectedAccountContext._getNextMedia(messageId, direction, 0, 0, 0)
+    return this.selectedAccountContext._getNextMedia(
+      messageId,
+      direction,
+      0,
+      0,
+      0
+    )
   }
 }

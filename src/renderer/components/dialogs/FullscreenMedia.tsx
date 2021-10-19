@@ -1,5 +1,10 @@
 import { onDownload } from '../message/messageFunctions'
-import React, { MouseEventHandler, ReactElement, useEffect, useState } from 'react'
+import React, {
+  MouseEventHandler,
+  ReactElement,
+  useEffect,
+  useState,
+} from 'react'
 import { Icon, Overlay } from '@blueprintjs/core'
 import { DialogProps } from './DialogController'
 import { MessageType } from '../../../shared/shared-types'
@@ -16,12 +21,13 @@ export default function FullscreenMedia(props: {
   msg: MessageType
   onClose: DialogProps['onClose']
 }) {
-
   const tx = window.static_translate
   const { onClose } = props
 
   const [msg, setMsg] = useState(props.msg)
-  const [previousNextMessageId, setPreviousNextMessageId] = useState<[number, number]>([0, 0])
+  const [previousNextMessageId, setPreviousNextMessageId] = useState<
+    [number, number]
+  >([0, 0])
   const { file, file_mime } = msg
 
   let elm = null
@@ -70,8 +76,16 @@ export default function FullscreenMedia(props: {
   }
 
   const updatePreviousNextMessageId = async () => {
-    const previousMessageId = await DeltaBackend.call('chat.getNextMedia', msg.id, -1)
-    const nextMessageId = await DeltaBackend.call('chat.getNextMedia', msg.id, 1)
+    const previousMessageId = await DeltaBackend.call(
+      'chat.getNextMedia',
+      msg.id,
+      -1
+    )
+    const nextMessageId = await DeltaBackend.call(
+      'chat.getNextMedia',
+      msg.id,
+      1
+    )
     setPreviousNextMessageId([previousMessageId, nextMessageId])
   }
 
@@ -82,18 +96,24 @@ export default function FullscreenMedia(props: {
 
   const previousImage = async (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
-    const message = await DeltaBackend.call('messageList.getMessage', previousNextMessageId[0])
+    const message = await DeltaBackend.call(
+      'messageList.getMessage',
+      previousNextMessageId[0]
+    )
     if (message === null) return
     setMsg(message)
   }
   const nextImage = async (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
-    const message = await DeltaBackend.call('messageList.getMessage', previousNextMessageId[1])
+    const message = await DeltaBackend.call(
+      'messageList.getMessage',
+      previousNextMessageId[1]
+    )
     if (message === null) return
     setMsg(message)
   }
-  
-  if (!msg || !msg.file) return elm 
+
+  if (!msg || !msg.file) return elm
 
   return (
     <Overlay
@@ -101,7 +121,6 @@ export default function FullscreenMedia(props: {
       className='attachment-overlay'
       onClose={onClose}
     >
-      
       <div className='render-media-wrapper'>
         {elm && (
           <div className='btn-wrapper'>
@@ -122,15 +141,14 @@ export default function FullscreenMedia(props: {
         )}
         {previousNextMessageId[0] !== 0 && (
           <div className='media-previous-button'>
-            <Icon onClick={previousImage} icon='chevron-left' iconSize={60}/>
+            <Icon onClick={previousImage} icon='chevron-left' iconSize={60} />
           </div>
         )}
-        
-        
+
         {previousNextMessageId[1] !== 0 && (
           <div className='media-next-button'>
-          <Icon onClick={nextImage} icon='chevron-right' iconSize={60}/>
-        </div>
+            <Icon onClick={nextImage} icon='chevron-right' iconSize={60} />
+          </div>
         )}
         <div className='attachment-view'>{elm}</div>
       </div>
