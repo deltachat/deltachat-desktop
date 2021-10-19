@@ -1,7 +1,7 @@
 import React from 'react'
 import { LabeledLink, Link } from './Link'
 import {
-  parse,
+  parse_text,
   ParsedElement,
 } from '@deltachat/message_parser_wasm/message_parser_wasm'
 import { getLogger } from '../../../shared/logger'
@@ -11,7 +11,7 @@ import { ActionEmitter, KeybindAction } from '../../keybindings'
 
 const log = getLogger('renderer/message-markdown')
 
-const parseMessage: (message: string) => ParsedElement[] = parse
+const parseMessage: (message: string) => ParsedElement[] = (m) => parse_text(m, true)
 
 function renderElement(elm: ParsedElement, key?: number): JSX.Element {
   switch (elm.t) {
@@ -44,7 +44,7 @@ function renderElement(elm: ParsedElement, key?: number): JSX.Element {
 
     case 'Link': {
       const { destination } = elm.c
-      return <Link target={destination} key={key} />
+      return <Link destination={destination} key={key} />
     }
 
     case 'LabeledLink':
@@ -52,7 +52,7 @@ function renderElement(elm: ParsedElement, key?: number): JSX.Element {
         <>
           <LabeledLink
             key={key}
-            target={elm.c.destination}
+            destination={elm.c.destination}
             label={<>{elm.c.label.map(renderElement)}</>}
           />{' '}
         </>
