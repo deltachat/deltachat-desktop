@@ -4,6 +4,7 @@
 
 ### Added
 - Clicking on member in group dialog shows the profile of member
+- Implement previous/next buttons for gallery
 
 ### Changed
 - Bring back the back and close button in dialogs, move actions that need an ok/cancel button
