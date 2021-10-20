@@ -1,4 +1,4 @@
-import { C, Message } from 'deltachat-node'
+import { C } from 'deltachat-node'
 import { getLogger } from '../../shared/logger'
 import SplitOut from './splitout'
 import { MessageType } from '../../shared/shared-types'

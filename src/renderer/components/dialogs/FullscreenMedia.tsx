@@ -1,7 +1,5 @@
 import { onDownload } from '../message/messageFunctions'
 import React, {
-  MouseEventHandler,
-  ReactElement,
   useEffect,
   useState,
 } from 'react'
@@ -91,7 +89,7 @@ export default function FullscreenMedia(props: {
 
   useEffect(() => {
     updatePreviousNextMessageId()
-  }, [msg])
+  }, [msg, updatePreviousNextMessageId])
   useInitEffect(() => updatePreviousNextMessageId())
 
   const previousImage = async (e: React.MouseEvent<HTMLDivElement>) => {
