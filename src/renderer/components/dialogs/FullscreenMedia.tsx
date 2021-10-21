@@ -1,8 +1,5 @@
 import { onDownload } from '../message/messageFunctions'
-import React, {
-  useEffect,
-  useState,
-} from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { Icon, Overlay } from '@blueprintjs/core'
 import { DialogProps } from './DialogController'
 import { MessageType } from '../../../shared/shared-types'
@@ -73,7 +70,7 @@ export default function FullscreenMedia(props: {
     log.warn('Unknown media type for fullscreen media', { file, file_mime })
   }
 
-  const updatePreviousNextMessageId = async () => {
+  const updatePreviousNextMessageId = useCallback(async () => {
     const previousMessageId = await DeltaBackend.call(
       'chat.getNextMedia',
       msg.id,
@@ -85,7 +82,7 @@ export default function FullscreenMedia(props: {
       1
     )
     setPreviousNextMessageId([previousMessageId, nextMessageId])
-  }
+  }, [msg])
 
   useEffect(() => {
     updatePreviousNextMessageId()
