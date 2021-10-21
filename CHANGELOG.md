@@ -8,6 +8,8 @@
 ### Changed
 - Bring back the back and close button in dialogs, move actions that need an ok/cancel button
   into it's own dialogs
+- show contacts that are already in group in add member dialog, but disabled
+- show chips for members to add
 
 ### Fixed
 - don't show logo twice in notifications (because macOS already shows applogo)
