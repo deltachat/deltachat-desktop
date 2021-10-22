@@ -25,14 +25,28 @@ import { Avatar, avatarInitial } from '../Avatar'
 import { runtime } from '../../runtime'
 import { DeltaInput } from '../Login-Styles'
 import { isChatReadonly } from '../../../shared/util'
+import { ipcBackend } from '../../ipc'
 
 export default function ViewGroup(props: {
   isOpen: DialogProps['isOpen']
   onClose: DialogProps['onClose']
   chat: FullChat
 }) {
-  const { isOpen, onClose, chat } = props
+  const { isOpen, onClose } = props
   const [viewMode, setViewMode] = useState('main')
+
+  const [chat, setChat] = useState(props.chat)
+
+  const onChatModified = async (_: any, [chatId, _2]: [number, number]) => {
+    if (chatId !== chat.id) return
+    setChat(await DeltaBackend.call('chatList.getFullChatById', chat.id))
+  }
+  useEffect(() => {
+    ipcBackend.on('DC_EVENT_CHAT_MODIFIED', onChatModified)
+    return () => {
+      ipcBackend.removeListener('DC_EVENT_CHAT_MODIFIED', onChatModified)
+    }
+  }, [])
 
   return (
     <DeltaDialogBase
@@ -139,7 +153,9 @@ function ViewGroupInner(props: {
     openDialog(AddMemberDialog, {
       listFlags,
       groupMembers,
-      onOk: (members: number[]) => members.forEach(addGroupMember),
+      onOk: (members: number[]) => {
+        members.forEach(addGroupMember)
+      },
     })
   }
 

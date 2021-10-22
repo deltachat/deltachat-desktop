@@ -331,22 +331,20 @@ export function AddMemberInnerDialog({
     .filter(([contactId, _contact]) => groupMembers.indexOf(contactId) !== -1)
     .map(([contactId, _contact]) => contactId)
 
-  const [contactIdsToAdd, setContactIdsToAdd] = useState<number[]>([])
+  const [contactIdsToAdd, setContactIdsToAdd] = useState<JsonContact[]>([])
 
   const addOrRemoveMember = (contact: JsonContact) => {
-    if (contactIdsToAdd.indexOf(contact.id) === -1) {
-      setContactIdsToAdd([...contactIdsToAdd, contact.id])
+    if (contactIdsToAdd.findIndex(c => c.id === contact.id) === -1) {
+      setContactIdsToAdd([...contactIdsToAdd, contact])
     } else {
-      setContactIdsToAdd(
-        contactIdsToAdd.filter(contactId => contactId !== contact.id)
-      )
+      setContactIdsToAdd(contactIdsToAdd.filter(c => c.id !== contact.id))
     }
   }
 
   const tx = window.static_translate
 
   const _onOk = () => {
-    onOk(contactIdsToAdd)
+    onOk(contactIdsToAdd.map(c => c.id))
   }
 
   const inputRef = useRef<HTMLInputElement>(null)
@@ -374,11 +372,9 @@ export function AddMemberInnerDialog({
         <Card style={{ padding: '0px 20px', height: '100%' }}>
           <div className='AddMemberChipsWrapper'>
             <div className='AddMemberChips'>
-              {contactIdsToAdd.map(contactId => {
+              {contactIdsToAdd.map(contact => {
                 return AddMemberChip({
-                  contact: (searchContacts.get(
-                    contactId
-                  ) as unknown) as JsonContact,
+                  contact,
                   onRemoveClick: addOrRemoveMember,
                 })
               })}
@@ -403,7 +399,7 @@ export function AddMemberInnerDialog({
               showCheckbox
               isChecked={contact => {
                 return (
-                  contactIdsToAdd.indexOf(contact.id) !== -1 ||
+                  contactIdsToAdd.findIndex(c => c.id === contact.id) !== -1 ||
                   contactIdsInGroup.indexOf(contact.id) !== -1
                 )
               }}
