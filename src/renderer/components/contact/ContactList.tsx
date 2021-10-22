@@ -14,6 +14,7 @@ export function ContactList2(props: {
   onCheckboxClick?: (contact: JsonContact) => void
   showRemove?: boolean
   onRemoveClick?: (contact: JsonContact) => void
+  disabledContacts?: number[]
 }) {
   const {
     contacts,
@@ -23,6 +24,7 @@ export function ContactList2(props: {
     onCheckboxClick,
     showRemove,
     onRemoveClick,
+    disabledContacts,
   } = props
   return (
     <div>
@@ -30,6 +32,10 @@ export function ContactList2(props: {
         let checked = false
         if (showCheckbox && typeof isChecked === 'function') {
           checked = isChecked(contact)
+        }
+        let disabled = false
+        if (disabledContacts !== undefined) {
+          disabled = disabledContacts.indexOf(contact.id) !== -1
         }
         return ContactListItem({
           contact,
@@ -39,6 +45,7 @@ export function ContactList2(props: {
           onCheckboxClick,
           showRemove: showRemove || false,
           onRemoveClick,
+          disabled,
         })
       })}
     </div>
@@ -60,6 +67,46 @@ export function useContacts(listFlags: number, queryStr: string) {
 
   useInitEffect(() => {
     DeltaBackend.call('getContacts2', listFlags, queryStr).then(setContacts)
+  })
+
+  return [contacts, updateContacts] as [typeof contacts, typeof updateContacts]
+}
+
+async function getAndSetContacts(
+  listFlags: number,
+  queryStr: string,
+  setContacts: (a: Map<number, JsonContact>) => void
+) {
+  const contactArrayToMap = (contactArray: JsonContact[]) => {
+    return new Map(
+      contactArray.map((contact: JsonContact) => {
+        return [contact.id, contact]
+      })
+    )
+  }
+  const contactArray = await DeltaBackend.call(
+    'getContacts2',
+    listFlags,
+    queryStr
+  )
+  setContacts(contactArrayToMap(contactArray))
+}
+
+export function useContactsMap(listFlags: number, queryStr: string) {
+  const [contacts, setContacts] = useState<Map<number, JsonContact>>(new Map())
+
+  const debouncedGetContacts = useMemo(
+    () =>
+      debounce((listFlags: number, queryStr: string) => {
+        getAndSetContacts(listFlags, queryStr, setContacts)
+      }, 200),
+    []
+  )
+  const updateContacts = (queryStr: string) =>
+    debouncedGetContacts(listFlags, queryStr)
+
+  useInitEffect(() => {
+    getAndSetContacts(listFlags, queryStr, setContacts)
   })
 
   return [contacts, updateContacts] as [typeof contacts, typeof updateContacts]

@@ -10,7 +10,7 @@ import {
 } from './DeltaDialog'
 import { useContactSearch, AddMemberInnerDialog } from './CreateChat'
 import { QrCodeShowQrInner } from './QrCode'
-import { useContacts, ContactList2 } from '../contact/ContactList'
+import { ContactList2, useContactsMap } from '../contact/ContactList'
 import {
   PseudoListItemShowQrCode,
   PseudoListItemAddMember,
@@ -25,14 +25,28 @@ import { Avatar, avatarInitial } from '../Avatar'
 import { runtime } from '../../runtime'
 import { DeltaInput } from '../Login-Styles'
 import { isChatReadonly } from '../../../shared/util'
+import { ipcBackend } from '../../ipc'
 
 export default function ViewGroup(props: {
   isOpen: DialogProps['isOpen']
   onClose: DialogProps['onClose']
   chat: FullChat
 }) {
-  const { isOpen, onClose, chat } = props
+  const { isOpen, onClose } = props
   const [viewMode, setViewMode] = useState('main')
+
+  const [chat, setChat] = useState(props.chat)
+
+  const onChatModified = async (_: any, [chatId, _2]: [number, number]) => {
+    if (chatId !== chat.id) return
+    setChat(await DeltaBackend.call('chatList.getFullChatById', chat.id))
+  }
+  useEffect(() => {
+    ipcBackend.on('DC_EVENT_CHAT_MODIFIED', onChatModified)
+    return () => {
+      ipcBackend.removeListener('DC_EVENT_CHAT_MODIFIED', onChatModified)
+    }
+  }, [])
 
   return (
     <DeltaDialogBase
@@ -52,7 +66,7 @@ export default function ViewGroup(props: {
 export const useGroup = (chat: FullChat) => {
   const [groupName, setGroupName] = useState(chat.name)
   const [groupMembers, setGroupMembers] = useState(
-    chat.contacts.map(({ id }) => id)
+    chat.contacts?.map(({ id }) => id)
   )
   const [groupImage, setGroupImage] = useState(chat.profileImage)
 
@@ -139,7 +153,9 @@ function ViewGroupInner(props: {
     openDialog(AddMemberDialog, {
       listFlags,
       groupMembers,
-      onOk: (members: number[]) => members.forEach(addGroupMember),
+      onOk: (members: number[]) => {
+        members.forEach(addGroupMember)
+      },
     })
   }
 
@@ -237,7 +253,7 @@ export function AddMemberDialog({
   groupMembers,
   onOk,
 }: DialogProps) {
-  const [searchContacts, updateSearchContacts] = useContacts(listFlags, '')
+  const [searchContacts, updateSearchContacts] = useContactsMap(listFlags, '')
   const [queryStr, onSearchChange] = useContactSearch(updateSearchContacts)
   return (
     <DeltaDialogBase
