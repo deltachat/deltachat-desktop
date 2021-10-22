@@ -143,4 +143,14 @@ export default class DCChat extends SplitOut {
     this.selectedAccountContext.blockChat(chatId)
     this.controller.chatList.updateChatList()
   }
+
+  getNextMedia(messageId: number, direction: 1 | -1): number {
+    return this.selectedAccountContext._getNextMedia(
+      messageId,
+      direction,
+      0,
+      0,
+      0
+    )
+  }
 }
