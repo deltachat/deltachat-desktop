@@ -41,7 +41,7 @@ export default function EncryptionInfo({
           <DeltaDialogFooterActions>
             <p
               className='delta-button primary bold'
-              style={{ float: 'right' }}
+              style={{ float: 'right', userSelect: 'text' }}
               onClick={onClose}
             >
               {tx('ok')}
