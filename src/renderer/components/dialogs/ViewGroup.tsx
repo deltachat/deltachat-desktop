@@ -19,13 +19,36 @@ import { DialogProps } from './DialogController'
 import { FullChat, JsonContact } from '../../../shared/shared-types'
 import { ViewProfileInner } from './ViewProfile'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect, useCallback } from 'react'
 import React from 'react'
 import { Avatar, avatarInitial } from '../Avatar'
 import { runtime } from '../../runtime'
 import { DeltaInput } from '../Login-Styles'
 import { isChatReadonly } from '../../../shared/util'
 import { ipcBackend } from '../../ipc'
+
+export function useChat(initialChat: FullChat): FullChat {
+  const [chat, setChat] = useState(initialChat)
+
+  const updateChat = useCallback(async () => {
+    setChat(await DeltaBackend.call('chatList.getFullChatById', initialChat.id))
+  }, [initialChat.id])
+
+  const onChatModified = async (_: any, [chatId, _2]: [number, number]) => {
+    if (chatId !== chat.id) return
+    updateChat()
+  }
+  useEffect(() => {
+    updateChat()
+  }, [initialChat, updateChat])
+  useEffect(() => {
+    ipcBackend.on('DC_EVENT_CHAT_MODIFIED', onChatModified)
+    return () => {
+      ipcBackend.removeListener('DC_EVENT_CHAT_MODIFIED', onChatModified)
+    }
+  }, [])
+  return chat
+}
 
 export default function ViewGroup(props: {
   isOpen: DialogProps['isOpen']
@@ -35,18 +58,7 @@ export default function ViewGroup(props: {
   const { isOpen, onClose } = props
   const [viewMode, setViewMode] = useState('main')
 
-  const [chat, setChat] = useState(props.chat)
-
-  const onChatModified = async (_: any, [chatId, _2]: [number, number]) => {
-    if (chatId !== chat.id) return
-    setChat(await DeltaBackend.call('chatList.getFullChatById', chat.id))
-  }
-  useEffect(() => {
-    ipcBackend.on('DC_EVENT_CHAT_MODIFIED', onChatModified)
-    return () => {
-      ipcBackend.removeListener('DC_EVENT_CHAT_MODIFIED', onChatModified)
-    }
-  }, [])
+  const chat = useChat(props.chat)
 
   return (
     <DeltaDialogBase
