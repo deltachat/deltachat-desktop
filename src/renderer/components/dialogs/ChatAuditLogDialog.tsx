@@ -7,7 +7,7 @@ import React, {
 } from 'react'
 import { DeltaDialogBase, DeltaDialogCloseButton } from './DeltaDialog'
 import { DialogProps } from './DialogController'
-import type { FullChat, NormalMessage } from '../../../shared/shared-types'
+import { FullChat, NormalMessage, MetaMessage, MetaMessageIs } from '../../../shared/shared-types'
 import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/dist/constants'
 import { getLogger } from '../../../shared/logger'
@@ -70,10 +70,7 @@ export default function ChatAuditLogDialog(props: {
   const isOpen = !!selectedChat
 
   const [loading, setLoading] = useState(true)
-  const [msgIds, setMsgIds] = useState<number[]>([])
-  const [messages, setMessages] = useState<{
-    [key: number]: NormalMessage | null
-  }>({})
+  const [messages, setMessages] = useState<MetaMessage[]>([])
 
   const listView = useRef<HTMLDivElement>(null)
 
@@ -98,16 +95,15 @@ export default function ChatAuditLogDialog(props: {
   const refresh = useCallback(
     async function () {
       setLoading(true)
-      const msgIds = await DeltaBackend.call(
-        'messageList.getMessageIds',
-        selectedChat.id,
-        C.DC_GCM_ADDDAYMARKER | C.DC_GCM_INFO_ONLY
-      )
       const messages = await DeltaBackend.call(
         'messageList.getMessages',
-        msgIds
+        selectedChat.id,
+        0,
+        -1,
+        {},
+        C.DC_GCM_ADDDAYMARKER | C.DC_GCM_INFO_ONLY
       )
-      setMsgIds(msgIds)
+
       setMessages(messages)
       setLoading(false)
 
@@ -148,21 +144,19 @@ export default function ChatAuditLogDialog(props: {
         <div>{tx('loading')}</div>
       ) : (
         <div style={{ overflowY: 'scroll' }} ref={listView}>
-          {msgIds.length === 0 && (
+          {messages.length === 0 && (
             <div className='no-content' key='no-content-msg'>
               <div>{tx('chat_audit_log_empty_message')}</div>
             </div>
           )}
           <ul key='info-message-list'>
-            {msgIds.map((id, index) => {
-              if (id === C.DC_MSG_ID_DAYMARKER) {
-                const key = 'magic' + id + '_' + specialMessageIdCounter++
-                const nextMessage = messages[msgIds[index + 1]]
-                if (!nextMessage) return null
+            {messages.map((message, index) => {
+              if (message.type === MetaMessageIs.DayMarker) {
+                const key = 'magic' + index + '_' + specialMessageIdCounter++
                 return (
                   <li key={key} className='time'>
                     <div>
-                      {moment.unix(nextMessage.timestamp).calendar(null, {
+                      {moment.unix(message.timestamp).calendar(null, {
                         sameDay: `[${tx('today')}]`,
                         lastDay: `[${tx('yesterday')}]`,
                         lastWeek: 'LL',
@@ -172,9 +166,8 @@ export default function ChatAuditLogDialog(props: {
                   </li>
                 )
               }
-              const message = messages[id]
-              if (!message || message == null) {
-                log.debug(`Missing message with id ${id}`)
+              if (message.type !== MetaMessageIs.Normal) {
+                log.debug(`Missing message with index ${index}`)
                 return
               }
               const { text, timestamp } = message
@@ -182,7 +175,7 @@ export default function ChatAuditLogDialog(props: {
               const status = mapCoreMsgStatus2String(message.state)
               return (
                 <li
-                  key={id}
+                  key={index}
                   className='info'
                   onClick={openMessageInfo.bind(null, message)}
                   onContextMenu={ev => message && showMenu(message, ev)}
