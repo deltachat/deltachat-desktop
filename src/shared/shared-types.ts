@@ -129,7 +129,18 @@ export type JsonLocations = {
   marker: string
 }[] // ReturnType<typeof DeltaChat.prototype.getLocations>
 
-export type JsonMessage = ReturnType<typeof Message.prototype.toJson>
+export type JsonMessage = ReturnType<typeof Message.prototype.toJson> & {
+  sender: JsonContact
+  setupCodeBegin?: string
+  file_mime: string | null
+  file_bytes: number | null
+  file_name: string | null
+}
+
+export type JsonMessageAttachmentSubset = Pick<
+  JsonMessage,
+  'file' | 'file_mime' | 'file_bytes' | 'file_name'
+>
 
 export interface FullChat {
   id: number
@@ -163,18 +174,7 @@ export type msgStatus =
   | 'sent'
   | ''
 
-export type MessageType = JsonMessage & {
-  sender: JsonContact
-  setupCodeBegin?: string
-  file_mime: string | null
-  file_bytes: number | null
-  file_name: string | null
-}
 
-export type MessageTypeAttachmentSubset = Pick<
-  MessageType,
-  'file' | 'file_mime' | 'file_bytes' | 'file_name'
->
 
 export type Theme = {
   name: string

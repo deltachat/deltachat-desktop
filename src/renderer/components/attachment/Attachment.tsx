@@ -1,6 +1,6 @@
 const { ipcRenderer } = window.electron_functions
 import mimeTypes from 'mime-types'
-import { MessageTypeAttachmentSubset } from '../../../shared/shared-types'
+import { JsonMessageAttachmentSubset } from '../../../shared/shared-types'
 import { DraftObject } from '../composer/Composer'
 
 /* Section - Data Copied in part from Signal */
@@ -40,7 +40,7 @@ export function isImage(filemime: string | null) {
   return SUPPORTED_IMAGE_MIME_TYPES.includes(filemime || '')
 }
 
-export function hasAttachment(attachment: MessageTypeAttachmentSubset | null) {
+export function hasAttachment(attachment: JsonMessageAttachmentSubset | null) {
   return attachment && attachment.file
 }
 
@@ -64,7 +64,7 @@ export function isGenericAttachment(filemime: string | null) {
 export function getExtension({
   file_name,
   file_mime,
-}: MessageTypeAttachmentSubset) {
+}: JsonMessageAttachmentSubset) {
   if (file_name && file_name.indexOf('.') >= 0) {
     const lastPeriod = file_name.lastIndexOf('.')
     const extension = file_name.slice(lastPeriod + 1)
@@ -77,7 +77,7 @@ export function getExtension({
 }
 
 export function dragAttachmentOut(
-  file: MessageTypeAttachmentSubset['file'],
+  file: JsonMessageAttachmentSubset['file'],
   dragEvent: React.DragEvent<HTMLDivElement>
 ) {
   dragEvent.preventDefault()

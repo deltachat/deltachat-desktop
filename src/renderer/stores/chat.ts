@@ -1,6 +1,6 @@
 import { ipcBackend, saveLastChatId } from '../ipc'
 import { Store, useStore } from './store'
-import { FullChat, MessageType } from '../../shared/shared-types'
+import { FullChat, JsonMessage } from '../../shared/shared-types'
 import { DeltaBackend } from '../delta-remote'
 import { runtime } from '../runtime'
 import { ActionEmitter, KeybindAction } from '../keybindings'
@@ -12,7 +12,7 @@ class state {
   chat: FullChat | null = null
 
   messageIds: number[] = []
-  messages: { [key: number]: MessageType | null } = {}
+  messages: { [key: number]: JsonMessage | null } = {}
   oldestFetchedMessageIndex = -1
   scrollToBottom = false // if true the UI will scroll to bottom
   scrollToBottomIfClose = false

@@ -16,7 +16,7 @@ import MessageBody from './MessageBody'
 import MessageMetaData from './MessageMetaData'
 
 import Attachment from '../attachment/messageAttachment'
-import { MessageType, JsonContact } from '../../../shared/shared-types'
+import { JsonMessage, JsonContact } from '../../../shared/shared-types'
 import { isGenericAttachment } from '../attachment/Attachment'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
 import { joinCall, openViewProfileDialog } from '../helpers/ChatMethods'
@@ -122,7 +122,7 @@ function buildContextMenu(
     conversationType,
   }: // onRetrySend,
   {
-    message: MessageType | null
+    message: JsonMessage | null
     text?: string
     conversationType: ConversationType
     // onRetrySend: Function
@@ -213,7 +213,7 @@ function buildContextMenu(
 }
 
 const Message = (props: {
-  message: MessageType
+  message: JsonMessage
   conversationType: ConversationType
   /* onRetrySend */
 }) => {
@@ -421,7 +421,7 @@ export const Quote = ({
   quotedText: string | null
   quotedMessageId: number | null
 }) => {
-  const [message, setMessage] = useState<MessageType | null>(null)
+  const [message, setMessage] = useState<JsonMessage | null>(null)
 
   useEffect(() => {
     if (quotedMessageId) {

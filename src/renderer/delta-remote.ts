@@ -3,7 +3,7 @@ import { _callDcMethodAsync } from './ipc'
 import {
   FullChat,
   ChatListItemType,
-  MessageType,
+  JsonMessage,
   JsonLocations,
   Theme,
   JsonContact,
@@ -112,7 +112,7 @@ class DeltaRemote {
     chatId: number,
     msgType1: number,
     msgType2: number
-  ): Promise<MessageType[]>
+  ): Promise<JsonMessage[]>
   call(fnName: 'chat.getEncryptionInfo', chatId: number): Promise<string>
   call(fnName: 'chat.getQrCode', chatId?: number): Promise<string>
   call(fnName: 'chat.leaveGroup', chatId: number): Promise<void>
@@ -210,7 +210,7 @@ class DeltaRemote {
     fnName: 'messageList.sendMessage',
     chatId: number,
     params: sendMessageParams
-  ): Promise<[number, MessageType | null]>
+  ): Promise<[number, JsonMessage | null]>
   call(
     fnName: 'messageList.sendSticker',
     chatId: number,
@@ -220,16 +220,16 @@ class DeltaRemote {
   call(
     fnName: 'messageList.getMessage',
     msgId: number
-  ): Promise<MessageType | null>
+  ): Promise<JsonMessage | null>
   call(
     fnName: 'messageList.getMessages',
     messageIds: number[]
-  ): Promise<{ [key: number]: MessageType | null }>
+  ): Promise<{ [key: number]: JsonMessage | null }>
   call(fnName: 'messageList.getMessageInfo', msgId: number): Promise<string>
   call(
     fnName: 'messageList.getDraft',
     chatId: number
-  ): Promise<MessageType | null>
+  ): Promise<JsonMessage | null>
   call(
     fnName: 'messageList.setDraft',
     chatId: number,
@@ -242,7 +242,7 @@ class DeltaRemote {
   call(
     fnName: 'messageList.messageIdToJson',
     id: number
-  ): Promise<MessageType | null>
+  ): Promise<JsonMessage | null>
   call(
     fnName: 'messageList.getMessageIds',
     chatid: number,

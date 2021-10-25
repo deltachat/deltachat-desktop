@@ -17,7 +17,7 @@ import { EmojiData, BaseEmoji } from 'emoji-mart'
 import { replaceColonsSafe } from '../conversations/emoji'
 import {
   JsonMessage,
-  MessageTypeAttachmentSubset,
+  JsonMessageAttachmentSubset,
 } from '../../../shared/shared-types'
 import { Quote } from '../message/Message'
 import { DeltaBackend, sendMessageParams } from '../../delta-remote'
@@ -324,7 +324,7 @@ export type DraftObject = { chatId: number } & Pick<
   JsonMessage,
   'text' | 'file' | 'quotedMessageId' | 'quotedText'
 > &
-  MessageTypeAttachmentSubset
+  JsonMessageAttachmentSubset
 
 export function useDraft(
   chatId: number | null,

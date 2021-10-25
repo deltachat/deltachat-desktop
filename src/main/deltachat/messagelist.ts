@@ -5,7 +5,7 @@ const log = getLogger('main/deltachat/messagelist')
 
 import SplitOut from './splitout'
 import { Message } from 'deltachat-node'
-import { MessageType, MessageSearchResult } from '../../shared/shared-types'
+import { JsonMessage, MessageSearchResult } from '../../shared/shared-types'
 
 import { writeFile } from 'fs/promises'
 import tempy from 'tempy'
@@ -25,7 +25,7 @@ export default class DCMessageList extends SplitOut {
       location?: { lat: number; lng: number }
       quoteMessageId?: number
     }
-  ): [number, MessageType | null] {
+  ): [number, JsonMessage | null] {
     const viewType = filename ? C.DC_MSG_FILE : C.DC_MSG_TEXT
     const msg = this.selectedAccountContext.messageNew(viewType)
     if (filename) msg.setFile(filename, undefined)
@@ -68,7 +68,7 @@ export default class DCMessageList extends SplitOut {
     return this.selectedAccountContext.getMessageInfo(msgId)
   }
 
-  async getDraft(chatId: number): Promise<MessageType | null> {
+  async getDraft(chatId: number): Promise<JsonMessage | null> {
     const draft = this.selectedAccountContext.getDraft(chatId)
     return draft ? this._messageToJson(draft) : null
   }
@@ -99,7 +99,7 @@ export default class DCMessageList extends SplitOut {
     this.selectedAccountContext.setDraft(chatId, draft)
   }
 
-  messageIdToJson(id: number): MessageType | null {
+  messageIdToJson(id: number): JsonMessage | null {
     const msg = this.selectedAccountContext.getMessage(id)
     if (!msg) {
       log.warn('No message found for ID ' + id)
@@ -108,7 +108,7 @@ export default class DCMessageList extends SplitOut {
     return this._messageToJson(msg)
   }
 
-  _messageToJson(msg: Message): MessageType {
+  _messageToJson(msg: Message): JsonMessage {
     const file_mime = msg.getFilemime()
     const file_name = msg.getFilename()
     const file_bytes = msg.getFilebytes()

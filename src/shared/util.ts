@@ -1,8 +1,8 @@
-import { MessageType, FullChat } from './shared-types'
+import { JsonMessage, FullChat } from './shared-types'
 
 import { C } from 'deltachat-node/dist/constants'
 
-export function getDirection({ fromId }: MessageType) {
+export function getDirection({ fromId }: JsonMessage) {
   return fromId === C.DC_CONTACT_ID_SELF ? 'outgoing' : 'incoming'
 }
 

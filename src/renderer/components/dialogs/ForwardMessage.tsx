@@ -6,7 +6,7 @@ import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
 import classNames from 'classnames'
 import { DeltaBackend } from '../../delta-remote'
 import { DialogProps } from './DialogController'
-import { MessageType } from '../../../shared/shared-types'
+import { JsonMessage } from '../../../shared/shared-types'
 
 import { C } from 'deltachat-node/dist/constants'
 import { ChatListPart, useLogicVirtualChatList } from '../chat/ChatList'
@@ -15,7 +15,7 @@ import { useChatList } from '../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../ThemeManager'
 
 export default function ForwardMessage(props: {
-  message: MessageType
+  message: JsonMessage
   onClose: DialogProps['onClose']
 }) {
   const tx = window.static_translate
