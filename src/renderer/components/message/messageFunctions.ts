@@ -2,9 +2,10 @@ import { getLogger } from '../../../shared/logger'
 const log = getLogger('render/msgFunctions')
 import type { Message } from 'deltachat-node'
 import { NormalMessage } from '../../../shared/shared-types'
-import { ChatStoreDispatch, selectChat } from '../../stores/chat'
+import { ChatStoreDispatch } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
 import { runtime } from '../../runtime'
+import {selectChat} from '../helpers/ChatMethods'
 /**
  * json representation of the message object we get from the backend
  */

@@ -11,12 +11,13 @@ import { useTranslationFunction, ScreenContext } from '../../contexts'
 import classNames from 'classnames'
 import qr from 'react-qr-svg'
 import QrReader from 'react-qr-reader'
-import { selectChat } from '../../stores/chat'
 import processOpenQrUrl from '../helpers/OpenQrUrl'
 import { getLogger } from '../../../shared/logger'
 import { useContextMenu } from '../ContextMenu'
 import { runtime } from '../../runtime'
 import { DeltaBackend } from '../../delta-remote'
+import {selectChat} from '../helpers/ChatMethods'
+
 
 const log = getLogger('renderer/dialogs/QrCode')
 

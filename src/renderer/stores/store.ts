@@ -50,12 +50,12 @@ export class Store<S> {
       effect(action, state)
     })
     if (state !== this.state) {
-      /*this.log.debug(
+      this.log.debug(
         `DISPATCHING of "${action.type}" changed the state. Before:`,
         this.state,
         'After:',
         state
-      )*/
+      )
       this.log.debug(`DISPATCHING of "${action.type}" changed the state.`)
       this.state = state
       this.listeners.forEach(listener => listener(this.state))

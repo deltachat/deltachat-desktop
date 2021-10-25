@@ -248,6 +248,7 @@ class DeltaRemote {
   call(
     fnName: 'messageList.getMessageIds',
     chatid: number,
+    marker1Before?: MarkerOneParams,
     flags?: number
   ): Promise<number[]>
   call(

@@ -36,16 +36,11 @@ export default function MessageList({
 }) {
   const [
     {
-      oldestFetchedMessageIndex,
-      messages,
-      messageIds,
-      scrollToBottom,
-      scrollToBottomIfClose,
-      scrollToLastPage,
-      scrollHeight,
     },
     chatStoreDispatch,
   ] = useChatStore()
+  return null
+  /*
   const messageListRef = useRef<HTMLDivElement | null>(null)
   const lastKnownScrollHeight = useRef<number>(0)
   const isFetching = useRef(false)
@@ -175,6 +170,7 @@ export default function MessageList({
       chatStore={chatStore}
     />
   )
+  */
 }
 
 /** Object holding type information about a chat for messages in that chat */

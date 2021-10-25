@@ -11,7 +11,7 @@ import { C } from 'deltachat-node/dist/constants'
 
 import { DeltaBackend } from '../../delta-remote'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
-import { selectChat } from '../../stores/chat'
+
 import {
   useContacts,
   ContactList2,
@@ -40,7 +40,7 @@ import { JsonContact } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
 import { QrCodeShowQrInner } from './QrCode'
 import { runtime } from '../../runtime'
-import { createChatByContactIdAndSelectIt } from '../helpers/ChatMethods'
+import { createChatByContactIdAndSelectIt, selectChat } from '../helpers/ChatMethods'
 import { Avatar } from '../Avatar'
 import { AddMemberDialog } from './ViewGroup'
 

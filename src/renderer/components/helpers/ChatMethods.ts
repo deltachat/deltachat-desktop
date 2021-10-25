@@ -1,5 +1,5 @@
-import { DeltaBackend } from '../../delta-remote'
-import chatStore, { selectChat } from '../../stores/chat'
+import { DeltaBackend, sendMessageParams } from '../../delta-remote'
+import chatStore from '../../stores/chat'
 import { ScreenContext, unwrapContext } from '../../contexts'
 import { ChatListItemType, FullChat } from '../../../shared/shared-types'
 import { MuteDuration } from '../../../shared/constants'
@@ -7,6 +7,7 @@ import { C } from 'deltachat-node/dist/constants'
 import { runtime } from '../../runtime'
 import { getLogger } from '../../../shared/logger'
 import AlertDialog from '../dialogs/AlertDialog'
+import MessageListStore from '../../stores/MessageListStore'
 
 const log = getLogger('renderer/message')
 
@@ -189,4 +190,29 @@ export async function createChatByContactIdAndSelectIt(
   // TODO update chatlist if its needed
 
   selectChat(chatId)
+}
+
+export const selectChat = async (chatId: number) => {
+  MessageListStore.selectChat(chatId)
+  chatStore.dispatch({ type: 'SELECT_CHAT', payload: chatId })
+}
+
+export const jumpToMessage = async (messageId: number) => {
+  const message = await DeltaBackend.call('messageList.getMessage', messageId)
+  if (!message) return
+  const chatId = message.chatId
+  log.debug(`jumpToMessage: chatId: ${chatId} messageId: ${messageId}`)
+  MessageListStore.jumpToMessage(chatId, messageId)
+  chatStore.dispatch({ type: 'SELECT_CHAT', payload: chatId })
+}
+
+export const sendMessage = async (
+  chatId: number,
+  messageParams: sendMessageParams
+) => {
+  await MessageListStore.sendMessage(chatId, messageParams)
+}
+
+export const deleteMessage = async (messageId: number) => {
+  await MessageListStore.deleteMessage(messageId)
 }
