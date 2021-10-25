@@ -12,6 +12,8 @@ import {
   DeltaChatAccount,
   DesktopSettings,
   QrCodeResponse,
+  MarkerOneParams,
+  MetaMessage,
 } from '../shared/shared-types'
 import { MuteDuration } from '../shared/constants'
 import { LocaleData } from '../shared/localize'
@@ -57,7 +59,6 @@ class DeltaRemote {
   // chatList -----------------------------------------------------------
   call(fnName: 'chatList.selectChat', chatId: number): Promise<FullChat>
   call(fnName: 'chatList.getSelectedChatId'): Promise<number>
-  call(fnName: 'chatList.onChatModified', chatId: number): Promise<void>
   call(
     fnName: 'chatList.getChatListEntries',
     listFlags?: number,
@@ -223,13 +224,14 @@ class DeltaRemote {
   ): Promise<NormalMessage | null>
   call(
     fnName: 'messageList.getMessages',
-    messageIds: number[]
-  ): Promise<{ [key: number]: NormalMessage | null }>
+    chatId: number,
+    indexStart: number,
+    indexEnd: number,
+    marker1Before?: MarkerOneParams,
+    flags?: number
+  ): Promise<MetaMessage[]>
   call(fnName: 'messageList.getMessageInfo', msgId: number): Promise<string>
-  call(
-    fnName: 'messageList.getDraft',
-    chatId: number
-  ): Promise<NormalMessage | null>
+  call(fnName: 'messageList.getDraft', chatId: number): Promise<NormalMessage>
   call(
     fnName: 'messageList.setDraft',
     chatId: number,
@@ -266,6 +268,18 @@ class DeltaRemote {
     fnName: 'messageList.saveMessageHTML2Disk',
     messageId: number
   ): Promise<string>
+  call(
+    fnName: 'messageList.getFirstUnreadMessageId',
+    chatId: number
+  ): Promise<number>
+  call(
+    fnName: 'messageList.getUnreadMessageIds',
+    chatId: number
+  ): Promise<number[]>
+  call(
+    fnName: 'messageList.markSeenMessages',
+    messageIds: number[]
+  ): Promise<void>
   // settings -----------------------------------------------------------
   call(
     fnName: 'settings.setConfig',

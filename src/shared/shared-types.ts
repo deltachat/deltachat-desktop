@@ -230,3 +230,6 @@ export declare type QrCodeResponse = {
   id: number
   text1: string
 }
+export type MarkerOneParams = {
+  [key: number]: number
+}

@@ -3,9 +3,10 @@ import { getLogger } from '../../shared/logger'
 
 const log = getLogger('main/deltachat/messagelist')
 
+// @ts-ignore
+import binding from 'deltachat-node/binding'
 import SplitOut from './splitout'
-import { Message } from 'deltachat-node'
-import { NormalMessage, MessageSearchResult, MetaMessageIs } from '../../shared/shared-types'
+import { NormalMessage, MessageSearchResult, MetaMessageIs, MarkerOneParams, MetaMessage } from '../../shared/shared-types'
 
 import { writeFile } from 'fs/promises'
 import tempy from 'tempy'
@@ -44,7 +45,10 @@ export default class DCMessageList extends SplitOut {
     }
 
     const messageId = this.selectedAccountContext.sendMessage(chatId, msg)
-    return [messageId, this.getMessage(messageId)]
+
+    const _msg: DCNMessage = this.selectedAccountContext.getMessage(messageId)
+    const message = _msg ? this._messageToJson(_msg) : null
+    return [messageId, message]
   }
 
   sendSticker(chatId: number, fileStickerPath: string) {
@@ -66,6 +70,61 @@ export default class DCMessageList extends SplitOut {
 
   getMessageInfo(msgId: number) {
     return this.selectedAccountContext.getMessageInfo(msgId)
+  }
+  
+  // TODO: Port to core
+  getFirstUnreadMessageId(chatId: number) {
+    const countFreshMessages = this.selectedAccountContext.getFreshMessageCount(chatId)
+    const messageIds = this.selectedAccountContext.getChatMessages(chatId, 0, 0)
+
+    let foundFreshMessages = 0
+    let firstUnreadMessageId = -1
+    for (let i = messageIds.length - 1; i >= 0; i--) {
+      const messageId = messageIds[i]
+
+      if (!this.selectedAccountContext.getMessage(messageId).getState().isFresh()) continue
+
+      foundFreshMessages++
+      firstUnreadMessageId = messageId
+
+      if (foundFreshMessages >= countFreshMessages) {
+        break
+      }
+    }
+
+    return firstUnreadMessageId
+  }
+
+  // TODO: Port to core
+  getUnreadMessageIds(chatId: number) {
+    const countFreshMessages = this.selectedAccountContext.getFreshMessageCount(chatId)
+    log.debug(`getUnreadMessageIds: countFreshMessages: ${countFreshMessages}`)
+    if (countFreshMessages === 0) return []
+
+    const messageIds = this.selectedAccountContext.getChatMessages(chatId, 0, 0)
+
+    let foundFreshMessages = 0
+    const unreadMessageIds: number[] = []
+    for (let i = messageIds.length - 1; i >= 0; i--) {
+      const messageId = messageIds[i]
+
+      const state = this.selectedAccountContext.getMessage(messageId).getState().state
+      const isFresh =
+        state === C.DC_STATE_IN_FRESH || state === C.DC_STATE_IN_NOTICED
+      log.debug(
+        `getUnreadMessageIds: messageId: ${messageId} isFresh: ${isFresh}`
+      )
+      if (!isFresh) continue
+
+      foundFreshMessages++
+      unreadMessageIds.unshift(messageId)
+
+      if (foundFreshMessages >= countFreshMessages) {
+        break
+      }
+    }
+
+    return unreadMessageIds
   }
 
   async getDraft(chatId: number): Promise<NormalMessage | null> {
@@ -135,42 +194,77 @@ export default class DCMessageList extends SplitOut {
     this.controller.chatList.selectChat(chatId)
   }
 
-  getMessageIds(chatId: number, flags: number = C.DC_GCM_ADDDAYMARKER) {
-    const messageIds = this.selectedAccountContext.getChatMessages(
-      chatId,
-      flags,
-      0
+  getMessageIds(
+    chatId: number,
+    markerOne: MarkerOneParams = {},
+    flags: number = C.DC_GCM_ADDDAYMARKER
+  ) {
+    log.debug(
+      `getMessageIds: chatId: ${chatId} markerOne: ${JSON.stringify(markerOne)}`
     )
+    const messageIds = []
+
+    for (const messageId of this.selectedAccountContext.getChatMessages(chatId, flags, 0)) {
+      if (markerOne && markerOne[messageId]) {
+        messageIds.push(C.DC_MSG_ID_MARKER1)
+      }
+      messageIds.push(messageId)
+    }
     return messageIds
   }
 
-  getMessages(messageIds: number[]) {
-    const messages: {
-      [key: number]: ReturnType<typeof DCMessageList.prototype.messageIdToJson>
-    } = {}
-    const markMessagesRead: number[] = []
-    messageIds.forEach(messageId => {
-      if (messageId <= C.DC_MSG_ID_LAST_SPECIAL) return
-      const message = this.messageIdToJson(messageId)
-      if (
-        getDirection(message) === 'incoming' &&
-        message.state !== C.DC_STATE_IN_SEEN
-      ) {
-        markMessagesRead.push(messageId)
+ // TODO: move to nodebindings
+  async getMessages(
+    chatId: number,
+    indexStart: number,
+    indexEnd: number,
+    markerOne: MarkerOneParams = {},
+    flags: number = C.DC_GCM_ADDDAYMARKER
+  ): Promise<MetaMessage[]> {
+    log.debug(
+      `getMessages: chatId: ${chatId} markerOne: ${JSON.stringify(markerOne)}`
+    )
+    const messageIds = this.getMessageIds(chatId, markerOne, flags)
+    console.log(messageIds)
+
+    if (indexEnd === -1) indexEnd = messageIds.length - 1
+
+    const messages: MetaMessage[] = []
+    for (
+      let messageIndex = indexStart;
+      messageIndex <= indexEnd;
+      messageIndex++
+    ) {
+      const messageId = messageIds[messageIndex]
+
+      let messageObject: MetaMessage = null
+      if (messageId == C.DC_MSG_ID_DAYMARKER) {
+        const nextMessageIndex = messageIndex + 1
+        const nextMessageId = messageIds[nextMessageIndex]
+        const nextMessageTimestamp = this.selectedAccountContext
+          .getMessage(nextMessageId)
+          .getTimestamp()
+        messageObject = {
+          type: MetaMessageIs.DayMarker,
+          timestamp: nextMessageTimestamp,
+        }
+      } else if (messageId === C.DC_MSG_ID_MARKER1) {
+        messageObject = {
+          type: MetaMessageIs.MarkerOne,
+          count: markerOne[messageIds[messageIndex + 1]],
+        }
+      } else if (messageId <= C.DC_MSG_ID_LAST_SPECIAL) {
+        log.debug(
+          `getMessages: not sure what do with this messageId: ${messageId}, skipping`
+        )
+      } else {
+        const msg = this.selectedAccountContext.getMessage(messageId)
+        if (!msg) {
+          continue
+        }
+        const message = this._messageToJson(msg)
+        messageObject = message
       }
-      messages[messageId] = message
-    })
-
-    if (markMessagesRead.length > 0) {
-      const chatId = messages[markMessagesRead[0]].chatId
-
-      log.debug(
-        `markMessagesRead ${markMessagesRead.length} messages for chat ${chatId}`
-      )
-      // TODO: move mark seen logic to frontend
-      setTimeout(() =>
-        this.selectedAccountContext.markSeenMessages(markMessagesRead)
-      )
     }
     return messages
   }
