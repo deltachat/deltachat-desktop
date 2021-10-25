@@ -6,8 +6,10 @@ import { C } from 'deltachat-node/dist/constants'
 import {
   ChatListItemType,
   MessageSearchResult,
+  MessageState,
 } from '../../../shared/shared-types'
 import { Avatar } from '../Avatar'
+import {mapCoreMsgStatus2String} from '../helpers/MapMsgStatus'
 
 const FreshMessageCounter = React.memo(({ counter }: { counter: number }) => {
   if (counter === 0) return null
@@ -53,7 +55,7 @@ const Message = React.memo(
           {summary.text1 !== null && (
             <div
               className={classNames('summary', {
-                draft: summary.status === 'draft',
+                draft: summary.state === MessageState.OUT_DRAFT,
               })}
             >
               {summary.text1 + ': '}
@@ -71,8 +73,14 @@ const Message = React.memo(
             {window.static_translate('chat_archived_label')}
           </div>
         )}
-        {!archived && !isContactRequest && summary.status && (
-          <div className={classNames('status-icon', summary.status)} />
+
+        {!archived && summary.state !== 0 && (
+          <div
+            className={classNames(
+              'status-icon',
+              mapCoreMsgStatus2String(summary.state)
+            )}
+          />
         )}
         {!isContactRequest && (
           <FreshMessageCounter counter={freshMessageCounter} />
