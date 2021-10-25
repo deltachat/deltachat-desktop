@@ -26,10 +26,6 @@ export default class JsonContacts extends SplitOut {
     const address = contact.getAddress()
     const result = this.selectedAccountContext.createContact(name, address)
 
-    // trigger interface updates
-    const chatId = this.selectedAccountContext.getChatIdByContactId(contactId)
-    this.controller.chatList.onChatModified(chatId)
-
     // TODO implement chat changed event in the core on name change
     return result
   }

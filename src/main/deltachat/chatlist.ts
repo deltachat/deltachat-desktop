@@ -1,12 +1,12 @@
 import { C, ChatList } from 'deltachat-node'
 import { Context } from 'deltachat-node/dist/context'
-import { app } from 'electron'
 import { getLogger } from '../../shared/logger'
 import {
   ChatListItemType,
   JsonChat,
   JsonContact,
   FullChat,
+  MessageState,
 } from '../../shared/shared-types'
 import SplitOut from './splitout'
 
@@ -20,24 +20,12 @@ export default class DCChatList extends SplitOut {
       log.debug(`Error: selected chat not found: ${chatId}`)
       return null
     }
-    if (!chat.isContactRequest && chat.freshMessageCounter > 0) {
-      this.selectedAccountContext.markNoticedChat(chat.id)
-      this.controller.emit('DESKTOP_CLEAR_NOTIFICATIONS_FOR_CHAT', chat.id)
-      chat.freshMessageCounter = 0
-      app.setBadgeCount(this.getGeneralFreshMessageCounter())
-    }
 
     return chat
   }
 
   getSelectedChatId() {
     return this.controller.selectedChatId
-  }
-
-  async onChatModified(chatId: number) {
-    // TODO: move event handling to store
-    const chat = await this.getFullChatById(chatId)
-    this.controller.sendToRenderer('DD_EVENT_CHAT_MODIFIED', { chatId, chat })
   }
 
   _chatListGetChatId(list: ChatList, index: number) {
@@ -96,8 +84,8 @@ export default class DCChatList extends SplitOut {
       summary: {
         text1: summary.text1,
         text2: summary.text2,
-        status: mapCoreMsgStatus2String(summary.state),
-      },
+        state: summary.state as MessageState,
+      },         
       isProtected: chat.isProtected,
       isGroup: isGroup,
       freshMessageCounter: this.selectedAccountContext.getFreshMessageCount(

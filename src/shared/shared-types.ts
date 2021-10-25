@@ -1,5 +1,3 @@
-type PromiseType<T> = T extends Promise<infer U> ? U : any
-
 export type Credentials = {
   [key: string]: any
   addr?: string
@@ -81,6 +79,7 @@ export interface ExtendedApp extends App {
 }
 
 import type { Contact } from 'deltachat-node'
+import { C } from 'deltachat-node/dist/constants'
 
 export type ContactJSON = ReturnType<typeof Contact.prototype.toJson>
 export interface ChatListItemType {
@@ -94,7 +93,7 @@ export interface ChatListItemType {
     | {
         text1: any
         text2: any
-        status: string
+        state: MessageState
       }
     | undefined
   isContactRequest: boolean
@@ -232,4 +231,15 @@ export declare type QrCodeResponse = {
 }
 export type MarkerOneParams = {
   [key: number]: number
+}
+
+export const enum MessageState {
+  IN_FRESH = C.DC_STATE_IN_FRESH,
+  IN_NOTICED = C.DC_STATE_IN_NOTICED,
+  OUT_DELIVERED = C.DC_STATE_OUT_DELIVERED,
+  OUT_DRAFT = C.DC_STATE_OUT_DRAFT,
+  OUT_FAILED = C.DC_STATE_OUT_FAILED,
+  OUT_MDN_RCVD = C.DC_STATE_OUT_MDN_RCVD,
+  OUT_PENDING = C.DC_STATE_OUT_PENDING,
+  OUT_PREPARING = C.DC_STATE_OUT_PREPARING,
 }

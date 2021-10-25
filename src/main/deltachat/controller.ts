@@ -3,7 +3,6 @@ import { app as rawApp } from 'electron'
 import { EventEmitter } from 'events'
 import { getLogger } from '../../shared/logger'
 import { JsonContact, AppState } from '../../shared/shared-types'
-import { maybeMarkSeen } from '../markseenFix'
 import * as mainWindow from '../windows/main'
 import DCAutocrypt from './autocrypt'
 import DCBackup from './backup'
@@ -66,7 +65,6 @@ export default class DeltaChatController extends EventEmitter {
     this.onChatlistUpdated = this.onChatlistUpdated.bind(this)
     this.onMsgsChanged = this.onMsgsChanged.bind(this)
     this.onIncomingMsg = this.onIncomingMsg.bind(this)
-    this.onChatModified = this.onChatModified.bind(this)
   }
 
   async init() {
@@ -331,6 +329,7 @@ export default class DeltaChatController extends EventEmitter {
       logCoreEvent.warn(accountId, event, data1, data2)
     } else if (event === 'DC_EVENT_INFO') {
       logCoreEvent.info(accountId, event, data1, data2)
+      return
     } else if (event.startsWith('DC_EVENT_ERROR')) {
       logCoreEvent.error(accountId, event, data1, data2)
     } else if (app.rc['log-debug']) {
@@ -346,32 +345,26 @@ export default class DeltaChatController extends EventEmitter {
     }
   }
 
-  onMsgsChanged(accountId: number, chatId: number, _msgId: number) {
+  onMsgsChanged(accountId: number, _chatId: number, _msgId: number) {
     if (this.selectedAccountId !== accountId) {
       return
     }
     this.onChatlistUpdated()
-    // chatListItem listens to this in the frontend
-    this.chatList.onChatModified(chatId)
   }
 
-  onIncomingMsg(accountId: number, chatId: number, msgId: number) {
+  onIncomingMsg(accountId: number, _chatId: number, _msgId: number) {
     if (this.selectedAccountId !== accountId) {
       return
     }
-    maybeMarkSeen(chatId, msgId)
     this.onChatlistUpdated()
-    // chatListItem listens to this in the frontend
-    this.chatList.onChatModified(chatId)
   }
 
-  onChatModified(accountId: number, chatId: number, _msgId: number) {
+  onChatModified(accountId: number, _chatId: number, _msgId: number) {
     if (this.selectedAccountId !== accountId) {
       return
     }
     this.onChatlistUpdated()
     // chatListItem listens to this in the frontend
-    this.chatList.onChatModified(chatId)
   }
 
   registerEventHandler(dc: DeltaChat) {
