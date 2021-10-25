@@ -3,14 +3,14 @@ import classNames from 'classnames'
 import Timestamp from '../conversations/Timestamp'
 import { isImage, isVideo } from '../attachment/Attachment'
 import { i18nContext } from '../../contexts'
-import { msgStatus } from '../../../shared/shared-types'
+import { MessageStatusString } from '../../../shared/shared-types'
 
 export default class MessageMetaData extends React.Component<{
   padlock: boolean
   username?: string
   file_mime?: string | null
   direction?: 'incoming' | 'outgoing'
-  status: msgStatus
+  status: MessageStatusString
   text?: string
   timestamp: number
   hasLocation?: boolean

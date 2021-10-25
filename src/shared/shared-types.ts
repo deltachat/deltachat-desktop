@@ -184,7 +184,7 @@ export interface FullChat {
 
 export type todo = any
 
-export type msgStatus =
+export type MessageStatusString =
   | 'error'
   | 'sending'
   | 'draft'
