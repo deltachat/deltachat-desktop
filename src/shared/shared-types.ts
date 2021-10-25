@@ -152,7 +152,7 @@ export interface FullChat {
   ephemeralTimer: number
 }
 
-type todo = any
+export type todo = any
 
 export type msgStatus =
   | 'error'
