@@ -9,7 +9,7 @@ import {
   dragAttachmentOut,
 } from './Attachment'
 import Timestamp from '../conversations/Timestamp'
-import { JsonMessage } from '../../../shared/shared-types'
+import { NormalMessage } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
 import { makeContextMenu } from '../ContextMenu'
 import { OpenDialogFunctionType } from '../dialogs/DialogController'
@@ -17,7 +17,7 @@ import { runtime } from '../../runtime'
 
 import filesizeConverter from 'filesize'
 
-export default function MediaAttachment({ message }: { message: JsonMessage }) {
+export default function MediaAttachment({ message }: { message: NormalMessage }) {
   if (!message.file) {
     return null
   }
@@ -45,7 +45,7 @@ const hideOpenInShellTypes = [
 ]
 
 const contextMenuFactory = (
-  message: JsonMessage,
+  message: NormalMessage,
   openDialog: OpenDialogFunctionType
 ) => {
   const tx = window.static_translate
@@ -71,7 +71,7 @@ const contextMenuFactory = (
 }
 
 /** provides a quick link to comonly used functions to save a few duplicated lines  */
-const useMediaActions = (message: JsonMessage) => {
+const useMediaActions = (message: NormalMessage) => {
   const { openDialog, openContextMenu } = useContext(ScreenContext)
   return {
     openContextMenu: makeContextMenu(
@@ -100,7 +100,7 @@ function squareBrokenMediaContent(
   )
 }
 
-function ImageAttachment({ message }: { message: JsonMessage }) {
+function ImageAttachment({ message }: { message: NormalMessage }) {
   const { openContextMenu, openFullscreenMedia, openInShell } = useMediaActions(
     message
   )
@@ -125,7 +125,7 @@ function ImageAttachment({ message }: { message: JsonMessage }) {
   )
 }
 
-function VideoAttachment({ message }: { message: JsonMessage }) {
+function VideoAttachment({ message }: { message: NormalMessage }) {
   const { openContextMenu, openFullscreenMedia, openInShell } = useMediaActions(
     message
   )
@@ -156,7 +156,7 @@ function VideoAttachment({ message }: { message: JsonMessage }) {
   )
 }
 
-function AudioAttachment({ message }: { message: JsonMessage }) {
+function AudioAttachment({ message }: { message: NormalMessage }) {
   const { openContextMenu } = useMediaActions(message)
   const { file_mime, file } = message
   const hasSupportedFormat = isAudio(file_mime)
@@ -186,7 +186,7 @@ function AudioAttachment({ message }: { message: JsonMessage }) {
   )
 }
 
-function FileAttachment({ message }: { message: JsonMessage }) {
+function FileAttachment({ message }: { message: NormalMessage }) {
   const { openContextMenu, downloadMedia, openInShell } = useMediaActions(
     message
   )

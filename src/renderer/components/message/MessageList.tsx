@@ -11,7 +11,7 @@ import type { ChatTypes } from 'deltachat-node'
 import moment from 'moment'
 
 import { getLogger } from '../../../shared/logger'
-import { JsonMessage, FullChat } from '../../../shared/shared-types'
+import { NormalMessage, FullChat } from '../../../shared/shared-types'
 import { useTranslationFunction } from '../../contexts'
 import { useDCConfigOnce } from '../helpers/useDCConfigOnce'
 const log = getLogger('render/msgList')
@@ -242,7 +242,7 @@ export const MessageListInner = React.memo(
             return (
               <MessageWrapper
                 key={messageId}
-                message={message as JsonMessage}
+                message={message as NormalMessage}
                 conversationType={conversationType}
               />
             )

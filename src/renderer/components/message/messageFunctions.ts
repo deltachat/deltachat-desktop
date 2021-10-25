@@ -1,7 +1,7 @@
 import { getLogger } from '../../../shared/logger'
 const log = getLogger('render/msgFunctions')
 import type { Message } from 'deltachat-node'
-import { JsonMessage } from '../../../shared/shared-types'
+import { NormalMessage } from '../../../shared/shared-types'
 import { ChatStoreDispatch, selectChat } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
 import { runtime } from '../../runtime'
@@ -22,7 +22,7 @@ export function openAttachmentInShell(msg: MsgObject) {
   }
 }
 
-export function forwardMessage(message: JsonMessage) {
+export function forwardMessage(message: NormalMessage) {
   window.__openDialog('ForwardMessage', { message })
 }
 
@@ -39,7 +39,7 @@ export function deleteMessage(
   })
 }
 
-export function openMessageInfo(message: JsonMessage) {
+export function openMessageInfo(message: NormalMessage) {
   window.__openDialog('MessageDetail', { id: message.id })
 }
 
@@ -51,7 +51,7 @@ export function setQuoteInDraft(messageId: number) {
   }
 }
 
-export async function privateReply(msg: JsonMessage) {
+export async function privateReply(msg: NormalMessage) {
   const quotedMessageId = msg.id
   const contactId = msg.fromId
   const chatId = await DeltaBackend.call(

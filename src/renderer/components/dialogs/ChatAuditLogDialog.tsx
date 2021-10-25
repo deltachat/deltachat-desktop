@@ -7,7 +7,7 @@ import React, {
 } from 'react'
 import { DeltaDialogBase, DeltaDialogCloseButton } from './DeltaDialog'
 import { DialogProps } from './DialogController'
-import type { FullChat, JsonMessage } from '../../../shared/shared-types'
+import type { FullChat, NormalMessage } from '../../../shared/shared-types'
 import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/dist/constants'
 import { getLogger } from '../../../shared/logger'
@@ -24,7 +24,7 @@ import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 const log = getLogger('render/ChatAuditLog')
 
 function buildContextMenu(
-  message: JsonMessage,
+  message: NormalMessage,
   isGroup: boolean,
   closeDialogCallback: DialogProps['onClose']
 ) {
@@ -72,14 +72,14 @@ export default function ChatAuditLogDialog(props: {
   const [loading, setLoading] = useState(true)
   const [msgIds, setMsgIds] = useState<number[]>([])
   const [messages, setMessages] = useState<{
-    [key: number]: JsonMessage | null
+    [key: number]: NormalMessage | null
   }>({})
 
   const listView = useRef<HTMLDivElement>(null)
 
   const { openContextMenu } = useContext(ScreenContext)
   const showMenu = (
-    message: JsonMessage,
+    message: NormalMessage,
     event: React.MouseEvent<
       HTMLDivElement | HTMLAnchorElement | HTMLLIElement,
       MouseEvent

@@ -1,11 +1,11 @@
-import { C } from 'deltachat-node'
+import { C, Message as DCNMessage } from 'deltachat-node'
 import { getLogger } from '../../shared/logger'
 
 const log = getLogger('main/deltachat/messagelist')
 
 import SplitOut from './splitout'
 import { Message } from 'deltachat-node'
-import { JsonMessage, MessageSearchResult } from '../../shared/shared-types'
+import { NormalMessage, MessageSearchResult, MetaMessageIs } from '../../shared/shared-types'
 
 import { writeFile } from 'fs/promises'
 import tempy from 'tempy'
@@ -25,7 +25,7 @@ export default class DCMessageList extends SplitOut {
       location?: { lat: number; lng: number }
       quoteMessageId?: number
     }
-  ): [number, JsonMessage | null] {
+  ): [number, NormalMessage | null] {
     const viewType = filename ? C.DC_MSG_FILE : C.DC_MSG_TEXT
     const msg = this.selectedAccountContext.messageNew(viewType)
     if (filename) msg.setFile(filename, undefined)
@@ -68,7 +68,7 @@ export default class DCMessageList extends SplitOut {
     return this.selectedAccountContext.getMessageInfo(msgId)
   }
 
-  async getDraft(chatId: number): Promise<JsonMessage | null> {
+  async getDraft(chatId: number): Promise<NormalMessage | null> {
     const draft = this.selectedAccountContext.getDraft(chatId)
     return draft ? this._messageToJson(draft) : null
   }
@@ -99,7 +99,7 @@ export default class DCMessageList extends SplitOut {
     this.selectedAccountContext.setDraft(chatId, draft)
   }
 
-  messageIdToJson(id: number): JsonMessage | null {
+  messageIdToJson(id: number): NormalMessage | null {
     const msg = this.selectedAccountContext.getMessage(id)
     if (!msg) {
       log.warn('No message found for ID ' + id)
@@ -108,7 +108,7 @@ export default class DCMessageList extends SplitOut {
     return this._messageToJson(msg)
   }
 
-  _messageToJson(msg: Message): JsonMessage {
+  _messageToJson(msg: DCNMessage): NormalMessage {
     const file_mime = msg.getFilemime()
     const file_name = msg.getFilename()
     const file_bytes = msg.getFilebytes()
@@ -116,16 +116,18 @@ export default class DCMessageList extends SplitOut {
     const setupCodeBegin = msg.getSetupcodebegin()
     const contact = fromId && this.controller.contacts.getContact(fromId)
 
-    const jsonMSG = msg.toJson()
+    const jsonMSG: ReturnType<typeof DCNMessage.prototype.toJson>  = msg.toJson()
 
-    return Object.assign(jsonMSG, {
+    return {
+      ...jsonMSG,
+      type: MetaMessageIs.Normal,
       sender: (contact ? { ...contact } : {}) as any,
       setupCodeBegin,
       // extra attachment fields
       file_mime,
       file_bytes,
       file_name,
-    })
+    }
   }
 
   forwardMessage(msgId: number, chatId: number) {

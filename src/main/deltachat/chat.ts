@@ -1,7 +1,7 @@
 import { C } from 'deltachat-node'
 import { getLogger } from '../../shared/logger'
 import SplitOut from './splitout'
-import { JsonMessage } from '../../shared/shared-types'
+import { NormalMessage } from '../../shared/shared-types'
 
 const log = getLogger('main/deltachat/chat')
 export default class DCChat extends SplitOut {
@@ -9,7 +9,7 @@ export default class DCChat extends SplitOut {
     chatId: number,
     msgType1: number,
     msgType2: number
-  ): JsonMessage[] {
+  ): NormalMessage[] {
     const mediaMessages = this.selectedAccountContext.getChatMedia(
       chatId,
       msgType1,

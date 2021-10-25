@@ -1,10 +1,10 @@
 import React from 'react'
 import Message from './Message'
-import { JsonMessage } from '../../../shared/shared-types'
+import { NormalMessage } from '../../../shared/shared-types'
 import { ConversationType } from './MessageList'
 
 type RenderMessageProps = {
-  message: JsonMessage
+  message: NormalMessage
   conversationType: ConversationType
 }
 

@@ -21,7 +21,7 @@ import { state as LocationStoreState } from '../../stores/locations'
 import ContextMenu from './ContextMenu'
 import {
   FullChat,
-  JsonMessage,
+  NormalMessage,
   JsonContact,
   JsonLocations,
 } from '../../../shared/shared-types'
@@ -430,7 +430,7 @@ export default class MapComponent extends React.Component<
     if (!map) {
       throw new Error('this.map is unset')
     }
-    let message: JsonMessage
+    let message: NormalMessage
     const features = map.queryRenderedFeatures(event.point)
     const contactFeature = features.find(f => {
       return (
@@ -443,7 +443,7 @@ export default class MapComponent extends React.Component<
         DeltaBackend.call(
           'messageList.getMessage',
           contactFeature.properties.msgId
-        ).then((messageObj: JsonMessage | null) => {
+        ).then((messageObj: NormalMessage | null) => {
           if (messageObj) {
             message = messageObj
           }
@@ -635,7 +635,7 @@ export default class MapComponent extends React.Component<
   renderPopupMessage(
     contactName: string,
     formattedDate: string,
-    message: JsonMessage | null
+    message: NormalMessage | null
   ) {
     return ReactDOMServer.renderToStaticMarkup(
       <PopupMessage

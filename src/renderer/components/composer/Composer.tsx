@@ -16,8 +16,8 @@ import { useChatStore } from '../../stores/chat'
 import { EmojiData, BaseEmoji } from 'emoji-mart'
 import { replaceColonsSafe } from '../conversations/emoji'
 import {
-  JsonMessage,
-  JsonMessageAttachmentSubset,
+  NormalMessage,
+  NormalMessageAttachmentSubset,
 } from '../../../shared/shared-types'
 import { Quote } from '../message/Message'
 import { DeltaBackend, sendMessageParams } from '../../delta-remote'
@@ -321,10 +321,10 @@ const Composer = forwardRef<
 export default Composer
 
 export type DraftObject = { chatId: number } & Pick<
-  JsonMessage,
+  NormalMessage,
   'text' | 'file' | 'quotedMessageId' | 'quotedText'
 > &
-  JsonMessageAttachmentSubset
+  NormalMessageAttachmentSubset
 
 export function useDraft(
   chatId: number | null,

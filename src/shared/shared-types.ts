@@ -111,7 +111,7 @@ export interface ChatListItemType {
   muted: boolean
 }
 
-import type { Chat, Message } from 'deltachat-node'
+import type { Chat, Message as DCNMessage } from 'deltachat-node'
 
 export type JsonChat = ReturnType<typeof Chat.prototype.toJson>
 
@@ -129,16 +129,36 @@ export type JsonLocations = {
   marker: string
 }[] // ReturnType<typeof DeltaChat.prototype.getLocations>
 
-export type JsonMessage = ReturnType<typeof Message.prototype.toJson> & {
+export type NormalMessage = ReturnType<typeof DCNMessage.prototype.toJson> & {
+  type: MetaMessageIs.Normal
   sender: JsonContact
-  setupCodeBegin?: string
+  setupCodeBegin: string | null
   file_mime: string | null
   file_bytes: number | null
   file_name: string | null
 }
 
-export type JsonMessageAttachmentSubset = Pick<
-  JsonMessage,
+export type DayMarkerMessage = {
+  type: MetaMessageIs.DayMarker
+  timestamp: number
+}
+
+export type MarkerOneMessage = {
+  type: MetaMessageIs.MarkerOne
+  count: number
+}
+
+export enum MetaMessageIs {
+  MarkerOne = 0,
+  DayMarker = 1,
+  Normal = 2,
+}
+
+export type MetaMessage = MarkerOneMessage | DayMarkerMessage | NormalMessage
+
+
+export type NormalMessageAttachmentSubset = Pick<
+  NormalMessage,
   'file' | 'file_mime' | 'file_bytes' | 'file_name'
 >
 

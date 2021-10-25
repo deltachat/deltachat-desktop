@@ -4,7 +4,7 @@ import { appName } from '../shared/constants'
 import { appIcon } from './application-constants'
 import DeltaChatController from './deltachat/controller'
 import { ExtendedAppMainProcess } from './types'
-import { FullChat, JsonMessage } from '../shared/shared-types'
+import { FullChat, NormalMessage } from '../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
 import { getLogger } from '../shared/logger'
 import { platform } from 'os'
@@ -36,7 +36,7 @@ export default function (dc: DeltaChatController, settings: any) {
     } else {
       const [chatInfo, message_json]: [
         FullChat,
-        JsonMessage | null
+        NormalMessage | null
       ] = await Promise.all([
         dc.callMethod(null, 'chatList.getFullChatById', [chatId]),
         dc.callMethod(null, 'messageList.messageIdToJson', [msgId]),
