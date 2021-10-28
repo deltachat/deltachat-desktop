@@ -1,7 +1,7 @@
 import React from 'react'
 import { LabeledLink, Link } from './Link'
 import {
-  parse_text,
+  parse_desktop_set,
   ParsedElement,
 } from '@deltachat/message_parser_wasm/message_parser_wasm'
 import { getLogger } from '../../../shared/logger'
@@ -11,7 +11,7 @@ import { ActionEmitter, KeybindAction } from '../../keybindings'
 
 const log = getLogger('renderer/message-markdown')
 
-const parseMessage: (message: string) => ParsedElement[] = (m) => parse_text(m, true)
+const parseMessage: (message: string) => ParsedElement[] = (m) => parse_desktop_set(m)
 
 function renderElement(elm: ParsedElement, key?: number): JSX.Element {
   switch (elm.t) {
