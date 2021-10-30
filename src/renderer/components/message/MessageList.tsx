@@ -30,7 +30,7 @@ export type ConversationType = {
   chatType: ChatTypes
 }
 
-const MessageList = React.memo(function MessageList({
+const MessageList = function MessageList({
   chat,
 }: {
   chat: FullChat
@@ -225,7 +225,9 @@ const MessageList = React.memo(function MessageList({
       message: MetaMessage
     ) => JSX.Element | undefined
   ) => {
+    
     return messageListStore.pageOrdering.map((pageKey: string) => {
+      console.log('xxx pageKey', pageKey)
       return (
         <MessagePage
           key={pageKey}
@@ -260,6 +262,7 @@ const MessageList = React.memo(function MessageList({
             ref={messageListTopRef}
           />
           {iterateMessages((key, _messageId, _messageIndex, message) => {
+            console.log('Hallo!!!')
             if (message.type === MetaMessageIs.DayMarker) {
               return (
                 <DayMarkerInfoMessage
@@ -342,7 +345,7 @@ const MessageList = React.memo(function MessageList({
       )}
     </>
   )
-})
+}
 
 export default MessageList
 
@@ -355,7 +358,7 @@ export function MessagePage({
     key: string,
     messageId: MessageId,
     messageIndex: number,
-    message: NormalMessage
+    message: MetaMessage
   ) => JSX.Element | undefined
 }) {
   const firstMessageIdIndex = page.firstMessageIdIndex
@@ -365,13 +368,13 @@ export function MessagePage({
         {page.messageIds.map((messageId: MessageId, index) => {
           const messageIndex = firstMessageIdIndex + index
           const message: MetaMessage = page.messages[index]
-          if (!message || message.type !== MetaMessageIs.Normal) return null
+          if (!message) return null
           const messageKey = calculateMessageKey(
             page.key,
             messageId,
             messageIndex
           )
-          return mapFunction(messageKey, messageId, messageIndex, message as unknown as NormalMessage)
+          return mapFunction(messageKey, messageId, messageIndex, message)
         })}
       </ul>
     </div>

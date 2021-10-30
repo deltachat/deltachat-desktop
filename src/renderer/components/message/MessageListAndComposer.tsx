@@ -6,7 +6,7 @@ import MessageList from './MessageList'
 import { SettingsContext, ScreenContext } from '../../contexts'
 import { ChatStoreStateWithChatSet } from '../../stores/chat'
 import ComposerMessageInput from '../composer/ComposerMessageInput'
-import { DesktopSettings } from '../../../shared/shared-types'
+import { DesktopSettings, FullChat } from '../../../shared/shared-types'
 import { isChatReadonly } from '../../../shared/util'
 
 const log = getLogger('renderer/MessageListAndComposer')
@@ -38,11 +38,13 @@ export function getBackgroundImageStyle(
 export default function MessageListAndComposer({
   chatStore,
 }: {
-  chatStore: ChatStoreStateWithChatSet
+  chatStore: FullChat
 }) {
   const conversationRef = useRef(null)
   const refComposer = useRef(null)
   const { openDialog } = useContext(ScreenContext)
+
+  console.log(JSON.stringify(chatStore))
 
   const messageInputRef = useRef<ComposerMessageInput>(null)
   const {
@@ -53,17 +55,17 @@ export default function MessageListAndComposer({
     removeFile,
     clearDraft,
   } = useDraft(
-    chatStore.chat.id,
-    chatStore.chat.isContactRequest,
+    chatStore.id,
+    chatStore.isContactRequest,
     messageInputRef
   )
 
   const onDrop = (e: React.DragEvent<any>) => {
-    if (chatStore.chat === null) {
+    if (chatStore === null) {
       log.warn('droped something, but no chat is selected')
       return
     }
-    const chatId = chatStore.chat.id as number
+    const chatId = chatStore.id as number
 
     e.preventDefault()
     e.stopPropagation()
@@ -103,8 +105,8 @@ export default function MessageListAndComposer({
           {tx(
             'ask_send_following_n_files_to',
             fileCount > 1
-              ? [String(fileCount), chatStore.chat.name]
-              : [chatStore.chat.name],
+              ? [String(fileCount), chatStore.name]
+              : [chatStore.name],
             {
               quantity: fileCount,
             }
@@ -179,7 +181,7 @@ export default function MessageListAndComposer({
     }
   }, [])
 
-  const [disabled, disabledReason] = isChatReadonly(chatStore.chat)
+  const [disabled, disabledReason] = isChatReadonly(chatStore)
 
   const settings = useContext(SettingsContext).desktopSettings
   const style = settings ? getBackgroundImageStyle(settings) : {}
@@ -193,14 +195,14 @@ export default function MessageListAndComposer({
       onDragOver={onDragOver}
     >
       <div className='message-list-and-composer__message-list'>
-        <MessageList chat={chatStore.chat} />
+        <MessageList chat={chatStore} />
       </div>
       <Composer
         ref={refComposer}
-        chatId={chatStore.chat.id}
+        chatId={chatStore.id}
         isDisabled={disabled}
         disabledReason={disabledReason}
-        isContactRequest={chatStore.chat.isContactRequest}
+        isContactRequest={chatStore.isContactRequest}
         messageInputRef={messageInputRef}
         draftState={draftState}
         updateDraftText={updateDraftText}

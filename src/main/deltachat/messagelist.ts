@@ -278,6 +278,7 @@ export default class DCMessageList extends SplitOut {
         const message = this._messageToJson(msg)
         messageObject = message
       }
+      messages.push(messageObject)
     }
     return messages
   }

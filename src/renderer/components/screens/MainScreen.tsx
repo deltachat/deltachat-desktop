@@ -252,7 +252,7 @@ export default function MainScreen() {
           onChatClick={onChatClick}
           selectedChatId={selectedChat.chat ? selectedChat.chat.id : null}
         />
-        <MessageListView view={view} selectedChat={selectedChat} />
+        { selectedChat.chat !== null &&  <MessageListView view={view} selectedChat={selectedChat.chat} /> }
       </div>
       <ConnectivityToast />
     </div>
@@ -284,7 +284,7 @@ function MessageListView({
   selectedChat,
   view,
 }: {
-  selectedChat: any
+  selectedChat: FullChat
   view: View
 }) {
   const tx = useTranslationFunction()
@@ -309,11 +309,11 @@ function MessageListView({
   }
   return (
     <>
-      {view === View.Media && <Gallery chatId={selectedChat.chat.id} />}
-      {view === View.Map && <MapComponent selectedChat={selectedChat.chat} />}
+      {view === View.Media && <Gallery chatId={selectedChat.id} />}
+      {view === View.Map && <MapComponent selectedChat={selectedChat} />}
       {view === View.MessageList && (
         <MessageListAndComposer
-          chatStore={selectedChat as ChatStoreStateWithChatSet}
+          chatStore={selectedChat}
         />
       )}
     </>
