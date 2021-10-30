@@ -6,7 +6,7 @@ const log = getLogger('main/deltachat/messagelist')
 // @ts-ignore
 import binding from 'deltachat-node/binding'
 import SplitOut from './splitout'
-import { NormalMessage, MessageSearchResult, MetaMessageIs, MarkerOneParams, MetaMessage } from '../../shared/shared-types'
+import { NormalMessage, MessageSearchResult, MetaMessageIs, MarkerOneParams, MetaMessage, MessageQuote } from '../../shared/shared-types'
 
 import { writeFile } from 'fs/promises'
 import tempy from 'tempy'
@@ -177,6 +177,18 @@ export default class DCMessageList extends SplitOut {
 
     const jsonMSG: ReturnType<typeof DCNMessage.prototype.toJson>  = msg.toJson()
 
+    let quote: MessageQuote = null
+    const quotedMessage = msg.getQuotedMessage()
+    if (quotedMessage) {
+      const _contact = this.selectedAccountContext.getContact(quotedMessage.getFromId())
+      quote = {
+        messageId: quotedMessage.getId(),
+        text: quotedMessage.getText(),
+        displayName: _contact.getDisplayName(),
+        displayColor: _contact.color,
+        overrideSenderName: quotedMessage.overrideSenderName,
+      }
+    }
     return {
       ...jsonMSG,
       type: MetaMessageIs.Normal,
@@ -186,6 +198,7 @@ export default class DCMessageList extends SplitOut {
       file_mime,
       file_bytes,
       file_name,
+      quote
     }
   }
 

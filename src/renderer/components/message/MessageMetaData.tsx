@@ -3,14 +3,15 @@ import classNames from 'classnames'
 import Timestamp from '../conversations/Timestamp'
 import { isImage, isVideo } from '../attachment/Attachment'
 import { i18nContext } from '../../contexts'
-import { MessageStatusString } from '../../../shared/shared-types'
+import { MessageStatusString, MessageState } from '../../../shared/shared-types'
+import {mapCoreMsgStatus2String} from '../helpers/MapMsgStatus'
 
 export default class MessageMetaData extends React.Component<{
   padlock: boolean
   username?: string
   file_mime?: string | null
   direction?: 'incoming' | 'outgoing'
-  status: MessageStatusString
+  state: MessageState
   text?: string
   timestamp: number
   hasLocation?: boolean
@@ -22,7 +23,7 @@ export default class MessageMetaData extends React.Component<{
       username,
       file_mime,
       direction,
-      status,
+      state,
       text,
       timestamp,
       hasLocation,
@@ -33,6 +34,8 @@ export default class MessageMetaData extends React.Component<{
       !text && (isImage(file_mime || null) || isVideo(file_mime || null))
     )
 
+
+    const messageStateString = mapCoreMsgStatus2String(state)
     return (
       <i18nContext.Consumer>
         {tx => (
@@ -60,9 +63,11 @@ export default class MessageMetaData extends React.Component<{
             <span className='spacer' />
             {direction === 'outgoing' ? (
               <div
-                className={classNames('status-icon', status)}
-                aria-label={tx(`a11y_delivery_status_${status}`)}
-                onClick={status === 'error' ? onClickError : undefined}
+                className={classNames('status-icon', messageStateString)}
+                aria-label={tx(`a11y_delivery_status_${messageStateString}`)}
+                onClick={
+                  messageStateString === 'error' ? onClickError : undefined
+                }
               />
             ) : null}
           </div>

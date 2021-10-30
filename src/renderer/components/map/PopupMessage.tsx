@@ -15,7 +15,7 @@ export default class PopupMessage extends React.Component<{
         <div className='map-popup'>
           <div>{message.text}</div>
           <MessageMetaData
-            status={mapCoreMsgStatus2String(message.state)}
+            state={message.state}
             timestamp={message.timestamp * 1000}
             padlock={message.showPadlock}
             username={username}

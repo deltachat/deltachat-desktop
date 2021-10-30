@@ -23,7 +23,7 @@ import { Quote } from '../message/Message'
 import { DeltaBackend, sendMessageParams } from '../../delta-remote'
 import { DraftAttachment } from '../attachment/messageAttachment'
 import { runtime } from '../../runtime'
-import { unselectChat } from '../helpers/ChatMethods'
+import { unselectChat, sendMessage } from '../helpers/ChatMethods'
 
 const log = getLogger('renderer/composer')
 
@@ -86,7 +86,7 @@ const Composer = forwardRef<
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
   const pickerButtonRef = useRef<HTMLDivElement>(null)
 
-  const sendMessage = () => {
+  const sendMessageAndFocusComposer = () => {
     if (chatId === null) {
       throw new Error('chat id is undefined')
     }
@@ -103,16 +103,10 @@ const Composer = forwardRef<
         log.debug(`Empty message: don't send it...`)
         return
       }
-      chatStoreDispatch({
-        type: 'SEND_MESSAGE',
-        payload: [
-          chatId,
-          {
-            text: replaceColonsSafe(message),
-            filename: draftState.file,
-            quoteMessageId: draftState.quotedMessageId,
-          } as sendMessageParams,
-        ],
+      sendMessage(chatId, {
+        text: replaceColonsSafe(message),
+        filename: draftState.file,
+        quoteMessageId: draftState.quote?.messageId
       })
 
       /* clear it here to make sure the draft is cleared */
@@ -252,11 +246,10 @@ const Composer = forwardRef<
     return (
       <div className='composer' ref={ref}>
         <div className='upper-bar'>
-          {draftState.quotedText && (
+          {draftState.quote && (
             <div className='attachment-quote-section is-quote'>
               <Quote
-                quotedText={draftState.quotedText}
-                quotedMessageId={draftState.quotedMessageId}
+                quote={draftState.quote}
               />
               <QuoteOrDraftRemoveButton onClick={removeQuote} />
             </div>
@@ -285,7 +278,7 @@ const Composer = forwardRef<
                 <ComposerMessageInput
                   ref={messageInputRef}
                   enterKeySends={desktopSettings.enterKeySends}
-                  sendMessage={sendMessage}
+                  sendMessage={sendMessageAndFocusComposer}
                   chatId={chatId}
                   updateDraftText={updateDraftText}
                   onPaste={handlePaste}
@@ -301,7 +294,7 @@ const Composer = forwardRef<
           >
             <span />
           </div>
-          <div className='send-button-wrapper' onClick={sendMessage}>
+          <div className='send-button-wrapper' onClick={sendMessageAndFocusComposer}>
             <button aria-label={tx('menu_send')} />
           </div>
         </div>
@@ -322,7 +315,7 @@ export default Composer
 
 export type DraftObject = { chatId: number } & Pick<
   NormalMessage,
-  'text' | 'file' | 'quotedMessageId' | 'quotedText'
+  'text' | 'file' | 'quote'
 > &
   NormalMessageAttachmentSubset
 
@@ -345,8 +338,7 @@ export function useDraft(
     file_bytes: null,
     file_mime: null,
     file_name: null,
-    quotedMessageId: 0,
-    quotedText: '',
+    quote: null
   })
   const draftRef = useRef<DraftObject>({
     chatId: chatId || 0,
@@ -355,8 +347,7 @@ export function useDraft(
     file_bytes: null,
     file_mime: null,
     file_name: null,
-    quotedMessageId: 0,
-    quotedText: '',
+    quote: null
   })
   draftRef.current = draftState
 
@@ -368,14 +359,15 @@ export function useDraft(
       file_bytes: null,
       file_mime: null,
       file_name: null,
-      quotedMessageId: 0,
-      quotedText: '',
+      quote: null,
     }))
     inputRef.current?.focus()
   }, [chatId, inputRef])
 
   const loadDraft = useCallback(
     (chatId: number) => {
+
+      log.debug('reloading draft because id changed', chatId)
       DeltaBackend.call('messageList.getDraft', chatId).then(newDraft => {
         if (!newDraft) {
           log.debug('no draft')
@@ -416,10 +408,11 @@ export function useDraft(
     }
     const draft = draftRef.current
     const oldChatId = chatId
+    if (!draft.quote) return
     await DeltaBackend.call('messageList.setDraft', chatId, {
       text: draft.text,
       file: draft.file,
-      quotedMessageId: draft.quotedMessageId || undefined,
+      quotedMessageId: draft.quote.messageId,
     })
 
     if (oldChatId !== chatId) {
@@ -437,8 +430,7 @@ export function useDraft(
         file_mime: newDraft.file_mime,
         file_name: newDraft.file_name,
         viewType: newDraft.viewType,
-        quotedMessageId: newDraft.quotedMessageId,
-        quotedText: newDraft.quotedText,
+        quote: newDraft.quote
       }))
       // don't load text to prevent bugging back
     } else {
@@ -459,7 +451,7 @@ export function useDraft(
 
   const removeQuote = useCallback(() => {
     if (draftRef.current) {
-      draftRef.current.quotedMessageId = null
+      draftRef.current.quote = null
     }
     saveDraft()
   }, [saveDraft])
@@ -478,8 +470,24 @@ export function useDraft(
   )
 
   useEffect(() => {
-    window.__setQuoteInDraft = (messageId: number) => {
-      draftRef.current.quotedMessageId = messageId
+    window.__setQuoteInDraft = async (messageId: number) => {
+      const message = await DeltaBackend.call(
+        'messageList.getMessage',
+        messageId
+      )
+
+      if (!message) return
+      const contact = await DeltaBackend.call(
+        'contacts.getContact',
+        message.fromId
+      )
+      draftRef.current.quote = {
+        messageId,
+        text: message.text,
+        displayName: contact.displayName,
+        displayColor: contact.color,
+        overrideSenderName: message.overrideSenderName,
+      }
       saveDraft()
       inputRef.current?.focus()
     }

@@ -16,10 +16,10 @@ import MessageBody from './MessageBody'
 import MessageMetaData from './MessageMetaData'
 
 import Attachment from '../attachment/messageAttachment'
-import { NormalMessage, JsonContact } from '../../../shared/shared-types'
+import { NormalMessage, JsonContact, MessageQuote } from '../../../shared/shared-types'
 import { isGenericAttachment } from '../attachment/Attachment'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
-import { joinCall, openViewProfileDialog } from '../helpers/ChatMethods'
+import { joinCall, openViewProfileDialog, jumpToMessage } from '../helpers/ChatMethods'
 import { C } from 'deltachat-node/dist/constants'
 // import { getLogger } from '../../../shared/logger'
 import { useChatStore2, ChatStoreDispatch } from '../../stores/chat'
@@ -32,6 +32,7 @@ import { ConversationType } from './MessageList'
 import { getDirection } from '../../../shared/util'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { ContextMenuItem } from '../ContextMenu'
+import moment from 'moment'
 
 const Avatar = (
   contact: JsonContact,
@@ -66,11 +67,22 @@ const Avatar = (
   }
 }
 
-const AuthorName = (
+export function getAuthorName(
+  displayName: string,
+  overrideSenderName?: string
+) {
+  return overrideSenderName ? `~${overrideSenderName}` : displayName
+}
+
+export function AuthorName({
+  contact,
+  onContactClick,
+  overrideSenderName
+}: {
   contact: JsonContact,
   onContactClick: (contact: JsonContact) => void,
   overrideSenderName?: string
-) => {
+}) {
   const { color, displayName } = contact
 
   return (
@@ -79,7 +91,7 @@ const AuthorName = (
       style={{ color: color }}
       onClick={() => onContactClick(contact)}
     >
-      {overrideSenderName ? `~${overrideSenderName}` : displayName}
+      {getAuthorName(displayName, overrideSenderName)}
     </span>
   )
 }
@@ -317,7 +329,7 @@ const Message = (props: {
     )
   }
 
-  const hasQuote = message.quotedText !== null
+  const hasQuote = message.quote !== null
 
   /** Whether to show author name and avatar */
   const showAuthor =
@@ -357,11 +369,11 @@ const Message = (props: {
               'can-hide': direction === 'outgoing' || !showAuthor,
             })}
           >
-            {AuthorName(
-              message.sender,
-              onContactClick,
-              message?.overrideSenderName
-            )}
+            <AuthorName
+              contact={message.sender}
+              onContactClick={onContactClick}
+              overrideSenderName={message?.overrideSenderName}
+            />
           </div>
         )}
         <div
@@ -370,12 +382,7 @@ const Message = (props: {
           })}
           onClick={onClickMessageBody}
         >
-          {hasQuote && (
-            <Quote
-              quotedText={message.quotedText}
-              quotedMessageId={message.quotedMessageId}
-            />
-          )}
+          {message.quote !== null && <Quote quote={message.quote} />}
           {message.file && !isSetupmessage && (
             <Attachment
               {...{
@@ -399,7 +406,7 @@ const Message = (props: {
           <MessageMetaData
             file_mime={(!isSetupmessage && message.file_mime) || null}
             direction={direction}
-            status={status}
+            state={message.state}
             text={text}
             hasLocation={hasLocation}
             timestamp={message.timestamp * 1000}
@@ -415,40 +422,87 @@ const Message = (props: {
 export default Message
 
 export const Quote = ({
-  quotedText,
-  quotedMessageId,
+  quote
 }: {
-  quotedText: string | null
-  quotedMessageId: number | null
+  quote: MessageQuote
 }) => {
-  const [message, setMessage] = useState<NormalMessage | null>(null)
+  const screenContext = useContext(ScreenContext)
 
-  useEffect(() => {
-    if (quotedMessageId) {
-      DeltaBackend.call('messageList.getMessage', quotedMessageId).then(msg => {
-        if (msg) {
-          setMessage(msg)
-        }
-      })
-    }
-  }, [quotedMessageId])
+  const onContactClick = async (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    event.stopPropagation()
+    event.preventDefault()
+    const message = await DeltaBackend.call(
+      'messageList.getMessage',
+      quote.messageId
+    )
+    if (message === null) return
+    throw new Error('Not implemented yet')
+    //const contact = message.contact
+    //openViewProfileDialog(screenContext, contact.id)
+  }
+
 
   return (
-    <div className='quote-background'>
+    <div
+      className='quote-background'
+      style={{ borderLeftColor: quote.displayColor }}
+      onClick={() => jumpToMessage(quote.messageId)}
+    >
       <div
         className='quote has-message'
-        style={{
-          borderLeftColor: (message && message.sender.color) || undefined,
-        }}
+        style={{ borderLeftColor: quote.displayColor }}
       >
-        <div className='quote-author'>
-          {message &&
-            AuthorName(message.sender, () => {}, message.overrideSenderName)}
+        <div
+          className='quote-author'
+          style={{ color: quote.displayColor }}
+          onClick={onContactClick}
+        >
+          {getAuthorName(quote.displayName, quote.overrideSenderName)}
         </div>
         <div className='quoted-text'>
-          <MessageBody text={quotedText || ''} />
+          <MessageBody text={quote.text} />
         </div>
       </div>
     </div>
+  )
+}
+
+export function DayMarkerInfoMessage(props: {
+  timestamp: number
+  key2: string
+}) {
+  const { timestamp, key2 } = props
+  const tx = useTranslationFunction()
+  return (
+    <li id={key2}>
+      <div className='info-message'>
+        <p style={{ textTransform: 'capitalize' }}>
+          {moment.unix(timestamp).calendar(null, {
+            sameDay: `[${tx('today')}]`,
+            lastDay: `[${tx('yesterday')}]`,
+            lastWeek: 'LL',
+            sameElse: 'LL',
+          })}
+        </p>
+      </div>
+    </li>
+  )
+}
+
+export function UnreadMessagesMarker(props: { count: number; key2: string }) {
+  const { count, key2 } = props
+  const tx = useTranslationFunction()
+  return (
+    <li id={key2}>
+      <div className='info-message'>
+        <p style={{ textTransform: 'capitalize' }}>
+          {tx('chat_n_new_messages', String(count), {
+            quantity: count === 1 ? 'one' : 'other',
+          })}
+        </p>
+      </div>
+    </li>
   )
 }

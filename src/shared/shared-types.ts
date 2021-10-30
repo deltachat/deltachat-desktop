@@ -128,6 +128,14 @@ export type JsonLocations = {
   marker: string
 }[] // ReturnType<typeof DeltaChat.prototype.getLocations>
 
+export type MessageQuote = {
+  messageId: number
+  text: string
+  displayName: string
+  displayColor: string
+  overrideSenderName: string
+}
+
 export type NormalMessage = ReturnType<typeof DCNMessage.prototype.toJson> & {
   type: MetaMessageIs.Normal
   sender: JsonContact
@@ -135,6 +143,7 @@ export type NormalMessage = ReturnType<typeof DCNMessage.prototype.toJson> & {
   file_mime: string | null
   file_bytes: number | null
   file_name: string | null
+  quote: MessageQuote | null
 }
 
 export type DayMarkerMessage = {
