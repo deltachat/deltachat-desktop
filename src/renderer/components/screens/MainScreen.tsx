@@ -16,6 +16,7 @@ import { useChatStore, ChatStoreStateWithChatSet } from '../../stores/chat'
 import {
   openViewGroupDialog,
   openViewProfileDialog,
+  selectChat,
 } from '../helpers/ChatMethods'
 
 import {
@@ -60,15 +61,15 @@ export default function MainScreen() {
   )
 
   const screenContext = useContext(ScreenContext)
-  const [selectedChat, chatStoreDispatch] = useChatStore()
+  const [selectedChat] = useChatStore()
 
   const onChatClick = (chatId: number) => {
     if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) return setShowArchivedChats(true)
     // avoid double clicks
     if (chatId === selectedChat.chat?.id) return
 
-    chatStoreDispatch({ type: 'SELECT_CHAT', payload: chatId })
-    setView(View.MessageList)
+    selectChat(chatId)
+    if (view !== View.MessageList) setView(View.MessageList)
   }
   const searchChats = (queryStr: string) => setQueryStr(queryStr)
   const handleSearchChange = (event: { target: { value: string } }) =>
@@ -94,7 +95,7 @@ export default function MainScreen() {
     setFirstLoad(false)
     const lastChatId = getLastSelectedChatId()
     if (lastChatId) {
-      chatStoreDispatch({ type: 'SELECT_CHAT', payload: lastChatId })
+      selectChat(lastChatId)
     }
   }
 
@@ -120,41 +121,6 @@ export default function MainScreen() {
   }
 
   const menu = <Menu selectedChat={selectedChat.chat} />
-  let MessageListView
-  if (selectedChat.chat !== null) {
-    switch (view) {
-      case View.Media:
-        MessageListView = <Gallery chatId={selectedChat.chat.id} />
-        break
-      case View.Map:
-        MessageListView = <MapComponent selectedChat={selectedChat.chat} />
-        break
-      case View.MessageList:
-      default:
-        MessageListView = (
-          <MessageListAndComposer
-            chatStore={selectedChat as ChatStoreStateWithChatSet}
-          />
-        )
-    }
-  } else {
-    const style: React.CSSProperties = window.__desktopSettings
-      ? getBackgroundImageStyle(window.__desktopSettings)
-      : {}
-
-    MessageListView = (
-      <div className='message-list-and-composer' style={style}>
-        <div
-          className='message-list-and-composer__message-list'
-          style={{ display: 'flex' }}
-        >
-          <div className='info-message big' style={{ alignSelf: 'center' }}>
-            <p>{tx('no_chat_selected_suggestion_desktop')}</p>
-          </div>
-        </div>
-      </div>
-    )
-  }
 
   // StandardJS won't let me use '&& { } || { }', so the following code
   // compares with showArchivedChats twice.
@@ -286,7 +252,7 @@ export default function MainScreen() {
           onChatClick={onChatClick}
           selectedChatId={selectedChat.chat ? selectedChat.chat.id : null}
         />
-        {MessageListView}
+        <MessageListView view={view} selectedChat={selectedChat} />
       </div>
       <ConnectivityToast />
     </div>
@@ -312,4 +278,44 @@ function chatSubtitle(chat: FullChat) {
     }
   }
   return 'ErrTitle'
+}
+
+function MessageListView({
+  selectedChat,
+  view,
+}: {
+  selectedChat: any
+  view: View
+}) {
+  const tx = useTranslationFunction()
+
+  if (selectedChat.id === null) {
+    const style: React.CSSProperties = window.__desktopSettings
+      ? getBackgroundImageStyle(window.__desktopSettings)
+      : {}
+
+    return (
+      <div className='message-list-and-composer' style={style}>
+        <div
+          className='message-list-and-composer__message-list'
+          style={{ display: 'flex' }}
+        >
+          <div className='info-message big' style={{ alignSelf: 'center' }}>
+            <p>{tx('no_chat_selected_suggestion_desktop')}</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+  return (
+    <>
+      {view === View.Media && <Gallery chatId={selectedChat.chat.id} />}
+      {view === View.Map && <MapComponent selectedChat={selectedChat.chat} />}
+      {view === View.MessageList && (
+        <MessageListAndComposer
+          chatStore={selectedChat as ChatStoreStateWithChatSet}
+        />
+      )}
+    </>
+  )
 }
