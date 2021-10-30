@@ -7,7 +7,8 @@ import {getLogger} from '../../../shared/logger'
 const log = getLogger('renderer/message/MessageWrapper')
 
 type RenderMessageProps = {
-  message: NormalMessage
+  message: NormalMessage 
+  conversationType: ConversationType
   key2: string
   isDeviceChat: boolean
   unreadMessageInViewIntersectionObserver: React.MutableRefObject<any>

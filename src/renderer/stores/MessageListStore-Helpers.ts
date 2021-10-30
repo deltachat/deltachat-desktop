@@ -397,6 +397,7 @@ export function scrollToMessageAndCheckIfWeNeedToLoadMore(
     }
     //messageElement.setAttribute('style', 'background-color: yellow')
 
+    if (!context.messageListRef.current) return
     let { scrollTop } = context.messageListRef.current
     const { scrollHeight, clientHeight } = context.messageListRef.current
     scrollTop = context.messageListRef.current.scrollTop = ((messageElement as unknown) as any).offsetTop
@@ -475,10 +476,13 @@ export function scrollToBottomAndCheckIfWeNeedToLoadMore(chatId: number) {
     context: MessageListStoreContext,
     _state: MessageListStoreState
   ) {
+    if (!context.messageListRef.current) return
     const { scrollTop, scrollHeight } = context.messageListRef.current
     subLog.debug(`scrollTop: ${scrollTop} scrollHeight ${scrollHeight}`)
 
     context.messageListRef.current.scrollTop = scrollHeight
+
+    if (!context.messageListWrapperRef.current) return
     const messageListWrapperHeight =
       context.messageListWrapperRef.current.clientHeight
     subLog.debug(
@@ -505,6 +509,7 @@ export function scrollToTopOfPageAndCheckIfWeNeedToLoadMore(pageKey: string) {
     'scrollToTopOfPageAndCheckIfWeNeedToLoadMore()'
   )
   return (context: MessageListStoreContext, _state: MessageListStoreState) => {
+    if (!context.messageListRef.current) return
     const { scrollTop, scrollHeight } = context.messageListRef.current
     subLog.debug(`scrollTop: ${scrollTop} scrollHeight ${scrollHeight}`)
 
@@ -554,6 +559,7 @@ export function incomingMessages(chatId: number) {
       return
     }
 
+    if (!context.messageListRef.current || !context.messageListWrapperRef.current) return
     const { scrollTop, scrollHeight } = context.messageListRef.current
     const { clientHeight } = context.messageListWrapperRef.current
 
@@ -625,6 +631,7 @@ export function scrollToMessage(
     ) as HTMLElement
 
     const scrollPosition = messageElement.offsetTop + relativeScrollPosition
+    if (!context.messageListRef.current) return
     context.messageListRef.current.scrollTop = scrollPosition
 
     subLog.debug(`restored scrollPosition to ${scrollPosition}`)

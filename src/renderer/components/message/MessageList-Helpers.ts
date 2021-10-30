@@ -6,8 +6,8 @@ import MessageListStore, {
 const log = getLogger('renderer/message/MessageList-Helpers')
 
 export function withoutTopPages(
-  messageListRef: React.MutableRefObject<any>,
-  messageListWrapperRef: React.MutableRefObject<any>
+  messageListRef: React.RefObject<any>,
+  messageListWrapperRef: React.RefObject<any>
 ) {
   const pageOrdering = MessageListStore.state.pageOrdering
 
@@ -32,8 +32,8 @@ export function withoutTopPages(
   return withoutPages
 }
 export function withoutBottomPages(
-  messageListRef: React.MutableRefObject<any>,
-  messageListWrapperRef: React.MutableRefObject<any>
+  messageListRef: React.RefObject<any>,
+  messageListWrapperRef: React.RefObject<any>
 ) {
   const messageListWrapperHeight = messageListWrapperRef.current.clientHeight
   let withoutPagesHeight = messageListRef.current.scrollHeight
@@ -72,7 +72,7 @@ export function withoutBottomPages(
 }
 
 export function* messagesInView(
-  messageListRef: React.MutableRefObject<HTMLElement>
+  messageListRef: React.RefObject<HTMLElement>
 ) {
   const messageListDOMElement = document
     .querySelector('#message-list')
@@ -80,6 +80,7 @@ export function* messagesInView(
   const messageElements = messageListDOMElement
     .querySelectorAll('li')
 
+  if (!messageListRef.current) return
   const scrollTop = messageListRef.current.scrollTop
   const messageListClientHeight = messageListRef.current.clientHeight
   const messageListOffsetTop = scrollTop
@@ -117,7 +118,7 @@ export function* messagesInView(
 
 export function isOnePageOrMoreAwayFromNewestMessage(
   messageListStore: MessageListStoreState,
-  messageListRef: React.MutableRefObject<HTMLElement>
+  messageListRef: React.RefObject<HTMLDivElement>
 ) {
   const debug = (str: String) =>
     log.debug('isOnePageOrMoreAwayFromNewestMessage: ' + str)
@@ -137,6 +138,7 @@ export function isOnePageOrMoreAwayFromNewestMessage(
   if (newestMessageIndexOnLastLoadedPage !== newestMessageIndex) {
     return true
   }
+  if (!messageListRef.current) return false
 
   const scrollBottom =
     messageListRef.current.scrollTop + messageListRef.current.clientHeight

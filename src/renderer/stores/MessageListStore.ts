@@ -82,10 +82,10 @@ export interface DispatchAfter {
 export type DispatchesAfter = DispatchAfter[]
 
 export type MessageListStoreContext = {
-  messageListRef: React.MutableRefObject<HTMLDivElement>
-  messageListWrapperRef: React.MutableRefObject<HTMLDivElement>
-  messageListTopRef: React.MutableRefObject<HTMLDivElement>
-  messageListBottomRef: React.MutableRefObject<HTMLDivElement>
+  messageListRef: React.RefObject<HTMLDivElement>
+  messageListWrapperRef: React.RefObject<HTMLDivElement>
+  messageListTopRef: React.RefObject<HTMLDivElement>
+  messageListBottomRef: React.RefObject<HTMLDivElement>
 }
 
 class _MessageListStore extends Store<
@@ -692,6 +692,7 @@ class _MessageListStore extends Store<
     }
     const chatId = MessageListStore.state.chatId
 
+    if (!context.messageListRef.current || !context.messageListWrapperRef.current) return
     const scrollTop = context.messageListRef.current.scrollTop
     const scrollHeight = context.messageListRef.current.scrollHeight
     const wrapperHeight = context.messageListWrapperRef.current.clientHeight

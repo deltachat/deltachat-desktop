@@ -91,7 +91,10 @@ export default chatStore
 
 export type ChatStoreDispatch = Store<state>['dispatch']
 
-export type ChatStoreState = typeof state.prototype
+export type ChatStoreState = {
+  chat: FullChat | null
+}
+
 
 export type ChatStoreStateWithChatSet = {
   chat: NonNullable<ChatStoreState['chat']>
