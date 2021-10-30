@@ -25,6 +25,7 @@ import {
   JsonContact,
   JsonLocations,
 } from '../../../shared/shared-types'
+import {sendMessage} from '../helpers/ChatMethods'
 
 type MapData = {
   contact: JsonContact
@@ -491,13 +492,7 @@ export default class MapComponent extends React.Component<
       return
     }
     const latLng = Object.assign({}, this.poiLocation)
-    chatStore.dispatch({
-      type: 'SEND_MESSAGE',
-      payload: [
-        selectedChat.id,
-        { text: message, location: latLng } as sendMessageParams,
-      ],
-    })
+    sendMessage(selectedChat.id, { text: message, location: latLng })
 
     if (this.contextMenuPopup) {
       this.contextMenuPopup.remove()
