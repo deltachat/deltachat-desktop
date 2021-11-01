@@ -267,7 +267,7 @@ const Message = (props: {
   // Info Message
   if (message.isInfo)
     return (
-      <div className='info-message' onContextMenu={showMenu}>
+      <div className='info-message' onContextMenu={showMenu} id={'' + id}>
         <p>
           {text}
           {direction === 'outgoing' &&
