@@ -8,7 +8,7 @@ import {
   privateReply,
   openMessageHTML,
 } from './messageFunctions'
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext } from 'react'
 import reactStringReplace from 'react-string-replace'
 
 import classNames from 'classnames'
@@ -16,7 +16,11 @@ import MessageBody from './MessageBody'
 import MessageMetaData from './MessageMetaData'
 
 import Attachment from '../attachment/messageAttachment'
-import { MessageType, JsonContact } from '../../../shared/shared-types'
+import {
+  MessageType,
+  JsonContact,
+  MessageQuote,
+} from '../../../shared/shared-types'
 import { isGenericAttachment } from '../attachment/Attachment'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
 import { joinCall, openViewProfileDialog } from '../helpers/ChatMethods'
@@ -79,7 +83,7 @@ const AuthorName = (
       style={{ color: color }}
       onClick={() => onContactClick(contact)}
     >
-      {overrideSenderName ? `~${overrideSenderName}` : displayName}
+      {getAuthorName(displayName, overrideSenderName)}
     </span>
   )
 }
@@ -317,8 +321,6 @@ const Message = (props: {
     )
   }
 
-  const hasQuote = message.quotedText !== null
-
   /** Whether to show author name and avatar */
   const showAuthor =
     conversationType.hasMultipleParticipants || message?.overrideSenderName
@@ -370,12 +372,7 @@ const Message = (props: {
           })}
           onClick={onClickMessageBody}
         >
-          {hasQuote && (
-            <Quote
-              quotedText={message.quotedText}
-              quotedMessageId={message.quotedMessageId}
-            />
-          )}
+          {message.quote !== null && <Quote quote={message.quote} />}
           {message.file && !isSetupmessage && (
             <Attachment
               {...{
@@ -383,7 +380,7 @@ const Message = (props: {
                 conversationType,
                 direction,
                 message,
-                hasQuote,
+                hasQuote: message.quote !== null,
               }}
             />
           )}
@@ -414,41 +411,49 @@ const Message = (props: {
 
 export default Message
 
-export const Quote = ({
-  quotedText,
-  quotedMessageId,
-}: {
-  quotedText: string | null
-  quotedMessageId: number | null
-}) => {
-  const [message, setMessage] = useState<MessageType | null>(null)
-
-  useEffect(() => {
-    if (quotedMessageId) {
-      DeltaBackend.call('messageList.getMessage', quotedMessageId).then(msg => {
-        if (msg) {
-          setMessage(msg)
-        }
-      })
-    }
-  }, [quotedMessageId])
+export const Quote = ({ quote }: { quote: MessageQuote }) => {
+  const onContactClick = async (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    event.stopPropagation()
+    event.preventDefault()
+    const message = await DeltaBackend.call(
+      'messageList.getMessage',
+      quote.messageId
+    )
+    if (message === null) return
+    throw new Error('Not implemented yet')
+    //const contact = message.contact
+    //openViewProfileDialog(screenContext, contact.id)
+  }
 
   return (
-    <div className='quote-background'>
+    <div
+      className='quote-background'
+      style={{ borderLeftColor: quote.displayColor }}
+    >
       <div
         className='quote has-message'
-        style={{
-          borderLeftColor: (message && message.sender.color) || undefined,
-        }}
+        style={{ borderLeftColor: quote.displayColor }}
       >
-        <div className='quote-author'>
-          {message &&
-            AuthorName(message.sender, () => {}, message.overrideSenderName)}
+        <div
+          className='quote-author'
+          style={{ color: quote.displayColor }}
+          onClick={onContactClick}
+        >
+          {getAuthorName(quote.displayName, quote.overrideSenderName)}
         </div>
         <div className='quoted-text'>
-          <MessageBody text={quotedText || ''} />
+          <MessageBody text={quote.text} />
         </div>
       </div>
     </div>
   )
+}
+
+export function getAuthorName(
+  displayName: string,
+  overrideSenderName?: string
+) {
+  return overrideSenderName ? `~${overrideSenderName}` : displayName
 }
