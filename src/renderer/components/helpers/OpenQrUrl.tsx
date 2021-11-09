@@ -20,6 +20,8 @@ import { parseMailto } from '../../../shared/parse_mailto'
 import MailtoDialog, { doMailtoAction } from '../dialogs/MailtoDialog'
 import { getLogger } from '../../../shared/logger'
 import { selectChat } from '../../stores/chat'
+import ConfirmationDialog from '../dialogs/ConfirmationDialog'
+import AlertDialog from '../dialogs/AlertDialog'
 
 const log = getLogger('renderer/processOpenUrl')
 
@@ -52,6 +54,16 @@ export function ProcessQrCodeDialog({
       </DeltaDialogFooter>
     </SmallDialog>
   )
+}
+
+async function setConfigFromQrCatchingErrorInAlert(qrContent: string) {
+  try {
+    await DeltaBackend.call('settings.setConfigFromQr', qrContent)
+  } catch (error) {
+    if (error instanceof Error) {
+      window.__openDialog(AlertDialog, { message: error.message })
+    }
+  }
 }
 
 export default async function processOpenQrUrl(
@@ -202,6 +214,54 @@ export default async function processOpenQrUrl(
       message: `The fingerprint of ${contact.displayName} is valid!`,
       confirmLabel: tx('ok'),
       cb: callback,
+    })
+  } else if (checkQr.state === QrState.QrWithdrawVerifyContact) {
+    window.__openDialog(ConfirmationDialog, {
+      message: tx('withdraw_verifycontact_explain'),
+      header: tx('withdraw_qr_code'),
+      confirmLabel: tx('ok'),
+      cb: async yes => {
+        if (yes) {
+          await setConfigFromQrCatchingErrorInAlert(url)
+        }
+        callback()
+      },
+    })
+  } else if (checkQr.state === QrState.QrReviveVerifyContact) {
+    window.__openDialog(ConfirmationDialog, {
+      message: tx('revive_verifycontact_explain'),
+      header: tx('revive_qr_code'),
+      confirmLabel: tx('ok'),
+      cb: async yes => {
+        if (yes) {
+          await setConfigFromQrCatchingErrorInAlert(url)
+        }
+        callback()
+      },
+    })
+  } else if (checkQr.state === QrState.QrWithdrawVerifyGroup) {
+    window.__openDialog(ConfirmationDialog, {
+      message: tx('withdraw_verifygroup_explain', checkQr.text1),
+      header: tx('withdraw_qr_code'),
+      confirmLabel: tx('ok'),
+      cb: async yes => {
+        if (yes) {
+          await setConfigFromQrCatchingErrorInAlert(url)
+        }
+        callback()
+      },
+    })
+  } else if (checkQr.state === QrState.QrReviveVerifyGroup) {
+    window.__openDialog(ConfirmationDialog, {
+      message: tx('revive_verifygroup_explain', checkQr.text1),
+      header: tx('revive_qr_code'),
+      confirmLabel: tx('ok'),
+      cb: async yes => {
+        if (yes) {
+          await setConfigFromQrCatchingErrorInAlert(url)
+        }
+        callback()
+      },
     })
   } else {
     closeProcessDialog()
