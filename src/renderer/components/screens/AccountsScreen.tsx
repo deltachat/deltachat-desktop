@@ -419,14 +419,14 @@ function AccountItem({
 
   useEffect(() => {
     updateUnreadCount(null, login.id)
-
-    // TODO: events need to be changed for this to work!
-    // (be always sent not just for selected account)
-    //
-    // ipcBackend.on('DC_EVENT_INCOMING_MSG', updateUnreadCount)
-    // return () => {
-    //   ipcBackend.removeListener('DC_EVENT_INCOMING_MSG', updateUnreadCount)
-    // }
+    // TODO use onIncomingMsg event directly after we changed the events to be filtered for active account in the frontend
+    ipcBackend.on('DD_EVENT_INCOMMING_MESSAGE_ACCOUNT', updateUnreadCount)
+    return () => {
+      ipcBackend.removeListener(
+        'DD_EVENT_INCOMMING_MESSAGE_ACCOUNT',
+        updateUnreadCount
+      )
+    }
   }, [login.id, updateUnreadCount])
 
   const tx = useTranslationFunction()
