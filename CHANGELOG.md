@@ -11,6 +11,7 @@
   into it's own dialogs
 - show contacts that are already in group in add member dialog, but disabled
 - show chips for members to add
+- update to typescript `4.4.4` and update eslint to version `8.2.0` (also updated the eslint plugins to their new versions)
 
 ### Fixed
 - don't show logo twice in notifications (because macOS already shows applogo)

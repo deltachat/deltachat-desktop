@@ -62,7 +62,7 @@ export default function CreateChat(props: {
   const chooseContact = async ({ id }: JsonContact) => {
     try {
       await createChatByContactIdAndSelectIt(id)
-    } catch (error) {
+    } catch (error: any) {
       return userFeedback({
         type: 'error',
         text: error && (error.message || error),
