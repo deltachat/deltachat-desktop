@@ -40,7 +40,7 @@ import { getLogger } from '../../../shared/logger'
 
 const log = getLogger('renderer/main-screen')
 
-enum View {
+export enum View {
   MessageList,
   Media,
   Map,
@@ -49,6 +49,7 @@ enum View {
 export default function MainScreen() {
   const [queryStr, setQueryStr] = useState('')
   const [view, setView] = useState(View.MessageList)
+  window.__setMainScreenView = setView
   const [showArchivedChats, setShowArchivedChats] = useState(false)
   // Small hack/misuse of keyBindingAction to setShowArchivedChats from other components (especially
   // ViewProfile when selecting a shared chat/group)

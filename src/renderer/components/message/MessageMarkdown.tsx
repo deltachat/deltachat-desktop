@@ -9,6 +9,7 @@ import { DeltaBackend } from '../../delta-remote'
 import { selectChat } from '../../stores/chat'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { MessagesDisplayContext } from '../../contexts'
+import { View as MainScreenView } from '../screens/MainScreen'
 
 const log = getLogger('renderer/message-markdown')
 
@@ -159,7 +160,9 @@ function BotCommandSuggestion({ suggestion }: { suggestion: string }) {
     } else if (message_display_context.context == 'chat_map') {
       chatID = message_display_context.chatId
       // go back to chat view
-      selectChat(chatID) // TODO check if this works, if not find a way that does it
+      selectChat(chatID)
+      window.__setMainScreenView &&
+        window.__setMainScreenView(MainScreenView.MessageList)
     } else if (message_display_context.context == 'chat_messagelist') {
       // nothing special to do
       chatID = message_display_context.chatId

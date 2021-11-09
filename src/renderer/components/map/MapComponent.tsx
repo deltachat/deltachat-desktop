@@ -63,6 +63,7 @@ export default class MapComponent extends React.Component<
     1000
   )
   map: mapboxgl.Map | undefined
+  popup_mount_node: HTMLDivElement | undefined
   stateFromSession: boolean | undefined
   currentUser: JsonContact | undefined
   constructor(props: MapProps) {
@@ -304,7 +305,9 @@ export default class MapComponent extends React.Component<
           extended: true,
         })
         const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
-          this.renderPopupMessage(contact.displayName, lastDate, null)
+          ReactDOMServer.renderToStaticMarkup(
+            this.renderPopupMessage(contact.displayName, lastDate, null)
+          )
         )
         if (mapData.marker) {
           // remove old marker
@@ -448,15 +451,23 @@ export default class MapComponent extends React.Component<
           if (messageObj) {
             message = messageObj
           }
-          const markup = this.renderPopupMessage(
-            contactFeature.properties?.contact,
-            formatRelativeTime(contactFeature.properties?.reported * 1000, {
-              extended: true,
-            }),
-            message
+          if (this.popup_mount_node) {
+            ReactDOM.unmountComponentAtNode(this.popup_mount_node)
+          }
+          this.popup_mount_node = document.createElement('div')
+          ReactDOM.render(
+            this.renderPopupMessage(
+              contactFeature.properties?.contact,
+              formatRelativeTime(contactFeature.properties?.reported * 1000, {
+                extended: true,
+              }),
+              message
+            ),
+            this.popup_mount_node
           )
+
           new mapboxgl.Popup({ offset: [0, -15] })
-            .setHTML(markup)
+            .setDOMContent(this.popup_mount_node)
             .setLngLat((contactFeature.geometry as any).coordinates)
             .addTo(map)
         })
@@ -638,7 +649,7 @@ export default class MapComponent extends React.Component<
     formattedDate: string,
     message: JsonMessage | null
   ) {
-    return ReactDOMServer.renderToStaticMarkup(
+    return (
       <MessagesDisplayContext.Provider
         value={
           message ? { context: 'chat_map', chatId: message?.chatId } : null
