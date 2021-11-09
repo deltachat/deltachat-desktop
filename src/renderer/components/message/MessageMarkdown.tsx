@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { LabeledLink, Link } from './Link'
 import {
   parse_desktop_set,
@@ -8,10 +8,12 @@ import { getLogger } from '../../../shared/logger'
 import { DeltaBackend } from '../../delta-remote'
 import { selectChat } from '../../stores/chat'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
+import { MessagesDisplayContext } from '../../contexts'
 
 const log = getLogger('renderer/message-markdown')
 
-const parseMessage: (message: string) => ParsedElement[] = (m) => parse_desktop_set(m)
+const parseMessage: (message: string) => ParsedElement[] = m =>
+  parse_desktop_set(m)
 
 function renderElement(elm: ParsedElement, key?: number): JSX.Element {
   switch (elm.t) {
@@ -62,6 +64,9 @@ function renderElement(elm: ParsedElement, key?: number): JSX.Element {
       const email = elm.c
       return <EmailLink key={key} email={email} />
     }
+
+    case 'BotCommandSuggestion':
+      return <BotCommandSuggestion key={key} suggestion={elm.c} />
 
     case 'Linebreak':
       return <div key={key} className='line-break' />
@@ -130,6 +135,76 @@ function TagLink({ tag }: { tag: string }) {
   return (
     <a href={'#'} onClick={setSearch}>
       {'#' + tag}
+    </a>
+  )
+}
+
+function BotCommandSuggestion({ suggestion }: { suggestion: string }) {
+  const message_display_context = useContext(MessagesDisplayContext)
+  const applySuggestion = async () => {
+    if (!message_display_context) {
+      return
+    }
+
+    let chatID
+    if (message_display_context.context == 'contact_profile_status') {
+      // Bot command was clicked inside of a contact status
+      chatID = await DeltaBackend.call(
+        'contacts.createChatByContactId',
+        message_display_context.contact_id
+      )
+      // also select the chat and close the profile window if this is the case
+      selectChat(chatID)
+      message_display_context.closeProfileDialog()
+    } else if (message_display_context.context == 'chat_map') {
+      chatID = message_display_context.chatId
+      // go back to chat view
+      selectChat(chatID) // TODO check if this works, if not find a way that does it
+    } else if (message_display_context.context == 'chat_messagelist') {
+      // nothing special to do
+      chatID = message_display_context.chatId
+    } else {
+      log.error(
+        'Error applying BotCommandSuggestion: message_display_context.type is not implemented: ',
+        //@ts-ignore
+        message_display_context.type
+      )
+      return
+    }
+
+    // IDEA: Optimisation - unify these two calls in a new backend call that only returns the info we need
+    const [{ name }, draft] = await Promise.all([
+      DeltaBackend.call('chatList.getFullChatById', chatID),
+      DeltaBackend.call('messageList.getDraft', chatID),
+    ])
+
+    if (draft) {
+      // ask if the draft should be replaced
+      const continue_process = await new Promise((resolve, _reject) => {
+        window.__openDialog('ConfirmationDialog', {
+          message: window.static_translate(
+            'mailto_dialog_confirm_replace_draft',
+            name
+          ),
+          confirmLabel: window.static_translate('replace_draft'),
+          cb: resolve,
+        })
+      })
+      if (!continue_process) {
+        return
+      }
+    }
+
+    await DeltaBackend.call('messageList.setDraft', chatID, {
+      text: suggestion,
+    })
+
+    window.__reloadDraft && window.__reloadDraft()
+  }
+
+  return (
+    <a href='#' onClick={applySuggestion}>
+      {suggestion}
     </a>
   )
 }

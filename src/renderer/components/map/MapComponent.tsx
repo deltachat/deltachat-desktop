@@ -13,7 +13,7 @@ import MapLayerFactory from './MapLayerFactory'
 import { Slider, Button, Collapse } from '@blueprintjs/core'
 import PopupMessage from './PopupMessage'
 import * as SessionStorage from '../helpers/SessionStorage'
-import { SettingsContext } from '../../contexts'
+import { MessagesDisplayContext, SettingsContext } from '../../contexts'
 import chatStore from '../../stores/chat'
 
 import { state as LocationStoreState } from '../../stores/locations'
@@ -639,11 +639,17 @@ export default class MapComponent extends React.Component<
     message: JsonMessage | null
   ) {
     return ReactDOMServer.renderToStaticMarkup(
-      <PopupMessage
-        username={contactName}
-        formattedDate={formattedDate}
-        message={message}
-      />
+      <MessagesDisplayContext.Provider
+        value={
+          message ? { context: 'chat_map', chatId: message?.chatId } : null
+        }
+      >
+        <PopupMessage
+          username={contactName}
+          formattedDate={formattedDate}
+          message={message}
+        />
+      </MessagesDisplayContext.Provider>
     )
   }
 

@@ -12,7 +12,7 @@ import moment from 'moment'
 
 import { getLogger } from '../../../shared/logger'
 import { MessageType, FullChat } from '../../../shared/shared-types'
-import { useTranslationFunction } from '../../contexts'
+import { MessagesDisplayContext, useTranslationFunction } from '../../contexts'
 import { useDCConfigOnce } from '../helpers/useDCConfigOnce'
 const log = getLogger('render/msgList')
 
@@ -166,14 +166,18 @@ export default function MessageList({
   }, [refComposer])
 
   return (
-    <MessageListInner
-      onScroll={onScroll}
-      oldestFetchedMessageIndex={oldestFetchedMessageIndex}
-      messageIds={messageIds}
-      messages={messages}
-      messageListRef={messageListRef}
-      chatStore={chatStore}
-    />
+    <MessagesDisplayContext.Provider
+      value={{ context: 'chat_messagelist', chatId: chatStore.chat.id }}
+    >
+      <MessageListInner
+        onScroll={onScroll}
+        oldestFetchedMessageIndex={oldestFetchedMessageIndex}
+        messageIds={messageIds}
+        messages={messages}
+        messageListRef={messageListRef}
+        chatStore={chatStore}
+      />
+    </MessagesDisplayContext.Provider>
   )
 }
 
