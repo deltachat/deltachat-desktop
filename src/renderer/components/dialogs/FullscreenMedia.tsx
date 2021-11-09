@@ -1,5 +1,5 @@
 import { onDownload } from '../message/messageFunctions'
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import { Icon, Overlay } from '@blueprintjs/core'
 import { DialogProps } from './DialogController'
 import { MessageType } from '../../../shared/shared-types'
@@ -9,6 +9,7 @@ import { getLogger } from '../../../shared/logger'
 import { gitHubIssuesUrl } from '../../../shared/constants'
 import { DeltaBackend } from '../../delta-remote'
 import { useInitEffect } from '../helpers/useInitEffect'
+import { preventDefault } from '../../../shared/util'
 
 const log = getLogger('renderer/fullscreen_media')
 
@@ -20,9 +21,11 @@ export default function FullscreenMedia(props: {
   const { onClose } = props
 
   const [msg, setMsg] = useState(props.msg)
-  const [previousNextMessageId, setPreviousNextMessageId] = useState<
-    [number, number]
-  >([0, 0])
+  const previousNextMessageId = useRef<[number, number]>([0, 0])
+  const [showPreviousNextMessageButtons, setShowPrevNextMsgBtns] = useState({
+    previous: false,
+    next: false,
+  })
   const { file, file_mime } = msg
 
   let elm = null
@@ -71,17 +74,15 @@ export default function FullscreenMedia(props: {
   }
 
   const updatePreviousNextMessageId = useCallback(async () => {
-    const previousMessageId = await DeltaBackend.call(
-      'chat.getNextMedia',
-      msg.id,
-      -1
-    )
-    const nextMessageId = await DeltaBackend.call(
-      'chat.getNextMedia',
-      msg.id,
-      1
-    )
-    setPreviousNextMessageId([previousMessageId, nextMessageId])
+    const [previousMessageId, nextMessageId] = await Promise.all([
+      DeltaBackend.call('chat.getNextMedia', msg.id, -1),
+      DeltaBackend.call('chat.getNextMedia', msg.id, 1),
+    ])
+    previousNextMessageId.current = [previousMessageId, nextMessageId]
+    setShowPrevNextMsgBtns({
+      previous: previousMessageId !== 0,
+      next: nextMessageId !== 0,
+    })
   }, [msg])
 
   useEffect(() => {
@@ -89,24 +90,39 @@ export default function FullscreenMedia(props: {
   }, [msg, updatePreviousNextMessageId])
   useInitEffect(() => updatePreviousNextMessageId())
 
-  const previousImage = async (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    const message = await DeltaBackend.call(
-      'messageList.getMessage',
-      previousNextMessageId[0]
-    )
-    if (message === null) return
-    setMsg(message)
-  }
-  const nextImage = async (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    const message = await DeltaBackend.call(
-      'messageList.getMessage',
-      previousNextMessageId[1]
-    )
-    if (message === null) return
-    setMsg(message)
-  }
+  const { previousImage, nextImage } = useMemo(() => {
+    const loadMessage = async (msgID: number) => {
+      if (msgID === 0) return
+      const message = await DeltaBackend.call('messageList.getMessage', msgID)
+      if (message === null) return
+      setMsg(message)
+    }
+    return {
+      previousImage: () => loadMessage(previousNextMessageId.current[0]),
+      nextImage: () => loadMessage(previousNextMessageId.current[1]),
+    }
+  }, [previousNextMessageId, setMsg])
+
+  useEffect(() => {
+    // use events directly for now
+    // this will need adjustment to the keybindings manager once we have proper screen managment
+    // where we can know exactly which screen / menu / dialog is focused
+    // and only send the context dependend keys to there
+    const listener = (ev: KeyboardEvent) => {
+      if (ev.repeat) {
+        return
+      }
+      ev.preventDefault()
+      ev.stopPropagation()
+      if (ev.key == 'ArrowLeft') {
+        previousImage()
+      } else if (ev.key == 'ArrowRight') {
+        nextImage()
+      }
+    }
+    document.addEventListener('keydown', listener)
+    return () => document.removeEventListener('keydown', listener)
+  }, [previousImage, nextImage])
 
   if (!msg || !msg.file) return elm
 
@@ -134,15 +150,22 @@ export default function FullscreenMedia(props: {
             />
           </div>
         )}
-        {previousNextMessageId[0] !== 0 && (
+        {showPreviousNextMessageButtons.previous && (
           <div className='media-previous-button'>
-            <Icon onClick={previousImage} icon='chevron-left' iconSize={60} />
+            <Icon
+              onClick={preventDefault(previousImage)}
+              icon='chevron-left'
+              iconSize={60}
+            />
           </div>
         )}
-
-        {previousNextMessageId[1] !== 0 && (
+        {showPreviousNextMessageButtons.next && (
           <div className='media-next-button'>
-            <Icon onClick={nextImage} icon='chevron-right' iconSize={60} />
+            <Icon
+              onClick={preventDefault(nextImage)}
+              icon='chevron-right'
+              iconSize={60}
+            />
           </div>
         )}
         <div className='attachment-view'>{elm}</div>

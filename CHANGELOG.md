@@ -4,7 +4,7 @@
 
 ### Added
 - Clicking on member in group dialog shows the profile of member
-- Implement previous/next buttons for gallery
+- Implement previous/next buttons for the gallery's media view (the left and right arrow keys can also be used for navigation)
 
 ### Changed
 - Bring back the back and close button in dialogs, move actions that need an ok/cancel button
