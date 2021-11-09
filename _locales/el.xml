@@ -49,7 +49,6 @@
         <item quantity="one">%d μέλος</item>
         <item quantity="other">%d μέλη</item>
     </plurals>
-
     <string name="draft">Πρόχειρο</string>
     <string name="image">Εικόνα</string>
     <!-- Translators: Used in summaries as "Draft: Reply", similar as "Draft: Image". Use a noun here, not a verb (not: "to reply") -->
