@@ -216,6 +216,7 @@ export default async function processOpenQrUrl(
       cb: callback,
     })
   } else if (checkQr.state === QrState.QrWithdrawVerifyContact) {
+    closeProcessDialog()
     window.__openDialog(ConfirmationDialog, {
       message: tx('withdraw_verifycontact_explain'),
       header: tx('withdraw_qr_code'),
@@ -224,10 +225,11 @@ export default async function processOpenQrUrl(
         if (yes) {
           await setConfigFromQrCatchingErrorInAlert(url)
         }
-        callback()
+        callback(null)
       },
     })
   } else if (checkQr.state === QrState.QrReviveVerifyContact) {
+    closeProcessDialog()
     window.__openDialog(ConfirmationDialog, {
       message: tx('revive_verifycontact_explain'),
       header: tx('revive_qr_code'),
@@ -236,10 +238,11 @@ export default async function processOpenQrUrl(
         if (yes) {
           await setConfigFromQrCatchingErrorInAlert(url)
         }
-        callback()
+        callback(null)
       },
     })
   } else if (checkQr.state === QrState.QrWithdrawVerifyGroup) {
+    closeProcessDialog()
     window.__openDialog(ConfirmationDialog, {
       message: tx('withdraw_verifygroup_explain', checkQr.text1),
       header: tx('withdraw_qr_code'),
@@ -248,10 +251,11 @@ export default async function processOpenQrUrl(
         if (yes) {
           await setConfigFromQrCatchingErrorInAlert(url)
         }
-        callback()
+        callback(null)
       },
     })
   } else if (checkQr.state === QrState.QrReviveVerifyGroup) {
+    closeProcessDialog()
     window.__openDialog(ConfirmationDialog, {
       message: tx('revive_verifygroup_explain', checkQr.text1),
       header: tx('revive_qr_code'),
@@ -260,7 +264,7 @@ export default async function processOpenQrUrl(
         if (yes) {
           await setConfigFromQrCatchingErrorInAlert(url)
         }
-        callback()
+        callback(null)
       },
     })
   } else {
