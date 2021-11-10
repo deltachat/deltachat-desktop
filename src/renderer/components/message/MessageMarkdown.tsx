@@ -121,12 +121,11 @@ function EmailLink({ email }: { email: string }): JSX.Element {
 
 function TagLink({ tag }: { tag: string }) {
   const setSearch = () => {
-    const searchTerm = '#' + tag
     log.debug(
-      `Clicked on a hastag, this should open search for the text "${searchTerm}"`
+      `Clicked on a hastag, this should open search for the text "${tag}"`
     )
     if (window.__chatlistSetSearch) {
-      window.__chatlistSetSearch(searchTerm)
+      window.__chatlistSetSearch(tag)
       ActionEmitter.emitAction(KeybindAction.ChatList_FocusSearchInput)
       // TODO: If you wonder why the focus doesn't work - its because of jikstra's composer focus hacks
       // Which transfer the focus back to the composer instantly
@@ -135,7 +134,7 @@ function TagLink({ tag }: { tag: string }) {
 
   return (
     <a href={'#'} onClick={setSearch}>
-      {'#' + tag}
+      {tag}
     </a>
   )
 }
