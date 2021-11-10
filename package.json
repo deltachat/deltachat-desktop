@@ -76,7 +76,7 @@
   },
   "dependencies": {
     "@blueprintjs/core": "^3.22.3",
-    "@deltachat/message_parser_wasm": "file:../message-parser/message_parser_wasm/pkg",
+    "@deltachat/message_parser_wasm": "^0.1.0",
     "@mapbox/geojson-extent": "^1.0.0",
     "application-config": "^1.0.1",
     "classnames": "^2.3.1",
