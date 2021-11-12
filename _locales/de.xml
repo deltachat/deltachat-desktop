@@ -18,6 +18,8 @@
     <string name="automatic">Automatisch</string>
     <string name="strict">Strikt</string>
     <string name="open">Öffnen</string>
+    <string name="download">Herunterladen</string>
+    <string name="downloading">Herunterladen…</string>
     <string name="open_attachment">Anhang öffnen</string>
     <string name="join">Teilnehmen</string>
     <string name="rejoin">Öffnen</string>
@@ -107,6 +109,10 @@
         <item quantity="one">%d Mitglied</item>
         <item quantity="other">%d Mitglieder</item>
     </plurals>
+    <plurals name="n_recipients">
+        <item quantity="one">%d Empfänger</item>
+        <item quantity="other">%d Empfänger</item>
+    </plurals>
 
     <string name="self">Ich</string>
     <string name="draft">Entwurf</string>
@@ -114,6 +120,8 @@
     <!-- Translators: Used in summaries as "Draft: Reply", similar as "Draft: Image". Use a noun here, not a verb (not: "to reply") -->
     <string name="reply_noun">Antwort</string>
     <string name="gif">Gif</string>
+    <!-- "Stickers" as known from other messengers, please pick up the wording from there; in some languages, "Sticker" in english is just fine. -->
+    <string name="sticker">Sticker</string>
     <string name="images">Bilder</string>
     <string name="audio">Audio</string>
     <string name="voice_message">Sprachnachricht</string>
@@ -164,7 +172,14 @@
     <string name="menu_new_contact">Neuer Kontakt</string>
     <string name="menu_new_chat">Neuer Chat</string>
     <string name="menu_new_group">Neue Gruppe</string>
+    <!-- "Subject" here must be the same wording as used in the e-mail context, so. eg. "Betreff" in german (the idea is to help people coming from the e-mail context) -->
+    <string name="new_group_or_subject">Neue Gruppe oder Betreff</string>
     <string name="menu_new_verified_group">Neue verifizierte Gruppe</string>
+    <!-- consider keeping the term "broadcast"; check how these lists are called eg. on whatsapp in the destination language -->
+    <string name="broadcast_list">Broadcast-Liste</string>
+    <string name="broadcast_lists">Broadcast-Listen</string>
+    <string name="new_broadcast_list">Neue Broadcast-Liste</string>
+    <string name="add_recipients">Empfänger hinzufügen</string>
     <string name="menu_send">Senden</string>
     <string name="menu_toggle_keyboard">Emojis einblenden</string>
     <string name="menu_edit_group">Gruppe bearbeiten</string>
@@ -195,6 +210,7 @@
     <string name="menu_mute">Stummschalten</string>
     <string name="menu_unmute">Stumm aus</string>
     <string name="menu_export_attachment">Datei exportieren</string>
+    <string name="menu_export_attachments">Dateien exportieren</string>
     <string name="menu_all_media">Alle Medien</string>
     <!-- menu entry that opens eg. a gallery image or a document in the chat at the correct position -->
     <string name="show_in_chat">Im Chat zeigen</string>
@@ -290,9 +306,13 @@
         <item quantity="one">%d Nachricht lokal und vom Server löschen?</item>
         <item quantity="other">%d Nachrichten lokal und vom Server löschen?</item>
     </plurals>
+    <plurals name="ask_delete_messages_simple">
+        <item quantity="one">%d Nachricht löschen?</item>
+        <item quantity="other">%d Nachrichten löschen?</item>
+    </plurals>
     <string name="ask_forward">Nachricht weiterleiten an %1$s?</string>
     <string name="ask_forward_multiple">Nachrichten an %1$d Chats weiterleiten?</string>
-    <string name="ask_export_attachment">Anlage exportieren? Das Exportieren von Anhängen ermöglicht es allen anderen Anwendungen auf Ihrem Gerät, auf diese zuzugreifen.\n\nFortfahren? </string>
+    <string name="ask_export_attachment">Das Exportieren von Anhängen ermöglicht es allen anderen Anwendungen auf Ihrem Gerät, auf diese zuzugreifen.\n\nFortfahren? </string>
     <string name="ask_block_contact">Diesen Kontakt blockieren? Sie werden keine Nachrichten mehr von diesem Kontakt erhalten.</string>
     <string name="ask_unblock_contact">Diesen Kontakt nicht mehr blockieren? Nachrichten von diesem Kontakt werden dann wieder angezeigt.</string>
     <string name="ask_delete_contacts">Kontakte dauerhaft löschen?\n\nKontakte mit laufenden Chats und Kontakte aus dem Adressbuch des Systems können nicht dauerhaft gelöscht werden.</string>
@@ -302,6 +322,8 @@
     <string name="ask_delete_value">%s löschen?</string>
     <!-- Translators: %1$s will be replaces by a comma separated list of names -->
     <string name="ask_remove_members">%1$s aus der Gruppe löschen?</string>
+    <!-- Translators: %1$s will be replaced by a comma separated list of names -->
+    <string name="ask_remove_from_broadcast">%1$s von der Broadcast-Liste entfernen?</string>
     <string name="open_url_confirmation">Diesen Link öffnen?</string>
 
 
@@ -330,6 +352,7 @@
         <item quantity="other">%d neue Nachrichten</item>
     </plurals>
     <string name="chat_no_messages_hint">Eine Nachricht an %1$s senden:\n\n• Es ist in Ordnung, wenn %2$s kein Delta Chat verwendet.\n\n• Die Übermittlung der ersten Nachricht kann eine Weile dauern und erfolgt unverschlüsselt. </string>
+    <string name="chat_new_broadcast_hint">In Broadcast-Listen erhalten die Empfänger die Nachrichten in den privaten Chats mit Ihnen.\n\nDie Empfänger wissen nicht, wer die anderen Empfänger sind.</string>
     <string name="chat_new_group_hint">Verfassen Sie die erste Nachricht, damit andere innerhalb dieser Gruppe antworten können.\n\n-- Es ist in Ordnung, wenn nicht alle Mitglieder Delta Chat verwenden.\n\n-- Die Zustellung der ersten Nachricht kann einige Zeit dauern.</string>
     <string name="chat_record_slide_to_cancel">Schieben, um abzubrechen</string>
     <string name="chat_record_explain">Tippen und halten, um eine Sprachnachricht aufzunehmen, loslassen um zu senden. </string>
@@ -385,6 +408,7 @@
     <!-- this message is shown whenever a link with non-latin characters is clicked. first placeholder is original hostname with special chars, second placeholder is hostname encoded in ascii -->
     <string name="puny_code_warning_description">Sie sind einem Link gefolgt, der durch die Verwendung ähnlich aussehender Zeichen aus verschiedenen Alphabeten zu einer falschen Darstellung führen könnte. Wenn Sie dem Link mit der Bezeichnung %1$s folgen, gelangen Sie zu %2$s, was für nicht-lateinische Zeichen normal ist. Wenn Sie solche Zeichen nicht erwartet haben, könnte dieser Link schädlich sein.</string>
 
+
     <!-- search -->
     <string name="search">Suchen</string>
     <string name="search_explain">Suche nach Chats, Kontakten und Nachrichten</string>
@@ -417,6 +441,12 @@
 
 
     <!-- Connectivity -->
+    <!-- Used as a headline for the "Inbox" eg. in the "Connectivity" view -->
+    <string name="incoming_messages">Eingehende Nachrichten</string>
+    <!-- Used as a headline for the "Outbox" eg. in the "Connectivity" view -->
+    <string name="outgoing_messages">Ausgehende Nachrichten</string>
+    <!-- Used as a headline in the "Connectivity" view. The placeholder will be replaced by the domain of the configured email-address. -->
+    <string name="storage_on_domain">Speicher auf %1$s</string>
     <string name="connectivity">Verbindungsstatus</string>
     <!-- Shown eg. in the title bar if the app is "Not connected"; as there is very few room, try to be as short as possible. -->
     <string name="connectivity_not_connected">Nicht verbunden</string>
@@ -426,6 +456,13 @@
     <string name="connectivity_updating">Aktualisiere…</string>
     <!-- Shown eg. in the setting if the app is "Connected" -->
     <string name="connectivity_connected">Verbunden</string>
+    <string name="sending">Sende…</string>
+    <string name="last_msg_sent_successfully">Letzte Nachricht erfolgreich versandt.</string>
+    <string name="not_supported_by_provider">Nicht unterstützt von Ihrem Anbieter.</string>
+    <!-- Used as a subtitle in quota context of "Connetivity" view. Should be be plural always, no number is prefixed or so. -->
+    <string name="messages">Nachrichten</string>
+    <!-- Used for describing resource usage, resulting string will be eg. "1.2 GiB of 3 GiB used" -->
+    <string name="part_of_total_used">%1$s von %2$s verwendet</string>
 
 
     <!-- welcome and login -->
@@ -447,6 +484,13 @@
     <string name="login_smtp_port">SMTP-Port</string>
     <string name="login_smtp_security">SMTP-Sicherheit</string>
     <string name="login_auth_method">Autorisierungsmethode</string>
+    <!-- the word "SOCKS5" here and in the following strings should not be translated in most cases -->
+    <string name="login_socks5">SOCKS5</string>
+    <string name="login_socks5_use_socks5">SOCKS5 verwenden</string>
+    <string name="login_socks5_host">SOCKS5-Host</string>
+    <string name="login_socks5_port">SOCKS5-Port</string>
+    <string name="login_socks5_user">SOCKS5-Anmeldename</string>
+    <string name="login_socks5_password">SOCKS5-Passwort</string>
     <!-- Translators: %1$s will be replaced by an e-mail address -->
     <string name="login_oauth2_checking_addr">Teste %1$s</string>
     <string name="login_info_oauth2_title">Weiter mit vereinfachter Einrichtung?</string>
@@ -474,7 +518,10 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="delete_account_ask">Möchten Sie das E-Mail-Konto und alle Daten wirklich von diesem Gerät löschen?</string>
     <string name="delete_account_explain_with_name">Alle Daten des E-Mail-Kontos \"%s\" werden von diesem Gerät gelöscht, dies schließt Ihre Ende-zu-Ende Autocrypt-Einstellungen, Kontakte, Chats, Nachrichten und Medien mit ein. Diese Aktion kann nicht rückgängig gemacht werden.</string>
     <string name="switching_account">E-Mail-Konto wechseln…</string>
+    <string name="unconfigured_account">Unkonfiguriertes Konto</string>
+    <string name="unconfigured_account_hint">Konto zum Konfigurieren öffnen.</string>
     <string name="try_connect_now">Versuche, zu verbinden</string>
+    <string name="sync_all">Alles synchronisieren</string>
     <!-- Translations: %1$s will be replaced by a more detailed error message -->
     <string name="configuration_failed_with_error">Konfiguration fehlgeschlagen. Fehler: %1$s</string>
 
@@ -496,7 +543,7 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="blocked_empty_hint">Wenn Sie Kontakte blockieren, werden diese hier angezeigt.</string>
     <string name="pref_profile_photo_remove_ask">Profilbild entfernen?</string>
     <string name="pref_password_and_account_settings">Passwort und E-Mail-Konto</string>
-    <string name="pref_who_can_see_profile_explain">Das Profilbild und der Name werden neben gesendeten Nachrichten angezeigt. Bereits gesendete Informationen können nicht mehr gelöscht oder entfernt werden.</string>
+    <string name="pref_who_can_see_profile_explain">Ihr Profilbild, Ihr Name und die Signatur werden beim Chatten zusammen mit Ihren Nachrichten gesendet.</string>
     <string name="pref_your_name">Mein Name</string>
     <!-- Translators: The value entered here is visible only to recipients who DO NOT use Deltachat, so its not a "Status" but the last line in the E-Mail. -->
     <string name="pref_default_status_label">Signatur</string>
@@ -582,6 +629,16 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="pref_background_custom_image">Benutzerdefiniertes Hintergrundbild</string>
     <string name="pref_background_custom_color">Benutzerdefinierte Farbe</string>
     <string name="export_aborted">Export abgebrochen.</string>
+    <string name="auto_download_messages">Nachrichten autom. herunterladen</string>
+    <!-- %1$s will be replaced by a human-readable number of bytes, eg. 32 KiB, 1 MiB -->
+    <string name="up_to_x">Bis zu %1$s</string>
+    <string name="up_to_x_most_worse_quality_images">Bis zu %1$s, die meisten Bilder schlechter Qualität</string>
+    <string name="up_to_x_most_balanced_quality_images">Bis zu %1$s, die meisten Bilder ausgewogener Qualität</string>
+    <string name="no_limit">Keine Begrenzung</string>
+    <!-- %1$s will be replaced by a human-readable number of bytes, eg. 32 KiB, 1 MiB. Resulting string eg. "1 MiB message" -->
+    <string name="n_bytes_message">%1$s Nachricht</string>
+    <!-- %1$s will be replaced by human-readable date and time -->
+    <string name="download_max_available_until">Download max. verfügbar bis %1$s</string>
     <string name="profile_image_select">Profilbild auswählen</string>
     <string name="select_your_new_profile_image">Wählen Sie Ihr Profilbild aus</string>
     <string name="profile_image_delete">Profilbild löschen</string>
@@ -679,6 +736,13 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="systemmsg_chat_protection_disabled">Chat-Absicherung ausgeschaltet.</string>
     <string name="systemmsg_chat_protection_enabled">Chat-Absicherung eingeschaltet.</string>
 
+    <string name="devicemsg_self_deleted">Sie haben den Chat \"Gespeicherte Nachrichten\" gelöscht.\n\nℹ️ Um die Funktion \"Gespeicherte Nachrichten\" erneut zu verwenden, erstellen Sie einfach einen Chat mit sich selbst.</string>
+    <!-- %1$s will be replaced by the number of storage already used, sth. as '500 MB'. CAVE: if you want to use a simple the percent sign, type in two, so eg. %1$s %% -->
+    <string name="devicemsg_storage_exceeding">⚠️ Der Speicherplatz Ihres Anbieters ist bald erschöpft; bereits %1$s%% sind verbraucht.\n\nSie können möglicherweise keine Nachrichten mehr empfangen, wenn der Speicherplatz zu 100%% verbraucht ist.\n\n👉 Bitte prüfen Sie, ob Sie alte Daten im Webinterface des Anbieters löschen können, und erwägen Sie, \"Einstellungen / Alte Nachrichten löschen\" zu aktivieren. Den aktuellen Speicherverbrauch können Sie jederzeit unter \"Einstellungen / Verbindung\" überprüfen.</string>
+    <!-- %1%s will be replaced by date and time in some human-readable format -->
+    <string name="devicemsg_bad_time">⚠️ Ihr Gerät scheint ein falsches Datum oder eine falsche Uhrzeit (%1$s) zu verwenden.\n\nStellen Sie Ihre Uhr ⏰🔧 richtig ein, um sicherzustellen, dass Ihre Nachrichten korrekt empfangen werden.</string>
+    <string name="devicemsg_update_reminder">⚠️ Ihre Delta-Chat-Version ist möglicherweise veraltet.\n\nDies kann zu Problemen führen, wenn Ihre Chat-PartnerInnen neuere Versionen verwenden - und Ihnen die neuesten Funktionen fehlen. 😳\nBitte überprüfen Sie https://get.delta.chat oder Ihren App-Store auf Updates.</string>
+
     <!-- Some options as "Manage keys" or "Backup" may require the system PIN/Fingerprint/Gesture/Etc. to be entered in a system dialog. This hint is added to the system dialog, below a title as "Manage keys" or "Backup". -->
     <string name="enter_system_secret_to_continue">Bitte geben Sie den System-Entsperrcode ein, um fortzufahren.</string>
 
@@ -720,6 +784,10 @@ Ihr bisheriges E-Mail-Konto wird dabei nicht gelöscht. Sie können mit der Opti
     <string name="qraccount_success_enter_name">Anmeldung erfolgreich — Ihre E-Mail-Adresse ist %1$s\n\nWenn Sie mögen, können Sie nun einen Namen und ein Profilbild festlegen, der den ChatpartnerInnen angezeigt wird.</string>
     <string name="qraccount_qr_code_cannot_be_used">Der eingescannte QR-Code kann nicht dazu verwendet werden, eine neues E-Mail-Konto zu erzeugen.</string>
     <string name="qraccount_use_on_new_install">Der gescannte QR-Code ist zum Erstellen eines neuen E-Mail-Kontos. Sie können den QR-Code nur bei einer neuen Delta Chat Installation verwenden.</string>
+    <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
+    <string name="secure_join_started">%1$s hat dich zu dieser Gruppe eingeladen.\n\nWarte auf die Antwort des Gerätes von %2$s...</string>
+    <!-- placeholder will be replaced by the name of the inviter. -->
+    <string name="secure_join_replies">%1$s antwortet. Warte, zur Gruppe hinzugefügt zu werden...</string>
     <string name="contact_verified">%1$s verifiziert.</string>
     <string name="contact_not_verified">Kann %1$s nicht verifizieren</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
@@ -733,6 +801,7 @@ Ihr bisheriges E-Mail-Konto wird dabei nicht gelöscht. Sie können mit der Opti
 
     <!-- notifications  -->
     <string name="notify_n_messages_in_m_chats">%1$d neue Nachrichten in %2$d Chats</string>
+    <string name="notify_dismiss">Verwerfen</string>
     <string name="notify_mark_read">Als gelesen markieren</string>
     <string name="notify_reply_button">Antworten</string>
     <string name="notify_new_message">Neue Nachricht</string>
@@ -875,5 +944,6 @@ Ihr bisheriges E-Mail-Konto wird dabei nicht gelöscht. Sie können mit der Opti
     <string name="update_1_20">Verbesserte E-Mail-Kompatibilität in Version 1.20:\n\n📫 Mailinglisten lesen\n📭 HTML-Mails anzeigen\n📪 Bessere Unterstützung von Support-Adressen\n📫 Viele weitere Probleme behoben\n\nLesen Sie unseren neuen Blog-Beitrag über diese ersten Schritte Richtung E-Mail und mehr:</string>
     <string name="update_1_22">Was ist neu in 1.22?\n\n👋 Chat-Anfragen werden jetzt als einzelne Chats angezeigt und können vor Annahme oder Blockieren im Detail geprüft werden\n\n🗄️ Das Archiv ist jetzt leicht vom Hauptmenü aus zugänglich - dort finden Sie auch die alten Chat-Anfragen\n\n📮📮📮📮 Verbessertes Multi-Account: Der Wechsel zwischen Konten geht jetzt schneller und wird weniger durch langwierige Downloads blockiert\n\n🤔 Immer wissen, was los ist: Verbindungsprobleme werden jetzt in der Titelleiste angezeigt, für Details einfach auf den Titel tippen\n\nMehr im Blog:</string>
     <string name="update_1_22_ios">Was ist neu in 1.22?\n\n👋 Chat-Anfragen werden jetzt als einzelne Chats angezeigt und können vor Annahme oder Blockieren im Detail geprüft werden\n\n🗄️ Das Archiv ist jetzt leicht den  Einstellungen aus zugänglich - dort finden Sie auch die alten Chat-Anfragen\n\n📮📮📮📮 Multi-Account hinzugefügt: Konten in den Einstellungen wechseln und verwalten\n\n🤔 Immer wissen, was los ist: Verbindungsprobleme werden jetzt in der Titelleiste angezeigt, für Details einfach auf den Titel tippen\n\nMehr im Blog:</string>
-
+    <string name="update_1_24_android">1.24 auf einen Blick:\n\n• Kontoauswahl in der oberen linken Ecke der Chatliste\n• Lang Tippen auf das App-Symbol, um die letzten Chats direkt zu öffnen\n• Große Dateien nach Bedarf herunterladen\n• Schnellere, nicht blockierende QR-Code-Scans und neue QR-Code-Optionen\n\nMehr unter 👉</string>
+    <string name="update_1_24_ios">1.24 auf einen Blick:\n\n• Starten Sie eine In-Chat-Suche aus dem Chat-Profil heraus\n• Große Dateien nach Bedarf herunterladen\n• Schnellere, nicht-blockierende QR-Code-Scans\n\nMehr unter 👉</string>
 </resources>
