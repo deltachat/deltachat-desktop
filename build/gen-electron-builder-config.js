@@ -53,7 +53,6 @@ const files = [
   '!node_modules/react/',
   '!node_modules/react-transition-group/',
   '!node_modules/css-to-react-native',
-  '!node_modules/simple-markdown',
   // re-add needed css stuff -> re-adding doesn't seem to work at this point in time
   // 'node_modules/normalize.css/normalize.css',
   // 'node_modules/@blueprintjs/core/lib/css/blueprint.css',
@@ -64,6 +63,7 @@ const files = [
   // cleanup deltachat-node
   //'!node_modules/deltachat-node/deltachat-core-rust/', - todo only exclude what is not needed (if no prebuilds are available)
   '!node_modules/deltachat-node/src',
+  '!node_modules/@deltachat/message_parser_wasm'
 ]
 const env = process.env
 

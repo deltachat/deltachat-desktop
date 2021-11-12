@@ -13,7 +13,11 @@ import { selectChat } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
 import { JsonContact } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
+import {
+  MessagesDisplayContext,
+  ScreenContext,
+  useTranslationFunction,
+} from '../../contexts'
 import { Avatar } from '../Avatar'
 import { useLogicVirtualChatList, ChatListPart } from '../chat/ChatList'
 import AutoSizer from 'react-virtualized-auto-sizer'
@@ -173,7 +177,15 @@ export function ViewProfileInner({
                 text={tx('pref_default_status_label')}
               />
               <div className='status-text'>
-                {MessageBody({ text: contact.status })}
+                <MessagesDisplayContext.Provider
+                  value={{
+                    context: 'contact_profile_status',
+                    contact_id: contact.id,
+                    closeProfileDialog: onClose,
+                  }}
+                >
+                  <MessageBody text={contact.status} />
+                </MessagesDisplayContext.Provider>
               </div>
             </>
           )}

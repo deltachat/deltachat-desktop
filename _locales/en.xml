@@ -18,6 +18,8 @@
     <string name="automatic">Automatic</string>
     <string name="strict">Strict</string>
     <string name="open">Open</string>
+    <string name="download">Download</string>
+    <string name="downloading">Downloading…</string>
     <string name="open_attachment">Open Attachment</string>
     <string name="join">Join</string>
     <string name="rejoin">Rejoin</string>
@@ -107,6 +109,10 @@
         <item quantity="one">%d member</item>
         <item quantity="other">%d members</item>
     </plurals>
+    <plurals name="n_recipients">
+        <item quantity="one">%d recipient</item>
+        <item quantity="other">%d recipients</item>
+    </plurals>
 
     <string name="self">Me</string>
     <string name="draft">Draft</string>
@@ -114,6 +120,8 @@
     <!-- Translators: Used in summaries as "Draft: Reply", similar as "Draft: Image". Use a noun here, not a verb (not: "to reply") -->
     <string name="reply_noun">Reply</string>
     <string name="gif">Gif</string>
+    <!-- "Stickers" as known from other messengers, please pick up the wording from there; in some languages, "Sticker" in english is just fine. -->
+    <string name="sticker">Sticker</string>
     <string name="images">Images</string>
     <string name="audio">Audio</string>
     <string name="voice_message">Voice Message</string>
@@ -164,7 +172,14 @@
     <string name="menu_new_contact">New Contact</string>
     <string name="menu_new_chat">New Chat</string>
     <string name="menu_new_group">New Group</string>
+    <!-- "Subject" here must be the same wording as used in the e-mail context, so. eg. "Betreff" in german (the idea is to help people coming from the e-mail context) -->
+    <string name="new_group_or_subject">New Group or Subject</string>
     <string name="menu_new_verified_group">New Verified Group</string>
+    <!-- consider keeping the term "broadcast"; check how these lists are called eg. on whatsapp in the destination language -->
+    <string name="broadcast_list">Broadcast List</string>
+    <string name="broadcast_lists">Broadcast Lists</string>
+    <string name="new_broadcast_list">New Broadcast List</string>
+    <string name="add_recipients">Add Recipients</string>
     <string name="menu_send">Send</string>
     <string name="menu_toggle_keyboard">Toggle Emoji Keyboard</string>
     <string name="menu_edit_group">Edit Group</string>
@@ -195,6 +210,7 @@
     <string name="menu_mute">Mute Notifications</string>
     <string name="menu_unmute">Unmute</string>
     <string name="menu_export_attachment">Export Attachment</string>
+    <string name="menu_export_attachments">Export Attachments</string>
     <string name="menu_all_media">All Media</string>
     <!-- menu entry that opens eg. a gallery image or a document in the chat at the correct position -->
     <string name="show_in_chat">Show in Chat</string>
@@ -290,9 +306,13 @@
         <item quantity="one">Delete %d message here and on the server?</item>
         <item quantity="other">Delete %d messages here and on the server?</item>
     </plurals>
+    <plurals name="ask_delete_messages_simple">
+        <item quantity="one">Delete %d message?</item>
+        <item quantity="other">Delete %d messages?</item>
+    </plurals>
     <string name="ask_forward">Forward messages to %1$s?</string>
     <string name="ask_forward_multiple">Forward messages to %1$d chats?</string>
-    <string name="ask_export_attachment">Export attachment? Exporting attachments will allow any other apps on your device to access them.\n\nContinue?</string>
+    <string name="ask_export_attachment">Exporting attachments will allow any other apps on your device to access them.\n\nContinue?</string>
     <string name="ask_block_contact">Block this contact? You will no longer receive messages from this contact.</string>
     <string name="ask_unblock_contact">Unblock this contact? You will once again be able to receive messages from this contact.</string>
     <string name="ask_delete_contacts">Delete contacts?\n\nContacts with ongoing chats and contacts from the system\'s address book cannot be deleted permanently.</string>
@@ -302,6 +322,8 @@
     <string name="ask_delete_value">Delete %s?</string>
     <!-- Translators: %1$s will be replaces by a comma separated list of names -->
     <string name="ask_remove_members">Remove %1$s from group?</string>
+    <!-- Translators: %1$s will be replaced by a comma separated list of names -->
+    <string name="ask_remove_from_broadcast">Remove %1$s from broadcast list?</string>
     <string name="open_url_confirmation">Do you want to open this link?</string>
 
 
@@ -330,6 +352,7 @@
         <item quantity="other">%d new messages</item>
     </plurals>
     <string name="chat_no_messages_hint">Send message to %1$s:\n\n• It is okay if %2$s does not use Delta Chat.\n\n• Delivering the first message may take a while and may be unencrypted.</string>
+    <string name="chat_new_broadcast_hint">In a broadcast list, others will receive messages in their private chats with you.\n\nThe recipients will not be aware of each other.</string>
     <string name="chat_new_group_hint">Compose the first message, allowing others to reply within this group.\n\n• It is okay if not all members use Delta Chat.\n\n• Delivering the first message may take a while.</string>
     <string name="chat_record_slide_to_cancel">Slide to cancel</string>
     <string name="chat_record_explain">Tap and hold to record a voice message, release to send</string>
@@ -385,6 +408,7 @@
     <!-- this message is shown whenever a link with non-latin characters is clicked. first placeholder is original hostname with special chars, second placeholder is hostname encoded in ascii -->
     <string name="puny_code_warning_description">You followed a link which could be misrepresenting characters by using similarly looking ones from different alphabets. Following the link labelled %1$s will lead to %2$s which is normal for non-Latin characters. If you did not expect such characters this link could be harmful</string>
 
+
     <!-- search -->
     <string name="search">Search</string>
     <string name="search_explain">Search for chats, contacts, and messages</string>
@@ -417,6 +441,12 @@
 
 
     <!-- Connectivity -->
+    <!-- Used as a headline for the "Inbox" eg. in the "Connectivity" view -->
+    <string name="incoming_messages">Incoming Messages</string>
+    <!-- Used as a headline for the "Outbox" eg. in the "Connectivity" view -->
+    <string name="outgoing_messages">Outgoing Messages</string>
+    <!-- Used as a headline in the "Connectivity" view. The placeholder will be replaced by the domain of the configured email-address. -->
+    <string name="storage_on_domain">Storage on %1$s</string>
     <string name="connectivity">Connectivity</string>
     <!-- Shown eg. in the title bar if the app is "Not connected"; as there is very few room, try to be as short as possible. -->
     <string name="connectivity_not_connected">Not connected</string>
@@ -426,6 +456,13 @@
     <string name="connectivity_updating">Updating…</string>
     <!-- Shown eg. in the setting if the app is "Connected" -->
     <string name="connectivity_connected">Connected</string>
+    <string name="sending">Sending…</string>
+    <string name="last_msg_sent_successfully">Last message sent successfully.</string>
+    <string name="not_supported_by_provider">Not supported by your provider.</string>
+    <!-- Used as a subtitle in quota context of "Connetivity" view. Should be be plural always, no number is prefixed or so. -->
+    <string name="messages">Messages</string>
+    <!-- Used for describing resource usage, resulting string will be eg. "1.2 GiB of 3 GiB used" -->
+    <string name="part_of_total_used">%1$s of %2$s used</string>
 
 
     <!-- welcome and login -->
@@ -447,6 +484,13 @@
     <string name="login_smtp_port">SMTP Port</string>
     <string name="login_smtp_security">SMTP Security</string>
     <string name="login_auth_method">Authorization Method</string>
+    <!-- the word "SOCKS5" here and in the following strings should not be translated in most cases -->
+    <string name="login_socks5">SOCKS5</string>
+    <string name="login_socks5_use_socks5">Use SOCKS5</string>
+    <string name="login_socks5_host">SOCKS5 Host</string>
+    <string name="login_socks5_port">SOCKS5 Port</string>
+    <string name="login_socks5_user">SOCKS5 User</string>
+    <string name="login_socks5_password">SOCKS5 Password</string>
     <!-- Translators: %1$s will be replaced by an e-mail address -->
     <string name="login_oauth2_checking_addr">Checking %1$s</string>
     <string name="login_info_oauth2_title">Continue with simplified setup?</string>
@@ -472,7 +516,10 @@
     <string name="delete_account_ask">Are you sure you want to delete your account data?</string>
     <string name="delete_account_explain_with_name">All account data of \"%s\" on this device will be deleted, including your end-to-end encryption setup, contacts, chats, messages and media. This action cannot be undone.</string>
     <string name="switching_account">Switching account…</string>
+    <string name="unconfigured_account">Unconfigured account</string>
+    <string name="unconfigured_account_hint">Open account to configure it.</string>
     <string name="try_connect_now">Try to connect now</string>
+    <string name="sync_all">Sync All</string>
     <!-- Translations: %1$s will be replaced by a more detailed error message -->
     <string name="configuration_failed_with_error">Configuration failed. Error: %1$s</string>
 
@@ -494,7 +541,7 @@
     <string name="blocked_empty_hint">If you block contacts, they will be shown here.</string>
     <string name="pref_profile_photo_remove_ask">Remove profile image?</string>
     <string name="pref_password_and_account_settings">Password and Account</string>
-    <string name="pref_who_can_see_profile_explain">Your profile image and name will be shown alongside your messages when communicating with other users. Already sent information can not be deleted or removed.</string>
+    <string name="pref_who_can_see_profile_explain">Your profile image, name and signature will be sent together with your messages when communicating with other users.</string>
     <string name="pref_your_name">Your Name</string>
     <!-- Translators: The value entered here is visible only to recipients who DO NOT use Deltachat, so its not a "Status" but the last line in the E-Mail. -->
     <string name="pref_default_status_label">Signature Text</string>
@@ -580,6 +627,16 @@
     <string name="pref_background_custom_image">Custom image</string>
     <string name="pref_background_custom_color">Custom color</string>
     <string name="export_aborted">Export aborted.</string>
+    <string name="auto_download_messages">Auto-Download Messages</string>
+    <!-- %1$s will be replaced by a human-readable number of bytes, eg. 32 KiB, 1 MiB -->
+    <string name="up_to_x">Up to %1$s</string>
+    <string name="up_to_x_most_worse_quality_images">Up to %1$s, most worse quality images</string>
+    <string name="up_to_x_most_balanced_quality_images">Up to %1$s, most balanced quality images</string>
+    <string name="no_limit">No limit</string>
+    <!-- %1$s will be replaced by a human-readable number of bytes, eg. 32 KiB, 1 MiB. Resulting string eg. "1 MiB message" -->
+    <string name="n_bytes_message">%1$s message</string>
+    <!-- %1$s will be replaced by human-readable date and time -->
+    <string name="download_max_available_until">Download maximum available until %1$s</string>
     <string name="profile_image_select">Select Profile Image</string>
     <string name="select_your_new_profile_image">Select your new profile image</string>
     <string name="profile_image_delete">Delete Profile Image</string>
@@ -677,6 +734,13 @@
     <string name="systemmsg_chat_protection_disabled">Chat protection disabled.</string>
     <string name="systemmsg_chat_protection_enabled">Chat protection enabled.</string>
 
+    <string name="devicemsg_self_deleted">You deleted the \"Saved messages\" chat.\n\nℹ️ To use the \"Saved messages\" feature again, create a new chat with yourself.</string>
+    <!-- %1$s will be replaced by the number of storage already used, sth. as '500 MB'. CAVE: if you want to use a simple the percent sign, type in two, so eg. %1$s %% -->
+    <string name="devicemsg_storage_exceeding">⚠️ Your provider\'s storage is about to exceed, already %1$s%% are used.\n\nYou may not be able to receive message when the storage is 100%% used.\n\n👉 Please check if you can delete old data in the provider\'s web interface and consider to enable \"Settings / Delete Old Messages\". You can check your current storage usage anytime at \"Settings / Connectivity\".</string>
+    <!-- %1%s will be replaced by date and time in some human-readable format -->
+    <string name="devicemsg_bad_time">⚠️ Date or time of your device seem to be inaccurate (%1$s).\n\nAdjust your clock ⏰🔧 to ensure your messages are received correctly.</string>
+    <string name="devicemsg_update_reminder">⚠️ Your Delta Chat version might be outdated.\n\nThis may cause problems because your chat partners use newer versions - and you are missing the latest features 😳\nPlease check https://get.delta.chat or your app store for updates.</string>
+
     <!-- Some options as "Manage keys" or "Backup" may require the system PIN/Fingerprint/Gesture/Etc. to be entered in a system dialog. This hint is added to the system dialog, below a title as "Manage keys" or "Backup". -->
     <string name="enter_system_secret_to_continue">Please enter your system defined secret to continue.</string>
 
@@ -716,6 +780,10 @@
     <string name="qraccount_success_enter_name">Login successful—your e-mail address is %1$s\n\nIf you like, you can now enter a name and an profile image that will be displayed to people you write to.</string>
     <string name="qraccount_qr_code_cannot_be_used">The scanned QR code cannot be used to set up a new account.</string>
     <string name="qraccount_use_on_new_install">The scanned QR code is for setting up a new account. You can scan the QR code when setting up a new Delta Chat installation.</string>
+    <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
+    <string name="secure_join_started">%1$s invited you to join this group.\n\nWaiting for the device of %2$s to reply…</string>
+    <!-- placeholder will be replaced by the name of the inviter. -->
+    <string name="secure_join_replies">%1$s replied, waiting for being added to the group…</string>
     <string name="contact_verified">%1$s verified.</string>
     <string name="contact_not_verified">Cannot verify %1$s.</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
@@ -729,6 +797,7 @@
 
     <!-- notifications  -->
     <string name="notify_n_messages_in_m_chats">%1$d new messages in %2$d chats</string>
+    <string name="notify_dismiss">Dismiss</string>
     <string name="notify_mark_read">Mark Read</string>
     <string name="notify_reply_button">Reply</string>
     <string name="notify_new_message">New message</string>
@@ -871,5 +940,6 @@
     <string name="update_1_20">Improved e-mail compatibility in version 1.20:\n\n📫 Read mailing lists\n📭 Read HTML-mails\n📪 Nice handling of support addresses\n📫 Many major and minor annoyances fixed\n\nRead our new blog post about these first steps towards mail and more:</string>
     <string name="update_1_22">What\'s new in 1.22?\n\n👋 Chat Requests now pop up as single chats and can be inspected in detail before accepting or blocking\n\n🗄️ The Archive is now easily accessible from the main menu - you\'ll also find your old requests there\n\n📮📮📮 Multi-account improved: Switching accounts is now faster and less often blocked by lengthy updates\n\n🤔 Know what\'s going on: Connection problems are shown in the title bar now, tap for details\n\nMore on the blog:</string>
     <string name="update_1_22_ios">What\'s new in 1.22?\n\n👋 Chat Requests now pop up as single chats and can be inspected in detail before accepting or blocking\n\n🗄️ The Archive is now easily accessible from the settings - you\'ll also find your old requests there\n\n📮📮📮 Multi-account added: Switch and manage accounts in the settings\n\n🤔 Know what\'s going on: Connection problems are shown in the title bar now, tap for details\n\nMore on the blog:</string>
-
+    <string name="update_1_24_android">1.24 at a glance:\n\n• Save taps: Account selection in the upper left corner of the chat list\n• Save more taps: Long-tap the app icon to open recent chats directly\n• Save traffic: Download large files as needed\n• Save nerves: faster, non-blocking QR code joins and new QR code options\n\nMore at 👉</string>
+    <string name="update_1_24_ios">1.24 at a glance:\n\n• Start an in-chat search from the chat\'s profile\n• Save traffic: Download large files as needed\n• Save nerves: faster, non-blocking QR code joins\n\nMore at 👉</string>
 </resources>

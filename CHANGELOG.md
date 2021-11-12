@@ -4,7 +4,11 @@
 
 ### Added
 - Clicking on member in group dialog shows the profile of member
+- Implement previous/next buttons for the gallery's media view (the left and right arrow keys can also be used for navigation)
 - Implement previous/next buttons for gallery
+- add update unread counts on account screen on incomming messages
+- Clickable bot command suggestions, email addresses and hashtags in messages
+- Clickable links in messages on the map
 
 ### Changed
 - Bring back the back and close button in dialogs, move actions that need an ok/cancel button
@@ -12,6 +16,8 @@
 - show contacts that are already in group in add member dialog, but disabled
 - show chips for members to add
 - update to typescript `4.4.4` and update eslint to version `8.2.0` (also updated the eslint plugins to their new versions)
+- use our new rust (wasm) based message (text) parser instead of `simple-markdown` for making links (and so on) clickable
+- remove dependencies that are now not needed anymore (`punycode`, `simple-markdown`)
 
 ### Fixed
 - don't show logo twice in notifications (because macOS already shows applogo)

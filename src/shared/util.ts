@@ -24,3 +24,14 @@ export function isChatReadonly(
     return [false, '']
   }
 }
+
+/** wraps a callback so that `event.preventDefault()` is called before it */
+export function preventDefault<EventType extends React.SyntheticEvent | Event>(
+  callback: Function
+) {
+  const wrapper = (cb: Function, ev: EventType) => {
+    ev.preventDefault()
+    cb()
+  }
+  return wrapper.bind(null, callback)
+}

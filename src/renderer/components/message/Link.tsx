@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react'
 import { ScreenContext } from '../../contexts'
-import { toASCII } from 'punycode'
 import { OpenDialogFunctionType } from '../dialogs/DialogController'
 import {
   SmallDialog,
@@ -10,10 +9,10 @@ import {
 import { DeltaCheckbox } from '../contact/ContactListItem'
 import { getLogger } from '../../../shared/logger'
 
-import UrlParser from 'url-parse'
 import chatStore from '../../stores/chat'
 import reactStringReplace from 'react-string-replace'
 import { runtime } from '../../runtime'
+import { LinkDestination } from '@deltachat/message_parser_wasm'
 
 const log = getLogger('renderer/LabeledLink')
 
@@ -32,47 +31,35 @@ function isDomainTrusted(domain: string): boolean {
   return getTrustedDomains().includes(domain)
 }
 
-function punycodeCheck(url: string) {
-  const URL = UrlParser(url)
-  // encode the punycode to make phishing harder
-  const originalHostname = URL.hostname
-  URL.set('hostname', URL.hostname.split('.').map(toASCII).join('.'))
-  return {
-    asciiUrl: URL.toString(),
-    originalHostname,
-    asciiHostname: URL.hostname,
-    hasPunycode: URL.toString() != url,
-  }
-}
-
 export const LabeledLink = ({
   label,
-  target,
+  destination,
 }: {
-  label: string
-  target: string
+  label: string | JSX.Element | JSX.Element[]
+  destination: LinkDestination
 }) => {
   const { openDialog } = useContext(ScreenContext)
+  const { target, punycode, hostname } = destination
 
-  const url = UrlParser(target)
   // encode the punycode to make phishing harder
-  url.set('hostname', url.hostname.split('.').map(toASCII).join('.'))
+  const realUrl = punycode ? punycode.punycode_encoded_url : target
+  const hostName = punycode ? punycode.ascii_hostname : hostname
 
   const onClick = (ev: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     ev.preventDefault()
     ev.stopPropagation()
     const isDeviceChat = chatStore.getState().chat?.isDeviceChat
 
-    //check if domain is trusted
-    if (isDeviceChat || isDomainTrusted(url.hostname)) {
+    //check if domain is trusted, or if there is no domain like on mailto just open it
+    if (isDeviceChat || !hostName || isDomainTrusted(hostName)) {
       runtime.openLink(target)
       return
     }
     // not trusted - ask for confimation from user
     labeledLinkConfirmationDialog(
       openDialog as OpenDialogFunctionType,
-      url.toString(),
-      url.hostname,
+      realUrl,
+      hostName,
       target
     )
   }
@@ -80,10 +67,10 @@ export const LabeledLink = ({
     <a
       href={'#' + target}
       x-target-url={target}
-      title={url.toString()}
+      title={realUrl}
       onClick={onClick}
     >
-      {String(label)}
+      {label}
     </a>
   )
 }
@@ -158,26 +145,22 @@ function labeledLinkConfirmationDialog(
   })
 }
 
-export const Link = ({ target }: { target: string }) => {
+export const Link = ({ destination }: { destination: LinkDestination }) => {
   const { openDialog } = useContext(ScreenContext)
 
-  const {
-    originalHostname,
-    asciiHostname,
-    hasPunycode,
-    asciiUrl,
-  } = punycodeCheck(target)
+  const { target, punycode } = destination
+  const asciiUrl = punycode ? punycode.punycode_encoded_url : target
 
   const onClick = (ev: any) => {
     ev.preventDefault()
     ev.stopPropagation()
 
-    if (hasPunycode) {
+    if (punycode) {
       openPunycodeUrlConfirmationDialog(
         openDialog as OpenDialogFunctionType,
-        originalHostname,
-        asciiHostname,
-        asciiUrl
+        punycode.original_hostname,
+        punycode.ascii_hostname,
+        punycode.punycode_encoded_url
       )
     } else {
       runtime.openLink(target)

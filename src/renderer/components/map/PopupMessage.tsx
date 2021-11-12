@@ -2,6 +2,7 @@ import React from 'react'
 import MessageMetaData from '../message/MessageMetaData'
 import { JsonMessage } from '../../../shared/shared-types'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
+import MessageBody from '../message/MessageBody'
 
 export default class PopupMessage extends React.Component<{
   username: string
@@ -13,7 +14,9 @@ export default class PopupMessage extends React.Component<{
     if (message) {
       return (
         <div className='map-popup'>
-          <div>{message.text}</div>
+          <div>
+            <MessageBody text={message.text} />
+          </div>
           <MessageMetaData
             status={mapCoreMsgStatus2String(message.state)}
             timestamp={message.timestamp * 1000}
