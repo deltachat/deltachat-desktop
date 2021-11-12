@@ -1,6 +1,8 @@
 //@ts-check
-const child = require('child_process')
-const { readFile, writeFile } = require('fs/promises')
+import { spawn } from 'child_process'
+import { build } from 'esbuild'
+import { copyFile, readFile } from 'fs/promises'
+import path, { join } from 'path'
 /**
  *
  * @param {string[]} args arguments for the command
@@ -9,7 +11,7 @@ const { readFile, writeFile } = require('fs/promises')
 async function run(command, args, options, listener = undefined) {
   return new Promise((resolve, reject) => {
     console.log(`- Executing "${command} ${args.join(' ')}"`)
-    const p = child.spawn(command, args, {
+    const p = spawn(command, args, {
       shell: true,
       cwd: process.cwd(),
       ...options,
@@ -34,19 +36,49 @@ async function run(command, args, options, listener = undefined) {
 }
 
 async function bundle(production, minify = false) {
-  const bundleArgs = [
-    'esbuild',
-    'src/renderer/main.tsx',
-    '--bundle',
-    ...(minify ? ['--minify'] : []),
-    '--sourcemap',
-    '--outfile=html-dist/bundle.js',
-    production
-      ? '--define:process.env.NODE_ENV=\\"production\\"'
-      : '--define:process.env.NODE_ENV=\\"development\\"',
-  ]
+  await build({
+    entryPoints: ['src/renderer/main.tsx'],
+    bundle: true,
+    minify,
+    sourcemap: true,
+    outfile: 'html-dist/bundle.js',
+    define: {
+      'process.env.NODE_ENV': production ? 'production' : 'development',
+    },
+    plugins: [wasmPlugin],
+  })
 
-  await run('npx', bundleArgs)
+  await copyFile(
+    'node_modules/@deltachat/message_parser_wasm/message_parser_wasm_bg.wasm',
+    'html-dist/message_parser_wasm_bg.wasm'
+  )
+}
+
+let wasmPlugin = {
+  name: 'wasm',
+  setup(build) {
+    // Resolve ".wasm" files to a path with a namespace
+    build.onResolve({ filter: /\.wasm$/ }, args => {
+      if (args.resolveDir === '') {
+        return // Ignore unresolvable paths
+      }
+      return {
+        path: path.isAbsolute(args.path)
+          ? args.path
+          : path.join(args.resolveDir, args.path),
+        namespace: 'wasm-binary',
+      }
+    })
+
+    // Virtual modules in the "wasm-binary" namespace contain the
+    // actual bytes of the WebAssembly file. This uses esbuild's
+    // built-in "binary" loader instead of manually embedding the
+    // binary data inside JavaScript code ourselves.
+    build.onLoad({ filter: /.*/, namespace: 'wasm-binary' }, async args => ({
+      contents: await readFile(args.path),
+      loader: 'binary',
+    }))
+  },
 }
 
 async function main(watch_ = false, production_, minify_ = false) {

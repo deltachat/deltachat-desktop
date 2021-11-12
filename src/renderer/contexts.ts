@@ -44,3 +44,19 @@ export const SettingsContext: React.Context<{
 export type unwrapContext<T> = T extends import('react').Context<infer R>
   ? R
   : null
+
+type MessagesDisplayContextType =
+  | { context: 'chat_messagelist'; chatId: number }
+  | { context: 'chat_map'; chatId: number }
+  | {
+      context: 'contact_profile_status'
+      contact_id: number
+      closeProfileDialog: () => void
+    }
+  | null
+/** Additional context for message body rendering
+ * this context is currently only used by bot command suggestions
+ * that they know in which chat they need to set/replace the draft */
+export const MessagesDisplayContext = React.createContext(
+  null as MessagesDisplayContextType
+)
