@@ -91,7 +91,7 @@
         <item quantity="one">%d godzina</item>
         <item quantity="few">%d godziny</item>
         <item quantity="many">%d godzin</item>
-        <item quantity="other">%d godziny</item>
+        <item quantity="other">%d godzin</item>
     </plurals>
     <plurals name="n_chats">
         <item quantity="one">%d czat</item>
@@ -117,13 +117,14 @@
         <item quantity="many">%dczłonków</item>
         <item quantity="other">%dczłonka</item>
     </plurals>
-
     <string name="self">Ja</string>
     <string name="draft">Szkic</string>
     <string name="image">Obraz</string>
     <!-- Translators: Used in summaries as "Draft: Reply", similar as "Draft: Image". Use a noun here, not a verb (not: "to reply") -->
     <string name="reply_noun">Odpowiedź</string>
     <string name="gif">Gif</string>
+    <!-- "Stickers" as known from other messengers, please pick up the wording from there; in some languages, "Sticker" in english is just fine. -->
+    <string name="sticker">Naklejka</string>
     <string name="images">Obrazy</string>
     <string name="audio">Audio</string>
     <string name="voice_message">Wiadomość głosowa</string>
@@ -210,6 +211,7 @@
     <string name="block">Zablokuj</string>
     <string name="menu_block_contact">Blokuj kontakt</string>
     <string name="menu_unblock_contact">Odblokuj kontakt</string>
+    <string name="accept">Akceptuj</string>
     <string name="menu_play">Odtwarzaj</string>
     <string name="menu_pause">Wstrzymaj</string>
     <string name="menu_scroll_to_bottom">Przewiń na dołu</string>
@@ -298,6 +300,12 @@
         <item quantity="many">Usunąć %d wiadomości tutaj i na serwerze?</item>
         <item quantity="other">Usunąć %d wiadomości tutaj i na serwerze?</item>
     </plurals>
+    <plurals name="ask_delete_messages_simple">
+        <item quantity="one">Usunąć %d wiadomość?</item>
+        <item quantity="few">Usunąć %d wiadomości?</item>
+        <item quantity="many">Usunąć %d wiadomości?</item>
+        <item quantity="other">Usunąć %d wiadomości?</item>
+    </plurals>
     <string name="ask_forward">Przekazać wiadomości do użytkownika %1$s?</string>
     <string name="ask_forward_multiple">Przekazać wiadomości do %1$d czatów?</string>
     <string name="ask_export_attachment">Eksportować załącznik? Eksportowanie załączników umożliwi dostęp do nich wszystkim aplikacjom na urządzeniu.\n\nKontynuować?</string>
@@ -353,8 +361,10 @@
     <string name="chat_share_with_title">Udostępnij</string>
     <string name="chat_input_placeholder">Wiadomość</string>
     <string name="chat_archived_label">Zarchiwizowane</string>
+    <string name="chat_request_label">Prośba</string>
     <string name="chat_no_messages">Brak wiadomości.</string>
     <string name="chat_self_talk_subtitle">Wiadomości wysłane do siebie</string>
+    <string name="archive_empty_hint">Jeśli zarchiwizujesz czaty, zostaną one pokazane tutaj.</string>
     <string name="saved_messages">Zapisane wiadomości</string>
     <string name="saved_messages_explain">• Przesyłaj tu wiadomości, aby mieć je pod ręką\n\n• Rób notatki lub notatki głosowe\n\n• Dołączaj media, aby je zachować</string>
     <!-- this "Saved" should match the "Saved" from "Saved messages" -->
@@ -422,6 +432,30 @@
     <string name="send_message">Wyślij wiadomość</string>
 
 
+    <!-- Connectivity -->
+    <!-- Used as a headline for the "Inbox" eg. in the "Connectivity" view -->
+    <string name="incoming_messages">Wiadomości przychodzące</string>
+    <!-- Used as a headline for the "Outbox" eg. in the "Connectivity" view -->
+    <string name="outgoing_messages">Wiadomości wychodzące</string>
+    <!-- Used as a headline in the "Connectivity" view. The placeholder will be replaced by the domain of the configured email-address. -->
+    <string name="storage_on_domain">Zajętość skrzynki %1$s</string>
+    <string name="connectivity">Łączność</string>
+    <!-- Shown eg. in the title bar if the app is "Not connected"; as there is very few room, try to be as short as possible. -->
+    <string name="connectivity_not_connected">Nie połączony</string>
+    <!-- Shown eg. in the title bar if the app is "Connecting"; as there is very few room, try to be as short as possible. Note that the three dots are a single character (…), not three (...) -->
+    <string name="connectivity_connecting">Łączenie…</string>
+    <!-- Shown eg. in the title bar if the app is "Updating" (eg. getting new/old message, sync things); as there is very few room, try to be as short as possible. Note that the three dots are a single character (…), not three (...) -->
+    <string name="connectivity_updating">Aktualizowanie…</string>
+    <!-- Shown eg. in the setting if the app is "Connected" -->
+    <string name="connectivity_connected">Połączony</string>
+    <string name="sending">Wysyłanie…</string>
+    <string name="last_msg_sent_successfully">Twoja ostatnia wiadomość została pomyślnie wysłana</string>
+    <!-- Used as a subtitle in quota context of "Connetivity" view. Should be be plural always, no number is prefixed or so. -->
+    <string name="messages">Wiadomości</string>
+    <!-- Used for describing resource usage, resulting string will be eg. "1.2 GiB of 3 GiB used" -->
+    <string name="part_of_total_used">%1$s z %2$s </string>
+
+
     <!-- welcome and login -->
     <string name="welcome_intro1_message">Komunikator o największym zasięgu na świecie. Darmowy i bezpieczny.</string>
     <string name="login_title">Zaloguj się</string>
@@ -441,6 +475,13 @@
     <string name="login_smtp_port">Port SMTP</string>
     <string name="login_smtp_security">Bezpieczeństwo SMTP</string>
     <string name="login_auth_method">Metoda autoryzacji</string>
+    <!-- the word "SOCKS5" here and in the following strings should not be translated in most cases -->
+    <string name="login_socks5">SOCKS5</string>
+    <string name="login_socks5_use_socks5">Użyj SOCKS5</string>
+    <string name="login_socks5_host">Host SOCKS5</string>
+    <string name="login_socks5_port">Port SOCKS5</string>
+    <string name="login_socks5_user">Użytkownik SOCKS5</string>
+    <string name="login_socks5_password">Hasło SOCKS5</string>
     <!-- Translators: %1$s will be replaced by an e-mail address -->
     <string name="login_oauth2_checking_addr">Sprawdzanie %1$s</string>
     <string name="login_info_oauth2_title">Kontynuuj w uproszczonej konfiguracji?</string>
@@ -466,7 +507,10 @@
     <string name="delete_account_ask">Czy na pewno chcesz usunąć dane swojego konta?</string>
     <string name="delete_account_explain_with_name">Wszystkie dane konta „%s” na tym urządzeniu zostaną usunięte, w tym konfiguracja szyfrowania end-to-end, kontakty, czaty, wiadomości i multimedia. Tej operacji nie można cofnąć.</string>
     <string name="switching_account">Przełączam konto…</string>
+    <string name="unconfigured_account">Nieskonfigurowane konto</string>
+    <string name="unconfigured_account_hint">Otwórz konto, aby je skonfigurować</string>
     <string name="try_connect_now">Spróbuj się teraz połączyć</string>
+    <string name="sync_all">Synchronizuj wszystkie</string>
     <!-- Translations: %1$s will be replaced by a more detailed error message -->
     <string name="configuration_failed_with_error">Konfiguracja nie powiodła się. Błąd: %1$s</string>
 
@@ -574,6 +618,14 @@
     <string name="pref_background_custom_image">Własny obraz</string>
     <string name="pref_background_custom_color">Własny kolor</string>
     <string name="export_aborted">Eksport przerwany.</string>
+    <string name="auto_download_messages">Automatyczne pobieranie wiadomości</string>
+    <!-- %1$s will be replaced by a human-readable number of bytes, eg. 32 KiB, 1 MiB -->
+    <string name="up_to_x">Do %1$s</string>
+    <string name="up_to_x_most_worse_quality_images">Do %1$s, większość obrazów gorszej jakości.</string>
+    <string name="up_to_x_most_balanced_quality_images">Do %1$s, obrazy o najbardziej zrównoważonej jakości</string>
+    <string name="no_limit">Bez limitu</string>
+    <!-- %1$s will be replaced by a human-readable number of bytes, eg. 32 KiB, 1 MiB. Resulting string eg. "1 MiB message" -->
+    <string name="n_bytes_message">Wiadomość %1$s</string>
     <string name="profile_image_select">Wybierz zdjęcie profilowe</string>
     <string name="select_your_new_profile_image">Wybierz nowe zdjęcie profilowe</string>
     <string name="profile_image_delete">Usuń zdjęcie profilowe</string>
