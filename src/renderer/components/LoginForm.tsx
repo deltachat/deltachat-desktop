@@ -433,8 +433,8 @@ export function ConfigureProgressDialog({
           onClose()
           onSuccess && onSuccess()
         } catch (err) {
-          log.error('configure error')
-          if (err) {
+          log.error('configure error', err)
+          if (typeof err === 'string') {
             onConfigureError(null, [null, err])
             onConfigureFailed(null, [null, ''])
           }

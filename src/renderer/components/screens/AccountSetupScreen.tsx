@@ -17,6 +17,9 @@ import {
 import type ScreenController from '../../ScreenController'
 import { Screens } from '../../ScreenController'
 import { DeltaBackend } from '../../delta-remote'
+import { getLogger } from '../../../shared/logger'
+
+const log = getLogger('renderer/AccountSetupScreen')
 
 export default function AccountSetupScreen({
   selectAccount,
@@ -46,10 +49,15 @@ export default function AccountSetupScreen({
       }
       window.__changeScreen(Screens.Accounts)
     } catch (error) {
-      window.__openDialog('AlertDialog', {
-        message: error?.message || error,
-        cb: () => {},
-      })
+      if (error instanceof Error) {
+        window.__openDialog('AlertDialog', {
+          message: error?.message,
+          cb: () => {},
+        })
+      } else {
+        log.error('unexpected error type', error)
+        throw error
+      }
     }
   }
 

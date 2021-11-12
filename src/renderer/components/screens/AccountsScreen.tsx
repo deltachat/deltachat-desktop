@@ -58,7 +58,9 @@ function ImportBackupProgressDialog({
       try {
         account = await DeltaBackend.call('backup.import', backupFile)
       } catch (err) {
-        setError(err)
+        if (err instanceof Error) {
+          setError(err.message)
+        }
         return
       }
       onClose()
@@ -313,13 +315,18 @@ function AccountSelection({
           try {
             await DeltaBackend.call('login.removeAccount', account.id)
             refreshAccounts()
-          } catch (error) {
-            window.__openDialog('AlertDialog', {
-              message: error?.message || error,
-              cb: () => {
-                refreshAccounts()
-              },
-            })
+          } catch (error: any) {
+            if (error instanceof Error) {
+              window.__openDialog('AlertDialog', {
+                message: error?.message,
+                cb: () => {
+                  refreshAccounts()
+                },
+              })
+            } else {
+              log.error('unexpected error type', error)
+              throw error
+            }
           }
         }
       },

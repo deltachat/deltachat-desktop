@@ -15,6 +15,7 @@
   into it's own dialogs
 - show contacts that are already in group in add member dialog, but disabled
 - show chips for members to add
+- update to typescript `4.4.4` and update eslint to version `8.2.0` (also updated the eslint plugins to their new versions)
 - use our new rust (wasm) based message (text) parser instead of `simple-markdown` for making links (and so on) clickable
 - remove dependencies that are now not needed anymore (`punycode`, `simple-markdown`)
 

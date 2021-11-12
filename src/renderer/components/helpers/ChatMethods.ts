@@ -135,7 +135,7 @@ export async function sendCallInvitation(
       chatId
     )
     await joinCall(screenContext, messageId)
-  } catch (error) {
+  } catch (error: todo) {
     log.error('failed send call invitation', error)
     screenContext.openDialog(AlertDialog, { message: error.toString() })
   }
@@ -157,7 +157,7 @@ export async function joinCall(
     }
 
     return runtime.openLink(message.videochatUrl)
-  } catch (error) {
+  } catch (error: todo) {
     log.error('failed to join call', error)
     screenContext.openDialog(AlertDialog, { message: error.toString() })
   }
