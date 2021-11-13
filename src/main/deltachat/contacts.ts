@@ -21,16 +21,10 @@ export default class JsonContacts extends SplitOut {
     log.debug(`Blocked contact ${name} (id = ${contactId})`)
   }
 
-  changeNickname(contactId: number, name: string) {
+  async changeNickname(contactId: number, name: string) {
     const contact = this.selectedAccountContext.getContact(contactId)
     const address = contact.getAddress()
     const result = this.selectedAccountContext.createContact(name, address)
-
-    // trigger interface updates
-    const chatId = this.selectedAccountContext.getChatIdByContactId(contactId)
-    this.controller.chatList.onChatModified(chatId)
-
-    // TODO implement chat changed event in the core on name change
     return result
   }
 

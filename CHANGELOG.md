@@ -20,6 +20,7 @@
 - remove dependencies that are now not needed anymore (`punycode`, `simple-markdown`)
 - dont load quoted messages asynchronously
 - update deltachat-node to v1.65.0
+- Join group via qr-code is now async (group already opens, no wait time)
 
 ### Fixed
 - don't show logo twice in notifications (because macOS already shows applogo)

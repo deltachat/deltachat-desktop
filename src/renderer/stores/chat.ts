@@ -240,8 +240,7 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
   }
 })
 
-ipcBackend.on('DD_EVENT_CHAT_MODIFIED', (_evt, payload) => {
-  const { chatId, chat } = payload
+ipcBackend.on('DC_EVENT_CHAT_MODIFIED', async (_evt, [chatId]) => {
   const state = chatStore.getState()
   if (state.chat?.id !== chatId) {
     return
@@ -249,16 +248,7 @@ ipcBackend.on('DD_EVENT_CHAT_MODIFIED', (_evt, payload) => {
   chatStore.dispatch({
     type: 'MODIFIED_CHAT',
     payload: {
-      chat: {
-        ...state.chat,
-        profileImage: chat.profileImage,
-        name: chat.name,
-        contacts: chat.contacts,
-        selfInGroup: chat.selfInGroup,
-        muted: chat.muted,
-        ephemeralTimer: chat.ephemeralTimer,
-        isContactRequest: chat.isContactRequest,
-      },
+      chat: await DeltaBackend.call('chatList.getFullChatById', chatId),
     } as Partial<state>,
   })
 })
