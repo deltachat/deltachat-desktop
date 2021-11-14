@@ -26,6 +26,7 @@
 
 ### Changed
 - use strict typescript for ui code
+
 ## [1.22.2] - 2021-09-23
 
 ### Fixed
