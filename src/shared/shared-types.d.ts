@@ -134,11 +134,13 @@ export type JsonMessage = ReturnType<typeof Message.prototype.toJson> & {
 }
 
 export type MessageQuote = {
-  messageId: number
   text: string
-  displayName: string
-  displayColor: string
-  overrideSenderName: string
+  message: {
+    messageId: number
+    displayName: string
+    displayColor: string
+    overrideSenderName: string
+  } | null
 }
 
 export interface FullChat {

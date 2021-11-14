@@ -417,9 +417,12 @@ export const Quote = ({ quote }: { quote: MessageQuote }) => {
   ) => {
     event.stopPropagation()
     event.preventDefault()
+
+    if (!quote.message) return
+
     const message = await DeltaBackend.call(
       'messageList.getMessage',
-      quote.messageId
+      quote.message.messageId
     )
     if (message === null) return
     throw new Error('Not implemented yet')
@@ -430,18 +433,22 @@ export const Quote = ({ quote }: { quote: MessageQuote }) => {
   return (
     <div
       className='quote-background'
-      style={{ borderLeftColor: quote.displayColor }}
+      style={{ borderLeftColor: quote.message?.displayColor }}
     >
       <div
         className='quote has-message'
-        style={{ borderLeftColor: quote.displayColor }}
+        style={{ borderLeftColor: quote.message?.displayColor }}
       >
         <div
           className='quote-author'
-          style={{ color: quote.displayColor }}
+          style={{ color: quote.message?.displayColor }}
           onClick={onContactClick}
         >
-          {getAuthorName(quote.displayName, quote.overrideSenderName)}
+          {quote.message &&
+            getAuthorName(
+              quote.message.displayName,
+              quote.message.overrideSenderName
+            )}
         </div>
         <div className='quoted-text'>
           <MessageBody text={quote.text} />

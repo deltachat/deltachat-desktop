@@ -128,12 +128,20 @@ export default class DCMessageList extends SplitOut {
       const contact = this.selectedAccountContext.getContact(
         quotedMessage.getFromId()
       )
+      const messageId = quotedMessage.getId()
+      const message =
+        messageId !== 0
+          ? {
+              messageId,
+              displayName: contact.getDisplayName(),
+              displayColor: contact.color,
+              overrideSenderName: quotedMessage.overrideSenderName,
+            }
+          : null
+
       quote = {
-        messageId: quotedMessage.getId(),
         text: quotedMessage.getText(),
-        displayName: contact.getDisplayName(),
-        displayColor: contact.color,
-        overrideSenderName: quotedMessage.overrideSenderName,
+        message,
       }
     }
 
