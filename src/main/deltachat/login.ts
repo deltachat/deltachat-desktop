@@ -274,6 +274,43 @@ export function txCoreStrings() {
   strings[C.DC_STR_REPLY_NOUN] = tx('reply_noun')
   strings[C.DC_STR_FORWARDED] = tx('forwarded')
 
+  //strings[C.DC_STR_MSGLOCATIONENABLED] = tx('')
+  //strings[C.DC_STR_MSGLOCATIONDISABLED] = tx('')
+  strings[C.DC_STR_LOCATION] = tx('location')
+  strings[C.DC_STR_STICKER] = tx('sticker')
+  strings[C.DC_STR_BAD_TIME_MSG_BODY] = tx('devicemsg_bad_time')
+  strings[C.DC_STR_UPDATE_REMINDER_MSG_BODY] = tx('devicemsg_update_reminder')
+  //strings[C.DC_STR_ERROR_NO_NETWORK] = tx('')
+  strings[C.DC_STR_SELF_DELETED_MSG_BODY] = tx('devicemsg_self_deleted')
+  //strings[C.DC_STR_SERVER_TURNED_OFF] = tx('')
+  strings[C.DC_STR_EPHEMERAL_MINUTES] = tx('systemmsg_ephemeral_timer_minutes')
+  strings[C.DC_STR_EPHEMERAL_HOURS] = tx('systemmsg_ephemeral_timer_hours')
+  strings[C.DC_STR_EPHEMERAL_DAYS] = tx('systemmsg_ephemeral_timer_days')
+  strings[C.DC_STR_EPHEMERAL_WEEKS] = tx('systemmsg_ephemeral_timer_weeks')
+  strings[C.DC_STR_QUOTA_EXCEEDING_MSG_BODY] = tx('devicemsg_storage_exceeding')
+  strings[C.DC_STR_PARTIAL_DOWNLOAD_MSG_BODY] = tx('n_bytes_message')
+  strings[C.DC_STR_DOWNLOAD_AVAILABILITY] = tx('download_max_available_until')
+  //strings[C.DC_STR_SYNC_MSG_SUBJECT] = tx('')
+  //strings[C.DC_STR_SYNC_MSG_BODY] = tx('')
+  strings[C.DC_STR_INCOMING_MESSAGES] = tx('incoming_messages')
+  strings[C.DC_STR_OUTGOING_MESSAGES] = tx('outgoing_messages')
+  strings[C.DC_STR_STORAGE_ON_DOMAIN] = tx('storage_on_domain')
+  strings[C.DC_STR_ONE_MOMENT] = tx('one_moment')
+  strings[C.DC_STR_CONNECTED] = tx('connectivity_connected')
+  strings[C.DC_STR_CONNTECTING] = tx('connectivity_connecting')
+  strings[C.DC_STR_UPDATING] = tx('connectivity_updating')
+  strings[C.DC_STR_SENDING] = tx('sending')
+  strings[C.DC_STR_LAST_MSG_SENT_SUCCESSFULLY] = tx(
+    'last_msg_sent_successfully'
+  )
+  strings[C.DC_STR_ERROR] = tx('error_x')
+  strings[C.DC_STR_NOT_SUPPORTED_BY_PROVIDER] = tx('not_supported_by_provider')
+  strings[C.DC_STR_MESSAGES] = tx('messages')
+  strings[C.DC_STR_BROADCAST_LIST] = tx('broadcast_list')
+  strings[C.DC_STR_PART_OF_TOTAL_USED] = tx('part_of_total_used')
+  strings[C.DC_STR_SECURE_JOIN_STARTED] = tx('secure_join_started')
+  strings[C.DC_STR_SECURE_JOIN_REPLIES] = tx('secure_join_replies')
+
   return strings
 }
 
