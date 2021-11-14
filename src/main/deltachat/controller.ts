@@ -363,7 +363,7 @@ export default class DeltaChatController extends EventEmitter {
     this.onChatlistUpdated()
   }
 
-  onChatModified(accountId: number, chatId: number, _msgId: number) {
+  onChatModified(accountId: number, _chatId: number, _msgId: number) {
     if (this.selectedAccountId !== accountId) {
       return
     }
