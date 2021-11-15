@@ -197,6 +197,30 @@ div.delta-form-group {
       background-color: var(--deltaChatPrimaryFgLight) !important;
     }
   }
+
+  textarea {
+    width: 100%;
+    padding: 0px;
+
+    margin-top: 5px;
+
+    border: none;
+    border-radius: 0px;
+    border-bottom: 2px solid;
+    border-bottom-color: var(--deltaChatPrimaryFgLight);
+
+    box-shadow: none !important;
+    &:focus,
+    &:active {
+      outline: none;
+      border-bottom-color: var(--loginInputFocusColor);
+      color: var(--loginInputFocusColor);
+    }
+
+    &:hover {
+      outline: none;
+    }
+  }
 }
 
 .welcome-deltachat {

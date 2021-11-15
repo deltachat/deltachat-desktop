@@ -73,6 +73,55 @@ export const DeltaSwitch = React.memo(
   }
 )
 
+export const DeltaTextarea = React.memo(
+  (
+    props: React.PropsWithChildren<{
+      label?: string
+      id?: string
+      value: any
+      placeholder?: string
+      disabled?: boolean
+      onChange: (
+        event: React.FormEvent<HTMLElement> &
+          React.ChangeEvent<HTMLTextAreaElement>
+      ) => void
+    }>
+  ) => {
+    const [isFocused, setIsFocused] = useState(false)
+
+    const onFocus = () => setIsFocused(true)
+    const onBlur = () => setIsFocused(false)
+    const showLabel =
+      isFocused ||
+      props.value?.length > 0 ||
+      (props.label !== undefined && props.label.length > 0)
+
+    return (
+      <div className='delta-form-group delta-textarea'>
+        <FormGroup>
+          <div
+            className={`label ${isFocused && 'focus'}`}
+            style={{ visibility: !showLabel ? 'hidden' : 'visible' }}
+          >
+            {props.label && props.label.length > 0
+              ? props.label
+              : props.placeholder}
+          </div>
+          <textarea
+            onChange={props.onChange}
+            value={props.value}
+            id={props.id}
+            disabled={props.disabled}
+            onFocus={onFocus}
+            onBlur={onBlur}
+            rows={5}
+          />
+        </FormGroup>
+      </div>
+    )
+  }
+)
+
 export const DeltaInput = React.memo(
   (
     props: React.PropsWithChildren<{

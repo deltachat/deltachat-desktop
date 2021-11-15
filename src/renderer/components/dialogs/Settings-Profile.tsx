@@ -4,7 +4,7 @@ import { useTranslationFunction, ScreenContext } from '../../contexts'
 
 import { DeltaBackend } from '../../delta-remote'
 import { avatarInitial } from '../Avatar'
-import { DeltaInput } from '../Login-Styles'
+import { DeltaInput, DeltaTextarea } from '../Login-Styles'
 import {
   DeltaDialogBody,
   DeltaDialogOkCancelFooter,
@@ -204,6 +204,7 @@ export function SettingsEditProfileDialogInner({
   const onOk = async () => {
     await DeltaBackend.call('setProfilePicture', profilePicture)
     handleDeltaSettingsChange('displayname', displayname)
+    handleDeltaSettingsChange('selfstatus', selfstatus)
     onClose()
   }
   return (
@@ -234,14 +235,14 @@ export function SettingsEditProfileDialogInner({
               setDisplayname(event.target.value)
             }}
           />
-          <DeltaInput
+          <DeltaTextarea
             key='status'
             id='status'
             placeholder={tx('pref_default_status_label')}
             value={selfstatus}
             onChange={(
               event: React.FormEvent<HTMLElement> &
-                React.ChangeEvent<HTMLInputElement>
+                React.ChangeEvent<HTMLTextAreaElement>
             ) => {
               setSelfstatus(event.target.value)
             }}

@@ -46,7 +46,7 @@ export function useChat(initialChat: FullChat): FullChat {
     return () => {
       ipcBackend.removeListener('DC_EVENT_CHAT_MODIFIED', onChatModified)
     }
-  }, [])
+  }, [onChatModified])
   return chat
 }
 
