@@ -24,6 +24,7 @@
 - don't show logo twice in notifications (because macOS already shows applogo)
 - disable editing of left/readonly groups
 - fix member list being incomplete in chat requests
+- Fix messagelist not being at the correct position after fetching more messages
 
 ### Changed
 - use strict typescript for ui code
