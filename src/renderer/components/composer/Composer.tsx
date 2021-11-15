@@ -252,12 +252,9 @@ const Composer = forwardRef<
     return (
       <div className='composer' ref={ref}>
         <div className='upper-bar'>
-          {draftState.quotedText && (
+          {draftState.quote !== null && (
             <div className='attachment-quote-section is-quote'>
-              <Quote
-                quotedText={draftState.quotedText}
-                quotedMessageId={draftState.quotedMessageId}
-              />
+              <Quote quote={draftState.quote} />
               <QuoteOrDraftRemoveButton onClick={removeQuote} />
             </div>
           )}
@@ -322,7 +319,7 @@ export default Composer
 
 export type DraftObject = { chatId: number } & Pick<
   JsonMessage,
-  'text' | 'file' | 'quotedMessageId' | 'quotedText'
+  'text' | 'file' | 'quotedMessageId' | 'quotedText' | 'quote'
 > &
   MessageTypeAttachmentSubset
 
@@ -347,6 +344,7 @@ export function useDraft(
     file_name: null,
     quotedMessageId: 0,
     quotedText: '',
+    quote: null,
   })
   const draftRef = useRef<DraftObject>({
     chatId: chatId || 0,
@@ -357,6 +355,7 @@ export function useDraft(
     file_name: null,
     quotedMessageId: 0,
     quotedText: '',
+    quote: null,
   })
   draftRef.current = draftState
 
@@ -370,6 +369,7 @@ export function useDraft(
       file_name: null,
       quotedMessageId: 0,
       quotedText: '',
+      quote: null,
     }))
     inputRef.current?.focus()
   }, [chatId, inputRef])
@@ -392,6 +392,7 @@ export function useDraft(
             viewType: newDraft.viewType,
             quotedMessageId: newDraft.quotedMessageId,
             quotedText: newDraft.quotedText,
+            quote: newDraft.quote,
           }))
           inputRef.current?.setText(newDraft.text)
         }
@@ -439,6 +440,7 @@ export function useDraft(
         viewType: newDraft.viewType,
         quotedMessageId: newDraft.quotedMessageId,
         quotedText: newDraft.quotedText,
+        quote: newDraft.quote,
       }))
       // don't load text to prevent bugging back
     } else {

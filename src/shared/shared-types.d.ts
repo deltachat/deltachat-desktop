@@ -129,7 +129,19 @@ export type JsonLocations = {
   marker: string
 }[] // ReturnType<typeof DeltaChat.prototype.getLocations>
 
-export type JsonMessage = ReturnType<typeof Message.prototype.toJson>
+export type JsonMessage = ReturnType<typeof Message.prototype.toJson> & {
+  quote: MessageQuote | null
+}
+
+export type MessageQuote = {
+  text: string
+  message: {
+    messageId: number
+    displayName: string
+    displayColor: string
+    overrideSenderName: string
+  } | null
+}
 
 export interface FullChat {
   id: number

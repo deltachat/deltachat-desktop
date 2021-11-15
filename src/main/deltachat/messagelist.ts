@@ -5,7 +5,11 @@ const log = getLogger('main/deltachat/messagelist')
 
 import SplitOut from './splitout'
 import { Message } from 'deltachat-node'
-import { MessageType, MessageSearchResult } from '../../shared/shared-types'
+import {
+  MessageType,
+  MessageSearchResult,
+  MessageQuote,
+} from '../../shared/shared-types'
 
 import { writeFile } from 'fs/promises'
 import tempy from 'tempy'
@@ -118,6 +122,29 @@ export default class DCMessageList extends SplitOut {
 
     const jsonMSG = msg.toJson()
 
+    let quote: MessageQuote = null
+    const quotedMessage = msg.getQuotedMessage()
+    if (quotedMessage) {
+      const contact = this.selectedAccountContext.getContact(
+        quotedMessage.getFromId()
+      )
+      const messageId = quotedMessage.getId()
+      const message =
+        messageId !== 0
+          ? {
+              messageId,
+              displayName: contact.getDisplayName(),
+              displayColor: contact.color,
+              overrideSenderName: quotedMessage.overrideSenderName,
+            }
+          : null
+
+      quote = {
+        text: quotedMessage.getText(),
+        message,
+      }
+    }
+
     return Object.assign(jsonMSG, {
       sender: (contact ? { ...contact } : {}) as any,
       setupCodeBegin,
@@ -125,6 +152,7 @@ export default class DCMessageList extends SplitOut {
       file_mime,
       file_bytes,
       file_name,
+      quote,
     })
   }
 
