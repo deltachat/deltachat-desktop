@@ -6,7 +6,6 @@ import {
   Intent,
   ProgressBar,
   Switch,
-  TextArea,
 } from '@blueprintjs/core'
 import { useTranslationFunction } from '../contexts'
 
@@ -97,10 +96,6 @@ export const DeltaTextarea = React.memo(
       props.value?.length > 0 ||
       (props.label !== undefined && props.label.length > 0)
 
-    const onInput = () => {
-      console.log(this)
-    }
-
     return (
       <div className='delta-form-group delta-textarea'>
         <FormGroup>
@@ -119,7 +114,6 @@ export const DeltaTextarea = React.memo(
             disabled={props.disabled}
             onFocus={onFocus}
             onBlur={onBlur}
-            onInput={onInput}
             rows={5}
           />
         </FormGroup>
