@@ -5,6 +5,7 @@ import {
   DeltaDialogFooterActions,
 } from './DeltaDialog'
 import { useTranslationFunction } from '../../contexts'
+import type { DialogProps } from './DialogController'
 
 export default function ConfirmationDialog({
   message,
@@ -19,12 +20,11 @@ export default function ConfirmationDialog({
   message: string
   cancelLabel?: string
   confirmLabel?: string
-  cb: (yes: boolean) => {}
-  onClose: () => {}
+  cb: (yes: boolean) => void
   isConfirmDanger?: boolean
   noMargin?: boolean
   header?: string
-}) {
+} & DialogProps) {
   const isOpen = !!message
   const tx = useTranslationFunction()
 
