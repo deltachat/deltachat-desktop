@@ -48,6 +48,7 @@ export default function MessageList({
   ] = useChatStore()
   const messageListRef = useRef<HTMLDivElement | null>(null)
   const lastKnownScrollHeight = useRef<number>(0)
+  const lastKnownScrollTop = useRef<number>(0)
   const isFetching = useRef(false)
 
   const [fetchMore] = useDebouncedCallback(
@@ -70,7 +71,8 @@ export default function MessageList({
         return
       }
       ;(lastKnownScrollHeight.current as any) = messageListRef.current.scrollHeight
-      if (messageListRef.current.scrollTop !== 0) return
+      ;(lastKnownScrollTop.current as any) = messageListRef.current.scrollTop
+      if (messageListRef.current.scrollTop > 200) return
       if (isFetching.current === false) {
         isFetching.current = true
         log.debug('Scrolled to top, fetching more messsages!')
@@ -141,7 +143,9 @@ export default function MessageList({
     if (scrollToLastPage === false) return
     // restore old scroll position after new messages are rendered
     messageListRef.current.scrollTop =
-      messageListRef.current.scrollHeight - lastKnownScrollHeight.current
+      messageListRef.current.scrollHeight -
+      lastKnownScrollHeight.current +
+      lastKnownScrollTop.current
     chatStoreDispatch({
       type: 'FINISHED_SCROLL',
       payload: 'SCROLLED_TO_LAST_PAGE',
