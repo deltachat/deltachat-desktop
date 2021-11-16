@@ -5,7 +5,7 @@ import { loginWithTmpUser, logout, clickAppMenuItem, translate } from './helpers
 
 /* global fixture, test */
 '.bp3-navbar-heading'
-const waitForLogin = 50000
+const waitForLogin = 5000
 const conf = {}
 const testMessage = 'Test message'
 let accountButton1 = null
@@ -25,7 +25,20 @@ fixture('Chat e2e tests')
     await waitForReact()
   })
 
+async function goBackToAccountOverviewIfNeeded(t) {
+  let cancelButton = Selector('#action-cancel')
+  if (await cancelButton.exists) {
+    await t.click(cancelButton)
+    return
+  }
+  let menu_button = Selector('#main-menu-button')
+  if (await menu_button.exists) {
+    await logout()
+  }
+}
+
 test('shows correct headline', async t => {
+  await goBackToAccountOverviewIfNeeded(t)
   await t
     .expect(Selector('.welcome-deltachat > .f1').innerText)
     .eql(await translate('welcome_desktop'))
@@ -34,10 +47,11 @@ test('shows correct headline', async t => {
     .typeText('#mail_pw', 'bar')
     .click("#action-login")
     .expect(Selector('.delta-dialog-content > p').innerText)
-    .eql('Error: ' + await translate('bad_email_address'))
+    .contains('Bad email-address: Invalid email address: missing \'@\'')
 })
 
 test('login works', async t => {
+  await goBackToAccountOverviewIfNeeded(t)
   conf.account1 = await loginWithTmpUser()
   //console.log(conf.account1)
   await t.expect(conf.account1).notEql(undefined)
@@ -45,12 +59,14 @@ test('login works', async t => {
 })
 
 test('account is shown on account overview', async t => {
+  await goBackToAccountOverviewIfNeeded(t)
   accountButton1 = Selector('.display-name').withText(conf.account1.email)
   await t.expect(accountButton1.exists).ok()
   await t.expect(Selector('.contact-list-item').count).eql(2)
 })
 
 test('second login works', async t => {
+  await goBackToAccountOverviewIfNeeded(t)
   conf.account2 = await loginWithTmpUser()
   //console.log(conf.account2)
   await t.expect(conf.account2).notEql(undefined)
@@ -58,12 +74,14 @@ test('second login works', async t => {
 })
 
 test('both login buttons are shown', async t => {
+  await goBackToAccountOverviewIfNeeded(t)
   accountButton2 = Selector('.display-name').withText(conf.account2.email)
   await t.expect(accountButton2.exists).ok()
   await t.expect(Selector('.contact-list-item').count).eql(3)
 })
 
 test('create chat', async t => {
+  await goBackToAccountOverviewIfNeeded(t)
   await t
     .click(accountButton1)
   await clickAppMenuItem(await translate('menu_new_chat'))
@@ -81,6 +99,7 @@ test('create chat', async t => {
 })
 
 test('write message', async t => {
+  await goBackToAccountOverviewIfNeeded(t)
   await t
     .click(accountButton1)
   await clickChatByName(t, conf.account2.email)
@@ -94,6 +113,7 @@ test('write message', async t => {
 
 test('open settings dialog and close with escape', async t => {
 
+  await goBackToAccountOverviewIfNeeded(t)
   const SettingsShouldBeOpen = async ()=>{
     await t
     .expect(
@@ -122,25 +142,24 @@ test('open settings dialog and close with escape', async t => {
   await t.pressKey('Ctrl+,')
   await SettingsShouldBeOpen()
   // check close via close button
-  await t.click(Selector(".SettingsDialog .bp3-dialog-footer-actions > .delta-button").withText((await translate("close")).toUpperCase()))
+  await t.click(Selector(".SettingsDialog .close-btn"))
   await SettingsShouldBeClosed()
   await logout()
 })
 
 if (process.env.CI !== 'true') {
   test('Contact request and receive message works', async t => {
+  await goBackToAccountOverviewIfNeeded(t)
     await t
       .click(accountButton2)
       await t
       .expect(
-        Selector('.chat-list-item > .content > .header > .name > span').withText(
-          await translate('chat_contact_request')
-        ).exists
+        Selector('.chat-list-item.is-contact-request').exists
       )
       .ok({ timeout: 30000 })
-    await clickChatByName(t, await translate('chat_contact_request'))
+
+    await t.click('.chat-list-item.is-contact-request')
     await t
-      .click(Selector('p').withText((await translate('yes')).toUpperCase()))
       .expect(Selector('#message-list li').count)
       .eql(1)
       .expect(Selector('.text').withText(testMessage).exists)
