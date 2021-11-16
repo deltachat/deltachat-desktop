@@ -1,4 +1,10 @@
-import React, { useState, useContext, useRef, useEffect } from 'react'
+import React, {
+  useState,
+  useContext,
+  useRef,
+  useEffect,
+  useLayoutEffect,
+} from 'react'
 import {
   DeltaDialogBase,
   DeltaDialogFooter,
@@ -20,7 +26,12 @@ import { selectChat } from '../helpers/ChatMethods'
 
 const log = getLogger('renderer/dialogs/QrCode')
 
-export default function QrCode({ isOpen, onClose, qrCode }: DialogProps) {
+export default function QrCode({
+  isOpen,
+  onClose,
+  qrCodeSVG,
+  qrCode,
+}: DialogProps) {
   const [showQrCode, setShowQrCode] = useState(true)
 
   const [addr, setAddr] = useState('')
@@ -50,6 +61,7 @@ export default function QrCode({ isOpen, onClose, qrCode }: DialogProps) {
         <QrCodeShowQrInner
           description={tx('qrshow_join_contact_hint', [addr])}
           qrCode={qrCode}
+          qrCodeSVG={qrCodeSVG}
           onClose={onClose}
         />
       )}
@@ -60,11 +72,13 @@ export default function QrCode({ isOpen, onClose, qrCode }: DialogProps) {
 
 export function QrCodeShowQrInner({
   qrCode,
+  qrCodeSVG,
   description,
   onClose,
   onBack,
 }: {
   qrCode: string
+  qrCodeSVG?: string
   description: string
   onClose?: todo
   onBack?: todo
@@ -81,30 +95,63 @@ export function QrCodeShowQrInner({
     )
   }
 
+  const [svgUrl, setSvgUrl] = useState<string | undefined>(undefined)
+
+  useLayoutEffect(() => {
+    if (qrCodeSVG) {
+      try {
+        const url = URL.createObjectURL(
+          new Blob([qrCodeSVG], { type: 'image/svg+xml' })
+        )
+        setSvgUrl(url)
+        return () => URL.revokeObjectURL(url)
+      } catch (error) {
+        setSvgUrl(undefined)
+        log.error('error creating blob url for qrcode', error)
+        log.info('loading svg failed, falling back to old rendering method')
+        // TODO is this error handling needed?
+      }
+    }
+  }, [qrCodeSVG])
+
   return (
     <>
       <DeltaDialogBody>
         <DeltaDialogContent noOverflow noPadding style={{ height: '500px' }}>
-          <qr.QRCode
-            bgColor='#FFFFFF'
-            fgColor='#000000'
-            level='Q'
-            value={qrCode}
-            style={{
-              height: 'auto',
-              padding: '30px',
-              backgroundColor: 'white',
-            }}
-          />
-          <p
-            style={{
-              textAlign: 'center',
-              marginTop: '10px',
-              overflowWrap: 'break-word',
-            }}
-          >
-            {description}
-          </p>
+          {svgUrl ? (
+            <img
+              style={{
+                width: '100%',
+                height: '100%',
+                backgroundColor: 'white',
+                userSelect: 'none',
+              }}
+              src={svgUrl}
+            />
+          ) : (
+            <>
+              <qr.QRCode
+                bgColor='#FFFFFF'
+                fgColor='#000000'
+                level='Q'
+                value={qrCode}
+                style={{
+                  height: 'auto',
+                  padding: '30px',
+                  backgroundColor: 'white',
+                }}
+              />
+              <p
+                style={{
+                  textAlign: 'center',
+                  marginTop: '10px',
+                  overflowWrap: 'break-word',
+                }}
+              >
+                {description}
+              </p>
+            </>
+          )}
         </DeltaDialogContent>
       </DeltaDialogBody>
       <DeltaDialogFooter>

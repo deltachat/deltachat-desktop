@@ -175,9 +175,13 @@ function ViewGroupInner(props: {
   }
 
   const showQRDialog = async () => {
-    const qrCode = await DeltaBackend.call('chat.getQrCode', chat.id)
+    const { content: qrCode, svg } = await DeltaBackend.call(
+      'chat.getQrCodeSVG',
+      chat.id
+    )
     openDialog(ShowQRDialog, {
       qrCode,
+      qrCodeSVG: svg,
       groupName,
     })
   }
@@ -304,7 +308,8 @@ export function ShowQRDialog({
   isOpen,
   qrCode,
   groupName,
-}: DialogProps) {
+  qrCodeSVG,
+}: { qrCode: string; groupName: string; qrCodeSVG?: string } & DialogProps) {
   const tx = useTranslationFunction()
 
   return (
@@ -322,6 +327,7 @@ export function ShowQRDialog({
       <DeltaDialogHeader title={tx('qrshow_title')} onClose={onClose} />
       <QrCodeShowQrInner
         qrCode={qrCode}
+        qrCodeSVG={qrCodeSVG}
         description={tx('qrshow_join_group_hint', [groupName])}
       />
     </DeltaDialogBase>

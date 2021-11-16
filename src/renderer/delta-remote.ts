@@ -115,6 +115,10 @@ class DeltaRemote {
   ): Promise<MessageType[]>
   call(fnName: 'chat.getEncryptionInfo', chatId: number): Promise<string>
   call(fnName: 'chat.getQrCode', chatId?: number): Promise<string>
+  call(
+    fnName: 'chat.getQrCodeSVG',
+    chatId?: number
+  ): Promise<{ content: string; svg: string }>
   call(fnName: 'chat.leaveGroup', chatId: number): Promise<void>
   call(fnName: 'chat.setName', chatId: number, name: string): Promise<boolean>
   call(

@@ -31,6 +31,13 @@ export default class DCChat extends SplitOut {
     return this.selectedAccountContext.getSecurejoinQrCode(chatId)
   }
 
+  getQrCodeSVG(chatId = 0): { content: string; svg: string } {
+    return {
+      content: this.selectedAccountContext.getSecurejoinQrCode(chatId),
+      svg: this.selectedAccountContext.getSecurejoinQrCodeSVG(chatId),
+    }
+  }
+
   leaveGroup(chatId: number) {
     log.debug(`action - leaving chat ${chatId}`)
     this.selectedAccountContext.removeContactFromChat(
