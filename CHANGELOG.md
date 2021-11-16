@@ -19,6 +19,7 @@
 - use our new rust (wasm) based message (text) parser instead of `simple-markdown` for making links (and so on) clickable
 - remove dependencies that are now not needed anymore (`punycode`, `simple-markdown`)
 - dont load quoted messages asynchronously
+- update deltachat-node to v1.65.0
 
 ### Fixed
 - don't show logo twice in notifications (because macOS already shows applogo)
