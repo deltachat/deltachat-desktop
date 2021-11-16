@@ -9,6 +9,7 @@
 - add update unread counts on account screen on incomming messages
 - Clickable bot command suggestions, email addresses and hashtags in messages
 - Clickable links in messages on the map
+- Tray icon now show a blue circle over the logo in case of unread messsages (only linux + win)
 
 ### Changed
 - Bring back the back and close button in dialogs, move actions that need an ok/cancel button
