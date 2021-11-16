@@ -143,7 +143,9 @@ export default function MessageList({
     if (scrollToLastPage === false) return
     // restore old scroll position after new messages are rendered
     messageListRef.current.scrollTop =
-      messageListRef.current.scrollHeight - lastKnownScrollHeight.current + lastKnownScrollTop.current
+      messageListRef.current.scrollHeight -
+      lastKnownScrollHeight.current +
+      lastKnownScrollTop.current
     chatStoreDispatch({
       type: 'FINISHED_SCROLL',
       payload: 'SCROLLED_TO_LAST_PAGE',
