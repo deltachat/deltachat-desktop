@@ -24,15 +24,16 @@ export function TrayImage(): string | NativeImage {
   const trayIconFolder = join(__dirname, '..', '..', 'images/tray')
   if (process.platform === 'darwin') {
     const image = nativeImage
-      .createFromPath(join(trayIconFolder, 'tray-icon.png'))
+      .createFromPath(join(trayIconFolder, 'tray-icon-mac.png'))
       .resize({ width: 24 })
     image.setTemplateImage(true)
     return image
   } else {
     const iconFormat = process.platform === 'win32' ? '.ico' : '.png'
+
     return `${join(
       trayIconFolder,
-      (has_unread ? 'tray-icon-unread' : 'tray-icon') + iconFormat
+      (has_unread ? 'deltachat-unread' : 'deltachat') + iconFormat
     )}`
   }
 }
