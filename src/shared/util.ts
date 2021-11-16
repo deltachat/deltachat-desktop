@@ -9,19 +9,28 @@ export function getDirection({ fromId }: MessageType) {
 export function isChatReadonly(
   chat: Pick<
     FullChat,
-    'isContactRequest' | 'isDeviceChat' | 'type' | 'isGroup' | 'selfInGroup'
+    | 'isContactRequest'
+    | 'isDeviceChat'
+    | 'type'
+    | 'isGroup'
+    | 'selfInGroup'
+    | 'canSend'
   >
-): [boolean, string] {
-  if (chat.isContactRequest) {
-    return [true, 'messaging_disabled_deaddrop']
-  } else if (chat.isDeviceChat === true) {
-    return [true, 'messaging_disabled_device_chat']
-  } else if (chat.type === C.DC_CHAT_TYPE_MAILINGLIST) {
-    return [true, 'messaging_disabled_mailing_list']
-  } else if (chat.isGroup && !chat.selfInGroup) {
-    return [true, 'messaging_disabled_not_in_group']
-  } else {
+): [isDisabled: boolean, disabledReason: string] {
+  if (chat.canSend) {
     return [false, '']
+  } else {
+    if (chat.isContactRequest) {
+      return [true, 'messaging_disabled_deaddrop']
+    } else if (chat.isDeviceChat === true) {
+      return [true, 'messaging_disabled_device_chat']
+    } else if (chat.type === C.DC_CHAT_TYPE_MAILINGLIST) {
+      return [true, 'messaging_disabled_mailing_list']
+    } else if (chat.isGroup && !chat.selfInGroup) {
+      return [true, 'messaging_disabled_not_in_group']
+    } else {
+      return [true, 'UNKNOWN DISABLED REASON']
+    }
   }
 }
 

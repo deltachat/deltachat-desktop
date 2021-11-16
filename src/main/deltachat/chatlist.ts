@@ -34,12 +34,6 @@ export default class DCChatList extends SplitOut {
     return this.controller.selectedChatId
   }
 
-  async onChatModified(chatId: number) {
-    // TODO: move event handling to store
-    const chat = await this.getFullChatById(chatId)
-    this.controller.sendToRenderer('DD_EVENT_CHAT_MODIFIED', { chatId, chat })
-  }
-
   _chatListGetChatId(list: ChatList, index: number) {
     return list.getChatId(index)
   }
@@ -162,6 +156,7 @@ export default class DCChatList extends SplitOut {
     return {
       id: chat.id,
       name: chat.name,
+      canSend: chat.canSend,
       isProtected: chat.isProtected,
       profileImage: chat.profileImage,
 
