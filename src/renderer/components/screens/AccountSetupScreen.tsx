@@ -84,6 +84,7 @@ export default function AccountSetupScreen({
           <DeltaDialogFooter>
             <DeltaDialogFooterActions>
               <p
+                id='action-cancel'
                 className={'delta-button bold primary'}
                 onClick={() => onCancel()}
               >

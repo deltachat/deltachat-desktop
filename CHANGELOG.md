@@ -21,6 +21,7 @@
 - dont load quoted messages asynchronously
 - update deltachat-node to v1.65.0
 - Fetch more messages if as close as 200px to top of MessageList
+- Join group via qr-code is now async (group already opens, no wait time)
 
 ### Fixed
 - don't show logo twice in notifications (because macOS already shows applogo)

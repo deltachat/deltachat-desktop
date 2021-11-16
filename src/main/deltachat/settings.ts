@@ -34,6 +34,14 @@ export default class DCSettings extends SplitOut {
     return Boolean(result)
   }
 
+  setConfigFromQr(qrCodeContent: string) {
+    if (!this.selectedAccountContext.setConfigFromQr(qrCodeContent)) {
+      throw new Error(
+        'setConfigFromQr failed, look into error events for details'
+      )
+    }
+  }
+
   getConfig(key: string) {
     return this.selectedAccountContext.getConfig(key)
   }

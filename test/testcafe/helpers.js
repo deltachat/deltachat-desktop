@@ -25,7 +25,7 @@ export async function loginWithTmpUser () {
     .typeText('#addr', account.email)
     .typeText('#mail_pw', account.password)
     .click("#action-login")
-    .expect(Selector('h2', { timeout: waitForLogin }).innerText)
+    .expect(Selector('.info-message.big', { timeout: waitForLogin }).innerText)
     .eql(await translate('no_chat_selected_suggestion_desktop'))
   return account
 }

@@ -55,4 +55,10 @@ export enum QrState {
   Text = C.DC_QR_TEXT,
   Url = C.DC_QR_URL,
   Error = C.DC_QR_ERROR,
+  QrWithdrawVerifyContact = C.DC_QR_WITHDRAW_VERIFYCONTACT,
+  /** text1=groupname */
+  QrWithdrawVerifyGroup = C.DC_QR_WITHDRAW_VERIFYGROUP,
+  QrReviveVerifyContact = C.DC_QR_REVIVE_VERIFYCONTACT,
+  /** text1=groupname */
+  QrReviveVerifyGroup = C.DC_QR_REVIVE_VERIFYGROUP,
 }

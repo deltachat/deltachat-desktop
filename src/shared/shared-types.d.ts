@@ -146,6 +146,7 @@ export type MessageQuote = {
 export interface FullChat {
   id: number
   name: string
+  canSend: boolean
   isProtected: boolean
   profileImage: string
   archived: boolean

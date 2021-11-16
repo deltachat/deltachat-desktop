@@ -346,13 +346,11 @@ export default class DeltaChatController extends EventEmitter {
     }
   }
 
-  onMsgsChanged(accountId: number, chatId: number, _msgId: number) {
+  onMsgsChanged(accountId: number, _chatId: number, _msgId: number) {
     if (this.selectedAccountId !== accountId) {
       return
     }
     this.onChatlistUpdated()
-    // chatListItem listens to this in the frontend
-    this.chatList.onChatModified(chatId)
   }
 
   onIncomingMsg(accountId: number, chatId: number, msgId: number) {
@@ -363,17 +361,13 @@ export default class DeltaChatController extends EventEmitter {
     }
     maybeMarkSeen(chatId, msgId)
     this.onChatlistUpdated()
-    // chatListItem listens to this in the frontend
-    this.chatList.onChatModified(chatId)
   }
 
-  onChatModified(accountId: number, chatId: number, _msgId: number) {
+  onChatModified(accountId: number, _chatId: number, _msgId: number) {
     if (this.selectedAccountId !== accountId) {
       return
     }
     this.onChatlistUpdated()
-    // chatListItem listens to this in the frontend
-    this.chatList.onChatModified(chatId)
   }
 
   registerEventHandler(dc: DeltaChat) {
@@ -428,8 +422,8 @@ export default class DeltaChatController extends EventEmitter {
     return this.selectedAccountContext.checkQrCode(qrCode)
   }
 
-  async joinSecurejoin(qrCode: string) {
-    return await this.selectedAccountContext.joinSecurejoin(qrCode)
+  joinSecurejoin(qrCode: string) {
+    return this.selectedAccountContext.joinSecurejoin(qrCode)
   }
 
   stopOngoingProcess() {

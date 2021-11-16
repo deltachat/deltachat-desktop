@@ -24,7 +24,6 @@ import React from 'react'
 import { Avatar, avatarInitial } from '../Avatar'
 import { runtime } from '../../runtime'
 import { DeltaInput } from '../Login-Styles'
-import { isChatReadonly } from '../../../shared/util'
 import { ipcBackend } from '../../ipc'
 
 export function useChat(initialChat: FullChat): FullChat {
@@ -121,7 +120,7 @@ function ViewGroupInner(props: {
   const { viewMode, setViewMode, onClose, chat } = props
   const tx = useTranslationFunction()
 
-  const chatDisabled = isChatReadonly(chat)[0]
+  const chatDisabled = !chat.canSend
 
   const {
     groupName,
@@ -224,7 +223,7 @@ function ViewGroupInner(props: {
                 )}
                 <ContactList2
                   contacts={chat.contacts}
-                  showRemove={!isChatReadonly(chat)[0]}
+                  showRemove={!chatDisabled}
                   onClick={(contact: JsonContact) => {
                     setProfileContact(contact)
                     setViewMode('profile')
