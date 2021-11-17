@@ -19,7 +19,7 @@ import { DialogProps } from './DialogController'
 import { FullChat, JsonContact } from '../../../shared/shared-types'
 import { ViewProfileInner } from './ViewProfile'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
-import { useState, useContext, useEffect, useCallback } from 'react'
+import { useState, useContext, useEffect, useCallback, useMemo } from 'react'
 import React from 'react'
 import { Avatar, avatarInitial } from '../Avatar'
 import { runtime } from '../../runtime'
@@ -33,10 +33,14 @@ export function useChat(initialChat: FullChat): FullChat {
     setChat(await DeltaBackend.call('chatList.getFullChatById', initialChat.id))
   }, [initialChat.id])
 
-  const onChatModified = async (_: any, [chatId, _2]: [number, number]) => {
-    if (chatId !== chat.id) return
-    updateChat()
-  }
+  const onChatModified = useMemo(
+    () => async (_: any, [chatId, _2]: [number, number]) => {
+      if (chatId !== chat.id) return
+      updateChat()
+    },
+    [chat.id, updateChat]
+  )
+
   useEffect(() => {
     updateChat()
   }, [initialChat, updateChat])
