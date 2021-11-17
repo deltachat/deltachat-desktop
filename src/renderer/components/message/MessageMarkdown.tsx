@@ -73,7 +73,7 @@ function renderElement(elm: ParsedElement, key?: number): JSX.Element {
       return <div key={key} className='line-break' />
 
     case 'Text':
-      return <>{elm.c}</>
+      return <span>{elm.c}</span>
 
     default:
       //@ts-ignore

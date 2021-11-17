@@ -123,11 +123,11 @@
         }
 
         .line-break {
-          height: 14px;
+          height: 0px;
         }
 
-        .line-break:last-child {
-          height: 0px;
+        .line-break + .line-break {
+          height: 14px;
         }
       }
     }
