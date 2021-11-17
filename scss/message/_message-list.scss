@@ -1,5 +1,5 @@
 .message-list-and-composer {
-  width: 70%;
+  width: calc(100% - var(--chatListWidth));
   float: right;
   display: flex;
   flex-direction: column;

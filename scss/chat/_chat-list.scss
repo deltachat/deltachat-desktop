@@ -1,5 +1,5 @@
 .chat-list {
-  width: 30%;
+  width: var(--chatListWidth);
   height: $content-height;
   float: left;
   overflow-y: auto;
@@ -18,4 +18,15 @@
     border-bottom: var(--cli-search-result-divider-border-width) solid
       var(--cli-search-result-divider-border);
   }
+}
+
+.resize-bar {
+    position: relative;
+    height: 100vh;
+    width: 10px;
+    float: left;
+    margin-right: -10px;
+    z-index: 1;
+    cursor: col-resize;
+    background: transparent;
 }

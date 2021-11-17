@@ -1,7 +1,7 @@
 $tab-height: 46px;
 
 .media-view {
-  width: 70%;
+  width: calc(100% - var(--chatListWidth));
   background-color: var(--galleryBg);
   float: right;
   padding-left: 10px;

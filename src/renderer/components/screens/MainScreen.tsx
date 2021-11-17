@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from 'react'
+import React, { useState, useContext, useRef, useCallback } from 'react'
 import {
   ScreenContext,
   SettingsContext,
@@ -289,10 +289,32 @@ export default function MainScreen() {
           onChatClick={onChatClick}
           selectedChatId={selectedChat.chat ? selectedChat.chat.id : null}
         />
+        <ResizableBar/>
         {MessageListView}
       </div>
       <ConnectivityToast />
     </div>
+  )
+}
+
+function ResizableBar(props: any) {
+  const onMouseDown = useCallback((e) => {
+    e.preventDefault();
+    document.onmouseup = (e) => {
+      e.preventDefault();
+      document.onmouseup = null
+      document.onmousemove = null
+    }
+    document.onmousemove = (e) => {
+      e.preventDefault();
+      const positionXAsPercentage =  e.clientX / window.innerWidth * 100;
+      if (positionXAsPercentage < 9) return;
+      if (positionXAsPercentage > 70) return;
+      document.documentElement.style.setProperty('--chatListWidth', `${positionXAsPercentage}%`);
+    }
+  }, [])
+  return (
+    <div onMouseDown={onMouseDown} className='resize-bar' />
   )
 }
 
