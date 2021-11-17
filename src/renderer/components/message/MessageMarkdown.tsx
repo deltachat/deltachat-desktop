@@ -87,15 +87,6 @@ export function message2React(message: string): JSX.Element {
   return <>{elements.map(renderElement)}</>
 }
 
-// newlinePlus: {
-//   order: 19,
-//   match: blockRegex(/^(?:\n *){2,}\n/),
-//   parse: ignoreCapture,
-//   react: function (_node: any, _output: any, state: any) {
-//     return <div key={state.key} className='double-line-break' />
-//   },
-// },
-
 function EmailLink({ email }: { email: string }): JSX.Element {
   const openChatWithEmail = async () => {
     let contactId = await DeltaBackend.call(
