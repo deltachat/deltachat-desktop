@@ -6,7 +6,7 @@
 - Clicking on member in group dialog shows the profile of member
 - Implement previous/next buttons for the gallery's media view (the left and right arrow keys can also be used for navigation)
 - Implement previous/next buttons for gallery
-- add update unread counts on account screen on incomming messages
+- add update unread counts on account screen on incoming messages
 - Clickable bot command suggestions, email addresses and hashtags in messages
 - Clickable links in messages on the map
 - Tray icon now show a blue circle over the logo in case of unread messsages (only linux + win)
