@@ -8,6 +8,7 @@ input.group-name-input {
   height: auto;
   background-color: transparent;
   color: var(--bp3MenuText);
+  user-select: text;
 }
 
 input.group-name-input {
