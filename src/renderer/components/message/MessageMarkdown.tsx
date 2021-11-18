@@ -77,7 +77,11 @@ function renderElement(elm: ParsedElement, key?: number): JSX.Element {
     default:
       //@ts-ignore
       log.error(`type ${elm.t} not known/implemented yet`, elm)
-      return <span key={key} style={{ color: 'red' }}>{JSON.stringify(elm)}</span>
+      return (
+        <span key={key} style={{ color: 'red' }}>
+          {JSON.stringify(elm)}
+        </span>
+      )
   }
 }
 
