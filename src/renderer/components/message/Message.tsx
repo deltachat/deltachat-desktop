@@ -131,10 +131,14 @@ function buildContextMenu(
     conversationType: ConversationType
     // onRetrySend: Function
   },
-  link: string,
+  clickTarget: HTMLAnchorElement | null,
   chatStoreDispatch: ChatStoreDispatch
 ): (false | ContextMenuItem)[] {
   const tx = window.static_translate // don't use the i18n context here for now as this component is inefficient (rendered one menu for every message)
+
+  const isLink = clickTarget && !clickTarget.getAttribute('x-not-a-link')
+  const link: string =
+    clickTarget?.getAttribute('x-target-url') || clickTarget?.href || ''
 
   if (!message) {
     throw new Error('connot show context menu for undefined message')
@@ -160,6 +164,8 @@ function buildContextMenu(
       },
 
     // Copy [selection] to clipboard
+    // OR Copy link to clipboard
+    // OR Copy message text to copy
     textSelected
       ? {
           label: tx('menu_copy_selection_to_clipboard'),
@@ -167,17 +173,17 @@ function buildContextMenu(
             runtime.writeClipboardText(selectedText as string)
           },
         }
+      : link !== '' && isLink
+      ? {
+          label: tx('menu_copy_link_to_clipboard'),
+          action: () => runtime.writeClipboardText(link),
+        }
       : {
           label: tx('menu_copy_text_to_clipboard'),
           action: () => {
             text && runtime.writeClipboardText(text)
           },
         },
-    // Copy link to clipboard
-    link !== '' && {
-      label: tx('menu_copy_link_to_clipboard'),
-      action: () => runtime.writeClipboardText(link),
-    },
     // Copy videocall link to clipboard
     message.videochatUrl !== '' && {
       label: tx('menu_copy_link_to_clipboard'),
@@ -235,15 +241,13 @@ const Message = (props: {
     event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement, MouseEvent>
   ) => void = event => {
     const target = event.target as HTMLAnchorElement
-    const link: string =
-      target?.getAttribute('x-target-url') || target?.href || ''
     const items = buildContextMenu(
       {
         message,
         text,
         conversationType,
       },
-      link,
+      target,
       chatStoreDispatch
     )
     const [cursorX, cursorY] = [event.clientX, event.clientY]
