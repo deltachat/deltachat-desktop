@@ -147,7 +147,7 @@ function buildContextMenu(
   const selectedText = window.getSelection()?.toString()
   const textSelected: boolean = selectedText !== null && selectedText !== ''
 
-  /** Copy actions, is on e of the following, (in that order):
+  /** Copy action, is one of the following, (in that order):
    *
    * - Copy [selection] to clipboard
    * - OR Copy link to clipboard
