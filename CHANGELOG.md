@@ -23,6 +23,7 @@
 - update deltachat-node to v1.65.0
 - Fetch more messages if as close as 200px to top of MessageList
 - Join group via qr-code is now async (group already opens, no wait time)
+- show only the relevant copy action in the context menu (selection, link, email or text depending on where the context menu was invoked)
 
 ### Fixed
 - don't show logo twice in notifications (because macOS already shows applogo)

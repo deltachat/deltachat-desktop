@@ -131,20 +131,56 @@ function buildContextMenu(
     conversationType: ConversationType
     // onRetrySend: Function
   },
-  link: string,
+  clickTarget: HTMLAnchorElement | null,
   chatStoreDispatch: ChatStoreDispatch
 ): (false | ContextMenuItem)[] {
   const tx = window.static_translate // don't use the i18n context here for now as this component is inefficient (rendered one menu for every message)
-
   if (!message) {
     throw new Error('connot show context menu for undefined message')
   }
 
-  const showAttachmentOptions = !!message.file && !message.isSetupmessage
-
+  const isLink = clickTarget && !clickTarget.getAttribute('x-not-a-link')
+  const email = clickTarget?.getAttribute('x-target-email')
+  const link: string =
+    clickTarget?.getAttribute('x-target-url') || clickTarget?.href || ''
   // grab selected text before clicking, otherwise the selection might be already gone
   const selectedText = window.getSelection()?.toString()
   const textSelected: boolean = selectedText !== null && selectedText !== ''
+
+  /** Copy action, is one of the following, (in that order):
+   *
+   * - Copy [selection] to clipboard
+   * - OR Copy link to clipboard
+   * - OR Copy email to clipboard
+   * - Fallback: OR Copy message text to copy
+   */
+  let copy_item: ContextMenuItem = {
+    label: tx('menu_copy_text_to_clipboard'),
+    action: () => {
+      text && runtime.writeClipboardText(text)
+    },
+  }
+
+  if (textSelected) {
+    copy_item = {
+      label: tx('menu_copy_selection_to_clipboard'),
+      action: () => {
+        runtime.writeClipboardText(selectedText as string)
+      },
+    }
+  } else if (link !== '' && isLink) {
+    copy_item = {
+      label: tx('menu_copy_link_to_clipboard'),
+      action: () => runtime.writeClipboardText(link),
+    }
+  } else if (email) {
+    copy_item = {
+      label: tx('menu_copy_email_to_clipboard'),
+      action: () => runtime.writeClipboardText(email),
+    }
+  }
+
+  const showAttachmentOptions = !!message.file && !message.isSetupmessage
 
   return [
     // Reply
@@ -158,26 +194,7 @@ function buildContextMenu(
         label: tx('reply_privately'),
         action: privateReply.bind(null, message),
       },
-
-    // Copy [selection] to clipboard
-    textSelected
-      ? {
-          label: tx('menu_copy_selection_to_clipboard'),
-          action: () => {
-            runtime.writeClipboardText(selectedText as string)
-          },
-        }
-      : {
-          label: tx('menu_copy_text_to_clipboard'),
-          action: () => {
-            text && runtime.writeClipboardText(text)
-          },
-        },
-    // Copy link to clipboard
-    link !== '' && {
-      label: tx('menu_copy_link_to_clipboard'),
-      action: () => runtime.writeClipboardText(link),
-    },
+    copy_item,
     // Copy videocall link to clipboard
     message.videochatUrl !== '' && {
       label: tx('menu_copy_link_to_clipboard'),
@@ -234,16 +251,15 @@ const Message = (props: {
   const showMenu: (
     event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement, MouseEvent>
   ) => void = event => {
-    const target = event.target as HTMLAnchorElement
-    const link: string =
-      target?.getAttribute('x-target-url') || target?.href || ''
+    // the event.t is a workaround for labled links, as they will be able to contain markdown formatting in the lable in the future.
+    const target = ((event as any).t || event.target) as HTMLAnchorElement
     const items = buildContextMenu(
       {
         message,
         text,
         conversationType,
       },
-      link,
+      target,
       chatStoreDispatch
     )
     const [cursorX, cursorY] = [event.clientX, event.clientY]

@@ -34,5 +34,8 @@
   },
   "ask_add_members_desktop": {
     "message": "Add %1$s to group?"
+  },
+  "menu_copy_email_to_clipboard":{
+    "message": "Copy Email"
   }
 }

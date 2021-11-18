@@ -107,7 +107,12 @@ function EmailLink({ email }: { email: string }): JSX.Element {
   }
 
   return (
-    <a href={'#'} onClick={openChatWithEmail}>
+    <a
+      href={'#'}
+      x-not-a-link='email'
+      x-target-email={email}
+      onClick={openChatWithEmail}
+    >
       {email}
     </a>
   )
@@ -127,7 +132,7 @@ function TagLink({ tag }: { tag: string }) {
   }
 
   return (
-    <a href={'#'} onClick={setSearch}>
+    <a href={'#'} x-not-a-link='tag' onClick={setSearch}>
       {tag}
     </a>
   )
@@ -199,7 +204,7 @@ function BotCommandSuggestion({ suggestion }: { suggestion: string }) {
   }
 
   return (
-    <a href='#' onClick={applySuggestion}>
+    <a href='#' x-not-a-link='bcs' onClick={applySuggestion}>
       {suggestion}
     </a>
   )

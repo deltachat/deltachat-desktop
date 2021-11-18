@@ -69,6 +69,7 @@ export const LabeledLink = ({
       x-target-url={target}
       title={realUrl}
       onClick={onClick}
+      onContextMenu={ev => ((ev as any).t = ev.currentTarget)}
     >
       {label}
     </a>
@@ -167,12 +168,7 @@ export const Link = ({ destination }: { destination: LinkDestination }) => {
     }
   }
   return (
-    <a
-      href='#'
-      {...{ 'x-target-url': asciiUrl }}
-      title={asciiUrl}
-      onClick={onClick}
-    >
+    <a href='#' x-target-url={asciiUrl} title={asciiUrl} onClick={onClick}>
       {target}
     </a>
   )
