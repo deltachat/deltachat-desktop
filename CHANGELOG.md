@@ -29,6 +29,7 @@
 - disable editing of left/readonly groups
 - fix member list being incomplete in chat requests
 - Fix messagelist not being at the correct position after fetching more messages
+- Fix group names/contact names & contact email addresses not being selectable
 
 ### Changed
 - use strict typescript for ui code
