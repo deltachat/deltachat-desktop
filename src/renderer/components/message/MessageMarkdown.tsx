@@ -73,12 +73,15 @@ function renderElement(elm: ParsedElement, key?: number): JSX.Element {
       return <div key={key} className='line-break' />
 
     case 'Text':
-      return <span>{elm.c}</span>
-
+      return <span key={key}>{elm.c}</span>
     default:
       //@ts-ignore
       log.error(`type ${elm.t} not known/implemented yet`, elm)
-      return <span style={{ color: 'red' }}>{JSON.stringify(elm)}</span>
+      return (
+        <span key={key} style={{ color: 'red' }}>
+          {JSON.stringify(elm)}
+        </span>
+      )
   }
 }
 
