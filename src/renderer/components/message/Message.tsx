@@ -412,6 +412,7 @@ const Message = (props: {
 export default Message
 
 export const Quote = ({ quote }: { quote: MessageQuote }) => {
+  const screenContext = useContext(ScreenContext)
   const onContactClick = async (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
@@ -425,9 +426,7 @@ export const Quote = ({ quote }: { quote: MessageQuote }) => {
       quote.message.messageId
     )
     if (message === null) return
-    throw new Error('Not implemented yet')
-    //const contact = message.contact
-    //openViewProfileDialog(screenContext, contact.id)
+    openViewProfileDialog(screenContext, message.sender.id)
   }
 
   return (
