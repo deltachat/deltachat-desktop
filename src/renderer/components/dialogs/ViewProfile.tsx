@@ -9,7 +9,6 @@ import {
 } from './DeltaDialog'
 import ChatListItem from '../chat/ChatListItem'
 import { useChatList } from '../chat/ChatListHelpers'
-import { selectChat } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
 import { JsonContact } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
@@ -26,6 +25,7 @@ import { useThemeCssVar } from '../../ThemeManager'
 import { DialogProps } from './DialogController'
 import { Card, Elevation } from '@blueprintjs/core'
 import { DeltaInput } from '../Login-Styles'
+import { selectChat } from '../helpers/ChatMethods'
 
 const ProfileInfoName = ({
   name,

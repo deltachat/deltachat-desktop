@@ -1,5 +1,5 @@
-import { DeltaBackend } from '../../delta-remote'
-import chatStore, { selectChat } from '../../stores/chat'
+import { DeltaBackend, sendMessageParams } from '../../delta-remote'
+import ChatStore from '../../stores/chat'
 import { ScreenContext, unwrapContext } from '../../contexts'
 import { ChatListItemType, FullChat } from '../../../shared/shared-types'
 import { MuteDuration } from '../../../shared/constants'
@@ -12,8 +12,12 @@ const log = getLogger('renderer/message')
 
 type Chat = ChatListItemType | FullChat
 
+export const selectChat = (chatId: number) => {
+  ChatStore.effect.selectChat(chatId)
+}
+
 export const unselectChat = () => {
-  chatStore.dispatch({ type: 'UI_UNSELECT_CHAT' })
+  ChatStore.reducer.unselectChat()
 }
 
 export async function setChatVisibility(
@@ -189,4 +193,12 @@ export async function createChatByContactIdAndSelectIt(
   // TODO update chatlist if its needed
 
   selectChat(chatId)
+}
+
+export function sendMessage(chatId: number, message: sendMessageParams) {
+  ChatStore.effect.sendMessage({ chatId, message })
+}
+
+export const deleteMessage = (messageId: number) => {
+  ChatStore.effect.uiDeleteMessage(messageId)
 }

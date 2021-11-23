@@ -113,14 +113,16 @@ export default class MapComponent extends React.Component<
       this.setState(savedState)
       this.stateFromSession = true
     }
-    locationStore.setState({
-      selectedChat: selectedChat,
-      locations: [],
-      mapSettings: {
-        timestampFrom: this.getTimestampForRange(),
-        timestampTo: 0,
-      },
-    })
+    locationStore.setState(_state => {
+      return {
+        selectedChat: selectedChat,
+        locations: [],
+        mapSettings: {
+          timestampFrom: this.getTimestampForRange(),
+          timestampTo: 0,
+        },
+      }
+    }, 'init')
     mapboxgl.accessToken = MapLayerFactory.getAccessToken()
     this.map = new mapboxgl.Map({
       container: 'map',

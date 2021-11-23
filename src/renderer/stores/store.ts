@@ -50,13 +50,13 @@ export class Store<S> {
       effect(action, state)
     })
     if (state !== this.state) {
-      /*this.log.debug(
+      this.log.debug(
         `DISPATCHING of "${action.type}" changed the state. Before:`,
         this.state,
         'After:',
         state
-      )*/
-      this.log.debug(`DISPATCHING of "${action.type}" changed the state.`)
+      )
+      //this.log.debug(`DISPATCHING of "${action.type}" changed the state.`)
       this.state = state
       this.listeners.forEach(listener => listener(this.state))
     }
@@ -80,8 +80,20 @@ export class Store<S> {
     this.reducers.push(reducer)
   }
 
-  setState(state: S) {
-    this.state = state
+  setState(
+    stateReducer: (currentState: S) => S | undefined,
+    description: String
+  ) {
+    const modifiedState = stateReducer(this.state)
+    if (modifiedState === undefined) return
+    this.log.debug(
+      `${description} changed the state. Before:`,
+      this.state,
+      'After:',
+      modifiedState
+    )
+    //this.log.debug(`${description} changed the state`)
+    this.state = modifiedState
     this.listeners.forEach(listener => listener(this.state))
   }
 }

@@ -16,6 +16,7 @@ import { useChatStore, ChatStoreStateWithChatSet } from '../../stores/chat'
 import {
   openViewGroupDialog,
   openViewProfileDialog,
+  selectChat,
 } from '../helpers/ChatMethods'
 
 import {
@@ -61,14 +62,14 @@ export default function MainScreen() {
   )
 
   const screenContext = useContext(ScreenContext)
-  const [selectedChat, chatStoreDispatch] = useChatStore()
+  const selectedChat = useChatStore()
 
   const onChatClick = (chatId: number) => {
     if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) return setShowArchivedChats(true)
     // avoid double clicks
     if (chatId === selectedChat.chat?.id) return
 
-    chatStoreDispatch({ type: 'SELECT_CHAT', payload: chatId })
+    selectChat(chatId)
     setView(View.MessageList)
   }
   const searchChats = (queryStr: string) => setQueryStr(queryStr)
@@ -97,7 +98,7 @@ export default function MainScreen() {
     setFirstLoad(false)
     const lastChatId = getLastSelectedChatId()
     if (lastChatId) {
-      chatStoreDispatch({ type: 'SELECT_CHAT', payload: lastChatId })
+      selectChat(lastChatId)
     }
   }
 
