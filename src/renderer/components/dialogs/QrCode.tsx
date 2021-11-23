@@ -123,8 +123,8 @@ export function QrCodeShowQrInner({
               style={{
                 width: '100%',
                 height: '100%',
-                backgroundColor: 'white',
                 userSelect: 'none',
+                paddingTop: '14px',
               }}
               src={svgUrl}
             />
