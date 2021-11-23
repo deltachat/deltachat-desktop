@@ -309,7 +309,7 @@ export function txCoreStrings() {
   strings[C.DC_STR_PART_OF_TOTAL_USED] = tx('part_of_total_used')
   strings[C.DC_STR_SECURE_JOIN_STARTED] = tx('secure_join_started')
   strings[C.DC_STR_SECURE_JOIN_REPLIES] = tx('secure_join_replies')
-  strings[C.DC_STR_VERIFY_CONTACT_QR_DESC] = tx('qr_scan_to_chat_with')
+  strings[C.DC_STR_SETUP_CONTACT_QR_DESC] = tx('qr_scan_to_chat_with')
   strings[C.DC_STR_SECURE_JOIN_GROUP_QR_DESC] = tx('secure_join_replies')
 
   return strings
