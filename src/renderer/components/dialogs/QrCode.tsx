@@ -145,10 +145,18 @@ export function QrCodeScanQrInner({ onClose }: { onClose: () => void }) {
 
   const qrImageReader = useRef<any>()
 
-  const handleScan = (data: string) => {
+  const handleScan = async (data: string) => {
     if (data && processingQrCode.current === false) {
       processingQrCode.current = true
-      processOpenQrUrl(data, handleScanResult)
+      try {
+        await processOpenQrUrl(data, handleScanResult)
+      } catch (err) {
+        processingQrCode.current = false
+        throw err
+      }
+      processingQrCode.current = false
+    } else if (processingQrCode.current === true) {
+      log.debug('Already processing a qr code')
     }
   }
 
