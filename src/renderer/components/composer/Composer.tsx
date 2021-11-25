@@ -12,7 +12,6 @@ import { SettingsContext, useTranslationFunction } from '../../contexts'
 import ComposerMessageInput from './ComposerMessageInput'
 import { getLogger } from '../../../shared/logger'
 import { EmojiAndStickerPicker } from './EmojiAndStickerPicker'
-import { useChatStore } from '../../stores/chat'
 import { EmojiData, BaseEmoji } from 'emoji-mart'
 import { replaceColonsSafe } from '../conversations/emoji'
 import {
@@ -20,10 +19,10 @@ import {
   MessageTypeAttachmentSubset,
 } from '../../../shared/shared-types'
 import { Quote } from '../message/Message'
-import { DeltaBackend, sendMessageParams } from '../../delta-remote'
+import { DeltaBackend } from '../../delta-remote'
 import { DraftAttachment } from '../attachment/messageAttachment'
 import { runtime } from '../../runtime'
-import { unselectChat } from '../helpers/ChatMethods'
+import { sendMessage, unselectChat } from '../helpers/ChatMethods'
 
 const log = getLogger('renderer/composer')
 
@@ -80,13 +79,12 @@ const Composer = forwardRef<
     removeFile,
     clearDraft,
   } = props
-  const chatStoreDispatch = useChatStore()[1]
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
   const pickerButtonRef = useRef<HTMLDivElement>(null)
 
-  const sendMessage = () => {
+  const composerSendMessage = () => {
     if (chatId === null) {
       throw new Error('chat id is undefined')
     }
@@ -103,16 +101,12 @@ const Composer = forwardRef<
         log.debug(`Empty message: don't send it...`)
         return
       }
-      chatStoreDispatch({
-        type: 'SEND_MESSAGE',
-        payload: [
-          chatId,
-          {
-            text: replaceColonsSafe(message),
-            filename: draftState.file,
-            quoteMessageId: draftState.quotedMessageId,
-          } as sendMessageParams,
-        ],
+      sendMessage(chatId, {
+        text: replaceColonsSafe(message),
+        filename: draftState.file,
+        quoteMessageId: draftState.quotedMessageId
+          ? draftState.quotedMessageId
+          : undefined,
       })
 
       /* clear it here to make sure the draft is cleared */
@@ -282,7 +276,7 @@ const Composer = forwardRef<
                 <ComposerMessageInput
                   ref={messageInputRef}
                   enterKeySends={desktopSettings.enterKeySends}
-                  sendMessage={sendMessage}
+                  sendMessage={composerSendMessage}
                   chatId={chatId}
                   updateDraftText={updateDraftText}
                   onPaste={handlePaste}
@@ -298,7 +292,7 @@ const Composer = forwardRef<
           >
             <span />
           </div>
-          <div className='send-button-wrapper' onClick={sendMessage}>
+          <div className='send-button-wrapper' onClick={composerSendMessage}>
             <button aria-label={tx('menu_send')} />
           </div>
         </div>

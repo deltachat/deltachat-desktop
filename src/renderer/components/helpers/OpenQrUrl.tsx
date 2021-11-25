@@ -19,9 +19,9 @@ import { runtime } from '../../runtime'
 import { parseMailto } from '../../../shared/parse_mailto'
 import MailtoDialog, { doMailtoAction } from '../dialogs/MailtoDialog'
 import { getLogger } from '../../../shared/logger'
-import { selectChat } from '../../stores/chat'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import AlertDialog from '../dialogs/AlertDialog'
+import { selectChat } from './ChatMethods'
 
 const log = getLogger('renderer/processOpenUrl')
 

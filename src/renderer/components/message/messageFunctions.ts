@@ -2,9 +2,9 @@ import { getLogger } from '../../../shared/logger'
 const log = getLogger('render/msgFunctions')
 import type { Message } from 'deltachat-node'
 import { MessageType, JsonMessage } from '../../../shared/shared-types'
-import { ChatStoreDispatch, selectChat } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
 import { runtime } from '../../runtime'
+import { deleteMessage, selectChat } from '../helpers/ChatMethods'
 /**
  * json representation of the message object we get from the backend
  */
@@ -26,16 +26,12 @@ export function forwardMessage(message: MessageType) {
   window.__openDialog('ForwardMessage', { message })
 }
 
-export function deleteMessage(
-  msg: MsgObject,
-  chatStoreDispatch: ChatStoreDispatch
-) {
+export function confirmDeleteMessage(msg: MsgObject) {
   const tx = window.static_translate
   window.__openDialog('ConfirmationDialog', {
     message: tx('ask_delete_message'),
     confirmLabel: tx('delete'),
-    cb: (yes: boolean) =>
-      yes && chatStoreDispatch({ type: 'UI_DELETE_MESSAGE', payload: msg.id }),
+    cb: (yes: boolean) => yes && deleteMessage(msg.id),
   })
 }
 

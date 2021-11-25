@@ -24,7 +24,9 @@ const getLocations = async (chatId: number, mapSettings: todo) => {
     timestampFrom,
     timestampTo
   )
-  locationStore.setState({ ...locationStore.getState(), locations })
+  locationStore.setState(_state => {
+    return { ...locationStore.getState(), locations }
+  }, 'getLocations')
 }
 
 const onLocationChange = (_evt: any, [chatId]: [number]) => {

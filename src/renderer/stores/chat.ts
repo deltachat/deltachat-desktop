@@ -1,263 +1,359 @@
 import { ipcBackend, saveLastChatId } from '../ipc'
 import { Store, useStore } from './store'
 import { FullChat, MessageType } from '../../shared/shared-types'
-import { DeltaBackend } from '../delta-remote'
+import { DeltaBackend, sendMessageParams } from '../delta-remote'
 import { runtime } from '../runtime'
 import { ActionEmitter, KeybindAction } from '../keybindings'
 import { C } from 'deltachat-node/dist/constants'
 
 export const PAGE_SIZE = 10
 
-class state {
-  chat: FullChat | null = null
-
-  messageIds: number[] = []
-  messages: { [key: number]: MessageType | null } = {}
-  oldestFetchedMessageIndex = -1
-  scrollToBottom = false // if true the UI will scroll to bottom
-  scrollToBottomIfClose = false
-  scrollToLastPage = false // after fetching more messages reset scroll bar to old position
-  scrollHeight = 0
-  countFetchedMessages = 0
+export interface ChatStoreState {
+  chat: FullChat | null
+  messageIds: number[]
+  messages: { [key: number]: MessageType | null }
+  oldestFetchedMessageIndex: number
+  scrollToBottom: boolean // if true the UI will scroll to bottom
+  scrollToBottomIfClose: boolean
+  scrollToLastPage: boolean // after fetching more messages reset scroll bar to old position
+  scrollHeight: number
+  countFetchedMessages: number
 }
 
-const defaultState = new state()
+const defaultState: ChatStoreState = {
+  chat: null,
+  messageIds: [],
+  messages: {},
+  oldestFetchedMessageIndex: -1,
+  scrollToBottom: false,
+  scrollToBottomIfClose: false,
+  scrollToLastPage: false,
+  scrollHeight: 0,
+  countFetchedMessages: 0,
+}
 
-const chatStore = new Store<state>(new state(), 'ChatStore')
-const log = chatStore.log
-
-chatStore.attachReducer(({ type, payload, id }, state) => {
-  if (type === 'SELECTED_CHAT') {
-    return { ...defaultState, ...payload }
-  }
-
-  if (typeof id !== 'undefined' && id !== state.chat?.id) {
+function guardReducerIfChatIdIsDifferent(
+  payload: { id: number },
+  state: ChatStoreState
+) {
+  if (typeof payload.id !== 'undefined' && payload.id !== state.chat?.id) {
     log.debug(
       'REDUCER',
       'seems like an old action because the chatId changed in between'
     )
-    return state
+    return true
   }
+  return false
+}
 
-  if (type === 'UI_UNSELECT_CHAT') {
-    return { ...defaultState }
-  } else if (type === 'MODIFIED_CHAT') {
-    return { ...state, ...payload }
-  } else if (type === 'FETCHED_MORE_MESSAGES') {
-    return {
-      ...state,
-      messages: { ...state.messages, ...payload.fetchedMessages },
-      oldestFetchedMessageIndex: payload.oldestFetchedMessageIndex,
-      scrollToLastPage: true,
-      scrollHeight: payload.scrollHeight,
-      countFetchedMessages: payload.countFetchedMessages,
-    }
-  } else if (type === 'FETCHED_INCOMING_MESSAGES') {
-    return {
-      ...state,
-      messageIds: payload.messageIds,
-      messages: {
-        ...state.messages,
-        ...payload.messagesIncoming,
-      },
-      scrollToBottomIfClose: true,
-    }
-    // type SCROLL_COMPLETE ?
-  } else if (type === 'FINISHED_SCROLL') {
-    if (payload === 'SCROLLED_TO_LAST_PAGE') {
-      return { ...state, scrollToLastPage: false, scrollHeight: 0 }
-    } else if (payload === 'SCROLLED_TO_BOTTOM') {
-      return { ...state, scrollToBottom: false, scrollToBottomIfClose: false }
-    }
-  } else if (type === 'UI_DELETE_MESSAGE') {
-    const msgId = payload
-
-    const messageIndex = state.messageIds.indexOf(msgId)
-    let { oldestFetchedMessageIndex } = state
-    if (messageIndex === oldestFetchedMessageIndex) {
-      oldestFetchedMessageIndex += 1
-    }
-    const messageIds = state.messageIds.filter(mId => mId !== msgId)
-    return {
-      ...state,
-      messageIds,
-      messages: { ...state.messages, [msgId]: null },
-      oldestFetchedMessageIndex,
-    }
-  } else if (type === 'MESSAGE_CHANGED') {
-    return {
-      ...state,
-      messages: { ...state.messages, ...payload.messagesChanged },
-    }
-  } else if (type === 'MESSAGE_SENT') {
-    const [messageId, message] = payload
-    const messageIds = [...state.messageIds, messageId]
-    const messages = { ...state.messages, [messageId]: message }
-    return { ...state, messageIds, messages, scrollToBottom: true }
-  } else if (type === 'MESSAGE_DELIVERED') {
-    const messages = {
-      ...state.messages,
-      [payload]: {
-        ...state.messages[payload],
-        state: C.DC_STATE_OUT_DELIVERED,
-      },
-    }
-    return { ...state, messages }
-  } else if (type === 'MESSAGE_FAILED') {
-    const messages = {
-      ...state.messages,
-      [payload]: {
-        ...state.messages[payload],
-        state: C.DC_STATE_OUT_FAILED,
-      },
-    }
-    return { ...state, messages }
-  } else if (type === 'MESSAGE_READ') {
-    const messages = {
-      ...state.messages,
-      [payload]: {
-        ...state.messages[payload],
-        state: C.DC_STATE_OUT_MDN_RCVD,
-      },
-    }
-    return { ...state, messages }
-  } else if (type === 'SET_MESSAGE_IDS') {
-    const messageIds = payload
-    return { ...state, messageIds }
+class ChatStore extends Store<ChatStoreState> {
+  reducer = {
+    selectedChat: (payload: Partial<ChatStoreState>) => {
+      this.setState(_ => {
+        return {
+          ...defaultState,
+          ...payload,
+        }
+      }, 'selectedChat')
+    },
+    unselectChat: () => {
+      this.setState(_ => {
+        return { ...defaultState }
+      }, 'unselectChat')
+    },
+    modifiedChat: (payload: { id: number } & Partial<ChatStoreState>) => {
+      this.setState(state => {
+        if (guardReducerIfChatIdIsDifferent(payload, state)) return
+        return {
+          ...state,
+          ...payload,
+        }
+      }, 'modifiedChat')
+    },
+    fetchedMoreMessages: (payload: {
+      id: number
+      fetchedMessages: ChatStoreState['messages']
+      scrollHeight: number
+      countFetchedMessages: number
+      oldestFetchedMessageIndex: number
+    }) => {
+      this.setState(state => {
+        if (guardReducerIfChatIdIsDifferent(payload, state)) return
+        return {
+          ...state,
+          messages: { ...state.messages, ...payload.fetchedMessages },
+          oldestFetchedMessageIndex: payload.oldestFetchedMessageIndex,
+          scrollToLastPage: true,
+          scrollHeight: payload.scrollHeight,
+          countFetchedMessages: payload.countFetchedMessages,
+        }
+      }, 'fetchedMoreMessages')
+    },
+    fetchedIncomingMessages: (payload: {
+      id: number
+      messageIds: ChatStoreState['messageIds']
+      messagesIncoming: ChatStoreState['messages']
+    }) => {
+      this.setState(state => {
+        if (guardReducerIfChatIdIsDifferent(payload, state)) return
+        return {
+          ...state,
+          messageIds: payload.messageIds,
+          messages: {
+            ...state.messages,
+            ...payload.messagesIncoming,
+          },
+          scrollToBottomIfClose: true,
+        }
+      }, 'fetchedIncomingMessages')
+    },
+    scrolledToLastPage: () => {
+      log.debug('scrolledToLastPage')
+      this.setState(state => {
+        return {
+          ...state,
+          scrollToLastPage: false,
+          scrollHeight: 0,
+        }
+      }, 'scrolledToLastPage')
+    },
+    scrolledToBottom: () => {
+      log.debug('scrolledToBottom')
+      this.setState(state => {
+        return {
+          ...state,
+          scrollToBottom: false,
+          scrollToBottomIfClose: false,
+        }
+      }, 'scrolledToBottom')
+    },
+    uiDeleteMessage: (payload: { id: number; msgId: number }) => {
+      this.setState(state => {
+        const { msgId } = payload
+        const messageIndex = state.messageIds.indexOf(msgId)
+        let { oldestFetchedMessageIndex } = state
+        if (messageIndex === oldestFetchedMessageIndex) {
+          oldestFetchedMessageIndex += 1
+        }
+        const messageIds = state.messageIds.filter(mId => mId !== msgId)
+        if (guardReducerIfChatIdIsDifferent(payload, state)) return
+        return {
+          ...state,
+          messageIds,
+          messages: { ...state.messages, [msgId]: null },
+          oldestFetchedMessageIndex,
+        }
+      }, 'uiDeleteMessage')
+    },
+    messageChanged: (payload: {
+      id: number
+      messagesChanged: ChatStoreState['messages']
+    }) => {
+      this.setState(state => {
+        if (guardReducerIfChatIdIsDifferent(payload, state)) return
+        return {
+          ...state,
+          messages: { ...state.messages, ...payload.messagesChanged },
+        }
+      }, 'messageChanged')
+    },
+    messageSent: (payload: {
+      id: number
+      messageId: number
+      message: MessageType
+    }) => {
+      const { messageId, message } = payload
+      this.setState(state => {
+        const messageIds = [...state.messageIds, messageId]
+        const messages = { ...state.messages, [messageId]: message }
+        if (guardReducerIfChatIdIsDifferent(payload, state)) return
+        return { ...state, messageIds, messages, scrollToBottom: true }
+      }, 'messageSent')
+    },
+    setMessageState: (payload: {
+      id: number
+      messageId: number
+      messageState: number
+    }) => {
+      const { messageId, messageState } = payload
+      this.setState(state => {
+        const message = state.messages[messageId]
+        if (message === null) return
+        const updatedMessage: MessageType = {
+          ...message,
+          state: messageState,
+        }
+        return {
+          ...state,
+          messages: {
+            ...state.messages,
+            [messageId]: updatedMessage,
+          },
+        }
+      }, 'setMessageState')
+    },
+    setMessageIds: (payload: { id: number; messageIds: number[] }) => {
+      this.setState(state => {
+        if (guardReducerIfChatIdIsDifferent(payload, state)) return
+        return {
+          ...state,
+          messageIds: payload.messageIds,
+        }
+      }, 'setMessageIds')
+    },
   }
-  return state
-})
-
-chatStore.attachEffect(async ({ type, payload }, state) => {
-  if (type === 'SELECT_CHAT') {
-    const chatId = payload
-    // these methods were called in backend before
-    // might be an issue if DeltaBackend.call has a significant delay
-    const chat = <FullChat>(
-      await DeltaBackend.call('chatList.selectChat', chatId)
-    )
-    if (chat.id === null) {
-      log.debug(
-        'SELECT CHAT chat does not exsits, id is null. chatId:',
-        chat.id
+  effect = {
+    selectChat: async (chatId: number) => {
+      // these methods were called in backend before
+      // might be an issue if DeltaBackend.call has a significant delay
+      const chat = <FullChat>(
+        await DeltaBackend.call('chatList.selectChat', chatId)
       )
-      return
-    }
-    const messageIds = <number[]>(
-      await DeltaBackend.call('messageList.getMessageIds', chatId)
-    )
-    const oldestFetchedMessageIndex = Math.max(messageIds.length - PAGE_SIZE, 0)
-    const newestFetchedMessageIndex = messageIds.length
+      if (chat.id === null) {
+        log.debug(
+          'SELECT CHAT chat does not exsits, id is null. chatId:',
+          chat.id
+        )
+        return
+      }
+      const messageIds = <number[]>(
+        await DeltaBackend.call('messageList.getMessageIds', chatId)
+      )
+      const oldestFetchedMessageIndex = Math.max(
+        messageIds.length - PAGE_SIZE,
+        0
+      )
+      const newestFetchedMessageIndex = messageIds.length
 
-    const messageIdsToFetch = messageIds.slice(
-      oldestFetchedMessageIndex,
-      newestFetchedMessageIndex
-    )
-    const messages = await DeltaBackend.call(
-      'messageList.getMessages',
-      messageIdsToFetch
-    )
-    chatStore.dispatch({
-      type: 'SELECTED_CHAT',
-      payload: {
+      const messageIdsToFetch = messageIds.slice(
+        oldestFetchedMessageIndex,
+        newestFetchedMessageIndex
+      )
+      const messages = await DeltaBackend.call(
+        'messageList.getMessages',
+        messageIdsToFetch
+      )
+
+      chatStore.reducer.selectedChat({
         chat,
-        id: chatId,
-        messageIds,
         messages,
+        messageIds,
         oldestFetchedMessageIndex,
         scrollToBottom: true,
-      } as Partial<state>,
-    })
-    ActionEmitter.emitAction(
-      chat.archived
-        ? KeybindAction.ChatList_SwitchToArchiveView
-        : KeybindAction.ChatList_SwitchToNormalView
-    )
-    runtime.updateBadge()
-    saveLastChatId(chatId)
-  } else if (type === 'UI_DELETE_MESSAGE') {
-    const msgId = payload
-    DeltaBackend.call('messageList.deleteMessage', msgId)
-  } else if (type === 'FETCH_MORE_MESSAGES') {
-    const oldestFetchedMessageIndex = Math.max(
-      state.oldestFetchedMessageIndex - PAGE_SIZE,
-      0
-    )
-    const lastMessageIndexOnLastPage = state.oldestFetchedMessageIndex
-    if (lastMessageIndexOnLastPage === 0) {
-      log.debug(
-        'FETCH_MORE_MESSAGES: lastMessageIndexOnLastPage is zero, returning'
+      })
+      ActionEmitter.emitAction(
+        chat.archived
+          ? KeybindAction.ChatList_SwitchToArchiveView
+          : KeybindAction.ChatList_SwitchToNormalView
       )
-      return
-    }
-    const fetchedMessageIds = state.messageIds.slice(
-      oldestFetchedMessageIndex,
-      lastMessageIndexOnLastPage
-    )
-    if (fetchedMessageIds.length === 0) {
-      log.debug(
-        'FETCH_MORE_MESSAGES: fetchedMessageIds.length is zero, returning'
+      runtime.updateBadge()
+      saveLastChatId(chatId)
+    },
+    uiDeleteMessage: (msgId: number) => {
+      DeltaBackend.call('messageList.deleteMessage', msgId)
+      if (!this.state.chat) return
+      const id = this.state.chat.id
+      this.reducer.uiDeleteMessage({ id, msgId })
+    },
+    fetchMoreMessages: async (scrollHeight: number) => {
+      log.debug(`fetchMoreMessages ${scrollHeight}`)
+      const state = this.state
+      if (state.chat === null) return
+      const id = state.chat.id
+      const oldestFetchedMessageIndex = Math.max(
+        state.oldestFetchedMessageIndex - PAGE_SIZE,
+        0
       )
-      return
-    }
+      const lastMessageIndexOnLastPage = state.oldestFetchedMessageIndex
+      if (lastMessageIndexOnLastPage === 0) {
+        log.debug(
+          'FETCH_MORE_MESSAGES: lastMessageIndexOnLastPage is zero, returning'
+        )
+        return
+      }
+      const fetchedMessageIds = state.messageIds.slice(
+        oldestFetchedMessageIndex,
+        lastMessageIndexOnLastPage
+      )
+      if (fetchedMessageIds.length === 0) {
+        log.debug(
+          'FETCH_MORE_MESSAGES: fetchedMessageIds.length is zero, returning'
+        )
+        return
+      }
 
-    const fetchedMessages = await DeltaBackend.call(
-      'messageList.getMessages',
-      fetchedMessageIds
-    )
+      const fetchedMessages = await DeltaBackend.call(
+        'messageList.getMessages',
+        fetchedMessageIds
+      )
 
-    chatStore.dispatch({
-      type: 'FETCHED_MORE_MESSAGES',
-      payload: {
+      chatStore.reducer.fetchedMoreMessages({
+        id,
         fetchedMessages,
         oldestFetchedMessageIndex,
         countFetchedMessages: fetchedMessageIds.length,
-        scrollHeight: payload.scrollHeight,
-      },
-    })
-  } else if (type === 'SEND_MESSAGE') {
-    if (payload[0] !== chatStore.state.chat?.id) return
-    const messageObj = await DeltaBackend.call(
-      'messageList.sendMessage',
-      payload[0],
-      payload[1]
-    )
+        scrollHeight: scrollHeight,
+      })
+    },
+    mute: async (payload: { chatId: number; muteDuration: number }) => {
+      if (payload.chatId !== chatStore.state.chat?.id) return
+      if (
+        !(await DeltaBackend.call(
+          'chat.setMuteDuration',
+          payload.chatId,
+          payload.muteDuration
+        ))
+      ) {
+        return
+      }
+    },
+    sendMessage: async (payload: {
+      chatId: number
+      message: sendMessageParams
+    }) => {
+      if (payload.chatId !== chatStore.state.chat?.id) return
+      const messageObj = await DeltaBackend.call(
+        'messageList.sendMessage',
+        payload.chatId,
+        payload.message
+      )
 
-    // Workaround for failed messages
-    if (messageObj[0] === 0) return
-    chatStore.dispatch({
-      type: 'MESSAGE_SENT',
-      payload: messageObj,
-      id: payload[0],
-    })
-  } else if (type === 'MUTE') {
-    if (payload[0] !== chatStore.state.chat?.id) return
-    if (
-      !(await DeltaBackend.call('chat.setMuteDuration', payload[0], payload[1]))
-    ) {
-      return
-    }
+      // Workaround for failed messages
+      if (messageObj[0] === 0) return
+      if (messageObj[1] === null) return
+      chatStore.reducer.messageSent({
+        messageId: messageObj[0],
+        message: messageObj[1],
+        id: payload.chatId,
+      })
+    },
   }
-})
+}
+
+const chatStore = new ChatStore({ ...defaultState }, 'ChatStore')
+
+chatStore.dispatch = (..._args) => {
+  throw new Error('Deprecated')
+}
+
+const log = chatStore.log
 
 ipcBackend.on('DC_EVENT_CHAT_MODIFIED', async (_evt, [chatId]) => {
   const state = chatStore.getState()
   if (state.chat?.id !== chatId) {
     return
   }
-  chatStore.dispatch({
-    type: 'MODIFIED_CHAT',
-    payload: {
-      chat: await DeltaBackend.call('chatList.getFullChatById', chatId),
-    } as Partial<state>,
+  chatStore.reducer.modifiedChat({
+    id: chatId,
+    chat: await DeltaBackend.call('chatList.getFullChatById', chatId),
   })
 })
 
 ipcBackend.on('DC_EVENT_MSG_DELIVERED', (_evt, [id, msgId]) => {
-  chatStore.dispatch({
-    type: 'MESSAGE_DELIVERED',
+  chatStore.reducer.setMessageState({
     id,
-    payload: msgId,
+    messageId: msgId,
+    messageState: C.DC_STATE_OUT_DELIVERED,
   })
 })
 
@@ -266,20 +362,19 @@ ipcBackend.on('DC_EVENT_MSG_FAILED', async (_evt, [chatId, msgId]) => {
   if (state.chat?.id !== chatId) return
   if (!state.messageIds.includes(msgId)) {
     // Hacking around https://github.com/deltachat/deltachat-desktop/issues/1361#issuecomment-776291299
-    const messageObj = [
-      msgId,
-      await DeltaBackend.call('messageList.getMessage', msgId),
-    ]
-    chatStore.dispatch({
-      type: 'MESSAGE_SENT',
-      payload: messageObj,
+    const message = await DeltaBackend.call('messageList.getMessage', msgId)
+    if (message === null) return
+
+    chatStore.reducer.messageSent({
       id: chatId,
+      messageId: msgId,
+      message,
     })
   }
-  chatStore.dispatch({
-    type: 'MESSAGE_FAILED',
+  chatStore.reducer.setMessageState({
     id: chatId,
-    payload: msgId,
+    messageId: msgId,
+    messageState: C.DC_STATE_OUT_FAILED,
   })
 })
 
@@ -300,40 +395,36 @@ ipcBackend.on('DC_EVENT_INCOMING_MSG', async (_, [chatId, _messageId]) => {
     'messageList.getMessages',
     messageIdsIncoming
   )
-  chatStore.dispatch({
-    type: 'FETCHED_INCOMING_MESSAGES',
-    payload: {
-      messageIds,
-      messageIdsIncoming,
-      messagesIncoming,
-    },
+  chatStore.reducer.fetchedIncomingMessages({
+    id: chatId,
+    messageIds,
+    messagesIncoming,
   })
 })
 
 ipcBackend.on('DC_EVENT_MSG_READ', (_evt, [id, msgId]) => {
-  chatStore.dispatch({
-    type: 'MESSAGE_READ',
+  chatStore.reducer.setMessageState({
     id,
-    payload: msgId,
+    messageId: msgId,
+    messageState: C.DC_STATE_OUT_MDN_RCVD,
   })
 })
 
 ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
   log.debug('DC_EVENT_MSGS_CHANGED', id, messageId)
+  const chatId = chatStore.state.chat?.id
+  if (chatId === null || chatId === undefined) {
+    return
+  }
   if (id === 0 && messageId === 0) {
-    const chatId = chatStore.state.chat?.id
-    if (chatId === null || chatId === undefined) {
-      return
-    }
     const messageIds = await DeltaBackend.call(
       'messageList.getMessageIds',
       chatId
     )
 
-    chatStore.dispatch({
-      type: 'SET_MESSAGE_IDS',
+    chatStore.reducer.setMessageIds({
       id: chatId,
-      payload: messageIds,
+      messageIds,
     })
     return
   }
@@ -346,12 +437,9 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
     const messagesChanged = await DeltaBackend.call('messageList.getMessages', [
       messageId,
     ])
-    chatStore.dispatch({
-      type: 'MESSAGE_CHANGED',
-      payload: {
-        messageId,
-        messagesChanged,
-      },
+    chatStore.reducer.messageChanged({
+      id: chatId,
+      messagesChanged,
     })
   } else {
     log.debug(
@@ -368,35 +456,27 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
       'messageList.getMessages',
       messageIdsIncoming
     )
-    chatStore.dispatch({
-      type: 'FETCHED_INCOMING_MESSAGES',
-      payload: {
-        messageIds,
-        messageIdsIncoming,
-        messagesIncoming,
-      },
+    chatStore.reducer.fetchedIncomingMessages({
+      id: chatId,
+      messageIds,
+      messagesIncoming,
     })
   }
 })
 
 ipcBackend.on('ClickOnNotification', (_ev, { chatId }) => {
-  selectChat(chatId)
+  chatStore.effect.selectChat(chatId)
 })
 
-export const useChatStore = () => useStore(chatStore)
+export const useChatStore = () => useStore(chatStore)[0]
 export const useChatStore2 = () => {
-  const [selectedChat, chatStoreDispatch] = useStore(chatStore)
-  return { selectedChat, chatStoreDispatch }
+  const [selectedChat, _chatStoreDispatch] = useStore(chatStore)
+  return { selectedChat }
 }
-
-export const selectChat = (chatId: number) =>
-  chatStore.dispatch({ type: 'SELECT_CHAT', payload: chatId })
 
 export default chatStore
 
-export type ChatStoreDispatch = Store<state>['dispatch']
-
-export type ChatStoreState = typeof state.prototype
+export type ChatStoreDispatch = Store<ChatStoreState>['dispatch']
 
 export type ChatStoreStateWithChatSet = {
   chat: NonNullable<ChatStoreState['chat']>

@@ -26,8 +26,9 @@ ipcBackend.on(
   'DD_EVENT_BLOCKED_CONTACTS_UPDATED',
   (_evt, payload: { blockedContacts: JsonContact[] }) => {
     const { blockedContacts } = payload
-    const state = contactsStore.getState()
-    contactsStore.setState({ ...state, blockedContacts })
+    contactsStore.setState(state => {
+      return { ...state, blockedContacts }
+    }, 'DD_EVENT_BLOCKED_CONTACTS_UPDATED')
   }
 )
 
@@ -36,9 +37,10 @@ ipcBackend.on(
   debounce(
     (_evt, payload: { contacts: JsonContact[] }) => {
       const { contacts } = payload
-      const state = contactsStore.getState()
       log.debug('DD_EVENT_CONTACTS_UPDATED', contacts)
-      contactsStore.setState({ ...state, contacts })
+      contactsStore.setState(state => {
+        return { ...state, contacts }
+      }, 'DD_EVENT_CONTACTS_UPDATED')
     },
     500,
     true

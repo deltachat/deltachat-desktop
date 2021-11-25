@@ -80,8 +80,20 @@ export class Store<S> {
     this.reducers.push(reducer)
   }
 
-  setState(state: S) {
-    this.state = state
+  setState(
+    stateReducer: (currentState: S) => S | undefined,
+    description: String
+  ) {
+    const modifiedState = stateReducer(this.state)
+    if (modifiedState === undefined) return
+    /*this.log.debug(
+      `${description} changed the state. Before:`,
+      this.state,
+      'After:',
+      modifiedState
+    )*/
+    this.log.debug(`${description} changed the state`)
+    this.state = modifiedState
     this.listeners.forEach(listener => listener(this.state))
   }
 }

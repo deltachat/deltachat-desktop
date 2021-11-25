@@ -16,7 +16,6 @@ import {
 } from './ChatListItemRow'
 import { PseudoListItemAddContact } from '../helpers/PseudoListItem'
 import { C } from 'deltachat-node/dist/constants'
-import { selectChat } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
 import { useContactIds } from '../contact/ContactList'
 import {
@@ -37,7 +36,10 @@ import { ScreenContext } from '../../contexts'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
 import { getLogger } from '../../../shared/logger'
 
-import { createChatByContactIdAndSelectIt } from '../helpers/ChatMethods'
+import {
+  createChatByContactIdAndSelectIt,
+  selectChat,
+} from '../helpers/ChatMethods'
 import { useThemeCssVar } from '../../ThemeManager'
 
 const log = getLogger('renderer/chatlist')

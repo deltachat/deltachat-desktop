@@ -6,10 +6,10 @@ import {
 } from '@deltachat/message_parser_wasm/message_parser_wasm'
 import { getLogger } from '../../../shared/logger'
 import { DeltaBackend } from '../../delta-remote'
-import { selectChat } from '../../stores/chat'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { MessagesDisplayContext } from '../../contexts'
 import { View as MainScreenView } from '../screens/MainScreen'
+import { selectChat } from '../helpers/ChatMethods'
 
 const log = getLogger('renderer/message-markdown')
 

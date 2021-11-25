@@ -2,11 +2,11 @@ import {
   onDownload,
   openAttachmentInShell,
   forwardMessage,
-  deleteMessage,
   openMessageInfo,
   setQuoteInDraft,
   privateReply,
   openMessageHTML,
+  confirmDeleteMessage,
 } from './messageFunctions'
 import React, { useContext } from 'react'
 import reactStringReplace from 'react-string-replace'
@@ -26,7 +26,6 @@ import { useTranslationFunction, ScreenContext } from '../../contexts'
 import { joinCall, openViewProfileDialog } from '../helpers/ChatMethods'
 import { C } from 'deltachat-node/dist/constants'
 // import { getLogger } from '../../../shared/logger'
-import { useChatStore2, ChatStoreDispatch } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
 import { runtime } from '../../runtime'
 import { AvatarFromContact } from '../Avatar'
@@ -131,8 +130,7 @@ function buildContextMenu(
     conversationType: ConversationType
     // onRetrySend: Function
   },
-  clickTarget: HTMLAnchorElement | null,
-  chatStoreDispatch: ChatStoreDispatch
+  clickTarget: HTMLAnchorElement | null
 ): (false | ContextMenuItem)[] {
   const tx = window.static_translate // don't use the i18n context here for now as this component is inefficient (rendered one menu for every message)
   if (!message) {
@@ -224,7 +222,7 @@ function buildContextMenu(
     // Delete message
     {
       label: tx('delete_message_desktop'),
-      action: deleteMessage.bind(null, message, chatStoreDispatch),
+      action: confirmDeleteMessage.bind(null, message),
     },
     // showRetry && {
     //   label:tx('retry_send'),
@@ -246,7 +244,6 @@ const Message = (props: {
 
   const screenContext = useContext(ScreenContext)
   const { openContextMenu, openDialog } = screenContext
-  const { chatStoreDispatch } = useChatStore2()
 
   const showMenu: (
     event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement, MouseEvent>
@@ -259,8 +256,7 @@ const Message = (props: {
         text,
         conversationType,
       },
-      target,
-      chatStoreDispatch
+      target
     )
     const [cursorX, cursorY] = [event.clientX, event.clientY]
 

@@ -1,6 +1,6 @@
-import React, { useRef, useEffect, useCallback } from 'react'
+import React, { useRef, useEffect, useCallback, useLayoutEffect } from 'react'
 import { MessageWrapper } from './MessageWrapper'
-import {
+import ChatStore, {
   useChatStore,
   ChatStoreState,
   ChatStoreStateWithChatSet,
@@ -34,18 +34,15 @@ export default function MessageList({
   chatStore: ChatStoreStateWithChatSet
   refComposer: todo
 }) {
-  const [
-    {
-      oldestFetchedMessageIndex,
-      messages,
-      messageIds,
-      scrollToBottom,
-      scrollToBottomIfClose,
-      scrollToLastPage,
-      scrollHeight,
-    },
-    chatStoreDispatch,
-  ] = useChatStore()
+  const {
+    oldestFetchedMessageIndex,
+    messages,
+    messageIds,
+    scrollToBottom,
+    scrollToBottomIfClose,
+    scrollToLastPage,
+    scrollHeight,
+  } = useChatStore()
   const messageListRef = useRef<HTMLDivElement | null>(null)
   const lastKnownScrollHeight = useRef<number>(0)
   const lastKnownScrollTop = useRef<number>(0)
@@ -56,10 +53,8 @@ export default function MessageList({
       if (!messageListRef.current) {
         return
       }
-      chatStoreDispatch({
-        type: 'FETCH_MORE_MESSAGES',
-        payload: { scrollHeight: messageListRef.current.scrollHeight },
-      })
+      const scrollHeight = messageListRef.current.scrollHeight
+      ChatStore.effect.fetchMoreMessages(scrollHeight)
     },
     30,
     { leading: true }
@@ -99,14 +94,11 @@ export default function MessageList({
       messageListRef.current.scrollHeight
     )
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
-    chatStoreDispatch({
-      type: 'FINISHED_SCROLL',
-      payload: 'SCROLLED_TO_BOTTOM',
-    })
+    ChatStore.reducer.scrolledToBottom()
 
     // Try fetching more messages if needed
     onScroll(null)
-  }, [chatStoreDispatch, onScroll, scrollToBottom])
+  }, [onScroll, scrollToBottom])
 
   useEffect(() => {
     if (!messageListRef.current) {
@@ -130,13 +122,10 @@ export default function MessageList({
       messageListRef.current.scrollTop = messageListRef.current.scrollHeight
     }
 
-    chatStoreDispatch({
-      type: 'FINISHED_SCROLL',
-      payload: 'SCROLLED_TO_BOTTOM',
-    })
-  }, [chatStoreDispatch, scrollToBottomIfClose])
+    ChatStore.reducer.scrolledToBottom()
+  }, [scrollToBottomIfClose])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!messageListRef.current) {
       return
     }
@@ -146,12 +135,9 @@ export default function MessageList({
       messageListRef.current.scrollHeight -
       lastKnownScrollHeight.current +
       lastKnownScrollTop.current
-    chatStoreDispatch({
-      type: 'FINISHED_SCROLL',
-      payload: 'SCROLLED_TO_LAST_PAGE',
-    })
+    ChatStore.reducer.scrolledToLastPage()
     isFetching.current = false
-  }, [chatStoreDispatch, scrollToLastPage, scrollHeight])
+  }, [scrollToLastPage, scrollHeight])
 
   useEffect(() => {
     isFetching.current = false
@@ -272,7 +258,7 @@ export const MessageListInner = React.memo(
 
 function EmptyChatMessage() {
   const tx = useTranslationFunction()
-  const [chatStore] = useChatStore()
+  const chatStore = useChatStore()
   const chat = chatStore.chat as FullChat
 
   let emptyChatMessage = tx('chat_no_messages_hint', [chat.name, chat.name])

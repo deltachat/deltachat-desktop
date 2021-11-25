@@ -6,7 +6,6 @@ import {
   useTranslationFunction,
   SettingsContext,
 } from '../contexts'
-import { useChatStore } from '../stores/chat'
 import { Menu } from '@blueprintjs/core'
 import {
   openLeaveChatDialog,
@@ -17,6 +16,7 @@ import {
   openMuteChatDialog,
   unMuteChat,
   sendCallInvitation,
+  unselectChat,
 } from './helpers/ChatMethods'
 import { runtime } from '../runtime'
 import { Screens } from '../ScreenController'
@@ -40,7 +40,6 @@ export function DeltaMenuItem({
 
 export default function DeltaMenu(props: { selectedChat: FullChat | null }) {
   const { selectedChat } = props
-  const chatStoreDispatch = useChatStore()[1]
 
   const tx = useTranslationFunction()
 
@@ -55,7 +54,7 @@ export default function DeltaMenu(props: { selectedChat: FullChat | null }) {
 
   const logout = () => {
     if (selectedChat) {
-      chatStoreDispatch({ type: 'UI_UNSELECT_CHAT' })
+      unselectChat()
     }
     DeltaBackend.call('login.logout')
     screenContext.changeScreen(Screens.Accounts)

@@ -11,8 +11,8 @@ import { C } from 'deltachat-node/dist/constants'
 import { ChatListPart, useLogicVirtualChatList } from '../chat/ChatList'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { useChatList } from '../chat/ChatListHelpers'
-import { selectChat } from '../../stores/chat'
 import { useThemeCssVar } from '../../ThemeManager'
+import { selectChat } from '../helpers/ChatMethods'
 
 export default function MailtoDialog(props: {
   messageText: string
