@@ -62,6 +62,13 @@ export default function SettingsProfile({
     DeltaBackend.call('getProfilePicture').then(setProfileImagePreview)
     return onDCEvent('DC_EVENT_CONNECTIVITY_CHANGED', updateConnectivity)
   }, [profileImagePreview])
+
+  useEffect(() => {
+    return onDCEvent('DC_EVENT_SELFAVATAR_CHANGED', () =>
+      DeltaBackend.call('getProfilePicture').then(setProfileImagePreview)
+    )
+  }, [])
+
   const tx = useTranslationFunction()
   return (
     <>
