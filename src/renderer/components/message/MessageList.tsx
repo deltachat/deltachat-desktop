@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from 'react'
+import React, { useRef, useEffect, useCallback, useLayoutEffect } from 'react'
 import { MessageWrapper } from './MessageWrapper'
 import ChatStore, {
   useChatStore,
@@ -125,7 +125,7 @@ export default function MessageList({
     ChatStore.reducer.scrolledToBottom()
   }, [scrollToBottomIfClose])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!messageListRef.current) {
       return
     }

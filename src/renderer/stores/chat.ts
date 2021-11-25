@@ -108,6 +108,7 @@ class ChatStore extends Store<ChatStoreState> {
       }, 'fetchedIncomingMessages')
     },
     scrolledToLastPage: () => {
+      log.debug('scrolledToLastPage')
       this.setState(state => {
         return {
           ...state,
@@ -117,6 +118,7 @@ class ChatStore extends Store<ChatStoreState> {
       }, 'scrolledToLastPage')
     },
     scrolledToBottom: () => {
+      log.debug('scrolledToBottom')
       this.setState(state => {
         return {
           ...state,
@@ -254,6 +256,7 @@ class ChatStore extends Store<ChatStoreState> {
       this.reducer.uiDeleteMessage({ id, msgId })
     },
     fetchMoreMessages: async (scrollHeight: number) => {
+      log.debug(`fetchMoreMessages ${scrollHeight}`)
       const state = this.state
       if (state.chat === null) return
       const id = state.chat.id
