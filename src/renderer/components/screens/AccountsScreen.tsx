@@ -440,7 +440,7 @@ function AccountItem({
 
   let inner
   if (login.type === 'configured') {
-    const title = tx('account_info_hover_tooltip_desktop', [
+    const title = tx('account_info_hover_tooltip_desktop2', [
       login.addr || 'null',
       account_size,
       String(login.id),
@@ -479,7 +479,7 @@ function AccountItem({
         <div className='contact-name'>
           <div className='display-name'>{tx('unconfigured_account')}</div>
           <div className='email' style={{ display: 'inline-block' }}>
-            {tx('unconfigured_account_subtitle')}
+            {tx('unconfigured_account_hint')}
           </div>
         </div>
       </div>
