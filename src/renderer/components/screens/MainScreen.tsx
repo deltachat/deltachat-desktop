@@ -185,15 +185,15 @@ export default function MainScreen() {
                 />
               </>
             )}
-              <Icon
-                  style={{
-                    padding: "0px 9px",
-                    marginRight: "10px"
-                  }}
-                  icon='menu'
-                  aria-label={tx('main_menu')}
-                  iconSize={20}
-                />
+            <Icon
+              style={{
+                padding: '0px 9px',
+                marginRight: '10px',
+              }}
+              icon='menu'
+              aria-label={tx('main_menu')}
+              iconSize={20}
+            />
             {(showArchivedChats && queryStr.length === 0) || (
               <SearchInput
                 id='chat-list-search'
