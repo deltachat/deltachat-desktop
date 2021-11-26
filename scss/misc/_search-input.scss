@@ -25,13 +25,22 @@ input.search-input {
 }
 
 input#chat-list-search {
+  position: absolute;
+  width: calc(30vw - 58px - 10px);
+  left: 58px;
   color: var(--navBarText);
-  background-color: transparent;
+  background-color: var(--chatListItemSelectedBgHover);
   border-radius: 3px;
   text-indent: 0px;
   font-size: 20px;
+  font-weight: normal;
   margin: 0;
-  margin-right: 20px;
+  margin-right: 0px;
+  margin-left: 0px;
+  padding-left: 10px !important;
+  border-color: TRANSPARENT;
+  border-style: solid;
+  border-width: 1px;
   &::placeholder {
     user-select: none;
   }
