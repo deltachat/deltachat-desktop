@@ -28,6 +28,7 @@ import {
   Position,
   Popover,
   Button,
+  Icon,
 } from '@blueprintjs/core'
 import { getLastSelectedChatId } from '../../ipc'
 import { useKeyBindingAction, KeybindAction } from '../../keybindings'
@@ -184,6 +185,15 @@ export default function MainScreen() {
                 />
               </>
             )}
+              <Icon
+                  style={{
+                    padding: "0px 9px",
+                    marginRight: "10px"
+                  }}
+                  icon='menu'
+                  aria-label={tx('main_menu')}
+                  iconSize={20}
+                />
             {(showArchivedChats && queryStr.length === 0) || (
               <SearchInput
                 id='chat-list-search'
