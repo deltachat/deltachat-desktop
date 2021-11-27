@@ -184,7 +184,7 @@ function BotCommandSuggestion({ suggestion }: { suggestion: string }) {
       const continue_process = await new Promise((resolve, _reject) => {
         window.__openDialog('ConfirmationDialog', {
           message: window.static_translate(
-            'mailto_dialog_confirm_replace_draft',
+            'confirm_replace_draft',
             name
           ),
           confirmLabel: window.static_translate('replace_draft'),
