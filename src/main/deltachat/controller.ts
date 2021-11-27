@@ -2,7 +2,7 @@ import DeltaChat, { C, DeltaChat as DeltaChatNode } from 'deltachat-node'
 import { app as rawApp } from 'electron'
 import { EventEmitter } from 'events'
 import { getLogger } from '../../shared/logger'
-import { JsonContact, AppState } from '../../shared/shared-types'
+import { AppState } from '../../shared/shared-types'
 import { maybeMarkSeen } from '../markseenFix'
 import * as mainWindow from '../windows/main'
 import DCAutocrypt from './autocrypt'
@@ -391,13 +391,6 @@ export default class DeltaChatController extends EventEmitter {
     this.sendToRenderer('DD_EVENT_CHATLIST_CHANGED', {})
   }
 
-  updateBlockedContacts() {
-    const blockedContacts = this._blockedContacts()
-    this.sendToRenderer('DD_EVENT_BLOCKED_CONTACTS_UPDATED', {
-      blockedContacts,
-    })
-  }
-
   /**
    * Returns the state in json format
    */
@@ -430,26 +423,12 @@ export default class DeltaChatController extends EventEmitter {
     this.selectedAccountContext.stopOngoingProcess()
   }
 
-  // ToDo: Deprecated, use contacts.getContact
-  _getContact(id: number) {
-    const contact = this.selectedAccountContext.getContact(id).toJson()
-    return { ...contact }
-  }
-
-  // ToDo: move to contacts.
-  _blockedContacts(): JsonContact[] {
-    if (!this.selectedAccountContext) return []
-    return this.selectedAccountContext
-      .getBlockedContacts()
-      .map(this._getContact.bind(this))
-  }
-
   // ToDo: move to contacts.
   getContacts2(listFlags: number, queryStr: string) {
-    const distinctIds = Array.from(
+    const distinctIds: number[] = Array.from(
       new Set(this.selectedAccountContext.getContacts(listFlags, queryStr))
     )
-    const contacts = distinctIds.map(this._getContact.bind(this))
+    const contacts = distinctIds.map(id => this.contacts.getContact(id))
     return contacts
   }
 

@@ -21,6 +21,13 @@ export default class JsonContacts extends SplitOut {
     log.debug(`Blocked contact ${name} (id = ${contactId})`)
   }
 
+  getBlocked(): JsonContact[] {
+    if (!this.selectedAccountContext) return []
+    return this.selectedAccountContext
+      .getBlockedContacts()
+      .map(this.getContact.bind(this))
+  }
+
   async changeNickname(contactId: number, name: string) {
     const contact = this.selectedAccountContext.getContact(contactId)
     const address = contact.getAddress()

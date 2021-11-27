@@ -1,44 +1,41 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import DeltaDialog, { DeltaDialogBody, DeltaDialogContent } from './DeltaDialog'
-import contactsStore, { contactsStoreState } from '../../stores/contacts'
 
 import { ContactList2 } from '../contact/ContactList'
 import { ScreenContext } from '../../contexts'
 import { DialogProps } from './DialogController'
+import { onDCEvent } from '../../ipc'
+import { JsonContact } from '../../../shared/shared-types'
+import debounce from 'debounce'
 
 export default function UnblockContacts(props: {
   isOpen: DialogProps['isOpen']
   onClose: DialogProps['onClose']
 }) {
   const { isOpen, onClose } = props
-  const [blockedContacts, setBlockedContacts] = useState<
-    contactsStoreState['blockedContacts'] | null
-  >(null)
-  const [hadBlockedContacts, setHadBlockedContacts] = useState<boolean | null>(
+  const [blockedContacts, setBlockedContacts] = useState<JsonContact[] | null>(
     null
   )
   const screenContext = useContext(ScreenContext)
 
   useEffect(() => {
-    const onContactsUpdate = ({ blockedContacts }: contactsStoreState) => {
-      if (hadBlockedContacts === null)
-        setHadBlockedContacts(blockedContacts.length !== 0)
-      setBlockedContacts(blockedContacts)
+    const onContactsUpdate = async () => {
+      setBlockedContacts(await DeltaBackend.call('contacts.getBlocked'))
     }
-    contactsStore.subscribe(onContactsUpdate)
-    DeltaBackend.call('updateBlockedContacts')
-    return () => contactsStore.unsubscribe(onContactsUpdate)
-  }, [hadBlockedContacts])
+    onContactsUpdate()
+    return onDCEvent(
+      'DC_EVENT_CONTACTS_CHANGED',
+      debounce(onContactsUpdate, 500)
+    )
+  }, [])
 
-  const blockContact = (id: number) => {
-    contactsStore.dispatch({ type: 'UI_UNBLOCK_CONTACT', payload: id })
-  }
   const onUnblockContact = ({ id }: { id: number }) => {
     screenContext.openDialog('ConfirmationDialog', {
       message: tx('ask_unblock_contact'),
       confirmLabel: tx('menu_unblock_contact'),
-      cb: (yes: boolean) => yes && blockContact(id),
+      cb: (yes: boolean) =>
+        yes && DeltaBackend.call('contacts.unblockContact', id),
     })
   }
 
@@ -49,7 +46,7 @@ export default function UnblockContacts(props: {
       isOpen={isOpen}
       onClose={onClose}
       title={tx('pref_blocked_contacts')}
-      fixed={hadBlockedContacts === true}
+      fixed={true}
     >
       <DeltaDialogBody>
         <DeltaDialogContent>
