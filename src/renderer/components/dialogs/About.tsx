@@ -61,22 +61,30 @@ export default function About(props: { isOpen: boolean; onClose: () => void }) {
   const desktopString = reactStringReplace(
     tx('about_offical_app_desktop'),
     'Delta Chat',
-    () => (
-      <ClickableLink href='https://delta.chat'>{'Delta Chat'}</ClickableLink>
+    (_match, _index, offset) => (
+      <ClickableLink key={offset} href='https://delta.chat'>
+        {'Delta Chat'}
+      </ClickableLink>
     )
   )
   let versionString = reactStringReplace(
     tx('about_licensed_under_desktop'),
     'GNU GPL version 3',
-    () => (
-      <ClickableLink href={gitHubLicenseUrl}>
+    (_match, _index, offset) => (
+      <ClickableLink key={offset} href={gitHubLicenseUrl}>
         {'GNU GPL version 3'}
       </ClickableLink>
     )
   )
-  versionString = reactStringReplace(versionString, 'GitHub', () => (
-    <ClickableLink href={gitHubUrl}>{'GitHub'}</ClickableLink>
-  ))
+  versionString = reactStringReplace(
+    versionString,
+    'GitHub',
+    (_match, _index, offset) => (
+      <ClickableLink key={offset} href={gitHubUrl}>
+        {'GitHub'}
+      </ClickableLink>
+    )
+  )
 
   return (
     <DeltaDialog
