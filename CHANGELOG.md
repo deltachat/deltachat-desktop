@@ -31,6 +31,7 @@
 - Fix messagelist not being at the correct position after fetching more messages
 - Fix group names/contact names & contact email addresses not being selectable
 - Fix scanning QRCode again while the Dialog is still open
+- selecting chat now closes all notifications about it again
 
 ### Changed
 - use strict typescript for ui code
