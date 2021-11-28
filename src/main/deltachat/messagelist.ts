@@ -123,24 +123,23 @@ export default class DCMessageList extends SplitOut {
     const jsonMSG = msg.toJson()
 
     let quote: MessageQuote = null
-    const quotedMessage = msg.getQuotedMessage()
-    if (quotedMessage) {
-      const contact = this.selectedAccountContext.getContact(
-        quotedMessage.getFromId()
-      )
-      const messageId = quotedMessage.getId()
-      const message =
-        messageId !== 0
-          ? {
-              messageId,
-              displayName: contact.getDisplayName(),
-              displayColor: contact.color,
-              overrideSenderName: quotedMessage.overrideSenderName,
-            }
-          : null
-
+    const quoteText = msg.getQuotedText()
+    if (quoteText) {
+      const quotedMessage = msg.getQuotedMessage()
+      let message = null
+      if (quotedMessage) {
+        const contact = this.selectedAccountContext.getContact(
+          quotedMessage.getFromId()
+        )
+        message = {
+          messageId: quotedMessage.getId(),
+          displayName: contact.getDisplayName(),
+          displayColor: contact.color,
+          overrideSenderName: quotedMessage.overrideSenderName,
+        }
+      }
       quote = {
-        text: quotedMessage.getText(),
+        text: quoteText,
         message,
       }
     }
