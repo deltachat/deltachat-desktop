@@ -32,6 +32,8 @@
 - Fix group names/contact names & contact email addresses not being selectable
 - Fix scanning QRCode again while the Dialog is still open
 - selecting chat now closes all notifications about it again
+- fix quotes without message text are empty (#2434)
+- Fix react warning in about dialog (#2428)
 
 ### Changed
 - use strict typescript for ui code
