@@ -150,11 +150,11 @@ export default function (dc: DeltaChatController, settings: any) {
     }
   )
 
-  dc.on('DESKTOP_CLEAR_NOTIFICATIONS_FOR_CHAT', (_ev, chatId) => {
+  dc.on('DESKTOP_CLEAR_NOTIFICATIONS_FOR_CHAT', chatId => {
     clearNotificationsForChat(chatId)
   })
 
-  dc.on('DESKTOP_CLEAR_ALL_NOTIFICATIONS', _ev => {
+  dc.on('DESKTOP_CLEAR_ALL_NOTIFICATIONS', _ => {
     clearAllNotifications()
   })
 }
