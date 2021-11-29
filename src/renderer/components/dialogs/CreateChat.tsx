@@ -507,6 +507,8 @@ function CreateGroupInner(props: {
   const viewPrefix = isVerified ? 'createVerifiedGroup' : 'createGroup'
 
   const [qrCode, setQrCode] = useState('')
+  const [qrCodeSVG, setQrCodeSvg] = useState<string | undefined>(undefined)
+
   const [errorMissingGroupName, setErrorMissingGroupName] = useState(false)
 
   const searchContacts = useContacts(
@@ -536,6 +538,7 @@ function CreateGroupInner(props: {
               setViewMode(viewPrefix + '-main')
             }}
             qrCode={qrCode}
+            qrCodeSVG={qrCodeSVG}
             description={tx('qrshow_join_group_hint', [groupName])}
           />
         </>
@@ -579,6 +582,7 @@ function CreateGroupInner(props: {
                       gId
                     )
                     setQrCode(qrCode)
+                    setQrCodeSvg(qrCodeSVG)
                     setViewMode(viewPrefix + '-showQrCode')
                   }}
                 />

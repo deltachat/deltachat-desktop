@@ -218,7 +218,6 @@ export function txCoreStrings() {
   strings[C.DC_STR_FILE] = tx('file')
   strings[C.DC_STR_ENCRYPTEDMSG] = tx('encrypted_message')
   strings[C.DC_STR_STATUSLINE] = tx('pref_default_status_text')
-  strings[C.DC_STR_NEWGROUPDRAFT] = tx('group_hello_draft')
   strings[C.DC_STR_MSGGRPNAME] = tx('systemmsg_group_name_changed')
   strings[C.DC_STR_MSGGRPIMGCHANGED] = tx('systemmsg_group_image_changed')
   strings[C.DC_STR_MSGADDMEMBER] = tx('systemmsg_member_added')
@@ -310,6 +309,8 @@ export function txCoreStrings() {
   strings[C.DC_STR_PART_OF_TOTAL_USED] = tx('part_of_total_used')
   strings[C.DC_STR_SECURE_JOIN_STARTED] = tx('secure_join_started')
   strings[C.DC_STR_SECURE_JOIN_REPLIES] = tx('secure_join_replies')
+  strings[C.DC_STR_SETUP_CONTACT_QR_DESC] = tx('qrshow_join_contact_hint')
+  strings[C.DC_STR_SECURE_JOIN_GROUP_QR_DESC] = tx('qrshow_join_group_hint')
 
   return strings
 }

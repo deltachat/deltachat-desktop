@@ -21,6 +21,7 @@ import {
 import { runtime } from '../runtime'
 import { Screens } from '../ScreenController'
 import { FullChat } from '../../shared/shared-types'
+import QrCode from './dialogs/QrCode'
 
 export function DeltaMenuItem({
   text,
@@ -198,8 +199,11 @@ export default function DeltaMenu(props: { selectedChat: FullChat | null }) {
         key='qr'
         text={tx('qr_code')}
         onClick={async () => {
-          const qrCode = await DeltaBackend.call('chat.getQrCode', 0)
-          screenContext.openDialog('QrCode', { qrCode })
+          const { content: qrCode, svg: qrCodeSVG } = await DeltaBackend.call(
+            'chat.getQrCodeSVG',
+            0
+          )
+          screenContext.openDialog(QrCode, { qrCode, qrCodeSVG })
         }}
       />
       {chatMenu}
