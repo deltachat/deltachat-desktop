@@ -24,10 +24,10 @@
 - use our new rust (wasm) based message (text) parser instead of `simple-markdown` for making links (and so on) clickable
 - remove dependencies that are now not needed anymore (`punycode`, `simple-markdown`)
 - dont load quoted messages asynchronously
-- update deltachat-node to v1.65.0
 - Fetch more messages if as close as 200px to top of MessageList
 - Join group via qr-code is now async (group already opens, no wait time)
 - show only the relevant copy action in the context menu (selection, link, email or text depending on where the context menu was invoked)
+- Use Qrcode svg from core
 - Update translations (29.11.2021)
 
 ### Fixed
