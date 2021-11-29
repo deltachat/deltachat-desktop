@@ -56,9 +56,9 @@ export default class DCChatList extends SplitOut {
 
   getChatListEntryMessageIdForChatId(chatID: number): number {
     // workaround until this is in core
-    const chatList = this.selectedAccountContext.getChatList(0,'',null)
+    const chatList = this.selectedAccountContext.getChatList(0, '', null)
     for (let counter = 0; counter < chatList.getCount(); counter++) {
-      if(chatID == chatList.getChatId(counter)) {
+      if (chatID == chatList.getChatId(counter)) {
         return chatList.getMessageId(counter)
       }
     }

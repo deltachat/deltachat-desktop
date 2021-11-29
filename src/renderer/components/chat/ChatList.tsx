@@ -404,7 +404,10 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
     const updateChatListItem = async (chatId: number) => {
       debouncingChatlistItemRequests[chatId] = 1
       // the message id of the event could be an older message than the newest message (for example msg-read event)
-      const messageId = await DeltaBackend.call('chatList.getChatListEntryMessageIdForChatId', chatId)
+      const messageId = await DeltaBackend.call(
+        'chatList.getChatListEntryMessageIdForChatId',
+        chatId
+      )
       setChatLoading(state => ({
         ...state,
         [chatId]: LoadStatus.FETCHING,
