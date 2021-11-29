@@ -28,9 +28,9 @@ jobs:
     - name: npm run build
       run: |
         npm run build
-    - name: npm test
+    - name: npm test-unit
       run: |
-        npm test
+        npm run test-unit
     - uses: DevExpress/testcafe-action@latest
       with:
         version: "1.14.0"
