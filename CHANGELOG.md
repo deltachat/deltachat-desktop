@@ -12,6 +12,7 @@
 - reload profile image on `DC_EVENT_SELFAVATAR_CHANGED` in settings
 
 ### Changed
+- Upgrade deltachat-node to `v1.68.0`
 - Bring back the back and close button in dialogs, move actions that need an ok/cancel button into it's own dialogs
 - show contacts that are already in group in add member dialog, but disabled
 - show chips for members to add
