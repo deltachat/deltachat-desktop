@@ -15,9 +15,9 @@ export const ipcBackend = ipcRenderer
 // as an array of strings.
 export function onDCEvent(
   event: string | string[],
-  cb: (data1: string, data2: string) => void
+  cb: (data1: number, data2: string | number) => void
 ) {
-  const wrapperCb = (_: any, [data1, data2]: [string, string]) => {
+  const wrapperCb = (_: any, [data1, data2]: [number, string | number]) => {
     cb(data1, data2)
   }
   if (Array.isArray(event)) {
