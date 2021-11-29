@@ -31,7 +31,9 @@
     <string name="back">Geri</string>
     <string name="close">Kapat</string>
     <string name="forward">İlet</string>
+    <!-- In the meaning of "To archive", "Put a chat to the archive". This string does not mean "The Archive". -->
     <string name="archive">Arşivle</string>
+    <!-- In the meaning of "To unarchive", "Remove a chat from the archive", opposite of the previous string -->
     <string name="unarchive">Arşivleme</string>
     <string name="mute">Sessize Al</string>
     <string name="ephemeral_messages">Kaybolan İletiler</string>
@@ -83,6 +85,9 @@
     <string name="this_month">Bu ay</string>
     <string name="last_week">Geçen hafta</string>
     <string name="last_month">Geçen ay</string>
+    <!-- the placeholder will be replaced by a date or time, resulting eg. in "Last seen at 12:13 AM" or "Last seen Nov 12" -->
+    <string name="last_seen_at">Son görülme %1$s</string>
+    <string name="last_seen_unknown">Son görülme: Bilinmeyen</string>
     <!-- Translators: show beside messages that are "N minutes old". prefer a short string, prefer abbreviations if they're well-known -->
     <plurals name="n_minutes">
         <item quantity="one">%d dk</item>
@@ -203,6 +208,7 @@
     <string name="menu_copy_link_to_clipboard">Bağlantıyı Kopyala</string>
     <string name="menu_copy_text_to_clipboard">Metni Kopyala</string>
     <string name="menu_copy_image_to_clipboard">Görseli Kopyala</string>
+    <string name="menu_copy_email_to_clipboard">E-Postayı Kopyala</string>
     <string name="paste_from_clipboard">Panodan Yapıştır</string>
     <string name="menu_forward">İletiyi İlet</string>
     <string name="menu_resend">İletiyi Yeniden Gönder</string>
@@ -353,7 +359,7 @@
     </plurals>
     <string name="chat_no_messages_hint">%1$s alıcısına ileti gönder:\n\n• %2$s Delta Chat kullanmıyorsa tamam.\n\n• İlk iletinin teslim edilmesi biraz zaman alabilir ve şifrelenmeyebilir.</string>
     <string name="chat_new_broadcast_hint">Bir yayın listesinde, diğerleri sizinle olan özel sohbetlerinde ileti alacak.\n\nAlıcılar birbirlerinin farkında olmayacak.</string>
-    <string name="chat_new_group_hint">İlk iletiyi oluşturun, diğerlerinin bu grupta yanıtlamasına izin verin.\n\n• Tüm üyeler Delta Chat kullanmıyorsa tamam.\n\n• İlk iletinin teslim edilmesi biraz zaman alabilir.</string>
+    <string name="chat_new_group_hint">Diğerleri, yalnızca siz bir ilk ileti gönderdikten sonra bu grubu görecek.</string>
     <string name="chat_record_slide_to_cancel">Vazgeçmek için kaydırın</string>
     <string name="chat_record_explain">Bir sesli ileti kaydetmek için dokunun ve basılı tutun, göndermek için bırakın</string>
     <string name="chat_no_chats_yet_title">Boş gelen kutusu.\nYeni bir sohbete başlamak için \"+\" simgesine basın.</string>
@@ -770,9 +776,11 @@
     <string name="qrshow_x_verified">%1$s doğrulandı.</string>
     <string name="qrshow_x_has_joined_group">%1$s gruba katıldı.</string>
     <string name="qrshow_join_group_title">QR Davet Kodu</string>
-    <string name="qrshow_join_group_hint">\"%1$s\" grubuna katılmak için bunu tarayın.</string>
+    <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by the group name, eg. "Scan to join group \"Testing group\"" -->
+    <string name="qrshow_join_group_hint">\"%1$s\" grubuna katılmak için bunu tarayın</string>
     <string name="qrshow_join_contact_title">QR Davet Kodu</string>
-    <string name="qrshow_join_contact_hint">%1$s ile bir iletişim ayarlamak için bunu tarayın.</string>
+    <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and address eg. "Scan to chat with Alice (alice@example.org)" -->
+    <string name="qrshow_join_contact_hint">%1$s ile bir iletişim ayarlamak için bunu tarayın</string>
     <string name="qrshow_join_contact_no_connection_hint">QR kod ayarlaması bir Internet bağlantısı gerektirir. İşlemden önce lütfen bir ağa bağlanın.</string>
     <string name="qrshow_join_contact_no_connection_toast">Internet bağlantısı yok; QR kod ayarlaması gerçekleştirilemiyor.</string>
     <string name="qraccount_ask_create_and_login">\"%1$s\" üzerinde yeni e-posta adresi oluşturulsun ve oturum açılsın mı?</string>
@@ -792,7 +800,7 @@
     <string name="copy_qr_data_success">QR URL\'si panoya kopyalandı</string>
     <string name="mailto_dialog_header_select_chat">İletinin gönderileceği sohbeti seçin</string>
     <!-- first placeholder is the name of the chat -->
-    <string name="mailto_dialog_confirm_replace_draft">%1$s zaten taslak bir ileti; onu değiştirmek istiyor musunuz?</string>
+    <string name="confirm_replace_draft">%1$s zaten bir taslak ileti; onu değiştirmek istiyor musunuz?</string>
     <string name="mailto_link_could_not_be_decoded">mailto bağlantısının kodu çözülemedi: %1$s</string>
 
     <!-- notifications  -->
@@ -889,7 +897,7 @@
     <string name="ask_delete_chat_desktop">Bu sohbet silinsin mi?</string>
     <string name="email_validation_failed_desktop">E-posta adresi gerekli.</string>
     <string name="forget_login_confirmation_desktop">Bu oturum silinsin mi? Uçtan uca ayarlamanızı, kişilerinizi, sohbetlerinizi, iletilerinizi ve ortamlarınızı kapsayarak her şey silinecek. Bu eylem geri alınamaz.</string>
-    <string name="account_info_hover_tooltip_desktop">E-posta: %1$s\nBoyut: %2$s\nYol: %3$s</string>
+    <string name="account_info_hover_tooltip_desktop2">E-Mail: %1$s\nSize: %2$s\nAccount Id: %3$s</string>
     <string name="me_desktop">ben</string>
     <string name="in_this_group_desktop">Grup Üyeleri</string>
     <string name="not_in_this_group_desktop">Olası grup üyeleri (grupta değil)</string>
@@ -903,6 +911,7 @@
     <string name="explain_desktop_minimized_disabled_tray_pref">Delta Chat --minimized seçeneğiyle başlatıldığından tepsi simgesi etkisizleştirilemez.</string>
     <string name="no_spellcheck_suggestions_found">Yazım önerileri bulunamadı.</string>
     <string name="show_window">Pencereyi Göster</string>
+    <string name="login_socks5_experimental_warning">SOCKS5 desteği şu anda deneysel. Lütfen riski size ait olarak kullanın. E-posta alanına bir adres yazarsanız, SOCKS5 üzerinden tünellenmeyen DNS araması olacak.</string>
 
     <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">Teslimat durumu: Hata</string>
@@ -937,9 +946,6 @@
 
 
     <!-- device messages for updates -->
-    <string name="update_1_20">1.20 sürümünde geliştirilen e-posta uyumluluğu:\n\n📫 Posta listelerini okuma\n📭 HTML postaları okuma\n📪 Destek adreslerini iyi işleme\n📫 Çoğu büyük ve küçük sorunlar düzeltildi\n\nPostaya yönelik bu ilk adımlar ve daha fazlası hakkındaki yeni blog gönderimizi okuyun:</string>
-    <string name="update_1_22">1.22\'de ne yeni?\n\n👋 Sohbet İstekleri artık tekli sohbetler olarak açılır ve kabul etmeden ya da engellemeden önce ayrıntılı incelenebilir\n\n🗄️ Arşiv şimdi ana menüden kolayca erişilebilirdir - orada eski isteklerinizi de bulacaksınız\n\n📮📮📮 Çoklu hesap geliştirildi: Hesaplar arasında geçiş yapmak artık daha hızlı ve uzun güncelleştirmeler tarafından daha az engellenir\n\n🤔 Neler olduğunu bilin: Bağlantı sorunları artık başlık çubuğunda gösterilir, ayrıntılar için dokunun\n\nDaha fazlası blogda:</string>
-    <string name="update_1_22_ios">1.22\'de ne yeni?\n\n👋 Sohbet İstekleri artık tekli sohbetler olarak açılır ve kabul etmeden ya da engellemeden önce ayrıntılı incelenebilir\n\n🗄️ Arşiv şimdi ana menüden kolayca erişilebilirdir - orada eski isteklerinizi de bulacaksınız\n\n📮📮📮 Çoklu hesap geliştirildi: Hesaplar arasında geçiş yapmak artık daha hızlı ve uzun güncelleştirmeler tarafından daha az engellenir\n\n🤔 Neler olduğunu bilin: Bağlantı sorunları artık başlık çubuğunda gösterilir, ayrıntılar için dokunun\n\nDaha fazlası blogda:</string>
     <string name="update_1_24_android">Bir bakışta 1.24:\n\n• Dokunmaları kaydedin: Sohbet listesinin sol üst köşesinden hesap seçimi\n• Daha fazla dokunmayı kaydedin: Son sohbetleri doğrudan açmak için uygulama simgesine uzun dokunun\n• Akışı kaydedin: Gerektiğinde büyük dosyaları indirin\n• Sinirleri kaydedin: Daha hızlı, engellenmeyen QR kod katılımları ve yeni QR kod seçenekleri\n\nDaha fazlası 👉</string>
     <string name="update_1_24_ios">Bir bakışta 1.24:\n\n• Sohbetin profilinden bir sohbet içi arama başlatın\n• \n• Akışı kaydedin: Gerektiğinde büyük dosyaları indirin\n• Sinirleri kaydedin: Daha hızlı, engellenmeyen QR kod katılımları\n\nDaha fazlası 👉</string>
-</resources>
+    </resources>

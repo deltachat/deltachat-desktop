@@ -31,7 +31,9 @@
     <string name="back">Назад</string>
     <string name="close">Закрыть</string>
     <string name="forward">Переслать</string>
+    <!-- In the meaning of "To archive", "Put a chat to the archive". This string does not mean "The Archive". -->
     <string name="archive">В архив</string>
+    <!-- In the meaning of "To unarchive", "Remove a chat from the archive", opposite of the previous string -->
     <string name="unarchive">Из архива</string>
     <string name="mute">Отключить уведомления</string>
     <string name="ephemeral_messages">Исчезающие сообщения</string>
@@ -83,6 +85,9 @@
     <string name="this_month">В этом месяце</string>
     <string name="last_week">Прошлая неделя</string>
     <string name="last_month">Прошлый месяц</string>
+    <!-- the placeholder will be replaced by a date or time, resulting eg. in "Last seen at 12:13 AM" or "Last seen Nov 12" -->
+    <string name="last_seen_at">Последний раз был в %1$s</string>
+    <string name="last_seen_unknown">Последний раз был: Неизвестно</string>
     <!-- Translators: show beside messages that are "N minutes old". prefer a short string, prefer abbreviations if they're well-known -->
     <plurals name="n_minutes">
         <item quantity="one">%d минуту</item>
@@ -217,6 +222,7 @@
     <string name="menu_copy_link_to_clipboard">Копировать ссылку</string>
     <string name="menu_copy_text_to_clipboard">Копировать текст</string>
     <string name="menu_copy_image_to_clipboard">Копировать изображение</string>
+    <string name="menu_copy_email_to_clipboard">Копировать E-Mail</string>
     <string name="paste_from_clipboard">Вставить из буфера обмена</string>
     <string name="menu_forward">Переслать сообщение</string>
     <string name="menu_resend">Продублировать сообщение</string>
@@ -798,8 +804,10 @@
     <string name="qrshow_x_verified">%1$s проверен.</string>
     <string name="qrshow_x_has_joined_group">%1$s присоединился к группе.</string>
     <string name="qrshow_join_group_title">QR код приглашения</string>
+    <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by the group name, eg. "Scan to join group \"Testing group\"" -->
     <string name="qrshow_join_group_hint">Отсканируйте код, чтобы присоединиться к группе «%1$s».</string>
     <string name="qrshow_join_contact_title">QR код приглашения</string>
+    <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and address eg. "Scan to chat with Alice (alice@example.org)" -->
     <string name="qrshow_join_contact_hint">Отсканируйте, чтобы создать контакт с %1$s</string>
     <string name="qrshow_join_contact_no_connection_hint">Для настройки по QR коду необходимо интернет соединение. Сначала подключитесь к сети интернет.</string>
     <string name="qrshow_join_contact_no_connection_toast">Нет соединения к интернету, невозможно начать процесс настройки по QR коду.</string>
@@ -820,7 +828,7 @@
     <string name="copy_qr_data_success">Ссылка из QR кода скопирована в буфер обмена</string>
     <string name="mailto_dialog_header_select_chat">Выберите чат для отправки сообщение</string>
     <!-- first placeholder is the name of the chat -->
-    <string name="mailto_dialog_confirm_replace_draft">%1$s уже существует в черновике, вы хотите его заменить? </string>
+    <string name="confirm_replace_draft">%1$s уже имеет черновик, вы хотите его заменить?</string>
     <string name="mailto_link_could_not_be_decoded">ссылка mailto не может быть декодирована: %1$s</string>
 
     <!-- notifications  -->
@@ -917,7 +925,7 @@
     <string name="ask_delete_chat_desktop">Действительно удалить этот чат?</string>
     <string name="email_validation_failed_desktop">Требуется адрес электронной почты.</string>
     <string name="forget_login_confirmation_desktop">Удалить эту учётную запись? Все данные будут удалены, включая настройки сквозного шифрования, контакты, чаты, сообщения и медиа файлы. Это действие нельзя будет отменить.</string>
-    <string name="account_info_hover_tooltip_desktop">Эл.почта: %1$s\nРазмер: %2$s\nПуть: %3$s</string>
+    <string name="account_info_hover_tooltip_desktop2">Эл.почта: %1$s\nРазмер: %2$s\nПуть: %3$s</string>
     <string name="me_desktop">мне</string>
     <string name="in_this_group_desktop">Участники группы</string>
     <string name="not_in_this_group_desktop">Потенциальные участники (не в группе)</string>
@@ -931,6 +939,7 @@
     <string name="explain_desktop_minimized_disabled_tray_pref">Значок в трее нельзя отключить, так как Delta Chat был запущен с параметром --свернуть</string>
     <string name="no_spellcheck_suggestions_found">Предложений по правописанию не найдено. </string>
     <string name="show_window">Показать Окно</string>
+    <string name="login_socks5_experimental_warning">Поддержка SOCKS5 в настоящее время экспериментальная. Используйте на свой риск. Если вы введете свой адрес электронной почты, DNS-запросы, которые не туннелируются через SOCKS5, не будут произведены.</string>
 
     <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">Статус доставки: Ошибка</string>
@@ -966,7 +975,6 @@
 
 
     <!-- device messages for updates -->
-    <string name="update_1_20">Улучшенная совместимость с эл.почтой в версии 1.20:\n\n📫 Чтение рассылок\n📭 Чтение HTML-писем\n📪 Улучшенная обработка адресов поддержки\n📫 Множество незначительных и значительных улучшений\n\nПрочтите нашу новую заметку в блоге об этих первых шагах к почте и многом другом: </string>
-    <string name="update_1_22">Что нового в 1.22?\n\n👋 Запросы контактов теперь отображаются как отдельные чаты и их можно просмотреть перед тем как принять или заблокировать\n\n🗄️ Архив теперь доступен из главного меню, там же вы можете найти старые запросы контактов\n\n📮📮📮 Улучшена поддержка множества аккаунтов: переключение между аккаунтами теперь быстрее и не задерживается загрузкой новых сообщений\n\n🤔 Проблемы с подключением теперь отображаются в заголовке — нажмите на него, чтобы узнать подробности\n\nБольше в блоге:</string>
-    <string name="update_1_22_ios">Что нового в 1.22?\n\n👋 Запросы контактов теперь отображаются как отдельные чаты и их можно просмотреть перед тем как принять или заблокировать\n\n🗄️ Архив теперь доступен из настроек - в нем вы также найдете старые запросы контактов\n\n📮📮📮 Добавлена поддержка множества аккаунтов: переключайте аккаунты и управляйте ими в настройках\n\n🤔 Проблемы с подключением теперь отображаются в заголовке — нажмите на него, чтобы узнать подробности\n\nБольше в блоге:</string>
+    <string name="update_1_24_android">Коротко о 1.24:\n\n• Смена аккаунта в левом верхнем углу списка чатов\n• Долгое нажатие на иконке приложения чтобы открыть список последних чатов напрямую\n• Отложенная загрузка больших файлов\n• Быстрое неблокирующее сканирование QR-кодов\n\nПодробнее на 👉</string>
+    <string name="update_1_24_ios">Коротко о 1.24:\n\n• Начинайте поиск в чате из профиля чата\n• Отложенная загрузка больших файлов\n• Быстрое неблокирующее сканирование QR-кодов\n\nПодробнее на 👉</string>
     </resources>

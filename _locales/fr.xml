@@ -31,7 +31,9 @@
     <string name="back">Retour</string>
     <string name="close">Fermer</string>
     <string name="forward">Faire suivre</string>
+    <!-- In the meaning of "To archive", "Put a chat to the archive". This string does not mean "The Archive". -->
     <string name="archive">Archiver</string>
+    <!-- In the meaning of "To unarchive", "Remove a chat from the archive", opposite of the previous string -->
     <string name="unarchive">Désarchiver</string>
     <string name="mute">Sourdine</string>
     <string name="ephemeral_messages">Messages éphémères</string>
@@ -770,8 +772,10 @@
     <string name="qrshow_x_verified">%1$s vérifiés.</string>
     <string name="qrshow_x_has_joined_group">%1$s a rejoint le groupe.</string>
     <string name="qrshow_join_group_title">QR code d\'invitation</string>
+    <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by the group name, eg. "Scan to join group \"Testing group\"" -->
     <string name="qrshow_join_group_hint">Scannez ceci pour rejoindre le groupe \"%1$s\".</string>
     <string name="qrshow_join_contact_title">QR code d\'invitation</string>
+    <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and address eg. "Scan to chat with Alice (alice@example.org)" -->
     <string name="qrshow_join_contact_hint">Scanner ceci pour créer un contact avec %1$s</string>
     <string name="qrshow_join_contact_no_connection_hint">\'installation du QR code nécessite une connexion Internet. Veuillez vous connecter à un réseau avant de continuer.</string>
     <string name="qrshow_join_contact_no_connection_toast">Pas de connexion Internet, ne peut pas effectuer la configuration du QR code.</string>
@@ -791,8 +795,6 @@
     <string name="verified_group_explain">Les groupes vérifiés (fonction expérimentale) offrent une sécurité contre les attaques actives. Les membres sont vérifiés avec un second facteur par d\'autres membres et les messages sont toujours chiffrés de bout en bout.</string>
     <string name="copy_qr_data_success">L\'URL du code QR a été copié dans le presse-papiers</string>
     <string name="mailto_dialog_header_select_chat">Sélectionnez une discussion à qui envoyer le message</string>
-    <!-- first placeholder is the name of the chat -->
-    <string name="mailto_dialog_confirm_replace_draft">%1$sa déjà un message en brouillon, voulez-vous le remplacer?</string>
     <string name="mailto_link_could_not_be_decoded">Le lien mailto n\'a pas pu être décodé: %1$s</string>
 
     <!-- notifications  -->
@@ -889,7 +891,6 @@
     <string name="ask_delete_chat_desktop">Effacer cette discussion?</string>
     <string name="email_validation_failed_desktop">Adresse email requise.</string>
     <string name="forget_login_confirmation_desktop">Effacer cette connexion? Tout sera supprimé, y compris vos réglages bout en bout, contacts, discussions, messages et les fichiers multimédia. Cette action ne peut pas être défaite.</string>
-    <string name="account_info_hover_tooltip_desktop">Courriel : %1$s\nTaille : %2$s\nChemin : %3$s</string>
     <string name="me_desktop">moi</string>
     <string name="in_this_group_desktop">Membres du groupe</string>
     <string name="not_in_this_group_desktop">Membres de groupe possibles (pas dans groupe)</string>
@@ -903,7 +904,6 @@
     <string name="explain_desktop_minimized_disabled_tray_pref">L\'icône système ne peut pas être enlevé car Delta Chat a été démarré avec l\'option --minimized.</string>
     <string name="no_spellcheck_suggestions_found">Aucune propositions de correction trouvées.</string>
     <string name="show_window">Afficher la fenêtre</string>
-
     <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">État de la livraison : Erreur</string>
     <string name="a11y_encryption_padlock">Cadenas de chiffrement</string>
@@ -936,8 +936,4 @@
     <string name="perm_enable_bg_already_done">Vous avez déjà autorisé Delta Chat à recevoir des messages en arrière plan.\n\nSi vous ne les recevez toujours pas en arrière plan, vérifiez les paramètres de votre système.</string>
 
 
-    <!-- device messages for updates -->
-    <string name="update_1_20">Compatibilité avec les courriel améliorés en version 1.20:\n\n📫 Lis les listes de diffusion\n📭 Lis les courriels au format HTML\n📪 Bon support des addresses de support\n📫 Beaucoup de nuisances mineures et majeures corrigées\n\nLisez notre nouveau billet de blog à propos de ces avancés sur le mail et plus:</string>
-    <string name="update_1_22">Quoi de neuf dans la 1.22?\n\n👋 Les demandes de contacts apparaissent dorénavant comme une discussion à part et peuvent être inspectées en détail avant de les accepter ou de les bloquer\n\n🗄️ L\'Archive est maintenant facilement accessible depuis les paramètres - vous trouverez aussi par là vos anciennes demande de contacts\n\n📮📮📮 Amélioration du multi-compte: le changement de comptes est maintenant plus rapide et moins souvent bloqué par de longues mises à jour 🤔 Sachez ce qui se passe: les problèmes de connectivité sont maintenant montrés dans le titre de la fenêtre, cliquez dessus pour plus de détails\n\nPlus sur notre blog:</string>
-    <string name="update_1_22_ios">Quoi de neuf dans la 1.22?\n\n👋 Les demandes de contacts apparaissent dorénavant comme une discussion à part et peuvent être inspectées en détail avant de les accepter ou de les bloquer\n\n🗄️ L\'Archive est maintenant facilement accessible depuis les paramètres - vous trouverez aussi par là vos anciennes demande de contacts\n\n📮📮📮 Comptes multiples ajoutés: Passez de l\'un à l\'autre et gérez les depuis vos paramètres\n\n🤔 Sachez ce qui se passe: les problèmes de connectivité sont maintenant montrés dans le titre de la fenêtre, cliquez dessus pour plus de détails\n\nPlus sur notre blog:</string>
     </resources>

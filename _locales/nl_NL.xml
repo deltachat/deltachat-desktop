@@ -31,7 +31,9 @@
     <string name="back">Terug</string>
     <string name="close">Sluiten</string>
     <string name="forward">Doorsturen</string>
+    <!-- In the meaning of "To archive", "Put a chat to the archive". This string does not mean "The Archive". -->
     <string name="archive">Archiveren</string>
+    <!-- In the meaning of "To unarchive", "Remove a chat from the archive", opposite of the previous string -->
     <string name="unarchive">De-archiveren</string>
     <string name="mute">Negeren</string>
     <string name="ephemeral_messages">Verdwijnende berichten</string>
@@ -83,6 +85,9 @@
     <string name="this_month">Deze maand</string>
     <string name="last_week">Vorige week</string>
     <string name="last_month">Vorige maand</string>
+    <!-- the placeholder will be replaced by a date or time, resulting eg. in "Last seen at 12:13 AM" or "Last seen Nov 12" -->
+    <string name="last_seen_at">Laatst gezien om %1$s</string>
+    <string name="last_seen_unknown">Laatst gezien: onbekend</string>
     <!-- Translators: show beside messages that are "N minutes old". prefer a short string, prefer abbreviations if they're well-known -->
     <plurals name="n_minutes">
         <item quantity="one">%d minuut</item>
@@ -203,6 +208,7 @@
     <string name="menu_copy_link_to_clipboard">Link kopiëren</string>
     <string name="menu_copy_text_to_clipboard">Tekst kopiëren</string>
     <string name="menu_copy_image_to_clipboard">Afbeelding kopiëren</string>
+    <string name="menu_copy_email_to_clipboard">E-mailadres kopiëren</string>
     <string name="paste_from_clipboard">Plakken van klembord</string>
     <string name="menu_forward">Bericht doorsturen</string>
     <string name="menu_resend">Bericht opnieuw versturen</string>
@@ -353,7 +359,7 @@
     </plurals>
     <string name="chat_no_messages_hint">Verstuur een bericht aan %1$s:\n\n• %2$s hoeft Delta Chat niet te gebruiken.\n\n• Het afleveren van het eerste bericht kan even duren en onversleuteld zijn.</string>
     <string name="chat_new_broadcast_hint">Als je een verzendlijst maakt, dan onhvangen anderen bericht van jou in hun privégesprekken.\n\nDe ontvangers kunnen elkaar echter niet zien.</string>
-    <string name="chat_new_group_hint">Stel het eerste bericht op, zodat anderen binnen deze groep kunnen reageren.\n\n• Niet alle leden hoeven Delta Chat te gebruiken.\n\n• Het afleveren van het eerste bericht kan even duren.</string>
+    <string name="chat_new_group_hint">Stel het eerste bericht op, zodat anderen binnen deze groep kunnen reageren.</string>
     <string name="chat_record_slide_to_cancel">Veeg opzij om te annuleren</string>
     <string name="chat_record_explain">Houdt ingedrukt om een spraakbericht op te nemen; laat los om te versturen</string>
     <string name="chat_no_chats_yet_title">Je Postvak IN is leeg.\nDruk op \"+\" om een gesprek te beginnen.</string>
@@ -770,9 +776,11 @@
     <string name="qrshow_x_verified">%1$s is goedgekeurd.</string>
     <string name="qrshow_x_has_joined_group">%1$s neemt nu deel aan de groep.</string>
     <string name="qrshow_join_group_title">QR-uitnodigingscode</string>
+    <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by the group name, eg. "Scan to join group \"Testing group\"" -->
     <string name="qrshow_join_group_hint">Scan dit om deel te nemen aan de groep ‘%1$s’.</string>
     <string name="qrshow_join_contact_title">QR-uitnodigingscode</string>
-    <string name="qrshow_join_contact_hint">Scan dit om een contactpersoon in te stellen met %1$s</string>
+    <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and address eg. "Scan to chat with Alice (alice@example.org)" -->
+    <string name="qrshow_join_contact_hint">Scan dit om een gesprek te beginnen met %1$s</string>
     <string name="qrshow_join_contact_no_connection_hint">Voor het instellen van QR-codes is een internetverbinding vereist. Maak verbinding en probeer het opnieuw.</string>
     <string name="qrshow_join_contact_no_connection_toast">Geen internetverbinding; kan QR-codes niet instellen.</string>
     <string name="qraccount_ask_create_and_login">Wil je een nieuw e-mailadres aanmaken op ‘%1$s’ en daarmee inloggen?</string>
@@ -792,7 +800,7 @@
     <string name="copy_qr_data_success">De QR-url is gekopieerd naar het klembord</string>
     <string name="mailto_dialog_header_select_chat">Kies in welk gesprek je dit bericht wilt delen</string>
     <!-- first placeholder is the name of the chat -->
-    <string name="mailto_dialog_confirm_replace_draft">%1$s bevat al een concept. Wil je dit vervangen?</string>
+    <string name="confirm_replace_draft">%1$s bevat al een concept. Wil je dit vervangen?</string>
     <string name="mailto_link_could_not_be_decoded">De mailto-link kan niet worden ontcijferd: %1$s</string>
 
     <!-- notifications  -->
@@ -889,7 +897,7 @@
     <string name="ask_delete_chat_desktop">Weet je zeker dat je dit gesprek wilt verwijderen?</string>
     <string name="email_validation_failed_desktop">E-mailadres vereist.</string>
     <string name="forget_login_confirmation_desktop">Wil je dit account verwijderen? Alles wordt verwijderd: je eind-tot-eindinstellingen, contactpersonen, gesprekken, berichten en media. Deze actie kan niet ongedaan worden gemaakt.</string>
-    <string name="account_info_hover_tooltip_desktop">E-Mail: %1$s\nGrootte: %2$s\nPad: %3$s</string>
+    <string name="account_info_hover_tooltip_desktop2">E-mail: %1$s\nGrootte: %2$s\nAccount-id: %3$s</string>
     <string name="me_desktop">ik</string>
     <string name="in_this_group_desktop">Groepsleden</string>
     <string name="not_in_this_group_desktop">Potentiële groepsleden (niet in de groep)</string>
@@ -903,6 +911,7 @@
     <string name="explain_desktop_minimized_disabled_tray_pref">Het systeemvakpictogram is uitgeschakeld omdat Delta Chat is gestart met de optie --minimized</string>
     <string name="no_spellcheck_suggestions_found">Geen suggesties gevonden.</string>
     <string name="show_window">Venster tonen</string>
+    <string name="login_socks5_experimental_warning">De SOCKS5-ondersteuning is momenteel nog experimenteel - gebruik hiervan is op eigen risico. Als je een e-mailadres invoert, dan vindt er een dns-opzoeking plaats die niet wordt doorgesluisd via SOCKS5.</string>
 
     <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">Bezorgstatus: afleveren mislukt</string>
@@ -937,9 +946,7 @@
 
 
     <!-- device messages for updates -->
-    <string name="update_1_20">Verbeterde e-mailcompatibiliteit in versie 1.20:\n\n📫 Lees mailinglijsten\n📭 Lees html-e-mails\n📪 Betere afhandeling van ondersteuningsadressen\n📫 Vele grotere en kleinere problemen opgelost\n\nLees ons nieuwste blogartikel over deze eerste stappen naar e-mail en meer (Engels):</string>
-    <string name="update_1_22">Wijzigingslog van versie 1.22:\n\n👋 Gespreksverzoeken worden nu getoond als losse gesprekken en kunnen worden bestudeerd alvorens de verzoeken te accepteren of af te wijzen\n\n🗄️ Het archief is voortaan te bereiken via het hoofdmenu, waar je tevens oude gespreksverzoeken vindt\n\n📮📮📮 Verbeterde ondersteuning voor meerdere accounts: het schakelen gaat voortaan veel sneller\n\n🤔 Blijf op de hoogte: verbindingsproblemen worden voortaan getoond in het meldingsgebied\n\nMeer informatie is te vinden op ons blog (Engels):</string>
-    <string name="update_1_22_ios">Wijzigingslog van versie 1.22:\n\n👋 Gespreksverzoeken worden nu getoond als losse gesprekken en kunnen worden bestudeerd alvorens de verzoeken te accepteren of af te wijzen\n\n🗄️ Het archief is voortaan te bereiken via het hoofdmenu, waar je tevens oude gespreksverzoeken vindt\n\n📮📮📮 Verbeterde ondersteuning voor meerdere accounts: het schakelen gaat voortaan veel sneller\n\n🤔 Blijf op de hoogte: verbindingsproblemen worden voortaan getoond in het meldingsgebied\n\nMeer informatie is te vinden op ons blog (Engels):</string>
     <string name="update_1_24_android">1.24 samengevat:\n\n• Bespaar moeite: accountkeuze zit nu links bovenaan de gesprekslijst\n• Bespaar nóg meer moeite: houd het app-pictogram lang ingedrukt om recente gesprekken direct te openen\n• Bespaar data: download grote bestanden alléén indien nodig\n• Bespaar frustratie: snellere, niet-in-de-weg-zittende QR-codes en nieuwe QR-code-opties\n\nMeer informatie is te vinden op 👉</string>
     <string name="update_1_24_ios">1.24 samengevat:\n\n• Doorzoek gesprekken vanuit profielen\n• Bespaar data: download grote bestanden alléén indien nodig\n• Bespaar frustratie: snellere, niet-in-de-weg-zittende QR-codes en nieuwe QR-code-opties\n\nMeer informatie 👉</string>
+    <string name="update_1_26">1.26 oppoetsen 💅\n\n• Sinds 1.24 zitten QR-codes niet langer in de weg, maar sinds deze versie zien ze er ook nog eens beter uit - op alle ondersteunde systemen!\n• Profielfoto\'s en tellers zien er nu overal hetzelfde uit\n• Heel veel bugs opgelost</string>
 </resources>
