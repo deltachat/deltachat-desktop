@@ -395,11 +395,16 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
     })
   }
 
+  const debouncingChatlistItemRequests: { [chatid: number]: number } = {}
+
   const onChatListItemChanged = (
     _event: any,
-    [chatId, messageId]: [number, number]
+    [chatId, _messageId]: [number, number]
   ) => {
-    const updateChatListItem = async (chatId: number, messageId: number) => {
+    const updateChatListItem = async (chatId: number) => {
+      debouncingChatlistItemRequests[chatId] = 1
+      // the message id of the event could be an older message than the newest message (for example msg-read event)
+      const messageId = await DeltaBackend.call('chatList.getChatListEntryMessageIdForChatId', chatId)
       setChatLoading(state => ({
         ...state,
         [chatId]: LoadStatus.FETCHING,
@@ -413,33 +418,27 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
         ...state,
         [chatId]: LoadStatus.LOADED,
       }))
-    }
-    if (chatId === 0) {
-      // setChatLoading({})
-      // setChatCache({})
-    } else {
-      if (messageId === 0) {
-        // if no message id is provided it tries to take the old one
-        // workaround to get msgId
-        const cachedChat = chatListIdsRef.current?.find(
-          ([cId, _messageId]) => cId === chatId
-        )
-        // check if workaround worked
-        if (cachedChat) {
-          updateChatListItem(chatId, cachedChat[1])
-        } else {
-          log.warn(
-            'onChatListItemChanged triggered, but no message id was provided nor found in the cache'
-          )
-        }
+      if (debouncingChatlistItemRequests[chatId] > 1) {
+        updateChatListItem(chatId)
       } else {
-        updateChatListItem(chatId, messageId)
+        debouncingChatlistItemRequests[chatId] = 0
+      }
+    }
+    if (chatId !== 0) {
+      if (
+        debouncingChatlistItemRequests[chatId] === undefined ||
+        debouncingChatlistItemRequests[chatId] === 0
+      ) {
+        updateChatListItem(chatId)
+      } else {
+        debouncingChatlistItemRequests[chatId] =
+          debouncingChatlistItemRequests[chatId] + 1
       }
     }
   }
 
   /**
-   * refresh chats a specific contact is in if that contac changed.
+   * refresh chats a specific contact is in if that contact changed.
    * Currently used for updating nickname changes in the summary of chatlistitems.
    */
   const onContactChanged = async (_ev: any, [contactId]: [number]) => {

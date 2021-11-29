@@ -70,6 +70,7 @@ class DeltaRemote {
   ): Promise<{
     [key: number]: ChatListItemType
   }>
+  call(fnName: 'chatList.getChatListEntryMessageIdForChatId', chatID: number): Promise<number>
   call(fnName: 'chatList.getFullChatById', chatId: number): Promise<FullChat>
   call(fnName: 'chatList.getGeneralFreshMessageCounter'): Promise<number> // this method might be used for a favicon badge counter
   // contacts ------------------------------------------------------------

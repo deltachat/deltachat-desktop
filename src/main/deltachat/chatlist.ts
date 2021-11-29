@@ -41,17 +41,28 @@ export default class DCChatList extends SplitOut {
     return list.getChatId(index)
   }
 
-  async getChatListEntries(
+  getChatListEntries(
     ...args: Parameters<typeof Context.prototype.getChatList>
   ) {
     const chatList = this.selectedAccountContext.getChatList(...args)
     const chatListJson: [number, number][] = []
     for (let counter = 0; counter < chatList.getCount(); counter++) {
-      const chatId = await chatList.getChatId(counter)
-      const messageId = await chatList.getMessageId(counter)
+      const chatId = chatList.getChatId(counter)
+      const messageId = chatList.getMessageId(counter)
       chatListJson.push([chatId, messageId])
     }
     return chatListJson
+  }
+
+  getChatListEntryMessageIdForChatId(chatID: number): number {
+    // workaround until this is in core
+    const chatList = this.selectedAccountContext.getChatList(0,'',null)
+    for (let counter = 0; counter < chatList.getCount(); counter++) {
+      if(chatID == chatList.getChatId(counter)) {
+        return chatList.getMessageId(counter)
+      }
+    }
+    return null
   }
 
   async getChatListItemsByEntries(entries: [number, number][]) {
