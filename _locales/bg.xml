@@ -1,3 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- common strings without special context -->
+    <string name="app_name">Delta Chat</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Отказ</string>
+    <string name="clear_search">Изчистване на търсенето</string>
+    <string name="yes">Да</string>
+    <string name="no">Не</string>
+    <string name="select">Избор</string>
+    <string name="def">По подразбиране</string>
+    <string name="default_value">По подразбиране (1%1$s)</string>
+    <string name="default_value_as_above">По подразбиране (същото като по-горе)</string>
+    <string name="custom">Дефиниран от потребителя</string>
+    <string name="none">Без</string>
+    <string name="automatic">Автоматично</string>
+    <string name="strict">Стриктно</string>
+    <string name="download">Сваляне</string>
+    <string name="downloading">Сваля се...</string>
+    <string name="open_attachment">Отваряне на прикачен файл</string>
+    <string name="join">Присъединяване</string>
+    <string name="rejoin">Присъединяване отново</string>
+    <string name="delete">Изтриване</string>
+    <string name="info">Информация</string>
+    <string name="update">Актуализиране</string>
+    <string name="emoji">Emoji</string>
+    <string name="attachment">Прикачен файл</string>
+    <string name="back">Назад</string>
+    <string name="close">Затваряне</string>
+    <string name="forward">Напред</string>
+    <!-- In the meaning of "To archive", "Put a chat to the archive". This string does not mean "The Archive". -->
+    <string name="archive">Архивиране</string>
+    <!-- In the meaning of "To unarchive", "Remove a chat from the archive", opposite of the previous string -->
+    <string name="unarchive">Възстановяване от архив</string>
+    <string name="mute">Изключване на звука</string>
+    <string name="ephemeral_messages">Изчезващи съобщения</string>
+    <string name="ephemeral_messages_hint">Тези настройки са приложими за всички членове на чата, които използват Delta Chat. Въпреки това те могат да копират, записват и препращат съобщения или да използват други клиенти за електронна поща.</string>
+    <string name="save">Записване</string>
+    <string name="chat">Чат</string>
+    <string name="media">Медия</string>
+    <string name="profile">Профил</string>
+    <string name="main_menu">Основно меню</string>
+    <string name="start_chat">Започване на чат</string>
+    <string name="show_full_message">Показване на пълното съобщение</string>
+    <string name="show_full_message_in_browser">Показване на пълното съобщение в браузър...</string>
+    <!-- this is shown as placeholder when something is loading at some places -->
+    <string name="loading">Зареждане...</string>
+    <string name="hide">Скриване</string>
+    <string name="activate">Активиране</string>
+    <string name="load_remote_content">Зареждане на отдалечените изображения</string>
+    <!-- possible answers to the question are: Never, Always, Once -->
+    <string name="load_remote_content_ask">Чрез отдалечени изображения е възможно да бъдете следени.\n\nНастройката също така позволява да се зареждат шрифтове и друго съдъжание. Дори ако е забранена, пак може да виждате вградени или кеширани изображения.\n\nДа се заредят ли отдалечените изображения?</string>
+    <string name="always">Винаги</string>
+    <string name="once">Веднъж</string>
+    <string name="show_password">Показване на паролата</string>
+    <string name="hide_password">Скриване на паролата</string>
+    <string name="not_now">Не сега</string>
+    <string name="never">Никога</string>
+    <string name="one_moment">Един момент...</string>
+    <string name="done">Готово</string>
+    <string name="undo">Отмяна на промените</string>
+    <string name="offline">Офлайн</string>
+    <!-- Translators: used eg. for the next view, could also be "continue" or so. as used in iOS headers, the string should be as short as possible, though. -->
+    <string name="next">Следващ</string>
+    <string name="error">Грешка</string>
+    <string name="error_x">Грешка:%1$s</string>
+    <string name="no_app_to_handle_data">Не може да бъде открито приложение, работещо с данни от този тип.</string>
+    <string name="no_browser_installed">Няма инсталиран браузър.</string>
+    <string name="file_not_found">%1$s не беше открит.</string>
+    <string name="copied_to_clipboard">Копирано в клипборда.</string>
+    <string name="contacts_headline">Лица за контакт</string>
+    <string name="email_address">Адрес за електронна поща</string>
+    <string name="bad_email_address">Невалиден адрес за електронна поща.</string>
+    <string name="password">Парола</string>
+    <string name="existing_password">Съществуваща парола</string>
+    <string name="now">Сега</string>
+    <!-- Translators: used as a headline in sections with actions that cannot be undone. could also be "Caution" or "Cave" or so. -->
+    <string name="danger">Опасност</string>
+    <string name="today">Днес</string>
+    <string name="yesterday">Вчера</string>
+    <string name="this_week">Тази седмица</string>
+    <string name="this_month">Този месец</string>
+    <string name="last_week">Миналата седмица</string>
+    <string name="last_month">Миналия месец</string>
+    <string name="self">Аз</string>
+    <string name="draft">Чернова</string>
+    <string name="image">Изображение</string>
+    <!-- Translators: Used in summaries as "Draft: Reply", similar as "Draft: Image". Use a noun here, not a verb (not: "to reply") -->
+    <string name="reply_noun">Отговор</string>
+    <string name="gif">Gif</string>
+    <!-- "Stickers" as known from other messengers, please pick up the wording from there; in some languages, "Sticker" in english is just fine. -->
+    <string name="sticker">Стикер</string>
+    <string name="images">Изображения</string>
+    <string name="audio">Аудио</string>
+    <string name="voice_message">Гласово съобщение</string>
+    <string name="forwarded">Препратено</string>
+    <string name="forwarded_message">Препратено съобщение</string>
+    <!-- %1$s will be replaced by the name or the e-mail address of the person who has forwarded the message -->
+    <string name="forwarded_by">Препратен от%1$s</string>
+    <string name="video">Видео</string>
+    <string name="documents">Документи</string>
+    <string name="contact">Контакт</string>
+    <string name="verified_contact">Проверен Контакт</string>
+    <string name="camera">Камера</string>
+    <!-- "capture" here means "start a video recording" or "take a photo"; eg. the description of the "shutter button" in the camera controls -->
+    <string name="capture">Заснемане</string>
+    <string name="switch_camera">Превключване на камерата</string>
+    <string name="toggle_fullscreen">Включване/изключване на пълноекранния режим</string>
+    <string name="location">Местоположение</string>
+    <string name="gallery">Галерия</string>
+    <string name="images_and_videos">Изображения и видеоклипове</string>
+    <string name="file">Файл</string>
+    <string name="files">Файлове</string>
+    <string name="unknown">Непознат</string>
+
+    <string name="green">Зелено</string>
+    <string name="red">Червено</string>
+    <string name="blue">Синьо</string>
+    <string name="orange">Оранжево</string>
+    <string name="cyan">Циан</string>
+    <string name="purple">Лилаво</string>
+    <string name="magenta">Маджента</string>
+    <string name="white">Бяло</string>
+
+    <string name="zoom">Мащабиране</string>
+    <string name="extra_small">Много малко</string>
+    <string name="small">Малко</string>
+    <string name="normal">Нормално</string>
+    <string name="large">Голямо</string>
+    <string name="extra_large">Много голямо</string>
+
+    <string name="fast">Бързо</string>
+    <string name="slow">Бавно</string>
+
+    <string name="message_delivered">Събщението е доставено</string>
+    <string name="message_read">Съобщението е прочетено</string>
+
+
+    <!-- menu labels (or icon, buttons...) -->
+    <string name="menu_new_contact">Нов Контакт</string>
+    <string name="menu_new_chat">Нов чат</string>
+    <string name="menu_new_group">Нова група</string>
+    <!-- "Subject" here must be the same wording as used in the e-mail context, so. eg. "Betreff" in german (the idea is to help people coming from the e-mail context) -->
+    <string name="new_group_or_subject">Нова Група или Тема</string>
+    <string name="menu_new_verified_group">Нова Проверена група</string>
+    <!-- consider keeping the term "broadcast"; check how these lists are called eg. on whatsapp in the destination language -->
+    <string name="broadcast_list">Списък за разпространение</string>
+    <string name="broadcast_lists">Списъци за разпространение</string>
+    <string name="new_broadcast_list">Нов Списък за разпространение</string>
+    <string name="add_recipients">Добавяне на получатели</string>
+    <string name="menu_send">Изпращане</string>
+    <string name="menu_toggle_keyboard">Включване/изключване на Emoji клавиатура</string>
+    <string name="menu_edit_group">Редактиране на Група</string>
+    <string name="menu_group_name_and_image">Име и изображение на Група</string>
+    <string name="menu_show_map">Показване на карта</string>
+    <string name="menu_show_global_map">Показване на всички местоположения</string>
+    <string name="menu_archive_chat">Архивиране на чата</string>
+    <string name="menu_unarchive_chat">Възстановяване на чата от архив</string>
+    <string name="menu_add_attachment">Добавяне на прикачен файл</string>
+    <string name="menu_leave_group">Напускане на групата</string>
+    <string name="menu_delete_chat">Изтриване на чата</string>
+    <string name="ask_delete_named_chat">Сигурни ли сте, че искате да изтриете%1$s?</string>
+    <string name="menu_delete_messages">Изтриване на съобщения</string>
+    <string name="menu_delete_image">Изтриване на изображение</string>
+    <string name="delete_contact">Изтриване на контакт</string>
+    <string name="menu_delete_locations">Да бъдат ли изтрити всички местоположения?</string>
+    <string name="menu_delete_location">Да бъде ли изтрито това местоположение?</string>
+    <string name="menu_message_details">Детайли на съобщение</string>
+    <string name="menu_copy_to_clipboard">Копиране в клипборд</string>
+    <string name="menu_copy_selection_to_clipboard">Копиране на избраното</string>
+    <string name="menu_copy_link_to_clipboard">Копиране на връзка</string>
+    <string name="menu_copy_text_to_clipboard">Копиране на текст</string>
+    <string name="menu_copy_image_to_clipboard">Копиране на изображение</string>
+    <string name="paste_from_clipboard">Поставяне от клипборд</string>
+    <string name="menu_forward">Препращане на съобщение</string>
+    <string name="menu_resend">Повторно изпращане на съобщение</string>
+    <string name="menu_reply">Отговор на съобщение</string>
     </resources>

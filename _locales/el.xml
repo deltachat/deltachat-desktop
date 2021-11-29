@@ -20,6 +20,7 @@
     <string name="back">Πίσω</string>
     <string name="close">Κλείσιμο</string>
     <string name="forward">Προώθηση</string>
+    <!-- In the meaning of "To archive", "Put a chat to the archive". This string does not mean "The Archive". -->
     <string name="archive">Αρχειοθέτηση</string>
     <string name="mute">Σίγαση</string>
     <string name="save">Αποθήκευση</string>

@@ -31,7 +31,9 @@
     <string name="back">Mbrapsht</string>
     <string name="close">Mbylle</string>
     <string name="forward">Përpara</string>
+    <!-- In the meaning of "To archive", "Put a chat to the archive". This string does not mean "The Archive". -->
     <string name="archive">Arkivoje</string>
+    <!-- In the meaning of "To unarchive", "Remove a chat from the archive", opposite of the previous string -->
     <string name="unarchive">Çarkivoje</string>
     <string name="mute">Heshtoje</string>
     <string name="ephemeral_messages">Mesazhe që zhduken</string>
@@ -83,6 +85,9 @@
     <string name="this_month">Këtë muaj</string>
     <string name="last_week">Javën e shkuar</string>
     <string name="last_month">Muajin e shkuar</string>
+    <!-- the placeholder will be replaced by a date or time, resulting eg. in "Last seen at 12:13 AM" or "Last seen Nov 12" -->
+    <string name="last_seen_at">Parë së fundi më %1$s</string>
+    <string name="last_seen_unknown">Parë së fundi më: S’dihet</string>
     <!-- Translators: show beside messages that are "N minutes old". prefer a short string, prefer abbreviations if they're well-known -->
     <plurals name="n_minutes">
         <item quantity="one">%d min</item>
@@ -201,6 +206,7 @@
     <string name="menu_copy_link_to_clipboard">Kopjoje lidhjen</string>
     <string name="menu_copy_text_to_clipboard">Kopjo tekstin</string>
     <string name="menu_copy_image_to_clipboard">Kopjo figurën</string>
+    <string name="menu_copy_email_to_clipboard">Kopjo Email</string>
     <string name="paste_from_clipboard">Ngjite prej të papastre</string>
     <string name="menu_forward">Përcille mesazhin</string>
     <string name="menu_resend">Ridërgoje mesazhin</string>
@@ -767,8 +773,10 @@
     <string name="qrshow_x_verified">%1$s u verifikua.</string>
     <string name="qrshow_x_has_joined_group">%1$s u bë pjesë e grupit në mënyrë të sigurt.</string>
     <string name="qrshow_join_group_title">Kod QR ftese</string>
+    <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by the group name, eg. "Scan to join group \"Testing group\"" -->
     <string name="qrshow_join_group_hint">Që të bëheni pjesë e grupit \"%1$s\", skanoni këtë.</string>
     <string name="qrshow_join_contact_title">Kod QR ftese</string>
+    <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and address eg. "Scan to chat with Alice (alice@example.org)" -->
     <string name="qrshow_join_contact_hint">Skanojeni këtë që të rregullohet një kontakt %1$s</string>
     <string name="qrshow_join_contact_no_connection_hint">Ujdisja e kodit QR lyp lidhje në internet. Ju lutemi, përpara se të ecni më tej, lidhuni me një rrjet.</string>
     <string name="qrshow_join_contact_no_connection_toast">S\’ka lidhje në internet, s\’bëhet dot ujdisja e kodit QR.</string>
@@ -789,7 +797,7 @@
     <string name="copy_qr_data_success">URL-ja QR u kopjua në të papastër</string>
     <string name="mailto_dialog_header_select_chat">Përzgjidhni fjalosje ku të dërgohet mesazhi</string>
     <!-- first placeholder is the name of the chat -->
-    <string name="mailto_dialog_confirm_replace_draft">%1$s ka tashmë një mesazh skicë, doni të zëvendësohet?</string>
+    <string name="confirm_replace_draft">%1$s përmban tashmë një skicë mesazhi, doni të zëvendësohet?</string>
     <string name="mailto_link_could_not_be_decoded">s’u shkodua dot lidhje mailto: %1$s</string>
 
     <!-- notifications  -->
@@ -884,7 +892,7 @@
     <string name="ask_delete_chat_desktop">Jeni i sigurt se doni të fshihet kjo fjalosje?</string>
     <string name="email_validation_failed_desktop">Adresa email është e domosdoshme.</string>
     <string name="forget_login_confirmation_desktop">Të fshihet kjo hyrje? Do të fshihet gjithçka, përfshi rregullimin tuaj për skaj-më-skaj, kontaktet, fjalosjet, mesazhet dhe mediat. Ky veprim është përfundimtar dhe s\’mund të prapësohet.</string>
-    <string name="account_info_hover_tooltip_desktop">Email: %1$s\nMadhësi: %2$s\nShteg: %3$s</string>
+    <string name="account_info_hover_tooltip_desktop2">Email: %1$s\nMadhësi: %2$s\nID  Llogarie: %3$s</string>
     <string name="me_desktop">unë</string>
     <string name="in_this_group_desktop">Anëtarë grupi</string>
     <string name="not_in_this_group_desktop">Anëtarë potencialë grupi (jo në grup)</string>
@@ -898,6 +906,7 @@
     <string name="explain_desktop_minimized_disabled_tray_pref">Ikona e panelit s’mund të çaktivizohet, ngaqë Delta Chat qe nisur me mundësinë --minimized.</string>
     <string name="no_spellcheck_suggestions_found">S’u gjetën sugjerimi drejtshkrimi.</string>
     <string name="show_window">Shfaq Dritare</string>
+    <string name="login_socks5_experimental_warning">Mbulimi për SOCKS5 aktualisht është eksperimental. Ju lutemi, përdoreni duke pasur parasysh rrezikun. Nëse shtypni një adresë te fusha e email-it, do të ketë kërkim DNS që nuk do të kalohet përmes SOCKS5.</string>
 
     <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">Gjendje dërgimi: Gabim</string>
@@ -932,9 +941,7 @@
 
 
     <!-- device messages for updates -->
-    <string name="update_1_20">U përmirësua përputhshmëri email-i në versionin 1.20:\n\n📫 Lexoni lista postimesh\n📭 Lexoni email-e HTML\n📪 Trajtim i bukur adresash asistence\n📫 U ndreqën mjaft yçkla të mëdha dhe vockla\n\nLexoni postimin tonë të ri në blog mbi këto hapa të para drejt email-it dhe më tepër:</string>
-    <string name="update_1_22">Ç’ka të re në 1.22?\n\n👋 Kërkesa për fjalosje tanimë hapen si flluska fjalosjesh më vete dhe mund të shqyrtohen në hollësi përpara se të pranohen apo bllokohen\n\n🗄️ Te Arkivi tani mund të hyhet kollaj që nga menuja kryesore - atje do të gjeni edhe kërkesat tuaja të dikurshme\n\n📮📮📮 U përmirësua puna me shumë llogari: Kalimi nga një llogari në një tjetër tanimë është më i shpejtë dhe më rrallë i bllokuar nga përditësime të gjata\n\n🤔 Njihni se ç’po bëhet: Tani e tutje, probleme lidhjeje shfaqen te shtylla e titullit, prekeni për hollësi\n\nMë tepër në blog:</string>
-    <string name="update_1_22_ios">Ç’ka të re në 1.22?\n\n👋 Kërkesa për fjalosje tanimë hapen si flluska fjalosjesh më vete dhe mund të shqyrtohen në hollësi përpara se të pranohen apo bllokohen\n\n🗄️ Te Arkivi tani mund të hyhet kollaj që nga menuja kryesore - atje do të gjeni edhe kërkesat tuaja të dikurshme\n\n📮📮📮 U shtua aftësia për të përdorur disa llogari: Ndërroni dhe administroni llogari te rregullimet\n\n🤔 Njihni se ç’po bëhet: Tani e tutje, probleme lidhjeje shfaqen te shtylla e titullit, prekeni për hollësi\n\nMë tepër në blog:</string>
     <string name="update_1_24_android">1.24 me një vështrim:\n\n• Ruani prekje: Përzgjedhje llogarish te cepi i sipërm majtas i listës së fjalosjeve\n• Ruani më tepër prekje: Prekeni gjatë ikonën e aplikacionit që të hapen drejtpërsëdrejti fjalosje së fundi\n• Ruani trafik: Shkarkoni kartela të mëdha, sipas nevojës\n• Kurseni nervat: hyrje më të shpejta jo bllokuese, me kod QR dhe mundësi të reja kodi QR\n\nMë tepër te 👉</string>
     <string name="update_1_24_ios">1.24 me një vështrim:\n\n• Filloni një kërkim brenda fjalosjeje, që prej profilit të fjalosjes\n• Ruani trafik: Shkarkoni kartela të mëdha, sipas nevojës\n• Kurseni nervat: hyrje më të shpejta jo bllokuese, me kod QR dhe mundësi të reja kodi QR\n\nMë tepër te 👉</string>
+    <string name="update_1_26">1.26 po lustrohen 💅\n\n• Pasi kodet QR u bënë jo bllokues, në 1.24, tani ata duken shumë të hijshëm - në krejt platformat\n• Avatarët dhe stemat duken të ngjashëm nëpër platforma të ndryshme\n• Plot ndreqje të metash</string>
 </resources>

@@ -31,7 +31,9 @@
     <string name="back">Voltar</string>
     <string name="close">Fechar</string>
     <string name="forward">Encaminhar</string>
+    <!-- In the meaning of "To archive", "Put a chat to the archive". This string does not mean "The Archive". -->
     <string name="archive">Arquivar</string>
+    <!-- In the meaning of "To unarchive", "Remove a chat from the archive", opposite of the previous string -->
     <string name="unarchive">Desarquivar</string>
     <string name="mute">Mudo</string>
     <string name="ephemeral_messages">Mensagens efêmeras</string>
@@ -173,7 +175,7 @@
     <string name="menu_new_chat">Nova conversa</string>
     <string name="menu_new_group">Novo grupo</string>
     <!-- "Subject" here must be the same wording as used in the e-mail context, so. eg. "Betreff" in german (the idea is to help people coming from the e-mail context) -->
-    <string name="new_group_or_subject">Novo grupo ou assunto</string>
+    <string name="new_group_or_subject">Novo Grupo ou Assunto</string>
     <string name="menu_new_verified_group">Novo grupo verificado</string>
     <!-- consider keeping the term "broadcast"; check how these lists are called eg. on whatsapp in the destination language -->
     <string name="broadcast_list">Lista de Transmissão</string>
@@ -770,8 +772,10 @@
     <string name="qrshow_x_verified">%1$s verificado.</string>
     <string name="qrshow_x_has_joined_group">%1$s ingressou no grupo.</string>
     <string name="qrshow_join_group_title">Código QR de convite</string>
+    <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by the group name, eg. "Scan to join group \"Testing group\"" -->
     <string name="qrshow_join_group_hint">Escanear para ingressar no grupo \"%1$s\".</string>
     <string name="qrshow_join_contact_title">Código QR de convite</string>
+    <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and address eg. "Scan to chat with Alice (alice@example.org)" -->
     <string name="qrshow_join_contact_hint">Escanear para estabelecer contato com %1$s</string>
     <string name="qrshow_join_contact_no_connection_hint">A configuração por código QR necessita de uma conexão à rede. Por favor conecte-se à uma rede antes de continuar.</string>
     <string name="qrshow_join_contact_no_connection_toast">Sem conexão à rede não é possível realizar configuração por código QR.</string>
@@ -781,7 +785,7 @@
     <string name="qraccount_qr_code_cannot_be_used">O código QR lido não pode ser usado para configurar uma nova conta.</string>
     <string name="qraccount_use_on_new_install">O código QR digitalizado é para configurar uma nova conta. Você pode ler o código QR ao configurar uma nova instalação Delta Chat.</string>
     <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
-    <string name="secure_join_started">%1$ste convidou para entrar neste grupo.\n\nEsperando o dispositivo de %2$s para responder...</string>
+    <string name="secure_join_started">%1$ste convidou para entrar neste grupo.\n\nEsperando o dispositivo de %2$s responder...</string>
     <!-- placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_replies">%1$srespondeu, esperando para ser adicionado ao grupo...</string>
     <string name="contact_verified">%1$s verificado.</string>
@@ -791,8 +795,6 @@
     <string name="verified_group_explain">Grupos verificados (experimental) fornecem segurança contra ataques ativos. Os membros são verificados com um segundo fator por outros membros e as mensagens são sempre criptografadas de ponta a ponta.</string>
     <string name="copy_qr_data_success">Endereço do código QR copiado para a área de transferência</string>
     <string name="mailto_dialog_header_select_chat">Selecione o bate-papo para enviar a mensagem</string>
-    <!-- first placeholder is the name of the chat -->
-    <string name="mailto_dialog_confirm_replace_draft">%1$s já tem um rascunho de mensagem, deseja substituí-lo?</string>
     <string name="mailto_link_could_not_be_decoded">link mailto não pôde ser decodificado: %1$s</string>
 
     <!-- notifications  -->
@@ -889,7 +891,6 @@
     <string name="ask_delete_chat_desktop">Tem certeza que quer apagar esta conversa?</string>
     <string name="email_validation_failed_desktop">E-mail necessário.</string>
     <string name="forget_login_confirmation_desktop">Apagar este login? Tudo será apagado, incluindo sua configuração de criptografia, contatos, conversas, mensagens e mídia. Esta ação é final e irreversível.</string>
-    <string name="account_info_hover_tooltip_desktop">E-Mail: %1$s\nTamanho: %2$s\nCaminho: %3$s</string>
     <string name="me_desktop">Eu</string>
     <string name="in_this_group_desktop">Participantes do grupo</string>
     <string name="not_in_this_group_desktop">Potenciais participantes do grupo (não inclusos)</string>
@@ -903,7 +904,6 @@
     <string name="explain_desktop_minimized_disabled_tray_pref">O ícone da bandeja não pode ser desativado porque o Delta Chat foi iniciado com a opção --minimized.</string>
     <string name="no_spellcheck_suggestions_found">Nenhuma sugestão de ortografia encontrada.</string>
     <string name="show_window">Mostrar Janela</string>
-
     <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">Status de entrega: Erro</string>
     <string name="a11y_encryption_padlock">Cadeado de criptografia</string>
@@ -937,7 +937,6 @@
 
 
     <!-- device messages for updates -->
-    <string name="update_1_20">Compatibilidade de e-mail aprimorada na versão 1.20:\n\n📫 Leitura de listas de e-mail\n📭 Leitura de e-mails HTML\n📪 Tratamento melhorado de endereços de suporte\n📫 Muitos incômodos maiores e menores corrigidos\n\nLeia nossa nova postagem no blog sobre esses primeiros passos em relação ao e-mail e muito mais:</string>
-    <string name="update_1_22">O que há de novo no 1.22?\n\n👋As solicitações de bate-papo agora aparecem como bate-papos únicos e podem ser inspecionadas em detalhes antes de aceitar ou bloquear\n\n🗄️ O arquivo agora está facilmente acessível a partir do menu principal - você também encontrará suas solicitações antigas lá\n\n📮📮📮 Multi-conta aprimorada: alternar contas agora é mais rápido e menos frequentemente bloqueado por atualizações demoradas\n\n🤔 Saiba o que está acontecendo: agora problemas de conexão são mostrados na barra de título, toque para obter detalhes\n\nMais no blog:</string>
-    <string name="update_1_22_ios">O que há de novo na 1.22?\n\n👋 As solicitações de bate-papo agora aparecem como bate-papos únicos e podem ser inspecionadas em detalhes antes de aceitar ou bloquear\n\n🗄️ O arquivo agora pode ser acessado facilmente nas configurações - você também encontrará suas antigas solicitações lá\n\n📮📮📮 Multi-contas adicionadas: Alterne e gerencie contas nas configurações\n\n🤔 Saiba o que está acontecendo: Problemas de conexão agora são mostrados na barra de título, toque para obter detalhes\n\nMais no blog: </string>
+    <string name="update_1_24_android">1.24 em resumo:\n\n• Lembre de toques: seleção de conta no canto superior esquerdo da lista de bate-papo\n• Lembre mais toques: toque longo no ícone do aplicativo para abrir os bate-papos recentes diretamente\n• Economize tráfego: faça download grande arquivos conforme necessário\n• Não fique nervoso: uso de código QR mais rápido e sem bloqueio e novas opções de código QR\n\nMais em 👉</string>
+    <string name="update_1_24_ios">1.24 em resumo:\n\n• Inicie uma pesquisa no bate-papo a partir do perfil do bate-papo\n• Economize tráfego: baixe arquivos grandes conforme necessário\n• Não fique nervoso: uso de código QR mais rápido e não bloqueante\n\nMais em 👉</string>
     </resources>

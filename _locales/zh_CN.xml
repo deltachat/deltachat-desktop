@@ -31,7 +31,9 @@
     <string name="back">返回</string>
     <string name="close">关闭</string>
     <string name="forward">转发</string>
+    <!-- In the meaning of "To archive", "Put a chat to the archive". This string does not mean "The Archive". -->
     <string name="archive">归档</string>
+    <!-- In the meaning of "To unarchive", "Remove a chat from the archive", opposite of the previous string -->
     <string name="unarchive">解档</string>
     <string name="mute">静音</string>
     <string name="ephemeral_messages">消息定时销毁</string>
@@ -83,6 +85,9 @@
     <string name="this_month">本月</string>
     <string name="last_week">上周</string>
     <string name="last_month">上个月</string>
+    <!-- the placeholder will be replaced by a date or time, resulting eg. in "Last seen at 12:13 AM" or "Last seen Nov 12" -->
+    <string name="last_seen_at">最后见到时间：%1$s</string>
+    <string name="last_seen_unknown">最后见到时间：未知</string>
     <!-- Translators: show beside messages that are "N minutes old". prefer a short string, prefer abbreviations if they're well-known -->
     <plurals name="n_minutes">
         <item quantity="other">%d 分钟</item>
@@ -196,6 +201,7 @@
     <string name="menu_copy_link_to_clipboard">复制链接</string>
     <string name="menu_copy_text_to_clipboard">复制文本</string>
     <string name="menu_copy_image_to_clipboard">复制图像</string>
+    <string name="menu_copy_email_to_clipboard">复制电子邮件</string>
     <string name="paste_from_clipboard">从剪贴板粘贴</string>
     <string name="menu_forward">转发消息</string>
     <string name="menu_resend">重发消息</string>
@@ -756,8 +762,10 @@
     <string name="qrshow_x_verified">%1$s 已验证。</string>
     <string name="qrshow_x_has_joined_group">%1$s 已加入群组。</string>
     <string name="qrshow_join_group_title">邀请二维码</string>
+    <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by the group name, eg. "Scan to join group \"Testing group\"" -->
     <string name="qrshow_join_group_hint">扫描此处来加入群组\"%1$s\"。</string>
     <string name="qrshow_join_contact_title">邀请二维码</string>
+    <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and address eg. "Scan to chat with Alice (alice@example.org)" -->
     <string name="qrshow_join_contact_hint">扫描此处来建立联系人 %1$s。</string>
     <string name="qrshow_join_contact_no_connection_hint">二维码设置需要互联网连接。 要继续，请先连接到网络。</string>
     <string name="qrshow_join_contact_no_connection_toast">没有互联网连接，无法进行二维码设置。</string>
@@ -778,7 +786,7 @@
     <string name="copy_qr_data_success">已复制二维码链接到剪贴板</string>
     <string name="mailto_dialog_header_select_chat">选择要发送消息的聊天</string>
     <!-- first placeholder is the name of the chat -->
-    <string name="mailto_dialog_confirm_replace_draft">%1$s 已经有一条草稿信息，要替换它吗？</string>
+    <string name="confirm_replace_draft">%1$s 已经有一条草稿信息，要替换它吗？</string>
     <string name="mailto_link_could_not_be_decoded">无法解码 mailto 链接：%1$s</string>
 
     <!-- notifications  -->
@@ -875,7 +883,7 @@
     <string name="ask_delete_chat_desktop">删除此聊天？</string>
     <string name="email_validation_failed_desktop">需要电子邮件地址。</string>
     <string name="forget_login_confirmation_desktop">删除此登录？ 一切都将被删除，包括您的端到端设置、联系人、聊天、消息及媒体。 此操作无法撤消。</string>
-    <string name="account_info_hover_tooltip_desktop">电子邮件：%1$s\n大小：%2$s\n路径：%3$s</string>
+    <string name="account_info_hover_tooltip_desktop2">电子邮件：%1$s\n大小：%2$s\n账户 Id：%3$s</string>
     <string name="me_desktop">我</string>
     <string name="in_this_group_desktop">群组成员</string>
     <string name="not_in_this_group_desktop">潜在的群组成员（不在群组中）</string>
@@ -889,6 +897,7 @@
     <string name="explain_desktop_minimized_disabled_tray_pref">在 Delta Chat 带 --minimized 参数启动时，无法禁用托盘图标。</string>
     <string name="no_spellcheck_suggestions_found">未找到拼写建议</string>
     <string name="show_window">显示窗口</string>
+    <string name="login_socks5_experimental_warning">SOCKS5 支持目前还处于试验阶段。请自行承担使用风险。如果您在电子邮件字段中输入一个地址，会有不流经 SOCKS5 隧道的 DNS 查找流量。</string>
 
     <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">发送状态：错误</string>
@@ -923,10 +932,7 @@
 
 
     <!-- device messages for updates -->
-    <string name="update_1_20">我们在 1.20 版本改进了电子邮件兼容性：\n\n📫 阅读邮件列表\n📭 阅读 HTML 邮件\n📪 很好地处理支持地址\n📫 修复了多处大大小小的错误\n\n详情请阅读我们新的博客文章：</string>
-    <string name="update_1_22">1.22 版有哪些变化？\n\n👋聊天请求现在会以单个聊天的形式弹出，可以在接受或阻止之前进行详细检查\n\n🗄️ 存档现在可以很容易地从主菜单访问- 你也可以在那里找到你的旧请求\n\n 📮📮📮 多帐户改进:切换帐户现在更快，更少被冗长的更新拦截 \n\n 🤔 知道正在发生什么：连接问题现在显示在标题栏，轻按查看详细信息 \n\n更多内容见博客：</string>
-    <string name="update_1_22_ios">1.22 版有哪些变化？\n\n👋聊天请求现在会以单个聊天的形式弹出，可以在接受或阻止之前进行详细检查 \n\n🗄️ 
-存档现在可以很容易地从主菜单访问 - 你也可以在那里找到你的旧请求 \n\n 📮📮📮 添加了多帐户：在设置中切换和管理帐户\n\n 🤔 知道正在发生什么：连接问题现在显示在标题栏，轻按查看详细信息 \n\n 更多内容见博客：</string>
     <string name="update_1_24_android">1.24 版变化一览：\n\n• 省手：在聊天列表左上角进行帐号选择\n• 进一步省手：长按应用图标直接打开最近的聊天\n• 省流量：按需下载大文件\n• 省精力：更快、无阻塞的二维码加入与新的二维码选项\n\n更多信息见 👉</string>
     <string name="update_1_24_ios">1.24 版变化一览：\n\n• 从聊天概要进行聊天内搜索\n• 省流量：按需下载大文件\n• 省精力：更快、无阻塞的二维码加入\n\n更多信息见 👉</string>
+    <string name="update_1_26">1.26 继续完善 💅\n\n• 在 1.24 版中不拦截二维码后，它们现在在所有平台上看起来都更好了\n• 头像和徽章在不同平台上看起来差不多\n• 修复了很多 bug</string>
 </resources>
