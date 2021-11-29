@@ -209,6 +209,7 @@ export default class MapComponent extends React.Component<
           profileImage: this.currentUser.profileImage,
           isBlocked: false,
           isVerified: true,
+          lastSeen: this.currentUser.lastSeen,
         })
       }
       contacts.forEach(contact => {
