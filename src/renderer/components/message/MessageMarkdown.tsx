@@ -183,10 +183,7 @@ function BotCommandSuggestion({ suggestion }: { suggestion: string }) {
       // ask if the draft should be replaced
       const continue_process = await new Promise((resolve, _reject) => {
         window.__openDialog('ConfirmationDialog', {
-          message: window.static_translate(
-            'confirm_replace_draft',
-            name
-          ),
+          message: window.static_translate('confirm_replace_draft', name),
           confirmLabel: window.static_translate('replace_draft'),
           cb: resolve,
         })

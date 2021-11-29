@@ -109,10 +109,7 @@ export async function doMailtoAction(chatId: number, messageText: string) {
     // ask if the draft should be replaced
     const continue_process = await new Promise((resolve, _reject) => {
       window.__openDialog('ConfirmationDialog', {
-        message: window.static_translate(
-          'confirm_replace_draft',
-          chat.name
-        ),
+        message: window.static_translate('confirm_replace_draft', chat.name),
         confirmLabel: window.static_translate('replace_draft'),
         cb: resolve,
       })
