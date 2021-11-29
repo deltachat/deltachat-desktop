@@ -129,20 +129,20 @@ export default class DCLoginController extends SplitOut {
     this.controller.hintUpdateIfNessesary()
 
     this.selectedAccountContext.addDeviceMessage(
-      'changelog-version-1.22-version1',
-      `What's new in 1.22?
+      'changelog-version-1.25-version0',
+      `What's new in 1.25?
 
-👋 Chat Requests now pop up as single chats and can be inspected in detail before accepting or blocking
+🎥 We added previous/next buttons in the fullscreen gallery view 
 
-🗄️ You'll also find your old requests in the Archive
+🔔 The tray icon visualizes if there are new messages through a blue dot
 
-📮📮📮 Multi-account improved: Switching accounts is now faster and less often blocked by lengthy updates
+🖱️ E-mail adresses, hashtags, bot commands and more in messages are now clickable
 
-🤔 Know what's going on: Info about Connection problems can be found in the settings
+👥 Improved look&feel for adding new group members and accessing contact profiles in group dialog
 
-📋Copy-Paste Images into chat
+❌ You can now withdraw your group QR codes. Simply scan it and withdraw them. Scan it again to revive.
 
-More on the blog: https://delta.chat/en/2021-08-24-updates` as any
+As this is a test release, please report bugs on the forum thread about it: https://support.delta.chat/t/help-testing-the-upcoming-1-25-x-release/1926` as any
     )
   }
 

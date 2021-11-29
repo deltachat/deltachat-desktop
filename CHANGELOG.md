@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+## [1.25.0] - 2021-11-29
+
+> We jumped to `1.25` for the version (should in theory be `1.23`), to be get sync with android and iOS numbering again.
+
 ### Added
 - Clicking on member in group dialog shows the profile of member
 - Implement previous/next buttons for the gallery's media view (the left and right arrow keys can also be used for navigation)
@@ -1369,7 +1373,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.22.2...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.25.0...HEAD
+
+[1.25.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.22.2...v1.25.0
 
 [1.22.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.22.1...v1.22.2
 
