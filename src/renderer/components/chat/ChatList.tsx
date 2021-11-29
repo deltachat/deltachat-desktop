@@ -31,18 +31,15 @@ import {
 } from 'react-window'
 import InfiniteLoader from 'react-window-infinite-loader'
 
-import { ipcBackend } from '../../ipc'
+import { onDCEvent } from '../../ipc'
 import { ScreenContext } from '../../contexts'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
-import { getLogger } from '../../../shared/logger'
 
 import {
   createChatByContactIdAndSelectIt,
   selectChat,
 } from '../helpers/ChatMethods'
 import { useThemeCssVar } from '../../ThemeManager'
-
-const log = getLogger('renderer/chatlist')
 
 const enum LoadStatus {
   FETCHING = 1,
@@ -397,54 +394,54 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
 
   const debouncingChatlistItemRequests: { [chatid: number]: number } = {}
 
-  const onChatListItemChanged = (
-    _event: any,
-    [chatId, _messageId]: [number, number]
-  ) => {
-    const updateChatListItem = async (chatId: number) => {
-      debouncingChatlistItemRequests[chatId] = 1
-      // the message id of the event could be an older message than the newest message (for example msg-read event)
-      const messageId = await DeltaBackend.call(
-        'chatList.getChatListEntryMessageIdForChatId',
-        chatId
-      )
-      setChatLoading(state => ({
-        ...state,
-        [chatId]: LoadStatus.FETCHING,
-      }))
-      const chats = await DeltaBackend.call(
-        'chatList.getChatListItemsByEntries',
-        [[chatId, messageId]]
-      )
-      setChatCache(cache => ({ ...cache, ...chats }))
-      setChatLoading(state => ({
-        ...state,
-        [chatId]: LoadStatus.LOADED,
-      }))
-      if (debouncingChatlistItemRequests[chatId] > 1) {
-        updateChatListItem(chatId)
-      } else {
-        debouncingChatlistItemRequests[chatId] = 0
+  const onChatListItemChanged = useCallback(
+    (chatId: number, _messageId: number | string) => {
+      const updateChatListItem = async (chatId: number) => {
+        debouncingChatlistItemRequests[chatId] = 1
+        // the message id of the event could be an older message than the newest message (for example msg-read event)
+        const messageId = await DeltaBackend.call(
+          'chatList.getChatListEntryMessageIdForChatId',
+          chatId
+        )
+        setChatLoading(state => ({
+          ...state,
+          [chatId]: LoadStatus.FETCHING,
+        }))
+        const chats = await DeltaBackend.call(
+          'chatList.getChatListItemsByEntries',
+          [[chatId, messageId]]
+        )
+        setChatCache(cache => ({ ...cache, ...chats }))
+        setChatLoading(state => ({
+          ...state,
+          [chatId]: LoadStatus.LOADED,
+        }))
+        if (debouncingChatlistItemRequests[chatId] > 1) {
+          updateChatListItem(chatId)
+        } else {
+          debouncingChatlistItemRequests[chatId] = 0
+        }
       }
-    }
-    if (chatId !== 0) {
-      if (
-        debouncingChatlistItemRequests[chatId] === undefined ||
-        debouncingChatlistItemRequests[chatId] === 0
-      ) {
-        updateChatListItem(chatId)
-      } else {
-        debouncingChatlistItemRequests[chatId] =
-          debouncingChatlistItemRequests[chatId] + 1
+      if (chatId !== 0) {
+        if (
+          debouncingChatlistItemRequests[chatId] === undefined ||
+          debouncingChatlistItemRequests[chatId] === 0
+        ) {
+          updateChatListItem(chatId)
+        } else {
+          debouncingChatlistItemRequests[chatId] =
+            debouncingChatlistItemRequests[chatId] + 1
+        }
       }
-    }
-  }
+    },
+    [debouncingChatlistItemRequests]
+  )
 
   /**
    * refresh chats a specific contact is in if that contact changed.
    * Currently used for updating nickname changes in the summary of chatlistitems.
    */
-  const onContactChanged = async (_ev: any, [contactId]: [number]) => {
+  const onContactChanged = async (contactId: number) => {
     if (contactId !== 0) {
       const chatListItems = await DeltaBackend.call(
         'chatList.getChatListEntries',
@@ -467,26 +464,29 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
   }
 
   useEffect(() => {
-    ipcBackend.on('DC_EVENT_MSG_READ', onChatListItemChanged)
-    ipcBackend.on('DC_EVENT_MSG_DELIVERED', onChatListItemChanged)
-    ipcBackend.on('DC_EVENT_MSG_FAILED', onChatListItemChanged)
-    ipcBackend.on('DC_EVENT_CHAT_MODIFIED', onChatListItemChanged)
-    ipcBackend.on('DC_EVENT_INCOMING_MSG', onChatListItemChanged)
-    ipcBackend.on('DC_EVENT_MSGS_CHANGED', onChatListItemChanged)
-    ipcBackend.on('DC_EVENT_MSGS_NOTICED', onChatListItemChanged)
-    ipcBackend.on('DC_EVENT_CONTACTS_CHANGED', onContactChanged)
+    const removeOnChatListItemChangedListener = onDCEvent(
+      [
+        'DC_EVENT_MSG_READ',
+        'DC_EVENT_MSG_DELIVERED',
+        'DC_EVENT_MSG_FAILED',
+        'DC_EVENT_CHAT_MODIFIED',
+        'DC_EVENT_INCOMING_MSG',
+        'DC_EVENT_MSGS_CHANGED',
+        'DC_EVENT_MSGS_NOTICED',
+      ],
+      onChatListItemChanged
+    )
+
+    const removeOnContactChangedListener = onDCEvent(
+      'DC_EVENT_CONTACTS_CHANGED',
+      onContactChanged
+    )
 
     return () => {
-      ipcBackend.removeListener('DC_EVENT_MSG_READ', onChatListItemChanged)
-      ipcBackend.removeListener('DC_EVENT_MSG_DELIVERED', onChatListItemChanged)
-      ipcBackend.removeListener('DC_EVENT_MSG_FAILED', onChatListItemChanged)
-      ipcBackend.removeListener('DC_EVENT_CHAT_MODIFIED', onChatListItemChanged)
-      ipcBackend.removeListener('DC_EVENT_INCOMING_MSG', onChatListItemChanged)
-      ipcBackend.removeListener('DC_EVENT_MSGS_CHANGED', onChatListItemChanged)
-      ipcBackend.removeListener('DC_EVENT_MSGS_NOTICED', onChatListItemChanged)
-      ipcBackend.removeListener('DC_EVENT_CONTACTS_CHANGED', onContactChanged)
+      removeOnChatListItemChangedListener()
+      removeOnContactChangedListener()
     }
-  }, [])
+  }, [onChatListItemChanged])
 
   // effects
 
