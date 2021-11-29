@@ -8,7 +8,7 @@
 - add update unread counts on account screen on incoming messages
 - Clickable bot command suggestions, email addresses and hashtags in messages
 - Clickable links in messages on the map
-- Tray icon now shows a blue circle over the logo in case of unread messsages (only linux + win)
+- Tray icon now shows a blue circle over the logo in case of unread messages (only linux + win)
 - reload profile image on `DC_EVENT_SELFAVATAR_CHANGED` in settings
 
 ### Changed
