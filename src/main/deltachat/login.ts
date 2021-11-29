@@ -129,8 +129,8 @@ export default class DCLoginController extends SplitOut {
     this.controller.hintUpdateIfNessesary()
 
     this.selectedAccountContext.addDeviceMessage(
-      'changelog-version-1.23-version3',
-      `What's new in 1.23?
+      'changelog-version-1.25-version0',
+      `What's new in 1.25?
 
 🎥 We added previous/next buttons in the fullscreen gallery view 
 
@@ -142,7 +142,7 @@ export default class DCLoginController extends SplitOut {
 
 ❌ You can now withdraw your group QR codes. Simply scan it and withdraw them. Scan it again to revive.
 
-More on the blog: https://???` as any
+As this is a test release, please report bugs on the forum thread about it: https://support.delta.chat/t/help-testing-the-upcoming-1-25-x-release/1926` as any
     )
   }
 
