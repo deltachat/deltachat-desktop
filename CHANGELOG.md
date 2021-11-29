@@ -36,6 +36,7 @@
 - selecting chat now closes all notifications about it again
 - fix quotes without message text are empty (#2434)
 - Fix react warning in about dialog (#2428)
+- Fix bug where wrong message is shown in chatlist item
 
 ### Changed
 - use strict typescript for ui code
