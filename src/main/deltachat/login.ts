@@ -132,11 +132,11 @@ export default class DCLoginController extends SplitOut {
       'changelog-version-1.25-version0',
       `What's new in 1.25?
 
-🎥 We added previous/next buttons in the fullscreen gallery view 
+🎥 We added previous/next buttons in the full-screen gallery view 
 
 🔔 The tray icon visualizes if there are new messages through a blue dot
 
-🖱️ E-mail adresses, hashtags, bot commands and more in messages are now clickable
+🖱️ E-mail addresses, hashtags, bot commands and more in messages are now clickable
 
 👥 Improved look&feel for adding new group members and accessing contact profiles in group dialog
 
