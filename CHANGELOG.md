@@ -2,7 +2,14 @@
 
 ## [Unreleased][unreleased]
 
+## [1.25.1] - 2021-11-30
+
+### Fixed
+- fixed production builds (`npm run build4production`)
+
 ## [1.25.0] - 2021-11-29
+
+> The Downloads of this version are broken because they were done with `npm run build4production` which was broken in this release, please either use `npm run build` or download `1.25.1` instead
 
 > We jumped to `1.25` for the version (should in theory be `1.23`), to be get sync with android and iOS numbering again.
 
@@ -1374,7 +1381,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.25.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.25.1...HEAD
+
+[1.25.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.25.0...v1.25.1
 
 [1.25.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.22.2...v1.25.0
 
