@@ -43,7 +43,7 @@ async function bundle(production, minify = false) {
     sourcemap: true,
     outfile: 'html-dist/bundle.js',
     define: {
-      'process.env.NODE_ENV': production ? 'production' : 'development',
+      'process.env.NODE_ENV': production ? '"production"' : '"development"',
     },
     plugins: [wasmPlugin],
   })
