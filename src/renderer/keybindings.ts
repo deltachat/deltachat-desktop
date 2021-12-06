@@ -14,6 +14,8 @@ export enum KeybindAction {
   ChatList_ClearSearchInput = 'chatlist:clear-search',
   Composer_Focus = 'composer:focus',
   Settings_Open = 'settings:open',
+  MessageList_PageUp = 'msglist:pageup',
+  MessageList_PageDown = 'msglist:pagedown',
 
   // Actions that are not necessarily triggered by keybindings
   ChatList_SwitchToArchiveView = 'chatlist:switch-to-archive-view',
@@ -98,6 +100,10 @@ function keyDownEvent2Action(ev: KeyboardEvent): KeybindAction | undefined {
       return KeybindAction.ChatList_SearchSelectFirstChat
     } else if (ev.key === 'F5') {
       return KeybindAction.Debug_MaybeNetwork
+    } else if (ev.key === 'PageUp') {
+      return KeybindAction.MessageList_PageUp
+    } else if (ev.key === 'PageDown') {
+      return KeybindAction.MessageList_PageDown
     }
   } else {
     // fire continuesly as long as button is pressed
