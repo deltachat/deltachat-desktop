@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- `PageUp` and `PageDown` keys can now be used to scroll in the MessageList
+
 ## [1.25.1] - 2021-11-30
 
 ### Fixed
