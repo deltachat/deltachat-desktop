@@ -111,6 +111,10 @@ function keyDownEvent2Action(ev: KeyboardEvent): KeybindAction | undefined {
       return KeybindAction.MessageList_PageUp
     } else if (ev.key === 'PageDown') {
       return KeybindAction.MessageList_PageDown
+    } else if (ev.altKey && ev.key === 'ArrowDown') {
+      return KeybindAction.ChatList_SelectNextChat
+    } else if (ev.altKey && ev.key === 'ArrowUp') {
+      return KeybindAction.ChatList_SelectPreviousChat
     }
   }
 }

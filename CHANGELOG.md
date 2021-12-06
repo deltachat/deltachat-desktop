@@ -4,6 +4,7 @@
 
 ### Added
 - `PageUp` and `PageDown` keys can now be used to scroll in the MessageList
+- Keeping `Alt + ArrowUp/ArrowDown` pressed now keeps selecting the next chat until the key is released
 
 ## [1.25.1] - 2021-11-30
 
