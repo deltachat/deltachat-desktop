@@ -107,6 +107,11 @@ function keyDownEvent2Action(ev: KeyboardEvent): KeybindAction | undefined {
     }
   } else {
     // fire continuesly as long as button is pressed
+    if (ev.key === 'PageUp') {
+      return KeybindAction.MessageList_PageUp
+    } else if (ev.key === 'PageDown') {
+      return KeybindAction.MessageList_PageDown
+    }
   }
 }
 
