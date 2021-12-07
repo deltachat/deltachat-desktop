@@ -152,6 +152,20 @@
     padding-left: 0;
     color: var(--colorPrimary);
   }
+
+  .download {
+    span.failed {
+      color: var(--colorDanger);
+      font-weight: bold;
+    }
+
+    button {
+      border: none;
+      background-color: transparent;
+      padding-left: 0;
+      color: var(--colorPrimary);
+    }
+  }
 }
 
 // States that modify the message buble appearance

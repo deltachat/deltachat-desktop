@@ -1,1 +1,5 @@
-{}
+{
+  "download_failed_please_try_again": {
+    "message": "Message download failed, please try again"
+  }
+}

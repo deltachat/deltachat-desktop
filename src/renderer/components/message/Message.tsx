@@ -7,6 +7,7 @@ import {
   privateReply,
   openMessageHTML,
   confirmDeleteMessage,
+  downloadFullMessage,
 } from './messageFunctions'
 import React, { useContext } from 'react'
 import reactStringReplace from 'react-string-replace'
@@ -35,6 +36,7 @@ import { ConversationType } from './MessageList'
 import { getDirection } from '../../../shared/util'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { ContextMenuItem } from '../ContextMenu'
+import { MessageDownloadState } from '../../../shared/constants'
 
 const Avatar = (
   contact: JsonContact,
@@ -328,6 +330,32 @@ const Message = (props: {
           tx('autocrypt_asm_click_body')
         ) : (
           <MessageBody text={text || ''} />
+        )}
+      </div>
+    )
+  }
+
+  // we need this typeconversion, if we don't have it esbuild tries bundling deltachat-node again,
+  // which fails becaus it imports stuff only availible in nodejs
+  const downloadState = (message.downloadState as unknown) as MessageDownloadState
+
+  if (downloadState !== MessageDownloadState.Done) {
+    content = (
+      <div className={'download'}>
+        {text} {'- '}
+        {downloadState == MessageDownloadState.Failure && (
+          <span className={'failed'}>
+            {tx('download_failed_please_try_again')}
+          </span>
+        )}
+        {downloadState == MessageDownloadState.InProgress && (
+          <span>{tx('downloading')}</span>
+        )}
+        {(downloadState == MessageDownloadState.Failure ||
+          downloadState === MessageDownloadState.Available) && (
+          <button onClick={downloadFullMessage.bind(null, message.id)}>
+            {tx('Download')}
+          </button>
         )}
       </div>
     )

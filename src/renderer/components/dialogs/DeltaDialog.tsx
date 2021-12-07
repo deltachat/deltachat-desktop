@@ -278,7 +278,7 @@ export function SmallDialog(
   )
 }
 
-export type SelectDialogOption = [string, string]
+export type SelectDialogOption = [value: string, label: string]
 
 export function SmallSelectDialog({
   selectedValue,
