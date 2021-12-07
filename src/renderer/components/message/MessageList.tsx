@@ -14,6 +14,7 @@ import { getLogger } from '../../../shared/logger'
 import { MessageType, FullChat } from '../../../shared/shared-types'
 import { MessagesDisplayContext, useTranslationFunction } from '../../contexts'
 import { useDCConfigOnce } from '../helpers/useDCConfigOnce'
+import { KeybindAction, useKeyBindingAction } from '../../keybindings'
 const log = getLogger('render/msgList')
 
 const messageIdsToShow = (
@@ -216,6 +217,23 @@ export const MessageListInner = React.memo(
       isDeviceChat: chatStore.chat.isDeviceChat as boolean,
       chatType: chatStore.chat.type as number,
     }
+
+    useKeyBindingAction(KeybindAction.MessageList_PageUp, () => {
+      if (messageListRef.current) {
+        messageListRef.current.scrollBy({
+          top: -messageListRef.current.clientHeight,
+          behavior: 'auto',
+        })
+      }
+    })
+    useKeyBindingAction(KeybindAction.MessageList_PageDown, () => {
+      if (messageListRef.current) {
+        messageListRef.current.scrollBy({
+          top: messageListRef.current.clientHeight,
+          behavior: 'auto',
+        })
+      }
+    })
 
     return (
       <div id='message-list' ref={messageListRef} onScroll={onScroll}>
