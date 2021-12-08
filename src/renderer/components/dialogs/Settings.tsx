@@ -22,6 +22,7 @@ import SettingsProfile from './Settings-Profile'
 import { getLogger } from '../../../shared/logger'
 import SettingsCommunication from './Settings-Communication'
 import { runtime } from '../../runtime'
+import SettingsDownloadOnDemand from './Settings-DownloadOnDemand'
 
 const log = getLogger('renderer/dialogs/Settings')
 
@@ -227,20 +228,20 @@ export default function Settings(props: DialogProps) {
           />
           <Card elevation={Elevation.ONE}>
             <SettingsCommunication
-              {...{
-                handleDeltaSettingsChange: handleDeltaSettingsChange,
-                settings,
-              }}
+              handleDeltaSettingsChange={handleDeltaSettingsChange}
+              settings={settings}
+            />
+            <SettingsDownloadOnDemand
+              handleDeltaSettingsChange={handleDeltaSettingsChange}
+              settings={settings}
             />
             <br />
             <H5>{tx('pref_privacy')}</H5>
             {renderDeltaSwitch('mdns_enabled', tx('pref_read_receipts'))}
             <br />
             <SettingsAutodelete
-              {...{
-                handleDeltaSettingsChange: handleDeltaSettingsChange,
-                settings,
-              }}
+              handleDeltaSettingsChange={handleDeltaSettingsChange}
+              settings={settings}
             />
           </Card>
           <SettingsAppearance
@@ -330,6 +331,7 @@ export default function Settings(props: DialogProps) {
         'delete_device_after',
         'delete_server_after',
         'webrtc_instance',
+        'download_limit',
       ])
       const rc = await runtime.getRC_Config()
       setState({ settings, rc })

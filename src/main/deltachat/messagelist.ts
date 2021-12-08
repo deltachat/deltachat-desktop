@@ -72,6 +72,10 @@ export default class DCMessageList extends SplitOut {
     return this.selectedAccountContext.getMessageInfo(msgId)
   }
 
+  downloadFullMessage(msgId: number) {
+    return this.selectedAccountContext.downloadFullMessage(msgId)
+  }
+
   async getDraft(chatId: number): Promise<MessageType | null> {
     const draft = this.selectedAccountContext.getDraft(chatId)
     return draft ? this._messageToJson(draft) : null

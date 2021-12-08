@@ -75,3 +75,7 @@ export async function openMessageHTML(messageId: number) {
   )
   runtime.openPath(filepath)
 }
+
+export async function downloadFullMessage(messageId: number) {
+  await DeltaBackend.call('messageList.downloadFullMessage', messageId)
+}
