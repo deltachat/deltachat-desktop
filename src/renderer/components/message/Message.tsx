@@ -344,9 +344,7 @@ const Message = (props: {
       <div className={'download'}>
         {text} {'- '}
         {downloadState == MessageDownloadState.Failure && (
-          <span className={'failed'}>
-            {tx('download_failed')}
-          </span>
+          <span className={'failed'}>{tx('download_failed')}</span>
         )}
         {downloadState == MessageDownloadState.InProgress && (
           <span>{tx('downloading')}</span>
