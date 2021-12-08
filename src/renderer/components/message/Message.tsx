@@ -345,7 +345,7 @@ const Message = (props: {
         {text} {'- '}
         {downloadState == MessageDownloadState.Failure && (
           <span className={'failed'}>
-            {tx('download_failed_please_try_again')}
+            {tx('download_failed')}
           </span>
         )}
         {downloadState == MessageDownloadState.InProgress && (
