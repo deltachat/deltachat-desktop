@@ -9,6 +9,7 @@
 
 ## Changed
 - update `filesize` dependency to version `8.0.6`
+- update deltachat-node to v1.70.0
 
 ## [1.25.1] - 2021-11-30
 
