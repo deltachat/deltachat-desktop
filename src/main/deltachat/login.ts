@@ -144,6 +144,16 @@ export default class DCLoginController extends SplitOut {
 
 As this is a test release, please report bugs on the forum thread about it: https://support.delta.chat/t/help-testing-the-upcoming-1-25-x-release/1926` as any
     )
+
+    this.selectedAccountContext.addDeviceMessage(
+      'changelog-version-1.25.2-version0',
+      `What's new in 1.25.2?
+      - \`PageUp\` and \`PageDown\` keys can now be used to scroll through MessageList
+      - Keeping \`Alt + ArrowUp/ArrowDown\` pressed keeps iterating through chats until the key is released
+      - Download on Demand (select at which file size messages should be automatically downloaded)
+      
+      As this is a test release, please report bugs on the forum thread about it: https://support.delta.chat/t/help-testing-the-upcoming-1-25-x-release/1926`
+    )
   }
 
   async accountInfo(accountId: number): Promise<DeltaChatAccount> {
