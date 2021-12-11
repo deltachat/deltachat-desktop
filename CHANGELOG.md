@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.25.2] - 2021-12-11
+
 ### Added
 - `PageUp` and `PageDown` keys can now be used to scroll in the MessageList
 - Keeping `Alt + ArrowUp/ArrowDown` pressed now keeps selecting the next chat until the key is released
@@ -1390,7 +1392,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.25.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.25.2...HEAD
+
+[1.25.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.25.1...v1.25.2
 
 [1.25.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.25.0...v1.25.1
 
