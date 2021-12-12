@@ -1,4 +1,4 @@
-import { DeltaBackend, sendMessageParams } from '../../delta-remote'
+import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/dist/constants'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
