@@ -28,7 +28,6 @@ export type sendMessageParams = {
 
 class DeltaRemote {
   // root ---------------------------------------------------------------
-  call(fnName: 'updateBlockedContacts'): Promise<void>
   call(fnName: 'setProfilePicture', newImage: string): Promise<void>
   call(fnName: 'getProfilePicture'): Promise<string>
   call(fnName: 'getInfo'): Promise<{ [key: string]: any }>
@@ -79,6 +78,7 @@ class DeltaRemote {
   // contacts ------------------------------------------------------------
   call(fnName: 'contacts.unblockContact', contactId: number): Promise<void>
   call(fnName: 'contacts.blockContact', contactId: number): Promise<void>
+  call(fnName: 'contacts.getBlocked'): Promise<JsonContact[]>
   call(
     fnName: 'contacts.changeNickname',
     contactId: number,
