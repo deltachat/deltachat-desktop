@@ -1,4 +1,4 @@
-import { DeltaBackend, sendMessageParams } from '../../delta-remote'
+import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/dist/constants'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
@@ -506,12 +506,9 @@ export default class MapComponent extends React.Component<
       return
     }
     const latLng = Object.assign({}, this.poiLocation)
-    chatStore.dispatch({
-      type: 'SEND_MESSAGE',
-      payload: [
-        selectedChat.id,
-        { text: message, location: latLng } as sendMessageParams,
-      ],
+    chatStore.effect.sendMessage({
+      chatId: selectedChat.id,
+      message: { text: message, location: latLng },
     })
 
     if (this.contextMenuPopup) {

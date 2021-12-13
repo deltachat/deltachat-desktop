@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+
+- fix sending POI
+
 ## [1.25.2] - 2021-12-11
 
 ### Added
