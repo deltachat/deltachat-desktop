@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.26.0] - 2021-12-15
+
 ### Fixed
 
 - fix sending POI

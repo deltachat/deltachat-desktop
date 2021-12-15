@@ -129,30 +129,24 @@ export default class DCLoginController extends SplitOut {
     this.controller.hintUpdateIfNessesary()
 
     this.selectedAccountContext.addDeviceMessage(
-      'changelog-version-1.25-version0',
-      `What's new in 1.25?
+      'changelog-version-1.26.0-version4',
+      `What's new in 1.26.0?
 
-🎥 We added previous/next buttons in the full-screen gallery view 
+🎥 The gallery view now has previous/next buttons
 
 🔔 The tray icon visualizes if there are new messages through a blue dot
 
-🖱️ E-mail addresses, hashtags, bot commands and more in messages are now clickable
+📩 Save traffic: Download large files only if needed
 
 👥 Improved look&feel for adding new group members and accessing contact profiles in group dialog
 
 ❌ You can now withdraw your group QR codes. Simply scan it and withdraw them. Scan it again to revive.
 
-As this is a test release, please report bugs on the forum thread about it: https://support.delta.chat/t/help-testing-the-upcoming-1-25-x-release/1926` as any
-    )
+🖱️ email@address.es, #hashtags and /bot commands in messages are now clickable
 
-    this.selectedAccountContext.addDeviceMessage(
-      'changelog-version-1.25.2-version0',
-      `What's new in 1.25.2?
-      - \`PageUp\` and \`PageDown\` keys can now be used to scroll through MessageList
-      - Keeping \`Alt + ArrowUp/ArrowDown\` pressed keeps iterating through chats until the key is released
-      - Download on Demand (select at which file size messages should be automatically downloaded)
-      
-      As this is a test release, please report bugs on the forum thread about it: https://support.delta.chat/t/help-testing-the-upcoming-1-25-x-release/1926`
+↕️ \`PageUp\` and \`PageDown\` keys can now be used to scroll through MessageList
+
+Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1260---2021-12-15`
     )
   }
 
