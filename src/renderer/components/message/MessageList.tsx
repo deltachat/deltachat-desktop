@@ -279,7 +279,7 @@ function EmptyChatMessage() {
   const chatStore = useChatStore()
   const chat = chatStore.chat as FullChat
 
-  let emptyChatMessage = tx('chat_no_messages_hint', [chat.name, chat.name])
+  let emptyChatMessage = tx('chat_new_one_to_one_hint', [chat.name, chat.name])
 
   const showAllEmail = useDCConfigOnce('show_emails')
 
