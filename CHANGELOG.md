@@ -8,6 +8,10 @@
 
 - fix sending POI
 
+### Changed
+
+- Update translations (16.12.2021)
+
 ## [1.25.2] - 2021-12-11
 
 ### Added
@@ -1398,7 +1402,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.25.2...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.26.0...HEAD
+
+[1.26.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.25.2...v1.26.0
 
 [1.25.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.25.1...v1.25.2
 
