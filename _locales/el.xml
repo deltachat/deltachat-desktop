@@ -86,9 +86,6 @@
     <string name="fast">Γρήγορο</string>
     <string name="slow">Αργό</string>
 
-    <string name="message_read">Το μήνυμα διαβάστηκε</string>
-
-
     <string name="menu_send">Αποστολή</string>
     <string name="menu_unmute">Αποσίγαση</string>
     <string name="menu_share">Μοιράσου</string>
@@ -165,5 +162,4 @@
     <string name="global_menu_help_desktop">Βοήθεια</string>
     <string name="remove_desktop">Αφαίρεση</string>
     <string name="save_desktop">Αποθήκευση</string>
-    <string name="none_blocked_desktop">Καμία φραγμένη επαφή</string>
     </resources>

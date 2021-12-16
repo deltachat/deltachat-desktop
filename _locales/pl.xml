@@ -18,11 +18,14 @@
     <string name="automatic">Automatyczne</string>
     <string name="strict">Dokładne</string>
     <string name="open">Otwórz</string>
+    <string name="download">Pobierz</string>
+    <string name="downloading">Pobieranie…</string>
     <string name="open_attachment">Otwórz załącznik</string>
     <string name="join">Dołącz</string>
     <string name="rejoin">Dołącz ponownie</string>
     <string name="delete">Usuń</string>
     <string name="info">Informacje</string>
+    <string name="update">Aktualizacja</string>
     <string name="emoji">Emoji</string>
     <string name="attachment">Załącznik</string>
     <string name="back">Wróć</string>
@@ -32,6 +35,7 @@
     <string name="archive">Archiwizuj</string>
     <!-- In the meaning of "To unarchive", "Remove a chat from the archive", opposite of the previous string -->
     <string name="unarchive">Przywróć z archiwum</string>
+    <string name="mute">Wyłącz powiadomienia</string>
     <string name="ephemeral_messages">Znikające wiadomości</string>
     <string name="ephemeral_messages_hint">Te ustawienia dotyczą wszystkich uczestników korzystających z Delta Chat. Mogą jednak kopiować, zapisywać i przekazywać wiadomości lub korzystać z innych klientów poczty e-mail.</string>
     <string name="save">Zapisz</string>
@@ -81,6 +85,9 @@
     <string name="this_month">Ten miesiąc</string>
     <string name="last_week">Ostatni tydzień</string>
     <string name="last_month">Ostatni miesiąc</string>
+    <!-- the placeholder will be replaced by a date or time, resulting eg. in "Last seen at 12:13 AM" or "Last seen Nov 12" -->
+    <string name="last_seen_at">Ostatnio widziano %1$s</string>
+    <string name="last_seen_unknown">Ostatnio widziano: nie wiadomo</string>
     <!-- Translators: show beside messages that are "N minutes old". prefer a short string, prefer abbreviations if they're well-known -->
     <plurals name="n_minutes">
         <item quantity="one">%d min</item>
@@ -119,6 +126,13 @@
         <item quantity="many">%dczłonków</item>
         <item quantity="other">%dczłonka</item>
     </plurals>
+    <plurals name="n_recipients">
+        <item quantity="one">%d odbiorca</item>
+        <item quantity="few">%d odbiorców</item>
+        <item quantity="many">%d odbiorców</item>
+        <item quantity="other">%d odbiorcy</item>
+    </plurals>
+
     <string name="self">Ja</string>
     <string name="draft">Szkic</string>
     <string name="image">Obraz</string>
@@ -140,6 +154,7 @@
     <string name="verified_contact">Zweryfikowany kontakt</string>
     <string name="camera">Kamera</string>
     <string name="switch_camera">Przełącz kamerę</string>
+    <string name="toggle_fullscreen">Przełącz na tryb pełnoekranowy</string>
     <string name="location">Lokalizacja</string>
     <string name="gallery">Galeria</string>
     <string name="images_and_videos">Obrazy i wideo</string>
@@ -166,10 +181,6 @@
     <string name="fast">Szybkie</string>
     <string name="slow">Wolne</string>
 
-    <string name="message_delivered">Wiadomość dostarczona</string>
-    <string name="message_read">Wiadomość przeczytana</string>
-
-
     <!-- menu labels (or icon, buttons...) -->
     <string name="menu_new_contact">Nowy kontakt</string>
     <string name="menu_new_chat">Nowy czat</string>
@@ -195,9 +206,7 @@
     <string name="menu_delete_chat">Usuń czat</string>
     <string name="ask_delete_named_chat">Czy na pewno chcesz usunąć „%1$s”?</string>
     <string name="menu_delete_messages">Usuń wiadomości</string>
-    <string name="menu_delete_image">Usuń  obraz</string>
     <string name="delete_contact">Usuń kontakt</string>
-    <string name="menu_delete_locations">Usunąć wszystkie lokalizacje?</string>
     <string name="menu_delete_location">Usunąć tę lokalizację?</string>
     <string name="menu_message_details">Szczegóły wiadomości</string>
     <string name="menu_copy_to_clipboard">Kopiuj do schowka</string>
@@ -205,9 +214,9 @@
     <string name="menu_copy_link_to_clipboard">Kopiuj link</string>
     <string name="menu_copy_text_to_clipboard">Kopiuj tekst</string>
     <string name="menu_copy_image_to_clipboard">Kopiuj obraz</string>
+    <string name="menu_copy_email_to_clipboard">Kopiuj e-mail</string>
     <string name="paste_from_clipboard">Wklej ze schowka</string>
     <string name="menu_forward">Przekaż wiadomość</string>
-    <string name="menu_resend">Wyślij ponownie wiadomość</string>
     <string name="menu_reply">Odpowiedz na wiadomość</string>
     <string name="menu_mute">Wyłącz powiadomienia</string>
     <string name="menu_unmute">Wyłącz powiadomienia</string>
@@ -230,20 +239,19 @@
     <string name="privacy_policy">Polityka prywatności</string>
     <string name="menu_select_all">Zaznacz wszystko</string>
     <string name="select_more">Zaznacz więcej</string>
-    <string name="menu_expand">Rozwiń</string>
     <string name="menu_edit_name">Edytuj nazwę</string>
     <string name="menu_settings">Ustawienia</string>
     <string name="menu_advanced">Zaawansowane</string>
-    <string name="menu_deaddrop">Prośba o kontakt</string>
-    <string name="menu_deaddrop_subtitle">Naciśnij wiadomość, aby rozpocząć rozmowę</string>
     <string name="menu_view_profile">Pokaż profil</string>
     <string name="menu_zoom_in">Powiększ</string>
     <string name="menu_zoom_out">Pomniejsz</string>
     <string name="menu_save_log">Zapisz log</string>
     <string name="menu_more_options">Więcej opcji</string>
+    <string name="menu_learn_spelling">Naucz się pisowni</string>
     <string name="menu_chat_audit_log">Dziennik audytu czatu</string>
     <string name="jump_to_message">Przejdź do wiadomości</string>
     <string name="copy_json">Kopiuj JSON</string>
+    <string name="replace_draft">Zastąp szkic</string>
     <string name="title_share_location">Udostępnij lokalizację dla wszystki czlonków grup</string>
     <string name="device_talk">Komunikaty urządzenia</string>
     <string name="device_talk_subtitle">Wiadomości generowane lokalnie</string>
@@ -265,7 +273,6 @@
     <string name="mute_for_seven_days">Wyłącz na 7 dni</string>
     <string name="mute_forever">Wyłącz na zawsze</string>
 
-    <string name="share_location_once">raz</string>
     <string name="share_location_for_5_minutes">na 5 minut</string>
     <string name="share_location_for_30_minutes">na 30 mninut</string>
     <string name="share_location_for_one_hour">na 1 godzinę</string>
@@ -285,7 +292,6 @@
     <string name="videochat_invite_user_hint">Wymaga to kompatybilnej aplikacji lub kompatybilnej przeglądarki po obu stronach.</string>
     <string name="videochat_contact_invited_hint">Użytkownik %1$s zaprosił na czat wideo.</string>
     <string name="videochat_you_invited_hint">Zaprosiłeś do czatu wideo.</string>
-    <string name="videochat_will_open_in_your_browser">Ten czat wideo otworzy się w twojej przeglądarce.</string>
     <string name="videochat_tap_to_join">Dotknij, aby dołączyć</string>
     <string name="videochat_tap_to_open">Dotknij, aby otworzyć</string>
     <string name="videochat_instance">Instancja czatu wideo</string>
@@ -363,7 +369,6 @@
         <item quantity="many">%d nowe wiadomości</item>
         <item quantity="other">%d nowych wiadomości</item>
     </plurals>
-    <string name="chat_no_messages_hint">Wyślij wiadomość do %1$s:\n\n• Nie ma problemu, jeśli %2$s nie używa Delta Chat.\n\n• Dostarczenie pierwszej wiadomości może chwilę potrwać i może być niezaszyfrowane.</string>
     <string name="chat_new_broadcast_hint">Na liście rozgłoszeniowej inne osoby będą otrzymywać wiadomości w swoich prywatnych czatach z Tobą.\n\nOdbiorcy nie będą o sobie nawzajem wiedzieć.</string>
     <string name="chat_new_group_hint">Napisz pierwszą wiadomość, by inni mogli odpowiedzieć w tej grupie.\n\n• Nie ma problemu, jeśli nie wszyscy członkowie korzystają z Delta Chat.\n\n• Dostarczenie pierwszej wiadomości może chwilę potrwać.</string>
     <string name="chat_record_slide_to_cancel">PRZESUŃ, BY ANULOWAĆ</string>
@@ -382,14 +387,11 @@
     <string name="saved_messages_explain">• Przesyłaj tu wiadomości, aby mieć je pod ręką\n\n• Rób notatki lub notatki głosowe\n\n• Dołączaj media, aby je zachować</string>
     <!-- this "Saved" should match the "Saved" from "Saved messages" -->
     <string name="saved">Zapisana</string>
-    <string name="chat_contact_request">Prośba o kontakt</string>
-    <string name="chat_no_contact_requests">Brak zaproszenia do kontaktów.\n\nJeśli chcesz, aby klasyczne wiadomości e-mail pojawiały się tutaj jako prośby o kontakt, możesz zmienić odpowiednie ustawienia w ustawieniach aplikacji.</string>
     <string name="retry_send">Spróbuj ponownie wysłać wiadomość</string>
-    <string name="send_failed">Nie można wysłać wiadomości</string>
     <!-- reasons for a disabled message composer -->
     <string name="messaging_disabled_not_in_group">Nie możesz pisać, ponieważ nie jesteś w tej grupie. Aby dołączyć, poproś innego członka.</string>
     <string name="messaging_disabled_device_chat">Ten czat zawiera wiadomości generowane lokalnie dlatego nie możesz pisać żadnych wiadomości.</string>
-    <string name="messaging_disabled_deaddrop">Kliknij wiadomość, aby zaakceptować lub odrzucić prośbę o kontakt</string>
+    <string name="messaging_disabled_mailing_list">Wysyłanie wiadomości w listach mailingowych nie jest jeszcze obsługiwane</string>
     <string name="cannot_display_unsuported_file_type">Nie można wyświetlić tego typu pliku: %s</string>
     <string name="attachment_failed_to_load">Nie udało się załadować załącznika</string>
     <!-- For recording Voice messages: Description for the "Lock" button allowing to lift the thumb from the record button while recording continues -->
@@ -397,7 +399,8 @@
 
     <!-- mailing lists -->
     <string name="mailing_list">Lista mailingowa</string>
-    <string name="ask_show_mailing_list">Wyświetlić listę mailingową „%1$s”?</string>
+    <string name="mailing_list_profile_info">Zmiany nazwy i obrazu listy adresowej dotyczą tylko tego urządzenia.</string>
+
     <!-- map -->
     <string name="filter_map_on_time">Pokaż lokalizacje w ramach czasowych</string>
     <string name="show_location_traces">Pokaż ślady</string>
@@ -414,6 +417,10 @@
     <string name="puny_code_warning_header">Wykryto podejrzany link</string>
     <!-- placeholder contains the hostname converted to ascii -->
     <string name="puny_code_warning_question">Czy na pewno chcesz odwiedzić %1$s?</string>
+    <!-- this message is shown whenever a link with non-latin characters is clicked. first placeholder is original hostname with special chars, second placeholder is hostname encoded in ascii -->
+    <string name="puny_code_warning_description">Wybrano link, który może przekłamywać znaki poprzez użycie podobnie wyglądających znaków z różnych alfabetów. Podążanie za linkiem oznaczonym %1$s doprowadzi do %2$s, co jest normalne dla znaków niełacińskich. Jeśli nie spodziewałeś się takich znaków, ten link może być szkodliwy.</string>
+
+
     <!-- search -->
     <string name="search">Szukaj</string>
     <string name="search_explain">Wyszukaj czaty, kontakty i wiadomości</string>
@@ -428,7 +435,6 @@
     <string name="group_create_button">Utwórz grupę</string>
     <string name="group_please_enter_group_name">Podaj nazwę dla grupy</string>
     <string name="group_add_members">Dodaj członków</string>
-    <string name="group_hello_draft">Witam, właśnie utworzyłem dla nas grupę \"%1$s\".</string>
     <string name="group_self_not_in_group">Musisz być członkiem grupy, aby wykonać tę czynność.</string>
     <string name="profile_encryption">Szyfrowanie</string>
     <string name="profile_shared_chats">Wspólne czaty</string>
@@ -463,6 +469,7 @@
     <string name="connectivity_connected">Połączony</string>
     <string name="sending">Wysyłanie…</string>
     <string name="last_msg_sent_successfully">Twoja ostatnia wiadomość została pomyślnie wysłana</string>
+    <string name="not_supported_by_provider">Nieobsługiwane przez twojego dostawcę.</string>
     <!-- Used as a subtitle in quota context of "Connetivity" view. Should be be plural always, no number is prefixed or so. -->
     <string name="messages">Wiadomości</string>
     <!-- Used for describing resource usage, resulting string will be eg. "1.2 GiB of 3 GiB used" -->
@@ -509,8 +516,6 @@
     <string name="import_backup_no_backup_found">Nie znaleziono kopii zapasowej.\n\nSkopiuj kopię zapasową do katalogu „%1$s i spróbuj ponownie. Alternatywnie dotknij \"Uruchom komunikator\", aby rozpocząć normalny proces instalacji.</string>
     <!-- Translators: %1$s will be replaced by the e-mail address -->
     <string name="login_error_cannot_login">Nie można się zalogować jako „%1$s. Sprawdź, czy adres e-mail i hasło są poprawne.</string>
-    <!-- Translators: %1$s will be replaced by the server name (eg. imap.somewhere.org) and %2$s will be replaced by the human-readable response from the server. this response may be a single word or some sentences and may or may not be localized. -->
-    <string name="login_error_server_response">Odpowiedź od %1$s: %2$s\n\nNiektórzy dostawcy umieszczają w skrzynce odbiorczej dodatkowe informacje, które można sprawdzić np. na stronie internetowej. W przypadku wystąpienia problemów należy skonsultować się z dostawcą lub znajomymi.</string>
     <!-- TLS certificate checks -->
     <string name="accept_invalid_certificates">Zaakceptuj nieprawidłowe certyfikaty</string>
     <string name="used_settings">Użyte ustawienia:</string>
@@ -519,7 +524,6 @@
     <string name="delete_account">Usuń konto</string>
     <string name="delete_account_ask">Czy na pewno chcesz usunąć dane swojego konta?</string>
     <string name="delete_account_explain_with_name">Wszystkie dane konta „%s” na tym urządzeniu zostaną usunięte, w tym konfiguracja szyfrowania end-to-end, kontakty, czaty, wiadomości i multimedia. Tej operacji nie można cofnąć.</string>
-    <string name="switching_account">Przełączam konto…</string>
     <string name="unconfigured_account">Nieskonfigurowane konto</string>
     <string name="unconfigured_account_hint">Otwórz konto, aby je skonfigurować</string>
     <string name="try_connect_now">Spróbuj się teraz połączyć</string>
@@ -543,7 +547,6 @@
     <string name="pref_profile_photo">Zdjęcie profilowe</string>
     <string name="pref_blocked_contacts">Zablokowane kontakty</string>
     <string name="blocked_empty_hint">Jeśli zablokujesz kontakty, zostaną one pokazane tutaj.</string>
-    <string name="pref_profile_photo_remove_ask">Usunąć zdjęcie profilowe?</string>
     <string name="pref_password_and_account_settings">Hasło i konto</string>
     <string name="pref_who_can_see_profile_explain">Twoje zdjęcie profilowe i nazwa będą wyświetlane wraz z wiadomościami podczas komunikacji z innymi użytkownikami. Już wysłanych informacji nie można skasować ani usunąć.</string>
     <string name="pref_your_name">Twoja nazwa</string>
@@ -637,8 +640,11 @@
     <string name="up_to_x_most_worse_quality_images">Do %1$s, większość obrazów gorszej jakości.</string>
     <string name="up_to_x_most_balanced_quality_images">Do %1$s, obrazy o najbardziej zrównoważonej jakości</string>
     <string name="no_limit">Bez limitu</string>
+    <string name="download_failed">Pobieranie nie udane</string>
     <!-- %1$s will be replaced by a human-readable number of bytes, eg. 32 KiB, 1 MiB. Resulting string eg. "1 MiB message" -->
     <string name="n_bytes_message">Wiadomość %1$s</string>
+    <!-- %1$s will be replaced by human-readable date and time -->
+    <string name="download_max_available_until">Maksymalna ilość do pobrania dostępna do %1$s</string>
     <string name="profile_image_select">Wybierz zdjęcie profilowe</string>
     <string name="select_your_new_profile_image">Wybierz nowe zdjęcie profilowe</string>
     <string name="profile_image_delete">Usuń zdjęcie profilowe</string>
@@ -661,8 +667,6 @@
 
     <!-- automatically delete message -->
     <string name="delete_old_messages">Usuń stare wiadomości</string>
-    <!-- devs: autodel_title is deprecated, use delete_old_messages instead -->
-    <string name="autodel_title">Automatyczne usuwanie wiadomości</string>
     <string name="autodel_device_title">Usuwanie wiadomości z urządzenia</string>
     <string name="autodel_server_title">Usuwanie wiadomości z serwera</string>
     <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
@@ -736,6 +740,9 @@
     <string name="systemmsg_chat_protection_disabled">Ochrona czatu wyłączona.</string>
     <string name="systemmsg_chat_protection_enabled">Ochrona czatu włączona.</string>
 
+    <string name="devicemsg_self_deleted">Usunięto czat „Zapisane wiadomości”.\n\nℹ️ Aby ponownie użyć funkcji „Zapisane wiadomości”, utwórz nowy czat ze sobą.</string>
+    <!-- %1$s will be replaced by the number of storage already used, sth. as '500 MB'. CAVE: if you want to use a simple the percent sign, type in two, so eg. %1$s %% -->
+    <string name="devicemsg_storage_exceeding">⚠️ Limit pamięci u twojego dostawcy wkrótce zostanie przekroczony, wykorzystano już %1$s%%.\n\nMożesz nie być w stanie otrzymywać wiadomości, gdy pamięć zostanie wykorzystana w 100%%.\n\n👉 Sprawdzić, czy możesz usunąć stare dane w interfejsie internetowym dostawcy i rozważyć włączenie opcji \"Ustawienia » Czaty i media » Usuń stare wiadomości\". W dowolnym momencie możesz sprawdzić swoje bieżące wykorzystanie pamięci w \"Ustawienia » Łączność\".</string>
     <!-- %1%s will be replaced by date and time in some human-readable format -->
     <string name="devicemsg_bad_time">⚠️ Data lub godzina urządzenia wydaje się być niedokładna (%1$s).\n\nDostosuj zegar ⏰🔧, aby upewnić się, że wiadomości są prawidłowo odbierane.</string>
     <string name="devicemsg_update_reminder">⚠️ Twoja wersja Delta Chat może być nieaktualna.\n\nMoże to powodować problemy, ponieważ Twoi partnerzy czatu korzystają z nowszych wersji, a Ty nie masz najnowszych funkcji 😳\nSprawdź aktualizacje na stronie https://get.delta.chat lub w sklepie z aplikacjami.</string>
@@ -755,7 +762,6 @@
     <string name="qrscan_contains_text">Zeskanowany kod QR zawiera następujący tekst:\n\n%1$s</string>
     <string name="qrscan_contains_url">Zeskanowany kod QR zawiera następujący adres:\n\n%1$s</string>
     <string name="qrscan_fingerprint_label">Odciski palca</string>
-    <string name="qrscan_x_verified_introduce_myself">Zweryfikowano %1$s, przedstaw się…</string>
     <string name="withdraw_verifycontact_explain">Ten kod QR może zostać zeskanowany przez inne osoby w celu skontaktowania się z Tobą.\n\nTutaj możesz dezaktywować kod QR i ponownie go aktywować poprzez zeskanowanie.</string>
     <string name="withdraw_verifygroup_explain">Ten kod QR może zostać zeskanowany przez inne osoby, aby dołączyć do grupy „%1$s”.\n\nTutaj możesz dezaktywować kod QR i ponownie go aktywować poprzez zeskanowanie.</string>
     <string name="withdraw_qr_code">Dezaktywuj kod QR</string>
@@ -774,13 +780,16 @@
     <string name="qrshow_join_contact_title">Kod QR zaproszenia</string>
     <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and address eg. "Scan to chat with Alice (alice@example.org)" -->
     <string name="qrshow_join_contact_hint">Zeskanuj go w celu skonfigurowania kontaktu z %1$s</string>
-    <string name="qrshow_join_contact_no_connection_hint">Konfiguracja kodu QR wymaga połączenia z Internetem. Przed kontynuowaniem połącz się z siecią.</string>
     <string name="qrshow_join_contact_no_connection_toast">Brak połączenia z Internetem, nie można przeprowadzić konfiguracji kodu QR.</string>
     <string name="qraccount_ask_create_and_login">Utworzyć nowy adres e-mail „%1$s” i się zalogować?</string>
     <string name="qraccount_ask_create_and_login_another">Utworzyć nowy adres e-mail „%1$s” i się zalogować?\n\nTwoje istniejące konto nie zostanie usunięte. Użyj opcji „Przełącz konto”, aby przełączać się między kontami.</string>
     <string name="qraccount_success_enter_name">Logowanie powiodło się – twój adres e-mail to %1$s\n\nJeśli chcesz, możesz teraz wprowadzić nazwę i zdjęcie profilowe, które będą wyświetlane osobom, do których piszesz.</string>
     <string name="qraccount_qr_code_cannot_be_used">Zeskanowanego kodu QR nie można użyć do założenia nowego konta.</string>
     <string name="qraccount_use_on_new_install">Zeskanowany kod QR służy do zakładania nowego konta. Możesz zeskanować kod QR podczas konfigurowania nowej instalacji Delta Chat.</string>
+    <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
+    <string name="secure_join_started">Użytkownik %1$s zaprosił cię do dołączenia do tej grupy.\n\nCzekam na odpowiedź urządzenia %2$s…</string>
+    <!-- placeholder will be replaced by the name of the inviter. -->
+    <string name="secure_join_replies">Użytkownik %1$s odpowiedział, czekając na dodanie do grupy…</string>
     <string name="contact_verified">Kontakt %1$s zweryfikowany.</string>
     <string name="contact_not_verified">Nie można zweryfikować %1$s</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
@@ -788,11 +797,12 @@
     <string name="verified_group_explain">Zweryfikowane grupy (eksperymentalne) zapewniają bezpieczeństwo przed aktywnymi atakami. Członkowie są weryfikowani za pomocą drugiego czynnika przez innych członków, a wiadomości są zawsze szyfrowane metodą end-to-end. </string>
     <string name="copy_qr_data_success">Skopiowano adres kodu QR do schowka</string>
     <string name="mailto_dialog_header_select_chat">Wybierz czat, do którego chcesz wysłać wiadomość</string>
+    <!-- first placeholder is the name of the chat -->
+    <string name="confirm_replace_draft">Na czacie %1$s jest już wersja robocza wiadomości, czy chcesz ją zastąpić?</string>
     <string name="mailto_link_could_not_be_decoded">link mailto nie mógł zostać odszyfrowany: %1$s</string>
 
     <!-- notifications  -->
-    <string name="notify_n_messages_in_m_chats">%1$d nowe wiadomości w %2$d czatach</string>
-    <string name="notify_mark_read">Oznacz jako przeczytane</string>
+    <string name="notify_dismiss">Odrzuć</string>
     <string name="notify_reply_button">Odpowiedz</string>
     <string name="notify_new_message">Nowa wiadomość</string>
     <string name="notify_background_connection_enabled">Połączenie w tle włączone</string>
@@ -849,49 +859,33 @@
     <string name="no_chat_selected_suggestion_desktop">Wybierz czat lub utwórz nowy czat</string>
     <string name="write_message_desktop">Napisz wiadomość</string>
     <string name="encryption_info_title_desktop">Informacje o szyfrowaniu</string>
-    <string name="contact_detail_title_desktop">Szczegóły kontaktu</string>
-    <string name="contact_request_title_desktop">Prośba o kontakt</string>
     <string name="delete_message_desktop">Usuń wiadomość</string>
     <string name="more_info_desktop">Więcej informacji</string>
-    <string name="logout_desktop">Wyloguj się</string>
     <string name="timestamp_format_m_desktop">D MMM</string>
     <string name="encryption_info_desktop">Pokaż informacje o szyfrowaniu</string>
-    <string name="verified_desktop">zweryfikowano</string>
     <string name="remove_desktop">Usuń</string>
     <string name="save_desktop">Zapisz</string>
-    <string name="add_contact_desktop">Dodaj kontakt</string>
-    <string name="login_required_desktop">wymagany</string>
     <string name="name_desktop">Nazwa</string>
     <string name="autocrypt_key_transfer_desktop">Transfer klucza Autocrypt</string>
     <string name="initiate_key_transfer_desktop">Wiadomość konfiguracyjna automatycznego szyfrowania bezpiecznie udostępnia twoją konfigurację end-to-end innym aplikacjom zgodnym z Autocrypt. Klucz zostanie zaszyfrowany za pomocą wyświetlonego tutaj kodu konfiguracyjnego, który należy wpisać na drugim urządzeniu.</string>
-    <string name="reply_to_message_desktop">Odpowiedz na wiadomość</string>
     <string name="select_group_image_desktop">Wybierz obraz grupy</string>
     <string name="imex_progress_title_desktop">Postęp tworzenia kopii zapasowej </string>
-    <string name="download_attachment_desktop">Pobierz załącznik</string>
     <string name="export_backup_desktop">Eksport kopii zapasowej</string>
-    <string name="transfer_key_desktop">Transferuj klucz</string>
     <string name="show_key_transfer_message_desktop">Twój klucz został wysłany do ciebie. Przełącz się na inne urządzenie i otwórz komunikat konfiguracji. Powinieneś zostać poproszony o kod instalacyjny. Wpisz następujące cyfry w wierszu polecenia. Po zakończeniu Twoje drugie urządzenie będzie gotowe do użycia funkcji Autocrypt.</string>
-    <string name="new_message_from_desktop">Nowa wiadomość od</string>
-    <string name="unblock_contacts_desktop">Odblokuj kontakt</string>
-    <string name="none_blocked_desktop">Tutaj nie ma zablokowanych kontaktów</string>
     <string name="autocrypt_correct_desktop">Pomyślnie przetransferowano konfigurację Autocrypt!</string>
     <string name="autocrypt_incorrect_desktop">Nieprawidłowy kod konfiguracji. Spróbuj ponownie.</string>
     <string name="create_chat_error_desktop">Nie można utworzyć czatu.</string>
-    <string name="ask_delete_chat_desktop">Czy na pewno chcesz usunąć ten czat?</string>
-    <string name="email_validation_failed_desktop">Wymagany adres e-mail.</string>
     <string name="forget_login_confirmation_desktop">Usunąć ten login? Wszystko zostanie usunięte, w tym kompletna konfiguracja, kontakty, czaty, wiadomości i multimedia. Ta akcja jest ostateczna i nie można jej odwrócić.</string>
-    <string name="me_desktop">ja</string>
-    <string name="in_this_group_desktop">Członkowie grupy</string>
-    <string name="not_in_this_group_desktop">Potencjalni członkowie grupy (nie w grupie)</string>
+    <string name="account_info_hover_tooltip_desktop2">E-mail: %1$s\nRozmiar: %2$s\nID konta: %3$s</string>
     <string name="message_detail_sent_desktop">wysłane</string>
     <string name="message_detail_received_desktop">odebrane</string>
-    <string name="message_detail_from_desktop">od</string>
-    <string name="message_detail_to_desktop">do</string>
     <string name="menu.view.developer.open.log.folder">Otwórz folder dziennika</string>
     <string name="menu.view.developer.open.current.log.file">Otwórz bieżący plik dziennika</string>
-    <string name="user_location_permission_explanation">Delta Chat wymaga uprawnienia lokalizacji, aby pokazać i udostępniać swoją lokalizację.</string>
     <string name="explain_desktop_minimized_disabled_tray_pref">Ikona w zasobniku nie może być wyłączona, ponieważ Delta Chat został uruchomiony z opcją --minimized.</string>
+    <string name="no_spellcheck_suggestions_found">Nie znaleziono propozycji pisowni.</string>
     <string name="show_window">Pokaż okno</string>
+    <string name="login_socks5_experimental_warning">Obsługa SOCKS5 jest obecnie eksperymentalna. Proszę używać na własne ryzyko. Jeśli wpiszesz adres w polu e-mail, nastąpi wyszukiwanie DNS, które nie będzie tunelowane przez SOCKS5.</string>
+
     <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">Status dostawy: Błąd</string>
     <string name="a11y_encryption_padlock">Kłódka szyfrowania</string>
@@ -926,4 +920,5 @@
     <!-- device messages for updates -->
     <string name="update_1_24_android">1.24 w skrócie:\n\n• Zapisywanie dotknięć: wybór konta w lewym górnym rogu listy czatu\n• Zapisywanie kolejnych dotknięć: dotknij i przytrzymaj ikony aplikacji, aby bezpośrednio otwierać ostatnie czaty\n• Oszczędzaj transfer: pobierz duże pliki w razie potrzeby\n• Oszczędzaj nerwy: szybsze, nieblokujące dołączanie za pomocą kodów QR i nowe opcje kodów QR\n\nWięcej na 👉</string>
     <string name="update_1_24_ios">1.24 w skrócie:\n\n• Rozpocznij wyszukiwanie na czacie z profilu czatu\n• Oszczędzaj transfer: pobierz duże pliki w razie potrzeby\n• Oszczędzaj nerwy: szybsze, nieblokujące dołączanie za pomocą kodów QR \n\nWięcej na 👉</string>
-    </resources>
+    <string name="update_1_26">1.26 dopracowanie 💅\n\n• Po tym jak w 1.24 kody QR przestały się blokować, teraz również wyglądają dużo ładniej - na wszystkich platformach\n• Awatary i plakietki wyglądają podobnie na różnych platformach\n• Naprawiono wiele błędów</string>
+</resources>
