@@ -443,10 +443,11 @@
     // and yes using this property is a bit hacky and depends on browser support
     // but atleast its simpler than estimating size with js
     -webkit-box-orient: vertical;
-    overflow: hidden;
     color: var(--messageQuotedText);
     white-space: pre-line;
     user-select: text;
+    position: relative;
+    word-break: break-all;
   }
 }
 
