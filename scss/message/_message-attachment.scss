@@ -156,8 +156,11 @@
 
       // Handling really long filenames - cut them off
       overflow-x: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
+      display: inline-block;
+      white-space: pre-line;
+      user-select: text;
+      position: relative;
+      word-break: break-all;
     }
 
     & > .size {
