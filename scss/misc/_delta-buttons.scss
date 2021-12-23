@@ -1,3 +1,4 @@
+
 button.delta-button-round {
   margin-top: 10px;
   background-color: var(--bp3-input-focused);
@@ -17,7 +18,7 @@ button.delta-button-round {
     border-color: rgba(206, 217, 224, 0.5);
     background-image: none;
     cursor: not-allowed;
-    color:white;
+    color:rgb(51, 49, 49);
     &:hover {
       background-color: rgba(206, 217, 224, 0.5);
     }
@@ -29,3 +30,5 @@ button.delta-button-round {
     background-clip: unset;
   }
 }
+
+
