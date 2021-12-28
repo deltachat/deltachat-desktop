@@ -11,18 +11,16 @@ button.delta-button-round {
   color: white;
   text-transform: uppercase;
   font-weight: bold;
-
   &:disabled {
     background-color: rgba(206, 217, 224, 0.5);
     border-color: rgba(206, 217, 224, 0.5);
     background-image: none;
     cursor: not-allowed;
-    color: rgba(92, 112, 128, 0.6);
+    color: var(--globalText);
     &:hover {
       background-color: rgba(206, 217, 224, 0.5);
     }
   }
-
   &:hover {
     background-color: var(--bp3-input-focused);
     box-shadow: none;
