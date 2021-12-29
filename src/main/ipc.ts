@@ -140,6 +140,11 @@ export async function init(cwd: string, logHandler: LogHandler) {
             'Permission Error',
             `Cannot write in this folder. You don't have write permission`
           )
+        } else {
+          dialog.showErrorBox(
+            'Unhandled Error',
+            `Cannot copy file. Error: ${error}`
+          )
         }
       }
     }
