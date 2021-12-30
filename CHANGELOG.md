@@ -2,6 +2,13 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- Make disabled "delete profile image" button more readable in dark themes @ejgonzalez17 #2478
+
+### Fixed
+- Fix overflow in long links inside quotes @naomiceron #2467
+- Show error if writing an attachment fails @IrvinLara9 #2479
+
 ## [1.26.0] - 2021-12-15
 
 ### Fixed
