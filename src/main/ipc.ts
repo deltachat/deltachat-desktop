@@ -132,7 +132,21 @@ export async function init(cwd: string, logHandler: LogHandler) {
       options
     )
     if (!canceled && filePath) {
-      await copyFile(source, filePath)
+      try {
+        await copyFile(source, filePath)
+      } catch (error) {
+        if (error.code == 'EACCES') {
+          dialog.showErrorBox(
+            'Permission Error',
+            `Cannot write in this folder. You don't have write permission`
+          )
+        } else {
+          dialog.showErrorBox(
+            'Unhandled Error',
+            `Cannot copy file. Error: ${error}`
+          )
+        }
+      }
     }
   })
 }
