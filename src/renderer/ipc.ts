@@ -35,10 +35,14 @@ export function startBackendLogging() {
     return log.error('Backend logging is already started!')
   backendLoggingStarted = true
 
-  ipcBackend.on('ALL', (_e, eName, ...args) =>
-    log.debug('backend', eName, ...args)
+  ipcBackend.on('ALL', (_e, eName, [data1, data2]) =>
+    /* ignore-console-log */
+    console.debug(
+      `%c📡 ${eName}%c ${data1} ${data2}`,
+      'background:rgba(125,125,125,0.15);border-radius:2px;padding:2px 4px;',
+      'color:grey'
+    )
   )
-  ipcBackend.on('error', (_e, ...args) => log.error(...args))
 }
 
 export function sendToBackend(event: string, ...args: any[]) {
