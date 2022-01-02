@@ -8,6 +8,7 @@
 ### Fixed
 - Fix overflow in long links inside quotes @naomiceron #2467
 - Show error if writing an attachment fails @IrvinLara9 #2479
+- Fix connectivity view title @IrvinLara9 #2480
 
 ## [1.26.0] - 2021-12-15
 
