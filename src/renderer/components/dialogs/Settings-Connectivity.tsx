@@ -37,7 +37,7 @@ export default function SettingsConnectivityDialog({
         width: '500px',
       }}
     >
-      <DeltaDialogHeader title={tx('pref_edit_profile')} />
+      <DeltaDialogHeader title={tx('connectivity')} />
       {SettingsConnectivityInner()}
       <DeltaDialogCloseFooter onClose={onClose} />
     </DeltaDialogBase>
