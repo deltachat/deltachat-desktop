@@ -15,7 +15,7 @@ export default function SettingsDownloadOnDemand(props: {
   const tx = useTranslationFunction()
 
   const options: { label: string; value: number }[] = [
-    { label: tx('no_limit'), value: 0 },
+    { label: tx('pref_show_emails_all'), value: 0 },
     { label: tx('up_to_x', '40 KiB'), value: 40960 },
     {
       label: tx('up_to_x_most_worse_quality_images', '160 KiB'),
@@ -45,7 +45,7 @@ export default function SettingsDownloadOnDemand(props: {
 
   const current_limit =
     settings['download_limit'] == 0
-      ? tx('no_limit')
+      ? tx('pref_show_emails_all')
       : tx(
           'up_to_x',
           filesizeConverter(settings['download_limit'], { base: 2 })
