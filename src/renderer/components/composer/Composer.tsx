@@ -6,7 +6,7 @@ import React, {
   useLayoutEffect,
   useCallback,
 } from 'react'
-import { Button } from '@blueprintjs/core'
+import { Button, Position, Popover, Menu, MenuItem } from '@blueprintjs/core'
 
 import { SettingsContext, useTranslationFunction } from '../../contexts'
 import ComposerMessageInput from './ComposerMessageInput'
@@ -128,8 +128,58 @@ const Composer = forwardRef<
     }
   }
 
-  const addFilename = async () => {
+  const addFilenameDoc = async () => {
     const file = await runtime.showOpenFileDialog({
+      filters: [
+        {
+          name: 'Document',
+          extensions: [
+            'doc',
+            'docx',
+            'xls',
+            'xlsx',
+            'ppt',
+            'ppt',
+            'pdf',
+            'txt',
+            'csv',
+            'log',
+          ],
+        },
+      ],
+      properties: ['openFile'],
+      defaultPath: runtime.getAppPath('home'),
+    })
+    if (file) {
+      addFileToDraft(file)
+    }
+  }
+
+  const addFilenameImg = async () => {
+    const file = await runtime.showOpenFileDialog({
+      filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }],
+      properties: ['openFile'],
+      defaultPath: runtime.getAppPath('home'),
+    })
+    if (file) {
+      addFileToDraft(file)
+    }
+  }
+
+  const addFilenameVid = async () => {
+    const file = await runtime.showOpenFileDialog({
+      filters: [{ name: 'Videos', extensions: ['mkv', 'avi', 'mp4'] }],
+      properties: ['openFile'],
+      defaultPath: runtime.getAppPath('home'),
+    })
+    if (file) {
+      addFileToDraft(file)
+    }
+  }
+
+  const addFilenameInv = async () => {
+    const file = await runtime.showOpenFileDialog({
+      filters: [{ name: 'All Files', extensions: ['*'] }],
       properties: ['openFile'],
       defaultPath: runtime.getAppPath('home'),
     })
@@ -263,12 +313,39 @@ const Composer = forwardRef<
         </div>
         <div className='lower-bar'>
           <div className='attachment-button'>
-            <Button
-              minimal
-              icon='paperclip'
-              onClick={addFilename.bind(null)}
-              aria-label={tx('attachment')}
-            />
+            <Popover
+              content={
+                <Menu>
+                  <MenuItem
+                    icon='document'
+                    text='Document'
+                    onClick={addFilenameDoc.bind(null)}
+                    aria-label={tx('attachment-document')}
+                  />
+                  <MenuItem
+                    icon='media'
+                    text='Image'
+                    onClick={addFilenameImg.bind(null)}
+                    aria-label={tx('attachment-image')}
+                  />
+                  <MenuItem
+                    icon='video'
+                    text='Video'
+                    onClick={addFilenameVid.bind(null)}
+                    aria-label={tx('attachment-video')}
+                  />
+                  <MenuItem
+                    icon='people'
+                    text='Invitation'
+                    onClick={addFilenameInv.bind(null)}
+                    aria-label={tx('attachment-invitation')}
+                  />
+                </Menu>
+              }
+              position={Position.RIGHT_TOP}
+            >
+              <Button minimal icon='paperclip' />
+            </Popover>
           </div>
           <SettingsContext.Consumer>
             {({ desktopSettings }) =>
