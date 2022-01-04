@@ -1,5 +1,17 @@
 {
   "download_failed": {
     "message": "Download failed"
+  },
+  "attachment-document": {
+    "message": "Attached document"
+  },
+  "attachment-image": {
+    "message": "Attached image"
+  },
+  "attachment-video": {
+    "message": "Attached video"
+  },
+  "attachment-invitation": {
+    "message": "Attached invitation"
   }
 }
