@@ -6,8 +6,7 @@ import React, {
   useLayoutEffect,
   useCallback,
 } from 'react'
-import { Button, Position, Popover, Menu, MenuItem } from '@blueprintjs/core'
-
+import MenuAttachment from '../attachment/menuAttachment'
 import { SettingsContext, useTranslationFunction } from '../../contexts'
 import ComposerMessageInput from './ComposerMessageInput'
 import { getLogger } from '../../../shared/logger'
@@ -125,56 +124,6 @@ const Composer = forwardRef<
         textareaRef.disabled = false
       }
       messageInputRef.current.focus()
-    }
-  }
-
-  const addFilenameDoc = async () => {
-    const file = await runtime.showOpenFileDialog({
-      filters: [
-        {
-          name: 'Document',
-          extensions: [
-            'doc',
-            'docx',
-            'xls',
-            'xlsx',
-            'ppt',
-            'ppt',
-            'pdf',
-            'txt',
-            'csv',
-            'log',
-            'zip',
-          ],
-        },
-      ],
-      properties: ['openFile'],
-      defaultPath: runtime.getAppPath('home'),
-    })
-    if (file) {
-      addFileToDraft(file)
-    }
-  }
-
-  const addFilenameImg = async () => {
-    const file = await runtime.showOpenFileDialog({
-      filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }],
-      properties: ['openFile'],
-      defaultPath: runtime.getAppPath('home'),
-    })
-    if (file) {
-      addFileToDraft(file)
-    }
-  }
-
-  const addFilenameVid = async () => {
-    const file = await runtime.showOpenFileDialog({
-      filters: [{ name: 'Videos', extensions: ['mkv', 'avi', 'mp4'] }],
-      properties: ['openFile'],
-      defaultPath: runtime.getAppPath('home'),
-    })
-    if (file) {
-      addFileToDraft(file)
     }
   }
 
@@ -302,35 +251,7 @@ const Composer = forwardRef<
           )}
         </div>
         <div className='lower-bar'>
-          <div className='attachment-button'>
-            <Popover
-              content={
-                <Menu>
-                  <MenuItem
-                    icon='document'
-                    text='Document'
-                    onClick={addFilenameDoc.bind(null)}
-                    aria-label={tx('attachment-document')}
-                  />
-                  <MenuItem
-                    icon='media'
-                    text='Image'
-                    onClick={addFilenameImg.bind(null)}
-                    aria-label={tx('attachment-image')}
-                  />
-                  <MenuItem
-                    icon='video'
-                    text='Video'
-                    onClick={addFilenameVid.bind(null)}
-                    aria-label={tx('attachment-video')}
-                  />
-                </Menu>
-              }
-              position={Position.RIGHT_TOP}
-            >
-              <Button minimal icon='paperclip' />
-            </Popover>
-          </div>
+          <MenuAttachment addFileToDraft={addFileToDraft} />
           <SettingsContext.Consumer>
             {({ desktopSettings }) =>
               desktopSettings && (

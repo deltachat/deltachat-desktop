@@ -2,13 +2,10 @@
   "download_failed": {
     "message": "Download failed"
   },
-  "attachment-document": {
-    "message": "Attached document"
+  "attachment-files": {
+    "message": "Attached files"
   },
-  "attachment-image": {
+  "attachment-images": {
     "message": "Attached image"
-  },
-  "attachment-video": {
-    "message": "Attached video"
   }
 }
