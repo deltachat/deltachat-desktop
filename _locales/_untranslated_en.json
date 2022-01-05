@@ -10,8 +10,5 @@
   },
   "attachment-video": {
     "message": "Attached video"
-  },
-  "attachment-invitation": {
-    "message": "Attached invitation"
   }
 }

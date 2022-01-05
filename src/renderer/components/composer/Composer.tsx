@@ -144,6 +144,7 @@ const Composer = forwardRef<
             'txt',
             'csv',
             'log',
+            'zip',
           ],
         },
       ],
@@ -169,17 +170,6 @@ const Composer = forwardRef<
   const addFilenameVid = async () => {
     const file = await runtime.showOpenFileDialog({
       filters: [{ name: 'Videos', extensions: ['mkv', 'avi', 'mp4'] }],
-      properties: ['openFile'],
-      defaultPath: runtime.getAppPath('home'),
-    })
-    if (file) {
-      addFileToDraft(file)
-    }
-  }
-
-  const addFilenameInv = async () => {
-    const file = await runtime.showOpenFileDialog({
-      filters: [{ name: 'All Files', extensions: ['*'] }],
       properties: ['openFile'],
       defaultPath: runtime.getAppPath('home'),
     })
@@ -333,12 +323,6 @@ const Composer = forwardRef<
                     text='Video'
                     onClick={addFilenameVid.bind(null)}
                     aria-label={tx('attachment-video')}
-                  />
-                  <MenuItem
-                    icon='people'
-                    text='Invitation'
-                    onClick={addFilenameInv.bind(null)}
-                    aria-label={tx('attachment-invitation')}
                   />
                 </Menu>
               }
