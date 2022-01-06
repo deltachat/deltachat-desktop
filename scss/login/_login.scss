@@ -201,13 +201,14 @@ div.delta-form-group {
   textarea {
     width: 100%;
     padding: 0px;
-
     margin-top: 5px;
-
     border: none;
     border-radius: 0px;
     border-bottom: 2px solid;
     border-bottom-color: var(--deltaChatPrimaryFgLight);
+    
+    background-color: transparent;
+    color: var(--bp3InputText);
 
     box-shadow: none !important;
     &:focus,
