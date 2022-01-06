@@ -243,6 +243,7 @@ export const MessageListInner = React.memo(
           {messagePages.map(messagePage => {
             return (
               <MessagePageComponent
+                key={messagePage.pageKey}
                 messagePage={messagePage}
                 conversationType={conversationType}
               />
@@ -301,10 +302,15 @@ const MessagePageComponent = React.memo(
       </div>
     )
   },
-  (prevPros, nextProps) => {
+  (prevProps, nextProps) => {
     const areEqual =
-      prevPros.messagePage.pageKey === nextProps.messagePage.pageKey &&
-      prevPros.messagePage.messages === nextProps.messagePage.messages
+      prevProps.messagePage.pageKey == nextProps.messagePage.pageKey
+
+    if (areEqual) {
+      console.log(`${nextProps.messagePage.pageKey} stays equal!`)
+    } else {
+      console.log(`${nextProps.messagePage.pageKey} changed! old: ${prevProps.messagePage.pageKey}`)
+    }
 
     return areEqual
   }
