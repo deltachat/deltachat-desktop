@@ -10,7 +10,7 @@ import { OrderedMap } from 'immutable'
 export const PAGE_SIZE = 10
 
 export interface MessagePage {
-  pageKey: string,
+  pageKey: string
   messages: OrderedMap<number, MessageType | null>
 }
 
@@ -87,7 +87,7 @@ class ChatStore extends Store<ChatStoreState> {
         if (guardReducerIfChatIdIsDifferent(payload, state)) return
         return {
           ...state,
-          messagePages: [ payload.fetchedMessagePage, ...state.messagePages ],
+          messagePages: [payload.fetchedMessagePage, ...state.messagePages],
           oldestFetchedMessageIndex: payload.oldestFetchedMessageIndex,
           scrollToLastPage: true,
           scrollHeight: payload.scrollHeight,
@@ -103,7 +103,10 @@ class ChatStore extends Store<ChatStoreState> {
       this.setState(state => {
         if (guardReducerIfChatIdIsDifferent(payload, state)) return
 
-        let messages: OrderedMap<number, MessageType | null> = OrderedMap().withMutations(messages => {
+        let messages: OrderedMap<
+          number,
+          MessageType | null
+        > = OrderedMap().withMutations(messages => {
           for (let messageIncoming of payload.messagesIncoming) {
             messages.set(messageIncoming.id, messageIncoming)
           }
@@ -111,16 +114,13 @@ class ChatStore extends Store<ChatStoreState> {
 
         let incomingMessagePage: MessagePage = {
           pageKey: calculatePageKey(messages),
-          messages
+          messages,
         }
 
         return {
           ...state,
           messageIds: payload.messageIds,
-          messagePages: [
-            incomingMessagePage,
-            ...state.messagePages,
-          ],
+          messagePages: [incomingMessagePage, ...state.messagePages],
           scrollToBottomIfClose: true,
         }
       }, 'fetchedIncomingMessages')
@@ -162,7 +162,7 @@ class ChatStore extends Store<ChatStoreState> {
             if (messagePage.messages.has(msgId)) {
               return {
                 ...messagePage,
-                messages: messagePage.messages.set(msgId, null)
+                messages: messagePage.messages.set(msgId, null),
               }
             }
             return messagePage
@@ -181,14 +181,16 @@ class ChatStore extends Store<ChatStoreState> {
           ...state,
           messagePages: state.messagePages.map(messagePage => {
             let returnMessagePage = messagePage
-            returnMessagePage.messages = returnMessagePage.messages.withMutations(messages => {
-              for (let changedMessage of payload.messagesChanged) {
-                if (!messages.has(changedMessage.id)) continue
-                messages.set(changedMessage.id, changedMessage)
+            returnMessagePage.messages = returnMessagePage.messages.withMutations(
+              messages => {
+                for (let changedMessage of payload.messagesChanged) {
+                  if (!messages.has(changedMessage.id)) continue
+                  messages.set(changedMessage.id, changedMessage)
+                }
               }
-            })
+            )
             return returnMessagePage
-          })
+          }),
         }
       }, 'messageChanged')
     },
@@ -223,13 +225,10 @@ class ChatStore extends Store<ChatStoreState> {
             if (messagePage.messages.has(messageId)) {
               const message = messagePage.messages.get(messageId)
               if (message !== null && message !== undefined) {
-                messagePage.messages.set(
-                  messageId,
-                  {
-                    ...message,
-                    state
-                  }
-                )
+                messagePage.messages.set(messageId, {
+                  ...message,
+                  state,
+                })
               }
             }
 
@@ -288,14 +287,12 @@ class ChatStore extends Store<ChatStoreState> {
 
       const messagePage: MessagePage = {
         pageKey: calculatePageKey(messages),
-        messages
+        messages,
       }
 
       chatStore.reducer.selectedChat({
         chat,
-        messagePages: [
-          messagePage
-        ],
+        messagePages: [messagePage],
         messageIds,
         oldestFetchedMessageIndex,
         scrollToBottom: true,
@@ -354,7 +351,7 @@ class ChatStore extends Store<ChatStoreState> {
 
       const fetchedMessagePage: MessagePage = {
         pageKey: calculatePageKey(messages),
-        messages
+        messages,
       }
 
       chatStore.reducer.fetchedMessagePage({
@@ -465,7 +462,9 @@ ipcBackend.on('DC_EVENT_INCOMING_MSG', async (_, [chatId, _messageId]) => {
     'messageList.getMessages',
     messageIdsIncoming
   )
-  const messagesIncoming = messageIdsIncoming.map(messageId => _messagesIncoming[messageId]) as MessageType[]
+  const messagesIncoming = messageIdsIncoming.map(
+    messageId => _messagesIncoming[messageId]
+  ) as MessageType[]
 
   chatStore.reducer.fetchedIncomingMessages({
     id: chatId,
@@ -533,7 +532,9 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
       messageIdsIncoming
     )
 
-    const messagesIncoming = messageIdsIncoming.map(messageId => _messagesIncoming[messageId]) as MessageType[]
+    const messagesIncoming = messageIdsIncoming.map(
+      messageId => _messagesIncoming[messageId]
+    ) as MessageType[]
     chatStore.reducer.fetchedIncomingMessages({
       id: chatId,
       messageIds,
@@ -546,15 +547,16 @@ ipcBackend.on('ClickOnNotification', (_ev, { chatId }) => {
   chatStore.effect.selectChat(chatId)
 })
 
-
-export function calculatePageKey(messages: OrderedMap<number, MessageType | null>): string {
+export function calculatePageKey(
+  messages: OrderedMap<number, MessageType | null>
+): string {
   let first = messages.first(null)
   let last = messages.last(null)
-  let firstId = "undefined"
+  let firstId = 'undefined'
   if (first) {
     firstId = first.id.toString()
   }
-  let lastId = "undefined"
+  let lastId = 'undefined'
   if (last) {
     lastId = last.id.toString()
   }
@@ -574,4 +576,3 @@ export type ChatStoreDispatch = Store<ChatStoreState>['dispatch']
 export type ChatStoreStateWithChatSet = {
   chat: NonNullable<ChatStoreState['chat']>
 } & Exclude<ChatStoreState, 'chat'>
-
