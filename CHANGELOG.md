@@ -12,7 +12,8 @@
 - Show error if writing an attachment fails @IrvinLara9 #2479
 - Fix connectivity view title @IrvinLara9 #2480
 - Do not double log core events
-- fix Bulgarian language name (uppercase first letter)
+- Fix Bulgarian language name (uppercase first letter)
+- Fix signature text styling @ejgonzalez17 
 
 ## [1.26.0] - 2021-12-15
 
