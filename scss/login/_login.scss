@@ -209,6 +209,8 @@ div.delta-form-group {
     background-color: transparent;
     color: var(--bp3InputText);
     box-shadow: none !important;
+    resize: vertical;
+
     &:focus,
     &:active {
       outline: none;
