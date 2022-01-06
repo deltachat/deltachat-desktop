@@ -202,12 +202,13 @@ class ChatStore extends Store<ChatStoreState> {
       const { messageId, message } = payload
       this.setState(state => {
         const messageIds = [...state.messageIds, messageId]
-        const messagePages = state.messagePages.map(messagePage => {
-          if (messagePage.messages.has(messageId)) {
-            messagePage.messages = messagePage.messages.set(messageId, message)
+        const messagePages: MessagePage[] = [
+          ...state.messagePages,
+          {
+            pageKey: `page-${messageId}-${messageId}`,
+            messages: OrderedMap().set(messageId, message) as OrderedMap<number, MessageType | null>
           }
-          return messagePage
-        })
+        ]
         if (guardReducerIfChatIdIsDifferent(payload, state)) return
         return { ...state, messageIds, messagePages, scrollToBottom: true }
       }, 'messageSent')
@@ -223,12 +224,18 @@ class ChatStore extends Store<ChatStoreState> {
           ...state,
           messagePages: state.messagePages.map(messagePage => {
             if (messagePage.messages.has(messageId)) {
+
               const message = messagePage.messages.get(messageId)
               if (message !== null && message !== undefined) {
-                messagePage.messages.set(messageId, {
+                let updatedMessages = messagePage.messages.set(messageId, {
                   ...message,
-                  state,
+                  state: messageState,
                 })
+
+                return {
+                  ...messagePage,
+                  messages: updatedMessages
+                }
               }
             }
 
