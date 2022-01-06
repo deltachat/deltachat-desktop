@@ -87,7 +87,7 @@ class ChatStore extends Store<ChatStoreState> {
         if (guardReducerIfChatIdIsDifferent(payload, state)) return
         return {
           ...state,
-          messagePages: [ ...state.messagePages, payload.fetchedMessagePage ],
+          messagePages: [ payload.fetchedMessagePage, ...state.messagePages ],
           oldestFetchedMessageIndex: payload.oldestFetchedMessageIndex,
           scrollToLastPage: true,
           scrollHeight: payload.scrollHeight,
@@ -548,8 +548,16 @@ ipcBackend.on('ClickOnNotification', (_ev, { chatId }) => {
 
 
 export function calculatePageKey(messages: OrderedMap<number, MessageType | null>): string {
-  let firstId = messages.first("undefined")
-  let lastId = messages.last("undefined")
+  let first = messages.first(null)
+  let last = messages.last(null)
+  let firstId = "undefined"
+  if (first) {
+    firstId = first.id.toString()
+  }
+  let lastId = "undefined"
+  if (last) {
+    lastId = last.id.toString()
+  }
   return `page-${firstId}-${lastId}`
 }
 

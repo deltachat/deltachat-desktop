@@ -289,7 +289,7 @@ const MessagePageComponent = React.memo(function MessagePageComponent({
             conversationType={conversationType}
           />
         )
-      })}
+      }).toOrderedSet()}
     </div>
   )
 }, (prevPros, nextProps) => {
