@@ -4,6 +4,7 @@ import ChatStore, {
   useChatStore,
   ChatStoreState,
   ChatStoreStateWithChatSet,
+  MessagePage,
 } from '../../stores/chat'
 import { useDebouncedCallback } from 'use-debounce'
 import { C } from 'deltachat-node/dist/constants'
@@ -37,7 +38,7 @@ export default function MessageList({
 }) {
   const {
     oldestFetchedMessageIndex,
-    messages,
+    messagePages,
     messageIds,
     scrollToBottom,
     scrollToBottomIfClose,
@@ -164,7 +165,7 @@ export default function MessageList({
         onScroll={onScroll}
         oldestFetchedMessageIndex={oldestFetchedMessageIndex}
         messageIds={messageIds}
-        messages={messages}
+        messagePages={messagePages}
         messageListRef={messageListRef}
         chatStore={chatStore}
       />
@@ -185,7 +186,7 @@ export const MessageListInner = React.memo(
     onScroll: (event: React.UIEvent<HTMLDivElement>) => void
     oldestFetchedMessageIndex: number
     messageIds: number[]
-    messages: ChatStoreState['messages']
+    messagePages: ChatStoreState['messagePages']
     messageListRef: React.MutableRefObject<HTMLDivElement | null>
     chatStore: ChatStoreStateWithChatSet
   }) => {
@@ -193,7 +194,7 @@ export const MessageListInner = React.memo(
       onScroll,
       oldestFetchedMessageIndex,
       messageIds,
-      messages,
+      messagePages,
       messageListRef,
 
       chatStore,
@@ -239,25 +240,8 @@ export const MessageListInner = React.memo(
       <div id='message-list' ref={messageListRef} onScroll={onScroll}>
         <ul>
           {messageIds.length === 0 && <EmptyChatMessage />}
-          {_messageIdsToShow.map((messageId, i) => {
-            if (messageId === C.DC_MSG_ID_DAYMARKER) {
-              const key = 'magic' + messageId + '_' + specialMessageIdCounter++
-              const nextMessage = messages[_messageIdsToShow[i + 1]]
-              if (!nextMessage) return null
-              return <DayMarker key={key} timestamp={nextMessage.timestamp} />
-            }
-            const message = messages[messageId]
-            if (!message) {
-              log.debug(`Missing message with id ${messageId}`)
-              return
-            }
-            return (
-              <MessageWrapper
-                key={messageId}
-                message={message as MessageType}
-                conversationType={conversationType}
-              />
-            )
+          {messagePages.map((messagePage) => {
+            return <MessagePageComponent messagePage={messagePage} conversationType={conversationType} />
           })}
         </ul>
       </div>
@@ -266,13 +250,55 @@ export const MessageListInner = React.memo(
   (prevProps, nextProps) => {
     const areEqual =
       prevProps.messageIds === nextProps.messageIds &&
-      prevProps.messages === nextProps.messages &&
+      prevProps.messagePages === nextProps.messagePages &&
       prevProps.oldestFetchedMessageIndex ===
         nextProps.oldestFetchedMessageIndex
 
     return areEqual
   }
 )
+
+const MessagePageComponent = React.memo(function MessagePageComponent({
+  messagePage,
+  conversationType
+} : {
+  messagePage: MessagePage,
+  conversationType: ConversationType
+}) {
+  return (
+    <div className="message-page" id={messagePage.pageKey}>
+      {messagePage.messages.map((message: MessageType | null) => {
+        if (message === null || message == undefined) return null
+        const messageId = message.id
+        if (messageId === C.DC_MSG_ID_DAYMARKER) {
+          //const key = 'magic' + messageId + '_' + specialMessageIdCounter++
+          // TODO
+          const nextMessage = null
+          //const nextMessage = messages[_messageIdsToShow[i + 1]]
+          if (!nextMessage) return null
+          //return <DayMarker key={key} timestamp={nextMessage.timestamp} />
+        }
+        if (!message) {
+          log.debug(`Missing message with id ${messageId}`)
+          return
+        }
+        return (
+          <MessageWrapper
+            key={messageId}
+            message={message as MessageType}
+            conversationType={conversationType}
+          />
+        )
+      })}
+    </div>
+  )
+}, (prevPros, nextProps) => {
+  const areEqual = 
+    prevPros.messagePage.pageKey === nextProps.messagePage.pageKey &&
+    prevPros.messagePage.messages === nextProps.messagePage.messages
+
+  return areEqual
+})
 
 function EmptyChatMessage() {
   const tx = useTranslationFunction()
