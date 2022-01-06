@@ -52,11 +52,7 @@ export default function MessageList({
 
   const [fetchMore] = useDebouncedCallback(
     () => {
-      if (!messageListRef.current) {
-        return
-      }
-      const scrollHeight = messageListRef.current.scrollHeight
-      ChatStore.effect.fetchMoreMessages(scrollHeight)
+      ChatStore.effect.fetchMoreMessages()
     },
     30,
     { leading: true }
@@ -85,7 +81,7 @@ export default function MessageList({
     [fetchMore]
   )
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!messageListRef.current) {
       return
     }
@@ -140,8 +136,8 @@ export default function MessageList({
       messageListRef.current.scrollHeight -
       lastKnownScrollHeight.current +
       lastKnownScrollTop.current
-    ChatStore.reducer.scrolledToLastPage()
     isFetching.current = false
+    setTimeout(() => ChatStore.reducer.scrolledToLastPage(), 0)
   }, [scrollToLastPage, scrollHeight])
 
   useEffect(() => {
@@ -309,14 +305,6 @@ const MessagePageComponent = React.memo(
     const areEqual =
       prevProps.messagePage.pageKey === nextProps.messagePage.pageKey &&
       prevProps.messagePage.messages === nextProps.messagePage.messages
-
-    if (areEqual) {
-      console.log(`${nextProps.messagePage.pageKey} stays equal!`)
-    } else {
-      console.log(
-        `${nextProps.messagePage.pageKey} changed! old: ${prevProps.messagePage.pageKey}`
-      )
-    }
 
     return areEqual
   }

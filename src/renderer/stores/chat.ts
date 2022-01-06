@@ -79,18 +79,21 @@ class ChatStore extends Store<ChatStoreState> {
     fetchedMessagePage: (payload: {
       id: number
       fetchedMessagePage: MessagePage
-      scrollHeight: number
       countFetchedMessages: number
       oldestFetchedMessageIndex: number
     }) => {
       this.setState(state => {
         if (guardReducerIfChatIdIsDifferent(payload, state)) return
+        //@ts-ignore
+        const scrollHeight = document.querySelector('#message-list')
+          .scrollHeight
+
         return {
           ...state,
           messagePages: [payload.fetchedMessagePage, ...state.messagePages],
           oldestFetchedMessageIndex: payload.oldestFetchedMessageIndex,
           scrollToLastPage: true,
-          scrollHeight: payload.scrollHeight,
+          scrollHeight: scrollHeight,
           countFetchedMessages: payload.countFetchedMessages,
         }
       }, 'fetchedMessagePage')
@@ -206,8 +209,11 @@ class ChatStore extends Store<ChatStoreState> {
           ...state.messagePages,
           {
             pageKey: `page-${messageId}-${messageId}`,
-            messages: OrderedMap().set(messageId, message) as OrderedMap<number, MessageType | null>
-          }
+            messages: OrderedMap().set(messageId, message) as OrderedMap<
+              number,
+              MessageType | null
+            >,
+          },
         ]
         if (guardReducerIfChatIdIsDifferent(payload, state)) return
         return { ...state, messageIds, messagePages, scrollToBottom: true }
@@ -224,7 +230,6 @@ class ChatStore extends Store<ChatStoreState> {
           ...state,
           messagePages: state.messagePages.map(messagePage => {
             if (messagePage.messages.has(messageId)) {
-
               const message = messagePage.messages.get(messageId)
               if (message !== null && message !== undefined) {
                 let updatedMessages = messagePage.messages.set(messageId, {
@@ -234,7 +239,7 @@ class ChatStore extends Store<ChatStoreState> {
 
                 return {
                   ...messagePage,
-                  messages: updatedMessages
+                  messages: updatedMessages,
                 }
               }
             }
@@ -318,8 +323,8 @@ class ChatStore extends Store<ChatStoreState> {
       const id = this.state.chat.id
       this.reducer.uiDeleteMessage({ id, msgId })
     },
-    fetchMoreMessages: async (scrollHeight: number) => {
-      log.debug(`fetchMoreMessages ${scrollHeight}`)
+    fetchMoreMessages: async () => {
+      log.debug(`fetchMoreMessages`)
       const state = this.state
       if (state.chat === null) return
       const id = state.chat.id
@@ -366,7 +371,6 @@ class ChatStore extends Store<ChatStoreState> {
         fetchedMessagePage,
         oldestFetchedMessageIndex,
         countFetchedMessages: fetchedMessageIds.length,
-        scrollHeight: scrollHeight,
       })
     },
     mute: async (payload: { chatId: number; muteDuration: number }) => {
@@ -557,15 +561,29 @@ ipcBackend.on('ClickOnNotification', (_ev, { chatId }) => {
 export function calculatePageKey(
   messages: OrderedMap<number, MessageType | null>
 ): string {
-  let first = messages.first(null)
-  let last = messages.last(null)
+  let first = messages.find(
+    message => message !== null && message !== undefined
+  )
+  let last = messages.findLast(
+    message => message !== null && message !== undefined
+  )
   let firstId = 'undefined'
   if (first) {
     firstId = first.id.toString()
+  } else {
+    throw new Error(
+      `first message is null/undefined ${JSON.stringify(
+        messages.toArray()
+      )} ${JSON.stringify(first)}`
+    )
   }
   let lastId = 'undefined'
   if (last) {
     lastId = last.id.toString()
+  } else {
+    throw new Error(
+      `last message is null/undefined ${JSON.stringify(messages.toArray())}`
+    )
   }
   return `page-${firstId}-${lastId}`
 }
