@@ -65,7 +65,7 @@ export default function MessageList({
   const onScroll = useCallback(
     (Event: React.UIEvent<HTMLDivElement> | null) => {
       if (isFetching.current === true) {
-        return;
+        return
       }
       if (!messageListRef.current) {
         return
@@ -313,7 +313,9 @@ const MessagePageComponent = React.memo(
     if (areEqual) {
       console.log(`${nextProps.messagePage.pageKey} stays equal!`)
     } else {
-      console.log(`${nextProps.messagePage.pageKey} changed! old: ${prevProps.messagePage.pageKey}`)
+      console.log(
+        `${nextProps.messagePage.pageKey} changed! old: ${prevProps.messagePage.pageKey}`
+      )
     }
 
     return areEqual
