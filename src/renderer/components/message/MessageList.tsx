@@ -64,6 +64,9 @@ export default function MessageList({
 
   const onScroll = useCallback(
     (Event: React.UIEvent<HTMLDivElement> | null) => {
+      if (isFetching.current === true) {
+        return;
+      }
       if (!messageListRef.current) {
         return
       }
@@ -82,7 +85,7 @@ export default function MessageList({
     [fetchMore]
   )
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!messageListRef.current) {
       return
     }
@@ -102,7 +105,7 @@ export default function MessageList({
     onScroll(null)
   }, [onScroll, scrollToBottom])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!messageListRef.current) {
       return
     }
@@ -304,7 +307,8 @@ const MessagePageComponent = React.memo(
   },
   (prevProps, nextProps) => {
     const areEqual =
-      prevProps.messagePage.pageKey == nextProps.messagePage.pageKey
+      prevProps.messagePage.pageKey === nextProps.messagePage.pageKey &&
+      prevProps.messagePage.messages === nextProps.messagePage.messages
 
     if (areEqual) {
       console.log(`${nextProps.messagePage.pageKey} stays equal!`)
