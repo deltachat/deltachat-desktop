@@ -147,7 +147,7 @@ export function ProfileImageSelector({
   const onClickSelectPicture = async () => {
     const file = await runtime.showOpenFileDialog({
       title: tx('select_your_new_profile_image'),
-      filters: [{ name: tx('images'), extensions: ['jpg', 'png', 'gif'] }],
+      filters: [{ name: tx('images'), extensions: ['jpg', 'png', 'gif','jpeg','icon','apng','ico','webp'] }],
       properties: ['openFile'],
       defaultPath: runtime.getAppPath('pictures'),
     })
