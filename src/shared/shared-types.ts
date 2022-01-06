@@ -165,7 +165,7 @@ export interface FullChat {
   ephemeralTimer: number
 }
 
-type todo = any
+export type todo = any
 
 export type msgStatus =
   | 'error'
@@ -176,18 +176,6 @@ export type msgStatus =
   | 'sent'
   | ''
 
-export type MessageType = JsonMessage & {
-  sender: JsonContact
-  setupCodeBegin?: string
-  file_mime: string | null
-  file_bytes: number | null
-  file_name: string | null
-}
-
-export type MessageTypeAttachmentSubset = Pick<
-  MessageType,
-  'file' | 'file_mime' | 'file_bytes' | 'file_name'
->
 
 export type Theme = {
   name: string
@@ -223,3 +211,41 @@ export declare type QrCodeResponse = {
   id: number
   text1: string
 }
+
+export type MarkerOneParams = {
+  [key: number]: number
+}
+
+
+
+export type DayMarkerMessage = {
+  type: MessageContainerIs.DayMarker
+  timestamp: number
+}
+
+export type MarkerOneMessage = {
+  type: MessageContainerIs.MarkerOne
+  count: number
+}
+
+export type NormalMessage = JsonMessage & {
+  type: MessageContainerIs.Normal
+  sender: JsonContact
+  setupCodeBegin?: string
+  file_mime: string | null
+  file_bytes: number | null
+  file_name: string | null
+}
+
+export type NormalMessageAttachmentSubset = Pick<
+  NormalMessage,
+  'file' | 'file_mime' | 'file_bytes' | 'file_name'
+>
+
+export enum MessageContainerIs {
+  MarkerOne = 0,
+  DayMarker = 1,
+  Normal = 2,
+}
+
+export type MessageContainer = MarkerOneMessage | DayMarkerMessage | NormalMessage

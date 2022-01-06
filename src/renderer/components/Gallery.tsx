@@ -4,7 +4,7 @@ import { C } from 'deltachat-node/dist/constants'
 import { DeltaBackend } from '../delta-remote'
 import { ScreenContext } from '../contexts'
 import MediaAttachment from './attachment/mediaAttachment'
-import { MessageType } from '../../shared/shared-types'
+import { NormalMessage } from '../../shared/shared-types'
 
 type MediaTabKey = 'images' | 'video' | 'audio' | 'documents'
 
@@ -31,7 +31,7 @@ type mediaProps = { chatId: number }
 
 export default class Gallery extends Component<
   mediaProps,
-  { id: MediaTabKey; msgTypes: number[]; medias: MessageType[] }
+  { id: MediaTabKey; msgTypes: number[]; medias: NormalMessage[] }
 > {
   constructor(props: mediaProps) {
     super(props)

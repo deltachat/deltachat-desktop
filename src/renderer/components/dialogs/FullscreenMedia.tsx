@@ -2,7 +2,7 @@ import { onDownload } from '../message/messageFunctions'
 import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import { Icon, Overlay } from '@blueprintjs/core'
 import { DialogProps } from './DialogController'
-import { MessageType } from '../../../shared/shared-types'
+import { NormalMessage } from '../../../shared/shared-types'
 import { runtime } from '../../runtime'
 import { isImage, isVideo, isAudio } from '../attachment/Attachment'
 import { getLogger } from '../../../shared/logger'
@@ -14,7 +14,7 @@ import { preventDefault } from '../../../shared/util'
 const log = getLogger('renderer/fullscreen_media')
 
 export default function FullscreenMedia(props: {
-  msg: MessageType
+  msg: NormalMessage
   onClose: DialogProps['onClose']
 }) {
   const tx = window.static_translate

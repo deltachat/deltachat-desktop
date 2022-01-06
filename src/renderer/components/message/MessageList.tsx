@@ -12,7 +12,7 @@ import type { ChatTypes } from 'deltachat-node'
 import moment from 'moment'
 
 import { getLogger } from '../../../shared/logger'
-import { MessageType, FullChat } from '../../../shared/shared-types'
+import { NormalMessage, FullChat } from '../../../shared/shared-types'
 import { MessagesDisplayContext, useTranslationFunction } from '../../contexts'
 import { useDCConfigOnce } from '../helpers/useDCConfigOnce'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
@@ -274,7 +274,7 @@ const MessagePageComponent = React.memo(
     return (
       <div className='message-page' id={messagePage.pageKey}>
         {messagePage.messages
-          .map((message: MessageType | null) => {
+          .map((message: NormalMessage | null) => {
             if (message === null || message == undefined) return null
             const messageId = message.id
             if (messageId === C.DC_MSG_ID_DAYMARKER) {
@@ -292,7 +292,7 @@ const MessagePageComponent = React.memo(
             return (
               <MessageWrapper
                 key={messageId}
-                message={message as MessageType}
+                message={message as NormalMessage}
                 conversationType={conversationType}
               />
             )

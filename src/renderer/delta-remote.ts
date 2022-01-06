@@ -3,7 +3,7 @@ import { _callDcMethodAsync } from './ipc'
 import {
   FullChat,
   ChatListItemType,
-  MessageType,
+  NormalMessage,
   JsonLocations,
   Theme,
   JsonContact,
@@ -116,7 +116,7 @@ class DeltaRemote {
     chatId: number,
     msgType1: number,
     msgType2: number
-  ): Promise<MessageType[]>
+  ): Promise<NormalMessage[]>
   call(fnName: 'chat.getEncryptionInfo', chatId: number): Promise<string>
   call(fnName: 'chat.getQrCode', chatId?: number): Promise<string>
   call(
@@ -218,7 +218,7 @@ class DeltaRemote {
     fnName: 'messageList.sendMessage',
     chatId: number,
     params: sendMessageParams
-  ): Promise<[number, MessageType | null]>
+  ): Promise<[number, NormalMessage | null]>
   call(
     fnName: 'messageList.sendSticker',
     chatId: number,
@@ -228,17 +228,17 @@ class DeltaRemote {
   call(
     fnName: 'messageList.getMessage',
     msgId: number
-  ): Promise<MessageType | null>
+  ): Promise<NormalMessage | null>
   call(
     fnName: 'messageList.getMessages',
     messageIds: number[]
-  ): Promise<{ [key: number]: MessageType | null }>
+  ): Promise<{ [key: number]: NormalMessage | null }>
   call(fnName: 'messageList.getMessageInfo', msgId: number): Promise<string>
   call(fnName: 'messageList.downloadFullMessage', msgId: number): Promise<void>
   call(
     fnName: 'messageList.getDraft',
     chatId: number
-  ): Promise<MessageType | null>
+  ): Promise<NormalMessage | null>
   call(
     fnName: 'messageList.setDraft',
     chatId: number,
@@ -251,7 +251,7 @@ class DeltaRemote {
   call(
     fnName: 'messageList.messageIdToJson',
     id: number
-  ): Promise<MessageType | null>
+  ): Promise<NormalMessage | null>
   call(
     fnName: 'messageList.getMessageIds',
     chatid: number,

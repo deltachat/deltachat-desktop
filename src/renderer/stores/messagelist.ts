@@ -1,9 +1,9 @@
 import { Store, useStore } from './store'
-import { MessageType } from '../../shared/shared-types'
+import { NormalMessage } from '../../shared/shared-types'
 
 class MessageListStoreState {
   messageIds: number[] = []
-  messages: { [key: number]: MessageType | null } = {}
+  messages: { [key: number]: NormalMessage | null } = {}
 }
 
 const messageListStore = new Store<MessageListStoreState>(

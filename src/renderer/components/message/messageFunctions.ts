@@ -1,7 +1,7 @@
 import { getLogger } from '../../../shared/logger'
 const log = getLogger('render/msgFunctions')
 import type { Message } from 'deltachat-node'
-import { MessageType, JsonMessage } from '../../../shared/shared-types'
+import { NormalMessage, JsonMessage } from '../../../shared/shared-types'
 import { DeltaBackend } from '../../delta-remote'
 import { runtime } from '../../runtime'
 import { deleteMessage, selectChat } from '../helpers/ChatMethods'
@@ -22,7 +22,7 @@ export function openAttachmentInShell(msg: MsgObject) {
   }
 }
 
-export function forwardMessage(message: MessageType) {
+export function forwardMessage(message: NormalMessage) {
   window.__openDialog('ForwardMessage', { message })
 }
 
@@ -35,7 +35,7 @@ export function confirmDeleteMessage(msg: MsgObject) {
   })
 }
 
-export function openMessageInfo(message: MessageType) {
+export function openMessageInfo(message: NormalMessage) {
   window.__openDialog('MessageDetail', { id: message.id })
 }
 

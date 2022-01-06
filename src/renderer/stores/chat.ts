@@ -1,6 +1,6 @@
 import { ipcBackend, saveLastChatId } from '../ipc'
 import { Store, useStore } from './store'
-import { FullChat, MessageType } from '../../shared/shared-types'
+import { FullChat, NormalMessage } from '../../shared/shared-types'
 import { DeltaBackend, sendMessageParams } from '../delta-remote'
 import { runtime } from '../runtime'
 import { ActionEmitter, KeybindAction } from '../keybindings'
@@ -11,7 +11,7 @@ export const PAGE_SIZE = 10
 
 export interface MessagePage {
   pageKey: string
-  messages: OrderedMap<number, MessageType | null>
+  messages: OrderedMap<number, NormalMessage | null>
 }
 
 export interface ChatStoreState {
@@ -101,19 +101,19 @@ class ChatStore extends Store<ChatStoreState> {
     fetchedIncomingMessages: (payload: {
       id: number
       messageIds: ChatStoreState['messageIds']
-      messagesIncoming: MessageType[]
+      messagesIncoming: NormalMessage[]
     }) => {
       this.setState(state => {
         if (guardReducerIfChatIdIsDifferent(payload, state)) return
 
         let messages: OrderedMap<
           number,
-          MessageType | null
+          NormalMessage | null
         > = OrderedMap().withMutations(messages => {
           for (let messageIncoming of payload.messagesIncoming) {
             messages.set(messageIncoming.id, messageIncoming)
           }
-        }) as OrderedMap<number, MessageType | null>
+        }) as OrderedMap<number, NormalMessage | null>
 
         let incomingMessagePage: MessagePage = {
           pageKey: calculatePageKey(messages),
@@ -176,7 +176,7 @@ class ChatStore extends Store<ChatStoreState> {
     },
     messageChanged: (payload: {
       id: number
-      messagesChanged: MessageType[]
+      messagesChanged: NormalMessage[]
     }) => {
       this.setState(state => {
         if (guardReducerIfChatIdIsDifferent(payload, state)) return
@@ -200,7 +200,7 @@ class ChatStore extends Store<ChatStoreState> {
     messageSent: (payload: {
       id: number
       messageId: number
-      message: MessageType
+      message: NormalMessage
     }) => {
       const { messageId, message } = payload
       this.setState(state => {
@@ -211,7 +211,7 @@ class ChatStore extends Store<ChatStoreState> {
             pageKey: `page-${messageId}-${messageId}`,
             messages: OrderedMap().set(messageId, message) as OrderedMap<
               number,
-              MessageType | null
+              NormalMessage | null
             >,
           },
         ]
@@ -295,7 +295,7 @@ class ChatStore extends Store<ChatStoreState> {
         messageIdsToFetch.forEach(messageId => {
           messagePages.set(messageId, _messages[messageId])
         })
-      }) as OrderedMap<number, MessageType | null>
+      }) as OrderedMap<number, NormalMessage | null>
 
       const messagePage: MessagePage = {
         pageKey: calculatePageKey(messages),
@@ -359,7 +359,7 @@ class ChatStore extends Store<ChatStoreState> {
         fetchedMessageIds.forEach(messageId => {
           messages.set(messageId, fetchedMessages[messageId])
         })
-      }) as OrderedMap<number, MessageType | null>
+      }) as OrderedMap<number, NormalMessage | null>
 
       const fetchedMessagePage: MessagePage = {
         pageKey: calculatePageKey(messages),
@@ -475,7 +475,7 @@ ipcBackend.on('DC_EVENT_INCOMING_MSG', async (_, [chatId, _messageId]) => {
   )
   const messagesIncoming = messageIdsIncoming.map(
     messageId => _messagesIncoming[messageId]
-  ) as MessageType[]
+  ) as NormalMessage[]
 
   chatStore.reducer.fetchedIncomingMessages({
     id: chatId,
@@ -545,7 +545,7 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
 
     const messagesIncoming = messageIdsIncoming.map(
       messageId => _messagesIncoming[messageId]
-    ) as MessageType[]
+    ) as NormalMessage[]
     chatStore.reducer.fetchedIncomingMessages({
       id: chatId,
       messageIds,
@@ -559,7 +559,7 @@ ipcBackend.on('ClickOnNotification', (_ev, { chatId }) => {
 })
 
 export function calculatePageKey(
-  messages: OrderedMap<number, MessageType | null>
+  messages: OrderedMap<number, NormalMessage | null>
 ): string {
   let first = messages.find(
     message => message !== null && message !== undefined

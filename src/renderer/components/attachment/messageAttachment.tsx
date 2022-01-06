@@ -12,8 +12,8 @@ import {
   dragAttachmentOut,
 } from './Attachment'
 import {
-  MessageType,
-  MessageTypeAttachmentSubset,
+  NormalMessage,
+  NormalMessageAttachmentSubset,
 } from '../../../shared/shared-types'
 import { runtime } from '../../runtime'
 import { ConversationType } from '../message/MessageList'
@@ -27,7 +27,7 @@ import filesizeConverter from 'filesize'
 type AttachmentProps = {
   text?: string
   conversationType: ConversationType
-  message: MessageType
+  message: NormalMessage
   hasQuote: boolean
 }
 
@@ -167,7 +167,7 @@ export default function Attachment({
 export function DraftAttachment({
   attachment,
 }: {
-  attachment: MessageTypeAttachmentSubset
+  attachment: NormalMessageAttachmentSubset
 }) {
   if (!attachment) {
     return null

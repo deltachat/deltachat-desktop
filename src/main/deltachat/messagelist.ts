@@ -6,9 +6,12 @@ const log = getLogger('main/deltachat/messagelist')
 import SplitOut from './splitout'
 import { Message } from 'deltachat-node'
 import {
-  MessageType,
+  NormalMessage,
   MessageSearchResult,
   MessageQuote,
+  MarkerOneParams,
+  MessageContainer,
+  MessageContainerIs,
 } from '../../shared/shared-types'
 
 import { writeFile } from 'fs/promises'
@@ -29,7 +32,7 @@ export default class DCMessageList extends SplitOut {
       location?: { lat: number; lng: number }
       quoteMessageId?: number
     }
-  ): [number, MessageType | null] {
+  ): [number, NormalMessage | null] {
     const viewType = filename ? C.DC_MSG_FILE : C.DC_MSG_TEXT
     const msg = this.selectedAccountContext.messageNew(viewType)
     if (filename) msg.setFile(filename, undefined)
@@ -76,7 +79,7 @@ export default class DCMessageList extends SplitOut {
     return this.selectedAccountContext.downloadFullMessage(msgId)
   }
 
-  async getDraft(chatId: number): Promise<MessageType | null> {
+  async getDraft(chatId: number): Promise<NormalMessage | null> {
     const draft = this.selectedAccountContext.getDraft(chatId)
     return draft ? this._messageToJson(draft) : null
   }
@@ -107,7 +110,7 @@ export default class DCMessageList extends SplitOut {
     this.selectedAccountContext.setDraft(chatId, draft)
   }
 
-  messageIdToJson(id: number): MessageType | null {
+  messageIdToJson(id: number): NormalMessage | null {
     const msg = this.selectedAccountContext.getMessage(id)
     if (!msg) {
       log.warn('No message found for ID ' + id)
@@ -116,7 +119,7 @@ export default class DCMessageList extends SplitOut {
     return this._messageToJson(msg)
   }
 
-  _messageToJson(msg: Message): MessageType {
+  _messageToJson(msg: Message): NormalMessage {
     const file_mime = msg.getFilemime()
     const file_name = msg.getFilename()
     const file_bytes = msg.getFilebytes()
@@ -148,7 +151,9 @@ export default class DCMessageList extends SplitOut {
       }
     }
 
-    return Object.assign(jsonMSG, {
+    return {
+      ...jsonMSG, 
+      type: MessageContainerIs.Normal,
       sender: (contact ? { ...contact } : {}) as any,
       setupCodeBegin,
       // extra attachment fields
@@ -156,7 +161,7 @@ export default class DCMessageList extends SplitOut {
       file_bytes,
       file_name,
       quote,
-    })
+    }
   }
 
   forwardMessage(msgId: number, chatId: number) {
@@ -204,6 +209,80 @@ export default class DCMessageList extends SplitOut {
     return messages
   }
 
+  getMessageIds2(
+    chatId: number,
+    markerOne: MarkerOneParams = {},
+    flags: number = C.DC_GCM_ADDDAYMARKER
+  ) {
+    log.debug(
+      `getMessageIds: chatId: ${chatId} markerOne: ${JSON.stringify(markerOne)}`
+    )
+    const messageIds = []
+
+    for (const messageId of this.selectedAccountContext.getChatMessages(chatId, flags, 0)) {
+      if (markerOne && markerOne[messageId]) {
+        messageIds.push(C.DC_MSG_ID_MARKER1)
+      }
+      messageIds.push(messageId)
+    }
+    return messageIds
+  }
+
+  async getMessages2(
+    chatId: number,
+    indexStart: number,
+    indexEnd: number,
+    markerOne: MarkerOneParams = {},
+    flags: number = C.DC_GCM_ADDDAYMARKER
+  ): Promise<MessageContainer[]> {
+    log.debug(
+      `getMessages: chatId: ${chatId} markerOne: ${JSON.stringify(markerOne)}`
+    )
+    const messageIds = this.getMessageIds2(chatId, markerOne, flags)
+    console.log(messageIds)
+
+    if (indexEnd === -1) indexEnd = messageIds.length - 1
+
+    const messages: MessageContainer[] = []
+    for (
+      let messageIndex = indexStart;
+      messageIndex <= indexEnd;
+      messageIndex++
+    ) {
+      const messageId = messageIds[messageIndex]
+
+      let messageObject: MessageContainer = null
+      if (messageId == C.DC_MSG_ID_DAYMARKER) {
+        const nextMessageIndex = messageIndex + 1
+        const nextMessageId = messageIds[nextMessageIndex]
+        const nextMessageTimestamp = this.selectedAccountContext
+          .getMessage(nextMessageId)
+          .getTimestamp()
+        messageObject = {
+          type: MessageContainerIs.DayMarker,
+          timestamp: nextMessageTimestamp,
+        }
+      } else if (messageId === C.DC_MSG_ID_MARKER1) {
+        messageObject = {
+          type: MessageContainerIs.MarkerOne,
+          count: markerOne[messageIds[messageIndex + 1]],
+        }
+      } else if (messageId <= C.DC_MSG_ID_LAST_SPECIAL) {
+        log.debug(
+          `getMessages: not sure what do with this messageId: ${messageId}, skipping`
+        )
+      } else {
+        const msg = this.selectedAccountContext.getMessage(messageId)
+        if (!msg) {
+          continue
+        }
+        const message = this._messageToJson(msg)
+        messageObject = message
+      }
+      messages.push(messageObject)
+    }
+    return messages
+  }
   markSeenMessages(messageIds: number[]) {
     this.selectedAccountContext.markSeenMessages(messageIds)
   }

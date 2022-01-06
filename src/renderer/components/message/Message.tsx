@@ -18,7 +18,7 @@ import MessageMetaData from './MessageMetaData'
 
 import Attachment from '../attachment/messageAttachment'
 import {
-  MessageType,
+  NormalMessage,
   JsonContact,
   MessageQuote,
 } from '../../../shared/shared-types'
@@ -127,7 +127,7 @@ function buildContextMenu(
     conversationType,
   }: // onRetrySend,
   {
-    message: MessageType | null
+    message: NormalMessage | null
     text?: string
     conversationType: ConversationType
     // onRetrySend: Function
@@ -234,7 +234,7 @@ function buildContextMenu(
 }
 
 const Message = (props: {
-  message: MessageType
+  message: NormalMessage
   conversationType: ConversationType
   /* onRetrySend */
 }) => {
