@@ -134,6 +134,9 @@
   left: -20px;
 
   &:hover {
+    button{
+      color: #fff;
+    }
     background-color: var(--chatListItemBgHover);
     cursor: pointer;
   }
@@ -158,12 +161,16 @@
   left: -20px;
   display: flex;
   justify-content: space-between;
-
-  &:hover {
+  &:hover{ 
+    button{ 
+      color: #fff;
+    }
+    .CurrentValue{ 
+      color: #fff;
+    }
     background-color: var(--chatListItemBgHover);
     cursor: pointer;
   }
-
   button {
     margin-left: 20px;
     padding: 0;
@@ -174,6 +181,9 @@
     text-align: center;
     line-height: 40px;
     color: var(--globalText);
+    &:hover{ 
+      color: #fff;
+    }
   }
 
   .CurrentValue {
@@ -181,5 +191,9 @@
     line-height: 40px;
     color: var(--colorPrimary);
     font-weight: lighter;
+    &:hover{ 
+      color: #fff;
+    }
   }
 }
+
