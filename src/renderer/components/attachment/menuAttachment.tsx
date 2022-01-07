@@ -71,7 +71,7 @@ const MenuAttachment = ({
       filters: [
         {
           name: 'Media',
-          extensions: ['jpg', 'png', 'gif', 'mkv', 'avi', 'mp4'],
+          extensions: ['jpg', 'jpeg', 'png', 'gif', 'mkv', 'avi', 'mp4'],
         },
       ],
       properties: ['openFile'],
