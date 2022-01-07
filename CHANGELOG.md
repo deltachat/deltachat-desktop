@@ -14,6 +14,7 @@
 - Do not double log core events
 - Fix Bulgarian language name (uppercase first letter)
 - Fix signature text styling @ejgonzalez17 
+- Fix the profile picture removal @cavesdev #2472
 
 ## [1.26.0] - 2021-12-15
 
