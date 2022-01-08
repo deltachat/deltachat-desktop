@@ -5,6 +5,8 @@ import { app as rawApp, dialog, protocol } from 'electron'
 import rc from './rc'
 import { VERSION, GIT_REF, BUILD_TIMESTAMP } from '../shared/build-info'
 import type { EventEmitter } from 'events'
+import contextMenu from './electron-context-menu'
+import { findOutIfWeAreRunningAsAppx } from './isAppx'
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -206,8 +208,5 @@ app.on('web-contents-created', (_e, contents) => {
     event.preventDefault()
   })
 })
-
-import contextMenu from './electron-context-menu'
-import { findOutIfWeAreRunningAsAppx } from './isAppx'
 
 contextMenu()
