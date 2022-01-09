@@ -9,6 +9,7 @@ import {
 } from '@blueprintjs/core'
 import { useTranslationFunction } from '../../contexts'
 import { runtime } from '../../runtime'
+import { MEDIA_EXTENSIONS } from '../../../shared/constants'
 
 //function to populate Menu
 const MenuAttachmentItems = ({
@@ -42,20 +43,8 @@ const MenuAttachment = ({
     const file = await runtime.showOpenFileDialog({
       filters: [
         {
-          name: 'Files',
-          extensions: [
-            'doc',
-            'docx',
-            'xls',
-            'xlsx',
-            'ppt',
-            'ppt',
-            'pdf',
-            'txt',
-            'csv',
-            'log',
-            'zip',
-          ],
+          name: 'All Files',
+          extensions: ['*'],
         },
       ],
       properties: ['openFile'],
@@ -71,7 +60,7 @@ const MenuAttachment = ({
       filters: [
         {
           name: 'Media',
-          extensions: ['jpg', 'jpeg', 'png', 'gif', 'mkv', 'avi', 'mp4'],
+          extensions: MEDIA_EXTENSIONS,
         },
       ],
       properties: ['openFile'],
