@@ -15,6 +15,7 @@
 - Fix Bulgarian language name (uppercase first letter)
 - Fix signature text styling @ejgonzalez17 
 - momentjs isn't localized on first startup
+- Fix connectivity status hiding composer @trujillo9616
 
 ## [1.26.0] - 2021-12-15
 
