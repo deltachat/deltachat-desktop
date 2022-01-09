@@ -42,6 +42,7 @@ export default function ConfirmationDialog({
               fontSize: '1.5em',
               fontWeight: 'lighter',
               marginBottom: '6px',
+              overflow: 'auto'
             }}
           >
             {header}
