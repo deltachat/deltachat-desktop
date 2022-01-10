@@ -4,6 +4,10 @@
 
 ## [1.26.0] - 2021-12-15
 
+### Added
+
+- Add an attachment menu
+
 ### Fixed
 
 - fix sending POI
@@ -11,10 +15,6 @@
 ### Changed
 
 - Update translations (16.12.2021)
-
-### Added
-
-- Add an attachment menu
 
 ## [1.25.2] - 2021-12-11
 
