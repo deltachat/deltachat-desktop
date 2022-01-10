@@ -6,6 +6,7 @@
 - Update translations (3.1.2022)
 - Make disabled "delete profile image" button more readable in dark themes @ejgonzalez17 #2478
 - Update inApp help (3.1.2022)
+- Add image formats when selecting the image profile @ejgonzalez17 #2492
 
 ### Fixed
 - Fix overflow in long links inside quotes @naomiceron #2467
@@ -14,6 +15,7 @@
 - Do not double log core events
 - Fix Bulgarian language name (uppercase first letter)
 - Fix signature text styling @ejgonzalez17 
+- Fix Add image formats @ejgonzalez17
 
 ## [1.26.0] - 2021-12-15
 

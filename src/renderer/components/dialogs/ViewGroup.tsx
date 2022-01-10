@@ -430,7 +430,12 @@ export function GroupImageSelector({
   const onClickSelectGroupImage = async () => {
     const file = await runtime.showOpenFileDialog({
       title: tx('select_your_new_profile_image'),
-      filters: [{ name: tx('images'), extensions: ['jpg', 'png', 'gif','jpeg','jpe'] }],
+      filters: [
+        {
+          name: tx('images'),
+          extensions: ['jpg', 'png', 'gif', 'jpeg', 'jpe'],
+        },
+      ],
       properties: ['openFile'],
       defaultPath: runtime.getAppPath('pictures'),
     })
