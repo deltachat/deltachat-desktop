@@ -18,7 +18,6 @@ import { useDCConfigOnce } from '../helpers/useDCConfigOnce'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
 const log = getLogger('render/msgList')
 
-
 export default function MessageList({
   chatStore,
   refComposer,
@@ -91,7 +90,6 @@ export default function MessageList({
       // Try fetching more messages if needed
       onScroll(null)
     })
-
   }, [onScroll, scrollToBottom])
 
   useLayoutEffect(() => {
@@ -184,7 +182,6 @@ export const MessageListInner = React.memo(
   }) => {
     const {
       onScroll,
-      oldestFetchedMessageIndex,
       messageIds,
       messagePages,
       messageListRef,
@@ -195,9 +192,6 @@ export const MessageListInner = React.memo(
     if (!chatStore.chat.id) {
       throw new Error('no chat id')
     }
-
-
-    let specialMessageIdCounter = 0
 
     const conversationType: ConversationType = {
       hasMultipleParticipants:
@@ -260,20 +254,20 @@ const MessagePageComponent = React.memo(
     messagePage: MessagePage
     conversationType: ConversationType
   }) {
-
-    let messageElements = []
-    let messagesOnPage = messagePage.messages.toArray()
+    const messageElements = []
+    const messagesOnPage = messagePage.messages.toArray()
 
     let specialMessageIdCounter = 0
     for (let i = 0; i < messagesOnPage.length; i++) {
       const [messageId, message] = messagesOnPage[i]
       if (messageId === C.DC_MSG_ID_DAYMARKER) {
-
-        if (i == messagesOnPage.length - 1) continue // next Message is not on this page, we for now justt skip rendering this daymarker. 
-        let [_nextMessageId, nextMessage] = messagesOnPage[i + 1]
-        if (!nextMessage) continue 
+        if (i == messagesOnPage.length - 1) continue // next Message is not on this page, we for now justt skip rendering this daymarker.
+        const [_nextMessageId, nextMessage] = messagesOnPage[i + 1]
+        if (!nextMessage) continue
         const key = 'magic' + messageId + '_' + specialMessageIdCounter++
-        messageElements.push(<DayMarker key={key} timestamp={nextMessage.timestamp} />)
+        messageElements.push(
+          <DayMarker key={key} timestamp={nextMessage.timestamp} />
+        )
       }
       if (message === null || message == undefined) continue
       if (!message) {
@@ -281,13 +275,12 @@ const MessagePageComponent = React.memo(
         continue
       }
       messageElements.push(
-            <MessageWrapper
-              key={messageId}
-              message={message as MessageType}
-              conversationType={conversationType}
-            />
+        <MessageWrapper
+          key={messageId}
+          message={message as MessageType}
+          conversationType={conversationType}
+        />
       )
-
     }
 
     return (
