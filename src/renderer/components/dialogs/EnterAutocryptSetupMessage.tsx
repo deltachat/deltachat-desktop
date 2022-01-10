@@ -61,7 +61,7 @@ export function SetupMessagePanel({
 
   return (
     <>
-      <div className={Classes.DIALOG_BODY}>
+      <div>
         <Card>
           <Callout>
             {tx('autocrypt_continue_transfer_please_enter_code')}
