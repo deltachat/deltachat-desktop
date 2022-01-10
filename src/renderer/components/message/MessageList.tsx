@@ -18,16 +18,6 @@ import { useDCConfigOnce } from '../helpers/useDCConfigOnce'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
 const log = getLogger('render/msgList')
 
-const messageIdsToShow = (
-  oldestFetchedMessageIndex: number,
-  messageIds: number[]
-) => {
-  const messageIdsToShow = []
-  for (let i = oldestFetchedMessageIndex; i < messageIds.length; i++) {
-    messageIdsToShow.push(messageIds[i])
-  }
-  return messageIdsToShow
-}
 
 export default function MessageList({
   chatStore,
@@ -81,7 +71,7 @@ export default function MessageList({
     [fetchMore]
   )
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!messageListRef.current) {
       return
     }
@@ -95,10 +85,13 @@ export default function MessageList({
       messageListRef.current.scrollHeight
     )
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
-    ChatStore.reducer.scrolledToBottom()
+    setTimeout(() => {
+      ChatStore.reducer.scrolledToBottom(), 0
 
-    // Try fetching more messages if needed
-    onScroll(null)
+      // Try fetching more messages if needed
+      onScroll(null)
+    })
+
   }, [onScroll, scrollToBottom])
 
   useLayoutEffect(() => {
@@ -123,7 +116,7 @@ export default function MessageList({
       messageListRef.current.scrollTop = messageListRef.current.scrollHeight
     }
 
-    ChatStore.reducer.scrolledToBottom()
+    setTimeout(() => ChatStore.reducer.scrolledToBottom(), 0)
   }, [scrollToBottomIfClose])
 
   useLayoutEffect(() => {
@@ -147,8 +140,8 @@ export default function MessageList({
     composerTextarea && composerTextarea.focus()
   }, [refComposer, chatStore.chat.id])
 
-  useEffect(() => {
-    if (!messageListRef.current) {
+  useLayoutEffect(() => {
+    if (!messageListRef.current || !refComposer.current) {
       return
     }
     const composerTextarea = refComposer.current.childNodes[1]
@@ -203,10 +196,6 @@ export const MessageListInner = React.memo(
       throw new Error('no chat id')
     }
 
-    const _messageIdsToShow = messageIdsToShow(
-      oldestFetchedMessageIndex,
-      messageIds
-    )
 
     let specialMessageIdCounter = 0
 
@@ -271,33 +260,39 @@ const MessagePageComponent = React.memo(
     messagePage: MessagePage
     conversationType: ConversationType
   }) {
+
+    let messageElements = []
+    let messagesOnPage = messagePage.messages.toArray()
+
+    let specialMessageIdCounter = 0
+    for (let i = 0; i < messagesOnPage.length; i++) {
+      const [messageId, message] = messagesOnPage[i]
+      if (messageId === C.DC_MSG_ID_DAYMARKER) {
+
+        if (i == messagesOnPage.length - 1) continue // next Message is not on this page, we for now justt skip rendering this daymarker. 
+        let [_nextMessageId, nextMessage] = messagesOnPage[i + 1]
+        if (!nextMessage) continue 
+        const key = 'magic' + messageId + '_' + specialMessageIdCounter++
+        messageElements.push(<DayMarker key={key} timestamp={nextMessage.timestamp} />)
+      }
+      if (message === null || message == undefined) continue
+      if (!message) {
+        log.debug(`Missing message with id ${messageId}`)
+        continue
+      }
+      messageElements.push(
+            <MessageWrapper
+              key={messageId}
+              message={message as MessageType}
+              conversationType={conversationType}
+            />
+      )
+
+    }
+
     return (
       <div className='message-page' id={messagePage.pageKey}>
-        {messagePage.messages
-          .map((message: MessageType | null) => {
-            if (message === null || message == undefined) return null
-            const messageId = message.id
-            if (messageId === C.DC_MSG_ID_DAYMARKER) {
-              //const key = 'magic' + messageId + '_' + specialMessageIdCounter++
-              // TODO
-              const nextMessage = null
-              //const nextMessage = messages[_messageIdsToShow[i + 1]]
-              if (!nextMessage) return null
-              //return <DayMarker key={key} timestamp={nextMessage.timestamp} />
-            }
-            if (!message) {
-              log.debug(`Missing message with id ${messageId}`)
-              return
-            }
-            return (
-              <MessageWrapper
-                key={messageId}
-                message={message as MessageType}
-                conversationType={conversationType}
-              />
-            )
-          })
-          .toOrderedSet()}
+        {messageElements}
       </div>
     )
   },
