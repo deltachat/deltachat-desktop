@@ -30,7 +30,7 @@ type TimestampProps = {
   extended: boolean
 }
 
-const Timestamp = React.memo(function Timestamp(props: TimestampProps) {
+const Timestamp = function Timestamp(props: TimestampProps) {
   const { direction, timestamp, extended } = props
   const moduleName = props.module || ''
 
@@ -70,6 +70,6 @@ const Timestamp = React.memo(function Timestamp(props: TimestampProps) {
       {relativeTime}
     </span>
   )
-})
+}
 
 export default Timestamp
