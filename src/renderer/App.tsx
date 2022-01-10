@@ -62,7 +62,6 @@ export default function App(_props: any) {
   }, [])
 
   async function reloadLocaleData(locale: string) {
-    moment.locale(locale)
     const localeData: LocaleData = await DeltaBackend.call(
       'extras.getLocaleData',
       locale
@@ -70,7 +69,7 @@ export default function App(_props: any) {
     window.localeData = localeData
     window.static_translate = translate(localeData.messages)
     setLocaleData(localeData)
-    moment.locale(locale)
+    moment.locale(localeData.locale)
   }
 
   useEffect(() => {
