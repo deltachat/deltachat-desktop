@@ -18,6 +18,7 @@
 - Fix connectivity status hiding composer @trujillo9616
 - Fix overflow in Confirmation Dialog @Abhijnan-Bajpai 
 - Fix the profile picture removal @cavesdev #2472
+- Fix the horizontal scroll in autocrypt dialogs @cavesdev #2277
 
 ## [1.26.0] - 2021-12-15
 
