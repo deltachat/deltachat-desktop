@@ -73,4 +73,13 @@ export enum MessageDownloadState {
   InProgress = C.DC_DOWNLOAD_IN_PROGRESS,
 }
 
-export const MEDIA_EXTENSIONS = ['jpg', 'jpeg', 'png', 'apng', 'gif', 'mkv', 'avi', 'mp4'];
+export const MEDIA_EXTENSIONS = [
+  'jpg',
+  'jpeg',
+  'png',
+  'apng',
+  'gif',
+  'mkv',
+  'avi',
+  'mp4',
+]

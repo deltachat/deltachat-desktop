@@ -20,7 +20,6 @@ import {
 import { Quote } from '../message/Message'
 import { DeltaBackend } from '../../delta-remote'
 import { DraftAttachment } from '../attachment/messageAttachment'
-import { runtime } from '../../runtime'
 import { sendMessage, unselectChat } from '../helpers/ChatMethods'
 
 const log = getLogger('renderer/composer')
