@@ -6,7 +6,6 @@
 - Update translations (3.1.2022)
 - Make disabled "delete profile image" button more readable in dark themes @ejgonzalez17 #2478
 - Update inApp help (3.1.2022)
-- Add image formats when selecting the image profile @ejgonzalez17 #2492
 
 ### Fixed
 - Fix overflow in long links inside quotes @naomiceron #2467
@@ -15,16 +14,21 @@
 - Do not double log core events
 - Fix Bulgarian language name (uppercase first letter)
 - Fix signature text styling @ejgonzalez17 
-- Fix Add image formats @ejgonzalez17
+- Fix missing image formats @ejgonzalez17
+- momentjs isn't localized on first startup
+- Fix connectivity status hiding composer @trujillo9616
+- Fix overflow in Confirmation Dialog @Abhijnan-Bajpai 
+- Fix the profile picture removal @cavesdev #2472
 
 ## [1.26.0] - 2021-12-15
 
-### Fixed
+### Added
+- Add an attachment menu
 
+### Fixed
 - fix sending POI
 
 ### Changed
-
 - Update translations (16.12.2021)
 
 ## [1.25.2] - 2021-12-11

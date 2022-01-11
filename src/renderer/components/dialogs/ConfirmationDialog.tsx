@@ -42,12 +42,18 @@ export default function ConfirmationDialog({
               fontSize: '1.5em',
               fontWeight: 'lighter',
               marginBottom: '6px',
+              overflow: 'auto',
+              wordBreak: 'break-word'
             }}
           >
             {header}
           </div>
         )}
-        <p>{message}</p>
+        <p
+          style={{
+            wordBreak: 'break-word'
+          }}
+        >{message}</p>
       </div>
       <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
         <DeltaDialogFooterActions>

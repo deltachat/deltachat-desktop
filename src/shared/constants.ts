@@ -72,3 +72,14 @@ export enum MessageDownloadState {
   Failure = C.DC_DOWNLOAD_FAILURE,
   InProgress = C.DC_DOWNLOAD_IN_PROGRESS,
 }
+
+export const MEDIA_EXTENSIONS = [
+  'jpg',
+  'jpeg',
+  'png',
+  'apng',
+  'gif',
+  'mkv',
+  'avi',
+  'mp4',
+]

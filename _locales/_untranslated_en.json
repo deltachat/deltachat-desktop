@@ -1,5 +1,11 @@
 {
   "download_failed": {
     "message": "Download failed"
+  },
+  "attachment-files": {
+    "message": "Attached files"
+  },
+  "attachment-images": {
+    "message": "Attached image"
   }
 }

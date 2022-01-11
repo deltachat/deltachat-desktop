@@ -214,7 +214,10 @@ export function SettingsEditProfileDialogInner({
     onClose()
   }
   const onOk = async () => {
-    await DeltaBackend.call('setProfilePicture', profilePicture)
+    await DeltaBackend.call(
+      'setProfilePicture',
+      profilePicture ? profilePicture : null
+    )
     handleDeltaSettingsChange('displayname', displayname)
     handleDeltaSettingsChange('selfstatus', selfstatus)
     onClose()
