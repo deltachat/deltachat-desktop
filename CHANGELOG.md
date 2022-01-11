@@ -14,6 +14,7 @@
 - Do not double log core events
 - Fix Bulgarian language name (uppercase first letter)
 - Fix signature text styling @ejgonzalez17 
+- Fix missing image formats @ejgonzalez17
 - momentjs isn't localized on first startup
 - Fix connectivity status hiding composer @trujillo9616
 - Fix overflow in Confirmation Dialog @Abhijnan-Bajpai 
