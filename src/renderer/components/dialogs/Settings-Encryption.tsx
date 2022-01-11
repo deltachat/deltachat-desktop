@@ -27,10 +27,10 @@ export function KeyViewPanel({
   const tx = window.static_translate
   return (
     <React.Fragment>
-      <div className={Classes.DIALOG_BODY}>
+      <div>
         <Card>
           <Callout>{tx('show_key_transfer_message_desktop')}</Callout>
-          <div className={Classes.DIALOG_BODY}>
+          <div>
             <InputTransferKey
               autocryptkey={autocryptKey.split('-')}
               disabled
