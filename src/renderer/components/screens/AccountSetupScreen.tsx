@@ -76,7 +76,6 @@ export default function AccountSetupScreen({
     }
   }, [onKeyDown])
 
-
   return (
     <div className='login-screen'>
       <div className='window'>
