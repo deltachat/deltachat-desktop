@@ -146,11 +146,14 @@
     min-height: unset;
   }
 
-  button.show-html {
+  .show-html {
     border: none;
     background-color: transparent;
     padding-left: 0;
     color: var(--colorPrimary);
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   .download {

@@ -6,8 +6,7 @@ import React, {
   useLayoutEffect,
   useCallback,
 } from 'react'
-import { Button } from '@blueprintjs/core'
-
+import MenuAttachment from '../attachment/menuAttachment'
 import { SettingsContext, useTranslationFunction } from '../../contexts'
 import ComposerMessageInput from './ComposerMessageInput'
 import { getLogger } from '../../../shared/logger'
@@ -21,7 +20,6 @@ import {
 import { Quote } from '../message/Message'
 import { DeltaBackend } from '../../delta-remote'
 import { DraftAttachment } from '../attachment/messageAttachment'
-import { runtime } from '../../runtime'
 import { sendMessage, unselectChat } from '../helpers/ChatMethods'
 
 const log = getLogger('renderer/composer')
@@ -125,16 +123,6 @@ const Composer = forwardRef<
         textareaRef.disabled = false
       }
       messageInputRef.current.focus()
-    }
-  }
-
-  const addFilename = async () => {
-    const file = await runtime.showOpenFileDialog({
-      properties: ['openFile'],
-      defaultPath: runtime.getAppPath('home'),
-    })
-    if (file) {
-      addFileToDraft(file)
     }
   }
 
@@ -262,14 +250,7 @@ const Composer = forwardRef<
           )}
         </div>
         <div className='lower-bar'>
-          <div className='attachment-button'>
-            <Button
-              minimal
-              icon='paperclip'
-              onClick={addFilename.bind(null)}
-              aria-label={tx('attachment')}
-            />
-          </div>
+          <MenuAttachment addFileToDraft={addFileToDraft} />
           <SettingsContext.Consumer>
             {({ desktopSettings }) =>
               desktopSettings && (

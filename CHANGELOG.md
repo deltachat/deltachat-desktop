@@ -14,20 +14,25 @@
 - Do not double log core events
 - Fix Bulgarian language name (uppercase first letter)
 - Fix signature text styling @ejgonzalez17 
+- Fix missing image formats @ejgonzalez17
 - momentjs isn't localized on first startup
 - Fix connectivity status hiding composer @trujillo9616
 - Fix overflow in Confirmation Dialog @Abhijnan-Bajpai 
 - Fix the profile picture removal @cavesdev #2472
 - Fix the horizontal scroll in autocrypt dialogs @cavesdev #2277
+- Add logging in by pressing enter in AccountSetupScreen
+- Fix blob width for html messages
+- Add new contact within the edit group dialog @cavesdev #2256
 
 ## [1.26.0] - 2021-12-15
 
-### Fixed
+### Added
+- Add an attachment menu
 
+### Fixed
 - fix sending POI
 
 ### Changed
-
 - Update translations (16.12.2021)
 
 ## [1.25.2] - 2021-12-11
