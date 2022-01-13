@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useCallback } from 'react'
 import { Credentials } from '../../../shared/shared-types'
 import LoginForm, {
   defaultCredentials,
@@ -61,13 +61,16 @@ export default function AccountSetupScreen({
     }
   }
 
-  const onKeyDown = (ev: KeyboardEvent) => {
-    if (ev.code === 'Enter') {
-      onClickLogin()
-      ev.stopPropagation()
-      ev.preventDefault()
-    }
-  }
+  const onKeyDown = useCallback(
+    (ev: KeyboardEvent) => {
+      if (ev.code === 'Enter') {
+        onClickLogin()
+        ev.stopPropagation()
+        ev.preventDefault()
+      }
+    },
+    [onClickLogin]
+  )
 
   useEffect(() => {
     window.addEventListener('keydown', onKeyDown)
