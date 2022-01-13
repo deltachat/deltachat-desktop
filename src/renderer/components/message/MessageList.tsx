@@ -4,6 +4,7 @@ import ChatStore, {
   useChatStore,
   ChatStoreState,
   ChatStoreStateWithChatSet,
+  MessagePage,
 } from '../../stores/chat'
 import { useDebouncedCallback } from 'use-debounce'
 import { C } from 'deltachat-node/dist/constants'
@@ -17,17 +18,6 @@ import { useDCConfigOnce } from '../helpers/useDCConfigOnce'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
 const log = getLogger('render/msgList')
 
-const messageIdsToShow = (
-  oldestFetchedMessageIndex: number,
-  messageIds: number[]
-) => {
-  const messageIdsToShow = []
-  for (let i = oldestFetchedMessageIndex; i < messageIds.length; i++) {
-    messageIdsToShow.push(messageIds[i])
-  }
-  return messageIdsToShow
-}
-
 export default function MessageList({
   chatStore,
   refComposer,
@@ -37,7 +27,7 @@ export default function MessageList({
 }) {
   const {
     oldestFetchedMessageIndex,
-    messages,
+    messagePages,
     messageIds,
     scrollToBottom,
     scrollToBottomIfClose,
@@ -51,11 +41,7 @@ export default function MessageList({
 
   const [fetchMore] = useDebouncedCallback(
     () => {
-      if (!messageListRef.current) {
-        return
-      }
-      const scrollHeight = messageListRef.current.scrollHeight
-      ChatStore.effect.fetchMoreMessages(scrollHeight)
+      ChatStore.effect.fetchMoreMessages()
     },
     30,
     { leading: true }
@@ -148,7 +134,7 @@ export default function MessageList({
   }, [refComposer, chatStore.chat.id])
 
   useEffect(() => {
-    if (!messageListRef.current) {
+    if (!messageListRef.current || !refComposer.current) {
       return
     }
     const composerTextarea = refComposer.current.childNodes[1]
@@ -164,7 +150,7 @@ export default function MessageList({
         onScroll={onScroll}
         oldestFetchedMessageIndex={oldestFetchedMessageIndex}
         messageIds={messageIds}
-        messages={messages}
+        messagePages={messagePages}
         messageListRef={messageListRef}
         chatStore={chatStore}
       />
@@ -185,15 +171,14 @@ export const MessageListInner = React.memo(
     onScroll: (event: React.UIEvent<HTMLDivElement>) => void
     oldestFetchedMessageIndex: number
     messageIds: number[]
-    messages: ChatStoreState['messages']
+    messagePages: ChatStoreState['messagePages']
     messageListRef: React.MutableRefObject<HTMLDivElement | null>
     chatStore: ChatStoreStateWithChatSet
   }) => {
     const {
       onScroll,
-      oldestFetchedMessageIndex,
       messageIds,
-      messages,
+      messagePages,
       messageListRef,
 
       chatStore,
@@ -202,13 +187,6 @@ export const MessageListInner = React.memo(
     if (!chatStore.chat.id) {
       throw new Error('no chat id')
     }
-
-    const _messageIdsToShow = messageIdsToShow(
-      oldestFetchedMessageIndex,
-      messageIds
-    )
-
-    let specialMessageIdCounter = 0
 
     const conversationType: ConversationType = {
       hasMultipleParticipants:
@@ -239,22 +217,11 @@ export const MessageListInner = React.memo(
       <div id='message-list' ref={messageListRef} onScroll={onScroll}>
         <ul>
           {messageIds.length === 0 && <EmptyChatMessage />}
-          {_messageIdsToShow.map((messageId, i) => {
-            if (messageId === C.DC_MSG_ID_DAYMARKER) {
-              const key = 'magic' + messageId + '_' + specialMessageIdCounter++
-              const nextMessage = messages[_messageIdsToShow[i + 1]]
-              if (!nextMessage) return null
-              return <DayMarker key={key} timestamp={nextMessage.timestamp} />
-            }
-            const message = messages[messageId]
-            if (!message) {
-              log.debug(`Missing message with id ${messageId}`)
-              return
-            }
+          {messagePages.map(messagePage => {
             return (
-              <MessageWrapper
-                key={messageId}
-                message={message as MessageType}
+              <MessagePageComponent
+                key={messagePage.pageKey}
+                messagePage={messagePage}
                 conversationType={conversationType}
               />
             )
@@ -266,9 +233,61 @@ export const MessageListInner = React.memo(
   (prevProps, nextProps) => {
     const areEqual =
       prevProps.messageIds === nextProps.messageIds &&
-      prevProps.messages === nextProps.messages &&
+      prevProps.messagePages === nextProps.messagePages &&
       prevProps.oldestFetchedMessageIndex ===
         nextProps.oldestFetchedMessageIndex
+
+    return areEqual
+  }
+)
+
+const MessagePageComponent = React.memo(
+  function MessagePageComponent({
+    messagePage,
+    conversationType,
+  }: {
+    messagePage: MessagePage
+    conversationType: ConversationType
+  }) {
+    const messageElements = []
+    const messagesOnPage = messagePage.messages.toArray()
+
+    let specialMessageIdCounter = 0
+    for (let i = 0; i < messagesOnPage.length; i++) {
+      const [messageId, message] = messagesOnPage[i]
+      if (messageId === C.DC_MSG_ID_DAYMARKER) {
+        if (i == messagesOnPage.length - 1) continue // next Message is not on this page, we for now justt skip rendering this daymarker.
+        const [_nextMessageId, nextMessage] = messagesOnPage[i + 1]
+        if (!nextMessage) continue
+        const key = 'magic' + messageId + '_' + specialMessageIdCounter++
+        messageElements.push(
+          <DayMarker key={key} timestamp={nextMessage.timestamp} />
+        )
+      }
+      if (message === null || message == undefined) continue
+      if (!message) {
+        log.debug(`Missing message with id ${messageId}`)
+        continue
+      }
+      messageElements.push(
+        <MessageWrapper
+          key={messageId}
+          message={message as MessageType}
+          conversationType={conversationType}
+        />
+      )
+    }
+
+    return (
+      <div className='message-page' id={messagePage.pageKey}>
+        {messageElements}
+      </div>
+    )
+  },
+  (prevProps, nextProps) => {
+    const areEqual =
+      prevProps.messagePage.pageKey === nextProps.messagePage.pageKey &&
+      prevProps.messagePage.messages === nextProps.messagePage.messages
 
     return areEqual
   }

@@ -11,12 +11,7 @@ type RenderMessageProps = {
 export const MessageWrapper = (props: RenderMessageProps) => {
   return (
     <li>
-      <RenderMessage {...props} />
+      <Message {...props} />
     </li>
   )
 }
-
-export const RenderMessage = React.memo(Message, (prevProps, nextProps) => {
-  const areEqual = prevProps.message === nextProps.message
-  return areEqual
-})
