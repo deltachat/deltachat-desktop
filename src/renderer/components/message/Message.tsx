@@ -424,12 +424,12 @@ const Message = (props: {
           )}
           {content}
           {hasHTML && (
-            <button
+            <div
               onClick={openMessageHTML.bind(null, message.id)}
               className='show-html'
             >
               {tx('show_full_message_in_browser')}
-            </button>
+            </div>
           )}
           <MessageMetaData
             file_mime={(!isSetupmessage && message.file_mime) || null}
