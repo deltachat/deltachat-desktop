@@ -49,9 +49,6 @@ export default function MessageList({
 
   const onScroll = useCallback(
     (Event: React.UIEvent<HTMLDivElement> | null) => {
-      if (isFetching.current === true) {
-        return
-      }
       if (!messageListRef.current) {
         return
       }
@@ -70,7 +67,7 @@ export default function MessageList({
     [fetchMore]
   )
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!messageListRef.current) {
       return
     }
@@ -84,15 +81,13 @@ export default function MessageList({
       messageListRef.current.scrollHeight
     )
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
-    setTimeout(() => {
-      ChatStore.reducer.scrolledToBottom(), 0
+    ChatStore.reducer.scrolledToBottom()
 
-      // Try fetching more messages if needed
-      onScroll(null)
-    })
+    // Try fetching more messages if needed
+    onScroll(null)
   }, [onScroll, scrollToBottom])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!messageListRef.current) {
       return
     }
@@ -114,7 +109,7 @@ export default function MessageList({
       messageListRef.current.scrollTop = messageListRef.current.scrollHeight
     }
 
-    setTimeout(() => ChatStore.reducer.scrolledToBottom(), 0)
+    ChatStore.reducer.scrolledToBottom()
   }, [scrollToBottomIfClose])
 
   useLayoutEffect(() => {
@@ -127,8 +122,8 @@ export default function MessageList({
       messageListRef.current.scrollHeight -
       lastKnownScrollHeight.current +
       lastKnownScrollTop.current
+    ChatStore.reducer.scrolledToLastPage()
     isFetching.current = false
-    setTimeout(() => ChatStore.reducer.scrolledToLastPage(), 0)
   }, [scrollToLastPage, scrollHeight])
 
   useEffect(() => {
@@ -138,7 +133,7 @@ export default function MessageList({
     composerTextarea && composerTextarea.focus()
   }, [refComposer, chatStore.chat.id])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!messageListRef.current || !refComposer.current) {
       return
     }
