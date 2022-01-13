@@ -3,7 +3,7 @@ name: Basic Code Checks
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
     paths-ignore:
       - 'docs/**'  # only trigger build if a file outside of /docs was changed
