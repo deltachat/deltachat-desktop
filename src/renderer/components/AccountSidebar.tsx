@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useRef} from "react";
 import { DeltaChatAccount, FullChat } from "../../shared/shared-types";
 import {DeltaBackend} from "../delta-remote";
 import ScreenController, { Screens } from "../ScreenController";
@@ -14,6 +14,17 @@ export default function AccountSidebar ({
     selectAccount: typeof ScreenController.prototype.selectAccount,
     logins: DeltaChatAccount[] | null
   }) {
+    const accountSidebarRef = useRef<HTMLDivElement>(null)
+    const toggleHideScrollbar = useCallback((show: boolean) => {
+      console.log("Haaaaalllooo")
+      if (accountSidebarRef.current === null) return
+
+      show === true ?
+        accountSidebarRef.current.classList.remove('hideScrollbarThumb') :
+        accountSidebarRef.current.classList.add('hideScrollbarThumb')
+
+    }, [accountSidebarRef])
+
     const switchAccount = useCallback(async (accountId: number) => {
       if (selectedChat) {
         unselectChat()
@@ -22,7 +33,7 @@ export default function AccountSidebar ({
       selectAccount(accountId)
     }, [selectedChat, selectAccount])
     return (
-        <div className="account-sidebar">
+        <div className="account-sidebar hideScrollbarThumb" ref={accountSidebarRef} onMouseEnter={() => { toggleHideScrollbar(true)} } onMouseLeave={() => toggleHideScrollbar(false)}>
                 {logins !== null && logins.map(account => {
                     if (account.type === 'unconfigured') return null
                     return (
@@ -35,7 +46,7 @@ export default function AccountSidebar ({
                             </div>
                     )
                 })}
-            <div onClick={() => {window.__changeScreen(Screens.Login)}}>
+            <div className="account" onClick={() => {window.__changeScreen(Screens.Login)}}>
                 <Avatar
                     avatarPath={undefined}
                     color={'#505050'}

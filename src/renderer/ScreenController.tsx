@@ -197,13 +197,13 @@ export default class ScreenController extends Component {
           selectAccount={this.selectAccount}
         />
       case Screens.Login:
-        if (this.selectedAccountId === undefined) {
+        if (this.state.selectedAccountId === undefined) {
           throw new Error('Selected account not defined')
         }
         return (
           <AccountSetupScreen
             selectAccount={this.selectAccount}
-            accountId={this.selectedAccountId}
+            accountId={this.state.selectedAccountId}
           />
         )
       case Screens.Accounts:
