@@ -338,12 +338,13 @@ export function AddMemberInnerDialog({
     C.DC_GCL_ADD_SELF,
     ''
   )
-  const [{}, onSearchChangeNewContact] = useContactSearch(updateContacts)
+  const [_, onSearchChangeNewContact] = useContactSearch(updateContacts)
 
   const onSearchChangeValidation = (query: ChangeEvent<HTMLInputElement>) => {
     if (searchContacts.size === 0) {
       onSearchChangeNewContact(query)
     }
+    console.log(query)
     onSearchChange(query)
   }
 
@@ -379,20 +380,23 @@ export function AddMemberInnerDialog({
   useLayoutEffect(applyCSSHacks, [inputRef, contactIdsToAdd])
   useEffect(applyCSSHacks, [])
 
-  const addContactOnClick = async () => {
-    if (!queryStrIsValidEmail) return
-
-    await DeltaBackend.call('contacts.createContact', queryStr)
-
+  const triggerOnChangeHandler = () => {
     if (inputRef.current) {
       const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
         window.HTMLInputElement.prototype,
         'value'
       )?.set
       nativeInputValueSetter?.call(inputRef.current, queryStr.split('@')[0])
-      var inputEvent = new Event('input', { bubbles: true })
+      const inputEvent = new Event('input', { bubbles: true })
       inputRef.current.dispatchEvent(inputEvent)
     }
+  }
+
+  const addContactOnClick = async () => {
+    if (!queryStrIsValidEmail) return
+
+    await DeltaBackend.call('contacts.createContact', queryStr)
+    triggerOnChangeHandler()
   }
 
   const renderAddContactIfNeeded = () => {
