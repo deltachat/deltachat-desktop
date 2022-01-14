@@ -10,6 +10,7 @@ import { gitHubIssuesUrl } from '../../../shared/constants'
 import { DeltaBackend } from '../../delta-remote'
 import { useInitEffect } from '../helpers/useInitEffect'
 import { preventDefault } from '../../../shared/util'
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 const log = getLogger('renderer/fullscreen_media')
 
@@ -33,7 +34,11 @@ export default function FullscreenMedia(props: {
   if (isImage(file_mime)) {
     elm = (
       <div className='image-container'>
-        <img src={runtime.transformBlobURL(file)} />
+        <TransformWrapper>
+          <TransformComponent>
+            <img src={runtime.transformBlobURL(file)} />
+          </TransformComponent>
+        </TransformWrapper>
       </div>
     )
   } else if (isAudio(file_mime)) {
@@ -136,7 +141,7 @@ export default function FullscreenMedia(props: {
       onClose={onClose}
     >
       <div className='render-media-wrapper'>
-        {elm && (
+        {elm && (          
           <div className='btn-wrapper'>
             <div
               role='button'
