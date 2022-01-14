@@ -1,7 +1,7 @@
 .ConnectivityToast {
   position: fixed;
   bottom: 5px;
-  left: 8px;
+  left: calc(8px + #{$account-sidebar-width});
   text-align: center;
   z-index: 99;
   background-color: var(--contextMenuBg);
