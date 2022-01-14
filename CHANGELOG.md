@@ -22,6 +22,7 @@
 - Fix the horizontal scroll in autocrypt dialogs @cavesdev #2277
 - Add logging in by pressing enter in AccountSetupScreen
 - Fix blob width for html messages
+- Fix usage of wrong translation key chat_no_contact_requests
 
 ## [1.26.0] - 2021-12-15
 
