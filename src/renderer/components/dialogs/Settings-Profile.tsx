@@ -70,6 +70,7 @@ export default function SettingsProfile({
   }, [])
 
   const tx = useTranslationFunction()
+  const profileBlobUrl = runtime.transformBlobURL(profileImagePreview)
   return (
     <>
       <Card elevation={Elevation.ONE} style={{ paddingTop: '0px' }}>
@@ -79,10 +80,21 @@ export default function SettingsProfile({
         >
           <div className='profile-image-selector'>
             {profileImagePreview ? (
-              <img
-                src={runtime.transformBlobURL(profileImagePreview)}
-                alt={tx('pref_profile_photo')}
-              />
+              <div
+                onClick={() => {
+                  openDialog('FullscreenMedia', {
+                    msg: {
+                      file_mime: 'image/x',
+                      file: profileBlobUrl,
+                    },
+                  })
+                }}
+                style={{
+                  cursor: profileBlobUrl ? 'pointer' : 'default',
+                }}
+              >
+                <img src={profileBlobUrl} alt={tx('pref_profile_photo')} />
+              </div>
             ) : (
               <span style={{ backgroundColor: state.selfContact.color }}>
                 {initial}

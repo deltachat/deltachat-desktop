@@ -202,13 +202,27 @@ function ViewGroupInner(props: {
           <div className={Classes.DIALOG_BODY}>
             <Card>
               <div className='group-settings-container'>
-                <Avatar
-                  displayName={groupName}
-                  avatarPath={groupImage}
-                  isVerified={chat.isProtected}
-                  color={chat.color}
-                  large
-                />
+                <div
+                  onClick={() => {
+                    openDialog('FullscreenMedia', {
+                      msg: {
+                        file_mime: 'image/x',
+                        file: groupImage,
+                      },
+                    })
+                  }}
+                  style={{
+                    cursor: groupImage ? 'pointer' : 'default',
+                  }}
+                >
+                  <Avatar
+                    displayName={groupName}
+                    avatarPath={groupImage}
+                    isVerified={chat.isProtected}
+                    color={chat.color}
+                    large
+                  />
+                </div>
                 <p className='group-name' style={{ marginLeft: '17px' }}>
                   {groupName}
                 </p>
