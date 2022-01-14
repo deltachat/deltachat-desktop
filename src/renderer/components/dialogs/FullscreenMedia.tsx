@@ -74,6 +74,9 @@ export default function FullscreenMedia(props: {
   }
 
   const updatePreviousNextMessageId = useCallback(async () => {
+    if (!msg.id) {
+      return
+    }
     const [previousMessageId, nextMessageId] = await Promise.all([
       DeltaBackend.call('chat.getNextMedia', msg.id, -1),
       DeltaBackend.call('chat.getNextMedia', msg.id, 1),
