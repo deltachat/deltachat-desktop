@@ -311,10 +311,7 @@ function EmptyChatMessage() {
   } else if (chat.isDeviceChat) {
     emptyChatMessage = tx('device_talk_explain')
   } else if (chat.isContactRequest) {
-    emptyChatMessage =
-      Number(showAllEmail) !== C.DC_SHOW_EMAILS_ALL
-        ? tx('chat_no_contact_requests')
-        : tx('chat_no_messages')
+    emptyChatMessage = tx('chat_no_messages')
   }
 
   return (
