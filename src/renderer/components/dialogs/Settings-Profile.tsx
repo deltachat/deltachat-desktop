@@ -3,7 +3,7 @@ import React, { useEffect, useState, useContext } from 'react'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
 
 import { DeltaBackend } from '../../delta-remote'
-import { avatarInitial } from '../Avatar'
+import { avatarInitial, ClickForFullscreenAvatarWrapper } from '../Avatar'
 import { DeltaInput, DeltaTextarea } from '../Login-Styles'
 import {
   DeltaDialogBody,
@@ -80,21 +80,9 @@ export default function SettingsProfile({
         >
           <div className='profile-image-selector'>
             {profileImagePreview ? (
-              <div
-                onClick={() => {
-                  openDialog('FullscreenMedia', {
-                    msg: {
-                      file_mime: 'image/x',
-                      file: profileBlobUrl,
-                    },
-                  })
-                }}
-                style={{
-                  cursor: profileBlobUrl ? 'pointer' : 'default',
-                }}
-              >
+              <ClickForFullscreenAvatarWrapper filename={profileBlobUrl}>
                 <img src={profileBlobUrl} alt={tx('pref_profile_photo')} />
-              </div>
+              </ClickForFullscreenAvatarWrapper>
             ) : (
               <span style={{ backgroundColor: state.selfContact.color }}>
                 {initial}

@@ -21,7 +21,11 @@ import { ViewProfileInner } from './ViewProfile'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { useState, useContext, useEffect, useCallback, useMemo } from 'react'
 import React from 'react'
-import { Avatar, avatarInitial } from '../Avatar'
+import {
+  Avatar,
+  avatarInitial,
+  ClickForFullscreenAvatarWrapper,
+} from '../Avatar'
 import { runtime } from '../../runtime'
 import { DeltaInput } from '../Login-Styles'
 import { ipcBackend } from '../../ipc'
@@ -202,19 +206,7 @@ function ViewGroupInner(props: {
           <div className={Classes.DIALOG_BODY}>
             <Card>
               <div className='group-settings-container'>
-                <div
-                  onClick={() => {
-                    openDialog('FullscreenMedia', {
-                      msg: {
-                        file_mime: 'image/x',
-                        file: groupImage,
-                      },
-                    })
-                  }}
-                  style={{
-                    cursor: groupImage ? 'pointer' : 'default',
-                  }}
-                >
+                <ClickForFullscreenAvatarWrapper filename={groupImage}>
                   <Avatar
                     displayName={groupName}
                     avatarPath={groupImage}
@@ -222,7 +214,7 @@ function ViewGroupInner(props: {
                     color={chat.color}
                     large
                   />
-                </div>
+                </ClickForFullscreenAvatarWrapper>
                 <p className='group-name' style={{ marginLeft: '17px' }}>
                   {groupName}
                 </p>
