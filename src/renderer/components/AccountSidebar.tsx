@@ -16,7 +16,6 @@ export default function AccountSidebar ({
   }) {
     const accountSidebarRef = useRef<HTMLDivElement>(null)
     const toggleHideScrollbar = useCallback((show: boolean) => {
-      console.log("Haaaaalllooo")
       if (accountSidebarRef.current === null) return
 
       show === true ?
