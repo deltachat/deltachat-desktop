@@ -106,16 +106,16 @@ class ChatStore extends Store<ChatStoreState> {
       this.setState(state => {
         if (guardReducerIfChatIdIsDifferent(payload, state)) return
 
-        let messages: OrderedMap<
+        const messages: OrderedMap<
           number,
           MessageType | null
         > = OrderedMap().withMutations(messages => {
-          for (let messageIncoming of payload.messagesIncoming) {
+          for (const messageIncoming of payload.messagesIncoming) {
             messages.set(messageIncoming.id, messageIncoming)
           }
         }) as OrderedMap<number, MessageType | null>
 
-        let incomingMessagePage: MessagePage = {
+        const incomingMessagePage: MessagePage = {
           pageKey: calculatePageKey(messages),
           messages,
         }
@@ -183,10 +183,10 @@ class ChatStore extends Store<ChatStoreState> {
         return {
           ...state,
           messagePages: state.messagePages.map(messagePage => {
-            let returnMessagePage = messagePage
+            const returnMessagePage = messagePage
             returnMessagePage.messages = returnMessagePage.messages.withMutations(
               messages => {
-                for (let changedMessage of payload.messagesChanged) {
+                for (const changedMessage of payload.messagesChanged) {
                   if (!messages.has(changedMessage.id)) continue
                   messages.set(changedMessage.id, changedMessage)
                 }
@@ -232,7 +232,7 @@ class ChatStore extends Store<ChatStoreState> {
             if (messagePage.messages.has(messageId)) {
               const message = messagePage.messages.get(messageId)
               if (message !== null && message !== undefined) {
-                let updatedMessages = messagePage.messages.set(messageId, {
+                const updatedMessages = messagePage.messages.set(messageId, {
                   ...message,
                   state: messageState,
                 })
@@ -571,10 +571,10 @@ ipcBackend.on('ClickOnNotification', (_ev, { chatId }) => {
 export function calculatePageKey(
   messages: OrderedMap<number, MessageType | null>
 ): string {
-  let first = messages.find(
+  const first = messages.find(
     message => message !== null && message !== undefined
   )
-  let last = messages.findLast(
+  const last = messages.findLast(
     message => message !== null && message !== undefined
   )
   let firstId = 'undefined'

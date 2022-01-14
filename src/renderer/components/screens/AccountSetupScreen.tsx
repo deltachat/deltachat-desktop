@@ -35,11 +35,14 @@ export default function AccountSetupScreen({
     defaultCredentials()
   )
 
-  const onClickLogin = () =>
-    openDialog(ConfigureProgressDialog, {
-      credentials,
-      onSuccess: () => selectAccount(accountId),
-    })
+  const onClickLogin = useCallback(
+    () =>
+      openDialog(ConfigureProgressDialog, {
+        credentials,
+        onSuccess: () => selectAccount(accountId),
+      }),
+    [accountId, openDialog, selectAccount, credentials]
+  )
 
   const onCancel = async () => {
     try {

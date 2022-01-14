@@ -14,7 +14,6 @@ import moment from 'moment'
 import { getLogger } from '../../../shared/logger'
 import { MessageType, FullChat } from '../../../shared/shared-types'
 import { MessagesDisplayContext, useTranslationFunction } from '../../contexts'
-import { useDCConfigOnce } from '../helpers/useDCConfigOnce'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
 const log = getLogger('render/msgList')
 
@@ -299,8 +298,6 @@ function EmptyChatMessage() {
   const chat = chatStore.chat as FullChat
 
   let emptyChatMessage = tx('chat_new_one_to_one_hint', [chat.name, chat.name])
-
-  const showAllEmail = useDCConfigOnce('show_emails')
 
   if (chat.isGroup && !chat.isContactRequest) {
     emptyChatMessage = chat.isUnpromoted
