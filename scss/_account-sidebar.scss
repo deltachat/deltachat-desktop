@@ -1,8 +1,11 @@
 .account-sidebar {
     position: absolute;
     left: 0;
-    width: 5vw;
+    width: $account-sidebar-width;
     height: 100vh;
     background-color: gray;
     overflow-y: scroll;
+    .account {
+        padding-left: calc(#{$account-sidebar-width} / 10);
+    }
 }

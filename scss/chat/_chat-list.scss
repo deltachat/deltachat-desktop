@@ -1,6 +1,6 @@
 .chat-list {
   width: 30vw;
-  margin-left: 5vw;
+  margin-left: $account-sidebar-width;
   height: $content-height;
   float: left;
   overflow-y: auto;

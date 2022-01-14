@@ -1,6 +1,6 @@
 .navbar-wrapper {
   .bp3-navbar {
-    margin-left: 5vw;
+    margin-left: $account-sidebar-width;
     padding: 0px;
     background-color: var(--navBarBackground);
     color: var(--navBarText);
@@ -8,7 +8,7 @@
   }
 
   .bp3-navbar-heading {
-    margin-left: 5px;
+    margin-left: $account-sidebar-width;
     margin-right: 0px;
     overflow-x: hidden;
     white-space: nowrap;
