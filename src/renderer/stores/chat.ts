@@ -123,7 +123,7 @@ class ChatStore extends Store<ChatStoreState> {
         return {
           ...state,
           messageIds: payload.messageIds,
-          messagePages: [incomingMessagePage, ...state.messagePages],
+          messagePages: [...state.messagePages, incomingMessagePage],
           scrollToBottomIfClose: true,
         }
       }, 'fetchedIncomingMessages')
@@ -536,6 +536,7 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
       'DC_EVENT_MSGS_CHANGED',
       'changed message seems to be a new message'
     )
+
     const messageIds = <number[]>(
       await DeltaBackend.call('messageList.getMessageIds', id)
     )
@@ -547,9 +548,14 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
       messageIdsIncoming
     )
 
-    const messagesIncoming = messageIdsIncoming.map(
-      messageId => _messagesIncoming[messageId]
-    ) as MessageType[]
+    const messagesIncoming = messageIdsIncoming
+      .map(messageId =>
+        _messagesIncoming[messageId] === undefined
+          ? null
+          : _messagesIncoming[messageId]
+      )
+      .filter(message => message !== null) as MessageType[]
+
     chatStore.reducer.fetchedIncomingMessages({
       id: chatId,
       messageIds,
