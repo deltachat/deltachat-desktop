@@ -1,5 +1,5 @@
 .message-list-and-composer {
-  width: calc(70vw - $account-sidebar-width);
+  width: calc(70vw - #{$account-sidebar-width});
   float: right;
   display: flex;
   flex-direction: column;

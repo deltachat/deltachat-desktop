@@ -8,7 +8,7 @@
   }
 
   .bp3-navbar-heading {
-    margin-left: $account-sidebar-width;
+    margin-left: 5px;
     margin-right: 0px;
     overflow-x: hidden;
     white-space: nowrap;
@@ -23,7 +23,7 @@
   }
 
   .bp3-align-right {
-    width: 65vw;
+    width: calc(70vw - #{$account-sidebar-width});
     float: none;
   }
 
