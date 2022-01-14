@@ -1,6 +1,9 @@
 import React from 'react'
+import { useContext } from 'react'
+
 import classNames from 'classnames'
 import { JsonContact } from '../../shared/shared-types'
+import { ScreenContext } from '../contexts'
 
 export function QRAvatar() {
   return (
@@ -80,5 +83,29 @@ export function AvatarFromContact(
       small={small === true}
       onClick={() => onClick && onClick(contact)}
     />
+  )
+}
+
+export function ClickForFullscreenAvatarWrapper(props: {
+  filename: string
+  children: React.ReactNode
+}) {
+  const { openDialog } = useContext(ScreenContext)
+  return (
+    <div
+      onClick={() => {
+        openDialog('FullscreenMedia', {
+          msg: {
+            file_mime: 'image/x',
+            file: props.filename,
+          },
+        })
+      }}
+      style={{
+        cursor: props.filename ? 'pointer' : 'default',
+      }}
+    >
+      {props.children}
+    </div>
   )
 }

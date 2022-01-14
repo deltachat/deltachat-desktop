@@ -3,7 +3,7 @@ import React, { useEffect, useState, useContext } from 'react'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
 
 import { DeltaBackend } from '../../delta-remote'
-import { avatarInitial } from '../Avatar'
+import { avatarInitial, ClickForFullscreenAvatarWrapper } from '../Avatar'
 import { DeltaInput, DeltaTextarea } from '../Login-Styles'
 import {
   DeltaDialogBody,
@@ -70,6 +70,7 @@ export default function SettingsProfile({
   }, [])
 
   const tx = useTranslationFunction()
+  const profileBlobUrl = runtime.transformBlobURL(profileImagePreview)
   return (
     <>
       <Card elevation={Elevation.ONE} style={{ paddingTop: '0px' }}>
@@ -79,10 +80,9 @@ export default function SettingsProfile({
         >
           <div className='profile-image-selector'>
             {profileImagePreview ? (
-              <img
-                src={runtime.transformBlobURL(profileImagePreview)}
-                alt={tx('pref_profile_photo')}
-              />
+              <ClickForFullscreenAvatarWrapper filename={profileBlobUrl}>
+                <img src={profileBlobUrl} alt={tx('pref_profile_photo')} />
+              </ClickForFullscreenAvatarWrapper>
             ) : (
               <span style={{ backgroundColor: state.selfContact.color }}>
                 {initial}
