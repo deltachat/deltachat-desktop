@@ -276,35 +276,39 @@ class ChatStore extends Store<ChatStoreState> {
       const messageIds = <number[]>(
         await DeltaBackend.call('messageList.getMessageIds', chatId)
       )
-      const oldestFetchedMessageIndex = Math.max(
-        messageIds.length - PAGE_SIZE,
-        0
-      )
-      const newestFetchedMessageIndex = messageIds.length
 
-      const messageIdsToFetch = messageIds.slice(
-        oldestFetchedMessageIndex,
-        newestFetchedMessageIndex
-      )
-      const _messages = await DeltaBackend.call(
-        'messageList.getMessages',
-        messageIdsToFetch
-      )
+      let oldestFetchedMessageIndex = -1
+      let messagePages: MessagePage[] = []
+      if (messageIds.length !== 0) {
+        oldestFetchedMessageIndex = Math.max(messageIds.length - PAGE_SIZE, 0)
+        const newestFetchedMessageIndex = messageIds.length
 
-      const messages = OrderedMap().withMutations(messagePages => {
-        messageIdsToFetch.forEach(messageId => {
-          messagePages.set(messageId, _messages[messageId])
-        })
-      }) as OrderedMap<number, MessageType | null>
+        const messageIdsToFetch = messageIds.slice(
+          oldestFetchedMessageIndex,
+          newestFetchedMessageIndex
+        )
+        const _messages = await DeltaBackend.call(
+          'messageList.getMessages',
+          messageIdsToFetch
+        )
 
-      const messagePage: MessagePage = {
-        pageKey: calculatePageKey(messages),
-        messages,
+        const messages = OrderedMap().withMutations(messagePages => {
+          messageIdsToFetch.forEach(messageId => {
+            messagePages.set(messageId, _messages[messageId])
+          })
+        }) as OrderedMap<number, MessageType | null>
+
+        messagePages = [
+          {
+            pageKey: calculatePageKey(messages),
+            messages,
+          },
+        ]
       }
 
       chatStore.reducer.selectedChat({
         chat,
-        messagePages: [messagePage],
+        messagePages,
         messageIds,
         oldestFetchedMessageIndex,
         scrollToBottom: true,
