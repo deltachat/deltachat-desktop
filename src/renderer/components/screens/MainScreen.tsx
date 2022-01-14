@@ -36,8 +36,10 @@ import ConnectivityToast from '../ConnectivityToast'
 import { C } from 'deltachat-node/dist/constants'
 import MapComponent from '../map/MapComponent'
 import MailingListProfile from '../dialogs/MessageListProfile'
-import { FullChat } from '../../../shared/shared-types'
+import { DeltaChatAccount, FullChat } from '../../../shared/shared-types'
 import { getLogger } from '../../../shared/logger'
+import AccountSidebar from '../AccountSidebar'
+import ScreenController from '../../ScreenController'
 
 const log = getLogger('renderer/main-screen')
 
@@ -47,7 +49,13 @@ export enum View {
   Map,
 }
 
-export default function MainScreen() {
+export default function MainScreen({
+  selectAccount,
+  logins,
+}: {
+  selectAccount: typeof ScreenController.prototype.selectAccount,
+  logins: DeltaChatAccount[] | null
+}) {
   const [queryStr, setQueryStr] = useState('')
   const [view, setView] = useState(View.MessageList)
   window.__setMainScreenView = setView
@@ -164,6 +172,7 @@ export default function MainScreen() {
   // compares with showArchivedChats twice.
   return (
     <div className='main-screen'>
+      <AccountSidebar logins={logins} selectAccount={selectAccount}/>
       <div className='navbar-wrapper'>
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>

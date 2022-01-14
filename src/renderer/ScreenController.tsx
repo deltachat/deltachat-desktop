@@ -15,6 +15,7 @@ import { getLogger } from '../shared/logger'
 import { ContextMenuLayer, showFnType } from './components/ContextMenu'
 import { DeltaBackend } from './delta-remote'
 import AccountSetupScreen from './components/screens/AccountSetupScreen'
+import { DeltaChatAccount } from '../shared/shared-types'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -33,7 +34,11 @@ export enum Screens {
 export default class ScreenController extends Component {
   dialogController: React.RefObject<DialogController>
   contextMenuShowFn: showFnType | null = null
-  state: { message: userFeedback | false; screen: Screens }
+  state: {
+    message: userFeedback | false;
+    screen: Screens;
+    logins: DeltaChatAccount[] | null
+  }
   onShowAbout: any
   selectedAccountId: number | undefined
 
@@ -42,6 +47,7 @@ export default class ScreenController extends Component {
     this.state = {
       message: false,
       screen: Screens.Loading,
+      logins: []
     }
 
     this.onError = this.onError.bind(this)
@@ -105,6 +111,16 @@ export default class ScreenController extends Component {
     }
   }
 
+  async refreshAccounts() {
+    const logins = await DeltaBackend.call('login.getAllAccounts')
+    this.setState({
+      ...this.state,
+      logins
+    })
+  }
+
+
+
   componentDidMount() {
     ipcRenderer.on('error', this.onError)
     ipcRenderer.on('DC_EVENT_ERROR', this.onError)
@@ -115,7 +131,9 @@ export default class ScreenController extends Component {
     ipcRenderer.send('frontendReady')
     window.dispatchEvent(new Event('frontendReady'))
 
+
     this.startup()
+    this.refreshAccounts()
   }
 
   componentWillUnmount() {
@@ -169,7 +187,10 @@ export default class ScreenController extends Component {
   renderScreen() {
     switch (this.state.screen) {
       case Screens.Main:
-        return <MainScreen />
+        return <MainScreen
+          logins={this.state.logins}
+          selectAccount={this.selectAccount}
+        />
       case Screens.Login:
         if (this.selectedAccountId === undefined) {
           throw new Error('Selected account not defined')
@@ -181,7 +202,11 @@ export default class ScreenController extends Component {
           />
         )
       case Screens.Accounts:
-        return <AccountsScreen selectAccount={this.selectAccount} />
+        return <AccountsScreen
+         selectAccount={this.selectAccount}
+         logins={this.state.logins}
+         refreshAccounts={this.refreshAccounts}
+       />
       default:
         return null
     }

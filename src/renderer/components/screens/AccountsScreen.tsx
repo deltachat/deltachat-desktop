@@ -146,11 +146,14 @@ const ScanQRCodeButton = React.memo(function ScanQRCode(_) {
 
 export default function AccountsScreen({
   selectAccount,
+  logins,
+  refreshAccounts
 }: {
-  selectAccount: typeof ScreenController.prototype.selectAccount
+  selectAccount: typeof ScreenController.prototype.selectAccount,
+  logins: DeltaChatAccount[] | null
+  refreshAccounts: () => Promise<void>
 }) {
   const tx = useTranslationFunction()
-  const [logins, setLogins] = useState<DeltaChatAccount[] | null>(null)
 
   const [syncAllAccounts, setSyncAllAccounts] = useState<boolean | null>(null)
 
@@ -163,24 +166,6 @@ export default function AccountsScreen({
     })()
   }, [])
 
-  const refreshAccounts = async () => {
-    const logins = await DeltaBackend.call('login.getAllAccounts')
-    setLogins(logins)
-  }
-
-  useEffect(() => {
-    let mounted = true
-    ;(async () => {
-      const logins = await DeltaBackend.call('login.getAllAccounts')
-      if (mounted === true) {
-        setLogins(logins)
-      }
-    })()
-
-    return () => {
-      mounted = false
-    }
-  }, [])
 
   const addAccount = async () => {
     const accountId = await DeltaBackend.call('login.addAccount')

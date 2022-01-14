@@ -1,5 +1,6 @@
 .navbar-wrapper {
   .bp3-navbar {
+    margin-left: 5vw;
     padding: 0px;
     background-color: var(--navBarBackground);
     color: var(--navBarText);
@@ -17,12 +18,12 @@
   }
 
   .bp3-align-left {
-    width: 30%;
+    width: 30vw;
     padding: 0px 10px;
   }
 
   .bp3-align-right {
-    width: 70%;
+    width: 65vw;
     float: none;
   }
 
