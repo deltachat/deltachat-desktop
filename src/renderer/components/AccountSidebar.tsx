@@ -33,6 +33,7 @@ export default function AccountSidebar ({
                                 <Avatar
                                     displayName={account.display_name === null ? '' : account.display_name}
                                     avatarPath={account.profile_image === null ? undefined : account.profile_image}
+                                    color={account.color}
                                 />
                             </div>
                     )
