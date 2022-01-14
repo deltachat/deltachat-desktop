@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { ipcBackend } from '../../ipc'
 import { getLogger } from '../../../shared/logger'
 import { DeltaBackend } from '../../delta-remote'
@@ -76,22 +76,23 @@ export function useChatList(
     []
   )
 
-  useEffect(() => {
+  const refresh = useCallback(() => {
     log.debug(
       'useChatList: listFlags, queryStr or queryContactId changed, refetching chatlistids'
     )
 
-    const refetchChatlist = () => {
       log.debug('useChatList: refetchingChatlist')
       debouncedGetChatListEntries(listFlags, queryStr, queryContactId)
-    }
 
-    ipcBackend.on('DD_EVENT_CHATLIST_CHANGED', refetchChatlist)
     debouncedGetChatListEntries(listFlags, queryStr, queryContactId)
+  }, [debouncedGetChatListEntries, listFlags, queryContactId, queryStr])
+
+  useEffect(() => {
+    ipcBackend.on('DD_EVENT_CHATLIST_CHANGED', refresh)
     return () => {
-      ipcBackend.removeListener('DD_EVENT_CHATLIST_CHANGED', refetchChatlist)
+      ipcBackend.removeListener('DD_EVENT_CHATLIST_CHANGED', refresh)
     }
-  }, [listFlags, queryStr, queryContactId, debouncedGetChatListEntries])
+  }, [refresh])
 
   return {
     chatListIds: chatListEntries,
@@ -101,5 +102,6 @@ export function useChatList(
     setQueryStr,
     queryContactId,
     setQueryContactId,
+    refresh
   }
 }

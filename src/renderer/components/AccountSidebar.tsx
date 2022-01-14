@@ -19,11 +19,8 @@ export default function AccountSidebar ({
         unselectChat()
       }
       await DeltaBackend.call('login.logout')
-      window.__changeScreen(Screens.Accounts)
       selectAccount(accountId)
-      window.__changeScreen(Screens.Main)
-
-    }, [selectedChat])
+    }, [selectedChat, selectAccount])
     return (
         <div className="account-sidebar">
                 {logins !== null && logins.map(account => {

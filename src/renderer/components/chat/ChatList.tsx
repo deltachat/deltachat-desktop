@@ -98,12 +98,13 @@ export function ChatListPart({
 }
 
 export default function ChatList(props: {
+  selectedAccountId: number | undefined
   selectedChatId: number | null
   showArchivedChats: boolean
   queryStr?: string
   onChatClick: (chatId: number) => void
 }) {
-  const { selectedChatId, showArchivedChats, onChatClick, queryStr } = props
+  const { selectedAccountId, selectedChatId, showArchivedChats, onChatClick, queryStr } = props
   const isSearchActive = queryStr !== ''
 
   const {
@@ -118,11 +119,14 @@ export default function ChatList(props: {
     queryStrIsValidEmail,
   } = useContactAndMessageLogic(queryStr)
 
-  const { chatListIds, isChatLoaded, loadChats, chatCache } = useLogicChatPart(
+  const { chatListIds, isChatLoaded, loadChats, chatCache, refresh } = useLogicChatPart(
     queryStr,
     showArchivedChats
   )
 
+  useEffect(() => {
+    refresh()
+  }, [selectedAccountId, refresh])
   const openContextMenu = useChatListContextMenu()
 
   const addContactOnClick = async () => {
@@ -501,7 +505,7 @@ function useLogicChatPart(
   queryStr: string | undefined,
   showArchivedChats: boolean
 ) {
-  const { chatListIds, setQueryStr, setListFlags } = useChatList()
+  const { chatListIds, setQueryStr, setListFlags, refresh } = useChatList()
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
     chatListIds
   )
@@ -519,7 +523,7 @@ function useLogicChatPart(
     [showArchivedChats, queryStr, setListFlags]
   )
 
-  return { chatListIds, isChatLoaded, loadChats, chatCache }
+  return { chatListIds, isChatLoaded, loadChats, chatCache, refresh }
 }
 
 function useContactAndMessageLogic(queryStr: string | undefined) {

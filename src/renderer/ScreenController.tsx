@@ -38,16 +38,17 @@ export default class ScreenController extends Component {
     message: userFeedback | false;
     screen: Screens;
     logins: DeltaChatAccount[] | null
+    selectedAccountId: number | undefined
   }
   onShowAbout: any
-  selectedAccountId: number | undefined
 
   constructor(public props: {}) {
     super(props)
     this.state = {
       message: false,
       screen: Screens.Loading,
-      logins: []
+      logins: [],
+      selectedAccountId: undefined
     }
 
     this.onError = this.onError.bind(this)
@@ -83,7 +84,10 @@ export default class ScreenController extends Component {
 
   async selectAccount(accountId: number) {
     await DeltaBackend.call('login.selectAccount', accountId)
-    this.selectedAccountId = accountId
+    this.setState({
+      ...this.state,
+      selectedAccountId: accountId
+    })
     const account = await DeltaBackend.call('login.accountInfo', accountId)
     if (account.type === 'configured') {
       this.changeScreen(Screens.Main)
@@ -188,6 +192,7 @@ export default class ScreenController extends Component {
     switch (this.state.screen) {
       case Screens.Main:
         return <MainScreen
+          selectedAccountId={this.state.selectedAccountId}
           logins={this.state.logins}
           selectAccount={this.selectAccount}
         />
