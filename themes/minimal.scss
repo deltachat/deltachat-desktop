@@ -382,3 +382,11 @@ div.group-image-wrapper div.group-image-edit-button {
 .bp3-navbar-group > .clear-button:before {
   color: var(--textNavBar) !important;
 }
+
+* {
+  font-family: 'Roboto';
+}
+
+.emoji-container.jumbo {
+  font-size: unset;
+}
