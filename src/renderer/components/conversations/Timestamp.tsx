@@ -30,18 +30,33 @@ type TimestampProps = {
   extended: boolean
 }
 
-const Timestamp = function Timestamp(props: TimestampProps) {
+const NonUpdatingTimestamp = function Timestamp(props: TimestampProps) {
   const { direction, timestamp, extended } = props
   const moduleName = props.module || ''
 
+  return (
+    <span
+      className={classNames(
+        moduleName,
+        direction ? `${moduleName}--${direction}` : null
+      )}
+      title={moment(timestamp).format('llll')}
+    >
+      {formatRelativeTime(timestamp, { extended })}
+    </span>
+  )
+
+}
+
+
+const UpdatingTimestamp = (props: TimestampProps) => {
+  const { direction, timestamp, extended } = props
+  const moduleName = props.module || ''
   const calculateRelativeTime = useCallback(
     () => formatRelativeTime(timestamp, { extended }),
     [timestamp, extended]
   )
-  const [relativeTime, setRelativeTime] = useState(() =>
-    calculateRelativeTime()
-  )
-
+  const [relativeTime, setRelativeTime] = useState(calculateRelativeTime())
   // Update relative time every UPDATE_FREQUENCY ms
   const recalculateRelativeTime = useCallback(
     () => setRelativeTime(calculateRelativeTime()),
@@ -55,7 +70,7 @@ const Timestamp = function Timestamp(props: TimestampProps) {
   ])
 
   // trigger a rerender that will be detected as a language change by the useEffect function above (window.localeData.locale)
-  useTranslationFunction()
+  //useTranslationFunction()
 
   if (timestamp === null || timestamp === undefined) return null
 
@@ -72,4 +87,9 @@ const Timestamp = function Timestamp(props: TimestampProps) {
   )
 }
 
-export default Timestamp
+export default function Timestamp(props: TimestampProps) {
+  if (props.timestamp < (Date.now() - 24 * 60 * 60)) {
+    return <NonUpdatingTimestamp {...props} />
+  }
+  return <UpdatingTimestamp {...props} />
+}
