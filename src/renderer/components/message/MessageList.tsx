@@ -66,7 +66,7 @@ export default function MessageList({
     [fetchMore]
   )
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!messageListRef.current) {
       return
     }
@@ -86,7 +86,7 @@ export default function MessageList({
     onScroll(null)
   }, [onScroll, scrollToBottom])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!messageListRef.current) {
       return
     }
@@ -125,14 +125,17 @@ export default function MessageList({
     isFetching.current = false
   }, [scrollToLastPage, scrollHeight])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     isFetching.current = false
+    if (!refComposer.current) {
+      return
+    }
 
     const composerTextarea = refComposer.current.childNodes[1]
     composerTextarea && composerTextarea.focus()
   }, [refComposer, chatStore.chat.id])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!messageListRef.current || !refComposer.current) {
       return
     }
