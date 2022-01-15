@@ -80,6 +80,7 @@ const AuthorName = (
 
   return (
     <span
+      key='author'
       className='author'
       style={{ color: color }}
       onClick={() => onContactClick(contact)}
@@ -110,7 +111,7 @@ const ForwardedTitle = (
             tx('forwarded_by', '$$forwarder$$'),
             '$$forwarder$$',
             () => (
-              <span style={{ color: color }}>
+              <span key='displayname' style={{ color: color }}>
                 {overrideSenderName ? `~${overrideSenderName}` : displayName}
               </span>
             )
@@ -344,10 +345,12 @@ const Message = (props: {
       <div className={'download'}>
         {text} {'- '}
         {downloadState == MessageDownloadState.Failure && (
-          <span className={'failed'}>{tx('download_failed')}</span>
+          <span key='fail' className={'failed'}>
+            {tx('download_failed')}
+          </span>
         )}
         {downloadState == MessageDownloadState.InProgress && (
-          <span>{tx('downloading')}</span>
+          <span key='downloading'>{tx('downloading')}</span>
         )}
         {(downloadState == MessageDownloadState.Failure ||
           downloadState === MessageDownloadState.Available) && (
