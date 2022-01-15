@@ -19,5 +19,8 @@
   },
   "pref_send_copy_to_self_explain": {
     "message": "Required for multi-device setup."
+  },
+  "menu_show_account_sidebar": {
+    "message": "Show account sidebar"
   }
 }

@@ -16,12 +16,12 @@
     }
     .account {
       padding-left: calc((100% + 3px - 48px) / 2);
-      border-left: solid 1px transparent;
+      border-left: solid 3px transparent;
       &:hover {
         border-left-color: lightgrey;
       }
       &.selected {
-        border-left-color: blue;
+        border-left-color: var(--colorPrimary);
       }
     }
 }

@@ -49,6 +49,7 @@ export interface DesktopSettingsType {
   activeTheme: string
   minimizeToTray: boolean
   syncAllAccounts: boolean
+  showAccountSidebar: boolean
 }
 
 export interface RC_Config {
