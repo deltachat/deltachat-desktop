@@ -15,7 +15,7 @@
       background: transparent;
     }
     .account {
-      padding-left: calc((100% + 3px - 48px) / 2);
+      padding-left: calc((100% - 48px) / 2);
       border-left: solid 3px transparent;
       &:hover {
         border-left-color: lightgrey;
