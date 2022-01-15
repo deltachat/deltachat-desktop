@@ -7,6 +7,7 @@
 - Make disabled "delete profile image" button more readable in dark themes @ejgonzalez17 #2478
 - Update inApp help (3.1.2022)
 - Making the minimal them even more zen
+- Drastically improve performance of MessageList
 
 ### Fixed
 - Fix overflow in long links inside quotes @naomiceron #2467

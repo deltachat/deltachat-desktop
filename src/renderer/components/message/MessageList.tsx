@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback, useLayoutEffect } from 'react'
+import React, { useRef, useCallback, useLayoutEffect } from 'react'
 import { MessageWrapper } from './MessageWrapper'
 import ChatStore, {
   useChatStore,
@@ -31,11 +31,10 @@ export default function MessageList({
     scrollToBottom,
     scrollToBottomIfClose,
     scrollToLastPage,
-    scrollHeight,
+    lastKnownScrollHeight,
+    lastKnownScrollTop,
   } = useChatStore()
   const messageListRef = useRef<HTMLDivElement | null>(null)
-  const lastKnownScrollHeight = useRef<number>(0)
-  const lastKnownScrollTop = useRef<number>(0)
   const isFetching = useRef(false)
 
   const [fetchMore] = useDebouncedCallback(
@@ -51,14 +50,13 @@ export default function MessageList({
       if (!messageListRef.current) {
         return
       }
-      ;(lastKnownScrollHeight.current as any) = messageListRef.current.scrollHeight
-      ;(lastKnownScrollTop.current as any) = messageListRef.current.scrollTop
-      if (messageListRef.current.scrollTop > 200) return
-      if (isFetching.current === false) {
-        isFetching.current = true
-        log.debug('Scrolled to top, fetching more messsages!')
-        fetchMore()
+      if (isFetching.current === true) {
+        return
       }
+      if (messageListRef.current.scrollTop > 200) return
+      isFetching.current = true
+      log.debug('Scrolled to top, fetching more messsages!')
+      setTimeout(() => fetchMore(), 0)
       Event?.preventDefault()
       Event?.stopPropagation()
       return false
@@ -66,7 +64,7 @@ export default function MessageList({
     [fetchMore]
   )
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!messageListRef.current) {
       return
     }
@@ -80,36 +78,36 @@ export default function MessageList({
       messageListRef.current.scrollHeight
     )
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
-    ChatStore.reducer.scrolledToBottom()
+    setTimeout(() => ChatStore.reducer.scrolledToBottom(), 0)
 
     // Try fetching more messages if needed
     onScroll(null)
   }, [onScroll, scrollToBottom])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!messageListRef.current) {
       return
     }
     if (scrollToBottomIfClose === false) return
-    const scrollHeight = lastKnownScrollHeight.current
+    const scrollHeight = lastKnownScrollHeight
     const { scrollTop, clientHeight } = messageListRef.current
     const scrollBottom = scrollTop + clientHeight
 
     const shouldScrollToBottom = scrollBottom >= scrollHeight - 7
 
-    log.debug(
+    /*log.debug(
       'scrollToBottomIfClose',
       scrollBottom,
       scrollHeight,
       shouldScrollToBottom
-    )
+    )*/
 
     if (shouldScrollToBottom) {
       messageListRef.current.scrollTop = messageListRef.current.scrollHeight
     }
 
-    ChatStore.reducer.scrolledToBottom()
-  }, [scrollToBottomIfClose])
+    setTimeout(() => ChatStore.reducer.scrolledToBottom(), 0)
+  }, [scrollToBottomIfClose, lastKnownScrollHeight])
 
   useLayoutEffect(() => {
     if (!messageListRef.current) {
@@ -119,20 +117,25 @@ export default function MessageList({
     // restore old scroll position after new messages are rendered
     messageListRef.current.scrollTop =
       messageListRef.current.scrollHeight -
-      lastKnownScrollHeight.current +
-      lastKnownScrollTop.current
-    ChatStore.reducer.scrolledToLastPage()
-    isFetching.current = false
-  }, [scrollToLastPage, scrollHeight])
+      lastKnownScrollHeight +
+      lastKnownScrollTop
+    setTimeout(() => {
+      ChatStore.reducer.scrolledToLastPage()
+      isFetching.current = false
+    }, 0)
+  }, [scrollToLastPage, lastKnownScrollHeight, lastKnownScrollTop])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     isFetching.current = false
+    if (!refComposer.current) {
+      return
+    }
 
     const composerTextarea = refComposer.current.childNodes[1]
     composerTextarea && composerTextarea.focus()
   }, [refComposer, chatStore.chat.id])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!messageListRef.current || !refComposer.current) {
       return
     }
