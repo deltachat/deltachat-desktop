@@ -191,7 +191,7 @@ export default function MainScreen({
   // compares with showArchivedChats twice.
   return (
     <div className='main-screen'>
-      <AccountSidebar selectedChat={selectedChat.chat} logins={logins} selectAccount={selectAccount}/>
+      <AccountSidebar selectedAccountId={selectedAccountId} selectedChat={selectedChat.chat} logins={logins} selectAccount={selectAccount}/>
       <div className='navbar-wrapper'>
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>

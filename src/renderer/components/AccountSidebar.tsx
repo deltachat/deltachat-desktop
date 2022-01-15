@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import React, {useCallback, useRef} from "react";
 import { DeltaChatAccount, FullChat } from "../../shared/shared-types";
 import {DeltaBackend} from "../delta-remote";
@@ -8,10 +9,12 @@ import {unselectChat} from "./helpers/ChatMethods";
 export default function AccountSidebar ({
     selectedChat,
     selectAccount,
+    selectedAccountId,
     logins,
   }: {
     selectedChat: FullChat | null,
     selectAccount: typeof ScreenController.prototype.selectAccount,
+    selectedAccountId: number | undefined,
     logins: DeltaChatAccount[] | null
   }) {
     const accountSidebarRef = useRef<HTMLDivElement>(null)
@@ -36,7 +39,7 @@ export default function AccountSidebar ({
                 {logins !== null && logins.map(account => {
                     if (account.type === 'unconfigured') return null
                     return (
-                            <div className="account" onClick={() => switchAccount(account.id)}>
+                            <div className={classNames("account", { selected: account.id === selectedAccountId})} onClick={() => switchAccount(account.id)}>
                                 <Avatar
                                     displayName={account.display_name === null ? '' : account.display_name}
                                     avatarPath={account.profile_image === null ? undefined : account.profile_image}
