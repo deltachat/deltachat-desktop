@@ -87,8 +87,9 @@ class ChatStore extends Store<ChatStoreState> {
       this.setState(state => {
         if (guardReducerIfChatIdIsDifferent(payload, state)) return
         //@ts-ignore
-        const {scrollHeight, scrollTop }= document.querySelector('#message-list')
-
+        const { scrollHeight, scrollTop } = document.querySelector(
+          '#message-list'
+        )
 
         return {
           ...state,
@@ -96,7 +97,7 @@ class ChatStore extends Store<ChatStoreState> {
           oldestFetchedMessageIndex: payload.oldestFetchedMessageIndex,
           scrollToLastPage: true,
           lastKnownScrollHeight: scrollHeight,
-          lastKnownScrollTop: scrollTop, 
+          lastKnownScrollTop: scrollTop,
           countFetchedMessages: payload.countFetchedMessages,
         }
       }, 'fetchedMessagePage')

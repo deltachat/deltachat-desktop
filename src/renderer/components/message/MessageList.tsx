@@ -32,7 +32,7 @@ export default function MessageList({
     scrollToBottomIfClose,
     scrollToLastPage,
     lastKnownScrollHeight,
-    lastKnownScrollTop
+    lastKnownScrollTop,
   } = useChatStore()
   const messageListRef = useRef<HTMLDivElement | null>(null)
   const isFetching = useRef(false)
