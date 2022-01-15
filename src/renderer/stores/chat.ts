@@ -22,7 +22,8 @@ export interface ChatStoreState {
   scrollToBottom: boolean // if true the UI will scroll to bottom
   scrollToBottomIfClose: boolean
   scrollToLastPage: boolean // after fetching more messages reset scroll bar to old position
-  scrollHeight: number
+  lastKnownScrollHeight: number
+  lastKnownScrollTop: number
   countFetchedMessages: number
 }
 
@@ -34,7 +35,8 @@ const defaultState: ChatStoreState = {
   scrollToBottom: false,
   scrollToBottomIfClose: false,
   scrollToLastPage: false,
-  scrollHeight: 0,
+  lastKnownScrollHeight: -1,
+  lastKnownScrollTop: -1,
   countFetchedMessages: 0,
 }
 
@@ -85,15 +87,16 @@ class ChatStore extends Store<ChatStoreState> {
       this.setState(state => {
         if (guardReducerIfChatIdIsDifferent(payload, state)) return
         //@ts-ignore
-        const scrollHeight = document.querySelector('#message-list')
-          .scrollHeight
+        const {scrollHeight, scrollTop }= document.querySelector('#message-list')
+
 
         return {
           ...state,
           messagePages: [payload.fetchedMessagePage, ...state.messagePages],
           oldestFetchedMessageIndex: payload.oldestFetchedMessageIndex,
           scrollToLastPage: true,
-          scrollHeight: scrollHeight,
+          lastKnownScrollHeight: scrollHeight,
+          lastKnownScrollTop: scrollTop, 
           countFetchedMessages: payload.countFetchedMessages,
         }
       }, 'fetchedMessagePage')
@@ -134,7 +137,8 @@ class ChatStore extends Store<ChatStoreState> {
         return {
           ...state,
           scrollToLastPage: false,
-          scrollHeight: 0,
+          lastKnownScrollHeight: -1,
+          lastKnownScrollTop: -1,
         }
       }, 'scrolledToLastPage')
     },
