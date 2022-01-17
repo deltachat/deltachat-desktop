@@ -125,7 +125,7 @@ function getStackTrace(): StackFrame[] | string {
 }
 
 export class Logger {
-  //@ts-ignore 
+  //@ts-ignore
   isMainProcess = typeof window === 'undefined'
   constructor(public readonly channel: string) {
     if (channel === 'core/event') {
