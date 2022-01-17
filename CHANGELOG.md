@@ -26,6 +26,7 @@
 - Fix blob width for html messages
 - Fix usage of wrong translation key chat_no_contact_requests
 - Fullscreen view for group avatar and own avatar in settings
+- Fix messagelist sometimes not loading more messages
 
 ## [1.26.0] - 2021-12-15
 

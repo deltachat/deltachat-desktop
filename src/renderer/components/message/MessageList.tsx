@@ -122,6 +122,7 @@ export default function MessageList({
     setTimeout(() => {
       ChatStore.reducer.scrolledToLastPage()
       isFetching.current = false
+      onScroll(null)
     }, 0)
   }, [scrollToLastPage, lastKnownScrollHeight, lastKnownScrollTop])
 
