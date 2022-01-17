@@ -415,6 +415,18 @@ class ChatStore extends Store<ChatStoreState> {
       })
     },
   }
+
+  stateToString(state: ChatStoreState): string {
+    return JSON.stringify({
+      ...state,
+      messagePages: state.messagePages.map(messagePage => {
+        return {
+          ...messagePage,
+          messages: messagePage.messages.toArray()
+        }          
+      })
+    }, null, 2)
+  }
 }
 
 const chatStore = new ChatStore({ ...defaultState }, 'ChatStore')
