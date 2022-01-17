@@ -38,6 +38,7 @@ const MenuAttachment = ({
 }: {
   addFileToDraft: (file: string) => void
 }) => {
+  const tx = useTranslationFunction()
   const addFilenameFile = async () => {
     //function for files
     const file = await runtime.showOpenFileDialog({
@@ -74,17 +75,17 @@ const MenuAttachment = ({
   const items = [
     {
       id: 0,
-      icon: 'document' as IconName,
-      text: 'Document',
-      onClick: addFilenameFile.bind(null),
-      attachment: 'attachment-files',
+      icon: 'media' as IconName,
+      text: tx('media'),
+      onClick: addFilenameMedia.bind(null),
+      attachment: 'attachment-images',
     },
     {
       id: 1,
-      icon: 'media' as IconName,
-      text: 'Media',
-      onClick: addFilenameMedia.bind(null),
-      attachment: 'attachment-images',
+      icon: 'document' as IconName,
+      text: tx('file'),
+      onClick: addFilenameFile.bind(null),
+      attachment: 'attachment-files',
     },
   ]
 
@@ -96,7 +97,7 @@ const MenuAttachment = ({
             <MenuAttachmentItems itemsArray={items} />
           </Menu>
         }
-        position={Position.RIGHT_TOP}
+        position={Position.TOP_LEFT}
       >
         <Button minimal icon='paperclip' />
       </Popover>
