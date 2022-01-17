@@ -88,7 +88,8 @@ const UpdatingTimestamp = (props: TimestampProps) => {
 }
 
 export default function Timestamp(props: TimestampProps) {
-  if (props.timestamp < (Date.now() - 24 * 60 * 60)) {
+  // if older than one week we don't need to update timestamps
+  if (props.timestamp < (Date.now() - 24 * 60 * 60 * 7)) {
     return <NonUpdatingTimestamp {...props} />
   }
   return <UpdatingTimestamp {...props} />
