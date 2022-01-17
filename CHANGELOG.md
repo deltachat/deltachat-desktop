@@ -8,6 +8,7 @@
 - Update inApp help (3.1.2022)
 - Making the minimal them even more zen
 - Drastically improve performance of MessageList
+- Don't update Timestamps if they are older then one week
 
 ### Fixed
 - Fix overflow in long links inside quotes @naomiceron #2467
