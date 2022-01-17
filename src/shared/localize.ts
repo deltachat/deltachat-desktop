@@ -5,7 +5,9 @@ export interface LocaleData {
   locale: string
   messages: {
     [key: string]: {
-      [key: string]: string
+      message?: string,
+      one?: string,
+      other?: string,
     }
   }
 }
