@@ -1,9 +1,10 @@
-import React, { useRef, useEffect, useCallback, useLayoutEffect } from 'react'
+import React, { useRef, useCallback, useLayoutEffect } from 'react'
 import { MessageWrapper } from './MessageWrapper'
 import ChatStore, {
   useChatStore,
   ChatStoreState,
   ChatStoreStateWithChatSet,
+  MessagePage,
 } from '../../stores/chat'
 import { useDebouncedCallback } from 'use-debounce'
 import { C } from 'deltachat-node/dist/constants'
@@ -13,20 +14,8 @@ import moment from 'moment'
 import { getLogger } from '../../../shared/logger'
 import { MessageType, FullChat } from '../../../shared/shared-types'
 import { MessagesDisplayContext, useTranslationFunction } from '../../contexts'
-import { useDCConfigOnce } from '../helpers/useDCConfigOnce'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
 const log = getLogger('render/msgList')
-
-const messageIdsToShow = (
-  oldestFetchedMessageIndex: number,
-  messageIds: number[]
-) => {
-  const messageIdsToShow = []
-  for (let i = oldestFetchedMessageIndex; i < messageIds.length; i++) {
-    messageIdsToShow.push(messageIds[i])
-  }
-  return messageIdsToShow
-}
 
 export default function MessageList({
   chatStore,
@@ -37,25 +26,20 @@ export default function MessageList({
 }) {
   const {
     oldestFetchedMessageIndex,
-    messages,
+    messagePages,
     messageIds,
     scrollToBottom,
     scrollToBottomIfClose,
     scrollToLastPage,
-    scrollHeight,
+    lastKnownScrollHeight,
+    lastKnownScrollTop,
   } = useChatStore()
   const messageListRef = useRef<HTMLDivElement | null>(null)
-  const lastKnownScrollHeight = useRef<number>(0)
-  const lastKnownScrollTop = useRef<number>(0)
   const isFetching = useRef(false)
 
   const [fetchMore] = useDebouncedCallback(
     () => {
-      if (!messageListRef.current) {
-        return
-      }
-      const scrollHeight = messageListRef.current.scrollHeight
-      ChatStore.effect.fetchMoreMessages(scrollHeight)
+      ChatStore.effect.fetchMoreMessages()
     },
     30,
     { leading: true }
@@ -66,14 +50,13 @@ export default function MessageList({
       if (!messageListRef.current) {
         return
       }
-      ;(lastKnownScrollHeight.current as any) = messageListRef.current.scrollHeight
-      ;(lastKnownScrollTop.current as any) = messageListRef.current.scrollTop
-      if (messageListRef.current.scrollTop > 200) return
-      if (isFetching.current === false) {
-        isFetching.current = true
-        log.debug('Scrolled to top, fetching more messsages!')
-        fetchMore()
+      if (isFetching.current === true) {
+        return
       }
+      if (messageListRef.current.scrollTop > 200) return
+      isFetching.current = true
+      log.debug('Scrolled to top, fetching more messsages!')
+      setTimeout(() => fetchMore(), 0)
       Event?.preventDefault()
       Event?.stopPropagation()
       return false
@@ -81,7 +64,7 @@ export default function MessageList({
     [fetchMore]
   )
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!messageListRef.current) {
       return
     }
@@ -95,36 +78,36 @@ export default function MessageList({
       messageListRef.current.scrollHeight
     )
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
-    ChatStore.reducer.scrolledToBottom()
+    setTimeout(() => ChatStore.reducer.scrolledToBottom(), 0)
 
     // Try fetching more messages if needed
     onScroll(null)
   }, [onScroll, scrollToBottom])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!messageListRef.current) {
       return
     }
     if (scrollToBottomIfClose === false) return
-    const scrollHeight = lastKnownScrollHeight.current
+    const scrollHeight = lastKnownScrollHeight
     const { scrollTop, clientHeight } = messageListRef.current
     const scrollBottom = scrollTop + clientHeight
 
     const shouldScrollToBottom = scrollBottom >= scrollHeight - 7
 
-    log.debug(
+    /*log.debug(
       'scrollToBottomIfClose',
       scrollBottom,
       scrollHeight,
       shouldScrollToBottom
-    )
+    )*/
 
     if (shouldScrollToBottom) {
       messageListRef.current.scrollTop = messageListRef.current.scrollHeight
     }
 
-    ChatStore.reducer.scrolledToBottom()
-  }, [scrollToBottomIfClose])
+    setTimeout(() => ChatStore.reducer.scrolledToBottom(), 0)
+  }, [scrollToBottomIfClose, lastKnownScrollHeight])
 
   useLayoutEffect(() => {
     if (!messageListRef.current) {
@@ -134,21 +117,27 @@ export default function MessageList({
     // restore old scroll position after new messages are rendered
     messageListRef.current.scrollTop =
       messageListRef.current.scrollHeight -
-      lastKnownScrollHeight.current +
-      lastKnownScrollTop.current
-    ChatStore.reducer.scrolledToLastPage()
-    isFetching.current = false
-  }, [scrollToLastPage, scrollHeight])
+      lastKnownScrollHeight +
+      lastKnownScrollTop
+    setTimeout(() => {
+      ChatStore.reducer.scrolledToLastPage()
+      isFetching.current = false
+      onScroll(null)
+    }, 0)
+  }, [scrollToLastPage, lastKnownScrollHeight, lastKnownScrollTop])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     isFetching.current = false
+    if (!refComposer.current) {
+      return
+    }
 
     const composerTextarea = refComposer.current.childNodes[1]
     composerTextarea && composerTextarea.focus()
   }, [refComposer, chatStore.chat.id])
 
-  useEffect(() => {
-    if (!messageListRef.current) {
+  useLayoutEffect(() => {
+    if (!messageListRef.current || !refComposer.current) {
       return
     }
     const composerTextarea = refComposer.current.childNodes[1]
@@ -164,7 +153,7 @@ export default function MessageList({
         onScroll={onScroll}
         oldestFetchedMessageIndex={oldestFetchedMessageIndex}
         messageIds={messageIds}
-        messages={messages}
+        messagePages={messagePages}
         messageListRef={messageListRef}
         chatStore={chatStore}
       />
@@ -185,15 +174,14 @@ export const MessageListInner = React.memo(
     onScroll: (event: React.UIEvent<HTMLDivElement>) => void
     oldestFetchedMessageIndex: number
     messageIds: number[]
-    messages: ChatStoreState['messages']
+    messagePages: ChatStoreState['messagePages']
     messageListRef: React.MutableRefObject<HTMLDivElement | null>
     chatStore: ChatStoreStateWithChatSet
   }) => {
     const {
       onScroll,
-      oldestFetchedMessageIndex,
       messageIds,
-      messages,
+      messagePages,
       messageListRef,
 
       chatStore,
@@ -202,13 +190,6 @@ export const MessageListInner = React.memo(
     if (!chatStore.chat.id) {
       throw new Error('no chat id')
     }
-
-    const _messageIdsToShow = messageIdsToShow(
-      oldestFetchedMessageIndex,
-      messageIds
-    )
-
-    let specialMessageIdCounter = 0
 
     const conversationType: ConversationType = {
       hasMultipleParticipants:
@@ -239,22 +220,11 @@ export const MessageListInner = React.memo(
       <div id='message-list' ref={messageListRef} onScroll={onScroll}>
         <ul>
           {messageIds.length === 0 && <EmptyChatMessage />}
-          {_messageIdsToShow.map((messageId, i) => {
-            if (messageId === C.DC_MSG_ID_DAYMARKER) {
-              const key = 'magic' + messageId + '_' + specialMessageIdCounter++
-              const nextMessage = messages[_messageIdsToShow[i + 1]]
-              if (!nextMessage) return null
-              return <DayMarker key={key} timestamp={nextMessage.timestamp} />
-            }
-            const message = messages[messageId]
-            if (!message) {
-              log.debug(`Missing message with id ${messageId}`)
-              return
-            }
+          {messagePages.map(messagePage => {
             return (
-              <MessageWrapper
-                key={messageId}
-                message={message as MessageType}
+              <MessagePageComponent
+                key={messagePage.pageKey}
+                messagePage={messagePage}
                 conversationType={conversationType}
               />
             )
@@ -266,9 +236,61 @@ export const MessageListInner = React.memo(
   (prevProps, nextProps) => {
     const areEqual =
       prevProps.messageIds === nextProps.messageIds &&
-      prevProps.messages === nextProps.messages &&
+      prevProps.messagePages === nextProps.messagePages &&
       prevProps.oldestFetchedMessageIndex ===
         nextProps.oldestFetchedMessageIndex
+
+    return areEqual
+  }
+)
+
+const MessagePageComponent = React.memo(
+  function MessagePageComponent({
+    messagePage,
+    conversationType,
+  }: {
+    messagePage: MessagePage
+    conversationType: ConversationType
+  }) {
+    const messageElements = []
+    const messagesOnPage = messagePage.messages.toArray()
+
+    let specialMessageIdCounter = 0
+    for (let i = 0; i < messagesOnPage.length; i++) {
+      const [messageId, message] = messagesOnPage[i]
+      if (messageId === C.DC_MSG_ID_DAYMARKER) {
+        if (i == messagesOnPage.length - 1) continue // next Message is not on this page, we for now justt skip rendering this daymarker.
+        const [_nextMessageId, nextMessage] = messagesOnPage[i + 1]
+        if (!nextMessage) continue
+        const key = 'magic' + messageId + '_' + specialMessageIdCounter++
+        messageElements.push(
+          <DayMarker key={key} timestamp={nextMessage.timestamp} />
+        )
+      }
+      if (message === null || message == undefined) continue
+      if (!message) {
+        log.debug(`Missing message with id ${messageId}`)
+        continue
+      }
+      messageElements.push(
+        <MessageWrapper
+          key={messageId}
+          message={message as MessageType}
+          conversationType={conversationType}
+        />
+      )
+    }
+
+    return (
+      <div className='message-page' id={messagePage.pageKey}>
+        {messageElements}
+      </div>
+    )
+  },
+  (prevProps, nextProps) => {
+    const areEqual =
+      prevProps.messagePage.pageKey === nextProps.messagePage.pageKey &&
+      prevProps.messagePage.messages === nextProps.messagePage.messages
 
     return areEqual
   }
@@ -281,8 +303,6 @@ function EmptyChatMessage() {
 
   let emptyChatMessage = tx('chat_new_one_to_one_hint', [chat.name, chat.name])
 
-  const showAllEmail = useDCConfigOnce('show_emails')
-
   if (chat.isGroup && !chat.isContactRequest) {
     emptyChatMessage = chat.isUnpromoted
       ? tx('chat_new_group_hint')
@@ -292,10 +312,7 @@ function EmptyChatMessage() {
   } else if (chat.isDeviceChat) {
     emptyChatMessage = tx('device_talk_explain')
   } else if (chat.isContactRequest) {
-    emptyChatMessage =
-      Number(showAllEmail) !== C.DC_SHOW_EMAILS_ALL
-        ? tx('chat_no_contact_requests')
-        : tx('chat_no_messages')
+    emptyChatMessage = tx('chat_no_messages')
   }
 
   return (

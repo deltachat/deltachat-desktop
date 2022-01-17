@@ -17,7 +17,7 @@ import {
   ScreenContext,
   useTranslationFunction,
 } from '../../contexts'
-import { Avatar } from '../Avatar'
+import { Avatar, ClickForFullscreenAvatarWrapper } from '../Avatar'
 import { useLogicVirtualChatList, ChatListPart } from '../chat/ChatList'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import MessageBody from '../message/MessageBody'
@@ -105,8 +105,6 @@ export function ViewProfileInner({
   contact: JsonContact
   onClose: () => void
 }) {
-  const { openDialog } = useContext(ScreenContext)
-
   const { chatListIds } = useChatList(0, '', contact.id)
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
     chatListIds
@@ -133,21 +131,9 @@ export function ViewProfileInner({
       <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
         <div>
           <div className='profile-info-container'>
-            <div
-              onClick={() => {
-                openDialog('FullscreenMedia', {
-                  msg: {
-                    file_mime: 'image/x',
-                    file: contact.profileImage,
-                  },
-                })
-              }}
-              style={{
-                cursor: contact.profileImage ? 'pointer' : 'default',
-              }}
-            >
+            <ClickForFullscreenAvatarWrapper filename={contact.profileImage}>
               <ProfileInfoAvatar contact={contact} />
-            </div>
+            </ClickForFullscreenAvatarWrapper>
             <ProfileInfoName
               name={contact.displayName}
               address={contact.address}

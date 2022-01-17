@@ -1,0 +1,4 @@
+# excluding html-help-files from programming-language-stats;
+# otherwise, the repos language would be come "html" instead of "typescript".
+# see https://github.com/github/linguist/blob/master/docs/overrides.md
+*.html linguist-vendored

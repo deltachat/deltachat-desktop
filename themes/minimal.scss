@@ -3,6 +3,9 @@
   --description: 'A minimalistic theme';
 }
 
+$AUTHOR_WIDTH: 8vw;
+$AUTHOR_MESSAGE_SPACING: 20px;
+
 $borderColor: #ecececaf;
 
 $navbarBgLight: $borderColor;
@@ -143,6 +146,30 @@ $scrollbarTransparency: 0.5;
 .message .msg-container {
   border-radius: 0px;
   padding: 0px;
+  max-width: calc(100% - #{$AUTHOR_WIDTH} - #{$AUTHOR_MESSAGE_SPACING});
+  .msg-body {
+    &>.text {
+      text-align: justify;
+    }
+  }
+}
+
+.message .msg-container .quote, .composer .quote {
+  padding: 0px 4px;
+  padding-left: 18px;
+  border-left-style: double;
+  border-left-color: black !important;
+  margin-left: 2px;
+}
+.message .msg-container .quote .quoted-text, .composer .quote .quoted-text {
+  font-size: 14px !important;
+  line-height: 18px !important;
+  max-height: 36px;
+  text-align: justify;
+}
+
+.quote-author {
+  display: none;
 }
 
 .info-message p {
@@ -227,17 +254,9 @@ $scrollbarTransparency: 0.5;
   margin-bottom: -7px;
   font-weight: unset;
 }
-.message.outgoing .metadata>.status-icon.read, .message.outgoing .metadata>.status-icon.delivered, .message.outgoing .metadata>.padlock-icon, .metadata.with-image-no-caption>.padlock-icon {
-  background-color: var(--messagePadlockIncomming);
-}
 
-.message.outgoing .metadata>.date, .metadata.with-image-no-caption>.date {
-  color: var(--messageMetadataIncomming);
-}
-.metadata.with-image-no-caption>.padlock-icon {
-  -webkit-mask: url(../images/padlock.svg) no-repeat center;
-  -webkit-mask-size: 125%;
-  background-color: var(--messagePadlockIncomming);
+.metadata {
+  display: none;
 }
 
 
@@ -247,14 +266,31 @@ $scrollbarTransparency: 0.5;
 .message .msg-container .msg-body>.text {
   margin-right: 0px;
 }
+
+
+.msg-body {
+    margin-left: calc(#{$AUTHOR_WIDTH} + #{$AUTHOR_MESSAGE_SPACING});
+    margin-top: -22px;
+}
+
+
 .message.forwarded .forwarded-indicator {
   font-weight: 100;
   color: var(--messagePadlockIncomming);
   opacity: 1;
+  margin-bottom: 22px;
+  margin-left: calc(#{$AUTHOR_WIDTH} + #{$AUTHOR_MESSAGE_SPACING});
 }
 
 .author-wrapper.can-hide {
   display: unset !important;
+}
+
+.author-wrapper .author {
+  width: $AUTHOR_WIDTH;
+
+  text-overflow: clip;
+  text-align: left;
 }
 
 .message-list-and-composer {
@@ -262,6 +298,22 @@ $scrollbarTransparency: 0.5;
   background-image: unset !important;
 }
 
+.info-message {
+  margin: 0px;
+  margin-bottom: 10px;
+  text-align: left;
+  color: lightgrey;
+  p {
+    padding: 0px;
+    text-transform: capitalize;
+    color: inherit;
+    margin: 0;
+    &::before {
+      margin-right: calc(#{$AUTHOR_WIDTH} - 8px + #{$AUTHOR_MESSAGE_SPACING});
+      content: '--';
+    }
+  }
+}
 
 .composer .lower-bar .send-button-wrapper button {
     background-blend-mode: difference;
@@ -329,4 +381,12 @@ div.group-image-wrapper div.group-image-edit-button {
 
 .bp3-navbar-group > .clear-button:before {
   color: var(--textNavBar) !important;
+}
+
+* {
+  font-family: 'Roboto';
+}
+
+.emoji-container.jumbo {
+  font-size: unset;
 }
