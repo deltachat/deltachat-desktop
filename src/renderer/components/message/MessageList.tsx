@@ -124,7 +124,7 @@ export default function MessageList({
       isFetching.current = false
       onScroll(null)
     }, 0)
-  }, [scrollToLastPage, lastKnownScrollHeight, lastKnownScrollTop])
+  }, [scrollToLastPage, lastKnownScrollHeight, lastKnownScrollTop, onScroll])
 
   useLayoutEffect(() => {
     isFetching.current = false
