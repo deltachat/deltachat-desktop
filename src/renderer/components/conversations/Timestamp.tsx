@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react'
 import classNames from 'classnames'
 import moment from 'moment'
 import formatRelativeTime from './formatRelativeTime'
-import { useTranslationFunction } from '../../contexts'
 
 const UPDATE_FREQUENCY = 60 * 1000
 
@@ -45,9 +44,7 @@ const NonUpdatingTimestamp = function Timestamp(props: TimestampProps) {
       {formatRelativeTime(timestamp, { extended })}
     </span>
   )
-
 }
-
 
 const UpdatingTimestamp = (props: TimestampProps) => {
   const { direction, timestamp, extended } = props
@@ -89,7 +86,7 @@ const UpdatingTimestamp = (props: TimestampProps) => {
 
 export default function Timestamp(props: TimestampProps) {
   // if older than one week we don't need to update timestamps
-  if (props.timestamp < (Date.now() - 24 * 60 * 60 * 7)) {
+  if (props.timestamp < Date.now() - 24 * 60 * 60 * 7) {
     return <NonUpdatingTimestamp {...props} />
   }
   return <UpdatingTimestamp {...props} />
