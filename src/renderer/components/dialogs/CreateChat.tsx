@@ -344,7 +344,6 @@ export function AddMemberInnerDialog({
     if (searchContacts.size === 0) {
       onSearchChangeNewContact(query)
     }
-    console.log(query)
     onSearchChange(query)
   }
 
