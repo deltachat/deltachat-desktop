@@ -82,7 +82,7 @@ export default function MessageList({
       messageListRef.current.scrollHeight
     )
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
-    setTimeout(() => ChatStore.reducer.scrolledToBottom({id: chatId}), 0)
+    setTimeout(() => ChatStore.reducer.scrolledToBottom({ id: chatId }), 0)
 
     // Try fetching more messages if needed
     onScroll(null)
@@ -114,7 +114,7 @@ export default function MessageList({
       messageListRef.current.scrollTop = messageListRef.current.scrollHeight
     }
 
-    setTimeout(() => ChatStore.reducer.scrolledToBottom({id: chatId}), 0)
+    setTimeout(() => ChatStore.reducer.scrolledToBottom({ id: chatId }), 0)
   }, [scrollToBottomIfClose, lastKnownScrollHeight])
 
   useLayoutEffect(() => {
@@ -132,7 +132,7 @@ export default function MessageList({
       lastKnownScrollHeight +
       lastKnownScrollTop
     setTimeout(() => {
-      ChatStore.reducer.scrolledToLastPage({id: chatId})
+      ChatStore.reducer.scrolledToLastPage({ id: chatId })
       isFetching.current = false
       onScroll(null)
     }, 0)

@@ -41,8 +41,11 @@ const defaultState: ChatStoreState = {
 }
 
 class ChatStore extends Store<ChatStoreState> {
-  guardReducerIfChatIdIsDifferent(payload: {id: number}) {
-    if (typeof payload.id !== 'undefined' && payload.id !== this.state.chat?.id) {
+  guardReducerIfChatIdIsDifferent(payload: { id: number }) {
+    if (
+      typeof payload.id !== 'undefined' &&
+      payload.id !== this.state.chat?.id
+    ) {
       log.debug(
         'REDUCER',
         'seems like an old action because the chatId changed in between'
@@ -69,7 +72,7 @@ class ChatStore extends Store<ChatStoreState> {
       this.setState(state => {
         const modifiedState = {
           ...state,
-          ...payload
+          ...payload,
         }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
         return modifiedState
@@ -106,7 +109,6 @@ class ChatStore extends Store<ChatStoreState> {
       messagesIncoming: MessageType[]
     }) => {
       this.setState(state => {
-
         const messages: OrderedMap<
           number,
           MessageType | null
@@ -132,7 +134,7 @@ class ChatStore extends Store<ChatStoreState> {
         return modifiedState
       }, 'fetchedIncomingMessages')
     },
-    scrolledToLastPage: (payload: {id: number}) => {
+    scrolledToLastPage: (payload: { id: number }) => {
       log.debug('scrolledToLastPage')
       this.setState(state => {
         const modifiedState = {
@@ -145,7 +147,7 @@ class ChatStore extends Store<ChatStoreState> {
         return modifiedState
       }, 'scrolledToLastPage')
     },
-    scrolledToBottom: (payload: {id: number}) => {
+    scrolledToBottom: (payload: { id: number }) => {
       log.debug('scrolledToBottom')
       this.setState(state => {
         const modifiedState = {
@@ -226,7 +228,12 @@ class ChatStore extends Store<ChatStoreState> {
             >,
           },
         ]
-        const modifiedState = { ...state, messageIds, messagePages, scrollToBottom: true }
+        const modifiedState = {
+          ...state,
+          messageIds,
+          messagePages,
+          scrollToBottom: true,
+        }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
         return modifiedState
       }, 'messageSent')
