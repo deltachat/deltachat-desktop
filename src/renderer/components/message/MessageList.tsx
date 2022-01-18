@@ -65,6 +65,10 @@ export default function MessageList({
   )
 
   useLayoutEffect(() => {
+    if (!ChatStore.state.chat) {
+      return
+    }
+    const chatId = ChatStore.state.chat.id
     if (!messageListRef.current) {
       return
     }
@@ -78,13 +82,17 @@ export default function MessageList({
       messageListRef.current.scrollHeight
     )
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
-    setTimeout(() => ChatStore.reducer.scrolledToBottom(), 0)
+    setTimeout(() => ChatStore.reducer.scrolledToBottom({id: chatId}), 0)
 
     // Try fetching more messages if needed
     onScroll(null)
   }, [onScroll, scrollToBottom])
 
   useLayoutEffect(() => {
+    if (!ChatStore.state.chat) {
+      return
+    }
+    const chatId = ChatStore.state.chat.id
     if (!messageListRef.current) {
       return
     }
@@ -106,10 +114,14 @@ export default function MessageList({
       messageListRef.current.scrollTop = messageListRef.current.scrollHeight
     }
 
-    setTimeout(() => ChatStore.reducer.scrolledToBottom(), 0)
+    setTimeout(() => ChatStore.reducer.scrolledToBottom({id: chatId}), 0)
   }, [scrollToBottomIfClose, lastKnownScrollHeight])
 
   useLayoutEffect(() => {
+    if (!ChatStore.state.chat) {
+      return
+    }
+    const chatId = ChatStore.state.chat.id
     if (!messageListRef.current) {
       return
     }
@@ -120,7 +132,7 @@ export default function MessageList({
       lastKnownScrollHeight +
       lastKnownScrollTop
     setTimeout(() => {
-      ChatStore.reducer.scrolledToLastPage()
+      ChatStore.reducer.scrolledToLastPage({id: chatId})
       isFetching.current = false
       onScroll(null)
     }, 0)

@@ -40,21 +40,17 @@ const defaultState: ChatStoreState = {
   countFetchedMessages: 0,
 }
 
-function guardReducerIfChatIdIsDifferent(
-  payload: { id: number },
-  state: ChatStoreState
-) {
-  if (typeof payload.id !== 'undefined' && payload.id !== state.chat?.id) {
-    log.debug(
-      'REDUCER',
-      'seems like an old action because the chatId changed in between'
-    )
-    return true
-  }
-  return false
-}
-
 class ChatStore extends Store<ChatStoreState> {
+  guardReducerIfChatIdIsDifferent(payload: {id: number}) {
+    if (typeof payload.id !== 'undefined' && payload.id !== this.state.chat?.id) {
+      log.debug(
+        'REDUCER',
+        'seems like an old action because the chatId changed in between'
+      )
+      return true
+    }
+    return false
+  }
   reducer = {
     selectedChat: (payload: Partial<ChatStoreState>) => {
       this.setState(_ => {
@@ -71,11 +67,12 @@ class ChatStore extends Store<ChatStoreState> {
     },
     modifiedChat: (payload: { id: number } & Partial<ChatStoreState>) => {
       this.setState(state => {
-        if (guardReducerIfChatIdIsDifferent(payload, state)) return
-        return {
+        const modifiedState = {
           ...state,
-          ...payload,
+          ...payload
         }
+        if (this.guardReducerIfChatIdIsDifferent(payload)) return
+        return modifiedState
       }, 'modifiedChat')
     },
     fetchedMessagePage: (payload: {
@@ -85,13 +82,12 @@ class ChatStore extends Store<ChatStoreState> {
       oldestFetchedMessageIndex: number
     }) => {
       this.setState(state => {
-        if (guardReducerIfChatIdIsDifferent(payload, state)) return
         //@ts-ignore
         const { scrollHeight, scrollTop } = document.querySelector(
           '#message-list'
         )
 
-        return {
+        const modifiedState = {
           ...state,
           messagePages: [payload.fetchedMessagePage, ...state.messagePages],
           oldestFetchedMessageIndex: payload.oldestFetchedMessageIndex,
@@ -100,6 +96,8 @@ class ChatStore extends Store<ChatStoreState> {
           lastKnownScrollTop: scrollTop,
           countFetchedMessages: payload.countFetchedMessages,
         }
+        if (this.guardReducerIfChatIdIsDifferent(payload)) return
+        return modifiedState
       }, 'fetchedMessagePage')
     },
     fetchedIncomingMessages: (payload: {
@@ -108,7 +106,6 @@ class ChatStore extends Store<ChatStoreState> {
       messagesIncoming: MessageType[]
     }) => {
       this.setState(state => {
-        if (guardReducerIfChatIdIsDifferent(payload, state)) return
 
         const messages: OrderedMap<
           number,
@@ -124,33 +121,40 @@ class ChatStore extends Store<ChatStoreState> {
           messages,
         }
 
-        return {
+        const modifiedState = {
           ...state,
           messageIds: payload.messageIds,
           messagePages: [...state.messagePages, incomingMessagePage],
           scrollToBottomIfClose: true,
         }
+
+        if (this.guardReducerIfChatIdIsDifferent(payload)) return
+        return modifiedState
       }, 'fetchedIncomingMessages')
     },
-    scrolledToLastPage: () => {
+    scrolledToLastPage: (payload: {id: number}) => {
       log.debug('scrolledToLastPage')
       this.setState(state => {
-        return {
+        const modifiedState = {
           ...state,
           scrollToLastPage: false,
           lastKnownScrollHeight: -1,
           lastKnownScrollTop: -1,
         }
+        if (this.guardReducerIfChatIdIsDifferent(payload)) return
+        return modifiedState
       }, 'scrolledToLastPage')
     },
-    scrolledToBottom: () => {
+    scrolledToBottom: (payload: {id: number}) => {
       log.debug('scrolledToBottom')
       this.setState(state => {
-        return {
+        const modifiedState = {
           ...state,
           scrollToBottom: false,
           scrollToBottomIfClose: false,
         }
+        if (this.guardReducerIfChatIdIsDifferent(payload)) return
+        return modifiedState
       }, 'scrolledToBottom')
     },
     uiDeleteMessage: (payload: { id: number; msgId: number }) => {
@@ -162,8 +166,7 @@ class ChatStore extends Store<ChatStoreState> {
           oldestFetchedMessageIndex += 1
         }
         const messageIds = state.messageIds.filter(mId => mId !== msgId)
-        if (guardReducerIfChatIdIsDifferent(payload, state)) return
-        return {
+        const modifiedState = {
           ...state,
           messageIds,
           messagePages: state.messagePages.map(messagePage => {
@@ -177,6 +180,8 @@ class ChatStore extends Store<ChatStoreState> {
           }),
           oldestFetchedMessageIndex,
         }
+        if (this.guardReducerIfChatIdIsDifferent(payload)) return
+        return modifiedState
       }, 'uiDeleteMessage')
     },
     messageChanged: (payload: {
@@ -184,8 +189,7 @@ class ChatStore extends Store<ChatStoreState> {
       messagesChanged: MessageType[]
     }) => {
       this.setState(state => {
-        if (guardReducerIfChatIdIsDifferent(payload, state)) return
-        return {
+        const modifiedState = {
           ...state,
           messagePages: state.messagePages.map(messagePage => {
             const returnMessagePage = messagePage
@@ -200,6 +204,8 @@ class ChatStore extends Store<ChatStoreState> {
             return returnMessagePage
           }),
         }
+        if (this.guardReducerIfChatIdIsDifferent(payload)) return
+        return modifiedState
       }, 'messageChanged')
     },
     messageSent: (payload: {
@@ -220,8 +226,9 @@ class ChatStore extends Store<ChatStoreState> {
             >,
           },
         ]
-        if (guardReducerIfChatIdIsDifferent(payload, state)) return
-        return { ...state, messageIds, messagePages, scrollToBottom: true }
+        const modifiedState = { ...state, messageIds, messagePages, scrollToBottom: true }
+        if (this.guardReducerIfChatIdIsDifferent(payload)) return
+        return modifiedState
       }, 'messageSent')
     },
     setMessageState: (payload: {
@@ -231,7 +238,7 @@ class ChatStore extends Store<ChatStoreState> {
     }) => {
       const { messageId, messageState } = payload
       this.setState(state => {
-        return {
+        const modifiedState = {
           ...state,
           messagePages: state.messagePages.map(messagePage => {
             if (messagePage.messages.has(messageId)) {
@@ -252,15 +259,18 @@ class ChatStore extends Store<ChatStoreState> {
             return messagePage
           }),
         }
+        if (this.guardReducerIfChatIdIsDifferent(payload)) return
+        return modifiedState
       }, 'setMessageState')
     },
     setMessageIds: (payload: { id: number; messageIds: number[] }) => {
       this.setState(state => {
-        if (guardReducerIfChatIdIsDifferent(payload, state)) return
-        return {
+        const modifiedState = {
           ...state,
           messageIds: payload.messageIds,
         }
+        if (this.guardReducerIfChatIdIsDifferent(payload)) return
+        return modifiedState
       }, 'setMessageIds')
     },
   }
