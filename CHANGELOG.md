@@ -9,6 +9,7 @@
 - Making the minimal them even more zen
 - Drastically improve performance of MessageList
 - Switch from tape to mocha for unit tests
+- Don't update Timestamps if they are older then one week
 
 ### Fixed
 - Fix overflow in long links inside quotes @naomiceron #2467
