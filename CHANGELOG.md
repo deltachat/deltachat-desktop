@@ -8,6 +8,7 @@
 - Update inApp help (3.1.2022)
 - Making the minimal them even more zen
 - Drastically improve performance of MessageList
+- Switch from tape to mocha for unit tests
 - Don't update Timestamps if they are older then one week
 
 ### Fixed
