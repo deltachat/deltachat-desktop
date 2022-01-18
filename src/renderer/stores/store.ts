@@ -52,9 +52,9 @@ export class Store<S> {
     if (state !== this.state) {
       /*this.log.debug(
         `DISPATCHING of "${action.type}" changed the state. Before:`,
-        this.state,
+        this.stateToString(this.state),
         'After:',
-        state
+        this.stateToString(state)
       )*/
       this.log.debug(`DISPATCHING of "${action.type}" changed the state.`)
       this.state = state
@@ -88,13 +88,20 @@ export class Store<S> {
     if (modifiedState === undefined) return
     /*this.log.debug(
       `${description} changed the state. Before:`,
-      this.state,
+      this.stateToString(this.state),
       'After:',
-      modifiedState
+      this.stateToString(modifiedState)
     )*/
     this.log.debug(`${description} changed the state`)
     this.state = modifiedState
     this.listeners.forEach(listener => listener(this.state))
+  }
+
+  stateToString(state: S) : string {
+    return '' + state
+  }
+  toString(): string {
+    return this.stateToString(this.state)
   }
 }
 
