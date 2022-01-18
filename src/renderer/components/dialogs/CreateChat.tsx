@@ -6,6 +6,7 @@ import React, {
   useLayoutEffect,
   useEffect,
   ChangeEvent,
+  useCallback,
 } from 'react'
 import { Card, Classes } from '@blueprintjs/core'
 import { C } from 'deltachat-node/dist/constants'
@@ -347,13 +348,16 @@ export function AddMemberInnerDialog({
     onSearchChange(query)
   }
 
-  const addOrRemoveMember = (contact: JsonContact) => {
-    if (contactIdsToAdd.findIndex(c => c.id === contact.id) === -1) {
-      setContactIdsToAdd([...contactIdsToAdd, contact])
-    } else {
-      setContactIdsToAdd(contactIdsToAdd.filter(c => c.id !== contact.id))
-    }
-  }
+  const addOrRemoveMember = useCallback(
+    (contact: JsonContact) => {
+      if (contactIdsToAdd.findIndex(c => c.id === contact.id) === -1) {
+        setContactIdsToAdd([...contactIdsToAdd, contact])
+      } else {
+        setContactIdsToAdd(contactIdsToAdd.filter(c => c.id !== contact.id))
+      }
+    },
+    [contactIdsToAdd]
+  )
 
   const tx = window.static_translate
 
@@ -379,24 +383,19 @@ export function AddMemberInnerDialog({
   useLayoutEffect(applyCSSHacks, [inputRef, contactIdsToAdd])
   useEffect(applyCSSHacks, [])
 
-  const triggerOnChangeHandler = () => {
-    if (inputRef.current) {
-      const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
-        window.HTMLInputElement.prototype,
-        'value'
-      )?.set
-      nativeInputValueSetter?.call(inputRef.current, queryStr.split('@')[0])
-      const inputEvent = new Event('input', { bubbles: true })
-      inputRef.current.dispatchEvent(inputEvent)
-    }
-  }
-
-  const addContactOnClick = async () => {
+  const addContactOnClick = useCallback(async () => {
     if (!queryStrIsValidEmail) return
 
-    await DeltaBackend.call('contacts.createContact', queryStr)
-    triggerOnChangeHandler()
-  }
+    const contactId = await DeltaBackend.call(
+      'contacts.createContact',
+      queryStr
+    )
+    const contact = await DeltaBackend.call('contacts.getContact', contactId)
+    addOrRemoveMember(contact)
+    onSearchChange({
+      target: { value: queryStr },
+    } as ChangeEvent<HTMLInputElement>)
+  }, [addOrRemoveMember, onSearchChange, queryStr, queryStrIsValidEmail])
 
   const renderAddContactIfNeeded = () => {
     if (queryStr === '' || searchContacts.size !== 0) {
