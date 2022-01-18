@@ -5,19 +5,19 @@ export interface LocaleData {
   locale: string
   messages: {
     [key: string]: {
-      message?: string,
-      one?: string,
-      other?: string,
+      message?: string
+      one?: string
+      other?: string
     }
   }
 }
 
-type getMessageOptions = { quantity?: string | number }
+type getMessageOptions = { quantity?: 'one' | 'other' | number }
 
 export type getMessageFunction = (
   key: string,
   substitutions?: string | string[],
-  raw_opts?: string | getMessageOptions
+  raw_opts?: 'one' | 'other' | getMessageOptions
 ) => string
 
 export function translate(
@@ -26,7 +26,7 @@ export function translate(
   function getMessage(
     key: string,
     substitutions?: string | string[],
-    raw_opts?: string | getMessageOptions
+    raw_opts?: 'one' | 'other' | getMessageOptions
   ) {
     let opts: getMessageOptions = {}
     if (typeof raw_opts === 'string') opts = { quantity: raw_opts }
@@ -45,7 +45,9 @@ export function translate(
         message = entry[opts.quantity]
       } else if (typeof opts.quantity === 'number') {
         message =
-          entry[opts.quantity] || opts.quantity === 1
+          entry[
+            (opts.quantity as unknown) as keyof LocaleData['messages'][0]
+          ] || opts.quantity === 1
             ? entry['one']
             : entry['other']
       } else {
@@ -55,6 +57,13 @@ export function translate(
         log.error(`Missing quantity '${opts.quantity}' for key '${key}'`)
         return `${key}:${opts.quantity}`
       }
+    }
+
+    if (typeof message === 'undefined') {
+      log.error(
+        `Missing 'message' for key '${key}', maybe you need to specify quantity`
+      )
+      return `${key}:?`
     }
 
     if (substitutions) {
