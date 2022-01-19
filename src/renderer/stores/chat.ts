@@ -525,6 +525,11 @@ ipcBackend.on('DC_EVENT_INCOMING_MSG', async (_, [chatId, _messageId]) => {
     messageId => _messagesIncoming[messageId]
   ) as MessageType[]
 
+  if (messagesIncoming.length === 0) {
+    log.debug('DC_EVENT_INCOMING_MSG, actually no new messages for us, returning')
+    return
+  }
+
   chatStore.reducer.fetchedIncomingMessages({
     id: chatId,
     messageIds,
@@ -599,6 +604,11 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
           : _messagesIncoming[messageId]
       )
       .filter(message => message !== null) as MessageType[]
+
+    if (messagesIncoming.length === 0) {
+      log.debug('DC_EVENT_MSGS_CHANGED actually no new messages for us, returning')
+      return
+    }
 
     chatStore.reducer.fetchedIncomingMessages({
       id: chatId,
