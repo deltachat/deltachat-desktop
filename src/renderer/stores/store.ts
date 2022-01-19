@@ -97,7 +97,7 @@ export class Store<S> {
     this.listeners.forEach(listener => listener(this.state))
   }
 
-  stateToString(state: S) : string {
+  stateToString(state: S): string {
     return '' + state
   }
   toString(): string {
