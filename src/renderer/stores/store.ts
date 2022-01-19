@@ -88,20 +88,20 @@ export class Store<S> {
     if (modifiedState === undefined) return
     this.log.debug(
       `${description} changed the state. Before:`,
-      this.stateToString(this.state),
+      this.stateToHumanReadable(this.state),
       'After:',
-      this.stateToString(modifiedState)
+      this.stateToHumanReadable(modifiedState)
     )
     //this.log.debug(`${description} changed the state`)
     this.state = modifiedState
     this.listeners.forEach(listener => listener(this.state))
   }
 
-  stateToString(state: S) : string {
-    return '' + state
+  stateToHumanReadable(state: S) : any {
+    return state
   }
-  toString(): string {
-    return this.stateToString(this.state)
+  toHumanReadableString(): string {
+    return this.stateToHumanReadable(this.state)
   }
 }
 

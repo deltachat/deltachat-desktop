@@ -433,8 +433,8 @@ class ChatStore extends Store<ChatStoreState> {
     },
   }
 
-  stateToString(state: ChatStoreState): string {
-    return JSON.stringify({
+  stateToHumanReadable(state: ChatStoreState): any {
+    return {
       //...state,
       chat: state.chat ? { id: state.chat.id, name: state.chat.name } : null,
       messagePages: state.messagePages.map(messagePage => {
@@ -452,7 +452,7 @@ class ChatStore extends Store<ChatStoreState> {
           })
         }          
       })
-    }, null, 2)
+    }
   }
 }
 
