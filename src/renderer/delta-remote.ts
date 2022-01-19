@@ -248,6 +248,7 @@ class DeltaRemote {
       quotedMessageId,
     }: { text?: string; file?: string; quotedMessageId?: number }
   ): Promise<void>
+  call(fnName: 'messageList.removeDraft', chatId: number): Promise<void>
   call(
     fnName: 'messageList.messageIdToJson',
     id: number

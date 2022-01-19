@@ -75,14 +75,13 @@ const Composer = forwardRef<
     updateDraftText,
     addFileToDraft,
     removeFile,
-    clearDraft,
   } = props
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
   const pickerButtonRef = useRef<HTMLDivElement>(null)
 
-  const composerSendMessage = () => {
+  const composerSendMessage = async () => {
     if (chatId === null) {
       throw new Error('chat id is undefined')
     }
@@ -99,7 +98,7 @@ const Composer = forwardRef<
         log.debug(`Empty message: don't send it...`)
         return
       }
-      sendMessage(chatId, {
+      await sendMessage(chatId, {
         text: replaceColonsSafe(message),
         filename: draftState.file,
         quoteMessageId: draftState.quotedMessageId
@@ -108,14 +107,9 @@ const Composer = forwardRef<
       })
 
       /* clear it here to make sure the draft is cleared */
-      DeltaBackend.call('messageList.setDraft', chatId, {
-        text: '',
-        file: '',
-        quotedMessageId: undefined,
-      })
-      /* update the state to reflect the removed draft */
-      clearDraft()
-      messageInputRef.current.clearText()
+      await DeltaBackend.call('messageList.removeDraft', chatId)
+      // /* update the state to reflect the removed draft */
+      window.__reloadDraft && window.__reloadDraft()
     } catch (error) {
       log.error(error)
     } finally {
@@ -390,13 +384,23 @@ export function useDraft(
     if (chatId === null) {
       return
     }
+    if (inputRef.current?.textareaRef.current?.disabled) {
+      // Guard against strange races
+      log.warn('Do not save draft while sending')
+      return
+    }
+
     const draft = draftRef.current
     const oldChatId = chatId
-    await DeltaBackend.call('messageList.setDraft', chatId, {
-      text: draft.text,
-      file: draft.file,
-      quotedMessageId: draft.quotedMessageId || undefined,
-    })
+    if (draft.text.length > 0 || draft.file != '' || !!draft.quotedMessageId) {
+      await DeltaBackend.call('messageList.setDraft', chatId, {
+        text: draft.text,
+        file: draft.file,
+        quotedMessageId: draft.quotedMessageId || undefined,
+      })
+    } else {
+      await DeltaBackend.call('messageList.removeDraft', chatId)
+    }
 
     if (oldChatId !== chatId) {
       log.debug('switched chat no reloading of draft required')
@@ -421,7 +425,7 @@ export function useDraft(
     } else {
       clearDraft()
     }
-  }, [chatId, clearDraft])
+  }, [chatId, clearDraft, inputRef])
 
   const updateDraftText = (text: string, InputChatId: number) => {
     if (chatId !== InputChatId) {
