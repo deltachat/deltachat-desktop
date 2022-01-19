@@ -66,6 +66,7 @@
   top: calc(50vh - (60px / 2));
   background-color: #3131316b;
   border-radius: 8%;
+  z-index: 1;
 
   .bp3-icon > svg:not([fill]) {
     fill: var(--bp3ButtonHoverBg);
@@ -81,4 +82,8 @@
 
 .media-next-button {
   right: 20px;
+}
+
+.react-transform-wrapper {
+  overflow: unset !important;
 }

@@ -10,6 +10,7 @@
 - Drastically improve performance of MessageList
 - Switch from tape to mocha for unit tests
 - Don't update Timestamps if they are older then one week
+- Add image zoom for full screen views
 
 ### Fixed
 - Fix overflow in long links inside quotes @naomiceron #2467
