@@ -41,6 +41,7 @@ const defaultState: ChatStoreState = {
 }
 
 class ChatStore extends Store<ChatStoreState> {
+  isLocked = false
   guardReducerIfChatIdIsDifferent(payload: { id: number }) {
     if (
       typeof payload.id !== 'undefined' &&
@@ -281,6 +282,22 @@ class ChatStore extends Store<ChatStoreState> {
       }, 'setMessageIds')
     },
   }
+
+  lockedEffect(effect: () => Promise<void>, effectName: string) {
+    return async () => {
+      if (this.isLocked === true) {
+        log.debug(`lockedEffect: ${effectName}: We\'re locked, returning`)
+        return
+      }
+
+      log.debug(`lockedEffect: ${effectName}: locking`)
+      this.isLocked = true
+      await effect()
+      this.isLocked = false
+      log.debug(`lockedEffect: ${effectName}: unlocked`)
+    }
+  }
+
   effect = {
     selectChat: async (chatId: number) => {
       // these methods were called in backend before
@@ -349,10 +366,12 @@ class ChatStore extends Store<ChatStoreState> {
       const id = this.state.chat.id
       this.reducer.uiDeleteMessage({ id, msgId })
     },
-    fetchMoreMessages: async () => {
+    fetchMoreMessages: this.lockedEffect(async () => {
       log.debug(`fetchMoreMessages`)
       const state = this.state
-      if (state.chat === null) return
+      if (state.chat === null) {
+        return
+      }
       const id = state.chat.id
       const oldestFetchedMessageIndex = Math.max(
         state.oldestFetchedMessageIndex - PAGE_SIZE,
@@ -398,7 +417,7 @@ class ChatStore extends Store<ChatStoreState> {
         oldestFetchedMessageIndex,
         countFetchedMessages: fetchedMessageIds.length,
       })
-    },
+    }, 'fetchMoreMessages'),
     mute: async (payload: { chatId: number; muteDuration: number }) => {
       if (payload.chatId !== chatStore.state.chat?.id) return
       if (

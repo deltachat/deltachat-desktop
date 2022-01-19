@@ -15,7 +15,7 @@ import { getLogger } from '../../../shared/logger'
 import { MessageType, FullChat } from '../../../shared/shared-types'
 import { MessagesDisplayContext, useTranslationFunction } from '../../contexts'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
-const log = getLogger('render/msgList')
+const log = getLogger('render/components/message/MessageList')
 
 export default function MessageList({
   chatStore,
@@ -35,7 +35,6 @@ export default function MessageList({
     lastKnownScrollTop,
   } = useChatStore()
   const messageListRef = useRef<HTMLDivElement | null>(null)
-  const isFetching = useRef(false)
 
   const [fetchMore] = useDebouncedCallback(
     () => {
@@ -50,11 +49,7 @@ export default function MessageList({
       if (!messageListRef.current) {
         return
       }
-      if (isFetching.current === true) {
-        return
-      }
       if (messageListRef.current.scrollTop > 200) return
-      isFetching.current = true
       log.debug('Scrolled to top, fetching more messsages!')
       setTimeout(() => fetchMore(), 0)
       Event?.preventDefault()
@@ -133,13 +128,11 @@ export default function MessageList({
       lastKnownScrollTop
     setTimeout(() => {
       ChatStore.reducer.scrolledToLastPage({ id: chatId })
-      isFetching.current = false
       onScroll(null)
     }, 0)
   }, [scrollToLastPage, lastKnownScrollHeight, lastKnownScrollTop, onScroll])
 
   useLayoutEffect(() => {
-    isFetching.current = false
     if (!refComposer.current) {
       return
     }
