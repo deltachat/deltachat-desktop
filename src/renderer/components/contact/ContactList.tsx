@@ -3,7 +3,7 @@ import { ContactListItem } from './ContactListItem'
 import { DeltaBackend } from '../../delta-remote'
 import { JsonContact } from '../../../shared/shared-types'
 import { debounce } from 'debounce'
-import { useInitEffect } from '../helpers/useInitEffect'
+import { useInitEffect } from '../helpers/hooks'
 import { debounceWithInit } from '../chat/ChatListHelpers'
 
 export function ContactList2(props: {

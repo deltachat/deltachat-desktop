@@ -8,7 +8,7 @@ import { isImage, isVideo, isAudio } from '../attachment/Attachment'
 import { getLogger } from '../../../shared/logger'
 import { gitHubIssuesUrl } from '../../../shared/constants'
 import { DeltaBackend } from '../../delta-remote'
-import { useInitEffect } from '../helpers/useInitEffect'
+import { useInitEffect } from '../helpers/hooks'
 import { preventDefault } from '../../../shared/util'
 
 const log = getLogger('renderer/fullscreen_media')
