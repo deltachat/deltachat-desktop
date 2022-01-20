@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import {
+  MutableRefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { debounce } from 'debounce'
 
 /** debounce workaround so it can be useful in useFunctions that are used from multiple places at once
@@ -19,16 +25,16 @@ export function useRefLock(): {
   setLock: (lock: boolean) => void
 } {
   const lockRef = useRef<boolean>(false)
+  const stableRef = useRef<any>({
+    isLocked: () => {
+      return lockRef.current === true
+    },
+    setLock: (lock: boolean) => {
+      return (lockRef.current = lock)
+    },
+  }) as MutableRefObject<any>
 
-  const isLocked = useCallback(() => {
-    return lockRef.current === true
-  }, [])
-
-  const setLock = useCallback((lock: boolean) => {
-    return (lockRef.current = lock)
-  }, [])
-
-  return { isLocked, setLock }
+  return stableRef.current
 }
 
 // Effect that only runs when component is first rendered/initiated
