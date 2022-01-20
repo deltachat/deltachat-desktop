@@ -52,9 +52,9 @@ export class Store<S> {
     if (state !== this.state) {
       this.log.debug(
         `DISPATCHING of "${action.type}" changed the state. Before:`,
-        this.stateToString(this.state),
+        this.stateToHumanReadable(this.state),
         'After:',
-        this.stateToString(state)
+        this.stateToHumanReadable(state)
       )
       //this.log.debug(`DISPATCHING of "${action.type}" changed the state.`)
       this.state = state
