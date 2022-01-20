@@ -41,6 +41,7 @@ const defaultState: ChatStoreState = {
 }
 
 class ChatStore extends Store<ChatStoreState> {
+  isLocked = false
   guardReducerIfChatIdIsDifferent(payload: { id: number }) {
     if (
       typeof payload.id !== 'undefined' &&
@@ -281,6 +282,22 @@ class ChatStore extends Store<ChatStoreState> {
       }, 'setMessageIds')
     },
   }
+
+  lockedEffect(effect: () => Promise<void>, effectName: string) {
+    return async () => {
+      if (this.isLocked === true) {
+        log.debug(`lockedEffect: ${effectName}: We're locked, returning`)
+        return
+      }
+
+      log.debug(`lockedEffect: ${effectName}: locking`)
+      this.isLocked = true
+      await effect()
+      this.isLocked = false
+      log.debug(`lockedEffect: ${effectName}: unlocked`)
+    }
+  }
+
   effect = {
     selectChat: async (chatId: number) => {
       // these methods were called in backend before
@@ -349,10 +366,12 @@ class ChatStore extends Store<ChatStoreState> {
       const id = this.state.chat.id
       this.reducer.uiDeleteMessage({ id, msgId })
     },
-    fetchMoreMessages: async () => {
+    fetchMoreMessages: this.lockedEffect(async () => {
       log.debug(`fetchMoreMessages`)
       const state = this.state
-      if (state.chat === null) return
+      if (state.chat === null) {
+        return
+      }
       const id = state.chat.id
       const oldestFetchedMessageIndex = Math.max(
         state.oldestFetchedMessageIndex - PAGE_SIZE,
@@ -398,7 +417,7 @@ class ChatStore extends Store<ChatStoreState> {
         oldestFetchedMessageIndex,
         countFetchedMessages: fetchedMessageIds.length,
       })
-    },
+    }, 'fetchMoreMessages'),
     mute: async (payload: { chatId: number; muteDuration: number }) => {
       if (payload.chatId !== chatStore.state.chat?.id) return
       if (
@@ -433,20 +452,27 @@ class ChatStore extends Store<ChatStoreState> {
     },
   }
 
-  stateToString(state: ChatStoreState): string {
-    return JSON.stringify(
-      {
-        ...state,
-        messagePages: state.messagePages.map(messagePage => {
-          return {
-            ...messagePage,
-            messages: messagePage.messages.toArray(),
-          }
-        }),
-      },
-      null,
-      2
-    )
+  stateToHumanReadable(state: ChatStoreState): any {
+    return {
+      //...state,
+      chat: state.chat ? { id: state.chat.id, name: state.chat.name } : null,
+      messagePages: state.messagePages.map(messagePage => {
+        return {
+          ...messagePage,
+          messages: messagePage.messages.toArray().map(([msgId, message]) => {
+            return [
+              msgId,
+              message === null || message === undefined
+                ? null
+                : {
+                    messageId: message.id,
+                    messsage: message.text,
+                  },
+            ]
+          }),
+        }
+      }),
+    }
   }
 }
 
@@ -518,6 +544,13 @@ ipcBackend.on('DC_EVENT_INCOMING_MSG', async (_, [chatId, _messageId]) => {
   const messagesIncoming = messageIdsIncoming.map(
     messageId => _messagesIncoming[messageId]
   ) as MessageType[]
+
+  if (messagesIncoming.length === 0) {
+    log.debug(
+      'DC_EVENT_INCOMING_MSG, actually no new messages for us, returning'
+    )
+    return
+  }
 
   chatStore.reducer.fetchedIncomingMessages({
     id: chatId,
@@ -593,6 +626,13 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
           : _messagesIncoming[messageId]
       )
       .filter(message => message !== null) as MessageType[]
+
+    if (messagesIncoming.length === 0) {
+      log.debug(
+        'DC_EVENT_MSGS_CHANGED actually no new messages for us, returning'
+      )
+      return
+    }
 
     chatStore.reducer.fetchedIncomingMessages({
       id: chatId,
