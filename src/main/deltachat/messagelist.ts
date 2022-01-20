@@ -107,6 +107,10 @@ export default class DCMessageList extends SplitOut {
     this.selectedAccountContext.setDraft(chatId, draft)
   }
 
+  removeDraft(chatId: number) {
+    this.selectedAccountContext.setDraft(chatId, null)
+  }
+
   messageIdToJson(id: number): MessageType | null {
     const msg = this.selectedAccountContext.getMessage(id)
     if (!msg) {

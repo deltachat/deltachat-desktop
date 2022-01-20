@@ -196,7 +196,7 @@ export async function createChatByContactIdAndSelectIt(
 }
 
 export function sendMessage(chatId: number, message: sendMessageParams) {
-  ChatStore.effect.sendMessage({ chatId, message })
+  return ChatStore.effect.sendMessage({ chatId, message })
 }
 
 export const deleteMessage = (messageId: number) => {
