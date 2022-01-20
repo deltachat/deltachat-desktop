@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- It's now possible to add new group members by their email addresses
+
 ### Changed
 - Update translations (3.1.2022)
 - Make disabled "delete profile image" button more readable in dark themes @ejgonzalez17 #2478
