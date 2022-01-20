@@ -283,18 +283,22 @@ class ChatStore extends Store<ChatStoreState> {
     },
   }
 
-  lockedEffect(effect: () => Promise<void>, effectName: string) {
+  lockedEffect<R>(
+    effect: () => Promise<R>,
+    effectName: string
+  ): () => Promise<R | false> {
     return async () => {
       if (this.isLocked === true) {
         log.debug(`lockedEffect: ${effectName}: We're locked, returning`)
-        return
+        return false
       }
 
       log.debug(`lockedEffect: ${effectName}: locking`)
       this.isLocked = true
-      await effect()
+      const returnValue = await effect()
       this.isLocked = false
       log.debug(`lockedEffect: ${effectName}: unlocked`)
+      return returnValue
     }
   }
 
@@ -366,11 +370,11 @@ class ChatStore extends Store<ChatStoreState> {
       const id = this.state.chat.id
       this.reducer.uiDeleteMessage({ id, msgId })
     },
-    fetchMoreMessages: this.lockedEffect(async () => {
+    fetchMoreMessages: this.lockedEffect<boolean>(async () => {
       log.debug(`fetchMoreMessages`)
       const state = this.state
       if (state.chat === null) {
-        return
+        return false
       }
       const id = state.chat.id
       const oldestFetchedMessageIndex = Math.max(
@@ -382,7 +386,7 @@ class ChatStore extends Store<ChatStoreState> {
         log.debug(
           'FETCH_MORE_MESSAGES: lastMessageIndexOnLastPage is zero, returning'
         )
-        return
+        return false
       }
       const fetchedMessageIds = state.messageIds.slice(
         oldestFetchedMessageIndex,
@@ -392,7 +396,7 @@ class ChatStore extends Store<ChatStoreState> {
         log.debug(
           'FETCH_MORE_MESSAGES: fetchedMessageIds.length is zero, returning'
         )
-        return
+        return false
       }
 
       const fetchedMessages = await DeltaBackend.call(
@@ -417,6 +421,7 @@ class ChatStore extends Store<ChatStoreState> {
         oldestFetchedMessageIndex,
         countFetchedMessages: fetchedMessageIds.length,
       })
+      return true
     }, 'fetchMoreMessages'),
     mute: async (payload: { chatId: number; muteDuration: number }) => {
       if (payload.chatId !== chatStore.state.chat?.id) return

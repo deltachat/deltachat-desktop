@@ -15,6 +15,7 @@ import { getLogger } from '../../../shared/logger'
 import { MessageType, FullChat } from '../../../shared/shared-types'
 import { MessagesDisplayContext, useTranslationFunction } from '../../contexts'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
+import { useRefLock } from '../helpers/hooks'
 const log = getLogger('render/components/message/MessageList')
 
 export default function MessageList({
@@ -36,9 +37,17 @@ export default function MessageList({
   } = useChatStore()
   const messageListRef = useRef<HTMLDivElement | null>(null)
 
+  // Don't fetch more while we are already fetching more ;)
+  const lockFetchMore = useRefLock()
+
   const [fetchMore] = useDebouncedCallback(
-    () => {
-      ChatStore.effect.fetchMoreMessages()
+    async () => {
+      lockFetchMore.setLock(true)
+      const isFetchingMore = await ChatStore.effect.fetchMoreMessages()
+      if (isFetchingMore === false) {
+        // Some we couldn't fetch more messages, so unlock again
+        lockFetchMore.setLock(false)
+      }
     },
     30,
     { leading: true }
@@ -49,6 +58,7 @@ export default function MessageList({
       if (!messageListRef.current) {
         return
       }
+      if (lockFetchMore.isLocked() === true) return
       if (messageListRef.current.scrollTop > 200) return
       log.debug('Scrolled to top, fetching more messsages!')
       setTimeout(() => fetchMore(), 0)
@@ -56,7 +66,7 @@ export default function MessageList({
       Event?.stopPropagation()
       return false
     },
-    [fetchMore]
+    [fetchMore, lockFetchMore]
   )
 
   useLayoutEffect(() => {
@@ -77,11 +87,14 @@ export default function MessageList({
       messageListRef.current.scrollHeight
     )
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
-    setTimeout(() => ChatStore.reducer.scrolledToBottom({ id: chatId }), 0)
+    setTimeout(() => {
+      ChatStore.reducer.scrolledToBottom({ id: chatId })
+      lockFetchMore.setLock(false)
+    }, 0)
 
     // Try fetching more messages if needed
     onScroll(null)
-  }, [onScroll, scrollToBottom])
+  }, [onScroll, scrollToBottom, lockFetchMore])
 
   useLayoutEffect(() => {
     if (!ChatStore.state.chat) {
@@ -109,8 +122,11 @@ export default function MessageList({
       messageListRef.current.scrollTop = messageListRef.current.scrollHeight
     }
 
-    setTimeout(() => ChatStore.reducer.scrolledToBottom({ id: chatId }), 0)
-  }, [scrollToBottomIfClose, lastKnownScrollHeight])
+    setTimeout(() => {
+      ChatStore.reducer.scrolledToBottom({ id: chatId })
+      lockFetchMore.setLock(false)
+    }, 0)
+  }, [scrollToBottomIfClose, lastKnownScrollHeight, lockFetchMore])
 
   useLayoutEffect(() => {
     if (!ChatStore.state.chat) {
@@ -128,9 +144,16 @@ export default function MessageList({
       lastKnownScrollTop
     setTimeout(() => {
       ChatStore.reducer.scrolledToLastPage({ id: chatId })
+      lockFetchMore.setLock(false)
       onScroll(null)
     }, 0)
-  }, [scrollToLastPage, lastKnownScrollHeight, lastKnownScrollTop, onScroll])
+  }, [
+    scrollToLastPage,
+    lastKnownScrollHeight,
+    lastKnownScrollTop,
+    onScroll,
+    lockFetchMore,
+  ])
 
   useLayoutEffect(() => {
     if (!refComposer.current) {
@@ -148,7 +171,8 @@ export default function MessageList({
     const composerTextarea = refComposer.current.childNodes[1]
     composerTextarea && composerTextarea.focus()
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
-  }, [refComposer])
+    lockFetchMore.setLock(false)
+  }, [refComposer, lockFetchMore])
 
   return (
     <MessagesDisplayContext.Provider
