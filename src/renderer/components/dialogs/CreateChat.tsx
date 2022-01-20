@@ -5,6 +5,8 @@ import React, {
   useRef,
   useLayoutEffect,
   useEffect,
+  ChangeEvent,
+  useCallback,
 } from 'react'
 import { Card, Classes } from '@blueprintjs/core'
 import { C } from 'deltachat-node/dist/constants'
@@ -18,7 +20,6 @@ import {
 } from '../contact/ContactList'
 import {
   PseudoListItem,
-  PseudoListItemNoSearchResults,
   PseudoListItemShowQrCode,
   PseudoListItemAddMember,
   PseudoListItemAddContact,
@@ -334,14 +335,29 @@ export function AddMemberInnerDialog({
     .map(([contactId, _contact]) => contactId)
 
   const [contactIdsToAdd, setContactIdsToAdd] = useState<JsonContact[]>([])
+  const [{ queryStrIsValidEmail }, updateContacts] = useContactsNew(
+    C.DC_GCL_ADD_SELF,
+    ''
+  )
+  const [_, onSearchChangeNewContact] = useContactSearch(updateContacts)
 
-  const addOrRemoveMember = (contact: JsonContact) => {
-    if (contactIdsToAdd.findIndex(c => c.id === contact.id) === -1) {
-      setContactIdsToAdd([...contactIdsToAdd, contact])
-    } else {
-      setContactIdsToAdd(contactIdsToAdd.filter(c => c.id !== contact.id))
+  const onSearchChangeValidation = (query: ChangeEvent<HTMLInputElement>) => {
+    if (searchContacts.size === 0) {
+      onSearchChangeNewContact(query)
     }
+    onSearchChange(query)
   }
+
+  const addOrRemoveMember = useCallback(
+    (contact: JsonContact) => {
+      if (contactIdsToAdd.findIndex(c => c.id === contact.id) === -1) {
+        setContactIdsToAdd([...contactIdsToAdd, contact])
+      } else {
+        setContactIdsToAdd(contactIdsToAdd.filter(c => c.id !== contact.id))
+      }
+    },
+    [contactIdsToAdd]
+  )
 
   const tx = window.static_translate
 
@@ -367,6 +383,33 @@ export function AddMemberInnerDialog({
   useLayoutEffect(applyCSSHacks, [inputRef, contactIdsToAdd])
   useEffect(applyCSSHacks, [])
 
+  const addContactOnClick = useCallback(async () => {
+    if (!queryStrIsValidEmail) return
+
+    const contactId = await DeltaBackend.call(
+      'contacts.createContact',
+      queryStr
+    )
+    const contact = await DeltaBackend.call('contacts.getContact', contactId)
+    addOrRemoveMember(contact)
+    onSearchChange({
+      target: { value: queryStr },
+    } as ChangeEvent<HTMLInputElement>)
+  }, [addOrRemoveMember, onSearchChange, queryStr, queryStrIsValidEmail])
+
+  const renderAddContactIfNeeded = () => {
+    if (queryStr === '' || searchContacts.size !== 0) {
+      return null
+    }
+    return (
+      <PseudoListItemAddContact
+        queryStr={queryStr}
+        queryStrIsEmail={queryStrIsValidEmail}
+        onClick={addContactOnClick}
+      />
+    )
+  }
+
   return (
     <>
       <DeltaDialogHeader title={tx('group_add_members')} />
@@ -383,7 +426,7 @@ export function AddMemberInnerDialog({
               <input
                 ref={inputRef}
                 className='search-input group-member-search'
-                onChange={onSearchChange}
+                onChange={onSearchChangeValidation}
                 value={queryStr}
                 placeholder={tx('search')}
                 autoFocus
@@ -408,9 +451,7 @@ export function AddMemberInnerDialog({
               disabledContacts={contactIdsInGroup}
               onCheckboxClick={addOrRemoveMember}
             />
-            {queryStr !== '' && searchContacts.size === 0 && (
-              <PseudoListItemNoSearchResults queryStr={queryStr} />
-            )}
+            {renderAddContactIfNeeded()}
           </div>
         </Card>
       </DeltaDialogBody>
