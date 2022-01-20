@@ -198,32 +198,40 @@ class ChatStore extends Store<ChatStoreState> {
         return modifiedState
       }, 'scrolledToBottom')
     },
-    uiDeleteMessage: (payload: { id: number; msgId: number }) => {
+    deleteMessages: (payload: { id: number; msgIds: number[] }) => {
       this.setState(state => {
-        const { msgId } = payload
-        const messageIndex = state.messageIds.indexOf(msgId)
-        let { oldestFetchedMessageIndex } = state
-        if (messageIndex === oldestFetchedMessageIndex) {
-          oldestFetchedMessageIndex += 1
-        }
-        const messageIds = state.messageIds.filter(mId => mId !== msgId)
+        const { msgIds } = payload
+        const messageIds = state.messageIds.filter(mId => msgIds.indexOf(mId) === -1)
         const modifiedState = {
           ...state,
           messageIds,
           messagePages: state.messagePages.map(messagePage => {
-            if (messagePage.messages.has(msgId)) {
+            const hasAny = msgIds.some((msgId) => messagePage.messages.has(msgId))
+            if (hasAny) {
               return {
                 ...messagePage,
-                messages: messagePage.messages.set(msgId, null),
+                messages: messagePage.messages.filter((value, key) => {
+                  return msgIds.indexOf(key) === -1
+                }),
               }
             }
             return messagePage
           }),
-          oldestFetchedMessageIndex,
         }
+        // Find oldest real messageId, get index of it & subtract messages before
+        const oldestMessagePage = modifiedState.messagePages[0]
+        let [oldestMessageId, messagesBefore] = [-1,0]
+        for (let [messageId, messages] of oldestMessagePage.messages) {
+          if (messageId > C.DC_MSG_ID_LAST_SPECIAL) {
+            oldestMessageId = messageId
+          }
+          messagesBefore++
+        }
+        const oldestMessageIndex = messageIds.indexOf(oldestMessageId) - messagesBefore
+        modifiedState.oldestFetchedMessageIndex = oldestMessageIndex
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
         return modifiedState
-      }, 'uiDeleteMessage')
+      }, 'deleteMessages')
     },
     messageChanged: (payload: {
       id: number
@@ -411,7 +419,7 @@ class ChatStore extends Store<ChatStoreState> {
       DeltaBackend.call('messageList.deleteMessage', msgId)
       if (!this.state.chat) return
       const id = this.state.chat.id
-      this.reducer.uiDeleteMessage({ id, msgId })
+      this.reducer.deleteMessages({ id, msgIds: [msgId] })
     },
     fetchMoreMessages: this.lockedEffect<boolean>(
       'scroll',
@@ -663,6 +671,7 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
     const messageIds = <number[]>(
       await DeltaBackend.call('messageList.getMessageIds', id)
     )
+    // TODO: Improve by only iterating over messageIds that are newer then our oldestFetchedMessageIndex
     const messageIdsIncoming = messageIds.filter(
       x => !chatStore.state.messageIds.includes(x)
     )
@@ -679,18 +688,23 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
       )
       .filter(message => message !== null) as MessageType[]
 
-    if (messagesIncoming.length === 0) {
-      log.debug(
-        'DC_EVENT_MSGS_CHANGED actually no new messages for us, returning'
-      )
-      return
-    }
+    // TODO: Improve by only iterating over messageIds that are currently displayed
+    const messageIdsDeleted = chatStore.state.messageIds.filter(
+      x => !messageIds.includes(x)
+    )
 
-    chatStore.reducer.fetchedIncomingMessages({
-      id: chatId,
-      messageIds,
-      messagesIncoming,
-    })
+    if (messagesIncoming.length !== 0) {
+      log.debug('DC_EVENT_MSGS_CHANGED: found new messages: ', messagesIncoming)
+      chatStore.reducer.fetchedIncomingMessages({
+        id: chatId,
+        messageIds,
+        messagesIncoming,
+      })
+    }
+    if (messageIdsDeleted.length !== 0) {
+      log.debug('DC_EVENT_MSGS_CHANGED: found deleted messages: ', messageIdsDeleted)
+      chatStore.reducer.deleteMessages({id: chatId, msgIds: messageIdsDeleted})
+    }
   }
 })
 
