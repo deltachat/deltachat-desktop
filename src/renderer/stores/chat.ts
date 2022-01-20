@@ -286,7 +286,7 @@ class ChatStore extends Store<ChatStoreState> {
   lockedEffect(effect: () => Promise<void>, effectName: string) {
     return async () => {
       if (this.isLocked === true) {
-        log.debug(`lockedEffect: ${effectName}: We\'re locked, returning`)
+        log.debug(`lockedEffect: ${effectName}: We're locked, returning`)
         return
       }
 
@@ -462,15 +462,16 @@ class ChatStore extends Store<ChatStoreState> {
           messages: messagePage.messages.toArray().map(([msgId, message]) => {
             return [
               msgId,
-              message === null || message === undefined ? null :
-              {
-                messageId: message.id,
-                messsage: message.text
-              }
+              message === null || message === undefined
+                ? null
+                : {
+                    messageId: message.id,
+                    messsage: message.text,
+                  },
             ]
-          })
-        }          
-      })
+          }),
+        }
+      }),
     }
   }
 }
@@ -545,7 +546,9 @@ ipcBackend.on('DC_EVENT_INCOMING_MSG', async (_, [chatId, _messageId]) => {
   ) as MessageType[]
 
   if (messagesIncoming.length === 0) {
-    log.debug('DC_EVENT_INCOMING_MSG, actually no new messages for us, returning')
+    log.debug(
+      'DC_EVENT_INCOMING_MSG, actually no new messages for us, returning'
+    )
     return
   }
 
@@ -625,7 +628,9 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
       .filter(message => message !== null) as MessageType[]
 
     if (messagesIncoming.length === 0) {
-      log.debug('DC_EVENT_MSGS_CHANGED actually no new messages for us, returning')
+      log.debug(
+        'DC_EVENT_MSGS_CHANGED actually no new messages for us, returning'
+      )
       return
     }
 

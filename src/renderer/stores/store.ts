@@ -97,7 +97,7 @@ export class Store<S> {
     this.listeners.forEach(listener => listener(this.state))
   }
 
-  stateToHumanReadable(state: S) : any {
+  stateToHumanReadable(state: S): any {
     return state
   }
   toHumanReadableString(): string {
