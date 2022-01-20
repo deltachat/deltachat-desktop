@@ -15,7 +15,7 @@ import { getLogger } from '../../../shared/logger'
 import { MessageType, FullChat } from '../../../shared/shared-types'
 import { MessagesDisplayContext, useTranslationFunction } from '../../contexts'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
-import {useRefLock} from '../helpers/hooks'
+import { useRefLock } from '../helpers/hooks'
 const log = getLogger('render/components/message/MessageList')
 
 export default function MessageList({
@@ -46,7 +46,7 @@ export default function MessageList({
       const isFetchingMore = await ChatStore.effect.fetchMoreMessages()
       if (isFetchingMore === false) {
         // Some we couldn't fetch more messages, so unlock again
-      lockFetchMore.setLock(false)
+        lockFetchMore.setLock(false)
       }
     },
     30,
@@ -66,7 +66,7 @@ export default function MessageList({
       Event?.stopPropagation()
       return false
     },
-    [fetchMore]
+    [fetchMore, lockFetchMore]
   )
 
   useLayoutEffect(() => {
@@ -94,7 +94,7 @@ export default function MessageList({
 
     // Try fetching more messages if needed
     onScroll(null)
-  }, [onScroll, scrollToBottom])
+  }, [onScroll, scrollToBottom, lockFetchMore])
 
   useLayoutEffect(() => {
     if (!ChatStore.state.chat) {
@@ -125,8 +125,8 @@ export default function MessageList({
     setTimeout(() => {
       ChatStore.reducer.scrolledToBottom({ id: chatId })
       lockFetchMore.setLock(false)
-    }, 0);
-    }, [scrollToBottomIfClose, lastKnownScrollHeight])
+    }, 0)
+  }, [scrollToBottomIfClose, lastKnownScrollHeight, lockFetchMore])
 
   useLayoutEffect(() => {
     if (!ChatStore.state.chat) {
@@ -147,7 +147,13 @@ export default function MessageList({
       lockFetchMore.setLock(false)
       onScroll(null)
     }, 0)
-  }, [scrollToLastPage, lastKnownScrollHeight, lastKnownScrollTop, onScroll])
+  }, [
+    scrollToLastPage,
+    lastKnownScrollHeight,
+    lastKnownScrollTop,
+    onScroll,
+    lockFetchMore,
+  ])
 
   useLayoutEffect(() => {
     if (!refComposer.current) {
@@ -166,7 +172,7 @@ export default function MessageList({
     composerTextarea && composerTextarea.focus()
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
     lockFetchMore.setLock(false)
-  }, [refComposer])
+  }, [refComposer, lockFetchMore])
 
   return (
     <MessagesDisplayContext.Provider

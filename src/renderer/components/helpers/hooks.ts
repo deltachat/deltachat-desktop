@@ -14,18 +14,21 @@ export function useDebounced<ARGS, RET>(
 }
 
 // This hook provides a simple reference lock.
-export function useRefLock(): { isLocked: () => boolean, setLock: (lock: boolean) => void } {
+export function useRefLock(): {
+  isLocked: () => boolean
+  setLock: (lock: boolean) => void
+} {
   const lockRef = useRef<boolean>(false)
-  
+
   const isLocked = useCallback(() => {
     return lockRef.current === true
   }, [])
 
   const setLock = useCallback((lock: boolean) => {
-    return lockRef.current = lock
+    return (lockRef.current = lock)
   }, [])
-  
-  return {isLocked, setLock}
+
+  return { isLocked, setLock }
 }
 
 // Effect that only runs when component is first rendered/initiated

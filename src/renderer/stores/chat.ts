@@ -283,7 +283,10 @@ class ChatStore extends Store<ChatStoreState> {
     },
   }
 
-  lockedEffect<R>(effect: () => Promise<R>, effectName: string): () => Promise<R | false> {
+  lockedEffect<R>(
+    effect: () => Promise<R>,
+    effectName: string
+  ): () => Promise<R | false> {
     return async () => {
       if (this.isLocked === true) {
         log.debug(`lockedEffect: ${effectName}: We're locked, returning`)
