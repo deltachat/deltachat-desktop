@@ -100,7 +100,7 @@ export class Store<S> {
   stateToHumanReadable(state: S): any {
     return state
   }
-  
+
   toHumanReadableString(): string {
     return this.stateToHumanReadable(this.state)
   }
