@@ -10,6 +10,7 @@ import { gitHubIssuesUrl } from '../../../shared/constants'
 import { DeltaBackend } from '../../delta-remote'
 import { useInitEffect } from '../helpers/hooks'
 import { preventDefault } from '../../../shared/util'
+import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 
 const log = getLogger('renderer/fullscreen_media')
 
@@ -21,6 +22,9 @@ export default function FullscreenMedia(props: {
   const { onClose } = props
 
   const [msg, setMsg] = useState(props.msg)
+  const resetImageZoom = useRef<() => void | null>(
+    null
+  ) as React.MutableRefObject<() => void | null>
   const previousNextMessageId = useRef<[number, number]>([0, 0])
   const [showPreviousNextMessageButtons, setShowPrevNextMsgBtns] = useState({
     previous: false,
@@ -33,7 +37,18 @@ export default function FullscreenMedia(props: {
   if (isImage(file_mime)) {
     elm = (
       <div className='image-container'>
-        <img src={runtime.transformBlobURL(file)} />
+        <TransformWrapper initialScale={1}>
+          {utils => {
+            resetImageZoom.current = () => {
+              utils.resetTransform()
+            }
+            return (
+              <TransformComponent>
+                <img src={runtime.transformBlobURL(file)} />
+              </TransformComponent>
+            )
+          }}
+        </TransformWrapper>
       </div>
     )
   } else if (isAudio(file_mime)) {
@@ -99,6 +114,9 @@ export default function FullscreenMedia(props: {
       const message = await DeltaBackend.call('messageList.getMessage', msgID)
       if (message === null) return
       setMsg(message)
+      if (resetImageZoom.current !== null) {
+        resetImageZoom.current()
+      }
     }
     return {
       previousImage: () => loadMessage(previousNextMessageId.current[0]),
