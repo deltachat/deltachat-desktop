@@ -452,7 +452,6 @@ class ChatStore extends Store<ChatStoreState> {
     },
   }
 
-
   stateToHumanReadable(state: ChatStoreState): any {
     return {
       //...state,
