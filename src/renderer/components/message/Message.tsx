@@ -24,7 +24,7 @@ import {
 } from '../../../shared/shared-types'
 import { isGenericAttachment } from '../attachment/Attachment'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
-import { joinCall, openViewProfileDialog } from '../helpers/ChatMethods'
+import { joinCall, jumpToMessage, openViewProfileDialog } from '../helpers/ChatMethods'
 import { C } from 'deltachat-node/dist/constants'
 // import { getLogger } from '../../../shared/logger'
 import { DeltaBackend } from '../../delta-remote'
@@ -488,6 +488,7 @@ export const Quote = ({ quote }: { quote: MessageQuote }) => {
     <div
       className='quote-background'
       style={{ borderLeftColor: quote.message?.displayColor }}
+      onClick={() => { quote.message && jumpToMessage(quote.message.messageId)}}
     >
       <div
         className='quote has-message'

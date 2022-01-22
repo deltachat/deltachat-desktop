@@ -16,6 +16,10 @@ export const selectChat = (chatId: number) => {
   ChatStore.effect.selectChat(chatId)
 }
 
+export const jumpToMessage = (msgId: number) => {
+  ChatStore.effect.jumpToMessage(msgId)
+}
+
 export const unselectChat = () => {
   ChatStore.reducer.unselectChat()
 }

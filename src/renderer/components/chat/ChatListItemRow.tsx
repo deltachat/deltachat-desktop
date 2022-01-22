@@ -5,7 +5,7 @@ import ChatListItem, {
 } from './ChatListItem'
 import { areEqual } from 'react-window'
 import { ContactListItem } from '../contact/ContactListItem'
-import { openViewProfileDialog } from '../helpers/ChatMethods'
+import { jumpToMessage, openViewProfileDialog } from '../helpers/ChatMethods'
 
 export const ChatListItemRowChat = React.memo<{
   index: number
@@ -75,9 +75,7 @@ export const ChatListItemRowMessage = React.memo<{
           queryStr={queryStr}
           msr={messageCache[msrId]}
           onClick={() => {
-            openDialog('MessageDetail', {
-              id: msrId,
-            })
+            jumpToMessage(msrId)
           }}
         />
       ) : (
