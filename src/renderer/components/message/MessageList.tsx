@@ -93,6 +93,20 @@ export default function MessageList({
         }
         console.debug(domElement)
         domElement.scrollIntoView()
+
+        // Trigger highlight animation
+        const parentElement = domElement.parentElement
+        if (parentElement !== null) {
+          setTimeout(() => {
+            // Retrigger animation
+            parentElement.classList.add('highlight')
+            parentElement.style.animation = 'none'
+            parentElement.offsetHeight
+            //@ts-ignore
+            parentElement.style.animation = null
+          }, 0)
+        }
+        //
         //ChatStore.reducer.scrolledToBottom({ id: chatId })
         //lockFetchMore.setLock(false)
         // Try fetching more messages if needed
