@@ -14,11 +14,19 @@ export interface MessagePage {
   messages: OrderedMap<number, MessageType | null>
 }
 
+type ScrollTo = ScrollToMessage |null
+
+interface ScrollToMessage {
+  type: 'scrollToMessage',
+  msgId: number
+}
+
 export interface ChatStoreState {
   chat: FullChat | null
   messageIds: number[]
   messagePages: MessagePage[]
   oldestFetchedMessageIndex: number
+  scrollTo: ScrollTo,
   scrollToBottom: boolean // if true the UI will scroll to bottom
   scrollToBottomIfClose: boolean
   scrollToLastPage: boolean // after fetching more messages reset scroll bar to old position
@@ -32,6 +40,7 @@ const defaultState: ChatStoreState = {
   messageIds: [],
   messagePages: [],
   oldestFetchedMessageIndex: -1,
+  scrollTo: null,
   scrollToBottom: false,
   scrollToBottomIfClose: false,
   scrollToLastPage: false,
@@ -422,6 +431,82 @@ class ChatStore extends Store<ChatStoreState> {
       runtime.updateBadge()
       saveLastChatId(chatId)
     },
+    jumpToMessage: async (msgId: number) => {
+      // these methods were called in backend before
+      // might be an issue if DeltaBackend.call has a significant delay
+      const _message = await DeltaBackend.call('messageList.getMessages', [msgId])
+
+      const message = _message[msgId] as MessageType
+      if (message === null || message === undefined) {
+        throw new Error('jumpToMessage: Tried to jump to non existing message with id: ' + msgId)
+      }
+
+      const chatId = (message as MessageType).chatId
+
+      const chat = <FullChat>(
+        await DeltaBackend.call('chatList.selectChat', chatId)
+      )
+      if (chat.id === null) {
+        log.debug(
+          'SELECT CHAT chat does not exsits, id is null. chatId:',
+          chat.id
+        )
+        return
+      }
+      const messageIds = <number[]>(
+        await DeltaBackend.call('messageList.getMessageIds', chatId)
+      )
+
+      const jumpToMessageIndex = messageIds.indexOf(msgId)
+
+      let oldestFetchedMessageIndex = -1
+      let newestFetchedMessageIndex = -1
+      let messagePages: MessagePage[] = []
+      if (messageIds.length !== 0) {
+        oldestFetchedMessageIndex = Math.max(jumpToMessageIndex - (PAGE_SIZE / 2), 0)
+        newestFetchedMessageIndex = Math.min(oldestFetchedMessageIndex + (PAGE_SIZE / 2), messageIds.length - 1)
+
+        const messageIdsToFetch = messageIds.slice(
+          oldestFetchedMessageIndex,
+          newestFetchedMessageIndex
+        )
+        const _messages = await DeltaBackend.call(
+          'messageList.getMessages',
+          messageIdsToFetch
+        )
+
+        const messages = OrderedMap().withMutations(messagePages => {
+          messageIdsToFetch.forEach(messageId => {
+            messagePages.set(messageId, _messages[messageId])
+          })
+        }) as OrderedMap<number, MessageType | null>
+
+        messagePages = [
+          {
+            pageKey: calculatePageKey(messages),
+            messages,
+          },
+        ]
+      }
+
+      chatStore.reducer.selectedChat({
+        chat,
+        messagePages,
+        messageIds,
+        oldestFetchedMessageIndex,
+        scrollTo: {
+          type: 'scrollToMessage',
+          msgId
+        }
+      })
+      ActionEmitter.emitAction(
+        chat.archived
+          ? KeybindAction.ChatList_SwitchToArchiveView
+          : KeybindAction.ChatList_SwitchToNormalView
+      )
+      runtime.updateBadge()
+      saveLastChatId(chatId)
+    },
     uiDeleteMessage: (msgId: number) => {
       DeltaBackend.call('messageList.deleteMessage', msgId)
       if (!this.state.chat) return
@@ -522,7 +607,7 @@ class ChatStore extends Store<ChatStoreState> {
   stateToHumanReadable(state: ChatStoreState): any {
     return {
       //...state,
-      chat: state.chat ? { id: state.chat.id, name: state.chat.name } : null,
+      ...state,
       messagePages: state.messagePages.map(messagePage => {
         return {
           ...messagePage,
@@ -750,6 +835,7 @@ export const useChatStore2 = () => {
 }
 
 export default chatStore
+window.__chatStore = chatStore
 
 export type ChatStoreDispatch = Store<ChatStoreState>['dispatch']
 

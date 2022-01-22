@@ -28,6 +28,7 @@ export default function MessageList({
     oldestFetchedMessageIndex,
     messagePages,
     messageIds,
+    scrollTo,
     scrollToBottom,
     scrollToBottomIfClose,
     scrollToLastPage,
@@ -62,6 +63,45 @@ export default function MessageList({
     },
     [fetchMore]
   )
+
+  useLayoutEffect(() => {
+    if (!ChatStore.state.chat) {
+      return
+    }
+    const chatId = ChatStore.state.chat.id
+    if (!messageListRef.current) {
+      return
+    }
+    if (scrollTo === null) {
+      return
+    }
+
+    log.debug(
+      'scrollTo: ' + scrollTo.type,
+      messageListRef.current.scrollTop,
+      messageListRef.current.scrollHeight
+    )
+    if (scrollTo.type === 'scrollToMessage') {
+      log.debug('scrollTo: scrollToMessage: ' + scrollTo.msgId)
+
+      setTimeout(() => {
+        const domElement = document.querySelector(`.message[id="${scrollTo.msgId.toString()}"]`)
+
+        if (!domElement) {
+          log.debug('scrollTo: scrollToMessage, couldnt find matching message in dom, returning')
+          return
+        }
+        console.debug(domElement)
+        domElement.scrollIntoView()
+        //ChatStore.reducer.scrolledToBottom({ id: chatId })
+        //lockFetchMore.setLock(false)
+        // Try fetching more messages if needed
+        onScroll(null)
+      }, 0)
+      return 
+    }
+
+  }, [onScroll, scrollTo, lockFetchMore])
 
   useLayoutEffect(() => {
     if (!ChatStore.state.chat) {

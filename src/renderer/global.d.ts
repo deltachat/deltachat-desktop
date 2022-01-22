@@ -32,6 +32,7 @@ declare global {
     __reloadDraft: (() => void) | null
     __desktopSettings: DesktopSettings | null
     __chatlistSetSearch: ((searchTerm: string) => void) | undefined
+    __chatStore: any
     __setMainScreenView:
       | React.Dispatch<React.SetStateAction<MainScreenView>>
       | undefined
