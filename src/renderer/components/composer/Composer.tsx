@@ -110,7 +110,6 @@ const Composer = forwardRef<
           ? draftState.quotedMessageId
           : undefined,
       })
-
     } catch (error) {
       log.error(error)
     } finally {
