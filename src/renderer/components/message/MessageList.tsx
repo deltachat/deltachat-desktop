@@ -198,7 +198,7 @@ export type ConversationType = {
   chatType: ChatTypes
 }
 
-export const MessageListInner = 
+export const MessageListInner = React.memo(
   (props: {
     onScroll: (event: React.UIEvent<HTMLDivElement>) => void
     oldestFetchedMessageIndex: number
@@ -261,9 +261,19 @@ export const MessageListInner =
         </ul>
       </div>
     )
-  }
+  },
+  (prevProps, nextProps) => {
+    const areEqual =
+      prevProps.messageIds === nextProps.messageIds &&
+      prevProps.messagePages === nextProps.messagePages &&
+      prevProps.oldestFetchedMessageIndex ===
+        nextProps.oldestFetchedMessageIndex
 
-const MessagePageComponent = 
+    return areEqual
+  }
+)
+
+const MessagePageComponent = React.memo(
   function MessagePageComponent({
     messagePage,
     conversationType,
@@ -305,7 +315,15 @@ const MessagePageComponent =
         {messageElements}
       </div>
     )
+  },
+  (prevProps, nextProps) => {
+    const areEqual =
+      prevProps.messagePage.pageKey === nextProps.messagePage.pageKey &&
+      prevProps.messagePage.messages === nextProps.messagePage.messages
+
+    return areEqual
   }
+)
 
 function EmptyChatMessage() {
   const tx = useTranslationFunction()
