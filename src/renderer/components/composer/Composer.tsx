@@ -98,6 +98,11 @@ const Composer = forwardRef<
         log.debug(`Empty message: don't send it...`)
         return
       }
+      /* clear it here to make sure the draft is cleared */
+      await DeltaBackend.call('messageList.removeDraft', chatId)
+      // /* update the state to reflect the removed draft */
+      window.__reloadDraft && window.__reloadDraft()
+
       await sendMessage(chatId, {
         text: replaceColonsSafe(message),
         filename: draftState.file,
@@ -106,10 +111,6 @@ const Composer = forwardRef<
           : undefined,
       })
 
-      /* clear it here to make sure the draft is cleared */
-      await DeltaBackend.call('messageList.removeDraft', chatId)
-      // /* update the state to reflect the removed draft */
-      window.__reloadDraft && window.__reloadDraft()
     } catch (error) {
       log.error(error)
     } finally {
