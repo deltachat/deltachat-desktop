@@ -42,6 +42,11 @@ const defaultState: ChatStoreState = {
 
 class ChatStore extends Store<ChatStoreState> {
   isLocked = false
+  guardReducerTriesToAddDuplicatePageKey(pageKeyToAdd: string) {
+    const isDuplicatePageKey = this.state.messagePages.findIndex(messagePage => messagePage.pageKey === pageKeyToAdd) !== -1
+    return isDuplicatePageKey
+
+  }
   guardReducerIfChatIdIsDifferent(payload: { id: number }) {
     if (
       typeof payload.id !== 'undefined' &&
@@ -119,8 +124,9 @@ class ChatStore extends Store<ChatStoreState> {
           }
         }) as OrderedMap<number, MessageType | null>
 
+        const incomingPageKey = calculatePageKey(messages)
         const incomingMessagePage: MessagePage = {
-          pageKey: calculatePageKey(messages),
+          pageKey: incomingPageKey,
           messages,
         }
 
@@ -131,7 +137,12 @@ class ChatStore extends Store<ChatStoreState> {
           scrollToBottomIfClose: true,
         }
 
+        if (this.guardReducerTriesToAddDuplicatePageKey(incomingPageKey)) {
+          throw new Error('We almost added the same page twice! We should prevent this in code duplicate pageKey: ' + incomingPageKey)
+        }
+
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
+
         return modifiedState
       }, 'fetchedIncomingMessages')
     },
