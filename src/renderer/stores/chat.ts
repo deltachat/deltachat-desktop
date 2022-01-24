@@ -43,9 +43,11 @@ const defaultState: ChatStoreState = {
 class ChatStore extends Store<ChatStoreState> {
   isLocked = false
   guardReducerTriesToAddDuplicatePageKey(pageKeyToAdd: string) {
-    const isDuplicatePageKey = this.state.messagePages.findIndex(messagePage => messagePage.pageKey === pageKeyToAdd) !== -1
+    const isDuplicatePageKey =
+      this.state.messagePages.findIndex(
+        messagePage => messagePage.pageKey === pageKeyToAdd
+      ) !== -1
     return isDuplicatePageKey
-
   }
   guardReducerIfChatIdIsDifferent(payload: { id: number }) {
     if (
@@ -138,7 +140,10 @@ class ChatStore extends Store<ChatStoreState> {
         }
 
         if (this.guardReducerTriesToAddDuplicatePageKey(incomingPageKey)) {
-          throw new Error('We almost added the same page twice! We should prevent this in code duplicate pageKey: ' + incomingPageKey)
+          throw new Error(
+            'We almost added the same page twice! We should prevent this in code duplicate pageKey: ' +
+              incomingPageKey
+          )
         }
 
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
