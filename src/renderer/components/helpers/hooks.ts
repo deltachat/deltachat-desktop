@@ -1,10 +1,4 @@
-import {
-  MutableRefObject,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import { MutableRefObject, useEffect, useRef, useState } from 'react'
 import { debounce } from 'debounce'
 
 /** debounce workaround so it can be useful in useFunctions that are used from multiple places at once
