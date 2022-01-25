@@ -7,7 +7,7 @@ import { ActionEmitter, KeybindAction } from '../keybindings'
 import { C } from 'deltachat-node/dist/constants'
 import { OrderedMap } from 'immutable'
 
-export const PAGE_SIZE = 10
+export const PAGE_SIZE = 20
 
 export interface MessagePage {
   pageKey: string
@@ -41,7 +41,9 @@ const defaultState: ChatStoreState = {
 }
 
 class ChatStore extends Store<ChatStoreState> {
-  isLocked = false
+  locks = {
+    scroll: false
+  }
   guardReducerTriesToAddDuplicatePageKey(pageKeyToAdd: string) {
     const isDuplicatePageKey =
       this.state.messagePages.findIndex(
@@ -65,6 +67,7 @@ class ChatStore extends Store<ChatStoreState> {
   reducer = {
     selectedChat: (payload: Partial<ChatStoreState>) => {
       this.setState(_ => {
+        this.locks.scroll = false
         return {
           ...defaultState,
           ...payload,
@@ -73,6 +76,7 @@ class ChatStore extends Store<ChatStoreState> {
     },
     unselectChat: () => {
       this.setState(_ => {
+        this.locks.scroll = false
         return { ...defaultState }
       }, 'unselectChat')
     },
@@ -161,6 +165,7 @@ class ChatStore extends Store<ChatStoreState> {
           lastKnownScrollTop: -1,
         }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
+        this.locks.scroll = false
         return modifiedState
       }, 'scrolledToLastPage')
     },
@@ -173,6 +178,7 @@ class ChatStore extends Store<ChatStoreState> {
           scrollToBottomIfClose: false,
         }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
+        this.locks.scroll = false
         return modifiedState
       }, 'scrolledToBottom')
     },
@@ -300,20 +306,23 @@ class ChatStore extends Store<ChatStoreState> {
   }
 
   lockedEffect<R>(
-    effect: () => Promise<R>,
+    lockName: 'scroll',
+    effect: () => Promise<R & false>,
     effectName: string
-  ): () => Promise<R | false> {
+  ): () => Promise<any> {
     return async () => {
-      if (this.isLocked === true) {
+      if (this.locks[lockName] === true) {
         log.debug(`lockedEffect: ${effectName}: We're locked, returning`)
         return false
       }
 
       log.debug(`lockedEffect: ${effectName}: locking`)
-      this.isLocked = true
+      this.locks[lockName] = true
       const returnValue = await effect()
-      this.isLocked = false
-      log.debug(`lockedEffect: ${effectName}: unlocked`)
+      if (returnValue === false) {
+      log.debug(`lockedEffect: ${effectName}: return value was false, unlocking`)
+        this.locks[lockName] = false
+      }
       return returnValue
     }
   }
@@ -386,7 +395,7 @@ class ChatStore extends Store<ChatStoreState> {
       const id = this.state.chat.id
       this.reducer.uiDeleteMessage({ id, msgId })
     },
-    fetchMoreMessages: this.lockedEffect<boolean>(async () => {
+    fetchMoreMessages: this.lockedEffect<boolean>('scroll', async () => {
       log.debug(`fetchMoreMessages`)
       const state = this.state
       if (state.chat === null) {
