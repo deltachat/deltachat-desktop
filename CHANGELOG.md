@@ -9,7 +9,7 @@
 - Update translations (3.1.2022)
 - Make disabled "delete profile image" button more readable in dark themes @ejgonzalez17 #2478
 - Update inApp help (3.1.2022)
-- Making the minimal them even more zen
+- Making the minimal theme even more zen
 - Drastically improve performance of MessageList
 - Switch from tape to mocha for unit tests
 - Don't update Timestamps if they are older then one week
