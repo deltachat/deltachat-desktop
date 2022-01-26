@@ -237,9 +237,10 @@ function buildContextMenu(
 const Message = (props: {
   message: MessageType
   conversationType: ConversationType
+  replies: (MessageType | null)[]
   /* onRetrySend */
 }) => {
-  const { message, conversationType } = props
+  const { message, conversationType, replies } = props
   const { id, viewType, text, hasLocation, isSetupmessage, hasHTML } = message
   const direction = getDirection(message)
   const status = mapCoreMsgStatus2String(message.state)
@@ -440,6 +441,7 @@ const Message = (props: {
             status={status}
             text={text}
             hasLocation={hasLocation}
+            replies={replies}
             timestamp={message.timestamp * 1000}
             padlock={message.showPadlock}
             onClickError={openMessageInfo.bind(null, message)}

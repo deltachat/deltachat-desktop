@@ -301,8 +301,17 @@ const MessagePageComponent = React.memo(
         log.debug(`Missing message with id ${messageId}`)
         continue
       }
+      // *** check if this message has a direct reply in the following msgs
+      // filter messagesOnPage to only consider subsequent msgs with !!quotedMessageId
+      const replies = messagesOnPage.filter((eachMsg, idx) => idx > i && eachMsg[1]?.quotedMessageId === messageId ).map(m=>m[1])
+      
+      // tag this msg with hasReplies
+
+      // check which replies are emoji only
+      // tag this msg with emoji and continue
       messageElements.push(
         <MessageWrapper
+          replies={replies}
           key={messageId}
           message={message as MessageType}
           conversationType={conversationType}

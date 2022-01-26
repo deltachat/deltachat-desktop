@@ -3,7 +3,9 @@ import classNames from 'classnames'
 import Timestamp from '../conversations/Timestamp'
 import { isImage, isVideo } from '../attachment/Attachment'
 import { i18nContext } from '../../contexts'
-import { msgStatus } from '../../../shared/shared-types'
+import { MessageType, msgStatus } from '../../../shared/shared-types'
+import { AnchorButton } from '@blueprintjs/core/lib/esm/components/button/buttons'
+import { Icon } from '@blueprintjs/core/lib/esm/components/icon/icon'
 
 export default class MessageMetaData extends React.Component<{
   padlock: boolean
@@ -14,6 +16,7 @@ export default class MessageMetaData extends React.Component<{
   text?: string
   timestamp: number
   hasLocation?: boolean
+  replies?: (MessageType | null)[]
   onClickError?: () => void
 }> {
   render() {
@@ -26,9 +29,10 @@ export default class MessageMetaData extends React.Component<{
       text,
       timestamp,
       hasLocation,
+      replies = [],
       onClickError,
     } = this.props
-
+    const replyCount= replies.length
     const withImageNoCaption = Boolean(
       !text && (isImage(file_mime || null) || isVideo(file_mime || null))
     )
@@ -65,6 +69,13 @@ export default class MessageMetaData extends React.Component<{
                 onClick={status === 'error' ? onClickError : undefined}
               />
             ) : null}
+            
+            {!replyCount ? null :
+              <AnchorButton small={true} minimal={true} style={{ marginLeft: 6, minHeight: 20, paddingRight: 6 }} className="bp3-round bp3-tag">
+                <span className="bp3-icon" style={{ verticalAlign: "middle" }} >{replyCount.toFixed(0)}</span>
+                <Icon icon="inheritance" iconSize={11} style={{ margin: 4, verticalAlign: "top" }} />
+              </AnchorButton>
+            }
           </div>
         )}
       </i18nContext.Consumer>
