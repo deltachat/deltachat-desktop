@@ -1,23 +1,36 @@
 import { ipcBackend } from './ipc'
 import { RC_Config } from '../shared/shared-types'
 import { setLogHandler } from '../shared/logger'
-import type { dialog, app, shell, clipboard } from 'electron'
+import type {
+  dialog,
+  app,
+  shell,
+  clipboard,
+  nativeImage as electronNativeImage,
+} from 'electron'
 import { basename, join } from 'path'
+import { getLogger } from '../shared/logger'
+
+const log = getLogger('renderer/runtime')
 
 const {
   openExternal,
   openPath,
+  nativeImage,
   write_clipboard_text,
   read_clipboard_text,
   app_getPath,
+  write_clipboard_image,
 } = (window as any).electron_functions as {
   // see static/preload.js
   ipcRenderer: import('electron').IpcRenderer
   openExternal: typeof shell.openExternal
   openPath: typeof shell.openPath
+  nativeImage: typeof electronNativeImage
   app_getPath: typeof app.getPath
   write_clipboard_text: typeof clipboard.writeText
   read_clipboard_text: typeof clipboard.readText
+  write_clipboard_image: typeof clipboard.writeImage
 }
 
 /**
@@ -51,6 +64,7 @@ interface Runtime {
   transformBlobURL(blob: string): string
   readClipboardText(): Promise<string>
   writeClipboardText(text: string): Promise<void>
+  writeClipboardImage(path: string): Promise<boolean>
   getAppPath(name: Parameters<typeof app.getPath>[0]): string
   openPath(path: string): Promise<string>
 }
@@ -71,6 +85,9 @@ class Browser implements Runtime {
   }
   writeClipboardText(_text: string): Promise<void> {
     // navigator.clipboard.writeText(text)
+    throw new Error('Method not implemented.')
+  }
+  writeClipboardImage(_path: string): Promise<boolean> {
     throw new Error('Method not implemented.')
   }
   transformBlobURL(_blob: string): string {
@@ -123,6 +140,19 @@ class Electron implements Runtime {
   }
   writeClipboardText(text: string): Promise<void> {
     return Promise.resolve(write_clipboard_text(text))
+  }
+  writeClipboardImage(path: string): Promise<boolean> {
+    return new Promise(function (resolve) {
+      try {
+        const natImage = nativeImage.createFromPath(path)
+        write_clipboard_image(natImage)
+        log.debug('Copied image to clipboard.')
+        resolve(true)
+      } catch (error) {
+        log.error('Copying image to clipboard failed: ', error)
+        resolve(false)
+      }
+    })
   }
   private rc_config: RC_Config | null = null
   transformBlobURL(blob: string): string {
