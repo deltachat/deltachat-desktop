@@ -16,6 +16,8 @@
     app_getPath: (p) => electron.ipcRenderer.sendSync('app-get-path', p),
     read_clipboard_text: electron.clipboard.readText,
     write_clipboard_text: electron.clipboard.writeText,
+    write_clipboard_image: electron.clipboard.writeImage,
+    nativeImage: electron.nativeImage,
   }
 
   console.log({ global })

@@ -11,6 +11,7 @@ import { DeltaBackend } from '../../delta-remote'
 import { useInitEffect } from '../helpers/hooks'
 import { preventDefault } from '../../../shared/util'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
+import { useContextMenu } from '../ContextMenu'
 
 const log = getLogger('renderer/fullscreen_media')
 
@@ -32,6 +33,15 @@ export default function FullscreenMedia(props: {
   })
   const { file, file_mime } = msg
 
+  const openMenu = useContextMenu([
+    {
+      label: tx('menu_copy_image_to_clipboard'),
+      action: () => {
+        runtime.writeClipboardImage(file)
+      },
+    },
+  ])
+
   let elm = null
 
   if (isImage(file_mime)) {
@@ -44,7 +54,12 @@ export default function FullscreenMedia(props: {
             }
             return (
               <TransformComponent>
-                <img src={runtime.transformBlobURL(file)} />
+                <div
+                  className='image-context-menu-container'
+                  onContextMenu={openMenu}
+                >
+                  <img src={runtime.transformBlobURL(file)} />
+                </div>
               </TransformComponent>
             )
           }}
