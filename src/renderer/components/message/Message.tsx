@@ -414,16 +414,21 @@ const Message = (props: {
           onClick={onClickMessageBody}
         >
           {message.quote !== null && <Quote quote={message.quote} />}
-          {message.file && !isSetupmessage && (
-            <Attachment
-              {...{
-                text,
-                conversationType,
-                direction,
-                message,
-                hasQuote: message.quote !== null,
-              }}
-            />
+          {message.file &&
+            !isSetupmessage &&
+            message.viewType !== C.DC_MSG_WEBXDC && (
+              <Attachment
+                {...{
+                  text,
+                  conversationType,
+                  direction,
+                  message,
+                  hasQuote: message.quote !== null,
+                }}
+              />
+            )}
+          {message.viewType === C.DC_MSG_WEBXDC && (
+            <WebxdcMessageContent message={message}></WebxdcMessageContent>
           )}
           {content}
           {hasHTML && (
@@ -503,4 +508,29 @@ export function getAuthorName(
   overrideSenderName?: string
 ) {
   return overrideSenderName ? `~${overrideSenderName}` : displayName
+}
+
+function WebxdcMessageContent({ message }: { message: MessageType }) {
+  const tx = useTranslationFunction()
+  if (message.viewType !== C.DC_MSG_WEBXDC) {
+    return null
+  }
+  const info = message.webxdcInfo || {
+    name: 'INFO MISSING!',
+    summary: 'INFO MISSING!',
+  }
+
+  return (
+    <div className='webxdc'>
+      <img
+        src={runtime.getWebxdcIconURL(message.id)}
+        alt={`icon of ${info.name}`}
+      />
+      <div>{info.name}</div>
+      <div>{info.summary}</div>
+      <button onClick={() => runtime.openWebxdc(message.id)}>
+        {tx('start_app')}
+      </button>
+    </div>
+  )
 }

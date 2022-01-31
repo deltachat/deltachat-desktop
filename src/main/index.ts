@@ -1,10 +1,21 @@
 console.time('init')
 
 import { mkdirSync, Stats, watchFile } from 'fs'
-import { app as rawApp, dialog } from 'electron'
+import { app as rawApp, dialog, protocol } from 'electron'
 import rc from './rc'
 import { VERSION, GIT_REF, BUILD_TIMESTAMP } from '../shared/build-info'
 import type { EventEmitter } from 'events'
+
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: 'webxdc',
+    privileges: {
+      allowServiceWorkers: true,
+      standard: true,
+      supportFetchAPI: true,
+    },
+  },
+])
 
 const app = rawApp as ExtendedAppMainProcess
 app.rc = rc
