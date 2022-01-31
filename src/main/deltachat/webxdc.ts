@@ -10,7 +10,7 @@ import { join } from 'path'
 const open_apps: { [msgId: number]: BrowserWindow } = {}
 
 const CSP =
-  "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline';"
+  "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src data: ;"
 
 export default class DCWebxdc extends SplitOut {
   constructor(controller: DeltaChatController) {
@@ -124,8 +124,11 @@ export default class DCWebxdc extends SplitOut {
         height: 667,
       }))
 
+      webxdc_windows.once("close", ()=>{
+        webxdc_windows.webContents.session.clearStorageData({"storages":['indexdb', 'localstorage', 'cookies', 'serviceworkers']})
+      })
+
       webxdc_windows.once('closed', () => {
-        webxdc_windows.webContents.session.clearStorageData()
         delete open_apps[msg_id]
       })
 
