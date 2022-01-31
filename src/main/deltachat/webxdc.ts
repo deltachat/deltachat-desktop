@@ -10,7 +10,7 @@ import { join } from 'path'
 const open_apps: { [msgId: number]: BrowserWindow } = {}
 
 const CSP =
-  "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src data: ;"
+  "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data: ;"
 
 export default class DCWebxdc extends SplitOut {
   constructor(controller: DeltaChatController) {
