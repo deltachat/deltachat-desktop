@@ -21,11 +21,7 @@ export default class DCSettings extends SplitOut {
     const result =
       this.selectedAccountContext.setConfig(key, String(value)) === 1
 
-    if (
-      key === 'inbox_watch' ||
-      key === 'sentbox_watch' ||
-      key === 'mvbox_watch'
-    ) {
+    if (key === 'sentbox_watch') {
       log.info(`It's a watch config, restarting IO...`)
       this.selectedAccountContext.stopIO()
       this.selectedAccountContext.startIO()

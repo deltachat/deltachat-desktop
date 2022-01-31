@@ -301,9 +301,7 @@ export default function Settings(props: DialogProps) {
             )}
             <br />
             <H5>{tx('pref_imap_folder_handling')}</H5>
-            {renderDeltaSwitch('inbox_watch', tx('pref_watch_inbox_folder'))}
             {renderDeltaSwitch('sentbox_watch', tx('pref_watch_sent_folder'))}
-            {renderDeltaSwitch('mvbox_watch', tx('pref_watch_mvbox_folder'))}
             {renderDeltaSwitch('bcc_self', tx('pref_send_copy_to_self'))}
             {renderDeltaSwitch('mvbox_move', tx('pref_auto_folder_moves'))}
           </Card>
@@ -317,9 +315,7 @@ export default function Settings(props: DialogProps) {
   useEffect(() => {
     const loadSettings = async () => {
       const settings = await DeltaBackend.call('settings.getConfigFor', [
-        'inbox_watch',
         'sentbox_watch',
-        'mvbox_watch',
         'mvbox_move',
         'e2ee_enabled',
         'addr',
