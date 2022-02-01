@@ -15,7 +15,6 @@ import { getLogger } from '../../../shared/logger'
 import { MessageType, FullChat } from '../../../shared/shared-types'
 import { MessagesDisplayContext, useTranslationFunction } from '../../contexts'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
-import { useRefLock } from '../helpers/hooks'
 const log = getLogger('render/components/message/MessageList')
 
 export default function MessageList({
@@ -53,6 +52,7 @@ export default function MessageList({
       if (!messageListRef.current) {
         return
       }
+      if (ChatStore.lockIsLocked('scroll') === true) return
       if (messageListRef.current.scrollTop > 200) return
       log.debug('Scrolled to top, fetching more messsages!')
       setTimeout(() => fetchMore(), 0)
