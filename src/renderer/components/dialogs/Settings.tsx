@@ -96,6 +96,14 @@ function DeltaSettingsInput({
   )
 }
 
+export interface SettingsState {
+  showSettingsDialog: boolean
+  settings: any
+  show: string
+  selfContact: todo
+  rc: RC_Config
+}
+
 export default function Settings(props: DialogProps) {
   useEffect(() => {
     if (window.__settingsOpened) {
@@ -109,13 +117,7 @@ export default function Settings(props: DialogProps) {
     }
   })
 
-  const [state, _setState] = useState<{
-    showSettingsDialog: boolean
-    settings: any
-    show: string
-    selfContact: todo
-    rc: RC_Config
-  }>({
+  const [state, _setState] = useState<SettingsState>({
     showSettingsDialog: false,
     settings: {},
     show: 'main',
@@ -197,7 +199,13 @@ export default function Settings(props: DialogProps) {
     )
   }
 
-  const renderDeltaSwitch = (configKey: string, label: string) => {
+  const renderDeltaSwitch = (
+    configKey: string,
+    label: string,
+    disabled?: boolean
+  ) => {
+    disabled = disabled === true ? true : false
+
     const configValue = state.settings[configKey]
     return (
       <Switch
@@ -208,6 +216,7 @@ export default function Settings(props: DialogProps) {
           handleDeltaSettingsChange(configKey, flipDeltaBoolean(configValue))
         }
         alignIndicator='right'
+        disabled={disabled}
       />
     )
   }
@@ -302,7 +311,10 @@ export default function Settings(props: DialogProps) {
             )}
             <br />
           </Card>
-          <SettingsImapFolderHandling renderDeltaSwitch={renderDeltaSwitch} />
+          <SettingsImapFolderHandling
+            state={state}
+            renderDeltaSwitch={renderDeltaSwitch}
+          />
           <SettingsManageKeys />
           <SettingsBackup />
         </DeltaDialogBody>
@@ -326,6 +338,7 @@ export default function Settings(props: DialogProps) {
         'delete_server_after',
         'webrtc_instance',
         'download_limit',
+        'only_fetch_mvbox',
       ])
       const rc = await runtime.getRC_Config()
       setState({ settings, rc })
