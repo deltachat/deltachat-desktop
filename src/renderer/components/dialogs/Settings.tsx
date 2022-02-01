@@ -11,6 +11,7 @@ import { DialogProps } from './DialogController'
 import SettingsAutodelete from './Settings-Autodelete'
 import SettingsManageKeys from './Settings-ManageKeys'
 import SettingsEncryption from './Settings-Encryption'
+import SettingsImapFolderHandling from './Settings-ImapFolderHandling'
 import {
   DeltaDialogBase,
   DeltaDialogHeader,
@@ -300,11 +301,8 @@ export default function Settings(props: DialogProps) {
               </>
             )}
             <br />
-            <H5>{tx('pref_imap_folder_handling')}</H5>
-            {renderDeltaSwitch('sentbox_watch', tx('pref_watch_sent_folder'))}
-            {renderDeltaSwitch('bcc_self', tx('pref_send_copy_to_self'))}
-            {renderDeltaSwitch('mvbox_move', tx('pref_auto_folder_moves'))}
           </Card>
+          <SettingsImapFolderHandling renderDeltaSwitch={renderDeltaSwitch} />
           <SettingsManageKeys />
           <SettingsBackup />
         </DeltaDialogBody>

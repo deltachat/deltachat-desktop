@@ -67,6 +67,7 @@ export function SettingsAccountInner(onClose: () => void) {
         'mail_pw',
         'sentbox_watch',
         'mvbox_move',
+        'only_fetch_mvbox',
         'e2ee_enabled',
         'mail_server',
         'mail_user',

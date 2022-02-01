@@ -19,6 +19,7 @@
 - Add image zoom for full screen views
 - Copying image now possible from gallery and chat view
 - Removed options to watch inbox and Deltachat folder from advanced settings
+- Added option to only watch Deltachat folder to advanced settings
 
 ### Fixed
 - Fix overflow in long links inside quotes @naomiceron #2467
