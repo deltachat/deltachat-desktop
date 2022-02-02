@@ -217,7 +217,7 @@ function buildContextMenu(
       },
     // Download attachment
     showAttachmentOptions && {
-      label: tx('menu_export_attachment'),
+      label: tx('save-as'),
       action: onDownload.bind(null, message),
     },
     // Forward message

@@ -57,7 +57,7 @@ const contextMenuFactory = (
       action: openAttachmentInShell.bind(null, message),
     },
     {
-      label: tx('save'),
+      label: tx('save-as'),
       action: onDownload.bind(null, message),
     },
     showCopyImage && {
