@@ -407,3 +407,21 @@ export function DeltaDialogCloseFooter({ onClose }: { onClose: () => any }) {
     </DeltaDialogFooter>
   )
 }
+
+export const DeltaSwitch2 = () => {
+  const [checked, setChecked]  = useState(false)
+  return (
+    <label className="DialogSwitch">
+      <div className="left">
+        <div className="label">Send Copy to Self</div>
+        <div className="description">Messages in this chat are generated locally by your Delta Chat app. Its makers use it to inform about app updates and problems during usage.</div>
+      </div>
+      <div className="right">
+        <label className="delta-switch2 bp3-switch bp3-align-right inactive">
+          <input type="checkbox" checked={checked} onClick={() => setChecked(!checked)}></input>
+          <span className={classNames("delta-switch2-indicator", {checked})}></span>
+        </label>
+      </div>
+    </label>
+  )
+}

@@ -3,6 +3,7 @@ import { Elevation, H5, Card } from '@blueprintjs/core'
 
 import { getLogger } from '../../../shared/logger'
 import { SettingsState } from './Settings'
+import {DeltaSwitch2} from './DeltaDialog'
 
 const log = getLogger('renderer/dialogs/Settings')
 
@@ -21,6 +22,7 @@ export default function SettingsImapFolderHandling({
     <>
       <Card elevation={Elevation.ONE}>
         <H5>{tx('pref_imap_folder_handling')}</H5>
+        <DeltaSwitch2/>
         {renderDeltaSwitch(
           'sentbox_watch',
           tx('pref_watch_sent_folder'),
