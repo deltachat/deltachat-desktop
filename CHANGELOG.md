@@ -33,6 +33,7 @@
 - Fix usage of wrong translation key chat_no_contact_requests
 - Fullscreen view for group avatar and own avatar in settings
 - Fix messagelist sometimes not loading more messages
+- Fix rockettheme font color for highlighted settings options
 
 ## [1.26.0] - 2021-12-15
 
