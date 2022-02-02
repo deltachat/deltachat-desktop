@@ -408,18 +408,42 @@ export function DeltaDialogCloseFooter({ onClose }: { onClose: () => any }) {
   )
 }
 
-export const DeltaSwitch2 = () => {
-  const [checked, setChecked]  = useState(false)
+export const DeltaSwitch2 = ({
+  label,
+  description,
+  value,
+  onClick,
+  disabled,
+}: {
+  label: string
+  value: boolean
+  description?: string
+  onClick: () => void
+  disabled?: boolean
+}) => {
+  disabled = disabled === true ? true : false
   return (
-    <label className="DialogSwitch">
-      <div className="left">
-        <div className="label">Send Copy to Self</div>
-        <div className="description">Messages in this chat are generated locally by your Delta Chat app. Its makers use it to inform about app updates and problems during usage.</div>
+    <label className={classNames('DialogSwitch', { disabled })}>
+      <div className='left'>
+        <div className='label'>{label}</div>
+        {description && <div className='description'>{description}</div>}
       </div>
-      <div className="right">
-        <label className="delta-switch2 bp3-switch bp3-align-right inactive">
-          <input type="checkbox" checked={checked} onClick={() => setChecked(!checked)}></input>
-          <span className={classNames("delta-switch2-indicator", {checked})}></span>
+      <div className='right'>
+        <label className='delta-switch2 bp3-switch bp3-align-right inactive'>
+          <input
+            type='checkbox'
+            checked={value}
+            onClick={() => {
+              disabled === false && onClick()
+            }}
+            readOnly
+          ></input>
+          <span
+            className={classNames('delta-switch2-indicator', {
+              checked: value,
+              disabled,
+            })}
+          ></span>
         </label>
       </div>
     </label>

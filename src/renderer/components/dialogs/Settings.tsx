@@ -16,6 +16,7 @@ import {
   DeltaDialogBase,
   DeltaDialogHeader,
   DeltaDialogBody,
+  DeltaSwitch2,
 } from './DeltaDialog'
 import SettingsBackup from './Settings-Backup'
 import SettingsAppearance from './Settings-Appearance'
@@ -27,7 +28,7 @@ import SettingsDownloadOnDemand from './Settings-DownloadOnDemand'
 
 const log = getLogger('renderer/dialogs/Settings')
 
-function flipDeltaBoolean(value: string) {
+export function flipDeltaBoolean(value: string) {
   return value === '1' ? '0' : '1'
 }
 
@@ -49,6 +50,20 @@ export function SettingsSelector(props: any) {
     </div>
   )
 }
+
+export type RenderDeltaSwitch2Type = ({
+  key,
+  label,
+  description,
+  disabled,
+  disabledValue,
+}: {
+  key: string
+  label: string
+  description?: string
+  disabled?: boolean
+  disabledValue?: boolean
+}) => void
 
 function DeltaSettingsInput({
   configKey,
@@ -221,6 +236,37 @@ export default function Settings(props: DialogProps) {
     )
   }
 
+  const renderDeltaSwitch2: RenderDeltaSwitch2Type = ({
+    key,
+    label,
+    description,
+    disabled,
+    disabledValue,
+  }: {
+    key: string
+    label: string
+    description?: string
+    disabled?: boolean
+    disabledValue?: boolean
+  }) => {
+    const value =
+      disabled === true && typeof disabledValue !== 'undefined'
+        ? disabledValue
+        : state.settings[key] === '1'
+    console.log('ZZZZ', key, value)
+    return (
+      <DeltaSwitch2
+        label={label}
+        value={value}
+        description={description}
+        onClick={() => {
+          handleDeltaSettingsChange(key, flipDeltaBoolean(state.settings[key]))
+        }}
+        disabled={disabled}
+      />
+    )
+  }
+
   const renderDialogContent = ({ settings, rc }: typeof state) => {
     if (Object.keys(settings || {}).length === 0 || !desktopSettings) {
       return null
@@ -313,7 +359,7 @@ export default function Settings(props: DialogProps) {
           </Card>
           <SettingsImapFolderHandling
             state={state}
-            renderDeltaSwitch={renderDeltaSwitch}
+            renderDeltaSwitch2={renderDeltaSwitch2}
           />
           <SettingsManageKeys />
           <SettingsBackup />

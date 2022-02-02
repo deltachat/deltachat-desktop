@@ -155,7 +155,6 @@
   }
 }
 
-
 .DialogSwitch {
   display: flex;
   flex-direction: row;
@@ -169,13 +168,21 @@
   &:hover {
     background-color: var(--chatListItemBgHover);
   }
-
+  &.disabled {
+    .left {
+      .label,
+      .description {
+        color: rgba(92, 112, 128, 0.6);
+      }
+    }
+  }
   .left {
     display: flex;
     flex-direction: column;
     margin-right: 40px;
-    .label {
+    min-width: 82%;
 
+    .label {
     }
     .description {
       color: var(--chat-list-item-archived-label-border);
@@ -193,7 +200,7 @@
       opacity: 0;
       z-index: -1;
     }
-    .delta-switch2-indicator{
+    .delta-switch2-indicator {
       display: block;
       position: relative;
       height: 16px;
@@ -207,7 +214,7 @@
       cursor: pointer;
 
       transition-delay: 0s;
-      transition-duration: .1s;
+      transition-duration: 0.1s;
       transition-property: background-color;
       transition-timing-function: cubic-bezier(0.4, 1, 0.75, 0.9);
 
@@ -220,6 +227,13 @@
         }
       }
 
+      &.disabled {
+        background: rgba(206, 217, 224, 0.5);
+        &::before {
+          background: rgba(255, 255, 255, 0.8);
+        }
+      }
+
       &::before {
         display: block;
         position: absolute;
@@ -227,7 +241,7 @@
         height: 20px;
         left: 0px;
 
-        content: "";
+        content: '';
 
         margin-bottom: 2px;
         margin-left: -2px;
@@ -239,11 +253,10 @@
         box-shadow: rgb(210 207 207 / 68%) 0px 2px 0px 0px;
 
         transition-delay: 0s;
-        transition-duration: .1s;
+        transition-duration: 0.1s;
         transition-property: left;
         transition-timing-function: cubic-bezier(0.4, 1, 0.75, 0.9);
       }
     }
-
   }
 }
