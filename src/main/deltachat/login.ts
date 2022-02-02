@@ -221,7 +221,6 @@ export function txCoreStrings() {
   strings[C.DC_STR_AUDIO] = tx('audio')
   strings[C.DC_STR_FILE] = tx('file')
   strings[C.DC_STR_ENCRYPTEDMSG] = tx('encrypted_message')
-  strings[C.DC_STR_STATUSLINE] = tx('pref_default_status_text')
   strings[C.DC_STR_MSGGRPNAME] = tx('systemmsg_group_name_changed')
   strings[C.DC_STR_MSGGRPIMGCHANGED] = tx('systemmsg_group_image_changed')
   strings[C.DC_STR_MSGADDMEMBER] = tx('systemmsg_member_added')
