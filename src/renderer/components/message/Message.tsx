@@ -182,6 +182,7 @@ function buildContextMenu(
   }
 
   const showAttachmentOptions = !!message.file && !message.isSetupmessage
+  const showCopyImage = message.viewType === C.DC_MSG_IMAGE
 
   return [
     // Reply
@@ -195,7 +196,14 @@ function buildContextMenu(
         label: tx('reply_privately'),
         action: privateReply.bind(null, message),
       },
-    copy_item,
+    text !== '' && copy_item,
+    // Copy image
+    showCopyImage && {
+      label: tx('menu_copy_image_to_clipboard'),
+      action: () => {
+        runtime.writeClipboardImage(message.file)
+      },
+    },
     // Copy videocall link to clipboard
     message.videochatUrl !== '' && {
       label: tx('menu_copy_link_to_clipboard'),

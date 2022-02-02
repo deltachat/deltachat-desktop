@@ -48,6 +48,7 @@ const contextMenuFactory = (
   message: MessageType,
   openDialog: OpenDialogFunctionType
 ) => {
+  const showCopyImage = message.viewType === C.DC_MSG_IMAGE
   const tx = window.static_translate
   const { id: msgId, viewType } = message
   return [
@@ -58,6 +59,12 @@ const contextMenuFactory = (
     {
       label: tx('save'),
       action: onDownload.bind(null, message),
+    },
+    showCopyImage && {
+      label: tx('menu_copy_image_to_clipboard'),
+      action: () => {
+        runtime.writeClipboardImage(message.file)
+      },
     },
     // {
     //   label: tx('jump_to_message'),
