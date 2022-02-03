@@ -197,6 +197,13 @@ app.on('web-contents-created', (_e, contents) => {
     // prevent new windows from being created when clicking on links
     return { action: 'deny' }
   })
+
+  // Prevent webview tags from being created,
+  // if you need them make sure to read https://www.electronjs.org/docs/latest/tutorial/security#12-verify-webview-options-before-creation
+  // to not indroduce security risks
+  contents.on('will-attach-webview', (event, _webPreferences, _params) => {
+    event.preventDefault()
+  })
 })
 
 import contextMenu from './electron-context-menu'
