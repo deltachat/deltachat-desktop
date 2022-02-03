@@ -124,8 +124,10 @@ export default class DCWebxdc extends SplitOut {
         height: 667,
       }))
 
-      webxdc_windows.once("close", ()=>{
-        webxdc_windows.webContents.session.clearStorageData({"storages":['indexdb', 'localstorage', 'cookies', 'serviceworkers']})
+      webxdc_windows.once('close', () => {
+        webxdc_windows.webContents.session.clearStorageData({
+          storages: ['indexdb', 'localstorage', 'cookies', 'serviceworkers'],
+        })
       })
 
       webxdc_windows.once('closed', () => {
@@ -146,12 +148,12 @@ export default class DCWebxdc extends SplitOut {
         >[1]
       ) => {
         if (permission == 'pointerLock') {
-          log.info("allowed webxdc to lock the pointer")
+          log.info('allowed webxdc to lock the pointer')
           // because games might lock the pointer
           return true
         }
         if (permission == 'fullscreen') {
-          log.info("allowed webxdc to go into fullscreen")
+          log.info('allowed webxdc to go into fullscreen')
           // games might do that too
           return true
         }
@@ -222,5 +224,11 @@ If you think that's a bug and you need that permission, then please open an issu
         }
       }
     )
+  }
+
+  closeAll() {
+    for (const open_app of Object.keys(open_apps)) {
+      open_apps[Number(open_app)].close()
+    }
   }
 }

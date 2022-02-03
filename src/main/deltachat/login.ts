@@ -73,6 +73,7 @@ export default class DCLoginController extends SplitOut {
   }
 
   logout() {
+    this.controller.webxdc.closeAll()
     app.state.saved.lastAccount = null
     app.saveState()
 
@@ -117,6 +118,7 @@ export default class DCLoginController extends SplitOut {
   }
 
   close() {
+    this.controller.webxdc.closeAll()
     this.controller.emit('DESKTOP_CLEAR_ALL_NOTIFICATIONS')
     if (!this.accounts) return
     this.accounts.stopIO()
