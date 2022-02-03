@@ -138,12 +138,7 @@ export default function MessageList({
       ChatStore.reducer.scrolledToLastPage({ id: chatId })
       onScroll(null)
     }, 0)
-  }, [
-    scrollToLastPage,
-    lastKnownScrollHeight,
-    lastKnownScrollTop,
-    onScroll,
-  ])
+  }, [scrollToLastPage, lastKnownScrollHeight, lastKnownScrollTop, onScroll])
 
   useLayoutEffect(() => {
     if (!refComposer.current) {
