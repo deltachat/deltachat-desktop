@@ -675,3 +675,9 @@ div.group-image-wrapper div.group-image-edit-button {
 .chat-list-item {
   height: 42px;
 }
+
+.bp3-menu-item:hover, .bp3-submenu .bp3-popover-target.bp3-popover-open > .bp3-menu-item, 
+.SettingsSelector:hover button, .SettingsSelector:hover .CurrentValue, 
+.SettingsButton:hover button, .bp3-control.bp3-switch:hover {
+  color: white !important;
+}
