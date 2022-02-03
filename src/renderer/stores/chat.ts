@@ -40,8 +40,26 @@ const defaultState: ChatStoreState = {
   countFetchedMessages: 0,
 }
 
+interface ChatStoreLocks {
+  scroll: boolean
+}
+
 class ChatStore extends Store<ChatStoreState> {
-  isLocked = false
+  __locks: ChatStoreLocks = {
+    scroll: false,
+  }
+
+  lockUnlock(key: keyof ChatStoreLocks) {
+    this.__locks[key] = false
+  }
+
+  lockLock(key: keyof ChatStoreLocks) {
+    this.__locks[key] = true
+  }
+
+  lockIsLocked(key: keyof ChatStoreLocks) {
+    return this.__locks[key]
+  }
   guardReducerTriesToAddDuplicatePageKey(pageKeyToAdd: string) {
     const isDuplicatePageKey =
       this.state.messagePages.findIndex(
@@ -65,6 +83,7 @@ class ChatStore extends Store<ChatStoreState> {
   reducer = {
     selectedChat: (payload: Partial<ChatStoreState>) => {
       this.setState(_ => {
+        this.lockUnlock('scroll')
         return {
           ...defaultState,
           ...payload,
@@ -73,6 +92,7 @@ class ChatStore extends Store<ChatStoreState> {
     },
     unselectChat: () => {
       this.setState(_ => {
+        this.lockUnlock('scroll')
         return { ...defaultState }
       }, 'unselectChat')
     },
@@ -161,6 +181,7 @@ class ChatStore extends Store<ChatStoreState> {
           lastKnownScrollTop: -1,
         }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
+        this.lockUnlock('scroll')
         return modifiedState
       }, 'scrolledToLastPage')
     },
@@ -173,6 +194,7 @@ class ChatStore extends Store<ChatStoreState> {
           scrollToBottomIfClose: false,
         }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
+        this.lockUnlock('scroll')
         return modifiedState
       }, 'scrolledToBottom')
     },
@@ -300,20 +322,25 @@ class ChatStore extends Store<ChatStoreState> {
   }
 
   lockedEffect<R>(
-    effect: () => Promise<R>,
+    lockName: keyof ChatStoreLocks,
+    effect: () => Promise<R & boolean>,
     effectName: string
-  ): () => Promise<R | false> {
+  ): () => Promise<any> {
     return async () => {
-      if (this.isLocked === true) {
+      if (this.lockIsLocked(lockName) === true) {
         log.debug(`lockedEffect: ${effectName}: We're locked, returning`)
         return false
       }
 
       log.debug(`lockedEffect: ${effectName}: locking`)
-      this.isLocked = true
+      this.lockLock(lockName)
       const returnValue = await effect()
-      this.isLocked = false
-      log.debug(`lockedEffect: ${effectName}: unlocked`)
+      if (returnValue === false) {
+        log.debug(
+          `lockedEffect: ${effectName}: return value was false, unlocking`
+        )
+        this.lockUnlock(lockName)
+      }
       return returnValue
     }
   }
@@ -386,59 +413,63 @@ class ChatStore extends Store<ChatStoreState> {
       const id = this.state.chat.id
       this.reducer.uiDeleteMessage({ id, msgId })
     },
-    fetchMoreMessages: this.lockedEffect<boolean>(async () => {
-      log.debug(`fetchMoreMessages`)
-      const state = this.state
-      if (state.chat === null) {
-        return false
-      }
-      const id = state.chat.id
-      const oldestFetchedMessageIndex = Math.max(
-        state.oldestFetchedMessageIndex - PAGE_SIZE,
-        0
-      )
-      const lastMessageIndexOnLastPage = state.oldestFetchedMessageIndex
-      if (lastMessageIndexOnLastPage === 0) {
-        log.debug(
-          'FETCH_MORE_MESSAGES: lastMessageIndexOnLastPage is zero, returning'
+    fetchMoreMessages: this.lockedEffect<boolean>(
+      'scroll',
+      async () => {
+        log.debug(`fetchMoreMessages`)
+        const state = this.state
+        if (state.chat === null) {
+          return false
+        }
+        const id = state.chat.id
+        const oldestFetchedMessageIndex = Math.max(
+          state.oldestFetchedMessageIndex - PAGE_SIZE,
+          0
         )
-        return false
-      }
-      const fetchedMessageIds = state.messageIds.slice(
-        oldestFetchedMessageIndex,
-        lastMessageIndexOnLastPage
-      )
-      if (fetchedMessageIds.length === 0) {
-        log.debug(
-          'FETCH_MORE_MESSAGES: fetchedMessageIds.length is zero, returning'
+        const lastMessageIndexOnLastPage = state.oldestFetchedMessageIndex
+        if (lastMessageIndexOnLastPage === 0) {
+          log.debug(
+            'FETCH_MORE_MESSAGES: lastMessageIndexOnLastPage is zero, returning'
+          )
+          return false
+        }
+        const fetchedMessageIds = state.messageIds.slice(
+          oldestFetchedMessageIndex,
+          lastMessageIndexOnLastPage
         )
-        return false
-      }
+        if (fetchedMessageIds.length === 0) {
+          log.debug(
+            'FETCH_MORE_MESSAGES: fetchedMessageIds.length is zero, returning'
+          )
+          return false
+        }
 
-      const fetchedMessages = await DeltaBackend.call(
-        'messageList.getMessages',
-        fetchedMessageIds
-      )
+        const fetchedMessages = await DeltaBackend.call(
+          'messageList.getMessages',
+          fetchedMessageIds
+        )
 
-      const messages = OrderedMap().withMutations(messages => {
-        fetchedMessageIds.forEach(messageId => {
-          messages.set(messageId, fetchedMessages[messageId])
+        const messages = OrderedMap().withMutations(messages => {
+          fetchedMessageIds.forEach(messageId => {
+            messages.set(messageId, fetchedMessages[messageId])
+          })
+        }) as OrderedMap<number, MessageType | null>
+
+        const fetchedMessagePage: MessagePage = {
+          pageKey: calculatePageKey(messages),
+          messages,
+        }
+
+        chatStore.reducer.fetchedMessagePage({
+          id,
+          fetchedMessagePage,
+          oldestFetchedMessageIndex,
+          countFetchedMessages: fetchedMessageIds.length,
         })
-      }) as OrderedMap<number, MessageType | null>
-
-      const fetchedMessagePage: MessagePage = {
-        pageKey: calculatePageKey(messages),
-        messages,
-      }
-
-      chatStore.reducer.fetchedMessagePage({
-        id,
-        fetchedMessagePage,
-        oldestFetchedMessageIndex,
-        countFetchedMessages: fetchedMessageIds.length,
-      })
-      return true
-    }, 'fetchMoreMessages'),
+        return true
+      },
+      'fetchMoreMessages'
+    ),
     mute: async (payload: { chatId: number; muteDuration: number }) => {
       if (payload.chatId !== chatStore.state.chat?.id) return
       if (
