@@ -23,9 +23,9 @@ export default function FullscreenMedia(props: {
   const { onClose } = props
 
   const [msg, setMsg] = useState(props.msg)
-  const resetImageZoom = useRef<() => void | null>(
+  const resetImageZoom = useRef<(() => void) | null>(
     null
-  ) as React.MutableRefObject<() => void | null>
+  ) as React.MutableRefObject<(() => void) | null>
   const previousNextMessageId = useRef<[number, number]>([0, 0])
   const [showPreviousNextMessageButtons, setShowPrevNextMsgBtns] = useState({
     previous: false,
