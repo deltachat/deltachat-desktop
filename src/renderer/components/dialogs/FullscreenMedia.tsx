@@ -40,6 +40,10 @@ export default function FullscreenMedia(props: {
         runtime.writeClipboardImage(file)
       },
     },
+    {
+      label: tx('save-as'),
+      action: onDownload.bind(null, msg),
+    },
   ])
 
   let elm = null

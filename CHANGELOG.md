@@ -14,6 +14,7 @@
 - Switch from tape to mocha for unit tests
 - Don't update Timestamps if they are older then one week
 - Add image zoom for full screen views
+- Copying image now possible from gallery and chat view
 
 ### Fixed
 - Fix overflow in long links inside quotes @naomiceron #2467
