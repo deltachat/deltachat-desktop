@@ -37,6 +37,8 @@ const {
  * Offers an abstraction Layer to make it easier to make browser client in the future
  */
 interface Runtime {
+  openWebxdc(msgId: number): void
+  getWebxdcIconURL(msgId: number): string
   /**
    * initializes runtime stuff
    * - sets the LogHandler
@@ -70,6 +72,12 @@ interface Runtime {
 }
 
 class Browser implements Runtime {
+  getWebxdcIconURL(_msgId: number): string {
+    throw new Error('Method not implemented.')
+  }
+  openWebxdc(_msgId: number): void {
+    throw new Error('Method not implemented.')
+  }
   openPath(_path: string): Promise<string> {
     throw new Error('Method not implemented.')
   }
@@ -124,6 +132,12 @@ class Browser implements Runtime {
   }
 }
 class Electron implements Runtime {
+  getWebxdcIconURL(msgId: number): string {
+    return `webxdc-icon:${msgId}`
+  }
+  openWebxdc(msgId: number): void {
+    ipcBackend.invoke('open-webxdc', msgId)
+  }
   openPath(path: string): Promise<string> {
     return openPath(path)
   }

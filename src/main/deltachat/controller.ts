@@ -29,6 +29,7 @@ import { stat, rename, readdir } from 'fs/promises'
 import { getConfigPath } from '../application-constants'
 import { rmdir } from 'fs/promises'
 import { rm } from 'fs/promises'
+import DCWebxdc from './webxdc'
 
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat')
@@ -245,6 +246,7 @@ export default class DeltaChatController extends EventEmitter {
   readonly context = new DCContext(this)
   readonly burnerAccounts = new DCBurnerAccounts(this)
   readonly extras = new Extras(this)
+  readonly webxdc = new DCWebxdc(this)
 
   /**
    * @param {string} methodName

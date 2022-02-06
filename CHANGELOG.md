@@ -4,8 +4,11 @@
 
 ### Added
 - It's now possible to add new group members by their email addresses
+- Experimental support for webxdc
 
 ### Changed
+- Update deltachat-node to `1.75.1`
+- Update electron to `13.6.8`
 - Update translations (3.1.2022)
 - Make disabled "delete profile image" button more readable in dark themes @ejgonzalez17 #2478
 - Update inApp help (3.1.2022)
