@@ -40,6 +40,15 @@ const defaultState: ChatStoreState = {
   countFetchedMessages: 0,
 }
 
+function getLastKnownScrollPosition() {
+  //@ts-ignore
+  const { scrollHeight, scrollTop } = document.querySelector('#message-list')
+  return {
+    lastKnownScrollHeight: scrollHeight,
+    lastKnownScrollTop: scrollTop,
+  }
+}
+
 interface ChatStoreLocks {
   scroll: boolean
 }
@@ -113,18 +122,18 @@ class ChatStore extends Store<ChatStoreState> {
       oldestFetchedMessageIndex: number
     }) => {
       this.setState(state => {
-        //@ts-ignore
-        const { scrollHeight, scrollTop } = document.querySelector(
-          '#message-list'
-        )
+        const {
+          lastKnownScrollHeight,
+          lastKnownScrollTop,
+        } = getLastKnownScrollPosition()
 
         const modifiedState = {
           ...state,
           messagePages: [payload.fetchedMessagePage, ...state.messagePages],
           oldestFetchedMessageIndex: payload.oldestFetchedMessageIndex,
           scrollToLastPage: true,
-          lastKnownScrollHeight: scrollHeight,
-          lastKnownScrollTop: scrollTop,
+          lastKnownScrollHeight,
+          lastKnownScrollTop,
           countFetchedMessages: payload.countFetchedMessages,
         }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
@@ -151,11 +160,17 @@ class ChatStore extends Store<ChatStoreState> {
           pageKey: incomingPageKey,
           messages,
         }
+        const {
+          lastKnownScrollHeight,
+          lastKnownScrollTop,
+        } = getLastKnownScrollPosition()
 
         const modifiedState = {
           ...state,
           messageIds: payload.messageIds,
           messagePages: [...state.messagePages, incomingMessagePage],
+          lastKnownScrollHeight,
+          lastKnownScrollTop,
           scrollToBottomIfClose: true,
         }
 
