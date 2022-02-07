@@ -104,12 +104,12 @@ export default function MessageList({
 
     const shouldScrollToBottom = scrollBottom >= scrollHeight - 7
 
-    /*log.debug(
+    log.debug(
       'scrollToBottomIfClose',
       scrollBottom,
       scrollHeight,
       shouldScrollToBottom
-    )*/
+    )
 
     if (shouldScrollToBottom) {
       messageListRef.current.scrollTop = messageListRef.current.scrollHeight
