@@ -31,18 +31,21 @@ export default function MessageList({
     scrollTo,
     scrollToBottom,
     scrollToBottomIfClose,
-    scrollToLastPage,
     lastKnownScrollHeight,
-    lastKnownScrollTop,
   } = useChatStore()
   const messageListRef = useRef<HTMLDivElement | null>(null)
 
-  const [fetchMore] = useDebouncedCallback(
+  const [fetchMoreTop] = useDebouncedCallback(
     async () => {
-      const isFetchingMore = await ChatStore.effect.fetchMoreMessages()
-      if (isFetchingMore === false) {
-        // Some we couldn't fetch more messages, so unlock again
-      }
+      await ChatStore.effect.fetchMoreMessagesTop()
+    },
+    30,
+    { leading: true }
+  )
+
+  const [fetchMoreBottom] = useDebouncedCallback(
+    async () => {
+      await ChatStore.effect.fetchMoreMessagesBottom()
     },
     30,
     { leading: true }
@@ -54,14 +57,27 @@ export default function MessageList({
         return
       }
       if (ChatStore.lockIsLocked('scroll') === true) return
-      if (messageListRef.current.scrollTop > 200) return
-      log.debug('Scrolled to top, fetching more messsages!')
-      setTimeout(() => fetchMore(), 0)
-      Event?.preventDefault()
-      Event?.stopPropagation()
-      return false
+      const distanceToTop = messageListRef.current.scrollTop
+      const distanceToBottom =
+        messageListRef.current.scrollHeight -
+        messageListRef.current.scrollTop -
+        messageListRef.current.clientHeight
+      //console.log('onScroll', distanceToTop, distanceToBottom)
+      if (distanceToTop < 200) {
+        log.debug('Scrolled to top, fetching more messsages!')
+        setTimeout(() => fetchMoreTop(), 0)
+        Event?.preventDefault()
+        Event?.stopPropagation()
+        return false
+      } else if (distanceToBottom < 200) {
+        log.debug('Scrolled to bottom, fetching more messsages!')
+        setTimeout(() => fetchMoreBottom(), 0)
+        Event?.preventDefault()
+        Event?.stopPropagation()
+        return false
+      }
     },
-    [fetchMore]
+    [fetchMoreTop, fetchMoreBottom]
   )
 
   useLayoutEffect(() => {
@@ -85,10 +101,14 @@ export default function MessageList({
       log.debug('scrollTo: scrollToMessage: ' + scrollTo.msgId)
 
       setTimeout(() => {
-        const domElement = document.querySelector(`.message[id="${scrollTo.msgId.toString()}"]`)
+        const domElement = document.querySelector(
+          `.message[id="${scrollTo.msgId.toString()}"]`
+        )
 
         if (!domElement) {
-          log.debug('scrollTo: scrollToMessage, couldnt find matching message in dom, returning')
+          log.debug(
+            'scrollTo: scrollToMessage, couldnt find matching message in dom, returning'
+          )
           return
         }
         console.debug(domElement)
@@ -112,10 +132,29 @@ export default function MessageList({
         // Try fetching more messages if needed
         onScroll(null)
       }, 0)
-      return 
-    }
+      return
+    } else if (scrollTo.type === 'scrollToPosition') {
+      log.debug(
+        'scrollTo type: scrollToPosition; lastKnownScrollHeight: ' +
+          scrollTo.lastKnownScrollHeight +
+          '; lastKnownScrollTop: ' +
+          scrollTo.lastKnownScrollTop
+      )
 
-  }, [onScroll, scrollTo, lockFetchMore])
+      if (scrollTo.appendedOn === 'top') {
+        messageListRef.current.scrollTop =
+          messageListRef.current.scrollHeight -
+          scrollTo.lastKnownScrollHeight +
+          scrollTo.lastKnownScrollTop
+      } else {
+        messageListRef.current.scrollTop = scrollTo.lastKnownScrollTop
+      }
+      setTimeout(() => {
+        ChatStore.reducer.unlockScroll({ id: chatId })
+        onScroll(null)
+      }, 0)
+    }
+  }, [onScroll, scrollTo])
 
   useLayoutEffect(() => {
     if (!ChatStore.state.chat) {
@@ -173,26 +212,6 @@ export default function MessageList({
       ChatStore.reducer.scrolledToBottom({ id: chatId })
     }, 0)
   }, [scrollToBottomIfClose, lastKnownScrollHeight])
-
-  useLayoutEffect(() => {
-    if (!ChatStore.state.chat) {
-      return
-    }
-    const chatId = ChatStore.state.chat.id
-    if (!messageListRef.current) {
-      return
-    }
-    if (scrollToLastPage === false) return
-    // restore old scroll position after new messages are rendered
-    messageListRef.current.scrollTop =
-      messageListRef.current.scrollHeight -
-      lastKnownScrollHeight +
-      lastKnownScrollTop
-    setTimeout(() => {
-      ChatStore.reducer.scrolledToLastPage({ id: chatId })
-      onScroll(null)
-    }, 0)
-  }, [scrollToLastPage, lastKnownScrollHeight, lastKnownScrollTop, onScroll])
 
   useLayoutEffect(() => {
     if (!refComposer.current) {
