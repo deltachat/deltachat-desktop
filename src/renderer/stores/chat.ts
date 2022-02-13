@@ -613,7 +613,7 @@ class ChatStore extends Store<ChatStoreState> {
         )
         if (fetchedMessageIds.length === 0) {
           log.debug(
-            'FETCH_MORE_MESSAGES: fetchedMessageIds.length is zero, returning'
+            'fetchMoreMessagesTop: fetchedMessageIds.length is zero, returning'
           )
           return false
         }
@@ -653,24 +653,29 @@ class ChatStore extends Store<ChatStoreState> {
           return false
         }
         const id = state.chat.id
-        const newestFetchedMessageIndex = Math.min(
-          state.newestFetchedMessageIndex - PAGE_SIZE,
+
+        const newestFetchedMessageIndex = state.newestFetchedMessageIndex
+        const newNewestFetchedMessageIndex = Math.min(
+          newestFetchedMessageIndex + PAGE_SIZE,
           state.messageIds.length - 1
         )
-
-        const lastMessageIndexONewestPage = state.newestFetchedMessageIndex
-        if (lastMessageIndexONewestPage === state.messageIds.length - 1) {
+        if (newestFetchedMessageIndex === state.messageIds.length - 1) {
           log.debug('fetchMoreMessagesBottom: no more messages, returning')
           return false
         }
 
         const fetchedMessageIds = state.messageIds.slice(
           newestFetchedMessageIndex,
-          lastMessageIndexONewestPage
+          newNewestFetchedMessageIndex
         )
         if (fetchedMessageIds.length === 0) {
           log.debug(
-            'fetchMoreMessagesBottom: fetchedMessageIds.length is zero, returning'
+            'fetchMoreMessagesBottom: fetchedMessageIds.length is zero, returning',
+            JSON.stringify({
+              newestFetchedMessageIndex,
+              newNewestFetchedMessageIndex,
+              messageIds: state.messageIds,
+            })
           )
           return false
         }
@@ -694,7 +699,7 @@ class ChatStore extends Store<ChatStoreState> {
         chatStore.reducer.appendMessagePageBottom({
           id,
           messagePage,
-          newestFetchedMessageIndex,
+          newestFetchedMessageIndex: newNewestFetchedMessageIndex,
           countFetchedMessages: fetchedMessageIds.length,
         })
         return true
@@ -718,20 +723,16 @@ class ChatStore extends Store<ChatStoreState> {
       message: sendMessageParams
     }) => {
       if (payload.chatId !== chatStore.state.chat?.id) return
-      const messageObj = await DeltaBackend.call(
+      const [messageId, message] = await DeltaBackend.call(
         'messageList.sendMessage',
         payload.chatId,
         payload.message
       )
 
       // Workaround for failed messages
-      if (messageObj[0] === 0) return
-      if (messageObj[1] === null) return
-      chatStore.reducer.messageSent({
-        messageId: messageObj[0],
-        message: messageObj[1],
-        id: payload.chatId,
-      })
+      if (messageId === 0) return
+      if (message === null) return
+      chatStore.effect.jumpToMessage(messageId)
     },
   }
 
