@@ -253,7 +253,6 @@ export default function Settings(props: DialogProps) {
       disabled === true && typeof disabledValue !== 'undefined'
         ? disabledValue
         : state.settings[key] === '1'
-    console.log('ZZZZ', key, value)
     return (
       <DeltaSwitch2
         label={label}

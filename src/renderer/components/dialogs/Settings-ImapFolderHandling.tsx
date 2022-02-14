@@ -1,11 +1,7 @@
 import React from 'react'
 import { Elevation, H5, Card } from '@blueprintjs/core'
 
-import { getLogger } from '../../../shared/logger'
-import { flipDeltaBoolean, SettingsState } from './Settings'
-import { DeltaSwitch2 } from './DeltaDialog'
-
-const log = getLogger('renderer/dialogs/Settings')
+import { SettingsState, RenderDeltaSwitch2Type } from './Settings'
 
 export default function SettingsImapFolderHandling({
   state,
@@ -17,7 +13,6 @@ export default function SettingsImapFolderHandling({
   const tx = window.static_translate
   const disableIfOnlyFetchMvBoxIsTrue = state.settings.only_fetch_mvbox === '1'
 
-  console.debug('SETTINGS_IMAP_FOLDER_HANDLING RENDER', state)
   return (
     <>
       <Card elevation={Elevation.ONE}>
