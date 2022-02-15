@@ -666,7 +666,7 @@ class ChatStore extends Store<ChatStoreState> {
 
         const fetchedMessageIds = state.messageIds.slice(
           newestFetchedMessageIndex,
-          newNewestFetchedMessageIndex
+          newNewestFetchedMessageIndex + 1
         )
         if (fetchedMessageIds.length === 0) {
           log.debug(

@@ -367,7 +367,7 @@ const Message = (props: {
         {(downloadState == MessageDownloadState.Failure ||
           downloadState === MessageDownloadState.Available) && (
           <button onClick={downloadFullMessage.bind(null, message.id)}>
-            {tx('Download')}
+            {tx('download')}
           </button>
         )}
       </div>
