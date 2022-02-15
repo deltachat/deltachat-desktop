@@ -11,10 +11,12 @@ import { DialogProps } from './DialogController'
 import SettingsAutodelete from './Settings-Autodelete'
 import SettingsManageKeys from './Settings-ManageKeys'
 import SettingsEncryption from './Settings-Encryption'
+import SettingsImapFolderHandling from './Settings-ImapFolderHandling'
 import {
   DeltaDialogBase,
   DeltaDialogHeader,
   DeltaDialogBody,
+  DeltaSwitch2,
 } from './DeltaDialog'
 import SettingsBackup from './Settings-Backup'
 import SettingsAppearance from './Settings-Appearance'
@@ -26,7 +28,7 @@ import SettingsDownloadOnDemand from './Settings-DownloadOnDemand'
 
 const log = getLogger('renderer/dialogs/Settings')
 
-function flipDeltaBoolean(value: string) {
+export function flipDeltaBoolean(value: string) {
   return value === '1' ? '0' : '1'
 }
 
@@ -48,6 +50,20 @@ export function SettingsSelector(props: any) {
     </div>
   )
 }
+
+export type RenderDeltaSwitch2Type = ({
+  key,
+  label,
+  description,
+  disabled,
+  disabledValue,
+}: {
+  key: string
+  label: string
+  description?: string
+  disabled?: boolean
+  disabledValue?: boolean
+}) => void
 
 function DeltaSettingsInput({
   configKey,
@@ -95,6 +111,14 @@ function DeltaSettingsInput({
   )
 }
 
+export interface SettingsState {
+  showSettingsDialog: boolean
+  settings: any
+  show: string
+  selfContact: todo
+  rc: RC_Config
+}
+
 export default function Settings(props: DialogProps) {
   useEffect(() => {
     if (window.__settingsOpened) {
@@ -108,13 +132,7 @@ export default function Settings(props: DialogProps) {
     }
   })
 
-  const [state, _setState] = useState<{
-    showSettingsDialog: boolean
-    settings: any
-    show: string
-    selfContact: todo
-    rc: RC_Config
-  }>({
+  const [state, _setState] = useState<SettingsState>({
     showSettingsDialog: false,
     settings: {},
     show: 'main',
@@ -196,7 +214,13 @@ export default function Settings(props: DialogProps) {
     )
   }
 
-  const renderDeltaSwitch = (configKey: string, label: string) => {
+  const renderDeltaSwitch = (
+    configKey: string,
+    label: string,
+    disabled?: boolean
+  ) => {
+    disabled = disabled === true ? true : false
+
     const configValue = state.settings[configKey]
     return (
       <Switch
@@ -207,6 +231,37 @@ export default function Settings(props: DialogProps) {
           handleDeltaSettingsChange(configKey, flipDeltaBoolean(configValue))
         }
         alignIndicator='right'
+        disabled={disabled}
+      />
+    )
+  }
+
+  const renderDeltaSwitch2: RenderDeltaSwitch2Type = ({
+    key,
+    label,
+    description,
+    disabled,
+    disabledValue,
+  }: {
+    key: string
+    label: string
+    description?: string
+    disabled?: boolean
+    disabledValue?: boolean
+  }) => {
+    const value =
+      disabled === true && typeof disabledValue !== 'undefined'
+        ? disabledValue
+        : state.settings[key] === '1'
+    return (
+      <DeltaSwitch2
+        label={label}
+        value={value}
+        description={description}
+        onClick={() => {
+          handleDeltaSettingsChange(key, flipDeltaBoolean(state.settings[key]))
+        }}
+        disabled={disabled}
       />
     )
   }
@@ -300,13 +355,11 @@ export default function Settings(props: DialogProps) {
               </>
             )}
             <br />
-            <H5>{tx('pref_imap_folder_handling')}</H5>
-            {renderDeltaSwitch('inbox_watch', tx('pref_watch_inbox_folder'))}
-            {renderDeltaSwitch('sentbox_watch', tx('pref_watch_sent_folder'))}
-            {renderDeltaSwitch('mvbox_watch', tx('pref_watch_mvbox_folder'))}
-            {renderDeltaSwitch('bcc_self', tx('pref_send_copy_to_self'))}
-            {renderDeltaSwitch('mvbox_move', tx('pref_auto_folder_moves'))}
           </Card>
+          <SettingsImapFolderHandling
+            state={state}
+            renderDeltaSwitch2={renderDeltaSwitch2}
+          />
           <SettingsManageKeys />
           <SettingsBackup />
         </DeltaDialogBody>
@@ -317,9 +370,7 @@ export default function Settings(props: DialogProps) {
   useEffect(() => {
     const loadSettings = async () => {
       const settings = await DeltaBackend.call('settings.getConfigFor', [
-        'inbox_watch',
         'sentbox_watch',
-        'mvbox_watch',
         'mvbox_move',
         'e2ee_enabled',
         'addr',
@@ -332,6 +383,7 @@ export default function Settings(props: DialogProps) {
         'delete_server_after',
         'webrtc_instance',
         'download_limit',
+        'only_fetch_mvbox',
       ])
       const rc = await runtime.getRC_Config()
       setState({ settings, rc })

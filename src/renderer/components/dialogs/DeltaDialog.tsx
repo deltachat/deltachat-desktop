@@ -407,3 +407,45 @@ export function DeltaDialogCloseFooter({ onClose }: { onClose: () => any }) {
     </DeltaDialogFooter>
   )
 }
+
+export const DeltaSwitch2 = ({
+  label,
+  description,
+  value,
+  onClick,
+  disabled,
+}: {
+  label: string
+  value: boolean
+  description?: string
+  onClick: () => void
+  disabled?: boolean
+}) => {
+  disabled = disabled === true ? true : false
+  return (
+    <label className={classNames('DialogSwitch', { disabled })}>
+      <div className='left'>
+        <div className='label'>{label}</div>
+        {description && <div className='description'>{description}</div>}
+      </div>
+      <div className='right'>
+        <label className='delta-switch2 bp3-switch bp3-align-right inactive'>
+          <input
+            type='checkbox'
+            checked={value}
+            onClick={() => {
+              disabled === false && onClick()
+            }}
+            readOnly
+          ></input>
+          <span
+            className={classNames('delta-switch2-indicator', {
+              checked: value,
+              disabled,
+            })}
+          ></span>
+        </label>
+      </div>
+    </label>
+  )
+}

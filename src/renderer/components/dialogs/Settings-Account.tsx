@@ -65,10 +65,9 @@ export function SettingsAccountInner(onClose: () => void) {
       [
         'addr',
         'mail_pw',
-        'inbox_watch',
         'sentbox_watch',
-        'mvbox_watch',
         'mvbox_move',
+        'only_fetch_mvbox',
         'e2ee_enabled',
         'mail_server',
         'mail_user',
