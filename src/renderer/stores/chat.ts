@@ -14,7 +14,7 @@ export interface MessagePage {
   messages: OrderedMap<number, MessageType | null>
 }
 
-type ScrollTo = ScrollToMessage | ScrollToPosition | null
+type ScrollTo = ScrollToMessage | ScrollToPosition | ScrollToLastKnownPosition | null
 
 interface ScrollToMessage {
   type: 'scrollToMessage'
@@ -22,11 +22,16 @@ interface ScrollToMessage {
   highlight: boolean
 }
 
-interface ScrollToPosition {
-  type: 'scrollToPosition'
+interface ScrollToLastKnownPosition {
+  type: 'scrollToLastKnownPosition'
   lastKnownScrollHeight: number
   lastKnownScrollTop: number
   appendedOn: 'top' | 'bottom'
+}
+
+interface ScrollToPosition {
+  type: 'scrollToPosition'
+  scrollTop: number
 }
 
 export interface ChatStoreState {
@@ -67,21 +72,31 @@ function getLastKnownScrollPosition(): {
   }
 }
 
-async function messagePageFromMessageIds(messageIds: number[]) {
+async function messagePagesFromMessageIds(messageIds: number[]) {
   const _messages = await DeltaBackend.call(
     'messageList.getMessages',
     messageIds
   )
 
-  const messages = OrderedMap().withMutations(messagePages => {
-    _messages.forEach(([messageId, message]) => {
-      messagePages.set(messageId, message)
-    })
-  }) as OrderedMap<number, MessageType | null>
+  let messagePages = []
 
-  const messagePages = {
-    pageKey: calculatePageKey(messages),
-    messages,
+  let currentIndex = 0
+  while (currentIndex < messageIds.length) {
+    const messages = OrderedMap().withMutations(messagePages => {
+      for (let i = currentIndex; i < currentIndex + PAGE_SIZE; i++) {
+        if (i >= _messages.length) break
+        let [messageId, message] = _messages[i]
+        messagePages.set(messageId, message)
+      }
+    }) as OrderedMap<number, MessageType | null>
+    currentIndex = currentIndex + PAGE_SIZE
+
+    const messagePage = {
+      pageKey: calculatePageKey(messages),
+      messages,
+    }
+
+    messagePages.push(messagePage)
   }
 
   return messagePages
@@ -140,6 +155,28 @@ class ChatStore extends Store<ChatStoreState> {
         }
       }, 'selectedChat')
     },
+    refresh: (messageIds: number[], messagePages: MessagePage[], newestFetchedMessageIndex: number, oldestFetchedMessageIndex: number) => {
+      this.setState(state => {
+        const {
+          lastKnownScrollTop,
+        } = getLastKnownScrollPosition()
+
+        const scrollTo: ScrollToPosition = {
+          type: 'scrollToPosition',
+          scrollTop: lastKnownScrollTop
+        }
+
+        return {
+          ...state,
+          messageIds,
+          messagePages,
+          scrollTo,
+          countFetchedMessages: messageIds.length,
+          newestFetchedMessageIndex,
+          oldestFetchedMessageIndex
+        }
+      }, 'refresh')
+    },
     unselectChat: () => {
       this.setState(_ => {
         this.lockUnlock('scroll')
@@ -168,8 +205,8 @@ class ChatStore extends Store<ChatStoreState> {
           lastKnownScrollTop,
         } = getLastKnownScrollPosition()
 
-        const scrollTo: ScrollToPosition = {
-          type: 'scrollToPosition',
+        const scrollTo: ScrollToLastKnownPosition = {
+          type: 'scrollToLastKnownPosition',
           lastKnownScrollHeight,
           lastKnownScrollTop,
           appendedOn: 'top',
@@ -204,8 +241,8 @@ class ChatStore extends Store<ChatStoreState> {
           lastKnownScrollTop,
         } = getLastKnownScrollPosition()
 
-        const scrollTo: ScrollToPosition = {
-          type: 'scrollToPosition',
+        const scrollTo: ScrollToLastKnownPosition = {
+          type: 'scrollToLastKnownPosition',
           lastKnownScrollTop,
           lastKnownScrollHeight,
           appendedOn: 'bottom',
@@ -275,7 +312,7 @@ class ChatStore extends Store<ChatStoreState> {
       }, 'fetchedIncomingMessages')
     },
     unlockScroll: (payload: { id: number }) => {
-      log.debug('scrolledToLastPage')
+      log.debug('unlockScroll')
       this.setState(state => {
         const modifiedState: ChatStoreState = {
           ...state,
@@ -283,9 +320,9 @@ class ChatStore extends Store<ChatStoreState> {
           lastKnownScrollHeight: -1,
         }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
-        this.lockUnlock('scroll')
+        setTimeout(() => this.lockUnlock('scroll'), 0)
         return modifiedState
-      }, 'scrolledToLastPage')
+      }, 'unlockScroll')
     },
     scrolledToBottom: (payload: { id: number }) => {
       log.debug('scrolledToBottom')
@@ -426,12 +463,12 @@ class ChatStore extends Store<ChatStoreState> {
     },
   }
 
-  lockedEffect<R>(
+  lockedEffect<T extends Function>(
     lockName: keyof ChatStoreLocks,
-    effect: () => Promise<R & boolean>,
+    effect: T,
     effectName: string
-  ): () => Promise<any> {
-    return async () => {
+  ): T {
+    const fn: T = (async (...args: any) => {
       if (this.lockIsLocked(lockName) === true) {
         log.debug(`lockedEffect: ${effectName}: We're locked, returning`)
         return false
@@ -439,7 +476,7 @@ class ChatStore extends Store<ChatStoreState> {
 
       log.debug(`lockedEffect: ${effectName}: locking`)
       this.lockLock(lockName)
-      const returnValue = await effect()
+      const returnValue = await effect(...args)
       if (returnValue === false) {
         log.debug(
           `lockedEffect: ${effectName}: return value was false, unlocking`
@@ -447,7 +484,8 @@ class ChatStore extends Store<ChatStoreState> {
         this.lockUnlock(lockName)
       }
       return returnValue
-    }
+    }) as unknown as T 
+    return fn
   }
 
   effect = {
@@ -485,7 +523,7 @@ class ChatStore extends Store<ChatStoreState> {
           oldestFetchedMessageIndex,
           newestFetchedMessageIndex + 1
         )
-        messagePages = [await messagePageFromMessageIds(messageIdsToFetch)]
+        messagePages = await messagePagesFromMessageIds(messageIdsToFetch)
       }
 
       chatStore.reducer.selectedChat({
@@ -575,7 +613,7 @@ class ChatStore extends Store<ChatStoreState> {
           newestFetchedMessageIndex + 1
         )
 
-        messagePages = [await messagePageFromMessageIds(messageIdsToFetch)]
+        messagePages = await messagePagesFromMessageIds(messageIdsToFetch)
       }
 
       chatStore.reducer.selectedChat({
@@ -604,7 +642,7 @@ class ChatStore extends Store<ChatStoreState> {
       const id = this.state.chat.id
       this.reducer.uiDeleteMessage({ id, msgId })
     },
-    fetchMoreMessagesTop: this.lockedEffect<boolean>(
+    fetchMoreMessagesTop: this.lockedEffect<() => Promise<boolean>>(
       'scroll',
       async () => {
         log.debug(`fetchMoreMessagesTop`)
@@ -635,9 +673,14 @@ class ChatStore extends Store<ChatStoreState> {
           return false
         }
 
-        const messagePage: MessagePage = await messagePageFromMessageIds(
+        const messagePages: MessagePage[] = await messagePagesFromMessageIds(
           fetchedMessageIds
         )
+
+        if (messagePages.length === 0) {
+          throw new Error('messagePages.length is zero, this should not happen')
+        }
+        const messagePage = messagePages[0]
 
         chatStore.reducer.appendMessagePageTop({
           id,
@@ -649,7 +692,7 @@ class ChatStore extends Store<ChatStoreState> {
       },
       'fetchMoreMessagesTop'
     ),
-    fetchMoreMessagesBottom: this.lockedEffect<boolean>(
+    fetchMoreMessagesBottom: this.lockedEffect<() => Promise<boolean>>(
       'scroll',
       async () => {
         log.debug(`fetchMoreMessagesBottom`)
@@ -685,9 +728,14 @@ class ChatStore extends Store<ChatStoreState> {
           return false
         }
 
-        const messagePage: MessagePage = await messagePageFromMessageIds(
+        const messagePages: MessagePage[] = await messagePagesFromMessageIds(
           fetchedMessageIds
         )
+
+        if (messagePages.length === 0) {
+          throw new Error('MessagePage length is zero, this should not happen')
+        }
+        const messagePage = messagePages[0]
 
         chatStore.reducer.appendMessagePageBottom({
           id,
@@ -699,6 +747,26 @@ class ChatStore extends Store<ChatStoreState> {
       },
       'fetchMoreMessagesBottom'
     ),
+    refresh: this.lockedEffect('scroll', async (payload: { chatId: number }) => {
+      log.debug(`refresh`)
+      const state = this.state
+      if (state.chat === null || state.chat.id !== payload.chatId) {
+        return false
+      }
+      const chatId = payload.chatId
+      const messageIds = <number[]>(
+        await DeltaBackend.call('messageList.getMessageIds', chatId)
+      )
+      let { newestFetchedMessageIndex, oldestFetchedMessageIndex } = state
+      newestFetchedMessageIndex = Math.min(newestFetchedMessageIndex, messageIds.length - 1)
+      oldestFetchedMessageIndex = Math.max(oldestFetchedMessageIndex, 0)
+
+      const messagePages = await messagePagesFromMessageIds(messageIds.slice(oldestFetchedMessageIndex, newestFetchedMessageIndex + 1))
+
+      this.reducer.refresh(messageIds, messagePages, newestFetchedMessageIndex, oldestFetchedMessageIndex)
+      return true
+
+    }, 'refresh'),
     mute: async (payload: { chatId: number; muteDuration: number }) => {
       if (payload.chatId !== chatStore.state.chat?.id) return
       if (
@@ -851,15 +919,7 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
     return
   }
   if (id === 0 && messageId === 0) {
-    const messageIds = await DeltaBackend.call(
-      'messageList.getMessageIds',
-      chatId
-    )
-
-    chatStore.reducer.setMessageIds({
-      id: chatId,
-      messageIds,
-    })
+    chatStore.effect.refresh({chatId})
     return
   }
   if (id !== chatStore.state.chat?.id) return

@@ -14,6 +14,7 @@ import { useTranslationFunction } from '../../contexts'
 
 enum DisappearingMessageDuration {
   OFF = Timespans.ZERO_SECONDS,
+  THREE_SECONDS = 3,
   THIRTY_SECONDS = Timespans.THIRTY_SECONDS,
   ONE_MINUTE = Timespans.ONE_MINUTE_IN_SECONDS,
   ONE_HOUR = Timespans.ONE_HOUR_IN_SECONDS,
@@ -47,6 +48,11 @@ function SelectDisappearingMessageDuration({
         key={'eph-0'}
         label={tx('off')}
         value={String(DisappearingMessageDuration.OFF)}
+      />
+      <Radio
+        key={'eph-1'}
+        label={'After 3 seconds'}
+        value={String(DisappearingMessageDuration.THREE_SECONDS)}
       />
       <Radio
         key={'eph-1'}
