@@ -100,20 +100,19 @@ export default function MessageList({
     if (scrollTo.type === 'scrollToMessage') {
       log.debug('scrollTo: scrollToMessage: ' + scrollTo.msgId)
 
-      setTimeout(() => {
-        const domElement = document.querySelector(
-          `.message[id="${scrollTo.msgId.toString()}"]`
+      const domElement = document.querySelector(
+        `.message[id="${scrollTo.msgId.toString()}"]`
+      )
+
+      if (!domElement) {
+        log.debug(
+          'scrollTo: scrollToMessage, couldnt find matching message in dom, returning'
         )
+        return
+      }
+      domElement.scrollIntoView()
 
-        if (!domElement) {
-          log.debug(
-            'scrollTo: scrollToMessage, couldnt find matching message in dom, returning'
-          )
-          return
-        }
-        console.debug(domElement)
-        domElement.scrollIntoView()
-
+      if (scrollTo.highlight === true) {
         // Trigger highlight animation
         const parentElement = domElement.parentElement
         if (parentElement !== null) {
@@ -126,12 +125,12 @@ export default function MessageList({
             parentElement.style.animation = null
           }, 0)
         }
-        //
-        //ChatStore.reducer.scrolledToBottom({ id: chatId })
-        //lockFetchMore.setLock(false)
-        // Try fetching more messages if needed
-        onScroll(null)
-      }, 0)
+      }
+      //
+      //ChatStore.reducer.scrolledToBottom({ id: chatId })
+      //lockFetchMore.setLock(false)
+      // Try fetching more messages if needed
+      onScroll(null)
       return
     } else if (scrollTo.type === 'scrollToPosition') {
       log.debug(

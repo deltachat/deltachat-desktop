@@ -19,6 +19,7 @@ type ScrollTo = ScrollToMessage | ScrollToPosition | null
 interface ScrollToMessage {
   type: 'scrollToMessage'
   msgId: number
+  highlight: boolean
 }
 
 interface ScrollToPosition {
@@ -503,7 +504,8 @@ class ChatStore extends Store<ChatStoreState> {
       runtime.updateBadge()
       saveLastChatId(chatId)
     },
-    jumpToMessage: async (msgId: number) => {
+    jumpToMessage: async (msgId: number, highlight?: boolean) => {
+      highlight = highlight === false ? false : true
       // these methods were called in backend before
       // might be an issue if DeltaBackend.call has a significant delay
       const _message = await DeltaBackend.call('messageList.getMessages2', [
@@ -585,6 +587,7 @@ class ChatStore extends Store<ChatStoreState> {
         scrollTo: {
           type: 'scrollToMessage',
           msgId,
+          highlight,
         },
       })
       ActionEmitter.emitAction(
@@ -722,7 +725,7 @@ class ChatStore extends Store<ChatStoreState> {
       // Workaround for failed messages
       if (messageId === 0) return
       if (message === null) return
-      chatStore.effect.jumpToMessage(messageId)
+      chatStore.effect.jumpToMessage(messageId, false)
     },
   }
 
