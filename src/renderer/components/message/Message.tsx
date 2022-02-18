@@ -31,7 +31,6 @@ import {
 } from '../helpers/ChatMethods'
 import { C } from 'deltachat-node/dist/constants'
 // import { getLogger } from '../../../shared/logger'
-import { DeltaBackend } from '../../delta-remote'
 import { runtime } from '../../runtime'
 import { AvatarFromContact } from '../Avatar'
 import { ConversationType } from './MessageList'
@@ -471,23 +470,6 @@ const Message = (props: {
 export default Message
 
 export const Quote = ({ quote }: { quote: MessageQuote }) => {
-  const screenContext = useContext(ScreenContext)
-  const onContactClick = async (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    event.stopPropagation()
-    event.preventDefault()
-
-    if (!quote.message) return
-
-    const message = await DeltaBackend.call(
-      'messageList.getMessage',
-      quote.message.messageId
-    )
-    if (message === null) return
-    openViewProfileDialog(screenContext, message.sender.id)
-  }
-
   return (
     <div
       className='quote-background'
