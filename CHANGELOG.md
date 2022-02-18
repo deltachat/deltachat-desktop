@@ -5,6 +5,7 @@
 ### Added
 - It's now possible to add new group members by their email addresses
 - Experimental support for webxdc
+- Implement jump to message
 
 ### Changed
 - Update deltachat-node to `1.75.1`
