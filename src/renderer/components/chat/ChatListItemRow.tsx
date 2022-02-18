@@ -66,7 +66,7 @@ export const ChatListItemRowMessage = React.memo<{
   data: todo
   style: todo
 }>(({ index, data, style }) => {
-  const { messageResultIds, messageCache, openDialog, queryStr } = data
+  const { messageResultIds, messageCache, queryStr } = data
   const msrId = messageResultIds[index]
   return (
     <div style={style}>
