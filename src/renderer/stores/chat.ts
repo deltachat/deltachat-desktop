@@ -552,9 +552,9 @@ class ChatStore extends Store<ChatStoreState> {
           messageIds.length - 1
         )
 
-        let countMessagesOnNewerSide =
+        const countMessagesOnNewerSide =
           newestFetchedMessageIndex - jumpToMessageIndex
-        let countMessagesOnOlderSide =
+        const countMessagesOnOlderSide =
           jumpToMessageIndex - oldestFetchedMessageIndex
         if (countMessagesOnNewerSide < half_page_size) {
           oldestFetchedMessageIndex = Math.max(
