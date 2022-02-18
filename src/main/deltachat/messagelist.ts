@@ -177,6 +177,8 @@ export default class DCMessageList extends SplitOut {
     return messageIds
   }
 
+  // DEPRECATED: Don't use as it doesn't correctly handle special messages.
+  // As it returns a hashmap, it will only return each special message once (at most)
   getMessages(messageIds: number[]) {
     const messages: {
       [key: number]: ReturnType<typeof DCMessageList.prototype.messageIdToJson>
@@ -197,6 +199,42 @@ export default class DCMessageList extends SplitOut {
     if (markMessagesRead.length > 0) {
       const chatId = messages[markMessagesRead[0]].chatId
 
+      log.debug(
+        `markMessagesRead ${markMessagesRead.length} messages for chat ${chatId}`
+      )
+      // TODO: move mark seen logic to frontend
+      setTimeout(() =>
+        this.selectedAccountContext.markSeenMessages(markMessagesRead)
+      )
+    }
+    return messages
+  }
+
+  getMessages2(messageIds: number[]) {
+    const messages: [
+      number,
+      ReturnType<typeof DCMessageList.prototype.messageIdToJson>
+    ][] = []
+    const markMessagesRead: number[] = []
+    let chatId = -1
+    messageIds.forEach(messageId => {
+      let message = null
+      if (messageId > C.DC_MSG_ID_LAST_SPECIAL) {
+        message = this.messageIdToJson(messageId)
+        if (chatId === -1) {
+          chatId = message.chatId
+        }
+        if (
+          getDirection(message) === 'incoming' &&
+          message.state !== C.DC_STATE_IN_SEEN
+        ) {
+          markMessagesRead.push(messageId)
+        }
+      }
+      messages.push([messageId, message])
+    })
+
+    if (markMessagesRead.length > 0) {
       log.debug(
         `markMessagesRead ${markMessagesRead.length} messages for chat ${chatId}`
       )
