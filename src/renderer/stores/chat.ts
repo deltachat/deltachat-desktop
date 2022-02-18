@@ -7,7 +7,7 @@ import { ActionEmitter, KeybindAction } from '../keybindings'
 import { C } from 'deltachat-node/dist/constants'
 import { OrderedMap } from 'immutable'
 
-export const PAGE_SIZE = 10
+export const PAGE_SIZE = 11
 
 export interface MessagePage {
   pageKey: string
@@ -64,6 +64,26 @@ function getLastKnownScrollPosition(): {
     lastKnownScrollHeight: scrollHeight,
     lastKnownScrollTop: scrollTop,
   }
+}
+
+async function messagePageFromMessageIds(messageIds: number[]) {
+  const _messages = await DeltaBackend.call(
+    'messageList.getMessages2',
+    messageIds
+  )
+
+  const messages = OrderedMap().withMutations(messagePages => {
+    _messages.forEach(([messageId, message]) => {
+      messagePages.set(messageId, message)
+    })
+  }) as OrderedMap<number, MessageType | null>
+
+  const messagePages = {
+    pageKey: calculatePageKey(messages),
+    messages,
+  }
+
+  return messagePages
 }
 
 interface ChatStoreLocks {
@@ -451,30 +471,20 @@ class ChatStore extends Store<ChatStoreState> {
       let newestFetchedMessageIndex = -1
       let messagePages: MessagePage[] = []
       if (messageIds.length !== 0) {
-        oldestFetchedMessageIndex = Math.max(messageIds.length - PAGE_SIZE, 0)
+        // mesageIds.length = 1767
+        // oldestFetchedMessageIndex = 1767 - 1 = 1766 - 10 = 1756
+        // newestFetchedMessageIndex =                        1766
+        oldestFetchedMessageIndex = Math.max(
+          messageIds.length - 1 - PAGE_SIZE,
+          0
+        )
         newestFetchedMessageIndex = messageIds.length - 1
 
         const messageIdsToFetch = messageIds.slice(
           oldestFetchedMessageIndex,
           newestFetchedMessageIndex + 1
         )
-        const _messages = await DeltaBackend.call(
-          'messageList.getMessages',
-          messageIdsToFetch
-        )
-
-        const messages = OrderedMap().withMutations(messagePages => {
-          messageIdsToFetch.forEach(messageId => {
-            messagePages.set(messageId, _messages[messageId])
-          })
-        }) as OrderedMap<number, MessageType | null>
-
-        messagePages = [
-          {
-            pageKey: calculatePageKey(messages),
-            messages,
-          },
-        ]
+        messagePages = [await messagePageFromMessageIds(messageIdsToFetch)]
       }
 
       chatStore.reducer.selectedChat({
@@ -496,17 +506,17 @@ class ChatStore extends Store<ChatStoreState> {
     jumpToMessage: async (msgId: number) => {
       // these methods were called in backend before
       // might be an issue if DeltaBackend.call has a significant delay
-      const _message = await DeltaBackend.call('messageList.getMessages', [
+      const _message = await DeltaBackend.call('messageList.getMessages2', [
         msgId,
       ])
 
-      const message = _message[msgId] as MessageType
-      if (message === null || message === undefined) {
+      if (_message.length === 0) {
         throw new Error(
           'jumpToMessage: Tried to jump to non existing message with id: ' +
             msgId
         )
       }
+      const message = _message[0][1] as MessageType
 
       const chatId = (message as MessageType).chatId
 
@@ -529,37 +539,41 @@ class ChatStore extends Store<ChatStoreState> {
       let oldestFetchedMessageIndex = -1
       let newestFetchedMessageIndex = -1
       let messagePages: MessagePage[] = []
+      const half_page_size = Math.ceil(PAGE_SIZE / 2)
       if (messageIds.length !== 0) {
         oldestFetchedMessageIndex = Math.max(
-          jumpToMessageIndex - PAGE_SIZE / 2,
+          jumpToMessageIndex - half_page_size,
           0
         )
         newestFetchedMessageIndex = Math.min(
-          jumpToMessageIndex + PAGE_SIZE / 2,
+          jumpToMessageIndex + half_page_size,
           messageIds.length - 1
         )
+
+        let countMessagesOnNewerSide =
+          newestFetchedMessageIndex - jumpToMessageIndex
+        let countMessagesOnOlderSide =
+          jumpToMessageIndex - oldestFetchedMessageIndex
+        if (countMessagesOnNewerSide < half_page_size) {
+          oldestFetchedMessageIndex = Math.max(
+            oldestFetchedMessageIndex -
+              (half_page_size - countMessagesOnNewerSide),
+            0
+          )
+        } else if (countMessagesOnOlderSide < half_page_size) {
+          newestFetchedMessageIndex = Math.min(
+            newestFetchedMessageIndex +
+              (half_page_size - countMessagesOnOlderSide),
+            messageIds.length - 1
+          )
+        }
 
         const messageIdsToFetch = messageIds.slice(
           oldestFetchedMessageIndex,
           newestFetchedMessageIndex + 1
         )
-        const _messages = await DeltaBackend.call(
-          'messageList.getMessages',
-          messageIdsToFetch
-        )
 
-        const messages = OrderedMap().withMutations(messagePages => {
-          messageIdsToFetch.forEach(messageId => {
-            messagePages.set(messageId, _messages[messageId])
-          })
-        }) as OrderedMap<number, MessageType | null>
-
-        messagePages = [
-          {
-            pageKey: calculatePageKey(messages),
-            messages,
-          },
-        ]
+        messagePages = [await messagePageFromMessageIds(messageIdsToFetch)]
       }
 
       chatStore.reducer.selectedChat({
@@ -618,21 +632,9 @@ class ChatStore extends Store<ChatStoreState> {
           return false
         }
 
-        const fetchedMessages = await DeltaBackend.call(
-          'messageList.getMessages',
+        const messagePage: MessagePage = await messagePageFromMessageIds(
           fetchedMessageIds
         )
-
-        const messages = OrderedMap().withMutations(messages => {
-          fetchedMessageIds.forEach(messageId => {
-            messages.set(messageId, fetchedMessages[messageId])
-          })
-        }) as OrderedMap<number, MessageType | null>
-
-        const messagePage: MessagePage = {
-          pageKey: calculatePageKey(messages),
-          messages,
-        }
 
         chatStore.reducer.appendMessagePageTop({
           id,
@@ -680,21 +682,9 @@ class ChatStore extends Store<ChatStoreState> {
           return false
         }
 
-        const fetchedMessages = await DeltaBackend.call(
-          'messageList.getMessages',
+        const messagePage: MessagePage = await messagePageFromMessageIds(
           fetchedMessageIds
         )
-
-        const messages = OrderedMap().withMutations(messages => {
-          fetchedMessageIds.forEach(messageId => {
-            messages.set(messageId, fetchedMessages[messageId])
-          })
-        }) as OrderedMap<number, MessageType | null>
-
-        const messagePage: MessagePage = {
-          pageKey: calculatePageKey(messages),
-          messages,
-        }
 
         chatStore.reducer.appendMessagePageBottom({
           id,
@@ -822,11 +812,11 @@ ipcBackend.on('DC_EVENT_INCOMING_MSG', async (_, [chatId, _messageId]) => {
     x => !chatStore.state.messageIds.includes(x)
   )
   const _messagesIncoming = await DeltaBackend.call(
-    'messageList.getMessages',
+    'messageList.getMessages2',
     messageIdsIncoming
   )
-  const messagesIncoming = messageIdsIncoming.map(
-    messageId => _messagesIncoming[messageId]
+  const messagesIncoming = _messagesIncoming.map(
+    ([_messageId, message]) => message
   ) as MessageType[]
 
   if (messagesIncoming.length === 0) {
@@ -875,11 +865,13 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
       'DC_EVENT_MSGS_CHANGED',
       'changed message seems to be message we already know'
     )
-    const messagesChanged = await DeltaBackend.call('messageList.getMessages', [
-      messageId,
-    ])
+    const messagesChanged = await DeltaBackend.call(
+      'messageList.getMessages2',
+      [messageId]
+    )
 
-    const message = messagesChanged[messageId]
+    if (messagesChanged.length === 0) return
+    const message = messagesChanged[0][1]
     if (message === null) return
 
     chatStore.reducer.messageChanged({
@@ -899,16 +891,12 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
       x => !chatStore.state.messageIds.includes(x)
     )
     const _messagesIncoming = await DeltaBackend.call(
-      'messageList.getMessages',
+      'messageList.getMessages2',
       messageIdsIncoming
     )
 
-    const messagesIncoming = messageIdsIncoming
-      .map(messageId =>
-        _messagesIncoming[messageId] === undefined
-          ? null
-          : _messagesIncoming[messageId]
-      )
+    const messagesIncoming = _messagesIncoming
+      .map(([_messageId, message]) => message)
       .filter(message => message !== null) as MessageType[]
 
     if (messagesIncoming.length === 0) {
