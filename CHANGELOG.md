@@ -41,6 +41,7 @@
 - Fullscreen view for group avatar and own avatar in settings
 - Fix messagelist sometimes not loading more messages
 - Fix rockettheme font color for highlighted settings options
+- Fix device messages showing unneccessary elements
 
 ## [1.26.0] - 2021-12-15
 
