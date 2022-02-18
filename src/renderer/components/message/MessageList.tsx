@@ -132,9 +132,9 @@ export default function MessageList({
       // Try fetching more messages if needed
       onScroll(null)
       return
-    } else if (scrollTo.type === 'scrollToPosition') {
+    } else if (scrollTo.type === 'scrollToLastKnownPosition') {
       log.debug(
-        'scrollTo type: scrollToPosition; lastKnownScrollHeight: ' +
+        'scrollTo type: scrollToLastKnownPosition; lastKnownScrollHeight: ' +
           scrollTo.lastKnownScrollHeight +
           '; lastKnownScrollTop: ' +
           scrollTo.lastKnownScrollTop
@@ -152,6 +152,17 @@ export default function MessageList({
         ChatStore.reducer.unlockScroll({ id: chatId })
         onScroll(null)
       }, 0)
+    } else if (scrollTo.type === 'scrollToPosition') {
+      log.debug(
+        'scrollTo type: scrollToPosition; scrollTop: ' +
+          scrollTo.scrollTop
+        )
+      messageListRef.current.scrollTop = scrollTo.scrollTop
+      setTimeout(() => {
+        ChatStore.reducer.unlockScroll({ id: chatId })
+        onScroll(null)
+      }, 0)
+
     }
   }, [onScroll, scrollTo])
 
