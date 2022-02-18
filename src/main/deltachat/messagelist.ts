@@ -177,40 +177,7 @@ export default class DCMessageList extends SplitOut {
     return messageIds
   }
 
-  // DEPRECATED: Don't use as it doesn't correctly handle special messages.
-  // As it returns a hashmap, it will only return each special message once (at most)
   getMessages(messageIds: number[]) {
-    const messages: {
-      [key: number]: ReturnType<typeof DCMessageList.prototype.messageIdToJson>
-    } = {}
-    const markMessagesRead: number[] = []
-    messageIds.forEach(messageId => {
-      if (messageId <= C.DC_MSG_ID_LAST_SPECIAL) return
-      const message = this.messageIdToJson(messageId)
-      if (
-        getDirection(message) === 'incoming' &&
-        message.state !== C.DC_STATE_IN_SEEN
-      ) {
-        markMessagesRead.push(messageId)
-      }
-      messages[messageId] = message
-    })
-
-    if (markMessagesRead.length > 0) {
-      const chatId = messages[markMessagesRead[0]].chatId
-
-      log.debug(
-        `markMessagesRead ${markMessagesRead.length} messages for chat ${chatId}`
-      )
-      // TODO: move mark seen logic to frontend
-      setTimeout(() =>
-        this.selectedAccountContext.markSeenMessages(markMessagesRead)
-      )
-    }
-    return messages
-  }
-
-  getMessages2(messageIds: number[]) {
     const messages: [
       number,
       ReturnType<typeof DCMessageList.prototype.messageIdToJson>

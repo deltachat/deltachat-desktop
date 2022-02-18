@@ -71,9 +71,7 @@ export default function ChatAuditLogDialog(props: {
 
   const [loading, setLoading] = useState(true)
   const [msgIds, setMsgIds] = useState<number[]>([])
-  const [messages, setMessages] = useState<{
-    [key: number]: MessageType | null
-  }>({})
+  const [messages, setMessages] = useState<[number, MessageType | null][]>([])
 
   const listView = useRef<HTMLDivElement>(null)
 
@@ -157,7 +155,8 @@ export default function ChatAuditLogDialog(props: {
             {msgIds.map((id, index) => {
               if (id === C.DC_MSG_ID_DAYMARKER) {
                 const key = 'magic' + id + '_' + specialMessageIdCounter++
-                const nextMessage = messages[msgIds[index + 1]]
+
+                const [_nextMessageId, nextMessage] = messages[index + 1]
                 if (!nextMessage) return null
                 return (
                   <li key={key} className='time'>
@@ -172,7 +171,7 @@ export default function ChatAuditLogDialog(props: {
                   </li>
                 )
               }
-              const message = messages[id]
+              const [_messageId, message] = messages[index]
               if (!message || message == null) {
                 log.debug(`Missing message with id ${id}`)
                 return

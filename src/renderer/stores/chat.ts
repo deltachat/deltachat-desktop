@@ -69,7 +69,7 @@ function getLastKnownScrollPosition(): {
 
 async function messagePageFromMessageIds(messageIds: number[]) {
   const _messages = await DeltaBackend.call(
-    'messageList.getMessages2',
+    'messageList.getMessages',
     messageIds
   )
 
@@ -508,7 +508,7 @@ class ChatStore extends Store<ChatStoreState> {
       highlight = highlight === false ? false : true
       // these methods were called in backend before
       // might be an issue if DeltaBackend.call has a significant delay
-      const _message = await DeltaBackend.call('messageList.getMessages2', [
+      const _message = await DeltaBackend.call('messageList.getMessages', [
         msgId,
       ])
 
@@ -815,7 +815,7 @@ ipcBackend.on('DC_EVENT_INCOMING_MSG', async (_, [chatId, _messageId]) => {
     x => !chatStore.state.messageIds.includes(x)
   )
   const _messagesIncoming = await DeltaBackend.call(
-    'messageList.getMessages2',
+    'messageList.getMessages',
     messageIdsIncoming
   )
   const messagesIncoming = _messagesIncoming.map(
@@ -868,10 +868,9 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
       'DC_EVENT_MSGS_CHANGED',
       'changed message seems to be message we already know'
     )
-    const messagesChanged = await DeltaBackend.call(
-      'messageList.getMessages2',
-      [messageId]
-    )
+    const messagesChanged = await DeltaBackend.call('messageList.getMessages', [
+      messageId,
+    ])
 
     if (messagesChanged.length === 0) return
     const message = messagesChanged[0][1]
@@ -894,7 +893,7 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
       x => !chatStore.state.messageIds.includes(x)
     )
     const _messagesIncoming = await DeltaBackend.call(
-      'messageList.getMessages2',
+      'messageList.getMessages',
       messageIdsIncoming
     )
 
