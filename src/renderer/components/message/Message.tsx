@@ -503,7 +503,6 @@ export const Quote = ({ quote }: { quote: MessageQuote }) => {
         <div
           className='quote-author'
           style={{ color: quote.message?.displayColor }}
-          onClick={onContactClick}
         >
           {quote.message &&
             getAuthorName(
