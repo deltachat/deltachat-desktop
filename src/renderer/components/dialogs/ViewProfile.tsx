@@ -65,6 +65,7 @@ export default function ViewProfile(props: {
   const tx = window.static_translate
   const { openDialog } = useContext(ScreenContext)
   const [contact, setContact] = useState<JsonContact>(props.contact)
+  const isDeviceMessage = contact.id === C.DC_CONTACT_ID_DEVICE
 
   const onClickEdit = () => {
     openDialog(EditContactNameDialog, {
@@ -85,7 +86,7 @@ export default function ViewProfile(props: {
       <DeltaDialogHeader
         title={tx('menu_view_profile')}
         onClickEdit={onClickEdit}
-        showEditButton={true}
+        showEditButton={!isDeviceMessage}
         showCloseButton={true}
         onClose={onClose}
       />
@@ -109,6 +110,8 @@ export function ViewProfileInner({
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
     chatListIds
   )
+  const isDeviceMessage = contact.id === C.DC_CONTACT_ID_DEVICE
+
   const tx = window.static_translate
 
   const onChatClick = (chatId: number) => {
@@ -136,7 +139,9 @@ export function ViewProfileInner({
             </ClickForFullscreenAvatarWrapper>
             <ProfileInfoName
               name={contact.displayName}
-              address={contact.address}
+              address={
+                isDeviceMessage ? tx('device_talk_subtitle') : contact.address
+              }
             />
           </div>
           <div
@@ -146,7 +151,7 @@ export function ViewProfileInner({
               justifyContent: 'center',
             }}
           >
-            {contact.id !== C.DC_CONTACT_ID_DEVICE && (
+            {!isDeviceMessage && (
               <button
                 aria-label={tx('send_message')}
                 onClick={onSendMessage}
@@ -175,35 +180,41 @@ export function ViewProfileInner({
               </div>
             </>
           )}
-          <DeltaDialogContentTextSeperator text={tx('profile_shared_chats')} />
         </div>
-        <div className='mutual-chats' style={{ flexGrow: 1 }}>
-          <AutoSizer>
-            {({ width, height }) => (
-              <ChatListPart
-                isRowLoaded={isChatLoaded}
-                loadMoreRows={loadChats}
-                rowCount={chatListIds.length}
-                width={width}
-                height={height}
-                itemKey={index => 'key' + chatListIds[index]}
-                itemHeight={CHATLISTITEM_CHAT_HEIGHT}
-              >
-                {({ index, style }) => {
-                  const [chatId] = chatListIds[index]
-                  return (
-                    <div style={style}>
-                      <ChatListItem
-                        chatListItem={chatCache[chatId] || undefined}
-                        onClick={onChatClick.bind(null, chatId)}
-                      />
-                    </div>
-                  )
-                }}
-              </ChatListPart>
-            )}
-          </AutoSizer>
-        </div>
+        {!isDeviceMessage && (
+          <>
+            <DeltaDialogContentTextSeperator
+              text={tx('profile_shared_chats')}
+            />
+            <div className='mutual-chats' style={{ flexGrow: 1 }}>
+              <AutoSizer>
+                {({ width, height }) => (
+                  <ChatListPart
+                    isRowLoaded={isChatLoaded}
+                    loadMoreRows={loadChats}
+                    rowCount={chatListIds.length}
+                    width={width}
+                    height={height}
+                    itemKey={index => 'key' + chatListIds[index]}
+                    itemHeight={CHATLISTITEM_CHAT_HEIGHT}
+                  >
+                    {({ index, style }) => {
+                      const [chatId] = chatListIds[index]
+                      return (
+                        <div style={style}>
+                          <ChatListItem
+                            chatListItem={chatCache[chatId] || undefined}
+                            onClick={onChatClick.bind(null, chatId)}
+                          />
+                        </div>
+                      )
+                    }}
+                  </ChatListPart>
+                )}
+              </AutoSizer>
+            </div>
+          </>
+        )}
       </div>
     </>
   )
