@@ -104,12 +104,16 @@ async function messagePagesFromMessageIds(messageIds: number[]) {
 
 interface ChatStoreLocks {
   scroll: boolean
+  queue: boolean
 }
 
 class ChatStore extends Store<ChatStoreState> {
   __locks: ChatStoreLocks = {
     scroll: false,
+    queue: false
+    
   }
+  effectQueue: Function[] = []
 
   lockUnlock(key: keyof ChatStoreLocks) {
     this.__locks[key] = false
@@ -488,6 +492,51 @@ class ChatStore extends Store<ChatStoreState> {
     return fn
   }
 
+  queuedEffect<T extends Function>(
+    effect: T,
+    effectName: string
+  ): T {
+    const fn: T = (async (...args: any) => {
+      const lockQueue = () => {
+        log.debug(`queuedEffect: ${effectName}: locking`)
+        this.lockLock('queue')
+      }
+      const unlockQueue = () => {
+        this.lockUnlock('queue')
+        log.debug(`queuedEffect: ${effectName}: unlocked`)
+      }
+
+      if (this.lockIsLocked('queue') === true) {
+        log.debug(`queuedEffect: ${effectName}: We're locked, adding effect to queue`)
+        this.effectQueue.push(effect.bind(this, args))
+        return false
+      }
+
+      lockQueue()
+      const returnValue = await effect(...args)
+      if (this.effectQueue.length !== 0) {
+        setTimeout(async () => {
+          log.debug('effectQueue: running queued effects')
+          while (true) {
+            if (this.effectQueue.length === 0) break
+            const effect = this.effectQueue.pop()
+            if (!effect) {
+              throw new Error('Undefined effect in effect queue? This should not happen')
+            }
+            await effect()
+          }
+          log.debug('effectQueue: finished')
+          unlockQueue()
+        }, 0)
+      } else {
+        unlockQueue()
+      }
+
+      return returnValue
+    }) as unknown as T 
+    return fn
+  }
+
   effect = {
     selectChat: async (chatId: number) => {
       // these methods were called in backend before
@@ -642,7 +691,7 @@ class ChatStore extends Store<ChatStoreState> {
       const id = this.state.chat.id
       this.reducer.uiDeleteMessage({ id, msgId })
     },
-    fetchMoreMessagesTop: this.lockedEffect<() => Promise<boolean>>(
+    fetchMoreMessagesTop: this.queuedEffect(this.lockedEffect(
       'scroll',
       async () => {
         log.debug(`fetchMoreMessagesTop`)
@@ -691,8 +740,8 @@ class ChatStore extends Store<ChatStoreState> {
         return true
       },
       'fetchMoreMessagesTop'
-    ),
-    fetchMoreMessagesBottom: this.lockedEffect<() => Promise<boolean>>(
+    ), 'fetchMoreMessagesTop'),
+    fetchMoreMessagesBottom: this.queuedEffect(this.lockedEffect(
       'scroll',
       async () => {
         log.debug(`fetchMoreMessagesBottom`)
@@ -746,8 +795,8 @@ class ChatStore extends Store<ChatStoreState> {
         return true
       },
       'fetchMoreMessagesBottom'
-    ),
-    refresh: this.lockedEffect('scroll', async (payload: { chatId: number }) => {
+    ), 'fetchMoreMessagesBottom'),
+    refresh: this.queuedEffect(this.lockedEffect('scroll', async (payload: { chatId: number }) => {
       log.debug(`refresh`)
       const state = this.state
       if (state.chat === null || state.chat.id !== payload.chatId) {
@@ -766,7 +815,7 @@ class ChatStore extends Store<ChatStoreState> {
       this.reducer.refresh(messageIds, messagePages, newestFetchedMessageIndex, oldestFetchedMessageIndex)
       return true
 
-    }, 'refresh'),
+    }, 'refresh'), 'refresh'),
     mute: async (payload: { chatId: number; muteDuration: number }) => {
       if (payload.chatId !== chatStore.state.chat?.id) return
       if (
@@ -779,10 +828,11 @@ class ChatStore extends Store<ChatStoreState> {
         return
       }
     },
-    sendMessage: async (payload: {
+    sendMessage: this.queuedEffect(async (payload: {
       chatId: number
       message: sendMessageParams
     }) => {
+      log.debug('sendMessage')
       if (payload.chatId !== chatStore.state.chat?.id) return
       const [messageId, message] = await DeltaBackend.call(
         'messageList.sendMessage',
@@ -794,7 +844,7 @@ class ChatStore extends Store<ChatStoreState> {
       if (messageId === 0) return
       if (message === null) return
       chatStore.effect.jumpToMessage(messageId, false)
-    },
+    }, 'sendMessage'),
   }
 
   stateToHumanReadable(state: ChatStoreState): any {
@@ -946,33 +996,7 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
       'changed message seems to be a new message'
     )
 
-    const messageIds = <number[]>(
-      await DeltaBackend.call('messageList.getMessageIds', id)
-    )
-    const messageIdsIncoming = messageIds.filter(
-      x => !chatStore.state.messageIds.includes(x)
-    )
-    const _messagesIncoming = await DeltaBackend.call(
-      'messageList.getMessages',
-      messageIdsIncoming
-    )
-
-    const messagesIncoming = _messagesIncoming
-      .map(([_messageId, message]) => message)
-      .filter(message => message !== null) as MessageType[]
-
-    if (messagesIncoming.length === 0) {
-      log.debug(
-        'DC_EVENT_MSGS_CHANGED actually no new messages for us, returning'
-      )
-      return
-    }
-
-    chatStore.reducer.fetchedIncomingMessages({
-      id: chatId,
-      messageIds,
-      messagesIncoming,
-    })
+    chatStore.effect.refresh({chatId})
   }
 })
 
@@ -1024,3 +1048,4 @@ export type ChatStoreDispatch = Store<ChatStoreState>['dispatch']
 export type ChatStoreStateWithChatSet = {
   chat: NonNullable<ChatStoreState['chat']>
 } & Exclude<ChatStoreState, 'chat'>
+
