@@ -297,18 +297,16 @@ export const MessageListInner = React.memo(
 
     useKeyBindingAction(KeybindAction.MessageList_PageUp, () => {
       if (messageListRef.current) {
-        messageListRef.current.scrollBy({
-          top: -messageListRef.current.clientHeight,
-          behavior: 'auto',
-        })
+        messageListRef.current.scrollTop = messageListRef.current.scrollTop - messageListRef.current.clientHeight
+        // @ts-ignore
+        onScroll(null)
       }
     })
     useKeyBindingAction(KeybindAction.MessageList_PageDown, () => {
       if (messageListRef.current) {
-        messageListRef.current.scrollBy({
-          top: messageListRef.current.clientHeight,
-          behavior: 'auto',
-        })
+        messageListRef.current.scrollTop = messageListRef.current.scrollTop + messageListRef.current.clientHeight
+        // @ts-ignore
+        onScroll(null)
       }
     })
 

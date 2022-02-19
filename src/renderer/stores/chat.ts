@@ -492,6 +492,24 @@ class ChatStore extends Store<ChatStoreState> {
     return fn
   }
 
+  tickRunQueuedEffect() {
+    setTimeout(async () => {
+      log.debug('effectQueue: running queued effects')
+      if (this.effectQueue.length === 0) {
+        log.debug('effectQueue: no more queued effects, unlocking')
+        this.lockUnlock('queue')
+        log.debug('effectQueue: finished')
+      }
+
+      const effect = this.effectQueue.pop()
+      if (!effect) {
+        throw new Error('Undefined effect in effect queue? This should not happen')
+      }
+      await effect()
+      this.tickRunQueuedEffect()
+    }, 0)
+  }
+
   queuedEffect<T extends Function>(
     effect: T,
     effectName: string
@@ -515,19 +533,7 @@ class ChatStore extends Store<ChatStoreState> {
       lockQueue()
       const returnValue = await effect(...args)
       if (this.effectQueue.length !== 0) {
-        setTimeout(async () => {
-          log.debug('effectQueue: running queued effects')
-          while (true) {
-            if (this.effectQueue.length === 0) break
-            const effect = this.effectQueue.pop()
-            if (!effect) {
-              throw new Error('Undefined effect in effect queue? This should not happen')
-            }
-            await effect()
-          }
-          log.debug('effectQueue: finished')
-          unlockQueue()
-        }, 0)
+        this.tickRunQueuedEffect()
       } else {
         unlockQueue()
       }
