@@ -94,10 +94,11 @@ export default class DCSettings extends SplitOut {
     const bgDir = join(getConfigPath(), 'background')
     await rm(bgDir, { recursive: true, force: true })
     await mkdir(bgDir, { recursive: true })
+    const fileName = `background_${Date.now()}` + extname(originalFilePath)
     const newPath = join(
       getConfigPath(),
       'background',
-      `background_${Date.now()}` + extname(originalFilePath)
+      fileName
     )
     try {
       await copyFile(originalFilePath, newPath)
@@ -105,7 +106,7 @@ export default class DCSettings extends SplitOut {
       log.error('BG-IMG Copy Failed', error)
       throw error
     }
-    return `url("${newPath.replace(/\\/g, '/')}")`
+    return `url("${fileName.replace(/\\/g, '/')}")`
   }
 
   estimateAutodeleteCount(fromServer: boolean, seconds: number) {
