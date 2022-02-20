@@ -8,6 +8,7 @@ import * as mainWindow from './windows/main'
 import { openHelpWindow } from './windows/help'
 import { join } from 'path'
 import { DesktopSettings } from './desktop_settings'
+import { getConfigPath } from './application-constants'
 
 const log = getLogger('main/ipc')
 const DeltaChatController: typeof import('./deltachat/controller').default = (() => {
@@ -125,6 +126,10 @@ export async function init(cwd: string, logHandler: LogHandler) {
 
   ipcMain.on('get-log-path', ev => {
     ev.returnValue = logHandler.logFilePath()
+  })
+
+  ipcMain.on('get-config-path', ev => {
+    ev.returnValue = getConfigPath()
   })
 
   ipcMain.on('get-rc-config', ev => {

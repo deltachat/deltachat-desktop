@@ -8,6 +8,8 @@ import { ChatStoreStateWithChatSet } from '../../stores/chat'
 import ComposerMessageInput from '../composer/ComposerMessageInput'
 import { DesktopSettingsType } from '../../../shared/shared-types'
 import { isChatReadonly } from '../../../shared/util'
+import { join } from 'path'
+import { getConfigPath } from '../../runtime'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -23,7 +25,8 @@ export function getBackgroundImageStyle(
   const bgImg = settings['chatViewBgImg']
   if (bgImg) {
     if (bgImg && bgImg.indexOf('url') !== -1) {
-      style.backgroundImage = `url("file://${bgImg.slice(
+      const bgImgPath = join(getConfigPath(), bgImg)
+      style.backgroundImage = `url("file://${bgImgPath.slice(
         5,
         bgImg.length - 2
       )}")`
