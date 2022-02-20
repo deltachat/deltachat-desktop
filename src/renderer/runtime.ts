@@ -232,6 +232,10 @@ class Electron implements Runtime {
   }
 }
 
+export function getConfigPath(): string {
+  return ipcBackend.sendSync('get-config-path')
+}
+
 const IS_ELECTRON = true
 
 export const runtime: Runtime = IS_ELECTRON ? new Electron() : new Browser()
