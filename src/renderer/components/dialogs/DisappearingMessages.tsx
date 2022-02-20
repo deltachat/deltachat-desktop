@@ -50,7 +50,7 @@ function SelectDisappearingMessageDuration({
         value={String(DisappearingMessageDuration.OFF)}
       />
       <Radio
-        key={'eph-1'}
+        key={'eph-1a'}
         label={'After 3 seconds'}
         value={String(DisappearingMessageDuration.THREE_SECONDS)}
       />

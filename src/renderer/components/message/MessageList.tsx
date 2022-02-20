@@ -56,13 +56,16 @@ export default function MessageList({
       if (!messageListRef.current) {
         return
       }
-      if (ChatStore.lockIsLocked('scroll') === true) return
+      if (ChatStore.lockIsLocked('scroll') === true) {
+        console.log('onScroll: locked, returning')
+        return
+      }
       const distanceToTop = messageListRef.current.scrollTop
       const distanceToBottom =
         messageListRef.current.scrollHeight -
         messageListRef.current.scrollTop -
         messageListRef.current.clientHeight
-      //console.log('onScroll', distanceToTop, distanceToBottom)
+      console.log('onScroll', distanceToTop, distanceToBottom)
       if (distanceToTop < 200) {
         log.debug('Scrolled to top, fetching more messsages!')
         setTimeout(() => fetchMoreTop(), 0)
@@ -130,7 +133,7 @@ export default function MessageList({
       //ChatStore.reducer.scrolledToBottom({ id: chatId })
       //lockFetchMore.setLock(false)
       // Try fetching more messages if needed
-      onScroll(null)
+      setTimeout(() => { onScroll(null) }, 0)
       return
     } else if (scrollTo.type === 'scrollToLastKnownPosition') {
       log.debug(
@@ -160,7 +163,7 @@ export default function MessageList({
       messageListRef.current.scrollTop = scrollTo.scrollTop
       setTimeout(() => {
         ChatStore.reducer.unlockScroll({ id: chatId })
-        onScroll(null)
+        setTimeout(() => { onScroll(null) }, 0)
       }, 0)
 
     }
@@ -186,10 +189,10 @@ export default function MessageList({
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
     setTimeout(() => {
       ChatStore.reducer.scrolledToBottom({ id: chatId })
+      setTimeout(() => { onScroll(null) }, 0)
     }, 0)
 
     // Try fetching more messages if needed
-    onScroll(null)
   }, [onScroll, scrollToBottom])
 
   useLayoutEffect(() => {
