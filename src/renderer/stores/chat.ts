@@ -272,6 +272,7 @@ class ChatStore extends Store<ChatStoreState> {
     fetchedIncomingMessages: (payload: {
       id: number
       messageIds: ChatStoreState['messageIds']
+      newestFetchedMessageIndex: number
       messagesIncoming: MessageType[]
     }) => {
       this.setState(state => {
@@ -298,6 +299,7 @@ class ChatStore extends Store<ChatStoreState> {
           ...state,
           messageIds: payload.messageIds,
           messagePages: [...state.messagePages, incomingMessagePage],
+          newestFetchedMessageIndex: payload.newestFetchedMessageIndex,
           lastKnownScrollHeight,
           lastKnownScrollTop,
           scrollToBottomIfClose: true,
@@ -479,6 +481,7 @@ class ChatStore extends Store<ChatStoreState> {
       }
 
       log.debug(`lockedEffect: ${effectName}: locking`)
+      console.debug(args)
       this.lockLock(lockName)
       const returnValue = await effect(...args)
       if (returnValue === false) {
@@ -526,10 +529,12 @@ class ChatStore extends Store<ChatStoreState> {
 
       if (this.lockIsLocked('queue') === true) {
         log.debug(`queuedEffect: ${effectName}: We're locked, adding effect to queue`)
-        this.effectQueue.push(effect.bind(this, args))
+        this.effectQueue.push(effect.bind(this, ...args))
         return false
       }
 
+      log.debug(`queuedEffect: ${effectName}: locking`)
+      console.debug(args)
       lockQueue()
       const returnValue = await effect(...args)
       if (this.effectQueue.length !== 0) {
@@ -538,6 +543,7 @@ class ChatStore extends Store<ChatStoreState> {
         unlockQueue()
       }
 
+      log.debug(`queuedEffect: ${effectName}: done`)
       return returnValue
     }) as unknown as T 
     return fn
@@ -581,7 +587,7 @@ class ChatStore extends Store<ChatStoreState> {
         messagePages = await messagePagesFromMessageIds(messageIdsToFetch)
       }
 
-      chatStore.reducer.selectedChat({
+      this.reducer.selectedChat({
         chat,
         messagePages,
         messageIds,
@@ -671,7 +677,7 @@ class ChatStore extends Store<ChatStoreState> {
         messagePages = await messagePagesFromMessageIds(messageIdsToFetch)
       }
 
-      chatStore.reducer.selectedChat({
+      this.reducer.selectedChat({
         chat,
         messagePages,
         messageIds,
@@ -737,7 +743,7 @@ class ChatStore extends Store<ChatStoreState> {
         }
         const messagePage = messagePages[0]
 
-        chatStore.reducer.appendMessagePageTop({
+        this.reducer.appendMessagePageTop({
           id,
           messagePage,
           oldestFetchedMessageIndex,
@@ -792,7 +798,7 @@ class ChatStore extends Store<ChatStoreState> {
         }
         const messagePage = messagePages[0]
 
-        chatStore.reducer.appendMessagePageBottom({
+        this.reducer.appendMessagePageBottom({
           id,
           messagePage,
           newestFetchedMessageIndex: newNewestFetchedMessageIndex,
@@ -803,9 +809,15 @@ class ChatStore extends Store<ChatStoreState> {
       'fetchMoreMessagesBottom'
     ), 'fetchMoreMessagesBottom'),
     refresh: this.queuedEffect(this.lockedEffect('scroll', async (payload: { chatId: number }) => {
-      log.debug(`refresh`)
+      const { chatId: eventChatId } = payload
+      log.debug(`refresh`, eventChatId)
       const state = this.state
-      if (state.chat === null || state.chat.id !== payload.chatId) {
+      if (state.chat === null) {
+        log.debug('refresh: state.chat is null, returning')
+        return false
+      }
+      if (state.chat.id !== payload.chatId) {
+        log.debug('refresh: state.chat.id and payload.chatId mismatch, returning', state.chat.id, payload.chatId)
         return false
       }
       const chatId = payload.chatId
@@ -823,7 +835,7 @@ class ChatStore extends Store<ChatStoreState> {
 
     }, 'refresh'), 'refresh'),
     mute: async (payload: { chatId: number; muteDuration: number }) => {
-      if (payload.chatId !== chatStore.state.chat?.id) return
+      if (payload.chatId !== this.state.chat?.id) return
       if (
         !(await DeltaBackend.call(
           'chat.setMuteDuration',
@@ -839,7 +851,7 @@ class ChatStore extends Store<ChatStoreState> {
       message: sendMessageParams
     }) => {
       log.debug('sendMessage')
-      if (payload.chatId !== chatStore.state.chat?.id) return
+      if (payload.chatId !== this.state.chat?.id) return
       const [messageId, message] = await DeltaBackend.call(
         'messageList.sendMessage',
         payload.chatId,
@@ -849,8 +861,128 @@ class ChatStore extends Store<ChatStoreState> {
       // Workaround for failed messages
       if (messageId === 0) return
       if (message === null) return
-      chatStore.effect.jumpToMessage(messageId, false)
+      this.effect.jumpToMessage(messageId, false)
     }, 'sendMessage'),
+    onEventChatModified: this.queuedEffect(async (chatId: number) => {
+      if (this.state.chat?.id !== chatId) {
+        return
+      }
+      this.reducer.modifiedChat({
+        id: chatId,
+        chat: await DeltaBackend.call('chatList.getFullChatById', chatId),
+      })
+    }, 'onEventChatModified'),
+    onEventMessageFailed: this.queuedEffect(async (chatId: number, msgId: number) => {
+      const state = this.state
+      if (state.chat?.id !== chatId) return
+      if (!state.messageIds.includes(msgId)) {
+        // Hacking around https://github.com/deltachat/deltachat-desktop/issues/1361#issuecomment-776291299
+        const message = await DeltaBackend.call('messageList.getMessage', msgId)
+        if (message === null) return
+
+        this.reducer.messageSent({
+          id: chatId,
+          messageId: msgId,
+          message,
+        })
+      }
+      this.reducer.setMessageState({
+        id: chatId,
+        messageId: msgId,
+        messageState: C.DC_STATE_OUT_FAILED,
+      })
+    }, 'onEventMessageFailed'),
+    onEventIncomingMessage: this.queuedEffect(async (chatId: number) => {
+      if (chatId !== this.state.chat?.id) {
+        log.debug(
+          `DC_EVENT_INCOMING_MSG chatId of event (${chatId}) doesn't match id of selected chat (${this.state.chat?.id}). Skipping.`
+        )
+        return
+      }
+      const messageIds = <number[]>(
+        await DeltaBackend.call('messageList.getMessageIds', chatId)
+      )
+      let firstFetchedMessageIndex = -1
+      let newestFetchedMessageIndex = -1
+      const messageIdsIncoming = messageIds.filter(
+        (msgId, index) => {
+          if (!this.state.messageIds.includes(msgId)) {
+            if (firstFetchedMessageIndex === -1) {
+              firstFetchedMessageIndex = index
+            }
+            newestFetchedMessageIndex = index
+            return true
+          }
+          return false
+        }
+      )
+      // Only add incoming messages if we could append them directly to messagePages without having a hole
+      if (firstFetchedMessageIndex !== this.state.newestFetchedMessageIndex + 1) {
+        log.debug('onEventIncomingMessage: new incoming messages cannot added to state without having a hole, returning')
+        return
+      }
+      const _messagesIncoming = await DeltaBackend.call(
+        'messageList.getMessages',
+        messageIdsIncoming
+      )
+      const messagesIncoming = _messagesIncoming.map(
+        ([_messageId, message]) => message
+      ) as MessageType[]
+
+      if (messagesIncoming.length === 0) {
+        log.debug(
+          'DC_EVENT_INCOMING_MSG, actually no new messages for us, returning'
+        )
+        return
+      }
+
+      this.reducer.fetchedIncomingMessages({
+        id: chatId,
+        messageIds,
+        messagesIncoming,
+        newestFetchedMessageIndex
+      })
+
+    }, 'onEventIncomingMessage'),
+    onEventMessagesChanged: this.queuedEffect(async (eventChatId: number, messageId: number) => {
+      log.debug('DC_EVENT_MSGS_CHANGED', eventChatId, messageId)
+      const chatId = this.state.chat?.id
+      if (chatId === null || chatId === undefined) {
+        return
+      }
+      if (eventChatId === 0 && messageId === 0) {
+        this.effect.refresh({chatId})
+        return
+      }
+      if (eventChatId !== this.state.chat?.id) return
+      if (this.state.messageIds.indexOf(messageId) !== -1) {
+        log.debug(
+          'DC_EVENT_MSGS_CHANGED',
+          'changed message seems to be message we already know'
+        )
+        const messagesChanged = await DeltaBackend.call('messageList.getMessages', [
+          messageId,
+        ])
+
+        if (messagesChanged.length === 0) return
+        const message = messagesChanged[0][1]
+        if (message === null) return
+
+        this.reducer.messageChanged({
+          id: chatId,
+          messagesChanged: [message],
+        })
+      } else {
+        log.debug(
+          'DC_EVENT_MSGS_CHANGED',
+          'changed message seems to be a new message'
+        )
+
+        console.log('onEventMessagesChanged', {chatId})
+        this.effect.refresh({chatId})
+      }
+    }, 'onEventMessagesChanged'),
+
   }
 
   stateToHumanReadable(state: ChatStoreState): any {
@@ -886,14 +1018,7 @@ chatStore.dispatch = (..._args) => {
 const log = chatStore.log
 
 ipcBackend.on('DC_EVENT_CHAT_MODIFIED', async (_evt, [chatId]) => {
-  const state = chatStore.getState()
-  if (state.chat?.id !== chatId) {
-    return
-  }
-  chatStore.reducer.modifiedChat({
-    id: chatId,
-    chat: await DeltaBackend.call('chatList.getFullChatById', chatId),
-  })
+  chatStore.effect.onEventChatModified(chatId)
 })
 
 ipcBackend.on('DC_EVENT_MSG_DELIVERED', (_evt, [id, msgId]) => {
@@ -905,59 +1030,11 @@ ipcBackend.on('DC_EVENT_MSG_DELIVERED', (_evt, [id, msgId]) => {
 })
 
 ipcBackend.on('DC_EVENT_MSG_FAILED', async (_evt, [chatId, msgId]) => {
-  const state = chatStore.getState()
-  if (state.chat?.id !== chatId) return
-  if (!state.messageIds.includes(msgId)) {
-    // Hacking around https://github.com/deltachat/deltachat-desktop/issues/1361#issuecomment-776291299
-    const message = await DeltaBackend.call('messageList.getMessage', msgId)
-    if (message === null) return
-
-    chatStore.reducer.messageSent({
-      id: chatId,
-      messageId: msgId,
-      message,
-    })
-  }
-  chatStore.reducer.setMessageState({
-    id: chatId,
-    messageId: msgId,
-    messageState: C.DC_STATE_OUT_FAILED,
-  })
+  chatStore.effect.onEventMessageFailed(chatId, msgId)
 })
 
 ipcBackend.on('DC_EVENT_INCOMING_MSG', async (_, [chatId, _messageId]) => {
-  if (chatId !== chatStore.state.chat?.id) {
-    log.debug(
-      `DC_EVENT_INCOMING_MSG chatId of event (${chatId}) doesn't match id of selected chat (${chatStore.state.chat?.id}). Skipping.`
-    )
-    return
-  }
-  const messageIds = <number[]>(
-    await DeltaBackend.call('messageList.getMessageIds', chatId)
-  )
-  const messageIdsIncoming = messageIds.filter(
-    x => !chatStore.state.messageIds.includes(x)
-  )
-  const _messagesIncoming = await DeltaBackend.call(
-    'messageList.getMessages',
-    messageIdsIncoming
-  )
-  const messagesIncoming = _messagesIncoming.map(
-    ([_messageId, message]) => message
-  ) as MessageType[]
-
-  if (messagesIncoming.length === 0) {
-    log.debug(
-      'DC_EVENT_INCOMING_MSG, actually no new messages for us, returning'
-    )
-    return
-  }
-
-  chatStore.reducer.fetchedIncomingMessages({
-    id: chatId,
-    messageIds,
-    messagesIncoming,
-  })
+  chatStore.effect.onEventIncomingMessage(chatId)
 })
 
 ipcBackend.on('DC_EVENT_MSG_READ', (_evt, [id, msgId]) => {
@@ -968,42 +1045,8 @@ ipcBackend.on('DC_EVENT_MSG_READ', (_evt, [id, msgId]) => {
   })
 })
 
-ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
-  log.debug('DC_EVENT_MSGS_CHANGED', id, messageId)
-  const chatId = chatStore.state.chat?.id
-  if (chatId === null || chatId === undefined) {
-    return
-  }
-  if (id === 0 && messageId === 0) {
-    chatStore.effect.refresh({chatId})
-    return
-  }
-  if (id !== chatStore.state.chat?.id) return
-  if (chatStore.state.messageIds.indexOf(messageId) !== -1) {
-    log.debug(
-      'DC_EVENT_MSGS_CHANGED',
-      'changed message seems to be message we already know'
-    )
-    const messagesChanged = await DeltaBackend.call('messageList.getMessages', [
-      messageId,
-    ])
-
-    if (messagesChanged.length === 0) return
-    const message = messagesChanged[0][1]
-    if (message === null) return
-
-    chatStore.reducer.messageChanged({
-      id: chatId,
-      messagesChanged: [message],
-    })
-  } else {
-    log.debug(
-      'DC_EVENT_MSGS_CHANGED',
-      'changed message seems to be a new message'
-    )
-
-    chatStore.effect.refresh({chatId})
-  }
+ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [eventChatId, messageId]) => {
+  chatStore.effect.onEventMessagesChanged(eventChatId, messageId)
 })
 
 ipcBackend.on('ClickOnNotification', (_ev, { chatId }) => {
