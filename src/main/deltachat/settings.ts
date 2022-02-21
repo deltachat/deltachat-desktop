@@ -95,11 +95,7 @@ export default class DCSettings extends SplitOut {
     await rm(bgDir, { recursive: true, force: true })
     await mkdir(bgDir, { recursive: true })
     const fileName = `background_${Date.now()}` + extname(originalFilePath)
-    const newPath = join(
-      getConfigPath(),
-      'background',
-      fileName
-    )
+    const newPath = join(getConfigPath(), 'background', fileName)
     try {
       await copyFile(originalFilePath, newPath)
     } catch (error) {
