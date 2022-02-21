@@ -861,7 +861,7 @@ class ChatStore extends Store<ChatStoreState> {
       // Workaround for failed messages
       if (messageId === 0) return
       if (message === null) return
-      this.effect.jumpToMessage(messageId, false)
+      await this.effect.jumpToMessage(messageId, false)
     }, 'sendMessage'),
     onEventChatModified: this.queuedEffect(async (chatId: number) => {
       if (this.state.chat?.id !== chatId) {

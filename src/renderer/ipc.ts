@@ -82,15 +82,15 @@ function callDcMethod(
   }
 
   const onSuccess = (_ev: any, returnValue: any) => {
-    log.debug(
+    /*log.debug(
       `EVENT_DD_DISPATCH_RETURN_${identifier}_${methodName}`,
       'Got back return: [truncated]'
-    )
-    /*log.debug(
+    )*/
+    log.debug(
       `EVENT_DD_DISPATCH_RETURN_${identifier}_${methodName}`,
       'Got back return: [',
       returnValue
-    )*/
+    )
     removeListeners()
     if (cb) {
       cb(null, returnValue)
