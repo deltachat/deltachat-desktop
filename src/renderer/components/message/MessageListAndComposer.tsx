@@ -22,19 +22,26 @@ export function getBackgroundImageStyle(
 
   if (!settings) return style
 
-  var bgImg = settings['chatViewBgImg']
+  let bgImg = settings['chatViewBgImg']
   if (bgImg) {
-    if (bgImg && bgImg.indexOf('url') !== -1) {
-      const filePath = bgImg.substring(bgImg.lastIndexOf("/") + 1, bgImg.length - 2);
+    if (bgImg && bgImg.startsWith('url')) {
+      // migrating in case of absolute filepaths
+      const filePath = bgImg.split('\\').pop()?.split('/').pop()
       bgImg = `img: ${filePath}`
       DeltaBackend.call('settings.setDesktopSetting', 'chatViewBgImg', bgImg)
     }
-    if (bgImg && bgImg.indexOf('img') !== -1) {
-      const filePath = bgImg.slice(5, bgImg.length)
+    if (bgImg.startsWith('img')) {
+      const filePath = bgImg.slice(5)
       const bgImgPath = join(getConfigPath(), 'background/', filePath)
       style.backgroundImage = `url("file://${bgImgPath}")`
-    } else {
-      style.backgroundColor = bgImg
+    }
+    if (bgImg.startsWith('#')) {
+      // migrating to new prefixes
+      bgImg = `color: ${bgImg}`
+      DeltaBackend.call('settings.setDesktopSetting', 'chatViewBgImg', bgImg)
+    }
+    if (bgImg.startsWith('color')) {
+      style.backgroundColor = bgImg.slice(7)
       style.backgroundImage = 'none'
     }
   }
