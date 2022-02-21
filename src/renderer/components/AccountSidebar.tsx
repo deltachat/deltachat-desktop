@@ -39,7 +39,7 @@ export default function AccountSidebar ({
                 {logins !== null && logins.map(account => {
                     if (account.type === 'unconfigured') return null
                     return (
-                            <div key={account.id} className={classNames("account", { selected: account.id === selectedAccountId})} onClick={() => switchAccount(account.id)}>
+                            <div key={account.id} className={classNames("account", { selected: account.id === selectedAccountId})} onClick={() => switchAccount(account.id)} title={account.display_name ? account.display_name : (account.addr ? account.addr : '')}>
                                 <Avatar
                                     displayName={account.display_name === null ? '' : account.display_name}
                                     avatarPath={account.profile_image === null ? undefined : account.profile_image}

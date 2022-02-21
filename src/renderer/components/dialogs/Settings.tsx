@@ -25,6 +25,7 @@ import { getLogger } from '../../../shared/logger'
 import SettingsCommunication from './Settings-Communication'
 import { runtime } from '../../runtime'
 import SettingsDownloadOnDemand from './Settings-DownloadOnDemand'
+import {ThemeManager} from '../../ThemeManager'
 
 const log = getLogger('renderer/dialogs/Settings')
 
@@ -162,6 +163,9 @@ export default function Settings(props: DialogProps) {
       true
     ) {
       setDesktopSetting(key, value)
+    }
+    if (key === 'showAccountSidebar') {
+      ThemeManager.refresh()
     }
   }
 

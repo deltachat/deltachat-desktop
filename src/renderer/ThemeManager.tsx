@@ -21,6 +21,14 @@ export namespace ThemeManager {
       themeVars.innerText = theme.data
       currentThemeChangeHook()
     }
+    const { showAccountSidebar } = await DeltaBackend.call('settings.getDesktopSettings')
+    const globalVars = window.document.getElementById('global-vars')
+    if (!globalVars) return
+    if (showAccountSidebar) {
+      globalVars.innerText = ''
+    } else {
+      globalVars.innerText = ':root { --accountSidebarWidth: 0px }'
+    }
   }
 
   ipcBackend.on('theme-update', _e => refresh())
