@@ -26,7 +26,7 @@ export function getBackgroundImageStyle(
   if (bgImg) {
     if (bgImg && bgImg.startsWith('url')) {
       // migrating in case of absolute filepaths
-      const filePath = parse(bgImg).base
+      const filePath = parse(bgImg.slice(5, bgImg.length - 2)).base
       bgImg = `img: ${filePath}`
       DeltaBackend.call('settings.setDesktopSetting', 'chatViewBgImg', bgImg)
     } else if (bgImg.startsWith('#')) {
