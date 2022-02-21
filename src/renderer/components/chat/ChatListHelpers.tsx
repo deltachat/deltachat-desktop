@@ -81,8 +81,8 @@ export function useChatList(
       'useChatList: listFlags, queryStr or queryContactId changed, refetching chatlistids'
     )
 
-      log.debug('useChatList: refetchingChatlist')
-      debouncedGetChatListEntries(listFlags, queryStr, queryContactId)
+    log.debug('useChatList: refetchingChatlist')
+    debouncedGetChatListEntries(listFlags, queryStr, queryContactId)
 
     debouncedGetChatListEntries(listFlags, queryStr, queryContactId)
   }, [debouncedGetChatListEntries, listFlags, queryContactId, queryStr])
@@ -102,6 +102,6 @@ export function useChatList(
     setQueryStr,
     queryContactId,
     setQueryContactId,
-    refresh
+    refresh,
   }
 }

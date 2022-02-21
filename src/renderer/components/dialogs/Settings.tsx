@@ -25,7 +25,7 @@ import { getLogger } from '../../../shared/logger'
 import SettingsCommunication from './Settings-Communication'
 import { runtime } from '../../runtime'
 import SettingsDownloadOnDemand from './Settings-DownloadOnDemand'
-import {ThemeManager} from '../../ThemeManager'
+import { ThemeManager } from '../../ThemeManager'
 
 const log = getLogger('renderer/dialogs/Settings')
 

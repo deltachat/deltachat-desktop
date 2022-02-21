@@ -22,7 +22,7 @@ export function getDefaultState(): DesktopSettingsType {
       activeTheme: 'system',
       minimizeToTray: false,
       syncAllAccounts: true,
-      showAccountSidebar: false
+      showAccountSidebar: false,
     },
     logins: [],
   }

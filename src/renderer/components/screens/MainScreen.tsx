@@ -1,4 +1,10 @@
-import React, { useState, useContext, useRef, useEffect, useCallback } from 'react'
+import React, {
+  useState,
+  useContext,
+  useRef,
+  useEffect,
+  useCallback,
+} from 'react'
 import {
   ScreenContext,
   SettingsContext,
@@ -49,14 +55,13 @@ export enum View {
   Map,
 }
 
-
 //create your forceUpdate hook
-function useForceUpdate(){
-    const [_value, setValue] = useState(0); // integer state
-    const forceUpdate = useCallback(() => {
-      () => setValue(value => value + 1)
-    }, [])
-    return forceUpdate; // update the state to force render
+function useForceUpdate() {
+  const [_value, setValue] = useState(0) // integer state
+  const forceUpdate = useCallback(() => {
+    ;() => setValue(value => value + 1)
+  }, [])
+  return forceUpdate // update the state to force render
 }
 
 export default function MainScreen({
@@ -64,8 +69,8 @@ export default function MainScreen({
   selectAccount,
   logins,
 }: {
-  selectedAccountId: number | undefined,
-  selectAccount: typeof ScreenController.prototype.selectAccount,
+  selectedAccountId: number | undefined
+  selectAccount: typeof ScreenController.prototype.selectAccount
   logins: DeltaChatAccount[] | null
 }) {
   const [queryStr, setQueryStr] = useState('')
@@ -73,7 +78,7 @@ export default function MainScreen({
   const forceRerender = useForceUpdate()
 
   useEffect(() => {
-    log.debug("selectedAccountId changed, force rerender")
+    log.debug('selectedAccountId changed, force rerender')
     forceRerender()
     setFirstLoad(true)
   }, [forceRerender, selectedAccountId])
@@ -193,9 +198,14 @@ export default function MainScreen({
     <div className='main-screen'>
       <SettingsContext.Consumer>
         {({ desktopSettings }) =>
-          desktopSettings?.showAccountSidebar ?
-            <AccountSidebar selectedAccountId={selectedAccountId} selectedChat={selectedChat.chat} logins={logins} selectAccount={selectAccount}/> :
-            null
+          desktopSettings?.showAccountSidebar ? (
+            <AccountSidebar
+              selectedAccountId={selectedAccountId}
+              selectedChat={selectedChat.chat}
+              logins={logins}
+              selectAccount={selectAccount}
+            />
+          ) : null
         }
       </SettingsContext.Consumer>
       <div className='navbar-wrapper'>

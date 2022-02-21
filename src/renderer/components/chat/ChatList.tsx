@@ -104,7 +104,13 @@ export default function ChatList(props: {
   queryStr?: string
   onChatClick: (chatId: number) => void
 }) {
-  const { selectedAccountId, selectedChatId, showArchivedChats, onChatClick, queryStr } = props
+  const {
+    selectedAccountId,
+    selectedChatId,
+    showArchivedChats,
+    onChatClick,
+    queryStr,
+  } = props
   const isSearchActive = queryStr !== ''
 
   const {
@@ -119,10 +125,13 @@ export default function ChatList(props: {
     queryStrIsValidEmail,
   } = useContactAndMessageLogic(queryStr)
 
-  const { chatListIds, isChatLoaded, loadChats, chatCache, refresh } = useLogicChatPart(
-    queryStr,
-    showArchivedChats
-  )
+  const {
+    chatListIds,
+    isChatLoaded,
+    loadChats,
+    chatCache,
+    refresh,
+  } = useLogicChatPart(queryStr, showArchivedChats)
 
   useEffect(() => {
     refresh()

@@ -1,38 +1,38 @@
-
 .account-sidebar {
-    position: absolute;
-    left: 0;
-    width: var(--accountSidebarWidth);
-    height: 100vh;
+  position: absolute;
+  left: 0;
+  width: var(--accountSidebarWidth);
+  height: 100vh;
+  background-color: var(--chatListItemBgPinned);
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
+  &::-webkit-scrollbar-track {
     background-color: var(--chatListItemBgPinned);
-    overflow-y: scroll;
-    &::-webkit-scrollbar {
-      width: 3px;
+  }
+  &.hideScrollbarThumb::-webkit-scrollbar-thumb {
+    background: transparent;
+  }
+  .account {
+    --account-avatar-size: 40px;
+    padding-left: calc((100% - var(--account-avatar-size) - 6px) / 2);
+    border-left: solid 3px transparent;
+    &:hover {
+      border-left-color: var(--colorNone);
     }
-    &::-webkit-scrollbar-track {
-      background-color: var(--chatListItemBgPinned);
+    &.selected {
+      border-left-color: var(--colorPrimary);
     }
-    &.hideScrollbarThumb::-webkit-scrollbar-thumb {
-      background: transparent;
-    }
-    .account {
-      --account-avatar-size: 40px;
-      padding-left: calc((100% - var(--account-avatar-size) - 6px) / 2);
-      border-left: solid 3px transparent;
-      &:hover {
-        border-left-color: var(--colorNone);
-      }
-      &.selected {
-        border-left-color: var(--colorPrimary);
-      }
 
-      .avatar {
-        --local-avatar-size: var(--account-avatar-size);
-        --local-avatar-vertical-margin: 8px;
-        --local-avatar-font-size: 25px;
-        div.content, img.content {
-          border-radius: 4px;
-        }
+    .avatar {
+      --local-avatar-size: var(--account-avatar-size);
+      --local-avatar-vertical-margin: 8px;
+      --local-avatar-font-size: 25px;
+      div.content,
+      img.content {
+        border-radius: 4px;
       }
     }
+  }
 }

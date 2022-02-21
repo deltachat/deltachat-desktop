@@ -21,7 +21,9 @@ export namespace ThemeManager {
       themeVars.innerText = theme.data
       currentThemeChangeHook()
     }
-    const { showAccountSidebar } = await DeltaBackend.call('settings.getDesktopSettings')
+    const { showAccountSidebar } = await DeltaBackend.call(
+      'settings.getDesktopSettings'
+    )
     const globalVars = window.document.getElementById('global-vars')
     if (!globalVars) return
     if (showAccountSidebar) {

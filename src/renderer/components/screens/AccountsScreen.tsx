@@ -147,9 +147,9 @@ const ScanQRCodeButton = React.memo(function ScanQRCode(_) {
 export default function AccountsScreen({
   selectAccount,
   logins,
-  refreshAccounts
+  refreshAccounts,
 }: {
-  selectAccount: typeof ScreenController.prototype.selectAccount,
+  selectAccount: typeof ScreenController.prototype.selectAccount
   logins: DeltaChatAccount[] | null
   refreshAccounts: () => Promise<void>
 }) {
@@ -165,7 +165,6 @@ export default function AccountsScreen({
       setSyncAllAccounts(desktopSettings.syncAllAccounts)
     })()
   }, [])
-
 
   const addAccount = async () => {
     const accountId = await DeltaBackend.call('login.addAccount')
