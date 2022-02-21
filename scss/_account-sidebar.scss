@@ -1,7 +1,8 @@
+
 .account-sidebar {
     position: absolute;
     left: 0;
-    width: $account-sidebar-width;
+    width: var(--accountSidebarWidth);
     height: 100vh;
     background-color: var(--chatListItemBgPinned);
     overflow-y: scroll;
@@ -15,13 +16,23 @@
       background: transparent;
     }
     .account {
-      padding-left: calc((100% - 48px) / 2);
+      --account-avatar-size: 40px;
+      padding-left: calc((100% - var(--account-avatar-size) - 6px) / 2);
       border-left: solid 3px transparent;
       &:hover {
-        border-left-color: lightgrey;
+        border-left-color: var(--colorNone);
       }
       &.selected {
         border-left-color: var(--colorPrimary);
+      }
+
+      .avatar {
+        --local-avatar-size: var(--account-avatar-size);
+        --local-avatar-vertical-margin: 8px;
+        --local-avatar-font-size: 25px;
+        div.content, img.content {
+          border-radius: 4px;
+        }
       }
     }
 }

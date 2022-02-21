@@ -1,6 +1,6 @@
 .navbar-wrapper {
   .bp3-navbar {
-    margin-left: $account-sidebar-width;
+    margin-left: var(--accountSidebarWidth);
     padding: 0px;
     background-color: var(--navBarBackground);
     color: var(--navBarText);
@@ -23,7 +23,7 @@
   }
 
   .bp3-align-right {
-    width: calc(70vw - #{$account-sidebar-width});
+    width: calc(70vw - var(--accountSidebarWidth));
     float: none;
   }
 
