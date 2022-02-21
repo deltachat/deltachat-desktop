@@ -11,6 +11,7 @@ import { SettingsSelector } from './Settings'
 import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
 import { runtime } from '../../runtime'
 import { RC_Config, Theme } from '../../../shared/shared-types'
+import { join } from 'path'
 
 const enum SetBackgroundAction {
   default,
@@ -48,8 +49,8 @@ function BackgroundSelector({
         'style',
         `position:absolute;top:${y}px;left:${ev.clientX}px;`
       )
-      if (!desktopSettings?.chatViewBgImg?.startsWith('url(')) {
-        colorInput.value = desktopSettings?.chatViewBgImg || ''
+      if (desktopSettings?.chatViewBgImg?.startsWith('color: ')) {
+        colorInput.value = desktopSettings?.chatViewBgImg.slice(7) || ''
       }
       setTimeout(() => colorInput.click(), 0)
     }
@@ -112,15 +113,18 @@ function BackgroundSelector({
             desktopSettings && (
               <div
                 style={{
-                  ...(desktopSettings.chatViewBgImg?.startsWith('url(')
+                  ...(desktopSettings.chatViewBgImg?.startsWith('img: ')
                     ? {
-                        backgroundImage: `url("file://${desktopSettings.chatViewBgImg.slice(
-                          5,
-                          desktopSettings.chatViewBgImg.length - 2
+                        backgroundImage: `url("file://${join(
+                          runtime.getConfigPath(),
+                          'background/',
+                          desktopSettings.chatViewBgImg.slice(5)
                         )}")`,
                       }
                     : {
-                        backgroundColor: desktopSettings.chatViewBgImg,
+                        backgroundColor: desktopSettings.chatViewBgImg?.slice(
+                          7
+                        ),
                         backgroundImage: 'unset',
                       }),
                   backgroundSize: 'cover',
@@ -276,9 +280,11 @@ export default function SettingsAppearance({
       <br />
       <H6>{tx('pref_background')}</H6>
       <BackgroundSelector
-        onChange={(val: string) =>
-          handleDesktopSettingsChange('chatViewBgImg', val)
-        }
+        onChange={(val: string) => {
+          val.startsWith('#')
+            ? handleDesktopSettingsChange('chatViewBgImg', `color: ${val}`)
+            : handleDesktopSettingsChange('chatViewBgImg', val)
+        }}
       />
     </Card>
   )

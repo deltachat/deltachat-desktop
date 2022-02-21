@@ -70,6 +70,7 @@ interface Runtime {
   writeClipboardImage(path: string): Promise<boolean>
   getAppPath(name: Parameters<typeof app.getPath>[0]): string
   openPath(path: string): Promise<string>
+  getConfigPath(): string
 }
 
 class Browser implements Runtime {
@@ -133,6 +134,9 @@ class Browser implements Runtime {
   }
   reloadWebContent(): void {
     window.location.reload()
+  }
+  getConfigPath(): string {
+    throw new Error('Method not implemented.')
   }
 }
 class Electron implements Runtime {
@@ -230,10 +234,9 @@ class Electron implements Runtime {
   updateBadge() {
     ipcBackend.send('update-badge')
   }
-}
-
-export function getConfigPath(): string {
-  return ipcBackend.sendSync('get-config-path')
+  getConfigPath(): string {
+    return ipcBackend.sendSync('get-config-path')
+  }
 }
 
 const IS_ELECTRON = true

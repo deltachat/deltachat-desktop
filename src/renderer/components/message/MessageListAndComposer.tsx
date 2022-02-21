@@ -8,8 +8,8 @@ import { ChatStoreStateWithChatSet } from '../../stores/chat'
 import ComposerMessageInput from '../composer/ComposerMessageInput'
 import { DesktopSettingsType } from '../../../shared/shared-types'
 import { isChatReadonly } from '../../../shared/util'
-import { join } from 'path'
-import { getConfigPath } from '../../runtime'
+import { join, parse } from 'path'
+import { runtime } from '../../runtime'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -26,23 +26,29 @@ export function getBackgroundImageStyle(
   if (bgImg) {
     if (bgImg && bgImg.startsWith('url')) {
       // migrating in case of absolute filepaths
-      const filePath = bgImg.split('\\').pop()?.split('/').pop()
+      const filePath = parse(bgImg).base
       bgImg = `img: ${filePath}`
       DeltaBackend.call('settings.setDesktopSetting', 'chatViewBgImg', bgImg)
-    }
-    if (bgImg.startsWith('img')) {
-      const filePath = bgImg.slice(5)
-      const bgImgPath = join(getConfigPath(), 'background/', filePath)
-      style.backgroundImage = `url("file://${bgImgPath}")`
-    }
-    if (bgImg.startsWith('#')) {
+    } else if (bgImg.startsWith('#')) {
       // migrating to new prefixes
       bgImg = `color: ${bgImg}`
       DeltaBackend.call('settings.setDesktopSetting', 'chatViewBgImg', bgImg)
     }
-    if (bgImg.startsWith('color')) {
+    if (bgImg.startsWith('img: ')) {
+      const filePath = bgImg.slice(5)
+      const bgImgPath = join(runtime.getConfigPath(), 'background/', filePath)
+      style.backgroundImage = `url("file://${bgImgPath}")`
+    } else if (bgImg.startsWith('color: ')) {
       style.backgroundColor = bgImg.slice(7)
       style.backgroundImage = 'none'
+    } else if (bgImg === 'var(--chatViewBg)') {
+      // theme default background color
+      style.backgroundColor = bgImg
+      style.backgroundImage = 'none'
+    } else {
+      log.error(
+        `Could not read background image ${bgImg} from config file under ${runtime.getConfigPath()}.`
+      )
     }
   }
   return style
