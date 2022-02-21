@@ -102,7 +102,7 @@ export default class DCSettings extends SplitOut {
       log.error('BG-IMG Copy Failed', error)
       throw error
     }
-    return `url("${fileName.replace(/\\/g, '/')}")`
+    return `img: ${fileName.replace(/\\/g, '/')}`
   }
 
   estimateAutodeleteCount(fromServer: boolean, seconds: number) {

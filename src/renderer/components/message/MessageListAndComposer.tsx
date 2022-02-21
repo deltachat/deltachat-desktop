@@ -22,10 +22,15 @@ export function getBackgroundImageStyle(
 
   if (!settings) return style
 
-  const bgImg = settings['chatViewBgImg']
+  var bgImg = settings['chatViewBgImg']
   if (bgImg) {
     if (bgImg && bgImg.indexOf('url') !== -1) {
-      const filePath = bgImg.slice(5, bgImg.length - 2)
+      const filePath = bgImg.substring(bgImg.lastIndexOf("/") + 1, bgImg.length - 2);
+      bgImg = `img: ${filePath}`
+      DeltaBackend.call('settings.setDesktopSetting', 'chatViewBgImg', bgImg)
+    }
+    if (bgImg && bgImg.indexOf('img') !== -1) {
+      const filePath = bgImg.slice(5, bgImg.length)
       const bgImgPath = join(getConfigPath(), 'background/', filePath)
       style.backgroundImage = `url("file://${bgImgPath}")`
     } else {
