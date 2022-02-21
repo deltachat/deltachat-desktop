@@ -25,11 +25,9 @@ export function getBackgroundImageStyle(
   const bgImg = settings['chatViewBgImg']
   if (bgImg) {
     if (bgImg && bgImg.indexOf('url') !== -1) {
-      const bgImgPath = join(getConfigPath(), bgImg)
-      style.backgroundImage = `url("file://${bgImgPath.slice(
-        5,
-        bgImg.length - 2
-      )}")`
+      const filePath = bgImg.slice(5, bgImg.length - 2)
+      const bgImgPath = join(getConfigPath(), 'background/', filePath)
+      style.backgroundImage = `url("file://${bgImgPath}")`
     } else {
       style.backgroundColor = bgImg
       style.backgroundImage = 'none'
