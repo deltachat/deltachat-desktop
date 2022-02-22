@@ -455,7 +455,11 @@ export function AddMemberInnerDialog({
           </div>
         </Card>
       </DeltaDialogBody>
-      <DeltaDialogOkCancelFooter onCancel={onCancel} onOk={_onOk} />
+      <DeltaDialogOkCancelFooter
+        onCancel={onCancel}
+        onOk={contactIdsToAdd.length === 0 ? () => {} : _onOk}
+        disableOK={contactIdsToAdd.length === 0 ? true : false}
+      />
     </>
   )
 }
