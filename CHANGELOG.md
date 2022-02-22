@@ -233,6 +233,7 @@
 - fix archiving/unarchiving chat deselection issues (see #2262)
 - clear userfeedback on account switch / logout (see #2261)
 - fix link color in quotes
+- disable OK button in dialog to add new members to a group if noone is selected
 
 ### Changed
 
