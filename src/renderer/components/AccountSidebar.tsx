@@ -83,7 +83,8 @@ export default function AccountSidebar({
       <div
         key='add'
         className='account'
-        onClick={() => {
+        onClick={async () => {
+          await DeltaBackend.call('login.logout')
           window.__changeScreen(Screens.Login)
         }}
       >
