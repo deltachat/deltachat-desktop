@@ -46,7 +46,7 @@ import {
 } from '../helpers/ChatMethods'
 import { Avatar } from '../Avatar'
 import { AddMemberDialog } from './ViewGroup'
-import {ContactListItem} from '../contact/ContactListItem'
+import { ContactListItem } from '../contact/ContactListItem'
 
 export default function CreateChat(props: {
   isOpen: DialogProps['isOpen']
@@ -391,7 +391,9 @@ export function AddMemberInnerDialog({
   useLayoutEffect(applyCSSHacks, [inputRef, contactIdsToAdd])
   useEffect(applyCSSHacks, [])
 
-  const [contactsToDeleteOnCancel, setContactsToDeleteOnCancel] = useState<number[]>([])
+  const [contactsToDeleteOnCancel, setContactsToDeleteOnCancel] = useState<
+    number[]
+  >([])
 
   const addContactOnClick = useCallback(async () => {
     if (!queryStrIsValidEmail) return
@@ -404,7 +406,7 @@ export function AddMemberInnerDialog({
     addOrRemoveMember(contact)
     setContactsToDeleteOnCancel(value => [...value, contactId])
     onSearchChange({
-      target: { value: queryStr },
+      target: { value: '' },
     } as ChangeEvent<HTMLInputElement>)
   }, [addOrRemoveMember, onSearchChange, queryStr, queryStrIsValidEmail])
 
@@ -424,8 +426,8 @@ export function AddMemberInnerDialog({
         name: queryStr,
         profileImage: '',
         nameAndAddr: '',
-        isBlocked: false, 
-        isVerified: false
+        isBlocked: false,
+        isVerified: false,
       }
       return (
         <ContactListItem
@@ -447,6 +449,14 @@ export function AddMemberInnerDialog({
     }
   }
 
+  const addContactOnKeyDown = (ev: React.KeyboardEvent<HTMLInputElement>) => {
+    if (ev.key == 'Enter') {
+      ;(document.querySelector<HTMLDivElement>(
+        '.delta-checkbox'
+      ) as HTMLDivElement).click()
+    }
+  }
+
   return (
     <>
       <DeltaDialogHeader title={tx('group_add_members')} />
@@ -464,7 +474,9 @@ export function AddMemberInnerDialog({
                 ref={inputRef}
                 className='search-input group-member-search'
                 onChange={onSearchChangeValidation}
-                onKeyDown={(event) => { console.debug('haaaaaalllo', event) }}
+                onKeyDown={event => {
+                  addContactOnKeyDown(event)
+                }}
                 value={queryStr}
                 placeholder={tx('search')}
                 autoFocus
