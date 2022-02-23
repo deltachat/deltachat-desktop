@@ -459,9 +459,21 @@ class ChatStore extends Store<ChatStoreState> {
     },
     setMessageIds: (payload: { id: number; messageIds: number[] }) => {
       this.setState(state => {
+        const {
+          lastKnownScrollHeight,
+          lastKnownScrollTop,
+        } = getLastKnownScrollPosition()
+
+        const scrollTo: ScrollToLastKnownPosition = {
+          type: 'scrollToLastKnownPosition',
+          lastKnownScrollHeight,
+          lastKnownScrollTop,
+          appendedOn: 'top',
+        }
         const modifiedState = {
           ...state,
           messageIds: payload.messageIds,
+          scrollTo
         }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
         return modifiedState
@@ -975,11 +987,12 @@ class ChatStore extends Store<ChatStoreState> {
       } else {
         log.debug(
           'DC_EVENT_MSGS_CHANGED',
-          'changed message seems to be a new message'
+          'changed message seems to be a new message, refetching messageIds'
         )
-
-        console.log('onEventMessagesChanged', {chatId})
-        this.effect.refresh({chatId})
+        const messageIds = <number[]>(
+          await DeltaBackend.call('messageList.getMessageIds', chatId)
+        )
+        this.reducer.setMessageIds({id: chatId, messageIds})
       }
     }, 'onEventMessagesChanged'),
 
