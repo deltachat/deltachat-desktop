@@ -102,4 +102,8 @@ export default class JsonContacts extends SplitOut {
     }
     return this.selectedAccountContext.lookupContactIdByAddr(email)
   }
+
+  deleteContact(contactId: number) {
+    return this.selectedAccountContext.deleteContact(contactId)
+  }
 }

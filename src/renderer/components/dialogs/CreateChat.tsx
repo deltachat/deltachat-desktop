@@ -46,6 +46,7 @@ import {
 } from '../helpers/ChatMethods'
 import { Avatar } from '../Avatar'
 import { AddMemberDialog } from './ViewGroup'
+import {ContactListItem} from '../contact/ContactListItem'
 
 export default function CreateChat(props: {
   isOpen: DialogProps['isOpen']
@@ -316,7 +317,7 @@ export const GroupSettingsSetNameAndProfileImage = ({
 }
 
 export function AddMemberInnerDialog({
-  onCancel,
+  onCancel: onCancel,
   onOk,
   onSearchChange,
   queryStr,
@@ -365,6 +366,13 @@ export function AddMemberInnerDialog({
     onOk(contactIdsToAdd.map(c => c.id))
   }
 
+  const _onCancel = async () => {
+    for (let contactId of contactsToDeleteOnCancel) {
+      await DeltaBackend.call('contacts.deleteContact', contactId)
+    }
+    onCancel()
+  }
+
   const inputRef = useRef<HTMLInputElement>(null)
   const contactListRef = useRef<HTMLDivElement>(null)
   const applyCSSHacks = () => {
@@ -383,6 +391,8 @@ export function AddMemberInnerDialog({
   useLayoutEffect(applyCSSHacks, [inputRef, contactIdsToAdd])
   useEffect(applyCSSHacks, [])
 
+  const [contactsToDeleteOnCancel, setContactsToDeleteOnCancel] = useState<number[]>([])
+
   const addContactOnClick = useCallback(async () => {
     if (!queryStrIsValidEmail) return
 
@@ -392,6 +402,7 @@ export function AddMemberInnerDialog({
     )
     const contact = await DeltaBackend.call('contacts.getContact', contactId)
     addOrRemoveMember(contact)
+    setContactsToDeleteOnCancel(value => [...value, contactId])
     onSearchChange({
       target: { value: queryStr },
     } as ChangeEvent<HTMLInputElement>)
@@ -401,13 +412,39 @@ export function AddMemberInnerDialog({
     if (queryStr === '' || searchContacts.size !== 0) {
       return null
     }
-    return (
-      <PseudoListItemAddContact
-        queryStr={queryStr}
-        queryStrIsEmail={queryStrIsValidEmail}
-        onClick={addContactOnClick}
-      />
-    )
+    if (queryStrIsValidEmail) {
+      const pseudoContact: JsonContact = {
+        address: queryStr,
+        color: 'lightgrey',
+        authName: '',
+        status: '',
+        displayName: queryStr,
+        id: -1,
+        lastSeen: -1,
+        name: queryStr,
+        profileImage: '',
+        nameAndAddr: '',
+        isBlocked: false, 
+        isVerified: false
+      }
+      return (
+        <ContactListItem
+          contact={pseudoContact}
+          showCheckbox={true}
+          checked={false}
+          showRemove={false}
+          onCheckboxClick={addContactOnClick}
+        />
+      )
+    } else {
+      return (
+        <PseudoListItemAddContact
+          queryStr={queryStr}
+          queryStrIsEmail={false}
+          onClick={() => {}}
+        />
+      )
+    }
   }
 
   return (
@@ -427,6 +464,7 @@ export function AddMemberInnerDialog({
                 ref={inputRef}
                 className='search-input group-member-search'
                 onChange={onSearchChangeValidation}
+                onKeyDown={(event) => { console.debug('haaaaaalllo', event) }}
                 value={queryStr}
                 placeholder={tx('search')}
                 autoFocus
@@ -456,7 +494,7 @@ export function AddMemberInnerDialog({
         </Card>
       </DeltaDialogBody>
       <DeltaDialogOkCancelFooter
-        onCancel={onCancel}
+        onCancel={_onCancel}
         onOk={contactIdsToAdd.length === 0 ? () => {} : _onOk}
         disableOK={contactIdsToAdd.length === 0 ? true : false}
       />

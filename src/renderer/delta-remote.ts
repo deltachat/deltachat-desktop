@@ -110,6 +110,7 @@ class DeltaRemote {
   ): Promise<JsonContact[]>
   call(fnName: 'contacts.getEncryptionInfo', contactId: number): Promise<string>
   call(fnName: 'contacts.lookupContactIdByAddr', email: string): Promise<number>
+  call(fnName: 'contacts.deleteContact', contactId: number): Promise<boolean>
   // chat ---------------------------------------------------------------
   call(
     fnName: 'chat.getChatMedia',
