@@ -317,7 +317,7 @@ export const GroupSettingsSetNameAndProfileImage = ({
 }
 
 export function AddMemberInnerDialog({
-  onCancel: onCancel,
+  onCancel,
   onOk,
   onSearchChange,
   queryStr,
@@ -367,7 +367,7 @@ export function AddMemberInnerDialog({
   }
 
   const _onCancel = async () => {
-    for (let contactId of contactsToDeleteOnCancel) {
+    for (const contactId of contactsToDeleteOnCancel) {
       await DeltaBackend.call('contacts.deleteContact', contactId)
     }
     onCancel()
