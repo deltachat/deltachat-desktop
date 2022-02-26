@@ -8,12 +8,17 @@ import { nativeImage } from 'electron'
 import { join } from 'path'
 import { readdir, stat, rmdir, writeFile } from 'fs/promises'
 import { getConfigPath } from '../application-constants'
+import UrlParser from 'url-parse'
+import type { Message } from 'deltachat-node'
 
-const open_apps: { [msgId: number]: BrowserWindow } = {}
+const open_apps: {
+  [msgId: number]: { win: BrowserWindow; msg_obj: Message }
+} = {}
+
+// account sessions that have the webxdc scheme registered
+const accounts_sessions: number[] = []
 
 // TODO:
-// 1. same app issue -> refactor a bit to move the webxdc scheme
-//    to app ready and there look for the msg obj in open apps
 // 2. on message deletion close webxdc if open and remove its DOMStorage data
 
 const CSP =
@@ -57,7 +62,7 @@ export default class DCWebxdc extends SplitOut {
           'webxdc instance for this app is already open, trying to focus it',
           { msg_id }
         )
-        open_apps[msg_id].focus()
+        open_apps[msg_id].win.focus()
         return
       }
 
@@ -80,54 +85,66 @@ export default class DCWebxdc extends SplitOut {
 
       // TODO intercept / deny network access - CSP should probably be disabled for testing
 
-      ses.protocol.registerBufferProtocol(
-        'webxdc',
-        async (request, callback) => {
-          let filename = request.url.substr(appURL.length + 1)
+      if (!accounts_sessions.includes(this.selectedAccountId)) {
+        accounts_sessions.push(this.selectedAccountId)
+        ses.protocol.registerBufferProtocol(
+          'webxdc',
+          async (request, callback) => {
+            const url = UrlParser(request.url)
+            const msg_id = Number(url.hostname.split('.')[0])
 
-          // remove trailing "/"
-          if (filename[filename.length - 1] == '/') {
-            filename = filename.substr(0, filename.length - 1)
-          }
+            if (!open_apps[msg_id]) {
+              return
+            }
 
-          if (filename === 'webxdc.js') {
-            const displayName = Buffer.from(
-              this.controller.settings.getConfig('displayname')
-            ).toString('base64')
-            const seflAddr = Buffer.from(
-              this.controller.settings.getConfig('addr')
-            ).toString('base64')
+            let filename = url.pathname
+            // remove leading / trailing "/"
+            if (filename.endsWith('/')) {
+              filename = filename.substr(0, filename.length - 1)
+            }
+            if (filename.startsWith('/')) {
+              filename = filename.substr(1)
+            }
 
-            // initializes the preload script, the actual implementation of `window.webxdc` is found there: static/webxdc-preload.js
-            callback({
-              mimeType: Mime.lookup(filename) || '',
-              data: Buffer.from(
-                `window.webxdc_internal.setup("${seflAddr}","${displayName}")`
-              ),
-            })
-          } else {
-            const blob = this.selectedAccountContext.getWebxdcBlob(
-              webxdc_message,
-              filename
-            )
-            if (blob) {
+            if (filename === 'webxdc.js') {
+              const displayName = Buffer.from(
+                this.controller.settings.getConfig('displayname')
+              ).toString('base64')
+              const seflAddr = Buffer.from(
+                this.controller.settings.getConfig('addr')
+              ).toString('base64')
+
+              // initializes the preload script, the actual implementation of `window.webxdc` is found there: static/webxdc-preload.js
               callback({
                 mimeType: Mime.lookup(filename) || '',
-                data: blob,
-                headers: {
-                  'Content-Security-Policy': CSP,
-                },
+                data: Buffer.from(
+                  `window.webxdc_internal.setup("${seflAddr}","${displayName}")`
+                ),
               })
             } else {
-              callback({ statusCode: 404 })
+              const blob = this.selectedAccountContext.getWebxdcBlob(
+                open_apps[msg_id].msg_obj,
+                filename
+              )
+              if (blob) {
+                callback({
+                  mimeType: Mime.lookup(filename) || '',
+                  data: blob,
+                  headers: {
+                    'Content-Security-Policy': CSP,
+                  },
+                })
+              } else {
+                callback({ statusCode: 404 })
+              }
             }
           }
-        }
-      )
+        )
+      }
 
       const app_icon = icon_blob && nativeImage?.createFromBuffer(icon_blob)
 
-      const webxdc_windows = (open_apps[msg_id] = new BrowserWindow({
+      const webxdc_windows = new BrowserWindow({
         webPreferences: {
           partition: this._currentPartition,
           sandbox: true,
@@ -150,7 +167,8 @@ export default class DCWebxdc extends SplitOut {
         icon: app_icon || undefined,
         width: 375,
         height: 667,
-      }))
+      })
+      open_apps[msg_id] = { win: webxdc_windows, msg_obj: webxdc_message }
 
       webxdc_windows.once('closed', () => {
         delete open_apps[msg_id]
@@ -203,7 +221,7 @@ If you think that's a bug and you need that permission, then please open an issu
 
     ipcMain.handle('webxdc.getAllUpdates', async event => {
       const key = Object.keys(open_apps).find(
-        key => open_apps[Number(key)].webContents === event.sender
+        key => open_apps[Number(key)].win.webContents === event.sender
       )
       if (!key) {
         log.error(
@@ -216,7 +234,7 @@ If you think that's a bug and you need that permission, then please open an issu
 
     ipcMain.handle('webxdc.sendUpdate', async (event, update, description) => {
       const key = Object.keys(open_apps).find(
-        key => open_apps[Number(key)].webContents === event.sender
+        key => open_apps[Number(key)].win.webContents === event.sender
       )
       if (!key) {
         log.error(
@@ -240,7 +258,7 @@ If you think that's a bug and you need that permission, then please open an issu
             msg_id,
             status_update_id
           )
-          instance.webContents.send('webxdc.statusUpdate', status_update[0])
+          instance.win.webContents.send('webxdc.statusUpdate', status_update[0])
         }
       }
     )
@@ -248,7 +266,7 @@ If you think that's a bug and you need that permission, then please open an issu
 
   closeAll() {
     for (const open_app of Object.keys(open_apps)) {
-      open_apps[Number(open_app)].close()
+      open_apps[Number(open_app)].win.close()
     }
   }
 
