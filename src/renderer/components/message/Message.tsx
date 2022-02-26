@@ -283,9 +283,15 @@ const Message = (props: {
   }
 
   // Info Message
-  if (message.isInfo)
+  if (message.isInfo) {
     return (
-      <div className='info-message' onContextMenu={showMenu}>
+      <div
+        className='info-message'
+        onContextMenu={showMenu}
+        onClick={() => {
+          message.parentId && jumpToMessage(message.parentId)
+        }}
+      >
         <p>
           {text}
           {direction === 'outgoing' &&
@@ -298,7 +304,7 @@ const Message = (props: {
         </p>
       </div>
     )
-
+  }
   // Normal Message
   const onContactClick = async (contact: JsonContact) => {
     openViewProfileDialog(screenContext, contact.id)
