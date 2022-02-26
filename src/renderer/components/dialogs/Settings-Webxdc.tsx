@@ -16,7 +16,7 @@ export default function SettingsWebxdc() {
     DeltaBackend.call('webxdc.getWebxdcDiskUsage').then(setUsage)
   }, [])
 
-  useEffect(() => updateUsage(), [])
+  useEffect(() => updateUsage(), [updateUsage])
 
   const { openDialog } = useContext(ScreenContext)
   const tx = window.static_translate
