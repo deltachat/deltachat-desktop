@@ -106,6 +106,8 @@ export default class DCLoginController extends SplitOut {
 
     if (this.accounts.removeAccount(accountId) !== 1) {
       throw new Error('Account deletion failed')
+    } else {
+      this.controller.webxdc._deleteWebxdcAccountData(accountId)
     }
   }
 

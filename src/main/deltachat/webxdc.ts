@@ -6,8 +6,15 @@ const log = getLogger('main/deltachat/webxdc')
 import Mime from 'mime-types'
 import { nativeImage } from 'electron'
 import { join } from 'path'
+import { readdir, stat, rmdir, writeFile } from 'fs/promises'
+import { getConfigPath } from '../application-constants'
 
 const open_apps: { [msgId: number]: BrowserWindow } = {}
+
+// TODO:
+// 1. same app issue -> refactor a bit to move the webxdc scheme
+//    to app ready and there look for the msg obj in open apps
+// 2. on message deletion close webxdc if open and remove its DOMStorage data
 
 const CSP =
   "default-src 'self';\
@@ -68,15 +75,15 @@ export default class DCWebxdc extends SplitOut {
         icon
       )
 
-      const partition = 'webxdc-temp-' + msg_id
-      const ses = session.fromPartition(partition)
+      const ses = this._currentSession
+      const appURL = `webxdc://${msg_id}.webxdc`
 
       // TODO intercept / deny network access - CSP should probably be disabled for testing
 
       ses.protocol.registerBufferProtocol(
         'webxdc',
         async (request, callback) => {
-          let filename = request.url.substr(16)
+          let filename = request.url.substr(appURL.length + 1)
 
           // remove trailing "/"
           if (filename[filename.length - 1] == '/') {
@@ -122,7 +129,7 @@ export default class DCWebxdc extends SplitOut {
 
       const webxdc_windows = (open_apps[msg_id] = new BrowserWindow({
         webPreferences: {
-          partition,
+          partition: this._currentPartition,
           sandbox: true,
           contextIsolation: true,
           webSecurity: true,
@@ -145,19 +152,13 @@ export default class DCWebxdc extends SplitOut {
         height: 667,
       }))
 
-      webxdc_windows.once('close', () => {
-        webxdc_windows.webContents.session.clearStorageData({
-          storages: ['indexdb', 'localstorage', 'cookies', 'serviceworkers'],
-        })
-      })
-
       webxdc_windows.once('closed', () => {
         delete open_apps[msg_id]
       })
 
       webxdc_windows.once('ready-to-show', () => {})
 
-      webxdc_windows.webContents.loadURL('webxdc://webxdc/index.html', {
+      webxdc_windows.webContents.loadURL(appURL + '/index.html', {
         extraHeaders: 'Content-Security-Policy: ' + CSP,
       })
 
@@ -249,5 +250,113 @@ If you think that's a bug and you need that permission, then please open an issu
     for (const open_app of Object.keys(open_apps)) {
       open_apps[Number(open_app)].close()
     }
+  }
+
+  get _currentPartition() {
+    return `persist:webxdc_${this.selectedAccountId}`
+  }
+
+  get _currentSession() {
+    return session.fromPartition(this._currentPartition, { cache: false })
+  }
+
+  clearWebxdcDOMStorage() {
+    return this._currentSession.clearStorageData()
+  }
+
+  async deleteWebxdcAccountData() {
+    await this._deleteWebxdcAccountData(this.selectedAccountId)
+    app.relaunch()
+    app.quit()
+  }
+
+  async _deleteWebxdcAccountData(accountId: number) {
+    // we can not delete the directory as it might still be used and that would be a problem on windows
+    // so the second next best thing we can do is telling electron to clear the data, even though it won't delete everything
+    const s = session.fromPartition(`persist:webxdc_${accountId}`, {
+      cache: false,
+    })
+    await s.clearStorageData()
+
+    // mark the folder for deletion on next startup
+    await writeFile(join(s.storagePath, 'webxdc-cleanup'), '-', 'utf-8')
+  }
+
+  async getWebxdcDiskUsage() {
+    const ses = this._currentSession
+    const [cache_size, real_total_size] = await Promise.all([
+      ses.getCacheSize(),
+      get_recursive_folder_size(ses.storagePath, [
+        'GPUCache',
+        'QuotaManager',
+        'Code Cache',
+        'LOG',
+        'LOG.old',
+        'LOCK',
+        '.DS_Store',
+        'Cookies-journal',
+        'Databases.db-journal',
+        'Preferences',
+        'QuotaManager-journal',
+        '000003.log',
+        'MANIFEST-000001',
+      ]),
+    ])
+    const empty_size = 49 * 1024 // ~ size of an empty session/partition
+
+    let total_size = real_total_size - empty_size
+    let data_size = total_size - cache_size
+    if (total_size < 0) {
+      total_size = 0
+      data_size = 0
+    }
+    return {
+      cache_size,
+      total_size,
+      data_size,
+    }
+  }
+}
+
+async function get_recursive_folder_size(
+  path: string,
+  exclude_list: string[] = []
+) {
+  let size = 0
+  for (const item of await readdir(path)) {
+    const item_path = join(path, item)
+    const stats = await stat(item_path)
+    if (exclude_list.includes(item)) {
+      continue
+    }
+    if (stats.isDirectory()) {
+      size += await get_recursive_folder_size(item_path, exclude_list)
+    } else {
+      size += stats.size
+    }
+  }
+  return size
+}
+
+export async function webxdcStartUpCleanup() {
+  try {
+    const partitions_dir = join(getConfigPath(), 'Partitions')
+    const folders = await readdir(partitions_dir)
+    for (const folder of folders) {
+      if (!folder.startsWith('webxdc')) {
+        continue
+      }
+      try {
+        await stat(join(partitions_dir, folder, 'webxdc-cleanup'))
+        await rmdir(join(partitions_dir, folder), { recursive: true })
+        log.info('webxdc cleanup: deleted ', folder)
+      } catch (error) {
+        if (error.code !== 'ENOENT') {
+          throw error
+        }
+      }
+    }
+  } catch (error) {
+    log.warn('webxdc cleanup failed', error)
   }
 }
