@@ -563,6 +563,7 @@ class ChatStore extends Store<ChatStoreState> {
         log.debug('effectQueue: no more queued effects, unlocking')
         this.lockUnlock('queue')
         log.debug('effectQueue: finished')
+        return
       }
 
       const effect = this.effectQueue.pop()
