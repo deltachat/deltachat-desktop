@@ -133,7 +133,9 @@ export default function MessageList({
       //ChatStore.reducer.scrolledToBottom({ id: chatId })
       //lockFetchMore.setLock(false)
       // Try fetching more messages if needed
-      setTimeout(() => { onScroll(null) }, 0)
+      setTimeout(() => {
+        onScroll(null)
+      }, 0)
       return
     } else if (scrollTo.type === 'scrollToLastKnownPosition') {
       log.debug(
@@ -157,15 +159,15 @@ export default function MessageList({
       }, 0)
     } else if (scrollTo.type === 'scrollToPosition') {
       log.debug(
-        'scrollTo type: scrollToPosition; scrollTop: ' +
-          scrollTo.scrollTop
-        )
+        'scrollTo type: scrollToPosition; scrollTop: ' + scrollTo.scrollTop
+      )
       messageListRef.current.scrollTop = scrollTo.scrollTop
       setTimeout(() => {
         ChatStore.reducer.unlockScroll({ id: chatId })
-        setTimeout(() => { onScroll(null) }, 0)
+        setTimeout(() => {
+          onScroll(null)
+        }, 0)
       }, 0)
-
     }
   }, [onScroll, scrollTo])
 
@@ -189,7 +191,9 @@ export default function MessageList({
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
     setTimeout(() => {
       ChatStore.reducer.scrolledToBottom({ id: chatId })
-      setTimeout(() => { onScroll(null) }, 0)
+      setTimeout(() => {
+        onScroll(null)
+      }, 0)
     }, 0)
 
     // Try fetching more messages if needed
@@ -300,14 +304,16 @@ export const MessageListInner = React.memo(
 
     useKeyBindingAction(KeybindAction.MessageList_PageUp, () => {
       if (messageListRef.current) {
-        messageListRef.current.scrollTop = messageListRef.current.scrollTop - messageListRef.current.clientHeight
+        messageListRef.current.scrollTop =
+          messageListRef.current.scrollTop - messageListRef.current.clientHeight
         // @ts-ignore
         onScroll(null)
       }
     })
     useKeyBindingAction(KeybindAction.MessageList_PageDown, () => {
       if (messageListRef.current) {
-        messageListRef.current.scrollTop = messageListRef.current.scrollTop + messageListRef.current.clientHeight
+        messageListRef.current.scrollTop =
+          messageListRef.current.scrollTop + messageListRef.current.clientHeight
         // @ts-ignore
         onScroll(null)
       }
