@@ -57,7 +57,7 @@ export default function MessageList({
         return
       }
       if (ChatStore.lockIsLocked('scroll') === true) {
-        console.log('onScroll: locked, returning')
+        //console.log('onScroll: locked, returning')
         return
       }
       const distanceToTop = messageListRef.current.scrollTop
@@ -65,7 +65,7 @@ export default function MessageList({
         messageListRef.current.scrollHeight -
         messageListRef.current.scrollTop -
         messageListRef.current.clientHeight
-      console.log('onScroll', distanceToTop, distanceToBottom)
+      //console.log('onScroll', distanceToTop, distanceToBottom)
       if (distanceToTop < 200) {
         log.debug('Scrolled to top, fetching more messsages!')
         setTimeout(() => fetchMoreTop(), 0)

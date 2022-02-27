@@ -233,6 +233,14 @@ class DeltaRemote {
     fnName: 'messageList.getMessages',
     messageIds: number[]
   ): Promise<[number, MessageType | null][]>
+  call(
+    fnName: 'messageList.getMessagesFromIndex',
+    chatId: number,
+    indexStart: number,
+    indexEnd: number,
+    flags?: number,
+    marker1before?: number
+  ): Promise<[number, MessageType | null][]>
   call(fnName: 'messageList.getMessageInfo', msgId: number): Promise<string>
   call(fnName: 'messageList.downloadFullMessage', msgId: number): Promise<void>
   call(
