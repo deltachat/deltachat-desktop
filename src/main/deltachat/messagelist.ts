@@ -213,6 +213,44 @@ export default class DCMessageList extends SplitOut {
     return messages
   }
 
+  getMessagesFromIndex(chatId: number, indexStart: number, indexEnd: number, flags: number = C.DC_GCM_ADDDAYMARKER, marker1before: number = -1) {
+    const messages: [
+      number,
+      ReturnType<typeof DCMessageList.prototype.messageIdToJson>
+    ][] = []
+    const markMessagesRead: number[] = []
+    const messageIds = this.selectedAccountContext.getChatMessages(chatId, flags, marker1before)
+
+    for (let i = indexStart; i <= indexEnd; i++) {
+      const messageId = messageIds[i]
+      let message = null
+      if (messageId > C.DC_MSG_ID_LAST_SPECIAL) {
+        message = this.messageIdToJson(messageId)
+        if (chatId === -1) {
+          chatId = message.chatId
+        }
+        if (
+          getDirection(message) === 'incoming' &&
+          message.state !== C.DC_STATE_IN_SEEN
+        ) {
+          markMessagesRead.push(messageId)
+        }
+      }
+      messages.push([messageId, message])
+    }
+
+    if (markMessagesRead.length > 0) {
+      log.debug(
+        `markMessagesRead ${markMessagesRead.length} messages for chat ${chatId}`
+      )
+      // TODO: move mark seen logic to frontend
+      setTimeout(() =>
+        this.selectedAccountContext.markSeenMessages(markMessagesRead)
+      )
+    }
+    return messages
+  }
+
   markSeenMessages(messageIds: number[]) {
     this.selectedAccountContext.markSeenMessages(messageIds)
   }

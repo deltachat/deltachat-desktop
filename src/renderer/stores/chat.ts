@@ -72,16 +72,50 @@ function getLastKnownScrollPosition(): {
   }
 }
 
-async function messagePagesFromMessageIds(messageIds: number[]) {
+async function messagePageFromMessageIndexes(chatId: number, indexStart: number, indexEnd: number) {
   const _messages = await DeltaBackend.call(
-    'messageList.getMessages',
-    messageIds
+    'messageList.getMessagesFromIndex',
+    chatId,
+    indexStart,
+    indexEnd,
+  )
+  if (_messages.length === 0) {
+    throw new Error('messagePageFromMessageIndexes: _messages.length equals zero. This should not happen')
+  }
+
+  if (_messages.length !== indexEnd - indexStart + 1) {
+    throw new Error('messagePageFromMessageIndexes: _messages.length doesn\'t equal indexEnd - indexStart + 1. This should not happen')
+  }
+
+  const messages = OrderedMap().withMutations(messagePages => {
+    for (let i = 0; i < _messages.length; i++) {
+      console.debug('a', _messages, i)
+      console.debug('b', _messages[i])
+      let [messageId, message] = _messages[i]
+      messagePages.set(messageId, message)
+    }
+  }) as OrderedMap<number, MessageType | null>
+
+  const messagePage = {
+    pageKey: calculatePageKey(messages),
+    messages,
+  }
+
+  return messagePage
+}
+
+async function messagePagesFromMessageIndexes(chatId: number, indexStart: number, indexEnd: number) {
+  const _messages = await DeltaBackend.call(
+    'messageList.getMessagesFromIndex',
+    chatId,
+    indexStart,
+    indexEnd,
   )
 
   let messagePages = []
 
   let currentIndex = 0
-  while (currentIndex < messageIds.length) {
+  while (currentIndex < _messages.length) {
     const messages = OrderedMap().withMutations(messagePages => {
       for (let i = currentIndex; i < currentIndex + PAGE_SIZE; i++) {
         if (i >= _messages.length) break
@@ -565,6 +599,7 @@ class ChatStore extends Store<ChatStoreState> {
     selectChat: async (chatId: number) => {
       // these methods were called in backend before
       // might be an issue if DeltaBackend.call has a significant delay
+      this.lockUnlock('scroll')
       const chat = <FullChat>(
         await DeltaBackend.call('chatList.selectChat', chatId)
       )
@@ -581,7 +616,7 @@ class ChatStore extends Store<ChatStoreState> {
 
       let oldestFetchedMessageIndex = -1
       let newestFetchedMessageIndex = -1
-      let messagePages: MessagePage[] = []
+      let messagePage: MessagePage | null = null
       if (messageIds.length !== 0) {
         // mesageIds.length = 1767
         // oldestFetchedMessageIndex = 1767 - 1 = 1766 - 10 = 1756
@@ -592,16 +627,12 @@ class ChatStore extends Store<ChatStoreState> {
         )
         newestFetchedMessageIndex = messageIds.length - 1
 
-        const messageIdsToFetch = messageIds.slice(
-          oldestFetchedMessageIndex,
-          newestFetchedMessageIndex + 1
-        )
-        messagePages = await messagePagesFromMessageIds(messageIdsToFetch)
+        messagePage = await messagePageFromMessageIndexes(chatId, oldestFetchedMessageIndex, newestFetchedMessageIndex)
       }
 
       this.reducer.selectedChat({
         chat,
-        messagePages,
+        messagePages: messagePage === null ? [] : [messagePage],
         messageIds,
         oldestFetchedMessageIndex,
         newestFetchedMessageIndex,
@@ -615,6 +646,7 @@ class ChatStore extends Store<ChatStoreState> {
       runtime.updateBadge()
       saveLastChatId(chatId)
     },
+
     jumpToMessage: async (msgId: number, highlight?: boolean) => {
       highlight = highlight === false ? false : true
       // these methods were called in backend before
@@ -651,7 +683,7 @@ class ChatStore extends Store<ChatStoreState> {
 
       let oldestFetchedMessageIndex = -1
       let newestFetchedMessageIndex = -1
-      let messagePages: MessagePage[] = []
+      let messagePage: MessagePage | null = null
       const half_page_size = Math.ceil(PAGE_SIZE / 2)
       if (messageIds.length !== 0) {
         oldestFetchedMessageIndex = Math.max(
@@ -686,12 +718,16 @@ class ChatStore extends Store<ChatStoreState> {
           newestFetchedMessageIndex + 1
         )
 
-        messagePages = await messagePagesFromMessageIds(messageIdsToFetch)
+        messagePage = await messagePageFromMessageIndexes(chatId, oldestFetchedMessageIndex, newestFetchedMessageIndex)
+      }
+
+      if (messagePage === null) {
+        throw new Error('jumpToMessage: messagePage is null, this should not happen')
       }
 
       this.reducer.selectedChat({
         chat,
-        messagePages,
+        messagePages: [messagePage],
         messageIds,
         oldestFetchedMessageIndex,
         newestFetchedMessageIndex,
@@ -746,14 +782,11 @@ class ChatStore extends Store<ChatStoreState> {
           return false
         }
 
-        const messagePages: MessagePage[] = await messagePagesFromMessageIds(
-          fetchedMessageIds
+        const messagePage: MessagePage = await messagePageFromMessageIndexes(
+          id,
+          oldestFetchedMessageIndex,
+          lastMessageIndexOnLastPage - 1
         )
-
-        if (messagePages.length === 0) {
-          throw new Error('messagePages.length is zero, this should not happen')
-        }
-        const messagePage = messagePages[0]
 
         this.reducer.appendMessagePageTop({
           id,
@@ -775,12 +808,12 @@ class ChatStore extends Store<ChatStoreState> {
         }
         const id = state.chat.id
 
-        const newestFetchedMessageIndex = state.newestFetchedMessageIndex
+        const newestFetchedMessageIndex = state.newestFetchedMessageIndex + 1
         const newNewestFetchedMessageIndex = Math.min(
           newestFetchedMessageIndex + PAGE_SIZE,
           state.messageIds.length - 1
         )
-        if (newestFetchedMessageIndex === state.messageIds.length - 1) {
+        if (newestFetchedMessageIndex === state.messageIds.length) {
           log.debug('fetchMoreMessagesBottom: no more messages, returning')
           return false
         }
@@ -801,14 +834,11 @@ class ChatStore extends Store<ChatStoreState> {
           return false
         }
 
-        const messagePages: MessagePage[] = await messagePagesFromMessageIds(
-          fetchedMessageIds
+        const messagePage: MessagePage = await messagePageFromMessageIndexes(
+          id,
+          newestFetchedMessageIndex,
+          newNewestFetchedMessageIndex
         )
-
-        if (messagePages.length === 0) {
-          throw new Error('MessagePage length is zero, this should not happen')
-        }
-        const messagePage = messagePages[0]
 
         this.reducer.appendMessagePageBottom({
           id,
@@ -840,7 +870,7 @@ class ChatStore extends Store<ChatStoreState> {
       newestFetchedMessageIndex = Math.min(newestFetchedMessageIndex, messageIds.length - 1)
       oldestFetchedMessageIndex = Math.max(oldestFetchedMessageIndex, 0)
 
-      const messagePages = await messagePagesFromMessageIds(messageIds.slice(oldestFetchedMessageIndex, newestFetchedMessageIndex + 1))
+      const messagePages = await messagePagesFromMessageIndexes(chatId, oldestFetchedMessageIndex, newestFetchedMessageIndex)
 
       this.reducer.refresh(messageIds, messagePages, newestFetchedMessageIndex, oldestFetchedMessageIndex)
       return true
