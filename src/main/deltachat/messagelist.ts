@@ -213,13 +213,23 @@ export default class DCMessageList extends SplitOut {
     return messages
   }
 
-  getMessagesFromIndex(chatId: number, indexStart: number, indexEnd: number, flags: number = C.DC_GCM_ADDDAYMARKER, marker1before: number = -1) {
+  getMessagesFromIndex(
+    chatId: number,
+    indexStart: number,
+    indexEnd: number,
+    flags = C.DC_GCM_ADDDAYMARKER,
+    marker1before = -1
+  ) {
     const messages: [
       number,
       ReturnType<typeof DCMessageList.prototype.messageIdToJson>
     ][] = []
     const markMessagesRead: number[] = []
-    const messageIds = this.selectedAccountContext.getChatMessages(chatId, flags, marker1before)
+    const messageIds = this.selectedAccountContext.getChatMessages(
+      chatId,
+      flags,
+      marker1before
+    )
 
     for (let i = indexStart; i <= indexEnd; i++) {
       const messageId = messageIds[i]
