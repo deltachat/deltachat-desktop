@@ -10,14 +10,14 @@ export default class JsonContacts extends SplitOut {
   unblockContact(contactId: number) {
     const contact = this.selectedAccountContext.getContact(contactId)
     this.selectedAccountContext.blockContact(contactId, false)
-    const name = contact.getNameAndAddress()
+    const name = contact?.getNameAndAddress()
     log.info(`Unblocked contact ${name} (id = ${contactId})`)
   }
 
   blockContact(contactId: number) {
     const contact = this.selectedAccountContext.getContact(contactId)
     this.selectedAccountContext.blockContact(contactId, true)
-    const name = contact.getNameAndAddress()
+    const name = contact?.getNameAndAddress()
     log.debug(`Blocked contact ${name} (id = ${contactId})`)
   }
 
@@ -30,6 +30,9 @@ export default class JsonContacts extends SplitOut {
 
   async changeNickname(contactId: number, name: string) {
     const contact = this.selectedAccountContext.getContact(contactId)
+    if (!contact) {
+      throw new Error('contact not found')
+    }
     const address = contact.getAddress()
     const result = this.selectedAccountContext.createContact(name, address)
     return result
@@ -65,7 +68,11 @@ export default class JsonContacts extends SplitOut {
   }
 
   getContact(contactId: number) {
-    return this.selectedAccountContext.getContact(contactId).toJson()
+    const contact = this.selectedAccountContext.getContact(contactId)?.toJson()
+    if (!contact) {
+      throw new Error('contact not found')
+    }
+    return contact
   }
 
   getContactIds(listFlags: number, queryStr: string): number[] {
@@ -79,15 +86,10 @@ export default class JsonContacts extends SplitOut {
     )
   }
 
-  _getJsonContact(id: number) {
-    const contact = this.selectedAccountContext.getContact(id).toJson()
-    return { ...contact }
-  }
-
   getContacts(ids: number[]) {
     const result: { [id: number]: JsonContact } = {}
     for (const id of ids) {
-      result[id] = this._getJsonContact(id)
+      result[id] = this.getContact(id)
     }
     return result
   }

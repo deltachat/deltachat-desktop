@@ -54,9 +54,9 @@ export default class DCChatList extends SplitOut {
     return chatListJson
   }
 
-  getChatListEntryMessageIdForChatId(chatID: number): number {
+  getChatListEntryMessageIdForChatId(chatID: number): number | null {
     // workaround until this is in core
-    const chatList = this.selectedAccountContext.getChatList(0, '', null)
+    const chatList = this.selectedAccountContext.getChatList(0, '', 0)
     for (let counter = 0; counter < chatList.getCount(); counter++) {
       if (chatID == chatList.getChatId(counter)) {
         return chatList.getMessageId(counter)
@@ -68,7 +68,7 @@ export default class DCChatList extends SplitOut {
   async getChatListItemsByEntries(entries: [number, number][]) {
     // const label = '[BENCH] getChatListItemsByEntries'
     // console.time(label)
-    const chats: { [key: number]: ChatListItemType } = {}
+    const chats: { [key: number]: ChatListItemType | null } = {}
     for (const entry of entries) {
       const chat = await this.getChatListItemByEntry(entry)
       chats[entry[0]] = chat
@@ -80,14 +80,14 @@ export default class DCChatList extends SplitOut {
   async getChatListItemByEntry([chatId, messageId]: [
     number,
     number
-  ]): Promise<ChatListItemType> {
+  ]): Promise<ChatListItemType | null> {
     const chat = await this._getChatById(chatId)
     if (chat === null) return null
 
     const summary = this.selectedAccountContext
       .getChatlistItemSummary(chatId, messageId)
       .toJson()
-    const lastUpdated = summary.timestamp ? summary.timestamp * 1000 : null
+    const lastUpdated = summary.timestamp ? summary.timestamp * 1000 : 0
 
     const name = chat.name || summary.text1
     const isGroup = isGroupChat(chat)
@@ -125,7 +125,7 @@ export default class DCChatList extends SplitOut {
     return chatListItem
   }
 
-  async _getChatById(chatId: number): Promise<JsonChat> {
+  async _getChatById(chatId: number): Promise<JsonChat | null> {
     if (!chatId) return null
     const rawChat = this.selectedAccountContext.getChat(chatId)
     if (!rawChat) return null
@@ -136,14 +136,10 @@ export default class DCChatList extends SplitOut {
     return this.selectedAccountContext.getChatContacts(chatId)
   }
 
-  async _getChatContact(contactId: number) {
-    return this.selectedAccountContext.getContact(contactId).toJson()
-  }
-
   async _getChatContacts(contactIds: number[]): Promise<JsonContact[]> {
     const contacts = []
     for (let i = 0; i < contactIds.length; i++) {
-      const contact = await this._getChatContact(contactIds[i])
+      const contact = this.controller.contacts.getContact(contactIds[i])
       contacts.push(contact)
     }
     return contacts
@@ -151,10 +147,13 @@ export default class DCChatList extends SplitOut {
 
   async isChatMuted(chatId: number): Promise<boolean> {
     const chat = await this._getChatById(chatId)
+    if (!chat) {
+      throw new Error('Chat is not defined')
+    }
     return chat.muted
   }
 
-  async getFullChatById(chatId: number): Promise<FullChat> {
+  async getFullChatById(chatId: number): Promise<FullChat | null> {
     const chat = await this._getChatById(chatId)
     if (chat === null) return null
 

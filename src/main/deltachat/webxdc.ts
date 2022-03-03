@@ -26,9 +26,16 @@ export default class DCWebxdc extends SplitOut {
         const url = request.url.substr(12)
 
         const msg = this.selectedAccountContext.getMessage(Number(url))
+        if (!msg || !msg.webxdcInfo) {
+          log.error('message not found or not a webxdc message:', url)
+          return callback({ statusCode: 404 })
+        }
         const icon = msg.webxdcInfo.icon
         const blob = this.selectedAccountContext.getWebxdcBlob(msg, icon)
-
+        if (!blob) {
+          log.error('getWebxdcBlob returned null instead of an icon')
+          return callback({ statusCode: 404 })
+        }
         callback({
           mimeType: Mime.lookup(icon) || '',
           data: blob,
@@ -50,6 +57,11 @@ export default class DCWebxdc extends SplitOut {
       log.info('opening new webxdc instance', { msg_id })
 
       const webxdc_message = this.selectedAccountContext.getMessage(msg_id)
+      if (!webxdc_message || !webxdc_message.webxdcInfo) {
+        log.error('message not found or not a webxdc message')
+        return
+      }
+
       const icon = webxdc_message.webxdcInfo.icon
       const icon_blob = this.selectedAccountContext.getWebxdcBlob(
         webxdc_message,
@@ -87,21 +99,26 @@ export default class DCWebxdc extends SplitOut {
               ),
             })
           } else {
-            callback({
-              mimeType: Mime.lookup(filename) || '',
-              data: this.selectedAccountContext.getWebxdcBlob(
-                webxdc_message,
-                filename
-              ),
-              headers: {
-                'Content-Security-Policy': CSP,
-              },
-            })
+            const blob = this.selectedAccountContext.getWebxdcBlob(
+              webxdc_message,
+              filename
+            )
+            if (blob) {
+              callback({
+                mimeType: Mime.lookup(filename) || '',
+                data: blob,
+                headers: {
+                  'Content-Security-Policy': CSP,
+                },
+              })
+            } else {
+              callback({ statusCode: 404 })
+            }
           }
         }
       )
 
-      const app_icon = nativeImage?.createFromBuffer(icon_blob)
+      const app_icon = icon_blob && nativeImage?.createFromBuffer(icon_blob)
 
       const webxdc_windows = (open_apps[msg_id] = new BrowserWindow({
         webPreferences: {
@@ -123,7 +140,7 @@ export default class DCWebxdc extends SplitOut {
           ),
         },
         title: `webxdc - ${webxdc_message.webxdcInfo.name}`,
-        icon: app_icon,
+        icon: app_icon || undefined,
         width: 375,
         height: 667,
       }))
@@ -144,13 +161,11 @@ export default class DCWebxdc extends SplitOut {
         extraHeaders: 'Content-Security-Policy: ' + CSP,
       })
 
-      const permission_handler = (
-        permission: Parameters<
-          Parameters<
-            typeof webxdc_windows.webContents.session.setPermissionRequestHandler
-          >[0]
-        >[1]
-      ) => {
+      type setPermissionRequestHandler = typeof webxdc_windows.webContents.session.setPermissionRequestHandler
+      type permission_arg = Parameters<
+        Exclude<Parameters<setPermissionRequestHandler>[0], null>
+      >[1]
+      const permission_handler = (permission: permission_arg) => {
         if (permission == 'pointerLock') {
           log.info('allowed webxdc to lock the pointer')
           // because games might lock the pointer

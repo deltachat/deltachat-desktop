@@ -174,10 +174,15 @@ function BotCommandSuggestion({ suggestion }: { suggestion: string }) {
     }
 
     // IDEA: Optimisation - unify these two calls in a new backend call that only returns the info we need
-    const [{ name }, draft] = await Promise.all([
+    const [chat, draft] = await Promise.all([
       DeltaBackend.call('chatList.getFullChatById', chatID),
       DeltaBackend.call('messageList.getDraft', chatID),
     ])
+    if (!chat) {
+      log.error('chat not defined')
+      return
+    }
+    const { name } = chat
 
     if (draft) {
       // ask if the draft should be replaced

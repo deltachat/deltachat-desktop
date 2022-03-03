@@ -6,13 +6,13 @@ import MessageList from './MessageList'
 import { SettingsContext, ScreenContext } from '../../contexts'
 import { ChatStoreStateWithChatSet } from '../../stores/chat'
 import ComposerMessageInput from '../composer/ComposerMessageInput'
-import { DesktopSettings } from '../../../shared/shared-types'
+import { DesktopSettingsType } from '../../../shared/shared-types'
 import { isChatReadonly } from '../../../shared/util'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
 export function getBackgroundImageStyle(
-  settings: DesktopSettings
+  settings: DesktopSettingsType
 ): React.CSSProperties {
   const style: React.CSSProperties = {
     backgroundSize: 'cover',

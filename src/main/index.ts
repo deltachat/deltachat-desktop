@@ -67,13 +67,12 @@ process.on('uncaughtException', err => {
   )
 })
 
-import setLanguage from './load-translations'
+import setLanguage, { getCurrentLocaleDate } from './load-translations'
 import * as ipc from './ipc'
 import { init as initMenu } from './menu'
-import State from './state'
+import { DesktopSettings } from './desktop_settings'
 import * as mainWindow from './windows/main'
 import * as devTools from './devtools'
-import { AppState } from '../shared/shared-types'
 import { ExtendedAppMainProcess } from './types'
 import { updateTrayIcon, hideDeltaChat, showDeltaChat } from './tray'
 import { acceptThemeCLI } from './themes'
@@ -83,7 +82,7 @@ app.isQuitting = false
 
 Promise.all([
   new Promise((resolve, _reject) => app.on('ready', resolve)),
-  State.load(),
+  DesktopSettings.load(),
 ])
   .then(onReady)
   .catch(error => {
@@ -92,15 +91,11 @@ Promise.all([
     process.exit(1)
   })
 
-async function onReady([_appReady, loadedState]: [any, AppState]) {
-  const state = (app.state = loadedState)
-
-  app.saveState = () => State.save({ saved: state.saved })
-
+async function onReady([_appReady, _loadedState]: [any, any]) {
   // can fail due to user error so running it first is better (cli argument)
   acceptThemeCLI()
 
-  setLanguage(state.saved.locale || app.getLocale())
+  setLanguage(DesktopSettings.state.locale || app.getLocale())
 
   const cwd = getAccountsPath()
   log.info(`cwd ${cwd}`)
@@ -118,7 +113,7 @@ async function onReady([_appReady, loadedState]: [any, AppState]) {
     watchFile('_locales/_untranslated_en.json', (curr: Stats, prev: Stats) => {
       if (curr.mtime !== prev.mtime) {
         log.info('translation-watch: File changed reloading translation data')
-        mainWindow.chooseLanguage(app.localeData.locale)
+        mainWindow.chooseLanguage(getCurrentLocaleDate().locale)
         log.info('translation-watch: reloading translation data - done')
       }
     })
@@ -144,7 +139,7 @@ async function onReady([_appReady, loadedState]: [any, AppState]) {
     log.debug("mainWindow.window.on('close')")
     if (!app.isQuitting) {
       e.preventDefault()
-      if (app.rc['minimized'] || app.state.saved.minimizeToTray) {
+      if (app.rc['minimized'] || DesktopSettings.state.minimizeToTray) {
         log.debug("mainWindow.window.on('close') Hiding main window")
         hideDeltaChat()
       } else {
@@ -173,8 +168,7 @@ export function quit(e?: Electron.Event) {
     app.quit()
   }
 
-  State.saveImmediate(app.state, doQuit)
-
+  DesktopSettings.saveImmediate().then(doQuit)
   setTimeout(() => {
     log.error('Saving state took too long. Quitting.')
     doQuit()

@@ -10,7 +10,7 @@ import {
   MessageSearchResult,
   Credentials,
   DeltaChatAccount,
-  DesktopSettings,
+  DesktopSettingsType,
   QrCodeResponse,
 } from '../shared/shared-types'
 import { MuteDuration } from '../shared/constants'
@@ -76,7 +76,10 @@ class DeltaRemote {
     fnName: 'chatList.getChatListEntryMessageIdForChatId',
     chatID: number
   ): Promise<number>
-  call(fnName: 'chatList.getFullChatById', chatId: number): Promise<FullChat>
+  call(
+    fnName: 'chatList.getFullChatById',
+    chatId: number
+  ): Promise<FullChat | null>
   call(fnName: 'chatList.getGeneralFreshMessageCounter'): Promise<number> // this method might be used for a favicon badge counter
   // contacts ------------------------------------------------------------
   call(fnName: 'contacts.unblockContact', contactId: number): Promise<void>
@@ -119,8 +122,9 @@ class DeltaRemote {
     fnName: 'chat.getChatMedia',
     chatId: number,
     msgType1: number,
-    msgType2: number
-  ): Promise<MessageType[]>
+    msgType2: number,
+    msgType3: number
+  ): Promise<(MessageType | null)[]>
   call(fnName: 'chat.getEncryptionInfo', chatId: number): Promise<string>
   call(fnName: 'chat.getQrCode', chatId?: number): Promise<string>
   call(
@@ -315,10 +319,10 @@ class DeltaRemote {
   ): Promise<number | ''>
   call(
     fnName: 'settings.setDesktopSetting',
-    key: keyof DesktopSettings,
+    key: keyof DesktopSettingsType,
     value: string | number | boolean
   ): Promise<boolean>
-  call(fnName: 'settings.getDesktopSettings'): Promise<DesktopSettings>
+  call(fnName: 'settings.getDesktopSettings'): Promise<DesktopSettingsType>
   call(
     fnName: 'settings.saveBackgroundImage',
     file: string,

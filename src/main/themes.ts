@@ -10,6 +10,7 @@ import * as mainWindow from './windows/main'
 const app = rawApp as ExtendedAppMainProcess
 
 import { getLogger } from '../shared/logger'
+import { DesktopSettings } from './desktop_settings'
 const log = getLogger('main/themes')
 
 const dc_theme_dir = join(__dirname, '../../themes')
@@ -154,7 +155,7 @@ Using --theme is for developers and theme creators ONLY and should not be used b
 If you have question or need help, feel free to ask in our forum https://support.delta.chat.`
       )
     }
-    app.state.saved.activeTheme = app.rc['theme']
+    DesktopSettings.mutate({ activeTheme: app.rc['theme'] })
     log.info(`set theme`)
     if (app.rc['theme-watch']) {
       log.info('theme-watch: activated', app.rc['theme-watch'])

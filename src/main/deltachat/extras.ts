@@ -1,17 +1,19 @@
 import { app as rawApp, clipboard } from 'electron'
-import { ExtendedAppMainProcess } from '../types'
 import { getLogger } from '../../shared/logger'
 import SplitOut from './splitout'
 import { LocaleData } from '../../shared/localize'
-import setLanguage, { loadTranslations } from '../load-translations'
+import setLanguage, {
+  getCurrentLocaleDate,
+  loadTranslations,
+} from '../load-translations'
 import { loadTheme, getAvailableThemes, resolveThemeAddress } from '../themes'
 import { txCoreStrings } from './login'
-const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat/extras')
 import { refresh as refreshMenu } from '../menu'
 import { join } from 'path'
 import mimeTypes from 'mime-types'
 import { writeFile } from 'fs/promises'
+import { DesktopSettings } from '../desktop_settings'
 
 // Extras, mainly Electron functions
 export default class Extras extends SplitOut {
@@ -19,7 +21,7 @@ export default class Extras extends SplitOut {
     if (locale) {
       loadTranslations(locale)
     }
-    return app.localeData
+    return getCurrentLocaleDate()
   }
   setLocale(locale: string) {
     setLanguage(locale)
@@ -28,8 +30,8 @@ export default class Extras extends SplitOut {
   }
   async getActiveTheme() {
     try {
-      log.debug('theme', app.state.saved.activeTheme)
-      return await loadTheme(app.state.saved.activeTheme)
+      log.debug('theme', DesktopSettings.state.activeTheme)
+      return await loadTheme(DesktopSettings.state.activeTheme)
     } catch (error) {
       log.error('loading theme failed:', error)
       return null
@@ -38,8 +40,8 @@ export default class Extras extends SplitOut {
   async setTheme(address: string) {
     try {
       resolveThemeAddress(address)
-      app.state.saved.activeTheme = address
-      app.saveState()
+      DesktopSettings.mutate({ activeTheme: address })
+      DesktopSettings.mutate({})
       return true
     } catch (error) {
       log.error('set theme failed: ', error)

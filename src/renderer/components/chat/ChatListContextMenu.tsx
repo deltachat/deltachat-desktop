@@ -88,6 +88,9 @@ export function useChatListContextMenu() {
         'chatList.getFullChatById',
         chatListItem.id
       )
+      if (!fullChat) {
+        throw new Error('chat was not found')
+      }
       openViewGroupDialog(screenContext, fullChat)
     }
     const onViewProfile = async () => {
@@ -95,6 +98,9 @@ export function useChatListContextMenu() {
         'chatList.getFullChatById',
         chatListItem.id
       )
+      if (!fullChat) {
+        throw new Error('chat was not found')
+      }
       if (fullChat.type !== C.DC_CHAT_TYPE_MAILINGLIST) {
         openViewProfileDialog(screenContext, fullChat.contactIds[0])
       } else {

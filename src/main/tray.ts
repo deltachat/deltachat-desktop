@@ -4,6 +4,8 @@ import * as mainWindow from './windows/main'
 import { ExtendedAppMainProcess } from './types'
 import { getLogger } from '../shared/logger'
 import { join } from 'path'
+import { DesktopSettings } from './desktop_settings'
+import { tx } from './load-translations'
 
 let tray: Tray | null = null
 let contextMenu: Menu | null = null
@@ -84,7 +86,7 @@ export function quitDeltaChat() {
 
 export function updateTrayIcon() {
   // User doesn't want tray icon => destroy it
-  if (!app.rc['minimized'] && app.state.saved.minimizeToTray !== true) {
+  if (!app.rc['minimized'] && DesktopSettings.state.minimizeToTray !== true) {
     if (tray != null) destroyTrayIcon()
     return
   }
@@ -100,7 +102,6 @@ export function destroyTrayIcon() {
 
 export function getTrayMenu() {
   if (tray === null) return
-  const tx = app.translate
   if (process.platform === 'darwin') {
     contextMenu = Menu.buildFromTemplate([
       mainWindowIsVisible()

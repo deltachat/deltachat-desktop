@@ -1,5 +1,5 @@
 import { ipcBackend } from './ipc'
-import { RC_Config } from '../shared/shared-types'
+import { DesktopSettingsType, RC_Config } from '../shared/shared-types'
 import { setLogHandler } from '../shared/logger'
 import type {
   dialog,
@@ -37,6 +37,7 @@ const {
  * Offers an abstraction Layer to make it easier to make browser client in the future
  */
 interface Runtime {
+  getDesktopSettings(): Promise<DesktopSettingsType>
   openWebxdc(msgId: number): void
   getWebxdcIconURL(msgId: number): string
   /**
@@ -72,6 +73,9 @@ interface Runtime {
 }
 
 class Browser implements Runtime {
+  getDesktopSettings(): Promise<DesktopSettingsType> {
+    throw new Error('Method not implemented.')
+  }
   getWebxdcIconURL(_msgId: number): string {
     throw new Error('Method not implemented.')
   }
@@ -132,6 +136,9 @@ class Browser implements Runtime {
   }
 }
 class Electron implements Runtime {
+  getDesktopSettings(): Promise<DesktopSettingsType> {
+    return ipcBackend.invoke('get-desktop-settings')
+  }
   getWebxdcIconURL(msgId: number): string {
     return `webxdc-icon:${msgId}`
   }

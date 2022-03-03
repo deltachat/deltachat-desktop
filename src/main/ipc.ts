@@ -7,6 +7,7 @@ import { ExtendedAppMainProcess } from './types'
 import * as mainWindow from './windows/main'
 import { openHelpWindow } from './windows/help'
 import { join } from 'path'
+import { DesktopSettings } from './desktop_settings'
 
 const log = getLogger('main/ipc')
 const DeltaChatController: typeof import('./deltachat/controller').default = (() => {
@@ -91,8 +92,12 @@ export async function init(cwd: string, logHandler: LogHandler) {
 
   ipcMain.on('saveLastChatId', (_e, chatId) => {
     if (dcController.selectedAccountId) {
-      const { lastChats } = app.state.saved
-      lastChats[dcController.selectedAccountId] = chatId
+      DesktopSettings.mutate({
+        lastChats: {
+          ...DesktopSettings.state.lastChats,
+          [dcController.selectedAccountId]: chatId,
+        },
+      })
     }
     // don't save to disk, because this is already done on close and it might block
     // we can ignore the crash case, because a crash isn't supposed to happen
@@ -103,8 +108,8 @@ export async function init(cwd: string, logHandler: LogHandler) {
     if (!dcController.selectedAccountId) {
       throw new Error('no account selected')
     }
-    const { lastChats } = app.state.saved
-    e.returnValue = lastChats[dcController.selectedAccountId]
+    e.returnValue =
+      DesktopSettings.state.lastChats[dcController.selectedAccountId]
   })
 
   ipcMain.on('help', async (_ev, locale) => {
@@ -162,5 +167,9 @@ export async function init(cwd: string, logHandler: LogHandler) {
         }
       }
     }
+  })
+
+  ipcMain.handle('get-desktop-settings', async _ev => {
+    return DesktopSettings.state
   })
 }

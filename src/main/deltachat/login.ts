@@ -1,18 +1,16 @@
 import { C } from 'deltachat-node'
-import { app as rawApp } from 'electron'
 import { getLogger } from '../../shared/logger'
 import { setupMarkseenFix } from '../markseenFix'
 import setupNotifications from '../notifications'
 import setupUnreadBadgeCounter from '../unread-badge'
 import SplitOut from './splitout'
 import { Credentials, DeltaChatAccount } from '../../shared/shared-types'
-import { ExtendedAppMainProcess } from '../types'
 import { stat, readdir } from 'fs/promises'
 import { join } from 'path'
 import { Context } from 'deltachat-node/dist/context'
+import { DesktopSettings } from '../desktop_settings'
+import { tx } from '../load-translations'
 const log = getLogger('main/deltachat/login')
-
-const app = rawApp as ExtendedAppMainProcess
 
 function setCoreStrings(dc: Context, strings: { [key: number]: string }) {
   Object.keys(strings).forEach(key => {
@@ -26,17 +24,19 @@ export default class DCLoginController extends SplitOut {
    * locale changes
    */
   _setCoreStrings(strings: { [key: number]: string }) {
-    if (!this.controller.selectedAccountContext) return
+    if (!this.controller._inner_selectedAccountContext) {
+      return
+    }
     setCoreStrings(this.controller.selectedAccountContext, strings)
   }
 
   async selectAccount(accountId: number) {
     log.debug('selectAccount', accountId)
     this.controller.selectedAccountId = accountId
-    if (this.controller.selectedAccountContext) {
+    if (this.controller._inner_selectedAccountContext) {
       this.controller.selectedAccountContext.unref()
     }
-    this.controller.selectedAccountContext = this.accounts.accountContext(
+    this.controller._inner_selectedAccountContext = this.accounts.accountContext(
       accountId
     )
 
@@ -45,13 +45,13 @@ export default class DCLoginController extends SplitOut {
     log.debug('Started IO')
 
     this.controller.emit('ready')
-    app.state.saved.lastAccount = accountId
+    DesktopSettings.mutate({ lastAccount: accountId })
 
     log.info('dc_get_info', this.selectedAccountContext.getInfo())
 
     this.updateDeviceChats()
 
-    setupNotifications(this.controller, (app as any).state.saved)
+    setupNotifications(this.controller, DesktopSettings.state)
     setupUnreadBadgeCounter(this.controller)
     setupMarkseenFix(this.controller)
     this.controller.ready = true
@@ -74,22 +74,18 @@ export default class DCLoginController extends SplitOut {
 
   logout() {
     this.controller.webxdc.closeAll()
-    app.state.saved.lastAccount = null
-    app.saveState()
+    DesktopSettings.mutate({ lastAccount: undefined })
 
-    if (!app.state.saved.syncAllAccounts) {
+    if (!DesktopSettings.state.syncAllAccounts) {
       this.selectedAccountContext.stopIO()
     }
-    if (this.controller.selectedAccountContext) {
+    if (this.controller._inner_selectedAccountContext) {
       this.controller.selectedAccountContext.unref()
     }
     this.controller.selectedAccountId = null
-    this.controller.selectedAccountContext = null
+    this.controller._inner_selectedAccountContext = null
 
     log.info('Logged out')
-
-    if (typeof this.controller._sendStateToRenderer === 'function')
-      this.controller._sendStateToRenderer()
   }
 
   async addAccount(): Promise<number> {
@@ -124,7 +120,7 @@ export default class DCLoginController extends SplitOut {
     this.accounts.stopIO()
     this.controller.unregisterEventHandler(this.accounts)
     this.accounts.close()
-    this.controller.account_manager = null
+    this.controller._inner_account_manager = null
   }
 
   updateDeviceChats() {
@@ -157,11 +153,14 @@ Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANG
 
     if (accountContext.isConfigured()) {
       const selfContact = accountContext.getContact(C.DC_CONTACT_ID_SELF)
+      if (!selfContact) {
+        log.error('selfContact is undefined')
+      }
       const [display_name, addr, profile_image, color] = [
         accountContext.getConfig('displayname'),
         accountContext.getConfig('addr'),
-        selfContact.getProfileImage(),
-        selfContact.color,
+        selfContact?.getProfileImage() || '',
+        selfContact?.color || 'red',
       ]
       accountContext.unref()
       return {
@@ -205,12 +204,11 @@ Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANG
   }
 
   async getLastLoggedInAccount() {
-    return app.state.saved.lastAccount
+    return DesktopSettings.state.lastAccount
   }
 }
 
 export function txCoreStrings() {
-  const tx = app.translate
   const strings: { [key: number]: string } = {}
   // TODO: Check if we need the uncommented core translations
   strings[C.DC_STR_NOMESSAGES] = tx('chat_no_messages')

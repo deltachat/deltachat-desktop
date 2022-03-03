@@ -54,20 +54,20 @@ export default class DCBackup extends SplitOut {
       const dcnContext = this.accounts.accountContext(accountId)
 
       this.controller.selectedAccountId = accountId
-      this.controller.selectedAccountContext = dcnContext
+      this.controller._inner_selectedAccountContext = dcnContext
 
       const onFail = (reason: String) => {
         this.accounts.removeAccount(accountId)
         this.controller.selectedAccountId = null
         this.controller.selectedAccountContext.unref()
-        this.controller.selectedAccountContext = null
+        this.controller._inner_selectedAccountContext = null
         reject(reason)
       }
 
       const onSuccess = () => {
         this.controller.selectedAccountId = null
         this.controller.selectedAccountContext.unref()
-        this.controller.selectedAccountContext = null
+        this.controller._inner_selectedAccountContext = null
         resolve(this.controller.login.accountInfo(accountId))
       }
 

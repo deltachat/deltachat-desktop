@@ -3,11 +3,11 @@ import { app, Notification, NativeImage, nativeImage } from 'electron'
 import { appName } from '../shared/constants'
 import { appIcon } from './application-constants'
 import DeltaChatController from './deltachat/controller'
-import { ExtendedAppMainProcess } from './types'
 import { FullChat, MessageType } from '../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
 import { getLogger } from '../shared/logger'
 import { platform } from 'os'
+import { tx } from './load-translations'
 
 const log = getLogger('main/notifications')
 
@@ -24,8 +24,6 @@ export default function (dc: DeltaChatController, settings: any) {
     chatId: number,
     msgId: number
   ): Promise<Notification> {
-    const tx = (app as ExtendedAppMainProcess).translate
-
     if (!settings.showNotificationContent) {
       // Notification which does not show content
       return new Notification({

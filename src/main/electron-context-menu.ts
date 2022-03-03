@@ -22,8 +22,7 @@ modifications:
 import electron, { BrowserWindow, MenuItemConstructorOptions } from 'electron'
 import { todo } from '../shared/shared-types'
 import { Event } from 'electron/common'
-import { getMessageFunction } from '../shared/localize'
-import { ExtendedAppMainProcess } from './types'
+import { tx } from './load-translations'
 
 const webContents = (win: BrowserWindow) => win.webContents
 
@@ -57,8 +56,6 @@ const removeUnusedMenuItems = (
 const create = (win: BrowserWindow) => {
   const enableSpellChecking = false
   const handleContextMenu = (_event: Event, props: todo) => {
-    const tx: getMessageFunction = (electron.app as ExtendedAppMainProcess)
-      .translate
     const { editFlags } = props
     const hasText = props.selectionText.trim().length > 0
     const can = (type: todo) => editFlags[`can${type}`] && hasText
@@ -141,7 +138,7 @@ const create = (win: BrowserWindow) => {
         label: suggestion,
         visible: Boolean(props.isEditable && hasText && props.misspelledWord),
         click(menuItem: MenuItemConstructorOptions) {
-          if(menuItem.label){
+          if (menuItem.label) {
             const target = webContents(win)
             target.insertText(menuItem.label)
           }
