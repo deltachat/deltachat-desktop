@@ -111,14 +111,13 @@ div.create-chat-contact-list-wrapper {
 
       .DisplayName {
         line-height: 68px;
-        margin-left: -24px;
-        padding-left: 30px;
-        padding-right: 22px;
+        margin-left: -33px;
+        padding-left: 39px;
+        padding-right: 12px;
         height: var(--local-height);
-        background-color: #e6e6e6;
+        background-color: #8080806b;
         line-height: var(--local-height);
-        border-top-right-radius: 48px;
-        border-bottom-right-radius: 48px;
+        border-radius: 48px;
         max-width: 130px;
         white-space: nowrap;
         overflow: hidden;
