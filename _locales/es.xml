@@ -379,6 +379,12 @@
     <string name="mailing_list">Lista de correo</string>
     <string name="mailing_list_profile_info">Los cambios en el nombre y la imagen de la lista de correo solo se aplican a este dispositivo.</string>
 
+    <!-- webxdc -->
+    <!-- "Start..." button for an app -->
+    <string name="start_app">Iniciar…</string>
+    <!-- this is a warning that is shown when one tries to send something to a chat that is not yet accepted. -->
+    <string name="accept_request_first">Primero acepte la solicitud de chat.</string>
+
     <!-- map -->
     <string name="filter_map_on_time">Mostrar ubicaciones en el marco de tiempo</string>
     <string name="show_location_traces">Mostrar trazas</string>
@@ -601,12 +607,16 @@
     <string name="pref_send_copy_to_self">Enviar autocopia</string>
     <string name="pref_auto_folder_moves">Mover automáticamente a la carpeta DeltaChat</string>
     <string name="pref_auto_folder_moves_explain">Las conversaciones son movidas para evitar saturar la Bandeja de entrada</string>
+    <string name="pref_only_fetch_mvbox_title">Solo obtener de la carpeta DeltaChat</string>
+    <string name="pref_only_fetch_mvbox_explain">Ignorar otras carpetas. Requiere que su servidor mueva los mensajes de chat a la carpeta DeltaChat.</string>
     <string name="pref_show_emails">Mostrar correos clásicos</string>
     <string name="pref_show_emails_no">No, sólo chats</string>
     <string name="pref_show_emails_accepted_contacts">Para contactos aceptados</string>
     <string name="pref_show_emails_all">Todos</string>
     <string name="pref_experimental_features">Características experimentales</string>
     <string name="pref_on_demand_location_streaming">Transmisión de ubicación bajo demanda</string>
+    <string name="pref_developer_mode">Modo desarrollador</string>
+    <string name="pref_developer_mode_explain">Activa las opciones de depuración y puede hacer que la aplicación sea menos estable. Solo para desarrolladores.</string>
     <string name="pref_background_default">Fondo por defecto</string>
     <string name="pref_background_default_color">Color por defecto</string>
     <string name="pref_background_custom_image">Imagen personalizada</string>
@@ -903,4 +913,7 @@
     <string name="update_1_24_android">1.24 de forma resumida:\n\n• Ahorre toques: Selección de cuenta en la esquina superior izquierda de la lista de chats\n• Ahorre más toques: Mantenga presionado el ícono de la aplicación para abrir los chats recientes directamente\n• Ahorre tráfico: Descargue archivos grandes según sea necesario\n• Ahorre tiempo: invitación de códigos QR más rápidas, sin bloqueo y nuevas opciones de códigos QR\n\nMás en 👉</string>
     <string name="update_1_24_ios">1.24 de forma resumida:\n\n• Inicie una búsqueda en el chat desde el perfil del chat\n• Ahorre tráfico: Descargue archivos grandes según sea necesario\n• Ahorre tiempo: invitación de códigos QR más rápidas y sin bloqueo\n\nMás en 👉</string>
     <string name="update_1_26">1.26 pulido 💅\n\n• Después de hacer que los códigos QR funcionen más rápido en 1.24, también se ven mucho mejor ahora, en todas las plataformas\n• Los avatares y las insignias tienen un aspecto similar en todas las plataformas\n• Se corrigieron muchos errores</string>
+    <string name="update_1_28_android">1.28 Aspectos destacados:\n\n🔒 Cifrado: una nueva opción experimental para mantener sus contactos, secretos de cifrado y mensajes de texto cifrados en su dispositivo. Solo disponible en la creación de cuentas e importación de archivos de copia de seguridad.\n\n📫 Escribir en listas de correo\n\n💫 Configuración inicial más rápida para más servidores de correo electrónico y opciones de red optimizadas para evitar errores de configuración accidentales\n\n🐜 Se corrigieron muuuuuchos problemas informados por los usuarios</string>
+    <string name="update_1_28_ios_extra_line">… y puedes seleccionar un fondo de pantalla en \"Configuración / Fondo\" ahora :)</string>
+
 </resources>

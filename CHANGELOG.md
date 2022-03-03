@@ -10,7 +10,7 @@
 ### Changed
 - Update deltachat-node to `1.75.1`
 - Update electron to `13.6.8`
-- Update translations (3.1.2022)
+- Update translations (3.3.2022)
 - Make disabled "delete profile image" button more readable in dark themes @ejgonzalez17 #2478
 - Update inApp help (3.1.2022)
 - Making the minimal theme even more zen

@@ -379,6 +379,12 @@
     <string name="mailing_list">Mailing List</string>
     <string name="mailing_list_profile_info">Changes on mailing list name and image apply to this device only.</string>
 
+    <!-- webxdc -->
+    <!-- "Start..." button for an app -->
+    <string name="start_app">Start…</string>
+    <!-- this is a warning that is shown when one tries to send something to a chat that is not yet accepted. -->
+    <string name="accept_request_first">Please accept the chat request first.</string>
+
     <!-- map -->
     <string name="filter_map_on_time">Show locations in time frame</string>
     <string name="show_location_traces">Show traces</string>
@@ -601,12 +607,16 @@
     <string name="pref_send_copy_to_self">Send Copy to Self</string>
     <string name="pref_auto_folder_moves">Automatic Moves to DeltaChat Folder</string>
     <string name="pref_auto_folder_moves_explain">Chat conversations are moved to avoid cluttering the Inbox</string>
+    <string name="pref_only_fetch_mvbox_title">Only Fetch from DeltaChat Folder</string>
+    <string name="pref_only_fetch_mvbox_explain">Ignore other folders. Requires your server to move chat messages to the DeltaChat folder.</string>
     <string name="pref_show_emails">Show Classic E-Mails</string>
     <string name="pref_show_emails_no">No, chats only</string>
     <string name="pref_show_emails_accepted_contacts">For accepted contacts</string>
     <string name="pref_show_emails_all">All</string>
     <string name="pref_experimental_features">Experimental Features</string>
     <string name="pref_on_demand_location_streaming">On-demand Location Streaming</string>
+    <string name="pref_developer_mode">Developer Mode</string>
+    <string name="pref_developer_mode_explain">Activates debugging options and can make the app less stable. For developers only.</string>
     <string name="pref_background_default">Default background</string>
     <string name="pref_background_default_color">Default color</string>
     <string name="pref_background_custom_image">Custom image</string>
@@ -903,4 +913,7 @@
     <string name="update_1_24_android">1.24 at a glance:\n\n• Save taps: Account selection in the upper left corner of the chat list\n• Save more taps: Long-tap the app icon to open recent chats directly\n• Save traffic: Download large files as needed\n• Save nerves: faster, non-blocking QR code joins and new QR code options\n\nMore at 👉</string>
     <string name="update_1_24_ios">1.24 at a glance:\n\n• Start an in-chat search from the chat\'s profile\n• Save traffic: Download large files as needed\n• Save nerves: faster, non-blocking QR code joins\n\nMore at 👉</string>
     <string name="update_1_26">1.26 polishing 💅\n\n• After making the QR codes non-blocking in 1.24, they also look much nicer now - on all platforms\n• Avatars and badges look similar across platform\n• Lots of bugs fixed</string>
+    <string name="update_1_28_android">1.28 Highlights:\n\n🔒 Encryption: A new experimental option for keeping your contacts, encryption secrets and text messages encrypted on your device. Only available on account creation and importing backup files.\n\n📫 Write to mailing list\n\n💫 Faster initial setup for more e-mail servers and streamlined networking options to prevent accidental misconfiguration\n\n🐜 Maaaaaany user-reported issues fixed</string>
+    <string name="update_1_28_ios_extra_line">… and you can select a wallpaper at \"Settings / Background\" now :)</string>
+
 </resources>
