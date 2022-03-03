@@ -8,13 +8,14 @@ export default class DCChat extends SplitOut {
   getChatMedia(
     chatId: number,
     msgType1: number,
-    msgType2: number
-  ): MessageType[] {
+    msgType2: number,
+    msgType3: number
+  ): (MessageType | null)[] {
     const mediaMessages = this.selectedAccountContext.getChatMedia(
       chatId,
       msgType1,
       msgType2,
-      null
+      msgType3
     )
     return mediaMessages.map(
       this.controller.messageList.messageIdToJson.bind(
@@ -59,6 +60,9 @@ export default class DCChat extends SplitOut {
     log.debug('action - modify group', { chatId, name, image, members })
     this.selectedAccountContext.setChatName(chatId, name)
     const chat = this.selectedAccountContext.getChat(chatId)
+    if (!chat) {
+      throw new Error('chat is undefined, this should not happen')
+    }
     if (typeof image !== 'undefined' && chat.getProfileImage() !== image) {
       this.selectedAccountContext.setChatProfileImage(chatId, image || '')
     }

@@ -5,6 +5,9 @@ import { DeltaBackend } from '../delta-remote'
 import { ScreenContext } from '../contexts'
 import MediaAttachment from './attachment/mediaAttachment'
 import { MessageType } from '../../shared/shared-types'
+import { getLogger } from '../../shared/logger'
+
+const log = getLogger('renderer/Gallery')
 
 type MediaTabKey = 'images' | 'video' | 'audio' | 'documents'
 
@@ -61,8 +64,15 @@ export default class Gallery extends Component<
       'chat.getChatMedia',
       this.props.chatId,
       msgTypes[0],
-      msgTypes[1]
-    ).then(medias => {
+      msgTypes[1],
+      0
+    ).then(raw_medias => {
+      const medias = raw_medias.filter(m => !!m) as MessageType[]
+      if (medias.length !== raw_medias.length) {
+        log.error(
+          'some empty gallery items detected, maybe messages are missing?'
+        )
+      }
       this.setState({ id, msgTypes, medias })
       this.forceUpdate()
     })

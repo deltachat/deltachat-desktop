@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { DesktopSettings } from '../shared/shared-types'
+import { DesktopSettingsType } from '../shared/shared-types'
 import { userFeedback, Screens } from './ScreenController'
 import { getMessageFunction } from '../shared/localize'
 import { showFnType } from './components/ContextMenu'
@@ -29,15 +29,15 @@ export const i18nContext = React.createContext<getMessageFunction>(
 export const useTranslationFunction = () => useContext(i18nContext)
 
 type setDesktopSetting = (
-  key: keyof DesktopSettings,
+  key: keyof DesktopSettingsType,
   value: string | number | boolean
 ) => {}
 
 export const SettingsContext: React.Context<{
-  desktopSettings: DesktopSettings | null
+  desktopSettings: DesktopSettingsType | null
   setDesktopSetting: setDesktopSetting
 }> = React.createContext({
-  desktopSettings: null as DesktopSettings | null,
+  desktopSettings: null as DesktopSettingsType | null,
   setDesktopSetting: ((_key, _value) => {}) as setDesktopSetting,
 })
 

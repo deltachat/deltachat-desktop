@@ -5,6 +5,7 @@ import { ExtendedAppMainProcess } from '../types'
 import { join } from 'path'
 import { stat } from 'fs/promises'
 import { appWindowTitle } from '../../shared/constants'
+import { tx } from '../load-translations'
 
 const log = getLogger('main/help')
 const app = rawApp as ExtendedAppMainProcess
@@ -41,7 +42,7 @@ export async function openHelpWindow(locale: string) {
     minWidth: 450,
     minHeight: 450,
   }
-  const help_window = win = new BrowserWindow({
+  const help_window = (win = new BrowserWindow({
     backgroundColor: '#282828',
     darkTheme: true, // Forces dark theme (GTK+3)
 
@@ -49,7 +50,7 @@ export async function openHelpWindow(locale: string) {
     minHeight: defaults.minHeight,
     minWidth: defaults.minWidth,
     show: false,
-    title: appWindowTitle + ' - ' + app.translate('menu_help'),
+    title: appWindowTitle + ' - ' + tx('menu_help'),
     useContentSize: true, // Specify web page size without OS chrome
 
     webPreferences: {
@@ -57,7 +58,7 @@ export async function openHelpWindow(locale: string) {
       sandbox: true,
       spellcheck: false,
     },
-  })
+  }))
 
   const url = await getHelpFileForLang(locale)
 
@@ -89,7 +90,7 @@ export async function openHelpWindow(locale: string) {
     const back_btn = document.createElement('button');
     back_btn.className = 'back-btn';
     back_btn.onclick = (ev) => {document.body.scrollTop = 0; document.documentElement.scrollTop = 0;};
-    back_btn.innerText = '↑ ${app.translate('menu_scroll_to_top')}';
+    back_btn.innerText = '↑ ${tx('menu_scroll_to_top')}';
     body.append(back_btn);
   `)
 }

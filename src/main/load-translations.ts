@@ -4,15 +4,35 @@ import fs from 'fs'
 import { getLogger } from '../shared/logger'
 const log = getLogger('load-transaltions')
 
-import { app as rawApp } from 'electron'
-import { ExtendedAppMainProcess } from './types'
-import { translate } from '../shared/localize'
-const app = rawApp as ExtendedAppMainProcess
+import {
+  getMessageFunction,
+  LocaleData,
+  translate as getTranslateFunction,
+} from '../shared/localize'
+
+let currentlocaleData: LocaleData | null = null
+
+export function getCurrentLocaleDate(): LocaleData {
+  if (currentlocaleData === null) {
+    log.error('tried to get locale data before init')
+    throw new Error('no locale data is loaded yet')
+  }
+  return currentlocaleData
+}
+
+let translateFunction: getMessageFunction | null = null
+export const tx: getMessageFunction = function (key, substitutions, raw_opts) {
+  if (translateFunction === null) {
+    log.error('tried to use translation function before init')
+    return key
+  }
+  return translateFunction(key, substitutions, raw_opts)
+}
 
 export default function setLanguage(locale: string) {
   const localeData = loadTranslations(locale)
-  app.localeData = localeData
-  app.translate = translate(app.localeData.messages)
+  currentlocaleData = localeData
+  translateFunction = getTranslateFunction(localeData.messages)
 }
 
 export function loadTranslations(locale: string) {

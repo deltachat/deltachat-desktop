@@ -2,7 +2,6 @@ import DeltaChat, { C, DeltaChat as DeltaChatNode } from 'deltachat-node'
 import { app as rawApp } from 'electron'
 import { EventEmitter } from 'events'
 import { getLogger } from '../../shared/logger'
-import { AppState } from '../../shared/shared-types'
 import { maybeMarkSeen } from '../markseenFix'
 import * as mainWindow from '../windows/main'
 import DCAutocrypt from './autocrypt'
@@ -30,6 +29,8 @@ import { getConfigPath } from '../application-constants'
 import { rmdir } from 'fs/promises'
 import { rm } from 'fs/promises'
 import DCWebxdc from './webxdc'
+import { DesktopSettings } from '../desktop_settings'
+import { tx } from '../load-translations'
 
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat')
@@ -47,9 +48,21 @@ export default class DeltaChatController extends EventEmitter {
   /**
    * Created and owned by ipc on the backend
    */
-  cwd: string = undefined
-  account_manager: DeltaChat = undefined
-  selectedAccountContext: Context = undefined
+
+  _inner_account_manager: DeltaChat | null = null
+  get account_manager(): DeltaChat {
+    if (!this._inner_account_manager) {
+      throw new Error('account manager is not defined (yet?)')
+    }
+    return this._inner_account_manager
+  }
+  _inner_selectedAccountContext: Context | null = null
+  get selectedAccountContext(): Context {
+    if (!this._inner_selectedAccountContext) {
+      throw new Error('selectedAccountContext is not defined (yet?)')
+    }
+    return this._inner_selectedAccountContext
+  }
   selectedAccountId: number | null = null
   selectedChatId: number | null = null
 
@@ -58,10 +71,8 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   ready = false // used for the about screen
-  _sendStateToRenderer: () => void
-  constructor(cwd: string) {
+  constructor(public cwd: string) {
     super()
-    this.cwd = cwd
 
     this.onAll = this.onAll.bind(this)
     this.onChatlistUpdated = this.onChatlistUpdated.bind(this)
@@ -82,12 +93,15 @@ export default class DeltaChatController extends EventEmitter {
     )
 
     log.debug('Initiating DeltaChatNode')
-    this.account_manager = new DeltaChatNode(this.cwd, 'deltachat-desktop')
+    this._inner_account_manager = new DeltaChatNode(
+      this.cwd,
+      'deltachat-desktop'
+    )
 
     log.debug('Starting event handler')
     this.registerEventHandler(this.account_manager)
 
-    if (app.state.saved.syncAllAccounts) {
+    if (DesktopSettings.state.syncAllAccounts) {
       log.info('Ready, starting accounts io...')
       this.account_manager.startIO()
       log.info('Started accounts io.')
@@ -188,7 +202,7 @@ export default class DeltaChatController extends EventEmitter {
               'found stickers, migrating them',
               old_sticker_folder
             )
-            let ctx: null | Context
+            let ctx: null | Context = null
             try {
               ctx = tmp_dc.accountContext(account_id)
               const blobdir = ctx.getBlobdir()
@@ -213,12 +227,9 @@ export default class DeltaChatController extends EventEmitter {
 
     tmp_dc.close()
     // Clear some settings that we cant migrate
-    app.saveState({
-      saved: {
-        ...app.state.saved,
-        lastAccount: -1,
-        lastChats: {},
-      },
+    DesktopSettings.mutate({
+      lastAccount: -1,
+      lastChats: {},
     })
 
     // cleanup
@@ -298,7 +309,7 @@ export default class DeltaChatController extends EventEmitter {
     let returnValue
     try {
       returnValue = await method(...args)
-    } catch (err) {
+    } catch (err: any) {
       log.error(
         `Error calling ${methodName}(${args.join(', ')}):\n ${err.stack}`
       )
@@ -325,7 +336,7 @@ export default class DeltaChatController extends EventEmitter {
   translate(
     ...args: Parameters<import('../../shared/localize').getMessageFunction>
   ) {
-    return (app as any).translate(...args)
+    return tx(...args)
   }
 
   onAll(event: string, accountId: number, data1: any, data2: any) {
@@ -374,7 +385,7 @@ export default class DeltaChatController extends EventEmitter {
 
   registerEventHandler(dc: DeltaChat) {
     dc.startEvents()
-    dc.on('ALL', (...args) => this.onAll.bind(this)(...args))
+    dc.on('ALL', this.onAll.bind(this))
     dc.on('DD_EVENT_CHATLIST_UPDATED', this.onChatlistUpdated)
     dc.on('DC_EVENT_MSGS_CHANGED', this.onMsgsChanged)
     dc.on('DC_EVENT_INCOMING_MSG', this.onIncomingMsg)
@@ -391,16 +402,6 @@ export default class DeltaChatController extends EventEmitter {
 
   onChatlistUpdated() {
     this.sendToRenderer('DD_EVENT_CHATLIST_CHANGED', {})
-  }
-
-  /**
-   * Returns the state in json format
-   */
-  getState(): AppState {
-    return {
-      saved: app.state.saved,
-      logins: app.state.logins,
-    }
   }
 
   async checkQrCode(qrCode: string) {
@@ -439,9 +440,10 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   getProfilePicture() {
-    return this.selectedAccountContext
-      .getContact(C.DC_CONTACT_ID_SELF)
-      .getProfileImage()
+    const selfContact = this.selectedAccountContext.getContact(
+      C.DC_CONTACT_ID_SELF
+    )
+    return selfContact?.getProfileImage() || ''
   }
 
   getInfo(): { [key: string]: any } {

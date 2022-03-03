@@ -12,6 +12,7 @@ import { refreshTrayContextMenu, showDeltaChat } from '../tray'
 import { ExtendedAppMainProcess } from '../types'
 import type { EventEmitter } from 'events'
 import { join } from 'path'
+import { DesktopSettings } from '../desktop_settings'
 const log = getLogger('main/mainWindow')
 
 export let window: (BrowserWindow & { hidden?: boolean }) | null = null
@@ -24,9 +25,11 @@ export function init(
     return window.show()
   }
 
-  const state = app.state
   const defaults = windowDefaults()
-  const initialBounds = Object.assign(defaults.bounds, state.saved.bounds)
+  const initialBounds = Object.assign(
+    defaults.bounds,
+    DesktopSettings.state.bounds
+  )
 
   const main_window = (window = <BrowserWindow & { hidden?: boolean }>(
     new electron.BrowserWindow({
@@ -146,24 +149,16 @@ export function init(
     e.preventDefault()
   })
 
-  window.on(
-    'move',
-    debounce((e: any) => {
-      state.saved.bounds = e.sender.getBounds()
-      app.saveState()
-    }, 1000)
-  )
+  const saveBounds = debounce((e: any) => {
+    DesktopSettings.mutate({ bounds: e.sender.getBounds() })
+  }, 1000)
 
-  window.on(
-    'resize',
-    debounce((e: any) => {
-      state.saved.bounds = e.sender.getBounds()
-      app.saveState()
-    }, 1000)
-  )
+  window.on('move', saveBounds)
+
+  window.on('resize', saveBounds)
 
   window.once('show', () => {
-    main_window.webContents.setZoomFactor(state.saved.zoomFactor)
+    main_window.webContents.setZoomFactor(DesktopSettings.state.zoomFactor)
   })
   window.on('close', () => {})
   window.on('blur', () => {
@@ -199,8 +194,8 @@ export function setBounds(
   bounds: Rectangle & { contentBounds: boolean },
   maximize: boolean
 ) {
-  if(!window) {
-    throw new Error("window does not exist, this should never happen");
+  if (!window) {
+    throw new Error('window does not exist, this should never happen')
   }
   // Maximize or minimize, if the second argument is present
   if (maximize === true && !window.isMaximized()) {

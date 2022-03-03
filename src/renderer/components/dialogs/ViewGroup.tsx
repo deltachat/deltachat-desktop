@@ -29,12 +29,23 @@ import {
 import { runtime } from '../../runtime'
 import { DeltaInput } from '../Login-Styles'
 import { ipcBackend } from '../../ipc'
+import { getLogger } from '../../../shared/logger'
+
+const log = getLogger('renderer/ViewGroup')
 
 export function useChat(initialChat: FullChat): FullChat {
   const [chat, setChat] = useState(initialChat)
 
   const updateChat = useCallback(async () => {
-    setChat(await DeltaBackend.call('chatList.getFullChatById', initialChat.id))
+    const chat = await DeltaBackend.call(
+      'chatList.getFullChatById',
+      initialChat.id
+    )
+    if (!chat) {
+      log.error('chat not defined')
+      return
+    }
+    setChat(chat)
   }, [initialChat.id])
 
   const onChatModified = useMemo(

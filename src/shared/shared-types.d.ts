@@ -22,7 +22,7 @@ export type Credentials = {
   socks5_password: string
 }
 
-export interface DesktopSettings {
+export interface DesktopSettingsType {
   bounds:
     | {
         height: number
@@ -51,11 +51,6 @@ export interface DesktopSettings {
   syncAllAccounts: boolean
 }
 
-export interface AppState {
-  saved: DesktopSettings
-  logins: DeltaChatAccount[]
-}
-
 export interface RC_Config {
   'log-debug': boolean
   'log-to-console': boolean
@@ -68,17 +63,7 @@ export interface RC_Config {
   minimized: boolean
 }
 
-import { App } from 'electron'
-import { LocaleData } from '../shared/localize'
 import { QrState } from '../shared/constants'
-
-export interface ExtendedApp extends App {
-  rc: RC_Config
-  isQuitting: boolean
-  ipcReady: boolean
-  localeData?: LocaleData
-  state?: AppState
-}
 
 import type { Contact } from 'deltachat-node'
 

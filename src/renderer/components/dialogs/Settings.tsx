@@ -6,7 +6,7 @@ import { Elevation, H5, Card, Classes, Switch, Label } from '@blueprintjs/core'
 const { ipcRenderer } = window.electron_functions
 import { SettingsContext, useTranslationFunction } from '../../contexts'
 
-import { DesktopSettings, RC_Config } from '../../../shared/shared-types'
+import { DesktopSettingsType, RC_Config } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
 import SettingsAutodelete from './Settings-Autodelete'
 import SettingsManageKeys from './Settings-ManageKeys'
@@ -154,7 +154,7 @@ export default function Settings(props: DialogProps) {
    * persisted in ~/.config/DeltaChat/deltachat.json
    */
   const handleDesktopSettingsChange = async (
-    key: keyof DesktopSettings,
+    key: keyof DesktopSettingsType,
     value: string | boolean | number
   ) => {
     if (
@@ -192,7 +192,7 @@ export default function Settings(props: DialogProps) {
    * render switch for Desktop Setings
    */
   const renderDTSettingSwitch = (
-    configKey: keyof DesktopSettings,
+    configKey: keyof DesktopSettingsType,
     label: string,
     disabled = false,
     disabled_is_checked = false

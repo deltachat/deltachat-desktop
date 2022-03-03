@@ -3,7 +3,6 @@ import { SettingsContext, i18nContext } from './contexts'
 import ScreenController from './ScreenController'
 import { sendToBackend, ipcBackend, startBackendLogging } from './ipc'
 import attachKeybindingsListener from './keybindings'
-import { AppState, DesktopSettings } from '../shared/shared-types'
 
 import { translate, LocaleData } from '../shared/localize'
 import { getLogger } from '../shared/logger'
@@ -13,12 +12,12 @@ import { ThemeManager, ThemeContext } from './ThemeManager'
 
 import moment from 'moment'
 import { CrashScreen } from './components/screens/CrashScreen'
+import { runtime } from './runtime'
+import { DesktopSettingsType } from '../shared/shared-types'
 
 attachKeybindingsListener()
 
 export default function App(_props: any) {
-  const [state, setState] = useState<AppState | null>(null)
-
   const [localeData, setLocaleData] = useState<LocaleData | null>(null)
 
   useEffect(() => {
@@ -54,10 +53,8 @@ export default function App(_props: any) {
   useLayoutEffect(() => {
     startBackendLogging()
     ;(async () => {
-      const state = await DeltaBackend.call('getState')
-      await reloadLocaleData(state.saved.locale)
-
-      setState(state)
+      const desktop_settings = await runtime.getDesktopSettings()
+      await reloadLocaleData(desktop_settings.locale || 'en')
     })()
   }, [])
 
@@ -83,7 +80,7 @@ export default function App(_props: any) {
     }
   }, [localeData])
 
-  if (!localeData || !state) return null
+  if (!localeData) return null
   return (
     <CrashScreen>
       <SettingsContextWrapper>
@@ -98,7 +95,7 @@ function SettingsContextWrapper({ children }: { children: React.ReactChild }) {
   const [
     desktopSettings,
     _setDesktopSettings,
-  ] = useState<DesktopSettings | null>(null)
+  ] = useState<DesktopSettingsType | null>(null)
   window.__desktopSettings = desktopSettings
 
   useEffect(() => {
@@ -112,14 +109,14 @@ function SettingsContextWrapper({ children }: { children: React.ReactChild }) {
   }, [])
 
   const setDesktopSetting = async (
-    key: keyof DesktopSettings,
+    key: keyof DesktopSettingsType,
     value: string | number | boolean
   ) => {
     if (
       (await DeltaBackend.call('settings.setDesktopSetting', key, value)) ===
       true
     ) {
-      _setDesktopSettings((prevState: DesktopSettings | null) => {
+      _setDesktopSettings((prevState: DesktopSettingsType | null) => {
         if (prevState === null) {
           log.warn(
             'trying to update local version of desktop settings object, but it was not loaded yet'

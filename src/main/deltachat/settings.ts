@@ -1,19 +1,15 @@
 import { C } from 'deltachat-node'
 import { getLogger } from '../../shared/logger'
 
-import { app as rawApp } from 'electron'
-
 const log = getLogger('main/deltachat/settings')
 
 import SplitOut from './splitout'
-import { ExtendedAppMainProcess } from '../types'
-import { DesktopSettings } from '../../shared/shared-types'
+import { DesktopSettingsType } from '../../shared/shared-types'
 import { copyFile, mkdir, rm } from 'fs/promises'
 import { join, extname } from 'path'
 import { getConfigPath } from '../application-constants'
 import { updateTrayIcon } from '../tray'
-
-const app = rawApp as ExtendedAppMainProcess
+import { DesktopSettings } from '../desktop_settings'
 
 export default class DCSettings extends SplitOut {
   setConfig(key: string, value: string): boolean {
@@ -54,10 +50,8 @@ export default class DCSettings extends SplitOut {
     return config
   }
 
-  setDesktopSetting(key: keyof DesktopSettings, value: string) {
-    const { saved } = app.state
-    ;(saved as any)[key] = value
-    app.saveState({ saved })
+  setDesktopSetting(key: keyof DesktopSettingsType, value: string) {
+    DesktopSettings.mutate({ [key]: value })
 
     if (key === 'minimizeToTray') updateTrayIcon()
 
@@ -72,8 +66,8 @@ export default class DCSettings extends SplitOut {
     return true
   }
 
-  getDesktopSettings(): DesktopSettings {
-    return app.state.saved
+  getDesktopSettings(): DesktopSettingsType {
+    return DesktopSettings.state
   }
 
   keysImport(directory: string) {

@@ -101,6 +101,9 @@ export default function MailtoDialog(props: {
 
 export async function doMailtoAction(chatId: number, messageText: string) {
   const chat = await DeltaBackend.call('chatList.getFullChatById', chatId)
+  if (!chat) {
+    throw new Error('chat not found')
+  }
   const draft = await DeltaBackend.call('messageList.getDraft', chatId)
 
   selectChat(chatId)

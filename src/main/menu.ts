@@ -1,4 +1,4 @@
-import { app, Menu, shell } from 'electron'
+import { Menu, shell } from 'electron'
 import {
   gitHubIssuesUrl,
   gitHubUrl,
@@ -8,10 +8,11 @@ import {
 import { getLogger } from '../shared/logger'
 import { getLogsPath } from './application-constants'
 import { LogHandler } from './log-handler'
-import { ExtendedAppMainProcess } from './types'
 import * as mainWindow from './windows/main'
 import { readFileSync } from 'fs'
 import { join } from 'path'
+import { DesktopSettings } from './desktop_settings'
+import { getCurrentLocaleDate, tx } from './load-translations'
 
 const log = getLogger('main/menu')
 
@@ -33,29 +34,24 @@ const languages: {
     .sort(({ name: name1 }, { name: name2 }) => (name1 > name2 ? 1 : -1))
 })()
 
-let logHandlerRef: LogHandler = null
+let logHandlerRef: LogHandler | null = null
 
 export function refresh() {
-  log.info(
-    `rebuilding menu with locale ${
-      (app as ExtendedAppMainProcess).localeData.locale
-    }`
-  )
+  log.info(`rebuilding menu with locale ${getCurrentLocaleDate().locale}`)
+  if (!logHandlerRef) {
+    log.critical('logHandlerRef not defined, could not build menu')
+    return
+  }
   const template = getMenuTemplate(logHandlerRef)
   const menu = Menu.buildFromTemplate(setLabels(template))
-  const item = getMenuItem(
-    menu,
-    (app as ExtendedAppMainProcess).translate(
-      'global_menu_view_floatontop_desktop'
-    )
-  )
+  const item = getMenuItem(menu, tx('global_menu_view_floatontop_desktop'))
   if (item) item.checked = mainWindow.isAlwaysOnTop()
   const isMac = process.platform === 'darwin'
   if (isMac === true) {
     Menu.setApplicationMenu(menu)
     return
   }
-  mainWindow.window.setMenu(menu)
+  mainWindow.window?.setMenu(menu)
 }
 
 export function init(logHandler: LogHandler) {
@@ -73,14 +69,13 @@ function setLabels(menu: rawMenuItem[]): Electron.MenuItemConstructorOptions[] {
   // Electron doesn't allow us to modify the menu with a new template,
   // so we must modify the labels directly in order to change
   // the menu item labels when the user changes languages
-  const translate = (app as ExtendedAppMainProcess).translate
 
   doTranslation(menu)
 
   function doTranslation(menu: rawMenuItem[]) {
     menu.forEach(item => {
       if (item.translate) {
-        item.label = translate(item.translate)
+        item.label = tx(item.translate)
       }
       if (item.submenu) doTranslation(item.submenu as any)
     })
@@ -90,14 +85,14 @@ function setLabels(menu: rawMenuItem[]): Electron.MenuItemConstructorOptions[] {
 }
 
 function getAvailableLanguages(): Electron.MenuItemConstructorOptions[] {
+  const { locale: currentLocale } = getCurrentLocaleDate()
   return languages.map(({ locale, name }) => {
     return {
       label: name,
       type: 'radio',
-      checked: locale === (app as ExtendedAppMainProcess).localeData.locale,
+      checked: locale === currentLocale,
       click: () => {
-        ;(app as ExtendedAppMainProcess).state.saved.locale = locale
-        ;(app as ExtendedAppMainProcess).saveState()
+        DesktopSettings.mutate({ locale })
         mainWindow.chooseLanguage(locale)
       },
     }
@@ -114,30 +109,27 @@ function getZoomFactors(): Electron.MenuItemConstructorOptions[] {
     { scale: 1.4, key: 'extra_large' },
   ]
 
-  if (
-    zoomFactors
-      .map(({ scale }) => scale)
-      .indexOf((app as ExtendedAppMainProcess).state.saved.zoomFactor) === -1
-  )
+  const currentZoomFactor = DesktopSettings.state.zoomFactor
+
+  if (zoomFactors.map(({ scale }) => scale).indexOf(currentZoomFactor) === -1)
     zoomFactors.push({
-      scale: (app as ExtendedAppMainProcess).state.saved.zoomFactor,
+      scale: currentZoomFactor,
       key: 'custom',
     })
 
   return zoomFactors.map(({ key, scale }) => {
     return {
       label: !(scale === 1 && key === 'custom')
-        ? `${scale}x ${(app as ExtendedAppMainProcess).translate(key)}`
-        : (app as ExtendedAppMainProcess).translate('custom'),
+        ? `${scale}x ${tx(key)}`
+        : tx('custom'),
       type: 'radio',
       checked:
-        scale === (app as ExtendedAppMainProcess).state.saved.zoomFactor &&
+        scale === DesktopSettings.state.zoomFactor &&
         !(scale === 1 && key === 'custom'),
       click: () => {
         if (key !== 'custom') {
-          ;(app as ExtendedAppMainProcess).state.saved.zoomFactor = scale
+          DesktopSettings.mutate({ zoomFactor: scale })
           mainWindow.setZoomFactor(scale)
-          ;(app as ExtendedAppMainProcess).saveState()
         } else {
           // todo? currently it is a no-op and the 'option' is only shown
           // when the config value was changed by the user
@@ -313,7 +305,7 @@ function getMenuTemplate(logHandler: LogHandler): rawMenuItem[] {
 
 function getMenuItem(menu: Menu, label: string) {
   for (let i = 0; i < menu.items.length; i++) {
-    const menuItem = menu.items[i].submenu.items.find(function (item) {
+    const menuItem = menu.items[i].submenu?.items.find(function (item) {
       return item.label === label
     })
     if (menuItem) return menuItem

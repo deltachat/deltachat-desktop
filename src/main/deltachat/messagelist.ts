@@ -130,7 +130,7 @@ export default class DCMessageList extends SplitOut {
 
     const jsonMSG = msg.toJson()
 
-    let quote: MessageQuote = null
+    let quote: MessageQuote | null = null
     const quoteText = msg.getQuotedText()
     if (quoteText) {
       const quotedMessage = msg.getQuotedMessage()
@@ -139,6 +139,9 @@ export default class DCMessageList extends SplitOut {
         const contact = this.selectedAccountContext.getContact(
           quotedMessage.getFromId()
         )
+        if (!contact) {
+          throw new Error('qoute author contact is undefined')
+        }
         message = {
           messageId: quotedMessage.getId(),
           displayName: contact.getDisplayName(),
@@ -188,6 +191,10 @@ export default class DCMessageList extends SplitOut {
       let message = null
       if (messageId > C.DC_MSG_ID_LAST_SPECIAL) {
         message = this.messageIdToJson(messageId)
+        if (!message) {
+          log.error('message not found: messageId', messageId)
+          return
+        }
         if (chatId === -1) {
           chatId = message.chatId
         }
@@ -269,11 +276,18 @@ export default class DCMessageList extends SplitOut {
     return this.selectedAccountContext.searchMessages(chatId, query)
   }
 
-  private _msgId2SearchResultItem(msgId: number): MessageSearchResult {
+  private _msgId2SearchResultItem(msgId: number): MessageSearchResult | null {
     const message = this.selectedAccountContext.getMessage(msgId)
+    if (!message) {
+      log.warn('search: message not found: msg_id ', msgId)
+      return null
+    }
     const chat = this.selectedAccountContext.getChat(message.getChatId())
     const author = this.selectedAccountContext.getContact(message.getFromId())
-
+    if (!chat || !author) {
+      log.warn('search: chat or author of message not found: msg_id ', msgId)
+      return null
+    }
     return {
       id: msgId,
       authorProfileImage: author.getProfileImage(),
@@ -288,7 +302,10 @@ export default class DCMessageList extends SplitOut {
   msgIds2SearchResultItems(ids: number[]) {
     const result: { [id: number]: MessageSearchResult } = {}
     for (const id of ids) {
-      result[id] = this._msgId2SearchResultItem(id)
+      const item = this._msgId2SearchResultItem(id)
+      if (item) {
+        result[id] = item
+      }
     }
     return result
   }
