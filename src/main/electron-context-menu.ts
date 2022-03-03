@@ -190,10 +190,7 @@ const create = (win: BrowserWindow) => {
     menuTemplate = removeUnusedMenuItems(menuTemplate)
 
     if (menuTemplate.length > 0) {
-      const menu = (electron.remote
-        ? electron.remote.Menu
-        : electron.Menu
-      ).buildFromTemplate(menuTemplate)
+      const menu = electron.Menu.buildFromTemplate(menuTemplate)
 
       menu.popup({ window: win })
     }
@@ -248,13 +245,11 @@ const ContextMenu = () => {
     isDisposed = true
   }
 
-  for (const win of (
-    electron.BrowserWindow || electron.remote.BrowserWindow
-  ).getAllWindows()) {
+  for (const win of electron.BrowserWindow.getAllWindows()) {
     init(win)
   }
 
-  const app = electron.app || electron.remote.app
+  const app = electron.app
 
   const onWindowCreated = (_event: todo, win: BrowserWindow) => {
     init(win)
