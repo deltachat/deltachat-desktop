@@ -544,12 +544,23 @@ class ChatStore extends Store<ChatStoreState> {
 
       log.debug(`lockedEffect: ${effectName}: locking`)
       this.lockLock(lockName)
-      const returnValue = await effect(...args)
+      let returnValue
+      try {
+        returnValue = await effect(...args)
+      } catch (err) {
+        log.error(`lockedEffect: ${effectName}: error in called effect: ${err}`)
+        this.lockUnlock(lockName)
+        return
+      }
       if (returnValue === false) {
         log.debug(
           `lockedEffect: ${effectName}: return value was false, unlocking`
         )
         this.lockUnlock(lockName)
+      } else {
+        log.debug(
+          `lockedEffect: ${effectName}: return value was NOT false, keeping it locked`
+        )
       }
       return returnValue
     }) as unknown) as T
@@ -569,10 +580,16 @@ class ChatStore extends Store<ChatStoreState> {
       const effect = this.effectQueue.pop()
       if (!effect) {
         throw new Error(
-          'Undefined effect in effect queue? This should not happen'
+          `Undefined effect in effect queue? This should not happen. Effect is: ${JSON.stringify(
+            effect
+          )}`
         )
       }
-      await effect()
+      try {
+        await effect()
+      } catch (err) {
+        log.error(`tickRunQueuedEffect: error in effect: ${err}`)
+      }
       this.tickRunQueuedEffect()
     }, 0)
   }
@@ -598,7 +615,14 @@ class ChatStore extends Store<ChatStoreState> {
 
       log.debug(`queuedEffect: ${effectName}: locking`)
       lockQueue()
-      const returnValue = await effect(...args)
+      let returnValue
+      try {
+        returnValue = await effect(...args)
+      } catch (err) {
+        log.error(`Error in queuedEffect ${effectName}: ${err}`)
+        unlockQueue()
+        return
+      }
       if (this.effectQueue.length !== 0) {
         this.tickRunQueuedEffect()
       } else {
@@ -613,9 +637,6 @@ class ChatStore extends Store<ChatStoreState> {
 
   effect = {
     selectChat: async (chatId: number) => {
-      // these methods were called in backend before
-      // might be an issue if DeltaBackend.call has a significant delay
-      this.lockUnlock('scroll')
       const chat = <FullChat>(
         await DeltaBackend.call('chatList.selectChat', chatId)
       )
