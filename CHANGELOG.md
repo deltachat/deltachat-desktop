@@ -6,9 +6,10 @@
 - It's now possible to add new group members by their email addresses
 - Experimental support for webxdc
 - Implement jump to message (quotes, search, webxdc info messages)
+- Logging for unhandled frontend errors
 
 ### Changed
-- Update deltachat-node to `1.75.1`
+- Update deltachat-node to `v1.75.3`
 - Update electron to `13.6.8`
 - Update translations (3.3.2022)
 - Make disabled "delete profile image" button more readable in dark themes @ejgonzalez17 #2478
@@ -24,7 +25,7 @@
 - Update error-stack-parser to 2.0.7
 - Sending messages on pressing enter is now activated per default
 - Disabled fetching account provider info as it causes the ui to be blocked
-- Update deltachat-node to v1.75.3
+- migrate backend to strict typescript
 
 ### Fixed
 - Fix overflow in long links inside quotes @naomiceron #2467
