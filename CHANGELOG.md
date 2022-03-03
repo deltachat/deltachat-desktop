@@ -22,6 +22,7 @@
 - Removed options to watch inbox and Deltachat folder from advanced settings
 - Added option to only watch Deltachat folder to advanced settings
 - Update error-stack-parser to 2.0.7
+- Sending messages on pressing enter is now activated per default
 
 ### Fixed
 - Fix overflow in long links inside quotes @naomiceron #2467
