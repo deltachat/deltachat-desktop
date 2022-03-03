@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased][unreleased]
+### Changed
+- Update electron to `v14.2.6`
 
 ## [1.27.0] - 2021-03-04
 
