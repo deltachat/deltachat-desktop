@@ -148,6 +148,16 @@ export default function LoginForm({
       setProviderInfo(undefined)
       return
     }
+  }
+
+  const onEmailBlur = (
+    event: React.FormEvent<HTMLElement> & React.FocusEvent<HTMLInputElement>
+  ) => {
+    const email = event.target.value
+    if (email === '') {
+      setProviderInfo(undefined)
+      return
+    }
     debouncedGetProviderInfo(email)
   }
 
@@ -185,6 +195,7 @@ export default function LoginForm({
             disabled={addrDisabled}
             value={addr}
             onChange={onEmailChange}
+            onBlur={onEmailBlur}
           />
 
           <DeltaPasswordInput

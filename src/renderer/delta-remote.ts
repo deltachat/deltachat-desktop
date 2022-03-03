@@ -38,7 +38,7 @@ class DeltaRemote {
     before_login_hint: string
     overview_page: string
     status: any
-  }>
+  } | undefined>
   call(fnName: 'checkValidEmail', email: string): Promise<boolean>
   call(fnName: 'joinSecurejoin', qrCode: string): Promise<number>
   call(fnName: 'stopOngoingProcess'): Promise<number>
