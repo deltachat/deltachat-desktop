@@ -141,8 +141,10 @@ const create = (win: BrowserWindow) => {
         label: suggestion,
         visible: Boolean(props.isEditable && hasText && props.misspelledWord),
         click(menuItem: MenuItemConstructorOptions) {
-          const target = webContents(win)
-          target.insertText(menuItem.label)
+          if(menuItem.label){
+            const target = webContents(win)
+            target.insertText(menuItem.label)
+          }
         },
       }
     }

@@ -7,7 +7,7 @@ const log = getLogger('main/markseenfix')
 let dc: DeltaChatController
 
 export async function maybeMarkSeen(chatId: number, msgId: number) {
-  if (!dc) {
+  if (!dc || !mainWindow.window) {
     return
   }
   if (!mainWindow.window.hidden) {
@@ -25,6 +25,9 @@ export async function maybeMarkSeen(chatId: number, msgId: number) {
 export function setupMarkseenFix(dcClass: DeltaChatController) {
   dc = dcClass
   dc.on('ready', _ => {
+    if (!mainWindow.window) {
+      throw new Error('window does not exist, this should never happen')
+    }
     mainWindow.window.on('focus', async () => {
       const selectedChatId = await dc.callMethod(
         null,

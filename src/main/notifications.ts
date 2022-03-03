@@ -42,9 +42,16 @@ export default function (dc: DeltaChatController, settings: any) {
         dc.callMethod(null, 'messageList.messageIdToJson', [msgId]),
       ])
 
+      if (!message_json) {
+        throw new Error(
+          "could not create notification for a message that doesn't exist (anymore?):" +
+            msgId
+        )
+      }
+
       const summary = message_json.summary
 
-      let icon: NativeImage
+      let icon: NativeImage | undefined = undefined
       if (message_json?.viewType === C.DC_MSG_IMAGE) {
         // if is image
         icon = nativeImage.createFromPath(message_json?.file)
@@ -73,7 +80,7 @@ export default function (dc: DeltaChatController, settings: any) {
 
       if (process.platform === 'win32') {
         // Workaround for disabling close button on windows. Undefined electron behaviour. Yey.
-        notificationOptions.closeButtonText = null
+        notificationOptions.closeButtonText = undefined
       }
 
       return new Notification(notificationOptions)
@@ -87,7 +94,7 @@ export default function (dc: DeltaChatController, settings: any) {
       for (const notify of notifications[chatId]) {
         notify.close()
       }
-      notifications[chatId] = null
+      delete notifications[chatId]
     }
   }
 
@@ -122,6 +129,9 @@ export default function (dc: DeltaChatController, settings: any) {
   dc.on(
     'DC_EVENT_INCOMING_MSG',
     async (accountId: number, chatId: number, msgId: number) => {
+      if (!mainWindow.window) {
+        throw new Error('window does not exist, this should never happen')
+      }
       if (
         settings.notifications &&
         (mainWindow.window.hidden || !mainWindow.window.isVisible())
@@ -139,13 +149,17 @@ export default function (dc: DeltaChatController, settings: any) {
           'with msgId:',
           msgId
         )
-        const notify = await createNotification(chatId, msgId)
-        notify.on('click', Event => {
-          onClickNotification(chatId, msgId, Event)
-        })
-        // notify.on('close', () => {})
-        addNotificationForChat(chatId, notify)
-        notify.show()
+        try {
+          const notify = await createNotification(chatId, msgId)
+          notify.on('click', Event => {
+            onClickNotification(chatId, msgId, Event)
+          })
+          // notify.on('close', () => {})
+          addNotificationForChat(chatId, notify)
+          notify.show()
+        } catch (error) {
+          log.warn('could not create notification:', error)
+        }
       }
     }
   )

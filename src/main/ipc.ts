@@ -69,7 +69,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
           `EVENT_DD_DISPATCH_RETURN_${identifier}_${methodName}`,
           returnValue
         )
-      } catch (err) {
+      } catch (err: any) {
         main.send(
           `EVENT_DD_DISPATCH_RETURN_ERR_${identifier}_${methodName}`,
           err.toString()
@@ -90,14 +90,19 @@ export async function init(cwd: string, logHandler: LogHandler) {
   })
 
   ipcMain.on('saveLastChatId', (_e, chatId) => {
-    const { lastChats } = app.state.saved
-    lastChats[dcController.selectedAccountId] = chatId
+    if (dcController.selectedAccountId) {
+      const { lastChats } = app.state.saved
+      lastChats[dcController.selectedAccountId] = chatId
+    }
     // don't save to disk, because this is already done on close and it might block
     // we can ignore the crash case, because a crash isn't supposed to happen
     // and it's not important data
   })
 
   ipcMain.on('getLastSelectedChatId', e => {
+    if (!dcController.selectedAccountId) {
+      throw new Error('no account selected')
+    }
     const { lastChats } = app.state.saved
     e.returnValue = lastChats[dcController.selectedAccountId]
   })
@@ -107,6 +112,9 @@ export async function init(cwd: string, logHandler: LogHandler) {
   })
 
   ipcMain.on('reload-main-window', () => {
+    if (!mainWindow.window) {
+      throw new Error('window does not exist, this should never happen')
+    }
     mainWindow.window.webContents.reload()
   })
 
@@ -123,10 +131,16 @@ export async function init(cwd: string, logHandler: LogHandler) {
   })
 
   ipcMain.handle('fileChooser', (_ev, options) => {
+    if (!mainWindow.window) {
+      throw new Error('window does not exist, this should never happen')
+    }
     return dialog.showOpenDialog(mainWindow.window, options)
   })
 
   ipcMain.handle('saveFile', async (_ev, source, options) => {
+    if (!mainWindow.window) {
+      throw new Error('window does not exist, this should never happen')
+    }
     const { canceled, filePath } = await dialog.showSaveDialog(
       mainWindow.window,
       options
@@ -134,7 +148,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
     if (!canceled && filePath) {
       try {
         await copyFile(source, filePath)
-      } catch (error) {
+      } catch (error: any) {
         if (error.code == 'EACCES') {
           dialog.showErrorBox(
             'Permission Error',

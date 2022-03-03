@@ -130,6 +130,9 @@ async function onReady([_appReady, loadedState]: [any, AppState]) {
 }
 
 ;(app as EventEmitter).once('ipcReady', () => {
+  if (!mainWindow.window) {
+    throw new Error('window does not exist, this should never happen')
+  }
   console.timeEnd('init')
   if (process.env.NODE_ENV === 'test') {
     mainWindow.window.maximize()
@@ -178,6 +181,9 @@ export function quit(e?: Electron.Event) {
   }, 4000)
 }
 app.on('activate', () => {
+  if (!mainWindow.window) {
+    throw new Error('window does not exist, this should never happen')
+  }
   log.debug("app.on('activate')")
   if (mainWindow.window.isVisible() === false) {
     log.debug("app.on('activate') showing main window")
