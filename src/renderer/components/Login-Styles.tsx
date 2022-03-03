@@ -137,10 +137,9 @@ export const DeltaInput = React.memo(
       onChange: (
         event: React.FormEvent<HTMLElement> &
           React.ChangeEvent<HTMLInputElement>
-      ) => void,
+      ) => void
       onBlur?: (
-        event: React.FormEvent<HTMLElement> &
-          React.FocusEvent<HTMLInputElement>
+        event: React.FormEvent<HTMLElement> & React.FocusEvent<HTMLInputElement>
       ) => void
     }>
   ) => {
@@ -149,7 +148,7 @@ export const DeltaInput = React.memo(
     const onFocus = () => setIsFocused(true)
     const onBlur = (event: React.FocusEvent<HTMLInputElement>) => {
       setIsFocused(false)
-      if(props.onBlur) props.onBlur(event)
+      if (props.onBlur) props.onBlur(event)
     }
     const showLabel =
       isFocused ||
