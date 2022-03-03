@@ -377,6 +377,12 @@
     <string name="mailing_list">Listë postimesh</string>
     <string name="mailing_list_profile_info">Ndryshime në emër dhe figurë liste postimesh aplikohen vetëm në këtë pajisje.</string>
 
+    <!-- webxdc -->
+    <!-- "Start..." button for an app -->
+    <string name="start_app">Fillo…</string>
+    <!-- this is a warning that is shown when one tries to send something to a chat that is not yet accepted. -->
+    <string name="accept_request_first">Ju lutemi, së pari pranoni kërkesën për fjalosje.</string>
+
     <!-- map -->
     <string name="filter_map_on_time">Shfaq vendndodhje në rrjedhë kohore</string>
     <string name="show_location_traces">Shfaq gjurmë</string>
@@ -599,11 +605,15 @@
     <string name="pref_send_copy_to_self">Dërgojini kopje vetes</string>
     <string name="pref_auto_folder_moves">Lëvizje të Vetvetishme te dosja DeltaChat</string>
     <string name="pref_auto_folder_moves_explain">Bisedat zhvendosen, që të shmanget rrëmuja te dosja Të marrë</string>
+    <string name="pref_only_fetch_mvbox_title">Sill Vetëm nga Dosje DeltaChat</string>
+    <string name="pref_only_fetch_mvbox_explain">Shpërfill dosje të tjera. Lyp që shërbyesi juaj të kalojë mesazhe fjalosjeje te dosje DeltaChat.</string>
     <string name="pref_show_emails">Shfaq email-e klasikë</string>
     <string name="pref_show_emails_no">Jo, vetëm fjalosje</string>
     <string name="pref_show_emails_accepted_contacts">Për kontakte të pranuar</string>
     <string name="pref_show_emails_all">Krejt</string>
     <string name="pref_experimental_features">Veçori eksperimentale</string>
+    <string name="pref_developer_mode">Mënyra Zhvillues</string>
+    <string name="pref_developer_mode_explain">Aktivizon mundësi diagnostikimi dhe mund ta bëjë aplikacionin më pak të qëndrueshëm. Vetëm për zhvillues.</string>
     <string name="pref_background_default">Sfond parazgjedhje</string>
     <string name="pref_background_default_color">Ngjyrë parazgjedhje</string>
     <string name="pref_background_custom_image">Figurë vetjake</string>
@@ -800,6 +810,8 @@
     <string name="ImageEditorHud_draw_anywhere_to_blur">Që të turbullohet, vizatoni kudo qoftë</string>
     <string name="ImageEditorHud_add_text">Shtoni tekst</string>
     <string name="ImageEditorHud_blur">Turbulloje</string>
+    <string name="ImageEditorHud_brush_marker">Penel Shënimesh</string>
+    <string name="ImageEditorHud_brush_highlight">Penel Theksimesh</string>
     <string name="ImageEditorHud_crop">Qethe</string>
     <string name="ImageEditorHud_flip">Ktheje në anë tjetër</string>
     <string name="ImageEditorHud_rotate">Rrotulloje</string>
@@ -898,4 +910,7 @@
     <string name="update_1_24_android">1.24 me një vështrim:\n\n• Ruani prekje: Përzgjedhje llogarish te cepi i sipërm majtas i listës së fjalosjeve\n• Ruani më tepër prekje: Prekeni gjatë ikonën e aplikacionit që të hapen drejtpërsëdrejti fjalosje së fundi\n• Ruani trafik: Shkarkoni kartela të mëdha, sipas nevojës\n• Kurseni nervat: hyrje më të shpejta jo bllokuese, me kod QR dhe mundësi të reja kodi QR\n\nMë tepër te 👉</string>
     <string name="update_1_24_ios">1.24 me një vështrim:\n\n• Filloni një kërkim brenda fjalosjeje, që prej profilit të fjalosjes\n• Ruani trafik: Shkarkoni kartela të mëdha, sipas nevojës\n• Kurseni nervat: hyrje më të shpejta jo bllokuese, me kod QR dhe mundësi të reja kodi QR\n\nMë tepër te 👉</string>
     <string name="update_1_26">1.26 po lustrohen 💅\n\n• Pasi kodet QR u bënë jo bllokues, në 1.24, tani ata duken shumë të hijshëm - në krejt platformat\n• Avatarët dhe stemat duken të ngjashëm nëpër platforma të ndryshme\n• Plot ndreqje të metash</string>
+    <string name="update_1_28_android">1.28 Në pah:\n\n🔒 Fshehtëzim: Një mundësi e re eksperimentale për të mbajtur të fshehtëzuara në pajisjen tuaj kontaktet, të fshehtat dhe mesazhe tekst tuajt. E mundshme vetëm gjatë krijimi llogarish dhe importimi kartelash kopjeruajtjeje.\n\n📫 Shkruani te listë postimesh\n\n💫 Ujdisje fillestare më e shpejtë për më tepër shërbyes email-i dhe mundësi të thjeshtuara punimi në rrjet, për të parandaluar formësim të gabuar aksidentalisht\n\n🐜 U ndreqën mjaaaaaaft probleme të njoftuara nga përdoruesit</string>
+    <string name="update_1_28_ios_extra_line">… dhe ju tani mund të përzgjidhni një sfond që nga “Rregullime / Sfond” :)</string>
+
 </resources>
