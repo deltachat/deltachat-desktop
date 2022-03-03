@@ -28,28 +28,30 @@ export function init(
   const defaults = windowDefaults()
   const initialBounds = Object.assign(defaults.bounds, state.saved.bounds)
 
-  window = new electron.BrowserWindow({
-    backgroundColor: '#282828',
-    // backgroundThrottling: false, // do not throttle animations/timers when page is background
-    darkTheme: true, // Forces dark theme (GTK+3)
-    icon: appIcon(),
-    minHeight: defaults.minHeight,
-    minWidth: defaults.minWidth,
-    show: false,
-    title: appWindowTitle,
-    height: initialBounds.height,
-    width: initialBounds.width,
-    x: initialBounds.x,
-    y: initialBounds.y,
-    webPreferences: {
-      nodeIntegration: false,
-      preload: defaults.preload,
-      spellcheck: false, // until we can load a local dictionary, see https://github.com/electron/electron/issues/22995
-      webSecurity: true,
-      allowRunningInsecureContent: false,
-      contextIsolation: false,
-    },
-  })
+  const main_window = (window = <BrowserWindow & { hidden?: boolean }>(
+    new electron.BrowserWindow({
+      backgroundColor: '#282828',
+      // backgroundThrottling: false, // do not throttle animations/timers when page is background
+      darkTheme: true, // Forces dark theme (GTK+3)
+      icon: appIcon(),
+      minHeight: defaults.minHeight,
+      minWidth: defaults.minWidth,
+      show: false,
+      title: appWindowTitle,
+      height: initialBounds.height,
+      width: initialBounds.width,
+      x: initialBounds.x,
+      y: initialBounds.y,
+      webPreferences: {
+        nodeIntegration: false,
+        preload: defaults.preload,
+        spellcheck: false, // until we can load a local dictionary, see https://github.com/electron/electron/issues/22995
+        webSecurity: true,
+        allowRunningInsecureContent: false,
+        contextIsolation: false,
+      },
+    })
+  ))
 
   // disable network request to fetch dictionary
   // issue: https://github.com/electron/electron/issues/22995
@@ -128,9 +130,9 @@ export function init(
   })
 
   window.once('ready-to-show', () => {
-    if (!options.hidden) window.show()
+    if (!options.hidden) main_window.show()
     if (process.env.NODE_ENV === 'test') {
-      window.maximize()
+      main_window.maximize()
     }
   })
 
@@ -161,15 +163,15 @@ export function init(
   )
 
   window.once('show', () => {
-    window.webContents.setZoomFactor(state.saved.zoomFactor)
+    main_window.webContents.setZoomFactor(state.saved.zoomFactor)
   })
   window.on('close', () => {})
   window.on('blur', () => {
-    window.hidden = true
+    main_window.hidden = true
     refreshTrayContextMenu()
   })
   window.on('focus', () => {
-    window.hidden = false
+    main_window.hidden = false
     refreshTrayContextMenu()
   })
 }
@@ -197,6 +199,9 @@ export function setBounds(
   bounds: Rectangle & { contentBounds: boolean },
   maximize: boolean
 ) {
+  if(!window) {
+    throw new Error("window does not exist, this should never happen");
+  }
   // Maximize or minimize, if the second argument is present
   if (maximize === true && !window.isMaximized()) {
     log.debug('setBounds: maximizing')

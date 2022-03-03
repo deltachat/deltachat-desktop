@@ -41,7 +41,7 @@ export async function openHelpWindow(locale: string) {
     minWidth: 450,
     minHeight: 450,
   }
-  win = new BrowserWindow({
+  const help_window = win = new BrowserWindow({
     backgroundColor: '#282828',
     darkTheme: true, // Forces dark theme (GTK+3)
 
@@ -66,7 +66,7 @@ export async function openHelpWindow(locale: string) {
   win.loadFile(url)
 
   win.once('ready-to-show', () => {
-    win.show()
+    help_window.show()
   })
 
   if (win.setSheetOffset) {

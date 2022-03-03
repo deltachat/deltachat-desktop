@@ -49,7 +49,7 @@ export function printProcessLogLevelInfo() {
   )
 }
 
-type LogHandlerFunction = (
+export type LogHandlerFunction = (
   channel: string,
   level: string,
   stacktrace: ReturnType<typeof getStackTrace>,

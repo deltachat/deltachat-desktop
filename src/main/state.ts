@@ -27,14 +27,14 @@ async function load() {
   const state = getDefaultState()
   let saved = {}
   try {
-    saved = await promisify(cb => appConfig.read(cb))()
+    saved = await promisify(cb => appConfig.read(cb))() as AppState
   } catch (error) {
     log.debug(error)
     log.info('Missing configuration file. Using default values.')
   }
   state.saved = Object.assign(state.saved, saved)
   if (typeof state.saved.lastAccount !== 'number') {
-    state.saved.lastAccount = null
+    state.saved.lastAccount = undefined
   }
   return state
 }

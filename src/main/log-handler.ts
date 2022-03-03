@@ -33,7 +33,7 @@ export function createLogHandler() {
      * @param stacktrace Stack trace if WARNING, ERROR or CRITICAL
      * @param ...args Variadic parameters. Stringified before logged to file
      */
-    log: (
+    log: ((
       channel: string,
       level: string,
       stacktrace: any[],
@@ -55,7 +55,7 @@ export function createLogHandler() {
           stacktrace,
         })
       }
-    },
+    }) as LogHandlerFunction,
     end: () => stream.end(),
     logFilePath: () => fileName,
   }
@@ -63,7 +63,7 @@ export function createLogHandler() {
 export type LogHandler = ReturnType<typeof createLogHandler>
 
 import { readdir, lstat, unlink } from 'fs/promises'
-import { getLogger } from '../shared/logger'
+import { getLogger, LogHandlerFunction } from '../shared/logger'
 
 export async function cleanupLogFolder() {
   const log = getLogger('logger/log-cleanup')

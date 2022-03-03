@@ -5,8 +5,8 @@ import { ExtendedAppMainProcess } from './types'
 import { getLogger } from '../shared/logger'
 import { join } from 'path'
 
-let tray: Tray = null
-let contextMenu: Menu = null
+let tray: Tray | null = null
+let contextMenu: Menu | null = null
 
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/tray')
@@ -39,6 +39,9 @@ export function TrayImage(): string | NativeImage {
 }
 
 export function mainWindowIsVisible() {
+  if (!mainWindow.window) {
+    throw new Error('window does not exist, this should never happen')
+  }
   if (process.platform === 'darwin' || process.platform === 'win32') {
     return mainWindow.window.isVisible()
   }
@@ -46,18 +49,27 @@ export function mainWindowIsVisible() {
 }
 
 export function closeDeltaChat() {
+  if (!mainWindow.window) {
+    throw new Error('window does not exist, this should never happen')
+  }
   mainWindow.window.close()
 }
 
 export function hideDeltaChat(minimize?: boolean) {
+  if (!mainWindow.window) {
+    throw new Error('window does not exist, this should never happen')
+  }
   if (minimize === true) {
     mainWindow.window.minimize()
   }
   mainWindow.window.hide()
-  if (process.platform === 'linux') tray.setContextMenu(getTrayMenu())
+  if (process.platform === 'linux') tray?.setContextMenu(getTrayMenu() as Menu)
 }
 
 export function showDeltaChat() {
+  if (!mainWindow.window) {
+    throw new Error('window does not exist, this should never happen')
+  }
   mainWindow.window.show()
 }
 
@@ -82,7 +94,7 @@ export function updateTrayIcon() {
 
 export function destroyTrayIcon() {
   log.info('destroy icon tray')
-  tray.destroy()
+  tray?.destroy()
   tray = null
 }
 
@@ -169,11 +181,11 @@ export function renderTrayIcon() {
   tray.setToolTip('Delta Chat')
 
   if (process.platform === 'darwin') {
-    tray.on('click', () => tray.popUpContextMenu(getTrayMenu()))
-    tray.on('right-click', () => tray.popUpContextMenu(getTrayMenu()))
+    tray.on('click', () => tray?.popUpContextMenu(getTrayMenu()))
+    tray.on('right-click', () => tray?.popUpContextMenu(getTrayMenu()))
   } else if (process.platform === 'win32') {
     tray.on('click', hideOrShowDeltaChat)
-    tray.on('right-click', () => tray.popUpContextMenu(getTrayMenu()))
+    tray.on('right-click', () => tray?.popUpContextMenu(getTrayMenu()))
   } else {
     tray.on('click', hideOrShowDeltaChat)
     tray.on('double-click', hideOrShowDeltaChat)
@@ -183,5 +195,5 @@ export function renderTrayIcon() {
 }
 
 export function refreshTrayContextMenu() {
-  tray?.setContextMenu(getTrayMenu())
+  tray?.setContextMenu(getTrayMenu() as Menu)
 }
