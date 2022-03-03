@@ -452,8 +452,12 @@ export default class DeltaChatController extends EventEmitter {
     }
   }
 
-  getProviderInfo(email: string) {
-    return this.selectedAccountContext.getProviderFromEmail(email)
+  getProviderInfo(_email: string) : ReturnType<typeof DeltaChat.getProviderFromEmail> {
+    // TODO: Disabled until fixed in core
+    /*if (DeltaChatNode.maybeValidAddr(email)) {
+      return this.selectedAccountContext.getProviderFromEmail(email)
+    }*/
+    return
   }
 
   checkValidEmail(email: string) {
