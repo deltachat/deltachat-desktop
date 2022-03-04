@@ -50,14 +50,14 @@ export default class DeltaChatController extends EventEmitter {
    */
 
   _inner_account_manager: DeltaChat | null = null
-  get account_manager(): DeltaChat {
+  get account_manager(): Readonly<DeltaChat> {
     if (!this._inner_account_manager) {
       throw new Error('account manager is not defined (yet?)')
     }
     return this._inner_account_manager
   }
   _inner_selectedAccountContext: Context | null = null
-  get selectedAccountContext(): Context {
+  get selectedAccountContext(): Readonly<Context> {
     if (!this._inner_selectedAccountContext) {
       throw new Error('selectedAccountContext is not defined (yet?)')
     }
