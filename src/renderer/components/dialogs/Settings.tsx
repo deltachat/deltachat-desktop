@@ -84,6 +84,9 @@ function DeltaSettingsInput({
   style?: React.CSSProperties
 }) {
   const input = useRef<HTMLInputElement>(null)
+  const [value, setValue] = useState(
+    ''
+  )
 
   useEffect(() => {
     if (input.current) {
@@ -91,7 +94,7 @@ function DeltaSettingsInput({
     }
     DeltaBackend.call('settings.getConfigFor', [configKey]).then(res => {
       if (input.current) {
-        input.current.value = res[configKey]
+        setValue(res[configKey])
         input.current.disabled = false
       }
     })
@@ -104,8 +107,10 @@ function DeltaSettingsInput({
         ref={input}
         style={style}
         className={Classes.INPUT}
+        value={value}
         onChange={ev => {
           const value = ev.target.value
+          setValue(value)
           DeltaBackend.call('settings.setConfig', configKey, value).catch(
             log.warn.bind(
               null,
