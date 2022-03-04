@@ -10,8 +10,14 @@ Search contact list: `ctrl + k`
 
 Focus message composer: `ctrl + n`
 
-Open settings: `cmd + ,` or `ctrl + ,`
+Open settings: `cmd ⌘ + ,` or `ctrl + ,`
 
 Call MaybeNetwork (can help if deltachat doesn't detect that it is online again after resuming standby): `F5`
 
 Scroll up/down a page in the messagelist: `PageUp` and `PageDown`
+
+## Composer
+
+When `Press Enter to Send` is deactivated: `ctrl + enter` or `cmd ⌘ + enter` to send the message.
+
+When `Press Enter to Send` activated: `shift + enter` to add a newline instead of sending
