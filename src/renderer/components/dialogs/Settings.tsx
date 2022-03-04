@@ -12,6 +12,7 @@ import SettingsAutodelete from './Settings-Autodelete'
 import SettingsManageKeys from './Settings-ManageKeys'
 import SettingsEncryption from './Settings-Encryption'
 import SettingsImapFolderHandling from './Settings-ImapFolderHandling'
+import { SettingsExperimentalFeatures } from './Settings-ExperimentalFeatures'
 import {
   DeltaDialogBase,
   DeltaDialogHeader,
@@ -25,6 +26,7 @@ import { getLogger } from '../../../shared/logger'
 import SettingsCommunication from './Settings-Communication'
 import { runtime } from '../../runtime'
 import SettingsDownloadOnDemand from './Settings-DownloadOnDemand'
+import { bool, string } from 'prop-types'
 
 const log = getLogger('renderer/dialogs/Settings')
 
@@ -50,6 +52,13 @@ export function SettingsSelector(props: any) {
     </div>
   )
 }
+
+export type RenderDTSettingSwitchType = (
+  configKey: keyof DesktopSettings,
+  label: string,
+  disabled?: boolean,
+  disabled_is_checked?: boolean
+) => JSX.Element | null
 
 export type RenderDeltaSwitch2Type = ({
   key,
@@ -191,14 +200,14 @@ export default function Settings(props: DialogProps) {
   /*
    * render switch for Desktop Setings
    */
-  const renderDTSettingSwitch = (
-    configKey: keyof DesktopSettings,
-    label: string,
-    disabled = false,
-    disabled_is_checked = false
+  const renderDTSettingSwitch: RenderDTSettingSwitchType = (
+    configKey,
+    label,
+    disabled,
+    disabled_is_checked
   ) => {
     if (!desktopSettings) {
-      return
+      return null
     }
     return (
       <Switch
@@ -321,40 +330,11 @@ export default function Settings(props: DialogProps) {
             )}
           </Card>
           <Card elevation={Elevation.ONE}>
-            <H5>{tx('pref_experimental_features')}</H5>
-            {renderDTSettingSwitch(
-              'enableOnDemandLocationStreaming',
-              tx('pref_on_demand_location_streaming')
-            )}
-            {renderDTSettingSwitch(
-              'minimizeToTray',
-              tx('pref_show_tray_icon'),
-              rc?.minimized,
-              rc?.minimized
-            )}
-            {rc?.minimized && (
-              <div className='bp3-callout'>
-                {tx('explain_desktop_minimized_disabled_tray_pref')}
-              </div>
-            )}
-            {renderDTSettingSwitch(
-              'enableChatAuditLog',
-              tx('menu_chat_audit_log')
-            )}
-            {renderDTSettingSwitch('enableAVCalls', tx('videochat'))}
-            {desktopSettings['enableAVCalls'] === true && (
-              <>
-                <DeltaSettingsInput
-                  configKey='webrtc_instance'
-                  label={tx('videochat_instance')}
-                  style={{ width: '100%' }}
-                />
-                <div className='bp3-callout'>
-                  {tx('videochat_instance_explain')}
-                </div>
-              </>
-            )}
-            <br />
+            <SettingsExperimentalFeatures
+              state={state}
+              renderDTSettingSwitch={renderDTSettingSwitch}
+              DeltaSettingsInput={DeltaSettingsInput}
+            />
           </Card>
           <SettingsImapFolderHandling
             state={state}
