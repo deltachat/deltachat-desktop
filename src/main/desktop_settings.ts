@@ -41,7 +41,7 @@ class PersistentState extends EventEmitter {
     this.inner_state = Object.assign(default_state, saved)
   }
 
-  mutate(state: Partial<DesktopSettingsType>) {
+  update(state: Partial<DesktopSettingsType>) {
     this.inner_state = { ...this.inner_state, ...state } as DesktopSettingsType
     this.save()
   }

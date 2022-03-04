@@ -227,7 +227,7 @@ export default class DeltaChatController extends EventEmitter {
 
     tmp_dc.close()
     // Clear some settings that we cant migrate
-    DesktopSettings.mutate({
+    DesktopSettings.update({
       lastAccount: -1,
       lastChats: {},
     })

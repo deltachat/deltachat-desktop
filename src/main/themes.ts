@@ -155,7 +155,7 @@ Using --theme is for developers and theme creators ONLY and should not be used b
 If you have question or need help, feel free to ask in our forum https://support.delta.chat.`
       )
     }
-    DesktopSettings.mutate({ activeTheme: app.rc['theme'] })
+    DesktopSettings.update({ activeTheme: app.rc['theme'] })
     log.info(`set theme`)
     if (app.rc['theme-watch']) {
       log.info('theme-watch: activated', app.rc['theme-watch'])

@@ -40,8 +40,8 @@ export default class Extras extends SplitOut {
   async setTheme(address: string) {
     try {
       resolveThemeAddress(address)
-      DesktopSettings.mutate({ activeTheme: address })
-      DesktopSettings.mutate({})
+      DesktopSettings.update({ activeTheme: address })
+      DesktopSettings.update({})
       return true
     } catch (error) {
       log.error('set theme failed: ', error)

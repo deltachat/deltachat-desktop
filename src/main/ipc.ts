@@ -92,7 +92,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
 
   ipcMain.on('saveLastChatId', (_e, chatId) => {
     if (dcController.selectedAccountId) {
-      DesktopSettings.mutate({
+      DesktopSettings.update({
         lastChats: {
           ...DesktopSettings.state.lastChats,
           [dcController.selectedAccountId]: chatId,
