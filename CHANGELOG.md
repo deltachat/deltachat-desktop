@@ -47,6 +47,7 @@
 - Fix messagelist sometimes not loading more messages
 - Fix rockettheme font color for highlighted settings options
 - Fix device messages showing unneccessary elements
+- Fix background image url being absolute -> make it portable #2562
 
 ## [1.26.0] - 2021-12-15
 
