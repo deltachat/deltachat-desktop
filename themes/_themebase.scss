@@ -165,6 +165,7 @@ $hover-contrast-change: 2%;
   --videoPlayBtnBgHover: #eeeeee;
   --fullScreenMediaButtons: #8b8e91;
   --messageHightlightColor: rgba(66, 165, 245, 0.8);
+  --addMemberChipBackgroundColor: #{$bgSecondary};
 
   @if lightness($bgPrimary) < 50 {
     // dark theme
