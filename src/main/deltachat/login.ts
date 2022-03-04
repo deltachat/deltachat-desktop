@@ -12,7 +12,10 @@ import { DesktopSettings } from '../desktop_settings'
 import { tx } from '../load-translations'
 const log = getLogger('main/deltachat/login')
 
-function setCoreStrings(dc: Context, strings: { [key: number]: string }) {
+function setCoreStrings(
+  dc: Readonly<Context>,
+  strings: { [key: number]: string }
+) {
   Object.keys(strings).forEach(key => {
     dc.setStockTranslation(Number(key), strings[Number(key)])
   })
