@@ -150,7 +150,7 @@ export function init(
   })
 
   const saveBounds = debounce((e: any) => {
-    DesktopSettings.mutate({ bounds: e.sender.getBounds() })
+    DesktopSettings.update({ bounds: e.sender.getBounds() })
   }, 1000)
 
   window.on('move', saveBounds)

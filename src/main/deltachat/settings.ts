@@ -51,7 +51,7 @@ export default class DCSettings extends SplitOut {
   }
 
   setDesktopSetting(key: keyof DesktopSettingsType, value: string) {
-    DesktopSettings.mutate({ [key]: value })
+    DesktopSettings.update({ [key]: value })
 
     if (key === 'minimizeToTray') updateTrayIcon()
 

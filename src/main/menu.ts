@@ -92,7 +92,7 @@ function getAvailableLanguages(): Electron.MenuItemConstructorOptions[] {
       type: 'radio',
       checked: locale === currentLocale,
       click: () => {
-        DesktopSettings.mutate({ locale })
+        DesktopSettings.update({ locale })
         mainWindow.chooseLanguage(locale)
       },
     }
@@ -128,7 +128,7 @@ function getZoomFactors(): Electron.MenuItemConstructorOptions[] {
         !(scale === 1 && key === 'custom'),
       click: () => {
         if (key !== 'custom') {
-          DesktopSettings.mutate({ zoomFactor: scale })
+          DesktopSettings.update({ zoomFactor: scale })
           mainWindow.setZoomFactor(scale)
         } else {
           // todo? currently it is a no-op and the 'option' is only shown

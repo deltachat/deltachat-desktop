@@ -48,7 +48,7 @@ export default class DCLoginController extends SplitOut {
     log.debug('Started IO')
 
     this.controller.emit('ready')
-    DesktopSettings.mutate({ lastAccount: accountId })
+    DesktopSettings.update({ lastAccount: accountId })
 
     log.info('dc_get_info', this.selectedAccountContext.getInfo())
 
@@ -77,7 +77,7 @@ export default class DCLoginController extends SplitOut {
 
   logout() {
     this.controller.webxdc.closeAll()
-    DesktopSettings.mutate({ lastAccount: undefined })
+    DesktopSettings.update({ lastAccount: undefined })
 
     if (!DesktopSettings.state.syncAllAccounts) {
       this.selectedAccountContext.stopIO()
