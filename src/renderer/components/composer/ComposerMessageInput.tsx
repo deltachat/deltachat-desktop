@@ -128,13 +128,13 @@ export default class ComposerMessageInput extends React.Component<
     const enterKeySends = this.props.enterKeySends
 
     // ENTER + SHIFT
-    if (e.keyCode === 13 && e.shiftKey) {
+    if (e.key === 'Enter' && e.shiftKey) {
       return 'NEWLINE'
       // ENTER + CTRL
-    } else if (e.keyCode === 13 && e.ctrlKey) {
+    } else if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
       return 'SEND'
       // ENTER
-    } else if (e.keyCode === 13 && !e.shiftKey) {
+    } else if (e.key === 'Enter' && !e.shiftKey) {
       return enterKeySends ? 'SEND' : 'NEWLINE'
     }
   }

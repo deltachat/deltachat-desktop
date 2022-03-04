@@ -24,6 +24,7 @@
 - Added option to only watch Deltachat folder to advanced settings
 - Update error-stack-parser to 2.0.7
 - Sending messages on pressing enter is now activated per default
+- added `Command ⌘ + Enter` as alias for `Ctrl + Enter` to send message when `Press Enter to Send` is deactivated
 - Disabled fetching account provider info as it causes the ui to be blocked
 - migrate backend to strict typescript
 
