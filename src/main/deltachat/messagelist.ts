@@ -243,6 +243,9 @@ export default class DCMessageList extends SplitOut {
       let message = null
       if (messageId > C.DC_MSG_ID_LAST_SPECIAL) {
         message = this.messageIdToJson(messageId)
+        if (!message) {
+          throw new Error('message not found: msgid ' + messageId)
+        }
         if (chatId === -1) {
           chatId = message.chatId
         }
