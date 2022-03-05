@@ -10,7 +10,7 @@
 
 ### Changed
 - Update `@deltachat/message_parser_wasm` to `0.3.0` (fixes some link parsing issues)
-- Update deltachat-node to `v1.75.3`
+- Update deltachat-node to `v1.76.0`
 - Update electron to `13.6.8`
 - Update translations (3.3.2022)
 - Make disabled "delete profile image" button more readable in dark themes @ejgonzalez17 #2478
