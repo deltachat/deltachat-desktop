@@ -7,6 +7,8 @@
 - Experimental support for webxdc
 - Implement jump to message (quotes, search, webxdc info messages)
 - Logging for unhandled frontend errors
+- Copying image now possible from gallery and chat view
+- Add image zoom for full screen views
 
 ### Changed
 - Update `@deltachat/message_parser_wasm` to `0.3.0` (fixes some link parsing issues)
@@ -19,8 +21,6 @@
 - Drastically improve performance of MessageList
 - Switch from tape to mocha for unit tests
 - Don't update Timestamps if they are older then one week
-- Add image zoom for full screen views
-- Copying image now possible from gallery and chat view
 - Removed options to watch inbox and Deltachat folder from advanced settings
 - Added option to only watch Deltachat folder to advanced settings
 - Update error-stack-parser to 2.0.7
