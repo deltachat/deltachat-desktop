@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- Added experimental account sidebar for quick switching between accounts
+
 ## [1.27.0] - 2021-03-04
 
 ### Added
@@ -11,7 +14,6 @@
 - Logging for unhandled frontend errors
 - Copying image now possible from gallery and chat view
 - Add image zoom for full screen views
-- Added experimental account sidebar for quick switching between accounts
 
 ### Changed
 - Update `@deltachat/message_parser_wasm` to `0.3.0` (fixes some link parsing issues)
