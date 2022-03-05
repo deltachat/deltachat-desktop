@@ -53,12 +53,19 @@ export function SettingsSelector(props: any) {
   )
 }
 
-export type RenderDTSettingSwitchType = (
-  configKey: keyof DesktopSettings,
-  label: string,
-  disabled?: boolean,
-  disabled_is_checked?: boolean
-) => JSX.Element | null
+export type RenderDTSettingSwitchType = ({
+  key,
+  label,
+  description,
+  disabled,
+  disabledValue,
+}: {
+  key: keyof DesktopSettings
+  label: string
+  description?: string
+  disabled?: boolean
+  disabledValue?: boolean
+}) => JSX.Element | null
 
 export type RenderDeltaSwitch2Type = ({
   key,
@@ -84,9 +91,7 @@ function DeltaSettingsInput({
   style?: React.CSSProperties
 }) {
   const input = useRef<HTMLInputElement>(null)
-  const [value, setValue] = useState(
-    ''
-  )
+  const [value, setValue] = useState('')
 
   useEffect(() => {
     if (input.current) {
@@ -205,25 +210,35 @@ export default function Settings(props: DialogProps) {
   /*
    * render switch for Desktop Setings
    */
-  const renderDTSettingSwitch: RenderDTSettingSwitchType = (
-    configKey,
+  const renderDTSettingSwitch: RenderDTSettingSwitchType = ({
+    key,
     label,
+    description,
     disabled,
-    disabled_is_checked
-  ) => {
+    disabledValue,
+  }: {
+    key: keyof DesktopSettings
+    label: string
+    description?: string
+    disabled?: boolean
+    disabledValue?: boolean
+  }) => {
     if (!desktopSettings) {
       return null
     }
+    const value =
+      disabled === true && typeof disabledValue !== 'undefined'
+        ? disabledValue
+        : desktopSettings[key] === true
     return (
-      <Switch
-        checked={desktopSettings[configKey] === true || disabled_is_checked}
-        className={desktopSettings[configKey] ? 'active' : 'inactive'}
+      <DeltaSwitch2
         label={label}
+        description={description}
+        value={value}
+        onClick={() => {
+          handleDesktopSettingsChange(key, !desktopSettings[key])
+        }}
         disabled={disabled}
-        onChange={() =>
-          handleDesktopSettingsChange(configKey, !desktopSettings[configKey])
-        }
-        alignIndicator='right'
       />
     )
   }
@@ -320,24 +335,25 @@ export default function Settings(props: DialogProps) {
           <SettingsEncryption renderDeltaSwitch={renderDeltaSwitch} />
           <Card elevation={Elevation.ONE}>
             <H5>{tx('pref_chats_and_media')}</H5>
-            {renderDTSettingSwitch(
-              'enterKeySends',
-              tx('pref_enter_sends_explain')
-            )}
-            {renderDTSettingSwitch(
-              'notifications',
-              tx('pref_notifications_explain')
-            )}
-            {renderDTSettingSwitch(
-              'showNotificationContent',
-              tx('pref_show_notification_content_explain'),
-              !desktopSettings['notifications']
-            )}
+            {renderDTSettingSwitch({
+              key: 'enterKeySends',
+              label: tx('pref_enter_sends_explain'),
+            })}
+            {renderDTSettingSwitch({
+              key: 'notifications',
+              label: tx('pref_notifications_explain'),
+            })}
+            {renderDTSettingSwitch({
+              key: 'showNotificationContent',
+              label: tx('pref_show_notification_content_explain'),
+              disabled: !desktopSettings['notifications'],
+            })}
           </Card>
           <Card elevation={Elevation.ONE}>
             <SettingsExperimentalFeatures
-              state={state}
+              // desktopSettings={desktopSettings}
               renderDTSettingSwitch={renderDTSettingSwitch}
+              state={state}
               DeltaSettingsInput={DeltaSettingsInput}
             />
           </Card>
