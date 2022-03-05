@@ -130,24 +130,20 @@ export default class DCLoginController extends SplitOut {
     this.controller.hintUpdateIfNessesary()
 
     this.selectedAccountContext.addDeviceMessage(
-      'changelog-version-1.26.0-version4',
-      `What's new in 1.26.0?
+      'changelog-version-1.27.0-version1',
+      `What's new in 1.27.0?
 
-🎥 The gallery view now has previous/next buttons
+🦘The long awaited jump to message is here (jump to quoted messages and in search)
 
-🔔 The tray icon visualizes if there are new messages through a blue dot
+🔎Images are now zoomable in the fullscreen view
 
-📩 Save traffic: Download large files only if needed
+🖼️Copying images is now possible
 
-👥 Improved look&feel for adding new group members and accessing contact profiles in group dialog
+↩️Sending messages on pressing enter is now the default
 
-❌ You can now withdraw your group QR codes. Simply scan it and withdraw them. Scan it again to revive.
+✨Many bugfixes and improvements
 
-🖱️ email@address.es, #hashtags and /bot commands in messages are now clickable
-
-↕️ \`PageUp\` and \`PageDown\` keys can now be used to scroll through MessageList
-
-Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1260---2021-12-15`
+Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1270---2021-03-04`
     )
   }
 
