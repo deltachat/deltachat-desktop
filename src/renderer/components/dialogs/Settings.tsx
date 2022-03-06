@@ -355,6 +355,7 @@ export default function Settings(props: DialogProps) {
               renderDTSettingSwitch={renderDTSettingSwitch}
               state={state}
               DeltaSettingsInput={DeltaSettingsInput}
+              handleDeltaSettingsChange={handleDeltaSettingsChange}
             />
           </Card>
           <SettingsImapFolderHandling
