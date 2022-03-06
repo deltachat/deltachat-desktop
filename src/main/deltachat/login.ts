@@ -133,11 +133,11 @@ export default class DCLoginController extends SplitOut {
       'changelog-version-1.27.0-version1',
       `What's new in 1.27.0?
 
-🦘The long awaited jump to message is here (jump to quoted messages and in search)
+🦘The long awaited jump to message is here (jump to quoted messages and search results)
 
 🔎Images are now zoomable in the fullscreen view
 
-🖼️Copying images is now possible
+🖼️Images can now be copied from the context menu
 
 ↩️Sending messages on pressing enter is now the default
 
