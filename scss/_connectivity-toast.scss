@@ -3,7 +3,7 @@
   bottom: 5px;
   left: 8px;
   text-align: center;
-  z-index: 99;
+  z-index: 19; // 1 under the .bp3 dialog backdrop
   background-color: var(--contextMenuBg);
   border: 1px solid var(--contextMenuBorder);
   padding: 5px;
