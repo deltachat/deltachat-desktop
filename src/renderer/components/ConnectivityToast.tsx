@@ -1,14 +1,21 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react'
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+  useContext,
+} from 'react'
 import { DeltaBackend } from '../delta-remote'
 import { onDCEvent } from '../ipc'
 
 import { getLogger } from '../../shared/logger'
-import { useTranslationFunction } from '../contexts'
+import { ScreenContext, useTranslationFunction } from '../contexts'
 import { useKeyBindingAction, KeybindAction } from '../keybindings'
 import { C } from 'deltachat-node/dist/constants'
 
 import { debounce } from 'debounce'
 import { debounceWithInit } from './chat/ChatListHelpers'
+import SettingsConnectivityDialog from './dialogs/Settings-Connectivity'
 
 const log = getLogger('renderer/components/ConnectivityToast')
 
@@ -134,18 +141,25 @@ export default function ConnectivityToast() {
     }
   }, [onBrowserOnline, maybeNetwork, onConnectivityChanged])
 
-  const onTryReconnectClick = () => {
+  const onTryReconnectClick = (ev: React.MouseEvent<HTMLDivElement>) => {
+    ev.preventDefault()
+    ev.stopPropagation()
     setTryConnectCooldown(false)
     setTimeout(() => setTryConnectCooldown(true), 15000)
     setTimeout(() => maybeNetwork(), 100)
   }
 
+  const { openDialog } = useContext(ScreenContext)
+  const onInfoTextClick = useCallback(() => {
+    openDialog(SettingsConnectivityDialog)
+  }, [openDialog])
+
   const tx = useTranslationFunction()
 
   return (
-    <>
+    <div className='ConnectivityToast' onClick={onInfoTextClick}>
       {networkState[0] === Connectivity.NOT_CONNECTED && (
-        <div className='ConnectivityToast'>
+        <>
           <a title={networkState[1]}>{tx('connectivity_not_connected')}</a>
           <div
             className={tryConnectCooldown ? '' : 'disabled'}
@@ -153,14 +167,14 @@ export default function ConnectivityToast() {
           >
             {tx('try_connect_now')}
           </div>
-        </div>
+        </>
       )}
       {networkState[0] === Connectivity.CONNECTING && (
-        <div className='ConnectivityToast'>{tx('connectivity_connecting')}</div>
+        <>{tx('connectivity_connecting')}</>
       )}
       {networkState[0] === Connectivity.WORKING && (
-        <div className='ConnectivityToast'>{tx('connectivity_updating')}</div>
+        <>{tx('connectivity_updating')}</>
       )}
-    </>
+    </div>
   )
 }
