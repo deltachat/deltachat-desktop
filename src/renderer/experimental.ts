@@ -31,6 +31,11 @@ These functions are highly experimental, use at your own risk.
     }
     log.info(`Imported ${contacts.length - error_count} contacts`)
   }
+
+  testErrorLogging() {
+    log.debug(new Error("a test error - should be logged to logfile"))
+    throw new Error("a test error - should be catched and logged to logfile");
+  }
 }
 
 export const exp = new Experimental()
