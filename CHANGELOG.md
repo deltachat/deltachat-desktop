@@ -2,7 +2,7 @@
 
 ## [Unreleased][unreleased]
 
-## [1.27.1] - 2021-03-10
+## [1.27.1] - 2022-03-10
 
 ### Changed
 
@@ -13,7 +13,7 @@
 - click on offline toast now opens the connectivity view
 - fix error object logging and make "core could not be loaded" error dialog more useful
 
-## [1.27.0] - 2021-03-04
+## [1.27.0] - 2022-03-04
 
 ### Added
 - It's now possible to add new group members by their email addresses
