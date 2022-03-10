@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+
+- click on offline toast now opens the connectivity view
+
 ## [1.27.0] - 2021-03-04
 
 ### Added
