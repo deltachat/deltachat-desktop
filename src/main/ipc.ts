@@ -26,11 +26,7 @@ const DeltaChatController: typeof import('./deltachat/controller').default = (()
       `The DeltaChat Module couldn't be loaded.
  Please check if all dependencies for deltachat-core are installed!
  The Log file is located in this folder: ${getLogsPath()}\n
- ${
-   error instanceof Error
-     ? error.message
-     : inspect(error, { depth: null })
- }`
+ ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
     )
   }
 })()

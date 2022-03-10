@@ -33,8 +33,8 @@ These functions are highly experimental, use at your own risk.
   }
 
   testErrorLogging() {
-    log.debug(new Error("a test error - should be logged to logfile"))
-    throw new Error("a test error - should be catched and logged to logfile");
+    log.debug(new Error('a test error - should be logged to logfile'))
+    throw new Error('a test error - should be catched and logged to logfile')
   }
 }
 
