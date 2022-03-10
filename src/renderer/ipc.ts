@@ -46,10 +46,10 @@ export function startBackendLogging() {
 
   const log2 = getLogger('renderer')
   window.addEventListener('error', event => {
-    log2.error('Unhandled Error:', event)
+    log2.error('Unhandled Error:', event.error)
   })
   window.addEventListener('unhandledrejection', event => {
-    log2.error('Unhandled Rejection:', event)
+    log2.error('Unhandled Rejection:', event, event.reason)
   })
 }
 
