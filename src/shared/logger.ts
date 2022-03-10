@@ -171,3 +171,19 @@ export class Logger {
 export function getLogger(channel: string) {
   return new Logger(channel)
 }
+
+// Fix for error not being able to be converted into json
+// From https://stackoverflow.com/a/18391400
+if (!('toJSON' in Error.prototype))
+  Object.defineProperty(Error.prototype, 'toJSON', {
+    value: function () {
+      var alt = {}
+      Object.getOwnPropertyNames(this).forEach(function (key) {
+        //@ts-ignore
+        alt[key] = this[key]
+      }, this)
+      return alt
+    },
+    configurable: true,
+    writable: true,
+  })

@@ -9,6 +9,7 @@ import { openHelpWindow } from './windows/help'
 import { join } from 'path'
 import { DesktopSettings } from './desktop_settings'
 import { getConfigPath } from './application-constants'
+import { inspect } from 'util'
 
 const log = getLogger('main/ipc')
 const DeltaChatController: typeof import('./deltachat/controller').default = (() => {
@@ -22,7 +23,14 @@ const DeltaChatController: typeof import('./deltachat/controller').default = (()
     )
     dialog.showErrorBox(
       'Fatal Error',
-      `The DeltaChat Module couldn't be loaded.\n Please check if all dependencies for deltachat-core are installed!\n The Log file is located in this folder: ${getLogsPath()}`
+      `The DeltaChat Module couldn't be loaded.
+ Please check if all dependencies for deltachat-core are installed!
+ The Log file is located in this folder: ${getLogsPath()}\n
+ ${
+   error instanceof Error
+     ? error.message
+     : inspect(error, { depth: null })
+ }`
     )
   }
 })()

@@ -7,6 +7,7 @@
 ### Fixed
 
 - click on offline toast now opens the connectivity view
+- fix error object logging and make "core could not be loaded" error dialog more useful
 
 ## [1.27.0] - 2021-03-04
 
