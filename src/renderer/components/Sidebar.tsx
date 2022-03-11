@@ -1,11 +1,17 @@
-import React from 'react'
+import classNames from 'classnames'
+import React, {useEffect, useState} from 'react'
 
-export default function Sidebar({setShowSidebar} : {setShowSidebar: any}) { 
+export type SidebarState = 'init' | 'visible' | 'invisible'
+
+const Sidebar = React.memo(({sidebarState, setSidebarState} : {sidebarState: SidebarState, setSidebarState: any})  => { 
   return ( 
-    <div className="sidebar-dropshadow" onClick={() => setShowSidebar(false)}>
-      <div className="sidebar">
+    <>
+      {sidebarState === 'visible' && <div className="backdrop" onClick={() => setSidebarState('invisible')}/>}
+      <div className={classNames("sidebar", sidebarState === 'init' ? {} : {visible: sidebarState === 'visible', invisible: sidebarState === 'invisible'})} >
         hallo
       </div>
-    </div>
+    </>
   )
-}
+})
+
+export default Sidebar
