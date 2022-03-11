@@ -40,6 +40,7 @@ import MailingListProfile from '../dialogs/MessageListProfile'
 import { FullChat } from '../../../shared/shared-types'
 import { getLogger } from '../../../shared/logger'
 import { RecoverableCrashScreen } from './RecoverableCrashScreen'
+import Sidebar from '../Sidebar'
 
 const log = getLogger('renderer/main-screen')
 
@@ -52,6 +53,7 @@ export enum View {
 export default function MainScreen() {
   const [queryStr, setQueryStr] = useState('')
   const [view, setView] = useState(View.MessageList)
+  const [showSidebar, setShowSidebar] = useState(false)
   window.__setMainScreenView = setView
   const [showArchivedChats, setShowArchivedChats] = useState(false)
   // Small hack/misuse of keyBindingAction to setShowArchivedChats from other components (especially
@@ -198,6 +200,7 @@ export default function MainScreen() {
               icon='menu'
               aria-label={tx('main_menu')}
               iconSize={20}
+              onClick={() => setShowSidebar(!showSidebar)}
             />
             {(showArchivedChats && queryStr.length === 0) || (
               <SearchInput
@@ -305,6 +308,7 @@ export default function MainScreen() {
           onChatClick={onChatClick}
           selectedChatId={selectedChat.chat ? selectedChat.chat.id : null}
         />
+        {showSidebar && <Sidebar setShowSidebar={setShowSidebar} /> }
         {MessageListView}
       </div>
       <ConnectivityToast />
