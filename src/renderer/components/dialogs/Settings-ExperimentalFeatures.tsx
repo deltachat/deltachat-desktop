@@ -1,31 +1,57 @@
-import React, { useState, useContext } from 'react'
-import { Card, Elevation, H5 } from '@blueprintjs/core'
-import { RenderDTSettingSwitchType, SettingsSelector, SettingsState } from './Settings'
+import React, { useState, useContext, FormEvent } from 'react'
+import { Card, Elevation, H5, Radio, RadioGroup } from '@blueprintjs/core'
+import {
+  RenderDTSettingSwitchType,
+  SettingsSelector,
+  SettingsState,
+} from './Settings'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { DeltaInput } from '../Login-Styles'
-import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogBody, DeltaDialogOkCancelFooter } from './DeltaDialog'
+import {
+  DeltaDialogBase,
+  DeltaDialogHeader,
+  DeltaDialogBody,
+  DeltaDialogOkCancelFooter,
+} from './DeltaDialog'
 import { DialogProps } from './DialogController'
 
+const WEBRTC_INSTANCE_JITSI = 'https://meet.jit.si/$ROOM'
 
 export function SettingsExperimentalFeatures({
   renderDTSettingSwitch,
   state,
   handleDeltaSettingsChange,
+  handleDesktopSettingsChange,
 }: {
   renderDTSettingSwitch: RenderDTSettingSwitchType
   state: SettingsState
   handleDeltaSettingsChange: any
+  handleDesktopSettingsChange: any
 }) {
   const tx = window.static_translate
   const { openDialog } = useContext(ScreenContext)
+
   const onClickEdit = async () => {
     openDialog(EditVideochatInstanceDialog, {
-      onOk: async (instance: string) => {
-        handleDeltaSettingsChange('webrtc_instance', instance)
+      onOk: async (configValue: string) => {
+        handleDeltaSettingsChange('webrtc_instance', configValue)
+        if (configValue === '') {
+          handleDesktopSettingsChange('enableAVCalls', false)
+        } else {
+          handleDesktopSettingsChange('enableAVCalls', true)
+        }
       },
       state: state,
-      configKey: 'webrtc_instance'
     })
+  }
+
+  const showVideochatInstance = (instance: string) => {
+    if (instance === '') {
+      return tx('off')
+    } else if (instance === WEBRTC_INSTANCE_JITSI) {
+      return 'Jitsi'
+    }
+    return instance
   }
 
   return (
@@ -52,30 +78,36 @@ export function SettingsExperimentalFeatures({
       })}
       <SettingsSelector
         onClick={onClickEdit.bind(null, false)}
-        currentValue={state.settings['webrtc_instance']}
+        currentValue={showVideochatInstance(state.settings['webrtc_instance'])}
       >
-        {tx('videochat_instance')}
+        {tx('videochat')}
       </SettingsSelector>
-      // TODO: Get rid of switch and make default true?
-      {renderDTSettingSwitch({
-        key: 'enableAVCalls',
-        label: tx('videochat'),
-      })}
-      <br />
     </>
   )
 }
+
+type RadioButtonValue = 'disabled' | 'jitsi' | 'custom'
 
 export function EditVideochatInstanceDialog({
   isOpen,
   onClose,
   onOk,
   onCancel,
-  configKey,
-  state
+  state,
 }: DialogProps) {
   const tx = useTranslationFunction()
-  const [value, setValue] = useState(state.settings[configKey])
+  const [configValue, setConfigValue] = useState(
+    state.settings['webrtc_instance']
+  )
+  const [radioValue, setRadioValue] = useState<RadioButtonValue>(() => {
+    if (configValue === '') {
+      return 'disabled'
+    } else if (configValue === WEBRTC_INSTANCE_JITSI) {
+      return 'jitsi'
+    } else {
+      return 'custom'
+    }
+  })
 
   const onClickCancel = () => {
     onClose()
@@ -83,8 +115,24 @@ export function EditVideochatInstanceDialog({
   }
   const onClickOk = () => {
     onClose()
-    onOk(value)
+    onOk(configValue)
   }
+  const onChangeRadio = (event: FormEvent<HTMLInputElement>) => {
+    const currentRadioValue = event.currentTarget.value as RadioButtonValue
+    let newConfigValue = ''
+    if (currentRadioValue === 'disabled') {
+      newConfigValue = ''
+      setRadioValue('disabled')
+    } else if (currentRadioValue === 'jitsi') {
+      newConfigValue = WEBRTC_INSTANCE_JITSI
+      setRadioValue('jitsi')
+    } else {
+      newConfigValue = state.settings['webrtc_instance']
+      setRadioValue('custom')
+    }
+    setConfigValue(newConfigValue)
+  }
+
   return (
     <DeltaDialogBase
       onClose={onClose}
@@ -98,22 +146,43 @@ export function EditVideochatInstanceDialog({
       }}
       fixed
     >
-      <DeltaDialogHeader title={'Edit videocall instance'} />
+      <DeltaDialogHeader title={tx('videochat')} />
       <DeltaDialogBody>
         <Card elevation={Elevation.ONE}>
-          <DeltaInput
-            key='webrtc_instance'
-            id='webrtc_instance'
-            value={value}
-            placeholder={'Add videochat instance here'}
-            onChange={(
-              event: React.FormEvent<HTMLElement> &
-                React.ChangeEvent<HTMLInputElement>
-            ) => {
-              setValue(event.target.value)
+          <div
+            className='bp3-callout'
+            style={{
+              marginBottom: '20px',
+              marginTop: '-20px',
             }}
-          />
-          <div className='bp3-callout'>{tx('videochat_instance_explain')}</div>
+          >
+            {tx('videochat_instance_explain_2')}
+          </div>
+
+          <RadioGroup onChange={onChangeRadio} selectedValue={radioValue}>
+            <Radio key='select-none' label={tx('off')} value='disabled' />
+            <Radio key='select-jitsi' label='Jitsi' value='jitsi' />
+            <Radio key='select-custom' label={tx('custom')} value='custom' />
+          </RadioGroup>
+          {radioValue === 'custom' && (
+            <div>
+              <DeltaInput
+                key='custom_webrtc_instance'
+                id='custom_webrtc_instance'
+                value={configValue}
+                placeholder={tx('videochat_instance_placeholder')}
+                onChange={(
+                  event: React.FormEvent<HTMLElement> &
+                    React.ChangeEvent<HTMLInputElement>
+                ) => {
+                  setConfigValue(event.target.value)
+                }}
+              />
+              <div className='bp3-callout'>
+                {tx('videochat_instance_example')}
+              </div>
+            </div>
+          )}
         </Card>
       </DeltaDialogBody>
       <DeltaDialogOkCancelFooter onCancel={onClickCancel} onOk={onClickOk} />

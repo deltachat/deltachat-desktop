@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext, useRef } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/dist/constants'
-import { Elevation, H5, Card, Classes, Switch, Label } from '@blueprintjs/core'
+import { Elevation, H5, Card, Switch } from '@blueprintjs/core'
 
 const { ipcRenderer } = window.electron_functions
 import { SettingsContext, useTranslationFunction } from '../../contexts'
@@ -26,7 +26,6 @@ import { getLogger } from '../../../shared/logger'
 import SettingsCommunication from './Settings-Communication'
 import { runtime } from '../../runtime'
 import SettingsDownloadOnDemand from './Settings-DownloadOnDemand'
-import { bool, string } from 'prop-types'
 
 const log = getLogger('renderer/dialogs/Settings')
 
@@ -80,55 +79,6 @@ export type RenderDeltaSwitch2Type = ({
   disabled?: boolean
   disabledValue?: boolean
 }) => void
-
-function DeltaSettingsInput({
-  configKey,
-  label,
-  style,
-}: {
-  configKey: string
-  label: string
-  style?: React.CSSProperties
-}) {
-  const input = useRef<HTMLInputElement>(null)
-  const [value, setValue] = useState('')
-
-  useEffect(() => {
-    if (input.current) {
-      input.current.disabled = true
-    }
-    DeltaBackend.call('settings.getConfigFor', [configKey]).then(res => {
-      if (input.current) {
-        setValue(res[configKey])
-        input.current.disabled = false
-      }
-    })
-  }, [configKey])
-
-  return (
-    <Label>
-      {label}
-      <input
-        ref={input}
-        style={style}
-        className={Classes.INPUT}
-        value={value}
-        onChange={ev => {
-          const value = ev.target.value
-          setValue(value)
-          DeltaBackend.call('settings.setConfig', configKey, value).catch(
-            log.warn.bind(
-              null,
-              'settings.setConfig returned false for:',
-              configKey,
-              value
-            )
-          )
-        }}
-      />
-    </Label>
-  )
-}
 
 export interface SettingsState {
   showSettingsDialog: boolean
@@ -351,11 +301,10 @@ export default function Settings(props: DialogProps) {
           </Card>
           <Card elevation={Elevation.ONE}>
             <SettingsExperimentalFeatures
-              // desktopSettings={desktopSettings}
               renderDTSettingSwitch={renderDTSettingSwitch}
               state={state}
-              DeltaSettingsInput={DeltaSettingsInput}
               handleDeltaSettingsChange={handleDeltaSettingsChange}
+              handleDesktopSettingsChange={handleDesktopSettingsChange}
             />
           </Card>
           <SettingsImapFolderHandling
