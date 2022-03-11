@@ -49,17 +49,6 @@ export default function DeltaMenu(props: { selectedChat: FullChat | null }) {
 
   let chatMenu: any = <div />
 
-  const onCreateChat = () => screenContext.openDialog('CreateChat', {})
-  const onUnblockContacts = () =>
-    screenContext.openDialog('UnblockContacts', {})
-
-  const logout = () => {
-    if (selectedChat) {
-      unselectChat()
-    }
-    DeltaBackend.call('login.logout')
-    screenContext.changeScreen(Screens.Accounts)
-  }
 
   if (selectedChat && selectedChat.id) {
     const onViewGroup = () =>
@@ -190,43 +179,7 @@ export default function DeltaMenu(props: { selectedChat: FullChat | null }) {
 
   return (
     <Menu>
-      <DeltaMenuItem
-        key='chat'
-        text={tx('menu_new_chat')}
-        onClick={onCreateChat}
-      />
-      <DeltaMenuItem
-        key='qr'
-        text={tx('qr_code')}
-        onClick={async () => {
-          const { content: qrCode, svg: qrCodeSVG } = await DeltaBackend.call(
-            'chat.getQrCodeSVG',
-            0
-          )
-          screenContext.openDialog(QrCode, { qrCode, qrCodeSVG })
-        }}
-      />
       {chatMenu}
-      <DeltaMenuItem
-        key='settings'
-        text={tx('menu_settings')}
-        onClick={() => screenContext.openDialog('Settings')}
-      />
-      <DeltaMenuItem
-        key='unblock'
-        text={tx('pref_blocked_contacts')}
-        onClick={onUnblockContacts}
-      />
-      <DeltaMenuItem
-        key='help'
-        text={tx('menu_help')}
-        onClick={_ => runtime.openHelpWindow()}
-      />
-      <DeltaMenuItem
-        key='logout'
-        text={tx('switch_account')}
-        onClick={logout}
-      />
     </Menu>
   )
 }
