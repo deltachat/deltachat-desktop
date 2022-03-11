@@ -185,7 +185,7 @@ export default class DCMessageList extends SplitOut {
       number,
       ReturnType<typeof DCMessageList.prototype.messageIdToJson>
     ][] = []
-    const markMessagesRead: number[] = []
+    const markMessagesSeen: number[] = []
     let chatId = -1
     messageIds.forEach(messageId => {
       let message = null
@@ -198,23 +198,23 @@ export default class DCMessageList extends SplitOut {
         if (chatId === -1) {
           chatId = message.chatId
         }
-        if (
-          getDirection(message) === 'incoming' &&
-          message.state !== C.DC_STATE_IN_SEEN
-        ) {
-          markMessagesRead.push(messageId)
+        // mark messages read triggers various mechanics in the core
+        // and should always be triggered if the user displays those
+        // messages on the screen.
+        if (getDirection(message) === 'incoming') {
+          markMessagesSeen.push(messageId)
         }
       }
       messages.push([messageId, message])
     })
 
-    if (markMessagesRead.length > 0) {
+    if (markMessagesSeen.length > 0) {
       log.debug(
-        `markMessagesRead ${markMessagesRead.length} messages for chat ${chatId}`
+        `markMessagesSeen ${markMessagesSeen.length} messages for chat ${chatId}`
       )
       // TODO: move mark seen logic to frontend
       setTimeout(() =>
-        this.selectedAccountContext.markSeenMessages(markMessagesRead)
+        this.selectedAccountContext.markSeenMessages(markMessagesSeen)
       )
     }
     return messages
@@ -231,7 +231,7 @@ export default class DCMessageList extends SplitOut {
       number,
       ReturnType<typeof DCMessageList.prototype.messageIdToJson>
     ][] = []
-    const markMessagesRead: number[] = []
+    const markMessagesSeen: number[] = []
     const messageIds = this.selectedAccountContext.getChatMessages(
       chatId,
       flags,
@@ -249,23 +249,23 @@ export default class DCMessageList extends SplitOut {
         if (chatId === -1) {
           chatId = message.chatId
         }
-        if (
-          getDirection(message) === 'incoming' &&
-          message.state !== C.DC_STATE_IN_SEEN
-        ) {
-          markMessagesRead.push(messageId)
+        // mark messages read triggers various mechanics in the core
+        // and should always be triggered if the user displays those
+        // messages on the screen.
+        if (getDirection(message) === 'incoming') {
+          markMessagesSeen.push(messageId)
         }
       }
       messages.push([messageId, message])
     }
 
-    if (markMessagesRead.length > 0) {
+    if (markMessagesSeen.length > 0) {
       log.debug(
-        `markMessagesRead ${markMessagesRead.length} messages for chat ${chatId}`
+        `markMessagesSeen ${markMessagesSeen.length} messages for chat ${chatId}`
       )
       // TODO: move mark seen logic to frontend
       setTimeout(() =>
-        this.selectedAccountContext.markSeenMessages(markMessagesRead)
+        this.selectedAccountContext.markSeenMessages(markMessagesSeen)
       )
     }
     return messages
