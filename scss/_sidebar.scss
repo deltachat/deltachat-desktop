@@ -1,0 +1,18 @@
+.sidebar-dropshadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #afafafba;
+  z-index: 100;
+  .sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40vw;
+    height: 100vh;
+    background-color: red;
+    z-index: 100;
+  }
+}
