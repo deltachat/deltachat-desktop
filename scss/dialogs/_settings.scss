@@ -152,11 +152,11 @@
 }
 
 .SettingsSelector {
+  display: flex;
   position: relative;
   height: 40px;
   width: calc(100% + 40px);
   left: -20px;
-  display: flex;
   justify-content: space-between;
 
   &:hover {
@@ -165,6 +165,7 @@
   }
 
   button {
+    max-width: 50%;
     margin-left: 20px;
     padding: 0;
 
@@ -181,5 +182,8 @@
     line-height: 40px;
     color: var(--colorPrimary);
     font-weight: lighter;
+    max-width: 50%;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 }

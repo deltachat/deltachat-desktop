@@ -4,6 +4,7 @@
 
 ### Changed
 - exclude more unused files from installation package
+- Improved videochat instance dialog
 
 ## [1.27.1] - 2022-03-10
 
