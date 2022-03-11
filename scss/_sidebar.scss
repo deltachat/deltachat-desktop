@@ -1,4 +1,4 @@
-.sidebar-dropshadow {
+.backdrop {
   position: absolute;
   top: 0;
   left: 0;
@@ -6,13 +6,45 @@
   height: 100vh;
   background-color: #afafafba;
   z-index: 100;
-  .sidebar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 40vw;
-    height: 100vh;
-    background-color: red;
-    z-index: 100;
+}
+
+.sidebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 27vw;
+  height: 100vh;
+  background-color: white;
+  z-index: 100;
+
+  transform: translateX(-100%);
+  -webkit-transform: translateX(-100%);
+
+  &.visible {
+    animation: sidebar-slide-in 0.5s forwards;
+    -webkit-animation: sidebar-slide-in 0.5s forwards;
   }
+
+  &.invisible {
+    animation: sidebar-slide-out 0.5s forwards;
+    -webkit-animation: sidebar-slide-out 0.5s forwards;
+  }
+}
+
+@keyframes sidebar-slide-in {
+    100% { transform: translateX(0%); }
+}
+
+@-webkit-keyframes sidebar-slide-in {
+    100% { -webkit-transform: translateX(0%); }
+}
+    
+@keyframes sidebar-slide-out {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-100%); }
+}
+
+@-webkit-keyframes sidebar-slide-out {
+    0% { -webkit-transform: translateX(0%); }
+    100% { -webkit-transform: translateX(-100%); }
 }
