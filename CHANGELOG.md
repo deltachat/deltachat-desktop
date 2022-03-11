@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- exclude more unused files from installation package
+
 ## [1.27.1] - 2022-03-10
 
 ### Changed
