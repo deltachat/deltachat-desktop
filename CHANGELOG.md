@@ -15,6 +15,7 @@
 
 ### Changed
 - exclude more unused files from installation package
+- Improved videochat instance dialog
 
 ### Fixed
 

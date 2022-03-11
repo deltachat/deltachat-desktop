@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext, useRef } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/dist/constants'
-import { Elevation, H5, Card, Classes, Switch, Label } from '@blueprintjs/core'
+import { Elevation, H5, Card, Switch } from '@blueprintjs/core'
 
 const { ipcRenderer } = window.electron_functions
 import { SettingsContext, useTranslationFunction } from '../../contexts'
@@ -12,6 +12,7 @@ import SettingsAutodelete from './Settings-Autodelete'
 import SettingsManageKeys from './Settings-ManageKeys'
 import SettingsEncryption from './Settings-Encryption'
 import SettingsImapFolderHandling from './Settings-ImapFolderHandling'
+import { SettingsExperimentalFeatures } from './Settings-ExperimentalFeatures'
 import {
   DeltaDialogBase,
   DeltaDialogHeader,
@@ -51,6 +52,20 @@ export function SettingsSelector(props: any) {
   )
 }
 
+export type RenderDTSettingSwitchType = ({
+  key,
+  label,
+  description,
+  disabled,
+  disabledValue,
+}: {
+  key: keyof DesktopSettingsType
+  label: string
+  description?: string
+  disabled?: boolean
+  disabledValue?: boolean
+}) => JSX.Element | null
+
 export type RenderDeltaSwitch2Type = ({
   key,
   label,
@@ -64,52 +79,6 @@ export type RenderDeltaSwitch2Type = ({
   disabled?: boolean
   disabledValue?: boolean
 }) => void
-
-function DeltaSettingsInput({
-  configKey,
-  label,
-  style,
-}: {
-  configKey: string
-  label: string
-  style?: React.CSSProperties
-}) {
-  const input = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    if (input.current) {
-      input.current.disabled = true
-    }
-    DeltaBackend.call('settings.getConfigFor', [configKey]).then(res => {
-      if (input.current) {
-        input.current.value = res[configKey]
-        input.current.disabled = false
-      }
-    })
-  }, [configKey])
-
-  return (
-    <Label>
-      {label}
-      <input
-        ref={input}
-        style={style}
-        className={Classes.INPUT}
-        onChange={ev => {
-          const value = ev.target.value
-          DeltaBackend.call('settings.setConfig', configKey, value).catch(
-            log.warn.bind(
-              null,
-              'settings.setConfig returned false for:',
-              configKey,
-              value
-            )
-          )
-        }}
-      />
-    </Label>
-  )
-}
 
 export interface SettingsState {
   showSettingsDialog: boolean
@@ -191,25 +160,35 @@ export default function Settings(props: DialogProps) {
   /*
    * render switch for Desktop Setings
    */
-  const renderDTSettingSwitch = (
-    configKey: keyof DesktopSettingsType,
-    label: string,
-    disabled = false,
-    disabled_is_checked = false
-  ) => {
+  const renderDTSettingSwitch: RenderDTSettingSwitchType = ({
+    key,
+    label,
+    description,
+    disabled,
+    disabledValue,
+  }: {
+    key: keyof DesktopSettingsType
+    label: string
+    description?: string
+    disabled?: boolean
+    disabledValue?: boolean
+  }) => {
     if (!desktopSettings) {
-      return
+      return null
     }
+    const value =
+      disabled === true && typeof disabledValue !== 'undefined'
+        ? disabledValue
+        : desktopSettings[key] === true
     return (
-      <Switch
-        checked={desktopSettings[configKey] === true || disabled_is_checked}
-        className={desktopSettings[configKey] ? 'active' : 'inactive'}
+      <DeltaSwitch2
         label={label}
+        description={description}
+        value={value}
+        onClick={() => {
+          handleDesktopSettingsChange(key, !desktopSettings[key])
+        }}
         disabled={disabled}
-        onChange={() =>
-          handleDesktopSettingsChange(configKey, !desktopSettings[configKey])
-        }
-        alignIndicator='right'
       />
     )
   }
@@ -306,55 +285,27 @@ export default function Settings(props: DialogProps) {
           <SettingsEncryption renderDeltaSwitch={renderDeltaSwitch} />
           <Card elevation={Elevation.ONE}>
             <H5>{tx('pref_chats_and_media')}</H5>
-            {renderDTSettingSwitch(
-              'enterKeySends',
-              tx('pref_enter_sends_explain')
-            )}
-            {renderDTSettingSwitch(
-              'notifications',
-              tx('pref_notifications_explain')
-            )}
-            {renderDTSettingSwitch(
-              'showNotificationContent',
-              tx('pref_show_notification_content_explain'),
-              !desktopSettings['notifications']
-            )}
+            {renderDTSettingSwitch({
+              key: 'enterKeySends',
+              label: tx('pref_enter_sends_explain'),
+            })}
+            {renderDTSettingSwitch({
+              key: 'notifications',
+              label: tx('pref_notifications_explain'),
+            })}
+            {renderDTSettingSwitch({
+              key: 'showNotificationContent',
+              label: tx('pref_show_notification_content_explain'),
+              disabled: !desktopSettings['notifications'],
+            })}
           </Card>
           <Card elevation={Elevation.ONE}>
-            <H5>{tx('pref_experimental_features')}</H5>
-            {renderDTSettingSwitch(
-              'enableOnDemandLocationStreaming',
-              tx('pref_on_demand_location_streaming')
-            )}
-            {renderDTSettingSwitch(
-              'minimizeToTray',
-              tx('pref_show_tray_icon'),
-              rc?.minimized,
-              rc?.minimized
-            )}
-            {rc?.minimized && (
-              <div className='bp3-callout'>
-                {tx('explain_desktop_minimized_disabled_tray_pref')}
-              </div>
-            )}
-            {renderDTSettingSwitch(
-              'enableChatAuditLog',
-              tx('menu_chat_audit_log')
-            )}
-            {renderDTSettingSwitch('enableAVCalls', tx('videochat'))}
-            {desktopSettings['enableAVCalls'] === true && (
-              <>
-                <DeltaSettingsInput
-                  configKey='webrtc_instance'
-                  label={tx('videochat_instance')}
-                  style={{ width: '100%' }}
-                />
-                <div className='bp3-callout'>
-                  {tx('videochat_instance_explain')}
-                </div>
-              </>
-            )}
-            <br />
+            <SettingsExperimentalFeatures
+              renderDTSettingSwitch={renderDTSettingSwitch}
+              state={state}
+              handleDeltaSettingsChange={handleDeltaSettingsChange}
+              handleDesktopSettingsChange={handleDesktopSettingsChange}
+            />
           </Card>
           <SettingsImapFolderHandling
             state={state}
