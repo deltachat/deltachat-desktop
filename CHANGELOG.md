@@ -71,6 +71,7 @@
 - Fix webxdc audio playback
 - Fix qr scanning on account screen
 
+
 ### Changed
 - exclude more unused files from installation package
 - Improved videochat instance dialog
