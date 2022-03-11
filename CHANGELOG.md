@@ -70,15 +70,13 @@
 - Reduce startup lag while fetching messages (fix debouncing of onChatListItemChanged)
 - Fix webxdc audio playback
 - Fix qr scanning on account screen
+- fix: log messageg-parser errors and display plain text message as fallback (instead of crashing)
 
 
 ### Changed
 - exclude more unused files from installation package
 - Improved videochat instance dialog
 
-### Fixed
-
-- fix: log messageg-parser errors and display plain text message as fallback (instead of crashing)
 
 ## [1.27.1] - 2022-03-10
 
