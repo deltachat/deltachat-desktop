@@ -636,57 +636,64 @@ class ChatStore extends Store<ChatStoreState> {
   }
 
   effect = {
-    selectChat: async (chatId: number) => {
-      const chat = <FullChat>(
-        await DeltaBackend.call('chatList.selectChat', chatId)
-      )
-      if (chat.id === null) {
-        log.debug(
-          'SELECT CHAT chat does not exsits, id is null. chatId:',
-          chat.id
-        )
-        return
-      }
-      const messageIds = <number[]>(
-        await DeltaBackend.call('messageList.getMessageIds', chatId)
-      )
+    selectChat: this.queuedEffect(
+      this.lockedEffect(
+        'scroll',
+        async (chatId: number) => {
+          const chat = <FullChat>(
+            await DeltaBackend.call('chatList.selectChat', chatId)
+          )
+          if (chat.id === null) {
+            log.debug(
+              'SELECT CHAT chat does not exsits, id is null. chatId:',
+              chat.id
+            )
+            return
+          }
+          const messageIds = <number[]>(
+            await DeltaBackend.call('messageList.getMessageIds', chatId)
+          )
 
-      let oldestFetchedMessageIndex = -1
-      let newestFetchedMessageIndex = -1
-      let messagePage: MessagePage | null = null
-      if (messageIds.length !== 0) {
-        // mesageIds.length = 1767
-        // oldestFetchedMessageIndex = 1767 - 1 = 1766 - 10 = 1756
-        // newestFetchedMessageIndex =                        1766
-        oldestFetchedMessageIndex = Math.max(
-          messageIds.length - 1 - PAGE_SIZE,
-          0
-        )
-        newestFetchedMessageIndex = messageIds.length - 1
+          let oldestFetchedMessageIndex = -1
+          let newestFetchedMessageIndex = -1
+          let messagePage: MessagePage | null = null
+          if (messageIds.length !== 0) {
+            // mesageIds.length = 1767
+            // oldestFetchedMessageIndex = 1767 - 1 = 1766 - 10 = 1756
+            // newestFetchedMessageIndex =                        1766
+            oldestFetchedMessageIndex = Math.max(
+              messageIds.length - 1 - PAGE_SIZE,
+              0
+            )
+            newestFetchedMessageIndex = messageIds.length - 1
 
-        messagePage = await messagePageFromMessageIndexes(
-          chatId,
-          oldestFetchedMessageIndex,
-          newestFetchedMessageIndex
-        )
-      }
+            messagePage = await messagePageFromMessageIndexes(
+              chatId,
+              oldestFetchedMessageIndex,
+              newestFetchedMessageIndex
+            )
+          }
 
-      this.reducer.selectedChat({
-        chat,
-        messagePages: messagePage === null ? [] : [messagePage],
-        messageIds,
-        oldestFetchedMessageIndex,
-        newestFetchedMessageIndex,
-        scrollToBottom: true,
-      })
-      ActionEmitter.emitAction(
-        chat.archived
-          ? KeybindAction.ChatList_SwitchToArchiveView
-          : KeybindAction.ChatList_SwitchToNormalView
-      )
-      runtime.updateBadge()
-      saveLastChatId(chatId)
-    },
+          this.reducer.selectedChat({
+            chat,
+            messagePages: messagePage === null ? [] : [messagePage],
+            messageIds,
+            oldestFetchedMessageIndex,
+            newestFetchedMessageIndex,
+            scrollToBottom: true,
+          })
+          ActionEmitter.emitAction(
+            chat.archived
+              ? KeybindAction.ChatList_SwitchToArchiveView
+              : KeybindAction.ChatList_SwitchToNormalView
+          )
+          runtime.updateBadge()
+          saveLastChatId(chatId)
+        },
+        'selectChat'
+      ),
+      'selectChat'
+    ),
 
     jumpToMessage: async (msgId: number, highlight?: boolean) => {
       highlight = highlight === false ? false : true
