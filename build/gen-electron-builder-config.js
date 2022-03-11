@@ -63,7 +63,54 @@ const files = [
   // cleanup deltachat-node
   //'!node_modules/deltachat-node/deltachat-core-rust/', - todo only exclude what is not needed (if no prebuilds are available)
   '!node_modules/deltachat-node/src',
-  '!node_modules/@deltachat/message_parser_wasm'
+  '!node_modules/@deltachat/message_parser_wasm',
+  // more files, tried it in the flatpak (saved around 50mb before compression)
+  '!node_modules/napi-macros',
+  // frontend node_modules not needed at runtime - would get easier if dc-desktop would adopt the 2 package.json project structure
+  // Blueprint js
+  '!node_modules/@blueprintjs/core/lib/css/blueprint-hi-contrast.css',
+  '!node_modules/@blueprintjs/core/lib/cjs',
+  '!node_modules/@blueprintjs/core/lib/esm',
+  '!node_modules/@blueprintjs/core/lib/esnext',
+  '!node_modules/@blueprintjs/core/lib/less',
+  '!node_modules/@blueprintjs/core/dist/*.js',
+  '!node_modules/@blueprintjs/core/src',
+  '!node_modules/@blueprintjs/core/node_modules/tslib',
+  '!node_modules/@blueprintjs/core/package.json',
+  '!node_modules/@blueprintjs/core/scripts',
+  '!node_modules/@blueprintjs/icons/lib/cjs',
+  '!node_modules/@blueprintjs/icons/lib/esm',
+  '!node_modules/@blueprintjs/icons/lib/esnext',
+  '!node_modules/@blueprintjs/icons/lib/less',
+  '!node_modules/@blueprintjs/icons/dist/*.js',
+  '!node_modules/@blueprintjs/icons/src',
+  '!node_modules/@blueprintjs/icons/package.json',
+  '!node_modules/@blueprintjs/icons/node_modules/tslib',
+  '!node_modules/popper.js',
+  // every react addon
+  '!node_modules/react-*',
+  '!node_modules/classnames',
+  '!node_modules/use-debounce',
+  '!node_modules/create-react-context',
+  // mapbox
+  '!node_modules/mapbox-gl/src',
+  '!node_modules/mapbox-gl/flow-typed',
+  '!node_modules/mapbox-gl/build',
+  '!node_modules/mapbox-gl/dist/*.flow',
+  '!node_modules/mapbox-gl/dist/mapbox-gl-dev.js',
+  '!node_modules/mapbox-gl/dist/mapbox-gl-unminified.js',
+  '!node_modules/mapbox-gl/dist/mapbox-gl-unminified.js.map',
+  '!node_modules/mapbox-gl/dist/mapbox-gl-csp.js.map',
+  '!node_modules/mapbox-gl/dist/mapbox-gl-csp-worker.js.map',
+  '!node_modules/mapbox-gl/dist/mapbox-gl-csp.js',
+  '!node_modules/mapbox-gl/dist/mapbox-gl-csp-worker.js',
+  '!node_modules/mapbox-gl/dist/mapbox-gl.js.map', // we don't want to add 3mb to debug mapbox in production
+  // need testing?
+  '!node_modules/resize-observer-polyfill',
+  '!node_modules/mapbox-gl/dist/style-spec',
+  '!node_modules/mapbox-gl/dist/mapbox-gl.js # should be bundled via esbuild already',
+  // momentjs is currently only used by renderer process
+  '!node_modules/moment',
 ]
 const env = process.env
 
