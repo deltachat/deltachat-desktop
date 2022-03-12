@@ -25,5 +25,14 @@
   },
   "videochat_instance_example": {
     "message": "Examples: https://meet.jit.si/$ROOM or basicwebrtc:https://your-server"
+  },
+  "version": {
+    "message": "Version"
+  },
+  "delta_chat_desktop": {
+    "message": "Delta Chat Desktop"
+  },
+  "about": {
+    "message": "About"
   }
 }
