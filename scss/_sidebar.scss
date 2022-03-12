@@ -4,7 +4,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #afafafba;
+  background-color: #1820268c;
   z-index: 100;
 }
 
@@ -14,7 +14,7 @@
   left: 0;
   min-width: 27vw;
   height: 100vh;
-  background-color: white;
+  background-color: var(--navBarText);
   z-index: 100;
 
   transform: translateX(-100%);
@@ -30,15 +30,72 @@
     -webkit-animation: sidebar-slide-out 0.1s forwards;
   }
 
+  .account {
+    min-height: 25vh;
+    padding: 20px;
+
+    background-color: var(--chatListItemSelectedBg);
+    color: var(--navBarText);
+    font-size: large;
+    .avatar div.content, img.content {
+      margin-top: 0px;
+      margin-bottom: 15px;
+    }
+    .quickIcon {
+      float: right;
+      width: 30px;
+      height: 30px;
+      background-color: var(--navBarBackground);
+      border-radius: 100%;
+      margin-right: 5px;
+      &.last {
+        margin-right: 0px;
+      }
+      .qr {
+        width: 30px;
+        height: 30px;
+        -webkit-mask: url(../images/qr_icon.svg) no-repeat center;
+        -webkit-mask-size: 58%;
+        background-color: var(--navBarText);
+      }
+      .savedMessages {
+        width: 30px;
+        height: 30px;
+        -webkit-mask: url(../images/saved-messages.svg) no-repeat center;
+        -webkit-mask-size: 35%;
+        background-color: var(--navBarText);
+      }
+    }
+    .displayname {
+      font-weight: bolder;
+    }
+    .emailAddress {
+      font-size: small;
+      font-weight: 100;
+      color: rgb(255 255 255 / 61%);
+    }
+  }
+
   .sidebar-item {
-    height: 40px;
+    --height: 40px;
+    height: var(--height);
     width: 100%;
-    /* background-color: lightgrey; */
-    font-size: 20px;
-    line-height: 40px;
-    padding: 0px 30px;
+    font-size: 16px;
+    line-height: var(--height);
+    padding: 0px 20px;
     &:hover {
-      background-color: lightgrey
+      background-color: var(--chatListItemBgHover);
+    }
+  }
+
+  .footer {
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    margin-bottom: 10px;
+    color: var(--navBarGroupSubtitle);
+    a {
+      color: var(--navBarGroupSubtitle);
     }
   }
 }

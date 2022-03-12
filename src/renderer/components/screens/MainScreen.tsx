@@ -41,6 +41,7 @@ import { FullChat } from '../../../shared/shared-types'
 import { getLogger } from '../../../shared/logger'
 import { RecoverableCrashScreen } from './RecoverableCrashScreen'
 import Sidebar, {SidebarState} from '../Sidebar'
+import SettingsStoreInstance from '../../stores/settings'
 
 const log = getLogger('renderer/main-screen')
 
@@ -104,6 +105,7 @@ export default function MainScreen() {
     if (lastChatId) {
       selectChat(lastChatId)
     }
+    SettingsStoreInstance.effect.load()
   }
 
   const tx = useTranslationFunction()

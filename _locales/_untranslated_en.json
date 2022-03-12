@@ -52,5 +52,14 @@
   },
   "desktop_keybindings_dialog_title": {
     "message": "Keybindings"
+  },
+  "version": {
+    "message": "Version"
+  },
+  "delta_chat_desktop": {
+    "message": "Delta Chat Desktop"
+  },
+  "about": {
+    "message": "About"
   }
 }

@@ -19,6 +19,17 @@ import { onDCEvent } from '../../ipc'
 import SettingsAccountDialog from './Settings-Account'
 import SettingsConnectivityDialog from './Settings-Connectivity'
 
+export function useProfileImage() {
+  const [profileImage, setProfileImage] = useState('')
+  useEffect(() => {
+    DeltaBackend.call('getProfilePicture').then(setProfileImage)
+    return onDCEvent('DC_EVENT_SELFAVATAR_CHANGED', () =>
+      DeltaBackend.call('getProfilePicture').then(setProfileImage)
+    )
+  }, [])
+  return profileImage
+}
+
 export default function SettingsProfile({
   addr,
   displayname,
@@ -32,7 +43,7 @@ export default function SettingsProfile({
   handleDeltaSettingsChange: (key: string, value: string) => void
 }) {
   const { openDialog } = useContext(ScreenContext)
-  const [profileImagePreview, setProfileImagePreview] = useState('')
+  const profileImagePreview = useProfileImage()
   const [connectivityString, setConnectivityString] = useState('')
 
   const updateConnectivity = async () => {
@@ -59,14 +70,7 @@ export default function SettingsProfile({
   useEffect(() => {
     updateConnectivity()
 
-    DeltaBackend.call('getProfilePicture').then(setProfileImagePreview)
     return onDCEvent('DC_EVENT_CONNECTIVITY_CHANGED', updateConnectivity)
-  }, [profileImagePreview])
-
-  useEffect(() => {
-    return onDCEvent('DC_EVENT_SELFAVATAR_CHANGED', () =>
-      DeltaBackend.call('getProfilePicture').then(setProfileImagePreview)
-    )
   }, [])
 
   const tx = useTranslationFunction()
