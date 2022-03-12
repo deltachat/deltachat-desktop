@@ -12,21 +12,28 @@ export type SidebarState = 'init' | 'visible' | 'invisible'
 const Sidebar = React.memo(({sidebarState, setSidebarState} : {sidebarState: SidebarState, setSidebarState: any})  => { 
   const screenContext = useContext(ScreenContext)
 
-  const onCreateChat = () => screenContext.openDialog('CreateChat', {})
-  const onUnblockContacts = () =>
+  const onCreateChat = () => {
+    setSidebarState('invisible')
+    screenContext.openDialog('CreateChat', {})
+  }
+  const onUnblockContacts = () => {
+    setSidebarState('invisible')
     screenContext.openDialog('UnblockContacts', {})
-
+  }
   const onLogout = () => {
+    setSidebarState('invisible')
     unselectChat()
     DeltaBackend.call('login.logout')
     screenContext.changeScreen(Screens.Accounts)
   }
 
   const onOpenHelp = () => {
+    setSidebarState('invisible')
     runtime.openHelpWindow()
   }
 
   const onOpenSettings = () => {
+    setSidebarState('invisible')
     screenContext.openDialog('Settings')
   }
 
