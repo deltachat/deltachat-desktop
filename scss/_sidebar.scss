@@ -12,7 +12,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  min-width: 27vw;
+  min-width: 250px;
   height: 100vh;
   background-color: var(--navBarText);
   z-index: 100;
@@ -31,7 +31,6 @@
   }
 
   .account {
-    min-height: 25vh;
     padding: 20px;
 
     background-color: var(--chatListItemSelectedBg);
