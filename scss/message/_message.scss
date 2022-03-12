@@ -385,7 +385,7 @@
   text-align: center;
   margin: 26px 0px;
 
-  p {
+  .bubble {
     display: inline-block;
     text-align: center;
     font-style: italic;
@@ -395,19 +395,18 @@
     border-radius: 10px;
     opacity: 0.9;
     color: var(--infoMessageBubbleText);
+    .status-icon.sending {
+      background-color: var(--infoMessageBubbleText);
+    }
   }
 
-  &.big > p {
+  &.big > .bubble {
     max-width: 550px;
     font-size: 1rem;
     padding: 2rem;
     font-style: normal;
     white-space: pre-wrap;
     text-align: left;
-  }
-
-  .status-icon.sending {
-    background-color: var(--infoMessageBubbleText);
   }
 }
 
