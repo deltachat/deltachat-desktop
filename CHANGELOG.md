@@ -5,6 +5,10 @@
 ### Changed
 - exclude more unused files from installation package
 
+### Fixed
+
+- fix: log messageg-parser errors and display plain text message as fallback (instead of crashing)
+
 ## [1.27.1] - 2022-03-10
 
 ### Changed

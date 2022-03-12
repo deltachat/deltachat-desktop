@@ -86,8 +86,13 @@ function renderElement(elm: ParsedElement, key?: number): JSX.Element {
 }
 
 export function message2React(message: string): JSX.Element {
-  const elements = parseMessage(message)
-  return <>{elements.map(renderElement)}</>
+  try {
+    const elements = parseMessage(message)
+    return <>{elements.map(renderElement)}</>
+  } catch (error) {
+    log.error("parseMessage failed:", {input: message, error})
+    return <>{message}</>
+  }
 }
 
 function EmailLink({ email }: { email: string }): JSX.Element {
