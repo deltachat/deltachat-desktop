@@ -38,6 +38,7 @@ import MapComponent from '../map/MapComponent'
 import MailingListProfile from '../dialogs/MessageListProfile'
 import { FullChat } from '../../../shared/shared-types'
 import { getLogger } from '../../../shared/logger'
+import { RecoverableCrashScreen } from './RecoverableCrashScreen'
 
 const log = getLogger('renderer/main-screen')
 
@@ -136,9 +137,11 @@ export default function MainScreen() {
       case View.MessageList:
       default:
         MessageListView = (
-          <MessageListAndComposer
-            chatStore={selectedChat as ChatStoreStateWithChatSet}
-          />
+          <RecoverableCrashScreen reset_on_change_key={selectedChat.chat.id}>
+            <MessageListAndComposer
+              chatStore={selectedChat as ChatStoreStateWithChatSet}
+            />
+          </RecoverableCrashScreen>
         )
     }
   } else {
