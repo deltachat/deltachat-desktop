@@ -5,6 +5,8 @@
 ### Fixed
 - Fix missing key login_socks5_login
 - Fix creating contacts from email address in message
+- Fix error in calculatePageKey
+- Fix special messages not getting fetched on incoming messages
 
 ### Changed
 - exclude more unused files from installation package
