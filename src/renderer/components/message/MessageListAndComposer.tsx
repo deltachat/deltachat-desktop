@@ -10,6 +10,7 @@ import { DesktopSettingsType } from '../../../shared/shared-types'
 import { isChatReadonly } from '../../../shared/util'
 import { join, parse } from 'path'
 import { runtime } from '../../runtime'
+import { RecoverableCrashScreen } from '../screens/RecoverableCrashScreen'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -212,7 +213,9 @@ export default function MessageListAndComposer({
       onDragOver={onDragOver}
     >
       <div className='message-list-and-composer__message-list'>
-        <MessageList chatStore={chatStore} refComposer={refComposer} />
+        <RecoverableCrashScreen reset_on_change_key={chatStore.chat.id}>
+          <MessageList chatStore={chatStore} refComposer={refComposer} />
+        </RecoverableCrashScreen>
       </div>
       <Composer
         ref={refComposer}
