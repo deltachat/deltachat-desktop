@@ -12,7 +12,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 27vw;
+  min-width: 27vw;
   height: 100vh;
   background-color: white;
   z-index: 100;
@@ -21,13 +21,13 @@
   -webkit-transform: translateX(-100%);
 
   &.visible {
-    animation: sidebar-slide-in 0.5s forwards;
-    -webkit-animation: sidebar-slide-in 0.5s forwards;
+    animation: sidebar-slide-in 0.3s forwards;
+    -webkit-animation: sidebar-slide-in 0.3s forwards;
   }
 
   &.invisible {
-    animation: sidebar-slide-out 0.5s forwards;
-    -webkit-animation: sidebar-slide-out 0.5s forwards;
+    animation: sidebar-slide-out 0.1s forwards;
+    -webkit-animation: sidebar-slide-out 0.1s forwards;
   }
 
   .sidebar-item {
@@ -36,7 +36,7 @@
     /* background-color: lightgrey; */
     font-size: 20px;
     line-height: 40px;
-    padding-left: 30px;
+    padding: 0px 30px;
     &:hover {
       background-color: lightgrey
     }
