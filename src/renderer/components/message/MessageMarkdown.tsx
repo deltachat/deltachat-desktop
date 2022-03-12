@@ -90,7 +90,7 @@ export function message2React(message: string): JSX.Element {
     const elements = parseMessage(message)
     return <>{elements.map(renderElement)}</>
   } catch (error) {
-    log.error("parseMessage failed:", {input: message, error})
+    log.error('parseMessage failed:', { input: message, error })
     return <>{message}</>
   }
 }
