@@ -64,7 +64,7 @@ node_modules/css-to-react-native
 node_modules/@deltachat/message_parser_wasm
 
 ### every react addon
-node_modules/react-*
+node_modules/react-*/*
 node_modules/classnames
 node_modules/use-debounce
 node_modules/create-react-context
@@ -72,6 +72,14 @@ node_modules/create-react-context
 
 # cleanup deltachat-node
 node_modules/deltachat-node/src
+node_modules/deltachat-node/scripts
+node_modules/deltachat-node/deltachat-core-rust/src
+node_modules/deltachat-node/deltachat-core-rust/draft
+node_modules/deltachat-node/deltachat-core-rust/assets
+node_modules/deltachat-node/deltachat-core-rust/deltachat-ffi
+node_modules/deltachat-node/deltachat-core-rust/Cargo.*
+node_modules/deltachat-node/deltachat-core-rust/benches
+node_modules/deltachat-node/deltachat-core-rust/deltachat_derive
 
 
 # backend dev dependencies, only needed for building backend (dc node in the case)
@@ -130,8 +138,13 @@ node_modules/@blueprintjs/icons/node_modules/tslib
 node_modules/popper.js/*
 
 ### node_modules/emoji-mart/
-# TODO
-
+node_modules/emoji-mart/data
+node_modules/emoji-mart/dist-es
+node_modules/emoji-mart/dist
+node_modules/emoji-mart/dist-modern
+node_modules/emoji-mart/stories
+node_modules/emoji-mart/*.js
+node_modules/emoji-mart/*.json
 
 ### node_modules/mapbox-gl/
 node_modules/mapbox-gl/src
@@ -145,4 +158,3 @@ node_modules/mapbox-gl/dist/mapbox-gl-csp.js.map
 node_modules/mapbox-gl/dist/mapbox-gl-csp-worker.js.map
 node_modules/mapbox-gl/dist/mapbox-gl-csp.js
 node_modules/mapbox-gl/dist/mapbox-gl-csp-worker.js
-  
