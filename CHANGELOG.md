@@ -4,6 +4,7 @@
 
 ### Fixed
 - Fix missing key login_socks5_login
+- Fix creating contacts from email address in message
 
 ### Changed
 - exclude more unused files from installation package
