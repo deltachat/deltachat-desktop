@@ -42,28 +42,28 @@
       margin-bottom: 15px;
     }
     .quickIcon {
+      --size: 32px;
       float: right;
-      width: 30px;
-      height: 30px;
+      width: var(--size);
+      height: var(--size);
       background-color: var(--navBarBackground);
       border-radius: 100%;
-      margin-right: 5px;
+      margin-right: 7px;
       &.last {
         margin-right: 0px;
       }
-      .qr {
-        width: 30px;
-        height: 30px;
-        -webkit-mask: url(../images/qr_icon.svg) no-repeat center;
-        -webkit-mask-size: 58%;
+      .icon {
+        width: var(--size);
+        height: var(--size);
         background-color: var(--navBarText);
-      }
-      .savedMessages {
-        width: 30px;
-        height: 30px;
-        -webkit-mask: url(../images/saved-messages.svg) no-repeat center;
-        -webkit-mask-size: 35%;
-        background-color: var(--navBarText);
+        &.qr {
+          -webkit-mask: url(../images/qr_icon.svg) no-repeat center;
+          -webkit-mask-size: 50%;
+        }
+        &.savedMessages {
+          -webkit-mask: url(../images/saved-messages.svg) no-repeat center;
+          -webkit-mask-size: 30%;
+        }
       }
     }
     .displayname {
