@@ -77,10 +77,10 @@ const Sidebar = React.memo(({sidebarState, setSidebarState} : {sidebarState: Sid
         <div className='account'>
           <Avatar addr={settings.selfContact.address} displayName={settings.settings.displayname || ''} color={settings.selfContact.color} avatarPath={settings.selfContact.profileImage} />
           <div key='qr' className='quickIcon last' onClick={onShowQRCode}>
-            <div className='qr' />          
+            <div className='icon qr' />          
           </div>
           <div key='savedMessages' className='quickIcon ' onClick={onSelectSavedMessages}>
-            <div className='savedMessages' />          
+            <div className='icon savedMessages' />          
           </div>
           <div className='displayname'>
             {settings.settings.displayname}
