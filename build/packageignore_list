@@ -1,0 +1,148 @@
+# syntax is basically https://www.electron.build/configuration/contents#files
+# but the `!` for exclude is added in `gen-electron-builder-config.js`
+
+# default
+**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}
+**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}
+**/node_modules/*.d.ts
+**/node_modules/.bin
+**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}
+.editorconfig
+**/._*
+**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}
+**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}
+**/{appveyor.yml,.travis.yml,circle.yml}
+**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}
+
+
+# misc unrelated stuff
+README_ASSETS/
+README.md
+bin/
+
+## dotfiles like prettier configuration
+.*
+test/
+jenkins/
+ci_scripts/
+**/.github/*
+electron-builder.json5
+
+## docs that are hidden in asar are useless
+docs/
+
+## don't bundle other packages
+dist/
+
+
+# Source files
+src/
+scss/
+static/
+**/*.scss
+**/*.ts
+**/*.d.ts
+_locales/*.xml
+build/
+
+
+# Build artifacts
+tsc-dist/renderer/
+**/*.tsbuildinfo
+**/*.css.map
+html-dist/report.htm
+node_modules/typescript/
+node_modules/@babel/
+
+## remove frontend stuff that was already bundled by esbuild
+node_modules/vt-pbf/
+node_modules/emoji-js-clean/
+node_modules/@mapbox
+node_modules/react
+node_modules/react-transition-group
+node_modules/css-to-react-native
+node_modules/@deltachat/message_parser_wasm
+
+### every react addon
+node_modules/react-*
+node_modules/classnames
+node_modules/use-debounce
+node_modules/create-react-context
+
+
+# cleanup deltachat-node
+node_modules/deltachat-node/src
+
+
+# backend dev dependencies, only needed for building backend (dc node in the case)
+node_modules/napi-macros
+
+
+# need testing?
+node_modules/resize-observer-polyfill
+node_modules/mapbox-gl/dist/style-spec
+
+
+# should be bundled via esbuild already:
+node_modules/mapbox-gl/dist/mapbox-gl.js
+
+
+# momentjs is currently only used by renderer process
+node_modules/moment
+
+# sourcemap we don't need
+
+## we don't want to add 3mb to debug mapbox in production
+node_modules/mapbox-gl/dist/mapbox-gl.js.map
+
+
+# re-add needed css stuff -> re-adding doesn't seem to work at this point in time
+
+# node_modules/normalize.css/normalize.css
+# node_modules/@blueprintjs/core/lib/css/blueprint.css
+# node_modules/@blueprintjs/icons/resources/icons/
+# node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css
+# node_modules/emoji-mart/css/emoji-mart.css
+# node_modules/mapbox-gl/dist/mapbox-gl.css
+
+## because we can not re-add we need to cleanup those modules instead of marking them to be removed:
+
+
+### node_modules/@blueprintjs/
+node_modules/@blueprintjs/core/lib/css/blueprint-hi-contrast.css
+node_modules/@blueprintjs/core/lib/cjs
+node_modules/@blueprintjs/core/lib/esm
+node_modules/@blueprintjs/core/lib/esnext
+node_modules/@blueprintjs/core/lib/less
+node_modules/@blueprintjs/core/dist/*.js
+node_modules/@blueprintjs/core/src
+node_modules/@blueprintjs/core/node_modules/tslib
+node_modules/@blueprintjs/core/package.json
+node_modules/@blueprintjs/core/scripts
+node_modules/@blueprintjs/icons/lib/cjs
+node_modules/@blueprintjs/icons/lib/esm
+node_modules/@blueprintjs/icons/lib/esnext
+node_modules/@blueprintjs/icons/lib/less
+node_modules/@blueprintjs/icons/dist/*.js
+node_modules/@blueprintjs/icons/src
+node_modules/@blueprintjs/icons/package.json
+node_modules/@blueprintjs/icons/node_modules/tslib
+node_modules/popper.js/*
+
+### node_modules/emoji-mart/
+# TODO
+
+
+### node_modules/mapbox-gl/
+node_modules/mapbox-gl/src
+node_modules/mapbox-gl/flow-typed
+node_modules/mapbox-gl/build
+node_modules/mapbox-gl/dist/*.flow
+node_modules/mapbox-gl/dist/mapbox-gl-dev.js
+node_modules/mapbox-gl/dist/mapbox-gl-unminified.js
+node_modules/mapbox-gl/dist/mapbox-gl-unminified.js.map
+node_modules/mapbox-gl/dist/mapbox-gl-csp.js.map
+node_modules/mapbox-gl/dist/mapbox-gl-csp-worker.js.map
+node_modules/mapbox-gl/dist/mapbox-gl-csp.js
+node_modules/mapbox-gl/dist/mapbox-gl-csp-worker.js
+  
