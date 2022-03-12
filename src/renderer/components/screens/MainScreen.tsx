@@ -156,7 +156,9 @@ export default function MainScreen() {
           style={{ display: 'flex' }}
         >
           <div className='info-message big' style={{ alignSelf: 'center' }}>
-            <p>{tx('no_chat_selected_suggestion_desktop')}</p>
+            <div className='bubble'>
+              {tx('no_chat_selected_suggestion_desktop')}
+            </div>
           </div>
         </div>
       </div>

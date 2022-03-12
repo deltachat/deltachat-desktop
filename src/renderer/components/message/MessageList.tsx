@@ -421,7 +421,7 @@ function EmptyChatMessage() {
   return (
     <li>
       <div className='info-message big'>
-        <p>{emptyChatMessage}</p>
+        <div className='bubble'>{emptyChatMessage}</div>
       </div>
     </li>
   )
@@ -432,14 +432,14 @@ export function DayMarker(props: { timestamp: number }) {
   const tx = useTranslationFunction()
   return (
     <div className='info-message'>
-      <p style={{ textTransform: 'capitalize' }}>
+      <div className='bubble' style={{ textTransform: 'capitalize' }}>
         {moment.unix(timestamp).calendar(null, {
           sameDay: `[${tx('today')}]`,
           lastDay: `[${tx('yesterday')}]`,
           lastWeek: 'LL',
           sameElse: 'LL',
         })}
-      </p>
+      </div>
     </div>
   )
 }
