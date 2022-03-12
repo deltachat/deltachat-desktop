@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- Fix missing key login_socks5_login
+
 ### Changed
 - exclude more unused files from installation package
 

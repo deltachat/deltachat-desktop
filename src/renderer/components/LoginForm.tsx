@@ -379,7 +379,7 @@ export default function LoginForm({
                 <DeltaInput
                   key='socks5_user'
                   id='socks5_user'
-                  label={tx('login_socks5_login')}
+                  label={tx('login_socks5_user')}
                   value={socks5_user}
                   onChange={handleCredentialsChange}
                 />
