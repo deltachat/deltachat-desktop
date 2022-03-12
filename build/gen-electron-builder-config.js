@@ -1,116 +1,17 @@
-const { writeFileSync } = require('fs')
+const { writeFileSync, readFileSync } = require('fs')
 const { join } = require('path')
+const exclude_list = readFileSync(
+  join(__dirname, 'packageignore_list'),
+  'utf-8'
+)
+  .split('\n')
+  .map(line => line.trim())
+  .filter(line => line != '' && !line.startsWith('#'))
+  .map(line => '!' + line)
 const files = [
-  // default
+  // start with including all files
   '**/*',
-  '!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}',
-  '!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}',
-  '!**/node_modules/*.d.ts',
-  '!**/node_modules/.bin',
-  '!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}',
-  '!.editorconfig',
-  '!**/._*',
-  '!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}',
-  '!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}',
-  '!**/{appveyor.yml,.travis.yml,circle.yml}',
-  '!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}',
-  // misc unrelated stuff
-  '!README_ASSETS/',
-  '!README.md',
-  '!bin/',
-  '!.*', // dotfiles like prettier configuration
-  '!test/',
-  '!jenkins/',
-  '!ci_scripts/',
-  '!**/.github/*',
-  '!electron-builder.json5',
-  '!docs/', // docs that are hidden in asar are useless
-  '!dist/', // don't bundle other packages
-  // Source files
-  '!src/',
-  '!scss/',
-  '!static/',
-  '!**/*.scss',
-  '!**/*.ts',
-  '!**/*.d.ts',
-  '!_locales/*.xml',
-  '!build/',
-  // Build artifacts
-  '!tsc-dist/renderer/',
-  '!**/*.tsbuildinfo',
-  '!**/*.css.map',
-  '!html-dist/report.htm',
-  '!node_modules/typescript/',
-  '!node_modules/@babel/',
-  // remove stuff that was already bundled by parcel
-  //'!node_modules/mapbox-gl/',
-  // '!node_modules/@blueprintjs/',
-  '!node_modules/vt-pbf/',
-  // '!node_modules/emoji-mart/',
-  '!node_modules/react-dom/',
-  '!node_modules/emoji-js-clean/',
-  '!node_modules/@mapbox/',
-  '!node_modules/react/',
-  '!node_modules/react-transition-group/',
-  '!node_modules/css-to-react-native',
-  // re-add needed css stuff -> re-adding doesn't seem to work at this point in time
-  // 'node_modules/normalize.css/normalize.css',
-  // 'node_modules/@blueprintjs/core/lib/css/blueprint.css',
-  // 'node_modules/@blueprintjs/icons/resources/icons/',
-  // 'node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css',
-  // 'node_modules/emoji-mart/css/emoji-mart.css',
-  // 'node_modules/mapbox-gl/dist/mapbox-gl.css',
-  // cleanup deltachat-node
-  //'!node_modules/deltachat-node/deltachat-core-rust/', - todo only exclude what is not needed (if no prebuilds are available)
-  '!node_modules/deltachat-node/src',
-  '!node_modules/@deltachat/message_parser_wasm',
-  // more files, tried it in the flatpak (saved around 50mb before compression)
-  '!node_modules/napi-macros',
-  // frontend node_modules not needed at runtime - would get easier if dc-desktop would adopt the 2 package.json project structure
-  // Blueprint js
-  '!node_modules/@blueprintjs/core/lib/css/blueprint-hi-contrast.css',
-  '!node_modules/@blueprintjs/core/lib/cjs',
-  '!node_modules/@blueprintjs/core/lib/esm',
-  '!node_modules/@blueprintjs/core/lib/esnext',
-  '!node_modules/@blueprintjs/core/lib/less',
-  '!node_modules/@blueprintjs/core/dist/*.js',
-  '!node_modules/@blueprintjs/core/src',
-  '!node_modules/@blueprintjs/core/node_modules/tslib',
-  '!node_modules/@blueprintjs/core/package.json',
-  '!node_modules/@blueprintjs/core/scripts',
-  '!node_modules/@blueprintjs/icons/lib/cjs',
-  '!node_modules/@blueprintjs/icons/lib/esm',
-  '!node_modules/@blueprintjs/icons/lib/esnext',
-  '!node_modules/@blueprintjs/icons/lib/less',
-  '!node_modules/@blueprintjs/icons/dist/*.js',
-  '!node_modules/@blueprintjs/icons/src',
-  '!node_modules/@blueprintjs/icons/package.json',
-  '!node_modules/@blueprintjs/icons/node_modules/tslib',
-  '!node_modules/popper.js',
-  // every react addon
-  '!node_modules/react-*',
-  '!node_modules/classnames',
-  '!node_modules/use-debounce',
-  '!node_modules/create-react-context',
-  // mapbox
-  '!node_modules/mapbox-gl/src',
-  '!node_modules/mapbox-gl/flow-typed',
-  '!node_modules/mapbox-gl/build',
-  '!node_modules/mapbox-gl/dist/*.flow',
-  '!node_modules/mapbox-gl/dist/mapbox-gl-dev.js',
-  '!node_modules/mapbox-gl/dist/mapbox-gl-unminified.js',
-  '!node_modules/mapbox-gl/dist/mapbox-gl-unminified.js.map',
-  '!node_modules/mapbox-gl/dist/mapbox-gl-csp.js.map',
-  '!node_modules/mapbox-gl/dist/mapbox-gl-csp-worker.js.map',
-  '!node_modules/mapbox-gl/dist/mapbox-gl-csp.js',
-  '!node_modules/mapbox-gl/dist/mapbox-gl-csp-worker.js',
-  '!node_modules/mapbox-gl/dist/mapbox-gl.js.map', // we don't want to add 3mb to debug mapbox in production
-  // need testing?
-  '!node_modules/resize-observer-polyfill',
-  '!node_modules/mapbox-gl/dist/style-spec',
-  '!node_modules/mapbox-gl/dist/mapbox-gl.js # should be bundled via esbuild already',
-  // momentjs is currently only used by renderer process
-  '!node_modules/moment',
+  ...exclude_list,
 ]
 const env = process.env
 

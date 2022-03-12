@@ -107,7 +107,7 @@ async function messagePageFromMessageIndexes(
   }) as OrderedMap<number, MessageType | null>
 
   const messagePage = {
-    pageKey: calculatePageKey(messages),
+    pageKey: calculatePageKey(messages, indexStart, indexEnd),
     messages,
   }
 
@@ -140,7 +140,7 @@ async function messagePagesFromMessageIndexes(
     currentIndex = currentIndex + PAGE_SIZE
 
     const messagePage = {
-      pageKey: calculatePageKey(messages),
+      pageKey: calculatePageKey(messages, indexStart, indexEnd),
       messages,
     }
 
@@ -323,23 +323,9 @@ class ChatStore extends Store<ChatStoreState> {
       id: number
       messageIds: ChatStoreState['messageIds']
       newestFetchedMessageIndex: number
-      messagesIncoming: MessageType[]
+      messagePage: MessagePage
     }) => {
       this.setState(state => {
-        const messages: OrderedMap<
-          number,
-          MessageType | null
-        > = OrderedMap().withMutations(messages => {
-          for (const messageIncoming of payload.messagesIncoming) {
-            messages.set(messageIncoming.id, messageIncoming)
-          }
-        }) as OrderedMap<number, MessageType | null>
-
-        const incomingPageKey = calculatePageKey(messages)
-        const incomingMessagePage: MessagePage = {
-          pageKey: incomingPageKey,
-          messages,
-        }
         const {
           lastKnownScrollHeight,
           lastKnownScrollTop,
@@ -348,17 +334,21 @@ class ChatStore extends Store<ChatStoreState> {
         const modifiedState = {
           ...state,
           messageIds: payload.messageIds,
-          messagePages: [...state.messagePages, incomingMessagePage],
+          messagePages: [...state.messagePages, payload.messagePage],
           newestFetchedMessageIndex: payload.newestFetchedMessageIndex,
           lastKnownScrollHeight,
           lastKnownScrollTop,
           scrollToBottomIfClose: true,
         }
 
-        if (this.guardReducerTriesToAddDuplicatePageKey(incomingPageKey)) {
+        if (
+          this.guardReducerTriesToAddDuplicatePageKey(
+            payload.messagePage.pageKey
+          )
+        ) {
           throw new Error(
             'We almost added the same page twice! We should prevent this in code duplicate pageKey: ' +
-              incomingPageKey
+              payload.messagePage.pageKey
           )
         }
 
@@ -1027,48 +1017,34 @@ class ChatStore extends Store<ChatStoreState> {
       const messageIds = <number[]>(
         await DeltaBackend.call('messageList.getMessageIds', chatId)
       )
-      let firstFetchedMessageIndex = -1
-      let newestFetchedMessageIndex = -1
-      const messageIdsIncoming = messageIds.filter((msgId, index) => {
-        if (!this.state.messageIds.includes(msgId)) {
-          if (firstFetchedMessageIndex === -1) {
-            firstFetchedMessageIndex = index
-          }
-          newestFetchedMessageIndex = index
-          return true
+      let indexStart = -1
+      let indexEnd = -1
+      for (let index = 0; index < messageIds.length; index++) {
+        const msgId = messageIds[index]
+        if (this.state.messageIds.includes(msgId)) continue
+        if (indexStart === -1) {
+          indexStart = index
         }
-        return false
-      })
+        indexEnd = index
+      }
       // Only add incoming messages if we could append them directly to messagePages without having a hole
-      if (
-        firstFetchedMessageIndex !==
-        this.state.newestFetchedMessageIndex + 1
-      ) {
+      if (indexStart !== this.state.newestFetchedMessageIndex + 1) {
         log.debug(
-          'onEventIncomingMessage: new incoming messages cannot added to state without having a hole, returning'
+          `onEventIncomingMessage: new incoming messages cannot added to state without having a hole (indexStart: ${indexStart}, newestFetchedMessageIndex ${this.state.newestFetchedMessageIndex}), returning`
         )
         return
       }
-      const _messagesIncoming = await DeltaBackend.call(
-        'messageList.getMessages',
-        messageIdsIncoming
+      const messagePage = await messagePageFromMessageIndexes(
+        chatId,
+        indexStart,
+        indexEnd
       )
-      const messagesIncoming = _messagesIncoming.map(
-        ([_messageId, message]) => message
-      ) as MessageType[]
-
-      if (messagesIncoming.length === 0) {
-        log.debug(
-          'DC_EVENT_INCOMING_MSG, actually no new messages for us, returning'
-        )
-        return
-      }
 
       this.reducer.fetchedIncomingMessages({
         id: chatId,
         messageIds,
-        messagesIncoming,
-        newestFetchedMessageIndex,
+        messagePage,
+        newestFetchedMessageIndex: indexEnd,
       })
     }, 'onEventIncomingMessage'),
     onEventMessagesChanged: this.queuedEffect(
@@ -1185,7 +1161,9 @@ ipcBackend.on('ClickOnNotification', (_ev, { chatId }) => {
 })
 
 export function calculatePageKey(
-  messages: OrderedMap<number, MessageType | null>
+  messages: OrderedMap<number, MessageType | null>,
+  indexStart: number,
+  indexEnd: number
 ): string {
   const first = messages.find(
     message => message !== null && message !== undefined
@@ -1193,25 +1171,18 @@ export function calculatePageKey(
   const last = messages.findLast(
     message => message !== null && message !== undefined
   )
-  let firstId = 'undefined'
+  let firstId = 0
   if (first) {
-    firstId = first.id.toString()
-  } else {
-    throw new Error(
-      `first message is null/undefined ${JSON.stringify(
-        messages.toArray()
-      )} ${JSON.stringify(first)}`
-    )
+    firstId = first.id
   }
-  let lastId = 'undefined'
+  let lastId = 0
   if (last) {
-    lastId = last.id.toString()
-  } else {
-    throw new Error(
-      `last message is null/undefined ${JSON.stringify(messages.toArray())}`
-    )
+    lastId = last.id
   }
-  return `page-${firstId}-${lastId}`
+  if (firstId + lastId + indexStart + indexEnd === 0) {
+    throw new Error('calculatePageKey: non unique page key of 0')
+  }
+  return `page-${firstId}-${lastId}-${indexStart}-${indexEnd}`
 }
 
 export const useChatStore = () => useStore(chatStore)[0]

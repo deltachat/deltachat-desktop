@@ -292,7 +292,7 @@ const Message = (props: {
           message.parentId && jumpToMessage(message.parentId)
         }}
       >
-        <p>
+        <div className='bubble'>
           {text}
           {direction === 'outgoing' &&
             (status === 'sending' || status === 'error') && (
@@ -301,7 +301,7 @@ const Message = (props: {
                 aria-label={tx(`a11y_delivery_status_${status}`)}
               />
             )}
-        </p>
+        </div>
       </div>
     )
   }
