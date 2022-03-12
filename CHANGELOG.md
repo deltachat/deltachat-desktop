@@ -5,6 +5,7 @@
 ### Fixed
 - Fix missing key login_socks5_login
 - Fix creating contacts from email address in message
+- Fix two different about dialogs on macOS #2280
 
 ### Changed
 - exclude more unused files from installation package
