@@ -5,6 +5,7 @@
 ### Fixed
 - Fix missing key login_socks5_login
 - Fix creating contacts from email address in message
+- Fix two different about dialogs on macOS #2280
 - Fix error in calculatePageKey
 - Fix special messages not getting fetched on incoming messages
 - Fix react adjacent warning in info message
