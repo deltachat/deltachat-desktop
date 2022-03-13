@@ -104,7 +104,7 @@ async function onReady([_appReady, _loadedState, _]: [any, any, any]) {
   log.info(`cwd ${cwd}`)
   await ipc.init(cwd, logHandler)
 
-  mainWindow.init(app, { hidden: app.rc['minimized'] })
+  mainWindow.init({ hidden: app.rc['minimized'] })
   initMenu(logHandler)
 
   if (rc.devmode) {
@@ -210,3 +210,6 @@ app.on('web-contents-created', (_e, contents) => {
 })
 
 contextMenu()
+
+import { openUrlFromArgv } from './open_url'
+openUrlFromArgv(process.argv)

@@ -2,25 +2,16 @@ import debounce from 'debounce'
 import electron, { BrowserWindow, Rectangle, session } from 'electron'
 import { appWindowTitle } from '../../shared/constants'
 import { getLogger } from '../../shared/logger'
-import {
-  appIcon,
-  windowDefaults,
-  htmlDistDir,
-  supportedURISchemes,
-} from '../application-constants'
-import { refreshTrayContextMenu, showDeltaChat } from '../tray'
-import { ExtendedAppMainProcess } from '../types'
-import type { EventEmitter } from 'events'
+import { appIcon, windowDefaults, htmlDistDir } from '../application-constants'
+import { refreshTrayContextMenu } from '../tray'
+
 import { join } from 'path'
 import { DesktopSettings } from '../desktop_settings'
 const log = getLogger('main/mainWindow')
 
 export let window: (BrowserWindow & { hidden?: boolean }) | null = null
 
-export function init(
-  app: ExtendedAppMainProcess,
-  options: { hidden: boolean }
-) {
+export function init(options: { hidden: boolean }) {
   if (window) {
     return window.show()
   }
@@ -62,75 +53,6 @@ export function init(
   session.defaultSession.setSpellCheckerDictionaryDownloadURL('https://00.00/')
 
   window.loadFile(join(htmlDistDir(), defaults.main))
-
-  let frontend_ready = false
-  ;(app as EventEmitter).once('frontendReady', () => {
-    frontend_ready = true
-  })
-
-  // Define custom protocol handler. Deep linking works on packaged versions of the application!
-  // These calls are for mac and windows, on linux it uses the desktop file.
-  app.setAsDefaultProtocolClient('openpgp4fpr')
-  app.setAsDefaultProtocolClient('OPENPGP4FPR')
-  // do not forcefully set DC as standard email handler to not annoy users
-
-  app.on('open-url', function (event: Event, url: string) {
-    if (event) event.preventDefault()
-    const sendOpenUrlEvent = () => {
-      log.info('open-url: Sending url to frontend.')
-      if (frontend_ready) {
-        send('open-url', url)
-      } else {
-        ;(app as EventEmitter).once('frontendReady', () => {
-          send('open-url', url)
-        })
-      }
-    }
-    log.debug('open-url: sending to frontend:', url)
-    if (app.ipcReady) return sendOpenUrlEvent()
-
-    log.debug('open-url: Waiting for ipc to be ready before opening url.')
-    ;(app as EventEmitter).once('ipcReady', () => {
-      log.debug('open-url: IPC ready.')
-      sendOpenUrlEvent()
-    })
-  })
-
-  // Iterate over arguments and look out for uris
-  const openUrlFromArgv = (argv: string[]) => {
-    args_loop: for (let i = 1; i < argv.length; i++) {
-      const arg = argv[i]
-
-      if (!arg.includes(':')) {
-        continue
-      }
-
-      log.debug(
-        'open-url: process something that looks like it could be a scheme:',
-        arg
-      )
-      for (const expectedScheme of supportedURISchemes) {
-        if (
-          arg.startsWith(expectedScheme.toUpperCase()) ||
-          arg.startsWith(expectedScheme.toLowerCase())
-        ) {
-          log.debug('open-url: Detected URI: ', arg)
-          app.emit('open-url', null, arg)
-          continue args_loop
-        }
-      }
-    }
-  }
-
-  openUrlFromArgv(process.argv)
-
-  app.on('second-instance', (_event: Event, argv: string[]) => {
-    log.debug('Someone tried to run a second instance')
-    openUrlFromArgv(argv)
-    if (window) {
-      showDeltaChat()
-    }
-  })
 
   window.once('ready-to-show', () => {
     if (!options.hidden) main_window.show()
