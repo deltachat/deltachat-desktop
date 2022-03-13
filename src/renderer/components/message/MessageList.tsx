@@ -66,14 +66,21 @@ export default function MessageList({
         messageListRef.current.scrollTop -
         messageListRef.current.clientHeight
       //console.log('onScroll', distanceToTop, distanceToBottom)
-      if (distanceToTop < 200) {
-        log.debug('Scrolled to top, fetching more messsages!')
+      if (distanceToTop < 200 && distanceToBottom < 200) {
+        log.debug('onScroll: Lets try loading messages from both ends')
+        setTimeout(() => fetchMoreTop(), 0)
+        setTimeout(() => fetchMoreBottom(), 0)
+        Event?.preventDefault()
+        Event?.stopPropagation()
+        return false
+      } else if (distanceToTop < 200) {
+        log.debug('onScroll: Scrolled to top, fetching more messsages!')
         setTimeout(() => fetchMoreTop(), 0)
         Event?.preventDefault()
         Event?.stopPropagation()
         return false
       } else if (distanceToBottom < 200) {
-        log.debug('Scrolled to bottom, fetching more messsages!')
+        log.debug('onScroll: Scrolled to bottom, fetching more messsages!')
         setTimeout(() => fetchMoreBottom(), 0)
         Event?.preventDefault()
         Event?.stopPropagation()
@@ -155,7 +162,9 @@ export default function MessageList({
       }
       setTimeout(() => {
         ChatStore.reducer.unlockScroll({ id: chatId })
-        onScroll(null)
+        setTimeout(() => {
+          onScroll(null)
+        }, 0)
       }, 0)
     } else if (scrollTo.type === 'scrollToPosition') {
       log.debug(

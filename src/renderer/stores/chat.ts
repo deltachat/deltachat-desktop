@@ -1028,10 +1028,14 @@ class ChatStore extends Store<ChatStoreState> {
         indexEnd = index
       }
       // Only add incoming messages if we could append them directly to messagePages without having a hole
-      if (indexStart !== this.state.newestFetchedMessageIndex + 1) {
+      if (
+        this.state.newestFetchedMessageIndex !== -1 &&
+        indexStart !== this.state.newestFetchedMessageIndex + 1
+      ) {
         log.debug(
           `onEventIncomingMessage: new incoming messages cannot added to state without having a hole (indexStart: ${indexStart}, newestFetchedMessageIndex ${this.state.newestFetchedMessageIndex}), returning`
         )
+        this.reducer.setMessageIds({ id: chatId, messageIds })
         return
       }
       const messagePage = await messagePageFromMessageIndexes(
