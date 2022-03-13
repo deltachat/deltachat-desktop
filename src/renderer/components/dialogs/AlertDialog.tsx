@@ -12,7 +12,7 @@ export default function AlertDialog({
   cb,
 }: {
   cb?: () => void
-  message: string
+  message: string | JSX.Element
   onClose: () => void
 }) {
   const tx = useTranslationFunction()

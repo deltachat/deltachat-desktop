@@ -50,8 +50,6 @@ export async function init(cwd: string, logHandler: LogHandler) {
   ipcMain.on('show', () => main.show())
   // ipcMain.on('setAllowNav', (e, ...args) => menu.setAllowNav(...args))
 
-  ipcMain.once('frontendReady', () => app.emit('frontendReady'))
-
   /* dispatch a method on DC core */
   ipcMain.on(
     'EVENT_DC_DISPATCH',

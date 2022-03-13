@@ -112,10 +112,9 @@ export default class ScreenController extends Component {
     ipcRenderer.on('showAboutDialog', this.onShowAbout)
     ipcRenderer.on('open-url', this.onOpenUrl)
 
-    ipcRenderer.send('frontendReady')
-    window.dispatchEvent(new Event('frontendReady'))
-
-    this.startup()
+    this.startup().then(() => {
+      ipcRenderer.send('frontendReady')
+    })
   }
 
   componentWillUnmount() {
