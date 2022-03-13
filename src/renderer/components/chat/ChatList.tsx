@@ -183,6 +183,7 @@ export default function ChatList(props: {
     }
   }, [])
 
+  const lastShowArchivedChatsState = useRef(showArchivedChats)
   // on select chat - scroll to selected chat - chatView
   // follow chat after loading or when it's position in the chatlist changes
   useEffect(() => {
@@ -194,9 +195,17 @@ export default function ChatList(props: {
     if (selectedChatIndex !== -1) {
       scrollSelectedChatIntoView(selectedChatIndex)
     } else {
-      scrollSelectedChatIntoView(0)
+      if (lastShowArchivedChatsState.current !== showArchivedChats) {
+        scrollSelectedChatIntoView(0)
+      }
     }
-  }, [selectedChatIndex, isSearchActive, scrollSelectedChatIntoView])
+    lastShowArchivedChatsState.current = showArchivedChats
+  }, [
+    selectedChatIndex,
+    isSearchActive,
+    scrollSelectedChatIntoView,
+    showArchivedChats,
+  ])
 
   const selectFirstChat = () => selectChat(chatListIds[0][0])
 
