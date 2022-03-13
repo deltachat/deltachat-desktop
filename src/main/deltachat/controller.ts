@@ -405,7 +405,7 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   async checkQrCode(qrCode: string) {
-    if (!this.selectedAccountContext) {
+    if (!this._inner_selectedAccountContext) {
       const { dc, context } = DeltaChat.newTemporary()
 
       this.registerEventHandler(dc)
@@ -447,7 +447,7 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   getInfo(): { [key: string]: any } {
-    if (this.selectedAccountContext) {
+    if (this._inner_selectedAccountContext) {
       return this.selectedAccountContext.getInfo()
     } else {
       return DeltaChat.newTemporary().context.getInfo()
