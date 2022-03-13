@@ -9,6 +9,9 @@
 - Fix error in calculatePageKey
 - Fix special messages not getting fetched on incoming messages
 - Fix react adjacent warning in info message
+- Fix open deltachat from uri doesn't detect the uri on macOS #2257
+- show qr code content if decoding failed
+- fix openpgp4frp uri opening on macOS
 
 ### Changed
 - exclude more unused files from installation package
