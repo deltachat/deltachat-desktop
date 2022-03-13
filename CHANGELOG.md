@@ -12,6 +12,7 @@
 - Fix open deltachat from uri doesn't detect the uri on macOS #2257
 - show qr code content if decoding failed
 - fix openpgp4frp uri opening on macOS
+- Fix loading more messages if we only less messages to fill the window size
 
 ### Changed
 - exclude more unused files from installation package
