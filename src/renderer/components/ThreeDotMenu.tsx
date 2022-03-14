@@ -9,7 +9,6 @@ import {
   openLeaveChatDialog,
   openDeleteChatDialog,
   openBlockFirstContactOfChatDialog,
-  openViewGroupDialog,
   setChatVisibility,
   openMuteChatDialog,
   unMuteChat,
@@ -113,7 +112,7 @@ export function useThreeDotMenu(selectedChat: FullChat | null) {
   }
 
   return (event: React.MouseEvent<any, MouseEvent>) => {
-    let threeDotButtonElement = document.querySelector(
+    const threeDotButtonElement = document.querySelector(
       '#main-menu-button'
     ) as any
 
