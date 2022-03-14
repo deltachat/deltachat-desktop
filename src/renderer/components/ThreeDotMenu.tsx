@@ -68,44 +68,11 @@ export function useThreeDotMenu(selectedChat: FullChat | null) {
       })
 
     menu = [
-      selectedChat.archived
-        ? {
-            label: tx('unarchive'),
-            action: () =>
-              setChatVisibility(chatId, C.DC_CHAT_VISIBILITY_NORMAL, true),
-          }
-        : {
-            label: tx('archive'),
-            action: () =>
-              setChatVisibility(chatId, C.DC_CHAT_VISIBILITY_ARCHIVED, true),
-          },
-      {
-        label: tx('delete'),
-        action: onDeleteChat,
-      },
       isGroup &&
         selfInGroup && {
           label: tx('menu_edit_group'),
           action: onViewGroup,
         },
-      {
-        label: tx('menu_leave_group'),
-        action: onLeaveGroup,
-      },
-      !isGroup &&
-        !(isSelfTalk || isDeviceChat) && {
-          label: tx('menu_block_contact'),
-          action: onBlockContact,
-        },
-      !selectedChat.muted
-        ? {
-            label: tx('mute'),
-            action: onMuteChat,
-          }
-        : {
-            label: tx('menu_unmute'),
-            action: onUnmuteChat,
-          },
       !isReadOnlyChat && {
         label: tx('ephemeral_messages'),
         action: onDisappearingMessages,
@@ -116,6 +83,30 @@ export function useThreeDotMenu(selectedChat: FullChat | null) {
           label: tx('menu_chat_audit_log'),
           action: openChatAuditLog,
         },
+      selectedChat.archived
+        ? {
+            label: tx('menu_unarchive_chat'),
+            action: () =>
+              setChatVisibility(chatId, C.DC_CHAT_VISIBILITY_NORMAL, true),
+          }
+        : {
+            label: tx('menu_archive_chat'),
+            action: () =>
+              setChatVisibility(chatId, C.DC_CHAT_VISIBILITY_ARCHIVED, true),
+          },
+      !isGroup &&
+        !(isSelfTalk || isDeviceChat) && {
+          label: tx('menu_block_contact'),
+          action: onBlockContact,
+        },
+      {
+        label: tx('menu_leave_group'),
+        action: onLeaveGroup,
+      },
+      {
+        label: tx('menu_delete_chat'),
+        action: onDeleteChat,
+      },
     ]
   }
 
