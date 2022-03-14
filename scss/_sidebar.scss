@@ -36,7 +36,8 @@
     background-color: var(--chatListItemSelectedBg);
     color: var(--navBarText);
     font-size: large;
-    .avatar div.content, img.content {
+    .avatar div.content,
+    img.content {
       margin-top: 0px;
       margin-bottom: 15px;
     }
@@ -100,19 +101,31 @@
 }
 
 @keyframes sidebar-slide-in {
-    100% { transform: translateX(0%); }
+  100% {
+    transform: translateX(0%);
+  }
 }
 
 @-webkit-keyframes sidebar-slide-in {
-    100% { -webkit-transform: translateX(0%); }
+  100% {
+    -webkit-transform: translateX(0%);
+  }
 }
-    
+
 @keyframes sidebar-slide-out {
-    0% { transform: translateX(0%); }
-    100% { transform: translateX(-100%); }
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
 }
 
 @-webkit-keyframes sidebar-slide-out {
-    0% { -webkit-transform: translateX(0%); }
-    100% { -webkit-transform: translateX(-100%); }
+  0% {
+    -webkit-transform: translateX(0%);
+  }
+  100% {
+    -webkit-transform: translateX(-100%);
+  }
 }
