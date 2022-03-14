@@ -14,6 +14,7 @@
 - fix openpgp4frp uri opening on macOS
 - Fix loading more messages if we only less messages to fill the window size
 - Fix chatlist jumps to top after archiving
+- Fix qr scanning on account screen
 
 ### Changed
 - exclude more unused files from installation package
