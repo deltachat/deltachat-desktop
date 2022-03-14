@@ -167,8 +167,11 @@ export default async function processOpenQrUrl(
           mail_pw: burnerAccount.password,
         }
 
-        const onSuccess = (account: DeltaChatAccount) => {
-          window.__selectAccount(account.id)
+        const accountId = await DeltaBackend.call('login.addAccount')
+        await DeltaBackend.call('login.selectAccount', accountId)
+
+        const onSuccess = (_account: DeltaChatAccount) => {
+          window.__changeScreen(Screens.Main)
           callback()
         }
         closeProcessDialog()
