@@ -13,7 +13,6 @@ import {
   setChatVisibility,
   openMuteChatDialog,
   unMuteChat,
-  sendCallInvitation,
 } from './helpers/ChatMethods'
 import { FullChat } from '../../shared/shared-types'
 import { ContextMenuItem } from './ContextMenu'
@@ -76,6 +75,17 @@ export function useThreeDotMenu(selectedChat: FullChat | null) {
           label: tx('menu_chat_audit_log'),
           action: openChatAuditLog,
         },
+     !selectedChat.muted ?
+        {
+          label: tx('menu_mute'),
+          action: onMuteChat
+        }
+       : 
+        {
+          label: tx('menu_unmute'),
+          action: onUnmuteChat,
+        }
+      ,
       selectedChat.archived
         ? {
             label: tx('menu_unarchive_chat'),
@@ -92,10 +102,11 @@ export function useThreeDotMenu(selectedChat: FullChat | null) {
           label: tx('menu_block_contact'),
           action: onBlockContact,
         },
-      {
-        label: tx('menu_leave_group'),
-        action: onLeaveGroup,
-      },
+      isGroup && selfInGroup &&
+        {
+          label: tx('menu_leave_group'),
+          action: onLeaveGroup,
+        },
       {
         label: tx('menu_delete_chat'),
         action: onDeleteChat,
