@@ -121,13 +121,13 @@ export default function MainScreen() {
     searchRef.current.value = ''
     searchChats('')
   })
+  const onClickThreeDotMenu = useThreeDotMenu(selectedChat.chat)
 
   if (!selectedChat) {
     log.error('selectedChat is undefined')
     return null
   }
 
-  const onClickThreeDotMenu = useThreeDotMenu(selectedChat.chat)
   let MessageListView
   if (selectedChat.chat !== null) {
     switch (view) {
