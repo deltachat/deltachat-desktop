@@ -219,7 +219,7 @@ export default function MessageListAndComposer({
       </div>
       <Composer
         ref={refComposer}
-        chatId={chatStore.chat.id}
+        selectedChat={chatStore.chat}
         isDisabled={disabled}
         disabledReason={disabledReason}
         isContactRequest={chatStore.chat.isContactRequest}

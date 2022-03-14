@@ -14,6 +14,7 @@ import { EmojiAndStickerPicker } from './EmojiAndStickerPicker'
 import { EmojiData, BaseEmoji } from 'emoji-mart'
 import { replaceColonsSafe } from '../conversations/emoji'
 import {
+  FullChat,
   JsonMessage,
   MessageTypeAttachmentSubset,
 } from '../../../shared/shared-types'
@@ -54,7 +55,7 @@ const Composer = forwardRef<
     isDisabled: boolean
     disabledReason: string
     isContactRequest: boolean
-    chatId: number | null
+    selectedChat: FullChat
     messageInputRef: React.MutableRefObject<ComposerMessageInput | null>
     draftState: DraftObject
     removeQuote: () => void
@@ -68,7 +69,7 @@ const Composer = forwardRef<
     isDisabled,
     disabledReason,
     isContactRequest,
-    chatId,
+    selectedChat,
     messageInputRef,
     draftState,
     removeQuote,
@@ -76,6 +77,8 @@ const Composer = forwardRef<
     addFileToDraft,
     removeFile,
   } = props
+
+  const chatId = selectedChat.id
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
@@ -247,7 +250,7 @@ const Composer = forwardRef<
           )}
         </div>
         <div className='lower-bar'>
-          <MenuAttachment addFileToDraft={addFileToDraft} />
+          <MenuAttachment addFileToDraft={addFileToDraft} selectedChat={selectedChat} />
           <SettingsContext.Consumer>
             {({ desktopSettings }) =>
               desktopSettings && (
