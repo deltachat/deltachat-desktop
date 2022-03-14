@@ -1,4 +1,4 @@
-import React, {useContext} from 'react'
+import React, { useContext } from 'react'
 import {
   Button,
   Position,
@@ -11,10 +11,8 @@ import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { runtime } from '../../runtime'
 import { MEDIA_EXTENSIONS } from '../../../shared/constants'
 
-import {
-  sendCallInvitation,
-} from '../helpers/ChatMethods'
-import {FullChat} from '../../../shared/shared-types'
+import { sendCallInvitation } from '../helpers/ChatMethods'
+import { FullChat } from '../../../shared/shared-types'
 //function to populate Menu
 const MenuAttachmentItems = ({
   itemsArray,
@@ -39,7 +37,7 @@ const MenuAttachmentItems = ({
 //main component that creates the menu and popover
 const MenuAttachment = ({
   addFileToDraft,
-  selectedChat
+  selectedChat,
 }: {
   addFileToDraft: (file: string) => void
   selectedChat: FullChat | null
@@ -93,8 +91,7 @@ const MenuAttachment = ({
         }
       },
     })
-
-    }
+  }
   // item array used to populate menu
   const items = [
     {
