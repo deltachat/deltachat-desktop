@@ -66,23 +66,6 @@ export function useThreeDotMenu(selectedChat: FullChat | null) {
       screenContext.openDialog('DisappearingMessages', {
         chatId: selectedChat.id,
       })
-    const onVideoChat = () => {
-      const chatId = selectedChat.id
-      if (!chatId) {
-        return
-      }
-      screenContext.openDialog('ConfirmationDialog', {
-        header: tx('videochat_invite_user_to_videochat', selectedChat.name),
-        message: tx('videochat_invite_user_hint'),
-        confirmLabel: tx('ok'),
-        cb: (yes: boolean) => {
-          if (yes) {
-            sendCallInvitation(screenContext, chatId)
-          }
-        },
-      })
-
-    }
 
     menu = [
       selectedChat.archived
@@ -96,12 +79,6 @@ export function useThreeDotMenu(selectedChat: FullChat | null) {
             action: () =>
               setChatVisibility(chatId, C.DC_CHAT_VISIBILITY_ARCHIVED, true),
           },
-      settingsContext.desktopSettings !== null &&
-        settingsContext.desktopSettings.enableAVCalls &&
-        !isReadOnlyChat && {
-          label: tx('videochat'),
-          action: onVideoChat,
-        },
       {
         label: tx('delete'),
         action: onDeleteChat,
