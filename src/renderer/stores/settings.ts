@@ -44,7 +44,7 @@ const settingsKeys: Array<keyof SettingsStoreState['settings']> = [
 class SettingsStore extends Store<SettingsStoreState | null> {
   reducer = {
     set: (newState: SettingsStoreState) => {
-      this.setState(state => {
+      this.setState(_state => {
         return newState
       }, 'set')
     },
