@@ -368,7 +368,7 @@ export default class DeltaChatController extends EventEmitter {
 
   onIncomingMsg(accountId: number, chatId: number, msgId: number) {
     // TODO better do proper event sorting in the frontend so we can listen there for this event
-    this.sendToRenderer('DD_EVENT_INCOMMING_MESSAGE_ACCOUNT', accountId)
+    this.sendToRenderer('DD_EVENT_INCOMING_MESSAGE_ACCOUNT', accountId)
     if (this.selectedAccountId !== accountId) {
       return
     }

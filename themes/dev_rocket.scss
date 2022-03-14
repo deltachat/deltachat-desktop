@@ -52,8 +52,8 @@ $scrollbarTransparency: 0.5;
   --navBarSearchPlaceholder: var(--navBarText);
   --navBarGroupSubtitle: var(--globalText);
   --messageStatusIcon: var(--globalText);
-  --messageMetadataIncomming: var(--globalText);
-  --messagePadlockIncomming: var(--globalText);
+  --messageMetadataIncoming: var(--globalText);
+  --messagePadlockIncoming: var(--globalText);
 
   --messageText: hsl(0, 0%, 26.7%);
   --messageOutgoingBg: var(--messagePadlockOutgoing);
@@ -289,16 +289,16 @@ $scrollbarTransparency: 0.5;
   font-weight: unset;
 }
 .message.outgoing .metadata>.status-icon.read, .message.outgoing .metadata>.status-icon.delivered, .message.outgoing .metadata>.padlock-icon, .metadata.with-image-no-caption>.padlock-icon {
-  background-color: var(--messagePadlockIncomming);
+  background-color: var(--messagePadlockIncoming);
 }
 
 .message.outgoing .metadata>.date, .metadata.with-image-no-caption>.date {
-  color: var(--messageMetadataIncomming);
+  color: var(--messageMetadataIncoming);
 }
 .metadata.with-image-no-caption>.padlock-icon {
   -webkit-mask: url(../images/padlock.svg) no-repeat center;
   -webkit-mask-size: 125%;
-  background-color: var(--messagePadlockIncomming);
+  background-color: var(--messagePadlockIncoming);
 }
 
 
@@ -310,7 +310,7 @@ $scrollbarTransparency: 0.5;
 }
 .message.forwarded .forwarded-indicator {
   font-weight: 100;
-  color: var(--messagePadlockIncomming);
+  color: var(--messagePadlockIncoming);
   opacity: 1;
 }
 
@@ -401,7 +401,7 @@ div.group-image-wrapper div.group-image-edit-button {
 
 
 :root {
-  --messageMetadataIncomming: hsl(0, 0%, 50%);
+  --messageMetadataIncoming: hsl(0, 0%, 50%);
 }
 
 .chat-list-item        > .content > .chat-list-item-message, 
