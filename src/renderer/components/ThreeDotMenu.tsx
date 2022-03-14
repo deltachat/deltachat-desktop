@@ -70,22 +70,20 @@ export function useThreeDotMenu(selectedChat: FullChat | null) {
         action: onDisappearingMessages,
       },
       !(isSelfTalk || isDeviceChat) &&
-        settingsContext.desktopSettings !== null  &&
+        settingsContext.desktopSettings !== null &&
         settingsContext.desktopSettings.enableChatAuditLog && {
           label: tx('menu_chat_audit_log'),
           action: openChatAuditLog,
         },
-     !selectedChat.muted ?
-        {
-          label: tx('menu_mute'),
-          action: onMuteChat
-        }
-       : 
-        {
-          label: tx('menu_unmute'),
-          action: onUnmuteChat,
-        }
-      ,
+      !selectedChat.muted
+        ? {
+            label: tx('menu_mute'),
+            action: onMuteChat,
+          }
+        : {
+            label: tx('menu_unmute'),
+            action: onUnmuteChat,
+          },
       selectedChat.archived
         ? {
             label: tx('menu_unarchive_chat'),
@@ -102,8 +100,8 @@ export function useThreeDotMenu(selectedChat: FullChat | null) {
           label: tx('menu_block_contact'),
           action: onBlockContact,
         },
-      isGroup && selfInGroup &&
-        {
+      isGroup &&
+        selfInGroup && {
           label: tx('menu_leave_group'),
           action: onLeaveGroup,
         },
