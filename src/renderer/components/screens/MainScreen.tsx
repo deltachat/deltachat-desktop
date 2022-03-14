@@ -25,8 +25,6 @@ import {
   Navbar,
   NavbarGroup,
   NavbarHeading,
-  Position,
-  Popover,
   Button,
   Icon,
 } from '@blueprintjs/core'
@@ -288,6 +286,7 @@ export default function MainScreen() {
               style={{
                 marginLeft:
                   selectedChat.chat && selectedChat.chat.id ? 0 : 'auto',
+                marginRight: '3px'
               }}
             >
               <Button
