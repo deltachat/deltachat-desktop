@@ -6,7 +6,7 @@ import {
 } from '../../contexts'
 
 import Gallery from '../Gallery'
-import Menu from '../Menu'
+import { useThreeDotMenu } from '../ThreeDotMenu'
 import ChatList from '../chat/ChatList'
 import MessageListAndComposer, {
   getBackgroundImageStyle,
@@ -40,7 +40,7 @@ import MailingListProfile from '../dialogs/MessageListProfile'
 import { FullChat } from '../../../shared/shared-types'
 import { getLogger } from '../../../shared/logger'
 import { RecoverableCrashScreen } from './RecoverableCrashScreen'
-import Sidebar, {SidebarState} from '../Sidebar'
+import Sidebar, { SidebarState } from '../Sidebar'
 import SettingsStoreInstance from '../../stores/settings'
 
 const log = getLogger('renderer/main-screen')
@@ -129,7 +129,7 @@ export default function MainScreen() {
     return null
   }
 
-  const menu = <Menu selectedChat={selectedChat.chat} />
+  const onClickThreeDotMenu = useThreeDotMenu(selectedChat.chat)
   let MessageListView
   if (selectedChat.chat !== null) {
     switch (view) {
@@ -290,15 +290,14 @@ export default function MainScreen() {
                   selectedChat.chat && selectedChat.chat.id ? 0 : 'auto',
               }}
             >
-              <Popover content={menu} position={Position.RIGHT_TOP}>
-                <Button
-                  className='icon-rotated'
-                  minimal
-                  icon='more'
-                  id='main-menu-button'
-                  aria-label={tx('main_menu')}
-                />
-              </Popover>
+              <Button
+                className='icon-rotated'
+                minimal
+                icon='more'
+                id='main-menu-button'
+                aria-label={tx('main_menu')}
+                onClick={onClickThreeDotMenu}
+              />
             </span>
           </NavbarGroup>
         </Navbar>
