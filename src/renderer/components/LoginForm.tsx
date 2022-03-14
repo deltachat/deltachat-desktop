@@ -405,7 +405,7 @@ export function ConfigureProgressDialog({
   isOpen,
   onClose,
   credentials,
-  onSuccess,
+  onSuccess
 }: DialogProps) {
   const [progress, setProgress] = useState(0)
   const [progressComment, setProgressComment] = useState('')

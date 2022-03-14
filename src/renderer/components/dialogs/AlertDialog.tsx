@@ -26,7 +26,7 @@ export default function AlertDialog({
   return (
     <SmallDialog isOpen={isOpen} onClose={onClose}>
       <div className='bp3-dialog-body-with-padding'>
-        <p>{message}</p>
+        <p style={{userSelect: 'auto'}}>{message}</p>
       </div>
       <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
         <DeltaDialogFooterActions>
