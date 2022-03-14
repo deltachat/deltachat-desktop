@@ -250,7 +250,10 @@ const Composer = forwardRef<
           )}
         </div>
         <div className='lower-bar'>
-          <MenuAttachment addFileToDraft={addFileToDraft} selectedChat={selectedChat} />
+          <MenuAttachment
+            addFileToDraft={addFileToDraft}
+            selectedChat={selectedChat}
+          />
           <SettingsContext.Consumer>
             {({ desktopSettings }) =>
               desktopSettings && (
