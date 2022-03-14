@@ -181,7 +181,7 @@
     & > .padlock-icon {
       @include color-svg(
         '../images/padlock.svg',
-        var(--messagePadlockIncomming),
+        var(--messagePadlockIncoming),
         125%
       );
     }
@@ -189,18 +189,18 @@
     & > .location-icon {
       @include color-svg(
         '../images/map-marker.svg',
-        var(--messagePadlockIncomming),
+        var(--messagePadlockIncoming),
         100%
       );
     }
 
     & > .date {
-      color: var(--messageMetadataIncomming);
+      color: var(--messageMetadataIncoming);
     }
   }
 
   .msg-container {
-    background-color: var(--messageIncommingBg);
+    background-color: var(--messageIncomingBg);
 
     &,
     .message-attachment-media {
