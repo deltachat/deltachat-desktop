@@ -87,12 +87,12 @@ export function useThreeDotMenu(selectedChat: FullChat | null) {
     menu = [
       selectedChat.archived
         ? {
-            label: tx('menu_unarchive_chat'),
+            label: tx('unarchive'),
             action: () =>
               setChatVisibility(chatId, C.DC_CHAT_VISIBILITY_NORMAL, true),
           }
         : {
-            label: tx('menu_archive_chat'),
+            label: tx('archive'),
             action: () =>
               setChatVisibility(chatId, C.DC_CHAT_VISIBILITY_ARCHIVED, true),
           },
@@ -103,7 +103,7 @@ export function useThreeDotMenu(selectedChat: FullChat | null) {
           action: onVideoChat,
         },
       {
-        label: tx('menu_delete_chat'),
+        label: tx('delete'),
         action: onDeleteChat,
       },
       isGroup &&
@@ -122,7 +122,7 @@ export function useThreeDotMenu(selectedChat: FullChat | null) {
         },
       !selectedChat.muted
         ? {
-            label: tx('menu_mute'),
+            label: tx('mute'),
             action: onMuteChat,
           }
         : {
