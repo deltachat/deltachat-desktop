@@ -15,7 +15,6 @@ import DCLoginController from './login'
 import DCMessageList from './messagelist'
 import DCSettings from './settings'
 import DCStickers from './stickers'
-import DCBurnerAccounts from './burnerAccounts'
 import { ExtendedAppMainProcess } from '../types'
 import Extras from './extras'
 
@@ -255,7 +254,6 @@ export default class DeltaChatController extends EventEmitter {
   readonly settings = new DCSettings(this)
   readonly stickers = new DCStickers(this)
   readonly context = new DCContext(this)
-  readonly burnerAccounts = new DCBurnerAccounts(this)
   readonly extras = new Extras(this)
   readonly webxdc = new DCWebxdc(this)
 
