@@ -157,33 +157,19 @@ export default async function processOpenQrUrl(
 
   if (checkQr.state === QrState.Account) {
     try {
-      const burnerAccount = await DeltaBackend.call(
-        'burnerAccounts.create',
-        url.substr(url.indexOf(':') + 1, url.length)
-      )
-      if (burnerAccount && burnerAccount.email && burnerAccount.password) {
-        const credentials = {
-          addr: burnerAccount.email,
-          mail_pw: burnerAccount.password,
-        }
+      const accountId = await DeltaBackend.call('login.addAccount')
+      await DeltaBackend.call('login.selectAccount', accountId)
+      await DeltaBackend.call('settings.setConfigFromQr', url)
 
-        const accountId = await DeltaBackend.call('login.addAccount')
-        await DeltaBackend.call('login.selectAccount', accountId)
-
-        const onSuccess = (_account: DeltaChatAccount) => {
-          window.__changeScreen(Screens.Main)
-          callback()
-        }
-        closeProcessDialog()
-        window.__openDialog(ConfigureProgressDialog, { credentials, onSuccess })
-      } else {
-        closeProcessDialog()
-        window.__openDialog('AlertDialog', {
-          message: tx('qraccount_qr_code_cannot_be_used'),
-          cb: callback,
-        })
-        return
+      const onSuccess = (_account: DeltaChatAccount) => {
+        window.__changeScreen(Screens.Main)
+        callback()
       }
+      closeProcessDialog()
+      window.__openDialog(ConfigureProgressDialog, {
+        credentials: {},
+        onSuccess,
+      })
     } catch (err) {
       closeProcessDialog()
       window.__openDialog('AlertDialog', {
