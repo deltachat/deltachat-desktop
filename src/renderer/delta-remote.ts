@@ -344,11 +344,6 @@ class DeltaRemote {
   call(fnName: 'context.maybeNetwork'): Promise<void>
   call(fnName: 'context.getConnectivity'): Promise<number>
   call(fnName: 'context.getConnectivityHTML'): Promise<string>
-  // burner accounts ------------------------------------------------------------
-  call(
-    fnName: 'burnerAccounts.create',
-    url: string
-  ): Promise<{ email: string; password: string }>
   // extras -------------------------------------------------------------
   call(fnName: 'extras.getLocaleData', locale: string): Promise<LocaleData>
   call(fnName: 'extras.setLocale', locale: string): Promise<void>
