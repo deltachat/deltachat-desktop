@@ -83,3 +83,6 @@ src/shared/build-info.ts
 embedded.provisionprofile
 
 stub.js
+
+# message list e2e test
+.test_tmp_data
