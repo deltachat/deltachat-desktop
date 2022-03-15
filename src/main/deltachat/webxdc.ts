@@ -85,6 +85,10 @@ export default class DCWebxdc extends SplitOut {
 
       // TODO intercept / deny network access - CSP should probably be disabled for testing
 
+      if (!this.selectedAccountId) {
+        throw new Error('this.selectedAccountId is undefined')
+      }
+
       if (!accounts_sessions.includes(this.selectedAccountId)) {
         accounts_sessions.push(this.selectedAccountId)
         ses.protocol.registerBufferProtocol(
@@ -283,6 +287,9 @@ If you think that's a bug and you need that permission, then please open an issu
   }
 
   async deleteWebxdcAccountData() {
+    if (!this.selectedAccountId) {
+      throw new Error('this.selectedAccountId is undefined')
+    }
     await this._deleteWebxdcAccountData(this.selectedAccountId)
     app.relaunch()
     app.quit()
@@ -297,11 +304,18 @@ If you think that's a bug and you need that permission, then please open an issu
     await s.clearStorageData()
 
     // mark the folder for deletion on next startup
-    await writeFile(join(s.storagePath, 'webxdc-cleanup'), '-', 'utf-8')
+    if (s.storagePath) {
+      await writeFile(join(s.storagePath, 'webxdc-cleanup'), '-', 'utf-8')
+    } else {
+      throw new Error('session has no storagePath set')
+    }
   }
 
   async getWebxdcDiskUsage() {
     const ses = this._currentSession
+    if (!ses.storagePath) {
+      throw new Error('session has no storagePath set')
+    }
     const [cache_size, real_total_size] = await Promise.all([
       ses.getCacheSize(),
       get_recursive_folder_size(ses.storagePath, [
@@ -368,7 +382,7 @@ export async function webxdcStartUpCleanup() {
         await stat(join(partitions_dir, folder, 'webxdc-cleanup'))
         await rmdir(join(partitions_dir, folder), { recursive: true })
         log.info('webxdc cleanup: deleted ', folder)
-      } catch (error) {
+      } catch (error: any) {
         if (error.code !== 'ENOENT') {
           throw error
         }
