@@ -14,6 +14,7 @@
 - fix openpgp4frp uri opening on macOS
 - Fix loading more messages if we only less messages to fill the window size
 - Fix chatlist jumps to top after archiving
+- Reduce startup lag while fetching messages (fix debouncing of onChatListItemChanged)
 - Fix webxdc audio playback
 - Fix qr scanning on account screen
 

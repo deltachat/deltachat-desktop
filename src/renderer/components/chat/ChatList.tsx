@@ -401,34 +401,47 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
     })
   }
 
-  const onChatListItemChanged = useCallback(
-    (chatId: number, _messageId: number | string) => {
-      const debouncingChatlistItemRequests: { [chatid: number]: number } = {}
-      const updateChatListItem = async (chatId: number) => {
-        debouncingChatlistItemRequests[chatId] = 1
-        // the message id of the event could be an older message than the newest message (for example msg-read event)
-        const messageId = await DeltaBackend.call(
-          'chatList.getChatListEntryMessageIdForChatId',
-          chatId
-        )
-        setChatLoading(state => ({
-          ...state,
-          [chatId]: LoadStatus.FETCHING,
-        }))
-        const chats = await DeltaBackend.call(
-          'chatList.getChatListItemsByEntries',
-          [[chatId, messageId]]
-        )
-        setChatCache(cache => ({ ...cache, ...chats }))
-        setChatLoading(state => ({
-          ...state,
-          [chatId]: LoadStatus.LOADED,
-        }))
-        if (debouncingChatlistItemRequests[chatId] > 1) {
-          updateChatListItem(chatId)
-        } else {
-          debouncingChatlistItemRequests[chatId] = 0
-        }
+  const onChatListItemChanged = useMemo(() => {
+    let debouncingChatlistItemRequests: { [chatid: number]: number } = {}
+    let cleanup_timeout: any | null = null
+    const updateChatListItem = async (chatId: number) => {
+      if (cleanup_timeout === null) {
+        // clean up debouncingChatlistItemRequests every half minute,
+        // so if there should ever be an error it auto recovers
+        cleanup_timeout = setTimeout(() => {
+          debouncingChatlistItemRequests = {}
+          cleanup_timeout = null
+        }, 30000)
+      }
+      debouncingChatlistItemRequests[chatId] = 1
+      // the message id of the event could be an older message than the newest message (for example msg-read event)
+      const messageId = await DeltaBackend.call(
+        'chatList.getChatListEntryMessageIdForChatId',
+        chatId
+      )
+      setChatLoading(state => ({
+        ...state,
+        [chatId]: LoadStatus.FETCHING,
+      }))
+      const chats = await DeltaBackend.call(
+        'chatList.getChatListItemsByEntries',
+        [[chatId, messageId]]
+      )
+      setChatCache(cache => ({ ...cache, ...chats }))
+      setChatLoading(state => ({
+        ...state,
+        [chatId]: LoadStatus.LOADED,
+      }))
+      if (debouncingChatlistItemRequests[chatId] > 1) {
+        updateChatListItem(chatId)
+      } else {
+        debouncingChatlistItemRequests[chatId] = 0
+      }
+    }
+
+    return (chatId: number, _messageId: number | string) => {
+      if (chatId === C.DC_CHAT_ID_TRASH) {
+        return
       }
       if (chatId !== 0) {
         if (
@@ -441,9 +454,8 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
             debouncingChatlistItemRequests[chatId] + 1
         }
       }
-    },
-    []
-  )
+    }
+  }, [])
 
   /**
    * refresh chats a specific contact is in if that contact changed.
