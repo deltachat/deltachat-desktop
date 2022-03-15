@@ -2,9 +2,14 @@
 
 ## [Unreleased][unreleased]
 
+## [1.27.2] - 2022-03-15
+
 ### Added
+
 - webxdc content now has access to persistent DOMStorage
+
 ### Fixed
+
 - Fix missing key login_socks5_login
 - Fix creating contacts from email address in message
 - Fix two different about dialogs on macOS #2280
@@ -1493,7 +1498,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.27.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.27.2...HEAD
+
+[1.27.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.27.1...v1.27.2
 
 [1.27.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.27.0...v1.27.1
 
