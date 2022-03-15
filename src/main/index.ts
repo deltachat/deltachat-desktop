@@ -15,6 +15,7 @@ protocol.registerSchemesAsPrivileged([
       allowServiceWorkers: true,
       standard: true,
       supportFetchAPI: true,
+      stream: true, // needed for audio playback
     },
   },
 ])

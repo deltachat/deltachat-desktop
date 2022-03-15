@@ -22,7 +22,7 @@ export default class JsonContacts extends SplitOut {
   }
 
   getBlocked(): JsonContact[] {
-    if (!this.selectedAccountContext) return []
+    if (!this.controller._inner_selectedAccountContext) return []
     return this.selectedAccountContext
       .getBlockedContacts()
       .map(this.getContact.bind(this))
