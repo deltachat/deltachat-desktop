@@ -427,10 +427,10 @@ function AccountItem({
   useEffect(() => {
     updateUnreadCount(null, login.id)
     // TODO use onIncomingMsg event directly after we changed the events to be filtered for active account in the frontend
-    ipcBackend.on('DD_EVENT_INCOMMING_MESSAGE_ACCOUNT', updateUnreadCount)
+    ipcBackend.on('DD_EVENT_INCOMING_MESSAGE_ACCOUNT', updateUnreadCount)
     return () => {
       ipcBackend.removeListener(
-        'DD_EVENT_INCOMMING_MESSAGE_ACCOUNT',
+        'DD_EVENT_INCOMING_MESSAGE_ACCOUNT',
         updateUnreadCount
       )
     }

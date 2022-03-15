@@ -15,7 +15,6 @@ import DCLoginController from './login'
 import DCMessageList from './messagelist'
 import DCSettings from './settings'
 import DCStickers from './stickers'
-import DCBurnerAccounts from './burnerAccounts'
 import { ExtendedAppMainProcess } from '../types'
 import Extras from './extras'
 
@@ -255,7 +254,6 @@ export default class DeltaChatController extends EventEmitter {
   readonly settings = new DCSettings(this)
   readonly stickers = new DCStickers(this)
   readonly context = new DCContext(this)
-  readonly burnerAccounts = new DCBurnerAccounts(this)
   readonly extras = new Extras(this)
   readonly webxdc = new DCWebxdc(this)
 
@@ -368,7 +366,7 @@ export default class DeltaChatController extends EventEmitter {
 
   onIncomingMsg(accountId: number, chatId: number, msgId: number) {
     // TODO better do proper event sorting in the frontend so we can listen there for this event
-    this.sendToRenderer('DD_EVENT_INCOMMING_MESSAGE_ACCOUNT', accountId)
+    this.sendToRenderer('DD_EVENT_INCOMING_MESSAGE_ACCOUNT', accountId)
     if (this.selectedAccountId !== accountId) {
       return
     }
@@ -405,7 +403,7 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   async checkQrCode(qrCode: string) {
-    if (!this.selectedAccountContext) {
+    if (!this._inner_selectedAccountContext) {
       const { dc, context } = DeltaChat.newTemporary()
 
       this.registerEventHandler(dc)
@@ -447,7 +445,7 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   getInfo(): { [key: string]: any } {
-    if (this.selectedAccountContext) {
+    if (this._inner_selectedAccountContext) {
       return this.selectedAccountContext.getInfo()
     } else {
       return DeltaChat.newTemporary().context.getInfo()

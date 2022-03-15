@@ -67,17 +67,17 @@ $hover-contrast-change: 2%;
   --setupMessageText: #ed824e;
   --infoMessageBubbleBg: #0000008c;
   --infoMessageBubbleText: white;
-  --messageIncommingBg: #{$bgMessageBubbleIncoming};
-  --messageIncommingDate: #{$textPrimary};
+  --messageIncomingBg: #{$bgMessageBubbleIncoming};
+  --messageIncomingDate: #{$textPrimary};
   --messageOutgoingBg: #{$bgMessageBubbleOutgoing};
   --messageOutgoingStatusColor: #4caf50; // Message Bubble - Buttons
   /* Message Bubble - Metadata */
   --messageStatusIcon: #4caf50;
   --messageStatusIconSending: #62656a;
   --messagePadlockOutgoing: #4caf50;
-  --messagePadlockIncomming: #a4a6a9;
+  --messagePadlockIncoming: #a4a6a9;
   --messageMetadataDate: #62656a;
-  --messageMetadataIncomming: rgba(#ffffff, 0.7);
+  --messageMetadataIncoming: rgba(#ffffff, 0.7);
   --messageAuthor: #ffffff;
   --messageReplyBtn: whitesmoke;
   --messageReplyBtnHover: white;
