@@ -6,8 +6,20 @@ const log = getLogger('main/deltachat/webxdc')
 import Mime from 'mime-types'
 import { nativeImage } from 'electron'
 import { join } from 'path'
+import { readdir, stat, rmdir, writeFile } from 'fs/promises'
+import { getConfigPath } from '../application-constants'
+import UrlParser from 'url-parse'
+import type { Message } from 'deltachat-node'
 
-const open_apps: { [msgId: number]: BrowserWindow } = {}
+const open_apps: {
+  [msgId: number]: { win: BrowserWindow; msg_obj: Message }
+} = {}
+
+// account sessions that have the webxdc scheme registered
+const accounts_sessions: number[] = []
+
+// TODO:
+// 2. on message deletion close webxdc if open and remove its DOMStorage data
 
 const CSP =
   "default-src 'self';\
@@ -50,7 +62,7 @@ export default class DCWebxdc extends SplitOut {
           'webxdc instance for this app is already open, trying to focus it',
           { msg_id }
         )
-        open_apps[msg_id].focus()
+        open_apps[msg_id].win.focus()
         return
       }
 
@@ -68,61 +80,77 @@ export default class DCWebxdc extends SplitOut {
         icon
       )
 
-      const partition = 'webxdc-temp-' + msg_id
-      const ses = session.fromPartition(partition)
+      const ses = this._currentSession
+      const appURL = `webxdc://${msg_id}.webxdc`
 
       // TODO intercept / deny network access - CSP should probably be disabled for testing
 
-      ses.protocol.registerBufferProtocol(
-        'webxdc',
-        async (request, callback) => {
-          let filename = request.url.substr(16)
+      if (!this.selectedAccountId) {
+        throw new Error('this.selectedAccountId is undefined')
+      }
 
-          // remove trailing "/"
-          if (filename[filename.length - 1] == '/') {
-            filename = filename.substr(0, filename.length - 1)
-          }
+      if (!accounts_sessions.includes(this.selectedAccountId)) {
+        accounts_sessions.push(this.selectedAccountId)
+        ses.protocol.registerBufferProtocol(
+          'webxdc',
+          async (request, callback) => {
+            const url = UrlParser(request.url)
+            const msg_id = Number(url.hostname.split('.')[0])
 
-          if (filename === 'webxdc.js') {
-            const displayName = Buffer.from(
-              this.controller.settings.getConfig('displayname')
-            ).toString('base64')
-            const seflAddr = Buffer.from(
-              this.controller.settings.getConfig('addr')
-            ).toString('base64')
+            if (!open_apps[msg_id]) {
+              return
+            }
 
-            // initializes the preload script, the actual implementation of `window.webxdc` is found there: static/webxdc-preload.js
-            callback({
-              mimeType: Mime.lookup(filename) || '',
-              data: Buffer.from(
-                `window.webxdc_internal.setup("${seflAddr}","${displayName}")`
-              ),
-            })
-          } else {
-            const blob = this.selectedAccountContext.getWebxdcBlob(
-              webxdc_message,
-              filename
-            )
-            if (blob) {
+            let filename = url.pathname
+            // remove leading / trailing "/"
+            if (filename.endsWith('/')) {
+              filename = filename.substr(0, filename.length - 1)
+            }
+            if (filename.startsWith('/')) {
+              filename = filename.substr(1)
+            }
+
+            if (filename === 'webxdc.js') {
+              const displayName = Buffer.from(
+                this.controller.settings.getConfig('displayname')
+              ).toString('base64')
+              const seflAddr = Buffer.from(
+                this.controller.settings.getConfig('addr')
+              ).toString('base64')
+
+              // initializes the preload script, the actual implementation of `window.webxdc` is found there: static/webxdc-preload.js
               callback({
                 mimeType: Mime.lookup(filename) || '',
-                data: blob,
-                headers: {
-                  'Content-Security-Policy': CSP,
-                },
+                data: Buffer.from(
+                  `window.webxdc_internal.setup("${seflAddr}","${displayName}")`
+                ),
               })
             } else {
-              callback({ statusCode: 404 })
+              const blob = this.selectedAccountContext.getWebxdcBlob(
+                open_apps[msg_id].msg_obj,
+                filename
+              )
+              if (blob) {
+                callback({
+                  mimeType: Mime.lookup(filename) || '',
+                  data: blob,
+                  headers: {
+                    'Content-Security-Policy': CSP,
+                  },
+                })
+              } else {
+                callback({ statusCode: 404 })
+              }
             }
           }
-        }
-      )
+        )
+      }
 
       const app_icon = icon_blob && nativeImage?.createFromBuffer(icon_blob)
 
-      const webxdc_windows = (open_apps[msg_id] = new BrowserWindow({
+      const webxdc_windows = new BrowserWindow({
         webPreferences: {
-          partition,
+          partition: this._currentPartition,
           sandbox: true,
           contextIsolation: true,
           webSecurity: true,
@@ -143,13 +171,8 @@ export default class DCWebxdc extends SplitOut {
         icon: app_icon || undefined,
         width: 375,
         height: 667,
-      }))
-
-      webxdc_windows.once('close', () => {
-        webxdc_windows.webContents.session.clearStorageData({
-          storages: ['indexdb', 'localstorage', 'cookies', 'serviceworkers'],
-        })
       })
+      open_apps[msg_id] = { win: webxdc_windows, msg_obj: webxdc_message }
 
       webxdc_windows.once('closed', () => {
         delete open_apps[msg_id]
@@ -157,7 +180,7 @@ export default class DCWebxdc extends SplitOut {
 
       webxdc_windows.once('ready-to-show', () => {})
 
-      webxdc_windows.webContents.loadURL('webxdc://webxdc/index.html', {
+      webxdc_windows.webContents.loadURL(appURL + '/index.html', {
         extraHeaders: 'Content-Security-Policy: ' + CSP,
       })
 
@@ -202,7 +225,7 @@ If you think that's a bug and you need that permission, then please open an issu
 
     ipcMain.handle('webxdc.getAllUpdates', async event => {
       const key = Object.keys(open_apps).find(
-        key => open_apps[Number(key)].webContents === event.sender
+        key => open_apps[Number(key)].win.webContents === event.sender
       )
       if (!key) {
         log.error(
@@ -215,7 +238,7 @@ If you think that's a bug and you need that permission, then please open an issu
 
     ipcMain.handle('webxdc.sendUpdate', async (event, update, description) => {
       const key = Object.keys(open_apps).find(
-        key => open_apps[Number(key)].webContents === event.sender
+        key => open_apps[Number(key)].win.webContents === event.sender
       )
       if (!key) {
         log.error(
@@ -239,7 +262,7 @@ If you think that's a bug and you need that permission, then please open an issu
             msg_id,
             status_update_id
           )
-          instance.webContents.send('webxdc.statusUpdate', status_update[0])
+          instance.win.webContents.send('webxdc.statusUpdate', status_update[0])
         }
       }
     )
@@ -247,7 +270,125 @@ If you think that's a bug and you need that permission, then please open an issu
 
   closeAll() {
     for (const open_app of Object.keys(open_apps)) {
-      open_apps[Number(open_app)].close()
+      open_apps[Number(open_app)].win.close()
     }
+  }
+
+  get _currentPartition() {
+    return `persist:webxdc_${this.selectedAccountId}`
+  }
+
+  get _currentSession() {
+    return session.fromPartition(this._currentPartition, { cache: false })
+  }
+
+  clearWebxdcDOMStorage() {
+    return this._currentSession.clearStorageData()
+  }
+
+  async deleteWebxdcAccountData() {
+    if (!this.selectedAccountId) {
+      throw new Error('this.selectedAccountId is undefined')
+    }
+    await this._deleteWebxdcAccountData(this.selectedAccountId)
+    app.relaunch()
+    app.quit()
+  }
+
+  async _deleteWebxdcAccountData(accountId: number) {
+    // we can not delete the directory as it might still be used and that would be a problem on windows
+    // so the second next best thing we can do is telling electron to clear the data, even though it won't delete everything
+    const s = session.fromPartition(`persist:webxdc_${accountId}`, {
+      cache: false,
+    })
+    await s.clearStorageData()
+
+    // mark the folder for deletion on next startup
+    if (s.storagePath) {
+      await writeFile(join(s.storagePath, 'webxdc-cleanup'), '-', 'utf-8')
+    } else {
+      throw new Error('session has no storagePath set')
+    }
+  }
+
+  async getWebxdcDiskUsage() {
+    const ses = this._currentSession
+    if (!ses.storagePath) {
+      throw new Error('session has no storagePath set')
+    }
+    const [cache_size, real_total_size] = await Promise.all([
+      ses.getCacheSize(),
+      get_recursive_folder_size(ses.storagePath, [
+        'GPUCache',
+        'QuotaManager',
+        'Code Cache',
+        'LOG',
+        'LOG.old',
+        'LOCK',
+        '.DS_Store',
+        'Cookies-journal',
+        'Databases.db-journal',
+        'Preferences',
+        'QuotaManager-journal',
+        '000003.log',
+        'MANIFEST-000001',
+      ]),
+    ])
+    const empty_size = 49 * 1024 // ~ size of an empty session/partition
+
+    let total_size = real_total_size - empty_size
+    let data_size = total_size - cache_size
+    if (total_size < 0) {
+      total_size = 0
+      data_size = 0
+    }
+    return {
+      cache_size,
+      total_size,
+      data_size,
+    }
+  }
+}
+
+async function get_recursive_folder_size(
+  path: string,
+  exclude_list: string[] = []
+) {
+  let size = 0
+  for (const item of await readdir(path)) {
+    const item_path = join(path, item)
+    const stats = await stat(item_path)
+    if (exclude_list.includes(item)) {
+      continue
+    }
+    if (stats.isDirectory()) {
+      size += await get_recursive_folder_size(item_path, exclude_list)
+    } else {
+      size += stats.size
+    }
+  }
+  return size
+}
+
+export async function webxdcStartUpCleanup() {
+  try {
+    const partitions_dir = join(getConfigPath(), 'Partitions')
+    const folders = await readdir(partitions_dir)
+    for (const folder of folders) {
+      if (!folder.startsWith('webxdc')) {
+        continue
+      }
+      try {
+        await stat(join(partitions_dir, folder, 'webxdc-cleanup'))
+        await rmdir(join(partitions_dir, folder), { recursive: true })
+        log.info('webxdc cleanup: deleted ', folder)
+      } catch (error: any) {
+        if (error.code !== 'ENOENT') {
+          throw error
+        }
+      }
+    }
+  } catch (error) {
+    log.warn('webxdc cleanup failed', error)
   }
 }

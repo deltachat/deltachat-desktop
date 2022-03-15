@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- webxdc content now has access to persistent DOMStorage
 ### Fixed
 - Fix missing key login_socks5_login
 - Fix creating contacts from email address in message
