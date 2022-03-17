@@ -6,7 +6,7 @@ export function getDefaultState(): DesktopSettingsType {
    */
   return {
     bounds: {},
-    enterKeySends: true,
+    enterKeySends: false,
     notifications: true,
     showNotificationContent: true,
     locale: null, // if this is null, the system chooses the system language electron reports

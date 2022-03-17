@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- Set default of enterKeySends to false again
+
 ## [1.27.2] - 2022-03-15
 
 ### Added
