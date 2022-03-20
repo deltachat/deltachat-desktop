@@ -69,7 +69,7 @@ export default function ConfirmationDialog({
           <p
             className={`delta-button bold primary ${
               isConfirmDanger ? 'danger' : 'primary'
-            }`}
+            } test-selector-confirm`}
             onClick={() => onClick(true)}
           >
             {confirmLabel || tx('yes')}

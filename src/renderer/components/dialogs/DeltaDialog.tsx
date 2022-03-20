@@ -391,9 +391,12 @@ export function DeltaDialogOkCancelFooter({
         </p>
         <p
           //className={ 'delta-button bold primary' + disableOK ? " disabled" : "" }
-          className={classNames('delta-button bold primary', {
-            disabled: disableOK,
-          })}
+          className={classNames(
+            'delta-button bold primary test-selector-confirm',
+            {
+              disabled: disableOK,
+            }
+          )}
           onClick={onOk}
         >
           {tx('ok')}

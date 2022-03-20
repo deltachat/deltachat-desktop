@@ -238,16 +238,42 @@ test('sending message scrolls down', async t => {
 })
 
 // scroll down to newest outgoing video chat invitation
-// test('sending message scrolls down', async t => {
-//     await clickChatByName(t, config.account_b_email)
-//     // spam some bigger messages so we can test scrolling
-//     await spam_messages(t)
-//     const end_msg_code = endCode('end-off outgoing message spam')
-//     await send_msg(t, end_msg_code)
-//     await Selector('#message-list msg-body', { timeout: 2300, visibilityCheck: true }).withText(
-//       end_msg_code
-//     )
-//   })
+test('sending videochat invitation scrolls down', async t => {
+  // enable / setup video chat
+  await clickAppMenuItem(t, await translate('menu_settings'))
+  await ClientFunction(function () {
+    // scroll down so button is found
+    let buttons = [...document.querySelectorAll('.SettingsSelector > button')]
+    let button = buttons[buttons.length - 1]
+    console.log({ button })
+    if (button) {
+      button.scrollIntoView()
+    }
+  })()
+  await t.click(
+    ReactSelector('SettingsSelector').withText(await translate('videochat'))
+  )
+  await t.click(Selector('.test-videochat-custom').withText(await translate('custom')))
+  await t.typeText(
+    Selector('#custom_webrtc_instance'),
+    'https://basicwebrtc.delta.chat/#camon=TRUE&roomname=$ROOM'
+  )
+  await t.click(Selector('.test-selector-confirm'))
+  // close settings
+  await t.pressKey('esc')
+  await clickChatByName(t, config.account_b_email)
+  // spam some bigger messages so we can test scrolling
+  await spam_messages(t)
+  // send video chat invitation
+  await clickAppMenuItem(t, await translate('videochat'))
+  // confirm sending
+  await t.click(Selector('.test-selector-confirm'))
+
+  // check
+  await t
+    .expect(MSGinViewportSelector(2300).exists)
+    .ok('video chat invitation is in view')
+})
 
 // scroll down to newest incoming message
 test('receiving message scrolls down', async t => {
