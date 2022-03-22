@@ -4,8 +4,8 @@ import ChatStore, {
   useChatStore,
   ChatStoreState,
   ChatStoreStateWithChatSet,
-  MessagePage,
 } from '../../stores/chat'
+import { MessagePage } from "../../stores/MessagePage"
 import { useDebouncedCallback } from 'use-debounce'
 import { C } from 'deltachat-node/dist/constants'
 import type { ChatTypes } from 'deltachat-node'
@@ -337,6 +337,7 @@ export const MessageListInner = React.memo(
               <MessagePageComponent
                 key={messagePage.pageKey}
                 messagePage={messagePage}
+                messagePageRev={messagePage.rev}
                 conversationType={conversationType}
               />
             )
@@ -362,6 +363,7 @@ const MessagePageComponent = React.memo(
     conversationType,
   }: {
     messagePage: MessagePage
+    messagePageRev: number
     conversationType: ConversationType
   }) {
     const messageElements = []
@@ -402,7 +404,7 @@ const MessagePageComponent = React.memo(
   (prevProps, nextProps) => {
     const areEqual =
       prevProps.messagePage.pageKey === nextProps.messagePage.pageKey &&
-      prevProps.messagePage.messages === nextProps.messagePage.messages
+      prevProps.messagePageRev === nextProps.messagePageRev
 
     return areEqual
   }

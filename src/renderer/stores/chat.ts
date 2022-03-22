@@ -6,13 +6,7 @@ import { runtime } from '../runtime'
 import { ActionEmitter, KeybindAction } from '../keybindings'
 import { C } from 'deltachat-node/dist/constants'
 import { OrderedMap } from 'immutable'
-
-export const PAGE_SIZE = 11
-
-export interface MessagePage {
-  pageKey: string
-  messages: OrderedMap<number, MessageType | null>
-}
+import { MessagePage, PAGE_SIZE } from './MessagePage'
 
 type ScrollTo =
   | ScrollToMessage
@@ -74,80 +68,6 @@ function getLastKnownScrollPosition(): {
     lastKnownScrollHeight: scrollHeight,
     lastKnownScrollTop: scrollTop,
   }
-}
-
-async function messagePageFromMessageIndexes(
-  chatId: number,
-  indexStart: number,
-  indexEnd: number
-) {
-  const _messages = await DeltaBackend.call(
-    'messageList.getMessagesFromIndex',
-    chatId,
-    indexStart,
-    indexEnd
-  )
-  if (_messages.length === 0) {
-    throw new Error(
-      'messagePageFromMessageIndexes: _messages.length equals zero. This should not happen'
-    )
-  }
-
-  if (_messages.length !== indexEnd - indexStart + 1) {
-    throw new Error(
-      "messagePageFromMessageIndexes: _messages.length doesn't equal indexEnd - indexStart + 1. This should not happen"
-    )
-  }
-
-  const messages = OrderedMap().withMutations(messagePages => {
-    for (let i = 0; i < _messages.length; i++) {
-      const [messageId, message] = _messages[i]
-      messagePages.set(messageId, message)
-    }
-  }) as OrderedMap<number, MessageType | null>
-
-  const messagePage = {
-    pageKey: calculatePageKey(messages, indexStart, indexEnd),
-    messages,
-  }
-
-  return messagePage
-}
-
-async function messagePagesFromMessageIndexes(
-  chatId: number,
-  indexStart: number,
-  indexEnd: number
-) {
-  const _messages = await DeltaBackend.call(
-    'messageList.getMessagesFromIndex',
-    chatId,
-    indexStart,
-    indexEnd
-  )
-
-  const messagePages = []
-
-  let currentIndex = 0
-  while (currentIndex < _messages.length) {
-    const messages = OrderedMap().withMutations(messagePages => {
-      for (let i = currentIndex; i < currentIndex + PAGE_SIZE; i++) {
-        if (i >= _messages.length) break
-        const [messageId, message] = _messages[i]
-        messagePages.set(messageId, message)
-      }
-    }) as OrderedMap<number, MessageType | null>
-    currentIndex = currentIndex + PAGE_SIZE
-
-    const messagePage = {
-      pageKey: calculatePageKey(messages, indexStart, indexEnd),
-      messages,
-    }
-
-    messagePages.push(messagePage)
-  }
-
-  return messagePages
 }
 
 interface ChatStoreLocks {
@@ -394,18 +314,10 @@ class ChatStore extends Store<ChatStoreState> {
           newestFetchedMessageIndex -= 1
         }
         const messageIds = state.messageIds.filter(mId => mId !== msgId)
+        state.messagePages.forEach(page => page.deleteMessage(msgId))
         const modifiedState = {
           ...state,
           messageIds,
-          messagePages: state.messagePages.map(messagePage => {
-            if (messagePage.messages.has(msgId)) {
-              return {
-                ...messagePage,
-                messages: messagePage.messages.set(msgId, null),
-              }
-            }
-            return messagePage
-          }),
           oldestFetchedMessageIndex,
           newestFetchedMessageIndex,
         }
@@ -418,23 +330,13 @@ class ChatStore extends Store<ChatStoreState> {
       messagesChanged: MessageType[]
     }) => {
       this.setState(state => {
-        const modifiedState = {
-          ...state,
-          messagePages: state.messagePages.map(messagePage => {
-            const returnMessagePage = messagePage
-            returnMessagePage.messages = returnMessagePage.messages.withMutations(
-              messages => {
-                for (const changedMessage of payload.messagesChanged) {
-                  if (!messages.has(changedMessage.id)) continue
-                  messages.set(changedMessage.id, changedMessage)
-                }
-              }
-            )
-            return returnMessagePage
-          }),
+        if (this.guardReducerIfChatIdIsDifferent(payload)) {
+          return
         }
-        if (this.guardReducerIfChatIdIsDifferent(payload)) return
-        return modifiedState
+        state.messagePages.forEach(page =>
+          page.messagesChanged(payload.messagesChanged)
+        )
+        return state
       }, 'messageChanged')
     },
     messageSent: (payload: {
@@ -447,13 +349,10 @@ class ChatStore extends Store<ChatStoreState> {
         const messageIds = [...state.messageIds, messageId]
         const messagePages: MessagePage[] = [
           ...state.messagePages,
-          {
-            pageKey: `page-${messageId}-${messageId}`,
-            messages: OrderedMap().set(messageId, message) as OrderedMap<
-              number,
-              MessageType | null
-            >,
-          },
+          new MessagePage(
+            `page-${messageId}-${messageId}`,
+            OrderedMap<number, MessageType | null>().set(messageId, message)
+          ),
         ]
         const modifiedState = {
           ...state,
@@ -472,29 +371,13 @@ class ChatStore extends Store<ChatStoreState> {
     }) => {
       const { messageId, messageState } = payload
       this.setState(state => {
-        const modifiedState = {
-          ...state,
-          messagePages: state.messagePages.map(messagePage => {
-            if (messagePage.messages.has(messageId)) {
-              const message = messagePage.messages.get(messageId)
-              if (message !== null && message !== undefined) {
-                const updatedMessages = messagePage.messages.set(messageId, {
-                  ...message,
-                  state: messageState,
-                })
-
-                return {
-                  ...messagePage,
-                  messages: updatedMessages,
-                }
-              }
-            }
-
-            return messagePage
-          }),
+        if (this.guardReducerIfChatIdIsDifferent(payload)) {
+          return
         }
-        if (this.guardReducerIfChatIdIsDifferent(payload)) return
-        return modifiedState
+        state.messagePages.forEach(page =>
+          page.setMessageState(messageId, messageState)
+        )
+        return state
       }, 'setMessageState')
     },
     setMessageIds: (payload: { id: number; messageIds: number[] }) => {
@@ -657,7 +540,7 @@ class ChatStore extends Store<ChatStoreState> {
             )
             newestFetchedMessageIndex = messageIds.length - 1
 
-            messagePage = await messagePageFromMessageIndexes(
+            messagePage = await MessagePage.messagePageFromMessageIndexes(
               chatId,
               oldestFetchedMessageIndex,
               newestFetchedMessageIndex
@@ -751,7 +634,7 @@ class ChatStore extends Store<ChatStoreState> {
           )
         }
 
-        messagePage = await messagePageFromMessageIndexes(
+        messagePage = await MessagePage.messagePageFromMessageIndexes(
           chatId,
           oldestFetchedMessageIndex,
           newestFetchedMessageIndex
@@ -822,7 +705,7 @@ class ChatStore extends Store<ChatStoreState> {
             return false
           }
 
-          const messagePage: MessagePage = await messagePageFromMessageIndexes(
+          const messagePage: MessagePage = await MessagePage.messagePageFromMessageIndexes(
             id,
             oldestFetchedMessageIndex,
             lastMessageIndexOnLastPage - 1
@@ -877,7 +760,7 @@ class ChatStore extends Store<ChatStoreState> {
             return false
           }
 
-          const messagePage: MessagePage = await messagePageFromMessageIndexes(
+          const messagePage: MessagePage = await MessagePage.messagePageFromMessageIndexes(
             id,
             newestFetchedMessageIndex,
             newNewestFetchedMessageIndex
@@ -925,7 +808,7 @@ class ChatStore extends Store<ChatStoreState> {
           )
           oldestFetchedMessageIndex = Math.max(oldestFetchedMessageIndex, 0)
 
-          const messagePages = await messagePagesFromMessageIndexes(
+          const messagePages = await MessagePage.messagePagesFromMessageIndexes(
             chatId,
             oldestFetchedMessageIndex,
             newestFetchedMessageIndex
@@ -1038,7 +921,7 @@ class ChatStore extends Store<ChatStoreState> {
         this.reducer.setMessageIds({ id: chatId, messageIds })
         return
       }
-      const messagePage = await messagePageFromMessageIndexes(
+      const messagePage = await MessagePage.messagePageFromMessageIndexes(
         chatId,
         indexStart,
         indexEnd
@@ -1164,30 +1047,6 @@ ipcBackend.on('ClickOnNotification', (_ev, { chatId }) => {
   chatStore.effect.selectChat(chatId)
 })
 
-export function calculatePageKey(
-  messages: OrderedMap<number, MessageType | null>,
-  indexStart: number,
-  indexEnd: number
-): string {
-  const first = messages.find(
-    message => message !== null && message !== undefined
-  )
-  const last = messages.findLast(
-    message => message !== null && message !== undefined
-  )
-  let firstId = 0
-  if (first) {
-    firstId = first.id
-  }
-  let lastId = 0
-  if (last) {
-    lastId = last.id
-  }
-  if (firstId + lastId + indexStart + indexEnd === 0) {
-    throw new Error('calculatePageKey: non unique page key of 0')
-  }
-  return `page-${firstId}-${lastId}-${indexStart}-${indexEnd}`
-}
 
 export const useChatStore = () => useStore(chatStore)[0]
 export const useChatStore2 = () => {
