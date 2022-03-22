@@ -5,7 +5,7 @@ import ChatStore, {
   ChatStoreState,
   ChatStoreStateWithChatSet,
 } from '../../stores/chat'
-import { MessagePage } from "../../stores/MessagePage"
+import { MessagePage } from '../../stores/MessagePage'
 import { useDebouncedCallback } from 'use-debounce'
 import { C } from 'deltachat-node/dist/constants'
 import type { ChatTypes } from 'deltachat-node'

@@ -8,7 +8,7 @@ let pseudo_random_revision_number = 0
 
 export class MessagePage {
   /** increase this number when sth changed, it gets used by the react memo */
-  rev: number = 0
+  rev = 0
   constructor(
     public pageKey: string,
     public messages: OrderedMap<number, MessageType | null>
