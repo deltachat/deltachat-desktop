@@ -24,7 +24,7 @@ export default function SettingsWebxdc() {
   const deleteData = () => {
     openDialog(ConfirmationDialog, {
       message:
-        "Delete all webxdc DOMStorage data, if you do that you might use some local settings of your webxdc's",
+        "Delete all webxdc DOMStorage data, if you do that you might loose some local settings of your webxdc's",
       confirmLabel: tx('delete'),
       cb: yes =>
         yes &&
@@ -33,7 +33,12 @@ export default function SettingsWebxdc() {
   }
 
   const resetWebxdcSession = () =>
-    DeltaBackend.call('webxdc.deleteWebxdcAccountData')
+    openDialog(ConfirmationDialog, {
+      message:
+        "Delete all webxdc DOMStorage data, if you do that you might loose some local settings of your webxdc's",
+      confirmLabel: tx('delete'),
+      cb: yes => yes && DeltaBackend.call('webxdc.deleteWebxdcAccountData'),
+    })
 
   return (
     <>

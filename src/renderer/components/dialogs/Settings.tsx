@@ -26,7 +26,6 @@ import { getLogger } from '../../../shared/logger'
 import SettingsCommunication from './Settings-Communication'
 import { runtime } from '../../runtime'
 import SettingsDownloadOnDemand from './Settings-DownloadOnDemand'
-import SettingsWebxdc from './Settings-Webxdc'
 
 const log = getLogger('renderer/dialogs/Settings')
 
@@ -314,7 +313,7 @@ export default function Settings(props: DialogProps) {
           />
           <SettingsManageKeys />
           <SettingsBackup />
-          <SettingsWebxdc />
+          {/* <SettingsWebxdc />  hide for now, see https://github.com/deltachat/deltachat-desktop/issues/2638 */}
         </DeltaDialogBody>
       </>
     )

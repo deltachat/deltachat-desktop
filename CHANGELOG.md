@@ -4,6 +4,7 @@
 
 ### Changed
 - Set default of enterKeySends to false again
+- remove webxdc clear domstorage settings for now until we know what we want (see https://github.com/deltachat/deltachat-desktop/issues/2638)
 
 ## [1.27.2] - 2022-03-15
 
