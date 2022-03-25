@@ -29,6 +29,7 @@
 - Reduce startup lag while fetching messages (fix debouncing of onChatListItemChanged)
 - Fix webxdc audio playback
 - Fix qr scanning on account screen
+- Fix messages not appearing with download on demand 
 
 ### Changed
 - exclude more unused files from installation package
