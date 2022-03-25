@@ -207,7 +207,6 @@ export default class ComposerMessageInput extends React.Component<
   }
 
   render() {
-    log.debug('state', this.state)
     return (
       <textarea
         className='message-input-area'
