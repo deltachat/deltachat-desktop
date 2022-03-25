@@ -2,10 +2,15 @@
 
 ## [Unreleased][unreleased]
 
+## [1.28.0] - 2022-03-25
+
 ### Changed
 - Set default of enterKeySends to false again
 - remove webxdc clear domstorage settings for now until we know what we want (see https://github.com/deltachat/deltachat-desktop/issues/2638)
 - increase composer draft saving debounce timeout to one second
+
+### Fixed
+- Fix messages not appearing with download on demand
 
 ## [1.27.2] - 2022-03-15
 
@@ -29,7 +34,6 @@
 - Reduce startup lag while fetching messages (fix debouncing of onChatListItemChanged)
 - Fix webxdc audio playback
 - Fix qr scanning on account screen
-- Fix messages not appearing with download on demand 
 
 ### Changed
 - exclude more unused files from installation package
@@ -1504,7 +1508,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.27.2...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.28.0...HEAD
+
+[1.28.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.27.2...v1.28.0
 
 [1.27.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.27.1...v1.27.2
 

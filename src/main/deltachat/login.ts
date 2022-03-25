@@ -132,8 +132,8 @@ export default class DCLoginController extends SplitOut {
     this.controller.hintUpdateIfNessesary()
 
     this.selectedAccountContext.addDeviceMessage(
-      'changelog-version-1.27.0-version1',
-      `What's new in 1.27.0?
+      'changelog-version-1.28.0-version1',
+      `What's new in 1.28.0?
 
 🦘The long awaited jump to message is here (jump to quoted messages and search results)
 
