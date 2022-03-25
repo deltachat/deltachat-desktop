@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- Update translations (25.03.2022)
+
+
 ## [1.28.0] - 2022-03-25
 
 ### Changed
