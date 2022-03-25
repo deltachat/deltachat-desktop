@@ -1,7 +1,4 @@
 {
-  "download_failed": {
-    "message": "Download failed"
-  },
   "attachment-files": {
     "message": "Attached files"
   },
@@ -10,12 +7,6 @@
   },
   "save-as": {
     "message": "Save As"
-  },
-  "pref_only_watch_mvbox_folder_title": {
-    "message": "Only Fetch from DeltaChat Folder"
-  },
-  "pref_only_watch_mvbox_folder_explain": {
-    "message": "Ignore other folders. Requires your server to move chat messages to the DeltaChat folder."
   },
   "pref_send_copy_to_self_explain": {
     "message": "Required for multi-device setup."
