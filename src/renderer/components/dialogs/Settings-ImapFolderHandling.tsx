@@ -36,9 +36,9 @@ export default function SettingsImapFolderHandling({
           disabledValue: false,
         })}
         {renderDeltaSwitch2({
-          label: tx('pref_only_watch_mvbox_folder_title'),
+          label: tx('pref_only_fetch_mvbox_title'),
           key: 'only_fetch_mvbox',
-          description: tx('pref_only_watch_mvbox_folder_explain'),
+          description: tx('pref_only_fetch_mvbox_explain'),
         })}
       </Card>
     </>

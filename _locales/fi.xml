@@ -183,7 +183,7 @@
     <string name="add_recipients">Lisää vastaanottajia</string>
     <string name="menu_send">Lähetä</string>
     <string name="menu_toggle_keyboard">Näytä emoji-näppäimistö</string>
-    <string name="menu_edit_group">Muokkaa ryhmä</string>
+    <string name="menu_edit_group">Muokkaa ryhmää</string>
     <string name="menu_group_name_and_image">Ryhmän nimi ja kuva</string>
     <string name="menu_show_map">Näytä kartta</string>
     <string name="menu_show_global_map">Näytä kaikki sijainnit</string>
@@ -223,7 +223,7 @@
     <string name="menu_pause">Tauko</string>
     <string name="menu_scroll_to_bottom">Vieritä alas</string>
     <string name="menu_scroll_to_top">Vieritä ylös</string>
-    <string name="menu_help">Apua</string>
+    <string name="menu_help">Ohje</string>
     <string name="privacy_policy">Yksityisyyskäytäntö</string>
     <string name="menu_select_all">Valitse kaikki</string>
     <string name="select_more">Valitse lisää</string>
@@ -275,17 +275,17 @@
     </plurals>
     <string name="file_saved_to">Tiedosto tallennettu \"%1$s\".</string>
 
-    <string name="videochat">Videopuhelu</string>
+    <string name="videochat">Videokeskustelu</string>
     <string name="videochat_invite_user_to_videochat">Kutsu %1$s videokeskusteluun?</string>
     <string name="videochat_invite_user_hint">Tämä vaatii molemmilta yhteensopivan sovelluksen tai selaimen.</string>
     <string name="videochat_contact_invited_hint">%1$s kutsui sinut videokeskusteluun.</string>
     <string name="videochat_you_invited_hint">Lähetit kutsun videokeskusteluun.</string>
     <string name="videochat_tap_to_join">Napauta liittyäksesi</string>
     <string name="videochat_tap_to_open">Napauta avataksesi</string>
-    <string name="videochat_instance">Videopuhelun tarjoaja</string>
-    <string name="videochat_instance_placeholder">Videopuhelusi tarjoaja</string>
-    <string name="videochat_instance_explain">Jos videopuhelun tarjoaja määritellään, voit aloittaa videopuhelun mistä tahansa keskustelusta. Videopuhelu vaatii molemmilta yhteensopivan sovelluksen tai selaimen.\n\nEsimerkkejä: https://meet.jit.si/$ROOM tai basicwebrtc:https://sinun-palvelimesi</string>
-    <string name="videochat_instance_from_qr">Käytä \"%1$s\" videopuhelupyyntöihin?\n\nTämän jälkeen voit aloittaa videopuhelun mistä tahansa keskustelusta. Tämä korvaa edellisen videokeskusteluasetuksen, jos sellainen on.</string>
+    <string name="videochat_instance">Videokeskustelun tarjoaja</string>
+    <string name="videochat_instance_placeholder">Videokeskustelusi tarjoaja</string>
+    <string name="videochat_instance_explain">Jos videokeskustelun tarjoaja määritellään, voit aloittaa videokeskustelun mistä tahansa keskustelusta. Videokeskustelu vaatii molemmilta yhteensopivan sovelluksen tai selaimen.\n\nEsimerkkejä: https://meet.jit.si/$ROOM tai basicwebrtc:https://sinun-palvelimesi</string>
+    <string name="videochat_instance_from_qr">Käytä \"%1$s\" videokeskustelupyyntöihin?\n\nTämän jälkeen voit aloittaa videokeskustelun mistä tahansa keskustelusta. Tämä korvaa edellisen videokeskusteluasetuksen, jos sellainen on.</string>
     <string name="videochat_invitation">Videokeskustelukutsu</string>
     <string name="videochat_invitation_body">Sinut on kutsuttu videokeskusteluun, klikkaa %1$s liittyäksesi.</string>
 
@@ -503,7 +503,7 @@
     <!-- TLS certificate checks -->
     <string name="accept_invalid_certificates">Hyväksy epäpätevät varmenteet</string>
     <string name="used_settings">Käytetyt asetukset:</string>
-    <string name="switch_account">Vaihda tili</string>
+    <string name="switch_account">Vaihda tiliä</string>
     <string name="add_account">Lisää tili</string>
     <string name="delete_account">Poista tili</string>
     <string name="delete_account_ask">Haluatko varmasti poistaa tilisi tiedot?</string>
@@ -538,8 +538,8 @@
     <string name="pref_default_status_label">Allekirjoitus</string>
     <!-- Translators: The URL should not be localized, it is not clear which language the receiver prefers and the language will be detected on the server -->
     <string name="pref_default_status_text">Lähetetty Delta Chat -sovelluksesta: https://delta.chat</string>
-    <string name="pref_enter_sends">Enter-painike lähettää</string>
-    <string name="pref_enter_sends_explain">Enter-painikkeen painaminen lähettää viestejä</string>
+    <string name="pref_enter_sends">Enter-näppäin lähettää</string>
+    <string name="pref_enter_sends_explain">Enter-näppäimen painaminen lähettää viestin</string>
     <string name="pref_outgoing_media_quality">Lähtevän median laatu</string>
     <string name="pref_outgoing_balanced">Tasapainotettu</string>
     <string name="pref_outgoing_worse">Huonompi laatu, pienempi koko</string>
@@ -551,9 +551,9 @@
     <string name="pref_notifications">Ilmoitukset</string>
     <string name="pref_notifications_show">Näytä</string>
     <string name="pref_notifications_priority">Tärkeys</string>
-    <string name="pref_notifications_explain">Kytke päälle järjestelmän ilmoitukset uusista viesteistä</string>
+    <string name="pref_notifications_explain">Järjestelmän ilmoitukset uusista viesteistä</string>
     <string name="pref_show_notification_content">Näytä viestien sisältö ilmoituksissa</string>
-    <string name="pref_show_notification_content_explain">Näyttää lähettäjän nimen ja viestin ensimmäiset sanat ilmoituksessa</string>
+    <string name="pref_show_notification_content_explain">Näytä lähettäjän nimi ja viestin ensimmäiset sanat ilmoituksessa</string>
     <string name="pref_led_color">LED-väri</string>
     <string name="pref_sound">Ääni</string>
     <string name="pref_silent">Äänetön</string>
@@ -612,7 +612,7 @@
     <string name="pref_show_emails">Näytä perinteiset sähköpostiviestit</string>
     <string name="pref_show_emails_no">Ei, pelkät pikaviestit</string>
     <string name="pref_show_emails_accepted_contacts">Hyväksytyille yhteystiedoille</string>
-    <string name="pref_show_emails_all">Kaikk</string>
+    <string name="pref_show_emails_all">Kaikki</string>
     <string name="pref_experimental_features">Kokeelliset ominaisuudet</string>
     <string name="pref_on_demand_location_streaming">Sijainnin jako pyydettäessä</string>
     <string name="pref_developer_mode">Kehittäjätila</string>
@@ -678,20 +678,20 @@
 
     <!-- autocrypt -->
     <string name="autocrypt">Autocrypt</string>
-    <string name="autocrypt_explain">Autocrypt on uusi ja avoin spesifikaatio sähköpostien automaattiselle päästä-päähän-salaukselle.\n\nPäästä-päähän-salauksen asetukset luodaan automaattisesti tarpeen mukaan ja ne voidaan siirtää laitteiden välillä Autocrypt -asetusviestien avulla.</string>
-    <string name="autocrypt_send_asm_title">Lähetä Autocrypt -asetusviesti</string>
-    <string name="autocrypt_send_asm_explain_before">Autocrypt -asetusviesti jakaa turvallisesti päästä-päähän-salauksen asetukset toisten Autocrypt-sopivien sovellusten kanssa.\n\nAsetuksen salataan tässä näytettävällä asetuskoodilla, joka on syötettävä toiseen laitteeseen.</string>
-    <string name="autocrypt_send_asm_button">Lähetä Autocrypt -asetusviesti</string>
+    <string name="autocrypt_explain">Autocrypt on uusi ja avoin spesifikaatio sähköpostien automaattiselle päästä-päähän-salaukselle.\n\nPäästä-päähän-salauksen asetukset luodaan automaattisesti tarpeen mukaan ja ne voidaan siirtää laitteiden välillä Autocrypt-asetusviestien avulla.</string>
+    <string name="autocrypt_send_asm_title">Lähetä Autocrypt-asetusviesti</string>
+    <string name="autocrypt_send_asm_explain_before">Autocrypt-asetusviesti jakaa turvallisesti päästä-päähän-salauksen asetukset toisten Autocrypt-yhteensopivien sovellusten kanssa.\n\nAsetuksen salataan tässä näytettävällä asetuskoodilla, joka on syötettävä toiseen laitteeseen.</string>
+    <string name="autocrypt_send_asm_button">Lähetä Autocrypt-asetusviesti</string>
     <string name="autocrypt_send_asm_explain_after">Asetusviesti on lähetetty sinulle itsellesi. Avaa viesti toisella laitteella. Sinulta pyydetään asennuskoodia. Anna seuraavat numerot:\n\n%1$s</string>
     <string name="autocrypt_prefer_e2ee">Suosi päästä-päähän-salausta</string>
-    <string name="autocrypt_asm_subject">Autocrypt -asetusviesti</string>
-    <string name="autocrypt_asm_general_body">Tätä Autocrypt -asetusviestiä käytetään päästä-päähän-salauksen asetusten kopioimiseksi toiselle laitteelle.\n\nSalauksen purkamiseksi ja asetusten käyttöön ottamiseksi, avaa viesti toisella Autocrypt-yhteensopivalla sovelluksella ja anna asennuskoodi laitteelta, jolla koodi luotiin.</string>
-    <string name="autocrypt_asm_click_body">Tätä Autocrypt -asetusviestiä käytetään päästä-päähän-salauksen asetusten kopioimiseksi toiselle laitteelle.\n\nSalauksen purkamiseksi ja asetusten käyttöön ottamiseksi, napauta tai klikkaa tätä viestiä.</string>
-    <string name="autocrypt_continue_transfer_title">Autocrypt -asetusviesti</string>
+    <string name="autocrypt_asm_subject">Autocrypt-asetusviesti</string>
+    <string name="autocrypt_asm_general_body">Tätä Autocrypt-asetusviestiä käytetään päästä-päähän-salauksen asetusten kopioimiseksi toiselle laitteelle.\n\nSalauksen purkamiseksi ja asetusten käyttöön ottamiseksi, avaa viesti toisella Autocrypt-yhteensopivalla sovelluksella ja anna asennuskoodi laitteelta, jolla koodi luotiin.</string>
+    <string name="autocrypt_asm_click_body">Tätä Autocrypt-asetusviestiä käytetään päästä-päähän-salauksen asetusten kopioimiseksi toiselle laitteelle.\n\nSalauksen purkamiseksi ja asetusten käyttöön ottamiseksi, napauta tai klikkaa tätä viestiä.</string>
+    <string name="autocrypt_continue_transfer_title">Autocrypt-asetusviesti</string>
     <string name="autocrypt_continue_transfer_please_enter_code">Anna toisella laitteella näkyvä asennuskoodi.</string>
     <string name="autocrypt_continue_transfer_succeeded">Päästä-päähän-salauksen asetuksen siirretty. Autocrypt toimii nyt tässä laitteessa samoilla asetuksilla kuin toisessa laitteessa.</string>
     <string name="autocrypt_continue_transfer_retry">Uudelleen</string>
-    <string name="autocrypt_bad_setup_code">Virheellinen asennuskoodi. Yritä uudelleen.\n\nJos et muista asennuskoodia, lähetä uusi Autocrypt -asetusviesti toisella laitteella.</string>
+    <string name="autocrypt_bad_setup_code">Virheellinen asennuskoodi. Yritä uudelleen.\n\nJos et muista asennuskoodia, lähetä uusi Autocrypt-asetusviesti toisella laitteella.</string>
 
 
     <!-- system messages -->
@@ -703,7 +703,7 @@
     <string name="systemmsg_group_left">Poistuit ryhmästä.</string>
     <string name="systemmsg_read_receipt_subject">Viesti avattu</string>
     <string name="systemmsg_read_receipt_body">Lähettämäsi viesti \"%1$s\" näytettiin vastaanottajan näytöllä.\n\nTämä ei takaa, että sisältö luettiin.</string>
-    <string name="systemmsg_cannot_decrypt">Viestin salausta ei voi purkaa.\n\n• Pyydä lähettäjää lähettämään viesti uudelleen.\n\n• Jos asensit Delta Chatin tai toisen sähköpostisovelluksen uudelleen tälle tai toiselle laitteelle, Autocrypt -asetusviestin lähettäminen siitä sovelluksesta voi auttaa.</string>
+    <string name="systemmsg_cannot_decrypt">Viestin salausta ei voi purkaa.\n\n• Pyydä lähettäjää lähettämään viesti uudelleen.\n\n• Jos asensit Delta Chatin tai toisen sähköpostisovelluksen uudelleen tälle tai toiselle laitteelle, Autocrypt-asetusviestin lähettäminen siitä sovelluksesta voi auttaa.</string>
     <!-- Translators: %1$s will be replaced by sth. as "member xy added" (trailing full-stop removed). -->
     <string name="systemmsg_action_by_me">%1$s minun toimestani.</string>
     <!-- Translators: %1$s will be replaced by sth. as "member xy added" (trailing full-stop removed). %2$s will be replaced by the name/addr of the person who did this action. -->
@@ -841,7 +841,7 @@
     <string name="global_menu_view_developer_desktop">Kehittäjä</string>
     <string name="global_menu_view_developer_tools_desktop">Kehittäjätyökalut</string>
     <string name="global_menu_help_desktop">Ohje</string>
-    <string name="global_menu_help_learn_desktop">Opi lisää Delta Chatista</string>
+    <string name="global_menu_help_learn_desktop">Lisätietoja Delta Chatista</string>
     <string name="global_menu_help_contribute_desktop">Osallistu GitHubissa</string>
     <string name="global_menu_help_report_desktop">Ilmoita ongelma</string>
     <string name="global_menu_help_about_desktop">Tietoja Delta Chatista</string>
@@ -858,7 +858,7 @@
     <string name="save_desktop">Tallenna</string>
     <string name="name_desktop">Nimi</string>
     <string name="autocrypt_key_transfer_desktop">Autocrypt-avainten siirto</string>
-    <string name="initiate_key_transfer_desktop">Autocrypt -asetusviesti jakaa turvallisesti päästä-päähän-salauksen asetukset toisten Autocrypt-sopivien sovellusten kanssa. Asetukset salataan tässä näytettävällä asetuskoodilla, joka on syötettävä toiseen laitteeseen.</string>
+    <string name="initiate_key_transfer_desktop">Autocrypt-asetusviesti jakaa turvallisesti päästä-päähän-salauksen asetukset toisten Autocrypt-yhteensopivien sovellusten kanssa. Asetukset salataan tässä näytettävällä asetuskoodilla, joka on syötettävä toiseen laitteeseen.</string>
     <string name="select_group_image_desktop">Valitse ryhmän kuva</string>
     <string name="imex_progress_title_desktop">Varmuuskopioinnin tila</string>
     <string name="export_backup_desktop">Vie varmuuskopio</string>
