@@ -1061,7 +1061,10 @@ class ChatStore extends Store<ChatStoreState> {
         if (chatId === null || chatId === undefined) {
           return
         }
-        if (messageId === 0 && (eventChatId === 0 || eventChatId === this.state.chat?.id)) {
+        if (
+          messageId === 0 &&
+          (eventChatId === 0 || eventChatId === this.state.chat?.id)
+        ) {
           this.effect.refresh({ chatId })
           return
         }
