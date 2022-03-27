@@ -5,6 +5,8 @@
 ### Changed
 - Update translations (25.03.2022)
 
+### Fixed
+- remove wrong line (about send on enter) from changelog in device msg
 
 ## [1.28.0] - 2022-03-25
 
