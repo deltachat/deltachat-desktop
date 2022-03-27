@@ -1,0 +1,90 @@
+.keyboard-hints-popover,
+.keyboard-hints-box,
+.keyboard-hint-cheatsheet-dialog {
+  .keybinding {
+    display: block;
+    margin-bottom: 7px;
+
+    .key {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 4px;
+      background: lightgrey;
+      box-shadow: 0px 3px rgba(0, 0, 0, 0.35);
+      border: 1px grey solid;
+
+      &:hover,
+      &.pressed {
+        box-shadow: 0px 1px rgba(0, 0, 0, 0.35);
+        transform: translatey(2px);
+      }
+    }
+  }
+  .action {
+    display: block;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+    padding: 4px 6px;
+    margin: 4px 0px;
+
+    .heading {
+      margin-bottom: 4px;
+    }
+  }
+
+  .explainer {
+    margin-top: 14px;
+    font-size: 13px;
+  }
+}
+
+.keyboard-hints-popover,
+.keyboard-hints-box {
+  width: 260px;
+
+  padding: 15px;
+
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
+
+.keyboard-hint-cheatsheet-dialog {
+  .bp3-dialog-header {
+    .bp3-heading {
+      flex-grow: 0;
+      margin-right: 8px;
+    }
+    .keybinding {
+      display: block;
+      margin-bottom: 7px;
+      flex-grow: 1;
+      font-size: 0.84em;
+      margin-bottom: 0;
+    }
+  }
+  .keyboard-hint-dialog-body {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    padding: 4px;
+    max-height: 600px;
+    justify-content: space-evenly;
+    align-content: space-around;
+
+    .action {
+      max-width: 240px;
+    }
+
+    .line {
+      border-bottom: 0.5px #808080ab solid;
+      display: block;
+      width: 228px;
+      margin: 6px 0px;
+    }
+
+    h2 {
+      max-width: 240px;
+      font-size: 1.4em;
+    }
+  }
+}

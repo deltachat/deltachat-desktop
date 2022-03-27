@@ -22,6 +22,7 @@ import { runtime } from '../../runtime'
 import { SettingsChatsAndMedia } from './Settings-ChatsAndMedia'
 import { SettingsAdvanced } from './Settings-Advanced'
 import SettingsNotifications from './Settings-Notifications'
+import SettingsDownloadOnDemand from './Settings-DownloadOnDemand'
 
 const log = getLogger('renderer/dialogs/Settings')
 

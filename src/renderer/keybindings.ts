@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 
 import { getLogger } from '../shared/logger'
+import KeybindingCheatSheet from './components/dialogs/KeybindingCheatSheet'
 import { Screens } from './ScreenController'
 
 const log = getLogger('renderer/keybindings')
@@ -14,6 +15,7 @@ export enum KeybindAction {
   ChatList_ClearSearchInput = 'chatlist:clear-search',
   Composer_Focus = 'composer:focus',
   Settings_Open = 'settings:open',
+  KeybindingCheatSheet_Open = 'keybindinginfo:open',
   MessageList_PageUp = 'msglist:pageup',
   MessageList_PageDown = 'msglist:pagedown',
 
@@ -104,6 +106,8 @@ function keyDownEvent2Action(ev: KeyboardEvent): KeybindAction | undefined {
       return KeybindAction.MessageList_PageUp
     } else if (ev.key === 'PageDown') {
       return KeybindAction.MessageList_PageDown
+    } else if ((ev.metaKey || ev.ctrlKey) && ev.key === '/') {
+      return KeybindAction.KeybindingCheatSheet_Open
     }
   } else {
     // fire continuesly as long as button is pressed
@@ -148,6 +152,10 @@ ActionEmitter.registerHandler(KeybindAction.Settings_Open, () => {
       window.__openDialog('Settings')
     }
   }
+})
+
+ActionEmitter.registerHandler(KeybindAction.KeybindingCheatSheet_Open, () => {
+  window.__openDialog(KeybindingCheatSheet)
 })
 
 ActionEmitter.registerHandler(KeybindAction.ChatList_ExitSearch, () => {
