@@ -4,6 +4,7 @@
 
 ### Changed
 - Update translations (25.03.2022)
+- Update react-string-replace to `1.0.0`
 
 
 ## [1.28.0] - 2022-03-25
