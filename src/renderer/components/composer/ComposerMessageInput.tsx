@@ -129,10 +129,10 @@ export default class ComposerMessageInput extends React.Component<
 
     // ENTER + SHIFT
     if (e.key === 'Enter' && e.shiftKey) {
-      return 'NEWLINE'
+      return enterKeySends ? 'NEWLINE' : 'SEND'
       // ENTER + CTRL
     } else if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-      return 'SEND'
+      return enterKeySends ? 'NEWLINE' : 'SEND'
       // ENTER
     } else if (e.key === 'Enter' && !e.shiftKey) {
       return enterKeySends ? 'SEND' : 'NEWLINE'

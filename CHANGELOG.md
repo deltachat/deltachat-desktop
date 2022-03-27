@@ -10,6 +10,7 @@
 - Update emoji-mart to `^3.0.1`
 - Update @types/emoji-mart to `^3.0.9`
 - Update deltachat-node to v1.77.0
+- `ENTER + SHIFT` and `ENTER + CTRL` in the composer do now the same thing: they send or add a newline depending on the `enterKeySends` user preference
 
 ### Removed
 - remove dependency `react-qr-svg`
@@ -18,6 +19,8 @@
 - fix: hide connectivity toast when connected
 - fix random search result position (#2631) 
 - fix: signature field in Edit Profile is not labeled when empty (#2579)
+- Keyboard shortcut preview for "Send on Enter" setting
+- Keyboard shortcut reference dialog (cheetsheet), accessible via `Ctrl + /` or `Cmd + /`
 
 ## [1.28.2] - 2022-04-22
 
