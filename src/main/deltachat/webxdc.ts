@@ -23,10 +23,10 @@ const accounts_sessions: number[] = []
 
 const CSP =
   "default-src 'self';\
-  style-src 'self' 'unsafe-inline';\
-  font-src 'self' data: ;\
-  script-src 'self' 'unsafe-inline' 'unsafe-eval';\
-  img-src 'self' data: ;"
+  style-src 'self' 'unsafe-inline' blob: ;\
+  font-src 'self' data: blob: ;\
+  script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: ;\
+  img-src 'self' data: blob: ;"
 
 export default class DCWebxdc extends SplitOut {
   constructor(controller: DeltaChatController) {
