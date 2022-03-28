@@ -39,10 +39,10 @@ export default function KeybindingCheatSheet(props: {
             getKeybindings(desktopSettings).map(entry => {
               if (entry.type === 'header') {
                 return (
-                  <>
-                    <div className='line' key={entry.title + 'hr'} />
-                    <h2 key={entry.title}>{entry.title}</h2>
-                  </>
+                  <div key={entry.title}>
+                    <div className='line'/>
+                    <h2>{entry.title}</h2>
+                  </div>
                 )
               } else {
                 const { action } = entry
