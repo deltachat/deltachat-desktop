@@ -5,6 +5,8 @@
 ### Changed
 - Update translations (25.03.2022)
 
+### Fixed
+- webxdc allow `blob:` uri scheme
 
 ## [1.28.0] - 2022-03-25
 
