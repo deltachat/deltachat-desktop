@@ -7,6 +7,7 @@
 - Update react-string-replace to `1.0.0`
 
 ### Fixed
+- remove wrong line (about send on enter) from changelog in device msg
 - webxdc allow `blob:` uri scheme
 
 ## [1.28.0] - 2022-03-25

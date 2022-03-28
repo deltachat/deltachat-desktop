@@ -141,8 +141,6 @@ export default class DCLoginController extends SplitOut {
 
 🖼️Images can now be copied from the context menu
 
-↩️Sending messages on pressing enter is now the default
-
 ✨Many bugfixes and improvements
 
 Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1270---2021-03-04`
