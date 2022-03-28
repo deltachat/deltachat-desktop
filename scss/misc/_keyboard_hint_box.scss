@@ -62,6 +62,9 @@
       margin-bottom: 0;
     }
   }
+  .bp3-dialog-body {
+    overflow: scroll;
+  }
   .keyboard-hint-dialog-body {
     display: flex;
     flex-wrap: wrap;
