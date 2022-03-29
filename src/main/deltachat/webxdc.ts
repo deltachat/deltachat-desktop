@@ -233,7 +233,10 @@ If you think that's a bug and you need that permission, then please open an issu
         )
         return []
       }
-      return this.selectedAccountContext.getWebxdcStatusUpdates(Number(key), serial)
+      return this.selectedAccountContext.getWebxdcStatusUpdates(
+        Number(key),
+        serial
+      )
     })
 
     ipcMain.handle('webxdc.sendUpdate', async (event, update, description) => {
@@ -255,7 +258,7 @@ If you think that's a bug and you need that permission, then please open an issu
 
     this.controller.addListener(
       'DC_EVENT_WEBXDC_STATUS_UPDATE',
-      (_ev: any, msg_id: number, status_update_id: number) => {
+      (_ev: any, msg_id: number, _status_update_id: number) => {
         const instance = open_apps[msg_id]
         if (instance) {
           instance.win.webContents.send('webxdc.statusUpdate')
