@@ -223,7 +223,7 @@ If you think that's a bug and you need that permission, then please open an issu
       event.sender.toggleDevTools()
     })
 
-    ipcMain.handle('webxdc.getAllUpdates', async event => {
+    ipcMain.handle('webxdc.getAllUpdates', async (event, serial = 0) => {
       const key = Object.keys(open_apps).find(
         key => open_apps[Number(key)].win.webContents === event.sender
       )
@@ -233,7 +233,7 @@ If you think that's a bug and you need that permission, then please open an issu
         )
         return []
       }
-      return this.selectedAccountContext.getWebxdcStatusUpdates(Number(key))
+      return this.selectedAccountContext.getWebxdcStatusUpdates(Number(key), serial)
     })
 
     ipcMain.handle('webxdc.sendUpdate', async (event, update, description) => {
@@ -258,11 +258,7 @@ If you think that's a bug and you need that permission, then please open an issu
       (_ev: any, msg_id: number, status_update_id: number) => {
         const instance = open_apps[msg_id]
         if (instance) {
-          const status_update = this.selectedAccountContext.getWebxdcStatusUpdates(
-            msg_id,
-            status_update_id
-          )
-          instance.win.webContents.send('webxdc.statusUpdate', status_update[0])
+          instance.win.webContents.send('webxdc.statusUpdate')
         }
       }
     )
