@@ -77,7 +77,10 @@
       width: 100px;
       height: 100px;
       border-radius: 100%;
-      user-select: none;
+      -webkit-user-select: none;
+         -moz-user-select: none;
+          -ms-user-select: none;
+              user-select: none;
       pointer-events: none;
     }
     span {
@@ -172,8 +175,8 @@
     background-color: unset;
     border: none;
 
-    text-align: center;
-    line-height: 40px;
+    text-align: left;
+    line-height: normal;
     color: var(--globalText);
   }
 
