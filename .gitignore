@@ -83,3 +83,6 @@ src/shared/build-info.ts
 embedded.provisionprofile
 
 stub.js
+
+# pnpm lockfile
+pnpm-lock.yaml
