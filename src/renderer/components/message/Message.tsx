@@ -431,7 +431,12 @@ const Message = (props: {
           })}
           onClick={onClickMessageBody}
         >
-          {message.quote !== null && <Quote quote={message.quote} />}
+          {message.quote !== null && (
+            <Quote
+              quote={message.quote}
+              isSticker={message.viewType === C.DC_MSG_STICKER}
+            />
+          )}
           {message.file &&
             !isSetupmessage &&
             message.viewType !== C.DC_MSG_WEBXDC && (
@@ -475,7 +480,13 @@ const Message = (props: {
 
 export default Message
 
-export const Quote = ({ quote }: { quote: MessageQuote }) => {
+export const Quote = ({
+  quote,
+  isSticker,
+}: {
+  quote: MessageQuote
+  isSticker: Boolean
+}) => {
   return (
     <div
       className='quote-background'
@@ -490,7 +501,7 @@ export const Quote = ({ quote }: { quote: MessageQuote }) => {
       >
         <div
           className='quote-author'
-          style={{ color: quote.message?.displayColor }}
+          style={!isSticker ? { color: quote.message?.displayColor } : {}}
         >
           {quote.message &&
             getAuthorName(
