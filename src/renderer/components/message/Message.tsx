@@ -497,7 +497,9 @@ export const Quote = ({
     >
       <div
         className='quote has-message'
-        style={{ borderLeftColor: quote.message?.displayColor }}
+        style={
+          !isSticker ? { borderLeftColor: quote.message?.displayColor } : {}
+        }
       >
         <div
           className='quote-author'
