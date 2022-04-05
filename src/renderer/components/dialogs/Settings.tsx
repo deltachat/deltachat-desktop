@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/dist/constants'
-import { Elevation, H5, Card, Switch } from '@blueprintjs/core'
+import { Elevation, H5, Card } from '@blueprintjs/core'
 
 const { ipcRenderer } = window.electron_functions
 import { SettingsContext, useTranslationFunction } from '../../contexts'
