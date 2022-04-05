@@ -15,6 +15,7 @@ import {
 } from './DeltaDialog'
 import { DialogProps } from './DialogController'
 
+
 const WEBRTC_INSTANCE_JITSI = 'https://meet.jit.si/$ROOM'
 
 export function SettingsExperimentalFeatures({
@@ -56,7 +57,6 @@ export function SettingsExperimentalFeatures({
 
   return (
     <>
-      <H5>{tx('pref_experimental_features')}</H5>
       {renderDTSettingSwitch({
         key: 'enableOnDemandLocationStreaming',
         label: tx('pref_on_demand_location_streaming'),
@@ -134,6 +134,7 @@ export function EditVideochatInstanceDialog({
   }
 
   return (
+      
     <DeltaDialogBase
       onClose={onClose}
       isOpen={isOpen}
@@ -146,7 +147,7 @@ export function EditVideochatInstanceDialog({
       }}
       fixed
     >
-      <DeltaDialogHeader title={tx('videochat')} />
+      <DeltaDialogHeader title={tx('videochat')} showBackButton/>
       <DeltaDialogBody>
         <Card elevation={Elevation.ONE}>
           <div

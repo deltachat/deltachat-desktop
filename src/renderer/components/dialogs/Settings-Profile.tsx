@@ -73,7 +73,6 @@ export default function SettingsProfile({
   const profileBlobUrl = runtime.transformBlobURL(profileImagePreview)
   return (
     <>
-      <Card elevation={Elevation.ONE} style={{ paddingTop: '0px' }}>
         <div
           className='profile-image-username'
           style={{ marginBottom: '10px' }}
@@ -124,7 +123,6 @@ export default function SettingsProfile({
         >
           {tx('connectivity') + ' ' + connectivityString}
         </SettingsButton>
-      </Card>
     </>
   )
 }

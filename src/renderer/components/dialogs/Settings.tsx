@@ -8,10 +8,6 @@ import { SettingsContext, useTranslationFunction } from '../../contexts'
 
 import { DesktopSettingsType, RC_Config } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
-import SettingsAutodelete from './Settings-Autodelete'
-import SettingsManageKeys from './Settings-ManageKeys'
-import SettingsEncryption from './Settings-Encryption'
-import SettingsImapFolderHandling from './Settings-ImapFolderHandling'
 import { SettingsExperimentalFeatures } from './Settings-ExperimentalFeatures'
 import {
   DeltaDialogBase,
@@ -19,13 +15,12 @@ import {
   DeltaDialogBody,
   DeltaSwitch2,
 } from './DeltaDialog'
-import SettingsBackup from './Settings-Backup'
 import SettingsAppearance from './Settings-Appearance'
 import SettingsProfile from './Settings-Profile'
 import { getLogger } from '../../../shared/logger'
-import SettingsCommunication from './Settings-Communication'
 import { runtime } from '../../runtime'
-import SettingsDownloadOnDemand from './Settings-DownloadOnDemand'
+import { SettingsChatsAndMedia } from './Settings-ChatsAndMedia'
+import { SettingsAdvanced } from './Settings-Advanced'
 
 const log = getLogger('renderer/dialogs/Settings')
 
@@ -37,6 +32,16 @@ export function SettingsButton(props: any) {
   const { onClick, children, ...otherProps } = props
   return (
     <div className='SettingsButton' onClick={onClick}>
+      <button {...otherProps}>{children}</button>
+    </div>
+  )
+}
+
+export function SettingsIconButton(props: any) {
+  const { onClick, iconName, children, ...otherProps } = props
+  return (
+    <div className='SettingsIconButton' onClick={onClick}>
+      <div className='Icon' style={{WebkitMask: 'url(../images/' + iconName + '.svg) no-repeat center'}}></div>
       <button {...otherProps}>{children}</button>
     </div>
   )
@@ -117,6 +122,8 @@ export default function Settings(props: DialogProps) {
   const { desktopSettings, setDesktopSetting } = useContext(SettingsContext)
 
   const tx = useTranslationFunction()
+  const [settingsMode, setSettingsMode] = useState('main')
+
 
   /*
    * Saves settings for the Deltachat Desktop
@@ -193,28 +200,6 @@ export default function Settings(props: DialogProps) {
     )
   }
 
-  const renderDeltaSwitch = (
-    configKey: string,
-    label: string,
-    disabled?: boolean
-  ) => {
-    disabled = disabled === true ? true : false
-
-    const configValue = state.settings[configKey]
-    return (
-      <Switch
-        checked={configValue === '1'}
-        className={configValue === '1' ? 'active' : 'inactive'}
-        label={label}
-        onChange={() =>
-          handleDeltaSettingsChange(configKey, flipDeltaBoolean(configValue))
-        }
-        alignIndicator='right'
-        disabled={disabled}
-      />
-    )
-  }
-
   const renderDeltaSwitch2: RenderDeltaSwitch2Type = ({
     key,
     label,
@@ -252,69 +237,120 @@ export default function Settings(props: DialogProps) {
 
     return (
       <>
-        <DeltaDialogBody>
-          <SettingsProfile
-            onClose={props.onClose}
-            addr={settings['addr']}
-            displayname={settings['displayname']}
-            state={state}
-            handleDeltaSettingsChange={handleDeltaSettingsChange}
+          {settingsMode === 'main' && (
+            <>
+            <DeltaDialogHeader
+              title={tx('menu_settings')}
+              onClose={onClose}
+              showCloseButton={true}
+            />
+            <DeltaDialogBody>
+            <Card elevation={Elevation.ONE} style={{ paddingTop: '0px' }}>
+              <SettingsProfile
+                onClose={props.onClose}
+                addr={settings['addr']}
+                displayname={settings['displayname']}
+                state={state}
+                handleDeltaSettingsChange={handleDeltaSettingsChange}
+              />
+              <br />
+              <SettingsIconButton iconName='forum' onClick={() => setSettingsMode('chats_and_media')}>
+                {tx('pref_chats_and_media')}
+              </SettingsIconButton>
+              <SettingsButton onClick={() => setSettingsMode('appearance')}>
+                <H5>{tx('pref_appearance')}</H5>
+              </SettingsButton>
+              <SettingsButton onClick={() => setSettingsMode('advanced')}>
+                <H5>{tx('menu_advanced')}</H5>
+              </SettingsButton>
+              <SettingsButton onClick={() => setSettingsMode('experimental_features')}>
+                <H5>{tx('pref_experimental_features')}</H5>
+              </SettingsButton>
+            </Card>
+          </DeltaDialogBody>
+        </>
+        )}
+        {settingsMode === 'experimental_features' && (
+          <>
+          <DeltaDialogHeader
+            title={tx('pref_experimental_features')}
+            showBackButton={true}
+            onClickBack={() => setSettingsMode('main')}
+            showCloseButton={true}
+            onClose={onClose}
           />
-          <Card elevation={Elevation.ONE}>
-            <SettingsCommunication
-              handleDeltaSettingsChange={handleDeltaSettingsChange}
-              settings={settings}
-            />
-            <SettingsDownloadOnDemand
-              handleDeltaSettingsChange={handleDeltaSettingsChange}
-              settings={settings}
-            />
-            <br />
-            <H5>{tx('pref_privacy')}</H5>
-            {renderDeltaSwitch('mdns_enabled', tx('pref_read_receipts'))}
-            <br />
-            <SettingsAutodelete
-              handleDeltaSettingsChange={handleDeltaSettingsChange}
-              settings={settings}
-            />
-          </Card>
-          <SettingsAppearance
-            handleDesktopSettingsChange={handleDesktopSettingsChange}
-            rc={rc}
-          />
-          <SettingsEncryption renderDeltaSwitch={renderDeltaSwitch} />
-          <Card elevation={Elevation.ONE}>
-            <H5>{tx('pref_chats_and_media')}</H5>
-            {renderDTSettingSwitch({
-              key: 'enterKeySends',
-              label: tx('pref_enter_sends_explain'),
-            })}
-            {renderDTSettingSwitch({
-              key: 'notifications',
-              label: tx('pref_notifications_explain'),
-            })}
-            {renderDTSettingSwitch({
-              key: 'showNotificationContent',
-              label: tx('pref_show_notification_content_explain'),
-              disabled: !desktopSettings['notifications'],
-            })}
-          </Card>
-          <Card elevation={Elevation.ONE}>
-            <SettingsExperimentalFeatures
+          <DeltaDialogBody>
+            <Card elevation={Elevation.ONE}>
+              <SettingsExperimentalFeatures
               renderDTSettingSwitch={renderDTSettingSwitch}
               state={state}
               handleDeltaSettingsChange={handleDeltaSettingsChange}
               handleDesktopSettingsChange={handleDesktopSettingsChange}
+              />
+            </Card>
+          </DeltaDialogBody>
+          </>
+          )}        
+          {settingsMode === 'chats_and_media' && (
+            <>
+            <DeltaDialogHeader
+              title={tx('pref_chats_and_media')}
+              showBackButton={true}
+              onClickBack={() => setSettingsMode('main')}
+              showCloseButton={true}
+              onClose={onClose}
             />
-          </Card>
-          <SettingsImapFolderHandling
-            state={state}
-            renderDeltaSwitch2={renderDeltaSwitch2}
-          />
-          <SettingsManageKeys />
-          <SettingsBackup />
-          {/* <SettingsWebxdc />  hide for now, see https://github.com/deltachat/deltachat-desktop/issues/2638 */}
-        </DeltaDialogBody>
+            <DeltaDialogBody>
+              <Card elevation={Elevation.ONE}>
+                <SettingsChatsAndMedia
+                state={state}
+                desktopSettings={desktopSettings}
+                handleDeltaSettingsChange={handleDeltaSettingsChange}
+                renderDeltaSwitch2={renderDeltaSwitch2}
+                renderDTSettingSwitch={renderDTSettingSwitch}
+                />
+              </Card>
+            </DeltaDialogBody>
+            </>
+            )}
+            {settingsMode === 'appearance' && (
+            <>
+            <DeltaDialogHeader
+              title={tx('pref_appearance')}
+              showBackButton={true}
+              onClickBack={() => setSettingsMode('main')}
+              showCloseButton={true}
+              onClose={onClose}
+            />
+            <DeltaDialogBody>
+              <Card elevation={Elevation.ONE}>
+                <SettingsAppearance
+                  handleDesktopSettingsChange={handleDesktopSettingsChange}
+                  rc={rc}
+                />
+              </Card>
+            </DeltaDialogBody>
+            </>
+            )}
+            {settingsMode === 'advanced' && (
+            <>
+            <DeltaDialogHeader
+              title={tx('menu_advanced')}
+              showBackButton={true}
+              onClickBack={() => setSettingsMode('main')}
+              showCloseButton={true}
+              onClose={onClose}
+            />
+            <DeltaDialogBody>
+              <Card elevation={Elevation.ONE}>
+                <SettingsAdvanced
+                  state={state}
+                  renderDeltaSwitch2={renderDeltaSwitch2}
+                />
+              </Card>
+            </DeltaDialogBody>
+            </>
+            )}
       </>
     )
   }
@@ -357,7 +393,6 @@ export default function Settings(props: DialogProps) {
   }, [])
 
   const { onClose } = props
-  const title = tx('menu_settings')
 
   return (
     <DeltaDialogBase
@@ -369,11 +404,6 @@ export default function Settings(props: DialogProps) {
       className='SettingsDialog'
       fixed
     >
-      <DeltaDialogHeader
-        title={title}
-        onClose={onClose}
-        showCloseButton={true}
-      />
       {renderDialogContent(state)}
     </DeltaDialogBase>
   )

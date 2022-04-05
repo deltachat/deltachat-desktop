@@ -7,7 +7,7 @@ import {
   Callout,
   Spinner,
 } from '@blueprintjs/core'
-import { SettingsButton } from './Settings'
+import { RenderDeltaSwitch2Type, SettingsButton } from './Settings'
 import { ScreenContext } from '../../contexts'
 import { DialogProps } from './DialogController'
 import InputTransferKey from './AutocryptSetupMessage'
@@ -124,17 +124,19 @@ export function SendAutocryptSetupMessage({
 }
 
 export default function SettingsEncryptio({
-  renderDeltaSwitch,
+  renderDeltaSwitch2,
 }: {
-  renderDeltaSwitch: Function
+  renderDeltaSwitch2: RenderDeltaSwitch2Type
 }) {
   const { openDialog } = useContext(ScreenContext)
   const tx = window.static_translate
   return (
     <>
-      <Card elevation={Elevation.ONE}>
         <H5>{tx('autocrypt')}</H5>
-        {renderDeltaSwitch('e2ee_enabled', tx('autocrypt_prefer_e2ee'))}
+        {renderDeltaSwitch2({
+          key: 'e2ee_enabled', 
+          label: tx('autocrypt_prefer_e2ee')
+        })}
         <SettingsButton
           style={{ color: 'var(--colorPrimary)', fontWeight: 'lighter' }}
           onClick={() => openDialog(SendAutocryptSetupMessage)}
@@ -142,7 +144,6 @@ export default function SettingsEncryptio({
           {tx('autocrypt_send_asm_button')}
         </SettingsButton>
         <div className='bp3-callout'>{tx('autocrypt_explain')}</div>
-      </Card>
     </>
   )
 }
