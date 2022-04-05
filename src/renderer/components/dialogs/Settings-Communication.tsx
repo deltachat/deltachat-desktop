@@ -49,7 +49,7 @@ export default function SettingsCommunication(props: any) {
 
   return (
     <>
-      <H5>{tx('pref_communication')}</H5>
+      <H5>{tx('pref_chats')}</H5>
       <SettingsSelector
         onClick={onOpenDialog.bind(null, false)}
         currentValue={showToString(settings['show_emails'])}

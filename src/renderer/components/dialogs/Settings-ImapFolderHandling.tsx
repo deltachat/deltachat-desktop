@@ -15,7 +15,6 @@ export default function SettingsImapFolderHandling({
 
   return (
     <>
-      <Card elevation={Elevation.ONE}>
         <H5>{tx('pref_imap_folder_handling')}</H5>
         {renderDeltaSwitch2({
           label: tx('pref_watch_sent_folder'),
@@ -40,7 +39,6 @@ export default function SettingsImapFolderHandling({
           key: 'only_fetch_mvbox',
           description: tx('pref_only_fetch_mvbox_explain'),
         })}
-      </Card>
     </>
   )
 }

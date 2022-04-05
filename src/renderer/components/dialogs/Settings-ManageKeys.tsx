@@ -82,7 +82,6 @@ export default function SettingsManageKeys() {
   const tx = window.static_translate
   return (
     <>
-      <Card elevation={Elevation.ONE}>
         <H5>{tx('pref_managekeys_menu_title')}</H5>
         <SettingsButton onClick={onKeysExport}>
           {tx('pref_managekeys_export_secret_keys')}...
@@ -90,7 +89,6 @@ export default function SettingsManageKeys() {
         <SettingsButton onClick={onKeysImport}>
           {tx('pref_managekeys_import_secret_keys')}...
         </SettingsButton>
-      </Card>
     </>
   )
 }

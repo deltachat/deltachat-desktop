@@ -269,8 +269,7 @@ export default function SettingsAppearance({
 
   const tx = useTranslationFunction()
   return (
-    <Card elevation={Elevation.ONE}>
-      <H5>{tx('pref_appearance')}</H5>
+    <>
       <SettingsSelector
         onClick={onOpenSelectThemeDialog}
         currentValue={shortCurrentValue()}
@@ -286,6 +285,6 @@ export default function SettingsAppearance({
             : handleDesktopSettingsChange('chatViewBgImg', val)
         }}
       />
-    </Card>
+    </>
   )
 }
