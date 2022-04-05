@@ -22,6 +22,7 @@ import { runtime } from '../../runtime'
 import { SettingsChatsAndMedia } from './Settings-ChatsAndMedia'
 import { SettingsAdvanced } from './Settings-Advanced'
 
+
 const log = getLogger('renderer/dialogs/Settings')
 
 export function flipDeltaBoolean(value: string) {
