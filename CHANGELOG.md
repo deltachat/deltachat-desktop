@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.28.1] - 2022-04-05
+
 ### Changed
 - Update translations (25.03.2022)
 - Update react-string-replace to `1.0.0`
@@ -1516,7 +1518,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.28.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.28.1...HEAD
+
+[1.28.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.28.0...v1.28.1
 
 [1.28.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.27.2...v1.28.0
 
