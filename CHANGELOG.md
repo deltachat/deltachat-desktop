@@ -4,10 +4,12 @@
 
 ### Changed
 - Update electron to `14.2.9`
+- Enable unread badge counter on windows
 
 ### Fixed
 - fix Layout issues in Settings window
 - Fix chat background on windows
+- fix tray icon unread indicator on windows
 
 ## [1.28.1] - 2022-04-05
 
