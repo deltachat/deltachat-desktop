@@ -7,6 +7,7 @@
 
 ### Fixed
 - fix Layout issues in Settings window
+- Fix chat background on windows
 
 ## [1.28.1] - 2022-04-05
 

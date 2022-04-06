@@ -6,7 +6,7 @@ import { LogHandler } from './log-handler'
 import { ExtendedAppMainProcess } from './types'
 import * as mainWindow from './windows/main'
 import { openHelpWindow } from './windows/help'
-import { join } from 'path'
+import { join, posix, sep } from 'path'
 import { DesktopSettings } from './desktop_settings'
 import { getConfigPath } from './application-constants'
 import { inspect } from 'util'
@@ -131,7 +131,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
   })
 
   ipcMain.on('get-config-path', ev => {
-    ev.returnValue = getConfigPath()
+    ev.returnValue = getConfigPath().split(sep).join(posix.sep)
   })
 
   ipcMain.on('get-rc-config', ev => {
