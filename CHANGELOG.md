@@ -13,7 +13,6 @@
 ### Changed
 - Update translations (25.03.2022)
 - Update react-string-replace to `1.0.0`
-- Update electron to `14.2.9`
 
 ### Fixed
 - remove wrong line (about send on enter) from changelog in device msg
