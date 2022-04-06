@@ -7,11 +7,11 @@ mergeable:
         validate:
           - do: dependent
             changed:
-              file: ['src/**']
+              file: 'src/**'
               required: ['CHANGELOG.md']
           - do: dependent
             changed:
-              file: ['scss/**']
+              file: 'scss/**'
               required: ['CHANGELOG.md']
     fail:
       - do: checks
