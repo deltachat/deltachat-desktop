@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- Update electron to `14.2.9`
+
 ### Fixed
 - fix Layout issues in Settings window
 
