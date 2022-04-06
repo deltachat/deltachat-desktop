@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- fix Layout issues in Settings window
+
 ### Changed
 - Update translations (25.03.2022)
 - Update react-string-replace to `1.0.0`
