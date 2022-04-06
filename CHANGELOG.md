@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- fix Layout issues in Settings window
+
 ## [1.28.1] - 2022-04-05
 
 ### Changed
