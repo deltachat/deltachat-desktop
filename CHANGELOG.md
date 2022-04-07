@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.28.2] - 2022-04-22
+
 ### Changed
 - Update electron to `14.2.9`
 - Enable unread badge counter on windows
@@ -1527,7 +1529,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.28.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.28.2...HEAD
+
+[1.28.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.28.1...v1.28.2
 
 [1.28.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.28.0...v1.28.1
 
