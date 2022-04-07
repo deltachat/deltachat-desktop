@@ -188,6 +188,7 @@ export default function ChatList(props: {
   // follow chat after loading or when it's position in the chatlist changes
   useEffect(() => {
     if (isSearchActive) {
+      scrollSelectedChatIntoView(0)
       // search is active, don't scroll
       return
     }
