@@ -51,6 +51,7 @@ tsc-dist/renderer/
 **/*.tsbuildinfo
 **/*.css.map
 html-dist/report.htm
+html-dist/bundle.js.map
 node_modules/typescript/
 node_modules/@babel/
 
