@@ -1,12 +1,5 @@
 import React, { useContext, useState } from 'react'
-import {
-  Card,
-  Elevation,
-  H5,
-  Classes,
-  Callout,
-  Spinner,
-} from '@blueprintjs/core'
+import { Card, H5, Classes, Callout, Spinner } from '@blueprintjs/core'
 import { RenderDeltaSwitch2Type, SettingsButton } from './Settings'
 import { ScreenContext } from '../../contexts'
 import { DialogProps } from './DialogController'
@@ -132,18 +125,18 @@ export default function SettingsEncryptio({
   const tx = window.static_translate
   return (
     <>
-        <H5>{tx('autocrypt')}</H5>
-        {renderDeltaSwitch2({
-          key: 'e2ee_enabled', 
-          label: tx('autocrypt_prefer_e2ee')
-        })}
-        <SettingsButton
-          style={{ color: 'var(--colorPrimary)', fontWeight: 'lighter' }}
-          onClick={() => openDialog(SendAutocryptSetupMessage)}
-        >
-          {tx('autocrypt_send_asm_button')}
-        </SettingsButton>
-        <div className='bp3-callout'>{tx('autocrypt_explain')}</div>
+      <H5>{tx('autocrypt')}</H5>
+      {renderDeltaSwitch2({
+        key: 'e2ee_enabled',
+        label: tx('autocrypt_prefer_e2ee'),
+      })}
+      <SettingsButton
+        style={{ color: 'var(--colorPrimary)', fontWeight: 'lighter' }}
+        onClick={() => openDialog(SendAutocryptSetupMessage)}
+      >
+        {tx('autocrypt_send_asm_button')}
+      </SettingsButton>
+      <div className='bp3-callout'>{tx('autocrypt_explain')}</div>
     </>
   )
 }

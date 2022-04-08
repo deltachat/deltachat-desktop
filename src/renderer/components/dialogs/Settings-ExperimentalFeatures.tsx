@@ -1,5 +1,5 @@
 import React, { useState, useContext, FormEvent } from 'react'
-import { Card, Elevation, H5, Radio, RadioGroup } from '@blueprintjs/core'
+import { Card, Elevation, Radio, RadioGroup } from '@blueprintjs/core'
 import {
   RenderDTSettingSwitchType,
   SettingsSelector,
@@ -14,7 +14,6 @@ import {
   DeltaDialogOkCancelFooter,
 } from './DeltaDialog'
 import { DialogProps } from './DialogController'
-
 
 const WEBRTC_INSTANCE_JITSI = 'https://meet.jit.si/$ROOM'
 
@@ -134,7 +133,6 @@ export function EditVideochatInstanceDialog({
   }
 
   return (
-      
     <DeltaDialogBase
       onClose={onClose}
       isOpen={isOpen}
@@ -147,7 +145,7 @@ export function EditVideochatInstanceDialog({
       }}
       fixed
     >
-      <DeltaDialogHeader title={tx('videochat')} showBackButton/>
+      <DeltaDialogHeader title={tx('videochat')} showBackButton />
       <DeltaDialogBody>
         <Card elevation={Elevation.ONE}>
           <div
