@@ -4,7 +4,7 @@ import {
   useTranslationFunction,
 } from '../../contexts'
 import React, { useContext, useEffect, useState } from 'react'
-import { H5, H6, Card, Elevation, Icon } from '@blueprintjs/core'
+import { H6, Icon } from '@blueprintjs/core'
 import { DeltaBackend } from '../../delta-remote'
 import { ThemeManager } from '../../ThemeManager'
 import { SettingsSelector } from './Settings'

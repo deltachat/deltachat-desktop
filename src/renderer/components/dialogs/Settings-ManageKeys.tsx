@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Elevation, H5 } from '@blueprintjs/core'
+import { H5 } from '@blueprintjs/core'
 import { SettingsButton } from './Settings'
 import type { OpenDialogOptions } from 'electron'
 import { DeltaBackend } from '../../delta-remote'
@@ -82,13 +82,13 @@ export default function SettingsManageKeys() {
   const tx = window.static_translate
   return (
     <>
-        <H5>{tx('pref_managekeys_menu_title')}</H5>
-        <SettingsButton onClick={onKeysExport}>
-          {tx('pref_managekeys_export_secret_keys')}...
-        </SettingsButton>
-        <SettingsButton onClick={onKeysImport}>
-          {tx('pref_managekeys_import_secret_keys')}...
-        </SettingsButton>
+      <H5>{tx('pref_managekeys_menu_title')}</H5>
+      <SettingsButton onClick={onKeysExport}>
+        {tx('pref_managekeys_export_secret_keys')}...
+      </SettingsButton>
+      <SettingsButton onClick={onKeysImport}>
+        {tx('pref_managekeys_import_secret_keys')}...
+      </SettingsButton>
     </>
   )
 }

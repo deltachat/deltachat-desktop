@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/dist/constants'
-import { Elevation, H5, Card } from '@blueprintjs/core'
+import { Elevation, Card } from '@blueprintjs/core'
 
 const { ipcRenderer } = window.electron_functions
 import { SettingsContext, useTranslationFunction } from '../../contexts'
@@ -21,7 +21,7 @@ import { getLogger } from '../../../shared/logger'
 import { runtime } from '../../runtime'
 import { SettingsChatsAndMedia } from './Settings-ChatsAndMedia'
 import { SettingsAdvanced } from './Settings-Advanced'
-
+import SettingsNotifications from './Settings-Notifications'
 
 const log = getLogger('renderer/dialogs/Settings')
 
@@ -42,7 +42,12 @@ export function SettingsIconButton(props: any) {
   const { onClick, iconName, children, ...otherProps } = props
   return (
     <div className='SettingsIconButton' onClick={onClick}>
-      <div className='Icon' style={{WebkitMask: 'url(../images/' + iconName + '.svg) no-repeat center'}}></div>
+      <div
+        className='Icon'
+        style={{
+          WebkitMask: 'url(../images/' + iconName + '.svg) no-repeat center',
+        }}
+      ></div>
       <button {...otherProps}>{children}</button>
     </div>
   )
@@ -124,7 +129,6 @@ export default function Settings(props: DialogProps) {
 
   const tx = useTranslationFunction()
   const [settingsMode, setSettingsMode] = useState('main')
-
 
   /*
    * Saves settings for the Deltachat Desktop
@@ -238,62 +242,80 @@ export default function Settings(props: DialogProps) {
 
     return (
       <>
-          {settingsMode === 'main' && (
-            <>
+        {settingsMode === 'main' && (
+          <>
             <DeltaDialogHeader
               title={tx('menu_settings')}
               onClose={onClose}
               showCloseButton={true}
             />
             <DeltaDialogBody>
-            <Card elevation={Elevation.ONE} style={{ paddingTop: '0px' }}>
-              <SettingsProfile
-                onClose={props.onClose}
-                addr={settings['addr']}
-                displayname={settings['displayname']}
-                state={state}
-                handleDeltaSettingsChange={handleDeltaSettingsChange}
-              />
-              <br />
-              <SettingsIconButton iconName='forum' onClick={() => setSettingsMode('chats_and_media')}>
-                {tx('pref_chats_and_media')}
-              </SettingsIconButton>
-              <SettingsButton onClick={() => setSettingsMode('appearance')}>
-                <H5>{tx('pref_appearance')}</H5>
-              </SettingsButton>
-              <SettingsButton onClick={() => setSettingsMode('advanced')}>
-                <H5>{tx('menu_advanced')}</H5>
-              </SettingsButton>
-              <SettingsButton onClick={() => setSettingsMode('experimental_features')}>
-                <H5>{tx('pref_experimental_features')}</H5>
-              </SettingsButton>
-            </Card>
-          </DeltaDialogBody>
-        </>
+              <Card elevation={Elevation.ONE} style={{ paddingTop: '0px' }}>
+                <SettingsProfile
+                  onClose={props.onClose}
+                  addr={settings['addr']}
+                  displayname={settings['displayname']}
+                  state={state}
+                  handleDeltaSettingsChange={handleDeltaSettingsChange}
+                />
+                <br />
+                <SettingsIconButton
+                  iconName='forum'
+                  onClick={() => setSettingsMode('chats_and_media')}
+                >
+                  {tx('pref_chats_and_media')}
+                </SettingsIconButton>
+                <SettingsIconButton
+                  iconName='bell'
+                  onClick={() => setSettingsMode('notifications')}
+                >
+                  {tx('pref_notifications')}
+                </SettingsIconButton>
+                <SettingsIconButton
+                  iconName='brightness-6'
+                  onClick={() => setSettingsMode('appearance')}
+                >
+                  {tx('pref_appearance')}
+                </SettingsIconButton>
+                <SettingsIconButton
+                  iconName='code-tags'
+                  onClick={() => setSettingsMode('advanced')}
+                >
+                  {tx('menu_advanced')}
+                </SettingsIconButton>
+                <SettingsIconButton
+                  iconName='test-tube'
+                  onClick={() => setSettingsMode('experimental_features')}
+                >
+                  {tx('pref_experimental_features')}
+                </SettingsIconButton>
+              </Card>
+            </DeltaDialogBody>
+          </>
         )}
         {settingsMode === 'experimental_features' && (
           <>
-          <DeltaDialogHeader
-            title={tx('pref_experimental_features')}
-            showBackButton={true}
-            onClickBack={() => setSettingsMode('main')}
-            showCloseButton={true}
-            onClose={onClose}
-          />
-          <DeltaDialogBody>
-            <Card elevation={Elevation.ONE}>
-              <SettingsExperimentalFeatures
-              renderDTSettingSwitch={renderDTSettingSwitch}
-              state={state}
-              handleDeltaSettingsChange={handleDeltaSettingsChange}
-              handleDesktopSettingsChange={handleDesktopSettingsChange}
-              />
-            </Card>
-          </DeltaDialogBody>
+            <DeltaDialogHeader
+              title={tx('pref_experimental_features')}
+              showBackButton={true}
+              onClickBack={() => setSettingsMode('main')}
+              showCloseButton={true}
+              onClose={onClose}
+            />
+            <DeltaDialogBody>
+              <Card elevation={Elevation.ONE}>
+                <SettingsExperimentalFeatures
+                  renderDTSettingSwitch={renderDTSettingSwitch}
+                  state={state}
+                  handleDeltaSettingsChange={handleDeltaSettingsChange}
+                  handleDesktopSettingsChange={handleDesktopSettingsChange}
+                />
+              </Card>
+            </DeltaDialogBody>
           </>
-          )}        
-          {settingsMode === 'chats_and_media' && (
-            <>
+        )}
+        {settingsMode === 'chats_and_media' && (
+          <>
             <DeltaDialogHeader
               title={tx('pref_chats_and_media')}
               showBackButton={true}
@@ -304,18 +326,36 @@ export default function Settings(props: DialogProps) {
             <DeltaDialogBody>
               <Card elevation={Elevation.ONE}>
                 <SettingsChatsAndMedia
-                state={state}
-                desktopSettings={desktopSettings}
-                handleDeltaSettingsChange={handleDeltaSettingsChange}
-                renderDeltaSwitch2={renderDeltaSwitch2}
-                renderDTSettingSwitch={renderDTSettingSwitch}
+                  state={state}
+                  handleDeltaSettingsChange={handleDeltaSettingsChange}
+                  renderDeltaSwitch2={renderDeltaSwitch2}
+                  renderDTSettingSwitch={renderDTSettingSwitch}
                 />
               </Card>
             </DeltaDialogBody>
-            </>
-            )}
-            {settingsMode === 'appearance' && (
-            <>
+          </>
+        )}
+        {settingsMode === 'notifications' && (
+          <>
+            <DeltaDialogHeader
+              title={tx('pref_notifications')}
+              showBackButton={true}
+              onClickBack={() => setSettingsMode('main')}
+              showCloseButton={true}
+              onClose={onClose}
+            />
+            <DeltaDialogBody>
+              <Card elevation={Elevation.ONE}>
+                <SettingsNotifications
+                  desktopSettings={desktopSettings}
+                  renderDTSettingSwitch={renderDTSettingSwitch}
+                />
+              </Card>
+            </DeltaDialogBody>
+          </>
+        )}
+        {settingsMode === 'appearance' && (
+          <>
             <DeltaDialogHeader
               title={tx('pref_appearance')}
               showBackButton={true}
@@ -331,10 +371,10 @@ export default function Settings(props: DialogProps) {
                 />
               </Card>
             </DeltaDialogBody>
-            </>
-            )}
-            {settingsMode === 'advanced' && (
-            <>
+          </>
+        )}
+        {settingsMode === 'advanced' && (
+          <>
             <DeltaDialogHeader
               title={tx('menu_advanced')}
               showBackButton={true}
@@ -350,8 +390,8 @@ export default function Settings(props: DialogProps) {
                 />
               </Card>
             </DeltaDialogBody>
-            </>
-            )}
+          </>
+        )}
       </>
     )
   }

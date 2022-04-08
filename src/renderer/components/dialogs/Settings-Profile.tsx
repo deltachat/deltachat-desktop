@@ -73,56 +73,53 @@ export default function SettingsProfile({
   const profileBlobUrl = runtime.transformBlobURL(profileImagePreview)
   return (
     <>
-        <div
-          className='profile-image-username'
-          style={{ marginBottom: '10px' }}
-        >
-          <div className='profile-image-selector'>
-            {profileImagePreview ? (
-              <ClickForFullscreenAvatarWrapper filename={profileBlobUrl}>
-                <img src={profileBlobUrl} alt={tx('pref_profile_photo')} />
-              </ClickForFullscreenAvatarWrapper>
-            ) : (
-              <span style={{ backgroundColor: state.selfContact.color }}>
-                {initial}
-              </span>
-            )}
-          </div>
-          <div className='profile-displayname-addr'>
-            <div className='displayname'>{state.settings.displayname}</div>
-            <div className='addr'>{addr}</div>
-          </div>
+      <div className='profile-image-username' style={{ marginBottom: '10px' }}>
+        <div className='profile-image-selector'>
+          {profileImagePreview ? (
+            <ClickForFullscreenAvatarWrapper filename={profileBlobUrl}>
+              <img src={profileBlobUrl} alt={tx('pref_profile_photo')} />
+            </ClickForFullscreenAvatarWrapper>
+          ) : (
+            <span style={{ backgroundColor: state.selfContact.color }}>
+              {initial}
+            </span>
+          )}
         </div>
-        <SettingsButton
-          onClick={() =>
-            openDialog(SettingsProfileDialog, {
-              state,
-              handleDeltaSettingsChange,
-            })
-          }
-        >
-          {tx('pref_edit_profile')}
-        </SettingsButton>
-        <SettingsButton
-          onClick={() =>
-            openDialog(SettingsAccountDialog, {
-              state,
-              handleDeltaSettingsChange,
-            })
-          }
-        >
-          {tx('pref_password_and_account_settings')}
-        </SettingsButton>
-        <SettingsButton
-          onClick={async () => {
-            openDialog(SettingsConnectivityDialog, {
-              state,
-              handleDeltaSettingsChange,
-            })
-          }}
-        >
-          {tx('connectivity') + ' ' + connectivityString}
-        </SettingsButton>
+        <div className='profile-displayname-addr'>
+          <div className='displayname'>{state.settings.displayname}</div>
+          <div className='addr'>{addr}</div>
+        </div>
+      </div>
+      <SettingsButton
+        onClick={() =>
+          openDialog(SettingsProfileDialog, {
+            state,
+            handleDeltaSettingsChange,
+          })
+        }
+      >
+        {tx('pref_edit_profile')}
+      </SettingsButton>
+      <SettingsButton
+        onClick={() =>
+          openDialog(SettingsAccountDialog, {
+            state,
+            handleDeltaSettingsChange,
+          })
+        }
+      >
+        {tx('pref_password_and_account_settings')}
+      </SettingsButton>
+      <SettingsButton
+        onClick={async () => {
+          openDialog(SettingsConnectivityDialog, {
+            state,
+            handleDeltaSettingsChange,
+          })
+        }}
+      >
+        {tx('connectivity') + ' ' + connectivityString}
+      </SettingsButton>
     </>
   )
 }
