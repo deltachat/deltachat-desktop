@@ -151,6 +151,7 @@ export function enterKeySendsKeyboardShortcuts(
   enterKeySends: boolean
 ): ShortcutAction[] {
   const { isMac } = runtime.getRuntimeInfo()
+  const tx = window.static_translate
 
   const Enter = ['Enter']
   const CtrlEnter = ['Control', 'Enter']
@@ -160,20 +161,23 @@ export function enterKeySendsKeyboardShortcuts(
 
   if (enterKeySends) {
     return [
-      { title: 'Send Message', keyBindings: [Enter] },
       {
-        title: 'Insert Newline',
+        title: tx('desktop_keybindings_action_send_message'),
+        keyBindings: [Enter],
+      },
+      {
+        title: tx('desktop_keybindings_action_insert_newline'),
         keyBindings: [ShiftEnter, CtrlOrMetaEnter],
       },
     ]
   } else {
     return [
       {
-        title: 'Send Message',
+        title: tx('desktop_keybindings_action_send_message'),
         keyBindings: [CtrlOrMetaEnter, ShiftEnter],
       },
       {
-        title: 'Insert Newline',
+        title: tx('desktop_keybindings_action_insert_newline'),
         keyBindings: [Enter],
       },
     ]
@@ -203,27 +207,44 @@ export function getKeybindings(
   settings: DesktopSettingsType
 ): CheatSheetEntryType[] {
   const { isMac } = runtime.getRuntimeInfo()
+  const tx = window.static_translate
+
   return [
-    Title('MessageInput / Composer'),
+    Title(tx('desktop_keybindings_composer')),
     ...enterKeySendsKeyboardShortcuts(settings['enterKeySends']).map(Shortcut),
-    Title('Global Shortcuts'),
+    Title(tx('desktop_keybindings_global')),
     ...[
       {
-        title: 'Switch between Chats',
+        title: tx('desktop_keybindings_action_switch_between_chats'),
         keyBindings: [
           ['Alt', 'ArrowUp'],
           ['Alt', 'ArrowDown'],
         ],
       },
-      { title: 'Scroll Messages', keyBindings: [['PageUp'], ['PageDown']] },
-      { title: 'Jump to Search', keyBindings: [['Control', 'K']] },
-      { title: 'Focus Composer', keyBindings: [['Control', 'N']] },
-      { title: 'Open Help', keyBindings: [['F1']] },
       {
-        title: 'Open Settings',
+        title: tx('desktop_keybindings_action_scroll_messages'),
+        keyBindings: [['PageUp'], ['PageDown']],
+      },
+      {
+        title: tx('desktop_keybindings_action_jump_to_search'),
+        keyBindings: [['Control', 'K']],
+      },
+      {
+        title: tx('desktop_keybindings_action_focus_composer'),
+        keyBindings: [['Control', 'N']],
+      },
+      {
+        title: tx('desktop_keybindings_action_open_help'),
+        keyBindings: [['F1']],
+      },
+      {
+        title: tx('desktop_keybindings_action_open_settings'),
         keyBindings: [['Control', ','], isMac && ['Meta', ',']],
       },
-      { title: 'Force Refresh Network', keyBindings: [['F5']] },
+      {
+        title: tx('desktop_keybindings_action_force_refresh_network'),
+        keyBindings: [['F5']],
+      },
     ].map(Shortcut),
   ]
 }

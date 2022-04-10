@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { SettingsContext } from '../../contexts'
+import { SettingsContext, useTranslationFunction } from '../../contexts'
 import {
   CheatSheetKeyboardShortcut,
   getKeybindings,
@@ -16,7 +16,7 @@ export default function KeybindingCheatSheet(props: {
   onClose: () => void
 }) {
   const { isOpen, onClose } = props
-  // const tx = useTranslationFunction()
+  const tx = useTranslationFunction()
 
   const { desktopSettings } = useContext(SettingsContext)
 
@@ -29,7 +29,9 @@ export default function KeybindingCheatSheet(props: {
       showCloseButton={true}
     >
       <DeltaDialogHeader onClose={onClose} showCloseButton={true}>
-        <h4 className='bp3-heading'>Keybindings</h4>
+        <h4 className='bp3-heading'>
+          {tx('desktop_keybindings_dialog_title')}
+        </h4>
         <CheatSheetKeyboardShortcut />
       </DeltaDialogHeader>
 
@@ -40,7 +42,7 @@ export default function KeybindingCheatSheet(props: {
               if (entry.type === 'header') {
                 return (
                   <div key={entry.title}>
-                    <div className='line'/>
+                    <div className='line' />
                     <h2>{entry.title}</h2>
                   </div>
                 )
