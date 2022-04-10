@@ -240,7 +240,7 @@ class Electron implements Runtime {
         })
       )
     }, this.getRC_Config())
-    ipcBackend.on('showHelpDialog', this.openHelpWindow)    
+    ipcBackend.on('showHelpDialog', this.openHelpWindow)
   }
   openHelpWindow(): void {
     ipcBackend.send('help', window.localeData.locale)

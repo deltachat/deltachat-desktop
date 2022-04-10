@@ -16,5 +16,41 @@
   },
   "videochat_instance_example": {
     "message": "Examples: https://meet.jit.si/$ROOM or basicwebrtc:https://your-server"
+  },
+  "desktop_keybindings_composer": {
+    "message": "MessageInput / Composer"
+  },
+  "desktop_keybindings_global": {
+    "message": "Global Shortcuts"
+  },
+  "desktop_keybindings_action_switch_between_chats": {
+    "message": "Switch between Chats"
+  },
+  "desktop_keybindings_action_scroll_messages": {
+    "message": "Scroll Messages"
+  },
+  "desktop_keybindings_action_jump_to_search": {
+    "message": "Jump to Search"
+  },
+  "desktop_keybindings_action_focus_composer": {
+    "message": "Focus Composer"
+  },
+  "desktop_keybindings_action_open_help": {
+    "message": "Open Help"
+  },
+  "desktop_keybindings_action_open_settings": {
+    "message": "Open Settings"
+  },
+  "desktop_keybindings_action_force_refresh_network": {
+    "message": "Force Refresh Network"
+  },
+  "desktop_keybindings_action_send_message": {
+    "message": "Send Message"
+  },
+  "desktop_keybindings_action_insert_newline": {
+    "message": "Insert Newline"
+  },
+  "desktop_keybindings_dialog_title": {
+    "message": "Keybindings"
   }
 }
