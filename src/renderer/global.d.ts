@@ -28,6 +28,7 @@ declare global {
     __screen: Screens
     __contextMenuActive: boolean
     __settingsOpened: boolean
+    __keybindingsDialogOpened: boolean
     __setQuoteInDraft: ((msgId: number) => void) | null
     __reloadDraft: (() => void) | null
     __desktopSettings: DesktopSettingsType | null
