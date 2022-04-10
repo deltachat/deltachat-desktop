@@ -227,10 +227,10 @@ export default function AccountsScreen({
                 <div
                   className={classNames(
                     Classes.DIALOG_HEADER,
-                    'bp3-dialog-header-border-bottom'
+                    'bp4-dialog-header-border-bottom'
                   )}
                 >
-                  <h4 className='bp3-heading'>
+                  <h4 className='bp4-heading'>
                     {tx('login_known_accounts_title_desktop')}
                   </h4>
                   {syncAllAccounts !== null && (

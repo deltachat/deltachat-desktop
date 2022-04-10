@@ -13,7 +13,7 @@ export function ClearButton(props: {
     <button
       aria-label='Clear'
       className={classNames(
-        'bp3-dialog-close-button bp3-button bp3-minimal bp3-icon-large bp3-icon-cross clear-button',
+        'bp4-dialog-close-button bp4-button bp4-minimal bp4-icon-large bp4-icon-cross clear-button',
         { 'clear-button--hidden': value === '' }
       )}
       onClick={onClear}

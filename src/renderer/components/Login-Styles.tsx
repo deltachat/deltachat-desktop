@@ -27,7 +27,7 @@ export const DeltaSelect = React.memo(
       <div className='delta-form-group delta-select'>
         <FormGroup>
           <div className={`label ${isFocused && 'focus'}`}>{props.label}</div>
-          <div className='bp3-select .modifier'>
+          <div className='bp4-select .modifier'>
             <select
               id={props.id}
               value={props.value}

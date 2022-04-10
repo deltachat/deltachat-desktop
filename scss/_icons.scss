@@ -14,7 +14,7 @@
 .remove-icon {
   margin-top: calc((64px - 20px) / 2);
   margin-right: 10px;
-  .bp3-icon > svg {
+  .bp4-icon > svg {
     width: 20px;
     height: 20px;
     fill: grey;
@@ -22,7 +22,7 @@
 }
 
 .remove-icon:hover {
-  .bp3-icon {
+  .bp4-icon {
     & > svg {
       fill: #bf0000;
     }

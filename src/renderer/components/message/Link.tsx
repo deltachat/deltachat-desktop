@@ -88,7 +88,7 @@ function labeledLinkConfirmationDialog(
     const toggleIsChecked = () => setIsChecked(checked => !checked)
     return (
       <SmallDialog isOpen={isOpen} onClose={onClose}>
-        <div className='bp3-dialog-body-with-padding'>
+        <div className='bp4-dialog-body-with-padding'>
           <p>{tx('open_url_confirmation')}</p>
           <p
             style={{
@@ -184,7 +184,7 @@ function openPunycodeUrlConfirmationDialog(
     const tx = window.static_translate
     return (
       <SmallDialog isOpen={isOpen} onClose={onClose}>
-        <div className='bp3-dialog-body-with-padding'>
+        <div className='bp4-dialog-body-with-padding'>
           <div
             style={{
               fontSize: '1.5em',

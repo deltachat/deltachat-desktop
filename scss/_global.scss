@@ -40,8 +40,8 @@ h3,
 h4,
 h5,
 p,
-.bp3-button,
-.bp3-dialog-header,
+.bp4-button,
+.bp4-dialog-header,
 button > span,
 label {
   user-select: none;
@@ -179,10 +179,10 @@ code {
     display: none;
   }
 
-  &.bp3-button[class*='bp3-icon-']::before {
+  &.bp4-button[class*='bp4-icon-']::before {
     color: white;
   }
-  &.bp3-button.bp3-minimal:hover {
+  &.bp4-button.bp4-minimal:hover {
     background-color: unset;
   }
 }

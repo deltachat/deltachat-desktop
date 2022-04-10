@@ -19,6 +19,7 @@
 - `ENTER + SHIFT` and `ENTER + CTRL` in the composer do now the same thing: they send or add a newline depending on the `enterKeySends` user preference
 - update webxdc setUpdateListener api
 - Remove dependency tempy
+- Update @blueprintjs/core to `4.1.2`
 
 ### Removed
 - remove dependency `react-qr-svg`

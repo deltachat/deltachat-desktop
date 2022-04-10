@@ -1,12 +1,12 @@
 .navbar-wrapper {
-  .bp3-navbar {
+  .bp4-navbar {
     padding: 0px;
     background-color: var(--navBarBackground);
     color: var(--navBarText);
     border-bottom: var(--outlineProperties);
   }
 
-  .bp3-navbar-heading {
+  .bp4-navbar-heading {
     margin-left: 5px;
     margin-right: 0px;
     overflow-x: hidden;
@@ -16,25 +16,25 @@
     font-weight: bold;
   }
 
-  .bp3-align-left {
+  .bp4-align-left {
     width: 30%;
     padding: 0px 10px;
   }
 
-  .bp3-align-right {
+  .bp4-align-right {
     width: 70%;
     float: none;
   }
 
-  .bp3-icon > svg:not([fill]) {
+  .bp4-icon > svg:not([fill]) {
     fill: var(--navBarText);
   }
 
-  .icon-rotated > .bp3-icon > svg:not([fill]) {
+  .icon-rotated > .bp4-icon > svg:not([fill]) {
     transform: rotate(90deg);
   }
 
-  .bp3-icon-search {
+  .bp4-icon-search {
     margin-left: 0px !important;
   }
 
@@ -53,7 +53,7 @@
     color: var(--navBarSearchPlaceholder);
   }
 
-  .bp3-button.bp3-minimal {
+  .bp4-button.bp4-minimal {
     min-width: 0px;
     min-height: 0px;
   }
@@ -63,7 +63,7 @@
     margin-right: 15px;
     display: flex;
 
-    .bp3-button {
+    .bp4-button {
       margin: 0px;
       position: relative;
       height: 50px;
@@ -71,7 +71,7 @@
     }
   }
 
-  .bp3-popover-target {
+  .bp4-popover-target {
     margin-right: 4px;
   }
 

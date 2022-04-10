@@ -7,18 +7,18 @@
   & > .row {
     width: 100%;
 
-    .bp3-input {
+    .bp4-input {
       width: 66%;
       float: left;
       border: 1px solid var(--colorNone);
       box-shadow: none;
     }
 
-    .bp3-input:focus {
-      border-color: var(--bp3-input-focused);
+    .bp4-input:focus {
+      border-color: var(--bp4-input-focused);
     }
 
-    .bp3-input:disabled {
+    .bp4-input:disabled {
       cursor: text;
       color: inherit;
       background: inherit;
@@ -33,8 +33,8 @@
       justify-content: center;
       height: 30px;
 
-      .bp3-icon > svg:not([fill]) {
-        fill: var(--bp3InputPlaceholder);
+      .bp4-icon > svg:not([fill]) {
+        fill: var(--bp4InputPlaceholder);
       }
     }
   }

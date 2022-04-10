@@ -65,7 +65,7 @@ export function SettingsExperimentalFeatures({
         disabledValue: settingsStore.rc.minimized,
       })}
       {settingsStore.rc.minimized && (
-        <div className='bp3-callout'>
+        <div className='bp4-callout'>
           {tx('explain_desktop_minimized_disabled_tray_pref')}
         </div>
       )}
@@ -149,7 +149,7 @@ export function EditVideochatInstanceDialog({
       <DeltaDialogBody>
         <Card elevation={Elevation.ONE}>
           <div
-            className='bp3-callout'
+            className='bp4-callout'
             style={{
               marginBottom: '20px',
               marginTop: '-20px',
@@ -184,7 +184,7 @@ export function EditVideochatInstanceDialog({
                     setConfigValue(event.target.value)
                   }}
                 />
-                <div className='bp3-callout'>
+                <div className='bp4-callout'>
                   {tx('videochat_instance_example')}
                 </div>
               </div>

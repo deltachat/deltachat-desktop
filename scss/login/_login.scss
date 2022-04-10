@@ -76,16 +76,16 @@
     justify-content: space-between;
 
     &:hover {
-      button.bp3-intent-danger {
+      button.bp4-intent-danger {
         display: inline-flex;
       }
     }
 
-    button.bp3-intent-danger {
+    button.bp4-intent-danger {
       display: none;
     }
 
-    button.bp3-large {
+    button.bp4-large {
       width: 90%;
     }
   }
@@ -131,13 +131,13 @@ div.delta-form-group {
   }
 
   &.delta-select {
-    .bp3-select::after {
+    .bp4-select::after {
       top: 0px;
       content: '^';
       font: 17px 'Consolas', monospace;
       transform: rotate(180deg);
     }
-    .bp3-select {
+    .bp4-select {
       width: 100%;
       select {
         -webkit-box-shadow: none;
@@ -155,7 +155,7 @@ div.delta-form-group {
         }
       }
     }
-    .bp3-form-group label.bp3-label {
+    .bp4-form-group label.bp4-label {
       padding-left: 10px;
       color: var(--deltaChatPrimaryFgLight);
       font-size: 16px;
@@ -163,7 +163,7 @@ div.delta-form-group {
   }
 
   &.delta-input {
-    .bp3-input {
+    .bp4-input {
       padding: unset;
       border-radius: unset;
       -webkit-box-shadow: none;
@@ -186,14 +186,14 @@ div.delta-form-group {
       }
     }
 
-    .bp3-button.bp3-minimal.bp3-intent-warning {
+    .bp4-button.bp4-minimal.bp4-intent-warning {
       color: #62656a !important;
       &:hover {
         color: white !important;
       }
     }
 
-    .bp3-button.bp3-minimal.bp3-intent-warning:hover {
+    .bp4-button.bp4-minimal.bp4-intent-warning:hover {
       background-color: var(--deltaChatPrimaryFgLight) !important;
     }
   }
@@ -207,7 +207,7 @@ div.delta-form-group {
     border-bottom: 2px solid;
     border-bottom-color: var(--deltaChatPrimaryFgLight);
     background-color: transparent;
-    color: var(--bp3InputText);
+    color: var(--bp4InputText);
     font-size: 16px;
     font-family: inherit;
     box-shadow: none !important;
