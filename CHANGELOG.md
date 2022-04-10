@@ -16,6 +16,7 @@
 
 ### Changed
 - update nodejs to version `16`
+- update electron to `18.0.3`
 - Move node-fetch to devDependencies
 - Update emoji-mart to `^3.0.1`
 - Update @types/emoji-mart to `^3.0.9`
