@@ -15,7 +15,6 @@ import {
 import { DialogProps } from './DialogController'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
 import classNames from 'classnames'
-import qr from 'react-qr-svg'
 import QrReader from 'react-qr-reader'
 import processOpenQrUrl from '../helpers/OpenQrUrl'
 import { getLogger } from '../../../shared/logger'
@@ -118,7 +117,7 @@ export function QrCodeShowQrInner({
     <>
       <DeltaDialogBody>
         <DeltaDialogContent noOverflow noPadding style={{ height: '500px' }}>
-          {svgUrl ? (
+          {svgUrl && (
             <img
               style={{
                 width: '100%',
@@ -128,29 +127,6 @@ export function QrCodeShowQrInner({
               }}
               src={svgUrl}
             />
-          ) : (
-            <>
-              <qr.QRCode
-                bgColor='#FFFFFF'
-                fgColor='#000000'
-                level='Q'
-                value={qrCode}
-                style={{
-                  height: 'auto',
-                  padding: '30px',
-                  backgroundColor: 'white',
-                }}
-              />
-              <p
-                style={{
-                  textAlign: 'center',
-                  marginTop: '10px',
-                  overflowWrap: 'break-word',
-                }}
-              >
-                {description}
-              </p>
-            </>
           )}
         </DeltaDialogContent>
       </DeltaDialogBody>

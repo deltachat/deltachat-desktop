@@ -7,6 +7,9 @@
 - Update emoji-mart to `^3.0.1`
 - Update @types/emoji-mart to `^3.0.9`
 
+### Removed
+- remove dependency `react-qr-svg`
+
 ## [1.28.2] - 2022-04-22
 
 ### Changed
