@@ -18,10 +18,10 @@ jobs:
       fail-fast: false # don't fail fast, because some tests can be flaky so better we get all results
     steps:
     - uses: actions/checkout@v1
-    - name: Use Node.js 14.x
+    - name: Use Node.js 16.x
       uses: actions/setup-node@v1
       with:
-        node-version: 14.x
+        node-version: 16.x
     - name: npm ci
       run: |
         npm ci
@@ -33,7 +33,7 @@ jobs:
         npm run test-unit
     - uses: DevExpress/testcafe-action@latest
       with:
-        version: "1.14.0"
+        version: "1.15.0"
         args: "--skip-js-errors electron:. ./test/testcafe/test.js ./test/testcafe/messagelist_tests.ts"
       env:
         DCC_NEW_TMP_EMAIL: ${{secrets.DCC_NEW_TMP_EMAIL}}
