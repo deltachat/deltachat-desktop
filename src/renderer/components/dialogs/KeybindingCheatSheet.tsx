@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { SettingsContext, useTranslationFunction } from '../../contexts'
 import {
   CheatSheetKeyboardShortcut,
@@ -19,6 +19,13 @@ export default function KeybindingCheatSheet(props: {
   const tx = useTranslationFunction()
 
   const { desktopSettings } = useContext(SettingsContext)
+
+  useEffect(() => {
+    window.__keybindingsDialogOpened = true
+    return () => {
+      window.__keybindingsDialogOpened = false
+    }
+  }, [])
 
   return (
     <DeltaDialogBase

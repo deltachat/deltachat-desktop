@@ -155,7 +155,9 @@ ActionEmitter.registerHandler(KeybindAction.Settings_Open, () => {
 })
 
 ActionEmitter.registerHandler(KeybindAction.KeybindingCheatSheet_Open, () => {
-  window.__openDialog(KeybindingCheatSheet)
+  if (!window.__keybindingsDialogOpened) {
+    window.__openDialog(KeybindingCheatSheet)
+  }
 })
 
 ActionEmitter.registerHandler(KeybindAction.ChatList_ExitSearch, () => {
