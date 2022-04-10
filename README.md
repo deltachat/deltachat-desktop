@@ -116,7 +116,7 @@ Follow the instruction on <https://rustup.rs/> to install rust and cargo.
 
 Then try running `npm install` again.
 
-Make sure that your nodejs version is `14.0.0` or newer.
+Make sure that your nodejs version is `16.0.0` or newer.
 
 If you still get errors look at the instructions in the deltchat-node and
 deltachat-rust-core README files to set things up **or write an issue**.
