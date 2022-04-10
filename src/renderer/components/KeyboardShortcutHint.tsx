@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { DesktopSettingsType } from '../../shared/shared-types'
+import { runtime } from '../runtime'
 
 const keySymbols: { [key: string]: string } = {
   Control: '^',
@@ -12,6 +13,27 @@ const keySymbols: { [key: string]: string } = {
 }
 
 const showOnlySymbolOn = ['ArrowDown', 'ArrowUp']
+
+function get_label(keyboard_key: string) {
+  if (runtime.getRuntimeInfo().isMac) {
+    switch (keyboard_key) {
+      case 'Alt':
+        return 'Option'
+      case 'Meta':
+        return 'Command'
+      default:
+        return keyboard_key
+    }
+  } else {
+    switch (keyboard_key) {
+      case 'Control':
+        // German seems to be the only language that uses another label for the control key
+        return window.localeData.locale == 'de' ? 'Strg' : 'Ctrl'
+      default:
+        return keyboard_key
+    }
+  }
+}
 
 function Key({ keyboard_key }: { keyboard_key: string }) {
   const [pressed, setPressed] = useState(false)
@@ -39,7 +61,7 @@ function Key({ keyboard_key }: { keyboard_key: string }) {
 
   return (
     <kbd className={pressed ? 'key pressed' : 'key'}>
-      {shouldHideLabel || keyboard_key}
+      {shouldHideLabel || get_label(keyboard_key)}
       {keySymbols[keyboard_key]
         ? (shouldHideLabel ? '' : ' ') + keySymbols[keyboard_key]
         : ''}
@@ -49,7 +71,7 @@ function Key({ keyboard_key }: { keyboard_key: string }) {
 
 export type ShortcutAction = {
   title: string
-  keyBindings: string[][]
+  keyBindings: (string[] | boolean)[]
 }
 
 export function KeyboardShortcut({ elements }: { elements: string[] }) {
@@ -69,7 +91,10 @@ export function KeyboardShortcut({ elements }: { elements: string[] }) {
 
 /** a group representing the same or similar actions  */
 export function ShortcutGroup({ title, keyBindings }: ShortcutAction) {
-  const bindings = keyBindings.map((elements, index) => {
+  const non_empty = keyBindings.filter(
+    e => typeof e !== 'boolean'
+  ) as string[][]
+  const bindings = non_empty.map((elements, index) => {
     return (
       <KeyboardShortcut
         elements={elements}
@@ -125,8 +150,12 @@ export function KeybordShortcutHintInSettings({
 export function enterKeySendsKeyboardShortcuts(
   enterKeySends: boolean
 ): ShortcutAction[] {
+  const { isMac } = runtime.getRuntimeInfo()
+
   const Enter = ['Enter']
   const CtrlEnter = ['Control', 'Enter']
+  const MetaEnter = ['Meta', 'Enter']
+  const CtrlOrMetaEnter = isMac ? MetaEnter : CtrlEnter
   const ShiftEnter = ['Shift', 'Enter']
 
   if (enterKeySends) {
@@ -134,14 +163,14 @@ export function enterKeySendsKeyboardShortcuts(
       { title: 'Send Message', keyBindings: [Enter] },
       {
         title: 'Insert Newline',
-        keyBindings: [ShiftEnter, CtrlEnter],
+        keyBindings: [ShiftEnter, CtrlOrMetaEnter],
       },
     ]
   } else {
     return [
       {
         title: 'Send Message',
-        keyBindings: [CtrlEnter, ShiftEnter],
+        keyBindings: [CtrlOrMetaEnter, ShiftEnter],
       },
       {
         title: 'Insert Newline',
@@ -162,9 +191,18 @@ function Shortcut(action: ShortcutAction): CheatSheetEntryType {
   return { action, type: 'shortcut' }
 }
 
+export function CheatSheetKeyboardShortcut() {
+  if (runtime.getRuntimeInfo().isMac) {
+    return <KeyboardShortcut elements={['Meta', '/']} />
+  } else {
+    return <KeyboardShortcut elements={['Control', '/']} />
+  }
+}
+
 export function getKeybindings(
   settings: DesktopSettingsType
 ): CheatSheetEntryType[] {
+  const { isMac } = runtime.getRuntimeInfo()
   return [
     Title('MessageInput / Composer'),
     ...enterKeySendsKeyboardShortcuts(settings['enterKeySends']).map(Shortcut),
@@ -183,10 +221,7 @@ export function getKeybindings(
       { title: 'Open Help', keyBindings: [['F1']] },
       {
         title: 'Open Settings',
-        keyBindings: [
-          ['Control', ','],
-          ['Meta', ','],
-        ],
+        keyBindings: [['Control', ','], isMac && ['Meta', ',']],
       },
       { title: 'Force Refresh Network', keyBindings: [['F5']] },
     ].map(Shortcut),
