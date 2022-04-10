@@ -156,6 +156,10 @@ export default function ConnectivityToast() {
 
   const tx = useTranslationFunction()
 
+  if (networkState[0] === Connectivity.CONNECTED) {
+    return null
+  }
+
   return (
     <div className='ConnectivityToast' onClick={onInfoTextClick}>
       {networkState[0] === Connectivity.NOT_CONNECTED && (
