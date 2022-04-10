@@ -10,6 +10,9 @@
 ### Removed
 - remove dependency `react-qr-svg`
 
+### Fixed
+- fix: hide connectivity toast when connected
+
 ## [1.28.2] - 2022-04-22
 
 ### Changed
