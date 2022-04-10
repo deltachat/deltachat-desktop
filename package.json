@@ -76,7 +76,7 @@
     "path": "path-browserify"
   },
   "dependencies": {
-    "@blueprintjs/core": "^3.22.3",
+    "@blueprintjs/core": "^4.1.2",
     "@deltachat/message_parser_wasm": "^0.3.0",
     "@mapbox/geojson-extent": "^1.0.0",
     "application-config": "^1.0.1",
@@ -120,8 +120,8 @@
     "@types/node": "^14.14.20",
     "@types/node-fetch": "^2.5.7",
     "@types/rc": "^1.1.0",
-    "@types/react": "^16.9.17",
-    "@types/react-dom": "^16.9.4",
+    "@types/react": "^17.0.2",
+    "@types/react-dom": "^17.0.2",
     "@types/react-window": "^1.8.4",
     "@types/react-window-infinite-loader": "^1.0.4",
     "@types/url-parse": "^1.4.3",

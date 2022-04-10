@@ -18,7 +18,7 @@ input.search-input {
     margin-left: 40px;
     padding: 10px 0px;
     width: calc(100% - 80px);
-    .bp3-navbar & {
+    .bp4-navbar & {
       margin-left: 0px;
     }
   }
@@ -43,7 +43,7 @@ input#chat-list-search {
   }
 }
 
-.bp3-navbar-group > .clear-button {
+.bp4-navbar-group > .clear-button {
   position: absolute;
   z-index: 10;
   left: calc(30vw - 30px);

@@ -1,11 +1,11 @@
 button.delta-button-round {
   margin-top: 10px;
-  background-color: var(--bp3-input-focused);
+  background-color: var(--bp4-input-focused);
   box-shadow: none;
   background-clip: unset;
   background-image: none;
   border-radius: 30px;
-  border-color: var(--bp3-input-focused);
+  border-color: var(--bp4-input-focused);
   border-style: solid !important;
   padding: 10px 15px;
   color: white;
@@ -22,7 +22,7 @@ button.delta-button-round {
     }
   }
   &:hover {
-    background-color: var(--bp3-input-focused);
+    background-color: var(--bp4-input-focused);
     box-shadow: none;
     background-clip: unset;
   }

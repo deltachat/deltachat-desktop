@@ -21,7 +21,7 @@ export async function logout () {
 }
 
 export async function closeDialog () {
-  await t.click('.DeltaDialog .bp3-dialog-close-button')
+  await t.click('.DeltaDialog .bp4-dialog-close-button')
 }
 
 export async function loginWithTmpUser () {

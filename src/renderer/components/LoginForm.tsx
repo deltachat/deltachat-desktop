@@ -479,7 +479,7 @@ export function ConfigureProgressDialog({
     >
       {!configureFailed && (
         <>
-          <div className='bp3-dialog-body-with-padding'>
+          <div className='bp4-dialog-body-with-padding'>
             <DeltaDialogContent>
               <DeltaProgressBar progress={progress} />
               <p style={{ userSelect: 'auto' }}>{progressComment}</p>
@@ -501,7 +501,7 @@ export function ConfigureProgressDialog({
       )}
       {configureFailed && (
         <>
-          <div className='bp3-dialog-body-with-padding'>
+          <div className='bp4-dialog-body-with-padding'>
             <DeltaDialogContent>
               <p style={{ userSelect: 'auto' }}>{error}</p>
             </DeltaDialogContent>

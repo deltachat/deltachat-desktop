@@ -32,7 +32,7 @@ export default function EncryptionInfo({
   const tx = window.static_translate
   return (
     <SmallDialog isOpen={isOpen} onClose={onClose}>
-      <div className='bp3-dialog-body-with-padding'>
+      <div className='bp4-dialog-body-with-padding'>
         <p style={{ whiteSpace: 'pre-wrap' }}>
           {!encryptionInfo && 'Fetching...'}
           {encryptionInfo && encryptionInfo}

@@ -87,14 +87,14 @@ export default class Gallery extends Component<
         : tx('tab_gallery_empty_hint')
     return (
       <div className='media-view'>
-        <div className='bp3-tabs' style={{ minWidth: 200 }}>
-          <ul className='bp3-tab-list .modifier' role='tablist'>
+        <div className='bp4-tabs' style={{ minWidth: 200 }}>
+          <ul className='bp4-tab-list .modifier' role='tablist'>
             {Object.keys(MediaTabs).map(realId => {
               const id = realId as MediaTabKey
               return (
                 <li
                   key={id}
-                  className='bp3-tab'
+                  className='bp4-tab'
                   role='tab'
                   aria-selected={this.state.id === id}
                   onClick={() => this.onSelect(id)}
@@ -104,7 +104,7 @@ export default class Gallery extends Component<
               )
             })}
           </ul>
-          <div className='bp3-tab-panel' role='tabpanel'>
+          <div className='bp4-tab-panel' role='tabpanel'>
             <div className='gallery'>
               <div className='item-container'>
                 {medias.length < 1 ? (

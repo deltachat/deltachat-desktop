@@ -3,8 +3,8 @@
     min-width: 350px !important;
     max-width: 70vw;
     padding-bottom: 0px !important;
-    background-color: var(--bp3DialogBgPrimary) !important;
-    .bp3-dialog-footer {
+    background-color: var(--bp4DialogBgPrimary) !important;
+    .bp4-dialog-footer {
       padding: 0 0px 0px;
     }
   }
@@ -18,7 +18,7 @@
   .delta-dialog-content {
     flex: 1 1 auto;
     padding: 0px 20px;
-    background-color: var(--bp3DialogHeaderBg);
+    background-color: var(--bp4DialogHeaderBg);
 
     .delta-dialog-content-text-seperator {
       line-height: 43px;
@@ -119,7 +119,7 @@
   }
 
   .header-button-wrapper {
-    .bp3-icon-large {
+    .bp4-icon-large {
       margin-right: 0px;
     }
     button:hover {
@@ -127,7 +127,7 @@
     }
 
     &.close-btn {
-      .bp3-icon-cross::before {
+      .bp4-icon-cross::before {
         margin-right: -14px;
         font-size: 24px;
       }
@@ -219,11 +219,11 @@
       transition-timing-function: cubic-bezier(0.4, 1, 0.75, 0.9);
 
       &.checked {
-        background: var(--bp3SwitchChecked);
+        background: var(--bp4SwitchChecked);
         &::before {
           left: calc(100% - 1em);
-          box-shadow: var(--bp3SwitchKnobShadowChecked);
-          background: var(--bp3SwitchKnobChecked);
+          box-shadow: var(--bp4SwitchKnobShadowChecked);
+          background: var(--bp4SwitchKnobChecked);
         }
       }
 

@@ -54,7 +54,7 @@ export default function ForwardMessage(props: {
       <div
         className={classNames(
           Classes.DIALOG_BODY,
-          '.bp3-dialog-body-no-footer'
+          '.bp4-dialog-body-no-footer'
         )}
       >
         <Card style={{ padding: '0px' }}>

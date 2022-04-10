@@ -51,7 +51,7 @@ export function DeltaDialogCloseButton(
       <button
         {...props}
         aria-label='Close'
-        className='bp3-dialog-close-button bp3-button bp3-minimal bp3-icon-large bp3-icon-cross'
+        className='bp4-dialog-close-button bp4-button bp4-minimal bp4-icon-large bp4-icon-cross'
       />
     </div>
   )
@@ -62,7 +62,7 @@ function DeltaDialogBackButton(props: React.HTMLAttributes<HTMLButtonElement>) {
     <div className='header-button-wrapper back-btn'>
       <button
         {...props}
-        className='bp3-button bp3-minimal bp3-icon-large bp3-icon-arrow-left'
+        className='bp4-button bp4-minimal bp4-icon-large bp4-icon-arrow-left'
       />
     </div>
   )
@@ -161,11 +161,11 @@ export function DeltaDialogHeader(props: {
     <div
       className={classNames(
         Classes.DIALOG_HEADER,
-        'bp3-dialog-header-border-bottom'
+        'bp4-dialog-header-border-bottom'
       )}
     >
       {showBackButton && <DeltaDialogBackButton onClick={onClickBack} />}
-      {title && <h4 className='bp3-heading'>{title}</h4>}
+      {title && <h4 className='bp4-heading'>{title}</h4>}
       {children}
       {showEditButton && <DeltaDialogEditButton onClick={onClickEdit} />}
       {typeof onClose === 'function' && showCloseButton !== false && (
@@ -189,7 +189,7 @@ export function DeltaDialogFooter(
       style={{ display: hide ? 'none' : 'block', ...props.style }}
       className={classNames(
         Classes.DIALOG_FOOTER,
-        'bp3-dialog-footer-border-top'
+        'bp4-dialog-footer-border-top'
       )}
     >
       {children}
@@ -209,7 +209,7 @@ export function DeltaDialogBody(
     <div
       ref={props.ref}
       className={classNames(Classes.DIALOG_BODY, {
-        'bp3-dialog-body-no-footer': noFooter !== false,
+        'bp4-dialog-body-no-footer': noFooter !== false,
       })}
       style={style}
     >
@@ -441,7 +441,7 @@ export const DeltaSwitch2 = ({
         {description && <div className='description'>{description}</div>}
       </div>
       <div className='right'>
-        <label className='delta-switch2 bp3-switch bp3-align-right inactive'>
+        <label className='delta-switch2 bp4-switch bp4-align-right inactive'>
           <input
             type='checkbox'
             checked={value}

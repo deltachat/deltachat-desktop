@@ -56,7 +56,7 @@ export default function UnblockContacts(props: {
               style={{
                 overflow: 'scroll',
                 height: '100%',
-                backgroundColor: 'var(--bp3DialogBgPrimary)',
+                backgroundColor: 'var(--bp4DialogBgPrimary)',
               }}
             >
               <ContactList2

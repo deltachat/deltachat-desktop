@@ -4,7 +4,7 @@ import { waitForReact } from 'testcafe-react-selectors'
 import { loginWithTmpUser, logout, clickThreeDotMenuItem, translate, clickSideBarItem } from './helpers'
 
 /* global fixture, test */
-'.bp3-navbar-heading'
+'.bp4-navbar-heading'
 const waitForLogin = 5000
 const conf = {}
 const testMessage = 'Test message'
@@ -118,7 +118,7 @@ test('open settings dialog and close with escape', async t => {
     await t
     .expect(
       Selector(
-        '.bp3-dialog-header.bp3-dialog-header-border-bottom > .bp3-heading'
+        '.bp4-dialog-header.bp4-dialog-header-border-bottom > .bp4-heading'
       ).innerText
     )
     .eql(await translate('menu_settings'))
@@ -126,7 +126,7 @@ test('open settings dialog and close with escape', async t => {
   const SettingsShouldBeClosed = async ()=>{
     await t.wait(1000).expect(
       Selector(
-        '.bp3-dialog-header.bp3-dialog-header-border-bottom > .bp3-heading'
+        '.bp4-dialog-header.bp4-dialog-header-border-bottom > .bp4-heading'
       ).exists
     ).notOk()
   }

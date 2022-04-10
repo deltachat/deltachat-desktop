@@ -45,7 +45,7 @@ const QuoteOrDraftRemoveButton = ({ onClick }: { onClick: () => void }) => {
     <button
       onClick={onClick}
       aria-label='Clear'
-      className='clear-quote-icon bp3-dialog-close-button bp3-button bp3-minimal bp3-icon-large bp3-icon-cross clear-button'
+      className='clear-quote-icon bp4-dialog-close-button bp4-button bp4-minimal bp4-icon-large bp4-icon-cross clear-button'
     />
   )
 }

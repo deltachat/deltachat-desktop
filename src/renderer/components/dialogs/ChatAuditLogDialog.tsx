@@ -134,7 +134,7 @@ export default function ChatAuditLogDialog(props: {
       style={{ width: 'calc(100vw - 50px)', maxWidth: '733px' }}
       showCloseButton={true}
     >
-      <div className='bp3-dialog-header bp3-dialog-header-border-bottom'>
+      <div className='bp4-dialog-header bp4-dialog-header-border-bottom'>
         <div className='heading'>
           <h4>{tx('chat_audit_log_title', selectedChat.name)}</h4>
           <h5>{tx('chat_audit_log_description')}</h5>

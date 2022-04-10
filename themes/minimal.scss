@@ -42,7 +42,7 @@ $scrollbarTransparency: 0.5;
 :root {
   --scrollbarThumb: black;
   --scrollbarThumbHover: black;
-  --bp3DialogBgSecondary: #ececec;
+  --bp4DialogBgSecondary: #ececec;
   --chatListItemBgHover: transparent;
   --cli-search-result-divider: var(--delta-dialog-seperator);
   --cli-search-result-divider-border-width: 0px;
@@ -69,11 +69,11 @@ $scrollbarTransparency: 0.5;
 /* overwrite css */
 
 
-.bp3-button.bp3-minimal:active, .bp3-button.bp3-minimal.bp3-active, .bp3-button.bp3-minimal:hover {
+.bp4-button.bp4-minimal:active, .bp4-button.bp4-minimal.bp4-active, .bp4-button.bp4-minimal:hover {
   background: $navbarBgLight;
 }
 
-.bp3-button.bp3-minimal:hover {
+.bp4-button.bp4-minimal:hover {
   font-weight: normal;
 }
 
@@ -87,20 +87,20 @@ $scrollbarTransparency: 0.5;
 
 
 .navbar-wrapper {
-  .bp3-icon>svg:not([fill]) {
+  .bp4-icon>svg:not([fill]) {
     fill: var(--globalText);
   }
-  .bp3-align-left {  
+  .bp4-align-left {  
     border-right: solid 1px $borderColor;
     border-bottom: solid 1px $borderColor;
   }
 
   span.views {
-    .bp3-button {
+    .bp4-button {
       background: unset;
       border-bottom: 3px solid transparent;
       padding-top: 10px;
-      &.bp3-active {
+      &.bp4-active {
         border-bottom-color: black;
       }
     }
@@ -116,16 +116,16 @@ $scrollbarTransparency: 0.5;
   }
 }
 
-.bp3-navbar {
+.bp4-navbar {
   -webkit-box-shadow: none;
   box-shadow: none;
 }
 
-.bp3-navbar .avatar.small {
+.bp4-navbar .avatar.small {
   display: none;
 }
 
-.navbar-wrapper .bp3-align-right {
+.navbar-wrapper .bp4-align-right {
   border-bottom: solid 1px $borderColor;
 }
 
@@ -134,17 +134,17 @@ $scrollbarTransparency: 0.5;
   border-top: 1px solid $borderColor;
 }
 
-.bp3-overlay-backdrop {
+.bp4-overlay-backdrop {
   backdrop-filter: blur(0.7px) grayscale(1);
   background-color: transparent;
 }
 
-.bp3-dialog {
+.bp4-dialog {
   box-shadow: 0 0 0 1px rgba(16,22,26,.1), 0 4px 8px rgba(16,22,26,.2), 0 0 30px 0px rgba(16,22,26,.2);
   transition: none;
 }
 
-.bp3-dialog-header, .bp3-dialog-footer {
+.bp4-dialog-header, .bp4-dialog-footer {
   border-radius: 0px;
 }
 .message .msg-container {
@@ -201,7 +201,7 @@ $scrollbarTransparency: 0.5;
     background-color: rgb(160, 160, 160);
   }
 }
-.attachment-overlay .bp3-icon > svg {
+.attachment-overlay .bp4-icon > svg {
   fill: rgb(160, 160, 160);
 }
 
@@ -330,7 +330,7 @@ $scrollbarTransparency: 0.5;
   background-color: transparent;
 }
 
-.bp3-button .bp3-icon, .bp3-button .bp3-icon-standard, .bp3-button .bp3-icon-large {
+.bp4-button .bp4-icon, .bp4-button .bp4-icon-standard, .bp4-button .bp4-icon-large {
     color: var(--globalText);
 }
 
@@ -339,11 +339,11 @@ $scrollbarTransparency: 0.5;
   background-color: var( --chatListItemSelectedText);
 }
 
-.bp3-tab[aria-selected=true] {
+.bp4-tab[aria-selected=true] {
   box-shadow: inset 0 -3px 0 black;
 }
 
-.bp3-tab:not([aria-disabled=true]):hover, .bp3-tab[aria-selected=true] {
+.bp4-tab:not([aria-disabled=true]):hover, .bp4-tab[aria-selected=true] {
   color: black;
 }
 
@@ -383,7 +383,7 @@ div.group-image-wrapper div.group-image-edit-button {
 }
 
 
-.bp3-navbar-group > .clear-button:before {
+.bp4-navbar-group > .clear-button:before {
   color: var(--textNavBar) !important;
 }
 

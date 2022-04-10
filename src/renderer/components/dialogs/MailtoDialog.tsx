@@ -48,7 +48,7 @@ export default function MailtoDialog(props: {
       <div
         className={classNames(
           Classes.DIALOG_BODY,
-          'bp3-dialog-body-no-footer',
+          'bp4-dialog-body-no-footer',
           'mailto-dialog'
         )}
       >

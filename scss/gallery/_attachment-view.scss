@@ -54,7 +54,7 @@
       margin-right: 5px;
     }
 
-    .bp3-icon-cross {
+    .bp4-icon-cross {
       cursor: pointer;
     }
   }
@@ -68,8 +68,8 @@
   border-radius: 8%;
   z-index: 1;
 
-  .bp3-icon > svg:not([fill]) {
-    fill: var(--bp3ButtonHoverBg);
+  .bp4-icon > svg:not([fill]) {
+    fill: var(--bp4ButtonHoverBg);
     &:hover {
       fill: white;
     }

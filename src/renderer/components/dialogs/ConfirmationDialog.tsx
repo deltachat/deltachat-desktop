@@ -35,7 +35,7 @@ export default function ConfirmationDialog({
 
   return (
     <SmallDialog isOpen={isOpen} onClose={onClose}>
-      <div className='bp3-dialog-body-with-padding'>
+      <div className='bp4-dialog-body-with-padding'>
         {header && (
           <div
             style={{
