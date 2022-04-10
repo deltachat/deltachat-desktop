@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import { SettingsContext } from '../../contexts'
 import {
+  CheatSheetKeyboardShortcut,
   getKeybindings,
-  KeyboardShortcut,
   ShortcutGroup,
 } from '../KeyboardShortcutHint'
 import {
@@ -30,7 +30,7 @@ export default function KeybindingCheatSheet(props: {
     >
       <DeltaDialogHeader onClose={onClose} showCloseButton={true}>
         <h4 className='bp3-heading'>Keybindings</h4>
-        <KeyboardShortcut elements={['Control', '/']} />
+        <CheatSheetKeyboardShortcut />
       </DeltaDialogHeader>
 
       <DeltaDialogBody>
