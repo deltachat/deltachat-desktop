@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- Move node-fetch to devDependencies
+
 ## [1.28.2] - 2022-04-22
 
 ### Changed
