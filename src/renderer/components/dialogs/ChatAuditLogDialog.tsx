@@ -12,7 +12,7 @@ import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/dist/constants'
 import { getLogger } from '../../../shared/logger'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import {
   openMessageInfo,
   setQuoteInDraft,
@@ -161,7 +161,7 @@ export default function ChatAuditLogDialog(props: {
                 return (
                   <li key={key} className='time'>
                     <div>
-                      {moment.unix(nextMessage.timestamp).calendar(null, {
+                      {dayjs.unix(nextMessage.timestamp).calendar(null, {
                         sameDay: `[${tx('today')}]`,
                         lastDay: `[${tx('yesterday')}]`,
                         lastWeek: 'LL',
@@ -188,7 +188,7 @@ export default function ChatAuditLogDialog(props: {
                 >
                   <p>
                     <div className='timestamp'>
-                      {moment.unix(timestamp).format('LT')}
+                      {dayjs.unix(timestamp).format('LT')}
                     </div>
                     {text}
                     {direction === 'outgoing' &&

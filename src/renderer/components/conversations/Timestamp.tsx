@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import classNames from 'classnames'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import formatRelativeTime from './formatRelativeTime'
 
 const UPDATE_FREQUENCY = 60 * 1000
@@ -39,7 +39,7 @@ const NonUpdatingTimestamp = function Timestamp(props: TimestampProps) {
         moduleName,
         direction ? `${moduleName}--${direction}` : null
       )}
-      title={moment(timestamp).format('llll')}
+      title={dayjs(timestamp).format('llll')}
     >
       {formatRelativeTime(timestamp, { extended })}
     </span>
@@ -77,7 +77,7 @@ const UpdatingTimestamp = (props: TimestampProps) => {
         moduleName,
         direction ? `${moduleName}--${direction}` : null
       )}
-      title={moment(timestamp).format('llll')}
+      title={dayjs(timestamp).format('llll')}
     >
       {relativeTime}
     </span>

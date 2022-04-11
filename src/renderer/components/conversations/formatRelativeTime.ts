@@ -1,5 +1,8 @@
-import moment from 'moment'
-import 'moment/min/locales'
+import dayjs from 'dayjs'
+import duration from 'dayjs/plugin/duration'
+dayjs.extend(duration)
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+dayjs.extend(localizedFormat)
 
 const getExtendedFormats = () => ({
   y: 'lll',
@@ -12,15 +15,15 @@ const getShortFormats = () => ({
   d: 'ddd',
 })
 
-function isToday(timestamp: moment.Moment) {
-  const today = moment().format('ddd')
-  const targetDay = moment(timestamp).format('ddd')
+function isToday(timestamp: dayjs.Dayjs) {
+  const today = dayjs().format('ddd')
+  const targetDay = dayjs(timestamp).format('ddd')
   return today === targetDay
 }
 
-function isYear(timestamp: moment.Moment) {
-  const year = moment().format('YYYY')
-  const targetYear = moment(timestamp).format('YYYY')
+function isYear(timestamp: dayjs.Dayjs) {
+  const year = dayjs().format('YYYY')
+  const targetYear = dayjs(timestamp).format('YYYY')
   return year === targetYear
 }
 
@@ -31,9 +34,9 @@ export default function formatRelativeTime(
   const { extended } = options
   const tx = window.static_translate
   const formats = extended ? getExtendedFormats() : getShortFormats()
-  const timestamp = moment(rawTimestamp)
-  const now = moment()
-  const diff = moment.duration(now.diff(timestamp))
+  const timestamp = dayjs(rawTimestamp)
+  const now = dayjs()
+  const diff = dayjs.duration(now.diff(timestamp))
 
   if (diff.years() >= 1 || !isYear(timestamp)) {
     return timestamp.format(formats.y)

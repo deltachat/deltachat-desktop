@@ -1,6 +1,6 @@
 import React from 'react'
 import DeltaDialog, { DeltaDialogBody } from './DeltaDialog'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { DeltaBackend } from '../../delta-remote'
 import { Card, Callout } from '@blueprintjs/core'
 import { DialogProps } from './DialogController'
@@ -67,7 +67,7 @@ class MessageInfo extends React.Component<
                 {tx('message_detail_sent_desktop')}
               </td>
               <td>
-                {moment(sentAt).format('LLLL')}{' '}
+                {dayjs(sentAt).format('LLLL')}{' '}
                 <span className='module-message-detail__unix-timestamp'>
                   ({sentAt})
                 </span>
@@ -79,7 +79,7 @@ class MessageInfo extends React.Component<
                   {tx('message_detail_received_desktop')}
                 </td>
                 <td>
-                  {moment(receivedAt).format('LLLL')}{' '}
+                  {dayjs(receivedAt).format('LLLL')}{' '}
                   <span className='module-message-detail__unix-timestamp'>
                     ({receivedAt})
                   </span>

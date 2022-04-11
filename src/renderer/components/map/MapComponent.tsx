@@ -7,7 +7,7 @@ import debounce from 'debounce'
 import mapboxgl from 'mapbox-gl'
 import { locationStore } from '../../stores/locations'
 import geojsonExtent from '@mapbox/geojson-extent'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import formatRelativeTime from '../conversations/formatRelativeTime'
 import MapLayerFactory from './MapLayerFactory'
 import { Slider, Button, Collapse } from '@blueprintjs/core'
@@ -579,7 +579,7 @@ export default class MapComponent extends React.Component<
     if (rangeMap[this.state.timeOffset].minutes === 0) {
       return 0
     } else {
-      return moment().unix() - rangeMap[this.state.timeOffset].minutes * 60
+      return dayjs().unix() - rangeMap[this.state.timeOffset].minutes * 60
     }
   }
 

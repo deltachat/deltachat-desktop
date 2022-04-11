@@ -9,7 +9,9 @@ import ChatStore, {
 import { useDebouncedCallback } from 'use-debounce'
 import { C } from 'deltachat-node/dist/constants'
 import type { ChatTypes } from 'deltachat-node'
-import moment from 'moment'
+import dayjs from 'dayjs'
+import calendar from 'dayjs/plugin/calendar'
+dayjs.extend(calendar)
 
 import { getLogger } from '../../../shared/logger'
 import { MessageType, FullChat } from '../../../shared/shared-types'
@@ -442,7 +444,7 @@ export function DayMarker(props: { timestamp: number }) {
   return (
     <div className='info-message'>
       <div className='bubble' style={{ textTransform: 'capitalize' }}>
-        {moment.unix(timestamp).calendar(null, {
+        {dayjs.unix(timestamp).calendar(null, {
           sameDay: `[${tx('today')}]`,
           lastDay: `[${tx('yesterday')}]`,
           lastWeek: 'LL',

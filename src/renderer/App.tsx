@@ -10,7 +10,7 @@ const log = getLogger('renderer/App')
 import { DeltaBackend } from './delta-remote'
 import { ThemeManager, ThemeContext } from './ThemeManager'
 
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { CrashScreen } from './components/screens/CrashScreen'
 import { runtime } from './runtime'
 import { DesktopSettingsType } from '../shared/shared-types'
@@ -66,7 +66,8 @@ export default function App(_props: any) {
     window.localeData = localeData
     window.static_translate = translate(localeData.messages)
     setLocaleData(localeData)
-    moment.locale(localeData.locale)
+    require(`dayjs/locale/${localeData.locale}`)
+    dayjs.locale(localeData.locale)
   }
 
   useEffect(() => {

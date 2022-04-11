@@ -12,6 +12,7 @@
 - Update deltachat-node to v1.77.0
 - `ENTER + SHIFT` and `ENTER + CTRL` in the composer do now the same thing: they send or add a newline depending on the `enterKeySends` user preference
 - update webxdc setUpdateListener api
+- Replace dependency `moment` with `dayjs`
 
 ### Removed
 - remove dependency `react-qr-svg`
