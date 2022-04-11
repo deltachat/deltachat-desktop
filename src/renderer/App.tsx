@@ -10,10 +10,22 @@ const log = getLogger('renderer/App')
 import { DeltaBackend } from './delta-remote'
 import { ThemeManager, ThemeContext } from './ThemeManager'
 
-import dayjs from 'dayjs'
 import { CrashScreen } from './components/screens/CrashScreen'
 import { runtime } from './runtime'
 import { DesktopSettingsType } from '../shared/shared-types'
+
+import dayjs from 'dayjs'
+const dayjsLocales = {
+    ar: [ 'ar', () => import('dayjs/locale/ar') ],
+    az: [ 'az', () => import('dayjs/locale/az') ],
+    bg: [ 'bg', () => import('dayjs/locale/bg') ],
+    ca: [ 'ca', () => import('dayjs/locale/ca') ],
+    cs: [ 'cs', () => import('dayjs/locale/cs') ],
+    ckb: [ 'en', () => import('dayjs/locale/en') ], // FIXME
+    da: [ 'da', () => import('dayjs/locale/da') ],
+    de: [ 'de', () => import('dayjs/locale/de') ],
+    // TODO
+}
 
 attachKeybindingsListener()
 
@@ -66,8 +78,9 @@ export default function App(_props: any) {
     window.localeData = localeData
     window.static_translate = translate(localeData.messages)
     setLocaleData(localeData)
-    require(`dayjs/locale/${localeData.locale}`)
-    dayjs.locale(localeData.locale)
+    dayjsLocale = dayjsLocales[localeData.locale]
+    await dayjsLocale[1]()
+    dayjs.locale(dayjsLocale[0])
   }
 
   useEffect(() => {
