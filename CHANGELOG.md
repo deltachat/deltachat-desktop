@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- Fix contact name has color in quote when replying with sticker
+
 ## [1.28.2] - 2022-04-22
 
 ### Changed
