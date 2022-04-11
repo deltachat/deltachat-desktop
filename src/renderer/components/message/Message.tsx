@@ -485,7 +485,7 @@ export const Quote = ({
   isSticker,
 }: {
   quote: MessageQuote
-  isSticker: Boolean
+  isSticker?: Boolean
 }) => {
   return (
     <div
