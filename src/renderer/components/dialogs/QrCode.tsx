@@ -72,7 +72,7 @@ export default function QrCode({
 export function QrCodeShowQrInner({
   qrCode,
   qrCodeSVG,
-  description,
+  description: _description,
   onClose,
   onBack,
 }: {
