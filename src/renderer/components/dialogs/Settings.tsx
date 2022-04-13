@@ -45,7 +45,7 @@ export function SettingsIconButton(props: any) {
       <div
         className='Icon'
         style={{
-          WebkitMask: 'url(../images/' + iconName + '.svg) no-repeat center',
+          WebkitMask: 'url(../images/icons/' + iconName + '.svg) no-repeat center',
         }}
       ></div>
       <button {...otherProps}>{children}</button>
