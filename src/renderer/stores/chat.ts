@@ -421,16 +421,19 @@ class ChatStore extends Store<ChatStoreState> {
         const modifiedState = {
           ...state,
           messagePages: state.messagePages.map(messagePage => {
-            const returnMessagePage = messagePage
-            returnMessagePage.messages = returnMessagePage.messages.withMutations(
-              messages => {
-                for (const changedMessage of payload.messagesChanged) {
-                  if (!messages.has(changedMessage.id)) continue
-                  messages.set(changedMessage.id, changedMessage)
-                }
+            let changed = false
+            const messages = messagePage.messages.withMutations(messages => {
+              for (const changedMessage of payload.messagesChanged) {
+                if (!messages.has(changedMessage.id)) continue
+                changed = true
+                messages.set(changedMessage.id, changedMessage)
               }
-            )
-            return returnMessagePage
+            })
+            if (changed === false) return messagePage
+            return {
+              ...messagePage,
+              messages,
+            }
           }),
         }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
@@ -1058,7 +1061,10 @@ class ChatStore extends Store<ChatStoreState> {
         if (chatId === null || chatId === undefined) {
           return
         }
-        if (eventChatId === 0 && messageId === 0) {
+        if (
+          messageId === 0 &&
+          (eventChatId === 0 || eventChatId === this.state.chat?.id)
+        ) {
           this.effect.refresh({ chatId })
           return
         }

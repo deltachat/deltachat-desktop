@@ -313,6 +313,7 @@ export default function Settings(props: DialogProps) {
           />
           <SettingsManageKeys />
           <SettingsBackup />
+          {/* <SettingsWebxdc />  hide for now, see https://github.com/deltachat/deltachat-desktop/issues/2638 */}
         </DeltaDialogBody>
       </>
     )

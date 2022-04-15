@@ -2,7 +2,59 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- Move node-fetch to devDependencies
+- Update emoji-mart to `^3.0.1`
+- Update @types/emoji-mart to `^3.0.9`
+
+### Removed
+- remove dependency `react-qr-svg`
+
 ### Fixed
+- fix: hide connectivity toast when connected
+
+### Fixed
+- fix random search result position (#2631) 
+
+## [1.28.2] - 2022-04-22
+
+### Changed
+- Update electron to `14.2.9`
+- Enable unread badge counter on windows
+
+### Fixed
+- fix Layout issues in Settings window
+- Fix chat background on windows
+- fix tray icon unread indicator on windows
+
+## [1.28.1] - 2022-04-05
+
+### Changed
+- Update translations (25.03.2022)
+- Update react-string-replace to `1.0.0`
+
+### Fixed
+- remove wrong line (about send on enter) from changelog in device msg
+- webxdc allow `blob:` uri scheme
+
+## [1.28.0] - 2022-03-25
+
+### Changed
+- Set default of enterKeySends to false again
+- remove webxdc clear domstorage settings for now until we know what we want (see https://github.com/deltachat/deltachat-desktop/issues/2638)
+- increase composer draft saving debounce timeout to one second
+
+### Fixed
+- Fix messages not appearing with download on demand
+
+## [1.27.2] - 2022-03-15
+
+### Added
+
+- webxdc content now has access to persistent DOMStorage
+
+### Fixed
+
 - Fix missing key login_socks5_login
 - Fix creating contacts from email address in message
 - Fix two different about dialogs on macOS #2280
@@ -14,6 +66,8 @@
 - fix openpgp4frp uri opening on macOS
 - Fix loading more messages if we only less messages to fill the window size
 - Fix chatlist jumps to top after archiving
+- Reduce startup lag while fetching messages (fix debouncing of onChatListItemChanged)
+- Fix webxdc audio playback
 - Fix qr scanning on account screen
 
 ### Changed
@@ -1489,7 +1543,15 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.27.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.28.2...HEAD
+
+[1.28.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.28.1...v1.28.2
+
+[1.28.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.28.0...v1.28.1
+
+[1.28.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.27.2...v1.28.0
+
+[1.27.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.27.1...v1.27.2
 
 [1.27.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.27.0...v1.27.1
 

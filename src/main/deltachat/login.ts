@@ -106,6 +106,8 @@ export default class DCLoginController extends SplitOut {
 
     if (this.accounts.removeAccount(accountId) !== 1) {
       throw new Error('Account deletion failed')
+    } else {
+      this.controller.webxdc._deleteWebxdcAccountData(accountId)
     }
   }
 
@@ -130,16 +132,14 @@ export default class DCLoginController extends SplitOut {
     this.controller.hintUpdateIfNessesary()
 
     this.selectedAccountContext.addDeviceMessage(
-      'changelog-version-1.27.0-version1',
-      `What's new in 1.27.0?
+      'changelog-version-1.28.0-version1',
+      `What's new in 1.28.0?
 
 🦘The long awaited jump to message is here (jump to quoted messages and search results)
 
 🔎Images are now zoomable in the fullscreen view
 
 🖼️Images can now be copied from the context menu
-
-↩️Sending messages on pressing enter is now the default
 
 ✨Many bugfixes and improvements
 

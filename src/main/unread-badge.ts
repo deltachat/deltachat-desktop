@@ -4,8 +4,6 @@ import DeltaChatController from './deltachat/controller'
 import { set_has_unread } from './tray'
 
 export default function setupUnreadBadge(dc: DeltaChatController) {
-  if (process.platform !== 'linux' && process.platform !== 'darwin') return
-
   let reUpdateTimeOut: NodeJS.Timeout
 
   async function update() {

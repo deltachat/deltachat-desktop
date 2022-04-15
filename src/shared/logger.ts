@@ -177,7 +177,7 @@ export function getLogger(channel: string) {
 if (!('toJSON' in Error.prototype))
   Object.defineProperty(Error.prototype, 'toJSON', {
     value: function () {
-      var alt = {}
+      const alt = {}
       Object.getOwnPropertyNames(this).forEach(function (key) {
         //@ts-ignore
         alt[key] = this[key]

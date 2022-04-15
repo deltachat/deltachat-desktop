@@ -16,6 +16,9 @@
 
 
 # misc unrelated stuff
+CHANGELOG.md
+CONTRIBUTORS.md
+LICENSE
 README_ASSETS/
 README.md
 bin/
@@ -27,6 +30,8 @@ jenkins/
 ci_scripts/
 **/.github/*
 electron-builder.json5
+package.json
+package-lock.json
 
 ## docs that are hidden in asar are useless
 docs/

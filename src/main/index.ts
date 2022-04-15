@@ -15,6 +15,7 @@ protocol.registerSchemesAsPrivileged([
       allowServiceWorkers: true,
       standard: true,
       supportFetchAPI: true,
+      stream: true, // needed for audio playback
     },
   },
 ])
@@ -78,6 +79,7 @@ import * as devTools from './devtools'
 import { ExtendedAppMainProcess } from './types'
 import { updateTrayIcon, hideDeltaChat, showDeltaChat } from './tray'
 import { acceptThemeCLI } from './themes'
+import { webxdcStartUpCleanup } from './deltachat/webxdc'
 
 app.ipcReady = false
 app.isQuitting = false
@@ -86,6 +88,7 @@ Promise.all([
   new Promise((resolve, _reject) => app.on('ready', resolve)),
   DesktopSettings.load(),
   findOutIfWeAreRunningAsAppx(),
+  webxdcStartUpCleanup(),
 ])
   .then(onReady)
   .catch(error => {
@@ -94,7 +97,12 @@ Promise.all([
     process.exit(1)
   })
 
-async function onReady([_appReady, _loadedState, _]: [any, any, any]) {
+async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
+  any,
+  any,
+  any,
+  any
+]) {
   // can fail due to user error so running it first is better (cli argument)
   acceptThemeCLI()
 
