@@ -17,6 +17,7 @@
 ### Fixed
 - fix: hide connectivity toast when connected
 - fix random search result position (#2631) 
+- fix: signature field in Edit Profile is not labeled when empty (#2579)
 
 ## [1.28.2] - 2022-04-22
 
