@@ -6,6 +6,7 @@
 - Move node-fetch to devDependencies
 - Update emoji-mart to `^3.0.1`
 - Update @types/emoji-mart to `^3.0.9`
+- Update deltachat-node to v1.77.0
 
 ### Removed
 - remove dependency `react-qr-svg`
