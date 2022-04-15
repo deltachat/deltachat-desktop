@@ -174,9 +174,13 @@ $hover-contrast-change: 2%;
 
     --messageReplyBtnBg: rgba(255, 255, 255, 0.13);
     --messageReplyBtnBgHover: rgba(255, 255, 255, 0.23);
+
+    --settingsIconColor: #666666;
   } @else {
     // light theme
     --scrollbarThumb: #{rgba(grey, $scrollbarTransparency)};
     --scrollbarThumbHover: #{rgba(grey, $scrollbarTransparency + 0.14)};
+
+    --settingsIconColor: #666666;
   }
 }

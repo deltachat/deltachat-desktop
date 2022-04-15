@@ -5,10 +5,21 @@
 ### Fixed
 - Fix contact name has color in quote when replying with sticker
 
+### Added
+- Implement expandable settings
+
 ### Changed
 - Move node-fetch to devDependencies
 - Update emoji-mart to `^3.0.1`
 - Update @types/emoji-mart to `^3.0.9`
+- Update deltachat-node to v1.77.0
+
+### Removed
+- remove dependency `react-qr-svg`
+
+### Fixed
+- fix: hide connectivity toast when connected
+- fix random search result position (#2631) 
 
 ## [1.28.2] - 2022-04-22
 
@@ -63,14 +74,13 @@
 - Reduce startup lag while fetching messages (fix debouncing of onChatListItemChanged)
 - Fix webxdc audio playback
 - Fix qr scanning on account screen
+- fix: log messageg-parser errors and display plain text message as fallback (instead of crashing)
+
 
 ### Changed
 - exclude more unused files from installation package
 - Improved videochat instance dialog
 
-### Fixed
-
-- fix: log messageg-parser errors and display plain text message as fallback (instead of crashing)
 
 ## [1.27.1] - 2022-03-10
 

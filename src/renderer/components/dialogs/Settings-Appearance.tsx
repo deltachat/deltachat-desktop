@@ -4,7 +4,7 @@ import {
   useTranslationFunction,
 } from '../../contexts'
 import React, { useContext, useEffect, useState } from 'react'
-import { H5, H6, Card, Elevation, Icon } from '@blueprintjs/core'
+import { H6, Icon } from '@blueprintjs/core'
 import { DeltaBackend } from '../../delta-remote'
 import { ThemeManager } from '../../ThemeManager'
 import { SettingsSelector } from './Settings'
@@ -269,8 +269,7 @@ export default function SettingsAppearance({
 
   const tx = useTranslationFunction()
   return (
-    <Card elevation={Elevation.ONE}>
-      <H5>{tx('pref_appearance')}</H5>
+    <>
       <SettingsSelector
         onClick={onOpenSelectThemeDialog}
         currentValue={shortCurrentValue()}
@@ -286,6 +285,6 @@ export default function SettingsAppearance({
             : handleDesktopSettingsChange('chatViewBgImg', val)
         }}
       />
-    </Card>
+    </>
   )
 }

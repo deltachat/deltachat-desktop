@@ -1,5 +1,5 @@
 import React, { useState, useContext, FormEvent } from 'react'
-import { Card, Elevation, H5, Radio, RadioGroup } from '@blueprintjs/core'
+import { Card, Elevation, Radio, RadioGroup } from '@blueprintjs/core'
 import {
   RenderDTSettingSwitchType,
   SettingsSelector,
@@ -56,7 +56,6 @@ export function SettingsExperimentalFeatures({
 
   return (
     <>
-      <H5>{tx('pref_experimental_features')}</H5>
       {renderDTSettingSwitch({
         key: 'enableOnDemandLocationStreaming',
         label: tx('pref_on_demand_location_streaming'),
@@ -146,7 +145,7 @@ export function EditVideochatInstanceDialog({
       }}
       fixed
     >
-      <DeltaDialogHeader title={tx('videochat')} />
+      <DeltaDialogHeader title={tx('videochat')} showBackButton />
       <DeltaDialogBody>
         <Card elevation={Elevation.ONE}>
           <div
