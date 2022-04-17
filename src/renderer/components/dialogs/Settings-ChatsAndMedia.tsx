@@ -13,7 +13,7 @@ import {
   enterKeySendsKeyboardShortcuts,
   KeybordShortcutHintInSettings,
 } from '../KeyboardShortcutHint'
-import {DesktopSettingsType} from '../../../shared/shared-types'
+import { DesktopSettingsType } from '../../../shared/shared-types'
 
 export function SettingsChatsAndMedia({
   state,
