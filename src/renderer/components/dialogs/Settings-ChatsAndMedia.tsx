@@ -9,14 +9,21 @@ import SettingsAutodelete from './Settings-Autodelete'
 import SettingsBackup from './Settings-Backup'
 import SettingsCommunication from './Settings-Communication'
 import SettingsDownloadOnDemand from './Settings-DownloadOnDemand'
+import {
+  enterKeySendsKeyboardShortcuts,
+  KeybordShortcutHintInSettings,
+} from '../KeyboardShortcutHint'
+import {DesktopSettingsType} from '../../../shared/shared-types'
 
 export function SettingsChatsAndMedia({
   state,
+  desktopSettings,
   handleDeltaSettingsChange,
   renderDeltaSwitch2,
   renderDTSettingSwitch,
 }: {
   state: SettingsState
+  desktopSettings: DesktopSettingsType
   handleDeltaSettingsChange: any
   renderDeltaSwitch2: RenderDeltaSwitch2Type
   renderDTSettingSwitch: RenderDTSettingSwitchType
@@ -33,6 +40,11 @@ export function SettingsChatsAndMedia({
         key: 'enterKeySends',
         label: tx('pref_enter_sends_explain'),
       })}
+      <KeybordShortcutHintInSettings
+        actions={enterKeySendsKeyboardShortcuts(
+          desktopSettings['enterKeySends']
+        )}
+      />
       <SettingsDownloadOnDemand
         handleDeltaSettingsChange={handleDeltaSettingsChange}
         settings={state.settings}
