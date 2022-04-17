@@ -329,6 +329,7 @@ export default function Settings(props: DialogProps) {
               <Card elevation={Elevation.ONE}>
                 <SettingsChatsAndMedia
                   state={state}
+                  desktopSettings={desktopSettings}
                   handleDeltaSettingsChange={handleDeltaSettingsChange}
                   renderDeltaSwitch2={renderDeltaSwitch2}
                   renderDTSettingSwitch={renderDTSettingSwitch}
