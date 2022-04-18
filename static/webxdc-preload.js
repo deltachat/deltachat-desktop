@@ -39,7 +39,7 @@
       last_serial = start_serial
       callback = cb
       onStatusUpdate()
-      return new Promise((res, rej) => {
+      return new Promise((res, _rej) => {
         setUpdateListenerPromise = res
       })
     },
