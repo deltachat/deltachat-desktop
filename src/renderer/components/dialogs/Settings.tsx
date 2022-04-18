@@ -22,6 +22,7 @@ import { runtime } from '../../runtime'
 import { SettingsChatsAndMedia } from './Settings-ChatsAndMedia'
 import { SettingsAdvanced } from './Settings-Advanced'
 import SettingsNotifications from './Settings-Notifications'
+import SettingsStoreInstance, {useSettingsStore} from '../../stores/settings'
 
 const log = getLogger('renderer/dialogs/Settings')
 
@@ -126,7 +127,7 @@ export default function Settings(props: DialogProps) {
     })
   }
 
-  const { desktopSettings, setDesktopSetting } = useContext(SettingsContext)
+  const settingsStore = useSettingsStore()[0]
 
   const tx = useTranslationFunction()
   const [settingsMode, setSettingsMode] = useState('main')
@@ -139,12 +140,7 @@ export default function Settings(props: DialogProps) {
     key: keyof DesktopSettingsType,
     value: string | boolean | number
   ) => {
-    if (
-      (await DeltaBackend.call('settings.setDesktopSetting', key, value)) ===
-      true
-    ) {
-      setDesktopSetting(key, value)
-    }
+    SettingsStoreInstance.effect.setDesktopSetting(key, value)
   }
 
   /** Saves settings to deltachat core */
@@ -186,20 +182,20 @@ export default function Settings(props: DialogProps) {
     disabled?: boolean
     disabledValue?: boolean
   }) => {
-    if (!desktopSettings) {
+    if (!settingsStore) {
       return null
     }
     const value =
       disabled === true && typeof disabledValue !== 'undefined'
         ? disabledValue
-        : desktopSettings[key] === true
+        : settingsStore.desktopSettings[key] === true
     return (
       <DeltaSwitch2
         label={label}
         description={description}
         value={value}
         onClick={() => {
-          handleDesktopSettingsChange(key, !desktopSettings[key])
+          handleDesktopSettingsChange(key, !settingsStore.desktopSettings[key])
         }}
         disabled={disabled}
       />
@@ -237,7 +233,9 @@ export default function Settings(props: DialogProps) {
   }
 
   const renderDialogContent = ({ settings, rc }: typeof state) => {
-    if (Object.keys(settings || {}).length === 0 || !desktopSettings) {
+    if (!settingsStore) return null
+
+    if (Object.keys(settings || {}).length === 0 || !settingsStore.desktopSettings) {
       return null
     }
 
@@ -256,6 +254,7 @@ export default function Settings(props: DialogProps) {
                   onClose={props.onClose}
                   addr={settings['addr']}
                   displayname={settings['displayname']}
+                  profileImage={settingsStore.selfContact.profileImage}
                   state={state}
                   handleDeltaSettingsChange={handleDeltaSettingsChange}
                 />
@@ -328,7 +327,7 @@ export default function Settings(props: DialogProps) {
               <Card elevation={Elevation.ONE}>
                 <SettingsChatsAndMedia
                   state={state}
-                  desktopSettings={desktopSettings}
+                  desktopSettings={settingsStore.desktopSettings}
                   handleDeltaSettingsChange={handleDeltaSettingsChange}
                   renderDeltaSwitch2={renderDeltaSwitch2}
                   renderDTSettingSwitch={renderDTSettingSwitch}
@@ -349,7 +348,7 @@ export default function Settings(props: DialogProps) {
             <DeltaDialogBody>
               <Card elevation={Elevation.ONE}>
                 <SettingsNotifications
-                  desktopSettings={desktopSettings}
+                  desktopSettings={settingsStore.desktopSettings}
                   renderDTSettingSwitch={renderDTSettingSwitch}
                 />
               </Card>
