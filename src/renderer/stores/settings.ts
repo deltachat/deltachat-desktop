@@ -1,6 +1,7 @@
 import { C } from 'deltachat-node/dist/constants'
-import { JsonContact } from '../../shared/shared-types'
+import { DesktopSettingsType, JsonContact } from '../../shared/shared-types'
 import { DeltaBackend } from '../delta-remote'
+import {ipcBackend} from '../ipc'
 import { Store, useStore } from './store'
 
 interface SettingsStoreState {
@@ -21,7 +22,8 @@ interface SettingsStoreState {
     webrtc_instance: string
     download_limit: string
     only_fetch_mvbox: string
-  }
+  },
+  desktopSettings: DesktopSettingsType
 }
 
 const settingsKeys: Array<keyof SettingsStoreState['settings']> = [
@@ -43,11 +45,37 @@ const settingsKeys: Array<keyof SettingsStoreState['settings']> = [
 
 class SettingsStore extends Store<SettingsStoreState | null> {
   reducer = {
-    set: (newState: SettingsStoreState) => {
+    setState: (newState: SettingsStoreState) => {
       this.setState(_state => {
         return newState
       }, 'set')
     },
+    setSelfContact: (selfContact: JsonContact) => {
+      this.setState(state => {
+        if (state === null) return
+        return {
+          ...state,
+          selfContact
+        }
+      }, 'setSelfContact')
+    },
+    setDesktopSetting: (key: keyof DesktopSettingsType, value: string | number | boolean) => {
+      this.setState(state => {
+        if (state === null) {
+          this.log.warn(
+            'trying to update local version of desktop settings object, but it was not loaded yet'
+          )
+          return
+        }
+        return {
+          ...state,
+          desktopSettings: {
+            ...state.desktopSettings,
+            [key]: value
+          }
+        }
+      }, 'setDesktopSetting')
+    }
   }
   effect = {
     load: async () => {
@@ -55,14 +83,34 @@ class SettingsStore extends Store<SettingsStoreState | null> {
         'settings.getConfigFor',
         settingsKeys
       )) as SettingsStoreState['settings']
+      const desktopSettings = await DeltaBackend.call(
+        'settings.getDesktopSettings'
+      )
       const selfContact = await DeltaBackend.call(
         'contacts.getContact',
         C.DC_CONTACT_ID_SELF
       )
-      this.reducer.set({ settings, selfContact, accountId: -1 })
+      this.reducer.setState({ settings, selfContact, accountId: -1, desktopSettings })
     },
+    setDesktopSetting: async(key: keyof DesktopSettingsType, value: string | number | boolean) => {
+      if (
+        (await DeltaBackend.call('settings.setDesktopSetting', key, value)) ===
+        true
+      ) {
+        this.reducer.setDesktopSetting(key, value)
+      }
+
+    }
   }
 }
+
+ipcBackend.on('DC_EVENT_SELFAVATAR_CHANGED', async (_evt, [_chatId]) => {
+  const selfContact = await DeltaBackend.call(
+    'contacts.getContact',
+    C.DC_CONTACT_ID_SELF
+  )
+  SettingsStoreInstance.reducer.setSelfContact(selfContact)
+})
 
 const SettingsStoreInstance = new SettingsStore(null, 'SettingsStore')
 export const useSettingsStore = () => useStore(SettingsStoreInstance)

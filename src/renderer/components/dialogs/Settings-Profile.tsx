@@ -33,17 +33,18 @@ export function useProfileImage() {
 export default function SettingsProfile({
   addr,
   displayname,
+  profileImage,
   state,
   handleDeltaSettingsChange,
 }: {
   onClose: any
   addr: string | undefined
   displayname: string | undefined
+  profileImage: string,
   state: any
   handleDeltaSettingsChange: (key: string, value: string) => void
 }) {
   const { openDialog } = useContext(ScreenContext)
-  const profileImagePreview = useProfileImage()
   const [connectivityString, setConnectivityString] = useState('')
 
   const updateConnectivity = async () => {
@@ -74,12 +75,12 @@ export default function SettingsProfile({
   }, [])
 
   const tx = useTranslationFunction()
-  const profileBlobUrl = runtime.transformBlobURL(profileImagePreview)
+  const profileBlobUrl = runtime.transformBlobURL(profileImage)
   return (
     <>
       <div className='profile-image-username' style={{ marginBottom: '10px' }}>
         <div className='profile-image-selector'>
-          {profileImagePreview ? (
+          {profileBlobUrl ? (
             <ClickForFullscreenAvatarWrapper filename={profileBlobUrl}>
               <img src={profileBlobUrl} alt={tx('pref_profile_photo')} />
             </ClickForFullscreenAvatarWrapper>
