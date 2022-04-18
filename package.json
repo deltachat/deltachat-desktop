@@ -103,7 +103,6 @@
     "react-zoom-pan-pinch": "^2.1.3",
     "source-map-support": "^0.5.19",
     "stackframe": "^1.2.1",
-    "tempy": "^0.3.0",
     "url-parse": "^1.5.9",
     "use-debounce": "^3.3.0"
   },
