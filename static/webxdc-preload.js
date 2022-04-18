@@ -38,10 +38,11 @@
     setUpdateListener: (cb, start_serial = 0) => {
       last_serial = start_serial
       callback = cb
-      onStatusUpdate()
-      return new Promise((res, _rej) => {
+      const promise = new Promise((res, _rej) => {
         setUpdateListenerPromise = res
       })
+      onStatusUpdate()
+      return promise
     },
     getAllUpdates: () => {
       console.error(
