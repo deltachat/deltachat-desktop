@@ -21,11 +21,9 @@ import SettingsStoreInstance, {
 const WEBRTC_INSTANCE_JITSI = 'https://meet.jit.si/$ROOM'
 
 export function SettingsExperimentalFeatures({
-  state,
   settingsStore,
   renderDTSettingSwitch,
 }: {
-  state: SettingsState
   renderDTSettingSwitch: RenderDTSettingSwitchType
   settingsStore: SettingsStoreState
 }) {
@@ -67,10 +65,10 @@ export function SettingsExperimentalFeatures({
       {renderDTSettingSwitch({
         key: 'minimizeToTray',
         label: tx('pref_show_tray_icon'),
-        disabled: state.rc?.minimized,
-        disabledValue: state.rc?.minimized,
+        disabled: settingsStore.rc.minimized,
+        disabledValue: settingsStore.rc.minimized,
       })}
-      {state.rc?.minimized && (
+      {settingsStore.rc.minimized && (
         <div className='bp3-callout'>
           {tx('explain_desktop_minimized_disabled_tray_pref')}
         </div>
