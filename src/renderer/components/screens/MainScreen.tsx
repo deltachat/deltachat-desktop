@@ -1,8 +1,5 @@
 import React, { useState, useContext, useRef } from 'react'
-import {
-  ScreenContext,
-  useTranslationFunction,
-} from '../../contexts'
+import { ScreenContext, useTranslationFunction } from '../../contexts'
 
 import Gallery from '../Gallery'
 import { useThreeDotMenu } from '../ThreeDotMenu'
@@ -38,7 +35,7 @@ import { FullChat } from '../../../shared/shared-types'
 import { getLogger } from '../../../shared/logger'
 import { RecoverableCrashScreen } from './RecoverableCrashScreen'
 import Sidebar, { SidebarState } from '../Sidebar'
-import SettingsStoreInstance, {useSettingsStore} from '../../stores/settings'
+import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 
 const log = getLogger('renderer/main-screen')
 
@@ -266,7 +263,8 @@ export default function MainScreen() {
                   icon={'media'}
                   aria-label={tx('media')}
                 />
-                { settingsStore?.desktopSettings.enableOnDemandLocationStreaming && (
+                {settingsStore?.desktopSettings
+                  .enableOnDemandLocationStreaming && (
                   <Button
                     minimal
                     large

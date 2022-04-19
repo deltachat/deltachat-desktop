@@ -22,7 +22,7 @@ import { Quote } from '../message/Message'
 import { DeltaBackend } from '../../delta-remote'
 import { DraftAttachment } from '../attachment/messageAttachment'
 import { sendMessage, unselectChat } from '../helpers/ChatMethods'
-import {useSettingsStore} from '../../stores/settings'
+import { useSettingsStore } from '../../stores/settings'
 
 const log = getLogger('renderer/composer')
 
@@ -256,7 +256,7 @@ const Composer = forwardRef<
             addFileToDraft={addFileToDraft}
             selectedChat={selectedChat}
           />
-          { settingsStore &&
+          {settingsStore && (
             <ComposerMessageInput
               ref={messageInputRef}
               enterKeySends={settingsStore?.desktopSettings.enterKeySends}
@@ -265,7 +265,7 @@ const Composer = forwardRef<
               updateDraftText={updateDraftText}
               onPaste={handlePaste}
             />
-          }
+          )}
           <div
             className='emoji-button'
             ref={pickerButtonRef}

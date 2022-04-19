@@ -22,7 +22,10 @@ import { runtime } from '../../runtime'
 import { SettingsChatsAndMedia } from './Settings-ChatsAndMedia'
 import { SettingsAdvanced } from './Settings-Advanced'
 import SettingsNotifications from './Settings-Notifications'
-import SettingsStoreInstance, {SettingsStoreState, useSettingsStore} from '../../stores/settings'
+import SettingsStoreInstance, {
+  SettingsStoreState,
+  useSettingsStore,
+} from '../../stores/settings'
 
 const log = getLogger('renderer/dialogs/Settings')
 
@@ -157,7 +160,10 @@ export default function Settings(props: DialogProps) {
         description={description}
         value={value}
         onClick={() => {
-          SettingsStoreInstance.effect.setDesktopSetting(key, !settingsStore.desktopSettings[key])
+          SettingsStoreInstance.effect.setDesktopSetting(
+            key,
+            !settingsStore.desktopSettings[key]
+          )
         }}
         disabled={disabled}
       />
@@ -171,13 +177,13 @@ export default function Settings(props: DialogProps) {
     disabled,
     disabledValue,
   }: {
-    key: keyof SettingsStoreState['settings'] 
+    key: keyof SettingsStoreState['settings']
     label: string
     description?: string
     disabled?: boolean
     disabledValue?: boolean
   }) => {
-    if (!settingsStore) return 
+    if (!settingsStore) return
     const value =
       disabled === true && typeof disabledValue !== 'undefined'
         ? disabledValue
@@ -188,7 +194,10 @@ export default function Settings(props: DialogProps) {
         value={value}
         description={description}
         onClick={() => {
-          SettingsStoreInstance.effect.setCoreSetting(key, flipDeltaBoolean(settingsStore.settings[key]))
+          SettingsStoreInstance.effect.setCoreSetting(
+            key,
+            flipDeltaBoolean(settingsStore.settings[key])
+          )
         }}
         disabled={disabled}
       />
@@ -198,7 +207,10 @@ export default function Settings(props: DialogProps) {
   const renderDialogContent = ({ rc }: typeof state) => {
     if (!settingsStore) return null
 
-    if (Object.keys(settingsStore.settings || {}).length === 0 || !settingsStore.desktopSettings) {
+    if (
+      Object.keys(settingsStore.settings || {}).length === 0 ||
+      !settingsStore.desktopSettings
+    ) {
       return null
     }
 
@@ -216,7 +228,6 @@ export default function Settings(props: DialogProps) {
                 <SettingsProfile
                   settingsStore={settingsStore}
                   onClose={props.onClose}
-                  
                 />
                 <br />
                 <SettingsIconButton
@@ -287,7 +298,6 @@ export default function Settings(props: DialogProps) {
                 <SettingsChatsAndMedia
                   settingsStore={settingsStore}
                   desktopSettings={settingsStore.desktopSettings}
-                  
                   renderDeltaSwitch2={renderDeltaSwitch2}
                   renderDTSettingSwitch={renderDTSettingSwitch}
                 />

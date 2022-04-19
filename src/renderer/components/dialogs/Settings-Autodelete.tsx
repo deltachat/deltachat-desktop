@@ -16,7 +16,9 @@ import { SettingsSelector } from './Settings'
 import { AutodeleteDuration } from '../../../shared/constants'
 import { DeltaCheckbox } from '../contact/ContactListItem'
 import classNames from 'classnames'
-import SettingsStoreInstance, { SettingsStoreState } from '../../stores/settings'
+import SettingsStoreInstance, {
+  SettingsStoreState,
+} from '../../stores/settings'
 
 function durationToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)
@@ -50,7 +52,7 @@ export function AutodeleteConfirmationDialog({
   estimateCount,
   seconds,
   isOpen,
-  onClose
+  onClose,
 }: {
   fromServer: boolean
   estimateCount: number
@@ -120,7 +122,11 @@ export function AutodeleteConfirmationDialog({
   )
 }
 
-export default function SettingsAutodelete({settingsStore}:{settingsStore: SettingsStoreState}) {
+export default function SettingsAutodelete({
+  settingsStore,
+}: {
+  settingsStore: SettingsStoreState
+}) {
   const { openDialog } = useContext(ScreenContext)
 
   const tx = useTranslationFunction()
@@ -176,7 +182,7 @@ export default function SettingsAutodelete({settingsStore}:{settingsStore: Setti
         openDialog(AutodeleteConfirmationDialog, {
           fromServer,
           estimateCount,
-          seconds
+          seconds,
         })
       },
     })
@@ -187,13 +193,17 @@ export default function SettingsAutodelete({settingsStore}:{settingsStore: Setti
       <H5>{tx('delete_old_messages')}</H5>
       <SettingsSelector
         onClick={onOpenDialog.bind(null, false)}
-        currentValue={durationToString(settingsStore.settings['delete_device_after'])}
+        currentValue={durationToString(
+          settingsStore.settings['delete_device_after']
+        )}
       >
         {tx('autodel_device_title')}
       </SettingsSelector>
       <SettingsSelector
         onClick={onOpenDialog.bind(null, true)}
-        currentValue={durationToString(settingsStore.settings['delete_server_after'])}
+        currentValue={durationToString(
+          settingsStore.settings['delete_server_after']
+        )}
       >
         {tx('autodel_server_title')}
       </SettingsSelector>

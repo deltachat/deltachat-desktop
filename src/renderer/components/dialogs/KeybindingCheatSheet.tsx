@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react'
 import { useTranslationFunction } from '../../contexts'
-import {useSettingsStore} from '../../stores/settings'
+import { useSettingsStore } from '../../stores/settings'
 import {
   CheatSheetKeyboardShortcut,
   getKeybindings,

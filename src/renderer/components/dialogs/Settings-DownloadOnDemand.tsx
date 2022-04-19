@@ -4,7 +4,9 @@ import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
 import { SettingsSelector } from './Settings'
 
 import filesizeConverter from 'filesize'
-import SettingsStoreInstance, { SettingsStoreState } from '../../stores/settings'
+import SettingsStoreInstance, {
+  SettingsStoreState,
+} from '../../stores/settings'
 
 export default function SettingsDownloadOnDemand(props: {
   settings: SettingsStoreState['settings']
@@ -37,7 +39,10 @@ export default function SettingsDownloadOnDemand(props: {
       title: tx('auto_download_messages'),
       onSave: async (bytes: string) => {
         const seconds = Number(bytes)
-        SettingsStoreInstance.effect.setCoreSetting('download_limit', seconds.toString())
+        SettingsStoreInstance.effect.setCoreSetting(
+          'download_limit',
+          seconds.toString()
+        )
       },
     })
   }
@@ -47,7 +52,9 @@ export default function SettingsDownloadOnDemand(props: {
       ? tx('pref_show_emails_all')
       : tx(
           'up_to_x',
-          filesizeConverter(Number.parseInt(settings['download_limit']), { base: 2 })
+          filesizeConverter(Number.parseInt(settings['download_limit']), {
+            base: 2,
+          })
         )
 
   return (

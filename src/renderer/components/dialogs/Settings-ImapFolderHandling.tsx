@@ -2,17 +2,18 @@ import React from 'react'
 import { H5 } from '@blueprintjs/core'
 
 import { RenderDeltaSwitch2Type } from './Settings'
-import {SettingsStoreState} from '../../stores/settings'
+import { SettingsStoreState } from '../../stores/settings'
 
 export default function SettingsImapFolderHandling({
   settingsStore,
   renderDeltaSwitch2,
 }: {
-  settingsStore: SettingsStoreState,
+  settingsStore: SettingsStoreState
   renderDeltaSwitch2: RenderDeltaSwitch2Type
 }) {
   const tx = window.static_translate
-  const disableIfOnlyFetchMvBoxIsTrue = settingsStore.settings.only_fetch_mvbox === '1'
+  const disableIfOnlyFetchMvBoxIsTrue =
+    settingsStore.settings.only_fetch_mvbox === '1'
 
   return (
     <>

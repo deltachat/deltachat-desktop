@@ -1,7 +1,4 @@
-import {
-  ScreenContext,
-  useTranslationFunction,
-} from '../../contexts'
+import { ScreenContext, useTranslationFunction } from '../../contexts'
 import React, { useContext, useEffect, useState } from 'react'
 import { H6, Icon } from '@blueprintjs/core'
 import { DeltaBackend } from '../../delta-remote'
@@ -9,7 +6,11 @@ import { ThemeManager } from '../../ThemeManager'
 import { SettingsSelector } from './Settings'
 import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
 import { runtime } from '../../runtime'
-import { DesktopSettingsType, RC_Config, Theme } from '../../../shared/shared-types'
+import {
+  DesktopSettingsType,
+  RC_Config,
+  Theme,
+} from '../../../shared/shared-types'
 import { join } from 'path'
 import SettingsStoreInstance from '../../stores/settings'
 
@@ -23,7 +24,7 @@ const enum SetBackgroundAction {
 
 function BackgroundSelector({
   onChange,
-  desktopSettings
+  desktopSettings,
 }: {
   onChange: (value: string) => void
   desktopSettings: DesktopSettingsType
@@ -119,9 +120,7 @@ function BackgroundSelector({
                   )}")`,
                 }
               : {
-                  backgroundColor: desktopSettings.chatViewBgImg?.slice(
-                    7
-                  ),
+                  backgroundColor: desktopSettings.chatViewBgImg?.slice(7),
                   backgroundImage: 'unset',
                 }),
             backgroundSize: 'cover',
@@ -187,9 +186,9 @@ function BackgroundSelector({
 
 export default function SettingsAppearance({
   rc,
-  desktopSettings
+  desktopSettings,
 }: {
-  rc: RC_Config,
+  rc: RC_Config
   desktopSettings: DesktopSettingsType
 }) {
   const { activeTheme } = desktopSettings
@@ -270,8 +269,14 @@ export default function SettingsAppearance({
         desktopSettings={desktopSettings}
         onChange={(val: string) => {
           val.startsWith('#')
-            ? SettingsStoreInstance.effect.setDesktopSetting('chatViewBgImg', `color: ${val}`)
-            : SettingsStoreInstance.effect.setDesktopSetting('chatViewBgImg', val)
+            ? SettingsStoreInstance.effect.setDesktopSetting(
+                'chatViewBgImg',
+                `color: ${val}`
+              )
+            : SettingsStoreInstance.effect.setDesktopSetting(
+                'chatViewBgImg',
+                val
+              )
         }}
       />
     </>
