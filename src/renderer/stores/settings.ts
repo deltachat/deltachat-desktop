@@ -1,7 +1,7 @@
 import { C } from 'deltachat-node/dist/constants'
 import { DesktopSettingsType, JsonContact } from '../../shared/shared-types'
 import { DeltaBackend } from '../delta-remote'
-import {ipcBackend} from '../ipc'
+import { ipcBackend } from '../ipc'
 import { Store, useStore } from './store'
 
 export interface SettingsStoreState {
@@ -22,7 +22,7 @@ export interface SettingsStoreState {
     webrtc_instance: string
     download_limit: string
     only_fetch_mvbox: string
-  },
+  }
   desktopSettings: DesktopSettingsType
 }
 
@@ -55,11 +55,14 @@ class SettingsStore extends Store<SettingsStoreState | null> {
         if (state === null) return
         return {
           ...state,
-          selfContact
+          selfContact,
         }
       }, 'setSelfContact')
     },
-    setDesktopSetting: (key: keyof DesktopSettingsType, value: string | number | boolean) => {
+    setDesktopSetting: (
+      key: keyof DesktopSettingsType,
+      value: string | number | boolean
+    ) => {
       this.setState(state => {
         if (state === null) {
           this.log.warn(
@@ -71,12 +74,15 @@ class SettingsStore extends Store<SettingsStoreState | null> {
           ...state,
           desktopSettings: {
             ...state.desktopSettings,
-            [key]: value
-          }
+            [key]: value,
+          },
         }
       }, 'setDesktopSetting')
     },
-    setCoreSetting: (key: keyof SettingsStoreState['settings'], value: string | boolean) => {
+    setCoreSetting: (
+      key: keyof SettingsStoreState['settings'],
+      value: string | boolean
+    ) => {
       this.setState(state => {
         if (state === null) {
           this.log.warn(
@@ -88,11 +94,11 @@ class SettingsStore extends Store<SettingsStoreState | null> {
           ...state,
           settings: {
             ...state.settings,
-            [key]: value
-          }
+            [key]: value,
+          },
         }
       }, 'setCoreSetting')
-    }
+    },
   }
   effect = {
     load: async () => {
@@ -107,9 +113,17 @@ class SettingsStore extends Store<SettingsStoreState | null> {
         'contacts.getContact',
         C.DC_CONTACT_ID_SELF
       )
-      this.reducer.setState({ settings, selfContact, accountId: -1, desktopSettings })
+      this.reducer.setState({
+        settings,
+        selfContact,
+        accountId: -1,
+        desktopSettings,
+      })
     },
-    setDesktopSetting: async(key: keyof DesktopSettingsType, value: string | number | boolean) => {
+    setDesktopSetting: async (
+      key: keyof DesktopSettingsType,
+      value: string | number | boolean
+    ) => {
       if (
         (await DeltaBackend.call('settings.setDesktopSetting', key, value)) ===
         true
@@ -117,7 +131,10 @@ class SettingsStore extends Store<SettingsStoreState | null> {
         this.reducer.setDesktopSetting(key, value)
       }
     },
-    setCoreSetting: async(key: keyof SettingsStoreState['settings'], value: string | boolean) => {
+    setCoreSetting: async (
+      key: keyof SettingsStoreState['settings'],
+      value: string | boolean
+    ) => {
       if (
         (await DeltaBackend.call('settings.setConfig', key, String(value))) ===
         true
@@ -126,7 +143,7 @@ class SettingsStore extends Store<SettingsStoreState | null> {
         return
       }
       this.log.warn('settings.setConfig returned false for: ', key, value)
-    }
+    },
   }
 }
 

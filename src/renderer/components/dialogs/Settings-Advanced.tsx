@@ -1,5 +1,5 @@
 import React from 'react'
-import {SettingsStoreState} from '../../stores/settings'
+import { SettingsStoreState } from '../../stores/settings'
 import { RenderDeltaSwitch2Type } from './Settings'
 import SettingsEncryption from './Settings-Encryption'
 import SettingsImapFolderHandling from './Settings-ImapFolderHandling'
@@ -9,7 +9,7 @@ export function SettingsAdvanced({
   settingsStore,
   renderDeltaSwitch2,
 }: {
-  settingsStore: SettingsStoreState,
+  settingsStore: SettingsStoreState
   renderDeltaSwitch2: RenderDeltaSwitch2Type
 }) {
   return (

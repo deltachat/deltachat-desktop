@@ -95,10 +95,7 @@ function ThemeContextWrapper({ children }: { children: React.ReactChild }) {
     ThemeManager.setUpdateHook(() => setThemeRand(Math.random()))
   }, [])
 
-
   return (
-    <ThemeContext.Provider value={theme_rand}>
-      {children}
-    </ThemeContext.Provider>
+    <ThemeContext.Provider value={theme_rand}>{children}</ThemeContext.Provider>
   )
 }

@@ -1,9 +1,6 @@
 import { C } from 'deltachat-node/dist/constants'
 import React, { useContext } from 'react'
-import {
-  ScreenContext,
-  useTranslationFunction
-} from '../contexts'
+import { ScreenContext, useTranslationFunction } from '../contexts'
 import {
   openLeaveChatDialog,
   openDeleteChatDialog,
@@ -14,7 +11,7 @@ import {
 } from './helpers/ChatMethods'
 import { FullChat } from '../../shared/shared-types'
 import { ContextMenuItem } from './ContextMenu'
-import {useSettingsStore} from '../stores/settings'
+import { useSettingsStore } from '../stores/settings'
 
 export function DeltaMenuItem({
   text,

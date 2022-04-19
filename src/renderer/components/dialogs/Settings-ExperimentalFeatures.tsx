@@ -14,7 +14,9 @@ import {
   DeltaDialogOkCancelFooter,
 } from './DeltaDialog'
 import { DialogProps } from './DialogController'
-import SettingsStoreInstance, {SettingsStoreState} from '../../stores/settings'
+import SettingsStoreInstance, {
+  SettingsStoreState,
+} from '../../stores/settings'
 
 const WEBRTC_INSTANCE_JITSI = 'https://meet.jit.si/$ROOM'
 
@@ -23,9 +25,9 @@ export function SettingsExperimentalFeatures({
   settingsStore,
   renderDTSettingSwitch,
 }: {
-  state: SettingsState,
-  renderDTSettingSwitch: RenderDTSettingSwitchType,
-  settingsStore: SettingsStoreState,
+  state: SettingsState
+  renderDTSettingSwitch: RenderDTSettingSwitchType
+  settingsStore: SettingsStoreState
 }) {
   const tx = window.static_translate
   const { openDialog } = useContext(ScreenContext)
@@ -33,14 +35,17 @@ export function SettingsExperimentalFeatures({
   const onClickEdit = async () => {
     openDialog(EditVideochatInstanceDialog, {
       onOk: async (configValue: string) => {
-        SettingsStoreInstance.effect.setCoreSetting('webrtc_instance', configValue)
+        SettingsStoreInstance.effect.setCoreSetting(
+          'webrtc_instance',
+          configValue
+        )
         if (configValue === '') {
           SettingsStoreInstance.effect.setDesktopSetting('enableAVCalls', false)
         } else {
           SettingsStoreInstance.effect.setDesktopSetting('enableAVCalls', true)
         }
       },
-      settingsStore
+      settingsStore,
     })
   }
 
@@ -76,7 +81,9 @@ export function SettingsExperimentalFeatures({
       })}
       <SettingsSelector
         onClick={onClickEdit.bind(null, false)}
-        currentValue={showVideochatInstance(settingsStore.settings['webrtc_instance'])}
+        currentValue={showVideochatInstance(
+          settingsStore.settings['webrtc_instance']
+        )}
       >
         {tx('videochat')}
       </SettingsSelector>
@@ -91,8 +98,8 @@ export function EditVideochatInstanceDialog({
   onClose,
   onOk,
   onCancel,
-  settingsStore
-}: DialogProps & {settingsStore: SettingsStoreState}) {
+  settingsStore,
+}: DialogProps & { settingsStore: SettingsStoreState }) {
   const tx = useTranslationFunction()
   const [configValue, setConfigValue] = useState(
     settingsStore.settings['webrtc_instance']

@@ -11,7 +11,7 @@ import { isChatReadonly } from '../../../shared/util'
 import { join, parse } from 'path'
 import { runtime } from '../../runtime'
 import { RecoverableCrashScreen } from '../screens/RecoverableCrashScreen'
-import {useSettingsStore} from '../../stores/settings'
+import { useSettingsStore } from '../../stores/settings'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -203,7 +203,9 @@ export default function MessageListAndComposer({
   const [disabled, disabledReason] = isChatReadonly(chatStore.chat)
 
   const settingsStore = useSettingsStore()[0]
-  const style = settingsStore ? getBackgroundImageStyle(settingsStore.desktopSettings) : {}
+  const style = settingsStore
+    ? getBackgroundImageStyle(settingsStore.desktopSettings)
+    : {}
 
   return (
     <div

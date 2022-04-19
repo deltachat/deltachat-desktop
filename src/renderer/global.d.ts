@@ -31,7 +31,6 @@ declare global {
     __keybindingsDialogOpened: boolean
     __setQuoteInDraft: ((msgId: number) => void) | null
     __reloadDraft: (() => void) | null
-    __desktopSettings: DesktopSettingsType | null
     __chatlistSetSearch: ((searchTerm: string) => void) | undefined
     __chatStore: any
     __setMainScreenView:

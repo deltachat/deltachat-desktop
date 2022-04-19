@@ -4,7 +4,9 @@ import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
 import { SettingsSelector } from './Settings'
 import { C } from 'deltachat-node/dist/constants'
-import SettingsStoreInstance, { SettingsStoreState } from '../../stores/settings'
+import SettingsStoreInstance, {
+  SettingsStoreState,
+} from '../../stores/settings'
 
 function showToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)
@@ -21,7 +23,11 @@ function showToString(configValue: number | string) {
   }
 }
 
-export default function SettingsCommunication({settingsStore}:{settingsStore: SettingsStoreState}) {
+export default function SettingsCommunication({
+  settingsStore,
+}: {
+  settingsStore: SettingsStoreState
+}) {
   const { openDialog } = useContext(ScreenContext)
 
   const tx = useTranslationFunction()

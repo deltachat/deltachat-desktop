@@ -14,7 +14,7 @@ import {
   KeybordShortcutHintInSettings,
 } from '../KeyboardShortcutHint'
 import { DesktopSettingsType } from '../../../shared/shared-types'
-import {SettingsStoreState} from '../../stores/settings'
+import { SettingsStoreState } from '../../stores/settings'
 
 export function SettingsChatsAndMedia({
   settingsStore,
@@ -31,9 +31,7 @@ export function SettingsChatsAndMedia({
 
   return (
     <>
-      <SettingsCommunication
-        settingsStore={settingsStore}
-      />
+      <SettingsCommunication settingsStore={settingsStore} />
       {renderDTSettingSwitch({
         key: 'enterKeySends',
         label: tx('pref_enter_sends_explain'),
@@ -43,10 +41,7 @@ export function SettingsChatsAndMedia({
           desktopSettings['enterKeySends']
         )}
       />
-      <SettingsDownloadOnDemand
-        
-        settings={settingsStore.settings}
-      />
+      <SettingsDownloadOnDemand settings={settingsStore.settings} />
       <br />
       <br />
       <H5>{tx('pref_privacy')}</H5>
@@ -56,9 +51,7 @@ export function SettingsChatsAndMedia({
       })}
       <br />
       <br />
-      <SettingsAutodelete
-        settingsStore={settingsStore}
-      />
+      <SettingsAutodelete settingsStore={settingsStore} />
       <br />
       <br />
       <SettingsBackup />
