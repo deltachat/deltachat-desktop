@@ -23,9 +23,9 @@ $hover-contrast-change: 2%;
   --navBarGroupSubtitle: #{changeContrast($textNavBar, 27%)};
   /* SideBar */
   --sideBarBackground: #{$bgPrimary};
-  // --sideBarText: #{$sideBarText};
-  --sideBarAccountBackground: #{$bgNavBar};
-  --sideBarAccountText: #{$textNavBar};
+  --sideBarAccountBackground: #{$sideBarAccountBg};
+  --sideBarAccountIconBackground: #{$sideBarAccountIconBg};
+  --sideBarAccountEmailText: #{$sideBarAccountEmailText};
   /* ChatView */
   --chatViewBg: #{$bgChatView};
   --chatViewBgImgPath: #{$bgImage};
@@ -37,9 +37,9 @@ $hover-contrast-change: 2%;
   --composerSendButton: #415e6b;
   --emojiSelectorSelectionColor: #{$accentColor};
   /* Chat List */
-  --chatListItemSelectedBg: #4c6e7d;
+  --chatListItemSelectedBg: #{$chatListItemSelectedBg};
   --chatListItemSelectedBgHover: #{changeContrast(
-      #4c6e7d,
+      $chatListItemSelectedBg,
       1% + $hover-contrast-change
     )};
   --chatListItemSelectedText: #{$bgPrimary};
