@@ -1,6 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { DeltaBackend } from '../../delta-remote'
-import { C } from 'deltachat-node/dist/constants'
+import React, { useState, useEffect } from 'react'
 import { Elevation, Card } from '@blueprintjs/core'
 
 const { ipcRenderer } = window.electron_functions
@@ -18,7 +16,6 @@ import {
 import SettingsAppearance from './Settings-Appearance'
 import SettingsProfile from './Settings-Profile'
 import { getLogger } from '../../../shared/logger'
-import { runtime } from '../../runtime'
 import { SettingsChatsAndMedia } from './Settings-ChatsAndMedia'
 import { SettingsAdvanced } from './Settings-Advanced'
 import SettingsNotifications from './Settings-Notifications'
@@ -99,7 +96,6 @@ export type RenderDeltaSwitch2Type = ({
 export interface SettingsState {
   showSettingsDialog: boolean
   show: string
-  rc: RC_Config
 }
 
 export default function Settings(props: DialogProps) {
@@ -118,7 +114,6 @@ export default function Settings(props: DialogProps) {
   const [state, _setState] = useState<SettingsState>({
     showSettingsDialog: false,
     show: 'main',
-    rc: ({} as any) as RC_Config,
   })
   const setState = (updatedState: any) => {
     _setState((prevState: any) => {
@@ -204,7 +199,7 @@ export default function Settings(props: DialogProps) {
     )
   }
 
-  const renderDialogContent = ({ rc }: typeof state) => {
+  const renderDialogContent = () => {
     if (!settingsStore) return null
 
     if (
@@ -276,9 +271,8 @@ export default function Settings(props: DialogProps) {
             <DeltaDialogBody>
               <Card elevation={Elevation.ONE}>
                 <SettingsExperimentalFeatures
-                  renderDTSettingSwitch={renderDTSettingSwitch}
-                  state={state}
                   settingsStore={settingsStore}
+                  renderDTSettingSwitch={renderDTSettingSwitch}
                 />
               </Card>
             </DeltaDialogBody>
@@ -336,7 +330,7 @@ export default function Settings(props: DialogProps) {
             <DeltaDialogBody>
               <Card elevation={Elevation.ONE}>
                 <SettingsAppearance
-                  rc={rc}
+                  rc={settingsStore.rc}
                   desktopSettings={settingsStore.desktopSettings}
                 />
               </Card>
@@ -367,21 +361,6 @@ export default function Settings(props: DialogProps) {
   }
 
   useEffect(() => {
-    const loadSettings = async () => {
-      const rc = await runtime.getRC_Config()
-      setState({ rc })
-    }
-    ;(async () => {
-      await loadSettings()
-      const selfContact = await DeltaBackend.call(
-        'contacts.getContact',
-        C.DC_CONTACT_ID_SELF
-      )
-      setState({ selfContact })
-    })()
-  }, [state.show])
-
-  useEffect(() => {
     return () => {
       ipcRenderer.removeAllListeners('DC_EVENT_IMEX_FILE_WRITTEN')
     }
@@ -399,7 +378,7 @@ export default function Settings(props: DialogProps) {
       className='SettingsDialog'
       fixed
     >
-      {renderDialogContent(state)}
+      {renderDialogContent()}
     </DeltaDialogBase>
   )
 }

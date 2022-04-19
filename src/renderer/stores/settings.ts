@@ -1,7 +1,12 @@
 import { C } from 'deltachat-node/dist/constants'
-import { DesktopSettingsType, JsonContact } from '../../shared/shared-types'
+import {
+  DesktopSettingsType,
+  JsonContact,
+  RC_Config,
+} from '../../shared/shared-types'
 import { DeltaBackend } from '../delta-remote'
 import { ipcBackend } from '../ipc'
+import { runtime } from '../runtime'
 import { Store, useStore } from './store'
 
 export interface SettingsStoreState {
@@ -24,6 +29,7 @@ export interface SettingsStoreState {
     only_fetch_mvbox: string
   }
   desktopSettings: DesktopSettingsType
+  rc: RC_Config
 }
 
 const settingsKeys: Array<keyof SettingsStoreState['settings']> = [
@@ -106,18 +112,21 @@ class SettingsStore extends Store<SettingsStoreState | null> {
         'settings.getConfigFor',
         settingsKeys
       )) as SettingsStoreState['settings']
-      const desktopSettings = await DeltaBackend.call(
-        'settings.getDesktopSettings'
-      )
       const selfContact = await DeltaBackend.call(
         'contacts.getContact',
         C.DC_CONTACT_ID_SELF
       )
+      const desktopSettings = await DeltaBackend.call(
+        'settings.getDesktopSettings'
+      )
+
+      const rc = await runtime.getRC_Config()
       this.reducer.setState({
         settings,
         selfContact,
         accountId: -1,
         desktopSettings,
+        rc,
       })
     },
     setDesktopSetting: async (
