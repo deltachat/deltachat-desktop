@@ -8,6 +8,7 @@
    */
   let callback = null
   var last_serial = 0
+  let setUpdateListenerPromise = null
   const onStatusUpdate = async () => {
     if (callback) {
       for (let update of await ipcRenderer.invoke(
@@ -16,6 +17,10 @@
       )) {
         last_serial = update.serial
         callback(update)
+      }
+      if (setUpdateListenerPromise) {
+        setUpdateListenerPromise()
+        setUpdateListenerPromise = null
       }
     }
   }
@@ -33,7 +38,11 @@
     setUpdateListener: (cb, start_serial = 0) => {
       last_serial = start_serial
       callback = cb
+      const promise = new Promise((res, _rej) => {
+        setUpdateListenerPromise = res
+      })
       onStatusUpdate()
+      return promise
     },
     getAllUpdates: () => {
       console.error(

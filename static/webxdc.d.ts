@@ -43,7 +43,7 @@ interface Webxdc<T> {
   setUpdateListener(
     cb: (statusUpdate: ReceivedStatusUpdate<T>) => void,
     serial: number
-  ): void
+  ): Promise<void>
   /**
    * WARNING! This function is deprecated, see setUpdateListener().
    */
