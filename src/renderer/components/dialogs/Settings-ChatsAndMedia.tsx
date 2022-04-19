@@ -14,17 +14,16 @@ import {
   KeybordShortcutHintInSettings,
 } from '../KeyboardShortcutHint'
 import { DesktopSettingsType } from '../../../shared/shared-types'
+import {SettingsStoreState} from '../../stores/settings'
 
 export function SettingsChatsAndMedia({
-  state,
+  settingsStore,
   desktopSettings,
-  handleDeltaSettingsChange,
   renderDeltaSwitch2,
   renderDTSettingSwitch,
 }: {
-  state: SettingsState
+  settingsStore: SettingsStoreState
   desktopSettings: DesktopSettingsType
-  handleDeltaSettingsChange: any
   renderDeltaSwitch2: RenderDeltaSwitch2Type
   renderDTSettingSwitch: RenderDTSettingSwitchType
 }) {
@@ -33,8 +32,7 @@ export function SettingsChatsAndMedia({
   return (
     <>
       <SettingsCommunication
-        handleDeltaSettingsChange={handleDeltaSettingsChange}
-        settings={state.settings}
+        settingsStore={settingsStore}
       />
       {renderDTSettingSwitch({
         key: 'enterKeySends',
@@ -46,8 +44,8 @@ export function SettingsChatsAndMedia({
         )}
       />
       <SettingsDownloadOnDemand
-        handleDeltaSettingsChange={handleDeltaSettingsChange}
-        settings={state.settings}
+        
+        settings={settingsStore.settings}
       />
       <br />
       <br />
@@ -59,8 +57,7 @@ export function SettingsChatsAndMedia({
       <br />
       <br />
       <SettingsAutodelete
-        handleDeltaSettingsChange={handleDeltaSettingsChange}
-        settings={state.settings}
+        settingsStore={settingsStore}
       />
       <br />
       <br />

@@ -28,19 +28,6 @@ export const i18nContext = React.createContext<getMessageFunction>(
  */
 export const useTranslationFunction = () => useContext(i18nContext)
 
-type setDesktopSetting = (
-  key: keyof DesktopSettingsType,
-  value: string | number | boolean
-) => {}
-
-export const SettingsContext: React.Context<{
-  desktopSettings: DesktopSettingsType | null
-  setDesktopSetting: setDesktopSetting
-}> = React.createContext({
-  desktopSettings: null as DesktopSettingsType | null,
-  setDesktopSetting: ((_key, _value) => {}) as setDesktopSetting,
-})
-
 export type unwrapContext<T> = T extends import('react').Context<infer R>
   ? R
   : null

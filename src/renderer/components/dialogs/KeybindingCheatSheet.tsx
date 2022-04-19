@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react'
-import { SettingsContext, useTranslationFunction } from '../../contexts'
+import { useTranslationFunction } from '../../contexts'
+import {useSettingsStore} from '../../stores/settings'
 import {
   CheatSheetKeyboardShortcut,
   getKeybindings,
@@ -18,7 +19,7 @@ export default function KeybindingCheatSheet(props: {
   const { isOpen, onClose } = props
   const tx = useTranslationFunction()
 
-  const { desktopSettings } = useContext(SettingsContext)
+  const settingsStore = useSettingsStore()[0]
 
   useEffect(() => {
     window.__keybindingsDialogOpened = true
@@ -44,8 +45,8 @@ export default function KeybindingCheatSheet(props: {
 
       <DeltaDialogBody>
         <div className='keyboard-hint-dialog-body'>
-          {desktopSettings &&
-            getKeybindings(desktopSettings).map(entry => {
+          {settingsStore &&
+            getKeybindings(settingsStore.desktopSettings).map(entry => {
               if (entry.type === 'header') {
                 return (
                   <div key={entry.title}>

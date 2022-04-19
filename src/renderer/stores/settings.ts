@@ -4,7 +4,7 @@ import { DeltaBackend } from '../delta-remote'
 import {ipcBackend} from '../ipc'
 import { Store, useStore } from './store'
 
-interface SettingsStoreState {
+export interface SettingsStoreState {
   accountId: number
   selfContact: JsonContact
   settings: {
@@ -75,6 +75,23 @@ class SettingsStore extends Store<SettingsStoreState | null> {
           }
         }
       }, 'setDesktopSetting')
+    },
+    setCoreSetting: (key: keyof SettingsStoreState['settings'], value: string | boolean) => {
+      this.setState(state => {
+        if (state === null) {
+          this.log.warn(
+            'trying to update local version of desktop settings object, but it was not loaded yet'
+          )
+          return
+        }
+        return {
+          ...state,
+          settings: {
+            ...state.settings,
+            [key]: value
+          }
+        }
+      }, 'setCoreSetting')
     }
   }
   effect = {
@@ -99,7 +116,16 @@ class SettingsStore extends Store<SettingsStoreState | null> {
       ) {
         this.reducer.setDesktopSetting(key, value)
       }
-
+    },
+    setCoreSetting: async(key: keyof SettingsStoreState['settings'], value: string | boolean) => {
+      if (
+        (await DeltaBackend.call('settings.setConfig', key, String(value))) ===
+        true
+      ) {
+        this.reducer.setCoreSetting(key, value)
+        return
+      }
+      this.log.warn('settings.setConfig returned false for: ', key, value)
     }
   }
 }

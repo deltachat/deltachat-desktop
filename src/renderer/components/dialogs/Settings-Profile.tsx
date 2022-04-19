@@ -18,6 +18,7 @@ import { DialogProps } from './DialogController'
 import { onDCEvent } from '../../ipc'
 import SettingsAccountDialog from './Settings-Account'
 import SettingsConnectivityDialog from './Settings-Connectivity'
+import SettingsStoreInstance, {SettingsStoreState} from '../../stores/settings'
 
 export function useProfileImage() {
   const [profileImage, setProfileImage] = useState('')
@@ -31,18 +32,10 @@ export function useProfileImage() {
 }
 
 export default function SettingsProfile({
-  addr,
-  displayname,
-  profileImage,
-  state,
-  handleDeltaSettingsChange,
+  settingsStore,
 }: {
+  settingsStore: SettingsStoreState,
   onClose: any
-  addr: string | undefined
-  displayname: string | undefined
-  profileImage: string,
-  state: any
-  handleDeltaSettingsChange: (key: string, value: string) => void
 }) {
   const { openDialog } = useContext(ScreenContext)
   const [connectivityString, setConnectivityString] = useState('')
@@ -67,7 +60,7 @@ export default function SettingsProfile({
     setConnectivityString(`(${connectivityString})`)
   }
 
-  const initial = avatarInitial(displayname || '', addr)
+  const initial = avatarInitial(settingsStore.selfContact.displayName || '', settingsStore.selfContact.address)
   useEffect(() => {
     updateConnectivity()
 
@@ -75,7 +68,7 @@ export default function SettingsProfile({
   }, [])
 
   const tx = useTranslationFunction()
-  const profileBlobUrl = runtime.transformBlobURL(profileImage)
+  const profileBlobUrl = runtime.transformBlobURL(settingsStore.selfContact.profileImage)
   return (
     <>
       <div className='profile-image-username' style={{ marginBottom: '10px' }}>
@@ -85,21 +78,20 @@ export default function SettingsProfile({
               <img src={profileBlobUrl} alt={tx('pref_profile_photo')} />
             </ClickForFullscreenAvatarWrapper>
           ) : (
-            <span style={{ backgroundColor: state.selfContact.color }}>
+            <span style={{ backgroundColor: settingsStore.selfContact.color }}>
               {initial}
             </span>
           )}
         </div>
         <div className='profile-displayname-addr'>
-          <div className='displayname'>{state.settings.displayname}</div>
-          <div className='addr'>{addr}</div>
+          <div className='displayname'>{settingsStore.settings.displayname}</div>
+          <div className='addr'>{settingsStore.selfContact.address}</div>
         </div>
       </div>
       <SettingsButton
         onClick={() =>
           openDialog(SettingsProfileDialog, {
-            state,
-            handleDeltaSettingsChange,
+            settingsStore
           })
         }
       >
@@ -108,8 +100,7 @@ export default function SettingsProfile({
       <SettingsButton
         onClick={() =>
           openDialog(SettingsAccountDialog, {
-            state,
-            handleDeltaSettingsChange,
+            settingsStore
           })
         }
       >
@@ -118,8 +109,7 @@ export default function SettingsProfile({
       <SettingsButton
         onClick={async () => {
           openDialog(SettingsConnectivityDialog, {
-            state,
-            handleDeltaSettingsChange,
+            settingsStore
           })
         }}
       >
@@ -194,16 +184,14 @@ export function ProfileImageSelector({
 
 export function SettingsEditProfileDialogInner({
   onClose,
-  state,
-  handleDeltaSettingsChange,
+  settingsStore
 }: {
   onClose: DialogProps['onClose']
-  state: any
-  handleDeltaSettingsChange: (key: string, value: string) => void
+  settingsStore: SettingsStoreState
 }) {
   const tx = useTranslationFunction()
-  const [displayname, setDisplayname] = useState(state.settings.displayname)
-  const [selfstatus, setSelfstatus] = useState(state.settings.selfstatus)
+  const [displayname, setDisplayname] = useState(settingsStore.settings.displayname)
+  const [selfstatus, setSelfstatus] = useState(settingsStore.settings.selfstatus)
 
   const [profilePicture, setProfilePicture] = useState('')
   useEffect(() => {
@@ -218,8 +206,8 @@ export function SettingsEditProfileDialogInner({
       'setProfilePicture',
       profilePicture ? profilePicture : null
     )
-    handleDeltaSettingsChange('displayname', displayname)
-    handleDeltaSettingsChange('selfstatus', selfstatus)
+    SettingsStoreInstance.effect.setCoreSetting('displayname', displayname)
+    SettingsStoreInstance.effect.setCoreSetting('selfstatus', selfstatus)
     onClose()
   }
   return (
@@ -231,9 +219,9 @@ export function SettingsEditProfileDialogInner({
             style={{ marginBottom: '30px' }}
           >
             <ProfileImageSelector
-              displayName={state.settings['displayname']}
-              addr={state.selfContact.address}
-              color={state.selfContact.color}
+              displayName={settingsStore.settings['displayname']}
+              addr={settingsStore.selfContact.address}
+              color={settingsStore.selfContact.color}
               profilePicture={profilePicture}
               setProfilePicture={setProfilePicture}
             />
@@ -272,13 +260,11 @@ export function SettingsEditProfileDialogInner({
 export function SettingsProfileDialog({
   onClose,
   isOpen,
-  state,
-  handleDeltaSettingsChange,
+  settingsStore
 }: {
   isOpen: DialogProps['isOpen']
   onClose: DialogProps['onClose']
-  state: any
-  handleDeltaSettingsChange: (key: string, value: string) => void
+  settingsStore: SettingsStoreState
 }) {
   const tx = useTranslationFunction()
   return (
@@ -293,9 +279,8 @@ export function SettingsProfileDialog({
     >
       <DeltaDialogHeader title={tx('pref_edit_profile')} />
       {SettingsEditProfileDialogInner({
-        state,
-        handleDeltaSettingsChange,
-        onClose,
+        settingsStore,
+        onClose
       })}
     </DeltaDialogBase>
   )

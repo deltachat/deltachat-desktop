@@ -1,7 +1,6 @@
 import React, { useState, useContext, useRef } from 'react'
 import {
   ScreenContext,
-  SettingsContext,
   useTranslationFunction,
 } from '../../contexts'
 
@@ -39,7 +38,7 @@ import { FullChat } from '../../../shared/shared-types'
 import { getLogger } from '../../../shared/logger'
 import { RecoverableCrashScreen } from './RecoverableCrashScreen'
 import Sidebar, { SidebarState } from '../Sidebar'
-import SettingsStoreInstance from '../../stores/settings'
+import SettingsStoreInstance, {useSettingsStore} from '../../stores/settings'
 
 const log = getLogger('renderer/main-screen')
 
@@ -107,6 +106,7 @@ export default function MainScreen() {
   }
 
   const tx = useTranslationFunction()
+  const settingsStore = useSettingsStore()[0]
 
   const searchRef = useRef<HTMLInputElement>(null)
 
@@ -148,8 +148,8 @@ export default function MainScreen() {
         )
     }
   } else {
-    const style: React.CSSProperties = window.__desktopSettings
-      ? getBackgroundImageStyle(window.__desktopSettings)
+    const style: React.CSSProperties = settingsStore
+      ? getBackgroundImageStyle(settingsStore.desktopSettings)
       : {}
 
     MessageListView = (
@@ -266,20 +266,16 @@ export default function MainScreen() {
                   icon={'media'}
                   aria-label={tx('media')}
                 />
-                <SettingsContext.Consumer>
-                  {({ desktopSettings }) =>
-                    desktopSettings?.enableOnDemandLocationStreaming && (
-                      <Button
-                        minimal
-                        large
-                        icon='map'
-                        onClick={() => setView(View.Map)}
-                        active={view === View.Map}
-                        aria-label={tx('tab_map')}
-                      />
-                    )
-                  }
-                </SettingsContext.Consumer>
+                { settingsStore?.desktopSettings.enableOnDemandLocationStreaming && (
+                  <Button
+                    minimal
+                    large
+                    icon='map'
+                    onClick={() => setView(View.Map)}
+                    active={view === View.Map}
+                    aria-label={tx('tab_map')}
+                  />
+                )}
               </span>
             )}
             <span
