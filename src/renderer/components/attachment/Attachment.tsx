@@ -30,6 +30,7 @@ const SUPPORTED_VIDEO_MIME_TYPES = Object.freeze([
   'video/mp4',
   'video/ogg',
   'video/webm',
+  'video/quicktime',
 ])
 /* EndSection - Data Copied in part from Signal */
 

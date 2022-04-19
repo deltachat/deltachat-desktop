@@ -25,6 +25,7 @@
 - fix: signature field in Edit Profile is not labeled when empty (#2579)
 - Keyboard shortcut preview for "Send on Enter" setting
 - Keyboard shortcut reference dialog (cheetsheet), accessible via `Ctrl + /` or `Cmd + /`
+- display `video/quicktime` videos
 
 ## [1.28.2] - 2022-04-22
 
