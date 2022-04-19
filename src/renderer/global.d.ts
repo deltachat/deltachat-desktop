@@ -1,5 +1,4 @@
 import { getMessageFunction, LocaleData } from '../shared/localize'
-import { DesktopSettingsType } from '../shared/shared-types'
 
 import {
   OpenDialogFunctionType,

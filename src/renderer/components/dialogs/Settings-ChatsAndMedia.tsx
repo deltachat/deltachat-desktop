@@ -1,10 +1,6 @@
 import { H5 } from '@blueprintjs/core'
 import React from 'react'
-import {
-  RenderDeltaSwitch2Type,
-  RenderDTSettingSwitchType,
-  SettingsState,
-} from './Settings'
+import { RenderDeltaSwitch2Type, RenderDTSettingSwitchType } from './Settings'
 import SettingsAutodelete from './Settings-Autodelete'
 import SettingsBackup from './Settings-Backup'
 import SettingsCommunication from './Settings-Communication'

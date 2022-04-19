@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useTranslationFunction } from '../../contexts'
 import { useSettingsStore } from '../../stores/settings'
 import {

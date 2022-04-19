@@ -1,5 +1,4 @@
 import React, { useContext } from 'react'
-import { DesktopSettingsType } from '../shared/shared-types'
 import { userFeedback, Screens } from './ScreenController'
 import { getMessageFunction } from '../shared/localize'
 import { showFnType } from './components/ContextMenu'
