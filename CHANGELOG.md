@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- Fix contact name has color in quote when replying with sticker
+
 ### Added
 - Implement expandable settings
 
