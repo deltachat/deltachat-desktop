@@ -4,7 +4,7 @@ import { Elevation, Card } from '@blueprintjs/core'
 const { ipcRenderer } = window.electron_functions
 import { useTranslationFunction } from '../../contexts'
 
-import { DesktopSettingsType, RC_Config } from '../../../shared/shared-types'
+import { DesktopSettingsType } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
 import { SettingsExperimentalFeatures } from './Settings-ExperimentalFeatures'
 import {
@@ -15,7 +15,6 @@ import {
 } from './DeltaDialog'
 import SettingsAppearance from './Settings-Appearance'
 import SettingsProfile from './Settings-Profile'
-import { getLogger } from '../../../shared/logger'
 import { SettingsChatsAndMedia } from './Settings-ChatsAndMedia'
 import { SettingsAdvanced } from './Settings-Advanced'
 import SettingsNotifications from './Settings-Notifications'
@@ -23,8 +22,6 @@ import SettingsStoreInstance, {
   SettingsStoreState,
   useSettingsStore,
 } from '../../stores/settings'
-
-const log = getLogger('renderer/dialogs/Settings')
 
 export function flipDeltaBoolean(value: string) {
   return value === '1' ? '0' : '1'
@@ -93,11 +90,6 @@ export type RenderDeltaSwitch2Type = ({
   disabledValue?: boolean
 }) => void
 
-export interface SettingsState {
-  showSettingsDialog: boolean
-  show: string
-}
-
 export default function Settings(props: DialogProps) {
   useEffect(() => {
     if (window.__settingsOpened) {
@@ -110,16 +102,6 @@ export default function Settings(props: DialogProps) {
       window.__settingsOpened = false
     }
   })
-
-  const [state, _setState] = useState<SettingsState>({
-    showSettingsDialog: false,
-    show: 'main',
-  })
-  const setState = (updatedState: any) => {
-    _setState((prevState: any) => {
-      return { ...prevState, ...updatedState }
-    })
-  }
 
   const settingsStore = useSettingsStore()[0]
 
@@ -372,7 +354,6 @@ export default function Settings(props: DialogProps) {
     <DeltaDialogBase
       isOpen={props.isOpen}
       onClose={() => {
-        setState({ showSettingsDialog: false })
         props.onClose()
       }}
       className='SettingsDialog'

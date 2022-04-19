@@ -1,10 +1,6 @@
 import React, { useState, useContext, FormEvent } from 'react'
 import { Card, Elevation, Radio, RadioGroup } from '@blueprintjs/core'
-import {
-  RenderDTSettingSwitchType,
-  SettingsSelector,
-  SettingsState,
-} from './Settings'
+import { RenderDTSettingSwitchType, SettingsSelector } from './Settings'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { DeltaInput } from '../Login-Styles'
 import {
