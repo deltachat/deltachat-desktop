@@ -678,6 +678,9 @@ div.group-image-wrapper div.group-image-edit-button {
 
 .bp3-menu-item:hover, .bp3-submenu .bp3-popover-target.bp3-popover-open > .bp3-menu-item, 
 .SettingsSelector:hover button, .SettingsSelector:hover .CurrentValue, 
-.SettingsButton:hover button, .bp3-control.bp3-switch:hover {
+.SettingsButton:hover button, .bp3-control.bp3-switch:hover, .SettingsIconButton:hover button{
   color: white !important;
+}
+.SettingsIconButton:hover .Icon {
+  background-color: white;
 }
