@@ -20,17 +20,6 @@ import SettingsAccountDialog from './Settings-Account'
 import SettingsConnectivityDialog from './Settings-Connectivity'
 import SettingsStoreInstance, {SettingsStoreState} from '../../stores/settings'
 
-export function useProfileImage() {
-  const [profileImage, setProfileImage] = useState('')
-  useEffect(() => {
-    DeltaBackend.call('getProfilePicture').then(setProfileImage)
-    return onDCEvent('DC_EVENT_SELFAVATAR_CHANGED', () =>
-      DeltaBackend.call('getProfilePicture').then(setProfileImage)
-    )
-  }, [])
-  return profileImage
-}
-
 export default function SettingsProfile({
   settingsStore,
 }: {
@@ -193,10 +182,7 @@ export function SettingsEditProfileDialogInner({
   const [displayname, setDisplayname] = useState(settingsStore.settings.displayname)
   const [selfstatus, setSelfstatus] = useState(settingsStore.settings.selfstatus)
 
-  const [profilePicture, setProfilePicture] = useState('')
-  useEffect(() => {
-    DeltaBackend.call('getProfilePicture').then(setProfilePicture)
-  }, [])
+  const [profilePicture, setProfilePicture] = useState(settingsStore.selfContact.profileImage)
 
   const onCancel = () => {
     onClose()
