@@ -14,7 +14,7 @@
   left: 0;
   min-width: 250px;
   height: 100vh;
-  background-color: var(--navBarText);
+  background-color: var(--sideBarBackground);
   z-index: 100;
 
   transform: translateX(-100%);
@@ -33,8 +33,8 @@
   .account {
     padding: 20px;
 
-    background-color: var(--chatListItemSelectedBg);
-    color: var(--navBarText);
+    background-color: var(--sideBarAccountBackground);
+    color: var(--sideBarAccountText);
     font-size: large;
     .avatar div.content,
     img.content {
@@ -46,7 +46,7 @@
       float: right;
       width: var(--size);
       height: var(--size);
-      background-color: var(--navBarBackground);
+      background-color: var(--sideBarAccountBackground);
       border-radius: 100%;
       margin-right: 7px;
       &.last {
