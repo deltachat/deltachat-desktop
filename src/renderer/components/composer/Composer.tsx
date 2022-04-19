@@ -7,7 +7,7 @@ import React, {
   useCallback,
 } from 'react'
 import MenuAttachment from '../attachment/menuAttachment'
-import { SettingsContext, useTranslationFunction } from '../../contexts'
+import { useTranslationFunction } from '../../contexts'
 import ComposerMessageInput from './ComposerMessageInput'
 import { getLogger } from '../../../shared/logger'
 import { EmojiAndStickerPicker } from './EmojiAndStickerPicker'
@@ -22,6 +22,7 @@ import { Quote } from '../message/Message'
 import { DeltaBackend } from '../../delta-remote'
 import { DraftAttachment } from '../attachment/messageAttachment'
 import { sendMessage, unselectChat } from '../helpers/ChatMethods'
+import {useSettingsStore} from '../../stores/settings'
 
 const log = getLogger('renderer/composer')
 
@@ -188,6 +189,7 @@ const Composer = forwardRef<
   }
 
   const tx = useTranslationFunction()
+  const settingsStore = useSettingsStore()[0]
 
   useLayoutEffect(() => {
     // focus composer on chat change
@@ -254,20 +256,16 @@ const Composer = forwardRef<
             addFileToDraft={addFileToDraft}
             selectedChat={selectedChat}
           />
-          <SettingsContext.Consumer>
-            {({ desktopSettings }) =>
-              desktopSettings && (
-                <ComposerMessageInput
-                  ref={messageInputRef}
-                  enterKeySends={desktopSettings.enterKeySends}
-                  sendMessage={composerSendMessage}
-                  chatId={chatId}
-                  updateDraftText={updateDraftText}
-                  onPaste={handlePaste}
-                />
-              )
-            }
-          </SettingsContext.Consumer>
+          { settingsStore &&
+            <ComposerMessageInput
+              ref={messageInputRef}
+              enterKeySends={settingsStore?.desktopSettings.enterKeySends}
+              sendMessage={composerSendMessage}
+              chatId={chatId}
+              updateDraftText={updateDraftText}
+              onPaste={handlePaste}
+            />
+          }
           <div
             className='emoji-button'
             ref={pickerButtonRef}

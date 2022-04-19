@@ -2,8 +2,7 @@ import { C } from 'deltachat-node/dist/constants'
 import React, { useContext } from 'react'
 import {
   ScreenContext,
-  useTranslationFunction,
-  SettingsContext,
+  useTranslationFunction
 } from '../contexts'
 import {
   openLeaveChatDialog,
@@ -15,6 +14,7 @@ import {
 } from './helpers/ChatMethods'
 import { FullChat } from '../../shared/shared-types'
 import { ContextMenuItem } from './ContextMenu'
+import {useSettingsStore} from '../stores/settings'
 
 export function DeltaMenuItem({
   text,
@@ -34,7 +34,7 @@ export function DeltaMenuItem({
 
 export function useThreeDotMenu(selectedChat: FullChat | null) {
   const screenContext = useContext(ScreenContext)
-  const settingsContext = useContext(SettingsContext)
+  const settingsStore = useSettingsStore()[0]
   const tx = useTranslationFunction()
 
   let menu: (ContextMenuItem | false)[] = [false]
@@ -69,8 +69,8 @@ export function useThreeDotMenu(selectedChat: FullChat | null) {
         action: onDisappearingMessages,
       },
       !(isSelfTalk || isDeviceChat) &&
-        settingsContext.desktopSettings !== null &&
-        settingsContext.desktopSettings.enableChatAuditLog && {
+        settingsStore !== null &&
+        settingsStore.desktopSettings.enableChatAuditLog && {
           label: tx('menu_chat_audit_log'),
           action: openChatAuditLog,
         },

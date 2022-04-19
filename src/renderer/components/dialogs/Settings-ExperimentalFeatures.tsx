@@ -14,19 +14,18 @@ import {
   DeltaDialogOkCancelFooter,
 } from './DeltaDialog'
 import { DialogProps } from './DialogController'
+import SettingsStoreInstance, {SettingsStoreState} from '../../stores/settings'
 
 const WEBRTC_INSTANCE_JITSI = 'https://meet.jit.si/$ROOM'
 
 export function SettingsExperimentalFeatures({
-  renderDTSettingSwitch,
   state,
-  handleDeltaSettingsChange,
-  handleDesktopSettingsChange,
+  settingsStore,
+  renderDTSettingSwitch,
 }: {
-  renderDTSettingSwitch: RenderDTSettingSwitchType
-  state: SettingsState
-  handleDeltaSettingsChange: any
-  handleDesktopSettingsChange: any
+  state: SettingsState,
+  renderDTSettingSwitch: RenderDTSettingSwitchType,
+  settingsStore: SettingsStoreState,
 }) {
   const tx = window.static_translate
   const { openDialog } = useContext(ScreenContext)
@@ -34,14 +33,14 @@ export function SettingsExperimentalFeatures({
   const onClickEdit = async () => {
     openDialog(EditVideochatInstanceDialog, {
       onOk: async (configValue: string) => {
-        handleDeltaSettingsChange('webrtc_instance', configValue)
+        SettingsStoreInstance.effect.setCoreSetting('webrtc_instance', configValue)
         if (configValue === '') {
-          handleDesktopSettingsChange('enableAVCalls', false)
+          SettingsStoreInstance.effect.setDesktopSetting('enableAVCalls', false)
         } else {
-          handleDesktopSettingsChange('enableAVCalls', true)
+          SettingsStoreInstance.effect.setDesktopSetting('enableAVCalls', true)
         }
       },
-      state: state,
+      settingsStore
     })
   }
 
@@ -77,7 +76,7 @@ export function SettingsExperimentalFeatures({
       })}
       <SettingsSelector
         onClick={onClickEdit.bind(null, false)}
-        currentValue={showVideochatInstance(state.settings['webrtc_instance'])}
+        currentValue={showVideochatInstance(settingsStore.settings['webrtc_instance'])}
       >
         {tx('videochat')}
       </SettingsSelector>
@@ -92,11 +91,11 @@ export function EditVideochatInstanceDialog({
   onClose,
   onOk,
   onCancel,
-  state,
-}: DialogProps) {
+  settingsStore
+}: DialogProps & {settingsStore: SettingsStoreState}) {
   const tx = useTranslationFunction()
   const [configValue, setConfigValue] = useState(
-    state.settings['webrtc_instance']
+    settingsStore.settings['webrtc_instance']
   )
   const [radioValue, setRadioValue] = useState<RadioButtonValue>(() => {
     if (configValue === '') {
@@ -126,7 +125,7 @@ export function EditVideochatInstanceDialog({
       newConfigValue = WEBRTC_INSTANCE_JITSI
       setRadioValue('jitsi')
     } else {
-      newConfigValue = state.settings['webrtc_instance']
+      newConfigValue = settingsStore.settings['webrtc_instance']
       setRadioValue('custom')
     }
     setConfigValue(newConfigValue)
