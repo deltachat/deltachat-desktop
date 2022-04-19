@@ -34,7 +34,7 @@
     padding: 20px;
 
     background-color: var(--sideBarAccountBackground);
-    color: var(--sideBarAccountText);
+    color: var(--navBarText);
     font-size: large;
     .avatar div.content,
     img.content {
@@ -46,7 +46,7 @@
       float: right;
       width: var(--size);
       height: var(--size);
-      background-color: var(--sideBarAccountBackground);
+      background-color: var(--sideBarAccountIconBackground);
       border-radius: 100%;
       margin-right: 7px;
       &.last {
@@ -72,7 +72,7 @@
     .emailAddress {
       font-size: small;
       font-weight: 100;
-      color: rgb(255 255 255 / 61%);
+      color: var(--sideBarAccountEmailText);
     }
   }
 
