@@ -15,18 +15,9 @@ import { runtime } from './runtime'
 import { DesktopSettingsType } from '../shared/shared-types'
 
 import dayjs from 'dayjs'
-const dayjsLocales: Record<string, [string, () => any]> = {
-  en: ['en', () => import('dayjs/locale/en')],
-  ar: ['ar', () => import('dayjs/locale/ar')],
-  az: ['az', () => import('dayjs/locale/az')],
-  bg: ['bg', () => import('dayjs/locale/bg')],
-  ca: ['ca', () => import('dayjs/locale/ca')],
-  cs: ['cs', () => import('dayjs/locale/cs')],
-  ckb: ['en', () => import('dayjs/locale/en')], // FIXME
-  da: ['da', () => import('dayjs/locale/da')],
-  de: ['de', () => import('dayjs/locale/de')],
-  // TODO
-}
+
+//@ts-ignore
+import * as dayjsLocales from "../../static/dayjs_locale.bundle.js"
 
 attachKeybindingsListener()
 
@@ -79,9 +70,14 @@ export default function App(_props: any) {
     window.localeData = localeData
     window.static_translate = translate(localeData.messages)
     setLocaleData(localeData)
-    const dayjsLocale = dayjsLocales[localeData.locale]
-    await dayjsLocale[1]()
-    dayjs.locale(dayjsLocale[0])
+    let dayjsLocale = dayjsLocales[localeData.locale]
+    console.log({dayjsLocales});
+    
+    if(!dayjsLocale){
+      console.warn("no dayjs locale found for:", localeData.locale)
+      dayjsLocale = dayjsLocales["en"]
+    }
+    dayjs.locale(dayjsLocale)
   }
 
   useEffect(() => {

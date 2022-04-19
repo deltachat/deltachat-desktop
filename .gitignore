@@ -86,3 +86,4 @@ stub.js
 
 # pnpm lockfile
 pnpm-lock.yaml
+static/dayjs_locale.bundle.js
