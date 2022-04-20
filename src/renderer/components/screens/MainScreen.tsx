@@ -171,6 +171,7 @@ export default function MainScreen() {
             <div
               className='sidebar-icon'
               onClick={() => setSidebarState('visible')}
+              id='hamburger-menu-button'
             >
               <Icon icon='menu' aria-label={tx('main_menu')} iconSize={20} />
             </div>
@@ -279,9 +280,8 @@ export default function MainScreen() {
                 className='icon-rotated'
                 minimal
                 icon='more'
-                id='main-menu-button'
+                id='three-dot-menu-button'
                 aria-label={tx('main_menu')}
-                onClick={onClickThreeDotMenu}
               />
             </span>
           </NavbarGroup>
