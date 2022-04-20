@@ -200,3 +200,9 @@
     overflow: hidden;
   }
 }
+
+.SettingsDialog {
+  .bp3-card:first-child {
+    padding-top: 0px;
+  }
+}
