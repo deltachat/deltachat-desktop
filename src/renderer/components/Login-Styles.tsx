@@ -112,6 +112,7 @@ export const DeltaTextarea = React.memo(
             value={props.value}
             id={props.id}
             disabled={props.disabled}
+            placeholder={!isFocused ? props.placeholder : ''}
             onFocus={onFocus}
             onBlur={onBlur}
             rows={5}

@@ -11,8 +11,9 @@ import {
   MessageQuote,
 } from '../../shared/shared-types'
 
-import { writeFile } from 'fs/promises'
-import tempy from 'tempy'
+import { mkdtemp, writeFile } from 'fs/promises'
+import { tmpdir } from 'os'
+import { join } from 'path'
 
 import { getDirection } from '../../shared/util'
 export default class DCMessageList extends SplitOut {
@@ -318,7 +319,8 @@ export default class DCMessageList extends SplitOut {
     const message_html_content = this.selectedAccountContext.getMessageHTML(
       messageId
     )
-    const pathToFile = tempy.file({ extension: 'html' })
+    const tmpDir = await mkdtemp(join(tmpdir(), 'deltachat-'))
+    const pathToFile = join(tmpDir, 'message.html')
     await writeFile(pathToFile, message_html_content, { encoding: 'utf-8' })
     return pathToFile
   }

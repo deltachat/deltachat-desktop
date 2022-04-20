@@ -1,5 +1,4 @@
 import { getMessageFunction, LocaleData } from '../shared/localize'
-import { DesktopSettingsType } from '../shared/shared-types'
 
 import {
   OpenDialogFunctionType,
@@ -28,9 +27,9 @@ declare global {
     __screen: Screens
     __contextMenuActive: boolean
     __settingsOpened: boolean
+    __keybindingsDialogOpened: boolean
     __setQuoteInDraft: ((msgId: number) => void) | null
     __reloadDraft: (() => void) | null
-    __desktopSettings: DesktopSettingsType | null
     __chatlistSetSearch: ((searchTerm: string) => void) | undefined
     __chatStore: any
     __setMainScreenView:

@@ -1,12 +1,8 @@
 import React, { useState, useContext, useRef } from 'react'
-import {
-  ScreenContext,
-  SettingsContext,
-  useTranslationFunction,
-} from '../../contexts'
+import { ScreenContext, useTranslationFunction } from '../../contexts'
 
 import Gallery from '../Gallery'
-import Menu from '../Menu'
+import { useThreeDotMenu } from '../ThreeDotMenu'
 import ChatList from '../chat/ChatList'
 import MessageListAndComposer, {
   getBackgroundImageStyle,
@@ -25,9 +21,8 @@ import {
   Navbar,
   NavbarGroup,
   NavbarHeading,
-  Position,
-  Popover,
   Button,
+  Icon,
 } from '@blueprintjs/core'
 import { getLastSelectedChatId } from '../../ipc'
 import { useKeyBindingAction, KeybindAction } from '../../keybindings'
@@ -39,6 +34,8 @@ import MailingListProfile from '../dialogs/MessageListProfile'
 import { FullChat } from '../../../shared/shared-types'
 import { getLogger } from '../../../shared/logger'
 import { RecoverableCrashScreen } from './RecoverableCrashScreen'
+import Sidebar, { SidebarState } from '../Sidebar'
+import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 
 const log = getLogger('renderer/main-screen')
 
@@ -51,6 +48,7 @@ export enum View {
 export default function MainScreen() {
   const [queryStr, setQueryStr] = useState('')
   const [view, setView] = useState(View.MessageList)
+  const [sidebarState, setSidebarState] = useState<SidebarState>('init')
   window.__setMainScreenView = setView
   const [showArchivedChats, setShowArchivedChats] = useState(false)
   // Small hack/misuse of keyBindingAction to setShowArchivedChats from other components (especially
@@ -101,9 +99,11 @@ export default function MainScreen() {
     if (lastChatId) {
       selectChat(lastChatId)
     }
+    SettingsStoreInstance.effect.load()
   }
 
   const tx = useTranslationFunction()
+  const settingsStore = useSettingsStore()[0]
 
   const searchRef = useRef<HTMLInputElement>(null)
 
@@ -118,13 +118,13 @@ export default function MainScreen() {
     searchRef.current.value = ''
     searchChats('')
   })
+  const onClickThreeDotMenu = useThreeDotMenu(selectedChat.chat)
 
   if (!selectedChat) {
     log.error('selectedChat is undefined')
     return null
   }
 
-  const menu = <Menu selectedChat={selectedChat.chat} />
   let MessageListView
   if (selectedChat.chat !== null) {
     switch (view) {
@@ -145,8 +145,8 @@ export default function MainScreen() {
         )
     }
   } else {
-    const style: React.CSSProperties = window.__desktopSettings
-      ? getBackgroundImageStyle(window.__desktopSettings)
+    const style: React.CSSProperties = settingsStore
+      ? getBackgroundImageStyle(settingsStore.desktopSettings)
       : {}
 
     MessageListView = (
@@ -172,6 +172,12 @@ export default function MainScreen() {
       <div className='navbar-wrapper'>
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
+            <div
+              className='sidebar-icon'
+              onClick={() => setSidebarState('visible')}
+            >
+              <Icon icon='menu' aria-label={tx('main_menu')} iconSize={20} />
+            </div>
             {queryStr.length === 0 && showArchivedChats && (
               <>
                 <div className='archived-chats-title'>
@@ -253,37 +259,34 @@ export default function MainScreen() {
                   icon={'media'}
                   aria-label={tx('media')}
                 />
-                <SettingsContext.Consumer>
-                  {({ desktopSettings }) =>
-                    desktopSettings?.enableOnDemandLocationStreaming && (
-                      <Button
-                        minimal
-                        large
-                        icon='map'
-                        onClick={() => setView(View.Map)}
-                        active={view === View.Map}
-                        aria-label={tx('tab_map')}
-                      />
-                    )
-                  }
-                </SettingsContext.Consumer>
+                {settingsStore?.desktopSettings
+                  .enableOnDemandLocationStreaming && (
+                  <Button
+                    minimal
+                    large
+                    icon='map'
+                    onClick={() => setView(View.Map)}
+                    active={view === View.Map}
+                    aria-label={tx('tab_map')}
+                  />
+                )}
               </span>
             )}
             <span
               style={{
                 marginLeft:
                   selectedChat.chat && selectedChat.chat.id ? 0 : 'auto',
+                marginRight: '3px',
               }}
             >
-              <Popover content={menu} position={Position.RIGHT_TOP}>
-                <Button
-                  className='icon-rotated'
-                  minimal
-                  icon='more'
-                  id='main-menu-button'
-                  aria-label={tx('main_menu')}
-                />
-              </Popover>
+              <Button
+                className='icon-rotated'
+                minimal
+                icon='more'
+                id='main-menu-button'
+                aria-label={tx('main_menu')}
+                onClick={onClickThreeDotMenu}
+              />
             </span>
           </NavbarGroup>
         </Navbar>
@@ -297,6 +300,7 @@ export default function MainScreen() {
         />
         {MessageListView}
       </div>
+      <Sidebar sidebarState={sidebarState} setSidebarState={setSidebarState} />
       <ConnectivityToast />
     </div>
   )

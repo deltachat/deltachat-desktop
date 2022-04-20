@@ -1,19 +1,16 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react'
-import { SettingsContext, i18nContext } from './contexts'
+import { i18nContext } from './contexts'
 import ScreenController from './ScreenController'
 import { sendToBackend, ipcBackend, startBackendLogging } from './ipc'
 import attachKeybindingsListener from './keybindings'
 
 import { translate, LocaleData } from '../shared/localize'
-import { getLogger } from '../shared/logger'
-const log = getLogger('renderer/App')
 import { DeltaBackend } from './delta-remote'
 import { ThemeManager, ThemeContext } from './ThemeManager'
 
 import moment from 'moment'
 import { CrashScreen } from './components/screens/CrashScreen'
 import { runtime } from './runtime'
-import { DesktopSettingsType } from '../shared/shared-types'
 
 attachKeybindingsListener()
 
@@ -83,66 +80,22 @@ export default function App(_props: any) {
   if (!localeData) return null
   return (
     <CrashScreen>
-      <SettingsContextWrapper>
+      <ThemeContextWrapper>
         <i18nContext.Provider value={window.static_translate}>
           <ScreenController />
         </i18nContext.Provider>
-      </SettingsContextWrapper>
+      </ThemeContextWrapper>
     </CrashScreen>
   )
 }
-function SettingsContextWrapper({ children }: { children: React.ReactChild }) {
-  const [
-    desktopSettings,
-    _setDesktopSettings,
-  ] = useState<DesktopSettingsType | null>(null)
-  window.__desktopSettings = desktopSettings
-
-  useEffect(() => {
-    ;(async () => {
-      const desktopSettings = await DeltaBackend.call(
-        'settings.getDesktopSettings'
-      )
-      _setDesktopSettings(desktopSettings)
-      window.__desktopSettings = desktopSettings
-    })()
-  }, [])
-
-  const setDesktopSetting = async (
-    key: keyof DesktopSettingsType,
-    value: string | number | boolean
-  ) => {
-    if (
-      (await DeltaBackend.call('settings.setDesktopSetting', key, value)) ===
-      true
-    ) {
-      _setDesktopSettings((prevState: DesktopSettingsType | null) => {
-        if (prevState === null) {
-          log.warn(
-            'trying to update local version of desktop settings object, but it was not loaded yet'
-          )
-          return prevState
-        }
-        const newState = { ...prevState, [key]: value }
-        window.__desktopSettings = newState
-        return newState
-      })
-    }
-  }
-
+function ThemeContextWrapper({ children }: { children: React.ReactChild }) {
   /** on each theme change this var changes */
   const [theme_rand, setThemeRand] = useState(0)
   useEffect(() => {
     ThemeManager.setUpdateHook(() => setThemeRand(Math.random()))
   }, [])
 
-  if (!desktopSettings) return null
-
   return (
-    <SettingsContext.Provider value={{ desktopSettings, setDesktopSetting }}>
-      <ThemeContext.Provider value={theme_rand}>
-        {children}
-      </ThemeContext.Provider>
-    </SettingsContext.Provider>
+    <ThemeContext.Provider value={theme_rand}>{children}</ThemeContext.Provider>
   )
 }

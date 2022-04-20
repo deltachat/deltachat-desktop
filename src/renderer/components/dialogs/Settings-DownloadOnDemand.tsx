@@ -2,16 +2,17 @@ import React, { useContext } from 'react'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
 import { SettingsSelector } from './Settings'
-import { todo } from '../../../shared/shared-types'
 
 import filesizeConverter from 'filesize'
+import SettingsStoreInstance, {
+  SettingsStoreState,
+} from '../../stores/settings'
 
 export default function SettingsDownloadOnDemand(props: {
-  handleDeltaSettingsChange: (key: string, value: any) => void
-  settings: todo
+  settings: SettingsStoreState['settings']
 }) {
   const { openDialog } = useContext(ScreenContext)
-  const { handleDeltaSettingsChange, settings } = props
+  const { settings } = props
   const tx = useTranslationFunction()
 
   const options: { label: string; value: number }[] = [
@@ -38,17 +39,22 @@ export default function SettingsDownloadOnDemand(props: {
       title: tx('auto_download_messages'),
       onSave: async (bytes: string) => {
         const seconds = Number(bytes)
-        handleDeltaSettingsChange('download_limit', seconds)
+        SettingsStoreInstance.effect.setCoreSetting(
+          'download_limit',
+          seconds.toString()
+        )
       },
     })
   }
 
   const current_limit =
-    settings['download_limit'] == 0
+    settings['download_limit'] == '0'
       ? tx('pref_show_emails_all')
       : tx(
           'up_to_x',
-          filesizeConverter(settings['download_limit'], { base: 2 })
+          filesizeConverter(Number.parseInt(settings['download_limit']), {
+            base: 2,
+          })
         )
 
   return (

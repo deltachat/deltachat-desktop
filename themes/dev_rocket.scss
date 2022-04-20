@@ -17,11 +17,15 @@ $bgMessageBubbleOutgoing: #efffde;
 $bgNavBar: #fff;
 $bgPrimary: #fff;
 $bgSecondary: #f5f5f5;
+$chatListItemSelectedBg: #4c6e7d;
 $colorDanger: #f96856;
 $colorNone: #a0a0a0;
 $colorPrimary: #000000;
 $ovalButtonBg: #415e6b;
 $ovalButtonText: #fff;
+$sideBarAccountBg: #f5f5f5;
+$sideBarAccountEmailText: #01010199;
+$sideBarAccountIconBg: #fff;
 $textPrimary: #010101;
 $textSecondary: #62656a;
 $textNavBar: $textPrimary;
@@ -678,6 +682,9 @@ div.group-image-wrapper div.group-image-edit-button {
 
 .bp3-menu-item:hover, .bp3-submenu .bp3-popover-target.bp3-popover-open > .bp3-menu-item, 
 .SettingsSelector:hover button, .SettingsSelector:hover .CurrentValue, 
-.SettingsButton:hover button, .bp3-control.bp3-switch:hover {
+.SettingsButton:hover button, .bp3-control.bp3-switch:hover, .SettingsIconButton:hover button{
   color: white !important;
+}
+.SettingsIconButton:hover .Icon {
+  background-color: white;
 }

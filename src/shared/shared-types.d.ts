@@ -208,3 +208,9 @@ export declare type QrCodeResponse = {
   id: number
   text1: string
 }
+
+/** Additional info about the runtime the ui might need */
+export type RuntimeInfo = {
+  /** used to determine wether to use command key in shortcuts or not */
+  isMac: boolean
+}

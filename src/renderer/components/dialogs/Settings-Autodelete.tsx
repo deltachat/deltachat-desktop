@@ -16,6 +16,9 @@ import { SettingsSelector } from './Settings'
 import { AutodeleteDuration } from '../../../shared/constants'
 import { DeltaCheckbox } from '../contact/ContactListItem'
 import classNames from 'classnames'
+import SettingsStoreInstance, {
+  SettingsStoreState,
+} from '../../stores/settings'
 
 function durationToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)
@@ -50,7 +53,6 @@ export function AutodeleteConfirmationDialog({
   seconds,
   isOpen,
   onClose,
-  handleDeltaSettingsChange,
 }: {
   fromServer: boolean
   estimateCount: number
@@ -61,9 +63,9 @@ export function AutodeleteConfirmationDialog({
 
   const onOk = () => {
     if (isConfirmed === false) return
-    handleDeltaSettingsChange(
+    SettingsStoreInstance.effect.setCoreSetting(
       fromServer ? 'delete_server_after' : 'delete_device_after',
-      seconds
+      seconds.toString()
     )
     onClose()
   }
@@ -120,9 +122,12 @@ export function AutodeleteConfirmationDialog({
   )
 }
 
-export default function SettingsAutodelete(props: any) {
+export default function SettingsAutodelete({
+  settingsStore,
+}: {
+  settingsStore: SettingsStoreState
+}) {
   const { openDialog } = useContext(ScreenContext)
-  const { handleDeltaSettingsChange, settings } = props
 
   const tx = useTranslationFunction()
 
@@ -153,8 +158,8 @@ export default function SettingsAutodelete(props: any) {
         ? AUTODELETE_DURATION_OPTIONS_SERVER
         : AUTODELETE_DURATION_OPTIONS_DEVICE,
       selectedValue: fromServer
-        ? settings['delete_server_after']
-        : settings['delete_device_after'],
+        ? settingsStore.settings['delete_server_after']
+        : settingsStore.settings['delete_device_after'],
       title: fromServer
         ? tx('autodel_server_title')
         : tx('autodel_device_title'),
@@ -168,9 +173,9 @@ export default function SettingsAutodelete(props: any) {
 
         if (seconds === 0) {
           // No need to have a confirmation dialog on disabling
-          handleDeltaSettingsChange(
+          SettingsStoreInstance.effect.setCoreSetting(
             fromServer ? 'delete_server_after' : 'delete_device_after',
-            seconds
+            seconds.toString()
           )
           return
         }
@@ -178,7 +183,6 @@ export default function SettingsAutodelete(props: any) {
           fromServer,
           estimateCount,
           seconds,
-          handleDeltaSettingsChange,
         })
       },
     })
@@ -189,13 +193,17 @@ export default function SettingsAutodelete(props: any) {
       <H5>{tx('delete_old_messages')}</H5>
       <SettingsSelector
         onClick={onOpenDialog.bind(null, false)}
-        currentValue={durationToString(settings['delete_device_after'])}
+        currentValue={durationToString(
+          settingsStore.settings['delete_device_after']
+        )}
       >
         {tx('autodel_device_title')}
       </SettingsSelector>
       <SettingsSelector
         onClick={onOpenDialog.bind(null, true)}
-        currentValue={durationToString(settings['delete_server_after'])}
+        currentValue={durationToString(
+          settingsStore.settings['delete_server_after']
+        )}
       >
         {tx('autodel_server_title')}
       </SettingsSelector>

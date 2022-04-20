@@ -127,7 +127,8 @@
   }
 }
 
-.SettingsButton {
+.SettingsButton,
+.SettingsIconButton {
   position: relative;
   height: 40px;
   width: calc(100% + 40px);
@@ -148,6 +149,18 @@
     text-align: center;
     line-height: 40px;
     color: var(--globalText);
+  }
+}
+
+.SettingsIconButton {
+  display: flex;
+  padding: 0px 20px;
+
+  .Icon {
+    width: 24px;
+    height: 100%;
+    -webkit-mask-size: 80%;
+    background-color: var(--settingsIconColor);
   }
 }
 
@@ -185,5 +198,11 @@
     max-width: 50%;
     text-overflow: ellipsis;
     overflow: hidden;
+  }
+}
+
+.SettingsDialog {
+  .bp3-card:first-child {
+    padding-top: 0px;
   }
 }

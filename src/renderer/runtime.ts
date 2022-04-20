@@ -1,5 +1,9 @@
 import { ipcBackend } from './ipc'
-import { DesktopSettingsType, RC_Config } from '../shared/shared-types'
+import {
+  DesktopSettingsType,
+  RC_Config,
+  RuntimeInfo,
+} from '../shared/shared-types'
 import { setLogHandler } from '../shared/logger'
 import type {
   dialog,
@@ -56,6 +60,10 @@ interface Runtime {
    */
   getRC_Config(): RC_Config
   /**
+   * get the additional info about the runtime
+   */
+  getRuntimeInfo(): RuntimeInfo
+  /**
    * Opens a link in a new Window or in the Browser
    * @param link
    */
@@ -74,6 +82,9 @@ interface Runtime {
 }
 
 class Browser implements Runtime {
+  getRuntimeInfo(): RuntimeInfo {
+    throw new Error('Method not implemented.')
+  }
   getDesktopSettings(): Promise<DesktopSettingsType> {
     throw new Error('Method not implemented.')
   }
@@ -179,7 +190,6 @@ class Electron implements Runtime {
       }
     })
   }
-  private rc_config: RC_Config | null = null
   transformBlobURL(blob: string): string {
     return blob
   }
@@ -194,13 +204,26 @@ class Electron implements Runtime {
   openLink(link: string): void {
     openExternal(link)
   }
+  private rc_config: RC_Config | null = null
   getRC_Config(): RC_Config {
-    if (!this.rc_config) {
-      this.rc_config = ipcBackend.sendSync('get-rc-config')
+    if (this.rc_config === null) {
+      throw new Error('this.rc_config is not set')
     }
-    return this.rc_config as RC_Config
+    return this.rc_config
+  }
+  private runtime_info: RuntimeInfo | null = null
+  getRuntimeInfo(): RuntimeInfo {
+    if (this.runtime_info === null) {
+      throw new Error('this.runtime_info is not set')
+    }
+    return this.runtime_info
   }
   initialize() {
+    // fetch vars
+    this.rc_config = ipcBackend.sendSync('get-rc-config')
+    this.runtime_info = ipcBackend.sendSync('get-runtime-info')
+
+    // set log handler
     setLogHandler((...args: any[]) => {
       ipcBackend.send(
         'handleLogMessage',

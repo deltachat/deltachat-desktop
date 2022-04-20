@@ -13,7 +13,7 @@ import MapLayerFactory from './MapLayerFactory'
 import { Slider, Button, Collapse } from '@blueprintjs/core'
 import PopupMessage from './PopupMessage'
 import * as SessionStorage from '../helpers/SessionStorage'
-import { MessagesDisplayContext, SettingsContext } from '../../contexts'
+import { MessagesDisplayContext } from '../../contexts'
 import chatStore from '../../stores/chat'
 
 import { state as LocationStoreState } from '../../stores/locations'
@@ -752,5 +752,3 @@ export default class MapComponent extends React.Component<
     )
   }
 }
-
-MapComponent.contextType = SettingsContext

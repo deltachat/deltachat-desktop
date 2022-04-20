@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Card, Elevation, H5, Intent } from '@blueprintjs/core'
+import { H5, Intent } from '@blueprintjs/core'
 import { SettingsButton } from './Settings'
 import type { OpenDialogOptions } from 'electron'
 import { ipcBackend } from '../../ipc'
@@ -98,12 +98,10 @@ export default function SettingsBackup() {
   const tx = useTranslationFunction()
   return (
     <>
-      <Card elevation={Elevation.ONE}>
-        <H5>{tx('pref_backup')}</H5>
-        <SettingsButton onClick={onBackupExport}>
-          {tx('export_backup_desktop')}
-        </SettingsButton>
-      </Card>
+      <H5>{tx('pref_backup')}</H5>
+      <SettingsButton onClick={onBackupExport}>
+        {tx('export_backup_desktop')}
+      </SettingsButton>
     </>
   )
 }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import {
   Button,
   Position,
@@ -7,10 +7,12 @@ import {
   MenuItem,
   IconName,
 } from '@blueprintjs/core'
-import { useTranslationFunction } from '../../contexts'
+import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { runtime } from '../../runtime'
 import { MEDIA_EXTENSIONS } from '../../../shared/constants'
 
+import { sendCallInvitation } from '../helpers/ChatMethods'
+import { FullChat } from '../../../shared/shared-types'
 //function to populate Menu
 const MenuAttachmentItems = ({
   itemsArray,
@@ -35,10 +37,13 @@ const MenuAttachmentItems = ({
 //main component that creates the menu and popover
 const MenuAttachment = ({
   addFileToDraft,
+  selectedChat,
 }: {
   addFileToDraft: (file: string) => void
+  selectedChat: FullChat | null
 }) => {
   const tx = useTranslationFunction()
+  const screenContext = useContext(ScreenContext)
   const addFilenameFile = async () => {
     //function for files
     const file = await runtime.showOpenFileDialog({
@@ -71,17 +76,40 @@ const MenuAttachment = ({
       addFileToDraft(file)
     }
   }
+
+  const onVideoChat = () => {
+    if (!selectedChat) {
+      return
+    }
+    screenContext.openDialog('ConfirmationDialog', {
+      header: tx('videochat_invite_user_to_videochat', selectedChat.name),
+      message: tx('videochat_invite_user_hint'),
+      confirmLabel: tx('ok'),
+      cb: (yes: boolean) => {
+        if (yes) {
+          sendCallInvitation(screenContext, selectedChat.id)
+        }
+      },
+    })
+  }
   // item array used to populate menu
   const items = [
     {
       id: 0,
+      icon: 'phone' as IconName,
+      text: tx('videochat'),
+      onClick: onVideoChat,
+      attachment: 'attachment-images',
+    },
+    {
+      id: 1,
       icon: 'media' as IconName,
       text: tx('media'),
       onClick: addFilenameMedia.bind(null),
       attachment: 'attachment-images',
     },
     {
-      id: 1,
+      id: 2,
       icon: 'document' as IconName,
       text: tx('file'),
       onClick: addFilenameFile.bind(null),

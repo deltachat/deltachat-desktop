@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="svg2"
+   width="6.7291269"
+   height="11.167496"
+   viewBox="0 0 6.7291269 11.167496"
+   sodipodi:docname="saved-messages.svg"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs6" />
+  <sodipodi:namedview
+     id="namedview4"
+     pagecolor="#000000"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     showgrid="true"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:snap-grids="true"
+     inkscape:snap-to-guides="false"
+     inkscape:zoom="8.8240139"
+     inkscape:cx="2.2098786"
+     inkscape:cy="9.1794959"
+     inkscape:window-width="1366"
+     inkscape:window-height="741"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g8"
+     showborder="true"
+     units="mm"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2418"
+       originx="-8.8733344"
+       originy="-6.9580227" />
+  </sodipodi:namedview>
+  <g
+     inkscape:groupmode="layer"
+     inkscape:label="Image"
+     id="g8"
+     transform="translate(-2.6567905,-0.61408249)">
+    <path
+       style="fill:#000000;stroke-width:0.896811"
+       id="path1001"
+       d="" />
+    <path
+       style="fill:#000000;stroke-width:0.896811"
+       id="path846"
+       d="" />
+    <path
+       id="rect4698"
+       style="fill:none;fill-opacity:0.395147;stroke:#ffffff;stroke-width:0.771835;stroke-linecap:square;stroke-linejoin:miter"
+       d="M 3.042708,1 H 9 V 11 L 6.034075,8.7288721 3.042708,11 Z"
+       sodipodi:nodetypes="cccccc" />
+  </g>
+</svg>

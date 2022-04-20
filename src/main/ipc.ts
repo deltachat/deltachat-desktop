@@ -10,6 +10,8 @@ import { join, posix, sep } from 'path'
 import { DesktopSettings } from './desktop_settings'
 import { getConfigPath } from './application-constants'
 import { inspect } from 'util'
+import { RuntimeInfo } from '../shared/shared-types'
+import { platform } from 'os'
 
 const log = getLogger('main/ipc')
 const DeltaChatController: typeof import('./deltachat/controller').default = (() => {
@@ -136,6 +138,13 @@ export async function init(cwd: string, logHandler: LogHandler) {
 
   ipcMain.on('get-rc-config', ev => {
     ev.returnValue = app.rc
+  })
+
+  ipcMain.on('get-runtime-info', ev => {
+    const info: RuntimeInfo = {
+      isMac: platform() === 'darwin',
+    }
+    ev.returnValue = info
   })
 
   ipcMain.on('app-get-path', (ev, arg) => {

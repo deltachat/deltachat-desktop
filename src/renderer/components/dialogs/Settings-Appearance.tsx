@@ -1,17 +1,18 @@
-import {
-  SettingsContext,
-  ScreenContext,
-  useTranslationFunction,
-} from '../../contexts'
+import { ScreenContext, useTranslationFunction } from '../../contexts'
 import React, { useContext, useEffect, useState } from 'react'
-import { H5, H6, Card, Elevation, Icon } from '@blueprintjs/core'
+import { H6, Icon } from '@blueprintjs/core'
 import { DeltaBackend } from '../../delta-remote'
 import { ThemeManager } from '../../ThemeManager'
 import { SettingsSelector } from './Settings'
 import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
 import { runtime } from '../../runtime'
-import { RC_Config, Theme } from '../../../shared/shared-types'
+import {
+  DesktopSettingsType,
+  RC_Config,
+  Theme,
+} from '../../../shared/shared-types'
 import { join } from 'path'
+import SettingsStoreInstance from '../../stores/settings'
 
 const enum SetBackgroundAction {
   default,
@@ -23,13 +24,13 @@ const enum SetBackgroundAction {
 
 function BackgroundSelector({
   onChange,
+  desktopSettings,
 }: {
   onChange: (value: string) => void
+  desktopSettings: DesktopSettingsType
 }) {
   // the #color-input element is located in index.html outside of react
   const colorInput = document.getElementById('color-input') as HTMLInputElement
-
-  const { setDesktopSetting, desktopSettings } = useContext(SettingsContext)
 
   useEffect(() => {
     colorInput.onchange = (ev: any) => onChange(ev.target.value)
@@ -80,13 +81,13 @@ function BackgroundSelector({
         if (!url) {
           break
         }
-        setDesktopSetting(
+        SettingsStoreInstance.effect.setDesktopSetting(
           'chatViewBgImg',
           await DeltaBackend.call('settings.saveBackgroundImage', url, false)
         )
         break
       case SetBackgroundAction.presetImage:
-        setDesktopSetting(
+        SettingsStoreInstance.effect.setDesktopSetting(
           'chatViewBgImg',
           await DeltaBackend.call(
             'settings.saveBackgroundImage',
@@ -108,33 +109,25 @@ function BackgroundSelector({
   return (
     <div>
       <div className={'bg-option-wrap'}>
-        <SettingsContext.Consumer>
-          {({ desktopSettings }) =>
-            desktopSettings && (
-              <div
-                style={{
-                  ...(desktopSettings.chatViewBgImg?.startsWith('img: ')
-                    ? {
-                        backgroundImage: `url("file://${join(
-                          runtime.getConfigPath(),
-                          'background/',
-                          desktopSettings.chatViewBgImg.slice(5)
-                        )}")`,
-                      }
-                    : {
-                        backgroundColor: desktopSettings.chatViewBgImg?.slice(
-                          7
-                        ),
-                        backgroundImage: 'unset',
-                      }),
-                  backgroundSize: 'cover',
-                }}
-                aria-label={tx('a11y_background_preview_label')}
-                className={'background-preview'}
-              />
-            )
-          }
-        </SettingsContext.Consumer>
+        <div
+          style={{
+            ...(desktopSettings.chatViewBgImg?.startsWith('img: ')
+              ? {
+                  backgroundImage: `url("file://${join(
+                    runtime.getConfigPath(),
+                    'background/',
+                    desktopSettings.chatViewBgImg.slice(5)
+                  )}")`,
+                }
+              : {
+                  backgroundColor: desktopSettings.chatViewBgImg?.slice(7),
+                  backgroundImage: 'unset',
+                }),
+            backgroundSize: 'cover',
+          }}
+          aria-label={tx('a11y_background_preview_label')}
+          className={'background-preview'}
+        />
         <div className={'background-options'}>
           <div
             onClick={onButton.bind(null, SetBackgroundAction.default)}
@@ -192,18 +185,12 @@ function BackgroundSelector({
 }
 
 export default function SettingsAppearance({
-  handleDesktopSettingsChange,
   rc,
+  desktopSettings,
 }: {
-  handleDesktopSettingsChange: todo
   rc: RC_Config
+  desktopSettings: DesktopSettingsType
 }) {
-  const { desktopSettings, setDesktopSetting } = useContext(SettingsContext)
-  if (!desktopSettings) {
-    throw new Error(
-      'desktop settings not initialiyed yet, this should not happen'
-    )
-  }
   const { activeTheme } = desktopSettings
 
   const { openDialog } = useContext(ScreenContext)
@@ -225,7 +212,7 @@ export default function SettingsAppearance({
 
   const setTheme = async (theme: string) => {
     if (await DeltaBackend.call('extras.setTheme', theme)) {
-      setDesktopSetting('activeTheme', theme)
+      SettingsStoreInstance.effect.setDesktopSetting('activeTheme', theme)
       await ThemeManager.refresh()
     }
   }
@@ -269,8 +256,7 @@ export default function SettingsAppearance({
 
   const tx = useTranslationFunction()
   return (
-    <Card elevation={Elevation.ONE}>
-      <H5>{tx('pref_appearance')}</H5>
+    <>
       <SettingsSelector
         onClick={onOpenSelectThemeDialog}
         currentValue={shortCurrentValue()}
@@ -280,12 +266,19 @@ export default function SettingsAppearance({
       <br />
       <H6>{tx('pref_background')}</H6>
       <BackgroundSelector
+        desktopSettings={desktopSettings}
         onChange={(val: string) => {
           val.startsWith('#')
-            ? handleDesktopSettingsChange('chatViewBgImg', `color: ${val}`)
-            : handleDesktopSettingsChange('chatViewBgImg', val)
+            ? SettingsStoreInstance.effect.setDesktopSetting(
+                'chatViewBgImg',
+                `color: ${val}`
+              )
+            : SettingsStoreInstance.effect.setDesktopSetting(
+                'chatViewBgImg',
+                val
+              )
         }}
       />
-    </Card>
+    </>
   )
 }

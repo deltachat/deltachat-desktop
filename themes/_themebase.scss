@@ -21,6 +21,12 @@ $hover-contrast-change: 2%;
   --navBarText: #{$textNavBar};
   --navBarSearchPlaceholder: #{changeContrast($textNavBar, 27%)};
   --navBarGroupSubtitle: #{changeContrast($textNavBar, 27%)};
+  /* SideBar */
+  --sideBarBackground: #{$bgPrimary};
+  --sideBarAccountBackground: #{$sideBarAccountBg};
+  --sideBarAccountIconBackground: #{$sideBarAccountIconBg};
+  --sideBarAccountIconHoverBackground: #{changeContrast($sideBarAccountIconBg, $hover-contrast-change)};;
+  --sideBarAccountEmailText: #{$sideBarAccountEmailText};
   /* ChatView */
   --chatViewBg: #{$bgChatView};
   --chatViewBgImgPath: #{$bgImage};
@@ -32,9 +38,9 @@ $hover-contrast-change: 2%;
   --composerSendButton: #415e6b;
   --emojiSelectorSelectionColor: #{$accentColor};
   /* Chat List */
-  --chatListItemSelectedBg: #4c6e7d;
+  --chatListItemSelectedBg: #{$chatListItemSelectedBg};
   --chatListItemSelectedBgHover: #{changeContrast(
-      #4c6e7d,
+      $chatListItemSelectedBg,
       1% + $hover-contrast-change
     )};
   --chatListItemSelectedText: #{$bgPrimary};
@@ -166,6 +172,7 @@ $hover-contrast-change: 2%;
   --fullScreenMediaButtons: #8b8e91;
   --messageHightlightColor: rgba(66, 165, 245, 0.8);
   --addMemberChipBackgroundColor: #{$bgSecondary};
+  --searchInputBackgroundColor: #52768700;
 
   @if lightness($bgPrimary) < 50 {
     // dark theme
@@ -174,9 +181,13 @@ $hover-contrast-change: 2%;
 
     --messageReplyBtnBg: rgba(255, 255, 255, 0.13);
     --messageReplyBtnBgHover: rgba(255, 255, 255, 0.23);
+
+    --settingsIconColor: #666666;
   } @else {
     // light theme
     --scrollbarThumb: #{rgba(grey, $scrollbarTransparency)};
     --scrollbarThumbHover: #{rgba(grey, $scrollbarTransparency + 0.14)};
+
+    --settingsIconColor: #666666;
   }
 }

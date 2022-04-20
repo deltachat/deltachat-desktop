@@ -3,7 +3,7 @@ import { DeltaBackend } from '../../delta-remote'
 import Composer, { useDraft } from '../composer/Composer'
 import { getLogger } from '../../../shared/logger'
 import MessageList from './MessageList'
-import { SettingsContext, ScreenContext } from '../../contexts'
+import { ScreenContext } from '../../contexts'
 import { ChatStoreStateWithChatSet } from '../../stores/chat'
 import ComposerMessageInput from '../composer/ComposerMessageInput'
 import { DesktopSettingsType } from '../../../shared/shared-types'
@@ -11,6 +11,7 @@ import { isChatReadonly } from '../../../shared/util'
 import { join, parse } from 'path'
 import { runtime } from '../../runtime'
 import { RecoverableCrashScreen } from '../screens/RecoverableCrashScreen'
+import { useSettingsStore } from '../../stores/settings'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -201,8 +202,10 @@ export default function MessageListAndComposer({
 
   const [disabled, disabledReason] = isChatReadonly(chatStore.chat)
 
-  const settings = useContext(SettingsContext).desktopSettings
-  const style = settings ? getBackgroundImageStyle(settings) : {}
+  const settingsStore = useSettingsStore()[0]
+  const style = settingsStore
+    ? getBackgroundImageStyle(settingsStore.desktopSettings)
+    : {}
 
   return (
     <div
@@ -219,7 +222,7 @@ export default function MessageListAndComposer({
       </div>
       <Composer
         ref={refComposer}
-        chatId={chatStore.chat.id}
+        selectedChat={chatStore.chat}
         isDisabled={disabled}
         disabledReason={disabledReason}
         isContactRequest={chatStore.chat.isContactRequest}

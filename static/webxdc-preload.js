@@ -7,8 +7,25 @@
    * @type {Parameters<import('./webxdc').Webxdc["setUpdateListener"]>[0]|null}
    */
   let callback = null
-  ipcRenderer.on('webxdc.statusUpdate', (_ev, update) => {
-    callback && callback(update)
+  var last_serial = 0
+  let setUpdateListenerPromise = null
+  const onStatusUpdate = async () => {
+    if (callback) {
+      for (let update of await ipcRenderer.invoke(
+        'webxdc.getAllUpdates',
+        last_serial
+      )) {
+        last_serial = update.serial
+        callback(update)
+      }
+      if (setUpdateListenerPromise) {
+        setUpdateListenerPromise()
+        setUpdateListenerPromise = null
+      }
+    }
+  }
+  ipcRenderer.on('webxdc.statusUpdate', _ev => {
+    onStatusUpdate()
   })
 
   /**
@@ -18,10 +35,21 @@
   const api = {
     selfAddr: '?Setup Missing?',
     selfName: '?Setup Missing?',
-    setUpdateListener: cb => {
+    setUpdateListener: (cb, start_serial = 0) => {
+      last_serial = start_serial
       callback = cb
+      const promise = new Promise((res, _rej) => {
+        setUpdateListenerPromise = res
+      })
+      onStatusUpdate()
+      return promise
     },
-    getAllUpdates: () => ipcRenderer.invoke('webxdc.getAllUpdates'),
+    getAllUpdates: () => {
+      console.error(
+        'getAllUpdates is deprectated an will removed in the future, it also returns an empty array now, so you really should use setUpdateListener instead.'
+      )
+      return Promise.resolve([])
+    },
     sendUpdate: (update, description) =>
       ipcRenderer.invoke('webxdc.sendUpdate', update, description),
   }

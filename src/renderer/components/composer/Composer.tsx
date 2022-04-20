@@ -7,13 +7,14 @@ import React, {
   useCallback,
 } from 'react'
 import MenuAttachment from '../attachment/menuAttachment'
-import { SettingsContext, useTranslationFunction } from '../../contexts'
+import { useTranslationFunction } from '../../contexts'
 import ComposerMessageInput from './ComposerMessageInput'
 import { getLogger } from '../../../shared/logger'
 import { EmojiAndStickerPicker } from './EmojiAndStickerPicker'
 import { EmojiData, BaseEmoji } from 'emoji-mart'
 import { replaceColonsSafe } from '../conversations/emoji'
 import {
+  FullChat,
   JsonMessage,
   MessageTypeAttachmentSubset,
 } from '../../../shared/shared-types'
@@ -21,6 +22,7 @@ import { Quote } from '../message/Message'
 import { DeltaBackend } from '../../delta-remote'
 import { DraftAttachment } from '../attachment/messageAttachment'
 import { sendMessage, unselectChat } from '../helpers/ChatMethods'
+import { useSettingsStore } from '../../stores/settings'
 
 const log = getLogger('renderer/composer')
 
@@ -54,7 +56,7 @@ const Composer = forwardRef<
     isDisabled: boolean
     disabledReason: string
     isContactRequest: boolean
-    chatId: number | null
+    selectedChat: FullChat
     messageInputRef: React.MutableRefObject<ComposerMessageInput | null>
     draftState: DraftObject
     removeQuote: () => void
@@ -68,7 +70,7 @@ const Composer = forwardRef<
     isDisabled,
     disabledReason,
     isContactRequest,
-    chatId,
+    selectedChat,
     messageInputRef,
     draftState,
     removeQuote,
@@ -76,6 +78,8 @@ const Composer = forwardRef<
     addFileToDraft,
     removeFile,
   } = props
+
+  const chatId = selectedChat.id
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
@@ -185,6 +189,7 @@ const Composer = forwardRef<
   }
 
   const tx = useTranslationFunction()
+  const settingsStore = useSettingsStore()[0]
 
   useLayoutEffect(() => {
     // focus composer on chat change
@@ -247,21 +252,20 @@ const Composer = forwardRef<
           )}
         </div>
         <div className='lower-bar'>
-          <MenuAttachment addFileToDraft={addFileToDraft} />
-          <SettingsContext.Consumer>
-            {({ desktopSettings }) =>
-              desktopSettings && (
-                <ComposerMessageInput
-                  ref={messageInputRef}
-                  enterKeySends={desktopSettings.enterKeySends}
-                  sendMessage={composerSendMessage}
-                  chatId={chatId}
-                  updateDraftText={updateDraftText}
-                  onPaste={handlePaste}
-                />
-              )
-            }
-          </SettingsContext.Consumer>
+          <MenuAttachment
+            addFileToDraft={addFileToDraft}
+            selectedChat={selectedChat}
+          />
+          {settingsStore && (
+            <ComposerMessageInput
+              ref={messageInputRef}
+              enterKeySends={settingsStore?.desktopSettings.enterKeySends}
+              sendMessage={composerSendMessage}
+              chatId={chatId}
+              updateDraftText={updateDraftText}
+              onPaste={handlePaste}
+            />
+          )}
           <div
             className='emoji-button'
             ref={pickerButtonRef}

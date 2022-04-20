@@ -1,10 +1,6 @@
 import React, { useState, useContext, FormEvent } from 'react'
-import { Card, Elevation, H5, Radio, RadioGroup } from '@blueprintjs/core'
-import {
-  RenderDTSettingSwitchType,
-  SettingsSelector,
-  SettingsState,
-} from './Settings'
+import { Card, Elevation, Radio, RadioGroup } from '@blueprintjs/core'
+import { RenderDTSettingSwitchType, SettingsSelector } from './Settings'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { DeltaInput } from '../Login-Styles'
 import {
@@ -14,19 +10,18 @@ import {
   DeltaDialogOkCancelFooter,
 } from './DeltaDialog'
 import { DialogProps } from './DialogController'
+import SettingsStoreInstance, {
+  SettingsStoreState,
+} from '../../stores/settings'
 
 const WEBRTC_INSTANCE_JITSI = 'https://meet.jit.si/$ROOM'
 
 export function SettingsExperimentalFeatures({
+  settingsStore,
   renderDTSettingSwitch,
-  state,
-  handleDeltaSettingsChange,
-  handleDesktopSettingsChange,
 }: {
   renderDTSettingSwitch: RenderDTSettingSwitchType
-  state: SettingsState
-  handleDeltaSettingsChange: any
-  handleDesktopSettingsChange: any
+  settingsStore: SettingsStoreState
 }) {
   const tx = window.static_translate
   const { openDialog } = useContext(ScreenContext)
@@ -34,14 +29,17 @@ export function SettingsExperimentalFeatures({
   const onClickEdit = async () => {
     openDialog(EditVideochatInstanceDialog, {
       onOk: async (configValue: string) => {
-        handleDeltaSettingsChange('webrtc_instance', configValue)
+        SettingsStoreInstance.effect.setCoreSetting(
+          'webrtc_instance',
+          configValue
+        )
         if (configValue === '') {
-          handleDesktopSettingsChange('enableAVCalls', false)
+          SettingsStoreInstance.effect.setDesktopSetting('enableAVCalls', false)
         } else {
-          handleDesktopSettingsChange('enableAVCalls', true)
+          SettingsStoreInstance.effect.setDesktopSetting('enableAVCalls', true)
         }
       },
-      state: state,
+      settingsStore,
     })
   }
 
@@ -56,7 +54,6 @@ export function SettingsExperimentalFeatures({
 
   return (
     <>
-      <H5>{tx('pref_experimental_features')}</H5>
       {renderDTSettingSwitch({
         key: 'enableOnDemandLocationStreaming',
         label: tx('pref_on_demand_location_streaming'),
@@ -64,10 +61,10 @@ export function SettingsExperimentalFeatures({
       {renderDTSettingSwitch({
         key: 'minimizeToTray',
         label: tx('pref_show_tray_icon'),
-        disabled: state.rc?.minimized,
-        disabledValue: state.rc?.minimized,
+        disabled: settingsStore.rc.minimized,
+        disabledValue: settingsStore.rc.minimized,
       })}
-      {state.rc?.minimized && (
+      {settingsStore.rc.minimized && (
         <div className='bp3-callout'>
           {tx('explain_desktop_minimized_disabled_tray_pref')}
         </div>
@@ -78,7 +75,9 @@ export function SettingsExperimentalFeatures({
       })}
       <SettingsSelector
         onClick={onClickEdit.bind(null, false)}
-        currentValue={showVideochatInstance(state.settings['webrtc_instance'])}
+        currentValue={showVideochatInstance(
+          settingsStore.settings['webrtc_instance']
+        )}
       >
         {tx('videochat')}
       </SettingsSelector>
@@ -93,11 +92,11 @@ export function EditVideochatInstanceDialog({
   onClose,
   onOk,
   onCancel,
-  state,
-}: DialogProps) {
+  settingsStore,
+}: DialogProps & { settingsStore: SettingsStoreState }) {
   const tx = useTranslationFunction()
   const [configValue, setConfigValue] = useState(
-    state.settings['webrtc_instance']
+    settingsStore.settings['webrtc_instance']
   )
   const [radioValue, setRadioValue] = useState<RadioButtonValue>(() => {
     if (configValue === '') {
@@ -127,7 +126,7 @@ export function EditVideochatInstanceDialog({
       newConfigValue = WEBRTC_INSTANCE_JITSI
       setRadioValue('jitsi')
     } else {
-      newConfigValue = state.settings['webrtc_instance']
+      newConfigValue = settingsStore.settings['webrtc_instance']
       setRadioValue('custom')
     }
     setConfigValue(newConfigValue)
@@ -170,23 +169,26 @@ export function EditVideochatInstanceDialog({
             />
           </RadioGroup>
           {radioValue === 'custom' && (
-            <div>
-              <DeltaInput
-                key='custom_webrtc_instance'
-                id='custom_webrtc_instance'
-                value={configValue}
-                placeholder={tx('videochat_instance_placeholder')}
-                onChange={(
-                  event: React.FormEvent<HTMLElement> &
-                    React.ChangeEvent<HTMLInputElement>
-                ) => {
-                  setConfigValue(event.target.value)
-                }}
-              />
-              <div className='bp3-callout'>
-                {tx('videochat_instance_example')}
+            <>
+              <br />
+              <div>
+                <DeltaInput
+                  key='custom_webrtc_instance'
+                  id='custom_webrtc_instance'
+                  value={configValue}
+                  placeholder={tx('videochat_instance_placeholder')}
+                  onChange={(
+                    event: React.FormEvent<HTMLElement> &
+                      React.ChangeEvent<HTMLInputElement>
+                  ) => {
+                    setConfigValue(event.target.value)
+                  }}
+                />
+                <div className='bp3-callout'>
+                  {tx('videochat_instance_example')}
+                </div>
               </div>
-            </div>
+            </>
           )}
         </Card>
       </DeltaDialogBody>
