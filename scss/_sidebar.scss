@@ -49,6 +49,9 @@
       background-color: var(--sideBarAccountIconBackground);
       border-radius: 100%;
       margin-right: 7px;
+      &:hover {
+        background-color: var(--sideBarAccountIconHoverBackground);
+      }
       &.last {
         margin-right: 0px;
       }

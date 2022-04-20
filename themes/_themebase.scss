@@ -25,6 +25,7 @@ $hover-contrast-change: 2%;
   --sideBarBackground: #{$bgPrimary};
   --sideBarAccountBackground: #{$sideBarAccountBg};
   --sideBarAccountIconBackground: #{$sideBarAccountIconBg};
+  --sideBarAccountIconHoverBackground: #{changeContrast($sideBarAccountIconBg, $hover-contrast-change)};;
   --sideBarAccountEmailText: #{$sideBarAccountEmailText};
   /* ChatView */
   --chatViewBg: #{$bgChatView};
