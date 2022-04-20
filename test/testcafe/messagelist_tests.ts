@@ -8,7 +8,11 @@ import { join } from 'path'
 import { rmSync } from 'fs'
 
 console.log('cleaning up test dir')
-rmSync(join(__dirname, '../../.test_tmp_data'), { recursive: true })
+try {
+  rmSync(join(__dirname, '../../.test_tmp_data'), { recursive: true })
+} catch (error) {
+  
+}
 console.log('cleaned up test dir')
 
 export const translate = ClientFunction((...args) =>
