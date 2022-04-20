@@ -4,8 +4,13 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-               echo 'Build..'
-               sh 'docker-compose up'
+        
+                sh '''
+                echo 'Build..'
+                docker-compose build --no-cache
+                docker-compose up
+                '''
+   
             }
         }
         stage('Test') {
