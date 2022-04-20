@@ -5,10 +5,11 @@ import { createTmpUser } from '../integration/fixtures/config'
 const waitForLogin = 50000
 
 export async function clickThreeDotMenuItem (label) {
+  t.debug()
   await t.click('#three-dot-menu-button')
   // await ClientFunction(() => document.querySelector('#three-dot-menu-button').click())()
-  await t.expect(Selector('dc-context-menu > .item').withText(label).exists).ok()
-  await t.click(Selector('dc-context-menu > .item').withText(label))
+  await t.expect(Selector('.dc-context-menu > .item').withText(label).exists).ok()
+  await t.click(Selector('.dc-context-menu > .item').withText(label))
 }
 
 export async function clickSideBarItem (label) {
