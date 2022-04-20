@@ -84,5 +84,8 @@ embedded.provisionprofile
 
 stub.js
 
+# message list e2e test
+.test_tmp_data
+
 # pnpm lockfile
 pnpm-lock.yaml

@@ -161,7 +161,12 @@ export function EditVideochatInstanceDialog({
           <RadioGroup onChange={onChangeRadio} selectedValue={radioValue}>
             <Radio key='select-none' label={tx('off')} value='disabled' />
             <Radio key='select-jitsi' label='Jitsi' value='jitsi' />
-            <Radio key='select-custom' label={tx('custom')} value='custom' />
+            <Radio
+              key='select-custom'
+              label={tx('custom')}
+              value='custom'
+              className={'test-videochat-custom'}
+            />
           </RadioGroup>
           {radioValue === 'custom' && (
             <>
