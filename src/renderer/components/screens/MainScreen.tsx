@@ -282,6 +282,7 @@ export default function MainScreen() {
                 icon='more'
                 id='three-dot-menu-button'
                 aria-label={tx('main_menu')}
+                onClick={onClickThreeDotMenu}
               />
             </span>
           </NavbarGroup>
