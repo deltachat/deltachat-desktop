@@ -145,7 +145,7 @@ export function EditVideochatInstanceDialog({
       }}
       fixed
     >
-      <DeltaDialogHeader title={tx('videochat')} showBackButton />
+      <DeltaDialogHeader title={tx('videochat')} />
       <DeltaDialogBody>
         <Card elevation={Elevation.ONE}>
           <div
@@ -164,23 +164,26 @@ export function EditVideochatInstanceDialog({
             <Radio key='select-custom' label={tx('custom')} value='custom' />
           </RadioGroup>
           {radioValue === 'custom' && (
-            <div>
-              <DeltaInput
-                key='custom_webrtc_instance'
-                id='custom_webrtc_instance'
-                value={configValue}
-                placeholder={tx('videochat_instance_placeholder')}
-                onChange={(
-                  event: React.FormEvent<HTMLElement> &
-                    React.ChangeEvent<HTMLInputElement>
-                ) => {
-                  setConfigValue(event.target.value)
-                }}
-              />
-              <div className='bp3-callout'>
-                {tx('videochat_instance_example')}
+            <>
+              <br />
+              <div>
+                <DeltaInput
+                  key='custom_webrtc_instance'
+                  id='custom_webrtc_instance'
+                  value={configValue}
+                  placeholder={tx('videochat_instance_placeholder')}
+                  onChange={(
+                    event: React.FormEvent<HTMLElement> &
+                      React.ChangeEvent<HTMLInputElement>
+                  ) => {
+                    setConfigValue(event.target.value)
+                  }}
+                />
+                <div className='bp3-callout'>
+                  {tx('videochat_instance_example')}
+                </div>
               </div>
-            </div>
+            </>
           )}
         </Card>
       </DeltaDialogBody>
