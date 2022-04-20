@@ -100,6 +100,24 @@
   }
 }
 
+.sidebar-icon {
+  --size: 40px;
+  --iconSize: 20px;
+  --avatarSize: 48px;
+  width: var(--size);
+  height: var(--size);
+  margin-left: calc((var(--avatarSize) - var(--size)) / 2);
+  margin-right: calc((var(--avatarSize) - var(--size)) / 2);
+  padding: calc((var(--size) - var(--iconSize)) / 2);
+
+  border-radius: 100%;
+  &:hover {
+    background-color: rgba(115, 134, 148, 0.3);
+  }
+  & > span {
+  }
+}
+
 @keyframes sidebar-slide-in {
   100% {
     transform: translateX(0%);

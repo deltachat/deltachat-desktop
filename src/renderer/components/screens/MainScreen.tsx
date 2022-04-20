@@ -175,16 +175,13 @@ export default function MainScreen() {
       <div className='navbar-wrapper'>
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
-            <Icon
-              style={{
-                padding: '0px 9px',
-                marginRight: '10px',
-              }}
-              icon='menu'
-              aria-label={tx('main_menu')}
-              iconSize={20}
-              onClick={() => setSidebarState('visible')}
-            />
+            <div className="sidebar-icon" onClick={() => setSidebarState('visible')} >
+              <Icon
+                icon='menu'
+                aria-label={tx('main_menu')}
+                iconSize={20}
+              />
+            </div>
             {queryStr.length === 0 && showArchivedChats && (
               <>
                 <div className='archived-chats-title'>
