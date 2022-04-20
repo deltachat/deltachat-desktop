@@ -127,7 +127,7 @@ const MenuAttachment = ({
         }
         position={Position.TOP_LEFT}
       >
-        <Button minimal icon='paperclip' />
+        <Button id='test-attachment-menu' minimal icon='paperclip' />
       </Popover>
     </div>
   )

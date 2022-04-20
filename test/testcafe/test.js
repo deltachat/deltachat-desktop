@@ -31,7 +31,7 @@ async function goBackToAccountOverviewIfNeeded(t) {
     await t.click(cancelButton)
     return
   }
-  let menu_button = Selector('#three-dot-menu-button')
+  let menu_button = Selector('#hamburger-menu-button')
   if (await menu_button.exists) {
     await logout()
   }
@@ -84,7 +84,7 @@ test('create chat', async t => {
   await goBackToAccountOverviewIfNeeded(t)
   await t
     .click(accountButton1)
-  await clickThreeDotMenuItem(await translate('menu_new_chat'))
+  await clickSideBarItem(await translate('menu_new_chat'))
   await t.expect(Selector('.FixedDeltaDialog').exists).ok()
   await t.typeText('.FixedDeltaDialog input', conf.account2.email)
   await t

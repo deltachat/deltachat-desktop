@@ -5,9 +5,7 @@ import { createTmpUser } from '../integration/fixtures/config'
 const waitForLogin = 50000
 
 export async function clickThreeDotMenuItem (label) {
-  t.debug()
   await t.click('#three-dot-menu-button')
-  // await ClientFunction(() => document.querySelector('#three-dot-menu-button').click())()
   await t.expect(Selector('.dc-context-menu > .item').withText(label).exists).ok()
   await t.click(Selector('.dc-context-menu > .item').withText(label))
 }
@@ -19,7 +17,7 @@ export async function clickSideBarItem (label) {
 }
 
 export async function logout () {
-  await clickThreeDotMenuItem(await translate('switch_account'))
+  await clickSideBarItem(await translate('switch_account'))
 }
 
 export async function closeDialog () {
