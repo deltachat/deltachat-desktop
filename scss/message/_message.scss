@@ -214,7 +214,7 @@
   margin-right: 0;
   margin-left: 32px;
 
-  .metadata:not(.with-image-no-caption) {
+  .metadata {
     & > .date {
       color: var(--messageOutgoingStatusColor);
     }

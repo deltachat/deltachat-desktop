@@ -132,11 +132,13 @@ test('prepare testing: login to account A with desktop', async t => {
     .typeText('#addr', config.account_a_email)
     .typeText('#mail_pw', config.account_a_password)
     .click('#action-login')
-  await t.expect(
-    Selector('.info-message.big', { timeout: 3000 }).withText(
-      await translate('no_chat_selected_suggestion_desktop')
-    ).exists
-  ).ok()
+  await t
+    .expect(
+      Selector('.info-message.big', { timeout: 3000 }).withText(
+        await translate('no_chat_selected_suggestion_desktop')
+      ).exists
+    )
+    .ok()
 })
 
 const clickChatByName = async (t, name) => {
@@ -187,7 +189,9 @@ function endCode(msg) {
 function MSGinViewportSelector(timeout = 2000): Selector {
   return Selector(
     () => {
-      let raw_labels = document.querySelectorAll('#message-list .msg-body')
+      let raw_labels = document.querySelectorAll(
+        '#message-list .msg-body, .join-button'
+      )
       let labels = Array.prototype.slice.call(raw_labels)
       function isElementInViewport(el) {
         var rect = el.getBoundingClientRect()
@@ -237,7 +241,7 @@ test('create chat with bot, so it is not a contact request', async t => {
 test('incoming message from chat partner is received', async t => {
   await clickChatByName(t, config.account_b_email)
   let old_msg_count = await Selector('#message-list li').count
-  console.log("SEND MESSAGE RESULT: ", config.device_b_context.sendMessage(12, 'hello world'))
+  await config.device_b_context.sendMessage(12, 'hello world')
   await t
     .expect(MSGinViewportSelector().withText('hello world').exists)
     .ok('message not found in view')
@@ -264,10 +268,12 @@ test('sending message scrolls down', async t => {
 })
 
 // scroll down to newest outgoing video chat invitation
-// TODO: should fail currently because videochat invitation is not scrolled in view
 test('sending videochat invitation scrolls down', async t => {
   // enable / setup video chat
-  await goToSideBarSubSettingsMenu(t, await translate('pref_experimental_features'))
+  await goToSideBarSubSettingsMenu(
+    t,
+    await translate('pref_experimental_features')
+  )
   await ClientFunction(function () {
     // scroll down so button is found
     let buttons = [...document.querySelectorAll('.SettingsSelector > button')]
@@ -297,11 +303,14 @@ test('sending videochat invitation scrolls down', async t => {
   await sendVideoChatInvitation(t)
   // confirm sending
   await t.click(Selector('.test-selector-confirm'))
-  await t.debug()
-  // check
-  await t
-    .expect(MSGinViewportSelector(2300).exists)
-    .ok('video chat invitation is in view')
+  // check if videochat invitation is in view
+  console.log(
+    await t
+      .expect(
+        MSGinViewportSelector(2300).filter('#message-list .join-button').exists
+      )
+      .ok('video chat invitation is not in view')
+  )
 })
 
 // scroll down to newest incoming message
