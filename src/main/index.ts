@@ -186,10 +186,11 @@ export function quit(e?: Electron.Event) {
   }, 4000)
 }
 app.on('activate', () => {
-  if (!mainWindow.window) {
-    throw new Error('window does not exist, this should never happen')
-  }
   log.debug("app.on('activate')")
+  if (!mainWindow.window) {
+    log.warn('window not set, this is normal on startup')
+    return
+  }
   if (mainWindow.window.isVisible() === false) {
     log.debug("app.on('activate') showing main window")
     showDeltaChat()
