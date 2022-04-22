@@ -35,6 +35,7 @@ const DeltaChatController: typeof import('./deltachat/controller').default = (()
 
 const app = rawApp as ExtendedAppMainProcess
 
+/** returns shutdown function */
 export async function init(cwd: string, logHandler: LogHandler) {
   const main = mainWindow
   const dcController = new DeltaChatController(cwd)
@@ -188,4 +189,9 @@ export async function init(cwd: string, logHandler: LogHandler) {
   ipcMain.handle('get-desktop-settings', async _ev => {
     return DesktopSettings.state
   })
+
+  return () => {
+    // the shutdown function
+    dcController._inner_account_manager?.stopIO()
+  }
 }
