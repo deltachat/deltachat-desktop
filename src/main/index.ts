@@ -97,6 +97,8 @@ Promise.all([
     process.exit(1)
   })
 
+let ipc_shutdown_function: (() => void) | null = null
+
 async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
   any,
   any,
@@ -110,7 +112,7 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
 
   const cwd = getAccountsPath()
   log.info(`cwd ${cwd}`)
-  await ipc.init(cwd, logHandler)
+  ipc_shutdown_function = await ipc.init(cwd, logHandler)
 
   mainWindow.init({ hidden: app.rc['minimized'] })
   initMenu(logHandler)
@@ -174,12 +176,23 @@ export function quit(e?: Electron.Event) {
   app.isQuitting = true
   e?.preventDefault()
 
+  log.info('Starting app shutdown process')
+  // close window
+  mainWindow.window?.close()
+  mainWindow.window?.destroy()
+
+  // does stop io and other things
+  ipc_shutdown_function && ipc_shutdown_function()
+
   function doQuit() {
     log.info('Quitting now. Bye.')
     app.quit()
   }
-
-  DesktopSettings.saveImmediate().then(doQuit)
+  DesktopSettings.saveImmediate().then(() => {
+    // timeout here to ensure core messages that come after quit are still logged
+    // (there should not be core activity after quit, but sometimes there are)
+    setTimeout(doQuit, 500)
+  })
   setTimeout(() => {
     log.error('Saving state took too long. Quitting.')
     doQuit()
