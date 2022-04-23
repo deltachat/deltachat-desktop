@@ -4,6 +4,7 @@
 
 ### Fixed
 - Fix contact name has color in quote when replying with sticker
+- Fix startup crash when spam clicking on app icon on mac.
 
 ### Added
 - Implement expandable settings
