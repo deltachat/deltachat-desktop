@@ -3,11 +3,13 @@
 ## [Unreleased][unreleased]
 
 ### Fixed
+- Fix "Send Message" does not always open chat view #2592
 - Fix contact name has color in quote when replying with sticker
 - Fix startup crash when spam clicking on app icon on mac.
 
 ### Added
 - Implement expandable settings
+- jump to message from gallery ("show in chat") #2618
 
 ### Changed
 - Move node-fetch to devDependencies

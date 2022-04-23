@@ -1,5 +1,5 @@
 import { DeltaBackend, sendMessageParams } from '../../delta-remote'
-import ChatStore from '../../stores/chat'
+import ChatStore, { ChatView } from '../../stores/chat'
 import { ScreenContext, unwrapContext } from '../../contexts'
 import { ChatListItemType, FullChat } from '../../../shared/shared-types'
 import { MuteDuration } from '../../../shared/constants'
@@ -14,6 +14,10 @@ type Chat = ChatListItemType | FullChat
 
 export const selectChat = (chatId: number) => {
   ChatStore.effect.selectChat(chatId)
+}
+
+export const setChatView = (view: ChatView) => {
+  ChatStore.effect.setView(view)
 }
 
 export const jumpToMessage = (msgId: number) => {

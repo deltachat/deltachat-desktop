@@ -38,7 +38,13 @@ interface ScrollToPosition {
   scrollTop: number
 }
 
+export enum ChatView {
+  MessageList,
+  Media,
+  Map,
+}
 export interface ChatStoreState {
+  activeView: ChatView
   chat: FullChat | null
   messageIds: number[]
   messagePages: MessagePage[]
@@ -52,6 +58,7 @@ export interface ChatStoreState {
 }
 
 const defaultState: ChatStoreState = {
+  activeView: ChatView.MessageList,
   chat: null,
   messageIds: [],
   messagePages: [],
@@ -197,6 +204,14 @@ class ChatStore extends Store<ChatStoreState> {
     return false
   }
   reducer = {
+    setView: (view: ChatView) => {
+      this.setState(prev => {
+        return {
+          ...prev,
+          activeView: view,
+        }
+      }, 'setChatView')
+    },
     selectedChat: (payload: Partial<ChatStoreState>) => {
       this.setState(_ => {
         this.lockUnlock('scroll')
@@ -687,7 +702,9 @@ class ChatStore extends Store<ChatStoreState> {
       ),
       'selectChat'
     ),
-
+    setView: (view: ChatView) => {
+      this.reducer.setView(view)
+    },
     jumpToMessage: async (msgId: number, highlight?: boolean) => {
       highlight = highlight === false ? false : true
       // these methods were called in backend before
