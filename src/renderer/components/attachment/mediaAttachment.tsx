@@ -16,6 +16,7 @@ import { OpenDialogFunctionType } from '../dialogs/DialogController'
 import { runtime } from '../../runtime'
 
 import filesizeConverter from 'filesize'
+import { jumpToMessage } from '../helpers/ChatMethods'
 
 export default function MediaAttachment({ message }: { message: MessageType }) {
   if (!message.file) {
@@ -66,10 +67,10 @@ const contextMenuFactory = (
         runtime.writeClipboardImage(message.file)
       },
     },
-    // {
-    //   label: tx('jump_to_message'),
-    //   action: ()=>alert('not implemented yet')
-    // },
+    {
+      label: tx('show_in_chat'),
+      action: () => jumpToMessage(message.id),
+    },
     {
       label: tx('menu_message_details'),
       action: openDialog.bind(null, 'MessageDetail', { id: msgId }),

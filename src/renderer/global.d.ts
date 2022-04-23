@@ -5,7 +5,6 @@ import {
   CloseDialogFunctionType,
 } from './components/dialogs/DialogController'
 import { userFeedback, Screens } from './ScreenController'
-import { View as MainScreenView } from './components/screens/MainScreen'
 
 declare global {
   interface Window {
@@ -32,8 +31,5 @@ declare global {
     __reloadDraft: (() => void) | null
     __chatlistSetSearch: ((searchTerm: string) => void) | undefined
     __chatStore: any
-    __setMainScreenView:
-      | React.Dispatch<React.SetStateAction<MainScreenView>>
-      | undefined
   }
 }

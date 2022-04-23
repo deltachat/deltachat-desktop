@@ -8,11 +8,16 @@ import MessageListAndComposer, {
   getBackgroundImageStyle,
 } from '../message/MessageListAndComposer'
 import SearchInput from '../SearchInput'
-import { useChatStore, ChatStoreStateWithChatSet } from '../../stores/chat'
+import {
+  useChatStore,
+  ChatStoreStateWithChatSet,
+  ChatView,
+} from '../../stores/chat'
 import {
   openViewGroupDialog,
   openViewProfileDialog,
   selectChat,
+  setChatView,
 } from '../helpers/ChatMethods'
 
 import {
@@ -39,17 +44,9 @@ import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 
 const log = getLogger('renderer/main-screen')
 
-export enum View {
-  MessageList,
-  Media,
-  Map,
-}
-
 export default function MainScreen() {
   const [queryStr, setQueryStr] = useState('')
-  const [view, setView] = useState(View.MessageList)
   const [sidebarState, setSidebarState] = useState<SidebarState>('init')
-  window.__setMainScreenView = setView
   const [showArchivedChats, setShowArchivedChats] = useState(false)
   // Small hack/misuse of keyBindingAction to setShowArchivedChats from other components (especially
   // ViewProfile when selecting a shared chat/group)
@@ -69,7 +66,6 @@ export default function MainScreen() {
     if (chatId === selectedChat.chat?.id) return
 
     selectChat(chatId)
-    setView(View.MessageList)
   }
   const searchChats = (queryStr: string) => setQueryStr(queryStr)
   const handleSearchChange = (event: { target: { value: string } }) =>
@@ -127,14 +123,14 @@ export default function MainScreen() {
 
   let MessageListView
   if (selectedChat.chat !== null) {
-    switch (view) {
-      case View.Media:
+    switch (selectedChat.activeView) {
+      case ChatView.Media:
         MessageListView = <Gallery chatId={selectedChat.chat.id} />
         break
-      case View.Map:
+      case ChatView.Map:
         MessageListView = <MapComponent selectedChat={selectedChat.chat} />
         break
-      case View.MessageList:
+      case ChatView.MessageList:
       default:
         MessageListView = (
           <RecoverableCrashScreen reset_on_change_key={selectedChat.chat.id}>
@@ -242,19 +238,19 @@ export default function MainScreen() {
             {selectedChat.chat && (
               <span className='views'>
                 <Button
-                  onClick={() => setView(View.MessageList)}
+                  onClick={() => setChatView(ChatView.MessageList)}
                   minimal
                   large
-                  active={view === View.MessageList}
+                  active={selectedChat.activeView === ChatView.MessageList}
                   // aria-selected={!view}
                   icon={'chat'}
                   aria-label={tx('chat')}
                 />
                 <Button
-                  onClick={() => setView(View.Media)}
+                  onClick={() => setChatView(ChatView.Media)}
                   minimal
                   large
-                  active={view === View.Media}
+                  active={selectedChat.activeView === ChatView.Media}
                   // aria-selected={view}
                   icon={'media'}
                   aria-label={tx('media')}
@@ -265,8 +261,8 @@ export default function MainScreen() {
                     minimal
                     large
                     icon='map'
-                    onClick={() => setView(View.Map)}
-                    active={view === View.Map}
+                    onClick={() => setChatView(ChatView.Map)}
+                    active={selectedChat.activeView === ChatView.Map}
                     aria-label={tx('tab_map')}
                   />
                 )}

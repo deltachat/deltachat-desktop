@@ -8,8 +8,8 @@ import { getLogger } from '../../../shared/logger'
 import { DeltaBackend } from '../../delta-remote'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { MessagesDisplayContext } from '../../contexts'
-import { View as MainScreenView } from '../screens/MainScreen'
-import { selectChat } from '../helpers/ChatMethods'
+import { selectChat, setChatView } from '../helpers/ChatMethods'
+import { ChatView } from '../../stores/chat'
 
 const log = getLogger('renderer/message-markdown')
 
@@ -164,8 +164,7 @@ function BotCommandSuggestion({ suggestion }: { suggestion: string }) {
       chatID = message_display_context.chatId
       // go back to chat view
       selectChat(chatID)
-      window.__setMainScreenView &&
-        window.__setMainScreenView(MainScreenView.MessageList)
+      setChatView(ChatView.MessageList)
     } else if (message_display_context.context == 'chat_messagelist') {
       // nothing special to do
       chatID = message_display_context.chatId
