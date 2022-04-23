@@ -12,6 +12,7 @@ import { useInitEffect } from '../helpers/hooks'
 import { preventDefault } from '../../../shared/util'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 import { useContextMenu } from '../ContextMenu'
+import { jumpToMessage } from '../helpers/ChatMethods'
 
 const log = getLogger('renderer/fullscreen_media')
 
@@ -43,6 +44,13 @@ export default function FullscreenMedia(props: {
     {
       label: tx('save-as'),
       action: onDownload.bind(null, msg),
+    },
+    {
+      label: tx('show_in_chat'),
+      action: () => {
+        jumpToMessage(msg.id)
+        onClose()
+      },
     },
   ])
 
