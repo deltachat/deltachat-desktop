@@ -56,7 +56,7 @@ describe('/shared/localize', () => {
                 )
                 return false
               }
-              return false
+              return true
             }
 
             if (!testString('\\\\n')) return false
@@ -64,7 +64,7 @@ describe('/shared/localize', () => {
             if (!testString('\\\\\\"')) return false
             // if (!testString('\\\\')) return false
 
-            return false
+            return true
           })
         })
       }
