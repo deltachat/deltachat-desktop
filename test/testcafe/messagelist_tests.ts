@@ -242,8 +242,9 @@ test('incoming message from chat partner is received', async t => {
   await clickChatByName(t, config.account_b_email)
   let old_msg_count = await Selector('#message-list li').count
   await config.device_b_context.sendMessage(12, 'hello world')
+  await t.wait(3000)
   await t
-    .expect(MSGinViewportSelector().withText('hello world').exists)
+    .expect(MSGinViewportSelector(6000).withText('hello world').exists)
     .ok('message not found in view')
   await t.expect(Selector('#message-list li').count).eql(old_msg_count + 1)
 })
@@ -326,7 +327,8 @@ test('receiving message scrolls down', async t => {
   }
   await t.wait(1000)
   const end_msg_code = endCode('end-off incoming message spam')
-  config.device_b_context.sendMessage(12, end_msg_code)
+  await config.device_b_context.sendMessage(12, end_msg_code)
+  await t.wait(3000)
   await t
     .expect(MSGinViewportSelector(6000).withText(end_msg_code).exists)
     .ok('message not found in view')
