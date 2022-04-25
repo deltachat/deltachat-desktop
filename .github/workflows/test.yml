@@ -38,3 +38,4 @@ jobs:
       env:
         DCC_NEW_TMP_EMAIL: ${{secrets.DCC_NEW_TMP_EMAIL}}
         NODE_ENV: test
+        TEST_DIR: .test_tmp_data
