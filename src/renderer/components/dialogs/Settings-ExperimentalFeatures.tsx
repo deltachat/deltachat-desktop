@@ -15,6 +15,8 @@ import SettingsStoreInstance, {
 } from '../../stores/settings'
 
 const WEBRTC_INSTANCE_JITSI = 'https://meet.jit.si/$ROOM'
+const WEBRTC_INSTANCE_SYSTEMLI = 'https://meet.systemli.org/$ROOM'
+const WEBRTC_INSTANCE_AUTISTICI = 'https://vc.autistici.org/$ROOM'
 
 export function SettingsExperimentalFeatures({
   settingsStore,
@@ -46,6 +48,10 @@ export function SettingsExperimentalFeatures({
   const showVideochatInstance = (instance: string) => {
     if (instance === '') {
       return tx('off')
+    } else if (instance === WEBRTC_INSTANCE_SYSTEMLI) {
+      return 'Systemli'
+    } else if (instance === WEBRTC_INSTANCE_AUTISTICI) {
+      return 'Autistici'
     } else if (instance === WEBRTC_INSTANCE_JITSI) {
       return 'Jitsi'
     }
@@ -85,7 +91,12 @@ export function SettingsExperimentalFeatures({
   )
 }
 
-type RadioButtonValue = 'disabled' | 'jitsi' | 'custom'
+type RadioButtonValue =
+  | 'disabled'
+  | 'jitsi'
+  | 'custom'
+  | 'systemli'
+  | 'autistici'
 
 export function EditVideochatInstanceDialog({
   isOpen,
@@ -101,6 +112,10 @@ export function EditVideochatInstanceDialog({
   const [radioValue, setRadioValue] = useState<RadioButtonValue>(() => {
     if (configValue === '') {
       return 'disabled'
+    } else if (configValue === WEBRTC_INSTANCE_SYSTEMLI) {
+      return 'systemli'
+    } else if (configValue === WEBRTC_INSTANCE_AUTISTICI) {
+      return 'autistici'
     } else if (configValue === WEBRTC_INSTANCE_JITSI) {
       return 'jitsi'
     } else {
@@ -122,6 +137,12 @@ export function EditVideochatInstanceDialog({
     if (currentRadioValue === 'disabled') {
       newConfigValue = ''
       setRadioValue('disabled')
+    } else if (currentRadioValue === 'systemli') {
+      newConfigValue = WEBRTC_INSTANCE_SYSTEMLI
+      setRadioValue('systemli')
+    } else if (currentRadioValue === 'autistici') {
+      newConfigValue = WEBRTC_INSTANCE_AUTISTICI
+      setRadioValue('autistici')
     } else if (currentRadioValue === 'jitsi') {
       newConfigValue = WEBRTC_INSTANCE_JITSI
       setRadioValue('jitsi')
@@ -160,6 +181,8 @@ export function EditVideochatInstanceDialog({
 
           <RadioGroup onChange={onChangeRadio} selectedValue={radioValue}>
             <Radio key='select-none' label={tx('off')} value='disabled' />
+            <Radio key='select-systemli' label='Systemli' value='systemli' />
+            <Radio key='select-autistici' label='Autistici' value='autistici' />
             <Radio key='select-jitsi' label='Jitsi' value='jitsi' />
             <Radio
               key='select-custom'
