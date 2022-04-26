@@ -136,7 +136,7 @@ export default function SettingsEncryptio({
       >
         {tx('autocrypt_send_asm_button')}
       </SettingsButton>
-      <div className='bp3-callout'>{tx('autocrypt_explain')}</div>
+      <div className='bp4-callout'>{tx('autocrypt_explain')}</div>
     </>
   )
 }

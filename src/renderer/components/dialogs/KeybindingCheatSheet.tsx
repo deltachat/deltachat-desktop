@@ -37,7 +37,7 @@ export default function KeybindingCheatSheet(props: {
       showCloseButton={true}
     >
       <DeltaDialogHeader onClose={onClose} showCloseButton={true}>
-        <h4 className='bp3-heading'>
+        <h4 className='bp4-heading'>
           {tx('desktop_keybindings_dialog_title')}
         </h4>
         <CheatSheetKeyboardShortcut />

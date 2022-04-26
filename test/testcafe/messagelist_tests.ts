@@ -172,7 +172,7 @@ export async function goToSideBarSubSettingsMenu(t, label) {
 export async function sendVideoChatInvitation(t) {
   await t.click('#test-attachment-menu')
   await t.click(
-    Selector('a.bp3-menu-item').withText(await translate('videochat'))
+    Selector('a.bp4-menu-item').withText(await translate('videochat'))
   )
 }
 
