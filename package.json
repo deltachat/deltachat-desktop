@@ -78,6 +78,7 @@
   "dependencies": {
     "@blueprintjs/core": "^4.1.2",
     "@deltachat/message_parser_wasm": "^0.3.0",
+    "@deltachat/react-qr-reader": "^4.0.0",
     "@mapbox/geojson-extent": "^1.0.0",
     "application-config": "^1.0.1",
     "classnames": "^2.3.1",
@@ -96,7 +97,6 @@
     "rc": "^1.2.8",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-qr-reader": "^2.2.1",
     "react-string-replace": "^1.0.0",
     "react-virtualized-auto-sizer": "^1.0.5",
     "react-window": "^1.8.6",

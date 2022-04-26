@@ -15,7 +15,7 @@ import {
 import { DialogProps } from './DialogController'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
 import classNames from 'classnames'
-import QrReader from 'react-qr-reader'
+import QrReader from '@deltachat/react-qr-reader'
 import processOpenQrUrl from '../helpers/OpenQrUrl'
 import { getLogger } from '../../../shared/logger'
 import { useContextMenu } from '../ContextMenu'

@@ -1,5 +1,5 @@
 declare module '@mapbox/geojson-extent'
-declare module 'react-qr-reader'
+declare module '@deltachat/react-qr-reader'
 
 type todo = any
 

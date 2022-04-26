@@ -20,6 +20,7 @@
 - update webxdc setUpdateListener api
 - Remove dependency tempy
 - Update @blueprintjs/core to `4.1.2`
+- use forked version of `react-qr-reader` (@deltachat/react-qr-reader@4.0.0)
 
 ### Removed
 - remove dependency `react-qr-svg`
