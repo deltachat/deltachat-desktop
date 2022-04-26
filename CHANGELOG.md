@@ -20,7 +20,7 @@
 - Move node-fetch to devDependencies
 - Update emoji-mart to `^3.0.1`
 - Update @types/emoji-mart to `^3.0.9`
-- Update deltachat-node to v1.77.0
+- Update deltachat-node to `v1.77.1`
 - `ENTER + SHIFT` and `ENTER + CTRL` in the composer do now the same thing: they send or add a newline depending on the `enterKeySends` user preference
 - update webxdc setUpdateListener api
 - Remove dependency tempy
