@@ -22,8 +22,8 @@ export function DeltaMenuItem({
 }) {
   return (
     <li onClick={onClick}>
-      <a className='bp3-menu-item bp3-popover-dismiss'>
-        <div className='bp3-text-overflow-ellipsis bp3-fill'>{text}</div>
+      <a className='bp4-menu-item bp4-popover-dismiss'>
+        <div className='bp4-text-overflow-ellipsis bp4-fill'>{text}</div>
       </a>
     </li>
   )
