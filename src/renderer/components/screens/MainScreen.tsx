@@ -171,6 +171,7 @@ export default function MainScreen() {
             <div
               className='sidebar-icon'
               onClick={() => setSidebarState('visible')}
+              id='hamburger-menu-button'
             >
               <Icon icon='menu' aria-label={tx('main_menu')} iconSize={20} />
             </div>
@@ -236,54 +237,55 @@ export default function MainScreen() {
               </NavbarHeading>
             )}
             {selectedChat.chat && (
-              <span className='views'>
-                <Button
-                  onClick={() => setChatView(ChatView.MessageList)}
-                  minimal
-                  large
-                  active={selectedChat.activeView === ChatView.MessageList}
-                  // aria-selected={!view}
-                  icon={'chat'}
-                  aria-label={tx('chat')}
-                />
-                <Button
-                  onClick={() => setChatView(ChatView.Media)}
-                  minimal
-                  large
-                  active={selectedChat.activeView === ChatView.Media}
-                  // aria-selected={view}
-                  icon={'media'}
-                  aria-label={tx('media')}
-                />
-                {settingsStore?.desktopSettings
-                  .enableOnDemandLocationStreaming && (
+              <>
+                <span className='views'>
                   <Button
+                    onClick={() => setChatView(ChatView.MessageList)}
                     minimal
                     large
-                    icon='map'
-                    onClick={() => setChatView(ChatView.Map)}
-                    active={selectedChat.activeView === ChatView.Map}
-                    aria-label={tx('tab_map')}
+                    active={selectedChat.activeView === ChatView.MessageList}
+                    // aria-selected={!view}
+                    icon={'chat'}
+                    aria-label={tx('chat')}
                   />
-                )}
-              </span>
+                  <Button
+                    onClick={() => setChatView(ChatView.Media)}
+                    minimal
+                    large
+                    active={selectedChat.activeView === ChatView.Media}
+                    // aria-selected={view}
+                    icon={'media'}
+                    aria-label={tx('media')}
+                  />
+                  {settingsStore?.desktopSettings
+                    .enableOnDemandLocationStreaming && (
+                    <Button
+                      minimal
+                      large
+                      icon='map'
+                      onClick={() => setChatView(ChatView.Map)}
+                      active={selectedChat.activeView === ChatView.Map}
+                      aria-label={tx('tab_map')}
+                    />
+                  )}
+                </span>
+                <span
+                  style={{
+                    marginLeft: 0,
+                    marginRight: '3px',
+                  }}
+                >
+                  <Button
+                    className='icon-rotated'
+                    minimal
+                    icon='more'
+                    id='three-dot-menu-button'
+                    aria-label={tx('main_menu')}
+                    onClick={onClickThreeDotMenu}
+                  />
+                </span>
+              </>
             )}
-            <span
-              style={{
-                marginLeft:
-                  selectedChat.chat && selectedChat.chat.id ? 0 : 'auto',
-                marginRight: '3px',
-              }}
-            >
-              <Button
-                className='icon-rotated'
-                minimal
-                icon='more'
-                id='main-menu-button'
-                aria-label={tx('main_menu')}
-                onClick={onClickThreeDotMenu}
-              />
-            </span>
           </NavbarGroup>
         </Navbar>
       </div>

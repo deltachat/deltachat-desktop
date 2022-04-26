@@ -110,7 +110,7 @@ export function useThreeDotMenu(selectedChat: FullChat | null) {
 
   return (event: React.MouseEvent<any, MouseEvent>) => {
     const threeDotButtonElement = document.querySelector(
-      '#main-menu-button'
+      '#three-dot-menu-button'
     ) as any
 
     const [cursorX, cursorY] = [

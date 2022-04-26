@@ -1,7 +1,7 @@
 //@ts-check
 import { Selector } from 'testcafe'
 import { waitForReact } from 'testcafe-react-selectors'
-import { loginWithTmpUser, logout, clickAppMenuItem, translate } from './helpers'
+import { loginWithTmpUser, logout, clickThreeDotMenuItem, translate, clickSideBarItem } from './helpers'
 
 /* global fixture, test */
 '.bp3-navbar-heading'
@@ -31,7 +31,7 @@ async function goBackToAccountOverviewIfNeeded(t) {
     await t.click(cancelButton)
     return
   }
-  let menu_button = Selector('#main-menu-button')
+  let menu_button = Selector('#hamburger-menu-button')
   if (await menu_button.exists) {
     await logout()
   }
@@ -84,7 +84,7 @@ test('create chat', async t => {
   await goBackToAccountOverviewIfNeeded(t)
   await t
     .click(accountButton1)
-  await clickAppMenuItem(await translate('menu_new_chat'))
+  await clickSideBarItem(await translate('menu_new_chat'))
   await t.expect(Selector('.FixedDeltaDialog').exists).ok()
   await t.typeText('.FixedDeltaDialog input', conf.account2.email)
   await t
@@ -133,7 +133,7 @@ test('open settings dialog and close with escape', async t => {
 
   await t.click(accountButton1)
   // check open via menu
-  await clickAppMenuItem(await translate('menu_settings'))
+  await clickSideBarItem(await translate('menu_settings'))
   await SettingsShouldBeOpen()
   // check close via keycombination
   await t.pressKey('esc')

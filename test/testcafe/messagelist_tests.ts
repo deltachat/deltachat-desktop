@@ -10,9 +10,7 @@ import { rmSync } from 'fs'
 console.log('cleaning up test dir')
 try {
   rmSync(join(__dirname, '../../.test_tmp_data'), { recursive: true })
-} catch (error) {
-  
-}
+} catch (error) {}
 console.log('cleaned up test dir')
 
 export const translate = ClientFunction((...args) =>
@@ -134,8 +132,13 @@ test('prepare testing: login to account A with desktop', async t => {
     .typeText('#addr', config.account_a_email)
     .typeText('#mail_pw', config.account_a_password)
     .click('#action-login')
-    .expect(Selector('.info-message.big', { timeout: 3000 }).innerText)
-    .eql(await translate('no_chat_selected_suggestion_desktop'))
+  await t
+    .expect(
+      Selector('.info-message.big', { timeout: 3000 }).withText(
+        await translate('no_chat_selected_suggestion_desktop')
+      ).exists
+    )
+    .ok()
 })
 
 const clickChatByName = async (t, name) => {
@@ -146,10 +149,31 @@ const clickChatByName = async (t, name) => {
   )
 }
 
-async function clickAppMenuItem(t, label) {
-  await t.click('#main-menu-button')
-  await t.expect(Selector('a.bp3-menu-item').withText(label).exists).ok()
-  await t.click(Selector('a.bp3-menu-item').withText(label))
+export async function clickThreeDotMenuItem(t, label) {
+  await t.click('#three-dot-menu-button')
+  await t
+    .expect(Selector('.dc-context-menu > .item').withText(label).exists)
+    .ok()
+  await t.click(Selector('.dc-context-menu > .item').withText(label))
+}
+
+export async function clickSideBarItem(t, label) {
+  await t.click('#hamburger-menu-button')
+  await t.expect(Selector('.sidebar-item').withText(label).exists).ok()
+  await t.click(Selector('.sidebar-item').withText(label))
+}
+
+export async function goToSideBarSubSettingsMenu(t, label) {
+  await clickSideBarItem(t, await translate('menu_settings'))
+  await t.expect(Selector('.SettingsIconButton').withText(label).exists).ok()
+  await t.click(Selector('.SettingsIconButton').withText(label))
+}
+
+export async function sendVideoChatInvitation(t) {
+  await t.click('#test-attachment-menu')
+  await t.click(
+    Selector('a.bp3-menu-item').withText(await translate('videochat'))
+  )
 }
 
 async function send_msg(t, message) {
@@ -165,7 +189,9 @@ function endCode(msg) {
 function MSGinViewportSelector(timeout = 2000): Selector {
   return Selector(
     () => {
-      let raw_labels = document.querySelectorAll('#message-list .msg-body')
+      let raw_labels = document.querySelectorAll(
+        '#message-list .msg-body, .join-button'
+      )
       let labels = Array.prototype.slice.call(raw_labels)
       function isElementInViewport(el) {
         var rect = el.getBoundingClientRect()
@@ -190,7 +216,7 @@ test('create chat with bot, so it is not a contact request', async t => {
   //   const account_item = ReactSelector('CreateChat').withText(
   //     config.account_a_email
   //   )
-  await clickAppMenuItem(t, await translate('menu_new_chat'))
+  await clickSideBarItem(t, await translate('menu_new_chat'))
 
   await t.expect(Selector('.FixedDeltaDialog').exists).ok()
   await t.typeText('.FixedDeltaDialog input', config.account_b_email)
@@ -215,9 +241,10 @@ test('create chat with bot, so it is not a contact request', async t => {
 test('incoming message from chat partner is received', async t => {
   await clickChatByName(t, config.account_b_email)
   let old_msg_count = await Selector('#message-list li').count
-  config.device_b_context.sendMessage(12, 'hello world')
+  await config.device_b_context.sendMessage(12, 'hello world')
+  await t.wait(3000)
   await t
-    .expect(MSGinViewportSelector().withText('hello world').exists)
+    .expect(MSGinViewportSelector(6000).withText('hello world').exists)
     .ok('message not found in view')
   await t.expect(Selector('#message-list li').count).eql(old_msg_count + 1)
 })
@@ -244,7 +271,10 @@ test('sending message scrolls down', async t => {
 // scroll down to newest outgoing video chat invitation
 test('sending videochat invitation scrolls down', async t => {
   // enable / setup video chat
-  await clickAppMenuItem(t, await translate('menu_settings'))
+  await goToSideBarSubSettingsMenu(
+    t,
+    await translate('pref_experimental_features')
+  )
   await ClientFunction(function () {
     // scroll down so button is found
     let buttons = [...document.querySelectorAll('.SettingsSelector > button')]
@@ -257,7 +287,9 @@ test('sending videochat invitation scrolls down', async t => {
   await t.click(
     ReactSelector('SettingsSelector').withText(await translate('videochat'))
   )
-  await t.click(Selector('.test-videochat-custom').withText(await translate('custom')))
+  await t.click(
+    Selector('.test-videochat-custom').withText(await translate('custom'))
+  )
   await t.typeText(
     Selector('#custom_webrtc_instance'),
     'https://basicwebrtc.delta.chat/#camon=TRUE&roomname=$ROOM'
@@ -269,14 +301,17 @@ test('sending videochat invitation scrolls down', async t => {
   // spam some bigger messages so we can test scrolling
   await spam_messages(t)
   // send video chat invitation
-  await clickAppMenuItem(t, await translate('videochat'))
+  await sendVideoChatInvitation(t)
   // confirm sending
   await t.click(Selector('.test-selector-confirm'))
-
-  // check
-  await t
-    .expect(MSGinViewportSelector(2300).exists)
-    .ok('video chat invitation is in view')
+  // check if videochat invitation is in view
+  console.log(
+    await t
+      .expect(
+        MSGinViewportSelector(2300).filter('#message-list .join-button').exists
+      )
+      .ok('video chat invitation is not in view')
+  )
 })
 
 // scroll down to newest incoming message
@@ -292,7 +327,8 @@ test('receiving message scrolls down', async t => {
   }
   await t.wait(1000)
   const end_msg_code = endCode('end-off incoming message spam')
-  config.device_b_context.sendMessage(12, end_msg_code)
+  await config.device_b_context.sendMessage(12, end_msg_code)
+  await t.wait(3000)
   await t
     .expect(MSGinViewportSelector(6000).withText(end_msg_code).exists)
     .ok('message not found in view')
