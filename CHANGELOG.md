@@ -12,6 +12,7 @@
 - fix webxdc content not visible in gallery
 - unexpected click behavior in gallery/document view #2626
 - fix prev/next media had seperate list for images and gifs
+- fixed height for webxdc icons in messages
 
 ### Added
 - Implement expandable settings
