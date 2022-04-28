@@ -9,7 +9,28 @@
 - Fix "Send Message" does not always open chat view #2592
 - Fix contact name has color in quote when replying with sticker
 - Fix startup crash when spam clicking on app icon on mac.
-- fix: hide connectivity toast when connected
+- fix webxdc content not visible in gallery
+
+### Added
+- Implement expandable settings
+- jump to message from gallery ("show in chat") #2618
+- add Webxdc tab to gallery
+
+### Changed
+- Move node-fetch to devDependencies
+- Update emoji-mart to `^3.0.1`
+- Update @types/emoji-mart to `^3.0.9`
+- Update deltachat-node to v1.77.0
+- `ENTER + SHIFT` and `ENTER + CTRL` in the composer do now the same thing: they send or add a newline depending on the `enterKeySends` user preference
+- update webxdc setUpdateListener api
+- Remove dependency tempy
+- Update @blueprintjs/core to `4.1.2`
+- use forked version of `react-qr-reader` (@deltachat/react-qr-reader@4.0.0)
+
+### Removed
+- remove dependency `react-qr-svg`
+
+### Fixed
 - fix random search result position (#2631) 
 - fix: signature field in Edit Profile is not labeled when empty (#2579)
 - Keyboard shortcut preview for "Send on Enter" setting

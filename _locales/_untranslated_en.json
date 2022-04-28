@@ -61,5 +61,8 @@
   },
   "about": {
     "message": "About"
+  },
+  "webxdc": {
+    "message": "Webxdc"
   }
 }

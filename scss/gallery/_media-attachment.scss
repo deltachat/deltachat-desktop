@@ -146,3 +146,52 @@
     }
   }
 }
+
+.media-attachment-webxdc {
+  display: flex;
+  flex-direction: row;
+  width: 300px;
+  margin: 5px 3px;
+
+  &:hover {
+    background-color: var(--galleryWebxdcItem);
+  }
+
+  & > .icon {
+    height: 44px;
+    width: 44px;
+  }
+
+  & > .text-part {
+    flex-grow: 1;
+    margin-left: 8px;
+    // The width of the icon plus our 8px margin
+    max-width: calc(100% - 37px);
+
+    & > .name {
+      color: var(--messageAttachmentFileInfo);
+      font-size: 14px;
+      line-height: 18px;
+      font-weight: 300;
+      margin-top: 2px;
+    }
+
+    & > .summary {
+      color: var(--messageAttachmentFileInfo);
+      font-size: 11px;
+      line-height: 16px;
+      letter-spacing: 0.3px;
+      margin-top: 3px;
+    }
+
+    & > .name,
+    .summary {
+      // Handling really long names - cut them off
+      overflow-x: hidden;
+      white-space: pre-line;
+      user-select: text;
+      position: relative;
+      word-break: break-all;
+    }
+  }
+}
