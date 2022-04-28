@@ -125,6 +125,7 @@ export type MessageQuote = {
     displayName: string
     displayColor: string
     overrideSenderName: string
+    image: null | string
   } | null
 }
 
