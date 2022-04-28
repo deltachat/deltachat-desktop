@@ -10,6 +10,7 @@
 - Fix contact name has color in quote when replying with sticker
 - Fix startup crash when spam clicking on app icon on mac.
 - fix webxdc content not visible in gallery
+- unexpected click behavior in gallery/document view #2626
 
 ### Added
 - Implement expandable settings

@@ -214,16 +214,15 @@ function FileAttachment({ message }: { message: MessageType }) {
     <div
       className='media-attachment-generic'
       role='button'
-      onClick={downloadMedia}
+      onClick={ev => {
+        ev.stopPropagation()
+        openInShell()
+      }}
       onContextMenu={openContextMenu}
     >
       <div
         className='file-icon'
         draggable='true'
-        onClick={ev => {
-          ev.stopPropagation()
-          openInShell()
-        }}
         onDragStart={dragAttachmentOut.bind(null, file)}
         title={file_mime || 'null'}
       >
