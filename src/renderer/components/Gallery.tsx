@@ -81,7 +81,7 @@ export default class Gallery extends Component<
     })
   }
 
-  emptyTabMessage(id: MediaTabKey):string {
+  emptyTabMessage(id: MediaTabKey): string {
     const tx = window.static_translate // static because dynamic isn't too important here
     switch (id) {
       case 'images':

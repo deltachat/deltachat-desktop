@@ -205,9 +205,7 @@ function AudioAttachment({ message }: { message: MessageType }) {
 }
 
 function FileAttachment({ message }: { message: MessageType }) {
-  const { openContextMenu, openInShell } = useMediaActions(
-    message
-  )
+  const { openContextMenu, openInShell } = useMediaActions(message)
   const { file_name, file_bytes, file_mime, file } = message
   const extension = getExtension(message)
   return (
