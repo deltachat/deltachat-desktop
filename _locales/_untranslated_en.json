@@ -64,5 +64,17 @@
   },
   "webxdc": {
     "message": "Webxdc"
+  },
+  "tab_image_empty_hint": {
+    "message": "Images shared in this chat will be displayed here."
+  },
+  "tab_video_empty_hint": {
+    "message": "Videos shared in this chat will be displayed here."
+  },
+  "tab_audio_empty_hint": {
+    "message": "Audio Files and Voice Messages shared in this chat will be displayed here."
+  },
+  "tab_webxdc_empty_hint": {
+    "message":"Webxdc content shared in this chat will be displayed here."
   }
 }

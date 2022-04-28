@@ -9,7 +9,7 @@ import { getLogger } from '../../shared/logger'
 
 const log = getLogger('renderer/Gallery')
 
-type MediaTabKey = 'images' | 'video' | 'audio' | 'documents'
+type MediaTabKey = 'images' | 'video' | 'audio' | 'documents' | 'webxdc'
 
 const MediaTabs: Readonly<
   {
@@ -81,13 +81,28 @@ export default class Gallery extends Component<
     })
   }
 
+  emptyTabMessage(id: MediaTabKey):string {
+    const tx = window.static_translate // static because dynamic isn't too important here
+    switch (id) {
+      case 'images':
+        return tx('tab_image_empty_hint')
+      case 'video':
+        return tx('tab_video_empty_hint')
+      case 'audio':
+        return tx('tab_audio_empty_hint')
+      case 'webxdc':
+        return tx('tab_webxdc_empty_hint')
+      case 'documents':
+      default:
+        return tx('tab_docs_empty_hint')
+    }
+  }
+
   render() {
     const { medias, id } = this.state
     const tx = window.static_translate // static because dynamic isn't too important here
-    const emptyTabMessage =
-      id === 'documents'
-        ? tx('tab_docs_empty_hint')
-        : tx('tab_gallery_empty_hint')
+    const emptyTabMessage = this.emptyTabMessage(id)
+
     return (
       <div className='media-view'>
         <div className='bp4-tabs' style={{ minWidth: 200 }}>
