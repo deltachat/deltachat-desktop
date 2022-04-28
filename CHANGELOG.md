@@ -11,6 +11,7 @@
 - Fix startup crash when spam clicking on app icon on mac.
 - fix webxdc content not visible in gallery
 - unexpected click behavior in gallery/document view #2626
+- fix prev/next media had seperate list for images and gifs
 
 ### Added
 - Implement expandable settings
