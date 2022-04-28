@@ -156,11 +156,22 @@ export default class DCChat extends SplitOut {
   }
 
   getNextMedia(messageId: number, direction: 1 | -1): number {
+    // workaround to get gifs and images into the same media list
+    let additional_view_type = 0
+    const viewType = this.selectedAccountContext
+      .getMessage(messageId)
+      ?.getViewType().viewType
+    if (viewType === C.DC_MSG_IMAGE) {
+      additional_view_type = C.DC_MSG_GIF
+    } else if (viewType === C.DC_MSG_GIF) {
+      additional_view_type = C.DC_MSG_IMAGE
+    }
+
     return this.selectedAccountContext._getNextMedia(
       messageId,
       direction,
       0,
-      0,
+      additional_view_type,
       0
     )
   }
