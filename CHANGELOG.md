@@ -13,6 +13,7 @@
 - unexpected click behavior in gallery/document view #2626
 - fix prev/next media had seperate list for images and gifs
 - fixed height for webxdc icons in messages
+- Better empty gallery tab messages
 
 ### Added
 - Implement expandable settings
