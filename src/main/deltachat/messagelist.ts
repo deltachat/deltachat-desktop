@@ -148,6 +148,11 @@ export default class DCMessageList extends SplitOut {
           displayName: contact.getDisplayName(),
           displayColor: contact.color,
           overrideSenderName: quotedMessage.overrideSenderName,
+          image:
+            quotedMessage.getViewType().isImage() ||
+            quotedMessage.getViewType().isGif()
+              ? quotedMessage.getFile()
+              : null,
         }
       }
       quote = {

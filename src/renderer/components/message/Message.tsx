@@ -501,19 +501,24 @@ export const Quote = ({
           !isSticker ? { borderLeftColor: quote.message?.displayColor } : {}
         }
       >
-        <div
-          className='quote-author'
-          style={!isSticker ? { color: quote.message?.displayColor } : {}}
-        >
-          {quote.message &&
-            getAuthorName(
-              quote.message.displayName,
-              quote.message.overrideSenderName
-            )}
+        <div className='quote-text'>
+          <div
+            className='quote-author'
+            style={!isSticker ? { color: quote.message?.displayColor } : {}}
+          >
+            {quote.message &&
+              getAuthorName(
+                quote.message.displayName,
+                quote.message.overrideSenderName
+              )}
+          </div>
+          <div className='quoted-text'>
+            <MessageBody text={quote.text} />
+          </div>
         </div>
-        <div className='quoted-text'>
-          <MessageBody text={quote.text} />
-        </div>
+        {quote.message?.image && (
+          <img className='quoted-image' src={quote.message?.image} />
+        )}
       </div>
     </div>
   )

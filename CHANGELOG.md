@@ -10,6 +10,7 @@
 ### Added
 - Implement expandable settings
 - jump to message from gallery ("show in chat") #2618
+- add images to quotes #2628
 
 ### Changed
 - Move node-fetch to devDependencies

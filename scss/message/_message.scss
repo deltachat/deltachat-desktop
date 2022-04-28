@@ -418,6 +418,8 @@
   padding: 0 4px;
   padding-left: 9px;
   margin: 2px 0 5px 0;
+  display: flex;
+  --quote-img-size: 36px;
 
   // &.has-message:hover {
   //   background: rgba(0, 0, 0, 0.07);
@@ -450,6 +452,12 @@
     user-select: text;
     position: relative;
     word-break: break-all;
+  }
+
+  img.quoted-image {
+    height: var(--quote-img-size);
+    width: var(--quote-img-size);
+    margin-left: 6px;
   }
 }
 
