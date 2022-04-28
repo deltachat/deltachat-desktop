@@ -28,6 +28,9 @@ const MediaTabs: Readonly<
   documents: {
     values: [C.DC_MSG_FILE],
   },
+  webxdc: {
+    values: [C.DC_MSG_WEBXDC],
+  },
 })
 
 type mediaProps = { chatId: number }

@@ -180,6 +180,7 @@ $hover-contrast-change: 2%;
   --messageHightlightColor: rgba(66, 165, 245, 0.8);
   --addMemberChipBackgroundColor: #{$bgSecondary};
   --searchInputBackgroundColor: #52768700;
+  --galleryWebxdcItem: #{changeContrast($bgPrimary, 10%)};
 
   @if lightness($bgPrimary) < 50 {
     // dark theme

@@ -17,6 +17,9 @@ import { runtime } from '../../runtime'
 
 import filesizeConverter from 'filesize'
 import { jumpToMessage } from '../helpers/ChatMethods'
+import { getLogger } from '../../../shared/logger'
+
+const log = getLogger('mediaAttachment')
 
 export default function MediaAttachment({ message }: { message: MessageType }) {
   if (!message.file) {
@@ -31,6 +34,8 @@ export default function MediaAttachment({ message }: { message: MessageType }) {
     case C.DC_MSG_AUDIO:
     case C.DC_MSG_VOICE:
       return <AudioAttachment message={message} />
+    case C.DC_MSG_WEBXDC:
+      return <WebxdcAttachment message={message} />
     case C.DC_MSG_FILE:
     default:
       return <FileAttachment message={message} />
@@ -43,6 +48,7 @@ const hideOpenInShellTypes = [
   C.DC_MSG_VIDEO,
   C.DC_MSG_AUDIO,
   C.DC_MSG_VOICE,
+  C.DC_MSG_WEBXDC,
 ]
 
 const contextMenuFactory = (
@@ -56,6 +62,10 @@ const contextMenuFactory = (
     !hideOpenInShellTypes.includes(viewType) && {
       label: tx('open'),
       action: openAttachmentInShell.bind(null, message),
+    },
+    viewType === C.DC_MSG_WEBXDC && {
+      label: tx('start_app'),
+      action: runtime.openWebxdc.bind(null, message.id),
     },
     {
       label: tx('save-as'),
@@ -228,6 +238,31 @@ function FileAttachment({ message }: { message: MessageType }) {
         <div className='size'>
           {file_bytes ? filesizeConverter(file_bytes) : '?'}
         </div>
+      </div>
+    </div>
+  )
+}
+
+function WebxdcAttachment({ message }: { message: MessageType }) {
+  const { openContextMenu } = useMediaActions(message)
+  if (!message.webxdcInfo) {
+    log.error('message.webxdcInfo is undefined, msgid:', message.id)
+    return FileAttachment({ message })
+  }
+
+  const { summary, name } = message.webxdcInfo
+
+  return (
+    <div
+      className='media-attachment-webxdc'
+      role='button'
+      onContextMenu={openContextMenu}
+      onClick={runtime.openWebxdc.bind(null, message.id)}
+    >
+      <img className='icon' src={runtime.getWebxdcIconURL(message.id)} />
+      <div className='text-part'>
+        <div className='name'>{name}</div>
+        <div className='summary'>{summary}</div>
       </div>
     </div>
   )
