@@ -42,7 +42,9 @@ jobs:
     # Packaging and processing
     - name: LINUX electron builder
       if: runner.os == 'Linux'
-      run: npx electron-builder --publish never --linux AppImage
+      run: |
+        export DEBUG=electron-builder
+        npx electron-builder --publish never --linux AppImage
     - name: LINUX renaming / upload Preperation
       if: runner.os == 'Linux'
       run: |
@@ -56,6 +58,7 @@ jobs:
       run: |
         echo "module.exports=()=>Promise.resolve()" > stub.js
         export CSC_IDENTITY_AUTO_DISCOVERY=false
+        export DEBUG=electron-builder
         npx electron-builder --publish never --mac mas dmg -c.mac.identity=null --config.afterSign="stub.js" || true
     - name: MAC renaming / upload Preperation
       if: runner.os == 'macOS'
@@ -68,7 +71,9 @@ jobs:
         ls dist/preview
     - name: WINDOWS electron builder
       if: runner.os == 'Windows'
-      run: npx electron-builder --win portable --config.artifactName="deltachat-desktop-${{ steps.prepare.outputs.prid }}.portable.exe"
+      run: |
+        set DEBUG=electron-builder
+        npx electron-builder --win portable --config.artifactName="deltachat-desktop-${{ steps.prepare.outputs.prid }}.portable.exe"
     - name: WINDOWS renaming / upload Preperation
       if: runner.os == 'Windows'
       run: |
