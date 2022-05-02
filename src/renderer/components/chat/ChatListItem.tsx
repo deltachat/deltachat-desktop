@@ -26,11 +26,13 @@ const Header = React.memo(
         {muted && <div className='mute_icon' aria-label={tx('mute')} />}
         {pinned && <div className='pin_icon' aria-label={tx('pin')} />}
         <div>
-          <Timestamp
-            timestamp={lastUpdated}
-            extended={false}
-            module='timestamp'
-          />
+          {lastUpdated !== 0 && (
+            <Timestamp
+              timestamp={lastUpdated}
+              extended={false}
+              module='timestamp'
+            />
+          )}
         </div>
       </div>
     )
