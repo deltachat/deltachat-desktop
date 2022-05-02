@@ -30,6 +30,7 @@
 - Remove dependency tempy
 - Update @blueprintjs/core to `4.1.2`
 - use forked version of `react-qr-reader` (@deltachat/react-qr-reader@4.0.0)
+- nicer webxdc start button #2723
 
 ### Removed
 - remove dependency `react-qr-svg`

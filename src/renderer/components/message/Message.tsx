@@ -549,7 +549,10 @@ function WebxdcMessageContent({ message }: { message: MessageType }) {
       />
       <div>{info.name}</div>
       <div>{info.summary}</div>
-      <button onClick={() => runtime.openWebxdc(message.id)}>
+      <button
+        className={'delta-button-round'}
+        onClick={() => runtime.openWebxdc(message.id)}
+      >
         {tx('start_app')}
       </button>
     </div>
