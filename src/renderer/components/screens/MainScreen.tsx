@@ -295,6 +295,7 @@ export default function MainScreen() {
           showArchivedChats={showArchivedChats}
           onChatClick={onChatClick}
           selectedChatId={selectedChat.chat ? selectedChat.chat.id : null}
+          onExitSearch={() => setQueryStr('')}
         />
         {MessageListView}
       </div>

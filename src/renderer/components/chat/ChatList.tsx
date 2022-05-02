@@ -101,6 +101,7 @@ export default function ChatList(props: {
   selectedChatId: number | null
   showArchivedChats: boolean
   queryStr?: string
+  onExitSearch?: () => void
   onChatClick: (chatId: number) => void
 }) {
   const { selectedChatId, showArchivedChats, onChatClick, queryStr } = props
@@ -133,6 +134,7 @@ export default function ChatList(props: {
       queryStr
     )
     await createChatByContactIdAndSelectIt(contactId)
+    props.onExitSearch && props.onExitSearch()
   }
   const screenContext = useContext(ScreenContext)
   const { openDialog } = screenContext
