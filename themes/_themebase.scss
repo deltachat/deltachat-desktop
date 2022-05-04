@@ -65,6 +65,13 @@ $hover-contrast-change: 2%;
   /* ContactList / AccountList */
   --contactListItemBgHover: #{changeContrast($bgPrimary, $hover-contrast-change)};
   --contactListItemBgFocus: #{changeContrast($bgPrimary, 12%)};
+  /* Keybindings Cheatsheet */
+  --keybindingHintsBoxBackground: #{$keybindingHintsBoxBackground};
+  --keybindingKeyBackground: #{$keybindingKeyBackground};
+  --keybindingKeyBorder: #{$keybindingKeyBorder};
+  --keybindingKeyFontColor: black;
+  --keybindingKeyShadow: #{$keybindingKeyShadow};
+  --keybindingActionBackground: #{$keybindingActionBackground};
   /* Message Bubble */
   --messageText: #{$textPrimary};
   --messageTextLink: #{$textPrimary};

@@ -9,21 +9,21 @@
       display: inline-block;
       padding: 3px 10px;
       border-radius: 4px;
-      background: lightgrey;
-      box-shadow: 0px 3px rgba(0, 0, 0, 0.35);
-      border: 1px grey solid;
-      color: black;
+      background: var(--keybindingKeyBackground);
+      box-shadow: 0px 3px var(--keybindingKeyShadow);
+      border: 1px var(--keybindingKeyBorder) solid;
+      color: var(--keybindingKeyFontColor);
 
       &:hover,
       &.pressed {
-        box-shadow: 0px 1px rgba(0, 0, 0, 0.35);
+        box-shadow: 0px 1px var(--keybindingKeyShadow);
         transform: translatey(2px);
       }
     }
   }
   .action {
     display: block;
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: var(--keybindingActionBackground);
     border-radius: 4px;
     padding: 4px 6px;
     margin: 4px 0px;
@@ -45,7 +45,7 @@
 
   padding: 15px;
 
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--keybindingHintsBoxBackground);
   border-radius: 5px;
 }
 
