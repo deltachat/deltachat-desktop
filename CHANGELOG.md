@@ -36,6 +36,7 @@
 - Update @blueprintjs/core to `4.1.2`
 - use forked version of `react-qr-reader` (@deltachat/react-qr-reader@4.0.0)
 - Metadata text color is now white on sent media messages
+- update deltachat-node to version `1.79.3`
 
 ### Removed
 - remove dependency `react-qr-svg`
