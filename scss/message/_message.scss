@@ -214,7 +214,7 @@
   margin-right: 0;
   margin-left: 32px;
 
-  .metadata {
+  .metadata:not(.with-image-no-caption) {
     & > .date {
       color: var(--messageOutgoingStatusColor);
     }
@@ -239,6 +239,9 @@
     & > .status-icon.delivered {
       background-color: var(--messageOutgoingStatusColor);
     }
+  }
+  .metadata.with-image-no-caption > .status-icon {
+    background-color: white;
   }
 
   .msg-container {

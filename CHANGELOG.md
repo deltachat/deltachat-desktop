@@ -8,6 +8,12 @@
 - Fix "Send Message" does not always open chat view #2592
 - Fix contact name has color in quote when replying with sticker
 - Fix startup crash when spam clicking on app icon on mac.
+- fix: hide connectivity toast when connected
+- fix random search result position (#2631) 
+- fix: signature field in Edit Profile is not labeled when empty (#2579)
+- Keyboard shortcut preview for "Send on Enter" setting
+- Keyboard shortcut reference dialog (cheetsheet), accessible via `Ctrl + /` or `Cmd + /`
+- display `video/quicktime` videos
 
 ### Added
 - Implement expandable settings
@@ -27,17 +33,11 @@
 - Remove dependency tempy
 - Update @blueprintjs/core to `4.1.2`
 - use forked version of `react-qr-reader` (@deltachat/react-qr-reader@4.0.0)
+- Metadata text color is now white on sent media messages
 
 ### Removed
 - remove dependency `react-qr-svg`
 
-### Fixed
-- fix: hide connectivity toast when connected
-- fix random search result position (#2631) 
-- fix: signature field in Edit Profile is not labeled when empty (#2579)
-- Keyboard shortcut preview for "Send on Enter" setting
-- Keyboard shortcut reference dialog (cheetsheet), accessible via `Ctrl + /` or `Cmd + /`
-- display `video/quicktime` videos
 
 ## [1.28.2] - 2022-04-22
 
@@ -50,6 +50,7 @@
 - Fix chat background on windows
 - fix tray icon unread indicator on windows
 
+
 ## [1.28.1] - 2022-04-05
 
 ### Changed
@@ -59,6 +60,7 @@
 ### Fixed
 - remove wrong line (about send on enter) from changelog in device msg
 - webxdc allow `blob:` uri scheme
+
 
 ## [1.28.0] - 2022-03-25
 
@@ -70,14 +72,13 @@
 ### Fixed
 - Fix messages not appearing with download on demand
 
+
 ## [1.27.2] - 2022-03-15
 
 ### Added
-
 - webxdc content now has access to persistent DOMStorage
 
 ### Fixed
-
 - Fix missing key login_socks5_login
 - Fix creating contacts from email address in message
 - Fix two different about dialogs on macOS #2280
@@ -94,7 +95,6 @@
 - Fix qr scanning on account screen
 - fix: log messageg-parser errors and display plain text message as fallback (instead of crashing)
 
-
 ### Changed
 - exclude more unused files from installation package
 - Improved videochat instance dialog
@@ -103,13 +103,12 @@
 ## [1.27.1] - 2022-03-10
 
 ### Changed
-
 - Update electron to `v14.2.6`
 
 ### Fixed
-
 - click on offline toast now opens the connectivity view
 - fix error object logging and make "core could not be loaded" error dialog more useful
+
 
 ## [1.27.0] - 2022-03-04
 
@@ -163,6 +162,7 @@
 - Fix device messages showing unneccessary elements
 - Fix background image url being absolute -> make it portable #2562
 
+
 ## [1.26.0] - 2021-12-15
 
 ### Added
@@ -173,6 +173,7 @@
 
 ### Changed
 - Update translations (16.12.2021)
+
 
 ## [1.25.2] - 2021-12-11
 
@@ -185,10 +186,12 @@
 - update `filesize` dependency to version `8.0.6`
 - update deltachat-node to v1.70.0
 
+
 ## [1.25.1] - 2021-11-30
 
 ### Fixed
 - fixed production builds (`npm run build4production`)
+
 
 ## [1.25.0] - 2021-11-29
 
