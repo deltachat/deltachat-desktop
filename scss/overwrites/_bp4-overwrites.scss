@@ -104,10 +104,15 @@ $bp4-dialog-radius: 2px;
 }
 
 .bp4-dialog-header {
+  padding: 20px;
+
   background-color: var(--bp4DialogHeaderBg);
+  
   // We should have one variable for dialog/context menu border radius
   border-radius: 2px 2px 0 0;
-  padding: 20px;
+
+  -webkit-box-shadow: unset;
+  box-shadow: unset;
 }
 
 .bp4-dialog-header-border-bottom {
