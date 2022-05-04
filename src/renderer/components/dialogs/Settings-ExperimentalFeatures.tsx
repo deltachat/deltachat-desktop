@@ -181,9 +181,9 @@ export function EditVideochatInstanceDialog({
 
           <RadioGroup onChange={onChangeRadio} selectedValue={radioValue}>
             <Radio key='select-none' label={tx('off')} value='disabled' />
-            <Radio key='select-systemli' label='Systemli' value='systemli' />
-            <Radio key='select-autistici' label='Autistici' value='autistici' />
-            <Radio key='select-jitsi' label='Jitsi' value='jitsi' />
+            <Radio key='select-jitsi' label={`Jitsi (https://jitsi.org)`} value='jitsi' />
+            <Radio key='select-systemli' label={`Systemli (https://systemli.org)`} value='systemli' />
+            <Radio key='select-autistici' label={`Autistici (https://autistici.org)`} value='autistici' />
             <Radio
               key='select-custom'
               label={tx('custom')}
