@@ -13,6 +13,7 @@ import { DialogProps } from './DialogController'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
+import ClickableLink from '../helpers/ClickableLink'
 
 const WEBRTC_INSTANCE_JITSI = 'https://meet.jit.si/$ROOM'
 const WEBRTC_INSTANCE_SYSTEMLI = 'https://meet.systemli.org/$ROOM'
@@ -98,6 +99,16 @@ type RadioButtonValue =
   | 'systemli'
   | 'autistici'
 
+export function RadioWithChildren({key, value, children}:{key:string, value: string, children: JSX.Element | string}) {
+  return (
+    <label className="bp3-control bp3-radio">
+      <input name="Blueprint3.RadioGroup-0" type="radio" value={value}/>
+      <span className="bp3-control-indicator"></span>
+      {children}
+    </label>
+  )
+}
+
 export function EditVideochatInstanceDialog({
   isOpen,
   onClose,
@@ -180,10 +191,28 @@ export function EditVideochatInstanceDialog({
           </div>
 
           <RadioGroup onChange={onChangeRadio} selectedValue={radioValue}>
-            <Radio key='select-none' label={tx('off')} value='disabled' />
-            <Radio key='select-jitsi' label={`Jitsi (https://jitsi.org)`} value='jitsi' />
-            <Radio key='select-systemli' label={`Systemli (https://systemli.org)`} value='systemli' />
-            <Radio key='select-autistici' label={`Autistici (https://autistici.org)`} value='autistici' />
+            <Radio key='select-none' label={tx('off')} value='disabled'/>
+            <RadioWithChildren key='select-jitsi'  value='jitsi'>
+              <>
+                {"Jitsi ("}
+                <ClickableLink key='jitsi' href='https://jitsi.org'>{`https://jitsi.org`}</ClickableLink>
+                {")"}
+              </>
+            </RadioWithChildren>
+            <RadioWithChildren key='select-systemli' value='systemli'>
+              <>
+                {"Systemli ("}
+                <ClickableLink key='jitsi' href='https://systemli.org'>{`https://systemli.org`}</ClickableLink>
+                {")"}
+              </>
+            </RadioWithChildren>
+            <RadioWithChildren key='select-autistici'value='autistici'>
+              <>
+                {"Autistici ("}
+                <ClickableLink key='jitsi' href='https://autistici.org'>{`https://autistici.org`}</ClickableLink>
+                {")"}
+              </>
+            </RadioWithChildren>
             <Radio
               key='select-custom'
               label={tx('custom')}
