@@ -5,6 +5,7 @@
 > You now need node version `>=16` for building desktop
 
 ### Fixed
+- Fix: exit search when using it to create a dm chat from an email address (new contact)
 - Fix "Send Message" does not always open chat view #2592
 - Fix contact name has color in quote when replying with sticker
 - Fix startup crash when spam clicking on app icon on mac.
