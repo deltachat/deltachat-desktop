@@ -29,7 +29,7 @@ function sendToFrontend(url: string) {
   }
 }
 
-const open_url = function (url: string) {
+export const open_url = function (url: string) {
   log.info('open_url was called')
   const sendOpenUrlEvent = () => {
     log.info('open-url: Sending url to frontend.')

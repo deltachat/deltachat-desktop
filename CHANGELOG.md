@@ -14,11 +14,13 @@
 - fix prev/next media had seperate list for images and gifs
 - fixed height for webxdc icons in messages
 - Better empty gallery tab messages
+- allow internal webxdc navigation (multiple html files)
 
 ### Added
 - Implement expandable settings
 - jump to message from gallery ("show in chat") #2618
 - add Webxdc tab to gallery
+- handle mailto links in webxdc content in deltachat
 
 ### Changed
 - Move node-fetch to devDependencies
