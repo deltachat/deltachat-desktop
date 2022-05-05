@@ -13,7 +13,7 @@
 - fix random search result position (#2631) 
 - fix: signature field in Edit Profile is not labeled when empty (#2579)
 - Keyboard shortcut preview for "Send on Enter" setting
-- Keyboard shortcut reference dialog (cheetsheet), accessible via `Ctrl + /` or `Cmd + /`
+- Keyboard shortcut reference dialog (cheatsheet), accessible via `Ctrl + /` or `Cmd + /`
 - display `video/quicktime` videos
 
 ### Added
@@ -28,14 +28,13 @@
 - Move node-fetch to devDependencies
 - Update emoji-mart to `^3.0.1`
 - Update @types/emoji-mart to `^3.0.9`
-- Update deltachat-node to `v1.77.1`
+- Update deltachat-node to `v1.79.3`
 - `ENTER + SHIFT` and `ENTER + CTRL` in the composer do now the same thing: they send or add a newline depending on the `enterKeySends` user preference
 - update webxdc setUpdateListener api
 - Remove dependency tempy
 - Update @blueprintjs/core to `4.1.2`
 - use forked version of `react-qr-reader` (@deltachat/react-qr-reader@4.0.0)
 - Metadata text color is now white on sent media messages
-- update deltachat-node to version `1.79.3`
 
 ### Removed
 - remove dependency `react-qr-svg`
