@@ -2,7 +2,7 @@
 
 ## [Unreleased][unreleased]
 
-## [1.30.0] - 2022-05-05
+## [1.29.0] - 2022-05-05
 
 > You now need node version `>=16` for building desktop
 
@@ -1582,7 +1582,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.28.2...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.29.0...HEAD
+
+[1.29.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.28.2...v1.29.0
 
 [1.28.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.28.1...v1.28.2
 

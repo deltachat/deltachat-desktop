@@ -132,15 +132,15 @@ export default class DCLoginController extends SplitOut {
     this.controller.hintUpdateIfNessesary()
 
     this.selectedAccountContext.addDeviceMessage(
-      'changelog-version-1.30.0-version2',
-      `What's new in 1.30.0?
+      'changelog-version-1.29.0-version2',
+      `What's new in 1.29.0?
 
 🏃‍♂️ Jump to a message from gallery view
 🖼️ Quote messages with images or gifs
 🍔 New hamburger menu for better navigation 
 📂 Expandable settings dialog
 ⌨️ Keyboard shortcut cheatsheet accessible via \`Ctrl + /\` or \`Cmd + /\`
-✊ New videochat instances available! Check out the collaborating projects https://www.systemli.org/ and https://www.autistici.org/!
+✊ New videochat instances available! Check out the collaborating projects https://www.systemli.org/ and https://www.autistici.org/ !
 
 Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1300---2022-05-05`
     )
