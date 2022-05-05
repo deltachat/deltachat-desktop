@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.30.0] - 2022-05-05
+
 > You now need node version `>=16` for building desktop
 
 ### Fixed
