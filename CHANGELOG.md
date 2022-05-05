@@ -15,29 +15,6 @@
 - fixed height for webxdc icons in messages
 - Better empty gallery tab messages
 - allow internal webxdc navigation (multiple html files)
-
-### Added
-- Implement expandable settings
-- jump to message from gallery ("show in chat") #2618
-- add Webxdc tab to gallery
-- handle mailto links in webxdc content in deltachat
-
-### Changed
-- Move node-fetch to devDependencies
-- Update emoji-mart to `^3.0.1`
-- Update @types/emoji-mart to `^3.0.9`
-- Update deltachat-node to v1.77.0
-- `ENTER + SHIFT` and `ENTER + CTRL` in the composer do now the same thing: they send or add a newline depending on the `enterKeySends` user preference
-- update webxdc setUpdateListener api
-- Remove dependency tempy
-- Update @blueprintjs/core to `4.1.2`
-- use forked version of `react-qr-reader` (@deltachat/react-qr-reader@4.0.0)
-- nicer webxdc start button #2723
-
-### Removed
-- remove dependency `react-qr-svg`
-
-### Fixed
 - fix random search result position (#2631) 
 - fix: signature field in Edit Profile is not labeled when empty (#2579)
 - Keyboard shortcut preview for "Send on Enter" setting
@@ -48,12 +25,12 @@
 ### Added
 - Implement expandable settings
 - jump to message from gallery ("show in chat") #2618
+- add Webxdc tab to gallery
+- handle mailto links in webxdc content in deltachat
 - add images to quotes #2628
 
+
 ### Changed
-- update nodejs to version `16`
-- update electron to `18.0.3`
-- upgrade electron builder to `23.0.4`
 - Move node-fetch to devDependencies
 - Update emoji-mart to `^3.0.1`
 - Update @types/emoji-mart to `^3.0.9`
@@ -63,11 +40,15 @@
 - Remove dependency tempy
 - Update @blueprintjs/core to `4.1.2`
 - use forked version of `react-qr-reader` (@deltachat/react-qr-reader@4.0.0)
+- nicer webxdc start button #2723
+- update nodejs to version `16`
+- update electron to `18.0.3`
+- upgrade electron builder to `23.0.4`
+- `ENTER + SHIFT` and `ENTER + CTRL` in the composer do now the same thing: they send or add a newline depending on the `enterKeySends` user preference
 - Metadata text color is now white on sent media messages
 
 ### Removed
 - remove dependency `react-qr-svg`
-
 
 ## [1.28.2] - 2022-04-22
 
