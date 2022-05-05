@@ -214,10 +214,29 @@ app.on('activate', () => {
 app.on('before-quit', e => quit(e))
 app.on('window-all-closed', (e: Electron.Event) => quit(e))
 
-app.on('web-contents-created', (_e, contents) => {
-  contents.on('will-navigate', (e, _navigationUrl) => {
-    e.preventDefault()
-  })
+app.on('web-contents-created', (_ev, contents) => {
+  const is_webxdc = contents.session.storagePath?.indexOf('webxdc_') !== -1
+  if (is_webxdc) {
+    contents.on('will-navigate', (e, navigationUrl) => {
+      if (navigationUrl.startsWith('webxdc://')) {
+        // allow internal webxdc nav
+        return
+      } else if (navigationUrl.startsWith('mailto:')) {
+        // handle mailto in dc
+        e.preventDefault()
+        open_url(navigationUrl)
+        mainWindow.window?.focus()
+      } else {
+        // prevent naviagtion to unknown scheme
+        e.preventDefault()
+      }
+    })
+  } else {
+    contents.on('will-navigate', (e, navigationUrl) => {
+      log.warn('blocked naviagation attempt to', navigationUrl)
+      e.preventDefault()
+    })
+  }
   contents.setWindowOpenHandler(_details => {
     // prevent new windows from being created when clicking on links
     return { action: 'deny' }
@@ -233,5 +252,5 @@ app.on('web-contents-created', (_e, contents) => {
 
 contextMenu()
 
-import { openUrlFromArgv } from './open_url'
+import { openUrlFromArgv, open_url } from './open_url'
 openUrlFromArgv(process.argv)
