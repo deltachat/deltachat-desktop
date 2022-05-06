@@ -132,18 +132,18 @@ export default class DCLoginController extends SplitOut {
     this.controller.hintUpdateIfNessesary()
 
     this.selectedAccountContext.addDeviceMessage(
-      'changelog-version-1.28.0-version1',
-      `What's new in 1.28.0?
+      'changelog-version-1.29.0-version3',
+      `What's new in 1.29.0?
 
-🦘The long awaited jump to message is here (jump to quoted messages and search results)
+🏃‍♂️ Jump to a message from gallery view
+🖼️ Quote messages with images or gifs
+🍔 New hamburger menu for better navigation 
+📂 Expandable settings dialog
+⌨️ Keyboard shortcut cheatsheet accessible via \`Ctrl + /\` or \`Cmd + /\`
+✊ New videochat instances available! Check out the awesome collaborating projects https://www.systemli.org/ and https://www.autistici.org/ !
+🚆 Many speed and reliability improvements
 
-🔎Images are now zoomable in the fullscreen view
-
-🖼️Images can now be copied from the context menu
-
-✨Many bugfixes and improvements
-
-Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1270---2021-03-04`
+Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1300---2022-05-05`
     )
   }
 
