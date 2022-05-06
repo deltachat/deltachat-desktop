@@ -21,6 +21,7 @@
 - Keyboard shortcut reference dialog (cheatsheet), accessible via `Ctrl + /` or `Cmd + /`
 - display `video/quicktime` videos
 - Fix chatlist item showed wrong timestamp (jan 1 1970) if there was no timestamp
+- Fix bring back get provider info
 
 ### Added
 - Implement expandable settings
