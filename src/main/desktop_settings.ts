@@ -31,7 +31,7 @@ class PersistentState extends EventEmitter {
         appConfig.read(cb)
       )()) as DesktopSettingsType
       // validate&fix saved state
-      if (typeof saved.lastAccount !== 'number') {
+      if (typeof saved.lastAccount !== 'number' || saved.lastAccount < 0) {
         saved.lastAccount = undefined
       }
     } catch (error) {

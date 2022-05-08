@@ -146,7 +146,7 @@ export default class DeltaChatController extends EventEmitter {
     const path_accounts_old = join(this.cwd, '..', 'accounts_old')
 
     if (migrate_from_format_2) {
-      logMigrate.info('found old accounts (2), we need to migrate...')
+      logMigrate.info('found old accounts (format 2), we need to migrate...')
 
       // First, rename accounts folder to accounts_old
       await rename(path_accounts, path_accounts_old)
@@ -227,7 +227,7 @@ export default class DeltaChatController extends EventEmitter {
     tmp_dc.close()
     // Clear some settings that we cant migrate
     DesktopSettings.update({
-      lastAccount: -1,
+      lastAccount: undefined,
       lastChats: {},
     })
 
