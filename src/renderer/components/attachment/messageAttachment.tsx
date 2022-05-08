@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import classNames from 'classnames'
 import { openAttachmentInShell } from '../message/messageFunctions'
-import { C } from 'deltachat-node/dist/constants'
+import { C } from 'deltachat-node/node/dist/constants'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import {
   isDisplayableByFullscreenMedia,

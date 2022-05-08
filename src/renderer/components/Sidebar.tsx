@@ -9,7 +9,7 @@ import { selectChat, unselectChat } from './helpers/ChatMethods'
 
 import { useSettingsStore } from '../stores/settings'
 import { Avatar } from './Avatar'
-import { C } from 'deltachat-node/dist/constants'
+import { C } from 'deltachat-node/node/dist/constants'
 import { VERSION } from '../../shared/build-info'
 
 export type SidebarState = 'init' | 'visible' | 'invisible'

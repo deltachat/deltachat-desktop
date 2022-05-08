@@ -1,5 +1,5 @@
 import { DeltaBackend } from '../../delta-remote'
-import { C } from 'deltachat-node/dist/constants'
+import { C } from 'deltachat-node/node/dist/constants'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import ReactDOM from 'react-dom'

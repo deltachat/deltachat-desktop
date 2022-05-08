@@ -29,7 +29,7 @@ import {
   jumpToMessage,
   openViewProfileDialog,
 } from '../helpers/ChatMethods'
-import { C } from 'deltachat-node/dist/constants'
+import { C } from 'deltachat-node/node/dist/constants'
 // import { getLogger } from '../../../shared/logger'
 import { runtime } from '../../runtime'
 import { AvatarFromContact } from '../Avatar'

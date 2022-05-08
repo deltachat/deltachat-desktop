@@ -11,7 +11,7 @@ import ChatListItem from '../chat/ChatListItem'
 import { useChatList } from '../chat/ChatListHelpers'
 import { DeltaBackend } from '../../delta-remote'
 import { JsonContact } from '../../../shared/shared-types'
-import { C } from 'deltachat-node/dist/constants'
+import { C } from 'deltachat-node/node/dist/constants'
 import {
   MessagesDisplayContext,
   ScreenContext,

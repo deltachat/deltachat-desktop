@@ -11,7 +11,7 @@ import { onDCEvent } from '../ipc'
 import { getLogger } from '../../shared/logger'
 import { ScreenContext, useTranslationFunction } from '../contexts'
 import { useKeyBindingAction, KeybindAction } from '../keybindings'
-import { C } from 'deltachat-node/dist/constants'
+import { C } from 'deltachat-node/node/dist/constants'
 
 import { debounce } from 'debounce'
 import { debounceWithInit } from './chat/ChatListHelpers'

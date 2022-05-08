@@ -1,4 +1,4 @@
-import { C } from 'deltachat-node/dist/constants'
+import { C } from 'deltachat-node/node/dist/constants'
 
 export const appName = 'DeltaChat'
 export const homePageUrl = 'https://delta.chat'

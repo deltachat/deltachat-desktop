@@ -9,7 +9,7 @@ import React, {
   useCallback,
 } from 'react'
 import { Card, Classes } from '@blueprintjs/core'
-import { C } from 'deltachat-node/dist/constants'
+import { C } from 'deltachat-node/node/dist/constants'
 
 import { DeltaBackend } from '../../delta-remote'
 import { ScreenContext, useTranslationFunction } from '../../contexts'

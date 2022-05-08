@@ -20,7 +20,7 @@ import Extras from './extras'
 
 import { VERSION, BUILD_TIMESTAMP } from '../../shared/build-info'
 import { Timespans, DAYS_UNTIL_UPDATE_SUGGESTION } from '../../shared/constants'
-import { Context } from 'deltachat-node/dist/context'
+import { Context } from 'deltachat-node/node/dist/context'
 import path, { join } from 'path'
 import { existsSync, lstatSync } from 'fs'
 import { stat, rename, readdir } from 'fs/promises'

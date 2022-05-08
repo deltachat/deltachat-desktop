@@ -10,7 +10,7 @@ import {
 } from './Attachment'
 import Timestamp from '../conversations/Timestamp'
 import { MessageType } from '../../../shared/shared-types'
-import { C } from 'deltachat-node/dist/constants'
+import { C } from 'deltachat-node/node/dist/constants'
 import { makeContextMenu } from '../ContextMenu'
 import { OpenDialogFunctionType } from '../dialogs/DialogController'
 import { runtime } from '../../runtime'
