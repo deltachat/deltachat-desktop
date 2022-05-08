@@ -71,7 +71,7 @@ export default class ScreenController extends Component {
     const lastLoggedInAccountId = await DeltaBackend.call(
       'login.getLastLoggedInAccount'
     )
-    if (lastLoggedInAccountId) {
+    if (lastLoggedInAccountId && !(lastLoggedInAccountId < 0)) {
       await this.selectAccount(lastLoggedInAccountId)
     } else {
       this.changeScreen(Screens.Accounts)

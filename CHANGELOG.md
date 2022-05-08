@@ -4,6 +4,9 @@
 
 ### Added
 - Show settings menu item in titlebar menu
+### Fixed
+- Fix crash on migrating accounts from an older version (before 1.21.0)
+- add a guard against selecting accounts with impossible ids (smaller than 0)
 
 ## [1.29.0] - 2022-05-05
 
