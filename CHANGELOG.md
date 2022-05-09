@@ -3,7 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
-- Show settings menu item on mac
+- Show settings menu item in titlebar menu
 
 ## [1.29.0] - 2022-05-05
 

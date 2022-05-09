@@ -147,16 +147,18 @@ function getMenuTemplate(logHandler: LogHandler): rawMenuItem[] {
       label: appWindowTitle,
       submenu: [
         {
-          translate: 'menu_settings',
-          click: () => {
-            mainWindow.send('showSettingsDialog')
-          },
-        },
-        {
           translate: 'global_menu_help_about_desktop',
           click: () => {
             mainWindow.send('showAboutDialog')
           },
+        },
+        { type: 'separator' },
+        {
+          translate: 'menu_settings',
+          click: () => {
+            mainWindow.send('showSettingsDialog')
+          },
+          accelerator: 'Cmd+,',
         },
         { type: 'separator' },
         { role: 'hide' },
@@ -181,6 +183,13 @@ function getMenuTemplate(logHandler: LogHandler): rawMenuItem[] {
           {
             translate: 'global_menu_file_desktop',
             submenu: [
+              {
+                translate: 'menu_settings',
+                click: () => {
+                  mainWindow.send('showSettingsDialog')
+                },
+                accelerator: 'Ctrl+,',
+              },
               {
                 translate: 'global_menu_file_quit_desktop',
                 role: 'quit',
