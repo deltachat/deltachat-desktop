@@ -20,8 +20,8 @@ export const setChatView = (view: ChatView) => {
   ChatStore.effect.setView(view)
 }
 
-export const jumpToMessage = (msgId: number) => {
-  ChatStore.effect.jumpToMessage(msgId)
+export const jumpToMessage = (msgId: number, highlight: undefined|boolean) => {
+  ChatStore.effect.jumpToMessage(msgId, highlight)
 }
 
 export const unselectChat = () => {
@@ -146,7 +146,7 @@ export async function sendCallInvitation(
       'chat.sendVideoChatInvitation',
       chatId
     )
-    ChatStore.effect.jumpToMessage(messageId)
+    ChatStore.effect.jumpToMessage(messageId, false)
     await joinCall(screenContext, messageId)
   } catch (error: todo) {
     log.error('failed send call invitation', error)

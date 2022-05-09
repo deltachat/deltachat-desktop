@@ -4,7 +4,7 @@ import Composer, { useDraft } from '../composer/Composer'
 import { getLogger } from '../../../shared/logger'
 import MessageList from './MessageList'
 import { ScreenContext } from '../../contexts'
-import { ChatStoreStateWithChatSet } from '../../stores/chat'
+import ChatStore, { ChatStoreStateWithChatSet } from '../../stores/chat'
 import ComposerMessageInput from '../composer/ComposerMessageInput'
 import { DesktopSettingsType } from '../../../shared/shared-types'
 import { isChatReadonly } from '../../../shared/util'
@@ -138,13 +138,20 @@ export default function MessageListAndComposer({
         </>
       ),
       confirmLabel: tx('menu_send'),
-      cb: (yes: boolean) =>
-        yes &&
-        sanitizedFileList.forEach(({ path }) =>
-          DeltaBackend.call('messageList.sendMessage', chatId, {
-            filename: path,
-          })
-        ),
+      cb: async (yes: boolean) => {
+        if (!yes) return
+        let lastMessageId: number = -1
+
+        for (let file of sanitizedFileList) {
+          const sendMessageResult = await DeltaBackend.call('messageList.sendMessage', chatId, { filename: file.path})
+          if (sendMessageResult && sendMessageResult[0] !== undefined) {
+            lastMessageId = sendMessageResult[0]
+          }
+        }
+
+        lastMessageId !== -1 && ChatStore.effect.jumpToMessage(lastMessageId, false)
+
+      }
     })
   }
 
