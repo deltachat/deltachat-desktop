@@ -7,6 +7,7 @@
 ### Fixed
 - Fix crash on migrating accounts from an older version (before 1.21.0)
 - add a guard against selecting accounts with impossible ids (smaller than 0)
+- fix stock translations set too late (after I/0 is started) #2735
 
 ## [1.29.0] - 2022-05-05
 
