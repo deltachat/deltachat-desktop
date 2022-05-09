@@ -146,6 +146,7 @@ export async function sendCallInvitation(
       'chat.sendVideoChatInvitation',
       chatId
     )
+    ChatStore.effect.jumpToMessage(messageId)
     await joinCall(screenContext, messageId)
   } catch (error: todo) {
     log.error('failed send call invitation', error)
