@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- Show settings menu item on mac
+
 ## [1.29.0] - 2022-05-05
 
 > You now need node version `>=16` for building desktop

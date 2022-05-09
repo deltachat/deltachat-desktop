@@ -147,6 +147,12 @@ function getMenuTemplate(logHandler: LogHandler): rawMenuItem[] {
       label: appWindowTitle,
       submenu: [
         {
+          translate: 'menu_settings',
+          click: () => {
+            mainWindow.send('showSettingsDialog')
+          },
+        },
+        {
           translate: 'global_menu_help_about_desktop',
           click: () => {
             mainWindow.send('showAboutDialog')

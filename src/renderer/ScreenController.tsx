@@ -35,6 +35,7 @@ export default class ScreenController extends Component {
   contextMenuShowFn: showFnType | null = null
   state: { message: userFeedback | false; screen: Screens }
   onShowAbout: any
+  onShowSettings: any
   selectedAccountId: number | undefined
 
   constructor(public props: {}) {
@@ -53,6 +54,7 @@ export default class ScreenController extends Component {
     this.changeScreen = this.changeScreen.bind(this)
     this.closeDialog = this.closeDialog.bind(this)
     this.onShowAbout = this.showAbout.bind(this, true)
+    this.onShowSettings = this.showSettings.bind(this, true)
     this.dialogController = createRef()
     this.selectAccount = this.selectAccount.bind(this)
 
@@ -110,6 +112,7 @@ export default class ScreenController extends Component {
     ipcRenderer.on('DC_EVENT_ERROR', this.onError)
     ipcRenderer.on('success', this.onSuccess)
     ipcRenderer.on('showAboutDialog', this.onShowAbout)
+    ipcRenderer.on('showSettingsDialog', this.onShowSettings)
     ipcRenderer.on('open-url', this.onOpenUrl)
 
     this.startup().then(() => {
@@ -119,6 +122,7 @@ export default class ScreenController extends Component {
 
   componentWillUnmount() {
     ipcRenderer.removeListener('showAboutDialog', this.onShowAbout)
+    ipcRenderer.removeListener('showSettingsDialog', this.onShowSettings)
     ipcRenderer.removeListener('error', this.onError)
     ipcRenderer.removeListener('DC_EVENT_ERROR', this.onError)
     ipcRenderer.removeListener('success', this.onSuccess)
@@ -138,6 +142,10 @@ export default class ScreenController extends Component {
 
   showAbout() {
     this.openDialog('About')
+  }
+
+  showSettings() {
+    this.openDialog('Settings')
   }
 
   async onOpenUrl(_event: Event, url: string) {
