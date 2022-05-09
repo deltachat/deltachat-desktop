@@ -130,6 +130,7 @@ export default class DCChat extends SplitOut {
    * @param {number} chatId
    */
   markNoticedChat(chatId: number) {
+    return
     this.selectedAccountContext.markNoticedChat(chatId)
   }
 
