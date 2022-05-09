@@ -15,6 +15,7 @@ import { getLogger } from '../shared/logger'
 import { ContextMenuLayer, showFnType } from './components/ContextMenu'
 import { DeltaBackend } from './delta-remote'
 import AccountSetupScreen from './components/screens/AccountSetupScreen'
+import { ActionEmitter, KeybindAction } from './keybindings'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -145,7 +146,7 @@ export default class ScreenController extends Component {
   }
 
   showSettings() {
-    this.openDialog('Settings')
+    ActionEmitter.emitAction(KeybindAction.Settings_Open)
   }
 
   async onOpenUrl(_event: Event, url: string) {
