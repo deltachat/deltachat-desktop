@@ -13,6 +13,9 @@
 - Fix jumping to send video chat invitation
 - Fix jumping to last message if sending multiple attachments through drag&drop
 
+### Changed
+- Update `@deltachat/message_parser_wasm` to `0.4.0` (fixes a email parsing issue)
+
 ## [1.29.0] - 2022-05-05
 
 > You now need node version `>=16` for building desktop

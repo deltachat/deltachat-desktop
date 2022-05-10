@@ -77,7 +77,7 @@
   },
   "dependencies": {
     "@blueprintjs/core": "^4.1.2",
-    "@deltachat/message_parser_wasm": "^0.3.0",
+    "@deltachat/message_parser_wasm": "^0.4.0",
     "@deltachat/react-qr-reader": "^4.0.0",
     "@mapbox/geojson-extent": "^1.0.0",
     "application-config": "^1.0.1",
