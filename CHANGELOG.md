@@ -4,9 +4,12 @@
 
 ### Added
 - Show settings menu item in titlebar menu
+- Sidebar closes on escape key
+
 ### Fixed
 - Fix crash on migrating accounts from an older version (before 1.21.0)
 - add a guard against selecting accounts with impossible ids (smaller than 0)
+
 
 ## [1.29.0] - 2022-05-05
 
@@ -38,7 +41,6 @@
 - handle mailto links in webxdc content in deltachat
 - add images to quotes #2628
 
-
 ### Changed
 - Move node-fetch to devDependencies
 - Update emoji-mart to `^3.0.1`
@@ -58,6 +60,7 @@
 
 ### Removed
 - remove dependency `react-qr-svg`
+
 
 ## [1.28.2] - 2022-04-22
 
