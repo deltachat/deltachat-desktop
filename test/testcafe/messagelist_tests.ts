@@ -242,7 +242,7 @@ test('incoming message from chat partner is received', async t => {
   await clickChatByName(t, config.account_b_email)
   let old_msg_count = await Selector('#message-list li').count
   await config.device_b_context.sendMessage(12, 'hello world')
-  await t.wait(3000)
+  await t.wait(7000)
   await t
     .expect(MSGinViewportSelector(6000).withText('hello world').exists)
     .ok('message not found in view')
