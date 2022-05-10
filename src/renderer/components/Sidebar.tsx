@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { ScreenContext, useTranslationFunction } from '../contexts'
 import { DeltaBackend } from '../delta-remote'
 import { runtime } from '../runtime'
@@ -71,6 +71,19 @@ const Sidebar = React.memo(
       setSidebarState('invisible')
       screenContext.openDialog('About')
     }
+
+    const onEscapeKeyUp = (ev: KeyboardEvent) => {
+      if (ev.key === 'Escape') {
+        setSidebarState('invisible')
+      }
+    }
+
+    useEffect(() => {
+      window.addEventListener('keyup', onEscapeKeyUp)
+      return () => {
+        window.removeEventListener('keyup', onEscapeKeyUp)
+      }
+    })
 
     const tx = useTranslationFunction()
 
