@@ -142,7 +142,7 @@
     "node-fetch": "^2.6.7",
     "prettier": "2.2.1",
     "sass": "^1.26.5",
-    "testcafe": "1.18.5",
+    "testcafe": "^1.18.6",
     "testcafe-browser-provider-electron": "0.0.18",
     "testcafe-react-selectors": "^4.1.5",
     "ts-node": "^10.4.0",
