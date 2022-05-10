@@ -13,6 +13,8 @@
   top: 0;
   left: 0;
   min-width: 250px;
+  width: 30%;
+  max-width: 90vw;
   height: 100vh;
   background-color: var(--sideBarBackground);
   z-index: 100;
@@ -71,11 +73,15 @@
     }
     .displayname {
       font-weight: bolder;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .emailAddress {
       font-size: small;
       font-weight: 100;
       color: var(--sideBarAccountEmailText);
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 

@@ -3,6 +3,8 @@
     font-size: medium;
     font-weight: bold;
     cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     img.verified-icon {
       width: 0.8em;
@@ -24,6 +26,8 @@
     font-weight: 100;
     cursor: pointer;
     color: var(--navBarGroupSubtitle);
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .no-chat-selected-screen {
