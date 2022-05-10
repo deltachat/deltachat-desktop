@@ -680,6 +680,9 @@ class ChatStore extends Store<ChatStoreState> {
             return false
           }
 
+          await DeltaBackend.call('chat.markNoticedChat', chatId)
+          chat.freshMessageCounter = 0
+
           let oldestFetchedMessageIndex = -1
           let newestFetchedMessageIndex = -1
           let messagePage: MessagePage | null = null

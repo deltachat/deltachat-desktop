@@ -291,7 +291,6 @@ export default class DCMessageList extends SplitOut {
         !message ||
         getDirection({ fromId: message.getFromId() }) !== 'incoming'
       )
-        // TODO: maybe break here because makes no sense to look further. return value -1 ok?
         continue
       if (message.getState().isSeen()) break
       firstUnreadMessageId = messageId

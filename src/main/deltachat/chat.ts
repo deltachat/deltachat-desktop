@@ -2,6 +2,8 @@ import { C } from 'deltachat-node'
 import { getLogger } from '../../shared/logger'
 import SplitOut from './splitout'
 import { MessageType } from '../../shared/shared-types'
+import { set_has_unread } from '../tray'
+import { app } from 'electron'
 
 const log = getLogger('main/deltachat/chat')
 export default class DCChat extends SplitOut {
@@ -130,8 +132,11 @@ export default class DCChat extends SplitOut {
    * @param {number} chatId
    */
   markNoticedChat(chatId: number) {
-    return
     this.selectedAccountContext.markNoticedChat(chatId)
+    this.controller.emit('DESKTOP_CLEAR_NOTIFICATIONS_FOR_CHAT', chatId)
+    const count = this.controller.chatList.getGeneralFreshMessageCounter()
+    app.setBadgeCount(count)
+    set_has_unread(count !== 0)
   }
 
   getChatEphemeralTimer(chatId: number) {
