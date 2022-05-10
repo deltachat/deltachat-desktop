@@ -182,11 +182,6 @@
 
 // States that modify the message bubble appearance
 
-.quote-text {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .message.incoming {
   margin-left: 0;
   margin-right: 32px;
@@ -432,11 +427,6 @@
 
 // quote
 
-.quote-author {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .quote-background {
   overflow: hidden;
   max-width: 100%;
@@ -462,6 +452,12 @@
     line-height: 13px;
     margin-bottom: 2px;
     font-weight: 300;
+  }
+
+  .quote-author,
+  .quote-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .quoted-text {
