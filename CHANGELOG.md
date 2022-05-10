@@ -8,13 +8,15 @@
 
 ### Fixed
 - Fix crash on migrating accounts from an older version (before 1.21.0)
-- add a guard against selecting accounts with impossible ids (smaller than 0)
-- fix stock translations set too late (after I/0 is started) #2735
+- Add a guard against selecting accounts with impossible ids (smaller than 0)
+- Fix stock translations set too late (after I/0 is started) #2735
 - Fix jumping to send video chat invitation
 - Fix jumping to last message if sending multiple attachments through drag&drop
+- Fix truncating of names and emails
 
 ### Changed
 - Update `@deltachat/message_parser_wasm` to `0.4.0` (fixes a email parsing issue)
+
 
 ## [1.29.0] - 2022-05-05
 
