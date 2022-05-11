@@ -12,6 +12,7 @@
 - fix stock translations set too late (after I/0 is started) #2735
 - Fix jumping to send video chat invitation
 - Fix jumping to last message if sending multiple attachments through drag&drop
+- prevent webxdc content from setting the window title
 
 ### Changed
 - Update `@deltachat/message_parser_wasm` to `0.4.0` (fixes a email parsing issue)

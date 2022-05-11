@@ -184,6 +184,11 @@ export default class DCWebxdc extends SplitOut {
         extraHeaders: 'Content-Security-Policy: ' + CSP,
       })
 
+      // prevent webxdc content from setting the window title
+      webxdc_windows.on('page-title-updated', ev => {
+        ev.preventDefault()
+      })
+
       type setPermissionRequestHandler = typeof webxdc_windows.webContents.session.setPermissionRequestHandler
       type permission_arg = Parameters<
         Exclude<Parameters<setPermissionRequestHandler>[0], null>
