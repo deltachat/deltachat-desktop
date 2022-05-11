@@ -148,6 +148,10 @@ export default class DCWebxdc extends SplitOut {
 
       const app_icon = icon_blob && nativeImage?.createFromBuffer(icon_blob)
 
+      const chat_name = this.selectedAccountContext
+        .getChat(webxdc_message.getChatId())
+        ?.getName()
+
       const webxdc_windows = new BrowserWindow({
         webPreferences: {
           partition: this._currentPartition,
@@ -167,7 +171,7 @@ export default class DCWebxdc extends SplitOut {
             'webxdc-preload.js'
           ),
         },
-        title: `webxdc - ${webxdc_message.webxdcInfo.name}`,
+        title: `${chat_name} – ${webxdc_message.webxdcInfo.name}`,
         icon: app_icon || undefined,
         width: 375,
         height: 667,
