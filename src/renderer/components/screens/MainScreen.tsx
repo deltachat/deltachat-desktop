@@ -209,7 +209,7 @@ export default function MainScreen() {
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  width: '100%',
+                  marginRight: '15px',
                 }}
                 onClick={onTitleClick}
               >
@@ -220,7 +220,7 @@ export default function MainScreen() {
                   avatarPath={selectedChat.chat.profileImage || undefined}
                   small
                 />
-                <div style={{ marginLeft: '7px' }}>
+                <div style={{ marginLeft: '7px', overflow: 'hidden' }}>
                   <div className='navbar-chat-name'>
                     {selectedChat.chat.name}
                     {selectedChat.chat.ephemeralTimer !== 0 && (
