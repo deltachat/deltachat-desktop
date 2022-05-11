@@ -5,6 +5,7 @@
 ### Added
 - Show settings menu item in titlebar menu
 - Sidebar closes on escape key
+- add chat name to webxdc window title
 
 ### Fixed
 - Fix crash on migrating accounts from an older version (before 1.21.0)
@@ -12,6 +13,7 @@
 - Fix stock translations set too late (after I/0 is started) #2735
 - Fix jumping to send video chat invitation
 - Fix jumping to last message if sending multiple attachments through drag&drop
+- prevent webxdc content from setting the window title
 - Fix truncating of names and emails
 
 ### Changed
