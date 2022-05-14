@@ -171,7 +171,7 @@ export default class DCWebxdc extends SplitOut {
             'webxdc-preload.js'
           ),
         },
-        title: `${chat_name} – ${webxdc_message.webxdcInfo.name}`,
+        title: `${webxdc_message.webxdcInfo.name} – ${chat_name}`,
         icon: app_icon || undefined,
         width: 375,
         height: 667,
