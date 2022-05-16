@@ -36,7 +36,7 @@ import { AvatarFromContact } from '../Avatar'
 import { ConversationType } from './MessageList'
 // const log = getLogger('renderer/message')
 
-import { getDirection } from '../../../shared/util'
+import { getDirection, truncateText } from '../../../shared/util'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { ContextMenuItem } from '../ContextMenu'
 import { MessageDownloadState } from '../../../shared/constants'
@@ -538,6 +538,7 @@ function WebxdcMessageContent({ message }: { message: MessageType }) {
   }
   const info = message.webxdcInfo || {
     name: 'INFO MISSING!',
+    document: undefined,
     summary: 'INFO MISSING!',
   }
 
@@ -547,7 +548,10 @@ function WebxdcMessageContent({ message }: { message: MessageType }) {
         src={runtime.getWebxdcIconURL(message.id)}
         alt={`icon of ${info.name}`}
       />
-      <div>{info.name}</div>
+      <div title={`${info.document ? info.document + ' \n' : ''}${info.name}`}>
+        {info.document && truncateText(info.document, 24) + ' - '}
+        {truncateText(info.name, 42)}
+      </div>
       <div>{info.summary}</div>
       <button
         className={'delta-button-round'}

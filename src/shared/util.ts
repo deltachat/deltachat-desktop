@@ -44,3 +44,11 @@ export function preventDefault<EventType extends React.SyntheticEvent | Event>(
   }
   return wrapper.bind(null, callback)
 }
+
+export function truncateText(text: string, max_len: number) {
+  if (text.length > max_len) {
+    return text.slice(0, max_len) + '…'
+  } else {
+    return text
+  }
+}
