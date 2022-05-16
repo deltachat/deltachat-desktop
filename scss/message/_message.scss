@@ -185,7 +185,6 @@
 .message.incoming {
   margin-left: 0;
   margin-right: 32px;
-  max-width: 100%;
 
   .metadata:not(.with-image-no-caption) {
     & > .padlock-icon {
@@ -223,7 +222,6 @@
   float: right;
   margin-right: 0;
   margin-left: 32px;
-  max-width: 100%;
 
   .metadata:not(.with-image-no-caption) {
     & > .date {
