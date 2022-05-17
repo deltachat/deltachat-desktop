@@ -15,7 +15,7 @@ import {
   ChatListItemRowMessage,
 } from './ChatListItemRow'
 import { PseudoListItemAddContact } from '../helpers/PseudoListItem'
-import { C } from 'deltachat-node/dist/constants'
+import { C } from 'deltachat-node/node/dist/constants'
 import { DeltaBackend } from '../../delta-remote'
 import { useContactIds } from '../contact/ContactList'
 import {

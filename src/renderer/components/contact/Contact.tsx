@@ -1,5 +1,5 @@
 import React, { CSSProperties, PropsWithChildren } from 'react'
-import { C } from 'deltachat-node/dist/constants'
+import { C } from 'deltachat-node/node/dist/constants'
 import { ContactJSON } from '../../../shared/shared-types'
 import { Avatar } from '../Avatar'
 

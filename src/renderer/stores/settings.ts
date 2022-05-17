@@ -1,4 +1,4 @@
-import { C } from 'deltachat-node/dist/constants'
+import { C } from 'deltachat-node/node/dist/constants'
 import {
   DesktopSettingsType,
   JsonContact,

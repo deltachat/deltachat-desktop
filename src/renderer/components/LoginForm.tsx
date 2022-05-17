@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 
 import type { DeltaChat } from 'deltachat-node'
-import { C } from 'deltachat-node/dist/constants'
+import { C } from 'deltachat-node/node/dist/constants'
 import React, { useEffect, useState } from 'react'
 import {
   DeltaInput,

@@ -4,7 +4,7 @@ import { FullChat, MessageType } from '../../shared/shared-types'
 import { DeltaBackend, sendMessageParams } from '../delta-remote'
 import { runtime } from '../runtime'
 import { ActionEmitter, KeybindAction } from '../keybindings'
-import { C } from 'deltachat-node/dist/constants'
+import { C } from 'deltachat-node/node/dist/constants'
 import { OrderedMap } from 'immutable'
 
 export const PAGE_SIZE = 11

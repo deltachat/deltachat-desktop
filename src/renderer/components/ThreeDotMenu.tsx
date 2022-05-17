@@ -1,4 +1,4 @@
-import { C } from 'deltachat-node/dist/constants'
+import { C } from 'deltachat-node/node/dist/constants'
 import React, { useContext } from 'react'
 import { ScreenContext, useTranslationFunction } from '../contexts'
 import {

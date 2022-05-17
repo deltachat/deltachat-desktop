@@ -10,6 +10,7 @@ import { readdir, stat, rmdir, writeFile } from 'fs/promises'
 import { getConfigPath } from '../application-constants'
 import UrlParser from 'url-parse'
 import type { Message } from 'deltachat-node'
+import { truncateText } from '../../shared/util'
 
 const open_apps: {
   [msgId: number]: { win: BrowserWindow; msg_obj: Message }
@@ -171,7 +172,11 @@ export default class DCWebxdc extends SplitOut {
             'webxdc-preload.js'
           ),
         },
-        title: `${webxdc_message.webxdcInfo.name} – ${chat_name}`,
+        title: `${
+          webxdc_message.webxdcInfo.document
+            ? truncateText(webxdc_message.webxdcInfo.document, 32) + ' - '
+            : ''
+        }${truncateText(webxdc_message.webxdcInfo.name, 42)} – ${chat_name}`,
         icon: app_icon || undefined,
         width: 375,
         height: 667,

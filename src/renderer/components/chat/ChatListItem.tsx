@@ -2,7 +2,7 @@ import React from 'react'
 import classNames from 'classnames'
 import Timestamp from '../conversations/Timestamp'
 import MessageBody from '../message/MessageBody'
-import { C } from 'deltachat-node/dist/constants'
+import { C } from 'deltachat-node/node/dist/constants'
 import {
   ChatListItemType,
   MessageSearchResult,

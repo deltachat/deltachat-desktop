@@ -1,6 +1,6 @@
 import { FullChat } from './shared-types'
 
-import { C } from 'deltachat-node/dist/constants'
+import { C } from 'deltachat-node/node/dist/constants'
 
 export function getDirection({ fromId }: { fromId: number }) {
   return fromId === C.DC_CONTACT_ID_SELF ? 'outgoing' : 'incoming'
@@ -43,4 +43,12 @@ export function preventDefault<EventType extends React.SyntheticEvent | Event>(
     cb()
   }
   return wrapper.bind(null, callback)
+}
+
+export function truncateText(text: string, max_len: number) {
+  if (text.length > max_len) {
+    return text.slice(0, max_len) + '…'
+  } else {
+    return text
+  }
 }

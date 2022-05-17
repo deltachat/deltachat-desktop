@@ -7,7 +7,7 @@ import SplitOut from './splitout'
 import { Credentials, DeltaChatAccount } from '../../shared/shared-types'
 import { stat, readdir } from 'fs/promises'
 import { join } from 'path'
-import { Context } from 'deltachat-node/dist/context'
+import { Context } from 'deltachat-node/node/dist/context'
 import { DesktopSettings } from '../desktop_settings'
 import { tx } from '../load-translations'
 const log = getLogger('main/deltachat/login')

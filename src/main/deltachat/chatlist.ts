@@ -1,5 +1,5 @@
 import { C, ChatList } from 'deltachat-node'
-import { Context } from 'deltachat-node/dist/context'
+import { Context } from 'deltachat-node/node/dist/context'
 import { getLogger } from '../../shared/logger'
 import {
   ChatListItemType,

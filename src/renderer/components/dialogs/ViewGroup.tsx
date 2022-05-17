@@ -1,5 +1,5 @@
 import { DeltaBackend } from '../../delta-remote'
-import { C } from 'deltachat-node/dist/constants'
+import { C } from 'deltachat-node/node/dist/constants'
 import { Card, Classes, Elevation } from '@blueprintjs/core'
 import {
   DeltaDialogBase,

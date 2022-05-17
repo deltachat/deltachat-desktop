@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { C } from 'deltachat-node/dist/constants'
+import { C } from 'deltachat-node/node/dist/constants'
 
 import { DeltaBackend } from '../delta-remote'
 import { ScreenContext } from '../contexts'

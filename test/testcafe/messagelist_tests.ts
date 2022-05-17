@@ -3,7 +3,7 @@ import { waitForReact } from 'testcafe-react-selectors'
 import { ReactSelector } from 'testcafe-react-selectors'
 import { createTmpUser } from '../integration/fixtures/config'
 import { C, DeltaChat } from 'deltachat-node'
-import type { Context } from 'deltachat-node/dist/context'
+import type { Context } from 'deltachat-node/node/dist/context'
 import { join } from 'path'
 import { rmSync } from 'fs'
 
