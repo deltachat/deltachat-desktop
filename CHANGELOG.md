@@ -4,6 +4,7 @@
 
 ### Added
 - add check for compatible node while installing dependencies (#2724)
+- add switch to enable experimental core logging
 
 ### Fixed
 - remove context menu option "open attachment" for webxdc (#2763)

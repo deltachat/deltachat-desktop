@@ -1,4 +1,10 @@
-import React, { useState, useContext, FormEvent } from 'react'
+import React, {
+  useState,
+  useContext,
+  FormEvent,
+  useEffect,
+  useCallback,
+} from 'react'
 import { Card, Elevation, Radio, RadioGroup } from '@blueprintjs/core'
 import { RenderDTSettingSwitchType, SettingsSelector } from './Settings'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
@@ -8,11 +14,14 @@ import {
   DeltaDialogHeader,
   DeltaDialogBody,
   DeltaDialogOkCancelFooter,
+  DeltaSwitch2,
 } from './DeltaDialog'
 import { DialogProps } from './DialogController'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
+import { DeltaBackend } from '../../delta-remote'
+import { runtime } from '../../runtime'
 
 const WEBRTC_INSTANCE_JITSI = 'https://meet.jit.si/$ROOM'
 const WEBRTC_INSTANCE_SYSTEMLI = 'https://meet.systemli.org/$ROOM'
@@ -87,7 +96,53 @@ export function SettingsExperimentalFeatures({
       >
         {tx('videochat')}
       </SettingsSelector>
+      <DebugWebxdcSwitch />
     </>
+  )
+}
+
+function DebugWebxdcSwitch(props: {}) {
+  const tx = window.static_translate
+
+  const [debugMsgId, setDebugMsgId] = useState(0)
+
+  const refresh = useCallback(() => {
+    DeltaBackend.call('settings.getConfig', 'debug_logging').then(val =>
+      setDebugMsgId(Number(val))
+    )
+  }, [])
+
+  useEffect(() => {
+    refresh()
+  }, [refresh])
+
+  console.log({ debugMsgId })
+  const isActive = !isNaN(debugMsgId) && debugMsgId > 0
+  return (
+    <div>
+      <DeltaSwitch2
+        label={tx('debug_logging')}
+        description={tx('debug_logging_description')}
+        value={isActive}
+        onClick={() => {
+          DeltaBackend.call(
+            'settings.setConfig',
+            'debug_logging',
+            isActive ? '0' : '1'
+          ).then(refresh)
+        }}
+        disabled={false}
+      />
+      {isActive && (
+        <button
+          onClick={() => {
+            runtime.openWebxdc(debugMsgId)
+          }}
+        >
+          {tx('Open Core Debug Log')}
+        </button>
+      )}
+    </div>
   )
 }
 
