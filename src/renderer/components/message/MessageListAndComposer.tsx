@@ -140,21 +140,13 @@ export default function MessageListAndComposer({
       confirmLabel: tx('menu_send'),
       cb: async (yes: boolean) => {
         if (!yes) return
-        let lastMessageId = -1
 
         for (const file of sanitizedFileList) {
-          const sendMessageResult = await DeltaBackend.call(
-            'messageList.sendMessage',
+          ChatStore.effect.sendMessage({
             chatId,
-            { filename: file.path }
-          )
-          if (sendMessageResult && sendMessageResult[0] !== undefined) {
-            lastMessageId = sendMessageResult[0]
-          }
+            message: { filename: file.path },
+          })
         }
-
-        lastMessageId !== -1 &&
-          ChatStore.effect.jumpToMessage(lastMessageId, false)
       },
     })
   }

@@ -281,6 +281,23 @@ export default class DCMessageList extends SplitOut {
     this.selectedAccountContext.markSeenMessages(messageIds)
   }
 
+  getFirstUnreadMessage(chatId: number): number {
+    const messageIds = this.selectedAccountContext.getChatMessages(chatId, 0, 0)
+    let firstUnreadMessageId = -1
+    for (let i = messageIds.length - 1; i > 0; i--) {
+      const messageId = messageIds[i]
+      const message = this.selectedAccountContext.getMessage(messageId)
+      if (
+        !message ||
+        getDirection({ fromId: message.getFromId() }) !== 'incoming'
+      )
+        continue
+      if (message.getState().isSeen()) break
+      firstUnreadMessageId = messageId
+    }
+    return firstUnreadMessageId
+  }
+
   searchMessages(query: string, chatId = 0): number[] {
     return this.selectedAccountContext.searchMessages(chatId, query)
   }

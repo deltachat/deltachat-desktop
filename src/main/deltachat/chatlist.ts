@@ -1,6 +1,5 @@
 import { C, ChatList } from 'deltachat-node'
 import { Context } from 'deltachat-node/node/dist/context'
-import { app } from 'electron'
 import { getLogger } from '../../shared/logger'
 import {
   ChatListItemType,
@@ -9,7 +8,6 @@ import {
   FullChat,
 } from '../../shared/shared-types'
 import SplitOut from './splitout'
-import { set_has_unread } from '../tray'
 
 const log = getLogger('main/deltachat/chatlist')
 
@@ -20,14 +18,6 @@ export default class DCChatList extends SplitOut {
     if (!chat) {
       log.debug(`Error: selected chat not found: ${chatId}`)
       return null
-    }
-    if (!chat.isContactRequest && chat.freshMessageCounter > 0) {
-      this.selectedAccountContext.markNoticedChat(chat.id)
-      this.controller.emit('DESKTOP_CLEAR_NOTIFICATIONS_FOR_CHAT', chat.id)
-      chat.freshMessageCounter = 0
-      const count = this.getGeneralFreshMessageCounter()
-      app.setBadgeCount(count)
-      set_has_unread(count !== 0)
     }
 
     return chat

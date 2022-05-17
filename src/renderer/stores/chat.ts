@@ -662,6 +662,27 @@ class ChatStore extends Store<ChatStoreState> {
             await DeltaBackend.call('messageList.getMessageIds', chatId)
           )
 
+          const firstUnreadMessageId = await DeltaBackend.call(
+            'messageList.getFirstUnreadMessage',
+            chatId
+          )
+          if (firstUnreadMessageId !== -1) {
+            setTimeout(() => {
+              this.effect.jumpToMessage(firstUnreadMessageId)
+              ActionEmitter.emitAction(
+                chat.archived
+                  ? KeybindAction.ChatList_SwitchToArchiveView
+                  : KeybindAction.ChatList_SwitchToNormalView
+              )
+              runtime.updateBadge()
+              saveLastChatId(chatId)
+            })
+            return false
+          }
+
+          await DeltaBackend.call('chat.markNoticedChat', chatId)
+          chat.freshMessageCounter = 0
+
           let oldestFetchedMessageIndex = -1
           let newestFetchedMessageIndex = -1
           let messagePage: MessagePage | null = null
@@ -705,105 +726,113 @@ class ChatStore extends Store<ChatStoreState> {
     setView: (view: ChatView) => {
       this.reducer.setView(view)
     },
-    jumpToMessage: async (msgId: number, highlight?: boolean) => {
-      highlight = highlight === false ? false : true
-      // these methods were called in backend before
-      // might be an issue if DeltaBackend.call has a significant delay
-      const _message = await DeltaBackend.call('messageList.getMessages', [
-        msgId,
-      ])
+    jumpToMessage: this.queuedEffect(
+      this.lockedEffect(
+        'scroll',
+        async (msgId: number, highlight?: boolean) => {
+          log.debug('jumpToMessage with messageId: ', msgId)
+          highlight = highlight === false ? false : true
+          // these methods were called in backend before
+          // might be an issue if DeltaBackend.call has a significant delay
+          const _message = await DeltaBackend.call('messageList.getMessages', [
+            msgId,
+          ])
 
-      if (_message.length === 0) {
-        throw new Error(
-          'jumpToMessage: Tried to jump to non existing message with id: ' +
-            msgId
-        )
-      }
-      const message = _message[0][1] as MessageType
+          if (_message.length === 0) {
+            throw new Error(
+              'jumpToMessage: Tried to jump to non existing message with id: ' +
+                msgId
+            )
+          }
+          const message = _message[0][1] as MessageType
 
-      const chatId = (message as MessageType).chatId
+          const chatId = (message as MessageType).chatId
 
-      const chat = <FullChat>(
-        await DeltaBackend.call('chatList.selectChat', chatId)
-      )
-      if (chat.id === null) {
-        log.debug(
-          'SELECT CHAT chat does not exsits, id is null. chatId:',
-          chat.id
-        )
-        return
-      }
-      const messageIds = <number[]>(
-        await DeltaBackend.call('messageList.getMessageIds', chatId)
-      )
-
-      const jumpToMessageIndex = messageIds.indexOf(msgId)
-
-      let oldestFetchedMessageIndex = -1
-      let newestFetchedMessageIndex = -1
-      let messagePage: MessagePage | null = null
-      const half_page_size = Math.ceil(PAGE_SIZE / 2)
-      if (messageIds.length !== 0) {
-        oldestFetchedMessageIndex = Math.max(
-          jumpToMessageIndex - half_page_size,
-          0
-        )
-        newestFetchedMessageIndex = Math.min(
-          jumpToMessageIndex + half_page_size,
-          messageIds.length - 1
-        )
-
-        const countMessagesOnNewerSide =
-          newestFetchedMessageIndex - jumpToMessageIndex
-        const countMessagesOnOlderSide =
-          jumpToMessageIndex - oldestFetchedMessageIndex
-        if (countMessagesOnNewerSide < half_page_size) {
-          oldestFetchedMessageIndex = Math.max(
-            oldestFetchedMessageIndex -
-              (half_page_size - countMessagesOnNewerSide),
-            0
+          const chat = <FullChat>(
+            await DeltaBackend.call('chatList.selectChat', chatId)
           )
-        } else if (countMessagesOnOlderSide < half_page_size) {
-          newestFetchedMessageIndex = Math.min(
-            newestFetchedMessageIndex +
-              (half_page_size - countMessagesOnOlderSide),
-            messageIds.length - 1
+          if (chat.id === null) {
+            log.debug(
+              'SELECT CHAT chat does not exsits, id is null. chatId:',
+              chat.id
+            )
+            return
+          }
+          const messageIds = <number[]>(
+            await DeltaBackend.call('messageList.getMessageIds', chatId)
           )
-        }
 
-        messagePage = await messagePageFromMessageIndexes(
-          chatId,
-          oldestFetchedMessageIndex,
-          newestFetchedMessageIndex
-        )
-      }
+          const jumpToMessageIndex = messageIds.indexOf(msgId)
 
-      if (messagePage === null) {
-        throw new Error(
-          'jumpToMessage: messagePage is null, this should not happen'
-        )
-      }
+          let oldestFetchedMessageIndex = -1
+          let newestFetchedMessageIndex = -1
+          let messagePage: MessagePage | null = null
+          const half_page_size = Math.ceil(PAGE_SIZE / 2)
+          if (messageIds.length !== 0) {
+            oldestFetchedMessageIndex = Math.max(
+              jumpToMessageIndex - half_page_size,
+              0
+            )
+            newestFetchedMessageIndex = Math.min(
+              jumpToMessageIndex + half_page_size,
+              messageIds.length - 1
+            )
 
-      this.reducer.selectedChat({
-        chat,
-        messagePages: [messagePage],
-        messageIds,
-        oldestFetchedMessageIndex,
-        newestFetchedMessageIndex,
-        scrollTo: {
-          type: 'scrollToMessage',
-          msgId,
-          highlight,
+            const countMessagesOnNewerSide =
+              newestFetchedMessageIndex - jumpToMessageIndex
+            const countMessagesOnOlderSide =
+              jumpToMessageIndex - oldestFetchedMessageIndex
+            if (countMessagesOnNewerSide < half_page_size) {
+              oldestFetchedMessageIndex = Math.max(
+                oldestFetchedMessageIndex -
+                  (half_page_size - countMessagesOnNewerSide),
+                0
+              )
+            } else if (countMessagesOnOlderSide < half_page_size) {
+              newestFetchedMessageIndex = Math.min(
+                newestFetchedMessageIndex +
+                  (half_page_size - countMessagesOnOlderSide),
+                messageIds.length - 1
+              )
+            }
+
+            messagePage = await messagePageFromMessageIndexes(
+              chatId,
+              oldestFetchedMessageIndex,
+              newestFetchedMessageIndex
+            )
+          }
+
+          if (messagePage === null) {
+            throw new Error(
+              'jumpToMessage: messagePage is null, this should not happen'
+            )
+          }
+
+          this.reducer.selectedChat({
+            chat,
+            messagePages: [messagePage],
+            messageIds,
+            oldestFetchedMessageIndex,
+            newestFetchedMessageIndex,
+            scrollTo: {
+              type: 'scrollToMessage',
+              msgId,
+              highlight,
+            },
+          })
+          ActionEmitter.emitAction(
+            chat.archived
+              ? KeybindAction.ChatList_SwitchToArchiveView
+              : KeybindAction.ChatList_SwitchToNormalView
+          )
+          runtime.updateBadge()
+          saveLastChatId(chatId)
         },
-      })
-      ActionEmitter.emitAction(
-        chat.archived
-          ? KeybindAction.ChatList_SwitchToArchiveView
-          : KeybindAction.ChatList_SwitchToNormalView
-      )
-      runtime.updateBadge()
-      saveLastChatId(chatId)
-    },
+        'jumpToMessage'
+      ),
+      'jumpToMessage'
+    ),
     uiDeleteMessage: (msgId: number) => {
       DeltaBackend.call('messageList.deleteMessage', msgId)
       if (!this.state.chat) return
