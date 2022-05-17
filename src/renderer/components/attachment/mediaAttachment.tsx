@@ -18,6 +18,7 @@ import { runtime } from '../../runtime'
 import filesizeConverter from 'filesize'
 import { jumpToMessage } from '../helpers/ChatMethods'
 import { getLogger } from '../../../shared/logger'
+import { truncateText } from '../../../shared/util'
 
 const log = getLogger('mediaAttachment')
 
@@ -247,7 +248,7 @@ function WebxdcAttachment({ message }: { message: MessageType }) {
     return FileAttachment({ message })
   }
 
-  const { summary, name } = message.webxdcInfo
+  const { summary, name, document } = message.webxdcInfo
 
   return (
     <div
@@ -258,7 +259,13 @@ function WebxdcAttachment({ message }: { message: MessageType }) {
     >
       <img className='icon' src={runtime.getWebxdcIconURL(message.id)} />
       <div className='text-part'>
-        <div className='name'>{name}</div>
+        <div
+          className='name'
+          title={`${document ? document + ' \n' : ''}${name}`}
+        >
+          {document && truncateText(document, 25) + ' - '}
+          {name}
+        </div>
         <div className='summary'>{summary}</div>
       </div>
     </div>

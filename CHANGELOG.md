@@ -6,6 +6,7 @@
 - Show settings menu item in titlebar menu
 - Sidebar closes on escape key
 - add chat name to webxdc window title
+- support for webxdc document names
 
 ### Fixed
 - Fix crash on migrating accounts from an older version (before 1.21.0)
