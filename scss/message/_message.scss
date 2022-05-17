@@ -392,6 +392,20 @@
   }
 }
 
+@media (max-width: 925px) {
+  .message {
+    max-width: 90%;
+
+    &.incoming {
+      margin-right: auto;
+    }
+
+    &.outgoing {
+      margin-left: auto;
+    }
+  }
+}
+
 .info-message {
   width: 100%;
   text-align: center;
