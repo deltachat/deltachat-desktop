@@ -8,16 +8,24 @@ div.profile-info-container {
   .profile-info-name-container {
     margin: auto 0px auto 17px;
     flex-grow: 1;
+    max-width: 80%;
     input.name {
       font-size: medium;
       font-weight: bold;
       background-color: transparent;
       color: var(--globalText);
     }
+    .group-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1;
+    }
     .address {
       color: #565656;
       user-select: text;
       margin-top: 0.25rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 }
