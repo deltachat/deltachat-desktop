@@ -32,6 +32,11 @@ div.group-settings-container {
   padding: 0px 65px 0px 20px;
   display: flex;
   align-items: center;
+  .group-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1;
+  }
 }
 
 div.group-member-contact-list-wrapper {
