@@ -19,6 +19,7 @@
 
 ### Changed
 - Update `@deltachat/message_parser_wasm` to `0.4.0` (fixes a email parsing issue)
+- Update deltachat-node to v1.83.0
 
 
 ## [1.29.0] - 2022-05-05
