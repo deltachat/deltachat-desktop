@@ -83,7 +83,7 @@
     "application-config": "^1.0.1",
     "classnames": "^2.3.1",
     "debounce": "^1.2.0",
-    "deltachat-node": "github:deltachat/deltachat-core-rust",
+    "deltachat-node": "1.83.0",
     "emoji-js-clean": "^4.0.0",
     "emoji-mart": "^3.0.1",
     "emoji-regex": "^9.2.2",
