@@ -3,6 +3,15 @@
 ## [Unreleased][unreleased]
 
 ### Added
+
+### Fixed
+
+### Changed
+
+
+## [1.29.1] - 2022-05-20
+
+### Added
 - Show settings menu item in titlebar menu
 - Sidebar closes on escape key
 - add chat name to webxdc window title
