@@ -1,7 +1,7 @@
 const converter = require('xml-js')
 const path = require('path')
 const fs = require('fs')
-const globWatcher = require('glob-watcher')
+const { readdir } = require('fs/promises')
 
 function xmlToJson (filename) {
   const xml = fs.readFileSync(filename, 'utf-8').toString()
@@ -60,28 +60,27 @@ function xmlToJson (filename) {
   done()
 }
 
-function convertTranslationsFromXMLToJSON(pathLocales, watch=false) {
+async function convertTranslationsFromXMLToJSON(pathLocales, watch=false) {
   const start = Date.now()
   console.log('+ Converting translations from xml to json... ')
 
   let count_converted = 0
-  fs.readdir(pathLocales, (err, files) => {
-    if (err) throw err
-    for(let f of files) {
-      if (path.extname(f) !== '.xml') continue
-      const pathXml = path.join(pathLocales, f)
-      xmlToJson(pathXml)
-      count_converted++
-    }
-    const time = Date.now() - start
-    console.log(`+ converted ${count_converted} files in ${time} ms\n`)
-  })
-
+  files = await readdir(pathLocales)
+  for(let f of files) {
+    if (path.extname(f) !== '.xml') continue
+    const pathXml = path.join(pathLocales, f)
+    xmlToJson(pathXml)
+    count_converted++
+  }
+  const time = Date.now() - start
+  console.log(`+ converted ${count_converted} files in ${time} ms\n`)
 
   if(watch === true) {
-      const watcher = globWatcher([path.join(pathLocales, '*.xml')], () => {
+      const globWatcher = require('glob-watcher')
+      globWatcher([path.join(pathLocales, '*.xml')], async done => {
           console.log(`+ files changed in "${source}"`)
-          convertTranslationsFromXMLToJSON(false)
+          await convertTranslationsFromXMLToJSON(pathLocales, watch=false)
+          done()
       })
       console.log('+ watching for file changes...')
   }

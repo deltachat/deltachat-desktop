@@ -2,7 +2,6 @@
 
 const { copyFile, mkdir, readdir, stat } = require('fs/promises')
 const { resolve, join } = require('path')
-const globWatcher = require('glob-watcher')
 
 async function copyRecursive(source, destination) {
     if ((await stat(source)).isDirectory()) {
@@ -38,9 +37,11 @@ async function copy(source, destination, watch=false) {
     console.log(`+ copied all source files to "${destination}"`)
 
     if(watch === true) {
-        const watcher = globWatcher([join(source, '*')], () => {
+        const globWatcher = require('glob-watcher')
+        globWatcher([join(source, '*')], async done => {
             console.log(`+ files changed in "${source}"`)
-            copy(source, destination, false)
+            await copy(source, destination, watch=false)
+            done()
         })
         console.log('+ watching for file changes...')
     }
