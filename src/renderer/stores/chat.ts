@@ -668,7 +668,7 @@ class ChatStore extends Store<ChatStoreState> {
           )
           if (firstUnreadMessageId !== -1) {
             setTimeout(() => {
-              this.effect.jumpToMessage(firstUnreadMessageId)
+              this.effect.jumpToMessage(firstUnreadMessageId, false)
               ActionEmitter.emitAction(
                 chat.archived
                   ? KeybindAction.ChatList_SwitchToArchiveView
