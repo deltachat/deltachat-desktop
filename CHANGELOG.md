@@ -7,6 +7,7 @@
 - Sidebar closes on escape key
 - add chat name to webxdc window title
 - support for webxdc document names
+- Access archived chats through sidebar
 
 ### Fixed
 - Fix crash on migrating accounts from an older version (before 1.21.0)
