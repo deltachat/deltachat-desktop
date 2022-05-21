@@ -177,7 +177,6 @@ export function QrCodeScanQrInner({ onClose }: { onClose: () => void }) {
         processingQrCode.current = false
         throw err
       }
-      processingQrCode.current = false
     } else if (processingQrCode.current === true) {
       log.debug('Already processing a qr code')
     }
