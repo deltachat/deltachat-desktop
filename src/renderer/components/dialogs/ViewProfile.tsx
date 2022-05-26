@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react'
+import formatRelativeTime from '../conversations/formatRelativeTime'
 import {
   DeltaDialogBase,
   DeltaDialogHeader,
@@ -30,16 +31,25 @@ import { selectChat } from '../helpers/ChatMethods'
 const ProfileInfoName = ({
   name,
   address,
+  lastSeen,
 }: {
   name: string
   address: string
+  lastSeen: number
 }) => {
+  const tx = useTranslationFunction()
+  const extended = false
+  const time = formatRelativeTime(lastSeen, { extended })
+
   return (
     <div className='profile-info-name-container'>
       <div>
         <p className='group-name'>{name}</p>
       </div>
       <div className='address'>{address}</div>
+      <div>
+        <p>{`${tx('last_seen_at', `${time}`)}`}</p>
+      </div>
     </div>
   )
 }
@@ -142,6 +152,7 @@ export function ViewProfileInner({
               address={
                 isDeviceMessage ? tx('device_talk_subtitle') : contact.address
               }
+              lastSeen={contact.lastSeen}
             />
           </div>
           <div
