@@ -1,0 +1,570 @@
+/* Message Bubble */
+.message {
+  position: relative;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: stretch;
+
+  li:hover > & {
+    .reply-button-wrapper {
+      opacity: 1;
+    }
+  }
+
+  & > .author-avatar {
+    align-self: flex-end;
+    bottom: 0px;
+    position: static;
+    margin-right: 8px;
+    user-select: none;
+
+    img {
+      height: 36px;
+      width: 36px;
+      border-radius: 18px;
+      object-fit: cover;
+      cursor: pointer;
+    }
+
+    &.default {
+      // text letter version
+      text-align: center;
+
+      & > .label {
+        user-select: none;
+        color: var(--avatarLabelColor);
+
+        top: -121px;
+        left: -10px;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        font-size: 25px;
+        line-height: 36px;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .reply-button-wrapper {
+    opacity: 0;
+    position: absolute;
+
+    display: flex;
+    align-items: center;
+    height: 100%;
+    bottom: 0;
+    z-index: 10;
+
+    &.incoming {
+      right: -52px;
+    }
+
+    &.outgoing {
+      left: -52px;
+      transform: scale(-1, 1);
+    }
+
+    div.reply {
+      padding: 4px;
+      border-radius: 100%;
+      cursor: pointer;
+      background-color: var(--messageReplyBtnBg);
+
+      &:hover {
+        background-color: var(--messageReplyBtnBgHover);
+        & > div.reply-icon {
+          background-color: var(--messageReplyBtnHover);
+        }
+      }
+
+      div.reply-icon {
+        height: 24px;
+        width: 24px;
+        display: block;
+        /* not used currently */
+        @include color-svg('../images/reply.svg', var(--messageReplyBtn));
+        user-select: none;
+      }
+    }
+  }
+
+  .msg-container {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    border-radius: 16px;
+    padding-right: 12px;
+    padding-left: 12px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    .msg-body {
+      &.msg-body--clickable > .text {
+        cursor: pointer;
+      }
+
+      & > .text {
+        color: var(--messageText);
+        font-size: 14px;
+        line-height: 18px;
+        text-align: start;
+
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+        white-space: pre-wrap;
+        cursor: default;
+
+        margin-right: 10px;
+
+        .double-line-break {
+          height: 28px;
+        }
+
+        .line-break {
+          height: 0px;
+        }
+
+        .line-break + .line-break {
+          height: 14px;
+        }
+      }
+    }
+
+    .webxdc {
+      img {
+        height: 171px;
+      }
+      button.delta-button-round {
+        padding: 6px 13px;
+      }
+    }
+  }
+
+  .metadata {
+    margin-top: 10px;
+    margin-bottom: -7px;
+    float: right;
+  }
+
+  .module-message__img-attachment {
+    object-fit: cover;
+    width: auto;
+    max-width: 100%;
+    min-height: unset;
+  }
+
+  .show-html {
+    border: none;
+    background-color: transparent;
+    padding-left: 0;
+    color: var(--colorPrimary);
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .download {
+    span.failed {
+      color: var(--colorDanger);
+      font-weight: bold;
+    }
+
+    button {
+      border: none;
+      background-color: transparent;
+      padding-left: 0;
+      color: var(--colorPrimary);
+    }
+  }
+}
+
+// States that modify the message bubble appearance
+
+.message.incoming {
+  margin-left: 0;
+  margin-right: 32px;
+
+  .metadata:not(.with-image-no-caption) {
+    & > .padlock-icon {
+      @include color-svg(
+        '../images/padlock.svg',
+        var(--messagePadlockIncoming),
+        125%
+      );
+    }
+
+    & > .location-icon {
+      @include color-svg(
+        '../images/map-marker.svg',
+        var(--messagePadlockIncoming),
+        100%
+      );
+    }
+
+    & > .date {
+      color: var(--messageMetadataIncoming);
+    }
+  }
+
+  .msg-container {
+    background-color: var(--messageIncomingBg);
+
+    &,
+    .message-attachment-media {
+      border-bottom-left-radius: 1px;
+    }
+  }
+}
+
+.message.outgoing {
+  float: right;
+  margin-right: 0;
+  margin-left: 32px;
+
+  .metadata:not(.with-image-no-caption) {
+    & > .date {
+      color: var(--messageOutgoingStatusColor);
+    }
+
+    & > .padlock-icon {
+      @include color-svg(
+        '../images/padlock.svg',
+        var(--messagePadlockOutgoing),
+        125%
+      );
+    }
+
+    & > .location-icon {
+      @include color-svg(
+        '../images/map-marker.svg',
+        var(--messagePadlockOutgoing),
+        100%
+      );
+    }
+
+    & > .status-icon.read,
+    & > .status-icon.delivered {
+      background-color: var(--messageOutgoingStatusColor);
+    }
+  }
+  .metadata.with-image-no-caption > .status-icon {
+    background-color: white;
+  }
+
+  .msg-container {
+    background-color: var(--messageOutgoingBg);
+
+    &,
+    .message-attachment-media {
+      border-bottom-right-radius: 1px;
+    }
+  }
+}
+
+.message.type-sticker {
+  .msg-container {
+    background-color: transparent !important;
+
+    .author-wrapper,
+    .forwarded-indicator {
+      display: none;
+    }
+
+    .quote-background {
+      background: #01010159;
+      padding: 5px;
+      padding-left: 6px;
+      border-radius: 7px;
+
+      & > .quote {
+        margin: 0;
+
+        .quoted-text {
+          color: white;
+        }
+      }
+    }
+  }
+
+  .message-attachment-media {
+    background-color: transparent;
+    & > .attachment-content {
+      margin-bottom: 20px;
+      cursor: default;
+    }
+  }
+
+  .metadata {
+    float: right;
+    padding: 4px 8px 1px 8px;
+    margin-bottom: -7px;
+    background-color: #01010159;
+    border-radius: 4px;
+    color: black;
+    font-weight: bold;
+  }
+
+  .metadata {
+    & > .date {
+      font-size: 11px;
+      color: white;
+    }
+
+    & > .padlock-icon {
+      @include color-svg('../images/padlock.svg', white, 125%);
+    }
+
+    & > .location-icon {
+      @include color-svg('../images/map-marker.svg', white, 100%);
+    }
+  }
+
+  .status-icon.read,
+  .status-icon.delivered {
+    background-color: white;
+  }
+}
+
+.message.has-html {
+  .text {
+    padding-bottom: 10px;
+  }
+}
+
+.message.error.incoming {
+  .text {
+    font-style: italic;
+  }
+}
+
+.message.forwarded {
+  .forwarded-indicator {
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-bottom: 3px;
+    opacity: 0.86;
+
+    span {
+      cursor: pointer;
+    }
+  }
+  .message-attachment-media {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    margin-top: 0;
+  }
+}
+
+.setupMessage {
+  .message {
+    .text {
+      color: var(--setupMessageText);
+    }
+  }
+}
+
+/* Spec: container > 438px and container < 593px*/
+@media (min-width: 800px) and (max-width: 925px) {
+  .message {
+    max-width: 374px;
+
+    &.incoming {
+      margin-right: auto;
+    }
+
+    &.outgoing {
+      margin-left: auto;
+    }
+  }
+}
+
+// Spec: container > 593px
+@media (min-width: 926px) {
+  .message {
+    max-width: 66%;
+
+    &.incoming {
+      margin-right: auto;
+    }
+
+    &.outgoing {
+      margin-left: auto;
+    }
+  }
+}
+
+@media (max-width: 925px) {
+  .message {
+    max-width: 90%;
+
+    &.incoming {
+      margin-right: auto;
+    }
+
+    &.outgoing {
+      margin-left: auto;
+    }
+  }
+}
+
+.info-message {
+  width: 100%;
+  text-align: center;
+  margin: 26px 0px;
+  overflow-wrap: anywhere;
+
+  .bubble {
+    display: inline-block;
+    text-align: center;
+    font-style: italic;
+    font-weight: bold;
+    padding: 7px 14px;
+    background-color: var(--infoMessageBubbleBg);
+    border-radius: 10px;
+    opacity: 0.9;
+    color: var(--infoMessageBubbleText);
+    .status-icon.sending {
+      background-color: var(--infoMessageBubbleText);
+    }
+  }
+
+  &.big > .bubble {
+    max-width: 550px;
+    font-size: 1rem;
+    padding: 2rem;
+    font-style: normal;
+    white-space: pre-wrap;
+    text-align: left;
+  }
+}
+
+// quote
+
+.quote-background {
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.message .msg-container .quote,
+.composer .quote {
+  border-left: 3px gray solid;
+  padding: 0 4px;
+  padding-left: 9px;
+  margin: 2px 0 5px 0;
+  display: flex;
+  --quote-img-size: 36px;
+
+  // &.has-message:hover {
+  //   background: rgba(0, 0, 0, 0.07);
+  // }
+
+  .author {
+    display: block;
+    height: 13px;
+    font-size: 13px;
+    line-height: 13px;
+    margin-bottom: 2px;
+    font-weight: 300;
+  }
+
+  .quote-author,
+  .quote-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .quoted-text {
+    font-size: 12px;
+    line-height: 12px;
+    margin: 0;
+    max-height: 40px;
+    overflow: hidden;
+    line-clamp: 3;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    // see https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-line-clamp
+    // and yes using this property is a bit hacky and depends on browser support
+    // but atleast its simpler than estimating size with js
+    -webkit-box-orient: vertical;
+    color: var(--messageQuotedText);
+    white-space: pre-line;
+    user-select: text;
+    position: relative;
+    word-break: break-all;
+  }
+
+  img.quoted-image {
+    height: var(--quote-img-size);
+    width: var(--quote-img-size);
+    margin-left: 6px;
+  }
+}
+
+.quoted-text,
+.msg-body > .text {
+  a {
+    text-decoration: underline;
+    color: var(--messageTextLink);
+  }
+}
+
+.author-wrapper {
+  &.can-hide {
+    display: none;
+  }
+  .author {
+    display: inline-block;
+    max-width: 40vw;
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 18px;
+    height: 18px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer;
+  }
+}
+.videochat-invitation {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  .videochat-icon {
+    height: 48px;
+    width: 48px;
+    background-color: var(--infoMessageBubbleBg);
+    border-radius: 100%;
+    margin: 8px 0px;
+    margin-right: 10px;
+  }
+  .break {
+    flex-basis: 100%;
+    height: 0;
+  }
+
+  .info-button {
+    display: flex;
+
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 7px 14px;
+
+    background-color: var(--infoMessageBubbleBg);
+    opacity: 0.9;
+    color: white;
+    border-radius: 10px;
+
+    cursor: pointer;
+  }
+
+  .join-button {
+    font-weight: 100;
+    margin-top: 5px;
+  }
+}
