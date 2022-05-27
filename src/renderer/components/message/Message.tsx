@@ -214,6 +214,7 @@ function buildContextMenu(
     },
     // Open Attachment
     showAttachmentOptions &&
+      message.viewType !== C.DC_MSG_WEBXDC &&
       isGenericAttachment(message.file_mime) && {
         label: tx('open_attachment'),
         action: openAttachmentInShell.bind(null, message),

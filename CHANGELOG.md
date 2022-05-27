@@ -5,6 +5,7 @@
 ### Added
 
 ### Fixed
+- remove context menu option "open attachment" for webxdc (#2763)
 
 ### Changed
 - click on webxdc icon starts it too now (#2775)
