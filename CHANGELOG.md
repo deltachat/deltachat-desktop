@@ -7,7 +7,7 @@
 ### Fixed
 
 ### Changed
-
+- click on webxdc icon starts it too now (#2775)
 
 ## [1.29.1] - 2022-05-20
 
