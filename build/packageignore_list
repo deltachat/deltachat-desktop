@@ -79,6 +79,7 @@ node_modules/create-react-context
 node_modules/deltachat-node/.*
 node_modules/deltachat-node/*.md
 node_modules/deltachat-node/target
+node_modules/deltachat-node/src
 node_modules/deltachat-node/assets
 node_modules/deltachat-node/benches
 node_modules/deltachat-node/Cargo.*
