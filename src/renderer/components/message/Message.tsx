@@ -346,9 +346,9 @@ const Message = (props: {
       <div dir='auto' className='text'>
         {message.isSetupmessage ? (
           tx('autocrypt_asm_click_body')
-        ) : (
-          <MessageBody text={text || ''} />
-        )}
+        ) : text ? (
+          <MessageBody text={text} />
+        ) : null}
       </div>
     )
   }
