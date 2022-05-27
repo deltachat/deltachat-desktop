@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- add check for compatible node while installing dependencies (#2724)
 
 ### Fixed
 - remove context menu option "open attachment" for webxdc (#2763)
@@ -10,6 +11,8 @@
 ### Changed
 - click on webxdc icon starts it too now (#2775)
 - webxdc title is now shown in bold (#2774)
+- remove unessesary deltachat-node files from release package
+- change composer keybindings (shift+enter now always adds a newline and crtl/cmd+enter now always sends regardless of what the enter key is set up to do)
 
 ## [1.29.1] - 2022-05-20
 
