@@ -549,7 +549,10 @@ function WebxdcMessageContent({ message }: { message: MessageType }) {
         alt={`icon of ${info.name}`}
         onClick={() => runtime.openWebxdc(message.id)}
       />
-      <div title={`${info.document ? info.document + ' \n' : ''}${info.name}`}>
+      <div
+        className='name'
+        title={`${info.document ? info.document + ' \n' : ''}${info.name}`}
+      >
         {info.document && truncateText(info.document, 24) + ' - '}
         {truncateText(info.name, 42)}
       </div>

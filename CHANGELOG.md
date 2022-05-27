@@ -8,6 +8,7 @@
 
 ### Changed
 - click on webxdc icon starts it too now (#2775)
+- webxdc title is now shown in bold (#2774)
 
 ## [1.29.1] - 2022-05-20
 
