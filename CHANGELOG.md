@@ -5,6 +5,7 @@
 ### Added
 
 ### Fixed
+- remove unessesary deltachat-node files from release package
 
 ### Changed
 
