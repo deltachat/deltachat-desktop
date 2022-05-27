@@ -9,6 +9,7 @@
 - remove unessesary deltachat-node files from release package
 
 ### Changed
+- change composer keybindings (shift+enter now always adds a newline and crtl/cmd+enter now always sends regardless of what the enter key is set up to do)
 
 
 ## [1.29.1] - 2022-05-20

@@ -163,22 +163,22 @@ export function enterKeySendsKeyboardShortcuts(
     return [
       {
         title: tx('desktop_keybindings_action_send_message'),
-        keyBindings: [Enter],
+        keyBindings: [Enter, CtrlOrMetaEnter],
       },
       {
         title: tx('desktop_keybindings_action_insert_newline'),
-        keyBindings: [ShiftEnter, CtrlOrMetaEnter],
+        keyBindings: [ShiftEnter],
       },
     ]
   } else {
     return [
       {
         title: tx('desktop_keybindings_action_send_message'),
-        keyBindings: [CtrlOrMetaEnter, ShiftEnter],
+        keyBindings: [CtrlOrMetaEnter],
       },
       {
         title: tx('desktop_keybindings_action_insert_newline'),
-        keyBindings: [Enter],
+        keyBindings: [Enter, ShiftEnter],
       },
     ]
   }
