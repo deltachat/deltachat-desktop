@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- add check for compatible node while installing dependencies (#2724)
 
 ### Fixed
 - remove unessesary deltachat-node files from release package
