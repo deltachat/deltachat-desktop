@@ -76,15 +76,29 @@ node_modules/create-react-context
 
 
 # cleanup deltachat-node
+node_modules/deltachat-node/.*
+node_modules/deltachat-node/*.md
+node_modules/deltachat-node/target
 node_modules/deltachat-node/src
-node_modules/deltachat-node/scripts
-node_modules/deltachat-node/deltachat-core-rust/src
-node_modules/deltachat-node/deltachat-core-rust/draft
-node_modules/deltachat-node/deltachat-core-rust/assets
-node_modules/deltachat-node/deltachat-core-rust/deltachat-ffi
-node_modules/deltachat-node/deltachat-core-rust/Cargo.*
-node_modules/deltachat-node/deltachat-core-rust/benches
-node_modules/deltachat-node/deltachat-core-rust/deltachat_derive
+node_modules/deltachat-node/assets
+node_modules/deltachat-node/benches
+node_modules/deltachat-node/Cargo.*
+node_modules/deltachat-node/deltachat_derive
+node_modules/deltachat-node/deltachat-ffi
+node_modules/deltachat-node/examples
+node_modules/deltachat-node/LICENSE
+node_modules/deltachat-node/node/*.md
+node_modules/deltachat-node/node/constants.js
+node_modules/deltachat-node/node/events.js
+node_modules/deltachat-node/node/binding.gyp
+node_modules/deltachat-node/node/lib
+node_modules/deltachat-node/node/LICENSE
+node_modules/deltachat-node/node/patches
+node_modules/deltachat-node/node/scripts
+node_modules/deltachat-node/node/src
+node_modules/deltachat-node/node/tsconfig.json
+node_modules/deltachat-node/release.toml
+node_modules/deltachat-node/rust-toolchain
 
 
 # backend dev dependencies, only needed for building backend (dc node in the case)
@@ -163,3 +177,10 @@ node_modules/mapbox-gl/dist/mapbox-gl-csp.js.map
 node_modules/mapbox-gl/dist/mapbox-gl-csp-worker.js.map
 node_modules/mapbox-gl/dist/mapbox-gl-csp.js
 node_modules/mapbox-gl/dist/mapbox-gl-csp-worker.js
+
+
+
+# TEMP - ignore ci artifacts until its fixed in the core repo: (until we have a new node release wit core 84)
+node_modules/deltachat-node/windows-latest
+node_modules/deltachat-node/macos-latest
+node_modules/deltachat-node/ubuntu-18.04
