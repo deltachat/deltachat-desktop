@@ -78,6 +78,7 @@ node_modules/create-react-context
 # cleanup deltachat-node
 node_modules/deltachat-node/.*
 node_modules/deltachat-node/*.md
+node_modules/deltachat-node/target
 node_modules/deltachat-node/assets
 node_modules/deltachat-node/benches
 node_modules/deltachat-node/Cargo.*
