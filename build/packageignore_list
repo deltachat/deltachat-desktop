@@ -176,3 +176,10 @@ node_modules/mapbox-gl/dist/mapbox-gl-csp.js.map
 node_modules/mapbox-gl/dist/mapbox-gl-csp-worker.js.map
 node_modules/mapbox-gl/dist/mapbox-gl-csp.js
 node_modules/mapbox-gl/dist/mapbox-gl-csp-worker.js
+
+
+
+# TEMP - ignore ci artifacts until its fixed in the core repo: (until we have a new node release wit core 84)
+node_modules/deltachat-node/windows-latest
+node_modules/deltachat-node/macos-latest
+node_modules/deltachat-node/ubuntu-18.04
