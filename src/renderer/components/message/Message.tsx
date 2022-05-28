@@ -214,6 +214,7 @@ function buildContextMenu(
     },
     // Open Attachment
     showAttachmentOptions &&
+      message.viewType !== C.DC_MSG_WEBXDC &&
       isGenericAttachment(message.file_mime) && {
         label: tx('open_attachment'),
         action: openAttachmentInShell.bind(null, message),
@@ -547,8 +548,12 @@ function WebxdcMessageContent({ message }: { message: MessageType }) {
       <img
         src={runtime.getWebxdcIconURL(message.id)}
         alt={`icon of ${info.name}`}
+        onClick={() => runtime.openWebxdc(message.id)}
       />
-      <div title={`${info.document ? info.document + ' \n' : ''}${info.name}`}>
+      <div
+        className='name'
+        title={`${info.document ? info.document + ' \n' : ''}${info.name}`}
+      >
         {info.document && truncateText(info.document, 24) + ' - '}
         {truncateText(info.name, 42)}
       </div>
