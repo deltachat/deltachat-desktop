@@ -121,8 +121,8 @@ function DebugWebxdcSwitch(props: {}) {
   return (
     <div>
       <DeltaSwitch2
-        label={tx('debug_logging')}
-        description={tx('debug_logging_description')}
+        label={tx('pref_debug_logging')}
+        description={tx('pref_debug_logging_explain')}
         value={isActive}
         onClick={() => {
           DeltaBackend.call(
