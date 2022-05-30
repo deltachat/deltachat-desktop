@@ -45,8 +45,7 @@ const ProfileInfoName = ({
   if (lastSeen == 0) {
     lastSeenString = tx('last_seen_unknown')
   } else {
-    const extended = false
-    const date = formatRelativeTime(lastSeen * 1000, { extended })
+    const date = formatRelativeTime(lastSeen * 1000, { extended: false })
     lastSeenString = tx('last_seen_at', date)
   }
 
