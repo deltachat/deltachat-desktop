@@ -39,15 +39,15 @@ const ProfileInfoName = ({
   lastSeen: number
 }) => {
   const tx = useTranslationFunction()
-  const year = moment(lastSeen).format('YYYY')
   let lastSeenString = ''
 
   // Dates from 1970 mean that contact has never been seen
-  if (parseInt(year) <= 1970) lastSeenString = tx('last_seen_unknown')
-  else {
+  if (lastSeen == 0) {
+    lastSeenString = tx('last_seen_unknown')
+  } else {
     const extended = false
-    const date = formatRelativeTime(lastSeen, { extended })
-    lastSeenString = tx('last_seen_at', `${date}`)
+    const date = formatRelativeTime(lastSeen * 1000, { extended })
+    lastSeenString = tx('last_seen_at', date)
   }
 
   return (
@@ -56,9 +56,7 @@ const ProfileInfoName = ({
         <p className='group-name'>{name}</p>
       </div>
       <div className='address'>{address}</div>
-      <div>
-        <p>{`${lastSeenString}`}</p>
-      </div>
+      <div className='last-seen'>{lastSeenString}</div>
     </div>
   )
 }
