@@ -13,6 +13,7 @@
 - webxdc title is now shown in bold (#2774)
 - remove unessesary deltachat-node files from release package
 - change composer keybindings (shift+enter now always adds a newline and crtl/cmd+enter now always sends regardless of what the enter key is set up to do)
+- update deltachat-node to v1.84.0
 
 ## [1.29.1] - 2022-05-20
 
