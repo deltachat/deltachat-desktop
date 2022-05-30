@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.30.0] - 2022-05-30
+
 ### Added
 - add check for compatible node while installing dependencies (#2724)
 
@@ -1618,7 +1620,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.29.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.30.0...HEAD
+
+[1.30.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.29.1...v1.30.0
 
 [1.29.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.29.0...v1.29.1
 
