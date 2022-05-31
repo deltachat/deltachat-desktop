@@ -367,22 +367,17 @@ const MessagePageComponent = React.memo(
     const messageElements = []
     const messagesOnPage = messagePage.messages.toArray()
 
-    let specialMessageIdCounter = 0
     for (let i = 0; i < messagesOnPage.length; i++) {
       const [messageId, message] = messagesOnPage[i]
-      if (messageId === C.DC_MSG_ID_DAYMARKER) {
-        if (i == messagesOnPage.length - 1) continue // next Message is not on this page, we for now justt skip rendering this daymarker.
-        const [_nextMessageId, nextMessage] = messagesOnPage[i + 1]
-        if (!nextMessage) continue
-        const key = 'magic' + messageId + '_' + specialMessageIdCounter++
-        messageElements.push(
-          <DayMarker key={key} timestamp={nextMessage.timestamp} />
-        )
-      }
       if (message === null || message == undefined) continue
       if (!message) {
         log.debug(`Missing message with id ${messageId}`)
         continue
+      }
+      if (messagePage.dayMarker.indexOf(messageId) !== -1) {
+        messageElements.push(
+          <DayMarker key={`daymarker-${messageId}`} timestamp={message?.timestamp || 0} />
+        )
       }
       messageElements.push(
         <MessageWrapper
