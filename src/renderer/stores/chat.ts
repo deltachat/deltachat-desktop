@@ -113,11 +113,11 @@ async function messagePageFromMessageIndexes(
     for (let i = 0; i < _messages.length; i++) {
       let [messageId, message] = _messages[i]
       if (messageId === C.DC_MSG_ID_DAYMARKER) {
-        if (!_messages[i+1]) {
+        if (!_messages[i + 1]) {
           log.debug(`Had to skip DayMarker, I'm sorry`)
           continue
         }
-        dayMarker.push(_messages[i+1][0])
+        dayMarker.push(_messages[i + 1][0])
         continue
       }
       messagePages.set(messageId, message)
@@ -127,7 +127,7 @@ async function messagePageFromMessageIndexes(
   const messagePage = {
     pageKey: calculatePageKey(messages, indexStart, indexEnd),
     messages,
-    dayMarker
+    dayMarker,
   }
 
   return messagePage
@@ -155,11 +155,11 @@ async function messagePagesFromMessageIndexes(
         if (i >= _messages.length) break
         const [messageId, message] = _messages[i]
         if (messageId === C.DC_MSG_ID_DAYMARKER) {
-          if (!_messages[i+1]) {
+          if (!_messages[i + 1]) {
             log.debug(`Had to skip DayMarker, I'm sorry`)
             continue
           }
-          dayMarker.push(_messages[i+1][0])
+          dayMarker.push(_messages[i + 1][0])
           continue
         }
 
@@ -171,7 +171,7 @@ async function messagePagesFromMessageIndexes(
     const messagePage = {
       pageKey: calculatePageKey(messages, indexStart, indexEnd),
       messages,
-      dayMarker
+      dayMarker,
     }
 
     messagePages.push(messagePage)
@@ -494,7 +494,7 @@ class ChatStore extends Store<ChatStoreState> {
               number,
               MessageType | null
             >,
-            dayMarker: []
+            dayMarker: [],
           },
         ]
         const modifiedState = {

@@ -86,15 +86,12 @@ class MessageInfo extends React.Component<
                 </td>
               </tr>
             ) : null}
-            {this.props.messageId && <tr>
-                <td className='module-message-detail__label'>
-                  messageId
-                </td>
-                <td>
-                  {this.props.messageId}
-                </td>
+            {this.props.messageId && (
+              <tr>
+                <td className='module-message-detail__label'>messageId</td>
+                <td>{this.props.messageId}</td>
               </tr>
-}
+            )}
           </tbody>
         </table>
       </div>
