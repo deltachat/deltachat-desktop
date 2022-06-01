@@ -105,26 +105,21 @@ const ForwardedTitle = (
   const { displayName, color } = contact
 
   return (
-    <div className='forwarded-indicator'>
-      {conversationType.hasMultipleParticipants && direction !== 'outgoing' ? (
-        reactStringReplace(
-          tx('forwarded_by', '$$forwarder$$'),
-          '$$forwarder$$',
-          () => (
-            <span
-              onClick={() => onContactClick(contact)}
-              key='displayname'
-              style={{ color: color }}
-            >
-              {overrideSenderName ? `~${overrideSenderName}` : displayName}
-            </span>
+    <div
+      className='forwarded-indicator'
+      onClick={() => onContactClick(contact)}
+    >
+      {conversationType.hasMultipleParticipants && direction !== 'outgoing'
+        ? reactStringReplace(
+            tx('forwarded_by', '$$forwarder$$'),
+            '$$forwarder$$',
+            () => (
+              <span key='displayname' style={{ color: color }}>
+                {overrideSenderName ? `~${overrideSenderName}` : displayName}
+              </span>
+            )
           )
-        )
-      ) : (
-        <span onClick={() => onContactClick(contact)}>
-          {tx('forwarded_message')}
-        </span>
-      )}
+        : tx('forwarded_message')}
     </div>
   )
 }
