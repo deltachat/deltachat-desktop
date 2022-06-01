@@ -31,8 +31,8 @@ $keybindingKeyBorder: gray;
 $keybindingKeyShadow: rgba(0, 0, 0, 0.35);
 $ovalButtonBg: #415e6b;
 $ovalButtonText: #fff;
-$sideBarAccountBg: #f5f5f5;
-$sideBarAccountEmailText: #01010199;
+$sideBarAccountBg: #fff;
+$sideBarAccountEmailText: black;
 $sideBarAccountIconBg: #fff;
 $textPrimary: #010101;
 $textSecondary: #62656a;
@@ -69,6 +69,10 @@ $scrollbarTransparency: 0.5;
 
   --messageOutgoingBg: var(--messagePadlockOutgoing);
   --messageQuotedText: var(--globalText);
+  
+  --sideBarAccountIconHoverBackground: #fff;
+
+  --settingsIconColor: black;
 }
 
 /* overwrite css */
@@ -181,15 +185,19 @@ $scrollbarTransparency: 0.5;
   display: none;
 }
 
-.info-message p {
-  border-radius: 0px;
-}
-
-.info-message p {
-  font-style: unset;
+.info-message .bubble {
+  display: inline-block;
+  text-align: center;
   font-weight: unset;
-  background-color: unset; 
+  padding: 0px;
+  background-color: unset;
+  border-radius: 0px;
+  opacity: .9;
   color: black;
+  &::before {
+    content: '--';
+    margin-right: 85px;
+  }
 }
 
 .attachment-overlay .attachment-view {
@@ -399,3 +407,40 @@ div.group-image-wrapper div.group-image-edit-button {
 .emoji-container.jumbo {
   font-size: unset;
 }
+
+.sidebar {
+  .account {
+    .displayname {
+      font-weight: normal;
+    }
+    .emailAddress {
+      font-weight: normal;
+    }
+    .quickIcon {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.media-previous-button, .media-next-button {
+  background-color: unset;
+  & > span > svg {
+    fill: black !important; 
+    &:hover {
+      fill: black;
+      cursor: pointer;
+    }
+  }
+}
+.attachment-overlay .btn-wrapper .download-btn {
+  background-color: black;
+  &:hover {
+    background-color: black;
+  }
+}
+.attachment-overlay .bp4-icon>svg {
+  fill: black;
+}
+
