@@ -6,6 +6,10 @@
 
 ### Fixed
 - "New contact" button hidden if contact already exists (#2646)
+- Fix too wide clickable area on forwarded messages @andresmc98 (#2782)
+- Fix button label saying open instead of save in export backup file dialog
+
+
 
 ### Changed
 
