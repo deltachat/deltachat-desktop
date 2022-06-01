@@ -3,16 +3,14 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- Added messageId to MessageDetail dialog
 
 ### Fixed
 - "New contact" button hidden if contact already exists (#2646)
 - Fix too wide clickable area on forwarded messages @andresmc98 (#2782)
 - Fix button label saying open instead of save in export backup file dialog
 
-
-
 ### Changed
-
 
 ## [1.30.0] - 2022-05-30
 

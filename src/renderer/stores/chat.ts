@@ -12,6 +12,7 @@ export const PAGE_SIZE = 11
 export interface MessagePage {
   pageKey: string
   messages: OrderedMap<number, MessageType | null>
+  dayMarker: number[]
 }
 
 type ScrollTo =
@@ -94,6 +95,7 @@ async function messagePageFromMessageIndexes(
     indexStart,
     indexEnd
   )
+
   if (_messages.length === 0) {
     throw new Error(
       'messagePageFromMessageIndexes: _messages.length equals zero. This should not happen'
@@ -106,9 +108,18 @@ async function messagePageFromMessageIndexes(
     )
   }
 
+  const dayMarker: number[] = []
   const messages = OrderedMap().withMutations(messagePages => {
     for (let i = 0; i < _messages.length; i++) {
-      const [messageId, message] = _messages[i]
+      let [messageId, message] = _messages[i]
+      if (messageId === C.DC_MSG_ID_DAYMARKER) {
+        if (!_messages[i + 1]) {
+          log.debug(`Had to skip DayMarker, I'm sorry`)
+          continue
+        }
+        dayMarker.push(_messages[i + 1][0])
+        continue
+      }
       messagePages.set(messageId, message)
     }
   }) as OrderedMap<number, MessageType | null>
@@ -116,6 +127,7 @@ async function messagePageFromMessageIndexes(
   const messagePage = {
     pageKey: calculatePageKey(messages, indexStart, indexEnd),
     messages,
+    dayMarker,
   }
 
   return messagePage
@@ -137,10 +149,20 @@ async function messagePagesFromMessageIndexes(
 
   let currentIndex = 0
   while (currentIndex < _messages.length) {
+    const dayMarker: number[] = []
     const messages = OrderedMap().withMutations(messagePages => {
       for (let i = currentIndex; i < currentIndex + PAGE_SIZE; i++) {
         if (i >= _messages.length) break
         const [messageId, message] = _messages[i]
+        if (messageId === C.DC_MSG_ID_DAYMARKER) {
+          if (!_messages[i + 1]) {
+            log.debug(`Had to skip DayMarker, I'm sorry`)
+            continue
+          }
+          dayMarker.push(_messages[i + 1][0])
+          continue
+        }
+
         messagePages.set(messageId, message)
       }
     }) as OrderedMap<number, MessageType | null>
@@ -149,6 +171,7 @@ async function messagePagesFromMessageIndexes(
     const messagePage = {
       pageKey: calculatePageKey(messages, indexStart, indexEnd),
       messages,
+      dayMarker,
     }
 
     messagePages.push(messagePage)
@@ -471,6 +494,7 @@ class ChatStore extends Store<ChatStoreState> {
               number,
               MessageType | null
             >,
+            dayMarker: [],
           },
         ]
         const modifiedState = {
