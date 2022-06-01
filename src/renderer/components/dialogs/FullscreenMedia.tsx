@@ -42,7 +42,7 @@ export default function FullscreenMedia(props: {
       },
     },
     {
-      label: tx('save-as'),
+      label: tx('save_as'),
       action: onDownload.bind(null, msg),
     },
     {
