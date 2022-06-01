@@ -312,15 +312,17 @@ export default function ChatList(props: {
                   >
                     {ChatListItemRowContact}
                   </ChatListPart>
-                  {chatListIds.length === 0 && queryStrIsValidEmail && (
-                    <div style={{ width: width }}>
-                      <PseudoListItemAddContact
-                        queryStr={queryStr || ''}
-                        queryStrIsEmail={queryStrIsValidEmail}
-                        onClick={addContactOnClick}
-                      />
-                    </div>
-                  )}
+                  {contactIds.length === 0 &&
+                    chatListIds.length === 0 &&
+                    queryStrIsValidEmail && (
+                      <div style={{ width: width }}>
+                        <PseudoListItemAddContact
+                          queryStr={queryStr || ''}
+                          queryStrIsEmail={queryStrIsValidEmail}
+                          onClick={addContactOnClick}
+                        />
+                      </div>
+                    )}
                   <div
                     className='search-result-divider'
                     style={{ width: width }}

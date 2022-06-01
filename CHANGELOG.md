@@ -2,6 +2,14 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+
+### Fixed
+- "New contact" button hidden if contact already exists (#2646)
+
+### Changed
+
+
 ## [1.30.0] - 2022-05-30
 
 ### Added
