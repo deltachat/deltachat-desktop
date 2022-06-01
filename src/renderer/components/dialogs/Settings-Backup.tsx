@@ -59,6 +59,7 @@ function onBackupExport() {
       const opts: OpenDialogOptions = {
         title: tx('export_backup_desktop'),
         defaultPath: runtime.getAppPath('downloads'),
+        buttonLabel: tx('save'),
         properties: ['openDirectory'],
       }
       const destination = await runtime.showOpenFileDialog(opts)
