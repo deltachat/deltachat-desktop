@@ -11,6 +11,7 @@
 - Fix button label saying open instead of save in export backup file dialog
 
 ### Changed
+- Updated minimal theme
 
 ## [1.30.0] - 2022-05-30
 
