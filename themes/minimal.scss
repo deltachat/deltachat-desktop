@@ -55,9 +55,9 @@ $scrollbarTransparency: 0.5;
 
   --chatListItemBgPinned: var(--bgPrimary);
   --chatListItemBgPinnedHover: transparent;
-  --chatListItemSelectedBg: black;
-  --chatListItemSelectedBgHover: var(--chatListItemSelectedBg);
-  --chatListItemSelectedText: white;
+  --chatListItemSelectedBg: white;
+  --chatListItemSelectedBgHover: white;
+  --chatListItemSelectedText: #4343f6;
   --chat-list-item-summary-text: var(--globalText);
   --composerSendButton: var(--scrollbarThumb);
   --navBarText: var(--globalText);
@@ -185,21 +185,6 @@ $scrollbarTransparency: 0.5;
   display: none;
 }
 
-.info-message .bubble {
-  display: inline-block;
-  text-align: center;
-  font-weight: unset;
-  padding: 0px;
-  background-color: unset;
-  border-radius: 0px;
-  opacity: .9;
-  color: black;
-  &::before {
-    content: '--';
-    margin-right: 85px;
-  }
-}
-
 .attachment-overlay .attachment-view {
   background-color: rgba(255, 255, 255, 0.96);
 }
@@ -319,7 +304,7 @@ $scrollbarTransparency: 0.5;
   margin: 0px;
   margin-bottom: 10px;
   text-align: left;
-  color: lightgrey;
+  color: rgb(0 0 0 / 20%);
   p {
     padding: 0px;
     text-transform: capitalize;
@@ -328,6 +313,20 @@ $scrollbarTransparency: 0.5;
     &::before {
       margin-right: calc(#{$AUTHOR_WIDTH} - 8px + #{$AUTHOR_MESSAGE_SPACING});
       content: '--';
+    }
+  }
+  .bubble {
+    display: inline-block;
+    text-align: left;
+    font-weight: unset;
+    padding: 0px;
+    background-color: unset;
+    border-radius: 0px;
+    opacity: .9;
+    color: inherit;
+    &::before {
+      content: '--';
+      margin-right: calc(8vw + 10px);
     }
   }
 }
