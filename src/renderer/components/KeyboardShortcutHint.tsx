@@ -162,22 +162,22 @@ export function enterKeySendsKeyboardShortcuts(
   if (enterKeySends) {
     return [
       {
-        title: tx('desktop_keybindings_action_send_message'),
+        title: tx('send_message'),
         keyBindings: [Enter, CtrlOrMetaEnter],
       },
       {
-        title: tx('desktop_keybindings_action_insert_newline'),
+        title: tx('insert_newline'),
         keyBindings: [ShiftEnter],
       },
     ]
   } else {
     return [
       {
-        title: tx('desktop_keybindings_action_send_message'),
+        title: tx('send_message'),
         keyBindings: [CtrlOrMetaEnter],
       },
       {
-        title: tx('desktop_keybindings_action_insert_newline'),
+        title: tx('insert_newline'),
         keyBindings: [Enter, ShiftEnter],
       },
     ]
@@ -213,34 +213,34 @@ export function getKeybindings(
     // Title(tx('desktop_keybindings_global')),
     ...[
       {
-        title: tx('desktop_keybindings_action_switch_between_chats'),
+        title: tx('switch_between_chats'),
         keyBindings: [
           ['Alt', 'ArrowUp'],
           ['Alt', 'ArrowDown'],
         ],
       },
       {
-        title: tx('desktop_keybindings_action_scroll_messages'),
+        title: tx('scroll_messages'),
         keyBindings: [['PageUp'], ['PageDown']],
       },
       {
-        title: tx('desktop_keybindings_action_jump_to_search'),
+        title: tx('jump_to_search'),
         keyBindings: [['Control', 'K']],
       },
       {
-        title: tx('desktop_keybindings_action_focus_composer'),
+        title: tx('focus_message_input'),
         keyBindings: [['Control', 'N']],
       },
       {
-        title: tx('desktop_keybindings_action_open_help'),
+        title: tx('help'),
         keyBindings: [['F1']],
       },
       {
-        title: tx('desktop_keybindings_action_open_settings'),
+        title: tx('settings'),
         keyBindings: [['Control', ','], isMac && ['Meta', ',']],
       },
       {
-        title: tx('desktop_keybindings_action_force_refresh_network'),
+        title: tx('force_refresh_network'),
         keyBindings: [['F5']],
       },
     ].map(Shortcut),

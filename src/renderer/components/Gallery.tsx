@@ -117,7 +117,7 @@ export default class Gallery extends Component<
                   aria-selected={this.state.id === id}
                   onClick={() => this.onSelect(id)}
                 >
-                  {tx(id)}
+                  {id === 'webxdc' ? 'webxdc' : tx(id)}
                 </li>
               )
             })}
