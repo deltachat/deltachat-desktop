@@ -31,6 +31,8 @@
     <string name="back">Terug</string>
     <string name="close">Sluiten</string>
     <string name="forward">Doorsturen</string>
+    <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
+    <string name="resend">Opnieuw versturen</string>
     <!-- In the meaning of "To archive", "Put a chat to the archive". This string does not mean "The Archive". -->
     <string name="archive">Archiveren</string>
     <!-- In the meaning of "To unarchive", "Remove a chat from the archive", opposite of the previous string -->
@@ -44,8 +46,8 @@
     <string name="profile">Profiel</string>
     <string name="main_menu">Hoofdmenu</string>
     <string name="start_chat">Gesprek beginnen</string>
-    <string name="show_full_message">Volledige bericht tonen…</string>
-    <string name="show_full_message_in_browser">Volledige bericht in browser tonen…</string>
+    <string name="show_full_message">Volledig bericht tonen…</string>
+    <string name="show_full_message_in_browser">Volledig bericht in browser tonen…</string>
     <!-- this is shown as placeholder when something is loading at some places -->
     <string name="loading">Bezig met laden…</string>
     <string name="hide">Verbergen</string>
@@ -149,7 +151,6 @@
     <string name="file">Bestand</string>
     <string name="files">Bestanden</string>
     <string name="unknown">Onbekend</string>
-
     <string name="green">Groen</string>
     <string name="red">Rood</string>
     <string name="blue">Blauw</string>
@@ -256,6 +257,7 @@
     <string name="unpin">Losmaken</string>
     <string name="ConversationFragment_quoted_message_not_found">Geen oorspronkelijk bericht gevonden</string>
     <string name="reply_privately">Privé beantwoorden</string>
+    <string name="source_code">Broncode</string>
 
     <string name="mute_for_one_hour">1 uur lang uitschakelen</string>
     <string name="mute_for_two_hours">2 uur lang uitschakelen</string>
@@ -434,7 +436,6 @@
     <string name="media_preview">Mediavoorbeeld</string>
     <string name="send_message">Bericht versturen</string>
 
-
     <!-- Connectivity -->
     <!-- Used as a headline for the "Inbox" eg. in the "Connectivity" view -->
     <string name="incoming_messages">Inkomende berichten</string>
@@ -461,6 +462,8 @@
 
 
     <!-- welcome and login -->
+    <string name="welcome_chat_over_email">Chatten via e-mail.</string>
+    <string name="scan_invitation_code">Uitnodigingscode scannen</string>
     <string name="welcome_intro1_message">Dé berichtenapp met het breedste publiek ter wereld. Gratis en onafhankelijk.</string>
     <string name="login_title">Inloggen</string>
     <string name="login_header">Inloggen op je server</string>
@@ -889,10 +892,33 @@
     <string name="a11y_background_preview_label">Achtergrondvoorbeeld</string>
     <string name="a11y_disappearing_messages_activated">Verdwijnende berichten zijn ingeschakeld</string>
 
-
+    <!-- iOS specific strings, developers: please take care to remove strings that are no longer used! -->
+    <string name="stop_sharing_location">Stop locatiedeling</string>
+    <string name="a11y_voice_message_hint_ios">Dubbeltik op de opname om hem te versturen. Veeg met twee vingers van links naar rechts om de opname af te breken.</string>
+    <string name="a11y_connectivity_hint">Dubbeltik om de verbindingsinformatie te bekijken.</string>
+    <string name="login_error_no_internet_connection">Het inloggen is mislukt omdat er geen internetverbinding is.</string>
+    <string name="share_account_not_configured">Dit account is niet ingesteld.</string>
+    <string name="cannot_play_audio_file">Dit audiobestand kan niet worden afgespeeld.</string>
+    <!-- iOS camera permission alert -->
+    <string name="perm_ios_explain_access_to_camera_denied">Voor het maken van foto\'s, opnemen van video\'s en gebruik van de QR-codescanner is cameratoegang vereist. Open de systeeminstellingen en verleen deze toegang.</string>
+    <string name="open_settings">Open instellingen</string>
+    <!-- iOS device contact alert -->
+    <string name="import_device_contacts">Importeer lokale contactpersonen</string>
+    <string name="import_device_contacts_hint">Voor het voeren van gesprekken met lokale contactpersonen is contactpersoontoegang vereist. Open de systeeminstellingen en verleen deze toegang.</string>
+    <!-- iOS notification settings -->
+    <string name="disabled_in_dc">Uitgenschakeld in Delta Chat</string>
+    <string name="disabled_in_system_settings">Uitgeschakeld in systeeminstellingen</string>
+    <string name="bg_app_refresh_disabled">App op de achtergrond vernieuwen is uitgeschakeld in de systeeminstellingen</string>
+    <!-- iOS connectivity view -->
+    <string name="delayed">Vertraagd</string>
+    <string name="notifications_avg_minutes">Gemiddeld elke %1$d minuten</string>
+    <string name="notifications_avg_hours">Gemiddeld elke %1$d uur</string>
+    <string name="last_check_at">Gecontroleerd om %1$s</string>
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Geef Delta Chat toegang tot je camera om foto\'s en video\'s te maken en QR-codes te scannen.</string>
     <string name="InfoPlist_NSContactsUsageDescription">Geef Delta Chat toegang tot je adresboek om gesprekken te voeren met contactpersonen. Delta Chat heeft geen servers, dus ze worden niet aan ons opgestuurd.</string>
+    <string name="InfoPlist_NSLocationAlwaysAndWhenInUseUsageDescription">Delta Chat heeft het locatietoegangsrecht nodig om je locatie te tonen en delen voor de door jou aangegeven duur.</string>
+    <string name="InfoPlist_NSLocationWhenInUseUsageDescription">Delta Chat heeft het locatietoegangsrecht nodig om je locatie te tonen en delen voor de door jou aangegeven duur.</string>
     <string name="InfoPlist_NSMicrophoneUsageDescription">Geef Delta Chat toegang tot je microfoon om audio op te nemen voor spraakberichten en video\'s.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Geef Delta Chat toegang tot je foto\'s om afbeeldingen te versturen.</string>
     <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">Delta Chat wil afbeeldingen opslaan in je fotogalerij.</string>
@@ -910,10 +936,8 @@
 
 
     <!-- device messages for updates -->
-    <string name="update_1_24_android">1.24 samengevat:\n\n• Bespaar moeite: accountkeuze zit nu links bovenaan de gesprekslijst\n• Bespaar nóg meer moeite: houd het app-pictogram lang ingedrukt om recente gesprekken direct te openen\n• Bespaar data: download grote bestanden alléén indien nodig\n• Bespaar frustratie: snellere, niet-in-de-weg-zittende QR-codes en nieuwe QR-code-opties\n\nMeer informatie is te vinden op 👉</string>
-    <string name="update_1_24_ios">1.24 samengevat:\n\n• Doorzoek gesprekken vanuit profielen\n• Bespaar data: download grote bestanden alléén indien nodig\n• Bespaar frustratie: snellere, niet-in-de-weg-zittende QR-codes en nieuwe QR-code-opties\n\nMeer informatie 👉</string>
-    <string name="update_1_26">1.26 oppoetsen 💅\n\n• Sinds 1.24 zitten QR-codes niet langer in de weg, maar sinds deze versie zien ze er ook nog eens beter uit - op alle ondersteunde systemen!\n• Profielfoto\'s en tellers zien er nu overal hetzelfde uit\n• Heel veel bugs opgelost</string>
     <string name="update_1_28_android">1.28 Uitgelicht:\n\n🔒 Versleuteling: er is een nieuwe, experimentele optie beschikbaar voor het versleutelen van je contactpersonen, inloggegevens en tekstberichten op je apparaat zelf. Let op: deze optie is alléén beschikbaar tijdens het toevoegen van een account en het importeren van back-upbestanden.\n\n📫 Schrijf berichten aan een mailinglijst\n\n💫 Snellere initiële instelmethode voor meer e-mailservers en vereenvoudigde netwerkopties om onopzettelijke instellingen te voorkomen\n\n🐜 Héél véél gemelde problemen opgelost!</string>
     <string name="update_1_28_ios_extra_line">…en je kunt voortaan een achtergrond kiezen via ‘Instellingen → Achtergrond’. :)</string>
+    <string name="update_1_30">Sneller en stabieler. Dát zijn de kernpunten van versie 1.30.\n\n We hebben ruim 15 bugs opgelost. Neem het wijzigingslog door om te zien of er eentje tussenstaat waar je last van had: https://get.delta.chat/#changelogs 🚀</string>
 
 </resources>

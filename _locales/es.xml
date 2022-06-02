@@ -31,6 +31,8 @@
     <string name="back">Atrás</string>
     <string name="close">Cerrar</string>
     <string name="forward">Reenviar</string>
+    <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
+    <string name="resend">Enviar de nuevo</string>
     <!-- In the meaning of "To archive", "Put a chat to the archive". This string does not mean "The Archive". -->
     <string name="archive">Archivar</string>
     <!-- In the meaning of "To unarchive", "Remove a chat from the archive", opposite of the previous string -->
@@ -91,31 +93,38 @@
     <!-- Translators: show beside messages that are "N minutes old". prefer a short string, prefer abbreviations if they're well-known -->
     <plurals name="n_minutes">
         <item quantity="one">%d min</item>
+        <item quantity="many">%d min</item>
         <item quantity="other">%d min</item>
     </plurals>
     <!-- Translators: show beside messages that are "N hours old". prefer a short string, prefer abbreviations if they're well-known -->
     <plurals name="n_hours">
         <item quantity="one">%d hora</item>
+        <item quantity="many">%d horas</item>
         <item quantity="other">%d horas</item>
     </plurals>
     <plurals name="n_chats">
         <item quantity="one">%d chat</item>
+        <item quantity="many">%d chats</item>
         <item quantity="other">%d chats</item>
     </plurals>
     <plurals name="n_contacts">
         <item quantity="one">%d contacto</item>
+        <item quantity="many">%d contactos</item>
         <item quantity="other">%d contactos</item>
     </plurals>
     <plurals name="n_messages">
         <item quantity="one">%d mensaje</item>
+        <item quantity="many">%d mensajes</item>
         <item quantity="other">%d mensajes</item>
     </plurals>
     <plurals name="n_members">
         <item quantity="one">%d miembro</item>
+        <item quantity="many">%d miembros</item>
         <item quantity="other">%d miembros</item>
     </plurals>
     <plurals name="n_recipients">
         <item quantity="one">%d destinatario</item>
+        <item quantity="many">%d destinatarios</item>
         <item quantity="other">%d destinatarios</item>
     </plurals>
 
@@ -149,7 +158,6 @@
     <string name="file">Archivo</string>
     <string name="files">Archivos</string>
     <string name="unknown">Desconocido</string>
-
     <string name="green">Verde</string>
     <string name="red">Rojo</string>
     <string name="blue">Azul</string>
@@ -256,7 +264,6 @@
     <string name="unpin">Desanclar</string>
     <string name="ConversationFragment_quoted_message_not_found">Mensaje original no encontrado</string>
     <string name="reply_privately">Responder en privado</string>
-
     <string name="mute_for_one_hour">Silenciar por 1 hora</string>
     <string name="mute_for_two_hours">Silenciar por 2 horas</string>
     <string name="mute_for_one_day">Silenciar por 1 día</string>
@@ -271,6 +278,7 @@
 
     <plurals name="ask_send_following_n_files_to">
         <item quantity="one">¿Enviar el  archivo a %s?</item>
+        <item quantity="many">¿Enviar los siguientes %d archivos a %s?</item>
         <item quantity="other">¿Enviar los siguientes %d archivos a %s?</item>
     </plurals>
     <string name="file_saved_to">Archivo guardado en \"%1$s\".</string>
@@ -293,15 +301,18 @@
     <string name="ask_leave_group">¿Seguro que deseas abandonar este grupo? </string>
     <plurals name="ask_delete_chat">
         <item quantity="one">¿Eliminar %d chat? No volverá a ser mostrado en la lista de chats, pero sus mensajes permanecerán en el servidor.</item>
+        <item quantity="many">¿Eliminar %d chats? No volverán a ser mostrados en la lista de chats, pero sus mensajes permanecerán en el servidor.</item>
         <item quantity="other">¿Eliminar %d chats? No volverán a ser mostrados en la lista de chats, pero sus mensajes permanecerán en el servidor.</item>
     </plurals>
     <string name="ask_delete_message">¿Seguro que quieres borrar este mensaje?</string>
     <plurals name="ask_delete_messages">
         <item quantity="one">¿Eliminar %d mensaje aquí y en el servidor?</item>
+        <item quantity="many">¿Eliminar %d mensajes aquí y en el servidor?</item>
         <item quantity="other">¿Eliminar %d mensajes aquí y en el servidor?</item>
     </plurals>
     <plurals name="ask_delete_messages_simple">
         <item quantity="one">¿Eliminar %d mensaje?</item>
+        <item quantity="many">¿Eliminar %d mensajes?</item>
         <item quantity="other">¿Eliminar %d mensajes?</item>
     </plurals>
     <string name="ask_forward">¿Reenviar mensajes a %1$s?</string>
@@ -331,10 +342,12 @@
     <!-- chatlist and chat view -->
     <plurals name="chat_archived">
         <item quantity="one">%d chat archivado</item>
+        <item quantity="many">%d chats archivados</item>
         <item quantity="other">%d chats archivados</item>
     </plurals>
     <plurals name="chat_unarchived">
         <item quantity="one">%d chat des-archivado</item>
+        <item quantity="many">%d chats des-archivados</item>
         <item quantity="other">%d chats des-archivados</item>
     </plurals>
     <string name="chat_archived_chats_title">Chats archivados</string>
@@ -343,6 +356,7 @@
     <string name="chat_unable_to_record_audio">No es posible grabar audio.</string>
     <plurals name="chat_n_new_messages">
         <item quantity="one">%d nuevo mensaje</item>
+        <item quantity="many">%d nuevos mensajes</item>
         <item quantity="other">%d nuevos mensajes</item>
     </plurals>
     <!-- The placeholder will be replaced by the name of the recipient in a one-to-one chat. -->
@@ -434,7 +448,6 @@
     <string name="media_preview">Vista previa de multimedia</string>
     <string name="send_message">Enviar mensaje</string>
 
-
     <!-- Connectivity -->
     <!-- Used as a headline for the "Inbox" eg. in the "Connectivity" view -->
     <string name="incoming_messages">Mensajes entrantes</string>
@@ -461,6 +474,8 @@
 
 
     <!-- welcome and login -->
+    <string name="welcome_chat_over_email">Charla por correo electrónico.</string>
+    <string name="scan_invitation_code">Escanear código de invitación</string>
     <string name="welcome_intro1_message">La aplicación de mensajería instantánea con la audiencia más amplia del mundo. Libre e independiente. </string>
     <string name="login_title">Iniciar sesión</string>
     <string name="login_header">Inicie sesión en su servidor</string>
@@ -889,7 +904,18 @@
     <string name="a11y_background_preview_label">Previsualización del fondo</string>
     <string name="a11y_disappearing_messages_activated">Desaparición de mensajes activada</string>
 
-
+    <!-- iOS specific strings, developers: please take care to remove strings that are no longer used! -->
+    <string name="stop_sharing_location">Dejar de compartir ubicación</string>
+    <string name="a11y_voice_message_hint_ios">Después de grabar, toque dos veces para enviar. Para descartar la grabación, deslice de izquierda a derecha con dos dedos.</string>
+    <string name="login_error_no_internet_connection">No hay conexión a Internet, el inicio de sesión falló.</string>
+    <string name="share_account_not_configured">La cuenta no está configurada.</string>
+    <string name="cannot_play_audio_file">El archivo de audio no se puede reproducir.</string>
+    <string name="open_settings">Abrir configuración</string>
+    <!-- iOS device contact alert -->
+    <string name="import_device_contacts">Importar contactos del dispositivo</string>
+    <!-- iOS notification settings -->
+    <string name="disabled_in_dc">Deshabilitado en Delta Chat</string>
+    <string name="disabled_in_system_settings">Deshabilitado en la configuración del sistema</string>
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Al permitir el acceso a la cámara podrás tomar fotos y videos.</string>
     <string name="InfoPlist_NSContactsUsageDescription">Al permitir acceder a tu libreta de direcciones podrás chatear con los contactos de tu dispositivo.</string>
@@ -910,10 +936,8 @@
 
 
     <!-- device messages for updates -->
-    <string name="update_1_24_android">1.24 de forma resumida:\n\n• Ahorre toques: Selección de cuenta en la esquina superior izquierda de la lista de chats\n• Ahorre más toques: Mantenga presionado el ícono de la aplicación para abrir los chats recientes directamente\n• Ahorre tráfico: Descargue archivos grandes según sea necesario\n• Ahorre tiempo: invitación de códigos QR más rápidas, sin bloqueo y nuevas opciones de códigos QR\n\nMás en 👉</string>
-    <string name="update_1_24_ios">1.24 de forma resumida:\n\n• Inicie una búsqueda en el chat desde el perfil del chat\n• Ahorre tráfico: Descargue archivos grandes según sea necesario\n• Ahorre tiempo: invitación de códigos QR más rápidas y sin bloqueo\n\nMás en 👉</string>
-    <string name="update_1_26">1.26 pulido 💅\n\n• Después de hacer que los códigos QR funcionen más rápido en 1.24, también se ven mucho mejor ahora, en todas las plataformas\n• Los avatares y las insignias tienen un aspecto similar en todas las plataformas\n• Se corrigieron muchos errores</string>
     <string name="update_1_28_android">1.28 Aspectos destacados:\n\n🔒 Cifrado: una nueva opción experimental para mantener sus contactos, secretos de cifrado y mensajes de texto cifrados en su dispositivo. Solo disponible en la creación de cuentas e importación de archivos de copia de seguridad.\n\n📫 Escribir en listas de correo\n\n💫 Configuración inicial más rápida para más servidores de correo electrónico y opciones de red optimizadas para evitar errores de configuración accidentales\n\n🐜 Se corrigieron muuuuuchos problemas informados por los usuarios</string>
     <string name="update_1_28_ios_extra_line">… y puedes seleccionar un fondo de pantalla en \"Configuración / Fondo\" ahora :)</string>
+    <string name="update_1_30">Más rápido. Más estable.\n\nPara las versiones 1.30, nos enfocamos en la velocidad y la confiabilidad, solucionando docenas de errores. Consulte nuestros registros de cambios para ver si su favorito está arreglado: https://get.delta.chat/#changelogs 🚀</string>
 
 </resources>

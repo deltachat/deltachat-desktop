@@ -31,6 +31,8 @@
     <string name="back">Atrás</string>
     <string name="close">Pechar</string>
     <string name="forward">Reenviar</string>
+    <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
+    <string name="resend">Reenviar</string>
     <!-- In the meaning of "To archive", "Put a chat to the archive". This string does not mean "The Archive". -->
     <string name="archive">Arquivar</string>
     <!-- In the meaning of "To unarchive", "Remove a chat from the archive", opposite of the previous string -->
@@ -149,7 +151,6 @@
     <string name="file">Ficheiro</string>
     <string name="files">Ficheiros</string>
     <string name="unknown">Descoñecido</string>
-
     <string name="green">Verde</string>
     <string name="red">Vermello</string>
     <string name="blue">Azul</string>
@@ -256,6 +257,7 @@
     <string name="unpin">Desafixar</string>
     <string name="ConversationFragment_quoted_message_not_found">Non se atopa a mensaxe orixinal</string>
     <string name="reply_privately">Responder de xeito privado</string>
+    <string name="source_code">Código Fonte</string>
 
     <string name="mute_for_one_hour">Acalar durante 1 h.</string>
     <string name="mute_for_two_hours">Acalar durante 2 h.</string>
@@ -434,7 +436,6 @@
     <string name="media_preview">Vista previa dos medios</string>
     <string name="send_message">Enviar mensaxe</string>
 
-
     <!-- Connectivity -->
     <!-- Used as a headline for the "Inbox" eg. in the "Connectivity" view -->
     <string name="incoming_messages">Mensaxes entrantes</string>
@@ -461,19 +462,21 @@
 
 
     <!-- welcome and login -->
+    <string name="welcome_chat_over_email">Chat a través de Email.</string>
+    <string name="scan_invitation_code">Escanear código de convite</string>
     <string name="welcome_intro1_message">O sistema de conversa con maior audiencia no mundo. Libre e independente.</string>
-    <string name="login_title">Conectar</string>
-    <string name="login_header">Conecta co teu servidor</string>
-    <string name="login_explain">Conecta cunha conta de correo existente</string>
+    <string name="login_title">Acceder</string>
+    <string name="login_header">Accede ao teu servidor</string>
+    <string name="login_explain">Accede cunha conta de correo existente</string>
     <string name="login_subheader">Para os provedores de correo máis frecuentes os axustes establécense automaticamente. Porén poderías ter que activar IMAP nos seus axustes. Consulta o teu provedor de correo ou aos amigos se tes dúbidas.</string>
     <string name="login_no_servers_hint">Non hai servidores Delta Chat, os teus datos permanecen no dispositivo.</string>
     <string name="login_inbox">Entrada</string>
-    <string name="login_imap_login">nome usuario IMAP</string>
+    <string name="login_imap_login">identificador IMAP</string>
     <string name="login_imap_server">Servidor IMAP</string>
     <string name="login_imap_port">Porto IMAP</string>
     <string name="login_imap_security">Seguridade IMAP</string>
     <string name="login_outbox">Saída</string>
-    <string name="login_smtp_login">nome usuario SMTP</string>
+    <string name="login_smtp_login">identificador SMTP</string>
     <string name="login_smtp_password">Contrasinal SMTP</string>
     <string name="login_smtp_server">Servidor SMTP</string>
     <string name="login_smtp_port">Porto SMTP</string>
@@ -499,7 +502,7 @@
     <string name="import_backup_ask">Atopouse un respaldo en \"%1$s\".\n\nQueres importar e utilizar os seus datos e axustes?</string>
     <string name="import_backup_no_backup_found">Non se atoparon respaldos.\n\nCopia o respaldo a \"%1$s\" e inténtao outra vez. Alternativamente, podes premer \"Comezar conversa\" e continuar co proceso normal de axustes.</string>
     <!-- Translators: %1$s will be replaced by the e-mail address -->
-    <string name="login_error_cannot_login">Non se puido conectar como \"%1$s\". Comproba o enderezo de correo e o contrasinal.</string>
+    <string name="login_error_cannot_login">Non se puido acceder como \"%1$s\". Comproba o enderezo de correo e o contrasinal.</string>
     <!-- TLS certificate checks -->
     <string name="accept_invalid_certificates">Aceptar certificados non válidos</string>
     <string name="used_settings">Axustes utilizados:</string>
@@ -769,9 +772,9 @@
     <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and address eg. "Scan to chat with Alice (alice@example.org)" -->
     <string name="qrshow_join_contact_hint">Escanea esto para conectar con %1$s-</string>
     <string name="qrshow_join_contact_no_connection_toast">Sen conexión a internet, non se pode facer o axuste por código QR</string>
-    <string name="qraccount_ask_create_and_login">Crear un novo enderezo de correo en \"%1$s\" e conectar ali?</string>
-    <string name="qraccount_ask_create_and_login_another">Crear un novo enderezo de email en \"%1$s\" e conectarte?\n\nNon se eliminará a conta actual. Usa \"Cambiar de conta\" para cambiar entre as túas contas.</string>
-    <string name="qraccount_success_enter_name">Conexión correcta—o teu enderezo é %1$s\n\nSe queres, agora podes escribir un nome e unha imaxe de avatar que será mostrado as persoas coas que te comunicas.</string>
+    <string name="qraccount_ask_create_and_login">Crear un novo enderezo de correo en \"%1$s\" e acceder ali?</string>
+    <string name="qraccount_ask_create_and_login_another">Crear un novo enderezo de email en \"%1$s\" e acceder?\n\nNon se eliminará a conta actual. Usa \"Cambiar de conta\" para cambiar entre as túas contas.</string>
+    <string name="qraccount_success_enter_name">Conexión correcta—o teu enderezo é %1$s\n\nSe queres, agora podes escribir un nome e unha imaxe de avatar que será mostrado ás persoas coas que te comunicas.</string>
     <string name="qraccount_qr_code_cannot_be_used">O código QR escaneado non se pode utilizar para crear unha nova conta.</string>
     <string name="qraccount_use_on_new_install">O código QR escaneado é para crear unha nova conta. Podes escanear o código QR cando configures unha nova instalación de Delta Chat.</string>
     <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
@@ -889,10 +892,33 @@
     <string name="a11y_background_preview_label">Vista previa do fondo</string>
     <string name="a11y_disappearing_messages_activated">Activada a desaparición de mensaxes</string>
 
-
+    <!-- iOS specific strings, developers: please take care to remove strings that are no longer used! -->
+    <string name="stop_sharing_location">Deixar de compartir localización</string>
+    <string name="a11y_voice_message_hint_ios">Tras gravar, dobre toque para enviar. Para desbotar a gravación, rabuña con dous dedos.</string>
+    <string name="a11y_connectivity_hint">Dobre toque para ver detalles da conectividade.</string>
+    <string name="login_error_no_internet_connection">Sen conexión a internet, fallou o acceso.</string>
+    <string name="share_account_not_configured">A conta non está configurada.</string>
+    <string name="cannot_play_audio_file">Non se pode reproducir o ficheiro de audio.</string>
+    <!-- iOS camera permission alert -->
+    <string name="perm_ios_explain_access_to_camera_denied">Para facer fotos, vídeos ou usar o escáner de Códigos-QR, abre os axustes do sistema e activa \"Cámara\".</string>
+    <string name="open_settings">Abrir Axustes</string>
+    <!-- iOS device contact alert -->
+    <string name="import_device_contacts">Importar contactos desde o dispositivo</string>
+    <string name="import_device_contacts_hint">Para conversar con contactos do teu dispositivo abre os Axustes e activa \"Contactos\".</string>
+    <!-- iOS notification settings -->
+    <string name="disabled_in_dc">Desactivado en Delta Chat</string>
+    <string name="disabled_in_system_settings">Desactivado nos axustes do sistema</string>
+    <string name="bg_app_refresh_disabled">\"Actualización en segundo plano da app\" desactivado nos axustes do sistema</string>
+    <!-- iOS connectivity view -->
+    <string name="delayed">Con retraso</string>
+    <string name="notifications_avg_minutes">De media cada %1$d minutos</string>
+    <string name="notifications_avg_hours">De media cada %1$d horas</string>
+    <string name="last_check_at">Comprobado en %1$s</string>
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Conceder acceso a cámara permíteche tomar fotos e vídeos.</string>
     <string name="InfoPlist_NSContactsUsageDescription">Permitir o acceso a libreta de enderezos permíteche conversar con contactos do dispositivo.</string>
+    <string name="InfoPlist_NSLocationAlwaysAndWhenInUseUsageDescription">Delta Chat precisa o permiso de localización para poder compartir a túa localización durante o tempo indicado na compartición da localización.</string>
+    <string name="InfoPlist_NSLocationWhenInUseUsageDescription">Delta Chat precisa o permiso de localización para poder compartir a túa localización durante o tempo indicado na compartición da localización.</string>
     <string name="InfoPlist_NSMicrophoneUsageDescription">Permitindo o acceso ao micrófono poderás gravar audio.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Permitindo o acceso a galería de fotos poderás subir imaxes desde ela.</string>
     <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">Delta Chat quere gardar imaxes na galería de fotos.</string>
@@ -910,10 +936,8 @@
 
 
     <!-- device messages for updates -->
-    <string name="update_1_24_android">1.24 dunha ollada:\n\n• Aforra toques: Selección de conta no canto superior esquerdo na lista de chats\n• Aforra máis toques: Presión longa na icona da app para abrir chats recentes\n• Aforra datos: Descarga ficheiros grandes baixo demanda\n• Por tranquilidade: únete con códigos QR sen bloqueos e máis rápido e novas opcións para os códigos QR\n\nMáis en 👉</string>
-    <string name="update_1_24_ios">1.24 dunha ollada:\n\n• Fai unha busca no chat desde o perfil do chat\n• Aforra datos: Descarga ficheiros grandes baixo demanda\n• Por tranquilidade: únete con códigos QR sen bloqueo e máis rápido\n\nMáis en 👉</string>
-    <string name="update_1_26">1.26 embelecido 💅\n\n• Tras facer que os códigos QR non bloqueasen a 1.24, agora son moito máis bonitos - en tódalas plataformas\n• Os avatares e insignias teñen aspecto máis homoxéneo en tódalas plataformas\n• Arranxamos moitos pequenos fallos</string>
     <string name="update_1_28_android">Destacado en 1.28:\n\n🔒 Cifrado: unha nova opción experimental para gardar contactos, chaves de cifrado e mensaxes de texto cifrados no teu dispositivo. Só dispoñible cando creas a conta e importas ficheiros de copia de apoio.\n\n📫 Escribir a listas de correo\n\n💫 Configuración inicial máis rápida para servidores de email e opcións de rede simplificadas para evitar problemas de configuración\n\n🐜Mais un looooote de problemiñas que as usuarias nos comentaron</string>
     <string name="update_1_28_ios_extra_line">...e podes elexir o tapiz en \"Axustes / Fondo\" :)</string>
+    <string name="update_1_30">Máis rápido. Máis estable.\n\nNa versión 1.30 poñemos o foco na velocidade e fiabilidade, arranxando dúcias de problemiñas. Mira o rexistro de cambios se algún que ti vises foi arranxado: https://get.delta.chat/#changelogs 🚀</string>
 
 </resources>

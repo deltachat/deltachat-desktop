@@ -104,7 +104,6 @@
     <string name="gallery">Galerio</string>
     <string name="file">Dosiero</string>
     <string name="unknown">Nekonata</string>
-
     <string name="green">Verda</string>
     <string name="red">Ruĝa</string>
     <string name="blue">Blua</string>
@@ -269,7 +268,6 @@
     <string name="tab_map">Mapo</string>
     <string name="media_preview">Aŭdvida antaŭrigardo</string>
     <string name="send_message">Sendi mesaĝon</string>
-
 
     <string name="login_title">Ensaluti</string>
     <string name="login_header">Ensaluti al via servilo</string>

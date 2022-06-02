@@ -121,7 +121,6 @@
     <string name="file">پەڕگە</string>
     <string name="files">پەڕگەکان</string>
     <string name="unknown">نەناسراو</string>
-
     <string name="green">سەوز</string>
     <string name="red">سوور</string>
     <string name="blue">شین</string>
@@ -208,7 +207,6 @@
     <string name="unpin">دەرزیلە لابە</string>
     <string name="ConversationFragment_quoted_message_not_found">پەیامە ڕەسەنەکە نەدۆزرایەوە</string>
     <string name="reply_privately">وەڵامدانەوەی نهێنی</string>
-
     <string name="mute_for_one_hour">بێدەنگ کردن بۆ ماوەی 1 کاتژمێر</string>
     <string name="mute_for_two_hours">بێدەنگ کردن بۆ ماوەی 2 کاتژمێر</string>
     <string name="mute_for_one_day">بێدەنگ کردن بۆ ماوەی 1 ڕۆژ</string>
@@ -343,7 +341,6 @@
     <string name="tab_docs_empty_hint">بەڵگە و مۆسیقا و هەموو پەڕگە هاوبەشکراوەکانی نێو ئەم وتووێژە، لێرەدا پیشان دەدرێن.</string>
     <string name="media_preview">پێشدیتنی ڕەنگاڵە</string>
     <string name="send_message">پەیام بنێرە</string>
-
 
     <string name="login_title">بچۆ ژوورەوە</string>
     <string name="login_header">بچۆ ژوورەوە بۆ سێرڤێرەکەی خۆت</string>
@@ -633,7 +630,6 @@
     <string name="a11y_delivery_status_invalid">دۆخی گەیشتن ناڕەوایە</string>
     <string name="a11y_message_context_menu_btn_label">چالاکییەکانی پەیام</string>
     <string name="a11y_disappearing_messages_activated">پەیامە خۆشارەوەکان چالاک کرا</string>
-
 
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">دێڵتا چات بۆ گرتن و هەناردنی وێنە و فلیم و سکان کردنی کۆدی QR، کامێراکەت بەکاردەهێنێت.</string>

@@ -31,6 +31,8 @@
     <string name="back">Back</string>
     <string name="close">Close</string>
     <string name="forward">Forward</string>
+    <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
+    <string name="resend">Resend</string>
     <!-- In the meaning of "To archive", "Put a chat to the archive". This string does not mean "The Archive". -->
     <string name="archive">Archive</string>
     <!-- In the meaning of "To unarchive", "Remove a chat from the archive", opposite of the previous string -->
@@ -149,6 +151,8 @@
     <string name="file">File</string>
     <string name="files">Files</string>
     <string name="unknown">Unknown</string>
+    <string name="version">Version</string>
+    <string name="about">About</string>
 
     <string name="green">Green</string>
     <string name="red">Red</string>
@@ -256,6 +260,7 @@
     <string name="unpin">Unpin</string>
     <string name="ConversationFragment_quoted_message_not_found">Original message not found</string>
     <string name="reply_privately">Reply Privately</string>
+    <string name="source_code">Source Code</string>
 
     <string name="mute_for_one_hour">Mute for 1 hour</string>
     <string name="mute_for_two_hours">Mute for 2 hours</string>
@@ -284,7 +289,9 @@
     <string name="videochat_tap_to_open">Tap to Open</string>
     <string name="videochat_instance">Video Chat Instance</string>
     <string name="videochat_instance_placeholder">Your Video Chat Instance</string>
+    <string name="videochat_instance_example">Examples: https://meet.jit.si/$ROOM or basicwebrtc:https://your-server</string>
     <string name="videochat_instance_explain">If a video chat instance is defined, you can start a video chat from each chat. Video chats require a compatible app or a compatible browser on both ends.\n\nExamples: https://meet.jit.si/$ROOM or basicwebrtc:https://your-server</string>
+    <string name="videochat_instance_explain_2">If video chat is enabled, you can start a video chat from each chat. Video chats require a compatible app or a compatible browser on both ends.</string>
     <string name="videochat_instance_from_qr">Use \"%1$s\" to invite others to video chats?\n\nOnce set, you can start a video chat from each chat. This will replace the previous setting for video chats, if any.</string>
     <string name="videochat_invitation">Video chat invitation</string>
     <string name="videochat_invitation_body">You are invited to a video chat, click %1$s to join.</string>
@@ -365,6 +372,7 @@
     <string name="saved_messages_explain">• Forward messages here for easy access\n\n• Take notes or voice memos\n\n• Attach media to save them</string>
     <!-- this "Saved" should match the "Saved" from "Saved messages" -->
     <string name="saved">Saved</string>
+    <string name="save_as">Save As</string>
     <string name="retry_send">Retry to send message</string>
     <!-- reasons for a disabled message composer -->
     <string name="messaging_disabled_not_in_group">You cannot write because you are not in this group. To join, ask another member.</string>
@@ -431,9 +439,12 @@
     <string name="tab_map">Map</string>
     <string name="tab_gallery_empty_hint">Images and videos shared in this chat will be displayed here.</string>
     <string name="tab_docs_empty_hint">Documents, music and other files shared in this chat will be displayed here.</string>
+    <string name="tab_image_empty_hint">Images shared in this chat will be displayed here.</string>
+    <string name="tab_video_empty_hint">Videos shared in this chat will be displayed here.</string>
+    <string name="tab_audio_empty_hint">Audio Files and Voice Messages shared in this chat will be displayed here.</string>
+    <string name="tab_webxdc_empty_hint">Webxdc content shared in this chat will be displayed here.</string>
     <string name="media_preview">Media Preview</string>
     <string name="send_message">Send Message</string>
-
 
     <!-- Connectivity -->
     <!-- Used as a headline for the "Inbox" eg. in the "Connectivity" view -->
@@ -461,9 +472,11 @@
 
 
     <!-- welcome and login -->
+    <string name="welcome_chat_over_email">Chat over E-Mail.</string>
+    <string name="scan_invitation_code">Scan Invitation Code</string>
     <string name="welcome_intro1_message">The messenger with the broadest audience in the world. Free and independent.</string>
     <string name="login_title">Log In</string>
-    <string name="login_header">Log In to Your Server</string>
+    <string name="login_header">Log into your E-Mail Account</string>
     <string name="login_explain">Log in with an existing e-mail account</string>
     <string name="login_subheader">For known e-mail providers additional settings are set up automatically. Sometimes IMAP needs to be enabled in the web settings. Consult your e-mail provider or friends for help.</string>
     <string name="login_no_servers_hint">There are no Delta Chat servers, your data stays on your device.</string>
@@ -495,7 +508,7 @@
     <string name="login_error_server">Please enter a valid server / IP address</string>
     <string name="login_error_port">Please enter a valid port (1–65535)</string>
     <string name="login_error_required_fields">Please enter a valid e-mail address and a password</string>
-    <string name="import_backup_title">Import Backup</string>
+    <string name="import_backup_title">Restore from Backup</string>
     <string name="import_backup_ask">Backup found at \"%1$s\".\n\nDo you want to import and use all data and settings from it?</string>
     <string name="import_backup_no_backup_found">No backups found.\n\nCopy the backup to \"%1$s\" and try again. Alternatively, press \"Start messaging\" to continue with the normal setup process.</string>
     <!-- Translators: %1$s will be replaced by the e-mail address -->
@@ -600,11 +613,12 @@
     <string name="pref_background_btn_default">Use Default Image</string>
     <string name="pref_background_btn_gallery">Select From Gallery</string>
     <string name="pref_imap_folder_handling">IMAP Folder Handling</string>
-    <string name="pref_imap_folder_warn_disable_defaults">If you disable this option, make sure, your server and your other clients are configured accordingly.\n\nOtherwise things may not work at all.</string>
+    <string name="pref_imap_folder_warn_disable_defaults">If you change this option, make sure, your server and your other clients are configured accordingly.\n\nOtherwise things may not work at all.</string>
     <string name="pref_watch_inbox_folder">Watch Inbox Folder</string>
     <string name="pref_watch_sent_folder">Watch Sent Folder</string>
     <string name="pref_watch_mvbox_folder">Watch DeltaChat Folder</string>
     <string name="pref_send_copy_to_self">Send Copy to Self</string>
+    <string name="pref_send_copy_to_self_explain">Required when using this account on multiple devices.</string>
     <string name="pref_auto_folder_moves">Automatic Moves to DeltaChat Folder</string>
     <string name="pref_auto_folder_moves_explain">Chat conversations are moved to avoid cluttering the Inbox</string>
     <string name="pref_only_fetch_mvbox_title">Only Fetch from DeltaChat Folder</string>
@@ -877,6 +891,15 @@
     <string name="show_window">Show Window</string>
     <string name="login_socks5_experimental_warning">SOCKS5 support is currently experimental. Please use at your own risk. If you type in an address in the e-mail field, there will be DNS lookup that won\'t get tunneled through SOCKS5.</string>
 
+    <!-- title of the "keybindings" dialog (for the keybindings names as such, where possible the normal command strings are used) -->
+    <string name="keybindings">Keybindings</string>
+    <string name="switch_between_chats">Switch between Chats</string>
+    <string name="scroll_messages">Scroll Messages</string>
+    <string name="jump_to_search">Jump to Search</string>
+    <string name="focus_message_input">Focus Message Input</string>
+    <string name="force_refresh_network">Force Refresh Network</string>
+    <string name="insert_newline">Insert Newline</string>
+
     <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">Delivery status: Error</string>
     <string name="a11y_encryption_padlock">Encryption padlock</string>
@@ -889,10 +912,33 @@
     <string name="a11y_background_preview_label">Background preview</string>
     <string name="a11y_disappearing_messages_activated">Disappearing messages activated</string>
 
-
+    <!-- iOS specific strings, developers: please take care to remove strings that are no longer used! -->
+    <string name="stop_sharing_location">Stop sharing location</string>
+    <string name="a11y_voice_message_hint_ios">After recording double-tap to send. To discard the recording scrub with two fingers.</string>
+    <string name="a11y_connectivity_hint">Double tap to view connectivity details.</string>
+    <string name="login_error_no_internet_connection">No internet connection, login failed.</string>
+    <string name="share_account_not_configured">Account is not configured.</string>
+    <string name="cannot_play_audio_file">The audio file cannot be played.</string>
+    <!-- iOS camera permission alert -->
+    <string name="perm_ios_explain_access_to_camera_denied">To take photos, capture videos or use the QR-Code scanner, open the system settings and enable \"Camera\".</string>
+    <string name="open_settings">Open Settings</string>
+    <!-- iOS device contact alert -->
+    <string name="import_device_contacts">Import device contacts</string>
+    <string name="import_device_contacts_hint">To chat with contacts from your device open Settings and enable \"Contacts\".</string>
+    <!-- iOS notification settings -->
+    <string name="disabled_in_dc">Disabled in Delta Chat</string>
+    <string name="disabled_in_system_settings">Disabled in system settings</string>
+    <string name="bg_app_refresh_disabled">\"Background App Refresh\" disabled in system settings</string>
+    <!-- iOS connectivity view -->
+    <string name="delayed">Delayed</string>
+    <string name="notifications_avg_minutes">On average every %1$d minutes</string>
+    <string name="notifications_avg_hours">On average every %1$d hours</string>
+    <string name="last_check_at">Checked at %1$s</string>
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Delta Chat uses your camera to take and send photos and videos and to scan QR codes.</string>
     <string name="InfoPlist_NSContactsUsageDescription">Delta Chat uses your contacts to show a list of e-mail addresses you can write to. Delta Chat has no server, your contacts are not sent anywhere.</string>
+    <string name="InfoPlist_NSLocationAlwaysAndWhenInUseUsageDescription">Delta Chat needs the location permission in order to share your location for the timespan you have enabled location sharing.</string>
+    <string name="InfoPlist_NSLocationWhenInUseUsageDescription">Delta Chat needs the location permission in order to share your location for the timespan you have enabled location sharing.</string>
     <string name="InfoPlist_NSMicrophoneUsageDescription">Delta Chat uses your microphone to record and send voice messages and videos with sound.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Delta Chat will let you choose which photos from your library to send.</string>
     <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">Delta Chat wants to save images to your photo library.</string>
@@ -910,10 +956,8 @@
 
 
     <!-- device messages for updates -->
-    <string name="update_1_24_android">1.24 at a glance:\n\n• Save taps: Account selection in the upper left corner of the chat list\n• Save more taps: Long-tap the app icon to open recent chats directly\n• Save traffic: Download large files as needed\n• Save nerves: faster, non-blocking QR code joins and new QR code options\n\nMore at 👉</string>
-    <string name="update_1_24_ios">1.24 at a glance:\n\n• Start an in-chat search from the chat\'s profile\n• Save traffic: Download large files as needed\n• Save nerves: faster, non-blocking QR code joins\n\nMore at 👉</string>
-    <string name="update_1_26">1.26 polishing 💅\n\n• After making the QR codes non-blocking in 1.24, they also look much nicer now - on all platforms\n• Avatars and badges look similar across platform\n• Lots of bugs fixed</string>
     <string name="update_1_28_android">1.28 Highlights:\n\n🔒 Encryption: A new experimental option for keeping your contacts, encryption secrets and text messages encrypted on your device. Only available on account creation and importing backup files.\n\n📫 Write to mailing list\n\n💫 Faster initial setup for more e-mail servers and streamlined networking options to prevent accidental misconfiguration\n\n🐜 Maaaaaany user-reported issues fixed</string>
     <string name="update_1_28_ios_extra_line">… and you can select a wallpaper at \"Settings / Background\" now :)</string>
+    <string name="update_1_30">Faster. More stable.\n\nFor 1.30 releases, we focused on speed and reliability, fixing dozens of bugs. Check our changelogs if your favorite one is fixed: https://get.delta.chat/#changelogs 🚀</string>
 
 </resources>

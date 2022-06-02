@@ -133,7 +133,6 @@
     <string name="file">Fil</string>
     <string name="files">Filer</string>
     <string name="unknown">Ukendt</string>
-
     <string name="green">Grøn</string>
     <string name="red">Rød</string>
     <string name="blue">Blå</string>
@@ -227,7 +226,6 @@
     <string name="unpin">Løsn</string>
     <string name="ConversationFragment_quoted_message_not_found">Oprindelig besked ikke fundet</string>
     <string name="reply_privately">Svar privat</string>
-
     <string name="mute_for_one_hour">Dæmp i 1 time</string>
     <string name="mute_for_two_hours">Dæmp i 2 timer</string>
     <string name="mute_for_one_day">Dæmp i 1 dag</string>
@@ -369,7 +367,6 @@
     <string name="media_preview">Medie forhåndsvisning</string>
     <string name="send_message">Send besked</string>
 
-
     <!-- Connectivity -->
     <!-- Used as a headline for the "Inbox" eg. in the "Connectivity" view -->
     <string name="incoming_messages">Indkommende beskeder</string>
@@ -390,7 +387,6 @@
     <string name="part_of_total_used">%1$s af %2$s brugt</string>
 
 
-    <!-- welcome and login -->
     <string name="welcome_intro1_message">Budbringeren med verdens bredeste publikum. Fri og uafhængig.</string>
     <string name="login_title">Login</string>
     <string name="login_header">Login til server</string>
@@ -759,7 +755,6 @@
     <string name="a11y_message_context_menu_btn_label">Beskedhandlinger</string>
     <string name="a11y_background_preview_label">Baggrundsvisning</string>
     <string name="a11y_disappearing_messages_activated">Beskeder med tidsudløb aktiveret</string>
-
 
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Delta Chat bruger dit kamera til at sende billeder, videoer og skanne QR-koder</string>
