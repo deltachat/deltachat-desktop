@@ -188,9 +188,9 @@ export type CheatSheetEntryType =
   | { title: string; type: 'header' }
   | { action: ShortcutAction; type: 'shortcut' }
 
-function Title(title: string): CheatSheetEntryType {
-  return { title, type: 'header' }
-}
+// function Title(title: string): CheatSheetEntryType {
+//   return { title, type: 'header' }
+// }
 function Shortcut(action: ShortcutAction): CheatSheetEntryType {
   return { action, type: 'shortcut' }
 }
