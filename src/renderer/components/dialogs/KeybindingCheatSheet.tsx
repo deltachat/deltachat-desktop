@@ -50,7 +50,6 @@ export default function KeybindingCheatSheet(props: {
               if (entry.type === 'header') {
                 return (
                   <div key={entry.title}>
-                    <div className='line' />
                     <h2>{entry.title}</h2>
                   </div>
                 )
