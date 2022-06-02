@@ -42,14 +42,12 @@
 .keyboard-hints-popover,
 .keyboard-hints-box {
   width: 260px;
-
-  padding: 15px;
-
-  background: var(--keybindingHintsBoxBackground);
-  border-radius: 5px;
 }
 
 .keyboard-hint-cheatsheet-dialog {
+  &.bp4-dialog {
+    background-color: var(--bp4DialogBgPrimary);
+  }
   .bp4-dialog-header {
     .bp4-heading {
       flex-grow: 0;
@@ -73,17 +71,12 @@
     padding: 4px;
     max-height: 600px;
     justify-content: space-evenly;
-    align-content: space-around;
+    padding: 20px;
 
     .action {
       max-width: 240px;
-    }
-
-    .line {
-      border-bottom: 0.5px #808080ab solid;
-      display: block;
-      width: 228px;
-      margin: 6px 0px;
+      width: calc(50% - 7px);
+      margin-right: 7px;  
     }
 
     h2 {

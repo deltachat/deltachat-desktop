@@ -210,9 +210,7 @@ export function getKeybindings(
   const tx = window.static_translate
 
   return [
-    Title(tx('desktop_keybindings_composer')),
-    ...enterKeySendsKeyboardShortcuts(settings['enterKeySends']).map(Shortcut),
-    Title(tx('desktop_keybindings_global')),
+    // Title(tx('desktop_keybindings_global')),
     ...[
       {
         title: tx('desktop_keybindings_action_switch_between_chats'),
@@ -246,5 +244,7 @@ export function getKeybindings(
         keyBindings: [['F5']],
       },
     ].map(Shortcut),
+    // Title(tx('desktop_keybindings_composer')),
+    ...enterKeySendsKeyboardShortcuts(settings['enterKeySends']).map(Shortcut),
   ]
 }
