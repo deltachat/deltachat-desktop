@@ -312,6 +312,13 @@ function getMenuTemplate(logHandler: LogHandler): rawMenuItem[] {
           accelerator: 'F1',
         },
         {
+          translate: 'keybindings',
+          click: () => {
+            mainWindow.send('showKeybindingsDialog')
+          },
+          accelerator: isMac ? 'Cmd+/' : 'Ctrl+/',
+        },
+        {
           translate: 'global_menu_help_learn_desktop',
           click: () => {
             shell.openExternal(homePageUrl)
