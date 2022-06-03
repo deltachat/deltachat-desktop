@@ -9,6 +9,62 @@
   background-size: cover;
   background-color: var(--chatViewBg);
   overflow: hidden;
+
+   .unread-message-counter {
+    $heightUnreadCounter: 20px;
+    $heightJumpToBottomButton: 40px;
+    $width: 40px;
+    $marginBottom: 50px;
+    $marginRight: 35px;
+
+    position: fixed;
+    left: calc(100% - #{$width} - #{$marginRight});
+    bottom: $marginBottom;
+    height: $heightUnreadCounter + $heightJumpToBottomButton;
+    width: $width;
+    z-index: 100;
+
+
+    .counter {
+      position: relative;
+      z-index: 10;
+      width: 25px;
+      height: 25px;
+      margin: 0 auto;
+      margin-bottom: 0px;
+      border-radius: 100%;
+      background-color: var(--colorPrimary);
+      color: #fff;
+      line-height: 25px;
+      font-size: 15px;
+      text-align: center;
+    }
+
+    .jump-to-bottom-button {
+      position: relative;
+      z-index: 8;
+
+      height: $heightJumpToBottomButton;
+      margin: 0 auto;
+      margin-top: -10px;
+      width: $width;
+
+      line-height: $heightJumpToBottomButton;
+      background-color: white;
+      border-radius: 100%;
+      box-shadow: 0px 3px 5px #66666630;
+
+      cursor: pointer;
+      .jump-to-bottom-icon {
+        height: $heightJumpToBottomButton;
+        width: $width;
+
+        -webkit-mask: url(../images/ic_scroll_down.png) no-repeat center;
+        -webkit-mask-size: 65%;
+        background-color: var(--scrollbarThumb);
+      }
+    }
+  }
 }
 
 .message-list-and-composer__message-list {
