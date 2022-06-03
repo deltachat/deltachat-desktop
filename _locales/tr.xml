@@ -151,8 +151,6 @@
     <string name="file">Dosya</string>
     <string name="files">Dosyalar</string>
     <string name="unknown">Bilinmeyen</string>
-    <string name="version">Sürüm</string>
-    <string name="about">Hakkında</string>
 
     <string name="green">Yeşil</string>
     <string name="red">Kırmızı</string>
@@ -895,7 +893,7 @@
     <string name="keybindings">Tuş Bağları</string>
     <string name="switch_between_chats">Sohbetler Arasında Geçiş Yap</string>
     <string name="scroll_messages">İletileri Kaydır</string>
-    <string name="jump_to_search">Aramaya Atla</string>
+    <!-- command to put the cursor to the message input field -->
     <string name="focus_message_input">İleti Girişine Odaklan</string>
     <string name="force_refresh_network">Ağı Yenilemeye Zorla</string>
     <string name="insert_newline">Yeni Satır Ekle</string>

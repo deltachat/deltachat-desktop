@@ -144,8 +144,6 @@
     <string name="file">文件</string>
     <string name="files">文件</string>
     <string name="unknown">未知</string>
-    <string name="version">版本号</string>
-    <string name="about">关于</string>
 
     <string name="green">绿色</string>
     <string name="red">红色</string>
@@ -881,7 +879,9 @@
     <string name="keybindings">密钥绑定</string>
     <string name="switch_between_chats">在不同聊天间切换</string>
     <string name="scroll_messages">滚动消息</string>
-    <string name="jump_to_search">跳至搜索</string>
+    <!-- command to put the cursor to the search input field -->
+    <string name="focus_search_input">聚焦搜索</string>
+    <!-- command to put the cursor to the message input field -->
     <string name="focus_message_input">聚焦消息输入</string>
     <string name="force_refresh_network">强制刷新网络</string>
     <string name="insert_newline">插入新行</string>
