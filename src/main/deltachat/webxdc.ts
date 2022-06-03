@@ -191,7 +191,7 @@ export default class DCWebxdc extends SplitOut {
             { role: 'fileMenu' },
             { role: 'viewMenu' },
             {
-              label: tx('help'),
+              label: tx('menu_help'),
               submenu: [
                 {
                   label: tx('source_code'),
