@@ -4,5 +4,8 @@
   },
   "attachment-images": {
     "message": "Attached image"
+  },
+  "about": {
+    "message": "About"
   }
 }
