@@ -227,7 +227,6 @@
     <string name="unpin">Odpíchnout</string>
     <string name="ConversationFragment_quoted_message_not_found">Původní zprávu nelze najít</string>
     <string name="reply_privately">Odpověz soukromě</string>
-
     <string name="mute_for_one_hour">Umlčet na 1 hodinu</string>
     <string name="mute_for_two_hours">Umlčet na 2 hodiny</string>
     <string name="mute_for_one_day">Umlčet na 1 den</string>
@@ -378,8 +377,6 @@
     <string name="media_preview">Náhled multimedia</string>
     <string name="send_message">Pošli zprávu</string>
 
-
-    <!-- welcome and login -->
     <string name="welcome_intro1_message">Messenger s nejširší základnou na světě. Svobodný a nezávislý.</string>
     <string name="login_title">Přihlaš se</string>
     <string name="login_header">Přihlaš se na váš server</string>
@@ -734,7 +731,6 @@
     <string name="a11y_message_context_menu_btn_label">Akce se zprávou</string>
     <string name="a11y_background_preview_label">Náhled pozadí</string>
     <string name="a11y_disappearing_messages_activated">Samomazací zprávy jsou zapnuty</string>
-
 
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Delta Chat využívá kameru k focení, filmování a snímání QR kódů.</string>

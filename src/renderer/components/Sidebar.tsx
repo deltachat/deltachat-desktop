@@ -161,7 +161,7 @@ const Sidebar = React.memo(
             {tx('switch_account')}
           </div>
           <div className='footer'>
-            <Link href='https://delta.chat' label={tx('delta_chat_desktop')} />
+            <Link href='https://delta.chat' label={'Delta Chat Desktop'} />
             <br />
             <Link
               href='https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md'

@@ -31,6 +31,8 @@
     <string name="back">Indietro</string>
     <string name="close">Chiudi</string>
     <string name="forward">Inoltra</string>
+    <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
+    <string name="resend">Reinvia</string>
     <!-- In the meaning of "To archive", "Put a chat to the archive". This string does not mean "The Archive". -->
     <string name="archive">Archivia</string>
     <!-- In the meaning of "To unarchive", "Remove a chat from the archive", opposite of the previous string -->
@@ -91,31 +93,38 @@
     <!-- Translators: show beside messages that are "N minutes old". prefer a short string, prefer abbreviations if they're well-known -->
     <plurals name="n_minutes">
         <item quantity="one">%d min</item>
-        <item quantity="other">%d min.</item>
+        <item quantity="many">%d min</item>
+        <item quantity="other">%d min</item>
     </plurals>
     <!-- Translators: show beside messages that are "N hours old". prefer a short string, prefer abbreviations if they're well-known -->
     <plurals name="n_hours">
         <item quantity="one">%d ora</item>
+        <item quantity="many">%d ore</item>
         <item quantity="other">%d ore</item>
     </plurals>
     <plurals name="n_chats">
         <item quantity="one">%d chat</item>
-        <item quantity="other">%d chat</item>
+        <item quantity="many">%d chats</item>
+        <item quantity="other">%d chats</item>
     </plurals>
     <plurals name="n_contacts">
         <item quantity="one">%d contatto</item>
+        <item quantity="many">%d contatti</item>
         <item quantity="other">%d contatti</item>
     </plurals>
     <plurals name="n_messages">
         <item quantity="one">%d messaggio</item>
+        <item quantity="many">%d messaggi</item>
         <item quantity="other">%d messaggi</item>
     </plurals>
     <plurals name="n_members">
         <item quantity="one">%d membri</item>
+        <item quantity="many">%d membri</item>
         <item quantity="other">%d membri</item>
     </plurals>
     <plurals name="n_recipients">
         <item quantity="one">%d destinatari</item>
+        <item quantity="many">%d destinatari</item>
         <item quantity="other">%d destinatari</item>
     </plurals>
 
@@ -127,7 +136,7 @@
     <string name="gif">Gif</string>
     <!-- "Stickers" as known from other messengers, please pick up the wording from there; in some languages, "Sticker" in english is just fine. -->
     <string name="sticker">Sticker</string>
-    <string name="images">Immagine</string>
+    <string name="images">Immagini</string>
     <string name="audio">Audio</string>
     <string name="voice_message">Messaggio Vocale</string>
     <string name="forwarded">Inoltrato</string>
@@ -159,7 +168,7 @@
     <string name="magenta">Magenta</string>
     <string name="white">Bianco</string>
 
-    <string name="zoom">Ingrandisci</string>
+    <string name="zoom">Ingrandimento</string>
     <string name="extra_small">Extra piccolo</string>
     <string name="small">Piccolo</string>
     <string name="normal">Normale</string>
@@ -231,8 +240,8 @@
     <string name="menu_settings">Impostazioni</string>
     <string name="menu_advanced">Avanzate</string>
     <string name="menu_view_profile">Vedi Profilo</string>
-    <string name="menu_zoom_in">Zoom In</string>
-    <string name="menu_zoom_out">Zoom Out</string>
+    <string name="menu_zoom_in">Ingrandisci</string>
+    <string name="menu_zoom_out">Rimpicciolisci</string>
     <string name="menu_save_log">Salva Log</string>
     <string name="menu_more_options">Più Opzioni</string>
     <string name="menu_learn_spelling">Impara l\'Ortografia</string>
@@ -256,6 +265,7 @@
     <string name="unpin">Sblocca</string>
     <string name="ConversationFragment_quoted_message_not_found">Messaggio originale non trovato</string>
     <string name="reply_privately">Rispondi in Privato</string>
+    <string name="source_code">Codice Sorgente</string>
 
     <string name="mute_for_one_hour">Silenzia per 1 ora</string>
     <string name="mute_for_two_hours">Silenzia per 2 ore</string>
@@ -271,6 +281,7 @@
 
     <plurals name="ask_send_following_n_files_to">
         <item quantity="one">Invia il seguente file a %s?</item>
+        <item quantity="many">Inviare i seguenti %d files a %s?</item>
         <item quantity="other">Inviare i seguenti %d files a %s?</item>
     </plurals>
     <string name="file_saved_to">File salvato su \"%1$s\".</string>
@@ -284,7 +295,9 @@
     <string name="videochat_tap_to_open">Tocca per Aprire</string>
     <string name="videochat_instance">Istanza Video Chat</string>
     <string name="videochat_instance_placeholder">La Tua Istanza Video Chat</string>
+    <string name="videochat_instance_example">Esempi: https://meet.jit.si/$ROOM o basicwebrtc:https://your-server</string>
     <string name="videochat_instance_explain">Se viene definita un\'istanza video chat, è possibile avviare una video chat da ciascuna chat uno a uno. Le video chat richiedono un\'app compatibile o un browser compatibile da entrambe le parti.\n\nEsempi: https://meet.jit.si/$ROOM o basicwebrtc:https://your-server</string>
+    <string name="videochat_instance_explain_2">Se la video chat è abilitata, è possibile avviare una video chat da ogni chat. Le video chat richiedono un\'applicazione compatibile o un browser compatibile da entrambe le parti.</string>
     <string name="videochat_instance_from_qr">Utilizzare \"%1$s\" per invitare altri alla video chat?\n\nUna volta impostato, è possibile avviare una video chat da ogni chat uno a uno. Ciò sostituirà l\'eventuale impostazione precedente per le video chat.</string>
     <string name="videochat_invitation">Invito alla video chat</string>
     <string name="videochat_invitation_body">Sei invitato a una video chat, fai clic %1$s per partecipare.</string>
@@ -293,15 +306,18 @@
     <string name="ask_leave_group">Sei sicuro di voler abbandonare il gruppo?</string>
     <plurals name="ask_delete_chat">
         <item quantity="one">Eliminare %d chat? Non verrà più mostrata nella lista delle chat, ma i messaggi rimarranno sul server.</item>
+        <item quantity="many">Eliminare %d chat? Non verranno più mostrate nella lista delle chat, ma i messaggi rimarranno sul server.</item>
         <item quantity="other">Eliminare %d chat? Non verranno più mostrate nella lista delle chat, ma i messaggi rimarranno sul server.</item>
     </plurals>
     <string name="ask_delete_message">Sei sicuro di voler eliminare questo messaggio?</string>
     <plurals name="ask_delete_messages">
         <item quantity="one">Eliminare %d messaggio qui e sul sever?</item>
+        <item quantity="many">Eliminare %d messaggi qui e sul sever?</item>
         <item quantity="other">Eliminare %d messaggi qui e sul sever?</item>
     </plurals>
     <plurals name="ask_delete_messages_simple">
         <item quantity="one">Eliminare %d messaggi?</item>
+        <item quantity="many">Eliminare %d messaggi?</item>
         <item quantity="other">Eliminare %d messaggi?</item>
     </plurals>
     <string name="ask_forward">Inoltrare messaggi a %1$s?</string>
@@ -324,25 +340,28 @@
     <!-- contact list -->
     <string name="contacts_title">Contatti</string>
     <string name="contacts_enter_name_or_email">Inserisci nome o indirizzo e-mail</string>
-    <string name="contacts_type_email_above">Inserisci qui sopra l\'indirizzo email</string>
+    <string name="contacts_type_email_above">Inserisci qui sopra l\'indirizzo e-mail</string>
     <string name="contacts_empty_hint">Nessun contatto.</string>
 
 
     <!-- chatlist and chat view -->
     <plurals name="chat_archived">
         <item quantity="one">%d chat archiviata</item>
+        <item quantity="many">%d chat archiviate</item>
         <item quantity="other">%d chat archiviate</item>
     </plurals>
     <plurals name="chat_unarchived">
         <item quantity="one">%d chat ripristinata</item>
+        <item quantity="many">%d chat ripristinate</item>
         <item quantity="other">%d chat ripristinate</item>
     </plurals>
     <string name="chat_archived_chats_title">Chat Archiviate</string>
-    <string name="chat_please_enter_message">Scrivere un messaggio.</string>
+    <string name="chat_please_enter_message">Scrivi un messaggio.</string>
     <string name="chat_camera_unavailable">Fotocamera non disponibile.</string>
     <string name="chat_unable_to_record_audio">Impossibile registrare audio.</string>
     <plurals name="chat_n_new_messages">
         <item quantity="one">%d nuovo messaggio</item>
+        <item quantity="many">%d nuovi messaggi</item>
         <item quantity="other">%d nuovi messaggi</item>
     </plurals>
     <!-- The placeholder will be replaced by the name of the recipient in a one-to-one chat. -->
@@ -365,6 +384,7 @@
     <string name="saved_messages_explain">• Inoltra i messaggi per trovarli facilmente\n\n• Memorizza note scritte o vocali\n\n• Allega oggetti per salvarli</string>
     <!-- this "Saved" should match the "Saved" from "Saved messages" -->
     <string name="saved">Salvato</string>
+    <string name="save_as">Salva Con Nome</string>
     <string name="retry_send">Riprova l\'invio del messaggio</string>
     <!-- reasons for a disabled message composer -->
     <string name="messaging_disabled_not_in_group">Non puoi scrivere perché non sei in questo gruppo. Per partecipare, chiedi ad un altro membro.</string>
@@ -431,9 +451,12 @@
     <string name="tab_map">Mappa</string>
     <string name="tab_gallery_empty_hint">Immagini e video condivisi in questa chat vengono mostrati qui.</string>
     <string name="tab_docs_empty_hint">Documenti, musica e altri file condivisi in questa chat vengono mostrati qui.</string>
+    <string name="tab_image_empty_hint">Le immagini condivise in questa chat saranno visualizzate qui.</string>
+    <string name="tab_video_empty_hint">I video condivisi in questa chat saranno visualizzati qui.</string>
+    <string name="tab_audio_empty_hint">I File Audio e i Messaggi Vocali condivisi in questa chat saranno visualizzati qui.</string>
+    <string name="tab_webxdc_empty_hint">I contenuti Webxdc condivisi in questa chat saranno visualizzati qui.</string>
     <string name="media_preview">Anteprima dei Media</string>
     <string name="send_message">Invia Messaggio</string>
-
 
     <!-- Connectivity -->
     <!-- Used as a headline for the "Inbox" eg. in the "Connectivity" view -->
@@ -461,9 +484,11 @@
 
 
     <!-- welcome and login -->
+    <string name="welcome_chat_over_email">Chat via E-mail.</string>
+    <string name="scan_invitation_code">Scansiona Invito</string>
     <string name="welcome_intro1_message">L’applicazione di messaggistica con la maggiore utenza al mondo. Libera e indipendente.</string>
     <string name="login_title">Login</string>
-    <string name="login_header">Login al Tuo Server</string>
+    <string name="login_header">Accedi al tuo Account E-Mail</string>
     <string name="login_explain">Accedi con un indirizzo e-mail esistente</string>
     <string name="login_subheader">Per i fornitori email conosciuti, le impostazioni aggiuntive vengono configurate automaticamente. A volte, IMAP deve essere abilitato dall\'interfaccia web dell\'email. Se riscontri problemi contatta il tuo fornitore email o i tuoi amici per aiutarti.</string>
     <string name="login_no_servers_hint">Non esistono server di Delta Chat, i tuoi dati restano nel tuo dispositivo!</string>
@@ -605,6 +630,7 @@
     <string name="pref_watch_sent_folder">Controlla Cartella Inviata</string>
     <string name="pref_watch_mvbox_folder">Controlla Cartella DeltaChat</string>
     <string name="pref_send_copy_to_self">Auto-invia Copia</string>
+    <string name="pref_send_copy_to_self_explain">Richiesto quando si utilizza questo account su più dispositivi.</string>
     <string name="pref_auto_folder_moves">Sposta nella Cartella DeltaChat</string>
     <string name="pref_auto_folder_moves_explain">Le chat vengono spostate per evitare di riempire la cartella In Arrivo</string>
     <string name="pref_only_fetch_mvbox_title">Recupera dalla Cartella DeltaChat</string>
@@ -877,6 +903,15 @@
     <string name="show_window">Mostra Finestra</string>
     <string name="login_socks5_experimental_warning">Il supporto SOCKS5 è attualmente sperimentale. Usatelo a vostro rischio e pericolo. Se si digita un indirizzo nel campo e-mail, ci sarà una ricerca DNS che non verrà trasferita tramite SOCKS5.</string>
 
+    <!-- title of the "keybindings" dialog (for the keybindings names as such, where possible the normal command strings are used) -->
+    <string name="keybindings">Scorciatoie Tastiera</string>
+    <string name="switch_between_chats">Passa da una Chat all\'altra</string>
+    <string name="scroll_messages">Scorri i Messaggi</string>
+    <!-- command to put the cursor to the message input field -->
+    <string name="focus_message_input">Focalizzazione Inserimento Messaggio</string>
+    <string name="force_refresh_network">Forza Aggiornamento Rete</string>
+    <string name="insert_newline">Inserisci Nuova Riga</string>
+
     <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">Stato di consegna: Errore</string>
     <string name="a11y_encryption_padlock">Lucchetto di cifratura</string>
@@ -889,10 +924,33 @@
     <string name="a11y_background_preview_label">Anteprima sfondo</string>
     <string name="a11y_disappearing_messages_activated">Messaggi che scompaiono attivati</string>
 
-
+    <!-- iOS specific strings, developers: please take care to remove strings that are no longer used! -->
+    <string name="stop_sharing_location">Smetti di condividere la posizione</string>
+    <string name="a11y_voice_message_hint_ios">Dopo la registrazione doppio tocco per inviare. Per scartare la registrazione striscia a destra con due dita.</string>
+    <string name="a11y_connectivity_hint">Doppio tocco per visualizzare i dettagli sulla connettività.</string>
+    <string name="login_error_no_internet_connection">Nessuna connessione internet, accesso fallito.</string>
+    <string name="share_account_not_configured">L\'account non è configurato.</string>
+    <string name="cannot_play_audio_file">Il file audio non può essere riprodotto.</string>
+    <!-- iOS camera permission alert -->
+    <string name="perm_ios_explain_access_to_camera_denied">Per scattare foto, filmare video o usare la scansione Codice QR, apri le impostazioni di sistema e autorizza \"Fotocamera\".</string>
+    <string name="open_settings">Apri Impostazioni</string>
+    <!-- iOS device contact alert -->
+    <string name="import_device_contacts">Importa i contatti del dispositivo</string>
+    <string name="import_device_contacts_hint">Per chattare coi contatti dal tuo dispositivo apri Impostazioni e abilita Contatti.</string>
+    <!-- iOS notification settings -->
+    <string name="disabled_in_dc">Disabilitato in Delta Chat</string>
+    <string name="disabled_in_system_settings">Disabilitato nelle impostazioni di sistema</string>
+    <string name="bg_app_refresh_disabled">\"Aggiornamento App in Background\" disabilitato nelle impostazioni di sistema</string>
+    <!-- iOS connectivity view -->
+    <string name="delayed">Ritardato</string>
+    <string name="notifications_avg_minutes">In media ogni %1$d minuti</string>
+    <string name="notifications_avg_hours">In media ogni %1$d ore</string>
+    <string name="last_check_at">Controllato a %1$s</string>
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Delta Chat utilizza la fotocamera per scattare e inviare foto e video e per scansionare i codici QR.</string>
     <string name="InfoPlist_NSContactsUsageDescription">Delta Chat usa i tuoi contatti per mostrare una lista di indirizzi e-mail a cui puoi scrivere. Delta Chat non ha un server, i tuoi contatti non vengono inviati da nessuna parte.</string>
+    <string name="InfoPlist_NSLocationAlwaysAndWhenInUseUsageDescription">Delta Chat ha bisogno dell\'autorizzazione di localizzazione per condividere la vostra posizione per il periodo di tempo in cui avete abilitato la condivisione della posizione.</string>
+    <string name="InfoPlist_NSLocationWhenInUseUsageDescription">Delta Chat ha bisogno dell\'autorizzazione di localizzazione per condividere la vostra posizione per il periodo di tempo in cui avete abilitato la condivisione della posizione.</string>
     <string name="InfoPlist_NSMicrophoneUsageDescription">Delta Chat utilizza il tuo microfono per registrare e inviare messaggi vocali e video con audio.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Delta Chat ti permetterà di scegliere quali foto della tua libreria inviare.</string>
     <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">Delta Chat vuole salvare le immagini nella tua libreria fotografica.</string>
@@ -903,17 +961,15 @@
     <string name="pref_background_notifications_explain">Utilizza una connessione in background al tuo server e richiede ignora ottimizzazioni della batteria.</string>
     <string name="pref_background_notifications_rationale">Per mantenere la connessione al tuo server di posta e ricevere messaggi in background, ignora le ottimizzazioni della batteria nel passaggio successivo.\n\nDelta Chat utilizza poche risorse e fa attenzione a non consumare la batteria.</string>
     <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
-    <string name="pref_reliable_service">Connessione in Background Affidabile</string>
+    <string name="pref_reliable_service">Connessione Affidabile</string>
     <string name="pref_reliable_service_explain">Richiede una notifica permanente</string>
     <string name="perm_enable_bg_reminder_title">Premi qui per ricevere i messaggi anche quando Delta Chat è in background.</string>
     <string name="perm_enable_bg_already_done">Hai già autorizzato Delta Chat a ricevere messaggi in background.\n\nSe i messaggi non arrivano in background controlla le impostazioni di sistema.</string>
 
 
     <!-- device messages for updates -->
-    <string name="update_1_24_android">1.24 a colpo d\'occhio:\n\n• Salva tocchi: selezione dell\'account nell\'angolo in alto a sinistra dell\'elenco chat\n• Salva più tocchi: tocca a lungo l\'icona dell\'app per aprire direttamente le chat recenti\n• Salva traffico: scarica i grandi file in base alle proprie esigenze\n• Risparmiate nervosismo: unioni con codici QR più veloci e non bloccanti e nuove opzioni per i codici QR\n\nAltro su 👉</string>
-    <string name="update_1_24_ios">1.24 a colpo d\'occhio:\n\n• Avvia una ricerca in-chat dal profilo della chat\n• Salva traffico: scarica file di grandi dimensioni in base alle esigenze\n• Risparmia nervosismo: ci si unisce con codici QR più veloci e non bloccanti\n\nAltro su 👉</string>
-    <string name="update_1_26">1.26 rifinitura 💅\n\n• Dopo aver reso i codici QR non bloccanti nella 1.24, ora hanno anche un aspetto molto più bello - su tutte le piattaforme\n• Gli avatar e i badge sono simili su tutte le piattaforme\n• Molti bug risolti</string>
     <string name="update_1_28_android">1.28 In evidenza:\n\n🔒 Crittografia: Una nuova opzione sperimentale per mantenere i contatti, le chiavi crittografiche e i messaggi di testo crittografati sul tuo dispositivo. Disponibile solo per la creazione di account e l\'importazione di file di backup.\n\n📫 Scrivi nella mailing list\n\n💫 Configurazione iniziale più rapida per più server di posta elettronica e opzioni di rete semplificate per prevenire configurazioni errate accidentali\n\n🐜 Moooooolti problemi riportati dagli utenti risolti</string>
     <string name="update_1_28_ios_extra_line">... e ora puoi selezionare uno sfondo in \"Impostazioni / Sfondo\" :)</string>
+    <string name="update_1_30">Più veloce. Più stabile.\n\nPer la versione 1.30 abbiamo puntato su velocità e affidabilità, risolvendo decine di problemi. Controlla nei nostri elenchi delle modifiche se il tuo preferito è risolto:https://get.delta.chat/#changelogs 🚀</string>
 
 </resources>

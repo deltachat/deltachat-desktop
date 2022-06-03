@@ -249,7 +249,6 @@
     <string name="unpin">取消釘選</string>
     <string name="ConversationFragment_quoted_message_not_found">找不到原始訊息</string>
     <string name="reply_privately">私下回覆</string>
-
     <string name="mute_for_one_hour">靜音1小時</string>
     <string name="mute_for_two_hours">靜音2小時</string>
     <string name="mute_for_one_day">靜音1天</string>
@@ -369,7 +368,6 @@
     <string name="tab_gallery_empty_hint">本對話中共享的圖片和視訊會顯示在這裡。</string>
     <string name="tab_docs_empty_hint">本對話中共享的文件、音樂和其它檔案會顯示在這裡。</string>
     <string name="media_preview">媒體預覽</string>
-    <!-- welcome and login -->
     <string name="welcome_intro1_message">免費、獨立的通訊軟體，我們有全世界最廣的受眾。</string>
     <string name="login_title">登入</string>
     <string name="login_header">登入你的伺服器</string>

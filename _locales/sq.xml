@@ -31,6 +31,8 @@
     <string name="back">Mbrapsht</string>
     <string name="close">Mbylle</string>
     <string name="forward">Përpara</string>
+    <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
+    <string name="resend">Ridërgoje</string>
     <!-- In the meaning of "To archive", "Put a chat to the archive". This string does not mean "The Archive". -->
     <string name="archive">Arkivoje</string>
     <!-- In the meaning of "To unarchive", "Remove a chat from the archive", opposite of the previous string -->
@@ -254,6 +256,7 @@
     <string name="unpin">Çfiksoje</string>
     <string name="ConversationFragment_quoted_message_not_found">S’u gjet mesazhi origjinal</string>
     <string name="reply_privately">Përgjigjuni privatisht</string>
+    <string name="source_code">Kod Burim</string>
 
     <string name="mute_for_one_hour">Heshtoji për 1 orë</string>
     <string name="mute_for_two_hours">Heshtoji për 2 orë</string>
@@ -432,7 +435,6 @@
     <string name="media_preview">Paraparje media</string>
     <string name="send_message">Dërgo mesazh</string>
 
-
     <!-- Connectivity -->
     <!-- Used as a headline for the "Inbox" eg. in the "Connectivity" view -->
     <string name="incoming_messages">Mesazhe të Marrë</string>
@@ -459,6 +461,8 @@
 
 
     <!-- welcome and login -->
+    <string name="welcome_chat_over_email">Fjalosje përmes Email-i</string>
+    <string name="scan_invitation_code">Skanoni Kod Ftese</string>
     <string name="welcome_intro1_message">Shkëmbyesi i mesazheve me publikun më të gjerë në botë. I lirë dhe i pavarur.</string>
     <string name="login_title">Hyrje</string>
     <string name="login_header">Hyrje te shërbyesi juaj</string>
@@ -886,10 +890,31 @@
     <string name="a11y_background_preview_label">Paraparje sfondi</string>
     <string name="a11y_disappearing_messages_activated">Zhdukja e mesazheve është e aktivizuar</string>
 
-
+    <!-- iOS specific strings, developers: please take care to remove strings that are no longer used! -->
+    <string name="stop_sharing_location">Ndale tregimin e vendndodhjes</string>
+    <string name="a11y_voice_message_hint_ios">Pas regjistrimit, prekeni dy herë që të dërgohet. Për ta hedhur regjistrimin tej, fërkojeni majtas-djathtas me dy gishta.</string>
+    <string name="a11y_connectivity_hint">Prekeni dy herë që të shihni hollësi lidhjeje.</string>
+    <string name="login_error_no_internet_connection">S’ka lidhje internet, hyrja dështoi.</string>
+    <string name="share_account_not_configured">Llogaria s’është e formësuar.</string>
+    <string name="cannot_play_audio_file">Kartela audio s’luhet dot.</string>
+    <!-- iOS camera permission alert -->
+    <string name="perm_ios_explain_access_to_camera_denied">Për të bërë foto, regjistruar video ose përdorur skanerin QR-Code, hapni rregullimet e sistemit dhe aktivizoni “Kamera”.</string>
+    <string name="open_settings">Hap Rregullimet</string>
+    <!-- iOS device contact alert -->
+    <string name="import_device_contacts">Importo kontakte pajisjeje</string>
+    <string name="import_device_contacts_hint">Për t’u fjalosur me kontakte nga pajisja juaj, hapni Rregullime dhe aktivizoni Kontaktet.</string>
+    <!-- iOS notification settings -->
+    <string name="disabled_in_dc">Çaktivizuar në Delta Chat</string>
+    <string name="disabled_in_system_settings">Çaktivizuar te rregullimet e sistemit</string>
+    <string name="bg_app_refresh_disabled">“Rifreskim Aplikacionesh Në Prapaskenë” çaktivizuar te rregullimet e sistemit</string>
+    <string name="notifications_avg_minutes">Mesatarisht çdo %1$d minuta</string>
+    <string name="notifications_avg_hours">Mesatarisht %1$d orë</string>
+    <string name="last_check_at">Kontrolluar më %1$s</string>
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Lejimi i përdorimi të kamerës ju bën të mundur të bëni foto dhe video.</string>
     <string name="InfoPlist_NSContactsUsageDescription">Lejimi i përdorimi të librit tuaj të adresave kamerës ju bën të mundur të bisedoni me kontakte prej pajisjes tuaj.</string>
+    <string name="InfoPlist_NSLocationAlwaysAndWhenInUseUsageDescription">Që të mund t’u tregojë të tjerëve vendndodhjen tuaj, Delta Chat lyp lejen vendore, për aq kohë sa keni aktivizuar tregim vendndodhjeje.</string>
+    <string name="InfoPlist_NSLocationWhenInUseUsageDescription">Që të mund t’u tregojë të tjerëve vendndodhjen tuaj, Delta Chat lyp lejen vendore, për aq kohë sa keni aktivizuar tregim vendndodhjeje.</string>
     <string name="InfoPlist_NSMicrophoneUsageDescription">Lejimi i përdorimi të mikrofonit ju bën të mundur të bëni incizoni audio.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Lejimi i përdorimi të fototekës tuaj ju bën të mundur të ngarkoni figura prej saj.</string>
     <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">Delta Chat dëshiron të ruajë figura në fototekën tuaj.</string>
@@ -907,10 +932,8 @@
 
 
     <!-- device messages for updates -->
-    <string name="update_1_24_android">1.24 me një vështrim:\n\n• Ruani prekje: Përzgjedhje llogarish te cepi i sipërm majtas i listës së fjalosjeve\n• Ruani më tepër prekje: Prekeni gjatë ikonën e aplikacionit që të hapen drejtpërsëdrejti fjalosje së fundi\n• Ruani trafik: Shkarkoni kartela të mëdha, sipas nevojës\n• Kurseni nervat: hyrje më të shpejta jo bllokuese, me kod QR dhe mundësi të reja kodi QR\n\nMë tepër te 👉</string>
-    <string name="update_1_24_ios">1.24 me një vështrim:\n\n• Filloni një kërkim brenda fjalosjeje, që prej profilit të fjalosjes\n• Ruani trafik: Shkarkoni kartela të mëdha, sipas nevojës\n• Kurseni nervat: hyrje më të shpejta jo bllokuese, me kod QR dhe mundësi të reja kodi QR\n\nMë tepër te 👉</string>
-    <string name="update_1_26">1.26 po lustrohen 💅\n\n• Pasi kodet QR u bënë jo bllokues, në 1.24, tani ata duken shumë të hijshëm - në krejt platformat\n• Avatarët dhe stemat duken të ngjashëm nëpër platforma të ndryshme\n• Plot ndreqje të metash</string>
     <string name="update_1_28_android">1.28 Në pah:\n\n🔒 Fshehtëzim: Një mundësi e re eksperimentale për të mbajtur të fshehtëzuara në pajisjen tuaj kontaktet, të fshehtat dhe mesazhe tekst tuajt. E mundshme vetëm gjatë krijimi llogarish dhe importimi kartelash kopjeruajtjeje.\n\n📫 Shkruani te listë postimesh\n\n💫 Ujdisje fillestare më e shpejtë për më tepër shërbyes email-i dhe mundësi të thjeshtuara punimi në rrjet, për të parandaluar formësim të gabuar aksidentalisht\n\n🐜 U ndreqën mjaaaaaaft probleme të njoftuara nga përdoruesit</string>
     <string name="update_1_28_ios_extra_line">… dhe ju tani mund të përzgjidhni një sfond që nga “Rregullime / Sfond” :)</string>
+    <string name="update_1_30">Më shpejtë. Me më tepër qëndrueshmëri.\n\nPër hedhjet në qarkullim të serisë 1.30, u përqendruam në shpejtësinë dhe qëndrueshmërinë, duke ndrequr dhjetëra. Shihni regjistrat tanë të ndryshimeve, për të parë nëse e juaja është ndrequr: https://get.delta.chat/#changelogs 🚀</string>
 
 </resources>

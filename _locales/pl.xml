@@ -31,6 +31,8 @@
     <string name="back">Wróć</string>
     <string name="close">Zamknij</string>
     <string name="forward">Przekaż</string>
+    <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
+    <string name="resend">Wyślij ponownie</string>
     <!-- In the meaning of "To archive", "Put a chat to the archive". This string does not mean "The Archive". -->
     <string name="archive">Archiwizuj</string>
     <!-- In the meaning of "To unarchive", "Remove a chat from the archive", opposite of the previous string -->
@@ -270,7 +272,6 @@
     <string name="unpin">Odepnij</string>
     <string name="ConversationFragment_quoted_message_not_found">Nie znaleziono oryginalnej wiadomości</string>
     <string name="reply_privately">Odpowiedz prywatnie </string>
-
     <string name="mute_for_one_hour">Wyłącz na 1 godzinę</string>
     <string name="mute_for_two_hours">Wyłącz na 2 godziny</string>
     <string name="mute_for_one_day">Wyłącz na 1 dzień</string>
@@ -462,7 +463,6 @@
     <string name="media_preview">Podgląd multimediów</string>
     <string name="send_message">Wyślij wiadomość</string>
 
-
     <!-- Connectivity -->
     <!-- Used as a headline for the "Inbox" eg. in the "Connectivity" view -->
     <string name="incoming_messages">Wiadomości przychodzące</string>
@@ -489,9 +489,11 @@
 
 
     <!-- welcome and login -->
+    <string name="welcome_chat_over_email">Rozmawiaj przez e-mail.</string>
+    <string name="scan_invitation_code">Zeskanuj kod zaproszenia</string>
     <string name="welcome_intro1_message">Komunikator o największym zasięgu na świecie. Darmowy i bezpieczny.</string>
     <string name="login_title">Zaloguj się</string>
-    <string name="login_header">Zaloguj się na swój serwer</string>
+    <string name="login_header">Zaloguj się na swoje konto e-mail</string>
     <string name="login_explain">Zaloguj się przy użyciu istniejącego konta e-mail</string>
     <string name="login_subheader">Dla znanych dostawców usług poczty elektronicznej poniższe ustawienia są ustawiane automatycznie. Czasami IMAP musi być włączony w interfejsie WWW. O pomoc należy zwrócić się do usługodawcy e-mail lub znajomych.</string>
     <string name="login_no_servers_hint">Nie ma serwerów Delta Chat, Twoje dane pozostają na Twoim urządzeniu!</string>
@@ -523,7 +525,7 @@
     <string name="login_error_server">Wprowadź poprawny adres serwera / IP</string>
     <string name="login_error_port">Podaj poprawny numer portu (1–65535)</string>
     <string name="login_error_required_fields">Podaj ważny adres e-mail i hasło</string>
-    <string name="import_backup_title">Import kopii zapasowej</string>
+    <string name="import_backup_title">Przywróć z kopii zapasowej</string>
     <string name="import_backup_ask">Delta Chat znalazł kopię zapasową w katalogu „%1$s.\n\nCzy chcesz zaimportować i używać wszystkich danych i ustawień z tej kopii zapasowej?</string>
     <string name="import_backup_no_backup_found">Nie znaleziono kopii zapasowej.\n\nSkopiuj kopię zapasową do katalogu „%1$s i spróbuj ponownie. Alternatywnie dotknij \"Uruchom komunikator\", aby rozpocząć normalny proces instalacji.</string>
     <!-- Translators: %1$s will be replaced by the e-mail address -->
@@ -913,7 +915,6 @@
     <string name="a11y_background_preview_label">Podgląd tła</string>
     <string name="a11y_disappearing_messages_activated">Aktywowano znikające wiadomości</string>
 
-
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Delta Chat używa aparatu do robienia i wysyłania zdjęć i filmów oraz do skanowania kodów QR.</string>
     <string name="InfoPlist_NSContactsUsageDescription">Zezwolenie na dostęp do książki adresowej pozwala czatować z kontaktami z urządzenia.</string>
@@ -934,10 +935,6 @@
 
 
     <!-- device messages for updates -->
-    <string name="update_1_24_android">1.24 w skrócie:\n\n• Zapisywanie dotknięć: wybór konta w lewym górnym rogu listy czatu\n• Zapisywanie kolejnych dotknięć: dotknij i przytrzymaj ikony aplikacji, aby bezpośrednio otwierać ostatnie czaty\n• Oszczędzaj transfer: pobierz duże pliki w razie potrzeby\n• Oszczędzaj nerwy: szybsze, nieblokujące dołączanie za pomocą kodów QR i nowe opcje kodów QR\n\nWięcej na 👉</string>
-    <string name="update_1_24_ios">1.24 w skrócie:\n\n• Rozpocznij wyszukiwanie na czacie z profilu czatu\n• Oszczędzaj transfer: pobierz duże pliki w razie potrzeby\n• Oszczędzaj nerwy: szybsze, nieblokujące dołączanie za pomocą kodów QR \n\nWięcej na 👉</string>
-    <string name="update_1_26">1.26 dopracowanie 💅\n\n• Po tym jak w 1.24 kody QR przestały się blokować, teraz również wyglądają dużo ładniej - na wszystkich platformach\n• Awatary i plakietki wyglądają podobnie na różnych platformach\n• Naprawiono wiele błędów</string>
     <string name="update_1_28_android">1.28 Najważniejsze informacje:\n\n🔒 Szyfrowanie: Nowa eksperymentalna opcja do utrzymywania kontaktów, szyfrowania sekretnych i tekstowych wiadomości zaszyfrowanych na twoim urządzeniu. Dostępne tylko podczas tworzenia konta i importowania plików kopii zapasowych.\n\n📫 Zapisywanie do listy dyskusyjnej\n\n💫 Szybsza konfiguracja początkowa dla większej liczby serwerów e-mail i usprawnionych opcji sieciowych, aby zapobiec przypadkowej błędnej konfiguracji\n\n🐜 Prawdopodobnie naprawione zgłaszane przez użytkownika problemy</string>
     <string name="update_1_28_ios_extra_line">… i już teraz możesz wybrać tapetę w „Ustawienia » Tło” :) </string>
-
-</resources>
+    </resources>

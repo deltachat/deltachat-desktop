@@ -238,7 +238,6 @@
     <string name="unpin">Atsegti</string>
     <string name="ConversationFragment_quoted_message_not_found">Pradinė žinutė nerasta</string>
     <string name="reply_privately">Atsakyti privačiai</string>
-
     <string name="mute_for_one_hour">Išjungti 1 valandai</string>
     <string name="mute_for_two_hours">Išjungti 2 valandoms</string>
     <string name="mute_for_one_day">Išjungti 1 dienai</string>
@@ -385,7 +384,6 @@
     <string name="media_preview">Medijos peržiūra</string>
     <string name="send_message">Siųsti žinutę</string>
 
-
     <!-- Connectivity -->
     <!-- Used as a headline for the "Inbox" eg. in the "Connectivity" view -->
     <string name="incoming_messages">Gaunamosios žinutės</string>
@@ -404,7 +402,6 @@
     <string name="last_msg_sent_successfully">Paskutinė žinutė sėkmingai išsiųsta.</string>
     <!-- Used as a subtitle in quota context of "Connetivity" view. Should be be plural always, no number is prefixed or so. -->
     <string name="messages">Žinutės</string>
-    <!-- welcome and login -->
     <string name="welcome_intro1_message">Pokalbių programa su plačiausia auditorija pasaulyje. Nemokama ir nepriklausoma.</string>
     <string name="login_title">Prisijungti</string>
     <string name="login_header">Prisijungti prie savo serverio</string>
@@ -760,7 +757,6 @@
     <string name="a11y_delivery_status_invalid">Neteisinga pristatymo būsena</string>
     <string name="a11y_background_preview_label">Fono peržiūra</string>
     <string name="a11y_disappearing_messages_activated">Išnykstančios žinutės aktyvuotos</string>
-
 
     <string name="InfoPlist_NSMicrophoneUsageDescription">Delta Chat naudoja mikrofoną, kad įrašytų ir siųstų balso žinutes bei vaizdo įrašus su garsu.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Delta Chat leis jums pasirinkti, kurias nuotraukas iš savo kolekcijos išsiųsti.</string>

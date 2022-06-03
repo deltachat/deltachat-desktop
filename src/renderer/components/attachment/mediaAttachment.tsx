@@ -69,7 +69,7 @@ const contextMenuFactory = (
       action: runtime.openWebxdc.bind(null, message.id),
     },
     {
-      label: tx('save-as'),
+      label: tx('save_as'),
       action: onDownload.bind(null, message),
     },
     showCopyImage && {
