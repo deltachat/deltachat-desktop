@@ -299,7 +299,11 @@ $scrollbarTransparency: 0.5;
 .message-list-and-composer {
   background-color: white !important;
   background-image: unset !important;
+  #message-list { 
+   padding: 0 12px;
+  }
 }
+
 
 .info-message {
   margin: 0px;
