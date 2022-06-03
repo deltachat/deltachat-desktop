@@ -224,7 +224,7 @@ export function getKeybindings(
         keyBindings: [['PageUp'], ['PageDown']],
       },
       {
-        title: tx('jump_to_search'),
+        title: tx('focus_search_input'),
         keyBindings: [['Control', 'K']],
       },
       {
