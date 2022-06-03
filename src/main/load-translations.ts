@@ -2,7 +2,7 @@ import path from 'path'
 import fs from 'fs'
 
 import { getLogger } from '../shared/logger'
-const log = getLogger('load-transaltions')
+const log = getLogger('load-translations')
 
 import {
   getMessageFunction,
