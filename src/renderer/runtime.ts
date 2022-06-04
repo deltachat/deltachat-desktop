@@ -192,7 +192,19 @@ class Electron implements Runtime {
   }
   transformBlobURL(blob: string): string {
     let filename = basename(blob)
-    return blob.replace(filename, encodeURIComponent(filename))
+    log.info('transformBlobURL', {
+      blob,
+      filename,
+      result: blob.replace(filename, encodeURIComponent(filename)),
+    })
+    let path_components = blob.replace(/\\/g, '/').split('/')
+    let filename2 = path_components[path_components.length - 1]
+    log.info('transformBlobURL2', {
+      blob,
+      path_components,
+      result: blob.replace(filename2, encodeURIComponent(filename2)),
+    })
+    return blob.replace(filename2, encodeURIComponent(filename2))
   }
   async showOpenFileDialog(
     options: Electron.OpenDialogOptions
