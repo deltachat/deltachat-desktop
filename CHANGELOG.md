@@ -4,6 +4,7 @@
 
 ### Added
 - Added messageId to MessageDetail dialog
+- add open keybindings dialog to window titlebar menu
 
 ### Fixed
 - "New contact" button hidden if contact already exists (#2646)
