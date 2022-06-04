@@ -36,6 +36,7 @@ export default class ScreenController extends Component {
   contextMenuShowFn: showFnType | null = null
   state: { message: userFeedback | false; screen: Screens }
   onShowAbout: any
+  onShowKeybindings: any
   onShowSettings: any
   selectedAccountId: number | undefined
 
@@ -54,8 +55,9 @@ export default class ScreenController extends Component {
     this.openDialog = this.openDialog.bind(this)
     this.changeScreen = this.changeScreen.bind(this)
     this.closeDialog = this.closeDialog.bind(this)
-    this.onShowAbout = this.showAbout.bind(this, true)
-    this.onShowSettings = this.showSettings.bind(this, true)
+    this.onShowAbout = this.showAbout.bind(this)
+    this.onShowKeybindings = this.showKeyBindings.bind(this)
+    this.onShowSettings = this.showSettings.bind(this)
     this.dialogController = createRef()
     this.selectAccount = this.selectAccount.bind(this)
 
@@ -113,6 +115,7 @@ export default class ScreenController extends Component {
     ipcRenderer.on('DC_EVENT_ERROR', this.onError)
     ipcRenderer.on('success', this.onSuccess)
     ipcRenderer.on('showAboutDialog', this.onShowAbout)
+    ipcRenderer.on('showKeybindingsDialog', this.onShowKeybindings)
     ipcRenderer.on('showSettingsDialog', this.onShowSettings)
     ipcRenderer.on('open-url', this.onOpenUrl)
 
@@ -147,6 +150,10 @@ export default class ScreenController extends Component {
 
   showSettings() {
     ActionEmitter.emitAction(KeybindAction.Settings_Open)
+  }
+
+  showKeyBindings() {
+    ActionEmitter.emitAction(KeybindAction.KeybindingCheatSheet_Open)
   }
 
   async onOpenUrl(_event: Event, url: string) {
