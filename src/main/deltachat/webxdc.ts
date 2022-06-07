@@ -188,7 +188,12 @@ export default class DCWebxdc extends SplitOut {
       if (platform() !== 'darwin') {
         webxdc_windows.setMenu(
           Menu.buildFromTemplate([
-            { role: 'fileMenu' },
+            {
+              label: tx('global_menu_file_desktop'),
+              submenu: [{ label: tx('global_menu_file_quit_desktop'), click: () => {
+                webxdc_windows.close()
+              } }],
+            },
             { role: 'viewMenu' },
             {
               label: tx('menu_help'),

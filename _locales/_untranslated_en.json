@@ -10,5 +10,8 @@
   },
   "what_is_webxdc": {
     "message": "What is Webxdc?"
+  },
+  "file_menu" : {
+    "message": "File"
   }
 }
