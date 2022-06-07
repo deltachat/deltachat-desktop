@@ -10,6 +10,7 @@
 - "New contact" button hidden if contact already exists (#2646)
 - Fix too wide clickable area on forwarded messages @andresmc98 (#2782)
 - Fix button label saying open instead of save in export backup file dialog
+- Fix display/playing of media files that contain invalid url chars in filename (such as `#`) (#2527)
 
 ### Changed
 - Updated minimal theme
