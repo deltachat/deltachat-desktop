@@ -234,7 +234,7 @@ div.delta-form-group {
 
   .delta-icon {
     padding-top: 40px;
-    width: 100px;
+    width: 100%;
     margin: 0 auto;
   }
 
@@ -257,7 +257,7 @@ div.delta-form-group {
     padding: 10px;
 
     margin: 0 auto;
-    margin-top: 50px;
+    margin-top: 15px;
 
     background-color: var(--colorPrimary);
     color: white;
@@ -267,6 +267,10 @@ div.delta-form-group {
     &:hover {
       cursor: pointer;
     }
+  }
+
+  #action-go-to-login {
+    margin-top: 40px;
   }
 }
 

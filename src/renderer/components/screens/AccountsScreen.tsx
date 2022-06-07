@@ -13,8 +13,8 @@ import { DeltaProgressBar } from '../Login-Styles'
 import { getLogger } from '../../../shared/logger'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import DeltaDialog, {
-  DeltaDialogFooter,
-  DeltaDialogFooterActions,
+  // DeltaDialogFooter,
+  // DeltaDialogFooterActions,
   DeltaDialogBase,
   DeltaDialogBody,
   DeltaDialogContent,
@@ -104,8 +104,55 @@ function ImportBackupProgressDialog({
   )
 }
 
-const ImportButton = function ImportButton(_props: any) {
+// const ImportButton = function ImportButton(_props: any) {
+//   const tx = useTranslationFunction()
+
+//   async function onClickImportBackup() {
+//     const file = await runtime.showOpenFileDialog({
+//       title: tx('import_backup_title'),
+//       properties: ['openFile'],
+//       filters: [{ name: '.tar or .bak', extensions: ['tar', 'bak'] }],
+//       defaultPath: runtime.getAppPath('downloads'),
+//     })
+//     if (file) {
+//       window.__openDialog(ImportBackupProgressDialog, {
+//         backupFile: file,
+//       })
+//     }
+//   }
+
+//   return (
+//     <p
+//       className={'delta-button light-bold primary'}
+//       onClick={onClickImportBackup}
+//     >
+//       {tx('import_backup_title')}
+//     </p>
+//   )
+// }
+
+// const ScanQRCodeButton = React.memo(function ScanQRCode(_) {
+//   const { openDialog } = useContext(ScreenContext)
+//   const tx = useTranslationFunction()
+
+//   const onClickScanQr = () => openDialog('ImportQrCode')
+
+//   return (
+//     <p className={'delta-button light-bold primary'} onClick={onClickScanQr}>
+//       {tx('qrscan_title')}
+//     </p>
+//   )
+// })
+
+export default function AccountsScreen({
+  selectAccount,
+}: {
+  selectAccount: typeof ScreenController.prototype.selectAccount
+}) {
   const tx = useTranslationFunction()
+  const [logins, setLogins] = useState<DeltaChatAccount[] | null>(null)
+
+  const [syncAllAccounts, setSyncAllAccounts] = useState<boolean | null>(null)
 
   async function onClickImportBackup() {
     const file = await runtime.showOpenFileDialog({
@@ -121,38 +168,8 @@ const ImportButton = function ImportButton(_props: any) {
     }
   }
 
-  return (
-    <p
-      className={'delta-button light-bold primary'}
-      onClick={onClickImportBackup}
-    >
-      {tx('import_backup_title')}
-    </p>
-  )
-}
-
-const ScanQRCodeButton = React.memo(function ScanQRCode(_) {
   const { openDialog } = useContext(ScreenContext)
-  const tx = useTranslationFunction()
-
   const onClickScanQr = () => openDialog('ImportQrCode')
-
-  return (
-    <p className={'delta-button light-bold primary'} onClick={onClickScanQr}>
-      {tx('qrscan_title')}
-    </p>
-  )
-})
-
-export default function AccountsScreen({
-  selectAccount,
-}: {
-  selectAccount: typeof ScreenController.prototype.selectAccount
-}) {
-  const tx = useTranslationFunction()
-  const [logins, setLogins] = useState<DeltaChatAccount[] | null>(null)
-
-  const [syncAllAccounts, setSyncAllAccounts] = useState<boolean | null>(null)
 
   useEffect(() => {
     ;(async () => {
@@ -205,18 +222,32 @@ export default function AccountsScreen({
         >
           <>
             {(!logins || logins.length === 0) && (
-              <DeltaDialogBody>
+              <DeltaDialogBody
+                noFooter={true}
+              >
                 <DeltaDialogContent>
                   <div className='welcome-deltachat'>
-                    <img className='delta-icon' src='../images/deltachat.png' />
-                    <p className='f1'>{tx('welcome_desktop')}</p>
-                    <p className='f2'>{tx('welcome_intro1_message')}</p>
+                    <img className='delta-icon' src='../images/intro1.png' />
+                    <p className='f1'>{tx('welcome_chat_over_email')}</p>
+                    {/* <p className='f2'>{tx('welcome_intro1_message')}</p> */}
                     <div
                       id='action-go-to-login'
                       className='welcome-button'
                       onClick={addAccount}
                     >
                       {tx('login_header')}
+                    </div>
+                    <div
+                      className='welcome-button'
+                      onClick={onClickImportBackup}
+                    >
+                      {tx('import_backup_title')}
+                    </div>
+                    <div
+                      className='welcome-button'
+                      onClick={onClickScanQr}
+                    >
+                      {tx('scan_invitation_code')}
                     </div>
                   </div>
                 </DeltaDialogContent>
@@ -265,14 +296,14 @@ export default function AccountsScreen({
                 </DeltaDialogBody>
               </>
             )}
-            <DeltaDialogFooter style={{ padding: '10px' }}>
+            {/* <DeltaDialogFooter style={{ padding: '10px' }}>
               <DeltaDialogFooterActions
                 style={{ justifyContent: 'space-between' }}
               >
                 <ScanQRCodeButton />
                 <ImportButton />
               </DeltaDialogFooterActions>
-            </DeltaDialogFooter>
+            </DeltaDialogFooter> */}
           </>
         </DeltaDialogBase>
       </div>
