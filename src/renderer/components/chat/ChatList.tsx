@@ -40,6 +40,7 @@ import {
   selectChat,
 } from '../helpers/ChatMethods'
 import { useThemeCssVar } from '../../ThemeManager'
+import { ChatListAudioPlayer } from './ChatListAudioPlayer'
 
 const enum LoadStatus {
   FETCHING = 1,
@@ -270,85 +271,92 @@ export default function ChatList(props: {
     <>
       <div className='chat-list'>
         <AutoSizer>
-          {({ width, height }) => (
-            <div>
-              {isSearchActive && (
-                <div className='search-result-divider' style={{ width: width }}>
-                  {translate_n('n_chats', chatListIds.length)}
-                </div>
-              )}
-              <ChatListPart
-                isRowLoaded={isChatLoaded}
-                loadMoreRows={loadChats}
-                rowCount={chatListIds.length}
-                width={width}
-                height={chatsHeight(height)}
-                setListRef={(ref: List<any> | null) =>
-                  ((listRefRef.current as any) = ref)
-                }
-                itemKey={index => 'key' + chatListIds[index]}
-                itemData={chatlistData}
-                itemHeight={CHATLISTITEM_CHAT_HEIGHT}
-              >
-                {ChatListItemRowChat}
-              </ChatListPart>
-              {isSearchActive && (
-                <>
+          {({ width, height: raw_height }) => {
+            const height = raw_height - 45
+            return (
+              <div>
+                <ChatListAudioPlayer />
+                {isSearchActive && (
                   <div
                     className='search-result-divider'
                     style={{ width: width }}
                   >
-                    {translate_n('n_contacts', contactIds.length)}
+                    {translate_n('n_chats', chatListIds.length)}
                   </div>
-                  <ChatListPart
-                    isRowLoaded={isContactLoaded}
-                    loadMoreRows={loadContact}
-                    rowCount={contactIds.length}
-                    width={width}
-                    height={contactsHeight(height)}
-                    itemKey={index => 'key' + contactIds[index]}
-                    itemData={contactlistData}
-                    itemHeight={CHATLISTITEM_CONTACT_HEIGHT}
-                  >
-                    {ChatListItemRowContact}
-                  </ChatListPart>
-                  {contactIds.length === 0 &&
-                    chatListIds.length === 0 &&
-                    queryStrIsValidEmail && (
-                      <div style={{ width: width }}>
-                        <PseudoListItemAddContact
-                          queryStr={queryStr || ''}
-                          queryStrIsEmail={queryStrIsValidEmail}
-                          onClick={addContactOnClick}
-                        />
-                      </div>
-                    )}
-                  <div
-                    className='search-result-divider'
-                    style={{ width: width }}
-                  >
-                    {translate_n('n_messages', messageResultIds.length)}
-                  </div>
+                )}
+                <ChatListPart
+                  isRowLoaded={isChatLoaded}
+                  loadMoreRows={loadChats}
+                  rowCount={chatListIds.length}
+                  width={width}
+                  height={chatsHeight(height)}
+                  setListRef={(ref: List<any> | null) =>
+                    ((listRefRef.current as any) = ref)
+                  }
+                  itemKey={index => 'key' + chatListIds[index]}
+                  itemData={chatlistData}
+                  itemHeight={CHATLISTITEM_CHAT_HEIGHT}
+                >
+                  {ChatListItemRowChat}
+                </ChatListPart>
+                {isSearchActive && (
+                  <>
+                    <div
+                      className='search-result-divider'
+                      style={{ width: width }}
+                    >
+                      {translate_n('n_contacts', contactIds.length)}
+                    </div>
+                    <ChatListPart
+                      isRowLoaded={isContactLoaded}
+                      loadMoreRows={loadContact}
+                      rowCount={contactIds.length}
+                      width={width}
+                      height={contactsHeight(height)}
+                      itemKey={index => 'key' + contactIds[index]}
+                      itemData={contactlistData}
+                      itemHeight={CHATLISTITEM_CONTACT_HEIGHT}
+                    >
+                      {ChatListItemRowContact}
+                    </ChatListPart>
+                    {contactIds.length === 0 &&
+                      chatListIds.length === 0 &&
+                      queryStrIsValidEmail && (
+                        <div style={{ width: width }}>
+                          <PseudoListItemAddContact
+                            queryStr={queryStr || ''}
+                            queryStrIsEmail={queryStrIsValidEmail}
+                            onClick={addContactOnClick}
+                          />
+                        </div>
+                      )}
+                    <div
+                      className='search-result-divider'
+                      style={{ width: width }}
+                    >
+                      {translate_n('n_messages', messageResultIds.length)}
+                    </div>
 
-                  <ChatListPart
-                    isRowLoaded={isMessageLoaded}
-                    loadMoreRows={loadMessages}
-                    rowCount={messageResultIds.length}
-                    width={width}
-                    height={
-                      // take remaining space
-                      messagesHeight(height)
-                    }
-                    itemKey={index => 'key' + messageResultIds[index]}
-                    itemData={messagelistData}
-                    itemHeight={CHATLISTITEM_MESSAGE_HEIGHT}
-                  >
-                    {ChatListItemRowMessage}
-                  </ChatListPart>
-                </>
-              )}
-            </div>
-          )}
+                    <ChatListPart
+                      isRowLoaded={isMessageLoaded}
+                      loadMoreRows={loadMessages}
+                      rowCount={messageResultIds.length}
+                      width={width}
+                      height={
+                        // take remaining space
+                        messagesHeight(height)
+                      }
+                      itemKey={index => 'key' + messageResultIds[index]}
+                      itemData={messagelistData}
+                      itemHeight={CHATLISTITEM_MESSAGE_HEIGHT}
+                    >
+                      {ChatListItemRowMessage}
+                    </ChatListPart>
+                  </>
+                )}
+              </div>
+            )
+          }}
         </AutoSizer>
       </div>
     </>

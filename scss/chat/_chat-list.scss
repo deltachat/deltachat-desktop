@@ -18,4 +18,14 @@
     border-bottom: var(--cli-search-result-divider-border-width) solid
       var(--cli-search-result-divider-border);
   }
+
+  .audio-player {
+    height: 45px;
+    width: 100%;
+    display: flex;
+
+    .control {
+      display: flex;
+    }
+  }
 }
