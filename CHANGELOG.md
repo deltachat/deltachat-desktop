@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+## Fixed
+- use addr if displayname is not set for webxdc selfName #2803
+
 ## [1.30.1] - 2022-06-07
 
 ### Added
