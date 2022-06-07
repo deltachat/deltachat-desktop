@@ -190,9 +190,14 @@ export default class DCWebxdc extends SplitOut {
           Menu.buildFromTemplate([
             {
               label: tx('global_menu_file_desktop'),
-              submenu: [{ label: tx('global_menu_file_quit_desktop'), click: () => {
-                webxdc_windows.close()
-              } }],
+              submenu: [
+                {
+                  label: tx('global_menu_file_quit_desktop'),
+                  click: () => {
+                    webxdc_windows.close()
+                  },
+                },
+              ],
             },
             { role: 'viewMenu' },
             {
