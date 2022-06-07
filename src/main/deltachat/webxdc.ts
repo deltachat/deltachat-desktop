@@ -4,13 +4,15 @@ import SplitOut from './splitout'
 import { getLogger } from '../../shared/logger'
 const log = getLogger('main/deltachat/webxdc')
 import Mime from 'mime-types'
-import { nativeImage } from 'electron'
+import { Menu, nativeImage, shell } from 'electron'
 import { join } from 'path'
 import { readdir, stat, rmdir, writeFile } from 'fs/promises'
 import { getConfigPath } from '../application-constants'
 import UrlParser from 'url-parse'
 import type { Message } from 'deltachat-node'
 import { truncateText } from '../../shared/util'
+import { platform } from 'os'
+import { tx } from '../load-translations'
 
 const open_apps: {
   [msgId: number]: { win: BrowserWindow; msg_obj: Message }
@@ -183,6 +185,46 @@ export default class DCWebxdc extends SplitOut {
       })
       open_apps[msg_id] = { win: webxdc_windows, msg_obj: webxdc_message }
 
+      if (platform() !== 'darwin') {
+        webxdc_windows.setMenu(
+          Menu.buildFromTemplate([
+            {
+              label: tx('global_menu_file_desktop'),
+              submenu: [
+                {
+                  label: tx('global_menu_file_quit_desktop'),
+                  click: () => {
+                    webxdc_windows.close()
+                  },
+                },
+              ],
+            },
+            { role: 'viewMenu' },
+            {
+              label: tx('menu_help'),
+              submenu: [
+                {
+                  label: tx('source_code'),
+                  enabled: !!(webxdc_message.webxdcInfo as any).source_code_url,
+                  icon: app_icon?.resize({ width: 24 }) || undefined,
+                  click: () =>
+                    shell.openExternal(
+                      (webxdc_message.webxdcInfo as any).source_code_url
+                    ),
+                },
+                {
+                  type: 'separator',
+                },
+                {
+                  label: tx('what_is_webxdc'),
+                  click: () => shell.openExternal('https://webxdc.org'),
+                },
+              ],
+            },
+          ])
+        )
+      }
+
       webxdc_windows.once('closed', () => {
         delete open_apps[msg_id]
       })
@@ -235,6 +277,13 @@ If you think that's a bug and you need that permission, then please open an issu
 
     ipcMain.handle('webxdc.toggle_dev_tools', async event => {
       event.sender.toggleDevTools()
+    })
+
+    ipcMain.handle('webxdc.exitFullscreen', async event => {
+      const key = Object.keys(open_apps).find(
+        key => open_apps[Number(key)].win.webContents === event.sender
+      )
+      open_apps[Number(key)].win.setFullScreen(false)
     })
 
     ipcMain.handle('webxdc.getAllUpdates', async (event, serial = 0) => {
