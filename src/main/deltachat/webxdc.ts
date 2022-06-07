@@ -115,7 +115,9 @@ export default class DCWebxdc extends SplitOut {
 
             if (filename === 'webxdc.js') {
               const displayName = Buffer.from(
-                this.controller.settings.getConfig('displayname')
+                this.controller.settings.getConfig('displayname') ||
+                  this.controller.settings.getConfig('addr') ||
+                  'unknown'
               ).toString('base64')
               const seflAddr = Buffer.from(
                 this.controller.settings.getConfig('addr')
