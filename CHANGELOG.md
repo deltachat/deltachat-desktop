@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.30.1] - 2022-06-07
+
 ### Added
 - Added messageId to MessageDetail dialog
 - added custom titlebar menu for webxdc (on linux and windows)
@@ -1637,7 +1639,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.30.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.30.1...HEAD
+
+[1.30.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.30.0...v1.30.1
 
 [1.30.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.29.1...v1.30.0
 
