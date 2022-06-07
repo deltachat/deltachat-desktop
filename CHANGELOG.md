@@ -13,7 +13,7 @@
 
 ### Changed
 - Updated minimal theme
-- Update translations (03.06.2022)
+- Update translations (07.06.2022)
 
 ## [1.30.0] - 2022-05-30
 
