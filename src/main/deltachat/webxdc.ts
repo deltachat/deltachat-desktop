@@ -279,6 +279,13 @@ If you think that's a bug and you need that permission, then please open an issu
       event.sender.toggleDevTools()
     })
 
+    ipcMain.handle('webxdc.exitFullscreen', async event => {
+      const key = Object.keys(open_apps).find(
+        key => open_apps[Number(key)].win.webContents === event.sender
+      )
+      open_apps[Number(key)].win.setFullScreen(false)
+    })
+
     ipcMain.handle('webxdc.getAllUpdates', async (event, serial = 0) => {
       const key = Object.keys(open_apps).find(
         key => open_apps[Number(key)].win.webContents === event.sender
