@@ -14,7 +14,6 @@ import processOpenQrUrl from './components/helpers/OpenQrUrl'
 import { getLogger } from '../shared/logger'
 import { ContextMenuLayer, showFnType } from './components/ContextMenu'
 import { DeltaBackend } from './delta-remote'
-import AccountSetupScreen from './components/screens/AccountSetupScreen'
 import { ActionEmitter, KeybindAction } from './keybindings'
 
 const log = getLogger('renderer/ScreenController')
@@ -25,10 +24,11 @@ export interface userFeedback {
 }
 
 export enum Screens {
-  Accounts = 'accounts',
+  Welcome = 'welcome',
   Main = 'main',
   Login = 'login',
   Loading = 'loading',
+  AccountSelection = 'accountSelection',
 }
 
 export default class ScreenController extends Component {
@@ -76,7 +76,12 @@ export default class ScreenController extends Component {
     if (lastLoggedInAccountId && !(lastLoggedInAccountId < 0)) {
       await this.selectAccount(lastLoggedInAccountId)
     } else {
-      this.changeScreen(Screens.Accounts)
+      const allAccountIds = await DeltaBackend.call('login.getAllAccountIds')
+      if (allAccountIds && allAccountIds.length > 0) {
+        this.changeScreen(Screens.AccountSelection)
+      } else {
+        this.changeScreen(Screens.Welcome)
+      }
     }
   }
 
@@ -104,7 +109,7 @@ export default class ScreenController extends Component {
     log.debug('Changing screen to:', screen)
     this.setState({ screen })
     window.__screen = screen
-    if (Screens.Accounts) {
+    if (Screens.Welcome) {
       // remove user feedback error message - https://github.com/deltachat/deltachat-desktop/issues/2261
       this.userFeedback(false)
     }
@@ -134,7 +139,7 @@ export default class ScreenController extends Component {
   }
 
   onError(_event: any, [data1, data2]: [string | number, string]) {
-    if (this.state.screen === Screens.Accounts) return
+    if (this.state.screen === Screens.Welcome) return
     if (data1 === 0) data1 = ''
     const text = data1 + data2
     this.userFeedback({ type: 'error', text })
@@ -190,13 +195,26 @@ export default class ScreenController extends Component {
           throw new Error('Selected account not defined')
         }
         return (
-          <AccountSetupScreen
+          <AccountsScreen
             selectAccount={this.selectAccount}
+            screenMode='setup'
             accountId={this.selectedAccountId}
           />
         )
-      case Screens.Accounts:
-        return <AccountsScreen selectAccount={this.selectAccount} />
+      case Screens.Welcome:
+        return (
+          <AccountsScreen
+            selectAccount={this.selectAccount}
+            screenMode='welcome'
+          />
+        )
+      case Screens.AccountSelection:
+        return (
+          <AccountsScreen
+            selectAccount={this.selectAccount}
+            screenMode='selection'
+          />
+        )
       default:
         return null
     }

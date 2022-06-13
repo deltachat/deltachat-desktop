@@ -146,7 +146,7 @@ export default async function processOpenQrUrl(
       cb: callback,
     })
     return
-  } else if (checkQr.state === QrState.Account && screen !== Screens.Accounts) {
+  } else if (checkQr.state === QrState.Account && screen !== Screens.Welcome) {
     closeProcessDialog()
     window.__openDialog('AlertDialog', {
       message: tx('Please logout first'),

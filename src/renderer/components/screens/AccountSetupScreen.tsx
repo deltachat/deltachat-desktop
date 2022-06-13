@@ -15,7 +15,6 @@ import {
 } from '../dialogs/DeltaDialog'
 
 import type ScreenController from '../../ScreenController'
-import { Screens } from '../../ScreenController'
 import { DeltaBackend } from '../../delta-remote'
 import { getLogger } from '../../../shared/logger'
 
@@ -24,9 +23,11 @@ const log = getLogger('renderer/AccountSetupScreen')
 export default function AccountSetupScreen({
   selectAccount,
   accountId,
+  onClickCancel,
 }: {
   selectAccount: typeof ScreenController.prototype.selectAccount
   accountId: number
+  onClickCancel: () => void
 }) {
   const tx = useTranslationFunction()
   const { openDialog } = useContext(ScreenContext)
@@ -50,7 +51,7 @@ export default function AccountSetupScreen({
       if (acInfo.type == 'unconfigured') {
         await DeltaBackend.call('login.removeAccount', accountId)
       }
-      window.__changeScreen(Screens.Accounts)
+      onClickCancel()
     } catch (error) {
       if (error instanceof Error) {
         window.__openDialog('AlertDialog', {

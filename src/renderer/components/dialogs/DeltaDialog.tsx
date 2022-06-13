@@ -202,9 +202,10 @@ export function DeltaDialogBody(
     noFooter?: boolean
     ref?: todo
     style?: any
+    id?: string
   }>
 ) {
-  const { noFooter, children, style } = props
+  const { noFooter, children, style, id } = props
   return (
     <div
       ref={props.ref}
@@ -212,6 +213,7 @@ export function DeltaDialogBody(
         'bp4-dialog-body-no-footer': noFooter !== false,
       })}
       style={style}
+      id={id}
     >
       {children}
     </div>

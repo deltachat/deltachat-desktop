@@ -226,6 +226,10 @@ div.delta-form-group {
   }
 }
 
+#welcome-dialog-body {
+  max-height: 100%;
+}
+
 .welcome-deltachat {
   display: flex;
   justify-content: center;
@@ -233,13 +237,12 @@ div.delta-form-group {
   text-align: center;
 
   .delta-icon {
-    padding-top: 40px;
     width: 100%;
     margin: 0 auto;
   }
 
   .f1 {
-    margin-top: 20px;
+    margin-top: 40px;
     font-size: x-large;
     color: var(--colorNone);
   }
