@@ -7,13 +7,14 @@ import { DeltaBackend } from '../../delta-remote'
 import { ipcBackend } from '../../ipc'
 import { runtime } from '../../runtime'
 import DeltaDialog, {
+  DeltaDialogBase,
   DeltaDialogBody,
   DeltaDialogContent,
   DeltaDialogHeader,
 } from '../dialogs/DeltaDialog'
 import { DeltaProgressBar } from '../Login-Styles'
 import { DialogProps } from '../dialogs/DialogController'
-import ScreenController from '../../ScreenController'
+import { Screens } from '../../ScreenController'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
@@ -113,52 +114,85 @@ const ImportButton = function ImportButton(_props: any) {
 }
 
 export default function WelcomeScreen({
-  selectAccount,
-  showBackButton,
-  onClickBack,
-  onAddAccount,
+  selectedAccountId,
 }: {
-  selectAccount: typeof ScreenController.prototype.selectAccount
-  showBackButton: boolean
-  onClickBack: () => void
-  onAddAccount: () => void
+  selectedAccountId: number
 }) {
   const tx = useTranslationFunction()
   const { openDialog } = useContext(ScreenContext)
   const onClickScanQr = () => openDialog('ImportQrCode')
+  const [showBackButton, setShowBackButton] = useState(false)
 
-  const addAccount = async () => {
-    const accountId = await DeltaBackend.call('login.addAccount')
-    selectAccount(accountId)
-    onAddAccount()
+  useEffect(() => {
+    ;(async () => {
+      const allAccountIds = await DeltaBackend.call('login.getAllAccountIds')
+      if (allAccountIds && allAccountIds.length > 1) {
+        setShowBackButton(true)
+      }
+    })()
+  }, [])
+
+  const onCancel = async () => {
+    try {
+      const acInfo = await DeltaBackend.call(
+        'login.accountInfo',
+        selectedAccountId
+      )
+      if (acInfo.type == 'unconfigured') {
+        await DeltaBackend.call('login.removeAccount', selectedAccountId)
+      }
+      window.__changeScreen(Screens.AccountList)
+    } catch (error) {
+      if (error instanceof Error) {
+        window.__openDialog('AlertDialog', {
+          message: error?.message,
+          cb: () => {},
+        })
+      } else {
+        log.error('unexpected error type', error)
+        throw error
+      }
+    }
   }
 
   return (
-    <>
-      <DeltaDialogHeader
-        showBackButton={showBackButton}
-        onClickBack={onClickBack}
-      />
-      <DeltaDialogBody id='welcome-dialog-body'>
-        <DeltaDialogContent>
-          <div className='welcome-deltachat'>
-            <img className='delta-icon' src='../images/intro1.png' />
-            <p className='f1'>{tx('welcome_chat_over_email')}</p>
-            {/* <p className='f2'>{tx('welcome_intro1_message')}</p> */}
-            <div
-              id='action-go-to-login'
-              className='welcome-button'
-              onClick={addAccount}
-            >
-              {tx('login_header')}
-            </div>
-            <ImportButton />
-            <div className='welcome-button' onClick={onClickScanQr}>
-              {tx('scan_invitation_code')}
-            </div>
-          </div>
-        </DeltaDialogContent>
-      </DeltaDialogBody>
-    </>
+    <div className='login-screen'>
+      <div className='window'>
+        <DeltaDialogBase
+          isOpen={true}
+          backdropProps={{ className: 'no-backdrop' }}
+          onClose={() => {}}
+          fixed={true}
+          canEscapeKeyClose={true}
+        >
+          <>
+            <DeltaDialogHeader
+              showBackButton={showBackButton}
+              onClickBack={onCancel}
+            />
+            <DeltaDialogBody id='welcome-dialog-body'>
+              <DeltaDialogContent>
+                <div className='welcome-deltachat'>
+                  <img className='delta-icon' src='../images/intro1.png' />
+                  <p className='f1'>{tx('welcome_chat_over_email')}</p>
+                  {/* <p className='f2'>{tx('welcome_intro1_message')}</p> */}
+                  <div
+                    id='action-go-to-login'
+                    className='welcome-button'
+                    onClick={() => window.__changeScreen(Screens.Login)}
+                  >
+                    {tx('login_header')}
+                  </div>
+                  <ImportButton />
+                  <div className='welcome-button' onClick={onClickScanQr}>
+                    {tx('scan_invitation_code')}
+                  </div>
+                </div>
+              </DeltaDialogContent>
+            </DeltaDialogBody>
+          </>
+        </DeltaDialogBase>
+      </div>
+    </div>
   )
 }

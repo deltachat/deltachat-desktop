@@ -157,8 +157,6 @@ export default async function processOpenQrUrl(
 
   if (checkQr.state === QrState.Account) {
     try {
-      const accountId = await DeltaBackend.call('login.addAccount')
-      await DeltaBackend.call('login.selectAccount', accountId)
       await DeltaBackend.call('settings.setConfigFromQr', url)
 
       const onSuccess = (_account: DeltaChatAccount) => {

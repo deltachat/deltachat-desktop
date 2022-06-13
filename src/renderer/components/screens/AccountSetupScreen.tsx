@@ -15,19 +15,13 @@ import {
 } from '../dialogs/DeltaDialog'
 
 import type ScreenController from '../../ScreenController'
-import { DeltaBackend } from '../../delta-remote'
-import { getLogger } from '../../../shared/logger'
-
-const log = getLogger('renderer/AccountSetupScreen')
 
 export default function AccountSetupScreen({
   selectAccount,
   accountId,
-  onClickCancel,
 }: {
   selectAccount: typeof ScreenController.prototype.selectAccount
   accountId: number
-  onClickCancel: () => void
 }) {
   const tx = useTranslationFunction()
   const { openDialog } = useContext(ScreenContext)
@@ -44,26 +38,6 @@ export default function AccountSetupScreen({
       }),
     [accountId, openDialog, selectAccount, credentials]
   )
-
-  const onCancel = async () => {
-    try {
-      const acInfo = await DeltaBackend.call('login.accountInfo', accountId)
-      if (acInfo.type == 'unconfigured') {
-        await DeltaBackend.call('login.removeAccount', accountId)
-      }
-      onClickCancel()
-    } catch (error) {
-      if (error instanceof Error) {
-        window.__openDialog('AlertDialog', {
-          message: error?.message,
-          cb: () => {},
-        })
-      } else {
-        log.error('unexpected error type', error)
-        throw error
-      }
-    }
-  }
 
   const onKeyDown = useCallback(
     (ev: KeyboardEvent) => {
@@ -108,7 +82,7 @@ export default function AccountSetupScreen({
               <p
                 id='action-cancel'
                 className={'delta-button bold primary'}
-                onClick={() => onCancel()}
+                onClick={() => selectAccount(accountId)}
               >
                 {tx('cancel')}
               </p>

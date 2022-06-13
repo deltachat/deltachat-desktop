@@ -49,25 +49,18 @@ export default class DCBackup extends SplitOut {
   }
 
   import(file: string): Promise<DeltaChatAccount> {
+    if (!this.selectedAccountId || !this.selectedAccountContext) {
+      throw new Error('Import of backup needs selected context.')
+    }
+    const accountId = this.selectedAccountId
+    const dcnContext = this.selectedAccountContext
+
     return new Promise((resolve, reject) => {
-      const accountId = this.accounts.addAccount()
-      const dcnContext = this.accounts.accountContext(accountId)
-
-      this.controller.selectedAccountId = accountId
-      this.controller._inner_selectedAccountContext = dcnContext
-
       const onFail = (reason: String) => {
-        this.accounts.removeAccount(accountId)
-        this.controller.selectedAccountId = null
-        this.controller.selectedAccountContext.unref()
-        this.controller._inner_selectedAccountContext = null
         reject(reason)
       }
 
       const onSuccess = () => {
-        this.controller.selectedAccountId = null
-        this.controller.selectedAccountContext.unref()
-        this.controller._inner_selectedAccountContext = null
         resolve(this.controller.login.accountInfo(accountId))
       }
 

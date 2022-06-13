@@ -10,70 +10,117 @@ import { ipcBackend } from '../../ipc'
 import ScreenController from '../../ScreenController'
 import { Avatar } from '../Avatar'
 import { PseudoContact } from '../contact/Contact'
-import { DeltaDialogBody, DeltaDialogContent } from '../dialogs/DeltaDialog'
+import {
+  DeltaDialogBase,
+  DeltaDialogBody,
+  DeltaDialogContent,
+} from '../dialogs/DeltaDialog'
 import filesizeConverter from 'filesize'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
-export default function AccountSelectionScreen({
-  refreshAccounts,
+export default function AccountListScreen({
   selectAccount,
-  logins,
-  syncAllAccounts,
-  setSyncAllAccounts,
   onAddAccount,
 }: {
-  refreshAccounts: () => Promise<void>
   selectAccount: typeof ScreenController.prototype.selectAccount
-  logins: any
-  syncAllAccounts: any
-  setSyncAllAccounts: any
   onAddAccount: any
 }) {
   const tx = useTranslationFunction()
 
-  return (
-    <>
-      <div
-        className={classNames(
-          Classes.DIALOG_HEADER,
-          'bp4-dialog-header-border-bottom'
-        )}
-      >
-        <h4 className='bp4-heading'>
-          {tx('login_known_accounts_title_desktop')}
-        </h4>
-        {syncAllAccounts !== null && (
-          <Switch
-            checked={syncAllAccounts}
-            label={tx('sync_all')}
-            onChange={async () => {
-              const new_state = !syncAllAccounts
-              await DeltaBackend.call(
-                'settings.setDesktopSetting',
-                'syncAllAccounts',
-                new_state
-              )
-              setSyncAllAccounts(new_state)
-            }}
-            alignIndicator={Alignment.RIGHT}
-          />
-        )}
+  const [logins, setLogins] = useState<DeltaChatAccount[] | null>(null)
+
+  const [syncAllAccounts, setSyncAllAccounts] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    ;(async () => {
+      const desktopSettings = await DeltaBackend.call(
+        'settings.getDesktopSettings'
+      )
+      setSyncAllAccounts(desktopSettings.syncAllAccounts)
+    })()
+  }, [])
+
+  const refreshAccounts = async () => {
+    const logins = await DeltaBackend.call('login.getAllAccounts')
+    setLogins(logins)
+  }
+
+  useEffect(() => {
+    let mounted = true
+    ;(async () => {
+      const logins = await DeltaBackend.call('login.getAllAccounts')
+      if (mounted === true) {
+        setLogins(logins)
+      }
+    })()
+
+    return () => {
+      mounted = false
+    }
+  }, [])
+
+  if (logins === null)
+    return (
+      <div className='login-screen'>
+        <div className='window'></div>
       </div>
-      <DeltaDialogBody>
-        <DeltaDialogContent noPadding={true}>
-          <AccountSelection
-            {...{
-              refreshAccounts,
-              selectAccount,
-              logins,
-              showUnread: syncAllAccounts || false,
-              onAddAccount,
-            }}
-          />
-        </DeltaDialogContent>
-      </DeltaDialogBody>
-    </>
+    )
+
+  return (
+    <div className='login-screen'>
+      <div className='window'>
+        <DeltaDialogBase
+          isOpen={true}
+          backdropProps={{ className: 'no-backdrop' }}
+          onClose={() => {}}
+          fixed={true}
+          canEscapeKeyClose={true}
+        >
+          <>
+            <div
+              className={classNames(
+                Classes.DIALOG_HEADER,
+                'bp4-dialog-header-border-bottom'
+              )}
+            >
+              <h4 className='bp4-heading'>
+                {tx('login_known_accounts_title_desktop')}
+              </h4>
+              {syncAllAccounts !== null && (
+                <Switch
+                  checked={syncAllAccounts}
+                  label={tx('sync_all')}
+                  onChange={async () => {
+                    const new_state = !syncAllAccounts
+                    await DeltaBackend.call(
+                      'settings.setDesktopSetting',
+                      'syncAllAccounts',
+                      new_state
+                    )
+                    setSyncAllAccounts(new_state)
+                  }}
+                  alignIndicator={Alignment.RIGHT}
+                />
+              )}
+            </div>
+            <DeltaDialogBody>
+              <DeltaDialogContent noPadding={true}>
+                <AccountSelection
+                  {...{
+                    refreshAccounts,
+                    selectAccount,
+                    logins,
+                    showUnread: syncAllAccounts || false,
+                    onAddAccount,
+                  }}
+                />
+              </DeltaDialogContent>
+            </DeltaDialogBody>
+          </>
+        </DeltaDialogBase>
+      </div>
+    </div>
   )
 }
 

@@ -3,7 +3,6 @@ import { Component, createRef } from 'react'
 const { ipcRenderer } = window.electron_functions
 
 import { ScreenContext } from './contexts'
-import AccountsScreen from './components/screens/AccountsScreen'
 import MainScreen from './components/screens/MainScreen'
 import DialogController, {
   OpenDialogFunctionType,
@@ -15,6 +14,9 @@ import { getLogger } from '../shared/logger'
 import { ContextMenuLayer, showFnType } from './components/ContextMenu'
 import { DeltaBackend } from './delta-remote'
 import { ActionEmitter, KeybindAction } from './keybindings'
+import AccountSetupScreen from './components/screens/AccountSetupScreen'
+import AccountListScreen from './components/screens/AccountListScreen'
+import WelcomeScreen from './components/screens/WelcomeScreen'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -28,7 +30,7 @@ export enum Screens {
   Main = 'main',
   Login = 'login',
   Loading = 'loading',
-  AccountSelection = 'accountSelection',
+  AccountList = 'accountSelection',
 }
 
 export default class ScreenController extends Component {
@@ -78,9 +80,10 @@ export default class ScreenController extends Component {
     } else {
       const allAccountIds = await DeltaBackend.call('login.getAllAccountIds')
       if (allAccountIds && allAccountIds.length > 0) {
-        this.changeScreen(Screens.AccountSelection)
+        this.changeScreen(Screens.AccountList)
       } else {
-        this.changeScreen(Screens.Welcome)
+        const accountId = await DeltaBackend.call('login.addAccount')
+        await this.selectAccount(accountId)
       }
     }
   }
@@ -92,7 +95,7 @@ export default class ScreenController extends Component {
     if (account.type === 'configured') {
       this.changeScreen(Screens.Main)
     } else {
-      this.changeScreen(Screens.Login)
+      this.changeScreen(Screens.Welcome)
     }
   }
 
@@ -195,24 +198,26 @@ export default class ScreenController extends Component {
           throw new Error('Selected account not defined')
         }
         return (
-          <AccountsScreen
+          <AccountSetupScreen
             selectAccount={this.selectAccount}
-            screenMode='setup'
             accountId={this.selectedAccountId}
           />
         )
       case Screens.Welcome:
+        if (this.selectedAccountId === undefined) {
+          throw new Error('Selected account not defined')
+        }
+        return <WelcomeScreen selectedAccountId={this.selectedAccountId} />
+      case Screens.AccountList:
         return (
-          <AccountsScreen
-            selectAccount={this.selectAccount}
-            screenMode='welcome'
-          />
-        )
-      case Screens.AccountSelection:
-        return (
-          <AccountsScreen
-            selectAccount={this.selectAccount}
-            screenMode='selection'
+          <AccountListScreen
+            {...{
+              selectAccount: this.selectAccount,
+              onAddAccount: async () => {
+                const accountId = await DeltaBackend.call('login.addAccount')
+                await this.selectAccount(accountId)
+              },
+            }}
           />
         )
       default:
