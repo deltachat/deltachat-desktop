@@ -66,7 +66,7 @@ export default function AccountSetupScreen({
           onClose={() => {}}
           fixed={true}
         >
-          <DeltaDialogHeader title={tx('add_account')} />
+          <DeltaDialogHeader title={tx('login_explain')} />
           <DeltaDialogBody>
             <DeltaDialogContent>
               <div className='login'>

@@ -169,6 +169,7 @@ export default function WelcomeScreen({
             <DeltaDialogHeader
               showBackButton={showBackButton}
               onClickBack={onCancel}
+              title={tx('add_account')}
             />
             <DeltaDialogBody id='welcome-dialog-body'>
               <DeltaDialogContent>
