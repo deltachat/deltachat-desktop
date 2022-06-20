@@ -41,7 +41,7 @@ test('shows correct headline', async t => {
   await goBackToAccountOverviewIfNeeded(t)
   await t
     .expect(Selector('.welcome-deltachat > .f1').innerText)
-    .eql(await translate('welcome_desktop'))
+    .eql(await translate('welcome_chat_over_email'))
     .click('.welcome-button')
     .typeText('#addr', 'foo')
     .typeText('#mail_pw', 'bar')
@@ -51,6 +51,7 @@ test('shows correct headline', async t => {
 })
 
 test('login works', async t => {
+  await t.debug()
   await goBackToAccountOverviewIfNeeded(t)
   conf.account1 = await loginWithTmpUser()
   //console.log(conf.account1)
@@ -67,6 +68,7 @@ test('account is shown on account overview', async t => {
 
 test('second login works', async t => {
   await goBackToAccountOverviewIfNeeded(t)
+  await t.click('#action-go-to-login')
   conf.account2 = await loginWithTmpUser()
   //console.log(conf.account2)
   await t.expect(conf.account2).notEql(undefined)

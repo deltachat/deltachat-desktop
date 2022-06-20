@@ -177,7 +177,7 @@ export default function WelcomeScreen({
                   <p className='f1'>{tx('welcome_chat_over_email')}</p>
                   {/* <p className='f2'>{tx('welcome_intro1_message')}</p> */}
                   <div
-                    id='action-go-to-login'
+                    id='action-login-to-email'
                     className='welcome-button'
                     onClick={() => window.__changeScreen(Screens.Login)}
                   >
