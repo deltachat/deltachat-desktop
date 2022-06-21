@@ -107,9 +107,12 @@ const ImportButton = function ImportButton(_props: any) {
   }
 
   return (
-    <div className='welcome-button' onClick={onClickImportBackup}>
+    <button
+      className='delta-button-round secondary'
+      onClick={onClickImportBackup}
+    >
       {tx('import_backup_title')}
-    </div>
+    </button>
   )
 }
 
@@ -172,22 +175,25 @@ export default function WelcomeScreen({
               title={tx('add_account')}
             />
             <DeltaDialogBody id='welcome-dialog-body'>
-              <DeltaDialogContent>
+              <DeltaDialogContent id='welcome-dialog-content'>
                 <div className='welcome-deltachat'>
                   <img className='delta-icon' src='../images/intro1.png' />
                   <p className='f1'>{tx('welcome_chat_over_email')}</p>
                   {/* <p className='f2'>{tx('welcome_intro1_message')}</p> */}
-                  <div
+                  <button
                     id='action-login-to-email'
-                    className='welcome-button'
+                    className='delta-button-round'
                     onClick={() => window.__changeScreen(Screens.Login)}
                   >
                     {tx('login_header')}
-                  </div>
+                  </button>
                   <ImportButton />
-                  <div className='welcome-button' onClick={onClickScanQr}>
+                  <button
+                    className='delta-button-round secondary'
+                    onClick={onClickScanQr}
+                  >
                     {tx('scan_invitation_code')}
-                  </div>
+                  </button>
                 </div>
               </DeltaDialogContent>
             </DeltaDialogBody>
