@@ -1,5 +1,5 @@
 import DeltaChat, { C, DeltaChat as DeltaChatNode } from 'deltachat-node'
-import { app as rawApp } from 'electron'
+import { app as rawApp, ipcMain } from 'electron'
 import { EventEmitter } from 'events'
 import { getLogger } from '../../shared/logger'
 import { maybeMarkSeen } from '../markseenFix'
@@ -99,6 +99,14 @@ export default class DeltaChatController extends EventEmitter {
 
     log.debug('Starting event handler')
     this.registerEventHandler(this.account_manager)
+
+    this.account_manager.startJSONRPCHandler((response) => {
+      mainWindow.send("json-rpc-message", response)
+    })
+
+    ipcMain.handle("json-rpc-request", (_ev, message) => {
+      this.account_manager.jsonRPCRequest(message)
+    })
 
     if (DesktopSettings.state.syncAllAccounts) {
       log.info('Ready, starting accounts io...')
