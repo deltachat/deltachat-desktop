@@ -1,5 +1,6 @@
 import { DeltaBackend } from './delta-remote'
 import { getLogger } from '../shared/logger'
+import { BackendRemote } from './backend-com'
 
 const log = getLogger('renderer/experiments')
 
@@ -11,6 +12,10 @@ These functions are highly experimental, use at your own risk.
     `
   constructor() {
     window.exp = this
+  }
+
+  getAllAccounts(){
+    return BackendRemote.listAccounts()
   }
 
   async importContacts(contacts: [string, string][]) {
