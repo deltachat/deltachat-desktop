@@ -1,8 +1,8 @@
 import {
   BaseDeltachat,
   yerpc,
-} from 'deltachat-node/deltachat-jsonrpc/typescript'
-import { Message } from 'deltachat-node/deltachat-jsonrpc/typescript/dist/generated/jsonrpc'
+} from 'deltachat-node/deltachat-jsonrpc/typescript/src/lib'
+import { Message } from 'deltachat-node/deltachat-jsonrpc/typescript/generated/jsonrpc'
 // import { getLogger } from '../shared/logger'
 
 const { BaseTransport } = yerpc

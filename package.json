@@ -106,7 +106,8 @@
     "source-map-support": "^0.5.19",
     "stackframe": "^1.2.1",
     "url-parse": "^1.5.9",
-    "use-debounce": "^3.3.0"
+    "use-debounce": "^3.3.0",
+    "yerpc": "^0.2.3"
   },
   "devDependencies": {
     "@babel/core": "^7.7.7",
