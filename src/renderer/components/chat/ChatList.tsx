@@ -40,6 +40,8 @@ import {
   selectChat,
 } from '../helpers/ChatMethods'
 import { useThemeCssVar } from '../../ThemeManager'
+import { useSettingsStore } from '../../stores/settings'
+import { Icon } from '@blueprintjs/core'
 
 const enum LoadStatus {
   FETCHING = 1,
@@ -137,7 +139,12 @@ export default function ChatList(props: {
     props.onExitSearch && props.onExitSearch()
   }
   const screenContext = useContext(ScreenContext)
+
   const { openDialog } = screenContext
+
+  const onCreateChat = () => {
+    screenContext.openDialog('CreateChat', {})
+  }
 
   const CHATLISTITEM_CHAT_HEIGHT =
     Number(useThemeCssVar('--SPECIAL-chatlist-item-chat-height')) || 64
@@ -347,6 +354,19 @@ export default function ChatList(props: {
                   </ChatListPart>
                 </>
               )}
+              <div
+                className='floating-action-button'
+                onClick={onCreateChat}
+                id='new-chat-button'
+                style={{ left: width - 65 }}
+              >
+                <div
+                  className='Icon'
+                  style={{
+                    WebkitMask: 'url(../images/dc-cross.svg) no-repeat center',
+                  }}
+                ></div>
+              </div>
             </div>
           )}
         </AutoSizer>
