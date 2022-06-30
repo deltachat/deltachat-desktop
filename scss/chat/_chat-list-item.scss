@@ -215,3 +215,27 @@
     background-color: var(--chatListItemDeaddropBgHover);
   }
 }
+
+.floating-action-button {
+  --size: 50px;
+  --iconSize: 20px;
+  position: fixed;
+  z-index: 20;
+  bottom: 15px;
+
+  width: var(--size);
+  height: var(--size);
+  padding: calc((var(--size) - var(--iconSize)) / 2);
+
+  background-color: var(--floatingActionButtonBg);
+  border-radius: 100%;
+  &:hover {
+    cursor: pointer;
+  }
+
+  .Icon {
+    height: 100%;
+    -webkit-mask-size: 90%;
+    background-color: white;
+  }
+}
