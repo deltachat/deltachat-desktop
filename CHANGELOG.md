@@ -14,6 +14,7 @@
 ### Changed
 - Updated minimal theme
 - Update translations (03.06.2022)
+- New login screen layout
 
 ## [1.30.0] - 2022-05-30
 
