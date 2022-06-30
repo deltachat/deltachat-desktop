@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+## Added
+- Floating action button in chatlist to start a new chat
+
 ## Fixed
 - use addr if displayname is not set for webxdc selfName #2803
 
