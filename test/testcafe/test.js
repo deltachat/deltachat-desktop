@@ -42,16 +42,15 @@ test('shows correct headline', async t => {
   await t
     .expect(Selector('.welcome-deltachat > .f1').innerText)
     .eql(await translate('welcome_chat_over_email'))
-    .click('.welcome-button')
+    .click('#action-login-to-email')
     .typeText('#addr', 'foo')
     .typeText('#mail_pw', 'bar')
     .click("#action-login")
     .expect(Selector('.delta-dialog-content > p').innerText)
-    .contains('Bad email-address: Invalid email address: missing \'@\'')
+    .contains('Bad email-address: Email "foo" must contain \'@\' character')
 })
 
 test('login works', async t => {
-  await t.debug()
   await goBackToAccountOverviewIfNeeded(t)
   conf.account1 = await loginWithTmpUser()
   //console.log(conf.account1)
