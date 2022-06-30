@@ -40,8 +40,6 @@ import {
   selectChat,
 } from '../helpers/ChatMethods'
 import { useThemeCssVar } from '../../ThemeManager'
-import { useSettingsStore } from '../../stores/settings'
-import { Icon } from '@blueprintjs/core'
 
 const enum LoadStatus {
   FETCHING = 1,
@@ -363,7 +361,8 @@ export default function ChatList(props: {
                 <div
                   className='Icon'
                   style={{
-                    WebkitMask: 'url(../images/dc-cross.svg) no-repeat center',
+                    WebkitMask:
+                      'url(../images/icons/plus.svg) no-repeat center',
                   }}
                 ></div>
               </div>

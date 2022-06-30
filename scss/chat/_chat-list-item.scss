@@ -227,7 +227,7 @@
   height: var(--size);
   padding: calc((var(--size) - var(--iconSize)) / 2);
 
-  background-color: var(--navBarBackground);
+  background-color: var(--floatingActionButtonBg);
   border-radius: 100%;
   &:hover {
     cursor: pointer;
