@@ -74,6 +74,8 @@
       ev.preventDefault()
       ev.stopImmediatePropagation()
       ev.stopPropagation()
+    } else if (ev.key == 'Escape') {
+      ipcRenderer.invoke('webxdc.exitFullscreen')
     }
   })
 })()

@@ -2,19 +2,35 @@
 
 ## [Unreleased][unreleased]
 
+## Added
+- Floating action button in chatlist to start a new chat
+
+## Fixed
+- use addr if displayname is not set for webxdc selfName #2803
+
+## Changed
+- Less round buttons, more similar to android and better spacing #2813
+
+## [1.30.1] - 2022-06-07
+
 ### Added
 - Added messageId to MessageDetail dialog
+- added custom titlebar menu for webxdc (on linux and windows)
 - add open keybindings dialog to window titlebar menu
+- exit fullscreen webxdc with escape key
 
 ### Fixed
 - "New contact" button hidden if contact already exists (#2646)
 - Fix too wide clickable area on forwarded messages @andresmc98 (#2782)
 - Fix button label saying open instead of save in export backup file dialog
+- Fix display/playing of media files that contain invalid url chars in filename (such as `#`) (#2527)
 
 ### Changed
 - Updated minimal theme
 - Update translations (03.06.2022)
 - New login screen layout
+- Update translations (07.06.2022)
+- Update deltachat-node to `1.86.0`
 
 ## [1.30.0] - 2022-05-30
 
@@ -1634,7 +1650,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.30.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.30.1...HEAD
+
+[1.30.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.30.0...v1.30.1
 
 [1.30.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.29.1...v1.30.0
 
