@@ -27,7 +27,7 @@ export async function closeDialog () {
 export async function loginWithTmpUser () {
   const account = await createTmpUser()
   await t
-    .click('#action-go-to-login')
+    .click('#action-login-to-email')
     .typeText('#addr', account.email)
     .typeText('#mail_pw', account.password)
     .click("#action-login")

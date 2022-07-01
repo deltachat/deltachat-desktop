@@ -3,7 +3,6 @@ import { Component, createRef } from 'react'
 const { ipcRenderer } = window.electron_functions
 
 import { ScreenContext } from './contexts'
-import AccountsScreen from './components/screens/AccountsScreen'
 import MainScreen from './components/screens/MainScreen'
 import DialogController, {
   OpenDialogFunctionType,
@@ -14,8 +13,10 @@ import processOpenQrUrl from './components/helpers/OpenQrUrl'
 import { getLogger } from '../shared/logger'
 import { ContextMenuLayer, showFnType } from './components/ContextMenu'
 import { DeltaBackend } from './delta-remote'
-import AccountSetupScreen from './components/screens/AccountSetupScreen'
 import { ActionEmitter, KeybindAction } from './keybindings'
+import AccountSetupScreen from './components/screens/AccountSetupScreen'
+import AccountListScreen from './components/screens/AccountListScreen'
+import WelcomeScreen from './components/screens/WelcomeScreen'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -25,10 +26,11 @@ export interface userFeedback {
 }
 
 export enum Screens {
-  Accounts = 'accounts',
+  Welcome = 'welcome',
   Main = 'main',
   Login = 'login',
   Loading = 'loading',
+  AccountList = 'accountSelection',
 }
 
 export default class ScreenController extends Component {
@@ -76,7 +78,13 @@ export default class ScreenController extends Component {
     if (lastLoggedInAccountId && !(lastLoggedInAccountId < 0)) {
       await this.selectAccount(lastLoggedInAccountId)
     } else {
-      this.changeScreen(Screens.Accounts)
+      const allAccountIds = await DeltaBackend.call('login.getAllAccountIds')
+      if (allAccountIds && allAccountIds.length > 0) {
+        this.changeScreen(Screens.AccountList)
+      } else {
+        const accountId = await DeltaBackend.call('login.addAccount')
+        await this.selectAccount(accountId)
+      }
     }
   }
 
@@ -87,7 +95,7 @@ export default class ScreenController extends Component {
     if (account.type === 'configured') {
       this.changeScreen(Screens.Main)
     } else {
-      this.changeScreen(Screens.Login)
+      this.changeScreen(Screens.Welcome)
     }
   }
 
@@ -104,7 +112,7 @@ export default class ScreenController extends Component {
     log.debug('Changing screen to:', screen)
     this.setState({ screen })
     window.__screen = screen
-    if (Screens.Accounts) {
+    if (Screens.Welcome) {
       // remove user feedback error message - https://github.com/deltachat/deltachat-desktop/issues/2261
       this.userFeedback(false)
     }
@@ -134,7 +142,7 @@ export default class ScreenController extends Component {
   }
 
   onError(_event: any, [data1, data2]: [string | number, string]) {
-    if (this.state.screen === Screens.Accounts) return
+    if (this.state.screen === Screens.Welcome) return
     if (data1 === 0) data1 = ''
     const text = data1 + data2
     this.userFeedback({ type: 'error', text })
@@ -195,8 +203,23 @@ export default class ScreenController extends Component {
             accountId={this.selectedAccountId}
           />
         )
-      case Screens.Accounts:
-        return <AccountsScreen selectAccount={this.selectAccount} />
+      case Screens.Welcome:
+        if (this.selectedAccountId === undefined) {
+          throw new Error('Selected account not defined')
+        }
+        return <WelcomeScreen selectedAccountId={this.selectedAccountId} />
+      case Screens.AccountList:
+        return (
+          <AccountListScreen
+            {...{
+              selectAccount: this.selectAccount,
+              onAddAccount: async () => {
+                const accountId = await DeltaBackend.call('login.addAccount')
+                await this.selectAccount(accountId)
+              },
+            }}
+          />
+        )
       default:
         return null
     }

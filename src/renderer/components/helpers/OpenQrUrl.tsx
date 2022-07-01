@@ -146,7 +146,7 @@ export default async function processOpenQrUrl(
       cb: callback,
     })
     return
-  } else if (checkQr.state === QrState.Account && screen !== Screens.Accounts) {
+  } else if (checkQr.state === QrState.Account && screen !== Screens.Welcome) {
     closeProcessDialog()
     window.__openDialog('AlertDialog', {
       message: tx('Please logout first'),
@@ -157,8 +157,6 @@ export default async function processOpenQrUrl(
 
   if (checkQr.state === QrState.Account) {
     try {
-      const accountId = await DeltaBackend.call('login.addAccount')
-      await DeltaBackend.call('login.selectAccount', accountId)
       await DeltaBackend.call('settings.setConfigFromQr', url)
 
       const onSuccess = (_account: DeltaChatAccount) => {

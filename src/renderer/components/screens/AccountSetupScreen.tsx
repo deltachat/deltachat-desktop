@@ -15,11 +15,6 @@ import {
 } from '../dialogs/DeltaDialog'
 
 import type ScreenController from '../../ScreenController'
-import { Screens } from '../../ScreenController'
-import { DeltaBackend } from '../../delta-remote'
-import { getLogger } from '../../../shared/logger'
-
-const log = getLogger('renderer/AccountSetupScreen')
 
 export default function AccountSetupScreen({
   selectAccount,
@@ -43,26 +38,6 @@ export default function AccountSetupScreen({
       }),
     [accountId, openDialog, selectAccount, credentials]
   )
-
-  const onCancel = async () => {
-    try {
-      const acInfo = await DeltaBackend.call('login.accountInfo', accountId)
-      if (acInfo.type == 'unconfigured') {
-        await DeltaBackend.call('login.removeAccount', accountId)
-      }
-      window.__changeScreen(Screens.Accounts)
-    } catch (error) {
-      if (error instanceof Error) {
-        window.__openDialog('AlertDialog', {
-          message: error?.message,
-          cb: () => {},
-        })
-      } else {
-        log.error('unexpected error type', error)
-        throw error
-      }
-    }
-  }
 
   const onKeyDown = useCallback(
     (ev: KeyboardEvent) => {
@@ -91,7 +66,7 @@ export default function AccountSetupScreen({
           onClose={() => {}}
           fixed={true}
         >
-          <DeltaDialogHeader title={tx('add_account')} />
+          <DeltaDialogHeader title={tx('login_explain')} />
           <DeltaDialogBody>
             <DeltaDialogContent>
               <div className='login'>
@@ -107,7 +82,7 @@ export default function AccountSetupScreen({
               <p
                 id='action-cancel'
                 className={'delta-button bold primary'}
-                onClick={() => onCancel()}
+                onClick={() => selectAccount(accountId)}
               >
                 {tx('cancel')}
               </p>

@@ -128,8 +128,8 @@ test('prepare testing: login to account A with desktop', async t => {
   //     config.account_a_email
   //   )
   await t
-    .click('#action-go-to-login')
-    .typeText('#addr', config.account_a_email)
+  .click('#action-login-to-email')
+  .typeText('#addr', config.account_a_email)
     .typeText('#mail_pw', config.account_a_password)
     .click('#action-login')
   await t

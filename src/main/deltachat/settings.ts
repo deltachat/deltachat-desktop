@@ -27,6 +27,9 @@ export default class DCSettings extends SplitOut {
   }
 
   setConfigFromQr(qrCodeContent: string) {
+    if (!this.selectedAccountContext) {
+      throw new Error('No account selected.')
+    }
     if (!this.selectedAccountContext.setConfigFromQr(qrCodeContent)) {
       throw new Error(
         'setConfigFromQr failed, look into error events for details'

@@ -202,9 +202,10 @@ export function DeltaDialogBody(
     noFooter?: boolean
     ref?: todo
     style?: any
+    id?: string
   }>
 ) {
-  const { noFooter, children, style } = props
+  const { noFooter, children, style, id } = props
   return (
     <div
       ref={props.ref}
@@ -212,6 +213,7 @@ export function DeltaDialogBody(
         'bp4-dialog-body-no-footer': noFooter !== false,
       })}
       style={style}
+      id={id}
     >
       {children}
     </div>
@@ -223,16 +225,18 @@ export function DeltaDialogContent(
     noPadding?: boolean
     noOverflow?: boolean
     style?: React.CSSProperties
+    id?: string
   }>
 ) {
-  const { noPadding, noOverflow } = props
+  const { noPadding, noOverflow, style, id } = props
   return (
     <div
-      style={props.style}
       className={classNames('delta-dialog-content', {
         'delta-dialog-content--no-padding': noPadding,
         'delta-dialog-content--no-overflow': noOverflow,
       })}
+      style={style}
+      id={id}
     >
       {props.children}
     </div>

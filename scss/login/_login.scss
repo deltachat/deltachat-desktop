@@ -226,20 +226,33 @@ div.delta-form-group {
   }
 }
 
+#welcome-dialog-body {
+  max-height: 100%;
+}
+
+#welcome-dialog-content {
+  padding-bottom: 20px;
+}
+
 .welcome-deltachat {
   display: flex;
   justify-content: center;
   flex-direction: column;
   text-align: center;
+  align-items: center;
 
   .delta-icon {
-    padding-top: 40px;
-    width: 100px;
+    width: 90%;
     margin: 0 auto;
+    height: auto;
+    @media (max-height: 600px) {
+      display: none;
+    }
   }
 
   .f1 {
-    margin-top: 20px;
+    margin-top: 40px;
+    margin-bottom: 30px;
     font-size: x-large;
     color: var(--colorNone);
   }
@@ -251,22 +264,12 @@ div.delta-form-group {
     font-size: larger;
   }
 
-  .welcome-button {
-    width: fit-content;
-    display: block;
-    padding: 10px;
+  .delta-button-round {
+    width: 75%;
+  }
 
-    margin: 0 auto;
-    margin-top: 50px;
-
-    background-color: var(--colorPrimary);
-    color: white;
-    text-transform: uppercase;
-    font-weight: 100;
-
-    &:hover {
-      cursor: pointer;
-    }
+  #action-go-to-login {
+    margin-top: 40px;
   }
 }
 

@@ -26,4 +26,11 @@ button.delta-button-round {
     box-shadow: none;
     background-clip: unset;
   }
+  &.secondary {
+    background-color: var(--bp4ButtonBg);
+    border: 1px;
+    border-color: var(--bp4ButtonText);
+    border-style: solid;
+    color: var(--bp4ButtonText);
+  }
 }

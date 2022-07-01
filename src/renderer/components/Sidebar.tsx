@@ -38,7 +38,7 @@ const Sidebar = React.memo(
       setSidebarState('invisible')
       unselectChat()
       DeltaBackend.call('login.logout')
-      screenContext.changeScreen(Screens.Accounts)
+      screenContext.changeScreen(Screens.AccountList)
     }
 
     const onOpenHelp = () => {

@@ -41,13 +41,13 @@ test('shows correct headline', async t => {
   await goBackToAccountOverviewIfNeeded(t)
   await t
     .expect(Selector('.welcome-deltachat > .f1').innerText)
-    .eql(await translate('welcome_desktop'))
-    .click('.welcome-button')
+    .eql(await translate('welcome_chat_over_email'))
+    .click('#action-login-to-email')
     .typeText('#addr', 'foo')
     .typeText('#mail_pw', 'bar')
     .click("#action-login")
     .expect(Selector('.delta-dialog-content > p').innerText)
-    .contains('Bad email-address: Invalid email address: missing \'@\'')
+    .contains('Bad email-address: Email "foo" must contain \'@\' character')
 })
 
 test('login works', async t => {
@@ -67,6 +67,7 @@ test('account is shown on account overview', async t => {
 
 test('second login works', async t => {
   await goBackToAccountOverviewIfNeeded(t)
+  await t.click('#action-go-to-login')
   conf.account2 = await loginWithTmpUser()
   //console.log(conf.account2)
   await t.expect(conf.account2).notEql(undefined)

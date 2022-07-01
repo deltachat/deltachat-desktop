@@ -1,155 +1,33 @@
-import React, { useState, useEffect, useContext, useMemo } from 'react'
-import { ipcBackend } from '../../ipc'
-import {
-  Classes,
-  Elevation,
-  Intent,
-  Card,
-  Icon,
-  Switch,
-  Alignment,
-} from '@blueprintjs/core'
-import { DeltaProgressBar } from '../Login-Styles'
+import { Classes, Switch, Alignment, Icon } from '@blueprintjs/core'
+import classNames from 'classnames'
 import { getLogger } from '../../../shared/logger'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
-import DeltaDialog, {
-  DeltaDialogFooter,
-  DeltaDialogFooterActions,
+import debounce from 'debounce'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
+import { DeltaChatAccount } from '../../../shared/shared-types'
+import { useTranslationFunction, ScreenContext } from '../../contexts'
+import { DeltaBackend } from '../../delta-remote'
+import { ipcBackend } from '../../ipc'
+import ScreenController from '../../ScreenController'
+import { Avatar } from '../Avatar'
+import { PseudoContact } from '../contact/Contact'
+import {
   DeltaDialogBase,
   DeltaDialogBody,
   DeltaDialogContent,
 } from '../dialogs/DeltaDialog'
-import { DeltaChatAccount } from '../../../shared/shared-types'
 import filesizeConverter from 'filesize'
-import { DialogProps } from '../dialogs/DialogController'
-import { DeltaBackend } from '../../delta-remote'
-import { IpcRendererEvent } from 'electron'
-import { Avatar } from '../Avatar'
-import { PseudoContact } from '../contact/Contact'
-import { runtime } from '../../runtime'
-import type ScreenController from '../../ScreenController'
-import debounce from 'debounce'
-import classNames from 'classnames'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
-function ImportBackupProgressDialog({
-  onClose,
-  isOpen,
-  backupFile,
-}: DialogProps) {
-  const [importProgress, setImportProgress] = useState(0.0)
-  const [error, setError] = useState<string | null>(null)
-
-  const onAll = (eventName: IpcRendererEvent, data1: string, data2: string) => {
-    log.debug('ALL core events: ', eventName, data1, data2)
-  }
-  const onImexProgress = (_evt: any, [progress, _data2]: [number, any]) => {
-    setImportProgress(progress)
-  }
-
-  const onError = (_data1: any, data2: string) => {
-    setError('DC_EVENT_ERROR: ' + data2)
-  }
-
-  useEffect(() => {
-    ;(async () => {
-      let account
-      try {
-        account = await DeltaBackend.call('backup.import', backupFile)
-      } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message)
-        }
-        return
-      }
-      onClose()
-      window.__selectAccount(account.id)
-    })()
-
-    ipcBackend.on('ALL', onAll)
-    ipcBackend.on('DC_EVENT_IMEX_PROGRESS', onImexProgress)
-    ipcBackend.on('DC_EVENT_ERROR', onError)
-
-    return () => {
-      ipcBackend.removeListener('ALL', onAll)
-      ipcBackend.removeListener('DC_EVENT_IMEX_PROGRESS', onImexProgress)
-      ipcBackend.removeListener('DC_EVENT_ERROR', onError)
-    }
-  }, [backupFile, onClose])
-
-  const tx = useTranslationFunction()
-  return (
-    <DeltaDialog
-      onClose={onClose}
-      title={tx('import_backup_title')}
-      // canOutsideClickClose
-      isOpen={isOpen}
-      style={{ top: '40%' }}
-    >
-      <div className={Classes.DIALOG_BODY}>
-        <Card elevation={Elevation.ONE}>
-          {error && (
-            <p>
-              {tx('error')}: {error}
-            </p>
-          )}
-          <DeltaProgressBar
-            progress={importProgress}
-            intent={!error ? Intent.SUCCESS : Intent.DANGER}
-          />
-        </Card>
-      </div>
-    </DeltaDialog>
-  )
-}
-
-const ImportButton = function ImportButton(_props: any) {
-  const tx = useTranslationFunction()
-
-  async function onClickImportBackup() {
-    const file = await runtime.showOpenFileDialog({
-      title: tx('import_backup_title'),
-      properties: ['openFile'],
-      filters: [{ name: '.tar or .bak', extensions: ['tar', 'bak'] }],
-      defaultPath: runtime.getAppPath('downloads'),
-    })
-    if (file) {
-      window.__openDialog(ImportBackupProgressDialog, {
-        backupFile: file,
-      })
-    }
-  }
-
-  return (
-    <p
-      className={'delta-button light-bold primary'}
-      onClick={onClickImportBackup}
-    >
-      {tx('import_backup_title')}
-    </p>
-  )
-}
-
-const ScanQRCodeButton = React.memo(function ScanQRCode(_) {
-  const { openDialog } = useContext(ScreenContext)
-  const tx = useTranslationFunction()
-
-  const onClickScanQr = () => openDialog('ImportQrCode')
-
-  return (
-    <p className={'delta-button light-bold primary'} onClick={onClickScanQr}>
-      {tx('qrscan_title')}
-    </p>
-  )
-})
-
-export default function AccountsScreen({
+export default function AccountListScreen({
   selectAccount,
+  onAddAccount,
 }: {
   selectAccount: typeof ScreenController.prototype.selectAccount
+  onAddAccount: any
 }) {
   const tx = useTranslationFunction()
+
   const [logins, setLogins] = useState<DeltaChatAccount[] | null>(null)
 
   const [syncAllAccounts, setSyncAllAccounts] = useState<boolean | null>(null)
@@ -182,11 +60,6 @@ export default function AccountsScreen({
     }
   }, [])
 
-  const addAccount = async () => {
-    const accountId = await DeltaBackend.call('login.addAccount')
-    selectAccount(accountId)
-  }
-
   if (logins === null)
     return (
       <div className='login-screen'>
@@ -202,77 +75,48 @@ export default function AccountsScreen({
           backdropProps={{ className: 'no-backdrop' }}
           onClose={() => {}}
           fixed={true}
+          canEscapeKeyClose={true}
         >
           <>
-            {(!logins || logins.length === 0) && (
-              <DeltaDialogBody>
-                <DeltaDialogContent>
-                  <div className='welcome-deltachat'>
-                    <img className='delta-icon' src='../images/deltachat.png' />
-                    <p className='f1'>{tx('welcome_desktop')}</p>
-                    <p className='f2'>{tx('welcome_intro1_message')}</p>
-                    <div
-                      id='action-go-to-login'
-                      className='welcome-button'
-                      onClick={addAccount}
-                    >
-                      {tx('login_header')}
-                    </div>
-                  </div>
-                </DeltaDialogContent>
-              </DeltaDialogBody>
-            )}
-            {logins && logins.length > 0 && (
-              <>
-                <div
-                  className={classNames(
-                    Classes.DIALOG_HEADER,
-                    'bp4-dialog-header-border-bottom'
-                  )}
-                >
-                  <h4 className='bp4-heading'>
-                    {tx('login_known_accounts_title_desktop')}
-                  </h4>
-                  {syncAllAccounts !== null && (
-                    <Switch
-                      checked={syncAllAccounts}
-                      label={tx('sync_all')}
-                      onChange={async () => {
-                        const new_state = !syncAllAccounts
-                        await DeltaBackend.call(
-                          'settings.setDesktopSetting',
-                          'syncAllAccounts',
-                          new_state
-                        )
-                        setSyncAllAccounts(new_state)
-                      }}
-                      alignIndicator={Alignment.RIGHT}
-                    />
-                  )}
-                </div>
-                <DeltaDialogBody>
-                  <DeltaDialogContent noPadding={true}>
-                    <AccountSelection
-                      {...{
-                        refreshAccounts,
-                        addAccount,
-                        selectAccount,
-                        logins,
-                        showUnread: syncAllAccounts || false,
-                      }}
-                    />
-                  </DeltaDialogContent>
-                </DeltaDialogBody>
-              </>
-            )}
-            <DeltaDialogFooter style={{ padding: '10px' }}>
-              <DeltaDialogFooterActions
-                style={{ justifyContent: 'space-between' }}
-              >
-                <ScanQRCodeButton />
-                <ImportButton />
-              </DeltaDialogFooterActions>
-            </DeltaDialogFooter>
+            <div
+              className={classNames(
+                Classes.DIALOG_HEADER,
+                'bp4-dialog-header-border-bottom'
+              )}
+            >
+              <h4 className='bp4-heading'>
+                {tx('login_known_accounts_title_desktop')}
+              </h4>
+              {syncAllAccounts !== null && (
+                <Switch
+                  checked={syncAllAccounts}
+                  label={tx('sync_all')}
+                  onChange={async () => {
+                    const new_state = !syncAllAccounts
+                    await DeltaBackend.call(
+                      'settings.setDesktopSetting',
+                      'syncAllAccounts',
+                      new_state
+                    )
+                    setSyncAllAccounts(new_state)
+                  }}
+                  alignIndicator={Alignment.RIGHT}
+                />
+              )}
+            </div>
+            <DeltaDialogBody>
+              <DeltaDialogContent noPadding={true}>
+                <AccountSelection
+                  {...{
+                    refreshAccounts,
+                    selectAccount,
+                    logins,
+                    showUnread: syncAllAccounts || false,
+                    onAddAccount,
+                  }}
+                />
+              </DeltaDialogContent>
+            </DeltaDialogBody>
           </>
         </DeltaDialogBase>
       </div>
@@ -282,16 +126,16 @@ export default function AccountsScreen({
 
 function AccountSelection({
   refreshAccounts,
-  addAccount,
   selectAccount,
   logins,
   showUnread,
+  onAddAccount,
 }: {
   refreshAccounts: () => Promise<void>
-  addAccount: () => {}
   selectAccount: typeof ScreenController.prototype.selectAccount
   logins: any
   showUnread: boolean
+  onAddAccount: any
 }) {
   const tx = useTranslationFunction()
   const { openDialog } = useContext(ScreenContext)
@@ -367,7 +211,7 @@ function AccountSelection({
         role='menu-item'
         id='action-go-to-login'
         className='contact-list-item'
-        onClick={addAccount}
+        onClick={onAddAccount}
         tabIndex={0}
       >
         <PseudoContact cutoff='+' text={tx('add_account')}></PseudoContact>
