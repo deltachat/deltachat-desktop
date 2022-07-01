@@ -306,7 +306,8 @@ export const MessageListInner = React.memo(
     const conversationType: ConversationType = {
       hasMultipleParticipants:
         chatStore.chat.type === C.DC_CHAT_TYPE_GROUP ||
-        chatStore.chat.type === C.DC_CHAT_TYPE_MAILINGLIST,
+        chatStore.chat.type === C.DC_CHAT_TYPE_MAILINGLIST ||
+        chatStore.chat.type === C.DC_CHAT_TYPE_BROADCAST,
       isDeviceChat: chatStore.chat.isDeviceChat as boolean,
       chatType: chatStore.chat.type as number,
     }

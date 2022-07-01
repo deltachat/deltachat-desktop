@@ -213,6 +213,10 @@ function mapCoreMsgStatus2String(state: number) {
   }
 }
 function isGroupChat(chat: JsonChat) {
-  return chat && chat.type === C.DC_CHAT_TYPE_GROUP
+  return chat && (chat.type === C.DC_CHAT_TYPE_GROUP || chat.type === C.DC_CHAT_TYPE_BROADCAST)
+}
+
+function isBroadcast(chat: JsonChat) {
+  return chat && chat.type === C.DC_CHAT_TYPE_BROADCAST
 }
 // end section Internal functions

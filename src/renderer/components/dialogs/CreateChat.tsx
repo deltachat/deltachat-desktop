@@ -91,6 +91,12 @@ export default function CreateChat(props: {
           text={tx('menu_new_verified_group')}
           onClick={() => setViewMode('createVerifiedGroup-main')}
         />
+        <PseudoListItem
+          id='newbroadcastlist'
+          cutoff='+'
+          text={tx('new_broadcast_list')}
+          onClick={() => setViewMode('createBroadcastList-main')}
+        />
       </Fragment>
     )
   }
