@@ -8,6 +8,9 @@
 ## Fixed
 - use addr if displayname is not set for webxdc selfName #2803
 
+## Changed
+- Less round buttons, more similar to android and better spacing #2813
+
 ## [1.30.1] - 2022-06-07
 
 ### Added
