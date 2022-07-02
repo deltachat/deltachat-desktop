@@ -1,5 +1,5 @@
 import {
-  BaseDeltachat,
+  BaseDeltaChat,
   yerpc,
 } from 'deltachat-node/deltachat-jsonrpc/typescript/src/lib'
 import { Message } from 'deltachat-node/deltachat-jsonrpc/typescript/generated/jsonrpc'
@@ -27,7 +27,7 @@ class ElectronTransport extends BaseTransport {
   }
 }
 
-class ElectronDeltachat extends BaseDeltachat<ElectronTransport> {
+class ElectronDeltachat extends BaseDeltaChat<ElectronTransport> {
   close() {
     /** noop */
   }
@@ -36,4 +36,5 @@ class ElectronDeltachat extends BaseDeltachat<ElectronTransport> {
   }
 }
 
-export const BackendRemote: BaseDeltachat<any> = new ElectronDeltachat()
+export const BackendRemote: BaseDeltaChat<any> = new ElectronDeltachat()
+
