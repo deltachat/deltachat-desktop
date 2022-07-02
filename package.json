@@ -84,7 +84,7 @@
     "application-config": "^1.0.1",
     "classnames": "^2.3.1",
     "debounce": "^1.2.0",
-    "deltachat-node": "github:deltachat/deltachat-core-rust#integrate-json-api-node-bindings",
+    "deltachat-node": "github:deltachat/deltachat-core-rust#jsonrpc-new",
     "emoji-js-clean": "^4.0.0",
     "emoji-mart": "^3.0.1",
     "emoji-regex": "^9.2.2",
@@ -105,9 +105,10 @@
     "react-zoom-pan-pinch": "^2.1.3",
     "source-map-support": "^0.5.19",
     "stackframe": "^1.2.1",
+    "tiny-emitter": "^2.1.0",
     "url-parse": "^1.5.9",
     "use-debounce": "^3.3.0",
-    "yerpc": "^0.2.3"
+    "yerpc": "^0.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.7.7",
