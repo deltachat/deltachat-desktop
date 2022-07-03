@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { Card } from '@blueprintjs/core'
 import reactStringReplace from 'react-string-replace'
 import { getLogger } from '../../../shared/logger'
 import DeltaDialog, { DeltaDialogBody, DeltaDialogFooter } from './DeltaDialog'
@@ -101,7 +100,9 @@ export default function About(props: { isOpen: boolean; onClose: () => void }) {
       onClose={onClose}
     >
       <DeltaDialogBody>
-        <Card>
+        <div
+          style={{ background: 'var(--bp4DialogBgPrimary)', padding: '21px' }}
+        >
           <p
             style={{ color: 'grey', userSelect: 'all' }}
           >{`Version ${VERSION} (git: ${GIT_REF})`}</p>
@@ -112,7 +113,7 @@ export default function About(props: { isOpen: boolean; onClose: () => void }) {
             {versionString}
           </p>
           <DCInfo />
-        </Card>
+        </div>
       </DeltaDialogBody>
       <DeltaDialogFooter />
     </DeltaDialog>
