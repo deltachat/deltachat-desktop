@@ -3,6 +3,7 @@ import { ipcBackend } from '../../ipc'
 import { getLogger } from '../../../shared/logger'
 import { DeltaBackend } from '../../delta-remote'
 import { debounce } from 'debounce'
+import { BackendRemote } from '../../backend-com'
 
 const log = getLogger('renderer/helpers/ChatList')
 
@@ -49,6 +50,10 @@ export function useChatList(
   _queryStr?: string,
   _queryContactId?: number
 ) {
+  if (window.__selectedAccountId === undefined) {
+    throw new Error('no context selected')
+  }
+  const accountId = window.__selectedAccountId
   if (!_queryStr) _queryStr = ''
 
   const [listFlags, setListFlags] = useState(_listFlags)
@@ -64,12 +69,14 @@ export function useChatList(
           queryStr: string | undefined,
           queryContactId: number | undefined
         ) => {
-          DeltaBackend.call(
-            'chatList.getChatListEntries',
-            listFlags,
-            queryStr,
-            queryContactId
-          ).then(setChatListEntries)
+          BackendRemote.rpc
+            .getChatlistEntries(
+              accountId,
+              listFlags,
+              queryStr || null,
+              queryContactId || null
+            )
+            .then(setChatListEntries)
         },
         200
       ),
