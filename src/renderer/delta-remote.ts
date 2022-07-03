@@ -30,17 +30,6 @@ class DeltaRemote {
   // root ---------------------------------------------------------------
   call(fnName: 'setProfilePicture', newImage: string | null): Promise<void>
   call(fnName: 'getProfilePicture'): Promise<string>
-  call(
-    fnName: 'getProviderInfo',
-    email: string
-  ): Promise<
-    | {
-        before_login_hint: string
-        overview_page: string
-        status: any
-      }
-    | undefined
-  >
   call(fnName: 'joinSecurejoin', qrCode: string): Promise<number>
   call(fnName: 'stopOngoingProcess'): Promise<number>
   call(fnName: 'checkQrCode', qrCode: string): Promise<QrCodeResponse>
