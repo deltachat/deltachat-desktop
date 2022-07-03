@@ -5,12 +5,12 @@ import {
 import { Message } from 'deltachat-node/deltachat-jsonrpc/typescript/generated/jsonrpc'
 import { DeltaBackend } from './delta-remote'
 import { runtime } from './runtime'
-// import { getLogger } from '../shared/logger'
+import { getLogger } from '../shared/logger'
 
 export * as Type from 'deltachat-node/deltachat-jsonrpc/typescript/generated/types'
 
 const { BaseTransport } = yerpc
-// const log = getLogger('renderer/jsonrpc')
+const log = getLogger('renderer/jsonrpc')
 
 class ElectronTransport extends BaseTransport {
   constructor() {
@@ -27,7 +27,7 @@ class ElectronTransport extends BaseTransport {
   _send(message: Message): void {
     const serialized = JSON.stringify(message)
     window.electron_functions.ipcRenderer.invoke('json-rpc-request', serialized)
-    //   log.debug("sent: ", message)
+    log.debug('sent: ', message)
   }
 }
 
