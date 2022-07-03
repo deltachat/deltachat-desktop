@@ -40,6 +40,7 @@ import {
   selectChat,
 } from '../helpers/ChatMethods'
 import { useThemeCssVar } from '../../ThemeManager'
+import { BackendRemote } from '../../backend-com'
 
 const enum LoadStatus {
   FETCHING = 1,
@@ -382,6 +383,10 @@ function translate_n(key: string, quantity: number) {
 
 /** functions for the chat virtual list */
 export function useLogicVirtualChatList(chatListIds: [number, number][]) {
+  if (window.__selectedAccountId === undefined) {
+    throw new Error('no context selected')
+  }
+  const accountId = window.__selectedAccountId
   // workaround to save a current reference of chatListIds
   const chatListIdsRef = useRef(chatListIds)
   if (chatListIdsRef.current !== chatListIds) {
@@ -487,10 +492,10 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
    */
   const onContactChanged = async (contactId: number) => {
     if (contactId !== 0) {
-      const chatListItems = await DeltaBackend.call(
-        'chatList.getChatListEntries',
-        undefined,
-        undefined,
+      const chatListItems = await BackendRemote.rpc.getChatlistEntries(
+        accountId,
+        null,
+        null,
         contactId
       )
       const inCurrentCache = Object.keys(chatCacheRef.current).map(v =>
