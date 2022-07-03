@@ -3,9 +3,7 @@ import classNames from 'classnames'
 import { getLogger } from '../../../shared/logger'
 import debounce from 'debounce'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
-import { DeltaChatAccount } from '../../../shared/shared-types'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
-import { DeltaBackend } from '../../delta-remote'
 import { ipcBackend } from '../../ipc'
 import ScreenController from '../../ScreenController'
 import { Avatar } from '../Avatar'
@@ -16,6 +14,8 @@ import {
   DeltaDialogContent,
 } from '../dialogs/DeltaDialog'
 import filesizeConverter from 'filesize'
+import { BackendRemote, EffectfulBackendActions, Type } from '../../backend-com'
+import { DeltaBackend } from '../../delta-remote'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
@@ -24,11 +24,11 @@ export default function AccountListScreen({
   onAddAccount,
 }: {
   selectAccount: typeof ScreenController.prototype.selectAccount
-  onAddAccount: any
+  onAddAccount: () => void
 }) {
   const tx = useTranslationFunction()
 
-  const [logins, setLogins] = useState<DeltaChatAccount[] | null>(null)
+  const [logins, setLogins] = useState<Type.Account[] | null>(null)
 
   const [syncAllAccounts, setSyncAllAccounts] = useState<boolean | null>(null)
 
@@ -42,14 +42,14 @@ export default function AccountListScreen({
   }, [])
 
   const refreshAccounts = async () => {
-    const logins = await DeltaBackend.call('login.getAllAccounts')
+    const logins = await BackendRemote.listAccounts()
     setLogins(logins)
   }
 
   useEffect(() => {
     let mounted = true
     ;(async () => {
-      const logins = await DeltaBackend.call('login.getAllAccounts')
+      const logins = await BackendRemote.listAccounts()
       if (mounted === true) {
         setLogins(logins)
       }
@@ -133,21 +133,21 @@ function AccountSelection({
 }: {
   refreshAccounts: () => Promise<void>
   selectAccount: typeof ScreenController.prototype.selectAccount
-  logins: any
+  logins: Type.Account[]
   showUnread: boolean
-  onAddAccount: any
+  onAddAccount: () => void
 }) {
   const tx = useTranslationFunction()
   const { openDialog } = useContext(ScreenContext)
 
-  const removeAccount = (account: DeltaChatAccount) => {
+  const removeAccount = (account: Type.Account) => {
     const header = tx(
       'ask_delete_value',
-      account.type == 'configured' ? account.addr || '?' : '[unconfigured]'
+      account.type == 'Configured' ? account.addr || '?' : '[unconfigured]'
     )
     const message = tx(
       'delete_account_explain_with_name',
-      account.type == 'configured' ? account.addr || '?' : '[unconfigured]'
+      account.type == 'Configured' ? account.addr || '?' : '[unconfigured]'
     )
     openDialog('ConfirmationDialog', {
       header,
@@ -157,7 +157,7 @@ function AccountSelection({
       cb: async (yes: boolean) => {
         if (yes) {
           try {
-            await DeltaBackend.call('login.removeAccount', account.id)
+            await EffectfulBackendActions.removeAccount(account.id)
             refreshAccounts()
           } catch (error: any) {
             if (error instanceof Error) {
@@ -216,7 +216,7 @@ function AccountSelection({
       >
         <PseudoContact cutoff='+' text={tx('add_account')}></PseudoContact>
       </div>
-      {logins.map((login: DeltaChatAccount, index: Number) => (
+      {logins.map((login: Type.Account, index: Number) => (
         <AccountItem
           key={`login-${index}`}
           login={login}
@@ -235,9 +235,9 @@ function AccountItem({
   removeAccount,
   showUnread,
 }: {
-  login: DeltaChatAccount
+  login: Type.Account
   selectAccount: typeof ScreenController.prototype.selectAccount
-  removeAccount: (account: DeltaChatAccount) => void
+  removeAccount: (account: Type.Account) => void
   showUnread: boolean
 }) {
   const removeAction = (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -283,7 +283,7 @@ function AccountItem({
   const tx = useTranslationFunction()
 
   let inner
-  if (login.type === 'configured') {
+  if (login.type === 'Configured') {
     const title = tx('account_info_hover_tooltip_desktop2', [
       login.addr || 'null',
       account_size,

@@ -80,9 +80,25 @@ interface Runtime {
   getAppPath(name: Parameters<typeof app.getPath>[0]): string
   openPath(path: string): Promise<string>
   getConfigPath(): string
+
+  // webxdc
+  deleteWebxdcAccountData(accountId: number): Promise<void>
+  closeAllWebxdcInstances(): void
+
+  // control app
+  restartApp(): void
 }
 
 class Browser implements Runtime {
+  deleteWebxdcAccountData(accountId: number): Promise<void> {
+    throw new Error('Method not implemented.')
+  }
+  closeAllWebxdcInstances(): void {
+    throw new Error('Method not implemented.')
+  }
+  restartApp(): void {
+    throw new Error('Method not implemented.')
+  }
   getRuntimeInfo(): RuntimeInfo {
     throw new Error('Method not implemented.')
   }
@@ -152,6 +168,15 @@ class Browser implements Runtime {
   }
 }
 class Electron implements Runtime {
+  deleteWebxdcAccountData(accountId: number): Promise<void> {
+    return ipcBackend.invoke('delete_webxdc_account_data', accountId)
+  }
+  closeAllWebxdcInstances(): void {
+    ipcBackend.invoke('close-all-webxdc')
+  }
+  restartApp(): void {
+    ipcBackend.invoke('restart_app')
+  }
   getDesktopSettings(): Promise<DesktopSettingsType> {
     return ipcBackend.invoke('get-desktop-settings')
   }

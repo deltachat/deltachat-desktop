@@ -15,6 +15,7 @@ import { ActionEmitter, KeybindAction } from '../keybindings'
 import SettingsConnectivityDialog from './dialogs/Settings-Connectivity'
 import { debounceWithInit } from './chat/ChatListHelpers'
 import { onDCEvent } from '../ipc'
+import { EffectfulBackendActions } from '../backend-com'
 
 export type SidebarState = 'init' | 'visible' | 'invisible'
 
@@ -37,10 +38,10 @@ const Sidebar = React.memo(
       setSidebarState('invisible')
       screenContext.openDialog('UnblockContacts', {})
     }
-    const onLogout = () => {
+    const onLogout = async () => {
       setSidebarState('invisible')
       unselectChat()
-      DeltaBackend.call('login.logout')
+      await EffectfulBackendActions.logout()
       screenContext.changeScreen(Screens.AccountList)
     }
 

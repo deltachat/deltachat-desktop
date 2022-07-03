@@ -5,6 +5,7 @@ import { ScreenContext } from '../../contexts'
 
 import { DeltaBackend } from '../../delta-remote'
 import ConfirmationDialog from './ConfirmationDialog'
+import { runtime } from '../../runtime'
 
 export default function SettingsWebxdc() {
   const [usage, setUsage] = useState<{
@@ -37,7 +38,14 @@ export default function SettingsWebxdc() {
       message:
         "Delete all webxdc DOMStorage data, if you do that you might loose some local settings of your webxdc's",
       confirmLabel: tx('delete'),
-      cb: yes => yes && DeltaBackend.call('webxdc.deleteWebxdcAccountData'),
+      cb: yes => {
+        if (!yes || window.__selectedAccountId === undefined) {
+          return
+        }
+        runtime.closeAllWebxdcInstances()
+        runtime.deleteWebxdcAccountData(window.__selectedAccountId)
+        runtime.restartApp()
+      },
     })
 
   return (
