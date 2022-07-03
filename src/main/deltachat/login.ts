@@ -83,13 +83,6 @@ export default class DCLoginController extends SplitOut {
     return accountId
   }
 
-  async getFreshMessageCounter(accountId: number) {
-    const accountContext = this.accounts.accountContext(accountId)
-    const result = accountContext.getFreshMessages().length
-    accountContext.unref()
-    return result
-  }
-
   close() {
     this.controller.webxdc._closeAll()
     this.controller.emit('DESKTOP_CLEAR_ALL_NOTIFICATIONS')
