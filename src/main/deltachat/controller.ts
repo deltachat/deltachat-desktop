@@ -452,15 +452,6 @@ export default class DeltaChatController extends EventEmitter {
     return selfContact?.getProfileImage() || ''
   }
 
-  getProviderInfo(
-    email: string
-  ): ReturnType<typeof DeltaChat.getProviderFromEmail> {
-    if (DeltaChatNode.maybeValidAddr(email)) {
-      return this.selectedAccountContext.getProviderFromEmail(email)
-    }
-    return
-  }
-
   hintUpdateIfNessesary() {
     if (
       this.selectedAccountContext &&
