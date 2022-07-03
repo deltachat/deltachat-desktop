@@ -47,12 +47,6 @@ class DeltaRemote {
   call(fnName: 'chatList.getSelectedChatId'): Promise<number>
   call(fnName: 'chatList.onChatModified', chatId: number): Promise<void>
   call(
-    fnName: 'chatList.getChatListEntries',
-    listFlags?: number,
-    queryStr?: string,
-    queryContactId?: number
-  ): Promise<[number, number][]>
-  call(
     fnName: 'chatList.getChatListItemsByEntries',
     entries: [number, number][]
   ): Promise<{
