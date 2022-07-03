@@ -31,7 +31,6 @@ class DeltaRemote {
   call(fnName: 'setProfilePicture', newImage: string | null): Promise<void>
   call(fnName: 'getProfilePicture'): Promise<string>
   call(fnName: 'joinSecurejoin', qrCode: string): Promise<number>
-  call(fnName: 'stopOngoingProcess'): Promise<number>
   call(fnName: 'checkQrCode', qrCode: string): Promise<QrCodeResponse>
   // autocrypt ----------------------------------------------------------
   call(fnName: 'autocrypt.initiateKeyTransfer'): Promise<string>
@@ -188,10 +187,6 @@ class DeltaRemote {
   ): Promise<JsonLocations>
   // login ----------------------------------------------------
   call(fnName: 'login.selectAccount', accountId: number): Promise<boolean>
-  call(
-    fnName: 'login.updateCredentials',
-    credentials: Credentials
-  ): Promise<void>
   call(fnName: 'login.addAccount'): Promise<number>
   call(fnName: 'login.getAccountSize', accountId: number): Promise<number>
   call(

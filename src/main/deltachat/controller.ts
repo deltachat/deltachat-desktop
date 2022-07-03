@@ -428,10 +428,6 @@ export default class DeltaChatController extends EventEmitter {
     return this.selectedAccountContext.joinSecurejoin(qrCode)
   }
 
-  stopOngoingProcess() {
-    this.selectedAccountContext.stopOngoingProcess()
-  }
-
   // ToDo: move to contacts.
   getContacts2(listFlags: number, queryStr: string) {
     const distinctIds: number[] = Array.from(
