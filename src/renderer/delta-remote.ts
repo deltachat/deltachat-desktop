@@ -313,7 +313,6 @@ class DeltaRemote {
     fromServer: boolean,
     seconds: number
   ): Promise<number>
-  call(fnName: 'settings.setConfigFromQr', qrCodeContent: string): Promise<void>
   // stickers -----------------------------------------------------------
   call(
     fnName: 'stickers.getStickers'
