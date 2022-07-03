@@ -190,10 +190,6 @@ class DeltaRemote {
   call(fnName: 'login.selectAccount', accountId: number): Promise<boolean>
   call(fnName: 'login.addAccount'): Promise<number>
   call(fnName: 'login.getAccountSize', accountId: number): Promise<number>
-  call(
-    fnName: 'login.getFreshMessageCounter',
-    accountId: number
-  ): Promise<number>
   call(fnName: 'login.getAllAccountIds'): Promise<number[]>
   call(fnName: 'login.getLastLoggedInAccount'): Promise<number>
 
