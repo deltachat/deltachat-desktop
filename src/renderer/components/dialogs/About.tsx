@@ -6,18 +6,26 @@ import DeltaDialog, { DeltaDialogBody, DeltaDialogFooter } from './DeltaDialog'
 import { gitHubUrl, gitHubLicenseUrl } from '../../../shared/constants'
 import { VERSION, GIT_REF } from '../../../shared/build-info'
 import ClickableLink from '../helpers/ClickableLink'
-import { DeltaBackend } from '../../delta-remote'
 import { useTranslationFunction } from '../../contexts'
 import { runtime } from '../../runtime'
+import { BackendRemote } from '../../backend-com'
 
 const log = getLogger('renderer/dialogs/About')
+
+function getInfo() {
+  if (window.__selectedAccountId === undefined) {
+    return BackendRemote.rpc.getSystemInfo()
+  } else {
+    return BackendRemote.rpc.getInfo(window.__selectedAccountId)
+  }
+}
 
 export function DCInfo(_props: any) {
   const tx = useTranslationFunction()
   const [content, setContent] = useState<{ [key: string]: any }>({})
 
   useEffect(function fetchContent() {
-    DeltaBackend.call('getInfo').then(info => {
+    getInfo().then(info => {
       setContent(info)
       log.debug('dcInfo', info)
     })

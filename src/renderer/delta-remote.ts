@@ -30,7 +30,6 @@ class DeltaRemote {
   // root ---------------------------------------------------------------
   call(fnName: 'setProfilePicture', newImage: string | null): Promise<void>
   call(fnName: 'getProfilePicture'): Promise<string>
-  call(fnName: 'getInfo'): Promise<{ [key: string]: any }>
   call(
     fnName: 'getProviderInfo',
     email: string
