@@ -22,6 +22,7 @@ import { getLogger } from '../../../shared/logger'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import AlertDialog from '../dialogs/AlertDialog'
 import { selectChat } from './ChatMethods'
+import { BackendRemote } from '../../backend-com'
 
 const log = getLogger('renderer/processOpenUrl')
 
@@ -32,8 +33,9 @@ export function ProcessQrCodeDialog({
 }: DialogProps) {
   const tx = useTranslationFunction()
 
-  const onCancel = () => {
-    DeltaBackend.call('stopOngoingProcess')
+  const onCancel = async () => {
+    window.__selectedAccountId &&
+      (await BackendRemote.rpc.stopOngoingProcess(window.__selectedAccountId))
     _onCancel && _onCancel()
     onClose()
   }
@@ -158,15 +160,13 @@ export default async function processOpenQrUrl(
   if (checkQr.state === QrState.Account) {
     try {
       await DeltaBackend.call('settings.setConfigFromQr', url)
-
-      const onSuccess = (_account: DeltaChatAccount) => {
-        window.__changeScreen(Screens.Main)
-        callback()
-      }
       closeProcessDialog()
       window.__openDialog(ConfigureProgressDialog, {
         credentials: {},
-        onSuccess,
+        onSuccess: () => {
+          window.__changeScreen(Screens.Main)
+          callback()
+        },
       })
     } catch (err) {
       closeProcessDialog()
