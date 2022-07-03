@@ -21,6 +21,7 @@ import { useTranslationFunction, i18nContext } from '../contexts'
 import { useDebouncedCallback } from 'use-debounce/lib'
 import { getLogger } from '../../shared/logger'
 import { IpcRendererEvent } from 'electron/renderer'
+import { BackendRemote, Type } from '../backend-com'
 
 const log = getLogger('renderer/loginForm')
 
@@ -101,7 +102,7 @@ export default function LoginForm({
 }: LoginProps) {
   const [uiShowAdvanced, setUiShowAdvanced] = useState<boolean>(false)
   const [providerInfo, setProviderInfo] = useState<
-    ReturnType<typeof DeltaChat.getProviderFromEmail>
+    Type.ProviderInfo | undefined
   >()
 
   const _handleCredentialsChange = (id: string, value: string) => {
@@ -133,7 +134,14 @@ export default function LoginForm({
 
   const [debouncedGetProviderInfo] = useDebouncedCallback(
     async (addr: string) => {
-      const result: any = await DeltaBackend.call('getProviderInfo', addr)
+      if (window.__selectedAccountId === undefined) {
+        setProviderInfo(undefined)
+        return
+      }
+      const result: any = await BackendRemote.rpc.getProviderInfo(
+        window.__selectedAccountId,
+        addr
+      )
       setProviderInfo(result || null)
     },
     500
