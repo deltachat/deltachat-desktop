@@ -63,19 +63,6 @@ export default class DCLoginController extends SplitOut {
     return true
   }
 
-  async updateCredentials(credentials: Credentials): Promise<void> {
-    this.selectedAccountContext.stopIO()
-    try {
-      await this.selectedAccountContext.configure(credentials)
-    } catch (err) {
-      if (this.selectedAccountContext.isConfigured()) {
-        this.selectedAccountContext.startIO()
-      }
-      throw err
-    }
-    this.selectedAccountContext.startIO()
-  }
-
   logout() {
     DesktopSettings.update({ lastAccount: undefined })
 

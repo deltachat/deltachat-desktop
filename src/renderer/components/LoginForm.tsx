@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 
-import type { DeltaChat } from 'deltachat-node'
 import { C } from 'deltachat-node/node/dist/constants'
 import React, { useEffect, useState } from 'react'
 import {
@@ -11,7 +10,6 @@ import {
   DeltaSwitch,
 } from './Login-Styles'
 import { Collapse, Dialog } from '@blueprintjs/core'
-import { DeltaBackend } from '../delta-remote'
 import ClickableLink from './helpers/ClickableLink'
 import { DialogProps } from './dialogs/DialogController'
 import { ipcBackend } from '../ipc'
@@ -408,7 +406,10 @@ export function ConfigureProgressDialog({
   onClose,
   credentials,
   onSuccess,
-}: DialogProps) {
+}: {
+  credentials: Partial<Credentials>
+  onSuccess?: () => void
+} & DialogProps) {
   const [progress, setProgress] = useState(0)
   const [progressComment, setProgressComment] = useState('')
   const [error, setError] = useState('')
@@ -422,8 +423,20 @@ export function ConfigureProgressDialog({
     setProgressComment(comment)
   }
 
-  const onCancel = (_event: any) => {
-    DeltaBackend.call('stopOngoingProcess')
+  const onCancel = async (_event: any) => {
+    try {
+      if (window.__selectedAccountId === undefined) {
+        throw new Error('no selected account')
+      }
+      await BackendRemote.rpc.stopOngoingProcess(window.__selectedAccountId)
+    } catch (error: any) {
+      log.error('failed to stopOngoingProcess', error)
+      onConfigureError(null, [
+        null,
+        'failed to stopOngoingProcess' + error.message || error.toString(),
+      ])
+      onConfigureFailed(null, [null, ''])
+    }
     onClose()
   }
 
@@ -441,16 +454,23 @@ export function ConfigureProgressDialog({
     () => {
       ;(async () => {
         try {
-          await DeltaBackend.call('login.updateCredentials', credentials)
+          if (window.__selectedAccountId === undefined) {
+            throw new Error('No account selected')
+          }
+
+          await BackendRemote.rpc.batchSetConfig(
+            window.__selectedAccountId,
+            credentials
+          )
+          await BackendRemote.rpc.configure(window.__selectedAccountId)
+
           // on successful configure:
           onClose()
           onSuccess && onSuccess()
-        } catch (err) {
+        } catch (err: any) {
           log.error('configure error', err)
-          if (typeof err === 'string') {
-            onConfigureError(null, [null, err])
-            onConfigureFailed(null, [null, ''])
-          }
+          onConfigureError(null, [null, err.message || err.toString()])
+          onConfigureFailed(null, [null, ''])
         }
       })()
     },
