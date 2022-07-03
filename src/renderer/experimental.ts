@@ -14,7 +14,7 @@ These functions are highly experimental, use at your own risk.
     window.exp = this
   }
 
-  getAllAccounts(){
+  getAllAccounts() {
     return BackendRemote.listAccounts()
   }
 

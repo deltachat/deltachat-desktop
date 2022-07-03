@@ -61,7 +61,7 @@ export default class DCBackup extends SplitOut {
       }
 
       const onSuccess = () => {
-        resolve(this.controller.login.accountInfo(accountId))
+        resolve(this.controller.login._accountInfo(accountId))
       }
 
       this.accounts.on(

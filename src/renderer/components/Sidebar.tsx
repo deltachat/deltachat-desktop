@@ -12,6 +12,7 @@ import { Avatar } from './Avatar'
 import { C } from 'deltachat-node/node/dist/constants'
 import { VERSION } from '../../shared/build-info'
 import { ActionEmitter, KeybindAction } from '../keybindings'
+import { EffectfulBackendActions } from '../backend-com'
 
 export type SidebarState = 'init' | 'visible' | 'invisible'
 
@@ -34,10 +35,10 @@ const Sidebar = React.memo(
       setSidebarState('invisible')
       screenContext.openDialog('UnblockContacts', {})
     }
-    const onLogout = () => {
+    const onLogout = async () => {
       setSidebarState('invisible')
       unselectChat()
-      DeltaBackend.call('login.logout')
+      await EffectfulBackendActions.logout()
       screenContext.changeScreen(Screens.AccountList)
     }
 

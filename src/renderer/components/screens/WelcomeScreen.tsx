@@ -15,6 +15,7 @@ import DeltaDialog, {
 import { DeltaProgressBar } from '../Login-Styles'
 import { DialogProps } from '../dialogs/DialogController'
 import { Screens } from '../../ScreenController'
+import { BackendRemote, EffectfulBackendActions } from '../../backend-com'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
@@ -89,7 +90,7 @@ function ImportBackupProgressDialog({
   )
 }
 
-const ImportButton = function ImportButton(_props: any) {
+const ImportButton = function ImportButton() {
   const tx = useTranslationFunction()
 
   async function onClickImportBackup() {
@@ -128,7 +129,7 @@ export default function WelcomeScreen({
 
   useEffect(() => {
     ;(async () => {
-      const allAccountIds = await DeltaBackend.call('login.getAllAccountIds')
+      const allAccountIds = await BackendRemote.listAccounts()
       if (allAccountIds && allAccountIds.length > 1) {
         setShowBackButton(true)
       }
@@ -137,12 +138,10 @@ export default function WelcomeScreen({
 
   const onCancel = async () => {
     try {
-      const acInfo = await DeltaBackend.call(
-        'login.accountInfo',
-        selectedAccountId
-      )
-      if (acInfo.type == 'unconfigured') {
-        await DeltaBackend.call('login.removeAccount', selectedAccountId)
+      const acInfo = await BackendRemote.rpc.getAccountInfo(selectedAccountId)
+      if (acInfo.type === 'Unconfigured') {
+        await EffectfulBackendActions.logout()
+        await EffectfulBackendActions.removeAccount(selectedAccountId)
       }
       window.__changeScreen(Screens.AccountList)
     } catch (error) {

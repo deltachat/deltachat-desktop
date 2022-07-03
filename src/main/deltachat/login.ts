@@ -77,7 +77,6 @@ export default class DCLoginController extends SplitOut {
   }
 
   logout() {
-    this.controller.webxdc.closeAll()
     DesktopSettings.update({ lastAccount: undefined })
 
     if (!DesktopSettings.state.syncAllAccounts) {
@@ -97,21 +96,6 @@ export default class DCLoginController extends SplitOut {
     return accountId
   }
 
-  async removeAccount(accountId: number) {
-    if (this.selectedAccountId === accountId) {
-      log.warn(
-        'account that should be removed is still selected, unselecting it first..'
-      )
-      await this.logout()
-    }
-
-    if (this.accounts.removeAccount(accountId) !== 1) {
-      throw new Error('Account deletion failed')
-    } else {
-      this.controller.webxdc._deleteWebxdcAccountData(accountId)
-    }
-  }
-
   async getFreshMessageCounter(accountId: number) {
     const accountContext = this.accounts.accountContext(accountId)
     const result = accountContext.getFreshMessages().length
@@ -120,7 +104,7 @@ export default class DCLoginController extends SplitOut {
   }
 
   close() {
-    this.controller.webxdc.closeAll()
+    this.controller.webxdc._closeAll()
     this.controller.emit('DESKTOP_CLEAR_ALL_NOTIFICATIONS')
     if (!this.accounts) return
     this.accounts.stopIO()
@@ -148,7 +132,7 @@ Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANG
     )
   }
 
-  async accountInfo(accountId: number): Promise<DeltaChatAccount> {
+  async _accountInfo(accountId: number): Promise<DeltaChatAccount> {
     const accountContext = this.accounts.accountContext(accountId)
 
     if (accountContext.isConfigured()) {
@@ -189,18 +173,6 @@ Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANG
 
   getAllAccountIds(): number[] {
     return super.accounts.getAllAccountIds()
-  }
-
-  async getAllAccounts(): Promise<DeltaChatAccount[]> {
-    const accountIds: number[] = super.accounts.getAllAccountIds()
-
-    const accounts: DeltaChatAccount[] = new Array(accountIds.length)
-
-    for (let i = 0; i < accountIds.length; i++) {
-      accounts[i] = await this.accountInfo(accountIds[i])
-    }
-
-    return accounts
   }
 
   async getLastLoggedInAccount() {

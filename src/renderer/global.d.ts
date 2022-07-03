@@ -23,6 +23,7 @@ declare global {
     __closeDialog: CloseDialogFunctionType
     __changeScreen: (screen: Screens) => void
     __selectAccount: (accountId: number) => void
+    readonly __selectedAccountId: number | undefined
     __screen: Screens
     __contextMenuActive: boolean
     __settingsOpened: boolean

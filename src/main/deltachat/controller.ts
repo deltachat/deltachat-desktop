@@ -100,11 +100,11 @@ export default class DeltaChatController extends EventEmitter {
     log.debug('Starting event handler')
     this.registerEventHandler(this.account_manager)
 
-    this.account_manager.startJsonRpcHandler((response) => {
-      mainWindow.send("json-rpc-message", response)
+    this.account_manager.startJsonRpcHandler(response => {
+      mainWindow.send('json-rpc-message', response)
     })
 
-    ipcMain.handle("json-rpc-request", (_ev, message) => {
+    ipcMain.handle('json-rpc-request', (_ev, message) => {
       this.account_manager.jsonRpcRequest(message)
     })
 
