@@ -207,11 +207,6 @@ class DeltaRemote {
     credentials: Credentials
   ): Promise<void>
   call(fnName: 'login.addAccount'): Promise<number>
-  call(fnName: 'login.removeAccount', accountId: number): Promise<void>
-  call(
-    fnName: 'login.accountInfo',
-    accountId: number
-  ): Promise<DeltaChatAccount>
   call(fnName: 'login.getAccountSize', accountId: number): Promise<number>
   call(
     fnName: 'login.getFreshMessageCounter',
@@ -219,7 +214,6 @@ class DeltaRemote {
   ): Promise<number>
   call(fnName: 'login.getAllAccountIds'): Promise<number[]>
   call(fnName: 'login.getLastLoggedInAccount'): Promise<number>
-  call(fnName: 'login.getAllAccounts'): Promise<DeltaChatAccount[]>
 
   // NOTHING HERE that is called directly from the frontend, yet
   // messageList --------------------------------------------------------
@@ -370,7 +364,6 @@ class DeltaRemote {
     total_size: number
     data_size: number
   }>
-  call(fnName: 'webxdc.deleteWebxdcAccountData'): Promise<void>
   // catchall: ----------------------------------------------------------
   call(fnName: string): Promise<any>
   call(fnName: string, ...args: any[]): Promise<any> {

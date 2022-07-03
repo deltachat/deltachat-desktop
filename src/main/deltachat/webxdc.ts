@@ -321,6 +321,10 @@ If you think that's a bug and you need that permission, then please open an issu
       )
     })
 
+    ipcMain.handle('close-all-webxdc', () => {
+      this._closeAll()
+    })
+
     this.controller.addListener(
       'DC_EVENT_WEBXDC_STATUS_UPDATE',
       (_ev: any, msg_id: number, _status_update_id: number) => {
@@ -332,7 +336,7 @@ If you think that's a bug and you need that permission, then please open an issu
     )
   }
 
-  closeAll() {
+  _closeAll() {
     for (const open_app of Object.keys(open_apps)) {
       open_apps[Number(open_app)].win.close()
     }
@@ -348,31 +352,6 @@ If you think that's a bug and you need that permission, then please open an issu
 
   clearWebxdcDOMStorage() {
     return this._currentSession.clearStorageData()
-  }
-
-  async deleteWebxdcAccountData() {
-    if (!this.selectedAccountId) {
-      throw new Error('this.selectedAccountId is undefined')
-    }
-    await this._deleteWebxdcAccountData(this.selectedAccountId)
-    app.relaunch()
-    app.quit()
-  }
-
-  async _deleteWebxdcAccountData(accountId: number) {
-    // we can not delete the directory as it might still be used and that would be a problem on windows
-    // so the second next best thing we can do is telling electron to clear the data, even though it won't delete everything
-    const s = session.fromPartition(`persist:webxdc_${accountId}`, {
-      cache: false,
-    })
-    await s.clearStorageData()
-
-    // mark the folder for deletion on next startup
-    if (s.storagePath) {
-      await writeFile(join(s.storagePath, 'webxdc-cleanup'), '-', 'utf-8')
-    } else {
-      throw new Error('session has no storagePath set')
-    }
   }
 
   async getWebxdcDiskUsage() {
@@ -456,3 +435,24 @@ export async function webxdcStartUpCleanup() {
     log.warn('webxdc cleanup failed', error)
   }
 }
+
+ipcMain.handle('delete_webxdc_account_data', async (_ev, accountId: number) => {
+  // we can not delete the directory as it might still be used and that would be a problem on windows
+  // so the second next best thing we can do is telling electron to clear the data, even though it won't delete everything
+  const s = session.fromPartition(`persist:webxdc_${accountId}`, {
+    cache: false,
+  })
+  await s.clearStorageData()
+
+  // mark the folder for deletion on next startup
+  if (s.storagePath) {
+    await writeFile(join(s.storagePath, 'webxdc-cleanup'), '-', 'utf-8')
+  } else {
+    throw new Error('session has no storagePath set')
+  }
+})
+
+ipcMain.handle('restart_app', async _ev => {
+  app.relaunch()
+  app.quit()
+})
