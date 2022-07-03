@@ -60,7 +60,13 @@ export function ProcessQrCodeDialog({
 
 async function setConfigFromQrCatchingErrorInAlert(qrContent: string) {
   try {
-    await DeltaBackend.call('settings.setConfigFromQr', qrContent)
+    if (window.__selectedAccountId === undefined) {
+      throw new Error('error: no context selected')
+    }
+    await BackendRemote.rpc.setConfigFromQr(
+      window.__selectedAccountId,
+      qrContent
+    )
   } catch (error) {
     if (error instanceof Error) {
       window.__openDialog(AlertDialog, { message: error.message })
@@ -159,7 +165,10 @@ export default async function processOpenQrUrl(
 
   if (checkQr.state === QrState.Account) {
     try {
-      await DeltaBackend.call('settings.setConfigFromQr', url)
+      if (window.__selectedAccountId === undefined) {
+        throw new Error('error: no context selected')
+      }
+      await BackendRemote.rpc.setConfigFromQr(window.__selectedAccountId, url)
       closeProcessDialog()
       window.__openDialog(ConfigureProgressDialog, {
         credentials: {},
@@ -168,10 +177,10 @@ export default async function processOpenQrUrl(
           callback()
         },
       })
-    } catch (err) {
+    } catch (err: any) {
       closeProcessDialog()
       window.__openDialog('AlertDialog', {
-        message: tx('qrscan_failed') + ': ' + err,
+        message: err.message || err.toString(),
         cb: callback,
       })
       return
