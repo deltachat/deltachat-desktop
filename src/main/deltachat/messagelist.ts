@@ -220,9 +220,9 @@ export default class DCMessageList extends SplitOut {
         `markMessagesSeen ${markMessagesSeen.length} messages for chat ${chatId}`
       )
       // TODO: move mark seen logic to frontend
-      setTimeout(() =>
-        this.selectedAccountContext.markSeenMessages(markMessagesSeen)
-      )
+      setTimeout(() => {
+        //this.selectedAccountContext.markSeenMessages(markMessagesSeen)
+      })
     }
     return messages
   }
@@ -271,20 +271,21 @@ export default class DCMessageList extends SplitOut {
         `markMessagesSeen ${markMessagesSeen.length} messages for chat ${chatId}`
       )
       // TODO: move mark seen logic to frontend
-      setTimeout(() =>
-        this.selectedAccountContext.markSeenMessages(markMessagesSeen)
-      )
+      setTimeout(() => {
+        //this.selectedAccountContext.markSeenMessages(markMessagesSeen)
+      })
     }
     return messages
   }
 
   markSeenMessages(messageIds: number[]) {
-    this.selectedAccountContext.markSeenMessages(messageIds)
+    //this.selectedAccountContext.markSeenMessages(messageIds)
   }
 
-  getFirstUnreadMessage(chatId: number): number {
+  getFirstUnreadMessage(chatId: number): {firstUnreadMessageId: number, countUnreadMessages: number} {
     const messageIds = this.selectedAccountContext.getChatMessages(chatId, 0, 0)
     let firstUnreadMessageId = -1
+    let countUnreadMessages = 0
     for (let i = messageIds.length - 1; i > 0; i--) {
       const messageId = messageIds[i]
       const message = this.selectedAccountContext.getMessage(messageId)
@@ -294,9 +295,11 @@ export default class DCMessageList extends SplitOut {
       )
         continue
       if (message.getState().isSeen()) break
+
       firstUnreadMessageId = messageId
+      countUnreadMessages++
     }
-    return firstUnreadMessageId
+    return {firstUnreadMessageId, countUnreadMessages}
   }
 
   searchMessages(query: string, chatId = 0): number[] {
