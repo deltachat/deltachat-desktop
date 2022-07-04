@@ -170,6 +170,11 @@ export default function CreateChat(props: {
       {viewMode.startsWith('createVerifiedGroup') && (
         <CreateGroupInner isVerified {...{ viewMode, setViewMode, onClose }} />
       )}
+      {viewMode.startsWith('createBroadcastList') && (
+        <CreateBroadcastInner
+          {...{ viewMode, setViewMode, onClose }}
+        />
+      )}
     </DeltaDialogBase>
   )
 }
@@ -725,6 +730,134 @@ function CreateGroupInner(props: {
           </DeltaDialogFooter>
         </>
       )}
+    </>
+  )
+}
+
+const useCreateBroadcast = (
+  broadcastRecipients: number[],
+  onClose: DialogProps['onClose']
+) => {
+  const [broadcastId, setBroadcastId] = useState(-1)
+
+  const lazilyCreateOrUpdateBroadcast = async (finishing: boolean) => {
+    let bId = broadcastId
+    if (bId === -1) {
+      bId = await DeltaBackend.call('chat.createBroadcastList')
+      setBroadcastId(bId)
+    }
+    if (finishing === true) {
+      for (const contactId of broadcastRecipients) {
+        if (contactId !== C.DC_CONTACT_ID_SELF) {
+          await DeltaBackend.call('chat.addContactToChat', bId, contactId)
+        }
+      }
+    }
+    return bId
+  }
+  const finishCreateBroadcast = async () => {
+    const bId = await lazilyCreateOrUpdateBroadcast(true)
+    onClose()
+    selectChat(bId)
+  }
+  return [broadcastId, lazilyCreateOrUpdateBroadcast, finishCreateBroadcast] as [
+    number,
+    typeof lazilyCreateOrUpdateBroadcast,
+    typeof finishCreateBroadcast
+  ]
+}
+
+function CreateBroadcastInner(props: {
+  viewMode: string
+  setViewMode: (newViewMode: string) => void
+  onClose: DialogProps['onClose']
+}) {
+  const { openDialog } = useContext(ScreenContext)
+  const { viewMode, setViewMode, onClose } = props
+  const tx = useTranslationFunction()
+
+  const [broadcastRecipients, removeBroadcastRecipient, addBroadcastRecipient] = useGroupMembers([1])
+  const [
+    broadcastId,
+    lazilyCreateOrUpdateBroadcast,
+    finishCreateBroadcast,
+  ] = useCreateBroadcast(broadcastRecipients, onClose)
+
+  const searchContacts = useContacts(
+    C.DC_GCL_ADD_SELF,
+    ''
+  )[0]
+
+  const showAddMemberDialog = () => {
+    const listFlags = C.DC_GCL_ADD_SELF
+
+    openDialog(AddMemberDialog, {
+      listFlags,
+      broadcastRecipients,
+      onOk: (recipients: number[]) =>
+        recipients.forEach(contactId => addBroadcastRecipient({ id: contactId })),
+    })
+  }
+  return (
+    <>
+          <DeltaDialogHeader
+            title={
+              tx('new_broadcast_list')
+            }
+          />
+          <div className={Classes.DIALOG_BODY}>
+            <Card>
+              {/* <GroupSettingsSetNameAndProfileImage
+                groupImage={groupImage}
+                onSetGroupImage={onSetGroupImage}
+                onUnsetGroupImage={onUnsetGroupImage}
+                groupName={groupName}
+                setGroupName={setGroupName}
+                errorMissingGroupName={errorMissingGroupName}
+                setErrorMissingGroupName={setErrorMissingGroupName}
+              /> */}
+              {/* TODO: Add broadcast name */}
+              <div className='group-seperator'>
+                {tx(
+                  'n_members',
+                  broadcastRecipients.length.toString(),
+                  broadcastRecipients.length <= 1 ? 'one' : 'other'
+                )}
+              </div>
+              <div className='group-member-contact-list-wrapper'>
+                <PseudoListItemAddMember onClick={showAddMemberDialog} />
+                <ContactList2
+                  contacts={searchContacts.filter(
+                    ({ id }) => broadcastRecipients.indexOf(id) !== -1
+                  )}
+                  onClick={() => {}}
+                  showRemove
+                  onRemoveClick={c => {
+                    removeBroadcastRecipient(c)
+                  }}
+                />
+              </div>
+            </Card>
+          </div>
+          <DeltaDialogFooter>
+            <DeltaDialogFooterActions>
+              <p
+                className='delta-button primary bold'
+                style={{ marginRight: '10px' }}
+                onClick={() => setViewMode('main')}
+              >
+                {tx('cancel')}
+              </p>
+              <p
+                className='delta-button primary bold'
+                onClick={() => {
+                  finishCreateBroadcast()
+                }}
+              >
+                {"Create Broadcast"}
+              </p>
+            </DeltaDialogFooterActions>
+          </DeltaDialogFooter>
     </>
   )
 }
