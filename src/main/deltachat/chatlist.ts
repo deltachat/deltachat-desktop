@@ -1,12 +1,6 @@
 import { C, ChatList } from 'deltachat-node'
-import { Context } from 'deltachat-node/node/dist/context'
 import { getLogger } from '../../shared/logger'
-import {
-  ChatListItemType,
-  JsonChat,
-  JsonContact,
-  FullChat,
-} from '../../shared/shared-types'
+import { JsonChat, JsonContact, FullChat } from '../../shared/shared-types'
 import SplitOut from './splitout'
 
 const log = getLogger('main/deltachat/chatlist')
@@ -40,68 +34,6 @@ export default class DCChatList extends SplitOut {
       }
     }
     return null
-  }
-
-  async getChatListItemsByEntries(entries: [number, number][]) {
-    // const label = '[BENCH] getChatListItemsByEntries'
-    // console.time(label)
-    const chats: { [key: number]: ChatListItemType | null } = {}
-    for (const entry of entries) {
-      const chat = await this.getChatListItemByEntry(entry)
-      chats[entry[0]] = chat
-    }
-    // console.timeEnd(label)
-    return chats
-  }
-
-  async getChatListItemByEntry([chatId, messageId]: [
-    number,
-    number
-  ]): Promise<ChatListItemType | null> {
-    const chat = await this._getChatById(chatId)
-    if (chat === null) return null
-
-    const summary = this.selectedAccountContext
-      .getChatlistItemSummary(chatId, messageId)
-      .toJson()
-    const lastUpdated = summary.timestamp ? summary.timestamp * 1000 : 0
-
-    const name = chat.name || summary.text1
-    const isGroup = isGroupChat(chat)
-    const isBroadcast = isBroadcastList(chat)
-    const contactIds = await this._getChatContactIds(chatId)
-    /**
-     * This is NOT the Chat Object, it's a smaller version for use as ChatListItem in the ChatList
-     */
-    const chatListItem = {
-      id: chat.id,
-      name,
-      avatarPath: chat.profileImage,
-      color: chat.color,
-      lastUpdated: lastUpdated,
-      summary: {
-        text1: summary.text1,
-        text2: summary.text2,
-        status: mapCoreMsgStatus2String(summary.state),
-      },
-      isProtected: chat.isProtected,
-      isBroadcast: isBroadcast,
-      isGroup: isGroup,
-      freshMessageCounter: this.selectedAccountContext.getFreshMessageCount(
-        chatId
-      ),
-      isContactRequest: chat.isContactRequest,
-      isArchiveLink: chat.id === C.DC_CHAT_ID_ARCHIVED_LINK,
-      contactIds,
-      isSelfTalk: chat.isSelfTalk,
-      isDeviceTalk: chat.isDeviceTalk,
-      selfInGroup: isGroup && contactIds.indexOf(C.DC_CONTACT_ID_SELF) !== -1,
-      archived: chat.archived,
-      pinned: chat.pinned,
-      muted: chat.muted,
-    }
-
-    return chatListItem
   }
 
   async _getChatById(chatId: number): Promise<JsonChat | null> {
@@ -184,25 +116,6 @@ export default class DCChatList extends SplitOut {
   }
 }
 // section: Internal functions
-
-function mapCoreMsgStatus2String(state: number) {
-  switch (state) {
-    case C.DC_STATE_OUT_FAILED:
-      return 'error'
-    case C.DC_STATE_OUT_PENDING:
-      return 'sending'
-    case C.DC_STATE_OUT_PREPARING:
-      return 'sending'
-    case C.DC_STATE_OUT_DRAFT:
-      return 'draft'
-    case C.DC_STATE_OUT_DELIVERED:
-      return 'delivered'
-    case C.DC_STATE_OUT_MDN_RCVD:
-      return 'read'
-    default:
-      return '' // to display no icon on unknown state
-  }
-}
 function isGroupChat(chat: JsonChat) {
   return (
     chat &&

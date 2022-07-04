@@ -12,16 +12,16 @@ import {
   unMuteChat,
 } from '../helpers/ChatMethods'
 
-import { ChatListItemType } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/node/dist/constants'
 import { DeltaBackend } from '../../delta-remote'
 import { ContextMenuItem } from '../ContextMenu'
 import MailingListProfile from '../dialogs/MessageListProfile'
+import { Type } from '../../backend-com'
 
 // const log = getLogger('renderer/ChatListContextMenu')
 
 function archiveStateMenu(
-  chat: ChatListItemType,
+  chat: Type.ChatListItemFetchResult & { type: 'ChatListItem' },
   tx: ReturnType<typeof useTranslationFunction>,
   isTheSelectedChat: boolean
 ): ContextMenuItem[] {
@@ -46,7 +46,7 @@ function archiveStateMenu(
   const pin: ContextMenuItem = {
     label: tx('pin_chat'),
     action: () =>
-      setChatVisibility(chat.id, C.DC_CHAT_VISIBILITY_PINNED, chat.archived),
+      setChatVisibility(chat.id, C.DC_CHAT_VISIBILITY_PINNED, chat.isArchived),
   }
   const unPin: ContextMenuItem = {
     label: tx('unpin_chat'),
@@ -60,9 +60,9 @@ function archiveStateMenu(
   normal	  y	      n       	y	  n
   */
 
-  if (chat.pinned) {
+  if (chat.isPinned) {
     return [unPin, archive]
-  } else if (chat.archived) {
+  } else if (chat.isArchived) {
     return [pin, unArchive]
   } else {
     // normal
@@ -76,7 +76,7 @@ export function useChatListContextMenu() {
 
   return (
     event: React.MouseEvent<any, MouseEvent>,
-    chatListItem: ChatListItemType,
+    chatListItem: Type.ChatListItemFetchResult & { type: 'ChatListItem' },
     selectedChatId: number
   ) => {
     const onDeleteChat = () =>
@@ -125,7 +125,7 @@ export function useChatListContextMenu() {
             selectedChatId === chatListItem.id
           ),
           // Mute
-          !chatListItem.muted
+          !chatListItem.isMuted
             ? {
                 label: tx('menu_mute'),
                 action: onMuteChat,
@@ -136,7 +136,7 @@ export function useChatListContextMenu() {
               },
           // Edit Group
           chatListItem.isGroup &&
-            chatListItem.selfInGroup && {
+            chatListItem.isSelfInGroup && {
               label: tx('menu_edit_group'),
               action: onViewGroup,
             },
@@ -158,7 +158,7 @@ export function useChatListContextMenu() {
             },
           // Leave group
           chatListItem.isGroup &&
-            chatListItem.selfInGroup && {
+            chatListItem.isSelfInGroup && {
               label: tx('menu_leave_group'),
               action: onLeaveGroup,
             },

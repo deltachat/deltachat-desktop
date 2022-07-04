@@ -1,16 +1,17 @@
 import { DeltaBackend, sendMessageParams } from '../../delta-remote'
 import ChatStore, { ChatView } from '../../stores/chat'
 import { ScreenContext, unwrapContext } from '../../contexts'
-import { ChatListItemType, FullChat } from '../../../shared/shared-types'
+import { FullChat } from '../../../shared/shared-types'
 import { MuteDuration } from '../../../shared/constants'
 import { C } from 'deltachat-node/node/dist/constants'
 import { runtime } from '../../runtime'
 import { getLogger } from '../../../shared/logger'
 import AlertDialog from '../dialogs/AlertDialog'
+import { Type } from '../../backend-com'
 
 const log = getLogger('renderer/message')
 
-type Chat = ChatListItemType | FullChat
+type Chat = FullChat | (Type.ChatListItemFetchResult & { type: 'ChatListItem' })
 
 export const selectChat = (chatId: number) => {
   ChatStore.effect.selectChat(chatId)
@@ -83,22 +84,23 @@ export function openDeleteChatDialog(
  */
 export function openBlockFirstContactOfChatDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
-  selectedChat: Chat | ChatListItemType
+  selectedChat: Chat
 ) {
   const tx = window.static_translate
-  const contactIds = selectedChat?.contactIds
+  const dmChatContact =
+    (selectedChat as Type.ChatListItemFetchResult & { type: 'ChatListItem' })
+      .dmChatContact || (selectedChat as FullChat)?.contactIds[0]
 
   // TODO: CHECK IF THE CHAT IS DM CHAT
 
-  if (contactIds?.length) {
+  if (dmChatContact) {
     screenContext.openDialog('ConfirmationDialog', {
       message: tx('ask_block_contact'),
       confirmLabel: tx('menu_block_contact'),
       isConfirmDanger: true,
       cb: (yes: boolean) =>
         yes &&
-        contactIds !== null &&
-        DeltaBackend.call('contacts.blockContact', contactIds[0]).then(
+        DeltaBackend.call('contacts.blockContact', dmChatContact).then(
           unselectChat
         ),
     })
@@ -107,7 +109,7 @@ export function openBlockFirstContactOfChatDialog(
 
 export function openEncryptionInfoDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
-  chatListItem: ChatListItemType
+  chatListItem: Type.ChatListItemFetchResult & { type: 'ChatListItem' }
 ) {
   screenContext.openDialog('EncryptionInfo', { chatListItem })
 }

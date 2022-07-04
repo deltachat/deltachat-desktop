@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from 'react'
 import { DeltaBackend } from '../../delta-remote'
-import { ChatListItemType } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
 import {
   SmallDialog,
   DeltaDialogFooter,
   DeltaDialogFooterActions,
 } from './DeltaDialog'
+import { Type } from '../../backend-com'
 
 export default function EncryptionInfo({
   chatListItem,
   isOpen,
   onClose,
 }: {
-  chatListItem: ChatListItemType
+  chatListItem: Type.ChatListItemFetchResult & { type: 'ChatListItem' }
   isOpen: boolean
   onClose: DialogProps['onClose']
 }) {
   const [encryptionInfo, setEncryptionInfo] = useState('Fetching...')
   useEffect(() => {
     if (!chatListItem) return
-    ;(!chatListItem.isGroup /*check should rather be isDirectMessage*/
+    ;(chatListItem.dmChatContact
       ? DeltaBackend.call(
           'contacts.getEncryptionInfo',
-          chatListItem.contactIds[0]
+          chatListItem.dmChatContact
         )
       : DeltaBackend.call('chat.getEncryptionInfo', chatListItem.id)
     ).then(setEncryptionInfo)
