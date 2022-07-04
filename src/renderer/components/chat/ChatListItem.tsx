@@ -3,109 +3,170 @@ import classNames from 'classnames'
 import Timestamp from '../conversations/Timestamp'
 import MessageBody from '../message/MessageBody'
 import { C } from 'deltachat-node/node/dist/constants'
-import {
-  ChatListItemType,
-  MessageSearchResult,
-} from '../../../shared/shared-types'
+import { MessageSearchResult } from '../../../shared/shared-types'
 import { Avatar } from '../Avatar'
+import { Type } from '../../backend-com'
+import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 
-const FreshMessageCounter = React.memo(({ counter }: { counter: number }) => {
+function FreshMessageCounter({ counter }: { counter: number }) {
   if (counter === 0) return null
   return <div className='fresh-message-counter'>{counter}</div>
-})
+}
 
-const Header = React.memo(
-  ({ chatListItem }: { chatListItem: ChatListItemType }) => {
-    const { lastUpdated, name, pinned, muted } = chatListItem
-    const tx = window.static_translate
-    return (
-      <div className='header'>
-        <div className='name'>
-          <span>{name + ' '}</span>
-        </div>
-        {muted && <div className='mute_icon' aria-label={tx('mute')} />}
-        {pinned && <div className='pin_icon' aria-label={tx('pin')} />}
-        <div>
-          {lastUpdated !== 0 && (
-            <Timestamp
-              timestamp={lastUpdated}
-              extended={false}
-              module='timestamp'
-            />
-          )}
-        </div>
+type ChatListItemType = Type.ChatListItemFetchResult & {
+  type: 'ChatListItem'
+}
+
+function Header({
+  lastUpdated,
+  name,
+  isPinned,
+  isMuted,
+}: Pick<ChatListItemType, 'lastUpdated' | 'name' | 'isPinned' | 'isMuted'>) {
+  const tx = window.static_translate
+  return (
+    <div className='header'>
+      <div className='name'>
+        <span>{name + ' '}</span>
       </div>
-    )
-  }
-)
-
-const Message = React.memo(
-  ({ chatListItem }: { chatListItem: ChatListItemType }) => {
-    const {
-      summary,
-      freshMessageCounter,
-      archived,
-      isContactRequest,
-    } = chatListItem
-    if (!summary) return null
-
-    return (
-      <div className='chat-list-item-message'>
-        <div className='text'>
-          {summary.text1 !== null && (
-            <div
-              className={classNames('summary', {
-                draft: summary.status === 'draft',
-              })}
-            >
-              {summary.text1 + ': '}
-            </div>
-          )}
-          <MessageBody text={summary.text2 || ''} disableJumbomoji preview />
-        </div>
-        {isContactRequest && (
-          <div className='label'>
-            {window.static_translate('chat_request_label')}
-          </div>
-        )}
-        {archived && (
-          <div className='label'>
-            {window.static_translate('chat_archived_label')}
-          </div>
-        )}
-        {!archived && !isContactRequest && summary.status && (
-          <div className={classNames('status-icon', summary.status)} />
-        )}
-        {!isContactRequest && (
-          <FreshMessageCounter counter={freshMessageCounter} />
+      {isMuted && <div className='mute_icon' aria-label={tx('mute')} />}
+      {isPinned && <div className='pin_icon' aria-label={tx('pin')} />}
+      <div>
+        {lastUpdated && lastUpdated !== 0 && (
+          <Timestamp
+            timestamp={lastUpdated}
+            extended={false}
+            module='timestamp'
+          />
         )}
       </div>
-    )
-  }
-)
+    </div>
+  )
+}
+
+function Message({
+  summaryStatus,
+  summaryText1,
+  summaryText2,
+  freshMessageCounter,
+  isArchived,
+  isContactRequest,
+}: Pick<
+  ChatListItemType,
+  | 'summaryStatus'
+  | 'summaryText1'
+  | 'summaryText2'
+  | 'freshMessageCounter'
+  | 'isArchived'
+  | 'isContactRequest'
+>) {
+  const status = mapCoreMsgStatus2String(summaryStatus)
+
+  return (
+    <div className='chat-list-item-message'>
+      <div className='text'>
+        {summaryText1 && (
+          <div
+            className={classNames('summary', {
+              draft: summaryStatus === C.DC_STATE_OUT_DRAFT,
+            })}
+          >
+            {summaryText1 + ': '}
+          </div>
+        )}
+        <MessageBody text={summaryText2 || ''} disableJumbomoji preview />
+      </div>
+      {isContactRequest && (
+        <div className='label'>
+          {window.static_translate('chat_request_label')}
+        </div>
+      )}
+      {isArchived && (
+        <div className='label'>
+          {window.static_translate('chat_archived_label')}
+        </div>
+      )}
+      {!isArchived && !isContactRequest && status && (
+        <div className={classNames('status-icon', status)} />
+      )}
+      {!isContactRequest && (
+        <FreshMessageCounter counter={freshMessageCounter} />
+      )}
+    </div>
+  )
+}
 
 export const PlaceholderChatListItem = React.memo(_ => {
   return <div className={classNames('chat-list-item', 'skeleton')} />
 })
 
-const ChatListItemArchiveLink = React.memo(
-  ({
-    chatListItem,
-    onClick,
-  }: {
-    chatListItem: ChatListItemType
-    onClick: () => void
-  }) => {
-    return (
-      <div role='button' onClick={onClick} className={'chat-list-item'}>
-        <div className='archive-link'>{chatListItem.name}</div>
-      </div>
-    )
-  }
-)
+function ChatListItemArchiveLink({ onClick }: { onClick: () => void }) {
+  const tx = window.static_translate
+  return (
+    <div role='button' onClick={onClick} className={'chat-list-item'}>
+      <div className='archive-link'>{tx('chat_archived_chats_title')}</div>
+    </div>
+  )
+}
 
-const ChatListItemNormal = React.memo<ChatListItemProps>(props => {
-  const { chatListItem, onClick, isSelected, onContextMenu } = props
+function ChatListItemError({
+  chatListItem,
+  onClick,
+  isSelected,
+  onContextMenu,
+}: {
+  chatListItem: Type.ChatListItemFetchResult & {
+    type: 'Error'
+  }
+  onClick: () => void
+  onContextMenu?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  isSelected?: boolean
+}) {
+  return (
+    <div
+      role='button'
+      onClick={onClick}
+      onContextMenu={onContextMenu}
+      className={classNames('chat-list-item', {
+        isError: true,
+        selected: isSelected,
+      })}
+    >
+      <Avatar
+        {...{
+          displayName: 'E',
+          color: '',
+        }}
+      />
+      <div className='content'>
+        <div className='header'>
+          <div className='name'>
+            <span>Error Loading Chat {chatListItem.id}</span>
+          </div>
+        </div>
+        <div className='chat-list-item-message'>
+          <div className='text'>
+            <MessageBody text={chatListItem.error} disableJumbomoji preview />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ChatListItemNormal({
+  chatListItem,
+  onClick,
+  isSelected,
+  onContextMenu,
+}: {
+  chatListItem: Type.ChatListItemFetchResult & {
+    type: 'ChatListItem'
+  }
+  onClick: () => void
+  onContextMenu?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  isSelected?: boolean
+}) {
   return (
     <div
       role='button'
@@ -114,29 +175,41 @@ const ChatListItemNormal = React.memo<ChatListItemProps>(props => {
       className={classNames('chat-list-item', {
         'has-unread': chatListItem.freshMessageCounter > 0,
         'is-contact-request': chatListItem.isContactRequest,
-        pinned: chatListItem.pinned,
-        muted: chatListItem.muted,
+        pinned: chatListItem.isPinned,
+        muted: chatListItem.isMuted,
         selected: isSelected,
       })}
     >
       <Avatar
         {...{
           displayName: chatListItem.name,
-          avatarPath: chatListItem.avatarPath,
+          avatarPath: chatListItem.avatarPath || undefined,
           color: chatListItem.color,
           isVerified: chatListItem.isProtected,
         }}
       />
       <div className='content'>
-        <Header chatListItem={chatListItem} />
-        <Message chatListItem={chatListItem} />
+        <Header
+          lastUpdated={chatListItem.lastUpdated}
+          name={chatListItem.name}
+          isPinned={chatListItem.isPinned}
+          isMuted={chatListItem.isMuted}
+        />
+        <Message
+          summaryStatus={chatListItem.summaryStatus}
+          summaryText1={chatListItem.summaryText1}
+          summaryText2={chatListItem.summaryText2}
+          freshMessageCounter={chatListItem.freshMessageCounter}
+          isArchived={chatListItem.isArchived}
+          isContactRequest={chatListItem.isContactRequest}
+        />
       </div>
     </div>
   )
-})
+}
 
 type ChatListItemProps = {
-  chatListItem: ChatListItemType
+  chatListItem: Type.ChatListItemFetchResult | undefined
   onClick: () => void
   onContextMenu?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
   isSelected?: boolean
@@ -145,23 +218,33 @@ type ChatListItemProps = {
 const ChatListItem = React.memo<ChatListItemProps>(
   props => {
     const { chatListItem, onClick } = props
-    if (chatListItem === null) return null
+
+    // if not loaded by virtual list yet
     if (typeof chatListItem === 'undefined') return <PlaceholderChatListItem />
-    if (chatListItem.id === C.DC_CHAT_ID_ARCHIVED_LINK)
+
+    if (chatListItem.type == 'ChatListItem') {
       return (
-        <ChatListItemArchiveLink
-          onClick={onClick}
+        <ChatListItemNormal
           chatListItem={chatListItem}
+          onClick={onClick}
+          isSelected={props.isSelected}
+          onContextMenu={props.onContextMenu}
         />
       )
-    return (
-      <ChatListItemNormal
-        chatListItem={chatListItem}
-        onClick={onClick}
-        isSelected={props.isSelected}
-        onContextMenu={props.onContextMenu}
-      />
-    )
+    } else if (chatListItem.type == 'Error') {
+      return (
+        <ChatListItemError
+          chatListItem={chatListItem}
+          onClick={onClick}
+          isSelected={props.isSelected}
+          onContextMenu={props.onContextMenu}
+        />
+      )
+    } else if (chatListItem.type == 'ArchiveLink') {
+      return <ChatListItemArchiveLink onClick={onClick} />
+    } else {
+      return <PlaceholderChatListItem />
+    }
   },
   (prevProps, nextProps) => {
     const shouldRerender =

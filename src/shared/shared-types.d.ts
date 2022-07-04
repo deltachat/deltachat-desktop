@@ -68,33 +68,6 @@ import { QrState } from '../shared/constants'
 import type { Contact } from 'deltachat-node'
 
 export type ContactJSON = ReturnType<typeof Contact.prototype.toJson>
-export interface ChatListItemType {
-  /** chat id */
-  id: number
-  name: string
-  avatarPath: string
-  color: string
-  lastUpdated: number
-  summary:
-    | {
-        text1: any
-        text2: any
-        status: string
-      }
-    | undefined
-  isContactRequest: boolean
-  isProtected: boolean
-  isGroup: boolean
-  freshMessageCounter: number
-  isArchiveLink: boolean
-  contactIds: number[]
-  isSelfTalk: boolean
-  isDeviceTalk: boolean
-  selfInGroup: boolean
-  archived: boolean
-  pinned: boolean
-  muted: boolean
-}
 
 import type { Chat, Message } from 'deltachat-node'
 

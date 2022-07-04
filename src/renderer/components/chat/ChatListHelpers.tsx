@@ -80,7 +80,7 @@ export function useChatList(
         },
         200
       ),
-    []
+    [accountId]
   )
 
   useEffect(() => {
