@@ -90,7 +90,7 @@ interface Runtime {
 }
 
 class Browser implements Runtime {
-  deleteWebxdcAccountData(accountId: number): Promise<void> {
+  deleteWebxdcAccountData(_accountId: number): Promise<void> {
     throw new Error('Method not implemented.')
   }
   closeAllWebxdcInstances(): void {

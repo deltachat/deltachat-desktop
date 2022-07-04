@@ -2,13 +2,11 @@ import { C } from 'deltachat-node/node/dist/constants'
 import { _callDcMethodAsync } from './ipc'
 import {
   FullChat,
-  ChatListItemType,
   MessageType,
   JsonLocations,
   Theme,
   JsonContact,
   MessageSearchResult,
-  Credentials,
   DeltaChatAccount,
   DesktopSettingsType,
   QrCodeResponse,
@@ -46,12 +44,6 @@ class DeltaRemote {
   call(fnName: 'chatList.selectChat', chatId: number): Promise<FullChat>
   call(fnName: 'chatList.getSelectedChatId'): Promise<number>
   call(fnName: 'chatList.onChatModified', chatId: number): Promise<void>
-  call(
-    fnName: 'chatList.getChatListItemsByEntries',
-    entries: [number, number][]
-  ): Promise<{
-    [key: number]: ChatListItemType
-  }>
   call(
     fnName: 'chatList.getChatListEntryMessageIdForChatId',
     chatID: number

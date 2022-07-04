@@ -18,11 +18,7 @@ import { PseudoListItemAddContact } from '../helpers/PseudoListItem'
 import { C } from 'deltachat-node/node/dist/constants'
 import { DeltaBackend } from '../../delta-remote'
 import { useContactIds } from '../contact/ContactList'
-import {
-  ChatListItemType,
-  MessageSearchResult,
-  JsonContact,
-} from '../../../shared/shared-types'
+import { MessageSearchResult, JsonContact } from '../../../shared/shared-types'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import {
   FixedSizeList as List,
@@ -40,7 +36,7 @@ import {
   selectChat,
 } from '../helpers/ChatMethods'
 import { useThemeCssVar } from '../../ThemeManager'
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote, Type } from '../../backend-com'
 
 const enum LoadStatus {
   FETCHING = 1,
@@ -396,7 +392,7 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
   // end workaround
 
   const [chatCache, setChatCache] = useState<{
-    [id: number]: ChatListItemType
+    [id: number]: Type.ChatListItemFetchResult
   }>({})
   /** referrence to newest chat cache for use in useEffect functions that listen for events */
   const chatCacheRef = useRef<typeof chatCache>({})
@@ -419,8 +415,8 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
       )
       return state
     })
-    const chats = await DeltaBackend.call(
-      'chatList.getChatListItemsByEntries',
+    const chats = await BackendRemote.rpc.getChatlistItemsByEntries(
+      accountId,
       entries
     )
     setChatCache(cache => ({ ...cache, ...chats }))
@@ -452,8 +448,8 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
         ...state,
         [chatId]: LoadStatus.FETCHING,
       }))
-      const chats = await DeltaBackend.call(
-        'chatList.getChatListItemsByEntries',
+      const chats = await BackendRemote.rpc.getChatlistItemsByEntries(
+        accountId,
         [[chatId, messageId]]
       )
       setChatCache(cache => ({ ...cache, ...chats }))
@@ -484,33 +480,36 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
         }
       }
     }
-  }, [])
+  }, [accountId])
 
   /**
    * refresh chats a specific contact is in if that contact changed.
    * Currently used for updating nickname changes in the summary of chatlistitems.
    */
-  const onContactChanged = async (contactId: number) => {
-    if (contactId !== 0) {
-      const chatListItems = await BackendRemote.rpc.getChatlistEntries(
-        accountId,
-        null,
-        null,
-        contactId
-      )
-      const inCurrentCache = Object.keys(chatCacheRef.current).map(v =>
-        Number(v)
-      )
-      const toBeRefreshed = chatListItems.filter(
-        ([chatId]) => inCurrentCache.indexOf(chatId) !== -1
-      )
-      const chats = await DeltaBackend.call(
-        'chatList.getChatListItemsByEntries',
-        toBeRefreshed
-      )
-      setChatCache(cache => ({ ...cache, ...chats }))
-    }
-  }
+  const onContactChanged = useCallback(
+    async (contactId: number) => {
+      if (contactId !== 0) {
+        const chatListItems = await BackendRemote.rpc.getChatlistEntries(
+          accountId,
+          null,
+          null,
+          contactId
+        )
+        const inCurrentCache = Object.keys(chatCacheRef.current).map(v =>
+          Number(v)
+        )
+        const toBeRefreshed = chatListItems.filter(
+          ([chatId]) => inCurrentCache.indexOf(chatId) !== -1
+        )
+        const chats = await BackendRemote.rpc.getChatlistItemsByEntries(
+          accountId,
+          toBeRefreshed
+        )
+        setChatCache(cache => ({ ...cache, ...chats }))
+      }
+    },
+    [accountId]
+  )
 
   useEffect(() => {
     const removeOnChatListItemChangedListener = onDCEvent(
@@ -535,7 +534,7 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
       removeOnChatListItemChangedListener()
       removeOnContactChangedListener()
     }
-  }, [onChatListItemChanged])
+  }, [onChatListItemChanged, onContactChanged])
 
   // effects
 

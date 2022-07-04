@@ -199,6 +199,14 @@
   }
 }
 
+.chat-list-item.isError {
+  &,
+  & > .content > .chat-list-item-message > .label,
+  & > .content > .chat-list-item-message > .text {
+    color: red;
+  }
+}
+
 // Pseudo chats
 
 .chat-list-item > div.archive-link {
