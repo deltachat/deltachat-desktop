@@ -3,6 +3,10 @@
   "version": "1.30.1",
   "description": "Desktop Application for delta.chat",
   "main": "index.js",
+  "bin": {
+    "deltachat-desktop": "bin/create-project",
+    "create-project": "bin/create-project"
+  },
   "scripts": {
     "preinstall": "node ./bin/check-nodejs-version.js",
     "test": "npm run check-types && npm run lint && npm run check-formatting && npm run test-log-conventions && npm run test-unit && npm run test-misc",
@@ -58,7 +62,9 @@
     "deltachat",
     "email",
     "messaging",
-    "desktop"
+    "desktop",
+    "cli",
+    "create-project"
   ],
   "author": {
     "name": "DeltaChat Developers",
@@ -72,6 +78,9 @@
     "node": ">=16.0.0"
   },
   "productName": "DeltaChat",
+  "publishConfig": {
+    "access": "public"
+  },
   "homepage": "https://delta.chat",
   "browser": {
     "path": "path-browserify"
@@ -82,6 +91,7 @@
     "@deltachat/react-qr-reader": "^4.0.0",
     "@mapbox/geojson-extent": "^1.0.0",
     "application-config": "^1.0.1",
+    "arg": "^5.0.2",
     "classnames": "^2.3.1",
     "debounce": "^1.2.0",
     "deltachat-node": "1.88.0",
@@ -89,6 +99,7 @@
     "emoji-mart": "^3.0.1",
     "emoji-regex": "^9.2.2",
     "error-stack-parser": "^2.0.7",
+    "esm": "^3.2.25",
     "filesize": "^8.0.6",
     "immutable": "^4.0.0",
     "mapbox-gl": "^1.12.0",
