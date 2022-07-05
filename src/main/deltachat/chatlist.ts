@@ -81,6 +81,7 @@ export default class DCChatList extends SplitOut {
 
     const name = chat.name || summary.text1
     const isGroup = isGroupChat(chat)
+    const isBroadcast = isBroadcastList(chat)
     const contactIds = await this._getChatContactIds(chatId)
     /**
      * This is NOT the Chat Object, it's a smaller version for use as ChatListItem in the ChatList
@@ -97,6 +98,7 @@ export default class DCChatList extends SplitOut {
         status: mapCoreMsgStatus2String(summary.state),
       },
       isProtected: chat.isProtected,
+      isBroadcast: isBroadcast,
       isGroup: isGroup,
       freshMessageCounter: this.selectedAccountContext.getFreshMessageCount(
         chatId
@@ -148,6 +150,7 @@ export default class DCChatList extends SplitOut {
     if (chat === null) return null
 
     const isGroup = isGroupChat(chat)
+    const isBroadcast = isBroadcastList(chat)
     const contactIds = await this._getChatContactIds(chatId)
 
     const contacts = await this._getChatContacts(contactIds)
@@ -174,6 +177,7 @@ export default class DCChatList extends SplitOut {
       freshMessageCounter: this.selectedAccountContext.getFreshMessageCount(
         chatId
       ),
+      isBroadcast: isBroadcast,
       isGroup: isGroup,
       isContactRequest: chat.isContactRequest,
       isDeviceChat: chat.isDeviceTalk,
@@ -216,7 +220,7 @@ function isGroupChat(chat: JsonChat) {
   return chat && (chat.type === C.DC_CHAT_TYPE_GROUP || chat.type === C.DC_CHAT_TYPE_BROADCAST)
 }
 
-function isBroadcast(chat: JsonChat) {
+function isBroadcastList(chat: JsonChat) {
   return chat && chat.type === C.DC_CHAT_TYPE_BROADCAST
 }
 // end section Internal functions

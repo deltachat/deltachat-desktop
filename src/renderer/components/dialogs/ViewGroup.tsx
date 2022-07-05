@@ -143,6 +143,7 @@ function ViewGroupInner(props: {
 
   const chatDisabled = !chat.canSend
 
+
   const {
     groupName,
     setGroupName,
@@ -153,9 +154,9 @@ function ViewGroupInner(props: {
     setGroupImage,
   } = useGroup(chat)
 
-  const showRemoveGroupMemberConfirmationDialog = (contact: JsonContact) => {
+  const showRemoveGroupMemberConfirmationDialog = (contact: JsonContact, isBroadcast?: boolean) => {
     openDialog('ConfirmationDialog', {
-      message: tx('ask_remove_members', contact.nameAndAddr),
+      message: viewMode === 'main' ? tx('ask_remove_members', contact.nameAndAddr) : tx('ask_remove_from_broadcast', contact.nameAndAddr),
       confirmLabel: tx('delete'),
       cb: (yes: boolean) => {
         if (yes) {
@@ -176,6 +177,17 @@ function ViewGroupInner(props: {
       }
     })
   }
+
+  // const showViewBroadcastDialog = () => {
+  //   openDialog(ViewBroadcastDialog, {
+  //     broadcastName: groupName,
+  //     broadcastImage: groupImage,
+  //     onOk: (broadcastName: string, broadcastImage: string) => {
+  //       setGroupName(broadcastName)
+  //       setGroupImage(broadcastImage)
+  //     }
+  //   })
+  // }
 
   const listFlags = chat.isProtected
     ? C.DC_GCL_VERIFIED_ONLY | C.DC_GCL_ADD_SELF
@@ -202,6 +214,7 @@ function ViewGroupInner(props: {
       groupName,
     })
   }
+  // console.log("VIEWMODE: ", viewMode)
 
   const [profileContact, setProfileContact] = useState<JsonContact | null>(null)
 
@@ -210,7 +223,7 @@ function ViewGroupInner(props: {
       {viewMode === 'main' && (
         <>
           <DeltaDialogHeader
-            title={tx('menu_edit_group')}
+            title={!isBroadcast? tx('menu_edit_group') : "Edit Broadcast"}
             onClickEdit={showViewGroupDialog}
             showEditButton={!chatDisabled}
             showCloseButton={true}
@@ -245,8 +258,59 @@ function ViewGroupInner(props: {
                     <PseudoListItemAddMember
                       onClick={() => showAddMemberDialog()}
                     />
-                    <PseudoListItemShowQrCode onClick={() => showQRDialog()} />
+                    {!isBroadcast && <PseudoListItemShowQrCode onClick={() => showQRDialog()} />}
                   </>
+                )}
+                <ContactList2
+                  contacts={chat.contacts}
+                  showRemove={!chatDisabled}
+                  onClick={(contact: JsonContact) => {
+                    setProfileContact(contact)
+                    setViewMode('profile')
+                  }}
+                  onRemoveClick={showRemoveGroupMemberConfirmationDialog}
+                />
+              </div>
+            </Card>
+          </div>
+        </>
+      )}
+      {/* TODO: check if broadcastList can be disabled */}
+      {viewMode === 'broadcast' && (
+        <>
+          <DeltaDialogHeader
+            title="Edit Broadcast"
+            onClickEdit={showViewGroupDialog}
+            showEditButton={!chatDisabled}
+            showCloseButton={true}
+            onClose={onClose}
+          />
+          <div className={Classes.DIALOG_BODY}>
+            <Card>
+              <div className='group-settings-container'>
+                  <Avatar
+                    displayName={groupName}
+                    avatarPath={groupImage}
+                    isVerified={chat.isProtected}
+                    color={chat.color}
+                    large
+                  />
+                <p className='group-name' style={{ marginLeft: '17px' }}>
+                  {groupName}
+                </p>
+              </div>
+              <div className='group-seperator'>
+                {tx(
+                  'n_members',
+                  groupMembers.length.toString(),
+                  groupMembers.length <= 1 ? 'one' : 'other'
+                )}
+              </div>
+              <div className='group-member-contact-list-wrapper'>
+                {!chatDisabled && (
+                    <PseudoListItemAddMember
+                      onClick={() => showAddMemberDialog()}
+                    />
                 )}
                 <ContactList2
                   contacts={chat.contacts}
@@ -387,7 +451,7 @@ export function ViewGroupDialog({
       }}
       fixed
     >
-      <DeltaDialogHeader title={tx('menu_group_name_and_image')} />
+      <DeltaDialogHeader title={"tx('menu_group_name_and_image')"} />
       <DeltaDialogBody>
         <Card elevation={Elevation.ONE}>
           <div
@@ -424,6 +488,79 @@ export function ViewGroupDialog({
               }}
             >
               {tx('group_please_enter_group_name')}
+            </p>
+          )}
+        </Card>
+      </DeltaDialogBody>
+      <DeltaDialogOkCancelFooter onCancel={onClickCancel} onOk={onClickOk} />
+    </DeltaDialogBase>
+  )
+}
+
+export function ViewBroadcastDialog({
+  onClose,
+  onOk,
+  onCancel,
+  isOpen,
+  broadcastName: initialBroadcastName,
+  broadcastImage: initialBroadcastImage,
+}: DialogProps) {
+  const [broadcastName, setBroadcastName] = useState(initialBroadcastName)
+  const [broadcastImage, _setBroadcastImage] = useState(initialBroadcastImage)
+  const tx = useTranslationFunction()
+
+  const onClickCancel = () => {
+    onClose()
+    onCancel && onCancel()
+  }
+  const onClickOk = () => {
+    onClose()
+    onOk(broadcastName, broadcastImage)
+  }
+  return (
+    <DeltaDialogBase
+      onClose={onClose}
+      isOpen={isOpen}
+      canOutsideClickClose={false}
+      style={{
+        top: '15vh',
+        width: '500px',
+        maxHeight: '70vh',
+        height: 'auto',
+      }}
+      fixed
+    >
+      <DeltaDialogHeader title='Broadcast Name' />
+      <DeltaDialogBody>
+        <Card elevation={Elevation.ONE}>
+          <div
+            className='profile-image-username center'
+            style={{ marginBottom: '30px' }}
+          >
+          </div>
+          <DeltaInput
+            key='broadcastname'
+            id='broadcastname'
+            placeholder='Broadcast Name'
+            value={broadcastName}
+            onChange={(
+              event: React.FormEvent<HTMLElement> &
+                React.ChangeEvent<HTMLInputElement>
+            ) => {
+              setBroadcastName(event.target.value)
+            }}
+          />
+          {broadcastName === '' && (
+            <p
+              style={{
+                color: 'var(--colorDanger)',
+                marginLeft: '80px',
+                position: 'relative',
+                top: '-30px',
+                marginBottom: '-18px',
+              }}
+            >
+              'Please enter Broadcast name.'
             </p>
           )}
         </Card>

@@ -84,6 +84,7 @@ export interface ChatListItemType {
     | undefined
   isContactRequest: boolean
   isProtected: boolean
+  isBroadcast: boolean
   isGroup: boolean
   freshMessageCounter: number
   isArchiveLink: boolean
@@ -143,6 +144,7 @@ export interface FullChat {
   contactIds: number[]
   color: string
   freshMessageCounter: number
+  isBroadcast: boolean
   isGroup: boolean
   isContactRequest: boolean
   isDeviceChat: boolean

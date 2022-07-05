@@ -77,7 +77,7 @@ export default function MainScreen() {
       screenContext.openDialog(MailingListProfile, {
         chat: selectedChat.chat,
       })
-    } else if (selectedChat.chat.isGroup) {
+    } else if (selectedChat.chat.isGroup || selectedChat.chat.isBroadcast) {
       openViewGroupDialog(screenContext, selectedChat.chat)
     } else {
       if (selectedChat.chat.contactIds && selectedChat.chat.contactIds[0]) {

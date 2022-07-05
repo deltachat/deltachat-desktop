@@ -116,7 +116,7 @@ export function openViewGroupDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
   selectedChat: FullChat
 ) {
-  screenContext.openDialog('ViewGroup', { chat: selectedChat })
+  screenContext.openDialog('ViewGroup', { chat: selectedChat, isBroadcast: selectedChat.isBroadcast })
 }
 
 export async function openViewProfileDialog(
