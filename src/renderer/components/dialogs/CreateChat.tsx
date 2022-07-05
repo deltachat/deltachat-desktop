@@ -793,7 +793,7 @@ function CreateBroadcastInner(props: {
 
     openDialog(AddMemberDialog, {
       listFlags,
-      broadcastRecipients,
+      groupMembers: broadcastRecipients,
       onOk: (recipients: number[]) =>
         recipients.forEach(contactId => addBroadcastRecipient({ id: contactId })),
     })

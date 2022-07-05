@@ -72,8 +72,9 @@ export default function ViewGroup(props: {
   isOpen: DialogProps['isOpen']
   onClose: DialogProps['onClose']
   chat: FullChat
+  isBroadcast: boolean
 }) {
-  const { isOpen, onClose } = props
+  const { isOpen, onClose, isBroadcast } = props
   const [viewMode, setViewMode] = useState('main')
 
   const chat = useChat(props.chat)
@@ -88,7 +89,7 @@ export default function ViewGroup(props: {
         height: 'calc(100vh - 50px)',
       }}
     >
-      <ViewGroupInner {...{ viewMode, setViewMode, onClose, chat }} />
+      <ViewGroupInner {...{ viewMode, setViewMode, onClose, chat, isBroadcast }} />
     </DeltaDialogBase>
   )
 }
@@ -134,9 +135,10 @@ function ViewGroupInner(props: {
   setViewMode: (newViewMode: string) => void
   onClose: DialogProps['onClose']
   chat: FullChat
+  isBroadcast: boolean
 }) {
   const { openDialog } = useContext(ScreenContext)
-  const { viewMode, setViewMode, onClose, chat } = props
+  const { viewMode, setViewMode, onClose, chat, isBroadcast } = props
   const tx = useTranslationFunction()
 
   const chatDisabled = !chat.canSend
@@ -171,7 +173,7 @@ function ViewGroupInner(props: {
       onOk: (groupName: string, groupImage: string) => {
         setGroupName(groupName)
         setGroupImage(groupImage)
-      },
+      }
     })
   }
 
