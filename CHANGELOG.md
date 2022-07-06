@@ -48,6 +48,7 @@
 
 ## Added
 - Floating action button in chatlist to start a new chat
+- register in os as handler for the `dcaccount:` scheme
 
 ## Fixed
 - use addr if displayname is not set for webxdc selfName #2803

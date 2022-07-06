@@ -13,6 +13,8 @@ const app = rawApp as ExtendedAppMainProcess
 // These calls are for mac and windows, on linux it uses the desktop file.
 app.setAsDefaultProtocolClient('openpgp4fpr')
 app.setAsDefaultProtocolClient('OPENPGP4FPR')
+app.setAsDefaultProtocolClient('dcaccount')
+app.setAsDefaultProtocolClient('DCACCOUNT')
 // do not forcefully set DC as standard email handler to not annoy users
 
 let frontend_ready = false
