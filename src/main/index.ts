@@ -30,6 +30,15 @@ protocol.registerSchemesAsPrivileged([
       stream: true, // needed for audio playback
     },
   },
+  {
+    scheme: 'ipfs',
+    privileges: {
+      allowServiceWorkers: true,
+      standard: true,
+      supportFetchAPI: true,
+      stream: true
+    },
+  },
 ])
 
 const app = rawApp as ExtendedAppMainProcess

@@ -1,4 +1,5 @@
 import { app, BrowserWindow, protocol, ipcMain, session } from 'electron/main'
+import { spawn } from 'child_process'
 import type DeltaChatController from './controller'
 import SplitOut from './splitout'
 import { getLogger } from '../../shared/logger'
@@ -30,6 +31,7 @@ const CSP =
   style-src 'self' 'unsafe-inline' blob: ;\
   font-src 'self' data: blob: ;\
   script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: ;\
+  connect-src 'self' ipfs://* ;\
   img-src 'self' data: blob: ;"
 
 export default class DCWebxdc extends SplitOut {
@@ -146,6 +148,36 @@ export default class DCWebxdc extends SplitOut {
                 callback({ statusCode: 404 })
               }
             }
+          }
+        )
+
+        /**
+         * Experimental!
+         *
+         * Register a _stream_ protocol for ipfs:// CIDv1 urls (base32 encoded)
+         *
+         * Requires you to have an ipfs daemon running locally.
+         * Temporary implementation. We should never use process.spawn() in a production app.
+         * Instead call out to core once we have support for that and callback with another
+         * stream. A stream api is important to avoid buffering data.
+         */
+        ses.protocol.registerStreamProtocol(
+          'ipfs',
+          async (request, callback) => {
+            const url = request.url.replace('ipfs://', '/ipfs/')
+            const child = spawn('ipfs', [ 'cat', url ])
+
+            child.stderr.on('data', (data) => {
+              console.log('ipfs stderr', data.toString())
+            })
+
+            child.on('close', (code) => {
+              if (code !== 0) {
+                console.error('ipfs error code', code)
+              }
+            })
+
+            callback(child.stdout)
           }
         )
       }
