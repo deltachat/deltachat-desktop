@@ -204,7 +204,19 @@ Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANG
   }
 
   async getLastLoggedInAccount() {
-    return DesktopSettings.state.lastAccount
+    if (DesktopSettings.state.lastAccount) {
+      try {
+        this.controller.account_manager.accountContext(
+          DesktopSettings.state.lastAccount
+        )
+        return DesktopSettings.state.lastAccount
+      } catch (error) {
+        log.warn(
+          `account with id ${DesktopSettings.state.lastAccount} does not exist`
+        )
+      }
+    }
+    return undefined
   }
 }
 
