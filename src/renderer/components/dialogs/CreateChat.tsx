@@ -171,9 +171,7 @@ export default function CreateChat(props: {
         <CreateGroupInner isVerified {...{ viewMode, setViewMode, onClose }} />
       )}
       {viewMode.startsWith('createBroadcastList') && (
-        <CreateBroadcastInner
-          {...{ viewMode, setViewMode, onClose }}
-        />
+        <CreateBroadcastInner {...{ viewMode, setViewMode, onClose }} />
       )}
     </DeltaDialogBase>
   )
@@ -334,6 +332,7 @@ export function AddMemberInnerDialog({
   queryStr,
   searchContacts,
   groupMembers,
+  isBroadcast,
 }: {
   onOk: (addMembers: number[]) => void
   onCancel: Parameters<typeof DeltaDialogOkCancelFooter>[0]['onCancel']
@@ -341,6 +340,7 @@ export function AddMemberInnerDialog({
   queryStr: string
   searchContacts: Map<number, JsonContact>
   groupMembers: number[]
+  isBroadcast?: boolean
 }) {
   const contactIdsInGroup: number[] = [...searchContacts]
     .filter(([contactId, _contact]) => groupMembers.indexOf(contactId) !== -1)
@@ -470,7 +470,9 @@ export function AddMemberInnerDialog({
 
   return (
     <>
-      <DeltaDialogHeader title={tx('group_add_members')} />
+      <DeltaDialogHeader
+        title={!isBroadcast ? tx('group_add_members') : tx('add_recipients')}
+      />
       <DeltaDialogBody style={{ overflow: 'hidden' }}>
         <Card style={{ padding: '0px 20px', height: '100%' }}>
           <div className='AddMemberChipsWrapper'>
@@ -632,6 +634,7 @@ function CreateGroupInner(props: {
       groupMembers,
       onOk: (members: number[]) =>
         members.forEach(contactId => addGroupMember({ id: contactId })),
+      isBroadcast: false,
     })
   }
   return (
@@ -675,7 +678,10 @@ function CreateGroupInner(props: {
                 )}
               </div>
               <div className='group-member-contact-list-wrapper'>
-                <PseudoListItemAddMember onClick={showAddMemberDialog} />
+                <PseudoListItemAddMember
+                  onClick={showAddMemberDialog}
+                  isBroadcast={false}
+                />
                 <PseudoListItemShowQrCode
                   onClick={async () => {
                     if (groupId === -1 && groupName === '') {
@@ -760,33 +766,25 @@ const useCreateBroadcast = (
     onClose()
     selectChat(bId)
   }
-  return [broadcastId, lazilyCreateOrUpdateBroadcast, finishCreateBroadcast] as [
-    number,
-    typeof lazilyCreateOrUpdateBroadcast,
-    typeof finishCreateBroadcast
-  ]
+  return finishCreateBroadcast as typeof finishCreateBroadcast
 }
 
 function CreateBroadcastInner(props: {
-  viewMode: string
   setViewMode: (newViewMode: string) => void
   onClose: DialogProps['onClose']
 }) {
   const { openDialog } = useContext(ScreenContext)
-  const { viewMode, setViewMode, onClose } = props
+  const { setViewMode, onClose } = props
   const tx = useTranslationFunction()
 
-  const [broadcastRecipients, removeBroadcastRecipient, addBroadcastRecipient] = useGroupMembers([1])
   const [
-    broadcastId,
-    lazilyCreateOrUpdateBroadcast,
-    finishCreateBroadcast,
-  ] = useCreateBroadcast(broadcastRecipients, onClose)
+    broadcastRecipients,
+    removeBroadcastRecipient,
+    addBroadcastRecipient,
+  ] = useGroupMembers([])
+  const finishCreateBroadcast = useCreateBroadcast(broadcastRecipients, onClose)
 
-  const searchContacts = useContacts(
-    C.DC_GCL_ADD_SELF,
-    ''
-  )[0]
+  const searchContacts = useContacts(C.DC_GCL_ADD_SELF, '')[0]
 
   const showAddMemberDialog = () => {
     const listFlags = C.DC_GCL_ADD_SELF
@@ -795,69 +793,65 @@ function CreateBroadcastInner(props: {
       listFlags,
       groupMembers: broadcastRecipients,
       onOk: (recipients: number[]) =>
-        recipients.forEach(contactId => addBroadcastRecipient({ id: contactId })),
+        recipients.forEach(contactId =>
+          addBroadcastRecipient({ id: contactId })
+        ),
+      isBroadcast: true,
     })
   }
   return (
     <>
-          <DeltaDialogHeader
-            title={
-              tx('new_broadcast_list')
-            }
-          />
-          <div className={Classes.DIALOG_BODY}>
-            <Card>
-              {/* <GroupSettingsSetNameAndProfileImage
-                groupImage={groupImage}
-                onSetGroupImage={onSetGroupImage}
-                onUnsetGroupImage={onUnsetGroupImage}
-                groupName={groupName}
-                setGroupName={setGroupName}
-                errorMissingGroupName={errorMissingGroupName}
-                setErrorMissingGroupName={setErrorMissingGroupName}
-              /> */}
-              {/* TODO: Add broadcast name */}
-              <div className='group-seperator'>
-                {tx(
-                  'n_members',
-                  broadcastRecipients.length.toString(),
-                  broadcastRecipients.length <= 1 ? 'one' : 'other'
-                )}
-              </div>
-              <div className='group-member-contact-list-wrapper'>
-                <PseudoListItemAddMember onClick={showAddMemberDialog} />
-                <ContactList2
-                  contacts={searchContacts.filter(
-                    ({ id }) => broadcastRecipients.indexOf(id) !== -1
-                  )}
-                  onClick={() => {}}
-                  showRemove
-                  onRemoveClick={c => {
-                    removeBroadcastRecipient(c)
-                  }}
-                />
-              </div>
-            </Card>
+      <DeltaDialogHeader title={tx('new_broadcast_list')} />
+      <div className={Classes.DIALOG_BODY}>
+        <Card>
+          <div className='broadcast-list-hint'>
+            {tx('chat_new_broadcast_hint')}
           </div>
-          <DeltaDialogFooter>
-            <DeltaDialogFooterActions>
-              <p
-                className='delta-button primary bold'
-                style={{ marginRight: '10px' }}
-                onClick={() => setViewMode('main')}
-              >
-                {tx('cancel')}
-              </p>
-              <p
-                className='delta-button primary bold'
-                onClick={() => {
-                  finishCreateBroadcast()
-                }}
-              >
-                {"Create Broadcast"}
-              </p>
-            </DeltaDialogFooterActions>
-          </DeltaDialogFooter>
+          <br />
+          {broadcastRecipients.length > 0 && (
+            <div className='group-seperator'>
+              {tx(
+                'n_recipients',
+                broadcastRecipients.length.toString(),
+                broadcastRecipients.length == 1 ? 'one' : 'other'
+              )}
+            </div>
+          )}
+          <div className='group-member-contact-list-wrapper'>
+            <PseudoListItemAddMember
+              onClick={showAddMemberDialog}
+              isBroadcast
+            />
+            <ContactList2
+              contacts={searchContacts.filter(
+                ({ id }) => broadcastRecipients.indexOf(id) !== -1
+              )}
+              onClick={() => {}}
+              showRemove
+              onRemoveClick={c => {
+                removeBroadcastRecipient(c)
+              }}
+            />
+          </div>
+        </Card>
+      </div>
+      <DeltaDialogFooter>
+        <DeltaDialogFooterActions>
+          <p
+            className='delta-button primary bold'
+            style={{ marginRight: '10px' }}
+            onClick={() => setViewMode('main')}
+          >
+            {tx('cancel')}
+          </p>
+          <p
+            className='delta-button primary bold'
+            onClick={() => finishCreateBroadcast()}
+          >
+            {'Create Broadcast List'}
+          </p>
+        </DeltaDialogFooterActions>
+      </DeltaDialogFooter>
     </>
   )
 }

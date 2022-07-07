@@ -414,7 +414,9 @@ function EmptyChatMessage() {
 
   let emptyChatMessage = tx('chat_new_one_to_one_hint', [chat.name, chat.name])
 
-  if (chat.isGroup && !chat.isContactRequest) {
+  if (chat.isBroadcast) {
+    emptyChatMessage = tx('chat_new_broadcast_hint')
+  } else if (chat.isGroup && !chat.isContactRequest) {
     emptyChatMessage = chat.isUnpromoted
       ? tx('chat_new_group_hint')
       : tx('chat_no_messages')

@@ -314,6 +314,10 @@ function chatSubtitle(chat: FullChat) {
       })
     } else if (chat.type === C.DC_CHAT_TYPE_MAILINGLIST) {
       return tx('mailing_list')
+    } else if (chat.type === C.DC_CHAT_TYPE_BROADCAST) {
+      return tx('n_recipients', [String(chat.contacts.length)], {
+        quantity: chat.contacts.length,
+      })
     } else if (chat.contacts.length >= 1) {
       if (chat.isSelfTalk) {
         return tx('chat_self_talk_subtitle')

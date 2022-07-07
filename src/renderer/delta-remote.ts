@@ -155,9 +155,7 @@ class DeltaRemote {
     chatId: number,
     duration: MuteDuration
   ): Promise<boolean>
-  call(
-    fnName: 'chat.createBroadcastList',
-  ): Promise<number>
+  call(fnName: 'chat.createBroadcastList'): Promise<number>
   call(
     fnName: 'chat.createGroupChat',
     verified: boolean,

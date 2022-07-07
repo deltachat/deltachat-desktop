@@ -217,7 +217,11 @@ function mapCoreMsgStatus2String(state: number) {
   }
 }
 function isGroupChat(chat: JsonChat) {
-  return chat && (chat.type === C.DC_CHAT_TYPE_GROUP || chat.type === C.DC_CHAT_TYPE_BROADCAST)
+  return (
+    chat &&
+    (chat.type === C.DC_CHAT_TYPE_GROUP ||
+      chat.type === C.DC_CHAT_TYPE_BROADCAST)
+  )
 }
 
 function isBroadcastList(chat: JsonChat) {

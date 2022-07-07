@@ -89,7 +89,9 @@ export default function ViewGroup(props: {
         height: 'calc(100vh - 50px)',
       }}
     >
-      <ViewGroupInner {...{ viewMode, setViewMode, onClose, chat, isBroadcast }} />
+      <ViewGroupInner
+        {...{ viewMode, setViewMode, onClose, chat, isBroadcast }}
+      />
     </DeltaDialogBase>
   )
 }
@@ -143,7 +145,6 @@ function ViewGroupInner(props: {
 
   const chatDisabled = !chat.canSend
 
-
   const {
     groupName,
     setGroupName,
@@ -154,9 +155,11 @@ function ViewGroupInner(props: {
     setGroupImage,
   } = useGroup(chat)
 
-  const showRemoveGroupMemberConfirmationDialog = (contact: JsonContact, isBroadcast?: boolean) => {
+  const showRemoveGroupMemberConfirmationDialog = (contact: JsonContact) => {
     openDialog('ConfirmationDialog', {
-      message: viewMode === 'main' ? tx('ask_remove_members', contact.nameAndAddr) : tx('ask_remove_from_broadcast', contact.nameAndAddr),
+      message: !isBroadcast
+        ? tx('ask_remove_members', contact.nameAndAddr)
+        : tx('ask_remove_from_broadcast', contact.nameAndAddr),
       confirmLabel: tx('delete'),
       cb: (yes: boolean) => {
         if (yes) {
@@ -174,7 +177,8 @@ function ViewGroupInner(props: {
       onOk: (groupName: string, groupImage: string) => {
         setGroupName(groupName)
         setGroupImage(groupImage)
-      }
+      },
+      isBroadcast: isBroadcast,
     })
   }
 
@@ -200,6 +204,7 @@ function ViewGroupInner(props: {
       onOk: (members: number[]) => {
         members.forEach(addGroupMember)
       },
+      isBroadcast: isBroadcast,
     })
   }
 
@@ -223,7 +228,7 @@ function ViewGroupInner(props: {
       {viewMode === 'main' && (
         <>
           <DeltaDialogHeader
-            title={!isBroadcast? tx('menu_edit_group') : "Edit Broadcast"}
+            title={!isBroadcast ? tx('menu_edit_group') : 'Edit Broadcast List'}
             onClickEdit={showViewGroupDialog}
             showEditButton={!chatDisabled}
             showCloseButton={true}
@@ -246,19 +251,30 @@ function ViewGroupInner(props: {
                 </p>
               </div>
               <div className='group-seperator'>
-                {tx(
-                  'n_members',
-                  groupMembers.length.toString(),
-                  groupMembers.length <= 1 ? 'one' : 'other'
-                )}
+                {!isBroadcast
+                  ? tx(
+                      'n_members',
+                      groupMembers.length.toString(),
+                      groupMembers.length == 1 ? 'one' : 'other'
+                    )
+                  : tx(
+                      'n_recipients',
+                      groupMembers.length.toString(),
+                      groupMembers.length == 1 ? 'one' : 'other'
+                    )}
               </div>
               <div className='group-member-contact-list-wrapper'>
                 {!chatDisabled && (
                   <>
                     <PseudoListItemAddMember
                       onClick={() => showAddMemberDialog()}
+                      isBroadcast={isBroadcast}
                     />
-                    {!isBroadcast && <PseudoListItemShowQrCode onClick={() => showQRDialog()} />}
+                    {!isBroadcast && (
+                      <PseudoListItemShowQrCode
+                        onClick={() => showQRDialog()}
+                      />
+                    )}
                   </>
                 )}
                 <ContactList2
@@ -276,7 +292,7 @@ function ViewGroupInner(props: {
         </>
       )}
       {/* TODO: check if broadcastList can be disabled */}
-      {viewMode === 'broadcast' && (
+      {/* {viewMode === 'broadcast' && (
         <>
           <DeltaDialogHeader
             title="Edit Broadcast"
@@ -310,6 +326,7 @@ function ViewGroupInner(props: {
                 {!chatDisabled && (
                     <PseudoListItemAddMember
                       onClick={() => showAddMemberDialog()}
+                      isBroadcast
                     />
                 )}
                 <ContactList2
@@ -324,8 +341,8 @@ function ViewGroupInner(props: {
               </div>
             </Card>
           </div>
-        </>
-      )}
+        </> */}
+      {/* )} */}
       {viewMode === 'profile' && (
         <>
           <DeltaDialogHeader
@@ -354,6 +371,7 @@ export function AddMemberDialog({
   listFlags,
   groupMembers,
   onOk,
+  isBroadcast,
 }: DialogProps) {
   const [searchContacts, updateSearchContacts] = useContactsMap(listFlags, '')
   const [queryStr, onSearchChange] = useContactSearch(updateSearchContacts)
@@ -381,6 +399,7 @@ export function AddMemberDialog({
         queryStr,
         searchContacts,
         groupMembers,
+        isBroadcast: isBroadcast,
       })}
     </DeltaDialogBase>
   )
@@ -422,6 +441,7 @@ export function ViewGroupDialog({
   onOk,
   onCancel,
   isOpen,
+  isBroadcast,
   groupName: initialGroupName,
   groupColor,
   groupImage: initialGroupImage,
@@ -451,24 +471,32 @@ export function ViewGroupDialog({
       }}
       fixed
     >
-      <DeltaDialogHeader title={"tx('menu_group_name_and_image')"} />
+      <DeltaDialogHeader
+        title={
+          !isBroadcast ? tx('menu_group_name_and_image') : 'Broadcast List Name'
+        }
+      />
       <DeltaDialogBody>
         <Card elevation={Elevation.ONE}>
           <div
             className='profile-image-username center'
             style={{ marginBottom: '30px' }}
           >
-            <GroupImageSelector
-              groupName={groupName}
-              groupColor={groupColor}
-              groupImage={groupImage}
-              setGroupImage={setGroupImage}
-            />
+            {!isBroadcast && (
+              <GroupImageSelector
+                groupName={groupName}
+                groupColor={groupColor}
+                groupImage={groupImage}
+                setGroupImage={setGroupImage}
+              />
+            )}
           </div>
           <DeltaInput
             key='groupname'
             id='groupname'
-            placeholder={tx('group_name')}
+            placeholder={
+              !isBroadcast ? tx('group_name') : 'Broadcast List Name'
+            }
             value={groupName}
             onChange={(
               event: React.FormEvent<HTMLElement> &
@@ -507,7 +535,6 @@ export function ViewBroadcastDialog({
 }: DialogProps) {
   const [broadcastName, setBroadcastName] = useState(initialBroadcastName)
   const [broadcastImage, _setBroadcastImage] = useState(initialBroadcastImage)
-  const tx = useTranslationFunction()
 
   const onClickCancel = () => {
     onClose()
@@ -536,8 +563,7 @@ export function ViewBroadcastDialog({
           <div
             className='profile-image-username center'
             style={{ marginBottom: '30px' }}
-          >
-          </div>
+          ></div>
           <DeltaInput
             key='broadcastname'
             id='broadcastname'
