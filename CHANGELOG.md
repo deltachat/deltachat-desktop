@@ -10,6 +10,7 @@
 
 ## Changed
 - Less round buttons, more similar to android and better spacing #2813
+- Updated deltachat-node to v1.88.0
 
 ## [1.30.1] - 2022-06-07
 
