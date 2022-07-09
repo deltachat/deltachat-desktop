@@ -7,6 +7,7 @@
 
 ## Fixed
 - use addr if displayname is not set for webxdc selfName #2803
+- prevent whitescreen on invalid last account id
 
 ## Changed
 - Less round buttons, more similar to android and better spacing #2813
