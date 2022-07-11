@@ -3,10 +3,6 @@
   "version": "1.30.1",
   "description": "Desktop Application for delta.chat",
   "main": "index.js",
-  "bin": {
-    "deltachat-desktop": "bin/create-project",
-    "create-project": "bin/create-project"
-  },
   "scripts": {
     "preinstall": "node ./bin/check-nodejs-version.js",
     "test": "npm run check-types && npm run lint && npm run check-formatting && npm run test-log-conventions && npm run test-unit && npm run test-misc",
@@ -52,7 +48,8 @@
     "pack:mac": "electron-builder --config ./electron-builder.json5 --mac dmg mas",
     "pack:linux:dir": "electron-builder --config ./electron-builder.json5 --linux --dir",
     "pack:linux": "electron-builder --config ./electron-builder.json5 --linux AppImage deb",
-    "pack:all": "electron-builder --config ./electron-builder.json5 --mac dmg --win nsis portable --linux AppImage deb"
+    "pack:all": "electron-builder --config ./electron-builder.json5 --mac dmg --win nsis portable --linux AppImage deb",
+    "version":"npx ts-node src/main/show_version.ts --"
   },
   "repository": {
     "type": "git",
@@ -62,9 +59,7 @@
     "deltachat",
     "email",
     "messaging",
-    "desktop",
-    "cli",
-    "create-project"
+    "desktop"
   ],
   "author": {
     "name": "DeltaChat Developers",
@@ -99,7 +94,6 @@
     "emoji-mart": "^3.0.1",
     "emoji-regex": "^9.2.2",
     "error-stack-parser": "^2.0.7",
-    "esm": "^3.2.25",
     "filesize": "^8.0.6",
     "immutable": "^4.0.0",
     "mapbox-gl": "^1.12.0",

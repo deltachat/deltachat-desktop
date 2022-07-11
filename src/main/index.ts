@@ -7,6 +7,17 @@ import { VERSION, GIT_REF, BUILD_TIMESTAMP } from '../shared/build-info'
 import type { EventEmitter } from 'events'
 import contextMenu from './electron-context-menu'
 import { findOutIfWeAreRunningAsAppx } from './isAppx'
+import { getHelpMenu } from './help_menu'
+
+if(rc['version']===true||rc['v']===true){
+  console.log(VERSION)
+  process.exit()
+}
+
+if(rc['help']===true||rc['h']===true){
+  getHelpMenu();
+  process.exit()
+}
 
 protocol.registerSchemesAsPrivileged([
   {
