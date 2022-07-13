@@ -47,6 +47,7 @@ import {
 import { Avatar } from '../Avatar'
 import { AddMemberDialog } from './ViewGroup'
 import { ContactListItem } from '../contact/ContactListItem'
+import { useSettingsStore } from '../../stores/settings'
 
 export default function CreateChat(props: {
   isOpen: DialogProps['isOpen']
@@ -74,6 +75,7 @@ export default function CreateChat(props: {
     }
     onClose()
   }
+  const settingsStore = useSettingsStore()[0]
 
   const renderAddGroupIfNeeded = () => {
     if (queryStr !== '') return null
@@ -91,12 +93,14 @@ export default function CreateChat(props: {
           text={tx('menu_new_verified_group')}
           onClick={() => setViewMode('createVerifiedGroup-main')}
         />
-        <PseudoListItem
-          id='newbroadcastlist'
-          cutoff='+'
-          text={tx('new_broadcast_list')}
-          onClick={() => setViewMode('createBroadcastList-main')}
-        />
+        {settingsStore?.desktopSettings.enableBroadcastLists && (
+          <PseudoListItem
+            id='newbroadcastlist'
+            cutoff='+'
+            text={tx('new_broadcast_list')}
+            onClick={() => setViewMode('createBroadcastList-main')}
+          />
+        )}
       </Fragment>
     )
   }
