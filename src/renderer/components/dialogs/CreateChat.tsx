@@ -511,7 +511,7 @@ export function AddMemberInnerDialog({
                   contactIdsInGroup.indexOf(contact.id) !== -1
                 )
               }}
-              disabledContacts={contactIdsInGroup}
+              disabledContacts={contactIdsInGroup.concat(C.DC_CONTACT_ID_SELF)}
               onCheckboxClick={addOrRemoveMember}
             />
             {renderAddContactIfNeeded()}
@@ -848,7 +848,7 @@ function CreateBroadcastInner(props: {
             className='delta-button primary bold'
             onClick={() => finishCreateBroadcast()}
           >
-            {'Create Broadcast List'}
+            {tx('create_broadcast_list')}
           </p>
         </DeltaDialogFooterActions>
       </DeltaDialogFooter>

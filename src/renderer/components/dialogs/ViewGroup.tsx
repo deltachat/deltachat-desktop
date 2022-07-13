@@ -228,7 +228,11 @@ function ViewGroupInner(props: {
       {viewMode === 'main' && (
         <>
           <DeltaDialogHeader
-            title={!isBroadcast ? tx('menu_edit_group') : 'Edit Broadcast List'}
+            title={
+              !isBroadcast
+                ? tx('menu_edit_group')
+                : tx('menu_edit_broadcast_list')
+            }
             onClickEdit={showViewGroupDialog}
             showEditButton={!chatDisabled}
             showCloseButton={true}
@@ -473,7 +477,9 @@ export function ViewGroupDialog({
     >
       <DeltaDialogHeader
         title={
-          !isBroadcast ? tx('menu_group_name_and_image') : 'Broadcast List Name'
+          !isBroadcast
+            ? tx('menu_group_name_and_image')
+            : tx('menu_broadcast_list_name')
         }
       />
       <DeltaDialogBody>
@@ -495,7 +501,7 @@ export function ViewGroupDialog({
             key='groupname'
             id='groupname'
             placeholder={
-              !isBroadcast ? tx('group_name') : 'Broadcast List Name'
+              !isBroadcast ? tx('group_name') : tx('menu_broadcast_list_name')
             }
             value={groupName}
             onChange={(
@@ -511,11 +517,13 @@ export function ViewGroupDialog({
                 color: 'var(--colorDanger)',
                 marginLeft: '80px',
                 position: 'relative',
-                top: '-30px',
+                top: '-10px',
                 marginBottom: '-18px',
               }}
             >
-              {tx('group_please_enter_group_name')}
+              {!isBroadcast
+                ? tx('group_please_enter_group_name')
+                : tx('broadcast_please_enter_broadcast_list_name')}
             </p>
           )}
         </Card>
@@ -533,6 +541,7 @@ export function ViewBroadcastDialog({
   broadcastName: initialBroadcastName,
   broadcastImage: initialBroadcastImage,
 }: DialogProps) {
+  const tx = useTranslationFunction()
   const [broadcastName, setBroadcastName] = useState(initialBroadcastName)
   const [broadcastImage, _setBroadcastImage] = useState(initialBroadcastImage)
 
@@ -567,7 +576,7 @@ export function ViewBroadcastDialog({
           <DeltaInput
             key='broadcastname'
             id='broadcastname'
-            placeholder='Broadcast Name'
+            placeholder={tx('menu_broadcast_list_name')}
             value={broadcastName}
             onChange={(
               event: React.FormEvent<HTMLElement> &
@@ -586,7 +595,7 @@ export function ViewBroadcastDialog({
                 marginBottom: '-18px',
               }}
             >
-              'Please enter Broadcast name.'
+              tx('broadcast_please_enter_broadcast_list_name')
             </p>
           )}
         </Card>

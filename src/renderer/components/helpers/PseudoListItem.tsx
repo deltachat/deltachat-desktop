@@ -66,7 +66,7 @@ export const PseudoListItemAddMember = ({
   isBroadcast = false,
 }: {
   onClick: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
-  isBroadcast: boolean
+  isBroadcast?: boolean
 }) => {
   const tx = useTranslationFunction()
   return (

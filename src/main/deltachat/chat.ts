@@ -100,7 +100,7 @@ export default class DCChat extends SplitOut {
   createGroupChat(verified: boolean, name: string) {
     return this.selectedAccountContext.createGroupChat(name, verified)
   }
-  
+
   /**
    * @returns id of the created chat
    */
