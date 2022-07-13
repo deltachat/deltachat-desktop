@@ -182,17 +182,6 @@ function ViewGroupInner(props: {
     })
   }
 
-  // const showViewBroadcastDialog = () => {
-  //   openDialog(ViewBroadcastDialog, {
-  //     broadcastName: groupName,
-  //     broadcastImage: groupImage,
-  //     onOk: (broadcastName: string, broadcastImage: string) => {
-  //       setGroupName(broadcastName)
-  //       setGroupImage(broadcastImage)
-  //     }
-  //   })
-  // }
-
   const listFlags = chat.isProtected
     ? C.DC_GCL_VERIFIED_ONLY | C.DC_GCL_ADD_SELF
     : C.DC_GCL_ADD_SELF
@@ -219,7 +208,6 @@ function ViewGroupInner(props: {
       groupName,
     })
   }
-  // console.log("VIEWMODE: ", viewMode)
 
   const [profileContact, setProfileContact] = useState<JsonContact | null>(null)
 
@@ -295,58 +283,6 @@ function ViewGroupInner(props: {
           </div>
         </>
       )}
-      {/* TODO: check if broadcastList can be disabled */}
-      {/* {viewMode === 'broadcast' && (
-        <>
-          <DeltaDialogHeader
-            title="Edit Broadcast"
-            onClickEdit={showViewGroupDialog}
-            showEditButton={!chatDisabled}
-            showCloseButton={true}
-            onClose={onClose}
-          />
-          <div className={Classes.DIALOG_BODY}>
-            <Card>
-              <div className='group-settings-container'>
-                  <Avatar
-                    displayName={groupName}
-                    avatarPath={groupImage}
-                    isVerified={chat.isProtected}
-                    color={chat.color}
-                    large
-                  />
-                <p className='group-name' style={{ marginLeft: '17px' }}>
-                  {groupName}
-                </p>
-              </div>
-              <div className='group-seperator'>
-                {tx(
-                  'n_members',
-                  groupMembers.length.toString(),
-                  groupMembers.length <= 1 ? 'one' : 'other'
-                )}
-              </div>
-              <div className='group-member-contact-list-wrapper'>
-                {!chatDisabled && (
-                    <PseudoListItemAddMember
-                      onClick={() => showAddMemberDialog()}
-                      isBroadcast
-                    />
-                )}
-                <ContactList2
-                  contacts={chat.contacts}
-                  showRemove={!chatDisabled}
-                  onClick={(contact: JsonContact) => {
-                    setProfileContact(contact)
-                    setViewMode('profile')
-                  }}
-                  onRemoveClick={showRemoveGroupMemberConfirmationDialog}
-                />
-              </div>
-            </Card>
-          </div>
-        </> */}
-      {/* )} */}
       {viewMode === 'profile' && (
         <>
           <DeltaDialogHeader
@@ -524,78 +460,6 @@ export function ViewGroupDialog({
               {!isBroadcast
                 ? tx('group_please_enter_group_name')
                 : tx('broadcast_please_enter_broadcast_list_name')}
-            </p>
-          )}
-        </Card>
-      </DeltaDialogBody>
-      <DeltaDialogOkCancelFooter onCancel={onClickCancel} onOk={onClickOk} />
-    </DeltaDialogBase>
-  )
-}
-
-export function ViewBroadcastDialog({
-  onClose,
-  onOk,
-  onCancel,
-  isOpen,
-  broadcastName: initialBroadcastName,
-  broadcastImage: initialBroadcastImage,
-}: DialogProps) {
-  const tx = useTranslationFunction()
-  const [broadcastName, setBroadcastName] = useState(initialBroadcastName)
-  const [broadcastImage, _setBroadcastImage] = useState(initialBroadcastImage)
-
-  const onClickCancel = () => {
-    onClose()
-    onCancel && onCancel()
-  }
-  const onClickOk = () => {
-    onClose()
-    onOk(broadcastName, broadcastImage)
-  }
-  return (
-    <DeltaDialogBase
-      onClose={onClose}
-      isOpen={isOpen}
-      canOutsideClickClose={false}
-      style={{
-        top: '15vh',
-        width: '500px',
-        maxHeight: '70vh',
-        height: 'auto',
-      }}
-      fixed
-    >
-      <DeltaDialogHeader title='Broadcast Name' />
-      <DeltaDialogBody>
-        <Card elevation={Elevation.ONE}>
-          <div
-            className='profile-image-username center'
-            style={{ marginBottom: '30px' }}
-          ></div>
-          <DeltaInput
-            key='broadcastname'
-            id='broadcastname'
-            placeholder={tx('menu_broadcast_list_name')}
-            value={broadcastName}
-            onChange={(
-              event: React.FormEvent<HTMLElement> &
-                React.ChangeEvent<HTMLInputElement>
-            ) => {
-              setBroadcastName(event.target.value)
-            }}
-          />
-          {broadcastName === '' && (
-            <p
-              style={{
-                color: 'var(--colorDanger)',
-                marginLeft: '80px',
-                position: 'relative',
-                top: '-30px',
-                marginBottom: '-18px',
-              }}
-            >
-              tx('broadcast_please_enter_broadcast_list_name')
             </p>
           )}
         </Card>
