@@ -28,6 +28,7 @@ export interface SettingsStoreState {
     webrtc_instance: string
     download_limit: string
     only_fetch_mvbox: string
+    'ui.lastchatid': string
   }
   desktopSettings: DesktopSettingsType
   rc: RC_Config
@@ -48,6 +49,7 @@ const settingsKeys: Array<keyof SettingsStoreState['settings']> = [
   'webrtc_instance',
   'download_limit',
   'only_fetch_mvbox',
+  'ui.lastchatid',
 ]
 
 class SettingsStore extends Store<SettingsStoreState | null> {
