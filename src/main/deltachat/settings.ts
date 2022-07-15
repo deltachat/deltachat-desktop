@@ -26,7 +26,7 @@ export default class DCSettings extends SplitOut {
     return Boolean(result)
   }
 
-  getConfig(key: string) {
+  _getConfig(key: string) {
     return this.selectedAccountContext.getConfig(key)
   }
 
@@ -34,9 +34,9 @@ export default class DCSettings extends SplitOut {
     const config: { [key: string]: string } = {}
     for (const key of keys) {
       if (key.indexOf('_port') > -1) {
-        config[key] = this.getConfig(key) === '0' ? '' : this.getConfig(key)
+        config[key] = this._getConfig(key) === '0' ? '' : this._getConfig(key)
       } else {
-        config[key] = this.getConfig(key)
+        config[key] = this._getConfig(key)
       }
     }
     return config

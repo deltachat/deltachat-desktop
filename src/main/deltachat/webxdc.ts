@@ -115,12 +115,12 @@ export default class DCWebxdc extends SplitOut {
 
             if (filename === 'webxdc.js') {
               const displayName = Buffer.from(
-                this.controller.settings.getConfig('displayname') ||
-                  this.controller.settings.getConfig('addr') ||
+                this.controller.settings._getConfig('displayname') ||
+                  this.controller.settings._getConfig('addr') ||
                   'unknown'
               ).toString('base64')
               const seflAddr = Buffer.from(
-                this.controller.settings.getConfig('addr')
+                this.controller.settings._getConfig('addr')
               ).toString('base64')
 
               // initializes the preload script, the actual implementation of `window.webxdc` is found there: static/webxdc-preload.js

@@ -261,7 +261,6 @@ class DeltaRemote {
     key: string,
     value: string
   ): Promise<boolean>
-  call(fnName: 'settings.getConfig', key: string): Promise<string>
   call(
     fnName: 'settings.getConfigFor',
     keys: string[]
