@@ -1,4 +1,4 @@
-import { ipcBackend, saveLastChatId } from '../ipc'
+import { ipcBackend } from '../ipc'
 import { Store, useStore } from './store'
 import { FullChat, MessageType } from '../../shared/shared-types'
 import { DeltaBackend, sendMessageParams } from '../delta-remote'
@@ -6,6 +6,7 @@ import { runtime } from '../runtime'
 import { ActionEmitter, KeybindAction } from '../keybindings'
 import { C } from 'deltachat-node/node/dist/constants'
 import { OrderedMap } from 'immutable'
+import { BackendRemote } from '../backend-com'
 
 export const PAGE_SIZE = 11
 
@@ -178,6 +179,16 @@ async function messagePagesFromMessageIndexes(
   }
 
   return messagePages
+}
+
+function saveLastChatId(chatId: number) {
+  if (window.__selectedAccountId) {
+    BackendRemote.rpc.setConfig(
+      window.__selectedAccountId,
+      'ui.lastchatid',
+      String(chatId)
+    )
+  }
 }
 
 interface ChatStoreLocks {

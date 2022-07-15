@@ -29,7 +29,6 @@ import {
   Button,
   Icon,
 } from '@blueprintjs/core'
-import { getLastSelectedChatId } from '../../ipc'
 import { useKeyBindingAction, KeybindAction } from '../../keybindings'
 import { Avatar } from '../Avatar'
 import ConnectivityToast from '../ConnectivityToast'
@@ -88,14 +87,17 @@ export default function MainScreen() {
 
   window.__chatlistSetSearch = searchChats
 
-  const [isFirstLoad, setFirstLoad] = useState(true)
-  if (isFirstLoad) {
-    setFirstLoad(false)
-    const lastChatId = getLastSelectedChatId()
-    if (lastChatId) {
-      selectChat(lastChatId)
-    }
-    SettingsStoreInstance.effect.load()
+  const isFirstLoad = useRef(true)
+  if (isFirstLoad.current) {
+    isFirstLoad.current = false
+    SettingsStoreInstance.effect.load().then(() => {
+      const lastChatId = SettingsStoreInstance.getState()?.settings[
+        'ui.lastchatid'
+      ]
+      if (lastChatId) {
+        selectChat(Number(lastChatId))
+      }
+    })
   }
 
   const tx = useTranslationFunction()
