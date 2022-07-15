@@ -16,6 +16,7 @@ export function getDefaultState(): DesktopSettingsType {
     enableChatAuditLog: false,
     enableOnDemandLocationStreaming: false,
     chatViewBgImg: undefined,
+    /** deprecated isn't used anymore since the move to jsonrpc */
     lastChats: {},
     zoomFactor: 1,
     activeTheme: 'system',
