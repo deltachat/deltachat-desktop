@@ -261,12 +261,6 @@ class DeltaRemote {
     key: string,
     value: string
   ): Promise<boolean>
-  call(
-    fnName: 'settings.getConfigFor',
-    keys: string[]
-  ): Promise<{
-    [key: string]: string
-  }>
   call(fnName: 'settings.keysImport', directory: string): Promise<void>
   call(fnName: 'settings.keysExport', directory: string): Promise<void>
   call(

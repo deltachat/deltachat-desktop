@@ -26,22 +26,6 @@ export default class DCSettings extends SplitOut {
     return Boolean(result)
   }
 
-  _getConfig(key: string) {
-    return this.selectedAccountContext.getConfig(key)
-  }
-
-  getConfigFor(keys: string[]) {
-    const config: { [key: string]: string } = {}
-    for (const key of keys) {
-      if (key.indexOf('_port') > -1) {
-        config[key] = this._getConfig(key) === '0' ? '' : this._getConfig(key)
-      } else {
-        config[key] = this._getConfig(key)
-      }
-    }
-    return config
-  }
-
   setDesktopSetting(key: keyof DesktopSettingsType, value: string) {
     DesktopSettings.update({ [key]: value })
 
