@@ -135,18 +135,3 @@ export function _callDcMethodAsync(
     })
   )
 }
-
-// move this part to the deltachat backend / deltachatcontroller
-
-export function saveLastChatId(chatId: number) {
-  ipcRenderer.send('saveLastChatId', chatId)
-}
-
-/**
- * get the last selected chats id from previous session
- */
-export function getLastSelectedChatId() {
-  return ipcRenderer.sendSync('getLastSelectedChatId')
-}
-
-// end-move

@@ -96,28 +96,6 @@ export async function init(cwd: string, logHandler: LogHandler) {
     })
   })
 
-  ipcMain.on('saveLastChatId', (_e, chatId) => {
-    if (dcController.selectedAccountId) {
-      DesktopSettings.update({
-        lastChats: {
-          ...DesktopSettings.state.lastChats,
-          [dcController.selectedAccountId]: chatId,
-        },
-      })
-    }
-    // don't save to disk, because this is already done on close and it might block
-    // we can ignore the crash case, because a crash isn't supposed to happen
-    // and it's not important data
-  })
-
-  ipcMain.on('getLastSelectedChatId', e => {
-    if (!dcController.selectedAccountId) {
-      throw new Error('no account selected')
-    }
-    e.returnValue =
-      DesktopSettings.state.lastChats[dcController.selectedAccountId]
-  })
-
   ipcMain.on('help', async (_ev, locale) => {
     await openHelpWindow(locale)
   })
