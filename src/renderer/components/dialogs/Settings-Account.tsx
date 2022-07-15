@@ -1,5 +1,4 @@
 import { useEffect, useState, useContext } from 'react'
-import { DeltaBackend } from '../../delta-remote'
 import { Card, Elevation } from '@blueprintjs/core'
 import React from 'react'
 import LoginForm, {
@@ -16,6 +15,7 @@ import {
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { Credentials } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
+import { BackendRemote } from '../../backend-com'
 
 export default function SettingsAccountDialog({
   isOpen,
@@ -60,8 +60,11 @@ export function SettingsAccountInner(onClose: () => void) {
   const { openDialog } = useContext(ScreenContext)
 
   const loadSettings = async () => {
-    const accountSettings: Credentials = ((await DeltaBackend.call(
-      'settings.getConfigFor',
+    if (window.__selectedAccountId === undefined) {
+      throw new Error('can not load settings when no account is selected')
+    }
+    const accountSettings: Credentials = ((await BackendRemote.rpc.batchGetConfig(
+      window.__selectedAccountId,
       [
         'addr',
         'mail_pw',
