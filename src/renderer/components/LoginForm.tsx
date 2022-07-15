@@ -206,7 +206,7 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
             onChange={handleCredentialsChange}
           />
 
-          {providerInfo?.before_login_hint && (
+          {providerInfo?.beforeLoginHint && (
             <div
               className={`before-login-hint ${
                 providerInfo.status === C.DC_PROVIDER_STATUS_BROKEN
@@ -214,8 +214,8 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
                   : ''
               }`}
             >
-              <p>{providerInfo.before_login_hint}</p>
-              <ClickableLink href={providerInfo.overview_page}>
+              <p>{providerInfo.beforeLoginHint}</p>
+              <ClickableLink href={providerInfo.overviewPage}>
                 {tx('more_info_desktop')}
               </ClickableLink>
             </div>

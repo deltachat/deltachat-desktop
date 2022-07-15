@@ -295,15 +295,15 @@ function AccountItem({
         <div className='contact'>
           <Avatar
             {...{
-              avatarPath: login.profile_image || undefined,
+              avatarPath: login.profileImage || undefined,
               color: login.color,
-              displayName: login.display_name || '',
+              displayName: login.displayName || '',
               addr: login.addr || undefined,
             }}
           />
           <div className='contact-name'>
             <div className='display-name'>
-              {login.display_name || login.addr}
+              {login.displayName || login.addr}
             </div>
             <div className='email' title={title}>
               {login.addr}
