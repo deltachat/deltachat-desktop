@@ -9,13 +9,14 @@ import contextMenu from './electron-context-menu'
 import { findOutIfWeAreRunningAsAppx } from './isAppx'
 import { getHelpMenu } from './help_menu'
 
-if(rc['version']===true||rc['v']===true){
-  console.log(VERSION)
+if (rc['version'] === true || rc['v'] === true) {
+  /* ignore-console-log */
+  console.info(VERSION)
   process.exit()
 }
 
-if(rc['help']===true||rc['h']===true){
-  getHelpMenu();
+if (rc['help'] === true || rc['h'] === true) {
+  getHelpMenu()
   process.exit()
 }
 

@@ -1,6 +1,6 @@
 export function getHelpMenu() {
-
-    console.log(`
+  /* ignore-console-log */
+  console.info(`
     Options:
 
     Flag
@@ -27,7 +27,5 @@ export function getHelpMenu() {
 
     For more info on logging see LOGGING.md.
     *--multiple-instances  is possible unstable - to avoid risks don't open the same account in multiple windows at a time
-    `);
-
+    `)
 }
-

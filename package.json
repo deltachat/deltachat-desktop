@@ -72,9 +72,6 @@
     "node": ">=16.0.0"
   },
   "productName": "DeltaChat",
-  "publishConfig": {
-    "access": "public"
-  },
   "homepage": "https://delta.chat",
   "browser": {
     "path": "path-browserify"
@@ -85,7 +82,6 @@
     "@deltachat/react-qr-reader": "^4.0.0",
     "@mapbox/geojson-extent": "^1.0.0",
     "application-config": "^1.0.1",
-    "arg": "^5.0.2",
     "classnames": "^2.3.1",
     "debounce": "^1.2.0",
     "deltachat-node": "1.88.0",

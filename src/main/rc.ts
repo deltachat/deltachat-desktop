@@ -11,20 +11,20 @@ const defaults: RC_Config = {
   'translation-watch': false,
   'theme-watch': false,
   minimized: false,
-  version:false,
-  v:false,
-  help:false,
-  h:false
+  version: false,
+  v: false,
+  help: false,
+  h: false,
 }
 
 const config = rc('DeltaChat', defaults) as RC_Config
 
-if(config.version || config.v){
-  config.version==true;
+if (config.version || config.v) {
+  config.version == true
 }
 
-if(config.help || config.h){
-  config.help==true;
+if (config.help || config.h) {
+  config.help == true
 }
 
 if (config.devmode) {
