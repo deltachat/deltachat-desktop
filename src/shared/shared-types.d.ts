@@ -44,6 +44,7 @@ export interface DesktopSettingsType {
   locale: string | null
   notifications: boolean
   showNotificationContent: boolean
+  /** @deprecated isn't used anymore since the move to jsonrpc */
   lastChats: { [accountId: number]: number }
   zoomFactor: number
   /** address to the active theme file scheme: "custom:name" or "dc:name" */
