@@ -20,8 +20,8 @@ import processOpenQrUrl from '../helpers/OpenQrUrl'
 import { getLogger } from '../../../shared/logger'
 import { useContextMenu } from '../ContextMenu'
 import { runtime } from '../../runtime'
-import { DeltaBackend } from '../../delta-remote'
 import { selectChat } from '../helpers/ChatMethods'
+import { BackendRemote } from '../../backend-com'
 
 const log = getLogger('renderer/dialogs/QrCode')
 
@@ -35,7 +35,11 @@ export default function QrCode({
 
   const [addr, setAddr] = useState('')
   useEffect(() => {
-    DeltaBackend.call('settings.getConfig', 'addr').then(setAddr)
+    if (window.__selectedAccountId) {
+      BackendRemote.rpc
+        .getConfig(window.__selectedAccountId, 'addr')
+        .then(addr => setAddr(addr || ''))
+    }
   }, [])
 
   const tx = useTranslationFunction()
