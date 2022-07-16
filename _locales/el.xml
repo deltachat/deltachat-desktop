@@ -20,7 +20,7 @@
     <string name="back">Πίσω</string>
     <string name="close">Κλείσιμο</string>
     <string name="forward">Προώθηση</string>
-    <!-- In the meaning of "To archive", "Put a chat to the archive". This string does not mean "The Archive". -->
+    <!-- Verb "to archive", as in "put a chat in the archive", not a noun "The Archive". -->
     <string name="archive">Αρχειοθέτηση</string>
     <string name="mute">Σίγαση</string>
     <string name="save">Αποθήκευση</string>
@@ -30,7 +30,7 @@
     <string name="not_now">Όχι τώρα</string>
     <string name="never">Ποτέ</string>
     <string name="done">Τέλος</string>
-    <!-- Translators: used eg. for the next view, could also be "continue" or so. as used in iOS headers, the string should be as short as possible, though. -->
+    <!-- For the next view or as "continue". Should be as short as possible. -->
     <string name="next">Επόμενο</string>
     <string name="no_browser_installed">Δεν υπάρχει εγκατεστημένος φυλλομετρητής</string>
     <string name="copied_to_clipboard">Αντιγράφηκε στο πρόχειρο</string>
@@ -41,7 +41,7 @@
     <string name="yesterday">Χθες</string>
     <string name="this_week">Αυτήν την εβδομάδα</string>
     <string name="this_month">Αυτόν το μήνα</string>
-    <!-- Translators: show beside messages that are "N hours old". prefer a short string, prefer abbreviations if they're well-known -->
+    <!-- Shown beside messages that are "N hours old". Prefer short strings, or well-known abbreviations. -->
     <plurals name="n_hours">
         <item quantity="one">%d ώρα</item>
         <item quantity="other">%d ώρες</item>
@@ -52,16 +52,15 @@
     </plurals>
     <string name="draft">Πρόχειρο</string>
     <string name="image">Εικόνα</string>
-    <!-- Translators: Used in summaries as "Draft: Reply", similar as "Draft: Image". Use a noun here, not a verb (not: "to reply") -->
+    <!-- Used in summaries as "Draft: Reply", similar as "Draft: Image". Use a noun here, not a verb (not: "to reply") -->
     <string name="reply_noun">Απάντηση</string>
-    <string name="gif">Gif</string>
     <string name="images">Εικόνες</string>
     <string name="audio">Ήχοι</string>
     <string name="video">Βίντεο</string>
     <string name="documents">Αρχεία</string>
     <string name="contact">Επαφή</string>
     <string name="camera">Κάμερα</string>
-    <!-- "capture" here means "start a video recording" or "take a photo"; eg. the description of the "shutter button" in the camera controls -->
+    <!-- As in "start a video recording" or "take a photo"; eg. the description of the "shutter button" in cameras -->
     <string name="capture">Λήψη</string>
     <string name="location">Τοποθεσία</string>
     <string name="gallery">Πινακοθήκη</string>
@@ -89,7 +88,7 @@
     <string name="menu_send">Αποστολή</string>
     <string name="menu_unmute">Αποσίγαση</string>
     <string name="menu_share">Μοιράσου</string>
-    <!-- this is the action "to block sth." usually a mailing list or a contact. this is NOT "a large solid piece of hard material" :) -->
+    <!-- Verb "to block sth." usually a mailing list or a contact, not a noun -->
     <string name="block">Φραγή</string>
     <string name="menu_play">Αναπαραγωγή</string>
     <string name="menu_pause">Παύση</string>
@@ -109,18 +108,17 @@
     <string name="chat_record_explain">Πάτα και κράτα πατημένο για να ηχογραφήσεις ένα φωνητικό μήνυμα, άφησε το κουμπί για αποστολή</string>
     <string name="chat_input_placeholder">Μήνυμα</string>
     <string name="chat_archived_label">Αρχειοθετημένα</string>
-    <!-- this "Saved" should match the "Saved" from "Saved messages" -->
+    <!-- Should match "Saved" from "Saved messages" -->
     <string name="saved">Αποθηκεύτηκε</string>
     <!-- search -->
     <string name="search">Αναζήτηση</string>
     <string name="tab_contact">Επαφή</string>
-    <string name="tab_members">Μέλη</string>
     <string name="tab_gallery">Εικόνα ή βίντεο</string>
     <string name="login_inbox">Εισερχόμενα</string>
     <string name="login_outbox">Εξερχόμενα</string>
     <string name="pref_enter_sends_explain">Τα μηνύματα θα στέλνονται με το πάτημα του Enter</string>
     <string name="pref_vibrate">Δόνηση</string>
-    <!-- Translators: The wording must indicate that we can't guarantee that, its a System flag that we set. But the System in question must honor it. -->
+    <!-- Translators: Must indicate that there is no guarantee as the system may not honor our request. -->
     <string name="pref_screen_security_explain">Να μην επιτρέπεται η καταγραφή της οθόνης (screenshots) στη λίστα με τα πρόσφατα και μέσα στην εφαρμογή</string>
     <string name="pref_notifications">Ειδοποιήσεις</string>
     <string name="pref_notifications_show">Εμφάνιση</string>
@@ -129,17 +127,16 @@
     <string name="pref_silent">Σε σίγαση</string>
     <string name="pref_privacy">Ιδιωτικότητα</string>
     <string name="pref_system_default">Προκαθορισμένο του συστήματος</string>
-    <!-- Translators: "light" in the meaning "opposite of dark" -->
+    <!-- Translators: as in "opposite of dark" -->
     <string name="pref_light_theme">Φωτεινό</string>
     <string name="pref_dark_theme">Σκοτεινό</string>
     <string name="pref_appearance">Εμφάνιση</string>
     <string name="pref_theme">Θέμα</string>
     <string name="pref_language">Γλώσσα</string>
-    <!-- Translators: Keep in mind that this is a Request - it must be clear in the wording that this cannot be enforced. -->
+    <!-- Translators: Must indicate that there is no guarantee as the system may not honor our request. -->
     <string name="pref_incognito_keyboard_explain">Αίτηση πληκτρολογίου για να απενεργοποιηθεί η προσωποποιημένη εκμάθηση</string>
     <string name="pref_read_receipts_explain">Αν τα αποδεικτικά ανάγνωσης είναι απενεργοποιημένα, δε θα μπορείς να δεις αποδεικτικά ανάγνωσης από άλλους/ες.</string>
     <string name="pref_use_system_emoji_explain">Απενεργοποίηση της ενσωματωμένης υποστήριξης για emoji του Delta Chat</string>
-    <string name="pref_communication">Επικοινωνία</string>
     <string name="pref_chats">Συνομιλίες</string>
     <string name="pref_other">Άλλο</string>
     <string name="pref_show_emails_all">Όλα</string>

@@ -22,7 +22,7 @@
     <string name="back">Rursus</string>
     <string name="close">Claudere</string>
     <string name="forward">Ante</string>
-    <!-- In the meaning of "To archive", "Put a chat to the archive". This string does not mean "The Archive". -->
+    <!-- Verb "to archive", as in "put a chat in the archive", not a noun "The Archive". -->
     <string name="archive">Conservare</string>
     <string name="mute">Mutus</string>
     <string name="save">Salvare</string>
