@@ -20,6 +20,7 @@
 - added custom titlebar menu for webxdc (on linux and windows)
 - add open keybindings dialog to window titlebar menu
 - exit fullscreen webxdc with escape key
+- added cli arguments --help and --version
 
 ### Fixed
 - "New contact" button hidden if contact already exists (#2646)

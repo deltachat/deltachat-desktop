@@ -61,6 +61,10 @@ export interface RC_Config {
   devmode: boolean
   'translation-watch': boolean
   minimized: boolean
+  version: boolean
+  v: boolean
+  help: boolean
+  h: boolean
 }
 
 import { QrState } from '../shared/constants'
