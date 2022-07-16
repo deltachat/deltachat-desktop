@@ -10,6 +10,7 @@
 - prevent whitescreen on invalid last account id
 
 ## Changed
+- rename the gallery tab "documents" to "files" #2829
 - Less round buttons, more similar to android and better spacing #2813
 - Updated deltachat-node to v1.88.0
 

@@ -9,7 +9,7 @@ import { getLogger } from '../../shared/logger'
 
 const log = getLogger('renderer/Gallery')
 
-type MediaTabKey = 'images' | 'video' | 'audio' | 'documents' | 'webxdc'
+type MediaTabKey = 'images' | 'video' | 'audio' | 'files' | 'webxdc'
 
 const MediaTabs: Readonly<
   {
@@ -25,7 +25,7 @@ const MediaTabs: Readonly<
   audio: {
     values: [C.DC_MSG_AUDIO, C.DC_MSG_VOICE],
   },
-  documents: {
+  files: {
     values: [C.DC_MSG_FILE],
   },
   webxdc: {
@@ -92,7 +92,7 @@ export default class Gallery extends Component<
         return tx('tab_audio_empty_hint')
       case 'webxdc':
         return tx('tab_webxdc_empty_hint')
-      case 'documents':
+      case 'files':
       default:
         return tx('tab_docs_empty_hint')
     }
