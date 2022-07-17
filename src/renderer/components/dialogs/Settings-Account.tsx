@@ -16,6 +16,7 @@ import {
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { Credentials } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
+import ConfirmationDialog from './ConfirmationDialog'
 
 export default function SettingsAccountDialog({
   isOpen,
@@ -42,7 +43,7 @@ export default function SettingsAccountDialog({
 }
 
 export function SettingsAccountInner(onClose: () => void) {
-  const [, setInitialAccountSettings] = useState<Credentials>(
+  const [initial_settings, setInitialAccountSettings] = useState<Credentials>(
     defaultCredentials()
   )
 
@@ -95,14 +96,32 @@ export function SettingsAccountInner(onClose: () => void) {
     loadSettings()
   }, [])
 
+  const tx = window.static_translate
+
   const onUpdate = () => {
     if (disableUpdate) return
     const onSuccess = () => onClose()
 
-    openDialog(ConfigureProgressDialog, {
-      credentials: accountSettings,
-      onSuccess,
-    })
+    const update = () => {
+      openDialog(ConfigureProgressDialog, {
+        credentials: accountSettings,
+        onSuccess,
+      })
+    }
+
+    if (initial_settings.addr !== accountSettings.addr) {
+      openDialog(ConfirmationDialog, {
+        confirmLabel: tx('perm_continue'),
+        isConfirmDanger: true,
+        message: tx('aeap_explanation', [
+          initial_settings.addr || '',
+          accountSettings.addr || '',
+        ]),
+        cb: yes => yes && update(),
+      })
+    } else {
+      update()
+    }
   }
 
   if (accountSettings === null) return null
@@ -114,7 +133,6 @@ export function SettingsAccountInner(onClose: () => void) {
             <LoginForm
               credentials={accountSettings}
               setCredentials={setAccountSettings}
-              addrDisabled
             />
           )}
         </Card>
