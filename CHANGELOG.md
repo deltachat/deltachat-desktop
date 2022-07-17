@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.31.0] - 2022-07-17
+
 ## Added
 - Floating action button in chatlist to start a new chat
 
@@ -1655,7 +1657,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.30.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.31.0...HEAD
+
+[1.31.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.30.1...v1.31.0
 
 [1.30.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.30.0...v1.30.1
 
