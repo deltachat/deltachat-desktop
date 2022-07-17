@@ -321,6 +321,9 @@ export function txCoreStrings() {
   strings[C.DC_STR_SECURE_JOIN_REPLIES] = tx('secure_join_replies')
   strings[C.DC_STR_SETUP_CONTACT_QR_DESC] = tx('qrshow_join_contact_hint')
   strings[C.DC_STR_SECURE_JOIN_GROUP_QR_DESC] = tx('qrshow_join_group_hint')
+  strings[C.DC_STR_NOT_CONNECTED] = tx('connectivity_not_connected')
+  strings[C.DC_STR_AEAP_ADDR_CHANGED] = tx('aeap_addr_changed')
+  strings[C.DC_STR_AEAP_EXPLANATION_AND_LINK] = tx('aeap_explanation')
 
   return strings
 }

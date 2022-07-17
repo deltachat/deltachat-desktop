@@ -91,13 +91,11 @@ export function defaultCredentials(credentials?: Credentials): Credentials {
 type LoginProps = React.PropsWithChildren<{
   credentials: Credentials
   setCredentials: (credentials: Credentials) => void
-  addrDisabled?: boolean
 }>
 
 export default function LoginForm({
   credentials,
   setCredentials,
-  addrDisabled,
 }: LoginProps) {
   const [uiShowAdvanced, setUiShowAdvanced] = useState<boolean>(false)
   const [providerInfo, setProviderInfo] = useState<
@@ -192,7 +190,6 @@ export default function LoginForm({
             key='addr'
             id='addr'
             placeholder={tx('email_address')}
-            disabled={addrDisabled}
             value={addr}
             onChange={onEmailChange}
             onBlur={onEmailBlur}
