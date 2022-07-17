@@ -93,10 +93,7 @@ type LoginProps = React.PropsWithChildren<{
   setCredentials: (credentials: Credentials) => void
 }>
 
-export default function LoginForm({
-  credentials,
-  setCredentials,
-}: LoginProps) {
+export default function LoginForm({ credentials, setCredentials }: LoginProps) {
   const [uiShowAdvanced, setUiShowAdvanced] = useState<boolean>(false)
   const [providerInfo, setProviderInfo] = useState<
     ReturnType<typeof DeltaChat.getProviderFromEmail>
