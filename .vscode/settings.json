@@ -1,4 +1,3 @@
 {
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "cmake.configureOnOpen": false
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
