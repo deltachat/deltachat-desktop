@@ -169,13 +169,13 @@ function ViewGroupInner(props: {
     })
   }
 
-  const showViewGroupDialog = () => {
-    openDialog(ViewGroupDialog, {
+  const onClickEdit = () => {
+    openDialog(EditGroupNameDialog, {
       groupName,
       groupImage,
       groupColor: chat.color,
       onOk: (groupName: string, groupImage: string) => {
-        setGroupName(groupName)
+        groupName.length > 1 && setGroupName(groupName)
         setGroupImage(groupImage)
       },
       isBroadcast: isBroadcast,
@@ -221,7 +221,7 @@ function ViewGroupInner(props: {
                 ? tx('menu_edit_group')
                 : tx('menu_edit_broadcast_list')
             }
-            onClickEdit={showViewGroupDialog}
+            onClickEdit={onClickEdit}
             showEditButton={!chatDisabled}
             showCloseButton={true}
             onClose={onClose}
@@ -376,7 +376,7 @@ export function ShowQRDialog({
   )
 }
 
-export function ViewGroupDialog({
+export function EditGroupNameDialog({
   onClose,
   onOk,
   onCancel,
