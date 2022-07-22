@@ -807,7 +807,7 @@ function CreateBroadcastInner(props: {
     <>
       <DeltaDialogHeader title={tx('new_broadcast_list')} />
       <div className={Classes.DIALOG_BODY}>
-        <Card>
+        <Card style={{paddingTop: '0px'}}>
           <div className='broadcast-list-hint'>
             {tx('chat_new_broadcast_hint')}
           </div>
