@@ -13,5 +13,17 @@
   },
   "file_menu" : {
     "message": "File"
+  },
+  "create_broadcast_list" : {
+    "message": "Create Broadcast List"
+  },
+  "menu_edit_broadcast_list" : {
+    "message": "Edit Broadcast List"
+  },
+  "menu_broadcast_list_name" : {
+    "message": "Broadcast List Name"
+  },
+  "broadcast_please_enter_broadcast_list_name" : {
+    "message": "Please enter a name for the broadcast list."
   }
 }

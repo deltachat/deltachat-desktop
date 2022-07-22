@@ -140,6 +140,11 @@ export function useChatListContextMenu() {
               label: tx('menu_edit_group'),
               action: onViewGroup,
             },
+          // Edit Broadcast List
+          chatListItem.isBroadcast && {
+            label: 'Edit Broadcast List',
+            action: onViewGroup,
+          },
           // View Profile
           !chatListItem.isGroup && {
             label: tx('menu_view_profile'),

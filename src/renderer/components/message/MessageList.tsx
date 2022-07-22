@@ -306,7 +306,8 @@ export const MessageListInner = React.memo(
     const conversationType: ConversationType = {
       hasMultipleParticipants:
         chatStore.chat.type === C.DC_CHAT_TYPE_GROUP ||
-        chatStore.chat.type === C.DC_CHAT_TYPE_MAILINGLIST,
+        chatStore.chat.type === C.DC_CHAT_TYPE_MAILINGLIST ||
+        chatStore.chat.type === C.DC_CHAT_TYPE_BROADCAST,
       isDeviceChat: chatStore.chat.isDeviceChat as boolean,
       chatType: chatStore.chat.type as number,
     }
@@ -413,7 +414,9 @@ function EmptyChatMessage() {
 
   let emptyChatMessage = tx('chat_new_one_to_one_hint', [chat.name, chat.name])
 
-  if (chat.isGroup && !chat.isContactRequest) {
+  if (chat.isBroadcast) {
+    emptyChatMessage = tx('chat_new_broadcast_hint')
+  } else if (chat.isGroup && !chat.isContactRequest) {
     emptyChatMessage = chat.isUnpromoted
       ? tx('chat_new_group_hint')
       : tx('chat_no_messages')

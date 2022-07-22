@@ -37,6 +37,7 @@ export interface DesktopSettingsType {
   /** path to last used/selected Account */
   lastAccount?: number
   enableAVCalls: boolean
+  enableBroadcastLists: boolean
   enableChatAuditLog: boolean
   enableOnDemandLocationStreaming: boolean
   enterKeySends: boolean
@@ -88,6 +89,7 @@ export interface ChatListItemType {
     | undefined
   isContactRequest: boolean
   isProtected: boolean
+  isBroadcast: boolean
   isGroup: boolean
   freshMessageCounter: number
   isArchiveLink: boolean
@@ -147,6 +149,7 @@ export interface FullChat {
   contactIds: number[]
   color: string
   freshMessageCounter: number
+  isBroadcast: boolean
   isGroup: boolean
   isContactRequest: boolean
   isDeviceChat: boolean

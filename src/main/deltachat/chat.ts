@@ -101,6 +101,13 @@ export default class DCChat extends SplitOut {
     return this.selectedAccountContext.createGroupChat(name, verified)
   }
 
+  /**
+   * @returns id of the created chat
+   */
+  createBroadcastList() {
+    return this.selectedAccountContext.createBroadcastList()
+  }
+
   delete(chatId: number) {
     log.debug(`action - deleting chat ${chatId}`)
     this.selectedAccountContext.deleteChat(chatId)

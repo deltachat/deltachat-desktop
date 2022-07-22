@@ -61,6 +61,11 @@ export function SettingsExperimentalFeatures({
   return (
     <>
       {renderDTSettingSwitch({
+        key: 'enableBroadcastLists',
+        label: tx('broadcast_lists'),
+        description: tx('chat_new_broadcast_hint'),
+      })}
+      {renderDTSettingSwitch({
         key: 'enableOnDemandLocationStreaming',
         label: tx('pref_on_demand_location_streaming'),
       })}

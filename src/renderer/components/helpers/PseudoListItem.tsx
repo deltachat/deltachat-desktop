@@ -63,15 +63,17 @@ export const PseudoListItemShowQrCode = ({
 
 export const PseudoListItemAddMember = ({
   onClick,
+  isBroadcast = false,
 }: {
   onClick: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  isBroadcast?: boolean
 }) => {
   const tx = useTranslationFunction()
   return (
     <PseudoListItem
       id='addmember'
       cutoff='+'
-      text={tx('group_add_members')}
+      text={!isBroadcast ? tx('group_add_members') : tx('add_recipients')}
       onClick={onClick}
     />
   )
