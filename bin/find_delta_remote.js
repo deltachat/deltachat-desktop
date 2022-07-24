@@ -3,19 +3,6 @@ const { spawn, spawnSync } = require('child_process')
 const path = require('path')
 const {argv0} = require('process')
 
-/**
- *
- * @param {string[]} args arguments for the command
- * @param {import('child_process').SpawnOptionsWithoutStdio} [options]
- */
-async function run(command, args, options, listener = undefined) {
-  return new Promise((resolve, reject) => {
-    console.log(`- Executing "${command} ${args.join(' ')}"`)
-    p.stdout.pipe(process.stdout)
-  })
-}
-
-
 async function findDeltaRemoteMethods() {
   const data = await fs.readFile('src/renderer/delta-remote.ts', 'utf8')
 
