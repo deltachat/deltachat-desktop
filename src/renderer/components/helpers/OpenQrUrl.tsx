@@ -1,7 +1,7 @@
 import React from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import { ConfigureProgressDialog } from '../LoginForm'
-import { Screens } from '../../ScreenController'
+import { Screens, selectedAccountId } from '../../ScreenController'
 import { QrState } from '../../../shared/constants'
 import { QrCodeResponse } from '../../../shared/shared-types'
 import { useTranslationFunction } from '../../contexts'
@@ -22,6 +22,7 @@ import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import AlertDialog from '../dialogs/AlertDialog'
 import { selectChat } from './ChatMethods'
 import { BackendRemote } from '../../backend-com'
+import { Qr } from 'deltachat-node/deltachat-jsonrpc/typescript/generated/types'
 
 const log = getLogger('renderer/processOpenUrl')
 
@@ -126,7 +127,7 @@ export default async function processOpenQrUrl(
   const screen = window.__screen
 
   const processDialogId = window.__openDialog(ProcessQrCodeDialog)
-  const checkQr: QrCodeResponse = await DeltaBackend.call('checkQrCode', url)
+  const checkQr: Qr = await BackendRemote.rpc.checkQr(selectedAccountId(), url)
 
   const closeProcessDialog = () => window.__closeDialog(processDialogId)
 
@@ -146,7 +147,7 @@ export default async function processOpenQrUrl(
     return
   }
 
-  if (checkQr.state !== QrState.Account && screen !== Screens.Main) {
+  if (checkQr.account && screen !== Screens.Main) {
     closeProcessDialog()
     window.__openDialog('AlertDialog', {
       message: tx('Please login first'),
@@ -228,9 +229,10 @@ export default async function processOpenQrUrl(
           await setConfigFromQrCatchingErrorInAlert(url)
         }
         callback(null)
+        checkQr.
       },
     })
-  } else if (checkQr.state === QrState.QrReviveVerifyContact) {
+  } else if (checkQr.reviveVerifyContact) {
     closeProcessDialog()
     window.__openDialog(ConfirmationDialog, {
       message: tx('revive_verifycontact_explain'),
