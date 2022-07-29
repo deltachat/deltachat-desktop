@@ -1,9 +1,7 @@
 import React from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import { ConfigureProgressDialog } from '../LoginForm'
-import { Screens } from '../../ScreenController'
-import { QrState } from '../../../shared/constants'
-import { QrCodeResponse } from '../../../shared/shared-types'
+import { Screens, selectedAccountId } from '../../ScreenController'
 import { useTranslationFunction } from '../../contexts'
 import {
   DeltaDialogFooter,
@@ -126,11 +124,18 @@ export default async function processOpenQrUrl(
   const screen = window.__screen
 
   const processDialogId = window.__openDialog(ProcessQrCodeDialog)
-  const checkQr: QrCodeResponse = await DeltaBackend.call('checkQrCode', url)
+  // const checkQr: Qr = await BackendRemote.rpc.checkQr(selectedAccountId(), url)
 
   const closeProcessDialog = () => window.__closeDialog(processDialogId)
+  let checkQr
+  try {
+    checkQr = await BackendRemote.rpc.checkQr(selectedAccountId(), url)
+  } catch (err) {
+    checkQr = null
+    log.error(err)
+  }
 
-  if (checkQr === null || checkQr.state === QrState.Error) {
+  if (checkQr === null) {
     closeProcessDialog()
     window.__openDialog(AlertDialog, {
       message: (
@@ -146,14 +151,14 @@ export default async function processOpenQrUrl(
     return
   }
 
-  if (checkQr.state !== QrState.Account && screen !== Screens.Main) {
+  if (checkQr.type === 'account' && screen !== Screens.Main) {
     closeProcessDialog()
     window.__openDialog('AlertDialog', {
       message: tx('Please login first'),
       cb: callback,
     })
     return
-  } else if (checkQr.state === QrState.Account && screen !== Screens.Welcome) {
+  } else if (checkQr.type === 'account' && screen !== Screens.Welcome) {
     closeProcessDialog()
     window.__openDialog('AlertDialog', {
       message: tx('Please logout first'),
@@ -162,7 +167,7 @@ export default async function processOpenQrUrl(
     return
   }
 
-  if (checkQr.state === QrState.Account) {
+  if (checkQr.type === 'account') {
     try {
       if (window.__selectedAccountId === undefined) {
         throw new Error('error: no context selected')
@@ -185,8 +190,11 @@ export default async function processOpenQrUrl(
       return
     }
     return
-  } else if (checkQr.state === QrState.AskVerifyContact) {
-    const contact = await DeltaBackend.call('contacts.getContact', checkQr.id)
+  } else if (checkQr.type === 'askVerifyContact') {
+    const contact = await DeltaBackend.call(
+      'contacts.getContact',
+      checkQr.contact_id
+    )
     closeProcessDialog()
     window.__openDialog('ConfirmationDialog', {
       message: tx('ask_start_chat_with', contact.address),
@@ -197,10 +205,10 @@ export default async function processOpenQrUrl(
         }
       },
     })
-  } else if (checkQr.state === QrState.AskVerifyGroup) {
+  } else if (checkQr.type === 'askVerifyGroup') {
     closeProcessDialog()
     window.__openDialog('ConfirmationDialog', {
-      message: tx('qrscan_ask_join_group', checkQr.text1),
+      message: tx('qrscan_ask_join_group', checkQr.grpname),
       confirmLabel: tx('ok'),
       cb: (confirmed: boolean) => {
         if (confirmed) {
@@ -209,15 +217,18 @@ export default async function processOpenQrUrl(
         return
       },
     })
-  } else if (checkQr.state === QrState.FprOk) {
-    const contact = await DeltaBackend.call('contacts.getContact', checkQr.id)
+  } else if (checkQr.type === 'fprOk') {
+    const contact = await DeltaBackend.call(
+      'contacts.getContact',
+      checkQr.contact_id
+    )
     closeProcessDialog()
     window.__openDialog('ConfirmationDialog', {
       message: `The fingerprint of ${contact.displayName} is valid!`,
       confirmLabel: tx('ok'),
       cb: callback,
     })
-  } else if (checkQr.state === QrState.QrWithdrawVerifyContact) {
+  } else if (checkQr.type === 'withdrawVerifyContact') {
     closeProcessDialog()
     window.__openDialog(ConfirmationDialog, {
       message: tx('withdraw_verifycontact_explain'),
@@ -230,7 +241,7 @@ export default async function processOpenQrUrl(
         callback(null)
       },
     })
-  } else if (checkQr.state === QrState.QrReviveVerifyContact) {
+  } else if (checkQr.type === 'reviveVerifyContact') {
     closeProcessDialog()
     window.__openDialog(ConfirmationDialog, {
       message: tx('revive_verifycontact_explain'),
@@ -243,10 +254,10 @@ export default async function processOpenQrUrl(
         callback(null)
       },
     })
-  } else if (checkQr.state === QrState.QrWithdrawVerifyGroup) {
+  } else if (checkQr.type === 'withdrawVerifyGroup') {
     closeProcessDialog()
     window.__openDialog(ConfirmationDialog, {
-      message: tx('withdraw_verifygroup_explain', checkQr.text1),
+      message: tx('withdraw_verifygroup_explain', checkQr.grpname),
       header: tx('withdraw_qr_code'),
       confirmLabel: tx('ok'),
       cb: async yes => {
@@ -256,10 +267,10 @@ export default async function processOpenQrUrl(
         callback(null)
       },
     })
-  } else if (checkQr.state === QrState.QrReviveVerifyGroup) {
+  } else if (checkQr.type === 'reviveVerifyGroup') {
     closeProcessDialog()
     window.__openDialog(ConfirmationDialog, {
-      message: tx('revive_verifygroup_explain', checkQr.text1),
+      message: tx('revive_verifygroup_explain', checkQr.grpname),
       header: tx('revive_qr_code'),
       confirmLabel: tx('ok'),
       cb: async yes => {
@@ -273,7 +284,7 @@ export default async function processOpenQrUrl(
     closeProcessDialog()
     window.__openDialog(copyContentAlertDialog, {
       message:
-        checkQr.state === QrState.Url
+        checkQr.type === 'url'
           ? tx('qrscan_contains_url', url)
           : tx('qrscan_contains_text', url),
       content: url,
