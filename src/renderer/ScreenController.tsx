@@ -268,3 +268,11 @@ export default class ScreenController extends Component {
     )
   }
 }
+
+export function selectedAccountId(): number {
+  const selectedAccountId = window.__selectedAccountId
+  if (selectedAccountId === undefined) {
+    throw new Error('no context selected')
+  }
+  return selectedAccountId
+}
