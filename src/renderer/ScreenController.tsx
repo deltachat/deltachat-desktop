@@ -269,7 +269,6 @@ export default class ScreenController extends Component {
   }
 }
 
-
 export function selectedAccountId(): number {
   const selectedAccountId = window.__selectedAccountId
   if (selectedAccountId === undefined) {

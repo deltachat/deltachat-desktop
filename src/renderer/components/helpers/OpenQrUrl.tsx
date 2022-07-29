@@ -2,8 +2,6 @@ import React from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import { ConfigureProgressDialog } from '../LoginForm'
 import { Screens, selectedAccountId } from '../../ScreenController'
-import { QrState } from '../../../shared/constants'
-import { QrCodeResponse } from '../../../shared/shared-types'
 import { useTranslationFunction } from '../../contexts'
 import {
   DeltaDialogFooter,
@@ -22,7 +20,6 @@ import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import AlertDialog from '../dialogs/AlertDialog'
 import { selectChat } from './ChatMethods'
 import { BackendRemote } from '../../backend-com'
-import { Qr } from 'deltachat-node/deltachat-jsonrpc/typescript/generated/types'
 
 const log = getLogger('renderer/processOpenUrl')
 
@@ -130,15 +127,13 @@ export default async function processOpenQrUrl(
   // const checkQr: Qr = await BackendRemote.rpc.checkQr(selectedAccountId(), url)
 
   const closeProcessDialog = () => window.__closeDialog(processDialogId)
-  let checkQr;
+  let checkQr
   try {
     checkQr = await BackendRemote.rpc.checkQr(selectedAccountId(), url)
-  }
-  catch(err) {
-    checkQr = null;
+  } catch (err) {
+    checkQr = null
     log.error(err)
   }
-  
 
   if (checkQr === null) {
     closeProcessDialog()
@@ -196,7 +191,10 @@ export default async function processOpenQrUrl(
     }
     return
   } else if (checkQr.type === 'askVerifyContact') {
-    const contact = await DeltaBackend.call('contacts.getContact', checkQr.contact_id)
+    const contact = await DeltaBackend.call(
+      'contacts.getContact',
+      checkQr.contact_id
+    )
     closeProcessDialog()
     window.__openDialog('ConfirmationDialog', {
       message: tx('ask_start_chat_with', contact.address),
@@ -220,7 +218,10 @@ export default async function processOpenQrUrl(
       },
     })
   } else if (checkQr.type === 'fprOk') {
-    const contact = await DeltaBackend.call('contacts.getContact', checkQr.contact_id)
+    const contact = await DeltaBackend.call(
+      'contacts.getContact',
+      checkQr.contact_id
+    )
     closeProcessDialog()
     window.__openDialog('ConfirmationDialog', {
       message: `The fingerprint of ${contact.displayName} is valid!`,
