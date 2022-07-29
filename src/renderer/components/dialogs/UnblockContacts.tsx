@@ -8,6 +8,8 @@ import { DialogProps } from './DialogController'
 import { onDCEvent } from '../../ipc'
 import { JsonContact } from '../../../shared/shared-types'
 import debounce from 'debounce'
+import { BackendRemote } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 export default function UnblockContacts(props: {
   isOpen: DialogProps['isOpen']
@@ -34,8 +36,8 @@ export default function UnblockContacts(props: {
     screenContext.openDialog('ConfirmationDialog', {
       message: tx('ask_unblock_contact'),
       confirmLabel: tx('menu_unblock_contact'),
-      cb: (yes: boolean) =>
-        yes && DeltaBackend.call('contacts.unblockContact', id),
+      cb: async (yes: boolean) =>
+        yes && await BackendRemote.rpc.contactsUnblock(selectedAccountId(), id),
     })
   }
 
