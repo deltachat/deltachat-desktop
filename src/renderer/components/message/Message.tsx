@@ -521,7 +521,7 @@ export const Quote = ({
                     tx('forwarded_by', '$$forwarder$$'),
                     '$$forwarder$$',
                     () => (
-                      <span key='displayname' style={authorStyle}>
+                      <span key='displayname'>
                         {getAuthorName(
                           quote.message?.displayName as string,
                           quote.message?.overrideSenderName
