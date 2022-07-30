@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+## Changed
+- open mailto links in messages always in deltachat #2835
+
 ## [1.31.0] - 2022-07-17
 
 ## Added

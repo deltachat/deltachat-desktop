@@ -14,6 +14,7 @@ import type {
 } from 'electron'
 import { basename, join } from 'path'
 import { getLogger } from '../shared/logger'
+import processOpenQrUrl from './components/helpers/OpenQrUrl'
 
 const log = getLogger('renderer/runtime')
 
@@ -207,7 +208,11 @@ class Electron implements Runtime {
     return filePaths && filePaths[0]
   }
   openLink(link: string): void {
-    openExternal(link)
+    if (link.startsWith('mailto:')) {
+      processOpenQrUrl(link)
+    } else {
+      openExternal(link)
+    }
   }
   private rc_config: RC_Config | null = null
   getRC_Config(): RC_Config {
