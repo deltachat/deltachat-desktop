@@ -493,31 +493,53 @@ export const Quote = ({
   quote: MessageQuote
   isSticker?: Boolean
 }) => {
+  const tx = window.static_translate
+
+  const authorStyle = isSticker ? {} : { color: quote.message?.displayColor }
+  const borderStyle =
+    isSticker || quote.message?.isForwarded
+      ? {}
+      : { borderLeftColor: quote.message?.displayColor }
+
   return (
     <div
       className='quote-background'
-      style={{ borderLeftColor: quote.message?.displayColor }}
       onClick={() => {
         quote.message && jumpToMessage(quote.message.messageId)
       }}
     >
       <div
-        className='quote has-message'
-        style={
-          !isSticker ? { borderLeftColor: quote.message?.displayColor } : {}
-        }
+        className={`quote ${quote.message && 'has-message'}`}
+        style={borderStyle}
       >
         <div className='quote-text'>
-          <div
-            className='quote-author'
-            style={!isSticker ? { color: quote.message?.displayColor } : {}}
-          >
-            {quote.message &&
-              getAuthorName(
-                quote.message.displayName,
-                quote.message.overrideSenderName
+          {quote.message && (
+            <>
+              {quote.message.isForwarded ? (
+                <div className='quote-author'>
+                  {reactStringReplace(
+                    tx('forwarded_by', '$$forwarder$$'),
+                    '$$forwarder$$',
+                    () => (
+                      <span key='displayname' style={authorStyle}>
+                        {getAuthorName(
+                          quote.message?.displayName as string,
+                          quote.message?.overrideSenderName
+                        )}
+                      </span>
+                    )
+                  )}
+                </div>
+              ) : (
+                <div className='quote-author' style={authorStyle}>
+                  {getAuthorName(
+                    quote.message.displayName,
+                    quote.message.overrideSenderName
+                  )}
+                </div>
               )}
-          </div>
+            </>
+          )}
           <div className='quoted-text'>
             <MessageBody text={quote.text} />
           </div>

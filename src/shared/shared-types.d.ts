@@ -132,6 +132,7 @@ export type MessageQuote = {
     displayColor: string
     overrideSenderName: string
     image: null | string
+    isForwarded: boolean
   } | null
 }
 
