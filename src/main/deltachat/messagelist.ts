@@ -141,7 +141,7 @@ export default class DCMessageList extends SplitOut {
           quotedMessage.getFromId()
         )
         if (!contact) {
-          throw new Error('qoute author contact is undefined')
+          throw new Error('quote author contact is undefined')
         }
         message = {
           messageId: quotedMessage.getId(),
@@ -153,6 +153,7 @@ export default class DCMessageList extends SplitOut {
             quotedMessage.getViewType().isGif()
               ? quotedMessage.getFile()
               : null,
+          isForwarded: quotedMessage.isForwarded(),
         }
       }
       quote = {
