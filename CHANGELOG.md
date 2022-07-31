@@ -5,11 +5,16 @@
 ## Changed
 - open mailto links in messages always in deltachat #2835
 
+## Added
+- Broadcast lists as experimental feature
+
+## Fixed
+- fix display of quoted forwarded messages
+
 ## [1.31.0] - 2022-07-17
 
 ## Added
 - Floating action button in chatlist to start a new chat
-- Broadcast lists as experimental feature
 
 ## Fixed
 - use addr if displayname is not set for webxdc selfName #2803
