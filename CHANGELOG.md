@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+## Changed
+- open mailto links in messages always in deltachat #2835
+
 ## Added
 - Broadcast lists as experimental feature
 
