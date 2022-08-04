@@ -809,7 +809,16 @@ function CreateBroadcastInner(props: {
       <div className={Classes.DIALOG_BODY}>
         <Card style={{ paddingTop: '0px' }}>
           <div className='broadcast-list-hint'>
-            {tx('chat_new_broadcast_hint')}
+            <p>{tx('chat_new_broadcast_hint')}</p>
+            <p
+              style={{
+                marginTop: '3px',
+                color: 'var(--colorDanger)',
+                fontWeight: 'bold',
+              }}
+            >
+              ⚠️ {tx('broadcast_list_warning')}
+            </p>
           </div>
           <br />
           {broadcastRecipients.length > 0 && (

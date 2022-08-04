@@ -11,6 +11,7 @@
 
 ## Fixed
 - fix display of quoted forwarded messages
+- add warning that broadcast lists are unencrypted
 
 ## [1.31.0] - 2022-07-17
 
