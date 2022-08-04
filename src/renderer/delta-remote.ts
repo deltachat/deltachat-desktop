@@ -45,10 +45,6 @@ class DeltaRemote {
   call(fnName: 'chatList.getSelectedChatId'): Promise<number>
   call(fnName: 'chatList.onChatModified', chatId: number): Promise<void>
   call(
-    fnName: 'chatList.getChatListEntryMessageIdForChatId',
-    chatID: number
-  ): Promise<number>
-  call(
     fnName: 'chatList.getFullChatById',
     chatId: number
   ): Promise<FullChat | null>
