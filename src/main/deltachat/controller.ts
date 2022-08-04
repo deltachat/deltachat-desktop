@@ -1,4 +1,4 @@
-import DeltaChat, { C, DeltaChat as DeltaChatNode } from 'deltachat-node'
+import DeltaChat, { DeltaChat as DeltaChatNode } from 'deltachat-node'
 import { app as rawApp, ipcMain } from 'electron'
 import { EventEmitter } from 'events'
 import { getLogger } from '../../shared/logger'

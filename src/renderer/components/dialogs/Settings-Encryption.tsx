@@ -8,7 +8,6 @@ import DeltaDialog, {
   DeltaDialogFooter,
   DeltaDialogFooterActions,
 } from './DeltaDialog'
-import { DeltaBackend } from '../../delta-remote'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 

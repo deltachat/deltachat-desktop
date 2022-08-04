@@ -112,7 +112,7 @@ async function messagePageFromMessageIndexes(
   const dayMarker: number[] = []
   const messages = OrderedMap().withMutations(messagePages => {
     for (let i = 0; i < _messages.length; i++) {
-      let [messageId, message] = _messages[i]
+      const [messageId, message] = _messages[i]
       if (messageId === C.DC_MSG_ID_DAYMARKER) {
         if (!_messages[i + 1]) {
           log.debug(`Had to skip DayMarker, I'm sorry`)
