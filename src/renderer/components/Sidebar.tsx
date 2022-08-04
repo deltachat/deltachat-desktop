@@ -78,7 +78,7 @@ const Sidebar = React.memo(
         setSidebarState(old => {
           if (old === 'init') {
             return 'init'
-          } 
+          }
           return 'invisible'
         })
       }
