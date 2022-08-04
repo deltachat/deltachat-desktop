@@ -8,7 +8,6 @@ import { BackendRemote } from '../backend-com'
 import { DeltaBackend } from '../delta-remote'
 import { ipcBackend } from '../ipc'
 import { runtime } from '../runtime'
-import { selectedAccountId } from '../ScreenController'
 import { Store, useStore } from './store'
 
 export interface SettingsStoreState {
