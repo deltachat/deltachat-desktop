@@ -9,7 +9,6 @@ import {
   MessageSearchResult,
   DeltaChatAccount,
   DesktopSettingsType,
-  QrCodeResponse,
 } from '../shared/shared-types'
 import { MuteDuration } from '../shared/constants'
 import { LocaleData } from '../shared/localize'

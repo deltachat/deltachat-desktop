@@ -44,25 +44,6 @@ export const enum AutodeleteDuration {
 
 export const DAYS_UNTIL_UPDATE_SUGGESTION = 120
 
-export enum QrState {
-  AskVerifyContact = C.DC_QR_ASK_VERIFYCONTACT,
-  AskVerifyGroup = C.DC_QR_ASK_VERIFYGROUP,
-  FprOk = C.DC_QR_FPR_OK,
-  FprMissmatch = C.DC_QR_FPR_MISMATCH,
-  QrFprWithoutAddr = C.DC_QR_FPR_WITHOUT_ADDR,
-  Account = C.DC_QR_ACCOUNT,
-  Addr = C.DC_QR_ADDR,
-  Text = C.DC_QR_TEXT,
-  Url = C.DC_QR_URL,
-  Error = C.DC_QR_ERROR,
-  QrWithdrawVerifyContact = C.DC_QR_WITHDRAW_VERIFYCONTACT,
-  /** text1=groupname */
-  QrWithdrawVerifyGroup = C.DC_QR_WITHDRAW_VERIFYGROUP,
-  QrReviveVerifyContact = C.DC_QR_REVIVE_VERIFYCONTACT,
-  /** text1=groupname */
-  QrReviveVerifyGroup = C.DC_QR_REVIVE_VERIFYGROUP,
-}
-
 // cloned, because we cannpt import it from dc node in the frontend directly,
 // without esbuild trying to include dc-node in the build and failing
 // because it can not bundle the nodejs-only dependencies of deltachat node.

@@ -64,8 +64,6 @@ export interface RC_Config {
   minimized: boolean
 }
 
-import { QrState } from '../shared/constants'
-
 import type { Contact } from 'deltachat-node'
 
 export type ContactJSON = ReturnType<typeof Contact.prototype.toJson>
@@ -177,12 +175,6 @@ export type DeltaChatAccount =
       profile_image: string | null
       color: string
     }
-
-export declare type QrCodeResponse = {
-  state: QrState
-  id: number
-  text1: string
-}
 
 /** Additional info about the runtime the ui might need */
 export type RuntimeInfo = {
