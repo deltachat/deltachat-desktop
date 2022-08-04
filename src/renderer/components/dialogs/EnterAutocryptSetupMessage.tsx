@@ -6,6 +6,8 @@ import { ScreenContext } from '../../contexts'
 import { MessageType } from '../../../shared/shared-types'
 import { DeltaBackend } from '../../delta-remote'
 import { getLogger } from '../../../shared/logger'
+import { BackendRemote } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 const log = getLogger('frontend/dialogs/EnterAutocryptSetupMessage')
 
@@ -98,8 +100,8 @@ export default function EnterAutocryptSetupMessage({
   const continueKeyTransfer = async (key: string) => {
     setLoading(true)
 
-    const result = await DeltaBackend.call(
-      'autocrypt.continueKeyTransfer',
+    const result = await BackendRemote.rpc.autocryptContinueKeyTransfer(
+      selectedAccountId(),
       message.id,
       key
     )

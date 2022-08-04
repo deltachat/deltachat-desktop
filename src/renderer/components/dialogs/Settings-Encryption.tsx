@@ -9,6 +9,8 @@ import DeltaDialog, {
   DeltaDialogFooterActions,
 } from './DeltaDialog'
 import { DeltaBackend } from '../../delta-remote'
+import { BackendRemote } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 export function KeyViewPanel({
   onClose,
@@ -88,7 +90,9 @@ export function SendAutocryptSetupMessage({
 
   const initiateKeyTransfer = async () => {
     setLoading(true)
-    const key = await DeltaBackend.call('autocrypt.initiateKeyTransfer')
+    const key = await BackendRemote.rpc.autocryptInitiateKeyTransfer(
+      selectedAccountId()
+    )
 
     setKey(key)
     setLoading(false)
