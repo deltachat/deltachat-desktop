@@ -13,7 +13,7 @@ export function getDefaultState(): DesktopSettingsType {
     credentials: undefined,
     lastAccount: undefined,
     enableAVCalls: false,
-    enableBroadcastLists: true,
+    enableBroadcastLists: false,
     enableChatAuditLog: false,
     enableOnDemandLocationStreaming: false,
     chatViewBgImg: undefined,
