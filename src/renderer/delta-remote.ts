@@ -27,22 +27,12 @@ export type sendMessageParams = {
 class DeltaRemote {
   // root ---------------------------------------------------------------
   call(fnName: 'setProfilePicture', newImage: string | null): Promise<void>
-  call(fnName: 'getProfilePicture'): Promise<string>
   call(fnName: 'joinSecurejoin', qrCode: string): Promise<number>
-  call(fnName: 'checkQrCode', qrCode: string): Promise<QrCodeResponse>
-  // autocrypt ----------------------------------------------------------
-  call(fnName: 'autocrypt.initiateKeyTransfer'): Promise<string>
-  call(
-    fnName: 'autocrypt.continueKeyTransfer',
-    messageId: number,
-    key: string
-  ): Promise<boolean>
   // backup -------------------------------------------------------------
   call(fnName: 'backup.export', dir: string): Promise<void>
   call(fnName: 'backup.import', file: string): Promise<DeltaChatAccount>
   // chatList -----------------------------------------------------------
   call(fnName: 'chatList.selectChat', chatId: number): Promise<FullChat>
-  call(fnName: 'chatList.getSelectedChatId'): Promise<number>
   call(fnName: 'chatList.onChatModified', chatId: number): Promise<void>
   call(
     fnName: 'chatList.getFullChatById',
