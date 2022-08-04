@@ -25,17 +25,6 @@ export default class DCChatList extends SplitOut {
     return list.getChatId(index)
   }
 
-  getChatListEntryMessageIdForChatId(chatID: number): number | null {
-    // workaround until this is in core
-    const chatList = this.selectedAccountContext.getChatList(0, '', 0)
-    for (let counter = 0; counter < chatList.getCount(); counter++) {
-      if (chatID == chatList.getChatId(counter)) {
-        return chatList.getMessageId(counter)
-      }
-    }
-    return null
-  }
-
   async _getChatById(chatId: number): Promise<JsonChat | null> {
     if (!chatId) return null
     const rawChat = this.selectedAccountContext.getChat(chatId)
