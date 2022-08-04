@@ -37,6 +37,7 @@ import {
 } from '../helpers/ChatMethods'
 import { useThemeCssVar } from '../../ThemeManager'
 import { BackendRemote, Type } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 const enum LoadStatus {
   FETCHING = 1,
@@ -379,10 +380,7 @@ function translate_n(key: string, quantity: number) {
 
 /** functions for the chat virtual list */
 export function useLogicVirtualChatList(chatListIds: [number, number][]) {
-  if (window.__selectedAccountId === undefined) {
-    throw new Error('no context selected')
-  }
-  const accountId = window.__selectedAccountId
+  const accountId = selectedAccountId()
   // workaround to save a current reference of chatListIds
   const chatListIdsRef = useRef(chatListIds)
   if (chatListIdsRef.current !== chatListIds) {
@@ -440,23 +438,29 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
       }
       debouncingChatlistItemRequests[chatId] = 1
       // the message id of the event could be an older message than the newest message (for example msg-read event)
-      const messageId = await DeltaBackend.call(
-        'chatList.getChatListEntryMessageIdForChatId',
-        chatId
-      )
-      setChatLoading(state => ({
-        ...state,
-        [chatId]: LoadStatus.FETCHING,
-      }))
-      const chats = await BackendRemote.rpc.getChatlistItemsByEntries(
+      const chatlist = await BackendRemote.rpc.getChatlistEntries(
         accountId,
-        [[chatId, messageId]]
+        null,
+        null,
+        null
       )
-      setChatCache(cache => ({ ...cache, ...chats }))
-      setChatLoading(state => ({
-        ...state,
-        [chatId]: LoadStatus.LOADED,
-      }))
+      const result = chatlist.find(([chat]) => chat === chatId)
+      if (result) {
+        setChatLoading(state => ({
+          ...state,
+          [chatId]: LoadStatus.FETCHING,
+        }))
+        const chats = await BackendRemote.rpc.getChatlistItemsByEntries(
+          accountId,
+          [result]
+        )
+        setChatCache(cache => ({ ...cache, ...chats }))
+        setChatLoading(state => ({
+          ...state,
+          [chatId]: LoadStatus.LOADED,
+        }))
+      }
+
       if (debouncingChatlistItemRequests[chatId] > 1) {
         updateChatListItem(chatId)
       } else {
