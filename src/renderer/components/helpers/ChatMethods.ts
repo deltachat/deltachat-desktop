@@ -7,7 +7,8 @@ import { C } from 'deltachat-node/node/dist/constants'
 import { runtime } from '../../runtime'
 import { getLogger } from '../../../shared/logger'
 import AlertDialog from '../dialogs/AlertDialog'
-import { Type } from '../../backend-com'
+import { BackendRemote, Type } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 const log = getLogger('renderer/message')
 
@@ -100,9 +101,9 @@ export function openBlockFirstContactOfChatDialog(
       isConfirmDanger: true,
       cb: (yes: boolean) =>
         yes &&
-        DeltaBackend.call('contacts.blockContact', dmChatContact).then(
-          unselectChat
-        ),
+        BackendRemote.rpc
+          .contactsBlock(selectedAccountId(), dmChatContact)
+          .then(unselectChat),
     })
   }
 }

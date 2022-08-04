@@ -23,7 +23,10 @@ export default function UnblockContacts(props: {
 
   useEffect(() => {
     const onContactsUpdate = async () => {
-      setBlockedContacts(await DeltaBackend.call('contacts.getBlocked'))
+      const blockedContacts = await BackendRemote.rpc.contactsGetBlocked(
+        selectedAccountId()
+      )
+      setBlockedContacts(blockedContacts)
     }
     onContactsUpdate()
     return onDCEvent(
@@ -37,7 +40,8 @@ export default function UnblockContacts(props: {
       message: tx('ask_unblock_contact'),
       confirmLabel: tx('menu_unblock_contact'),
       cb: async (yes: boolean) =>
-        yes && await BackendRemote.rpc.contactsUnblock(selectedAccountId(), id),
+        yes &&
+        (await BackendRemote.rpc.contactsUnblock(selectedAccountId(), id)),
     })
   }
 
