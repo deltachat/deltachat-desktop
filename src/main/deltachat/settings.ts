@@ -12,20 +12,6 @@ import { updateTrayIcon } from '../tray'
 import { DesktopSettings } from '../desktop_settings'
 
 export default class DCSettings extends SplitOut {
-  setConfig(key: string, value: string): boolean {
-    log.info(`Setting config ${key}:${value}`)
-    const result =
-      this.selectedAccountContext.setConfig(key, String(value)) === 1
-
-    if (key === 'sentbox_watch') {
-      log.info(`It's a watch config, restarting IO...`)
-      this.selectedAccountContext.stopIO()
-      this.selectedAccountContext.startIO()
-    }
-
-    return Boolean(result)
-  }
-
   setDesktopSetting(key: keyof DesktopSettingsType, value: string) {
     DesktopSettings.update({ [key]: value })
 

@@ -8,6 +8,7 @@ import { BackendRemote } from '../backend-com'
 import { DeltaBackend } from '../delta-remote'
 import { ipcBackend } from '../ipc'
 import { runtime } from '../runtime'
+import { selectedAccountId } from '../ScreenController'
 import { Store, useStore } from './store'
 
 export interface SettingsStoreState {
@@ -111,11 +112,12 @@ class SettingsStore extends Store<SettingsStoreState | null> {
   }
   effect = {
     load: async () => {
-      if (window.__selectedAccountId === undefined) {
+      const accountId = window.__selectedAccountId
+      if (accountId === undefined) {
         throw new Error('can not load settings when no account is selected')
       }
       const settings = (await BackendRemote.rpc.batchGetConfig(
-        window.__selectedAccountId,
+        accountId,
         settingsKeys
       )) as SettingsStoreState['settings']
       const selfContact = await DeltaBackend.call(
@@ -130,7 +132,7 @@ class SettingsStore extends Store<SettingsStoreState | null> {
       this.reducer.setState({
         settings,
         selfContact,
-        accountId: -1,
+        accountId,
         desktopSettings,
         rc,
       })
@@ -150,14 +152,19 @@ class SettingsStore extends Store<SettingsStoreState | null> {
       key: keyof SettingsStoreState['settings'],
       value: string | boolean
     ) => {
-      if (
-        (await DeltaBackend.call('settings.setConfig', key, String(value))) ===
-        true
-      ) {
+      try {
+        if (!this.state) {
+          throw new Error('no account selected')
+        }
+        await BackendRemote.rpc.setConfig(
+          this.state.accountId,
+          key,
+          String(value)
+        )
         this.reducer.setCoreSetting(key, value)
-        return
+      } catch (error) {
+        this.log.warn('setConfig failed:', error)
       }
-      this.log.warn('settings.setConfig returned false for: ', key, value)
     },
   }
 }
