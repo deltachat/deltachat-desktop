@@ -241,11 +241,6 @@ class DeltaRemote {
     messageId: number
   ): Promise<string>
   // settings -----------------------------------------------------------
-  call(
-    fnName: 'settings.setConfig',
-    key: string,
-    value: string
-  ): Promise<boolean>
   call(fnName: 'settings.keysImport', directory: string): Promise<void>
   call(fnName: 'settings.keysExport', directory: string): Promise<void>
   call(
