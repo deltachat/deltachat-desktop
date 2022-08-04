@@ -220,8 +220,8 @@ class Electron implements Runtime {
     if (!blob) {
       return blob
     }
-    let path_components = blob.replace(/\\/g, '/').split('/')
-    let filename2 = path_components[path_components.length - 1]
+    const path_components = blob.replace(/\\/g, '/').split('/')
+    const filename2 = path_components[path_components.length - 1]
     return blob.replace(filename2, encodeURIComponent(filename2))
   }
   async showOpenFileDialog(
