@@ -133,9 +133,9 @@ export default class DCLoginController extends SplitOut {
     this.controller.hintUpdateIfNessesary()
 
     this.selectedAccountContext.addDeviceMessage(
-      'changelog-version-1.31.0-version0',
+      'changelog-version-1.31.1-version0',
       `What's new in 1.31.0?
-
+2️⃣ new experimental features: Broadcast lists and Automated Email Address Porting
 ➕ Floating action button in chatlist to start a new chat
 🚆 Many reliability improvements and bugfixes
 
