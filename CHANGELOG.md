@@ -8,6 +8,7 @@
 
 ## Added
 - Broadcast lists as experimental feature
+- add connectivity status in sidebar/hamburger menu #2819
 
 ## Fixed
 - fix display of quoted forwarded messages

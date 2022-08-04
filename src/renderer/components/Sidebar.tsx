@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { ScreenContext, useTranslationFunction } from '../contexts'
 import { DeltaBackend } from '../delta-remote'
 import { runtime } from '../runtime'
@@ -12,6 +12,9 @@ import { Avatar } from './Avatar'
 import { C } from 'deltachat-node/node/dist/constants'
 import { VERSION } from '../../shared/build-info'
 import { ActionEmitter, KeybindAction } from '../keybindings'
+import SettingsConnectivityDialog from './dialogs/Settings-Connectivity'
+import { debounceWithInit } from './chat/ChatListHelpers'
+import { onDCEvent } from '../ipc'
 
 export type SidebarState = 'init' | 'visible' | 'invisible'
 
@@ -44,6 +47,11 @@ const Sidebar = React.memo(
     const onOpenHelp = () => {
       setSidebarState('invisible')
       runtime.openHelpWindow()
+    }
+
+    const onOpenConnectivity = () => {
+      setSidebarState('invisible')
+      screenContext.openDialog(SettingsConnectivityDialog)
     }
 
     const onOpenSettings = () => {
@@ -133,6 +141,9 @@ const Sidebar = React.memo(
             </div>
             <div className='displayname'>{settings.settings.displayname}</div>
             <div className='emailAddress'>{settings.settings.addr}</div>
+            <div className='connectivity' onClick={onOpenConnectivity}>
+              <SidebarConnectivity />
+            </div>
           </div>
           <div key='new_chat' className='sidebar-item' onClick={onCreateChat}>
             {tx('menu_new_chat')}
@@ -197,3 +208,33 @@ export function Link({
 }
 
 export default Sidebar
+
+const SidebarConnectivity = () => {
+  const [state, setState] = useState('')
+  const tx = window.static_translate
+
+  const onConnectivityChanged = useMemo(
+    () =>
+      debounceWithInit(async (_data1: any, _data2: any) => {
+        const connectivity = await DeltaBackend.call('context.getConnectivity')
+
+        if (connectivity >= C.DC_CONNECTIVITY_CONNECTED) {
+          setState('connectivity_connected')
+        } else if (connectivity >= C.DC_CONNECTIVITY_WORKING) {
+          setState('connectivity_updating')
+        } else if (connectivity >= C.DC_CONNECTIVITY_CONNECTING) {
+          setState('connectivity_connecting')
+        } else if (connectivity >= C.DC_CONNECTIVITY_NOT_CONNECTED) {
+          setState('connectivity_not_connected')
+        }
+      }, 300),
+    []
+  )
+
+  useEffect(
+    () => onDCEvent('DC_EVENT_CONNECTIVITY_CHANGED', onConnectivityChanged),
+    [onConnectivityChanged]
+  )
+
+  return <>{tx('connectivity') + ': ' + tx(state)}</>
+}
