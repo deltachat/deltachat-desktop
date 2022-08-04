@@ -236,5 +236,5 @@ const SidebarConnectivity = () => {
     [onConnectivityChanged]
   )
 
-  return <>{tx('connectivity') + ': ' + tx(state)}</>
+  return <>{tx(state)}</>
 }
