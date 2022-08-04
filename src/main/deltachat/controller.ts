@@ -4,7 +4,6 @@ import { EventEmitter } from 'events'
 import { getLogger } from '../../shared/logger'
 import { maybeMarkSeen } from '../markseenFix'
 import * as mainWindow from '../windows/main'
-import DCAutocrypt from './autocrypt'
 import DCBackup from './backup'
 import DCChat from './chat'
 import DCChatList from './chatlist'
@@ -251,7 +250,6 @@ export default class DeltaChatController extends EventEmitter {
     logMigrate.info('migration completed')
   }
 
-  readonly autocrypt = new DCAutocrypt(this)
   readonly backup = new DCBackup(this)
   readonly chatList = new DCChatList(this)
   readonly contacts = new JsonContacts(this)
@@ -410,20 +408,6 @@ export default class DeltaChatController extends EventEmitter {
     this.sendToRenderer('DD_EVENT_CHATLIST_CHANGED', {})
   }
 
-  async checkQrCode(qrCode: string) {
-    if (!this._inner_selectedAccountContext) {
-      const { dc, context } = DeltaChat.newTemporary()
-
-      this.registerEventHandler(dc)
-      const checkQr = await context.checkQrCode(qrCode)
-      this.unregisterEventHandler(dc)
-      dc.close()
-
-      return checkQr
-    }
-    return this.selectedAccountContext.checkQrCode(qrCode)
-  }
-
   joinSecurejoin(qrCode: string) {
     return this.selectedAccountContext.joinSecurejoin(qrCode)
   }
@@ -439,13 +423,6 @@ export default class DeltaChatController extends EventEmitter {
 
   setProfilePicture(newImage: string) {
     this.selectedAccountContext.setConfig('selfavatar', newImage)
-  }
-
-  getProfilePicture() {
-    const selfContact = this.selectedAccountContext.getContact(
-      C.DC_CONTACT_ID_SELF
-    )
-    return selfContact?.getProfileImage() || ''
   }
 
   hintUpdateIfNessesary() {
