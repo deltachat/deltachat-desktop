@@ -48,7 +48,7 @@ const Sidebar = React.memo(
 
     const onOpenSettings = () => {
       setSidebarState('invisible')
-      screenContext.openDialog('Settings')
+      ActionEmitter.emitAction(KeybindAction.Settings_Open)
     }
 
     const onShowQRCode = async () => {
