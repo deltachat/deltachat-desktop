@@ -21,7 +21,7 @@ const Sidebar = React.memo(
     setSidebarState,
   }: {
     sidebarState: SidebarState
-    setSidebarState: any
+    setSidebarState: React.Dispatch<React.SetStateAction<SidebarState>>
   }) => {
     const screenContext = useContext(ScreenContext)
     const settings = useSettingsStore()[0]
@@ -48,7 +48,7 @@ const Sidebar = React.memo(
 
     const onOpenSettings = () => {
       setSidebarState('invisible')
-      screenContext.openDialog('Settings')
+      ActionEmitter.emitAction(KeybindAction.Settings_Open)
     }
 
     const onShowQRCode = async () => {
@@ -75,7 +75,12 @@ const Sidebar = React.memo(
 
     const onEscapeKeyUp = (ev: KeyboardEvent) => {
       if (ev.key === 'Escape') {
-        setSidebarState('invisible')
+        setSidebarState(old => {
+          if (old === 'init') {
+            return 'init'
+          }
+          return 'invisible'
+        })
       }
     }
 
