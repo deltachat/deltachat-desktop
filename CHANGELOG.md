@@ -14,6 +14,7 @@
 - fix escape key let sidebar flimmer shortly upon startup bug
 - fix double open settings crash #2824
 - fix display of quoted forwarded messages
+- add warning that broadcast lists are unencrypted
 
 ## [1.31.0] - 2022-07-17
 
