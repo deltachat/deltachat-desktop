@@ -34,6 +34,7 @@
 
   .account {
     padding: 20px;
+    padding-bottom: 13px;
 
     background-color: var(--sideBarAccountBackground);
     color: var(--navBarText);
@@ -82,6 +83,14 @@
       color: var(--sideBarAccountEmailText);
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    .connectivity {
+      font-size: small;
+      font-weight: 100;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 10px;
     }
   }
 
