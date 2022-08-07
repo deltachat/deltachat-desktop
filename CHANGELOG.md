@@ -17,6 +17,7 @@
 - fix double open settings crash #2824
 - fix display of quoted forwarded messages
 - add warning that broadcast lists are unencrypted
+- remove 1px white bottom border on image message
 
 ## [1.31.0] - 2022-07-17
 
