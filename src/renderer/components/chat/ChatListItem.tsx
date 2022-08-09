@@ -5,7 +5,7 @@ import MessageBody from '../message/MessageBody'
 import { C } from 'deltachat-node/node/dist/constants'
 import { MessageSearchResult } from '../../../shared/shared-types'
 import { Avatar } from '../Avatar'
-import { Type } from '../../backend-com'
+import { Type } from '../../backend'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 
 function FreshMessageCounter({ counter }: { counter: number }) {

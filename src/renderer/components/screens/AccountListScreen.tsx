@@ -14,7 +14,7 @@ import {
   DeltaDialogContent,
 } from '../dialogs/DeltaDialog'
 import filesizeConverter from 'filesize'
-import { BackendRemote, EffectfulBackendActions, Type } from '../../backend-com'
+import { DeltaChat, Backend, EffectfulBackend, Type } from '../../backend'
 import { DeltaBackend } from '../../delta-remote'
 
 const log = getLogger('renderer/components/AccountsScreen')
@@ -42,14 +42,14 @@ export default function AccountListScreen({
   }, [])
 
   const refreshAccounts = async () => {
-    const logins = await BackendRemote.listAccounts()
+    const logins = await DeltaChat.listAccounts()
     setLogins(logins)
   }
 
   useEffect(() => {
     let mounted = true
     ;(async () => {
-      const logins = await BackendRemote.listAccounts()
+      const logins = await DeltaChat.listAccounts()
       if (mounted === true) {
         setLogins(logins)
       }
@@ -157,7 +157,7 @@ function AccountSelection({
       cb: async (yes: boolean) => {
         if (yes) {
           try {
-            await EffectfulBackendActions.removeAccount(account.id)
+            await EffectfulBackend.removeAccount(account.id)
             refreshAccounts()
           } catch (error: any) {
             if (error instanceof Error) {
@@ -260,7 +260,7 @@ function AccountItem({
     () =>
       debounce((_ev: any, account_id: number) => {
         if (account_id === login.id) {
-          BackendRemote.rpc
+          Backend
             .getFreshMsgs(login.id)
             .catch(log.error)
             .then(u => setUnreadCount(u?.length || 0))

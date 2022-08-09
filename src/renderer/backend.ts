@@ -40,10 +40,11 @@ class ElectronDeltachat extends BaseDeltaChat<ElectronTransport> {
   }
 }
 
-export const BackendRemote: BaseDeltaChat<any> = new ElectronDeltachat()
+export const DeltaChat: BaseDeltaChat<any> = new ElectronDeltachat()
+export const Backend = DeltaChat.rpc
 
 /** Functions with side-effects */
-export namespace EffectfulBackendActions {
+export namespace EffectfulBackend {
   export async function removeAccount(account_id: number) {
     // unselect the account in the UI if its selected
     if (window.__selectedAccountId === account_id) {
@@ -53,7 +54,7 @@ export namespace EffectfulBackendActions {
     }
 
     // remove the account
-    await BackendRemote.rpc.removeAccount(account_id)
+    await Backend.removeAccount(account_id)
 
     // if sucessfull remove webxdc data
     runtime.deleteWebxdcAccountData(account_id)
@@ -71,4 +72,12 @@ export namespace EffectfulBackendActions {
     await DeltaBackend.call('login.logout')
     ;(window.__selectedAccountId as any) = undefined
   }
+}
+
+export function selectedAccountId(): number {
+  const selectedAccountId = window.__selectedAccountId
+  if (selectedAccountId === undefined) {
+    throw new Error('no context selected')
+  }
+  return selectedAccountId
 }

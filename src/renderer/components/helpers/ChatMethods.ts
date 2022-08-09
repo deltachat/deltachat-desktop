@@ -7,7 +7,7 @@ import { C } from 'deltachat-node/node/dist/constants'
 import { runtime } from '../../runtime'
 import { getLogger } from '../../../shared/logger'
 import AlertDialog from '../dialogs/AlertDialog'
-import { Type } from '../../backend-com'
+import { Type } from '../../backend'
 
 const log = getLogger('renderer/message')
 

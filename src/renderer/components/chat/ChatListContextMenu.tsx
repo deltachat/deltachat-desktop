@@ -16,7 +16,7 @@ import { C } from 'deltachat-node/node/dist/constants'
 import { DeltaBackend } from '../../delta-remote'
 import { ContextMenuItem } from '../ContextMenu'
 import MailingListProfile from '../dialogs/MessageListProfile'
-import { Type } from '../../backend-com'
+import { Type } from '../../backend'
 
 // const log = getLogger('renderer/ChatListContextMenu')
 

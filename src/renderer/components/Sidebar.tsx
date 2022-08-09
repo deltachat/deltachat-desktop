@@ -12,7 +12,7 @@ import { Avatar } from './Avatar'
 import { C } from 'deltachat-node/node/dist/constants'
 import { VERSION } from '../../shared/build-info'
 import { ActionEmitter, KeybindAction } from '../keybindings'
-import { EffectfulBackendActions } from '../backend-com'
+import { EffectfulBackend } from '../backend'
 
 export type SidebarState = 'init' | 'visible' | 'invisible'
 
@@ -38,7 +38,7 @@ const Sidebar = React.memo(
     const onLogout = async () => {
       setSidebarState('invisible')
       unselectChat()
-      await EffectfulBackendActions.logout()
+      await EffectfulBackend.logout()
       screenContext.changeScreen(Screens.AccountList)
     }
 

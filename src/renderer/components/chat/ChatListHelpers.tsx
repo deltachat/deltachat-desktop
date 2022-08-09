@@ -3,7 +3,7 @@ import { ipcBackend } from '../../ipc'
 import { getLogger } from '../../../shared/logger'
 import { DeltaBackend } from '../../delta-remote'
 import { debounce } from 'debounce'
-import { BackendRemote } from '../../backend-com'
+import { Backend } from '../../backend'
 
 const log = getLogger('renderer/helpers/ChatList')
 
@@ -69,7 +69,7 @@ export function useChatList(
           queryStr: string | undefined,
           queryContactId: number | undefined
         ) => {
-          BackendRemote.rpc
+          Backend
             .getChatlistEntries(
               accountId,
               listFlags,

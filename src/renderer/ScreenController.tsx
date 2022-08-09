@@ -17,7 +17,7 @@ import { ActionEmitter, KeybindAction } from './keybindings'
 import AccountSetupScreen from './components/screens/AccountSetupScreen'
 import AccountListScreen from './components/screens/AccountListScreen'
 import WelcomeScreen from './components/screens/WelcomeScreen'
-import { BackendRemote } from './backend-com'
+import { Backend } from './backend'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -72,6 +72,7 @@ export default class ScreenController extends Component {
     window.__screen = this.state.screen
   }
 
+  // TODO: Move to src/renderer/backend.ts
   private async startup() {
     const lastLoggedInAccountId = await DeltaBackend.call(
       'login.getLastLoggedInAccount'
@@ -89,6 +90,7 @@ export default class ScreenController extends Component {
     }
   }
 
+  // TODO: Move to src/renderer/backend.ts
   async selectAccount(accountId: number) {
     // for now we still need to call the backend function,
     // because backend still has sleected account
@@ -96,7 +98,7 @@ export default class ScreenController extends Component {
 
     this.selectedAccountId = accountId
     ;(window.__selectedAccountId as number) = accountId
-    const account = await BackendRemote.rpc.getAccountInfo(
+    const account = await Backend.getAccountInfo(
       this.selectedAccountId
     )
     if (account.type === 'Configured') {
@@ -269,10 +271,3 @@ export default class ScreenController extends Component {
   }
 }
 
-export function selectedAccountId(): number {
-  const selectedAccountId = window.__selectedAccountId
-  if (selectedAccountId === undefined) {
-    throw new Error('no context selected')
-  }
-  return selectedAccountId
-}

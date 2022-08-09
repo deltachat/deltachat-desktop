@@ -19,7 +19,7 @@ import { useTranslationFunction, i18nContext } from '../contexts'
 import { useDebouncedCallback } from 'use-debounce/lib'
 import { getLogger } from '../../shared/logger'
 import { IpcRendererEvent } from 'electron/renderer'
-import { BackendRemote, Type } from '../backend-com'
+import { Backend, Type } from '../backend'
 
 const log = getLogger('renderer/loginForm')
 
@@ -136,7 +136,7 @@ export default function LoginForm({
         setProviderInfo(undefined)
         return
       }
-      const result: any = await BackendRemote.rpc.getProviderInfo(
+      const result: any = await Backend.getProviderInfo(
         window.__selectedAccountId,
         addr
       )
@@ -434,7 +434,7 @@ export function ConfigureProgressDialog({
       if (window.__selectedAccountId === undefined) {
         throw new Error('no selected account')
       }
-      await BackendRemote.rpc.stopOngoingProcess(window.__selectedAccountId)
+      await Backend.stopOngoingProcess(window.__selectedAccountId)
     } catch (error: any) {
       log.error('failed to stopOngoingProcess', error)
       onConfigureError(null, [
@@ -464,11 +464,11 @@ export function ConfigureProgressDialog({
             throw new Error('No account selected')
           }
 
-          await BackendRemote.rpc.batchSetConfig(
+          await Backend.batchSetConfig(
             window.__selectedAccountId,
             credentials
           )
-          await BackendRemote.rpc.configure(window.__selectedAccountId)
+          await Backend.configure(window.__selectedAccountId)
 
           // on successful configure:
           onClose()

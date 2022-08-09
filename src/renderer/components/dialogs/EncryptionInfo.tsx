@@ -6,7 +6,7 @@ import {
   DeltaDialogFooter,
   DeltaDialogFooterActions,
 } from './DeltaDialog'
-import { Type } from '../../backend-com'
+import { Type } from '../../backend'
 
 export default function EncryptionInfo({
   chatListItem,

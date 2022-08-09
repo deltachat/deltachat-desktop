@@ -36,8 +36,7 @@ import {
   selectChat,
 } from '../helpers/ChatMethods'
 import { useThemeCssVar } from '../../ThemeManager'
-import { BackendRemote, Type } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
+import { Backend, Type, selectedAccountId } from '../../backend'
 
 const enum LoadStatus {
   FETCHING = 1,
@@ -413,7 +412,7 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
       )
       return state
     })
-    const chats = await BackendRemote.rpc.getChatlistItemsByEntries(
+    const chats = await Backend.getChatlistItemsByEntries(
       accountId,
       entries
     )
@@ -438,7 +437,7 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
       }
       debouncingChatlistItemRequests[chatId] = 1
       // the message id of the event could be an older message than the newest message (for example msg-read event)
-      const chatlist = await BackendRemote.rpc.getChatlistEntries(
+      const chatlist = await Backend.getChatlistEntries(
         accountId,
         null,
         null,
@@ -450,7 +449,7 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
           ...state,
           [chatId]: LoadStatus.FETCHING,
         }))
-        const chats = await BackendRemote.rpc.getChatlistItemsByEntries(
+        const chats = await Backend.getChatlistItemsByEntries(
           accountId,
           [result]
         )
@@ -493,7 +492,7 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
   const onContactChanged = useCallback(
     async (contactId: number) => {
       if (contactId !== 0) {
-        const chatListItems = await BackendRemote.rpc.getChatlistEntries(
+        const chatListItems = await Backend.getChatlistEntries(
           accountId,
           null,
           null,
@@ -505,7 +504,7 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
         const toBeRefreshed = chatListItems.filter(
           ([chatId]) => inCurrentCache.indexOf(chatId) !== -1
         )
-        const chats = await BackendRemote.rpc.getChatlistItemsByEntries(
+        const chats = await Backend.getChatlistItemsByEntries(
           accountId,
           toBeRefreshed
         )

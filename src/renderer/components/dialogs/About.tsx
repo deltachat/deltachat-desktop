@@ -7,15 +7,15 @@ import { VERSION, GIT_REF } from '../../../shared/build-info'
 import ClickableLink from '../helpers/ClickableLink'
 import { useTranslationFunction } from '../../contexts'
 import { runtime } from '../../runtime'
-import { BackendRemote } from '../../backend-com'
+import { Backend } from '../../backend'
 
 const log = getLogger('renderer/dialogs/About')
 
 function getInfo() {
   if (window.__selectedAccountId === undefined) {
-    return BackendRemote.rpc.getSystemInfo()
+    return Backend.getSystemInfo()
   } else {
-    return BackendRemote.rpc.getInfo(window.__selectedAccountId)
+    return Backend.getInfo(window.__selectedAccountId)
   }
 }
 

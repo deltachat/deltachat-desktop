@@ -6,7 +6,7 @@ import { runtime } from '../runtime'
 import { ActionEmitter, KeybindAction } from '../keybindings'
 import { C } from 'deltachat-node/node/dist/constants'
 import { OrderedMap } from 'immutable'
-import { BackendRemote } from '../backend-com'
+import { Backend } from '../backend'
 
 export const PAGE_SIZE = 11
 
@@ -183,7 +183,7 @@ async function messagePagesFromMessageIndexes(
 
 function saveLastChatId(chatId: number) {
   if (window.__selectedAccountId) {
-    BackendRemote.rpc.setConfig(
+    Backend.setConfig(
       window.__selectedAccountId,
       'ui.lastchatid',
       String(chatId)

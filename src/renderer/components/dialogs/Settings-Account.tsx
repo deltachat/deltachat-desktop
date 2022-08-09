@@ -15,7 +15,7 @@ import {
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { Credentials } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
-import { BackendRemote } from '../../backend-com'
+import { Backend } from '../../backend'
 
 export default function SettingsAccountDialog({
   isOpen,
@@ -63,7 +63,7 @@ export function SettingsAccountInner(onClose: () => void) {
     if (window.__selectedAccountId === undefined) {
       throw new Error('can not load settings when no account is selected')
     }
-    const accountSettings: Credentials = ((await BackendRemote.rpc.batchGetConfig(
+    const accountSettings: Credentials = ((await Backend.batchGetConfig(
       window.__selectedAccountId,
       [
         'addr',

@@ -1,7 +1,7 @@
 import React from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import { ConfigureProgressDialog } from '../LoginForm'
-import { Screens, selectedAccountId } from '../../ScreenController'
+import { Screens } from '../../ScreenController'
 import { useTranslationFunction } from '../../contexts'
 import {
   DeltaDialogFooter,
@@ -19,7 +19,7 @@ import { getLogger } from '../../../shared/logger'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import AlertDialog from '../dialogs/AlertDialog'
 import { selectChat } from './ChatMethods'
-import { BackendRemote } from '../../backend-com'
+import { Backend, selectedAccountId } from '../../backend'
 
 const log = getLogger('renderer/processOpenUrl')
 
@@ -32,7 +32,7 @@ export function ProcessQrCodeDialog({
 
   const onCancel = async () => {
     window.__selectedAccountId &&
-      (await BackendRemote.rpc.stopOngoingProcess(window.__selectedAccountId))
+      (await Backend.stopOngoingProcess(window.__selectedAccountId))
     _onCancel && _onCancel()
     onClose()
   }
@@ -60,7 +60,7 @@ async function setConfigFromQrCatchingErrorInAlert(qrContent: string) {
     if (window.__selectedAccountId === undefined) {
       throw new Error('error: no context selected')
     }
-    await BackendRemote.rpc.setConfigFromQr(
+    await Backend.setConfigFromQr(
       window.__selectedAccountId,
       qrContent
     )
@@ -124,12 +124,12 @@ export default async function processOpenQrUrl(
   const screen = window.__screen
 
   const processDialogId = window.__openDialog(ProcessQrCodeDialog)
-  // const checkQr: Qr = await BackendRemote.rpc.checkQr(selectedAccountId(), url)
+  // const checkQr: Qr = await Backend.checkQr(selectedAccountId(), url)
 
   const closeProcessDialog = () => window.__closeDialog(processDialogId)
   let checkQr
   try {
-    checkQr = await BackendRemote.rpc.checkQr(selectedAccountId(), url)
+    checkQr = await Backend.checkQr(selectedAccountId(), url)
   } catch (err) {
     checkQr = null
     log.error(err)
@@ -172,7 +172,7 @@ export default async function processOpenQrUrl(
       if (window.__selectedAccountId === undefined) {
         throw new Error('error: no context selected')
       }
-      await BackendRemote.rpc.setConfigFromQr(window.__selectedAccountId, url)
+      await Backend.setConfigFromQr(window.__selectedAccountId, url)
       closeProcessDialog()
       window.__openDialog(ConfigureProgressDialog, {
         credentials: {},

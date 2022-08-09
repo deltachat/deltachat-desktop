@@ -15,7 +15,7 @@ import DeltaDialog, {
 import { DeltaProgressBar } from '../Login-Styles'
 import { DialogProps } from '../dialogs/DialogController'
 import { Screens } from '../../ScreenController'
-import { BackendRemote, EffectfulBackendActions } from '../../backend-com'
+import { DeltaChat, Backend, EffectfulBackend } from '../../backend'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
@@ -129,7 +129,7 @@ export default function WelcomeScreen({
 
   useEffect(() => {
     ;(async () => {
-      const allAccountIds = await BackendRemote.listAccounts()
+      const allAccountIds = await DeltaChat.listAccounts()
       if (allAccountIds && allAccountIds.length > 1) {
         setShowBackButton(true)
       }
@@ -138,10 +138,10 @@ export default function WelcomeScreen({
 
   const onCancel = async () => {
     try {
-      const acInfo = await BackendRemote.rpc.getAccountInfo(selectedAccountId)
+      const acInfo = await Backend.getAccountInfo(selectedAccountId)
       if (acInfo.type === 'Unconfigured') {
-        await EffectfulBackendActions.logout()
-        await EffectfulBackendActions.removeAccount(selectedAccountId)
+        await EffectfulBackend.logout()
+        await EffectfulBackend.removeAccount(selectedAccountId)
       }
       window.__changeScreen(Screens.AccountList)
     } catch (error) {

@@ -5,7 +5,7 @@ import { JsonContact } from '../../../shared/shared-types'
 import { debounce } from 'debounce'
 import { useInitEffect } from '../helpers/hooks'
 import { debounceWithInit } from '../chat/ChatListHelpers'
-import { BackendRemote } from '../../backend-com'
+import { Backend } from '../../backend'
 
 export function ContactList2(props: {
   contacts: JsonContact[]
@@ -127,7 +127,7 @@ export function useContactsNew(listFlags: number, initialQueryStr: string) {
           listFlags,
           queryStr
         )
-        const queryStrIsValidEmail = await BackendRemote.rpc.checkEmailValidity(
+        const queryStrIsValidEmail = await Backend.checkEmailValidity(
           queryStr
         )
         setState({ contacts, queryStrIsValidEmail })
@@ -165,7 +165,7 @@ export function useContactIds(listFlags: number, queryStr: string | undefined) {
           listFlags,
           queryStr || ''
         )
-        const queryStrIsValidEmail = await BackendRemote.rpc.checkEmailValidity(
+        const queryStrIsValidEmail = await Backend.checkEmailValidity(
           queryStr || ''
         )
         setState({ contactIds, queryStrIsValidEmail })

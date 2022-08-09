@@ -4,7 +4,7 @@ import {
   JsonContact,
   RC_Config,
 } from '../../shared/shared-types'
-import { BackendRemote } from '../backend-com'
+import { Backend } from '../backend'
 import { DeltaBackend } from '../delta-remote'
 import { ipcBackend } from '../ipc'
 import { runtime } from '../runtime'
@@ -115,7 +115,7 @@ class SettingsStore extends Store<SettingsStoreState | null> {
       if (accountId === undefined) {
         throw new Error('can not load settings when no account is selected')
       }
-      const settings = (await BackendRemote.rpc.batchGetConfig(
+      const settings = (await Backend.batchGetConfig(
         accountId,
         settingsKeys
       )) as SettingsStoreState['settings']
@@ -155,7 +155,7 @@ class SettingsStore extends Store<SettingsStoreState | null> {
         if (!this.state) {
           throw new Error('no account selected')
         }
-        await BackendRemote.rpc.setConfig(
+        await Backend.setConfig(
           this.state.accountId,
           key,
           String(value)

@@ -21,7 +21,7 @@ import { getLogger } from '../../../shared/logger'
 import { useContextMenu } from '../ContextMenu'
 import { runtime } from '../../runtime'
 import { selectChat } from '../helpers/ChatMethods'
-import { BackendRemote } from '../../backend-com'
+import { Backend } from '../../backend'
 
 const log = getLogger('renderer/dialogs/QrCode')
 
@@ -36,7 +36,7 @@ export default function QrCode({
   const [addr, setAddr] = useState('')
   useEffect(() => {
     if (window.__selectedAccountId) {
-      BackendRemote.rpc
+      Backend
         .getConfig(window.__selectedAccountId, 'addr')
         .then(addr => setAddr(addr || ''))
     }
