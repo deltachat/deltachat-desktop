@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+## Fixed
+- fix indentation in --help
+
 ## [1.32.0] - 2022-08-09
 
 ## Changed
