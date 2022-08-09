@@ -7,6 +7,7 @@
 - update esbuild to 0.14.51
 - disable broadcast lists by default, because they are experimental
 - updated deltachat-node to `v1.91.0`
+- Update translations (09.08.2022)
 
 ## Added
 - Broadcast lists as experimental feature
