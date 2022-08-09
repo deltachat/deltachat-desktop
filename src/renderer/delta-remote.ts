@@ -29,7 +29,6 @@ export type sendMessageParams = {
 class DeltaRemote {
   // root ---------------------------------------------------------------
   call(fnName: 'setProfilePicture', newImage: string | null): Promise<void>
-  call(fnName: 'getProfilePicture'): Promise<string>
   call(fnName: 'getInfo'): Promise<{ [key: string]: any }>
   call(
     fnName: 'getProviderInfo',
@@ -58,8 +57,6 @@ class DeltaRemote {
   call(fnName: 'backup.import', file: string): Promise<DeltaChatAccount>
   // chatList -----------------------------------------------------------
   call(fnName: 'chatList.selectChat', chatId: number): Promise<FullChat>
-  call(fnName: 'chatList.getSelectedChatId'): Promise<number>
-  call(fnName: 'chatList.onChatModified', chatId: number): Promise<void>
   call(
     fnName: 'chatList.getChatListEntries',
     listFlags?: number,
@@ -80,7 +77,6 @@ class DeltaRemote {
     fnName: 'chatList.getFullChatById',
     chatId: number
   ): Promise<FullChat | null>
-  call(fnName: 'chatList.getGeneralFreshMessageCounter'): Promise<number> // this method might be used for a favicon badge counter
   // contacts ------------------------------------------------------------
   call(fnName: 'contacts.unblockContact', contactId: number): Promise<void>
   call(fnName: 'contacts.blockContact', contactId: number): Promise<void>
@@ -170,7 +166,6 @@ class DeltaRemote {
       | C.DC_CERTCK_STRICT
       | C.DC_CHAT_VISIBILITY_PINNED
   ): Promise<void>
-  call(fnName: 'chat.getChatContacts', chatId: number): Promise<number[]>
   call(fnName: 'chat.markNoticedChat', chatId: number): Promise<void>
   call(fnName: 'chat.getChatEphemeralTimer', chatId: number): Promise<number>
   call(
@@ -180,19 +175,12 @@ class DeltaRemote {
   ): Promise<void>
   call(fnName: 'chat.sendVideoChatInvitation', chatId: number): Promise<number>
   call(fnName: 'chat.accept', chatId: number): Promise<void>
-  call(fnName: 'chat.block', chatId: number): Promise<void>
   call(
     fnName: 'chat.getNextMedia',
     messageId: number,
     direction: 1 | -1
   ): Promise<number>
   // locations ----------------------------------------------------------
-  call(
-    fnName: 'locations.setLocation',
-    latitude: number,
-    longitude: number,
-    accuracy: number
-  ): Promise<void>
   call(
     fnName: 'locations.getLocations',
     chatId: number,
@@ -267,10 +255,6 @@ class DeltaRemote {
   ): Promise<void>
   call(fnName: 'messageList.removeDraft', chatId: number): Promise<void>
   call(
-    fnName: 'messageList.messageIdToJson',
-    id: number
-  ): Promise<MessageType | null>
-  call(
     fnName: 'messageList.getMessageIds',
     chatid: number,
     flags?: number
@@ -313,16 +297,6 @@ class DeltaRemote {
   call(fnName: 'settings.keysImport', directory: string): Promise<void>
   call(fnName: 'settings.keysExport', directory: string): Promise<void>
   call(
-    fnName: 'settings.serverFlags',
-    {
-      mail_security,
-      send_security,
-    }: {
-      mail_security?: string
-      send_security?: string
-    }
-  ): Promise<number | ''>
-  call(
     fnName: 'settings.setDesktopSetting',
     key: keyof DesktopSettingsType,
     value: string | number | boolean
@@ -358,7 +332,6 @@ class DeltaRemote {
     theme: Theme
     data: string
   } | null>
-  call(fnName: 'extras.setThemeFilePath', address: string): void
   call(fnName: 'extras.getAvailableThemes'): Promise<Theme[]>
   call(fnName: 'extras.setTheme', address: string): Promise<boolean>
   call(fnName: 'extras.writeClipboardToTempFile'): Promise<string>

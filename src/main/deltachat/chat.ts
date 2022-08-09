@@ -163,11 +163,6 @@ export default class DCChat extends SplitOut {
     this.controller.chatList.updateChatList()
   }
 
-  block(chatId: number) {
-    this.selectedAccountContext.blockChat(chatId)
-    this.controller.chatList.updateChatList()
-  }
-
   getNextMedia(messageId: number, direction: 1 | -1): number {
     // workaround to get gifs and images into the same media list
     let additional_view_type = 0

@@ -23,10 +23,6 @@ export default class DCChatList extends SplitOut {
     return chat
   }
 
-  getSelectedChatId() {
-    return this.controller.selectedChatId
-  }
-
   _chatListGetChatId(list: ChatList, index: number) {
     return list.getChatId(index)
   }

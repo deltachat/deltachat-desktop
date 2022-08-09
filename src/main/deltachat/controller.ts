@@ -437,12 +437,6 @@ export default class DeltaChatController extends EventEmitter {
     this.selectedAccountContext.setConfig('selfavatar', newImage)
   }
 
-  getProfilePicture() {
-    const selfContact = this.selectedAccountContext.getContact(
-      C.DC_CONTACT_ID_SELF
-    )
-    return selfContact?.getProfileImage() || ''
-  }
 
   getInfo(): { [key: string]: any } {
     if (this._inner_selectedAccountContext) {
