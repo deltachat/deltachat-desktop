@@ -62,12 +62,18 @@ async function main() {
 
   result.reverse()
 
+  let count_usages = 0
   for (let r of result) {
     console.log(`# ${r.methodName} [${r.total_occurances}]`)
     for (let f of r.files) {
       console.log(`- ${f[0]} [${f[1]}]`)
+      count_usages++
     }
   }
+
+  console.log('')
+  console.log(`Remaining Methods: ${result.length}`)
+  console.log(`Remaining Usages: ${count_usages}`)
 }
 
 
