@@ -36,7 +36,7 @@
 - Less round buttons, more similar to android and better spacing #2813
 - Updated deltachat-node to `v1.90.0`
 - Update translations (17.07.2022)
-- add aeap confirmation dialog and make email address changable
+- add aeap confirmation dialog and make email address changeable
 
 ## [1.30.1] - 2022-06-07
 
