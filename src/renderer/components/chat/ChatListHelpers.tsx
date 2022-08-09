@@ -69,14 +69,12 @@ export function useChatList(
           queryStr: string | undefined,
           queryContactId: number | undefined
         ) => {
-          Backend
-            .getChatlistEntries(
-              accountId,
-              listFlags,
-              queryStr || null,
-              queryContactId || null
-            )
-            .then(setChatListEntries)
+          Backend.getChatlistEntries(
+            accountId,
+            listFlags,
+            queryStr || null,
+            queryContactId || null
+          ).then(setChatListEntries)
         },
         200
       ),

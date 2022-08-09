@@ -88,9 +88,7 @@ export function SendAutocryptSetupMessage({
 
   const initiateKeyTransfer = async () => {
     setLoading(true)
-    const key = await Backend.autocryptInitiateKeyTransfer(
-      selectedAccountId()
-    )
+    const key = await Backend.autocryptInitiateKeyTransfer(selectedAccountId())
 
     setKey(key)
     setLoading(false)

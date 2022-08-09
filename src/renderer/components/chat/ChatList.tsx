@@ -412,10 +412,7 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
       )
       return state
     })
-    const chats = await Backend.getChatlistItemsByEntries(
-      accountId,
-      entries
-    )
+    const chats = await Backend.getChatlistItemsByEntries(accountId, entries)
     setChatCache(cache => ({ ...cache, ...chats }))
     setChatLoading(state => {
       entries.forEach(([chatId, _msgId]) => (state[chatId] = LoadStatus.LOADED))
@@ -449,10 +446,9 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
           ...state,
           [chatId]: LoadStatus.FETCHING,
         }))
-        const chats = await Backend.getChatlistItemsByEntries(
-          accountId,
-          [result]
-        )
+        const chats = await Backend.getChatlistItemsByEntries(accountId, [
+          result,
+        ])
         setChatCache(cache => ({ ...cache, ...chats }))
         setChatLoading(state => ({
           ...state,

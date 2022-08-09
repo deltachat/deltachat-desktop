@@ -457,10 +457,7 @@ export function ConfigureProgressDialog({
     () => {
       ;(async () => {
         try {
-          await Backend.batchSetConfig(
-            selectedAccountId(),
-            credentials
-          )
+          await Backend.batchSetConfig(selectedAccountId(), credentials)
           await Backend.configure(selectedAccountId())
 
           // on successful configure:

@@ -260,8 +260,7 @@ function AccountItem({
     () =>
       debounce((_ev: any, account_id: number) => {
         if (account_id === login.id) {
-          Backend
-            .getFreshMsgs(login.id)
+          Backend.getFreshMsgs(login.id)
             .catch(log.error)
             .then(u => setUnreadCount(u?.length || 0))
         }

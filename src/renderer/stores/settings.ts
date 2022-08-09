@@ -152,11 +152,7 @@ class SettingsStore extends Store<SettingsStoreState | null> {
         if (!this.state) {
           throw new Error('no account selected')
         }
-        await Backend.setConfig(
-          this.state.accountId,
-          key,
-          String(value)
-        )
+        await Backend.setConfig(this.state.accountId, key, String(value))
         this.reducer.setCoreSetting(key, value)
       } catch (error) {
         this.log.warn('setConfig failed:', error)

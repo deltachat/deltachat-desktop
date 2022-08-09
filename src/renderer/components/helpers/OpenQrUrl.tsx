@@ -56,10 +56,7 @@ export function ProcessQrCodeDialog({
 
 async function setConfigFromQrCatchingErrorInAlert(qrContent: string) {
   try {
-    await Backend.setConfigFromQr(
-      selectedAccountId(),
-      qrContent
-    )
+    await Backend.setConfigFromQr(selectedAccountId(), qrContent)
   } catch (error) {
     if (error instanceof Error) {
       window.__openDialog(AlertDialog, { message: error.message })

@@ -182,11 +182,7 @@ async function messagePagesFromMessageIndexes(
 }
 
 function saveLastChatId(chatId: number) {
-  Backend.setConfig(
-    selectedAccountId(),
-    'ui.lastchatid',
-    String(chatId)
-  )
+  Backend.setConfig(selectedAccountId(), 'ui.lastchatid', String(chatId))
 }
 
 interface ChatStoreLocks {

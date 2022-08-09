@@ -36,9 +36,9 @@ export default function QrCode({
   const [addr, setAddr] = useState('')
   useEffect(() => {
     if (window.__selectedAccountId) {
-      Backend
-        .getConfig(window.__selectedAccountId, 'addr')
-        .then(addr => setAddr(addr || ''))
+      Backend.getConfig(window.__selectedAccountId, 'addr').then(addr =>
+        setAddr(addr || '')
+      )
     }
   }, [])
 

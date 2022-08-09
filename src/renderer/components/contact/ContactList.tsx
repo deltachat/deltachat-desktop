@@ -127,9 +127,7 @@ export function useContactsNew(listFlags: number, initialQueryStr: string) {
           listFlags,
           queryStr
         )
-        const queryStrIsValidEmail = await Backend.checkEmailValidity(
-          queryStr
-        )
+        const queryStrIsValidEmail = await Backend.checkEmailValidity(queryStr)
         setState({ contacts, queryStrIsValidEmail })
       }, 200),
     []
