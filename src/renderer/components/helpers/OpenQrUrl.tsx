@@ -31,8 +31,7 @@ export function ProcessQrCodeDialog({
   const tx = useTranslationFunction()
 
   const onCancel = async () => {
-    window.__selectedAccountId &&
-      (await Backend.stopOngoingProcess(window.__selectedAccountId))
+    await Backend.stopOngoingProcess(selectedAccountId())
     _onCancel && _onCancel()
     onClose()
   }
@@ -57,11 +56,8 @@ export function ProcessQrCodeDialog({
 
 async function setConfigFromQrCatchingErrorInAlert(qrContent: string) {
   try {
-    if (window.__selectedAccountId === undefined) {
-      throw new Error('error: no context selected')
-    }
     await Backend.setConfigFromQr(
-      window.__selectedAccountId,
+      selectedAccountId(),
       qrContent
     )
   } catch (error) {
@@ -169,10 +165,7 @@ export default async function processOpenQrUrl(
 
   if (checkQr.type === 'account') {
     try {
-      if (window.__selectedAccountId === undefined) {
-        throw new Error('error: no context selected')
-      }
-      await Backend.setConfigFromQr(window.__selectedAccountId, url)
+      await Backend.setConfigFromQr(selectedAccountId(), url)
       closeProcessDialog()
       window.__openDialog(ConfigureProgressDialog, {
         credentials: {},

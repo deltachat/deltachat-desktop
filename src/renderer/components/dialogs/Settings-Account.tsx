@@ -15,7 +15,7 @@ import {
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { Credentials } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
-import { Backend } from '../../backend'
+import { Backend, selectedAccountId } from '../../backend'
 
 export default function SettingsAccountDialog({
   isOpen,
@@ -60,11 +60,8 @@ export function SettingsAccountInner(onClose: () => void) {
   const { openDialog } = useContext(ScreenContext)
 
   const loadSettings = async () => {
-    if (window.__selectedAccountId === undefined) {
-      throw new Error('can not load settings when no account is selected')
-    }
     const accountSettings: Credentials = ((await Backend.batchGetConfig(
-      window.__selectedAccountId,
+      selectedAccountId(),
       [
         'addr',
         'mail_pw',

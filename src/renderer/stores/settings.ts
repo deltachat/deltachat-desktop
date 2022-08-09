@@ -4,7 +4,7 @@ import {
   JsonContact,
   RC_Config,
 } from '../../shared/shared-types'
-import { Backend } from '../backend'
+import { Backend, selectedAccountId } from '../backend'
 import { DeltaBackend } from '../delta-remote'
 import { ipcBackend } from '../ipc'
 import { runtime } from '../runtime'
@@ -111,10 +111,7 @@ class SettingsStore extends Store<SettingsStoreState | null> {
   }
   effect = {
     load: async () => {
-      const accountId = window.__selectedAccountId
-      if (accountId === undefined) {
-        throw new Error('can not load settings when no account is selected')
-      }
+      const accountId = selectedAccountId()
       const settings = (await Backend.batchGetConfig(
         accountId,
         settingsKeys

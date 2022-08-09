@@ -19,7 +19,7 @@ import { useTranslationFunction, i18nContext } from '../contexts'
 import { useDebouncedCallback } from 'use-debounce/lib'
 import { getLogger } from '../../shared/logger'
 import { IpcRendererEvent } from 'electron/renderer'
-import { Backend, Type } from '../backend'
+import { Backend, selectedAccountId, Type } from '../backend'
 
 const log = getLogger('renderer/loginForm')
 
@@ -431,10 +431,7 @@ export function ConfigureProgressDialog({
 
   const onCancel = async (_event: any) => {
     try {
-      if (window.__selectedAccountId === undefined) {
-        throw new Error('no selected account')
-      }
-      await Backend.stopOngoingProcess(window.__selectedAccountId)
+      await Backend.stopOngoingProcess(selectedAccountId())
     } catch (error: any) {
       log.error('failed to stopOngoingProcess', error)
       onConfigureError(null, [
@@ -460,15 +457,11 @@ export function ConfigureProgressDialog({
     () => {
       ;(async () => {
         try {
-          if (window.__selectedAccountId === undefined) {
-            throw new Error('No account selected')
-          }
-
           await Backend.batchSetConfig(
-            window.__selectedAccountId,
+            selectedAccountId(),
             credentials
           )
-          await Backend.configure(window.__selectedAccountId)
+          await Backend.configure(selectedAccountId())
 
           // on successful configure:
           onClose()
