@@ -3,6 +3,9 @@ const { spawn, spawnSync } = require('child_process')
 const path = require('path')
 const {argv0} = require('process')
 
+const COUNT_USAGES_BEFORE = 157
+const COUNT_METHODS_BEFORE = 110
+
 async function findDeltaRemoteMethods() {
   const data = await fs.readFile('src/renderer/delta-remote.ts', 'utf8')
 
@@ -72,8 +75,17 @@ async function main() {
   }
 
   console.log('')
-  console.log(`Remaining Methods: ${result.length}`)
-  console.log(`Remaining Usages: ${count_usages}`)
+  const delta_methods = COUNT_METHODS_BEFORE - result.length
+  const percentage_methods = ((delta_methods) / COUNT_METHODS_BEFORE * 100).toFixed(2)
+  console.log(`Ported (Methods): ${delta_methods}/${COUNT_METHODS_BEFORE} (${percentage_methods}%)`) 
+  const delta_usage = COUNT_USAGES_BEFORE - count_usages
+  const percentage_usage = (delta_usage / COUNT_USAGES_BEFORE * 100).toFixed(2)
+  console.log(`Ported (Usages): ${delta_usage}/${COUNT_USAGES_BEFORE} (${percentage_usage}%)`)
+  console.log('')
+  console.log(`Remaining (Methods): ${result.length}`)
+  console.log(`Remaining (Usages): ${count_usages}`)
+
+
 }
 
 
