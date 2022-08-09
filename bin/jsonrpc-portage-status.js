@@ -77,7 +77,7 @@ async function main() {
   console.log('')
   const delta_methods = COUNT_METHODS_BEFORE - result.length
   const percentage_methods = ((delta_methods) / COUNT_METHODS_BEFORE * 100).toFixed(2)
-  console.log(`Ported (Methods): ${delta_methods_before}/${COUNT_METHODS_BEFORE} (${percentage_methods}%)`) 
+  console.log(`Ported (Methods): ${delta_methods}/${COUNT_METHODS_BEFORE} (${percentage_methods}%)`) 
   const delta_usage = COUNT_USAGES_BEFORE - count_usages
   const percentage_usage = (delta_usage / COUNT_USAGES_BEFORE * 100).toFixed(2)
   console.log(`Ported (Usages): ${delta_usage}/${COUNT_USAGES_BEFORE} (${percentage_usage}%)`)
