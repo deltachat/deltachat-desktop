@@ -2,6 +2,11 @@
 
 ## [Unreleased][unreleased]
 
+## [1.32.1] - 2022-08-18
+
+## Changed
+- updated deltachat-node to `v1.93.0` to fix flatpak and nix build issues
+
 ## Fixed
 - fix indentation in --help
 
@@ -1681,7 +1686,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.32.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.32.1...HEAD
+
+[1.32.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.32.0...v1.32.1
 
 [1.32.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.31.0...v1.32.0
 
