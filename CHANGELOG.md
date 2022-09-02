@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+## Changed
+- start using jsonrpc api
+
 ## [1.32.1] - 2022-08-18
 
 ## Changed
