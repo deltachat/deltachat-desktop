@@ -7,7 +7,8 @@ import { C } from 'deltachat-node/node/dist/constants'
 import { runtime } from '../../runtime'
 import { getLogger } from '../../../shared/logger'
 import AlertDialog from '../dialogs/AlertDialog'
-import { Type } from '../../backend-com'
+import { EffectfulBackendActions, Type } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 const log = getLogger('renderer/message')
 
@@ -71,11 +72,13 @@ export function openDeleteChatDialog(
     cb: (yes: boolean) =>
       yes &&
       chat.id &&
-      DeltaBackend.call('chat.delete', chat.id).then(() => {
-        if (selectedChatId === chat.id) {
-          unselectChat()
+      EffectfulBackendActions.deleteChat(selectedAccountId(), chat.id).then(
+        () => {
+          if (selectedChatId === chat.id) {
+            unselectChat()
+          }
         }
-      }),
+      ),
   })
 }
 

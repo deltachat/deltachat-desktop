@@ -32,5 +32,6 @@ declare global {
     __reloadDraft: (() => void) | null
     __chatlistSetSearch: ((searchTerm: string) => void) | undefined
     __chatStore: any
+    __refetchChatlist: undefined | (() => void)
   }
 }

@@ -98,11 +98,6 @@ export default class DCChatList extends SplitOut {
   getGeneralFreshMessageCounter() {
     return this.selectedAccountContext.getFreshMessages().length
   }
-
-  updateChatList() {
-    log.debug('updateChatList')
-    this.controller.sendToRenderer('DD_EVENT_CHATLIST_UPDATED')
-  }
 }
 // section: Internal functions
 function isGroupChat(chat: JsonChat) {

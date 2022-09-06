@@ -23,6 +23,8 @@ import { DeltaBackend } from '../../delta-remote'
 import { DraftAttachment } from '../attachment/messageAttachment'
 import { sendMessage, unselectChat } from '../helpers/ChatMethods'
 import { useSettingsStore } from '../../stores/settings'
+import { EffectfulBackendActions } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 const log = getLogger('renderer/composer')
 
@@ -206,7 +208,7 @@ const Composer = forwardRef<
         <div
           className='contact-request-button delete'
           onClick={() => {
-            DeltaBackend.call('chat.delete', chatId)
+            EffectfulBackendActions.deleteChat(selectedAccountId(), chatId)
             unselectChat()
           }}
         >
@@ -215,7 +217,7 @@ const Composer = forwardRef<
         <div
           className='contact-request-button accept'
           onClick={() => {
-            DeltaBackend.call('chat.accept', chatId)
+            EffectfulBackendActions.acceptChat(selectedAccountId(), chatId)
           }}
         >
           {tx('accept')}
