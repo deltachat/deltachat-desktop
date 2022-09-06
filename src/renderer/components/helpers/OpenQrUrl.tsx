@@ -20,6 +20,7 @@ import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import AlertDialog from '../dialogs/AlertDialog'
 import { selectChat } from './ChatMethods'
 import { BackendRemote } from '../../backend-com'
+import { Qr } from 'deltachat-node/deltachat-jsonrpc/typescript/generated/types'
 
 const log = getLogger('renderer/processOpenUrl')
 
@@ -151,7 +152,9 @@ export default async function processOpenQrUrl(
     return
   }
 
-  if (checkQr.type === 'account' && screen !== Screens.Main) {
+  const allowedQrCodesOnWelcomeScreen: Qr["type"][] = ["account", "text", 'url'] 
+
+  if (!allowedQrCodesOnWelcomeScreen.includes(checkQr.type) && screen !== Screens.Main) {
     closeProcessDialog()
     window.__openDialog('AlertDialog', {
       message: tx('Please login first'),
