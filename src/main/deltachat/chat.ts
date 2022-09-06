@@ -111,7 +111,6 @@ export default class DCChat extends SplitOut {
   delete(chatId: number) {
     log.debug(`action - deleting chat ${chatId}`)
     this.selectedAccountContext.deleteChat(chatId)
-    this.controller.chatList.updateChatList()
     this.controller.emit('DESKTOP_CLEAR_NOTIFICATIONS_FOR_CHAT', chatId)
   }
 
@@ -156,16 +155,6 @@ export default class DCChat extends SplitOut {
 
   async sendVideoChatInvitation(chatId: number) {
     return await this.selectedAccountContext.sendVideochatInvitation(chatId)
-  }
-
-  accept(chatId: number) {
-    this.selectedAccountContext.acceptChat(chatId)
-    this.controller.chatList.updateChatList()
-  }
-
-  block(chatId: number) {
-    this.selectedAccountContext.blockChat(chatId)
-    this.controller.chatList.updateChatList()
   }
 
   getNextMedia(messageId: number, direction: 1 | -1): number {

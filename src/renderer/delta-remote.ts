@@ -118,6 +118,7 @@ class DeltaRemote {
     verified: boolean,
     name: string
   ): Promise<number>
+  /** @deprecated please do not use direclty */
   call(fnName: 'chat.delete', chatId: number): Promise<void>
   call(
     fnName: 'chat.setVisibility',
@@ -136,8 +137,6 @@ class DeltaRemote {
     ephemeralTimer: number
   ): Promise<void>
   call(fnName: 'chat.sendVideoChatInvitation', chatId: number): Promise<number>
-  call(fnName: 'chat.accept', chatId: number): Promise<void>
-  call(fnName: 'chat.block', chatId: number): Promise<void>
   call(
     fnName: 'chat.getNextMedia',
     messageId: number,

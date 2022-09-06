@@ -93,10 +93,12 @@ export function useChatList(
       debouncedGetChatListEntries(listFlags, queryStr, queryContactId)
     }
 
+    window.__refetchChatlist = refetchChatlist
     ipcBackend.on('DD_EVENT_CHATLIST_CHANGED', refetchChatlist)
     debouncedGetChatListEntries(listFlags, queryStr, queryContactId)
     return () => {
       ipcBackend.removeListener('DD_EVENT_CHATLIST_CHANGED', refetchChatlist)
+      window.__refetchChatlist = undefined
     }
   }, [listFlags, queryStr, queryContactId, debouncedGetChatListEntries])
 

@@ -71,4 +71,21 @@ export namespace EffectfulBackendActions {
     await DeltaBackend.call('login.logout')
     ;(window.__selectedAccountId as any) = undefined
   }
+
+  // TODO make a core events for these chatlist events instead of faking them in desktop
+  export async function acceptChat(account_id: number, chatId: number) {
+    await BackendRemote.rpc.acceptChat(account_id, chatId)
+    window.__refetchChatlist && window.__refetchChatlist()
+  }
+
+  export async function blockChat(account_id: number, chatId: number) {
+    await BackendRemote.rpc.acceptChat(account_id, chatId)
+    window.__refetchChatlist && window.__refetchChatlist()
+  }
+
+  export async function deleteChat(account_id: number, chatId: number) {
+    // TODO implement in jsonrpc
+    await DeltaBackend.call('chat.delete', chatId)
+    window.__refetchChatlist && window.__refetchChatlist()
+  }
 }
