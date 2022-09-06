@@ -42,8 +42,8 @@ export function useThreeDotMenu(selectedChat: FullChat | null) {
       isSelfTalk,
       isDeviceChat,
       id: chatId,
+      canSend,
     } = selectedChat
-    const isReadOnlyChat = (isGroup && !selfInGroup) || isDeviceChat // setting this as var because we plan to have more readonly chats in the future
     const onLeaveGroup = () =>
       selectedChat && openLeaveChatDialog(screenContext, selectedChat.id)
     const onBlockContact = () =>
@@ -61,7 +61,7 @@ export function useThreeDotMenu(selectedChat: FullChat | null) {
       })
 
     menu = [
-      !isReadOnlyChat && {
+      canSend && {
         label: tx('ephemeral_messages'),
         action: onDisappearingMessages,
       },
