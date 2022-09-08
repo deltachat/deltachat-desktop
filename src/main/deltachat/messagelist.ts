@@ -282,7 +282,9 @@ export default class DCMessageList extends SplitOut {
     //this.selectedAccountContext.markSeenMessages(messageIds)
   }
 
-  getFirstUnreadMessage(chatId: number): {firstUnreadMessageId: number, countUnreadMessages: number} {
+  getFirstUnreadMessage(
+    chatId: number
+  ): { firstUnreadMessageId: number; countUnreadMessages: number } {
     const messageIds = this.selectedAccountContext.getChatMessages(chatId, 0, 0)
     let firstUnreadMessageId = -1
     let countUnreadMessages = 0
@@ -299,7 +301,7 @@ export default class DCMessageList extends SplitOut {
       firstUnreadMessageId = messageId
       countUnreadMessages++
     }
-    return {firstUnreadMessageId, countUnreadMessages}
+    return { firstUnreadMessageId, countUnreadMessages }
   }
 
   searchMessages(query: string, chatId = 0): number[] {

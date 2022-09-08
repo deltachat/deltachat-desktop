@@ -330,7 +330,7 @@ export const MessageListInner = React.memo(
     })
 
     const onePageAwayFromNewestMessage = true
-    const countUnreadMessages:number = chatStore.countUnreadMessages
+    const countUnreadMessages: number = chatStore.countUnreadMessages
 
     return (
       <div id='message-list' ref={messageListRef} onScroll={onScroll}>
@@ -346,16 +346,13 @@ export const MessageListInner = React.memo(
             )
           })}
         </ul>
-        {(onePageAwayFromNewestMessage === true ||
-          countUnreadMessages > 0) && (
+        {(onePageAwayFromNewestMessage === true || countUnreadMessages > 0) && (
           <>
             <div className='unread-message-counter'>
               <div
                 className='counter'
                 style={
-                  countUnreadMessages === 0
-                    ? { visibility: 'hidden' }
-                    : {}
+                  countUnreadMessages === 0 ? { visibility: 'hidden' } : {}
                 }
               >
                 {countUnreadMessages}
@@ -363,20 +360,13 @@ export const MessageListInner = React.memo(
               <div
                 className='jump-to-bottom-button'
                 onClick={() => {
-                  //ChatStore.effect.markAllMessagesSeen()
-                  ChatStore.effect.jumpToMessage(
-                    ChatStore.state.messageIds[
-                      ChatStore.state.messageIds.length - 1
-                    ],
-                    false,
-                    true
-                  )
+                  ChatStore.effect.jumpToMessage(undefined, true)
                 }}
               >
                 <div className='jump-to-bottom-icon' />
               </div>
             </div>
-           </>
+          </>
         )}
       </div>
     )

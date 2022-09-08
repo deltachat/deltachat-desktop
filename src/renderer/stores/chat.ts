@@ -57,7 +57,7 @@ export interface ChatStoreState {
   scrollToBottomIfClose: boolean
   lastKnownScrollHeight: number
   countFetchedMessages: number
-  firstUnreadMessageId: number,
+  firstUnreadMessageId: number
   countUnreadMessages: number
   jumpToMessageStack: number[]
 }
@@ -76,7 +76,7 @@ const defaultState: ChatStoreState = {
   countFetchedMessages: 0,
   firstUnreadMessageId: -1,
   countUnreadMessages: 0,
-  jumpToMessageStack: []
+  jumpToMessageStack: [],
 }
 
 function getLastKnownScrollPosition(): {
@@ -597,7 +597,11 @@ class ChatStore extends Store<ChatStoreState> {
       try {
         returnValue = await effect(...args)
       } catch (err) {
-        log.error(`lockedEffect: ${effectName}: error in called effect: ${err}`)
+        log.error(
+          `lockedEffect: ${effectName}: error in called effect: ${
+            (err as Error).stack || err
+          }`
+        )
         this.lockUnlock(lockName)
         return
       }
@@ -703,7 +707,10 @@ class ChatStore extends Store<ChatStoreState> {
             await DeltaBackend.call('messageList.getMessageIds', chatId)
           )
 
-          const {firstUnreadMessageId, countUnreadMessages} = await DeltaBackend.call(
+          const {
+            firstUnreadMessageId,
+            countUnreadMessages,
+          } = await DeltaBackend.call(
             'messageList.getFirstUnreadMessage',
             chatId
           )
@@ -753,7 +760,7 @@ class ChatStore extends Store<ChatStoreState> {
             scrollToBottom: true,
             countUnreadMessages,
             firstUnreadMessageId: firstUnreadMessageId,
-            jumpToMessageStack: []
+            jumpToMessageStack: [],
           })
           ActionEmitter.emitAction(
             chat.archived
@@ -773,49 +780,82 @@ class ChatStore extends Store<ChatStoreState> {
     jumpToMessage: this.queuedEffect(
       this.lockedEffect(
         'scroll',
-        async (msgId: number | undefined, highlight?: boolean, popJumpToMessageStack?: boolean) => {
+        async (
+          msgId: number | undefined,
+          highlight?: boolean,
+          addMessageIdToStack?: undefined | number
+        ) => {
           log.debug('jumpToMessage with messageId: ', msgId)
           highlight = highlight === false ? false : true
+
           // these methods were called in backend before
           // might be an issue if DeltaBackend.call has a significant delay
           let _message: [number, MessageType | null][] = []
-          let jumpToMessageStack: number[] = []
+
+          let chatId = -1
           let jumpToMessageId = -1
-          if (popJumpToMessageStack === true) {
-            let [_jumpToMessageStack, _jumpToMessageId]: [number[], number] = chatStore.state.jumpToMessageStack.length === 0 ?
-              [[], chatStore.state.messageIds[chatStore.state.messageIds.length - 1]] :
-              [
-                chatStore.state.jumpToMessageStack.slice(0, chatStore.state.jumpToMessageStack.length - 2),
-                chatStore.state.jumpToMessageStack[chatStore.state.jumpToMessageStack.length - 1]
+          let jumpToMessageStack: number[] = []
+          let message = undefined
+          if (msgId === undefined) {
+            const jumpToMessageStackLength = this.state.jumpToMessageStack
+              .length
+            if (jumpToMessageStackLength !== 0) {
+              jumpToMessageStack = this.state.jumpToMessageStack.slice(
+                0,
+                jumpToMessageStackLength - 1
+              )
+              jumpToMessageId = this.state.jumpToMessageStack[
+                jumpToMessageStackLength - 1
               ]
-            _message = await DeltaBackend.call('messageList.getMessages', [jumpToMessageId])
-            jumpToMessageStack = _jumpToMessageStack
-            jumpToMessageId = _jumpToMessageId
-          } else {
-            msgId = msgId as number
-
+              _message = await DeltaBackend.call('messageList.getMessages', [
+                jumpToMessageId as number,
+              ])
+              message = _message[0][1] as MessageType
+              chatId = message.chatId
+            } else {
+              jumpToMessageStack = []
+              jumpToMessageId = this.state.messageIds[
+                this.state.messageIds.length - 1
+              ]
+              _message = await DeltaBackend.call('messageList.getMessages', [
+                jumpToMessageId as number,
+              ])
+              message = _message[0][1] as MessageType
+              chatId = message.chatId
+            }
+          } else if (addMessageIdToStack === undefined) {
+            // reset jumpToMessageStack
             _message = await DeltaBackend.call('messageList.getMessages', [
-              msgId,
+              msgId as number,
             ])
-            const chatId = (_message[0][1] as MessageType)?.chatId
+            message = _message[0][1] as MessageType
+            chatId = message.chatId
 
-            jumpToMessageStack = chatId === chatStore.state.chat?.id ?
-              [...chatStore.state.jumpToMessageStack, jumpToMessageId] :
-              []
+            jumpToMessageId = msgId as number
+            jumpToMessageStack = []
+          } else {
+            _message = await DeltaBackend.call('messageList.getMessages', [
+              msgId as number,
+            ])
+            message = _message[0][1] as MessageType
+            chatId = message.chatId
 
-            jumpToMessageId = msgId
+            jumpToMessageId = msgId as number
+            // If we are not switching chats, add current jumpToMessageId to the stack
+            const currentChatId = chatStore.state.chat?.id || -1
+            jumpToMessageStack =
+              chatId === currentChatId
+                ? [...chatStore.state.jumpToMessageStack, addMessageIdToStack]
+                : []
           }
 
           //@ts-ignore
-          if (_message.length === 0) {
+          if (message === undefined) {
             throw new Error(
               'jumpToMessage: Tried to jump to non existing message with id: ' +
                 msgId
             )
           }
-          const message = _message[0][1] as MessageType
-
-          const chatId = (message as MessageType).chatId
 
           const chat = <FullChat>(
             await DeltaBackend.call('chatList.selectChat', chatId)
@@ -878,7 +918,13 @@ class ChatStore extends Store<ChatStoreState> {
             )
           }
 
-          const { firstUnreadMessageId, countUnreadMessages } = await DeltaBackend.call('messageList.getFirstUnreadMessage', chatId)
+          const {
+            firstUnreadMessageId,
+            countUnreadMessages,
+          } = await DeltaBackend.call(
+            'messageList.getFirstUnreadMessage',
+            chatId
+          )
 
           this.reducer.selectedChat({
             chat,
@@ -893,7 +939,7 @@ class ChatStore extends Store<ChatStoreState> {
             },
             countUnreadMessages,
             firstUnreadMessageId,
-            jumpToMessageStack
+            jumpToMessageStack,
           })
           ActionEmitter.emitAction(
             chat.archived

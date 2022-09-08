@@ -10,7 +10,7 @@
   background-color: var(--chatViewBg);
   overflow: hidden;
 
-   .unread-message-counter {
+  .unread-message-counter {
     $heightUnreadCounter: 20px;
     $heightJumpToBottomButton: 40px;
     $width: 40px;
@@ -23,7 +23,6 @@
     height: $heightUnreadCounter + $heightJumpToBottomButton;
     width: $width;
     z-index: 100;
-
 
     .counter {
       position: relative;
