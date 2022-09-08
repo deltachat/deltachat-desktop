@@ -221,7 +221,7 @@ export default class DCMessageList extends SplitOut {
       )
       // TODO: move mark seen logic to frontend
       setTimeout(() => {
-        //this.selectedAccountContext.markSeenMessages(markMessagesSeen)
+        this.selectedAccountContext.markSeenMessages(markMessagesSeen)
       })
     }
     return messages
@@ -272,14 +272,14 @@ export default class DCMessageList extends SplitOut {
       )
       // TODO: move mark seen logic to frontend
       setTimeout(() => {
-        //this.selectedAccountContext.markSeenMessages(markMessagesSeen)
+        this.selectedAccountContext.markSeenMessages(markMessagesSeen)
       })
     }
     return messages
   }
 
   markSeenMessages(messageIds: number[]) {
-    //this.selectedAccountContext.markSeenMessages(messageIds)
+    this.selectedAccountContext.markSeenMessages(messageIds)
   }
 
   getFirstUnreadMessage(

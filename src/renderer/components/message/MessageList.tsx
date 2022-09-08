@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useLayoutEffect } from 'react'
+import React, { useRef, useState, useCallback, useLayoutEffect } from 'react'
 import { MessageWrapper } from './MessageWrapper'
 import ChatStore, {
   useChatStore,
@@ -34,6 +34,7 @@ export default function MessageList({
     lastKnownScrollHeight,
   } = useChatStore()
   const messageListRef = useRef<HTMLDivElement | null>(null)
+  const [onePageAwayFromNewestMessage, setOnePageAwayFromNewestMessage] = useState(false)
 
   const [fetchMoreTop] = useDebouncedCallback(
     async () => {
@@ -66,6 +67,10 @@ export default function MessageList({
         messageListRef.current.scrollTop -
         messageListRef.current.clientHeight
       //console.log('onScroll', distanceToTop, distanceToBottom)
+
+      const onePageAwayFromNewestMessageTreshold = (messageListRef.current.clientHeight / 3)
+      const onePageAwayFromNewestMessage = distanceToBottom >= onePageAwayFromNewestMessageTreshold 
+      setOnePageAwayFromNewestMessage(onePageAwayFromNewestMessage)
       if (distanceToTop < 200 && distanceToBottom < 200) {
         log.debug('onScroll: Lets try loading messages from both ends')
         setTimeout(() => fetchMoreTop(), 0)
@@ -87,7 +92,7 @@ export default function MessageList({
         return false
       }
     },
-    [fetchMoreTop, fetchMoreBottom]
+    [fetchMoreTop, fetchMoreBottom, setOnePageAwayFromNewestMessage]
   )
 
   useLayoutEffect(() => {
@@ -268,6 +273,7 @@ export default function MessageList({
         messagePages={messagePages}
         messageListRef={messageListRef}
         chatStore={chatStore}
+        onePageAwayFromNewestMessage={onePageAwayFromNewestMessage}
       />
     </MessagesDisplayContext.Provider>
   )
@@ -289,14 +295,15 @@ export const MessageListInner = React.memo(
     messagePages: ChatStoreState['messagePages']
     messageListRef: React.MutableRefObject<HTMLDivElement | null>
     chatStore: ChatStoreStateWithChatSet
+    onePageAwayFromNewestMessage: boolean
   }) => {
     const {
       onScroll,
       messageIds,
       messagePages,
       messageListRef,
-
       chatStore,
+      onePageAwayFromNewestMessage
     } = props
 
     if (!chatStore.chat.id) {
@@ -329,7 +336,6 @@ export const MessageListInner = React.memo(
       }
     })
 
-    const onePageAwayFromNewestMessage = true
     const countUnreadMessages: number = chatStore.countUnreadMessages
 
     return (
@@ -376,7 +382,8 @@ export const MessageListInner = React.memo(
       prevProps.messageIds === nextProps.messageIds &&
       prevProps.messagePages === nextProps.messagePages &&
       prevProps.oldestFetchedMessageIndex ===
-        nextProps.oldestFetchedMessageIndex
+        nextProps.oldestFetchedMessageIndex &&
+      prevProps.onePageAwayFromNewestMessage === nextProps.onePageAwayFromNewestMessage
 
     return areEqual
   }

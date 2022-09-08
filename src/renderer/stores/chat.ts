@@ -843,10 +843,13 @@ class ChatStore extends Store<ChatStoreState> {
             jumpToMessageId = msgId as number
             // If we are not switching chats, add current jumpToMessageId to the stack
             const currentChatId = chatStore.state.chat?.id || -1
-            jumpToMessageStack =
-              chatId === currentChatId
-                ? [...chatStore.state.jumpToMessageStack, addMessageIdToStack]
-                : []
+            if (chatId !== currentChatId) {
+              jumpToMessageStack = []
+            } else if (chatStore.state.jumpToMessageStack.indexOf(addMessageIdToStack) !== -1) {
+              jumpToMessageStack = chatStore.state.jumpToMessageStack
+            } else {
+              jumpToMessageStack = [...chatStore.state.jumpToMessageStack, addMessageIdToStack]
+            }
           }
 
           //@ts-ignore
