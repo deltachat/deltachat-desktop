@@ -34,7 +34,6 @@ import { ConversationType } from './MessageList'
 import { getDirection, truncateText } from '../../../shared/util'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { ContextMenuItem } from '../ContextMenu'
-import { MessageDownloadState } from '../../../shared/constants'
 import { Type } from '../../backend-com'
 
 const Avatar = (

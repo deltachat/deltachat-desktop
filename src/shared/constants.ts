@@ -35,16 +35,6 @@ export const enum AutodeleteDuration {
 
 export const DAYS_UNTIL_UPDATE_SUGGESTION = 120
 
-// cloned, because we cannpt import it from dc node in the frontend directly,
-// without esbuild trying to include dc-node in the build and failing
-// because it can not bundle the nodejs-only dependencies of deltachat node.
-export enum MessageDownloadState {
-  Available = C.DC_DOWNLOAD_AVAILABLE,
-  Done = C.DC_DOWNLOAD_DONE,
-  Failure = C.DC_DOWNLOAD_FAILURE,
-  InProgress = C.DC_DOWNLOAD_IN_PROGRESS,
-}
-
 export const MEDIA_EXTENSIONS = [
   'jpg',
   'jpeg',
