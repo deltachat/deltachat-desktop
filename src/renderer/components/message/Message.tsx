@@ -462,7 +462,7 @@ const Message = (props: {
             </div>
           )}
           <MessageMetaData
-            file_mime={(!isSetupmessage && message.fileMime) || null}
+            fileMime={(!isSetupmessage && message.fileMime) || null}
             direction={direction}
             status={status}
             hasText={text !== null}

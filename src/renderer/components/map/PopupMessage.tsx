@@ -23,6 +23,7 @@ export default class PopupMessage extends React.Component<{
             hasText={false}
             padlock={message.showPadlock}
             username={username}
+            fileMime={null}
           />
         </div>
       )

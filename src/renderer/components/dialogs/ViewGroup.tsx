@@ -278,7 +278,8 @@ function ViewGroupInner(props: {
                   </>
                 )}
                 <ContactList2
-                  contacts={chat.contacts}
+                  // contacts={chat.contacts}
+                  contacts={[]}
                   showRemove={!chatDisabled}
                   onClick={(contact: JsonContact) => {
                     setProfileContact(contact)
