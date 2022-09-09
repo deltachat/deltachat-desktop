@@ -12,12 +12,12 @@ import {
 } from './CreateChat'
 
 import { DialogProps } from './DialogController'
-import { FullChat } from '../../../shared/shared-types'
+import { Type } from '../../backend-com'
 
 export default function MailingListProfile(props: {
   isOpen: DialogProps['isOpen']
   onClose: DialogProps['onClose']
-  chat: FullChat
+  chat: Type.FullChat
 }) {
   const { isOpen, onClose, chat } = props
 
@@ -58,7 +58,7 @@ export default function MailingListProfile(props: {
 
 const useEdit = (
   groupName: string,
-  groupImage: string | undefined,
+  groupImage: string | null | undefined,
   groupId: number,
   onClose: DialogProps['onClose']
 ) => {
@@ -67,7 +67,7 @@ const useEdit = (
       'chat.modifyGroup',
       groupId,
       groupName,
-      groupImage,
+      groupImage || undefined,
       null
     )
   }

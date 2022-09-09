@@ -17,11 +17,6 @@ import MessageBody from './MessageBody'
 import MessageMetaData from './MessageMetaData'
 
 import Attachment from '../attachment/messageAttachment'
-import {
-  MessageType,
-  JsonContact,
-  MessageQuote,
-} from '../../../shared/shared-types'
 import { isGenericAttachment } from '../attachment/Attachment'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
 import {
@@ -40,10 +35,11 @@ import { getDirection, truncateText } from '../../../shared/util'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { ContextMenuItem } from '../ContextMenu'
 import { MessageDownloadState } from '../../../shared/constants'
+import { Type } from '../../backend-com'
 
 const Avatar = (
-  contact: JsonContact,
-  onContactClick: (contact: JsonContact) => void
+  contact: Type.Contact,
+  onContactClick: (contact: Type.Contact) => void
 ) => {
   const { profileImage, color, displayName } = contact
 
@@ -75,8 +71,8 @@ const Avatar = (
 }
 
 const AuthorName = (
-  contact: JsonContact,
-  onContactClick: (contact: JsonContact) => void,
+  contact: Type.Contact,
+  onContactClick: (contact: Type.Contact) => void,
   overrideSenderName?: string
 ) => {
   const { color, displayName } = contact
@@ -94,8 +90,8 @@ const AuthorName = (
 }
 
 const ForwardedTitle = (
-  contact: JsonContact,
-  onContactClick: (contact: JsonContact) => void,
+  contact: Type.Contact,
+  onContactClick: (contact: Type.Contact) => void,
   direction: 'incoming' | 'outgoing',
   conversationType: ConversationType,
   overrideSenderName?: string
@@ -136,7 +132,7 @@ function buildContextMenu(
     conversationType,
   }: // onRetrySend,
   {
-    message: MessageType | null
+    message: Type.Message | null
     text?: string
     conversationType: ConversationType
     // onRetrySend: Function
@@ -145,7 +141,7 @@ function buildContextMenu(
 ): (false | ContextMenuItem)[] {
   const tx = window.static_translate // don't use the i18n context here for now as this component is inefficient (rendered one menu for every message)
   if (!message) {
-    throw new Error('connot show context menu for undefined message')
+    throw new Error('cannot show context menu for undefined message')
   }
 
   const isLink = clickTarget && !clickTarget.getAttribute('x-not-a-link')
@@ -190,7 +186,7 @@ function buildContextMenu(
   }
 
   const showAttachmentOptions = !!message.file && !message.isSetupmessage
-  const showCopyImage = message.viewType === C.DC_MSG_IMAGE
+  const showCopyImage = !!message.file && message.viewType === 'Image'
 
   return [
     // Reply
@@ -209,18 +205,20 @@ function buildContextMenu(
     showCopyImage && {
       label: tx('menu_copy_image_to_clipboard'),
       action: () => {
-        runtime.writeClipboardImage(message.file)
+        runtime.writeClipboardImage(message.file as string)
       },
     },
     // Copy videocall link to clipboard
-    message.videochatUrl !== '' && {
-      label: tx('menu_copy_link_to_clipboard'),
-      action: () => runtime.writeClipboardText(message.videochatUrl),
-    },
+    message.videochatUrl !== null &&
+      message.videochatUrl !== '' && {
+        label: tx('menu_copy_link_to_clipboard'),
+        action: () =>
+          runtime.writeClipboardText(message.videochatUrl as string),
+      },
     // Open Attachment
     showAttachmentOptions &&
-      message.viewType !== C.DC_MSG_WEBXDC &&
-      isGenericAttachment(message.file_mime) && {
+      message.viewType !== 'Webxdc' &&
+      isGenericAttachment(message.fileMime) && {
         label: tx('open_attachment'),
         action: openAttachmentInShell.bind(null, message),
       },
@@ -252,12 +250,12 @@ function buildContextMenu(
 }
 
 const Message = (props: {
-  message: MessageType
+  message: Type.Message
   conversationType: ConversationType
   /* onRetrySend */
 }) => {
   const { message, conversationType } = props
-  const { id, viewType, text, hasLocation, isSetupmessage, hasHTML } = message
+  const { id, viewType, text, hasLocation, isSetupmessage, hasHtml } = message
   const direction = getDirection(message)
   const status = mapCoreMsgStatus2String(message.state)
   const tx = useTranslationFunction()
@@ -273,7 +271,7 @@ const Message = (props: {
     const items = buildContextMenu(
       {
         message,
-        text,
+        text: text || undefined,
         conversationType,
       },
       target
@@ -312,7 +310,7 @@ const Message = (props: {
     )
   }
   // Normal Message
-  const onContactClick = async (contact: JsonContact) => {
+  const onContactClick = async (contact: Type.Contact) => {
     openViewProfileDialog(screenContext, contact.id)
   }
 
@@ -323,7 +321,7 @@ const Message = (props: {
   }
 
   let content
-  if (message.viewType === C.DC_MSG_VIDEOCHAT_INVITATION) {
+  if (message.viewType === 'VideochatInvitation') {
     return (
       <div className='videochat-invitation'>
         <div className='videochat-icon'>
@@ -352,7 +350,7 @@ const Message = (props: {
       <div dir='auto' className='text'>
         {message.isSetupmessage ? (
           tx('autocrypt_asm_click_body')
-        ) : text ? (
+        ) : text !== null ? (
           <MessageBody text={text} />
         ) : null}
       </div>
@@ -395,10 +393,10 @@ const Message = (props: {
       className={classNames(
         'message',
         direction,
-        { 'type-sticker': viewType === C.DC_MSG_STICKER },
+        { 'type-sticker': viewType === 'Sticker' },
         { error: status === 'error' },
         { forwarded: message.isForwarded },
-        { 'has-html': hasHTML }
+        { 'has-html': hasHtml }
       )}
       id={message.id.toString()}
     >
@@ -416,7 +414,7 @@ const Message = (props: {
             onContactClick,
             direction,
             conversationType,
-            message?.overrideSenderName
+            message?.overrideSenderName || undefined
           )}
         {!message.isForwarded && (
           <div
@@ -427,7 +425,7 @@ const Message = (props: {
             {AuthorName(
               message.sender,
               onContactClick,
-              message?.overrideSenderName
+              message?.overrideSenderName || undefined
             )}
           </div>
         )}
@@ -440,27 +438,22 @@ const Message = (props: {
           {message.quote !== null && (
             <Quote
               quote={message.quote}
-              isSticker={message.viewType === C.DC_MSG_STICKER}
+              isSticker={message.viewType === 'Sticker'}
             />
           )}
-          {message.file &&
-            !isSetupmessage &&
-            message.viewType !== C.DC_MSG_WEBXDC && (
-              <Attachment
-                {...{
-                  text,
-                  conversationType,
-                  direction,
-                  message,
-                  hasQuote: message.quote !== null,
-                }}
-              />
-            )}
-          {message.viewType === C.DC_MSG_WEBXDC && (
+          {message.file && !isSetupmessage && message.viewType !== 'Webxdc' && (
+            <Attachment
+              text={text || undefined}
+              conversationType={conversationType}
+              message={message}
+              hasQuote={message.quote !== null}
+            />
+          )}
+          {message.viewType === 'Webxdc' && (
             <WebxdcMessageContent message={message}></WebxdcMessageContent>
           )}
           {content}
-          {hasHTML && (
+          {hasHtml && (
             <div
               onClick={openMessageHTML.bind(null, message.id)}
               className='show-html'
@@ -469,10 +462,10 @@ const Message = (props: {
             </div>
           )}
           <MessageMetaData
-            file_mime={(!isSetupmessage && message.file_mime) || null}
+            file_mime={(!isSetupmessage && message.fileMime) || null}
             direction={direction}
             status={status}
-            text={text}
+            hasText={text !== null}
             hasLocation={hasLocation}
             timestamp={message.timestamp * 1000}
             padlock={message.showPadlock}
@@ -490,32 +483,35 @@ export const Quote = ({
   quote,
   isSticker,
 }: {
-  quote: MessageQuote
+  quote: Type.MessageQuote
   isSticker?: Boolean
 }) => {
   const tx = window.static_translate
 
-  const authorStyle = isSticker ? {} : { color: quote.message?.displayColor }
+  const hasMessage = quote.kind === 'WithMessage'
+
+  const authorStyle =
+    !hasMessage || isSticker ? {} : { color: quote.authorDisplayColor }
   const borderStyle =
-    isSticker || quote.message?.isForwarded
+    !hasMessage || isSticker || quote.isForwarded
       ? {}
-      : { borderLeftColor: quote.message?.displayColor }
+      : { borderLeftColor: quote.authorDisplayColor }
 
   return (
     <div
       className='quote-background'
       onClick={() => {
-        quote.message && jumpToMessage(quote.message.messageId)
+        hasMessage && jumpToMessage(quote.messageId)
       }}
     >
       <div
-        className={`quote ${quote.message && 'has-message'}`}
+        className={`quote ${hasMessage && 'has-message'}`}
         style={borderStyle}
       >
         <div className='quote-text'>
-          {quote.message && (
+          {hasMessage && (
             <>
-              {quote.message.isForwarded ? (
+              {quote.isForwarded ? (
                 <div className='quote-author'>
                   {reactStringReplace(
                     tx('forwarded_by', '$$forwarder$$'),
@@ -523,8 +519,8 @@ export const Quote = ({
                     () => (
                       <span key='displayname'>
                         {getAuthorName(
-                          quote.message?.displayName as string,
-                          quote.message?.overrideSenderName
+                          quote.authorDisplayName as string,
+                          quote.overrideSenderName || undefined
                         )}
                       </span>
                     )
@@ -533,19 +529,19 @@ export const Quote = ({
               ) : (
                 <div className='quote-author' style={authorStyle}>
                   {getAuthorName(
-                    quote.message.displayName,
-                    quote.message.overrideSenderName
+                    quote.authorDisplayName,
+                    quote.overrideSenderName || undefined
                   )}
                 </div>
               )}
             </>
           )}
           <div className='quoted-text'>
-            <MessageBody text={quote.text} />
+            <MessageBody text={quote.text || ""} />
           </div>
         </div>
-        {quote.message?.image && (
-          <img className='quoted-image' src={quote.message?.image} />
+        {hasMessage && quote.image && (
+          <img className='quoted-image' src={quote.image} />
         )}
       </div>
     </div>
@@ -559,9 +555,9 @@ export function getAuthorName(
   return overrideSenderName ? `~${overrideSenderName}` : displayName
 }
 
-function WebxdcMessageContent({ message }: { message: MessageType }) {
+function WebxdcMessageContent({ message }: { message: Type.Message }) {
   const tx = useTranslationFunction()
-  if (message.viewType !== C.DC_MSG_WEBXDC) {
+  if (message.viewType !== 'Webxdc') {
     return null
   }
   const info = message.webxdcInfo || {

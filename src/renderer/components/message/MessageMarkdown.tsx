@@ -10,6 +10,8 @@ import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { MessagesDisplayContext } from '../../contexts'
 import { selectChat, setChatView } from '../helpers/ChatMethods'
 import { ChatView } from '../../stores/chat'
+import { BackendRemote } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 const log = getLogger('renderer/message-markdown')
 
@@ -176,11 +178,11 @@ function BotCommandSuggestion({ suggestion }: { suggestion: string }) {
       )
       return
     }
-
+    const accountId = selectedAccountId()
     // IDEA: Optimisation - unify these two calls in a new backend call that only returns the info we need
     const [chat, draft] = await Promise.all([
-      DeltaBackend.call('chatList.getFullChatById', chatID),
-      DeltaBackend.call('messageList.getDraft', chatID),
+      BackendRemote.rpc.getBasicChatInfo(accountId, chatID),
+      BackendRemote.rpc.getDraft(accountId, chatID),
     ])
     if (!chat) {
       log.error('chat not defined')
@@ -202,9 +204,13 @@ function BotCommandSuggestion({ suggestion }: { suggestion: string }) {
       }
     }
 
-    await DeltaBackend.call('messageList.setDraft', chatID, {
-      text: suggestion,
-    })
+    await BackendRemote.rpc.miscSetDraft(
+      accountId,
+      chatID,
+      suggestion,
+      null,
+      null
+    )
 
     window.__reloadDraft && window.__reloadDraft()
   }

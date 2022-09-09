@@ -2,7 +2,6 @@ import { onDownload } from '../message/messageFunctions'
 import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import { Icon, Overlay } from '@blueprintjs/core'
 import { DialogProps } from './DialogController'
-import { MessageType } from '../../../shared/shared-types'
 import { runtime } from '../../runtime'
 import { isImage, isVideo, isAudio } from '../attachment/Attachment'
 import { getLogger } from '../../../shared/logger'
@@ -13,11 +12,13 @@ import { preventDefault } from '../../../shared/util'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 import { useContextMenu } from '../ContextMenu'
 import { jumpToMessage } from '../helpers/ChatMethods'
+import { BackendRemote, Type } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 const log = getLogger('renderer/fullscreen_media')
 
 export default function FullscreenMedia(props: {
-  msg: MessageType
+  msg: Type.Message
   onClose: DialogProps['onClose']
 }) {
   const tx = window.static_translate
@@ -32,7 +33,12 @@ export default function FullscreenMedia(props: {
     previous: false,
     next: false,
   })
-  const { file, file_mime } = msg
+  const { file, fileMime } = msg
+
+  if (!file) {
+    log.error('file attribute not set in message', msg)
+    throw new Error('file attribute not set')
+  }
 
   const openMenu = useContextMenu([
     {
@@ -56,7 +62,7 @@ export default function FullscreenMedia(props: {
 
   let elm = null
 
-  if (isImage(file_mime)) {
+  if (isImage(fileMime)) {
     elm = (
       <div className='image-container'>
         <TransformWrapper initialScale={1}>
@@ -78,11 +84,11 @@ export default function FullscreenMedia(props: {
         </TransformWrapper>
       </div>
     )
-  } else if (isAudio(file_mime)) {
+  } else if (isAudio(fileMime)) {
     elm = <audio src={runtime.transformBlobURL(file)} controls />
-  } else if (isVideo(file_mime)) {
+  } else if (isVideo(fileMime)) {
     elm = <video src={runtime.transformBlobURL(file)} controls autoPlay />
-  } else if (!file_mime) {
+  } else if (!fileMime) {
     // no file mime
     elm = (
       <div>
@@ -95,14 +101,14 @@ export default function FullscreenMedia(props: {
         </p>
       </div>
     )
-    log.warn('Unknown mime type', { file, file_mime })
+    log.warn('Unknown mime type', { file, file_mime: fileMime })
   } else {
     // can not be displayed by fullscreen media
     elm = (
       <div>
         <p>
           Error: Desktop issue: Unknown media type for{' '}
-          {runtime.transformBlobURL(file)} (mime_type: {file_mime})
+          {runtime.transformBlobURL(file)} (mime_type: {fileMime})
         </p>
         <p>
           Please report this bug on{' '}
@@ -112,7 +118,10 @@ export default function FullscreenMedia(props: {
         </p>
       </div>
     )
-    log.warn('Unknown media type for fullscreen media', { file, file_mime })
+    log.warn('Unknown media type for fullscreen media', {
+      file,
+      file_mime: fileMime,
+    })
   }
 
   const updatePreviousNextMessageId = useCallback(async () => {
@@ -138,7 +147,10 @@ export default function FullscreenMedia(props: {
   const { previousImage, nextImage } = useMemo(() => {
     const loadMessage = async (msgID: number) => {
       if (msgID === 0) return
-      const message = await DeltaBackend.call('messageList.getMessage', msgID)
+      const message = await BackendRemote.rpc.messageGetMessage(
+        selectedAccountId(),
+        msgID
+      )
       if (message === null) return
       setMsg(message)
       if (resetImageZoom.current !== null) {

@@ -4,7 +4,6 @@ import { DeltaDialogBase, DeltaDialogHeader } from './DeltaDialog'
 import ChatListItem from '../chat/ChatListItem'
 import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
 import classNames from 'classnames'
-import { DeltaBackend } from '../../delta-remote'
 import { DialogProps } from './DialogController'
 
 import { C } from 'deltachat-node/node/dist/constants'
@@ -13,6 +12,8 @@ import AutoSizer from 'react-virtualized-auto-sizer'
 import { useChatList } from '../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../ThemeManager'
 import { selectChat } from '../helpers/ChatMethods'
+import { BackendRemote } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 export default function MailtoDialog(props: {
   messageText: string
@@ -100,11 +101,10 @@ export default function MailtoDialog(props: {
 }
 
 export async function doMailtoAction(chatId: number, messageText: string) {
-  const chat = await DeltaBackend.call('chatList.getFullChatById', chatId)
-  if (!chat) {
-    throw new Error('chat not found')
-  }
-  const draft = await DeltaBackend.call('messageList.getDraft', chatId)
+  const accountId = selectedAccountId()
+
+  const chat = await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
+  const draft = await BackendRemote.rpc.getDraft(accountId, chatId)
 
   selectChat(chatId)
 
@@ -122,7 +122,13 @@ export async function doMailtoAction(chatId: number, messageText: string) {
     }
   }
 
-  await DeltaBackend.call('messageList.setDraft', chatId, { text: messageText })
+  await BackendRemote.rpc.miscSetDraft(
+    accountId,
+    chatId,
+    messageText,
+    null,
+    null
+  )
 
   window.__reloadDraft && window.__reloadDraft()
 }

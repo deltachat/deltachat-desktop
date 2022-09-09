@@ -16,7 +16,7 @@ import {
   PseudoListItemAddMember,
 } from '../helpers/PseudoListItem'
 import { DialogProps } from './DialogController'
-import { FullChat, JsonContact } from '../../../shared/shared-types'
+import { JsonContact } from '../../../shared/shared-types'
 import { ViewProfileInner } from './ViewProfile'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { useState, useContext, useEffect, useCallback, useMemo } from 'react'
@@ -30,23 +30,27 @@ import { runtime } from '../../runtime'
 import { DeltaInput } from '../Login-Styles'
 import { ipcBackend } from '../../ipc'
 import { getLogger } from '../../../shared/logger'
+import { BackendRemote, Type } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 const log = getLogger('renderer/ViewGroup')
 
-export function useChat(initialChat: FullChat): FullChat {
+export function useChat(initialChat: Type.FullChat): Type.FullChat {
   const [chat, setChat] = useState(initialChat)
 
+  const accountId = selectedAccountId()
   const updateChat = useCallback(async () => {
-    const chat = await DeltaBackend.call(
-      'chatList.getFullChatById',
+    const chat = await BackendRemote.rpc.chatlistGetFullChatById(
+      accountId,
       initialChat.id
     )
+
     if (!chat) {
       log.error('chat not defined')
       return
     }
     setChat(chat)
-  }, [initialChat.id])
+  }, [initialChat.id, accountId])
 
   const onChatModified = useMemo(
     () => async (_: any, [chatId, _2]: [number, number]) => {
@@ -71,7 +75,7 @@ export function useChat(initialChat: FullChat): FullChat {
 export default function ViewGroup(props: {
   isOpen: DialogProps['isOpen']
   onClose: DialogProps['onClose']
-  chat: FullChat
+  chat: Type.FullChat
   isBroadcast: boolean
 }) {
   const { isOpen, onClose, isBroadcast } = props
@@ -90,13 +94,17 @@ export default function ViewGroup(props: {
       }}
     >
       <ViewGroupInner
-        {...{ viewMode, setViewMode, onClose, chat, isBroadcast }}
+        viewMode={viewMode}
+        setViewMode={setViewMode}
+        onClose={onClose}
+        chat={chat}
+        isBroadcast={isBroadcast}
       />
     </DeltaDialogBase>
   )
 }
 
-export const useGroup = (chat: FullChat) => {
+export const useGroup = (chat: Type.FullChat) => {
   const [groupName, setGroupName] = useState(chat.name)
   const [groupMembers, setGroupMembers] = useState(
     chat.contacts?.map(({ id }) => id)
@@ -109,7 +117,7 @@ export const useGroup = (chat: FullChat) => {
         'chat.modifyGroup',
         chat.id,
         groupName,
-        groupImage,
+        groupImage || undefined,
         groupMembers
       )
     })()
@@ -136,7 +144,7 @@ function ViewGroupInner(props: {
   viewMode: string
   setViewMode: (newViewMode: string) => void
   onClose: DialogProps['onClose']
-  chat: FullChat
+  chat: Type.FullChat
   isBroadcast: boolean
 }) {
   const { openDialog } = useContext(ScreenContext)

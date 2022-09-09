@@ -21,15 +21,6 @@ export const enum Timespans {
   ONE_YEAR_IN_SECONDS = 60 * 60 * 24 * 365,
 }
 
-export const enum MuteDuration {
-  OFF = Timespans.ZERO_SECONDS,
-  ONE_HOUR = Timespans.ONE_HOUR_IN_SECONDS,
-  TWO_HOURS = Timespans.TWO_HOURS_IN_SECONDS,
-  ONE_DAY = Timespans.ONE_DAY_IN_SECONDS,
-  SEVEN_DAYS = Timespans.ONE_WEEK_IN_SECONDS,
-  FOREVER = -1,
-}
-
 export const enum AutodeleteDuration {
   NEVER = Timespans.ZERO_SECONDS,
   AT_ONCE = Timespans.ONE_SECOND,

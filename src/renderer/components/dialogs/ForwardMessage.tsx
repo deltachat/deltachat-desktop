@@ -4,7 +4,6 @@ import { DeltaDialogBase, DeltaDialogHeader } from './DeltaDialog'
 import ChatListItem from '../chat/ChatListItem'
 import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
 import classNames from 'classnames'
-import { DeltaBackend } from '../../delta-remote'
 import { DialogProps } from './DialogController'
 import { MessageType } from '../../../shared/shared-types'
 
@@ -13,11 +12,15 @@ import { ChatListPart, useLogicVirtualChatList } from '../chat/ChatList'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { useChatList } from '../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../ThemeManager'
+import { BackendRemote } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
+import { selectChat } from '../helpers/ChatMethods'
 
 export default function ForwardMessage(props: {
   message: MessageType
   onClose: DialogProps['onClose']
 }) {
+  const accountId = selectedAccountId()
   const tx = window.static_translate
   const { message, onClose } = props
   const { chatListIds, queryStr, setQueryStr } = useChatList(
@@ -27,9 +30,16 @@ export default function ForwardMessage(props: {
     chatListIds
   )
 
-  const onChatClick = (chatid: number) => {
-    DeltaBackend.call('messageList.forwardMessage', message.id, chatid)
+  const onChatClick = async (chatid: number) => {
+    await BackendRemote.rpc.forwardMessages(accountId, [message.id], chatid)
     onClose()
+    const chat = await BackendRemote.rpc.chatlistGetFullChatById(
+      accountId,
+      chatid
+    )
+    if (!chat.isSelfTalk) {
+      selectChat(chatid)
+    }
   }
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setQueryStr(e.target.value)

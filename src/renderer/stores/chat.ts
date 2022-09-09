@@ -1,18 +1,18 @@
 import { ipcBackend } from '../ipc'
 import { Store, useStore } from './store'
-import { FullChat, MessageType } from '../../shared/shared-types'
-import { DeltaBackend, sendMessageParams } from '../delta-remote'
+import { sendMessageParams } from '../delta-remote'
 import { runtime } from '../runtime'
 import { ActionEmitter, KeybindAction } from '../keybindings'
 import { C } from 'deltachat-node/node/dist/constants'
 import { OrderedMap } from 'immutable'
-import { BackendRemote } from '../backend-com'
+import { BackendRemote, Type } from '../backend-com'
+import { selectedAccountId } from '../ScreenController'
 
 export const PAGE_SIZE = 11
 
 export interface MessagePage {
   pageKey: string
-  messages: OrderedMap<number, MessageType | null>
+  messages: OrderedMap<number, Type.Message | null>
   dayMarker: number[]
 }
 
@@ -47,7 +47,8 @@ export enum ChatView {
 }
 export interface ChatStoreState {
   activeView: ChatView
-  chat: FullChat | null
+  chat: Type.FullChat | null
+  accountId?: number
   messageIds: number[]
   messagePages: MessagePage[]
   newestFetchedMessageIndex: number
@@ -62,6 +63,7 @@ export interface ChatStoreState {
 const defaultState: ChatStoreState = {
   activeView: ChatView.MessageList,
   chat: null,
+  accountId: undefined,
   messageIds: [],
   messagePages: [],
   newestFetchedMessageIndex: -1,
@@ -86,12 +88,13 @@ function getLastKnownScrollPosition(): {
 }
 
 async function messagePageFromMessageIndexes(
+  accountId: number,
   chatId: number,
   indexStart: number,
   indexEnd: number
 ) {
-  const _messages = await DeltaBackend.call(
-    'messageList.getMessagesFromIndex',
+  const _messages = await getMessagesFromIndex(
+    accountId,
     chatId,
     indexStart,
     indexEnd
@@ -123,7 +126,7 @@ async function messagePageFromMessageIndexes(
       }
       messagePages.set(messageId, message)
     }
-  }) as OrderedMap<number, MessageType | null>
+  }) as OrderedMap<number, Type.Message | null>
 
   const messagePage = {
     pageKey: calculatePageKey(messages, indexStart, indexEnd),
@@ -135,12 +138,13 @@ async function messagePageFromMessageIndexes(
 }
 
 async function messagePagesFromMessageIndexes(
+  accountId: number,
   chatId: number,
   indexStart: number,
   indexEnd: number
 ) {
-  const _messages = await DeltaBackend.call(
-    'messageList.getMessagesFromIndex',
+  const _messages = await getMessagesFromIndex(
+    accountId,
     chatId,
     indexStart,
     indexEnd
@@ -166,7 +170,7 @@ async function messagePagesFromMessageIndexes(
 
         messagePages.set(messageId, message)
       }
-    }) as OrderedMap<number, MessageType | null>
+    }) as OrderedMap<number, Type.Message | null>
     currentIndex = currentIndex + PAGE_SIZE
 
     const messagePage = {
@@ -464,7 +468,7 @@ class ChatStore extends Store<ChatStoreState> {
     },
     messageChanged: (payload: {
       id: number
-      messagesChanged: MessageType[]
+      messagesChanged: Type.Message[]
     }) => {
       this.setState(state => {
         const modifiedState = {
@@ -492,7 +496,7 @@ class ChatStore extends Store<ChatStoreState> {
     messageSent: (payload: {
       id: number
       messageId: number
-      message: MessageType
+      message: Type.Message
     }) => {
       const { messageId, message } = payload
       this.setState(state => {
@@ -503,7 +507,7 @@ class ChatStore extends Store<ChatStoreState> {
             pageKey: `page-${messageId}-${messageId}`,
             messages: OrderedMap().set(messageId, message) as OrderedMap<
               number,
-              MessageType | null
+              Type.Message | null
             >,
             dayMarker: [],
           },
@@ -683,8 +687,10 @@ class ChatStore extends Store<ChatStoreState> {
       this.lockedEffect(
         'scroll',
         async (chatId: number) => {
-          const chat = <FullChat>(
-            await DeltaBackend.call('chatList.selectChat', chatId)
+          const accountId = selectedAccountId()
+          const chat = await BackendRemote.rpc.chatlistGetFullChatById(
+            accountId,
+            chatId
           )
           if (chat.id === null) {
             log.debug(
@@ -693,17 +699,21 @@ class ChatStore extends Store<ChatStoreState> {
             )
             return
           }
-          const messageIds = <number[]>(
-            await DeltaBackend.call('messageList.getMessageIds', chatId)
+          const messageIds = await BackendRemote.rpc.messageListGetMessageIds(
+            accountId,
+            chatId,
+            C.DC_GCM_ADDDAYMARKER
           )
 
-          const firstUnreadMessageId = await DeltaBackend.call(
-            'messageList.getFirstUnreadMessage',
+          const firstUnreadMsgId = await BackendRemote.rpc.getFirstUnreadMessageOfChat(
+            accountId,
             chatId
           )
-          if (firstUnreadMessageId !== -1) {
+          if (firstUnreadMsgId !== null) {
+            console.log({firstUnreadMsgId});
+            
             setTimeout(() => {
-              this.effect.jumpToMessage(firstUnreadMessageId, false)
+              this.effect.jumpToMessage(firstUnreadMsgId, false)
               ActionEmitter.emitAction(
                 chat.archived
                   ? KeybindAction.ChatList_SwitchToArchiveView
@@ -715,7 +725,7 @@ class ChatStore extends Store<ChatStoreState> {
             return false
           }
 
-          await DeltaBackend.call('chat.markNoticedChat', chatId)
+          await BackendRemote.rpc.marknoticedChat(accountId, chatId)
           chat.freshMessageCounter = 0
 
           let oldestFetchedMessageIndex = -1
@@ -732,6 +742,7 @@ class ChatStore extends Store<ChatStoreState> {
             newestFetchedMessageIndex = messageIds.length - 1
 
             messagePage = await messagePageFromMessageIndexes(
+              accountId,
               chatId,
               oldestFetchedMessageIndex,
               newestFetchedMessageIndex
@@ -740,6 +751,7 @@ class ChatStore extends Store<ChatStoreState> {
 
           this.reducer.selectedChat({
             chat,
+            accountId,
             messagePages: messagePage === null ? [] : [messagePage],
             messageIds,
             oldestFetchedMessageIndex,
@@ -766,25 +778,25 @@ class ChatStore extends Store<ChatStoreState> {
         'scroll',
         async (msgId: number, highlight?: boolean) => {
           log.debug('jumpToMessage with messageId: ', msgId)
+          const accountId = selectedAccountId()
           highlight = highlight === false ? false : true
           // these methods were called in backend before
           // might be an issue if DeltaBackend.call has a significant delay
-          const _message = await DeltaBackend.call('messageList.getMessages', [
-            msgId,
-          ])
 
-          if (_message.length === 0) {
-            throw new Error(
-              'jumpToMessage: Tried to jump to non existing message with id: ' +
-                msgId
-            )
+          if (!accountId) {
+            throw new Error('no account set')
           }
-          const message = _message[0][1] as MessageType
+          // this function already throws an error if message is not found
+          const message = await BackendRemote.rpc.messageGetMessage(
+            accountId,
+            msgId
+          )
 
-          const chatId = (message as MessageType).chatId
+          const chatId = (message as Type.Message).chatId
 
-          const chat = <FullChat>(
-            await DeltaBackend.call('chatList.selectChat', chatId)
+          const chat = await BackendRemote.rpc.chatlistGetFullChatById(
+            accountId,
+            chatId
           )
           if (chat.id === null) {
             log.debug(
@@ -793,8 +805,10 @@ class ChatStore extends Store<ChatStoreState> {
             )
             return
           }
-          const messageIds = <number[]>(
-            await DeltaBackend.call('messageList.getMessageIds', chatId)
+          const messageIds = await BackendRemote.rpc.messageListGetMessageIds(
+            accountId,
+            chatId,
+            C.DC_GCM_ADDDAYMARKER
           )
 
           const jumpToMessageIndex = messageIds.indexOf(msgId)
@@ -832,6 +846,7 @@ class ChatStore extends Store<ChatStoreState> {
             }
 
             messagePage = await messagePageFromMessageIndexes(
+              accountId,
               chatId,
               oldestFetchedMessageIndex,
               newestFetchedMessageIndex
@@ -846,6 +861,7 @@ class ChatStore extends Store<ChatStoreState> {
 
           this.reducer.selectedChat({
             chat,
+            accountId,
             messagePages: [messagePage],
             messageIds,
             oldestFetchedMessageIndex,
@@ -869,7 +885,10 @@ class ChatStore extends Store<ChatStoreState> {
       'jumpToMessage'
     ),
     uiDeleteMessage: (msgId: number) => {
-      DeltaBackend.call('messageList.deleteMessage', msgId)
+      if (!this.state.accountId) {
+        throw new Error('Account Id unset')
+      }
+      BackendRemote.rpc.deleteMessages(this.state.accountId, [msgId])
       if (!this.state.chat) return
       const id = this.state.chat.id
       this.reducer.uiDeleteMessage({ id, msgId })
@@ -879,6 +898,9 @@ class ChatStore extends Store<ChatStoreState> {
         'scroll',
         async () => {
           log.debug(`fetchMoreMessagesTop`)
+          if (!this.state.accountId) {
+            throw new Error('no account set')
+          }
           const state = this.state
           if (state.chat === null) {
             return false
@@ -907,6 +929,7 @@ class ChatStore extends Store<ChatStoreState> {
           }
 
           const messagePage: MessagePage = await messagePageFromMessageIndexes(
+            this.state.accountId,
             id,
             oldestFetchedMessageIndex,
             lastMessageIndexOnLastPage - 1
@@ -929,6 +952,9 @@ class ChatStore extends Store<ChatStoreState> {
         'scroll',
         async () => {
           log.debug(`fetchMoreMessagesBottom`)
+          if (!this.state.accountId) {
+            throw new Error('no account set')
+          }
           const state = this.state
           if (state.chat === null) {
             return false
@@ -962,6 +988,7 @@ class ChatStore extends Store<ChatStoreState> {
           }
 
           const messagePage: MessagePage = await messagePageFromMessageIndexes(
+            this.state.accountId,
             id,
             newestFetchedMessageIndex,
             newNewestFetchedMessageIndex
@@ -999,8 +1026,13 @@ class ChatStore extends Store<ChatStoreState> {
             return false
           }
           const chatId = payload.chatId
-          const messageIds = <number[]>(
-            await DeltaBackend.call('messageList.getMessageIds', chatId)
+          if (!this.state.accountId) {
+            throw new Error('no account set')
+          }
+          const messageIds = await BackendRemote.rpc.messageListGetMessageIds(
+            this.state.accountId,
+            chatId,
+            C.DC_GCM_ADDDAYMARKER
           )
           let { newestFetchedMessageIndex, oldestFetchedMessageIndex } = state
           newestFetchedMessageIndex = Math.min(
@@ -1010,6 +1042,7 @@ class ChatStore extends Store<ChatStoreState> {
           oldestFetchedMessageIndex = Math.max(oldestFetchedMessageIndex, 0)
 
           const messagePages = await messagePagesFromMessageIndexes(
+            this.state.accountId,
             chatId,
             oldestFetchedMessageIndex,
             newestFetchedMessageIndex
@@ -1027,26 +1060,36 @@ class ChatStore extends Store<ChatStoreState> {
       ),
       'refresh'
     ),
-    mute: async (payload: { chatId: number; muteDuration: number }) => {
+    mute: async (payload: {
+      chatId: number
+      muteDuration: Type.MuteDuration
+    }) => {
       if (payload.chatId !== this.state.chat?.id) return
-      if (
-        !(await DeltaBackend.call(
-          'chat.setMuteDuration',
-          payload.chatId,
-          payload.muteDuration
-        ))
-      ) {
-        return
-      }
+
+      BackendRemote.rpc.setChatMuteDuration(
+        selectedAccountId(),
+        payload.chatId,
+        payload.muteDuration
+      )
     },
     sendMessage: this.queuedEffect(
       async (payload: { chatId: number; message: sendMessageParams }) => {
         log.debug('sendMessage')
-        if (payload.chatId !== this.state.chat?.id) return
-        const [messageId, message] = await DeltaBackend.call(
-          'messageList.sendMessage',
+        if (
+          payload.chatId !== this.state.chat?.id ||
+          this.state.accountId === undefined
+        ) {
+          return
+        }
+
+        const { text, filename, location, quoteMessageId } = payload.message
+        const [messageId, message] = await BackendRemote.rpc.miscSendMsg(
+          this.state.accountId,
           payload.chatId,
-          payload.message
+          text || null,
+          filename || null,
+          location ? [location.lat, location.lng] : null,
+          quoteMessageId || null
         )
 
         // Workaround for failed messages
@@ -1060,9 +1103,15 @@ class ChatStore extends Store<ChatStoreState> {
       if (this.state.chat?.id !== chatId) {
         return
       }
+      if (!this.state.accountId) {
+        throw new Error('no account set')
+      }
       this.reducer.modifiedChat({
         id: chatId,
-        chat: await DeltaBackend.call('chatList.getFullChatById', chatId),
+        chat: await BackendRemote.rpc.chatlistGetFullChatById(
+          this.state.accountId,
+          chatId
+        ),
       })
     }, 'onEventChatModified'),
     onEventMessageFailed: this.queuedEffect(
@@ -1071,17 +1120,24 @@ class ChatStore extends Store<ChatStoreState> {
         if (state.chat?.id !== chatId) return
         if (!state.messageIds.includes(msgId)) {
           // Hacking around https://github.com/deltachat/deltachat-desktop/issues/1361#issuecomment-776291299
-          const message = await DeltaBackend.call(
-            'messageList.getMessage',
-            msgId
-          )
-          if (message === null) return
 
-          this.reducer.messageSent({
-            id: chatId,
-            messageId: msgId,
-            message,
-          })
+          if (!this.state.accountId) {
+            throw new Error('no account set')
+          }
+          try {
+            const message = await BackendRemote.rpc.messageGetMessage(
+              this.state.accountId,
+              msgId
+            )
+            this.reducer.messageSent({
+              id: chatId,
+              messageId: msgId,
+              message,
+            })
+          } catch (error) {
+            // ignore message not found, like the code that was previously here
+            return
+          }
         }
         this.reducer.setMessageState({
           id: chatId,
@@ -1098,8 +1154,13 @@ class ChatStore extends Store<ChatStoreState> {
         )
         return
       }
-      const messageIds = <number[]>(
-        await DeltaBackend.call('messageList.getMessageIds', chatId)
+      if (!this.state.accountId) {
+        throw new Error('no account set')
+      }
+      const messageIds = await BackendRemote.rpc.messageListGetMessageIds(
+        this.state.accountId,
+        chatId,
+        C.DC_GCM_ADDDAYMARKER
       )
       let indexStart = -1
       let indexEnd = -1
@@ -1123,6 +1184,7 @@ class ChatStore extends Store<ChatStoreState> {
         return
       }
       const messagePage = await messagePageFromMessageIndexes(
+        this.state.accountId,
         chatId,
         indexStart,
         indexEnd
@@ -1150,31 +1212,37 @@ class ChatStore extends Store<ChatStoreState> {
           return
         }
         if (eventChatId !== this.state.chat?.id) return
+        if (!this.state.accountId) {
+          throw new Error('no account set')
+        }
         if (this.state.messageIds.indexOf(messageId) !== -1) {
           log.debug(
             'DC_EVENT_MSGS_CHANGED',
             'changed message seems to be message we already know'
           )
-          const messagesChanged = await DeltaBackend.call(
-            'messageList.getMessages',
-            [messageId]
-          )
-
-          if (messagesChanged.length === 0) return
-          const message = messagesChanged[0][1]
-          if (message === null) return
-
-          this.reducer.messageChanged({
-            id: chatId,
-            messagesChanged: [message],
-          })
+          try {
+            const message = await BackendRemote.rpc.messageGetMessage(
+              this.state.accountId,
+              messageId
+            )
+            this.reducer.messageChanged({
+              id: chatId,
+              messagesChanged: [message],
+            })
+          } catch (error) {
+            log.warn('failed to fetch message with id', messageId, error)
+            // ignore not found and other errors
+            return
+          }
         } else {
           log.debug(
             'DC_EVENT_MSGS_CHANGED',
             'changed message seems to be a new message, refetching messageIds'
           )
-          const messageIds = <number[]>(
-            await DeltaBackend.call('messageList.getMessageIds', chatId)
+          const messageIds = await BackendRemote.rpc.messageListGetMessageIds(
+            this.state.accountId,
+            chatId,
+            C.DC_GCM_ADDDAYMARKER
           )
           this.reducer.setMessageIds({ id: chatId, messageIds })
         }
@@ -1252,7 +1320,7 @@ ipcBackend.on('ClickOnNotification', (_ev, { chatId }) => {
 })
 
 export function calculatePageKey(
-  messages: OrderedMap<number, MessageType | null>,
+  messages: OrderedMap<number, Type.Message | null>,
   indexStart: number,
   indexEnd: number
 ): string {
@@ -1290,3 +1358,28 @@ export type ChatStoreDispatch = Store<ChatStoreState>['dispatch']
 export type ChatStoreStateWithChatSet = {
   chat: NonNullable<ChatStoreState['chat']>
 } & Exclude<ChatStoreState, 'chat'>
+
+async function getMessagesFromIndex(
+  accountId: number,
+  chatId: number,
+  indexStart: number,
+  indexEnd: number,
+  flags = C.DC_GCM_ADDDAYMARKER
+): Promise<[number, Type.Message][]> {
+  const allMessageIds = await BackendRemote.rpc.messageListGetMessageIds(
+    accountId,
+    chatId,
+    flags
+  )
+
+  const messageIds = allMessageIds
+    .slice(indexStart, indexEnd + 1)
+    .filter(msgid => msgid > C.DC_MSG_ID_LAST_SPECIAL)
+
+  const messages = await BackendRemote.rpc.messageGetMessages(
+    accountId,
+    messageIds
+  )
+
+  return messageIds.map(id => [id, messages[id]])
+}

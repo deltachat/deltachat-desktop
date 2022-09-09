@@ -1,4 +1,5 @@
-import { JsonLocations, JsonContact } from '../../../shared/shared-types'
+import { JsonLocations } from '../../../shared/shared-types'
+import { Type } from '../../backend-com'
 
 // todo: get this from some settings/config file
 const accessToken =
@@ -64,7 +65,7 @@ export default class MapLayerFactory {
 
   static getGeoJSONPointsLayerSourceData(
     locations: JsonLocations,
-    contact: JsonContact,
+    contact: Type.Contact,
     withMessageOnly: boolean
   ): mapboxgl.GeoJSONSourceOptions['data'] {
     return {

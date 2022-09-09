@@ -1,26 +1,8 @@
 import { C, ChatList } from 'deltachat-node'
-import { getLogger } from '../../shared/logger'
 import { JsonChat, JsonContact, FullChat } from '../../shared/shared-types'
 import SplitOut from './splitout'
 
-const log = getLogger('main/deltachat/chatlist')
-
 export default class DCChatList extends SplitOut {
-  async selectChat(chatId: number) {
-    this.controller.selectedChatId = chatId
-    const chat = await this.getFullChatById(chatId)
-    if (!chat) {
-      log.debug(`Error: selected chat not found: ${chatId}`)
-      return null
-    }
-
-    return chat
-  }
-
-  getSelectedChatId() {
-    return this.controller.selectedChatId
-  }
-
   _chatListGetChatId(list: ChatList, index: number) {
     return list.getChatId(index)
   }

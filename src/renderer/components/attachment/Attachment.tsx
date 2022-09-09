@@ -1,7 +1,6 @@
 const { ipcRenderer } = window.electron_functions
 import mimeTypes from 'mime-types'
-import { MessageTypeAttachmentSubset } from '../../../shared/shared-types'
-import { DraftObject } from '../composer/Composer'
+import { Type } from '../../backend-com'
 
 /* Section - Data Copied in part from Signal */
 // Supported media types in google chrome
@@ -49,7 +48,7 @@ export function isVideo(filemime: string | null) {
   return SUPPORTED_VIDEO_MIME_TYPES.includes(filemime || '')
 }
 
-export function isAudio(filemime: DraftObject['file_mime']) {
+export function isAudio(filemime: string | null) {
   if (!filemime) return false
   return filemime.startsWith('audio/')
 }
@@ -63,18 +62,18 @@ export function isGenericAttachment(filemime: string | null) {
 }
 
 export function getExtension({
-  file_name,
-  file_mime,
+  fileName,
+  fileMime,
 }: MessageTypeAttachmentSubset) {
-  if (file_name && file_name.indexOf('.') >= 0) {
-    const lastPeriod = file_name.lastIndexOf('.')
-    const extension = file_name.slice(lastPeriod + 1)
+  if (fileName && fileName.indexOf('.') >= 0) {
+    const lastPeriod = fileName.lastIndexOf('.')
+    const extension = fileName.slice(lastPeriod + 1)
     if (extension.length) {
       return extension
     }
   }
 
-  return mimeTypes.extension(file_mime || '') || null
+  return mimeTypes.extension(fileMime || '') || null
 }
 
 export function dragAttachmentOut(
@@ -84,3 +83,8 @@ export function dragAttachmentOut(
   dragEvent.preventDefault()
   ipcRenderer.send('ondragstart', file)
 }
+
+export type MessageTypeAttachmentSubset = Pick<
+  Type.Message,
+  'file' | 'fileMime' | 'fileBytes' | 'fileName'
+>

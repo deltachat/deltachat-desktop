@@ -152,9 +152,12 @@ export default async function processOpenQrUrl(
     return
   }
 
-  const allowedQrCodesOnWelcomeScreen: Qr["type"][] = ["account", "text", 'url'] 
+  const allowedQrCodesOnWelcomeScreen: Qr['type'][] = ['account', 'text', 'url']
 
-  if (!allowedQrCodesOnWelcomeScreen.includes(checkQr.type) && screen !== Screens.Main) {
+  if (
+    !allowedQrCodesOnWelcomeScreen.includes(checkQr.type) &&
+    screen !== Screens.Main
+  ) {
     closeProcessDialog()
     window.__openDialog('AlertDialog', {
       message: tx('Please login first'),

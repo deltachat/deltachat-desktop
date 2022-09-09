@@ -2,8 +2,8 @@ import React from 'react'
 import { useContext } from 'react'
 
 import classNames from 'classnames'
-import { JsonContact } from '../../shared/shared-types'
 import { ScreenContext } from '../contexts'
+import { Type } from '../backend-com'
 
 export function QRAvatar() {
   return (
@@ -27,7 +27,7 @@ export function avatarInitial(name: string, addr?: string) {
 type htmlDivProps = React.HTMLAttributes<HTMLDivElement>
 
 export function Avatar(props: {
-  avatarPath?: string
+  avatarPath?: string | null
   color?: string
   displayName: string
   addr?: string
@@ -67,14 +67,14 @@ export function Avatar(props: {
 }
 
 export function AvatarFromContact(
-  props: { contact: JsonContact; onClick?: (contact: JsonContact) => void },
+  props: { contact: Type.Contact; onClick?: (contact: Type.Contact) => void },
   large?: boolean,
   small?: boolean
 ) {
   const { contact, onClick } = props
   return (
     <Avatar
-      avatarPath={contact.profileImage}
+      avatarPath={contact.profileImage || undefined}
       color={contact.color}
       displayName={contact.displayName}
       addr={contact.address}
@@ -87,13 +87,16 @@ export function AvatarFromContact(
 }
 
 export function ClickForFullscreenAvatarWrapper(props: {
-  filename: string
+  filename: string | null
   children: React.ReactNode
 }) {
   const { openDialog } = useContext(ScreenContext)
   return (
     <div
       onClick={() => {
+        if (!props.filename) {
+          return
+        }
         openDialog('FullscreenMedia', {
           msg: {
             file_mime: 'image/x',

@@ -35,11 +35,11 @@ import ConnectivityToast from '../ConnectivityToast'
 import { C } from 'deltachat-node/node/dist/constants'
 import MapComponent from '../map/MapComponent'
 import MailingListProfile from '../dialogs/MessageListProfile'
-import { FullChat } from '../../../shared/shared-types'
 import { getLogger } from '../../../shared/logger'
 import { RecoverableCrashScreen } from './RecoverableCrashScreen'
 import Sidebar, { SidebarState } from '../Sidebar'
 import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
+import { Type } from '../../backend-com'
 
 const log = getLogger('renderer/main-screen')
 
@@ -72,11 +72,14 @@ export default function MainScreen() {
   const onTitleClick = () => {
     if (!selectedChat.chat) return
 
-    if (selectedChat.chat.type === C.DC_CHAT_TYPE_MAILINGLIST) {
+    if (selectedChat.chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST) {
       screenContext.openDialog(MailingListProfile, {
         chat: selectedChat.chat,
       })
-    } else if (selectedChat.chat.isGroup || selectedChat.chat.isBroadcast) {
+    } else if (
+      selectedChat.chat.chatType === C.DC_CHAT_TYPE_GROUP ||
+      selectedChat.chat.chatType === C.DC_CHAT_TYPE_BROADCAST
+    ) {
       openViewGroupDialog(screenContext, selectedChat.chat)
     } else {
       if (selectedChat.chat.contactIds && selectedChat.chat.contactIds[0]) {
@@ -307,16 +310,16 @@ export default function MainScreen() {
   )
 }
 
-function chatSubtitle(chat: FullChat) {
+function chatSubtitle(chat: Type.FullChat) {
   const tx = window.static_translate
   if (chat.id && chat.id > C.DC_CHAT_ID_LAST_SPECIAL) {
-    if (chat.type === C.DC_CHAT_TYPE_GROUP) {
+    if (chat.chatType === C.DC_CHAT_TYPE_GROUP) {
       return tx('n_members', [String(chat.contacts.length)], {
         quantity: chat.contacts.length,
       })
-    } else if (chat.type === C.DC_CHAT_TYPE_MAILINGLIST) {
+    } else if (chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST) {
       return tx('mailing_list')
-    } else if (chat.type === C.DC_CHAT_TYPE_BROADCAST) {
+    } else if (chat.chatType === C.DC_CHAT_TYPE_BROADCAST) {
       return tx('n_recipients', [String(chat.contacts.length)], {
         quantity: chat.contacts.length,
       })

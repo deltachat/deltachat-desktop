@@ -1,10 +1,10 @@
 import React from 'react'
 import Message from './Message'
-import { MessageType } from '../../../shared/shared-types'
 import { ConversationType } from './MessageList'
+import { Type } from '../../backend-com'
 
 type RenderMessageProps = {
-  message: MessageType
+  message: Type.Message
   conversationType: ConversationType
 }
 

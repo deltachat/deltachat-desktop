@@ -3,10 +3,11 @@
 ## [Unreleased][unreleased]
 
 ## Changed
-- start using jsonrpc api
+- start migrating to jsonrpc api
 
 ## Fixed
 - allow scanning of certain qr code types on welcome screen (account, url and text)
+- fix selecting chat after forwarding to it
 
 ## [1.32.1] - 2022-08-18
 

@@ -201,7 +201,7 @@ export function useContactSearch(
   ]
 }
 
-export function useGroupImage(image?: string) {
+export function useGroupImage(image?: string | null) {
   const [groupImage, setGroupImage] = useState(image)
   const tx = window.static_translate
 
@@ -270,7 +270,7 @@ export const GroupSettingsSetNameAndProfileImage = ({
   color,
   isVerified,
 }: {
-  groupImage?: string
+  groupImage?: string | null
   onSetGroupImage: () => void
   onUnsetGroupImage: () => void
   groupName: string
@@ -558,7 +558,7 @@ const AddMemberChip = (props: {
 const useCreateGroup = (
   verified: boolean,
   groupName: string,
-  groupImage: string | undefined,
+  groupImage: string | null | undefined,
   groupMembers: number[],
   onClose: DialogProps['onClose']
 ) => {
@@ -573,7 +573,7 @@ const useCreateGroup = (
       await DeltaBackend.call('chat.setName', gId, groupName)
     }
     if (finishing === true) {
-      if (groupImage !== '' && groupImage !== undefined) {
+      if (groupImage && groupImage !== '') {
         await DeltaBackend.call('chat.setProfileImage', gId, groupImage)
       }
       for (const contactId of groupMembers) {

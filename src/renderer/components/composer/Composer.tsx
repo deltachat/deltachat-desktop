@@ -13,18 +13,14 @@ import { getLogger } from '../../../shared/logger'
 import { EmojiAndStickerPicker } from './EmojiAndStickerPicker'
 import { EmojiData, BaseEmoji } from 'emoji-mart'
 import { replaceColonsSafe } from '../conversations/emoji'
-import {
-  FullChat,
-  JsonMessage,
-  MessageTypeAttachmentSubset,
-} from '../../../shared/shared-types'
 import { Quote } from '../message/Message'
 import { DeltaBackend } from '../../delta-remote'
 import { DraftAttachment } from '../attachment/messageAttachment'
 import { sendMessage, unselectChat } from '../helpers/ChatMethods'
 import { useSettingsStore } from '../../stores/settings'
-import { EffectfulBackendActions } from '../../backend-com'
+import { BackendRemote, EffectfulBackendActions, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import { MessageTypeAttachmentSubset } from '../attachment/Attachment'
 
 const log = getLogger('renderer/composer')
 
@@ -58,7 +54,7 @@ const Composer = forwardRef<
     isDisabled: boolean
     disabledReason: string
     isContactRequest: boolean
-    selectedChat: FullChat
+    selectedChat: Type.FullChat
     messageInputRef: React.MutableRefObject<ComposerMessageInput | null>
     draftState: DraftObject
     removeQuote: () => void
@@ -107,14 +103,15 @@ const Composer = forwardRef<
 
       const sendMessagePromise = sendMessage(chatId, {
         text: replaceColonsSafe(message),
-        filename: draftState.file,
-        quoteMessageId: draftState.quotedMessageId
-          ? draftState.quotedMessageId
-          : undefined,
+        filename: draftState.file || undefined,
+        quoteMessageId:
+          draftState.quote?.kind === 'WithMessage'
+            ? draftState.quote.messageId
+            : undefined,
       })
 
       /* clear it here to make sure the draft is cleared */
-      await DeltaBackend.call('messageList.removeDraft', chatId)
+      await BackendRemote.rpc.removeDraft(selectedAccountId(), chatId)
       // /* update the state to reflect the removed draft */
       window.__reloadDraft && window.__reloadDraft()
 
@@ -296,8 +293,8 @@ const Composer = forwardRef<
 export default Composer
 
 export type DraftObject = { chatId: number } & Pick<
-  JsonMessage,
-  'text' | 'file' | 'quotedMessageId' | 'quotedText' | 'quote'
+  Type.Message,
+  'text' | 'file' | 'quote'
 > &
   MessageTypeAttachmentSubset
 
@@ -316,23 +313,19 @@ export function useDraft(
   const [draftState, _setDraft] = useState<DraftObject>({
     chatId: chatId || 0,
     text: '',
-    file: '',
-    file_bytes: null,
-    file_mime: null,
-    file_name: null,
-    quotedMessageId: 0,
-    quotedText: '',
+    file: null,
+    fileBytes: 0,
+    fileMime: null,
+    fileName: null,
     quote: null,
   })
   const draftRef = useRef<DraftObject>({
     chatId: chatId || 0,
     text: '',
-    file: '',
-    file_bytes: null,
-    file_mime: null,
-    file_name: null,
-    quotedMessageId: 0,
-    quotedText: '',
+    file: null,
+    fileBytes: 0,
+    fileMime: null,
+    fileName: null,
     quote: null,
   })
   draftRef.current = draftState
@@ -341,12 +334,10 @@ export function useDraft(
     _setDraft(_ => ({
       chatId: chatId || 0,
       text: '',
-      file: '',
-      file_bytes: null,
-      file_mime: null,
-      file_name: null,
-      quotedMessageId: 0,
-      quotedText: '',
+      file: null,
+      fileBytes: 0,
+      fileMime: null,
+      fileName: null,
       quote: null,
     }))
     inputRef.current?.focus()
@@ -354,7 +345,7 @@ export function useDraft(
 
   const loadDraft = useCallback(
     (chatId: number) => {
-      DeltaBackend.call('messageList.getDraft', chatId).then(newDraft => {
+      BackendRemote.rpc.getDraft(selectedAccountId(), chatId).then(newDraft => {
         if (!newDraft) {
           log.debug('no draft')
           clearDraft()
@@ -362,17 +353,15 @@ export function useDraft(
         } else {
           _setDraft(old => ({
             ...old,
-            text: newDraft.text,
+            text: newDraft.text || '',
             file: newDraft.file,
-            file_bytes: newDraft.file_bytes,
-            file_mime: newDraft.file_mime,
-            file_name: newDraft.file_name,
+            fileBytes: newDraft.fileBytes,
+            fileMime: newDraft.fileMime,
+            fileName: newDraft.fileName,
             viewType: newDraft.viewType,
-            quotedMessageId: newDraft.quotedMessageId,
-            quotedText: newDraft.quotedText,
             quote: newDraft.quote,
           }))
-          inputRef.current?.setText(newDraft.text)
+          newDraft.text && inputRef.current?.setText(newDraft.text)
         }
       })
     },
@@ -398,17 +387,24 @@ export function useDraft(
       log.warn('Do not save draft while sending')
       return
     }
+    const accountId = selectedAccountId()
 
     const draft = draftRef.current
     const oldChatId = chatId
-    if (draft.text.length > 0 || draft.file != '' || !!draft.quotedMessageId) {
-      await DeltaBackend.call('messageList.setDraft', chatId, {
-        text: draft.text,
-        file: draft.file,
-        quotedMessageId: draft.quotedMessageId || undefined,
-      })
+    if (
+      (draft.text && draft.text.length > 0) ||
+      draft.file != '' ||
+      !!draft.quote
+    ) {
+      await BackendRemote.rpc.miscSetDraft(
+        accountId,
+        chatId,
+        draft.text,
+        draft.file,
+        draft.quote?.kind === 'WithMessage' ? draft.quote.messageId : null
+      )
     } else {
-      await DeltaBackend.call('messageList.removeDraft', chatId)
+      await BackendRemote.rpc.removeDraft(accountId, chatId)
     }
 
     if (oldChatId !== chatId) {
@@ -416,18 +412,16 @@ export function useDraft(
       return
     }
     const newDraft = chatId
-      ? await DeltaBackend.call('messageList.getDraft', chatId)
+      ? await BackendRemote.rpc.getDraft(accountId, chatId)
       : null
     if (newDraft) {
       _setDraft(old => ({
         ...old,
         file: newDraft.file,
-        file_bytes: newDraft.file_bytes,
-        file_mime: newDraft.file_mime,
-        file_name: newDraft.file_name,
+        fileBytes: newDraft.fileBytes,
+        fileMime: newDraft.fileMime,
+        fileName: newDraft.fileName,
         viewType: newDraft.viewType,
-        quotedMessageId: newDraft.quotedMessageId,
-        quotedText: newDraft.quotedText,
         quote: newDraft.quote,
       }))
       // don't load text to prevent bugging back
@@ -449,7 +443,7 @@ export function useDraft(
 
   const removeQuote = useCallback(() => {
     if (draftRef.current) {
-      draftRef.current.quotedMessageId = null
+      draftRef.current.quote = null
     }
     saveDraft()
   }, [saveDraft])
@@ -469,7 +463,10 @@ export function useDraft(
 
   useEffect(() => {
     window.__setQuoteInDraft = (messageId: number) => {
-      draftRef.current.quotedMessageId = messageId
+      draftRef.current.quote = ({
+        kind: 'withMessage',
+        message_id: messageId,
+      } as any) as Type.MessageQuote
       saveDraft()
       inputRef.current?.focus()
     }

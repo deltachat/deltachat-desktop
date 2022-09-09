@@ -13,10 +13,10 @@ import {
 } from '../helpers/ChatMethods'
 
 import { C } from 'deltachat-node/node/dist/constants'
-import { DeltaBackend } from '../../delta-remote'
 import { ContextMenuItem } from '../ContextMenu'
 import MailingListProfile from '../dialogs/MessageListProfile'
-import { Type } from '../../backend-com'
+import { BackendRemote, Type } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 // const log = getLogger('renderer/ChatListContextMenu')
 
@@ -73,6 +73,7 @@ function archiveStateMenu(
 export function useChatListContextMenu() {
   const screenContext = useContext(ScreenContext)
   const tx = useTranslationFunction()
+  const accountId = selectedAccountId()
 
   return (
     event: React.MouseEvent<any, MouseEvent>,
@@ -84,24 +85,22 @@ export function useChatListContextMenu() {
     const onEncrInfo = () =>
       openEncryptionInfoDialog(screenContext, chatListItem)
     const onViewGroup = async () => {
-      const fullChat = await DeltaBackend.call(
-        'chatList.getFullChatById',
+      // throws error if chat was not found
+      const fullChat = await BackendRemote.rpc.chatlistGetFullChatById(
+        accountId,
         chatListItem.id
       )
-      if (!fullChat) {
-        throw new Error('chat was not found')
-      }
       openViewGroupDialog(screenContext, fullChat)
     }
     const onViewProfile = async () => {
-      const fullChat = await DeltaBackend.call(
-        'chatList.getFullChatById',
+      const fullChat = await BackendRemote.rpc.chatlistGetFullChatById(
+        accountId,
         chatListItem.id
       )
       if (!fullChat) {
         throw new Error('chat was not found')
       }
-      if (fullChat.type !== C.DC_CHAT_TYPE_MAILINGLIST) {
+      if (fullChat.chatType !== C.DC_CHAT_TYPE_MAILINGLIST) {
         openViewProfileDialog(screenContext, fullChat.contactIds[0])
       } else {
         screenContext.openDialog(MailingListProfile, {

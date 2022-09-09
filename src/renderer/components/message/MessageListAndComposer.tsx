@@ -7,11 +7,12 @@ import { ScreenContext } from '../../contexts'
 import ChatStore, { ChatStoreStateWithChatSet } from '../../stores/chat'
 import ComposerMessageInput from '../composer/ComposerMessageInput'
 import { DesktopSettingsType } from '../../../shared/shared-types'
-import { isChatReadonly } from '../../../shared/util'
 import { join, parse } from 'path'
 import { runtime } from '../../runtime'
 import { RecoverableCrashScreen } from '../screens/RecoverableCrashScreen'
 import { useSettingsStore } from '../../stores/settings'
+import { Type } from '../../backend-com'
+import { C } from 'deltachat-node/node/dist/constants'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -239,4 +240,27 @@ export default function MessageListAndComposer({
       />
     </div>
   )
+}
+
+export function isChatReadonly(
+  chat: Pick<
+    Type.FullChat,
+    'isContactRequest' | 'isDeviceChat' | 'chatType' | 'selfInGroup' | 'canSend'
+  >
+): [isDisabled: boolean, disabledReason: string] {
+  if (chat.canSend) {
+    return [false, '']
+  } else {
+    if (chat.isContactRequest) {
+      return [true, 'messaging_disabled_deaddrop']
+    } else if (chat.isDeviceChat === true) {
+      return [true, 'messaging_disabled_device_chat']
+    } else if (chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST) {
+      return [true, 'messaging_disabled_mailing_list']
+    } else if (chat.chatType === C.DC_CHAT_TYPE_GROUP && !chat.selfInGroup) {
+      return [true, 'messaging_disabled_not_in_group']
+    } else {
+      return [true, 'UNKNOWN DISABLED REASON']
+    }
+  }
 }

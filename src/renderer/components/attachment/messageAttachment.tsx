@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import classNames from 'classnames'
 import { openAttachmentInShell } from '../message/messageFunctions'
-import { C } from 'deltachat-node/node/dist/constants'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import {
   isDisplayableByFullscreenMedia,
@@ -10,16 +9,14 @@ import {
   isAudio,
   getExtension,
   dragAttachmentOut,
-} from './Attachment'
-import {
-  MessageType,
   MessageTypeAttachmentSubset,
-} from '../../../shared/shared-types'
+} from './Attachment'
 import { runtime } from '../../runtime'
 import { ConversationType } from '../message/MessageList'
 import { getDirection } from '../../../shared/util'
 
 import filesizeConverter from 'filesize'
+import { Type } from '../../backend-com'
 
 // const MINIMUM_IMG_HEIGHT = 150
 // const MAXIMUM_IMG_HEIGHT = 300
@@ -27,7 +24,7 @@ import filesizeConverter from 'filesize'
 type AttachmentProps = {
   text?: string
   conversationType: ConversationType
-  message: MessageType
+  message: Type.Message
   hasQuote: boolean
 }
 
@@ -44,9 +41,9 @@ export default function Attachment({
   }
   const direction = getDirection(message)
   const onClickAttachment = (ev: any) => {
-    if (message.viewType === C.DC_MSG_STICKER) return
+    if (message.viewType === 'Sticker') return
     ev.stopPropagation()
-    if (isDisplayableByFullscreenMedia(message.file_mime)) {
+    if (isDisplayableByFullscreenMedia(message.fileMime)) {
       openDialog('FullscreenMedia', { msg: message })
     } else {
       openAttachmentInShell(message)
@@ -61,7 +58,7 @@ export default function Attachment({
   // const dimensions = message.msg.dimensions || {}
   // Calculating height to prevent reflow when image loads
   // const height = Math.max(MINIMUM_IMG_HEIGHT, (dimensions as any).height || 0)
-  if (isImage(message.file_mime)) {
+  if (isImage(message.fileMime)) {
     if (!message.file) {
       return (
         <div
@@ -87,7 +84,7 @@ export default function Attachment({
         />
       </div>
     )
-  } else if (isVideo(message.file_mime)) {
+  } else if (isVideo(message.fileMime)) {
     if (!message.file) {
       return (
         <div
@@ -116,7 +113,7 @@ export default function Attachment({
         />
       </div>
     )
-  } else if (isAudio(message.file_mime)) {
+  } else if (isAudio(message.fileMime)) {
     return (
       <audio
         controls
@@ -130,7 +127,7 @@ export default function Attachment({
       </audio>
     )
   } else {
-    const { file_name, file_bytes, file_mime } = message
+    const { fileName, fileBytes, fileMime } = message
     const extension = getExtension(message)
     return (
       <div
@@ -145,18 +142,18 @@ export default function Attachment({
           className='file-icon'
           draggable='true'
           onDragStart={dragAttachmentOut.bind(null, message.file)}
-          title={file_mime || 'null'}
+          title={fileMime || 'null'}
         >
           {extension ? (
             <div className='file-extension'>
-              {file_mime === 'application/octet-stream' ? '' : extension}
+              {fileMime === 'application/octet-stream' ? '' : extension}
             </div>
           ) : null}
         </div>
         <div className='text-part'>
-          <div className='name'>{file_name}</div>
+          <div className='name'>{fileName}</div>
           <div className='size'>
-            {file_bytes ? filesizeConverter(file_bytes) : '?'}
+            {fileBytes ? filesizeConverter(fileBytes) : '?'}
           </div>
         </div>
       </div>
@@ -172,52 +169,52 @@ export function DraftAttachment({
   if (!attachment) {
     return null
   }
-  if (isImage(attachment.file_mime)) {
+  if (isImage(attachment.fileMime)) {
     return (
       <div className={classNames('message-attachment-media')}>
         <img
           className='attachment-content'
-          src={runtime.transformBlobURL(attachment.file)}
+          src={runtime.transformBlobURL(attachment.file || '')}
         />
       </div>
     )
-  } else if (isVideo(attachment.file_mime)) {
+  } else if (isVideo(attachment.fileMime)) {
     return (
       <div className={classNames('message-attachment-media')}>
         <video
           className='attachment-content'
-          src={runtime.transformBlobURL(attachment.file)}
+          src={runtime.transformBlobURL(attachment.file || '')}
           controls
         />
       </div>
     )
-  } else if (isAudio(attachment.file_mime)) {
+  } else if (isAudio(attachment.fileMime)) {
     return (
       <audio controls className={classNames('message-attachment-audio')}>
-        <source src={runtime.transformBlobURL(attachment.file)} />
+        <source src={runtime.transformBlobURL(attachment.file || '')} />
       </audio>
     )
   } else {
-    const { file_name, file_bytes, file_mime } = attachment
+    const { fileName, fileBytes, fileMime } = attachment
     const extension = getExtension(attachment)
     return (
       <div className={classNames('message-attachment-generic')}>
         <div
           className='file-icon'
           draggable='true'
-          onDragStart={ev => file_name && dragAttachmentOut(file_name, ev)}
-          title={file_mime || 'null'}
+          onDragStart={ev => fileName && dragAttachmentOut(fileName, ev)}
+          title={fileMime || 'null'}
         >
           {extension ? (
             <div className='file-extension'>
-              {file_mime === 'application/octet-stream' ? '' : extension}
+              {fileMime === 'application/octet-stream' ? '' : extension}
             </div>
           ) : null}
         </div>
         <div className='text-part'>
-          <div className='name'>{file_name}</div>
+          <div className='name'>{fileName}</div>
           <div className='size'>
-            {file_bytes ? filesizeConverter(file_bytes) : '?'}
+            {fileBytes ? filesizeConverter(fileBytes) : '?'}
           </div>
         </div>
       </div>

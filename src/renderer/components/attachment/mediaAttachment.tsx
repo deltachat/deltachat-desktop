@@ -9,8 +9,6 @@ import {
   dragAttachmentOut,
 } from './Attachment'
 import Timestamp from '../conversations/Timestamp'
-import { MessageType } from '../../../shared/shared-types'
-import { C } from 'deltachat-node/node/dist/constants'
 import { makeContextMenu } from '../ContextMenu'
 import { OpenDialogFunctionType } from '../dialogs/DialogController'
 import { runtime } from '../../runtime'
@@ -19,44 +17,49 @@ import filesizeConverter from 'filesize'
 import { jumpToMessage } from '../helpers/ChatMethods'
 import { getLogger } from '../../../shared/logger'
 import { truncateText } from '../../../shared/util'
+import { Type } from '../../backend-com'
 
 const log = getLogger('mediaAttachment')
 
-export default function MediaAttachment({ message }: { message: MessageType }) {
+export default function MediaAttachment({
+  message,
+}: {
+  message: Type.Message
+}) {
   if (!message.file) {
     return null
   }
   switch (message.viewType) {
-    case C.DC_MSG_GIF:
-    case C.DC_MSG_IMAGE:
+    case 'Gif':
+    case 'Image':
       return <ImageAttachment message={message} />
-    case C.DC_MSG_VIDEO:
+    case 'Video':
       return <VideoAttachment message={message} />
-    case C.DC_MSG_AUDIO:
-    case C.DC_MSG_VOICE:
+    case 'Audio':
+    case 'Voice':
       return <AudioAttachment message={message} />
-    case C.DC_MSG_WEBXDC:
+    case 'Webxdc':
       return <WebxdcAttachment message={message} />
-    case C.DC_MSG_FILE:
+    case 'File':
     default:
       return <FileAttachment message={message} />
   }
 }
 
-const hideOpenInShellTypes = [
-  C.DC_MSG_GIF,
-  C.DC_MSG_IMAGE,
-  C.DC_MSG_VIDEO,
-  C.DC_MSG_AUDIO,
-  C.DC_MSG_VOICE,
-  C.DC_MSG_WEBXDC,
+const hideOpenInShellTypes: Type.Viewtype[] = [
+  'Gif',
+  'Image',
+  'Video',
+  'Audio',
+  'Voice',
+  'Webxdc',
 ]
 
 const contextMenuFactory = (
-  message: MessageType,
+  message: Type.Message,
   openDialog: OpenDialogFunctionType
 ) => {
-  const showCopyImage = message.viewType === C.DC_MSG_IMAGE
+  const showCopyImage = message.viewType === 'Image'
   const tx = window.static_translate
   const { id: msgId, viewType } = message
   return [
@@ -64,7 +67,7 @@ const contextMenuFactory = (
       label: tx('open'),
       action: openAttachmentInShell.bind(null, message),
     },
-    viewType === C.DC_MSG_WEBXDC && {
+    viewType === 'Webxdc' && {
       label: tx('start_app'),
       action: runtime.openWebxdc.bind(null, message.id),
     },
@@ -75,7 +78,7 @@ const contextMenuFactory = (
     showCopyImage && {
       label: tx('menu_copy_image_to_clipboard'),
       action: () => {
-        runtime.writeClipboardImage(message.file)
+        message.file && runtime.writeClipboardImage(message.file)
       },
     },
     {
@@ -90,7 +93,7 @@ const contextMenuFactory = (
 }
 
 /** provides a quick link to comonly used functions to save a few duplicated lines  */
-const useMediaActions = (message: MessageType) => {
+const useMediaActions = (message: Type.Message) => {
   const { openDialog, openContextMenu } = useContext(ScreenContext)
   return {
     openContextMenu: makeContextMenu(
@@ -119,12 +122,12 @@ function squareBrokenMediaContent(
   )
 }
 
-function ImageAttachment({ message }: { message: MessageType }) {
+function ImageAttachment({ message }: { message: Type.Message }) {
   const { openContextMenu, openFullscreenMedia, openInShell } = useMediaActions(
     message
   )
-  const { file, file_mime } = message
-  const hasSupportedFormat = isImage(file_mime || '')
+  const { file, fileMime } = message
+  const hasSupportedFormat = isImage(fileMime || '')
   const isBroken = !file || !hasSupportedFormat
   return (
     <div
@@ -133,7 +136,7 @@ function ImageAttachment({ message }: { message: MessageType }) {
       onContextMenu={openContextMenu}
     >
       {isBroken ? (
-        squareBrokenMediaContent(hasSupportedFormat, file_mime || '')
+        squareBrokenMediaContent(hasSupportedFormat, fileMime || '')
       ) : (
         <img
           className='attachment-content'
@@ -144,12 +147,12 @@ function ImageAttachment({ message }: { message: MessageType }) {
   )
 }
 
-function VideoAttachment({ message }: { message: MessageType }) {
+function VideoAttachment({ message }: { message: Type.Message }) {
   const { openContextMenu, openFullscreenMedia, openInShell } = useMediaActions(
     message
   )
-  const { file_mime, file } = message
-  const hasSupportedFormat = isVideo(file_mime)
+  const { fileMime, file } = message
+  const hasSupportedFormat = isVideo(fileMime)
   const isBroken = !file || !hasSupportedFormat
   return (
     <div
@@ -158,7 +161,7 @@ function VideoAttachment({ message }: { message: MessageType }) {
       onContextMenu={openContextMenu}
     >
       {isBroken ? (
-        squareBrokenMediaContent(hasSupportedFormat, file_mime)
+        squareBrokenMediaContent(hasSupportedFormat, fileMime)
       ) : (
         <>
           <video
@@ -175,10 +178,10 @@ function VideoAttachment({ message }: { message: MessageType }) {
   )
 }
 
-function AudioAttachment({ message }: { message: MessageType }) {
+function AudioAttachment({ message }: { message: Type.Message }) {
   const { openContextMenu } = useMediaActions(message)
-  const { file_mime, file } = message
-  const hasSupportedFormat = isAudio(file_mime)
+  const { fileMime, file } = message
+  const hasSupportedFormat = isAudio(fileMime)
   return (
     <div className='media-attachment-audio' onContextMenu={openContextMenu}>
       <div className='heading'>
@@ -191,13 +194,13 @@ function AudioAttachment({ message }: { message: MessageType }) {
       </div>
       {hasSupportedFormat ? (
         <audio controls>
-          <source src={runtime.transformBlobURL(file)} />
+          <source src={runtime.transformBlobURL(file || '')} />
         </audio>
       ) : (
         <div>
           {window.static_translate(
             'cannot_display_unsuported_file_type',
-            file_mime || 'null'
+            fileMime || 'null'
           )}
         </div>
       )}
@@ -205,9 +208,9 @@ function AudioAttachment({ message }: { message: MessageType }) {
   )
 }
 
-function FileAttachment({ message }: { message: MessageType }) {
+function FileAttachment({ message }: { message: Type.Message }) {
   const { openContextMenu, openInShell } = useMediaActions(message)
-  const { file_name, file_bytes, file_mime, file } = message
+  const { fileName, fileBytes, fileMime, file } = message
   const extension = getExtension(message)
   return (
     <div
@@ -223,26 +226,27 @@ function FileAttachment({ message }: { message: MessageType }) {
         className='file-icon'
         draggable='true'
         onDragStart={dragAttachmentOut.bind(null, file)}
-        title={file_mime || 'null'}
+        title={fileMime || 'null'}
       >
         {extension ? (
           <div className='file-extension'>
-            {file_mime === 'application/octet-stream' ? '' : extension}
+            {fileMime === 'application/octet-stream' ? '' : extension}
           </div>
         ) : null}
       </div>
       <div className='text-part'>
-        <div className='name'>{file_name}</div>
+        <div className='name'>{fileName}</div>
         <div className='size'>
-          {file_bytes ? filesizeConverter(file_bytes) : '?'}
+          {fileBytes ? filesizeConverter(fileBytes) : '?'}
         </div>
       </div>
     </div>
   )
 }
 
-function WebxdcAttachment({ message }: { message: MessageType }) {
+function WebxdcAttachment({ message }: { message: Type.Message }) {
   const { openContextMenu } = useMediaActions(message)
+
   if (!message.webxdcInfo) {
     log.error('message.webxdcInfo is undefined, msgid:', message.id)
     return FileAttachment({ message })

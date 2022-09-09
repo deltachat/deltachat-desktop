@@ -1,18 +1,19 @@
 import { DeltaBackend, sendMessageParams } from '../../delta-remote'
 import ChatStore, { ChatView } from '../../stores/chat'
 import { ScreenContext, unwrapContext } from '../../contexts'
-import { FullChat } from '../../../shared/shared-types'
-import { MuteDuration } from '../../../shared/constants'
 import { C } from 'deltachat-node/node/dist/constants'
 import { runtime } from '../../runtime'
 import { getLogger } from '../../../shared/logger'
 import AlertDialog from '../dialogs/AlertDialog'
-import { EffectfulBackendActions, Type } from '../../backend-com'
+import { BackendRemote, EffectfulBackendActions, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import ViewGroup from '../dialogs/ViewGroup'
 
 const log = getLogger('renderer/message')
 
-type Chat = FullChat | (Type.ChatListItemFetchResult & { type: 'ChatListItem' })
+type Chat =
+  | Type.FullChat
+  | (Type.ChatListItemFetchResult & { type: 'ChatListItem' })
 
 export const selectChat = (chatId: number) => {
   ChatStore.effect.selectChat(chatId)
@@ -92,7 +93,7 @@ export function openBlockFirstContactOfChatDialog(
   const tx = window.static_translate
   const dmChatContact =
     (selectedChat as Type.ChatListItemFetchResult & { type: 'ChatListItem' })
-      .dmChatContact || (selectedChat as FullChat)?.contactIds[0]
+      .dmChatContact || (selectedChat as Type.FullChat).contactIds[0]
 
   // TODO: CHECK IF THE CHAT IS DM CHAT
 
@@ -119,11 +120,11 @@ export function openEncryptionInfoDialog(
 
 export function openViewGroupDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
-  selectedChat: FullChat
+  selectedChat: Type.FullChat
 ) {
-  screenContext.openDialog('ViewGroup', {
+  screenContext.openDialog(ViewGroup, {
     chat: selectedChat,
-    isBroadcast: selectedChat.isBroadcast,
+    isBroadcast: selectedChat.chatType === C.DC_CHAT_TYPE_BROADCAST,
   })
 }
 
@@ -145,7 +146,7 @@ export async function openMuteChatDialog(
 }
 
 export async function unMuteChat(chatId: number) {
-  await DeltaBackend.call('chat.setMuteDuration', chatId, MuteDuration.OFF)
+  BackendRemote.rpc.setChatMuteDuration(selectedAccountId(), chatId, 'NotMuted')
 }
 
 export async function sendCallInvitation(
@@ -170,14 +171,19 @@ export async function joinCall(
   messageId: number
 ) {
   try {
-    const message = await DeltaBackend.call('messageList.getMessage', messageId)
+    const message = await BackendRemote.rpc.messageGetMessage(
+      selectedAccountId(),
+      messageId
+    )
 
     if (!message) {
       throw new Error('Message not found')
     }
-
-    if (message.viewType !== C.DC_MSG_VIDEOCHAT_INVITATION) {
+    if (message.viewType !== 'VideochatInvitation') {
       throw new Error('Message is not a video chat invitation')
+    }
+    if (!message.videochatUrl) {
+      throw new Error('Message has no video chat url')
     }
 
     return runtime.openLink(message.videochatUrl)

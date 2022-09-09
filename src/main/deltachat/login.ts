@@ -1,6 +1,5 @@
 import { C } from 'deltachat-node'
 import { getLogger } from '../../shared/logger'
-import { setupMarkseenFix } from '../markseenFix'
 import setupNotifications from '../notifications'
 import setupUnreadBadgeCounter from '../unread-badge'
 import SplitOut from './splitout'
@@ -58,7 +57,6 @@ export default class DCLoginController extends SplitOut {
 
     setupNotifications(this.controller, DesktopSettings.state)
     setupUnreadBadgeCounter(this.controller)
-    setupMarkseenFix(this.controller)
     this.controller.ready = true
     return true
   }

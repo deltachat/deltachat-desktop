@@ -11,7 +11,7 @@ export default class MessageMetaData extends React.Component<{
   file_mime?: string | null
   direction?: 'incoming' | 'outgoing'
   status: msgStatus
-  text?: string
+  hasText: boolean
   timestamp: number
   hasLocation?: boolean
   onClickError?: () => void
@@ -23,14 +23,14 @@ export default class MessageMetaData extends React.Component<{
       file_mime,
       direction,
       status,
-      text,
+      hasText,
       timestamp,
       hasLocation,
       onClickError,
     } = this.props
 
     const withImageNoCaption = Boolean(
-      !text && (isImage(file_mime || null) || isVideo(file_mime || null))
+      !hasText && (isImage(file_mime || null) || isVideo(file_mime || null))
     )
 
     return (

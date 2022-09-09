@@ -1,4 +1,3 @@
-import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/node/dist/constants'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
@@ -19,16 +18,12 @@ import chatStore from '../../stores/chat'
 import { state as LocationStoreState } from '../../stores/locations'
 
 import ContextMenu from './ContextMenu'
-import {
-  FullChat,
-  MessageType,
-  JsonMessage,
-  JsonContact,
-  JsonLocations,
-} from '../../../shared/shared-types'
+import { JsonLocations } from '../../../shared/shared-types'
+import { BackendRemote, Type } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 type MapData = {
-  contact: JsonContact
+  contact: Type.Contact
   pathLayerId: string
   pointsLayerId: string
   hidden: Boolean
@@ -37,10 +32,10 @@ type MapData = {
 
 type Point = [number, number]
 
-type Contact = JsonContact & { hidden?: boolean }
+type Contact = Type.Contact & { hidden?: boolean }
 
 type MapProps = {
-  selectedChat: FullChat
+  selectedChat: Type.FullChat
 }
 
 export default class MapComponent extends React.Component<
@@ -65,7 +60,7 @@ export default class MapComponent extends React.Component<
   map: mapboxgl.Map | undefined
   popup_mount_node: HTMLDivElement | undefined
   stateFromSession: boolean | undefined
-  currentUser: JsonContact | undefined
+  currentUser: Type.Contact | undefined
   constructor(props: MapProps) {
     super(props)
     this.state = {
@@ -91,8 +86,9 @@ export default class MapComponent extends React.Component<
   }
 
   async init() {
-    this.currentUser = await DeltaBackend.call(
-      'contacts.getContact',
+    const accountId = selectedAccountId()
+    this.currentUser = await BackendRemote.rpc.contactsGetContact(
+      accountId,
       C.DC_CONTACT_ID_SELF
     )
 
@@ -189,28 +185,17 @@ export default class MapComponent extends React.Component<
     this.mapDataStore.clear()
     const { selectedChat } = this.props
     let allPoints: Point[] = []
-    const currentContacts: JsonContact[] = []
+    const currentContacts: Type.Contact[] = []
     ;(this.mapDataStore as any).locationCount = locations.length
     if (locations.length > 0) {
       const contacts = selectedChat.contacts
 
-      if (!selectedChat.isGroup || !selectedChat.selfInGroup) {
+      if (
+        selectedChat.chatType !== C.DC_CHAT_TYPE_GROUP ||
+        !selectedChat.selfInGroup
+      ) {
         // add current account to contact list to see own location and path
-        contacts.push({
-          id: C.DC_CONTACT_ID_SELF,
-          address: this.currentUser.address,
-          displayName: this.currentUser.displayName,
-          authName: this.currentUser.displayName,
-          status: '',
-          name: this.currentUser.displayName,
-          color: this.currentUser.color,
-          nameAndAddr:
-            this.currentUser.displayName + '(' + this.currentUser.address + ')',
-          profileImage: this.currentUser.profileImage,
-          isBlocked: false,
-          isVerified: true,
-          lastSeen: this.currentUser.lastSeen,
-        })
+        contacts.push(this.currentUser)
       }
       contacts.forEach(contact => {
         const locationsForContact = locations.filter(
@@ -437,7 +422,7 @@ export default class MapComponent extends React.Component<
     if (!map) {
       throw new Error('this.map is unset')
     }
-    let message: MessageType
+    let message: Type.Message
     const features = map.queryRenderedFeatures(event.point)
     const contactFeature = features.find(f => {
       return (
@@ -447,33 +432,30 @@ export default class MapComponent extends React.Component<
     })
     if (contactFeature) {
       if (contactFeature.properties?.msgId) {
-        DeltaBackend.call(
-          'messageList.getMessage',
+        message = await BackendRemote.rpc.messageGetMessage(
+          selectedAccountId(),
           contactFeature.properties.msgId
-        ).then((messageObj: MessageType | null) => {
-          if (messageObj) {
-            message = messageObj
-          }
-          if (this.popup_mount_node) {
-            ReactDOM.unmountComponentAtNode(this.popup_mount_node)
-          }
-          this.popup_mount_node = document.createElement('div')
-          ReactDOM.render(
-            this.renderPopupMessage(
-              contactFeature.properties?.contact,
-              formatRelativeTime(contactFeature.properties?.reported * 1000, {
-                extended: true,
-              }),
-              message
-            ),
-            this.popup_mount_node
-          )
+        )
 
-          new mapboxgl.Popup({ offset: [0, -15] })
-            .setDOMContent(this.popup_mount_node)
-            .setLngLat((contactFeature.geometry as any).coordinates)
-            .addTo(map)
-        })
+        if (this.popup_mount_node) {
+          ReactDOM.unmountComponentAtNode(this.popup_mount_node)
+        }
+        this.popup_mount_node = document.createElement('div')
+        ReactDOM.render(
+          this.renderPopupMessage(
+            contactFeature.properties?.contact,
+            formatRelativeTime(contactFeature.properties?.reported * 1000, {
+              extended: true,
+            }),
+            message
+          ),
+          this.popup_mount_node
+        )
+
+        new mapboxgl.Popup({ offset: [0, -15] })
+          .setDOMContent(this.popup_mount_node)
+          .setLngLat((contactFeature.geometry as any).coordinates)
+          .addTo(map)
       }
     }
   }
@@ -647,7 +629,7 @@ export default class MapComponent extends React.Component<
   renderPopupMessage(
     contactName: string,
     formattedDate: string,
-    message: JsonMessage | null
+    message: Type.Message | null
   ) {
     return (
       <MessagesDisplayContext.Provider

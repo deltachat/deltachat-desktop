@@ -12,7 +12,6 @@ import type { ChatTypes } from 'deltachat-node'
 import moment from 'moment'
 
 import { getLogger } from '../../../shared/logger'
-import { MessageType, FullChat } from '../../../shared/shared-types'
 import { MessagesDisplayContext, useTranslationFunction } from '../../contexts'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
 const log = getLogger('render/components/message/MessageList')
@@ -305,11 +304,11 @@ export const MessageListInner = React.memo(
 
     const conversationType: ConversationType = {
       hasMultipleParticipants:
-        chatStore.chat.type === C.DC_CHAT_TYPE_GROUP ||
-        chatStore.chat.type === C.DC_CHAT_TYPE_MAILINGLIST ||
-        chatStore.chat.type === C.DC_CHAT_TYPE_BROADCAST,
+        chatStore.chat.chatType === C.DC_CHAT_TYPE_GROUP ||
+        chatStore.chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST ||
+        chatStore.chat.chatType === C.DC_CHAT_TYPE_BROADCAST,
       isDeviceChat: chatStore.chat.isDeviceChat as boolean,
-      chatType: chatStore.chat.type as number,
+      chatType: chatStore.chat.chatType as number,
     }
 
     useKeyBindingAction(KeybindAction.MessageList_PageUp, () => {
@@ -386,7 +385,7 @@ const MessagePageComponent = React.memo(
       messageElements.push(
         <MessageWrapper
           key={messageId}
-          message={message as MessageType}
+          message={message}
           conversationType={conversationType}
         />
       )
@@ -410,13 +409,17 @@ const MessagePageComponent = React.memo(
 function EmptyChatMessage() {
   const tx = useTranslationFunction()
   const chatStore = useChatStore()
-  const chat = chatStore.chat as FullChat
+  const chat = chatStore.chat
+
+  if (!chat) {
+    throw new Error('no chat selected')
+  }
 
   let emptyChatMessage = tx('chat_new_one_to_one_hint', [chat.name, chat.name])
 
-  if (chat.isBroadcast) {
+  if (chat.chatType === C.DC_CHAT_TYPE_BROADCAST) {
     emptyChatMessage = tx('chat_new_broadcast_hint')
-  } else if (chat.isGroup && !chat.isContactRequest) {
+  } else if (chat.chatType === C.DC_CHAT_TYPE_GROUP && !chat.isContactRequest) {
     emptyChatMessage = chat.isUnpromoted
       ? tx('chat_new_group_hint')
       : tx('chat_no_messages')
