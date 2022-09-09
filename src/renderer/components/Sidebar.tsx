@@ -1,7 +1,6 @@
 import classNames from 'classnames'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { ScreenContext, useTranslationFunction } from '../contexts'
-import { DeltaBackend } from '../delta-remote'
 import { runtime } from '../runtime'
 import { Screens, selectedAccountId } from '../ScreenController'
 import QrCode from './dialogs/QrCode'
@@ -220,11 +219,12 @@ export default Sidebar
 const SidebarConnectivity = () => {
   const [state, setState] = useState('')
   const tx = window.static_translate
+  const accountId = selectedAccountId()
 
   const onConnectivityChanged = useMemo(
     () =>
       debounceWithInit(async (_data1: any, _data2: any) => {
-        const connectivity = await DeltaBackend.call('context.getConnectivity')
+        const connectivity = await BackendRemote.rpc.getConnectivity(accountId)
 
         if (connectivity >= C.DC_CONNECTIVITY_CONNECTED) {
           setState('connectivity_connected')
@@ -236,7 +236,7 @@ const SidebarConnectivity = () => {
           setState('connectivity_not_connected')
         }
       }, 300),
-    []
+    [accountId]
   )
 
   useEffect(

@@ -1,5 +1,5 @@
 import { Card, Elevation } from '@blueprintjs/core'
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useContext, useCallback } from 'react'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
 
 import { DeltaBackend } from '../../delta-remote'
@@ -21,6 +21,8 @@ import SettingsConnectivityDialog from './Settings-Connectivity'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
+import { BackendRemote } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 export default function SettingsProfile({
   settingsStore,
@@ -30,9 +32,10 @@ export default function SettingsProfile({
 }) {
   const { openDialog } = useContext(ScreenContext)
   const [connectivityString, setConnectivityString] = useState('')
+  const accountId = selectedAccountId()
 
-  const updateConnectivity = async () => {
-    const connectivity = await DeltaBackend.call('context.getConnectivity')
+  const updateConnectivity = useCallback(async () => {
+    const connectivity = await BackendRemote.rpc.getConnectivity(accountId)
 
     let connectivityString = ''
     if (connectivity >= C.DC_CONNECTIVITY_CONNECTED) {
@@ -49,7 +52,7 @@ export default function SettingsProfile({
       connectivityString = window.static_translate('connectivity_not_connected')
     }
     setConnectivityString(`(${connectivityString})`)
-  }
+  }, [accountId])
 
   const initial = avatarInitial(
     settingsStore.selfContact.displayName || '',
@@ -59,7 +62,7 @@ export default function SettingsProfile({
     updateConnectivity()
 
     return onDCEvent('DC_EVENT_CONNECTIVITY_CHANGED', updateConnectivity)
-  }, [])
+  }, [updateConnectivity])
 
   const tx = useTranslationFunction()
   const profileBlobUrl = runtime.transformBlobURL(

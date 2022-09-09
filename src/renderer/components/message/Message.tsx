@@ -360,20 +360,19 @@ const Message = (props: {
   // which fails becaus it imports stuff only availible in nodejs
   const downloadState = message.downloadState
 
-  if (downloadState !== "Done") {
+  if (downloadState !== 'Done') {
     content = (
       <div className={'download'}>
         {text} {'- '}
-        {downloadState == "Failure" && (
+        {downloadState == 'Failure' && (
           <span key='fail' className={'failed'}>
             {tx('download_failed')}
           </span>
         )}
-        {downloadState == "InProgress" && (
+        {downloadState == 'InProgress' && (
           <span key='downloading'>{tx('downloading')}</span>
         )}
-        {(downloadState == "Failure" ||
-          downloadState === "Available") && (
+        {(downloadState == 'Failure' || downloadState === 'Available') && (
           <button onClick={downloadFullMessage.bind(null, message.id)}>
             {tx('download')}
           </button>

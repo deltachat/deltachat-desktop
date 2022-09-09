@@ -167,8 +167,6 @@ class DeltaRemote {
     [key: string]: string[]
   }>
   // context ------------------------------------------------------------
-  call(fnName: 'context.maybeNetwork'): Promise<void>
-  call(fnName: 'context.getConnectivity'): Promise<number>
   call(fnName: 'context.getConnectivityHTML'): Promise<string>
   // extras -------------------------------------------------------------
   call(fnName: 'extras.getLocaleData', locale: string): Promise<LocaleData>

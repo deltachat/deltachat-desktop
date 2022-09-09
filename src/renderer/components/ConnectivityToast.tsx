@@ -5,7 +5,6 @@ import React, {
   useMemo,
   useContext,
 } from 'react'
-import { DeltaBackend } from '../delta-remote'
 import { onDCEvent } from '../ipc'
 
 import { getLogger } from '../../shared/logger'
@@ -16,6 +15,8 @@ import { C } from 'deltachat-node/node/dist/constants'
 import { debounce } from 'debounce'
 import { debounceWithInit } from './chat/ChatListHelpers'
 import SettingsConnectivityDialog from './dialogs/Settings-Connectivity'
+import { BackendRemote } from '../backend-com'
+import { selectedAccountId } from '../ScreenController'
 
 const log = getLogger('renderer/components/ConnectivityToast')
 
@@ -33,8 +34,10 @@ export default function ConnectivityToast() {
   ] = useState([Connectivity.CONNECTED, ''])
   const [tryConnectCooldown, setTryConnectCooldown] = useState(true)
 
+  const accountId = selectedAccountId()
+
   const maybeNetwork = useMemo(
-    () => debounce(() => DeltaBackend.call('context.maybeNetwork'), 140, true),
+    () => debounce(() => BackendRemote.rpc.maybeNetwork(), 140, true),
     []
   )
 
@@ -87,7 +90,7 @@ export default function ConnectivityToast() {
   const onConnectivityChanged = useMemo(
     () =>
       debounceWithInit(async (_data1: any, _data2: any) => {
-        const connectivity = await DeltaBackend.call('context.getConnectivity')
+        const connectivity = await BackendRemote.rpc.getConnectivity(accountId)
 
         if (connectivity >= C.DC_CONNECTIVITY_CONNECTED) {
           log.debug("Core thinks we're back online and connected")
@@ -115,7 +118,7 @@ export default function ConnectivityToast() {
           ])
         }
       }, 300),
-    []
+    [accountId]
   )
 
   useKeyBindingAction(KeybindAction.Debug_MaybeNetwork, maybeNetwork)
