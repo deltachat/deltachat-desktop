@@ -1,33 +1,9 @@
 import DeltaChat from 'deltachat-node'
-import { getLogger } from '../../shared/logger'
 
 import SplitOut from './splitout'
 import { JsonContact } from '../../shared/shared-types'
 
-const log = getLogger('main/deltachat/contacts')
-
 export default class JsonContacts extends SplitOut {
-  unblockContact(contactId: number) {
-    const contact = this.selectedAccountContext.getContact(contactId)
-    this.selectedAccountContext.blockContact(contactId, false)
-    const name = contact?.getNameAndAddress()
-    log.info(`Unblocked contact ${name} (id = ${contactId})`)
-  }
-
-  blockContact(contactId: number) {
-    const contact = this.selectedAccountContext.getContact(contactId)
-    this.selectedAccountContext.blockContact(contactId, true)
-    const name = contact?.getNameAndAddress()
-    log.debug(`Blocked contact ${name} (id = ${contactId})`)
-  }
-
-  getBlocked(): JsonContact[] {
-    if (!this.controller._inner_selectedAccountContext) return []
-    return this.selectedAccountContext
-      .getBlockedContacts()
-      .map(this.getContact.bind(this))
-  }
-
   async changeNickname(contactId: number, name: string) {
     const contact = this.selectedAccountContext.getContact(contactId)
     if (!contact) {
@@ -73,17 +49,6 @@ export default class JsonContacts extends SplitOut {
       throw new Error('contact not found')
     }
     return contact
-  }
-
-  getContactIds(listFlags: number, queryStr: string): number[] {
-    return (
-      this.selectedAccountContext
-        .getContacts(listFlags, queryStr)
-        // deduplicate the items here until its fixed in the core: see https://github.com/deltachat/deltachat-core-rust/issues/2552
-        .filter(function (item: number, pos: number, ary: number[]) {
-          return !pos || item != ary[pos - 1]
-        })
-    )
   }
 
   getContacts(ids: number[]) {

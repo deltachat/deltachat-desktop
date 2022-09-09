@@ -11,7 +11,6 @@ import {
 import ChatListItem from '../chat/ChatListItem'
 import { useChatList } from '../chat/ChatListHelpers'
 import { DeltaBackend } from '../../delta-remote'
-import { JsonContact } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/node/dist/constants'
 import {
   MessagesDisplayContext,
@@ -27,6 +26,7 @@ import { DialogProps } from './DialogController'
 import { Card, Elevation } from '@blueprintjs/core'
 import { DeltaInput } from '../Login-Styles'
 import { selectChat } from '../helpers/ChatMethods'
+import { Type } from '../../backend-com'
 
 const ProfileInfoName = ({
   name,
@@ -59,7 +59,7 @@ const ProfileInfoName = ({
   )
 }
 
-function ProfileInfoAvatar({ contact }: { contact: JsonContact }) {
+function ProfileInfoAvatar({ contact }: { contact: Type.Contact }) {
   const { displayName, profileImage } = contact
   const color = contact.color
   return Avatar({
@@ -73,13 +73,13 @@ function ProfileInfoAvatar({ contact }: { contact: JsonContact }) {
 export default function ViewProfile(props: {
   isOpen: boolean
   onClose: () => void
-  contact: JsonContact
+  contact: Type.Contact
 }) {
   const { isOpen, onClose } = props
 
   const tx = window.static_translate
   const { openDialog } = useContext(ScreenContext)
-  const [contact, setContact] = useState<JsonContact>(props.contact)
+  const [contact, setContact] = useState<Type.Contact>(props.contact)
   const isDeviceMessage = contact.id === C.DC_CONTACT_ID_DEVICE
 
   const onClickEdit = () => {
@@ -118,7 +118,7 @@ export function ViewProfileInner({
   contact,
   onClose,
 }: {
-  contact: JsonContact
+  contact: Type.Contact
   onClose: () => void
 }) {
   const { chatListIds } = useChatList(0, '', contact.id)

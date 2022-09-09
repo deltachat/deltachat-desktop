@@ -710,8 +710,8 @@ class ChatStore extends Store<ChatStoreState> {
             chatId
           )
           if (firstUnreadMsgId !== null) {
-            console.log({firstUnreadMsgId});
-            
+            console.log({ firstUnreadMsgId })
+
             setTimeout(() => {
               this.effect.jumpToMessage(firstUnreadMsgId, false)
               ActionEmitter.emitAction(

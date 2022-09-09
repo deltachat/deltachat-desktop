@@ -461,6 +461,7 @@ const Message = (props: {
               {tx('show_full_message_in_browser')}
             </div>
           )}
+          {JSON.stringify({ text })}
           <MessageMetaData
             fileMime={(!isSetupmessage && message.fileMime) || null}
             direction={direction}
@@ -537,7 +538,7 @@ export const Quote = ({
             </>
           )}
           <div className='quoted-text'>
-            <MessageBody text={quote.text || ""} />
+            <MessageBody text={quote.text || ''} />
           </div>
         </div>
         {hasMessage && quote.image && (

@@ -1,7 +1,6 @@
 import { C } from 'deltachat-node/node/dist/constants'
 import { _callDcMethodAsync } from './ipc'
 import {
-  FullChat,
   JsonLocations,
   Theme,
   JsonContact,
@@ -30,15 +29,7 @@ class DeltaRemote {
   call(fnName: 'backup.import', file: string): Promise<DeltaChatAccount>
   // chatList -----------------------------------------------------------
   call(fnName: 'chatList.onChatModified', chatId: number): Promise<void>
-  call(
-    fnName: 'chatList.getFullChatById',
-    chatId: number
-  ): Promise<FullChat | null>
-  call(fnName: 'chatList.getGeneralFreshMessageCounter'): Promise<number> // this method might be used for a favicon badge counter
   // contacts ------------------------------------------------------------
-  call(fnName: 'contacts.unblockContact', contactId: number): Promise<void>
-  call(fnName: 'contacts.blockContact', contactId: number): Promise<void>
-  call(fnName: 'contacts.getBlocked'): Promise<JsonContact[]>
   call(
     fnName: 'contacts.changeNickname',
     contactId: number,
@@ -55,29 +46,15 @@ class DeltaRemote {
   ): Promise<number>
   call(fnName: 'contacts.getContact', contactId: number): Promise<JsonContact>
   call(
-    fnName: 'contacts.getContactIds',
-    listFlags: number,
-    queryStr: string
-  ): Promise<number[]>
-  call(
     fnName: 'contacts.getContacts',
     ids: number[]
   ): Promise<{ [id: number]: JsonContact }>
-  call(
-    fnName: 'getContacts2',
-    listFlags: number,
-    queryStr: string
-  ): Promise<JsonContact[]>
   call(fnName: 'contacts.getEncryptionInfo', contactId: number): Promise<string>
   call(fnName: 'contacts.lookupContactIdByAddr', email: string): Promise<number>
   call(fnName: 'contacts.deleteContact', contactId: number): Promise<boolean>
   // chat ---------------------------------------------------------------
   call(fnName: 'chat.getEncryptionInfo', chatId: number): Promise<string>
   call(fnName: 'chat.getQrCode', chatId?: number): Promise<string>
-  call(
-    fnName: 'chat.getQrCodeSVG',
-    chatId?: number
-  ): Promise<{ content: string; svg: string }>
   call(fnName: 'chat.leaveGroup', chatId: number): Promise<void>
   call(fnName: 'chat.setName', chatId: number, name: string): Promise<boolean>
   call(

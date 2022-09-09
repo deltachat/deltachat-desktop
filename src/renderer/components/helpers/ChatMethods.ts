@@ -8,6 +8,7 @@ import AlertDialog from '../dialogs/AlertDialog'
 import { BackendRemote, EffectfulBackendActions, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import ViewGroup from '../dialogs/ViewGroup'
+import ViewProfile from '../dialogs/ViewProfile'
 
 const log = getLogger('renderer/message')
 
@@ -94,6 +95,7 @@ export function openBlockFirstContactOfChatDialog(
   const dmChatContact =
     (selectedChat as Type.ChatListItemFetchResult & { type: 'ChatListItem' })
       .dmChatContact || (selectedChat as Type.FullChat).contactIds[0]
+  const accountId = selectedAccountId()
 
   // TODO: CHECK IF THE CHAT IS DM CHAT
 
@@ -104,9 +106,9 @@ export function openBlockFirstContactOfChatDialog(
       isConfirmDanger: true,
       cb: (yes: boolean) =>
         yes &&
-        DeltaBackend.call('contacts.blockContact', dmChatContact).then(
-          unselectChat
-        ),
+        BackendRemote.rpc
+          .contactsBlock(accountId, dmChatContact)
+          .then(unselectChat),
     })
   }
 }
@@ -132,8 +134,11 @@ export async function openViewProfileDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
   contact_id: number
 ) {
-  screenContext.openDialog('ViewProfile', {
-    contact: await DeltaBackend.call('contacts.getContact', contact_id),
+  screenContext.openDialog(ViewProfile, {
+    contact: await BackendRemote.rpc.contactsGetContact(
+      selectedAccountId(),
+      contact_id
+    ),
   })
 }
 
@@ -196,8 +201,10 @@ export async function joinCall(
 export async function createChatByContactIdAndSelectIt(
   contactId: number
 ): Promise<void> {
-  const chatId = await DeltaBackend.call(
-    'contacts.createChatByContactId',
+  const accountId = selectedAccountId()
+
+  const chatId = await BackendRemote.rpc.contactsCreateChatByContactId(
+    accountId,
     contactId
   )
 
@@ -205,7 +212,10 @@ export async function createChatByContactIdAndSelectIt(
     throw new Error(window.static_translate('create_chat_error_desktop'))
   }
 
-  const chat = await DeltaBackend.call('chatList.getFullChatById', chatId)
+  const chat = await BackendRemote.rpc.chatlistGetFullChatById(
+    accountId,
+    chatId
+  )
 
   if (chat && chat.archived) {
     log.debug('chat was archived, unarchiving it')

@@ -409,15 +409,6 @@ export default class DeltaChatController extends EventEmitter {
     return this.selectedAccountContext.joinSecurejoin(qrCode)
   }
 
-  // ToDo: move to contacts.
-  getContacts2(listFlags: number, queryStr: string) {
-    const distinctIds: number[] = Array.from(
-      new Set(this.selectedAccountContext.getContacts(listFlags, queryStr))
-    )
-    const contacts = distinctIds.map(id => this.contacts.getContact(id))
-    return contacts
-  }
-
   setProfilePicture(newImage: string) {
     this.selectedAccountContext.setConfig('selfavatar', newImage)
   }

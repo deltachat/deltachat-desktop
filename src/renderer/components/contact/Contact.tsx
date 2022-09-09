@@ -40,7 +40,7 @@ function ContactName(
 
 export default function Contact(props: {
   contact: {
-    profileImage: string
+    profileImage: string | null
     color: string
     displayName: string
     address: string

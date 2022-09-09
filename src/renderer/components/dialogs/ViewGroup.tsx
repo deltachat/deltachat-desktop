@@ -16,7 +16,6 @@ import {
   PseudoListItemAddMember,
 } from '../helpers/PseudoListItem'
 import { DialogProps } from './DialogController'
-import { JsonContact } from '../../../shared/shared-types'
 import { ViewProfileInner } from './ViewProfile'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { useState, useContext, useEffect, useCallback, useMemo } from 'react'
@@ -163,7 +162,7 @@ function ViewGroupInner(props: {
     setGroupImage,
   } = useGroup(chat)
 
-  const showRemoveGroupMemberConfirmationDialog = (contact: JsonContact) => {
+  const showRemoveGroupMemberConfirmationDialog = (contact: Type.Contact) => {
     openDialog('ConfirmationDialog', {
       message: !isBroadcast
         ? tx('ask_remove_members', contact.nameAndAddr)
@@ -206,10 +205,11 @@ function ViewGroupInner(props: {
   }
 
   const showQRDialog = async () => {
-    const { content: qrCode, svg } = await DeltaBackend.call(
-      'chat.getQrCodeSVG',
+    const [qrCode, svg] = await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(
+      selectedAccountId(),
       chat.id
     )
+
     openDialog(ShowQRDialog, {
       qrCode,
       qrCodeSVG: svg,
@@ -217,7 +217,9 @@ function ViewGroupInner(props: {
     })
   }
 
-  const [profileContact, setProfileContact] = useState<JsonContact | null>(null)
+  const [profileContact, setProfileContact] = useState<Type.Contact | null>(
+    null
+  )
 
   return (
     <>
@@ -278,10 +280,9 @@ function ViewGroupInner(props: {
                   </>
                 )}
                 <ContactList2
-                  // contacts={chat.contacts}
-                  contacts={[]}
+                  contacts={chat.contacts}
                   showRemove={!chatDisabled}
-                  onClick={(contact: JsonContact) => {
+                  onClick={contact => {
                     setProfileContact(contact)
                     setViewMode('profile')
                   }}
