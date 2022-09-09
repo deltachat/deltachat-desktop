@@ -26,7 +26,8 @@ import { DialogProps } from './DialogController'
 import { Card, Elevation } from '@blueprintjs/core'
 import { DeltaInput } from '../Login-Styles'
 import { selectChat } from '../helpers/ChatMethods'
-import { Type } from '../../backend-com'
+import { BackendRemote, Type } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 const ProfileInfoName = ({
   name,
@@ -121,6 +122,7 @@ export function ViewProfileInner({
   contact: Type.Contact
   onClose: () => void
 }) {
+  const accountId = selectedAccountId()
   const { chatListIds } = useChatList(0, '', contact.id)
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
     chatListIds
@@ -134,8 +136,8 @@ export function ViewProfileInner({
     onClose()
   }
   const onSendMessage = async () => {
-    const dmChatId = await DeltaBackend.call(
-      'contacts.createChatByContactId',
+    const dmChatId = await BackendRemote.rpc.contactsCreateChatByContactId(
+      accountId,
       contact.id
     )
     onChatClick(dmChatId)

@@ -1,18 +1,15 @@
 import { C } from 'deltachat-node/node/dist/constants'
-import {
-  DesktopSettingsType,
-  JsonContact,
-  RC_Config,
-} from '../../shared/shared-types'
-import { BackendRemote } from '../backend-com'
+import { DesktopSettingsType, RC_Config } from '../../shared/shared-types'
+import { BackendRemote, Type } from '../backend-com'
 import { DeltaBackend } from '../delta-remote'
 import { ipcBackend } from '../ipc'
 import { runtime } from '../runtime'
+import { selectedAccountId } from '../ScreenController'
 import { Store, useStore } from './store'
 
 export interface SettingsStoreState {
   accountId: number
-  selfContact: JsonContact
+  selfContact: Type.Contact
   settings: {
     sentbox_watch: string
     mvbox_move: string
@@ -59,7 +56,7 @@ class SettingsStore extends Store<SettingsStoreState | null> {
         return newState
       }, 'set')
     },
-    setSelfContact: (selfContact: JsonContact) => {
+    setSelfContact: (selfContact: Type.Contact) => {
       this.setState(state => {
         if (state === null) return
         return {
@@ -119,8 +116,8 @@ class SettingsStore extends Store<SettingsStoreState | null> {
         accountId,
         settingsKeys
       )) as SettingsStoreState['settings']
-      const selfContact = await DeltaBackend.call(
-        'contacts.getContact',
+      const selfContact = await BackendRemote.rpc.contactsGetContact(
+        accountId,
         C.DC_CONTACT_ID_SELF
       )
       const desktopSettings = await DeltaBackend.call(
@@ -169,8 +166,9 @@ class SettingsStore extends Store<SettingsStoreState | null> {
 }
 
 ipcBackend.on('DC_EVENT_SELFAVATAR_CHANGED', async (_evt, [_chatId]) => {
-  const selfContact = await DeltaBackend.call(
-    'contacts.getContact',
+  const accountId = selectedAccountId()
+  const selfContact = await BackendRemote.rpc.contactsGetContact(
+    accountId,
     C.DC_CONTACT_ID_SELF
   )
   SettingsStoreInstance.reducer.setSelfContact(selfContact)

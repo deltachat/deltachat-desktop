@@ -127,9 +127,10 @@ export default function ChatList(props: {
   const addContactOnClick = async () => {
     if (!queryStrIsValidEmail || !queryStr) return
 
-    const contactId = await DeltaBackend.call(
-      'contacts.createContact',
-      queryStr
+    const contactId = await BackendRemote.rpc.contactsCreateContact(
+      selectedAccountId(),
+      queryStr,
+      null
     )
     await createChatByContactIdAndSelectIt(contactId)
     props.onExitSearch && props.onExitSearch()

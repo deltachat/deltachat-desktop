@@ -3,7 +3,6 @@ import { _callDcMethodAsync } from './ipc'
 import {
   JsonLocations,
   Theme,
-  JsonContact,
   MessageSearchResult,
   DeltaChatAccount,
   DesktopSettingsType,
@@ -35,20 +34,6 @@ class DeltaRemote {
     contactId: number,
     name: string
   ): Promise<number>
-  call(
-    fnName: 'contacts.createContact',
-    email: string,
-    name?: string
-  ): Promise<number>
-  call(
-    fnName: 'contacts.createChatByContactId',
-    contactId: number
-  ): Promise<number>
-  call(fnName: 'contacts.getContact', contactId: number): Promise<JsonContact>
-  call(
-    fnName: 'contacts.getContacts',
-    ids: number[]
-  ): Promise<{ [id: number]: JsonContact }>
   call(fnName: 'contacts.getEncryptionInfo', contactId: number): Promise<string>
   call(fnName: 'contacts.lookupContactIdByAddr', email: string): Promise<number>
   call(fnName: 'contacts.deleteContact', contactId: number): Promise<boolean>

@@ -63,7 +63,7 @@ export default function SettingsProfile({
 
   const tx = useTranslationFunction()
   const profileBlobUrl = runtime.transformBlobURL(
-    settingsStore.selfContact.profileImage
+    settingsStore.selfContact.profileImage || ''
   )
   return (
     <>
@@ -127,7 +127,7 @@ export function ProfileImageSelector({
   displayName: string
   addr: string
   color: string
-  profilePicture: string
+  profilePicture: string | null
   setProfilePicture: (path: string) => void
 }) {
   const tx = window.static_translate
