@@ -72,8 +72,8 @@ export default class ComposerMessageInput extends React.Component<
     return null
   }
 
-  setText(text: string) {
-    this.setState({ text, loadingDraft: false })
+  setText(text: string | null) {
+    this.setState({ text: text || '', loadingDraft: false })
   }
 
   setComposerSize(size: number) {

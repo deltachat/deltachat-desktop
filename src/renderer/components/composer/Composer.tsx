@@ -361,8 +361,9 @@ export function useDraft(
             viewType: newDraft.viewType,
             quote: newDraft.quote,
           }))
-          newDraft.text && inputRef.current?.setText(newDraft.text)
+          inputRef.current?.setText(newDraft.text)
         }
+        inputRef.current?.setState({ loadingDraft: false })
       })
     },
     [clearDraft, inputRef]
@@ -393,14 +394,23 @@ export function useDraft(
     const oldChatId = chatId
     if (
       (draft.text && draft.text.length > 0) ||
-      draft.file != '' ||
+      (draft.file && draft.file != '') ||
       !!draft.quote
     ) {
+      console.log({
+        draft,
+        states: [
+          draft.text && draft.text.length > 0,
+          draft.file && draft.file != '',
+          !!draft.quote,
+        ],
+      })
+
       await BackendRemote.rpc.miscSetDraft(
         accountId,
         chatId,
         draft.text,
-        draft.file,
+        draft.file !== '' ? draft.file : null,
         draft.quote?.kind === 'WithMessage' ? draft.quote.messageId : null
       )
     } else {
@@ -463,10 +473,10 @@ export function useDraft(
 
   useEffect(() => {
     window.__setQuoteInDraft = (messageId: number) => {
-      draftRef.current.quote = ({
-        kind: 'withMessage',
-        message_id: messageId,
-      } as any) as Type.MessageQuote
+      draftRef.current.quote = (({
+        kind: 'WithMessage',
+        messageId,
+      } as Partial<Type.MessageQuote>) as any) as Type.MessageQuote
       saveDraft()
       inputRef.current?.focus()
     }
