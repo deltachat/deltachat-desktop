@@ -15,6 +15,7 @@ import { getLogger } from '../../../shared/logger'
 import { MessageType, FullChat } from '../../../shared/shared-types'
 import { MessagesDisplayContext, useTranslationFunction } from '../../contexts'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
+import debounce from 'debounce'
 const log = getLogger('render/components/message/MessageList')
 
 export default function MessageList({
@@ -34,7 +35,8 @@ export default function MessageList({
     lastKnownScrollHeight,
   } = useChatStore()
   const messageListRef = useRef<HTMLDivElement | null>(null)
-  const [onePageAwayFromNewestMessage, setOnePageAwayFromNewestMessage] = useState(false)
+  const [onePageAwayFromNewestMessage, _setOnePageAwayFromNewestMessage] = useState(false)
+  const setOnePageAwayFromNewestMessage = debounce(_setOnePageAwayFromNewestMessage, 30, true)
 
   const [fetchMoreTop] = useDebouncedCallback(
     async () => {
@@ -68,9 +70,11 @@ export default function MessageList({
         messageListRef.current.clientHeight
       //console.log('onScroll', distanceToTop, distanceToBottom)
 
+      const isNewestMessageLoaded = ChatStore.state.newestFetchedMessageIndex === ChatStore.state.messageIds.length - 1
       const onePageAwayFromNewestMessageTreshold = (messageListRef.current.clientHeight / 3)
-      const onePageAwayFromNewestMessage = distanceToBottom >= onePageAwayFromNewestMessageTreshold 
+      const onePageAwayFromNewestMessage = !isNewestMessageLoaded || distanceToBottom >= onePageAwayFromNewestMessageTreshold 
       setOnePageAwayFromNewestMessage(onePageAwayFromNewestMessage)
+
       if (distanceToTop < 200 && distanceToBottom < 200) {
         log.debug('onScroll: Lets try loading messages from both ends')
         setTimeout(() => fetchMoreTop(), 0)
