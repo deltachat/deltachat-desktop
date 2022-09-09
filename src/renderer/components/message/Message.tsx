@@ -359,22 +359,22 @@ const Message = (props: {
 
   // we need this typeconversion, if we don't have it esbuild tries bundling deltachat-node again,
   // which fails becaus it imports stuff only availible in nodejs
-  const downloadState = (message.downloadState as unknown) as MessageDownloadState
+  const downloadState = message.downloadState
 
-  if (downloadState !== MessageDownloadState.Done) {
+  if (downloadState !== "Done") {
     content = (
       <div className={'download'}>
         {text} {'- '}
-        {downloadState == MessageDownloadState.Failure && (
+        {downloadState == "Failure" && (
           <span key='fail' className={'failed'}>
             {tx('download_failed')}
           </span>
         )}
-        {downloadState == MessageDownloadState.InProgress && (
+        {downloadState == "InProgress" && (
           <span key='downloading'>{tx('downloading')}</span>
         )}
-        {(downloadState == MessageDownloadState.Failure ||
-          downloadState === MessageDownloadState.Available) && (
+        {(downloadState == "Failure" ||
+          downloadState === "Available") && (
           <button onClick={downloadFullMessage.bind(null, message.id)}>
             {tx('download')}
           </button>
@@ -461,7 +461,6 @@ const Message = (props: {
               {tx('show_full_message_in_browser')}
             </div>
           )}
-          {JSON.stringify({ text })}
           <MessageMetaData
             fileMime={(!isSetupmessage && message.fileMime) || null}
             direction={direction}
