@@ -588,7 +588,7 @@ class ChatStore extends Store<ChatStoreState> {
   ): T {
     const fn: T = ((async (...args: any) => {
       if (this.lockIsLocked(lockName) === true) {
-        log.debug(`lockedEffect: ${effectName}: We're locked, returning`)
+        log.debug(`lockedEffect: ${effectName}: We're locked, dropping effect`)
         return false
       }
 
@@ -720,7 +720,7 @@ class ChatStore extends Store<ChatStoreState> {
       try {
         returnValue = await effect(...args)
       } catch (err) {
-        log.error(`Error in lockedQueuedEffect ${effectName}: ${err}`)
+        log.error(`Error in lockedQueuedEffect ${effectName}: ${(err as Error).stack}`)
         unlockQueue()
         return
       }
@@ -824,6 +824,7 @@ class ChatStore extends Store<ChatStoreState> {
     setView: (view: ChatView) => {
       this.reducer.setView(view)
     },
+    // TODO: Probably this should be lockedQueuedEffect too?
     jumpToMessage: this.queuedEffect(
       this.lockedEffect(
         'scroll',
