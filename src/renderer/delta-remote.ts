@@ -34,7 +34,6 @@ class DeltaRemote {
     contactId: number,
     name: string
   ): Promise<number>
-  call(fnName: 'contacts.getEncryptionInfo', contactId: number): Promise<string>
   call(fnName: 'contacts.lookupContactIdByAddr', email: string): Promise<number>
   call(fnName: 'contacts.deleteContact', contactId: number): Promise<boolean>
   // chat ---------------------------------------------------------------
@@ -166,8 +165,6 @@ class DeltaRemote {
   ): Promise<{
     [key: string]: string[]
   }>
-  // context ------------------------------------------------------------
-  call(fnName: 'context.getConnectivityHTML'): Promise<string>
   // extras -------------------------------------------------------------
   call(fnName: 'extras.getLocaleData', locale: string): Promise<LocaleData>
   call(fnName: 'extras.setLocale', locale: string): Promise<void>

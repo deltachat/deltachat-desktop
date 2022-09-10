@@ -21,10 +21,6 @@ export default class JsonContacts extends SplitOut {
     return contact
   }
 
-  getEncryptionInfo(contactId: number) {
-    return this.selectedAccountContext.getContactEncryptionInfo(contactId)
-  }
-
   lookupContactIdByAddr(email: string): number {
     if (!DeltaChat.maybeValidAddr(email)) {
       throw new Error(this.controller.translate('bad_email_address'))
