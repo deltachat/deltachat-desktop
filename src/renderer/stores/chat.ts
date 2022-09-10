@@ -578,6 +578,9 @@ class ChatStore extends Store<ChatStoreState> {
     },
   }
 
+  // This effect will only get executed if the lock is unlocked. If it's still locked, this effect
+  // will get dropped/not executed. If you want the effect to get executed as soon as the lock with
+  // lockNameis unlocked, use lockedQueuedEffect.
   lockedEffect<T extends Function>(
     lockName: keyof ChatStoreLocks,
     effect: T,
@@ -641,6 +644,7 @@ class ChatStore extends Store<ChatStoreState> {
     }, 0)
   }
 
+  // This effect will get added to the end of the queue. The queue is getting executed one after the other.
   queuedEffect<T extends Function>(effect: T, effectName: string): T {
     const fn: T = ((async (...args: any) => {
       const lockQueue = () => {
@@ -682,92 +686,139 @@ class ChatStore extends Store<ChatStoreState> {
     return fn
   }
 
+  // This effect is once the lock with lockName is unlocked. It will get postponed until the lock is free.
+  lockedQueuedEffect<T extends Function>(lockName: keyof ChatStoreLocks, effect: T, effectName: string): T {
+    const fn: T = ((async (...args: any) => {
+      const lockQueue = () => {
+        log.debug(`lockedQueuedEffect: ${effectName}: locking`)
+        this.lockLock('queue')
+      }
+      const unlockQueue = () => {
+        this.lockUnlock('queue')
+        log.debug(`lockedQueuedEffect: ${effectName}: unlocked`)
+      }
+
+      if (this.lockIsLocked('queue') === true) {
+        log.debug(
+          `lockedQueuedEffect: ${effectName}: We're locked, adding effect to queue`
+        )
+        this.effectQueue.push(effect.bind(this, ...args))
+        return false
+      }
+
+      if (this.lockIsLocked(lockName) === true) {
+        log.debug(
+          `lockedQueuedEffect: ${effectName}: Lock "${lockName}" is locked, postponing effect in queue`
+        )
+        this.effectQueue.push(effect.bind(this, ...args))
+        return false
+      }
+
+      log.debug(`lockedQueuedEffect: ${effectName}: locking`)
+      lockQueue()
+      let returnValue
+      try {
+        returnValue = await effect(...args)
+      } catch (err) {
+        log.error(`Error in lockedQueuedEffect ${effectName}: ${err}`)
+        unlockQueue()
+        return
+      }
+      if (this.effectQueue.length !== 0) {
+        this.tickRunQueuedEffect()
+      } else {
+        unlockQueue()
+      }
+
+      log.debug(`lockedQueuedEffect: ${effectName}: done`)
+      return returnValue
+    }) as unknown) as T
+    return fn
+  }
+
   effect = {
-    selectChat: this.queuedEffect(
-      this.lockedEffect(
-        'scroll',
-        async (chatId: number) => {
-          const accountId = selectedAccountId()
-          const chat = await BackendRemote.rpc.chatlistGetFullChatById(
-            accountId,
-            chatId
+    selectChat: this.lockedQueuedEffect(
+      'scroll',
+      async (chatId: number) => {
+        const accountId = selectedAccountId()
+        const chat = await BackendRemote.rpc.chatlistGetFullChatById(
+          accountId,
+          chatId
+        )
+        if (chat.id === null) {
+          log.debug(
+            'SELECT CHAT chat does not exsits, id is null. chatId:',
+            chat.id
           )
-          if (chat.id === null) {
-            log.debug(
-              'SELECT CHAT chat does not exsits, id is null. chatId:',
-              chat.id
+          return
+        }
+        const messageIds = await BackendRemote.rpc.messageListGetMessageIds(
+          accountId,
+          chatId,
+          C.DC_GCM_ADDDAYMARKER
+        )
+
+        const firstUnreadMsgId = await BackendRemote.rpc.getFirstUnreadMessageOfChat(
+          accountId,
+          chatId
+        )
+        if (firstUnreadMsgId !== null) {
+          console.log({ firstUnreadMsgId })
+
+          setTimeout(() => {
+            this.effect.jumpToMessage(firstUnreadMsgId, false)
+            ActionEmitter.emitAction(
+              chat.archived
+                ? KeybindAction.ChatList_SwitchToArchiveView
+                : KeybindAction.ChatList_SwitchToNormalView
             )
-            return
-          }
-          const messageIds = await BackendRemote.rpc.messageListGetMessageIds(
+            runtime.updateBadge()
+            saveLastChatId(chatId)
+          })
+          return false
+        }
+
+        await BackendRemote.rpc.marknoticedChat(accountId, chatId)
+        chat.freshMessageCounter = 0
+
+        let oldestFetchedMessageIndex = -1
+        let newestFetchedMessageIndex = -1
+        let messagePage: MessagePage | null = null
+        if (messageIds.length !== 0) {
+          // mesageIds.length = 1767
+          // oldestFetchedMessageIndex = 1767 - 1 = 1766 - 10 = 1756
+          // newestFetchedMessageIndex =                        1766
+          oldestFetchedMessageIndex = Math.max(
+            messageIds.length - 1 - PAGE_SIZE,
+            0
+          )
+          newestFetchedMessageIndex = messageIds.length - 1
+
+          messagePage = await messagePageFromMessageIndexes(
             accountId,
             chatId,
-            C.DC_GCM_ADDDAYMARKER
-          )
-
-          const firstUnreadMsgId = await BackendRemote.rpc.getFirstUnreadMessageOfChat(
-            accountId,
-            chatId
-          )
-          if (firstUnreadMsgId !== null) {
-            console.log({ firstUnreadMsgId })
-
-            setTimeout(() => {
-              this.effect.jumpToMessage(firstUnreadMsgId, false)
-              ActionEmitter.emitAction(
-                chat.archived
-                  ? KeybindAction.ChatList_SwitchToArchiveView
-                  : KeybindAction.ChatList_SwitchToNormalView
-              )
-              runtime.updateBadge()
-              saveLastChatId(chatId)
-            })
-            return false
-          }
-
-          await BackendRemote.rpc.marknoticedChat(accountId, chatId)
-          chat.freshMessageCounter = 0
-
-          let oldestFetchedMessageIndex = -1
-          let newestFetchedMessageIndex = -1
-          let messagePage: MessagePage | null = null
-          if (messageIds.length !== 0) {
-            // mesageIds.length = 1767
-            // oldestFetchedMessageIndex = 1767 - 1 = 1766 - 10 = 1756
-            // newestFetchedMessageIndex =                        1766
-            oldestFetchedMessageIndex = Math.max(
-              messageIds.length - 1 - PAGE_SIZE,
-              0
-            )
-            newestFetchedMessageIndex = messageIds.length - 1
-
-            messagePage = await messagePageFromMessageIndexes(
-              accountId,
-              chatId,
-              oldestFetchedMessageIndex,
-              newestFetchedMessageIndex
-            )
-          }
-
-          this.reducer.selectedChat({
-            chat,
-            accountId,
-            messagePages: messagePage === null ? [] : [messagePage],
-            messageIds,
             oldestFetchedMessageIndex,
-            newestFetchedMessageIndex,
-            scrollToBottom: true,
-          })
-          ActionEmitter.emitAction(
-            chat.archived
-              ? KeybindAction.ChatList_SwitchToArchiveView
-              : KeybindAction.ChatList_SwitchToNormalView
+            newestFetchedMessageIndex
           )
-          runtime.updateBadge()
-          saveLastChatId(chatId)
-        },
-        'selectChat'
-      ),
+        }
+
+        this.reducer.selectedChat({
+          chat,
+          accountId,
+          messagePages: messagePage === null ? [] : [messagePage],
+          messageIds,
+          oldestFetchedMessageIndex,
+          newestFetchedMessageIndex,
+          scrollToBottom: true,
+        })
+        ActionEmitter.emitAction(
+          chat.archived
+            ? KeybindAction.ChatList_SwitchToArchiveView
+            : KeybindAction.ChatList_SwitchToNormalView
+        )
+        runtime.updateBadge()
+        saveLastChatId(chatId)
+      },
       'selectChat'
     ),
     setView: (view: ChatView) => {
