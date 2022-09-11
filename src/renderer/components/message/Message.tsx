@@ -463,7 +463,7 @@ const Message = (props: {
             fileMime={(!isSetupmessage && message.fileMime) || null}
             direction={direction}
             status={status}
-            hasText={text !== null}
+            hasText={text !== null && text !== ''}
             hasLocation={hasLocation}
             timestamp={message.timestamp * 1000}
             padlock={message.showPadlock}
