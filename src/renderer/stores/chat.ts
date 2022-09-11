@@ -1439,5 +1439,19 @@ async function getMessagesFromIndex(
     messageIds
   )
 
-  return messageIds.map(id => [id, messages[id]])
+  const result: [number, Type.Message][] = messageIds.map(id => [
+    id,
+    messages[id],
+  ])
+
+  // mark messages as seen once they are loaded
+  const unseen_messages = result
+    .filter(
+      ([_, { state }]) =>
+        state === C.DC_STATE_IN_FRESH || state === C.DC_STATE_IN_SEEN
+    )
+    .map(([id]) => id)
+  BackendRemote.rpc.markseenMsgs(accountId, unseen_messages)
+
+  return result
 }
