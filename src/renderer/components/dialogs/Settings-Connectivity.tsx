@@ -13,8 +13,8 @@ import { onDCEvent } from '../../ipc'
 import { debounceWithInit } from '../chat/ChatListHelpers'
 import { DialogProps } from './DialogController'
 import { useTranslationFunction } from '../../contexts'
-import {BackendRemote} from '../../backend-com'
-import {selectedAccountId} from '../../ScreenController'
+import { BackendRemote } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 const INHERIT_STYLES = ['line-height', 'background-color', 'color', 'font-size']
 const OverwrittenStyles =

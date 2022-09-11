@@ -76,7 +76,6 @@ export async function privateReply(msg: Type.Message) {
 
   // select chat
   selectChat(chatId)
-
 }
 
 export async function openMessageHTML(messageId: number) {

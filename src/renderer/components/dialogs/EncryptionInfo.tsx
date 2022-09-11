@@ -7,7 +7,7 @@ import {
   DeltaDialogFooterActions,
 } from './DeltaDialog'
 import { BackendRemote, Type } from '../../backend-com'
-import {selectedAccountId} from '../../ScreenController'
+import { selectedAccountId } from '../../ScreenController'
 
 export default function EncryptionInfo({
   chatListItem,
@@ -22,8 +22,10 @@ export default function EncryptionInfo({
   useEffect(() => {
     if (!chatListItem) return
     ;(chatListItem.dmChatContact
-      ? 
-        BackendRemote.rpc.getContactEncryptionInfo(selectedAccountId(), chatListItem.dmChatContact)
+      ? BackendRemote.rpc.getContactEncryptionInfo(
+          selectedAccountId(),
+          chatListItem.dmChatContact
+        )
       : DeltaBackend.call('chat.getEncryptionInfo', chatListItem.id)
     ).then(setEncryptionInfo)
   }, [chatListItem])

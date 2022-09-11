@@ -687,7 +687,11 @@ class ChatStore extends Store<ChatStoreState> {
   }
 
   // This effect is once the lock with lockName is unlocked. It will get postponed until the lock is free.
-  lockedQueuedEffect<T extends Function>(lockName: keyof ChatStoreLocks, effect: T, effectName: string): T {
+  lockedQueuedEffect<T extends Function>(
+    lockName: keyof ChatStoreLocks,
+    effect: T,
+    effectName: string
+  ): T {
     const fn: T = ((async (...args: any) => {
       const lockQueue = () => {
         log.debug(`lockedQueuedEffect: ${effectName}: locking`)
@@ -720,7 +724,9 @@ class ChatStore extends Store<ChatStoreState> {
       try {
         returnValue = await effect(...args)
       } catch (err) {
-        log.error(`Error in lockedQueuedEffect ${effectName}: ${(err as Error).stack}`)
+        log.error(
+          `Error in lockedQueuedEffect ${effectName}: ${(err as Error).stack}`
+        )
         unlockQueue()
         return
       }
