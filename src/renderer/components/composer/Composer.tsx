@@ -397,15 +397,6 @@ export function useDraft(
       (draft.file && draft.file != '') ||
       !!draft.quote
     ) {
-      console.log({
-        draft,
-        states: [
-          draft.text && draft.text.length > 0,
-          draft.file && draft.file != '',
-          !!draft.quote,
-        ],
-      })
-
       await BackendRemote.rpc.miscSetDraft(
         accountId,
         chatId,
