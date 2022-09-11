@@ -8,7 +8,6 @@ import {
   DeltaDialogBase,
   DeltaDialogHeader,
 } from './DeltaDialog'
-import { DeltaBackend } from '../../delta-remote'
 import { onDCEvent } from '../../ipc'
 import { debounceWithInit } from '../chat/ChatListHelpers'
 import { DialogProps } from './DialogController'
