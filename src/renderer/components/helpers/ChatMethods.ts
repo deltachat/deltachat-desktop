@@ -152,7 +152,11 @@ export async function openMuteChatDialog(
 }
 
 export async function unMuteChat(chatId: number) {
-  await BackendRemote.rpc.setChatMuteDuration(selectedAccountId(), chatId, 'NotMuted')
+  await BackendRemote.rpc.setChatMuteDuration(
+    selectedAccountId(),
+    chatId,
+    'NotMuted'
+  )
 }
 
 export async function sendCallInvitation(
