@@ -1124,7 +1124,7 @@ class ChatStore extends Store<ChatStoreState> {
     }) => {
       if (payload.chatId !== this.state.chat?.id) return
 
-      BackendRemote.rpc.setChatMuteDuration(
+      await BackendRemote.rpc.setChatMuteDuration(
         selectedAccountId(),
         payload.chatId,
         payload.muteDuration
