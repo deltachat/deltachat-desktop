@@ -106,9 +106,10 @@ export function openBlockFirstContactOfChatDialog(
       isConfirmDanger: true,
       cb: (yes: boolean) =>
         yes &&
-        BackendRemote.rpc
-          .contactsBlock(accountId, dmChatContact)
-          .then(unselectChat),
+        BackendRemote.rpc.contactsBlock(accountId, dmChatContact).then(() => {
+          unselectChat()
+          window.__refetchChatlist && window.__refetchChatlist()
+        }),
     })
   }
 }
