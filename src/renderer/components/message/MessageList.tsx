@@ -1,4 +1,10 @@
-import React, { useRef, useCallback, useLayoutEffect } from 'react'
+import React, {
+  useRef,
+  useCallback,
+  useLayoutEffect,
+  MutableRefObject,
+  useEffect,
+} from 'react'
 import { MessageWrapper } from './MessageWrapper'
 import ChatStore, {
   useChatStore,
@@ -14,6 +20,8 @@ import moment from 'moment'
 import { getLogger } from '../../../shared/logger'
 import { MessagesDisplayContext, useTranslationFunction } from '../../contexts'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
+import { BackendRemote } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 const log = getLogger('render/components/message/MessageList')
 
 export default function MessageList({
@@ -49,6 +57,53 @@ export default function MessageList({
     30,
     { leading: true }
   )
+
+  const onUnreadMessageInView: IntersectionObserverCallback = entries => {
+    if (ChatStore.state.chat === null) return
+    const chatId = ChatStore.state.chat.id
+    setTimeout(() => {
+      log.debug(`onUnreadMessageInView: entries.length: ${entries.length}`)
+
+      const messageIdsToMarkAsRead = []
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue
+        const messageKey = entry.target.getAttribute('id')
+        if (messageKey === null) continue
+        const messageId = messageKey.split('-')[1]
+        const messageHeight = entry.target.clientHeight
+
+        log.debug(
+          `onUnreadMessageInView: messageId ${messageId} height: ${messageHeight} intersectionRate: ${entry.intersectionRatio}`
+        )
+        log.debug(
+          `onUnreadMessageInView: messageId ${messageId} marking as read`
+        )
+
+        messageIdsToMarkAsRead.push(Number.parseInt(messageId))
+        if (unreadMessageInViewIntersectionObserver.current === null) continue
+        unreadMessageInViewIntersectionObserver.current.unobserve(entry.target)
+      }
+
+      if (messageIdsToMarkAsRead.length > 0) {
+        BackendRemote.rpc.markseenMsgs(
+          selectedAccountId(),
+          messageIdsToMarkAsRead
+        )
+      }
+    })
+  }
+  const unreadMessageInViewIntersectionObserver: MutableRefObject<IntersectionObserver> = useRef(
+    new IntersectionObserver(onUnreadMessageInView, {
+      root: null,
+      rootMargin: '0px',
+      threshold: [0, 1],
+    })
+  )
+  useEffect(() => {
+    return () => {
+      unreadMessageInViewIntersectionObserver.current?.disconnect()
+    }
+  }, [])
 
   const onScroll = useCallback(
     (Event: React.UIEvent<HTMLDivElement> | null) => {
@@ -267,6 +322,9 @@ export default function MessageList({
         messagePages={messagePages}
         messageListRef={messageListRef}
         chatStore={chatStore}
+        unreadMessageInViewIntersectionObserver={
+          unreadMessageInViewIntersectionObserver
+        }
       />
     </MessagesDisplayContext.Provider>
   )
@@ -288,14 +346,15 @@ export const MessageListInner = React.memo(
     messagePages: ChatStoreState['messagePages']
     messageListRef: React.MutableRefObject<HTMLDivElement | null>
     chatStore: ChatStoreStateWithChatSet
+    unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
   }) => {
     const {
       onScroll,
       messageIds,
       messagePages,
       messageListRef,
-
       chatStore,
+      unreadMessageInViewIntersectionObserver,
     } = props
 
     if (!chatStore.chat.id) {
@@ -338,6 +397,9 @@ export const MessageListInner = React.memo(
                 key={messagePage.pageKey}
                 messagePage={messagePage}
                 conversationType={conversationType}
+                unreadMessageInViewIntersectionObserver={
+                  unreadMessageInViewIntersectionObserver
+                }
               />
             )
           })}
@@ -360,9 +422,11 @@ const MessagePageComponent = React.memo(
   function MessagePageComponent({
     messagePage,
     conversationType,
+    unreadMessageInViewIntersectionObserver,
   }: {
     messagePage: MessagePage
     conversationType: ConversationType
+    unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
   }) {
     const messageElements = []
     const messagesOnPage = messagePage.messages.toArray()
@@ -385,8 +449,12 @@ const MessagePageComponent = React.memo(
       messageElements.push(
         <MessageWrapper
           key={messageId}
+          key2={`${messageId}`}
           message={message}
           conversationType={conversationType}
+          unreadMessageInViewIntersectionObserver={
+            unreadMessageInViewIntersectionObserver
+          }
         />
       )
     }

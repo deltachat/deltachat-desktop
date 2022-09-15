@@ -785,7 +785,6 @@ class ChatStore extends Store<ChatStoreState> {
         }
 
         await BackendRemote.rpc.marknoticedChat(accountId, chatId)
-        chat.freshMessageCounter = 0
 
         let oldestFetchedMessageIndex = -1
         let newestFetchedMessageIndex = -1
@@ -1443,15 +1442,6 @@ async function getMessagesFromIndex(
     id,
     messages[id],
   ])
-
-  // mark messages as seen once they are loaded
-  const unseen_messages = result
-    .filter(
-      ([_, { state }]) =>
-        state === C.DC_STATE_IN_FRESH || state === C.DC_STATE_IN_SEEN
-    )
-    .map(([id]) => id)
-  BackendRemote.rpc.markseenMsgs(accountId, unseen_messages)
 
   return result
 }
