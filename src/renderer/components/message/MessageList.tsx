@@ -60,6 +60,9 @@ export default function MessageList({
 
   const onUnreadMessageInView: IntersectionObserverCallback = entries => {
     if (ChatStore.state.chat === null) return
+    // Don't mark messages as read if window is not focused
+    if (document.hasFocus() === false) return 
+
     const chatId = ChatStore.state.chat.id
     setTimeout(() => {
       log.debug(`onUnreadMessageInView: entries.length: ${entries.length}`)
