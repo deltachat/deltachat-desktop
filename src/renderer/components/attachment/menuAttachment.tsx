@@ -12,7 +12,7 @@ import { runtime } from '../../runtime'
 import { MEDIA_EXTENSIONS } from '../../../shared/constants'
 
 import { sendCallInvitation } from '../helpers/ChatMethods'
-import { FullChat } from '../../../shared/shared-types'
+import { Type } from '../../backend-com'
 //function to populate Menu
 const MenuAttachmentItems = ({
   itemsArray,
@@ -40,7 +40,7 @@ const MenuAttachment = ({
   selectedChat,
 }: {
   addFileToDraft: (file: string) => void
-  selectedChat: FullChat | null
+  selectedChat: Type.FullChat | null
 }) => {
   const tx = useTranslationFunction()
   const screenContext = useContext(ScreenContext)

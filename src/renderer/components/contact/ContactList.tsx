@@ -1,20 +1,19 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { ContactListItem } from './ContactListItem'
-import { DeltaBackend } from '../../delta-remote'
-import { JsonContact } from '../../../shared/shared-types'
 import { debounce } from 'debounce'
 import { useInitEffect } from '../helpers/hooks'
 import { debounceWithInit } from '../chat/ChatListHelpers'
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote, Type } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 export function ContactList2(props: {
-  contacts: JsonContact[]
-  onClick?: (contact: JsonContact) => void
+  contacts: Type.Contact[]
+  onClick?: (contact: Type.Contact) => void
   showCheckbox?: boolean
-  isChecked?: (contact: JsonContact) => boolean
-  onCheckboxClick?: (contact: JsonContact) => void
+  isChecked?: (contact: Type.Contact) => boolean
+  onCheckboxClick?: (contact: Type.Contact) => void
   showRemove?: boolean
-  onRemoveClick?: (contact: JsonContact) => void
+  onRemoveClick?: (contact: Type.Contact) => void
   disabledContacts?: number[]
 }) {
   const {
@@ -54,20 +53,25 @@ export function ContactList2(props: {
 }
 
 export function useContacts(listFlags: number, queryStr: string) {
-  const [contacts, setContacts] = useState<JsonContact[]>([])
+  const [contacts, setContacts] = useState<Type.Contact[]>([])
+  const accountId = selectedAccountId()
 
   const debouncedGetContacts2 = useMemo(
     () =>
       debounce((listFlags: number, queryStr: string) => {
-        DeltaBackend.call('getContacts2', listFlags, queryStr).then(setContacts)
+        BackendRemote.rpc
+          .contactsGetContacts(accountId, listFlags, queryStr)
+          .then(setContacts)
       }, 200),
-    []
+    [accountId]
   )
   const updateContacts = (queryStr: string) =>
     debouncedGetContacts2(listFlags, queryStr)
 
   useInitEffect(() => {
-    DeltaBackend.call('getContacts2', listFlags, queryStr).then(setContacts)
+    BackendRemote.rpc
+      .contactsGetContacts(accountId, listFlags, queryStr)
+      .then(setContacts)
   })
 
   return [contacts, updateContacts] as [typeof contacts, typeof updateContacts]
@@ -76,17 +80,18 @@ export function useContacts(listFlags: number, queryStr: string) {
 async function getAndSetContacts(
   listFlags: number,
   queryStr: string,
-  setContacts: (a: Map<number, JsonContact>) => void
+  setContacts: (a: Map<number, Type.Contact>) => void
 ) {
-  const contactArrayToMap = (contactArray: JsonContact[]) => {
+  const accountId = selectedAccountId()
+  const contactArrayToMap = (contactArray: Type.Contact[]) => {
     return new Map(
-      contactArray.map((contact: JsonContact) => {
+      contactArray.map((contact: Type.Contact) => {
         return [contact.id, contact]
       })
     )
   }
-  const contactArray = await DeltaBackend.call(
-    'getContacts2',
+  const contactArray = await BackendRemote.rpc.contactsGetContacts(
+    accountId,
     listFlags,
     queryStr
   )
@@ -94,7 +99,7 @@ async function getAndSetContacts(
 }
 
 export function useContactsMap(listFlags: number, queryStr: string) {
-  const [contacts, setContacts] = useState<Map<number, JsonContact>>(new Map())
+  const [contacts, setContacts] = useState<Map<number, Type.Contact>>(new Map())
 
   const debouncedGetContacts = useMemo(
     () =>
@@ -115,15 +120,16 @@ export function useContactsMap(listFlags: number, queryStr: string) {
 
 export function useContactsNew(listFlags: number, initialQueryStr: string) {
   const [state, setState] = useState<{
-    contacts: JsonContact[]
+    contacts: Type.Contact[]
     queryStrIsValidEmail: boolean
   }>({ contacts: [], queryStrIsValidEmail: false })
+  const accountId = selectedAccountId()
 
   const debouncedGetContacts2 = useMemo(
     () =>
       debounceWithInit(async (listFlags: number, queryStr: string) => {
-        const contacts = await DeltaBackend.call(
-          'getContacts2',
+        const contacts = await BackendRemote.rpc.contactsGetContacts(
+          accountId,
           listFlags,
           queryStr
         )
@@ -132,7 +138,7 @@ export function useContactsNew(listFlags: number, initialQueryStr: string) {
         )
         setState({ contacts, queryStrIsValidEmail })
       }, 200),
-    []
+    [accountId]
   )
 
   const search = useCallback(
@@ -152,6 +158,7 @@ export function useContactsNew(listFlags: number, initialQueryStr: string) {
 }
 
 export function useContactIds(listFlags: number, queryStr: string | undefined) {
+  const accountId = selectedAccountId()
   const [state, setState] = useState<{
     contactIds: number[]
     queryStrIsValidEmail: boolean
@@ -160,17 +167,17 @@ export function useContactIds(listFlags: number, queryStr: string | undefined) {
   const debouncedGetContactsIds = useMemo(
     () =>
       debounce(async (listFlags: number, queryStr: string | undefined) => {
-        const contactIds = await DeltaBackend.call(
-          'contacts.getContactIds',
+        const contactIds = await BackendRemote.rpc.contactsGetContactIds(
+          accountId,
           listFlags,
-          queryStr || ''
+          queryStr || null
         )
         const queryStrIsValidEmail = await BackendRemote.rpc.checkEmailValidity(
           queryStr || ''
         )
         setState({ contactIds, queryStrIsValidEmail })
       }, 200),
-    [setState]
+    [setState, accountId]
   )
 
   const init = useRef(false)

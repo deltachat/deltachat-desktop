@@ -1,16 +1,12 @@
 import { C } from 'deltachat-node/node/dist/constants'
 import { _callDcMethodAsync } from './ipc'
 import {
-  FullChat,
-  MessageType,
   JsonLocations,
   Theme,
-  JsonContact,
   MessageSearchResult,
   DeltaChatAccount,
   DesktopSettingsType,
 } from '../shared/shared-types'
-import { MuteDuration } from '../shared/constants'
 import { LocaleData } from '../shared/localize'
 
 export type sendMessageParams = {
@@ -31,63 +27,18 @@ class DeltaRemote {
   call(fnName: 'backup.export', dir: string): Promise<void>
   call(fnName: 'backup.import', file: string): Promise<DeltaChatAccount>
   // chatList -----------------------------------------------------------
-  call(fnName: 'chatList.selectChat', chatId: number): Promise<FullChat>
   call(fnName: 'chatList.onChatModified', chatId: number): Promise<void>
-  call(
-    fnName: 'chatList.getFullChatById',
-    chatId: number
-  ): Promise<FullChat | null>
-  call(fnName: 'chatList.getGeneralFreshMessageCounter'): Promise<number> // this method might be used for a favicon badge counter
   // contacts ------------------------------------------------------------
-  call(fnName: 'contacts.unblockContact', contactId: number): Promise<void>
-  call(fnName: 'contacts.blockContact', contactId: number): Promise<void>
-  call(fnName: 'contacts.getBlocked'): Promise<JsonContact[]>
   call(
     fnName: 'contacts.changeNickname',
     contactId: number,
     name: string
   ): Promise<number>
-  call(
-    fnName: 'contacts.createContact',
-    email: string,
-    name?: string
-  ): Promise<number>
-  call(
-    fnName: 'contacts.createChatByContactId',
-    contactId: number
-  ): Promise<number>
-  call(fnName: 'contacts.getContact', contactId: number): Promise<JsonContact>
-  call(
-    fnName: 'contacts.getContactIds',
-    listFlags: number,
-    queryStr: string
-  ): Promise<number[]>
-  call(
-    fnName: 'contacts.getContacts',
-    ids: number[]
-  ): Promise<{ [id: number]: JsonContact }>
-  call(
-    fnName: 'getContacts2',
-    listFlags: number,
-    queryStr: string
-  ): Promise<JsonContact[]>
-  call(fnName: 'contacts.getEncryptionInfo', contactId: number): Promise<string>
   call(fnName: 'contacts.lookupContactIdByAddr', email: string): Promise<number>
   call(fnName: 'contacts.deleteContact', contactId: number): Promise<boolean>
   // chat ---------------------------------------------------------------
-  call(
-    fnName: 'chat.getChatMedia',
-    chatId: number,
-    msgType1: number,
-    msgType2: number,
-    msgType3: number
-  ): Promise<(MessageType | null)[]>
   call(fnName: 'chat.getEncryptionInfo', chatId: number): Promise<string>
   call(fnName: 'chat.getQrCode', chatId?: number): Promise<string>
-  call(
-    fnName: 'chat.getQrCodeSVG',
-    chatId?: number
-  ): Promise<{ content: string; svg: string }>
   call(fnName: 'chat.leaveGroup', chatId: number): Promise<void>
   call(fnName: 'chat.setName', chatId: number, name: string): Promise<boolean>
   call(
@@ -106,11 +57,6 @@ class DeltaRemote {
     fnName: 'chat.setProfileImage',
     chatId: number,
     newImage: string
-  ): Promise<boolean>
-  call(
-    fnName: 'chat.setMuteDuration',
-    chatId: number,
-    duration: MuteDuration
   ): Promise<boolean>
   call(fnName: 'chat.createBroadcastList'): Promise<number>
   call(
@@ -166,66 +112,11 @@ class DeltaRemote {
   // NOTHING HERE that is called directly from the frontend, yet
   // messageList --------------------------------------------------------
   call(
-    fnName: 'messageList.sendMessage',
-    chatId: number,
-    params: sendMessageParams
-  ): Promise<[number, MessageType | null]>
-  call(
     fnName: 'messageList.sendSticker',
     chatId: number,
     stickerPath: string
   ): Promise<void>
-  call(fnName: 'messageList.deleteMessage', id: number): Promise<void>
-  call(
-    fnName: 'messageList.getMessage',
-    msgId: number
-  ): Promise<MessageType | null>
-  call(
-    fnName: 'messageList.getMessages',
-    messageIds: number[]
-  ): Promise<[number, MessageType | null][]>
-  call(
-    fnName: 'messageList.getMessagesFromIndex',
-    chatId: number,
-    indexStart: number,
-    indexEnd: number,
-    flags?: number,
-    marker1before?: number
-  ): Promise<[number, MessageType | null][]>
-  call(fnName: 'messageList.getMessageInfo', msgId: number): Promise<string>
   call(fnName: 'messageList.downloadFullMessage', msgId: number): Promise<void>
-  call(
-    fnName: 'messageList.getDraft',
-    chatId: number
-  ): Promise<MessageType | null>
-  call(
-    fnName: 'messageList.setDraft',
-    chatId: number,
-    {
-      text,
-      file,
-      quotedMessageId,
-    }: { text?: string; file?: string; quotedMessageId?: number }
-  ): Promise<void>
-  call(fnName: 'messageList.removeDraft', chatId: number): Promise<void>
-  call(
-    fnName: 'messageList.messageIdToJson',
-    id: number
-  ): Promise<MessageType | null>
-  call(
-    fnName: 'messageList.getMessageIds',
-    chatid: number,
-    flags?: number
-  ): Promise<number[]>
-  call(
-    fnName: 'messageList.forwardMessage',
-    msgId: number,
-    chatId: number
-  ): Promise<void>
-  call(
-    fnName: 'messageList.getFirstUnreadMessage',
-    chatId: number
-  ): Promise<number>
   call(
     fnName: 'messageList.searchMessages',
     query: string,
@@ -274,10 +165,6 @@ class DeltaRemote {
   ): Promise<{
     [key: string]: string[]
   }>
-  // context ------------------------------------------------------------
-  call(fnName: 'context.maybeNetwork'): Promise<void>
-  call(fnName: 'context.getConnectivity'): Promise<number>
-  call(fnName: 'context.getConnectivityHTML'): Promise<string>
   // extras -------------------------------------------------------------
   call(fnName: 'extras.getLocaleData', locale: string): Promise<LocaleData>
   call(fnName: 'extras.setLocale', locale: string): Promise<void>

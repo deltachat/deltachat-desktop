@@ -1,44 +1,17 @@
 import { C } from 'deltachat-node'
 import { getLogger } from '../../shared/logger'
 import SplitOut from './splitout'
-import { MessageType } from '../../shared/shared-types'
 import { set_has_unread } from '../tray'
 import { app } from 'electron'
 
 const log = getLogger('main/deltachat/chat')
 export default class DCChat extends SplitOut {
-  getChatMedia(
-    chatId: number,
-    msgType1: number,
-    msgType2: number,
-    msgType3: number
-  ): (MessageType | null)[] {
-    const mediaMessages = this.selectedAccountContext.getChatMedia(
-      chatId,
-      msgType1,
-      msgType2,
-      msgType3
-    )
-    return mediaMessages.map(
-      this.controller.messageList.messageIdToJson.bind(
-        this.controller.messageList
-      )
-    )
-  }
-
   getEncryptionInfo(chatId: number) {
     return this.selectedAccountContext.getChatEncrytionInfo(chatId)
   }
 
   getQrCode(chatId = 0) {
     return this.selectedAccountContext.getSecurejoinQrCode(chatId)
-  }
-
-  getQrCodeSVG(chatId = 0): { content: string; svg: string } {
-    return {
-      content: this.selectedAccountContext.getSecurejoinQrCode(chatId),
-      svg: this.selectedAccountContext.getSecurejoinQrCodeSVG(chatId),
-    }
   }
 
   leaveGroup(chatId: number) {

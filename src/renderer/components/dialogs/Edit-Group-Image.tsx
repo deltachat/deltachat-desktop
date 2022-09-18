@@ -4,7 +4,7 @@ import { Avatar } from '../Avatar'
 import { useContextMenu } from '../ContextMenu'
 
 export const GroupImage = (props: {
-  groupImage?: string
+  groupImage?: string | null
   onSetGroupImage: () => void
   onUnsetGroupImage: () => void
   style?: React.CSSProperties
@@ -46,7 +46,7 @@ export const GroupImage = (props: {
       <div onClick={() => groupImage && showAvatarFullscreen()}>
         <Avatar
           displayName={groupName || ''}
-          avatarPath={groupImage}
+          avatarPath={groupImage || undefined}
           isVerified={isVerified}
           color={color}
           style={{ ...style, cursor: 'pointer' }}

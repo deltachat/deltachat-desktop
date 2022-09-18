@@ -1,9 +1,8 @@
 import classNames from 'classnames'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { ScreenContext, useTranslationFunction } from '../contexts'
-import { DeltaBackend } from '../delta-remote'
 import { runtime } from '../runtime'
-import { Screens } from '../ScreenController'
+import { Screens, selectedAccountId } from '../ScreenController'
 import QrCode from './dialogs/QrCode'
 import { selectChat, unselectChat } from './helpers/ChatMethods'
 
@@ -15,7 +14,7 @@ import { ActionEmitter, KeybindAction } from '../keybindings'
 import SettingsConnectivityDialog from './dialogs/Settings-Connectivity'
 import { debounceWithInit } from './chat/ChatListHelpers'
 import { onDCEvent } from '../ipc'
-import { EffectfulBackendActions } from '../backend-com'
+import { BackendRemote, EffectfulBackendActions } from '../backend-com'
 
 export type SidebarState = 'init' | 'visible' | 'invisible'
 
@@ -29,6 +28,7 @@ const Sidebar = React.memo(
   }) => {
     const screenContext = useContext(ScreenContext)
     const settings = useSettingsStore()[0]
+    const accountId = selectedAccountId()
 
     const onCreateChat = () => {
       setSidebarState('invisible')
@@ -62,16 +62,17 @@ const Sidebar = React.memo(
 
     const onShowQRCode = async () => {
       setSidebarState('invisible')
-      const { content: qrCode, svg: qrCodeSVG } = await DeltaBackend.call(
-        'chat.getQrCodeSVG',
-        0
-      )
+      const [
+        qrCode,
+        qrCodeSVG,
+      ] = await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(accountId, null)
+
       screenContext.openDialog(QrCode, { qrCode, qrCodeSVG })
     }
     const onSelectSavedMessages = async () => {
       setSidebarState('invisible')
-      const savedMessagesChatId = await DeltaBackend.call(
-        'contacts.createChatByContactId',
+      const savedMessagesChatId = await BackendRemote.rpc.contactsCreateChatByContactId(
+        accountId,
         C.DC_CONTACT_ID_SELF
       )
       selectChat(savedMessagesChatId)
@@ -218,11 +219,12 @@ export default Sidebar
 const SidebarConnectivity = () => {
   const [state, setState] = useState('')
   const tx = window.static_translate
+  const accountId = selectedAccountId()
 
   const onConnectivityChanged = useMemo(
     () =>
       debounceWithInit(async (_data1: any, _data2: any) => {
-        const connectivity = await DeltaBackend.call('context.getConnectivity')
+        const connectivity = await BackendRemote.rpc.getConnectivity(accountId)
 
         if (connectivity >= C.DC_CONNECTIVITY_CONNECTED) {
           setState('connectivity_connected')
@@ -234,7 +236,7 @@ const SidebarConnectivity = () => {
           setState('connectivity_not_connected')
         }
       }, 300),
-    []
+    [accountId]
   )
 
   useEffect(

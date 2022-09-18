@@ -1,9 +1,10 @@
 import React from 'react'
 import DeltaDialog, { DeltaDialogBody } from './DeltaDialog'
 import moment from 'moment'
-import { DeltaBackend } from '../../delta-remote'
 import { Card, Callout } from '@blueprintjs/core'
 import { DialogProps } from './DialogController'
+import { selectedAccountId } from '../../ScreenController'
+import { BackendRemote } from '../../backend-com'
 
 type MessageInfoProps = {
   messageId: number
@@ -34,12 +35,13 @@ class MessageInfo extends React.Component<
 
   async refresh() {
     this.setState({ loading: true })
-    const message = await DeltaBackend.call(
-      'messageList.getMessage',
+    const accountId = selectedAccountId()
+    const message = await BackendRemote.rpc.messageGetMessage(
+      accountId,
       this.props.messageId
     )
-    const info = await DeltaBackend.call(
-      'messageList.getMessageInfo',
+    const info = await BackendRemote.rpc.getMessageInfo(
+      accountId,
       this.props.messageId
     )
     this.setState({

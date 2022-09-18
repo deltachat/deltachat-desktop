@@ -149,11 +149,6 @@ export type MessageType = JsonMessage & {
   file_name: string | null
 }
 
-export type MessageTypeAttachmentSubset = Pick<
-  MessageType,
-  'file' | 'file_mime' | 'file_bytes' | 'file_name'
->
-
 export type Theme = {
   name: string
   description: string

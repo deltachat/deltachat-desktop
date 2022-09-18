@@ -15,43 +15,7 @@ import { mkdtemp, writeFile } from 'fs/promises'
 import { tmpdir } from 'os'
 import { join } from 'path'
 
-import { getDirection } from '../../shared/util'
 export default class DCMessageList extends SplitOut {
-  sendMessage(
-    chatId: number,
-    {
-      text,
-      filename,
-      location,
-      quoteMessageId,
-    }: {
-      text?: string
-      filename?: string
-      location?: { lat: number; lng: number }
-      quoteMessageId?: number
-    }
-  ): [number, MessageType | null] {
-    const viewType = filename ? C.DC_MSG_FILE : C.DC_MSG_TEXT
-    const msg = this.selectedAccountContext.messageNew(viewType)
-    if (filename) msg.setFile(filename, undefined)
-    if (text) msg.setText(text)
-    if (location) msg.setLocation(location.lat, location.lng)
-
-    if (quoteMessageId) {
-      const quotedMessage = this.selectedAccountContext.getMessage(
-        quoteMessageId
-      )
-      if (!quotedMessage) {
-        log.error('sendMessage: Message to quote not found')
-      } else {
-        msg.setQuote(quotedMessage)
-      }
-    }
-
-    const messageId = this.selectedAccountContext.sendMessage(chatId, msg)
-    return [messageId, this.getMessage(messageId)]
-  }
-
   sendSticker(chatId: number, fileStickerPath: string) {
     const viewType = C.DC_MSG_STICKER
     const msg = this.selectedAccountContext.messageNew(viewType)
@@ -60,56 +24,8 @@ export default class DCMessageList extends SplitOut {
     this.selectedAccountContext.sendMessage(chatId, msg)
   }
 
-  deleteMessage(id: number) {
-    log.info(`deleting messages ${id}`)
-    this.selectedAccountContext.deleteMessages([id])
-  }
-
-  getMessage(msgId: number) {
-    return this.messageIdToJson(msgId)
-  }
-
-  getMessageInfo(msgId: number) {
-    return this.selectedAccountContext.getMessageInfo(msgId)
-  }
-
   downloadFullMessage(msgId: number) {
     return this.selectedAccountContext.downloadFullMessage(msgId)
-  }
-
-  async getDraft(chatId: number): Promise<MessageType | null> {
-    const draft = this.selectedAccountContext.getDraft(chatId)
-    return draft ? this._messageToJson(draft) : null
-  }
-
-  setDraft(
-    chatId: number,
-    {
-      text,
-      file,
-      quotedMessageId,
-    }: { text?: string; file?: string; quotedMessageId?: number }
-  ) {
-    const viewType = file ? C.DC_MSG_FILE : C.DC_MSG_TEXT
-    const draft = this.selectedAccountContext.messageNew(viewType)
-    if (file) draft.setFile(file, undefined)
-    if (text) draft.setText(text)
-    if (quotedMessageId) {
-      const quotedMessage = this.selectedAccountContext.getMessage(
-        quotedMessageId
-      )
-      if (!quotedMessage) {
-        log.error('setDraftquote: Message to quote not found')
-      } else {
-        draft.setQuote(quotedMessage)
-      }
-    }
-
-    this.selectedAccountContext.setDraft(chatId, draft)
-  }
-
-  removeDraft(chatId: number) {
-    this.selectedAccountContext.setDraft(chatId, null)
   }
 
   messageIdToJson(id: number): MessageType | null {
@@ -171,132 +87,6 @@ export default class DCMessageList extends SplitOut {
       file_name,
       quote,
     })
-  }
-
-  forwardMessage(msgId: number, chatId: number) {
-    this.selectedAccountContext.forwardMessages([msgId], chatId)
-    this.controller.chatList.selectChat(chatId)
-  }
-
-  getMessageIds(chatId: number, flags: number = C.DC_GCM_ADDDAYMARKER) {
-    const messageIds = this.selectedAccountContext.getChatMessages(
-      chatId,
-      flags,
-      0
-    )
-    return messageIds
-  }
-
-  getMessages(messageIds: number[]) {
-    const messages: [
-      number,
-      ReturnType<typeof DCMessageList.prototype.messageIdToJson>
-    ][] = []
-    const markMessagesSeen: number[] = []
-    let chatId = -1
-    messageIds.forEach(messageId => {
-      let message = null
-      if (messageId > C.DC_MSG_ID_LAST_SPECIAL) {
-        message = this.messageIdToJson(messageId)
-        if (!message) {
-          log.error('message not found: messageId', messageId)
-          return
-        }
-        if (chatId === -1) {
-          chatId = message.chatId
-        }
-        // mark messages read triggers various mechanics in the core
-        // and should always be triggered if the user displays those
-        // messages on the screen.
-        if (getDirection(message) === 'incoming') {
-          markMessagesSeen.push(messageId)
-        }
-      }
-      messages.push([messageId, message])
-    })
-
-    if (markMessagesSeen.length > 0) {
-      log.debug(
-        `markMessagesSeen ${markMessagesSeen.length} messages for chat ${chatId}`
-      )
-      // TODO: move mark seen logic to frontend
-      setTimeout(() =>
-        this.selectedAccountContext.markSeenMessages(markMessagesSeen)
-      )
-    }
-    return messages
-  }
-
-  getMessagesFromIndex(
-    chatId: number,
-    indexStart: number,
-    indexEnd: number,
-    flags = C.DC_GCM_ADDDAYMARKER,
-    marker1before = -1
-  ) {
-    const messages: [
-      number,
-      ReturnType<typeof DCMessageList.prototype.messageIdToJson>
-    ][] = []
-    const markMessagesSeen: number[] = []
-    const messageIds = this.selectedAccountContext.getChatMessages(
-      chatId,
-      flags,
-      marker1before
-    )
-
-    for (let i = indexStart; i <= indexEnd; i++) {
-      const messageId = messageIds[i]
-      let message = null
-      if (messageId > C.DC_MSG_ID_LAST_SPECIAL) {
-        message = this.messageIdToJson(messageId)
-        if (!message) {
-          throw new Error('message not found: msgid ' + messageId)
-        }
-        if (chatId === -1) {
-          chatId = message.chatId
-        }
-        // mark messages read triggers various mechanics in the core
-        // and should always be triggered if the user displays those
-        // messages on the screen.
-        if (getDirection(message) === 'incoming') {
-          markMessagesSeen.push(messageId)
-        }
-      }
-      messages.push([messageId, message])
-    }
-
-    if (markMessagesSeen.length > 0) {
-      log.debug(
-        `markMessagesSeen ${markMessagesSeen.length} messages for chat ${chatId}`
-      )
-      // TODO: move mark seen logic to frontend
-      setTimeout(() =>
-        this.selectedAccountContext.markSeenMessages(markMessagesSeen)
-      )
-    }
-    return messages
-  }
-
-  markSeenMessages(messageIds: number[]) {
-    this.selectedAccountContext.markSeenMessages(messageIds)
-  }
-
-  getFirstUnreadMessage(chatId: number): number {
-    const messageIds = this.selectedAccountContext.getChatMessages(chatId, 0, 0)
-    let firstUnreadMessageId = -1
-    for (let i = messageIds.length - 1; i > 0; i--) {
-      const messageId = messageIds[i]
-      const message = this.selectedAccountContext.getMessage(messageId)
-      if (
-        !message ||
-        getDirection({ fromId: message.getFromId() }) !== 'incoming'
-      )
-        continue
-      if (message.getState().isSeen()) break
-      firstUnreadMessageId = messageId
-    }
-    return firstUnreadMessageId
   }
 
   searchMessages(query: string, chatId = 0): number[] {

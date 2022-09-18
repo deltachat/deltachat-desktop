@@ -10,6 +10,8 @@ import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { MessagesDisplayContext } from '../../contexts'
 import { selectChat, setChatView } from '../helpers/ChatMethods'
 import { ChatView } from '../../stores/chat'
+import { BackendRemote } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 const log = getLogger('renderer/message-markdown')
 
@@ -97,15 +99,20 @@ export function message2React(message: string): JSX.Element {
 
 function EmailLink({ email }: { email: string }): JSX.Element {
   const openChatWithEmail = async () => {
+    const accountId = selectedAccountId()
     let contactId = await DeltaBackend.call(
       'contacts.lookupContactIdByAddr',
       email
     )
     if (contactId == 0) {
-      contactId = await DeltaBackend.call('contacts.createContact', email)
+      contactId = await BackendRemote.rpc.contactsCreateContact(
+        accountId,
+        email,
+        null
+      )
     }
-    const chatId = await DeltaBackend.call(
-      'contacts.createChatByContactId',
+    const chatId = await BackendRemote.rpc.contactsCreateChatByContactId(
+      accountId,
       contactId
     )
     selectChat(chatId)
@@ -149,12 +156,13 @@ function BotCommandSuggestion({ suggestion }: { suggestion: string }) {
     if (!message_display_context) {
       return
     }
+    const accountId = selectedAccountId()
 
     let chatID
     if (message_display_context.context == 'contact_profile_status') {
       // Bot command was clicked inside of a contact status
-      chatID = await DeltaBackend.call(
-        'contacts.createChatByContactId',
+      chatID = await BackendRemote.rpc.contactsCreateChatByContactId(
+        accountId,
         message_display_context.contact_id
       )
       // also select the chat and close the profile window if this is the case
@@ -176,11 +184,10 @@ function BotCommandSuggestion({ suggestion }: { suggestion: string }) {
       )
       return
     }
-
     // IDEA: Optimisation - unify these two calls in a new backend call that only returns the info we need
     const [chat, draft] = await Promise.all([
-      DeltaBackend.call('chatList.getFullChatById', chatID),
-      DeltaBackend.call('messageList.getDraft', chatID),
+      BackendRemote.rpc.getBasicChatInfo(accountId, chatID),
+      BackendRemote.rpc.getDraft(accountId, chatID),
     ])
     if (!chat) {
       log.error('chat not defined')
@@ -202,9 +209,13 @@ function BotCommandSuggestion({ suggestion }: { suggestion: string }) {
       }
     }
 
-    await DeltaBackend.call('messageList.setDraft', chatID, {
-      text: suggestion,
-    })
+    await BackendRemote.rpc.miscSetDraft(
+      accountId,
+      chatID,
+      suggestion,
+      null,
+      null
+    )
 
     window.__reloadDraft && window.__reloadDraft()
   }

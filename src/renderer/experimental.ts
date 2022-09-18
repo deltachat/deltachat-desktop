@@ -1,6 +1,6 @@
-import { DeltaBackend } from './delta-remote'
 import { getLogger } from '../shared/logger'
 import { BackendRemote } from './backend-com'
+import { selectedAccountId } from './ScreenController'
 
 const log = getLogger('renderer/experiments')
 
@@ -19,11 +19,12 @@ These functions are highly experimental, use at your own risk.
   }
 
   async importContacts(contacts: [string, string][]) {
+    const accountId = selectedAccountId()
     let error_count = 0
     for (const contact of contacts) {
       if (
-        await DeltaBackend.call(
-          'contacts.createContact',
+        await BackendRemote.rpc.contactsCreateContact(
+          accountId,
           contact[0],
           contact[1]
         )

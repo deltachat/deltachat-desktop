@@ -9,9 +9,9 @@ import {
   openMuteChatDialog,
   unMuteChat,
 } from './helpers/ChatMethods'
-import { FullChat } from '../../shared/shared-types'
 import { ContextMenuItem } from './ContextMenu'
 import { useSettingsStore } from '../stores/settings'
+import { Type } from '../backend-com'
 
 export function DeltaMenuItem({
   text,
@@ -29,7 +29,7 @@ export function DeltaMenuItem({
   )
 }
 
-export function useThreeDotMenu(selectedChat: FullChat | null) {
+export function useThreeDotMenu(selectedChat: Type.FullChat | null) {
   const screenContext = useContext(ScreenContext)
   const settingsStore = useSettingsStore()[0]
   const tx = useTranslationFunction()
@@ -37,13 +37,13 @@ export function useThreeDotMenu(selectedChat: FullChat | null) {
   let menu: (ContextMenuItem | false)[] = [false]
   if (selectedChat && selectedChat.id) {
     const {
-      isGroup,
       selfInGroup,
       isSelfTalk,
       isDeviceChat,
       id: chatId,
       canSend,
     } = selectedChat
+    const isGroup = selectedChat.chatType === C.DC_CHAT_TYPE_GROUP
     const onLeaveGroup = () =>
       selectedChat && openLeaveChatDialog(screenContext, selectedChat.id)
     const onBlockContact = () =>
@@ -71,7 +71,7 @@ export function useThreeDotMenu(selectedChat: FullChat | null) {
           label: tx('menu_chat_audit_log'),
           action: openChatAuditLog,
         },
-      !selectedChat.muted
+      !selectedChat.isMuted
         ? {
             label: tx('menu_mute'),
             action: onMuteChat,

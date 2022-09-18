@@ -1,5 +1,3 @@
-import { C } from 'deltachat-node/node/dist/constants'
-
 export const appName = 'DeltaChat'
 export const homePageUrl = 'https://delta.chat'
 export const gitHubUrl = 'https://github.com/deltachat/deltachat-desktop'
@@ -21,15 +19,6 @@ export const enum Timespans {
   ONE_YEAR_IN_SECONDS = 60 * 60 * 24 * 365,
 }
 
-export const enum MuteDuration {
-  OFF = Timespans.ZERO_SECONDS,
-  ONE_HOUR = Timespans.ONE_HOUR_IN_SECONDS,
-  TWO_HOURS = Timespans.TWO_HOURS_IN_SECONDS,
-  ONE_DAY = Timespans.ONE_DAY_IN_SECONDS,
-  SEVEN_DAYS = Timespans.ONE_WEEK_IN_SECONDS,
-  FOREVER = -1,
-}
-
 export const enum AutodeleteDuration {
   NEVER = Timespans.ZERO_SECONDS,
   AT_ONCE = Timespans.ONE_SECOND,
@@ -43,16 +32,6 @@ export const enum AutodeleteDuration {
 }
 
 export const DAYS_UNTIL_UPDATE_SUGGESTION = 120
-
-// cloned, because we cannpt import it from dc node in the frontend directly,
-// without esbuild trying to include dc-node in the build and failing
-// because it can not bundle the nodejs-only dependencies of deltachat node.
-export enum MessageDownloadState {
-  Available = C.DC_DOWNLOAD_AVAILABLE,
-  Done = C.DC_DOWNLOAD_DONE,
-  Failure = C.DC_DOWNLOAD_FAILURE,
-  InProgress = C.DC_DOWNLOAD_IN_PROGRESS,
-}
 
 export const MEDIA_EXTENSIONS = [
   'jpg',

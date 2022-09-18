@@ -8,11 +8,12 @@ import {
   DeltaDialogBase,
   DeltaDialogHeader,
 } from './DeltaDialog'
-import { DeltaBackend } from '../../delta-remote'
 import { onDCEvent } from '../../ipc'
 import { debounceWithInit } from '../chat/ChatListHelpers'
 import { DialogProps } from './DialogController'
 import { useTranslationFunction } from '../../contexts'
+import { BackendRemote } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 const INHERIT_STYLES = ['line-height', 'background-color', 'color', 'font-size']
 const OverwrittenStyles =
@@ -47,7 +48,7 @@ export default function SettingsConnectivityDialog({
 export async function getConnectivityHTML(
   styleSensor: React.MutableRefObject<HTMLDivElement | null>
 ): Promise<string> {
-  let cHTML = await DeltaBackend.call('context.getConnectivityHTML')
+  let cHTML = await BackendRemote.rpc.getConnectivityHtml(selectedAccountId())
 
   if (styleSensor.current) {
     const cstyle = window.getComputedStyle(styleSensor.current)

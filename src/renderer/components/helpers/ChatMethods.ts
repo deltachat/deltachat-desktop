@@ -1,18 +1,20 @@
 import { DeltaBackend, sendMessageParams } from '../../delta-remote'
 import ChatStore, { ChatView } from '../../stores/chat'
 import { ScreenContext, unwrapContext } from '../../contexts'
-import { FullChat } from '../../../shared/shared-types'
-import { MuteDuration } from '../../../shared/constants'
 import { C } from 'deltachat-node/node/dist/constants'
 import { runtime } from '../../runtime'
 import { getLogger } from '../../../shared/logger'
 import AlertDialog from '../dialogs/AlertDialog'
-import { EffectfulBackendActions, Type } from '../../backend-com'
+import { BackendRemote, EffectfulBackendActions, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import ViewGroup from '../dialogs/ViewGroup'
+import ViewProfile from '../dialogs/ViewProfile'
 
 const log = getLogger('renderer/message')
 
-type Chat = FullChat | (Type.ChatListItemFetchResult & { type: 'ChatListItem' })
+type Chat =
+  | Type.FullChat
+  | (Type.ChatListItemFetchResult & { type: 'ChatListItem' })
 
 export const selectChat = (chatId: number) => {
   ChatStore.effect.selectChat(chatId)
@@ -92,7 +94,8 @@ export function openBlockFirstContactOfChatDialog(
   const tx = window.static_translate
   const dmChatContact =
     (selectedChat as Type.ChatListItemFetchResult & { type: 'ChatListItem' })
-      .dmChatContact || (selectedChat as FullChat)?.contactIds[0]
+      .dmChatContact || (selectedChat as Type.FullChat).contactIds[0]
+  const accountId = selectedAccountId()
 
   // TODO: CHECK IF THE CHAT IS DM CHAT
 
@@ -103,9 +106,10 @@ export function openBlockFirstContactOfChatDialog(
       isConfirmDanger: true,
       cb: (yes: boolean) =>
         yes &&
-        DeltaBackend.call('contacts.blockContact', dmChatContact).then(
-          unselectChat
-        ),
+        BackendRemote.rpc.contactsBlock(accountId, dmChatContact).then(() => {
+          unselectChat()
+          window.__refetchChatlist && window.__refetchChatlist()
+        }),
     })
   }
 }
@@ -119,11 +123,11 @@ export function openEncryptionInfoDialog(
 
 export function openViewGroupDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
-  selectedChat: FullChat
+  selectedChat: Type.FullChat
 ) {
-  screenContext.openDialog('ViewGroup', {
+  screenContext.openDialog(ViewGroup, {
     chat: selectedChat,
-    isBroadcast: selectedChat.isBroadcast,
+    isBroadcast: selectedChat.chatType === C.DC_CHAT_TYPE_BROADCAST,
   })
 }
 
@@ -131,8 +135,11 @@ export async function openViewProfileDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
   contact_id: number
 ) {
-  screenContext.openDialog('ViewProfile', {
-    contact: await DeltaBackend.call('contacts.getContact', contact_id),
+  screenContext.openDialog(ViewProfile, {
+    contact: await BackendRemote.rpc.contactsGetContact(
+      selectedAccountId(),
+      contact_id
+    ),
   })
 }
 
@@ -145,7 +152,11 @@ export async function openMuteChatDialog(
 }
 
 export async function unMuteChat(chatId: number) {
-  await DeltaBackend.call('chat.setMuteDuration', chatId, MuteDuration.OFF)
+  await BackendRemote.rpc.setChatMuteDuration(
+    selectedAccountId(),
+    chatId,
+    'NotMuted'
+  )
 }
 
 export async function sendCallInvitation(
@@ -170,14 +181,19 @@ export async function joinCall(
   messageId: number
 ) {
   try {
-    const message = await DeltaBackend.call('messageList.getMessage', messageId)
+    const message = await BackendRemote.rpc.messageGetMessage(
+      selectedAccountId(),
+      messageId
+    )
 
     if (!message) {
       throw new Error('Message not found')
     }
-
-    if (message.viewType !== C.DC_MSG_VIDEOCHAT_INVITATION) {
+    if (message.viewType !== 'VideochatInvitation') {
       throw new Error('Message is not a video chat invitation')
+    }
+    if (!message.videochatUrl) {
+      throw new Error('Message has no video chat url')
     }
 
     return runtime.openLink(message.videochatUrl)
@@ -190,8 +206,10 @@ export async function joinCall(
 export async function createChatByContactIdAndSelectIt(
   contactId: number
 ): Promise<void> {
-  const chatId = await DeltaBackend.call(
-    'contacts.createChatByContactId',
+  const accountId = selectedAccountId()
+
+  const chatId = await BackendRemote.rpc.contactsCreateChatByContactId(
+    accountId,
     contactId
   )
 
@@ -199,7 +217,10 @@ export async function createChatByContactIdAndSelectIt(
     throw new Error(window.static_translate('create_chat_error_desktop'))
   }
 
-  const chat = await DeltaBackend.call('chatList.getFullChatById', chatId)
+  const chat = await BackendRemote.rpc.chatlistGetFullChatById(
+    accountId,
+    chatId
+  )
 
   if (chat && chat.archived) {
     log.debug('chat was archived, unarchiving it')

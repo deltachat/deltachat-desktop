@@ -81,6 +81,7 @@ export default async function processOpenQrUrl(
   if (url.toLowerCase().startsWith('mailto:')) {
     log.debug('processing mailto url:', url)
     try {
+      const accountId = selectedAccountId()
       const mailto = parseMailto(url)
       const messageText = mailto.subject
         ? mailto.subject + (mailto.body ? '\n\n' + mailto.body : '')
@@ -92,13 +93,14 @@ export default async function processOpenQrUrl(
           mailto.to
         )
         if (contactId == 0) {
-          contactId = await DeltaBackend.call(
-            'contacts.createContact',
-            mailto.to
+          contactId = await BackendRemote.rpc.contactsCreateContact(
+            accountId,
+            mailto.to,
+            null
           )
         }
-        const chatId = await DeltaBackend.call(
-          'contacts.createChatByContactId',
+        const chatId = await BackendRemote.rpc.contactsCreateChatByContactId(
+          accountId,
           contactId
         )
         if (messageText) {
@@ -152,9 +154,12 @@ export default async function processOpenQrUrl(
     return
   }
 
-  const allowedQrCodesOnWelcomeScreen: Qr["type"][] = ["account", "text", 'url'] 
+  const allowedQrCodesOnWelcomeScreen: Qr['type'][] = ['account', 'text', 'url']
 
-  if (!allowedQrCodesOnWelcomeScreen.includes(checkQr.type) && screen !== Screens.Main) {
+  if (
+    !allowedQrCodesOnWelcomeScreen.includes(checkQr.type) &&
+    screen !== Screens.Main
+  ) {
     closeProcessDialog()
     window.__openDialog('AlertDialog', {
       message: tx('Please login first'),
@@ -194,8 +199,9 @@ export default async function processOpenQrUrl(
     }
     return
   } else if (checkQr.type === 'askVerifyContact') {
-    const contact = await DeltaBackend.call(
-      'contacts.getContact',
+    const accountId = selectedAccountId()
+    const contact = await BackendRemote.rpc.contactsGetContact(
+      accountId,
       checkQr.contact_id
     )
     closeProcessDialog()
@@ -221,8 +227,9 @@ export default async function processOpenQrUrl(
       },
     })
   } else if (checkQr.type === 'fprOk') {
-    const contact = await DeltaBackend.call(
-      'contacts.getContact',
+    const accountId = selectedAccountId()
+    const contact = await BackendRemote.rpc.contactsGetContact(
+      accountId,
       checkQr.contact_id
     )
     closeProcessDialog()

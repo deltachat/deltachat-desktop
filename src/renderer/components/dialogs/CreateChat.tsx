@@ -36,7 +36,6 @@ import {
 
 import { GroupImage } from './Edit-Group-Image'
 
-import { JsonContact } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
 import { QrCodeShowQrInner } from './QrCode'
 import { runtime } from '../../runtime'
@@ -48,6 +47,8 @@ import { Avatar } from '../Avatar'
 import { AddMemberDialog } from './ViewGroup'
 import { ContactListItem } from '../contact/ContactListItem'
 import { useSettingsStore } from '../../stores/settings'
+import { BackendRemote, Type } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 export default function CreateChat(props: {
   isOpen: DialogProps['isOpen']
@@ -64,7 +65,7 @@ export default function CreateChat(props: {
   )
   const [queryStr, onSearchChange] = useContactSearch(updateContacts)
 
-  const chooseContact = async ({ id }: JsonContact) => {
+  const chooseContact = async ({ id }: Type.Contact) => {
     try {
       await createChatByContactIdAndSelectIt(id)
     } catch (error: any) {
@@ -108,9 +109,10 @@ export default function CreateChat(props: {
   const addContactOnClick = async () => {
     if (!queryStrIsValidEmail) return
 
-    const contactId = await DeltaBackend.call(
-      'contacts.createContact',
-      queryStr
+    const contactId = await BackendRemote.rpc.contactsCreateContact(
+      selectedAccountId(),
+      queryStr,
+      null
     )
     await createChatByContactIdAndSelectIt(contactId)
     onClose()
@@ -201,7 +203,7 @@ export function useContactSearch(
   ]
 }
 
-export function useGroupImage(image?: string) {
+export function useGroupImage(image?: string | null) {
   const [groupImage, setGroupImage] = useState(image)
   const tx = window.static_translate
 
@@ -228,12 +230,12 @@ export function useGroupImage(image?: string) {
 export function useGroupMembers(initialMemebers: number[]) {
   const [groupMembers, setGroupMembers] = useState(initialMemebers)
 
-  const removeGroupMember = ({ id }: JsonContact | { id: number }) =>
+  const removeGroupMember = ({ id }: Type.Contact | { id: number }) =>
     id !== 1 &&
     setGroupMembers(prevMembers => prevMembers.filter(gId => gId !== id))
-  const addGroupMember = ({ id }: JsonContact | { id: number }) =>
+  const addGroupMember = ({ id }: Type.Contact | { id: number }) =>
     setGroupMembers(prevMembers => [...prevMembers, id])
-  const addRemoveGroupMember = ({ id }: JsonContact | { id: number }) => {
+  const addRemoveGroupMember = ({ id }: Type.Contact | { id: number }) => {
     groupMembers.indexOf(id) !== -1
       ? removeGroupMember({ id })
       : addGroupMember({ id })
@@ -270,7 +272,7 @@ export const GroupSettingsSetNameAndProfileImage = ({
   color,
   isVerified,
 }: {
-  groupImage?: string
+  groupImage?: string | null
   onSetGroupImage: () => void
   onUnsetGroupImage: () => void
   groupName: string
@@ -342,7 +344,7 @@ export function AddMemberInnerDialog({
   onCancel: Parameters<typeof DeltaDialogOkCancelFooter>[0]['onCancel']
   onSearchChange: ReturnType<typeof useContactSearch>[1]
   queryStr: string
-  searchContacts: Map<number, JsonContact>
+  searchContacts: Map<number, Type.Contact>
   groupMembers: number[]
   isBroadcast?: boolean
 }) {
@@ -350,7 +352,7 @@ export function AddMemberInnerDialog({
     .filter(([contactId, _contact]) => groupMembers.indexOf(contactId) !== -1)
     .map(([contactId, _contact]) => contactId)
 
-  const [contactIdsToAdd, setContactIdsToAdd] = useState<JsonContact[]>([])
+  const [contactIdsToAdd, setContactIdsToAdd] = useState<Type.Contact[]>([])
   const [{ queryStrIsValidEmail }, updateContacts] = useContactsNew(
     C.DC_GCL_ADD_SELF,
     ''
@@ -365,7 +367,7 @@ export function AddMemberInnerDialog({
   }
 
   const addOrRemoveMember = useCallback(
-    (contact: JsonContact) => {
+    (contact: Type.Contact) => {
       if (contactIdsToAdd.findIndex(c => c.id === contact.id) === -1) {
         setContactIdsToAdd([...contactIdsToAdd, contact])
       } else {
@@ -413,11 +415,17 @@ export function AddMemberInnerDialog({
   const addContactOnClick = useCallback(async () => {
     if (!queryStrIsValidEmail) return
 
-    const contactId = await DeltaBackend.call(
-      'contacts.createContact',
-      queryStr
+    const accountId = selectedAccountId()
+
+    const contactId = await BackendRemote.rpc.contactsCreateContact(
+      accountId,
+      queryStr,
+      null
     )
-    const contact = await DeltaBackend.call('contacts.getContact', contactId)
+    const contact = await BackendRemote.rpc.contactsGetContact(
+      accountId,
+      contactId
+    )
     addOrRemoveMember(contact)
     setContactsToDeleteOnCancel(value => [...value, contactId])
     onSearchChange({
@@ -430,7 +438,7 @@ export function AddMemberInnerDialog({
       return null
     }
     if (queryStrIsValidEmail) {
-      const pseudoContact: JsonContact = {
+      const pseudoContact: Type.Contact = {
         address: queryStr,
         color: 'lightgrey',
         authName: '',
@@ -443,6 +451,7 @@ export function AddMemberInnerDialog({
         nameAndAddr: '',
         isBlocked: false,
         isVerified: false,
+        wasSeenRecently: false,
       }
       return (
         <ContactListItem
@@ -532,8 +541,8 @@ export function AddMemberInnerDialog({
 }
 
 const AddMemberChip = (props: {
-  contact: JsonContact
-  onRemoveClick: (contact: JsonContact) => void
+  contact: Type.Contact
+  onRemoveClick: (contact: Type.Contact) => void
 }) => {
   const { contact, onRemoveClick } = props
   return (
@@ -558,7 +567,7 @@ const AddMemberChip = (props: {
 const useCreateGroup = (
   verified: boolean,
   groupName: string,
-  groupImage: string | undefined,
+  groupImage: string | null | undefined,
   groupMembers: number[],
   onClose: DialogProps['onClose']
 ) => {
@@ -573,7 +582,7 @@ const useCreateGroup = (
       await DeltaBackend.call('chat.setName', gId, groupName)
     }
     if (finishing === true) {
-      if (groupImage !== '' && groupImage !== undefined) {
+      if (groupImage && groupImage !== '') {
         await DeltaBackend.call('chat.setProfileImage', gId, groupImage)
       }
       for (const contactId of groupMembers) {

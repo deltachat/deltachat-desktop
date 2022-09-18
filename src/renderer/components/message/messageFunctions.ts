@@ -1,20 +1,27 @@
 import { getLogger } from '../../../shared/logger'
 const log = getLogger('render/msgFunctions')
-import type { Message } from 'deltachat-node'
-import { MessageType, JsonMessage } from '../../../shared/shared-types'
 import { DeltaBackend } from '../../delta-remote'
 import { runtime } from '../../runtime'
 import { deleteMessage, selectChat } from '../helpers/ChatMethods'
+import { BackendRemote, Type } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 /**
  * json representation of the message object we get from the backend
  */
-type MsgObject = ReturnType<typeof Message.prototype.toJson>
 
-export function onDownload(msg: MsgObject) {
-  runtime.downloadFile(msg.file)
+export function onDownload(msg: Type.Message) {
+  if (!msg.file) {
+    log.error('message has no file to download:', msg)
+    throw new Error('message has no file to download')
+  }
+  msg.file && runtime.downloadFile(msg.file)
 }
 
-export function openAttachmentInShell(msg: MsgObject) {
+export function openAttachmentInShell(msg: Type.Message) {
+  if (!msg.file) {
+    log.error('message has no file to open:', msg)
+    throw new Error('message has no file to open')
+  }
   if (!runtime.openPath(msg.file)) {
     log.info(
       "file couldn't be opened, try saving it in a different place and try to open it from there"
@@ -22,11 +29,11 @@ export function openAttachmentInShell(msg: MsgObject) {
   }
 }
 
-export function forwardMessage(message: MessageType) {
+export function forwardMessage(message: Type.Message) {
   window.__openDialog('ForwardMessage', { message })
 }
 
-export function confirmDeleteMessage(msg: MsgObject) {
+export function confirmDeleteMessage(msg: Type.Message) {
   const tx = window.static_translate
   window.__openDialog('ConfirmationDialog', {
     message: tx('ask_delete_message'),
@@ -35,7 +42,7 @@ export function confirmDeleteMessage(msg: MsgObject) {
   })
 }
 
-export function openMessageInfo(message: MessageType) {
+export function openMessageInfo(message: Type.Message) {
   window.__openDialog('MessageDetail', { id: message.id })
 }
 
@@ -47,22 +54,25 @@ export function setQuoteInDraft(messageId: number) {
   }
 }
 
-export async function privateReply(msg: JsonMessage) {
+export async function privateReply(msg: Type.Message) {
   const quotedMessageId = msg.id
   const contactId = msg.fromId
-  const chatId = await DeltaBackend.call(
-    'contacts.createChatByContactId',
+  const accountId = selectedAccountId()
+  const chatId = await BackendRemote.rpc.contactsCreateChatByContactId(
+    accountId,
     contactId
   )
 
   // retrieve existing draft to append the quotedMessageId
-  const oldDraft = await DeltaBackend.call('messageList.getDraft', chatId)
+  const oldDraft = await BackendRemote.rpc.getDraft(accountId, chatId)
 
-  await DeltaBackend.call('messageList.setDraft', chatId, {
-    text: oldDraft?.text,
-    file: oldDraft?.file,
-    quotedMessageId,
-  })
+  await BackendRemote.rpc.miscSetDraft(
+    accountId,
+    chatId,
+    oldDraft?.text || null,
+    oldDraft?.file || null,
+    quotedMessageId
+  )
 
   // select chat
   selectChat(chatId)

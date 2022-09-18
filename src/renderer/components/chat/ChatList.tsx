@@ -18,7 +18,7 @@ import { PseudoListItemAddContact } from '../helpers/PseudoListItem'
 import { C } from 'deltachat-node/node/dist/constants'
 import { DeltaBackend } from '../../delta-remote'
 import { useContactIds } from '../contact/ContactList'
-import { MessageSearchResult, JsonContact } from '../../../shared/shared-types'
+import { MessageSearchResult } from '../../../shared/shared-types'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import {
   FixedSizeList as List,
@@ -127,9 +127,10 @@ export default function ChatList(props: {
   const addContactOnClick = async () => {
     if (!queryStrIsValidEmail || !queryStr) return
 
-    const contactId = await DeltaBackend.call(
-      'contacts.createContact',
-      queryStr
+    const contactId = await BackendRemote.rpc.contactsCreateContact(
+      selectedAccountId(),
+      queryStr,
+      null
     )
     await createChatByContactIdAndSelectIt(contactId)
     props.onExitSearch && props.onExitSearch()
@@ -576,12 +577,13 @@ function useLogicChatPart(
 }
 
 function useContactAndMessageLogic(queryStr: string | undefined) {
+  const accountId = selectedAccountId()
   const { contactIds, queryStrIsValidEmail } = useContactIds(0, queryStr)
   const messageResultIds = useMessageResults(queryStr)
 
   // Contacts ----------------
   const [contactCache, setContactCache] = useState<{
-    [id: number]: JsonContact
+    [id: number]: Type.Contact
   }>({})
   const [contactLoadState, setContactLoading] = useState<{
     [id: number]: undefined | LoadStatus.FETCHING | LoadStatus.LOADED
@@ -599,7 +601,11 @@ function useContactAndMessageLogic(queryStr: string | undefined) {
       ids.forEach(id => (state[id] = LoadStatus.FETCHING))
       return state
     })
-    const contacts = await DeltaBackend.call('contacts.getContacts', ids)
+
+    const contacts = await BackendRemote.rpc.contactsGetContactsByIds(
+      accountId,
+      ids
+    )
     setContactCache(cache => ({ ...cache, ...contacts }))
     setContactLoading(state => {
       ids.forEach(id => (state[id] = LoadStatus.LOADED))

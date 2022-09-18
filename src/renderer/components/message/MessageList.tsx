@@ -1,4 +1,10 @@
-import React, { useRef, useCallback, useLayoutEffect } from 'react'
+import React, {
+  useRef,
+  useCallback,
+  useLayoutEffect,
+  MutableRefObject,
+  useEffect,
+} from 'react'
 import { MessageWrapper } from './MessageWrapper'
 import ChatStore, {
   useChatStore,
@@ -12,9 +18,10 @@ import type { ChatTypes } from 'deltachat-node'
 import moment from 'moment'
 
 import { getLogger } from '../../../shared/logger'
-import { MessageType, FullChat } from '../../../shared/shared-types'
 import { MessagesDisplayContext, useTranslationFunction } from '../../contexts'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
+import { BackendRemote } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 const log = getLogger('render/components/message/MessageList')
 
 export default function MessageList({
@@ -50,6 +57,56 @@ export default function MessageList({
     30,
     { leading: true }
   )
+
+  const onUnreadMessageInView: IntersectionObserverCallback = entries => {
+    if (ChatStore.state.chat === null) return
+    // Don't mark messages as read if window is not focused
+    if (document.hasFocus() === false) return 
+
+    const chatId = ChatStore.state.chat.id
+    setTimeout(() => {
+      log.debug(`onUnreadMessageInView: entries.length: ${entries.length}`)
+
+      const messageIdsToMarkAsRead = []
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue
+        const messageKey = entry.target.getAttribute('id')
+        if (messageKey === null) continue
+        const messageId = messageKey.split('-')[1]
+        const messageHeight = entry.target.clientHeight
+
+        log.debug(
+          `onUnreadMessageInView: messageId ${messageId} height: ${messageHeight} intersectionRate: ${entry.intersectionRatio}`
+        )
+        log.debug(
+          `onUnreadMessageInView: messageId ${messageId} marking as read`
+        )
+
+        messageIdsToMarkAsRead.push(Number.parseInt(messageId))
+        if (unreadMessageInViewIntersectionObserver.current === null) continue
+        unreadMessageInViewIntersectionObserver.current.unobserve(entry.target)
+      }
+
+      if (messageIdsToMarkAsRead.length > 0) {
+        BackendRemote.rpc.markseenMsgs(
+          selectedAccountId(),
+          messageIdsToMarkAsRead
+        )
+      }
+    })
+  }
+  const unreadMessageInViewIntersectionObserver: MutableRefObject<IntersectionObserver> = useRef(
+    new IntersectionObserver(onUnreadMessageInView, {
+      root: null,
+      rootMargin: '0px',
+      threshold: [0, 1],
+    })
+  )
+  useEffect(() => {
+    return () => {
+      unreadMessageInViewIntersectionObserver.current?.disconnect()
+    }
+  }, [])
 
   const onScroll = useCallback(
     (Event: React.UIEvent<HTMLDivElement> | null) => {
@@ -268,6 +325,9 @@ export default function MessageList({
         messagePages={messagePages}
         messageListRef={messageListRef}
         chatStore={chatStore}
+        unreadMessageInViewIntersectionObserver={
+          unreadMessageInViewIntersectionObserver
+        }
       />
     </MessagesDisplayContext.Provider>
   )
@@ -289,14 +349,15 @@ export const MessageListInner = React.memo(
     messagePages: ChatStoreState['messagePages']
     messageListRef: React.MutableRefObject<HTMLDivElement | null>
     chatStore: ChatStoreStateWithChatSet
+    unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
   }) => {
     const {
       onScroll,
       messageIds,
       messagePages,
       messageListRef,
-
       chatStore,
+      unreadMessageInViewIntersectionObserver,
     } = props
 
     if (!chatStore.chat.id) {
@@ -305,11 +366,11 @@ export const MessageListInner = React.memo(
 
     const conversationType: ConversationType = {
       hasMultipleParticipants:
-        chatStore.chat.type === C.DC_CHAT_TYPE_GROUP ||
-        chatStore.chat.type === C.DC_CHAT_TYPE_MAILINGLIST ||
-        chatStore.chat.type === C.DC_CHAT_TYPE_BROADCAST,
+        chatStore.chat.chatType === C.DC_CHAT_TYPE_GROUP ||
+        chatStore.chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST ||
+        chatStore.chat.chatType === C.DC_CHAT_TYPE_BROADCAST,
       isDeviceChat: chatStore.chat.isDeviceChat as boolean,
-      chatType: chatStore.chat.type as number,
+      chatType: chatStore.chat.chatType as number,
     }
 
     useKeyBindingAction(KeybindAction.MessageList_PageUp, () => {
@@ -339,6 +400,9 @@ export const MessageListInner = React.memo(
                 key={messagePage.pageKey}
                 messagePage={messagePage}
                 conversationType={conversationType}
+                unreadMessageInViewIntersectionObserver={
+                  unreadMessageInViewIntersectionObserver
+                }
               />
             )
           })}
@@ -361,9 +425,11 @@ const MessagePageComponent = React.memo(
   function MessagePageComponent({
     messagePage,
     conversationType,
+    unreadMessageInViewIntersectionObserver,
   }: {
     messagePage: MessagePage
     conversationType: ConversationType
+    unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
   }) {
     const messageElements = []
     const messagesOnPage = messagePage.messages.toArray()
@@ -386,8 +452,12 @@ const MessagePageComponent = React.memo(
       messageElements.push(
         <MessageWrapper
           key={messageId}
-          message={message as MessageType}
+          key2={`${messageId}`}
+          message={message}
           conversationType={conversationType}
+          unreadMessageInViewIntersectionObserver={
+            unreadMessageInViewIntersectionObserver
+          }
         />
       )
     }
@@ -410,13 +480,17 @@ const MessagePageComponent = React.memo(
 function EmptyChatMessage() {
   const tx = useTranslationFunction()
   const chatStore = useChatStore()
-  const chat = chatStore.chat as FullChat
+  const chat = chatStore.chat
+
+  if (!chat) {
+    throw new Error('no chat selected')
+  }
 
   let emptyChatMessage = tx('chat_new_one_to_one_hint', [chat.name, chat.name])
 
-  if (chat.isBroadcast) {
+  if (chat.chatType === C.DC_CHAT_TYPE_BROADCAST) {
     emptyChatMessage = tx('chat_new_broadcast_hint')
-  } else if (chat.isGroup && !chat.isContactRequest) {
+  } else if (chat.chatType === C.DC_CHAT_TYPE_GROUP && !chat.isContactRequest) {
     emptyChatMessage = chat.isUnpromoted
       ? tx('chat_new_group_hint')
       : tx('chat_no_messages')

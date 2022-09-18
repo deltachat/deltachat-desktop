@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
-import { C } from 'deltachat-node/node/dist/constants'
-
-import { DeltaBackend } from '../delta-remote'
 import { ScreenContext } from '../contexts'
 import MediaAttachment from './attachment/mediaAttachment'
-import { MessageType } from '../../shared/shared-types'
 import { getLogger } from '../../shared/logger'
+import { BackendRemote, Type } from '../backend-com'
+import { selectedAccountId } from '../ScreenController'
 
 const log = getLogger('renderer/Gallery')
 
@@ -13,31 +11,31 @@ type MediaTabKey = 'images' | 'video' | 'audio' | 'files' | 'webxdc'
 
 const MediaTabs: Readonly<
   {
-    [key in MediaTabKey]: { values: number[] }
+    [key in MediaTabKey]: { values: Type.Viewtype[] }
   }
-> = Object.freeze({
+> = {
   images: {
-    values: [C.DC_MSG_GIF, C.DC_MSG_IMAGE],
+    values: ['Gif', 'Image'],
   },
   video: {
-    values: [C.DC_MSG_VIDEO],
+    values: ['Video'],
   },
   audio: {
-    values: [C.DC_MSG_AUDIO, C.DC_MSG_VOICE],
+    values: ['Audio', 'Voice'],
   },
   files: {
-    values: [C.DC_MSG_FILE],
+    values: ['File'],
   },
   webxdc: {
-    values: [C.DC_MSG_WEBXDC],
+    values: ['Webxdc'],
   },
-})
+}
 
 type mediaProps = { chatId: number }
 
 export default class Gallery extends Component<
   mediaProps,
-  { id: MediaTabKey; msgTypes: number[]; medias: MessageType[] }
+  { id: MediaTabKey; msgTypes: Type.Viewtype[]; medias: Type.Message[] }
 > {
   constructor(props: mediaProps) {
     super(props)
@@ -63,22 +61,27 @@ export default class Gallery extends Component<
       throw new Error('chat id missing')
     }
     const msgTypes = MediaTabs[id].values
-    DeltaBackend.call(
-      'chat.getChatMedia',
-      this.props.chatId,
-      msgTypes[0],
-      msgTypes[1],
-      0
-    ).then(raw_medias => {
-      const medias = raw_medias.filter(m => !!m) as MessageType[]
-      if (medias.length !== raw_medias.length) {
-        log.error(
-          'some empty gallery items detected, maybe messages are missing?'
+
+    const accountId = selectedAccountId()
+    BackendRemote.rpc
+      .chatGetMedia(
+        accountId,
+        this.props.chatId,
+        msgTypes[0],
+        msgTypes[1],
+        null
+      )
+      .then(async media_ids => {
+        // throws if some media is not found
+        const medias = await Promise.all(
+          media_ids.map(id =>
+            BackendRemote.rpc.messageGetMessage(accountId, id)
+          )
         )
-      }
-      this.setState({ id, msgTypes, medias })
-      this.forceUpdate()
-    })
+        this.setState({ id, msgTypes, medias })
+        this.forceUpdate()
+      })
+      .catch(log.error)
   }
 
   emptyTabMessage(id: MediaTabKey): string {

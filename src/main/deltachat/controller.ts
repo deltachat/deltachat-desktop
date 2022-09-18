@@ -2,7 +2,6 @@ import DeltaChat, { DeltaChat as DeltaChatNode } from 'deltachat-node'
 import { app as rawApp, ipcMain } from 'electron'
 import { EventEmitter } from 'events'
 import { getLogger } from '../../shared/logger'
-import { maybeMarkSeen } from '../markseenFix'
 import * as mainWindow from '../windows/main'
 import DCBackup from './backup'
 import DCChat from './chat'
@@ -62,7 +61,6 @@ export default class DeltaChatController extends EventEmitter {
     return this._inner_selectedAccountContext
   }
   selectedAccountId: number | null = null
-  selectedChatId: number | null = null
 
   get accountDir() {
     return join(this.selectedAccountContext.getBlobdir(), '..')
@@ -370,13 +368,12 @@ export default class DeltaChatController extends EventEmitter {
     this.onChatlistUpdated()
   }
 
-  onIncomingMsg(accountId: number, chatId: number, msgId: number) {
+  onIncomingMsg(accountId: number, _chatId: number, _msgId: number) {
     // TODO better do proper event sorting in the frontend so we can listen there for this event
     this.sendToRenderer('DD_EVENT_INCOMING_MESSAGE_ACCOUNT', accountId)
     if (this.selectedAccountId !== accountId) {
       return
     }
-    maybeMarkSeen(chatId, msgId)
     this.onChatlistUpdated()
   }
 
@@ -412,15 +409,6 @@ export default class DeltaChatController extends EventEmitter {
     return this.selectedAccountContext.joinSecurejoin(qrCode)
   }
 
-  // ToDo: move to contacts.
-  getContacts2(listFlags: number, queryStr: string) {
-    const distinctIds: number[] = Array.from(
-      new Set(this.selectedAccountContext.getContacts(listFlags, queryStr))
-    )
-    const contacts = distinctIds.map(id => this.contacts.getContact(id))
-    return contacts
-  }
-
   setProfilePicture(newImage: string) {
     this.selectedAccountContext.setConfig('selfavatar', newImage)
   }
@@ -445,6 +433,5 @@ export default class DeltaChatController extends EventEmitter {
    */
   _resetState() {
     this.ready = false
-    this.selectedChatId = null
   }
 }

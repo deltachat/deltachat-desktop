@@ -60,7 +60,12 @@ function Message({
   | 'isArchived'
   | 'isContactRequest'
 >) {
-  const status = mapCoreMsgStatus2String(summaryStatus)
+  const wasReceived =
+    summaryStatus === C.DC_STATE_IN_FRESH ||
+    summaryStatus === C.DC_STATE_IN_SEEN ||
+    summaryStatus === C.DC_STATE_IN_NOTICED
+
+  const status = wasReceived ? '' : mapCoreMsgStatus2String(summaryStatus)
 
   return (
     <div className='chat-list-item-message'>

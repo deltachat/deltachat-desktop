@@ -7,8 +7,6 @@ import React, {
 } from 'react'
 import { DeltaDialogBase, DeltaDialogCloseButton } from './DeltaDialog'
 import { DialogProps } from './DialogController'
-import type { FullChat, MessageType } from '../../../shared/shared-types'
-import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/node/dist/constants'
 import { getLogger } from '../../../shared/logger'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
@@ -20,11 +18,13 @@ import {
 } from '../message/messageFunctions'
 import { getDirection } from '../../../shared/util'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
+import { BackendRemote, Type } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 const log = getLogger('render/ChatAuditLog')
 
 function buildContextMenu(
-  message: MessageType,
+  message: Type.Message,
   isGroup: boolean,
   closeDialogCallback: DialogProps['onClose']
 ) {
@@ -51,7 +51,7 @@ function buildContextMenu(
     {
       label: tx('global_menu_edit_copy_desktop'),
       action: () => {
-        navigator.clipboard.writeText(message.text)
+        navigator.clipboard.writeText(message.text || '')
       },
     },
     // Message details
@@ -63,7 +63,7 @@ function buildContextMenu(
 }
 
 export default function ChatAuditLogDialog(props: {
-  selectedChat: FullChat
+  selectedChat: Type.FullChat
   onClose: DialogProps['onClose']
 }) {
   const { selectedChat, onClose } = props
@@ -71,19 +71,23 @@ export default function ChatAuditLogDialog(props: {
 
   const [loading, setLoading] = useState(true)
   const [msgIds, setMsgIds] = useState<number[]>([])
-  const [messages, setMessages] = useState<[number, MessageType | null][]>([])
+  const [messages, setMessages] = useState<Record<number, Type.Message>>([])
 
   const listView = useRef<HTMLDivElement>(null)
 
   const { openContextMenu } = useContext(ScreenContext)
   const showMenu = (
-    message: MessageType,
+    message: Type.Message,
     event: React.MouseEvent<
       HTMLDivElement | HTMLAnchorElement | HTMLLIElement,
       MouseEvent
     >
   ) => {
-    const items = buildContextMenu(message, selectedChat.isGroup, onClose)
+    const items = buildContextMenu(
+      message,
+      selectedChat.chatType === C.DC_CHAT_TYPE_GROUP,
+      onClose
+    )
     const [cursorX, cursorY] = [event.clientX, event.clientY]
 
     openContextMenu({
@@ -96,15 +100,18 @@ export default function ChatAuditLogDialog(props: {
   const refresh = useCallback(
     async function () {
       setLoading(true)
-      const msgIds = await DeltaBackend.call(
-        'messageList.getMessageIds',
+      const account_id = selectedAccountId()
+
+      const msgIds = await BackendRemote.rpc.messageListGetMessageIds(
+        account_id,
         selectedChat.id,
         C.DC_GCM_ADDDAYMARKER | C.DC_GCM_INFO_ONLY
       )
-      const messages = await DeltaBackend.call(
-        'messageList.getMessages',
+      const messages = await BackendRemote.rpc.messageGetMessages(
+        account_id,
         msgIds
       )
+
       setMsgIds(msgIds)
       setMessages(messages)
       setLoading(false)
@@ -156,7 +163,7 @@ export default function ChatAuditLogDialog(props: {
               if (id === C.DC_MSG_ID_DAYMARKER) {
                 const key = 'magic' + id + '_' + specialMessageIdCounter++
 
-                const [_nextMessageId, nextMessage] = messages[index + 1]
+                const nextMessage = messages[msgIds[index + 1]]
                 if (!nextMessage) return null
                 return (
                   <li key={key} className='time'>
@@ -171,7 +178,7 @@ export default function ChatAuditLogDialog(props: {
                   </li>
                 )
               }
-              const [_messageId, message] = messages[index]
+              const message = messages[msgIds[index]]
               if (!message || message == null) {
                 log.debug(`Missing message with id ${id}`)
                 return

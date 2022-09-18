@@ -8,10 +8,10 @@ import { msgStatus } from '../../../shared/shared-types'
 export default class MessageMetaData extends React.Component<{
   padlock: boolean
   username?: string
-  file_mime?: string | null
+  fileMime: string | null
   direction?: 'incoming' | 'outgoing'
   status: msgStatus
-  text?: string
+  hasText: boolean
   timestamp: number
   hasLocation?: boolean
   onClickError?: () => void
@@ -20,17 +20,17 @@ export default class MessageMetaData extends React.Component<{
     const {
       padlock,
       username,
-      file_mime,
+      fileMime,
       direction,
       status,
-      text,
+      hasText,
       timestamp,
       hasLocation,
       onClickError,
     } = this.props
 
     const withImageNoCaption = Boolean(
-      !text && (isImage(file_mime || null) || isVideo(file_mime || null))
+      !hasText && (isImage(fileMime) || isVideo(fileMime))
     )
 
     return (
