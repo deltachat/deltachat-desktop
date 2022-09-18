@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- clear webxdc browser data on webxdc instance deletion
+
 ## Changed
 - start migrating to jsonrpc api
 
