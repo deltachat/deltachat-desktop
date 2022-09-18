@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+## Added
+- show mailing list address in chat subtile
+
 ## Changed
 - start migrating to jsonrpc api
 
