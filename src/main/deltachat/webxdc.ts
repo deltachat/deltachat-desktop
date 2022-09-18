@@ -333,6 +333,26 @@ If you think that's a bug and you need that permission, then please open an issu
         }
       }
     )
+
+    this.controller.addListener(
+      'DC_EVENT_WEBXDC_INSTANCE_DELETED',
+      (_ev: any, msg_id: number) => {
+        const instance = open_apps[msg_id]
+        if (instance) {
+          instance.win.close()
+        }
+        const s = session.fromPartition(
+          `persist:webxdc_${this.selectedAccountId}`,
+          {
+            cache: false,
+          }
+        )
+        const appURL = `webxdc://${msg_id}.webxdc`
+        s.clearStorageData({ origin: appURL })
+        s.clearCodeCaches({ urls: [appURL] })
+        s.clearCache()
+      }
+    )
   }
 
   _closeAll() {
