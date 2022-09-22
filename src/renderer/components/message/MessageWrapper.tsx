@@ -54,7 +54,7 @@ export const MessageWrapper = (props: RenderMessageProps) => {
       props.unreadMessageInViewIntersectionObserver.current?.unobserve(
         messageBottomElement
       )
-  }, [])
+  }, [props.key2,props.unreadMessageInViewIntersectionObserver, shouldInViewObserve])
   return (
     <li id={props.key2}>
       <Message {...props} />

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { DeltaBackend } from '../../delta-remote'
 import { DialogProps } from './DialogController'
 import {
   SmallDialog,
