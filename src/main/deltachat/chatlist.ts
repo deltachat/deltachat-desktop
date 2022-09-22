@@ -21,7 +21,7 @@ export default class DCChatList extends SplitOut {
   async _getChatContacts(contactIds: number[]): Promise<JsonContact[]> {
     const contacts = []
     for (let i = 0; i < contactIds.length; i++) {
-      const contact = this.controller.contacts.getContact(contactIds[i])
+      const contact = this.controller.contacts._getContact(contactIds[i])
       contacts.push(contact)
     }
     return contacts

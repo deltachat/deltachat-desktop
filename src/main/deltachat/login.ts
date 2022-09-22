@@ -76,11 +76,6 @@ export default class DCLoginController extends SplitOut {
     log.info('Logged out')
   }
 
-  async addAccount(): Promise<number> {
-    const accountId = this.accounts.addAccount()
-    return accountId
-  }
-
   close() {
     this.controller.webxdc._closeAll()
     this.controller.emit('DESKTOP_CLEAR_ALL_NOTIFICATIONS')
@@ -142,10 +137,6 @@ Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANG
     const account_dir = join(accountContext.getBlobdir(), '..')
     accountContext.unref()
     return await _getAccountSize(account_dir)
-  }
-
-  getAllAccountIds(): number[] {
-    return super.accounts.getAllAccountIds()
   }
 
   async getLastLoggedInAccount() {
