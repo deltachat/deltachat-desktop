@@ -7,6 +7,7 @@
 
 ## Changed
 - start migrating to jsonrpc api
+- Update translations (22.09.2022)
 
 ## Fixed
 - allow scanning of certain qr code types on welcome screen (account, url and text)

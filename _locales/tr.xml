@@ -155,6 +155,11 @@
     <string name="images_and_videos">Görseller ve Videolar</string>
     <string name="file">Dosya</string>
     <string name="files">Dosyalar</string>
+    <!-- "Private App" is used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <string name="webxdc_app">Özel Uygulama</string>
+    <!-- plural of "Private App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <string name="webxdc_apps">Özel Uygulamalar</string>
+    <string name="files_and_webxdx_apps">Dosyalar ve Özel Uygulamalar</string>
     <string name="unknown">Bilinmeyen</string>
 
     <string name="green">Yeşil</string>
@@ -264,6 +269,8 @@
     <string name="ConversationFragment_quoted_message_not_found">Özgün ileti bulunamadı</string>
     <string name="reply_privately">Özel Olarak Yanıtla</string>
     <string name="source_code">Kaynak Kodu</string>
+    <!-- Menu item beside an app/chat that adds an icon to the system's home screen. If the user taps that icon, the app/chat is opened directly. -->
+    <string name="add_to_home_screen">Ana Ekrana Ekle</string>
 
     <string name="mute_for_one_hour">1 saatliğine sessize al</string>
     <string name="mute_for_two_hours">2 saatliğine sessize al</string>
@@ -443,7 +450,7 @@
     <string name="tab_image_empty_hint">Bu sohbette paylaşılan görseller burada görünecek.</string>
     <string name="tab_video_empty_hint">Bu sohbette paylaşılan videolar burada görünecek.</string>
     <string name="tab_audio_empty_hint">Bu sohbette paylaşılan ses dosyaları ve sesli iletiler burada görünecek.</string>
-    <string name="tab_webxdc_empty_hint">Bu sohbette paylaşılan Webxdc içeriği burada görünecek.</string>
+    <string name="tab_webxdc_empty_hint">Bu sohbette paylaşılan özel uygulamalar burada görünecek.</string>
     <string name="media_preview">Ortam Önizlemesi</string>
     <string name="send_message">İleti Gönder</string>
     <!-- Placeholder %1$s will be replaced by the name of the contact changing their address. Placeholders %2$s and %3$s will be replaced by old/new email addresses. -->
@@ -624,7 +631,7 @@
     <string name="pref_auto_folder_moves">DeltaChat Klasörüne Otomatik Olarak Taşı</string>
     <string name="pref_auto_folder_moves_explain">Sohbet görüşmeleri, Gelen Kutusu\'ndaki dağınıklığı önlemek için taşınır</string>
     <string name="pref_only_fetch_mvbox_title">Yalnızca DeltaChat Klasöründen Getir</string>
-    <string name="pref_only_fetch_mvbox_explain">Diğer klasörleri yok sayar. Sunucunuzun sohbet iletilerini DeltaChat klasörüne taşımasını gerektirir.</string>
+    <string name="pref_only_fetch_mvbox_explain">Diğer klasörleri yoksayar. Sunucunuzun sohbet iletilerini DeltaChat klasörüne taşımasını gerektirir.</string>
     <string name="pref_show_emails">Klasik E-Postaları Göster</string>
     <string name="pref_show_emails_no">Hayır, yalnızca sohbetler</string>
     <string name="pref_show_emails_accepted_contacts">Kabul edilen kişiler için</string>
@@ -710,38 +717,121 @@
 
 
     <!-- system messages -->
+    <!-- deprecated -->
     <string name="systemmsg_group_name_changed">\"%1$s\" grup adı \"%2$s\" olarak değiştirildi.</string>
+    <!-- deprecated -->
     <string name="systemmsg_group_image_changed">Grup görseli değiştirildi.</string>
+    <!-- deprecated -->
     <string name="systemmsg_group_image_deleted">Grup görseli silindi.</string>
+    <!-- deprecated -->
     <string name="systemmsg_member_added">%1$s üyesi eklendi.</string>
+    <!-- deprecated -->
     <string name="systemmsg_member_removed">%1$s üyesi kaldırıldı.</string>
+    <!-- deprecated -->
     <string name="systemmsg_group_left">Gruptan ayrılındı.</string>
     <string name="systemmsg_read_receipt_subject">İleti açıldı</string>
     <string name="systemmsg_read_receipt_body">Gönderdiğiniz \"%1$s\" iletisi alıcının ekranında görüntülendi.\n\nBu, içeriğin okunduğunun güvencesi değildir.</string>
     <string name="systemmsg_cannot_decrypt">Bu iletinin şifresi çözülemiyor.\n\n• Bu iletiye basitçe yanıt vermek ve gönderene iletiyi yeniden gönderip gönderemeyeceğini sormak zaten yardımcı olabilir.\n\n• Delta Chat\'i ya da başka bir e-posta programını bu ya da başka bir aygıta yeniden kurduysanız, oradan bir Autocrypt Ayarlama İletisi göndermek isteyebilirsiniz.</string>
-    <!-- Translators: %1$s will be replaced by sth. as "ACTION by me". -->
+    <!-- deprecated -->
     <string name="systemmsg_action_by_me">Benim tarafımdan %1$s.</string>
-    <!-- Translators: %1$s will be replaced by an action and %2$s will be replaced by the name/addr of the person who did it, as "ACTION by MEMBER". -->
+    <!-- deprecated -->
     <string name="systemmsg_action_by_user">%2$s tarafından %1$s.</string>
     <string name="systemmsg_unknown_sender_for_chat">Bu sohbet için bilinmeyen gönderen. Daha fazla ayrıntı için \'bilgi\'ye bakın.</string>
     <string name="systemmsg_subject_for_new_contact">%1$s kişisinden gelen ileti</string>
     <string name="systemmsg_failed_sending_to">%1$s kişisine ileti gönderme başarısız.</string>
 
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_disabled">Kaybolan iletiler zamanlayıcısı etkisizleştirildi.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_enabled">Kaybolan iletiler zamanlayıcısı %1$s s\'ye ayarlandı.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_minute">Kaybolan iletiler zamanlayıcısı 1 dakikaya ayarlandı.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_hour">Kaybolan iletiler zamanlayıcısı 1 saate ayarlandı.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_day">Kaybolan iletiler zamanlayıcısı 1 güne ayarlandı.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_week">Kaybolan iletiler zamanlayıcısı 1 haftaya ayarlandı.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_four_weeks">Kaybolan iletiler zamanlayıcısı 4 haftaya ayarlandı.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_minutes">Kaybolan iletiler zamanlayıcısı %1$s dakikaya ayarlandı.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_hours">Kaybolan iletiler zamanlayıcısı %1$s saate ayarlandı.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_days">Kaybolan iletiler zamanlayıcısı %1$s güne ayarlandı.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_weeks">Kaybolan iletiler zamanlayıcısı %1$s haftaya ayarlandı.</string>
-
-    <!-- Translators: Protection disabled/enabled messages may be displayed together with a "big shield" and may be suffixed by systemmsg_action_by_user or systemmsg_action_by_me -->
+    <!-- deprecated -->
     <string name="systemmsg_chat_protection_disabled">Sohbet koruması etkisizleştirildi.</string>
+    <!-- deprecated -->
     <string name="systemmsg_chat_protection_enabled">Sohbet koruması etkinleştirildi.</string>
+
+    <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name -->
+    <string name="group_name_changed_by_you">\"%1$s\" grup adını \"%2$s\" olarak değiştirdiniz.</string>
+    <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name, %3$s will be replaced by name and address of the contact who did the action. -->
+    <string name="group_name_changed_by_other">\"%1$s\" grup adı %3$s tarafından \"%2$s\" olarak değiştirildi.</string>
+    <string name="group_image_changed_by_you">Grup görselini değiştirdiniz.</string>
+    <!-- %1$s will be replaced by name and address of the contact who did the action -->
+    <string name="group_image_changed_by_other">Grup görseli %1$s tarafından değiştirildi.</string>
+    <!-- %1$s will be replaced by name and address of the contact added to the group -->
+    <string name="add_member_by_you">%1$s üyesini eklediniz.</string>
+    <!-- %1$s will be replaced by name and address of the contact added to the group, %2$s will be replaced by name and address of the contact who did the action -->
+    <string name="add_member_by_other">%1$s üyesi %2$s tarafından eklendi.</string>
+    <!-- %1$s will be replaced by name and address of the contact removed from the group -->
+    <string name="remove_member_by_you">%1$s üyesini kaldırdınız.</string>
+    <!-- %1$s will be replaced by name and address of the contact removed from the group, %2$s will be replaced by name and address of the contact who did the action -->
+    <string name="remove_member_by_other">%1$s üyesi %2$s tarafından kaldırıldı.</string>
+    <string name="group_left_by_you">Gruptan ayrıldınız.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="group_left_by_other">%1$s tarafından gruptan ayrılındı.</string>
+    <string name="group_image_deleted_by_you">Grup görselini sildiniz.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="group_image_deleted_by_other">Grup görseli %1$s tarafından silindi.</string>
+    <string name="location_enabled_by_you">Konum akışını etkinleştirdiniz.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="location_enabled_by_other">Konum akışı %1$s tarafından etkinleştirildi.</string>
+    <string name="ephemeral_timer_disabled_by_you">Kaybolan iletiler zamanlayıcısını etkisizleştirdiniz.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_disabled_by_other">Kaybolan iletiler zamanlayıcısı %1$s tarafından etkisizleştirildi.</string>
+    <!-- %1$s will be replaced by the number of seconds (always >1) the timer is set to -->
+    <string name="ephemeral_timer_seconds_by_you">Kaybolan iletiler zamanlayıcısını %1$s s\'ye ayarladınız.</string>
+    <!-- %1$s will be replaced by the number of seconds (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_seconds_by_other">Kaybolan iletiler zamanlayıcısı %2$s tarafından %1$s s\'ye ayarlandı.</string>
+    <string name="ephemeral_timer_1_minute_by_you">Kaybolan iletiler zamanlayıcısını 1 dakikaya ayarladınız.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_1_minute_by_other">Kaybolan iletiler zamanlayıcısı %1$s tarafından 1 dakikaya ayarlandı.</string>
+    <string name="ephemeral_timer_1_hour_by_you">Kaybolan iletiler zamanlayıcısını 1 saate ayarladınız.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_1_hour_by_other">Kaybolan iletiler zamanlayıcısı %1$s tarafından 1 saate ayarlandı.</string>
+    <string name="ephemeral_timer_1_day_by_you">Kaybolan iletiler zamanlayıcısını 1 güne ayarladınız.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_1_day_by_other">Kaybolan iletiler zamanlayıcısı %1$s tarafından 1 güne ayarlandı.</string>
+    <string name="ephemeral_timer_1_week_by_you">Kaybolan iletiler zamanlayıcısını 1 haftaya ayarladınız.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_1_week_by_other">Kaybolan iletiler zamanlayıcısı %1$s tarafından 1 haftaya ayarlandı.</string>
+    <!-- %1$s will be replaced by the number of minutes (always >1) the timer is set to -->
+    <string name="ephemeral_timer_minutes_by_you">Kaybolan iletiler zamanlayıcısını %1$s dakikaya ayarladınız.</string>
+    <!-- %1$s will be replaced by the number of minutes (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_minutes_by_other">Kaybolan iletiler zamanlayıcısı %2$s tarafından %1$s dakikaya ayarlandı.</string>
+    <!-- %1$s will be replaced by the number of hours (always >1) the timer is set to -->
+    <string name="ephemeral_timer_hours_by_you">Kaybolan iletiler zamanlayıcısını %1$s saate ayarladınız.</string>
+    <!-- %1$s will be replaced by the number of hours (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_hours_by_other">Kaybolan iletiler zamanlayıcısı %2$s tarafından %1$s saate ayarlandı.</string>
+    <!-- %1$s will be replaced by the number of days (always >1) the timer is set to -->
+    <string name="ephemeral_timer_days_by_you">Kaybolan iletiler zamanlayıcısını %1$s güne ayarladınız.</string>
+    <!-- %1$s will be replaced by the number of days (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_days_by_other">Kaybolan iletiler zamanlayıcısı %2$s tarafından %1$s güne ayarlandı.</string>
+    <!-- %1$s will be replaced by the number of weeks (always >1) the timer is set to -->
+    <string name="ephemeral_timer_weeks_by_you">Kaybolan iletiler zamanlayıcısını %1$s haftaya ayarladınız.</string>
+    <!-- %1$s will be replaced by the number of weeks (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_weeks_by_other">Kaybolan iletiler zamanlayıcısı %2$s tarafından %1$s haftaya ayarlandı.</string>
+    <string name="protection_enabled_by_you">Sohbet korumasını etkinleştirdiniz.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="protection_enabled_by_other">Sohbet koruması %1$s tarafından etkinleştirildi.</string>
+    <string name="protection_disabled_by_you">Sohbet korumasını etkisizleştirdiniz.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="protection_disabled_by_other">Sohbet koruması %1$s tarafından etkisizleştirildi.</string>
 
     <string name="devicemsg_self_deleted">\"Kaydedilen iletiler\" sohbetini sildiniz.\n\nℹ️ \"Kaydedilen iletiler\" özelliğini yeniden kullanmak için kendinizle yeni bir sohbet oluşturun.</string>
     <!-- %1$s will be replaced by the amount of storage already used, sth. as '500 MB'. If you want to use a percentage sign, type in two of them, eg. %1$s %% -->
@@ -949,8 +1039,8 @@
 
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
     <string name="pref_background_notifications">Arka Plan Bildirimleri</string>
-    <string name="pref_background_notifications_explain">Sunucunuza bir arka plan bağlantısı kullanır ve pil iyileştirmelerinin yok sayılmasını gerektirir.</string>
-    <string name="pref_background_notifications_rationale">E-posta sunucunuza bağlantıyı sürdürmek ve arka planda iletileri almak için sonraki adımda pil iyileştirmelerini yok sayın.\n\nDelta Chat, kaynakların en azını kullanır ve pilinizi boşaltmamaya özen gösterir.</string>
+    <string name="pref_background_notifications_explain">Sunucunuza bir arka plan bağlantısı kullanır ve pil iyileştirmelerinin yoksayılmasını gerektirir.</string>
+    <string name="pref_background_notifications_rationale">E-posta sunucunuza bağlantıyı sürdürmek ve arka planda iletileri almak için sonraki adımda pil iyileştirmelerini yoksayın.\n\nDelta Chat, az kaynak kullanır ve pilinizi boşaltmamaya özen gösterir.</string>
     <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
     <string name="pref_reliable_service">Güvenilir Arka Plan Bağlantısı</string>
     <string name="pref_reliable_service_explain">Kalıcı bir bildirim gerektirir</string>
