@@ -153,6 +153,11 @@
     <string name="images_and_videos">Figura dhe video</string>
     <string name="file">Kartelë</string>
     <string name="files">Kartela</string>
+    <!-- "Private App" is used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <string name="webxdc_app">Aplikacion Privat</string>
+    <!-- plural of "Private App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <string name="webxdc_apps">Aplikacione Private</string>
+    <string name="files_and_webxdx_apps">Kartela dhe Aplikacione Private</string>
     <string name="unknown">E panjohur</string>
 
     <string name="green">E gjelbër</string>
@@ -262,6 +267,8 @@
     <string name="ConversationFragment_quoted_message_not_found">S’u gjet mesazhi origjinal</string>
     <string name="reply_privately">Përgjigjuni privatisht</string>
     <string name="source_code">Kod Burim</string>
+    <!-- Menu item beside an app/chat that adds an icon to the system's home screen. If the user taps that icon, the app/chat is opened directly. -->
+    <string name="add_to_home_screen">Shtoje te Skena e Kreut</string>
 
     <string name="mute_for_one_hour">Heshtoji për 1 orë</string>
     <string name="mute_for_two_hours">Heshtoji për 2 orë</string>
@@ -441,7 +448,7 @@
     <string name="tab_image_empty_hint">Figurat e dhëna në këtë fjalosje do të shfaqen këtu.</string>
     <string name="tab_video_empty_hint">Videot e dhëna në këtë fjalosje do të shfaqen këtu.</string>
     <string name="tab_audio_empty_hint">Kartelat Audio dhe Mesazhet Zanore të dhëna në këtë fjalosje do të shfaqen këtu.</string>
-    <string name="tab_webxdc_empty_hint">Lëndë Webxdc e dhënë në këtë fjalosje do të shfaqet këtu.</string>
+    <string name="tab_webxdc_empty_hint">Këtu do të shfaqen aplikacione private të përbashkët në këtë fjalosje </string>
     <string name="media_preview">Paraparje media</string>
     <string name="send_message">Dërgo mesazh</string>
     <!-- Placeholder %1$s will be replaced by the name of the contact changing their address. Placeholders %2$s and %3$s will be replaced by old/new email addresses. -->
@@ -707,38 +714,121 @@
 
 
     <!-- system messages -->
+    <!-- deprecated -->
     <string name="systemmsg_group_name_changed">Emri i grupit u ndryshua nga \"%1$s\" në \"%2$s\".</string>
+    <!-- deprecated -->
     <string name="systemmsg_group_image_changed">Figura e grupit ndryshoi.</string>
+    <!-- deprecated -->
     <string name="systemmsg_group_image_deleted">Figura e grupit u fshi.</string>
+    <!-- deprecated -->
     <string name="systemmsg_member_added">U shtua anëtari %1$s.</string>
+    <!-- deprecated -->
     <string name="systemmsg_member_removed">U hoq anëtari %1$s.</string>
+    <!-- deprecated -->
     <string name="systemmsg_group_left">U braktis grupi.</string>
     <string name="systemmsg_read_receipt_subject">Dëftesë leximi</string>
     <string name="systemmsg_read_receipt_body">Kjo është dëftesë leximi për mesazhin \"%1$s\".\n\nDo të thotë që mesazhi u shfaq te pajisja e marrësit, jo domosdo që lënda u lexua.</string>
     <string name="systemmsg_cannot_decrypt">Ky mesazh s\’mund të shfshehtëzohet.\n\n• Mundet që të ndihmojë dërgimi thjesht i një përgjigjeje këtij mesazhi dhe t\’i kërkohet dërguesit ta ridërgojë mesazhin.\n\n• Në rast se ri-instaluat Delta Chat-in apo një tjetër program email-esh në këtë apo në një tjetër pajisje, mund të donit të dërgonit një Mesazh Rregullimi Autocrypt-i që prej andej.</string>
-    <!-- Translators: %1$s will be replaced by sth. as "ACTION by me". -->
+    <!-- deprecated -->
     <string name="systemmsg_action_by_me">%1$s nga unë.</string>
-    <!-- Translators: %1$s will be replaced by an action and %2$s will be replaced by the name/addr of the person who did it, as "ACTION by MEMBER". -->
+    <!-- deprecated -->
     <string name="systemmsg_action_by_user">%1$s nga %2$s.</string>
     <string name="systemmsg_unknown_sender_for_chat">Dërgues i panjohur për këtë fjalosje. Për më tepër hollësi, shihni \'info\'.</string>
     <string name="systemmsg_subject_for_new_contact">Mesazh nga %1$s</string>
     <string name="systemmsg_failed_sending_to">S’u arrit të dërgohej mesazh te %1$s.</string>
 
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_disabled">Kohëmatësi për mesazhe që zhduken është i çaktivizuar.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_enabled">Kohëmatësi i zhdukjes së mesazheve është vënë në %1$s s.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_minute">Kohëmatësi për mesazhe që zhduken është vënë në 1 minutë.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_hour">Kohëmatësi për mesazhe që zhduken është vënë në 1 orë.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_day">Kohëmatësi për mesazhe që zhduken është vënë në 1 ditë.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_week">Kohëmatësi për mesazhe që zhduken është vënë në 1 javë.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_four_weeks">Kohëmatësi për mesazhe që zhduken është vënë në 4 javë.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_minutes">Kohëmatësi për mesazhe që zhduken është vënë në %1$s minuta.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_hours">Kohëmatësi për mesazhe që zhduken është vënë në %1$s orë.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_days">Kohëmatësi i zhdukjes së mesazheve është vënë në %1$s ditë.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_weeks">Kohëmatësi për mesazhe që zhduken është vënë në %1$s javë.</string>
-
-    <!-- Translators: Protection disabled/enabled messages may be displayed together with a "big shield" and may be suffixed by systemmsg_action_by_user or systemmsg_action_by_me -->
+    <!-- deprecated -->
     <string name="systemmsg_chat_protection_disabled">Mbrojtja e fjalosjes u çaktivizua.</string>
+    <!-- deprecated -->
     <string name="systemmsg_chat_protection_enabled">Mbrojtja e fjalosjes u aktivizua.</string>
+
+    <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name -->
+    <string name="group_name_changed_by_you">E ndryshuat emrin e grupit nga “%1$s” në “%2$s”.</string>
+    <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name, %3$s will be replaced by name and address of the contact who did the action. -->
+    <string name="group_name_changed_by_other">Emri i grupit u ndryshua nga “%1$s” në “%2$s” nga %3$s.</string>
+    <string name="group_image_changed_by_you">Ndryshuat figurën e grupit</string>
+    <!-- %1$s will be replaced by name and address of the contact who did the action -->
+    <string name="group_image_changed_by_other">Figura e grupit u ndryshua nga %1$s.</string>
+    <!-- %1$s will be replaced by name and address of the contact added to the group -->
+    <string name="add_member_by_you">Shtuat anëtarin %1$s.</string>
+    <!-- %1$s will be replaced by name and address of the contact added to the group, %2$s will be replaced by name and address of the contact who did the action -->
+    <string name="add_member_by_other">Anëtari %1$s u shtua nga %2$s.</string>
+    <!-- %1$s will be replaced by name and address of the contact removed from the group -->
+    <string name="remove_member_by_you">Hoqët anëtarin %1$s.</string>
+    <!-- %1$s will be replaced by name and address of the contact removed from the group, %2$s will be replaced by name and address of the contact who did the action -->
+    <string name="remove_member_by_other">Anëtari %1$s u hoq nga %2$s.</string>
+    <string name="group_left_by_you">E braktisët grupin.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="group_left_by_other">Grupi u braktis nga %1$s.</string>
+    <string name="group_image_deleted_by_you">Fshitë figurën e grupit.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="group_image_deleted_by_other">Figura e grupit u fshi nga %1$s.</string>
+    <string name="location_enabled_by_you">Aktivizuat dhënie vendndodhjeje</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="location_enabled_by_other">Dhënie vendndodhjeje aktivizuar nga %1$s.</string>
+    <string name="ephemeral_timer_disabled_by_you">Çaktivizuat kohëmatësin e zhdukjes së mesazheve.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_disabled_by_other">Kohëmatësi i zhdukjes së mesazheve u çaktivizua nga %1$s.</string>
+    <!-- %1$s will be replaced by the number of seconds (always >1) the timer is set to -->
+    <string name="ephemeral_timer_seconds_by_you">E vutë kohëmatësin e zhdukjes së mesazheve në %1$s s</string>
+    <!-- %1$s will be replaced by the number of seconds (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_seconds_by_other">Kohëmatësi i zhdukjes së mesazheve u vu në %1$s s nga %2$s.</string>
+    <string name="ephemeral_timer_1_minute_by_you">E vutë kohëmatësin e zhdukjes së mesazheve në 1 minutë.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_1_minute_by_other">Kohëmatësi i zhdukjes së mesazheve u vu në 1 minutë nga %1$s.</string>
+    <string name="ephemeral_timer_1_hour_by_you">E vutë kohëmatësin e zhdukjes së mesazheve në 1 orë.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_1_hour_by_other">Kohëmatësi i zhdukjes së mesazheve u vu në 1 orë nga %1$s.</string>
+    <string name="ephemeral_timer_1_day_by_you">E vutë kohëmatësin e zhdukjes së mesazheve në 1 ditë.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_1_day_by_other">Kohëmatësi i zhdukjes së mesazheve u vu në 1 ditë nga %1$s.</string>
+    <string name="ephemeral_timer_1_week_by_you">E vutë kohëmatësin e zhdukjes së mesazheve në 1 javë.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_1_week_by_other">Kohëmatësi i zhdukjes së mesazheve u vu në 1 javë nga %1$s.</string>
+    <!-- %1$s will be replaced by the number of minutes (always >1) the timer is set to -->
+    <string name="ephemeral_timer_minutes_by_you">E vutë kohëmatësin e zhdukjes së mesazheve në %1$s minuta.</string>
+    <!-- %1$s will be replaced by the number of minutes (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_minutes_by_other">Kohëmatësi i zhdukjes së mesazheve u vu në %1$s minuta nga %2$s.</string>
+    <!-- %1$s will be replaced by the number of hours (always >1) the timer is set to -->
+    <string name="ephemeral_timer_hours_by_you">E vutë kohëmatësin e zhdukjes së mesazheve në %1$s orë.</string>
+    <!-- %1$s will be replaced by the number of hours (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_hours_by_other">Kohëmatësi i zhdukjes së mesazheve u vu në %1$s orë nga %2$s.</string>
+    <!-- %1$s will be replaced by the number of days (always >1) the timer is set to -->
+    <string name="ephemeral_timer_days_by_you">E vutë kohëmatësin e zhdukjes së mesazheve në %1$s ditë.</string>
+    <!-- %1$s will be replaced by the number of days (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_days_by_other">Kohëmatësi i zhdukjes së mesazheve u vu në %1$s ditë nga %2$s.</string>
+    <!-- %1$s will be replaced by the number of weeks (always >1) the timer is set to -->
+    <string name="ephemeral_timer_weeks_by_you">E vutë kohëmatësin e zhdukjes së mesazheve në %1$s javë.</string>
+    <!-- %1$s will be replaced by the number of weeks (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_weeks_by_other">Kohëmatësi i zhdukjes së mesazheve u vu në %1$s javë nga %2$s.</string>
+    <string name="protection_enabled_by_you">Aktivizuat mbrojtje fjalosjeje.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="protection_enabled_by_other">Mbrojtje fjalosjeje aktivizuar nga %1$s.</string>
+    <string name="protection_disabled_by_you">Çaktivizuat mbrojtje fjalosjeje.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="protection_disabled_by_other">Mbrojtje fjalosjeje çaktivizuar nga %1$s.</string>
 
     <string name="devicemsg_self_deleted">Fshitë fjalosjen “Mesazhe të ruajtur”.\n\nℹ️ Që të përdorni sërish veçorinë “Mesazhe të ruajtur”, krijoni një fjalosje të re me veten tuaj.</string>
     <!-- %1$s will be replaced by the amount of storage already used, sth. as '500 MB'. If you want to use a percentage sign, type in two of them, eg. %1$s %% -->
@@ -889,6 +979,8 @@
     <string name="show_window">Shfaq Dritare</string>
     <string name="login_socks5_experimental_warning">Mbulimi për SOCKS5 aktualisht është eksperimental. Ju lutemi, përdoreni duke pasur parasysh rrezikun. Nëse shtypni një adresë te fusha e email-it, do të ketë kërkim DNS që nuk do të kalohet përmes SOCKS5.</string>
 
+    <!-- title of the "keybindings" dialog (for the keybindings names as such, where possible the normal command strings are used) -->
+    <string name="keybindings">Kombinim tastesh</string>
     <string name="switch_between_chats">Kaloni nga një Fjalosje në tjetrën</string>
     <string name="scroll_messages">Rrëshqitni nëpër Mesazhe</string>
     <!-- command to put the cursor to the search input field -->

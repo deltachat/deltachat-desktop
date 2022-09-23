@@ -155,6 +155,11 @@
     <string name="images_and_videos">Imaxes e vídeos</string>
     <string name="file">Ficheiro</string>
     <string name="files">Ficheiros</string>
+    <!-- "Private App" is used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <string name="webxdc_app">App privada</string>
+    <!-- plural of "Private App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <string name="webxdc_apps">Apps privadas</string>
+    <string name="files_and_webxdx_apps">Ficheiros e Apps privadas</string>
     <string name="unknown">Descoñecido</string>
 
     <string name="green">Verde</string>
@@ -264,6 +269,8 @@
     <string name="ConversationFragment_quoted_message_not_found">Non se atopa a mensaxe orixinal</string>
     <string name="reply_privately">Responder de xeito privado</string>
     <string name="source_code">Código Fonte</string>
+    <!-- Menu item beside an app/chat that adds an icon to the system's home screen. If the user taps that icon, the app/chat is opened directly. -->
+    <string name="add_to_home_screen">Engadir á pantalla de Inicio</string>
 
     <string name="mute_for_one_hour">Acalar durante 1 h.</string>
     <string name="mute_for_two_hours">Acalar durante 2 h.</string>
@@ -443,7 +450,7 @@
     <string name="tab_image_empty_hint">As imaxes compartidas neste chat serán visibles aquí.</string>
     <string name="tab_video_empty_hint">Os vídeos compartidos neste chat serán visibles aquí.</string>
     <string name="tab_audio_empty_hint">Os ficheiros de Audio e de Mensaxes de Voz compartidos neste chat serán mostrados aquí.</string>
-    <string name="tab_webxdc_empty_hint">Contido Webxdc compartido neste chat será mostrado aquí.</string>
+    <string name="tab_webxdc_empty_hint">As apps privadas compartidas neste chat aparecerán aquí.</string>
     <string name="media_preview">Vista previa dos medios</string>
     <string name="send_message">Enviar mensaxe</string>
     <!-- Placeholder %1$s will be replaced by the name of the contact changing their address. Placeholders %2$s and %3$s will be replaced by old/new email addresses. -->
@@ -710,39 +717,85 @@
 
 
     <!-- system messages -->
+    <!-- deprecated -->
     <string name="systemmsg_group_name_changed">Nome do grupo cambiado de \"%1$s\" a \"%2$s\".</string>
+    <!-- deprecated -->
     <string name="systemmsg_group_image_changed">Cambiouse a imaxe do grupo.</string>
+    <!-- deprecated -->
     <string name="systemmsg_group_image_deleted">Imaxe do grupo borrada.</string>
+    <!-- deprecated -->
     <string name="systemmsg_member_added">Engadeuse a %1$s.</string>
+    <!-- deprecated -->
     <string name="systemmsg_member_removed">Eliminouse a %1$s.</string>
+    <!-- deprecated -->
     <string name="systemmsg_group_left">Saír do Grupo.</string>
     <string name="systemmsg_read_receipt_subject">Mensaxe aberta</string>
     <string name="systemmsg_read_receipt_body">A mensaxe \"%1$s\" que enviaches mostrouse na pantalla do correspondente.\n\nNon hai garantía de que o contido fose lido.</string>
     <string name="systemmsg_cannot_decrypt">Esta mensaxe non se pode descifrar.\n\n• Podería axudar que respondas a mensaxe pedindo ao remitente que a volte a enviar.\n\n• En caso dunha reinstalación Delta Chat ou outro programa de correo en este ou outro dispositivo igual debes enviar unha Mensaxe de Configuración Autocrypt desde alí.</string>
-    <!-- Translators: %1$s will be replaced by sth. as "ACTION by me". -->
+    <!-- deprecated -->
     <string name="systemmsg_action_by_me">%1$s por min.</string>
-    <!-- Translators: %1$s will be replaced by an action and %2$s will be replaced by the name/addr of the person who did it, as "ACTION by MEMBER". -->
+    <!-- deprecated -->
     <string name="systemmsg_action_by_user">%1$s por %2$s.</string>
     <string name="systemmsg_unknown_sender_for_chat">Remitente descoñecido para esta convers. Mira en \'info\' para saber máis.</string>
     <string name="systemmsg_subject_for_new_contact">Mensaxe de %1$s</string>
     <string name="systemmsg_failed_sending_to">Fallou o envío para %1$s.</string>
 
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_disabled">Desactivada a caducidade para as mensaxes.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_enabled">As mensaxes desparecerán após %1$s s.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_minute">As mensaxes desparecerán após 1 minuto.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_hour">As mensaxes desparecerán após 1 hora.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_day">As mensaxes desaparecerán após 1 día.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_week">As mensaxes desaparecerán após 1 semana.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_four_weeks">As mensaxes desaparecerán após 4 semanas.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_minutes">As mensaxes desaparecerán após %1$s minutos.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_hours">As mensaxes desaparecerán após %1$s horas.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_days">As mensaxes desaparecerán após %1$s días.</string>
+    <!-- deprecated -->
     <string name="systemmsg_ephemeral_timer_weeks">As mensaxes desaparecerán após %1$s semanas.</string>
-
-    <!-- Translators: Protection disabled/enabled messages may be displayed together with a "big shield" and may be suffixed by systemmsg_action_by_user or systemmsg_action_by_me -->
+    <!-- deprecated -->
     <string name="systemmsg_chat_protection_disabled">Protección do chat desactivada.</string>
+    <!-- deprecated -->
     <string name="systemmsg_chat_protection_enabled">Protección do chat activada.</string>
 
+    <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name -->
+    <string name="group_name_changed_by_you">Cambiaches o nome do grupo de \"%1$s\" a \"%2$s\".</string>
+    <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name, %3$s will be replaced by name and address of the contact who did the action. -->
+    <string name="group_name_changed_by_other">%3$s cambiou o nome do grupo de \"%1$s\" a \"%2$s\".</string>
+    <string name="group_image_changed_by_you">Cambiaches a imaxe do grupo.</string>
+    <!-- %1$s will be replaced by name and address of the contact who did the action -->
+    <string name="group_image_changed_by_other">Imaxe do grupo cambiada por %1$s.</string>
+    <!-- %1$s will be replaced by name and address of the contact added to the group -->
+    <string name="add_member_by_you">Engadiches un membro %1$s.</string>
+    <!-- %1$s will be replaced by name and address of the contact added to the group, %2$s will be replaced by name and address of the contact who did the action -->
+    <string name="add_member_by_other">%1$s engadido por %2$s.</string>
+    <!-- %1$s will be replaced by name and address of the contact removed from the group -->
+    <string name="remove_member_by_you">Eliminaches a %1$s.</string>
+    <!-- %1$s will be replaced by name and address of the contact removed from the group, %2$s will be replaced by name and address of the contact who did the action -->
+    <string name="remove_member_by_other">%1$s eliminado por %2$s.</string>
+    <string name="group_left_by_you">Saíches do grupo</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="group_left_by_other">%1$s deixou o grupo.</string>
+    <string name="group_image_deleted_by_you">Eliminaches a imaxe do grupo</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="group_image_deleted_by_other">%1$s eliminou a imaxe do grupo.</string>
+    <string name="location_enabled_by_you">Activaches a compartición da localización.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="location_enabled_by_other">Difusión da localización activada por %1$s.</string>
+    <string name="ephemeral_timer_disabled_by_you">Desactivaches o temporizador de eliminación de mensaxes.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_disabled_by_other">Temporizador da eliminación de mensaxes descativado por %1$s.</string>
+    <!-- %1$s will be replaced by the number of seconds (always >1) the timer is set to -->
+    <string name="ephemeral_timer_seconds_by_you">Estableceches que as mensaxes desaparezan en  %1$s s</string>
     <string name="devicemsg_self_deleted">Eliminaches o chat \"Mensaxes gardadas\".\n\nℹ️ Para usar \"Mensaxes gardadas\" de novo, crea un novo chat contigo mesmo.</string>
     <!-- %1$s will be replaced by the amount of storage already used, sth. as '500 MB'. If you want to use a percentage sign, type in two of them, eg. %1$s %% -->
     <string name="devicemsg_storage_exceeding">⚠️ A almacenaxe do teu provedor vaise esgotar, xa utilizaches %1$s %%.\n\nPode que non recibas mensaxes cando a almacenaxe chegue a 100%% utilizado.\n\n👉 Mira se podes eliminar datos antigos na interface web do teu provedor e pensa se debes activar \"Axustes / Eliminar Mensaxes Antigas\". Podes ver a almacenaxe actual utilizada en \"Axustes / Conectividade\".</string>
