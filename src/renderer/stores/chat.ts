@@ -1,12 +1,12 @@
 import { ipcBackend } from '../ipc'
 import { Store, useStore } from './store'
 import { sendMessageParams } from '../delta-remote'
-import { runtime } from '../runtime'
 import { ActionEmitter, KeybindAction } from '../keybindings'
 import { C } from 'deltachat-node/node/dist/constants'
 import { OrderedMap } from 'immutable'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
+import { debouncedUpdateBadgeCounter } from '../system-integration/badge-counter'
 
 export const PAGE_SIZE = 11
 
@@ -776,7 +776,7 @@ class ChatStore extends Store<ChatStoreState> {
                 ? KeybindAction.ChatList_SwitchToArchiveView
                 : KeybindAction.ChatList_SwitchToNormalView
             )
-            runtime.updateBadge()
+            debouncedUpdateBadgeCounter()
             saveLastChatId(chatId)
           })
           return false
@@ -785,6 +785,8 @@ class ChatStore extends Store<ChatStoreState> {
         // TODO:  this.controller.emit('DESKTOP_CLEAR_NOTIFICATIONS_FOR_CHAT', chatId)
         // TODO: update badge counter
         await BackendRemote.rpc.marknoticedChat(accountId, chatId)
+        debouncedUpdateBadgeCounter()
+        // TODO DESKTOP_CLEAR_NOTIFICATIONS_FOR_CHAT
 
         let oldestFetchedMessageIndex = -1
         let newestFetchedMessageIndex = -1
@@ -821,7 +823,6 @@ class ChatStore extends Store<ChatStoreState> {
             ? KeybindAction.ChatList_SwitchToArchiveView
             : KeybindAction.ChatList_SwitchToNormalView
         )
-        runtime.updateBadge()
         saveLastChatId(chatId)
       },
       'selectChat'
@@ -934,7 +935,7 @@ class ChatStore extends Store<ChatStoreState> {
               ? KeybindAction.ChatList_SwitchToArchiveView
               : KeybindAction.ChatList_SwitchToNormalView
           )
-          runtime.updateBadge()
+          debouncedUpdateBadgeCounter()
           saveLastChatId(chatId)
         },
         'jumpToMessage'

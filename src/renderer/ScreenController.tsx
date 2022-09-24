@@ -18,6 +18,7 @@ import AccountSetupScreen from './components/screens/AccountSetupScreen'
 import AccountListScreen from './components/screens/AccountListScreen'
 import WelcomeScreen from './components/screens/WelcomeScreen'
 import { BackendRemote } from './backend-com'
+import { debouncedUpdateBadgeCounter } from './system-integration/badge-counter'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -104,6 +105,7 @@ export default class ScreenController extends Component {
     } else {
       this.changeScreen(Screens.Welcome)
     }
+    debouncedUpdateBadgeCounter()
   }
 
   userFeedback(message: userFeedback | false) {

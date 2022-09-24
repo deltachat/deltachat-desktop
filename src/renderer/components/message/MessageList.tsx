@@ -22,6 +22,7 @@ import { MessagesDisplayContext, useTranslationFunction } from '../../contexts'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import { debouncedUpdateBadgeCounter } from '../../system-integration/badge-counter'
 const log = getLogger('render/components/message/MessageList')
 
 export default function MessageList({
@@ -87,10 +88,9 @@ export default function MessageList({
       }
 
       if (messageIdsToMarkAsRead.length > 0) {
-        BackendRemote.rpc.markseenMsgs(
-          selectedAccountId(),
-          messageIdsToMarkAsRead
-        )
+        BackendRemote.rpc
+          .markseenMsgs(selectedAccountId(), messageIdsToMarkAsRead)
+          .then(debouncedUpdateBadgeCounter)
       }
     })
   }

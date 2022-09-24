@@ -1,7 +1,6 @@
 import { C } from 'deltachat-node'
 import { getLogger } from '../../shared/logger'
 import setupNotifications from '../notifications'
-import setupUnreadBadgeCounter from '../unread-badge'
 import SplitOut from './splitout'
 import { DeltaChatAccount } from '../../shared/shared-types'
 import { stat, readdir } from 'fs/promises'
@@ -56,7 +55,6 @@ export default class DCLoginController extends SplitOut {
     this.updateDeviceChats()
 
     setupNotifications(this.controller, DesktopSettings.state)
-    setupUnreadBadgeCounter(this.controller)
     this.controller.ready = true
     return true
   }

@@ -6,6 +6,7 @@ import { Message } from 'deltachat-node/deltachat-jsonrpc/typescript/generated/j
 import { DeltaBackend } from './delta-remote'
 import { runtime } from './runtime'
 import { getLogger } from '../shared/logger'
+import { debouncedUpdateBadgeCounter } from './system-integration/badge-counter'
 
 export * as Type from 'deltachat-node/deltachat-jsonrpc/typescript/generated/types'
 
@@ -65,6 +66,7 @@ export namespace EffectfulBackendActions {
     }
 
     runtime.closeAllWebxdcInstances()
+    debouncedUpdateBadgeCounter()
 
     // for now we still need to call the backend function,
     // because backend still has sleected account

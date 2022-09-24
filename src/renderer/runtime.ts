@@ -54,7 +54,6 @@ interface Runtime {
   openLogFile(): void
   getCurrentLogLocation(): string
   openHelpWindow(): void
-  updateBadge(): void
   /**
    * get the comandline arguments
    */
@@ -86,9 +85,15 @@ interface Runtime {
 
   // control app
   restartApp(): void
+
+  // more system integration functions:
+  setBadgeCounter(value: number): void
 }
 
 class Browser implements Runtime {
+  setBadgeCounter(_value: number): void {
+    log.warn('setBadgeCounter is not implemented for browser')
+  }
   deleteWebxdcAccountData(_accountId: number): Promise<void> {
     throw new Error('Method not implemented.')
   }
@@ -147,9 +152,6 @@ class Browser implements Runtime {
   getRC_Config(): RC_Config {
     throw new Error('Method not implemented.')
   }
-  updateBadge(): void {
-    throw new Error('Method not implemented.')
-  }
   openHelpWindow(): void {
     throw new Error('Method not implemented.')
   }
@@ -167,6 +169,9 @@ class Browser implements Runtime {
   }
 }
 class Electron implements Runtime {
+  setBadgeCounter(value: number): void {
+    ipcBackend.invoke('app.setBadgeCountAndTrayIconIndicator', value)
+  }
   deleteWebxdcAccountData(accountId: number): Promise<void> {
     return ipcBackend.invoke('delete_webxdc_account_data', accountId)
   }
@@ -285,9 +290,6 @@ class Electron implements Runtime {
   }
   reloadWebContent(): void {
     ipcBackend.send('reload-main-window')
-  }
-  updateBadge() {
-    ipcBackend.send('update-badge')
   }
   getConfigPath(): string {
     return ipcBackend.sendSync('get-config-path')
