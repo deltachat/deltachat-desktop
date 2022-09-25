@@ -4,6 +4,7 @@
 
 ### Added
 - clear webxdc browser data on webxdc instance deletion
+- add donate link in settings
 
 ## Changed
 - start migrating to jsonrpc api
