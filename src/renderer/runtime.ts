@@ -1,5 +1,6 @@
 import { ipcBackend } from './ipc'
 import {
+  DcNotification,
   DesktopSettingsType,
   RC_Config,
   RuntimeInfo,
@@ -88,9 +89,29 @@ interface Runtime {
 
   // more system integration functions:
   setBadgeCounter(value: number): void
+  showNotification(data: DcNotification): void
+  clearAllNotifications(): void
+  clearNotifications(chatId: number): void
+  setNotificationCallback(
+    cb: (data: { accountId: number; chatId: number; msgId: number }) => void
+  ): void
 }
 
 class Browser implements Runtime {
+  setNotificationCallback(
+    _cb: (data: { accountId: number; chatId: number; msgId: number }) => void
+  ): void {
+    throw new Error('Method not implemented.')
+  }
+  showNotification(_data: DcNotification): void {
+    throw new Error('Method not implemented.')
+  }
+  clearAllNotifications(): void {
+    throw new Error('Method not implemented.')
+  }
+  clearNotifications(_chatId: number): void {
+    throw new Error('Method not implemented.')
+  }
   setBadgeCounter(_value: number): void {
     log.warn('setBadgeCounter is not implemented for browser')
   }
@@ -169,6 +190,25 @@ class Browser implements Runtime {
   }
 }
 class Electron implements Runtime {
+  private notificationCallback: (data: {
+    accountId: number
+    chatId: number
+    msgId: number
+  }) => void = () => {}
+  setNotificationCallback(
+    cb: (data: { accountId: number; chatId: number; msgId: number }) => void
+  ): void {
+    this.notificationCallback = cb
+  }
+  showNotification(data: DcNotification): void {
+    ipcBackend.invoke('notifications.show', data)
+  }
+  clearAllNotifications(): void {
+    ipcBackend.invoke('notifications.clearAll')
+  }
+  clearNotifications(chatId: number): void {
+    ipcBackend.invoke('notifications.clear', chatId)
+  }
   setBadgeCounter(value: number): void {
     ipcBackend.invoke('app.setBadgeCountAndTrayIconIndicator', value)
   }
@@ -278,6 +318,9 @@ class Electron implements Runtime {
       )
     }, this.getRC_Config())
     ipcBackend.on('showHelpDialog', this.openHelpWindow)
+    ipcBackend.on('ClickOnNotification', (_ev, data) =>
+      this.notificationCallback(data)
+    )
   }
   openHelpWindow(): void {
     ipcBackend.send('help', window.localeData.locale)

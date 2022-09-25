@@ -12,8 +12,6 @@ import moment from 'moment'
 import { CrashScreen } from './components/screens/CrashScreen'
 import { runtime } from './runtime'
 
-import './system-integration/badge-counter'
-
 attachKeybindingsListener()
 
 export default function App(_props: any) {

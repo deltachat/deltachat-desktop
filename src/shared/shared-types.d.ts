@@ -179,8 +179,21 @@ export type DeltaChatAccount =
       color: string
     }
 
+// Types that will stay:
+
 /** Additional info about the runtime the ui might need */
 export type RuntimeInfo = {
   /** used to determine wether to use command key in shortcuts or not */
   isMac: boolean
+}
+
+export interface DcNotification {
+  title: string
+  body: string
+  /** path to image that should be shown instead of icon */
+  icon: string | null
+  chatId: number
+  messageId: number
+  // for future
+  accountId: number
 }

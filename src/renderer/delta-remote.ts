@@ -63,8 +63,6 @@ class DeltaRemote {
     verified: boolean,
     name: string
   ): Promise<number>
-  /** @deprecated please do not use direclty */
-  call(fnName: 'chat.delete', chatId: number): Promise<void>
   call(
     fnName: 'chat.setVisibility',
     chatId: number,

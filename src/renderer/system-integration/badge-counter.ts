@@ -20,13 +20,14 @@ export const debouncedUpdateBadgeCounter = debounce(
   false
 )
 
-ipcBackend.on('DC_EVENT_INCOMING_MSG', async (_, [_chatId, _messageId]) => {
-  debouncedUpdateBadgeCounter()
-})
+export function initBadgeCounter() {
+  ipcBackend.on('DC_EVENT_INCOMING_MSG', async (_, [_chatId, _messageId]) => {
+    debouncedUpdateBadgeCounter()
+  })
 
-ipcBackend.on('DC_EVENT_CHAT_MODIFIED', async (_evt, [_chatId]) => {
+  ipcBackend.on('DC_EVENT_CHAT_MODIFIED', async (_evt, [_chatId]) => {
+    debouncedUpdateBadgeCounter()
+  })
+  // on app startup:
   debouncedUpdateBadgeCounter()
-})
-
-// on app startup:
-debouncedUpdateBadgeCounter()
+}

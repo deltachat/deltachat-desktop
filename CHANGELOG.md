@@ -16,6 +16,7 @@
 - allow scanning of certain qr code types on welcome screen (account, url and text)
 - fix selecting chat after forwarding to it
 - fixed bug where unread badge on app icon was not updated immediately
+- fix notifications are not removed from notification center
 
 ## [1.32.1] - 2022-08-18
 
