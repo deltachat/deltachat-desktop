@@ -61,8 +61,6 @@ export default function MainScreen() {
 
   const onChatClick = (chatId: number) => {
     if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) return setShowArchivedChats(true)
-    // avoid double clicks
-    if (chatId === selectedChat.chat?.id) return
 
     selectChat(chatId)
   }
