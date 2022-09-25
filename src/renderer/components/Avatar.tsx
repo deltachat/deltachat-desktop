@@ -4,6 +4,8 @@ import { useContext } from 'react'
 import classNames from 'classnames'
 import { ScreenContext } from '../contexts'
 import { Type } from '../backend-com'
+import FullscreenMedia from './dialogs/FullscreenMedia'
+import { T } from 'deltachat-node/deltachat-jsonrpc/typescript/src/lib'
 
 export function QRAvatar() {
   return (
@@ -97,11 +99,11 @@ export function ClickForFullscreenAvatarWrapper(props: {
         if (!props.filename) {
           return
         }
-        openDialog('FullscreenMedia', {
+        openDialog(FullscreenMedia, {
           msg: {
-            file_mime: 'image/x',
+            fileMime: 'image/x',
             file: props.filename,
-          },
+          } as T.Message,
         })
       }}
       style={{

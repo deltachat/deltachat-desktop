@@ -28,5 +28,8 @@
   },
   "broadcast_list_warning": {
     "message": "Broadcast Lists are always unencrypted because they use blind copy (BCC)"
+  },
+  "pref_donate": {
+    "message": "Donate"
   }
 }

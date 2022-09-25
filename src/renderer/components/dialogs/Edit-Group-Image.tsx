@@ -1,7 +1,9 @@
+import { T } from 'deltachat-node/deltachat-jsonrpc/typescript/src/lib'
 import React, { useContext } from 'react'
 import { ScreenContext } from '../../contexts'
 import { Avatar } from '../Avatar'
 import { useContextMenu } from '../ContextMenu'
+import FullscreenMedia from './FullscreenMedia'
 
 export const GroupImage = (props: {
   groupImage?: string | null
@@ -26,11 +28,11 @@ export const GroupImage = (props: {
   const { openDialog } = useContext(ScreenContext)
 
   const showAvatarFullscreen = () =>
-    openDialog('FullscreenMedia', {
+    openDialog(FullscreenMedia, {
       msg: {
-        file_mime: 'image/x',
+        fileMime: 'image/x',
         file: groupImage,
-      },
+      } as T.Message,
     })
 
   const openContextMenu = useContextMenu([
