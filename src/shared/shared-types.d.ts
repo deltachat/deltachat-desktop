@@ -51,6 +51,7 @@ export interface DesktopSettingsType {
   activeTheme: string
   minimizeToTray: boolean
   syncAllAccounts: boolean
+  lastSaveDialogLocation: string | undefined
 }
 
 export interface RC_Config {
