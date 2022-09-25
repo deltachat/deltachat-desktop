@@ -6,12 +6,13 @@ import { LogHandler } from './log-handler'
 import { ExtendedAppMainProcess } from './types'
 import * as mainWindow from './windows/main'
 import { openHelpWindow } from './windows/help'
-import { join, posix, sep } from 'path'
+import path, { basename, join, posix, sep } from 'path'
 import { DesktopSettings } from './desktop_settings'
 import { getConfigPath } from './application-constants'
 import { inspect } from 'util'
 import { RuntimeInfo } from '../shared/shared-types'
 import { platform } from 'os'
+import { existsSync } from 'fs'
 
 const log = getLogger('main/ipc')
 const DeltaChatController: typeof import('./deltachat/controller').default = (() => {
@@ -137,14 +138,26 @@ export async function init(cwd: string, logHandler: LogHandler) {
     return dialog.showOpenDialog(mainWindow.window, options)
   })
 
-  ipcMain.handle('saveFile', async (_ev, source, options) => {
+  ipcMain.handle('saveFile', async (_ev, source) => {
     if (!mainWindow.window) {
       throw new Error('window does not exist, this should never happen')
     }
+
+    let base_path = DesktopSettings.state.lastSaveDialogLocation
+      ? DesktopSettings.state.lastSaveDialogLocation
+      : app.getPath('downloads')
+
+    if (!existsSync(base_path)) {
+      base_path = app.getPath('downloads')
+    }
+
     const { canceled, filePath } = await dialog.showSaveDialog(
       mainWindow.window,
-      options
+      {
+        defaultPath: join(base_path, basename(source)),
+      }
     )
+
     if (!canceled && filePath) {
       try {
         await copyFile(source, filePath)
@@ -161,6 +174,9 @@ export async function init(cwd: string, logHandler: LogHandler) {
           )
         }
       }
+      DesktopSettings.update({
+        lastSaveDialogLocation: path.dirname(filePath),
+      })
     }
   })
 

@@ -12,7 +12,6 @@ import type {
   clipboard,
   nativeImage as electronNativeImage,
 } from 'electron'
-import { basename, join } from 'path'
 import { getLogger } from '../shared/logger'
 import processOpenQrUrl from './components/helpers/OpenQrUrl'
 
@@ -193,9 +192,7 @@ class Electron implements Runtime {
     return app_getPath(name)
   }
   async downloadFile(pathToFile: string): Promise<void> {
-    await ipcBackend.invoke('saveFile', pathToFile, {
-      defaultPath: join(app_getPath('downloads'), basename(pathToFile)),
-    })
+    await ipcBackend.invoke('saveFile', pathToFile)
   }
   readClipboardText(): Promise<string> {
     return Promise.resolve(read_clipboard_text())

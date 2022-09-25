@@ -23,5 +23,6 @@ export function getDefaultState(): DesktopSettingsType {
     activeTheme: 'system',
     minimizeToTray: false,
     syncAllAccounts: true,
+    lastSaveDialogLocation: undefined,
   }
 }
