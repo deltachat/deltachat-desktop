@@ -101,11 +101,14 @@ export default function MessageList({
       threshold: [0, 1],
     })
   )
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       unreadMessageInViewIntersectionObserver.current?.disconnect()
     }
-  }, [unreadMessageInViewIntersectionObserver.current])
+  }, [])
 
   const onScroll = useCallback(
     (Event: React.UIEvent<HTMLDivElement> | null) => {
