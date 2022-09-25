@@ -92,7 +92,8 @@ export default function FullscreenMedia(props: {
     // no file mime
     elm = (
       <div>
-        <p>Error: Unknown mime_type for {runtime.transformBlobURL(file)}</p>
+        <p>Error: Unknown mimeType for {runtime.transformBlobURL(file)}</p>
+        <p>mimeType is "{fileMime}"</p>
         <p>
           Please report this bug on{' '}
           <a href='#' onClick={() => runtime.openLink(gitHubIssuesUrl)}>
@@ -101,14 +102,14 @@ export default function FullscreenMedia(props: {
         </p>
       </div>
     )
-    log.warn('Unknown mime type', { file, file_mime: fileMime })
+    log.warn('Unknown mime type', { file, fileMime })
   } else {
     // can not be displayed by fullscreen media
     elm = (
       <div>
         <p>
           Error: Desktop issue: Unknown media type for{' '}
-          {runtime.transformBlobURL(file)} (mime_type: {fileMime})
+          {runtime.transformBlobURL(file)} (mimetype: {fileMime})
         </p>
         <p>
           Please report this bug on{' '}
@@ -120,7 +121,7 @@ export default function FullscreenMedia(props: {
     )
     log.warn('Unknown media type for fullscreen media', {
       file,
-      file_mime: fileMime,
+      fileMime,
     })
   }
 
