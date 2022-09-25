@@ -37,7 +37,6 @@ class DeltaRemote {
   call(fnName: 'contacts.lookupContactIdByAddr', email: string): Promise<number>
   call(fnName: 'contacts.deleteContact', contactId: number): Promise<boolean>
   // chat ---------------------------------------------------------------
-  call(fnName: 'chat.getEncryptionInfo', chatId: number): Promise<string>
   call(fnName: 'chat.getQrCode', chatId?: number): Promise<string>
   call(fnName: 'chat.leaveGroup', chatId: number): Promise<void>
   call(fnName: 'chat.setName', chatId: number, name: string): Promise<boolean>
@@ -75,7 +74,6 @@ class DeltaRemote {
       | C.DC_CHAT_VISIBILITY_PINNED
   ): Promise<void>
   call(fnName: 'chat.getChatContacts', chatId: number): Promise<number[]>
-  call(fnName: 'chat.markNoticedChat', chatId: number): Promise<void>
   call(fnName: 'chat.getChatEphemeralTimer', chatId: number): Promise<number>
   call(
     fnName: 'chat.setChatEphemeralTimer',
@@ -104,9 +102,7 @@ class DeltaRemote {
   ): Promise<JsonLocations>
   // login ----------------------------------------------------
   call(fnName: 'login.selectAccount', accountId: number): Promise<boolean>
-  call(fnName: 'login.addAccount'): Promise<number>
   call(fnName: 'login.getAccountSize', accountId: number): Promise<number>
-  call(fnName: 'login.getAllAccountIds'): Promise<number[]>
   call(fnName: 'login.getLastLoggedInAccount'): Promise<number>
 
   // NOTHING HERE that is called directly from the frontend, yet

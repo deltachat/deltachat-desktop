@@ -79,11 +79,11 @@ export default class ScreenController extends Component {
     if (lastLoggedInAccountId && !(lastLoggedInAccountId < 0)) {
       await this.selectAccount(lastLoggedInAccountId)
     } else {
-      const allAccountIds = await DeltaBackend.call('login.getAllAccountIds')
+      const allAccountIds = await BackendRemote.rpc.getAllAccountIds()
       if (allAccountIds && allAccountIds.length > 0) {
         this.changeScreen(Screens.AccountList)
       } else {
-        const accountId = await DeltaBackend.call('login.addAccount')
+        const accountId = await BackendRemote.rpc.addAccount()
         await this.selectAccount(accountId)
       }
     }
@@ -221,7 +221,7 @@ export default class ScreenController extends Component {
             {...{
               selectAccount: this.selectAccount,
               onAddAccount: async () => {
-                const accountId = await DeltaBackend.call('login.addAccount')
+                const accountId = await BackendRemote.rpc.addAccount()
                 await this.selectAccount(accountId)
               },
             }}

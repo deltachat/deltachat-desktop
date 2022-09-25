@@ -769,8 +769,6 @@ class ChatStore extends Store<ChatStoreState> {
           chatId
         )
         if (firstUnreadMsgId !== null) {
-          console.log({ firstUnreadMsgId })
-
           setTimeout(() => {
             this.effect.jumpToMessage(firstUnreadMsgId, false)
             ActionEmitter.emitAction(
@@ -784,6 +782,8 @@ class ChatStore extends Store<ChatStoreState> {
           return false
         }
 
+        // TODO:  this.controller.emit('DESKTOP_CLEAR_NOTIFICATIONS_FOR_CHAT', chatId)
+        // TODO: update badge counter
         await BackendRemote.rpc.marknoticedChat(accountId, chatId)
 
         let oldestFetchedMessageIndex = -1

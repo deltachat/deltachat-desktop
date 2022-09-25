@@ -13,7 +13,7 @@ export default class JsonContacts extends SplitOut {
     return result
   }
 
-  getContact(contactId: number) {
+  _getContact(contactId: number) {
     const contact = this.selectedAccountContext.getContact(contactId)?.toJson()
     if (!contact) {
       throw new Error('contact not found')
