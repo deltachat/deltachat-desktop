@@ -154,7 +154,7 @@ export default async function processOpenQrUrl(
     return
   }
 
-  const allowedQrCodesOnWelcomeScreen: Qr['type'][] = ['account', 'text', 'url']
+  const allowedQrCodesOnWelcomeScreen: Qr['type'][] = ['account', 'login', 'text', 'url']
 
   if (
     !allowedQrCodesOnWelcomeScreen.includes(checkQr.type) &&
@@ -166,7 +166,8 @@ export default async function processOpenQrUrl(
       cb: callback,
     })
     return
-  } else if (checkQr.type === 'account' && screen !== Screens.Welcome) {
+  } else if (checkQr.type === 'account' || checkQr.type === 'login' && screen !== Screens.Welcome) {
+    // TODO ask if user wants it, then log them out and then run the qrcode
     closeProcessDialog()
     window.__openDialog('AlertDialog', {
       message: tx('Please logout first'),
@@ -175,7 +176,8 @@ export default async function processOpenQrUrl(
     return
   }
 
-  if (checkQr.type === 'account') {
+  if (checkQr.type === 'account'|| checkQr.type === 'login') {
+    // TODO ask if user wants it 
     try {
       if (window.__selectedAccountId === undefined) {
         throw new Error('error: no context selected')
