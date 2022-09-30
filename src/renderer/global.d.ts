@@ -33,5 +33,6 @@ declare global {
     __chatlistSetSearch: ((searchTerm: string) => void) | undefined
     __chatStore: any
     __refetchChatlist: undefined | (() => void)
+    __welcome_qr: undefined | string
   }
 }

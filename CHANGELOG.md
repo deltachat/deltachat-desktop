@@ -11,6 +11,7 @@
 - Update translations (22.09.2022)
 - click on selected chat in chatlist now goes to bottom or first unread message
 - remember last path in "save as" dialog
+- allow using `dclogin:` and `dcaccount:` from logged in account, without logging out first
 
 ## Fixed
 - allow scanning of certain qr code types on welcome screen (account, url and text)

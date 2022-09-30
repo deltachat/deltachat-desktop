@@ -21,6 +21,7 @@ import AlertDialog from '../dialogs/AlertDialog'
 import { selectChat } from './ChatMethods'
 import { BackendRemote } from '../../backend-com'
 import { Qr } from 'deltachat-node/deltachat-jsonrpc/typescript/generated/types'
+import { EffectfulBackendActions } from '../../backend-com'
 
 const log = getLogger('renderer/processOpenUrl')
 
@@ -74,7 +75,8 @@ async function setConfigFromQrCatchingErrorInAlert(qrContent: string) {
 
 export default async function processOpenQrUrl(
   url: string,
-  callback: any = null
+  callback: any = null,
+  skipLoginConfirmation = false
 ) {
   const tx = window.static_translate
 
@@ -154,7 +156,12 @@ export default async function processOpenQrUrl(
     return
   }
 
-  const allowedQrCodesOnWelcomeScreen: Qr['type'][] = ['account', 'login', 'text', 'url']
+  const allowedQrCodesOnWelcomeScreen: Qr['type'][] = [
+    'account',
+    'login',
+    'text',
+    'url',
+  ]
 
   if (
     !allowedQrCodesOnWelcomeScreen.includes(checkQr.type) &&
@@ -166,39 +173,73 @@ export default async function processOpenQrUrl(
       cb: callback,
     })
     return
-  } else if (checkQr.type === 'account' || checkQr.type === 'login' && screen !== Screens.Welcome) {
-    // TODO ask if user wants it, then log them out and then run the qrcode
-    closeProcessDialog()
-    window.__openDialog('AlertDialog', {
-      message: tx('Please logout first'),
-      cb: callback,
-    })
-    return
   }
 
-  if (checkQr.type === 'account'|| checkQr.type === 'login') {
-    // TODO ask if user wants it 
-    try {
-      if (window.__selectedAccountId === undefined) {
-        throw new Error('error: no context selected')
+  if (checkQr.type === 'account' || checkQr.type === 'login') {
+    closeProcessDialog()
+
+    if (!skipLoginConfirmation) {
+      // ask if user wants it
+      let singular_term =
+        (await BackendRemote.rpc.getAllAccountIds()).length == 1
+
+      let message: string =
+        checkQr.type === 'account'
+          ? singular_term
+            ? 'qraccount_ask_create_and_login'
+            : 'qraccount_ask_create_and_login_another'
+          : checkQr.type === 'login'
+          ? singular_term
+            ? 'qrlogin_ask_login'
+            : 'qrlogin_ask_login_another'
+          : '?'
+
+      let yes = await new Promise(resolve => {
+        window.__openDialog(ConfirmationDialog, {
+          message: tx(message),
+          cb: resolve,
+          confirmLabel: tx('login'),
+        })
+      })
+
+      if (!yes) {
+        callback && callback()
+        return
       }
-      await BackendRemote.rpc.setConfigFromQr(window.__selectedAccountId, url)
-      closeProcessDialog()
-      window.__openDialog(ConfigureProgressDialog, {
-        credentials: {},
-        onSuccess: () => {
-          window.__changeScreen(Screens.Main)
-          callback()
-        },
-      })
-    } catch (err: any) {
-      closeProcessDialog()
-      window.__openDialog('AlertDialog', {
-        message: err.message || err.toString(),
-        cb: callback,
-      })
-      return
     }
+
+    if (screen !== Screens.Welcome) {
+      // log out first
+      EffectfulBackendActions.logout()
+      window.__selectAccount(await BackendRemote.rpc.addAccount())
+
+      callback && callback()
+      // define callback to call this function again, skipping the question
+      window.__welcome_qr = url
+    } else {
+      try {
+        if (window.__selectedAccountId === undefined) {
+          throw new Error('error: no context selected')
+        }
+        await BackendRemote.rpc.setConfigFromQr(window.__selectedAccountId, url)
+        closeProcessDialog()
+        window.__openDialog(ConfigureProgressDialog, {
+          credentials: {},
+          onSuccess: () => {
+            window.__changeScreen(Screens.Main)
+            callback()
+          },
+        })
+      } catch (err: any) {
+        closeProcessDialog()
+        window.__openDialog('AlertDialog', {
+          message: err.message || err.toString(),
+          cb: callback,
+        })
+        return
+      }
+    }
+
     return
   } else if (checkQr.type === 'askVerifyContact') {
     const accountId = selectedAccountId()
