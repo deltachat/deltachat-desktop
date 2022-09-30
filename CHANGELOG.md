@@ -12,6 +12,7 @@
 - click on selected chat in chatlist now goes to bottom or first unread message
 - remember last path in "save as" dialog
 - allow using `dclogin:` and `dcaccount:` from logged in account, without logging out first
+- register in os as handler for the `dcaccount:` and `dclogin:` scheme
 
 ## Fixed
 - allow scanning of certain qr code types on welcome screen (account, url and text)
@@ -49,7 +50,6 @@
 
 ## Added
 - Floating action button in chatlist to start a new chat
-- register in os as handler for the `dcaccount:` scheme
 
 ## Fixed
 - use addr if displayname is not set for webxdc selfName #2803

@@ -21,7 +21,7 @@ build['protocols'] = [
   {
     name: 'QR code data',
     role: 'Viewer',
-    schemes: ['openpgp4fpr', 'dcaccount'],
+    schemes: ['openpgp4fpr', 'dcaccount', 'dclogin:'],
   },
   {
     name: 'Send Mails via MailTo Scheme',

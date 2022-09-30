@@ -180,21 +180,21 @@ export default async function processOpenQrUrl(
 
     if (!skipLoginConfirmation) {
       // ask if user wants it
-      let singular_term =
+      const is_singular_term =
         (await BackendRemote.rpc.getAllAccountIds()).length == 1
 
-      let message: string =
+      const message: string =
         checkQr.type === 'account'
-          ? singular_term
+          ? is_singular_term
             ? 'qraccount_ask_create_and_login'
             : 'qraccount_ask_create_and_login_another'
           : checkQr.type === 'login'
-          ? singular_term
+          ? is_singular_term
             ? 'qrlogin_ask_login'
             : 'qrlogin_ask_login_another'
           : '?'
 
-      let yes = await new Promise(resolve => {
+      const yes = await new Promise(resolve => {
         window.__openDialog(ConfirmationDialog, {
           message: tx(message),
           cb: resolve,

@@ -15,6 +15,8 @@ app.setAsDefaultProtocolClient('openpgp4fpr')
 app.setAsDefaultProtocolClient('OPENPGP4FPR')
 app.setAsDefaultProtocolClient('dcaccount')
 app.setAsDefaultProtocolClient('DCACCOUNT')
+app.setAsDefaultProtocolClient('dclogin')
+app.setAsDefaultProtocolClient('DCLOGIN')
 // do not forcefully set DC as standard email handler to not annoy users
 
 let frontend_ready = false
