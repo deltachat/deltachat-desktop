@@ -16,6 +16,7 @@
 - allow scanning of certain qr code types on welcome screen (account, url and text)
 - fix selecting chat after forwarding to it
 - fix quote linebreaks #2870
+- fix low resolution of copy qrcode image #2907
 
 ## [1.32.1] - 2022-08-18
 
