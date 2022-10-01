@@ -2,8 +2,8 @@ div.profile-info-container {
   margin-left: 20px;
   display: flex;
   width: calc(100% - 65px);
-  .avatar.large > .content {
-    margin: 0px;
+  .avatar.large {
+    --local-avatar-vertical-margin: 0;
   }
   .profile-info-name-container {
     margin: auto 0px auto 17px;

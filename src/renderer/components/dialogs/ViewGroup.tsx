@@ -245,6 +245,7 @@ function ViewGroupInner(props: {
                     avatarPath={groupImage}
                     isVerified={chat.isProtected}
                     color={chat.color}
+                    wasSeenRecently={chat.wasSeenRecently}
                     large
                   />
                 </ClickForFullscreenAvatarWrapper>

@@ -36,6 +36,7 @@ export function Avatar(props: {
   large?: boolean
   small?: boolean
   isVerified?: boolean
+  wasSeenRecently?: boolean
   style?: htmlDivProps['style']
   onClick?: () => void
 }) {
@@ -47,6 +48,7 @@ export function Avatar(props: {
     isVerified,
     large,
     small,
+    wasSeenRecently,
     onClick,
   } = props
 
@@ -59,7 +61,10 @@ export function Avatar(props: {
   )
 
   return (
-    <div className={classNames('avatar', { large, small })} onClick={onClick}>
+    <div
+      className={classNames('avatar', { large, small, wasSeenRecently })}
+      onClick={onClick}
+    >
       {content}
       {isVerified && (
         <img className='verified-icon' src='../images/verified.png' />

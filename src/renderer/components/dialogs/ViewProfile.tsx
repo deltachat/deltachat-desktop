@@ -61,13 +61,14 @@ const ProfileInfoName = ({
 }
 
 function ProfileInfoAvatar({ contact }: { contact: Type.Contact }) {
-  const { displayName, profileImage } = contact
+  const { displayName, profileImage, wasSeenRecently } = contact
   const color = contact.color
   return Avatar({
     avatarPath: profileImage,
     color,
     displayName,
     large: true,
+    wasSeenRecently,
   })
 }
 

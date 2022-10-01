@@ -45,6 +45,7 @@ export default function Contact(props: {
     displayName: string
     address: string
     isVerified: boolean
+    wasSeenRecently: boolean
   }
 }) {
   const {
@@ -53,11 +54,18 @@ export default function Contact(props: {
     displayName,
     address,
     isVerified,
+    wasSeenRecently,
   } = props.contact
   return (
     <div className='contact'>
       <Avatar
-        {...{ avatarPath: profileImage, color, displayName, addr: address }}
+        {...{
+          avatarPath: profileImage,
+          color,
+          displayName,
+          addr: address,
+          wasSeenRecently,
+        }}
       />
       {ContactName(displayName, address, isVerified)}
     </div>

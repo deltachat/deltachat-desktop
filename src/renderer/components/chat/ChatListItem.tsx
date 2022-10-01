@@ -191,6 +191,7 @@ function ChatListItemNormal({
           avatarPath: chatListItem.avatarPath || undefined,
           color: chatListItem.color,
           isVerified: chatListItem.isProtected,
+          wasSeenRecently: chatListItem.wasSeenRecently,
         }}
       />
       <div className='content'>
