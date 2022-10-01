@@ -16,6 +16,7 @@ import { DeltaProgressBar } from '../Login-Styles'
 import { DialogProps } from '../dialogs/DialogController'
 import { Screens } from '../../ScreenController'
 import { BackendRemote, EffectfulBackendActions } from '../../backend-com'
+import processOpenQrUrl from '../helpers/OpenQrUrl'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
@@ -132,6 +133,12 @@ export default function WelcomeScreen({
       const allAccountIds = await BackendRemote.listAccounts()
       if (allAccountIds && allAccountIds.length > 1) {
         setShowBackButton(true)
+      }
+      if (window.__welcome_qr) {
+        // this is the "callback" when opening dclogin or dcaccount from an already existing account,
+        // the app needs to switch to the welcome screen first.
+        await processOpenQrUrl(window.__welcome_qr, undefined, true)
+        window.__welcome_qr = undefined
       }
     })()
   }, [])

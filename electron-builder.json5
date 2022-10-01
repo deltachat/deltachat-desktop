@@ -3,7 +3,11 @@
 {
   appId: 'chat.delta.desktop.electron',
   protocols: [
-    { name: 'QR code data', role: 'Viewer', schemes: ['openpgp4fpr'] },
+    {
+      name: 'QR code data',
+      role: 'Viewer',
+      schemes: ['openpgp4fpr', 'dcaccount', 'dclogin:'],
+    },
     {
       name: 'Send Mails via MailTo Scheme',
       role: 'Viewer',
