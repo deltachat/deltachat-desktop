@@ -1,15 +1,11 @@
-import {
-  BaseDeltaChat,
-  yerpc,
-} from 'deltachat-node/deltachat-jsonrpc/typescript/src/lib'
-import { Message } from 'deltachat-node/deltachat-jsonrpc/typescript/generated/jsonrpc'
+import { BaseDeltaChat, yerpc, RPC } from '@deltachat/jsonrpc-client'
 import { DeltaBackend } from './delta-remote'
 import { runtime } from './runtime'
 import { getLogger } from '../shared/logger'
 import { debouncedUpdateBadgeCounter } from './system-integration/badge-counter'
 import { clearNotificationsForChat } from './system-integration/notifications'
 
-export * as Type from 'deltachat-node/deltachat-jsonrpc/typescript/generated/types'
+export { T as Type } from '@deltachat/jsonrpc-client'
 
 const { BaseTransport } = yerpc
 const log = getLogger('renderer/jsonrpc')
@@ -20,13 +16,13 @@ class ElectronTransport extends BaseTransport {
     window.electron_functions.ipcRenderer.on(
       'json-rpc-message',
       (_ev, response) => {
-        const message: Message = JSON.parse(response)
+        const message: RPC.Message = JSON.parse(response)
         //   log.debug("received: ", message)
         this._onmessage(message)
       }
     )
   }
-  _send(message: Message): void {
+  _send(message: RPC.Message): void {
     const serialized = JSON.stringify(message)
     window.electron_functions.ipcRenderer.invoke('json-rpc-request', serialized)
     log.debug('sent: ', message)

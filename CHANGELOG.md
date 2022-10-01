@@ -2,21 +2,28 @@
 
 ## [Unreleased][unreleased]
 
+
 ### Added
+- show mailing list address in chat subtile
 - clear webxdc browser data on webxdc instance deletion
 - add donate link in settings
+- add button to clear chat history (delete all messages of a chat)
 
 ## Changed
 - start migrating to jsonrpc api
 - Update translations (22.09.2022)
 - click on selected chat in chatlist now goes to bottom or first unread message
 - remember last path in "save as" dialog
+- allow using `dclogin:` and `dcaccount:` from logged in account, without logging out first
+- register in os as handler for the `dcaccount:` and `dclogin:` scheme
 
 ## Fixed
 - allow scanning of certain qr code types on welcome screen (account, url and text)
 - fix selecting chat after forwarding to it
 - fixed bug where unread badge on app icon was not updated immediately
 - fix notifications are not removed from notification center
+- fix quote linebreaks #2870
+- fix low resolution of copy qrcode image #2907
 
 ## [1.32.1] - 2022-08-18
 

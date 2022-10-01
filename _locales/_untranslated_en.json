@@ -31,5 +31,8 @@
   },
   "pref_donate": {
     "message": "Donate"
+  },
+  "clear_chat": {
+    "message": "Clear Chat"
   }
 }

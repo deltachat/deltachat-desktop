@@ -10,7 +10,7 @@ const UPDATE_FREQUENCY = 60 * 1000
 const DEDUPLICATION_COUNTER_ROLLOVER = 999
 
 // object that holds references to the update functions of the currently active Timestamp elements
-let updateRefs: { [key: string]: () => void } = {}
+const updateRefs: { [key: string]: () => void } = {}
 // to prevent same key on same timestamp
 let deduplicationCounter = 0
 
@@ -79,10 +79,7 @@ const UpdatingTimestamp = (props: TimestampProps) => {
     return () => {
       delete updateRefs[key]
     }
-  }, [timestamp, window.localeData.locale, recalculateRelativeTime])
-
-  // trigger a rerender that will be detected as a language change by the useEffect function above (window.localeData.locale)
-  //useTranslationFunction()
+  }, [timestamp, recalculateRelativeTime])
 
   if (timestamp === null || timestamp === undefined) return null
 

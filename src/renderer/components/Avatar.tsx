@@ -5,7 +5,7 @@ import classNames from 'classnames'
 import { ScreenContext } from '../contexts'
 import { Type } from '../backend-com'
 import FullscreenMedia from './dialogs/FullscreenMedia'
-import { T } from 'deltachat-node/deltachat-jsonrpc/typescript/src/lib'
+import { T } from '@deltachat/jsonrpc-client'
 
 export function QRAvatar() {
   return (
