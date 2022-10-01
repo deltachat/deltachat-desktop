@@ -5,6 +5,7 @@
 ### Added
 - clear webxdc browser data on webxdc instance deletion
 - add donate link in settings
+- add button to clear chat history (delete all messages of a chat)
 
 ## Changed
 - start migrating to jsonrpc api
