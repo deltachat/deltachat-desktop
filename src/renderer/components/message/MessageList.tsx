@@ -61,9 +61,8 @@ export default function MessageList({
   const onUnreadMessageInView: IntersectionObserverCallback = entries => {
     if (ChatStore.state.chat === null) return
     // Don't mark messages as read if window is not focused
-    if (document.hasFocus() === false) return 
+    if (document.hasFocus() === false) return
 
-    const chatId = ChatStore.state.chat.id
     setTimeout(() => {
       log.debug(`onUnreadMessageInView: entries.length: ${entries.length}`)
 
@@ -102,8 +101,11 @@ export default function MessageList({
       threshold: [0, 1],
     })
   )
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       unreadMessageInViewIntersectionObserver.current?.disconnect()
     }
   }, [])

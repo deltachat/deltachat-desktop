@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { DeltaBackend } from '../../delta-remote'
 import { DialogProps } from './DialogController'
 import {
   SmallDialog,
@@ -26,7 +25,10 @@ export default function EncryptionInfo({
           selectedAccountId(),
           chatListItem.dmChatContact
         )
-      : DeltaBackend.call('chat.getEncryptionInfo', chatListItem.id)
+      : BackendRemote.rpc.getChatEncryptionInfo(
+          selectedAccountId(),
+          chatListItem.id
+        )
     ).then(setEncryptionInfo)
   }, [chatListItem])
 

@@ -43,7 +43,7 @@ export default class DCMessageList extends SplitOut {
     const file_bytes = msg.getFilebytes()
     const fromId = msg.getFromId()
     const setupCodeBegin = msg.getSetupcodebegin()
-    const contact = fromId && this.controller.contacts.getContact(fromId)
+    const contact = fromId && this.controller.contacts._getContact(fromId)
 
     const jsonMSG = msg.toJson()
 

@@ -143,11 +143,12 @@
   button {
     margin-left: 20px;
     padding: 0;
+    flex-grow: 1;
 
     background-color: unset;
     border: none;
 
-    text-align: center;
+    text-align: start;
     line-height: 40px;
     color: var(--globalText);
   }

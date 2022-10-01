@@ -76,11 +76,6 @@ export default class DCLoginController extends SplitOut {
     log.info('Logged out')
   }
 
-  async addAccount(): Promise<number> {
-    const accountId = this.accounts.addAccount()
-    return accountId
-  }
-
   close() {
     this.controller.webxdc._closeAll()
     this.controller.emit('DESKTOP_CLEAR_ALL_NOTIFICATIONS')
@@ -144,10 +139,6 @@ Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANG
     return await _getAccountSize(account_dir)
   }
 
-  getAllAccountIds(): number[] {
-    return super.accounts.getAllAccountIds()
-  }
-
   async getLastLoggedInAccount() {
     if (DesktopSettings.state.lastAccount) {
       try {
@@ -178,11 +169,6 @@ export function txCoreStrings() {
   strings[C.DC_STR_AUDIO] = tx('audio')
   strings[C.DC_STR_FILE] = tx('file')
   strings[C.DC_STR_ENCRYPTEDMSG] = tx('encrypted_message')
-  strings[C.DC_STR_MSGGRPNAME] = tx('systemmsg_group_name_changed')
-  strings[C.DC_STR_MSGGRPIMGCHANGED] = tx('systemmsg_group_image_changed')
-  strings[C.DC_STR_MSGADDMEMBER] = tx('systemmsg_member_added')
-  strings[C.DC_STR_MSGDELMEMBER] = tx('systemmsg_member_removed')
-  strings[C.DC_STR_MSGGROUPLEFT] = tx('systemmsg_group_left')
   // strings[C.DC_STR_E2E_AVAILABLE] = tx('DC_STR_E2E_AVAILABLE')
   // strings[C.DC_STR_ENCR_TRANSP] = tx('DC_STR_ENCR_TRANSP')
   // strings[C.DC_STR_ENCR_NONE] = tx('DC_STR_ENCR_NONE')
@@ -190,7 +176,6 @@ export function txCoreStrings() {
   strings[C.DC_STR_CANTDECRYPT_MSG_BODY] = tx('systemmsg_cannot_decrypt')
   strings[C.DC_STR_READRCPT] = tx('systemmsg_read_receipt_subject')
   strings[C.DC_STR_READRCPT_MAILBODY] = tx('systemmsg_read_receipt_body')
-  strings[C.DC_STR_MSGGRPIMGDELETED] = tx('systemmsg_group_image_deleted')
   strings[C.DC_STR_E2E_PREFERRED] = tx('autocrypt_prefer_e2ee')
   strings[C.DC_STR_ARCHIVEDCHATS] = tx('chat_archived_chats_title')
   strings[C.DC_STR_AC_SETUP_MSG_SUBJECT] = tx('autocrypt_asm_subject')
@@ -201,8 +186,6 @@ export function txCoreStrings() {
   strings[C.DC_STR_CONTACT_VERIFIED] = tx('contact_verified')
   strings[C.DC_STR_CONTACT_NOT_VERIFIED] = tx('contact_not_verified')
   strings[C.DC_STR_CONTACT_SETUP_CHANGED] = tx('contact_setup_changed')
-  strings[C.DC_STR_MSGACTIONBYUSER] = tx('systemmsg_action_by_user')
-  strings[C.DC_STR_MSGACTIONBYME] = tx('systemmsg_action_by_me')
   strings[C.DC_STR_DEVICE_MESSAGES_HINT] = tx('device_talk_explain')
   strings[C.DC_STR_WELCOME_MESSAGE] = tx('device_talk_welcome_message')
   strings[C.DC_STR_UNKNOWN_SENDER_FOR_CHAT] = tx(
@@ -212,24 +195,9 @@ export function txCoreStrings() {
     'systemmsg_subject_for_new_contact'
   )
   strings[C.DC_STR_FAILED_SENDING_TO] = tx('systemmsg_failed_sending_to')
-  strings[C.DC_STR_EPHEMERAL_DISABLED] = tx(
-    'systemmsg_ephemeral_timer_disabled'
-  )
-  strings[C.DC_STR_EPHEMERAL_SECONDS] = tx('systemmsg_ephemeral_timer_enabled')
-  strings[C.DC_STR_EPHEMERAL_MINUTE] = tx('systemmsg_ephemeral_timer_minute')
-  strings[C.DC_STR_EPHEMERAL_HOUR] = tx('systemmsg_ephemeral_timer_hour')
-  strings[C.DC_STR_EPHEMERAL_DAY] = tx('systemmsg_ephemeral_timer_day')
-  strings[C.DC_STR_EPHEMERAL_WEEK] = tx('systemmsg_ephemeral_timer_week')
-  strings[C.DC_STR_EPHEMERAL_FOUR_WEEKS] = tx(
-    'systemmsg_ephemeral_timer_four_weeks'
-  )
   strings[C.DC_STR_VIDEOCHAT_INVITATION] = tx('videochat_invitation')
   strings[C.DC_STR_VIDEOCHAT_INVITE_MSG_BODY] = tx('videochat_invitation_body')
   strings[C.DC_STR_CONFIGURATION_FAILED] = tx('configuration_failed_with_error')
-  strings[C.DC_STR_PROTECTION_ENABLED] = tx('systemmsg_chat_protection_enabled')
-  strings[C.DC_STR_PROTECTION_DISABLED] = tx(
-    'systemmsg_chat_protection_disabled'
-  )
   strings[C.DC_STR_REPLY_NOUN] = tx('reply_noun')
   strings[C.DC_STR_FORWARDED] = tx('forwarded')
 
@@ -242,10 +210,6 @@ export function txCoreStrings() {
   //strings[C.DC_STR_ERROR_NO_NETWORK] = tx('')
   strings[C.DC_STR_SELF_DELETED_MSG_BODY] = tx('devicemsg_self_deleted')
   //strings[C.DC_STR_SERVER_TURNED_OFF] = tx('')
-  strings[C.DC_STR_EPHEMERAL_MINUTES] = tx('systemmsg_ephemeral_timer_minutes')
-  strings[C.DC_STR_EPHEMERAL_HOURS] = tx('systemmsg_ephemeral_timer_hours')
-  strings[C.DC_STR_EPHEMERAL_DAYS] = tx('systemmsg_ephemeral_timer_days')
-  strings[C.DC_STR_EPHEMERAL_WEEKS] = tx('systemmsg_ephemeral_timer_weeks')
   strings[C.DC_STR_QUOTA_EXCEEDING_MSG_BODY] = tx('devicemsg_storage_exceeding')
   strings[C.DC_STR_PARTIAL_DOWNLOAD_MSG_BODY] = tx('n_bytes_message')
   strings[C.DC_STR_DOWNLOAD_AVAILABILITY] = tx('download_max_available_until')
@@ -274,6 +238,101 @@ export function txCoreStrings() {
   strings[C.DC_STR_NOT_CONNECTED] = tx('connectivity_not_connected')
   strings[C.DC_STR_AEAP_ADDR_CHANGED] = tx('aeap_addr_changed')
   strings[C.DC_STR_AEAP_EXPLANATION_AND_LINK] = tx('aeap_explanation')
+
+  strings[C.DC_STR_GROUP_NAME_CHANGED_BY_YOU] = tx('group_name_changed_by_you')
+  strings[C.DC_STR_GROUP_NAME_CHANGED_BY_OTHER] = tx(
+    'group_name_changed_by_other'
+  )
+  strings[C.DC_STR_GROUP_IMAGE_CHANGED_BY_YOU] = tx(
+    'group_image_changed_by_you'
+  )
+  strings[C.DC_STR_GROUP_IMAGE_CHANGED_BY_OTHER] = tx(
+    'group_image_changed_by_other'
+  )
+  strings[C.DC_STR_ADD_MEMBER_BY_YOU] = tx('add_member_by_you')
+  strings[C.DC_STR_ADD_MEMBER_BY_OTHER] = tx('add_member_by_other')
+  strings[C.DC_STR_REMOVE_MEMBER_BY_YOU] = tx('remove_member_by_you')
+  strings[C.DC_STR_REMOVE_MEMBER_BY_OTHER] = tx('remove_member_by_other')
+  strings[C.DC_STR_GROUP_LEFT_BY_YOU] = tx('group_left_by_you')
+  strings[C.DC_STR_GROUP_LEFT_BY_OTHER] = tx('group_left_by_other')
+  strings[C.DC_STR_GROUP_IMAGE_DELETED_BY_YOU] = tx(
+    'group_image_deleted_by_you'
+  )
+  strings[C.DC_STR_GROUP_IMAGE_DELETED_BY_OTHER] = tx(
+    'group_image_deleted_by_other'
+  )
+  strings[C.DC_STR_LOCATION_ENABLED_BY_YOU] = tx('location_enabled_by_you')
+  strings[C.DC_STR_LOCATION_ENABLED_BY_OTHER] = tx('location_enabled_by_other')
+  strings[C.DC_STR_EPHEMERAL_TIMER_DISABLED_BY_YOU] = tx(
+    'ephemeral_timer_disabled_by_you'
+  )
+  strings[C.DC_STR_EPHEMERAL_TIMER_DISABLED_BY_OTHER] = tx(
+    'ephemeral_timer_disabled_by_other'
+  )
+  strings[C.DC_STR_EPHEMERAL_TIMER_SECONDS_BY_YOU] = tx(
+    'ephemeral_timer_seconds_by_you'
+  )
+  strings[C.DC_STR_EPHEMERAL_TIMER_SECONDS_BY_OTHER] = tx(
+    'ephemeral_timer_seconds_by_other'
+  )
+  strings[C.DC_STR_EPHEMERAL_TIMER_1_MINUTE_BY_YOU] = tx(
+    'ephemeral_timer_1_minute_by_you'
+  )
+  strings[C.DC_STR_EPHEMERAL_TIMER_1_MINUTE_BY_OTHER] = tx(
+    'ephemeral_timer_1_minute_by_other'
+  )
+  strings[C.DC_STR_EPHEMERAL_TIMER_1_HOUR_BY_YOU] = tx(
+    'ephemeral_timer_1_hour_by_you'
+  )
+  strings[C.DC_STR_EPHEMERAL_TIMER_1_HOUR_BY_OTHER] = tx(
+    'ephemeral_timer_1_hour_by_other'
+  )
+  strings[C.DC_STR_EPHEMERAL_TIMER_1_DAY_BY_YOU] = tx(
+    'ephemeral_timer_1_day_by_you'
+  )
+  strings[C.DC_STR_EPHEMERAL_TIMER_1_DAY_BY_OTHER] = tx(
+    'ephemeral_timer_1_day_by_other'
+  )
+  strings[C.DC_STR_EPHEMERAL_TIMER_1_WEEK_BY_YOU] = tx(
+    'ephemeral_timer_1_week_by_you'
+  )
+  strings[C.DC_STR_EPHEMERAL_TIMER_1_WEEK_BY_OTHER] = tx(
+    'ephemeral_timer_1_week_by_other'
+  )
+  strings[C.DC_STR_EPHEMERAL_TIMER_MINUTES_BY_YOU] = tx(
+    'ephemeral_timer_minutes_by_you'
+  )
+  strings[C.DC_STR_EPHEMERAL_TIMER_MINUTES_BY_OTHER] = tx(
+    'ephemeral_timer_minutes_by_other'
+  )
+  strings[C.DC_STR_EPHEMERAL_TIMER_HOURS_BY_YOU] = tx(
+    'ephemeral_timer_hours_by_you'
+  )
+  strings[C.DC_STR_EPHEMERAL_TIMER_HOURS_BY_OTHER] = tx(
+    'ephemeral_timer_hours_by_other'
+  )
+  strings[C.DC_STR_EPHEMERAL_TIMER_DAYS_BY_YOU] = tx(
+    'ephemeral_timer_days_by_you'
+  )
+  strings[C.DC_STR_EPHEMERAL_TIMER_DAYS_BY_OTHER] = tx(
+    'ephemeral_timer_days_by_other'
+  )
+  strings[C.DC_STR_EPHEMERAL_TIMER_WEEKS_BY_YOU] = tx(
+    'ephemeral_timer_weeks_by_you'
+  )
+  strings[C.DC_STR_EPHEMERAL_TIMER_WEEKS_BY_OTHER] = tx(
+    'ephemeral_timer_weeks_by_other'
+  )
+  strings[C.DC_STR_PROTECTION_ENABLED_BY_YOU] = tx('protection_enabled_by_you')
+  strings[C.DC_STR_PROTECTION_ENABLED_BY_OTHER] = tx(
+    'protection_enabled_by_other'
+  )
+  strings[C.DC_STR_PROTECTION_DISABLED_BY_YOU] = tx(
+    'protection_disabled_by_you'
+  )
+  strings[C.DC_STR_PROTECTION_DISABLED_BY_OTHER] = tx(
+    'protection_disabled_by_other'
+  )
 
   return strings
 }

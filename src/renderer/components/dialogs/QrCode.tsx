@@ -99,6 +99,7 @@ export function QrCodeShowQrInner({
   }
 
   const [svgUrl, setSvgUrl] = useState<string | undefined>(undefined)
+  const svgUrlRef = useRef(svgUrl)
 
   useLayoutEffect(() => {
     if (qrCodeSVG) {
@@ -107,6 +108,7 @@ export function QrCodeShowQrInner({
           new Blob([qrCodeSVG], { type: 'image/svg+xml' })
         )
         setSvgUrl(url)
+        svgUrlRef.current = url
         return () => URL.revokeObjectURL(url)
       } catch (error) {
         setSvgUrl(undefined)
@@ -116,6 +118,29 @@ export function QrCodeShowQrInner({
       }
     }
   }, [qrCodeSVG])
+
+  const imageContextMenu = useContextMenu([
+    {
+      label: tx('menu_copy_image_to_clipboard'),
+      action: () => {
+        if (svgUrlRef.current) {
+          const img = document.createElement('img')
+          img.src = svgUrlRef.current
+          const canvas = document.createElement('canvas')
+          canvas.height = 630
+          canvas.width = 515
+          const context = canvas.getContext('2d')
+          context?.drawImage(img, 0, 0)
+          canvas.toBlob(function (blob) {
+            if (blob) {
+              const item = new ClipboardItem({ 'image/png': blob })
+              navigator.clipboard.write([item])
+            }
+          }, 'image/png')
+        }
+      },
+    },
+  ])
 
   return (
     <>
@@ -130,6 +155,7 @@ export function QrCodeShowQrInner({
                 paddingTop: '16px',
               }}
               src={svgUrl}
+              onContextMenu={imageContextMenu}
             />
           )}
         </DeltaDialogContent>

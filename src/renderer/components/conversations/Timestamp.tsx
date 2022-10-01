@@ -2,25 +2,36 @@ import React, { useState, useEffect, useCallback } from 'react'
 import classNames from 'classnames'
 import moment from 'moment'
 import formatRelativeTime from './formatRelativeTime'
+import { getLogger } from '../../../shared/logger'
+
+const log = getLogger('renderer/Component/Timestamp')
 
 const UPDATE_FREQUENCY = 60 * 1000
+const DEDUPLICATION_COUNTER_ROLLOVER = 999
 
-// This hook allows running a callback every delay milliseconds. It takes
-// care of clearing the interval on component unmount.
-export function useInterval(callback: () => void, delay: number) {
-  useEffect(() => {
-    let mounted = true
-    if (delay === null || callback === null) return
+// object that holds references to the update functions of the currently active Timestamp elements
+const updateRefs: { [key: string]: () => void } = {}
+// to prevent same key on same timestamp
+let deduplicationCounter = 0
 
-    const interval = setInterval(() => {
-      if (mounted === true) callback()
-    }, delay)
-    return () => {
-      mounted = false
-      clearInterval(interval)
+function updateTimestamps() {
+  log.debug('updateTS:', { updateRefs })
+
+  for (const key in updateRefs) {
+    if (Object.prototype.hasOwnProperty.call(updateRefs, key)) {
+      if (updateRefs[key]) {
+        updateRefs[key]()
+      }
     }
-  }, [callback, delay])
+  }
+
+  if (deduplicationCounter >= DEDUPLICATION_COUNTER_ROLLOVER) {
+    deduplicationCounter = 0
+  }
 }
+
+window.addEventListener('focus', updateTimestamps)
+setInterval(updateTimestamps, UPDATE_FREQUENCY)
 
 type TimestampProps = {
   direction?: 'incoming' | 'outgoing'
@@ -59,15 +70,16 @@ const UpdatingTimestamp = (props: TimestampProps) => {
     () => setRelativeTime(calculateRelativeTime()),
     [calculateRelativeTime]
   )
-  useInterval(recalculateRelativeTime, UPDATE_FREQUENCY)
-  useEffect(recalculateRelativeTime, [
-    timestamp,
-    window.localeData.locale,
-    recalculateRelativeTime,
-  ])
 
-  // trigger a rerender that will be detected as a language change by the useEffect function above (window.localeData.locale)
-  //useTranslationFunction()
+  useEffect(() => {
+    //register in global updater
+    const key = `${timestamp}|${deduplicationCounter++}`
+    updateRefs[key] = recalculateRelativeTime
+    recalculateRelativeTime()
+    return () => {
+      delete updateRefs[key]
+    }
+  }, [timestamp, recalculateRelativeTime])
 
   if (timestamp === null || timestamp === undefined) return null
 
