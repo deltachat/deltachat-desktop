@@ -13,6 +13,7 @@ import { inspect } from 'util'
 import { RuntimeInfo } from '../shared/shared-types'
 import { platform } from 'os'
 import { existsSync } from 'fs'
+import { set_has_unread } from './tray'
 
 const log = getLogger('main/ipc')
 const DeltaChatController: typeof import('./deltachat/controller').default = (() => {
@@ -183,6 +184,14 @@ export async function init(cwd: string, logHandler: LogHandler) {
   ipcMain.handle('get-desktop-settings', async _ev => {
     return DesktopSettings.state
   })
+
+  ipcMain.handle(
+    'app.setBadgeCountAndTrayIconIndicator',
+    (_, count: number) => {
+      app.setBadgeCount(count)
+      set_has_unread(count !== 0)
+    }
+  )
 
   return () => {
     // the shutdown function

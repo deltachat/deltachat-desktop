@@ -1,7 +1,6 @@
 import { C } from 'deltachat-node'
 import { getLogger } from '../../shared/logger'
-import setupNotifications from '../notifications'
-import setupUnreadBadgeCounter from '../unread-badge'
+import '../notifications'
 import SplitOut from './splitout'
 import { DeltaChatAccount } from '../../shared/shared-types'
 import { stat, readdir } from 'fs/promises'
@@ -55,8 +54,6 @@ export default class DCLoginController extends SplitOut {
 
     this.updateDeviceChats()
 
-    setupNotifications(this.controller, DesktopSettings.state)
-    setupUnreadBadgeCounter(this.controller)
     this.controller.ready = true
     return true
   }
@@ -78,7 +75,6 @@ export default class DCLoginController extends SplitOut {
 
   close() {
     this.controller.webxdc._closeAll()
-    this.controller.emit('DESKTOP_CLEAR_ALL_NOTIFICATIONS')
     if (!this.accounts) return
     this.accounts.stopIO()
     this.controller.unregisterEventHandler(this.accounts)

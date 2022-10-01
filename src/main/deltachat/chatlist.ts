@@ -76,10 +76,6 @@ export default class DCChatList extends SplitOut {
       ephemeralTimer,
     }
   }
-
-  getGeneralFreshMessageCounter() {
-    return this.selectedAccountContext.getFreshMessages().length
-  }
 }
 // section: Internal functions
 function isGroupChat(chat: JsonChat) {

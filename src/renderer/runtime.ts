@@ -1,5 +1,6 @@
 import { ipcBackend } from './ipc'
 import {
+  DcNotification,
   DesktopSettingsType,
   RC_Config,
   RuntimeInfo,
@@ -54,7 +55,6 @@ interface Runtime {
   openLogFile(): void
   getCurrentLogLocation(): string
   openHelpWindow(): void
-  updateBadge(): void
   /**
    * get the comandline arguments
    */
@@ -86,9 +86,35 @@ interface Runtime {
 
   // control app
   restartApp(): void
+
+  // more system integration functions:
+  setBadgeCounter(value: number): void
+  showNotification(data: DcNotification): void
+  clearAllNotifications(): void
+  clearNotifications(chatId: number): void
+  setNotificationCallback(
+    cb: (data: { accountId: number; chatId: number; msgId: number }) => void
+  ): void
 }
 
 class Browser implements Runtime {
+  setNotificationCallback(
+    _cb: (data: { accountId: number; chatId: number; msgId: number }) => void
+  ): void {
+    throw new Error('Method not implemented.')
+  }
+  showNotification(_data: DcNotification): void {
+    throw new Error('Method not implemented.')
+  }
+  clearAllNotifications(): void {
+    throw new Error('Method not implemented.')
+  }
+  clearNotifications(_chatId: number): void {
+    throw new Error('Method not implemented.')
+  }
+  setBadgeCounter(_value: number): void {
+    log.warn('setBadgeCounter is not implemented for browser')
+  }
   deleteWebxdcAccountData(_accountId: number): Promise<void> {
     throw new Error('Method not implemented.')
   }
@@ -147,9 +173,6 @@ class Browser implements Runtime {
   getRC_Config(): RC_Config {
     throw new Error('Method not implemented.')
   }
-  updateBadge(): void {
-    throw new Error('Method not implemented.')
-  }
   openHelpWindow(): void {
     throw new Error('Method not implemented.')
   }
@@ -167,6 +190,28 @@ class Browser implements Runtime {
   }
 }
 class Electron implements Runtime {
+  private notificationCallback: (data: {
+    accountId: number
+    chatId: number
+    msgId: number
+  }) => void = () => {}
+  setNotificationCallback(
+    cb: (data: { accountId: number; chatId: number; msgId: number }) => void
+  ): void {
+    this.notificationCallback = cb
+  }
+  showNotification(data: DcNotification): void {
+    ipcBackend.invoke('notifications.show', data)
+  }
+  clearAllNotifications(): void {
+    ipcBackend.invoke('notifications.clearAll')
+  }
+  clearNotifications(chatId: number): void {
+    ipcBackend.invoke('notifications.clear', chatId)
+  }
+  setBadgeCounter(value: number): void {
+    ipcBackend.invoke('app.setBadgeCountAndTrayIconIndicator', value)
+  }
   deleteWebxdcAccountData(accountId: number): Promise<void> {
     return ipcBackend.invoke('delete_webxdc_account_data', accountId)
   }
@@ -273,6 +318,9 @@ class Electron implements Runtime {
       )
     }, this.getRC_Config())
     ipcBackend.on('showHelpDialog', this.openHelpWindow)
+    ipcBackend.on('ClickOnNotification', (_ev, data) =>
+      this.notificationCallback(data)
+    )
   }
   openHelpWindow(): void {
     ipcBackend.send('help', window.localeData.locale)
@@ -285,9 +333,6 @@ class Electron implements Runtime {
   }
   reloadWebContent(): void {
     ipcBackend.send('reload-main-window')
-  }
-  updateBadge() {
-    ipcBackend.send('update-badge')
   }
   getConfigPath(): string {
     return ipcBackend.sendSync('get-config-path')

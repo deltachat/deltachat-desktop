@@ -1,12 +1,13 @@
 import { ipcBackend } from '../ipc'
 import { Store, useStore } from './store'
 import { sendMessageParams } from '../delta-remote'
-import { runtime } from '../runtime'
 import { ActionEmitter, KeybindAction } from '../keybindings'
 import { C } from 'deltachat-node/node/dist/constants'
 import { OrderedMap } from 'immutable'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
+import { debouncedUpdateBadgeCounter } from '../system-integration/badge-counter'
+import { clearNotificationsForChat } from '../system-integration/notifications'
 
 export const PAGE_SIZE = 11
 
@@ -764,6 +765,10 @@ class ChatStore extends Store<ChatStoreState> {
           C.DC_GCM_ADDDAYMARKER
         )
 
+        BackendRemote.rpc.marknoticedChat(accountId, chatId)
+        debouncedUpdateBadgeCounter()
+        clearNotificationsForChat(accountId, chatId)
+
         const firstUnreadMsgId = await BackendRemote.rpc.getFirstUnreadMessageOfChat(
           accountId,
           chatId
@@ -776,15 +781,10 @@ class ChatStore extends Store<ChatStoreState> {
                 ? KeybindAction.ChatList_SwitchToArchiveView
                 : KeybindAction.ChatList_SwitchToNormalView
             )
-            runtime.updateBadge()
             saveLastChatId(chatId)
           })
           return false
         }
-
-        // TODO:  this.controller.emit('DESKTOP_CLEAR_NOTIFICATIONS_FOR_CHAT', chatId)
-        // TODO: update badge counter
-        await BackendRemote.rpc.marknoticedChat(accountId, chatId)
 
         let oldestFetchedMessageIndex = -1
         let newestFetchedMessageIndex = -1
@@ -821,7 +821,6 @@ class ChatStore extends Store<ChatStoreState> {
             ? KeybindAction.ChatList_SwitchToArchiveView
             : KeybindAction.ChatList_SwitchToNormalView
         )
-        runtime.updateBadge()
         saveLastChatId(chatId)
       },
       'selectChat'
@@ -934,7 +933,7 @@ class ChatStore extends Store<ChatStoreState> {
               ? KeybindAction.ChatList_SwitchToArchiveView
               : KeybindAction.ChatList_SwitchToNormalView
           )
-          runtime.updateBadge()
+          debouncedUpdateBadgeCounter()
           saveLastChatId(chatId)
         },
         'jumpToMessage'
@@ -1370,10 +1369,6 @@ ipcBackend.on('DC_EVENT_MSG_READ', (_evt, [id, msgId]) => {
 
 ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [eventChatId, messageId]) => {
   chatStore.effect.onEventMessagesChanged(eventChatId, messageId)
-})
-
-ipcBackend.on('ClickOnNotification', (_ev, { chatId }) => {
-  chatStore.effect.selectChat(chatId)
 })
 
 export function calculatePageKey(

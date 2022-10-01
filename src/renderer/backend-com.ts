@@ -2,6 +2,8 @@ import { BaseDeltaChat, yerpc, RPC } from '@deltachat/jsonrpc-client'
 import { DeltaBackend } from './delta-remote'
 import { runtime } from './runtime'
 import { getLogger } from '../shared/logger'
+import { debouncedUpdateBadgeCounter } from './system-integration/badge-counter'
+import { clearNotificationsForChat } from './system-integration/notifications'
 
 export { T as Type } from '@deltachat/jsonrpc-client'
 
@@ -61,6 +63,7 @@ export namespace EffectfulBackendActions {
     }
 
     runtime.closeAllWebxdcInstances()
+    debouncedUpdateBadgeCounter()
 
     // for now we still need to call the backend function,
     // because backend still has sleected account
@@ -79,9 +82,9 @@ export namespace EffectfulBackendActions {
     window.__refetchChatlist && window.__refetchChatlist()
   }
 
-  export async function deleteChat(account_id: number, chatId: number) {
-    // TODO implement in jsonrpc
-    await DeltaBackend.call('chat.delete', chatId)
+  export async function deleteChat(accountId: number, chatId: number) {
+    await BackendRemote.rpc.deleteChat(accountId, chatId)
+    clearNotificationsForChat(accountId, chatId)
     window.__refetchChatlist && window.__refetchChatlist()
   }
 }

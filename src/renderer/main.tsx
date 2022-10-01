@@ -6,6 +6,7 @@ import { printProcessLogLevelInfo } from '../shared/logger'
 import App from './App'
 import { runtime } from './runtime'
 import init from '@deltachat/message_parser_wasm'
+import initSystemIntegration from './system-integration'
 
 async function main() {
   exp.help //make sure experimental.ts is used
@@ -13,6 +14,8 @@ async function main() {
     runtime.initialize()
     printProcessLogLevelInfo()
     await init('./message_parser_wasm_bg.wasm')
+
+    initSystemIntegration()
 
     ReactDOM.render(<App />, document.querySelector('#root'))
   } catch (error) {
