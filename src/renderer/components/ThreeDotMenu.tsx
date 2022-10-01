@@ -8,6 +8,7 @@ import {
   setChatVisibility,
   openMuteChatDialog,
   unMuteChat,
+  clearChat,
 } from './helpers/ChatMethods'
 import { ContextMenuItem } from './ContextMenu'
 import { useSettingsStore } from '../stores/settings'
@@ -101,6 +102,10 @@ export function useThreeDotMenu(selectedChat: Type.FullChat | null) {
           label: tx('menu_leave_group'),
           action: onLeaveGroup,
         },
+      {
+        label: tx('clear_chat'),
+        action: clearChat.bind(null, chatId),
+      },
       {
         label: tx('menu_delete_chat'),
         action: onDeleteChat,
