@@ -316,7 +316,7 @@ function chatSubtitle(chat: Type.FullChat) {
         quantity: chat.contacts.length,
       })
     } else if (chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST) {
-      return tx('mailing_list')
+      return `${tx('mailing_list')} – ${chat.mailingListAddress}`
     } else if (chat.chatType === C.DC_CHAT_TYPE_BROADCAST) {
       return tx('n_recipients', [String(chat.contacts.length)], {
         quantity: chat.contacts.length,
