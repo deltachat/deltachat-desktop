@@ -222,6 +222,7 @@ export default function MainScreen() {
                   isVerified={selectedChat.chat.isProtected}
                   avatarPath={selectedChat.chat.profileImage || undefined}
                   small
+                  wasSeenRecently={selectedChat.chat.wasSeenRecently}
                 />
                 <div style={{ marginLeft: '7px', overflow: 'hidden' }}>
                   <div className='navbar-chat-name'>

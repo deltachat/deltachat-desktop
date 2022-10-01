@@ -183,6 +183,7 @@ $hover-contrast-change: 2%;
   --addMemberChipBackgroundColor: #{$bgSecondary};
   --searchInputBackgroundColor: #52768700;
   --galleryWebxdcItem: #{changeContrast($bgPrimary, 10%)};
+  --recently-seen-indicator-color: #4caf50;
 
   @if lightness($bgPrimary) < 50 {
     // dark theme

@@ -17,6 +17,36 @@
     pointer-events: none;
   }
 
+  &.wasSeenRecently {
+    div.content,
+    img.content {
+      border-radius: 0;
+      mask: url('../images/avatar/online-avatar-mask.svg') no-repeat center;
+      -webkit-mask: url('../images/avatar/online-avatar-mask.svg') no-repeat
+        center;
+      mask-size: var(--local-avatar-size);
+      -webkit-mask-size: var(--local-avatar-size);
+    }
+
+    &::after {
+      content: ''; // without this the dot will not render
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      height: var(--local-avatar-size);
+      width: var(--local-avatar-size);
+      margin: var(--local-avatar-vertical-margin) 0;
+
+      background-color: var(--recently-seen-indicator-color);
+      mask: url('../images/avatar/online-avatar-dot.svg') no-repeat center;
+      -webkit-mask: url('../images/avatar/online-avatar-dot.svg') no-repeat
+        center;
+      mask-size: var(--local-avatar-size);
+      -webkit-mask-size: var(--local-avatar-size);
+    }
+  }
+
   div.content {
     background-color: #505050;
     line-height: var(--local-avatar-size);
