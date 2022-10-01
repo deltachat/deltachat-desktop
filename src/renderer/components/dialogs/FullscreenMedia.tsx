@@ -6,7 +6,6 @@ import { runtime } from '../../runtime'
 import { isImage, isVideo, isAudio } from '../attachment/Attachment'
 import { getLogger } from '../../../shared/logger'
 import { gitHubIssuesUrl } from '../../../shared/constants'
-import { DeltaBackend } from '../../delta-remote'
 import { useInitEffect } from '../helpers/hooks'
 import { preventDefault } from '../../../shared/util'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
@@ -28,7 +27,10 @@ export default function FullscreenMedia(props: {
   const resetImageZoom = useRef<(() => void) | null>(
     null
   ) as React.MutableRefObject<(() => void) | null>
-  const previousNextMessageId = useRef<[number, number]>([0, 0])
+  const previousNextMessageId = useRef<[number | null, number | null]>([
+    null,
+    null,
+  ])
   const [showPreviousNextMessageButtons, setShowPrevNextMsgBtns] = useState({
     previous: false,
     next: false,
@@ -124,19 +126,17 @@ export default function FullscreenMedia(props: {
       fileMime,
     })
   }
-
   const updatePreviousNextMessageId = useCallback(async () => {
     if (!msg.id) {
       return
     }
-    const [previousMessageId, nextMessageId] = await Promise.all([
-      DeltaBackend.call('chat.getNextMedia', msg.id, -1),
-      DeltaBackend.call('chat.getNextMedia', msg.id, 1),
-    ])
-    previousNextMessageId.current = [previousMessageId, nextMessageId]
+    previousNextMessageId.current = await getNeighboringMedia(
+      msg.id,
+      msg.viewType
+    )
     setShowPrevNextMsgBtns({
-      previous: previousMessageId !== 0,
-      next: nextMessageId !== 0,
+      previous: previousNextMessageId.current[0] !== null,
+      next: previousNextMessageId.current[1] !== null,
     })
   }, [msg])
 
@@ -159,8 +159,8 @@ export default function FullscreenMedia(props: {
       }
     }
     return {
-      previousImage: () => loadMessage(previousNextMessageId.current[0]),
-      nextImage: () => loadMessage(previousNextMessageId.current[1]),
+      previousImage: () => loadMessage(previousNextMessageId.current[0] || 0),
+      nextImage: () => loadMessage(previousNextMessageId.current[1] || 0),
     }
   }, [previousNextMessageId, setMsg])
 
@@ -232,5 +232,28 @@ export default function FullscreenMedia(props: {
         <div className='attachment-view'>{elm}</div>
       </div>
     </Overlay>
+  )
+}
+
+async function getNeighboringMedia(
+  messageId: number,
+  viewType: Type.Viewtype
+): Promise<[previousMessageId: number | null, nextMessageId: number | null]> {
+  const accountId = selectedAccountId()
+
+  // workaround to get gifs and images into the same media list
+  let additionalViewType: Type.Viewtype | null = null
+  if (viewType === 'Image') {
+    additionalViewType = 'Gif'
+  } else if (viewType === 'Gif') {
+    additionalViewType = 'Image'
+  }
+
+  return await BackendRemote.rpc.chatGetNeighboringMedia(
+    accountId,
+    messageId,
+    viewType,
+    additionalViewType,
+    null
   )
 }
