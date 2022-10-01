@@ -9,6 +9,7 @@ import { BackendRemote, EffectfulBackendActions, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import ViewGroup from '../dialogs/ViewGroup'
 import ViewProfile from '../dialogs/ViewProfile'
+import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 
 const log = getLogger('renderer/message')
 
@@ -242,4 +243,26 @@ export function sendMessage(chatId: number, message: sendMessageParams) {
 
 export const deleteMessage = (messageId: number) => {
   ChatStore.effect.uiDeleteMessage(messageId)
+}
+
+export async function clearChat(chatId: number) {
+  const accountID = selectedAccountId()
+  const tx = window.static_translate
+  const messages_to_delete = await BackendRemote.rpc.messageListGetMessageIds(
+    accountID,
+    chatId,
+    0
+  )
+
+  window.__openDialog(ConfirmationDialog, {
+    message: tx('ask_delete_messages', String(messages_to_delete.length), {
+      quantity: messages_to_delete.length,
+    }),
+    cb: async yes => {
+      if (yes) {
+        await BackendRemote.rpc.deleteMessages(accountID, messages_to_delete)
+        selectChat(chatId)
+      }
+    },
+  })
 }

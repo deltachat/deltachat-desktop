@@ -1,4 +1,4 @@
-import { T } from 'deltachat-node/deltachat-jsonrpc/typescript/src/lib'
+import { T } from '@deltachat/jsonrpc-client'
 import React, { useContext } from 'react'
 import { ScreenContext } from '../../contexts'
 import { Avatar } from '../Avatar'
