@@ -15,7 +15,7 @@ Let's say the core version you want to upgrade to is `X.Y.Z`.
 1. `npm i deltachat-node@X.Y.Z @deltachat/jsonrpc-client@X.Y.Z`
 2. mention that you updated those dependencies in `CHANGELOG.md`
 
-If the core version is not uploaded to NPM yet, then you need to upload the files from our download server to NPM via `npm publish [url]` (if you have the rights to do so, otherwise ask us to do it).
+If the core version is not uploaded to NPM yet, then you need to upload the files from our download server to NPM via `npm publish [url] --access=public` (if you have the rights to do so, otherwise ask us to do it).
 They are built by GitHub CI in the core repo and then uploaded to https://download.delta.chat/node/.
 
 ## Update to a development version (for a pull request that needs a new core to be tested)
