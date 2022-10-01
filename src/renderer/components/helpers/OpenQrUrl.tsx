@@ -19,8 +19,7 @@ import { getLogger } from '../../../shared/logger'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import AlertDialog from '../dialogs/AlertDialog'
 import { selectChat } from './ChatMethods'
-import { BackendRemote } from '../../backend-com'
-import { Qr } from 'deltachat-node/deltachat-jsonrpc/typescript/generated/types'
+import { BackendRemote, Type } from '../../backend-com'
 
 const log = getLogger('renderer/processOpenUrl')
 
@@ -154,7 +153,7 @@ export default async function processOpenQrUrl(
     return
   }
 
-  const allowedQrCodesOnWelcomeScreen: Qr['type'][] = ['account', 'text', 'url']
+  const allowedQrCodesOnWelcomeScreen: Type.Qr['type'][] = ['account', 'text', 'url']
 
   if (
     !allowedQrCodesOnWelcomeScreen.includes(checkQr.type) &&
