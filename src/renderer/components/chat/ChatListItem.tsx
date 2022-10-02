@@ -3,10 +3,10 @@ import classNames from 'classnames'
 import Timestamp from '../conversations/Timestamp'
 import MessageBody from '../message/MessageBody'
 import { C } from 'deltachat-node/node/dist/constants'
-import { MessageSearchResult } from '../../../shared/shared-types'
 import { Avatar } from '../Avatar'
 import { Type } from '../../backend-com'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
+import { T } from '@deltachat/jsonrpc-client'
 
 function FreshMessageCounter({ counter }: { counter: number }) {
   if (counter === 0) return null
@@ -263,7 +263,7 @@ const ChatListItem = React.memo<ChatListItemProps>(
 export default ChatListItem
 
 export const ChatListItemMessageResult = React.memo<{
-  msr: MessageSearchResult
+  msr: T.MessageSearchResult
   onClick: () => void
   queryStr: string
 }>(props => {
@@ -273,14 +273,14 @@ export const ChatListItemMessageResult = React.memo<{
     <div role='button' onClick={onClick} className='pseudo-chat-list-item'>
       <Avatar
         avatarPath={msr.authorProfileImage}
-        color={msr.author_color}
-        displayName={msr.author_name}
+        color={msr.authorColor}
+        displayName={msr.authorName}
       />
       <div className='content'>
         <div className='header'>
           <div className='name'>
             <span>
-              {msr.author_name + (msr.chat_name ? ' in ' + msr.chat_name : '')}
+              {msr.authorName + (msr.chatName ? ' in ' + msr.chatName : '')}
             </span>
           </div>
           <div>
