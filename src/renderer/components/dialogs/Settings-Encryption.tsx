@@ -44,16 +44,6 @@ export function KeyViewPanel({
   )
 }
 
-function KeyLoadingPanel() {
-  return (
-    <div className={Classes.DIALOG_BODY}>
-      <Card>
-        <Spinner />
-      </Card>
-    </div>
-  )
-}
-
 function InitiatePanel({ onClick }: { onClick: todo }) {
   const tx = window.static_translate
   return (
@@ -79,7 +69,6 @@ export function SendAutocryptSetupMessage({
   onClose: Function
   isOpen: boolean
 }) {
-  const [loading, setLoading] = useState<boolean>(false)
   const [key, setKey] = useState<string | null>(null)
 
   const onClose = () => {
@@ -88,21 +77,16 @@ export function SendAutocryptSetupMessage({
   }
 
   const initiateKeyTransfer = async () => {
-    setLoading(true)
     const key = await BackendRemote.rpc.autocryptInitiateKeyTransfer(
       selectedAccountId()
     )
-
     setKey(key)
-    setLoading(false)
   }
 
   const tx = window.static_translate
 
   let body
-  if (loading) {
-    body = <KeyLoadingPanel />
-  } else if (key) {
+  if (key) {
     body = <KeyViewPanel autocryptKey={key} onClose={onClose} />
   } else {
     body = <InitiatePanel onClick={initiateKeyTransfer} />
@@ -119,7 +103,7 @@ export function SendAutocryptSetupMessage({
   )
 }
 
-export default function SettingsEncryptio({
+export default function SettingsEncryption({
   renderDeltaSwitch2,
 }: {
   renderDeltaSwitch2: RenderDeltaSwitch2Type

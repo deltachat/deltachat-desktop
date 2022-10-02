@@ -17,6 +17,7 @@
 - remember last path in "save as" dialog
 - allow using `dclogin:` and `dcaccount:` from logged in account, without logging out first
 - register in os as handler for the `dcaccount:` and `dclogin:` scheme
+- remove loading stage from sending autocrypt setup message
 - make contact last seen always display relative time
 
 ## Fixed
