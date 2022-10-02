@@ -331,7 +331,7 @@ export default function ChatList(props: {
                     className='search-result-divider'
                     style={{ width: width }}
                   >
-                    {translate_n('n_messages', messageResultIds.length)}
+                    {translated_messages_label(messageResultIds.length)}
                   </div>
 
                   <ChatListPart
@@ -662,5 +662,14 @@ function useContactAndMessageLogic(queryStr: string | undefined) {
     loadMessages,
     messageCache,
     queryStrIsValidEmail,
+  }
+}
+
+function translated_messages_label(count: number) {
+  // the search function truncates search to 1000 items for global search
+  if (count === 1000) {
+    return window.static_translate('n_messages', '1000+', { quantity: 'other' })
+  } else {
+    return translate_n('n_messages', count)
   }
 }

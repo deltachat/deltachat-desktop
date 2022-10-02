@@ -19,10 +19,6 @@ export default class DCMessageList extends SplitOut {
     this.selectedAccountContext.sendMessage(chatId, msg)
   }
 
-  searchMessages(query: string, chatId = 0): number[] {
-    return this.selectedAccountContext.searchMessages(chatId, query)
-  }
-
   private _msgId2SearchResultItem(msgId: number): MessageSearchResult | null {
     const message = this.selectedAccountContext.getMessage(msgId)
     if (!message) {
