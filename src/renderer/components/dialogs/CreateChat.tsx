@@ -615,6 +615,7 @@ function CreateGroupInner(props: {
   const { openDialog } = useContext(ScreenContext)
   const { viewMode, setViewMode, onClose, isVerified } = props
   const tx = useTranslationFunction()
+  const accountId = selectedAccountId()
 
   const [groupName, setGroupName] = useState('')
   const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage()
@@ -702,8 +703,11 @@ function CreateGroupInner(props: {
                       return
                     }
                     const gId = await lazilyCreateOrUpdateGroup(false)
-                    const qrCode = await DeltaBackend.call(
-                      'chat.getQrCode',
+                    const [
+                      qrCode,
+                      qrCodeSVG,
+                    ] = await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(
+                      accountId,
                       gId
                     )
                     setQrCode(qrCode)

@@ -5,7 +5,6 @@ import { getLogger } from '../../shared/logger'
 import * as mainWindow from '../windows/main'
 import DCBackup from './backup'
 import DCChat from './chat'
-import DCChatList from './chatlist'
 import JsonContacts from './contacts'
 import DCContext from './context'
 import DCLocations from './locations'
@@ -249,7 +248,6 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   readonly backup = new DCBackup(this)
-  readonly chatList = new DCChatList(this)
   readonly contacts = new JsonContacts(this)
   readonly chat = new DCChat(this)
   readonly locations = new DCLocations(this)

@@ -18,6 +18,7 @@
 - allow using `dclogin:` and `dcaccount:` from logged in account, without logging out first
 - register in os as handler for the `dcaccount:` and `dclogin:` scheme
 - remove loading stage from sending autocrypt setup message
+- make contact last seen always display relative time
 
 ## Fixed
 - allow scanning of certain qr code types on welcome screen (account, url and text)
@@ -26,6 +27,7 @@
 - fix notifications are not removed from notification center
 - fix quote linebreaks #2870
 - fix low resolution of copy qrcode image #2907
+- fix group join qr code when creating a new group
 
 ## [1.32.1] - 2022-08-18
 

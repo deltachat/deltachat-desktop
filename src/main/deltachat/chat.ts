@@ -4,10 +4,6 @@ import SplitOut from './splitout'
 
 const log = getLogger('main/deltachat/chat')
 export default class DCChat extends SplitOut {
-  getQrCode(chatId = 0) {
-    return this.selectedAccountContext.getSecurejoinQrCode(chatId)
-  }
-
   leaveGroup(chatId: number) {
     log.debug(`action - leaving chat ${chatId}`)
     this.selectedAccountContext.removeContactFromChat(

@@ -13,14 +13,6 @@ export default class JsonContacts extends SplitOut {
     return result
   }
 
-  _getContact(contactId: number) {
-    const contact = this.selectedAccountContext.getContact(contactId)?.toJson()
-    if (!contact) {
-      throw new Error('contact not found')
-    }
-    return contact
-  }
-
   lookupContactIdByAddr(email: string): number {
     if (!DeltaChat.maybeValidAddr(email)) {
       throw new Error(this.controller.translate('bad_email_address'))
