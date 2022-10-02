@@ -25,6 +25,38 @@ import { selectedAccountId } from '../../ScreenController'
 import { debouncedUpdateBadgeCounter } from '../../system-integration/badge-counter'
 const log = getLogger('render/components/message/MessageList')
 
+window.addEventListener('focus', () => {
+  log.debug('window focused')
+  const messageElements = Array.prototype.slice.call(
+    document.querySelectorAll('#message-list .message-observer-bottom')
+  )
+
+  const visibleElements = messageElements.filter(el => {
+    var rect = el.getBoundingClientRect()
+    return (
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <=
+        (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    )
+  })
+
+  const messageIdsToMarkAsRead = visibleElements.map(el =>
+    Number.parseInt(el.getAttribute('id').split('-')[1])
+  )
+
+  if (messageIdsToMarkAsRead.length !== 0) {
+    log.debug(
+      `window was focused: marking ${messageIdsToMarkAsRead.length} visible messages as read`,
+      messageIdsToMarkAsRead
+    )
+    BackendRemote.rpc
+      .markseenMsgs(selectedAccountId(), messageIdsToMarkAsRead)
+      .then(debouncedUpdateBadgeCounter)
+  }
+})
+
 export default function MessageList({
   chatStore,
   refComposer,

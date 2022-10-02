@@ -62,7 +62,7 @@ export const MessageWrapper = (props: RenderMessageProps) => {
   return (
     <li id={props.key2}>
       <Message {...props} />
-      <div id={'bottom-' + props.key2} />
+      <div className='message-observer-bottom' id={'bottom-' + props.key2} />
     </li>
   )
 }
