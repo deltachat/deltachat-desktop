@@ -4,12 +4,7 @@ import { getLogger } from '../../shared/logger'
 const log = getLogger('main/deltachat/messagelist')
 
 import SplitOut from './splitout'
-import { Message } from 'deltachat-node'
-import {
-  MessageType,
-  MessageSearchResult,
-  MessageQuote,
-} from '../../shared/shared-types'
+import { MessageSearchResult } from '../../shared/shared-types'
 
 import { mkdtemp, writeFile } from 'fs/promises'
 import { tmpdir } from 'os'
@@ -26,67 +21,6 @@ export default class DCMessageList extends SplitOut {
 
   downloadFullMessage(msgId: number) {
     return this.selectedAccountContext.downloadFullMessage(msgId)
-  }
-
-  messageIdToJson(id: number): MessageType | null {
-    const msg = this.selectedAccountContext.getMessage(id)
-    if (!msg) {
-      log.warn('No message found for ID ' + id)
-      return null
-    }
-    return this._messageToJson(msg)
-  }
-
-  _messageToJson(msg: Message): MessageType {
-    const file_mime = msg.getFilemime()
-    const file_name = msg.getFilename()
-    const file_bytes = msg.getFilebytes()
-    const fromId = msg.getFromId()
-    const setupCodeBegin = msg.getSetupcodebegin()
-    const contact = fromId && this.controller.contacts._getContact(fromId)
-
-    const jsonMSG = msg.toJson()
-
-    let quote: MessageQuote | null = null
-    const quoteText = msg.getQuotedText()
-    if (quoteText) {
-      const quotedMessage = msg.getQuotedMessage()
-      let message = null
-      if (quotedMessage) {
-        const contact = this.selectedAccountContext.getContact(
-          quotedMessage.getFromId()
-        )
-        if (!contact) {
-          throw new Error('quote author contact is undefined')
-        }
-        message = {
-          messageId: quotedMessage.getId(),
-          displayName: contact.getDisplayName(),
-          displayColor: contact.color,
-          overrideSenderName: quotedMessage.overrideSenderName,
-          image:
-            quotedMessage.getViewType().isImage() ||
-            quotedMessage.getViewType().isGif()
-              ? quotedMessage.getFile()
-              : null,
-          isForwarded: quotedMessage.isForwarded(),
-        }
-      }
-      quote = {
-        text: quoteText,
-        message,
-      }
-    }
-
-    return Object.assign(jsonMSG, {
-      sender: (contact ? { ...contact } : {}) as any,
-      setupCodeBegin,
-      // extra attachment fields
-      file_mime,
-      file_bytes,
-      file_name,
-      quote,
-    })
   }
 
   searchMessages(query: string, chatId = 0): number[] {
