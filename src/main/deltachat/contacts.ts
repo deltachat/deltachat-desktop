@@ -1,5 +1,3 @@
-import DeltaChat from 'deltachat-node'
-
 import SplitOut from './splitout'
 
 export default class JsonContacts extends SplitOut {
@@ -11,13 +9,6 @@ export default class JsonContacts extends SplitOut {
     const address = contact.getAddress()
     const result = this.selectedAccountContext.createContact(name, address)
     return result
-  }
-
-  lookupContactIdByAddr(email: string): number {
-    if (!DeltaChat.maybeValidAddr(email)) {
-      throw new Error(this.controller.translate('bad_email_address'))
-    }
-    return this.selectedAccountContext.lookupContactIdByAddr(email)
   }
 
   deleteContact(contactId: number) {

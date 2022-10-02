@@ -89,11 +89,11 @@ export default async function processOpenQrUrl(
         : mailto.body
 
       if (mailto.to) {
-        let contactId = await DeltaBackend.call(
-          'contacts.lookupContactIdByAddr',
+        let contactId = await BackendRemote.rpc.lookupContactIdByAddr(
+          accountId,
           mailto.to
         )
-        if (contactId == 0) {
+        if (contactId === null) {
           contactId = await BackendRemote.rpc.contactsCreateContact(
             accountId,
             mailto.to,

@@ -59,7 +59,8 @@ export function openLeaveChatDialog(
     confirmLabel: tx('menu_leave_group'),
     isConfirmDanger: true,
     noMargin: true,
-    cb: (yes: boolean) => yes && DeltaBackend.call('chat.leaveGroup', chatId),
+    cb: (yes: boolean) =>
+      yes && BackendRemote.rpc.leaveGroup(selectedAccountId(), chatId),
   })
 }
 
@@ -149,7 +150,6 @@ export async function openMuteChatDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
   chatId: number
 ) {
-  // todo open dialog to ask for duration
   screenContext.openDialog('MuteChat', { chatId })
 }
 
@@ -166,8 +166,8 @@ export async function sendCallInvitation(
   chatId: number
 ) {
   try {
-    const messageId = await DeltaBackend.call(
-      'chat.sendVideoChatInvitation',
+    const messageId = await BackendRemote.rpc.sendVideochatInvitation(
+      selectedAccountId(),
       chatId
     )
     ChatStore.effect.jumpToMessage(messageId, false)

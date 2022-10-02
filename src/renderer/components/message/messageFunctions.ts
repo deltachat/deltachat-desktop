@@ -88,7 +88,7 @@ export async function openMessageHTML(messageId: number) {
 }
 
 export async function downloadFullMessage(messageId: number) {
-  await DeltaBackend.call('messageList.downloadFullMessage', messageId)
+  await BackendRemote.rpc.downloadFullMessage(selectedAccountId(), messageId)
 }
 
 export async function openWebxdc(messageId: number) {
