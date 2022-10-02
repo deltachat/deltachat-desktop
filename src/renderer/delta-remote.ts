@@ -37,7 +37,6 @@ class DeltaRemote {
   call(fnName: 'contacts.lookupContactIdByAddr', email: string): Promise<number>
   call(fnName: 'contacts.deleteContact', contactId: number): Promise<boolean>
   // chat ---------------------------------------------------------------
-  call(fnName: 'chat.getQrCode', chatId?: number): Promise<string>
   call(fnName: 'chat.leaveGroup', chatId: number): Promise<void>
   call(fnName: 'chat.setName', chatId: number, name: string): Promise<boolean>
   call(

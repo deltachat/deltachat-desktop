@@ -25,6 +25,7 @@
 - fix notifications are not removed from notification center
 - fix quote linebreaks #2870
 - fix low resolution of copy qrcode image #2907
+- fix group join qr code when creating a new group
 
 ## [1.32.1] - 2022-08-18
 
