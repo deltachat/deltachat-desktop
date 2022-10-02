@@ -34,11 +34,8 @@ class DeltaRemote {
     contactId: number,
     name: string
   ): Promise<number>
-  call(fnName: 'contacts.lookupContactIdByAddr', email: string): Promise<number>
   call(fnName: 'contacts.deleteContact', contactId: number): Promise<boolean>
   // chat ---------------------------------------------------------------
-  call(fnName: 'chat.leaveGroup', chatId: number): Promise<void>
-  call(fnName: 'chat.setName', chatId: number, name: string): Promise<boolean>
   call(
     fnName: 'chat.modifyGroup',
     chatId: number,
@@ -47,22 +44,6 @@ class DeltaRemote {
     members: number[] | null
   ): Promise<boolean>
   call(
-    fnName: 'chat.addContactToChat',
-    chatId: number,
-    contactId: number
-  ): Promise<boolean>
-  call(
-    fnName: 'chat.setProfileImage',
-    chatId: number,
-    newImage: string
-  ): Promise<boolean>
-  call(fnName: 'chat.createBroadcastList'): Promise<number>
-  call(
-    fnName: 'chat.createGroupChat',
-    verified: boolean,
-    name: string
-  ): Promise<number>
-  call(
     fnName: 'chat.setVisibility',
     chatId: number,
     visibility:
@@ -70,14 +51,12 @@ class DeltaRemote {
       | C.DC_CERTCK_STRICT
       | C.DC_CHAT_VISIBILITY_PINNED
   ): Promise<void>
-  call(fnName: 'chat.getChatContacts', chatId: number): Promise<number[]>
   call(fnName: 'chat.getChatEphemeralTimer', chatId: number): Promise<number>
   call(
     fnName: 'chat.setChatEphemeralTimer',
     chatId: number,
     ephemeralTimer: number
   ): Promise<void>
-  call(fnName: 'chat.sendVideoChatInvitation', chatId: number): Promise<number>
   // locations ----------------------------------------------------------
   call(
     fnName: 'locations.setLocation',
@@ -104,7 +83,6 @@ class DeltaRemote {
     chatId: number,
     stickerPath: string
   ): Promise<void>
-  call(fnName: 'messageList.downloadFullMessage', msgId: number): Promise<void>
   call(
     fnName: 'messageList.searchMessages',
     query: string,

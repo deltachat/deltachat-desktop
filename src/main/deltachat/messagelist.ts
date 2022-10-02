@@ -19,10 +19,6 @@ export default class DCMessageList extends SplitOut {
     this.selectedAccountContext.sendMessage(chatId, msg)
   }
 
-  downloadFullMessage(msgId: number) {
-    return this.selectedAccountContext.downloadFullMessage(msgId)
-  }
-
   searchMessages(query: string, chatId = 0): number[] {
     return this.selectedAccountContext.searchMessages(chatId, query)
   }

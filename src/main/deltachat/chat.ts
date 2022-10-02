@@ -4,18 +4,6 @@ import SplitOut from './splitout'
 
 const log = getLogger('main/deltachat/chat')
 export default class DCChat extends SplitOut {
-  leaveGroup(chatId: number) {
-    log.debug(`action - leaving chat ${chatId}`)
-    this.selectedAccountContext.removeContactFromChat(
-      chatId,
-      C.DC_CONTACT_ID_SELF
-    )
-  }
-
-  setName(chatId: number, name: string) {
-    return this.selectedAccountContext.setChatName(chatId, name)
-  }
-
   modifyGroup(
     chatId: number,
     name: string,
@@ -49,28 +37,6 @@ export default class DCChat extends SplitOut {
     return true
   }
 
-  addContactToChat(chatId: number, contactId: number) {
-    return this.selectedAccountContext.addContactToChat(chatId, contactId)
-  }
-
-  setProfileImage(chatId: number, newImage: string) {
-    return this.selectedAccountContext.setChatProfileImage(chatId, newImage)
-  }
-
-  /**
-   * @returns id of the created chat
-   */
-  createGroupChat(verified: boolean, name: string) {
-    return this.selectedAccountContext.createGroupChat(name, verified)
-  }
-
-  /**
-   * @returns id of the created chat
-   */
-  createBroadcastList() {
-    return this.selectedAccountContext.createBroadcastList()
-  }
-
   setVisibility(
     chatId: number,
     visibility:
@@ -82,19 +48,11 @@ export default class DCChat extends SplitOut {
     this.selectedAccountContext.setChatVisibility(chatId, visibility)
   }
 
-  getChatContacts(chatId: number) {
-    return this.selectedAccountContext.getChatContacts(chatId)
-  }
-
   getChatEphemeralTimer(chatId: number) {
     return this.selectedAccountContext.getChatEphemeralTimer(chatId)
   }
 
   setChatEphemeralTimer(chatId: number, timer: number) {
     return this.selectedAccountContext.setChatEphemeralTimer(chatId, timer)
-  }
-
-  async sendVideoChatInvitation(chatId: number) {
-    return await this.selectedAccountContext.sendVideochatInvitation(chatId)
   }
 }
