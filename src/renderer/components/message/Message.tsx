@@ -292,7 +292,7 @@ const Message = (props: {
         className='info-message'
         onContextMenu={showMenu}
         onClick={() => {
-          message.parentId && jumpToMessage(message.parentId)
+          message.parentId && jumpToMessage(message.parentId, true, message.id)
         }}
       >
         <div className='bubble'>
@@ -437,6 +437,7 @@ const Message = (props: {
             <Quote
               quote={message.quote}
               isSticker={message.viewType === 'Sticker'}
+              msgParentId={message.id}
             />
           )}
           {message.file && !isSetupmessage && message.viewType !== 'Webxdc' && (
@@ -480,9 +481,11 @@ export default Message
 export const Quote = ({
   quote,
   isSticker,
+  msgParentId
 }: {
   quote: Type.MessageQuote
   isSticker?: Boolean
+  msgParentId: number
 }) => {
   const tx = window.static_translate
 
@@ -499,7 +502,8 @@ export const Quote = ({
     <div
       className='quote-background'
       onClick={() => {
-        hasMessage && jumpToMessage(quote.messageId)
+        quote.kind === 'WithMessage' &&
+          jumpToMessage(quote.messageId, true, msgParentId)
       }}
     >
       <div

@@ -59,6 +59,7 @@ export interface ChatStoreState {
   scrollToBottomIfClose: boolean
   lastKnownScrollHeight: number
   countFetchedMessages: number
+  jumpToMessageStack: number[]
 }
 
 const defaultState: ChatStoreState = {
@@ -74,6 +75,7 @@ const defaultState: ChatStoreState = {
   scrollToBottomIfClose: false,
   lastKnownScrollHeight: -1,
   countFetchedMessages: 0,
+  jumpToMessageStack: [],
 }
 
 function getLastKnownScrollPosition(): {
@@ -832,7 +834,11 @@ class ChatStore extends Store<ChatStoreState> {
     jumpToMessage: this.queuedEffect(
       this.lockedEffect(
         'scroll',
-        async (msgId: number, highlight?: boolean) => {
+        async (
+          msgId: number | undefined,
+          highlight?: boolean,
+          addMessageIdToStack?: undefined | number
+        ) => {
           log.debug('jumpToMessage with messageId: ', msgId)
           const accountId = selectedAccountId()
           highlight = highlight === false ? false : true
@@ -843,12 +849,74 @@ class ChatStore extends Store<ChatStoreState> {
             throw new Error('no account set')
           }
           // this function already throws an error if message is not found
-          const message = await BackendRemote.rpc.messageGetMessage(
-            accountId,
-            msgId
-          )
 
-          const chatId = (message as Type.Message).chatId
+          let chatId = -1
+          let jumpToMessageId = -1
+          let jumpToMessageStack: number[] = []
+          let message: Type.Message | undefined = undefined
+          if (msgId === undefined) {
+            const jumpToMessageStackLength = this.state.jumpToMessageStack
+              .length
+            if (jumpToMessageStackLength !== 0) {
+              jumpToMessageStack = this.state.jumpToMessageStack.slice(
+                0,
+                jumpToMessageStackLength - 1
+              )
+              jumpToMessageId = this.state.jumpToMessageStack[
+                jumpToMessageStackLength - 1
+              ]
+              message = await BackendRemote.rpc.messageGetMessage(
+                accountId,
+                jumpToMessageId as number,
+              )
+              chatId = message.chatId
+            } else {
+              jumpToMessageStack = []
+              jumpToMessageId = this.state.messageIds[
+                this.state.messageIds.length - 1
+              ]
+              message = await BackendRemote.rpc.messageGetMessage(
+                accountId,
+                jumpToMessageId
+              )
+              chatId = message.chatId
+            }
+          } else if (addMessageIdToStack === undefined) {
+            // reset jumpToMessageStack
+            message = await BackendRemote.rpc.messageGetMessage(
+              accountId,
+              msgId as number,
+            )
+            chatId = message.chatId
+
+            jumpToMessageId = msgId as number
+            jumpToMessageStack = []
+          } else {
+            message = await BackendRemote.rpc.messageGetMessage(
+              accountId,
+              msgId as number,
+            )
+            chatId = message.chatId
+
+            jumpToMessageId = msgId as number
+            // If we are not switching chats, add current jumpToMessageId to the stack
+            const currentChatId = chatStore.state.chat?.id || -1
+            if (chatId !== currentChatId) {
+              jumpToMessageStack = []
+            } else if (chatStore.state.jumpToMessageStack.indexOf(addMessageIdToStack) !== -1) {
+              jumpToMessageStack = chatStore.state.jumpToMessageStack
+            } else {
+              jumpToMessageStack = [...chatStore.state.jumpToMessageStack, addMessageIdToStack]
+            }
+          }
+
+          //@ts-ignore
+          if (message === undefined) {
+            throw new Error(
+              'jumpToMessage: Tried to jump to non existing message with id: ' +
+                msgId
+            )
+          }
 
           const chat = await BackendRemote.rpc.chatlistGetFullChatById(
             accountId,
@@ -867,7 +935,7 @@ class ChatStore extends Store<ChatStoreState> {
             C.DC_GCM_ADDDAYMARKER
           )
 
-          const jumpToMessageIndex = messageIds.indexOf(msgId)
+          const jumpToMessageIndex = messageIds.indexOf(jumpToMessageId)
 
           let oldestFetchedMessageIndex = -1
           let newestFetchedMessageIndex = -1
@@ -924,7 +992,7 @@ class ChatStore extends Store<ChatStoreState> {
             newestFetchedMessageIndex,
             scrollTo: {
               type: 'scrollToMessage',
-              msgId,
+              msgId: jumpToMessageId,
               highlight,
             },
           })
