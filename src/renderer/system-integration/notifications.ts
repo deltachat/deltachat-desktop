@@ -91,7 +91,7 @@ export function clearAllNotifications() {
 }
 
 function getNotificationIcon(
-  notification: T.MessageNotificationData
+  notification: T.MessageNotificationInfo
 ): string | null {
   if (notification.image && isImage(notification.imageMimeType)) {
     return notification.image

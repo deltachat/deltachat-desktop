@@ -21,9 +21,10 @@
     div.content,
     img.content {
       border-radius: 0;
-      mask: url('../images/avatar/online-avatar-mask-smaller.svg') no-repeat center;
-      -webkit-mask: url('../images/avatar/online-avatar-mask-smaller.svg') no-repeat
+      mask: url('../images/avatar/online-avatar-mask-smaller.svg') no-repeat
         center;
+      -webkit-mask: url('../images/avatar/online-avatar-mask-smaller.svg')
+        no-repeat center;
       mask-size: var(--local-avatar-size);
       -webkit-mask-size: var(--local-avatar-size);
     }
