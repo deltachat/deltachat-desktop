@@ -17,6 +17,7 @@
 - remember last path in "save as" dialog
 - allow using `dclogin:` and `dcaccount:` from logged in account, without logging out first
 - register in os as handler for the `dcaccount:` and `dclogin:` scheme
+- make contact last seen always display relative time
 
 ## Fixed
 - allow scanning of certain qr code types on welcome screen (account, url and text)
