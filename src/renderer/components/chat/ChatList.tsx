@@ -16,9 +16,7 @@ import {
 } from './ChatListItemRow'
 import { PseudoListItemAddContact } from '../helpers/PseudoListItem'
 import { C } from 'deltachat-node/node/dist/constants'
-import { DeltaBackend } from '../../delta-remote'
 import { useContactIds } from '../contact/ContactList'
-import { MessageSearchResult } from '../../../shared/shared-types'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import {
   FixedSizeList as List,
@@ -38,6 +36,7 @@ import {
 import { useThemeCssVar } from '../../ThemeManager'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import { T } from '@deltachat/jsonrpc-client'
 
 const enum LoadStatus {
   FETCHING = 1,
@@ -615,7 +614,7 @@ function useContactAndMessageLogic(queryStr: string | undefined) {
 
   // Message ----------------
   const [messageCache, setMessageCache] = useState<{
-    [id: number]: MessageSearchResult
+    [id: number]: T.MessageSearchResult
   }>({})
   const [messageLoadState, setMessageLoading] = useState<{
     [id: number]: undefined | LoadStatus.FETCHING | LoadStatus.LOADED
@@ -633,8 +632,8 @@ function useContactAndMessageLogic(queryStr: string | undefined) {
       ids.forEach(id => (state[id] = LoadStatus.FETCHING))
       return state
     })
-    const messages = await DeltaBackend.call(
-      'messageList.msgIds2SearchResultItems',
+    const messages = await BackendRemote.rpc.messageIdsToSearchResults(
+      accountId,
       ids
     )
     setMessageCache(cache => ({ ...cache, ...messages }))

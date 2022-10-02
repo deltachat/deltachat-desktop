@@ -3,7 +3,6 @@ import { _callDcMethodAsync } from './ipc'
 import {
   JsonLocations,
   Theme,
-  MessageSearchResult,
   DeltaChatAccount,
   DesktopSettingsType,
 } from '../shared/shared-types'
@@ -83,10 +82,6 @@ class DeltaRemote {
     chatId: number,
     stickerPath: string
   ): Promise<void>
-  call(
-    fnName: 'messageList.msgIds2SearchResultItems',
-    msgIds: number[]
-  ): Promise<{ [id: number]: MessageSearchResult }>
   call(
     fnName: 'messageList.saveMessageHTML2Disk',
     messageId: number
