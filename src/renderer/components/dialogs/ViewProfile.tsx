@@ -28,6 +28,7 @@ import { DeltaInput } from '../Login-Styles'
 import { selectChat } from '../helpers/ChatMethods'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import moment from 'moment'
 
 const ProfileInfoName = ({
   name,
@@ -40,13 +41,15 @@ const ProfileInfoName = ({
 }) => {
   const tx = useTranslationFunction()
   let lastSeenString = ''
+  let lastSeenAbsolute:string|undefined = undefined
 
   // Dates from 1970 mean that contact has never been seen
   if (lastSeen == 0) {
     lastSeenString = tx('last_seen_unknown')
   } else {
-    const date = formatRelativeTime(lastSeen * 1000, { extended: false })
-    lastSeenString = tx('last_seen_at', date)
+    const date = moment(lastSeen * 1000).fromNow()
+    lastSeenString = tx('last_seen', date)
+    lastSeenAbsolute =  tx('last_seen_at', moment(lastSeen*1000).toLocaleString())
   }
 
   return (
@@ -55,7 +58,7 @@ const ProfileInfoName = ({
         <p className='group-name'>{name}</p>
       </div>
       <div className='address'>{address}</div>
-      <div className='last-seen'>{lastSeenString}</div>
+      <div className='last-seen' title={lastSeenAbsolute}>{lastSeenString}</div>
     </div>
   )
 }
