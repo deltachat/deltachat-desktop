@@ -84,11 +84,6 @@ class DeltaRemote {
     stickerPath: string
   ): Promise<void>
   call(
-    fnName: 'messageList.searchMessages',
-    query: string,
-    chatId?: number
-  ): Promise<number[]>
-  call(
     fnName: 'messageList.msgIds2SearchResultItems',
     msgIds: number[]
   ): Promise<{ [id: number]: MessageSearchResult }>

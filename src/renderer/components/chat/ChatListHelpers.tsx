@@ -1,9 +1,9 @@
 import { useState, useEffect, useMemo } from 'react'
 import { ipcBackend } from '../../ipc'
 import { getLogger } from '../../../shared/logger'
-import { DeltaBackend } from '../../delta-remote'
 import { debounce } from 'debounce'
 import { BackendRemote } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 const log = getLogger('renderer/helpers/ChatList')
 
@@ -24,17 +24,20 @@ export function debounceWithInit<ARGS extends Array<any>>(
   }
 }
 
-export function useMessageResults(queryStr: string | undefined) {
+export function useMessageResults(
+  queryStr: string | undefined,
+  chatId: number | null = null
+) {
   const [ids, setIds] = useState<number[]>([])
 
   const debouncedSearchMessages = useMemo(
     () =>
       debounceWithInit((queryStr: string | undefined) => {
-        DeltaBackend.call('messageList.searchMessages', queryStr || '', 0).then(
-          setIds
-        )
+        BackendRemote.rpc
+          .searchMessages(selectedAccountId(), queryStr || '', chatId)
+          .then(setIds)
       }, 200),
-    []
+    [chatId]
   )
 
   useEffect(() => debouncedSearchMessages(queryStr), [
