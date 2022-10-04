@@ -206,8 +206,9 @@ export function SettingsEditProfileDialogInner({
     onClose()
   }
   const onOk = async () => {
-    await DeltaBackend.call(
-      'setProfilePicture',
+    await BackendRemote.rpc.setConfig(
+      selectedAccountId(),
+       'selfavatar', 
       profilePicture ? profilePicture : null
     )
     SettingsStoreInstance.effect.setCoreSetting('displayname', displayname)

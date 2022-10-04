@@ -20,7 +20,6 @@ export type sendMessageParams = {
 
 class DeltaRemote {
   // root ---------------------------------------------------------------
-  call(fnName: 'setProfilePicture', newImage: string | null): Promise<void>
   call(fnName: 'joinSecurejoin', qrCode: string): Promise<number>
   // backup -------------------------------------------------------------
   call(fnName: 'backup.export', dir: string): Promise<void>
