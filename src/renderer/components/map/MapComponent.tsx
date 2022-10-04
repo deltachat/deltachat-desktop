@@ -234,7 +234,7 @@ export default class MapComponent extends React.Component<
         poiWithMarker.map(location => {
           const el = document.createElement('div')
           el.className = 'marker-icon'
-          el.innerText = location.marker || ''
+          el.innerText = location.marker || '?'
           // make a marker for each feature and add to the map
           const m = new mapboxgl.Marker(el)
             .setLngLat([location.longitude, location.latitude])
