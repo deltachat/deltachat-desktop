@@ -30,7 +30,9 @@ declare global {
     __keybindingsDialogOpened: boolean
     __setQuoteInDraft: ((msgId: number) => void) | null
     __reloadDraft: (() => void) | null
-    __chatlistSetSearch: ((searchTerm: string) => void) | undefined
+    __chatlistSetSearch:
+      | ((searchTerm: string, chatId: number | null) => void)
+      | undefined
     __chatStore: any
     __refetchChatlist: undefined | (() => void)
     __welcome_qr: undefined | string
