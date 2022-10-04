@@ -407,10 +407,6 @@ export default class DeltaChatController extends EventEmitter {
     return this.selectedAccountContext.joinSecurejoin(qrCode)
   }
 
-  setProfilePicture(newImage: string) {
-    this.selectedAccountContext.setConfig('selfavatar', newImage)
-  }
-
   hintUpdateIfNessesary() {
     if (
       this.selectedAccountContext &&
