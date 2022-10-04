@@ -21,7 +21,7 @@ const getLocations = async (chatId: number, mapSettings: todo) => {
   const locations: T.Location[] = await BackendRemote.rpc.getLocations(
     selectedAccountId(),
     chatId,
-    0,
+    null,
     timestampFrom,
     timestampTo
   )
