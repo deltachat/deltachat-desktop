@@ -37,17 +37,6 @@ export default class DCChat extends SplitOut {
     return true
   }
 
-  setVisibility(
-    chatId: number,
-    visibility:
-      | C.DC_CHAT_VISIBILITY_NORMAL
-      | C.DC_CHAT_VISIBILITY_ARCHIVED
-      | C.DC_CHAT_VISIBILITY_PINNED
-  ) {
-    log.debug(`action - set chat ${chatId} visibility ${visibility}`)
-    this.selectedAccountContext.setChatVisibility(chatId, visibility)
-  }
-
   getChatEphemeralTimer(chatId: number) {
     return this.selectedAccountContext.getChatEphemeralTimer(chatId)
   }

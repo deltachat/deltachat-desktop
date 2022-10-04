@@ -41,14 +41,6 @@ class DeltaRemote {
     image: string | undefined,
     members: number[] | null
   ): Promise<boolean>
-  call(
-    fnName: 'chat.setVisibility',
-    chatId: number,
-    visibility:
-      | C.DC_CERTCK_AUTO
-      | C.DC_CERTCK_STRICT
-      | C.DC_CHAT_VISIBILITY_PINNED
-  ): Promise<void>
   call(fnName: 'chat.getChatEphemeralTimer', chatId: number): Promise<number>
   call(
     fnName: 'chat.setChatEphemeralTimer',

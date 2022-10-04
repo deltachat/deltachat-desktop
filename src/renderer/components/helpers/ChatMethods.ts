@@ -10,6 +10,7 @@ import { selectedAccountId } from '../../ScreenController'
 import ViewGroup from '../dialogs/ViewGroup'
 import ViewProfile from '../dialogs/ViewProfile'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
+import { T } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/message')
 
@@ -39,13 +40,14 @@ export const unselectChat = () => {
 
 export async function setChatVisibility(
   chatId: number,
-  visibility:
-    | C.DC_CHAT_VISIBILITY_NORMAL
-    | C.DC_CHAT_VISIBILITY_ARCHIVED
-    | C.DC_CHAT_VISIBILITY_PINNED,
+  visibility: T.ChatVisibility,
   shouldUnselectChat = false
 ) {
-  await DeltaBackend.call('chat.setVisibility', chatId, visibility)
+  await BackendRemote.rpc.setChatVisibility(
+    selectedAccountId(),
+    chatId,
+    visibility
+  )
   if (shouldUnselectChat) unselectChat()
 }
 
@@ -226,10 +228,10 @@ export async function createChatByContactIdAndSelectIt(
 
   if (chat && chat.archived) {
     log.debug('chat was archived, unarchiving it')
-    await DeltaBackend.call(
-      'chat.setVisibility',
+    await BackendRemote.rpc.setChatVisibility(
+      selectedAccountId(),
       chatId,
-      C.DC_CHAT_VISIBILITY_NORMAL
+      'Normal'
     )
   }
 

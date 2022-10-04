@@ -86,12 +86,12 @@ export function useThreeDotMenu(selectedChat: Type.FullChat | null) {
         ? {
             label: tx('menu_unarchive_chat'),
             action: () =>
-              setChatVisibility(chatId, C.DC_CHAT_VISIBILITY_NORMAL, true),
+              setChatVisibility(chatId, "Normal", true),
           }
         : {
             label: tx('menu_archive_chat'),
             action: () =>
-              setChatVisibility(chatId, C.DC_CHAT_VISIBILITY_ARCHIVED, true),
+              setChatVisibility(chatId, "Archived", true),
           },
       !isGroup &&
         !(isSelfTalk || isDeviceChat) && {
