@@ -30,7 +30,7 @@ function archiveStateMenu(
     action: () =>
       setChatVisibility(
         chat.id,
-        C.DC_CHAT_VISIBILITY_ARCHIVED,
+        "Archived",
         isTheSelectedChat
       ),
   }
@@ -39,18 +39,18 @@ function archiveStateMenu(
     action: () =>
       setChatVisibility(
         chat.id,
-        C.DC_CHAT_VISIBILITY_NORMAL,
+        "Normal",
         isTheSelectedChat
       ),
   }
   const pin: ContextMenuItem = {
     label: tx('pin_chat'),
     action: () =>
-      setChatVisibility(chat.id, C.DC_CHAT_VISIBILITY_PINNED, chat.isArchived),
+      setChatVisibility(chat.id, "Pinned", chat.isArchived),
   }
   const unPin: ContextMenuItem = {
     label: tx('unpin_chat'),
-    action: () => setChatVisibility(chat.id, C.DC_CHAT_VISIBILITY_NORMAL),
+    action: () => setChatVisibility(chat.id, "Normal"),
   }
 
   /*
