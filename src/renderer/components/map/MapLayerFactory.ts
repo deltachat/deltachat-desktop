@@ -1,4 +1,4 @@
-import { JsonLocations } from '../../../shared/shared-types'
+import { T } from '@deltachat/jsonrpc-client'
 import { Type } from '../../backend-com'
 
 // todo: get this from some settings/config file
@@ -7,7 +7,7 @@ const accessToken =
 
 export default class MapLayerFactory {
   static getGeoJSONLineSourceData(
-    locations: JsonLocations
+    locations: T.Location[]
   ): mapboxgl.GeoJSONSourceOptions['data'] {
     const coordinates = locations.map(point => [
       point.longitude,
@@ -64,7 +64,7 @@ export default class MapLayerFactory {
   }
 
   static getGeoJSONPointsLayerSourceData(
-    locations: JsonLocations,
+    locations: T.Location[],
     contact: Type.Contact,
     withMessageOnly: boolean
   ): mapboxgl.GeoJSONSourceOptions['data'] {
@@ -93,7 +93,7 @@ export default class MapLayerFactory {
     }
   }
 
-  static getPOILayer(locations: JsonLocations) {
+  static getPOILayer(locations: T.Location[]) {
     const layer: mapboxgl.Layer = {
       id: 'poi-layer',
       type: 'symbol',

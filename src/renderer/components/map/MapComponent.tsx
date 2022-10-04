@@ -18,9 +18,9 @@ import chatStore from '../../stores/chat'
 import { state as LocationStoreState } from '../../stores/locations'
 
 import ContextMenu from './ContextMenu'
-import { JsonLocations } from '../../../shared/shared-types'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import { T } from '@deltachat/jsonrpc-client'
 
 type MapData = {
   contact: Type.Contact
@@ -234,7 +234,7 @@ export default class MapComponent extends React.Component<
         poiWithMarker.map(location => {
           const el = document.createElement('div')
           el.className = 'marker-icon'
-          el.innerHTML = location.marker
+          el.innerText = location.marker || ''
           // make a marker for each feature and add to the map
           const m = new mapboxgl.Marker(el)
             .setLngLat([location.longitude, location.latitude])
@@ -259,7 +259,7 @@ export default class MapComponent extends React.Component<
     }
   }
 
-  renderContactLayer(contact: Contact, locationsForContact: JsonLocations) {
+  renderContactLayer(contact: Contact, locationsForContact: T.Location[]) {
     if (!this.map) {
       throw new Error('this.map is unset')
     }
@@ -348,7 +348,7 @@ export default class MapComponent extends React.Component<
 
   addOrUpdateLayerForContact(
     mapData: MapData,
-    locationsForContact: JsonLocations
+    locationsForContact: T.Location[]
   ) {
     if (!this.map) {
       throw new Error('this.map is unset')
@@ -376,7 +376,7 @@ export default class MapComponent extends React.Component<
     }
   }
 
-  addPathLayer(locationsForContact: JsonLocations, mapData: MapData) {
+  addPathLayer(locationsForContact: T.Location[], mapData: MapData) {
     if (!this.map) {
       throw new Error('this.map is unset')
     }
@@ -397,7 +397,7 @@ export default class MapComponent extends React.Component<
     }
   }
 
-  addPathJointsLayer(locationsForContact: JsonLocations, data: MapData) {
+  addPathJointsLayer(locationsForContact: T.Location[], data: MapData) {
     if (!this.map) {
       throw new Error('this.map is unset')
     }
