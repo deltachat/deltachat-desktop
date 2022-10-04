@@ -7,7 +7,6 @@ import DCBackup from './backup'
 import DCChat from './chat'
 import JsonContacts from './contacts'
 import DCContext from './context'
-import DCLocations from './locations'
 import DCLoginController from './login'
 import DCMessageList from './messagelist'
 import DCSettings from './settings'
@@ -250,7 +249,6 @@ export default class DeltaChatController extends EventEmitter {
   readonly backup = new DCBackup(this)
   readonly contacts = new JsonContacts(this)
   readonly chat = new DCChat(this)
-  readonly locations = new DCLocations(this)
   readonly login = new DCLoginController(this)
   readonly messageList = new DCMessageList(this)
   readonly settings = new DCSettings(this)

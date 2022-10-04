@@ -1,6 +1,6 @@
-import { JsonLocations } from '../../shared/shared-types'
-import { Type } from '../backend-com'
-import { DeltaBackend } from '../delta-remote'
+import { T } from '@deltachat/jsonrpc-client'
+import { BackendRemote, Type } from '../backend-com'
+import { selectedAccountId } from '../ScreenController'
 import { Store } from './store'
 
 const { ipcRenderer } = window.electron_functions
@@ -11,15 +11,15 @@ export class state {
     timestampFrom: 0,
     timestampTo: 0,
   }
-  locations: JsonLocations = []
+  locations: T.Location[] = []
 }
 
 export const locationStore = new Store(new state(), 'location')
 
 const getLocations = async (chatId: number, mapSettings: todo) => {
   const { timestampFrom, timestampTo } = mapSettings
-  const locations: JsonLocations = await DeltaBackend.call(
-    'locations.getLocations',
+  const locations: T.Location[] = await BackendRemote.rpc.getLocations(
+    selectedAccountId(),
     chatId,
     0,
     timestampFrom,

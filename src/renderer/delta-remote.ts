@@ -1,6 +1,5 @@
 import { _callDcMethodAsync } from './ipc'
 import {
-  JsonLocations,
   Theme,
   DeltaChatAccount,
   DesktopSettingsType,
@@ -38,14 +37,6 @@ class DeltaRemote {
     image: string | undefined,
     members: number[] | null
   ): Promise<boolean>
-  // locations ----------------------------------------------------------
-  call(
-    fnName: 'locations.getLocations',
-    chatId: number,
-    contactId: number,
-    timestampFrom: number,
-    timestampTo: number
-  ): Promise<JsonLocations>
   // login ----------------------------------------------------
   call(fnName: 'login.selectAccount', accountId: number): Promise<boolean>
   call(fnName: 'login.getAccountSize', accountId: number): Promise<number>

@@ -81,18 +81,6 @@ export type JsonChat = ReturnType<typeof Chat.prototype.toJson>
 
 export type JsonContact = ReturnType<typeof Contact.prototype.toJson>
 
-export type JsonLocations = {
-  accuracy: number
-  latitude: number
-  longitude: number
-  timestamp: number
-  contactId: number
-  msgId: number
-  chatId: number
-  isIndependent: boolean
-  marker: string
-}[] // ReturnType<typeof DeltaChat.prototype.getLocations>
-
 export type JsonMessage = ReturnType<typeof Message.prototype.toJson> & {
   quote: MessageQuote | null
 }
