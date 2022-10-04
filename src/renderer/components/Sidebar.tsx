@@ -183,7 +183,7 @@ const Sidebar = React.memo(
             <br />
             <Link
               href='https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md'
-              label={tx('version') + ' ' + VERSION}
+              label={'v' + VERSION}
             />{' '}
             - <a onClick={onOpenAbout}>{tx('about')}</a>
           </div>
