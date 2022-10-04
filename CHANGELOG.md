@@ -19,6 +19,7 @@
 - register in os as handler for the `dcaccount:` and `dclogin:` scheme
 - remove loading stage from sending autocrypt setup message
 - make contact last seen always display relative time
+- hide ephemeral timer menu options for mailing lists #2920
 
 ## Fixed
 - allow scanning of certain qr code types on welcome screen (account, url and text)
