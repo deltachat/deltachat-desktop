@@ -23,8 +23,6 @@ class DeltaRemote {
   // backup -------------------------------------------------------------
   call(fnName: 'backup.export', dir: string): Promise<void>
   call(fnName: 'backup.import', file: string): Promise<DeltaChatAccount>
-  // chatList -----------------------------------------------------------
-  call(fnName: 'chatList.onChatModified', chatId: number): Promise<void>
   // contacts ------------------------------------------------------------
   call(
     fnName: 'contacts.changeNickname',
@@ -41,12 +39,6 @@ class DeltaRemote {
     members: number[] | null
   ): Promise<boolean>
   // locations ----------------------------------------------------------
-  call(
-    fnName: 'locations.setLocation',
-    latitude: number,
-    longitude: number,
-    accuracy: number
-  ): Promise<void>
   call(
     fnName: 'locations.getLocations',
     chatId: number,
@@ -73,16 +65,6 @@ class DeltaRemote {
   // settings -----------------------------------------------------------
   call(fnName: 'settings.keysImport', directory: string): Promise<void>
   call(fnName: 'settings.keysExport', directory: string): Promise<void>
-  call(
-    fnName: 'settings.serverFlags',
-    {
-      mail_security,
-      send_security,
-    }: {
-      mail_security?: string
-      send_security?: string
-    }
-  ): Promise<number | ''>
   call(
     fnName: 'settings.setDesktopSetting',
     key: keyof DesktopSettingsType,
@@ -114,7 +96,6 @@ class DeltaRemote {
     theme: Theme
     data: string
   } | null>
-  call(fnName: 'extras.setThemeFilePath', address: string): void
   call(fnName: 'extras.getAvailableThemes'): Promise<Theme[]>
   call(fnName: 'extras.setTheme', address: string): Promise<boolean>
   call(fnName: 'extras.writeClipboardToTempFile'): Promise<string>
