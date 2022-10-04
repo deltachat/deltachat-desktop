@@ -13,6 +13,7 @@ import {
 import { ContextMenuItem } from './ContextMenu'
 import { useSettingsStore } from '../stores/settings'
 import { Type } from '../backend-com'
+import { ActionEmitter, KeybindAction } from '../keybindings'
 
 export function DeltaMenuItem({
   text,
@@ -62,6 +63,17 @@ export function useThreeDotMenu(selectedChat: Type.FullChat | null) {
       })
 
     menu = [
+      {
+        label: tx('search_in_chat'),
+        action: () => {
+          window.__chatlistSetSearch?.('', selectedChat.id)
+          setTimeout(
+            () =>
+              ActionEmitter.emitAction(KeybindAction.ChatList_FocusSearchInput),
+            0
+          )
+        },
+      },
       canSend &&
         selectedChat.chatType !== C.DC_CHAT_TYPE_MAILINGLIST && {
           label: tx('ephemeral_messages'),
