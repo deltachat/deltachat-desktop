@@ -11,19 +11,19 @@
   "what_is_webxdc": {
     "message": "What is Webxdc?"
   },
-  "file_menu" : {
+  "file_menu": {
     "message": "File"
   },
-  "create_broadcast_list" : {
+  "create_broadcast_list": {
     "message": "Create Broadcast List"
   },
-  "menu_edit_broadcast_list" : {
+  "menu_edit_broadcast_list": {
     "message": "Edit Broadcast List"
   },
-  "menu_broadcast_list_name" : {
+  "menu_broadcast_list_name": {
     "message": "Broadcast List Name"
   },
-  "broadcast_please_enter_broadcast_list_name" : {
+  "broadcast_please_enter_broadcast_list_name": {
     "message": "Please enter a name for the broadcast list."
   },
   "broadcast_list_warning": {
@@ -35,7 +35,13 @@
   "clear_chat": {
     "message": "Clear Chat"
   },
-  "last_seen":{
+  "last_seen": {
     "message": "Last seen %1$s"
+  },
+  "search_in_chat": {
+    "message": "Search in Chat"
+  },
+  "exit_search": {
+    "message": "Exit Search"
   }
 }

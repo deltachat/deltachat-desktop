@@ -26,7 +26,7 @@ import {
 import InfiniteLoader from 'react-window-infinite-loader'
 
 import { onDCEvent } from '../../ipc'
-import { ScreenContext } from '../../contexts'
+import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
 
 import {
@@ -37,6 +37,7 @@ import { useThemeCssVar } from '../../ThemeManager'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { T } from '@deltachat/jsonrpc-client'
+import { Avatar } from '../Avatar'
 
 const enum LoadStatus {
   FETCHING = 1,
@@ -98,10 +99,19 @@ export default function ChatList(props: {
   selectedChatId: number | null
   showArchivedChats: boolean
   queryStr?: string
+  queryChatId: number | null
   onExitSearch?: () => void
   onChatClick: (chatId: number) => void
 }) {
-  const { selectedChatId, showArchivedChats, onChatClick, queryStr } = props
+  const accountId = selectedAccountId()
+
+  const {
+    selectedChatId,
+    showArchivedChats,
+    onChatClick,
+    queryStr,
+    queryChatId,
+  } = props
   const isSearchActive = queryStr !== ''
 
   const {
@@ -114,7 +124,7 @@ export default function ChatList(props: {
     loadContact,
     contactCache,
     queryStrIsValidEmail,
-  } = useContactAndMessageLogic(queryStr)
+  } = useContactAndMessageLogic(queryStr, queryChatId)
 
   const { chatListIds, isChatLoaded, loadChats, chatCache } = useLogicChatPart(
     queryStr,
@@ -268,7 +278,76 @@ export default function ChatList(props: {
     return { messageResultIds, messageCache, openDialog, queryStr }
   }, [messageResultIds, messageCache, openDialog, queryStr])
 
+  const [searchChatInfo, setSearchChatInfo] = useState<T.FullChat | null>(null)
+  useEffect(() => {
+    if (queryChatId) {
+      BackendRemote.rpc
+        .chatlistGetFullChatById(accountId, queryChatId)
+        .then(setSearchChatInfo)
+        .catch(console.error)
+    } else {
+      setSearchChatInfo(null)
+    }
+  }, [accountId, queryChatId, isSearchActive])
+
   // Render --------------------
+  const tx = useTranslationFunction()
+
+  if (queryChatId && searchChatInfo) {
+    return (
+      <>
+        <div className='chat-list'>
+          <AutoSizer>
+            {({ width, height }) => (
+              <div>
+                <div className='search-result-divider' style={{ width: width }}>
+                  {tx('search_in_chat')}
+                </div>
+                <div
+                  className='search-in-chat-label'
+                  style={{ width, height: '64px' }}
+                >
+                  <Avatar
+                    avatarPath={searchChatInfo.profileImage}
+                    color={searchChatInfo.color}
+                    displayName={searchChatInfo.name}
+                  />
+                  <div className='chat-name'>{searchChatInfo.name}</div>
+                  <button
+                    onClick={() => props.onExitSearch?.()}
+                    aria-label={tx('exit_search')}
+                  >
+                    X
+                  </button>
+                </div>
+                <div className='search-result-divider' style={{ width: width }}>
+                  {translate_n('n_messages', messageResultIds.length)}
+                </div>
+                <ChatListPart
+                  isRowLoaded={isMessageLoaded}
+                  loadMoreRows={loadMessages}
+                  rowCount={messageResultIds.length}
+                  width={width}
+                  height={
+                    // take remaining space
+                    height -
+                    DIVIDER_HEIGHT * 2 -
+                    64 /* height of chat label above */
+                  }
+                  itemKey={index => 'key' + messageResultIds[index]}
+                  itemData={messagelistData}
+                  itemHeight={CHATLISTITEM_MESSAGE_HEIGHT}
+                >
+                  {ChatListItemRowMessage}
+                </ChatListPart>
+              </div>
+            )}
+          </AutoSizer>
+        </div>
+      </>
+    )
+  }
+
   return (
     <>
       <div className='chat-list'>
@@ -575,10 +654,13 @@ function useLogicChatPart(
   return { chatListIds, isChatLoaded, loadChats, chatCache }
 }
 
-function useContactAndMessageLogic(queryStr: string | undefined) {
+function useContactAndMessageLogic(
+  queryStr: string | undefined,
+  searchChatId: number | null = null
+) {
   const accountId = selectedAccountId()
   const { contactIds, queryStrIsValidEmail } = useContactIds(0, queryStr)
-  const messageResultIds = useMessageResults(queryStr)
+  const messageResultIds = useMessageResults(queryStr, searchChatId)
 
   // Contacts ----------------
   const [contactCache, setContactCache] = useState<{

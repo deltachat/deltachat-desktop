@@ -135,7 +135,7 @@ function TagLink({ tag }: { tag: string }) {
       `Clicked on a hastag, this should open search for the text "${tag}"`
     )
     if (window.__chatlistSetSearch) {
-      window.__chatlistSetSearch(tag)
+      window.__chatlistSetSearch(tag, null)
       ActionEmitter.emitAction(KeybindAction.ChatList_FocusSearchInput)
       // TODO: If you wonder why the focus doesn't work - its because of jikstra's composer focus hacks
       // Which transfer the focus back to the composer instantly

@@ -10,6 +10,7 @@
 - add button to clear chat history (delete all messages of a chat)
 - add recently seen indicator
 - add jump down button
+- add "search for messages in chat"
 
 ## Changed
 - start migrating to jsonrpc api
