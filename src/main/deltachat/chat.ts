@@ -1,4 +1,3 @@
-import { C } from 'deltachat-node'
 import { getLogger } from '../../shared/logger'
 import SplitOut from './splitout'
 
@@ -35,13 +34,5 @@ export default class DCChat extends SplitOut {
       )
     }
     return true
-  }
-
-  getChatEphemeralTimer(chatId: number) {
-    return this.selectedAccountContext.getChatEphemeralTimer(chatId)
-  }
-
-  setChatEphemeralTimer(chatId: number, timer: number) {
-    return this.selectedAccountContext.setChatEphemeralTimer(chatId, timer)
   }
 }

@@ -1,4 +1,3 @@
-import { C } from 'deltachat-node/node/dist/constants'
 import { _callDcMethodAsync } from './ipc'
 import {
   JsonLocations,
@@ -41,12 +40,6 @@ class DeltaRemote {
     image: string | undefined,
     members: number[] | null
   ): Promise<boolean>
-  call(fnName: 'chat.getChatEphemeralTimer', chatId: number): Promise<number>
-  call(
-    fnName: 'chat.setChatEphemeralTimer',
-    chatId: number,
-    ephemeralTimer: number
-  ): Promise<void>
   // locations ----------------------------------------------------------
   call(
     fnName: 'locations.setLocation',
