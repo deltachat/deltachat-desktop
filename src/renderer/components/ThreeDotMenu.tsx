@@ -62,10 +62,11 @@ export function useThreeDotMenu(selectedChat: Type.FullChat | null) {
       })
 
     menu = [
-      canSend && {
-        label: tx('ephemeral_messages'),
-        action: onDisappearingMessages,
-      },
+      canSend &&
+        selectedChat.chatType !== C.DC_CHAT_TYPE_MAILINGLIST && {
+          label: tx('ephemeral_messages'),
+          action: onDisappearingMessages,
+        },
       !(isSelfTalk || isDeviceChat) &&
         settingsStore !== null &&
         settingsStore.desktopSettings.enableChatAuditLog && {
