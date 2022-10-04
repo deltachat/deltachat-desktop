@@ -485,7 +485,7 @@ export const Quote = ({
 }: {
   quote: Type.MessageQuote
   isSticker?: Boolean
-  msgParentId: number
+  msgParentId?: number
 }) => {
   const tx = window.static_translate
 
