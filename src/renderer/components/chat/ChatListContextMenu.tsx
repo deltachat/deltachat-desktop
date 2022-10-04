@@ -27,30 +27,19 @@ function archiveStateMenu(
 ): ContextMenuItem[] {
   const archive: ContextMenuItem = {
     label: tx('menu_archive_chat'),
-    action: () =>
-      setChatVisibility(
-        chat.id,
-        "Archived",
-        isTheSelectedChat
-      ),
+    action: () => setChatVisibility(chat.id, 'Archived', isTheSelectedChat),
   }
   const unArchive: ContextMenuItem = {
     label: tx('menu_unarchive_chat'),
-    action: () =>
-      setChatVisibility(
-        chat.id,
-        "Normal",
-        isTheSelectedChat
-      ),
+    action: () => setChatVisibility(chat.id, 'Normal', isTheSelectedChat),
   }
   const pin: ContextMenuItem = {
     label: tx('pin_chat'),
-    action: () =>
-      setChatVisibility(chat.id, "Pinned", chat.isArchived),
+    action: () => setChatVisibility(chat.id, 'Pinned', chat.isArchived),
   }
   const unPin: ContextMenuItem = {
     label: tx('unpin_chat'),
-    action: () => setChatVisibility(chat.id, "Normal"),
+    action: () => setChatVisibility(chat.id, 'Normal'),
   }
 
   /*

@@ -8,9 +8,10 @@ import {
   DeltaDialogFooterActions,
 } from './DeltaDialog'
 import { RadioGroup, Radio } from '@blueprintjs/core'
-import { DeltaBackend } from '../../delta-remote'
 import { Timespans } from '../../../shared/constants'
 import { useTranslationFunction } from '../../contexts'
+import { BackendRemote } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 enum DisappearingMessageDuration {
   OFF = Timespans.ZERO_SECONDS,
@@ -99,8 +100,8 @@ export default function DisappearingMessage({
 
   useEffect(() => {
     ;(async () => {
-      const ephemeralTimer = await DeltaBackend.call(
-        'chat.getChatEphemeralTimer',
+      const ephemeralTimer = await BackendRemote.rpc.getChatEphemeralTimer(
+        selectedAccountId(),
         chatId
       )
       setDisappearingMessageDuration(ephemeralTimer)
@@ -109,8 +110,8 @@ export default function DisappearingMessage({
   }, [chatId])
 
   const saveAndClose = async () => {
-    await DeltaBackend.call(
-      'chat.setChatEphemeralTimer',
+    await BackendRemote.rpc.setChatEphemeralTimer(
+      selectedAccountId(),
       chatId,
       disappearingMessageDuration
     )

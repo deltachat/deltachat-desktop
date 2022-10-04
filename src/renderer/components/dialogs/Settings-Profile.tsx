@@ -2,7 +2,6 @@ import { Card, Elevation } from '@blueprintjs/core'
 import React, { useEffect, useState, useContext, useCallback } from 'react'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
 
-import { DeltaBackend } from '../../delta-remote'
 import { avatarInitial, ClickForFullscreenAvatarWrapper } from '../Avatar'
 import { DeltaInput, DeltaTextarea } from '../Login-Styles'
 import {
@@ -208,7 +207,7 @@ export function SettingsEditProfileDialogInner({
   const onOk = async () => {
     await BackendRemote.rpc.setConfig(
       selectedAccountId(),
-       'selfavatar', 
+      'selfavatar',
       profilePicture ? profilePicture : null
     )
     SettingsStoreInstance.effect.setCoreSetting('displayname', displayname)
