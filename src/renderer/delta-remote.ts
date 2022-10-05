@@ -1,9 +1,5 @@
 import { _callDcMethodAsync } from './ipc'
-import {
-  Theme,
-  DeltaChatAccount,
-  DesktopSettingsType,
-} from '../shared/shared-types'
+import { DeltaChatAccount, DesktopSettingsType } from '../shared/shared-types'
 import { LocaleData } from '../shared/localize'
 
 export type sendMessageParams = {
@@ -72,14 +68,6 @@ class DeltaRemote {
   // extras -------------------------------------------------------------
   call(fnName: 'extras.getLocaleData', locale: string): Promise<LocaleData>
   call(fnName: 'extras.setLocale', locale: string): Promise<void>
-  call(
-    fnName: 'extras.getActiveTheme'
-  ): Promise<{
-    theme: Theme
-    data: string
-  } | null>
-  call(fnName: 'extras.getAvailableThemes'): Promise<Theme[]>
-  call(fnName: 'extras.setTheme', address: string): Promise<boolean>
   // catchall: ----------------------------------------------------------
   call(fnName: string): Promise<any>
   call(fnName: string, ...args: any[]): Promise<any> {

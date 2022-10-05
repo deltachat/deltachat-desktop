@@ -5,6 +5,7 @@ import {
   DesktopSettingsType,
   RC_Config,
   RuntimeInfo,
+  Theme,
 } from '../shared/shared-types'
 import { setLogHandler } from '../shared/logger'
 import type {
@@ -106,6 +107,12 @@ interface Runtime {
     data_size: number
   }>
   clearWebxdcDOMStorage(accountId: number): Promise<void>
+  getAvailableThemes(): Promise<Theme[]>
+  getActiveTheme(): Promise<{
+    theme: Theme
+    data: string
+  } | null>
+  resolveThemeAddress(address: string): Promise<string>
 }
 
 class Browser implements Runtime {
@@ -113,6 +120,15 @@ class Browser implements Runtime {
     throw new Error('Method not implemented.')
   }
   notifyWebxdcInstanceDeleted(_accountId: number, _instanceId: number): void {
+    throw new Error('Method not implemented.')
+  }
+  getAvailableThemes(): Promise<Theme[]> {
+    throw new Error('Method not implemented.')
+  }
+  async getActiveTheme(): Promise<{ theme: Theme; data: string } | null> {
+    return null
+  }
+  resolveThemeAddress(_address: string): Promise<string> {
     throw new Error('Method not implemented.')
   }
   clearWebxdcDOMStorage(_accountId: number): Promise<void> {
@@ -226,6 +242,15 @@ class Electron implements Runtime {
   }
   notifyWebxdcInstanceDeleted(accountId: number, instanceId: number): void {
     ipcBackend.invoke('webxdc:instance-deleted', accountId, instanceId)
+  }
+  getAvailableThemes(): Promise<Theme[]> {
+    return ipcBackend.invoke('themes.getAvailableThemes')
+  }
+  getActiveTheme(): Promise<{ theme: Theme; data: string } | null> {
+    return ipcBackend.invoke('themes.getActiveTheme')
+  }
+  resolveThemeAddress(address: string): Promise<string> {
+    return ipcBackend.invoke('themes.getAvailableThemes', address)
   }
   async clearWebxdcDOMStorage(accountId: number): Promise<void> {
     ipcBackend.invoke('webxdc.clearWebxdcDOMStorage', accountId)
