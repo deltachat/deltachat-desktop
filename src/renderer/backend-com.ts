@@ -17,7 +17,7 @@ class ElectronTransport extends BaseTransport {
       'json-rpc-message',
       (_ev, response) => {
         const message: RPC.Message = JSON.parse(response)
-        //   log.debug("received: ", message)
+        log.debug('received: ', message)
         this._onmessage(message)
       }
     )
