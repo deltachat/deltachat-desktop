@@ -87,7 +87,6 @@ class DeltaRemote {
   } | null>
   call(fnName: 'extras.getAvailableThemes'): Promise<Theme[]>
   call(fnName: 'extras.setTheme', address: string): Promise<boolean>
-  call(fnName: 'extras.writeClipboardToTempFile'): Promise<string>
   // webxdc: ------------------------------------------------------------
   call(fnName: 'webxdc.clearWebxdcDOMStorage'): Promise<void>
   call(

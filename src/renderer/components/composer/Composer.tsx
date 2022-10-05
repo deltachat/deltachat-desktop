@@ -14,13 +14,13 @@ import { EmojiAndStickerPicker } from './EmojiAndStickerPicker'
 import { EmojiData, BaseEmoji } from 'emoji-mart'
 import { replaceColonsSafe } from '../conversations/emoji'
 import { Quote } from '../message/Message'
-import { DeltaBackend } from '../../delta-remote'
 import { DraftAttachment } from '../attachment/messageAttachment'
 import { sendMessage, unselectChat } from '../helpers/ChatMethods'
 import { useSettingsStore } from '../../stores/settings'
 import { BackendRemote, EffectfulBackendActions, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { MessageTypeAttachmentSubset } from '../attachment/Attachment'
+import { runtime } from '../../runtime'
 
 const log = getLogger('renderer/composer')
 
@@ -181,7 +181,8 @@ const Composer = forwardRef<
 
     try {
       // Write clipboard to file then attach it to the draft
-      addFileToDraft(await DeltaBackend.call('extras.writeClipboardToTempFile'))
+      const path = await runtime.writeClipboardToTempFile()
+      addFileToDraft(path)
     } catch (err) {
       log.error('Failed to paste file.', err)
     }

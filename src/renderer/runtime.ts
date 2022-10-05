@@ -95,9 +95,13 @@ interface Runtime {
   setNotificationCallback(
     cb: (data: { accountId: number; chatId: number; msgId: number }) => void
   ): void
+  writeClipboardToTempFile(): Promise<string>
 }
 
 class Browser implements Runtime {
+  async writeClipboardToTempFile(): Promise<string> {
+    throw new Error('Method not implemented.')
+  }
   setNotificationCallback(
     _cb: (data: { accountId: number; chatId: number; msgId: number }) => void
   ): void {
@@ -190,6 +194,9 @@ class Browser implements Runtime {
   }
 }
 class Electron implements Runtime {
+  async writeClipboardToTempFile(): Promise<string> {
+    return ipcBackend.invoke('app.writeClipboardToTempFile')
+  }
   private notificationCallback: (data: {
     accountId: number
     chatId: number
