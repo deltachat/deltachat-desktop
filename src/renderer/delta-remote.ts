@@ -39,8 +39,6 @@ class DeltaRemote {
   ): Promise<boolean>
   // login ----------------------------------------------------
   call(fnName: 'login.selectAccount', accountId: number): Promise<boolean>
-
-  // NOTHING HERE that is called directly from the frontend, yet
   // messageList --------------------------------------------------------
   call(
     fnName: 'messageList.sendSticker',
