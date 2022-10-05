@@ -11,7 +11,6 @@ import {
   SelectDialogOption,
 } from './DeltaDialog'
 import { DialogProps } from './DialogController'
-import { DeltaBackend } from '../../delta-remote'
 import { SettingsSelector } from './Settings'
 import { AutodeleteDuration } from '../../../shared/constants'
 import { DeltaCheckbox } from '../contact/ContactListItem'
