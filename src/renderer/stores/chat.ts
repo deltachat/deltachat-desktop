@@ -870,6 +870,7 @@ class ChatStore extends Store<ChatStoreState> {
                 jumpToMessageId as number,
               )
               chatId = message.chatId
+
             } else {
               jumpToMessageStack = []
               jumpToMessageId = this.state.messageIds[
@@ -880,6 +881,7 @@ class ChatStore extends Store<ChatStoreState> {
                 jumpToMessageId
               )
               chatId = message.chatId
+              return this.effect.selectChat(chatId)
             }
           } else if (addMessageIdToStack === undefined) {
             // reset jumpToMessageStack
