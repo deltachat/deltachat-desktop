@@ -74,10 +74,8 @@ export default class ScreenController extends Component {
   }
 
   private async startup() {
-    const lastLoggedInAccountId = await DeltaBackend.call(
-      'login.getLastLoggedInAccount'
-    )
-    if (lastLoggedInAccountId && !(lastLoggedInAccountId < 0)) {
+    const lastLoggedInAccountId = await this._getLastUsedAccount()
+    if (lastLoggedInAccountId) {
       await this.selectAccount(lastLoggedInAccountId)
     } else {
       const allAccountIds = await BackendRemote.rpc.getAllAccountIds()
@@ -87,6 +85,25 @@ export default class ScreenController extends Component {
         const accountId = await BackendRemote.rpc.addAccount()
         await this.selectAccount(accountId)
       }
+    }
+  }
+
+  private async _getLastUsedAccount(): Promise<number | undefined> {
+    const lastLoggedInAccountId = (
+      await DeltaBackend.call('settings.getDesktopSettings')
+    ).lastAccount
+    try {
+      if (lastLoggedInAccountId) {
+        await BackendRemote.rpc.getAccountInfo(lastLoggedInAccountId)
+        return lastLoggedInAccountId
+      } else {
+        return undefined
+      }
+    } catch (error) {
+      log.warn(
+        `getLastUsedAccount: account with id ${lastLoggedInAccountId} does not exist`
+      )
+      return undefined
     }
   }
 
