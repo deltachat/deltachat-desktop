@@ -39,7 +39,6 @@ class DeltaRemote {
   ): Promise<boolean>
   // login ----------------------------------------------------
   call(fnName: 'login.selectAccount', accountId: number): Promise<boolean>
-  call(fnName: 'login.getAccountSize', accountId: number): Promise<number>
   call(fnName: 'login.getLastLoggedInAccount'): Promise<number>
 
   // NOTHING HERE that is called directly from the frontend, yet

@@ -128,13 +128,6 @@ Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANG
     }
   }
 
-  async getAccountSize(accountId: number): Promise<number> {
-    const accountContext = this.accounts.accountContext(accountId)
-    const account_dir = join(accountContext.getBlobdir(), '..')
-    accountContext.unref()
-    return await _getAccountSize(account_dir)
-  }
-
   async getLastLoggedInAccount() {
     if (DesktopSettings.state.lastAccount) {
       try {
@@ -331,28 +324,4 @@ export function txCoreStrings() {
   )
 
   return strings
-}
-
-async function _getAccountSize(path: string) {
-  try {
-    const db_size = (await stat(join(path, 'dc.db'))).size
-    const blob_dir = join(path, 'dc.db-blobs')
-    const blob_files = await readdir(blob_dir)
-    let blob_size = 0
-    if (blob_files.length > 0) {
-      const blob_file_sizes = await Promise.all(
-        blob_files.map(
-          async blob_file => (await stat(join(blob_dir, blob_file))).size
-        )
-      )
-      blob_size = blob_file_sizes.reduce(
-        (totalSize, currentBlobSize) => totalSize + currentBlobSize
-      )
-    }
-
-    return db_size + blob_size
-  } catch (error) {
-    log.warn(error)
-    return 0
-  }
 }
