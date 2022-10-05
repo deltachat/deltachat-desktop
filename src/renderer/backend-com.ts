@@ -66,7 +66,7 @@ export namespace EffectfulBackendActions {
     debouncedUpdateBadgeCounter()
 
     // for now we still need to call the backend function,
-    // because backend still has sleected account
+    // because backend still has selected account
     await DeltaBackend.call('login.logout')
     ;(window.__selectedAccountId as any) = undefined
   }
