@@ -19,6 +19,7 @@ import AccountListScreen from './components/screens/AccountListScreen'
 import WelcomeScreen from './components/screens/WelcomeScreen'
 import { BackendRemote } from './backend-com'
 import { debouncedUpdateBadgeCounter } from './system-integration/badge-counter'
+import { hintUpdateIfNessesary, updateDeviceChats } from './deviceMessages'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -119,6 +120,8 @@ export default class ScreenController extends Component {
     )
     if (account.type === 'Configured') {
       this.changeScreen(Screens.Main)
+      hintUpdateIfNessesary(this.selectedAccountId)
+      updateDeviceChats(this.selectedAccountId)
     } else {
       this.changeScreen(Screens.Welcome)
     }
