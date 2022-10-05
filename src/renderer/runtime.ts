@@ -99,6 +99,13 @@ interface Runtime {
     cb: (data: { accountId: number; chatId: number; msgId: number }) => void
   ): void
   writeClipboardToTempFile(): Promise<string>
+  getWebxdcDiskUsage(
+    accountId: number
+  ): Promise<{
+    total_size: number
+    data_size: number
+  }>
+  clearWebxdcDOMStorage(accountId: number): Promise<void>
 }
 
 class Browser implements Runtime {
@@ -106,6 +113,17 @@ class Browser implements Runtime {
     throw new Error('Method not implemented.')
   }
   notifyWebxdcInstanceDeleted(_accountId: number, _instanceId: number): void {
+    throw new Error('Method not implemented.')
+  }
+  clearWebxdcDOMStorage(_accountId: number): Promise<void> {
+    throw new Error('Method not implemented.')
+  }
+  getWebxdcDiskUsage(
+    _accountId: number
+  ): Promise<{
+    total_size: number
+    data_size: number
+  }> {
     throw new Error('Method not implemented.')
   }
   async writeClipboardToTempFile(): Promise<string> {
@@ -208,6 +226,17 @@ class Electron implements Runtime {
   }
   notifyWebxdcInstanceDeleted(accountId: number, instanceId: number): void {
     ipcBackend.invoke('webxdc:instance-deleted', accountId, instanceId)
+  }
+  async clearWebxdcDOMStorage(accountId: number): Promise<void> {
+    ipcBackend.invoke('webxdc.clearWebxdcDOMStorage', accountId)
+  }
+  getWebxdcDiskUsage(
+    accountId: number
+  ): Promise<{
+    total_size: number
+    data_size: number
+  }> {
+    return ipcBackend.invoke('webxdc.getWebxdcDiskUsage', accountId)
   }
   async writeClipboardToTempFile(): Promise<string> {
     return ipcBackend.invoke('app.writeClipboardToTempFile')

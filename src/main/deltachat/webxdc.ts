@@ -88,7 +88,7 @@ export default class DCWebxdc extends SplitOut {
       const icon = webxdcInfo.icon
       const icon_blob = dc_context.getWebxdcBlob(webxdc_message_ref, icon)
 
-      const ses = this._currentSession
+      const ses = sessionFromAccountId(this.selectedAccountId)
       const appURL = `webxdc://${msg_id}.webxdc`
 
       // TODO intercept / deny network access - CSP should probably be disabled for testing
@@ -342,12 +342,10 @@ If you think that's a bug and you need that permission, then please open an issu
         if (instance) {
           instance.win.close()
         }
-        const s = session.fromPartition(
-          `persist:webxdc_${this.selectedAccountId}`,
-          {
-            cache: false,
-          }
-        )
+        if (!this.selectedAccountId) {
+          throw new Error('selectedAccountId is empty')
+        }
+        const s = sessionFromAccountId(this.selectedAccountId)
         const appURL = `webxdc://${instanceId}.webxdc`
         s.clearStorageData({ origin: appURL })
         s.clearCodeCaches({ urls: [appURL] })
@@ -363,55 +361,64 @@ If you think that's a bug and you need that permission, then please open an issu
   }
 
   get _currentPartition() {
-    return `persist:webxdc_${this.selectedAccountId}`
-  }
-
-  get _currentSession() {
-    return session.fromPartition(this._currentPartition, { cache: false })
-  }
-
-  clearWebxdcDOMStorage() {
-    return this._currentSession.clearStorageData()
-  }
-
-  async getWebxdcDiskUsage() {
-    const ses = this._currentSession
-    if (!ses.storagePath) {
-      throw new Error('session has no storagePath set')
+    if (!this.selectedAccountId) {
+      throw new Error('selectedAccountId is empty')
     }
-    const [cache_size, real_total_size] = await Promise.all([
-      ses.getCacheSize(),
-      get_recursive_folder_size(ses.storagePath, [
-        'GPUCache',
-        'QuotaManager',
-        'Code Cache',
-        'LOG',
-        'LOG.old',
-        'LOCK',
-        '.DS_Store',
-        'Cookies-journal',
-        'Databases.db-journal',
-        'Preferences',
-        'QuotaManager-journal',
-        '000003.log',
-        'MANIFEST-000001',
-      ]),
-    ])
-    const empty_size = 49 * 1024 // ~ size of an empty session/partition
-
-    let total_size = real_total_size - empty_size
-    let data_size = total_size - cache_size
-    if (total_size < 0) {
-      total_size = 0
-      data_size = 0
-    }
-    return {
-      cache_size,
-      total_size,
-      data_size,
-    }
+    return partitionFromAccountId(this.selectedAccountId)
   }
 }
+
+function partitionFromAccountId(accountId: number) {
+  return `persist:webxdc_${accountId}`
+}
+
+function sessionFromAccountId(accountId: number) {
+  return session.fromPartition(partitionFromAccountId(accountId), {
+    cache: false,
+  })
+}
+
+ipcMain.handle('webxdc.clearWebxdcDOMStorage', (_, accountId: number) => {
+  sessionFromAccountId(accountId).clearStorageData()
+})
+
+ipcMain.handle('webxdc.getWebxdcDiskUsage', async (_, accountId: number) => {
+  const ses = sessionFromAccountId(accountId)
+  if (!ses.storagePath) {
+    throw new Error('session has no storagePath set')
+  }
+  const [cache_size, real_total_size] = await Promise.all([
+    ses.getCacheSize(),
+    get_recursive_folder_size(ses.storagePath, [
+      'GPUCache',
+      'QuotaManager',
+      'Code Cache',
+      'LOG',
+      'LOG.old',
+      'LOCK',
+      '.DS_Store',
+      'Cookies-journal',
+      'Databases.db-journal',
+      'Preferences',
+      'QuotaManager-journal',
+      '000003.log',
+      'MANIFEST-000001',
+    ]),
+  ])
+  const empty_size = 49 * 1024 // ~ size of an empty session/partition
+
+  let total_size = real_total_size - empty_size
+  let data_size = total_size - cache_size
+  if (total_size < 0) {
+    total_size = 0
+    data_size = 0
+  }
+  return {
+    cache_size,
+    total_size,
+    data_size,
+  }
+})
 
 async function get_recursive_folder_size(
   path: string,
