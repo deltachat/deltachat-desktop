@@ -1,5 +1,5 @@
 import { copyFile } from 'fs/promises'
-import { app as rawApp, dialog, ipcMain } from 'electron'
+import { app as rawApp, clipboard, dialog, ipcMain } from 'electron'
 import { getLogger } from '../shared/logger'
 import { getLogsPath } from './application-constants'
 import { LogHandler } from './log-handler'
@@ -14,6 +14,8 @@ import { RuntimeInfo } from '../shared/shared-types'
 import { platform } from 'os'
 import { existsSync } from 'fs'
 import { set_has_unread } from './tray'
+import mimeTypes from 'mime-types'
+import { writeFile } from 'fs/promises'
 
 const log = getLogger('main/ipc')
 const DeltaChatController: typeof import('./deltachat/controller').default = (() => {
@@ -193,8 +195,31 @@ export async function init(cwd: string, logHandler: LogHandler) {
     }
   )
 
+  ipcMain.handle('app.writeClipboardToTempFile', () =>
+    writeClipboardToTempFile()
+  )
+
   return () => {
     // the shutdown function
     dcController._inner_account_manager?.stopIO()
   }
+}
+
+async function writeClipboardToTempFile(): Promise<string> {
+  const formats = clipboard.availableFormats().sort()
+  log.debug('Clipboard available formats:', formats)
+  if (formats.length <= 0) {
+    throw new Error('No files to write')
+  }
+  const pathToFile = join(
+    rawApp.getPath('temp'),
+    `paste.${mimeTypes.extension(formats[0]) || 'bin'}`
+  )
+  const buf =
+    mimeTypes.extension(formats[0]) === 'png'
+      ? clipboard.readImage().toPNG()
+      : clipboard.readBuffer(formats[0])
+  log.debug(`Writing clipboard ${formats[0]} to file ${pathToFile}`)
+  await writeFile(pathToFile, buf, 'binary')
+  return pathToFile
 }

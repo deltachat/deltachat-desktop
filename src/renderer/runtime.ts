@@ -98,6 +98,7 @@ interface Runtime {
   setNotificationCallback(
     cb: (data: { accountId: number; chatId: number; msgId: number }) => void
   ): void
+  writeClipboardToTempFile(): Promise<string>
 }
 
 class Browser implements Runtime {
@@ -105,6 +106,9 @@ class Browser implements Runtime {
     throw new Error('Method not implemented.')
   }
   notifyWebxdcInstanceDeleted(_accountId: number, _instanceId: number): void {
+    throw new Error('Method not implemented.')
+  }
+  async writeClipboardToTempFile(): Promise<string> {
     throw new Error('Method not implemented.')
   }
   setNotificationCallback(
@@ -204,6 +208,9 @@ class Electron implements Runtime {
   }
   notifyWebxdcInstanceDeleted(accountId: number, instanceId: number): void {
     ipcBackend.invoke('webxdc:instance-deleted', accountId, instanceId)
+  }
+  async writeClipboardToTempFile(): Promise<string> {
+    return ipcBackend.invoke('app.writeClipboardToTempFile')
   }
   private notificationCallback: (data: {
     accountId: number
