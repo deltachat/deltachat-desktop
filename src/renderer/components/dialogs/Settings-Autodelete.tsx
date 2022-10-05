@@ -19,6 +19,8 @@ import classNames from 'classnames'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
+import { BackendRemote } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 function durationToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)
@@ -128,6 +130,7 @@ export default function SettingsAutodelete({
   settingsStore: SettingsStoreState
 }) {
   const { openDialog } = useContext(ScreenContext)
+  const accountId = selectedAccountId()
 
   const tx = useTranslationFunction()
 
@@ -165,8 +168,8 @@ export default function SettingsAutodelete({
         : tx('autodel_device_title'),
       onSave: async (_seconds: string) => {
         const seconds = Number(_seconds)
-        const estimateCount = await DeltaBackend.call(
-          'settings.estimateAutodeleteCount',
+        const estimateCount = await BackendRemote.rpc.estimateAutoDeletionCount(
+          accountId,
           fromServer,
           seconds
         )

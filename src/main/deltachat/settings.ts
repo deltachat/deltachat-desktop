@@ -66,11 +66,4 @@ export default class DCSettings extends SplitOut {
     }
     return `img: ${fileName.replace(/\\/g, '/')}`
   }
-
-  estimateAutodeleteCount(fromServer: boolean, seconds: number) {
-    return this.selectedAccountContext.estimateDeletionCount(
-      fromServer,
-      seconds
-    )
-  }
 }

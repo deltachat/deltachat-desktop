@@ -65,11 +65,6 @@ class DeltaRemote {
     file: string,
     isDefaultPicture: boolean
   ): Promise<string>
-  call(
-    fnName: 'settings.estimateAutodeleteCount',
-    fromServer: boolean,
-    seconds: number
-  ): Promise<number>
   // stickers -----------------------------------------------------------
   call(
     fnName: 'stickers.getStickers'
