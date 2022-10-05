@@ -3,19 +3,20 @@ import { Card, Elevation, H5 } from '@blueprintjs/core'
 import filesizeConverter from 'filesize'
 import { ScreenContext } from '../../contexts'
 
-import { DeltaBackend } from '../../delta-remote'
 import ConfirmationDialog from './ConfirmationDialog'
 import { runtime } from '../../runtime'
+import { selectedAccountId } from '../../ScreenController'
 
 export default function SettingsWebxdc() {
+  const accountId = selectedAccountId()
   const [usage, setUsage] = useState<{
     total_size: number
     data_size: number
   } | null>(null)
 
   const updateUsage = useCallback(() => {
-    DeltaBackend.call('webxdc.getWebxdcDiskUsage').then(setUsage)
-  }, [])
+    runtime.getWebxdcDiskUsage(accountId).then(setUsage)
+  }, [accountId])
 
   useEffect(() => updateUsage(), [updateUsage])
 
@@ -28,8 +29,7 @@ export default function SettingsWebxdc() {
         "Delete all webxdc DOMStorage data, if you do that you might loose some local settings of your webxdc's",
       confirmLabel: tx('delete'),
       cb: yes =>
-        yes &&
-        DeltaBackend.call('webxdc.clearWebxdcDOMStorage').then(updateUsage),
+        yes && runtime.clearWebxdcDOMStorage(accountId).then(updateUsage),
     })
   }
 
