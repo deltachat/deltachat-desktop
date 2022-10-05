@@ -247,7 +247,8 @@ function AccountItem({
 
   const [account_size, setSize] = useState<string>('?')
   useEffect(() => {
-    DeltaBackend.call('login.getAccountSize', login.id)
+    BackendRemote.rpc
+      .getAccountFileSize(login.id)
       .catch(log.error)
       .then(bytes => {
         bytes && setSize(filesizeConverter(bytes))
