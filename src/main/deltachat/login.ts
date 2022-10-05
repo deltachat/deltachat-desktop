@@ -26,8 +26,6 @@ export default class DCLoginController extends SplitOut {
 
     log.info('dc_get_info', this.selectedAccountContext.getInfo())
 
-    this.updateDeviceChats()
-
     this.controller.ready = true
     return true
   }
@@ -54,20 +52,6 @@ export default class DCLoginController extends SplitOut {
     this.controller.unregisterEventHandler(this.accounts)
     this.accounts.close()
     this.controller._inner_account_manager = null
-  }
-
-  updateDeviceChats() {
-    this.controller.hintUpdateIfNessesary()
-
-    this.selectedAccountContext.addDeviceMessage(
-      'changelog-version-1.32.0-version0',
-      `What's new in 1.32.0?
-2️⃣ New experimental features: Broadcast lists and Automated Email Address Porting
-➕ Floating action button in chatlist to start a new chat
-🚆 Many reliability improvements and bugfixes
-
-Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1310---2022-07-17`
-    )
   }
 
   async _accountInfo(accountId: number): Promise<DeltaChatAccount> {

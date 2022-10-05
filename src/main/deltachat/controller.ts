@@ -13,9 +13,6 @@ import DCSettings from './settings'
 import DCStickers from './stickers'
 import { ExtendedAppMainProcess } from '../types'
 import Extras from './extras'
-
-import { VERSION, BUILD_TIMESTAMP } from '../../shared/build-info'
-import { Timespans, DAYS_UNTIL_UPDATE_SUGGESTION } from '../../shared/constants'
 import { Context } from 'deltachat-node/node/dist/context'
 import path, { join } from 'path'
 import { existsSync, lstatSync } from 'fs'
@@ -79,12 +76,6 @@ export default class DeltaChatController extends EventEmitter {
     this._resetState()
 
     await this.migrateToAccountsApiIfNeeded()
-
-    setInterval(
-      // If the dc is always on
-      this.hintUpdateIfNessesary.bind(this),
-      Timespans.ONE_DAY_IN_SECONDS * 1000
-    )
 
     log.debug('Initiating DeltaChatNode')
     this._inner_account_manager = new DeltaChatNode(
@@ -403,20 +394,6 @@ export default class DeltaChatController extends EventEmitter {
 
   joinSecurejoin(qrCode: string) {
     return this.selectedAccountContext.joinSecurejoin(qrCode)
-  }
-
-  hintUpdateIfNessesary() {
-    if (
-      this.selectedAccountContext &&
-      Date.now() >
-        Timespans.ONE_DAY_IN_SECONDS * DAYS_UNTIL_UPDATE_SUGGESTION * 1000 +
-          BUILD_TIMESTAMP
-    ) {
-      this.selectedAccountContext.addDeviceMessage(
-        `update-suggestion-${VERSION}`,
-        `This build is over ${DAYS_UNTIL_UPDATE_SUGGESTION} days old - There might be a new version available. -> https://get.delta.chat`
-      )
-    }
   }
 
   /**
