@@ -4,6 +4,7 @@ import {
   DesktopSettingsType,
   RC_Config,
   RuntimeInfo,
+  Theme,
 } from '../shared/shared-types'
 import { setLogHandler } from '../shared/logger'
 import type {
@@ -103,9 +104,24 @@ interface Runtime {
     data_size: number
   }>
   clearWebxdcDOMStorage(accountId: number): Promise<void>
+  getAvailableThemes(): Promise<Theme[]>
+  getActiveTheme(): Promise<{
+    theme: Theme
+    data: string
+  } | null>
+  resolveThemeAddress(address: string): Promise<string>
 }
 
 class Browser implements Runtime {
+  getAvailableThemes(): Promise<Theme[]> {
+    throw new Error('Method not implemented.')
+  }
+  async getActiveTheme(): Promise<{ theme: Theme; data: string } | null> {
+    return null
+  }
+  resolveThemeAddress(_address: string): Promise<string> {
+    throw new Error('Method not implemented.')
+  }
   clearWebxdcDOMStorage(_accountId: number): Promise<void> {
     throw new Error('Method not implemented.')
   }
@@ -212,6 +228,15 @@ class Browser implements Runtime {
   }
 }
 class Electron implements Runtime {
+  getAvailableThemes(): Promise<Theme[]> {
+    return ipcBackend.invoke('themes.getAvailableThemes')
+  }
+  getActiveTheme(): Promise<{ theme: Theme; data: string } | null> {
+    return ipcBackend.invoke('themes.getActiveTheme')
+  }
+  resolveThemeAddress(address: string): Promise<string> {
+    return ipcBackend.invoke('themes.getAvailableThemes', address)
+  }
   async clearWebxdcDOMStorage(accountId: number): Promise<void> {
     ipcBackend.invoke('webxdc.clearWebxdcDOMStorage', accountId)
   }

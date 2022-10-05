@@ -93,6 +93,7 @@ function ThemeContextWrapper({ children }: { children: React.ReactChild }) {
   const [theme_rand, setThemeRand] = useState(0)
   useEffect(() => {
     ThemeManager.setUpdateHook(() => setThemeRand(Math.random()))
+    ThemeManager.refresh()
   }, [])
 
   return (

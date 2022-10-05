@@ -13,6 +13,9 @@ import {
 } from '../../../shared/shared-types'
 import { join } from 'path'
 import SettingsStoreInstance from '../../stores/settings'
+import { getLogger } from '../../../shared/logger'
+
+const log = getLogger('renderer/settings/appearance')
 
 const enum SetBackgroundAction {
   default,
@@ -198,9 +201,7 @@ export default function SettingsAppearance({
   const [availableThemes, setAvailableThemes] = useState<Theme[]>([])
   useEffect(() => {
     ;(async () => {
-      const availableThemes = await DeltaBackend.call(
-        'extras.getAvailableThemes'
-      )
+      const availableThemes = await runtime.getAvailableThemes()
 
       setAvailableThemes(
         availableThemes.filter(
@@ -211,7 +212,7 @@ export default function SettingsAppearance({
   }, [rc.devmode, activeTheme])
 
   const setTheme = async (theme: string) => {
-    if (await DeltaBackend.call('extras.setTheme', theme)) {
+    if (await setThemeFunction(theme)) {
       SettingsStoreInstance.effect.setDesktopSetting('activeTheme', theme)
       await ThemeManager.refresh()
     }
@@ -281,4 +282,15 @@ export default function SettingsAppearance({
       />
     </>
   )
+}
+
+async function setThemeFunction(address: string) {
+  try {
+    runtime.resolveThemeAddress(address)
+    DeltaBackend.call('settings.setDesktopSetting', 'activeTheme', address)
+    return true
+  } catch (error) {
+    log.error('set theme failed: ', error)
+    return false
+  }
 }

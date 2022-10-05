@@ -3,7 +3,7 @@ import { readFile, readdir } from 'fs/promises'
 import { join, basename } from 'path'
 import { Theme } from '../shared/shared-types'
 import { getCustomThemesPath } from './application-constants'
-import { app as rawApp, nativeTheme } from 'electron'
+import { app as rawApp, ipcMain, nativeTheme } from 'electron'
 import { ExtendedAppMainProcess } from './types'
 import * as mainWindow from './windows/main'
 
@@ -173,3 +173,19 @@ If you have question or need help, feel free to ask in our forum https://support
     mainWindow.send('theme-update')
   })
 }
+
+ipcMain.handle('themes.getActiveTheme', async () => {
+  try {
+    log.debug('theme', DesktopSettings.state.activeTheme)
+    return await loadTheme(DesktopSettings.state.activeTheme)
+  } catch (error) {
+    log.error('loading theme failed:', error)
+    return null
+  }
+})
+
+ipcMain.handle('themes.resolveThemeAddress', (_, address: string) =>
+  resolveThemeAddress(address)
+)
+
+ipcMain.handle('themes.getAvailableThemes', getAvailableThemes)
