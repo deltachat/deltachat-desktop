@@ -481,7 +481,7 @@ export default Message
 export const Quote = ({
   quote,
   isSticker,
-  msgParentId
+  msgParentId,
 }: {
   quote: Type.MessageQuote
   isSticker?: Boolean

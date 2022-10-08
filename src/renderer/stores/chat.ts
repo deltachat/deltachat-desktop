@@ -867,10 +867,9 @@ class ChatStore extends Store<ChatStoreState> {
               ]
               message = await BackendRemote.rpc.messageGetMessage(
                 accountId,
-                jumpToMessageId as number,
+                jumpToMessageId as number
               )
               chatId = message.chatId
-
             } else {
               jumpToMessageStack = []
               jumpToMessageId = this.state.messageIds[
@@ -887,7 +886,7 @@ class ChatStore extends Store<ChatStoreState> {
             // reset jumpToMessageStack
             message = await BackendRemote.rpc.messageGetMessage(
               accountId,
-              msgId as number,
+              msgId as number
             )
             chatId = message.chatId
 
@@ -896,7 +895,7 @@ class ChatStore extends Store<ChatStoreState> {
           } else {
             message = await BackendRemote.rpc.messageGetMessage(
               accountId,
-              msgId as number,
+              msgId as number
             )
             chatId = message.chatId
 
@@ -905,10 +904,17 @@ class ChatStore extends Store<ChatStoreState> {
             const currentChatId = chatStore.state.chat?.id || -1
             if (chatId !== currentChatId) {
               jumpToMessageStack = []
-            } else if (chatStore.state.jumpToMessageStack.indexOf(addMessageIdToStack) !== -1) {
+            } else if (
+              chatStore.state.jumpToMessageStack.indexOf(
+                addMessageIdToStack
+              ) !== -1
+            ) {
               jumpToMessageStack = chatStore.state.jumpToMessageStack
             } else {
-              jumpToMessageStack = [...chatStore.state.jumpToMessageStack, addMessageIdToStack]
+              jumpToMessageStack = [
+                ...chatStore.state.jumpToMessageStack,
+                addMessageIdToStack,
+              ]
             }
           }
 

@@ -44,9 +44,15 @@ export default function MessageList({
     lastKnownScrollHeight,
   } = useChatStore()
   const messageListRef = useRef<HTMLDivElement | null>(null)
-  const [onePageAwayFromNewestMessage, _setOnePageAwayFromNewestMessage] = useState(false)
-  const setOnePageAwayFromNewestMessage = debounce(_setOnePageAwayFromNewestMessage, 30, true)
-
+  const [
+    onePageAwayFromNewestMessage,
+    _setOnePageAwayFromNewestMessage,
+  ] = useState(false)
+  const setOnePageAwayFromNewestMessage = debounce(
+    _setOnePageAwayFromNewestMessage,
+    30,
+    true
+  )
 
   const [fetchMoreTop] = useDebouncedCallback(
     async () => {
@@ -130,9 +136,14 @@ export default function MessageList({
         messageListRef.current.scrollTop -
         messageListRef.current.clientHeight
 
-      const isNewestMessageLoaded = ChatStore.state.newestFetchedMessageIndex === ChatStore.state.messageIds.length - 1
-      const onePageAwayFromNewestMessageTreshold = (messageListRef.current.clientHeight / 3)
-      const onePageAwayFromNewestMessage = !isNewestMessageLoaded || distanceToBottom >= onePageAwayFromNewestMessageTreshold 
+      const isNewestMessageLoaded =
+        ChatStore.state.newestFetchedMessageIndex ===
+        ChatStore.state.messageIds.length - 1
+      const onePageAwayFromNewestMessageTreshold =
+        messageListRef.current.clientHeight / 3
+      const onePageAwayFromNewestMessage =
+        !isNewestMessageLoaded ||
+        distanceToBottom >= onePageAwayFromNewestMessageTreshold
       setOnePageAwayFromNewestMessage(onePageAwayFromNewestMessage)
 
       //console.log('onScroll', distanceToTop, distanceToBottom)
@@ -343,7 +354,8 @@ export default function MessageList({
           unreadMessageInViewIntersectionObserver
         }
       />
-      {(onePageAwayFromNewestMessage === true || countUnreadMessages > 0) && JumpDownButton({countUnreadMessages})}
+      {(onePageAwayFromNewestMessage === true || countUnreadMessages > 0) &&
+        JumpDownButton({ countUnreadMessages })}
     </MessagesDisplayContext.Provider>
   )
 }
@@ -405,7 +417,6 @@ export const MessageListInner = React.memo(
       }
     })
 
-
     return (
       <div id='message-list' ref={messageListRef} onScroll={onScroll}>
         <ul>
@@ -430,20 +441,23 @@ export const MessageListInner = React.memo(
     const areEqual =
       prevProps.messageIds === nextProps.messageIds &&
       prevProps.messagePages === nextProps.messagePages &&
-      prevProps.oldestFetchedMessageIndex === nextProps.oldestFetchedMessageIndex
+      prevProps.oldestFetchedMessageIndex ===
+        nextProps.oldestFetchedMessageIndex
     return areEqual
   }
 )
 
-function JumpDownButton({countUnreadMessages}: {countUnreadMessages: number}) {
-  return ( 
+function JumpDownButton({
+  countUnreadMessages,
+}: {
+  countUnreadMessages: number
+}) {
+  return (
     <>
       <div className='unread-message-counter'>
         <div
           className='counter'
-          style={
-            countUnreadMessages === 0 ? { visibility: 'hidden' } : {}
-          }
+          style={countUnreadMessages === 0 ? { visibility: 'hidden' } : {}}
         >
           {countUnreadMessages}
         </div>
