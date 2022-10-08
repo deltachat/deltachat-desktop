@@ -481,7 +481,6 @@ const MessagePageComponent = React.memo(
         continue
       }
       if (messagePage.dayMarker.indexOf(messageId) !== -1) {
-        console.log('xxx', message.timestamp)
         messageElements.push(
           <DayMarker
             key={`daymarker-${messageId}`}
