@@ -4,6 +4,7 @@ import React, {
   useLayoutEffect,
   MutableRefObject,
   useEffect,
+  useState,
 } from 'react'
 import { MessageWrapper } from './MessageWrapper'
 import ChatStore, {
@@ -13,6 +14,7 @@ import ChatStore, {
   MessagePage,
 } from '../../stores/chat'
 import { useDebouncedCallback } from 'use-debounce'
+import debounce from 'debounce'
 import { C } from 'deltachat-node/node/dist/constants'
 import type { ChatTypes } from 'deltachat-node'
 import moment from 'moment'
@@ -74,6 +76,15 @@ export default function MessageList({
     lastKnownScrollHeight,
   } = useChatStore()
   const messageListRef = useRef<HTMLDivElement | null>(null)
+  const [
+    onePageAwayFromNewestMessage,
+    _setOnePageAwayFromNewestMessage,
+  ] = useState(false)
+  const setOnePageAwayFromNewestMessage = debounce(
+    _setOnePageAwayFromNewestMessage,
+    30,
+    true
+  )
 
   const [fetchMoreTop] = useDebouncedCallback(
     async () => {
@@ -156,6 +167,17 @@ export default function MessageList({
         messageListRef.current.scrollHeight -
         messageListRef.current.scrollTop -
         messageListRef.current.clientHeight
+
+      const isNewestMessageLoaded =
+        ChatStore.state.newestFetchedMessageIndex ===
+        ChatStore.state.messageIds.length - 1
+      const onePageAwayFromNewestMessageTreshold =
+        messageListRef.current.clientHeight / 3
+      const onePageAwayFromNewestMessage =
+        !isNewestMessageLoaded ||
+        distanceToBottom >= onePageAwayFromNewestMessageTreshold
+      setOnePageAwayFromNewestMessage(onePageAwayFromNewestMessage)
+
       //console.log('onScroll', distanceToTop, distanceToBottom)
       if (distanceToTop < 200 && distanceToBottom < 200) {
         log.debug('onScroll: Lets try loading messages from both ends')
@@ -178,7 +200,7 @@ export default function MessageList({
         return false
       }
     },
-    [fetchMoreTop, fetchMoreBottom]
+    [fetchMoreTop, fetchMoreBottom, setOnePageAwayFromNewestMessage]
   )
 
   useLayoutEffect(() => {
@@ -297,7 +319,7 @@ export default function MessageList({
     }, 0)
 
     // Try fetching more messages if needed
-  }, [onScroll, scrollToBottom])
+  }, [onScroll, scrollToBottom, setOnePageAwayFromNewestMessage])
 
   useLayoutEffect(() => {
     if (!ChatStore.state.chat) {
@@ -348,6 +370,7 @@ export default function MessageList({
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
   }, [refComposer])
 
+  const countUnreadMessages: number = chatStore.chat.freshMessageCounter
   return (
     <MessagesDisplayContext.Provider
       value={{ context: 'chat_messagelist', chatId: chatStore.chat.id }}
@@ -363,6 +386,8 @@ export default function MessageList({
           unreadMessageInViewIntersectionObserver
         }
       />
+      {(onePageAwayFromNewestMessage === true || countUnreadMessages > 0) &&
+        JumpDownButton({ countUnreadMessages })}
     </MessagesDisplayContext.Provider>
   )
 }
@@ -450,10 +475,36 @@ export const MessageListInner = React.memo(
       prevProps.messagePages === nextProps.messagePages &&
       prevProps.oldestFetchedMessageIndex ===
         nextProps.oldestFetchedMessageIndex
-
     return areEqual
   }
 )
+
+function JumpDownButton({
+  countUnreadMessages,
+}: {
+  countUnreadMessages: number
+}) {
+  return (
+    <>
+      <div className='unread-message-counter'>
+        <div
+          className='counter'
+          style={countUnreadMessages === 0 ? { visibility: 'hidden' } : {}}
+        >
+          {countUnreadMessages}
+        </div>
+        <div
+          className='jump-to-bottom-button'
+          onClick={() => {
+            ChatStore.effect.jumpToMessage(undefined, true)
+          }}
+        >
+          <div className='jump-to-bottom-icon' />
+        </div>
+      </div>
+    </>
+  )
+}
 
 const MessagePageComponent = React.memo(
   function MessagePageComponent({

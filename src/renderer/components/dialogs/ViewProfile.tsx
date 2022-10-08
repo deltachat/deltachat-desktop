@@ -41,7 +41,7 @@ const ProfileInfoName = ({
 }) => {
   const tx = useTranslationFunction()
   let lastSeenString = ''
-  let lastSeenAbsolute:string|undefined = undefined
+  let lastSeenAbsolute: string | undefined = undefined
 
   // Dates from 1970 mean that contact has never been seen
   if (lastSeen == 0) {
@@ -49,7 +49,10 @@ const ProfileInfoName = ({
   } else {
     const date = moment(lastSeen * 1000).fromNow()
     lastSeenString = tx('last_seen', date)
-    lastSeenAbsolute =  tx('last_seen_at', moment(lastSeen*1000).toLocaleString())
+    lastSeenAbsolute = tx(
+      'last_seen_at',
+      moment(lastSeen * 1000).toLocaleString()
+    )
   }
 
   return (
@@ -58,7 +61,9 @@ const ProfileInfoName = ({
         <p className='group-name'>{name}</p>
       </div>
       <div className='address'>{address}</div>
-      <div className='last-seen' title={lastSeenAbsolute}>{lastSeenString}</div>
+      <div className='last-seen' title={lastSeenAbsolute}>
+        {lastSeenString}
+      </div>
     </div>
   )
 }

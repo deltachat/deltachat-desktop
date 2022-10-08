@@ -27,9 +27,10 @@ export const setChatView = (view: ChatView) => {
 
 export const jumpToMessage = (
   msgId: number,
-  highlight?: undefined | boolean
+  highlight?: undefined | boolean,
+  msgParentId?: undefined | number
 ) => {
-  ChatStore.effect.jumpToMessage(msgId, highlight)
+  ChatStore.effect.jumpToMessage(msgId, highlight, msgParentId)
 }
 
 export const unselectChat = () => {
