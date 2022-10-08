@@ -74,6 +74,7 @@ $scrollbarTransparency: 0.5;
   --sideBarAccountIconHoverBackground: #fff;
 
   --settingsIconColor: black;
+  --infoMessageBubbleBg: black;
 }
 
 /* overwrite css */
@@ -299,7 +300,11 @@ $scrollbarTransparency: 0.5;
 .message-list-and-composer {
   background-color: white !important;
   background-image: unset !important;
+  #message-list { 
+   padding: 0 12px;
+  }
 }
+
 
 .info-message {
   margin: 0px;
@@ -409,6 +414,10 @@ div.group-image-wrapper div.group-image-edit-button {
 }
 
 .sidebar {
+  .sidebar-item {
+    font-size: unset;
+    cursor: pointer;
+  }
   .account {
     .displayname {
       font-weight: normal;
@@ -421,6 +430,22 @@ div.group-image-wrapper div.group-image-edit-button {
         cursor: pointer;
       }
     }
+  }
+  .account {
+    border-bottom: solid 1px rgba(236,236,236,.6862745098);
+  }
+  .footer {
+    display: block;
+    position: absolute;
+
+    bottom: 0;
+    width: 100%;
+    left: 0px;
+    padding-top: 10px;
+    padding-left: 20px;
+    margin-bottom: 10px;
+
+    border-top: solid 1px rgba(236,236,236,.6862745098);
   }
 }
 
