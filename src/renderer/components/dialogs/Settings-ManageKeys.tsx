@@ -5,6 +5,8 @@ import type { OpenDialogOptions } from 'electron'
 import { DeltaBackend } from '../../delta-remote'
 import { ipcBackend } from '../../ipc'
 import { runtime } from '../../runtime'
+import {BackendRemote} from '../../backend-com'
+import {selectedAccountId} from '../../ScreenController'
 
 async function onKeysImport() {
   const tx = window.static_translate
@@ -35,7 +37,7 @@ async function onKeysImport() {
         }
         window.__userFeedback({ type: 'success', text })
       })
-      DeltaBackend.call('settings.keysImport', filename)
+      BackendRemote.rpc.importSelfKeys(selectedAccountId(), filename, null)
     },
   })
 }
@@ -73,7 +75,7 @@ async function onKeysExport() {
           text: tx('pref_managekeys_secret_keys_exported_to_x', filename),
         })
       })
-      DeltaBackend.call('settings.keysExport', destination)
+      BackendRemote.rpc.exportSelfKeys(selectedAccountId(), destination, null)
     },
   })
 }
