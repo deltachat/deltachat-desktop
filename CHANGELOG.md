@@ -9,6 +9,7 @@
 - add donate link in settings
 - add button to clear chat history (delete all messages of a chat)
 - add recently seen indicator
+- add jump down button
 
 ## Changed
 - start migrating to jsonrpc api
