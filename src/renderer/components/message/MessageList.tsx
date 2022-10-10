@@ -45,14 +45,9 @@ export default function MessageList({
   } = useChatStore()
   const messageListRef = useRef<HTMLDivElement | null>(null)
   const [
-    onePageAwayFromNewestMessage,
-    _setOnePageAwayFromNewestMessage,
+    showJumpDownButton,
+    setShowJumpDownButton,
   ] = useState(false)
-  const setOnePageAwayFromNewestMessage = debounce(
-    _setOnePageAwayFromNewestMessage,
-    30,
-    true
-  )
 
   const [fetchMoreTop] = useDebouncedCallback(
     async () => {
@@ -141,10 +136,12 @@ export default function MessageList({
         ChatStore.state.messageIds.length - 1
       const onePageAwayFromNewestMessageTreshold =
         messageListRef.current.clientHeight / 3
-      const onePageAwayFromNewestMessage =
+      const newShowJumpDownButton =
         !isNewestMessageLoaded ||
         distanceToBottom >= onePageAwayFromNewestMessageTreshold
-      setOnePageAwayFromNewestMessage(onePageAwayFromNewestMessage)
+      if (newShowJumpDownButton != showJumpDownButton) {
+        setShowJumpDownButton(newShowJumpDownButton)
+      }
 
       //console.log('onScroll', distanceToTop, distanceToBottom)
       if (distanceToTop < 200 && distanceToBottom < 200) {
@@ -168,7 +165,7 @@ export default function MessageList({
         return false
       }
     },
-    [fetchMoreTop, fetchMoreBottom, setOnePageAwayFromNewestMessage]
+    [fetchMoreTop, fetchMoreBottom, setShowJumpDownButton, showJumpDownButton]
   )
 
   useLayoutEffect(() => {
@@ -287,7 +284,7 @@ export default function MessageList({
     }, 0)
 
     // Try fetching more messages if needed
-  }, [onScroll, scrollToBottom, setOnePageAwayFromNewestMessage])
+  }, [onScroll, scrollToBottom, setShowJumpDownButton])
 
   useLayoutEffect(() => {
     if (!ChatStore.state.chat) {
@@ -338,6 +335,7 @@ export default function MessageList({
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
   }, [refComposer])
 
+  console.log('MessageList render')
   const countUnreadMessages: number = chatStore.chat.freshMessageCounter
   return (
     <MessagesDisplayContext.Provider
@@ -354,8 +352,9 @@ export default function MessageList({
           unreadMessageInViewIntersectionObserver
         }
       />
-      {(onePageAwayFromNewestMessage === true || countUnreadMessages > 0) &&
-        JumpDownButton({ countUnreadMessages })}
+      {(showJumpDownButton === true || countUnreadMessages > 0) &&
+        <JumpDownButton countUnreadMessages={countUnreadMessages} />
+      }
     </MessagesDisplayContext.Provider>
   )
 }
@@ -442,7 +441,8 @@ export const MessageListInner = React.memo(
       prevProps.messageIds === nextProps.messageIds &&
       prevProps.messagePages === nextProps.messagePages &&
       prevProps.oldestFetchedMessageIndex ===
-        nextProps.oldestFetchedMessageIndex
+        nextProps.oldestFetchedMessageIndex &&
+      prevProps.onScroll === nextProps.onScroll
     return areEqual
   }
 )
