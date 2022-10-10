@@ -14,7 +14,6 @@ import ChatStore, {
   MessagePage,
 } from '../../stores/chat'
 import { useDebouncedCallback } from 'use-debounce'
-import debounce from 'debounce'
 import { C } from 'deltachat-node/node/dist/constants'
 import type { ChatTypes } from 'deltachat-node'
 import moment from 'moment'
@@ -34,7 +33,7 @@ window.addEventListener('focus', () => {
   )
 
   const visibleElements = messageElements.filter(el => {
-    var rect = el.getBoundingClientRect()
+    const rect = el.getBoundingClientRect()
     return (
       rect.top >= 0 &&
       rect.left >= 0 &&

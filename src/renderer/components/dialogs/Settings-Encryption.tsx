@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Card, H5, Classes, Callout, Spinner } from '@blueprintjs/core'
+import { Card, H5, Classes, Callout } from '@blueprintjs/core'
 import { RenderDeltaSwitch2Type, SettingsButton } from './Settings'
 import { ScreenContext } from '../../contexts'
 import { DialogProps } from './DialogController'

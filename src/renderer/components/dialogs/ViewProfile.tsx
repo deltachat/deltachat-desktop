@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react'
-import formatRelativeTime from '../conversations/formatRelativeTime'
 import {
   DeltaDialogBase,
   DeltaDialogHeader,

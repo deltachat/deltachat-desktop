@@ -1003,6 +1003,7 @@ class ChatStore extends Store<ChatStoreState> {
               msgId: jumpToMessageId,
               highlight,
             },
+            jumpToMessageStack,
           })
           ActionEmitter.emitAction(
             chat.archived
