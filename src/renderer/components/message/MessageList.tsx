@@ -485,7 +485,7 @@ function JumpDownButton({
 }) {
   return (
     <>
-      <div className='unread-message-counter'>
+      <div className='jump-down-button'>
         <div
           className='counter'
           style={countUnreadMessages === 0 ? { visibility: 'hidden' } : {}}
@@ -493,12 +493,12 @@ function JumpDownButton({
           {countUnreadMessages}
         </div>
         <div
-          className='jump-to-bottom-button'
+          className='button'
           onClick={() => {
             ChatStore.effect.jumpToMessage(undefined, true)
           }}
         >
-          <div className='jump-to-bottom-icon' />
+          <div className='icon' />
         </div>
       </div>
     </>
