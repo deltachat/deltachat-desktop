@@ -545,6 +545,12 @@ export const Quote = ({
         {hasMessage && quote.image && (
           <img className='quoted-image' src={quote.image} />
         )}
+        {hasMessage && quote.viewType == 'Webxdc' && (
+          <img
+            className='quoted-webxdc-icon'
+            src={runtime.getWebxdcIconURL(quote.messageId)}
+          />
+        )}
       </div>
     </div>
   )
