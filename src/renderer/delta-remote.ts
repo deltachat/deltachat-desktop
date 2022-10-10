@@ -46,8 +46,6 @@ class DeltaRemote {
     messageId: number
   ): Promise<string>
   // settings -----------------------------------------------------------
-  call(fnName: 'settings.keysImport', directory: string): Promise<void>
-  call(fnName: 'settings.keysExport', directory: string): Promise<void>
   call(
     fnName: 'settings.setDesktopSetting',
     key: keyof DesktopSettingsType,

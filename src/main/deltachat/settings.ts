@@ -1,4 +1,3 @@
-import { C } from 'deltachat-node'
 import { getLogger } from '../../shared/logger'
 
 const log = getLogger('main/deltachat/settings')
@@ -30,22 +29,6 @@ export default class DCSettings extends SplitOut {
 
   getDesktopSettings(): DesktopSettingsType {
     return DesktopSettings.state
-  }
-
-  keysImport(directory: string) {
-    this.selectedAccountContext.importExport(
-      C.DC_IMEX_IMPORT_SELF_KEYS,
-      directory,
-      undefined
-    )
-  }
-
-  keysExport(directory: string) {
-    this.selectedAccountContext.importExport(
-      C.DC_IMEX_EXPORT_SELF_KEYS,
-      directory,
-      undefined
-    )
   }
 
   async saveBackgroundImage(file: string, isDefaultPicture: boolean) {
