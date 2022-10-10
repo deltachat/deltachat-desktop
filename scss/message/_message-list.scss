@@ -14,13 +14,14 @@
     $heightUnreadCounter: 20px;
     $heightJumpToBottomButton: 40px;
     $width: 40px;
-    $marginBottom: 50px;
-    $marginRight: 35px;
+    $height: $heightUnreadCounter + $heightJumpToBottomButton - 5px;
+    $marginBottom: 10px;
+    $marginRight: 10px;
 
-    position: fixed;
+    position: relative;
     left: calc(100% - #{$width} - #{$marginRight});
-    bottom: $marginBottom;
-    height: $heightUnreadCounter + $heightJumpToBottomButton;
+    bottom: calc(-100% + #{$height} + #{$marginBottom});
+    height: $height;
     width: $width;
     z-index: 10;
 
