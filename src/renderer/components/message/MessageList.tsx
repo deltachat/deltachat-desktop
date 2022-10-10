@@ -76,10 +76,7 @@ export default function MessageList({
     lastKnownScrollHeight,
   } = useChatStore()
   const messageListRef = useRef<HTMLDivElement | null>(null)
-  const [
-    showJumpDownButton,
-    setShowJumpDownButton,
-  ] = useState(false)
+  const [showJumpDownButton, setShowJumpDownButton] = useState(false)
 
   const [fetchMoreTop] = useDebouncedCallback(
     async () => {
@@ -383,9 +380,9 @@ export default function MessageList({
           unreadMessageInViewIntersectionObserver
         }
       />
-      {(showJumpDownButton === true || countUnreadMessages > 0) &&
+      {(showJumpDownButton === true || countUnreadMessages > 0) && (
         <JumpDownButton countUnreadMessages={countUnreadMessages} />
-      }
+      )}
     </MessagesDisplayContext.Provider>
   )
 }
