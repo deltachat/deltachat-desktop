@@ -193,9 +193,16 @@ export default async function processOpenQrUrl(
             : 'qrlogin_ask_login_another'
           : '?'
 
+      const replacementValue =
+        checkQr.type === 'account'
+          ? checkQr.domain
+          : checkQr.type === 'login'
+          ? checkQr.address
+          : ''
+
       const yes = await new Promise(resolve => {
         window.__openDialog(ConfirmationDialog, {
-          message: tx(message),
+          message: tx(message, replacementValue),
           cb: resolve,
           confirmLabel: tx('login'),
         })
