@@ -211,7 +211,7 @@ export function SettingsEditProfileDialogInner({
       profilePicture ? profilePicture : null
     )
     SettingsStoreInstance.effect.setCoreSetting('displayname', displayname)
-    SettingsStoreInstance.effect.setCoreSetting('selfstatus', selfstatus)
+    SettingsStoreInstance.effect.setCoreSetting('selfstatus', selfstatus || "")
     onClose()
   }
   return (
