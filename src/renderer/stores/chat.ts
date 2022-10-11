@@ -21,6 +21,7 @@ type ScrollTo =
   | ScrollToMessage
   | ScrollToPosition
   | ScrollToLastKnownPosition
+  | ScrollToBottom
   | null
 
 interface ScrollToMessage {
@@ -41,6 +42,11 @@ interface ScrollToPosition {
   scrollTop: number
 }
 
+interface ScrollToBottom {
+  type: 'scrollToBottom',
+  ifClose: boolean
+}
+
 export enum ChatView {
   MessageList,
   Media,
@@ -55,8 +61,6 @@ export interface ChatStoreState {
   newestFetchedMessageIndex: number
   oldestFetchedMessageIndex: number
   scrollTo: ScrollTo
-  scrollToBottom: boolean // if true the UI will scroll to bottom
-  scrollToBottomIfClose: boolean
   lastKnownScrollHeight: number
   countFetchedMessages: number
   jumpToMessageStack: number[]
@@ -71,8 +75,6 @@ const defaultState: ChatStoreState = {
   newestFetchedMessageIndex: -1,
   oldestFetchedMessageIndex: -1,
   scrollTo: null,
-  scrollToBottom: false,
-  scrollToBottomIfClose: false,
   lastKnownScrollHeight: -1,
   countFetchedMessages: 0,
   jumpToMessageStack: [],
@@ -387,6 +389,11 @@ class ChatStore extends Store<ChatStoreState> {
           lastKnownScrollTop,
         } = getLastKnownScrollPosition()
 
+        const scrollTo: ScrollToBottom = {
+          type: 'scrollToBottom',
+          ifClose: true
+        }
+
         const modifiedState = {
           ...state,
           messageIds: payload.messageIds,
@@ -394,7 +401,7 @@ class ChatStore extends Store<ChatStoreState> {
           newestFetchedMessageIndex: payload.newestFetchedMessageIndex,
           lastKnownScrollHeight,
           lastKnownScrollTop,
-          scrollToBottomIfClose: true,
+          scrollTo
         }
 
         if (
@@ -431,8 +438,7 @@ class ChatStore extends Store<ChatStoreState> {
       this.setState(state => {
         const modifiedState = {
           ...state,
-          scrollToBottom: false,
-          scrollToBottomIfClose: false,
+          scrollTo: null
         }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
         this.lockUnlock('scroll')
@@ -515,11 +521,15 @@ class ChatStore extends Store<ChatStoreState> {
             dayMarker: [],
           },
         ]
+        const scrollTo: ScrollToBottom = {
+          type: 'scrollToBottom',
+          ifClose: false
+        }
         const modifiedState = {
           ...state,
           messageIds,
           messagePages,
-          scrollToBottom: true,
+          scrollTo
         }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
         return modifiedState
@@ -595,7 +605,7 @@ class ChatStore extends Store<ChatStoreState> {
         return false
       }
 
-      log.debug(`lockedEffect: ${effectName}: locking`)
+      //log.debug(`lockedEffect: ${effectName}: locking`)
       this.lockLock(lockName)
       let returnValue
       try {
@@ -606,14 +616,14 @@ class ChatStore extends Store<ChatStoreState> {
         return
       }
       if (returnValue === false) {
-        log.debug(
+        /*log.debug(
           `lockedEffect: ${effectName}: return value was false, unlocking`
-        )
+        )*/
         this.lockUnlock(lockName)
       } else {
-        log.debug(
+        /*log.debug(
           `lockedEffect: ${effectName}: return value was NOT false, keeping it locked`
-        )
+        )*/
       }
       return returnValue
     }) as unknown) as T
@@ -624,7 +634,7 @@ class ChatStore extends Store<ChatStoreState> {
     setTimeout(async () => {
       log.debug('effectQueue: running queued effects')
       if (this.effectQueue.length === 0) {
-        log.debug('effectQueue: no more queued effects, unlocking')
+        //log.debug('effectQueue: no more queued effects, unlocking')
         this.lockUnlock('queue')
         log.debug('effectQueue: finished')
         return
@@ -651,12 +661,12 @@ class ChatStore extends Store<ChatStoreState> {
   queuedEffect<T extends Function>(effect: T, effectName: string): T {
     const fn: T = ((async (...args: any) => {
       const lockQueue = () => {
-        log.debug(`queuedEffect: ${effectName}: locking`)
+        //log.debug(`queuedEffect: ${effectName}: locking`)
         this.lockLock('queue')
       }
       const unlockQueue = () => {
         this.lockUnlock('queue')
-        log.debug(`queuedEffect: ${effectName}: unlocked`)
+        //log.debug(`queuedEffect: ${effectName}: unlocked`)
       }
 
       if (this.lockIsLocked('queue') === true) {
@@ -667,7 +677,7 @@ class ChatStore extends Store<ChatStoreState> {
         return false
       }
 
-      log.debug(`queuedEffect: ${effectName}: locking`)
+      //log.debug(`queuedEffect: ${effectName}: locking`)
       lockQueue()
       let returnValue
       try {
@@ -683,7 +693,7 @@ class ChatStore extends Store<ChatStoreState> {
         unlockQueue()
       }
 
-      log.debug(`queuedEffect: ${effectName}: done`)
+      //log.debug(`queuedEffect: ${effectName}: done`)
       return returnValue
     }) as unknown) as T
     return fn
@@ -697,7 +707,7 @@ class ChatStore extends Store<ChatStoreState> {
   ): T {
     const fn: T = ((async (...args: any) => {
       const lockQueue = () => {
-        log.debug(`lockedQueuedEffect: ${effectName}: locking`)
+        //log.debug(`lockedQueuedEffect: ${effectName}: locking`)
         this.lockLock('queue')
       }
       const unlockQueue = () => {
@@ -721,7 +731,7 @@ class ChatStore extends Store<ChatStoreState> {
         return false
       }
 
-      log.debug(`lockedQueuedEffect: ${effectName}: locking`)
+      //log.debug(`lockedQueuedEffect: ${effectName}: locking`)
       lockQueue()
       let returnValue
       try {
@@ -809,6 +819,10 @@ class ChatStore extends Store<ChatStoreState> {
           )
         }
 
+        const scrollTo: ScrollToBottom = {
+          type: 'scrollToBottom',
+          ifClose: false
+        }
         this.reducer.selectedChat({
           chat,
           accountId,
@@ -816,7 +830,7 @@ class ChatStore extends Store<ChatStoreState> {
           messageIds,
           oldestFetchedMessageIndex,
           newestFetchedMessageIndex,
-          scrollToBottom: true,
+          scrollTo
         })
         ActionEmitter.emitAction(
           chat.archived
@@ -1084,7 +1098,6 @@ class ChatStore extends Store<ChatStoreState> {
       this.lockedEffect(
         'scroll',
         async () => {
-          log.debug(`fetchMoreMessagesBottom`)
           if (!this.state.accountId) {
             throw new Error('no account set')
           }
@@ -1100,9 +1113,10 @@ class ChatStore extends Store<ChatStoreState> {
             state.messageIds.length - 1
           )
           if (newestFetchedMessageIndex === state.messageIds.length) {
-            log.debug('fetchMoreMessagesBottom: no more messages, returning')
+            //log.debug('fetchMoreMessagesBottom: no more messages, returning')
             return false
           }
+          log.debug(`fetchMoreMessagesBottom`)
 
           const fetchedMessageIds = state.messageIds.slice(
             newestFetchedMessageIndex,

@@ -70,8 +70,6 @@ export default function MessageList({
     messagePages,
     messageIds,
     scrollTo,
-    scrollToBottom,
-    scrollToBottomIfClose,
     lastKnownScrollHeight,
   } = useChatStore()
   const messageListRef = useRef<HTMLDivElement | null>(null)
@@ -210,7 +208,9 @@ export default function MessageList({
 
     log.debug(
       'scrollTo: ' + scrollTo.type,
+      'scrollTop:', 
       messageListRef.current.scrollTop,
+      'scrollHeight:', 
       messageListRef.current.scrollHeight
     )
     if (scrollTo.type === 'scrollToMessage') {
@@ -294,7 +294,7 @@ export default function MessageList({
     if (!messageListRef.current) {
       return
     }
-    if (scrollToBottom === false) {
+    if (scrollTo === null || scrollTo.type !== 'scrollToBottom') {
       return
     }
 
@@ -312,7 +312,7 @@ export default function MessageList({
     }, 0)
 
     // Try fetching more messages if needed
-  }, [onScroll, scrollToBottom, setShowJumpDownButton])
+  }, [onScroll, scrollTo, setShowJumpDownButton])
 
   useLayoutEffect(() => {
     if (!ChatStore.state.chat) {
@@ -322,7 +322,7 @@ export default function MessageList({
     if (!messageListRef.current) {
       return
     }
-    if (scrollToBottomIfClose === false) return
+    if (scrollTo === null || scrollTo.type !== 'scrollToBottom' || scrollTo.ifClose === false) return
     const scrollHeight = lastKnownScrollHeight
     const { scrollTop, clientHeight } = messageListRef.current
     const scrollBottom = scrollTop + clientHeight
@@ -343,7 +343,7 @@ export default function MessageList({
     setTimeout(() => {
       ChatStore.reducer.scrolledToBottom({ id: chatId })
     }, 0)
-  }, [scrollToBottomIfClose, lastKnownScrollHeight])
+  }, [scrollTo, lastKnownScrollHeight])
 
   useLayoutEffect(() => {
     if (!refComposer.current) {
