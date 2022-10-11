@@ -1,5 +1,4 @@
 import React from 'react'
-import { DeltaBackend } from '../../delta-remote'
 import { ConfigureProgressDialog } from '../LoginForm'
 import { Screens, selectedAccountId } from '../../ScreenController'
 import { useTranslationFunction } from '../../contexts'
@@ -257,20 +256,21 @@ export default async function processOpenQrUrl(
     window.__openDialog('ConfirmationDialog', {
       message: tx('ask_start_chat_with', contact.address),
       confirmLabel: tx('ok'),
-      cb: async (confirmed: boolean) => {
+      cb: (confirmed: boolean) => {
         if (confirmed) {
-          DeltaBackend.call('joinSecurejoin', url).then(callback)
+          BackendRemote.rpc.secureJoin(accountId, url).then(callback)
         }
       },
     })
   } else if (checkQr.type === 'askVerifyGroup') {
+    const accountId = selectedAccountId()
     closeProcessDialog()
     window.__openDialog('ConfirmationDialog', {
       message: tx('qrscan_ask_join_group', checkQr.grpname),
       confirmLabel: tx('ok'),
       cb: (confirmed: boolean) => {
         if (confirmed) {
-          DeltaBackend.call('joinSecurejoin', url).then(callback)
+          BackendRemote.rpc.secureJoin(accountId, url).then(callback)
         }
         return
       },
