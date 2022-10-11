@@ -9,7 +9,6 @@ import {
 } from './DeltaDialog'
 import ChatListItem from '../chat/ChatListItem'
 import { useChatList } from '../chat/ChatListHelpers'
-import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/node/dist/constants'
 import {
   MessagesDisplayContext,

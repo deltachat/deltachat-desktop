@@ -1,5 +1,3 @@
-import { C } from 'deltachat-node'
-
 import SplitOut from './splitout'
 import { mkdtemp, writeFile } from 'fs/promises'
 import { tmpdir } from 'os'
