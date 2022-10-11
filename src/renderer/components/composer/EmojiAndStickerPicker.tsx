@@ -10,6 +10,8 @@ import classNames from 'classnames'
 import { DeltaBackend } from '../../delta-remote'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { useTranslationFunction } from '../../contexts'
+import { BackendRemote } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 export const StickerDiv = (props: {
   stickerPackName: string
@@ -24,7 +26,8 @@ export const StickerDiv = (props: {
     setShowEmojiPicker,
   } = props
   const onClickSticker = (fileName: string) => {
-    DeltaBackend.call('messageList.sendSticker', chatId, fileName)
+    const stickerPath = fileName.replace('file://', '')
+    BackendRemote.rpc.sendSticker(selectedAccountId(), chatId, stickerPath)
     setShowEmojiPicker(false)
   }
 

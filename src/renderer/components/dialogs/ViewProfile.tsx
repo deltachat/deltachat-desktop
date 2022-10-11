@@ -95,8 +95,8 @@ export default function ViewProfile(props: {
     openDialog(EditContactNameDialog, {
       contactName: contact.name,
       onOk: async (contactName: string) => {
-        await DeltaBackend.call(
-          'contacts.changeNickname',
+        await BackendRemote.rpc.changeContactName(
+          selectedAccountId(),
           contact.id,
           contactName
         )

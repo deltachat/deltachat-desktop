@@ -11,7 +11,6 @@ import React, {
 import { Card, Classes } from '@blueprintjs/core'
 import { C } from 'deltachat-node/node/dist/constants'
 
-import { DeltaBackend } from '../../delta-remote'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import {
   useContacts,
@@ -385,7 +384,7 @@ export function AddMemberInnerDialog({
 
   const _onCancel = async () => {
     for (const contactId of contactsToDeleteOnCancel) {
-      await DeltaBackend.call('contacts.deleteContact', contactId)
+      await BackendRemote.rpc.deleteContact(selectedAccountId(), contactId)
     }
     onCancel()
   }

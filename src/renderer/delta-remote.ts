@@ -13,18 +13,9 @@ export type sendMessageParams = {
 }
 
 class DeltaRemote {
-  // root ---------------------------------------------------------------
-  call(fnName: 'joinSecurejoin', qrCode: string): Promise<number>
   // backup -------------------------------------------------------------
   call(fnName: 'backup.export', dir: string): Promise<void>
   call(fnName: 'backup.import', file: string): Promise<DeltaChatAccount>
-  // contacts ------------------------------------------------------------
-  call(
-    fnName: 'contacts.changeNickname',
-    contactId: number,
-    name: string
-  ): Promise<number>
-  call(fnName: 'contacts.deleteContact', contactId: number): Promise<boolean>
   // chat ---------------------------------------------------------------
   call(
     fnName: 'chat.modifyGroup',
@@ -36,11 +27,6 @@ class DeltaRemote {
   // login ----------------------------------------------------
   call(fnName: 'login.selectAccount', accountId: number): Promise<boolean>
   // messageList --------------------------------------------------------
-  call(
-    fnName: 'messageList.sendSticker',
-    chatId: number,
-    stickerPath: string
-  ): Promise<void>
   call(
     fnName: 'messageList.saveMessageHTML2Disk',
     messageId: number

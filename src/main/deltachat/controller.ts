@@ -5,7 +5,6 @@ import { getLogger } from '../../shared/logger'
 import * as mainWindow from '../windows/main'
 import DCBackup from './backup'
 import DCChat from './chat'
-import JsonContacts from './contacts'
 import DCContext from './context'
 import DCLoginController from './login'
 import DCMessageList from './messagelist'
@@ -238,7 +237,6 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   readonly backup = new DCBackup(this)
-  readonly contacts = new JsonContacts(this)
   readonly chat = new DCChat(this)
   readonly login = new DCLoginController(this)
   readonly messageList = new DCMessageList(this)
@@ -390,10 +388,6 @@ export default class DeltaChatController extends EventEmitter {
 
   onChatlistUpdated() {
     this.sendToRenderer('DD_EVENT_CHATLIST_CHANGED', {})
-  }
-
-  joinSecurejoin(qrCode: string) {
-    return this.selectedAccountContext.joinSecurejoin(qrCode)
   }
 
   /**
