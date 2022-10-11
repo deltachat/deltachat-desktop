@@ -5,7 +5,6 @@ import { sendToBackend, ipcBackend, startBackendLogging } from './ipc'
 import attachKeybindingsListener from './keybindings'
 
 import { translate, LocaleData } from '../shared/localize'
-import { DeltaBackend } from './delta-remote'
 import { ThemeManager, ThemeContext } from './ThemeManager'
 
 import moment from 'moment'
@@ -57,10 +56,7 @@ export default function App(_props: any) {
   }, [])
 
   async function reloadLocaleData(locale: string) {
-    const localeData: LocaleData = await DeltaBackend.call(
-      'extras.getLocaleData',
-      locale
-    )
+    const localeData = await runtime.getLocaleData(locale)
     window.localeData = localeData
     window.static_translate = translate(localeData.messages)
     setLocaleData(localeData)
@@ -70,7 +66,7 @@ export default function App(_props: any) {
 
   useEffect(() => {
     const onChooseLanguage = async (_e: any, locale: string) => {
-      await DeltaBackend.call('extras.setLocale', locale)
+      await runtime.setLocale(locale)
       await reloadLocaleData(locale)
     }
     ipcBackend.on('chooseLanguage', onChooseLanguage)
