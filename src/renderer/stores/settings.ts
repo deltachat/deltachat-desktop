@@ -1,7 +1,6 @@
 import { C } from 'deltachat-node/node/dist/constants'
 import { DesktopSettingsType, RC_Config } from '../../shared/shared-types'
 import { BackendRemote, Type } from '../backend-com'
-import { DeltaBackend } from '../delta-remote'
 import { ipcBackend } from '../ipc'
 import { runtime } from '../runtime'
 import { selectedAccountId } from '../ScreenController'
@@ -120,9 +119,7 @@ class SettingsStore extends Store<SettingsStoreState | null> {
         accountId,
         C.DC_CONTACT_ID_SELF
       )
-      const desktopSettings = await DeltaBackend.call(
-        'settings.getDesktopSettings'
-      )
+      const desktopSettings = await runtime.getDesktopSettings()
 
       const rc = await runtime.getRC_Config()
       this.reducer.setState({
@@ -137,11 +134,11 @@ class SettingsStore extends Store<SettingsStoreState | null> {
       key: keyof DesktopSettingsType,
       value: string | number | boolean
     ) => {
-      if (
-        (await DeltaBackend.call('settings.setDesktopSetting', key, value)) ===
-        true
-      ) {
+      try {
+        await runtime.setDesktopSetting(key, value)
         this.reducer.setDesktopSetting(key, value)
+      } catch (error) {
+        this.log.error('failed to apply desktop setting:', error)
       }
     },
     setCoreSetting: async (

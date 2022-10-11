@@ -22,7 +22,7 @@ export function set_has_unread(new_has_unread: boolean) {
   }
 }
 
-export function TrayImage(): string | NativeImage {
+function TrayImage(): string | NativeImage {
   const trayIconFolder = join(__dirname, '..', '..', 'images/tray')
   if (process.platform === 'darwin') {
     const image = nativeImage
@@ -40,7 +40,7 @@ export function TrayImage(): string | NativeImage {
   }
 }
 
-export function mainWindowIsVisible() {
+function mainWindowIsVisible() {
   if (!mainWindow.window) {
     throw new Error('window does not exist, this should never happen')
   }
@@ -48,13 +48,6 @@ export function mainWindowIsVisible() {
     return mainWindow.window.isVisible()
   }
   return mainWindow.window.isVisible() && mainWindow.window.isFocused()
-}
-
-export function closeDeltaChat() {
-  if (!mainWindow.window) {
-    throw new Error('window does not exist, this should never happen')
-  }
-  mainWindow.window.close()
 }
 
 export function hideDeltaChat(minimize?: boolean) {
@@ -75,11 +68,11 @@ export function showDeltaChat() {
   mainWindow.window.show()
 }
 
-export function hideOrShowDeltaChat() {
+function hideOrShowDeltaChat() {
   mainWindowIsVisible() ? hideDeltaChat(true) : showDeltaChat()
 }
 
-export function quitDeltaChat() {
+function quitDeltaChat() {
   globalShortcut.unregisterAll()
   app.quit()
 }
@@ -94,13 +87,13 @@ export function updateTrayIcon() {
   renderTrayIcon()
 }
 
-export function destroyTrayIcon() {
+function destroyTrayIcon() {
   log.info('destroy icon tray')
   tray?.destroy()
   tray = null
 }
 
-export function getTrayMenu() {
+function getTrayMenu() {
   if (tray === null) return
   if (process.platform === 'darwin') {
     contextMenu = Menu.buildFromTemplate([
@@ -165,11 +158,11 @@ export function getTrayMenu() {
   return contextMenu
 }
 
-export function TrayIcon() {
+function TrayIcon() {
   return new Tray(TrayImage())
 }
 
-export function renderTrayIcon() {
+function renderTrayIcon() {
   if (tray != null) {
     log.warn('Tray icon not destroyed before render?')
     destroyTrayIcon()

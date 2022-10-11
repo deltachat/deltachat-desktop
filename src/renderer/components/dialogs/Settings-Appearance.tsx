@@ -287,7 +287,7 @@ export default function SettingsAppearance({
 async function setThemeFunction(address: string) {
   try {
     runtime.resolveThemeAddress(address)
-    DeltaBackend.call('settings.setDesktopSetting', 'activeTheme', address)
+    await runtime.setDesktopSetting('activeTheme', address)
     return true
   } catch (error) {
     log.error('set theme failed: ', error)

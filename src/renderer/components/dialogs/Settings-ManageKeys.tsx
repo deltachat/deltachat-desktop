@@ -4,8 +4,8 @@ import { SettingsButton } from './Settings'
 import type { OpenDialogOptions } from 'electron'
 import { ipcBackend } from '../../ipc'
 import { runtime } from '../../runtime'
-import {BackendRemote} from '../../backend-com'
-import {selectedAccountId} from '../../ScreenController'
+import { BackendRemote } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 async function onKeysImport() {
   const tx = window.static_translate

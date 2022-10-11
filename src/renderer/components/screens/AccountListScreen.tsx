@@ -15,7 +15,7 @@ import {
 } from '../dialogs/DeltaDialog'
 import filesizeConverter from 'filesize'
 import { BackendRemote, EffectfulBackendActions, Type } from '../../backend-com'
-import { DeltaBackend } from '../../delta-remote'
+import { runtime } from '../../runtime'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
@@ -34,9 +34,7 @@ export default function AccountListScreen({
 
   useEffect(() => {
     ;(async () => {
-      const desktopSettings = await DeltaBackend.call(
-        'settings.getDesktopSettings'
-      )
+      const desktopSettings = await runtime.getDesktopSettings()
       setSyncAllAccounts(desktopSettings.syncAllAccounts)
     })()
   }, [])
@@ -93,11 +91,15 @@ export default function AccountListScreen({
                   label={tx('sync_all')}
                   onChange={async () => {
                     const new_state = !syncAllAccounts
-                    await DeltaBackend.call(
-                      'settings.setDesktopSetting',
+                    await runtime.setDesktopSetting(
                       'syncAllAccounts',
                       new_state
                     )
+                    if (new_state) {
+                      BackendRemote.rpc.startIoForAllAccounts()
+                    } else {
+                      BackendRemote.rpc.stopIoForAllAccounts()
+                    }
                     setSyncAllAccounts(new_state)
                   }}
                   alignIndicator={Alignment.RIGHT}
