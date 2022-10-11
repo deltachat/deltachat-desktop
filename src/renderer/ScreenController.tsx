@@ -20,6 +20,7 @@ import WelcomeScreen from './components/screens/WelcomeScreen'
 import { BackendRemote } from './backend-com'
 import { debouncedUpdateBadgeCounter } from './system-integration/badge-counter'
 import { hintUpdateIfNessesary, updateDeviceChats } from './deviceMessages'
+import { runtime } from './runtime'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -90,9 +91,8 @@ export default class ScreenController extends Component {
   }
 
   private async _getLastUsedAccount(): Promise<number | undefined> {
-    const lastLoggedInAccountId = (
-      await DeltaBackend.call('settings.getDesktopSettings')
-    ).lastAccount
+    const lastLoggedInAccountId = (await runtime.getDesktopSettings())
+      .lastAccount
     try {
       if (lastLoggedInAccountId) {
         await BackendRemote.rpc.getAccountInfo(lastLoggedInAccountId)

@@ -45,6 +45,10 @@ const {
  */
 interface Runtime {
   getDesktopSettings(): Promise<DesktopSettingsType>
+  setDesktopSetting(
+    key: keyof DesktopSettingsType,
+    value: string | number | boolean | undefined
+  ): Promise<void>
   /**
    * initializes runtime stuff
    * - sets the LogHandler
@@ -120,6 +124,12 @@ class Browser implements Runtime {
     throw new Error('Method not implemented.')
   }
   notifyWebxdcInstanceDeleted(_accountId: number, _instanceId: number): void {
+    throw new Error('Method not implemented.')
+  }
+  setDesktopSetting(
+    _key: keyof DesktopSettingsType,
+    _value: string | number | boolean | undefined
+  ): Promise<void> {
     throw new Error('Method not implemented.')
   }
   getAvailableThemes(): Promise<Theme[]> {
@@ -299,6 +309,12 @@ class Electron implements Runtime {
   }
   getDesktopSettings(): Promise<DesktopSettingsType> {
     return ipcBackend.invoke('get-desktop-settings')
+  }
+  setDesktopSetting(
+    key: keyof DesktopSettingsType,
+    value: string | number | boolean | undefined
+  ): Promise<void> {
+    return ipcBackend.invoke('set-desktop-setting', key, value)
   }
   getWebxdcIconURL(msgId: number): string {
     return `webxdc-icon:${msgId}`

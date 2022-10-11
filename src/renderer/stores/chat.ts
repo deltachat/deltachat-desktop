@@ -759,7 +759,7 @@ class ChatStore extends Store<ChatStoreState> {
           )
           return
         }
-        const messageIds = await BackendRemote.rpc.messageListGetMessageIds(
+        const messageIds = await BackendRemote.rpc.getMessageIds(
           accountId,
           chatId,
           C.DC_GCM_ADDDAYMARKER
@@ -939,7 +939,7 @@ class ChatStore extends Store<ChatStoreState> {
             )
             return
           }
-          const messageIds = await BackendRemote.rpc.messageListGetMessageIds(
+          const messageIds = await BackendRemote.rpc.getMessageIds(
             accountId,
             chatId,
             C.DC_GCM_ADDDAYMARKER
@@ -1164,7 +1164,7 @@ class ChatStore extends Store<ChatStoreState> {
           if (!this.state.accountId) {
             throw new Error('no account set')
           }
-          const messageIds = await BackendRemote.rpc.messageListGetMessageIds(
+          const messageIds = await BackendRemote.rpc.getMessageIds(
             this.state.accountId,
             chatId,
             C.DC_GCM_ADDDAYMARKER
@@ -1292,7 +1292,7 @@ class ChatStore extends Store<ChatStoreState> {
       if (!this.state.accountId) {
         throw new Error('no account set')
       }
-      const messageIds = await BackendRemote.rpc.messageListGetMessageIds(
+      const messageIds = await BackendRemote.rpc.getMessageIds(
         this.state.accountId,
         chatId,
         C.DC_GCM_ADDDAYMARKER
@@ -1374,7 +1374,7 @@ class ChatStore extends Store<ChatStoreState> {
             'DC_EVENT_MSGS_CHANGED',
             'changed message seems to be a new message, refetching messageIds'
           )
-          const messageIds = await BackendRemote.rpc.messageListGetMessageIds(
+          const messageIds = await BackendRemote.rpc.getMessageIds(
             this.state.accountId,
             chatId,
             C.DC_GCM_ADDDAYMARKER
@@ -1497,7 +1497,7 @@ async function getMessagesFromIndex(
   indexEnd: number,
   flags = C.DC_GCM_ADDDAYMARKER
 ): Promise<[number, Type.Message][]> {
-  const allMessageIds = await BackendRemote.rpc.messageListGetMessageIds(
+  const allMessageIds = await BackendRemote.rpc.getMessageIds(
     accountId,
     chatId,
     flags

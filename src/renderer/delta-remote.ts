@@ -1,5 +1,5 @@
 import { _callDcMethodAsync } from './ipc'
-import { DeltaChatAccount, DesktopSettingsType } from '../shared/shared-types'
+import { DeltaChatAccount } from '../shared/shared-types'
 import { LocaleData } from '../shared/localize'
 
 export type sendMessageParams = {
@@ -46,12 +46,6 @@ class DeltaRemote {
     messageId: number
   ): Promise<string>
   // settings -----------------------------------------------------------
-  call(
-    fnName: 'settings.setDesktopSetting',
-    key: keyof DesktopSettingsType,
-    value: string | number | boolean
-  ): Promise<boolean>
-  call(fnName: 'settings.getDesktopSettings'): Promise<DesktopSettingsType>
   call(
     fnName: 'settings.saveBackgroundImage',
     file: string,

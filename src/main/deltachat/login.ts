@@ -31,11 +31,6 @@ export default class DCLoginController extends SplitOut {
   }
 
   logout() {
-    DesktopSettings.update({ lastAccount: undefined })
-
-    if (!DesktopSettings.state.syncAllAccounts) {
-      this.selectedAccountContext.stopIO()
-    }
     if (this.controller._inner_selectedAccountContext) {
       this.controller.selectedAccountContext.unref()
     }

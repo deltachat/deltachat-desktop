@@ -65,6 +65,12 @@ export namespace EffectfulBackendActions {
     runtime.closeAllWebxdcInstances()
     debouncedUpdateBadgeCounter()
 
+    if (!(await runtime.getDesktopSettings()).syncAllAccounts) {
+      await BackendRemote.rpc.stopIo(window.__selectedAccountId)
+    }
+
+    runtime.setDesktopSetting('lastAccount', undefined)
+
     // for now we still need to call the backend function,
     // because backend still has selected account
     await DeltaBackend.call('login.logout')

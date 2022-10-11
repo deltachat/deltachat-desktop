@@ -10,10 +10,10 @@ import path, { basename, join, posix, sep } from 'path'
 import { DesktopSettings } from './desktop_settings'
 import { getConfigPath } from './application-constants'
 import { inspect } from 'util'
-import { RuntimeInfo } from '../shared/shared-types'
+import { DesktopSettingsType, RuntimeInfo } from '../shared/shared-types'
 import { platform } from 'os'
 import { existsSync } from 'fs'
-import { set_has_unread } from './tray'
+import { set_has_unread, updateTrayIcon } from './tray'
 import mimeTypes from 'mime-types'
 import { writeFile } from 'fs/promises'
 
@@ -186,6 +186,21 @@ export async function init(cwd: string, logHandler: LogHandler) {
   ipcMain.handle('get-desktop-settings', async _ev => {
     return DesktopSettings.state
   })
+
+  ipcMain.handle(
+    'set-desktop-setting',
+    (
+      _ev,
+      key: keyof DesktopSettingsType,
+      value: string | number | boolean | undefined
+    ) => {
+      DesktopSettings.update({ [key]: value })
+
+      if (key === 'minimizeToTray') updateTrayIcon()
+
+      return true
+    }
+  )
 
   ipcMain.handle(
     'app.setBadgeCountAndTrayIconIndicator',

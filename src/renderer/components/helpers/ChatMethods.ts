@@ -251,7 +251,7 @@ export const deleteMessage = (messageId: number) => {
 export async function clearChat(chatId: number) {
   const accountID = selectedAccountId()
   const tx = window.static_translate
-  const messages_to_delete = await BackendRemote.rpc.messageListGetMessageIds(
+  const messages_to_delete = await BackendRemote.rpc.getMessageIds(
     accountID,
     chatId,
     0
