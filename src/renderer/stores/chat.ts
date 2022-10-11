@@ -43,7 +43,7 @@ interface ScrollToPosition {
 }
 
 interface ScrollToBottom {
-  type: 'scrollToBottom',
+  type: 'scrollToBottom'
   ifClose: boolean
 }
 
@@ -391,7 +391,7 @@ class ChatStore extends Store<ChatStoreState> {
 
         const scrollTo: ScrollToBottom = {
           type: 'scrollToBottom',
-          ifClose: true
+          ifClose: true,
         }
 
         const modifiedState = {
@@ -401,7 +401,7 @@ class ChatStore extends Store<ChatStoreState> {
           newestFetchedMessageIndex: payload.newestFetchedMessageIndex,
           lastKnownScrollHeight,
           lastKnownScrollTop,
-          scrollTo
+          scrollTo,
         }
 
         if (
@@ -511,13 +511,13 @@ class ChatStore extends Store<ChatStoreState> {
         ]
         const scrollTo: ScrollToBottom = {
           type: 'scrollToBottom',
-          ifClose: false
+          ifClose: false,
         }
         const modifiedState = {
           ...state,
           messageIds,
           messagePages,
-          scrollTo
+          scrollTo,
         }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
         return modifiedState
@@ -809,7 +809,7 @@ class ChatStore extends Store<ChatStoreState> {
 
         const scrollTo: ScrollToBottom = {
           type: 'scrollToBottom',
-          ifClose: false
+          ifClose: false,
         }
         this.reducer.selectedChat({
           chat,
@@ -818,7 +818,7 @@ class ChatStore extends Store<ChatStoreState> {
           messageIds,
           oldestFetchedMessageIndex,
           newestFetchedMessageIndex,
-          scrollTo
+          scrollTo,
         })
         ActionEmitter.emitAction(
           chat.archived

@@ -208,9 +208,9 @@ export default function MessageList({
 
     log.debug(
       'scrollTo: ' + scrollTo.type,
-      'scrollTop:', 
+      'scrollTop:',
       messageListRef.current.scrollTop,
-      'scrollHeight:', 
+      'scrollHeight:',
       messageListRef.current.scrollHeight
     )
     if (scrollTo.type === 'scrollToMessage') {
