@@ -433,18 +433,6 @@ class ChatStore extends Store<ChatStoreState> {
         return modifiedState
       }, 'unlockScroll')
     },
-    scrolledToBottom: (payload: { id: number }) => {
-      log.debug('scrolledToBottom')
-      this.setState(state => {
-        const modifiedState = {
-          ...state,
-          scrollTo: null
-        }
-        if (this.guardReducerIfChatIdIsDifferent(payload)) return
-        this.lockUnlock('scroll')
-        return modifiedState
-      }, 'scrolledToBottom')
-    },
     uiDeleteMessage: (payload: { id: number; msgId: number }) => {
       this.setState(state => {
         const { msgId } = payload
