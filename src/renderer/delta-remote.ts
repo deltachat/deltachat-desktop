@@ -30,12 +30,6 @@ class DeltaRemote {
     fnName: 'messageList.saveMessageHTML2Disk',
     messageId: number
   ): Promise<string>
-  // settings -----------------------------------------------------------
-  call(
-    fnName: 'settings.saveBackgroundImage',
-    file: string,
-    isDefaultPicture: boolean
-  ): Promise<string>
   // stickers -----------------------------------------------------------
   call(
     fnName: 'stickers.getStickers'

@@ -1,4 +1,4 @@
-import { copyFile } from 'fs/promises'
+import { copyFile, mkdir, rm } from 'fs/promises'
 import { app as rawApp, clipboard, dialog, ipcMain } from 'electron'
 import { getLogger } from '../shared/logger'
 import { getLogsPath } from './application-constants'
@@ -6,7 +6,7 @@ import { LogHandler } from './log-handler'
 import { ExtendedAppMainProcess } from './types'
 import * as mainWindow from './windows/main'
 import { openHelpWindow } from './windows/help'
-import path, { basename, join, posix, sep } from 'path'
+import path, { basename, extname, join, posix, sep } from 'path'
 import { DesktopSettings } from './desktop_settings'
 import { getConfigPath } from './application-constants'
 import { inspect } from 'util'
@@ -212,6 +212,28 @@ export async function init(cwd: string, logHandler: LogHandler) {
 
   ipcMain.handle('app.writeClipboardToTempFile', () =>
     writeClipboardToTempFile()
+  )
+
+  ipcMain.handle(
+    'saveBackgroundImage',
+    async (_ev, file: string, isDefaultPicture: boolean) => {
+      const originalFilePath = !isDefaultPicture
+        ? file
+        : join(__dirname, '../../images/backgrounds/', file)
+
+      const bgDir = join(getConfigPath(), 'background')
+      await rm(bgDir, { recursive: true, force: true })
+      await mkdir(bgDir, { recursive: true })
+      const fileName = `background_${Date.now()}` + extname(originalFilePath)
+      const newPath = join(getConfigPath(), 'background', fileName)
+      try {
+        await copyFile(originalFilePath, newPath)
+      } catch (error) {
+        log.error('BG-IMG Copy Failed', error)
+        throw error
+      }
+      return `img: ${fileName.replace(/\\/g, '/')}`
+    }
   )
 
   return () => {
