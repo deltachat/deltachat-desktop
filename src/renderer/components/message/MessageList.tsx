@@ -283,67 +283,44 @@ export default function MessageList({
           onScroll(null)
         }, 0)
       }, 0)
+    } else if (scrollTo.type === 'scrollToBottom') {
+      if (scrollTo.ifClose === true) {
+        const scrollHeight = lastKnownScrollHeight
+        const { scrollTop, clientHeight } = messageListRef.current
+        const scrollBottom = scrollTop + clientHeight
+
+        const shouldScrollToBottom = scrollBottom >= scrollHeight - 7
+
+        log.debug(
+          'scrollToBottomIfClose',
+          scrollBottom,
+          scrollHeight,
+          shouldScrollToBottom
+        )
+
+        if (shouldScrollToBottom) {
+          messageListRef.current.scrollTop = messageListRef.current.scrollHeight
+        }
+
+        setTimeout(() => {
+          ChatStore.reducer.scrolledToBottom({ id: chatId })
+        }, 0)
+      } else {
+        log.debug(
+          'scrollToBottom',
+          messageListRef.current.scrollTop,
+          messageListRef.current.scrollHeight
+        )
+        messageListRef.current.scrollTop = messageListRef.current.scrollHeight
+        setTimeout(() => {
+          ChatStore.reducer.scrolledToBottom({ id: chatId })
+          setTimeout(() => {
+            onScroll(null)
+          }, 0)
+        }, 0)
+      }
     }
-  }, [onScroll, scrollTo])
-
-  useLayoutEffect(() => {
-    if (!ChatStore.state.chat) {
-      return
-    }
-    const chatId = ChatStore.state.chat.id
-    if (!messageListRef.current) {
-      return
-    }
-    if (scrollTo === null || scrollTo.type !== 'scrollToBottom') {
-      return
-    }
-
-    log.debug(
-      'scrollToBottom',
-      messageListRef.current.scrollTop,
-      messageListRef.current.scrollHeight
-    )
-    messageListRef.current.scrollTop = messageListRef.current.scrollHeight
-    setTimeout(() => {
-      ChatStore.reducer.scrolledToBottom({ id: chatId })
-      setTimeout(() => {
-        onScroll(null)
-      }, 0)
-    }, 0)
-
-    // Try fetching more messages if needed
-  }, [onScroll, scrollTo, setShowJumpDownButton])
-
-  useLayoutEffect(() => {
-    if (!ChatStore.state.chat) {
-      return
-    }
-    const chatId = ChatStore.state.chat.id
-    if (!messageListRef.current) {
-      return
-    }
-    if (scrollTo === null || scrollTo.type !== 'scrollToBottom' || scrollTo.ifClose === false) return
-    const scrollHeight = lastKnownScrollHeight
-    const { scrollTop, clientHeight } = messageListRef.current
-    const scrollBottom = scrollTop + clientHeight
-
-    const shouldScrollToBottom = scrollBottom >= scrollHeight - 7
-
-    log.debug(
-      'scrollToBottomIfClose',
-      scrollBottom,
-      scrollHeight,
-      shouldScrollToBottom
-    )
-
-    if (shouldScrollToBottom) {
-      messageListRef.current.scrollTop = messageListRef.current.scrollHeight
-    }
-
-    setTimeout(() => {
-      ChatStore.reducer.scrolledToBottom({ id: chatId })
-    }, 0)
-  }, [scrollTo, lastKnownScrollHeight])
+  }, [onScroll, scrollTo, lastKnownScrollHeight])
 
   useLayoutEffect(() => {
     if (!refComposer.current) {
