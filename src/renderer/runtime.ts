@@ -17,6 +17,7 @@ import type {
 } from 'electron'
 import { getLogger } from '../shared/logger'
 import processOpenQrUrl from './components/helpers/OpenQrUrl'
+import { LocaleData } from '../shared/localize'
 
 const log = getLogger('renderer/runtime')
 
@@ -95,6 +96,10 @@ interface Runtime {
   // control app
   restartApp(): void
 
+  // translations
+  getLocaleData(locale?: string): Promise<LocaleData>
+  setLocale(locale: string): Promise<void>
+
   // more system integration functions:
   setBadgeCounter(value: number): void
   showNotification(data: DcNotification): void
@@ -124,6 +129,12 @@ class Browser implements Runtime {
     throw new Error('Method not implemented.')
   }
   notifyWebxdcInstanceDeleted(_accountId: number, _instanceId: number): void {
+    throw new Error('Method not implemented.')
+  }
+  getLocaleData(_locale?: string | undefined): Promise<LocaleData> {
+    throw new Error('Method not implemented.')
+  }
+  setLocale(_locale: string): Promise<void> {
     throw new Error('Method not implemented.')
   }
   setDesktopSetting(
@@ -252,6 +263,12 @@ class Electron implements Runtime {
   }
   notifyWebxdcInstanceDeleted(accountId: number, instanceId: number): void {
     ipcBackend.invoke('webxdc:instance-deleted', accountId, instanceId)
+  }
+  getLocaleData(locale?: string | undefined): Promise<LocaleData> {
+    return ipcBackend.invoke('getLocaleData', locale)
+  }
+  setLocale(locale: string): Promise<void> {
+    return ipcBackend.invoke('setLocale', locale)
   }
   getAvailableThemes(): Promise<Theme[]> {
     return ipcBackend.invoke('themes.getAvailableThemes')

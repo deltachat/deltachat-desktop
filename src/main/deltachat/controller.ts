@@ -11,7 +11,6 @@ import DCMessageList from './messagelist'
 import DCSettings from './settings'
 import DCStickers from './stickers'
 import { ExtendedAppMainProcess } from '../types'
-import Extras from './extras'
 import { Context } from 'deltachat-node/node/dist/context'
 import path, { join } from 'path'
 import { existsSync, lstatSync } from 'fs'
@@ -243,7 +242,6 @@ export default class DeltaChatController extends EventEmitter {
   readonly settings = new DCSettings(this)
   readonly stickers = new DCStickers(this)
   readonly context = new DCContext(this)
-  readonly extras = new Extras(this)
   readonly webxdc = new DCWebxdc(this)
 
   /**

@@ -1,6 +1,5 @@
 import { _callDcMethodAsync } from './ipc'
 import { DeltaChatAccount } from '../shared/shared-types'
-import { LocaleData } from '../shared/localize'
 
 export type sendMessageParams = {
   text?: string | null
@@ -43,9 +42,6 @@ class DeltaRemote {
   ): Promise<{
     [key: string]: string[]
   }>
-  // extras -------------------------------------------------------------
-  call(fnName: 'extras.getLocaleData', locale: string): Promise<LocaleData>
-  call(fnName: 'extras.setLocale', locale: string): Promise<void>
   // catchall: ----------------------------------------------------------
   call(fnName: string): Promise<any>
   call(fnName: string, ...args: any[]): Promise<any> {
