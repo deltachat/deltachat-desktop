@@ -70,8 +70,6 @@ export default function MessageList({
     messagePages,
     messageIds,
     scrollTo,
-    scrollToBottom,
-    scrollToBottomIfClose,
     lastKnownScrollHeight,
   } = useChatStore()
   const messageListRef = useRef<HTMLDivElement | null>(null)
@@ -210,7 +208,9 @@ export default function MessageList({
 
     log.debug(
       'scrollTo: ' + scrollTo.type,
+      'scrollTop:',
       messageListRef.current.scrollTop,
+      'scrollHeight:',
       messageListRef.current.scrollHeight
     )
     if (scrollTo.type === 'scrollToMessage') {
@@ -242,14 +242,6 @@ export default function MessageList({
           }, 0)
         }
       }
-      //
-      //ChatStore.reducer.scrolledToBottom({ id: chatId })
-      //lockFetchMore.setLock(false)
-      // Try fetching more messages if needed
-      setTimeout(() => {
-        onScroll(null)
-      }, 0)
-      return
     } else if (scrollTo.type === 'scrollToLastKnownPosition') {
       log.debug(
         'scrollTo type: scrollToLastKnownPosition; lastKnownScrollHeight: ' +
@@ -266,84 +258,45 @@ export default function MessageList({
       } else {
         messageListRef.current.scrollTop = scrollTo.lastKnownScrollTop
       }
-      setTimeout(() => {
-        ChatStore.reducer.unlockScroll({ id: chatId })
-        setTimeout(() => {
-          onScroll(null)
-        }, 0)
-      }, 0)
     } else if (scrollTo.type === 'scrollToPosition') {
       log.debug(
         'scrollTo type: scrollToPosition; scrollTop: ' + scrollTo.scrollTop
       )
       messageListRef.current.scrollTop = scrollTo.scrollTop
-      setTimeout(() => {
-        ChatStore.reducer.unlockScroll({ id: chatId })
-        setTimeout(() => {
-          onScroll(null)
-        }, 0)
-      }, 0)
-    }
-  }, [onScroll, scrollTo])
+    } else if (scrollTo.type === 'scrollToBottom') {
+      if (scrollTo.ifClose === true) {
+        const scrollHeight = lastKnownScrollHeight
+        const { scrollTop, clientHeight } = messageListRef.current
+        const scrollBottom = scrollTop + clientHeight
 
-  useLayoutEffect(() => {
-    if (!ChatStore.state.chat) {
-      return
-    }
-    const chatId = ChatStore.state.chat.id
-    if (!messageListRef.current) {
-      return
-    }
-    if (scrollToBottom === false) {
-      return
-    }
+        const shouldScrollToBottom = scrollBottom >= scrollHeight - 7
 
-    log.debug(
-      'scrollToBottom',
-      messageListRef.current.scrollTop,
-      messageListRef.current.scrollHeight
-    )
-    messageListRef.current.scrollTop = messageListRef.current.scrollHeight
+        log.debug(
+          'scrollToBottomIfClose',
+          scrollBottom,
+          scrollHeight,
+          shouldScrollToBottom
+        )
+
+        if (shouldScrollToBottom) {
+          messageListRef.current.scrollTop = messageListRef.current.scrollHeight
+        }
+      } else {
+        log.debug(
+          'scrollToBottom',
+          messageListRef.current.scrollTop,
+          messageListRef.current.scrollHeight
+        )
+        messageListRef.current.scrollTop = messageListRef.current.scrollHeight
+      }
+    }
     setTimeout(() => {
-      ChatStore.reducer.scrolledToBottom({ id: chatId })
+      ChatStore.reducer.unlockScroll({ id: chatId })
       setTimeout(() => {
         onScroll(null)
       }, 0)
     }, 0)
-
-    // Try fetching more messages if needed
-  }, [onScroll, scrollToBottom, setShowJumpDownButton])
-
-  useLayoutEffect(() => {
-    if (!ChatStore.state.chat) {
-      return
-    }
-    const chatId = ChatStore.state.chat.id
-    if (!messageListRef.current) {
-      return
-    }
-    if (scrollToBottomIfClose === false) return
-    const scrollHeight = lastKnownScrollHeight
-    const { scrollTop, clientHeight } = messageListRef.current
-    const scrollBottom = scrollTop + clientHeight
-
-    const shouldScrollToBottom = scrollBottom >= scrollHeight - 7
-
-    log.debug(
-      'scrollToBottomIfClose',
-      scrollBottom,
-      scrollHeight,
-      shouldScrollToBottom
-    )
-
-    if (shouldScrollToBottom) {
-      messageListRef.current.scrollTop = messageListRef.current.scrollHeight
-    }
-
-    setTimeout(() => {
-      ChatStore.reducer.scrolledToBottom({ id: chatId })
-    }, 0)
-  }, [scrollToBottomIfClose, lastKnownScrollHeight])
+  }, [onScroll, scrollTo, lastKnownScrollHeight])
 
   useLayoutEffect(() => {
     if (!refComposer.current) {
