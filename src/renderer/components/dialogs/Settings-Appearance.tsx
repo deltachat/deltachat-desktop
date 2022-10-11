@@ -1,7 +1,6 @@
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import React, { useContext, useEffect, useState } from 'react'
 import { H6, Icon } from '@blueprintjs/core'
-import { DeltaBackend } from '../../delta-remote'
 import { ThemeManager } from '../../ThemeManager'
 import { SettingsSelector } from './Settings'
 import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
@@ -86,14 +85,13 @@ function BackgroundSelector({
         }
         SettingsStoreInstance.effect.setDesktopSetting(
           'chatViewBgImg',
-          await DeltaBackend.call('settings.saveBackgroundImage', url, false)
+          await runtime.saveBackgroundImage(url, false)
         )
         break
       case SetBackgroundAction.presetImage:
         SettingsStoreInstance.effect.setDesktopSetting(
           'chatViewBgImg',
-          await DeltaBackend.call(
-            'settings.saveBackgroundImage',
+          await runtime.saveBackgroundImage(
             (ev.target as any).dataset.url,
             true
           )

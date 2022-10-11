@@ -119,9 +119,16 @@ interface Runtime {
     data: string
   } | null>
   resolveThemeAddress(address: string): Promise<string>
+  saveBackgroundImage(file: string, isDefaultPicture: boolean): Promise<string>
 }
 
 class Browser implements Runtime {
+  saveBackgroundImage(
+    _file: string,
+    _isDefaultPicture: boolean
+  ): Promise<string> {
+    throw new Error('Method not implemented.')
+  }
   getLocaleData(_locale?: string | undefined): Promise<LocaleData> {
     throw new Error('Method not implemented.')
   }
@@ -249,6 +256,12 @@ class Browser implements Runtime {
   }
 }
 class Electron implements Runtime {
+  saveBackgroundImage(
+    file: string,
+    isDefaultPicture: boolean
+  ): Promise<string> {
+    return ipcBackend.invoke('saveBackgroundImage', file, isDefaultPicture)
+  }
   getLocaleData(locale?: string | undefined): Promise<LocaleData> {
     return ipcBackend.invoke('getLocaleData', locale)
   }
