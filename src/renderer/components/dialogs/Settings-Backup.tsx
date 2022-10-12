@@ -6,10 +6,11 @@ import { ipcBackend } from '../../ipc'
 import { DialogProps } from './DialogController'
 import { DeltaDialogBody, DeltaDialogContent, SmallDialog } from './DeltaDialog'
 import { DeltaProgressBar } from '../Login-Styles'
-import { DeltaBackend } from '../../delta-remote'
 import { useTranslationFunction } from '../../contexts'
 import { runtime } from '../../runtime'
 import { getLogger } from '../../../shared/logger'
+import { BackendRemote } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 const log = getLogger('renderer/Settings/Backup')
 
 function ExportProgressDialog(props: DialogProps) {
@@ -42,6 +43,7 @@ function ExportProgressDialog(props: DialogProps) {
 }
 
 function onBackupExport() {
+  const accountId = selectedAccountId()
   const tx = window.static_translate
   const openDialog = window.__openDialog
 
@@ -80,7 +82,7 @@ function onBackupExport() {
 
       const dialog_number = openDialog(ExportProgressDialog)
       try {
-        await DeltaBackend.call('backup.export', destination)
+        await BackendRemote.rpc.exportBackup(accountId, destination, null)
       } catch (error) {
         // TODO/QUESTION - how are errors shown to user?
         log.error('backup-export failed:', error)

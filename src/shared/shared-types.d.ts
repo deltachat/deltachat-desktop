@@ -147,17 +147,6 @@ export type Theme = {
   is_prototype: boolean
 }
 
-export type DeltaChatAccount =
-  | { id: number; type: 'unconfigured' }
-  | {
-      id: number
-      type: 'configured'
-      display_name: string | null
-      addr: string | null
-      profile_image: string | null
-      color: string
-    }
-
 // Types that will stay:
 
 /** Additional info about the runtime the ui might need */

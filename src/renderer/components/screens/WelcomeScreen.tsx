@@ -3,7 +3,6 @@ import { IpcRendererEvent } from 'electron'
 import React, { useEffect, useState, useContext } from 'react'
 import { getLogger } from '../../../shared/logger'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
-import { DeltaBackend } from '../../delta-remote'
 import { ipcBackend } from '../../ipc'
 import { runtime } from '../../runtime'
 import DeltaDialog, {
@@ -14,7 +13,7 @@ import DeltaDialog, {
 } from '../dialogs/DeltaDialog'
 import { DeltaProgressBar } from '../Login-Styles'
 import { DialogProps } from '../dialogs/DialogController'
-import { Screens } from '../../ScreenController'
+import { Screens, selectedAccountId } from '../../ScreenController'
 import { BackendRemote, EffectfulBackendActions } from '../../backend-com'
 import processOpenQrUrl from '../helpers/OpenQrUrl'
 
@@ -39,11 +38,15 @@ function ImportBackupProgressDialog({
     setError('DC_EVENT_ERROR: ' + data2)
   }
 
+  const accountId = selectedAccountId()
+
   useEffect(() => {
     ;(async () => {
       let account
       try {
-        account = await DeltaBackend.call('backup.import', backupFile)
+        log.debug(`Starting backup import of ${backupFile}`)
+        await BackendRemote.rpc.importBackup(accountId, backupFile, null)
+        account = await BackendRemote.rpc.getAccountInfo(accountId)
       } catch (err) {
         if (err instanceof Error) {
           setError(err.message)

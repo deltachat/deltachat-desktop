@@ -1,5 +1,4 @@
 import { _callDcMethodAsync } from './ipc'
-import { DeltaChatAccount } from '../shared/shared-types'
 
 export type sendMessageParams = {
   text?: string | null
@@ -12,9 +11,6 @@ export type sendMessageParams = {
 }
 
 class DeltaRemote {
-  // backup -------------------------------------------------------------
-  call(fnName: 'backup.export', dir: string): Promise<void>
-  call(fnName: 'backup.import', file: string): Promise<DeltaChatAccount>
   // chat ---------------------------------------------------------------
   call(
     fnName: 'chat.modifyGroup',
