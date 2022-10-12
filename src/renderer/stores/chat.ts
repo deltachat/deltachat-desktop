@@ -370,39 +370,6 @@ class ChatStore extends Store<ChatStoreState> {
         return modifiedState
       }, 'messageChanged')
     },
-    messageSent: (payload: {
-      id: number
-      messageId: number
-      message: Type.Message
-    }) => {
-      const { messageId, message } = payload
-      this.setState(state => {
-        // TODO daymarker missing? sometimes it could add a daymarker,
-        // maybe add logic here or just refresh on sending message
-        const messageListItems: T.MessageListItem[] = [
-          ...state.messageListItems,
-          { kind: 'message', msg_id: messageId },
-        ]
-        const messagePages: MessagePage[] = [
-          ...state.messagePages,
-          {
-            pageKey: `page-${messageId}-${messageId}`,
-            messages: OrderedMap().set(
-              messageId,
-              message
-            ) as MessagePage['messages'],
-          },
-        ]
-        const modifiedState: ChatStoreState = {
-          ...state,
-          messageListItems,
-          messagePages,
-          viewState: state.viewState.messageSent(),
-        }
-        if (this.guardReducerIfChatIdIsDifferent(payload)) return
-        return modifiedState
-      }, 'messageSent')
-    },
     setMessageState: (payload: {
       id: number
       messageId: number
@@ -955,43 +922,6 @@ class ChatStore extends Store<ChatStoreState> {
         ),
       })
     }, 'onEventChatModified'),
-    onEventMessageFailed: this.scheduler.queuedEffect(
-      async (chatId: number, msgId: number) => {
-        const state = this.state
-        if (state.chat?.id !== chatId) return
-        if (
-          !state.messageListItems.find(
-            m => m.kind === 'message' && m.msg_id == msgId
-          )
-        ) {
-          // Hacking around https://github.com/deltachat/deltachat-desktop/issues/1361#issuecomment-776291299
-
-          if (!this.state.accountId) {
-            throw new Error('no account set')
-          }
-          try {
-            const message = await BackendRemote.rpc.messageGetMessage(
-              this.state.accountId,
-              msgId
-            )
-            this.reducer.messageSent({
-              id: chatId,
-              messageId: msgId,
-              message,
-            })
-          } catch (error) {
-            // ignore message not found, like the code that was previously here
-            return
-          }
-        }
-        this.reducer.setMessageState({
-          id: chatId,
-          messageId: msgId,
-          messageState: C.DC_STATE_OUT_FAILED,
-        })
-      },
-      'onEventMessageFailed'
-    ),
     onEventIncomingMessage: this.scheduler.queuedEffect(
       async (chatId: number) => {
         if (chatId !== this.state.chat?.id) {
@@ -1156,10 +1086,6 @@ ipcBackend.on('DC_EVENT_MSG_DELIVERED', (_evt, [id, msgId]) => {
   })
 })
 
-ipcBackend.on('DC_EVENT_MSG_FAILED', async (_evt, [chatId, msgId]) => {
-  chatStore.effect.onEventMessageFailed(chatId, msgId)
-})
-
 ipcBackend.on('DC_EVENT_INCOMING_MSG', async (_, [chatId, _messageId]) => {
   chatStore.effect.onEventIncomingMessage(chatId)
 })
@@ -1174,6 +1100,9 @@ ipcBackend.on('DC_EVENT_MSG_READ', (_evt, [id, msgId]) => {
 
 ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [eventChatId, messageId]) => {
   chatStore.effect.onEventMessagesChanged(eventChatId, messageId)
+})
+ipcBackend.on('DC_EVENT_MSG_FAILED', async (_, [chatId, msgId]) => {
+  chatStore.effect.onEventMessagesChanged(chatId, msgId)
 })
 
 export function calculatePageKey(
