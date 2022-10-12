@@ -8,6 +8,7 @@ import {
   openMessageHTML,
   confirmDeleteMessage,
   downloadFullMessage,
+  openWebxdc,
 } from './messageFunctions'
 import React, { useContext } from 'react'
 import reactStringReplace from 'react-string-replace'
@@ -573,7 +574,7 @@ function WebxdcMessageContent({ message }: { message: Type.Message }) {
       <img
         src={runtime.getWebxdcIconURL(message.id)}
         alt={`icon of ${info.name}`}
-        onClick={() => runtime.openWebxdc(message.id)}
+        onClick={() => openWebxdc(message.id)}
       />
       <div
         className='name'
@@ -585,7 +586,7 @@ function WebxdcMessageContent({ message }: { message: Type.Message }) {
       <div>{info.summary}</div>
       <button
         className={'delta-button-round'}
-        onClick={() => runtime.openWebxdc(message.id)}
+        onClick={() => openWebxdc(message.id)}
       >
         {tx('start_app')}
       </button>

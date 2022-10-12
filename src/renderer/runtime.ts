@@ -1,6 +1,7 @@
 import { ipcBackend } from './ipc'
 import {
   DcNotification,
+  DcOpenWebxdcParameters,
   DesktopSettingsType,
   RC_Config,
   RuntimeInfo,
@@ -43,7 +44,7 @@ const {
  */
 interface Runtime {
   getDesktopSettings(): Promise<DesktopSettingsType>
-  openWebxdc(msgId: number): void
+  openWebxdc(msgId: number, params: DcOpenWebxdcParameters): void
   getWebxdcIconURL(msgId: number): string
   /**
    * initializes runtime stuff
@@ -133,7 +134,7 @@ class Browser implements Runtime {
   getWebxdcIconURL(_msgId: number): string {
     throw new Error('Method not implemented.')
   }
-  openWebxdc(_msgId: number): void {
+  openWebxdc(_msgId: number, _params: DcOpenWebxdcParameters): void {
     throw new Error('Method not implemented.')
   }
   openPath(_path: string): Promise<string> {
@@ -227,8 +228,8 @@ class Electron implements Runtime {
   getWebxdcIconURL(msgId: number): string {
     return `webxdc-icon:${msgId}`
   }
-  openWebxdc(msgId: number): void {
-    ipcBackend.invoke('open-webxdc', msgId)
+  openWebxdc(msgId: number, params: DcOpenWebxdcParameters): void {
+    ipcBackend.invoke('open-webxdc', msgId, params)
   }
   openPath(path: string): Promise<string> {
     return openPath(path)

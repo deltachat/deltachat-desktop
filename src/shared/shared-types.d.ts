@@ -70,6 +70,7 @@ export interface RC_Config {
   h: boolean
 }
 
+import { T } from '@deltachat/jsonrpc-client'
 import type { Contact } from 'deltachat-node'
 
 export type ContactJSON = ReturnType<typeof Contact.prototype.toJson>
@@ -196,4 +197,12 @@ export interface DcNotification {
   messageId: number
   // for future
   accountId: number
+}
+
+export interface DcOpenWebxdcParameters {
+  accountId: number
+  displayname: string | null
+  addr: string | null
+  webxdcInfo: T.WebxdcMessageInfo
+  chatName: string
 }

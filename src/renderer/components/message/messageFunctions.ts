@@ -89,3 +89,28 @@ export async function openMessageHTML(messageId: number) {
 export async function downloadFullMessage(messageId: number) {
   await DeltaBackend.call('messageList.downloadFullMessage', messageId)
 }
+
+export async function openWebxdc(messageId: number) {
+  const accountId = selectedAccountId()
+  const message = await BackendRemote.rpc.messageGetMessage(
+    accountId,
+    messageId
+  )
+  if (!message.webxdcInfo) {
+    throw new Error('no webxdc info for message ' + messageId)
+  }
+  const chatName = (
+    await BackendRemote.rpc.getBasicChatInfo(accountId, message.chatId)
+  ).name
+  const {
+    addr,
+    displayname,
+  } = await BackendRemote.rpc.batchGetConfig(accountId, ['addr', 'displayname'])
+  runtime.openWebxdc(messageId, {
+    accountId,
+    addr,
+    displayname,
+    chatName,
+    webxdcInfo: message.webxdcInfo,
+  })
+}
