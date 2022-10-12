@@ -11,14 +11,6 @@ export type sendMessageParams = {
 }
 
 class DeltaRemote {
-  // chat ---------------------------------------------------------------
-  call(
-    fnName: 'chat.modifyGroup',
-    chatId: number,
-    name: string,
-    image: string | undefined,
-    members: number[] | null
-  ): Promise<boolean>
   // login ----------------------------------------------------
   call(fnName: 'login.selectAccount', accountId: number): Promise<boolean>
   // messageList --------------------------------------------------------

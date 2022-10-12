@@ -269,3 +269,43 @@ export async function clearChat(chatId: number) {
     },
   })
 }
+
+export async function modifyGroup(
+  chatId: number,
+  name: string,
+  image: string | undefined,
+  members: number[] | null
+) {
+  const accountId = selectedAccountId()
+  log.debug('action - modify group', { chatId, name, image, members })
+  await BackendRemote.rpc.setChatName(accountId, chatId, name)
+  const chat = await BackendRemote.rpc.chatlistGetFullChatById(
+    accountId,
+    chatId
+  )
+  if (!chat) {
+    throw new Error('chat is undefined, this should not happen')
+  }
+  if (typeof image !== 'undefined' && chat.profileImage !== image) {
+    await BackendRemote.rpc.setChatProfileImage(
+      accountId,
+      chatId,
+      image || null
+    )
+  }
+
+  if (members !== null) {
+    const previousMembers = [...chat.contactIds]
+    const remove = previousMembers.filter(m => !members.includes(m))
+    const add = members.filter(m => !previousMembers.includes(m))
+
+    await Promise.all(
+      remove.map(id =>
+        BackendRemote.rpc.removeContactFromChat(accountId, chatId, id)
+      )
+    )
+    await Promise.all(
+      add.map(id => BackendRemote.rpc.addContactToChat(accountId, chatId, id))
+    )
+  }
+}

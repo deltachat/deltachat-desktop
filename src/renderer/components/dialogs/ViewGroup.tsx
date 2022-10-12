@@ -1,4 +1,3 @@
-import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/node/dist/constants'
 import { Card, Classes, Elevation } from '@blueprintjs/core'
 import {
@@ -31,6 +30,7 @@ import { ipcBackend } from '../../ipc'
 import { getLogger } from '../../../shared/logger'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import { modifyGroup } from '../helpers/ChatMethods'
 
 const log = getLogger('renderer/ViewGroup')
 
@@ -112,13 +112,7 @@ export const useGroup = (chat: Type.FullChat) => {
 
   useEffect(() => {
     ;(async () => {
-      DeltaBackend.call(
-        'chat.modifyGroup',
-        chat.id,
-        groupName,
-        groupImage || undefined,
-        groupMembers
-      )
+      modifyGroup(chat.id, groupName, groupImage || undefined, groupMembers)
     })()
   }, [groupName, groupImage, groupMembers, chat.id])
 
