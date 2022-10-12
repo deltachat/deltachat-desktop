@@ -100,15 +100,6 @@ export class ChatViewState {
     return this
   }
 
-  messageSent() {
-    this.scrollTo = {
-      type: 'scrollToBottom',
-      ifClose: false,
-    }
-
-    return this
-  }
-
   setMessageListItems() {
     const {
       lastKnownScrollHeight,
