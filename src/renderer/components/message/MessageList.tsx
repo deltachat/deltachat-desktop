@@ -479,7 +479,7 @@ const MessagePageComponent = React.memo(
               (message as {
                 id: string
                 ts: number
-              }).ts || 0
+              }).ts
             }
           />
         )
