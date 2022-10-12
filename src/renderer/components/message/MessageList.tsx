@@ -24,6 +24,7 @@ import { KeybindAction, useKeyBindingAction } from '../../keybindings'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { debouncedUpdateBadgeCounter } from '../../system-integration/badge-counter'
+import { T } from '@deltachat/jsonrpc-client'
 const log = getLogger('render/components/message/MessageList')
 
 window.addEventListener('focus', () => {
@@ -68,9 +69,8 @@ export default function MessageList({
   const {
     oldestFetchedMessageIndex,
     messagePages,
-    messageIds,
-    scrollTo,
-    lastKnownScrollHeight,
+    messageListItems,
+    viewState,
   } = useChatStore()
   const messageListRef = useRef<HTMLDivElement | null>(null)
   const [showJumpDownButton, setShowJumpDownButton] = useState(false)
@@ -147,7 +147,7 @@ export default function MessageList({
       if (!messageListRef.current) {
         return
       }
-      if (ChatStore.lockIsLocked('scroll') === true) {
+      if (ChatStore.sceduler.isLocked('scroll') === true) {
         //console.log('onScroll: locked, returning')
         return
       }
@@ -158,8 +158,8 @@ export default function MessageList({
         messageListRef.current.clientHeight
 
       const isNewestMessageLoaded =
-        ChatStore.state.newestFetchedMessageIndex ===
-        ChatStore.state.messageIds.length - 1
+        ChatStore.state.newestFetchedMessageListItemIndex ===
+        ChatStore.state.messageListItems.length - 1
       const onePageAwayFromNewestMessageTreshold =
         messageListRef.current.clientHeight / 3
       const newShowJumpDownButton =
@@ -202,9 +202,11 @@ export default function MessageList({
     if (!messageListRef.current) {
       return
     }
-    if (scrollTo === null) {
+    if (viewState.scrollTo === null) {
       return
     }
+
+    const { scrollTo, lastKnownScrollHeight } = viewState
 
     log.debug(
       'scrollTo: ' + scrollTo.type,
@@ -296,7 +298,7 @@ export default function MessageList({
         onScroll(null)
       }, 0)
     }, 0)
-  }, [onScroll, scrollTo, lastKnownScrollHeight])
+  }, [onScroll, viewState, viewState.scrollTo, viewState.lastKnownScrollHeight])
 
   useLayoutEffect(() => {
     if (!refComposer.current) {
@@ -324,7 +326,7 @@ export default function MessageList({
       <MessageListInner
         onScroll={onScroll}
         oldestFetchedMessageIndex={oldestFetchedMessageIndex}
-        messageIds={messageIds}
+        messageListItems={messageListItems}
         messagePages={messagePages}
         messageListRef={messageListRef}
         chatStore={chatStore}
@@ -351,7 +353,7 @@ export const MessageListInner = React.memo(
   (props: {
     onScroll: (event: React.UIEvent<HTMLDivElement>) => void
     oldestFetchedMessageIndex: number
-    messageIds: number[]
+    messageListItems: T.MessageListItem[]
     messagePages: ChatStoreState['messagePages']
     messageListRef: React.MutableRefObject<HTMLDivElement | null>
     chatStore: ChatStoreStateWithChatSet
@@ -359,7 +361,7 @@ export const MessageListInner = React.memo(
   }) => {
     const {
       onScroll,
-      messageIds,
+      messageListItems,
       messagePages,
       messageListRef,
       chatStore,
@@ -399,7 +401,7 @@ export const MessageListInner = React.memo(
     return (
       <div id='message-list' ref={messageListRef} onScroll={onScroll}>
         <ul>
-          {messageIds.length === 0 && <EmptyChatMessage />}
+          {messageListItems.length === 0 && <EmptyChatMessage />}
           {messagePages.map(messagePage => {
             return (
               <MessagePageComponent
@@ -417,8 +419,8 @@ export const MessageListInner = React.memo(
     )
   },
   (prevProps, nextProps) => {
-    const areEqual =
-      prevProps.messageIds === nextProps.messageIds &&
+    const areEqual: boolean =
+      prevProps.messageListItems === nextProps.messageListItems &&
       prevProps.messagePages === nextProps.messagePages &&
       prevProps.oldestFetchedMessageIndex ===
         nextProps.oldestFetchedMessageIndex &&
@@ -466,33 +468,35 @@ const MessagePageComponent = React.memo(
   }) {
     const messageElements = []
     const messagesOnPage = messagePage.messages.toArray()
-
     for (let i = 0; i < messagesOnPage.length; i++) {
       const [messageId, message] = messagesOnPage[i]
-      if (message === null || message == undefined) continue
-      if (!message) {
-        log.debug(`Missing message with id ${messageId}`)
-        continue
-      }
-      if (messagePage.dayMarker.indexOf(messageId) !== -1) {
+      if (typeof messageId === 'string') {
+        // daymarker
         messageElements.push(
           <DayMarker
             key={`daymarker-${messageId}`}
-            timestamp={message?.timestamp || 0}
+            timestamp={
+              (message as {
+                id: string
+                ts: number
+              }).ts || 0
+            }
+          />
+        )
+      } else {
+        // message
+        messageElements.push(
+          <MessageWrapper
+            key={messageId}
+            key2={`${messageId}`}
+            message={message as T.Message}
+            conversationType={conversationType}
+            unreadMessageInViewIntersectionObserver={
+              unreadMessageInViewIntersectionObserver
+            }
           />
         )
       }
-      messageElements.push(
-        <MessageWrapper
-          key={messageId}
-          key2={`${messageId}`}
-          message={message}
-          conversationType={conversationType}
-          unreadMessageInViewIntersectionObserver={
-            unreadMessageInViewIntersectionObserver
-          }
-        />
-      )
     }
 
     return (
