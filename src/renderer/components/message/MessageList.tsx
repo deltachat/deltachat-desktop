@@ -147,7 +147,7 @@ export default function MessageList({
       if (!messageListRef.current) {
         return
       }
-      if (ChatStore.sceduler.isLocked('scroll') === true) {
+      if (ChatStore.scheduler.isLocked('scroll') === true) {
         //console.log('onScroll: locked, returning')
         return
       }
