@@ -10,7 +10,7 @@ import { debouncedUpdateBadgeCounter } from '../system-integration/badge-counter
 import { clearNotificationsForChat } from '../system-integration/notifications'
 import { T } from '@deltachat/jsonrpc-client'
 import { ChatViewState } from './chat/chat_scroll'
-import { ChatStoreScheduler as ChatStoreScheduler } from './chat/chat_scheduler'
+import { ChatStoreScheduler } from './chat/chat_scheduler'
 import { saveLastChatId } from './chat/chat_sideeffects'
 
 export const PAGE_SIZE = 11
