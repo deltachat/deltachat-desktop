@@ -10,7 +10,7 @@ import { debouncedUpdateBadgeCounter } from '../system-integration/badge-counter
 import { clearNotificationsForChat } from '../system-integration/notifications'
 import { T } from '@deltachat/jsonrpc-client'
 import { ChatViewState } from './chat/chat_scroll'
-import { ChatStoreSceduler } from './chat/chat_locks'
+import { ChatStoreScheduler as ChatStoreScheduler } from './chat/chat_locks'
 import { saveLastChatId } from './chat/chat_sideeffects'
 
 export const PAGE_SIZE = 11
@@ -138,7 +138,7 @@ async function messagePagesFromMessageIndexes(
 }
 
 class ChatStore extends Store<ChatStoreState> {
-  sceduler = new ChatStoreSceduler()
+  scheduler = new ChatStoreScheduler()
 
   guardReducerTriesToAddDuplicatePageKey(pageKeyToAdd: string) {
     const isDuplicatePageKey =
@@ -174,7 +174,7 @@ class ChatStore extends Store<ChatStoreState> {
     },
     selectedChat: (payload: Partial<ChatStoreState>) => {
       this.setState(_ => {
-        this.sceduler.unlock('scroll')
+        this.scheduler.unlock('scroll')
         return {
           ...defaultState(),
           ...payload,
@@ -201,7 +201,7 @@ class ChatStore extends Store<ChatStoreState> {
     },
     unselectChat: () => {
       this.setState(_ => {
-        this.sceduler.unlock('scroll')
+        this.scheduler.unlock('scroll')
         return { ...defaultState() }
       }, 'unselectChat')
     },
@@ -302,7 +302,7 @@ class ChatStore extends Store<ChatStoreState> {
           viewState: state.viewState.unlockScroll(),
         }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
-        setTimeout(() => this.sceduler.unlock('scroll'), 0)
+        setTimeout(() => this.scheduler.unlock('scroll'), 0)
         return modifiedState
       }, 'unlockScroll')
     },
@@ -452,7 +452,7 @@ class ChatStore extends Store<ChatStoreState> {
   }
 
   effect = {
-    selectChat: this.sceduler.lockedQueuedEffect(
+    selectChat: this.scheduler.lockedQueuedEffect(
       'scroll',
       async (chatId: number) => {
         const accountId = selectedAccountId()
@@ -537,8 +537,8 @@ class ChatStore extends Store<ChatStoreState> {
       this.reducer.setView(view)
     },
     // TODO: Probably this should be lockedQueuedEffect too?
-    jumpToMessage: this.sceduler.queuedEffect(
-      this.sceduler.lockedEffect(
+    jumpToMessage: this.scheduler.queuedEffect(
+      this.scheduler.lockedEffect(
         'scroll',
         async (
           msgId: number | undefined,
@@ -728,8 +728,8 @@ class ChatStore extends Store<ChatStoreState> {
       const id = this.state.chat.id
       this.reducer.uiDeleteMessage({ id, msgId })
     },
-    fetchMoreMessagesTop: this.sceduler.queuedEffect(
-      this.sceduler.lockedEffect(
+    fetchMoreMessagesTop: this.scheduler.queuedEffect(
+      this.scheduler.lockedEffect(
         'scroll',
         async () => {
           log.debug(`fetchMoreMessagesTop`)
@@ -782,8 +782,8 @@ class ChatStore extends Store<ChatStoreState> {
       ),
       'fetchMoreMessagesTop'
     ),
-    fetchMoreMessagesBottom: this.sceduler.queuedEffect(
-      this.sceduler.lockedEffect(
+    fetchMoreMessagesBottom: this.scheduler.queuedEffect(
+      this.scheduler.lockedEffect(
         'scroll',
         async () => {
           if (!this.state.accountId) {
@@ -844,8 +844,8 @@ class ChatStore extends Store<ChatStoreState> {
       ),
       'fetchMoreMessagesBottom'
     ),
-    refresh: this.sceduler.queuedEffect(
-      this.sceduler.lockedEffect(
+    refresh: this.scheduler.queuedEffect(
+      this.scheduler.lockedEffect(
         'scroll',
         async (payload: { chatId: number }) => {
           const { chatId: eventChatId } = payload
@@ -913,7 +913,7 @@ class ChatStore extends Store<ChatStoreState> {
         payload.muteDuration
       )
     },
-    sendMessage: this.sceduler.queuedEffect(
+    sendMessage: this.scheduler.queuedEffect(
       async (payload: { chatId: number; message: sendMessageParams }) => {
         log.debug('sendMessage')
         if (
@@ -940,7 +940,7 @@ class ChatStore extends Store<ChatStoreState> {
       },
       'sendMessage'
     ),
-    onEventChatModified: this.sceduler.queuedEffect(async (chatId: number) => {
+    onEventChatModified: this.scheduler.queuedEffect(async (chatId: number) => {
       if (this.state.chat?.id !== chatId) {
         return
       }
@@ -955,7 +955,7 @@ class ChatStore extends Store<ChatStoreState> {
         ),
       })
     }, 'onEventChatModified'),
-    onEventMessageFailed: this.sceduler.queuedEffect(
+    onEventMessageFailed: this.scheduler.queuedEffect(
       async (chatId: number, msgId: number) => {
         const state = this.state
         if (state.chat?.id !== chatId) return
@@ -992,7 +992,7 @@ class ChatStore extends Store<ChatStoreState> {
       },
       'onEventMessageFailed'
     ),
-    onEventIncomingMessage: this.sceduler.queuedEffect(
+    onEventIncomingMessage: this.scheduler.queuedEffect(
       async (chatId: number) => {
         if (chatId !== this.state.chat?.id) {
           log.debug(
@@ -1048,7 +1048,7 @@ class ChatStore extends Store<ChatStoreState> {
       },
       'onEventIncomingMessage'
     ),
-    onEventMessagesChanged: this.sceduler.queuedEffect(
+    onEventMessagesChanged: this.scheduler.queuedEffect(
       async (eventChatId: number, messageId: number) => {
         log.debug('DC_EVENT_MSGS_CHANGED', eventChatId, messageId)
         const chatId = this.state.chat?.id
@@ -1225,11 +1225,11 @@ async function getMessagesFromIndex(
     messageIds
   )
 
-  // log.debug('getMessagesFromIndex', {
-  //   allMessageListItems,
-  //   messageIds,
-  //   messages,
-  // })
+  log.debug('getMessagesFromIndex', {
+    allMessageListItems,
+    messageIds,
+    messages,
+  })
 
   return allMessageListItems.map(m => [
     m.kind === 'message' ? m.msg_id : `d${m.timestamp}`,

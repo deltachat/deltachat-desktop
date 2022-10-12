@@ -7,7 +7,7 @@ interface ChatStoreLocks {
   queue: boolean
 }
 
-export class ChatStoreSceduler {
+export class ChatStoreScheduler {
   private locks: ChatStoreLocks = {
     scroll: false,
     queue: false,
