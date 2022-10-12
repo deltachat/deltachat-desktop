@@ -13,6 +13,7 @@ import type { Message } from 'deltachat-node'
 import { truncateText } from '../../shared/util'
 import { platform } from 'os'
 import { tx } from '../load-translations'
+import { DcOpenWebxdcParameters } from '../../shared/shared-types'
 
 const open_apps: {
   [msgId: number]: { win: BrowserWindow; msg_obj: Message }
@@ -59,7 +60,8 @@ export default class DCWebxdc extends SplitOut {
     })
 
     // actual webxdc instances
-    ipcMain.handle('open-webxdc', (ev, msg_id) => {
+    ipcMain.handle('open-webxdc', (_ev, msg_id, p: DcOpenWebxdcParameters) => {
+      const { webxdcInfo, chatName, displayname, addr, accountId } = p
       if (open_apps[msg_id]) {
         log.warn(
           'webxdc instance for this app is already open, trying to focus it',
@@ -69,31 +71,30 @@ export default class DCWebxdc extends SplitOut {
         return
       }
 
+      if (this.selectedAccountId !== accountId) {
+        throw new Error('this.selectedAccountId is not equal to accountId')
+      }
+
+      const dc_context = this.accounts.accountContext(accountId)
+
       log.info('opening new webxdc instance', { msg_id })
 
-      const webxdc_message = this.selectedAccountContext.getMessage(msg_id)
-      if (!webxdc_message || !webxdc_message.webxdcInfo) {
-        log.error('message not found or not a webxdc message')
+      const webxdc_message_ref = dc_context.getMessage(msg_id)
+      if (!webxdc_message_ref) {
+        log.error('message not found')
         return
       }
 
-      const icon = webxdc_message.webxdcInfo.icon
-      const icon_blob = this.selectedAccountContext.getWebxdcBlob(
-        webxdc_message,
-        icon
-      )
+      const icon = webxdcInfo.icon
+      const icon_blob = dc_context.getWebxdcBlob(webxdc_message_ref, icon)
 
       const ses = this._currentSession
       const appURL = `webxdc://${msg_id}.webxdc`
 
       // TODO intercept / deny network access - CSP should probably be disabled for testing
 
-      if (!this.selectedAccountId) {
-        throw new Error('this.selectedAccountId is undefined')
-      }
-
-      if (!accounts_sessions.includes(this.selectedAccountId)) {
-        accounts_sessions.push(this.selectedAccountId)
+      if (!accounts_sessions.includes(accountId)) {
+        accounts_sessions.push(accountId)
         ses.protocol.registerBufferProtocol(
           'webxdc',
           async (request, callback) => {
@@ -114,13 +115,12 @@ export default class DCWebxdc extends SplitOut {
             }
 
             if (filename === 'webxdc.js') {
-              const getConfig = this.selectedAccountContext.getConfig.bind(
-                this.selectedAccountContext
-              )
               const displayName = Buffer.from(
-                getConfig('displayname') || getConfig('addr') || 'unknown'
+                displayname || addr || 'unknown'
               ).toString('base64')
-              const seflAddr = Buffer.from(getConfig('addr')).toString('base64')
+              const seflAddr = Buffer.from(addr || 'unknown@unknown').toString(
+                'base64'
+              )
 
               // initializes the preload script, the actual implementation of `window.webxdc` is found there: static/webxdc-preload.js
               callback({
@@ -130,7 +130,7 @@ export default class DCWebxdc extends SplitOut {
                 ),
               })
             } else {
-              const blob = this.selectedAccountContext.getWebxdcBlob(
+              const blob = dc_context.getWebxdcBlob(
                 open_apps[msg_id].msg_obj,
                 filename
               )
@@ -152,10 +152,6 @@ export default class DCWebxdc extends SplitOut {
 
       const app_icon = icon_blob && nativeImage?.createFromBuffer(icon_blob)
 
-      const chat_name = this.selectedAccountContext
-        .getChat(webxdc_message.getChatId())
-        ?.getName()
-
       const webxdc_windows = new BrowserWindow({
         webPreferences: {
           partition: this._currentPartition,
@@ -176,15 +172,15 @@ export default class DCWebxdc extends SplitOut {
           ),
         },
         title: `${
-          webxdc_message.webxdcInfo.document
-            ? truncateText(webxdc_message.webxdcInfo.document, 32) + ' - '
+          webxdcInfo.document
+            ? truncateText(webxdcInfo.document, 32) + ' - '
             : ''
-        }${truncateText(webxdc_message.webxdcInfo.name, 42)} – ${chat_name}`,
+        }${truncateText(webxdcInfo.name, 42)} – ${chatName}`,
         icon: app_icon || undefined,
         width: 375,
         height: 667,
       })
-      open_apps[msg_id] = { win: webxdc_windows, msg_obj: webxdc_message }
+      open_apps[msg_id] = { win: webxdc_windows, msg_obj: webxdc_message_ref }
 
       if (platform() !== 'darwin') {
         webxdc_windows.setMenu(
@@ -206,12 +202,11 @@ export default class DCWebxdc extends SplitOut {
               submenu: [
                 {
                   label: tx('source_code'),
-                  enabled: !!(webxdc_message.webxdcInfo as any).source_code_url,
+                  enabled: !!webxdcInfo.sourceCodeUrl,
                   icon: app_icon?.resize({ width: 24 }) || undefined,
                   click: () =>
-                    shell.openExternal(
-                      (webxdc_message.webxdcInfo as any).source_code_url
-                    ),
+                    webxdcInfo.sourceCodeUrl &&
+                    shell.openExternal(webxdcInfo.sourceCodeUrl),
                 },
                 {
                   type: 'separator',

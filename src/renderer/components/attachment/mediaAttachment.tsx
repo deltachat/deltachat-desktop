@@ -1,5 +1,9 @@
 import React, { useContext } from 'react'
-import { openAttachmentInShell, onDownload } from '../message/messageFunctions'
+import {
+  openAttachmentInShell,
+  onDownload,
+  openWebxdc,
+} from '../message/messageFunctions'
 import { ScreenContext } from '../../contexts'
 import {
   isImage,
@@ -69,7 +73,7 @@ const contextMenuFactory = (
     },
     viewType === 'Webxdc' && {
       label: tx('start_app'),
-      action: runtime.openWebxdc.bind(null, message.id),
+      action: openWebxdc.bind(null, message.id),
     },
     {
       label: tx('save_as'),
@@ -259,7 +263,7 @@ function WebxdcAttachment({ message }: { message: Type.Message }) {
       className='media-attachment-webxdc'
       role='button'
       onContextMenu={openContextMenu}
-      onClick={runtime.openWebxdc.bind(null, message.id)}
+      onClick={openWebxdc.bind(null, message.id)}
     >
       <img className='icon' src={runtime.getWebxdcIconURL(message.id)} />
       <div className='text-part'>
