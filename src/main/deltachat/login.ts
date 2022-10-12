@@ -1,8 +1,6 @@
-import { C } from 'deltachat-node'
 import { getLogger } from '../../shared/logger'
 import '../notifications'
 import SplitOut from './splitout'
-import { DeltaChatAccount } from '../../shared/shared-types'
 import { DesktopSettings } from '../desktop_settings'
 const log = getLogger('main/deltachat/login')
 
@@ -47,37 +45,5 @@ export default class DCLoginController extends SplitOut {
     this.controller.unregisterEventHandler(this.accounts)
     this.accounts.close()
     this.controller._inner_account_manager = null
-  }
-
-  async _accountInfo(accountId: number): Promise<DeltaChatAccount> {
-    const accountContext = this.accounts.accountContext(accountId)
-
-    if (accountContext.isConfigured()) {
-      const selfContact = accountContext.getContact(C.DC_CONTACT_ID_SELF)
-      if (!selfContact) {
-        log.error('selfContact is undefined')
-      }
-      const [display_name, addr, profile_image, color] = [
-        accountContext.getConfig('displayname'),
-        accountContext.getConfig('addr'),
-        selfContact?.getProfileImage() || '',
-        selfContact?.color || 'red',
-      ]
-      accountContext.unref()
-      return {
-        type: 'configured',
-        id: accountId,
-        display_name,
-        addr,
-        profile_image,
-        color,
-      }
-    } else {
-      accountContext.unref()
-      return {
-        type: 'unconfigured',
-        id: accountId,
-      }
-    }
   }
 }

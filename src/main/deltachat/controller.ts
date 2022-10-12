@@ -3,7 +3,6 @@ import { app as rawApp, ipcMain } from 'electron'
 import { EventEmitter } from 'events'
 import { getLogger } from '../../shared/logger'
 import * as mainWindow from '../windows/main'
-import DCBackup from './backup'
 import DCChat from './chat'
 import DCContext from './context'
 import DCLoginController from './login'
@@ -234,7 +233,6 @@ export default class DeltaChatController extends EventEmitter {
     logMigrate.info('migration completed')
   }
 
-  readonly backup = new DCBackup(this)
   readonly chat = new DCChat(this)
   readonly login = new DCLoginController(this)
   readonly messageList = new DCMessageList(this)
