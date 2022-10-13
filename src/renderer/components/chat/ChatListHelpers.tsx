@@ -97,10 +97,14 @@ export function useChatList(
     }
 
     window.__refetchChatlist = refetchChatlist
-    ipcBackend.on('DD_EVENT_CHATLIST_CHANGED', refetchChatlist)
+    ipcBackend.on('DC_EVENT_MSGS_CHANGED', refetchChatlist)
+    ipcBackend.on('DC_EVENT_INCOMING_MSG', refetchChatlist)
+    ipcBackend.on('DC_EVENT_CHAT_MODIFIED', refetchChatlist)
     debouncedGetChatListEntries(listFlags, queryStr, queryContactId)
     return () => {
-      ipcBackend.removeListener('DD_EVENT_CHATLIST_CHANGED', refetchChatlist)
+      ipcBackend.removeListener('DC_EVENT_MSGS_CHANGED', refetchChatlist)
+      ipcBackend.removeListener('DC_EVENT_INCOMING_MSG', refetchChatlist)
+      ipcBackend.removeListener('DC_EVENT_CHAT_MODIFIED', refetchChatlist)
       window.__refetchChatlist = undefined
     }
   }, [listFlags, queryStr, queryContactId, debouncedGetChatListEntries])

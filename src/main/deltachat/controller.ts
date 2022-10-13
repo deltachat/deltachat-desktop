@@ -59,12 +59,8 @@ export default class DeltaChatController extends EventEmitter {
   ready = false // used for the about screen
   constructor(public cwd: string) {
     super()
-
     this.onAll = this.onAll.bind(this)
-    this.onChatlistUpdated = this.onChatlistUpdated.bind(this)
-    this.onMsgsChanged = this.onMsgsChanged.bind(this)
     this.onIncomingMsg = this.onIncomingMsg.bind(this)
-    this.onChatModified = this.onChatModified.bind(this)
   }
 
   async init() {
@@ -338,48 +334,20 @@ export default class DeltaChatController extends EventEmitter {
     }
   }
 
-  onMsgsChanged(accountId: number, _chatId: number, _msgId: number) {
-    if (this.selectedAccountId !== accountId) {
-      return
-    }
-    this.onChatlistUpdated()
-  }
-
   onIncomingMsg(accountId: number, _chatId: number, _msgId: number) {
     // TODO better do proper event sorting in the frontend so we can listen there for this event
     this.sendToRenderer('DD_EVENT_INCOMING_MESSAGE_ACCOUNT', accountId)
-    if (this.selectedAccountId !== accountId) {
-      return
-    }
-    this.onChatlistUpdated()
-  }
-
-  onChatModified(accountId: number, _chatId: number, _msgId: number) {
-    if (this.selectedAccountId !== accountId) {
-      return
-    }
-    this.onChatlistUpdated()
   }
 
   registerEventHandler(dc: DeltaChat) {
     dc.startEvents()
     dc.on('ALL', this.onAll.bind(this))
-    dc.on('DD_EVENT_CHATLIST_UPDATED', this.onChatlistUpdated)
-    dc.on('DC_EVENT_MSGS_CHANGED', this.onMsgsChanged)
     dc.on('DC_EVENT_INCOMING_MSG', this.onIncomingMsg)
-    dc.on('DC_EVENT_CHAT_MODIFIED', this.onChatModified)
   }
 
   unregisterEventHandler(dc: DeltaChat) {
     dc.removeListener('ALL', this.onAll)
-    dc.removeListener('DD_EVENT_CHATLIST_UPDATED', this.onChatlistUpdated)
-    dc.removeListener('DC_EVENT_MSGS_CHANGED', this.onMsgsChanged)
     dc.removeListener('DC_EVENT_INCOMING_MSG', this.onIncomingMsg)
-    dc.removeListener('DC_EVENT_CHAT_MODIFIED', this.onChatModified)
-  }
-
-  onChatlistUpdated() {
-    this.sendToRenderer('DD_EVENT_CHATLIST_CHANGED', {})
   }
 
   /**
