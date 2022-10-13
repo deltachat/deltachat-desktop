@@ -319,20 +319,26 @@ If you think that's a bug and you need that permission, then please open an issu
       this._closeAll()
     })
 
-    this.controller.addListener(
-      'DC_EVENT_WEBXDC_STATUS_UPDATE',
-      (_ev: any, msg_id: number, _status_update_id: number) => {
-        const instance = open_apps[msg_id]
+    ipcMain.handle(
+      'webxdc:status-update',
+      (_ev, accountId: number, instanceId: number) => {
+        if (accountId !== this.selectedAccountId) {
+          log.warn('got webxdc:status-update for wrong account')
+          return
+        }
+        const instance = open_apps[instanceId]
         if (instance) {
           instance.win.webContents.send('webxdc.statusUpdate')
         }
       }
     )
-
-    this.controller.addListener(
-      'DC_EVENT_WEBXDC_INSTANCE_DELETED',
-      (_ev: any, msg_id: number) => {
-        const instance = open_apps[msg_id]
+    ipcMain.handle(
+      'webxdc:instance-deleted',
+      (_ev, accountId: number, instanceId: number) => {
+        if (accountId !== this.selectedAccountId) {
+          return
+        }
+        const instance = open_apps[instanceId]
         if (instance) {
           instance.win.close()
         }
@@ -342,7 +348,7 @@ If you think that's a bug and you need that permission, then please open an issu
             cache: false,
           }
         )
-        const appURL = `webxdc://${msg_id}.webxdc`
+        const appURL = `webxdc://${instanceId}.webxdc`
         s.clearStorageData({ origin: appURL })
         s.clearCodeCaches({ urls: [appURL] })
         s.clearCache()
@@ -464,9 +470,4 @@ ipcMain.handle('delete_webxdc_account_data', async (_ev, accountId: number) => {
   } else {
     throw new Error('session has no storagePath set')
   }
-})
-
-ipcMain.handle('restart_app', async _ev => {
-  app.relaunch()
-  app.quit()
 })

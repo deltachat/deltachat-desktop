@@ -1,7 +1,7 @@
 console.time('init')
 
 import { mkdirSync, Stats, watchFile } from 'fs'
-import { app as rawApp, dialog, protocol } from 'electron'
+import { app as rawApp, dialog, ipcMain, protocol } from 'electron'
 import rc from './rc'
 import { VERSION, GIT_REF, BUILD_TIMESTAMP } from '../shared/build-info'
 import type { EventEmitter } from 'events'
@@ -266,3 +266,8 @@ contextMenu()
 
 import { openUrlFromArgv, open_url } from './open_url'
 openUrlFromArgv(process.argv)
+
+ipcMain.handle('restart_app', async _ev => {
+  app.relaunch()
+  app.quit()
+})
