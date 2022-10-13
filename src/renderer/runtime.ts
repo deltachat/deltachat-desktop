@@ -44,8 +44,6 @@ const {
  */
 interface Runtime {
   getDesktopSettings(): Promise<DesktopSettingsType>
-  openWebxdc(msgId: number, params: DcOpenWebxdcParameters): void
-  getWebxdcIconURL(msgId: number): string
   /**
    * initializes runtime stuff
    * - sets the LogHandler
@@ -82,8 +80,12 @@ interface Runtime {
   getConfigPath(): string
 
   // webxdc
+  openWebxdc(msgId: number, params: DcOpenWebxdcParameters): void
+  getWebxdcIconURL(msgId: number): string
   deleteWebxdcAccountData(accountId: number): Promise<void>
   closeAllWebxdcInstances(): void
+  notifyWebxdcStatusUpdate(accountId: number, instanceId: number): void
+  notifyWebxdcInstanceDeleted(accountId: number, instanceId: number): void
 
   // control app
   restartApp(): void
@@ -99,6 +101,12 @@ interface Runtime {
 }
 
 class Browser implements Runtime {
+  notifyWebxdcStatusUpdate(_accountId: number, _instanceId: number): void {
+    throw new Error('Method not implemented.')
+  }
+  notifyWebxdcInstanceDeleted(_accountId: number, _instanceId: number): void {
+    throw new Error('Method not implemented.')
+  }
   setNotificationCallback(
     _cb: (data: { accountId: number; chatId: number; msgId: number }) => void
   ): void {
@@ -191,6 +199,12 @@ class Browser implements Runtime {
   }
 }
 class Electron implements Runtime {
+  notifyWebxdcStatusUpdate(accountId: number, instanceId: number): void {
+    ipcBackend.invoke('webxdc:status-update', accountId, instanceId)
+  }
+  notifyWebxdcInstanceDeleted(accountId: number, instanceId: number): void {
+    ipcBackend.invoke('webxdc:instance-deleted', accountId, instanceId)
+  }
   private notificationCallback: (data: {
     accountId: number
     chatId: number

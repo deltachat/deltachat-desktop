@@ -5,6 +5,7 @@ import { runtime } from '../../runtime'
 import { deleteMessage, selectChat } from '../helpers/ChatMethods'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import { internalOpenWebxdc } from '../../system-integration/webxdc'
 /**
  * json representation of the message object we get from the backend
  */
@@ -92,25 +93,5 @@ export async function downloadFullMessage(messageId: number) {
 
 export async function openWebxdc(messageId: number) {
   const accountId = selectedAccountId()
-  const message = await BackendRemote.rpc.messageGetMessage(
-    accountId,
-    messageId
-  )
-  if (!message.webxdcInfo) {
-    throw new Error('no webxdc info for message ' + messageId)
-  }
-  const chatName = (
-    await BackendRemote.rpc.getBasicChatInfo(accountId, message.chatId)
-  ).name
-  const {
-    addr,
-    displayname,
-  } = await BackendRemote.rpc.batchGetConfig(accountId, ['addr', 'displayname'])
-  runtime.openWebxdc(messageId, {
-    accountId,
-    addr,
-    displayname,
-    chatName,
-    webxdcInfo: message.webxdcInfo,
-  })
+  internalOpenWebxdc(accountId, messageId)
 }
