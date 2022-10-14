@@ -217,7 +217,7 @@ export function Link({
 export default Sidebar
 
 const SidebarConnectivity = () => {
-  const [state, setState] = useState('')
+  const [state, setState] = useState<string>('')
   const tx = window.static_translate
   const accountId = selectedAccountId()
 
@@ -227,13 +227,13 @@ const SidebarConnectivity = () => {
         const connectivity = await BackendRemote.rpc.getConnectivity(accountId)
 
         if (connectivity >= C.DC_CONNECTIVITY_CONNECTED) {
-          setState('connectivity_connected')
+          setState(tx('connectivity_connected'))
         } else if (connectivity >= C.DC_CONNECTIVITY_WORKING) {
-          setState('connectivity_updating')
+          setState(tx('connectivity_updating'))
         } else if (connectivity >= C.DC_CONNECTIVITY_CONNECTING) {
-          setState('connectivity_connecting')
+          setState(tx('connectivity_connecting'))
         } else if (connectivity >= C.DC_CONNECTIVITY_NOT_CONNECTED) {
-          setState('connectivity_not_connected')
+          setState(tx('connectivity_not_connected'))
         }
       }, 300),
     [accountId]
@@ -244,5 +244,5 @@ const SidebarConnectivity = () => {
     [onConnectivityChanged]
   )
 
-  return <>{tx(state)}</>
+  return <>{state}</>
 }
