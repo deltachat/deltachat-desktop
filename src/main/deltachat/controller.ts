@@ -230,6 +230,7 @@ export default class DeltaChatController extends EventEmitter {
       }
     }
 
+    this.unregisterEventHandler(tmp_dc)
     tmp_dc.close()
     // Clear some settings that we cant migrate
     DesktopSettings.update({
