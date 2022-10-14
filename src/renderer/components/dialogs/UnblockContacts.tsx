@@ -4,9 +4,8 @@ import DeltaDialog, { DeltaDialogBody, DeltaDialogContent } from './DeltaDialog'
 import { ContactList2 } from '../contact/ContactList'
 import { ScreenContext } from '../../contexts'
 import { DialogProps } from './DialogController'
-import { onDCEvent } from '../../ipc'
 import debounce from 'debounce'
-import { BackendRemote, Type } from '../../backend-com'
+import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 
 export default function UnblockContacts(props: {
@@ -26,7 +25,8 @@ export default function UnblockContacts(props: {
     }
     onContactsUpdate()
     return onDCEvent(
-      'DC_EVENT_CONTACTS_CHANGED',
+      accountId,
+      'ContactsChanged',
       debounce(onContactsUpdate, 500)
     )
   }, [accountId])

@@ -13,8 +13,11 @@ import { VERSION } from '../../shared/build-info'
 import { ActionEmitter, KeybindAction } from '../keybindings'
 import SettingsConnectivityDialog from './dialogs/Settings-Connectivity'
 import { debounceWithInit } from './chat/ChatListHelpers'
-import { onDCEvent } from '../ipc'
-import { BackendRemote, EffectfulBackendActions } from '../backend-com'
+import {
+  BackendRemote,
+  EffectfulBackendActions,
+  onDCEvent,
+} from '../backend-com'
 
 export type SidebarState = 'init' | 'visible' | 'invisible'
 
@@ -218,12 +221,12 @@ export default Sidebar
 
 const SidebarConnectivity = () => {
   const [state, setState] = useState<string>('')
-  const tx = window.static_translate
   const accountId = selectedAccountId()
 
   const onConnectivityChanged = useMemo(
     () =>
-      debounceWithInit(async (_data1: any, _data2: any) => {
+      debounceWithInit(async () => {
+        const tx = window.static_translate
         const connectivity = await BackendRemote.rpc.getConnectivity(accountId)
 
         if (connectivity >= C.DC_CONNECTIVITY_CONNECTED) {
@@ -240,8 +243,8 @@ const SidebarConnectivity = () => {
   )
 
   useEffect(
-    () => onDCEvent('DC_EVENT_CONNECTIVITY_CHANGED', onConnectivityChanged),
-    [onConnectivityChanged]
+    () => onDCEvent(accountId, 'ConnectivityChanged', onConnectivityChanged),
+    [onConnectivityChanged, accountId]
   )
 
   return <>{state}</>

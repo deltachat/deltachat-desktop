@@ -1,6 +1,5 @@
 import { debounce } from 'debounce'
 import { BackendRemote } from '../backend-com'
-import { ipcBackend } from '../ipc'
 import { runtime } from '../runtime'
 
 async function updateBadgeCounter() {

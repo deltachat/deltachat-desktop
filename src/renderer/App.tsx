@@ -13,6 +13,7 @@ import { runtime } from './runtime'
 import { updateCoreStrings } from './stockStrings'
 import { getLogger } from '../shared/logger'
 import { BackendRemote } from './backend-com'
+import { runPostponedFunctions } from './onready'
 
 attachKeybindingsListener()
 
@@ -51,6 +52,7 @@ export default function App(_props: any) {
 
   useLayoutEffect(() => {
     startBackendLogging()
+    runPostponedFunctions()
     ;(async () => {
       const desktop_settings = await runtime.getDesktopSettings()
       await reloadLocaleData(desktop_settings.locale || 'en')
@@ -121,8 +123,8 @@ export function startBackendLogging() {
     BackendRemote.on('ALL', (accountId, event) => {
       const isActiveAccount = window.__selectedAccountId == accountId
       let data: any,
-        eventColor = 'rgba(125,125,125,0.15)',
         accountColor = 'rgba(125,125,125,0.25)'
+      const eventColor = 'rgba(125,125,125,0.15)'
 
       if (isActiveAccount) {
         accountColor = 'rgba(0,125,0,0.25)'

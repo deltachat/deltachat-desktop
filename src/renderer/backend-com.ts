@@ -1,4 +1,4 @@
-import { BaseDeltaChat, yerpc, RPC } from '@deltachat/jsonrpc-client'
+import { BaseDeltaChat, yerpc, RPC, DcEvent } from '@deltachat/jsonrpc-client'
 import { DeltaBackend } from './delta-remote'
 import { runtime } from './runtime'
 import { getLogger } from '../shared/logger'
@@ -92,5 +92,23 @@ export namespace EffectfulBackendActions {
     await BackendRemote.rpc.deleteChat(accountId, chatId)
     clearNotificationsForChat(accountId, chatId)
     window.__refetchChatlist && window.__refetchChatlist()
+  }
+}
+
+type ContextEvents = { ALL: (event: DcEvent) => void } & {
+  [Property in DcEvent['type']]: (
+    event: Extract<DcEvent, { type: Property }>
+  ) => void
+}
+
+export function onDCEvent<variant extends keyof ContextEvents>(
+  accountId: number,
+  eventType: variant,
+  callback: ContextEvents[variant]
+) {
+  const emitter = BackendRemote.getContextEvents(accountId)
+  emitter.on(eventType, callback)
+  return () => {
+    emitter.off(eventType, callback)
   }
 }

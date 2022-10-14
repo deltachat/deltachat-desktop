@@ -47,6 +47,7 @@ export function printProcessLogLevelInfo() {
     )}`,
     emojiFontCss
   )
+  /* ignore-console-log */
   console.info(
     `# Tips and Tricks for working with the browser console:
 ## Use the search to filter the output like:

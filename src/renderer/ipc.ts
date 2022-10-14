@@ -12,25 +12,6 @@ export const ipcBackend = ipcRenderer
 
 ipcBackend.setMaxListeners(20)
 
-// Listen to DC/Backend events in a convenient way. Returns a callback to remove the
-// event listener. You can bind the same event listener to multiple events by passing them
-// as an array of strings.
-export function onDCEvent(
-  event: string | string[],
-  cb: (data1: number, data2: string | number) => void
-) {
-  const wrapperCb = (_: any, [data1, data2]: [number, string | number]) => {
-    cb(data1, data2)
-  }
-  if (Array.isArray(event)) {
-    event.forEach(e => ipcBackend.on(e, wrapperCb))
-    return () => event.forEach(e => ipcBackend.removeListener(e, wrapperCb))
-  } else {
-    ipcBackend.on(event, wrapperCb)
-    return () => ipcBackend.removeListener(event, wrapperCb)
-  }
-}
-
 export function sendToBackend(event: string, ...args: any[]) {
   log.debug(`sendToBackend: ${event} ${args.join(' ')}`)
   ipcRenderer.send('ALL', event, ...args)

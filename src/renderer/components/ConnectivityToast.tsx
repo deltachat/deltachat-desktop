@@ -5,7 +5,6 @@ import React, {
   useMemo,
   useContext,
 } from 'react'
-import { onDCEvent } from '../ipc'
 
 import { getLogger } from '../../shared/logger'
 import { ScreenContext, useTranslationFunction } from '../contexts'
@@ -15,7 +14,7 @@ import { C } from 'deltachat-node/node/dist/constants'
 import { debounce } from 'debounce'
 import { debounceWithInit } from './chat/ChatListHelpers'
 import SettingsConnectivityDialog from './dialogs/Settings-Connectivity'
-import { BackendRemote } from '../backend-com'
+import { BackendRemote, onDCEvent } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
 
 const log = getLogger('renderer/components/ConnectivityToast')
@@ -89,7 +88,7 @@ export default function ConnectivityToast() {
 
   const onConnectivityChanged = useMemo(
     () =>
-      debounceWithInit(async (_data1: any, _data2: any) => {
+      debounceWithInit(async () => {
         const connectivity = await BackendRemote.rpc.getConnectivity(accountId)
 
         if (connectivity >= C.DC_CONNECTIVITY_CONNECTED) {
@@ -131,7 +130,8 @@ export default function ConnectivityToast() {
     window.addEventListener('focus', maybeNetwork)
 
     const removeOnConnectivityChanged = onDCEvent(
-      'DC_EVENT_CONNECTIVITY_CHANGED',
+      accountId,
+      'ConnectivityChanged',
       onConnectivityChanged
     )
 
@@ -142,7 +142,7 @@ export default function ConnectivityToast() {
 
       removeOnConnectivityChanged()
     }
-  }, [onBrowserOnline, maybeNetwork, onConnectivityChanged])
+  }, [onBrowserOnline, maybeNetwork, onConnectivityChanged, accountId])
 
   const onTryReconnectClick = (ev: React.MouseEvent<HTMLDivElement>) => {
     ev.preventDefault()

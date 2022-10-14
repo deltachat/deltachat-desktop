@@ -1,9 +1,8 @@
 import { C } from 'deltachat-node/node/dist/constants'
 import { DesktopSettingsType, RC_Config } from '../../shared/shared-types'
 import { BackendRemote, Type } from '../backend-com'
-import { ipcBackend } from '../ipc'
+import { onReady } from '../onready'
 import { runtime } from '../runtime'
-import { selectedAccountId } from '../ScreenController'
 import { Store, useStore } from './store'
 
 export interface SettingsStoreState {
@@ -162,14 +161,16 @@ class SettingsStore extends Store<SettingsStoreState | null> {
   }
 }
 
-BackendRemote.on('SelfavatarChanged', async accountId => {
-  if (accountId === window.__selectedAccountId) {
-    const selfContact = await BackendRemote.rpc.contactsGetContact(
-      accountId,
-      C.DC_CONTACT_ID_SELF
-    )
-    SettingsStoreInstance.reducer.setSelfContact(selfContact)
-  }
+onReady(() => {
+  BackendRemote.on('SelfavatarChanged', async accountId => {
+    if (accountId === window.__selectedAccountId) {
+      const selfContact = await BackendRemote.rpc.contactsGetContact(
+        accountId,
+        C.DC_CONTACT_ID_SELF
+      )
+      SettingsStoreInstance.reducer.setSelfContact(selfContact)
+    }
+  })
 })
 
 const SettingsStoreInstance = new SettingsStore(null, 'SettingsStore')

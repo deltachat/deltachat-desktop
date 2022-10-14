@@ -14,13 +14,12 @@ import { SettingsButton } from './Settings'
 import { runtime } from '../../runtime'
 import { C } from 'deltachat-node/node/dist/constants'
 import { DialogProps } from './DialogController'
-import { onDCEvent } from '../../ipc'
 import SettingsAccountDialog from './Settings-Account'
 import SettingsConnectivityDialog from './Settings-Connectivity'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote, onDCEvent } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 
 export default function SettingsProfile({
@@ -59,9 +58,8 @@ export default function SettingsProfile({
   )
   useEffect(() => {
     updateConnectivity()
-
-    return onDCEvent('DC_EVENT_CONNECTIVITY_CHANGED', updateConnectivity)
-  }, [updateConnectivity])
+    return onDCEvent(accountId, 'ConnectivityChanged', updateConnectivity)
+  }, [updateConnectivity, accountId])
 
   const tx = useTranslationFunction()
   const profileBlobUrl = runtime.transformBlobURL(
