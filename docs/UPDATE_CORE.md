@@ -42,3 +42,5 @@ If you already have a core git checkout, you can skip the first step.
 3. run `npm i` and `npm run build` inside `../deltachat-core-rust/`
 4. run `npm i` and `npm run build` inside `../deltachat-core-rust/deltachat-jsonrpc/typescript/`
 5. go into your desktop repo and run `npm i ../deltachat-core-rust/deltachat-jsonrpc/typescript` and `npm i ../deltachat-core-rust`
+
+Note that you need to run step 3 and 4 again after each change to core sourcecode.
