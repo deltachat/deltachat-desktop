@@ -60,7 +60,6 @@ export default class DeltaChatController extends EventEmitter {
   constructor(public cwd: string) {
     super()
     this.onAll = this.onAll.bind(this)
-    this.onIncomingMsg = this.onIncomingMsg.bind(this)
   }
 
   async init() {
@@ -334,20 +333,14 @@ export default class DeltaChatController extends EventEmitter {
     }
   }
 
-  onIncomingMsg(accountId: number, _chatId: number, _msgId: number) {
-    // TODO better do proper event sorting in the frontend so we can listen there for this event
-    this.sendToRenderer('DD_EVENT_INCOMING_MESSAGE_ACCOUNT', accountId)
-  }
 
   registerEventHandler(dc: DeltaChat) {
     dc.startEvents()
     dc.on('ALL', this.onAll.bind(this))
-    dc.on('DC_EVENT_INCOMING_MSG', this.onIncomingMsg)
   }
 
   unregisterEventHandler(dc: DeltaChat) {
     dc.removeListener('ALL', this.onAll)
-    dc.removeListener('DC_EVENT_INCOMING_MSG', this.onIncomingMsg)
   }
 
   /**

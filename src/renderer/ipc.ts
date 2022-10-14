@@ -31,30 +31,6 @@ export function onDCEvent(
   }
 }
 
-let backendLoggingStarted = false
-export function startBackendLogging() {
-  if (backendLoggingStarted === true)
-    return log.error('Backend logging is already started!')
-  backendLoggingStarted = true
-
-  ipcBackend.on('ALL', (_e, eName, data) => {
-    /* ignore-console-log */
-    console.debug(
-      `%c📡 ${eName}`,
-      'background:rgba(125,125,125,0.15);border-radius:2px;padding:2px 4px;',
-      data
-    )
-  })
-
-  const log2 = getLogger('renderer')
-  window.addEventListener('error', event => {
-    log2.error('Unhandled Error:', event.error)
-  })
-  window.addEventListener('unhandledrejection', event => {
-    log2.error('Unhandled Rejection:', event, event.reason)
-  })
-}
-
 export function sendToBackend(event: string, ...args: any[]) {
   log.debug(`sendToBackend: ${event} ${args.join(' ')}`)
   ipcRenderer.send('ALL', event, ...args)

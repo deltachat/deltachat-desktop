@@ -23,6 +23,7 @@
 - make contact last seen always display relative time
 - hide ephemeral timer menu options for mailing lists #2920
 - reposition ConnectivityToast
+- only show core events in frontend dev console if deltachat was started with `--log-debug` or `--devmode`
 
 ## Fixed
 - allow scanning of certain qr code types on welcome screen (account, url and text)
