@@ -14,6 +14,7 @@
 
 ## Changed
 - start migrating to jsonrpc api
+- migrate event handling to jsonrpc api
 - Update translations (22.09.2022)
 - click on selected chat in chatlist now goes to bottom or first unread message
 - remember last path in "save as" dialog
