@@ -12,14 +12,14 @@ import {
 import { Collapse, Dialog } from '@blueprintjs/core'
 import ClickableLink from './helpers/ClickableLink'
 import { DialogProps } from './dialogs/DialogController'
-import { ipcBackend } from '../ipc'
 import { DeltaDialogContent, DeltaDialogFooter } from './dialogs/DeltaDialog'
 import { Credentials } from '../../shared/shared-types'
 import { useTranslationFunction, i18nContext } from '../contexts'
 import { useDebouncedCallback } from 'use-debounce/lib'
 import { getLogger } from '../../shared/logger'
-import { IpcRendererEvent } from 'electron/renderer'
 import { BackendRemote, Type } from '../backend-com'
+import { selectedAccountId } from '../ScreenController'
+import { DcEventType } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/loginForm')
 
@@ -414,13 +414,14 @@ export function ConfigureProgressDialog({
   const [progressComment, setProgressComment] = useState('')
   const [error, setError] = useState('')
   const [configureFailed, setConfigureFailed] = useState(false)
+  const accountId = selectedAccountId()
 
-  const onConfigureProgress = (
-    _: IpcRendererEvent | null,
-    [progress, comment]: [number, string]
-  ) => {
+  const onConfigureProgress = ({
+    progress,
+    comment,
+  }: DcEventType<'ConfigureProgress'>) => {
     progress !== 0 && setProgress(progress)
-    setProgressComment(comment)
+    setProgressComment(comment || '')
   }
 
   const onCancel = async (_event: any) => {
@@ -431,24 +432,13 @@ export function ConfigureProgressDialog({
       await BackendRemote.rpc.stopOngoingProcess(window.__selectedAccountId)
     } catch (error: any) {
       log.error('failed to stopOngoingProcess', error)
-      onConfigureError(null, [
-        null,
-        'failed to stopOngoingProcess' + error.message || error.toString(),
-      ])
-      onConfigureFailed(null, [null, ''])
+      setError(
+        'failed to stopOngoingProcess' + error.message || error.toString()
+      )
+      setConfigureFailed(true)
     }
     onClose()
   }
-
-  const onConfigureError = (
-    _: IpcRendererEvent | null,
-    [_data1, data2]: [null, string]
-  ) => setError(data2)
-
-  const onConfigureFailed = (
-    _: IpcRendererEvent | null,
-    [_data1, _data2]: [null, string]
-  ) => setConfigureFailed(true)
 
   useEffect(
     () => {
@@ -469,8 +459,8 @@ export function ConfigureProgressDialog({
           onSuccess && onSuccess()
         } catch (err: any) {
           log.error('configure error', err)
-          onConfigureError(null, [null, err.message || err.toString()])
-          onConfigureFailed(null, [null, ''])
+          setError(err.message || err.toString())
+          setConfigureFailed(true)
         }
       })()
     },
@@ -478,16 +468,12 @@ export function ConfigureProgressDialog({
   )
 
   useEffect(() => {
-    ipcBackend.on('DC_EVENT_CONFIGURE_PROGRESS', onConfigureProgress)
-    ipcBackend.on('DCN_EVENT_CONFIGURE_FAILED', onConfigureFailed)
+    const emitter = BackendRemote.getContextEvents(accountId)
+    emitter.on('ConfigureProgress', onConfigureProgress)
     return () => {
-      ipcBackend.removeListener(
-        'DC_EVENT_CONFIGURE_PROGRESS',
-        onConfigureProgress
-      )
-      ipcBackend.removeListener('DCN_EVENT_CONFIGURE_FAILED', onConfigureFailed)
+      emitter.off('ConfigureProgress', onConfigureProgress)
     }
-  }, [])
+  }, [accountId])
 
   const tx = useTranslationFunction()
 

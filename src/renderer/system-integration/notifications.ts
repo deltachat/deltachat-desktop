@@ -5,9 +5,7 @@ import { DcNotification } from '../../shared/shared-types'
 import { BackendRemote } from '../backend-com'
 import { isImage } from '../components/attachment/Attachment'
 import { jumpToMessage } from '../components/helpers/ChatMethods'
-import { ipcBackend } from '../ipc'
 import { runtime } from '../runtime'
-import { selectedAccountId } from '../ScreenController'
 import SettingsStoreInstance from '../stores/settings'
 
 const log = getLogger('renderer/notifications')
@@ -16,9 +14,15 @@ function isMuted(accountId: number, chatId: number) {
   return BackendRemote.rpc.isChatMuted(accountId, chatId)
 }
 
-async function incomingMessageHandler(chatId: number, messageId: number) {
-  // TODO check for account once we listen for the real event here
-  const accountId = selectedAccountId()
+async function incomingMessageHandler(
+  accountId: number,
+  chatId: number,
+  messageId: number
+) {
+  if (accountId !== window.__selectedAccountId) {
+    // notifications for different accounts are not supported yet
+    return
+  }
 
   log.debug('incomingMessageHandler: ', { chatId, messageId })
 
@@ -103,8 +107,8 @@ function getNotificationIcon(
 }
 
 export function initNotifications() {
-  ipcBackend.on('DC_EVENT_INCOMING_MSG', async (_, [chatId, messageId]) => {
-    incomingMessageHandler(chatId, messageId)
+  BackendRemote.on('IncomingMsg', (accountId, { chatId, msgId }) => {
+    incomingMessageHandler(accountId, chatId, msgId)
   })
   runtime.setNotificationCallback(({ accountId, msgId, chatId }) => {
     if (window.__selectedAccountId !== accountId) {

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { H5, Intent } from '@blueprintjs/core'
 import { SettingsButton } from './Settings'
 import type { OpenDialogOptions } from 'electron'
-import { ipcBackend } from '../../ipc'
 import { DialogProps } from './DialogController'
 import { DeltaDialogBody, DeltaDialogContent, SmallDialog } from './DeltaDialog'
 import { DeltaProgressBar } from '../Login-Styles'
@@ -11,22 +10,24 @@ import { runtime } from '../../runtime'
 import { getLogger } from '../../../shared/logger'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import { DcEventType } from '@deltachat/jsonrpc-client'
 const log = getLogger('renderer/Settings/Backup')
 
 function ExportProgressDialog(props: DialogProps) {
   const tx = useTranslationFunction()
   const [progress, setProgress] = useState(0.0)
 
-  const onImexProgress = (_: any, [progress, _data2]: [number, any]) => {
+  const onImexProgress = ({ progress }: DcEventType<'ImexProgress'>) => {
     setProgress(progress)
   }
+  const accountId = selectedAccountId()
   useEffect(() => {
-    ipcBackend.on('DC_EVENT_IMEX_PROGRESS', onImexProgress)
-
+    const emitter = BackendRemote.getContextEvents(accountId)
+    emitter.on('ImexProgress', onImexProgress)
     return () => {
-      ipcBackend.removeListener('DC_EVENT_IMEX_PROGRESS', onImexProgress)
+      emitter.off('ImexProgress', onImexProgress)
     }
-  }, [])
+  }, [accountId])
 
   return (
     <SmallDialog isOpen={props.isOpen} onClose={() => {}}>
@@ -69,16 +70,16 @@ function onBackupExport() {
         return
       }
 
-      const listenForOutputFile = (
-        _event: any,
-        [_, filename]: [any, string]
-      ) => {
+      const listenForOutputFile = ({
+        path: filename,
+      }: DcEventType<'ImexFileWritten'>) => {
         userFeedback({
           type: 'success',
           text: tx('pref_backup_written_to_x', filename),
         })
       }
-      ipcBackend.once('DC_EVENT_IMEX_FILE_WRITTEN', listenForOutputFile)
+      const emitter = BackendRemote.getContextEvents(selectedAccountId())
+      emitter.once('ImexFileWritten', listenForOutputFile)
 
       const dialog_number = openDialog(ExportProgressDialog)
       try {
@@ -87,10 +88,7 @@ function onBackupExport() {
         // TODO/QUESTION - how are errors shown to user?
         log.error('backup-export failed:', error)
       } finally {
-        ipcBackend.removeListener(
-          'DC_EVENT_IMEX_FILE_WRITTEN',
-          listenForOutputFile
-        )
+        emitter.off('ImexFileWritten', listenForOutputFile)
         closeDialog(dialog_number)
       }
     },
