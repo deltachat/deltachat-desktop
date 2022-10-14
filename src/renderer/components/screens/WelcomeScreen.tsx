@@ -27,9 +27,6 @@ function ImportBackupProgressDialog({
   const [importProgress, setImportProgress] = useState(0.0)
   const [error, setError] = useState<string | null>(null)
 
-  const onAll = (eventName: IpcRendererEvent, data1: string, data2: string) => {
-    log.debug('ALL core events: ', eventName, data1, data2)
-  }
   const onImexProgress = (_evt: any, [progress, _data2]: [number, any]) => {
     setImportProgress(progress)
   }
@@ -57,12 +54,10 @@ function ImportBackupProgressDialog({
       window.__selectAccount(account.id)
     })()
 
-    ipcBackend.on('ALL', onAll)
     ipcBackend.on('DC_EVENT_IMEX_PROGRESS', onImexProgress)
     ipcBackend.on('DC_EVENT_ERROR', onError)
 
     return () => {
-      ipcBackend.removeListener('ALL', onAll)
       ipcBackend.removeListener('DC_EVENT_IMEX_PROGRESS', onImexProgress)
       ipcBackend.removeListener('DC_EVENT_ERROR', onError)
     }
