@@ -96,6 +96,11 @@ export default function MessageList({
     // Don't mark messages as read if window is not focused
     if (document.hasFocus() === false) return
 
+    if (ChatStore.scheduler.isLocked('scroll') === true) {
+      //console.log('onScroll: locked, returning')
+      return
+    }
+
     setTimeout(() => {
       log.debug(`onUnreadMessageInView: entries.length: ${entries.length}`)
 
