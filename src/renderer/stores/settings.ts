@@ -162,13 +162,14 @@ class SettingsStore extends Store<SettingsStoreState | null> {
   }
 }
 
-ipcBackend.on('DC_EVENT_SELFAVATAR_CHANGED', async (_evt, [_chatId]) => {
-  const accountId = selectedAccountId()
-  const selfContact = await BackendRemote.rpc.contactsGetContact(
-    accountId,
-    C.DC_CONTACT_ID_SELF
-  )
-  SettingsStoreInstance.reducer.setSelfContact(selfContact)
+BackendRemote.on('SelfavatarChanged', async accountId => {
+  if (accountId === window.__selectedAccountId) {
+    const selfContact = await BackendRemote.rpc.contactsGetContact(
+      accountId,
+      C.DC_CONTACT_ID_SELF
+    )
+    SettingsStoreInstance.reducer.setSelfContact(selfContact)
+  }
 })
 
 const SettingsStoreInstance = new SettingsStore(null, 'SettingsStore')

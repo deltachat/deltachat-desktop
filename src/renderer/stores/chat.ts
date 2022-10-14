@@ -1074,11 +1074,17 @@ chatStore.dispatch = (..._args) => {
 
 const log = chatStore.log
 
-ipcBackend.on('DC_EVENT_CHAT_MODIFIED', async (_evt, [chatId]) => {
+BackendRemote.on('ChatModified', (accountId, { chatId }) => {
+  if (accountId !== window.__selectedAccountId) {
+    return
+  }
   chatStore.effect.onEventChatModified(chatId)
 })
 
-ipcBackend.on('DC_EVENT_MSG_DELIVERED', (_evt, [id, msgId]) => {
+BackendRemote.on('MsgDelivered', (accountId, { chatId: id, msgId }) => {
+  if (accountId !== window.__selectedAccountId) {
+    return
+  }
   chatStore.reducer.setMessageState({
     id,
     messageId: msgId,
@@ -1086,11 +1092,17 @@ ipcBackend.on('DC_EVENT_MSG_DELIVERED', (_evt, [id, msgId]) => {
   })
 })
 
-ipcBackend.on('DC_EVENT_INCOMING_MSG', async (_, [chatId, _messageId]) => {
+BackendRemote.on('IncomingMsg', (accountId, { chatId }) => {
+  if (accountId !== window.__selectedAccountId) {
+    return
+  }
   chatStore.effect.onEventIncomingMessage(chatId)
 })
 
-ipcBackend.on('DC_EVENT_MSG_READ', (_evt, [id, msgId]) => {
+BackendRemote.on('MsgRead', (accountId, { chatId: id, msgId }) => {
+  if (accountId !== window.__selectedAccountId) {
+    return
+  }
   chatStore.reducer.setMessageState({
     id,
     messageId: msgId,
@@ -1098,10 +1110,17 @@ ipcBackend.on('DC_EVENT_MSG_READ', (_evt, [id, msgId]) => {
   })
 })
 
-ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [eventChatId, messageId]) => {
-  chatStore.effect.onEventMessagesChanged(eventChatId, messageId)
+BackendRemote.on('MsgsChanged', (accountId, { chatId, msgId }) => {
+  if (accountId !== window.__selectedAccountId) {
+    return
+  }
+  chatStore.effect.onEventMessagesChanged(chatId, msgId)
 })
-ipcBackend.on('DC_EVENT_MSG_FAILED', async (_, [chatId, msgId]) => {
+
+BackendRemote.on('MsgFailed', (accountId, { chatId, msgId }) => {
+  if (accountId !== window.__selectedAccountId) {
+    return
+  }
   chatStore.effect.onEventMessagesChanged(chatId, msgId)
 })
 

@@ -1,9 +1,7 @@
 import { Classes, Card, Elevation, Intent } from '@blueprintjs/core'
-import { IpcRendererEvent } from 'electron'
 import React, { useEffect, useState, useContext } from 'react'
 import { getLogger } from '../../../shared/logger'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
-import { ipcBackend } from '../../ipc'
 import { runtime } from '../../runtime'
 import DeltaDialog, {
   DeltaDialogBase,
@@ -16,6 +14,7 @@ import { DialogProps } from '../dialogs/DialogController'
 import { Screens, selectedAccountId } from '../../ScreenController'
 import { BackendRemote, EffectfulBackendActions } from '../../backend-com'
 import processOpenQrUrl from '../helpers/OpenQrUrl'
+import { DcEventType } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
@@ -27,23 +26,17 @@ function ImportBackupProgressDialog({
   const [importProgress, setImportProgress] = useState(0.0)
   const [error, setError] = useState<string | null>(null)
 
-  const onImexProgress = (_evt: any, [progress, _data2]: [number, any]) => {
+  const onImexProgress = ({ progress }: DcEventType<'ImexProgress'>) => {
     setImportProgress(progress)
-  }
-
-  const onError = (_data1: any, data2: string) => {
-    setError('DC_EVENT_ERROR: ' + data2)
   }
 
   const accountId = selectedAccountId()
 
   useEffect(() => {
     ;(async () => {
-      let account
       try {
         log.debug(`Starting backup import of ${backupFile}`)
         await BackendRemote.rpc.importBackup(accountId, backupFile, null)
-        account = await BackendRemote.rpc.getAccountInfo(accountId)
       } catch (err) {
         if (err instanceof Error) {
           setError(err.message)
@@ -51,15 +44,13 @@ function ImportBackupProgressDialog({
         return
       }
       onClose()
-      window.__selectAccount(account.id)
+      window.__selectAccount(accountId)
     })()
 
-    ipcBackend.on('DC_EVENT_IMEX_PROGRESS', onImexProgress)
-    ipcBackend.on('DC_EVENT_ERROR', onError)
-
+    const emitter = BackendRemote.getContextEvents(accountId)
+    emitter.on('ImexProgress', onImexProgress)
     return () => {
-      ipcBackend.removeListener('DC_EVENT_IMEX_PROGRESS', onImexProgress)
-      ipcBackend.removeListener('DC_EVENT_ERROR', onError)
+      emitter.off('ImexProgress', onImexProgress)
     }
   }, [backupFile, onClose, accountId])
 
