@@ -276,10 +276,10 @@ function AccountItem({
     updateUnreadCount(login.id)
     // TODO use onIncomingMsg event directly after we changed the events to be filtered for active account in the frontend
     let emitter = BackendRemote.getContextEvents(login.id)
-    
-    emitter.on("IncomingMsg", updateUnreadCount.bind(null, login.id))
+
+    emitter.on('IncomingMsg', updateUnreadCount.bind(null, login.id))
     return () => {
-      emitter.off("IncomingMsg", updateUnreadCount.bind(null, login.id))
+      emitter.off('IncomingMsg', updateUnreadCount.bind(null, login.id))
     }
   }, [login.id, updateUnreadCount])
 

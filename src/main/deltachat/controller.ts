@@ -333,7 +333,6 @@ export default class DeltaChatController extends EventEmitter {
     }
   }
 
-
   registerEventHandler(dc: DeltaChat) {
     dc.startEvents()
     dc.on('ALL', this.onAll.bind(this))
