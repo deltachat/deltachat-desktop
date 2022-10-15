@@ -13,8 +13,11 @@ import { VERSION } from '../../shared/build-info'
 import { ActionEmitter, KeybindAction } from '../keybindings'
 import SettingsConnectivityDialog from './dialogs/Settings-Connectivity'
 import { debounceWithInit } from './chat/ChatListHelpers'
-import { onDCEvent } from '../ipc'
-import { BackendRemote, EffectfulBackendActions } from '../backend-com'
+import {
+  BackendRemote,
+  EffectfulBackendActions,
+  onDCEvent,
+} from '../backend-com'
 
 export type SidebarState = 'init' | 'visible' | 'invisible'
 
@@ -217,32 +220,32 @@ export function Link({
 export default Sidebar
 
 const SidebarConnectivity = () => {
-  const [state, setState] = useState('')
-  const tx = window.static_translate
+  const [state, setState] = useState<string>('')
   const accountId = selectedAccountId()
 
   const onConnectivityChanged = useMemo(
     () =>
-      debounceWithInit(async (_data1: any, _data2: any) => {
+      debounceWithInit(async () => {
+        const tx = window.static_translate
         const connectivity = await BackendRemote.rpc.getConnectivity(accountId)
 
         if (connectivity >= C.DC_CONNECTIVITY_CONNECTED) {
-          setState('connectivity_connected')
+          setState(tx('connectivity_connected'))
         } else if (connectivity >= C.DC_CONNECTIVITY_WORKING) {
-          setState('connectivity_updating')
+          setState(tx('connectivity_updating'))
         } else if (connectivity >= C.DC_CONNECTIVITY_CONNECTING) {
-          setState('connectivity_connecting')
+          setState(tx('connectivity_connecting'))
         } else if (connectivity >= C.DC_CONNECTIVITY_NOT_CONNECTED) {
-          setState('connectivity_not_connected')
+          setState(tx('connectivity_not_connected'))
         }
       }, 300),
     [accountId]
   )
 
   useEffect(
-    () => onDCEvent('DC_EVENT_CONNECTIVITY_CHANGED', onConnectivityChanged),
-    [onConnectivityChanged]
+    () => onDCEvent(accountId, 'ConnectivityChanged', onConnectivityChanged),
+    [onConnectivityChanged, accountId]
   )
 
-  return <>{tx(state)}</>
+  return <>{state}</>
 }

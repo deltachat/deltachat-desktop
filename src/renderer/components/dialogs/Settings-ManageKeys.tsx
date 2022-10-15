@@ -2,10 +2,10 @@ import React from 'react'
 import { H5 } from '@blueprintjs/core'
 import { SettingsButton } from './Settings'
 import type { OpenDialogOptions } from 'electron'
-import { ipcBackend } from '../../ipc'
 import { runtime } from '../../runtime'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import { DcEventType } from '@deltachat/jsonrpc-client'
 
 async function onKeysImport() {
   const tx = window.static_translate
@@ -30,13 +30,19 @@ async function onKeysImport() {
         return
       }
       const text = tx('pref_managekeys_secret_keys_imported_from_x', filename)
-      ipcBackend.on('DC_EVENT_IMEX_PROGRESS', (_event, progress) => {
+      const onImexProgress = ({ progress }: DcEventType<'ImexProgress'>) => {
         if (progress !== 1000) {
           return
         }
         window.__userFeedback({ type: 'success', text })
-      })
-      BackendRemote.rpc.importSelfKeys(selectedAccountId(), filename, null)
+      }
+      const emitter = BackendRemote.getContextEvents(selectedAccountId())
+      emitter.on('ImexProgress', onImexProgress)
+      BackendRemote.rpc
+        .importSelfKeys(selectedAccountId(), filename, null)
+        .finally(() => {
+          emitter.off('ImexProgress', onImexProgress)
+        })
     },
   })
 }
@@ -64,17 +70,19 @@ async function onKeysExport() {
     message: title,
     confirmLabel: tx('yes'),
     cancelLabel: tx('no'),
-    cb: (yes: boolean) => {
+    cb: async (yes: boolean) => {
       if (!yes || !destination) {
         return
       }
-      ipcBackend.once('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
-        window.__userFeedback({
-          type: 'success',
-          text: tx('pref_managekeys_secret_keys_exported_to_x', filename),
-        })
+      await BackendRemote.rpc.exportSelfKeys(
+        selectedAccountId(),
+        destination,
+        null
+      )
+      window.__userFeedback({
+        type: 'success',
+        text: tx('pref_managekeys_secret_keys_exported_to_x', destination),
       })
-      BackendRemote.rpc.exportSelfKeys(selectedAccountId(), destination, null)
     },
   })
 }

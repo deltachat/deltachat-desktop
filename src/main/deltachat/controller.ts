@@ -22,6 +22,7 @@ import { tx } from '../load-translations'
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat')
 const logCoreEvent = getLogger('core/event')
+const logCoreEventM = getLogger('core/event/m')
 const logMigrate = getLogger('main/migrate')
 
 /**
@@ -60,7 +61,6 @@ export default class DeltaChatController extends EventEmitter {
   constructor(public cwd: string) {
     super()
     this.onAll = this.onAll.bind(this)
-    this.onIncomingMsg = this.onIncomingMsg.bind(this)
   }
 
   async init() {
@@ -74,11 +74,32 @@ export default class DeltaChatController extends EventEmitter {
       'deltachat-desktop'
     )
 
-    log.debug('Starting event handler')
-    this.registerEventHandler(this.account_manager)
-
     this.account_manager.startJsonRpcHandler(response => {
       mainWindow.send('json-rpc-message', response)
+      if (response.indexOf('event') !== -1)
+        try {
+          const { method, params } = JSON.parse(response)
+          if (method === 'event') {
+            const { contextId, event } = params
+            if (event.type === 'Warning') {
+              logCoreEvent.warn(contextId, event.msg)
+            } else if (event === 'Info') {
+              logCoreEvent.info(contextId, event.msg)
+            } else if (event.startsWith('Error')) {
+              logCoreEvent.error(contextId, event.msg)
+            } else if (app.rc['log-debug']) {
+              // in debug mode log all core events
+              const event_clone = Object.assign({}, event) as Partial<
+                typeof event
+              >
+              delete event_clone.type
+              logCoreEvent.debug(event.type, contextId, event)
+            }
+          }
+        } catch (error) {
+          // ignore json parse errors
+          return
+        }
     })
 
     ipcMain.handle('json-rpc-request', (_ev, message) => {
@@ -209,6 +230,7 @@ export default class DeltaChatController extends EventEmitter {
       }
     }
 
+    this.unregisterEventHandler(tmp_dc)
     tmp_dc.close()
     // Clear some settings that we cant migrate
     DesktopSettings.update({
@@ -316,38 +338,24 @@ export default class DeltaChatController extends EventEmitter {
 
   onAll(event: string, accountId: number, data1: any, data2: any) {
     if (event === 'DC_EVENT_WARNING') {
-      logCoreEvent.warn(accountId, event, data1, data2)
+      logCoreEventM.warn(accountId, event, data1, data2)
     } else if (event === 'DC_EVENT_INFO') {
-      logCoreEvent.info(accountId, event, data1, data2)
+      logCoreEventM.info(accountId, event, data1, data2)
     } else if (event.startsWith('DC_EVENT_ERROR')) {
-      logCoreEvent.error(accountId, event, data1, data2)
+      logCoreEventM.error(accountId, event, data1, data2)
     } else if (app.rc['log-debug']) {
       // in debug mode log all core events
-      logCoreEvent.debug(accountId, event, data1, data2)
+      logCoreEventM.debug(accountId, event, data1, data2)
     }
-
-    this.emit('ALL', event, accountId, data1, data2)
-    this.emit(event, accountId, data1, data2)
-
-    if (accountId === this.selectedAccountId) {
-      this.sendToRenderer(event, [data1, data2])
-    }
-  }
-
-  onIncomingMsg(accountId: number, _chatId: number, _msgId: number) {
-    // TODO better do proper event sorting in the frontend so we can listen there for this event
-    this.sendToRenderer('DD_EVENT_INCOMING_MESSAGE_ACCOUNT', accountId)
   }
 
   registerEventHandler(dc: DeltaChat) {
     dc.startEvents()
     dc.on('ALL', this.onAll.bind(this))
-    dc.on('DC_EVENT_INCOMING_MSG', this.onIncomingMsg)
   }
 
   unregisterEventHandler(dc: DeltaChat) {
     dc.removeListener('ALL', this.onAll)
-    dc.removeListener('DC_EVENT_INCOMING_MSG', this.onIncomingMsg)
   }
 
   /**

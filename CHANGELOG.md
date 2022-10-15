@@ -14,6 +14,7 @@
 
 ## Changed
 - start migrating to jsonrpc api
+- migrate event handling to jsonrpc api
 - Update translations (22.09.2022)
 - click on selected chat in chatlist now goes to bottom or first unread message
 - remember last path in "save as" dialog
@@ -23,6 +24,7 @@
 - make contact last seen always display relative time
 - hide ephemeral timer menu options for mailing lists #2920
 - reposition ConnectivityToast
+- only show core events in frontend dev console if deltachat was started with `--log-debug` or `--devmode`
 
 ## Fixed
 - allow scanning of certain qr code types on welcome screen (account, url and text)

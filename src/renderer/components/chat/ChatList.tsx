@@ -25,7 +25,6 @@ import {
 } from 'react-window'
 import InfiniteLoader from 'react-window-infinite-loader'
 
-import { onDCEvent } from '../../ipc'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
 
@@ -34,9 +33,9 @@ import {
   selectChat,
 } from '../helpers/ChatMethods'
 import { useThemeCssVar } from '../../ThemeManager'
-import { BackendRemote, Type } from '../../backend-com'
+import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import { T } from '@deltachat/jsonrpc-client'
+import { DcEvent, DcEventType, T } from '@deltachat/jsonrpc-client'
 import { Avatar } from '../Avatar'
 
 const enum LoadStatus {
@@ -547,7 +546,21 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
       }
     }
 
-    return (chatId: number, _messageId: number | string) => {
+    return ({
+      chatId,
+    }: Extract<
+      DcEvent,
+      {
+        type:
+          | 'MsgRead'
+          | 'MsgDelivered'
+          | 'MsgFailed'
+          | 'IncomingMsg'
+          | 'ChatModified'
+          | 'MsgsChanged'
+          | 'MsgsNoticed'
+      }
+    >) => {
       if (chatId === C.DC_CHAT_ID_TRASH) {
         return
       }
@@ -570,7 +583,7 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
    * Currently used for updating nickname changes in the summary of chatlistitems.
    */
   const onContactChanged = useCallback(
-    async (contactId: number) => {
+    async ({ contactId }: DcEventType<'ContactsChanged'>) => {
       if (contactId !== 0) {
         const chatListItems = await BackendRemote.rpc.getChatlistEntries(
           accountId,
@@ -594,30 +607,32 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
     [accountId]
   )
 
-  useEffect(() => {
-    const removeOnChatListItemChangedListener = onDCEvent(
-      [
-        'DC_EVENT_MSG_READ',
-        'DC_EVENT_MSG_DELIVERED',
-        'DC_EVENT_MSG_FAILED',
-        'DC_EVENT_CHAT_MODIFIED',
-        'DC_EVENT_INCOMING_MSG',
-        'DC_EVENT_MSGS_CHANGED',
-        'DC_EVENT_MSGS_NOTICED',
-      ],
-      onChatListItemChanged
-    )
+  useEffect(() => onDCEvent(accountId, 'ContactsChanged', onContactChanged), [
+    accountId,
+    onContactChanged,
+  ])
 
-    const removeOnContactChangedListener = onDCEvent(
-      'DC_EVENT_CONTACTS_CHANGED',
-      onContactChanged
-    )
+  useEffect(() => {
+    const emitter = BackendRemote.getContextEvents(accountId)
+
+    emitter.on('MsgRead', onChatListItemChanged)
+    emitter.on('MsgDelivered', onChatListItemChanged)
+    emitter.on('MsgFailed', onChatListItemChanged)
+    emitter.on('IncomingMsg', onChatListItemChanged)
+    emitter.on('ChatModified', onChatListItemChanged)
+    emitter.on('MsgsChanged', onChatListItemChanged)
+    emitter.on('MsgsNoticed', onChatListItemChanged)
 
     return () => {
-      removeOnChatListItemChangedListener()
-      removeOnContactChangedListener()
+      emitter.off('MsgRead', onChatListItemChanged)
+      emitter.off('MsgDelivered', onChatListItemChanged)
+      emitter.off('MsgFailed', onChatListItemChanged)
+      emitter.off('IncomingMsg', onChatListItemChanged)
+      emitter.off('ChatModified', onChatListItemChanged)
+      emitter.off('MsgsChanged', onChatListItemChanged)
+      emitter.off('MsgsNoticed', onChatListItemChanged)
     }
-  }, [onChatListItemChanged, onContactChanged])
+  }, [onChatListItemChanged, accountId])
 
   // effects
 

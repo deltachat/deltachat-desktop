@@ -1,6 +1,5 @@
 import { debounce } from 'debounce'
 import { BackendRemote } from '../backend-com'
-import { ipcBackend } from '../ipc'
 import { runtime } from '../runtime'
 
 async function updateBadgeCounter() {
@@ -21,12 +20,11 @@ export const debouncedUpdateBadgeCounter = debounce(
 )
 
 export function initBadgeCounter() {
-  ipcBackend.on('DC_EVENT_INCOMING_MSG', async (_, [_chatId, _messageId]) => {
-    debouncedUpdateBadgeCounter()
+  BackendRemote.on('IncomingMsg', accountId => {
+    if (accountId === window.__selectedAccountId) debouncedUpdateBadgeCounter()
   })
-
-  ipcBackend.on('DC_EVENT_CHAT_MODIFIED', async (_evt, [_chatId]) => {
-    debouncedUpdateBadgeCounter()
+  BackendRemote.on('ChatModified', accountId => {
+    if (accountId === window.__selectedAccountId) debouncedUpdateBadgeCounter()
   })
   // on app startup:
   debouncedUpdateBadgeCounter()

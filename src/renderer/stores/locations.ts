@@ -1,9 +1,8 @@
-import { T } from '@deltachat/jsonrpc-client'
+import { DcEvent, T } from '@deltachat/jsonrpc-client'
 import { BackendRemote, Type } from '../backend-com'
+import { onReady } from '../onready'
 import { selectedAccountId } from '../ScreenController'
 import { Store } from './store'
-
-const { ipcRenderer } = window.electron_functions
 
 export class state {
   selectedChat: Type.FullChat | null = null
@@ -30,33 +29,42 @@ const getLocations = async (chatId: number, mapSettings: todo) => {
   }, 'getLocations')
 }
 
-const onLocationChange = (_evt: any, [chatId]: [number]) => {
-  const { selectedChat, mapSettings } = locationStore.getState()
-  if (selectedChat && chatId === selectedChat.id) {
-    getLocations(chatId, mapSettings)
-  }
-}
-
-ipcRenderer.on('DC_EVENT_LOCATION_CHANGED', (_evt, contactId) => {
-  const { selectedChat, mapSettings } = locationStore.getState()
-  if (!selectedChat || !selectedChat.id) {
-    return
-  }
-  if (contactId === 0) {
-    // this means all locations were deleted
-    getLocations(selectedChat.id, mapSettings)
-  }
-  if (selectedChat && selectedChat.contactIds) {
-    const isMemberOfSelectedChat = selectedChat.contactIds.includes(contactId)
-    if (isMemberOfSelectedChat) {
+onReady(() => {
+  BackendRemote.on('LocationChanged', (accountId, { contactId }) => {
+    if (accountId !== window.__selectedAccountId) {
+      return
+    }
+    const { selectedChat, mapSettings } = locationStore.getState()
+    if (!selectedChat || !selectedChat.id) {
+      return
+    }
+    if (contactId === null) {
+      // this means all locations were deleted
       getLocations(selectedChat.id, mapSettings)
+    } else if (selectedChat && selectedChat.contactIds) {
+      const isMemberOfSelectedChat = selectedChat.contactIds.includes(contactId)
+      if (isMemberOfSelectedChat) {
+        getLocations(selectedChat.id, mapSettings)
+      }
+    }
+  })
+
+  const onLocationChange = (
+    accountId: number,
+    { chatId }: Extract<DcEvent, { type: 'MsgsChanged' | 'IncomingMsg' }>
+  ) => {
+    if (accountId === window.__selectedAccountId) {
+      const { selectedChat, mapSettings } = locationStore.getState()
+      if (selectedChat && chatId === selectedChat.id) {
+        getLocations(chatId, mapSettings)
+      }
     }
   }
-})
 
-// sometimes a MSGS_CHANGED is sent instead of locations changed
-ipcRenderer.on('DC_EVENT_MSGS_CHANGED', onLocationChange)
-ipcRenderer.on('DC_EVENT_INCOMING_MSG', onLocationChange)
+  // sometimes a MSGS_CHANGED is sent instead of locations changed
+  BackendRemote.on('MsgsChanged', onLocationChange)
+  BackendRemote.on('IncomingMsg', onLocationChange)
+})
 
 locationStore.attachReducer((action, state) => {
   if (action.type === 'DC_GET_LOCATIONS') {

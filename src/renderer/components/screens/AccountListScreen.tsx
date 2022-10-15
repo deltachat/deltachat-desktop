@@ -4,7 +4,6 @@ import { getLogger } from '../../../shared/logger'
 import debounce from 'debounce'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
-import { ipcBackend } from '../../ipc'
 import ScreenController from '../../ScreenController'
 import { Avatar } from '../Avatar'
 import { PseudoContact } from '../contact/Contact'
@@ -261,7 +260,7 @@ function AccountItem({
 
   const updateUnreadCount = useMemo(
     () =>
-      debounce((_ev: any, account_id: number) => {
+      debounce((account_id: number) => {
         if (account_id === login.id) {
           BackendRemote.rpc
             .getFreshMsgs(login.id)
@@ -273,14 +272,11 @@ function AccountItem({
   )
 
   useEffect(() => {
-    updateUnreadCount(null, login.id)
-    // TODO use onIncomingMsg event directly after we changed the events to be filtered for active account in the frontend
-    ipcBackend.on('DD_EVENT_INCOMING_MESSAGE_ACCOUNT', updateUnreadCount)
+    updateUnreadCount(login.id)
+    const emitter = BackendRemote.getContextEvents(login.id)
+    emitter.on('IncomingMsg', updateUnreadCount.bind(null, login.id))
     return () => {
-      ipcBackend.removeListener(
-        'DD_EVENT_INCOMING_MESSAGE_ACCOUNT',
-        updateUnreadCount
-      )
+      emitter.off('IncomingMsg', updateUnreadCount.bind(null, login.id))
     }
   }, [login.id, updateUnreadCount])
 

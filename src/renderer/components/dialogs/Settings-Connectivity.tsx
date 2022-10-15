@@ -8,11 +8,10 @@ import {
   DeltaDialogBase,
   DeltaDialogHeader,
 } from './DeltaDialog'
-import { onDCEvent } from '../../ipc'
 import { debounceWithInit } from '../chat/ChatListHelpers'
 import { DialogProps } from './DialogController'
 import { useTranslationFunction } from '../../contexts'
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote, onDCEvent } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 
 const INHERIT_STYLES = ['line-height', 'background-color', 'color', 'font-size']
@@ -65,6 +64,7 @@ export async function getConnectivityHTML(
 }
 
 export function SettingsConnectivityInner() {
+  const accountId = selectedAccountId()
   const [connectivityHTML, setConnectivityHTML] = useState('')
   const styleSensor = useRef<HTMLDivElement | null>(null)
 
@@ -79,8 +79,8 @@ export function SettingsConnectivityInner() {
 
   useEffect(() => {
     updateConnectivity()
-    return onDCEvent('DC_EVENT_CONNECTIVITY_CHANGED', updateConnectivity)
-  })
+    return onDCEvent(accountId, 'ConnectivityChanged', updateConnectivity)
+  }, [accountId, updateConnectivity])
 
   return (
     <>

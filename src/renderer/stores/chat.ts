@@ -1,4 +1,3 @@
-import { ipcBackend } from '../ipc'
 import { Store, useStore } from './store'
 import { sendMessageParams } from '../delta-remote'
 import { ActionEmitter, KeybindAction } from '../keybindings'
@@ -12,6 +11,7 @@ import { T } from '@deltachat/jsonrpc-client'
 import { ChatViewState } from './chat/chat_scroll'
 import { ChatStoreScheduler } from './chat/chat_scheduler'
 import { saveLastChatId } from './chat/chat_sideeffects'
+import { onReady } from '../onready'
 
 export const PAGE_SIZE = 11
 
@@ -1074,35 +1074,56 @@ chatStore.dispatch = (..._args) => {
 
 const log = chatStore.log
 
-ipcBackend.on('DC_EVENT_CHAT_MODIFIED', async (_evt, [chatId]) => {
-  chatStore.effect.onEventChatModified(chatId)
-})
-
-ipcBackend.on('DC_EVENT_MSG_DELIVERED', (_evt, [id, msgId]) => {
-  chatStore.reducer.setMessageState({
-    id,
-    messageId: msgId,
-    messageState: C.DC_STATE_OUT_DELIVERED,
+onReady(() => {
+  BackendRemote.on('ChatModified', (accountId, { chatId }) => {
+    if (accountId !== window.__selectedAccountId) {
+      return
+    }
+    chatStore.effect.onEventChatModified(chatId)
   })
-})
 
-ipcBackend.on('DC_EVENT_INCOMING_MSG', async (_, [chatId, _messageId]) => {
-  chatStore.effect.onEventIncomingMessage(chatId)
-})
-
-ipcBackend.on('DC_EVENT_MSG_READ', (_evt, [id, msgId]) => {
-  chatStore.reducer.setMessageState({
-    id,
-    messageId: msgId,
-    messageState: C.DC_STATE_OUT_MDN_RCVD,
+  BackendRemote.on('MsgDelivered', (accountId, { chatId: id, msgId }) => {
+    if (accountId !== window.__selectedAccountId) {
+      return
+    }
+    chatStore.reducer.setMessageState({
+      id,
+      messageId: msgId,
+      messageState: C.DC_STATE_OUT_DELIVERED,
+    })
   })
-})
 
-ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [eventChatId, messageId]) => {
-  chatStore.effect.onEventMessagesChanged(eventChatId, messageId)
-})
-ipcBackend.on('DC_EVENT_MSG_FAILED', async (_, [chatId, msgId]) => {
-  chatStore.effect.onEventMessagesChanged(chatId, msgId)
+  BackendRemote.on('IncomingMsg', (accountId, { chatId }) => {
+    if (accountId !== window.__selectedAccountId) {
+      return
+    }
+    chatStore.effect.onEventIncomingMessage(chatId)
+  })
+
+  BackendRemote.on('MsgRead', (accountId, { chatId: id, msgId }) => {
+    if (accountId !== window.__selectedAccountId) {
+      return
+    }
+    chatStore.reducer.setMessageState({
+      id,
+      messageId: msgId,
+      messageState: C.DC_STATE_OUT_MDN_RCVD,
+    })
+  })
+
+  BackendRemote.on('MsgsChanged', (accountId, { chatId, msgId }) => {
+    if (accountId !== window.__selectedAccountId) {
+      return
+    }
+    chatStore.effect.onEventMessagesChanged(chatId, msgId)
+  })
+
+  BackendRemote.on('MsgFailed', (accountId, { chatId, msgId }) => {
+    if (accountId !== window.__selectedAccountId) {
+      return
+    }
+    chatStore.effect.onEventMessagesChanged(chatId, msgId)
+  })
 })
 
 export function calculatePageKey(
