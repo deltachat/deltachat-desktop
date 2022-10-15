@@ -13,12 +13,6 @@ export type sendMessageParams = {
 class DeltaRemote {
   // login ----------------------------------------------------
   call(fnName: 'login.selectAccount', accountId: number): Promise<boolean>
-  // stickers -----------------------------------------------------------
-  call(
-    fnName: 'stickers.getStickers'
-  ): Promise<{
-    [key: string]: string[]
-  }>
   // catchall: ----------------------------------------------------------
   call(fnName: string): Promise<any>
   call(fnName: string, ...args: any[]): Promise<any> {
