@@ -510,6 +510,13 @@
     width: var(--quote-img-size);
     margin-left: 6px;
   }
+
+  img.quoted-webxdc-icon {
+    height: var(--quote-img-size);
+    width: var(--quote-img-size);
+    margin-left: 6px;
+    border-radius: 7%;
+  }
 }
 
 .quoted-text,
