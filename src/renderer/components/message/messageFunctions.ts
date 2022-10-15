@@ -1,6 +1,5 @@
 import { getLogger } from '../../../shared/logger'
 const log = getLogger('render/msgFunctions')
-import { DeltaBackend } from '../../delta-remote'
 import { runtime } from '../../runtime'
 import { deleteMessage, selectChat } from '../helpers/ChatMethods'
 import { BackendRemote, Type } from '../../backend-com'
@@ -80,11 +79,15 @@ export async function privateReply(msg: Type.Message) {
 }
 
 export async function openMessageHTML(messageId: number) {
-  const filepath = await DeltaBackend.call(
-    'messageList.saveMessageHTML2Disk',
+  const content = await BackendRemote.rpc.getMessageHtml(
+    selectedAccountId(),
     messageId
   )
-  runtime.openPath(filepath)
+  if (!content) {
+    log.error('openMessageHTML, message has no html content', { messageId })
+    return
+  }
+  runtime.openMessageHTML(content)
 }
 
 export async function downloadFullMessage(messageId: number) {

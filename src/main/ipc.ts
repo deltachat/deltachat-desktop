@@ -1,5 +1,5 @@
-import { copyFile, mkdir, rm } from 'fs/promises'
-import { app as rawApp, clipboard, dialog, ipcMain } from 'electron'
+import { copyFile, mkdir, mkdtemp, rm } from 'fs/promises'
+import { app as rawApp, clipboard, dialog, ipcMain, shell } from 'electron'
 import { getLogger } from '../shared/logger'
 import { getLogsPath } from './application-constants'
 import { LogHandler } from './log-handler'
@@ -11,7 +11,7 @@ import { DesktopSettings } from './desktop_settings'
 import { getConfigPath } from './application-constants'
 import { inspect } from 'util'
 import { DesktopSettingsType, RuntimeInfo } from '../shared/shared-types'
-import { platform } from 'os'
+import { platform, tmpdir } from 'os'
 import { existsSync } from 'fs'
 import { set_has_unread, updateTrayIcon } from './tray'
 import mimeTypes from 'mime-types'
@@ -235,6 +235,13 @@ export async function init(cwd: string, logHandler: LogHandler) {
       return `img: ${fileName.replace(/\\/g, '/')}`
     }
   )
+
+  ipcMain.handle('openMessageHTML', async (_ev, content: string) => {
+    const tmpDir = await mkdtemp(join(tmpdir(), 'deltachat-'))
+    const pathToFile = join(tmpDir, 'message.html')
+    await writeFile(pathToFile, content, { encoding: 'utf-8' })
+    shell.openPath(pathToFile)
+  })
 
   return () => {
     // the shutdown function

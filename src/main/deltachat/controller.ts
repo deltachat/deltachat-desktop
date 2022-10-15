@@ -5,7 +5,6 @@ import { getLogger } from '../../shared/logger'
 import * as mainWindow from '../windows/main'
 import DCContext from './context'
 import DCLoginController from './login'
-import DCMessageList from './messagelist'
 import DCStickers from './stickers'
 import { ExtendedAppMainProcess } from '../types'
 import { Context } from 'deltachat-node/node/dist/context'
@@ -251,7 +250,6 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   readonly login = new DCLoginController(this)
-  readonly messageList = new DCMessageList(this)
   readonly stickers = new DCStickers(this)
   readonly context = new DCContext(this)
   readonly webxdc = new DCWebxdc(this)
