@@ -45,6 +45,7 @@ const {
  * Offers an abstraction Layer to make it easier to make browser client in the future
  */
 interface Runtime {
+  openMessageHTML(content: string): void
   getDesktopSettings(): Promise<DesktopSettingsType>
   setDesktopSetting(
     key: keyof DesktopSettingsType,
@@ -126,6 +127,9 @@ interface Runtime {
 }
 
 class Browser implements Runtime {
+  openMessageHTML(_content: string): void {
+    throw new Error('Method not implemented.')
+  }
   notifyWebxdcStatusUpdate(_accountId: number, _instanceId: number): void {
     throw new Error('Method not implemented.')
   }
@@ -265,6 +269,9 @@ class Browser implements Runtime {
   }
 }
 class Electron implements Runtime {
+  openMessageHTML(content: string): void {
+    ipcBackend.invoke('openMessageHTML', content)
+  }
   notifyWebxdcStatusUpdate(accountId: number, instanceId: number): void {
     ipcBackend.invoke('webxdc:status-update', accountId, instanceId)
   }

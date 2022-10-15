@@ -13,11 +13,6 @@ export type sendMessageParams = {
 class DeltaRemote {
   // login ----------------------------------------------------
   call(fnName: 'login.selectAccount', accountId: number): Promise<boolean>
-  // messageList --------------------------------------------------------
-  call(
-    fnName: 'messageList.saveMessageHTML2Disk',
-    messageId: number
-  ): Promise<string>
   // stickers -----------------------------------------------------------
   call(
     fnName: 'stickers.getStickers'
