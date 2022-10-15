@@ -21,9 +21,6 @@ import moment from 'moment'
 import { getLogger } from '../../../shared/logger'
 import { MessagesDisplayContext, useTranslationFunction } from '../../contexts'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
-import { BackendRemote } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
-import { debouncedUpdateBadgeCounter } from '../../system-integration/badge-counter'
 import { T } from '@deltachat/jsonrpc-client'
 const log = getLogger('render/components/message/MessageList')
 
