@@ -416,6 +416,25 @@ class ChatStore extends Store<ChatStoreState> {
         return modifiedState
       }, 'setMessageIds')
     },
+
+    setFreshMessageCounter: (payload: {
+      id: number
+      freshMessageCounter: number
+    }) => {
+      const { freshMessageCounter } = payload
+      this.setState(state => {
+        if (!state.chat) return
+        const modifiedState: ChatStoreState = {
+          ...state,
+          chat: {
+            ...state.chat,
+            freshMessageCounter,
+          },
+        }
+        if (this.guardReducerIfChatIdIsDifferent(payload)) return
+        return modifiedState
+      }, 'setMessageIds')
+    },
   }
 
   effect = {
@@ -686,6 +705,25 @@ class ChatStore extends Store<ChatStoreState> {
       ),
       'jumpToMessage'
     ),
+    markseenMessages: async (chatId: number, msgIds: number[]) => {
+      if (!this.state.chat || !this.state.chat.id) return
+      if (this.state.chat.id !== chatId) return
+      if (!this.state.accountId) {
+        throw new Error('Account Id unset')
+      }
+
+      await BackendRemote.rpc.markseenMsgs(this.state.accountId, msgIds)
+      const freshMessageCounter = await BackendRemote.rpc.getFreshMsgCnt(
+        this.state.accountId,
+        this.state.chat.id
+      )
+      this.reducer.setFreshMessageCounter({
+        id: this.state.chat.id,
+        freshMessageCounter,
+      })
+
+      debouncedUpdateBadgeCounter()
+    },
     uiDeleteMessage: (msgId: number) => {
       if (!this.state.accountId) {
         throw new Error('Account Id unset')

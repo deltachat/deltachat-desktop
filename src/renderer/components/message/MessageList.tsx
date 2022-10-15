@@ -53,9 +53,9 @@ window.addEventListener('focus', () => {
       `window was focused: marking ${messageIdsToMarkAsRead.length} visible messages as read`,
       messageIdsToMarkAsRead
     )
-    BackendRemote.rpc
-      .markseenMsgs(selectedAccountId(), messageIdsToMarkAsRead)
-      .then(debouncedUpdateBadgeCounter)
+    const chatId = ChatStore.state.chat?.id
+    if (!chatId) return
+    ChatStore.effect.markseenMessages(chatId, messageIdsToMarkAsRead)
   }
 })
 
@@ -125,9 +125,9 @@ export default function MessageList({
       }
 
       if (messageIdsToMarkAsRead.length > 0) {
-        BackendRemote.rpc
-          .markseenMsgs(selectedAccountId(), messageIdsToMarkAsRead)
-          .then(debouncedUpdateBadgeCounter)
+        const chatId = ChatStore.state.chat?.id
+        if (!chatId) return
+        ChatStore.effect.markseenMessages(chatId, messageIdsToMarkAsRead)
       }
     })
   }
