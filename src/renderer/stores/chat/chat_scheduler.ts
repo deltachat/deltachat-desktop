@@ -1,6 +1,6 @@
 import { getLogger } from '../../../shared/logger'
 
-const log = getLogger('renderer/stores/chat/sceduler')
+const log = getLogger('renderer/stores/chat/scheduler')
 
 interface ChatStoreLocks {
   scroll: boolean
