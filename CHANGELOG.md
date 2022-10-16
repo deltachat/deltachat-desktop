@@ -26,6 +26,7 @@
 - reposition ConnectivityToast
 - only show core events in frontend dev console if deltachat was started with `--log-debug` or `--devmode`
 - always show sticker tab now and add a button to quickly open the sticker folder.
+- update deltachat-node and deltachat/jsonrpc-client to v1.97.0
 
 ## Fixed
 - allow scanning of certain qr code types on welcome screen (account, url and text)
