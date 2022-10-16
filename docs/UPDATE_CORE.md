@@ -39,4 +39,8 @@ If you already have a core git checkout, you can skip the first step.
 
 1. clone the core repo, right next to your desktop repo folder: `git clone git@github.com:deltachat/deltachat-core-rust.git`
 2. go into your core checkout and run `git pull` to update it to the newest version, then create a branch for your changes
-3. go into your desktop repo and run `npm i ../deltachat-core-rust/deltachat-jsonrpc/typescript` and `npm i ../deltachat-core-rust`
+3. run `npm i` and `npm run build` inside `../deltachat-core-rust/`
+4. run `npm i` and `npm run build` inside `../deltachat-core-rust/deltachat-jsonrpc/typescript/`
+5. go into your desktop repo and run `npm i ../deltachat-core-rust/deltachat-jsonrpc/typescript` and `npm i ../deltachat-core-rust`
+
+Note that you need to run step 3 and 4 again after each change to core sourcecode.

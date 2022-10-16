@@ -11,6 +11,7 @@
 - add recently seen indicator
 - add jump down button
 - add "search for messages in chat"
+- show webxdc icon in quote
 
 ## Changed
 - migrated core communication to jsonrpc api
