@@ -1,4 +1,3 @@
-import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/node/dist/constants'
 import { Card, Classes, Elevation } from '@blueprintjs/core'
 import {
@@ -27,10 +26,11 @@ import {
 } from '../Avatar'
 import { runtime } from '../../runtime'
 import { DeltaInput } from '../Login-Styles'
-import { ipcBackend } from '../../ipc'
 import { getLogger } from '../../../shared/logger'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import { modifyGroup } from '../helpers/ChatMethods'
+import { DcEventType } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/ViewGroup')
 
@@ -52,7 +52,7 @@ export function useChat(initialChat: Type.FullChat): Type.FullChat {
   }, [initialChat.id, accountId])
 
   const onChatModified = useMemo(
-    () => async (_: any, [chatId, _2]: [number, number]) => {
+    () => async ({ chatId }: DcEventType<'ChatModified'>) => {
       if (chatId !== chat.id) return
       updateChat()
     },
@@ -63,11 +63,12 @@ export function useChat(initialChat: Type.FullChat): Type.FullChat {
     updateChat()
   }, [initialChat, updateChat])
   useEffect(() => {
-    ipcBackend.on('DC_EVENT_CHAT_MODIFIED', onChatModified)
+    const emitter = BackendRemote.getContextEvents(accountId)
+    emitter.on('ChatModified', onChatModified)
     return () => {
-      ipcBackend.removeListener('DC_EVENT_CHAT_MODIFIED', onChatModified)
+      emitter.on('ChatModified', onChatModified)
     }
-  }, [onChatModified])
+  }, [onChatModified, accountId])
   return chat
 }
 
@@ -112,13 +113,7 @@ export const useGroup = (chat: Type.FullChat) => {
 
   useEffect(() => {
     ;(async () => {
-      DeltaBackend.call(
-        'chat.modifyGroup',
-        chat.id,
-        groupName,
-        groupImage || undefined,
-        groupMembers
-      )
+      modifyGroup(chat.id, groupName, groupImage || undefined, groupMembers)
     })()
   }, [groupName, groupImage, groupMembers, chat.id])
 

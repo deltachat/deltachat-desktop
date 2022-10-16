@@ -4,7 +4,6 @@ import { getLogger } from '../../../shared/logger'
 import debounce from 'debounce'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
-import { ipcBackend } from '../../ipc'
 import ScreenController from '../../ScreenController'
 import { Avatar } from '../Avatar'
 import { PseudoContact } from '../contact/Contact'
@@ -15,7 +14,7 @@ import {
 } from '../dialogs/DeltaDialog'
 import filesizeConverter from 'filesize'
 import { BackendRemote, EffectfulBackendActions, Type } from '../../backend-com'
-import { DeltaBackend } from '../../delta-remote'
+import { runtime } from '../../runtime'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
@@ -34,9 +33,7 @@ export default function AccountListScreen({
 
   useEffect(() => {
     ;(async () => {
-      const desktopSettings = await DeltaBackend.call(
-        'settings.getDesktopSettings'
-      )
+      const desktopSettings = await runtime.getDesktopSettings()
       setSyncAllAccounts(desktopSettings.syncAllAccounts)
     })()
   }, [])
@@ -93,11 +90,15 @@ export default function AccountListScreen({
                   label={tx('sync_all')}
                   onChange={async () => {
                     const new_state = !syncAllAccounts
-                    await DeltaBackend.call(
-                      'settings.setDesktopSetting',
+                    await runtime.setDesktopSetting(
                       'syncAllAccounts',
                       new_state
                     )
+                    if (new_state) {
+                      BackendRemote.rpc.startIoForAllAccounts()
+                    } else {
+                      BackendRemote.rpc.stopIoForAllAccounts()
+                    }
                     setSyncAllAccounts(new_state)
                   }}
                   alignIndicator={Alignment.RIGHT}
@@ -247,7 +248,8 @@ function AccountItem({
 
   const [account_size, setSize] = useState<string>('?')
   useEffect(() => {
-    DeltaBackend.call('login.getAccountSize', login.id)
+    BackendRemote.rpc
+      .getAccountFileSize(login.id)
       .catch(log.error)
       .then(bytes => {
         bytes && setSize(filesizeConverter(bytes))
@@ -258,7 +260,7 @@ function AccountItem({
 
   const updateUnreadCount = useMemo(
     () =>
-      debounce((_ev: any, account_id: number) => {
+      debounce((account_id: number) => {
         if (account_id === login.id) {
           BackendRemote.rpc
             .getFreshMsgs(login.id)
@@ -270,14 +272,11 @@ function AccountItem({
   )
 
   useEffect(() => {
-    updateUnreadCount(null, login.id)
-    // TODO use onIncomingMsg event directly after we changed the events to be filtered for active account in the frontend
-    ipcBackend.on('DD_EVENT_INCOMING_MESSAGE_ACCOUNT', updateUnreadCount)
+    updateUnreadCount(login.id)
+    const emitter = BackendRemote.getContextEvents(login.id)
+    emitter.on('IncomingMsg', updateUnreadCount.bind(null, login.id))
     return () => {
-      ipcBackend.removeListener(
-        'DD_EVENT_INCOMING_MESSAGE_ACCOUNT',
-        updateUnreadCount
-      )
+      emitter.off('IncomingMsg', updateUnreadCount.bind(null, login.id))
     }
   }, [login.id, updateUnreadCount])
 

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Elevation, Card } from '@blueprintjs/core'
 
-const { ipcRenderer } = window.electron_functions
 import { useTranslationFunction } from '../../contexts'
 
 import { DesktopSettingsType } from '../../../shared/shared-types'
@@ -358,12 +357,6 @@ export default function Settings(props: DialogProps) {
       </>
     )
   }
-
-  useEffect(() => {
-    return () => {
-      ipcRenderer.removeAllListeners('DC_EVENT_IMEX_FILE_WRITTEN')
-    }
-  }, [])
 
   const { onClose } = props
 

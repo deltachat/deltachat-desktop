@@ -19,6 +19,9 @@ import AccountListScreen from './components/screens/AccountListScreen'
 import WelcomeScreen from './components/screens/WelcomeScreen'
 import { BackendRemote } from './backend-com'
 import { debouncedUpdateBadgeCounter } from './system-integration/badge-counter'
+import { hintUpdateIfNessesary, updateDeviceChats } from './deviceMessages'
+import { runtime } from './runtime'
+import { DcEventType } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -74,10 +77,8 @@ export default class ScreenController extends Component {
   }
 
   private async startup() {
-    const lastLoggedInAccountId = await DeltaBackend.call(
-      'login.getLastLoggedInAccount'
-    )
-    if (lastLoggedInAccountId && !(lastLoggedInAccountId < 0)) {
+    const lastLoggedInAccountId = await this._getLastUsedAccount()
+    if (lastLoggedInAccountId) {
       await this.selectAccount(lastLoggedInAccountId)
     } else {
       const allAccountIds = await BackendRemote.rpc.getAllAccountIds()
@@ -87,6 +88,24 @@ export default class ScreenController extends Component {
         const accountId = await BackendRemote.rpc.addAccount()
         await this.selectAccount(accountId)
       }
+    }
+  }
+
+  private async _getLastUsedAccount(): Promise<number | undefined> {
+    const lastLoggedInAccountId = (await runtime.getDesktopSettings())
+      .lastAccount
+    try {
+      if (lastLoggedInAccountId) {
+        await BackendRemote.rpc.getAccountInfo(lastLoggedInAccountId)
+        return lastLoggedInAccountId
+      } else {
+        return undefined
+      }
+    } catch (error) {
+      log.warn(
+        `getLastUsedAccount: account with id ${lastLoggedInAccountId} does not exist`
+      )
+      return undefined
     }
   }
 
@@ -102,6 +121,8 @@ export default class ScreenController extends Component {
     )
     if (account.type === 'Configured') {
       this.changeScreen(Screens.Main)
+      hintUpdateIfNessesary(this.selectedAccountId)
+      updateDeviceChats(this.selectedAccountId)
     } else {
       this.changeScreen(Screens.Welcome)
     }
@@ -128,9 +149,7 @@ export default class ScreenController extends Component {
   }
 
   componentDidMount() {
-    ipcRenderer.on('error', this.onError)
-    ipcRenderer.on('DC_EVENT_ERROR', this.onError)
-    ipcRenderer.on('success', this.onSuccess)
+    BackendRemote.on('Error', this.onError)
     ipcRenderer.on('showAboutDialog', this.onShowAbout)
     ipcRenderer.on('showKeybindingsDialog', this.onShowKeybindings)
     ipcRenderer.on('showSettingsDialog', this.onShowSettings)
@@ -142,19 +161,20 @@ export default class ScreenController extends Component {
   }
 
   componentWillUnmount() {
+    BackendRemote.off('Error', this.onError)
     ipcRenderer.removeListener('showAboutDialog', this.onShowAbout)
     ipcRenderer.removeListener('showSettingsDialog', this.onShowSettings)
-    ipcRenderer.removeListener('error', this.onError)
-    ipcRenderer.removeListener('DC_EVENT_ERROR', this.onError)
-    ipcRenderer.removeListener('success', this.onSuccess)
     ipcRenderer.removeListener('open-url', this.onOpenUrl)
   }
 
-  onError(_event: any, [data1, data2]: [string | number, string]) {
-    if (this.state.screen === Screens.Welcome) return
-    if (data1 === 0) data1 = ''
-    const text = data1 + data2
-    this.userFeedback({ type: 'error', text })
+  onError(accountId: number, { msg }: DcEventType<'Error'>) {
+    if (
+      this.selectedAccountId !== accountId ||
+      this.state.screen === Screens.Welcome
+    ) {
+      return
+    }
+    this.userFeedback({ type: 'error', text: msg })
   }
 
   onSuccess(_event: any, text: string) {

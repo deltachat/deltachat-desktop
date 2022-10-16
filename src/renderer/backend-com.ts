@@ -1,4 +1,4 @@
-import { BaseDeltaChat, yerpc, RPC } from '@deltachat/jsonrpc-client'
+import { BaseDeltaChat, yerpc, RPC, DcEvent } from '@deltachat/jsonrpc-client'
 import { DeltaBackend } from './delta-remote'
 import { runtime } from './runtime'
 import { getLogger } from '../shared/logger'
@@ -17,7 +17,7 @@ class ElectronTransport extends BaseTransport {
       'json-rpc-message',
       (_ev, response) => {
         const message: RPC.Message = JSON.parse(response)
-        //   log.debug("received: ", message)
+        log.debug('received: ', message)
         this._onmessage(message)
       }
     )
@@ -65,8 +65,14 @@ export namespace EffectfulBackendActions {
     runtime.closeAllWebxdcInstances()
     debouncedUpdateBadgeCounter()
 
+    if (!(await runtime.getDesktopSettings()).syncAllAccounts) {
+      await BackendRemote.rpc.stopIo(window.__selectedAccountId)
+    }
+
+    runtime.setDesktopSetting('lastAccount', undefined)
+
     // for now we still need to call the backend function,
-    // because backend still has sleected account
+    // because backend still has selected account
     await DeltaBackend.call('login.logout')
     ;(window.__selectedAccountId as any) = undefined
   }
@@ -86,5 +92,23 @@ export namespace EffectfulBackendActions {
     await BackendRemote.rpc.deleteChat(accountId, chatId)
     clearNotificationsForChat(accountId, chatId)
     window.__refetchChatlist && window.__refetchChatlist()
+  }
+}
+
+type ContextEvents = { ALL: (event: DcEvent) => void } & {
+  [Property in DcEvent['type']]: (
+    event: Extract<DcEvent, { type: Property }>
+  ) => void
+}
+
+export function onDCEvent<variant extends keyof ContextEvents>(
+  accountId: number,
+  eventType: variant,
+  callback: ContextEvents[variant]
+) {
+  const emitter = BackendRemote.getContextEvents(accountId)
+  emitter.on(eventType, callback)
+  return () => {
+    emitter.off(eventType, callback)
   }
 }

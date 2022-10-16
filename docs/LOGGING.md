@@ -39,3 +39,16 @@ Basically the log files are **tab separated** `CSV`-files(also known as `TSV`):
 | timestamp                  | location / module | level  | stacktrace | arg1          | arg2 | ... |
 | -------------------------- | ----------------- | ------ | ---------- | ------------- | ---- | --- |
 | "2019-01-27T13:46:31.801Z" | "main/deltachat"  | "INFO" | \[]        | "dc_get_info" | -    | ... |
+
+#### Tips and Tricks for working with the browser console:
+
+##### Use the search to filter the output like:
+
+space seperate terms, exclude with -, if your term contains spaces you should exape it with "
+
+`-👻` - don't show events from background accounts (not selected accounts)
+`-📡` - don't show any events
+`-renderer/jsonrpc` - don't show jsonrpc messages
+`renderer/jsonrpc` - show only jsonrpc messages
+
+Start deltachat with --devmode (or --log-debug and --log-to-console) argument to show full log output.

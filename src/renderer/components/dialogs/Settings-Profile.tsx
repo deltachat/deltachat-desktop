@@ -2,7 +2,6 @@ import { Card, Elevation } from '@blueprintjs/core'
 import React, { useEffect, useState, useContext, useCallback } from 'react'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
 
-import { DeltaBackend } from '../../delta-remote'
 import { avatarInitial, ClickForFullscreenAvatarWrapper } from '../Avatar'
 import { DeltaInput, DeltaTextarea } from '../Login-Styles'
 import {
@@ -15,13 +14,12 @@ import { SettingsButton } from './Settings'
 import { runtime } from '../../runtime'
 import { C } from 'deltachat-node/node/dist/constants'
 import { DialogProps } from './DialogController'
-import { onDCEvent } from '../../ipc'
 import SettingsAccountDialog from './Settings-Account'
 import SettingsConnectivityDialog from './Settings-Connectivity'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote, onDCEvent } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 
 export default function SettingsProfile({
@@ -60,9 +58,8 @@ export default function SettingsProfile({
   )
   useEffect(() => {
     updateConnectivity()
-
-    return onDCEvent('DC_EVENT_CONNECTIVITY_CHANGED', updateConnectivity)
-  }, [updateConnectivity])
+    return onDCEvent(accountId, 'ConnectivityChanged', updateConnectivity)
+  }, [updateConnectivity, accountId])
 
   const tx = useTranslationFunction()
   const profileBlobUrl = runtime.transformBlobURL(
@@ -206,8 +203,9 @@ export function SettingsEditProfileDialogInner({
     onClose()
   }
   const onOk = async () => {
-    await DeltaBackend.call(
-      'setProfilePicture',
+    await BackendRemote.rpc.setConfig(
+      selectedAccountId(),
+      'selfavatar',
       profilePicture ? profilePicture : null
     )
     SettingsStoreInstance.effect.setCoreSetting('displayname', displayname)

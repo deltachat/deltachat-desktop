@@ -16,9 +16,7 @@ import {
 } from './ChatListItemRow'
 import { PseudoListItemAddContact } from '../helpers/PseudoListItem'
 import { C } from 'deltachat-node/node/dist/constants'
-import { DeltaBackend } from '../../delta-remote'
 import { useContactIds } from '../contact/ContactList'
-import { MessageSearchResult } from '../../../shared/shared-types'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import {
   FixedSizeList as List,
@@ -27,8 +25,7 @@ import {
 } from 'react-window'
 import InfiniteLoader from 'react-window-infinite-loader'
 
-import { onDCEvent } from '../../ipc'
-import { ScreenContext } from '../../contexts'
+import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
 
 import {
@@ -36,8 +33,10 @@ import {
   selectChat,
 } from '../helpers/ChatMethods'
 import { useThemeCssVar } from '../../ThemeManager'
-import { BackendRemote, Type } from '../../backend-com'
+import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import { DcEvent, DcEventType, T } from '@deltachat/jsonrpc-client'
+import { Avatar } from '../Avatar'
 
 const enum LoadStatus {
   FETCHING = 1,
@@ -99,10 +98,19 @@ export default function ChatList(props: {
   selectedChatId: number | null
   showArchivedChats: boolean
   queryStr?: string
+  queryChatId: number | null
   onExitSearch?: () => void
   onChatClick: (chatId: number) => void
 }) {
-  const { selectedChatId, showArchivedChats, onChatClick, queryStr } = props
+  const accountId = selectedAccountId()
+
+  const {
+    selectedChatId,
+    showArchivedChats,
+    onChatClick,
+    queryStr,
+    queryChatId,
+  } = props
   const isSearchActive = queryStr !== ''
 
   const {
@@ -115,7 +123,7 @@ export default function ChatList(props: {
     loadContact,
     contactCache,
     queryStrIsValidEmail,
-  } = useContactAndMessageLogic(queryStr)
+  } = useContactAndMessageLogic(queryStr, queryChatId)
 
   const { chatListIds, isChatLoaded, loadChats, chatCache } = useLogicChatPart(
     queryStr,
@@ -269,7 +277,76 @@ export default function ChatList(props: {
     return { messageResultIds, messageCache, openDialog, queryStr }
   }, [messageResultIds, messageCache, openDialog, queryStr])
 
+  const [searchChatInfo, setSearchChatInfo] = useState<T.FullChat | null>(null)
+  useEffect(() => {
+    if (queryChatId) {
+      BackendRemote.rpc
+        .chatlistGetFullChatById(accountId, queryChatId)
+        .then(setSearchChatInfo)
+        .catch(console.error)
+    } else {
+      setSearchChatInfo(null)
+    }
+  }, [accountId, queryChatId, isSearchActive])
+
   // Render --------------------
+  const tx = useTranslationFunction()
+
+  if (queryChatId && searchChatInfo) {
+    return (
+      <>
+        <div className='chat-list'>
+          <AutoSizer>
+            {({ width, height }) => (
+              <div>
+                <div className='search-result-divider' style={{ width: width }}>
+                  {tx('search_in_chat')}
+                </div>
+                <div
+                  className='search-in-chat-label'
+                  style={{ width, height: '64px' }}
+                >
+                  <Avatar
+                    avatarPath={searchChatInfo.profileImage}
+                    color={searchChatInfo.color}
+                    displayName={searchChatInfo.name}
+                  />
+                  <div className='chat-name'>{searchChatInfo.name}</div>
+                  <button
+                    onClick={() => props.onExitSearch?.()}
+                    aria-label={tx('exit_search')}
+                  >
+                    X
+                  </button>
+                </div>
+                <div className='search-result-divider' style={{ width: width }}>
+                  {translate_n('n_messages', messageResultIds.length)}
+                </div>
+                <ChatListPart
+                  isRowLoaded={isMessageLoaded}
+                  loadMoreRows={loadMessages}
+                  rowCount={messageResultIds.length}
+                  width={width}
+                  height={
+                    // take remaining space
+                    height -
+                    DIVIDER_HEIGHT * 2 -
+                    64 /* height of chat label above */
+                  }
+                  itemKey={index => 'key' + messageResultIds[index]}
+                  itemData={messagelistData}
+                  itemHeight={CHATLISTITEM_MESSAGE_HEIGHT}
+                >
+                  {ChatListItemRowMessage}
+                </ChatListPart>
+              </div>
+            )}
+          </AutoSizer>
+        </div>
+      </>
+    )
+  }
+
   return (
     <>
       <div className='chat-list'>
@@ -331,7 +408,7 @@ export default function ChatList(props: {
                     className='search-result-divider'
                     style={{ width: width }}
                   >
-                    {translate_n('n_messages', messageResultIds.length)}
+                    {translated_messages_label(messageResultIds.length)}
                   </div>
 
                   <ChatListPart
@@ -469,7 +546,21 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
       }
     }
 
-    return (chatId: number, _messageId: number | string) => {
+    return ({
+      chatId,
+    }: Extract<
+      DcEvent,
+      {
+        type:
+          | 'MsgRead'
+          | 'MsgDelivered'
+          | 'MsgFailed'
+          | 'IncomingMsg'
+          | 'ChatModified'
+          | 'MsgsChanged'
+          | 'MsgsNoticed'
+      }
+    >) => {
       if (chatId === C.DC_CHAT_ID_TRASH) {
         return
       }
@@ -492,7 +583,7 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
    * Currently used for updating nickname changes in the summary of chatlistitems.
    */
   const onContactChanged = useCallback(
-    async (contactId: number) => {
+    async ({ contactId }: DcEventType<'ContactsChanged'>) => {
       if (contactId !== 0) {
         const chatListItems = await BackendRemote.rpc.getChatlistEntries(
           accountId,
@@ -516,30 +607,32 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
     [accountId]
   )
 
-  useEffect(() => {
-    const removeOnChatListItemChangedListener = onDCEvent(
-      [
-        'DC_EVENT_MSG_READ',
-        'DC_EVENT_MSG_DELIVERED',
-        'DC_EVENT_MSG_FAILED',
-        'DC_EVENT_CHAT_MODIFIED',
-        'DC_EVENT_INCOMING_MSG',
-        'DC_EVENT_MSGS_CHANGED',
-        'DC_EVENT_MSGS_NOTICED',
-      ],
-      onChatListItemChanged
-    )
+  useEffect(() => onDCEvent(accountId, 'ContactsChanged', onContactChanged), [
+    accountId,
+    onContactChanged,
+  ])
 
-    const removeOnContactChangedListener = onDCEvent(
-      'DC_EVENT_CONTACTS_CHANGED',
-      onContactChanged
-    )
+  useEffect(() => {
+    const emitter = BackendRemote.getContextEvents(accountId)
+
+    emitter.on('MsgRead', onChatListItemChanged)
+    emitter.on('MsgDelivered', onChatListItemChanged)
+    emitter.on('MsgFailed', onChatListItemChanged)
+    emitter.on('IncomingMsg', onChatListItemChanged)
+    emitter.on('ChatModified', onChatListItemChanged)
+    emitter.on('MsgsChanged', onChatListItemChanged)
+    emitter.on('MsgsNoticed', onChatListItemChanged)
 
     return () => {
-      removeOnChatListItemChangedListener()
-      removeOnContactChangedListener()
+      emitter.off('MsgRead', onChatListItemChanged)
+      emitter.off('MsgDelivered', onChatListItemChanged)
+      emitter.off('MsgFailed', onChatListItemChanged)
+      emitter.off('IncomingMsg', onChatListItemChanged)
+      emitter.off('ChatModified', onChatListItemChanged)
+      emitter.off('MsgsChanged', onChatListItemChanged)
+      emitter.off('MsgsNoticed', onChatListItemChanged)
     }
-  }, [onChatListItemChanged, onContactChanged])
+  }, [onChatListItemChanged, accountId])
 
   // effects
 
@@ -576,10 +669,13 @@ function useLogicChatPart(
   return { chatListIds, isChatLoaded, loadChats, chatCache }
 }
 
-function useContactAndMessageLogic(queryStr: string | undefined) {
+function useContactAndMessageLogic(
+  queryStr: string | undefined,
+  searchChatId: number | null = null
+) {
   const accountId = selectedAccountId()
   const { contactIds, queryStrIsValidEmail } = useContactIds(0, queryStr)
-  const messageResultIds = useMessageResults(queryStr)
+  const messageResultIds = useMessageResults(queryStr, searchChatId)
 
   // Contacts ----------------
   const [contactCache, setContactCache] = useState<{
@@ -615,7 +711,7 @@ function useContactAndMessageLogic(queryStr: string | undefined) {
 
   // Message ----------------
   const [messageCache, setMessageCache] = useState<{
-    [id: number]: MessageSearchResult
+    [id: number]: T.MessageSearchResult
   }>({})
   const [messageLoadState, setMessageLoading] = useState<{
     [id: number]: undefined | LoadStatus.FETCHING | LoadStatus.LOADED
@@ -633,8 +729,8 @@ function useContactAndMessageLogic(queryStr: string | undefined) {
       ids.forEach(id => (state[id] = LoadStatus.FETCHING))
       return state
     })
-    const messages = await DeltaBackend.call(
-      'messageList.msgIds2SearchResultItems',
+    const messages = await BackendRemote.rpc.messageIdsToSearchResults(
+      accountId,
       ids
     )
     setMessageCache(cache => ({ ...cache, ...messages }))
@@ -662,5 +758,14 @@ function useContactAndMessageLogic(queryStr: string | undefined) {
     loadMessages,
     messageCache,
     queryStrIsValidEmail,
+  }
+}
+
+function translated_messages_label(count: number) {
+  // the search function truncates search to 1000 items for global search
+  if (count === 1000) {
+    return window.static_translate('n_messages', '1000+', { quantity: 'other' })
+  } else {
+    return translate_n('n_messages', count)
   }
 }

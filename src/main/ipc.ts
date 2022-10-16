@@ -1,19 +1,21 @@
-import { copyFile } from 'fs/promises'
-import { app as rawApp, dialog, ipcMain } from 'electron'
+import { copyFile, mkdir, mkdtemp, rm } from 'fs/promises'
+import { app as rawApp, clipboard, dialog, ipcMain, shell } from 'electron'
 import { getLogger } from '../shared/logger'
 import { getLogsPath } from './application-constants'
 import { LogHandler } from './log-handler'
 import { ExtendedAppMainProcess } from './types'
 import * as mainWindow from './windows/main'
 import { openHelpWindow } from './windows/help'
-import path, { basename, join, posix, sep } from 'path'
+import path, { basename, extname, join, posix, sep } from 'path'
 import { DesktopSettings } from './desktop_settings'
 import { getConfigPath } from './application-constants'
 import { inspect } from 'util'
-import { RuntimeInfo } from '../shared/shared-types'
-import { platform } from 'os'
+import { DesktopSettingsType, RuntimeInfo } from '../shared/shared-types'
+import { platform, tmpdir } from 'os'
 import { existsSync } from 'fs'
-import { set_has_unread } from './tray'
+import { set_has_unread, updateTrayIcon } from './tray'
+import mimeTypes from 'mime-types'
+import { writeFile } from 'fs/promises'
 
 const log = getLogger('main/ipc')
 const DeltaChatController: typeof import('./deltachat/controller').default = (() => {
@@ -186,6 +188,21 @@ export async function init(cwd: string, logHandler: LogHandler) {
   })
 
   ipcMain.handle(
+    'set-desktop-setting',
+    (
+      _ev,
+      key: keyof DesktopSettingsType,
+      value: string | number | boolean | undefined
+    ) => {
+      DesktopSettings.update({ [key]: value })
+
+      if (key === 'minimizeToTray') updateTrayIcon()
+
+      return true
+    }
+  )
+
+  ipcMain.handle(
     'app.setBadgeCountAndTrayIconIndicator',
     (_, count: number) => {
       app.setBadgeCount(count)
@@ -193,8 +210,60 @@ export async function init(cwd: string, logHandler: LogHandler) {
     }
   )
 
+  ipcMain.handle('app.writeClipboardToTempFile', () =>
+    writeClipboardToTempFile()
+  )
+
+  ipcMain.handle(
+    'saveBackgroundImage',
+    async (_ev, file: string, isDefaultPicture: boolean) => {
+      const originalFilePath = !isDefaultPicture
+        ? file
+        : join(__dirname, '../../images/backgrounds/', file)
+
+      const bgDir = join(getConfigPath(), 'background')
+      await rm(bgDir, { recursive: true, force: true })
+      await mkdir(bgDir, { recursive: true })
+      const fileName = `background_${Date.now()}` + extname(originalFilePath)
+      const newPath = join(getConfigPath(), 'background', fileName)
+      try {
+        await copyFile(originalFilePath, newPath)
+      } catch (error) {
+        log.error('BG-IMG Copy Failed', error)
+        throw error
+      }
+      return `img: ${fileName.replace(/\\/g, '/')}`
+    }
+  )
+
+  ipcMain.handle('openMessageHTML', async (_ev, content: string) => {
+    const tmpDir = await mkdtemp(join(tmpdir(), 'deltachat-'))
+    const pathToFile = join(tmpDir, 'message.html')
+    await writeFile(pathToFile, content, { encoding: 'utf-8' })
+    shell.openPath(pathToFile)
+  })
+
   return () => {
     // the shutdown function
     dcController._inner_account_manager?.stopIO()
   }
+}
+
+async function writeClipboardToTempFile(): Promise<string> {
+  const formats = clipboard.availableFormats().sort()
+  log.debug('Clipboard available formats:', formats)
+  if (formats.length <= 0) {
+    throw new Error('No files to write')
+  }
+  const pathToFile = join(
+    rawApp.getPath('temp'),
+    `paste.${mimeTypes.extension(formats[0]) || 'bin'}`
+  )
+  const buf =
+    mimeTypes.extension(formats[0]) === 'png'
+      ? clipboard.readImage().toPNG()
+      : clipboard.readBuffer(formats[0])
+  log.debug(`Writing clipboard ${formats[0]} to file ${pathToFile}`)
+  await writeFile(pathToFile, buf, 'binary')
+  return pathToFile
 }

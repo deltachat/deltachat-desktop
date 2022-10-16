@@ -11,7 +11,6 @@ import React, {
 import { Card, Classes } from '@blueprintjs/core'
 import { C } from 'deltachat-node/node/dist/constants'
 
-import { DeltaBackend } from '../../delta-remote'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import {
   useContacts,
@@ -385,7 +384,7 @@ export function AddMemberInnerDialog({
 
   const _onCancel = async () => {
     for (const contactId of contactsToDeleteOnCancel) {
-      await DeltaBackend.call('contacts.deleteContact', contactId)
+      await BackendRemote.rpc.deleteContact(selectedAccountId(), contactId)
     }
     onCancel()
   }
@@ -572,22 +571,27 @@ const useCreateGroup = (
   onClose: DialogProps['onClose']
 ) => {
   const [groupId, setGroupId] = useState(-1)
+  const accountId = selectedAccountId()
 
   const lazilyCreateOrUpdateGroup = async (finishing: boolean) => {
     let gId = groupId
     if (gId === -1) {
-      gId = await DeltaBackend.call('chat.createGroupChat', verified, groupName)
+      gId = await BackendRemote.rpc.createGroupChat(
+        accountId,
+        groupName,
+        verified
+      )
       setGroupId(gId)
     } else {
-      await DeltaBackend.call('chat.setName', gId, groupName)
+      await BackendRemote.rpc.setChatName(accountId, gId, groupName)
     }
     if (finishing === true) {
       if (groupImage && groupImage !== '') {
-        await DeltaBackend.call('chat.setProfileImage', gId, groupImage)
+        await BackendRemote.rpc.setChatProfileImage(accountId, gId, groupImage)
       }
       for (const contactId of groupMembers) {
         if (contactId !== C.DC_CONTACT_ID_SELF) {
-          await DeltaBackend.call('chat.addContactToChat', gId, contactId)
+          await BackendRemote.rpc.addContactToChat(accountId, gId, contactId)
         }
       }
     }
@@ -762,17 +766,18 @@ const useCreateBroadcast = (
   onClose: DialogProps['onClose']
 ) => {
   const [broadcastId, setBroadcastId] = useState(-1)
+  const accountId = selectedAccountId()
 
   const lazilyCreateOrUpdateBroadcast = async (finishing: boolean) => {
     let bId = broadcastId
     if (bId === -1) {
-      bId = await DeltaBackend.call('chat.createBroadcastList')
+      bId = await BackendRemote.rpc.createBroadcastList(accountId)
       setBroadcastId(bId)
     }
     if (finishing === true) {
       for (const contactId of broadcastRecipients) {
         if (contactId !== C.DC_CONTACT_ID_SELF) {
-          await DeltaBackend.call('chat.addContactToChat', bId, contactId)
+          await BackendRemote.rpc.addContactToChat(accountId, bId, contactId)
         }
       }
     }

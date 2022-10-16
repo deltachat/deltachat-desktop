@@ -5,6 +5,7 @@ import {
   DesktopSettingsType,
   RC_Config,
   RuntimeInfo,
+  Theme,
 } from '../shared/shared-types'
 import { setLogHandler } from '../shared/logger'
 import type {
@@ -16,6 +17,7 @@ import type {
 } from 'electron'
 import { getLogger } from '../shared/logger'
 import processOpenQrUrl from './components/helpers/OpenQrUrl'
+import { LocaleData } from '../shared/localize'
 
 const log = getLogger('renderer/runtime')
 
@@ -43,7 +45,12 @@ const {
  * Offers an abstraction Layer to make it easier to make browser client in the future
  */
 interface Runtime {
+  openMessageHTML(content: string): void
   getDesktopSettings(): Promise<DesktopSettingsType>
+  setDesktopSetting(
+    key: keyof DesktopSettingsType,
+    value: string | number | boolean | undefined
+  ): Promise<void>
   /**
    * initializes runtime stuff
    * - sets the LogHandler
@@ -90,6 +97,10 @@ interface Runtime {
   // control app
   restartApp(): void
 
+  // translations
+  getLocaleData(locale?: string): Promise<LocaleData>
+  setLocale(locale: string): Promise<void>
+
   // more system integration functions:
   setBadgeCounter(value: number): void
   showNotification(data: DcNotification): void
@@ -98,13 +109,72 @@ interface Runtime {
   setNotificationCallback(
     cb: (data: { accountId: number; chatId: number; msgId: number }) => void
   ): void
+  writeClipboardToTempFile(): Promise<string>
+  getWebxdcDiskUsage(
+    accountId: number
+  ): Promise<{
+    total_size: number
+    data_size: number
+  }>
+  clearWebxdcDOMStorage(accountId: number): Promise<void>
+  getAvailableThemes(): Promise<Theme[]>
+  getActiveTheme(): Promise<{
+    theme: Theme
+    data: string
+  } | null>
+  resolveThemeAddress(address: string): Promise<string>
+  saveBackgroundImage(file: string, isDefaultPicture: boolean): Promise<string>
 }
 
 class Browser implements Runtime {
+  openMessageHTML(_content: string): void {
+    throw new Error('Method not implemented.')
+  }
   notifyWebxdcStatusUpdate(_accountId: number, _instanceId: number): void {
     throw new Error('Method not implemented.')
   }
   notifyWebxdcInstanceDeleted(_accountId: number, _instanceId: number): void {
+    throw new Error('Method not implemented.')
+  }
+  saveBackgroundImage(
+    _file: string,
+    _isDefaultPicture: boolean
+  ): Promise<string> {
+    throw new Error('Method not implemented.')
+  }
+  getLocaleData(_locale?: string | undefined): Promise<LocaleData> {
+    throw new Error('Method not implemented.')
+  }
+  setLocale(_locale: string): Promise<void> {
+    throw new Error('Method not implemented.')
+  }
+  setDesktopSetting(
+    _key: keyof DesktopSettingsType,
+    _value: string | number | boolean | undefined
+  ): Promise<void> {
+    throw new Error('Method not implemented.')
+  }
+  getAvailableThemes(): Promise<Theme[]> {
+    throw new Error('Method not implemented.')
+  }
+  async getActiveTheme(): Promise<{ theme: Theme; data: string } | null> {
+    return null
+  }
+  resolveThemeAddress(_address: string): Promise<string> {
+    throw new Error('Method not implemented.')
+  }
+  clearWebxdcDOMStorage(_accountId: number): Promise<void> {
+    throw new Error('Method not implemented.')
+  }
+  getWebxdcDiskUsage(
+    _accountId: number
+  ): Promise<{
+    total_size: number
+    data_size: number
+  }> {
+    throw new Error('Method not implemented.')
+  }
+  async writeClipboardToTempFile(): Promise<string> {
     throw new Error('Method not implemented.')
   }
   setNotificationCallback(
@@ -199,11 +269,49 @@ class Browser implements Runtime {
   }
 }
 class Electron implements Runtime {
+  openMessageHTML(content: string): void {
+    ipcBackend.invoke('openMessageHTML', content)
+  }
   notifyWebxdcStatusUpdate(accountId: number, instanceId: number): void {
     ipcBackend.invoke('webxdc:status-update', accountId, instanceId)
   }
   notifyWebxdcInstanceDeleted(accountId: number, instanceId: number): void {
     ipcBackend.invoke('webxdc:instance-deleted', accountId, instanceId)
+  }
+  saveBackgroundImage(
+    file: string,
+    isDefaultPicture: boolean
+  ): Promise<string> {
+    return ipcBackend.invoke('saveBackgroundImage', file, isDefaultPicture)
+  }
+  getLocaleData(locale?: string | undefined): Promise<LocaleData> {
+    return ipcBackend.invoke('getLocaleData', locale)
+  }
+  setLocale(locale: string): Promise<void> {
+    return ipcBackend.invoke('setLocale', locale)
+  }
+  getAvailableThemes(): Promise<Theme[]> {
+    return ipcBackend.invoke('themes.getAvailableThemes')
+  }
+  getActiveTheme(): Promise<{ theme: Theme; data: string } | null> {
+    return ipcBackend.invoke('themes.getActiveTheme')
+  }
+  resolveThemeAddress(address: string): Promise<string> {
+    return ipcBackend.invoke('themes.getAvailableThemes', address)
+  }
+  async clearWebxdcDOMStorage(accountId: number): Promise<void> {
+    ipcBackend.invoke('webxdc.clearWebxdcDOMStorage', accountId)
+  }
+  getWebxdcDiskUsage(
+    accountId: number
+  ): Promise<{
+    total_size: number
+    data_size: number
+  }> {
+    return ipcBackend.invoke('webxdc.getWebxdcDiskUsage', accountId)
+  }
+  async writeClipboardToTempFile(): Promise<string> {
+    return ipcBackend.invoke('app.writeClipboardToTempFile')
   }
   private notificationCallback: (data: {
     accountId: number
@@ -238,6 +346,12 @@ class Electron implements Runtime {
   }
   getDesktopSettings(): Promise<DesktopSettingsType> {
     return ipcBackend.invoke('get-desktop-settings')
+  }
+  setDesktopSetting(
+    key: keyof DesktopSettingsType,
+    value: string | number | boolean | undefined
+  ): Promise<void> {
+    return ipcBackend.invoke('set-desktop-setting', key, value)
   }
   getWebxdcIconURL(msgId: number): string {
     return `webxdc-icon:${msgId}`

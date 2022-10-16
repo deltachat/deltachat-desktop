@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { DeltaBackend } from '../../delta-remote'
 import { Card, Classes } from '@blueprintjs/core'
 import {
   DeltaDialogBase,
@@ -13,6 +12,7 @@ import {
 
 import { DialogProps } from './DialogController'
 import { Type } from '../../backend-com'
+import { modifyGroup } from '../helpers/ChatMethods'
 
 export default function MailingListProfile(props: {
   isOpen: DialogProps['isOpen']
@@ -63,13 +63,7 @@ const useEdit = (
   onClose: DialogProps['onClose']
 ) => {
   const updateGroup = async () => {
-    await DeltaBackend.call(
-      'chat.modifyGroup',
-      groupId,
-      groupName,
-      groupImage || undefined,
-      null
-    )
+    await modifyGroup(groupId, groupName, groupImage || undefined, null)
   }
   const onUpdateGroup = async () => {
     if (groupName === '') return

@@ -1,5 +1,4 @@
 import React, { useRef, useContext, useEffect } from 'react'
-import { DeltaBackend } from '../../delta-remote'
 import Composer, { useDraft } from '../composer/Composer'
 import { getLogger } from '../../../shared/logger'
 import MessageList from './MessageList'
@@ -31,11 +30,11 @@ export function getBackgroundImageStyle(
       // migrating in case of absolute filepaths
       const filePath = parse(bgImg.slice(5, bgImg.length - 2)).base
       bgImg = `img: ${filePath}`
-      DeltaBackend.call('settings.setDesktopSetting', 'chatViewBgImg', bgImg)
+      runtime.setDesktopSetting('chatViewBgImg', bgImg)
     } else if (bgImg.startsWith('#')) {
       // migrating to new prefixes
       bgImg = `color: ${bgImg}`
-      DeltaBackend.call('settings.setDesktopSetting', 'chatViewBgImg', bgImg)
+      runtime.setDesktopSetting('chatViewBgImg', bgImg)
     }
     if (bgImg.startsWith('img: ')) {
       const filePath = bgImg.slice(5)

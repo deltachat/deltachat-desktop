@@ -102,7 +102,7 @@ export default function ChatAuditLogDialog(props: {
       setLoading(true)
       const account_id = selectedAccountId()
 
-      const msgIds = await BackendRemote.rpc.messageListGetMessageIds(
+      const msgIds = await BackendRemote.rpc.getMessageIds(
         account_id,
         selectedChat.id,
         C.DC_GCM_ADDDAYMARKER | C.DC_GCM_INFO_ONLY

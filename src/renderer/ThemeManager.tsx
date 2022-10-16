@@ -1,7 +1,7 @@
-import { DeltaBackend } from './delta-remote'
 import { Theme } from '../shared/shared-types'
 import { ipcBackend } from './ipc'
 import React, { useContext, useMemo } from 'react'
+import { runtime } from './runtime'
 
 export namespace ThemeManager {
   let currentThemeMetaData: Theme
@@ -11,7 +11,7 @@ export namespace ThemeManager {
     const theme: {
       theme: Theme
       data: string
-    } | null = await DeltaBackend.call('extras.getActiveTheme')
+    } | null = await runtime.getActiveTheme()
     if (theme) {
       currentThemeMetaData = theme.theme
       const themeVars = window.document.getElementById('theme-vars')
@@ -24,7 +24,6 @@ export namespace ThemeManager {
   }
 
   ipcBackend.on('theme-update', _e => refresh())
-  refresh()
 
   export function getCurrentThemeMetaData() {
     return currentThemeMetaData

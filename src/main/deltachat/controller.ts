@@ -3,20 +3,9 @@ import { app as rawApp, ipcMain } from 'electron'
 import { EventEmitter } from 'events'
 import { getLogger } from '../../shared/logger'
 import * as mainWindow from '../windows/main'
-import DCBackup from './backup'
-import DCChat from './chat'
-import JsonContacts from './contacts'
 import DCContext from './context'
-import DCLocations from './locations'
 import DCLoginController from './login'
-import DCMessageList from './messagelist'
-import DCSettings from './settings'
-import DCStickers from './stickers'
 import { ExtendedAppMainProcess } from '../types'
-import Extras from './extras'
-
-import { VERSION, BUILD_TIMESTAMP } from '../../shared/build-info'
-import { Timespans, DAYS_UNTIL_UPDATE_SUGGESTION } from '../../shared/constants'
 import { Context } from 'deltachat-node/node/dist/context'
 import path, { join } from 'path'
 import { existsSync, lstatSync } from 'fs'
@@ -31,6 +20,7 @@ import { tx } from '../load-translations'
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat')
 const logCoreEvent = getLogger('core/event')
+const logCoreEventM = getLogger('core/event/m')
 const logMigrate = getLogger('main/migrate')
 
 /**
@@ -68,12 +58,7 @@ export default class DeltaChatController extends EventEmitter {
   ready = false // used for the about screen
   constructor(public cwd: string) {
     super()
-
     this.onAll = this.onAll.bind(this)
-    this.onChatlistUpdated = this.onChatlistUpdated.bind(this)
-    this.onMsgsChanged = this.onMsgsChanged.bind(this)
-    this.onIncomingMsg = this.onIncomingMsg.bind(this)
-    this.onChatModified = this.onChatModified.bind(this)
   }
 
   async init() {
@@ -81,23 +66,38 @@ export default class DeltaChatController extends EventEmitter {
 
     await this.migrateToAccountsApiIfNeeded()
 
-    setInterval(
-      // If the dc is always on
-      this.hintUpdateIfNessesary.bind(this),
-      Timespans.ONE_DAY_IN_SECONDS * 1000
-    )
-
     log.debug('Initiating DeltaChatNode')
     this._inner_account_manager = new DeltaChatNode(
       this.cwd,
       'deltachat-desktop'
     )
 
-    log.debug('Starting event handler')
-    this.registerEventHandler(this.account_manager)
-
     this.account_manager.startJsonRpcHandler(response => {
       mainWindow.send('json-rpc-message', response)
+      if (response.indexOf('event') !== -1)
+        try {
+          const { method, params } = JSON.parse(response)
+          if (method === 'event') {
+            const { contextId, event } = params
+            if (event.type === 'Warning') {
+              logCoreEvent.warn(contextId, event.msg)
+            } else if (event === 'Info') {
+              logCoreEvent.info(contextId, event.msg)
+            } else if (event.startsWith('Error')) {
+              logCoreEvent.error(contextId, event.msg)
+            } else if (app.rc['log-debug']) {
+              // in debug mode log all core events
+              const event_clone = Object.assign({}, event) as Partial<
+                typeof event
+              >
+              delete event_clone.type
+              logCoreEvent.debug(event.type, contextId, event)
+            }
+          }
+        } catch (error) {
+          // ignore json parse errors
+          return
+        }
     })
 
     ipcMain.handle('json-rpc-request', (_ev, message) => {
@@ -228,6 +228,7 @@ export default class DeltaChatController extends EventEmitter {
       }
     }
 
+    this.unregisterEventHandler(tmp_dc)
     tmp_dc.close()
     // Clear some settings that we cant migrate
     DesktopSettings.update({
@@ -247,16 +248,8 @@ export default class DeltaChatController extends EventEmitter {
     logMigrate.info('migration completed')
   }
 
-  readonly backup = new DCBackup(this)
-  readonly contacts = new JsonContacts(this)
-  readonly chat = new DCChat(this)
-  readonly locations = new DCLocations(this)
   readonly login = new DCLoginController(this)
-  readonly messageList = new DCMessageList(this)
-  readonly settings = new DCSettings(this)
-  readonly stickers = new DCStickers(this)
   readonly context = new DCContext(this)
-  readonly extras = new Extras(this)
   readonly webxdc = new DCWebxdc(this)
 
   /**
@@ -341,88 +334,24 @@ export default class DeltaChatController extends EventEmitter {
 
   onAll(event: string, accountId: number, data1: any, data2: any) {
     if (event === 'DC_EVENT_WARNING') {
-      logCoreEvent.warn(accountId, event, data1, data2)
+      logCoreEventM.warn(accountId, event, data1, data2)
     } else if (event === 'DC_EVENT_INFO') {
-      logCoreEvent.info(accountId, event, data1, data2)
+      logCoreEventM.info(accountId, event, data1, data2)
     } else if (event.startsWith('DC_EVENT_ERROR')) {
-      logCoreEvent.error(accountId, event, data1, data2)
+      logCoreEventM.error(accountId, event, data1, data2)
     } else if (app.rc['log-debug']) {
       // in debug mode log all core events
-      logCoreEvent.debug(accountId, event, data1, data2)
+      logCoreEventM.debug(accountId, event, data1, data2)
     }
-
-    this.emit('ALL', event, accountId, data1, data2)
-    this.emit(event, accountId, data1, data2)
-
-    if (accountId === this.selectedAccountId) {
-      this.sendToRenderer(event, [data1, data2])
-    }
-  }
-
-  onMsgsChanged(accountId: number, _chatId: number, _msgId: number) {
-    if (this.selectedAccountId !== accountId) {
-      return
-    }
-    this.onChatlistUpdated()
-  }
-
-  onIncomingMsg(accountId: number, _chatId: number, _msgId: number) {
-    // TODO better do proper event sorting in the frontend so we can listen there for this event
-    this.sendToRenderer('DD_EVENT_INCOMING_MESSAGE_ACCOUNT', accountId)
-    if (this.selectedAccountId !== accountId) {
-      return
-    }
-    this.onChatlistUpdated()
-  }
-
-  onChatModified(accountId: number, _chatId: number, _msgId: number) {
-    if (this.selectedAccountId !== accountId) {
-      return
-    }
-    this.onChatlistUpdated()
   }
 
   registerEventHandler(dc: DeltaChat) {
     dc.startEvents()
     dc.on('ALL', this.onAll.bind(this))
-    dc.on('DD_EVENT_CHATLIST_UPDATED', this.onChatlistUpdated)
-    dc.on('DC_EVENT_MSGS_CHANGED', this.onMsgsChanged)
-    dc.on('DC_EVENT_INCOMING_MSG', this.onIncomingMsg)
-    dc.on('DC_EVENT_CHAT_MODIFIED', this.onChatModified)
   }
 
   unregisterEventHandler(dc: DeltaChat) {
     dc.removeListener('ALL', this.onAll)
-    dc.removeListener('DD_EVENT_CHATLIST_UPDATED', this.onChatlistUpdated)
-    dc.removeListener('DC_EVENT_MSGS_CHANGED', this.onMsgsChanged)
-    dc.removeListener('DC_EVENT_INCOMING_MSG', this.onIncomingMsg)
-    dc.removeListener('DC_EVENT_CHAT_MODIFIED', this.onChatModified)
-  }
-
-  onChatlistUpdated() {
-    this.sendToRenderer('DD_EVENT_CHATLIST_CHANGED', {})
-  }
-
-  joinSecurejoin(qrCode: string) {
-    return this.selectedAccountContext.joinSecurejoin(qrCode)
-  }
-
-  setProfilePicture(newImage: string) {
-    this.selectedAccountContext.setConfig('selfavatar', newImage)
-  }
-
-  hintUpdateIfNessesary() {
-    if (
-      this.selectedAccountContext &&
-      Date.now() >
-        Timespans.ONE_DAY_IN_SECONDS * DAYS_UNTIL_UPDATE_SUGGESTION * 1000 +
-          BUILD_TIMESTAMP
-    ) {
-      this.selectedAccountContext.addDeviceMessage(
-        `update-suggestion-${VERSION}`,
-        `This build is over ${DAYS_UNTIL_UPDATE_SUGGESTION} days old - There might be a new version available. -> https://get.delta.chat`
-      )
-    }
   }
 
   /**

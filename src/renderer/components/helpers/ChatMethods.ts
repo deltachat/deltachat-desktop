@@ -1,4 +1,4 @@
-import { DeltaBackend, sendMessageParams } from '../../delta-remote'
+import { sendMessageParams } from '../../delta-remote'
 import ChatStore, { ChatView } from '../../stores/chat'
 import { ScreenContext, unwrapContext } from '../../contexts'
 import { C } from 'deltachat-node/node/dist/constants'
@@ -10,6 +10,7 @@ import { selectedAccountId } from '../../ScreenController'
 import ViewGroup from '../dialogs/ViewGroup'
 import ViewProfile from '../dialogs/ViewProfile'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
+import { T } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/message')
 
@@ -39,13 +40,14 @@ export const unselectChat = () => {
 
 export async function setChatVisibility(
   chatId: number,
-  visibility:
-    | C.DC_CHAT_VISIBILITY_NORMAL
-    | C.DC_CHAT_VISIBILITY_ARCHIVED
-    | C.DC_CHAT_VISIBILITY_PINNED,
+  visibility: T.ChatVisibility,
   shouldUnselectChat = false
 ) {
-  await DeltaBackend.call('chat.setVisibility', chatId, visibility)
+  await BackendRemote.rpc.setChatVisibility(
+    selectedAccountId(),
+    chatId,
+    visibility
+  )
   if (shouldUnselectChat) unselectChat()
 }
 
@@ -59,7 +61,8 @@ export function openLeaveChatDialog(
     confirmLabel: tx('menu_leave_group'),
     isConfirmDanger: true,
     noMargin: true,
-    cb: (yes: boolean) => yes && DeltaBackend.call('chat.leaveGroup', chatId),
+    cb: (yes: boolean) =>
+      yes && BackendRemote.rpc.leaveGroup(selectedAccountId(), chatId),
   })
 }
 
@@ -149,7 +152,6 @@ export async function openMuteChatDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
   chatId: number
 ) {
-  // todo open dialog to ask for duration
   screenContext.openDialog('MuteChat', { chatId })
 }
 
@@ -166,8 +168,8 @@ export async function sendCallInvitation(
   chatId: number
 ) {
   try {
-    const messageId = await DeltaBackend.call(
-      'chat.sendVideoChatInvitation',
+    const messageId = await BackendRemote.rpc.sendVideochatInvitation(
+      selectedAccountId(),
       chatId
     )
     ChatStore.effect.jumpToMessage(messageId, false)
@@ -226,10 +228,10 @@ export async function createChatByContactIdAndSelectIt(
 
   if (chat && chat.archived) {
     log.debug('chat was archived, unarchiving it')
-    await DeltaBackend.call(
-      'chat.setVisibility',
+    await BackendRemote.rpc.setChatVisibility(
+      selectedAccountId(),
       chatId,
-      C.DC_CHAT_VISIBILITY_NORMAL
+      'Normal'
     )
   }
 
@@ -249,7 +251,7 @@ export const deleteMessage = (messageId: number) => {
 export async function clearChat(chatId: number) {
   const accountID = selectedAccountId()
   const tx = window.static_translate
-  const messages_to_delete = await BackendRemote.rpc.messageListGetMessageIds(
+  const messages_to_delete = await BackendRemote.rpc.getMessageIds(
     accountID,
     chatId,
     0
@@ -266,4 +268,44 @@ export async function clearChat(chatId: number) {
       }
     },
   })
+}
+
+export async function modifyGroup(
+  chatId: number,
+  name: string,
+  image: string | undefined,
+  members: number[] | null
+) {
+  const accountId = selectedAccountId()
+  log.debug('action - modify group', { chatId, name, image, members })
+  await BackendRemote.rpc.setChatName(accountId, chatId, name)
+  const chat = await BackendRemote.rpc.chatlistGetFullChatById(
+    accountId,
+    chatId
+  )
+  if (!chat) {
+    throw new Error('chat is undefined, this should not happen')
+  }
+  if (typeof image !== 'undefined' && chat.profileImage !== image) {
+    await BackendRemote.rpc.setChatProfileImage(
+      accountId,
+      chatId,
+      image || null
+    )
+  }
+
+  if (members !== null) {
+    const previousMembers = [...chat.contactIds]
+    const remove = previousMembers.filter(m => !members.includes(m))
+    const add = members.filter(m => !previousMembers.includes(m))
+
+    await Promise.all(
+      remove.map(id =>
+        BackendRemote.rpc.removeContactFromChat(accountId, chatId, id)
+      )
+    )
+    await Promise.all(
+      add.map(id => BackendRemote.rpc.addContactToChat(accountId, chatId, id))
+    )
+  }
 }

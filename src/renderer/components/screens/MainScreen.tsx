@@ -45,6 +45,7 @@ const log = getLogger('renderer/main-screen')
 
 export default function MainScreen() {
   const [queryStr, setQueryStr] = useState('')
+  const [queryChatId, setQueryChatId] = useState<null | number>(null)
   const [sidebarState, setSidebarState] = useState<SidebarState>('init')
   const [showArchivedChats, setShowArchivedChats] = useState(false)
   // Small hack/misuse of keyBindingAction to setShowArchivedChats from other components (especially
@@ -64,9 +65,13 @@ export default function MainScreen() {
 
     selectChat(chatId)
   }
-  const searchChats = (queryStr: string) => setQueryStr(queryStr)
-  const handleSearchChange = (event: { target: { value: string } }) =>
-    searchChats(event.target.value)
+  const searchChats = (queryStr: string, chatId: number | null = null) => {
+    setQueryStr(queryStr)
+    setQueryChatId(chatId)
+  }
+  const handleSearchChange = (event: { target: { value: string } }) => {
+    setQueryStr(event.target.value)
+  }
   const onTitleClick = () => {
     if (!selectedChat.chat) return
 
@@ -116,6 +121,7 @@ export default function MainScreen() {
     }
     searchRef.current.value = ''
     searchChats('')
+    setQueryChatId(null)
   })
   const onClickThreeDotMenu = useThreeDotMenu(selectedChat.chat)
 
@@ -299,7 +305,11 @@ export default function MainScreen() {
           showArchivedChats={showArchivedChats}
           onChatClick={onChatClick}
           selectedChatId={selectedChat.chat ? selectedChat.chat.id : null}
-          onExitSearch={() => setQueryStr('')}
+          queryChatId={queryChatId}
+          onExitSearch={() => {
+            setQueryStr('')
+            setQueryChatId(null)
+          }}
         />
         {MessageListView}
       </div>

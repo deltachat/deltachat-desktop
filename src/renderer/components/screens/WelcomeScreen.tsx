@@ -1,10 +1,7 @@
 import { Classes, Card, Elevation, Intent } from '@blueprintjs/core'
-import { IpcRendererEvent } from 'electron'
 import React, { useEffect, useState, useContext } from 'react'
 import { getLogger } from '../../../shared/logger'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
-import { DeltaBackend } from '../../delta-remote'
-import { ipcBackend } from '../../ipc'
 import { runtime } from '../../runtime'
 import DeltaDialog, {
   DeltaDialogBase,
@@ -14,9 +11,10 @@ import DeltaDialog, {
 } from '../dialogs/DeltaDialog'
 import { DeltaProgressBar } from '../Login-Styles'
 import { DialogProps } from '../dialogs/DialogController'
-import { Screens } from '../../ScreenController'
+import { Screens, selectedAccountId } from '../../ScreenController'
 import { BackendRemote, EffectfulBackendActions } from '../../backend-com'
 import processOpenQrUrl from '../helpers/OpenQrUrl'
+import { DcEventType } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
@@ -28,22 +26,17 @@ function ImportBackupProgressDialog({
   const [importProgress, setImportProgress] = useState(0.0)
   const [error, setError] = useState<string | null>(null)
 
-  const onAll = (eventName: IpcRendererEvent, data1: string, data2: string) => {
-    log.debug('ALL core events: ', eventName, data1, data2)
-  }
-  const onImexProgress = (_evt: any, [progress, _data2]: [number, any]) => {
+  const onImexProgress = ({ progress }: DcEventType<'ImexProgress'>) => {
     setImportProgress(progress)
   }
 
-  const onError = (_data1: any, data2: string) => {
-    setError('DC_EVENT_ERROR: ' + data2)
-  }
+  const accountId = selectedAccountId()
 
   useEffect(() => {
     ;(async () => {
-      let account
       try {
-        account = await DeltaBackend.call('backup.import', backupFile)
+        log.debug(`Starting backup import of ${backupFile}`)
+        await BackendRemote.rpc.importBackup(accountId, backupFile, null)
       } catch (err) {
         if (err instanceof Error) {
           setError(err.message)
@@ -51,19 +44,15 @@ function ImportBackupProgressDialog({
         return
       }
       onClose()
-      window.__selectAccount(account.id)
+      window.__selectAccount(accountId)
     })()
 
-    ipcBackend.on('ALL', onAll)
-    ipcBackend.on('DC_EVENT_IMEX_PROGRESS', onImexProgress)
-    ipcBackend.on('DC_EVENT_ERROR', onError)
-
+    const emitter = BackendRemote.getContextEvents(accountId)
+    emitter.on('ImexProgress', onImexProgress)
     return () => {
-      ipcBackend.removeListener('ALL', onAll)
-      ipcBackend.removeListener('DC_EVENT_IMEX_PROGRESS', onImexProgress)
-      ipcBackend.removeListener('DC_EVENT_ERROR', onError)
+      emitter.off('ImexProgress', onImexProgress)
     }
-  }, [backupFile, onClose])
+  }, [backupFile, onClose, accountId])
 
   const tx = useTranslationFunction()
   return (

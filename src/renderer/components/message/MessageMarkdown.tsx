@@ -5,7 +5,6 @@ import {
   ParsedElement,
 } from '@deltachat/message_parser_wasm/message_parser_wasm'
 import { getLogger } from '../../../shared/logger'
-import { DeltaBackend } from '../../delta-remote'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { MessagesDisplayContext } from '../../contexts'
 import { selectChat, setChatView } from '../helpers/ChatMethods'
@@ -100,11 +99,11 @@ export function message2React(message: string): JSX.Element {
 function EmailLink({ email }: { email: string }): JSX.Element {
   const openChatWithEmail = async () => {
     const accountId = selectedAccountId()
-    let contactId = await DeltaBackend.call(
-      'contacts.lookupContactIdByAddr',
+    let contactId = await BackendRemote.rpc.lookupContactIdByAddr(
+      accountId,
       email
     )
-    if (contactId == 0) {
+    if (contactId === null) {
       contactId = await BackendRemote.rpc.contactsCreateContact(
         accountId,
         email,
@@ -136,7 +135,7 @@ function TagLink({ tag }: { tag: string }) {
       `Clicked on a hastag, this should open search for the text "${tag}"`
     )
     if (window.__chatlistSetSearch) {
-      window.__chatlistSetSearch(tag)
+      window.__chatlistSetSearch(tag, null)
       ActionEmitter.emitAction(KeybindAction.ChatList_FocusSearchInput)
       // TODO: If you wonder why the focus doesn't work - its because of jikstra's composer focus hacks
       // Which transfer the focus back to the composer instantly

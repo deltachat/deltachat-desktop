@@ -3,16 +3,14 @@
 // and heavyly uses the events
 
 import { BackendRemote } from '../backend-com'
-import { ipcBackend } from '../ipc'
 import { runtime } from '../runtime'
-import { selectedAccountId } from '../ScreenController'
 
 export function initWebxdc() {
-  ipcBackend.on('DC_EVENT_WEBXDC_STATUS_UPDATE', (_ev, [msgId]) => {
-    runtime.notifyWebxdcStatusUpdate(selectedAccountId(), msgId)
+  BackendRemote.on('WebxdcStatusUpdate', (accountId, { msgId }) => {
+    runtime.notifyWebxdcStatusUpdate(accountId, msgId)
   })
-  ipcBackend.on('DC_EVENT_WEBXDC_INSTANCE_DELETED', (_ev, [msg_id]) => {
-    runtime.notifyWebxdcInstanceDeleted(selectedAccountId(), msg_id)
+  BackendRemote.on('WebxdcInstanceDeleted', (accountId, { msgId }) => {
+    runtime.notifyWebxdcInstanceDeleted(accountId, msgId)
   })
 }
 

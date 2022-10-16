@@ -10,10 +10,12 @@
 - add button to clear chat history (delete all messages of a chat)
 - add recently seen indicator
 - add jump down button
+- add "search for messages in chat"
 - show webxdc icon in quote
 
 ## Changed
-- start migrating to jsonrpc api
+- migrated core communication to jsonrpc api
+- migrate event handling to jsonrpc api
 - Update translations (22.09.2022)
 - click on selected chat in chatlist now goes to bottom or first unread message
 - remember last path in "save as" dialog
@@ -23,6 +25,9 @@
 - make contact last seen always display relative time
 - hide ephemeral timer menu options for mailing lists #2920
 - reposition ConnectivityToast
+- only show core events in frontend dev console if deltachat was started with `--log-debug` or `--devmode`
+- always show sticker tab now and add a button to quickly open the sticker folder.
+- update deltachat-node and deltachat/jsonrpc-client to v1.97.0
 
 ## Fixed
 - allow scanning of certain qr code types on welcome screen (account, url and text)
@@ -32,6 +37,8 @@
 - fix quote linebreaks #2870
 - fix low resolution of copy qrcode image #2907
 - fix group join qr code when creating a new group
+- message search: show "1000+ messages", because 1000 as result means the result was truncated most of the time
+- fix contact name is not updated in view profile #2945
 
 ## [1.32.1] - 2022-08-18
 

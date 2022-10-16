@@ -7,9 +7,11 @@ import React, {
 } from 'react'
 import { Picker, EmojiData } from 'emoji-mart'
 import classNames from 'classnames'
-import { DeltaBackend } from '../../delta-remote'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { useTranslationFunction } from '../../contexts'
+import { BackendRemote } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
+import { runtime } from '../../runtime'
 
 export const StickerDiv = (props: {
   stickerPackName: string
@@ -24,7 +26,8 @@ export const StickerDiv = (props: {
     setShowEmojiPicker,
   } = props
   const onClickSticker = (fileName: string) => {
-    DeltaBackend.call('messageList.sendSticker', chatId, fileName)
+    const stickerPath = fileName.replace('file://', '')
+    BackendRemote.rpc.sendSticker(selectedAccountId(), chatId, stickerPath)
     setShowEmojiPicker(false)
   }
 
@@ -58,8 +61,17 @@ export const StickerPicker = (props: {
   setShowEmojiPicker: (enabled: boolean) => void
 }) => {
   const { stickers, chatId, setShowEmojiPicker } = props
+
+  const onOpenStickerFolder = async () => {
+    const folder = await BackendRemote.rpc.miscGetStickerFolder(
+      selectedAccountId()
+    )
+    runtime.openPath(folder)
+  }
+
   return (
     <div className='emoji-sticker-picker__sticker-picker'>
+      <button onClick={onOpenStickerFolder}>Open Sticker Folder</button>
       <div className='emoji-sticker-picker__sticker-picker__inner'>
         {Object.keys(stickers).map(stickerPackName => {
           return (
@@ -104,6 +116,7 @@ export const EmojiAndStickerPicker = forwardRef<
     setShowEmojiPicker: React.Dispatch<React.SetStateAction<boolean>>
   }
 >((props, ref) => {
+  const accountId = selectedAccountId()
   const { onEmojiSelect, chatId, setShowEmojiPicker } = props
   const tx = useTranslationFunction()
 
@@ -111,13 +124,12 @@ export const EmojiAndStickerPicker = forwardRef<
   const [stickers, setStickers] = useState<{
     [key: string]: string[]
   }>({})
-  const disableStickers = Object.keys(stickers).length === 0
 
   useEffect(() => {
-    DeltaBackend.call('stickers.getStickers').then(stickers =>
-      setStickers(stickers)
-    )
-  }, [])
+    BackendRemote.rpc
+      .miscGetStickers(accountId)
+      .then(stickers => setStickers(stickers))
+  }, [accountId])
 
   useLayoutEffect(() => {
     document
@@ -132,7 +144,7 @@ export const EmojiAndStickerPicker = forwardRef<
   return (
     <div
       className={classNames('emoji-sticker-picker', {
-        'disable-sticker': disableStickers,
+        'disable-sticker': false,
       })}
       ref={ref}
     >

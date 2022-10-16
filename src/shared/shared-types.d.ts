@@ -81,18 +81,6 @@ export type JsonChat = ReturnType<typeof Chat.prototype.toJson>
 
 export type JsonContact = ReturnType<typeof Contact.prototype.toJson>
 
-export type JsonLocations = {
-  accuracy: number
-  latitude: number
-  longitude: number
-  timestamp: number
-  contactId: number
-  msgId: number
-  chatId: number
-  isIndependent: boolean
-  marker: string
-}[] // ReturnType<typeof DeltaChat.prototype.getLocations>
-
 export type JsonMessage = ReturnType<typeof Message.prototype.toJson> & {
   quote: MessageQuote | null
 }
@@ -158,27 +146,6 @@ export type Theme = {
   /** whether the theme is a prototype and should be hidden in the selection unless deltachat is started in devmode */
   is_prototype: boolean
 }
-
-export type MessageSearchResult = {
-  id: number
-  authorProfileImage: string
-  author_name: string
-  author_color: string
-  chat_name: null | string
-  message: string
-  timestamp: number
-}
-
-export type DeltaChatAccount =
-  | { id: number; type: 'unconfigured' }
-  | {
-      id: number
-      type: 'configured'
-      display_name: string | null
-      addr: string | null
-      profile_image: string | null
-      color: string
-    }
 
 // Types that will stay:
 

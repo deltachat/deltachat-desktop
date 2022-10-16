@@ -10,6 +10,9 @@ import {
   translate as getTranslateFunction,
 } from '../shared/localize'
 
+import { refresh as refreshMenu } from './menu'
+import { ipcMain } from 'electron'
+
 let currentlocaleData: LocaleData | null = null
 
 export function getCurrentLocaleDate(): LocaleData {
@@ -85,3 +88,18 @@ function getLocaleMessages(file: string) {
     throw err
   }
 }
+
+ipcMain.handle(
+  'getLocaleData',
+  (_ev, locale?: string): LocaleData => {
+    if (locale) {
+      loadTranslations(locale)
+    }
+    return getCurrentLocaleDate()
+  }
+)
+
+ipcMain.handle('setLocale', (_ev, locale: string) => {
+  setLanguage(locale)
+  refreshMenu()
+})
