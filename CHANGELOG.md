@@ -2,6 +2,14 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+
+### Changed
+
+### Fixed
+
+## [1.33.0] - 2022-10-16
+
 
 ### Added
 - show mailing list address in chat subtile
@@ -13,7 +21,7 @@
 - add "search for messages in chat"
 - show webxdc icon in quote
 
-## Changed
+### Changed
 - migrated core communication to jsonrpc api
 - migrate event handling to jsonrpc api
 - Update translations (22.09.2022)
@@ -29,7 +37,7 @@
 - always show sticker tab now and add a button to quickly open the sticker folder.
 - update deltachat-node and deltachat/jsonrpc-client to v1.97.0
 
-## Fixed
+### Fixed
 - allow scanning of certain qr code types on welcome screen (account, url and text)
 - fix selecting chat after forwarding to it
 - fixed bug where unread badge on app icon was not updated immediately
@@ -42,26 +50,26 @@
 
 ## [1.32.1] - 2022-08-18
 
-## Changed
+### Changed
 - updated deltachat-node to `v1.93.0` to fix flatpak and nix build issues
 
-## Fixed
+### Fixed
 - fix indentation in --help
 
 ## [1.32.0] - 2022-08-09
 
-## Changed
+### Changed
 - open mailto links in messages always in deltachat #2835
 - update esbuild to 0.14.51
 - disable broadcast lists by default, because they are experimental
 - updated deltachat-node to `v1.91.0`
 - Update translations (09.08.2022)
 
-## Added
+### Added
 - Broadcast lists as experimental feature
 - add connectivity status in sidebar/hamburger menu #2819
 
-## Fixed
+### Fixed
 - fix escape key let sidebar flimmer shortly upon startup bug
 - fix double open settings crash #2824
 - fix display of quoted forwarded messages
@@ -70,14 +78,14 @@
 
 ## [1.31.0] - 2022-07-17
 
-## Added
+### Added
 - Floating action button in chatlist to start a new chat
 
-## Fixed
+### Fixed
 - use addr if displayname is not set for webxdc selfName #2803
 - prevent whitescreen on invalid last account id
 
-## Changed
+### Changed
 - rename the gallery tab "documents" to "files" #2829
 - Less round buttons, more similar to android and better spacing #2813
 - Updated deltachat-node to `v1.90.0`
@@ -1724,7 +1732,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.32.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.33.0...HEAD
+
+[1.33.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.32.1...v1.33.0
 
 [1.32.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.32.0...v1.32.1
 
