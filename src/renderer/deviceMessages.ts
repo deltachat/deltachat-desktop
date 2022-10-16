@@ -29,14 +29,16 @@ setInterval(
 export function updateDeviceChats(accountId: number) {
   BackendRemote.rpc.addDeviceMessage(
     accountId,
-    'changelog-version-1.33.0-version0',
+    'changelog-version-1.33.0-version1',
     `What's new in 1.33.0?
 
 - We made some speed improvements by moving to a new "backend" architecture
 - We added some exiting new features:
-  - Clear chat
-  - Search in chat
+  - Clear chat history
+  - Search for Messages in chat
+  - jump down button
   - a recently seen indicator
+- many smaller bugfixes fixes and improvements
 
 Thanks for testing DeltaChat, please report bugs on Github.
 
