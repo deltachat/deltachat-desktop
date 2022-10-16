@@ -35,7 +35,8 @@
 - fix quote linebreaks #2870
 - fix low resolution of copy qrcode image #2907
 - fix group join qr code when creating a new group
-- message search: show "1000+ messages", because 1000 as result means the result was truncated most of the time 
+- message search: show "1000+ messages", because 1000 as result means the result was truncated most of the time
+- fix contact name is not updated in view profile #2945
 
 ## [1.32.1] - 2022-08-18
 

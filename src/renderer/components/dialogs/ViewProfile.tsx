@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import {
   DeltaDialogBase,
   DeltaDialogHeader,
@@ -24,7 +24,7 @@ import { DialogProps } from './DialogController'
 import { Card, Elevation } from '@blueprintjs/core'
 import { DeltaInput } from '../Login-Styles'
 import { selectChat } from '../helpers/ChatMethods'
-import { BackendRemote, Type } from '../../backend-com'
+import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import moment from 'moment'
 
@@ -85,6 +85,7 @@ export default function ViewProfile(props: {
 }) {
   const { isOpen, onClose } = props
 
+  const accountId = selectedAccountId()
   const tx = window.static_translate
   const { openDialog } = useContext(ScreenContext)
   const [contact, setContact] = useState<Type.Contact>(props.contact)
@@ -95,14 +96,21 @@ export default function ViewProfile(props: {
       contactName: contact.name,
       onOk: async (contactName: string) => {
         await BackendRemote.rpc.changeContactName(
-          selectedAccountId(),
+          accountId,
           contact.id,
           contactName
         )
-        setContact({ ...contact, name: contactName })
       },
     })
   }
+
+  useEffect(() => {
+    return onDCEvent(accountId, 'ContactsChanged', () => {
+      BackendRemote.rpc
+        .contactsGetContact(accountId, contact.id)
+        .then(setContact)
+    })
+  }, [accountId, contact.id])
 
   return (
     <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
