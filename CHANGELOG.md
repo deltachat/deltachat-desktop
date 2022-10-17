@@ -9,6 +9,8 @@
 
 ### Fixed
 
+- fix that results of search in chat are not ordered by newest first
+
 ## [1.33.0] - 2022-10-16
 
 
