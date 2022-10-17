@@ -99,7 +99,7 @@ export default function EnterAutocryptSetupMessage({
   const continueKeyTransfer = async (key: string) => {
     setLoading(true)
 
-    const result = await BackendRemote.rpc.autocryptContinueKeyTransfer(
+    const result = await BackendRemote.rpc.continueAutocryptKeyTransfer(
       selectedAccountId(),
       message.id,
       key

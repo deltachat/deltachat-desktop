@@ -15,10 +15,7 @@ export function initWebxdc() {
 }
 
 export async function internalOpenWebxdc(accountId: number, messageId: number) {
-  const message = await BackendRemote.rpc.messageGetMessage(
-    accountId,
-    messageId
-  )
+  const message = await BackendRemote.rpc.getMessage(accountId, messageId)
   if (!message.webxdcInfo) {
     throw new Error('no webxdc info for message ' + messageId)
   }

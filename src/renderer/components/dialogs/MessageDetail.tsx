@@ -36,7 +36,7 @@ class MessageInfo extends React.Component<
   async refresh() {
     this.setState({ loading: true })
     const accountId = selectedAccountId()
-    const message = await BackendRemote.rpc.messageGetMessage(
+    const message = await BackendRemote.rpc.getMessage(
       accountId,
       this.props.messageId
     )

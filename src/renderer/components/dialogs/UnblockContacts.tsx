@@ -21,7 +21,7 @@ export default function UnblockContacts(props: {
 
   useEffect(() => {
     const onContactsUpdate = async () => {
-      setBlockedContacts(await BackendRemote.rpc.contactsGetBlocked(accountId))
+      setBlockedContacts(await BackendRemote.rpc.getBlockedContacts(accountId))
     }
     onContactsUpdate()
     return onDCEvent(
@@ -36,7 +36,7 @@ export default function UnblockContacts(props: {
       message: tx('ask_unblock_contact'),
       confirmLabel: tx('menu_unblock_contact'),
       cb: (yes: boolean) =>
-        yes && BackendRemote.rpc.contactsUnblock(accountId, id),
+        yes && BackendRemote.rpc.unblockContact(accountId, id),
     })
   }
 

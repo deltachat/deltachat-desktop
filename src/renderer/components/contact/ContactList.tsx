@@ -60,7 +60,7 @@ export function useContacts(listFlags: number, queryStr: string) {
     () =>
       debounce((listFlags: number, queryStr: string) => {
         BackendRemote.rpc
-          .contactsGetContacts(accountId, listFlags, queryStr)
+          .getContacts(accountId, listFlags, queryStr)
           .then(setContacts)
       }, 200),
     [accountId]
@@ -70,7 +70,7 @@ export function useContacts(listFlags: number, queryStr: string) {
 
   useInitEffect(() => {
     BackendRemote.rpc
-      .contactsGetContacts(accountId, listFlags, queryStr)
+      .getContacts(accountId, listFlags, queryStr)
       .then(setContacts)
   })
 
@@ -90,7 +90,7 @@ async function getAndSetContacts(
       })
     )
   }
-  const contactArray = await BackendRemote.rpc.contactsGetContacts(
+  const contactArray = await BackendRemote.rpc.getContacts(
     accountId,
     listFlags,
     queryStr
@@ -128,7 +128,7 @@ export function useContactsNew(listFlags: number, initialQueryStr: string) {
   const debouncedGetContacts2 = useMemo(
     () =>
       debounceWithInit(async (listFlags: number, queryStr: string) => {
-        const contacts = await BackendRemote.rpc.contactsGetContacts(
+        const contacts = await BackendRemote.rpc.getContacts(
           accountId,
           listFlags,
           queryStr
@@ -167,7 +167,7 @@ export function useContactIds(listFlags: number, queryStr: string | undefined) {
   const debouncedGetContactsIds = useMemo(
     () =>
       debounce(async (listFlags: number, queryStr: string | undefined) => {
-        const contactIds = await BackendRemote.rpc.contactsGetContactIds(
+        const contactIds = await BackendRemote.rpc.getContactIds(
           accountId,
           listFlags,
           queryStr || null

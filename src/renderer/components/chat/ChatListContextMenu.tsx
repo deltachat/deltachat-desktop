@@ -75,14 +75,14 @@ export function useChatListContextMenu() {
       openEncryptionInfoDialog(screenContext, chatListItem)
     const onViewGroup = async () => {
       // throws error if chat was not found
-      const fullChat = await BackendRemote.rpc.chatlistGetFullChatById(
+      const fullChat = await BackendRemote.rpc.getFullChatById(
         accountId,
         chatListItem.id
       )
       openViewGroupDialog(screenContext, fullChat)
     }
     const onViewProfile = async () => {
-      const fullChat = await BackendRemote.rpc.chatlistGetFullChatById(
+      const fullChat = await BackendRemote.rpc.getFullChatById(
         accountId,
         chatListItem.id
       )
