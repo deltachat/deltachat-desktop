@@ -34,7 +34,13 @@ export function useMessageResults(
       debounceWithInit((queryStr: string | undefined) => {
         BackendRemote.rpc
           .searchMessages(selectedAccountId(), queryStr || '', chatId)
-          .then(setIds)
+          .then(ids => {
+            if (chatId) {
+              // fix that results of search in chat are not ordered by newest first
+              ids.reverse()
+            }
+            setIds(ids)
+          })
       }, 200),
     [chatId]
   )
