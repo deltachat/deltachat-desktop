@@ -93,13 +93,13 @@ export default async function processOpenQrUrl(
           mailto.to
         )
         if (contactId === null) {
-          contactId = await BackendRemote.rpc.contactsCreateContact(
+          contactId = await BackendRemote.rpc.createContact(
             accountId,
             mailto.to,
             null
           )
         }
-        const chatId = await BackendRemote.rpc.contactsCreateChatByContactId(
+        const chatId = await BackendRemote.rpc.createChatByContactId(
           accountId,
           contactId
         )
@@ -248,7 +248,7 @@ export default async function processOpenQrUrl(
     return
   } else if (checkQr.type === 'askVerifyContact') {
     const accountId = selectedAccountId()
-    const contact = await BackendRemote.rpc.contactsGetContact(
+    const contact = await BackendRemote.rpc.getContact(
       accountId,
       checkQr.contact_id
     )
@@ -277,7 +277,7 @@ export default async function processOpenQrUrl(
     })
   } else if (checkQr.type === 'fprOk') {
     const accountId = selectedAccountId()
-    const contact = await BackendRemote.rpc.contactsGetContact(
+    const contact = await BackendRemote.rpc.getContact(
       accountId,
       checkQr.contact_id
     )

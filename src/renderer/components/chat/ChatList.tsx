@@ -135,7 +135,7 @@ export default function ChatList(props: {
   const addContactOnClick = async () => {
     if (!queryStrIsValidEmail || !queryStr) return
 
-    const contactId = await BackendRemote.rpc.contactsCreateContact(
+    const contactId = await BackendRemote.rpc.createContact(
       selectedAccountId(),
       queryStr,
       null
@@ -281,7 +281,7 @@ export default function ChatList(props: {
   useEffect(() => {
     if (queryChatId) {
       BackendRemote.rpc
-        .chatlistGetFullChatById(accountId, queryChatId)
+        .getFullChatById(accountId, queryChatId)
         .then(setSearchChatInfo)
         .catch(console.error)
     } else {
@@ -698,10 +698,7 @@ function useContactAndMessageLogic(
       return state
     })
 
-    const contacts = await BackendRemote.rpc.contactsGetContactsByIds(
-      accountId,
-      ids
-    )
+    const contacts = await BackendRemote.rpc.getContactsByIds(accountId, ids)
     setContactCache(cache => ({ ...cache, ...contacts }))
     setContactLoading(state => {
       ids.forEach(id => (state[id] = LoadStatus.LOADED))

@@ -87,7 +87,7 @@ export default class MapComponent extends React.Component<
 
   async init() {
     const accountId = selectedAccountId()
-    this.currentUser = await BackendRemote.rpc.contactsGetContact(
+    this.currentUser = await BackendRemote.rpc.getContact(
       accountId,
       C.DC_CONTACT_ID_SELF
     )
@@ -432,7 +432,7 @@ export default class MapComponent extends React.Component<
     })
     if (contactFeature) {
       if (contactFeature.properties?.msgId) {
-        message = await BackendRemote.rpc.messageGetMessage(
+        message = await BackendRemote.rpc.getMessage(
           selectedAccountId(),
           contactFeature.properties.msgId
         )

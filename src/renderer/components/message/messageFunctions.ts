@@ -58,7 +58,7 @@ export async function privateReply(msg: Type.Message) {
   const quotedMessageId = msg.id
   const contactId = msg.fromId
   const accountId = selectedAccountId()
-  const chatId = await BackendRemote.rpc.contactsCreateChatByContactId(
+  const chatId = await BackendRemote.rpc.createChatByContactId(
     accountId,
     contactId
   )

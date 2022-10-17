@@ -148,7 +148,7 @@ export default function FullscreenMedia(props: {
   const { previousImage, nextImage } = useMemo(() => {
     const loadMessage = async (msgID: number) => {
       if (msgID === 0) return
-      const message = await BackendRemote.rpc.messageGetMessage(
+      const message = await BackendRemote.rpc.getMessage(
         selectedAccountId(),
         msgID
       )
@@ -249,7 +249,7 @@ async function getNeighboringMedia(
     additionalViewType = 'Image'
   }
 
-  return await BackendRemote.rpc.chatGetNeighboringMedia(
+  return await BackendRemote.rpc.getNeighboringChatMedia(
     accountId,
     messageId,
     viewType,

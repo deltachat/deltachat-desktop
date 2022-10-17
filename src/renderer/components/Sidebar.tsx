@@ -74,7 +74,7 @@ const Sidebar = React.memo(
     }
     const onSelectSavedMessages = async () => {
       setSidebarState('invisible')
-      const savedMessagesChatId = await BackendRemote.rpc.contactsCreateChatByContactId(
+      const savedMessagesChatId = await BackendRemote.rpc.createChatByContactId(
         accountId,
         C.DC_CONTACT_ID_SELF
       )

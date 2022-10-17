@@ -61,7 +61,7 @@ async function incomingMessageHandler(
     }
   } else {
     try {
-      const notificationInfo = await BackendRemote.rpc.messageGetNotificationInfo(
+      const notificationInfo = await BackendRemote.rpc.getMessageNotificationInfo(
         accountId,
         messageId
       )

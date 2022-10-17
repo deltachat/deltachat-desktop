@@ -23,11 +23,7 @@ These functions are highly experimental, use at your own risk.
     let error_count = 0
     for (const contact of contacts) {
       if (
-        await BackendRemote.rpc.contactsCreateContact(
-          accountId,
-          contact[0],
-          contact[1]
-        )
+        await BackendRemote.rpc.createContact(accountId, contact[0], contact[1])
       )
         log.debug('created contact', contact[1], contact[0])
       else {

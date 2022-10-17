@@ -108,7 +108,7 @@ export default function CreateChat(props: {
   const addContactOnClick = async () => {
     if (!queryStrIsValidEmail) return
 
-    const contactId = await BackendRemote.rpc.contactsCreateContact(
+    const contactId = await BackendRemote.rpc.createContact(
       selectedAccountId(),
       queryStr,
       null
@@ -416,15 +416,12 @@ export function AddMemberInnerDialog({
 
     const accountId = selectedAccountId()
 
-    const contactId = await BackendRemote.rpc.contactsCreateContact(
+    const contactId = await BackendRemote.rpc.createContact(
       accountId,
       queryStr,
       null
     )
-    const contact = await BackendRemote.rpc.contactsGetContact(
-      accountId,
-      contactId
-    )
+    const contact = await BackendRemote.rpc.getContact(accountId, contactId)
     addOrRemoveMember(contact)
     setContactsToDeleteOnCancel(value => [...value, contactId])
     onSearchChange({

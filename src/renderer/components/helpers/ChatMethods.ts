@@ -111,7 +111,7 @@ export function openBlockFirstContactOfChatDialog(
       isConfirmDanger: true,
       cb: (yes: boolean) =>
         yes &&
-        BackendRemote.rpc.contactsBlock(accountId, dmChatContact).then(() => {
+        BackendRemote.rpc.blockContact(accountId, dmChatContact).then(() => {
           unselectChat()
           window.__refetchChatlist && window.__refetchChatlist()
         }),
@@ -141,7 +141,7 @@ export async function openViewProfileDialog(
   contact_id: number
 ) {
   screenContext.openDialog(ViewProfile, {
-    contact: await BackendRemote.rpc.contactsGetContact(
+    contact: await BackendRemote.rpc.getContact(
       selectedAccountId(),
       contact_id
     ),
@@ -185,7 +185,7 @@ export async function joinCall(
   messageId: number
 ) {
   try {
-    const message = await BackendRemote.rpc.messageGetMessage(
+    const message = await BackendRemote.rpc.getMessage(
       selectedAccountId(),
       messageId
     )
@@ -212,7 +212,7 @@ export async function createChatByContactIdAndSelectIt(
 ): Promise<void> {
   const accountId = selectedAccountId()
 
-  const chatId = await BackendRemote.rpc.contactsCreateChatByContactId(
+  const chatId = await BackendRemote.rpc.createChatByContactId(
     accountId,
     contactId
   )
@@ -221,10 +221,7 @@ export async function createChatByContactIdAndSelectIt(
     throw new Error(window.static_translate('create_chat_error_desktop'))
   }
 
-  const chat = await BackendRemote.rpc.chatlistGetFullChatById(
-    accountId,
-    chatId
-  )
+  const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
 
   if (chat && chat.archived) {
     log.debug('chat was archived, unarchiving it')
@@ -279,10 +276,7 @@ export async function modifyGroup(
   const accountId = selectedAccountId()
   log.debug('action - modify group', { chatId, name, image, members })
   await BackendRemote.rpc.setChatName(accountId, chatId, name)
-  const chat = await BackendRemote.rpc.chatlistGetFullChatById(
-    accountId,
-    chatId
-  )
+  const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
   if (!chat) {
     throw new Error('chat is undefined, this should not happen')
   }

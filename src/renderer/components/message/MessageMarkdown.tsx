@@ -104,13 +104,9 @@ function EmailLink({ email }: { email: string }): JSX.Element {
       email
     )
     if (contactId === null) {
-      contactId = await BackendRemote.rpc.contactsCreateContact(
-        accountId,
-        email,
-        null
-      )
+      contactId = await BackendRemote.rpc.createContact(accountId, email, null)
     }
-    const chatId = await BackendRemote.rpc.contactsCreateChatByContactId(
+    const chatId = await BackendRemote.rpc.createChatByContactId(
       accountId,
       contactId
     )
@@ -160,7 +156,7 @@ function BotCommandSuggestion({ suggestion }: { suggestion: string }) {
     let chatID
     if (message_display_context.context == 'contact_profile_status') {
       // Bot command was clicked inside of a contact status
-      chatID = await BackendRemote.rpc.contactsCreateChatByContactId(
+      chatID = await BackendRemote.rpc.createChatByContactId(
         accountId,
         message_display_context.contact_id
       )
