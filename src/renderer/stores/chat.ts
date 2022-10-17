@@ -452,10 +452,7 @@ class ChatStore extends Store<ChatStoreState> {
       'scroll',
       async (chatId: number) => {
         const accountId = selectedAccountId()
-        const chat = await BackendRemote.rpc.chatlistGetFullChatById(
-          accountId,
-          chatId
-        )
+        const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
         if (chat.id === null) {
           log.debug(
             'SELECT CHAT chat does not exsits, id is null. chatId:',
@@ -567,7 +564,7 @@ class ChatStore extends Store<ChatStoreState> {
               jumpToMessageId = this.state.jumpToMessageStack[
                 jumpToMessageStackLength - 1
               ]
-              message = await BackendRemote.rpc.messageGetMessage(
+              message = await BackendRemote.rpc.getMessage(
                 accountId,
                 jumpToMessageId as number
               )
@@ -580,7 +577,7 @@ class ChatStore extends Store<ChatStoreState> {
             }
           } else if (addMessageIdToStack === undefined) {
             // reset jumpToMessageStack
-            message = await BackendRemote.rpc.messageGetMessage(
+            message = await BackendRemote.rpc.getMessage(
               accountId,
               msgId as number
             )
@@ -589,7 +586,7 @@ class ChatStore extends Store<ChatStoreState> {
             jumpToMessageId = msgId as number
             jumpToMessageStack = []
           } else {
-            message = await BackendRemote.rpc.messageGetMessage(
+            message = await BackendRemote.rpc.getMessage(
               accountId,
               msgId as number
             )
@@ -622,7 +619,7 @@ class ChatStore extends Store<ChatStoreState> {
             )
           }
 
-          const chat = await BackendRemote.rpc.chatlistGetFullChatById(
+          const chat = await BackendRemote.rpc.getFullChatById(
             accountId,
             chatId
           )
@@ -969,7 +966,7 @@ class ChatStore extends Store<ChatStoreState> {
       }
       this.reducer.modifiedChat({
         id: chatId,
-        chat: await BackendRemote.rpc.chatlistGetFullChatById(
+        chat: await BackendRemote.rpc.getFullChatById(
           this.state.accountId,
           chatId
         ),
@@ -1059,7 +1056,7 @@ class ChatStore extends Store<ChatStoreState> {
             'changed message seems to be message we already know'
           )
           try {
-            const message = await BackendRemote.rpc.messageGetMessage(
+            const message = await BackendRemote.rpc.getMessage(
               this.state.accountId,
               messageId
             )
@@ -1223,10 +1220,7 @@ async function getMessagesFromIndex(
     .map(m => (m.kind === 'message' ? m.msg_id : C.DC_MSG_ID_LAST_SPECIAL))
     .filter(msgId => msgId !== C.DC_MSG_ID_LAST_SPECIAL)
 
-  const messages = await BackendRemote.rpc.messageGetMessages(
-    accountId,
-    messageIds
-  )
+  const messages = await BackendRemote.rpc.getMessages(accountId, messageIds)
 
   log.debug('getMessagesFromIndex', {
     allMessageListItems,

@@ -106,9 +106,7 @@ export default function ViewProfile(props: {
 
   useEffect(() => {
     return onDCEvent(accountId, 'ContactsChanged', () => {
-      BackendRemote.rpc
-        .contactsGetContact(accountId, contact.id)
-        .then(setContact)
+      BackendRemote.rpc.getContact(accountId, contact.id).then(setContact)
     })
   }, [accountId, contact.id])
 
@@ -151,7 +149,7 @@ export function ViewProfileInner({
     onClose()
   }
   const onSendMessage = async () => {
-    const dmChatId = await BackendRemote.rpc.contactsCreateChatByContactId(
+    const dmChatId = await BackendRemote.rpc.createChatByContactId(
       accountId,
       contact.id
     )

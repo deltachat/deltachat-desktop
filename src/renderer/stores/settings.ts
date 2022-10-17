@@ -114,7 +114,7 @@ class SettingsStore extends Store<SettingsStoreState | null> {
         accountId,
         settingsKeys
       )) as SettingsStoreState['settings']
-      const selfContact = await BackendRemote.rpc.contactsGetContact(
+      const selfContact = await BackendRemote.rpc.getContact(
         accountId,
         C.DC_CONTACT_ID_SELF
       )
@@ -164,7 +164,7 @@ class SettingsStore extends Store<SettingsStoreState | null> {
 onReady(() => {
   BackendRemote.on('SelfavatarChanged', async accountId => {
     if (accountId === window.__selectedAccountId) {
-      const selfContact = await BackendRemote.rpc.contactsGetContact(
+      const selfContact = await BackendRemote.rpc.getContact(
         accountId,
         C.DC_CONTACT_ID_SELF
       )

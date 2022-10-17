@@ -64,7 +64,7 @@ export default class Gallery extends Component<
 
     const accountId = selectedAccountId()
     BackendRemote.rpc
-      .chatGetMedia(
+      .getChatMedia(
         accountId,
         this.props.chatId,
         msgTypes[0],
@@ -74,9 +74,7 @@ export default class Gallery extends Component<
       .then(async media_ids => {
         // throws if some media is not found
         const medias = await Promise.all(
-          media_ids.map(id =>
-            BackendRemote.rpc.messageGetMessage(accountId, id)
-          )
+          media_ids.map(id => BackendRemote.rpc.getMessage(accountId, id))
         )
         this.setState({ id, msgTypes, medias })
         this.forceUpdate()

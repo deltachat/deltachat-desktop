@@ -39,7 +39,7 @@ export function useChat(initialChat: Type.FullChat): Type.FullChat {
 
   const accountId = selectedAccountId()
   const updateChat = useCallback(async () => {
-    const chat = await BackendRemote.rpc.chatlistGetFullChatById(
+    const chat = await BackendRemote.rpc.getFullChatById(
       accountId,
       initialChat.id
     )

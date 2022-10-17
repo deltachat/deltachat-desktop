@@ -33,10 +33,7 @@ export default function ForwardMessage(props: {
   const onChatClick = async (chatid: number) => {
     await BackendRemote.rpc.forwardMessages(accountId, [message.id], chatid)
     onClose()
-    const chat = await BackendRemote.rpc.chatlistGetFullChatById(
-      accountId,
-      chatid
-    )
+    const chat = await BackendRemote.rpc.getFullChatById(accountId, chatid)
     if (!chat.isSelfTalk) {
       selectChat(chatid)
     }
