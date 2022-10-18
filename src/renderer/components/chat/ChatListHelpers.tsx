@@ -36,7 +36,7 @@ export function useMessageResults(
           .searchMessages(selectedAccountId(), queryStr || '', chatId)
           .then(ids => {
             if (chatId) {
-              // fix that results of search in chat are not ordered by newest first
+              // in-chat search results need to be be ordered by newest first
               ids.reverse()
             }
             setIds(ids)
