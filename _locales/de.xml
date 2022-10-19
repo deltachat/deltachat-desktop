@@ -248,7 +248,7 @@
     <string name="menu_save_log">Logdatei speichern</string>
     <string name="menu_more_options">Mehr Optionen</string>
     <string name="menu_learn_spelling">Schreibweise lernen</string>
-    <string name="menu_chat_audit_log">Chat-Überwachungsprotokoll</string>
+    <string name="menu_chat_audit_log">Chat-Ereignisprotokoll</string>
     <string name="jump_to_message">Zur Nachricht springen</string>
     <string name="copy_json">JSON kopieren</string>
     <string name="replace_draft">Entwurf ersetzen</string>
@@ -385,7 +385,7 @@
     <string name="retry_send">Nachricht erneut senden</string>
     <!-- reasons for a disabled message composer -->
     <string name="messaging_disabled_not_in_group">Sie können nicht schreiben, da Sie kein Mitglied dieser Gruppe sind. Bitten Sie ein anderes Mitglied, Sie hinzuzufügen.</string>
-    <string name="messaging_disabled_device_chat">Dieser Chat entält lokal generierte Nachrichten. Sie können hier keine Nachrichten schreiben.</string>
+    <string name="messaging_disabled_device_chat">Dieser Chat enthält lokal generierte Nachrichten. Sie können hier keine Nachrichten schreiben.</string>
     <string name="messaging_disabled_mailing_list">Das Senden von Nachrichten in Mailinglisten wird noch nicht unterstützt.</string>
     <string name="cannot_display_unsuported_file_type">Kann diesen Dateityp nicht anzeigen: %s</string>
     <string name="attachment_failed_to_load">Kann Anhang nicht laden</string>
@@ -409,7 +409,7 @@
 
     <!-- chat audit log -->
     <string name="chat_audit_log_empty_message">Systemmeldungen dieses Chats werden hier angezeigt.</string>
-    <string name="chat_audit_log_title">Chat-Überwachungsprotokoll für %1$s</string>
+    <string name="chat_audit_log_title">Chat-Ereignisprotokoll für %1$s</string>
     <string name="chat_audit_log_description">Diese Ansicht zeigt nur System- und Infomeldungen. Nützlich, um die letzten Chat-Aktionen zu finden, ohne durch viele normale Nachrichten zu scrollen.</string>
 
     <!-- punycode warning / labeled links -->
@@ -717,56 +717,12 @@
 
 
     <!-- system messages -->
-    <!-- deprecated -->
-    <string name="systemmsg_group_name_changed">Gruppenname von \"%1$s\" zu \"%2$s\" geändert.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_image_changed">Gruppenbild geändert.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_image_deleted">Gruppenbild gelöscht.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_member_added">%1$s hinzugefügt.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_member_removed">%1$s entfernt.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_left">Gruppe verlassen.</string>
     <string name="systemmsg_read_receipt_subject">Empfangsbestätigung</string>
     <string name="systemmsg_read_receipt_body">Ihre Nachricht \"%1$s\" wurde auf dem Empfangsgerät angezeigt.\n\nDas ist keine Garantie dafür, dass sie auch gelesen wurde.</string>
     <string name="systemmsg_cannot_decrypt">Diese Nachricht kann nicht entschlüsselt werden.\n\n• Es könnte bereits helfen, einfach auf diese Nachricht zu antworten und die/den AbsenderIn zu bitten, die Nachricht erneut zu senden.\n\n• Falls Delta Chat oder ein anderes E-Mail-Programm auf diesem oder einem anderen Gerät neu installiert wurde, kann von dort aus eine Autocrypt Setup-Nachricht gesendet werden.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_action_by_me">%1$s von mir.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_action_by_user">%1$s von %2$s.</string>
     <string name="systemmsg_unknown_sender_for_chat">Absender ist für diesen Chat unbekannt. Siehe \"Info\" für weitere Details,</string>
     <string name="systemmsg_subject_for_new_contact">Nachricht von %1$s</string>
     <string name="systemmsg_failed_sending_to">Nachricht senden an %1$s fehlgeschlagen.</string>
-
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_disabled">Verschwindende Nachrichten ausgeschaltet.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_enabled">Ablaufzeit verschwindender Nachrichten auf %1$s s festgelegt.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_minute">Ablaufzeit verschwindender Nachrichten auf 1 Minute festgelegt.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_hour">Ablaufzeit verschwindender Nachrichten auf 1 Stunde festgelegt.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_day">Ablaufzeit verschwindender Nachrichten auf 1 Tag festgelegt.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_week">Ablaufzeit verschwindender Nachrichten auf 1 Woche festgelegt.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_four_weeks">Ablaufzeit verschwindender Nachrichten auf 4 Wochen festgelegt.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_minutes">Ablaufzeit verschwindender Nachrichten auf %1$s Minuten festgelegt.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_hours">Ablaufzeit verschwindender Nachrichten auf %1$s Stunden festgelegt.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_days">Ablaufzeit verschwindender Nachrichten auf %1$s Tage festgelegt.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_weeks">Ablaufzeit verschwindender Nachrichten auf %1$s Wochen festgelegt.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_chat_protection_disabled">Chat-Absicherung ausgeschaltet.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_chat_protection_enabled">Chat-Absicherung eingeschaltet.</string>
-
     <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name -->
     <string name="group_name_changed_by_you">Sie haben den Gruppennamen von \"%1$s\" zu \"%2$s\" geändert.</string>
     <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name, %3$s will be replaced by name and address of the contact who did the action. -->
@@ -795,9 +751,9 @@
     <!-- %1$s will be replaced by name and address of the contact -->
     <string name="ephemeral_timer_disabled_by_other">Verschwindende Nachrichten ausgeschaltet von %1$s.</string>
     <!-- %1$s will be replaced by the number of seconds (always >1) the timer is set to -->
-    <string name="ephemeral_timer_seconds_by_you">Sie haben die Ablaufzeit verschwindender Nachrichten auf %1$s s gesetzt.</string>
+    <string name="ephemeral_timer_seconds_by_you">Sie haben die Ablaufzeit verschwindender Nachrichten auf %1$s Sekunden gesetzt.</string>
     <!-- %1$s will be replaced by the number of seconds (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
-    <string name="ephemeral_timer_seconds_by_other">Ablaufzeit verschwindender Nachrichten auf %1$s s gesetzt von %2$s.</string>
+    <string name="ephemeral_timer_seconds_by_other">Ablaufzeit verschwindender Nachrichten auf %1$s Sekunden gesetzt von %2$s.</string>
     <string name="ephemeral_timer_1_minute_by_you">Sie haben die Ablaufzeit verschwindender Nachrichten auf 1 Minute gesetzt.</string>
     <!-- %1$s will be replaced by name and address of the contact -->
     <string name="ephemeral_timer_1_minute_by_other">Ablaufzeit verschwindender Nachrichten auf 1 MInute gesetzt von %1$s.</string>
@@ -875,12 +831,14 @@
     <string name="qrshow_join_contact_hint">Scannen für Chat mit %1$s</string>
     <string name="qrshow_join_contact_no_connection_toast">Keine Verbindung zum Internet, Austausch des QR-Codes nicht möglich.</string>
     <string name="qraccount_ask_create_and_login">E-Mail-Konto auf \"%1$s\" erzeugen und dort anmelden?</string>
-    <string name="qraccount_ask_create_and_login_another">E-Mail-Konto auf \"%1$s\" erzeugen und dort anmelden?
-
-Ihr bisheriges E-Mail-Konto wird dabei nicht gelöscht. Sie können mit der Option \"E-Mail-Konto wechseln\" jederzeit zwischen den Konten hin- und herschalten.</string>
+    <string name="qraccount_ask_create_and_login_another">E-Mail-Konto auf \"%1$s\" erzeugen und dort anmelden?\n\nIhr bisheriges E-Mail-Konto wird dabei nicht gelöscht. Sie können mit der Option \"E-Mail-Konto wechseln\" jederzeit zwischen den Konten hin- und herschalten.</string>
     <string name="qraccount_success_enter_name">Anmeldung erfolgreich — Ihre E-Mail-Adresse ist %1$s\n\nWenn Sie mögen, können Sie nun einen Namen und ein Profilbild festlegen, der den ChatpartnerInnen angezeigt wird.</string>
     <string name="qraccount_qr_code_cannot_be_used">Der eingescannte QR-Code kann nicht dazu verwendet werden, eine neues E-Mail-Konto zu erzeugen.</string>
     <string name="qraccount_use_on_new_install">Der gescannte QR-Code ist zum Erstellen eines neuen E-Mail-Kontos. Sie können den QR-Code nur bei einer neuen Delta Chat Installation verwenden.</string>
+    <!-- the placeholder will be replaced by the e-mail address of the account -->
+    <string name="qrlogin_ask_login">Bei \"%1$s\" anmelden?</string>
+    <!-- the placeholder will be replaced by the e-mail address of the account -->
+    <string name="qrlogin_ask_login_another">Bei \"%1$s\" anmelden?\n\nIhr bisheriges E-Mail-Konto wird dabei nicht gelöscht. Sie können mit der Option \"E-Mail-Konto wechseln\" jederzeit zwischen den Konten hin- und herschalten.</string>
     <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">%1$s hat dich zu dieser Gruppe eingeladen.\n\nWarte auf die Antwort des Gerätes von %2$s...</string>
     <!-- placeholder will be replaced by the name of the inviter. -->
@@ -1056,6 +1014,6 @@ Ihr bisheriges E-Mail-Konto wird dabei nicht gelöscht. Sie können mit der Opti
 
 
     <!-- device messages for updates -->
-    <string name="update_1_30">Schneller. Stabiler.\n\nFür die Version 1.30 haben wir uns auf Geschwindigkeit und Zuverlässigkeit konzentriert und Dutzende Fehler behoben. Ist Ihr Lieblingsfehler dabei? Details im Changelog: https://get.delta.chat/#changelogs 🚀</string>
+    <string name="update_1_34_android">Was ist neu in 1.34?\n\n🤗 Bessere Kontaktlisten: Sortiert nach \"Zuletzt gesehen\" und innerhalb von 10 Minuten gesehene Kontakte werden mit einem Punkt markiert 🟢\n\n📑 Neue Tabs in Chat-Profilen: \"Audio\" und \"Private Apps\"\n\n🖼️ Wenn Ihnen jemand eine \"Private App\" (z.B. von https://webxdc.org ) schickt, können Sie diese zum Startbildschirm hinzufügen</string>
 
 </resources>

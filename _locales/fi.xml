@@ -155,6 +155,11 @@
     <string name="images_and_videos">Kuvat ja videot</string>
     <string name="file">Tiedosto</string>
     <string name="files">Tiedostot</string>
+    <!-- "Private App" is used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <string name="webxdc_app">Yksityinen sovellus</string>
+    <!-- plural of "Private App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <string name="webxdc_apps">Yksityiset sovellukset</string>
+    <string name="files_and_webxdx_apps">Tiedostot ja yksityiset sovellukset</string>
     <string name="unknown">Tuntematon</string>
 
     <string name="green">Vihreä</string>
@@ -264,6 +269,9 @@
     <string name="ConversationFragment_quoted_message_not_found">Alkuperäistä viestiä ei löydy</string>
     <string name="reply_privately">Vastaa yksityisesti</string>
     <string name="source_code">Lähdekoodi</string>
+    <!-- Menu item beside an app/chat that adds an icon to the system's home screen. If the user taps that icon, the app/chat is opened directly. -->
+    <string name="add_to_home_screen">Lisää aloitusnäytölle</string>
+
     <string name="mute_for_one_hour">Mykistä 1 tunniksi</string>
     <string name="mute_for_two_hours">Mykistä 2 tunniksi</string>
     <string name="mute_for_one_day">Mykistä 1 päiväksi</string>
@@ -442,6 +450,7 @@
     <string name="tab_image_empty_hint">Tässä keskustelussa jaetut kuvat näkyvät tässä.</string>
     <string name="tab_video_empty_hint">Tässä keskustelussa jaetut videot näkyvät tässä.</string>
     <string name="tab_audio_empty_hint">Tässä keskustelussa jaetut äänitiedostot ja -viestit näkyvät tässä.</string>
+    <string name="tab_webxdc_empty_hint">Keskustelussa jaetut yksityiset sovellukset näkyvät tässä.</string>
     <string name="media_preview">Median esikatselu</string>
     <string name="send_message">Lähetä viesti</string>
     <!-- Placeholder %1$s will be replaced by the name of the contact changing their address. Placeholders %2$s and %3$s will be replaced by old/new email addresses. -->
@@ -708,55 +717,77 @@
 
 
     <!-- system messages -->
-    <!-- deprecated -->
-    <string name="systemmsg_group_name_changed">Ryhmän nimi vaihdettu: \"%1$s\" --> \"%2$s\".</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_image_changed">Ryhmän kuva vaihdettu.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_image_deleted">Ryhmän kuva poistettu</string>
-    <!-- deprecated -->
-    <string name="systemmsg_member_added">Jäsen %1$s lisätty</string>
-    <!-- deprecated -->
-    <string name="systemmsg_member_removed">Jäsen %1$s poistettu</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_left">Poistuttiin ryhmästä.</string>
     <string name="systemmsg_read_receipt_subject">Viesti avattu</string>
     <string name="systemmsg_read_receipt_body">Lähettämäsi viesti \"%1$s\" näytettiin vastaanottajan näytöllä.\n\nTämä ei takaa, että sisältö luettiin.</string>
     <string name="systemmsg_cannot_decrypt">Viestin salausta ei voi purkaa.\n\n• Pyydä lähettäjää lähettämään viesti uudelleen.\n\n• Jos asensit Delta Chatin tai toisen sähköpostisovelluksen uudelleen tälle tai toiselle laitteelle, Autocrypt-asetusviestin lähettäminen siitä sovelluksesta voi auttaa.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_action_by_me">%1$s minun toimestani.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_action_by_user">%1$s käyttäjän %2$s toimesta.</string>
     <string name="systemmsg_unknown_sender_for_chat">Tuntematon lähettäjä. Katso \"lisätietoja\".</string>
     <string name="systemmsg_subject_for_new_contact">Viesti lähettäjältä %1$s</string>
     <string name="systemmsg_failed_sending_to">Viestin lähettäminen kohteeseen %1$s epäonnistui.</string>
-
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_disabled">Katoavien viestien ajastin poistettiin.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_enabled">Katoavien viestien ajastin asetettu %1$s sekuntiin.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_minute">Katoavien viestien ajastin asetettu 1 minuuttiin.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_hour">Katoavien viestien ajastin asetettu 1 tuntiin.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_day">Katoavien viestien ajastin asetettu 1 päivään.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_week">Katoavien viestien ajastin asetettu 1 viikkoon.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_four_weeks">Katoavien viestien ajastin asetettu 4 viikkoon.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_minutes">Katoavien viestien ajastin asetettu %1$s minuuttiin.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_hours">Katoavien viestien ajastin asetettu %1$s tuntiin.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_days">Katoavien viestien ajastin asetettu %1$s päivään.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_weeks">Katoavien viestien ajastin asetettu %1$s viikkoon.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_chat_protection_disabled">Keskustelusuojaus poistettu</string>
-    <!-- deprecated -->
-    <string name="systemmsg_chat_protection_enabled">Keskustelusuojaus käytössä</string>
+    <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name -->
+    <string name="group_name_changed_by_you">Ryhmän nimi vaihdettu: \"%1$s\" --> \"%2$s\" minun toimestani.</string>
+    <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name, %3$s will be replaced by name and address of the contact who did the action. -->
+    <string name="group_name_changed_by_other">Ryhmän nimi vaihdettu: \"%1$s\" --> \"%2$s\" käyttäjän %3$s toimesta.</string>
+    <string name="group_image_changed_by_you">Ryhmän kuva vaihdettu minun toimestani.</string>
+    <!-- %1$s will be replaced by name and address of the contact who did the action -->
+    <string name="group_image_changed_by_other">Ryhmän kuva vaihdettu käyttäjän %1$s toimesta.</string>
+    <!-- %1$s will be replaced by name and address of the contact added to the group -->
+    <string name="add_member_by_you">Jäsen %1$s lisätty minun toimestani.</string>
+    <!-- %1$s will be replaced by name and address of the contact added to the group, %2$s will be replaced by name and address of the contact who did the action -->
+    <string name="add_member_by_other">Jäsen %1$s lisätty käyttäjän %2$s toimesta.</string>
+    <!-- %1$s will be replaced by name and address of the contact removed from the group -->
+    <string name="remove_member_by_you">Jäsen %1$s poistettu minun toimestani.</string>
+    <!-- %1$s will be replaced by name and address of the contact removed from the group, %2$s will be replaced by name and address of the contact who did the action -->
+    <string name="remove_member_by_other">Jäsen %1$s poistettu käyttäjän %2$s toimesta.</string>
+    <string name="group_left_by_you">Poistuit ryhmästä.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="group_left_by_other">%1$s poistui ryhmästä.</string>
+    <string name="group_image_deleted_by_you">Ryhmän kuva poistettu minun toimestani.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="group_image_deleted_by_other">Ryhmän kuva poistettu käyttäjän %1$s toimesta.</string>
+    <string name="location_enabled_by_you">Aloitit sijainnin jakamisen.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="location_enabled_by_other">%1$s aloitti sijainnin jakamisen.</string>
+    <string name="ephemeral_timer_disabled_by_you">Katoavien viestien ajastin poistettiin minun toimestani.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_disabled_by_other">Katoavien viestien ajastin poistettiin käyttäjän %1$s toimesta.</string>
+    <!-- %1$s will be replaced by the number of seconds (always >1) the timer is set to -->
+    <string name="ephemeral_timer_seconds_by_you">Katoavien viestien ajastin asetettu %1$s sekuntiin minun toimestani.</string>
+    <!-- %1$s will be replaced by the number of seconds (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_seconds_by_other">Katoavien viestien ajastin asetettu %1$s sekuntiin käyttäjän %2$s toimesta.</string>
+    <string name="ephemeral_timer_1_minute_by_you">Katoavien viestien ajastin asetettu 1 minuuttiin minun toimestani.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_1_minute_by_other">Katoavien viestien ajastin asetettu 1 minuuttiin käyttäjän %1$s toimesta.</string>
+    <string name="ephemeral_timer_1_hour_by_you">Katoavien viestien ajastin asetettu 1 tuntiin minun toimestani.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_1_hour_by_other">Katoavien viestien ajastin asetettu 1 tuntiin käyttäjän %1$s toimesta.</string>
+    <string name="ephemeral_timer_1_day_by_you">Katoavien viestien ajastin asetettu 1 päivään minun toimestani.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_1_day_by_other">Katoavien viestien ajastin asetettu 1 päivään käyttäjän %1$s toimesta.</string>
+    <string name="ephemeral_timer_1_week_by_you">Katoavien viestien ajastin asetettu 1 viikkoon minun toimestani.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_1_week_by_other">Katoavien viestien ajastin asetettu 1 viikkoon käyttäjän %1$s toimesta.</string>
+    <!-- %1$s will be replaced by the number of minutes (always >1) the timer is set to -->
+    <string name="ephemeral_timer_minutes_by_you">Katoavien viestien ajastin asetettu %1$s minuuttiin minun toimestani.</string>
+    <!-- %1$s will be replaced by the number of minutes (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_minutes_by_other">Katoavien viestien ajastin asetettu %1$s minuuttiin käyttäjän %2$s toimesta.</string>
+    <!-- %1$s will be replaced by the number of hours (always >1) the timer is set to -->
+    <string name="ephemeral_timer_hours_by_you">Katoavien viestien ajastin asetettu %1$s tuntiin minun toimestani.</string>
+    <!-- %1$s will be replaced by the number of hours (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_hours_by_other">Katoavien viestien ajastin asetettu %1$s tuntiin käyttäjän %2$s toimesta.</string>
+    <!-- %1$s will be replaced by the number of days (always >1) the timer is set to -->
+    <string name="ephemeral_timer_days_by_you">Katoavien viestien ajastin asetettu %1$s päivään minun toimestani.</string>
+    <!-- %1$s will be replaced by the number of days (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_days_by_other">Katoavien viestien ajastin asetettu %1$s päivään käyttäjän %2$s toimesta.</string>
+    <!-- %1$s will be replaced by the number of weeks (always >1) the timer is set to -->
+    <string name="ephemeral_timer_weeks_by_you">Katoavien viestien ajastin asetettu %1$s viikkoon minun toimestani.</string>
+    <!-- %1$s will be replaced by the number of weeks (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_weeks_by_other">Katoavien viestien ajastin asetettu %1$s viikkoon käyttäjän %2$s toimesta.</string>
+    <string name="protection_enabled_by_you">Keskustelusuojaus käytössä minun toimestani.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="protection_enabled_by_other">Keskustelusuojaus käytössä käyttäjän %1$s toimesta.</string>
+    <string name="protection_disabled_by_you">Keskustelusuojaus poistettu minun toimestani.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="protection_disabled_by_other">Keskustelusuojaus poistettu käyttäjän %1$s toimesta.</string>
 
     <string name="devicemsg_self_deleted">Poistit \"Tallennetut viestit\" -keskustelun.\n\nℹ️ Käyttääksesi \"Tallennetut viestit\" -ominaisuutta jälleen, aloita uusi keskustelu itsesi kanssa.</string>
     <!-- %1$s will be replaced by the amount of storage already used, sth. as '500 MB'. If you want to use a percentage sign, type in two of them, eg. %1$s %% -->
@@ -804,6 +835,10 @@
     <string name="qraccount_success_enter_name">Kirjautuminen onnistui - sähköpostiosoitteesa on %1$s\n\nVoit nyt halutessasi antaa nimen ja profiilikuvan, jotka näytetään muille kirjoittaessasi heille.</string>
     <string name="qraccount_qr_code_cannot_be_used">Uutta tiliä ei voida luoda skannatulla QR-koodilla.</string>
     <string name="qraccount_use_on_new_install">Skannattu QR-koodi on käytössä uuden tilin luomiseksi. Voit skannata QR-koodin uuden Delta Chat -asennuksen yhteydessä.</string>
+    <!-- the placeholder will be replaced by the e-mail address of the account -->
+    <string name="qrlogin_ask_login">Haluatko kirjautua osoitteella \"%1$s\"?</string>
+    <!-- the placeholder will be replaced by the e-mail address of the account -->
+    <string name="qrlogin_ask_login_another">Haluatko kirjautua osoitteella \"%1$s\"?\n\nNykyistä tiliäsi ei poisteta. Käytä \"Vaihda tiliä\" -kohtaa vaihtaaksesi tiliesi välillä.</string>
     <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">%1$s kutsui sinut tähän ryhmään.\n\nOdotetaan vastausta yhteystiedon %2$s laitteelta...</string>
     <!-- placeholder will be replaced by the name of the inviter. -->
@@ -952,6 +987,11 @@
     <string name="notifications_avg_minutes">Keskimäärin%1$d minuutin välein</string>
     <string name="notifications_avg_hours">Keskimäärin %1$d tunnin välein</string>
     <string name="last_check_at">Tarkistettu %1$s</string>
+    <!-- iOS webxdc selector -->
+    <string name="webxdc_selector_empty_hint">Kaikissa keskusteluissa jaetut yksityiset sovellukset näkyvät tässä. \"Tiedostot\" näyttää ladatut yksityiset sovellukset.</string>
+    <!-- iOS webxdc shortcut page -->
+    <string name="shortcut_step1_tap_share_btn">Napauta jakamispainiketta.</string>
+    <string name="shortcut_step2_tap_add_to_home_screen">Valitse \"Lisää aloitusnäytölle\" lisätäksesi sovelluksen puhelimesi aloitusnäytölle.</string>
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Delta Chat käyttää kameraa kuvien ja videoiden kuvaamiseen ja lähettämiseen sekä QR-koodien skannaamiseen.</string>
     <string name="InfoPlist_NSContactsUsageDescription">Delta Chat käyttää yhteystietojasi näyttämään listan sähköpostiosoitteista, joihin voit kirjoittaa. Delta Chatilla ei ole palvelimia, eikä yhteystietojasi lähetetä mihinkään.</string>
@@ -973,7 +1013,4 @@
     <string name="perm_enable_bg_already_done">Annoit jo luvan viestien vastaanottamiselle taustalla.\n\nJos et saa viestejä taustalla, tarkista myös järjestelmäasetukset.</string>
 
 
-    <!-- device messages for updates -->
-    <string name="update_1_30">Nopeampi. Vakaampi.\n\n1.30-versioissa keskityimme nopeuteen ja luotettavuuteen, ja korjasimme kasan bugeja ja virheitä. Tarkista muutoslokistamme korjasimmeko sinusta tärkeimmän: https://get.delta.chat/#changelogs 🚀</string>
-
-</resources>
+    </resources>

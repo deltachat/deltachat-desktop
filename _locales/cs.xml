@@ -577,55 +577,71 @@
 
 
     <!-- system messages -->
-    <!-- deprecated -->
-    <string name="systemmsg_group_name_changed">Názen skupiny změněn z \"%1$s\" na \"%2$s\".</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_image_changed">Obrázek skupiny změněn.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_image_deleted">Obrázek skupiny smazán.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_member_added">Člen %1$s byl přidán.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_member_removed">Člen %1$s byl odebrán.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_left">Skupina opuštěna.</string>
     <string name="systemmsg_read_receipt_subject">Zpráva otevřena</string>
     <string name="systemmsg_read_receipt_body">Odeslaná zpráva \"%1$s\" byla příjemci zobrazena na jeho přístroji.\n\nNicméně přečtení obsahu není zaručeno.</string>
     <string name="systemmsg_cannot_decrypt">Zprávu nelze dešifrovat.\n\n• Může pomoct jednoduchá odpověď odesílateli s požadavkem o znovuzaslání zprávy.\n\n• Pokud jde o novou instalaci Delta Chatu či jiného e-mailového programu na tomto nebo jiném zařízení, může být nutné poslat si z nich Nastavení Autocryptu.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_action_by_me">%1$s ode mě.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_action_by_user">%1$s od %2$s.</string>
     <string name="systemmsg_unknown_sender_for_chat">Neznámý odesilatel v tomto hovoru. Více najdeš v Popisu.</string>
     <string name="systemmsg_subject_for_new_contact">Zpráva od %1$s</string>
     <string name="systemmsg_failed_sending_to">Odeslání zprávy pro %1$s selhalo.</string>
-
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_disabled">Časovač samomazacích zpráv je vypnut.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_enabled">Časovač samomazacích zpráv je na %1$s s. </string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_minute">Časovač samomazacích zpráv na 1 minutu.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_hour">Časovač samomazacích zpráv na 1 hodinu.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_day">Časovač samomazacích zpráv na 1 den.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_week">Časovač samomazacích zpráv na 1 týden.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_four_weeks">Časovač samomazacích zpráv na 4 týdny.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_minutes">Samomazací zprávy vyprší po %1$s minutách.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_hours">Samomazací zprávy vyprší po %1$s hodinách.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_days">Samomazací zprávy vyprší po %1$s dnech.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_weeks">Samomazací zprávy vyprší po %1$s týdnech.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_chat_protection_disabled">Ochrana rozhovoru vypnuta.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_chat_protection_enabled">Ochrana rozhovoru zapnuta.</string>
+    <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name -->
+    <string name="group_name_changed_by_you">Názen skupiny změněn z \"%1$s\" na \"%2$s\" ode mě.</string>
+    <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name, %3$s will be replaced by name and address of the contact who did the action. -->
+    <string name="group_name_changed_by_other">Názen skupiny změněn z \"%1$s\" na \"%2$s\" od %3$s.</string>
+    <string name="group_image_changed_by_you">Obrázek skupiny změněn ode mě.</string>
+    <!-- %1$s will be replaced by name and address of the contact who did the action -->
+    <string name="group_image_changed_by_other">Obrázek skupiny změněn od %1$s.</string>
+    <!-- %1$s will be replaced by name and address of the contact added to the group -->
+    <string name="add_member_by_you">Člen %1$s byl přidán ode mě.</string>
+    <!-- %1$s will be replaced by name and address of the contact added to the group, %2$s will be replaced by name and address of the contact who did the action -->
+    <string name="add_member_by_other">Člen %1$s byl přidán od %2$s.</string>
+    <!-- %1$s will be replaced by name and address of the contact removed from the group -->
+    <string name="remove_member_by_you">Člen %1$s byl odebrán ode mě.</string>
+    <!-- %1$s will be replaced by name and address of the contact removed from the group, %2$s will be replaced by name and address of the contact who did the action -->
+    <string name="remove_member_by_other">Člen %1$s byl odebrán od %2$s.</string>
+    <string name="group_image_deleted_by_you">Obrázek skupiny smazán ode mě.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="group_image_deleted_by_other">Obrázek skupiny smazán od %1$s.</string>
+    <string name="ephemeral_timer_disabled_by_you">Časovač samomazacích zpráv je vypnut ode mě.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_disabled_by_other">Časovač samomazacích zpráv je vypnut od %1$s.</string>
+    <!-- %1$s will be replaced by the number of seconds (always >1) the timer is set to -->
+    <string name="ephemeral_timer_seconds_by_you">Časovač samomazacích zpráv je na %1$s s ode mě.</string>
+    <!-- %1$s will be replaced by the number of seconds (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_seconds_by_other">Časovač samomazacích zpráv je na %1$s s od %2$s.</string>
+    <string name="ephemeral_timer_1_minute_by_you">Časovač samomazacích zpráv na 1 minutu ode mě.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_1_minute_by_other">Časovač samomazacích zpráv na 1 minutu od %1$s.</string>
+    <string name="ephemeral_timer_1_hour_by_you">Časovač samomazacích zpráv na 1 hodinu ode mě.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_1_hour_by_other">Časovač samomazacích zpráv na 1 hodinu od %1$s.</string>
+    <string name="ephemeral_timer_1_day_by_you">Časovač samomazacích zpráv na 1 den ode mě.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_1_day_by_other">Časovač samomazacích zpráv na 1 den od %1$s.</string>
+    <string name="ephemeral_timer_1_week_by_you">Časovač samomazacích zpráv na 1 týden ode mě.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_1_week_by_other">Časovač samomazacích zpráv na 1 týden od %1$s.</string>
+    <!-- %1$s will be replaced by the number of minutes (always >1) the timer is set to -->
+    <string name="ephemeral_timer_minutes_by_you">Samomazací zprávy vyprší po %1$s minutách ode mě.</string>
+    <!-- %1$s will be replaced by the number of minutes (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_minutes_by_other">Samomazací zprávy vyprší po %1$s minutách od %2$s.</string>
+    <!-- %1$s will be replaced by the number of hours (always >1) the timer is set to -->
+    <string name="ephemeral_timer_hours_by_you">Samomazací zprávy vyprší po %1$s hodinách ode mě.</string>
+    <!-- %1$s will be replaced by the number of hours (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_hours_by_other">Samomazací zprávy vyprší po %1$s hodinách od %2$s.</string>
+    <!-- %1$s will be replaced by the number of days (always >1) the timer is set to -->
+    <string name="ephemeral_timer_days_by_you">Samomazací zprávy vyprší po %1$s dnech ode mě.</string>
+    <!-- %1$s will be replaced by the number of days (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_days_by_other">Samomazací zprávy vyprší po %1$s dnech od %2$s.</string>
+    <!-- %1$s will be replaced by the number of weeks (always >1) the timer is set to -->
+    <string name="ephemeral_timer_weeks_by_you">Samomazací zprávy vyprší po %1$s týdnech ode mě.</string>
+    <!-- %1$s will be replaced by the number of weeks (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_weeks_by_other">Samomazací zprávy vyprší po %1$s týdnech od %2$s.</string>
+    <string name="protection_enabled_by_you">Ochrana rozhovoru zapnuta ode mě.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="protection_enabled_by_other">Ochrana rozhovoru zapnuta od %1$s.</string>
+    <string name="protection_disabled_by_you">Ochrana rozhovoru vypnuta ode mě.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="protection_disabled_by_other">Ochrana rozhovoru vypnuta od %1$s.</string>
 
     <!-- qr code stuff -->
     <string name="qr_code">QR kód</string>

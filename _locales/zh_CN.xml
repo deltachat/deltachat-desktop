@@ -633,8 +633,8 @@
     <string name="auto_download_messages">自动下载消息</string>
     <!-- %1$s will be replaced by a human-readable number of bytes, eg. 32 KiB, 1 MiB -->
     <string name="up_to_x">%1$s 以下</string>
-    <string name="up_to_x_most_worse_quality_images">%1$s 以下，图像质量最差</string>
-    <string name="up_to_x_most_balanced_quality_images">%1$s 以下，图像质量最均衡</string>
+    <string name="up_to_x_most_worse_quality_images">%1$s 以下，最差的图像质量</string>
+    <string name="up_to_x_most_balanced_quality_images">%1$s 以下，均衡的图像质量</string>
     <string name="download_failed">下载失败</string>
     <!-- %1$s will be replaced by a human-readable number of bytes, eg. 32 KiB, 1 MiB. Resulting string eg. "1 MiB message" -->
     <string name="n_bytes_message">%1$s 消息</string>
@@ -702,56 +702,12 @@
 
 
     <!-- system messages -->
-    <!-- deprecated -->
-    <string name="systemmsg_group_name_changed">已更改群组名称：从“%1$s”更改为\"%2$s\"</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_image_changed">已更改群组图像</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_image_deleted">已删除群组图像</string>
-    <!-- deprecated -->
-    <string name="systemmsg_member_added">已添加成员 %1$s</string>
-    <!-- deprecated -->
-    <string name="systemmsg_member_removed">已移除成员 %1$s </string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_left">已离开群组</string>
     <string name="systemmsg_read_receipt_subject">消息已被打开</string>
     <string name="systemmsg_read_receipt_body">您发送的“%1$s”消息已在接收者的屏幕上显示过。\n\n这并不保证内容已被阅读。</string>
     <string name="systemmsg_cannot_decrypt">此消息无法解密。\n\n• 简单回复此消息并要求发送者重发该消息可能会有所帮助。\n\n• 如果您在此设备或其他设备上重新安装了 Delta Chat 或其他电子邮件程序，则可能需要从别处发送 Autocrypt 设置消息。</string>
-    <!-- deprecated -->
-    <string name="systemmsg_action_by_me">我 %1$s。</string>
-    <!-- deprecated -->
-    <string name="systemmsg_action_by_user">%2$s %1$s。</string>
     <string name="systemmsg_unknown_sender_for_chat">此聊天发送者未知。查看“信息”来获取更多详情。</string>
     <string name="systemmsg_subject_for_new_contact">来自 %1$s 的消息</string>
     <string name="systemmsg_failed_sending_to">发送消息给 %1$s 失败。</string>
-
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_disabled">已禁用消息定时销毁计时器</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_enabled">设置消息定时销毁计时器为 %1$s 秒</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_minute">设置消息定时销毁计时器为 1 分钟</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_hour">设置消息定时销毁计时器为 1 小时</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_day">设置消息定时销毁计时器为 1 天</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_week">设置消息定时销毁计时器为 1 周</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_four_weeks">设置消息定时销毁计时器为 4 周</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_minutes">设置消息定时销毁计时器为 %1$s 分钟</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_hours">设置消息定时销毁计时器为 %1$s 小时</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_days">设置消息定时销毁计时器为 %1$s 天</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_weeks">设置消息定时销毁计时器为 %1$s 周</string>
-    <!-- deprecated -->
-    <string name="systemmsg_chat_protection_disabled">已禁用聊天保护</string>
-    <!-- deprecated -->
-    <string name="systemmsg_chat_protection_enabled">已启用聊天保护</string>
-
     <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name -->
     <string name="group_name_changed_by_you">你将群名称从 \"%1$s\"改为了\"%2$s\"。</string>
     <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name, %3$s will be replaced by name and address of the contact who did the action. -->
@@ -864,6 +820,10 @@
     <string name="qraccount_success_enter_name">登录成功——电子邮件地址是 %1$s\n\n如果您愿意，您现在可以去设置一个名称和个人资料图片。它们将显示给您发消息到的人。</string>
     <string name="qraccount_qr_code_cannot_be_used">无法使用扫描到的二维码建立新账户。</string>
     <string name="qraccount_use_on_new_install">扫描到的二维码是用于设置新帐户的。设置新的 Delta Chat 安装时，您可以扫描此二维码。</string>
+    <!-- the placeholder will be replaced by the e-mail address of the account -->
+    <string name="qrlogin_ask_login">登录 \"%1$s\"吗？</string>
+    <!-- the placeholder will be replaced by the e-mail address of the account -->
+    <string name="qrlogin_ask_login_another">登录“%1$s“吗？\n\n你现有的账户不会被删除。使用“切换账户”项目在不同账户间进行切换。</string>
     <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">%1$s 邀请你加入此群组。\n\n等待 %2$s 设备回复…</string>
     <!-- placeholder will be replaced by the name of the inviter. -->
@@ -871,7 +831,7 @@
     <string name="contact_verified">%1$s 已验证。</string>
     <string name="contact_not_verified">无法验证 %1$s。</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
-    <string name="contact_setup_changed">已更改 %1$s 的加密设置</string>
+    <string name="contact_setup_changed">%1$s 的加密设置已更改。</string>
     <string name="verified_group_explain">已验证群组（实验性）可提供针对主动攻击的安全性。其中的成员被其他成员用第二个因素进行了验证，并且消息始终是端到端加密的。</string>
     <string name="copy_qr_data_success">已复制二维码链接到剪贴板</string>
     <string name="mailto_dialog_header_select_chat">选择要发送消息的聊天</string>
@@ -883,7 +843,7 @@
     <string name="notify_dismiss">不予理会</string>
     <string name="notify_reply_button">回复</string>
     <string name="notify_new_message">新消息</string>
-    <string name="notify_background_connection_enabled">后台连接已启用</string>
+    <string name="notify_background_connection_enabled">已启用后台连接</string>
     <string name="notify_priority_high">高</string>
     <string name="notify_priority_max">最高</string>
     <string name="notify_name_and_message">名称和消息</string>
@@ -1012,6 +972,11 @@
     <string name="notifications_avg_minutes">平均每 %1$d 分钟</string>
     <string name="notifications_avg_hours">平均每 %1$d 小时</string>
     <string name="last_check_at">检查于 %1$s</string>
+    <!-- iOS webxdc selector -->
+    <string name="webxdc_selector_empty_hint">任何聊天中接收或发送的私人文件都会出现在这里。“文件”显示私人应用刚被下载。</string>
+    <!-- iOS webxdc shortcut page -->
+    <string name="shortcut_step1_tap_share_btn">点击分享按钮</string>
+    <string name="shortcut_step2_tap_add_to_home_screen">选择“添加到主屏幕”来将应用添加到主屏幕。</string>
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Delta Chat 使用相机来拍摄、发送照片和视频以及扫描二维码。</string>
     <string name="InfoPlist_NSContactsUsageDescription">Delta Chat 使用您的联系人来显示您可以写信到的电子邮件地址列表。 Delta Chat 没有服务器，您的联系人不会被发送到任何地方。</string>
@@ -1034,6 +999,6 @@
 
 
     <!-- device messages for updates -->
-    <string name="update_1_30">更快。更稳定。\n\n对于 1.30 版本，我们专注于速度和可靠性，修复了几十个 bug。查看我们的更新记录，了解你曾遇到的 bug 是否已经修复： https://get.delta.chat/#changelogs 🚀</string>
+    <string name="update_1_34_android">1.34 版有哪些变化？\n\n🤗 更友好的联系人列表：按“上次见到”顺序排列，10分钟内见到的联系人用一个圆点标记 🟢\n\n📑 聊天概况的新页面：“音频” 和“私人应用”\n\n🖼️ 如果有人给你发送一个“私人应用”(例如，从 https://webxdc.org)，你可以将它添加到主屏幕</string>
 
 </resources>

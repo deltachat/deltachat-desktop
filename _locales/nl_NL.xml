@@ -717,56 +717,12 @@
 
 
     <!-- system messages -->
-    <!-- deprecated -->
-    <string name="systemmsg_group_name_changed">Groepsnaam gewijzigd van \"%1$s\" in \"%2$s\".</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_image_changed">Groepsafbeelding gewijzigd.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_image_deleted">Groepsafbeelding verwijderd.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_member_added">‘%1$s’ is toegevoegd.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_member_removed">‘%1$s’ is verwijderd.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_left">Groep verlaten.</string>
     <string name="systemmsg_read_receipt_subject">Leesbevestiging</string>
     <string name="systemmsg_read_receipt_body">Het door jou verstuurde bericht, “%1$s”, heeft het scherm van de ontvanger bereikt.\n\nDit betekent echter niet dat het ook gelezen is.</string>
     <string name="systemmsg_cannot_decrypt">Dit bericht kan niet worden ontsleuteld.\n\n• Het kan helpen dit bericht te beantwoorden en de afzender te vragen het opnieuw te versturen.\n\n• Als je Delta Chat of een andere e-mailapp opnieuw hebt geïnstalleerd op dit of een ander apparaat, verstuur het instelbericht dan opnieuw.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_action_by_me">%1$s door mij.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_action_by_user">%1$s door %2$s.</string>
     <string name="systemmsg_unknown_sender_for_chat">Dit gesprek bevat een onbekende afzender. Zie ‘Informatie’ voor meer informatie.</string>
     <string name="systemmsg_subject_for_new_contact">Bericht van %1$s</string>
     <string name="systemmsg_failed_sending_to">Het bericht kan niet worden verstuurd aan %1$s.</string>
-
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_disabled">De tijdklok van verdwijnende berichten is uitgeschakeld.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_enabled">De tijdklok van verdwijnende berichten is ingesteld op %1$s sec.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_minute">De tijdklok van verdwijnende berichten is ingesteld op 1 minuut.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_hour">De tijdklok van verdwijnende berichten is ingesteld op 1 uur.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_day">De tijdklok van verdwijnende berichten is ingesteld op 1 dag.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_week">De tijdklok van verdwijnende berichten is ingesteld op 1 week.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_four_weeks">De tijdklok van verdwijnende berichten is ingesteld op 4 weken.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_minutes">De tijdklok van verdwijnende berichten is ingesteld op %1$s minuten.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_hours">De tijdklok van verdwijnende berichten is ingesteld op %1$s uur.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_days">De tijdklok van verdwijnende berichten is ingesteld op %1$s dagen.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_weeks">De tijdklok van verdwijnende berichten is ingesteld op %1$s weken.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_chat_protection_disabled">Gespreksbeveiliging is uitgeschakeld.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_chat_protection_enabled">Gespreksbeveiliging is ingeschakeld.</string>
-
     <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name -->
     <string name="group_name_changed_by_you">Je hebt de groepsnaam gewijzigd. Oude naam: “%1$s” - Nieuwe naam: “%2$s”</string>
     <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name, %3$s will be replaced by name and address of the contact who did the action. -->
@@ -879,6 +835,10 @@
     <string name="qraccount_success_enter_name">Het inloggen is gelukt - je e-mailadres is ‘%1$s’.\n\nAls je wilt, kun je een naam en profielafbeelding opgeven die worden getoond aan de mensen waarmee je communiceert.</string>
     <string name="qraccount_qr_code_cannot_be_used">De gescande QR-code kan niet worden gebruikt om een nieuw account in te stellen.</string>
     <string name="qraccount_use_on_new_install">De gescande QR-code is voor het instellen van een nieuw account. Je kunt deze direct scannen na het (opnieuw) installeren van Delta Chat.</string>
+    <!-- the placeholder will be replaced by the e-mail address of the account -->
+    <string name="qrlogin_ask_login">Inloggen als ‘%1$s’?</string>
+    <!-- the placeholder will be replaced by the e-mail address of the account -->
+    <string name="qrlogin_ask_login_another">Wil je inloggen als ‘%1$s’?\n\nJe reeds aanwezige account wordt niet verwijderd. Druk op de knop ‘Ander account kiezen’ om tussen accounts te schakelen.</string>
     <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">%1$s heeft je uitgenodigd voor deze groep.\n\nEr wordt gewacht op antwoord van het apparaat %2$s…</string>
     <!-- placeholder will be replaced by the name of the inviter. -->
@@ -1027,6 +987,11 @@
     <string name="notifications_avg_minutes">Gemiddeld elke %1$d minuten</string>
     <string name="notifications_avg_hours">Gemiddeld elke %1$d uur</string>
     <string name="last_check_at">Gecontroleerd om %1$s</string>
+    <!-- iOS webxdc selector -->
+    <string name="webxdc_selector_empty_hint">Privéapps die je verstuurt of ontvangt worden hier getoond. Bij de bestanden zie je de zojuist gedownloade apps.</string>
+    <!-- iOS webxdc shortcut page -->
+    <string name="shortcut_step1_tap_share_btn">Druk op de deelknop</string>
+    <string name="shortcut_step2_tap_add_to_home_screen">Kies ‘Toevoegen aan startscherm’ om de app in kwestie toe te voegen aan je startscherm.</string>
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Geef Delta Chat toegang tot je camera om foto\'s en video\'s te maken en QR-codes te scannen.</string>
     <string name="InfoPlist_NSContactsUsageDescription">Geef Delta Chat toegang tot je adresboek om gesprekken te voeren met contactpersonen. Delta Chat heeft geen servers, dus ze worden niet aan ons opgestuurd.</string>
@@ -1049,6 +1014,6 @@
 
 
     <!-- device messages for updates -->
-    <string name="update_1_30">Sneller en stabieler. Dát zijn de kernpunten van versie 1.30.\n\n We hebben ruim 15 bugs opgelost. Neem het wijzigingslog door om te zien of er eentje tussenstaat waar je last van had: https://get.delta.chat/#changelogs 🚀</string>
+    <string name="update_1_34_android">Wat is er nieuw en verbeterd in 1.34?\n\n🤗 Handigere contactpersoonslijsten: sorteren op laatst gezien en contactpersonen die de afgelopen 10 minuten actief waren worden voortaan gemarkeerd met een stip 🟢\n\n📑 Nieuwe pagina\'s in profielen: audio en privé-apps\n\n🖼️ Als iemand je een privé-app stuurt (bijv. van https://webxdc.org ), dan kun je deze toevoegen aan het startscherm.</string>
 
 </resources>

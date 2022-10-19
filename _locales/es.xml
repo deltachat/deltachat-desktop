@@ -32,7 +32,7 @@
     <string name="close">Cerrar</string>
     <string name="forward">Reenviar</string>
     <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
-    <string name="resend">Reenviar</string>
+    <string name="resend">Volver a enviar</string>
     <!-- Verb "to archive", as in "put a chat in the archive", not a noun "The Archive". -->
     <string name="archive">Archivar</string>
     <!-- Verb "to unarchive", as in "remove a chat from the archive", opposite of the previous string -->
@@ -732,56 +732,12 @@
 
 
     <!-- system messages -->
-    <!-- deprecated -->
-    <string name="systemmsg_group_name_changed">Nombre de grupo cambiado de \"%1$s\" a \"%2$s\"</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_image_changed">Imagen de grupo cambiada.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_image_deleted">Imagen de grupo eliminada.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_member_added">Miembro %1$s añadido.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_member_removed">Miembro %1$s eliminado.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_left">Grupo abandonado.</string>
     <string name="systemmsg_read_receipt_subject">Recibo de lectura</string>
     <string name="systemmsg_read_receipt_body">El mensaje \"%1$s\" que enviaste se mostró en la pantalla del destinatario.\n\nEsto no garantiza que el contenido haya sido leído.</string>
     <string name="systemmsg_cannot_decrypt">Este mensaje no puede ser descifrado.\n\n• Es posible que sea útil simplemente responderlo y pedirle al remitente que lo envíe nuevamente.\n\n• En caso de que haya reinstalado Delta Chat u otro programa de correo en este u otro dispositivo, puede que quiera enviar un Mensaje de Configuración de Autocrypt desde allí.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_action_by_me">%1$s por mi.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_action_by_user">%1$s por %2$s.</string>
     <string name="systemmsg_unknown_sender_for_chat">Remitente desconocido. Mira \"info\" para más detalles.</string>
     <string name="systemmsg_subject_for_new_contact">Mensaje de %1$s</string>
     <string name="systemmsg_failed_sending_to">Falla en enviar el mensaje a %1$s.</string>
-
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_disabled">Temporizador de mensajes borrados desactivado.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_enabled">Temporizador del borrado de mensajes dispuesto en %1$s s.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_minute">Temporizador de borrado de mensaje dispuesto en 1 minuto.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_hour">Temporizador de borrado de mensaje dispuesto en 1 hora.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_day">Temporizador de borrado de mensaje dispuesto en 1 día.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_week">Temporizador de borrado de mensaje dispuesto en 1 semana.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_four_weeks">Temporizador de borrado de mensaje dispuesto en 4 semanas.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_minutes">Temporizador de mensajes borrados dispuesto en %1$s minutos.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_hours">Temporizador de mensajes borrados dispuesto a %1$s horas.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_days">Temporizador de mensajes borrados dispuestos en %1$s días.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_weeks">Temporizador de mensajes borrados dispuestos para %1$s semanas.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_chat_protection_disabled">Protección de chat desactivada.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_chat_protection_enabled">Protección de chat activada.</string>
-
     <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name -->
     <string name="group_name_changed_by_you">Cambiaste el nombre del grupo de \"%1$s\" a \"%2$s\".</string>
     <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name, %3$s will be replaced by name and address of the contact who did the action. -->
@@ -894,6 +850,10 @@
     <string name="qraccount_success_enter_name">Ingreso satisfactorio—tu dirección de email es %1$s\n\nSi lo deseas, puedes ingresar un nombre y una imagen de perfil, que será mostrada a los usuarios que escribas.</string>
     <string name="qraccount_qr_code_cannot_be_used">El código QR escaneado no puede ser usado para configurar una nueva cuenta.</string>
     <string name="qraccount_use_on_new_install">El código QR escaneado esta configurando la nueva cuenta. Puedes escanear el código QR cuando estés preparando una nueva instalación de Delta Chat</string>
+    <!-- the placeholder will be replaced by the e-mail address of the account -->
+    <string name="qrlogin_ask_login">¿Iniciar sesión en \"%1$s\"?</string>
+    <!-- the placeholder will be replaced by the e-mail address of the account -->
+    <string name="qrlogin_ask_login_another">¿Iniciar sesión en \"%1$s\"?\n\nTu cuenta existente no será eliminada. Usa la opción \"Cambiar cuenta\" para cambiar entre tus cuentas.</string>
     <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">%1$s te invitó a unirte a este grupo.\n\nEsperando que el dispositivo de %2$s responda…</string>
     <!-- placeholder will be replaced by the name of the inviter. -->
@@ -1042,6 +1002,11 @@
     <string name="notifications_avg_minutes">Promedio cada %1$d minutos</string>
     <string name="notifications_avg_hours">Promedio cada %1$d horas</string>
     <string name="last_check_at">Comprobado en %1$s</string>
+    <!-- iOS webxdc selector -->
+    <string name="webxdc_selector_empty_hint">Aplicaciones privadas recibidas o enviadas en cualquier chat aparecerán aquí. \"Archivos\" muestra aplicaciones privadas descargadas. </string>
+    <!-- iOS webxdc shortcut page -->
+    <string name="shortcut_step1_tap_share_btn">Presiona el botón de compartir</string>
+    <string name="shortcut_step2_tap_add_to_home_screen">Selecciona \"Añadir a la pantalla principal\" para añadir la aplicación a tu pantaña principal.</string>
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Al permitir el acceso a la cámara podrás tomar fotos y videos.</string>
     <string name="InfoPlist_NSContactsUsageDescription">Al permitir acceder a tu libreta de direcciones podrás chatear con los contactos de tu dispositivo.</string>
@@ -1064,6 +1029,6 @@
 
 
     <!-- device messages for updates -->
-    <string name="update_1_30">Más rápido. Más estable.\n\nPara las versiones 1.30, nos enfocamos en la velocidad y la confiabilidad, solucionando docenas de errores. Consulte nuestros registros de cambios para ver si su favorito está arreglado: https://get.delta.chat/#changelogs 🚀</string>
+    <string name="update_1_34_android">¿Qué hay de nuevo en 1.34?\n\n🤗 Lista de contactos más amigable: Ordenada por visto por última vez y los contactos vistos hace menos de 10 minutos son marcados con un punto 🟢\n\n📑 Nuevas pestañas en los perfiles de los chats: \"Audio\" y \"Aplicaciones privadas\"\n\n🖼️ Si alguien te envía una \"Aplicación privada\" (ej. de https://webxdc.org ), puedes añadirla a la pantalla principal del teléfono</string>
 
 </resources>

@@ -29,6 +29,8 @@
     <string name="back">Atgal</string>
     <string name="close">Užverti</string>
     <string name="forward">Persiųsti</string>
+    <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
+    <string name="resend">Siųsti iš naujo</string>
     <!-- Verb "to archive", as in "put a chat in the archive", not a noun "The Archive". -->
     <string name="archive">Archyvuoti</string>
     <!-- Verb "to unarchive", as in "remove a chat from the archive", opposite of the previous string -->
@@ -118,12 +120,20 @@
         <item quantity="many">%d dalyvių</item>
         <item quantity="other">%d dalyvis</item>
     </plurals>
+    <plurals name="n_recipients">
+        <item quantity="one">%d gavėjas</item>
+        <item quantity="few">%d gavėjai</item>
+        <item quantity="many">%d gavėjų</item>
+        <item quantity="other">%d gavėjas</item>
+    </plurals>
     <string name="self">Aš</string>
     <string name="draft">Juodraštis</string>
     <string name="image">Paveikslas</string>
     <!-- Used in summaries as "Draft: Reply", similar as "Draft: Image". Use a noun here, not a verb (not: "to reply") -->
     <string name="reply_noun">Atsakymas</string>
     <string name="gif">Gif</string>
+    <!-- "Stickers" as known from other messengers; in some languages, the English "Sticker" is fine. -->
+    <string name="sticker">Lipdukas</string>
     <string name="images">Paveikslai</string>
     <string name="audio">Garso įrašai</string>
     <string name="voice_message">Balso žinutė</string>
@@ -190,6 +200,7 @@
     <string name="menu_copy_link_to_clipboard">Kopijuoti nuorodą</string>
     <string name="menu_copy_text_to_clipboard">Kopijuoti tekstą</string>
     <string name="menu_copy_image_to_clipboard">Kopijuoti paveikslą</string>
+    <string name="menu_copy_email_to_clipboard">Kopijuoti el. paštą</string>
     <string name="paste_from_clipboard">Įdėti iš iškarpinės</string>
     <string name="menu_forward">Persiųsti žinutę</string>
     <string name="menu_reply">Atsakyti į žinutę</string>
@@ -238,6 +249,7 @@
     <string name="unpin">Atsegti</string>
     <string name="ConversationFragment_quoted_message_not_found">Pradinė žinutė nerasta</string>
     <string name="reply_privately">Atsakyti privačiai</string>
+    <string name="source_code">Pirminis kodas</string>
     <string name="mute_for_one_hour">Išjungti 1 valandai</string>
     <string name="mute_for_two_hours">Išjungti 2 valandoms</string>
     <string name="mute_for_one_day">Išjungti 1 dienai</string>
@@ -341,11 +353,15 @@
     <string name="saved_messages_explain">• Persiųskite žinutes čia, kad lengvai jas pasiektumėte\n\n• Rašykitės pastabas ar įrašinėkite balso žinutes\n\n• Pridėkite mediją, norėdami ją išsaugoti</string>
     <!-- Should match "Saved" from "Saved messages" -->
     <string name="saved">Įrašyta</string>
+    <string name="save_as">Įrašyti kaip</string>
     <!-- reasons for a disabled message composer -->
     <string name="messaging_disabled_not_in_group">Jūs negalite rašyti, nes nesate šioje grupėje. Norėdami prisijungti, paprašykite kito nario.</string>
     <string name="messaging_disabled_device_chat">Šiame pokalbyje yra vietiniu lygmeniu sukurtos žinutės. Štai kodėl negalite rašyti jokių žinučių.</string>
     <string name="cannot_display_unsuported_file_type">Nepavyksta atvaizduoti šio failo tipo: %s</string>
     <string name="attachment_failed_to_load">Nepavyko įkelti priedo</string>
+    <!-- webxdc -->
+    <!-- "Start..." button for an app -->
+    <string name="start_app">Pradėti…</string>
     <!-- chat audit log -->
     <string name="chat_audit_log_empty_message">Čia atsiras šio pokalbio sisteminės žinutės</string>
     <string name="chat_audit_log_title">Pokalbio audito žurnalas, skirtas %1$s</string>
@@ -379,6 +395,9 @@
     <string name="tab_map">Žemėlapis</string>
     <string name="tab_gallery_empty_hint">Čia bus rodomi šiame pokalbyje bendrinami paveikslai ir vaizdo įrašai.</string>
     <string name="tab_docs_empty_hint">Čia bus rodomi šiame pokalbyje bendrinami dokumentai, muzika ir kiti failai.</string>
+    <string name="tab_image_empty_hint">Čia bus rodomi šiame pokalbyje bendrinti paveikslai.</string>
+    <string name="tab_video_empty_hint">Čia bus rodomi šiame pokalbyje bendrinti vaizdo įrašai.</string>
+    <string name="tab_audio_empty_hint">Čia bus rodomi šiame pokalbyje bendrinti garso įrašų failai ir balso žinutės.</string>
     <string name="media_preview">Medijos peržiūra</string>
     <string name="send_message">Siųsti žinutę</string>
     <!-- Connectivity -->
@@ -605,49 +624,13 @@
 
 
     <!-- system messages -->
-    <!-- deprecated -->
-    <string name="systemmsg_group_name_changed">Grupės pavadinimas pasikeitė iš \"%1$s\" į \"%2$s\".</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_image_changed">Grupės paveikslas pakeistas.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_image_deleted">Grupės paveikslas ištrintas.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_member_added">Dalyvis %1$s pridėtas.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_member_removed">Dalyvis %1$s pašalintas.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_left">Išeita iš grupės.</string>
     <string name="systemmsg_read_receipt_subject">Pranešimas apie skaitymą</string>
     <string name="systemmsg_read_receipt_body">Tai yra pranešimas apie žinutės \"%1$s\" skaitymą.\n\nTai reiškia, kad žinutė buvo atvaizduota gavėjo įrenginyje, tačiau neužtikrina, kad jos turinys buvo perskaitytas.</string>
     <string name="systemmsg_cannot_decrypt">Nepavyksta iššifruoti šios žinutės.\n\n• Galima, tiesiog, atsakyti į šią žinutę ir paprašyti siuntėjo dar kartą išsiųsti šią žinutę.\n\n• Tuo atveju, jeigu iš naujo įdiegėte Delta Chat ar kitą el. pašto programą šiame ar kitame įrenginyje, jūs galite pageidauti išsiųsti Autocrypt sąrankos žinutę iš to įrenginio.</string>
     <string name="systemmsg_subject_for_new_contact">Žinutė nuo %1$s</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_disabled">Išnykstančių žinučių laikmatis išjungtas.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_enabled">Išnykstančių žinučių laikmatis nustatytas į %1$s sek.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_minute">Išnykstančių žinučių laikmatis nustatytas į 1 minutę.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_hour">Išnykstančių žinučių laikmatis nustatytas į 1 valandą.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_day">Išnykstančių žinučių laikmatis nustatytas į 1 dieną.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_week">Išnykstančių žinučių laikmatis nustatytas į 1 savaitę.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_four_weeks">Išnykstančių žinučių laikmatis nustatytas į 4 savaites.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_minutes">Išnykstančių žinučių laikmatis nustatytas į %1$s min.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_hours">Išnykstančių žinučių laikmatis nustatytas į %1$s val.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_days">Išnykstančių žinučių laikmatis nustatytas į %1$s d.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_weeks">Išnykstančių žinučių laikmatis nustatytas į %1$s sav.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_chat_protection_disabled">Pokalbio apsauga išjungta.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_chat_protection_enabled">Pokalbio apsauga įjungta.</string>
-
+    <string name="group_image_deleted_by_you">Jūs ištrynėte grupės paveikslą.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="group_image_deleted_by_other">%1$s ištrynė grupės paveikslą.</string>
     <!-- %1%s will be replaced by date and time in some human-readable format -->
     <string name="devicemsg_bad_time">⚠️ Atrodo, kad jūsų įrenginyje yra nustatyta netiksli data ar laikas (%1$s).\n\nSuderinkite savo laikrodį ⏰🔧 kad užtikrintumėte, jog žinutės bus gaunamos teisingai.</string>
     <!-- qr code stuff -->
@@ -750,6 +733,7 @@
     <string name="autocrypt_incorrect_desktop">Neteisingas sąrankos kodas. Bandykite dar kartą.</string>
     <string name="create_chat_error_desktop">Nepavyko sukurti pokalbio.</string>
     <string name="forget_login_confirmation_desktop">Ištrinti šį prisijungimą? Viskas bus ištrinta, įskaitant jūsų ištisinę sąranką, adresatus, pokalbius, žinutes ir mediją. Šis veiksmas yra galutinis ir negalės būti panaikintas.</string>
+    <string name="account_info_hover_tooltip_desktop2">El. paštas: %1$s\nDydis: %2$s\nPaskyros Id: %3$s</string>
     <string name="message_detail_sent_desktop">išsiųsta</string>
     <string name="message_detail_received_desktop">gauta</string>
     <string name="menu.view.developer.open.log.folder">Atverti žurnalų aplanką</string>
@@ -768,6 +752,13 @@
     <string name="a11y_background_preview_label">Fono peržiūra</string>
     <string name="a11y_disappearing_messages_activated">Išnykstančios žinutės aktyvuotos</string>
 
+    <string name="login_error_no_internet_connection">Nėra interneto ryšio, nepavyko prisijungti.</string>
+    <string name="share_account_not_configured">Paskyra nėra sukonfigūruota.</string>
+    <string name="cannot_play_audio_file">Garso įrašo failas negali būti atkurtas.</string>
+    <string name="open_settings">Atverti nustatymus</string>
+    <!-- iOS notification settings -->
+    <string name="disabled_in_dc">Išjungta Delta Chat programėlėje</string>
+    <string name="disabled_in_system_settings">Išjungta sistemos nustatymuose</string>
     <string name="InfoPlist_NSMicrophoneUsageDescription">Delta Chat naudoja mikrofoną, kad įrašytų ir siųstų balso žinutes bei vaizdo įrašus su garsu.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Delta Chat leis jums pasirinkti, kurias nuotraukas iš savo kolekcijos išsiųsti.</string>
     <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">Delta Chat nori įrašyti paveikslus į jūsų nuotraukų kolekciją.</string>

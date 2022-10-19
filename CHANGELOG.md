@@ -5,6 +5,7 @@
 ### Added
 
 ### Changed
+- Update translations (19.10.2022)
 
 ### Fixed
 
