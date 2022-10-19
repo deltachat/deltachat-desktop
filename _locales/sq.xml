@@ -714,56 +714,12 @@
 
 
     <!-- system messages -->
-    <!-- deprecated -->
-    <string name="systemmsg_group_name_changed">Emri i grupit u ndryshua nga \"%1$s\" në \"%2$s\".</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_image_changed">Figura e grupit ndryshoi.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_image_deleted">Figura e grupit u fshi.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_member_added">U shtua anëtari %1$s.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_member_removed">U hoq anëtari %1$s.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_left">U braktis grupi.</string>
     <string name="systemmsg_read_receipt_subject">Dëftesë leximi</string>
     <string name="systemmsg_read_receipt_body">Kjo është dëftesë leximi për mesazhin \"%1$s\".\n\nDo të thotë që mesazhi u shfaq te pajisja e marrësit, jo domosdo që lënda u lexua.</string>
     <string name="systemmsg_cannot_decrypt">Ky mesazh s\’mund të shfshehtëzohet.\n\n• Mundet që të ndihmojë dërgimi thjesht i një përgjigjeje këtij mesazhi dhe t\’i kërkohet dërguesit ta ridërgojë mesazhin.\n\n• Në rast se ri-instaluat Delta Chat-in apo një tjetër program email-esh në këtë apo në një tjetër pajisje, mund të donit të dërgonit një Mesazh Rregullimi Autocrypt-i që prej andej.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_action_by_me">%1$s nga unë.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_action_by_user">%1$s nga %2$s.</string>
     <string name="systemmsg_unknown_sender_for_chat">Dërgues i panjohur për këtë fjalosje. Për më tepër hollësi, shihni \'info\'.</string>
     <string name="systemmsg_subject_for_new_contact">Mesazh nga %1$s</string>
     <string name="systemmsg_failed_sending_to">S’u arrit të dërgohej mesazh te %1$s.</string>
-
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_disabled">Kohëmatësi për mesazhe që zhduken është i çaktivizuar.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_enabled">Kohëmatësi i zhdukjes së mesazheve është vënë në %1$s s.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_minute">Kohëmatësi për mesazhe që zhduken është vënë në 1 minutë.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_hour">Kohëmatësi për mesazhe që zhduken është vënë në 1 orë.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_day">Kohëmatësi për mesazhe që zhduken është vënë në 1 ditë.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_week">Kohëmatësi për mesazhe që zhduken është vënë në 1 javë.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_four_weeks">Kohëmatësi për mesazhe që zhduken është vënë në 4 javë.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_minutes">Kohëmatësi për mesazhe që zhduken është vënë në %1$s minuta.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_hours">Kohëmatësi për mesazhe që zhduken është vënë në %1$s orë.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_days">Kohëmatësi i zhdukjes së mesazheve është vënë në %1$s ditë.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_weeks">Kohëmatësi për mesazhe që zhduken është vënë në %1$s javë.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_chat_protection_disabled">Mbrojtja e fjalosjes u çaktivizua.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_chat_protection_enabled">Mbrojtja e fjalosjes u aktivizua.</string>
-
     <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name -->
     <string name="group_name_changed_by_you">E ndryshuat emrin e grupit nga “%1$s” në “%2$s”.</string>
     <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name, %3$s will be replaced by name and address of the contact who did the action. -->
@@ -876,6 +832,10 @@
     <string name="qraccount_success_enter_name">Hyrje e suksesshme—adresa juaj email është %1$s\n\nNëse doni, tani mund të jepni një emër dhe një figurë avatari që do t’u shfaqet personave që ju shkruajnë.</string>
     <string name="qraccount_qr_code_cannot_be_used">Kodi QR i skanuar s’mund të përdoret për të ujdisur një llogari të re.</string>
     <string name="qraccount_use_on_new_install">Kodi QR i skanuar është për ujdisje të një llogarie të re. Kodin QR mund ta skanoni kur ujdisni një instalim të ri të Delta Chat-it.</string>
+    <!-- the placeholder will be replaced by the e-mail address of the account -->
+    <string name="qrlogin_ask_login">Të hyhet si “%1$s”?</string>
+    <!-- the placeholder will be replaced by the e-mail address of the account -->
+    <string name="qrlogin_ask_login_another">Të hyhet si “%1$s”?\n\nLlogaria juaj ekzistuese s’do të fshihet. Që të kaloni nga një llogari e juaja në një tjetër, përdorni zërin “Ndërroni Llogari”.</string>
     <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">%1$s ju ftoi të bëheni pjesë e këtij grupi.\n\nPo pritet për pajisjen e %2$s që të përgjigjet…</string>
     <!-- placeholder will be replaced by the name of the inviter. -->
@@ -1022,6 +982,11 @@
     <string name="notifications_avg_minutes">Mesatarisht çdo %1$d minuta</string>
     <string name="notifications_avg_hours">Mesatarisht %1$d orë</string>
     <string name="last_check_at">Kontrolluar më %1$s</string>
+    <!-- iOS webxdc selector -->
+    <string name="webxdc_selector_empty_hint">Këtu do të duken aplikacione private të dërguar apo të marrë në cilëndo fjalosje. “Kartela” shfaq aplikacione private të saposhkarkuara.</string>
+    <!-- iOS webxdc shortcut page -->
+    <string name="shortcut_step1_tap_share_btn">Klikoni butonin për ndarje</string>
+    <string name="shortcut_step2_tap_add_to_home_screen">Që ta shtoni aplikacionin te skena juaj e kreut, përzgjidhni “Shtoje te Skena e Kreut”.</string>
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Lejimi i përdorimi të kamerës ju bën të mundur të bëni foto dhe video.</string>
     <string name="InfoPlist_NSContactsUsageDescription">Lejimi i përdorimi të librit tuaj të adresave kamerës ju bën të mundur të bisedoni me kontakte prej pajisjes tuaj.</string>
@@ -1044,6 +1009,6 @@
 
 
     <!-- device messages for updates -->
-    <string name="update_1_30">Më shpejtë. Me më tepër qëndrueshmëri.\n\nPër hedhjet në qarkullim të serisë 1.30, u përqendruam në shpejtësinë dhe qëndrueshmërinë, duke ndrequr dhjetëra. Shihni regjistrat tanë të ndryshimeve, për të parë nëse e juaja është ndrequr: https://get.delta.chat/#changelogs 🚀</string>
+    <string name="update_1_34_android">Ç’ka të re në 1.34?\n\n🤗 Lista më miqësore kontaktesh: Renditur sipas parë së fundi dhe kontakteve të parë brenda 10 minutash u vihet një shenjë 🟢\n\n📑 Faqe të reja në profile fjalosjesh: “Audio” dhe “Aplikacione Private”\n\n🖼️ Nëse dikush ju dërgon një “Aplikacion Privat” (p.sh., që nga https://webxdc.org ), mund ta shtoni te skena e kreut</string>
 
 </resources>

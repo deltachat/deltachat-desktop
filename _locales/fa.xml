@@ -155,6 +155,11 @@
     <string name="images_and_videos">تصاویر و فیلم‌ها</string>
     <string name="file">پوشه</string>
     <string name="files">فایل‌ها</string>
+    <!-- "Private App" is used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <string name="webxdc_app">نرم‌افزار خصوصی</string>
+    <!-- plural of "Private App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <string name="webxdc_apps">نرم‌افزارهای خصوصی</string>
+    <string name="files_and_webxdx_apps">فایل‌ها و نرم‌افزارهای خصوصی</string>
     <string name="unknown">ناشناس</string>
 
     <string name="green">سبز</string>
@@ -265,6 +270,9 @@
     <string name="ConversationFragment_quoted_message_not_found">پیام اصلی یافت نشد</string>
     <string name="reply_privately">پاسخ دادن به صورت خصوصی</string>
     <string name="source_code">کد منبع</string>
+    <!-- Menu item beside an app/chat that adds an icon to the system's home screen. If the user taps that icon, the app/chat is opened directly. -->
+    <string name="add_to_home_screen">افزودن به صفحه خانه</string>
+
     <string name="mute_for_one_hour">ساکت کردن به مدت۱ ساعت</string>
     <string name="mute_for_two_hours">ساکت کردن به مدت ۲ ساعت</string>
     <string name="mute_for_one_day">ساکت کردن به مدت ۱ روز</string>
@@ -447,6 +455,7 @@ https://meet.jit.si/$ROOM
     <string name="tab_image_empty_hint">تصاوری که در این گفتگو اشتراک گذاری شده‌ باشند در اینجا نمایش داده می‌شوند. </string>
     <string name="tab_video_empty_hint">فیلم‌هایی که در این گفتگو اشتراک گذاری شده باشند در اینجا نمایش داده می‌شوند. </string>
     <string name="tab_audio_empty_hint">فایل‌ها و پیام‌های صوتی که در این گفتگو اشتراک گذاری شده‌‌اند در اینجا نمایش داده می‌شوند.</string>
+    <string name="tab_webxdc_empty_hint">نرم‌افزارهای خصوصی، که در این گفتگو به اشتراک گذاشته شده‌اند در اینجا نمایش داده می‌شوند. </string>
     <string name="media_preview">نمایش رسانه</string>
     <string name="send_message">ارسال پیام</string>
     <!-- Placeholder %1$s will be replaced by the name of the contact changing their address. Placeholders %2$s and %3$s will be replaced by old/new email addresses. -->
@@ -721,56 +730,31 @@ https://meet.jit.si/$ROOM
 
 
     <!-- system messages -->
-    <!-- deprecated -->
-    <string name="systemmsg_group_name_changed">اسم گروه از \"%1$s\" به \"%2$s\" تغییر کرد. </string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_image_changed">تصویر گروه تغییر کرد.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_image_deleted">تصویر گروه حذف شد.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_member_added">%1$s عضو شد.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_member_removed">عضویت %1$sحذف شد. </string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_left">گروه ترک شد. </string>
     <string name="systemmsg_read_receipt_subject">پیام باز شد</string>
     <string name="systemmsg_read_receipt_body">پیام\"%1$s\" که ارسال کرده بودید در ثفحه گیرنده نمایش داده شد\n\n. تضمینی وجود ندارد که محتوای پیام را خوانده باشد. </string>
     <string name="systemmsg_cannot_decrypt">این پیام را نمی‌توان رمزگشایی کرد.\n\n• ممکن است بهتر باشد که به همین پیام پاسخ داده و از ارسال کننده بخواهید دوباره آن را بفرستد. \n\n• اگر دوباره دلتاچت را نصب کرده‌اید یا از یک ایمیل دیگر هم روی این دستگاه یا دستگاه دیگر استفاده می‌کنید ممکن است لازم باشد یک پیام تنظیمات خودرمز از آن دستگاه ارسال کنید. </string>
-    <!-- deprecated -->
-    <string name="systemmsg_action_by_me">%1$sتوسط من</string>
-    <!-- deprecated -->
-    <string name="systemmsg_action_by_user">%1$sتوسط%2$s</string>
     <string name="systemmsg_unknown_sender_for_chat">فرستنده در این گفت و گو ناشناس است. برای جزئیات بیشتر به \"اطلاعات\" مراجعه کنید.</string>
     <string name="systemmsg_subject_for_new_contact">پیام از%1$s</string>
     <string name="systemmsg_failed_sending_to">ارسال ناموفق پیام به %1$s.</string>
-
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_disabled">زمان سنج پیام های ناپدید شونده غیرفعال شد.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_enabled">زمان‌سنج پیام ناپدید شونده روی %1$sثانیه تنظیم شد.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_minute">زمان سنج پیام های ناپدید شونده برای 1 دقیقه تنظیم شد.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_hour">زمان سنج پیام های ناپدید شونده برای 1 ساعت تنظیم شد.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_day">زمان سنج پیام های ناپدید شونده برای 1 روز تنظیم شد.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_week">زمان سنج پیام های ناپدید شونده برای 1 هفته تنظیم شد.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_four_weeks">زمان سنج پیام های ناپدید شونده برای 4 هفته تنظیم شد.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_minutes">زمان‌سنج پیام‌های ناپدید شونده روی %1$s دقیقه تنظیم شد.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_hours">زمان‌سنج پیام ناپدید شونده روی %1$s ساعت تنظیم شد.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_days">زمان‌سنج پیام ناپدید شونده روی %1$s روز تنظیم شد.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_weeks">زمان‌سنج پیام ناپدید شونده روی %1$s هفته تنظیم شد.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_chat_protection_disabled">محافظت از گفنگو غیرفعال شد.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_chat_protection_enabled">محافظت از گفتگو فعال شد.</string>
-
+    <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name -->
+    <string name="group_name_changed_by_you">شما نام گروه را از «%1$s» به «%2$s»  تغییر دادید. </string>
+    <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name, %3$s will be replaced by name and address of the contact who did the action. -->
+    <string name="group_name_changed_by_other">نام گروه توسط %3$s از «%1$s» به «%2$s » تغییر کرد. </string>
+    <string name="group_image_changed_by_you">شما تصویر گروه را تغییر دادید. </string>
+    <!-- %1$s will be replaced by name and address of the contact who did the action -->
+    <string name="group_image_changed_by_other">تصویر گروه توسط %1$s تغییر کرد. </string>
+    <!-- %1$s will be replaced by name and address of the contact added to the group -->
+    <string name="add_member_by_you">شما %1$s را به عنوان عضو جدید اضافه کردید. </string>
+    <!-- %1$s will be replaced by name and address of the contact added to the group, %2$s will be replaced by name and address of the contact who did the action -->
+    <string name="add_member_by_other">عضو جدید با نام %1$s توسط %2$s افزوده شد. </string>
+    <!-- %1$s will be replaced by name and address of the contact removed from the group -->
+    <string name="remove_member_by_you">شما عضویت %1$s را حذف کردید.  </string>
+    <!-- %1$s will be replaced by name and address of the contact removed from the group, %2$s will be replaced by name and address of the contact who did the action -->
+    <string name="remove_member_by_other">عضویت %1$s توسط %2$s حذف شد. </string>
+    <string name="group_left_by_you">شما گروه را ترک کردید.</string>
+    <string name="group_image_deleted_by_you">شما تصویر گروه را حذف کردید.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="group_image_deleted_by_other">تصویر گروه توسط %1$s حذف شد.</string>
     <string name="devicemsg_self_deleted">شما گفتگوی «پیام‌های ذخیره شده» را پاک کردید. 
 ℹ️ برای استفاده مجدد از «پیام‌های ذخیره شده» کافی است یک گفتگوی جدید با خودتان درست کنید. </string>
     <!-- %1$s will be replaced by the amount of storage already used, sth. as '500 MB'. If you want to use a percentage sign, type in two of them, eg. %1$s %% -->
@@ -1018,10 +1002,4 @@ GNU GPL ورژن ۳
     <string name="perm_enable_bg_already_done">قبلا اجازه دسترسی به فعالیت در پس زمینه را به دلتاچت داده‌اید. \n\n اگر پیام‌ها هنوز هم در شرایط پس زمینه نمی‌آمد لطفا تنظیمات سیستم را نیز بررسی نمایید. </string>
 
 
-    <!-- device messages for updates -->
-    <string name="update_1_30">سریع‌تر و پایدارتر
-
-در نسخه‌های ۱.۳۰ بر سرعت، قابلیت اطمینان و بر طرف کردن ده‌ها اشکال تمرکز کرده‌ایم. اگر می‌خواهید ببینید یکی از مشکلات شما رفع شده است به شرح تغییرات مراجعه کنید:
-https://get.delta.chat/#changelogs 🚀</string>
-
-</resources>
+    </resources>

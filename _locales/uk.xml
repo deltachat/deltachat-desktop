@@ -171,6 +171,11 @@
     <string name="images_and_videos">Зображення та відео</string>
     <string name="file">Файл</string>
     <string name="files">Файли</string>
+    <!-- "Private App" is used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <string name="webxdc_app">Приватний застосунок</string>
+    <!-- plural of "Private App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <string name="webxdc_apps">Приватні застосунки</string>
+    <string name="files_and_webxdx_apps">Файли і приватні застосунки</string>
     <string name="unknown">Невідомо</string>
 
     <string name="green">Зелений</string>
@@ -475,6 +480,7 @@
     <string name="tab_image_empty_hint">Зображення, якими поділилися у цьому чаті, будуть відображатися тут.</string>
     <string name="tab_video_empty_hint">Відео, якими поділилися у цьому чаті, будуть відображатися тут.</string>
     <string name="tab_audio_empty_hint">Аудіозаписи та голосові повідомлення, якими поділилися у цьому чаті, будуть відображатися тут.</string>
+    <string name="tab_webxdc_empty_hint">Приватні застосунки, якими поділилися у цьому чаті, будуть відображатися тут.</string>
     <string name="media_preview">Попередній перегляд медіа</string>
     <string name="send_message">Надіслати повідомлення</string>
     <!-- Placeholder %1$s will be replaced by the name of the contact changing their address. Placeholders %2$s and %3$s will be replaced by old/new email addresses. -->
@@ -741,56 +747,12 @@
 
 
     <!-- system messages -->
-    <!-- deprecated -->
-    <string name="systemmsg_group_name_changed">Назву групи змінено з «%1$s» на «%2$s».</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_image_changed">Зображення групи змінено.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_image_deleted">Зображення групи видалено.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_member_added">Додано учасника %1$s.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_member_removed">Видалено учасника %1$s.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_left">Ви залишили групу.</string>
     <string name="systemmsg_read_receipt_subject">Сповіщення про прочитання.</string>
     <string name="systemmsg_read_receipt_body">Це підтвердження того, що повідомлення «%1$s» було відкрито на пристрої одержувача. Дане підтвердження не означає, що повідомлення було прочитано.</string>
     <string name="systemmsg_cannot_decrypt">Це повідомлення не може бути розшифроване.\n\n• Можливо, має сенс просто відповісти на нього і попросити відправника повторно відправити повідомлення.\n\n• У випадку, якщо Ви переустановили Delta Chat або іншу поштову програму на цьому або іншому пристрої, Ви, можливо, захочете відправити повідомлення з параметрами Autocrypt звідти.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_action_by_me">%1$s мною.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_action_by_user">%1$s користувачем %2$s.</string>
     <string name="systemmsg_unknown_sender_for_chat">Невідомий відправник для цього чату. Дивіться \"Інформацію\" для деталей.</string>
     <string name="systemmsg_subject_for_new_contact">Повідомлення від %1$s</string>
     <string name="systemmsg_failed_sending_to">Неможлива надіслати повідомлення до %1$s.</string>
-
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_disabled">Вимкнено таймер зникнення повідомлень</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_enabled">Таймер зникнення повідомлень встановлено на %1$s с.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_minute">Таймер зникнення повідомлень встановлено на 1 хвилину.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_hour">Таймер зникнення повідомлень встановлено на 1 годину.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_day">Таймер зникнення повідомлень встановлено на 1 день.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_week">Таймер зникнення повідомлень встановлено на 1 тиждень.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_four_weeks">Таймер зникнення повідомлень встановлено на 4 тижні.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_minutes">Таймер повідомлень, що зникають встановлено на %1$s хвилин.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_hours">Таймер повідомлень, що зникають встановлено на %1$s годин.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_days">Таймер повідомлень, що зникають встановлено на %1$s днів.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_ephemeral_timer_weeks">Таймер повідомлень, що зникають встановлено на %1$s тижнів.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_chat_protection_disabled">Захист чату вимкнено.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_chat_protection_enabled">Захист чату увімкнено.</string>
-
     <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name -->
     <string name="group_name_changed_by_you">Ви змінили назву групи з «%1$s» на «%2$s».</string>
     <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name, %3$s will be replaced by name and address of the contact who did the action. -->
@@ -903,6 +865,10 @@
     <string name="qraccount_success_enter_name">Вхід успішний — ваша ел. адреса %1$s\n\nЯкщо ви бажаєте, ви можете ввести ім\'я та аватар.</string>
     <string name="qraccount_qr_code_cannot_be_used">Зісканований QR-код не може бути використаний для створення нового облікового запису.</string>
     <string name="qraccount_use_on_new_install">Зісканований QR-код для створення нового облікового запису. Ви можете зісканувати QR-код коли налаштовуєте нову інсталяцію.</string>
+    <!-- the placeholder will be replaced by the e-mail address of the account -->
+    <string name="qrlogin_ask_login">Увійти до \"%1$s\"?</string>
+    <!-- the placeholder will be replaced by the e-mail address of the account -->
+    <string name="qrlogin_ask_login_another">Увійти до \"%1$s\"?\n\nВаш обліковий запис, що вже існує, не буде видалено. Використовуйте \"Перемкнути обліковий запис\" для переключання між вашими обліковими записами.</string>
     <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">%1$s запросили вас приєднатися до цієї групи.\n\nОчікуємо на відповідь від пристрою %2$s…</string>
     <!-- placeholder will be replaced by the name of the inviter. -->
@@ -1051,6 +1017,11 @@
     <string name="notifications_avg_minutes">В середньому %1$d хвилин</string>
     <string name="notifications_avg_hours">В середньому %1$d годин</string>
     <string name="last_check_at">Перевірено о %1$s</string>
+    <!-- iOS webxdc selector -->
+    <string name="webxdc_selector_empty_hint">Приватні застосунки, отримані або надіслані у цьому чаті, будуть відображатися тут. \"Файли\" відображають щойно завантажені приватні застосунки.</string>
+    <!-- iOS webxdc shortcut page -->
+    <string name="shortcut_step1_tap_share_btn">Натисніть кнопку поділитися</string>
+    <string name="shortcut_step2_tap_add_to_home_screen">Виберіть «Додати на головний екран», щоб додати застосунок на головний екран.</string>
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Delta Chat використовує вашу камеру для знімання та надсилання фото та відео, а також для сканування QR-кодів.</string>
     <string name="InfoPlist_NSContactsUsageDescription">Delta Chat використовує ваші контакти аби показати список адрес ел.пошти на які ви можете написати. Delta Chat не має сервера, тож ваші контакти нікуди не надсилаються.</string>
@@ -1073,6 +1044,6 @@
 
 
     <!-- device messages for updates -->
-    <string name="update_1_30">Швидший. Стабільніший.\n\nДля релізів 1.30, ми зосередилися на швидкості та надійності, виправивши десятки помилок. Перегляньте наші журнали змін: https://get.delta.chat/#changelogs 🚀</string>
+    <string name="update_1_34_android">Що нового в 1.34?\n\n🤗 Дружніші списки контактів: упорядковані за останнім відвідуванням і контакти, які бачили протягом 10 хвилин, позначаються крапкою 🟢\n\n📑 Нові сторінки в профілях чату: «Аудіо» та «Приватні застосунки»\n\n🖼️ Якщо хтось надішле вам «Приватний застосунок» (наприклад, з https://webxdc.org), ви можете додати її на головний екран</string>
 
 </resources>

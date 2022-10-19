@@ -7,7 +7,7 @@ import { selectedAccountId } from '../ScreenController'
 
 const log = getLogger('renderer/Gallery')
 
-type MediaTabKey = 'images' | 'video' | 'audio' | 'files' | 'webxdc'
+type MediaTabKey = 'images' | 'video' | 'audio' | 'files' | 'webxdc_apps'
 
 const MediaTabs: Readonly<
   {
@@ -26,7 +26,7 @@ const MediaTabs: Readonly<
   files: {
     values: ['File'],
   },
-  webxdc: {
+  webxdc_apps: {
     values: ['Webxdc'],
   },
 }
@@ -93,7 +93,7 @@ export default class Gallery extends Component<
         return tx('tab_video_empty_hint')
       case 'audio':
         return tx('tab_audio_empty_hint')
-      case 'webxdc':
+      case 'webxdc_apps':
         return tx('tab_webxdc_empty_hint')
       case 'files':
       default:
@@ -120,7 +120,7 @@ export default class Gallery extends Component<
                   aria-selected={this.state.id === id}
                   onClick={() => this.onSelect(id)}
                 >
-                  {id === 'webxdc' ? 'Webxdc' : tx(id)}
+                  {tx(id)}
                 </li>
               )
             })}

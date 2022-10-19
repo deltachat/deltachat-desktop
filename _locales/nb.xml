@@ -370,25 +370,27 @@
 
 
     <!-- system messages -->
-    <!-- deprecated -->
-    <string name="systemmsg_group_name_changed">Gruppenavn endret fra \"%1$s\" til \"%2$s\".</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_image_changed">Gruppebilde endret.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_image_deleted">Gruppebilde slettet.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_member_added">Medlem %1$s lagt til.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_member_removed">Medlem %1$s fjernet.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_group_left">Gruppe oppløst.</string>
     <string name="systemmsg_read_receipt_subject">Meldingskvittering</string>
     <string name="systemmsg_read_receipt_body">Dette er en meldingskvittering for meldingen \"%1$s\".\n\nDenne meldingskvitteringen bekrefter bare at meldingen ble vist på mottakerens enhet. Det finnes ingen garanti for at mottakeren har lest meldingsinnholdet.</string>
     <string name="systemmsg_cannot_decrypt">Denne meldingen kan ikke dekrypteres.\n\n• Det kan hjelpe å svare på denne meldingen og spørre avsenderen om å sende den igjen.\n\n• I fall du har reinstallert Delta Chat eller et annet e-postprogram på denne eller en annen enhet, kan du sende en Autocrypt-oppsettsmelding derfra.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_action_by_me">%1$s av meg.</string>
-    <!-- deprecated -->
-    <string name="systemmsg_action_by_user">%1$s av %2$s.</string>
+    <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name -->
+    <string name="group_name_changed_by_you">Gruppenavn endret fra \"%1$s\" til \"%2$s\" av meg.</string>
+    <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name, %3$s will be replaced by name and address of the contact who did the action. -->
+    <string name="group_name_changed_by_other">Gruppenavn endret fra \"%1$s\" til \"%2$s\" av %3$s.</string>
+    <string name="group_image_changed_by_you">Gruppebilde endret av meg.</string>
+    <!-- %1$s will be replaced by name and address of the contact who did the action -->
+    <string name="group_image_changed_by_other">Gruppebilde endret av %1$s.</string>
+    <!-- %1$s will be replaced by name and address of the contact added to the group -->
+    <string name="add_member_by_you">Medlem %1$s lagt til av meg.</string>
+    <!-- %1$s will be replaced by name and address of the contact added to the group, %2$s will be replaced by name and address of the contact who did the action -->
+    <string name="add_member_by_other">Medlem %1$s lagt til av %2$s.</string>
+    <!-- %1$s will be replaced by name and address of the contact removed from the group -->
+    <string name="remove_member_by_you">Medlem %1$s fjernet av meg.</string>
+    <!-- %1$s will be replaced by name and address of the contact removed from the group, %2$s will be replaced by name and address of the contact who did the action -->
+    <string name="remove_member_by_other">Medlem %1$s fjernet av %2$s.</string>
+    <string name="group_image_deleted_by_you">Gruppebilde slettet av meg.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="group_image_deleted_by_other">Gruppebilde slettet av %1$s.</string>
     <!-- qr code stuff -->
     <string name="qr_code">QR-kode</string>
     <string name="qrscan_title">Skann QR-kode</string>
