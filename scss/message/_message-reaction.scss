@@ -10,7 +10,7 @@
       margin-left: 2px;
       border: 1px transparent solid;
 
-      &:hover {
+      &:hover, &.own:hover {
         border-color: rgba(128, 128, 128, 0.5);
         background-color: rgba(128, 128, 128, 0.3);
       }
