@@ -81,9 +81,9 @@ export default class DeltaChatController extends EventEmitter {
             const { contextId, event } = params
             if (event.type === 'Warning') {
               logCoreEvent.warn(contextId, event.msg)
-            } else if (event === 'Info') {
+            } else if (event.type === 'Info') {
               logCoreEvent.info(contextId, event.msg)
-            } else if (event.startsWith('Error')) {
+            } else if (event.type.startsWith('Error')) {
               logCoreEvent.error(contextId, event.msg)
             } else if (app.rc['log-debug']) {
               // in debug mode log all core events
