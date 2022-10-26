@@ -29,110 +29,125 @@ interface ScrollToBottom {
   ifClose: boolean
 }
 
-export class ChatViewState {
-  scrollTo: ScrollTo = null
-  lastKnownScrollHeight = -1
+export interface ChatViewState {
+  scrollTo: ScrollTo
+  lastKnownScrollHeight: number
+}
 
-  refresh() {
+export function defaultChatViewState(): ChatViewState {
+  return {
+    scrollTo: null,
+    lastKnownScrollHeight: -1
+  }
+}
+
+export class ChatViewReducer {
+  static refresh(prevState: ChatViewState): ChatViewState {
     // keep scroll position
     const { lastKnownScrollTop } = getLastKnownScrollPosition()
-    this.scrollTo = {
-      type: 'scrollToPosition',
-      scrollTop: lastKnownScrollTop,
+    return {
+      ...prevState,
+      scrollTo: {
+        type: 'scrollToPosition',
+        scrollTop: lastKnownScrollTop,
+      }
     }
-
-    return this
   }
 
-  appendMessagePageTop() {
+  static appendMessagePageTop(prevState: ChatViewState): ChatViewState {
     const {
       lastKnownScrollHeight,
       lastKnownScrollTop,
     } = getLastKnownScrollPosition()
 
-    this.scrollTo = {
-      type: 'scrollToLastKnownPosition',
-      lastKnownScrollHeight,
-      lastKnownScrollTop,
-      appendedOn: 'top',
+    return {
+      ...prevState,
+      scrollTo: {
+        type: 'scrollToLastKnownPosition',
+        lastKnownScrollHeight,
+        lastKnownScrollTop,
+        appendedOn: 'top',
+      }
     }
-
-    return this
   }
 
-  appendMessagePageBottom() {
+  static appendMessagePageBottom(prevState: ChatViewState): ChatViewState {
     const {
       lastKnownScrollHeight,
       lastKnownScrollTop,
     } = getLastKnownScrollPosition()
 
-    this.scrollTo = {
-      type: 'scrollToLastKnownPosition',
-      lastKnownScrollTop,
-      lastKnownScrollHeight,
-      appendedOn: 'bottom',
+    return {
+      ...prevState,
+      scrollTo: {
+        type: 'scrollToLastKnownPosition',
+        lastKnownScrollTop,
+        lastKnownScrollHeight,
+        appendedOn: 'bottom',
+      }
     }
-
-    return this
   }
 
-  fetchedIncomingMessages() {
+  static fetchedIncomingMessages(prevState: ChatViewState): ChatViewState {
     const {
       lastKnownScrollHeight,
       // lastKnownScrollTop,
     } = getLastKnownScrollPosition()
 
-    this.scrollTo = {
-      type: 'scrollToBottom',
-      ifClose: true,
+    return {
+      ...prevState,
+      scrollTo: {
+        type: 'scrollToBottom',
+        ifClose: true,
+      },
+      lastKnownScrollHeight
     }
-
-    this.lastKnownScrollHeight = lastKnownScrollHeight
-    //this.lastKnownScrollTop = lastKnownScrollTop
-
-    return this
   }
 
-  unlockScroll() {
-    this.scrollTo = null
-    this.lastKnownScrollHeight = -1
-
-    return this
+  static unlockScroll(prevState: ChatViewState): ChatViewState {
+    return {
+      ...prevState,
+      scrollTo: null,
+      lastKnownScrollHeight: -1
+    }
   }
 
-  setMessageListItems() {
+  static setMessageListItems(prevState: ChatViewState): ChatViewState {
     const {
       lastKnownScrollHeight,
       lastKnownScrollTop,
     } = getLastKnownScrollPosition()
 
-    this.scrollTo = {
-      type: 'scrollToLastKnownPosition',
-      lastKnownScrollHeight,
-      lastKnownScrollTop,
-      appendedOn: 'top',
+    return {
+      ...prevState,
+      scrollTo: {
+        type: 'scrollToLastKnownPosition',
+        lastKnownScrollHeight,
+        lastKnownScrollTop,
+        appendedOn: 'top',
+      }
     }
-
-    return this
   }
 
-  selectChat() {
-    this.scrollTo = {
-      type: 'scrollToBottom',
-      ifClose: false,
+  static selectChat(prevState: ChatViewState): ChatViewState {
+    return {
+      ...prevState,
+      scrollTo: {
+        type: 'scrollToBottom',
+        ifClose: false,
+      }
     }
-
-    return this
   }
 
-  jumpToMessage(jumpToMessageId: number, highlight: boolean) {
-    this.scrollTo = {
-      type: 'scrollToMessage',
-      msgId: jumpToMessageId,
-      highlight,
+  static jumpToMessage(prevState: ChatViewState, jumpToMessageId: number, highlight: boolean): ChatViewState {
+    return {
+      ...prevState,
+      scrollTo: {
+        type: 'scrollToMessage',
+        msgId: jumpToMessageId,
+        highlight,
+      }
     }
-
-    return this
   }
 }
 
