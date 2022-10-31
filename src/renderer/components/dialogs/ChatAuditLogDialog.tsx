@@ -109,7 +109,7 @@ export default function ChatAuditLogDialog(props: {
       )
       const messages = await BackendRemote.rpc.messageGetMessages(
         account_id,
-        msgIds
+        msgIds.filter(id => id !== 9)
       )
 
       setMsgIds(msgIds)
