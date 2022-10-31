@@ -6,9 +6,11 @@
 
 ### Changed
 - Update translations (19.10.2022)
+- instantly react to changing chat background color
 
 ### Fixed
 
+- fix setting color chat background color #2659
 - fix chat audit log #2967
 - fix that results of search in chat are not ordered by newest first
 
