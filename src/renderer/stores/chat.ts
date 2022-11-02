@@ -12,7 +12,7 @@ import {
   ChatViewState,
   ChatViewReducer,
   defaultChatViewState,
-} from './chat/chat_scroll'
+} from './chat/chat_view_reducer'
 import { ChatStoreScheduler } from './chat/chat_scheduler'
 import { saveLastChatId } from './chat/chat_sideeffects'
 import { onReady } from '../onready'
