@@ -6,9 +6,11 @@
 
 ### Changed
 - Update translations (19.10.2022)
+- instantly react to changing chat background color
 
 ### Fixed
 
+- fix setting color chat background color #2659
 - Fix that results of search in chat are not ordered by newest first
 - Fix messagelist overscrolling #2956 
 - Fix messagelist not jumping to correct message #2953
