@@ -222,11 +222,11 @@ class ChatStore extends Store<ChatStoreState> {
       oldestFetchedMessageIndex: number
     }) => {
       this.setState(state => {
-        const modifiedState = {
+        const modifiedState: ChatStoreState = {
           ...state,
           messagePages: [payload.messagePage, ...state.messagePages],
           oldestFetchedMessageIndex: payload.oldestFetchedMessageIndex,
-          scrollTo: ChatViewReducer.appendMessagePageTop(state.viewState),
+          viewState: ChatViewReducer.appendMessagePageTop(state.viewState),
           countFetchedMessages: payload.countFetchedMessages,
         }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
@@ -234,8 +234,9 @@ class ChatStore extends Store<ChatStoreState> {
           this.guardReducerTriesToAddDuplicatePageKey(
             payload.messagePage.pageKey
           )
-        )
+        ) {
           return
+        }
         return modifiedState
       }, 'appendMessagePageTop')
     },
