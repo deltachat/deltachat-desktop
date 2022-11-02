@@ -37,7 +37,7 @@ export interface ChatViewState {
 export function defaultChatViewState(): ChatViewState {
   return {
     scrollTo: null,
-    lastKnownScrollHeight: -1
+    lastKnownScrollHeight: -1,
   }
 }
 
@@ -50,7 +50,7 @@ export class ChatViewReducer {
       scrollTo: {
         type: 'scrollToPosition',
         scrollTop: lastKnownScrollTop,
-      }
+      },
     }
   }
 
@@ -67,7 +67,7 @@ export class ChatViewReducer {
         lastKnownScrollHeight,
         lastKnownScrollTop,
         appendedOn: 'top',
-      }
+      },
     }
   }
 
@@ -84,7 +84,7 @@ export class ChatViewReducer {
         lastKnownScrollTop,
         lastKnownScrollHeight,
         appendedOn: 'bottom',
-      }
+      },
     }
   }
 
@@ -100,7 +100,7 @@ export class ChatViewReducer {
         type: 'scrollToBottom',
         ifClose: true,
       },
-      lastKnownScrollHeight
+      lastKnownScrollHeight,
     }
   }
 
@@ -108,7 +108,7 @@ export class ChatViewReducer {
     return {
       ...prevState,
       scrollTo: null,
-      lastKnownScrollHeight: -1
+      lastKnownScrollHeight: -1,
     }
   }
 
@@ -125,7 +125,7 @@ export class ChatViewReducer {
         lastKnownScrollHeight,
         lastKnownScrollTop,
         appendedOn: 'top',
-      }
+      },
     }
   }
 
@@ -135,18 +135,22 @@ export class ChatViewReducer {
       scrollTo: {
         type: 'scrollToBottom',
         ifClose: false,
-      }
+      },
     }
   }
 
-  static jumpToMessage(prevState: ChatViewState, jumpToMessageId: number, highlight: boolean): ChatViewState {
+  static jumpToMessage(
+    prevState: ChatViewState,
+    jumpToMessageId: number,
+    highlight: boolean
+  ): ChatViewState {
     return {
       ...prevState,
       scrollTo: {
         type: 'scrollToMessage',
         msgId: jumpToMessageId,
         highlight,
-      }
+      },
     }
   }
 }

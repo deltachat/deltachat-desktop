@@ -8,7 +8,11 @@ import { selectedAccountId } from '../ScreenController'
 import { debouncedUpdateBadgeCounter } from '../system-integration/badge-counter'
 import { clearNotificationsForChat } from '../system-integration/notifications'
 import { T } from '@deltachat/jsonrpc-client'
-import { ChatViewState, ChatViewReducer, defaultChatViewState } from './chat/chat_scroll'
+import {
+  ChatViewState,
+  ChatViewReducer,
+  defaultChatViewState,
+} from './chat/chat_scroll'
 import { ChatStoreScheduler } from './chat/chat_scheduler'
 import { saveLastChatId } from './chat/chat_sideeffects'
 import { onReady } from '../onready'
