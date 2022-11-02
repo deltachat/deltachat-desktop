@@ -170,19 +170,21 @@ class ChatStore extends Store<ChatStoreState> {
   reducer = {
     setView: (view: ChatView) => {
       this.setState(prev => {
-        return {
+        const modifiedState: ChatStoreState = {
           ...prev,
           activeView: view,
         }
+        return modifiedState
       }, 'setChatView')
     },
     selectedChat: (payload: Partial<ChatStoreState>) => {
       this.setState(_ => {
         this.scheduler.unlock('scroll')
-        return {
+        const modifiedState: ChatStoreState = {
           ...defaultState(),
           ...payload,
         }
+        return modifiedState
       }, 'selectedChat')
     },
     refresh: (
@@ -192,7 +194,7 @@ class ChatStore extends Store<ChatStoreState> {
       oldestFetchedMessageIndex: number
     ) => {
       this.setState(state => {
-        return {
+        const modifiedState: ChatStoreState = {
           ...state,
           messageListItems,
           messagePages,
@@ -201,17 +203,19 @@ class ChatStore extends Store<ChatStoreState> {
           newestFetchedMessageListItemIndex: newestFetchedMessageIndex,
           oldestFetchedMessageIndex,
         }
+        return modifiedState
       }, 'refresh')
     },
     unselectChat: () => {
       this.setState(_ => {
         this.scheduler.unlock('scroll')
-        return { ...defaultState() }
+        const modifiedState: ChatStoreState = { ...defaultState() }
+        return modifiedState
       }, 'unselectChat')
     },
     modifiedChat: (payload: { id: number } & Partial<ChatStoreState>) => {
       this.setState(state => {
-        const modifiedState = {
+        const modifiedState: ChatStoreState = {
           ...state,
           ...payload,
         }
@@ -319,17 +323,17 @@ class ChatStore extends Store<ChatStoreState> {
         )
         let {
           oldestFetchedMessageIndex,
-          newestFetchedMessageListItemIndex: newestFetchedMessageIndex,
+          newestFetchedMessageListItemIndex,
         } = state
         if (messageIndex === oldestFetchedMessageIndex) {
           oldestFetchedMessageIndex += 1
-        } else if (messageIndex === newestFetchedMessageIndex) {
-          newestFetchedMessageIndex -= 1
+        } else if (messageIndex === newestFetchedMessageListItemIndex) {
+          newestFetchedMessageListItemIndex -= 1
         }
         const messageListItems = state.messageListItems.filter(
           m => m.kind !== 'message' || m.msg_id !== msgId
         )
-        const modifiedState = {
+        const modifiedState: ChatStoreState = {
           ...state,
           messageListItems,
           messagePages: state.messagePages.map(messagePage => {
@@ -342,7 +346,7 @@ class ChatStore extends Store<ChatStoreState> {
             return messagePage
           }),
           oldestFetchedMessageIndex,
-          newestFetchedMessageIndex,
+          newestFetchedMessageListItemIndex,
         }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
         return modifiedState
@@ -353,7 +357,7 @@ class ChatStore extends Store<ChatStoreState> {
       messagesChanged: Type.Message[]
     }) => {
       this.setState(state => {
-        const modifiedState = {
+        const modifiedState: ChatStoreState = {
           ...state,
           messagePages: state.messagePages.map(messagePage => {
             let changed = false
@@ -382,7 +386,7 @@ class ChatStore extends Store<ChatStoreState> {
     }) => {
       const { messageId, messageState } = payload
       this.setState(state => {
-        const modifiedState = {
+        const modifiedState: ChatStoreState = {
           ...state,
           messagePages: state.messagePages.map(messagePage => {
             if (messagePage.messages.has(messageId)) {
