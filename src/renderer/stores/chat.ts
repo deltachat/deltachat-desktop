@@ -39,7 +39,7 @@ export interface ChatStoreState {
   messageListItems: T.MessageListItem[]
   messagePages: MessagePage[]
   newestFetchedMessageListItemIndex: number
-  oldestFetchedMessageIndex: number
+  oldestFetchedMessageListItemIndex: number
   viewState: ChatViewState
   jumpToMessageStack: number[]
   countFetchedMessages: number
@@ -52,7 +52,7 @@ const defaultState: () => ChatStoreState = () => ({
   messageListItems: [],
   messagePages: [],
   newestFetchedMessageListItemIndex: -1,
-  oldestFetchedMessageIndex: -1,
+  oldestFetchedMessageListItemIndex: -1,
   viewState: defaultChatViewState(),
   jumpToMessageStack: [],
   countFetchedMessages: 0,
@@ -190,8 +190,8 @@ class ChatStore extends Store<ChatStoreState> {
     refresh: (
       messageListItems: T.MessageListItem[],
       messagePages: MessagePage[],
-      newestFetchedMessageIndex: number,
-      oldestFetchedMessageIndex: number
+      newestFetchedMessageListItemIndex: number,
+      oldestFetchedMessageListItemIndex: number
     ) => {
       this.setState(state => {
         const modifiedState: ChatStoreState = {
@@ -200,8 +200,8 @@ class ChatStore extends Store<ChatStoreState> {
           messagePages,
           viewState: ChatViewReducer.refresh(state.viewState),
           countFetchedMessages: messageListItems.length,
-          newestFetchedMessageListItemIndex: newestFetchedMessageIndex,
-          oldestFetchedMessageIndex,
+          newestFetchedMessageListItemIndex,
+          oldestFetchedMessageListItemIndex,
         }
         return modifiedState
       }, 'refresh')
@@ -227,13 +227,14 @@ class ChatStore extends Store<ChatStoreState> {
       id: number
       messagePage: MessagePage
       countFetchedMessages: number
-      oldestFetchedMessageIndex: number
+      oldestFetchedMessageListItemIndex: number
     }) => {
       this.setState(state => {
         const modifiedState: ChatStoreState = {
           ...state,
           messagePages: [payload.messagePage, ...state.messagePages],
-          oldestFetchedMessageIndex: payload.oldestFetchedMessageIndex,
+          oldestFetchedMessageListItemIndex:
+            payload.oldestFetchedMessageListItemIndex,
           viewState: ChatViewReducer.appendMessagePageTop(state.viewState),
           countFetchedMessages: payload.countFetchedMessages,
         }
@@ -322,11 +323,11 @@ class ChatStore extends Store<ChatStoreState> {
           m => m.kind === 'message' && m.msg_id == msgId
         )
         let {
-          oldestFetchedMessageIndex,
+          oldestFetchedMessageListItemIndex,
           newestFetchedMessageListItemIndex,
         } = state
-        if (messageIndex === oldestFetchedMessageIndex) {
-          oldestFetchedMessageIndex += 1
+        if (messageIndex === oldestFetchedMessageListItemIndex) {
+          oldestFetchedMessageListItemIndex += 1
         } else if (messageIndex === newestFetchedMessageListItemIndex) {
           newestFetchedMessageListItemIndex -= 1
         }
@@ -345,7 +346,7 @@ class ChatStore extends Store<ChatStoreState> {
             }
             return messagePage
           }),
-          oldestFetchedMessageIndex,
+          oldestFetchedMessageListItemIndex,
           newestFetchedMessageListItemIndex,
         }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
@@ -489,24 +490,24 @@ class ChatStore extends Store<ChatStoreState> {
           return false
         }
 
-        let oldestFetchedMessageIndex = -1
-        let newestFetchedMessageIndex = -1
+        let oldestFetchedMessageListItemIndex = -1
+        let newestFetchedMessageListItemIndex = -1
         let messagePage: MessagePage | null = null
         if (messageListItems.length !== 0) {
           // mesageIds.length = 1767
-          // oldestFetchedMessageIndex = 1767 - 1 = 1766 - 10 = 1756
+          // oldestFetchedMessageListItemIndex = 1767 - 1 = 1766 - 10 = 1756
           // newestFetchedMessageIndex =                        1766
-          oldestFetchedMessageIndex = Math.max(
+          oldestFetchedMessageListItemIndex = Math.max(
             messageListItems.length - 1 - PAGE_SIZE,
             0
           )
-          newestFetchedMessageIndex = messageListItems.length - 1
+          newestFetchedMessageListItemIndex = messageListItems.length - 1
 
           messagePage = await messagePageFromMessageIndexes(
             accountId,
             chatId,
-            oldestFetchedMessageIndex,
-            newestFetchedMessageIndex
+            oldestFetchedMessageListItemIndex,
+            newestFetchedMessageListItemIndex
           )
         }
 
@@ -515,8 +516,8 @@ class ChatStore extends Store<ChatStoreState> {
           accountId,
           messagePages: messagePage === null ? [] : [messagePage],
           messageListItems,
-          oldestFetchedMessageIndex,
-          newestFetchedMessageListItemIndex: newestFetchedMessageIndex,
+          oldestFetchedMessageListItemIndex,
+          newestFetchedMessageListItemIndex,
           viewState: ChatViewReducer.selectChat(this.state.viewState),
         })
         ActionEmitter.emitAction(
@@ -643,33 +644,33 @@ class ChatStore extends Store<ChatStoreState> {
           )
 
           // calculate page indexes, so that jumpToMessageId is in the middle of the page
-          let oldestFetchedMessageIndex = -1
-          let newestFetchedMessageIndex = -1
+          let oldestFetchedMessageListItemIndex = -1
+          let newestFetchedMessageListItemIndex = -1
           let messagePage: MessagePage | null = null
           const half_page_size = Math.ceil(PAGE_SIZE / 2)
           if (messageListItems.length !== 0) {
-            oldestFetchedMessageIndex = Math.max(
+            oldestFetchedMessageListItemIndex = Math.max(
               jumpToMessageIndex - half_page_size,
               0
             )
-            newestFetchedMessageIndex = Math.min(
+            newestFetchedMessageListItemIndex = Math.min(
               jumpToMessageIndex + half_page_size,
               messageListItems.length - 1
             )
 
             const countMessagesOnNewerSide =
-              newestFetchedMessageIndex - jumpToMessageIndex
+              newestFetchedMessageListItemIndex - jumpToMessageIndex
             const countMessagesOnOlderSide =
-              jumpToMessageIndex - oldestFetchedMessageIndex
+              jumpToMessageIndex - oldestFetchedMessageListItemIndex
             if (countMessagesOnNewerSide < half_page_size) {
-              oldestFetchedMessageIndex = Math.max(
-                oldestFetchedMessageIndex -
+              oldestFetchedMessageListItemIndex = Math.max(
+                oldestFetchedMessageListItemIndex -
                   (half_page_size - countMessagesOnNewerSide),
                 0
               )
             } else if (countMessagesOnOlderSide < half_page_size) {
-              newestFetchedMessageIndex = Math.min(
-                newestFetchedMessageIndex +
+              newestFetchedMessageListItemIndex = Math.min(
+                newestFetchedMessageListItemIndex +
                   (half_page_size - countMessagesOnOlderSide),
                 messageListItems.length - 1
               )
@@ -678,8 +679,8 @@ class ChatStore extends Store<ChatStoreState> {
             messagePage = await messagePageFromMessageIndexes(
               accountId,
               chatId,
-              oldestFetchedMessageIndex,
-              newestFetchedMessageIndex
+              oldestFetchedMessageListItemIndex,
+              newestFetchedMessageListItemIndex
             )
           }
 
@@ -694,8 +695,8 @@ class ChatStore extends Store<ChatStoreState> {
             accountId,
             messagePages: [messagePage],
             messageListItems,
-            oldestFetchedMessageIndex,
-            newestFetchedMessageListItemIndex: newestFetchedMessageIndex,
+            oldestFetchedMessageListItemIndex,
+            newestFetchedMessageListItemIndex: newestFetchedMessageListItemIndex,
             viewState: ChatViewReducer.jumpToMessage(
               this.state.viewState,
               jumpToMessageId,
@@ -756,11 +757,12 @@ class ChatStore extends Store<ChatStoreState> {
             return false
           }
           const id = state.chat.id
-          const oldestFetchedMessageIndex = Math.max(
-            state.oldestFetchedMessageIndex - PAGE_SIZE,
+          const oldestFetchedMessageListItemIndex = Math.max(
+            state.oldestFetchedMessageListItemIndex - PAGE_SIZE,
             0
           )
-          const lastMessageIndexOnLastPage = state.oldestFetchedMessageIndex
+          const lastMessageIndexOnLastPage =
+            state.oldestFetchedMessageListItemIndex
           if (lastMessageIndexOnLastPage === 0) {
             log.debug(
               'FETCH_MORE_MESSAGES: lastMessageIndexOnLastPage is zero, returning'
@@ -768,7 +770,7 @@ class ChatStore extends Store<ChatStoreState> {
             return false
           }
           const fetchedMessageListItems = state.messageListItems.slice(
-            oldestFetchedMessageIndex,
+            oldestFetchedMessageListItemIndex,
             lastMessageIndexOnLastPage
           )
           if (fetchedMessageListItems.length === 0) {
@@ -781,14 +783,14 @@ class ChatStore extends Store<ChatStoreState> {
           const messagePage: MessagePage = await messagePageFromMessageIndexes(
             this.state.accountId,
             id,
-            oldestFetchedMessageIndex,
+            oldestFetchedMessageListItemIndex,
             lastMessageIndexOnLastPage - 1
           )
 
           this.reducer.appendMessagePageTop({
             id,
             messagePage,
-            oldestFetchedMessageIndex,
+            oldestFetchedMessageListItemIndex,
             countFetchedMessages: fetchedMessageListItems.length,
           })
           return true
@@ -888,27 +890,30 @@ class ChatStore extends Store<ChatStoreState> {
             C.DC_GCM_ADDDAYMARKER
           )
           let {
-            newestFetchedMessageListItemIndex: newestFetchedMessageIndex,
-            oldestFetchedMessageIndex,
+            newestFetchedMessageListItemIndex,
+            oldestFetchedMessageListItemIndex,
           } = state
-          newestFetchedMessageIndex = Math.min(
-            newestFetchedMessageIndex,
+          newestFetchedMessageListItemIndex = Math.min(
+            newestFetchedMessageListItemIndex,
             messageListItems.length - 1
           )
-          oldestFetchedMessageIndex = Math.max(oldestFetchedMessageIndex, 0)
+          oldestFetchedMessageListItemIndex = Math.max(
+            oldestFetchedMessageListItemIndex,
+            0
+          )
 
           const messagePages = await messagePagesFromMessageIndexes(
             this.state.accountId,
             chatId,
-            oldestFetchedMessageIndex,
-            newestFetchedMessageIndex
+            oldestFetchedMessageListItemIndex,
+            newestFetchedMessageListItemIndex
           )
 
           this.reducer.refresh(
             messageListItems,
             messagePages,
-            newestFetchedMessageIndex,
-            oldestFetchedMessageIndex
+            newestFetchedMessageListItemIndex,
+            oldestFetchedMessageListItemIndex
           )
           return true
         },
