@@ -8,7 +8,11 @@ import { selectedAccountId } from '../ScreenController'
 import { debouncedUpdateBadgeCounter } from '../system-integration/badge-counter'
 import { clearNotificationsForChat } from '../system-integration/notifications'
 import { T } from '@deltachat/jsonrpc-client'
-import { ChatViewState } from './chat/chat_scroll'
+import {
+  ChatViewState,
+  ChatViewReducer,
+  defaultChatViewState,
+} from './chat/chat_view_reducer'
 import { ChatStoreScheduler } from './chat/chat_scheduler'
 import { saveLastChatId } from './chat/chat_sideeffects'
 import { onReady } from '../onready'
@@ -49,7 +53,7 @@ const defaultState: () => ChatStoreState = () => ({
   messagePages: [],
   newestFetchedMessageListItemIndex: -1,
   oldestFetchedMessageIndex: -1,
-  viewState: new ChatViewState(),
+  viewState: defaultChatViewState(),
   jumpToMessageStack: [],
   countFetchedMessages: 0,
 })
@@ -192,7 +196,7 @@ class ChatStore extends Store<ChatStoreState> {
           ...state,
           messageListItems,
           messagePages,
-          viewState: state.viewState.refresh(),
+          viewState: ChatViewReducer.refresh(state.viewState),
           countFetchedMessages: messageListItems.length,
           newestFetchedMessageListItemIndex: newestFetchedMessageIndex,
           oldestFetchedMessageIndex,
@@ -222,11 +226,11 @@ class ChatStore extends Store<ChatStoreState> {
       oldestFetchedMessageIndex: number
     }) => {
       this.setState(state => {
-        const modifiedState = {
+        const modifiedState: ChatStoreState = {
           ...state,
           messagePages: [payload.messagePage, ...state.messagePages],
           oldestFetchedMessageIndex: payload.oldestFetchedMessageIndex,
-          scrollTo: state.viewState.appendMessagePageTop(),
+          viewState: ChatViewReducer.appendMessagePageTop(state.viewState),
           countFetchedMessages: payload.countFetchedMessages,
         }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
@@ -234,8 +238,9 @@ class ChatStore extends Store<ChatStoreState> {
           this.guardReducerTriesToAddDuplicatePageKey(
             payload.messagePage.pageKey
           )
-        )
+        ) {
           return
+        }
         return modifiedState
       }, 'appendMessagePageTop')
     },
@@ -250,7 +255,7 @@ class ChatStore extends Store<ChatStoreState> {
           ...state,
           messagePages: [...state.messagePages, payload.messagePage],
           newestFetchedMessageListItemIndex: payload.newestFetchedMessageIndex,
-          viewState: state.viewState.appendMessagePageBottom(),
+          viewState: ChatViewReducer.appendMessagePageBottom(state.viewState),
           countFetchedMessages: payload.countFetchedMessages,
         }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
@@ -275,7 +280,7 @@ class ChatStore extends Store<ChatStoreState> {
           messageListItems: payload.messageListItems,
           messagePages: [...state.messagePages, payload.messagePage],
           // newestFetchedMessageIndex: payload.newestFetchedMessageIndex,
-          viewState: state.viewState.fetchedIncomingMessages(),
+          viewState: ChatViewReducer.fetchedIncomingMessages(state.viewState),
         }
 
         if (
@@ -299,7 +304,7 @@ class ChatStore extends Store<ChatStoreState> {
       this.setState(state => {
         const modifiedState: ChatStoreState = {
           ...state,
-          viewState: state.viewState.unlockScroll(),
+          viewState: ChatViewReducer.unlockScroll(state.viewState),
         }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
         setTimeout(() => this.scheduler.unlock('scroll'), 0)
@@ -410,7 +415,7 @@ class ChatStore extends Store<ChatStoreState> {
         const modifiedState: ChatStoreState = {
           ...state,
           messageListItems: payload.messageListItems,
-          viewState: state.viewState.setMessageListItems(),
+          viewState: ChatViewReducer.setMessageListItems(state.viewState),
         }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
         return modifiedState
@@ -508,7 +513,7 @@ class ChatStore extends Store<ChatStoreState> {
           messageListItems,
           oldestFetchedMessageIndex,
           newestFetchedMessageListItemIndex: newestFetchedMessageIndex,
-          viewState: this.state.viewState.selectChat(),
+          viewState: ChatViewReducer.selectChat(this.state.viewState),
         })
         ActionEmitter.emitAction(
           chat.archived
@@ -687,7 +692,8 @@ class ChatStore extends Store<ChatStoreState> {
             messageListItems,
             oldestFetchedMessageIndex,
             newestFetchedMessageListItemIndex: newestFetchedMessageIndex,
-            viewState: this.state.viewState.jumpToMessage(
+            viewState: ChatViewReducer.jumpToMessage(
+              this.state.viewState,
               jumpToMessageId,
               highlight
             ),
