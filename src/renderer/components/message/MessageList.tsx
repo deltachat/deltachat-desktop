@@ -64,7 +64,7 @@ export default function MessageList({
   refComposer: todo
 }) {
   const {
-    oldestFetchedMessageIndex,
+    oldestFetchedMessageListItemIndex,
     messagePages,
     messageListItems,
     viewState,
@@ -327,7 +327,7 @@ export default function MessageList({
     >
       <MessageListInner
         onScroll={onScroll}
-        oldestFetchedMessageIndex={oldestFetchedMessageIndex}
+        oldestFetchedMessageIndex={oldestFetchedMessageListItemIndex}
         messageListItems={messageListItems}
         messagePages={messagePages}
         messageListRef={messageListRef}
