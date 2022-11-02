@@ -11,8 +11,12 @@
 ### Fixed
 
 - fix setting color chat background color #2659
+- Fix that results of search in chat are not ordered by newest first
+- Fix messagelist overscrolling #2956 
+- Fix messagelist not jumping to correct message #2953
 - fix chat audit log #2967
 - fix that results of search in chat are not ordered by newest first
+- don't show dash in mailinlist title if there is no mailinglist address #2965
 
 ## [1.33.0] - 2022-10-16
 
