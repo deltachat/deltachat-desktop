@@ -14,9 +14,9 @@ import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
 
-const WEBRTC_INSTANCE_JITSI = 'https://meet.jit.si/$ROOM'
-const WEBRTC_INSTANCE_SYSTEMLI = 'https://meet.systemli.org/$ROOM'
-const WEBRTC_INSTANCE_AUTISTICI = 'https://vc.autistici.org/$ROOM'
+const VIDEO_CHAT_INSTANCE_JITSI = 'https://meet.jit.si/$ROOM'
+const VIDEO_CHAT_INSTANCE_SYSTEMLI = 'https://meet.systemli.org/$ROOM'
+const VIDEO_CHAT_INSTANCE_AUTISTICI = 'https://vc.autistici.org/$ROOM'
 
 export function SettingsExperimentalFeatures({
   settingsStore,
@@ -48,11 +48,11 @@ export function SettingsExperimentalFeatures({
   const showVideochatInstance = (instance: string) => {
     if (instance === '') {
       return tx('off')
-    } else if (instance === WEBRTC_INSTANCE_SYSTEMLI) {
+    } else if (instance === VIDEO_CHAT_INSTANCE_SYSTEMLI) {
       return 'Systemli'
-    } else if (instance === WEBRTC_INSTANCE_AUTISTICI) {
+    } else if (instance === VIDEO_CHAT_INSTANCE_AUTISTICI) {
       return 'Autistici'
-    } else if (instance === WEBRTC_INSTANCE_JITSI) {
+    } else if (instance === VIDEO_CHAT_INSTANCE_JITSI) {
       return 'Jitsi'
     }
     return instance
@@ -106,11 +106,11 @@ export function EditVideochatInstanceDialog({
   const [radioValue, setRadioValue] = useState<RadioButtonValue>(() => {
     if (configValue === '') {
       return 'disabled'
-    } else if (configValue === WEBRTC_INSTANCE_SYSTEMLI) {
+    } else if (configValue === VIDEO_CHAT_INSTANCE_SYSTEMLI) {
       return 'systemli'
-    } else if (configValue === WEBRTC_INSTANCE_AUTISTICI) {
+    } else if (configValue === VIDEO_CHAT_INSTANCE_AUTISTICI) {
       return 'autistici'
-    } else if (configValue === WEBRTC_INSTANCE_JITSI) {
+    } else if (configValue === VIDEO_CHAT_INSTANCE_JITSI) {
       return 'jitsi'
     } else {
       return 'custom'
@@ -132,13 +132,13 @@ export function EditVideochatInstanceDialog({
       newConfigValue = ''
       setRadioValue('disabled')
     } else if (currentRadioValue === 'systemli') {
-      newConfigValue = WEBRTC_INSTANCE_SYSTEMLI
+      newConfigValue = VIDEO_CHAT_INSTANCE_SYSTEMLI
       setRadioValue('systemli')
     } else if (currentRadioValue === 'autistici') {
-      newConfigValue = WEBRTC_INSTANCE_AUTISTICI
+      newConfigValue = VIDEO_CHAT_INSTANCE_AUTISTICI
       setRadioValue('autistici')
     } else if (currentRadioValue === 'jitsi') {
-      newConfigValue = WEBRTC_INSTANCE_JITSI
+      newConfigValue = VIDEO_CHAT_INSTANCE_JITSI
       setRadioValue('jitsi')
     } else {
       newConfigValue = settingsStore.settings['webrtc_instance']

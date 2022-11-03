@@ -35,9 +35,9 @@ function BackgroundSelector({
   const colorInput = document.getElementById('color-input') as HTMLInputElement
 
   useEffect(() => {
-    colorInput.onchange = (ev: any) => onChange(ev.target.value)
+    colorInput.oninput = (ev: any) => onChange(ev.target.value)
     return () => {
-      colorInput.onchange = null
+      colorInput.oninput = null
     }
   }, [onChange, colorInput])
 
@@ -56,6 +56,9 @@ function BackgroundSelector({
         colorInput.value = desktopSettings?.chatViewBgImg.slice(7) || ''
       }
       setTimeout(() => colorInput.click(), 0)
+      if (colorInput.value) {
+        onChange(colorInput.value)
+      }
     }
   }
 
