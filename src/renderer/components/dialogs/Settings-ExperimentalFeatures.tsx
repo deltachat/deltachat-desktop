@@ -70,17 +70,6 @@ export function SettingsExperimentalFeatures({
         label: tx('pref_on_demand_location_streaming'),
       })}
       {renderDTSettingSwitch({
-        key: 'minimizeToTray',
-        label: tx('pref_show_tray_icon'),
-        disabled: settingsStore.rc.minimized,
-        disabledValue: settingsStore.rc.minimized,
-      })}
-      {settingsStore.rc.minimized && (
-        <div className='bp4-callout'>
-          {tx('explain_desktop_minimized_disabled_tray_pref')}
-        </div>
-      )}
-      {renderDTSettingSwitch({
         key: 'enableChatAuditLog',
         label: tx('menu_chat_audit_log'),
       })}

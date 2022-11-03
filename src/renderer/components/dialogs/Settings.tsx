@@ -349,6 +349,7 @@ export default function Settings(props: DialogProps) {
                 <SettingsAdvanced
                   settingsStore={settingsStore}
                   renderDeltaSwitch2={renderDeltaSwitch2}
+                  renderDTSettingSwitch={renderDTSettingSwitch}
                 />
               </Card>
             </DeltaDialogBody>

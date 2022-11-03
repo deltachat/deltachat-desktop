@@ -21,7 +21,7 @@ export function getDefaultState(): DesktopSettingsType {
     lastChats: {},
     zoomFactor: 1,
     activeTheme: 'system',
-    minimizeToTray: false,
+    minimizeToTray: true,
     syncAllAccounts: true,
     lastSaveDialogLocation: undefined,
   }
