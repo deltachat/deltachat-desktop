@@ -8,7 +8,11 @@ import { selectedAccountId } from '../ScreenController'
 import { debouncedUpdateBadgeCounter } from '../system-integration/badge-counter'
 import { clearNotificationsForChat } from '../system-integration/notifications'
 import { T } from '@deltachat/jsonrpc-client'
-import { ChatViewState } from './chat/chat_scroll'
+import {
+  ChatViewState,
+  ChatViewReducer,
+  defaultChatViewState,
+} from './chat/chat_view_reducer'
 import { ChatStoreScheduler } from './chat/chat_scheduler'
 import { saveLastChatId } from './chat/chat_sideeffects'
 import { onReady } from '../onready'
@@ -35,7 +39,7 @@ export interface ChatStoreState {
   messageListItems: T.MessageListItem[]
   messagePages: MessagePage[]
   newestFetchedMessageListItemIndex: number
-  oldestFetchedMessageIndex: number
+  oldestFetchedMessageListItemIndex: number
   viewState: ChatViewState
   jumpToMessageStack: number[]
   countFetchedMessages: number
@@ -48,8 +52,8 @@ const defaultState: () => ChatStoreState = () => ({
   messageListItems: [],
   messagePages: [],
   newestFetchedMessageListItemIndex: -1,
-  oldestFetchedMessageIndex: -1,
-  viewState: new ChatViewState(),
+  oldestFetchedMessageListItemIndex: -1,
+  viewState: defaultChatViewState(),
   jumpToMessageStack: [],
   countFetchedMessages: 0,
 })
@@ -166,48 +170,52 @@ class ChatStore extends Store<ChatStoreState> {
   reducer = {
     setView: (view: ChatView) => {
       this.setState(prev => {
-        return {
+        const modifiedState: ChatStoreState = {
           ...prev,
           activeView: view,
         }
+        return modifiedState
       }, 'setChatView')
     },
     selectedChat: (payload: Partial<ChatStoreState>) => {
       this.setState(_ => {
         this.scheduler.unlock('scroll')
-        return {
+        const modifiedState: ChatStoreState = {
           ...defaultState(),
           ...payload,
         }
+        return modifiedState
       }, 'selectedChat')
     },
     refresh: (
       messageListItems: T.MessageListItem[],
       messagePages: MessagePage[],
-      newestFetchedMessageIndex: number,
-      oldestFetchedMessageIndex: number
+      newestFetchedMessageListItemIndex: number,
+      oldestFetchedMessageListItemIndex: number
     ) => {
       this.setState(state => {
-        return {
+        const modifiedState: ChatStoreState = {
           ...state,
           messageListItems,
           messagePages,
-          viewState: state.viewState.refresh(),
+          viewState: ChatViewReducer.refresh(state.viewState),
           countFetchedMessages: messageListItems.length,
-          newestFetchedMessageListItemIndex: newestFetchedMessageIndex,
-          oldestFetchedMessageIndex,
+          newestFetchedMessageListItemIndex,
+          oldestFetchedMessageListItemIndex,
         }
+        return modifiedState
       }, 'refresh')
     },
     unselectChat: () => {
       this.setState(_ => {
         this.scheduler.unlock('scroll')
-        return { ...defaultState() }
+        const modifiedState: ChatStoreState = { ...defaultState() }
+        return modifiedState
       }, 'unselectChat')
     },
     modifiedChat: (payload: { id: number } & Partial<ChatStoreState>) => {
       this.setState(state => {
-        const modifiedState = {
+        const modifiedState: ChatStoreState = {
           ...state,
           ...payload,
         }
@@ -219,14 +227,15 @@ class ChatStore extends Store<ChatStoreState> {
       id: number
       messagePage: MessagePage
       countFetchedMessages: number
-      oldestFetchedMessageIndex: number
+      oldestFetchedMessageListItemIndex: number
     }) => {
       this.setState(state => {
-        const modifiedState = {
+        const modifiedState: ChatStoreState = {
           ...state,
           messagePages: [payload.messagePage, ...state.messagePages],
-          oldestFetchedMessageIndex: payload.oldestFetchedMessageIndex,
-          scrollTo: state.viewState.appendMessagePageTop(),
+          oldestFetchedMessageListItemIndex:
+            payload.oldestFetchedMessageListItemIndex,
+          viewState: ChatViewReducer.appendMessagePageTop(state.viewState),
           countFetchedMessages: payload.countFetchedMessages,
         }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
@@ -234,8 +243,9 @@ class ChatStore extends Store<ChatStoreState> {
           this.guardReducerTriesToAddDuplicatePageKey(
             payload.messagePage.pageKey
           )
-        )
+        ) {
           return
+        }
         return modifiedState
       }, 'appendMessagePageTop')
     },
@@ -250,7 +260,7 @@ class ChatStore extends Store<ChatStoreState> {
           ...state,
           messagePages: [...state.messagePages, payload.messagePage],
           newestFetchedMessageListItemIndex: payload.newestFetchedMessageIndex,
-          viewState: state.viewState.appendMessagePageBottom(),
+          viewState: ChatViewReducer.appendMessagePageBottom(state.viewState),
           countFetchedMessages: payload.countFetchedMessages,
         }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
@@ -275,7 +285,7 @@ class ChatStore extends Store<ChatStoreState> {
           messageListItems: payload.messageListItems,
           messagePages: [...state.messagePages, payload.messagePage],
           // newestFetchedMessageIndex: payload.newestFetchedMessageIndex,
-          viewState: state.viewState.fetchedIncomingMessages(),
+          viewState: ChatViewReducer.fetchedIncomingMessages(state.viewState),
         }
 
         if (
@@ -299,7 +309,7 @@ class ChatStore extends Store<ChatStoreState> {
       this.setState(state => {
         const modifiedState: ChatStoreState = {
           ...state,
-          viewState: state.viewState.unlockScroll(),
+          viewState: ChatViewReducer.unlockScroll(state.viewState),
         }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
         setTimeout(() => this.scheduler.unlock('scroll'), 0)
@@ -313,18 +323,18 @@ class ChatStore extends Store<ChatStoreState> {
           m => m.kind === 'message' && m.msg_id == msgId
         )
         let {
-          oldestFetchedMessageIndex,
-          newestFetchedMessageListItemIndex: newestFetchedMessageIndex,
+          oldestFetchedMessageListItemIndex,
+          newestFetchedMessageListItemIndex,
         } = state
-        if (messageIndex === oldestFetchedMessageIndex) {
-          oldestFetchedMessageIndex += 1
-        } else if (messageIndex === newestFetchedMessageIndex) {
-          newestFetchedMessageIndex -= 1
+        if (messageIndex === oldestFetchedMessageListItemIndex) {
+          oldestFetchedMessageListItemIndex += 1
+        } else if (messageIndex === newestFetchedMessageListItemIndex) {
+          newestFetchedMessageListItemIndex -= 1
         }
         const messageListItems = state.messageListItems.filter(
           m => m.kind !== 'message' || m.msg_id !== msgId
         )
-        const modifiedState = {
+        const modifiedState: ChatStoreState = {
           ...state,
           messageListItems,
           messagePages: state.messagePages.map(messagePage => {
@@ -336,8 +346,8 @@ class ChatStore extends Store<ChatStoreState> {
             }
             return messagePage
           }),
-          oldestFetchedMessageIndex,
-          newestFetchedMessageIndex,
+          oldestFetchedMessageListItemIndex,
+          newestFetchedMessageListItemIndex,
         }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
         return modifiedState
@@ -348,7 +358,7 @@ class ChatStore extends Store<ChatStoreState> {
       messagesChanged: Type.Message[]
     }) => {
       this.setState(state => {
-        const modifiedState = {
+        const modifiedState: ChatStoreState = {
           ...state,
           messagePages: state.messagePages.map(messagePage => {
             let changed = false
@@ -377,7 +387,7 @@ class ChatStore extends Store<ChatStoreState> {
     }) => {
       const { messageId, messageState } = payload
       this.setState(state => {
-        const modifiedState = {
+        const modifiedState: ChatStoreState = {
           ...state,
           messagePages: state.messagePages.map(messagePage => {
             if (messagePage.messages.has(messageId)) {
@@ -410,7 +420,7 @@ class ChatStore extends Store<ChatStoreState> {
         const modifiedState: ChatStoreState = {
           ...state,
           messageListItems: payload.messageListItems,
-          viewState: state.viewState.setMessageListItems(),
+          viewState: ChatViewReducer.setMessageListItems(state.viewState),
         }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
         return modifiedState
@@ -480,24 +490,24 @@ class ChatStore extends Store<ChatStoreState> {
           return false
         }
 
-        let oldestFetchedMessageIndex = -1
-        let newestFetchedMessageIndex = -1
+        let oldestFetchedMessageListItemIndex = -1
+        let newestFetchedMessageListItemIndex = -1
         let messagePage: MessagePage | null = null
         if (messageListItems.length !== 0) {
           // mesageIds.length = 1767
-          // oldestFetchedMessageIndex = 1767 - 1 = 1766 - 10 = 1756
+          // oldestFetchedMessageListItemIndex = 1767 - 1 = 1766 - 10 = 1756
           // newestFetchedMessageIndex =                        1766
-          oldestFetchedMessageIndex = Math.max(
+          oldestFetchedMessageListItemIndex = Math.max(
             messageListItems.length - 1 - PAGE_SIZE,
             0
           )
-          newestFetchedMessageIndex = messageListItems.length - 1
+          newestFetchedMessageListItemIndex = messageListItems.length - 1
 
           messagePage = await messagePageFromMessageIndexes(
             accountId,
             chatId,
-            oldestFetchedMessageIndex,
-            newestFetchedMessageIndex
+            oldestFetchedMessageListItemIndex,
+            newestFetchedMessageListItemIndex
           )
         }
 
@@ -506,9 +516,9 @@ class ChatStore extends Store<ChatStoreState> {
           accountId,
           messagePages: messagePage === null ? [] : [messagePage],
           messageListItems,
-          oldestFetchedMessageIndex,
-          newestFetchedMessageListItemIndex: newestFetchedMessageIndex,
-          viewState: this.state.viewState.selectChat(),
+          oldestFetchedMessageListItemIndex,
+          newestFetchedMessageListItemIndex,
+          viewState: ChatViewReducer.selectChat(this.state.viewState),
         })
         ActionEmitter.emitAction(
           chat.archived
@@ -634,33 +644,33 @@ class ChatStore extends Store<ChatStoreState> {
           )
 
           // calculate page indexes, so that jumpToMessageId is in the middle of the page
-          let oldestFetchedMessageIndex = -1
-          let newestFetchedMessageIndex = -1
+          let oldestFetchedMessageListItemIndex = -1
+          let newestFetchedMessageListItemIndex = -1
           let messagePage: MessagePage | null = null
           const half_page_size = Math.ceil(PAGE_SIZE / 2)
           if (messageListItems.length !== 0) {
-            oldestFetchedMessageIndex = Math.max(
+            oldestFetchedMessageListItemIndex = Math.max(
               jumpToMessageIndex - half_page_size,
               0
             )
-            newestFetchedMessageIndex = Math.min(
+            newestFetchedMessageListItemIndex = Math.min(
               jumpToMessageIndex + half_page_size,
               messageListItems.length - 1
             )
 
             const countMessagesOnNewerSide =
-              newestFetchedMessageIndex - jumpToMessageIndex
+              newestFetchedMessageListItemIndex - jumpToMessageIndex
             const countMessagesOnOlderSide =
-              jumpToMessageIndex - oldestFetchedMessageIndex
+              jumpToMessageIndex - oldestFetchedMessageListItemIndex
             if (countMessagesOnNewerSide < half_page_size) {
-              oldestFetchedMessageIndex = Math.max(
-                oldestFetchedMessageIndex -
+              oldestFetchedMessageListItemIndex = Math.max(
+                oldestFetchedMessageListItemIndex -
                   (half_page_size - countMessagesOnNewerSide),
                 0
               )
             } else if (countMessagesOnOlderSide < half_page_size) {
-              newestFetchedMessageIndex = Math.min(
-                newestFetchedMessageIndex +
+              newestFetchedMessageListItemIndex = Math.min(
+                newestFetchedMessageListItemIndex +
                   (half_page_size - countMessagesOnOlderSide),
                 messageListItems.length - 1
               )
@@ -669,8 +679,8 @@ class ChatStore extends Store<ChatStoreState> {
             messagePage = await messagePageFromMessageIndexes(
               accountId,
               chatId,
-              oldestFetchedMessageIndex,
-              newestFetchedMessageIndex
+              oldestFetchedMessageListItemIndex,
+              newestFetchedMessageListItemIndex
             )
           }
 
@@ -685,9 +695,10 @@ class ChatStore extends Store<ChatStoreState> {
             accountId,
             messagePages: [messagePage],
             messageListItems,
-            oldestFetchedMessageIndex,
-            newestFetchedMessageListItemIndex: newestFetchedMessageIndex,
-            viewState: this.state.viewState.jumpToMessage(
+            oldestFetchedMessageListItemIndex,
+            newestFetchedMessageListItemIndex: newestFetchedMessageListItemIndex,
+            viewState: ChatViewReducer.jumpToMessage(
+              this.state.viewState,
               jumpToMessageId,
               highlight
             ),
@@ -746,11 +757,12 @@ class ChatStore extends Store<ChatStoreState> {
             return false
           }
           const id = state.chat.id
-          const oldestFetchedMessageIndex = Math.max(
-            state.oldestFetchedMessageIndex - PAGE_SIZE,
+          const oldestFetchedMessageListItemIndex = Math.max(
+            state.oldestFetchedMessageListItemIndex - PAGE_SIZE,
             0
           )
-          const lastMessageIndexOnLastPage = state.oldestFetchedMessageIndex
+          const lastMessageIndexOnLastPage =
+            state.oldestFetchedMessageListItemIndex
           if (lastMessageIndexOnLastPage === 0) {
             log.debug(
               'FETCH_MORE_MESSAGES: lastMessageIndexOnLastPage is zero, returning'
@@ -758,7 +770,7 @@ class ChatStore extends Store<ChatStoreState> {
             return false
           }
           const fetchedMessageListItems = state.messageListItems.slice(
-            oldestFetchedMessageIndex,
+            oldestFetchedMessageListItemIndex,
             lastMessageIndexOnLastPage
           )
           if (fetchedMessageListItems.length === 0) {
@@ -771,14 +783,14 @@ class ChatStore extends Store<ChatStoreState> {
           const messagePage: MessagePage = await messagePageFromMessageIndexes(
             this.state.accountId,
             id,
-            oldestFetchedMessageIndex,
+            oldestFetchedMessageListItemIndex,
             lastMessageIndexOnLastPage - 1
           )
 
           this.reducer.appendMessagePageTop({
             id,
             messagePage,
-            oldestFetchedMessageIndex,
+            oldestFetchedMessageListItemIndex,
             countFetchedMessages: fetchedMessageListItems.length,
           })
           return true
@@ -878,27 +890,30 @@ class ChatStore extends Store<ChatStoreState> {
             C.DC_GCM_ADDDAYMARKER
           )
           let {
-            newestFetchedMessageListItemIndex: newestFetchedMessageIndex,
-            oldestFetchedMessageIndex,
+            newestFetchedMessageListItemIndex,
+            oldestFetchedMessageListItemIndex,
           } = state
-          newestFetchedMessageIndex = Math.min(
-            newestFetchedMessageIndex,
+          newestFetchedMessageListItemIndex = Math.min(
+            newestFetchedMessageListItemIndex,
             messageListItems.length - 1
           )
-          oldestFetchedMessageIndex = Math.max(oldestFetchedMessageIndex, 0)
+          oldestFetchedMessageListItemIndex = Math.max(
+            oldestFetchedMessageListItemIndex,
+            0
+          )
 
           const messagePages = await messagePagesFromMessageIndexes(
             this.state.accountId,
             chatId,
-            oldestFetchedMessageIndex,
-            newestFetchedMessageIndex
+            oldestFetchedMessageListItemIndex,
+            newestFetchedMessageListItemIndex
           )
 
           this.reducer.refresh(
             messageListItems,
             messagePages,
-            newestFetchedMessageIndex,
-            oldestFetchedMessageIndex
+            newestFetchedMessageListItemIndex,
+            oldestFetchedMessageListItemIndex
           )
           return true
         },
