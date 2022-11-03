@@ -10,6 +10,7 @@
 ### Fixed
 
 - fix that results of search in chat are not ordered by newest first
+- Fix chat name/avatar in navbar take full width
 
 ## [1.33.0] - 2022-10-16
 
