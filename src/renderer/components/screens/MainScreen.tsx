@@ -218,7 +218,7 @@ export default function MainScreen() {
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  marginRight: '15px',
+                  width: '100%',
                 }}
                 onClick={onTitleClick}
               >

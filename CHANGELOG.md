@@ -16,6 +16,7 @@
 - Fix messagelist not jumping to correct message #2953
 - fix chat audit log #2967
 - fix that results of search in chat are not ordered by newest first
+- Fix chat name/avatar in navbar take full width
 - don't show dash in mailinlist title if there is no mailinglist address #2965
 
 ## [1.33.0] - 2022-10-16
