@@ -6,6 +6,7 @@
 
 ### Changed
 - Update translations (19.10.2022)
+- Tray icon is now by default enabled. Settings got moved to Settings->Advanced
 - instantly react to changing chat background color
 
 ### Fixed

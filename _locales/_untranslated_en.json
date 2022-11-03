@@ -43,5 +43,8 @@
   },
   "exit_search": {
     "message": "Exit Search"
+  },
+  "pref_system_integration_menu_title": {
+    "message": "System integration"
   }
 }
