@@ -52,7 +52,6 @@ export default class DeltaChatController extends EventEmitter {
 
   constructor(public cwd: string) {
     super()
-    this.onAll = this.onAll.bind(this)
   }
 
   async init() {
@@ -304,27 +303,6 @@ export default class DeltaChatController extends EventEmitter {
       throw err
     }
     return returnValue
-  }
-
-  sendToRenderer(eventType: string, payload?: any) {
-    log.debug('sendToRenderer eventType: ' + eventType)
-    //log.debug('sendToRenderer: ' + eventType, payload)
-    mainWindow.send('ALL', eventType, payload)
-    if (!eventType) {
-      log.error(
-        'Tried to send an undefined event to the renderer.\n' +
-          'This is not allowed and will normally produce a crash of electron'
-      )
-      return
-    }
-    if (!payload) payload = null
-    mainWindow.send(eventType, payload)
-  }
-
-  translate(
-    ...args: Parameters<import('../../shared/localize').getMessageFunction>
-  ) {
-    return tx(...args)
   }
 
   onAll(event: string, accountId: number, data1: any, data2: any) {
