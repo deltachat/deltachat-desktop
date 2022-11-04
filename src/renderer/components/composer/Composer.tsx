@@ -21,6 +21,7 @@ import { BackendRemote, EffectfulBackendActions, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { MessageTypeAttachmentSubset } from '../attachment/Attachment'
 import { runtime } from '../../runtime'
+import { C } from 'deltachat-node/node/dist/constants'
 
 const log = getLogger('renderer/composer')
 
@@ -206,11 +207,13 @@ const Composer = forwardRef<
         <div
           className='contact-request-button delete'
           onClick={() => {
-            EffectfulBackendActions.deleteChat(selectedAccountId(), chatId)
+            EffectfulBackendActions.blockChat(selectedAccountId(), chatId)
             unselectChat()
           }}
         >
-          {tx('delete')}
+          {selectedChat.chatType === C.DC_CHAT_TYPE_SINGLE
+            ? tx('block')
+            : tx('delete')}
         </div>
         <div
           className='contact-request-button accept'

@@ -84,7 +84,7 @@ export namespace EffectfulBackendActions {
   }
 
   export async function blockChat(account_id: number, chatId: number) {
-    await BackendRemote.rpc.acceptChat(account_id, chatId)
+    await BackendRemote.rpc.blockChat(account_id, chatId)
     window.__refetchChatlist && window.__refetchChatlist()
   }
 
