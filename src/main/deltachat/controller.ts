@@ -55,15 +55,12 @@ export default class DeltaChatController extends EventEmitter {
     return join(this.selectedAccountContext.getBlobdir(), '..')
   }
 
-  ready = false // used for the about screen
   constructor(public cwd: string) {
     super()
     this.onAll = this.onAll.bind(this)
   }
 
   async init() {
-    this._resetState()
-
     await this.migrateToAccountsApiIfNeeded()
 
     log.debug('Initiating DeltaChatNode')
@@ -352,13 +349,5 @@ export default class DeltaChatController extends EventEmitter {
 
   unregisterEventHandler(dc: DeltaChat) {
     dc.removeListener('ALL', this.onAll)
-  }
-
-  /**
-   * Internal
-   * Reset state related to login
-   */
-  _resetState() {
-    this.ready = false
   }
 }

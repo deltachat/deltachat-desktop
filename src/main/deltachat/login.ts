@@ -13,8 +13,6 @@ export default class DCLoginController extends SplitOut {
     this.controller._inner_selectedAccountContext = this.accounts.accountContext(
       accountId
     )
-    this.controller.emit('ready')
-    this.controller.ready = true
     return true
   }
 
