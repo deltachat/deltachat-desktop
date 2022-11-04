@@ -150,7 +150,10 @@ export default class DeltaChatController extends EventEmitter {
 
     // Next, create temporary account manger to migrate accounts
     const tmp_dc = new DeltaChat(path_accounts)
-    this.registerEventHandler(tmp_dc)
+
+    // registerEventHandler
+    tmp_dc.startEvents()
+    tmp_dc.on('ALL', this.onAll.bind(this))
 
     const old_folders_to_delete = []
 
@@ -220,7 +223,8 @@ export default class DeltaChatController extends EventEmitter {
       }
     }
 
-    this.unregisterEventHandler(tmp_dc)
+    // unregisterEventHandler
+    tmp_dc.removeListener('ALL', this.onAll)
     tmp_dc.close()
     // Clear some settings that we cant migrate
     DesktopSettings.update({
@@ -334,14 +338,5 @@ export default class DeltaChatController extends EventEmitter {
       // in debug mode log all core events
       logCoreEventM.debug(accountId, event, data1, data2)
     }
-  }
-
-  registerEventHandler(dc: DeltaChat) {
-    dc.startEvents()
-    dc.on('ALL', this.onAll.bind(this))
-  }
-
-  unregisterEventHandler(dc: DeltaChat) {
-    dc.removeListener('ALL', this.onAll)
   }
 }
