@@ -27,13 +27,4 @@ export default class DCLoginController extends SplitOut {
 
     log.info('Logged out')
   }
-
-  close() {
-    this.controller.webxdc._closeAll()
-    if (!this.accounts) return
-    this.accounts.stopIO()
-    this.controller.unregisterEventHandler(this.accounts)
-    this.accounts.close()
-    this.controller._inner_account_manager = null
-  }
 }
