@@ -39,15 +39,15 @@ export default class DCWebxdc extends SplitOut {
     // icon protocoll
     app.whenReady().then(() => {
       protocol.registerBufferProtocol('webxdc-icon', (request, callback) => {
-        const url = request.url.substr(12)
-
-        const msg = this.selectedAccountContext.getMessage(Number(url))
+        const [account, message] = request.url.substr(12).split('.')
+        const context = this.accounts.accountContext(Number(account))
+        const msg = context.getMessage(Number(message))
         if (!msg || !msg.webxdcInfo) {
-          log.error('message not found or not a webxdc message:', url)
+          log.error('message not found or not a webxdc message:', message)
           return callback({ statusCode: 404 })
         }
         const icon = msg.webxdcInfo.icon
-        const blob = this.selectedAccountContext.getWebxdcBlob(msg, icon)
+        const blob = context.getWebxdcBlob(msg, icon)
         if (!blob) {
           log.error('getWebxdcBlob returned null instead of an icon')
           return callback({ statusCode: 404 })

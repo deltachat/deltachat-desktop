@@ -88,7 +88,7 @@ interface Runtime {
 
   // webxdc
   openWebxdc(msgId: number, params: DcOpenWebxdcParameters): void
-  getWebxdcIconURL(msgId: number): string
+  getWebxdcIconURL(accountId: number, msgId: number): string
   deleteWebxdcAccountData(accountId: number): Promise<void>
   closeAllWebxdcInstances(): void
   notifyWebxdcStatusUpdate(accountId: number, instanceId: number): void
@@ -209,7 +209,7 @@ class Browser implements Runtime {
   getDesktopSettings(): Promise<DesktopSettingsType> {
     throw new Error('Method not implemented.')
   }
-  getWebxdcIconURL(_msgId: number): string {
+  getWebxdcIconURL(_accountId: number, _msgId: number): string {
     throw new Error('Method not implemented.')
   }
   openWebxdc(_msgId: number, _params: DcOpenWebxdcParameters): void {
@@ -353,8 +353,8 @@ class Electron implements Runtime {
   ): Promise<void> {
     return ipcBackend.invoke('set-desktop-setting', key, value)
   }
-  getWebxdcIconURL(msgId: number): string {
-    return `webxdc-icon:${msgId}`
+  getWebxdcIconURL(accountId: number, msgId: number): string {
+    return `webxdc-icon:${accountId}.${msgId}`
   }
   openWebxdc(msgId: number, params: DcOpenWebxdcParameters): void {
     ipcBackend.invoke('open-webxdc', msgId, params)
