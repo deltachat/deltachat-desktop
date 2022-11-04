@@ -3,7 +3,6 @@ import { app as rawApp, ipcMain } from 'electron'
 import { EventEmitter } from 'events'
 import { getLogger } from '../../shared/logger'
 import * as mainWindow from '../windows/main'
-import DCContext from './context'
 import DCLoginController from './login'
 import { ExtendedAppMainProcess } from '../types'
 import { Context } from 'deltachat-node/node/dist/context'
@@ -50,10 +49,6 @@ export default class DeltaChatController extends EventEmitter {
     return this._inner_selectedAccountContext
   }
   selectedAccountId: number | null = null
-
-  get accountDir() {
-    return join(this.selectedAccountContext.getBlobdir(), '..')
-  }
 
   constructor(public cwd: string) {
     super()
@@ -246,7 +241,6 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   readonly login = new DCLoginController(this)
-  readonly context = new DCContext(this)
   readonly webxdc = new DCWebxdc(this)
 
   /**
