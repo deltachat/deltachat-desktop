@@ -116,6 +116,7 @@ export default class ScreenController extends Component {
 
     this.selectedAccountId = accountId
     ;(window.__selectedAccountId as number) = accountId
+
     const account = await BackendRemote.rpc.getAccountInfo(
       this.selectedAccountId
     )
@@ -127,6 +128,11 @@ export default class ScreenController extends Component {
       this.changeScreen(Screens.Welcome)
     }
     debouncedUpdateBadgeCounter()
+
+    await BackendRemote.rpc.startIo(accountId)
+    runtime.setDesktopSetting('lastAccount', accountId)
+    log.info('system_info', await BackendRemote.rpc.getSystemInfo())
+    log.info('account_info', await BackendRemote.rpc.getInfo(accountId))
   }
 
   userFeedback(message: userFeedback | false) {
