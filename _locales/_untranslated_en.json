@@ -46,5 +46,8 @@
   },
   "pref_system_integration_menu_title": {
     "message": "System integration"
+  },
+  "notify_new_messages": {
+    "message": "New messages"
   }
 }
