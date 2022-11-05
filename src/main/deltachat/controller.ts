@@ -14,7 +14,6 @@ import { rmdir } from 'fs/promises'
 import { rm } from 'fs/promises'
 import DCWebxdc from './webxdc'
 import { DesktopSettings } from '../desktop_settings'
-import { tx } from '../load-translations'
 
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat')
