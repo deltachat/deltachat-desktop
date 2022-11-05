@@ -20,6 +20,7 @@
 - Fix chat name/avatar in navbar take full width
 - don't show dash in mailinlist title if there is no mailinglist address #2965
 - fix scan account creation (burner-account/dcaccount: and dclogin:) from MainScreen
+- fix contact requests button to run block function and show right label (Group: delete, DM: block) #2877
 
 ## [1.33.0] - 2022-10-16
 
