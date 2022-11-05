@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react'
 import { i18nContext } from './contexts'
 import ScreenController from './ScreenController'
-import { sendToBackend, ipcBackend } from './ipc'
 import attachKeybindingsListener from './keybindings'
 
 import { translate, LocaleData } from '../shared/localize'
@@ -21,7 +20,7 @@ export default function App(_props: any) {
   const [localeData, setLocaleData] = useState<LocaleData | null>(null)
 
   useEffect(() => {
-    sendToBackend('ipcReady')
+    runtime.emitUIReady()
     window.addEventListener('keydown', function (ev: KeyboardEvent) {
       if (ev.code === 'KeyA' && (ev.metaKey || ev.ctrlKey)) {
         let stop = true
@@ -69,13 +68,9 @@ export default function App(_props: any) {
   }
 
   useEffect(() => {
-    const onChooseLanguage = async (_e: any, locale: string) => {
+    runtime.onChooseLanguage = async (locale: string) => {
       await runtime.setLocale(locale)
       await reloadLocaleData(locale)
-    }
-    ipcBackend.on('chooseLanguage', onChooseLanguage)
-    return () => {
-      ipcBackend.removeListener('chooseLanguage', onChooseLanguage)
     }
   }, [localeData])
 

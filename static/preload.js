@@ -6,8 +6,6 @@
 (() => {
   const electron = require('electron')
 
-  console.log(electron.app, electron.remote,electron)
-
   //@ts-ignore
   window.electron_functions = {
     ipcRenderer: electron.ipcRenderer,

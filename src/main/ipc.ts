@@ -50,10 +50,6 @@ export async function init(cwd: string, logHandler: LogHandler) {
     app.emit('ipcReady')
   })
 
-  ipcMain.on('all', (e, ...args: any[]) => {
-    log.debug('Renderer event:', e, ...args)
-  })
-
   ipcMain.on('show', () => main.show())
   // ipcMain.on('setAllowNav', (e, ...args) => menu.setAllowNav(...args))
 

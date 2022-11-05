@@ -1,6 +1,5 @@
 import React from 'react'
 import { Component, createRef } from 'react'
-const { ipcRenderer } = window.electron_functions
 
 import { ScreenContext } from './contexts'
 import MainScreen from './components/screens/MainScreen'
@@ -151,21 +150,26 @@ export default class ScreenController extends Component {
 
   componentDidMount() {
     BackendRemote.on('Error', this.onError)
-    ipcRenderer.on('showAboutDialog', this.onShowAbout)
-    ipcRenderer.on('showKeybindingsDialog', this.onShowKeybindings)
-    ipcRenderer.on('showSettingsDialog', this.onShowSettings)
-    ipcRenderer.on('open-url', this.onOpenUrl)
+
+    runtime.onShowDialog = kind => {
+      if (kind === 'about') {
+        this.onShowAbout()
+      } else if (kind === 'keybindings') {
+        this.onShowKeybindings()
+      } else if (kind === 'settings') {
+        this.onShowSettings()
+      }
+    }
+
+    runtime.onOpenQrUrl = processOpenQrUrl
 
     this.startup().then(() => {
-      ipcRenderer.send('frontendReady')
+      runtime.emitUIFullyReady()
     })
   }
 
   componentWillUnmount() {
     BackendRemote.off('Error', this.onError)
-    ipcRenderer.removeListener('showAboutDialog', this.onShowAbout)
-    ipcRenderer.removeListener('showSettingsDialog', this.onShowSettings)
-    ipcRenderer.removeListener('open-url', this.onOpenUrl)
   }
 
   onError(accountId: number, { msg }: DcEventType<'Error'>) {
@@ -192,10 +196,6 @@ export default class ScreenController extends Component {
 
   showKeyBindings() {
     ActionEmitter.emitAction(KeybindAction.KeybindingCheatSheet_Open)
-  }
-
-  async onOpenUrl(_event: Event, url: string) {
-    processOpenQrUrl(url)
   }
 
   openDialog(...args: Parameters<OpenDialogFunctionType>) {
