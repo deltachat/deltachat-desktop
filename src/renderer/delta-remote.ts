@@ -11,8 +11,6 @@ export type sendMessageParams = {
 }
 
 class DeltaRemote {
-  // login ----------------------------------------------------
-  call(fnName: 'login.selectAccount', accountId: number): Promise<boolean>
   // catchall: ----------------------------------------------------------
   call(fnName: string): Promise<any>
   call(fnName: string, ...args: any[]): Promise<any> {

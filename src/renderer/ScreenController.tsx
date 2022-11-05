@@ -110,10 +110,6 @@ export default class ScreenController extends Component {
   }
 
   async selectAccount(accountId: number) {
-    // for now we still need to call the backend function,
-    // because backend still has sleected account
-    await DeltaBackend.call('login.selectAccount', accountId)
-
     this.selectedAccountId = accountId
     ;(window.__selectedAccountId as number) = accountId
 

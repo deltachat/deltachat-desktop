@@ -70,10 +70,6 @@ export namespace EffectfulBackendActions {
     }
 
     runtime.setDesktopSetting('lastAccount', undefined)
-
-    // for now we still need to call the backend function,
-    // because backend still has selected account
-    await DeltaBackend.call('login.logout')
     ;(window.__selectedAccountId as any) = undefined
   }
 

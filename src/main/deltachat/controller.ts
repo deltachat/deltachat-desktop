@@ -3,7 +3,6 @@ import { app as rawApp, ipcMain } from 'electron'
 import { EventEmitter } from 'events'
 import { getLogger } from '../../shared/logger'
 import * as mainWindow from '../windows/main'
-import DCLoginController from './login'
 import { ExtendedAppMainProcess } from '../types'
 import { Context } from 'deltachat-node/node/dist/context'
 import path, { join } from 'path'
@@ -234,7 +233,6 @@ export default class DeltaChatController extends EventEmitter {
     logMigrate.info('migration completed')
   }
 
-  readonly login = new DCLoginController(this)
   readonly webxdc = new DCWebxdc(this)
 
   /**
