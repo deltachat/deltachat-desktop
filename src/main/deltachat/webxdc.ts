@@ -16,7 +16,12 @@ import { tx } from '../load-translations'
 import { DcOpenWebxdcParameters } from '../../shared/shared-types'
 
 const open_apps: {
-  [msgId: number]: { win: BrowserWindow; msg_obj: Message }
+  [instanceId: string]: {
+    win: BrowserWindow
+    msg_obj: Message
+    msgId: number
+    accountId: number
+  }
 } = {}
 
 // account sessions that have the webxdc scheme registered
@@ -56,23 +61,20 @@ export default class DCWebxdc extends SplitOut {
           mimeType: Mime.lookup(icon) || '',
           data: blob,
         })
+        context.unref()
       })
     })
 
     // actual webxdc instances
     ipcMain.handle('open-webxdc', (_ev, msg_id, p: DcOpenWebxdcParameters) => {
       const { webxdcInfo, chatName, displayname, addr, accountId } = p
-      if (open_apps[msg_id]) {
+      if (open_apps[`${accountId}.${msg_id}`]) {
         log.warn(
           'webxdc instance for this app is already open, trying to focus it',
           { msg_id }
         )
-        open_apps[msg_id].win.focus()
+        open_apps[`${accountId}.${msg_id}`].win.focus()
         return
-      }
-
-      if (this.selectedAccountId !== accountId) {
-        throw new Error('this.selectedAccountId is not equal to accountId')
       }
 
       const dc_context = this.accounts.accountContext(accountId)
@@ -88,8 +90,8 @@ export default class DCWebxdc extends SplitOut {
       const icon = webxdcInfo.icon
       const icon_blob = dc_context.getWebxdcBlob(webxdc_message_ref, icon)
 
-      const ses = sessionFromAccountId(this.selectedAccountId)
-      const appURL = `webxdc://${msg_id}.webxdc`
+      const ses = sessionFromAccountId(accountId)
+      const appURL = `webxdc://${accountId}.${msg_id}.webxdc`
 
       // TODO intercept / deny network access - CSP should probably be disabled for testing
 
@@ -99,9 +101,10 @@ export default class DCWebxdc extends SplitOut {
           'webxdc',
           async (request, callback) => {
             const url = UrlParser(request.url)
-            const msg_id = Number(url.hostname.split('.')[0])
+            const [account, msg] = url.hostname.split('.')
+            const id = `${account}.${msg}`
 
-            if (!open_apps[msg_id]) {
+            if (!open_apps[id]) {
               return
             }
 
@@ -131,7 +134,7 @@ export default class DCWebxdc extends SplitOut {
               })
             } else {
               const blob = dc_context.getWebxdcBlob(
-                open_apps[msg_id].msg_obj,
+                open_apps[id].msg_obj,
                 filename
               )
               if (blob) {
@@ -154,7 +157,7 @@ export default class DCWebxdc extends SplitOut {
 
       const webxdc_windows = new BrowserWindow({
         webPreferences: {
-          partition: this._currentPartition,
+          partition: partitionFromAccountId(accountId),
           sandbox: true,
           contextIsolation: true,
           webSecurity: true,
@@ -180,7 +183,12 @@ export default class DCWebxdc extends SplitOut {
         width: 375,
         height: 667,
       })
-      open_apps[msg_id] = { win: webxdc_windows, msg_obj: webxdc_message_ref }
+      open_apps[`${accountId}.${msg_id}`] = {
+        win: webxdc_windows,
+        msg_obj: webxdc_message_ref,
+        accountId,
+        msgId: msg_id,
+      }
 
       if (platform() !== 'darwin') {
         webxdc_windows.setMenu(
@@ -222,7 +230,7 @@ export default class DCWebxdc extends SplitOut {
       }
 
       webxdc_windows.once('closed', () => {
-        delete open_apps[msg_id]
+        delete open_apps[`${accountId}.${msg_id}`]
       })
 
       webxdc_windows.once('ready-to-show', () => {})
@@ -277,14 +285,14 @@ If you think that's a bug and you need that permission, then please open an issu
 
     ipcMain.handle('webxdc.exitFullscreen', async event => {
       const key = Object.keys(open_apps).find(
-        key => open_apps[Number(key)].win.webContents === event.sender
+        key => open_apps[key].win.webContents === event.sender
       )
-      open_apps[Number(key)].win.setFullScreen(false)
+      if (key) open_apps[key].win.setFullScreen(false)
     })
 
     ipcMain.handle('webxdc.getAllUpdates', async (event, serial = 0) => {
       const key = Object.keys(open_apps).find(
-        key => open_apps[Number(key)].win.webContents === event.sender
+        key => open_apps[key].win.webContents === event.sender
       )
       if (!key) {
         log.error(
@@ -292,15 +300,18 @@ If you think that's a bug and you need that permission, then please open an issu
         )
         return []
       }
-      return this.selectedAccountContext.getWebxdcStatusUpdates(
-        Number(key),
+      const context = this.accounts.accountContext(open_apps[key].accountId)
+      const result = context.getWebxdcStatusUpdates<any>(
+        open_apps[key].msgId,
         serial
       )
+      context.unref()
+      return result
     })
 
     ipcMain.handle('webxdc.sendUpdate', async (event, update, description) => {
       const key = Object.keys(open_apps).find(
-        key => open_apps[Number(key)].win.webContents === event.sender
+        key => open_apps[key].win.webContents === event.sender
       )
       if (!key) {
         log.error(
@@ -308,11 +319,9 @@ If you think that's a bug and you need that permission, then please open an issu
         )
         return
       }
-      return this.selectedAccountContext.sendWebxdcStatusUpdate(
-        Number(key),
-        update,
-        description
-      )
+      const context = this.accounts.accountContext(open_apps[key].accountId)
+      context.sendWebxdcStatusUpdate(open_apps[key].msgId, update, description)
+      context.unref()
     })
 
     ipcMain.handle('close-all-webxdc', () => {
@@ -322,11 +331,7 @@ If you think that's a bug and you need that permission, then please open an issu
     ipcMain.handle(
       'webxdc:status-update',
       (_ev, accountId: number, instanceId: number) => {
-        if (accountId !== this.selectedAccountId) {
-          log.warn('got webxdc:status-update for wrong account')
-          return
-        }
-        const instance = open_apps[instanceId]
+        const instance = open_apps[`${accountId}.${instanceId}`]
         if (instance) {
           instance.win.webContents.send('webxdc.statusUpdate')
         }
@@ -335,18 +340,12 @@ If you think that's a bug and you need that permission, then please open an issu
     ipcMain.handle(
       'webxdc:instance-deleted',
       (_ev, accountId: number, instanceId: number) => {
-        if (accountId !== this.selectedAccountId) {
-          return
-        }
-        const instance = open_apps[instanceId]
+        const instance = open_apps[`${accountId}.${instanceId}`]
         if (instance) {
           instance.win.close()
         }
-        if (!this.selectedAccountId) {
-          throw new Error('selectedAccountId is empty')
-        }
-        const s = sessionFromAccountId(this.selectedAccountId)
-        const appURL = `webxdc://${instanceId}.webxdc`
+        const s = sessionFromAccountId(accountId)
+        const appURL = `webxdc://${accountId}.${instanceId}.webxdc`
         s.clearStorageData({ origin: appURL })
         s.clearCodeCaches({ urls: [appURL] })
         s.clearCache()
@@ -356,15 +355,8 @@ If you think that's a bug and you need that permission, then please open an issu
 
   _closeAll() {
     for (const open_app of Object.keys(open_apps)) {
-      open_apps[Number(open_app)].win.close()
+      open_apps[open_app].win.close()
     }
-  }
-
-  get _currentPartition() {
-    if (!this.selectedAccountId) {
-      throw new Error('selectedAccountId is empty')
-    }
-    return partitionFromAccountId(this.selectedAccountId)
   }
 }
 
