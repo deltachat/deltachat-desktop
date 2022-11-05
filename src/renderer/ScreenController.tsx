@@ -12,7 +12,6 @@ import processOpenQrUrl from './components/helpers/OpenQrUrl'
 
 import { getLogger } from '../shared/logger'
 import { ContextMenuLayer, showFnType } from './components/ContextMenu'
-import { DeltaBackend } from './delta-remote'
 import { ActionEmitter, KeybindAction } from './keybindings'
 import AccountSetupScreen from './components/screens/AccountSetupScreen'
 import AccountListScreen from './components/screens/AccountListScreen'

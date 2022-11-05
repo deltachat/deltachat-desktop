@@ -22,6 +22,16 @@ export type Credentials = {
   socks5_password: string
 }
 
+export type sendMessageParams = {
+  text?: string | null
+  filename?: string
+  location?: {
+    lat: number
+    lng: number
+  }
+  quoteMessageId?: number
+}
+
 export interface DesktopSettingsType {
   bounds:
     | {

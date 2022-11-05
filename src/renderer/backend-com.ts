@@ -1,5 +1,4 @@
 import { BaseDeltaChat, yerpc, RPC, DcEvent } from '@deltachat/jsonrpc-client'
-import { DeltaBackend } from './delta-remote'
 import { runtime } from './runtime'
 import { getLogger } from '../shared/logger'
 import { debouncedUpdateBadgeCounter } from './system-integration/badge-counter'

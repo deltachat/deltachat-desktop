@@ -57,38 +57,6 @@ export async function init(cwd: string, logHandler: LogHandler) {
   ipcMain.on('show', () => main.show())
   // ipcMain.on('setAllowNav', (e, ...args) => menu.setAllowNav(...args))
 
-  /* dispatch a method on DC core */
-  ipcMain.on(
-    'EVENT_DC_DISPATCH',
-    (e: any, _identifier: number, methodName: string, args: any[]) => {
-      if (!Array.isArray(args)) args = [args]
-      log.debug('EVENT_DC_DISPATCH: ', methodName, args)
-      dcController.callMethod(e, methodName, args)
-    }
-  )
-
-  /* dispatch a method on DC core with result passed to callback */
-  ipcMain.on(
-    'EVENT_DC_DISPATCH_CB',
-    async (e: any, identifier: number, methodName: string, args: any[]) => {
-      if (!Array.isArray(args)) args = [args]
-      log.debug(`EVENT_DC_DISPATCH_CB (${identifier}) : ${methodName} ${args}`)
-
-      try {
-        const returnValue = await dcController.callMethod(e, methodName, args)
-        main.send(
-          `EVENT_DD_DISPATCH_RETURN_${identifier}_${methodName}`,
-          returnValue
-        )
-      } catch (err: any) {
-        main.send(
-          `EVENT_DD_DISPATCH_RETURN_ERR_${identifier}_${methodName}`,
-          err.toString()
-        )
-      }
-    }
-  )
-
   ipcMain.on('handleLogMessage', (_e, channel, level, stacktrace, ...args) =>
     logHandler.log(channel, level, stacktrace, ...args)
   )

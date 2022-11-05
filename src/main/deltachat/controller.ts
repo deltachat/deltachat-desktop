@@ -235,65 +235,6 @@ export default class DeltaChatController extends EventEmitter {
 
   readonly webxdc = new DCWebxdc(this)
 
-  /**
-   * @param {string} methodName
-   */
-  __resolveNestedMethod(self: DeltaChatController, methodName: string) {
-    const parts = methodName.split('.')
-    if (parts.length > 2) {
-      const message =
-        'Resolving of nested method name failed: Too many parts, only two allowed: ' +
-        methodName
-      log.error(message)
-      throw new Error(message)
-    }
-    const scope = (self as any)[parts[0]]
-    if (typeof scope === 'undefined') {
-      const message = 'Resolving of nested method name failed: ' + methodName
-      log.error(message)
-      throw new Error(message)
-    }
-    const method = scope[parts[1]]
-    if (typeof method !== 'function') {
-      const message = '(nested) Method is not of type function: ' + methodName
-      log.error(message)
-      throw new Error(message)
-    }
-    return method.bind(scope)
-  }
-
-  /**
-   *
-   * @param {*} evt
-   * @param {string} methodName
-   * @param {*} args
-   */
-  async callMethod(_evt: any, methodName: string, args: any[] = []) {
-    const method =
-      methodName.indexOf('.') !== -1
-        ? this.__resolveNestedMethod(this, methodName)
-        : (methodName => {
-            const method = (this as any)[methodName]
-            if (typeof method !== 'function') {
-              const message = 'Method is not of type function: ' + methodName
-              log.error(message)
-              throw new Error(message)
-            }
-            return method.bind(this)
-          })(methodName)
-
-    let returnValue
-    try {
-      returnValue = await method(...args)
-    } catch (err: any) {
-      log.error(
-        `Error calling ${methodName}(${args.join(', ')}):\n ${err.stack}`
-      )
-      throw err
-    }
-    return returnValue
-  }
-
   onAll(event: string, accountId: number, data1: any, data2: any) {
     if (event === 'DC_EVENT_WARNING') {
       logCoreEventM.warn(accountId, event, data1, data2)
