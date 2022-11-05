@@ -40,14 +40,6 @@ export default class DeltaChatController extends EventEmitter {
     }
     return this._inner_account_manager
   }
-  _inner_selectedAccountContext: Context | null = null
-  get selectedAccountContext(): Readonly<Context> {
-    if (!this._inner_selectedAccountContext) {
-      throw new Error('selectedAccountContext is not defined (yet?)')
-    }
-    return this._inner_selectedAccountContext
-  }
-  selectedAccountId: number | null = null
 
   constructor(public cwd: string) {
     super()
