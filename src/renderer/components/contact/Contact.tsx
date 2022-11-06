@@ -1,18 +1,5 @@
 import React, { CSSProperties, PropsWithChildren } from 'react'
-import { C } from '@deltachat/jsonrpc-client'
-import { ContactJSON } from '../../../shared/shared-types'
 import { Avatar } from '../Avatar'
-
-export function convertContactProps(contact: ContactJSON) {
-  return {
-    name: contact.name,
-    email: contact.address,
-    avatarPath: contact.profileImage,
-    profileName: contact.displayName,
-    isMe: contact.id === C.DC_CONTACT_ID_SELF,
-    verified: contact.isVerified,
-  }
-}
 
 const VerifiedIcon = (props: { style?: CSSProperties }) => (
   <img

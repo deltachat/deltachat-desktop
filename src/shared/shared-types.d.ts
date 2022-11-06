@@ -81,56 +81,6 @@ export interface RC_Config {
 }
 
 import { T } from '@deltachat/jsonrpc-client'
-import type { Contact } from 'deltachat-node'
-
-export type ContactJSON = ReturnType<typeof Contact.prototype.toJson>
-
-import type { Chat, Message } from 'deltachat-node'
-
-export type JsonChat = ReturnType<typeof Chat.prototype.toJson>
-
-export type JsonContact = ReturnType<typeof Contact.prototype.toJson>
-
-export type JsonMessage = ReturnType<typeof Message.prototype.toJson> & {
-  quote: MessageQuote | null
-}
-
-export type MessageQuote = {
-  text: string
-  message: {
-    messageId: number
-    displayName: string
-    displayColor: string
-    overrideSenderName: string
-    image: null | string
-    isForwarded: boolean
-  } | null
-}
-
-export interface FullChat {
-  id: number
-  name: string
-  canSend: boolean
-  isProtected: boolean
-  profileImage: string
-  archived: boolean
-  type: number
-  isUnpromoted: boolean
-  isSelfTalk: boolean
-  contacts: JsonContact[]
-  contactIds: number[]
-  color: string
-  freshMessageCounter: number
-  isBroadcast: boolean
-  isGroup: boolean
-  isContactRequest: boolean
-  isDeviceChat: boolean
-  selfInGroup: boolean
-  muted: boolean
-  ephemeralTimer: number
-}
-
-type todo = any
 
 export type msgStatus =
   | 'error'
@@ -140,14 +90,6 @@ export type msgStatus =
   | 'read'
   | 'sent'
   | ''
-
-export type MessageType = JsonMessage & {
-  sender: JsonContact
-  setupCodeBegin?: string
-  file_mime: string | null
-  file_bytes: number | null
-  file_name: string | null
-}
 
 export type Theme = {
   name: string

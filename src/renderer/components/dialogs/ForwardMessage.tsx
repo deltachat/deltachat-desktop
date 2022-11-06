@@ -5,9 +5,8 @@ import ChatListItem from '../chat/ChatListItem'
 import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
 import classNames from 'classnames'
 import { DialogProps } from './DialogController'
-import { MessageType } from '../../../shared/shared-types'
 
-import { C } from '@deltachat/jsonrpc-client'
+import { C, T } from '@deltachat/jsonrpc-client'
 import { ChatListPart, useLogicVirtualChatList } from '../chat/ChatList'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { useChatList } from '../chat/ChatListHelpers'
@@ -17,7 +16,7 @@ import { selectedAccountId } from '../../ScreenController'
 import { selectChat } from '../helpers/ChatMethods'
 
 export default function ForwardMessage(props: {
-  message: MessageType
+  message: T.Message
   onClose: DialogProps['onClose']
 }) {
   const accountId = selectedAccountId()
