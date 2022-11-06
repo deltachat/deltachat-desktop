@@ -105,15 +105,21 @@ class ChatStore extends Store<ChatStoreState> {
       debouncedUpdateBadgeCounter()
       clearNotificationsForChat(accountId, chatId)
       saveLastChatId(chatId)
-      this.reducer.selectedChat({
-        chat,
-        accountId,
-      })
+
       ActionEmitter.emitAction(
         chat.archived
           ? KeybindAction.ChatList_SwitchToArchiveView
           : KeybindAction.ChatList_SwitchToNormalView
       )
+      if (this.state.chat?.id === chatId) {
+        // jump down if reselecting the same chat
+        window.__internal_jump_to_message?.(undefined, false, undefined)
+      } else {
+        this.reducer.selectedChat({
+          chat,
+          accountId,
+        })
+      }
     },
 
     jumpToMessage: async (
