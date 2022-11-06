@@ -1,6 +1,6 @@
-const { ipcRenderer } = window.electron_functions
 import mimeTypes from 'mime-types'
 import { Type } from '../../backend-com'
+import { runtime } from '../../runtime'
 
 /* Section - Data Copied in part from Signal */
 // Supported media types in google chrome
@@ -81,7 +81,7 @@ export function dragAttachmentOut(
   dragEvent: React.DragEvent<HTMLDivElement>
 ) {
   dragEvent.preventDefault()
-  ipcRenderer.send('ondragstart', file)
+  if (file) runtime.onDragFileOut(file)
 }
 
 export type MessageTypeAttachmentSubset = Pick<

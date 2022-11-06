@@ -11,7 +11,7 @@ import { runtime } from '../../runtime'
 import { RecoverableCrashScreen } from '../screens/RecoverableCrashScreen'
 import { useSettingsStore } from '../../stores/settings'
 import { Type } from '../../backend-com'
-import { C } from 'deltachat-node/node/dist/constants'
+import { C } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/MessageListAndComposer')
 

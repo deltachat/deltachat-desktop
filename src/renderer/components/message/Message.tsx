@@ -25,7 +25,7 @@ import {
   jumpToMessage,
   openViewProfileDialog,
 } from '../helpers/ChatMethods'
-import { C } from 'deltachat-node/node/dist/constants'
+import { C } from '@deltachat/jsonrpc-client'
 // import { getLogger } from '../../../shared/logger'
 import { runtime } from '../../runtime'
 import { AvatarFromContact } from '../Avatar'
@@ -36,6 +36,7 @@ import { getDirection, truncateText } from '../../../shared/util'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { ContextMenuItem } from '../ContextMenu'
 import { Type } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 const Avatar = (
   contact: Type.Contact,
@@ -549,7 +550,7 @@ export const Quote = ({
         {hasMessage && quote.viewType == 'Webxdc' && (
           <img
             className='quoted-webxdc-icon'
-            src={runtime.getWebxdcIconURL(quote.messageId)}
+            src={runtime.getWebxdcIconURL(selectedAccountId(), quote.messageId)}
           />
         )}
       </div>
@@ -578,7 +579,7 @@ function WebxdcMessageContent({ message }: { message: Type.Message }) {
   return (
     <div className='webxdc'>
       <img
-        src={runtime.getWebxdcIconURL(message.id)}
+        src={runtime.getWebxdcIconURL(selectedAccountId(), message.id)}
         alt={`icon of ${info.name}`}
         onClick={() => openWebxdc(message.id)}
       />

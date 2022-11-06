@@ -1,7 +1,6 @@
-import { sendMessageParams } from '../../delta-remote'
 import ChatStore, { ChatView } from '../../stores/chat'
 import { ScreenContext, unwrapContext } from '../../contexts'
-import { C } from 'deltachat-node/node/dist/constants'
+import { C } from '@deltachat/jsonrpc-client'
 import { runtime } from '../../runtime'
 import { getLogger } from '../../../shared/logger'
 import AlertDialog from '../dialogs/AlertDialog'
@@ -11,6 +10,7 @@ import ViewGroup from '../dialogs/ViewGroup'
 import ViewProfile from '../dialogs/ViewProfile'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import { T } from '@deltachat/jsonrpc-client'
+import { sendMessageParams } from '../../../shared/shared-types'
 
 const log = getLogger('renderer/message')
 
