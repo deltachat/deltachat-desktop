@@ -195,7 +195,7 @@ export function quit(e?: Electron.Event) {
     mainWindow.window?.close()
     mainWindow.window?.destroy()
   } catch (error) {
-    log.error("failed to close window, error:", error)
+    log.error('failed to close window, error:', error)
   }
 
   // does stop io and other things

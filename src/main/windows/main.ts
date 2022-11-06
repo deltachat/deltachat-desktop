@@ -105,7 +105,7 @@ export function send(channel: string, ...args: any[]) {
   try {
     window.webContents.send(channel, ...args)
   } catch (error) {
-    log.error("can not send message to window, error:", error)
+    log.error('can not send message to window, error:', error)
   }
 }
 
