@@ -2,7 +2,7 @@ import React, { useLayoutEffect } from 'react'
 import Message from './Message'
 import { ConversationType } from './MessageList'
 import { Type } from '../../backend-com'
-import { C } from 'deltachat-node/node/dist/constants'
+import { C } from '@deltachat/jsonrpc-client'
 import { getLogger } from '../../../shared/logger'
 
 const log = getLogger('renderer/message/MessageWrapper')

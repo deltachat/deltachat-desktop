@@ -1,6 +1,6 @@
 import ChatStore, { ChatView } from '../../stores/chat'
 import { ScreenContext, unwrapContext } from '../../contexts'
-import { C } from 'deltachat-node/node/dist/constants'
+import { C } from '@deltachat/jsonrpc-client'
 import { runtime } from '../../runtime'
 import { getLogger } from '../../../shared/logger'
 import AlertDialog from '../dialogs/AlertDialog'
