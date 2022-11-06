@@ -237,8 +237,16 @@ export async function createChatByContactIdAndSelectIt(
   selectChat(chatId)
 }
 
-export function sendMessage(chatId: number, message: sendMessageParams) {
-  return ChatStore.effect.sendMessage({ chatId, message })
+export async function sendMessage(chatId: number, message: sendMessageParams) {
+  const { text, filename, location, quoteMessageId } = message
+  await BackendRemote.rpc.miscSendMsg(
+    selectedAccountId(),
+    chatId,
+    text || null,
+    filename || null,
+    location ? [location.lat, location.lng] : null,
+    quoteMessageId || null
+  )
 }
 
 export const deleteMessage = (messageId: number) => {

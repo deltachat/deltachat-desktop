@@ -884,33 +884,6 @@ class ChatStore extends Store<ChatStoreState> {
         payload.muteDuration
       )
     },
-    sendMessage: this.scheduler.queuedEffect(
-      async (payload: { chatId: number; message: sendMessageParams }) => {
-        log.debug('sendMessage')
-        if (
-          payload.chatId !== this.state.chat?.id ||
-          this.state.accountId === undefined
-        ) {
-          return
-        }
-
-        const { text, filename, location, quoteMessageId } = payload.message
-        const [messageId, message] = await BackendRemote.rpc.miscSendMsg(
-          this.state.accountId,
-          payload.chatId,
-          text || null,
-          filename || null,
-          location ? [location.lat, location.lng] : null,
-          quoteMessageId || null
-        )
-
-        // Workaround for failed messages
-        if (messageId === 0) return
-        if (message === null) return
-        await this.effect.jumpToMessage(messageId, false)
-      },
-      'sendMessage'
-    ),
     onEventChatModified: this.scheduler.queuedEffect(async (chatId: number) => {
       if (this.state.chat?.id !== chatId) {
         return
