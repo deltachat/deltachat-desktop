@@ -308,7 +308,7 @@ class Electron implements Runtime {
     ipcBackend.send('frontendReady')
   }
   emitUIReady(): void {
-    ipcBackend.emit('ipcReady')
+    ipcBackend.send('ipcReady')
   }
   openMessageHTML(content: string): void {
     ipcBackend.invoke('openMessageHTML', content)

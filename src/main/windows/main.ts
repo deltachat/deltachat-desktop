@@ -102,7 +102,11 @@ export function send(channel: string, ...args: any[]) {
     log.warn("window not defined, can't send ipc to renderer")
     return
   }
-  window.webContents.send(channel, ...args)
+  try {
+    window.webContents.send(channel, ...args)
+  } catch (error) {
+    log.error("can not send message to window, error:", error)
+  }
 }
 
 /**
