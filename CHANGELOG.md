@@ -8,6 +8,7 @@
 - Update translations (19.10.2022)
 - Tray icon is now by default enabled. Settings got moved to Settings->Advanced
 - instantly react to changing chat background color
+- reduce notifications when many messages are received at once.
 
 ### Fixed
 
@@ -21,6 +22,7 @@
 - don't show dash in mailinlist title if there is no mailinglist address #2965
 - fix scan account creation (burner-account/dcaccount: and dclogin:) from MainScreen
 - fix contact requests button to run block function and show right label (Group: delete, DM: block) #2877
+- Fix notifications when showNotificationContent was disabled
 
 ## [1.33.0] - 2022-10-16
 
