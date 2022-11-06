@@ -9,7 +9,7 @@ import React, {
 import { getLogger } from '../../shared/logger'
 import { ScreenContext, useTranslationFunction } from '../contexts'
 import { useKeyBindingAction, KeybindAction } from '../keybindings'
-import { C } from 'deltachat-node/node/dist/constants'
+import { C } from '@deltachat/jsonrpc-client'
 
 import { debounce } from 'debounce'
 import { debounceWithInit } from './chat/ChatListHelpers'

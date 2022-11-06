@@ -1,6 +1,6 @@
 import { Store, useStore } from './store'
 import { ActionEmitter, KeybindAction } from '../keybindings'
-import { C } from 'deltachat-node/node/dist/constants'
+import { C } from '@deltachat/jsonrpc-client'
 import { OrderedMap } from 'immutable'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'

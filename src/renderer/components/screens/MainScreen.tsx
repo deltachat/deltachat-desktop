@@ -32,7 +32,7 @@ import {
 import { useKeyBindingAction, KeybindAction } from '../../keybindings'
 import { Avatar } from '../Avatar'
 import ConnectivityToast from '../ConnectivityToast'
-import { C } from 'deltachat-node/node/dist/constants'
+import { C } from '@deltachat/jsonrpc-client'
 import MapComponent from '../map/MapComponent'
 import MailingListProfile from '../dialogs/MessageListProfile'
 import { getLogger } from '../../../shared/logger'

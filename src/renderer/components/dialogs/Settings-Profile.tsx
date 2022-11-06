@@ -12,7 +12,7 @@ import {
 } from './DeltaDialog'
 import { SettingsButton } from './Settings'
 import { runtime } from '../../runtime'
-import { C } from 'deltachat-node/node/dist/constants'
+import { C } from '@deltachat/jsonrpc-client'
 import { DialogProps } from './DialogController'
 import SettingsAccountDialog from './Settings-Account'
 import SettingsConnectivityDialog from './Settings-Connectivity'

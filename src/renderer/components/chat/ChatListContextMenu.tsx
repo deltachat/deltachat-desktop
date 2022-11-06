@@ -12,7 +12,7 @@ import {
   unMuteChat,
 } from '../helpers/ChatMethods'
 
-import { C } from 'deltachat-node/node/dist/constants'
+import { C } from '@deltachat/jsonrpc-client'
 import { ContextMenuItem } from '../ContextMenu'
 import MailingListProfile from '../dialogs/MessageListProfile'
 import { BackendRemote, Type } from '../../backend-com'

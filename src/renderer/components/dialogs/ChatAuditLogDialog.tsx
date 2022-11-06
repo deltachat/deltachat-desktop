@@ -7,7 +7,7 @@ import React, {
 } from 'react'
 import { DeltaDialogBase, DeltaDialogCloseButton } from './DeltaDialog'
 import { DialogProps } from './DialogController'
-import { C } from 'deltachat-node/node/dist/constants'
+import { C } from '@deltachat/jsonrpc-client'
 import { getLogger } from '../../../shared/logger'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
 import moment from 'moment'

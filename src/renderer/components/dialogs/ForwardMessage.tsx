@@ -7,7 +7,7 @@ import classNames from 'classnames'
 import { DialogProps } from './DialogController'
 import { MessageType } from '../../../shared/shared-types'
 
-import { C } from 'deltachat-node/node/dist/constants'
+import { C } from '@deltachat/jsonrpc-client'
 import { ChatListPart, useLogicVirtualChatList } from '../chat/ChatList'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { useChatList } from '../chat/ChatListHelpers'
