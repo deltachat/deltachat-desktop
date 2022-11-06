@@ -125,7 +125,7 @@ async function showGroupedNotification(
         const { chatName, chatProfileImage } = notificationInfo
         runtime.showNotification({
           title: chatName,
-          body: `${msgCount} new messages`, // TODO TX
+          body: tx('notify_bundle_new_messages_in_one_chat', String(msgCount)),
           icon: chatProfileImage || null,
           chatId: chatIds[0],
           messageId: 0, // just select chat on click, no specific message
@@ -138,7 +138,10 @@ async function showGroupedNotification(
         const chatCount = chatIds.length
         runtime.showNotification({
           title: tx('notify_new_messages'), // IDEA: when we support notifications from multiple accounts, then show account displayname here?
-          body: `${msgCount} messages in ${chatCount} chats`, // TODO TX
+          body: tx('notify_bundle_new_messages', [
+            String(msgCount),
+            String(chatCount),
+          ]),
           icon: null, // IDEA: when we support notifications from multiple accounts, then show account profile image here?
           chatId: 0,
           messageId: 0,

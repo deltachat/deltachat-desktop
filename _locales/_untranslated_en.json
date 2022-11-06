@@ -49,5 +49,11 @@
   },
   "notify_new_messages": {
     "message": "New messages"
+  },
+  "notify_bundle_new_messages_in_one_chat": {
+    "message": "%1$d new messages"
+  },
+  "notify_bundle_new_messages": {
+    "message": "%1$d messages in %2$d chats"
   }
 }
