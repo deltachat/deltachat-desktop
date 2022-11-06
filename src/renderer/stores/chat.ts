@@ -316,43 +316,6 @@ class ChatStore extends Store<ChatStoreState> {
         return modifiedState
       }, 'unlockScroll')
     },
-    uiDeleteMessage: (payload: { id: number; msgId: number }) => {
-      this.setState(state => {
-        const { msgId } = payload
-        const messageIndex = state.messageListItems.findIndex(
-          m => m.kind === 'message' && m.msg_id == msgId
-        )
-        let {
-          oldestFetchedMessageListItemIndex,
-          newestFetchedMessageListItemIndex,
-        } = state
-        if (messageIndex === oldestFetchedMessageListItemIndex) {
-          oldestFetchedMessageListItemIndex += 1
-        } else if (messageIndex === newestFetchedMessageListItemIndex) {
-          newestFetchedMessageListItemIndex -= 1
-        }
-        const messageListItems = state.messageListItems.filter(
-          m => m.kind !== 'message' || m.msg_id !== msgId
-        )
-        const modifiedState: ChatStoreState = {
-          ...state,
-          messageListItems,
-          messagePages: state.messagePages.map(messagePage => {
-            if (messagePage.messages.has(msgId)) {
-              return {
-                ...messagePage,
-                messages: messagePage.messages.delete(msgId),
-              }
-            }
-            return messagePage
-          }),
-          oldestFetchedMessageListItemIndex,
-          newestFetchedMessageListItemIndex,
-        }
-        if (this.guardReducerIfChatIdIsDifferent(payload)) return
-        return modifiedState
-      }, 'uiDeleteMessage')
-    },
     messageChanged: (payload: {
       id: number
       messagesChanged: Type.Message[]
@@ -731,15 +694,6 @@ class ChatStore extends Store<ChatStoreState> {
       })
 
       debouncedUpdateBadgeCounter()
-    },
-    uiDeleteMessage: (msgId: number) => {
-      if (!this.state.accountId) {
-        throw new Error('Account Id unset')
-      }
-      BackendRemote.rpc.deleteMessages(this.state.accountId, [msgId])
-      if (!this.state.chat) return
-      const id = this.state.chat.id
-      this.reducer.uiDeleteMessage({ id, msgId })
     },
     fetchMoreMessagesTop: this.scheduler.queuedEffect(
       this.scheduler.lockedEffect(

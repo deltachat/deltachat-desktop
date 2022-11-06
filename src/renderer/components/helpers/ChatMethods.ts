@@ -242,7 +242,7 @@ export function sendMessage(chatId: number, message: sendMessageParams) {
 }
 
 export const deleteMessage = (messageId: number) => {
-  ChatStore.effect.uiDeleteMessage(messageId)
+  BackendRemote.rpc.deleteMessages(selectedAccountId(), [messageId])
 }
 
 export async function clearChat(chatId: number) {
