@@ -3,8 +3,6 @@ import { app as rawApp, ipcMain } from 'electron'
 import { EventEmitter } from 'events'
 import { getLogger } from '../../shared/logger'
 import * as mainWindow from '../windows/main'
-import DCContext from './context'
-import DCLoginController from './login'
 import { ExtendedAppMainProcess } from '../types'
 import { Context } from 'deltachat-node/node/dist/context'
 import path, { join } from 'path'
@@ -15,7 +13,6 @@ import { rmdir } from 'fs/promises'
 import { rm } from 'fs/promises'
 import DCWebxdc from './webxdc'
 import { DesktopSettings } from '../desktop_settings'
-import { tx } from '../load-translations'
 
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat')
@@ -42,28 +39,12 @@ export default class DeltaChatController extends EventEmitter {
     }
     return this._inner_account_manager
   }
-  _inner_selectedAccountContext: Context | null = null
-  get selectedAccountContext(): Readonly<Context> {
-    if (!this._inner_selectedAccountContext) {
-      throw new Error('selectedAccountContext is not defined (yet?)')
-    }
-    return this._inner_selectedAccountContext
-  }
-  selectedAccountId: number | null = null
 
-  get accountDir() {
-    return join(this.selectedAccountContext.getBlobdir(), '..')
-  }
-
-  ready = false // used for the about screen
   constructor(public cwd: string) {
     super()
-    this.onAll = this.onAll.bind(this)
   }
 
   async init() {
-    this._resetState()
-
     await this.migrateToAccountsApiIfNeeded()
 
     log.debug('Initiating DeltaChatNode')
@@ -158,7 +139,10 @@ export default class DeltaChatController extends EventEmitter {
 
     // Next, create temporary account manger to migrate accounts
     const tmp_dc = new DeltaChat(path_accounts)
-    this.registerEventHandler(tmp_dc)
+
+    // registerEventHandler
+    tmp_dc.startEvents()
+    tmp_dc.on('ALL', this.onAll.bind(this))
 
     const old_folders_to_delete = []
 
@@ -228,7 +212,8 @@ export default class DeltaChatController extends EventEmitter {
       }
     }
 
-    this.unregisterEventHandler(tmp_dc)
+    // unregisterEventHandler
+    tmp_dc.removeListener('ALL', this.onAll)
     tmp_dc.close()
     // Clear some settings that we cant migrate
     DesktopSettings.update({
@@ -248,89 +233,7 @@ export default class DeltaChatController extends EventEmitter {
     logMigrate.info('migration completed')
   }
 
-  readonly login = new DCLoginController(this)
-  readonly context = new DCContext(this)
   readonly webxdc = new DCWebxdc(this)
-
-  /**
-   * @param {string} methodName
-   */
-  __resolveNestedMethod(self: DeltaChatController, methodName: string) {
-    const parts = methodName.split('.')
-    if (parts.length > 2) {
-      const message =
-        'Resolving of nested method name failed: Too many parts, only two allowed: ' +
-        methodName
-      log.error(message)
-      throw new Error(message)
-    }
-    const scope = (self as any)[parts[0]]
-    if (typeof scope === 'undefined') {
-      const message = 'Resolving of nested method name failed: ' + methodName
-      log.error(message)
-      throw new Error(message)
-    }
-    const method = scope[parts[1]]
-    if (typeof method !== 'function') {
-      const message = '(nested) Method is not of type function: ' + methodName
-      log.error(message)
-      throw new Error(message)
-    }
-    return method.bind(scope)
-  }
-
-  /**
-   *
-   * @param {*} evt
-   * @param {string} methodName
-   * @param {*} args
-   */
-  async callMethod(_evt: any, methodName: string, args: any[] = []) {
-    const method =
-      methodName.indexOf('.') !== -1
-        ? this.__resolveNestedMethod(this, methodName)
-        : (methodName => {
-            const method = (this as any)[methodName]
-            if (typeof method !== 'function') {
-              const message = 'Method is not of type function: ' + methodName
-              log.error(message)
-              throw new Error(message)
-            }
-            return method.bind(this)
-          })(methodName)
-
-    let returnValue
-    try {
-      returnValue = await method(...args)
-    } catch (err: any) {
-      log.error(
-        `Error calling ${methodName}(${args.join(', ')}):\n ${err.stack}`
-      )
-      throw err
-    }
-    return returnValue
-  }
-
-  sendToRenderer(eventType: string, payload?: any) {
-    log.debug('sendToRenderer eventType: ' + eventType)
-    //log.debug('sendToRenderer: ' + eventType, payload)
-    mainWindow.send('ALL', eventType, payload)
-    if (!eventType) {
-      log.error(
-        'Tried to send an undefined event to the renderer.\n' +
-          'This is not allowed and will normally produce a crash of electron'
-      )
-      return
-    }
-    if (!payload) payload = null
-    mainWindow.send(eventType, payload)
-  }
-
-  translate(
-    ...args: Parameters<import('../../shared/localize').getMessageFunction>
-  ) {
-    return tx(...args)
-  }
 
   onAll(event: string, accountId: number, data1: any, data2: any) {
     if (event === 'DC_EVENT_WARNING') {
@@ -343,22 +246,5 @@ export default class DeltaChatController extends EventEmitter {
       // in debug mode log all core events
       logCoreEventM.debug(accountId, event, data1, data2)
     }
-  }
-
-  registerEventHandler(dc: DeltaChat) {
-    dc.startEvents()
-    dc.on('ALL', this.onAll.bind(this))
-  }
-
-  unregisterEventHandler(dc: DeltaChat) {
-    dc.removeListener('ALL', this.onAll)
-  }
-
-  /**
-   * Internal
-   * Reset state related to login
-   */
-  _resetState() {
-    this.ready = false
   }
 }

@@ -1,7 +1,6 @@
 import { Store, useStore } from './store'
-import { sendMessageParams } from '../delta-remote'
 import { ActionEmitter, KeybindAction } from '../keybindings'
-import { C } from 'deltachat-node/node/dist/constants'
+import { C } from '@deltachat/jsonrpc-client'
 import { OrderedMap } from 'immutable'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
@@ -16,6 +15,7 @@ import {
 import { ChatStoreScheduler } from './chat/chat_scheduler'
 import { saveLastChatId } from './chat/chat_sideeffects'
 import { onReady } from '../onready'
+import { sendMessageParams } from '../../shared/shared-types'
 
 export const PAGE_SIZE = 11
 

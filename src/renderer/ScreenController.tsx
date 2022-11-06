@@ -1,6 +1,5 @@
 import React from 'react'
 import { Component, createRef } from 'react'
-const { ipcRenderer } = window.electron_functions
 
 import { ScreenContext } from './contexts'
 import MainScreen from './components/screens/MainScreen'
@@ -12,7 +11,6 @@ import processOpenQrUrl from './components/helpers/OpenQrUrl'
 
 import { getLogger } from '../shared/logger'
 import { ContextMenuLayer, showFnType } from './components/ContextMenu'
-import { DeltaBackend } from './delta-remote'
 import { ActionEmitter, KeybindAction } from './keybindings'
 import AccountSetupScreen from './components/screens/AccountSetupScreen'
 import AccountListScreen from './components/screens/AccountListScreen'
@@ -110,12 +108,9 @@ export default class ScreenController extends Component {
   }
 
   async selectAccount(accountId: number) {
-    // for now we still need to call the backend function,
-    // because backend still has sleected account
-    await DeltaBackend.call('login.selectAccount', accountId)
-
     this.selectedAccountId = accountId
     ;(window.__selectedAccountId as number) = accountId
+
     const account = await BackendRemote.rpc.getAccountInfo(
       this.selectedAccountId
     )
@@ -127,6 +122,11 @@ export default class ScreenController extends Component {
       this.changeScreen(Screens.Welcome)
     }
     debouncedUpdateBadgeCounter()
+
+    await BackendRemote.rpc.startIo(accountId)
+    runtime.setDesktopSetting('lastAccount', accountId)
+    log.info('system_info', await BackendRemote.rpc.getSystemInfo())
+    log.info('account_info', await BackendRemote.rpc.getInfo(accountId))
   }
 
   userFeedback(message: userFeedback | false) {
@@ -150,21 +150,26 @@ export default class ScreenController extends Component {
 
   componentDidMount() {
     BackendRemote.on('Error', this.onError)
-    ipcRenderer.on('showAboutDialog', this.onShowAbout)
-    ipcRenderer.on('showKeybindingsDialog', this.onShowKeybindings)
-    ipcRenderer.on('showSettingsDialog', this.onShowSettings)
-    ipcRenderer.on('open-url', this.onOpenUrl)
+
+    runtime.onShowDialog = kind => {
+      if (kind === 'about') {
+        this.onShowAbout()
+      } else if (kind === 'keybindings') {
+        this.onShowKeybindings()
+      } else if (kind === 'settings') {
+        this.onShowSettings()
+      }
+    }
+
+    runtime.onOpenQrUrl = processOpenQrUrl
 
     this.startup().then(() => {
-      ipcRenderer.send('frontendReady')
+      runtime.emitUIFullyReady()
     })
   }
 
   componentWillUnmount() {
     BackendRemote.off('Error', this.onError)
-    ipcRenderer.removeListener('showAboutDialog', this.onShowAbout)
-    ipcRenderer.removeListener('showSettingsDialog', this.onShowSettings)
-    ipcRenderer.removeListener('open-url', this.onOpenUrl)
   }
 
   onError(accountId: number, { msg }: DcEventType<'Error'>) {
@@ -191,10 +196,6 @@ export default class ScreenController extends Component {
 
   showKeyBindings() {
     ActionEmitter.emitAction(KeybindAction.KeybindingCheatSheet_Open)
-  }
-
-  async onOpenUrl(_event: Event, url: string) {
-    processOpenQrUrl(url)
   }
 
   openDialog(...args: Parameters<OpenDialogFunctionType>) {

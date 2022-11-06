@@ -22,6 +22,7 @@ import { jumpToMessage } from '../helpers/ChatMethods'
 import { getLogger } from '../../../shared/logger'
 import { truncateText } from '../../../shared/util'
 import { Type } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 const log = getLogger('mediaAttachment')
 
@@ -265,7 +266,10 @@ function WebxdcAttachment({ message }: { message: Type.Message }) {
       onContextMenu={openContextMenu}
       onClick={openWebxdc.bind(null, message.id)}
     >
-      <img className='icon' src={runtime.getWebxdcIconURL(message.id)} />
+      <img
+        className='icon'
+        src={runtime.getWebxdcIconURL(selectedAccountId(), message.id)}
+      />
       <div className='text-part'>
         <div
           className='name'

@@ -1,4 +1,4 @@
-import { C } from 'deltachat-node/node/dist/constants'
+import { C } from '@deltachat/jsonrpc-client'
 import { getLogger } from '../shared/logger'
 import { BackendRemote } from './backend-com'
 

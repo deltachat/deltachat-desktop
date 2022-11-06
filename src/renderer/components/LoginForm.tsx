@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 
-import { C } from 'deltachat-node/node/dist/constants'
+import { C } from '@deltachat/jsonrpc-client'
 import React, { useEffect, useState } from 'react'
 import {
   DeltaInput,

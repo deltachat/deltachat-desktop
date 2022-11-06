@@ -20,9 +20,10 @@ modifications:
 
 'use strict'
 import electron, { BrowserWindow, MenuItemConstructorOptions } from 'electron'
-import { todo } from '../shared/shared-types'
 import { Event } from 'electron/common'
 import { tx } from './load-translations'
+
+type todo = any
 
 const webContents = (win: BrowserWindow) => win.webContents
 

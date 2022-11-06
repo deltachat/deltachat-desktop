@@ -1,5 +1,4 @@
 import { BaseDeltaChat, yerpc, RPC, DcEvent } from '@deltachat/jsonrpc-client'
-import { DeltaBackend } from './delta-remote'
 import { runtime } from './runtime'
 import { getLogger } from '../shared/logger'
 import { debouncedUpdateBadgeCounter } from './system-integration/badge-counter'
@@ -70,10 +69,6 @@ export namespace EffectfulBackendActions {
     }
 
     runtime.setDesktopSetting('lastAccount', undefined)
-
-    // for now we still need to call the backend function,
-    // because backend still has selected account
-    await DeltaBackend.call('login.logout')
     ;(window.__selectedAccountId as any) = undefined
   }
 

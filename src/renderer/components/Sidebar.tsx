@@ -8,7 +8,7 @@ import { selectChat, unselectChat } from './helpers/ChatMethods'
 
 import { useSettingsStore } from '../stores/settings'
 import { Avatar } from './Avatar'
-import { C } from 'deltachat-node/node/dist/constants'
+import { C } from '@deltachat/jsonrpc-client'
 import { VERSION } from '../../shared/build-info'
 import { ActionEmitter, KeybindAction } from '../keybindings'
 import SettingsConnectivityDialog from './dialogs/Settings-Connectivity'

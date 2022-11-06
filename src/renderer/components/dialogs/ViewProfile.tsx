@@ -9,7 +9,7 @@ import {
 } from './DeltaDialog'
 import ChatListItem from '../chat/ChatListItem'
 import { useChatList } from '../chat/ChatListHelpers'
-import { C } from 'deltachat-node/node/dist/constants'
+import { C } from '@deltachat/jsonrpc-client'
 import {
   MessagesDisplayContext,
   ScreenContext,

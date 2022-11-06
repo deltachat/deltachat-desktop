@@ -1,4 +1,4 @@
-import { C } from 'deltachat-node/node/dist/constants'
+import { C } from '@deltachat/jsonrpc-client'
 import { Card, Classes, Elevation } from '@blueprintjs/core'
 import {
   DeltaDialogBase,

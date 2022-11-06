@@ -90,6 +90,7 @@ import * as mainWindow from './windows/main'
 import * as devTools from './devtools'
 import { ExtendedAppMainProcess } from './types'
 import { updateTrayIcon, hideDeltaChat, showDeltaChat } from './tray'
+import './notifications'
 import { acceptThemeCLI } from './themes'
 import { webxdcStartUpCleanup } from './deltachat/webxdc'
 
@@ -190,8 +191,12 @@ export function quit(e?: Electron.Event) {
 
   log.info('Starting app shutdown process')
   // close window
-  mainWindow.window?.close()
-  mainWindow.window?.destroy()
+  try {
+    mainWindow.window?.close()
+    mainWindow.window?.destroy()
+  } catch (error) {
+    log.error('failed to close window, error:', error)
+  }
 
   // does stop io and other things
   ipc_shutdown_function && ipc_shutdown_function()

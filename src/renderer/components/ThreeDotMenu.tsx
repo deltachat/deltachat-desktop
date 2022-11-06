@@ -1,4 +1,4 @@
-import { C } from 'deltachat-node/node/dist/constants'
+import { C } from '@deltachat/jsonrpc-client'
 import React, { useContext } from 'react'
 import { ScreenContext, useTranslationFunction } from '../contexts'
 import {
