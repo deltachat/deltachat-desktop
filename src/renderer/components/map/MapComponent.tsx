@@ -13,7 +13,6 @@ import { Slider, Button, Collapse } from '@blueprintjs/core'
 import PopupMessage from './PopupMessage'
 import * as SessionStorage from '../helpers/SessionStorage'
 import { MessagesDisplayContext } from '../../contexts'
-import chatStore from '../../stores/chat'
 
 import { state as LocationStoreState } from '../../stores/locations'
 
@@ -21,6 +20,7 @@ import ContextMenu from './ContextMenu'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { T } from '@deltachat/jsonrpc-client'
+import { sendMessage } from '../helpers/ChatMethods'
 
 type MapData = {
   contact: Type.Contact
@@ -488,10 +488,7 @@ export default class MapComponent extends React.Component<
       return
     }
     const latLng = Object.assign({}, this.poiLocation)
-    chatStore.effect.sendMessage({
-      chatId: selectedChat.id,
-      message: { text: message, location: latLng },
-    })
+    sendMessage(selectedChat.id, { text: message, location: latLng })
 
     if (this.contextMenuPopup) {
       this.contextMenuPopup.remove()
