@@ -8,6 +8,7 @@
 - Update translations (19.10.2022)
 - Tray icon is now by default enabled. Settings got moved to Settings->Advanced
 - instantly react to changing chat background color
+- reduce notifications when many messages are received at once.
 
 ### Fixed
 
@@ -19,6 +20,7 @@
 - fix that results of search in chat are not ordered by newest first
 - Fix chat name/avatar in navbar take full width
 - don't show dash in mailinlist title if there is no mailinglist address #2965
+- Fix notifications when showNotificationContent was disabled
 
 ## [1.33.0] - 2022-10-16
 
