@@ -1,4 +1,3 @@
-import { ipcBackend } from './ipc'
 import {
   DcNotification,
   DcOpenWebxdcParameters,
@@ -29,6 +28,7 @@ const {
   read_clipboard_text,
   app_getPath,
   write_clipboard_image,
+  ipcRenderer: ipcBackend,
 } = (window as any).electron_functions as {
   // see static/preload.js
   ipcRenderer: import('electron').IpcRenderer
@@ -45,6 +45,8 @@ const {
  * Offers an abstraction Layer to make it easier to make browser client in the future
  */
 interface Runtime {
+  emitUIFullyReady(): void
+  emitUIReady(): void
   openMessageHTML(content: string): void
   getDesktopSettings(): Promise<DesktopSettingsType>
   setDesktopSetting(
@@ -88,7 +90,7 @@ interface Runtime {
 
   // webxdc
   openWebxdc(msgId: number, params: DcOpenWebxdcParameters): void
-  getWebxdcIconURL(msgId: number): string
+  getWebxdcIconURL(accountId: number, msgId: number): string
   deleteWebxdcAccountData(accountId: number): Promise<void>
   closeAllWebxdcInstances(): void
   notifyWebxdcStatusUpdate(accountId: number, instanceId: number): void
@@ -124,9 +126,33 @@ interface Runtime {
   } | null>
   resolveThemeAddress(address: string): Promise<string>
   saveBackgroundImage(file: string, isDefaultPicture: boolean): Promise<string>
+  onDragFileOut(file: string): void
+
+  // callbacks to set
+  onChooseLanguage: ((locale: string) => Promise<void>) | undefined
+  onThemeUpdate: (() => void) | undefined
+  onShowDialog:
+    | ((kind: 'about' | 'keybindings' | 'settings') => void)
+    | undefined
+  onOpenQrUrl: ((url: string) => void) | undefined
 }
 
 class Browser implements Runtime {
+  onOpenQrUrl: ((url: string) => void) | undefined
+  onShowDialog:
+    | ((kind: 'about' | 'keybindings' | 'settings') => void)
+    | undefined
+  emitUIFullyReady(): void {
+    throw new Error('Method not implemented.')
+  }
+  onDragFileOut(_file: string): void {
+    throw new Error('Method not implemented.')
+  }
+  onThemeUpdate: (() => void) | undefined
+  onChooseLanguage: ((locale: string) => Promise<void>) | undefined
+  emitUIReady(): void {
+    throw new Error('Method not implemented.')
+  }
   openMessageHTML(_content: string): void {
     throw new Error('Method not implemented.')
   }
@@ -209,7 +235,7 @@ class Browser implements Runtime {
   getDesktopSettings(): Promise<DesktopSettingsType> {
     throw new Error('Method not implemented.')
   }
-  getWebxdcIconURL(_msgId: number): string {
+  getWebxdcIconURL(_accountId: number, _msgId: number): string {
     throw new Error('Method not implemented.')
   }
   openWebxdc(_msgId: number, _params: DcOpenWebxdcParameters): void {
@@ -269,6 +295,21 @@ class Browser implements Runtime {
   }
 }
 class Electron implements Runtime {
+  onOpenQrUrl: ((url: string) => void) | undefined
+  onShowDialog:
+    | ((kind: 'about' | 'keybindings' | 'settings') => void)
+    | undefined
+  onDragFileOut(file: string): void {
+    ipcBackend.send('ondragstart', file)
+  }
+  onThemeUpdate: (() => void) | undefined
+  onChooseLanguage: ((locale: string) => Promise<void>) | undefined
+  emitUIFullyReady(): void {
+    ipcBackend.send('frontendReady')
+  }
+  emitUIReady(): void {
+    ipcBackend.send('ipcReady')
+  }
   openMessageHTML(content: string): void {
     ipcBackend.invoke('openMessageHTML', content)
   }
@@ -353,8 +394,8 @@ class Electron implements Runtime {
   ): Promise<void> {
     return ipcBackend.invoke('set-desktop-setting', key, value)
   }
-  getWebxdcIconURL(msgId: number): string {
-    return `webxdc-icon:${msgId}`
+  getWebxdcIconURL(accountId: number, msgId: number): string {
+    return `webxdc-icon:${accountId}.${msgId}`
   }
   openWebxdc(msgId: number, params: DcOpenWebxdcParameters): void {
     ipcBackend.invoke('open-webxdc', msgId, params)
@@ -450,6 +491,16 @@ class Electron implements Runtime {
     ipcBackend.on('ClickOnNotification', (_ev, data) =>
       this.notificationCallback(data)
     )
+    ipcBackend.on('chooseLanguage', (_ev, locale) => {
+      this.onChooseLanguage?.(locale)
+    })
+    ipcBackend.on('theme-update', () => this.onThemeUpdate?.())
+    ipcBackend.on('showAboutDialog', () => this.onShowDialog?.('about'))
+    ipcBackend.on('showKeybindingsDialog', () =>
+      this.onShowDialog?.('keybindings')
+    )
+    ipcBackend.on('showSettingsDialog', () => this.onShowDialog?.('settings'))
+    ipcBackend.on('open-url', (_ev, url) => this.onOpenQrUrl?.(url))
   }
   openHelpWindow(): void {
     ipcBackend.send('help', window.localeData.locale)

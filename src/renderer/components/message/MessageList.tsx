@@ -14,7 +14,7 @@ import ChatStore, {
   MessagePage,
 } from '../../stores/chat'
 import { useDebouncedCallback } from 'use-debounce'
-import { C } from 'deltachat-node/node/dist/constants'
+import { C } from '@deltachat/jsonrpc-client'
 import type { ChatTypes } from 'deltachat-node'
 import moment from 'moment'
 

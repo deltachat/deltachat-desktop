@@ -1,5 +1,4 @@
 import { Theme } from '../shared/shared-types'
-import { ipcBackend } from './ipc'
 import React, { useContext, useMemo } from 'react'
 import { runtime } from './runtime'
 
@@ -8,6 +7,7 @@ export namespace ThemeManager {
   let currentThemeChangeHook: () => void = () => {}
 
   export async function refresh() {
+    runtime.onThemeUpdate = refresh
     const theme: {
       theme: Theme
       data: string
@@ -22,8 +22,6 @@ export namespace ThemeManager {
       currentThemeChangeHook()
     }
   }
-
-  ipcBackend.on('theme-update', _e => refresh())
 
   export function getCurrentThemeMetaData() {
     return currentThemeMetaData

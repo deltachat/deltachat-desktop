@@ -15,7 +15,7 @@ import {
   ChatListItemRowMessage,
 } from './ChatListItemRow'
 import { PseudoListItemAddContact } from '../helpers/PseudoListItem'
-import { C } from 'deltachat-node/node/dist/constants'
+import { C } from '@deltachat/jsonrpc-client'
 import { useContactIds } from '../contact/ContactList'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import {

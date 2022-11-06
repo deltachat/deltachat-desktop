@@ -9,7 +9,7 @@ import React, {
   useCallback,
 } from 'react'
 import { Card, Classes } from '@blueprintjs/core'
-import { C } from 'deltachat-node/node/dist/constants'
+import { C } from '@deltachat/jsonrpc-client'
 
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import {

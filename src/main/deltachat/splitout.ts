@@ -10,12 +10,4 @@ export default class SplitOut {
   get accounts() {
     return this.controller.account_manager
   }
-
-  get selectedAccountContext() {
-    return this.controller.selectedAccountContext
-  }
-
-  get selectedAccountId() {
-    return this.controller.selectedAccountId
-  }
 }

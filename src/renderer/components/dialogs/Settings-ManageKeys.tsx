@@ -48,8 +48,7 @@ async function onKeysImport() {
 }
 
 async function onKeysExport() {
-  // TODO: ask for the user's password and check it using
-  // var matches = ipcRenderer.sendSync('dispatchSync', 'checkPassword', password)
+  // TODO: ask for the user's password and check it
   const tx = window.static_translate
 
   const opts: OpenDialogOptions = {
