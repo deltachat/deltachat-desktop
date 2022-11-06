@@ -215,7 +215,7 @@ export default async function processOpenQrUrl(
 
     if (screen !== Screens.Welcome) {
       // log out first
-      EffectfulBackendActions.logout()
+      await EffectfulBackendActions.logout()
       window.__selectAccount(await BackendRemote.rpc.addAccount())
 
       callback && callback()
