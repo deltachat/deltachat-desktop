@@ -9,11 +9,9 @@ import React, {
 import { MessageWrapper } from './MessageWrapper'
 import ChatStore, {
   useChatStore,
-  ChatStoreState,
   ChatStoreStateWithChatSet,
   MessagePage,
 } from '../../stores/chat'
-import { useDebouncedCallback } from 'use-debounce'
 import { C } from '@deltachat/jsonrpc-client'
 import type { ChatTypes } from 'deltachat-node'
 import moment from 'moment'
@@ -22,9 +20,11 @@ import { getLogger } from '../../../shared/logger'
 import { MessagesDisplayContext, useTranslationFunction } from '../../contexts'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
 import { T } from '@deltachat/jsonrpc-client'
+import { selectedAccountId } from '../../ScreenController'
+import { useMessageList } from '../../stores/messagelist'
 const log = getLogger('render/components/message/MessageList')
 
-window.addEventListener('focus', () => {
+const onWindowFocus = (markseenMessages: (msgIds: number[]) => void) => {
   log.debug('window focused')
   const messageElements = Array.prototype.slice.call(
     document.querySelectorAll('#message-list .message-observer-bottom')
@@ -50,11 +50,9 @@ window.addEventListener('focus', () => {
       `window was focused: marking ${messageIdsToMarkAsRead.length} visible messages as read`,
       messageIdsToMarkAsRead
     )
-    const chatId = ChatStore.state.chat?.id
-    if (!chatId) return
-    ChatStore.effect.markseenMessages(chatId, messageIdsToMarkAsRead)
+    markseenMessages(messageIdsToMarkAsRead)
   }
-})
+}
 
 export default function MessageList({
   chatStore,
@@ -64,36 +62,31 @@ export default function MessageList({
   refComposer: todo
 }) {
   const {
-    oldestFetchedMessageListItemIndex,
-    messagePages,
-    messageListItems,
-    viewState,
-  } = useChatStore()
+    store: {
+      scheduler,
+      effect: { markseenMessages, jumpToMessage },
+      reducer: { unlockScroll },
+    },
+    state: {
+      oldestFetchedMessageListItemIndex,
+      newestFetchedMessageListItemIndex,
+      messagePages,
+      messageListItems,
+      viewState,
+    },
+    fetchMoreBottom,
+    fetchMoreTop,
+  } = useMessageList(selectedAccountId(), chatStore.chat.id)
+
   const messageListRef = useRef<HTMLDivElement | null>(null)
   const [showJumpDownButton, setShowJumpDownButton] = useState(false)
-
-  const [fetchMoreTop] = useDebouncedCallback(
-    async () => {
-      await ChatStore.effect.fetchMoreMessagesTop()
-    },
-    30,
-    { leading: true }
-  )
-
-  const [fetchMoreBottom] = useDebouncedCallback(
-    async () => {
-      await ChatStore.effect.fetchMoreMessagesBottom()
-    },
-    30,
-    { leading: true }
-  )
 
   const onUnreadMessageInView: IntersectionObserverCallback = entries => {
     if (ChatStore.state.chat === null) return
     // Don't mark messages as read if window is not focused
     if (document.hasFocus() === false) return
 
-    if (ChatStore.scheduler.isLocked('scroll') === true) {
+    if (scheduler.isLocked('scroll') === true) {
       //console.log('onScroll: locked, returning')
       return
     }
@@ -124,7 +117,7 @@ export default function MessageList({
       if (messageIdsToMarkAsRead.length > 0) {
         const chatId = ChatStore.state.chat?.id
         if (!chatId) return
-        ChatStore.effect.markseenMessages(chatId, messageIdsToMarkAsRead)
+        markseenMessages(messageIdsToMarkAsRead)
       }
     })
   }
@@ -136,6 +129,12 @@ export default function MessageList({
     })
   )
 
+  useEffect(() => {
+    const onFocus = onWindowFocus.bind(null, markseenMessages)
+    window.addEventListener('focus', onFocus)
+    return () => window.removeEventListener('focus', onFocus)
+  }, [markseenMessages])
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     return () => {
@@ -144,12 +143,19 @@ export default function MessageList({
     }
   }, [])
 
+  useEffect(() => {
+    window.__internal_jump_to_message = jumpToMessage
+    return () => {
+      window.__internal_jump_to_message = undefined
+    }
+  }, [jumpToMessage])
+
   const onScroll = useCallback(
     (Event: React.UIEvent<HTMLDivElement> | null) => {
       if (!messageListRef.current) {
         return
       }
-      if (ChatStore.scheduler.isLocked('scroll') === true) {
+      if (scheduler.isLocked('scroll') === true) {
         //console.log('onScroll: locked, returning')
         return
       }
@@ -160,8 +166,7 @@ export default function MessageList({
         messageListRef.current.clientHeight
 
       const isNewestMessageLoaded =
-        ChatStore.state.newestFetchedMessageListItemIndex ===
-        ChatStore.state.messageListItems.length - 1
+        newestFetchedMessageListItemIndex === messageListItems.length - 1
       const onePageAwayFromNewestMessageTreshold =
         messageListRef.current.clientHeight / 3
       const newShowJumpDownButton =
@@ -193,14 +198,20 @@ export default function MessageList({
         return false
       }
     },
-    [fetchMoreTop, fetchMoreBottom, setShowJumpDownButton, showJumpDownButton]
+    [
+      fetchMoreTop,
+      fetchMoreBottom,
+      setShowJumpDownButton,
+      showJumpDownButton,
+      newestFetchedMessageListItemIndex,
+      messageListItems.length,
+    ]
   )
 
   useLayoutEffect(() => {
     if (!ChatStore.state.chat) {
       return
     }
-    const chatId = ChatStore.state.chat.id
     if (!messageListRef.current) {
       return
     }
@@ -295,12 +306,18 @@ export default function MessageList({
       }
     }
     setTimeout(() => {
-      ChatStore.reducer.unlockScroll({ id: chatId })
+      unlockScroll()
       setTimeout(() => {
         onScroll(null)
       }, 0)
     }, 0)
-  }, [onScroll, viewState, viewState.scrollTo, viewState.lastKnownScrollHeight])
+  }, [
+    onScroll,
+    viewState,
+    viewState.scrollTo,
+    viewState.lastKnownScrollHeight,
+    unlockScroll,
+  ])
 
   useLayoutEffect(() => {
     if (!refComposer.current) {
@@ -337,7 +354,10 @@ export default function MessageList({
         }
       />
       {(showJumpDownButton === true || countUnreadMessages > 0) && (
-        <JumpDownButton countUnreadMessages={countUnreadMessages} />
+        <JumpDownButton
+          countUnreadMessages={countUnreadMessages}
+          jumpToMessage={jumpToMessage}
+        />
       )}
     </MessagesDisplayContext.Provider>
   )
@@ -356,7 +376,7 @@ export const MessageListInner = React.memo(
     onScroll: (event: React.UIEvent<HTMLDivElement>) => void
     oldestFetchedMessageIndex: number
     messageListItems: T.MessageListItem[]
-    messagePages: ChatStoreState['messagePages']
+    messagePages: MessagePage[]
     messageListRef: React.MutableRefObject<HTMLDivElement | null>
     chatStore: ChatStoreStateWithChatSet
     unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
@@ -433,8 +453,14 @@ export const MessageListInner = React.memo(
 
 function JumpDownButton({
   countUnreadMessages,
+  jumpToMessage,
 }: {
   countUnreadMessages: number
+  jumpToMessage: (
+    msgId: number | undefined,
+    highlight?: boolean,
+    addMessageIdToStack?: undefined | number
+  ) => Promise<void>
 }) {
   return (
     <>
@@ -448,7 +474,7 @@ function JumpDownButton({
         <div
           className='button'
           onClick={() => {
-            ChatStore.effect.jumpToMessage(undefined, true)
+            jumpToMessage(undefined, true)
           }}
         >
           <div className='icon' />

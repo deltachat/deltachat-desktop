@@ -36,5 +36,12 @@ declare global {
     __chatStore: any
     __refetchChatlist: undefined | (() => void)
     __welcome_qr: undefined | string
+    __internal_jump_to_message:
+      | undefined
+      | ((
+          msgId: number | undefined,
+          highlight?: boolean,
+          addMessageIdToStack?: undefined | number
+        ) => Promise<void>)
   }
 }
