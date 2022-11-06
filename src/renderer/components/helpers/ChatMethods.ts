@@ -11,6 +11,7 @@ import ViewProfile from '../dialogs/ViewProfile'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import { T } from '@deltachat/jsonrpc-client'
 import { sendMessageParams } from '../../../shared/shared-types'
+import chatStore from '../../stores/chat'
 
 const log = getLogger('renderer/message')
 
@@ -239,7 +240,7 @@ export async function createChatByContactIdAndSelectIt(
 
 export async function sendMessage(chatId: number, message: sendMessageParams) {
   const { text, filename, location, quoteMessageId } = message
-  await BackendRemote.rpc.miscSendMsg(
+  const [id] = await BackendRemote.rpc.miscSendMsg(
     selectedAccountId(),
     chatId,
     text || null,
@@ -247,6 +248,8 @@ export async function sendMessage(chatId: number, message: sendMessageParams) {
     location ? [location.lat, location.lng] : null,
     quoteMessageId || null
   )
+  // jump down on sending
+  chatStore.effect.jumpToMessage(id, false)
 }
 
 export const deleteMessage = (messageId: number) => {
