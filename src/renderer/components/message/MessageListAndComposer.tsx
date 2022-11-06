@@ -3,7 +3,7 @@ import Composer, { useDraft } from '../composer/Composer'
 import { getLogger } from '../../../shared/logger'
 import MessageList from './MessageList'
 import { ScreenContext } from '../../contexts'
-import ChatStore, { ChatStoreStateWithChatSet } from '../../stores/chat'
+import { ChatStoreStateWithChatSet } from '../../stores/chat'
 import ComposerMessageInput from '../composer/ComposerMessageInput'
 import { DesktopSettingsType } from '../../../shared/shared-types'
 import { join, parse } from 'path'
@@ -12,6 +12,7 @@ import { RecoverableCrashScreen } from '../screens/RecoverableCrashScreen'
 import { useSettingsStore } from '../../stores/settings'
 import { Type } from '../../backend-com'
 import { C } from '@deltachat/jsonrpc-client'
+import { sendMessage } from '../helpers/ChatMethods'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -142,10 +143,7 @@ export default function MessageListAndComposer({
         if (!yes) return
 
         for (const file of sanitizedFileList) {
-          ChatStore.effect.sendMessage({
-            chatId,
-            message: { filename: file.path },
-          })
+          sendMessage(chatId, { filename: file.path })
         }
       },
     })
