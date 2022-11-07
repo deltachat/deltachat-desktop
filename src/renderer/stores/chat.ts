@@ -257,6 +257,8 @@ onReady(() => {
     if (accountId !== window.__selectedAccountId) {
       return
     }
-    chatStore.effect.onEventContactModified(contactId)
+    if (contactId) {
+      chatStore.effect.onEventContactModified(contactId)
+    }
   })
 })
