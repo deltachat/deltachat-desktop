@@ -129,12 +129,6 @@ async function messagePagesFromMessageIndexes(
   return messagePages
 }
 
-// select chat
-// and unselect chat
-// and mute need to be done outside of this
-// and sendMessage
-// and onEventChatModified
-
 export function useMessageList(accountId: number, chatId: number) {
   let store = useMemo(() => {
     const store = new MessageListStore(accountId, chatId)
