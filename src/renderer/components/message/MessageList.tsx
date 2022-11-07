@@ -495,7 +495,10 @@ export const MessageListInner = React.memo(
                   <div className='info-message'>
                     <div
                       className='bubble'
-                      style={{ textTransform: 'capitalize' }}
+                      style={{
+                        textTransform: 'capitalize',
+                        backgroundColor: 'rgba(55,0,0,0.5)',
+                      }}
                     >
                       message with id {messageId.msg_id} was not found in cache,
                       this should not happen, please contact the developers
