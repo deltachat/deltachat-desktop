@@ -188,6 +188,23 @@ class ChatStore extends Store<ChatStoreState> {
         ),
       })
     },
+    onEventContactModified: async (contactId: number) => {
+      if (!this.state.chat) {
+        return
+      }
+      if (!this.state.accountId) {
+        throw new Error('no account set')
+      }
+      if (this.state.chat.contactIds.includes(contactId)) {
+        this.reducer.modifiedChat({
+          id: this.state.chat.id,
+          chat: await BackendRemote.rpc.getFullChatById(
+            this.state.accountId,
+            this.state.chat.id
+          ),
+        })
+      }
+    },
   }
 
   stateToHumanReadable(state: ChatStoreState): any {
@@ -228,3 +245,18 @@ export type ChatStoreDispatch = Store<ChatStoreState>['dispatch']
 export type ChatStoreStateWithChatSet = {
   chat: NonNullable<ChatStoreState['chat']>
 } & Exclude<ChatStoreState, 'chat'>
+
+onReady(() => {
+  BackendRemote.on('ChatModified', (accountId, { chatId }) => {
+    if (accountId !== window.__selectedAccountId) {
+      return
+    }
+    chatStore.effect.onEventChatModified(chatId)
+  })
+  BackendRemote.on('ContactsChanged', (accountId, { contactId }) => {
+    if (accountId !== window.__selectedAccountId) {
+      return
+    }
+    chatStore.effect.onEventContactModified(contactId)
+  })
+})
