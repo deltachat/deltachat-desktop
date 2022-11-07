@@ -72,7 +72,7 @@ function useUnreadCount(
       }
     }
 
-    let cleanup = [
+    const cleanup = [
       onDCEvent(accountId, 'IncomingMsg', update),
       onDCEvent(accountId, 'MsgRead', update),
       onDCEvent(accountId, 'MsgsNoticed', update),
@@ -244,6 +244,7 @@ export default function MessageList({
       showJumpDownButton,
       newestFetchedMessageListItemIndex,
       messageListItems.length,
+      scheduler,
     ]
   )
 

@@ -115,14 +115,14 @@ class ChatStore extends Store<ChatStoreState> {
 
     jumpToMessage: async (
       msgId: number,
-      highlight: boolean = true,
+      highlight = true,
       msgParentId?: number
     ) => {
       log.debug('jumpToMessage with messageId: ', msgId)
       const accountId = selectedAccountId()
 
       // check if jump to message is in same chat, if not switch
-      let message = await BackendRemote.rpc.getMessage(
+      const message = await BackendRemote.rpc.getMessage(
         accountId,
         msgId as number
       )

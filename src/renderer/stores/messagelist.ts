@@ -36,14 +36,14 @@ const defaultState = () =>
   } as MessageListState)
 
 export function useMessageList(accountId: number, chatId: number) {
-  let store = useMemo(() => {
+  const store = useMemo(() => {
     const store = new MessageListStore(accountId, chatId)
     store.effect.loadChat()
     return store
   }, [accountId, chatId])
 
   useEffect(() => {
-    let cleanup = [
+    const cleanup = [
       onDCEvent(accountId, 'MsgDelivered', ({ chatId: eventChatId, msgId }) => {
         if (chatId === eventChatId) {
           store.reducer.setMessageState(msgId, C.DC_STATE_OUT_DELIVERED)
@@ -77,7 +77,7 @@ export function useMessageList(accountId: number, chatId: number) {
       }),
     ]
     return () => cleanup.forEach(off => off())
-  }, [accountId, chatId])
+  }, [accountId, chatId, store])
 
   const [state, setState] = useState(store.getState())
 
@@ -559,8 +559,6 @@ class MessageListStore extends Store<MessageListState> {
         async () => {
           const state = this.state
 
-          const id = this.chatId
-
           const newestFetchedMessageListItemIndex =
             state.newestFetchedMessageListItemIndex + 1
           const newNewestFetchedMessageListItemIndex = Math.min(
@@ -733,8 +731,7 @@ class MessageListStore extends Store<MessageListState> {
 
   stateToHumanReadable(state: MessageListState): any {
     return {
-      // ...state,
-      aV: this.activeView,
+      ...state,
     }
   }
 }
@@ -745,7 +742,7 @@ async function loadMessages(
   oldestFetchedMessageListItemIndex: number,
   newestFetchedMessageListItemIndex: number
 ) {
-  let view = getView(
+  const view = getView(
     messageListItems,
     oldestFetchedMessageListItemIndex,
     newestFetchedMessageListItemIndex
@@ -753,29 +750,4 @@ async function loadMessages(
     .map(m => (m.kind === 'message' ? m.msg_id : C.DC_MSG_ID_LAST_SPECIAL))
     .filter(msgId => msgId !== C.DC_MSG_ID_LAST_SPECIAL)
   return await BackendRemote.rpc.getMessages(accountId, view)
-}
-
-async function getMessagesFromIndex(
-  accountId: number,
-  chatId: number,
-  indexStart: number,
-  indexEnd: number,
-  flags = C.DC_GCM_ADDDAYMARKER
-): Promise<[number | string, Type.Message | { id: string; ts: number }][]> {
-  const allMessageListItems = (
-    await BackendRemote.rpc.getMessageListItems(accountId, chatId, flags)
-  ).slice(indexStart, indexEnd + 1)
-
-  const messageIds = allMessageListItems
-    .map(m => (m.kind === 'message' ? m.msg_id : C.DC_MSG_ID_LAST_SPECIAL))
-    .filter(msgId => msgId !== C.DC_MSG_ID_LAST_SPECIAL)
-
-  const messages = await BackendRemote.rpc.getMessages(accountId, messageIds)
-
-  return allMessageListItems.map(m => [
-    m.kind === 'message' ? m.msg_id : `d${m.timestamp}`,
-    m.kind === 'message'
-      ? messages[m.msg_id]
-      : { id: `d${m.timestamp}`, ts: m.timestamp },
-  ])
 }
