@@ -4,7 +4,6 @@ import { C } from '@deltachat/jsonrpc-client'
 import { OrderedMap } from 'immutable'
 import { BackendRemote, onDCEvent, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
-import { debouncedUpdateBadgeCounter } from '../system-integration/badge-counter'
 import { T } from '@deltachat/jsonrpc-client'
 import {
   ChatViewState,
@@ -34,7 +33,6 @@ interface MessageListState {
   viewState: ChatViewState
   jumpToMessageStack: number[]
   countFetchedMessages: number
-  freshMessageCounter: number
 }
 
 const defaultState = () =>
@@ -46,7 +44,6 @@ const defaultState = () =>
     viewState: defaultChatViewState(),
     jumpToMessageStack: [],
     countFetchedMessages: 0,
-    freshMessageCounter: 0,
   } as MessageListState)
 
 async function messagePageFromMessageIndexes(
@@ -423,20 +420,6 @@ class MessageListStore extends Store<MessageListState> {
         return modifiedState
       }, 'setMessageIds')
     },
-
-    setFreshMessageCounter: (payload: {
-      id: number
-      freshMessageCounter: number
-    }) => {
-      const { freshMessageCounter } = payload
-      this.setState(state => {
-        const modifiedState: MessageListState = {
-          ...state,
-          freshMessageCounter,
-        }
-        return modifiedState
-      }, 'setFreshMessageCounter')
-    },
   }
 
   effect = {
@@ -683,18 +666,6 @@ class MessageListStore extends Store<MessageListState> {
       ),
       'jumpToMessage'
     ),
-    markseenMessages: async (msgIds: number[]) => {
-      await BackendRemote.rpc.markseenMsgs(this.accountId, msgIds)
-      const freshMessageCounter = await BackendRemote.rpc.getFreshMsgCnt(
-        this.accountId,
-        this.chatId
-      )
-      this.reducer.setFreshMessageCounter({
-        id: this.chatId,
-        freshMessageCounter,
-      })
-      debouncedUpdateBadgeCounter()
-    },
     fetchMoreMessagesTop: this.scheduler.queuedEffect(
       this.scheduler.lockedEffect(
         'scroll',

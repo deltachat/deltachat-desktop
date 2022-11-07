@@ -22,9 +22,11 @@ import { KeybindAction, useKeyBindingAction } from '../../keybindings'
 import { T } from '@deltachat/jsonrpc-client'
 import { selectedAccountId } from '../../ScreenController'
 import { useMessageList } from '../../stores/messagelist'
+import { BackendRemote, onDCEvent } from '../../backend-com'
+import { debouncedUpdateBadgeCounter } from '../../system-integration/badge-counter'
 const log = getLogger('render/components/message/MessageList')
 
-const onWindowFocus = (markseenMessages: (msgIds: number[]) => void) => {
+const onWindowFocus = (accountId: number) => {
   log.debug('window focused')
   const messageElements = Array.prototype.slice.call(
     document.querySelectorAll('#message-list .message-observer-bottom')
@@ -50,8 +52,36 @@ const onWindowFocus = (markseenMessages: (msgIds: number[]) => void) => {
       `window was focused: marking ${messageIdsToMarkAsRead.length} visible messages as read`,
       messageIdsToMarkAsRead
     )
-    markseenMessages(messageIdsToMarkAsRead)
+    BackendRemote.rpc
+      .markseenMsgs(accountId, messageIdsToMarkAsRead)
+      .then(debouncedUpdateBadgeCounter)
   }
+}
+
+function useUnreadCount(
+  accountId: number,
+  chatId: number,
+  initialValue: number
+) {
+  const [freshMessageCounter, setFreshMessageCounter] = useState(initialValue)
+
+  useEffect(() => {
+    const update = async ({ chatId: eventChatId }: { chatId: number }) => {
+      if (chatId === eventChatId) {
+        const count = await BackendRemote.rpc.getFreshMsgCnt(accountId, chatId)
+        setFreshMessageCounter(count)
+      }
+    }
+
+    let cleanup = [
+      onDCEvent(accountId, 'IncomingMsg', update),
+      onDCEvent(accountId, 'MsgRead', update),
+      onDCEvent(accountId, 'MsgsNoticed', update),
+    ]
+    return () => cleanup.forEach(off => off())
+  }, [accountId, chatId])
+
+  return freshMessageCounter
 }
 
 export default function MessageList({
@@ -61,10 +91,11 @@ export default function MessageList({
   chatStore: ChatStoreStateWithChatSet
   refComposer: todo
 }) {
+  const accountId = selectedAccountId()
   const {
     store: {
       scheduler,
-      effect: { markseenMessages, jumpToMessage },
+      effect: { jumpToMessage },
       reducer: { unlockScroll },
     },
     state: {
@@ -76,7 +107,13 @@ export default function MessageList({
     },
     fetchMoreBottom,
     fetchMoreTop,
-  } = useMessageList(selectedAccountId(), chatStore.chat.id)
+  } = useMessageList(accountId, chatStore.chat.id)
+
+  const countUnreadMessages = useUnreadCount(
+    accountId,
+    chatStore.chat.id,
+    chatStore.chat.freshMessageCounter
+  )
 
   const messageListRef = useRef<HTMLDivElement | null>(null)
   const [showJumpDownButton, setShowJumpDownButton] = useState(false)
@@ -117,7 +154,9 @@ export default function MessageList({
       if (messageIdsToMarkAsRead.length > 0) {
         const chatId = ChatStore.state.chat?.id
         if (!chatId) return
-        markseenMessages(messageIdsToMarkAsRead)
+        BackendRemote.rpc
+          .markseenMsgs(accountId, messageIdsToMarkAsRead)
+          .then(debouncedUpdateBadgeCounter)
       }
     })
   }
@@ -130,10 +169,10 @@ export default function MessageList({
   )
 
   useEffect(() => {
-    const onFocus = onWindowFocus.bind(null, markseenMessages)
+    const onFocus = onWindowFocus.bind(null, accountId)
     window.addEventListener('focus', onFocus)
     return () => window.removeEventListener('focus', onFocus)
-  }, [markseenMessages])
+  }, [accountId])
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -337,7 +376,6 @@ export default function MessageList({
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
   }, [refComposer])
 
-  const countUnreadMessages: number = chatStore.chat.freshMessageCounter
   return (
     <MessagesDisplayContext.Provider
       value={{ context: 'chat_messagelist', chatId: chatStore.chat.id }}
