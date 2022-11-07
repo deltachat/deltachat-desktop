@@ -346,12 +346,11 @@ class MessageListStore extends Store<MessageListState> {
         'scroll',
         async (
           msgId: number | undefined,
-          highlight?: boolean,
+          highlight = true,
           addMessageIdToStack?: undefined | number
         ) => {
           this.log.debug('jumpToMessage with messageId: ', msgId)
           const accountId = selectedAccountId()
-          highlight = highlight === false ? false : true
           // these methods were called in backend before
           // might be an issue if DeltaBackend.call has a significant delay
 
@@ -365,6 +364,7 @@ class MessageListStore extends Store<MessageListState> {
           let jumpToMessageStack: number[] = []
           let message: Type.Message | undefined = undefined
           if (msgId === undefined) {
+            // jump down
             const jumpToMessageStackLength = this.state.jumpToMessageStack
               .length
             if (jumpToMessageStackLength !== 0) {
@@ -381,8 +381,19 @@ class MessageListStore extends Store<MessageListState> {
               )
               chatId = message.chatId
             } else {
-              this.effect.loadChat()
-              return
+              const items = this.state.messageListItems
+                .map(m =>
+                  m.kind === 'message' ? m.msg_id : C.DC_MSG_ID_LAST_SPECIAL
+                )
+                .filter(msgId => msgId !== C.DC_MSG_ID_LAST_SPECIAL)
+              message = await BackendRemote.rpc.getMessage(
+                accountId,
+                items[items.length - 1]
+              )
+              chatId = message.chatId
+              jumpToMessageStack = []
+              jumpToMessageId = message.id
+              highlight = false
             }
           } else if (addMessageIdToStack === undefined) {
             // reset jumpToMessageStack
