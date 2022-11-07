@@ -1,7 +1,6 @@
 import { Store } from './store'
 import { ActionEmitter, KeybindAction } from '../keybindings'
 import { C } from '@deltachat/jsonrpc-client'
-import { OrderedMap } from 'immutable'
 import { BackendRemote, onDCEvent, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
 import { T } from '@deltachat/jsonrpc-client'
@@ -15,14 +14,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
 const PAGE_SIZE = 11
-
-export interface MessagePage {
-  pageKey: string
-  messages: OrderedMap<
-    number | string,
-    Type.Message | { id: string; ts: number }
-  >
-}
 
 interface MessageListState {
   // chat: Type.FullChat | null

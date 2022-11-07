@@ -10,7 +10,6 @@ import { MessageWrapper } from './MessageWrapper'
 import ChatStore, {
   useChatStore,
   ChatStoreStateWithChatSet,
-  MessagePage,
 } from '../../stores/chat'
 import { C } from '@deltachat/jsonrpc-client'
 import type { ChatTypes } from 'deltachat-node'

@@ -1,6 +1,5 @@
 import { Store, useStore } from './store'
 import { ActionEmitter, KeybindAction } from '../keybindings'
-import { OrderedMap } from 'immutable'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
 import { debouncedUpdateBadgeCounter } from '../system-integration/badge-counter'
@@ -9,14 +8,6 @@ import { saveLastChatId } from './chat/chat_sideeffects'
 import { onReady } from '../onready'
 
 export const PAGE_SIZE = 11
-
-export interface MessagePage {
-  pageKey: string
-  messages: OrderedMap<
-    number | string,
-    Type.Message | { id: string; ts: number }
-  >
-}
 
 export enum ChatView {
   MessageList,
