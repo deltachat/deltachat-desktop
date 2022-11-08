@@ -12,6 +12,7 @@ import { useTranslationFunction } from '../../contexts'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { runtime } from '../../runtime'
+import { jumpToMessage } from '../helpers/ChatMethods'
 
 export const StickerDiv = (props: {
   stickerPackName: string
@@ -27,7 +28,9 @@ export const StickerDiv = (props: {
   } = props
   const onClickSticker = (fileName: string) => {
     const stickerPath = fileName.replace('file://', '')
-    BackendRemote.rpc.sendSticker(selectedAccountId(), chatId, stickerPath)
+    BackendRemote.rpc
+      .sendSticker(selectedAccountId(), chatId, stickerPath)
+      .then(id => jumpToMessage(id, false))
     setShowEmojiPicker(false)
   }
 
