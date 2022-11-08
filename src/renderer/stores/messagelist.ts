@@ -339,180 +339,172 @@ class MessageListStore extends Store<MessageListState> {
       },
       'selectChat'
     ),
-    // TODO: Probably this should be lockedQueuedEffect too?
-    jumpToMessage: this.scheduler.queuedEffect(
-      this.scheduler.lockedEffect(
-        'scroll',
-        async (
-          msgId: number | undefined,
-          highlight = true,
-          addMessageIdToStack?: undefined | number
-        ) => {
-          this.log.debug('jumpToMessage with messageId: ', msgId)
-          const accountId = selectedAccountId()
-          // these methods were called in backend before
-          // might be an issue if DeltaBackend.call has a significant delay
+    jumpToMessage: this.scheduler.lockedQueuedEffect(
+      'scroll',
+      async (
+        msgId: number | undefined,
+        highlight = true,
+        addMessageIdToStack?: undefined | number
+      ) => {
+        this.log.debug('jumpToMessage with messageId: ', msgId)
+        const accountId = selectedAccountId()
+        // these methods were called in backend before
+        // might be an issue if DeltaBackend.call has a significant delay
 
-          if (!accountId) {
-            throw new Error('no account set')
-          }
-          // this function already throws an error if message is not found
+        if (!accountId) {
+          throw new Error('no account set')
+        }
+        // this function already throws an error if message is not found
 
-          let chatId = -1
-          let jumpToMessageId = -1
-          let jumpToMessageStack: number[] = []
-          let message: Type.Message | undefined = undefined
-          if (msgId === undefined) {
-            // jump down
-            const jumpToMessageStackLength = this.state.jumpToMessageStack
-              .length
-            if (jumpToMessageStackLength !== 0) {
-              jumpToMessageStack = this.state.jumpToMessageStack.slice(
-                0,
-                jumpToMessageStackLength - 1
-              )
-              jumpToMessageId = this.state.jumpToMessageStack[
-                jumpToMessageStackLength - 1
-              ]
-              message = await BackendRemote.rpc.getMessage(
-                accountId,
-                jumpToMessageId as number
-              )
-              chatId = message.chatId
-            } else {
-              const items = this.state.messageListItems
-                .map(m =>
-                  m.kind === 'message' ? m.msg_id : C.DC_MSG_ID_LAST_SPECIAL
-                )
-                .filter(msgId => msgId !== C.DC_MSG_ID_LAST_SPECIAL)
-              message = await BackendRemote.rpc.getMessage(
-                accountId,
-                items[items.length - 1]
-              )
-              chatId = message.chatId
-              jumpToMessageStack = []
-              jumpToMessageId = message.id
-              highlight = false
-            }
-          } else if (addMessageIdToStack === undefined) {
-            // reset jumpToMessageStack
+        let chatId = -1
+        let jumpToMessageId = -1
+        let jumpToMessageStack: number[] = []
+        let message: Type.Message | undefined = undefined
+        if (msgId === undefined) {
+          // jump down
+          const jumpToMessageStackLength = this.state.jumpToMessageStack.length
+          if (jumpToMessageStackLength !== 0) {
+            jumpToMessageStack = this.state.jumpToMessageStack.slice(
+              0,
+              jumpToMessageStackLength - 1
+            )
+            jumpToMessageId = this.state.jumpToMessageStack[
+              jumpToMessageStackLength - 1
+            ]
             message = await BackendRemote.rpc.getMessage(
               accountId,
-              msgId as number
+              jumpToMessageId as number
             )
             chatId = message.chatId
-
-            jumpToMessageId = msgId as number
-            jumpToMessageStack = []
           } else {
+            const items = this.state.messageListItems
+              .map(m =>
+                m.kind === 'message' ? m.msg_id : C.DC_MSG_ID_LAST_SPECIAL
+              )
+              .filter(msgId => msgId !== C.DC_MSG_ID_LAST_SPECIAL)
             message = await BackendRemote.rpc.getMessage(
               accountId,
-              msgId as number
+              items[items.length - 1]
             )
             chatId = message.chatId
-
-            jumpToMessageId = msgId as number
-            // If we are not switching chats, add current jumpToMessageId to the stack
-            const currentChatId = this.chatId || -1
-            if (chatId !== currentChatId) {
-              jumpToMessageStack = []
-            } else if (
-              this.state.jumpToMessageStack.indexOf(addMessageIdToStack) !== -1
-            ) {
-              jumpToMessageStack = this.state.jumpToMessageStack
-            } else {
-              jumpToMessageStack = [
-                ...this.state.jumpToMessageStack,
-                addMessageIdToStack,
-              ]
-            }
+            jumpToMessageStack = []
+            jumpToMessageId = message.id
+            highlight = false
           }
-
-          //@ts-ignore
-          if (message === undefined) {
-            throw new Error(
-              'jumpToMessage: Tried to jump to non existing message with id: ' +
-                msgId
-            )
-          }
-
-          const chat = await BackendRemote.rpc.getFullChatById(
+        } else if (addMessageIdToStack === undefined) {
+          // reset jumpToMessageStack
+          message = await BackendRemote.rpc.getMessage(
             accountId,
-            chatId
+            msgId as number
           )
-          if (chat.id === null) {
-            this.log.debug(
-              'SELECT CHAT chat does not exsits, id is null. chatId:',
-              chat.id
-            )
-            return
-          }
-          const messageListItems = await BackendRemote.rpc.getMessageListItems(
+          chatId = message.chatId
+
+          jumpToMessageId = msgId as number
+          jumpToMessageStack = []
+        } else {
+          message = await BackendRemote.rpc.getMessage(
             accountId,
-            chatId,
-            C.DC_GCM_ADDDAYMARKER
+            msgId as number
+          )
+          chatId = message.chatId
+
+          jumpToMessageId = msgId as number
+          // If we are not switching chats, add current jumpToMessageId to the stack
+          const currentChatId = this.chatId || -1
+          if (chatId !== currentChatId) {
+            jumpToMessageStack = []
+          } else if (
+            this.state.jumpToMessageStack.indexOf(addMessageIdToStack) !== -1
+          ) {
+            jumpToMessageStack = this.state.jumpToMessageStack
+          } else {
+            jumpToMessageStack = [
+              ...this.state.jumpToMessageStack,
+              addMessageIdToStack,
+            ]
+          }
+        }
+
+        //@ts-ignore
+        if (message === undefined) {
+          throw new Error(
+            'jumpToMessage: Tried to jump to non existing message with id: ' +
+              msgId
+          )
+        }
+
+        const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
+        if (chat.id === null) {
+          this.log.debug(
+            'SELECT CHAT chat does not exsits, id is null. chatId:',
+            chat.id
+          )
+          return
+        }
+        const messageListItems = await BackendRemote.rpc.getMessageListItems(
+          accountId,
+          chatId,
+          C.DC_GCM_ADDDAYMARKER
+        )
+
+        const jumpToMessageIndex = messageListItems.findIndex(
+          m => m.kind === 'message' && m.msg_id === jumpToMessageId
+        )
+
+        // calculate page indexes, so that jumpToMessageId is in the middle of the page
+        let oldestFetchedMessageListItemIndex = -1
+        let newestFetchedMessageListItemIndex = -1
+        let messageCache: MessageListState['messageCache'] = {}
+        const half_page_size = Math.ceil(PAGE_SIZE / 2)
+        if (messageListItems.length !== 0) {
+          oldestFetchedMessageListItemIndex = Math.max(
+            jumpToMessageIndex - half_page_size,
+            0
+          )
+          newestFetchedMessageListItemIndex = Math.min(
+            jumpToMessageIndex + half_page_size,
+            messageListItems.length - 1
           )
 
-          const jumpToMessageIndex = messageListItems.findIndex(
-            m => m.kind === 'message' && m.msg_id === jumpToMessageId
-          )
-
-          // calculate page indexes, so that jumpToMessageId is in the middle of the page
-          let oldestFetchedMessageListItemIndex = -1
-          let newestFetchedMessageListItemIndex = -1
-          let messageCache: MessageListState['messageCache'] = {}
-          const half_page_size = Math.ceil(PAGE_SIZE / 2)
-          if (messageListItems.length !== 0) {
+          const countMessagesOnNewerSide =
+            newestFetchedMessageListItemIndex - jumpToMessageIndex
+          const countMessagesOnOlderSide =
+            jumpToMessageIndex - oldestFetchedMessageListItemIndex
+          if (countMessagesOnNewerSide < half_page_size) {
             oldestFetchedMessageListItemIndex = Math.max(
-              jumpToMessageIndex - half_page_size,
+              oldestFetchedMessageListItemIndex -
+                (half_page_size - countMessagesOnNewerSide),
               0
             )
+          } else if (countMessagesOnOlderSide < half_page_size) {
             newestFetchedMessageListItemIndex = Math.min(
-              jumpToMessageIndex + half_page_size,
+              newestFetchedMessageListItemIndex +
+                (half_page_size - countMessagesOnOlderSide),
               messageListItems.length - 1
-            )
-
-            const countMessagesOnNewerSide =
-              newestFetchedMessageListItemIndex - jumpToMessageIndex
-            const countMessagesOnOlderSide =
-              jumpToMessageIndex - oldestFetchedMessageListItemIndex
-            if (countMessagesOnNewerSide < half_page_size) {
-              oldestFetchedMessageListItemIndex = Math.max(
-                oldestFetchedMessageListItemIndex -
-                  (half_page_size - countMessagesOnNewerSide),
-                0
-              )
-            } else if (countMessagesOnOlderSide < half_page_size) {
-              newestFetchedMessageListItemIndex = Math.min(
-                newestFetchedMessageListItemIndex +
-                  (half_page_size - countMessagesOnOlderSide),
-                messageListItems.length - 1
-              )
-            }
-
-            messageCache = await loadMessages(
-              accountId,
-              messageListItems,
-              oldestFetchedMessageListItemIndex,
-              newestFetchedMessageListItemIndex
             )
           }
 
-          this.reducer.selectedChat({
-            messageCache,
+          messageCache = await loadMessages(
+            accountId,
             messageListItems,
             oldestFetchedMessageListItemIndex,
-            newestFetchedMessageListItemIndex: newestFetchedMessageListItemIndex,
-            viewState: ChatViewReducer.jumpToMessage(
-              this.state.viewState,
-              jumpToMessageId,
-              highlight
-            ),
-            jumpToMessageStack,
-          })
-        },
-        'jumpToMessage'
-      ),
+            newestFetchedMessageListItemIndex
+          )
+        }
+
+        this.reducer.selectedChat({
+          messageCache,
+          messageListItems,
+          oldestFetchedMessageListItemIndex,
+          newestFetchedMessageListItemIndex: newestFetchedMessageListItemIndex,
+          viewState: ChatViewReducer.jumpToMessage(
+            this.state.viewState,
+            jumpToMessageId,
+            highlight
+          ),
+          jumpToMessageStack,
+        })
+      },
       'jumpToMessage'
     ),
     fetchMoreMessagesTop: this.scheduler.queuedEffect(

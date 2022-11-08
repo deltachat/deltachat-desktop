@@ -30,6 +30,7 @@
 - fix unread count on scroll down button
 - make recently seen dot in navbar disappear automatically #2926
 - only webxdc info messages jump to parent message on click now
+- fix scroll down when sending message
 
 ## [1.33.0] - 2022-10-16
 
