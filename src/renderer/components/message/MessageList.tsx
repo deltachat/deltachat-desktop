@@ -9,11 +9,8 @@ import React, {
 import { MessageWrapper } from './MessageWrapper'
 import ChatStore, {
   useChatStore,
-  ChatStoreState,
   ChatStoreStateWithChatSet,
-  MessagePage,
 } from '../../stores/chat'
-import { useDebouncedCallback } from 'use-debounce'
 import { C } from '@deltachat/jsonrpc-client'
 import type { ChatTypes } from 'deltachat-node'
 import moment from 'moment'
@@ -22,9 +19,13 @@ import { getLogger } from '../../../shared/logger'
 import { MessagesDisplayContext, useTranslationFunction } from '../../contexts'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
 import { T } from '@deltachat/jsonrpc-client'
+import { selectedAccountId } from '../../ScreenController'
+import { useMessageList } from '../../stores/messagelist'
+import { BackendRemote, onDCEvent } from '../../backend-com'
+import { debouncedUpdateBadgeCounter } from '../../system-integration/badge-counter'
 const log = getLogger('render/components/message/MessageList')
 
-window.addEventListener('focus', () => {
+const onWindowFocus = (accountId: number) => {
   log.debug('window focused')
   const messageElements = Array.prototype.slice.call(
     document.querySelectorAll('#message-list .message-observer-bottom')
@@ -50,11 +51,37 @@ window.addEventListener('focus', () => {
       `window was focused: marking ${messageIdsToMarkAsRead.length} visible messages as read`,
       messageIdsToMarkAsRead
     )
-    const chatId = ChatStore.state.chat?.id
-    if (!chatId) return
-    ChatStore.effect.markseenMessages(chatId, messageIdsToMarkAsRead)
+    BackendRemote.rpc
+      .markseenMsgs(accountId, messageIdsToMarkAsRead)
+      .then(debouncedUpdateBadgeCounter)
   }
-})
+}
+
+function useUnreadCount(
+  accountId: number,
+  chatId: number,
+  initialValue: number
+) {
+  const [freshMessageCounter, setFreshMessageCounter] = useState(initialValue)
+
+  useEffect(() => {
+    const update = async ({ chatId: eventChatId }: { chatId: number }) => {
+      if (chatId === eventChatId) {
+        const count = await BackendRemote.rpc.getFreshMsgCnt(accountId, chatId)
+        setFreshMessageCounter(count)
+      }
+    }
+
+    const cleanup = [
+      onDCEvent(accountId, 'IncomingMsg', update),
+      onDCEvent(accountId, 'MsgRead', update),
+      onDCEvent(accountId, 'MsgsNoticed', update),
+    ]
+    return () => cleanup.forEach(off => off())
+  }, [accountId, chatId])
+
+  return freshMessageCounter
+}
 
 export default function MessageList({
   chatStore,
@@ -63,37 +90,40 @@ export default function MessageList({
   chatStore: ChatStoreStateWithChatSet
   refComposer: todo
 }) {
+  const accountId = selectedAccountId()
   const {
-    oldestFetchedMessageListItemIndex,
-    messagePages,
-    messageListItems,
-    viewState,
-  } = useChatStore()
+    store: {
+      scheduler,
+      effect: { jumpToMessage },
+      reducer: { unlockScroll },
+      activeView,
+    },
+    state: {
+      oldestFetchedMessageListItemIndex,
+      newestFetchedMessageListItemIndex,
+      messageCache,
+      messageListItems,
+      viewState,
+    },
+    fetchMoreBottom,
+    fetchMoreTop,
+  } = useMessageList(accountId, chatStore.chat.id)
+
+  const countUnreadMessages = useUnreadCount(
+    accountId,
+    chatStore.chat.id,
+    chatStore.chat.freshMessageCounter
+  )
+
   const messageListRef = useRef<HTMLDivElement | null>(null)
   const [showJumpDownButton, setShowJumpDownButton] = useState(false)
-
-  const [fetchMoreTop] = useDebouncedCallback(
-    async () => {
-      await ChatStore.effect.fetchMoreMessagesTop()
-    },
-    30,
-    { leading: true }
-  )
-
-  const [fetchMoreBottom] = useDebouncedCallback(
-    async () => {
-      await ChatStore.effect.fetchMoreMessagesBottom()
-    },
-    30,
-    { leading: true }
-  )
 
   const onUnreadMessageInView: IntersectionObserverCallback = entries => {
     if (ChatStore.state.chat === null) return
     // Don't mark messages as read if window is not focused
     if (document.hasFocus() === false) return
 
-    if (ChatStore.scheduler.isLocked('scroll') === true) {
+    if (scheduler.isLocked('scroll') === true) {
       //console.log('onScroll: locked, returning')
       return
     }
@@ -124,7 +154,9 @@ export default function MessageList({
       if (messageIdsToMarkAsRead.length > 0) {
         const chatId = ChatStore.state.chat?.id
         if (!chatId) return
-        ChatStore.effect.markseenMessages(chatId, messageIdsToMarkAsRead)
+        BackendRemote.rpc
+          .markseenMsgs(accountId, messageIdsToMarkAsRead)
+          .then(debouncedUpdateBadgeCounter)
       }
     })
   }
@@ -136,6 +168,12 @@ export default function MessageList({
     })
   )
 
+  useEffect(() => {
+    const onFocus = onWindowFocus.bind(null, accountId)
+    window.addEventListener('focus', onFocus)
+    return () => window.removeEventListener('focus', onFocus)
+  }, [accountId])
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     return () => {
@@ -144,12 +182,19 @@ export default function MessageList({
     }
   }, [])
 
+  useEffect(() => {
+    window.__internal_jump_to_message = jumpToMessage
+    return () => {
+      window.__internal_jump_to_message = undefined
+    }
+  }, [jumpToMessage])
+
   const onScroll = useCallback(
     (Event: React.UIEvent<HTMLDivElement> | null) => {
       if (!messageListRef.current) {
         return
       }
-      if (ChatStore.scheduler.isLocked('scroll') === true) {
+      if (scheduler.isLocked('scroll') === true) {
         //console.log('onScroll: locked, returning')
         return
       }
@@ -160,8 +205,7 @@ export default function MessageList({
         messageListRef.current.clientHeight
 
       const isNewestMessageLoaded =
-        ChatStore.state.newestFetchedMessageListItemIndex ===
-        ChatStore.state.messageListItems.length - 1
+        newestFetchedMessageListItemIndex === messageListItems.length - 1
       const onePageAwayFromNewestMessageTreshold =
         messageListRef.current.clientHeight / 3
       const newShowJumpDownButton =
@@ -193,14 +237,21 @@ export default function MessageList({
         return false
       }
     },
-    [fetchMoreTop, fetchMoreBottom, setShowJumpDownButton, showJumpDownButton]
+    [
+      fetchMoreTop,
+      fetchMoreBottom,
+      setShowJumpDownButton,
+      showJumpDownButton,
+      newestFetchedMessageListItemIndex,
+      messageListItems.length,
+      scheduler,
+    ]
   )
 
   useLayoutEffect(() => {
     if (!ChatStore.state.chat) {
       return
     }
-    const chatId = ChatStore.state.chat.id
     if (!messageListRef.current) {
       return
     }
@@ -295,12 +346,18 @@ export default function MessageList({
       }
     }
     setTimeout(() => {
-      ChatStore.reducer.unlockScroll({ id: chatId })
+      unlockScroll()
       setTimeout(() => {
         onScroll(null)
       }, 0)
     }, 0)
-  }, [onScroll, viewState, viewState.scrollTo, viewState.lastKnownScrollHeight])
+  }, [
+    onScroll,
+    viewState,
+    viewState.scrollTo,
+    viewState.lastKnownScrollHeight,
+    unlockScroll,
+  ])
 
   useLayoutEffect(() => {
     if (!refComposer.current) {
@@ -320,7 +377,6 @@ export default function MessageList({
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
   }, [refComposer])
 
-  const countUnreadMessages: number = chatStore.chat.freshMessageCounter
   return (
     <MessagesDisplayContext.Provider
       value={{ context: 'chat_messagelist', chatId: chatStore.chat.id }}
@@ -329,7 +385,8 @@ export default function MessageList({
         onScroll={onScroll}
         oldestFetchedMessageIndex={oldestFetchedMessageListItemIndex}
         messageListItems={messageListItems}
-        messagePages={messagePages}
+        activeView={activeView}
+        messageCache={messageCache}
         messageListRef={messageListRef}
         chatStore={chatStore}
         unreadMessageInViewIntersectionObserver={
@@ -337,7 +394,10 @@ export default function MessageList({
         }
       />
       {(showJumpDownButton === true || countUnreadMessages > 0) && (
-        <JumpDownButton countUnreadMessages={countUnreadMessages} />
+        <JumpDownButton
+          countUnreadMessages={countUnreadMessages}
+          jumpToMessage={jumpToMessage}
+        />
       )}
     </MessagesDisplayContext.Provider>
   )
@@ -356,7 +416,8 @@ export const MessageListInner = React.memo(
     onScroll: (event: React.UIEvent<HTMLDivElement>) => void
     oldestFetchedMessageIndex: number
     messageListItems: T.MessageListItem[]
-    messagePages: ChatStoreState['messagePages']
+    activeView: T.MessageListItem[]
+    messageCache: { [msgId: number]: T.Message }
     messageListRef: React.MutableRefObject<HTMLDivElement | null>
     chatStore: ChatStoreStateWithChatSet
     unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
@@ -364,7 +425,8 @@ export const MessageListInner = React.memo(
     const {
       onScroll,
       messageListItems,
-      messagePages,
+      messageCache,
+      activeView,
       messageListRef,
       chatStore,
       unreadMessageInViewIntersectionObserver,
@@ -404,17 +466,47 @@ export const MessageListInner = React.memo(
       <div id='message-list' ref={messageListRef} onScroll={onScroll}>
         <ul>
           {messageListItems.length === 0 && <EmptyChatMessage />}
-          {messagePages.map(messagePage => {
-            return (
-              <MessagePageComponent
-                key={messagePage.pageKey}
-                messagePage={messagePage}
-                conversationType={conversationType}
-                unreadMessageInViewIntersectionObserver={
-                  unreadMessageInViewIntersectionObserver
-                }
-              />
-            )
+          {activeView.map(messageId => {
+            if (messageId.kind === 'dayMarker') {
+              return (
+                <DayMarker
+                  key={`daymarker-${messageId.timestamp}`}
+                  timestamp={messageId.timestamp}
+                />
+              )
+            }
+
+            if (messageId.kind === 'message') {
+              const message = messageCache[messageId.msg_id]
+              if (message) {
+                return (
+                  <MessageWrapper
+                    key={messageId.msg_id}
+                    key2={`${messageId.msg_id}`}
+                    message={message as T.Message}
+                    conversationType={conversationType}
+                    unreadMessageInViewIntersectionObserver={
+                      unreadMessageInViewIntersectionObserver
+                    }
+                  />
+                )
+              } else {
+                return (
+                  <div className='info-message'>
+                    <div
+                      className='bubble'
+                      style={{
+                        textTransform: 'capitalize',
+                        backgroundColor: 'rgba(55,0,0,0.5)',
+                      }}
+                    >
+                      message with id {messageId.msg_id} was not found in cache,
+                      this should not happen, please contact the developers
+                    </div>
+                  </div>
+                )
+              }
+            }
           })}
         </ul>
       </div>
@@ -422,8 +514,8 @@ export const MessageListInner = React.memo(
   },
   (prevProps, nextProps) => {
     const areEqual: boolean =
-      prevProps.messageListItems === nextProps.messageListItems &&
-      prevProps.messagePages === nextProps.messagePages &&
+      prevProps.activeView === nextProps.activeView &&
+      prevProps.messageCache === nextProps.messageCache &&
       prevProps.oldestFetchedMessageIndex ===
         nextProps.oldestFetchedMessageIndex &&
       prevProps.onScroll === nextProps.onScroll
@@ -433,8 +525,14 @@ export const MessageListInner = React.memo(
 
 function JumpDownButton({
   countUnreadMessages,
+  jumpToMessage,
 }: {
   countUnreadMessages: number
+  jumpToMessage: (
+    msgId: number | undefined,
+    highlight?: boolean,
+    addMessageIdToStack?: undefined | number
+  ) => Promise<void>
 }) {
   return (
     <>
@@ -448,7 +546,7 @@ function JumpDownButton({
         <div
           className='button'
           onClick={() => {
-            ChatStore.effect.jumpToMessage(undefined, true)
+            jumpToMessage(undefined, true)
           }}
         >
           <div className='icon' />
@@ -457,64 +555,6 @@ function JumpDownButton({
     </>
   )
 }
-
-const MessagePageComponent = React.memo(
-  function MessagePageComponent({
-    messagePage,
-    conversationType,
-    unreadMessageInViewIntersectionObserver,
-  }: {
-    messagePage: MessagePage
-    conversationType: ConversationType
-    unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
-  }) {
-    const messageElements = []
-    const messagesOnPage = messagePage.messages.toArray()
-    for (let i = 0; i < messagesOnPage.length; i++) {
-      const [messageId, message] = messagesOnPage[i]
-      if (typeof messageId === 'string') {
-        // daymarker
-        messageElements.push(
-          <DayMarker
-            key={`daymarker-${messageId}`}
-            timestamp={
-              (message as {
-                id: string
-                ts: number
-              }).ts
-            }
-          />
-        )
-      } else {
-        // message
-        messageElements.push(
-          <MessageWrapper
-            key={messageId}
-            key2={`${messageId}`}
-            message={message as T.Message}
-            conversationType={conversationType}
-            unreadMessageInViewIntersectionObserver={
-              unreadMessageInViewIntersectionObserver
-            }
-          />
-        )
-      }
-    }
-
-    return (
-      <div className='message-page' id={messagePage.pageKey}>
-        {messageElements}
-      </div>
-    )
-  },
-  (prevProps, nextProps) => {
-    const areEqual =
-      prevProps.messagePage.pageKey === nextProps.messagePage.pageKey &&
-      prevProps.messagePage.messages === nextProps.messagePage.messages
-
-    return areEqual
-  }
-)
 
 function EmptyChatMessage() {
   const tx = useTranslationFunction()
