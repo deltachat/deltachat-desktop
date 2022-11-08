@@ -104,6 +104,7 @@ export default function MessageList({
       messageCache,
       messageListItems,
       viewState,
+      jumpToMessageStack,
     },
     fetchMoreBottom,
     fetchMoreTop,
@@ -393,10 +394,13 @@ export default function MessageList({
           unreadMessageInViewIntersectionObserver
         }
       />
-      {(showJumpDownButton === true || countUnreadMessages > 0) && (
+      {(showJumpDownButton === true ||
+        countUnreadMessages > 0 ||
+        jumpToMessageStack.length > 0) && (
         <JumpDownButton
           countUnreadMessages={countUnreadMessages}
           jumpToMessage={jumpToMessage}
+          jumpToMessageStack={jumpToMessageStack}
         />
       )}
     </MessagesDisplayContext.Provider>
@@ -526,6 +530,7 @@ export const MessageListInner = React.memo(
 function JumpDownButton({
   countUnreadMessages,
   jumpToMessage,
+  jumpToMessageStack,
 }: {
   countUnreadMessages: number
   jumpToMessage: (
@@ -533,6 +538,7 @@ function JumpDownButton({
     highlight?: boolean,
     addMessageIdToStack?: undefined | number
   ) => Promise<void>
+  jumpToMessageStack: number[]
 }) {
   return (
     <>
@@ -549,7 +555,11 @@ function JumpDownButton({
             jumpToMessage(undefined, true)
           }}
         >
-          <div className='icon' />
+          <div
+            className={
+              'icon ' + (jumpToMessageStack.length > 0 ? 'back' : 'down')
+            }
+          />
         </div>
       </div>
     </>

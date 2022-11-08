@@ -11,6 +11,7 @@
 - made frontend code more independent from electron
 - reduce notifications when many messages are received at once.
 - update deltachat-node and deltachat/jsonrpc-client to `v1.99.0`
+- jump down button: show different icon (one arrow), when jumping to message in jump to message list
 
 ### Fixed
 

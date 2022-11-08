@@ -58,10 +58,19 @@
       .icon {
         height: $heightJumpToBottomButton;
         width: $width;
-
-        -webkit-mask: url(../images/ic_scroll_down.png) no-repeat center;
-        -webkit-mask-size: 65%;
         background-color: var(--jumpDownButtonIconColor);
+        &.down {
+          mask: url(../images/ic_scroll_down.png) no-repeat center;
+          -webkit-mask: url(../images/ic_scroll_down.png) no-repeat center;
+          mask-size: 65%;
+          -webkit-mask-size: 65%;
+        }
+        &.back {
+          mask: url(../images/ic_scroll_back.svg) no-repeat center;
+          -webkit-mask: url(../images/ic_scroll_back.svg) no-repeat center;
+          mask-size: 65%;
+          -webkit-mask-size: 65%;
+        }
       }
     }
   }
