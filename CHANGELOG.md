@@ -22,6 +22,8 @@
 - Fix chat name/avatar in navbar take full width
 - don't show dash in mailinlist title if there is no mailinglist address #2965
 - Fix notifications when showNotificationContent was disabled
+- fix unread count on scroll down button
+- make recently seen dot in navbar disappear automatically #2926
 
 ## [1.33.0] - 2022-10-16
 
