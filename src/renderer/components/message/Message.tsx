@@ -312,15 +312,6 @@ const Message = (props: {
             />
           )}
           {text}
-          {isWebxdcInfo && message.parentId && (
-            <img
-              src={runtime.getWebxdcIconURL(
-                selectedAccountId(),
-                message.parentId
-              )}
-              onClick={() => openWebxdc(message.id)}
-            />
-          )}
           {direction === 'outgoing' &&
             (status === 'sending' || status === 'error') && (
               <div
