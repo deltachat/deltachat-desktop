@@ -122,11 +122,10 @@ class MessageListStore extends Store<MessageListState> {
   }
 
   get activeView() {
-    const items = [...this.state.messageListItems]
     const start = this.state.oldestFetchedMessageListItemIndex
     const end = this.state.newestFetchedMessageListItemIndex
-    const view = getView(items, start, end)
-    this.log.debug('get activeView', { end, start, view })
+    const view = getView(this.state.messageListItems, start, end)
+    // this.log.debug('get activeView', { end, start, view })
     return view
   }
 
