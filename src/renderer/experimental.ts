@@ -38,6 +38,10 @@ These functions are highly experimental, use at your own risk.
     log.debug(new Error('a test error - should be logged to logfile'))
     throw new Error('a test error - should be catched and logged to logfile')
   }
+
+  getContextEmitters() {
+    return (BackendRemote as any).contextEmitters
+  }
 }
 
 export const exp = new Experimental()
