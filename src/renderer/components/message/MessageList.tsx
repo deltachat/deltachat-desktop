@@ -10,7 +10,6 @@ import { MessageWrapper } from './MessageWrapper'
 import ChatStore, {
   useChatStore,
   ChatStoreStateWithChatSet,
-  MessagePage,
 } from '../../stores/chat'
 import { C } from '@deltachat/jsonrpc-client'
 import type { ChatTypes } from 'deltachat-node'
@@ -73,7 +72,7 @@ function useUnreadCount(
       }
     }
 
-    let cleanup = [
+    const cleanup = [
       onDCEvent(accountId, 'IncomingMsg', update),
       onDCEvent(accountId, 'MsgRead', update),
       onDCEvent(accountId, 'MsgsNoticed', update),
@@ -97,11 +96,12 @@ export default function MessageList({
       scheduler,
       effect: { jumpToMessage },
       reducer: { unlockScroll },
+      activeView,
     },
     state: {
       oldestFetchedMessageListItemIndex,
       newestFetchedMessageListItemIndex,
-      messagePages,
+      messageCache,
       messageListItems,
       viewState,
     },
@@ -244,6 +244,7 @@ export default function MessageList({
       showJumpDownButton,
       newestFetchedMessageListItemIndex,
       messageListItems.length,
+      scheduler,
     ]
   )
 
@@ -384,7 +385,8 @@ export default function MessageList({
         onScroll={onScroll}
         oldestFetchedMessageIndex={oldestFetchedMessageListItemIndex}
         messageListItems={messageListItems}
-        messagePages={messagePages}
+        activeView={activeView}
+        messageCache={messageCache}
         messageListRef={messageListRef}
         chatStore={chatStore}
         unreadMessageInViewIntersectionObserver={
@@ -414,7 +416,8 @@ export const MessageListInner = React.memo(
     onScroll: (event: React.UIEvent<HTMLDivElement>) => void
     oldestFetchedMessageIndex: number
     messageListItems: T.MessageListItem[]
-    messagePages: MessagePage[]
+    activeView: T.MessageListItem[]
+    messageCache: { [msgId: number]: T.Message }
     messageListRef: React.MutableRefObject<HTMLDivElement | null>
     chatStore: ChatStoreStateWithChatSet
     unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
@@ -422,7 +425,8 @@ export const MessageListInner = React.memo(
     const {
       onScroll,
       messageListItems,
-      messagePages,
+      messageCache,
+      activeView,
       messageListRef,
       chatStore,
       unreadMessageInViewIntersectionObserver,
@@ -462,17 +466,47 @@ export const MessageListInner = React.memo(
       <div id='message-list' ref={messageListRef} onScroll={onScroll}>
         <ul>
           {messageListItems.length === 0 && <EmptyChatMessage />}
-          {messagePages.map(messagePage => {
-            return (
-              <MessagePageComponent
-                key={messagePage.pageKey}
-                messagePage={messagePage}
-                conversationType={conversationType}
-                unreadMessageInViewIntersectionObserver={
-                  unreadMessageInViewIntersectionObserver
-                }
-              />
-            )
+          {activeView.map(messageId => {
+            if (messageId.kind === 'dayMarker') {
+              return (
+                <DayMarker
+                  key={`daymarker-${messageId.timestamp}`}
+                  timestamp={messageId.timestamp}
+                />
+              )
+            }
+
+            if (messageId.kind === 'message') {
+              const message = messageCache[messageId.msg_id]
+              if (message) {
+                return (
+                  <MessageWrapper
+                    key={messageId.msg_id}
+                    key2={`${messageId.msg_id}`}
+                    message={message as T.Message}
+                    conversationType={conversationType}
+                    unreadMessageInViewIntersectionObserver={
+                      unreadMessageInViewIntersectionObserver
+                    }
+                  />
+                )
+              } else {
+                return (
+                  <div className='info-message'>
+                    <div
+                      className='bubble'
+                      style={{
+                        textTransform: 'capitalize',
+                        backgroundColor: 'rgba(55,0,0,0.5)',
+                      }}
+                    >
+                      message with id {messageId.msg_id} was not found in cache,
+                      this should not happen, please contact the developers
+                    </div>
+                  </div>
+                )
+              }
+            }
           })}
         </ul>
       </div>
@@ -480,8 +514,8 @@ export const MessageListInner = React.memo(
   },
   (prevProps, nextProps) => {
     const areEqual: boolean =
-      prevProps.messageListItems === nextProps.messageListItems &&
-      prevProps.messagePages === nextProps.messagePages &&
+      prevProps.activeView === nextProps.activeView &&
+      prevProps.messageCache === nextProps.messageCache &&
       prevProps.oldestFetchedMessageIndex ===
         nextProps.oldestFetchedMessageIndex &&
       prevProps.onScroll === nextProps.onScroll
@@ -521,64 +555,6 @@ function JumpDownButton({
     </>
   )
 }
-
-const MessagePageComponent = React.memo(
-  function MessagePageComponent({
-    messagePage,
-    conversationType,
-    unreadMessageInViewIntersectionObserver,
-  }: {
-    messagePage: MessagePage
-    conversationType: ConversationType
-    unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
-  }) {
-    const messageElements = []
-    const messagesOnPage = messagePage.messages.toArray()
-    for (let i = 0; i < messagesOnPage.length; i++) {
-      const [messageId, message] = messagesOnPage[i]
-      if (typeof messageId === 'string') {
-        // daymarker
-        messageElements.push(
-          <DayMarker
-            key={`daymarker-${messageId}`}
-            timestamp={
-              (message as {
-                id: string
-                ts: number
-              }).ts
-            }
-          />
-        )
-      } else {
-        // message
-        messageElements.push(
-          <MessageWrapper
-            key={messageId}
-            key2={`${messageId}`}
-            message={message as T.Message}
-            conversationType={conversationType}
-            unreadMessageInViewIntersectionObserver={
-              unreadMessageInViewIntersectionObserver
-            }
-          />
-        )
-      }
-    }
-
-    return (
-      <div className='message-page' id={messagePage.pageKey}>
-        {messageElements}
-      </div>
-    )
-  },
-  (prevProps, nextProps) => {
-    const areEqual =
-      prevProps.messagePage.pageKey === nextProps.messagePage.pageKey &&
-      prevProps.messagePage.messages === nextProps.messagePage.messages
-
-    return areEqual
-  }
-)
 
 function EmptyChatMessage() {
   const tx = useTranslationFunction()

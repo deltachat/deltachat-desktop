@@ -1,6 +1,5 @@
 import { Store, useStore } from './store'
 import { ActionEmitter, KeybindAction } from '../keybindings'
-import { OrderedMap } from 'immutable'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
 import { debouncedUpdateBadgeCounter } from '../system-integration/badge-counter'
@@ -9,14 +8,6 @@ import { saveLastChatId } from './chat/chat_sideeffects'
 import { onReady } from '../onready'
 
 export const PAGE_SIZE = 11
-
-export interface MessagePage {
-  pageKey: string
-  messages: OrderedMap<
-    number | string,
-    Type.Message | { id: string; ts: number }
-  >
-}
 
 export enum ChatView {
   MessageList,
@@ -124,14 +115,14 @@ class ChatStore extends Store<ChatStoreState> {
 
     jumpToMessage: async (
       msgId: number,
-      highlight: boolean = true,
+      highlight = true,
       msgParentId?: number
     ) => {
       log.debug('jumpToMessage with messageId: ', msgId)
       const accountId = selectedAccountId()
 
       // check if jump to message is in same chat, if not switch
-      let message = await BackendRemote.rpc.getMessage(
+      const message = await BackendRemote.rpc.getMessage(
         accountId,
         msgId as number
       )
