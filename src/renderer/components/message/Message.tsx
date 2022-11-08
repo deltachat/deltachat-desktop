@@ -293,7 +293,7 @@ const Message = (props: {
 
     return (
       <div
-        className='info-message'
+        className={'info-message' + (isWebxdcInfo ? ' webxdc-info' : '')}
         onContextMenu={showMenu}
         onClick={() => {
           isWebxdcInfo &&
@@ -302,7 +302,25 @@ const Message = (props: {
         }}
       >
         <div className='bubble'>
+          {isWebxdcInfo && message.parentId && (
+            <img
+              src={runtime.getWebxdcIconURL(
+                selectedAccountId(),
+                message.parentId
+              )}
+              onClick={() => openWebxdc(message.id)}
+            />
+          )}
           {text}
+          {isWebxdcInfo && message.parentId && (
+            <img
+              src={runtime.getWebxdcIconURL(
+                selectedAccountId(),
+                message.parentId
+              )}
+              onClick={() => openWebxdc(message.id)}
+            />
+          )}
           {direction === 'outgoing' &&
             (status === 'sending' || status === 'error') && (
               <div
