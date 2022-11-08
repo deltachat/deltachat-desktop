@@ -2,7 +2,7 @@ import { Classes, Switch, Alignment, Icon } from '@blueprintjs/core'
 import classNames from 'classnames'
 import { getLogger } from '../../../shared/logger'
 import debounce from 'debounce'
-import React, { useContext, useEffect, useMemo, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
 import ScreenController from '../../ScreenController'
 import { Avatar } from '../Avatar'
@@ -13,7 +13,12 @@ import {
   DeltaDialogContent,
 } from '../dialogs/DeltaDialog'
 import filesizeConverter from 'filesize'
-import { BackendRemote, EffectfulBackendActions, Type } from '../../backend-com'
+import {
+  BackendRemote,
+  EffectfulBackendActions,
+  onDCEvent,
+  Type,
+} from '../../backend-com'
 import { runtime } from '../../runtime'
 
 const log = getLogger('renderer/components/AccountsScreen')
@@ -258,27 +263,16 @@ function AccountItem({
 
   const [unreadCount, setUnreadCount] = useState(0)
 
-  const updateUnreadCount = useMemo(
-    () =>
-      debounce((account_id: number) => {
-        if (account_id === login.id) {
-          BackendRemote.rpc
-            .getFreshMsgs(login.id)
-            .catch(log.error)
-            .then(u => setUnreadCount(u?.length || 0))
-        }
-      }, 200),
-    [login.id]
-  )
-
   useEffect(() => {
-    updateUnreadCount(login.id)
-    const emitter = BackendRemote.getContextEvents(login.id)
-    emitter.on('IncomingMsg', updateUnreadCount.bind(null, login.id))
-    return () => {
-      emitter.off('IncomingMsg', updateUnreadCount.bind(null, login.id))
-    }
-  }, [login.id, updateUnreadCount])
+    const update = debounce(() => {
+      BackendRemote.rpc
+        .getFreshMsgs(login.id)
+        .catch(log.error)
+        .then(u => setUnreadCount(u?.length || 0))
+    }, 200)
+    update()
+    return onDCEvent(login.id, 'IncomingMsg', update)
+  }, [login.id])
 
   const tx = useTranslationFunction()
 
