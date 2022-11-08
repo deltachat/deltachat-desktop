@@ -216,7 +216,7 @@ class MessageListStore extends Store<MessageListState> {
             ...state.messageCache,
             ...payload.newMessageCacheItems,
           },
-          // newestFetchedMessageIndex: payload.newestFetchedMessageIndex,
+          newestFetchedMessageListItemIndex: payload.newestFetchedMessageIndex,
           viewState: ChatViewReducer.fetchedIncomingMessages(state.viewState),
         }
         return modifiedState
@@ -665,16 +665,35 @@ class MessageListStore extends Store<MessageListState> {
         this.chatId,
         C.DC_GCM_ADDDAYMARKER
       )
-      let indexStart = -1
       let indexEnd = -1
-      for (let index = 0; index < messageListItems.length; index++) {
-        const msgListItem = messageListItems[index]
-        if (this.state.messageListItems.includes(msgListItem)) continue
-        if (indexStart === -1) {
-          indexStart = index
+      const last_item = this.state.messageListItems[
+        this.state.messageListItems.length - 1
+      ]
+
+      let indexStart = messageListItems.findIndex(item => {
+        if (last_item.kind !== item.kind) {
+          return false
+        } else {
+          if (item.kind === 'message') {
+            return item.msg_id === (last_item as any).msg_id
+          } else {
+            return item.timestamp === (last_item as any).timestamp
+          }
         }
-        indexEnd = index
+      })
+
+      // check if there is an intersection
+      if (indexStart !== -1 && messageListItems[indexStart + 1]) {
+        indexStart = indexStart + 1
       }
+
+      // if index start is not the end set, then set the end to the end
+      if (indexStart !== messageListItems.length - 1) {
+        indexEnd = messageListItems.length - 1
+      } else {
+        indexEnd = indexStart
+      }
+
       // Only add incoming messages if we could append them directly to messagePages without having a hole
       if (
         this.state.newestFetchedMessageListItemIndex !== -1 &&
