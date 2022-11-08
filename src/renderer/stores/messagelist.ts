@@ -269,6 +269,17 @@ class MessageListStore extends Store<MessageListState> {
         return modifiedState
       }, 'setMessageIds')
     },
+    clearJumpStack: () => {
+      if (this.state.jumpToMessageStack.length !== 0) {
+        this.setState(state => {
+          const modifiedState: MessageListState = {
+            ...state,
+            jumpToMessageStack: [],
+          }
+          return modifiedState
+        }, 'clearJumpStack')
+      }
+    },
   }
 
   effect = {

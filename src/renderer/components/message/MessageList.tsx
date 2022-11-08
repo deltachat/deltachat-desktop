@@ -95,7 +95,7 @@ export default function MessageList({
     store: {
       scheduler,
       effect: { jumpToMessage },
-      reducer: { unlockScroll },
+      reducer: { unlockScroll, clearJumpStack },
       activeView,
     },
     state: {
@@ -214,6 +214,9 @@ export default function MessageList({
         distanceToBottom >= onePageAwayFromNewestMessageTreshold
       if (newShowJumpDownButton != showJumpDownButton) {
         setShowJumpDownButton(newShowJumpDownButton)
+      }
+      if (!newShowJumpDownButton) {
+        clearJumpStack()
       }
 
       //console.log('onScroll', distanceToTop, distanceToBottom)
@@ -394,9 +397,7 @@ export default function MessageList({
           unreadMessageInViewIntersectionObserver
         }
       />
-      {(showJumpDownButton === true ||
-        countUnreadMessages > 0 ||
-        jumpToMessageStack.length > 0) && (
+      {(showJumpDownButton === true || countUnreadMessages > 0) && (
         <JumpDownButton
           countUnreadMessages={countUnreadMessages}
           jumpToMessage={jumpToMessage}
