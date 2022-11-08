@@ -10,6 +10,7 @@
 - instantly react to changing chat background color
 - made frontend code more independent from electron
 - reduce notifications when many messages are received at once.
+- update deltachat-node and deltachat/jsonrpc-client to `v1.99.0`
 
 ### Fixed
 
