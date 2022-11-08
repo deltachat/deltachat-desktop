@@ -12,6 +12,7 @@
 - reduce notifications when many messages are received at once.
 - update deltachat-node and deltachat/jsonrpc-client to `v1.99.0`
 - jump down button: show different icon (one arrow), when jumping to message in jump to message list
+- add webxdc's icon to webxdc info messages
 
 ### Fixed
 
@@ -28,6 +29,7 @@
 - Fix notifications when showNotificationContent was disabled
 - fix unread count on scroll down button
 - make recently seen dot in navbar disappear automatically #2926
+- only webxdc info messages jump to parent message on click now
 
 ## [1.33.0] - 2022-10-16
 
