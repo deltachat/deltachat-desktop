@@ -441,13 +441,11 @@
   }
 
   &.webxdc-info > .bubble {
-    border-radius: 20px;
-    background-color: rgb(0 0 0 / 29%);
-    padding: 7px 7px;
+    padding: 7px 8px;
     img {
       height: 18px;
       width: 18px;
-      margin: 0px 5px;
+      margin-right: 5px;
       border-radius: 7%; // webxdc border radius
       vertical-align: bottom;
       background-color: black;
