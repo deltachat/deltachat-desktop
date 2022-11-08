@@ -289,12 +289,16 @@ const Message = (props: {
 
   // Info Message
   if (message.isInfo) {
+    const isWebxdcInfo = message.systemMessageType === 'WebxdcInfoMessage'
+
     return (
       <div
         className='info-message'
         onContextMenu={showMenu}
         onClick={() => {
-          message.parentId && jumpToMessage(message.parentId, true, message.id)
+          isWebxdcInfo &&
+            message.parentId &&
+            jumpToMessage(message.parentId, true, message.id)
         }}
       >
         <div className='bubble'>
