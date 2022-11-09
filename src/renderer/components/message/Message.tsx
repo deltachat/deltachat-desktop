@@ -35,7 +35,7 @@ import { ConversationType } from './MessageList'
 import { getDirection, truncateText } from '../../../shared/util'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { ContextMenuItem } from '../ContextMenu'
-import { Type } from '../../backend-com'
+import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 
 const Avatar = (
@@ -226,6 +226,16 @@ function buildContextMenu(
         label: tx('open_attachment'),
         action: openAttachmentInShell.bind(null, message),
       },
+    // Save Sticker to sticker collection
+    message.viewType === 'Sticker' && {
+      label: tx('save_sticker'),
+      action: () =>
+        BackendRemote.rpc.miscSaveSticker(
+          selectedAccountId(),
+          message.id,
+          tx('saved')
+        ),
+    },
     // Download attachment
     showAttachmentOptions && {
       label: tx('save_as'),
