@@ -38,6 +38,7 @@
 - only webxdc info messages jump to parent message on click now
 - fix scroll down when sending message
 - fix jump to info-message
+- don't show "copy text" menu entry for stickers
 
 ## [1.33.0] - 2022-10-16
 
