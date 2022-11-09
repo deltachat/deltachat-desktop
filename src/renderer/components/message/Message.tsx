@@ -294,6 +294,7 @@ const Message = (props: {
     return (
       <div
         className={'info-message' + (isWebxdcInfo ? ' webxdc-info' : '')}
+        id={String(message.id)}
         onContextMenu={showMenu}
         onClick={() => {
           isWebxdcInfo &&

@@ -272,9 +272,14 @@ export default function MessageList({
     if (scrollTo.type === 'scrollToMessage') {
       log.debug('scrollTo: scrollToMessage: ' + scrollTo.msgId)
 
-      const domElement = document.querySelector(
+      let domElement = document.querySelector(
         `.message[id="${scrollTo.msgId.toString()}"]`
       )
+      if (!domElement) {
+        domElement = document.querySelector(
+          `.info-message[id="${scrollTo.msgId.toString()}"]`
+        )
+      }
 
       if (!domElement) {
         log.debug(
@@ -496,7 +501,7 @@ export const MessageListInner = React.memo(
                 )
               } else {
                 return (
-                  <div className='info-message'>
+                  <div className='info-message' id={String(messageId.msg_id)}>
                     <div
                       className='bubble'
                       style={{

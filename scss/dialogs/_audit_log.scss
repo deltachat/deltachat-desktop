@@ -70,6 +70,14 @@
         padding: 7px 14px;
       }
 
+      img {
+        border-radius: 7%;
+        height: 28px;
+        width: 28px;
+        vertical-align: middle;
+        margin-inline-end: 5px;
+      }
+
       &:hover {
         background: rgba($color: grey, $alpha: 0.25);
         border-radius: 10px 0 0 10px;
