@@ -18,6 +18,7 @@
 - jump down button: show different icon (one arrow), when jumping to message in jump to message list
 - add webxdc's icon to webxdc info messages
 - chat audit log also show menu on click
+- add context menu option to save a sticker to the own sticker menu
 
 ### Fixed
 
