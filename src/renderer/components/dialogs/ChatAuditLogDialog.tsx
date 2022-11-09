@@ -20,6 +20,8 @@ import { getDirection } from '../../../shared/util'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import { runtime } from '../../runtime'
+import { jumpToMessage } from '../helpers/ChatMethods'
 
 const log = getLogger('render/ChatAuditLog')
 
@@ -30,6 +32,24 @@ function buildContextMenu(
 ) {
   const tx = window.static_translate // don't use the i18n context here for now as this component is inefficient (rendered one menu for every message)
   return [
+    // Show in Chat
+    {
+      label: tx('show_in_chat'),
+      action: () => {
+        closeDialogCallback()
+        setTimeout(() => jumpToMessage(message.id, true))
+      },
+    },
+    // Show Webxdc in Chat
+    message.systemMessageType == 'WebxdcInfoMessage' && {
+      label: tx('show_webxdc_in_chat'),
+      action: () => {
+        if (message.parentId) {
+          closeDialogCallback()
+          jumpToMessage(message.parentId, true)
+        }
+      },
+    },
     // Reply
     {
       label: tx('reply_noun'),
@@ -183,20 +203,26 @@ export default function ChatAuditLogDialog(props: {
                 log.debug(`Missing message with id ${id}`)
                 return
               }
-              const { text, timestamp } = message
+              const { text, timestamp, systemMessageType, parentId } = message
               const direction = getDirection(message)
               const status = mapCoreMsgStatus2String(message.state)
+              const accountId = selectedAccountId()
               return (
                 <li
                   key={id}
                   className='info'
-                  onClick={openMessageInfo.bind(null, message)}
-                  onContextMenu={ev => message && showMenu(message, ev)}
+                  onClick={ev => showMenu(message, ev)}
+                  onContextMenu={ev => showMenu(message, ev)}
                 >
                   <p>
                     <div className='timestamp'>
                       {moment.unix(timestamp).format('LT')}
                     </div>
+                    {systemMessageType == 'WebxdcInfoMessage' && parentId && (
+                      <img
+                        src={runtime.getWebxdcIconURL(accountId, parentId)}
+                      />
+                    )}
                     {text}
                     {direction === 'outgoing' &&
                       (status === 'sending' || status === 'error') && (

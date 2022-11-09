@@ -4,6 +4,10 @@
 
 ### Added
 
+- show webxdc icon in chat audit log
+- add option to jump to message in chat audit log
+- add option to jump to webxdc message in chat audit log
+
 ### Changed
 - Update translations (19.10.2022)
 - Tray icon is now by default enabled. Settings got moved to Settings->Advanced
@@ -13,6 +17,7 @@
 - update deltachat-node and deltachat/jsonrpc-client to `v1.99.0`
 - jump down button: show different icon (one arrow), when jumping to message in jump to message list
 - add webxdc's icon to webxdc info messages
+- chat audit log also show menu on click
 
 ### Fixed
 
@@ -31,6 +36,7 @@
 - make recently seen dot in navbar disappear automatically #2926
 - only webxdc info messages jump to parent message on click now
 - fix scroll down when sending message
+- fix jump to info-message
 
 ## [1.33.0] - 2022-10-16
 
