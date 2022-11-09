@@ -463,11 +463,7 @@ const Message = (props: {
           onClick={onClickMessageBody}
         >
           {message.quote !== null && (
-            <Quote
-              quote={message.quote}
-              isSticker={message.viewType === 'Sticker'}
-              msgParentId={message.id}
-            />
+            <Quote quote={message.quote} msgParentId={message.id} />
           )}
           {message.file && !isSetupmessage && message.viewType !== 'Webxdc' && (
             <Attachment
@@ -509,21 +505,18 @@ export default Message
 
 export const Quote = ({
   quote,
-  isSticker,
   msgParentId,
 }: {
   quote: Type.MessageQuote
-  isSticker?: Boolean
   msgParentId?: number
 }) => {
   const tx = window.static_translate
 
   const hasMessage = quote.kind === 'WithMessage'
 
-  const authorStyle =
-    !hasMessage || isSticker ? {} : { color: quote.authorDisplayColor }
+  const authorStyle = hasMessage ? { color: quote.authorDisplayColor } : {}
   const borderStyle =
-    !hasMessage || isSticker || quote.isForwarded
+    !hasMessage || quote.isForwarded
       ? {}
       : { borderLeftColor: quote.authorDisplayColor }
 
