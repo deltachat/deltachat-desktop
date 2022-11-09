@@ -16,6 +16,7 @@
 
 ### Fixed
 
+- prevent double context menu on macOS
 - fix setting color chat background color #2659
 - Fix that results of search in chat are not ordered by newest first
 - Fix messagelist overscrolling #2956 
