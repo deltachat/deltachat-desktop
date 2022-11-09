@@ -160,7 +160,7 @@ function buildContextMenu(
    * - OR Copy email to clipboard
    * - Fallback: OR Copy message text to copy
    */
-  let copy_item: ContextMenuItem = {
+  let copy_item: ContextMenuItem | false = {
     label: tx('menu_copy_text_to_clipboard'),
     action: () => {
       text && runtime.writeClipboardText(text)
@@ -184,6 +184,9 @@ function buildContextMenu(
       label: tx('menu_copy_email_to_clipboard'),
       action: () => runtime.writeClipboardText(email),
     }
+  }
+  if (copy_item && message.viewType === 'Sticker') {
+    copy_item = false
   }
 
   const showAttachmentOptions = !!message.file && !message.isSetupmessage
