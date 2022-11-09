@@ -40,6 +40,7 @@
 - fix scroll down when sending message
 - fix jump to info-message
 - don't show "copy text" menu entry for stickers
+- fix text and author color in quote in sticker replies
 
 ## [1.33.0] - 2022-10-16
 
