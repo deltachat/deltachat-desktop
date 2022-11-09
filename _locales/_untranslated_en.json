@@ -56,7 +56,10 @@
   "notify_bundle_new_messages": {
     "message": "%1$d messages in %2$d chats"
   },
-  "show_webxdc_in_chat" : {
+  "show_webxdc_in_chat": {
     "message": "Show Private App in Chat"
+  },
+  "save_sticker": {
+    "message": "Save Sticker"
   }
 }
