@@ -22,7 +22,7 @@ let queuedNotifications: {
   [accountId: number]: queuedNotification[]
 } = {}
 
-async function incomingMessageHandler(
+function incomingMessageHandler(
   accountId: number,
   chatId: number,
   messageId: number
@@ -41,12 +41,6 @@ async function incomingMessageHandler(
   if (document.hasFocus()) {
     // window has focus don't send notification
     log.debug('notification ignored: window has focus')
-    return
-  }
-
-  if (await isMuted(accountId, chatId)) {
-    // chat is muted
-    log.debug('notification ignored: chat muted')
     return
   }
 
@@ -165,8 +159,33 @@ async function flushNotifications(accountId: number) {
     // make it work even if there is nothing
     queuedNotifications[accountId] = []
   }
-  const notifications = [...queuedNotifications[accountId]]
+  let notifications = [...queuedNotifications[accountId]]
   queuedNotifications = []
+
+  // filter out muted chats:
+  const uniqueChats = [...new Set(notifications.map(n => n.chatId))]
+  const mutedChats = (
+    await Promise.all(
+      uniqueChats.map(id =>
+        isMuted(accountId, id).then(muted => ({ muted, id }))
+      )
+    )
+  )
+    .filter(e => e.muted)
+    .map(e => e.id)
+  if (mutedChats.length > 0) {
+    // some chats are muted
+    log.debug(`ignoring notifications of ${mutedChats.length} muted chats`)
+  }
+  notifications = notifications.filter(notification => {
+    if (mutedChats.includes(notification.chatId)) {
+      // muted chat
+      log.debug('notification ignored: chat muted', notification)
+      return false
+    } else {
+      return true
+    }
+  })
 
   if (notifications.length > notificationLimit) {
     showGroupedNotification(accountId, notifications)
