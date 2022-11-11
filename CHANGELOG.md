@@ -2,8 +2,12 @@
 
 ## [Unreleased][unreleased]
 
-### Added
+## [1.33.1] - 2022-11-09 - Testrelease
 
+> This is a testrelease, learn more at <https://support.delta.chat/t/help-testing-the-upcoming-1-33-x-release/2278>
+
+### Added
+- add webxdc's icon to webxdc info messages
 - show webxdc icon in chat audit log
 - add option to jump to message in chat audit log
 - add option to jump to webxdc message in chat audit log
@@ -16,7 +20,6 @@
 - reduce notifications when many messages are received at once.
 - update deltachat-node and deltachat/jsonrpc-client to `v1.100.0`
 - jump down button: show different icon (one arrow), when jumping to message in jump to message list
-- add webxdc's icon to webxdc info messages
 - chat audit log also show menu on click
 - add context menu option to save a sticker to the own sticker menu
 
@@ -1766,7 +1769,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.33.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.33.1...HEAD
+
+[1.33.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.33.0...v1.33.1
 
 [1.33.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.32.1...v1.33.0
 

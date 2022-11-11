@@ -44,4 +44,20 @@ Thanks for testing DeltaChat, please report bugs on Github.
 
 Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md` // no anchor link because this is a test version
   )
+  BackendRemote.rpc.addDeviceMessage(
+    accountId,
+    'changelog-version-1.33.1-version0',
+    `What's new in 1.33.1?
+
+- Many messagelist/chat view bugs fixed
+- tray icon is now enabled by default
+- when receiving many notifications at once, they will be grouped now.
+- some improvements to the chat audit log
+- it's now possible to save stickers
+
+Thanks for testing Delta Chat, please report bugs on GitHub.
+Especially contact us if you encounter a specific bug, where desktop feels like it is half frozen, where it reacts to clicks, but not to events (unread badge in chat list won't disappear, message state stays spinning even though the message is already sent out successfully): https://github.com/deltachat/deltachat-desktop/issues/2992
+
+Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md` // no anchor link because this is a test version
+  )
 }
