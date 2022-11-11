@@ -49,11 +49,11 @@ Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANG
     'changelog-version-1.33.1-version0',
     `What's new in 1.33.1?
 
-- Many of the bugs with the message list/chat view are fixed now
+- Many messagelist/chat view bugs fixed
 - tray icon is now enabled by default
 - when receiving many notifications at once, they will be grouped now.
 - some improvements to the chat audit log
-- add context menu option to save a sticker to the own sticker menu
+- it's now possible to save stickers
 
 Thanks for testing Delta Chat, please report bugs on GitHub.
 Especially contact us if you encounter a specific bug, where desktop feels like it is half frozen, where it reacts to clicks, but not to events (unread badge in chat list won't disappear, message state stays spinning even though the message is already sent out successfully): https://github.com/deltachat/deltachat-desktop/issues/2992
