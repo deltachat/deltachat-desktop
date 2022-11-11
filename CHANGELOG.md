@@ -14,7 +14,7 @@
 - instantly react to changing chat background color
 - made frontend code more independent from electron
 - reduce notifications when many messages are received at once.
-- update deltachat-node and deltachat/jsonrpc-client to `v1.99.0`
+- update deltachat-node and deltachat/jsonrpc-client to `v1.100.0`
 - jump down button: show different icon (one arrow), when jumping to message in jump to message list
 - add webxdc's icon to webxdc info messages
 - chat audit log also show menu on click
