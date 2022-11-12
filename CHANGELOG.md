@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+
+- dclogin scheme in desktop file
+
 ## [1.33.1] - 2022-11-09 - Testrelease
 
 > This is a testrelease, learn more at <https://support.delta.chat/t/help-testing-the-upcoming-1-33-x-release/2278>

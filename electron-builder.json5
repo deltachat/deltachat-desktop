@@ -6,7 +6,7 @@
     {
       name: 'QR code data',
       role: 'Viewer',
-      schemes: ['openpgp4fpr', 'dcaccount', 'dclogin:'],
+      schemes: ['openpgp4fpr', 'dcaccount', 'dclogin'],
     },
     {
       name: 'Send Mails via MailTo Scheme',
