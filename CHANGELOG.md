@@ -3,6 +3,16 @@
 ## [Unreleased][unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+## [1.33.2] - 2022-16-09 - Testrelease
+
+> This is a testrelease, learn more at <https://support.delta.chat/t/help-testing-the-upcoming-1-33-x-release/2278>
+
+### Added
 - Add experimental option to enable markdown rendering in messages
 
 ### Changed
@@ -14,7 +24,7 @@
 
 ### Fixed
 
-- dclogin scheme in desktop file
+- fix dclogin scheme in desktop file
 - don't log jsonrpc requests to logfile #3015
 
 ## [1.33.1] - 2022-11-09 - Testrelease
@@ -1784,7 +1794,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.33.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.33.2...HEAD
+
+[1.33.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.33.1...v1.33.2
 
 [1.33.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.33.0...v1.33.1
 

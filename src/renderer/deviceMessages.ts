@@ -60,4 +60,17 @@ Especially contact us if you encounter a specific bug, where desktop feels like 
 
 Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md` // no anchor link because this is a test version
   )
+  BackendRemote.rpc.addDeviceMessage(
+    accountId,
+    'changelog-version-1.33.2-version0',
+    `What's new in 1.33.2?
+
+- Fixed a bug that caused deltachat to cause 100% cpu usage
+- Add experimental option to enable markdown in messages
+
+Thanks for testing Delta Chat, please report bugs on GitHub.
+Especially contact us if you encounter a specific bug, where desktop feels like it is half frozen, where it reacts to clicks, but not to events (unread badge in chat list won't disappear, message state stays spinning even though the message is already sent out successfully): https://github.com/deltachat/deltachat-desktop/issues/2992
+
+Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md` // no anchor link because this is a test version
+  )
 }
