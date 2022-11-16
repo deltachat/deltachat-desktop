@@ -594,6 +594,7 @@ function WebxdcMessageContent({ message }: { message: Type.Message }) {
     name: 'INFO MISSING!',
     document: undefined,
     summary: 'INFO MISSING!',
+    internetAccess: false
   }
 
   return (
@@ -611,6 +612,7 @@ function WebxdcMessageContent({ message }: { message: Type.Message }) {
         {truncateText(info.name, 42)}
       </div>
       <div>{info.summary}</div>
+      {info.internetAccess && <div className='experimental'><b>EXPERIMENTAL</b> Webxdc that has full internet access, be careful! (only works in saved messages)</div>}
       <button
         className={'delta-button-round'}
         onClick={() => openWebxdc(message.id)}

@@ -144,6 +144,11 @@
       button.delta-button-round {
         padding: 6px 13px;
       }
+      div.experimental {
+        color: var(--colorDanger);
+        background: var(--contextMenuBg);
+        border-radius: 8px;
+      }
     }
 
     .webxdc + .text span {
