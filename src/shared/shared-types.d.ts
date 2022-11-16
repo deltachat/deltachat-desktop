@@ -62,6 +62,7 @@ export interface DesktopSettingsType {
   minimizeToTray: boolean
   syncAllAccounts: boolean
   lastSaveDialogLocation: string | undefined
+  experimentalEnableMarkdownInMessages: boolean
 }
 
 export interface RC_Config {

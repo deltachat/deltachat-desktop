@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { LabeledLink, Link } from './Link'
 import {
   parse_desktop_set,
+  parse_text,
   ParsedElement,
 } from '@deltachat/message_parser_wasm/message_parser_wasm'
 import { getLogger } from '../../../shared/logger'
@@ -11,11 +12,20 @@ import { selectChat, setChatView } from '../helpers/ChatMethods'
 import { ChatView } from '../../stores/chat'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import SettingsStoreInstance from '../../stores/settings'
 
 const log = getLogger('renderer/message-markdown')
 
-const parseMessage: (message: string) => ParsedElement[] = m =>
+let parseMessage: (message: string) => ParsedElement[] = m =>
   parse_desktop_set(m)
+
+SettingsStoreInstance.subscribe(newState => {
+  if (newState?.desktopSettings.experimentalEnableMarkdownInMessages) {
+    parseMessage = m => parse_text(m, true)
+  } else {
+    parseMessage = m => parse_desktop_set(m)
+  }
+})
 
 function renderElement(elm: ParsedElement, key?: number): JSX.Element {
   switch (elm.t) {

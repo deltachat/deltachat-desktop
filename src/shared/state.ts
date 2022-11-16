@@ -24,5 +24,6 @@ export function getDefaultState(): DesktopSettingsType {
     minimizeToTray: true,
     syncAllAccounts: true,
     lastSaveDialogLocation: undefined,
+    experimentalEnableMarkdownInMessages: false,
   }
 }

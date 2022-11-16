@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- Add experimental option to enable markdown rendering in messages
+
 ### Changed
 
 - update deltachat-node and deltachat/jsonrpc-client to `v1.101.0`
