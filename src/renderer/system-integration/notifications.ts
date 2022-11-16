@@ -119,7 +119,7 @@ async function showGroupedNotification(
         const { chatName, chatProfileImage } = notificationInfo
         runtime.showNotification({
           title: chatName,
-          body: tx('notify_bundle_new_messages_in_one_chat', String(msgCount)),
+          body: tx('chat_n_new_messages', String(msgCount), 'other'),
           icon: chatProfileImage || null,
           chatId: chatIds[0],
           messageId: 0, // just select chat on click, no specific message
