@@ -421,7 +421,7 @@ export function EditGroupNameDialog({
         title={
           !isBroadcast
             ? tx('menu_group_name_and_image')
-            : tx('menu_broadcast_list_name')
+            : tx('menu_edit_name')
         }
       />
       <DeltaDialogBody>
@@ -443,7 +443,7 @@ export function EditGroupNameDialog({
             key='groupname'
             id='groupname'
             placeholder={
-              !isBroadcast ? tx('group_name') : tx('menu_broadcast_list_name')
+              !isBroadcast ? tx('group_name') : tx('name_desktop')
             }
             value={groupName}
             onChange={(
