@@ -55,8 +55,8 @@ space seperate terms, exclude with -, if your term contains spaces you should ex
 
 -👻                 don't show events from background accounts (not selected accounts)
 -📡                 don't show any events
--renderer/jsonrpc   don't show jsonrpc messages
-renderer/jsonrpc    show only jsonrpc messages
+-[JSONRPC]   don't show jsonrpc messages
+[JSONRPC]    show only jsonrpc messages
 
 Start deltachat with --devmode (or --log-debug and --log-to-console) argument to show full log output.
   `
@@ -79,6 +79,10 @@ export function setLogHandler(
 ) {
   handler = LogHandler
   rc = rcObject
+}
+
+export function hasDebugEnabled() {
+  return rc['log-debug']
 }
 
 function log(
