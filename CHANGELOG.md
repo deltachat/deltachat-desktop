@@ -12,6 +12,7 @@
 ### Fixed
 
 - dclogin scheme in desktop file
+- don't log jsonrpc requests to logfile #3015
 
 ## [1.33.1] - 2022-11-09 - Testrelease
 
