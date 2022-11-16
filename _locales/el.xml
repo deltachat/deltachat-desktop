@@ -14,22 +14,33 @@
     <string name="automatic">Αυτόματα</string>
     <string name="strict">Αυστηρός</string>
     <string name="open">Άνοιγμα</string>
+    <string name="download">Λήψη</string>
+    <string name="join">Μπες</string>
     <string name="delete">Διαγραφή</string>
     <string name="info">Πληροφορίες</string>
     <string name="update">Ενημέρωση</string>
+    <string name="emoji">Emoji</string>
     <string name="back">Πίσω</string>
     <string name="close">Κλείσιμο</string>
     <string name="forward">Προώθηση</string>
     <!-- Verb "to archive", as in "put a chat in the archive", not a noun "The Archive". -->
     <string name="archive">Αρχειοθέτηση</string>
+    <!-- Verb "to unarchive", as in "remove a chat from the archive", opposite of the previous string -->
+    <string name="unarchive">Αποαρχειοθ</string>
     <string name="mute">Σίγαση</string>
+    <string name="ephemeral_messages">Μηνύματα που εξαφανίζονται</string>
     <string name="save">Αποθήκευση</string>
     <string name="media">Πολυμέσα</string>
     <string name="profile">Προφίλ</string>
+    <!-- Placeholder text when something is loading -->
+    <string name="loading">Φόρτωση…</string>
+    <string name="hide">Απόκρυψη</string>
+    <string name="activate">Ενεργοποίηση</string>
     <string name="always">Πάντα</string>
     <string name="not_now">Όχι τώρα</string>
     <string name="never">Ποτέ</string>
     <string name="done">Τέλος</string>
+    <string name="undo">Αναίρεση</string>
     <!-- For the next view or as "continue". Should be as short as possible. -->
     <string name="next">Επόμενο</string>
     <string name="no_browser_installed">Δεν υπάρχει εγκατεστημένος φυλλομετρητής</string>
@@ -41,6 +52,11 @@
     <string name="yesterday">Χθες</string>
     <string name="this_week">Αυτήν την εβδομάδα</string>
     <string name="this_month">Αυτόν το μήνα</string>
+    <!-- Shown beside messages that are "N minutes old". Prefer short strings, or well-known abbreviations. -->
+    <plurals name="n_minutes">
+        <item quantity="one">%d λεπτό</item>
+        <item quantity="other">%d λεπτά</item>
+    </plurals>
     <!-- Shown beside messages that are "N hours old". Prefer short strings, or well-known abbreviations. -->
     <plurals name="n_hours">
         <item quantity="one">%d ώρα</item>
@@ -50,18 +66,30 @@
         <item quantity="one">%d μέλος</item>
         <item quantity="other">%d μέλη</item>
     </plurals>
+    <!-- Short form for "N Chats Selected" or "N Messages Selected": in English, "N Selected" -->
+    <plurals name="n_selected">
+        <item quantity="one">%d επιλεγμένο</item>
+        <item quantity="other">%d επιλεγμένα</item>
+    </plurals>
+
+    <string name="self">Εγώ</string>
     <string name="draft">Πρόχειρο</string>
     <string name="image">Εικόνα</string>
     <!-- Used in summaries as "Draft: Reply", similar as "Draft: Image". Use a noun here, not a verb (not: "to reply") -->
     <string name="reply_noun">Απάντηση</string>
+    <string name="gif">GIF</string>
+    <!-- "Stickers" as known from other messengers; in some languages, the English "Sticker" is fine. -->
+    <string name="sticker">Αυτοκόλλητο</string>
     <string name="images">Εικόνες</string>
     <string name="audio">Ήχοι</string>
+    <string name="voice_message">Μήνυμα φωνής</string>
     <string name="video">Βίντεο</string>
     <string name="documents">Αρχεία</string>
     <string name="contact">Επαφή</string>
     <string name="camera">Κάμερα</string>
     <!-- As in "start a video recording" or "take a photo"; eg. the description of the "shutter button" in cameras -->
     <string name="capture">Λήψη</string>
+    <string name="switch_camera">Αλλαγή κάμερας</string>
     <string name="location">Τοποθεσία</string>
     <string name="gallery">Πινακοθήκη</string>
     <string name="file">Αρχείο</string>
@@ -85,44 +113,94 @@
     <string name="fast">Γρήγορο</string>
     <string name="slow">Αργό</string>
 
+    <string name="menu_new_group">Νέα ομάδα</string>
     <string name="menu_send">Αποστολή</string>
+    <string name="menu_toggle_keyboard">Εναλλαγή πληκτρολογίου emoji</string>
+    <string name="menu_edit_group">Επεξεργασία ομάδας</string>
+    <string name="menu_add_attachment">Προσθήκη συνημμένου</string>
+    <string name="menu_leave_group">Αποχώρηση απ\' την ομάδα</string>
+    <string name="menu_message_details">Στοιχεία μηνύματος</string>
+    <string name="menu_copy_to_clipboard">Αντιγραφή στο πρόχειρο</string>
+    <string name="menu_copy_text_to_clipboard">Αντιγραφή κειμένου</string>
+    <string name="menu_forward">Προώθηση μηνύματος</string>
+    <string name="menu_reply">Απάντηση στο μήνυμα</string>
+    <string name="menu_mute">Σίγαση ειδοποιήσεων</string>
     <string name="menu_unmute">Αποσίγαση</string>
+    <string name="menu_all_media">Όλα τα πολυμέσα</string>
     <string name="menu_share">Μοιράσου</string>
     <!-- Verb "to block sth." usually a mailing list or a contact, not a noun -->
     <string name="block">Φραγή</string>
+    <string name="accept">Αποδοχή</string>
     <string name="menu_play">Αναπαραγωγή</string>
     <string name="menu_pause">Παύση</string>
+    <string name="menu_scroll_to_bottom">Πήγαινε στο τέρμα</string>
     <string name="menu_help">Βοήθεια</string>
+    <string name="menu_select_all">Επιλογή όλων</string>
     <string name="menu_settings">Ρυθμίσεις</string>
     <string name="menu_advanced">Για προχωρημένους</string>
+    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <string name="pin">Καρφίτσωμα</string>
+    <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
+    <string name="unpin">Ξεκαρφίτσωμα</string>
+    <!-- Menu item beside an app/chat that adds an icon to the system's home screen. If the user taps that icon, the app/chat is opened directly. -->
+    <string name="add_to_home_screen">Προσθήκη στην κεντρική οθόνη</string>
+
     <string name="mute_for_one_hour">Σίγαση για 1 ώρα</string>
     <string name="mute_for_two_hours">Σίγαση για 2 ώρες</string>
     <string name="mute_for_one_day">Σίγαση για 1 ημέρα</string>
     <string name="mute_for_seven_days">Σίγαση για 7 ημέρες</string>
+    <!-- %1$s is replaced by a comma-separated list of names -->
+    <string name="ask_remove_members">Αφαίρεση του/της %1$s από την ομάδα;</string>
     <!-- contact list -->
     <string name="contacts_title">Επαφές</string>
     <string name="contacts_empty_hint">Δεν υπάρχουν επαφές.</string>
 
 
+    <string name="chat_camera_unavailable">Η κάμερα δεν είναι διαθέσιμη.</string>
     <string name="chat_record_slide_to_cancel">Σύρε για ακύρωση</string>
     <string name="chat_record_explain">Πάτα και κράτα πατημένο για να ηχογραφήσεις ένα φωνητικό μήνυμα, άφησε το κουμπί για αποστολή</string>
+    <string name="chat_share_with_title">Μοιράσου με</string>
     <string name="chat_input_placeholder">Μήνυμα</string>
     <string name="chat_archived_label">Αρχειοθετημένα</string>
+    <string name="chat_request_label">Αίτημα</string>
     <!-- Should match "Saved" from "Saved messages" -->
     <string name="saved">Αποθηκεύτηκε</string>
+    <!-- webxdc -->
+    <!-- "Start..." button for an app -->
+    <string name="start_app">Εκκίνηση…</string>
     <!-- search -->
     <string name="search">Αναζήτηση</string>
+    <string name="search_no_result_for_x">Δε βρέθηκαν αποτελέσματα για \"%s\"</string>
+
+
+    <!-- create/edit groups, contact/group profile -->
+    <string name="group_name">Όνομα ομάδας</string>
+    <string name="remove_group_image">Αφαίρεση φωτογραφίας ομάδας;</string>
+    <string name="group_create_button">Δημιουργία ομάδας</string>
+    <string name="group_add_members">Προσθήκη μελών</string>
     <string name="tab_contact">Επαφή</string>
+    <string name="tab_group">Ομάδα</string>
     <string name="tab_gallery">Εικόνα ή βίντεο</string>
+    <string name="media_preview">Προεπισκόπιση</string>
+    <string name="send_message">Αποστολή μηνύματος</string>
+    <!-- Shown in the title bar if the app is "Connecting"; prefer short strings. The ellipsis is a single character (…), not three (...) -->
+    <string name="connectivity_connecting">Συνδέεται…</string>
+    <string name="sending">Στέλνεται…</string>
+    <!-- Subtitle in quota context of "Connetivity" view. Should be be plural always, no number is prefixed. -->
+    <string name="messages">Μηνύματα</string>
     <string name="login_inbox">Εισερχόμενα</string>
     <string name="login_outbox">Εξερχόμενα</string>
+    <string name="pref_your_name">Το όνομά σου</string>
+    <string name="pref_enter_sends">Το Enter στέλνει</string>
     <string name="pref_enter_sends_explain">Τα μηνύματα θα στέλνονται με το πάτημα του Enter</string>
     <string name="pref_vibrate">Δόνηση</string>
+    <string name="pref_screen_security">Ασφάλεια οθόνης</string>
     <!-- Translators: Must indicate that there is no guarantee as the system may not honor our request. -->
     <string name="pref_screen_security_explain">Να μην επιτρέπεται η καταγραφή της οθόνης (screenshots) στη λίστα με τα πρόσφατα και μέσα στην εφαρμογή</string>
     <string name="pref_notifications">Ειδοποιήσεις</string>
     <string name="pref_notifications_show">Εμφάνιση</string>
     <string name="pref_notifications_priority">Προτεραιότητα</string>
+    <string name="pref_led_color">Χρώμα LED</string>
     <string name="pref_sound">Ήχος</string>
     <string name="pref_silent">Σε σίγαση</string>
     <string name="pref_privacy">Ιδιωτικότητα</string>
@@ -133,14 +211,79 @@
     <string name="pref_appearance">Εμφάνιση</string>
     <string name="pref_theme">Θέμα</string>
     <string name="pref_language">Γλώσσα</string>
+    <string name="pref_incognito_keyboard">Κρυφό πληκτρολόγιο</string>
     <!-- Translators: Must indicate that there is no guarantee as the system may not honor our request. -->
     <string name="pref_incognito_keyboard_explain">Αίτηση πληκτρολογίου για να απενεργοποιηθεί η προσωποποιημένη εκμάθηση</string>
+    <string name="pref_read_receipts">Αποδεικτικά ανάγνωσης</string>
     <string name="pref_read_receipts_explain">Αν τα αποδεικτικά ανάγνωσης είναι απενεργοποιημένα, δε θα μπορείς να δεις αποδεικτικά ανάγνωσης από άλλους/ες.</string>
+    <string name="pref_use_system_emoji">Χρήση emoji συστήματος</string>
     <string name="pref_use_system_emoji_explain">Απενεργοποίηση της ενσωματωμένης υποστήριξης για emoji του Delta Chat</string>
+    <string name="pref_app_access">Πρόσβαση εφαρμογής</string>
     <string name="pref_chats">Συνομιλίες</string>
+    <string name="pref_in_chat_sounds">Ήχοι μέσα στη συνομιλία</string>
+    <string name="pref_message_text_size">Μέγεθος γραμματοσειράς μηνύματος</string>
     <string name="pref_other">Άλλο</string>
+    <string name="pref_backup_explain">Δημιουργία αντίγραφου ασφαλείας συνομιλιών στην εξωτερική μνήμη</string>
+    <string name="pref_background">Ταπετσαρία συνομιλίας</string>
+    <string name="pref_background_btn_default">Χρήση προκαθορισμένου</string>
+    <string name="pref_background_btn_gallery">Επιλογή</string>
     <string name="pref_show_emails_all">Όλα</string>
     <string name="autocrypt_continue_transfer_retry">Επανάληψη</string>
+    <string name="systemmsg_subject_for_new_contact">Μήνυμα από τον/την %1$s</string>
+    <string name="group_image_changed_by_you">Άλλαξες το εικονίδιο της ομάδας.</string>
+    <!-- %1$s will be replaced by name and address of the contact who did the action -->
+    <string name="group_image_changed_by_other">Ο/Η %1$s άλλαξε το εικονίδιο της ομάδας.</string>
+    <!-- %1$s will be replaced by name and address of the contact added to the group -->
+    <string name="add_member_by_you">Πρόσθεσες τον/την %1$s.</string>
+    <!-- %1$s will be replaced by name and address of the contact added to the group, %2$s will be replaced by name and address of the contact who did the action -->
+    <string name="add_member_by_other">Ο/Η %2$s πρόσθεσε τον/την %1$s.</string>
+    <!-- %1$s will be replaced by name and address of the contact removed from the group -->
+    <string name="remove_member_by_you">Αφαίρεσες τον/την %1$s.</string>
+    <!-- %1$s will be replaced by name and address of the contact removed from the group, %2$s will be replaced by name and address of the contact who did the action -->
+    <string name="remove_member_by_other">Ο/Η %2$s αφαίρεσε τον/την %1$s.</string>
+    <string name="group_left_by_you">Έφυγες απ\\' την ομάδα.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="group_left_by_other">Ο/Η %1$s έφυγε απ\\' την ομαδα.</string>
+    <string name="ephemeral_timer_disabled_by_you">Απενεργοποίησες τα μηνύματα που εξαφανίζονται.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_disabled_by_other">Ο/Η %1$s απενεργοποίησε τα μηνύματα που εξαφανίζονται.</string>
+    <!-- %1$s will be replaced by the number of seconds (always >1) the timer is set to -->
+    <string name="ephemeral_timer_seconds_by_you">Όρισες το χρόνο εξαφάνισης των μηνυμάτων σε %1$s δευτερόλεπτα.</string>
+    <!-- %1$s will be replaced by the number of seconds (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_seconds_by_other">Ο/Η %2$s όρισε το χρόνο εξαφάνισης των μηνυμάτων σε %1$s δευτερόλεπτα.</string>
+    <string name="ephemeral_timer_1_minute_by_you">Όρισες το χρόνο εξαφάνισης των μηνυμάτων σε 1 λεπτό.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_1_minute_by_other">Ο/Η %1$s όρισε το χρόνο εξαφάνισης των μηνυμάτων σε 1 λεπτό.</string>
+    <string name="ephemeral_timer_1_hour_by_you">Όρισες το χρόνο εξαφάνισης των μηνυμάτων σε 1 ώρα.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_1_hour_by_other">Ο/Η %1$s όρισε το χρόνο εξαφάνισης των μηνυμάτων σε 1 ώρα.</string>
+    <string name="ephemeral_timer_1_day_by_you">Όρισες το χρόνο εξαφάνισης των μηνυμάτων σε 1 ημέρα.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_1_day_by_other">Ο/Η %1$s όρισε το χρόνο εξαφάνισης των μηνυμάτων σε 1 ημέρα.</string>
+    <string name="ephemeral_timer_1_week_by_you">Όρισες το χρόνο εξαφάνισης των μηνυμάτων σε 1 εβδομάδα.</string>
+    <!-- %1$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_1_week_by_other">Ο/Η %1$s όρισε το χρόνο εξαφάνισης των μηνυμάτων σε 1 εβδομάδα.</string>
+    <!-- %1$s will be replaced by the number of minutes (always >1) the timer is set to -->
+    <string name="ephemeral_timer_minutes_by_you">Όρισες το χρόνο εξαφάνισης των μηνυμάτων σε %1$s  λεπτά.</string>
+    <!-- %1$s will be replaced by the number of minutes (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_minutes_by_other">Ο/Η %2$s όρισε το χρόνο εξαφάνισης των μηνυμάτων σε %1$s λεπτά.</string>
+    <!-- %1$s will be replaced by the number of hours (always >1) the timer is set to -->
+    <string name="ephemeral_timer_hours_by_you">Όρισες το χρόνο εξαφάνισης των μηνυμάτων σε %1$s ώρες.</string>
+    <!-- %1$s will be replaced by the number of hours (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_hours_by_other">Ο/Η %2$s όρισε το χρόνο εξαφάνισης των μηνυμάτων σε %1$s ώρες.</string>
+    <!-- %1$s will be replaced by the number of days (always >1) the timer is set to -->
+    <string name="ephemeral_timer_days_by_you">Όρισες το χρόνο εξαφάνισης των μηνυμάτων σε %1$s ημέρες.</string>
+    <!-- %1$s will be replaced by the number of days (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_days_by_other">Ο/Η %2$s όρισε το χρόνο εξαφάνισης των μηνυμάτων σε %1$s ημέρες.</string>
+    <!-- %1$s will be replaced by the number of weeks (always >1) the timer is set to -->
+    <string name="ephemeral_timer_weeks_by_you">Όρισες το χρόνο εξαφάνισης των μηνυμάτων σε %1$s εβδομάδες.</string>
+    <!-- %1$s will be replaced by the number of weeks (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <string name="ephemeral_timer_weeks_by_other">Ο/Η %2$s όρισε το χρόνο εξαφάνισης των μηνυμάτων σε %1$s εβδομάδες.</string>
+    <!-- qr code stuff -->
+    <string name="qr_code">Κωδικός QR</string>
+    <string name="qrscan_title">Σκανάρισμα κωδικού QR</string>
+    <!-- notifications  -->
+    <string name="notify_dismiss">Απόρριψη</string>
     <string name="notify_reply_button">Απάντηση</string>
     <string name="notify_new_message">Νέο μήνυμα</string>
     <string name="notify_priority_high">Υψηλή</string>
@@ -153,10 +296,20 @@
     <!-- permissions -->
     <string name="perm_required_title">Χρειάζονται δικαιώματα πρόσβασης</string>
     <string name="perm_continue">Συνέχεια</string>
+    <!-- ImageEditorHud -->
+    <string name="ImageEditorHud_draw_anywhere_to_blur">Ζωγράφισε οπουδήποτε για να θολώσεις</string>
+    <string name="ImageEditorHud_add_text">Σύνταξη κειμένου</string>
+    <string name="ImageEditorHud_blur">Θόλωμα</string>
+    <string name="ImageEditorHud_flip">Εναλλαγή</string>
     <string name="global_menu_preferences_language_desktop">Γλώσσα</string>
     <string name="global_menu_file_desktop">Αρχείο</string>
     <string name="global_menu_edit_desktop">Eπεξεργασία</string>
+    <string name="global_menu_edit_undo_desktop">Αναίρεση</string>
+    <string name="global_menu_edit_copy_desktop">Αντιγραφή</string>
+    <string name="global_menu_view_desktop">Εμφάνιση</string>
     <string name="global_menu_help_desktop">Βοήθεια</string>
+    <string name="delete_message_desktop">Διαγραφή μηνύματος</string>
+    <string name="more_info_desktop">Περισσότερες πληροφορίες</string>
     <string name="remove_desktop">Αφαίρεση</string>
     <string name="save_desktop">Αποθήκευση</string>
     </resources>
