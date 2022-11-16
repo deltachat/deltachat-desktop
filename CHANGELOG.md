@@ -2,6 +2,11 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+
+- update deltachat-node and deltachat/jsonrpc-client to `v1.101.0`
+  - fixes 100% cpu usage bug
+
 ### Fixed
 
 - dclogin scheme in desktop file
