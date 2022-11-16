@@ -188,7 +188,7 @@ const Sidebar = React.memo(
               href='https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md'
               label={'v' + VERSION}
             />{' '}
-            - <a onClick={onOpenAbout}>{tx('about')}</a>
+            - <a onClick={onOpenAbout}>{tx('global_menu_help_about_desktop')}</a>
           </div>
         </div>
       </>
