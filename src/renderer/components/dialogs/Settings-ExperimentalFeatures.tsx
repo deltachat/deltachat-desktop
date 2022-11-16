@@ -73,6 +73,10 @@ export function SettingsExperimentalFeatures({
         key: 'enableChatAuditLog',
         label: tx('menu_chat_audit_log'),
       })}
+      {renderDTSettingSwitch({
+        key: 'experimentalEnableMarkdownInMessages',
+        label: 'Render Markdown in Messages',
+      })}
       <SettingsSelector
         onClick={onClickEdit.bind(null, false)}
         currentValue={showVideochatInstance(

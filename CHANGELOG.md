@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- Add experimental option to enable markdown rendering in messages
+
 ### Changed
 
 - add ability for experimental testing webxdc apps to have full internet access #3005
