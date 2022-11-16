@@ -114,7 +114,7 @@ export function useThreeDotMenu(selectedChat: Type.FullChat | null) {
           action: onLeaveGroup,
         },
       {
-        label: tx('clear_chat'),
+        label: tx('menu_clear_chat'),
         action: clearChat.bind(null, chatId),
       },
       {
