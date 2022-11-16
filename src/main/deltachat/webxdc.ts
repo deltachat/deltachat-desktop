@@ -21,6 +21,7 @@ const open_apps: {
     msg_obj: Message
     msgId: number
     accountId: number
+    internet_access: boolean
   }
 } = {}
 
@@ -141,9 +142,11 @@ export default class DCWebxdc extends SplitOut {
                 callback({
                   mimeType: Mime.lookup(filename) || '',
                   data: blob,
-                  headers: {
-                    'Content-Security-Policy': CSP,
-                  },
+                  headers: open_apps[id].internet_access
+                    ? {}
+                    : {
+                        'Content-Security-Policy': CSP,
+                      },
                 })
               } else {
                 callback({ statusCode: 404 })
@@ -188,6 +191,7 @@ export default class DCWebxdc extends SplitOut {
         msg_obj: webxdc_message_ref,
         accountId,
         msgId: msg_id,
+        internet_access: webxdcInfo['internetAccess'],
       }
 
       if (platform() !== 'darwin') {

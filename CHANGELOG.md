@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+
+- add ability for experimental testing webxdc apps to have full internet access #3005
+
 ### Fixed
 
 - dclogin scheme in desktop file
