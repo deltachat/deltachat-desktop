@@ -419,9 +419,7 @@ export function EditGroupNameDialog({
     >
       <DeltaDialogHeader
         title={
-          !isBroadcast
-            ? tx('menu_group_name_and_image')
-            : tx('menu_edit_name')
+          !isBroadcast ? tx('menu_group_name_and_image') : tx('menu_edit_name')
         }
       />
       <DeltaDialogBody>
@@ -442,9 +440,7 @@ export function EditGroupNameDialog({
           <DeltaInput
             key='groupname'
             id='groupname'
-            placeholder={
-              !isBroadcast ? tx('group_name') : tx('name_desktop')
-            }
+            placeholder={!isBroadcast ? tx('group_name') : tx('name_desktop')}
             value={groupName}
             onChange={(
               event: React.FormEvent<HTMLElement> &
