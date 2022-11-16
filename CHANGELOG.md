@@ -5,6 +5,9 @@
 ### Changed
 
 - add ability for experimental testing webxdc apps to have full internet access #3005
+- update deltachat-node and deltachat/jsonrpc-client to `v1.101.0`
+  - fixes 100% cpu usage bug
+- Update translations (16.11.2022)
 
 ### Fixed
 
