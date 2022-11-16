@@ -91,12 +91,13 @@ async function showGroupedNotification(
   accountId: number,
   notifications: queuedNotification[]
 ) {
+  const msgCount = notifications.length
   const tx = window.static_translate
 
   if (!SettingsStoreInstance.state?.desktopSettings.showNotificationContent) {
     runtime.showNotification({
       title: appName,
-      body: tx('notify_new_messages'),
+      body: tx('chat_n_new_messages', String(msgCount), 'other'),
       icon: null,
       chatId: 0,
       messageId: 0,
@@ -104,7 +105,6 @@ async function showGroupedNotification(
     })
   } else {
     const chatIds = [...new Set(notifications.map(({ chatId }) => chatId))]
-    const msgCount = notifications.length
 
     try {
       if (chatIds.length === 1) {
