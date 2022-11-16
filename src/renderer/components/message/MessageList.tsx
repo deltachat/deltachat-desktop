@@ -249,6 +249,7 @@ export default function MessageList({
       newestFetchedMessageListItemIndex,
       messageListItems.length,
       scheduler,
+      clearJumpStack,
     ]
   )
 
