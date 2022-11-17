@@ -8,6 +8,8 @@
 
 ### Fixed
 
+- Fix valid emails with whitespaces at start/end not recognized as valid email addresses
+
 ## [1.33.2] - 2022-16-09 - Testrelease
 
 > This is a testrelease, learn more at <https://support.delta.chat/t/help-testing-the-upcoming-1-33-x-release/2278>
