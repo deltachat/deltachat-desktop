@@ -137,7 +137,7 @@ export default function ChatList(props: {
 
     const contactId = await BackendRemote.rpc.createContact(
       selectedAccountId(),
-      queryStr,
+      queryStr.trim(),
       null
     )
     await createChatByContactIdAndSelectIt(contactId)

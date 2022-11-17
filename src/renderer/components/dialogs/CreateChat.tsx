@@ -110,7 +110,7 @@ export default function CreateChat(props: {
 
     const contactId = await BackendRemote.rpc.createContact(
       selectedAccountId(),
-      queryStr,
+      queryStr.trim(),
       null
     )
     await createChatByContactIdAndSelectIt(contactId)
@@ -418,7 +418,7 @@ export function AddMemberInnerDialog({
 
     const contactId = await BackendRemote.rpc.createContact(
       accountId,
-      queryStr,
+      queryStr.trim(),
       null
     )
     const contact = await BackendRemote.rpc.getContact(accountId, contactId)

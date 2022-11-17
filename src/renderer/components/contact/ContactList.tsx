@@ -134,7 +134,7 @@ export function useContactsNew(listFlags: number, initialQueryStr: string) {
           queryStr
         )
         const queryStrIsValidEmail = await BackendRemote.rpc.checkEmailValidity(
-          queryStr
+          queryStr.trim()
         )
         setState({ contacts, queryStrIsValidEmail })
       }, 200),
@@ -173,7 +173,7 @@ export function useContactIds(listFlags: number, queryStr: string | undefined) {
           queryStr || null
         )
         const queryStrIsValidEmail = await BackendRemote.rpc.checkEmailValidity(
-          queryStr || ''
+          queryStr?.trim() || ''
         )
         setState({ contactIds, queryStrIsValidEmail })
       }, 200),
