@@ -2,6 +2,9 @@ import classNames from 'classnames'
 import React, { forwardRef, useState } from 'react'
 import { DeltaRadiobutton } from '../LoginForm'
 
+export type EncryptionModus  = 'never_encrypt' | 'encrypt_if_possible' | 'always_encrypt'
+
+
 function EncryptionMode({
   className,
   text,
@@ -30,9 +33,10 @@ export const EncryptionModusPopup = forwardRef<
   HTMLDivElement,
   {
     setShowEncryptionModusPopup: (state: boolean) => void
+    encryptionModus: EncryptionModus
+    setEncryptionModus: (modus: EncryptionModus) => void 
   }
->((props, ref) => {
-  const [state, setState] = useState('encrypt_if_possible')
+>(({setShowEncryptionModusPopup, encryptionModus, setEncryptionModus}, ref) => {
   return (
     <>
       <div className='encryption-modus-popup' ref={ref}>
@@ -40,20 +44,20 @@ export const EncryptionModusPopup = forwardRef<
           <EncryptionMode
             className='never_encrypt'
             text='Never encrypt'
-            checked={state === 'never_encrypt'}
-            onClick={() => setState('never_encrypt')}
+            checked={encryptionModus === 'never_encrypt'}
+            onClick={() => setEncryptionModus('never_encrypt')}
           />
           <EncryptionMode
             className='encrypt_if_possible'
             text='Encrypt if possible'
-            checked={state === 'encrypt_if_possible'}
-            onClick={() => setState('encrypt_if_possible')}
+            checked={encryptionModus === 'encrypt_if_possible'}
+            onClick={() => setEncryptionModus('encrypt_if_possible')}
           />
           <EncryptionMode
             className='always_encrypt'
             text='Always encrypt'
-            checked={state === 'always_encrypt'}
-            onClick={() => setState('always_encrypt')}
+            checked={encryptionModus === 'always_encrypt'}
+            onClick={() => setEncryptionModus('always_encrypt')}
           />
         </div>
       </div>

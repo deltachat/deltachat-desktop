@@ -22,7 +22,8 @@ import { selectedAccountId } from '../../ScreenController'
 import { MessageTypeAttachmentSubset } from '../attachment/Attachment'
 import { runtime } from '../../runtime'
 import { C } from 'deltachat-node/node/dist/constants'
-import { EncryptionModusPopup } from '../message/EncyptionModusPopup'
+import { EncryptionModus, EncryptionModusPopup } from '../message/EncyptionModusPopup'
+import classNames from 'classnames'
 
 const log = getLogger('renderer/composer')
 
@@ -84,6 +85,7 @@ const Composer = forwardRef<
   const [showEncryptionModusPopup, setShowEncryptionModusPopup] = useState(
     false
   )
+  const [encryptionModus, setEncryptionModus] = useState<EncryptionModus>('encrypt_if_possible')
 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
   const encryptionModusPopupRef = useRef<HTMLDivElement>(null)
@@ -301,10 +303,9 @@ const Composer = forwardRef<
             <span />
           </div>
           <div
-            className='emoji-button'
-            ref={pickerButtonRef}
+            className={classNames('encryption-modus-button', encryptionModus)}
             onClick={onEncryptionModusIconClick}
-            aria-label={tx('emoji')}
+            aria-label={tx('encryption_modus')}
           >
             <span />
           </div>
@@ -324,6 +325,8 @@ const Composer = forwardRef<
           <EncryptionModusPopup
             ref={encryptionModusPopupRef}
             setShowEncryptionModusPopup={setShowEncryptionModusPopup}
+            encryptionModus={encryptionModus}
+            setEncryptionModus={setEncryptionModus}
           />
         )}
       </div>

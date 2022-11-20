@@ -108,6 +108,40 @@
       }
     }
 
+    .encryption-modus-button {
+      height: 40px;
+      padding: 0px 3px;
+      &:focus {
+        outline: none;
+      }
+      &:hover {
+        cursor: pointer;
+      }
+      &.always_encrypt {
+        span {
+          -webkit-mask: url(../images/padlock.svg) no-repeat center;
+          background: green;
+        }
+      }
+      &.never_encrypt {
+        span {
+          -webkit-mask: url(../images/icons/padlock-strike-through.svg)
+            no-repeat center;
+          background: red;
+        }
+      }
+
+      span {
+        display: block;
+        width: 25px;
+        height: 25px;
+        margin-top: calc((40px - 25px) / 2);
+        -webkit-mask: url(../images/icons/autocrypt.svg) no-repeat center;
+        -webkit-mask-size: contain !important;
+        background-color: var(--colorPrimary);
+      }
+    }
+
     .send-button-wrapper {
       width: 32px;
       height: 32px;
