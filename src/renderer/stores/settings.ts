@@ -12,6 +12,7 @@ export interface SettingsStoreState {
     sentbox_watch: string
     mvbox_move: string
     e2ee_enabled: string
+    manual_encryption_mode: string
     addr: string
     displayname: string
     selfstatus: string
@@ -33,6 +34,7 @@ const settingsKeys: Array<keyof SettingsStoreState['settings']> = [
   'sentbox_watch',
   'mvbox_move',
   'e2ee_enabled',
+  'manual_encryption_mode',
   'addr',
   'displayname',
   'selfstatus',

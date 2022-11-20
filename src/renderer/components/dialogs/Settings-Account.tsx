@@ -73,6 +73,7 @@ export function SettingsAccountInner(onClose: () => void) {
         'mvbox_move',
         'only_fetch_mvbox',
         'e2ee_enabled',
+	'manual_encryption_mode',
         'mail_server',
         'mail_user',
         'mail_port',
