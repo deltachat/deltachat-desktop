@@ -126,7 +126,7 @@ export default function SettingsEncryption({
       <div className='bp4-callout'>{tx('autocrypt_explain')}</div>
       {renderDeltaSwitch2({
         key: 'manual_encryption_mode',
-        label: tx('autocrypt_prefer_e2ee'),
+        label: tx('manual_encryption_mode_settings'),
       })}
     </>
   )

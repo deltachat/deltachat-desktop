@@ -41,6 +41,9 @@
   "search_in_chat": {
     "message": "Search in Chat"
   },
+  "manual_encryption_mode_settings":{
+    "message": "Manually set encryption per chat"
+  },
   "exit_search": {
     "message": "Exit Search"
   },
