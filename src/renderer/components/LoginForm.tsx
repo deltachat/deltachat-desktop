@@ -535,3 +535,23 @@ export function ConfigureProgressDialog({
     </Dialog>
   )
 }
+
+export function DeltaRadiobutton({
+  checked,
+  onClick,
+}: {
+  checked: boolean
+  onClick: () => void
+}) {
+  return (
+    <>
+      <input
+        type='radio'
+        value='system'
+        checked={checked}
+        onClick={onClick}
+        readOnly
+      />
+    </>
+  )
+}

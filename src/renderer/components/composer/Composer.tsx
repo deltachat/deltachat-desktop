@@ -22,6 +22,7 @@ import { selectedAccountId } from '../../ScreenController'
 import { MessageTypeAttachmentSubset } from '../attachment/Attachment'
 import { runtime } from '../../runtime'
 import { C } from 'deltachat-node/node/dist/constants'
+import { EncryptionModusPopup } from '../message/EncyptionModusPopup'
 
 const log = getLogger('renderer/composer')
 
@@ -80,8 +81,12 @@ const Composer = forwardRef<
 
   const chatId = selectedChat.id
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+  const [showEncryptionModusPopup, setShowEncryptionModusPopup] = useState(
+    false
+  )
 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
+  const encryptionModusPopupRef = useRef<HTMLDivElement>(null)
   const pickerButtonRef = useRef<HTMLDivElement>(null)
 
   const composerSendMessage = async () => {
@@ -127,7 +132,14 @@ const Composer = forwardRef<
     }
   }
 
-  const onEmojiIconClick = () => setShowEmojiPicker(!showEmojiPicker)
+  const onEmojiIconClick = () => {
+    setShowEmojiPicker(!showEmojiPicker)
+    setShowEncryptionModusPopup(false)
+  }
+  const onEncryptionModusIconClick = () => {
+    setShowEncryptionModusPopup(!showEncryptionModusPopup)
+    setShowEmojiPicker(false)
+  }
   const onEmojiSelect = (emoji: EmojiData) => {
     log.debug(`EmojiPicker: Selected ${emoji.id}`)
     messageInputRef.current?.insertStringAtCursorPosition(
@@ -143,15 +155,26 @@ const Composer = forwardRef<
       clientX: number
       clientY: number
     }) => {
-      if (!emojiAndStickerRef.current) return
-      const boundingRect = emojiAndStickerRef.current.getBoundingClientRect()
-      const clickIsOutSideEmojiPicker = !insideBoundingRect(
-        clientX,
-        clientY,
-        boundingRect,
-        2
-      )
-      if (clickIsOutSideEmojiPicker) setShowEmojiPicker(false)
+      if (emojiAndStickerRef.current) {
+        const emojiBoundingRect = emojiAndStickerRef.current.getBoundingClientRect()
+        const clickIsOutSideEmojiPicker = !insideBoundingRect(
+          clientX,
+          clientY,
+          emojiBoundingRect,
+          2
+        )
+        clickIsOutSideEmojiPicker && setShowEmojiPicker(false)
+      }
+      if (encryptionModusPopupRef.current) {
+        const encryptionModusBoundingRect = encryptionModusPopupRef.current.getBoundingClientRect()
+        const clickIsOutSideEncryptionModusPopup = !insideBoundingRect(
+          clientX,
+          clientY,
+          encryptionModusBoundingRect,
+          2
+        )
+        clickIsOutSideEncryptionModusPopup && setShowEncryptionModusPopup(false)
+      }
     }
 
     document.addEventListener('click', onClick)
@@ -277,6 +300,14 @@ const Composer = forwardRef<
           >
             <span />
           </div>
+          <div
+            className='emoji-button'
+            ref={pickerButtonRef}
+            onClick={onEncryptionModusIconClick}
+            aria-label={tx('emoji')}
+          >
+            <span />
+          </div>
           <div className='send-button-wrapper' onClick={composerSendMessage}>
             <button aria-label={tx('menu_send')} />
           </div>
@@ -287,6 +318,12 @@ const Composer = forwardRef<
             ref={emojiAndStickerRef}
             onEmojiSelect={onEmojiSelect}
             setShowEmojiPicker={setShowEmojiPicker}
+          />
+        )}
+        {showEncryptionModusPopup && (
+          <EncryptionModusPopup
+            ref={encryptionModusPopupRef}
+            setShowEncryptionModusPopup={setShowEncryptionModusPopup}
           />
         )}
       </div>
