@@ -146,6 +146,10 @@ class ChatStore extends Store<ChatStoreState> {
         await this.effect.selectChat(chat.id)
       }
 
+      if (this.state.activeView !== ChatView.MessageList) {
+        this.reducer.setView(ChatView.MessageList)
+      }
+
       setTimeout(() => {
         // jump to message
         window.__internal_jump_to_message?.(msgId, highlight, msgParentId)
