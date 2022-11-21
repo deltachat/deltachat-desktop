@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- fix jump to message from gallery
 
 ## [1.33.2] - 2022-16-09 - Testrelease
 
