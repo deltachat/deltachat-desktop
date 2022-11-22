@@ -8,6 +8,7 @@
 
 ### Fixed
 - fix jump to message from gallery
+- webxdc: allow `data:` in `connect-src` in CSP
 
 ## [1.33.2] - 2022-16-09 - Testrelease
 
