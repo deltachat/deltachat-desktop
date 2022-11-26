@@ -7,10 +7,20 @@
 ### Changed
 
 ### Fixed
+
+
+<a id="1.34.0"></a>
+
+## [1.34.0] - 2022-11-24 - Testrelease
+
+### Changed
+- update deltachat-node and deltachat/jsonrpc-client to `v1.102.0`
+
+### Fixed
 - fix jump to message from gallery
 - webxdc: allow `data:` in `connect-src` in CSP
 
-## [1.33.2] - 2022-16-09 - Testrelease
+## [1.33.2] - 2022-11-16 - Testrelease
 
 > This is a testrelease, learn more at <https://support.delta.chat/t/help-testing-the-upcoming-1-33-x-release/2278>
 
@@ -1796,7 +1806,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.33.2...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.34.0...HEAD
+
+[1.34.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.33.2...v1.34.0
 
 [1.33.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.33.1...v1.33.2
 

@@ -1,76 +1,20 @@
-import { BUILD_TIMESTAMP, VERSION } from '../shared/build-info'
-import { Timespans, DAYS_UNTIL_UPDATE_SUGGESTION } from '../shared/constants'
 import { BackendRemote } from './backend-com'
-
-export function hintUpdateIfNessesary(accountId: number) {
-  if (
-    Date.now() >
-    Timespans.ONE_DAY_IN_SECONDS * DAYS_UNTIL_UPDATE_SUGGESTION * 1000 +
-      BUILD_TIMESTAMP
-  ) {
-    BackendRemote.rpc.addDeviceMessage(
-      accountId,
-      `update-suggestion-${VERSION}`,
-      `This build is over ${DAYS_UNTIL_UPDATE_SUGGESTION} days old - There might be a new version available. -> https://get.delta.chat`
-    )
-  }
-}
-
-setInterval(
-  // If the dc is always on
-  () => {
-    if (window.__selectedAccountId) {
-      hintUpdateIfNessesary(window.__selectedAccountId)
-    }
-  },
-  Timespans.ONE_DAY_IN_SECONDS * 1000
-)
 
 export function updateDeviceChats(accountId: number) {
   BackendRemote.rpc.addDeviceMessage(
     accountId,
-    'changelog-version-1.33.0-version1',
-    `What's new in 1.33.0?
+    'changelog-version-1.34.0-version0',
+    `What's new in 1.34.0?
 
-- We made some speed improvements by moving to a new "backend" architecture
-- We added some exiting new features:
-  - Clear chat history
-  - Search for Messages in chat
-  - jump down button
-  - a recently seen indicator
-- many smaller bugfixes fixes and improvements
+    ⚡️ Faster UI thanks to jsonrpc
+    🧹 Clear chat history
+    🔍 Search for Messages in chat
+    ⏬ jump down button
+    🤗 Friendlier contact lists: Ordered by last seen and contacts seen within 10 minutes are marked by a dot 🟢
+    🎛️ Tray icon is now enabled by default
+    🔔 when receiving multiple Notifications at once, they will be grouped into one single Notification
+    😀 right click to add sticker to the sticker selector
+    ✨ Many smaller bug fixes and general improvements
 
-Thanks for testing DeltaChat, please report bugs on Github.
-
-Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md` // no anchor link because this is a test version
-  )
-  BackendRemote.rpc.addDeviceMessage(
-    accountId,
-    'changelog-version-1.33.1-version0',
-    `What's new in 1.33.1?
-
-- Many messagelist/chat view bugs fixed
-- tray icon is now enabled by default
-- when receiving many notifications at once, they will be grouped now.
-- some improvements to the chat audit log
-- it's now possible to save stickers
-
-Thanks for testing Delta Chat, please report bugs on GitHub.
-Especially contact us if you encounter a specific bug, where desktop feels like it is half frozen, where it reacts to clicks, but not to events (unread badge in chat list won't disappear, message state stays spinning even though the message is already sent out successfully): https://github.com/deltachat/deltachat-desktop/issues/2992
-
-Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md` // no anchor link because this is a test version
-  )
-  BackendRemote.rpc.addDeviceMessage(
-    accountId,
-    'changelog-version-1.33.2-version0',
-    `What's new in 1.33.2?
-
-- Fixed a bug that caused deltachat to cause 100% cpu usage
-- Add experimental option to enable markdown in messages
-
-Thanks for testing Delta Chat, please report bugs on GitHub.
-Especially contact us if you encounter a specific bug, where desktop feels like it is half frozen, where it reacts to clicks, but not to events (unread badge in chat list won't disappear, message state stays spinning even though the message is already sent out successfully): https://github.com/deltachat/deltachat-desktop/issues/2992
-
-Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md` // no anchor link because this is a test version
-  )
+Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1.34.0`)
 }
