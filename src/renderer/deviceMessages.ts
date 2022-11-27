@@ -6,13 +6,13 @@ export function updateDeviceChats(accountId: number) {
     'changelog-version-1.34.0-version0',
     `What's new in 1.34.0?
 
-    ⚡️ Faster UI thanks to jsonrpc
+    ⚡️ Smooth rendering. Much snappier scrolling. The new version is easy on your patience and is the result of a refactoring that took more than a year (for our tech-savvy friends: we are now using JSON-RPC under the hood and threw away lots of old, annoying code :)  
     🧹 Clear chat history
-    🔍 Search for Messages in chat
+    🔍 Search for messages in chat
     ⏬ jump down button
-    🤗 Friendlier contact lists: Ordered by last seen and contacts seen within 10 minutes are marked by a dot 🟢
+    🤗 Friendlier contact lists: ordered by last seen and contacts seen within 10 minutes are marked by a dot 🟢
     🎛️ Tray icon is now enabled by default
-    🔔 when receiving multiple Notifications at once, they will be grouped into one single Notification
+    🔔 when receiving multiple notifications at once, they will be grouped into one single notification
     😀 right click to add sticker to the sticker selector
     ✨ Many smaller bug fixes and general improvements
 
