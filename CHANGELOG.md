@@ -11,7 +11,7 @@
 
 <a id="1.34.0"></a>
 
-## [1.34.0] - 2022-11-24 - Testrelease
+## [1.34.0] - 2022-11-27
 
 ### Changed
 - update deltachat-node and deltachat/jsonrpc-client to `v1.102.0`
