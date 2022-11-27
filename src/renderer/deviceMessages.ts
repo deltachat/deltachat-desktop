@@ -16,5 +16,5 @@ export function updateDeviceChats(accountId: number) {
     😀 right click to add sticker to the sticker selector
     ✨ Many smaller bug fixes and general improvements
 
-Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1.34.0`)
+Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1_34_0`)
 }
