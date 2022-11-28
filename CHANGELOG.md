@@ -7,7 +7,7 @@
 ### Changed
 
 ### Fixed
-
+- fix webxdc: allow `self` and `blob:` in `connect-src` in CSP
 
 <a id="1_34_0"></a>
 

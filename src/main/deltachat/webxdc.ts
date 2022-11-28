@@ -36,7 +36,7 @@ const CSP =
   style-src 'self' 'unsafe-inline' blob: ;\
   font-src 'self' data: blob: ;\
   script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: ;\
-  connect-src data: ;\
+  connect-src 'self' data: blob: ;\
   img-src 'self' data: blob: ;"
 
 export default class DCWebxdc extends SplitOut {
