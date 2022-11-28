@@ -105,6 +105,7 @@ export default function MessageList({
       messageListItems,
       viewState,
       jumpToMessageStack,
+      loaded,
     },
     fetchMoreBottom,
     fetchMoreTop,
@@ -399,6 +400,7 @@ export default function MessageList({
         messageCache={messageCache}
         messageListRef={messageListRef}
         chatStore={chatStore}
+        loaded={loaded}
         unreadMessageInViewIntersectionObserver={
           unreadMessageInViewIntersectionObserver
         }
@@ -431,6 +433,7 @@ export const MessageListInner = React.memo(
     messageCache: { [msgId: number]: T.Message }
     messageListRef: React.MutableRefObject<HTMLDivElement | null>
     chatStore: ChatStoreStateWithChatSet
+    loaded: boolean
     unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
   }) => {
     const {
@@ -440,6 +443,7 @@ export const MessageListInner = React.memo(
       activeView,
       messageListRef,
       chatStore,
+      loaded,
       unreadMessageInViewIntersectionObserver,
     } = props
 
@@ -472,6 +476,14 @@ export const MessageListInner = React.memo(
         onScroll(null)
       }
     })
+
+    if (!loaded) {
+      return (
+        <div id='message-list' ref={messageListRef} onScroll={onScroll}>
+          <ul></ul>
+        </div>
+      )
+    }
 
     return (
       <div id='message-list' ref={messageListRef} onScroll={onScroll}>

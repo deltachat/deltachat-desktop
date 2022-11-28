@@ -9,6 +9,7 @@
 ### Fixed
 - fix webxdc: allow `self` and `blob:` in `connect-src` in CSP
 - indentation in update device message
+- fix "no messages" blinking up for a second when loading a chat
 
 <a id="1_34_0"></a>
 
