@@ -7,7 +7,7 @@
 ### Changed
 
 ### Fixed
-
+- indentation in update device message
 
 <a id="1_34_0"></a>
 
