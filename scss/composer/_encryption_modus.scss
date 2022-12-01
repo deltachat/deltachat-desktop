@@ -21,13 +21,13 @@ $emp-height: 20vh;
       height: 33%;
       padding: 0px 30px;
       cursor: pointer;
-      &.always_encrypt {
+      &.ForceEncrypted {
         .encryption-mode-icon {
           -webkit-mask: url(../images/padlock.svg) no-repeat center;
           background: green;
         }
       }
-      &.never_encrypt {
+      &.ForcePlaintext {
         .encryption-mode-icon {
           -webkit-mask: url(../images/icons/padlock-strike-through.svg)
             no-repeat center;

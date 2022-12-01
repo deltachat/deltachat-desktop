@@ -1,9 +1,7 @@
+import {EncryptionModus} from '@deltachat/jsonrpc-client/dist/generated/types'
 import classNames from 'classnames'
 import React, { forwardRef, useState } from 'react'
 import { DeltaRadiobutton } from '../LoginForm'
-
-export type EncryptionModus  = 'never_encrypt' | 'encrypt_if_possible' | 'always_encrypt'
-
 
 function EncryptionMode({
   className,
@@ -42,22 +40,22 @@ export const EncryptionModusPopup = forwardRef<
       <div className='encryption-modus-popup' ref={ref}>
         <div className='encryption-modus-selector'>
           <EncryptionMode
-            className='never_encrypt'
+            className='ForcePlaintext'
             text='Never encrypt'
-            checked={encryptionModus === 'never_encrypt'}
-            onClick={() => setEncryptionModus('never_encrypt')}
+            checked={encryptionModus === 'ForcePlaintext'}
+            onClick={() => setEncryptionModus('ForcePlaintext')}
           />
           <EncryptionMode
-            className='encrypt_if_possible'
+            className='Opportunistic'
             text='Encrypt if possible'
-            checked={encryptionModus === 'encrypt_if_possible'}
-            onClick={() => setEncryptionModus('encrypt_if_possible')}
+            checked={encryptionModus === 'Opportunistic'}
+            onClick={() => setEncryptionModus('Opportunistic')}
           />
           <EncryptionMode
-            className='always_encrypt'
+            className='ForceEncrypted'
             text='Always encrypt'
-            checked={encryptionModus === 'always_encrypt'}
-            onClick={() => setEncryptionModus('always_encrypt')}
+            checked={encryptionModus === 'ForceEncrypted'}
+            onClick={() => setEncryptionModus('ForceEncrypted')}
           />
         </div>
       </div>

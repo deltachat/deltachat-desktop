@@ -22,8 +22,9 @@ import { selectedAccountId } from '../../ScreenController'
 import { MessageTypeAttachmentSubset } from '../attachment/Attachment'
 import { runtime } from '../../runtime'
 import { C } from 'deltachat-node/node/dist/constants'
-import { EncryptionModus, EncryptionModusPopup } from '../message/EncyptionModusPopup'
+import { EncryptionModusPopup } from '../message/EncyptionModusPopup'
 import classNames from 'classnames'
+import {EncryptionModus} from '@deltachat/jsonrpc-client/dist/generated/types'
 
 const log = getLogger('renderer/composer')
 
@@ -85,7 +86,19 @@ const Composer = forwardRef<
   const [showEncryptionModusPopup, setShowEncryptionModusPopup] = useState(
     false
   )
-  const [encryptionModus, setEncryptionModus] = useState<EncryptionModus>('encrypt_if_possible')
+
+  const [encryptionModus, _setEncryptionModus] = useState<EncryptionModus>('Opportunistic')
+  useEffect(() => {
+    (async () => {
+      const encryptionModus = await BackendRemote.rpc.getChatEncryptionModus(selectedAccountId(), chatId)
+      if (encryptionModus === null) return
+      _setEncryptionModus(encryptionModus)
+    })()
+  }, [chatId])
+  const setEncryptionModus = async (state: EncryptionModus) => {
+    await BackendRemote.rpc.setChatEncryptionModus(selectedAccountId(), chatId, state)
+    _setEncryptionModus(state)
+  }
 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
   const encryptionModusPopupRef = useRef<HTMLDivElement>(null)
