@@ -5,6 +5,7 @@
 ### Added
 
 ### Changed
+- show jump down button earlier when scrolling up
 
 ### Fixed
 - fix webxdc: allow `self` and `blob:` in `connect-src` in CSP
