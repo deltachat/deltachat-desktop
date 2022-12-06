@@ -23,6 +23,7 @@ interface MessageListState {
   oldestFetchedMessageListItemIndex: number
   viewState: ChatViewState
   jumpToMessageStack: number[]
+  loaded: boolean
 }
 
 const defaultState = () =>
@@ -33,6 +34,7 @@ const defaultState = () =>
     oldestFetchedMessageListItemIndex: -1,
     viewState: defaultChatViewState(),
     jumpToMessageStack: [],
+    loaded: false,
   } as MessageListState)
 
 export function useMessageList(accountId: number, chatId: number) {
@@ -136,6 +138,7 @@ class MessageListStore extends Store<MessageListState> {
         const modifiedState: MessageListState = {
           ...defaultState(),
           ...payload,
+          loaded: true,
         }
         return modifiedState
       }, 'selectedChat')
@@ -154,6 +157,7 @@ class MessageListStore extends Store<MessageListState> {
           viewState: ChatViewReducer.refresh(state.viewState),
           newestFetchedMessageListItemIndex,
           oldestFetchedMessageListItemIndex,
+          loaded: true,
         }
         return modifiedState
       }, 'refresh')
