@@ -405,7 +405,7 @@ export default function MessageList({
           unreadMessageInViewIntersectionObserver
         }
       />
-      {(showJumpDownButton === true || countUnreadMessages > 0) && (
+      {showJumpDownButton && (
         <JumpDownButton
           countUnreadMessages={countUnreadMessages}
           jumpToMessage={jumpToMessage}

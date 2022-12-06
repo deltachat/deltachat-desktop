@@ -10,6 +10,7 @@
 - fix webxdc: allow `self` and `blob:` in `connect-src` in CSP
 - indentation in update device message
 - fix "no messages" blinking up for a second when loading a chat
+- hide unread count on jump down button if you are at the bottom, fixes #3033
 
 <a id="1_34_0"></a>
 
