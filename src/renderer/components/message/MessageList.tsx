@@ -623,7 +623,7 @@ export function DayMarker(props: { timestamp: number }) {
   const { timestamp } = props
   const tx = useTranslationFunction()
   return (
-    <div className='info-message'>
+    <div className='info-message daymarker'>
       <div className='bubble' style={{ textTransform: 'capitalize' }}>
         {moment.unix(timestamp).calendar(null, {
           sameDay: `[${tx('today')}]`,
