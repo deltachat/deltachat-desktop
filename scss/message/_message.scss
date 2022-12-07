@@ -434,8 +434,6 @@
   .bubble {
     display: inline-block;
     text-align: center;
-    font-style: italic;
-    font-weight: bold;
     padding: 7px 14px;
     background-color: var(--infoMessageBubbleBg);
     border-radius: 10px;
@@ -443,6 +441,12 @@
     color: var(--infoMessageBubbleText);
     .status-icon.sending {
       background-color: var(--infoMessageBubbleText);
+    }
+  }
+
+  &.daymarker {
+    .bubble {
+      font-weight: bold;
     }
   }
 
