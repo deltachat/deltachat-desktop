@@ -208,11 +208,9 @@ export default function MessageList({
 
       const isNewestMessageLoaded =
         newestFetchedMessageListItemIndex === messageListItems.length - 1
-      const onePageAwayFromNewestMessageTreshold =
-        messageListRef.current.clientHeight / 3
       const newShowJumpDownButton =
         !isNewestMessageLoaded ||
-        distanceToBottom >= onePageAwayFromNewestMessageTreshold
+        distanceToBottom >= 10 /* 10 is close enough to 0 */
       if (newShowJumpDownButton != showJumpDownButton) {
         setShowJumpDownButton(newShowJumpDownButton)
       }
@@ -405,7 +403,7 @@ export default function MessageList({
           unreadMessageInViewIntersectionObserver
         }
       />
-      {(showJumpDownButton === true || countUnreadMessages > 0) && (
+      {showJumpDownButton && (
         <JumpDownButton
           countUnreadMessages={countUnreadMessages}
           jumpToMessage={jumpToMessage}
