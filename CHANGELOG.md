@@ -5,6 +5,7 @@
 ### Added
 
 ### Changed
+- make font-style of info messages consistent with iOS and Android #3034
 
 ### Fixed
 - fix webxdc: allow `self` and `blob:` in `connect-src` in CSP
