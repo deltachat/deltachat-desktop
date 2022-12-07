@@ -113,7 +113,7 @@ export const useGroup = (chat: Type.FullChat) => {
 
   useEffect(() => {
     ;(async () => {
-      modifyGroup(chat.id, groupName, groupImage || undefined, groupMembers)
+      modifyGroup(chat.id, groupName, groupImage, groupMembers)
     })()
   }, [groupName, groupImage, groupMembers, chat.id])
 

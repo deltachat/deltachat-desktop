@@ -281,7 +281,7 @@ export async function clearChat(chatId: number) {
 export async function modifyGroup(
   chatId: number,
   name: string,
-  image: string | undefined,
+  image: string | null | undefined,
   members: number[] | null
 ) {
   const accountId = selectedAccountId()
