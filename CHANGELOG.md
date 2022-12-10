@@ -16,6 +16,7 @@
 - fix "no messages" blinking up for a second when loading a chat
 - hide unread count on jump down button if you are at the bottom, fixes #3033
 - fix removing group avatar image #3038
+- fix chat title in navbar did not update correctly when it should change (disappearing messages & recently seen indicator) #3046
 
 <a id="1_34_0"></a>
 
