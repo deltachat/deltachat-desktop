@@ -40,6 +40,7 @@ import { RecoverableCrashScreen } from './RecoverableCrashScreen'
 import Sidebar, { SidebarState } from '../Sidebar'
 import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 import { Type } from '../../backend-com'
+import { InlineVerifiedIcon } from '../VerifiedIcon'
 
 const log = getLogger('renderer/main-screen')
 
@@ -225,7 +226,6 @@ export default function MainScreen() {
                 <Avatar
                   displayName={selectedChat.chat.name}
                   color={selectedChat.chat.color}
-                  isVerified={selectedChat.chat.isProtected}
                   avatarPath={selectedChat.chat.profileImage || undefined}
                   small
                   wasSeenRecently={selectedChat.chat.wasSeenRecently}
@@ -233,12 +233,17 @@ export default function MainScreen() {
                 <div style={{ marginLeft: '7px', overflow: 'hidden' }}>
                   <div className='navbar-chat-name'>
                     {selectedChat.chat.name}
-                    {selectedChat.chat.ephemeralTimer !== 0 && (
-                      <div
-                        className={'disapearing-messages-icon'}
-                        aria-label={tx('a11y_disappearing_messages_activated')}
-                      />
-                    )}
+                    <div className='chat_property_icons'>
+                      {selectedChat.chat.isProtected && <InlineVerifiedIcon />}
+                      {selectedChat.chat.ephemeralTimer !== 0 && (
+                        <div
+                          className={'disapearing-messages-icon'}
+                          aria-label={tx(
+                            'a11y_disappearing_messages_activated'
+                          )}
+                        />
+                      )}
+                    </div>
                   </div>
                   <div className='navbar-chat-subtile'>
                     {chatSubtitle(selectedChat.chat)}

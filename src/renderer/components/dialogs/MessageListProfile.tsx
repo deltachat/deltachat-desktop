@@ -44,7 +44,6 @@ export default function MailingListProfile(props: {
             errorMissingGroupName={errorMissingGroupName}
             setErrorMissingGroupName={setErrorMissingGroupName}
             color={chat.color}
-            isVerified={chat.isProtected}
           />
           <div style={{ padding: '15px 0px' }}>
             {tx('mailing_list_profile_info')}

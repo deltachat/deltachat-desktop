@@ -48,6 +48,7 @@ import { ContactListItem } from '../contact/ContactListItem'
 import { useSettingsStore } from '../../stores/settings'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import { InlineVerifiedIcon } from '../VerifiedIcon'
 
 export default function CreateChat(props: {
   isOpen: DialogProps['isOpen']
@@ -269,7 +270,6 @@ export const GroupSettingsSetNameAndProfileImage = ({
   errorMissingGroupName,
   setErrorMissingGroupName,
   color,
-  isVerified,
 }: {
   groupImage?: string | null
   onSetGroupImage: () => void
@@ -279,7 +279,6 @@ export const GroupSettingsSetNameAndProfileImage = ({
   errorMissingGroupName: boolean
   setErrorMissingGroupName: React.Dispatch<React.SetStateAction<boolean>>
   color?: string
-  isVerified?: boolean
 }) => {
   const tx = useTranslationFunction()
   const onChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
@@ -296,7 +295,6 @@ export const GroupSettingsSetNameAndProfileImage = ({
           onUnsetGroupImage={onUnsetGroupImage}
           groupName={groupName}
           color={color}
-          isVerified={isVerified}
         />
         <input
           className='group-name-input'
@@ -552,10 +550,11 @@ const AddMemberChip = (props: {
           displayName={contact.displayName}
           avatarPath={contact.profileImage}
           color={contact.color}
-          isVerified={contact.isVerified}
         />
       </div>
-      <div className='DisplayName'>{contact.displayName}</div>
+      <div className='DisplayName'>
+        {contact.displayName} {contact.isVerified && <InlineVerifiedIcon />}
+      </div>
     </div>
   )
 }
