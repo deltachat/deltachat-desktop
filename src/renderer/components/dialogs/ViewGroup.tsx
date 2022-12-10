@@ -31,6 +31,7 @@ import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { modifyGroup } from '../helpers/ChatMethods'
 import { DcEventType } from '@deltachat/jsonrpc-client'
+import { InlineVerifiedIcon } from '../VerifiedIcon'
 
 const log = getLogger('renderer/ViewGroup')
 
@@ -238,14 +239,13 @@ function ViewGroupInner(props: {
                   <Avatar
                     displayName={groupName}
                     avatarPath={groupImage}
-                    isVerified={chat.isProtected}
                     color={chat.color}
                     wasSeenRecently={chat.wasSeenRecently}
                     large
                   />
                 </ClickForFullscreenAvatarWrapper>
                 <p className='group-name' style={{ marginLeft: '17px' }}>
-                  {groupName}
+                  {groupName} {chat.isProtected && <InlineVerifiedIcon />}
                 </p>
               </div>
               <div className='group-seperator'>

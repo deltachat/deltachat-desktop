@@ -66,16 +66,6 @@
   img.content {
     object-fit: cover;
   }
-
-  img.verified-icon {
-    z-index: 10;
-    position: absolute;
-    width: calc(var(--local-avatar-size) / 2.5);
-    height: calc(var(--local-avatar-size) / 2.5);
-    margin-right: 0px;
-    right: 0;
-    bottom: var(--local-avatar-vertical-margin);
-  }
 }
 
 .avatar.small {

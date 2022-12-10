@@ -11,7 +11,6 @@ export const GroupImage = (props: {
   onUnsetGroupImage: () => void
   style?: React.CSSProperties
   groupName?: string
-  isVerified?: boolean
   color?: string
 }) => {
   const tx = window.static_translate
@@ -21,7 +20,6 @@ export const GroupImage = (props: {
     onUnsetGroupImage,
     style,
     groupName,
-    isVerified,
     color,
   } = props
 
@@ -49,7 +47,6 @@ export const GroupImage = (props: {
         <Avatar
           displayName={groupName || ''}
           avatarPath={groupImage || undefined}
-          isVerified={isVerified}
           color={color}
           style={{ ...style, cursor: 'pointer' }}
           large

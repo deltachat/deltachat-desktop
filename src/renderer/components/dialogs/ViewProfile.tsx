@@ -27,13 +27,16 @@ import { selectChat } from '../helpers/ChatMethods'
 import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import moment from 'moment'
+import { InlineVerifiedIcon } from '../VerifiedIcon'
 
 const ProfileInfoName = ({
   name,
+  isVerified,
   address,
   lastSeen,
 }: {
   name: string
+  isVerified: boolean
   address: string
   lastSeen: number
 }) => {
@@ -56,7 +59,10 @@ const ProfileInfoName = ({
   return (
     <div className='profile-info-name-container'>
       <div>
-        <p className='group-name'>{name}</p>
+        <p className='group-name'>
+          {name}
+          {isVerified && <InlineVerifiedIcon />}
+        </p>
       </div>
       <div className='address'>{address}</div>
       <div className='last-seen' title={lastSeenAbsolute}>
@@ -169,6 +175,7 @@ export function ViewProfileInner({
             </ClickForFullscreenAvatarWrapper>
             <ProfileInfoName
               name={contact.displayName}
+              isVerified={contact.isVerified}
               address={
                 isDeviceMessage ? tx('device_talk_subtitle') : contact.address
               }

@@ -6,18 +6,27 @@
     overflow: hidden;
     text-overflow: ellipsis;
 
-    img.verified-icon {
-      width: 0.8em;
-      height: 0.8em;
-      margin-left: 3px;
-    }
-
-    .disapearing-messages-icon {
-      width: 0.8em;
-      height: 0.8em;
-      margin-left: 3px;
+    .chat_property_icons {
       display: inline-block;
-      @include color-svg('../images/clock.svg', var(--navBarGroupSubtitle));
+      --chat-property-icon-size: 0.8em;
+      // about 1 white space's width
+      margin-inline-start: 0.3em;
+
+      .disapearing-messages-icon,
+      img.verified-icon {
+        width: var(--chat-property-icon-size);
+        height: var(--chat-property-icon-size);
+        vertical-align: middle;
+        // move it up a little bit so it looks more centered
+        transform: translate(0px, -0.07em);
+        margin-inline-start: 0;
+        margin-inline-end: 0.16em;
+      }
+
+      .disapearing-messages-icon {
+        display: inline-block;
+        @include color-svg('../images/clock.svg', var(--navBarGroupSubtitle));
+      }
     }
   }
 

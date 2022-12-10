@@ -35,7 +35,6 @@ export function Avatar(props: {
   addr?: string
   large?: boolean
   small?: boolean
-  isVerified?: boolean
   wasSeenRecently?: boolean
   style?: htmlDivProps['style']
   onClick?: () => void
@@ -45,7 +44,6 @@ export function Avatar(props: {
     color,
     displayName,
     addr,
-    isVerified,
     large,
     small,
     wasSeenRecently,
@@ -66,9 +64,6 @@ export function Avatar(props: {
       onClick={onClick}
     >
       {content}
-      {isVerified && (
-        <img className='verified-icon' src='../images/verified.png' />
-      )}
     </div>
   )
 }
@@ -85,7 +80,6 @@ export function AvatarFromContact(
       color={contact.color}
       displayName={contact.displayName}
       addr={contact.address}
-      isVerified={contact.isVerified}
       large={large === true}
       small={small === true}
       onClick={() => onClick && onClick(contact)}

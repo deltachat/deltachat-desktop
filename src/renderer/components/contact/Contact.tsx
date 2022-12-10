@@ -1,13 +1,6 @@
-import React, { CSSProperties, PropsWithChildren } from 'react'
+import React, { PropsWithChildren } from 'react'
 import { Avatar } from '../Avatar'
-
-const VerifiedIcon = (props: { style?: CSSProperties }) => (
-  <img
-    className='verified-icon'
-    src='../images/verified.png'
-    style={props.style}
-  />
-)
+import { InlineVerifiedIcon } from '../VerifiedIcon'
 
 function ContactName(
   displayName: string,
@@ -18,7 +11,7 @@ function ContactName(
     <div className='contact-name'>
       <div className='display-name'>
         {displayName}
-        {isVerified && <VerifiedIcon style={{ marginLeft: '4px' }} />}
+        {isVerified && <InlineVerifiedIcon />}
       </div>
       <div className='email'>{address}</div>
     </div>
