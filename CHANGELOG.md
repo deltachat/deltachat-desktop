@@ -7,6 +7,7 @@
 ### Changed
 - show jump down button earlier when scrolling up
 - make font-style of info messages consistent with iOS and Android #3034
+- Bump `decode-uri-component` from `0.2.0` to `0.2.2`.
 
 ### Fixed
 - fix webxdc: allow `self` and `blob:` in `connect-src` in CSP
