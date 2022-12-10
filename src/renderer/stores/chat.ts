@@ -75,6 +75,19 @@ class ChatStore extends Store<ChatStoreState> {
         return modifiedState
       }, 'modifiedChat')
     },
+    modifiedEphemeralTimer: (id: number, timer: number) => {
+      this.setState(state => {
+        if (!state.chat) {
+          return
+        }
+        const modifiedState: ChatStoreState = {
+          ...state,
+          chat: { ...state.chat, ephemeralTimer: timer },
+        }
+        if (this.guardReducerIfChatIdIsDifferent({ id })) return
+        return modifiedState
+      }, 'modifiedChat')
+    },
   }
 
   effect = {
@@ -183,6 +196,15 @@ class ChatStore extends Store<ChatStoreState> {
         ),
       })
     },
+    onEventChatEphemeralTimerModified: (chatId: number, timer: number) => {
+      if (this.state.chat?.id !== chatId) {
+        return
+      }
+      if (!this.state.accountId) {
+        throw new Error('no account set')
+      }
+      this.reducer.modifiedEphemeralTimer(chatId, timer)
+    },
     onEventContactModified: async (contactId: number) => {
       if (!this.state.chat) {
         return
@@ -217,15 +239,6 @@ chatStore.dispatch = (..._args) => {
 
 const log = chatStore.log
 
-onReady(() => {
-  BackendRemote.on('ChatModified', (accountId, { chatId }) => {
-    if (accountId !== window.__selectedAccountId) {
-      return
-    }
-    chatStore.effect.onEventChatModified(chatId)
-  })
-})
-
 export const useChatStore = () => useStore(chatStore)[0]
 export const useChatStore2 = () => {
   const [selectedChat, _chatStoreDispatch] = useStore(chatStore)
@@ -256,4 +269,13 @@ onReady(() => {
       chatStore.effect.onEventContactModified(contactId)
     }
   })
+  BackendRemote.on(
+    'ChatEphemeralTimerModified',
+    (accountId, { chatId, timer }) => {
+      if (accountId !== window.__selectedAccountId) {
+        return
+      }
+      chatStore.effect.onEventChatEphemeralTimerModified(chatId, timer)
+    }
+  )
 })
