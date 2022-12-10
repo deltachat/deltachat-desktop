@@ -6,6 +6,7 @@ import { debouncedUpdateBadgeCounter } from '../system-integration/badge-counter
 import { clearNotificationsForChat } from '../system-integration/notifications'
 import { saveLastChatId } from './chat/chat_sideeffects'
 import { onReady } from '../onready'
+import { C } from '@deltachat/jsonrpc-client'
 
 export const PAGE_SIZE = 11
 
@@ -222,6 +223,27 @@ class ChatStore extends Store<ChatStoreState> {
         })
       }
     },
+    onEventContactsChanged: async (contactId: number) => {
+      if (!this.state.accountId) {
+        throw new Error('no account set')
+      }
+      if (!this.state.chat) {
+        return
+      }
+      const chatId = this.state.chat.id
+      if (this.state.chat.chatType === C.DC_CHAT_TYPE_SINGLE) {
+        if (this.state.chat.contactIds.includes(contactId)) {
+          // would be better if contact change would also send a chat modified event for the DM chats
+          this.reducer.modifiedChat({
+            id: chatId,
+            chat: await BackendRemote.rpc.getFullChatById(
+              this.state.accountId,
+              chatId
+            ),
+          })
+        }
+      }
+    },
   }
 
   stateToHumanReadable(state: ChatStoreState): any {
@@ -278,4 +300,12 @@ onReady(() => {
       chatStore.effect.onEventChatEphemeralTimerModified(chatId, timer)
     }
   )
+  BackendRemote.on('ContactsChanged', (accountId, { contactId }) => {
+    if (accountId !== window.__selectedAccountId) {
+      return
+    }
+    if (contactId !== null) {
+      chatStore.effect.onEventContactsChanged(contactId)
+    }
+  })
 })
