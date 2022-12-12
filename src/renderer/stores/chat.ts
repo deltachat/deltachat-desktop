@@ -6,6 +6,7 @@ import { debouncedUpdateBadgeCounter } from '../system-integration/badge-counter
 import { clearNotificationsForChat } from '../system-integration/notifications'
 import { saveLastChatId } from './chat/chat_sideeffects'
 import { onReady } from '../onready'
+import { C } from '@deltachat/jsonrpc-client'
 
 export const PAGE_SIZE = 11
 
@@ -72,6 +73,19 @@ class ChatStore extends Store<ChatStoreState> {
           ...payload,
         }
         if (this.guardReducerIfChatIdIsDifferent(payload)) return
+        return modifiedState
+      }, 'modifiedChat')
+    },
+    modifiedEphemeralTimer: (id: number, timer: number) => {
+      this.setState(state => {
+        if (!state.chat) {
+          return
+        }
+        const modifiedState: ChatStoreState = {
+          ...state,
+          chat: { ...state.chat, ephemeralTimer: timer },
+        }
+        if (this.guardReducerIfChatIdIsDifferent({ id })) return
         return modifiedState
       }, 'modifiedChat')
     },
@@ -183,6 +197,15 @@ class ChatStore extends Store<ChatStoreState> {
         ),
       })
     },
+    onEventChatEphemeralTimerModified: (chatId: number, timer: number) => {
+      if (this.state.chat?.id !== chatId) {
+        return
+      }
+      if (!this.state.accountId) {
+        throw new Error('no account set')
+      }
+      this.reducer.modifiedEphemeralTimer(chatId, timer)
+    },
     onEventContactModified: async (contactId: number) => {
       if (!this.state.chat) {
         return
@@ -198,6 +221,27 @@ class ChatStore extends Store<ChatStoreState> {
             this.state.chat.id
           ),
         })
+      }
+    },
+    onEventContactsChanged: async (contactId: number) => {
+      if (!this.state.accountId) {
+        throw new Error('no account set')
+      }
+      if (!this.state.chat) {
+        return
+      }
+      const chatId = this.state.chat.id
+      if (this.state.chat.chatType === C.DC_CHAT_TYPE_SINGLE) {
+        if (this.state.chat.contactIds.includes(contactId)) {
+          // would be better if contact change would also send a chat modified event for the DM chats
+          this.reducer.modifiedChat({
+            id: chatId,
+            chat: await BackendRemote.rpc.getFullChatById(
+              this.state.accountId,
+              chatId
+            ),
+          })
+        }
       }
     },
   }
@@ -216,15 +260,6 @@ chatStore.dispatch = (..._args) => {
 }
 
 const log = chatStore.log
-
-onReady(() => {
-  BackendRemote.on('ChatModified', (accountId, { chatId }) => {
-    if (accountId !== window.__selectedAccountId) {
-      return
-    }
-    chatStore.effect.onEventChatModified(chatId)
-  })
-})
 
 export const useChatStore = () => useStore(chatStore)[0]
 export const useChatStore2 = () => {
@@ -254,6 +289,23 @@ onReady(() => {
     }
     if (contactId) {
       chatStore.effect.onEventContactModified(contactId)
+    }
+  })
+  BackendRemote.on(
+    'ChatEphemeralTimerModified',
+    (accountId, { chatId, timer }) => {
+      if (accountId !== window.__selectedAccountId) {
+        return
+      }
+      chatStore.effect.onEventChatEphemeralTimerModified(chatId, timer)
+    }
+  )
+  BackendRemote.on('ContactsChanged', (accountId, { contactId }) => {
+    if (accountId !== window.__selectedAccountId) {
+      return
+    }
+    if (contactId !== null) {
+      chatStore.effect.onEventContactsChanged(contactId)
     }
   })
 })
