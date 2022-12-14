@@ -152,7 +152,10 @@
     category: 'public.app-category.social-networking',
     entitlements: 'build/entitlements.mac.plist',
     entitlementsInherit: 'build/entitlements.mac.plist',
-    extendInfo: { NSCameraUsageDescription: 'For scanning qr codes.' },
+    extendInfo: {
+      NSCameraUsageDescription: 'For scanning qr codes.',
+      ITSAppUsesNonExemptEncryption: false,
+    },
     gatekeeperAssess: true,
     hardenedRuntime: true,
     icon: 'resources/icon.icns',
