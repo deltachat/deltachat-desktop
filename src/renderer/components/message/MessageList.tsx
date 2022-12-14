@@ -521,8 +521,9 @@ export const MessageListInner = React.memo(
                         backgroundColor: 'rgba(55,0,0,0.5)',
                       }}
                     >
-                      message with id {messageId.msg_id} was not found in cache,
-                      this should not happen, please contact the developers
+                      Message with id {messageId.msg_id} was not found in cache.
+                      Select a different chat, then this chat again to fix it.
+                      We are working on a better solution.
                     </div>
                   </div>
                 )
