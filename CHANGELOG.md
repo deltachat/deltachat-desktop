@@ -15,7 +15,7 @@
 - move all verified icons to the end chat/contact name (previously some were still on the avatar image)
 - set `ITSAppUsesNonExemptEncryption` to `false` for mac
 - update deltachat-node and deltachat/jsonrpc-client to `v1.104.0`
-- Update translations (18.12.2022)
+- Update translations (22.12.2022)
 
 ### Fixed
 - fix "message not found in cache" bug #3039
