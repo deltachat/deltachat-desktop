@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_34_1"></a>
+
+## [1.34.1] - 2022-12-22
+
 ### Added
 
 ### Changed
@@ -1820,7 +1824,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.34.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.34.1...HEAD
+
+[1.34.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.34.0...v1.34.1
 
 [1.34.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.33.2...v1.34.0
 

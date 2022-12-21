@@ -18,4 +18,14 @@ export function updateDeviceChats(accountId: number) {
 
 Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1_34_0`
   )
+
+  BackendRemote.rpc.addDeviceMessage(
+    accountId,
+    'changelog-version-1.34.1-version0',
+    `What's new in 1.34.1?
+
+Some smaller bug fixes and improvements.
+
+Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1_34_1`
+  )
 }
