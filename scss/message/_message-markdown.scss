@@ -4,6 +4,8 @@
   padding: 6px;
   border-radius: 8px;
   margin-bottom: 5px;
+  // overflow needs to be controlled so text does not escape the message bubble
+  overflow: scroll;
 }
 
 .mm-inline-code {
