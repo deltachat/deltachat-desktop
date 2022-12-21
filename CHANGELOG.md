@@ -14,6 +14,7 @@
 - Update translations (18.12.2022)
 
 ### Fixed
+- fix "message not found in cache" bug #3039
 - fix webxdc: allow `self` and `blob:` in `connect-src` in CSP
 - indentation in update device message
 - fix "no messages" blinking up for a second when loading a chat

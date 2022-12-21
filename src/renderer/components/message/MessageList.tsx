@@ -94,7 +94,7 @@ export default function MessageList({
   const {
     store: {
       scheduler,
-      effect: { jumpToMessage },
+      effect: { jumpToMessage, loadMissingMessages },
       reducer: { unlockScroll, clearJumpStack },
       activeView,
     },
@@ -402,6 +402,7 @@ export default function MessageList({
         unreadMessageInViewIntersectionObserver={
           unreadMessageInViewIntersectionObserver
         }
+        loadMissingMessages={loadMissingMessages}
       />
       {showJumpDownButton && (
         <JumpDownButton
@@ -433,6 +434,7 @@ export const MessageListInner = React.memo(
     chatStore: ChatStoreStateWithChatSet
     loaded: boolean
     unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
+    loadMissingMessages: () => Promise<void>
   }) => {
     const {
       onScroll,
@@ -443,6 +445,7 @@ export const MessageListInner = React.memo(
       chatStore,
       loaded,
       unreadMessageInViewIntersectionObserver,
+      loadMissingMessages,
     } = props
 
     if (!chatStore.chat.id) {
@@ -512,6 +515,9 @@ export const MessageListInner = React.memo(
                   />
                 )
               } else {
+                // setTimeout tells it to call method in next event loop iteration, so after rendering
+                // it is debounced later so we can call it here multiple times and it's ok
+                setTimeout(loadMissingMessages)
                 return (
                   <div className='info-message' id={String(messageId.msg_id)}>
                     <div
@@ -521,8 +527,7 @@ export const MessageListInner = React.memo(
                         backgroundColor: 'rgba(55,0,0,0.5)',
                       }}
                     >
-                      message with id {messageId.msg_id} was not found in cache,
-                      this should not happen, please contact the developers
+                      loading message {messageId.msg_id}
                     </div>
                   </div>
                 )
