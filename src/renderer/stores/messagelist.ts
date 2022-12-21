@@ -12,6 +12,7 @@ import {
 import { ChatStoreScheduler } from './chat/chat_scheduler'
 import { useEffect, useMemo, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
+import { debounce } from 'debounce'
 
 const PAGE_SIZE = 11
 
@@ -521,6 +522,44 @@ class MessageListStore extends Store<MessageListState> {
         })
       },
       'jumpToMessage'
+    ),
+    loadMissingMessages: debounce(
+      // needs debounce, because every missing message calls this
+      this.scheduler.lockedQueuedEffect(
+        'scroll',
+        async () => {
+          const { messageCache } = this.state
+          const missing_message_ids: number[] = []
+          for (const item of this.activeView) {
+            if (item.kind === 'message' && !messageCache[item.msg_id]) {
+              missing_message_ids.push(item.msg_id)
+            }
+          }
+          if (missing_message_ids.length === 0) {
+            return
+          }
+          this.log.warn(
+            'Message store cache misses messages, trying to load them now',
+            missing_message_ids
+          )
+          const newMessageCacheItems = await BackendRemote.rpc.getMessages(
+            this.accountId,
+            missing_message_ids
+          )
+          this.setState(state => {
+            const modifiedState: MessageListState = {
+              ...state,
+              messageCache: {
+                ...state.messageCache,
+                ...newMessageCacheItems,
+              },
+            }
+            return modifiedState
+          }, 'loadMissingMessagesAppend')
+        },
+        'loadMissingMessages'
+      ),
+      400
     ),
     fetchMoreMessagesTop: this.scheduler.queuedEffect(
       this.scheduler.lockedEffect(
