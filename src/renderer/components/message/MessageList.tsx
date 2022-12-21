@@ -434,7 +434,7 @@ export const MessageListInner = React.memo(
     chatStore: ChatStoreStateWithChatSet
     loaded: boolean
     unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
-    loadMissingMessages:() => Promise<void>
+    loadMissingMessages: () => Promise<void>
   }) => {
     const {
       onScroll,
@@ -445,7 +445,7 @@ export const MessageListInner = React.memo(
       chatStore,
       loaded,
       unreadMessageInViewIntersectionObserver,
-      loadMissingMessages
+      loadMissingMessages,
     } = props
 
     if (!chatStore.chat.id) {
