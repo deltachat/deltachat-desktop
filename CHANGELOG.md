@@ -11,6 +11,7 @@
 - move all verified icons to the end chat/contact name (previously some were still on the avatar image)
 - set `ITSAppUsesNonExemptEncryption` to `false` for mac
 - update deltachat-node and deltachat/jsonrpc-client to `v1.104.0`
+- Update translations (18.12.2022)
 
 ### Fixed
 - fix webxdc: allow `self` and `blob:` in `connect-src` in CSP
@@ -19,6 +20,7 @@
 - hide unread count on jump down button if you are at the bottom, fixes #3033
 - fix removing group avatar image #3038
 - fix chat title in navbar did not update correctly when it should change (disappearing messages & recently seen indicator) #3046
+- Control overflow of so text does not escape the code block nor message bubble, for the experimental message markdown mode.
 
 <a id="1_34_0"></a>
 
