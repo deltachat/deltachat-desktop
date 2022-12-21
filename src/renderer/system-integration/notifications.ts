@@ -1,4 +1,4 @@
-import { T } from 'deltachat-node/deltachat-jsonrpc/typescript/src/lib'
+import { T } from '@deltachat/jsonrpc-client'
 import { appName } from '../../shared/constants'
 import { getLogger } from '../../shared/logger'
 import { BackendRemote } from '../backend-com'

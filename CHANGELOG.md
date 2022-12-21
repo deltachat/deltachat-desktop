@@ -10,6 +10,7 @@
 - Bump `decode-uri-component` from `0.2.0` to `0.2.2`.
 - move all verified icons to the end chat/contact name (previously some were still on the avatar image)
 - set `ITSAppUsesNonExemptEncryption` to `false` for mac
+- update deltachat-node and deltachat/jsonrpc-client to `v1.104.0`
 - Update translations (18.12.2022)
 
 ### Fixed
