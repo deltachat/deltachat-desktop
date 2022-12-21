@@ -10,6 +10,7 @@
 - Bump `decode-uri-component` from `0.2.0` to `0.2.2`.
 - move all verified icons to the end chat/contact name (previously some were still on the avatar image)
 - set `ITSAppUsesNonExemptEncryption` to `false` for mac
+- Update translations (18.12.2022)
 
 ### Fixed
 - fix webxdc: allow `self` and `blob:` in `connect-src` in CSP
