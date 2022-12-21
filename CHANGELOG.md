@@ -18,6 +18,7 @@
 - hide unread count on jump down button if you are at the bottom, fixes #3033
 - fix removing group avatar image #3038
 - fix chat title in navbar did not update correctly when it should change (disappearing messages & recently seen indicator) #3046
+- Control overflow of so text does not escape the code block nor message bubble, for the experimental message markdown mode.
 
 <a id="1_34_0"></a>
 
