@@ -3,10 +3,12 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- show count of the archived chats with unread messages
 
 ### Changed
 - forward message dialog now has a title and a confirmation dialog and chat preview before forwarding
 - update deltachat-node and deltachat/jsonrpc-client to `v1.105.0`
+- change style of "Archived Chats" chatlist item
 
 ### Fixed
 - fix default welcome screen height so all buttons fit scrollbar is hidden

@@ -209,12 +209,26 @@
 
 // Pseudo chats
 
-.chat-list-item > div.archive-link {
-  top: calc((64px - 18px) / 2);
-  width: 100%;
-  font-weight: 200;
-  text-align: center;
-  color: var(--chat-list-item-summary-text);
+.chat-list-item.archive-link-item {
+  & > .content > div.archive-link {
+    top: calc((64px - 18px) / 2);
+    font-weight: 200;
+
+    font-size: 14px;
+    line-height: 18px;
+
+    overflow-x: hidden;
+    overflow-y: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    font-weight: 200;
+    font-size: medium;
+    user-select: none;
+  }
+  .fresh-message-counter {
+    background-color: grey;
+  }
 }
 
 .chat-list-item.is-deaddrop {
