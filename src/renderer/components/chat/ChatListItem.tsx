@@ -105,11 +105,29 @@ export const PlaceholderChatListItem = React.memo(_ => {
   return <div className={classNames('chat-list-item', 'skeleton')} />
 })
 
-function ChatListItemArchiveLink({ onClick }: { onClick: () => void }) {
+function ChatListItemArchiveLink({
+  onClick,
+  chatListItem,
+}: {
+  onClick: () => void
+  chatListItem: Type.ChatListItemFetchResult & {
+    type: 'ArchiveLink'
+  }
+}) {
   const tx = window.static_translate
   return (
-    <div role='button' onClick={onClick} className={'chat-list-item'}>
-      <div className='archive-link'>{tx('chat_archived_chats_title')}</div>
+    <div
+      role='button'
+      onClick={onClick}
+      className={'chat-list-item archive-link-item'}
+    >
+      <div className='avatar'>
+        <img className='content' src='../images/icons/icon-archive.svg' />
+      </div>
+      <div className='content'>
+        <div className='archive-link'>{tx('chat_archived_chats_title')}</div>
+      </div>
+      <FreshMessageCounter counter={chatListItem.freshMessageCounter} />
     </div>
   )
 }
@@ -247,7 +265,12 @@ const ChatListItem = React.memo<ChatListItemProps>(
         />
       )
     } else if (chatListItem.type == 'ArchiveLink') {
-      return <ChatListItemArchiveLink onClick={onClick} />
+      return (
+        <ChatListItemArchiveLink
+          chatListItem={chatListItem}
+          onClick={onClick}
+        />
+      )
     } else {
       return <PlaceholderChatListItem />
     }

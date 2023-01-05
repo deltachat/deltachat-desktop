@@ -2,6 +2,12 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- show count of the archived chats with unread messages
+
+### Changed
+- change style of "Archived Chats" chatlist item
+
 <a id="1_34_1"></a>
 
 ## [1.34.1] - 2022-12-22
