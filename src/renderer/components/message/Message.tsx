@@ -1,7 +1,7 @@
 import {
   onDownload,
   openAttachmentInShell,
-  forwardMessage,
+  openForwardDialog,
   openMessageInfo,
   setQuoteInDraft,
   privateReply,
@@ -244,7 +244,7 @@ function buildContextMenu(
     // Forward message
     {
       label: tx('menu_forward'),
-      action: forwardMessage.bind(null, message),
+      action: openForwardDialog.bind(null, message),
     },
     // Message details
     {
