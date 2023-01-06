@@ -165,7 +165,7 @@
 
 .chat-list-item.muted {
   .fresh-message-counter {
-    background-color: grey;
+    background-color: var(--unreadCountBgMuted);
   }
   .mute_icon {
     flex-shrink: 0;
@@ -227,7 +227,7 @@
     user-select: none;
   }
   .fresh-message-counter {
-    background-color: grey;
+    background-color: var(--unreadCountBgMuted);
   }
 }
 
