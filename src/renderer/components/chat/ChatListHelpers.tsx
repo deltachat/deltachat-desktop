@@ -54,7 +54,7 @@ export function useMessageResults(
 }
 
 export function useChatList(
-  _listFlags = 0,
+  _listFlags: number | null = null,
   _queryStr?: string,
   _queryContactId?: number
 ) {
@@ -73,7 +73,7 @@ export function useChatList(
     () =>
       debounce(
         (
-          listFlags: number,
+          listFlags: number | null,
           queryStr: string | undefined,
           queryContactId: number | undefined
         ) => {
