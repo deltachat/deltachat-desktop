@@ -457,7 +457,10 @@ function translate_n(key: string, quantity: number) {
 }
 
 /** functions for the chat virtual list */
-export function useLogicVirtualChatList(chatListIds: [number, number][]) {
+export function useLogicVirtualChatList(
+  chatListIds: [number, number][],
+  listFlags: number | null
+) {
   const accountId = selectedAccountId()
   // workaround to save a current reference of chatListIds
   const chatListIdsRef = useRef(chatListIds)
@@ -518,7 +521,7 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
       // the message id of the event could be an older message than the newest message (for example msg-read event)
       const chatlist = await BackendRemote.rpc.getChatlistEntries(
         accountId,
-        null,
+        listFlags,
         null,
         null
       )
@@ -576,7 +579,7 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
         }
       }
     }
-  }, [accountId])
+  }, [accountId, listFlags])
 
   /**
    * refresh chats a specific contact is in if that contact changed.
@@ -648,9 +651,10 @@ function useLogicChatPart(
   queryStr: string | undefined,
   showArchivedChats: boolean
 ) {
-  const { chatListIds, setQueryStr, setListFlags } = useChatList()
+  const { chatListIds, setQueryStr, setListFlags, listFlags } = useChatList()
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
-    chatListIds
+    chatListIds,
+    listFlags
   )
 
   // effects

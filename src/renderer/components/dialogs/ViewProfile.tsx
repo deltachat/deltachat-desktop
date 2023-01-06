@@ -142,9 +142,10 @@ export function ViewProfileInner({
   onClose: () => void
 }) {
   const accountId = selectedAccountId()
-  const { chatListIds } = useChatList(0, '', contact.id)
+  const { chatListIds } = useChatList(null, '', contact.id)
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
-    chatListIds
+    chatListIds,
+    null
   )
   const isDeviceMessage = contact.id === C.DC_CONTACT_ID_DEVICE
 
