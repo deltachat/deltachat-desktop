@@ -22,11 +22,11 @@ export default function ForwardMessage(props: {
   const accountId = selectedAccountId()
   const tx = window.static_translate
   const { message, onClose } = props
-  const { chatListIds, queryStr, setQueryStr } = useChatList(
-    C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS
-  )
+  const listFlags = C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS
+  const { chatListIds, queryStr, setQueryStr } = useChatList(listFlags)
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
-    chatListIds
+    chatListIds,
+    listFlags
   )
 
   const onChatClick = async (chatid: number) => {
