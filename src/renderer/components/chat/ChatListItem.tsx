@@ -7,6 +7,9 @@ import { Avatar } from '../Avatar'
 import { Type } from '../../backend-com'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { T } from '@deltachat/jsonrpc-client'
+import { getLogger } from '../../../shared/logger'
+
+const log = getLogger('renderer/chatlist/item')
 
 function FreshMessageCounter({ counter }: { counter: number }) {
   if (counter === 0) return null
@@ -127,6 +130,7 @@ function ChatListItemError({
   onContextMenu?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
   isSelected?: boolean
 }) {
+  log.info('Error Loading Chatlistitem ' + chatListItem.id, chatListItem.error)
   return (
     <div
       role='button'
@@ -150,7 +154,7 @@ function ChatListItemError({
           </div>
         </div>
         <div className='chat-list-item-message'>
-          <div className='text'>
+          <div className='text' title={chatListItem.error}>
             <MessageBody text={chatListItem.error} disableJumbomoji preview />
           </div>
         </div>
