@@ -6,11 +6,24 @@ import ChatListItem, {
 import { areEqual } from 'react-window'
 import { ContactListItem } from '../contact/ContactListItem'
 import { jumpToMessage, openViewProfileDialog } from '../helpers/ChatMethods'
+import { Type } from '../../backend-com'
 
 export const ChatListItemRowChat = React.memo<{
   index: number
-  data: todo
-  style: todo
+  data: {
+    selectedChatId: number | null
+    chatListIds: number[]
+    chatCache: {
+      [id: number]: Type.ChatListItemFetchResult
+    }
+    onChatClick: (chatId: number) => void
+    openContextMenu: (
+      event: React.MouseEvent<any, MouseEvent>,
+      chatListItem: Type.ChatListItemFetchResult,
+      selectedChatId: number | null
+    ) => void
+  }
+  style: React.CSSProperties
 }>(({ index, data, style }) => {
   const {
     selectedChatId,
@@ -19,7 +32,7 @@ export const ChatListItemRowChat = React.memo<{
     onChatClick,
     openContextMenu,
   } = data
-  const [chatId] = chatListIds[index]
+  const chatId = chatListIds[index]
   return (
     <div style={style}>
       <ChatListItem

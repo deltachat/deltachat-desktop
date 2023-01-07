@@ -67,9 +67,7 @@ export function useChatList(
   const [listFlags, setListFlags] = useState(_listFlags)
   const [queryStr, setQueryStr] = useState<string | undefined>(_queryStr)
   const [queryContactId, setQueryContactId] = useState(_queryContactId)
-  const [chatListEntries, setChatListEntries] = useState<
-    [number, number | null][]
-  >([])
+  const [chatListEntries, setChatListEntries] = useState<number[]>([])
 
   const debouncedGetChatListEntries = useMemo(
     () =>

@@ -78,7 +78,7 @@ export default function MailtoDialog(props: {
                     itemHeight={CHATLISTITEM_CHAT_HEIGHT}
                   >
                     {({ index, style }) => {
-                      const [chatId] = chatListIds[index]
+                      const chatId = chatListIds[index]
                       return (
                         <div style={style}>
                           <ChatListItem
