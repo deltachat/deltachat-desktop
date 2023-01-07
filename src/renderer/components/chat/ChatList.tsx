@@ -37,6 +37,9 @@ import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { DcEvent, DcEventType, T } from '@deltachat/jsonrpc-client'
 import { Avatar } from '../Avatar'
+import { getLogger } from '../../../shared/logger'
+
+const log = getLogger('renderer/components/chatlist')
 
 const enum LoadStatus {
   FETCHING = 1,
@@ -458,8 +461,7 @@ function translate_n(key: string, quantity: number) {
 
 /** functions for the chat virtual list */
 export function useLogicVirtualChatList(
-  chatListIds: [number, number][],
-  listFlags: number | null
+  chatListIds: [number, number | null][]
 ) {
   const accountId = selectedAccountId()
   // workaround to save a current reference of chatListIds
@@ -518,28 +520,30 @@ export function useLogicVirtualChatList(
         }, 30000)
       }
       debouncingChatlistItemRequests[chatId] = 1
-      // the message id of the event could be an older message than the newest message (for example msg-read event)
-      const chatlist = await BackendRemote.rpc.getChatlistEntries(
-        accountId,
-        listFlags,
-        null,
-        null
-      )
-      const result = chatlist.find(([chat]) => chat === chatId)
-      if (result) {
-        setChatLoading(state => ({
-          ...state,
-          [chatId]: LoadStatus.FETCHING,
-        }))
-        const chats = await BackendRemote.rpc.getChatlistItemsByEntries(
+      try {
+        // the message id of the event could be an older message than the newest message (for example msg-read event)
+        const result = await BackendRemote.rpc.getChatlistEntryByChat(
           accountId,
-          [result]
+          chatId
         )
-        setChatCache(cache => ({ ...cache, ...chats }))
-        setChatLoading(state => ({
-          ...state,
-          [chatId]: LoadStatus.LOADED,
-        }))
+
+        if (result) {
+          setChatLoading(state => ({
+            ...state,
+            [chatId]: LoadStatus.FETCHING,
+          }))
+          const chats = await BackendRemote.rpc.getChatlistItemsByEntries(
+            accountId,
+            [result]
+          )
+          setChatCache(cache => ({ ...cache, ...chats }))
+          setChatLoading(state => ({
+            ...state,
+            [chatId]: LoadStatus.LOADED,
+          }))
+        }
+      } catch (error) {
+        log.warn('error loading chatlistitem', error)
       }
 
       if (debouncingChatlistItemRequests[chatId] > 1) {
@@ -579,7 +583,7 @@ export function useLogicVirtualChatList(
         }
       }
     }
-  }, [accountId, listFlags])
+  }, [accountId])
 
   /**
    * refresh chats a specific contact is in if that contact changed.
@@ -651,10 +655,9 @@ function useLogicChatPart(
   queryStr: string | undefined,
   showArchivedChats: boolean
 ) {
-  const { chatListIds, setQueryStr, setListFlags, listFlags } = useChatList()
+  const { chatListIds, setQueryStr, setListFlags } = useChatList()
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
-    chatListIds,
-    listFlags
+    chatListIds
   )
 
   // effects
