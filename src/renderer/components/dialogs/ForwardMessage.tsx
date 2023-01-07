@@ -25,8 +25,7 @@ export default function ForwardMessage(props: {
   const listFlags = C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS
   const { chatListIds, queryStr, setQueryStr } = useChatList(listFlags)
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
-    chatListIds,
-    listFlags
+    chatListIds
   )
 
   const onChatClick = async (chatid: number) => {
