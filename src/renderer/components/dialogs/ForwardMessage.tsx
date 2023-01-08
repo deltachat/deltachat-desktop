@@ -13,7 +13,7 @@ import { useChatList } from '../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../ThemeManager'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import { selectChat } from '../helpers/ChatMethods'
+import { forwardMessage, selectChat } from '../helpers/ChatMethods'
 import { confirmForwardMessage } from '../message/messageFunctions'
 
 export default function ForwardMessage(props: {
@@ -35,10 +35,12 @@ export default function ForwardMessage(props: {
     onClose()
     if (!chat.isSelfTalk) {
       selectChat(chat.id)
-    }
-    const yes = await confirmForwardMessage(accountId, message, chat)
-    if (!yes) {
-      selectChat(message.chatId)
+      const yes = await confirmForwardMessage(accountId, message, chat)
+      if (!yes) {
+        selectChat(message.chatId)
+      }
+    } else {
+      await forwardMessage(accountId, message.id, chat.id)
     }
   }
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
