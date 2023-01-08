@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- fix default welcome screen height so all buttons fit scrollbar is hidden
+
 <a id="1_34_1"></a>
 
 ## [1.34.1] - 2022-12-22
