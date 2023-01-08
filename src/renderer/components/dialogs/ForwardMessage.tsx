@@ -33,9 +33,12 @@ export default function ForwardMessage(props: {
   const onChatClick = async (chatId: number) => {
     const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
     onClose()
-    const yes = await confirmForwardMessage(accountId, message, chat)
-    if (yes && !chat.isSelfTalk) {
+    if (!chat.isSelfTalk) {
       selectChat(chat.id)
+    }
+    const yes = await confirmForwardMessage(accountId, message, chat)
+    if (!yes) {
+      selectChat(message.chatId)
     }
   }
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
