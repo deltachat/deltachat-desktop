@@ -48,9 +48,10 @@ export default function ForwardMessage(props: {
     Number(useThemeCssVar('--SPECIAL-chatlist-item-chat-height')) || 64
   return (
     <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
-      <DeltaDialogHeader onClose={onClose}
-        title={tx('forward_to')}>
-      </DeltaDialogHeader>
+      <DeltaDialogHeader
+        onClose={onClose}
+        title={tx('forward_to')}
+      ></DeltaDialogHeader>
       <div
         className={classNames(
           Classes.DIALOG_BODY,
@@ -58,12 +59,12 @@ export default function ForwardMessage(props: {
         )}
       >
         <Card style={{ padding: '0px' }}>
-          <div className="forward-message-account-input">
+          <div className='forward-message-account-input'>
             <input
               className='search-input'
               onChange={onSearchChange}
               value={queryStr}
-              placeholder={tx('contacts_enter_name_or_email')}
+              placeholder={tx('search')}
               autoFocus
               spellCheck={false}
             />

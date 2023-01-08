@@ -1,9 +1,13 @@
 $side-padding: 20px;
 
 .forward-message-account-input {
-    padding-right: $side-padding;
-    padding-left: $side-padding;
-    padding-bottom: $side-padding;
+  padding-right: $side-padding;
+  padding-left: $side-padding;
+  padding-bottom: $side-padding;
+
+  .search-input {
+    width: 100%;
+  }
 }
 
 .forward-message-list-chat-list {

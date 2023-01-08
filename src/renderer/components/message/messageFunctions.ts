@@ -1,7 +1,11 @@
 import { getLogger } from '../../../shared/logger'
 const log = getLogger('render/msgFunctions')
 import { runtime } from '../../runtime'
-import { forwardMessage, deleteMessage, selectChat } from '../helpers/ChatMethods'
+import {
+  forwardMessage,
+  deleteMessage,
+  selectChat,
+} from '../helpers/ChatMethods'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { internalOpenWebxdc } from '../../system-integration/webxdc'
@@ -40,12 +44,16 @@ export function confirmDialog(message: string, confirmLabel: string) {
       confirmLabel,
       cb: (yes: boolean) => {
         res(yes)
-      }
+      },
     })
   })
 }
 
-export async function confirmForwardMessage(accountId: number, message: Type.Message, chat: Type.FullChat) {
+export async function confirmForwardMessage(
+  accountId: number,
+  message: Type.Message,
+  chat: Type.FullChat
+) {
   const tx = window.static_translate
   const yes = await confirmDialog(tx('ask_forward', [chat.name]), tx('forward'))
   if (yes) {
