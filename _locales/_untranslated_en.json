@@ -29,9 +29,6 @@
   "broadcast_list_warning": {
     "message": "Broadcast Lists are always unencrypted because they use blind copy (BCC)"
   },
-  "pref_donate": {
-    "message": "Donate"
-  },
   "clear_chat": {
     "message": "Clear Chat"
   },
@@ -61,5 +58,23 @@
   },
   "save_sticker": {
     "message": "Save Sticker"
+  },
+  "pref_support_deltachat": {
+    "message": "Donate Money or Time"
+  },
+  "contribute_to_deltachat": {
+    "message": "Contribute to DeltaChat"
+  },
+  "donate_money": {
+    "message": "Donate Money"
+  },
+  "other_ways_to_contribute": {
+    "message": "Other ways to contribute"
+  },
+  "other_ways_to_contribute_description": {
+    "message": "If giving money is not your thing, you can find other ways to help here, like translating Delta Chat into your language, testing nightly versions, giving feedback on in our forum or even getting involved with coding, there are many ways in which you can contribute to the project."
+  },
+  "donate_money_reason":{
+    "message": "Your support helps us to continue to improve Delta Chat."
   }
 }
