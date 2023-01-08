@@ -20,20 +20,20 @@
     padding: 0px 20px;
     background-color: var(--bp4DialogHeaderBg);
 
-    .delta-dialog-content-text-seperator {
+    .delta-dialog-content-text-separator {
       line-height: 43px;
       height: 40px;
       padding-left: 15px;
       /* text-align: center; */
       font-weight: 200;
-      color: var(--delta-dialog-seperator-text);
-      background: var(--delta-dialog-seperator);
+      color: var(--delta-dialog-separator-text);
+      background: var(--delta-dialog-separator);
       user-select: none;
     }
 
-    // .delta-dialog-content-seperator {
+    // .delta-dialog-content-separator {
     //   height: 10px;
-    //   background: var(--delta-dialog-seperator);
+    //   background: var(--delta-dialog-separator);
     //   box-shadow: inset 0px 2px 0 0px rgba(24, 33, 39, 0.14),
     //     0px 1px 0 0px rgba(24, 33, 39, 0.18);
     // }

@@ -684,7 +684,7 @@ function CreateGroupInner(props: {
                 errorMissingGroupName={errorMissingGroupName}
                 setErrorMissingGroupName={setErrorMissingGroupName}
               />
-              <div className='group-seperator'>
+              <div className='group-separator'>
                 {tx(
                   'n_members',
                   groupMembers.length.toString(),
@@ -836,7 +836,7 @@ function CreateBroadcastInner(props: {
           </div>
           <br />
           {broadcastRecipients.length > 0 && (
-            <div className='group-seperator'>
+            <div className='group-separator'>
               {tx(
                 'n_recipients',
                 broadcastRecipients.length.toString(),

@@ -30,7 +30,7 @@ export default function InputTransferKey(
           value={props.autocryptkey[i]}
         />
         {i !== 8 && i !== 2 && i !== 5 && (
-          <div className='seperator'>
+          <div className='separator'>
             <Icon icon='small-minus' />
           </div>
         )}
