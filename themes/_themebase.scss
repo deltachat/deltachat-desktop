@@ -147,8 +147,8 @@ $hover-contrast-change: 2%;
   --bp4-control-indicator-color: #{rgba($textPrimary, 0.08)};
   --outlineProperties: 1px solid transparent;
   --outlineColor: #{$outlineColor};
-  --delta-dialog-seperator: #{$bgSecondary};
-  --delta-dialog-seperator-text: #{changeContrast($bgSecondary, 24%)};
+  --delta-dialog-separator: #{$bgSecondary};
+  --delta-dialog-separator-text: #{changeContrast($bgSecondary, 24%)};
   /* EmojiMart overwrites */
   --emojiMartText: #{$textPrimary};
   --emojiMartBorder: #{$outlineColor};

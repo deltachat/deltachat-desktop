@@ -4,7 +4,7 @@ import {
   DeltaDialogHeader,
   DeltaDialogBody,
   DeltaDialogContent,
-  DeltaDialogContentTextSeperator,
+  DeltaDialogContentTextSeparator,
   DeltaDialogOkCancelFooter,
 } from './DeltaDialog'
 import ChatListItem from '../chat/ChatListItem'
@@ -202,7 +202,7 @@ export function ViewProfileInner({
           </div>
           {contact.status != '' && (
             <>
-              <DeltaDialogContentTextSeperator
+              <DeltaDialogContentTextSeparator
                 text={tx('pref_default_status_label')}
               />
               <div className='status-text'>
@@ -221,7 +221,7 @@ export function ViewProfileInner({
         </div>
         {!isDeviceMessage && (
           <>
-            <DeltaDialogContentTextSeperator
+            <DeltaDialogContentTextSeparator
               text={tx('profile_shared_chats')}
             />
             <div className='mutual-chats' style={{ flexGrow: 1 }}>
