@@ -543,19 +543,21 @@ export function useLogicVirtualChatList(chatListIds: number[]) {
 
     return ({
       chatId,
-    }: Extract<
-      DcEvent,
-      {
-        type:
-          | 'MsgRead'
-          | 'MsgDelivered'
-          | 'MsgFailed'
-          | 'IncomingMsg'
-          | 'ChatModified'
-          | 'MsgsChanged'
-          | 'MsgsNoticed'
-      }
-    >) => {
+    }:
+      | Extract<
+          DcEvent,
+          {
+            type:
+              | 'MsgRead'
+              | 'MsgDelivered'
+              | 'MsgFailed'
+              | 'IncomingMsg'
+              | 'ChatModified'
+              | 'MsgsChanged'
+              | 'MsgsNoticed'
+          }
+        >
+      | { chatId: number; type: 'onContactChanged' }) => {
       if (chatId === C.DC_CHAT_ID_TRASH) {
         return
       }
@@ -586,16 +588,14 @@ export function useLogicVirtualChatList(chatListIds: number[]) {
           null,
           contactId
         )
-        const inCurrentCache = Object.keys(chatCacheRef.current).map(v =>
-          Number(v)
-        )
-        const toBeRefreshed = chatListItems.filter(
-          chatId => inCurrentCache.indexOf(chatId) !== -1
-        )
-        // other function already has debouncing so just use it
-        toBeRefreshed.forEach(chatId =>
-          onChatListItemChanged({ chatId, type: 'ChatModified' })
-        )
+        for (let i = 0; i < chatListItems.length; i++) {
+          const chatId = chatListItems[i]
+          // check if chat is already loaded and we need to refresh it
+          if (typeof chatCacheRef.current[chatId] !== 'undefined') {
+            // other function already has debouncing so just use it
+            onChatListItemChanged({ chatId, type: 'onContactChanged' })
+          }
+        }
       }
     },
     [accountId]
