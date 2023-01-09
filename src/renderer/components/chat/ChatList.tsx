@@ -592,11 +592,10 @@ export function useLogicVirtualChatList(chatListIds: number[]) {
         const toBeRefreshed = chatListItems.filter(
           chatId => inCurrentCache.indexOf(chatId) !== -1
         )
-        const chats = await BackendRemote.rpc.getChatlistItemsByEntries(
-          accountId,
-          toBeRefreshed
+        // other function already has debouncing so just use it
+        toBeRefreshed.forEach(chatId =>
+          onChatListItemChanged({ chatId, type: 'ChatModified' })
         )
-        setChatCache(cache => ({ ...cache, ...chats }))
       }
     },
     [accountId]
