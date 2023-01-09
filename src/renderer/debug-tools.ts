@@ -6,6 +6,6 @@ export function countCall(label: string) {
     countCalls[label] = 1
   }
 }
-export function printCallCounterResult(){
-    console.table(countCalls)
+export function printCallCounterResult() {
+  console.table(countCalls)
 }
