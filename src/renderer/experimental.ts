@@ -1,5 +1,6 @@
 import { getLogger } from '../shared/logger'
 import { BackendRemote } from './backend-com'
+import { printCallCounterResult } from './debug-tools'
 import { selectedAccountId } from './ScreenController'
 
 const log = getLogger('renderer/experiments')
@@ -41,6 +42,10 @@ These functions are highly experimental, use at your own risk.
 
   getContextEmitters() {
     return (BackendRemote as any).contextEmitters
+  }
+
+  printCallCounterResult() {
+    printCallCounterResult()
   }
 }
 
