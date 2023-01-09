@@ -531,7 +531,7 @@ export function useLogicVirtualChatList(chatListIds: number[]) {
           [chatId]: LoadStatus.LOADED,
         }))
         // sleep a while to reduce overall calls
-        await new Promise((res) => setTimeout(res, 150))
+        await new Promise(res => setTimeout(res, 150))
       } catch (error) {
         log.warn('error loading chatlistitem', error)
       }
@@ -581,9 +581,11 @@ export function useLogicVirtualChatList(chatListIds: number[]) {
    * refresh chats a specific contact is in if that contact changed.
    * Currently used for updating nickname changes in the summary of chatlistitems.
    */
-  const onContactChanged = useCallback(
-    async ({ contactId }: DcEventType<'ContactsChanged'>) => {
-      if (contactId !== 0) {
+  const onContactChanged = useMemo(() => {
+    let debouncingRequests: { [contactId: number]: number } = {}
+
+    const updateChatsOfContact = async (contactId: number) => {
+      try {
         const chatListItems = await BackendRemote.rpc.getChatlistEntries(
           accountId,
           null,
@@ -598,10 +600,35 @@ export function useLogicVirtualChatList(chatListIds: number[]) {
             onChatListItemChanged({ chatId, type: 'onContactChanged' })
           }
         }
+      } catch (error) {
+        log.warn('error loading chatlistitems onContactChanged', error)
       }
-    },
-    [accountId]
-  )
+      // sleep a while to reduce overall calls
+      // this is 1 second because a contact change does not change that often
+      // and it's not that important for the chatlist (only recently seen, name of the contact in summary and chattitle for DM chats)
+      // NOTE(simon): this limit will not be hit in local usage,
+      // NOTE(simon): I'll keep it in for the time being for when we have a browser version
+      await new Promise(res => setTimeout(res, 1000))
+      if (debouncingRequests[contactId] > 1) {
+        updateChatsOfContact(contactId)
+      } else {
+        debouncingRequests[contactId] = 0
+      }
+    }
+
+    return async ({ contactId }: DcEventType<'ContactsChanged'>) => {
+      if (contactId !== null && contactId !== 0) {
+        if (
+          debouncingRequests[contactId] === undefined ||
+          debouncingRequests[contactId] === 0
+        ) {
+          updateChatsOfContact(contactId)
+        } else {
+          debouncingRequests[contactId] = debouncingRequests[contactId] + 1
+        }
+      }
+    }
+  }, [accountId])
 
   useEffect(() => onDCEvent(accountId, 'ContactsChanged', onContactChanged), [
     accountId,
