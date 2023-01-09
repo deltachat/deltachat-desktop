@@ -3,6 +3,7 @@ import { runtime } from './runtime'
 import { hasDebugEnabled } from '../shared/logger'
 import { debouncedUpdateBadgeCounter } from './system-integration/badge-counter'
 import { clearNotificationsForChat } from './system-integration/notifications'
+import { countCall } from './debug-tools'
 
 export { T as Type } from '@deltachat/jsonrpc-client'
 
@@ -29,6 +30,10 @@ class ElectronTransport extends BaseTransport {
     if (hasDebugEnabled()) {
       /* ignore-console-log */
       console.debug('%c▲ %c[JSONRPC]', 'color: green', 'color:grey', message)
+      if ((message as any)['method']) {
+        countCall((message as any).method)
+        countCall('total')
+      }
     }
   }
 }

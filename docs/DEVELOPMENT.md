@@ -262,3 +262,8 @@ export CSC_IDENTITY_AUTO_DISCOVERY=false
 docs about macOS sandbox permissions:
 https://developer.apple.com/library/archive/documentation/Miscellaneous/Reference/EntitlementKeyReference/Chapters/EnablingAppSandbox.html#//apple_ref/doc/uid/TP40011195-CH4-SW1
 https://developer.apple.com/library/archive/documentation/Miscellaneous/Reference/EntitlementKeyReference/Chapters/AppSandboxTemporaryExceptionEntitlements.html#//apple_ref/doc/uid/TP40011195-CH5-SW1
+
+### JSONRPC stuff:
+
+If you want to debug how many jsonrpc calls were made you can run `exp.printCallCounterResult()` in the devConsole when you have debug logging enabled.
+This can be useful if you want to test your debouncing logic or compare a branch against another branch, to see if you change reduced overall jsonrpc calls.
