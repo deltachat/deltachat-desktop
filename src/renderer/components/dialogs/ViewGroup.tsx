@@ -248,7 +248,7 @@ function ViewGroupInner(props: {
                   {groupName} {chat.isProtected && <InlineVerifiedIcon />}
                 </p>
               </div>
-              <div className='group-seperator'>
+              <div className='group-separator'>
                 {!isBroadcast
                   ? tx(
                       'n_members',
