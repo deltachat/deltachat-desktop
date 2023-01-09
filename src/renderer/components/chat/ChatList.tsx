@@ -629,13 +629,6 @@ export function useLogicVirtualChatList(chatListIds: number[]) {
     }
   }, [onChatListItemChanged, accountId])
 
-  // effects
-
-  useEffect(() => {
-    // force refresh of inital data
-    loadChats(0, Math.min(chatListIds.length, 10))
-  }, [chatListIds]) // eslint-disable-line react-hooks/exhaustive-deps
-
   return { isChatLoaded, loadChats, chatCache }
 }
 
@@ -660,6 +653,19 @@ function useLogicChatPart(
         : setListFlags(0),
     [showArchivedChats, queryStr, setListFlags]
   )
+
+  // for example user switched to search or to archived chats
+  // so force refresh of inital data
+  const shouldReload = useRef(false)
+  useEffect(() => {
+    shouldReload.current = true
+  }, [showArchivedChats, queryStr]) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (shouldReload.current) {
+      shouldReload.current = false
+      loadChats(0, Math.min(chatListIds.length, 20))
+    }
+  }, [chatListIds]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return { chatListIds, isChatLoaded, loadChats, chatCache }
 }
