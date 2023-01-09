@@ -1,4 +1,4 @@
-let countCalls: { [key: string]: number } = {}
+const countCalls: { [key: string]: number } = {}
 export function countCall(label: string) {
   if (countCalls[label]) {
     countCalls[label]++
