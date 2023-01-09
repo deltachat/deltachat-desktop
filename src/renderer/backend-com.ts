@@ -98,6 +98,16 @@ export namespace EffectfulBackendActions {
     clearNotificationsForChat(accountId, chatId)
     window.__refetchChatlist && window.__refetchChatlist()
   }
+
+  export async function blockContact(accountId: number, contactId: number) {
+    await BackendRemote.rpc.blockContact(accountId, contactId)
+    window.__refetchChatlist && window.__refetchChatlist()
+  }
+
+  export async function unBlockContact(accountId: number, contactId: number) {
+    await BackendRemote.rpc.unblockContact(accountId, contactId)
+    window.__refetchChatlist && window.__refetchChatlist()
+  }
 }
 
 type ContextEvents = { ALL: (event: DcEvent) => void } & {

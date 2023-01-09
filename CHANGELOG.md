@@ -9,6 +9,7 @@
 
 ### Fixed
 - fix default welcome screen height so all buttons fit scrollbar is hidden
+- fix unblock contact did not update the chatlist
 
 <a id="1_34_1"></a>
 

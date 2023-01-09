@@ -5,7 +5,12 @@ import { ContactList2 } from '../contact/ContactList'
 import { ScreenContext } from '../../contexts'
 import { DialogProps } from './DialogController'
 import debounce from 'debounce'
-import { BackendRemote, onDCEvent, Type } from '../../backend-com'
+import {
+  BackendRemote,
+  EffectfulBackendActions,
+  onDCEvent,
+  Type,
+} from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 
 export default function UnblockContacts(props: {
@@ -36,7 +41,7 @@ export default function UnblockContacts(props: {
       message: tx('ask_unblock_contact'),
       confirmLabel: tx('menu_unblock_contact'),
       cb: (yes: boolean) =>
-        yes && BackendRemote.rpc.unblockContact(accountId, id),
+        yes && EffectfulBackendActions.unBlockContact(accountId, id),
     })
   }
 
