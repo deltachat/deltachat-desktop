@@ -2,6 +2,11 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+
+### Changed
+- forward message dialog now has a title and a confirmation dialog and chat preview before forwarding
+
 ### Fixed
 - fix default welcome screen height so all buttons fit scrollbar is hidden
 

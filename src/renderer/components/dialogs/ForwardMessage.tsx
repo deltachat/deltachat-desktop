@@ -13,7 +13,8 @@ import { useChatList } from '../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../ThemeManager'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import { selectChat } from '../helpers/ChatMethods'
+import { forwardMessage, selectChat } from '../helpers/ChatMethods'
+import { confirmForwardMessage } from '../message/messageFunctions'
 
 export default function ForwardMessage(props: {
   message: T.Message
@@ -29,12 +30,17 @@ export default function ForwardMessage(props: {
     chatListIds
   )
 
-  const onChatClick = async (chatid: number) => {
-    await BackendRemote.rpc.forwardMessages(accountId, [message.id], chatid)
+  const onChatClick = async (chatId: number) => {
+    const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
     onClose()
-    const chat = await BackendRemote.rpc.getFullChatById(accountId, chatid)
     if (!chat.isSelfTalk) {
-      selectChat(chatid)
+      selectChat(chat.id)
+      const yes = await confirmForwardMessage(accountId, message, chat)
+      if (!yes) {
+        selectChat(message.chatId)
+      }
+    } else {
+      await forwardMessage(accountId, message.id, chat.id)
     }
   }
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -47,16 +53,10 @@ export default function ForwardMessage(props: {
     Number(useThemeCssVar('--SPECIAL-chatlist-item-chat-height')) || 64
   return (
     <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
-      <DeltaDialogHeader onClose={onClose}>
-        <input
-          className='search-input'
-          onChange={onSearchChange}
-          value={queryStr}
-          placeholder={tx('contacts_enter_name_or_email')}
-          autoFocus
-          spellCheck={false}
-        />
-      </DeltaDialogHeader>
+      <DeltaDialogHeader
+        onClose={onClose}
+        title={tx('forward_to')}
+      ></DeltaDialogHeader>
       <div
         className={classNames(
           Classes.DIALOG_BODY,
@@ -64,6 +64,16 @@ export default function ForwardMessage(props: {
         )}
       >
         <Card style={{ padding: '0px' }}>
+          <div className='forward-message-account-input'>
+            <input
+              className='search-input'
+              onChange={onSearchChange}
+              value={queryStr}
+              placeholder={tx('search')}
+              autoFocus
+              spellCheck={false}
+            />
+          </div>
           <div className='forward-message-list-chat-list'>
             {noResults && queryStr && (
               <PseudoListItemNoSearchResults queryStr={queryStr} />

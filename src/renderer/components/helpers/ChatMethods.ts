@@ -252,6 +252,14 @@ export async function sendMessage(chatId: number, message: sendMessageParams) {
   chatStore.effect.jumpToMessage(id, false)
 }
 
+export function forwardMessage(
+  accountId: number,
+  messageId: number,
+  chatId: number
+) {
+  return BackendRemote.rpc.forwardMessages(accountId, [messageId], chatId)
+}
+
 export const deleteMessage = (messageId: number) => {
   BackendRemote.rpc.deleteMessages(selectedAccountId(), [messageId])
 }

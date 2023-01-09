@@ -1,7 +1,11 @@
 import { getLogger } from '../../../shared/logger'
 const log = getLogger('render/msgFunctions')
 import { runtime } from '../../runtime'
-import { deleteMessage, selectChat } from '../helpers/ChatMethods'
+import {
+  forwardMessage,
+  deleteMessage,
+  selectChat,
+} from '../helpers/ChatMethods'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { internalOpenWebxdc } from '../../system-integration/webxdc'
@@ -29,8 +33,33 @@ export function openAttachmentInShell(msg: Type.Message) {
   }
 }
 
-export function forwardMessage(message: Type.Message) {
+export function openForwardDialog(message: Type.Message) {
   window.__openDialog('ForwardMessage', { message })
+}
+
+export function confirmDialog(message: string, confirmLabel: string) {
+  return new Promise((res, _rej) => {
+    window.__openDialog('ConfirmationDialog', {
+      message,
+      confirmLabel,
+      cb: (yes: boolean) => {
+        res(yes)
+      },
+    })
+  })
+}
+
+export async function confirmForwardMessage(
+  accountId: number,
+  message: Type.Message,
+  chat: Type.FullChat
+) {
+  const tx = window.static_translate
+  const yes = await confirmDialog(tx('ask_forward', [chat.name]), tx('forward'))
+  if (yes) {
+    await forwardMessage(accountId, message.id, chat.id)
+  }
+  return yes
 }
 
 export function confirmDeleteMessage(msg: Type.Message) {
