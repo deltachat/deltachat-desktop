@@ -530,6 +530,8 @@ export function useLogicVirtualChatList(chatListIds: number[]) {
           ...state,
           [chatId]: LoadStatus.LOADED,
         }))
+        // sleep a while to reduce overall calls
+        await new Promise((res) => setTimeout(res, 150))
       } catch (error) {
         log.warn('error loading chatlistitem', error)
       }
