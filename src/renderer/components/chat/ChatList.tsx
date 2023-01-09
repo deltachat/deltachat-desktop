@@ -505,16 +505,7 @@ export function useLogicVirtualChatList(chatListIds: number[]) {
 
   const onChatListItemChanged = useMemo(() => {
     let debouncingChatlistItemRequests: { [chatid: number]: number } = {}
-    let cleanup_timeout: any | null = null
     const updateChatListItem = async (chatId: number) => {
-      if (cleanup_timeout === null) {
-        // clean up debouncingChatlistItemRequests every half minute,
-        // so if there should ever be an error it auto recovers
-        cleanup_timeout = setTimeout(() => {
-          debouncingChatlistItemRequests = {}
-          cleanup_timeout = null
-        }, 30000)
-      }
       debouncingChatlistItemRequests[chatId] = 1
       try {
         setChatLoading(state => ({
