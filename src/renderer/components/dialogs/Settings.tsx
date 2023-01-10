@@ -246,13 +246,15 @@ export default function Settings(props: DialogProps) {
                 >
                   {tx('pref_experimental_features')}
                 </SettingsIconButton>
+                {/* 
                 <SettingsIconButton
                   iconName='favorite'
                   onClick={() => runtime.openLink(donationUrl)}
                   isLink
                 >
                   {tx('pref_donate')}
-                </SettingsIconButton>
+                </SettingsIconButton> 
+                */}
               </Card>
             </DeltaDialogBody>
           </>

@@ -14,6 +14,9 @@
 - fix default welcome screen height so all buttons fit scrollbar is hidden
 - fix unblock contact did not update the chatlist
 
+### Removed
+- temporarily remove donate link to make app store release possible again
+
 <a id="1_34_1"></a>
 
 ## [1.34.1] - 2022-12-22
