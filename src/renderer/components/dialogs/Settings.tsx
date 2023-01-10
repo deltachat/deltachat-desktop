@@ -21,8 +21,8 @@ import SettingsStoreInstance, {
   SettingsStoreState,
   useSettingsStore,
 } from '../../stores/settings'
-import { runtime } from '../../runtime'
-import { donationUrl } from '../../../shared/constants'
+// import { runtime } from '../../runtime'
+// import { donationUrl } from '../../../shared/constants'
 
 export function flipDeltaBoolean(value: string) {
   return value === '1' ? '0' : '1'
