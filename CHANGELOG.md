@@ -7,7 +7,7 @@
 
 ### Changed
 - forward message dialog now has a title and a confirmation dialog and chat preview before forwarding
-- update deltachat-node and deltachat/jsonrpc-client to `v1.105.0`
+- update deltachat-node and deltachat/jsonrpc-client to `v1.106.0`
 - change style of "Archived Chats" chatlist item
 
 ### Fixed
