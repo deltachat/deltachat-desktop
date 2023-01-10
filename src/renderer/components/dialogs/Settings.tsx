@@ -21,8 +21,8 @@ import SettingsStoreInstance, {
   SettingsStoreState,
   useSettingsStore,
 } from '../../stores/settings'
-import { runtime } from '../../runtime'
-import { donationUrl } from '../../../shared/constants'
+// import { runtime } from '../../runtime'
+// import { donationUrl } from '../../../shared/constants'
 
 export function flipDeltaBoolean(value: string) {
   return value === '1' ? '0' : '1'
@@ -246,13 +246,15 @@ export default function Settings(props: DialogProps) {
                 >
                   {tx('pref_experimental_features')}
                 </SettingsIconButton>
+                {/* 
                 <SettingsIconButton
                   iconName='favorite'
                   onClick={() => runtime.openLink(donationUrl)}
                   isLink
                 >
                   {tx('pref_donate')}
-                </SettingsIconButton>
+                </SettingsIconButton> 
+                */}
               </Card>
             </DeltaDialogBody>
           </>
