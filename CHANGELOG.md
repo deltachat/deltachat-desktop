@@ -15,7 +15,7 @@
 - fix unblock contact did not update the chatlist
 
 ### Removed
-- temporarily remove donate link to make app store release possible again
+- temporarily remove donate link to make app store release possible again (only on MacOS)
 
 <a id="1_34_1"></a>
 
