@@ -76,5 +76,11 @@
   },
   "donate_money_reason":{
     "message": "Your support helps us to continue to improve Delta Chat."
+  },
+  "in_app_donate_no_permission": {
+    "message": "The user is not allowed to make in-app purchase."
+  },
+  "in_app_donate_not_availible": {
+    "message": "in-app donation failed to load, please conect to the internet"
   }
 }

@@ -5,7 +5,7 @@ import { contributeUrl, donationUrl } from '../../../shared/constants'
 export function SettingsDonate({}: {}) {
   const tx = window.static_translate
 
-  const MoneySection = false /* isMacAppstoreBuild */
+  const MoneySection = true /* isMacAppstoreBuild */
     ? DonateMacOSAppstore
     : DonateMoney
 
@@ -51,5 +51,18 @@ function DonateMoney() {
 }
 
 function DonateMacOSAppstore() {
-  return <div>options</div>
+
+  // only one recuring donation option, because otherwise we'd need to track if the user is already subscribed
+  return (
+    <div>
+
+      <button
+        onClick={() =>
+          runtime.openLink('https://apps.apple.com/account/subscriptions')
+        }
+      >
+        Manage Recuring Donation
+      </button>
+    </div>
+  )
 }
