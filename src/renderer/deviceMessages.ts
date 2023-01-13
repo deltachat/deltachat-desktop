@@ -21,11 +21,12 @@ Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANG
 
   BackendRemote.rpc.addDeviceMessage(
     accountId,
-    'changelog-version-1.34.1-version0',
-    `What's new in 1.34.1?
+    'changelog-version-1.34.2-version0',
+    `What's new in 1.34.2?
 
-Some smaller bug fixes and improvements.
+We resolved two email (IMAP) connection issues.
+This release also includes some smaller improvements and bug fixes.
 
-Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1_34_1`
+Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1_34_2`
   )
 }

@@ -3,6 +3,18 @@
 ## [Unreleased][unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+### Removed
+
+<a id="1_34_2"></a>
+
+## [1.34.2] - 2023-01-12
+
+### Added
 - show count of the archived chats with unread messages
 
 ### Changed
@@ -1839,7 +1851,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.34.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.34.2...HEAD
+
+[1.34.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.34.1...v1.34.2
 
 [1.34.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.34.0...v1.34.1
 
