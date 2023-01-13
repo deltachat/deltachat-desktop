@@ -23,6 +23,7 @@ import SettingsStoreInstance, {
 } from '../../stores/settings'
 import { runtime } from '../../runtime'
 import { donationUrl } from '../../../shared/constants'
+import { SettingsDonate } from './Settings-Donate'
 
 export function flipDeltaBoolean(value: string) {
   return value === '1' ? '0' : '1'
@@ -353,6 +354,22 @@ export default function Settings(props: DialogProps) {
                   renderDeltaSwitch2={renderDeltaSwitch2}
                   renderDTSettingSwitch={renderDTSettingSwitch}
                 />
+              </Card>
+            </DeltaDialogBody>
+          </>
+        )}
+        {settingsMode === 'donation' && (
+          <>
+            <DeltaDialogHeader
+              title={tx('contribute_to_deltachat')}
+              showBackButton={true}
+              onClickBack={() => setSettingsMode('main')}
+              showCloseButton={true}
+              onClose={onClose}
+            />
+            <DeltaDialogBody>
+              <Card elevation={Elevation.ONE}>
+                <SettingsDonate />
               </Card>
             </DeltaDialogBody>
           </>

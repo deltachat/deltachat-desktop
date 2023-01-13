@@ -267,3 +267,19 @@ https://developer.apple.com/library/archive/documentation/Miscellaneous/Referenc
 
 If you want to debug how many jsonrpc calls were made you can run `exp.printCallCounterResult()` in the devConsole when you have debug logging enabled.
 This can be useful if you want to test your debouncing logic or compare a branch against another branch, to see if you change reduced overall jsonrpc calls.
+
+### MacOS in app purchase stuff for donations on MacOS:
+
+To test it you need to replace the bundle id:
+
+```
+sed -i s/com.github.Electron/chat.delta.desktop.electron/ node_modules/electron/dist/Electron.app/Contents/Info.plist
+```
+
+> note: that the `-i` option does only work with the gnu version of `sed`.
+
+
+#### Useful links:
+
+- https://help.apple.com/app-store-connect/#/devb57be10e7
+- Create a Sandbox Apple ID - https://help.apple.com/app-store-connect/#/dev8b997bee1

@@ -208,3 +208,61 @@
     padding-top: 0px;
   }
 }
+
+div.donate-page {
+  margin: 4px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 395px;
+
+  p.donate-reason {
+    font-size: 23px;
+    line-height: 30px;
+  }
+
+  .donate-money-section {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+  }
+
+  .donate-time-section {
+    .other-ways {
+      font-size: 18px;
+      line-height: 23px;
+      margin-bottom: 17px;
+    }
+  }
+
+  .spacer {
+    flex-grow: 1;
+  }
+
+  button {
+    &:hover {
+      background-color: #5c85ff;
+    }
+
+    background-color: #7396ff;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 36px;
+    display: flex;
+    font-size: 23px;
+    text-align: start;
+    width: 100%;
+    .label {
+      flex-grow: 1;
+    }
+    .Icon {
+      width: 24px;
+      height: 24px;
+      mask-size: 80%;
+      -webkit-mask-size: 80%;
+      background-color: black;
+    }
+  }
+}
