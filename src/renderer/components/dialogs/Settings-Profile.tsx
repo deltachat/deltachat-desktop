@@ -291,7 +291,7 @@ export function SettingsProfileDialog({
   isOpen: DialogProps['isOpen']
   onClose: DialogProps['onClose']
   settingsStore: SettingsStoreState
-  title?: DialogProps['title']
+  title?: string
   cancelLabel?: string
   confirmLabel?: string
   simpleSetup?: boolean
