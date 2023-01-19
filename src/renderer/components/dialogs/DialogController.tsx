@@ -56,6 +56,7 @@ export type DialogProps = {
   onClose: () => void
   userFeedback: todo
   key: string
+  title: todo
   openDialog: todo
   closeDialog: todo
   [key: string]: any
