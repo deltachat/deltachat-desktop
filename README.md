@@ -12,17 +12,21 @@
 
 <details><summary>Click to expand</summary>
 
-- [Install](#install)
-  - [Linux](#linux)
-    - [Flatpak](#flatpak)
-    - [Arch Linux](#arch-linux)
-  - [Mac OS](#mac)
-  - [From Source](#source)
-  - [Troubleshooting](#troubleshooting)
-- [Configuration and Databases](#config-and-db)
-- [How to Contribute](#how-to-contribute)
-- [Logging](#logging)
-- [License](#license)
+- [deltachat-desktop](#deltachat-desktop)
+  - [Table of Contents](#table-of-contents)
+  - [Install ](#install-)
+    - [Linux ](#linux-)
+      - [Flatpak ](#flatpak-)
+      - [Arch Linux ](#arch-linux-)
+    - [Mac OS ](#mac-os-)
+    - [Homebrew](#homebrew)
+    - [DMG](#dmg)
+    - [From Source ](#from-source-)
+    - [Troubleshooting ](#troubleshooting-)
+  - [Configuration and Databases ](#configuration-and-databases-)
+  - [How to Contribute ](#how-to-contribute-)
+  - [Logging ](#logging-)
+  - [License ](#license-)
 
 </details>
 
@@ -104,6 +108,8 @@ $ npm run build
 # Start the application:
 $ npm start
 ```
+
+For development with local deltachat-core read the [docs](docs/UPDATE_CORE.md)
 
 ### Troubleshooting <a id="troubleshooting"></a>
 
