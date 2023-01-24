@@ -337,12 +337,13 @@ class MessageListStore extends Store<MessageListState> {
           )
           newestFetchedMessageListItemIndex = messageListItems.length - 1
 
-          messageCache = await loadMessages(
-            this.accountId,
-            messageListItems,
-            oldestFetchedMessageListItemIndex,
-            newestFetchedMessageListItemIndex
-          )
+          messageCache =
+            (await loadMessages(
+              this.accountId,
+              messageListItems,
+              oldestFetchedMessageListItemIndex,
+              newestFetchedMessageListItemIndex
+            ).catch(err => this.log.error('loadMessages failed', err))) || {}
         }
 
         this.reducer.selectedChat({
@@ -500,12 +501,13 @@ class MessageListStore extends Store<MessageListState> {
             )
           }
 
-          messageCache = await loadMessages(
-            accountId,
-            messageListItems,
-            oldestFetchedMessageListItemIndex,
-            newestFetchedMessageListItemIndex
-          )
+          messageCache =
+            (await loadMessages(
+              accountId,
+              messageListItems,
+              oldestFetchedMessageListItemIndex,
+              newestFetchedMessageListItemIndex
+            ).catch(err => this.log.error('loadMessages failed', err))) || {}
         }
 
         this.reducer.selectedChat({
@@ -591,12 +593,13 @@ class MessageListStore extends Store<MessageListState> {
             return false
           }
 
-          const newMessageCacheItems = await loadMessages(
-            this.accountId,
-            state.messageListItems,
-            oldestFetchedMessageListItemIndex,
-            lastMessageIndexOnLastPage - 1
-          )
+          const newMessageCacheItems =
+            (await loadMessages(
+              this.accountId,
+              state.messageListItems,
+              oldestFetchedMessageListItemIndex,
+              lastMessageIndexOnLastPage - 1
+            ).catch(err => this.log.error('loadMessages failed', err))) || {}
 
           this.reducer.appendMessagePageTop({
             id,
@@ -645,12 +648,13 @@ class MessageListStore extends Store<MessageListState> {
             return false
           }
 
-          const newMessageCacheItems = await loadMessages(
-            this.accountId,
-            state.messageListItems,
-            newestFetchedMessageListItemIndex,
-            newNewestFetchedMessageListItemIndex
-          )
+          const newMessageCacheItems =
+            (await loadMessages(
+              this.accountId,
+              state.messageListItems,
+              newestFetchedMessageListItemIndex,
+              newNewestFetchedMessageListItemIndex
+            ).catch(err => this.log.error('loadMessages failed', err))) || {}
 
           this.reducer.appendMessagePageBottom({
             newMessageCacheItems,
@@ -686,12 +690,13 @@ class MessageListStore extends Store<MessageListState> {
             0
           )
 
-          const messageCache = await loadMessages(
-            this.accountId,
-            messageListItems,
-            oldestFetchedMessageListItemIndex,
-            newestFetchedMessageListItemIndex
-          )
+          const messageCache =
+            (await loadMessages(
+              this.accountId,
+              messageListItems,
+              oldestFetchedMessageListItemIndex,
+              newestFetchedMessageListItemIndex
+            ).catch(err => this.log.error('loadMessages failed', err))) || {}
 
           this.reducer.refresh(
             messageListItems,
@@ -752,12 +757,13 @@ class MessageListStore extends Store<MessageListState> {
         return
       }
 
-      const newMessageCacheItems = await loadMessages(
-        this.accountId,
-        messageListItems,
-        indexStart,
-        indexEnd
-      )
+      const newMessageCacheItems =
+        (await loadMessages(
+          this.accountId,
+          messageListItems,
+          indexStart,
+          indexEnd
+        ).catch(err => this.log.error('loadMessages failed', err))) || {}
 
       this.reducer.fetchedIncomingMessages({
         messageListItems,

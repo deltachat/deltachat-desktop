@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- still show the rest of the chat, even if loading first batch of messages failed
 
 ### Removed
 
