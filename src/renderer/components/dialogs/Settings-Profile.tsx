@@ -123,7 +123,6 @@ export function ProfileImageSelector({
   color,
   profilePicture,
   setProfilePicture,
-  hideDeleteButton = false,
 }: {
   displayName: string
   addr: string
@@ -169,16 +168,14 @@ export function ProfileImageSelector({
         >
           {tx('profile_image_select')}
         </button>
-        {!hideDeleteButton ? (
-          <button
-            aria-label={tx('profile_image_delete')}
-            onClick={onClickRemovePicture}
-            className={'delta-button-round'}
-            disabled={!profilePicture}
-          >
-            {tx('profile_image_delete')}
-          </button>
-        ) : null}
+        <button
+          aria-label={tx('profile_image_delete')}
+          onClick={onClickRemovePicture}
+          className={'delta-button-round'}
+          disabled={!profilePicture}
+        >
+          {tx('profile_image_delete')}
+        </button>
       </>
     </div>
   )
@@ -236,7 +233,6 @@ export function SettingsEditProfileDialogInner({
               color={settingsStore.selfContact.color}
               profilePicture={profilePicture}
               setProfilePicture={setProfilePicture}
-              hideDeleteButton={simpleSetup}
             />
           </div>
           <DeltaInput
@@ -251,9 +247,8 @@ export function SettingsEditProfileDialogInner({
               setDisplayname(event.target.value)
             }}
           />
-          {simpleSetup ? (
-            <span>You can change that later in the settings</span>
-          ) : (
+          {simpleSetup ? <span>{tx('settings_can_change_later')}</span> : null}
+          {simpleSetup ? null : (
             <DeltaTextarea
               key='status'
               id='status'

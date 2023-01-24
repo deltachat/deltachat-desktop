@@ -116,8 +116,8 @@ export default function MainScreen() {
     screenContext.openDialog(SettingsProfileDialog, {
       settingsStore,
       title: 'Account setup',
-      confirmLabel: 'ok',
-      cancelLabel: 'later',
+      confirmLabel: tx('ok'),
+      cancelLabel: tx('later'),
       simpleSetup: true,
     })
   }
