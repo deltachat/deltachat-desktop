@@ -23,46 +23,6 @@ import { DcEventType } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/loginForm')
 
-const getDefaultPort = (credentials: Credentials, protocol: string) => {
-  const SendSecurityPortMap = {
-    imap: {
-      ssl: 993,
-      default: 143,
-    },
-    smtp: {
-      ssl: 465,
-      starttls: 587,
-      plain: 25,
-    },
-  }
-  const { mail_security, send_security } = credentials
-  if (protocol === 'imap') {
-    if (
-      mail_security === C.DC_SOCKET_AUTO.toString() ||
-      mail_security === '' ||
-      mail_security === C.DC_SOCKET_SSL.toString()
-    ) {
-      return SendSecurityPortMap.imap['ssl']
-    } else {
-      return SendSecurityPortMap.imap['default']
-    }
-  } else {
-    if (
-      send_security === C.DC_SOCKET_AUTO.toString() ||
-      send_security === '' ||
-      send_security === C.DC_SOCKET_SSL.toString()
-    ) {
-      return SendSecurityPortMap.smtp['ssl']
-    } else if (send_security === C.DC_SOCKET_STARTTLS.toString()) {
-      return SendSecurityPortMap.smtp['starttls']
-    } else if (send_security === C.DC_SOCKET_PLAIN.toString()) {
-      return SendSecurityPortMap.smtp['plain']
-    } else {
-      return SendSecurityPortMap.smtp['ssl']
-    }
-  }
-}
-
 export function defaultCredentials(credentials?: Credentials): Credentials {
   const defaultCredentials: Credentials = {
     addr: '',
@@ -257,10 +217,7 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
               key='mail_port'
               id='mail_port'
               label={tx('login_imap_port')}
-              placeholder={tx(
-                'default_value',
-                String(getDefaultPort(credentials, 'imap'))
-              )}
+              placeholder={tx('def')}
               type='number'
               min='0'
               max='65535'
@@ -309,10 +266,7 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
             <DeltaInput
               key='send_port'
               id='send_port'
-              placeholder={tx(
-                'default_value',
-                String(getDefaultPort(credentials, 'smtp'))
-              )}
+              placeholder={tx('def')}
               label={tx('login_smtp_port')}
               type='number'
               min='0'
