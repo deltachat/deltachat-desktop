@@ -118,7 +118,7 @@ export default function MainScreen() {
       title: 'Account setup',
       confirmLabel: tx('ok'),
       cancelLabel: tx('later'),
-      simpleSetup: true,
+      firstSetup: true,
     })
   }
 

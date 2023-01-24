@@ -186,13 +186,13 @@ export function SettingsEditProfileDialogInner({
   settingsStore,
   cancelLabel,
   confirmLabel,
-  simpleSetup = false,
+  firstSetup = false,
 }: {
   onClose: DialogProps['onClose']
   settingsStore: SettingsStoreState
   cancelLabel?: string
   confirmLabel?: string
-  simpleSetup?: boolean
+  firstSetup?: boolean
 }) {
   const tx = useTranslationFunction()
   const [displayname, setDisplayname] = useState(
@@ -247,8 +247,14 @@ export function SettingsEditProfileDialogInner({
               setDisplayname(event.target.value)
             }}
           />
-          {simpleSetup ? <span>{tx('settings_can_change_later')}</span> : null}
-          {simpleSetup ? null : (
+          {firstSetup ? (
+            <p className='bp4-callout'>
+              {tx('qraccount_success_enter_name', [
+                settingsStore.selfContact.address,
+              ])}
+            </p>
+          ) : null}
+          {firstSetup ? null : (
             <DeltaTextarea
               key='status'
               id='status'
@@ -281,7 +287,7 @@ export function SettingsProfileDialog({
   title,
   cancelLabel,
   confirmLabel,
-  simpleSetup = false,
+  firstSetup = false,
 }: {
   isOpen: DialogProps['isOpen']
   onClose: DialogProps['onClose']
@@ -289,7 +295,7 @@ export function SettingsProfileDialog({
   title?: string
   cancelLabel?: string
   confirmLabel?: string
-  simpleSetup?: boolean
+  firstSetup?: boolean
 }) {
   const tx = useTranslationFunction()
   title = title || tx('pref_edit_profile')
@@ -309,7 +315,7 @@ export function SettingsProfileDialog({
         onClose,
         cancelLabel,
         confirmLabel,
-        simpleSetup,
+        firstSetup,
       })}
     </DeltaDialogBase>
   )
