@@ -129,6 +129,7 @@ export function ProfileImageSelector({
   color: string
   profilePicture: string | null
   setProfilePicture: (path: string) => void
+  hideDeleteButton?: boolean
 }) {
   const tx = window.static_translate
 
@@ -183,9 +184,15 @@ export function ProfileImageSelector({
 export function SettingsEditProfileDialogInner({
   onClose,
   settingsStore,
+  cancelLabel,
+  confirmLabel,
+  firstSetup = false,
 }: {
   onClose: DialogProps['onClose']
   settingsStore: SettingsStoreState
+  cancelLabel?: string
+  confirmLabel?: string
+  firstSetup?: boolean
 }) {
   const tx = useTranslationFunction()
   const [displayname, setDisplayname] = useState(
@@ -240,21 +247,35 @@ export function SettingsEditProfileDialogInner({
               setDisplayname(event.target.value)
             }}
           />
-          <DeltaTextarea
-            key='status'
-            id='status'
-            placeholder={tx('pref_default_status_label')}
-            value={selfstatus}
-            onChange={(
-              event: React.FormEvent<HTMLElement> &
-                React.ChangeEvent<HTMLTextAreaElement>
-            ) => {
-              setSelfstatus(event.target.value)
-            }}
-          />
+          {firstSetup ? (
+            <p className='bp4-callout'>
+              {tx('qraccount_success_enter_name', [
+                settingsStore.selfContact.address,
+              ])}
+            </p>
+          ) : null}
+          {firstSetup ? null : (
+            <DeltaTextarea
+              key='status'
+              id='status'
+              placeholder={tx('pref_default_status_label')}
+              value={selfstatus}
+              onChange={(
+                event: React.FormEvent<HTMLElement> &
+                  React.ChangeEvent<HTMLTextAreaElement>
+              ) => {
+                setSelfstatus(event.target.value)
+              }}
+            />
+          )}
         </Card>
       </DeltaDialogBody>
-      <DeltaDialogOkCancelFooter onCancel={onCancel} onOk={onOk} />
+      <DeltaDialogOkCancelFooter
+        cancelLabel={cancelLabel}
+        confirmLabel={confirmLabel}
+        onCancel={onCancel}
+        onOk={onOk}
+      />
     </>
   )
 }
@@ -263,12 +284,21 @@ export function SettingsProfileDialog({
   onClose,
   isOpen,
   settingsStore,
+  title,
+  cancelLabel,
+  confirmLabel,
+  firstSetup = false,
 }: {
   isOpen: DialogProps['isOpen']
   onClose: DialogProps['onClose']
   settingsStore: SettingsStoreState
+  title?: string
+  cancelLabel?: string
+  confirmLabel?: string
+  firstSetup?: boolean
 }) {
   const tx = useTranslationFunction()
+  title = title || tx('pref_edit_profile')
   return (
     <DeltaDialogBase
       onClose={onClose}
@@ -279,10 +309,13 @@ export function SettingsProfileDialog({
         width: '500px',
       }}
     >
-      <DeltaDialogHeader title={tx('pref_edit_profile')} />
+      <DeltaDialogHeader title={title} />
       {SettingsEditProfileDialogInner({
         settingsStore,
         onClose,
+        cancelLabel,
+        confirmLabel,
+        firstSetup,
       })}
     </DeltaDialogBase>
   )

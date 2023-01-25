@@ -231,6 +231,7 @@ export default async function processOpenQrUrl(
         window.__openDialog(ConfigureProgressDialog, {
           credentials: {},
           onSuccess: () => {
+            window.__askForName = true
             window.__changeScreen(Screens.Main)
             callback()
           },

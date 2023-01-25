@@ -41,6 +41,7 @@ import Sidebar, { SidebarState } from '../Sidebar'
 import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 import { Type } from '../../backend-com'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
+import { SettingsProfileDialog } from '../dialogs/Settings-Profile'
 
 const log = getLogger('renderer/main-screen')
 
@@ -109,6 +110,17 @@ export default function MainScreen() {
 
   const tx = useTranslationFunction()
   const settingsStore = useSettingsStore()[0]
+
+  if (settingsStore && window.__askForName) {
+    window.__askForName = false
+    screenContext.openDialog(SettingsProfileDialog, {
+      settingsStore,
+      title: 'Account setup',
+      confirmLabel: tx('ok'),
+      cancelLabel: tx('later'),
+      firstSetup: true,
+    })
+  }
 
   const searchRef = useRef<HTMLInputElement>(null)
 

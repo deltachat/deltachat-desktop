@@ -61,5 +61,8 @@
   },
   "save_sticker": {
     "message": "Save Sticker"
+  },
+  "later": {
+    "message": "Later"
   }
 }

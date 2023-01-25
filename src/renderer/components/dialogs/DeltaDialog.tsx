@@ -375,13 +375,20 @@ export function DeltaDialogOkCancelFooter({
   onCancel,
   onOk,
   disableOK,
+  cancelLabel,
+  confirmLabel,
 }: {
   onCancel: () => any
   onOk: () => any
   disableOK?: boolean
+  cancelLabel?: string
+  confirmLabel?: string
 }) {
   const tx = window.static_translate
   disableOK = disableOK === true ? true : false
+
+  cancelLabel = cancelLabel || tx('cancel')
+  confirmLabel = confirmLabel || tx('ok')
 
   return (
     <DeltaDialogFooter>
@@ -391,7 +398,7 @@ export function DeltaDialogOkCancelFooter({
           style={{ marginRight: '10px' }}
           onClick={onCancel}
         >
-          {tx('cancel')}
+          {cancelLabel}
         </p>
         <p
           //className={ 'delta-button bold primary' + disableOK ? " disabled" : "" }
@@ -403,7 +410,7 @@ export function DeltaDialogOkCancelFooter({
           )}
           onClick={onOk}
         >
-          {tx('ok')}
+          {confirmLabel}
         </p>
       </DeltaDialogFooterActions>
     </DeltaDialogFooter>

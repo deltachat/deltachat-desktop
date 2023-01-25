@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- new dialog to change profile name/photo pops up after logging with a QR-Code
 
 ### Changed
 
