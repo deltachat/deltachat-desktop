@@ -10,6 +10,12 @@
 ### Fixed
 
 ### Removed
+- Removed port numbers from advanced settings placeholders.
+  Delta Chat core may try multiple ports during autoconfiguration,
+  load configuraiton from the server or from the provider database,
+  so displayed placeholder was sometimes incorrect.
+  Now a simple string "Default" is displayed instead.
+  (<https://github.com/deltachat/deltachat-desktop/pull/3094>)
 
 <a id="1_34_2"></a>
 
