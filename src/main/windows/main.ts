@@ -37,7 +37,7 @@ export function init(options: { hidden: boolean }) {
       x: initialBounds.x,
       y: initialBounds.y,
       webPreferences: {
-        nodeIntegration: false,
+        nodeIntegration: true,
         preload: defaults.preload,
         spellcheck: false, // until we can load a local dictionary, see https://github.com/electron/electron/issues/22995
         webSecurity: true,
