@@ -6,8 +6,8 @@ const log = getLogger('main/deltachat/webxdc')
 import Mime from 'mime-types'
 import { Menu, nativeImage, shell } from 'electron'
 import { join } from 'path'
-import { readdir, stat, rmdir, writeFile } from 'fs/promises'
-import { getConfigPath } from '../application-constants'
+import { readdir, stat, rmdir, writeFile, readFile } from 'fs/promises'
+import { getConfigPath, htmlDistDir } from '../application-constants'
 import UrlParser from 'url-parse'
 import type { Message } from 'deltachat-node'
 import { truncateText } from '../../shared/util'
@@ -37,7 +37,10 @@ const CSP =
   font-src 'self' data: blob: ;\
   script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: ;\
   connect-src 'self' data: blob: ;\
-  img-src 'self' data: blob: ;"
+  img-src 'self' data: blob: ;\
+  webrtc 'block'"
+
+const WRAPPER_PATH = 'webxdc-wrapper.45870014933640136498.html'
 
 export default class DCWebxdc extends SplitOut {
   constructor(controller: DeltaChatController) {
@@ -119,7 +122,19 @@ export default class DCWebxdc extends SplitOut {
               filename = filename.substr(1)
             }
 
-            if (filename === 'webxdc.js') {
+            if (filename === WRAPPER_PATH) {
+              callback({
+                mimeType: Mime.lookup(filename) || '',
+                data: await readFile(
+                  join(htmlDistDir(), '/webxdc_wrapper.html')
+                ),
+                headers: open_apps[id].internet_access
+                  ? {}
+                  : {
+                      'Content-Security-Policy': CSP,
+                    },
+              })
+            } else if (filename === 'webxdc.js') {
               const displayName = Buffer.from(
                 displayname || addr || 'unknown'
               ).toString('base64')
@@ -131,7 +146,8 @@ export default class DCWebxdc extends SplitOut {
               callback({
                 mimeType: Mime.lookup(filename) || '',
                 data: Buffer.from(
-                  `window.webxdc_internal.setup("${seflAddr}","${displayName}")`
+                  `window.parent.webxdc_internal.setup("${seflAddr}","${displayName}")
+                  window.webxdc = window.parent.webxdc`
                 ),
               })
             } else {
@@ -240,9 +256,17 @@ export default class DCWebxdc extends SplitOut {
 
       webxdc_windows.once('ready-to-show', () => {})
 
-      webxdc_windows.webContents.loadURL(appURL + '/index.html', {
+      webxdc_windows.webContents.loadURL(appURL + '/' + WRAPPER_PATH, {
         extraHeaders: 'Content-Security-Policy: ' + CSP,
       })
+
+      // prevent reload and naviagtion of wrapper page
+      webxdc_windows.webContents.on('will-navigate', ev => {
+        ev.preventDefault()
+      })
+
+      // we would like to make `mailto:`-links work,
+      // but https://github.com/electron/electron/pull/34418 is not merged yet.
 
       // prevent webxdc content from setting the window title
       webxdc_windows.on('page-title-updated', ev => {
@@ -293,6 +317,16 @@ If you think that's a bug and you need that permission, then please open an issu
         key => open_apps[key].win.webContents === event.sender
       )
       if (key) open_apps[key].win.setFullScreen(false)
+    })
+
+    ipcMain.handle('webxdc.exit', async event => {
+      const key = Object.keys(open_apps).find(
+        key => open_apps[key].win.webContents === event.sender
+      )
+      if (key) {
+        open_apps[key].win.loadURL('about:blank')
+        open_apps[key].win.close()
+      }
     })
 
     ipcMain.handle('webxdc.getAllUpdates', async (event, serial = 0) => {

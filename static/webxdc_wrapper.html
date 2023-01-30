@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .iframe-container {
+        overflow: hidden;
+        height: 100vh;
+        width: 100vw;
+        position: relative;
+      }
+      .iframe-container iframe {
+        border: 0;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+      }
+      #progress {
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loading">
+      <progress id="progress" max="100" value="0"></progress>
+    </div>
+    <div class="iframe-container">
+      <iframe id="frame"></iframe>
+    </div>
+    <script>
+      const iframe = document.getElementById('frame')
+      window.webxdc_internal.fill_up_connections()
+    </script>
+  </body>
+</html>
