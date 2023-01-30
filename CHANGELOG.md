@@ -11,6 +11,7 @@
   - to make this work, we also moved some electron api invocations from preload script to main process
 
 ### Fixed
+- still show the rest of the chat, even if loading first batch of messages failed
 
 ### Removed
 - Removed port numbers from advanced settings placeholders.

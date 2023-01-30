@@ -174,7 +174,10 @@ export class ChatStoreScheduler {
         returnValue = await effect(...args)
       } catch (err) {
         log.error(
-          `Error in lockedQueuedEffect ${effectName}: ${(err as Error).stack}`
+          `Error in lockedQueuedEffect ${effectName}: ${
+            err instanceof Error ? err.name + err.message : err
+          }`,
+          err
         )
         unlockQueue()
         return
