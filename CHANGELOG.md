@@ -8,6 +8,7 @@
 ### Changed
 - upgrade electron to version `22`
   - to make this work, we also moved some electron api invocations from preload script to main process
+- update deltachat-node and deltachat/jsonrpc-client to `v1.107.0`
 
 ### Fixed
 
