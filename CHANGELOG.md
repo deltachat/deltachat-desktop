@@ -4,6 +4,7 @@
 
 ### Added
 - new dialog to change profile name/photo pops up after logging with a QR-Code
+- add progressbar to webxdc loading
 
 ### Changed
 - upgrade electron to version `22`
