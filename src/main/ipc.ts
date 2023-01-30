@@ -1,5 +1,12 @@
 import { copyFile, mkdir, mkdtemp, rm } from 'fs/promises'
-import { app as rawApp, clipboard, dialog, ipcMain, shell } from 'electron'
+import {
+  app as rawApp,
+  clipboard,
+  dialog,
+  ipcMain,
+  nativeImage,
+  shell,
+} from 'electron'
 import { getLogger } from '../shared/logger'
 import { getLogsPath } from './application-constants'
 import { LogHandler } from './log-handler'
@@ -177,6 +184,20 @@ export async function init(cwd: string, logHandler: LogHandler) {
   ipcMain.handle('app.writeClipboardToTempFile', () =>
     writeClipboardToTempFile()
   )
+
+  ipcMain.handle('electron.shell.openExternal', (_ev, url) =>
+    shell.openExternal(url)
+  )
+  ipcMain.handle('electron.shell.openPath', (_ev, path) => shell.openPath(path))
+  ipcMain.handle('electron.clipboard.readText', _ev => {
+    return clipboard.readText()
+  })
+  ipcMain.handle('electron.clipboard.writeText', (_ev, text) => {
+    return clipboard.writeText(text)
+  })
+  ipcMain.handle('electron.clipboard.writeImage', (_ev, path) => {
+    return clipboard.writeImage(nativeImage.createFromPath(path))
+  })
 
   ipcMain.handle(
     'saveBackgroundImage',

@@ -7,13 +7,21 @@
           content="default-src 'none';
                    style-src 'self' 'unsafe-inline';
                    font-src 'self';
-                   script-src 'self';
+                   script-src 'self' 'wasm-unsafe-eval';
                    worker-src blob: ;
                    child-src blob: ;
                    img-src 'self' data: blob: file: webxdc-icon: ;
                    media-src 'self' file: ;
                    connect-src https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com 'self'"
     >
+    <!-- 
+      script-src 'wasm-unsafe-eval' for script is needed for the message parser wasm,
+      maybe there is a way to build it differently to not need this csp case
+
+      style-src 'unsafe-inline' is need for theming and for the virtual list, see https://github.com/deltachat/deltachat-desktop/issues/2105
+
+      worker-src blob: is needed for mapbox afaik
+     -->
     <link rel="stylesheet" href="./fonts/fonts.css">
     <link rel="stylesheet" href="main.css" />
     <link rel="stylesheet" href="fallback-theme.css" />
