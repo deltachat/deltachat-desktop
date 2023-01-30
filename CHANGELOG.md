@@ -3,6 +3,18 @@
 ## [Unreleased][unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+### Removed
+
+<a id="1_34_3"></a>
+
+## [1.34.3] - 2023-01-30
+
+### Added
 - new dialog to change profile name/photo pops up after logging with a QR-Code
 - add progressbar to webxdc loading
 
@@ -1863,7 +1875,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.34.2...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.34.3...HEAD
+
+[1.343]: https://github.com/deltachat/deltachat-desktop/compare/v1.34.2...v1.34.3
 
 [1.34.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.34.1...v1.34.2
 
