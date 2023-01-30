@@ -6,6 +6,8 @@
 - new dialog to change profile name/photo pops up after logging with a QR-Code
 
 ### Changed
+- upgrade electron to version `22`
+  - to make this work, we also moved some electron api invocations from preload script to main process
 
 ### Fixed
 

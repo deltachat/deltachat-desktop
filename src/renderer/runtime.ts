@@ -7,38 +7,18 @@ import {
   Theme,
 } from '../shared/shared-types'
 import { setLogHandler } from '../shared/logger'
-import type {
-  dialog,
-  app,
-  shell,
-  clipboard,
-  nativeImage as electronNativeImage,
-} from 'electron'
+import type { dialog, app } from 'electron'
 import { getLogger } from '../shared/logger'
 import processOpenQrUrl from './components/helpers/OpenQrUrl'
 import { LocaleData } from '../shared/localize'
 
 const log = getLogger('renderer/runtime')
 
-const {
-  openExternal,
-  openPath,
-  nativeImage,
-  write_clipboard_text,
-  read_clipboard_text,
-  app_getPath,
-  write_clipboard_image,
-  ipcRenderer: ipcBackend,
-} = (window as any).electron_functions as {
+const { app_getPath, ipcRenderer: ipcBackend } = (window as any)
+  .electron_functions as {
   // see static/preload.js
   ipcRenderer: import('electron').IpcRenderer
-  openExternal: typeof shell.openExternal
-  openPath: typeof shell.openPath
-  nativeImage: typeof electronNativeImage
   app_getPath: typeof app.getPath
-  write_clipboard_text: typeof clipboard.writeText
-  read_clipboard_text: typeof clipboard.readText
-  write_clipboard_image: typeof clipboard.writeImage
 }
 
 /**
@@ -83,7 +63,7 @@ interface Runtime {
   transformBlobURL(blob: string): string
   readClipboardText(): Promise<string>
   writeClipboardText(text: string): Promise<void>
-  writeClipboardImage(path: string): Promise<boolean>
+  writeClipboardImage(path: string): Promise<void>
   getAppPath(name: Parameters<typeof app.getPath>[0]): string
   openPath(path: string): Promise<string>
   getConfigPath(): string
@@ -258,7 +238,7 @@ class Browser implements Runtime {
     // navigator.clipboard.writeText(text)
     throw new Error('Method not implemented.')
   }
-  writeClipboardImage(_path: string): Promise<boolean> {
+  writeClipboardImage(_path: string): Promise<void> {
     throw new Error('Method not implemented.')
   }
   transformBlobURL(_blob: string): string {
@@ -401,7 +381,7 @@ class Electron implements Runtime {
     ipcBackend.invoke('open-webxdc', msgId, params)
   }
   openPath(path: string): Promise<string> {
-    return openPath(path)
+    return ipcBackend.invoke('electron.shell.openPath', path)
   }
   getAppPath(name: Parameters<Runtime['getAppPath']>[0]): string {
     return app_getPath(name)
@@ -410,23 +390,13 @@ class Electron implements Runtime {
     await ipcBackend.invoke('saveFile', pathToFile)
   }
   readClipboardText(): Promise<string> {
-    return Promise.resolve(read_clipboard_text())
+    return ipcBackend.invoke('electron.clipboard.readText')
   }
   writeClipboardText(text: string): Promise<void> {
-    return Promise.resolve(write_clipboard_text(text))
+    return ipcBackend.invoke('electron.clipboard.writeText', text)
   }
-  writeClipboardImage(path: string): Promise<boolean> {
-    return new Promise(function (resolve) {
-      try {
-        const natImage = nativeImage.createFromPath(path)
-        write_clipboard_image(natImage)
-        log.debug('Copied image to clipboard.')
-        resolve(true)
-      } catch (error) {
-        log.error('Copying image to clipboard failed: ', error)
-        resolve(false)
-      }
-    })
+  writeClipboardImage(path: string): Promise<void> {
+    return ipcBackend.invoke('electron.clipboard.writeImage', path)
   }
   transformBlobURL(blob: string): string {
     if (!blob) {
@@ -448,7 +418,7 @@ class Electron implements Runtime {
     if (link.startsWith('mailto:')) {
       processOpenQrUrl(link)
     } else {
-      openExternal(link)
+      ipcBackend.invoke('electron.shell.openExternal', link)
     }
   }
   private rc_config: RC_Config | null = null
@@ -506,7 +476,7 @@ class Electron implements Runtime {
     ipcBackend.send('help', window.localeData.locale)
   }
   openLogFile(): void {
-    openPath(this.getCurrentLogLocation())
+    ipcBackend.invoke('electron.shell.openPath', this.getCurrentLogLocation())
   }
   getCurrentLogLocation(): string {
     return ipcBackend.sendSync('get-log-path')
