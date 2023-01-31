@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- add context menu option to mark all archived chats as noticed
 
 ### Changed
 

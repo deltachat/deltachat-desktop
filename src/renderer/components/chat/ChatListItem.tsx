@@ -4,10 +4,12 @@ import Timestamp from '../conversations/Timestamp'
 import MessageBody from '../message/MessageBody'
 import { C } from '@deltachat/jsonrpc-client'
 import { Avatar } from '../Avatar'
-import { Type } from '../../backend-com'
+import { BackendRemote, Type } from '../../backend-com'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { T } from '@deltachat/jsonrpc-client'
 import { getLogger } from '../../../shared/logger'
+import { useContextMenu } from '../ContextMenu'
+import { selectedAccountId } from '../../ScreenController'
 
 const log = getLogger('renderer/chatlist/item')
 
@@ -118,10 +120,24 @@ function ChatListItemArchiveLink({
   }
 }) {
   const tx = window.static_translate
+
+  const onContextMenu = useContextMenu([
+    {
+      label: tx('mark_all_as_read'),
+      action: () => {
+        BackendRemote.rpc.marknoticedChat(
+          selectedAccountId(),
+          C.DC_CHAT_ID_ARCHIVED_LINK
+        )
+      },
+    },
+  ])
+
   return (
     <div
       role='button'
       onClick={onClick}
+      onContextMenu={onContextMenu}
       className={'chat-list-item archive-link-item'}
     >
       <div className='avatar'>
