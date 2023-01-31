@@ -90,7 +90,6 @@
     "deltachat-node": "^1.107.0",
     "emoji-js-clean": "^4.0.0",
     "emoji-mart": "5.5.2",
-    "emoji-regex": "^9.2.2",
     "error-stack-parser": "^2.0.7",
     "filesize": "^8.0.6",
     "immutable": "^4.0.0",

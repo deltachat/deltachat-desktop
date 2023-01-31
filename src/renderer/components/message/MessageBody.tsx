@@ -1,6 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
-import { getSizeClass, emojiRegEx, replaceColons } from '../conversations/emoji'
+import { getSizeClass, replaceColons } from '../conversations/emoji'
 import { message2React } from './MessageMarkdown'
 
 export default function MessageBody(props: {
@@ -11,12 +11,8 @@ export default function MessageBody(props: {
   const { text, disableJumbomoji, preview } = props
   // if text is only emojis and Jumbomoji is enabled
   const emojifiedText = trim(text.replace(/:[\w\d_\-+]*:/g, replaceColons))
-  if (
-    emojifiedText.length < 50 &&
-    !disableJumbomoji &&
-    emojifiedText.replace(emojiRegEx, '') === ''
-  ) {
-    const sizeClass = disableJumbomoji ? '' : getSizeClass(emojifiedText)
+  const sizeClass = disableJumbomoji ? '' : getSizeClass(emojifiedText)
+  if (sizeClass !== '') {
     return (
       <span className={classNames('emoji-container', sizeClass)}>
         {emojifiedText}
