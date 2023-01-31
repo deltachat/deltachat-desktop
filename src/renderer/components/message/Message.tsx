@@ -199,7 +199,8 @@ function buildContextMenu(
       action: setQuoteInDraft.bind(null, message.id),
     },
     // Reply privately -> only show in groups, don't show on info messages or outgoing messages
-    conversationType.chatType === C.DC_CHAT_TYPE_GROUP &&
+    (conversationType.chatType === C.DC_CHAT_TYPE_GROUP ||
+      conversationType.chatType === C.DC_CHAT_TYPE_MAILINGLIST) &&
       message.fromId > C.DC_CONTACT_ID_LAST_SPECIAL && {
         label: tx('reply_privately'),
         action: privateReply.bind(null, message),
