@@ -12,8 +12,10 @@
 - update `emoji-mart` to version `5.5.2` (adds `@emoji-mart/data@1.1.2` & `@emoji-mart/react@1.1.1`)
 - emoji picker now closes automatically when selecting an emoji, press `shift` to select multiple emojis
 - escape key closes the emoji picker
+- removed dependency on `emoji-regex`
 
 ### Fixed
+- improve jumbomoji logic (that emoji only messages appear bigger), now works even with new emojis that are not in delta chat yet.
 - css: fix hover overflow on context menu corners
 
 ### Removed
