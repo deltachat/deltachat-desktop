@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- css: fix hover overflow on context menu corners
 
 ### Removed
 
