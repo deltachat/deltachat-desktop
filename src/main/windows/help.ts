@@ -93,4 +93,10 @@ export async function openHelpWindow(locale: string) {
     back_btn.innerText = '↑ ${tx('menu_scroll_to_top')}';
     body.append(back_btn);
   `)
+
+  // help does not need web permissions so deny all
+  win.webContents.session.setPermissionCheckHandler((_wc, _permission) => false)
+  win.webContents.session.setPermissionRequestHandler(
+    (_wc, _permission, callback) => callback(false)
+  )
 }

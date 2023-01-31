@@ -6,6 +6,7 @@
 - add reply privately in mailinglists
 
 ### Changed
+- restrict web permissions #2548
 
 ### Fixed
 
