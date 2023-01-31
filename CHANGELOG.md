@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- add reply privately in mailinglists
 
 ### Changed
 
