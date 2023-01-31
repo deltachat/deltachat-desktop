@@ -6,6 +6,7 @@
 - add reply privately in mailinglists
 
 ### Changed
+- update google noto color emoji font to `unicode 15`
 
 ### Fixed
 
