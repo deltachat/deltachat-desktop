@@ -10,18 +10,16 @@ $emojimart-search-height: 31px + 6px;
   height: $esp-height;
   right: 13px;
   bottom: 50px;
-  background-color: var(--emojiMartBg);
-  border-radius: var(--emojiMartOutsideRadius);
+  background-color: var(--emojiStickerPicker-Background);
+  border-radius: var(--emojiStickerPicker-BorderRadius);
+  overflow: hidden;
   box-shadow: 0px 0px 0px 1px #00000017;
 
   div.emoji-or-sticker-header-nav {
     width: 100%;
     height: calc(#{$esp-header-height} + 1px);
     display: flex;
-    border-bottom: 1px solid var(--emojiMartBorder);
-    background: var(--emojiMartBg);
-    border-top-left-radius: var(--emojiMartOutsideRadius);
-    border-top-right-radius: var(--emojiMartOutsideRadius);
+    border-bottom: 1px solid #00000017;
 
     div.selector-button {
       width: 50%;
