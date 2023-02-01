@@ -165,6 +165,11 @@ export default function MessageListAndComposer({
     if (targetTagName === 'INPUT' || targetTagName === 'TEXTAREA') {
       return
     }
+
+    if (document.querySelector(":focus")?.tagName?.toLowerCase() === "em-emoji-picker"){
+      return
+    }
+
     e.preventDefault()
     e.stopPropagation()
     messageInputRef?.current?.focus()
