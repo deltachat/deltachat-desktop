@@ -13,6 +13,7 @@ import { jumpToMessage } from '../helpers/ChatMethods'
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 import type { EmojiData } from 'emoji-mart/index'
+import { useThemeCssVar } from '../../ThemeManager'
 
 export const StickerDiv = (props: {
   stickerPackName: string
@@ -125,6 +126,16 @@ export const EmojiAndStickerPicker = forwardRef<
       .then(stickers => setStickers(stickers))
   }, [accountId])
 
+  let emoji_picker_category_style = useThemeCssVar(
+    '--SPECIAL-emoji-picker-category-icon-style'
+  )
+  if (
+    emoji_picker_category_style !== 'solid' &&
+    emoji_picker_category_style !== 'outline'
+  ) {
+    emoji_picker_category_style = 'solid'
+  }
+
   return (
     <div className={'emoji-sticker-picker'} ref={ref}>
       <div className='emoji-or-sticker-header-nav'>
@@ -171,6 +182,7 @@ export const EmojiAndStickerPicker = forwardRef<
             skinTonePosition={'none'}
             autoFocus={true}
             dynamicWidth={true}
+            icons={emoji_picker_category_style}
           />
         </div>
       )}
