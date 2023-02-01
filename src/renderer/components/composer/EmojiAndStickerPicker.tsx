@@ -3,10 +3,8 @@ import React, {
   useEffect,
   forwardRef,
   PropsWithChildren,
-  useLayoutEffect,
 } from 'react'
 import classNames from 'classnames'
-import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { useTranslationFunction } from '../../contexts'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
@@ -14,6 +12,7 @@ import { runtime } from '../../runtime'
 import { jumpToMessage } from '../helpers/ChatMethods'
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
+import type { EmojiData } from 'emoji-mart/index'
 
 export const StickerDiv = (props: {
   stickerPackName: string
