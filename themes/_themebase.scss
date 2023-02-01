@@ -25,7 +25,10 @@ $hover-contrast-change: 2%;
   --sideBarBackground: #{$bgPrimary};
   --sideBarAccountBackground: #{$sideBarAccountBg};
   --sideBarAccountIconBackground: #{$sideBarAccountIconBg};
-  --sideBarAccountIconHoverBackground: #{changeContrast($sideBarAccountIconBg, $hover-contrast-change)};;
+  --sideBarAccountIconHoverBackground: #{changeContrast(
+      $sideBarAccountIconBg,
+      $hover-contrast-change
+    )};
   --sideBarAccountEmailText: #{$sideBarAccountEmailText};
   /* ChatView */
   --chatViewBg: #{$bgChatView};
@@ -149,17 +152,7 @@ $hover-contrast-change: 2%;
   --outlineColor: #{$outlineColor};
   --delta-dialog-separator: #{$bgSecondary};
   --delta-dialog-separator-text: #{changeContrast($bgSecondary, 24%)};
-  /* EmojiMart overwrites */
-  --emojiMartText: #{$textPrimary};
-  --emojiMartBorder: #{$outlineColor};
-  --emojiMartSearchBorder: lightgrey;
-  --emojiMartBg: #{$bgPrimary};
-  --emojiMartOutsideRadius: 5px;
-  --emojiMartCategoryIcons: #{mix($textPrimary, $bgSecondary, 40%)};
-  --emojiMartInputBg: #{$bgSecondary};
-  --emojiMartInputText: #{$textPrimary};
-  --emojiMartInputPlaceholder: #{mix($textPrimary, $bgSecondary, 30%)};
-  --emojiMartSelect: #{mix($bgSecondary, invert($bgSecondary), 0.2)};
+
   /* Misc */
   --galleryBg: #{$bgPrimary};
   --avatarLabelColor: #ffffff; // Manual value: This will not get generated in the future
@@ -185,6 +178,23 @@ $hover-contrast-change: 2%;
   --galleryWebxdcItem: #{changeContrast($bgPrimary, 10%)};
   --recently-seen-indicator-color: #34c759;
 
+  /* EmojiMart overwrites */
+  // --emojiMartText: #{$textPrimary};
+  // --emojiMartBorder: #{$outlineColor};
+  // --emojiMartBg: #{$bgPrimary};
+  // --emojiMartInputBg: #{$bgSecondary};
+  // --emojiMartInputText: #{$textPrimary};
+  // emoji picker
+  --emoji-picker-background-rgb: 255, 255, 255;
+  // base color for text, seach placeholder an icons
+  --emoji-picker-text-rgb: ;
+  //  accent color
+  --emoji-picker-accent-rgb: ;
+  //  selected input field bg
+  --emoji-picker-selected-input-bg-rgb: 128, 128, 128;
+  //  border, scrollbar, in-active search input, emoji hover background
+  --emoji-picker-border-and-hover-color: rgba(128, 128, 128, 0.4);
+
   @if lightness($bgPrimary) < 50 {
     // dark theme
     --scrollbarThumb: #{rgba(white, $scrollbarTransparency)};
@@ -196,6 +206,8 @@ $hover-contrast-change: 2%;
     --settingsIconColor: #666666;
 
     --unreadCountBgMuted: #3b3b3b;
+
+    --SPECIAL-emoji-picker-category-icon-style: solid;
   } @else {
     // light theme
     --scrollbarThumb: #{rgba(grey, $scrollbarTransparency)};
@@ -206,5 +218,7 @@ $hover-contrast-change: 2%;
     --jumpDownButtonIconColor: #808080;
 
     --unreadCountBgMuted: #b6b6bb;
+
+    --SPECIAL-emoji-picker-category-icon-style: outline;
   }
 }

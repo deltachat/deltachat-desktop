@@ -59,6 +59,26 @@ $emojimart-search-height: 31px + 6px;
       em-emoji-picker {
         width: 100%;
         height: 100%;
+        --border-radius: 0px;
+
+        // unknown effect?
+        --background-rgb: var(--emoji-picker-background-rgb);
+        // background
+        --rgb-background: var(--emoji-picker-background-rgb);
+        // base color for text, seach placeholder an icons
+        --rgb-color: var(--emoji-picker-text-rgb);
+        --rgb-accent: var(--emoji-picker-accent-rgb);
+        // selected input field bg
+        --rgb-input: var(--emoji-picker-selected-input-bg-rgb);
+        // border, scrollbar, in-active search input, emoji hover background
+        --color-border: var(--emoji-picker-border-and-hover-color);
+
+        --font-family: $roboto;
+
+        // --category-icon-size: 24px;
+        // --font-size: 20px;
+        --color-border-over: rgba(0, 0, 0, 0);
+        --shadow: none;
       }
     }
   }
@@ -80,8 +100,7 @@ $emojimart-search-height: 31px + 6px;
           font-size: large;
           font-weight: 500;
           text-transform: capitalize;
-          font-family: Roboto, NotoEmoji, 'Helvetica Neue', Arial, Helvetica,
-            NotoMono, sans-serif;
+          font-family: $roboto;
           font-size: 16px;
           font-weight: 500;
           height: 28px;
@@ -118,36 +137,3 @@ $emojimart-search-height: 31px + 6px;
     }
   }
 }
-
-// Emojimart overwrites
-
-// .emoji-mart {
-//   color: var(--emojiMartText);
-//   border: none;
-//   background: var(--emojiMartBg);
-// }
-
-// .emoji-mart-anchors svg,
-// .emoji-mart-anchors img {
-//   fill: var(--emojiMartCategoryIcons);
-// }
-
-// .emoji-mart-search input::placeholder {
-//   color: var(--emojiMartInputPlaceholder);
-// }
-
-// .emoji-mart-search input {
-//   background: var(--emojiMartBg);
-//   border-color: var(--emojiMartSearchBorder);
-//   color: var(--emojiMartInputText);
-// }
-
-// // select background circle
-// .emoji-mart-category .emoji-mart-emoji:hover:before {
-//   background-color: var(--emojiMartSelect);
-// }
-
-
-// .emoji-mart-category .emoji-mart-emoji span {
-//   cursor: pointer;
-// }

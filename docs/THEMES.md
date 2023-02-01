@@ -115,11 +115,13 @@ Read the comments in the theme files for additional information.
 Some theming requires the javascript code to know how it should behave, for this purpose we have some css vars that are read by the javascript of the app:
 
 ```scss
-# the chatlist is virtualized so the js needs to know the item height
-  --SPECIAL-chatlist-item-chat-height: 64;
-  --SPECIAL-chatlist-item-contact-height: 64;
-  --SPECIAL-chatlist-item-message-height: 64;
-  --SPECIAL-chatlist-divider-height: 50;
+/* the chatlist is virtualized so the js needs to know the item height */
+--SPECIAL-chatlist-item-chat-height: 64;
+--SPECIAL-chatlist-item-contact-height: 64;
+--SPECIAL-chatlist-item-message-height: 64;
+--SPECIAL-chatlist-divider-height: 50;
+/* emoji picker icon style */
+--SPECIAL-emoji-picker-category-icon-style: solid; /* solid | outline */
 ```
 
 ## Hidden prototype themes with `dev_`
