@@ -163,13 +163,11 @@ node_modules/@blueprintjs/icons/node_modules/tslib
 node_modules/popper.js/*
 
 ### node_modules/emoji-mart/
-node_modules/emoji-mart/data
-node_modules/emoji-mart/dist-es
-node_modules/emoji-mart/dist
-node_modules/emoji-mart/dist-modern
-node_modules/emoji-mart/stories
-node_modules/emoji-mart/*.js
-node_modules/emoji-mart/*.json
+node_modules/emoji-mart/*
+
+### node_modules/@emoji-mart/data
+### node_modules/@emoji-mart/react
+node_modules/@emoji-mart/*
 
 ### node_modules/mapbox-gl/
 node_modules/mapbox-gl/src
