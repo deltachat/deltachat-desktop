@@ -166,7 +166,10 @@ export default function MessageListAndComposer({
       return
     }
 
-    if (document.querySelector(":focus")?.tagName?.toLowerCase() === "em-emoji-picker"){
+    if (
+      document.querySelector(':focus')?.tagName?.toLowerCase() ===
+      'em-emoji-picker'
+    ) {
       return
     }
 
