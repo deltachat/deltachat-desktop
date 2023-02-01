@@ -136,6 +136,7 @@ const Composer = forwardRef<
     )
     if (!shiftPressed.current) {
       setShowEmojiPicker(false)
+      messageInputRef.current?.focus()
     }
   }
   // track shift key -> update [shiftPressed]
