@@ -27,7 +27,19 @@ const { app_getPath, ipcRenderer: ipcBackend } = (window as any)
 interface Runtime {
   emitUIFullyReady(): void
   emitUIReady(): void
-  openMessageHTML(content: string): void
+  /**
+   * open html message, in dedicated window or in system browser
+   * @param window_id unique id that we know if it's already open, should be accountid+"-"+msgid
+   * @param subject subject of the email (or start of message, if we don't have a subject?)
+   * @param sender sender display name
+   * @param content content of the html mail
+   */
+  openMessageHTML(
+    window_id: string,
+    subject: string,
+    sender: string,
+    content: string
+  ): void
   getDesktopSettings(): Promise<DesktopSettingsType>
   setDesktopSetting(
     key: keyof DesktopSettingsType,
@@ -133,7 +145,12 @@ class Browser implements Runtime {
   emitUIReady(): void {
     throw new Error('Method not implemented.')
   }
-  openMessageHTML(_content: string): void {
+  openMessageHTML(
+    _window_id: string,
+    _subject: string,
+    _sender: string,
+    _content: string
+  ): void {
     throw new Error('Method not implemented.')
   }
   notifyWebxdcStatusUpdate(_accountId: number, _instanceId: number): void {
@@ -290,8 +307,13 @@ class Electron implements Runtime {
   emitUIReady(): void {
     ipcBackend.send('ipcReady')
   }
-  openMessageHTML(content: string): void {
-    ipcBackend.invoke('openMessageHTML', content)
+  openMessageHTML(
+    window_id: string,
+    subject: string,
+    sender: string,
+    content: string
+  ): void {
+    ipcBackend.invoke('openMessageHTML', window_id, subject, sender, content)
   }
   notifyWebxdcStatusUpdate(accountId: number, instanceId: number): void {
     ipcBackend.invoke('webxdc:status-update', accountId, instanceId)

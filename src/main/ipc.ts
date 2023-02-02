@@ -1,4 +1,4 @@
-import { copyFile, mkdir, mkdtemp, rm } from 'fs/promises'
+import { copyFile, mkdir, rm } from 'fs/promises'
 import {
   app as rawApp,
   clipboard,
@@ -18,11 +18,12 @@ import { DesktopSettings } from './desktop_settings'
 import { getConfigPath } from './application-constants'
 import { inspect } from 'util'
 import { DesktopSettingsType, RuntimeInfo } from '../shared/shared-types'
-import { platform, tmpdir } from 'os'
+import { platform } from 'os'
 import { existsSync } from 'fs'
 import { set_has_unread, updateTrayIcon } from './tray'
 import mimeTypes from 'mime-types'
 import { writeFile } from 'fs/promises'
+import { openHtmlEmailWindow } from './windows/html_email'
 
 const log = getLogger('main/ipc')
 const DeltaChatController: typeof import('./deltachat/controller').default = (() => {
@@ -221,12 +222,18 @@ export async function init(cwd: string, logHandler: LogHandler) {
     }
   )
 
-  ipcMain.handle('openMessageHTML', async (_ev, content: string) => {
-    const tmpDir = await mkdtemp(join(tmpdir(), 'deltachat-'))
-    const pathToFile = join(tmpDir, 'message.html')
-    await writeFile(pathToFile, content, { encoding: 'utf-8' })
-    shell.openPath(pathToFile)
-  })
+  ipcMain.handle(
+    'openMessageHTML',
+    async (
+      _ev,
+      window_id: string,
+      subject: string,
+      sender: string,
+      content: string
+    ) => {
+      openHtmlEmailWindow(window_id, subject, sender, content)
+    }
+  )
 
   return () => {
     // the shutdown function

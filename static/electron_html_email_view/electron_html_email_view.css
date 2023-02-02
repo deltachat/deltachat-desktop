@@ -1,0 +1,39 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  font-family: monospace;
+}
+
+div.header {
+  display: flex;
+  border-bottom: 1px solid rgb(204, 204, 204);
+  min-height: 20px;
+  padding: 5px;
+}
+
+div.header > .title {
+  flex-grow: 1;
+}
+
+div.header > .title p {
+  margin: 0.3em;
+}
+
+#subject {
+  font-size: 1.2em;
+}
+
+div.header > button {
+}
+
+div#content {
+  flex-grow: 1;
+  /* background-color: antiquewhite; */
+}

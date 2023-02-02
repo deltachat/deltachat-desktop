@@ -51,6 +51,7 @@
 ### Added
 - add context menu option to mark all archived chats as noticed
 - add reply privately in mailinglists
+- html emails are opened shown in a dedicated window
 
 ### Changed
 - Update translations (07.02.2023)

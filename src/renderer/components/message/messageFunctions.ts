@@ -113,6 +113,7 @@ export async function privateReply(msg: Type.Message) {
 }
 
 export async function openMessageHTML(messageId: number) {
+  const accountId = selectedAccountId()
   const content = await BackendRemote.rpc.getMessageHtml(
     selectedAccountId(),
     messageId
@@ -121,7 +122,16 @@ export async function openMessageHTML(messageId: number) {
     log.error('openMessageHTML, message has no html content', { messageId })
     return
   }
-  runtime.openMessageHTML(content)
+  const {
+    sender: { displayName },
+    subject,
+  } = await BackendRemote.rpc.getMessage(selectedAccountId(), messageId)
+  runtime.openMessageHTML(
+    `${accountId}.${messageId}`,
+    subject,
+    displayName,
+    content
+  )
 }
 
 export async function downloadFullMessage(messageId: number) {

@@ -496,7 +496,7 @@ export default function Message(props: {
               onClick={openMessageHTML.bind(null, message.id)}
               className='show-html'
             >
-              {tx('show_full_message_in_browser')}
+              {tx('show_full_message')}
             </div>
           )}
           <MessageMetaData
