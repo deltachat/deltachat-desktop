@@ -13,10 +13,12 @@
 - emoji picker now closes automatically when selecting an emoji, press `shift` to select multiple emojis
 - escape key closes the emoji picker
 - removed dependency on `emoji-regex`
+- context menu size is updated dynamically, so there shouldn't be any word-wrapping
 
 ### Fixed
 - improve jumbomoji logic (that emoji only messages appear bigger), now works even with new emojis that are not in delta chat yet.
 - css: fix hover overflow on context menu corners
+- context menu items are correctly updated when application language changes
 
 ### Removed
 

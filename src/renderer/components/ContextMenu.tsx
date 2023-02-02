@@ -26,6 +26,8 @@ export function ContextMenuLayer({
   setShowFunction: (showFn: showFnType) => void
 }) {
   const layerRef = useRef<HTMLDivElement>(null)
+  const cursorX = useRef<number>(0)
+  const cursorY = useRef<number>(0)
   const [active, setActive] = useState(false)
   const [currentItems, setCurrentItems] = useState<ContextMenuItem[]>([])
   const [position, setPosition] = useState<{ top: number; left: number }>({
@@ -33,44 +35,45 @@ export function ContextMenuLayer({
     left: 0,
   })
 
-  function show({ cursorX, cursorY, items: rawItems }: showFnArguments) {
+  function show({ cursorX: x, cursorY: y, items: rawItems }: showFnArguments) {
     if (!layerRef.current) {
       throw new Error('Somehow the ContextMenuLayer went missing')
     }
     // Filter out empty null items
     // (can happen when constructing the array with inline conditions,
     // look at the chatlistitem context menu for an example)
+    cursorX.current = x
+    cursorY.current = y
     const items = rawItems.filter(item => !!item) as ContextMenuItem[]
     // Get required information
+    setCurrentItems(items)
+    window.__contextMenuActive = true
+    setActive(true)
+  }
+
+  function showAfter(menuEl: HTMLDivElement | null) {
+    if (!menuEl || !layerRef.current) {
+      return
+    }
+    if (cursorX.current == null || cursorY.current == null) {
+      throw new Error('Somehow the cursor for context menu was not set')
+    }
     const style = window.getComputedStyle(layerRef.current)
 
     const getValue = (key: string) =>
       Number(style.getPropertyValue(key).replace('px', ''))
 
-    const ContextMenuWidth = getValue('--local-menu-width')
-    const ContextMenuItemLineHeight = getValue('--local-menu-item-Line-height')
-    const ContextMenuItemVerticalMargin = getValue(
-      '--local-menu-item-vertical-padding'
-    )
-    // the margin that the context menu should have to the window border
-    const BorderMargin = getValue('--local-border-clearance')
-
-    const ContextMenuItemHeight =
-      ContextMenuItemVerticalMargin * 2 + ContextMenuItemLineHeight
-
     const space = {
       height: getValue('height'),
       width: getValue('width'),
     }
-    const [x, y] = [cursorX, cursorY]
 
-    const overflowingLines = estimateOverflowingLines(items)
+    const x = cursorX.current,
+      y = cursorY.current
 
     const menu = {
-      height:
-        items.length * ContextMenuItemHeight +
-        overflowingLines * ContextMenuItemLineHeight,
-      width: ContextMenuWidth,
+      height: menuEl.clientHeight,
+      width: menuEl.clientWidth,
     }
 
     // Finding Orientation
@@ -78,7 +81,7 @@ export function ContextMenuLayer({
       left = 0
 
     // Right or Left
-    if (x + menu.width + BorderMargin <= space.width) {
+    if (x + menu.width <= space.width) {
       // Right
       left = x
     } else {
@@ -87,7 +90,7 @@ export function ContextMenuLayer({
     }
 
     // Bottom or Top
-    if (y + menu.height + BorderMargin <= space.height) {
+    if (y + menu.height <= space.height) {
       // Bottom
       top = y
     } else {
@@ -97,9 +100,6 @@ export function ContextMenuLayer({
 
     // Displaying Menu
     setPosition({ top, left })
-    setCurrentItems(items)
-    window.__contextMenuActive = true
-    setActive(true)
   }
 
   function cancel() {
@@ -123,6 +123,7 @@ export function ContextMenuLayer({
           top={position.top}
           left={position.left}
           items={currentItems}
+          openCallback={showAfter}
           closeCallback={cancel}
         />
       )}
@@ -130,44 +131,27 @@ export function ContextMenuLayer({
   )
 }
 
-/**
- * line Overflow detection
- *
- * detect if labels overflow the lines and estimate the overflow
- *  */
-function estimateOverflowingLines(items: ContextMenuItem[]) {
-  let overflowingLines = 0
-  for (const { label } of items) {
-    if (label.length > overFlowLineCharacterCount) {
-      const words = label.split(' ')
-      let currentLength = 0,
-        overSize = 0
-      for (const word of words) {
-        if (currentLength + word.length > overFlowLineCharacterCount) {
-          overSize++
-          currentLength = word.length
-        } else {
-          currentLength += word.length
-        }
-        if (currentLength >= overFlowLineCharacterCount) {
-          currentLength -= overFlowLineCharacterCount
-          overSize++
-        }
-      }
-      overflowingLines += overSize
-    }
-  }
-  return overflowingLines
-}
-
 export function ContextMenu(props: {
   top: number
   left: number
   items: (ContextMenuItem | false)[]
+  openCallback: (el: HTMLDivElement | null) => void
   closeCallback: () => void
 }) {
+  const menuRef = useRef<HTMLDivElement>(null)
+  const didOpen = useRef<boolean>(false)
   useLayoutEffect(() => {
-    document.querySelector<HTMLDivElement>('div.dc-context-menu')?.focus()
+    if (!menuRef.current) {
+      throw new Error()
+    }
+    if (didOpen.current) {
+      return
+    }
+    didOpen.current = true
+    menuRef.current.focus()
+    if (typeof props.openCallback === 'function')
+      props.openCallback(menuRef.current)
+    //document.querySelector<HTMLDivElement>('div.dc-context-menu')?.focus()
   })
 
   useEffect(() => {
@@ -239,6 +223,7 @@ export function ContextMenu(props: {
 
   return (
     <div
+      ref={menuRef}
       className='dc-context-menu'
       style={{
         top: `${props.top}px`,
@@ -251,6 +236,7 @@ export function ContextMenu(props: {
         <div
           className='item'
           onClick={() => {
+            didOpen.current = false
             props.closeCallback()
             item.action()
           }}
