@@ -61,7 +61,6 @@ function archiveStateMenu(
 
 export function useChatListContextMenu() {
   const screenContext = useContext(ScreenContext)
-  const tx = useTranslationFunction()
   const accountId = selectedAccountId()
 
   return (
@@ -69,6 +68,7 @@ export function useChatListContextMenu() {
     chatListItem: Type.ChatListItemFetchResult & { type: 'ChatListItem' },
     selectedChatId: number
   ) => {
+    const tx = window.static_translate
     const onDeleteChat = () =>
       openDeleteChatDialog(screenContext, chatListItem, selectedChatId)
     const onEncrInfo = () =>
