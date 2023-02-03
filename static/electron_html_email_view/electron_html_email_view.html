@@ -6,12 +6,14 @@
     <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'none';
-                   style-src 'self';
+                   style-src 'self' 'unsafe-inline';
                    font-src 'self';
                    script-src 'self';
                    "
     />
     <link rel="stylesheet" href="electron_html_email_view.css" />
+    <link rel="stylesheet" href="../fallback-theme.css" />
+    <style id="theme-vars"></style>
   </head>
   <body>
     <div class="header">
@@ -19,7 +21,10 @@
         <p id="subject" aria-label="subject">SUBJECT</p>
         <p id="sender" aria-label="sender">sender</p>
       </div>
-      <button id="toggle_network"></button>
+      <div class="network-toggle">
+        <input type="checkbox" id="toggle_network" />
+        <label for="toggle_network" id="toggle_network_label"></label>
+      </div>
     </div>
     <div id="content"></div>
     <script src="electron_html_email_view.js"></script>

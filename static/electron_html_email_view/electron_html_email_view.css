@@ -7,15 +7,16 @@ body {
 body {
   display: flex;
   flex-direction: column;
-  background-color: white;
-  font-family: monospace;
+  background: var(--htmlEmail-background);
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 div.header {
   display: flex;
-  border-bottom: 1px solid rgb(204, 204, 204);
+  border-bottom: 1px solid var(--htmlEmail-border-color);
   min-height: 20px;
   padding: 5px;
+  color: var(--htmlEmail-color);
 }
 
 div.header > .title {
@@ -27,13 +28,30 @@ div.header > .title p {
 }
 
 #subject {
-  font-size: 1.2em;
+  font-size: 1em;
+}
+
+#sender {
+  font-size: 0.8em;
 }
 
 div.header > button {
 }
 
+div.header > div.network-toggle {
+  display: flex;
+  align-items: center;
+  margin: 4px;
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bp4DialogBgSecondary);
+  padding: 6px;
+}
+
+div.header > div.network-toggle > input {
+  margin-inline-end: 5px;
+}
+
 div#content {
   flex-grow: 1;
-  /* background-color: antiquewhite; */
+  background-color: white;
 }

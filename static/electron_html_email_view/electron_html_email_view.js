@@ -1,23 +1,25 @@
 const subjectElement = document.getElementById('subject')
 const fromElement = document.getElementById('sender')
+const networkCheckbox = document.getElementById('toggle_network')
+const networkButtonLabel = document.getElementById('toggle_network_label')
 
-let promise = window.htmlview.getInfo().then(({ subject, from }) => {
-  ;(subjectElement.innerText = subject), (fromElement.innerText = from)
-})
+let promise = window.htmlview
+  .getInfo()
+  .then(({ subject, from, networkButtonLabelText }) => {
+    ;(subjectElement.innerText = subject), (fromElement.innerText = from)
+    networkButtonLabel.innerText = networkButtonLabelText
+  })
 
 let network_enabled = false
-const networkButton = document.getElementById('toggle_network')
-function updateLabel() {
-  networkButton.innerText = network_enabled
-    ? 'Deny Remote Content'
-    : 'Load Remote Content'
+
+networkCheckbox.onclick = ev => {
+  ev.preventDefault()
+  const new_value = !network_enabled
+  window.htmlview.changeAllowNetwork(new_value).then(() => {
+    networkCheckbox.checked = new_value
+    network_enabled = new_value
+  })
 }
-networkButton.onclick = () => {
-  network_enabled = !network_enabled
-  updateLabel()
-  window.htmlview.changeAllowNetwork(network_enabled)
-}
-updateLabel()
 
 const contentElement = document.getElementById('content')
 function updateContentBounds() {

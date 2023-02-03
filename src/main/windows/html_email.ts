@@ -1,7 +1,9 @@
 import electron, {
   BrowserView,
   BrowserWindow,
+  dialog,
   MenuItemConstructorOptions,
+  nativeTheme,
   session,
   shell,
   WebContents,
@@ -12,6 +14,7 @@ import { DesktopSettings } from '../desktop_settings'
 import { truncateText } from '../../shared/util'
 import { tx } from '../load-translations'
 import { open_url } from '../open_url'
+import { loadTheme } from '../themes'
 
 const open_windows: { [window_id: string]: BrowserWindow } = {}
 
@@ -61,7 +64,17 @@ export function openHtmlEmailWindow(
   window.webContents.ipc.handle('html_email:get_info', _ => ({
     subject,
     from,
+    networkButtonLabelText: tx('load_remote_content'),
   }))
+
+  nativeTheme.on('updated', () => {
+    window.webContents.ipc.emit('theme-update')
+  })
+
+  window.webContents.ipc.handle(
+    'get-theme',
+    async () => (await loadTheme(DesktopSettings.state.activeTheme)).data
+  )
 
   window.loadFile(
     join(
@@ -106,7 +119,17 @@ export function openHtmlEmailWindow(
 
   window.webContents.ipc.handle(
     'html-view:change-network',
-    (_ev, allow_network: boolean) => {
+    async (_ev, allow_network: boolean) => {
+      if (allow_network) {
+        const result = await dialog.showMessageBox(window, {
+          message: tx('load_remote_content_ask'),
+          buttons: [tx('no'), tx('yes')],
+        })
+        if(result.response === 0) {
+          throw new Error("user denied");
+        }
+      }
+
       const bounds = sandboxedView?.getBounds()
       window.removeBrowserView(sandboxedView)
       context_menu_handle()
