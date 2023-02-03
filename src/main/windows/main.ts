@@ -7,6 +7,7 @@ import { refreshTrayContextMenu } from '../tray'
 
 import { join } from 'path'
 import { DesktopSettings } from '../desktop_settings'
+import { Session } from 'electron/main'
 const log = getLogger('main/mainWindow')
 
 export let window: (BrowserWindow & { hidden?: boolean }) | null = null
@@ -91,6 +92,45 @@ export function init(options: { hidden: boolean }) {
     main_window.hidden = false
     refreshTrayContextMenu()
   })
+
+  const allowed_web_permissions = [
+    'notifications',
+    'pointerLock',
+    'fullscreen',
+    'clipboard-read',
+    'media',
+    'mediaKeySystem',
+    // not used:
+    //  "display-capture", - not used
+    //  "geolocation", - not used
+    //  "midi" - not used
+    //  "midiSysex" - not used
+    // what is this about?
+    //  "openExternal"
+    //  "window-placement"
+  ]
+  type permission_arg = Parameters<
+    Exclude<Parameters<Session['setPermissionRequestHandler']>[0], null>
+  >[1]
+  const permission_handler = (permission: permission_arg) => {
+    log.info('preq', permission)
+    if (!allowed_web_permissions.includes(permission)) {
+      log.info(
+        `main window requested "${permission}" permission, but we denied it, because it is not in the list of allowed permissions.`
+      )
+      return false
+    } else {
+      return true
+    }
+  }
+  window.webContents.session.setPermissionCheckHandler((_wc, permission) => {
+    return permission_handler(permission as any)
+  })
+  window.webContents.session.setPermissionRequestHandler(
+    (_wc, permission, callback) => {
+      callback(permission_handler(permission))
+    }
+  )
 }
 
 export function hide() {

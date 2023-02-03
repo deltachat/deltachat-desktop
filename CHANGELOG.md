@@ -4,10 +4,17 @@
 
 ### Added
 - add context menu option to mark all archived chats as noticed
+- add reply privately in mailinglists
 
 ### Changed
+- restrict web permissions #2548
+- update google noto color emoji font to `unicode 15`
+- update `emoji-mart` to version `5.5.2` (adds `@emoji-mart/data@1.1.2` & `@emoji-mart/react@1.1.1`)
+- emoji picker now closes automatically when selecting an emoji, press `shift` to select multiple emojis
+- escape key closes the emoji picker
 
 ### Fixed
+- css: fix hover overflow on context menu corners
 
 ### Removed
 

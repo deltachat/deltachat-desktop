@@ -25,3 +25,9 @@ Scroll up/down a page in the messagelist: `PageUp` and `PageDown`
 When `Press Enter to Send` is deactivated: `ctrl + enter` or `shift + enter` or `cmd ⌘ + enter` to send the message.
 
 When `Press Enter to Send` activated: `ctrl + enter` or `shift + enter` or `cmd ⌘ + enter` to add a newline instead of sending
+
+## Emoji Picker
+
+The emoji picker auto closes when selecting an emoji, press `shift` to select multiple emojis.
+
+`Escape` key closes the emoji picker.

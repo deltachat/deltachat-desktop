@@ -11,7 +11,7 @@ import { useTranslationFunction } from '../../contexts'
 import ComposerMessageInput from './ComposerMessageInput'
 import { getLogger } from '../../../shared/logger'
 import { EmojiAndStickerPicker } from './EmojiAndStickerPicker'
-import { EmojiData, BaseEmoji } from 'emoji-mart'
+import type { EmojiData, BaseEmoji } from 'emoji-mart/index'
 import { replaceColonsSafe } from '../conversations/emoji'
 import { Quote } from '../message/Message'
 import { DraftAttachment } from '../attachment/messageAttachment'
@@ -128,12 +128,39 @@ const Composer = forwardRef<
   }
 
   const onEmojiIconClick = () => setShowEmojiPicker(!showEmojiPicker)
+  const shiftPressed = useRef(false)
   const onEmojiSelect = (emoji: EmojiData) => {
     log.debug(`EmojiPicker: Selected ${emoji.id}`)
     messageInputRef.current?.insertStringAtCursorPosition(
       (emoji as BaseEmoji).native
     )
+    if (!shiftPressed.current) {
+      setShowEmojiPicker(false)
+      messageInputRef.current?.focus()
+    }
   }
+  // track shift key -> update [shiftPressed]
+  // also handle escape key for emoji picker
+  useEffect(() => {
+    const onKey = (ev: KeyboardEvent) => {
+      if (ev.key === 'Shift') {
+        shiftPressed.current = ev.shiftKey
+      }
+      if (ev.type === 'keydown' && ev.key === 'Escape') {
+        setShowEmojiPicker(false)
+      }
+    }
+    // these options are needed, otherwise emoji mart sometimes eats the keydown event
+    // and we don't get it here
+    const opt = { passive: true, capture: true }
+    document.addEventListener('keydown', onKey, opt)
+    document.addEventListener('keyup', onKey, opt)
+    return () => {
+      const opt = { capture: true }
+      document.removeEventListener('keydown', onKey, opt)
+      document.removeEventListener('keyup', onKey, opt)
+    }
+  }, [shiftPressed])
   useEffect(() => {
     if (!showEmojiPicker) return
     const onClick = ({
