@@ -11,6 +11,7 @@ import { join } from 'path'
 import { DesktopSettings } from '../desktop_settings'
 import { truncateText } from '../../shared/util'
 import { tx } from '../load-translations'
+import { open_url } from '../open_url'
 
 const open_windows: { [window_id: string]: BrowserWindow } = {}
 
@@ -175,8 +176,13 @@ function makeBrowserView(allow_remote_content: boolean, html_content: string) {
     (e: electron.Event, url: string) => {
       // Prevent drag-and-drop from navigating the Electron window, which can happen
       // before our drag-and-drop handlers have been initialized.
+      // Also handle clicking links inside of the message.
       e.preventDefault()
-      shell.openExternal(url)
+      if (url.startsWith('mailto:')) {
+        open_url(url)
+      } else {
+        shell.openExternal(url)
+      }
     }
   )
 
