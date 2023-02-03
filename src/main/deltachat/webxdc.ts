@@ -302,8 +302,8 @@ If you think that's a bug and you need that permission, then please open an issu
         }
       )
       webxdc_windows.webContents.session.setPermissionRequestHandler(
-        (_wc, permission) => {
-          return permission_handler(permission)
+        (_wc, permission, callback) => {
+          callback(permission_handler(permission))
         }
       )
     })
