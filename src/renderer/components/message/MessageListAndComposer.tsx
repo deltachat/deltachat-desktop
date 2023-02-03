@@ -165,6 +165,15 @@ export default function MessageListAndComposer({
     if (targetTagName === 'INPUT' || targetTagName === 'TEXTAREA') {
       return
     }
+
+    // don't force focus on the message input as long as the emoji picker is open
+    if (
+      document.querySelector(':focus')?.tagName?.toLowerCase() ===
+      'em-emoji-picker'
+    ) {
+      return
+    }
+
     e.preventDefault()
     e.stopPropagation()
     messageInputRef?.current?.focus()
