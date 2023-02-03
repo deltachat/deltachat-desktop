@@ -64,6 +64,8 @@ export interface DesktopSettingsType {
   lastSaveDialogLocation: string | undefined
   experimentalEnableMarkdownInMessages: boolean
   enableWebxdcDevTools: boolean
+  /** set to false to disable the confirmation dialog for loading remote content */
+  HTMLEmailAskForRemoteLoadingConfirmation: boolean,
 }
 
 export interface RC_Config {

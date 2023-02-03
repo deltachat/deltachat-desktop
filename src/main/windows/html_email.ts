@@ -120,13 +120,22 @@ export function openHtmlEmailWindow(
   window.webContents.ipc.handle(
     'html-view:change-network',
     async (_ev, allow_network: boolean) => {
-      if (allow_network) {
+      if (
+        allow_network &&
+        DesktopSettings.state.HTMLEmailAskForRemoteLoadingConfirmation
+      ) {
         const result = await dialog.showMessageBox(window, {
           message: tx('load_remote_content_ask'),
+          checkboxLabel: tx('do_not_ask_again'),
           buttons: [tx('no'), tx('yes')],
         })
-        if(result.response === 0) {
-          throw new Error("user denied");
+        if (result.response === 0) {
+          throw new Error('user denied')
+        }
+        if (result.checkboxChecked) {
+          DesktopSettings.update({
+            HTMLEmailAskForRemoteLoadingConfirmation: false,
+          })
         }
       }
 

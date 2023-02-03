@@ -64,5 +64,8 @@
   },
   "later": {
     "message": "Later"
+  },
+  "do_not_ask_again": {
+    "message": "Do not ask again"
   }
 }
