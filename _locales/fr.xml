@@ -48,6 +48,10 @@
     <string name="start_chat">Commencer la discussion</string>
     <string name="show_full_message">Montrer le message complet...</string>
     <string name="show_full_message_in_browser">Afficher le message complet dans le navigateur</string>
+    <!-- Stay short here, say ~16 characters. The source string could also be "All Read", maybe that hint can make translations easier :) -->
+    <string name="mark_all_as_read">Marquer tout comme lu</string>
+    <!-- Shortest text for "Mark as being read". In english, this could be "Read" (past tense of "to read"), in german, this could be "Gelesen". -->
+    <string name="mark_as_read_short">Lu</string>
     <!-- Placeholder text when something is loading -->
     <string name="loading">Chargement...</string>
     <string name="hide">Cacher</string>
@@ -127,7 +131,7 @@
         <item quantity="many">%d destinataires</item>
         <item quantity="other">%d destinataires</item>
     </plurals>
-    <!-- Short form for "N Chats Selected" or "N Messages Selected": in English, "N Selected" -->
+    <!-- Short form for "N Items Selected" -->
     <plurals name="n_selected">
         <item quantity="one">%d Sélectionné</item>
         <item quantity="many">%d Sélectionné</item>
@@ -753,8 +757,9 @@
     <string name="remove_member_by_you">Membre %1$s retiré par vous.</string>
     <!-- %1$s will be replaced by name and address of the contact removed from the group, %2$s will be replaced by name and address of the contact who did the action -->
     <string name="remove_member_by_other">Membre %1$s retiré par %2$s.</string>
+    <!-- "left" in the meaning of "exited" -->
     <string name="group_left_by_you">Vous avez quitté le groupe.</string>
-    <!-- %1$s will be replaced by name and address of the contact -->
+    <!-- "left" in the meaning of "exited"; %1$s will be replaced by name and address of the contact leaving the group -->
     <string name="group_left_by_other">%1$s a quitté le groupe.</string>
     <string name="group_image_deleted_by_you">Image du groupe effacée par vous.</string>
     <!-- %1$s will be replaced by name and address of the contact -->
@@ -997,7 +1002,7 @@
     <string name="disabled_in_dc">Désactivé dans Delta Chat</string>
     <string name="disabled_in_system_settings">Désactivé dans les paramètres système</string>
     <string name="bg_app_refresh_disabled">\"La recharge des applications en arrière-plan\" est désactivé dans les paramètres du système.</string>
-    <!-- iOS connectivity view -->
+    <!-- iOS connectivity view, Adjective, used eg. as "Notifications: Delayed" -->
     <string name="delayed">Retardé</string>
     <string name="notifications_avg_minutes">Toutes les %1$d minutes en moyenne</string>
     <string name="notifications_avg_hours">Toutes les %1$d heures en moyenne</string>
