@@ -14,6 +14,7 @@
 - escape key closes the emoji picker
 - removed dependency on `emoji-regex`
 - context menu size is updated dynamically, so there shouldn't be any word-wrapping
+- remove dependency on `glob-watcher`
 
 ### Fixed
 - improve jumbomoji logic (that emoji only messages appear bigger), now works even with new emojis that are not in delta chat yet.
