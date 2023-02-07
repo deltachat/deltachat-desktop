@@ -128,6 +128,10 @@ export function openHtmlEmailWindow(
           message: tx('load_remote_content_ask'),
           checkboxLabel: tx('do_not_ask_again'),
           buttons: [tx('no'), tx('yes')],
+          type: 'none',
+          icon: '',
+          defaultId: 0,
+          cancelId: 0
         })
         if (result.response === 0) {
           throw new Error('user denied')
