@@ -134,7 +134,7 @@
         <item quantity="many">%d одержувачів</item>
         <item quantity="other">%d одержувачів</item>
     </plurals>
-    <!-- Short form for "N Chats Selected" or "N Messages Selected": in English, "N Selected" -->
+    <!-- Short form for "N Items Selected" -->
     <plurals name="n_selected">
         <item quantity="one">%d обраний</item>
         <item quantity="few">%d обрано</item>
@@ -768,8 +768,9 @@
     <string name="remove_member_by_you">Ви видалили учасника %1$s.</string>
     <!-- %1$s will be replaced by name and address of the contact removed from the group, %2$s will be replaced by name and address of the contact who did the action -->
     <string name="remove_member_by_other">%2$s видалили учасника %1$s.</string>
+    <!-- "left" in the meaning of "exited" -->
     <string name="group_left_by_you">Ви залишили групу.</string>
-    <!-- %1$s will be replaced by name and address of the contact -->
+    <!-- "left" in the meaning of "exited"; %1$s will be replaced by name and address of the contact leaving the group -->
     <string name="group_left_by_other">%1$s залишили групу.</string>
     <string name="group_image_deleted_by_you">Ви видалили зображення групи.</string>
     <!-- %1$s will be replaced by name and address of the contact -->
@@ -1012,7 +1013,7 @@
     <string name="disabled_in_dc">Вимкнено в Delta Chat</string>
     <string name="disabled_in_system_settings">Вимкнено в налаштуваннях системи</string>
     <string name="bg_app_refresh_disabled">«Фонове оновлення додатка» вимкнено в налаштуваннях системи</string>
-    <!-- iOS connectivity view -->
+    <!-- iOS connectivity view, Adjective, used eg. as "Notifications: Delayed" -->
     <string name="delayed">Запізнюється</string>
     <string name="notifications_avg_minutes">В середньому %1$d хвилин</string>
     <string name="notifications_avg_hours">В середньому %1$d годин</string>

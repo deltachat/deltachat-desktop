@@ -48,6 +48,10 @@
     <string name="start_chat">Start Chat</string>
     <string name="show_full_message">Show Full Message…</string>
     <string name="show_full_message_in_browser">Show Full Message in Browser…</string>
+    <!-- Stay short here, say ~16 characters. The source string could also be "All Read", maybe that hint can make translations easier :) -->
+    <string name="mark_all_as_read">Mark All as Read</string>
+    <!-- Shortest text for "Mark as being read". In english, this could be "Read" (past tense of "to read"), in german, this could be "Gelesen". -->
+    <string name="mark_as_read_short">Read</string>
     <!-- Placeholder text when something is loading -->
     <string name="loading">Loading…</string>
     <string name="hide">Hide</string>
@@ -120,7 +124,7 @@
         <item quantity="one">%d recipient</item>
         <item quantity="other">%d recipients</item>
     </plurals>
-    <!-- Short form for "N Chats Selected" or "N Messages Selected": in English, "N Selected" -->
+    <!-- Short form for "N Items Selected" -->
     <plurals name="n_selected">
         <item quantity="one">%d Selected</item>
         <item quantity="other">%d Selected</item>
@@ -738,8 +742,9 @@
     <string name="remove_member_by_you">You removed member %1$s.</string>
     <!-- %1$s will be replaced by name and address of the contact removed from the group, %2$s will be replaced by name and address of the contact who did the action -->
     <string name="remove_member_by_other">Member %1$s removed by %2$s.</string>
+    <!-- "left" in the meaning of "exited" -->
     <string name="group_left_by_you">You left the group.</string>
-    <!-- %1$s will be replaced by name and address of the contact -->
+    <!-- "left" in the meaning of "exited"; %1$s will be replaced by name and address of the contact leaving the group -->
     <string name="group_left_by_other">Group left by %1$s.</string>
     <string name="group_image_deleted_by_you">You deleted the group image.</string>
     <!-- %1$s will be replaced by name and address of the contact -->
@@ -982,7 +987,7 @@
     <string name="disabled_in_dc">Disabled in Delta Chat</string>
     <string name="disabled_in_system_settings">Disabled in system settings</string>
     <string name="bg_app_refresh_disabled">\"Background App Refresh\" disabled in system settings</string>
-    <!-- iOS connectivity view -->
+    <!-- iOS connectivity view, Adjective, used eg. as "Notifications: Delayed" -->
     <string name="delayed">Delayed</string>
     <string name="notifications_avg_minutes">On average every %1$d minutes</string>
     <string name="notifications_avg_hours">On average every %1$d hours</string>
