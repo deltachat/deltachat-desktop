@@ -12,12 +12,6 @@ type showFnArguments = {
 
 export type showFnType = (args: showFnArguments) => void
 
-/**
- * character count that is considdered to fill a line, used to estimate linebreaks
- * might depend on fontsize and font-family
- * */
-const overFlowLineCharacterCount = 19
-
 const ScrollKeysToBlock = ['Space', 'PageUp', 'PageDown', 'End', 'Home']
 
 export function ContextMenuLayer({
