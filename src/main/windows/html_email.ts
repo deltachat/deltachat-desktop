@@ -131,7 +131,7 @@ export function openHtmlEmailWindow(
           type: 'none',
           icon: '',
           defaultId: 0,
-          cancelId: 0
+          cancelId: 0,
         })
         if (result.response === 0) {
           throw new Error('user denied')
