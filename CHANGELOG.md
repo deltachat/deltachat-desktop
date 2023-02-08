@@ -16,6 +16,7 @@
 - removed dependency on `emoji-regex`
 - context menu size is updated dynamically, so there shouldn't be any word-wrapping
 - remove dependency on `glob-watcher`
+- update deltachat-node and deltachat/jsonrpc-client to `v1.107.1`
 
 ### Fixed
 - improve jumbomoji logic (that emoji only messages appear bigger), now works even with new emojis that are not in delta chat yet.
