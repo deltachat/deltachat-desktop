@@ -3,6 +3,19 @@
 ## [Unreleased][unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+### Removed
+
+
+<a id="1_34_4"></a>
+
+## [1.34.4] - 2023-02-09
+
+### Added
 - add context menu option to mark all archived chats as noticed
 - add reply privately in mailinglists
 
@@ -1890,9 +1903,11 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.34.3...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.34.4...HEAD
 
-[1.343]: https://github.com/deltachat/deltachat-desktop/compare/v1.34.2...v1.34.3
+[1.34.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.34.3...v1.34.4
+
+[1.34.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.34.2...v1.34.3
 
 [1.34.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.34.1...v1.34.2
 
