@@ -87,7 +87,6 @@ import * as ipc from './ipc'
 import { init as initMenu } from './menu'
 import { DesktopSettings } from './desktop_settings'
 import * as mainWindow from './windows/main'
-import * as devTools from './devtools'
 import { ExtendedAppMainProcess } from './types'
 import { updateTrayIcon, hideDeltaChat, showDeltaChat } from './tray'
 import './notifications'
@@ -131,7 +130,6 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
   initMenu(logHandler)
 
   if (rc.devmode) {
-    devTools.tryInstallReactDevTools()
     mainWindow.toggleDevTools()
   }
 

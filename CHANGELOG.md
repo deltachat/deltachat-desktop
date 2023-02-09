@@ -11,6 +11,7 @@
 ### Removed
 - remove unused direct dependency on babel: `@babel/core`, `@babel/preset-env` and `@babel/preset-react`
 - remove `hallmark` modules, because we never really used it and it has many dependencies.
+- remove unused `electron-devtools-installer` - it does not work since our upgrade to electron >=11, so its not used for a long time already
 
 
 <a id="1_34_4"></a>
