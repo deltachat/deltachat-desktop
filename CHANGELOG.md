@@ -10,6 +10,7 @@
 
 ### Removed
 - remove unused direct dependency on babel: `@babel/core`, `@babel/preset-env` and `@babel/preset-react`
+- remove `hallmark` modules, because we never really used it and it has many dependencies.
 
 
 <a id="1_34_4"></a>

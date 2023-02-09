@@ -41,7 +41,6 @@
     "build4production": "NODE_ENV=production npm run build && npm run check-types",
     "translations-pull": "tx pull -l en -f && tx pull -f --parallel",
     "translations-update": "npm run translations-pull && npm run build:shared:translations && ./bin/find_complete_translations.sh",
-    "hallmark": "hallmark --fix",
     "pack": "npm run pack:generate_config && npm run pack:all",
     "pack:generate_config": "node ./build/gen-electron-builder-config.js && prettier --write ./electron-builder.json5 --loglevel silent",
     "pack:win": "electron-builder --config ./electron-builder.json5 --win nsis portable",
@@ -137,7 +136,6 @@
     "eslint": "^8.2.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-react-hooks": "^4.3.0",
-    "hallmark": "^4.0.0",
     "mocha": "^9.2.2",
     "node-fetch": "^2.6.7",
     "prettier": "2.2.1",
@@ -149,12 +147,6 @@
     "typescript": "^4.4.4",
     "walk": "^2.3.14",
     "xml-js": "^1.6.8"
-  },
-  "hallmark": {
-    "ignore": [
-      "README.md",
-      "UPGRADING.md"
-    ]
   },
   "standard": {
     "ignore": [
