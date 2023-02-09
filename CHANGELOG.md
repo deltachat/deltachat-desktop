@@ -9,6 +9,7 @@
 ### Fixed
 
 ### Removed
+- remove unused direct dependency on babel: `@babel/core`, `@babel/preset-env` and `@babel/preset-react`
 
 
 <a id="1_34_4"></a>
