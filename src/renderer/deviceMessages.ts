@@ -29,4 +29,18 @@ This release also includes some smaller improvements and bug fixes.
 
 Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1_34_2`
   )
+
+  BackendRemote.rpc.addDeviceMessage(
+    accountId,
+    'changelog-version-1.34.4-version2',
+    `What's new in 1.34.4?
+
+More stability for sending Messages and support for the new unicode 13 and 14 emojis:
+13: 🥲😶‍🌫️😮‍💨😵‍💫🥸❤️‍🔥❤️‍🩹🤌🫀🫁🧔‍♂️🧔‍♀️🥷🤵‍♂️🤵‍♀️👰‍♂️👰‍♀️👩‍🍼👨‍🍼🧑‍🍼🧑‍🎄🫂🐈‍⬛🦬🦣🦫🐻‍❄️🦤🪶🦭🪲🪳🪰🪱🪴🫐🫒🫑🫓🫔🫕🫖🧋🪨🪵🛖🛻🛼🪄🪅🪆🪡🪢🩴🪖🪗🪘🪙🪃🪚🪛🪝🪜🛗🪞🪟🪠🪤🪣🪥🪦🪧⚧️🏳️‍⚧️
+14: 🫠🫢🫣🫡🫥🫤🥹🫱🫲🫳🫴🫰🫵🫶🫦🫅🫃🫄🧌🪸🪷🪹🪺🫘🫗🫙🛝🛞🛟🪩🪫🩼🩻🫧🪬🪪🟰
+
+The emoji picker now closes when you choose an emoji. Press shift to choose multiple emojis.
+
+Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1_34_4`
+  )
 }
