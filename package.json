@@ -147,10 +147,5 @@
     "typescript": "^4.4.4",
     "walk": "^2.3.14",
     "xml-js": "^1.6.8"
-  },
-  "standard": {
-    "ignore": [
-      "static/avoid-eval.js"
-    ]
   }
 }
