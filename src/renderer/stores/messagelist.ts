@@ -305,7 +305,8 @@ class MessageListStore extends Store<MessageListState> {
         const messageListItems = await BackendRemote.rpc.getMessageListItems(
           this.accountId,
           this.chatId,
-          C.DC_GCM_ADDDAYMARKER
+          false,
+          true
         )
 
         const firstUnreadMsgId = await BackendRemote.rpc.getFirstUnreadMessageOfChat(
@@ -461,7 +462,8 @@ class MessageListStore extends Store<MessageListState> {
         const messageListItems = await BackendRemote.rpc.getMessageListItems(
           accountId,
           chatId,
-          C.DC_GCM_ADDDAYMARKER
+          false,
+          true
         )
 
         const jumpToMessageIndex = messageListItems.findIndex(
@@ -675,7 +677,8 @@ class MessageListStore extends Store<MessageListState> {
           const messageListItems = await BackendRemote.rpc.getMessageListItems(
             this.accountId,
             this.chatId,
-            C.DC_GCM_ADDDAYMARKER
+            false,
+            true
           )
           let {
             newestFetchedMessageListItemIndex,
@@ -714,7 +717,8 @@ class MessageListStore extends Store<MessageListState> {
       const messageListItems = await BackendRemote.rpc.getMessageListItems(
         this.accountId,
         this.chatId,
-        C.DC_GCM_ADDDAYMARKER
+        false,
+        true
       )
       let indexEnd = -1
       const last_item = this.state.messageListItems[
@@ -801,7 +805,8 @@ class MessageListStore extends Store<MessageListState> {
           const messageListItems = await BackendRemote.rpc.getMessageListItems(
             this.accountId,
             this.chatId,
-            C.DC_GCM_ADDDAYMARKER
+            false,
+            true
           )
           this.reducer.setMessageListItems(messageListItems)
         }

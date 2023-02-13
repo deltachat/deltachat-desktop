@@ -269,7 +269,8 @@ export async function clearChat(chatId: number) {
   const messages_to_delete = await BackendRemote.rpc.getMessageIds(
     accountID,
     chatId,
-    0
+    false,
+    false
   )
 
   window.__openDialog(ConfirmationDialog, {
