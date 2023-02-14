@@ -712,7 +712,7 @@ function useContactAndMessageLogic(
 
   // Message ----------------
   const [messageCache, setMessageCache] = useState<{
-    [id: number]: T.MessageSearchResult
+    [id: number]: T.MessageSearchResult | undefined
   }>({})
   const [messageLoadState, setMessageLoading] = useState<{
     [id: number]: undefined | LoadStatus.FETCHING | LoadStatus.LOADED

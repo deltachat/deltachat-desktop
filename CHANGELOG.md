@@ -8,6 +8,7 @@
 - update deltachat-node and deltachat/jsonrpc-client to `v1.109.0`
 
 ### Fixed
+- better error handling when messages fail to load from db
 
 ### Removed
 - remove unused direct dependency on babel: `@babel/core`, `@babel/preset-env` and `@babel/preset-react`

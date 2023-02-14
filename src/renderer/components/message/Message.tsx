@@ -264,11 +264,11 @@ function buildContextMenu(
   ]
 }
 
-const Message = (props: {
+export default function Message(props: {
   message: Type.Message
   conversationType: ConversationType
   /* onRetrySend */
-}) => {
+}) {
   const { message, conversationType } = props
   const { id, viewType, text, hasLocation, isSetupmessage, hasHtml } = message
   const direction = getDirection(message)
@@ -501,8 +501,6 @@ const Message = (props: {
     </div>
   )
 }
-
-export default Message
 
 export const Quote = ({
   quote,
