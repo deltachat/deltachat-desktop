@@ -5,7 +5,7 @@
 ### Added
 
 ### Changed
-- update deltachat-node and deltachat/jsonrpc-client to `v1.108.0`
+- update deltachat-node and deltachat/jsonrpc-client to `v1.109.0`
 
 ### Fixed
 
