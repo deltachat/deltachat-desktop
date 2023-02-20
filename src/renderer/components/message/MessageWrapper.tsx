@@ -14,7 +14,7 @@ type RenderMessageProps = {
   unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
 }
 
-export const MessageWrapper = (props: RenderMessageProps) => {
+export function MessageWrapper(props: RenderMessageProps) {
   const state = props.message.state
   const shouldInViewObserve =
     state === C.DC_STATE_IN_FRESH || state === C.DC_STATE_IN_NOTICED

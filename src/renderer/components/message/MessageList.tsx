@@ -429,7 +429,7 @@ export const MessageListInner = React.memo(
     oldestFetchedMessageIndex: number
     messageListItems: T.MessageListItem[]
     activeView: T.MessageListItem[]
-    messageCache: { [msgId: number]: T.Message }
+    messageCache: { [msgId: number]: T.MessageLoadResult | undefined }
     messageListRef: React.MutableRefObject<HTMLDivElement | null>
     chatStore: ChatStoreStateWithChatSet
     loaded: boolean
@@ -502,17 +502,30 @@ export const MessageListInner = React.memo(
 
             if (messageId.kind === 'message') {
               const message = messageCache[messageId.msg_id]
-              if (message) {
+              if (message?.variant === 'message') {
                 return (
                   <MessageWrapper
                     key={messageId.msg_id}
                     key2={`${messageId.msg_id}`}
-                    message={message as T.Message}
+                    message={message}
                     conversationType={conversationType}
                     unreadMessageInViewIntersectionObserver={
                       unreadMessageInViewIntersectionObserver
                     }
                   />
+                )
+              } else if (message?.variant === 'loadingError') {
+                return (
+                  <div className='info-message' id={String(messageId.msg_id)}>
+                    <div
+                      className='bubble'
+                      style={{
+                        backgroundColor: 'rgba(55,0,0,0.5)',
+                      }}
+                    >
+                      loading message {messageId.msg_id} failed: {message.error}
+                    </div>
+                  </div>
                 )
               } else {
                 // setTimeout tells it to call method in next event loop iteration, so after rendering
@@ -523,11 +536,10 @@ export const MessageListInner = React.memo(
                     <div
                       className='bubble'
                       style={{
-                        textTransform: 'capitalize',
                         backgroundColor: 'rgba(55,0,0,0.5)',
                       }}
                     >
-                      loading message {messageId.msg_id}
+                      Loading Message {messageId.msg_id}
                     </div>
                   </div>
                 )

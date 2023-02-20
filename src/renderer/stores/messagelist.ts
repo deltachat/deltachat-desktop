@@ -19,7 +19,7 @@ const PAGE_SIZE = 11
 interface MessageListState {
   // chat: Type.FullChat | null
   messageListItems: T.MessageListItem[]
-  messageCache: { [msgId: number]: T.Message }
+  messageCache: { [msgId: number]: T.MessageLoadResult|undefined }
   newestFetchedMessageListItemIndex: number
   oldestFetchedMessageListItemIndex: number
   viewState: ChatViewState
@@ -239,10 +239,11 @@ class MessageListStore extends Store<MessageListState> {
       }, 'unlockScroll')
     },
     messageChanged: (message: Type.Message) => {
+      const messageLoadResult:Type.MessageLoadResult = {variant: 'message', ...message}
       this.setState(state => {
         const modifiedState: MessageListState = {
           ...state,
-          messageCache: { ...state.messageCache, [message.id]: message },
+          messageCache: { ...state.messageCache, [message.id]: messageLoadResult },
         }
         return modifiedState
       }, 'messageChanged')
@@ -256,7 +257,7 @@ class MessageListStore extends Store<MessageListState> {
             [messageId]: {
               ...state.messageCache[messageId],
               state: messageState,
-            },
+            } as Type.MessageLoadResult,
           },
         }
         return modifiedState

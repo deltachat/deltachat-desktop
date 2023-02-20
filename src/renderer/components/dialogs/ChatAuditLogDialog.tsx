@@ -90,8 +90,10 @@ export default function ChatAuditLogDialog(props: {
   const isOpen = !!selectedChat
 
   const [loading, setLoading] = useState(true)
-  const [msgIds, setMsgIds] = useState<number[]>([])
-  const [messages, setMessages] = useState<Record<number, Type.Message>>([])
+  const [msgEntries, setMsgEntries] = useState<Type.MessageListItem[]>([])
+  const [messages, setMessages] = useState<
+    Record<number, Type.MessageLoadResult>
+  >([])
 
   const listView = useRef<HTMLDivElement>(null)
 
@@ -122,18 +124,22 @@ export default function ChatAuditLogDialog(props: {
       setLoading(true)
       const account_id = selectedAccountId()
 
-      const msgIds = await BackendRemote.rpc.getMessageIds(
+      const msgEntries = await BackendRemote.rpc.getMessageListItems(
         account_id,
         selectedChat.id,
         true,
         true
       )
+      /** only ids of real messages, without daymarkers */
+      const onlyMsgIds = msgEntries
+        .map(entry => (entry.kind === 'message' ? entry.msg_id : undefined))
+        .filter(entry => typeof entry !== 'undefined') as number[]
       const messages = await BackendRemote.rpc.getMessages(
         account_id,
-        msgIds.filter(id => id !== 9)
+        onlyMsgIds
       )
 
-      setMsgIds(msgIds)
+      setMsgEntries(msgEntries)
       setMessages(messages)
       setLoading(false)
 
@@ -148,8 +154,6 @@ export default function ChatAuditLogDialog(props: {
   useEffect(() => {
     refresh()
   }, [selectedChat.id, refresh])
-
-  let specialMessageIdCounter = 0
 
   const tx = useTranslationFunction()
 
@@ -174,22 +178,19 @@ export default function ChatAuditLogDialog(props: {
         <div>{tx('loading')}</div>
       ) : (
         <div style={{ overflowY: 'scroll' }} ref={listView}>
-          {msgIds.length === 0 && (
+          {msgEntries.length === 0 && (
             <div className='no-content' key='no-content-msg'>
               <div>{tx('chat_audit_log_empty_message')}</div>
             </div>
           )}
           <ul key='info-message-list'>
-            {msgIds.map((id, index) => {
-              if (id === C.DC_MSG_ID_DAYMARKER) {
-                const key = 'magic' + id + '_' + specialMessageIdCounter++
-
-                const nextMessage = messages[msgIds[index + 1]]
-                if (!nextMessage) return null
+            {msgEntries.map(entry => {
+              if (entry.kind === 'dayMarker') {
+                const key = 'magic' + entry.timestamp
                 return (
                   <li key={key} className='time'>
                     <div>
-                      {moment.unix(nextMessage.timestamp).calendar(null, {
+                      {moment.unix(entry.timestamp).calendar(null, {
                         sameDay: `[${tx('today')}]`,
                         lastDay: `[${tx('yesterday')}]`,
                         lastWeek: 'LL',
@@ -199,11 +200,21 @@ export default function ChatAuditLogDialog(props: {
                   </li>
                 )
               }
-              const message = messages[msgIds[index]]
+              const id = entry.msg_id
+              const message = messages[id]
               if (!message || message == null) {
                 log.debug(`Missing message with id ${id}`)
                 return
               }
+              if (message.variant !== 'message') {
+                log.debug(`Loading of message with id ${id} failed`)
+                return (
+                  <li key={id} className='info'>
+                    <p>{`${id}: ${message.error}`}</p>
+                  </li>
+                )
+              }
+
               const { text, timestamp, systemMessageType, parentId } = message
               const direction = getDirection(message)
               const status = mapCoreMsgStatus2String(message.state)
