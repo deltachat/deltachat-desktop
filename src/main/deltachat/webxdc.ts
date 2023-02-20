@@ -9,7 +9,6 @@ import { join } from 'path'
 import { readdir, stat, rmdir, writeFile, readFile } from 'fs/promises'
 import { getConfigPath, htmlDistDir } from '../application-constants'
 import UrlParser from 'url-parse'
-import type { Message } from 'deltachat-node'
 import { truncateText } from '../../shared/util'
 import { platform } from 'os'
 import { tx } from '../load-translations'
@@ -19,7 +18,6 @@ import { DesktopSettings } from '../desktop_settings'
 const open_apps: {
   [instanceId: string]: {
     win: BrowserWindow
-    msg_obj: Message
     msgId: number
     accountId: number
     internet_access: boolean
@@ -49,277 +47,281 @@ export default class DCWebxdc extends SplitOut {
 
     // icon protocol
     app.whenReady().then(() => {
-      protocol.registerBufferProtocol('webxdc-icon', (request, callback) => {
-        const [account, message] = request.url.substr(12).split('.')
-        const context = this.accounts.accountContext(Number(account))
-        const msg = context.getMessage(Number(message))
-        if (!msg || !msg.webxdcInfo) {
-          log.error('message not found or not a webxdc message:', message)
-          return callback({ statusCode: 404 })
+      protocol.registerBufferProtocol(
+        'webxdc-icon',
+        async (request, callback) => {
+          const [a, m] = request.url.substr(12).split('.')
+          const [accountId, messageId] = [Number(a), Number(m)]
+          try {
+            const { icon } = await this.rpc.getWebxdcInfo(accountId, messageId)
+            const blob = Buffer.from(
+              await this.rpc.getWebxdcBlob(accountId, messageId, icon),
+              'base64'
+            )
+            callback({
+              mimeType: Mime.lookup(icon) || '',
+              data: blob,
+            })
+          } catch (error) {
+            log.error('failed to load webxdc icon for:', error)
+            callback({ statusCode: 404 })
+          }
         }
-        const icon = msg.webxdcInfo.icon
-        const blob = context.getWebxdcBlob(msg, icon)
-        if (!blob) {
-          log.error('getWebxdcBlob returned null instead of an icon')
-          return callback({ statusCode: 404 })
-        }
-        callback({
-          mimeType: Mime.lookup(icon) || '',
-          data: blob,
-        })
-        context.unref()
-      })
+      )
     })
 
     // actual webxdc instances
-    ipcMain.handle('open-webxdc', (_ev, msg_id, p: DcOpenWebxdcParameters) => {
-      const { webxdcInfo, chatName, displayname, addr, accountId } = p
-      if (open_apps[`${accountId}.${msg_id}`]) {
-        log.warn(
-          'webxdc instance for this app is already open, trying to focus it',
-          { msg_id }
+    ipcMain.handle(
+      'open-webxdc',
+      async (_ev, msg_id, p: DcOpenWebxdcParameters) => {
+        const { webxdcInfo, chatName, displayname, addr, accountId } = p
+        if (open_apps[`${accountId}.${msg_id}`]) {
+          log.warn(
+            'webxdc instance for this app is already open, trying to focus it',
+            { msg_id }
+          )
+          open_apps[`${accountId}.${msg_id}`].win.focus()
+          return
+        }
+
+        log.info('opening new webxdc instance', { msg_id })
+
+        const icon = webxdcInfo.icon
+        const icon_blob = Buffer.from(
+          await this.rpc.getWebxdcBlob(accountId, msg_id, icon),
+          'base64'
         )
-        open_apps[`${accountId}.${msg_id}`].win.focus()
-        return
-      }
 
-      const dc_context = this.accounts.accountContext(accountId)
+        const ses = sessionFromAccountId(accountId)
+        const appURL = `webxdc://${accountId}.${msg_id}.webxdc`
 
-      log.info('opening new webxdc instance', { msg_id })
+        // TODO intercept / deny network access - CSP should probably be disabled for testing
 
-      const webxdc_message_ref = dc_context.getMessage(msg_id)
-      if (!webxdc_message_ref) {
-        log.error('message not found')
-        return
-      }
+        if (!accounts_sessions.includes(accountId)) {
+          accounts_sessions.push(accountId)
+          ses.protocol.registerBufferProtocol(
+            'webxdc',
+            async (request, callback) => {
+              const url = UrlParser(request.url)
+              const [account, msg] = url.hostname.split('.')
+              const id = `${account}.${msg}`
 
-      const icon = webxdcInfo.icon
-      const icon_blob = dc_context.getWebxdcBlob(webxdc_message_ref, icon)
+              if (!open_apps[id]) {
+                return
+              }
 
-      const ses = sessionFromAccountId(accountId)
-      const appURL = `webxdc://${accountId}.${msg_id}.webxdc`
+              let filename = url.pathname
+              // remove leading / trailing "/"
+              if (filename.endsWith('/')) {
+                filename = filename.substr(0, filename.length - 1)
+              }
+              if (filename.startsWith('/')) {
+                filename = filename.substr(1)
+              }
 
-      // TODO intercept / deny network access - CSP should probably be disabled for testing
-
-      if (!accounts_sessions.includes(accountId)) {
-        accounts_sessions.push(accountId)
-        ses.protocol.registerBufferProtocol(
-          'webxdc',
-          async (request, callback) => {
-            const url = UrlParser(request.url)
-            const [account, msg] = url.hostname.split('.')
-            const id = `${account}.${msg}`
-
-            if (!open_apps[id]) {
-              return
-            }
-
-            let filename = url.pathname
-            // remove leading / trailing "/"
-            if (filename.endsWith('/')) {
-              filename = filename.substr(0, filename.length - 1)
-            }
-            if (filename.startsWith('/')) {
-              filename = filename.substr(1)
-            }
-
-            if (filename === WRAPPER_PATH) {
-              callback({
-                mimeType: Mime.lookup(filename) || '',
-                data: await readFile(
-                  join(htmlDistDir(), '/webxdc_wrapper.html')
-                ),
-                headers: open_apps[id].internet_access
-                  ? {}
-                  : {
-                      'Content-Security-Policy': CSP,
-                    },
-              })
-            } else if (filename === 'webxdc.js') {
-              const displayName = Buffer.from(
-                displayname || addr || 'unknown'
-              ).toString('base64')
-              const selfAddr = Buffer.from(addr || 'unknown@unknown').toString(
-                'base64'
-              )
-
-              // initializes the preload script, the actual implementation of `window.webxdc` is found there: static/webxdc-preload.js
-              callback({
-                mimeType: Mime.lookup(filename) || '',
-                data: Buffer.from(
-                  `window.parent.webxdc_internal.setup("${selfAddr}","${displayName}")
-                  window.webxdc = window.parent.webxdc`
-                ),
-                headers: {
-                  'Content-Security-Policy': CSP,
-                },
-              })
-            } else {
-              const blob = dc_context.getWebxdcBlob(
-                open_apps[id].msg_obj,
-                filename
-              )
-              if (blob) {
+              if (filename === WRAPPER_PATH) {
                 callback({
                   mimeType: Mime.lookup(filename) || '',
-                  data: blob,
+                  data: await readFile(
+                    join(htmlDistDir(), '/webxdc_wrapper.html')
+                  ),
                   headers: open_apps[id].internet_access
                     ? {}
                     : {
                         'Content-Security-Policy': CSP,
                       },
                 })
+              } else if (filename === 'webxdc.js') {
+                const displayName = Buffer.from(
+                  displayname || addr || 'unknown'
+                ).toString('base64')
+                const selfAddr = Buffer.from(
+                  addr || 'unknown@unknown'
+                ).toString('base64')
+
+                // initializes the preload script, the actual implementation of `window.webxdc` is found there: static/webxdc-preload.js
+                callback({
+                  mimeType: Mime.lookup(filename) || '',
+                  data: Buffer.from(
+                    `window.parent.webxdc_internal.setup("${selfAddr}","${displayName}")
+                  window.webxdc = window.parent.webxdc`
+                  ),
+                  headers: {
+                    'Content-Security-Policy': CSP,
+                  },
+                })
               } else {
-                callback({ statusCode: 404 })
+                const blob = Buffer.from(
+                  await this.rpc.getWebxdcBlob(
+                    open_apps[id].accountId,
+                    open_apps[id].msgId,
+                    filename
+                  ),
+                  'base64'
+                )
+                if (blob) {
+                  callback({
+                    mimeType: Mime.lookup(filename) || '',
+                    data: blob,
+                    headers: open_apps[id].internet_access
+                      ? {}
+                      : {
+                          'Content-Security-Policy': CSP,
+                        },
+                  })
+                } else {
+                  callback({ statusCode: 404 })
+                }
               }
             }
+          )
+        }
+
+        const app_icon = icon_blob && nativeImage?.createFromBuffer(icon_blob)
+
+        const webxdc_windows = new BrowserWindow({
+          webPreferences: {
+            partition: partitionFromAccountId(accountId),
+            sandbox: true,
+            contextIsolation: true,
+            webSecurity: true,
+            nodeIntegration: false,
+            navigateOnDragDrop: false,
+            devTools: true,
+            javascript: true,
+            preload: join(
+              __dirname,
+              '..',
+              '..',
+              '..',
+              'html-dist',
+              'webxdc-preload.js'
+            ),
+          },
+          title: `${
+            webxdcInfo.document
+              ? truncateText(webxdcInfo.document, 32) + ' - '
+              : ''
+          }${truncateText(webxdcInfo.name, 42)} – ${chatName}`,
+          icon: app_icon || undefined,
+          width: 375,
+          height: 667,
+        })
+        open_apps[`${accountId}.${msg_id}`] = {
+          win: webxdc_windows,
+          accountId,
+          msgId: msg_id,
+          internet_access: webxdcInfo['internetAccess'],
+        }
+
+        if (platform() !== 'darwin') {
+          webxdc_windows.setMenu(
+            Menu.buildFromTemplate([
+              {
+                label: tx('global_menu_file_desktop'),
+                submenu: [
+                  {
+                    label: tx('global_menu_file_quit_desktop'),
+                    click: () => {
+                      webxdc_windows.close()
+                    },
+                  },
+                ],
+              },
+              { role: 'viewMenu' },
+              {
+                label: tx('menu_help'),
+                submenu: [
+                  {
+                    label: tx('source_code'),
+                    enabled: !!webxdcInfo.sourceCodeUrl,
+                    icon: app_icon?.resize({ width: 24 }) || undefined,
+                    click: () =>
+                      webxdcInfo.sourceCodeUrl &&
+                      shell.openExternal(webxdcInfo.sourceCodeUrl),
+                  },
+                  {
+                    type: 'separator',
+                  },
+                  {
+                    label: tx('what_is_webxdc'),
+                    click: () => shell.openExternal('https://webxdc.org'),
+                  },
+                ],
+              },
+            ])
+          )
+        }
+
+        webxdc_windows.once('closed', () => {
+          delete open_apps[`${accountId}.${msg_id}`]
+        })
+
+        webxdc_windows.once('ready-to-show', () => {})
+
+        webxdc_windows.webContents.loadURL(appURL + '/' + WRAPPER_PATH, {
+          extraHeaders: 'Content-Security-Policy: ' + CSP,
+        })
+
+        // prevent reload and navigation of wrapper page
+        webxdc_windows.webContents.on('will-navigate', ev => {
+          ev.preventDefault()
+        })
+
+        // we would like to make `mailto:`-links work,
+        // but https://github.com/electron/electron/pull/34418 is not merged yet.
+
+        // prevent webxdc content from setting the window title
+        webxdc_windows.on('page-title-updated', ev => {
+          ev.preventDefault()
+        })
+
+        type setPermissionRequestHandler = typeof webxdc_windows.webContents.session.setPermissionRequestHandler
+        type permission_arg = Parameters<
+          Exclude<Parameters<setPermissionRequestHandler>[0], null>
+        >[1]
+        const loggedPermissionRequests: { [K in permission_arg]?: true } = {}
+        /** prevents webxdcs from spamming the log */
+        const logPermissionRequest = (permission: permission_arg) => {
+          if (loggedPermissionRequests[permission]) {
+            return
+          }
+          loggedPermissionRequests[permission] = true
+          log.info(
+            `webxdc '${webxdcInfo.name}' requested "${permission}" permission, but we denied it.
+If you think that's a bug and you need that permission, then please open an issue on github`
+          )
+        }
+        const permission_handler = (permission: permission_arg) => {
+          if (permission == 'pointerLock') {
+            log.info(`allowed webxdc '${webxdcInfo.name}' to lock the pointer`)
+            // because games might lock the pointer
+            return true
+          }
+          if (permission == 'fullscreen') {
+            log.info(
+              `allowed webxdc '${webxdcInfo.name}' to go into fullscreen`
+            )
+            // games might do that too
+            return true
+          }
+
+          logPermissionRequest(permission)
+          return false
+        }
+
+        webxdc_windows.webContents.session.setPermissionCheckHandler(
+          (_wc, permission) => {
+            return permission_handler(permission as any)
+          }
+        )
+        webxdc_windows.webContents.session.setPermissionRequestHandler(
+          (_wc, permission, callback) => {
+            callback(permission_handler(permission))
           }
         )
       }
-
-      const app_icon = icon_blob && nativeImage?.createFromBuffer(icon_blob)
-
-      const webxdc_windows = new BrowserWindow({
-        webPreferences: {
-          partition: partitionFromAccountId(accountId),
-          sandbox: true,
-          contextIsolation: true,
-          webSecurity: true,
-          nodeIntegration: false,
-          navigateOnDragDrop: false,
-          devTools: DesktopSettings.state.enableWebxdcDevTools,
-          javascript: true,
-          preload: join(
-            __dirname,
-            '..',
-            '..',
-            '..',
-            'html-dist',
-            'webxdc-preload.js'
-          ),
-        },
-        title: `${
-          webxdcInfo.document
-            ? truncateText(webxdcInfo.document, 32) + ' - '
-            : ''
-        }${truncateText(webxdcInfo.name, 42)} – ${chatName}`,
-        icon: app_icon || undefined,
-        width: 375,
-        height: 667,
-      })
-      open_apps[`${accountId}.${msg_id}`] = {
-        win: webxdc_windows,
-        msg_obj: webxdc_message_ref,
-        accountId,
-        msgId: msg_id,
-        internet_access: webxdcInfo['internetAccess'],
-      }
-
-      if (platform() !== 'darwin') {
-        webxdc_windows.setMenu(
-          Menu.buildFromTemplate([
-            {
-              label: tx('global_menu_file_desktop'),
-              submenu: [
-                {
-                  label: tx('global_menu_file_quit_desktop'),
-                  click: () => {
-                    webxdc_windows.close()
-                  },
-                },
-              ],
-            },
-            { role: 'viewMenu' },
-            {
-              label: tx('menu_help'),
-              submenu: [
-                {
-                  label: tx('source_code'),
-                  enabled: !!webxdcInfo.sourceCodeUrl,
-                  icon: app_icon?.resize({ width: 24 }) || undefined,
-                  click: () =>
-                    webxdcInfo.sourceCodeUrl &&
-                    shell.openExternal(webxdcInfo.sourceCodeUrl),
-                },
-                {
-                  type: 'separator',
-                },
-                {
-                  label: tx('what_is_webxdc'),
-                  click: () => shell.openExternal('https://webxdc.org'),
-                },
-              ],
-            },
-          ])
-        )
-      }
-
-      webxdc_windows.once('closed', () => {
-        delete open_apps[`${accountId}.${msg_id}`]
-      })
-
-      webxdc_windows.once('ready-to-show', () => {})
-
-      webxdc_windows.webContents.loadURL(appURL + '/' + WRAPPER_PATH, {
-        extraHeaders: 'Content-Security-Policy: ' + CSP,
-      })
-
-      // prevent reload and navigation of wrapper page
-      webxdc_windows.webContents.on('will-navigate', ev => {
-        ev.preventDefault()
-      })
-
-      // we would like to make `mailto:`-links work,
-      // but https://github.com/electron/electron/pull/34418 is not merged yet.
-
-      // prevent webxdc content from setting the window title
-      webxdc_windows.on('page-title-updated', ev => {
-        ev.preventDefault()
-      })
-
-      type setPermissionRequestHandler = typeof webxdc_windows.webContents.session.setPermissionRequestHandler
-      type permission_arg = Parameters<
-        Exclude<Parameters<setPermissionRequestHandler>[0], null>
-      >[1]
-      const loggedPermissionRequests: { [K in permission_arg]?: true } = {}
-      /** prevents webxdcs from spamming the log */
-      const logPermissionRequest = (permission: permission_arg) => {
-        if (loggedPermissionRequests[permission]) {
-          return
-        }
-        loggedPermissionRequests[permission] = true
-        log.info(
-          `webxdc '${webxdcInfo.name}' requested "${permission}" permission, but we denied it.
-If you think that's a bug and you need that permission, then please open an issue on github`
-        )
-      }
-      const permission_handler = (permission: permission_arg) => {
-        if (permission == 'pointerLock') {
-          log.info(`allowed webxdc '${webxdcInfo.name}' to lock the pointer`)
-          // because games might lock the pointer
-          return true
-        }
-        if (permission == 'fullscreen') {
-          log.info(`allowed webxdc '${webxdcInfo.name}' to go into fullscreen`)
-          // games might do that too
-          return true
-        }
-
-        logPermissionRequest(permission)
-        return false
-      }
-
-      webxdc_windows.webContents.session.setPermissionCheckHandler(
-        (_wc, permission) => {
-          return permission_handler(permission as any)
-        }
-      )
-      webxdc_windows.webContents.session.setPermissionRequestHandler(
-        (_wc, permission, callback) => {
-          callback(permission_handler(permission))
-        }
-      )
-    })
+    )
 
     ipcMain.handle('webxdc.toggle_dev_tools', async event => {
       if (DesktopSettings.state.enableWebxdcDevTools) {
@@ -354,13 +356,9 @@ If you think that's a bug and you need that permission, then please open an issu
         )
         return []
       }
-      const context = this.accounts.accountContext(open_apps[key].accountId)
-      const result = context.getWebxdcStatusUpdates<any>(
-        open_apps[key].msgId,
-        serial
-      )
-      context.unref()
-      return result
+
+      const { accountId, msgId } = open_apps[key]
+      return await this.rpc.getWebxdcStatusUpdates(accountId, msgId, serial)
     })
 
     ipcMain.handle('webxdc.sendUpdate', async (event, update, description) => {
@@ -373,9 +371,13 @@ If you think that's a bug and you need that permission, then please open an issu
         )
         return
       }
-      const context = this.accounts.accountContext(open_apps[key].accountId)
-      context.sendWebxdcStatusUpdate(open_apps[key].msgId, update, description)
-      context.unref()
+      const { accountId, msgId } = open_apps[key]
+      return await this.rpc.sendWebxdcStatusUpdate(
+        accountId,
+        msgId,
+        update,
+        description
+      )
     })
 
     ipcMain.handle('close-all-webxdc', () => {

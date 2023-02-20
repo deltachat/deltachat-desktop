@@ -13,12 +13,29 @@ import { rmdir } from 'fs/promises'
 import { rm } from 'fs/promises'
 import DCWebxdc from './webxdc'
 import { DesktopSettings } from '../desktop_settings'
+import { RPC, yerpc, BaseDeltaChat } from '@deltachat/jsonrpc-client'
 
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat')
 const logCoreEvent = getLogger('core/event')
 const logCoreEventM = getLogger('core/event/m')
 const logMigrate = getLogger('main/migrate')
+
+class ElectronMainTransport extends yerpc.BaseTransport {
+  constructor(private sender: (message: yerpc.Message) => void) {
+    super()
+  }
+
+  onMessage(message: yerpc.Message): void {
+    this._onmessage(message)
+  }
+
+  _send(message: yerpc.Message): void {
+    this.sender(message)
+  }
+}
+
+export class JRPCDeltaChat extends BaseDeltaChat<ElectronMainTransport> {}
 
 /**
  * DeltaChatController
@@ -44,6 +61,14 @@ export default class DeltaChatController extends EventEmitter {
     super()
   }
 
+  _jsonrpcRemote: JRPCDeltaChat | null = null
+  get jsonrpcRemote(): Readonly<JRPCDeltaChat> {
+    if (!this._jsonrpcRemote) {
+      throw new Error('_jsonrpcRemote is not defined (yet?)')
+    }
+    return this._jsonrpcRemote
+  }
+
   async init() {
     await this.migrateToAccountsApiIfNeeded()
 
@@ -53,7 +78,25 @@ export default class DeltaChatController extends EventEmitter {
       'deltachat-desktop'
     )
 
+    const mainProcessTransport = new ElectronMainTransport(message => {
+      message.id = `main-${message.id}`
+      this.account_manager.jsonRpcRequest(JSON.stringify(message))
+    })
+
     this.account_manager.startJsonRpcHandler(response => {
+      try {
+        if (response.indexOf('"id":"main-') !== -1) {
+          const message = JSON.parse(response)
+          if (message.id.startsWith('main-')) {
+            message.id = Number(message.id.replace('main-',''))
+            mainProcessTransport.onMessage(message)
+            return
+          }
+        }
+      } catch (error) {
+        log.error("jsonrpc-decode", error)
+      }
+
       mainWindow.send('json-rpc-message', response)
       if (response.indexOf('event') !== -1)
         try {
@@ -84,6 +127,8 @@ export default class DeltaChatController extends EventEmitter {
     ipcMain.handle('json-rpc-request', (_ev, message) => {
       this.account_manager.jsonRpcRequest(message)
     })
+
+    this._jsonrpcRemote = new JRPCDeltaChat(mainProcessTransport)
 
     if (DesktopSettings.state.syncAllAccounts) {
       log.info('Ready, starting accounts io...')

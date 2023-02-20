@@ -1,4 +1,4 @@
-import { BaseDeltaChat, yerpc, RPC, DcEvent } from '@deltachat/jsonrpc-client'
+import { BaseDeltaChat, yerpc, DcEvent } from '@deltachat/jsonrpc-client'
 import { runtime } from './runtime'
 import { hasDebugEnabled } from '../shared/logger'
 import { debouncedUpdateBadgeCounter } from './system-integration/badge-counter'
@@ -17,7 +17,7 @@ class ElectronTransport extends BaseTransport {
     window.electron_functions.ipcRenderer.on(
       'json-rpc-message',
       (_ev: any, response: any) => {
-        const message: RPC.Message = JSON.parse(response)
+        const message: yerpc.Message = JSON.parse(response)
         if (hasDebugEnabled()) {
           /* ignore-console-log */
           console.debug('%c▼ %c[JSONRPC]', 'color: red', 'color:grey', message)
@@ -26,7 +26,7 @@ class ElectronTransport extends BaseTransport {
       }
     )
   }
-  _send(message: RPC.Message): void {
+  _send(message: yerpc.Message): void {
     const serialized = JSON.stringify(message)
     window.electron_functions.ipcRenderer.invoke('json-rpc-request', serialized)
     if (hasDebugEnabled()) {
