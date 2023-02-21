@@ -97,11 +97,6 @@ const Sidebar = React.memo(
       }
     }
 
-    const onOpenArchivedChats = () => {
-      setSidebarState('invisible')
-      ActionEmitter.emitAction(KeybindAction.ChatList_SwitchToArchiveView)
-    }
-
     useEffect(() => {
       window.addEventListener('keyup', onEscapeKeyUp)
       return () => {
@@ -164,13 +159,6 @@ const Sidebar = React.memo(
             onClick={onUnblockContacts}
           >
             {tx('pref_blocked_contacts')}
-          </div>
-          <div
-            key='archived_chats'
-            className='sidebar-item'
-            onClick={onOpenArchivedChats}
-          >
-            {tx('chat_archived_chats_title')}
           </div>
           <div key='settings' className='sidebar-item' onClick={onOpenSettings}>
             {tx('menu_settings')}
