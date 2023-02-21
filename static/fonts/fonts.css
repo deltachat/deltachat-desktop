@@ -29,3 +29,8 @@
   font-family: "NotoEmoji";
   src: url("noto/emoji/NotoColorEmoji.ttf") format("truetype");
 }
+/* make emoji mart use the same emoji fonts in the same order that we use elsewhere */
+@font-face {
+  font-family: 'EmojiMart';
+  src: local('Apple Color Emoji'), url("noto/emoji/NotoColorEmoji.ttf") format("truetype");
+}

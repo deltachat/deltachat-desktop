@@ -128,3 +128,29 @@ Some theming requires the javascript code to know how it should behave, for this
 
 Themes can be hidden in production mode:
 When their filename is prefixed with `dev_` they won't show up in the theme selection unless they are selected or `--devmode` is active.
+
+# Guide: Changing the emoji font
+
+So let's say we have our own emoji font, in my case it's the mono color version of google's noto emojis.
+
+The first step is to aquire your prefered emoji font, then save it somewhere where it will not be acidentially deleted (for example you could install it as a system font).
+
+Then overwrite the `"EmojiMart"` font family at the end of your theme.scss file like shown here:
+
+```scss
+/* overwrite css */
+
+@font-face {
+  font-family: 'EmojiMart';
+  /* use the absolute path */
+  src: url('/absolute/path/to/NotoEmoji-Medium.ttf') format('truetype');
+  /* or if you installed it use the name under which it was installed */
+  /* If your font name does not work, make sure it is the 'PostScript-Name' of the font */
+  src: local('NotoEmoji-Regular');
+  /* don't forget to remove the src that you don't need there should only be one */
+}
+```
+
+Now build your theme (see sections above on how to do that), select your custom theme in detachat and then enjoy the new look of your emojis:
+
+<img src="./doc-assets/emoji-picker-with-noto-mono-color-emoji.png" width="200px" />
