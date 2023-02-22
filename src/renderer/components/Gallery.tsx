@@ -35,7 +35,12 @@ type mediaProps = { chatId: number }
 
 export default class Gallery extends Component<
   mediaProps,
-  { id: MediaTabKey; msgTypes: Type.Viewtype[]; medias: Type.Message[] }
+  {
+    id: MediaTabKey
+    msgTypes: Type.Viewtype[]
+    medias: Type.Message[]
+    errors: { msgId: number; error: string }[]
+  }
 > {
   constructor(props: mediaProps) {
     super(props)
@@ -43,6 +48,7 @@ export default class Gallery extends Component<
       id: 'images',
       msgTypes: MediaTabs.images.values,
       medias: [],
+      errors: [],
     }
   }
 
@@ -73,13 +79,25 @@ export default class Gallery extends Component<
       )
       .then(async media_ids => {
         // throws if some media is not found
-        const medias = await Promise.all(
-          media_ids.map(id => BackendRemote.rpc.getMessage(accountId, id))
+        const all_media_fetch_results = await BackendRemote.rpc.getMessages(
+          accountId,
+          media_ids
         )
-        this.setState({ id, msgTypes, medias })
+        const medias: Type.Message[] = []
+        const errors = []
+        for (const msgId of media_ids) {
+          const result = all_media_fetch_results[msgId]
+          if (result.variant === 'message') {
+            medias.push(result)
+          } else {
+            errors.push({ msgId, error: result.error })
+          }
+        }
+        log.errorWithoutStackTrace('messages failed to load:', errors)
+        this.setState({ id, msgTypes, medias, errors })
         this.forceUpdate()
       })
-      .catch(log.error)
+      .catch(log.error.bind(log))
   }
 
   emptyTabMessage(id: MediaTabKey): string {
@@ -100,7 +118,7 @@ export default class Gallery extends Component<
   }
 
   render() {
-    const { medias, id } = this.state
+    const { medias, id, errors } = this.state
     const tx = window.static_translate // static because dynamic isn't too important here
     const emptyTabMessage = this.emptyTabMessage(id)
 
@@ -125,6 +143,19 @@ export default class Gallery extends Component<
           </ul>
           <div className='bp4-tab-panel' role='tabpanel'>
             <div className='gallery'>
+              {errors.length > 0 && (
+                <div className='loading-errors'>
+                  The following messages failed to load, please report these
+                  errors to the developers:
+                  <ul>
+                    {errors.map(error => (
+                      <li key={error.msgId}>
+                        {error.msgId} {'->'} {error.error}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
               <div className='item-container'>
                 {medias.length < 1 ? (
                   <p className='no-media-message'>{emptyTabMessage}</p>
