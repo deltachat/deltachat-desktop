@@ -46,7 +46,7 @@
     },
     getAllUpdates: () => {
       console.error(
-        'getAllUpdates is deprecated an will removed in the future, it also returns an empty array now, so you really should use setUpdateListener instead.'
+        'getAllUpdates is deprecated and will be removed in the future, it also returns an empty array now, so you really should use setUpdateListener instead.'
       )
       return Promise.resolve([])
     },
