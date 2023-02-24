@@ -46,7 +46,7 @@ export default class DCWebxdc extends SplitOut {
   constructor(controller: DeltaChatController) {
     super(controller)
 
-    // icon protocoll
+    // icon protocol
     app.whenReady().then(() => {
       protocol.registerBufferProtocol('webxdc-icon', (request, callback) => {
         const [account, message] = request.url.substr(12).split('.')
@@ -138,7 +138,7 @@ export default class DCWebxdc extends SplitOut {
               const displayName = Buffer.from(
                 displayname || addr || 'unknown'
               ).toString('base64')
-              const seflAddr = Buffer.from(addr || 'unknown@unknown').toString(
+              const selfAddr = Buffer.from(addr || 'unknown@unknown').toString(
                 'base64'
               )
 
@@ -146,7 +146,7 @@ export default class DCWebxdc extends SplitOut {
               callback({
                 mimeType: Mime.lookup(filename) || '',
                 data: Buffer.from(
-                  `window.parent.webxdc_internal.setup("${seflAddr}","${displayName}")
+                  `window.parent.webxdc_internal.setup("${selfAddr}","${displayName}")
                   window.webxdc = window.parent.webxdc`
                 ),
               })
@@ -260,7 +260,7 @@ export default class DCWebxdc extends SplitOut {
         extraHeaders: 'Content-Security-Policy: ' + CSP,
       })
 
-      // prevent reload and naviagtion of wrapper page
+      // prevent reload and navigation of wrapper page
       webxdc_windows.webContents.on('will-navigate', ev => {
         ev.preventDefault()
       })
