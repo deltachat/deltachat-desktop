@@ -1,6 +1,6 @@
 // webxdc could be seen as system integration,
 // because it opens new "independent" windows
-// and heavyly uses the events
+// and heavily uses the events
 
 import { BackendRemote } from '../backend-com'
 import { runtime } from '../runtime'

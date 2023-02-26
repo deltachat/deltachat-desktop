@@ -212,3 +212,10 @@ code {
     background-color: none;
   }
 }
+
+/* force usage of our emoji font in code blocks */
+code,
+kbd,
+samp {
+  font-family: monospace, $emojifonts;
+}
