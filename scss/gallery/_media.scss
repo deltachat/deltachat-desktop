@@ -21,6 +21,17 @@ $tab-height: 46px;
         padding: 5px 5px 5px 5px;
       }
     }
+
+    & > .loading-errors {
+      background-color: rgb(255, 90, 90);
+      color: black;
+      padding: 14px;
+      font-size: larger;
+      ul {
+        font-size: medium;
+        margin: 0;
+      }
+    }
   }
   .no-media-message {
     font-size: 1.1rem;

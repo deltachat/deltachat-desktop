@@ -181,6 +181,11 @@ export class Logger {
     log(this, 3, this.getStackTrace(), args)
   }
 
+  /** use this when you know that the stacktrace is not relevant */
+  errorWithoutStackTrace(...args: any[]) {
+    log(this, 3, [], args)
+  }
+
   critical(...args: any[]) {
     log(this, 4, this.getStackTrace(), args)
   }
