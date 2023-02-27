@@ -7,6 +7,7 @@
 
 ### Changed
 - update deltachat-node and deltachat/jsonrpc-client to `v1.110.0`
+- update `@deltachat/message_parser_wasm` to `0.5.1` (`<delimited@emails>` and fix code blocks with emojis)
 
 ### Fixed
 - better error handling when messages fail to load from db in messagelist and gallery
