@@ -6,7 +6,7 @@
 - Add possibility for themes to change the emoji font. See docs/THEMES.md for a guide.
 
 ### Changed
-- update deltachat-node and deltachat/jsonrpc-client to `v1.109.0`
+- update deltachat-node and deltachat/jsonrpc-client to `v1.110.0`
 
 ### Fixed
 - better error handling when messages fail to load from db in messagelist and gallery
