@@ -1,4 +1,3 @@
-import { H5 } from '@blueprintjs/core'
 import React from 'react'
 import { RenderDeltaSwitch2Type, RenderDTSettingSwitchType } from './Settings'
 import SettingsAutodelete from './Settings-Autodelete'
@@ -40,7 +39,7 @@ export function SettingsChatsAndMedia({
       <SettingsDownloadOnDemand settings={settingsStore.settings} />
       <br />
       <br />
-      <H5>{tx('pref_privacy')}</H5>
+      <h5 className='heading'>{tx('pref_privacy')}</h5>
       {renderDeltaSwitch2({
         key: 'mdns_enabled',
         label: tx('pref_read_receipts'),

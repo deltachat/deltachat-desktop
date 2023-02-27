@@ -219,3 +219,54 @@ kbd,
 samp {
   font-family: monospace, $emojifonts;
 }
+
+/// blueprint - replacement
+
+.heading {
+  color: var(--bp4Heading);
+  font-weight: 600;
+  margin: 0 0 10px;
+  padding: 0;
+}
+
+h1.heading {
+  font-size: 36px;
+  line-height: 40px;
+}
+
+h2.heading {
+  font-size: 28px;
+  line-height: 32px;
+}
+
+h3.heading {
+  font-size: 22px;
+  line-height: 25px;
+}
+
+h4.heading {
+  font-size: 18px;
+  line-height: 21px;
+}
+
+h5.heading {
+  font-size: 16px;
+  line-height: 19px;
+}
+
+h6.heading {
+  font-size: 14px;
+  line-height: 16px;
+}
+
+.bp4-dialog-header .heading {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+  -webkit-box-flex: 1;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  line-height: inherit;
+  margin: 10px 0;
+}

@@ -1,5 +1,4 @@
 import React, { useContext } from 'react'
-import { H5 } from '@blueprintjs/core'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
 import { SettingsSelector } from './Settings'
@@ -55,7 +54,7 @@ export default function SettingsCommunication({
 
   return (
     <>
-      <H5>{tx('pref_chats')}</H5>
+      <h5 className='heading'>{tx('pref_chats')}</h5>
       <SettingsSelector
         onClick={onOpenDialog.bind(null, false)}
         currentValue={showToString(settingsStore.settings['show_emails'])}

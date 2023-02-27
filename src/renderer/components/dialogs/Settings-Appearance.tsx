@@ -1,6 +1,6 @@
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import React, { useContext, useEffect, useState } from 'react'
-import { H6, Icon } from '@blueprintjs/core'
+import { Icon } from '@blueprintjs/core'
 import { ThemeManager } from '../../ThemeManager'
 import { SettingsSelector } from './Settings'
 import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
@@ -266,7 +266,7 @@ export default function SettingsAppearance({
         {tx('pref_theme')}
       </SettingsSelector>
       <br />
-      <H6>{tx('pref_background')}</H6>
+      <h6 className='heading'>{tx('pref_background')}</h6>
       <BackgroundSelector
         desktopSettings={desktopSettings}
         onChange={(val: string) => {

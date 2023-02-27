@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { H5, Intent } from '@blueprintjs/core'
+import { Intent } from '@blueprintjs/core'
 import { SettingsButton } from './Settings'
 import type { OpenDialogOptions } from 'electron'
 import { DialogProps } from './DialogController'
@@ -33,9 +33,9 @@ function ExportProgressDialog(props: DialogProps) {
     <SmallDialog isOpen={props.isOpen} onClose={() => {}}>
       <DeltaDialogBody>
         <DeltaDialogContent>
-          <H5 style={{ marginTop: '20px' }}>
+          <h5 className='heading' style={{ marginTop: '20px' }}>
             {tx('imex_progress_title_desktop')}
-          </H5>
+          </h5>
           <DeltaProgressBar intent={Intent.PRIMARY} progress={progress} />
         </DeltaDialogContent>
       </DeltaDialogBody>
@@ -99,7 +99,7 @@ export default function SettingsBackup() {
   const tx = useTranslationFunction()
   return (
     <>
-      <H5>{tx('pref_backup')}</H5>
+      <h5 className='heading'>{tx('pref_backup')}</h5>
       <SettingsButton onClick={onBackupExport}>
         {tx('export_backup_desktop')}
       </SettingsButton>

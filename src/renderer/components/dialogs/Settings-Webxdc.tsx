@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { Card, Elevation, H5 } from '@blueprintjs/core'
+import { Card, Elevation } from '@blueprintjs/core'
 import filesizeConverter from 'filesize'
 import { ScreenContext } from '../../contexts'
 
@@ -51,7 +51,7 @@ export default function SettingsWebxdc() {
   return (
     <>
       <Card elevation={Elevation.ONE}>
-        <H5>{'Local Webxdc data usage'}</H5>
+        <h5 className='heading'>{'Local Webxdc data usage'}</h5>
         {!usage && tx('loading')}
         {usage && (
           <table>

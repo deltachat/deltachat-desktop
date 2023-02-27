@@ -86,7 +86,7 @@ export default function AccountListScreen({
                 'bp4-dialog-header-border-bottom'
               )}
             >
-              <h4 className='bp4-heading'>
+              <h4 className='heading'>
                 {tx('login_known_accounts_title_desktop')}
               </h4>
               {syncAllAccounts !== null && (

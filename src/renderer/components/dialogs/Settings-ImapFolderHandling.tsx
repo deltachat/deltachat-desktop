@@ -1,5 +1,4 @@
 import React from 'react'
-import { H5 } from '@blueprintjs/core'
 
 import { RenderDeltaSwitch2Type } from './Settings'
 import { SettingsStoreState } from '../../stores/settings'
@@ -17,7 +16,7 @@ export default function SettingsImapFolderHandling({
 
   return (
     <>
-      <H5>{tx('pref_imap_folder_handling')}</H5>
+      <h5 className='heading'>{tx('pref_imap_folder_handling')}</h5>
       {renderDeltaSwitch2({
         label: tx('pref_watch_sent_folder'),
         key: 'sentbox_watch',

@@ -1,5 +1,4 @@
 import React from 'react'
-import { H5 } from '@blueprintjs/core'
 import { SettingsButton } from './Settings'
 import type { OpenDialogOptions } from 'electron'
 import { runtime } from '../../runtime'
@@ -90,7 +89,7 @@ export default function SettingsManageKeys() {
   const tx = window.static_translate
   return (
     <>
-      <H5>{tx('pref_managekeys_menu_title')}</H5>
+      <h5 className='heading'>{tx('pref_managekeys_menu_title')}</h5>
       <SettingsButton onClick={onKeysExport}>
         {tx('pref_managekeys_export_secret_keys')}...
       </SettingsButton>

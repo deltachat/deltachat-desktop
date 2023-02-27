@@ -1,4 +1,3 @@
-import { H5 } from '@blueprintjs/core'
 import React from 'react'
 import { SettingsStoreState } from '../../stores/settings'
 import { RenderDeltaSwitch2Type, RenderDTSettingSwitchType } from './Settings'
@@ -47,7 +46,7 @@ function SettingsTrayIcon({
   const tx = window.static_translate
   return (
     <>
-      <H5>{tx('pref_system_integration_menu_title')}</H5>
+      <h5 className='heading'>{tx('pref_system_integration_menu_title')}</h5>
       {renderDTSettingSwitch({
         key: 'minimizeToTray',
         label: tx('pref_show_tray_icon'),

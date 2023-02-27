@@ -119,7 +119,7 @@ test('open settings dialog and close with escape', async t => {
     await t
     .expect(
       Selector(
-        '.bp4-dialog-header.bp4-dialog-header-border-bottom > .bp4-heading'
+        '.bp4-dialog-header.bp4-dialog-header-border-bottom > .heading'
       ).innerText
     )
     .eql(await translate('menu_settings'))
@@ -127,7 +127,7 @@ test('open settings dialog and close with escape', async t => {
   const SettingsShouldBeClosed = async ()=>{
     await t.wait(1000).expect(
       Selector(
-        '.bp4-dialog-header.bp4-dialog-header-border-bottom > .bp4-heading'
+        '.bp4-dialog-header.bp4-dialog-header-border-bottom > .heading'
       ).exists
     ).notOk()
   }

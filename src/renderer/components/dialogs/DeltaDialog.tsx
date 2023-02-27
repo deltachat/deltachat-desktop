@@ -165,7 +165,7 @@ export function DeltaDialogHeader(props: {
       )}
     >
       {showBackButton && <DeltaDialogBackButton onClick={onClickBack} />}
-      {title && <h4 className='bp4-heading'>{title}</h4>}
+      {title && <h4 className='heading'>{title}</h4>}
       {children}
       {showEditButton && <DeltaDialogEditButton onClick={onClickEdit} />}
       {typeof onClose === 'function' && showCloseButton !== false && (
