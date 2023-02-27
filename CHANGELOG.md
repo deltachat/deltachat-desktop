@@ -3,6 +3,16 @@
 ## [Unreleased][unreleased]
 
 ### Added
+### Changed
+### Fixed
+### Removed
+
+
+<a id="1_34_5"></a>
+
+## [1.34.5] - 2023-02-27
+
+### Added
 - Add possibility for themes to change the emoji font. See docs/THEMES.md for a guide.
 
 ### Changed
@@ -1911,7 +1921,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.34.4...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.34.5...HEAD
+
+[1.34.5]: https://github.com/deltachat/deltachat-desktop/compare/v1.34.4...v1.34.5
 
 [1.34.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.34.3...v1.34.4
 
