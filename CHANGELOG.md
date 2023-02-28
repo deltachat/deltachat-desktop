@@ -7,6 +7,7 @@
 ### Fixed
 - fix updating of relative timestamps #3125
 ### Removed
+- removed more bloat (unnessary files) from release packages
 
 
 <a id="1_34_5"></a>

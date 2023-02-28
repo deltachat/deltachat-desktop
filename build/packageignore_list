@@ -32,6 +32,11 @@ ci_scripts/
 electron-builder.json5
 package.json
 package-lock.json
+**/.eslintrc.yml
+**/.nycrc
+**/.editorconfig
+**/.eslintignore
+**/Makefile
 
 ## docs that are hidden in asar are useless
 docs/
@@ -73,6 +78,8 @@ node_modules/react-qr-reader
 node_modules/react-transition-group
 node_modules/vt-pbf
 node_modules/webrtc-adapter
+node_modules/@deltachat/react-qr-reader
+node_modules/rtcpeerconnection-shim
 
 ### every react addon
 node_modules/react-*/*
@@ -105,6 +112,13 @@ node_modules/deltachat-node/node/src
 node_modules/deltachat-node/node/tsconfig.json
 node_modules/deltachat-node/release.toml
 node_modules/deltachat-node/rust-toolchain
+node_modules/deltachat-node/deltachat-jsonrpc
+node_modules/deltachat-node/deltachat-ratelimit
+node_modules/deltachat-node/deltachat-repl
+node_modules/deltachat-node/deltachat-rpc-client
+node_modules/deltachat-node/deltachat-rpc-server
+node_modules/deltachat-node/format-flowed 
+node_modules/deltachat-node/fuzz
 
 
 # backend dev dependencies, only needed for building backend (dc node in the case)
@@ -118,7 +132,16 @@ node_modules/mapbox-gl/dist/style-spec
 
 # should be bundled via esbuild already:
 node_modules/mapbox-gl/dist/mapbox-gl.js
+node_modules/geojson-vt
+node_modules/geojson-flatten
+node_modules/filesize
 
+### node_modules/emoji-mart/
+node_modules/emoji-mart/*
+
+### node_modules/@emoji-mart/data
+### node_modules/@emoji-mart/react
+node_modules/@emoji-mart/*
 
 # momentjs is currently only used by renderer process
 node_modules/moment
@@ -161,13 +184,28 @@ node_modules/@blueprintjs/icons/src
 node_modules/@blueprintjs/icons/package.json
 node_modules/@blueprintjs/icons/node_modules/tslib
 node_modules/popper.js/*
+node_modules/camel-case
+node_modules/capital-case
+node_modules/constant-case
+node_modules/change-case
+node_modules/dot-case
+node_modules/header-case
+node_modules/no-case
+node_modules/param-case
+node_modules/pascal-case
+node_modules/path-case
+node_modules/sentence-case
+node_modules/snake-case
+node_modules/upper-case
+node_modules/upper-case-first
+node_modules/@juggle/resize-observer
+node_modules/dom4
+node_modules/@hypnosphi
+node_modules/typed-styles
+node_modules/csstype
+node_modules/warning
+node_modules/typed-styles
 
-### node_modules/emoji-mart/
-node_modules/emoji-mart/*
-
-### node_modules/@emoji-mart/data
-### node_modules/@emoji-mart/react
-node_modules/@emoji-mart/*
 
 ### node_modules/mapbox-gl/
 node_modules/mapbox-gl/src
@@ -182,9 +220,22 @@ node_modules/mapbox-gl/dist/mapbox-gl-csp-worker.js.map
 node_modules/mapbox-gl/dist/mapbox-gl-csp.js
 node_modules/mapbox-gl/dist/mapbox-gl-csp-worker.js
 
+# mapbox dependencies
+node_modules/mapbox-gl/node_modules
+node_modules/kdbush
+node_modules/csscolorparser
+node_modules/earcut
+
+# remove stuff from testing frameworks that we don't need
+node_modules/ajv
+node_modules/uri-js
 
 
-# TEMP - ignore ci artifacts until its fixed in the core repo: (until we have a new node release wit core 84)
-node_modules/deltachat-node/windows-latest
-node_modules/deltachat-node/macos-latest
-node_modules/deltachat-node/ubuntu-18.04
+# electron builder stuff
+node_modules/dmg-license
+node_modules/crc
+node_modules/xmlbuilder
+node_modules/verror
+node_modules/plist
+node_modules/node-addon-api
+node_modules/iconv-corefoundation
