@@ -471,7 +471,7 @@ export function useLogicVirtualChatList(
   // end workaround
 
   const [chatCache, setChatCache] = useState<{
-    [id: number]: Type.ChatListItemFetchResult
+    [id: number]: Type.ChatListItemFetchResult | undefined
   }>({})
   /** referrence to newest chat cache for use in useEffect functions that listen for events */
   const chatCacheRef = useRef<typeof chatCache>({})
@@ -683,7 +683,7 @@ function useContactAndMessageLogic(
 
   // Contacts ----------------
   const [contactCache, setContactCache] = useState<{
-    [id: number]: Type.Contact
+    [id: number]: Type.Contact | undefined
   }>({})
   const [contactLoadState, setContactLoading] = useState<{
     [id: number]: undefined | LoadStatus.FETCHING | LoadStatus.LOADED

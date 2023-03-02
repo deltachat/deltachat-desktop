@@ -6,11 +6,22 @@ import ChatListItem, {
 import { areEqual } from 'react-window'
 import { ContactListItem } from '../contact/ContactListItem'
 import { jumpToMessage, openViewProfileDialog } from '../helpers/ChatMethods'
+import { Type } from '../../backend-com'
+import type { useChatListContextMenu } from './ChatListContextMenu'
+import { ScreenContext, unwrapContext } from '../../contexts'
 
 export const ChatListItemRowChat = React.memo<{
   index: number
-  data: todo
-  style: todo
+  data: {
+    selectedChatId: number | null
+    chatListIds: [number, number][]
+    chatCache: {
+      [id: number]: Type.ChatListItemFetchResult | undefined
+    }
+    onChatClick: (chatId: number) => void
+    openContextMenu: ReturnType<typeof useChatListContextMenu>
+  }
+  style: React.CSSProperties
 }>(({ index, data, style }) => {
   const {
     selectedChatId,
@@ -28,7 +39,8 @@ export const ChatListItemRowChat = React.memo<{
         onClick={onChatClick.bind(null, chatId)}
         onContextMenu={event => {
           const chat = chatCache[chatId]
-          openContextMenu(event, chat, selectedChatId)
+          if (chat?.type === 'ChatListItem')
+            openContextMenu(event, chat, selectedChatId)
         }}
       />
     </div>
@@ -37,16 +49,23 @@ export const ChatListItemRowChat = React.memo<{
 
 export const ChatListItemRowContact = React.memo<{
   index: number
-  data: todo
-  style: todo
+  data: {
+    contactCache: {
+      [id: number]: Type.Contact | undefined
+    }
+    contactIds: number[]
+    screenContext: unwrapContext<typeof ScreenContext>
+  }
+  style: React.CSSProperties
 }>(({ index, data, style }) => {
   const { contactCache, contactIds, screenContext } = data
   const contactId = contactIds[index]
+  const contact = contactCache[contactId]
   return (
     <div style={style}>
-      {contactCache[contactId] ? (
+      {contact ? (
         <ContactListItem
-          contact={contactCache[contactId]}
+          contact={contact}
           showCheckbox={false}
           checked={false}
           showRemove={false}
@@ -63,17 +82,25 @@ export const ChatListItemRowContact = React.memo<{
 
 export const ChatListItemRowMessage = React.memo<{
   index: number
-  data: todo
-  style: todo
+  data: {
+    messageResultIds: number[]
+    messageCache: {
+      [id: number]: Type.MessageSearchResult | undefined
+    }
+    openDialog: unwrapContext<typeof ScreenContext>['openDialog']
+    queryStr: string | undefined
+  }
+  style: React.CSSProperties
 }>(({ index, data, style }) => {
   const { messageResultIds, messageCache, queryStr } = data
   const msrId = messageResultIds[index]
+  const messageSearchResult = messageCache[msrId]
   return (
     <div style={style}>
-      {messageCache[msrId] ? (
+      {messageSearchResult ? (
         <ChatListItemMessageResult
-          queryStr={queryStr}
-          msr={messageCache[msrId]}
+          queryStr={queryStr || ''}
+          msr={messageSearchResult}
           onClick={() => {
             jumpToMessage(msrId)
           }}

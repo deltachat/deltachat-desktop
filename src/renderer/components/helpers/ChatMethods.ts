@@ -70,7 +70,7 @@ export function openLeaveChatDialog(
 export function openDeleteChatDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
   chat: Chat,
-  selectedChatId: number
+  selectedChatId: number | null
 ) {
   const tx = window.static_translate
   screenContext.openDialog('ConfirmationDialog', {

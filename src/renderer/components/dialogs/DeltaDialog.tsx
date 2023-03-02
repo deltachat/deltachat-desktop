@@ -201,7 +201,7 @@ export function DeltaDialogBody(
   props: React.PropsWithChildren<{
     noFooter?: boolean
     ref?: todo
-    style?: any
+    style?: React.CSSProperties
     id?: string
   }>
 ) {
