@@ -149,6 +149,9 @@ export default class DCWebxdc extends SplitOut {
                   `window.parent.webxdc_internal.setup("${selfAddr}","${displayName}")
                   window.webxdc = window.parent.webxdc`
                 ),
+                headers: {
+                  'Content-Security-Policy': CSP,
+                },
               })
             } else {
               const blob = dc_context.getWebxdcBlob(
