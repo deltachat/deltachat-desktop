@@ -280,22 +280,31 @@ export default class DCWebxdc extends SplitOut {
       type permission_arg = Parameters<
         Exclude<Parameters<setPermissionRequestHandler>[0], null>
       >[1]
+      const loggedPermissionRequests: { [K in permission_arg]?: true } = {}
+      /** prevents webxdcs from spamming the log */
+      const logPermissionRequest = (permission: permission_arg) => {
+        if (loggedPermissionRequests[permission]) {
+          return
+        }
+        loggedPermissionRequests[permission] = true
+        log.info(
+          `webxdc '${webxdcInfo.name}' requested "${permission}" permission, but we denied it.
+If you think that's a bug and you need that permission, then please open an issue on github`
+        )
+      }
       const permission_handler = (permission: permission_arg) => {
         if (permission == 'pointerLock') {
-          log.info('allowed webxdc to lock the pointer')
+          log.info(`allowed webxdc '${webxdcInfo.name}' to lock the pointer`)
           // because games might lock the pointer
           return true
         }
         if (permission == 'fullscreen') {
-          log.info('allowed webxdc to go into fullscreen')
+          log.info(`allowed webxdc '${webxdcInfo.name}' to go into fullscreen`)
           // games might do that too
           return true
         }
 
-        log.info(
-          `webxdc requested "${permission}" permission, but we denied it.
-If you think that's a bug and you need that permission, then please open an issue on github`
-        )
+        logPermissionRequest(permission)
         return false
       }
 
