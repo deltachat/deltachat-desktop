@@ -5,6 +5,7 @@
 ### Added
 ### Changed
 ### Fixed
+- mac: update tray icon menu on hiding/showing #3041
 ### Removed
 
 
