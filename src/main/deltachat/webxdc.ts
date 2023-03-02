@@ -14,6 +14,7 @@ import { truncateText } from '../../shared/util'
 import { platform } from 'os'
 import { tx } from '../load-translations'
 import { DcOpenWebxdcParameters } from '../../shared/shared-types'
+import { DesktopSettings } from '../desktop_settings'
 
 const open_apps: {
   [instanceId: string]: {
@@ -186,7 +187,7 @@ export default class DCWebxdc extends SplitOut {
           webSecurity: true,
           nodeIntegration: false,
           navigateOnDragDrop: false,
-          devTools: true,
+          devTools: DesktopSettings.state.enableWebxdcDevTools,
           javascript: true,
           preload: join(
             __dirname,
@@ -321,7 +322,9 @@ If you think that's a bug and you need that permission, then please open an issu
     })
 
     ipcMain.handle('webxdc.toggle_dev_tools', async event => {
-      event.sender.toggleDevTools()
+      if (DesktopSettings.state.enableWebxdcDevTools) {
+        event.sender.toggleDevTools()
+      }
     })
 
     ipcMain.handle('webxdc.exitFullscreen', async event => {
