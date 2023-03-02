@@ -15,7 +15,12 @@ const updateRefs: { [key: string]: () => void } = {}
 let deduplicationCounter = 0
 
 function updateTimestamps() {
-  log.debug('updateTS:', { updateRefs })
+  if (document.hidden) {
+    log.debug('updateTS: canceled page not visible')
+    return
+  } else {
+    log.debug('updateTS:', { updateRefs })
+  }
 
   for (const key in updateRefs) {
     if (Object.prototype.hasOwnProperty.call(updateRefs, key)) {
@@ -96,9 +101,11 @@ const UpdatingTimestamp = (props: TimestampProps) => {
   )
 }
 
+const relativeTimeThreshold = 24 * 60 * 60 * 1000 // one day
+
 export default function Timestamp(props: TimestampProps) {
   // if older than one week we don't need to update timestamps
-  if (props.timestamp < Date.now() - 24 * 60 * 60 * 7) {
+  if (props.timestamp < Date.now() - relativeTimeThreshold) {
     return <NonUpdatingTimestamp {...props} />
   }
   return <UpdatingTimestamp {...props} />
