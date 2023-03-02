@@ -27,10 +27,10 @@ enum Connectivity {
 }
 
 export default function ConnectivityToast() {
-  const [networkState, setNetworkState]: [
-    [Connectivity, string],
-    todo
-  ] = useState([Connectivity.CONNECTED, ''])
+  const [networkState, setNetworkState] = useState<[Connectivity, string]>([
+    Connectivity.CONNECTED,
+    '',
+  ])
   const [tryConnectCooldown, setTryConnectCooldown] = useState(true)
 
   const accountId = selectedAccountId()

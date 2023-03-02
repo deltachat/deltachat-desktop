@@ -66,7 +66,7 @@ export function useChatListContextMenu() {
   return (
     event: React.MouseEvent<any, MouseEvent>,
     chatListItem: Type.ChatListItemFetchResult & { type: 'ChatListItem' },
-    selectedChatId: number
+    selectedChatId: number | null
   ) => {
     const tx = window.static_translate
     const onDeleteChat = () =>
