@@ -37,11 +37,16 @@ export function openForwardDialog(message: Type.Message) {
   window.__openDialog('ForwardMessage', { message })
 }
 
-export function confirmDialog(message: string, confirmLabel: string) {
+export function confirmDialog(
+  message: string,
+  confirmLabel: string,
+  isConfirmDanger = false
+): Promise<boolean> {
   return new Promise((res, _rej) => {
     window.__openDialog('ConfirmationDialog', {
       message,
       confirmLabel,
+      isConfirmDanger,
       cb: (yes: boolean) => {
         res(yes)
       },

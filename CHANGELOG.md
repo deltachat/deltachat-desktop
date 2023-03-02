@@ -5,6 +5,7 @@
 ### Added
 ### Changed
 ### Fixed
+- chat request deletion now asks for confirmation
 ### Removed
 
 
