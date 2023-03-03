@@ -22,6 +22,7 @@ import { selectedAccountId } from '../../ScreenController'
 import { MessageTypeAttachmentSubset } from '../attachment/Attachment'
 import { runtime } from '../../runtime'
 import { C } from 'deltachat-node/node/dist/constants'
+import { confirmDialog } from '../message/messageFunctions'
 
 const log = getLogger('renderer/composer')
 
@@ -233,7 +234,19 @@ const Composer = forwardRef<
       <div ref={ref} className='composer contact-request'>
         <div
           className='contact-request-button delete'
-          onClick={() => {
+          onClick={async () => {
+            if (selectedChat.chatType !== C.DC_CHAT_TYPE_SINGLE) {
+              // if chat gets deleted instead of blocked ask user for confirmation
+              if (
+                !(await confirmDialog(
+                  tx('ask_delete_named_chat', selectedChat.name),
+                  tx('delete'),
+                  true
+                ))
+              ) {
+                return
+              }
+            }
             EffectfulBackendActions.blockChat(selectedAccountId(), chatId)
             unselectChat()
           }}
