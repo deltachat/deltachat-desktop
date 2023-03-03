@@ -104,6 +104,8 @@ function getTrayMenu() {
             type: 'normal',
             click() {
               hideDeltaChat()
+              // fix #3041
+              refreshTrayContextMenu()
             },
           }
         : {
@@ -112,6 +114,8 @@ function getTrayMenu() {
             type: 'normal',
             click() {
               showDeltaChat()
+              // fix #3041
+              refreshTrayContextMenu()
             },
           },
 
