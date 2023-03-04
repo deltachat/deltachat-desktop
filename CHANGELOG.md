@@ -4,6 +4,7 @@
 
 ### Added
 ### Changed
+- update electron from `v22.1.0` to version `v22.3.2`
 ### Fixed
 - mac: update tray icon menu on hiding/showing #3041
 - chat request deletion now asks for confirmation
