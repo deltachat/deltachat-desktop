@@ -286,7 +286,7 @@ export default function MessageList({
 
       if (!domElement) {
         log.debug(
-          'scrollTo: scrollToMessage, couldn't find matching message in dom, returning'
+          'scrollTo: scrollToMessage, couldn\'t find matching message in dom, returning'
         )
         return
       }
