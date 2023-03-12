@@ -44,7 +44,7 @@ interface Runtime {
   getCurrentLogLocation(): string
   openHelpWindow(): void
   /**
-   * get the comandline arguments
+   * get the commandline arguments
    */
   getRC_Config(): RC_Config
   /**

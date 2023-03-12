@@ -51,7 +51,7 @@ export function printProcessLogLevelInfo() {
   console.info(
     `# Tips and Tricks for working with the browser console:
 ## Use the search to filter the output like:
-space seperate terms, exclude with -, if your term contains spaces you should exape it with "
+space separate terms, exclude with -, if your term contains spaces you should exape it with "
 
 -👻                 don't show events from background accounts (not selected accounts)
 -📡                 don't show any events

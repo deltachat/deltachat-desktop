@@ -247,7 +247,7 @@ export function DeltaDialogContentTextSeparator(props: { text: string }) {
   return <div className='delta-dialog-content-text-separator'>{props.text}</div>
 }
 
-// unused - info: scss class is also comented out
+// unused - info: scss class is also commented out
 // export function DeltaDialogContentSeparator(props: {
 //   style?: React.CSSProperties
 // }) {

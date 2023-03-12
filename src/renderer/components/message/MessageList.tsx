@@ -227,13 +227,13 @@ export default function MessageList({
         Event?.stopPropagation()
         return false
       } else if (distanceToTop < 200) {
-        log.debug('onScroll: Scrolled to top, fetching more messsages!')
+        log.debug('onScroll: Scrolled to top, fetching more messages!')
         setTimeout(() => fetchMoreTop(), 0)
         Event?.preventDefault()
         Event?.stopPropagation()
         return false
       } else if (distanceToBottom < 200) {
-        log.debug('onScroll: Scrolled to bottom, fetching more messsages!')
+        log.debug('onScroll: Scrolled to bottom, fetching more messages!')
         setTimeout(() => fetchMoreBottom(), 0)
         Event?.preventDefault()
         Event?.stopPropagation()
@@ -286,7 +286,7 @@ export default function MessageList({
 
       if (!domElement) {
         log.debug(
-          'scrollTo: scrollToMessage, couldnt find matching message in dom, returning'
+          'scrollTo: scrollToMessage, couldn't find matching message in dom, returning'
         )
         return
       }

@@ -3,7 +3,7 @@
 
 let callbacks: (() => void)[] = []
 
-/** make sure this is run when all mentioned variables are availible */
+/** make sure this is run when all mentioned variables are available */
 export function onReady(cb: () => void) {
   callbacks.push(cb)
 }

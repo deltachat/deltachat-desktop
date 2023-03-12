@@ -52,7 +52,7 @@ if (typeof Intl.Segmenter === 'function') {
   getEmojiCount = input => [...new Intl.Segmenter().segment(input)].length
 } else {
   log.warn(
-    'Intl.Segmenter api is not availible, emoji counting will be less percise'
+    'Intl.Segmenter api is not available, emoji counting will be less percise'
   )
   getEmojiCount = input => input.length
 }

@@ -97,7 +97,7 @@ export default function MessageListAndComposer({
       for (let i = 0; i < fileList.length; i++) {
         const { path, name } = fileList[i]
         // TODO filter out folders somehow
-        // if that is possible without a backend call to check wheter the file exists,
+        // if that is possible without a backend call to check whether the file exists,
         // maybe some browser api like FileReader could help
         if (!forbiddenPathRegEx.test(path.replace('\\', '/'))) {
           sanitizedFileList.push({ path, name })

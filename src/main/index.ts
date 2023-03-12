@@ -242,7 +242,7 @@ app.on('web-contents-created', (_ev, contents) => {
         open_url(navigationUrl)
         mainWindow.window?.focus()
       } else {
-        // prevent naviagtion to unknown scheme
+        // prevent navigation to unknown scheme
         e.preventDefault()
       }
     })

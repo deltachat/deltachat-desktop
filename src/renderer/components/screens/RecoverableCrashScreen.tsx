@@ -29,7 +29,7 @@ export class RecoverableCrashScreen extends React.Component<{
 
   errorToText(error: any) {
     if (error instanceof Error) {
-      // TODO parse the stack and map the sourcemap to provide a usefull stacktrace
+      // TODO parse the stack and map the sourcemap to provide a useful stacktrace
       return (error.stack || '[no stack trace provided]')
         .replace(/file:\/\/\/[\w\W]+?\/html-dist\//g, '') // for development
         .replace(/\(file:\/\/.*?app.asar./g, '(') // for production (packaged)

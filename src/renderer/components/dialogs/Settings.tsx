@@ -118,7 +118,7 @@ export default function Settings(props: DialogProps) {
   const [settingsMode, setSettingsMode] = useState('main')
 
   /*
-   * render switch for Desktop Setings
+   * render switch for Desktop Settings
    */
   const renderDTSettingSwitch: RenderDTSettingSwitchType = ({
     key,

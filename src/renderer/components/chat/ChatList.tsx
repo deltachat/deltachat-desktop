@@ -465,7 +465,7 @@ export function useLogicVirtualChatList(
   // workaround to save a current reference of chatListIds
   const chatListIdsRef = useRef(chatListIds)
   if (chatListIdsRef.current !== chatListIds) {
-    // this is simmilar to a use hook doing this, but probably less expensive
+    // this is similar to a use hook doing this, but probably less expensive
     chatListIdsRef.current = chatListIds
   }
   // end workaround
@@ -473,7 +473,7 @@ export function useLogicVirtualChatList(
   const [chatCache, setChatCache] = useState<{
     [id: number]: Type.ChatListItemFetchResult | undefined
   }>({})
-  /** referrence to newest chat cache for use in useEffect functions that listen for events */
+  /** reference to newest chat cache for use in useEffect functions that listen for events */
   const chatCacheRef = useRef<typeof chatCache>({})
   chatCacheRef.current = chatCache
 
@@ -640,7 +640,7 @@ export function useLogicVirtualChatList(
   // effects
 
   useEffect(() => {
-    // force refresh of inital data
+    // force refresh of initial data
     loadChats(0, Math.min(chatListIds.length, 10))
   }, [chatListIds]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -742,7 +742,7 @@ function useContactAndMessageLogic(
   }
 
   useEffect(() => {
-    // force refresh of inital data
+    // force refresh of initial data
     loadContact(0, Math.min(contactIds.length, 10))
     loadMessages(0, Math.min(messageResultIds.length, 10))
   }, [contactIds, messageResultIds]) // eslint-disable-line react-hooks/exhaustive-deps

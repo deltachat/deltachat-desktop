@@ -166,7 +166,7 @@ export default function FullscreenMedia(props: {
 
   useEffect(() => {
     // use events directly for now
-    // this will need adjustment to the keybindings manager once we have proper screen managment
+    // this will need adjustment to the keybindings manager once we have proper screen management
     // where we can know exactly which screen / menu / dialog is focused
     // and only send the context dependend keys to there
     const listener = (ev: KeyboardEvent) => {

@@ -55,7 +55,7 @@ export const LabeledLink = ({
       runtime.openLink(target)
       return
     }
-    // not trusted - ask for confimation from user
+    // not trusted - ask for confirmation from user
     labeledLinkConfirmationDialog(
       openDialog as OpenDialogFunctionType,
       realUrl,

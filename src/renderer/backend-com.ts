@@ -62,7 +62,7 @@ export namespace EffectfulBackendActions {
     // remove the account
     await BackendRemote.rpc.removeAccount(account_id)
 
-    // if sucessfull remove webxdc data
+    // if successful remove webxdc data
     runtime.deleteWebxdcAccountData(account_id)
   }
 

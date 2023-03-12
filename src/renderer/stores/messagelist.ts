@@ -304,7 +304,7 @@ class MessageListStore extends Store<MessageListState> {
         )
         if (chat.id === null) {
           this.log.debug(
-            'SELECT CHAT chat does not exsits, id is null. chatId:',
+            'SELECT CHAT chat does not exist, id is null. chatId:',
             chat.id
           )
           return
@@ -461,7 +461,7 @@ class MessageListStore extends Store<MessageListState> {
         const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
         if (chat.id === null) {
           this.log.debug(
-            'SELECT CHAT chat does not exsits, id is null. chatId:',
+            'SELECT CHAT chat does not exist, id is null. chatId:',
             chat.id
           )
           return

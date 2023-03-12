@@ -100,7 +100,7 @@ class ChatStore extends Store<ChatStoreState> {
       const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
       if (chat.id === null) {
         log.debug(
-          'SELECT CHAT chat does not exsits, id is null. chatId:',
+          'SELECT CHAT chat does not exist, id is null. chatId:',
           chat.id
         )
         return
@@ -151,7 +151,7 @@ class ChatStore extends Store<ChatStoreState> {
         )
         if (chat.id === null) {
           log.debug(
-            'SELECT CHAT chat does not exsits, id is null. chatId:',
+            'SELECT CHAT chat does not exist, id is null. chatId:',
             chat.id
           )
           return

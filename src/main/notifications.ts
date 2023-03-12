@@ -16,7 +16,7 @@ function createNotification(data: DcNotification): Notification {
     : undefined
 
   if (!icon || icon.isEmpty()) {
-    // fallback: show app icon instead (if not on mac, because mac aready shows the app icon)
+    // fallback: show app icon instead (if not on mac, because mac already shows the app icon)
     if (!isMac) {
       icon = nativeImage.createFromPath(appIcon())
     }

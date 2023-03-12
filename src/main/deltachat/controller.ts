@@ -137,7 +137,7 @@ export default class DeltaChatController extends EventEmitter {
       await rename(path_accounts, path_accounts_old)
     }
 
-    // Next, create temporary account manger to migrate accounts
+    // Next, create temporary account manager to migrate accounts
     const tmp_dc = new DeltaChat(path_accounts)
 
     // registerEventHandler
@@ -215,7 +215,7 @@ export default class DeltaChatController extends EventEmitter {
     // unregisterEventHandler
     tmp_dc.removeListener('ALL', this.onAll)
     tmp_dc.close()
-    // Clear some settings that we cant migrate
+    // Clear some settings that we can't migrate
     DesktopSettings.update({
       lastAccount: undefined,
       lastChats: {},
