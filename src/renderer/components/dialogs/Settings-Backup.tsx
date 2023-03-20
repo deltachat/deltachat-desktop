@@ -43,7 +43,7 @@ function ExportProgressDialog(props: DialogProps) {
   )
 }
 
-function onBackupExport() {
+export function onBackupExport() {
   const accountId = selectedAccountId()
   const tx = window.static_translate
   const openDialog = window.__openDialog

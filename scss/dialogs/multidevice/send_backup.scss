@@ -1,0 +1,109 @@
+div.send-backup-dialog-container {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  z-index: 20;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+}
+
+div.send-backup-dialog {
+  min-width: min(100vw, 500px);
+  min-height: min(100vh, 600px);
+  width: 80vw;
+  height: 80vh;
+  margin: auto;
+
+  background-color: var(--bp4DialogBgPrimary);
+  border-radius: 8px;
+  padding: 12px;
+  position: relative;
+
+  .header {
+    font-size: larger;
+
+    div.close-btn {
+      display: inline-block;
+    }
+  }
+
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+
+    .content {
+      min-width: 300px;
+      flex-wrap: wrap;
+      flex-grow: 1;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      img.setup-qr {
+        max-width: 339px;
+      }
+    }
+
+    .dialog-sidebar {
+      min-width: 200px;
+      max-width: 360px;
+      flex-shrink: 1;
+
+      ol {
+        list-style: none;
+        counter-reset: list-counter;
+        padding: 0;
+
+        li {
+          counter-increment: list-counter;
+          margin: 0.25rem;
+          display: flex;
+        }
+
+        li::before {
+          content: counter(list-counter);
+          background: #2164c3;
+          width: 1.25rem;
+          height: 1.25rem;
+          border-radius: 50%;
+          display: inline-block;
+          line-height: 1.25rem;
+          color: #fff;
+          text-align: center;
+          flex: none;
+          align-self: flex-start;
+          margin-right: 5px;
+        }
+      }
+
+      .method {
+        display: flex;
+        .tab {
+          padding: 8px;
+          margin: 5px;
+
+          border-radius: 5px;
+          background-color: blue;
+          color: white;
+
+          &:hover {
+            background-color: green;
+          }
+
+          &.selected {
+            background-color: var(--colorPrimary);
+          }
+        }
+      }
+
+      .explain {
+        .notes {
+          background-color: lightcoral;
+          border-radius: 5px;
+          padding: 2px 12px;
+        }
+      }
+    }
+  }
+}
