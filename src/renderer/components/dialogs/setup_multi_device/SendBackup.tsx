@@ -53,12 +53,8 @@ export function SendBackupDialog({ onClose }: DialogProps) {
     const accountId = selectedAccountId()
     try {
       const transfer = BackendRemote.rpc.provideBackup(accountId)
-
-      setTimeout(async () => {
-        // this timeout is a hack for now
-        setQrSvg(await BackendRemote.rpc.getBackupQrSvg(accountId))
-        setQrContent(await BackendRemote.rpc.getBackupQr(accountId))
-      }, 6000)
+      setQrSvg(await BackendRemote.rpc.getBackupQrSvg(accountId))
+      setQrContent(await BackendRemote.rpc.getBackupQr(accountId))
       await transfer
     } catch (error) {
       // todo show the error on page or in a dialog too
