@@ -17,19 +17,25 @@ export function SendBackupDialog({ onClose }: DialogProps) {
   const [svgUrl, setSvgUrl] = useState<string | null>(null)
   const [qrContent, setQrContent] = useState<string | null>(null)
   const [progress, setProgress] = useState<number | null>(null)
+  const [stage, setStage] = useState<
+    null | 'preparing' | 'awaiting_scan' | 'transfering'
+  >(null)
 
   useEffect(() => {
     const accountId = selectedAccountId()
 
     const unsub1 = onDCEvent(accountId, 'ImexProgress', ({ progress }) => {
       setProgress(progress)
+      if (stage === 'awaiting_scan') {
+        setStage('transfering')
+      }
     })
+  }, [stage])
 
+  useEffect(() => {
+    const accountId = selectedAccountId()
     return () => {
-      ;(async () => {
-        unsub1()
-        BackendRemote.rpc.stopOngoingProcess(accountId)
-      })()
+      BackendRemote.rpc.stopOngoingProcess(accountId)
     }
   }, [])
 
@@ -52,15 +58,18 @@ export function SendBackupDialog({ onClose }: DialogProps) {
     setInProgress(true)
     const accountId = selectedAccountId()
     try {
+      setStage('preparing')
       const transfer = BackendRemote.rpc.provideBackup(accountId)
       setQrSvg(await BackendRemote.rpc.getBackupQrSvg(accountId))
       setQrContent(await BackendRemote.rpc.getBackupQr(accountId))
+      setStage('awaiting_scan')
       await transfer
     } catch (error) {
       // todo show the error on page or in a dialog too
       log.errorWithoutStackTrace('networked transfer failed', error)
       setQrSvg(null)
     } finally {
+      setStage(null)
       setInProgress(false)
       setQrSvg(null)
       setQrContent(null)
@@ -92,38 +101,57 @@ export function SendBackupDialog({ onClose }: DialogProps) {
               <>
                 {!inProgress && (
                   <>
-                    <button onClick={startNetworkedTransfer}>Start</button>
+                    <button
+                      className='delta-button-round'
+                      onClick={startNetworkedTransfer}
+                    >
+                      Start
+                    </button>
                   </>
                 )}
                 {inProgress && (
                   <>
-                    {svgUrl && qrContent && (
+                    {stage === 'awaiting_scan' && svgUrl && qrContent && (
                       <>
                         <img className='setup-qr' src={svgUrl} />
-                        <button onClick={copyQrToClipboard}>
+                        <button
+                          className='delta-button-round'
+                          onClick={copyQrToClipboard}
+                        >
                           Copy QR Content to Clipboard
                         </button>
                       </>
                     )}
-                    {progress && (
+                    {stage === 'preparing' && <>Preparing</>}
+
+                    {progress && stage !== 'awaiting_scan' && (
                       <progress value={progress} max={1000}></progress>
                     )}
 
-                    <button onClick={cancel}>Cancel</button>
+                    <button className='delta-button-round' onClick={cancel}>
+                      Cancel
+                    </button>
                   </>
                 )}
               </>
             )}
             {mode === 'manual' && (
               <>
-                <button onClick={startManualBackup}>Start Backup</button>
+                <button
+                  className='delta-button-round'
+                  onClick={startManualBackup}
+                >
+                  Start Backup
+                </button>
               </>
             )}
           </div>
           <div className='dialog-sidebar'>
             <div className='method' aria-label='setup method'>
               <button
-                className={`tab ${mode === 'networked' ? 'selected' : ''}`}
+                className={`delta-button-tab ${
+                  mode === 'networked' ? 'selected' : ''
+                }`}
                 aria-checked={mode === 'networked'}
                 onClick={() => setMode('networked')}
                 disabled={inProgress}
@@ -131,7 +159,9 @@ export function SendBackupDialog({ onClose }: DialogProps) {
                 Automatic (Local Network)
               </button>
               <button
-                className={`tab ${mode === 'manual' ? 'selected' : ''}`}
+                className={`delta-button-tab ${
+                  mode === 'manual' ? 'selected' : ''
+                }`}
                 aria-checked={mode === 'networked'}
                 onClick={() => setMode('manual')}
                 disabled={inProgress}

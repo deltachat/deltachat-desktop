@@ -18,18 +18,24 @@ div.send-backup-dialog {
   border-radius: 8px;
   padding: 12px;
   position: relative;
+  display: flex;
+  flex-direction: column;
 
   .header {
     font-size: larger;
 
-    div.close-btn {
-      display: inline-block;
+    .close-btn {
+      float: right;
     }
   }
 
   .container {
+    flex-grow: 1;
+
     display: flex;
     flex-wrap: wrap;
+
+    overflow-y: scroll;
 
     .content {
       min-width: 300px;
@@ -39,6 +45,7 @@ div.send-backup-dialog {
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
 
       img.setup-qr {
         max-width: 339px;
@@ -79,27 +86,11 @@ div.send-backup-dialog {
 
       .method {
         display: flex;
-        .tab {
-          padding: 8px;
-          margin: 5px;
-
-          border-radius: 5px;
-          background-color: blue;
-          color: white;
-
-          &:hover {
-            background-color: green;
-          }
-
-          &.selected {
-            background-color: var(--colorPrimary);
-          }
-        }
       }
 
       .explain {
         .notes {
-          background-color: lightcoral;
+          border: 3px solid var(--colorDanger);
           border-radius: 5px;
           padding: 2px 12px;
         }
