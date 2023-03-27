@@ -175,9 +175,9 @@
     <string name="images_and_videos">Obrazy i wideo</string>
     <string name="file">Plik</string>
     <string name="files">Pliki</string>
-    <!-- "Private App" is used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <!-- "App" is used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
     <string name="webxdc_app">Prywatna aplikacja</string>
-    <!-- plural of "Private App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <!-- plural of "App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
     <string name="webxdc_apps">Prywatne aplikacje</string>
     <string name="files_and_webxdx_apps">Pliki i prywatne aplikacje</string>
     <string name="unknown">Nieznany</string>
@@ -224,6 +224,8 @@
     <string name="menu_add_attachment">Dodaj załącznik</string>
     <string name="menu_leave_group">Opuść grupę</string>
     <string name="menu_delete_chat">Usuń czat</string>
+    <!-- Command to delete all messages in a chat. The chat itself will not be deleted but will be empty afterwards, so make sure to be different from "Delete Chat" here. "Clear" is a verb here, "Empty Chat" would also be fine (eg. in German "Chat leeren") -->
+    <string name="clear_chat">Wyczyść czat</string>
     <string name="ask_delete_named_chat">Czy na pewno chcesz usunąć „%1$s”?</string>
     <string name="menu_delete_messages">Usuń wiadomości</string>
     <string name="delete_contact">Usuń kontakt</string>
@@ -479,18 +481,44 @@
     <string name="tab_docs">Dokumenty</string>
     <string name="tab_links">Linki</string>
     <string name="tab_map">Mapa</string>
-    <string name="tab_gallery_empty_hint">Tutaj zostaną wyświetlone zdjęcia i filmy udostępnione na tym czacie.</string>
-    <string name="tab_docs_empty_hint">Tutaj zostaną wyświetlone dokumenty, muzyka i inne pliki udostępnione na tym czacie.</string>
-    <string name="tab_image_empty_hint">Tutaj  będą wyświetlane zdjęcia udostępnione w tym czacie.</string>
-    <string name="tab_video_empty_hint">Tutaj będą wyświetlane filmy udostępnione w tym czacie.</string>
-    <string name="tab_audio_empty_hint">Tutaj będą wyświetlane pliki dźwiękowe i wiadomości głosowe udostępnione w tym czacie.</string>
+    <string name="tab_gallery_empty_hint">Tutaj pojawią się zdjęcia i filmy udostępnione na tym czacie.</string>
+    <string name="tab_docs_empty_hint">Tutaj pojawią się dokumenty, muzyka i inne pliki udostępnione na tym czacie.</string>
+    <string name="tab_image_empty_hint">Tutaj pojawią się zdjęcia udostępnione w tym czacie.</string>
+    <string name="tab_video_empty_hint">Tutaj pojawią się filmy udostępnione w tym czacie.</string>
+    <string name="tab_audio_empty_hint">Tutaj pojawią się pliki dźwiękowe i wiadomości głosowe udostępnione w tym czacie.</string>
     <string name="tab_webxdc_empty_hint">Tutaj pojawią się prywatne aplikacje udostępnione na tym czacie.</string>
+    <string name="tab_all_media_empty_hint">Tutaj pojawią się multimedia udostępnione w dowolnym czacie.</string>
     <string name="media_preview">Podgląd multimediów</string>
     <string name="send_message">Wyślij wiadomość</string>
     <!-- Placeholder %1$s will be replaced by the name of the contact changing their address. Placeholders %2$s and %3$s will be replaced by old/new email addresses. -->
     <string name="aeap_addr_changed">%1$s zmieniła swój adres z %2$s na %3$s</string>
     <!-- the explanation is shown (1) as a modal dialog with the buttons "Cancel" and "Continue" as well as (2) as a device message -->
     <string name="aeap_explanation">Zmieniłeś swój adres e-mail z %1$s na %2$s.\n\nJeśli teraz wyślesz wiadomość do zweryfikowanej grupy, kontakty tam zawarte automatycznie zastąpią stary adres Twoim nowym.\n\nBardzo zalecane jest, aby ustawić swojego starego dostawcę emaila tak, aby przekazywał wszystkie emaile na Twój nowy adres email. W przeciwnym razie możesz przegapić wiadomości od kontaktów, które jeszcze nie dostały Twojego nowego adresu.</string>
+
+
+    <!-- Multi Device -->
+    <!-- "Second Device" can also be translated as "Another Device", if that is catchier in the destination language. However, make sure to use the term consistently. -->
+    <string name="multidevice_title">Dodaj kolejne urządzenie</string>
+    <string name="multidevice_same_network_hint">Upewnij się, że oba urządzenia są połączone z tym samym Wi-Fi lub siecią</string>
+    <string name="multidevice_install_dc_on_other_device">Zainstaluj Delta Chat na swoim kolejnym urządzeniu (https://get.delta.chat)</string>
+    <string name="multidevice_tap_scan_on_other_device">Uruchom Delta Chat, dotknij „Dodaj jako kolejne urządzenie” i zeskanuj pokazany tutaj kod</string>
+    <!-- Shown inside a "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and/or address eg. "Scan to set up second device for Alice (alice@example.org)" -->
+    <string name="multidevice_qr_subtitle">Zeskanuj, aby skonfigurować kolejne urządzenie dla %1$s</string>
+    <string name="multidevice_receiver_title">Dodaj jako kolejne urządzenie</string>
+    <string name="multidevice_open_settings_on_other_device">Na pierwszym urządzeniu przejdź do „Ustawienia » Dodaj kolejne urządzenie” i zeskanuj wyświetlony tam kod</string>
+    <string name="multidevice_receiver_scanning_ask">Skopiować konto z innego urządzenia na to urządzenie?</string>
+    <string name="multidevice_abort">Przerwać konfigurowanie kolejnego urządzenia?</string>
+    <string name="multidevice_abort_will_invalidate_copied_qr">Spowoduje to unieważnienie kodu QR skopiowanego do schowka.</string>
+    <string name="multidevice_experimental_hint">(eksperymentalna, wymagana wersja 1.36)</string>
+    <!-- Shown beside progress bar, stay short -->
+    <string name="preparing_account">Przygotowywanie konta…</string>
+    <!-- Shown beside progress bar, stay short -->
+    <string name="waiting_for_receiver">Oczekiwanie na odbiorcę…</string>
+    <!-- Shown beside progress bar, stay short -->
+    <string name="receiver_connected">Odbiorca połączony…</string>
+    <!-- Shown beside progress bar, stay short -->
+    <string name="transferring">Przenoszenie…</string>
+    <string name="troubleshooting">Rozwiązywanie problemów</string>
 
     <!-- Connectivity -->
     <!-- Headline for the "Inbox" eg. in the "Connectivity" view -->
@@ -654,6 +682,7 @@
     <string name="pref_managekeys_import_explain">Zaimportować prywatne klucze z „%1$s”?\n\n• Istniejące prywatne klucze nie są usuwane\n\n• Ostatni zaimportowany klucz zostanie użyty jako nowy klucz domyślny, chyba że w nazwie pliku znajduje się słowo legacy”.</string>
     <string name="pref_managekeys_secret_keys_exported_to_x">Prywatne klucze zapisano pomyślnie do „%1$s”.</string>
     <string name="pref_managekeys_secret_keys_imported_from_x">Prywatne klucze zaimportowano z „%1$s”.</string>
+    <!-- No need to translate "Wallpaper" literally. Chose what is common in your language for a "Wallpaper" or a "Background". Avoid adding the term "image" here, as the "Wallpaper" may also be just a single color. -->
     <string name="pref_background">Tło</string>
     <string name="pref_background_btn_default">Użyj domyślnego obrazu</string>
     <string name="pref_background_btn_gallery">Wybierz z galerii</string>
@@ -720,6 +749,7 @@
     <!-- shown below enabled autodel_server-option, should be a summary of autodel_server_ask and remind about the impact -->
     <string name="autodel_server_enabled_hint">Obejmuje to e-maile, multimedia i „Zapisane wiadomości” we wszystkich folderach na serwerze. Nie używaj tej funkcji, jeśli chcesz zachować dane na serwerze lub jeśli używasz innych klientów poczty e-mail oprócz Delta Chat.</string>
     <string name="autodel_confirm">Rozumiem, usuń te wszystkie wiadomości</string>
+    <!-- "At once" in the meaning of "Immediately", without any intervening time. -->
     <string name="autodel_at_once">Od razu</string>
     <string name="after_30_seconds">Po 30 sekundach</string>
     <string name="after_1_minute">Po 1 minucie</string>
@@ -831,7 +861,7 @@
     <string name="devicemsg_bad_time">⚠️ Data lub godzina urządzenia wydaje się być niedokładna (%1$s).\n\nDostosuj zegar ⏰🔧, aby upewnić się, że wiadomości są prawidłowo odbierane.</string>
     <string name="devicemsg_update_reminder">⚠️ Twoja wersja Delta Chat może być nieaktualna.\n\nMoże to powodować problemy, ponieważ Twoi partnerzy czatu korzystają z nowszych wersji, a Ty nie masz najnowszych funkcji 😳\nSprawdź aktualizacje na stronie https://get.delta.chat lub w sklepie z aplikacjami.</string>
 
-    <!-- Some options as "Manage keys" or "Backup" may require the system PIN/Fingerprint/Gesture/Etc. to be entered in a system dialog. This hint is added to the system dialog, below a title as "Manage keys" or "Backup". -->
+    <!-- Some options as "Add Second Device" or "Backup" may require the system PIN/Fingerprint/Gesture/Etc. to be entered in a system dialog. This hint is added to the system dialog, below a title as "Add Second Device" or "Backup". -->
     <string name="enter_system_secret_to_continue">Aby kontynuować, wprowadź swój tajny kod zdefiniowany w systemie.</string>
 
     <!-- qr code stuff -->

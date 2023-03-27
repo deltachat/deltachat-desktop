@@ -445,6 +445,7 @@
     <string name="pref_managekeys_import_explain">Impor kunci rahasia dari \"%1$s\"?\n\n• Kunci rahasia sebelumnya tidak akan terhapus\n\n• Kunci terakhir yang diimpo akan digunakan sebagai kunci default baru kecuali ada kata \"legacy\" di nama berkas.</string>
     <string name="pref_managekeys_secret_keys_exported_to_x">Kunci rahasia berhasil ditulis ke \"%1$s\".</string>
     <string name="pref_managekeys_secret_keys_imported_from_x">Kunci rahasia diimpor dari \"%1$s\".</string>
+    <!-- No need to translate "Wallpaper" literally. Chose what is common in your language for a "Wallpaper" or a "Background". Avoid adding the term "image" here, as the "Wallpaper" may also be just a single color. -->
     <string name="pref_background">Latar belakang</string>
     <string name="pref_background_btn_default">Menggunakan gambar default</string>
     <string name="pref_background_btn_gallery">Pilih dari galeri</string>
@@ -474,6 +475,7 @@
     <string name="autodel_device_title">Hapus pesarn dari perangkat</string>
     <string name="autodel_server_title">Hapus pesan dari server</string>
     <string name="autodel_confirm">Saya mengerti, hapus semua pesan ini</string>
+    <!-- "At once" in the meaning of "Immediately", without any intervening time. -->
     <string name="autodel_at_once">Segera</string>
     <string name="after_30_seconds">Setelah 30 detik</string>
     <string name="after_1_minute">Setelah 1 menit</string>

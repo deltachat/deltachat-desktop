@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- common strings without special context -->
+    <string name="app_name">Delta Chat</string>
+    <string name="ok">Kwaltitok</string>
+    <string name="cancel">Axkanah</string>
+    <string name="clear_search">Xikixpolo</string>
+    <string name="yes">Kena</string>
+    <string name="no">Amo</string>
+    <string name="select">Xikpehpena</string>
+    <string name="on">Tlikwitok</string>
+    <string name="off">Sewtok</string>
+    </resources>

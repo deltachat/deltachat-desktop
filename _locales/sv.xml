@@ -178,7 +178,7 @@
     <string name="delete_contact">Ta bort kontakt</string>
     <string name="menu_delete_location">Ta bort denna plats?</string>
     <string name="menu_message_details">Meddelandedetaljer</string>
-    <string name="menu_copy_to_clipboard">Kopierad till urklipp</string>
+    <string name="menu_copy_to_clipboard">Kopiera till urklipp</string>
     <string name="menu_copy_selection_to_clipboard">Kopiera urval</string>
     <string name="menu_copy_link_to_clipboard">Kopiera länk</string>
     <string name="menu_copy_text_to_clipboard">Kopiera text</string>
@@ -490,6 +490,7 @@
     <string name="pref_managekeys_import_explain">Importera säkerhetsnycklar från \"%1$s\"?\n\n• Befintliga säkerhetsnycklar kommer inte att tas bort\n\n• Den senast importerade nyckeln kommer att användas som ny standardnyckel, om den inte har ordet \"legacy\" i sitt filnamn.</string>
     <string name="pref_managekeys_secret_keys_exported_to_x">Säkerhetsnycklar korrekt skrivna till \"%1$s\".</string>
     <string name="pref_managekeys_secret_keys_imported_from_x">Säkerhetsnycklar importerade från \"%1$s\".</string>
+    <!-- No need to translate "Wallpaper" literally. Chose what is common in your language for a "Wallpaper" or a "Background". Avoid adding the term "image" here, as the "Wallpaper" may also be just a single color. -->
     <string name="pref_background">Bakgrund</string>
     <string name="pref_background_btn_default">Använd standardbild</string>
     <string name="pref_background_btn_gallery">Välj från galleriet</string>
@@ -517,6 +518,7 @@
     <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
     <string name="autodel_device_ask">Vill du ta bort %1$d meddelanden nu och alla kommande meddelanden \"%2$s\" i framtiden?\n\n• Detta inkluderar all mediafiler.\n\n• Meddelanden kommer att tas bort oavsett om de har lästs eller inte.\n\n• \"Sparade meddelanden\" undantas från lokal borttagning.</string>
     <string name="autodel_confirm">Jag förstår! Ta bort alla dessa meddelanden.</string>
+    <!-- "At once" in the meaning of "Immediately", without any intervening time. -->
     <string name="autodel_at_once">Nu genast</string>
     <string name="after_30_seconds">Efter 30 sekunder</string>
     <string name="after_1_minute">Efter 1 minut</string>

@@ -147,9 +147,9 @@
     <string name="images_and_videos">이미지와 동영상</string>
     <string name="file">파일</string>
     <string name="files">파일</string>
-    <!-- "Private App" is used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <!-- "App" is used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
     <string name="webxdc_app">개인 앱</string>
-    <!-- plural of "Private App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <!-- plural of "App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
     <string name="webxdc_apps">개인 앱</string>
     <string name="files_and_webxdx_apps">파일, 개인 앱</string>
     <string name="unknown">알 수 없음</string>
@@ -437,6 +437,7 @@
     <!-- the explanation is shown (1) as a modal dialog with the buttons "Cancel" and "Continue" as well as (2) as a device message -->
     <string name="aeap_explanation">이메일 주소를 %1$s에서 %2$s로 바꿨습니다.\n\n확인된 그룹으로 메시지를 보내면 해당 그룹의 연락처가 자동으로 이전 주소를 새 주소로 대체합니다.\n\n모든 이메일을 새 이메일 주소로 전달하도록 이전 이메일 공급자를 설정하는 것이 좋습니다. 그렇지 않으면 새 주소를 받지 못한 연락처의 메시지를 놓칠 수 있습니다.</string>
 
+
     <!-- Connectivity -->
     <!-- Headline for the "Inbox" eg. in the "Connectivity" view -->
     <string name="incoming_messages">수신 메시지</string>
@@ -596,6 +597,7 @@
     <string name="pref_managekeys_import_explain">\"%1$s\"에서 암호 키를 가져오시겠습니까?\n\n• 기존 개인 키는 삭제되지 않습니다\n\n• 마지막으로 가져온 키는 파일 이름에 \"레거시\"라는 단어가 없는 한 새 기본 키로 사용됩니다.</string>
     <string name="pref_managekeys_secret_keys_exported_to_x">암호 키가 \"%1$s\"에 기록되었습니다.</string>
     <string name="pref_managekeys_secret_keys_imported_from_x">암호 키를 \"%1$s\"에서 가져왔습니다.</string>
+    <!-- No need to translate "Wallpaper" literally. Chose what is common in your language for a "Wallpaper" or a "Background". Avoid adding the term "image" here, as the "Wallpaper" may also be just a single color. -->
     <string name="pref_background">채팅방 배경화면</string>
     <string name="pref_background_btn_default">기본 이미지 사용</string>
     <string name="pref_background_btn_gallery">갤러리에서 선택됨</string>
@@ -651,6 +653,7 @@
     <!-- shown below enabled autodel_server-option, should be a summary of autodel_server_ask and remind about the impact -->
     <string name="autodel_server_enabled_hint">여기에는 모든 서버 폴더에 있는 전자 메일, 미디어 및 \"저장된 메시지\"가 포함됩니다. 서버에 데이터를 보관하거나 Delta Chat 외에 다른 이메일 클라이언트를 사용하는 경우 이 기능을 사용하지 마십시오.</string>
     <string name="autodel_confirm">알겠습니다. 모든 메시지를 삭제하세요.</string>
+    <!-- "At once" in the meaning of "Immediately", without any intervening time. -->
     <string name="autodel_at_once">한 번에</string>
     <string name="after_30_seconds">30초 후</string>
     <string name="after_1_minute">1분 후</string>
@@ -758,7 +761,7 @@
     <string name="devicemsg_bad_time">⚠️ 장치의 날짜 또는 시간이 정확하지 않은 것 같습니다(%1$s).\n\n메시지가 올바르게 수신되도록 시계 ⏰🔧를 조정하세요.</string>
     <string name="devicemsg_update_reminder">⚠️ 델타 채팅 버전이 오래되었을 수 있습니다.\n\n채팅 파트너가 최신 버전을 사용하기 때문에 문제가 발생할 수 있습니다.  당신은 최신 기능이 없습니다. 😳\n https://get.delta.chat 또는 앱 스토어에서 업데이트를 확인하십시오.</string>
 
-    <!-- Some options as "Manage keys" or "Backup" may require the system PIN/Fingerprint/Gesture/Etc. to be entered in a system dialog. This hint is added to the system dialog, below a title as "Manage keys" or "Backup". -->
+    <!-- Some options as "Add Second Device" or "Backup" may require the system PIN/Fingerprint/Gesture/Etc. to be entered in a system dialog. This hint is added to the system dialog, below a title as "Add Second Device" or "Backup". -->
     <string name="enter_system_secret_to_continue">계속하려면 시스템 정의 암호를 입력하십시오.</string>
 
     <!-- qr code stuff -->

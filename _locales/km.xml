@@ -560,6 +560,7 @@
     <string name="pref_managekeys_import_explain">នាំចូលកូនសោរសម្ងាត់ពី \"%1$s\"?\n\n• កូនសោរសម្ងាត់ដែលមានស្រាប់នឹងមិនបានលុបទេ\n\n•កូនសោរដែលនាំចូលចុងក្រោយនឹងបានប្រើប្រាស់ដូចជា លំនាំថ្មីលើកលែងតែវាមានពាក្យ \"legacy\" ក្នុងឈ្មោះឯកសាររបស់វា។</string>
     <string name="pref_managekeys_secret_keys_exported_to_x">បានសរសេរកូនសោរសម្ងាត់ ដោយជោគជ័យទៅ \"%1$s\"</string>
     <string name="pref_managekeys_secret_keys_imported_from_x">បាននាំចូលកូនសោរសម្ងាត់ពី \"%1$s\"</string>
+    <!-- No need to translate "Wallpaper" literally. Chose what is common in your language for a "Wallpaper" or a "Background". Avoid adding the term "image" here, as the "Wallpaper" may also be just a single color. -->
     <string name="pref_background">ផ្ទៃខាងក្រោយ</string>
     <string name="pref_background_btn_default">ប្រើប្រាស់រូបភាពលំនាំដើម</string>
     <string name="pref_background_btn_gallery">ជ្រើសរើសពីវិចិត្រសាល</string>
@@ -620,6 +621,7 @@
     <!-- shown below enabled autodel_server-option, should be a summary of autodel_server_ask and remind about the impact -->
     <string name="autodel_server_enabled_hint">នេះរួមបញ្ចូលទាំងអុីម៉ែល ប្រពន្ធ័ផ្សព្វផ្សាយ និង \"សារដែលបានរក្សាទុក\" ក្នុងថតទាំងអស់របស់ម៉ាសុីនមេ។ កុំប្រើមុខងារនេះ ប្រសិនបើអ្នកចង់រក្សាទិន្ន័យនៅលើម៉ាសុីនមេ ឬប្រសិនបើអ្នកកំពុងប្រើសេវាកម្មអុីម៉េលផ្សេងពី សា Delta Chat ។</string>
     <string name="autodel_confirm">ខ្ញុំយល់។ លុបសារទាំងអស់នេះ</string>
+    <!-- "At once" in the meaning of "Immediately", without any intervening time. -->
     <string name="autodel_at_once">នៅពេលតែមួយ</string>
     <string name="after_30_seconds">បន្ទាប់ពី ៣០វិនាទី</string>
     <string name="after_1_minute">បន្ទាប់ពី ១នាទី</string>
@@ -724,7 +726,7 @@
     <string name="devicemsg_bad_time">⚠️ កាលបរិច្ឆេទ ឬពេលវេលានៃឧបករណ៍របស់អ្នកហាក់ដូចជាមិនត្រឹមត្រូវ (%1$s)។\n\n កែតម្រូវនាឡិការបស់អ្នក ⏰🔧 ដើម្បីធានាថា សាររបស់អ្នកត្រូវបានទទួលត្រឹមត្រូវ។</string>
     <string name="devicemsg_update_reminder">⚠️កំណែ Delta Chat របស់អ្នកប្រហែលជាហួសសម័យហើយ។\n\n នេះអាចបណ្តាលឱ្យមានបញ្ហាដោយសារតែដៃគូជជែករបស់អ្នកប្រើកំណែថ្មីជាង - ហើយអ្នកកំពុងបាត់លក្ខណៈពិសេសចុងក្រោយ 😳\n សូមពិនិត្យមើល https://get.delta.chat ឬហាងកម្មវិធីរបស់អ្នកដើម្បីទទួលបានព័ត៌មានថ្មីៗ ។</string>
 
-    <!-- Some options as "Manage keys" or "Backup" may require the system PIN/Fingerprint/Gesture/Etc. to be entered in a system dialog. This hint is added to the system dialog, below a title as "Manage keys" or "Backup". -->
+    <!-- Some options as "Add Second Device" or "Backup" may require the system PIN/Fingerprint/Gesture/Etc. to be entered in a system dialog. This hint is added to the system dialog, below a title as "Add Second Device" or "Backup". -->
     <string name="enter_system_secret_to_continue">សូមបញ្ចូល ប្រព័ន្ធកំណត់ដោយសម្ងាត់របស់អ្នក ដើម្បីបន្ត។</string>
 
     <!-- qr code stuff -->
