@@ -39,7 +39,7 @@
     "watch:frontend:static": "npm run build:frontend:static -- -w",
     "watch:frontend:scss": "npm run build:frontend:scss -- --watch",
     "build4production": "NODE_ENV=production npm run build && npm run check-types",
-    "translations-pull": "tx pull -l en -f && tx pull -f -a",
+    "translations-pull": "tx pull -s -f && tx pull -f -a",
     "translations-update": "npm run translations-pull && npm run build:shared:translations && ./bin/find_complete_translations.sh",
     "pack": "npm run pack:generate_config && npm run pack:all",
     "pack:generate_config": "node ./build/gen-electron-builder-config.js && prettier --write ./electron-builder.json5 --loglevel silent",

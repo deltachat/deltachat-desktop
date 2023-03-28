@@ -455,6 +455,7 @@
     <!-- "Second Device" can also be translated as "Another Device", if that is catchier in the destination language. However, make sure to use the term consistently. -->
     <string name="multidevice_title">添加第二台设备</string>
     <string name="multidevice_same_network_hint">确保两台设备连接的是相同的 WI-Fi 或网络</string>
+    <string name="multidevice_this_creates_a_qr_code">这会创建一个第二台设备可以扫描以复制该账户的二维码。</string>
     <string name="multidevice_install_dc_on_other_device">在你的其他设备上安装 Delta Chat (https://get.delta.chat)</string>
     <string name="multidevice_tap_scan_on_other_device">启动 Delta Chat 应用，轻按“添加为第二台设备”并扫描显示在那里的二维码</string>
     <!-- Shown inside a "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and/or address eg. "Scan to set up second device for Alice (alice@example.org)" -->
@@ -1035,5 +1036,4 @@
 
     <!-- device messages for updates -->
     <string name="update_1_34_android">1.34 版有哪些变化？\n\n🤗 更友好的联系人列表：按“上次见到”顺序排列，10分钟内见到的联系人用一个圆点标记 🟢\n\n📑 聊天概况的新页面：“音频” 和“私人应用”\n\n🖼️ 如果有人给你发送一个“私人应用”(例如，从 https://webxdc.org)，你可以将它添加到主屏幕</string>
-
-</resources>
+    </resources>

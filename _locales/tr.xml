@@ -1051,5 +1051,4 @@
 
     <!-- device messages for updates -->
     <string name="update_1_34_android">1.34\'te ne yeni?\n\n🤗 Daha dostça kişi listeleri: Son görülmeye göre düzenlenir ve 10 dakika içinde görülen kişiler bir noktayla işaretlenir 🟢\n\n📑 Sohbet profillerindeki yeni sayfalar: \"Ses\" ve \"Özel Uygulamalar\"\n\n🖼️ Birisi size bir \"Özel Uygulama\" (ör. https://webxdc.org) gönderirse, onu ana ekranınıza ekleyebilirsiniz</string>
-
-</resources>
+    </resources>
