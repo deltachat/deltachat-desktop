@@ -391,6 +391,7 @@
     <string name="pref_managekeys_import_explain">Inportatu gako sekretuak \"%1$s\"-tik?\n\n• Dauden gako sekretuak ez dira ezabatuko\n\n• Inportatutako azken gakoa lehenetsitako gako berri gisa erabiliko da fitxategiaren izenean \"legacy\" ez badu.</string>
     <string name="pref_managekeys_secret_keys_exported_to_x">Gako sekretuak ongi idatzi dira hemen: \"%1$s\".</string>
     <string name="pref_managekeys_secret_keys_imported_from_x">Gako sekretuak hemendik inportatu dira: \"%1$s\".</string>
+    <!-- No need to translate "Wallpaper" literally. Chose what is common in your language for a "Wallpaper" or a "Background". Avoid adding the term "image" here, as the "Wallpaper" may also be just a single color. -->
     <string name="pref_background">Atzealdea</string>
     <string name="pref_background_btn_default">Erabili lehenetsitako irudia</string>
     <string name="pref_background_btn_gallery">Hautatu galeriatik</string>
@@ -415,6 +416,7 @@
     <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
     <string name="autodel_device_ask">%1$d mezu ezabatu nahi dituzu orain eta \"%2$s\" etorkizunean jasotako mezuak ere?\n\n• Honek multimedia ere barne hartzen du\n\n• Mezuak ikusi ala ez ezabatuko dira\n\n• \"Gordetako mezuak\" ez dira lokalki ezabatuko</string>
     <string name="autodel_confirm">Ulertzen dut, ezabatu mezuk guzti hauek</string>
+    <!-- "At once" in the meaning of "Immediately", without any intervening time. -->
     <string name="autodel_at_once">Berehala</string>
     <string name="autodel_after_1_hour">Ordubete eta gero</string>
     <string name="autodel_after_1_day">Egun bat eta gero</string>

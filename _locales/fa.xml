@@ -155,9 +155,9 @@
     <string name="images_and_videos">تصاویر و فیلم‌ها</string>
     <string name="file">پوشه</string>
     <string name="files">فایل‌ها</string>
-    <!-- "Private App" is used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <!-- "App" is used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
     <string name="webxdc_app">نرم‌افزار خصوصی</string>
-    <!-- plural of "Private App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <!-- plural of "App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
     <string name="webxdc_apps">نرم‌افزارهای خصوصی</string>
     <string name="files_and_webxdx_apps">فایل‌ها و نرم‌افزارهای خصوصی</string>
     <string name="unknown">ناشناس</string>
@@ -465,6 +465,7 @@ https://meet.jit.si/$ROOM
 اگر به گروه‌های تایید شده یا مخاطبین خود پیامی ارسال کنید؛ به صورت خودکار نشانی جدید را جایگزین نشانی پیشین می‌کنند. 
 به شدت توصیه می‌شود که نشانی رایانامه پیشین خود را به نحوی تنظیم کنید که همه رایانامه‌ها را به نشانی جدید شما هدایت کند؛ در غیر این صورت ممکن است پیام‌های مخاطبینی که از تغییر نشانی شما مطلع نشده‌اند را از دست بدهید. </string>
 
+
     <!-- Connectivity -->
     <!-- Headline for the "Inbox" eg. in the "Connectivity" view -->
     <string name="incoming_messages">پیام‌های ورودی</string>
@@ -633,6 +634,7 @@ https://meet.jit.si/$ROOM
  وجود داشته باشد. </string>
     <string name="pref_managekeys_secret_keys_exported_to_x">کلیدهای خصوصی با موفقیت در\"%1$s\" ذخیره شدند. </string>
     <string name="pref_managekeys_secret_keys_imported_from_x">کلیدهای خصوصی از \"%1$s\" وارد شدند. </string>
+    <!-- No need to translate "Wallpaper" literally. Chose what is common in your language for a "Wallpaper" or a "Background". Avoid adding the term "image" here, as the "Wallpaper" may also be just a single color. -->
     <string name="pref_background">تصویرزمینه</string>
     <string name="pref_background_btn_default">استفاده از تصویر پیش‌فرض</string>
     <string name="pref_background_btn_gallery">انتخاب از گالری</string>
@@ -699,6 +701,7 @@ https://meet.jit.si/$ROOM
     <!-- shown below enabled autodel_server-option, should be a summary of autodel_server_ask and remind about the impact -->
     <string name="autodel_server_enabled_hint">این شامل ایمیل‌ها، رسانه و \"پیام‌های ذخیره شده\" در همه پوشه‌های سرور می‌شود. اگر می‌خواهید داده‌ها را در سرور نگه دارید از این قابلیت استفاده نکنید. اگر از دیگر نرم‌افزارهای ایمیل به جز دلتا چت استفاده می‌کنید از این قابلیت استفاده نکنید.</string>
     <string name="autodel_confirm">متوجه هستم، همه پیام‌ها حذف شوند</string>
+    <!-- "At once" in the meaning of "Immediately", without any intervening time. -->
     <string name="autodel_at_once">یک بار</string>
     <string name="after_30_seconds">بعد از ۳۰ ثانیه</string>
     <string name="after_1_minute">بعد از ۱ دقیقه</string>
@@ -816,7 +819,7 @@ https://meet.jit.si/$ROOM
 این موضوع ممکن است مشکلاتی ایجاد کند چون مخاطبین شما از نسخه‌های جدیدتر استفاده می‌کنند. همچنین قابلیت‌های جدید را هم از دست می‌دهید😳
 لطفا برای دریافت نسخه جدید به app store یا https://get.delta.chat مراجعه کنید. </string>
 
-    <!-- Some options as "Manage keys" or "Backup" may require the system PIN/Fingerprint/Gesture/Etc. to be entered in a system dialog. This hint is added to the system dialog, below a title as "Manage keys" or "Backup". -->
+    <!-- Some options as "Add Second Device" or "Backup" may require the system PIN/Fingerprint/Gesture/Etc. to be entered in a system dialog. This hint is added to the system dialog, below a title as "Add Second Device" or "Backup". -->
     <string name="enter_system_secret_to_continue">برای ادامه، لطفا رمز تعیین شده توسط سیستم خود را وارد کنید</string>
 
     <!-- qr code stuff -->

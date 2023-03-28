@@ -171,9 +171,9 @@
     <string name="images_and_videos">Obrázky a videá</string>
     <string name="file">Súbor</string>
     <string name="files">Súbory</string>
-    <!-- "Private App" is used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <!-- "App" is used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
     <string name="webxdc_app">Súkromná aplikácia</string>
-    <!-- plural of "Private App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <!-- plural of "App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
     <string name="webxdc_apps">Súkromné aplikácie</string>
     <string name="files_and_webxdx_apps">Súbory a súkromné aplikácie</string>
     <string name="unknown">Neznáme</string>
@@ -647,6 +647,7 @@
     <string name="pref_managekeys_import_explain">Importovať tajné kľúče z priečinka „%1$s“?\n\n• Existujúce tajné kľúče nebudú odstránené\n\n• Posledný importovaný kľúč sa použije ako nový predvolený kľúč, pokiaľ v názve súboru nebude slovo „legacy“.</string>
     <string name="pref_managekeys_secret_keys_exported_to_x">Tajné kľúče boli úspešne zapísané do priečinka „%1$s“.</string>
     <string name="pref_managekeys_secret_keys_imported_from_x">Tajné kľúče importované z „%1$s“.</string>
+    <!-- No need to translate "Wallpaper" literally. Chose what is common in your language for a "Wallpaper" or a "Background". Avoid adding the term "image" here, as the "Wallpaper" may also be just a single color. -->
     <string name="pref_background">Pozadie</string>
     <string name="pref_background_btn_default">Použiť predvolený obrázok</string>
     <string name="pref_background_btn_gallery">Vyberte z galérie</string>
@@ -713,6 +714,7 @@
     <!-- shown below enabled autodel_server-option, should be a summary of autodel_server_ask and remind about the impact -->
     <string name="autodel_server_enabled_hint">Patria sem e-maily, médiá a „Uložené správy“ vo všetkých priečinkoch servera. Túto funkciu nepoužívajte, ak chcete uchovať údaje na serveri alebo ak okrem Delta Chatu používate aj iných e-mailových klientov.</string>
     <string name="autodel_confirm">Rozumiem, vymazať všetky tieto správy</string>
+    <!-- "At once" in the meaning of "Immediately", without any intervening time. -->
     <string name="autodel_at_once">Naraz</string>
     <string name="after_30_seconds">Po 30 sekundách</string>
     <string name="after_1_minute">Po 1 minúte</string>
@@ -824,7 +826,7 @@
     <string name="devicemsg_bad_time">Zdá sa, že dátum alebo čas vášho zariadenia je nepresný (%1$s).\n\nUpravte si hodiny ⏰🔧, aby ste zaistili správne prijímanie správ. </string>
     <string name="devicemsg_update_reminder">⚠️ Vaša verzia Delta Chat-u môže byť zastaraná.\n\nMôže to spôsobiť problémy, pretože vaši chatový partneri používajú novšie verzie – a vám chýbajú najnovšie funkcie 😳\nAktualizácie nájdete na https://get.delta.chat alebo obchode s aplikáciami . </string>
 
-    <!-- Some options as "Manage keys" or "Backup" may require the system PIN/Fingerprint/Gesture/Etc. to be entered in a system dialog. This hint is added to the system dialog, below a title as "Manage keys" or "Backup". -->
+    <!-- Some options as "Add Second Device" or "Backup" may require the system PIN/Fingerprint/Gesture/Etc. to be entered in a system dialog. This hint is added to the system dialog, below a title as "Add Second Device" or "Backup". -->
     <string name="enter_system_secret_to_continue">Ak chcete pokračovať, zadajte heslo do systému.</string>
 
     <!-- qr code stuff -->

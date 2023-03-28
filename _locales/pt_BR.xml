@@ -167,9 +167,9 @@
     <string name="images_and_videos">Imagens e vídeos</string>
     <string name="file">Arquivo</string>
     <string name="files">Arquivos</string>
-    <!-- "Private App" is used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <!-- "App" is used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
     <string name="webxdc_app">App Privado</string>
-    <!-- plural of "Private App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <!-- plural of "App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
     <string name="webxdc_apps">Apps Privados</string>
     <string name="files_and_webxdx_apps">Arquivos e Apps Privados</string>
     <string name="unknown">Desconhecido</string>
@@ -477,6 +477,7 @@
     <!-- the explanation is shown (1) as a modal dialog with the buttons "Cancel" and "Continue" as well as (2) as a device message -->
     <string name="aeap_explanation">Você mudou seu endereço de e-mail de %1$s para %2$s.\n\nSe você agora enviar uma mensagem para um grupo verificado, os contatos lá substituirão automaticamente o antigo por seu novo endereço.\n\nÉ altamente recomendável configurar seu antigo provedor de e-mail para encaminhar todos os e-mails para seu novo endereço de e-mail. Caso contrário, você pode perder mensagens de contatos que ainda não receberam seu novo endereço.</string>
 
+
     <!-- Connectivity -->
     <!-- Headline for the "Inbox" eg. in the "Connectivity" view -->
     <string name="incoming_messages">Mensagens Recebidas</string>
@@ -639,6 +640,7 @@
     <string name="pref_managekeys_import_explain">Importar chaves secretas de \"%1$s\"?\n\n• As chaves secretas atuais não serão apagadas\n\n• A última chave importada será usada por padrão a não ser que ela tenha a palavra \"legacy\" no seu nome.</string>
     <string name="pref_managekeys_secret_keys_exported_to_x">Chaves secretas exportadas para \"%1$s\".</string>
     <string name="pref_managekeys_secret_keys_imported_from_x">Chaves secretas importadas de \"%1$s\".</string>
+    <!-- No need to translate "Wallpaper" literally. Chose what is common in your language for a "Wallpaper" or a "Background". Avoid adding the term "image" here, as the "Wallpaper" may also be just a single color. -->
     <string name="pref_background">Papel de parede</string>
     <string name="pref_background_btn_default">Usar imagem padrão</string>
     <string name="pref_background_btn_gallery">Selecionar da galeria</string>
@@ -705,6 +707,7 @@
     <!-- shown below enabled autodel_server-option, should be a summary of autodel_server_ask and remind about the impact -->
     <string name="autodel_server_enabled_hint">Isso inclui e-mails, mídia e \"Mensagens salvas\" em todas as pastas do servidor. Não use esta função se quiser manter os dados no servidor ou se estiver usando outros clientes de e-mail além do Delta Chat.</string>
     <string name="autodel_confirm">Eu entendo, apague todas essas mensagens</string>
+    <!-- "At once" in the meaning of "Immediately", without any intervening time. -->
     <string name="autodel_at_once">De uma vez só</string>
     <string name="after_30_seconds">Após 30 segundos</string>
     <string name="after_1_minute">Após 1 minuto</string>
@@ -816,7 +819,7 @@
     <string name="devicemsg_bad_time">⚠️ A data ou hora do seu dispositivo parecem imprecisas (%1$s).\n\nAjuste o relógio ⏰🔧 para garantir que suas mensagens sejam recebidas corretamente.</string>
     <string name="devicemsg_update_reminder">⚠️ Sua versão do Delta Chat pode estar desatualizada.\n\nIsso pode causar problemas porque seus parceiros de bate-papo usam versões mais recentes - e você está perdendo os recursos mais recentes 😳\nEntre em https://get.delta.chat ou seu verifique com seu provedor de aplicativos por atualizações.</string>
 
-    <!-- Some options as "Manage keys" or "Backup" may require the system PIN/Fingerprint/Gesture/Etc. to be entered in a system dialog. This hint is added to the system dialog, below a title as "Manage keys" or "Backup". -->
+    <!-- Some options as "Add Second Device" or "Backup" may require the system PIN/Fingerprint/Gesture/Etc. to be entered in a system dialog. This hint is added to the system dialog, below a title as "Add Second Device" or "Backup". -->
     <string name="enter_system_secret_to_continue">Por favor, insira o segredo de sistema para continuar. </string>
 
     <!-- qr code stuff -->

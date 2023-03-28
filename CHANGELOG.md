@@ -5,6 +5,8 @@
 ### Added
 ### Changed
 - update electron from `v22.1.0` to version `v22.3.2`
+- use the new go based transifex cli (old one stopped working)
+- Update translations (28.03.2023)
 ### Fixed
 - mac: update tray icon menu on hiding/showing #3041
 - chat request deletion now asks for confirmation

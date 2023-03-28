@@ -159,11 +159,11 @@
     <string name="images_and_videos">Bilder und Videos</string>
     <string name="file">Datei</string>
     <string name="files">Dateien</string>
-    <!-- "Private App" is used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
-    <string name="webxdc_app">Private App</string>
-    <!-- plural of "Private App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
-    <string name="webxdc_apps">Private Apps</string>
-    <string name="files_and_webxdx_apps">Dateien und Private Apps</string>
+    <!-- "App" is used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <string name="webxdc_app">App</string>
+    <!-- plural of "App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <string name="webxdc_apps">Apps</string>
+    <string name="files_and_webxdx_apps">Dateien und Apps</string>
     <string name="unknown">Unbekannt</string>
 
     <string name="green">Grün</string>
@@ -208,6 +208,8 @@
     <string name="menu_add_attachment">Dateien anhängen</string>
     <string name="menu_leave_group">Gruppe verlassen</string>
     <string name="menu_delete_chat">Chat löschen</string>
+    <!-- Command to delete all messages in a chat. The chat itself will not be deleted but will be empty afterwards, so make sure to be different from "Delete Chat" here. "Clear" is a verb here, "Empty Chat" would also be fine (eg. in German "Chat leeren") -->
+    <string name="clear_chat">Chat leeren</string>
     <string name="ask_delete_named_chat">Sind Sie sicher, dass Sie \"%1$s\" löschen möchten?</string>
     <string name="menu_delete_messages">Nachrichten löschen</string>
     <string name="delete_contact">Kontakt löschen</string>
@@ -454,13 +456,40 @@
     <string name="tab_image_empty_hint">In diesem Chat geteilte Bilder werden hier angezeigt.</string>
     <string name="tab_video_empty_hint">In diesem Chat geteilte Videos werden hier angezeigt.</string>
     <string name="tab_audio_empty_hint">In diesem Chat geteilte Audiodateien und Sprachnachrichten werden hier angezeigt.</string>
-    <string name="tab_webxdc_empty_hint">In diesem Chat geteilte Private Apps werden hier angezeigt.</string>
+    <string name="tab_webxdc_empty_hint">In diesem Chat geteilte Apps werden hier angezeigt.</string>
+    <string name="tab_all_media_empty_hint">Medien aus allen Chats werden hier angezeigt.</string>
     <string name="media_preview">Medien-Vorschau</string>
     <string name="send_message">Nachricht senden</string>
     <!-- Placeholder %1$s will be replaced by the name of the contact changing their address. Placeholders %2$s and %3$s will be replaced by old/new email addresses. -->
     <string name="aeap_addr_changed">%1$s hat die E-Mail-Adresse von %2$s nach %3$s geändert</string>
     <!-- the explanation is shown (1) as a modal dialog with the buttons "Cancel" and "Continue" as well as (2) as a device message -->
     <string name="aeap_explanation">Sie haben Ihre E-Mail-Adresse von %1$s auf %2$s geändert.\n\nWenn Sie jetzt eine Nachricht an eine verifizierte Gruppe senden, wird dort automatisch die alte durch die neue Adresse ersetzt.\n\nEs wird dringend empfohlen, Ihren alten E-Mail-Anbieter so einzurichten, dass er alle E-Mails an Ihre neue E-Mail-Adresse weiterleitet. Andernfalls könnten Sie Nachrichten von Kontakten verpassen, die Ihre neue E-Mail-Adresse noch nicht erhalten haben.</string>
+
+
+    <!-- Multi Device -->
+    <!-- "Second Device" can also be translated as "Another Device", if that is catchier in the destination language. However, make sure to use the term consistently. -->
+    <string name="multidevice_title">Zweitgerät hinzufügen</string>
+    <string name="multidevice_same_network_hint">Beide Geräte müssen im selben Wi-Fi oder Netzwerk sein.</string>
+    <string name="multidevice_this_creates_a_qr_code">Erstellt einen QR-Code, den ein Zweitgerät scannen kann, um das Konto zu kopieren.</string>
+    <string name="multidevice_install_dc_on_other_device">Delta Chat auf dem anderen Gerät installieren (https://get.delta.chat)</string>
+    <string name="multidevice_tap_scan_on_other_device">Delta Chat starten, \"Als Zweitgerät hinzufügen\" wählen und den QR-Code scannen</string>
+    <!-- Shown inside a "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and/or address eg. "Scan to set up second device for Alice (alice@example.org)" -->
+    <string name="multidevice_qr_subtitle">Scannen, um ein zweites Gerät für %1$s hinzuzufügen</string>
+    <string name="multidevice_receiver_title">Als Zweitgerät hinzufügen</string>
+    <string name="multidevice_open_settings_on_other_device">Auf dem ersten Gerät, gehe zu \"Einstellungen / Zweitgerät hinzufügen\" und scanne den dort angezeigten Code</string>
+    <string name="multidevice_receiver_scanning_ask">Das Konto vom anderen Gerät auf dieses Gerät kopieren?</string>
+    <string name="multidevice_abort">Einrichtung des Zweitgeräts beenden?</string>
+    <string name="multidevice_abort_will_invalidate_copied_qr">Dadurch wird der auf die Zwischenablage kopierte QR-Code ungültig.</string>
+    <string name="multidevice_experimental_hint">(experimentell, Version 1.36 erforderlich)</string>
+    <!-- Shown beside progress bar, stay short -->
+    <string name="preparing_account">Konto vorbereiten…</string>
+    <!-- Shown beside progress bar, stay short -->
+    <string name="waiting_for_receiver">Warte auf Empfänger…</string>
+    <!-- Shown beside progress bar, stay short -->
+    <string name="receiver_connected">Empfänger verbunden…</string>
+    <!-- Shown beside progress bar, stay short -->
+    <string name="transferring">Transfer…</string>
+    <string name="troubleshooting">Fehlersuche</string>
 
     <!-- Connectivity -->
     <!-- Headline for the "Inbox" eg. in the "Connectivity" view -->
@@ -624,6 +653,7 @@
     <string name="pref_managekeys_import_explain">Geheime Schlüssel von \"%1$s\" importieren?\n\n• Bereits vorhandene Schlüssel werden nicht gelöscht\n\n• Der zuletzt importierte Schlüssel wird als neuer Standardschlüssel verwendet, außer der Dateiname beinhaltet das Wort \"legacy\"</string>
     <string name="pref_managekeys_secret_keys_exported_to_x">Geheime Schlüssel erfolgreich nach \"%1$s\" geschrieben.</string>
     <string name="pref_managekeys_secret_keys_imported_from_x">Geheime Schlüssel von \"%1$s\" importiert.</string>
+    <!-- No need to translate "Wallpaper" literally. Chose what is common in your language for a "Wallpaper" or a "Background". Avoid adding the term "image" here, as the "Wallpaper" may also be just a single color. -->
     <string name="pref_background">Hintergrund</string>
     <string name="pref_background_btn_default">Standard-Bild verwenden</string>
     <string name="pref_background_btn_gallery">Aus Galerie auswählen</string>
@@ -690,6 +720,7 @@
     <!-- shown below enabled autodel_server-option, should be a summary of autodel_server_ask and remind about the impact -->
     <string name="autodel_server_enabled_hint">Dies schließt E-Mails, Medien und \"Gespeicherte Nachrichten\" aus allen Server-Ordnern mit ein. Verwenden Sie diese Funktion nicht, wenn Sie Daten auf dem Server behalten möchten oder wenn Sie neben Delta Chat noch andere E-Mail-Clients verwenden.</string>
     <string name="autodel_confirm">Verstanden, all diese Nachrichten löschen</string>
+    <!-- "At once" in the meaning of "Immediately", without any intervening time. -->
     <string name="autodel_at_once">Sofort</string>
     <string name="after_30_seconds">Nach 30 Sekunden</string>
     <string name="after_1_minute">Nach 1 Minute</string>
@@ -801,8 +832,8 @@
     <string name="devicemsg_bad_time">⚠️ Ihr Gerät scheint ein falsches Datum oder eine falsche Uhrzeit (%1$s) zu verwenden.\n\nStellen Sie Ihre Uhr ⏰🔧 richtig ein, um sicherzustellen, dass Ihre Nachrichten korrekt empfangen werden.</string>
     <string name="devicemsg_update_reminder">⚠️ Ihre Delta-Chat-Version ist möglicherweise veraltet.\n\nDies kann zu Problemen führen, wenn Ihre Chat-PartnerInnen neuere Versionen verwenden - und Ihnen die neuesten Funktionen fehlen. 😳\nBitte überprüfen Sie https://get.delta.chat oder Ihren App-Store auf Updates.</string>
 
-    <!-- Some options as "Manage keys" or "Backup" may require the system PIN/Fingerprint/Gesture/Etc. to be entered in a system dialog. This hint is added to the system dialog, below a title as "Manage keys" or "Backup". -->
-    <string name="enter_system_secret_to_continue">Bitte geben Sie den System-Entsperrcode ein, um fortzufahren.</string>
+    <!-- Some options as "Add Second Device" or "Backup" may require the system PIN/Fingerprint/Gesture/Etc. to be entered in a system dialog. This hint is added to the system dialog, below a title as "Add Second Device" or "Backup". -->
+    <string name="enter_system_secret_to_continue">Entsperren zum Fortfahren</string>
 
     <!-- qr code stuff -->
     <string name="qr_code">QR-Code</string>
@@ -993,7 +1024,7 @@
     <string name="notifications_avg_hours">Im Mittel alle %1$d Stunden</string>
     <string name="last_check_at">Überprüft um %1$s</string>
     <!-- iOS webxdc selector -->
-    <string name="webxdc_selector_empty_hint">Empfangene oder gesendete Private Apps werden hier angezeigt. Unter \"Dateien\" können Sie auf heruntergeladene Private Apps zugreifen.</string>
+    <string name="webxdc_selector_empty_hint">Empfangene oder gesendete Apps werden hier angezeigt. Unter \"Dateien\" können Sie auf heruntergeladene Apps zugreifen.</string>
     <!-- iOS webxdc shortcut page -->
     <string name="shortcut_step1_tap_share_btn">\"Teilen\" anklicken</string>
     <string name="shortcut_step2_tap_add_to_home_screen">\"Zum Home-Bildschirm\" auswählen, um die App zum Startbildschirm hinzuzufügen</string>

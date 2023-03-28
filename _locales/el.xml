@@ -155,9 +155,9 @@
     <string name="images_and_videos">Εικόνες και Βίντεο</string>
     <string name="file">Αρχείο</string>
     <string name="files">Αρχεία</string>
-    <!-- "Private App" is used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <!-- "App" is used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
     <string name="webxdc_app">Ιδιωτική Εφαρμογή</string>
-    <!-- plural of "Private App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <!-- plural of "App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
     <string name="webxdc_apps">Ιδιωτικές Εφαρμογές</string>
     <string name="files_and_webxdx_apps">Αρχεία και Ιδιωτικές Εφαρμογές</string>
     <string name="unknown">Άγνωστο</string>
@@ -458,6 +458,7 @@
     <!-- the explanation is shown (1) as a modal dialog with the buttons "Cancel" and "Continue" as well as (2) as a device message -->
     <string name="aeap_explanation">Αλλάξατε την διεύθυνσή σας από %1$s σε %2$s.\n\nΤώρα, εάν στείλετε ένα μήνυμα σε μια επαληθευμένη ομάδα, οι επαφές εκεί θα αντικαταστήσουν αυτόματα την παλιά με τη νέα σας διεύθυνση.\n\nΣυνιστάται ιδιαίτερα να ρυθμίσετε τον παλιό σας πάροχο email ώστε να προωθεί όλα τα μηνύματα ηλεκτρονικού ταχυδρομείου στη νέα σας διεύθυνση ηλεκτρονικού ταχυδρομείου. Διαφορετικά, ενδέχεται να χάσετε μηνύματα επαφών που δεν έχουν λάβει ακόμη τη νέα σας διεύθυνση.</string>
 
+
     <!-- Connectivity -->
     <!-- Headline for the "Inbox" eg. in the "Connectivity" view -->
     <string name="incoming_messages">Εισερχόμενα Μηνύματα</string>
@@ -620,6 +621,7 @@
     <string name="pref_managekeys_import_explain">Εισαγωγή μυστικών κλειδιών από το \"%1$s\";\n\n• Τα υπάρχοντα μυστικά κλειδιά δεν θα διαγραφούν\n\n• Το κλειδί που εισήχθη τελευταία θα χρησιμοποιηθεί ως το νέο προεπιλεγμένο κλειδί, εκτός εάν έχει τη λέξη \"legacy\" στο όνομα του αρχείου του.</string>
     <string name="pref_managekeys_secret_keys_exported_to_x">Τα μυστικά κλειδιά γράφτηκαν με επιτυχία στο \"%1$s\".</string>
     <string name="pref_managekeys_secret_keys_imported_from_x">Τα μυστικά κλειδιά εισήχθησαν από το \"%1$s\".</string>
+    <!-- No need to translate "Wallpaper" literally. Chose what is common in your language for a "Wallpaper" or a "Background". Avoid adding the term "image" here, as the "Wallpaper" may also be just a single color. -->
     <string name="pref_background">Ταπετσαρία συνομιλίας</string>
     <string name="pref_background_btn_default">Χρήση προκαθορισμένου</string>
     <string name="pref_background_btn_gallery">Επιλογή</string>
@@ -686,6 +688,7 @@
     <!-- shown below enabled autodel_server-option, should be a summary of autodel_server_ask and remind about the impact -->
     <string name="autodel_server_enabled_hint">Αυτό περιλαμβάνει e-mail, πολυμέσα και \"Αποθηκευμένα μηνύματα\" σε όλους τους φακέλους διακομιστή. Μην χρησιμοποιείτε αυτήν τη λειτουργία εάν θέλετε να διατηρήσετε δεδομένα στο διακομιστή ή εάν χρησιμοποιείτε άλλα προγράμματα-πελάτες ηλεκτρονικού ταχυδρομείου εκτός από το Delta Chat.</string>
     <string name="autodel_confirm">Καταλαβαίνω, διαγράψτε όλα αυτά τα μηνύματα</string>
+    <!-- "At once" in the meaning of "Immediately", without any intervening time. -->
     <string name="autodel_at_once">Με τη μία</string>
     <string name="after_30_seconds">Μετά από 30 δευτερόλεπτα</string>
     <string name="after_1_minute">Μετά από 1 λεπτό</string>
@@ -797,7 +800,7 @@
     <string name="devicemsg_bad_time">⚠️ Η ημερομηνία ή η ώρα στη συσκευή σας φαίνεται να είναι μην είναι ακριβής (%1$s).\n\nΠροσαρμόστε το ρολόι σας ⏰🔧 για να βεβαιωθείτε ότι τα μηνύματά σας λαμβάνονται σωστά.</string>
     <string name="devicemsg_update_reminder">⚠️ Η έκδοση Delta Chat μπορεί να είναι παλιά.\n\nΑυτό μπορεί να προκαλέσει προβλήματα επειδή οι συνεργάτες συνομιλίας σας χρησιμοποιούν νεότερες εκδόσεις - και δεν έχετε τις πιο πρόσφατες λειτουργίες 😳\nΕλέγξτε τη https://get.delta.chat ή το κατάστημα εφαρμογών σας για ενημερώσεις .</string>
 
-    <!-- Some options as "Manage keys" or "Backup" may require the system PIN/Fingerprint/Gesture/Etc. to be entered in a system dialog. This hint is added to the system dialog, below a title as "Manage keys" or "Backup". -->
+    <!-- Some options as "Add Second Device" or "Backup" may require the system PIN/Fingerprint/Gesture/Etc. to be entered in a system dialog. This hint is added to the system dialog, below a title as "Add Second Device" or "Backup". -->
     <string name="enter_system_secret_to_continue">Εισαγάγετε το μυστικό που έχει οριστεί από το σύστημά σας για να συνεχίσετε.</string>
 
     <!-- qr code stuff -->

@@ -155,9 +155,9 @@
     <string name="images_and_videos">Kuvat ja videot</string>
     <string name="file">Tiedosto</string>
     <string name="files">Tiedostot</string>
-    <!-- "Private App" is used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <!-- "App" is used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
     <string name="webxdc_app">Yksityinen sovellus</string>
-    <!-- plural of "Private App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <!-- plural of "App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
     <string name="webxdc_apps">Yksityiset sovellukset</string>
     <string name="files_and_webxdx_apps">Tiedostot ja yksityiset sovellukset</string>
     <string name="unknown">Tuntematon</string>
@@ -458,6 +458,7 @@
     <!-- the explanation is shown (1) as a modal dialog with the buttons "Cancel" and "Continue" as well as (2) as a device message -->
     <string name="aeap_explanation">Vaihdoit sähköpostiosoitteesi osoitteesta %1$s osoitteeksi %2$s.\n\nJos lähetät viestin vahvistettuun ryhmään, ryhmän jäsenet saavat automaattisesti uuden osoitteesi.\n\nOn suositeltavaa asettaa vanha tilisi välittämään kaikki viestit uuteen osoitteeseesi. Muuten et välttämättä saa viestejä niiltä yhteystiedoiltasi, joilla ei ole uutta osoitettasi.</string>
 
+
     <!-- Connectivity -->
     <!-- Headline for the "Inbox" eg. in the "Connectivity" view -->
     <string name="incoming_messages">Saapuvat viestit</string>
@@ -620,6 +621,7 @@
     <string name="pref_managekeys_import_explain">Tuo salaiset avaimet kohteesta \"%1$s\"?\n\n• Olemassa olevia salaisia avaimia ei poisteta\n\n• Viimeistä tuotua avainta käytetään oletusavaimena, paitsi jos sen tiedostonimessä on sana \"legacy\".</string>
     <string name="pref_managekeys_secret_keys_exported_to_x">Salaiset avaimet kirjoitettu onnistuneesti kohteeseen \"%1$s\".</string>
     <string name="pref_managekeys_secret_keys_imported_from_x">Salaiset avaimet tuotu kohteesta \"%1$s\".</string>
+    <!-- No need to translate "Wallpaper" literally. Chose what is common in your language for a "Wallpaper" or a "Background". Avoid adding the term "image" here, as the "Wallpaper" may also be just a single color. -->
     <string name="pref_background">Tausta</string>
     <string name="pref_background_btn_default">Käytä oletuskuvaa</string>
     <string name="pref_background_btn_gallery">Valitse galleriasta</string>
@@ -686,6 +688,7 @@
     <!-- shown below enabled autodel_server-option, should be a summary of autodel_server_ask and remind about the impact -->
     <string name="autodel_server_enabled_hint">Tämä sisältää sähköpostit, median ja \"Tallennetut viestit\" kaikissa palvelimen kansioissa. Älä käytä tätä toimintoa, jos haluat pitää tietosi palvelimella tai jos käytät muita sähköpostisovelluksia Delta Chatin lisäksi.</string>
     <string name="autodel_confirm">Ymmärrän, poista kaikki nämä viestit</string>
+    <!-- "At once" in the meaning of "Immediately", without any intervening time. -->
     <string name="autodel_at_once">Heti</string>
     <string name="after_30_seconds">30 sekunnin päästä</string>
     <string name="after_1_minute">1 minuutin päästä</string>
@@ -797,7 +800,7 @@
     <string name="devicemsg_bad_time">⚠️ Laitteesi päivämäärä tai aika vaikuttaa olevan väärässä (%1$s).\n\nAseta kellonaika ⏰🔧 varmistaaksesi, että viestin vastaanottaminen onnistuu.</string>
     <string name="devicemsg_update_reminder">⚠️ Delta Chat -versio saattaa olla vanhentunut.\n\nTämä saattaa aiheuttaa ongelmia, koska muut käyttävät uudempia versioita - ja saatat jäädä paitsi uusista ominaisuuksista. 😳\nTarkista uudet päivitykset sovelluskaupastasi tai https://get.delta.chat</string>
 
-    <!-- Some options as "Manage keys" or "Backup" may require the system PIN/Fingerprint/Gesture/Etc. to be entered in a system dialog. This hint is added to the system dialog, below a title as "Manage keys" or "Backup". -->
+    <!-- Some options as "Add Second Device" or "Backup" may require the system PIN/Fingerprint/Gesture/Etc. to be entered in a system dialog. This hint is added to the system dialog, below a title as "Add Second Device" or "Backup". -->
     <string name="enter_system_secret_to_continue">Anna järjestelmän määrittämä koodi jatkaaksesi.</string>
 
     <!-- qr code stuff -->

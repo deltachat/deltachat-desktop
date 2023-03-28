@@ -491,6 +491,7 @@ https://delta.chat</string>
     <string name="pref_managekeys_import_secret_keys">秘密鍵のインポート</string>
     <string name="pref_managekeys_secret_keys_exported_to_x">暗号鍵は%1$sに正常に書き込まれました。</string>
     <string name="pref_managekeys_secret_keys_imported_from_x">暗号鍵は%1$sからインポートされました。</string>
+    <!-- No need to translate "Wallpaper" literally. Chose what is common in your language for a "Wallpaper" or a "Background". Avoid adding the term "image" here, as the "Wallpaper" may also be just a single color. -->
     <string name="pref_background">背景</string>
     <string name="pref_background_btn_default">デフォルトの画像を使う</string>
     <string name="pref_background_btn_gallery">ギャラリーから選ぶ</string>
@@ -534,6 +535,7 @@ https://delta.chat</string>
     <string name="autodel_device_title">端末からメッセージを削除する</string>
     <string name="autodel_server_title">サーバーからメッセージを削除する</string>
     <string name="autodel_confirm">分かりました。メッセージを削除していいです。</string>
+    <!-- "At once" in the meaning of "Immediately", without any intervening time. -->
     <string name="autodel_at_once">すぐに</string>
     <string name="after_30_seconds">30秒</string>
     <string name="after_1_minute">1分</string>
