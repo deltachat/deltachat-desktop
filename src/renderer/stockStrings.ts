@@ -184,5 +184,7 @@ export async function updateCoreStrings() {
     'protection_disabled_by_other'
   )
 
+  strings[C.DC_STR_BACKUP_TRANSFER_QR] = tx('multidevice_qr_subtitle')
+
   await BackendRemote.rpc.setStockStrings(strings)
 }
