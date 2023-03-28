@@ -158,19 +158,21 @@ export function SendBackupDialog({ onClose }: DialogProps) {
               </ol>
             </div>
             <div>
-              <button
-                className='delta-button-round troubleshooting-btn'
-                onClick={() => runtime.openLink(TROUBLESHOOTING_URL)}
-              >
-                {tx('troubleshooting')}{' '}
-                <div
-                  className='link-icon'
-                  style={{
-                    WebkitMask:
-                      'url(../images/icons/open_in_new.svg) no-repeat center',
-                  }}
-                ></div>
-              </button>
+              {inProgress && (
+                <button
+                  className='delta-button-round troubleshooting-btn'
+                  onClick={() => runtime.openLink(TROUBLESHOOTING_URL)}
+                >
+                  {tx('troubleshooting')}{' '}
+                  <div
+                    className='link-icon'
+                    style={{
+                      WebkitMask:
+                        'url(../images/icons/open_in_new.svg) no-repeat center',
+                    }}
+                  ></div>
+                </button>
+              )}
             </div>
           </div>
         </div>
