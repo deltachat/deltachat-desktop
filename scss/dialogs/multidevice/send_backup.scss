@@ -1,25 +1,9 @@
-div.send-backup-dialog-container {
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  z-index: 20;
-  background-color: rgba(0, 0, 0, 0.2);
-  display: flex;
-}
-
 div.send-backup-dialog {
-  min-width: min(100vw, 500px);
-  min-height: min(100vh, 600px);
-  width: 80vw;
-  height: 80vh;
-  margin: auto;
-
   background-color: var(--bp4DialogBgPrimary);
-  border-radius: 8px;
   padding: 12px;
-  position: relative;
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
 
   .header {
     font-size: larger;
@@ -34,8 +18,6 @@ div.send-backup-dialog {
 
     display: flex;
     flex-wrap: wrap;
-
-    overflow-y: scroll;
 
     .content {
       min-width: 300px;
@@ -84,22 +66,21 @@ div.send-backup-dialog {
         }
       }
     }
+  }
+}
 
-    .troubleshooting-btn {
-      display: flex;
-      align-items: center;
-      margin: auto;
-      .link-icon {
-        width: 2em;
-        height: 2em;
-        background-color: white;
-        display: inline-block;
-        -webkit-mask: url(../images/icons/open_in_new.svg) center center
-          no-repeat;
-        mask: url(../images/icons/open_in_new.svg) center center no-repeat;
-        -webkit-mask-size: 80%;
-        mask-size: 80%;
-      }
-    }
+.setup-new-device-troubleshooting-btn {
+  display: flex;
+  align-items: center;
+  margin: auto;
+  .link-icon {
+    width: 2em;
+    height: 2em;
+    background-color: var(--colorPrimary);
+    display: inline-block;
+    -webkit-mask: url(../images/icons/open_in_new.svg) center center no-repeat;
+    mask: url(../images/icons/open_in_new.svg) center center no-repeat;
+    -webkit-mask-size: 80%;
+    mask-size: 80%;
   }
 }

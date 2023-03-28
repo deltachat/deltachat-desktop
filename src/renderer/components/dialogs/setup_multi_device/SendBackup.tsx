@@ -7,6 +7,13 @@ import { ScreenContext } from '../../../contexts'
 import { runtime } from '../../../runtime'
 import { selectedAccountId } from '../../../ScreenController'
 import ConfirmationDialog from '../ConfirmationDialog'
+import {
+  DeltaDialogBase,
+  DeltaDialogContent,
+  DeltaDialogFooter,
+  DeltaDialogFooterActions,
+  DeltaDialogHeader,
+} from '../DeltaDialog'
 import { DialogProps } from '../DialogController'
 
 const log = getLogger('renderer/send_backup')
@@ -89,7 +96,9 @@ export function SendBackupDialog({ onClose }: DialogProps) {
       cancelLabel: tx('no'),
       cb: (yes: boolean) => {
         if (yes) {
-          BackendRemote.rpc.stopOngoingProcess(selectedAccountId())
+          BackendRemote.rpc
+            .stopOngoingProcess(selectedAccountId())
+            .then(onClose)
         }
       },
     })
@@ -98,39 +107,26 @@ export function SendBackupDialog({ onClose }: DialogProps) {
   const tx = window.static_translate
 
   return (
-    <div className='send-backup-dialog-container'>
-      <div className='send-backup-dialog'>
-        <div className='header'>
-          {tx('multidevice_title')}{' '}
-          <button className='close-btn' onClick={onClose} disabled={inProgress}>
-            X
-          </button>
-        </div>
+    <DeltaDialogBase
+      onClose={cancel}
+      canEscapeKeyClose={true}
+      isOpen={true}
+      canOutsideClickClose={false}
+      style={{ width: 'unset' }}
+    >
+      <DeltaDialogHeader title={tx('multidevice_title')} />
+      <DeltaDialogContent className='send-backup-dialog'>
         <div className='container'>
           <div className='content'>
             {!inProgress && (
               <>
                 <p>{tx('multidevice_this_creates_a_qr_code')}</p>
-                <button
-                  className='delta-button-round'
-                  onClick={startNetworkedTransfer}
-                >
-                  {tx('next')}
-                </button>
               </>
             )}
             {inProgress && (
               <>
                 {stage === 'awaiting_scan' && svgUrl && qrContent && (
-                  <>
-                    <img className='setup-qr' src={svgUrl} />
-                    <button
-                      className='delta-button-round'
-                      onClick={copyQrToClipboard}
-                    >
-                      {tx('menu_copy_to_clipboard')}
-                    </button>
-                  </>
+                  <img className='setup-qr' src={svgUrl} />
                 )}
                 {stage === 'preparing' && <>{tx('preparing_account')}</>}
 
@@ -139,10 +135,6 @@ export function SendBackupDialog({ onClose }: DialogProps) {
                 {progress && stage !== 'awaiting_scan' && (
                   <progress value={progress} max={1000}></progress>
                 )}
-
-                <button className='delta-button-round' onClick={cancel}>
-                  {tx('cancel')}
-                </button>
               </>
             )}
           </div>
@@ -158,25 +150,62 @@ export function SendBackupDialog({ onClose }: DialogProps) {
                   <li>{tx('multidevice_tap_scan_on_other_device')}</li>
                 </ol>
               </div>
-              <div>
-                <button
-                  className='delta-button-round troubleshooting-btn'
-                  onClick={() => runtime.openLink(TROUBLESHOOTING_URL)}
-                >
-                  {tx('troubleshooting')}{' '}
-                  <div
-                    className='link-icon'
-                    style={{
-                      WebkitMask:
-                        'url(../images/icons/open_in_new.svg) no-repeat center',
-                    }}
-                  ></div>
-                </button>
-              </div>
             </div>
           )}
         </div>
-      </div>
-    </div>
+      </DeltaDialogContent>
+      <DeltaDialogFooter>
+        <DeltaDialogFooterActions>
+          {inProgress && (
+            <>
+              <p
+                className='delta-button bold primary setup-new-device-troubleshooting-btn'
+                onClick={() => runtime.openLink(TROUBLESHOOTING_URL)}
+                style={{ marginRight: '10px' }}
+                role='button'
+              >
+                {tx('troubleshooting')}{' '}
+                <div
+                  className='link-icon'
+                  style={{
+                    WebkitMask:
+                      'url(../images/icons/open_in_new.svg) no-repeat center',
+                  }}
+                ></div>
+              </p>
+              {stage === 'awaiting_scan' && svgUrl && qrContent && (
+                <p
+                  className='delta-button bold primary'
+                  onClick={copyQrToClipboard}
+                  role='button'
+                >
+                  {tx('menu_copy_to_clipboard')}
+                </p>
+              )}
+              <div style={{ flexGrow: 1 }}>{/** spacer */}</div>
+            </>
+          )}
+          <p
+            className={`delta-button bold primary`}
+            onClick={cancel}
+            role='button'
+          >
+            {tx('cancel')}
+          </p>
+          {!inProgress && (
+            <>
+              <div style={{ flexGrow: 1 }}>{/** spacer */}</div>
+              <p
+                className='delta-button bold primary'
+                onClick={startNetworkedTransfer}
+                role='button'
+              >
+                {tx('next')}
+              </p>
+            </>
+          )}
+        </DeltaDialogFooterActions>
+      </DeltaDialogFooter>
+    </DeltaDialogBase>
   )
 }
