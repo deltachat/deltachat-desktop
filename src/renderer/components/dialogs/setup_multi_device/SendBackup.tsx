@@ -27,8 +27,9 @@ export function SendBackupDialog({ onClose }: DialogProps) {
   const [qrContent, setQrContent] = useState<string | null>(null)
   const [progress, setProgress] = useState<number | null>(null)
   const [stage, setStage] = useState<
-    null | 'preparing' | 'awaiting_scan' | 'transfering'
+    null | 'preparing' | 'awaiting_scan' | 'transfering' | 'error'
   >(null)
+  const [error, setError] = useState<string | null>(null)
 
   const { openDialog } = useContext(ScreenContext)
 
@@ -75,12 +76,14 @@ export function SendBackupDialog({ onClose }: DialogProps) {
       setQrContent(await BackendRemote.rpc.getBackupQr(accountId))
       setStage('awaiting_scan')
       await transfer
+      onClose()
     } catch (error) {
-      // todo show the error on page or in a dialog too
       log.errorWithoutStackTrace('networked transfer failed', error)
       setQrSvg(null)
+      // show the error on page or in a dialog too
+      setError('Error: ' + (error as any)?.message)
+      setStage('error')
     } finally {
-      setStage(null)
       setInProgress(false)
       setQrSvg(null)
       setQrContent(null)
@@ -118,6 +121,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
       <DeltaDialogContent className='send-backup-dialog'>
         <div className='container'>
           <div className='content'>
+            {error}
             {!inProgress && (
               <>
                 <p>{tx('multidevice_this_creates_a_qr_code')}</p>
@@ -155,7 +159,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
         </div>
       </DeltaDialogContent>
       <DeltaDialogFooter>
-        <DeltaDialogFooterActions>
+        <DeltaDialogFooterActions style={{ alignItems: 'center' }}>
           {inProgress && (
             <>
               <p
@@ -179,7 +183,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
                   onClick={copyQrToClipboard}
                   role='button'
                 >
-                  {tx('menu_copy_to_clipboard')}
+                  {tx('global_menu_edit_copy_desktop')}
                 </p>
               )}
               <div style={{ flexGrow: 1 }}>{/** spacer */}</div>
@@ -200,7 +204,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
                 onClick={startNetworkedTransfer}
                 role='button'
               >
-                {tx('next')}
+                {tx('perm_continue')}
               </p>
             </>
           )}
