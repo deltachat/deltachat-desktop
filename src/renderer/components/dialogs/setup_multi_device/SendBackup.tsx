@@ -1,13 +1,17 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useState } from 'react'
 import { getLogger } from '../../../../shared/logger'
 import { BackendRemote, onDCEvent } from '../../../backend-com'
+import { ScreenContext } from '../../../contexts'
 
 import { runtime } from '../../../runtime'
 import { selectedAccountId } from '../../../ScreenController'
+import ConfirmationDialog from '../ConfirmationDialog'
 import { DialogProps } from '../DialogController'
 
 const log = getLogger('renderer/send_backup')
+
+const TROUBLESHOOTING_URL = 'https://delta.chat/en/help#multiclient'
 
 export function SendBackupDialog({ onClose }: DialogProps) {
   const [inProgress, setInProgress] = useState<boolean>(false)
@@ -18,6 +22,8 @@ export function SendBackupDialog({ onClose }: DialogProps) {
   const [stage, setStage] = useState<
     null | 'preparing' | 'awaiting_scan' | 'transfering'
   >(null)
+
+  const { openDialog } = useContext(ScreenContext)
 
   useEffect(() => {
     const accountId = selectedAccountId()
@@ -76,7 +82,17 @@ export function SendBackupDialog({ onClose }: DialogProps) {
   }
 
   const cancel = async () => {
-    await BackendRemote.rpc.stopOngoingProcess(selectedAccountId())
+    openDialog(ConfirmationDialog, {
+      header: tx('multidevice_abort'),
+      message: tx('multidevice_abort_will_invalidate_copied_qr'),
+      confirmLabel: tx('yes'),
+      cancelLabel: tx('no'),
+      cb: (yes: boolean) => {
+        if (yes) {
+          BackendRemote.rpc.stopOngoingProcess(selectedAccountId())
+        }
+      },
+    })
   }
 
   const tx = window.static_translate
@@ -99,7 +115,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
                   className='delta-button-round'
                   onClick={startNetworkedTransfer}
                 >
-                  Start
+                  {tx('start')}
                 </button>
               </>
             )}
@@ -118,12 +134,14 @@ export function SendBackupDialog({ onClose }: DialogProps) {
                 )}
                 {stage === 'preparing' && <>{tx('preparing_account')}</>}
 
+                {stage === 'transfering' && <>{tx('transfering')}</>}
+
                 {progress && stage !== 'awaiting_scan' && (
                   <progress value={progress} max={1000}></progress>
                 )}
 
                 <button className='delta-button-round' onClick={cancel}>
-                  Cancel
+                  {tx('cancel')}
                 </button>
               </>
             )}
@@ -138,6 +156,21 @@ export function SendBackupDialog({ onClose }: DialogProps) {
                 <li>{tx('multidevice_same_network_hint')}</li>
                 <li>{tx('multidevice_tap_scan_on_other_device')}</li>
               </ol>
+            </div>
+            <div>
+              <button
+                className='delta-button-round troubleshooting-btn'
+                onClick={() => runtime.openLink(TROUBLESHOOTING_URL)}
+              >
+                {tx('troubleshooting')}{' '}
+                <div
+                  className='link-icon'
+                  style={{
+                    WebkitMask:
+                      'url(../images/icons/open_in_new.svg) no-repeat center',
+                  }}
+                ></div>
+              </button>
             </div>
           </div>
         </div>

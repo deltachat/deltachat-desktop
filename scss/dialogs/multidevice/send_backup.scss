@@ -83,17 +83,22 @@ div.send-backup-dialog {
           margin-right: 5px;
         }
       }
+    }
 
-      .method {
-        display: flex;
-      }
-
-      .explain {
-        .notes {
-          border: 3px solid var(--colorDanger);
-          border-radius: 5px;
-          padding: 2px 12px;
-        }
+    .troubleshooting-btn {
+      display: flex;
+      align-items: center;
+      margin: auto;
+      .link-icon {
+        width: 2em;
+        height: 2em;
+        background-color: white;
+        display: inline-block;
+        -webkit-mask: url(../images/icons/open_in_new.svg) center center
+          no-repeat;
+        mask: url(../images/icons/open_in_new.svg) center center no-repeat;
+        -webkit-mask-size: 80%;
+        mask-size: 80%;
       }
     }
   }
