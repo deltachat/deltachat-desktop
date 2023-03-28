@@ -159,11 +159,11 @@
     <string name="images_and_videos">Images and Videos</string>
     <string name="file">File</string>
     <string name="files">Files</string>
-    <!-- "Private App" is used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
-    <string name="webxdc_app">Private App</string>
-    <!-- plural of "Private App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
-    <string name="webxdc_apps">Private Apps</string>
-    <string name="files_and_webxdx_apps">Files and Private Apps</string>
+    <!-- "App" is used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <string name="webxdc_app">App</string>
+    <!-- plural of "App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <string name="webxdc_apps">Apps</string>
+    <string name="files_and_webxdx_apps">Files and Apps</string>
     <string name="unknown">Unknown</string>
 
     <string name="green">Green</string>
@@ -208,6 +208,8 @@
     <string name="menu_add_attachment">Add Attachment</string>
     <string name="menu_leave_group">Leave Group</string>
     <string name="menu_delete_chat">Delete Chat</string>
+    <!-- Command to delete all messages in a chat. The chat itself will not be deleted but will be empty afterwards, so make sure to be different from "Delete Chat" here. "Clear" is a verb here, "Empty Chat" would also be fine (eg. in German "Chat leeren") -->
+    <string name="clear_chat">Clear Chat</string>
     <string name="ask_delete_named_chat">Are you sure you want to delete \"%1$s\"?</string>
     <string name="menu_delete_messages">Delete Messages</string>
     <string name="delete_contact">Delete Contact</string>
@@ -454,13 +456,40 @@
     <string name="tab_image_empty_hint">Images shared in this chat will appear here.</string>
     <string name="tab_video_empty_hint">Videos shared in this chat will appear here.</string>
     <string name="tab_audio_empty_hint">Audio files and voice messages shared in this chat will appear here.</string>
-    <string name="tab_webxdc_empty_hint">Private apps shared in this chat will appear here.</string>
+    <string name="tab_webxdc_empty_hint">Apps shared in this chat will appear here.</string>
+    <string name="tab_all_media_empty_hint">Media shared in any chat will appear here.</string>
     <string name="media_preview">Media Preview</string>
     <string name="send_message">Send Message</string>
     <!-- Placeholder %1$s will be replaced by the name of the contact changing their address. Placeholders %2$s and %3$s will be replaced by old/new email addresses. -->
     <string name="aeap_addr_changed">%1$s changed their address from %2$s to %3$s</string>
     <!-- the explanation is shown (1) as a modal dialog with the buttons "Cancel" and "Continue" as well as (2) as a device message -->
     <string name="aeap_explanation">You changed your email address from %1$s to %2$s.\n\nIf you now send a message to a verified group, contacts there will automatically replace the old with your new address.\n\nIt\'s highly advised to set up your old email provider to forward all emails to your new email address. Otherwise you might miss messages of contacts who did not get your new address yet.</string>
+
+
+    <!-- Multi Device -->
+    <!-- "Second Device" can also be translated as "Another Device", if that is catchier in the destination language. However, make sure to use the term consistently. -->
+    <string name="multidevice_title">Add Second Device</string>
+    <string name="multidevice_same_network_hint">Make sure both devices are on the same Wi-Fi or network</string>
+    <string name="multidevice_this_creates_a_qr_code">This creates a QR code that the second device can scan to copy the account.</string>
+    <string name="multidevice_install_dc_on_other_device">Install Delta Chat on your other device (https://get.delta.chat)</string>
+    <string name="multidevice_tap_scan_on_other_device">Start Delta Chat, tap “Add as Second Device” and scan the code shown here</string>
+    <!-- Shown inside a "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and/or address eg. "Scan to set up second device for Alice (alice@example.org)" -->
+    <string name="multidevice_qr_subtitle">Scan to set up second device for %1$s</string>
+    <string name="multidevice_receiver_title">Add as Second Device</string>
+    <string name="multidevice_open_settings_on_other_device">On the first device, go to “Settings / Add Second Device“ and scan the code shown there</string>
+    <string name="multidevice_receiver_scanning_ask">Copy the account from the other device to this device?</string>
+    <string name="multidevice_abort">Abort setting up second device?</string>
+    <string name="multidevice_abort_will_invalidate_copied_qr">This will invalidate the QR code copied to clipboard.</string>
+    <string name="multidevice_experimental_hint">(experimental, version 1.36 required)</string>
+    <!-- Shown beside progress bar, stay short -->
+    <string name="preparing_account">Preparing account…</string>
+    <!-- Shown beside progress bar, stay short -->
+    <string name="waiting_for_receiver">Waiting for receiver…</string>
+    <!-- Shown beside progress bar, stay short -->
+    <string name="receiver_connected">Receiver connected…</string>
+    <!-- Shown beside progress bar, stay short -->
+    <string name="transferring">Transferring…</string>
+    <string name="troubleshooting">Troubleshooting</string>
 
     <!-- Connectivity -->
     <!-- Headline for the "Inbox" eg. in the "Connectivity" view -->
@@ -624,7 +653,8 @@
     <string name="pref_managekeys_import_explain">Import secret keys from \"%1$s\"?\n\n• Existing secret keys will not be deleted\n\n• The last imported key will be used as the new default key unless it has the word \"legacy\" in its filename.</string>
     <string name="pref_managekeys_secret_keys_exported_to_x">Secret keys written successfully to \"%1$s\".</string>
     <string name="pref_managekeys_secret_keys_imported_from_x">Secret keys imported from \"%1$s\".</string>
-    <string name="pref_background">Background</string>
+    <!-- No need to translate "Wallpaper" literally. Chose what is common in your language for a "Wallpaper" or a "Background". Avoid adding the term "image" here, as the "Wallpaper" may also be just a single color. -->
+    <string name="pref_background">Wallpaper</string>
     <string name="pref_background_btn_default">Use Default Image</string>
     <string name="pref_background_btn_gallery">Select From Gallery</string>
     <string name="pref_imap_folder_handling">IMAP Folder Handling</string>
@@ -644,7 +674,7 @@
     <string name="pref_on_demand_location_streaming">On-demand Location Streaming</string>
     <string name="pref_developer_mode">Developer Mode</string>
     <string name="pref_developer_mode_explain">Activates debugging options and can make the app less stable. For developers only.</string>
-    <string name="pref_background_default">Default background</string>
+    <string name="pref_background_default">Default image</string>
     <string name="pref_background_default_color">Default color</string>
     <string name="pref_background_custom_image">Custom image</string>
     <string name="pref_background_custom_color">Custom color</string>
@@ -690,6 +720,7 @@
     <!-- shown below enabled autodel_server-option, should be a summary of autodel_server_ask and remind about the impact -->
     <string name="autodel_server_enabled_hint">This includes e-mails, media and \"Saved messages\" in all server folders. Do not use this function if you want to keep data on the server or if you are using other e-mail clients besides Delta Chat.</string>
     <string name="autodel_confirm">I understand, delete all these messages</string>
+    <!-- "At once" in the meaning of "Immediately", without any intervening time. -->
     <string name="autodel_at_once">At once</string>
     <string name="after_30_seconds">After 30 seconds</string>
     <string name="after_1_minute">After 1 minute</string>
@@ -801,8 +832,8 @@
     <string name="devicemsg_bad_time">⚠️ Date or time on your device seems to be inaccurate (%1$s).\n\nAdjust your clock ⏰🔧 to ensure your messages are received correctly.</string>
     <string name="devicemsg_update_reminder">⚠️ Your Delta Chat version might be outdated.\n\nThis may cause problems because your chat partners use newer versions - and you are missing the latest features 😳\nPlease check https://get.delta.chat or your app store for updates.</string>
 
-    <!-- Some options as "Manage keys" or "Backup" may require the system PIN/Fingerprint/Gesture/Etc. to be entered in a system dialog. This hint is added to the system dialog, below a title as "Manage keys" or "Backup". -->
-    <string name="enter_system_secret_to_continue">Please enter your system defined secret to continue.</string>
+    <!-- Some options as "Add Second Device" or "Backup" may require the system PIN/Fingerprint/Gesture/Etc. to be entered in a system dialog. This hint is added to the system dialog, below a title as "Add Second Device" or "Backup". -->
+    <string name="enter_system_secret_to_continue">Unlock to continue</string>
 
     <!-- qr code stuff -->
     <string name="qr_code">QR Code</string>
@@ -967,7 +998,7 @@
     <string name="a11y_delivery_status_read">Delivery status: Read</string>
     <string name="a11y_delivery_status_invalid">Invalid delivery status</string>
     <string name="a11y_message_context_menu_btn_label">Message actions</string>
-    <string name="a11y_background_preview_label">Background preview</string>
+    <string name="a11y_background_preview_label">Wallpaper preview</string>
     <string name="a11y_disappearing_messages_activated">Disappearing messages activated</string>
 
     <!-- iOS specific strings, developers: please take care to remove strings that are no longer used! -->
@@ -993,7 +1024,7 @@
     <string name="notifications_avg_hours">On average every %1$d hours</string>
     <string name="last_check_at">Checked at %1$s</string>
     <!-- iOS webxdc selector -->
-    <string name="webxdc_selector_empty_hint">Private apps received or sent in any chat will appear here. \"Files\" shows private apps just downloaded.</string>
+    <string name="webxdc_selector_empty_hint">Apps received or sent in any chat will appear here. \"Files\" shows apps just downloaded.</string>
     <!-- iOS webxdc shortcut page -->
     <string name="shortcut_step1_tap_share_btn">Click the share button</string>
     <string name="shortcut_step2_tap_add_to_home_screen">Select \"Add to Home Screen\" to add the app to your home screen.</string>
@@ -1020,5 +1051,9 @@
 
     <!-- device messages for updates -->
     <string name="update_1_34_android">What\'s new in 1.34?\n\n🤗 Friendlier contact lists: Ordered by last seen and contacts seen within 10 minutes are marked by a dot 🟢\n\n📑 New pages in chat profiles: \"Audio\" and \"Private Apps\"\n\n🖼️ If someone sends you a \"Private App\" (eg. from https://webxdc.org ), you can add it to the home screen</string>
+    <!-- placeholder will be replaced by the URL https://get.delta.chat/#changelogs -->
+    <string name="update_1_36_android">1.36 Highlights\n\n💻📱 Use Delta Chat on all your devices easily - just follow three simple steps at \"Settings / Add Second Device\" (experimental)\n\n🖼🔍 Ever searching for an image and could not remember the chat? \"All Media\" from the main menu is yours!\n\nWhat else? Notifications for all Accounts, clear chat, and more at %1$s</string>
+    <!-- placeholder will be replaced by the URL https://delta.chat/en/2023-03-27-third-independent-security-audit -->
+    <string name="update_1_36_audit">We don\'t talk much about security here, but rest assured, we care: See %1$s for recent good news 👌</string>
 
 </resources>
