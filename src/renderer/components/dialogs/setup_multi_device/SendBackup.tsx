@@ -115,7 +115,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
                   className='delta-button-round'
                   onClick={startNetworkedTransfer}
                 >
-                  {tx('start')}
+                  {tx('next')}
                 </button>
               </>
             )}
@@ -146,19 +146,19 @@ export function SendBackupDialog({ onClose }: DialogProps) {
               </>
             )}
           </div>
-          <div className='dialog-sidebar'>
-            <div className='explain' key='networked'>
-              <ol>
-                <li>
-                  {tx('multidevice_install_dc_on_other_device')}{' '}
-                  {tx('multidevice_experimental_hint')}
-                </li>
-                <li>{tx('multidevice_same_network_hint')}</li>
-                <li>{tx('multidevice_tap_scan_on_other_device')}</li>
-              </ol>
-            </div>
-            <div>
-              {inProgress && (
+          {inProgress && (
+            <div className='dialog-sidebar'>
+              <div className='explain' key='networked'>
+                <ol>
+                  <li>
+                    {tx('multidevice_install_dc_on_other_device')}{' '}
+                    {tx('multidevice_experimental_hint')}
+                  </li>
+                  <li>{tx('multidevice_same_network_hint')}</li>
+                  <li>{tx('multidevice_tap_scan_on_other_device')}</li>
+                </ol>
+              </div>
+              <div>
                 <button
                   className='delta-button-round troubleshooting-btn'
                   onClick={() => runtime.openLink(TROUBLESHOOTING_URL)}
@@ -172,9 +172,9 @@ export function SendBackupDialog({ onClose }: DialogProps) {
                     }}
                   ></div>
                 </button>
-              )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
