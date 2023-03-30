@@ -182,13 +182,19 @@ export default function WelcomeScreen({
                   >
                     {tx('login_header')}
                   </button>
-                  <ImportButton />
+                  <button
+                    className='delta-button-round secondary'
+                    onClick={onClickScanQr}
+                  >
+                    {tx('multidevice_receiver_title')}
+                  </button>
                   <button
                     className='delta-button-round secondary'
                     onClick={onClickScanQr}
                   >
                     {tx('scan_invitation_code')}
                   </button>
+                  <ImportButton />
                 </div>
               </DeltaDialogContent>
             </DeltaDialogBody>
