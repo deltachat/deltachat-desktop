@@ -7,6 +7,7 @@
 - update electron from `v22.1.0` to version `v22.3.2`
 - use the new go based transifex cli (old one stopped working)
 - Update translations (28.03.2023)
+- update deltachat-node and deltachat/jsonrpc-client to `v1.112.1`
 ### Fixed
 - mac: update tray icon menu on hiding/showing #3041
 - chat request deletion now asks for confirmation
