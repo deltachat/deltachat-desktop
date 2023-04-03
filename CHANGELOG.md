@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- networked setup multidevice
 ### Changed
 - update electron from `v22.1.0` to version `v22.3.2`
 - use the new go based transifex cli (old one stopped working)

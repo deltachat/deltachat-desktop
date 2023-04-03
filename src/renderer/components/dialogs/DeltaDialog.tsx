@@ -224,17 +224,22 @@ export function DeltaDialogContent(
   props: React.PropsWithChildren<{
     noPadding?: boolean
     noOverflow?: boolean
+    className?: string
     style?: React.CSSProperties
     id?: string
   }>
 ) {
-  const { noPadding, noOverflow, style, id } = props
+  const { noPadding, noOverflow, style, id, className } = props
   return (
     <div
-      className={classNames('delta-dialog-content', {
-        'delta-dialog-content--no-padding': noPadding,
-        'delta-dialog-content--no-overflow': noOverflow,
-      })}
+      className={classNames(
+        'delta-dialog-content',
+        {
+          'delta-dialog-content--no-padding': noPadding,
+          'delta-dialog-content--no-overflow': noOverflow,
+        },
+        className
+      )}
       style={style}
       id={id}
     >

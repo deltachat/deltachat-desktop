@@ -34,3 +34,45 @@ button.delta-button-round {
     color: var(--bp4ButtonText);
   }
 }
+
+button.delta-button-tab {
+  padding: 8px;
+  margin: 5px;
+  border-radius: 5px;
+
+  border: none;
+  border-color: var(--delta-btn-tab-bg);
+  background-color: var(--delta-btn-tab-bg);
+  color: var(--delta-btn-tab-text);
+
+  &:hover {
+    border-color: var(--delta-btn-tab-hover-bg);
+    background-color: var(--delta-btn-tab-hover-bg);
+    color: var(--delta-btn-tab-hover-text);
+  }
+
+  // for buttons that are used as tabs
+  &.selected {
+    border-color: var(--delta-btn-tab-selected-bg);
+    background-color: var(--delta-btn-tab-selected-bg);
+    color: var(--delta-btn-tab-selected-text);
+  }
+
+  &:disabled {
+    background-image: none;
+    cursor: not-allowed;
+    border-color: var(--delta-btn-tab-bg);
+    background-color: var(--delta-btn-tab-bg);
+    color: var(--globalText);
+    &:hover {
+      background-color: rgba(206, 217, 224, 0.5);
+    }
+    &.selected {
+      &:disabled {
+        background-color: rgba(206, 217, 224, 0.5);
+        border-color: rgba(206, 217, 224, 0.5);
+        color: var(--globalText);
+      }
+    }
+  }
+}
