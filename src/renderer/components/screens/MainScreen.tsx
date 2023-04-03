@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from 'react'
+import React, { useState, useContext, useRef, useEffect } from 'react'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 
 import Gallery from '../Gallery'
@@ -111,16 +111,22 @@ export default function MainScreen() {
   const tx = useTranslationFunction()
   const settingsStore = useSettingsStore()[0]
 
-  if (settingsStore && window.__askForName) {
-    window.__askForName = false
-    screenContext.openDialog(SettingsProfileDialog, {
-      settingsStore,
-      title: 'Account setup',
-      confirmLabel: tx('ok'),
-      cancelLabel: tx('later'),
-      firstSetup: true,
+  useEffect(() => {
+    SettingsStoreInstance.effect.load().then(() => {
+      // make sure it uses new version of settings store instance
+      const settingsStore = SettingsStoreInstance.state
+      if (settingsStore && window.__askForName) {
+        window.__askForName = false
+        screenContext.openDialog(SettingsProfileDialog, {
+          settingsStore,
+          title: 'Account setup',
+          confirmLabel: tx('ok'),
+          cancelLabel: tx('later'),
+          firstSetup: true,
+        })
+      }
     })
-  }
+  }, [screenContext, tx])
 
   const searchRef = useRef<HTMLInputElement>(null)
 

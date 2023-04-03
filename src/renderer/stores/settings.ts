@@ -49,7 +49,7 @@ const settingsKeys: Array<keyof SettingsStoreState['settings']> = [
 
 class SettingsStore extends Store<SettingsStoreState | null> {
   reducer = {
-    setState: (newState: SettingsStoreState) => {
+    setState: (newState: SettingsStoreState | null) => {
       this.setState(_state => {
         return newState
       }, 'set')
@@ -105,6 +105,10 @@ class SettingsStore extends Store<SettingsStoreState | null> {
     },
   }
   effect = {
+    clear: () => {
+      this.reducer.setState(null)
+      this.log.info('cleared settings store')
+    },
     load: async () => {
       const accountId = window.__selectedAccountId
       if (accountId === undefined) {

@@ -4,6 +4,8 @@ import { hasDebugEnabled } from '../shared/logger'
 import { debouncedUpdateBadgeCounter } from './system-integration/badge-counter'
 import { clearNotificationsForChat } from './system-integration/notifications'
 import { countCall } from './debug-tools'
+import SettingsStoreInstance from './stores/settings'
+import chatStore from './stores/chat'
 
 export { T as Type } from '@deltachat/jsonrpc-client'
 
@@ -70,6 +72,9 @@ export namespace EffectfulBackendActions {
     if (window.__selectedAccountId === undefined) {
       throw new Error('no account selected')
     }
+    // clear stores - these do react updates so call them first
+    chatStore.reducer.unselectChat()
+    SettingsStoreInstance.effect.clear()
 
     runtime.closeAllWebxdcInstances()
     debouncedUpdateBadgeCounter()
