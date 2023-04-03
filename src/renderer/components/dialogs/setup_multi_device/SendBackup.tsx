@@ -70,6 +70,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
     setInProgress(true)
     const accountId = selectedAccountId()
     try {
+      setError(null)
       setStage('preparing')
       const transfer = BackendRemote.rpc.provideBackup(accountId)
       setQrSvg(await BackendRemote.rpc.getBackupQrSvg(accountId))
