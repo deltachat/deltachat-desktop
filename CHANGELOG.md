@@ -12,6 +12,8 @@
 - mac: update tray icon menu on hiding/showing #3041
 - chat request deletion now asks for confirmation
 - fix updating of relative timestamps #3125
+- fix account details of old account shown in new second account created via qr code #3154
+- fix chat of old account still selected in new account
 ### Removed
 - removed more bloat (unnessary files) from release packages
 
