@@ -25,5 +25,6 @@ export function getDefaultState(): DesktopSettingsType {
     syncAllAccounts: true,
     lastSaveDialogLocation: undefined,
     experimentalEnableMarkdownInMessages: false,
+    enableWebxdcDevTools: false,
   }
 }

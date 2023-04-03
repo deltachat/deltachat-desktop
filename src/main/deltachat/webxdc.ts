@@ -14,6 +14,7 @@ import { truncateText } from '../../shared/util'
 import { platform } from 'os'
 import { tx } from '../load-translations'
 import { DcOpenWebxdcParameters } from '../../shared/shared-types'
+import { DesktopSettings } from '../desktop_settings'
 
 const open_apps: {
   [instanceId: string]: {
@@ -149,6 +150,9 @@ export default class DCWebxdc extends SplitOut {
                   `window.parent.webxdc_internal.setup("${selfAddr}","${displayName}")
                   window.webxdc = window.parent.webxdc`
                 ),
+                headers: {
+                  'Content-Security-Policy': CSP,
+                },
               })
             } else {
               const blob = dc_context.getWebxdcBlob(
@@ -183,7 +187,7 @@ export default class DCWebxdc extends SplitOut {
           webSecurity: true,
           nodeIntegration: false,
           navigateOnDragDrop: false,
-          devTools: true,
+          devTools: DesktopSettings.state.enableWebxdcDevTools,
           javascript: true,
           preload: join(
             __dirname,
@@ -277,22 +281,31 @@ export default class DCWebxdc extends SplitOut {
       type permission_arg = Parameters<
         Exclude<Parameters<setPermissionRequestHandler>[0], null>
       >[1]
+      const loggedPermissionRequests: { [K in permission_arg]?: true } = {}
+      /** prevents webxdcs from spamming the log */
+      const logPermissionRequest = (permission: permission_arg) => {
+        if (loggedPermissionRequests[permission]) {
+          return
+        }
+        loggedPermissionRequests[permission] = true
+        log.info(
+          `webxdc '${webxdcInfo.name}' requested "${permission}" permission, but we denied it.
+If you think that's a bug and you need that permission, then please open an issue on github`
+        )
+      }
       const permission_handler = (permission: permission_arg) => {
         if (permission == 'pointerLock') {
-          log.info('allowed webxdc to lock the pointer')
+          log.info(`allowed webxdc '${webxdcInfo.name}' to lock the pointer`)
           // because games might lock the pointer
           return true
         }
         if (permission == 'fullscreen') {
-          log.info('allowed webxdc to go into fullscreen')
+          log.info(`allowed webxdc '${webxdcInfo.name}' to go into fullscreen`)
           // games might do that too
           return true
         }
 
-        log.info(
-          `webxdc requested "${permission}" permission, but we denied it.
-If you think that's a bug and you need that permission, then please open an issue on github`
-        )
+        logPermissionRequest(permission)
         return false
       }
 
@@ -309,7 +322,9 @@ If you think that's a bug and you need that permission, then please open an issu
     })
 
     ipcMain.handle('webxdc.toggle_dev_tools', async event => {
-      event.sender.toggleDevTools()
+      if (DesktopSettings.state.enableWebxdcDevTools) {
+        event.sender.toggleDevTools()
+      }
     })
 
     ipcMain.handle('webxdc.exitFullscreen', async event => {

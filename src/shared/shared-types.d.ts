@@ -63,6 +63,7 @@ export interface DesktopSettingsType {
   syncAllAccounts: boolean
   lastSaveDialogLocation: string | undefined
   experimentalEnableMarkdownInMessages: boolean
+  enableWebxdcDevTools: boolean
 }
 
 export interface RC_Config {
