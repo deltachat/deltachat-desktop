@@ -13,7 +13,7 @@ import { rmdir } from 'fs/promises'
 import { rm } from 'fs/promises'
 import DCWebxdc from './webxdc'
 import { DesktopSettings } from '../desktop_settings'
-import { RPC, yerpc, BaseDeltaChat } from '@deltachat/jsonrpc-client'
+import { yerpc, BaseDeltaChat } from '@deltachat/jsonrpc-client'
 
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat')
@@ -88,13 +88,13 @@ export default class DeltaChatController extends EventEmitter {
         if (response.indexOf('"id":"main-') !== -1) {
           const message = JSON.parse(response)
           if (message.id.startsWith('main-')) {
-            message.id = Number(message.id.replace('main-',''))
+            message.id = Number(message.id.replace('main-', ''))
             mainProcessTransport.onMessage(message)
             return
           }
         }
       } catch (error) {
-        log.error("jsonrpc-decode", error)
+        log.error('jsonrpc-decode', error)
       }
 
       mainWindow.send('json-rpc-message', response)
