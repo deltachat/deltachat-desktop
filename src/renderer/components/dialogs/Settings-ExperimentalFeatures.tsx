@@ -77,6 +77,10 @@ export function SettingsExperimentalFeatures({
         key: 'experimentalEnableMarkdownInMessages',
         label: 'Render Markdown in Messages',
       })}
+      {renderDTSettingSwitch({
+        key: 'enableWebxdcDevTools',
+        label: 'Enable Webxdc Devtools',
+      })}
       <SettingsSelector
         onClick={onClickEdit.bind(null, false)}
         currentValue={showVideochatInstance(

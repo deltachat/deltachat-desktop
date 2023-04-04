@@ -3,17 +3,20 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- networked setup multidevice
 ### Changed
 - update electron from `v22.1.0` to version `v22.3.2`
 - use the new go based transifex cli (old one stopped working)
 - Update translations (28.03.2023)
 - update deltachat-node and deltachat/jsonrpc-client to `v1.112.5`
+- only allow webxdc devtools when user enabled it in settings #3157
 ### Fixed
 - mac: update tray icon menu on hiding/showing #3041
 - chat request deletion now asks for confirmation
 - fix updating of relative timestamps #3125
 - fix account details of old account shown in new second account created via qr code #3154
 - fix chat of old account still selected in new account
+- some webxdc security fixes #3157
 ### Removed
 - removed more bloat (unnessary files) from release packages
 

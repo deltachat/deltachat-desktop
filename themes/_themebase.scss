@@ -196,6 +196,14 @@ $hover-contrast-change: 2%;
   //  border, scrollbar, in-active search input, emoji hover background
   --emoji-picker-border-and-hover-color: rgb(#{colorToRGB(changeContrast($bgSecondary, 8%))});
 
+  /** delta tab button */
+  --delta-btn-tab-bg: transparent;
+  --delta-btn-tab-text: #{$textSecondary};
+  --delta-btn-tab-hover-bg: rgba(125,125,125, 0.3);
+  --delta-btn-tab-hover-text: #{$textPrimary};
+  --delta-btn-tab-selected-bg: #{$colorPrimary};
+  --delta-btn-tab-selected-text: #{$textPrimary};
+
   @if lightness($bgPrimary) < 50 {
     // dark theme
     --scrollbarThumb: #{rgba(white, $scrollbarTransparency)};

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Elevation, Card } from '@blueprintjs/core'
 
-import { useTranslationFunction } from '../../contexts'
+import { ScreenContext, useTranslationFunction } from '../../contexts'
 
 import { DesktopSettingsType } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
@@ -23,6 +23,7 @@ import SettingsStoreInstance, {
 } from '../../stores/settings'
 import { runtime } from '../../runtime'
 import { donationUrl } from '../../../shared/constants'
+import { SendBackupDialog } from './setup_multi_device/SendBackup'
 
 export function flipDeltaBoolean(value: string) {
   return value === '1' ? '0' : '1'
@@ -113,6 +114,8 @@ export default function Settings(props: DialogProps) {
   })
 
   const settingsStore = useSettingsStore()[0]
+
+  const { openDialog } = useContext(ScreenContext)
 
   const tx = useTranslationFunction()
   const [settingsMode, setSettingsMode] = useState('main')
@@ -233,6 +236,15 @@ export default function Settings(props: DialogProps) {
                   onClick={() => setSettingsMode('appearance')}
                 >
                   {tx('pref_appearance')}
+                </SettingsIconButton>
+                <SettingsIconButton
+                  iconName='devices'
+                  onClick={() => {
+                    openDialog(SendBackupDialog)
+                    props.onClose()
+                  }}
+                >
+                  {tx('multidevice_title')}
                 </SettingsIconButton>
                 <SettingsIconButton
                   iconName='code-tags'

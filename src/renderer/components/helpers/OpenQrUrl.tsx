@@ -20,6 +20,7 @@ import AlertDialog from '../dialogs/AlertDialog'
 import { selectChat } from './ChatMethods'
 import { EffectfulBackendActions } from '../../backend-com'
 import { BackendRemote, Type } from '../../backend-com'
+import { ImportBackupTransferProgressDialog } from '../dialogs/setup_multi_device/ReceiveBackup'
 
 const log = getLogger('renderer/processOpenUrl')
 
@@ -159,6 +160,7 @@ export default async function processOpenQrUrl(
     'login',
     'text',
     'url',
+    'backup',
   ]
 
   if (
@@ -340,6 +342,20 @@ export default async function processOpenQrUrl(
         callback(null)
       },
     })
+  } else if (checkQr.type === 'backup') {
+    closeProcessDialog()
+    if (screen === Screens.Main) {
+      window.__openDialog('AlertDialog', {
+        message: tx('Please logout first'),
+        cb: callback,
+      })
+    } else {
+      window.__openDialog(ImportBackupTransferProgressDialog, {
+        QrWithToken: url,
+      })
+    }
+    callback(null)
+    return
   } else {
     closeProcessDialog()
     window.__openDialog(copyContentAlertDialog, {
