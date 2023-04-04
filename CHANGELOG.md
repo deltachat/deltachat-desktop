@@ -10,6 +10,7 @@
 - Update translations (28.03.2023)
 - update deltachat-node and deltachat/jsonrpc-client to `v1.112.5`
 - only allow webxdc devtools when user enabled it in settings #3157
+- move webxdc functions in backend from cffi to jsonrpc #3127
 ### Fixed
 - mac: update tray icon menu on hiding/showing #3041
 - chat request deletion now asks for confirmation
