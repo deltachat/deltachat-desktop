@@ -11,10 +11,10 @@
   let setUpdateListenerPromise = null
   const onStatusUpdate = async () => {
     if (callback) {
-      for (let update of await ipcRenderer.invoke(
-        'webxdc.getAllUpdates',
-        last_serial
-      )) {
+      const updates = JSON.parse(
+        await ipcRenderer.invoke('webxdc.getAllUpdates', last_serial)
+      )
+      for (let update of updates) {
         last_serial = update.serial
         callback(update)
       }
