@@ -4,6 +4,14 @@ import { extname, join } from 'path'
 import chokidar from 'chokidar'
 import { readdir, readFile, writeFile } from 'fs/promises'
 
+function removeJunk(input) {
+  return input
+    .replace(new RegExp('\\\\n', 'g'), '\n')
+    .replace(new RegExp("\\\\'", 'g'), "'")
+    .replace(new RegExp('\\\\\\"', 'g'), '"')
+    .replace(new RegExp('\\\\', 'g'), '')
+}
+
 async function xmlToJson(filename) {
   const xml = (await readFile(filename, 'utf-8')).toString()
 
@@ -35,10 +43,7 @@ async function xmlToJson(filename) {
     if (!name) return error(string)
     let text = string._text
     if (typeof text === 'string') {
-      text = text.replace(new RegExp('\\\\n', 'g'), '\n')
-      text = text.replace(new RegExp("\\\\'", 'g'), "'")
-      text = text.replace(new RegExp('\\\\\\"', 'g'), '"')
-      text = text.replace(new RegExp('\\\\', 'g'), '')
+      text = removeJunk(text)
     }
     res[name] = {
       message: text,
@@ -56,7 +61,7 @@ async function xmlToJson(filename) {
     plural.item.forEach(i => {
       const quantity = i._attributes.quantity
       if (!quantity) return error(plural)
-      items[quantity] = i._text
+      items[quantity] = removeJunk(i._text)
     })
     res[name] = items
   })
@@ -94,7 +99,6 @@ async function convertTranslationsFromXMLToJSON(pathLocales, watch = false) {
       })
       console.log('+ watching for file changes...')
     })
-
   }
 }
 
