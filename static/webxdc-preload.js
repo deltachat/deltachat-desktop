@@ -51,7 +51,7 @@
       return Promise.resolve([])
     },
     sendUpdate: (update, description) =>
-      ipcRenderer.invoke('webxdc.sendUpdate', update, description),
+      ipcRenderer.invoke('webxdc.sendUpdate', JSON.stringify(update), description),
   }
 
   const connections = []
