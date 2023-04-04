@@ -18,6 +18,7 @@
 - fix account details of old account shown in new second account created via qr code #3154
 - fix chat of old account still selected in new account
 - some webxdc security fixes #3157
+- add message metadata to video chat invitiation (encryption and send status and date-time)
 ### Removed
 - removed more bloat (unnessary files) from release packages
 

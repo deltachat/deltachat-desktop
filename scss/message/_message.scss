@@ -600,10 +600,33 @@
     border-radius: 10px;
 
     cursor: pointer;
+    .join-button {
+      font-weight: 100;
+      margin-top: 5px;
+    }
   }
 
-  .join-button {
-    font-weight: 100;
-    margin-top: 5px;
+  .meta-data-container {
+    background-color: var(--infoMessageBubbleBg);
+    opacity: 0.9;
+    color: white;
+    border-radius: 0px 0px 10px 10px;
+    padding: 4px 11px;
+
+    .metadata {
+      margin: 0;
+
+      & > .padlock-icon {
+        @include color-svg('../images/padlock.svg', white, 125%);
+      }
+
+      & > .location-icon {
+        @include color-svg('../images/map-marker.svg', white, 100%);
+      }
+
+      & > .date {
+        color: white;
+      }
+    }
   }
 }
