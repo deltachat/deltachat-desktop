@@ -7,7 +7,7 @@
 ### Changed
 - update electron from `v22.1.0` to version `v22.3.2`
 - use the new go based transifex cli (old one stopped working)
-- Update translations (28.03.2023)
+- Update translations (05.04.2023)
 - update deltachat-node and deltachat/jsonrpc-client to `v1.112.5`
 - only allow webxdc devtools when user enabled it in settings #3157
 - move webxdc functions in backend from cffi to jsonrpc #3127
