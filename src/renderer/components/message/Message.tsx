@@ -372,6 +372,19 @@ export default function Message(props: {
               : tx('rejoin')}
           </div>
         </div>
+        <div className='break' />
+        <div className='meta-data-container'>
+          <MessageMetaData
+            fileMime={(!isSetupmessage && message.fileMime) || null}
+            direction={direction}
+            status={status}
+            hasText={text !== null && text !== ''}
+            hasLocation={hasLocation}
+            timestamp={message.timestamp * 1000}
+            padlock={message.showPadlock}
+            onClickError={openMessageInfo.bind(null, message)}
+          />
+        </div>
       </div>
     )
   } else {
