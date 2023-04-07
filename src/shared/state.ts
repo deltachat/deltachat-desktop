@@ -27,6 +27,6 @@ export function getDefaultState(): DesktopSettingsType {
     experimentalEnableMarkdownInMessages: false,
     enableWebxdcDevTools: false,
     HTMLEmailAskForRemoteLoadingConfirmation: true,
-    HTMLEmailAlwaysLoadRemoteContent: false
+    HTMLEmailAlwaysLoadRemoteContent: false,
   }
 }
