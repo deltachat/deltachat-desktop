@@ -27,6 +27,7 @@ const open_windows: { [window_id: string]: BrowserWindow } = {}
  */
 export function openHtmlEmailWindow(
   window_id: string,
+  isContactRequest: boolean,
   subject: string,
   from: string,
   htmlEmail: string
@@ -61,10 +62,14 @@ export function openHtmlEmailWindow(
   }))
   window.webContents.setZoomFactor(DesktopSettings.state.zoomFactor)
 
+  const loadRemoteContentAtStart =
+    DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent && !isContactRequest
+
   window.webContents.ipc.handle('html_email:get_info', _ => ({
     subject,
     from,
     networkButtonLabelText: tx('load_remote_content'),
+    toggle_network: loadRemoteContentAtStart,
   }))
 
   nativeTheme.on('updated', () => {
@@ -101,7 +106,10 @@ export function openHtmlEmailWindow(
     delete open_windows[window_id]
   })
 
-  let sandboxedView: BrowserView = makeBrowserView(false, htmlEmail)
+  let sandboxedView: BrowserView = makeBrowserView(
+    loadRemoteContentAtStart,
+    htmlEmail
+  )
   window.setBrowserView(sandboxedView)
   let context_menu_handle = createContextMenu(window, sandboxedView.webContents)
 
@@ -121,21 +129,51 @@ export function openHtmlEmailWindow(
     'html-view:change-network',
     async (_ev, allow_network: boolean) => {
       if (
+        !isContactRequest &&
+        !allow_network &&
+        DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent
+      ) {
+        // revert always loading when turning the toggle switch
+        DesktopSettings.update({
+          HTMLEmailAlwaysLoadRemoteContent: false,
+        })
+      }
+
+      if (
         allow_network &&
         DesktopSettings.state.HTMLEmailAskForRemoteLoadingConfirmation
       ) {
+        const buttons = [
+          {
+            label: tx('no'),
+            action: () => {
+              throw new Error('user denied')
+            },
+          },
+          isContactRequest || {
+            label: tx('pref_html_always_load_remote_content'),
+            action: () => {
+              DesktopSettings.update({
+                HTMLEmailAlwaysLoadRemoteContent: true,
+              })
+            },
+          },
+          { label: tx('yes'), action: () => {} },
+        ].filter(item => typeof item === 'object') as {
+          label: string
+          action: () => void
+        }[]
+
         const result = await dialog.showMessageBox(window, {
           message: tx('load_remote_content_ask'),
           checkboxLabel: tx('do_not_ask_again'),
-          buttons: [tx('no'), tx('yes')],
+          buttons: buttons.map(b => b.label),
           type: 'none',
           icon: '',
           defaultId: 0,
           cancelId: 0,
         })
-        if (result.response === 0) {
-          throw new Error('user denied')
-        }
+        buttons[result.response].action()
         if (result.checkboxChecked) {
           DesktopSettings.update({
             HTMLEmailAskForRemoteLoadingConfirmation: false,

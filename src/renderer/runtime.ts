@@ -36,6 +36,7 @@ interface Runtime {
    */
   openMessageHTML(
     window_id: string,
+    isContactRequest: boolean,
     subject: string,
     sender: string,
     content: string
@@ -147,6 +148,7 @@ class Browser implements Runtime {
   }
   openMessageHTML(
     _window_id: string,
+    _isContactRequest: boolean,
     _subject: string,
     _sender: string,
     _content: string
@@ -309,11 +311,19 @@ class Electron implements Runtime {
   }
   openMessageHTML(
     window_id: string,
+    isContactRequest: boolean,
     subject: string,
     sender: string,
     content: string
   ): void {
-    ipcBackend.invoke('openMessageHTML', window_id, subject, sender, content)
+    ipcBackend.invoke(
+      'openMessageHTML',
+      window_id,
+      isContactRequest,
+      subject,
+      sender,
+      content
+    )
   }
   notifyWebxdcStatusUpdate(accountId: number, instanceId: number): void {
     ipcBackend.invoke('webxdc:status-update', accountId, instanceId)

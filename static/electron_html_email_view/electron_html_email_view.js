@@ -3,14 +3,15 @@ const fromElement = document.getElementById('sender')
 const networkCheckbox = document.getElementById('toggle_network')
 const networkButtonLabel = document.getElementById('toggle_network_label')
 
+let network_enabled = false
+
 let promise = window.htmlview
   .getInfo()
-  .then(({ subject, from, networkButtonLabelText }) => {
+  .then(({ subject, from, toggle_network, networkButtonLabelText }) => {
     ;(subjectElement.innerText = subject), (fromElement.innerText = from)
     networkButtonLabel.innerText = networkButtonLabelText
+    networkCheckbox.checked = network_enabled = toggle_network
   })
-
-let network_enabled = false
 
 networkCheckbox.onclick = ev => {
   ev.preventDefault()

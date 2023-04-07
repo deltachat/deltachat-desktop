@@ -45,6 +45,10 @@ export function SettingsChatsAndMedia({
         key: 'mdns_enabled',
         label: tx('pref_read_receipts'),
       })}
+      {renderDTSettingSwitch({
+        key: 'HTMLEmailAlwaysLoadRemoteContent',
+        label: tx('pref_html_always_load_remote_content'),
+      })}
       <br />
       <br />
       <SettingsAutodelete settingsStore={settingsStore} />
