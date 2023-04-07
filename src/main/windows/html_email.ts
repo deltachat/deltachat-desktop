@@ -73,7 +73,9 @@ export function openHtmlEmailWindow(
   }))
 
   nativeTheme.on('updated', () => {
-    window.webContents.ipc.emit('theme-update')
+    try {
+      window.webContents.ipc.emit('theme-update')
+    } catch (error) { /* ignore error */}
   })
 
   window.webContents.ipc.handle(
