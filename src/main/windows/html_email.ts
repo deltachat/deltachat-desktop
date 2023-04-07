@@ -199,10 +199,24 @@ export function openHtmlEmailWindow(
   // window.webContents.openDevTools({ mode: 'detach' })
 }
 
-const CSP_DENY =
-  "default-src 'self'; img-src 'self' blob: data:;style-src 'self' 'unsafe-inline'"
-const CSP_ALLOW =
-  "default-src 'self'; img-src 'self' blob: data: https: http:;style-src 'self' 'unsafe-inline';"
+const CSP_DENY = `default-src 'none';
+font-src 'self' data:;
+frame-src 'none';
+img-src 'self' data:;
+media-src 'self' data:;
+style-src 'self' data: 'unsafe-inline';
+form-action 'none';
+script-src 'none';`
+const CSP_ALLOW = `
+default-src 'none';
+font-src 'self' data: http: https:;
+frame-src 'none';
+img-src 'self' blob: data: https: http:;
+media-src 'self' data: http: https:;
+style-src 'self' 'unsafe-inline';
+form-action 'none';
+script-src 'none';
+`
 
 function makeBrowserView(allow_remote_content: boolean, html_content: string) {
   const ses = session.fromPartition(`${Date.now()}`, { cache: false })
