@@ -2,6 +2,7 @@ const subjectElement = document.getElementById('subject')
 const fromElement = document.getElementById('sender')
 const networkCheckbox = document.getElementById('toggle_network')
 const networkButtonLabel = document.getElementById('toggle_network_label')
+const networkMoreButton = document.getElementById('toggle_network_more_button')
 
 let network_enabled = false
 
@@ -20,6 +21,13 @@ networkCheckbox.onclick = ev => {
     networkCheckbox.checked = new_value
     network_enabled = new_value
   })
+}
+
+networkMoreButton.onclick = (ev) => {
+  /** @type {MouseEvent} */
+  const event = ev
+  const {x,y} = event
+  window.htmlview.openMoreMenu({x, y})
 }
 
 const contentElement = document.getElementById('content')

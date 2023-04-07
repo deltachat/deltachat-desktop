@@ -6,6 +6,9 @@ contextBridge.exposeInMainWorld('htmlview', {
     ipcRenderer.invoke('html-view:resize-content', bounds),
   changeAllowNetwork: allow_network =>
     ipcRenderer.invoke('html-view:change-network', allow_network),
+  openMoreMenu: ({ x, y }) => {
+    ipcRenderer.invoke('html-view:more-menu', { x, y })
+  },
 })
 
 async function updateTheme() {

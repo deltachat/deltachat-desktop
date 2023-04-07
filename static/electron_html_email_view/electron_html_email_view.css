@@ -35,20 +35,26 @@ div.header > .title p {
   font-size: 0.8em;
 }
 
-div.header > button {
-}
-
 div.header > div.network-toggle {
   display: flex;
   align-items: center;
   margin: 4px;
   font-family: Arial, Helvetica, sans-serif;
-  background: var(--bp4DialogBgSecondary);
   padding: 6px;
+  font-size: 0.8em;
 }
 
 div.header > div.network-toggle > input {
   margin-inline-end: 5px;
+}
+
+div.header > div.network-toggle > button#toggle_network_more_button {
+  margin-left: 6px;
+  background-color: transparent;
+  border: 1px grey solid;
+  font-size: 0.8em;
+  border-radius: 2px;
+  color: var(--htmlEmail-color);
 }
 
 div#content {

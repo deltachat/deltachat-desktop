@@ -64,11 +64,5 @@
   },
   "later": {
     "message": "Later"
-  },
-  "do_not_ask_again": {
-    "message": "Do not ask again"
-  },
-  "pref_html_always_load_remote_content": {
-    "message": "Always load remote images in HTML Emails"
   }
 }

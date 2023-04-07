@@ -46,8 +46,8 @@ export function openHtmlEmailWindow(
     minWidth: 400,
     show: false,
     title: `${truncateText(subject, 42)} – ${truncateText(from, 40)}`,
-    height: 600,
-    width: 650,
+    height: 621,
+    width: 800,
     webPreferences: {
       nodeIntegration: false,
       preload: join(
@@ -75,7 +75,9 @@ export function openHtmlEmailWindow(
   nativeTheme.on('updated', () => {
     try {
       window.webContents.ipc.emit('theme-update')
-    } catch (error) { /* ignore error */}
+    } catch (error) {
+      /* ignore error */
+    }
   })
 
   window.webContents.ipc.handle(
@@ -115,6 +117,51 @@ export function openHtmlEmailWindow(
   window.setBrowserView(sandboxedView)
   let context_menu_handle = createContextMenu(window, sandboxedView.webContents)
 
+  window.webContents.ipc.handle('html-view:more-menu', (_ev, { x, y }) => {
+    const menuItems: {
+      [key: string]: () => MenuItemConstructorOptions
+    } = {
+      separator: () => ({ type: 'separator' }),
+      always_show: () => ({
+        id: 'always_show',
+        type: 'checkbox',
+        label: tx('always_load_remote_images'),
+        checked: DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent,
+        click() {
+          const newValue = !DesktopSettings.state
+            .HTMLEmailAlwaysLoadRemoteContent
+          DesktopSettings.update({
+            HTMLEmailAlwaysLoadRemoteContent: newValue,
+          })
+          // apply change
+          update_restrictions(null, newValue)
+          window.webContents.executeJavaScript(
+            `document.getElementById('toggle_network').checked = ${Boolean(
+              newValue
+            )}`
+          )
+        },
+      }),
+      dont_ask: () => ({
+        id: 'show_warning',
+        type: 'checkbox',
+        label: tx('show_warning'),
+        checked: DesktopSettings.state.HTMLEmailAskForRemoteLoadingConfirmation,
+        click() {
+          DesktopSettings.update({
+            HTMLEmailAskForRemoteLoadingConfirmation: !DesktopSettings.state
+              .HTMLEmailAskForRemoteLoadingConfirmation,
+          })
+        },
+      }),
+    }
+    const menu = electron.Menu.buildFromTemplate([
+      menuItems.always_show(),
+      menuItems.dont_ask(),
+    ])
+    menu.popup({ window, x, y })
+  })
+
   window.webContents.ipc.handle(
     'html-view:resize-content',
     (_ev, bounds: Electron.Rectangle) => {
@@ -127,75 +174,74 @@ export function openHtmlEmailWindow(
     }
   )
 
-  window.webContents.ipc.handle(
-    'html-view:change-network',
-    async (_ev, allow_network: boolean) => {
-      if (
-        !isContactRequest &&
-        !allow_network &&
-        DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent
-      ) {
-        // revert always loading when turning the toggle switch
-        DesktopSettings.update({
-          HTMLEmailAlwaysLoadRemoteContent: false,
-        })
-      }
-
-      if (
-        allow_network &&
-        DesktopSettings.state.HTMLEmailAskForRemoteLoadingConfirmation
-      ) {
-        const buttons = [
-          {
-            label: tx('no'),
-            action: () => {
-              throw new Error('user denied')
-            },
-          },
-          isContactRequest || {
-            label: tx('pref_html_always_load_remote_content'),
-            action: () => {
-              DesktopSettings.update({
-                HTMLEmailAlwaysLoadRemoteContent: true,
-              })
-            },
-          },
-          { label: tx('yes'), action: () => {} },
-        ].filter(item => typeof item === 'object') as {
-          label: string
-          action: () => void
-        }[]
-
-        const result = await dialog.showMessageBox(window, {
-          message: tx('load_remote_content_ask'),
-          checkboxLabel: tx('do_not_ask_again'),
-          buttons: buttons.map(b => b.label),
-          type: 'none',
-          icon: '',
-          defaultId: 0,
-          cancelId: 0,
-        })
-        buttons[result.response].action()
-        if (result.checkboxChecked) {
-          DesktopSettings.update({
-            HTMLEmailAskForRemoteLoadingConfirmation: false,
-          })
-        }
-      }
-
-      const bounds = sandboxedView?.getBounds()
-      window.removeBrowserView(sandboxedView)
-      context_menu_handle()
-      sandboxedView.webContents.close()
-      sandboxedView = makeBrowserView(allow_network, htmlEmail)
-      window.setBrowserView(sandboxedView)
-      context_menu_handle = createContextMenu(window, sandboxedView.webContents)
-      if (bounds) sandboxedView.setBounds(bounds)
-
-      // for debugging email
-      // sandboxedView.webContents.openDevTools({ mode: 'detach' })
+  const update_restrictions = async (
+    _ev: any,
+    allow_network: boolean,
+    skip_sideeffects = false
+  ) => {
+    if (
+      !skip_sideeffects &&
+      !isContactRequest &&
+      !allow_network &&
+      DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent
+    ) {
+      // revert always loading when turning the toggle switch
+      DesktopSettings.update({
+        HTMLEmailAlwaysLoadRemoteContent: false,
+      })
     }
-  )
+
+    if (
+      !skip_sideeffects &&
+      allow_network &&
+      DesktopSettings.state.HTMLEmailAskForRemoteLoadingConfirmation
+    ) {
+      const buttons = [
+        {
+          label: tx('no'),
+          action: () => {
+            throw new Error('user denied')
+          },
+        },
+        { label: tx('yes'), action: () => {} },
+        // isContactRequest || {
+        //   label: tx('pref_html_always_load_remote_content'),
+        //   action: () => {
+        //     DesktopSettings.update({
+        //       HTMLEmailAlwaysLoadRemoteContent: true,
+        //     })
+        //   },
+        // },
+      ].filter(item => typeof item === 'object') as {
+        label: string
+        action: () => void
+      }[]
+
+      const result = await dialog.showMessageBox(window, {
+        message: tx('load_remote_content_ask'),
+        buttons: buttons.map(b => b.label),
+        type: 'none',
+        icon: '',
+        defaultId: 0,
+        cancelId: 0,
+      })
+      buttons[result.response].action()
+    }
+
+    const bounds = sandboxedView?.getBounds()
+    window.removeBrowserView(sandboxedView)
+    context_menu_handle()
+    sandboxedView.webContents.close()
+    sandboxedView = makeBrowserView(allow_network, htmlEmail)
+    window.setBrowserView(sandboxedView)
+    context_menu_handle = createContextMenu(window, sandboxedView.webContents)
+    if (bounds) sandboxedView.setBounds(bounds)
+
+    // for debugging email
+    // sandboxedView.webContents.openDevTools({ mode: 'detach' })
+  }
+
+  window.webContents.ipc.handle('html-view:change-network', update_restrictions)
 
   // for debugging wrapper
   // window.webContents.openDevTools({ mode: 'detach' })
