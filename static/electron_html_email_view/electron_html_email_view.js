@@ -4,22 +4,22 @@ const networkCheckbox = document.getElementById('toggle_network')
 const networkButtonLabel = document.getElementById('toggle_network_label')
 const networkMoreButton = document.getElementById('toggle_network_more_button')
 
-let network_enabled = false
+window.network_enabled = false
 
 let promise = window.htmlview
   .getInfo()
   .then(({ subject, from, toggle_network, networkButtonLabelText }) => {
     ;(subjectElement.innerText = subject), (fromElement.innerText = from)
     networkButtonLabel.innerText = networkButtonLabelText
-    networkCheckbox.checked = network_enabled = toggle_network
+    networkCheckbox.checked = window.network_enabled = toggle_network
   })
 
 networkCheckbox.onclick = ev => {
   ev.preventDefault()
-  const new_value = !network_enabled
+  const new_value = !window.network_enabled
   window.htmlview.changeAllowNetwork(new_value).then(() => {
     networkCheckbox.checked = new_value
-    network_enabled = new_value
+    window.network_enabled = new_value
   })
 }
 

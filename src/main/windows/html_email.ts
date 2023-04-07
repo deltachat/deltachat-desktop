@@ -134,9 +134,9 @@ export function openHtmlEmailWindow(
             HTMLEmailAlwaysLoadRemoteContent: newValue,
           })
           // apply change
-          update_restrictions(null, newValue)
+          update_restrictions(null, newValue, true)
           window.webContents.executeJavaScript(
-            `document.getElementById('toggle_network').checked = ${Boolean(
+            `document.getElementById('toggle_network').checked = window.network_enabled= ${Boolean(
               newValue
             )}`
           )
