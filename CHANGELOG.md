@@ -3,9 +3,9 @@
 ## [Unreleased][unreleased]
 
 
-<a id="1_34_6"></a>
+<a id="1_36_0"></a>
 
-## [1.34.6] - 2023-04-08
+## [1.36.0] - 2023-04-08
 
 ### Added
 - networked setup multidevice
@@ -1947,9 +1947,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.34.6...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.36.0...HEAD
 
-[1.34.6]: https://github.com/deltachat/deltachat-desktop/compare/v1.34.5...v1.34.6
+[1.36.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.34.5...v1.36.0
 
 [1.34.5]: https://github.com/deltachat/deltachat-desktop/compare/v1.34.4...v1.34.5
 
