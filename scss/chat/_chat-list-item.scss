@@ -80,6 +80,8 @@
         & > img.summary_thumbnail {
           height: 18px;
           width: 18px;
+          min-width: 18px;
+          min-height: 18px;
           border-radius: 3px;
           margin-inline-start: 3px;
           margin-inline-end: 4px;
