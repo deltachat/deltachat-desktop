@@ -64,7 +64,7 @@ function Message({
   freshMessageCounter,
   isArchived,
   isContactRequest,
-  summaryPreviewImage
+  summaryPreviewImage,
 }: Pick<
   ChatListItemType,
   | 'summaryStatus'
@@ -94,7 +94,9 @@ function Message({
             {summaryText1 + ': '}
           </div>
         )}
-        {summaryPreviewImage && <img className="summary_thumbnail" src={summaryPreviewImage} />}
+        {summaryPreviewImage && (
+          <img className='summary_thumbnail' src={summaryPreviewImage} />
+        )}
         <div>
           <MessageBody text={summaryText2 || ''} disableJumbomoji preview />
         </div>
@@ -252,7 +254,7 @@ function ChatListItemNormal({
           isPinned={chatListItem.isPinned}
           isMuted={chatListItem.isMuted}
         />
-       
+
         <Message
           summaryStatus={chatListItem.summaryStatus}
           summaryText1={chatListItem.summaryText1}
