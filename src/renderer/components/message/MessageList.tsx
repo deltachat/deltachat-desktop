@@ -283,6 +283,11 @@ export default function MessageList({
           `.info-message[id="${scrollTo.msgId.toString()}"]`
         )
       }
+      if (!domElement) {
+        domElement = document.querySelector(
+          `.videochat-invitation[id="${scrollTo.msgId.toString()}"]`
+        )
+      }
 
       if (!domElement) {
         log.debug(
