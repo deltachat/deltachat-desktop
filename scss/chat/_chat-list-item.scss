@@ -63,6 +63,8 @@
       margin-top: 3px;
 
       & > .text {
+        display: flex;
+        align-items: center;
         max-width: calc(100% - 18px);
         height: 1.3em;
         flex-grow: 1;
@@ -74,6 +76,14 @@
         text-overflow: ellipsis;
         color: var(--chat-list-item-summary-text);
         user-select: none;
+
+        & > img.summary_thumbnail {
+          height: 18px;
+          width: 18px;
+          border-radius: 3px;
+          margin-inline-start: 3px;
+          margin-inline-end: 4px;
+        }
 
         & > .summary {
           float: left;
