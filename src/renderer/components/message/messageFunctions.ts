@@ -113,15 +113,28 @@ export async function privateReply(msg: Type.Message) {
 }
 
 export async function openMessageHTML(messageId: number) {
-  const content = await BackendRemote.rpc.getMessageHtml(
-    selectedAccountId(),
-    messageId
-  )
+  const accountId = selectedAccountId()
+  const content = await BackendRemote.rpc.getMessageHtml(accountId, messageId)
   if (!content) {
     log.error('openMessageHTML, message has no html content', { messageId })
     return
   }
-  runtime.openMessageHTML(content)
+  const {
+    sender: { displayName },
+    subject,
+    chatId,
+  } = await BackendRemote.rpc.getMessage(accountId, messageId)
+  const { isContactRequest } = await BackendRemote.rpc.getBasicChatInfo(
+    accountId,
+    chatId
+  )
+  runtime.openMessageHTML(
+    `${accountId}.${messageId}`,
+    isContactRequest,
+    subject,
+    displayName,
+    content
+  )
 }
 
 export async function downloadFullMessage(messageId: number) {

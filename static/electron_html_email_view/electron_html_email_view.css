@@ -1,0 +1,63 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  background: var(--htmlEmail-background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+div.header {
+  display: flex;
+  border-bottom: 1px solid var(--htmlEmail-border-color);
+  min-height: 20px;
+  padding: 5px;
+  color: var(--htmlEmail-color);
+}
+
+div.header > .title {
+  flex-grow: 1;
+}
+
+div.header > .title p {
+  margin: 0.3em;
+}
+
+#subject {
+  font-size: 1em;
+}
+
+#sender {
+  font-size: 0.8em;
+}
+
+div.header > div.network-toggle {
+  display: flex;
+  align-items: center;
+  margin: 4px;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 6px;
+  font-size: 0.8em;
+}
+
+div.header > div.network-toggle > input {
+  margin-inline-end: 5px;
+}
+
+div.header > div.network-toggle > button#toggle_network_more_button {
+  margin-left: 6px;
+  background-color: transparent;
+  border: 1px grey solid;
+  font-size: 0.8em;
+  border-radius: 2px;
+  color: var(--htmlEmail-color);
+}
+
+div#content {
+  flex-grow: 1;
+  background-color: white;
+}

@@ -4,6 +4,7 @@
 
 ### Added
 - networked setup multidevice
+- open html emails in internal window
 ### Changed
 - update electron from `v22.1.0` to version `v22.3.2`
 - use the new go based transifex cli (old one stopped working)
@@ -51,6 +52,7 @@
 ### Added
 - add context menu option to mark all archived chats as noticed
 - add reply privately in mailinglists
+- html emails are opened shown in a dedicated window
 
 ### Changed
 - Update translations (07.02.2023)

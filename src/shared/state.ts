@@ -26,5 +26,7 @@ export function getDefaultState(): DesktopSettingsType {
     lastSaveDialogLocation: undefined,
     experimentalEnableMarkdownInMessages: false,
     enableWebxdcDevTools: false,
+    HTMLEmailAskForRemoteLoadingConfirmation: true,
+    HTMLEmailAlwaysLoadRemoteContent: false,
   }
 }

@@ -9,7 +9,7 @@ $hover-contrast-change: 2%;
 }
 
 @function colorToRGB($color) {
-  @return red($color), green($color), blue($color)
+  @return red($color), green($color), blue($color);
 }
 
 :root {
@@ -194,7 +194,14 @@ $hover-contrast-change: 2%;
   //  selected input field bg
   --emoji-picker-selected-input-bg-rgb: #{colorToRGB($bgSecondary)};
   //  border, scrollbar, in-active search input, emoji hover background
-  --emoji-picker-border-and-hover-color: rgb(#{colorToRGB(changeContrast($bgSecondary, 8%))});
+  --emoji-picker-border-and-hover-color: rgb(
+    #{colorToRGB(changeContrast($bgSecondary, 8%))}
+  );
+
+  /** HTML Email Window */
+  --htmlEmail-background: #{$bgPrimary};
+  --htmlEmail-color: #{$textPrimary};
+  --htmlEmail-border-color: #{changeContrast($bgPrimary, 20%)};
 
   /** delta tab button */
   --delta-btn-tab-bg: transparent;
