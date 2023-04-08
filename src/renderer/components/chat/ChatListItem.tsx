@@ -64,6 +64,7 @@ function Message({
   freshMessageCounter,
   isArchived,
   isContactRequest,
+  summaryPreviewImage
 }: Pick<
   ChatListItemType,
   | 'summaryStatus'
@@ -72,6 +73,7 @@ function Message({
   | 'freshMessageCounter'
   | 'isArchived'
   | 'isContactRequest'
+  | 'summaryPreviewImage'
 >) {
   const wasReceived =
     summaryStatus === C.DC_STATE_IN_FRESH ||
@@ -92,7 +94,10 @@ function Message({
             {summaryText1 + ': '}
           </div>
         )}
-        <MessageBody text={summaryText2 || ''} disableJumbomoji preview />
+        {summaryPreviewImage && <img className="summary_thumbnail" src={summaryPreviewImage} />}
+        <div>
+          <MessageBody text={summaryText2 || ''} disableJumbomoji preview />
+        </div>
       </div>
       {isContactRequest && (
         <div className='label'>
@@ -247,10 +252,12 @@ function ChatListItemNormal({
           isPinned={chatListItem.isPinned}
           isMuted={chatListItem.isMuted}
         />
+       
         <Message
           summaryStatus={chatListItem.summaryStatus}
           summaryText1={chatListItem.summaryText1}
           summaryText2={chatListItem.summaryText2}
+          summaryPreviewImage={chatListItem.summaryPreviewImage}
           freshMessageCounter={chatListItem.freshMessageCounter}
           isArchived={chatListItem.isArchived}
           isContactRequest={chatListItem.isContactRequest}
