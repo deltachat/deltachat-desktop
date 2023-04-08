@@ -2,9 +2,15 @@
 
 ## [Unreleased][unreleased]
 
+
+<a id="1_34_6"></a>
+
+## [1.34.6] - 2023-04-08
+
 ### Added
 - networked setup multidevice
 - open html emails in internal window
+
 ### Changed
 - update electron from `v22.1.0` to version `v22.3.2`
 - use the new go based transifex cli (old one stopped working)
@@ -12,6 +18,7 @@
 - update deltachat-node and deltachat/jsonrpc-client to `v1.112.6`
 - only allow webxdc devtools when user enabled it in settings #3157
 - move webxdc functions in backend from cffi to jsonrpc #3127
+
 ### Fixed
 - mac: update tray icon menu on hiding/showing #3041
 - chat request deletion now asks for confirmation
@@ -21,6 +28,7 @@
 - fix scroll down when sending video chat invitation
 - some webxdc security fixes #3157
 - add message metadata to video chat invitiation (encryption and send status and date-time)
+
 ### Removed
 - removed more bloat (unnessary files) from release packages
 
@@ -1939,7 +1947,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.34.5...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.34.6...HEAD
+
+[1.34.6]: https://github.com/deltachat/deltachat-desktop/compare/v1.34.5...v1.34.6
 
 [1.34.5]: https://github.com/deltachat/deltachat-desktop/compare/v1.34.4...v1.34.5
 
