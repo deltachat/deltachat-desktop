@@ -60,7 +60,9 @@
     <!-- Possible answers to the question are: Never, Always, Once -->
     <string name="load_remote_content_ask">Віддалені зображення можна використовувати для слідкування за вами.\n\nЦе налаштування також дозволяє завантажувати шрифти та інший вміст. Якщо воно вимкнене, ви можете побачити вбудовані або кешовані зображення.\n\nЗавантажувати віддалені зображення?</string>
     <string name="always">Завжди</string>
+    <string name="always_load_remote_images">Завжди завантажувати віддалені зображення</string>
     <string name="once">Один раз</string>
+    <string name="show_warning">Показати попередження</string>
     <string name="show_password">Показати пароль</string>
     <string name="hide_password">Приховати пароль</string>
     <string name="not_now">Не зараз</string>
@@ -511,6 +513,7 @@
     <string name="multidevice_abort">Скасувати налаштування другого пристрою?</string>
     <string name="multidevice_abort_will_invalidate_copied_qr">Це зробить недійсним QR-код, скопійований у буфер обміну.</string>
     <string name="multidevice_experimental_hint">(експериментальний, потрібна версія 1.36)</string>
+    <string name="multidevice_transfer_done_devicemsg">ℹ️ Обліковий запис перенесено на ваш другий пристрій.</string>
     <!-- Shown beside progress bar, stay short -->
     <string name="preparing_account">Підготовка облікового запису…</string>
     <!-- Shown beside progress bar, stay short -->
