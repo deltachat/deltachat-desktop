@@ -352,7 +352,7 @@ export default function Message(props: {
   let content
   if (message.viewType === 'VideochatInvitation') {
     return (
-      <div className='videochat-invitation'>
+      <div className='videochat-invitation' id={message.id.toString()}>
         <div className='videochat-icon'>
           <span className='icon videocamera' />
         </div>
