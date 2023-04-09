@@ -2,6 +2,12 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_36_1"></a>
+
+## [1.36.1] - 2023-04-09
+
+### Fixed
+- add `ws` as explicit dependency, this should hotfix the startup crash #3171
 
 <a id="1_36_0"></a>
 
@@ -1947,7 +1953,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.36.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.36.1...HEAD
+
+[1.36.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.36.0...v1.36.1
 
 [1.36.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.34.5...v1.36.0
 
