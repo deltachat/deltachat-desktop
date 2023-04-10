@@ -11,6 +11,7 @@ import { getLogger } from '../../../shared/logger'
 import { useContextMenu } from '../ContextMenu'
 import { selectedAccountId } from '../../ScreenController'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
+import { runtime } from '../../runtime'
 
 const log = getLogger('renderer/chatlist/item')
 
@@ -65,6 +66,8 @@ function Message({
   isArchived,
   isContactRequest,
   summaryPreviewImage,
+  lastMessageType,
+  lastMessageId,
 }: Pick<
   ChatListItemType,
   | 'summaryStatus'
@@ -74,6 +77,8 @@ function Message({
   | 'isArchived'
   | 'isContactRequest'
   | 'summaryPreviewImage'
+  | 'lastMessageType'
+  | `lastMessageId`
 >) {
   const wasReceived =
     summaryStatus === C.DC_STATE_IN_FRESH ||
@@ -81,6 +86,8 @@ function Message({
     summaryStatus === C.DC_STATE_IN_NOTICED
 
   const status = wasReceived ? '' : mapCoreMsgStatus2String(summaryStatus)
+
+  const iswebxdc = lastMessageType === 'Webxdc'
 
   return (
     <div className='chat-list-item-message'>
@@ -96,6 +103,12 @@ function Message({
         )}
         {summaryPreviewImage && (
           <img className='summary_thumbnail' src={summaryPreviewImage} />
+        )}
+        {iswebxdc && lastMessageId && (
+          <img
+            className='summary_thumbnail'
+            src={runtime.getWebxdcIconURL(selectedAccountId(), lastMessageId)}
+          />
         )}
         <div>
           <MessageBody text={summaryText2 || ''} disableJumbomoji preview />
@@ -263,6 +276,8 @@ function ChatListItemNormal({
           freshMessageCounter={chatListItem.freshMessageCounter}
           isArchived={chatListItem.isArchived}
           isContactRequest={chatListItem.isContactRequest}
+          lastMessageType={chatListItem.lastMessageType}
+          lastMessageId={chatListItem.lastMessageId}
         />
       </div>
     </div>
