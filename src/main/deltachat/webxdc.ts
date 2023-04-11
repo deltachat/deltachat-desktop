@@ -4,7 +4,7 @@ import SplitOut from './splitout'
 import { getLogger } from '../../shared/logger'
 const log = getLogger('main/deltachat/webxdc')
 import Mime from 'mime-types'
-import { Menu, nativeImage, shell } from 'electron'
+import { Menu, ProtocolResponse, nativeImage, shell } from 'electron'
 import { join } from 'path'
 import { readdir, stat, rmdir, writeFile, readFile } from 'fs/promises'
 import { getConfigPath, htmlDistDir } from '../application-constants'
@@ -102,6 +102,15 @@ export default class DCWebxdc extends SplitOut {
           ses.protocol.registerBufferProtocol(
             'webxdc',
             async (request, callback) => {
+              const respond = (response: Omit<ProtocolResponse, 'headers'>) => {
+                ;(response as ProtocolResponse).headers = open_apps[id]
+                  .internet_access
+                  ? {}
+                  : {
+                      'Content-Security-Policy': CSP,
+                    }
+                callback(response)
+              }
               const url = UrlParser(request.url)
               const [account, msg] = url.hostname.split('.')
               const id = `${account}.${msg}`
@@ -120,16 +129,11 @@ export default class DCWebxdc extends SplitOut {
               }
 
               if (filename === WRAPPER_PATH) {
-                callback({
+                respond({
                   mimeType: Mime.lookup(filename) || '',
                   data: await readFile(
                     join(htmlDistDir(), '/webxdc_wrapper.html')
                   ),
-                  headers: open_apps[id].internet_access
-                    ? {}
-                    : {
-                        'Content-Security-Policy': CSP,
-                      },
                 })
               } else if (filename === 'webxdc.js') {
                 const displayName = Buffer.from(
@@ -140,15 +144,12 @@ export default class DCWebxdc extends SplitOut {
                 ).toString('base64')
 
                 // initializes the preload script, the actual implementation of `window.webxdc` is found there: static/webxdc-preload.js
-                callback({
+                respond({
                   mimeType: Mime.lookup(filename) || '',
                   data: Buffer.from(
                     `window.parent.webxdc_internal.setup("${selfAddr}","${displayName}")
                   window.webxdc = window.parent.webxdc`
                   ),
-                  headers: {
-                    'Content-Security-Policy': CSP,
-                  },
                 })
               } else {
                 try {
@@ -161,18 +162,13 @@ export default class DCWebxdc extends SplitOut {
                     'base64'
                   )
 
-                  callback({
+                  respond({
                     mimeType: Mime.lookup(filename) || '',
                     data: blob,
-                    headers: open_apps[id].internet_access
-                      ? {}
-                      : {
-                          'Content-Security-Policy': CSP,
-                        },
                   })
                 } catch (error) {
                   log.error('webxdc: load blob:', error)
-                  callback({
+                  respond({
                     statusCode: 404,
                   })
                 }
