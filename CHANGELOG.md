@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Changed
+- Update inApp help (11.4.2023)
 - improve confirm abort dialog for setup second device #3173
 
 <a id="1_36_1"></a>

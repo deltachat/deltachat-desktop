@@ -13,6 +13,10 @@ mergeable:
             changed:
               file: 'scss/**'
               required: ['CHANGELOG.md']
+          - do: dependent
+            changed:
+              file: 'static/help/**'
+              required: ['CHANGELOG.md']
     fail:
       - do: checks
         status: 'action_required'
