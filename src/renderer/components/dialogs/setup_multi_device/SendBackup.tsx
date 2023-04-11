@@ -30,6 +30,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
     null | 'preparing' | 'awaiting_scan' | 'transfering' | 'error'
   >(null)
   const [error, setError] = useState<string | null>(null)
+  const [wasCopied, setCopied] = useState(false)
 
   const { openDialog } = useContext(ScreenContext)
 
@@ -63,7 +64,10 @@ export function SendBackupDialog({ onClose }: DialogProps) {
   }, [qrCodeSVG])
 
   const copyQrToClipboard = () => {
-    if (qrContent) runtime.writeClipboardText(qrContent)
+    if (qrContent) {
+      runtime.writeClipboardText(qrContent)
+      setCopied(true)
+    }
   }
 
   const startNetworkedTransfer = async () => {
@@ -88,14 +92,22 @@ export function SendBackupDialog({ onClose }: DialogProps) {
       setInProgress(false)
       setQrSvg(null)
       setQrContent(null)
+      setCopied(false)
       BackendRemote.rpc.stopOngoingProcess(accountId)
     }
   }
 
   const cancel = async () => {
+    if (stage === 'error' || stage === null) {
+      return onClose()
+    }
     openDialog(ConfirmationDialog, {
-      header: tx('multidevice_abort'),
-      message: tx('multidevice_abort_will_invalidate_copied_qr'),
+      ...(wasCopied
+        ? {
+            header: tx('multidevice_abort'),
+            message: tx('multidevice_abort_will_invalidate_copied_qr'),
+          }
+        : { message: tx('multidevice_abort') }),
       confirmLabel: tx('yes'),
       cancelLabel: tx('no'),
       cb: (yes: boolean) => {
