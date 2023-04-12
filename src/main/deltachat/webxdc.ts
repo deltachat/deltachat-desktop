@@ -187,7 +187,7 @@ export default class DCWebxdc extends SplitOut {
             webSecurity: true,
             nodeIntegration: false,
             navigateOnDragDrop: false,
-            devTools: true,
+            devTools: DesktopSettings.state.enableWebxdcDevTools,
             javascript: true,
             preload: join(
               __dirname,
