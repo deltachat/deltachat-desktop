@@ -103,12 +103,19 @@ export default class DCWebxdc extends SplitOut {
             'webxdc',
             async (request, callback) => {
               const respond = (response: Omit<ProtocolResponse, 'headers'>) => {
-                ;(response as ProtocolResponse).headers = open_apps[id]
-                  .internet_access
-                  ? {}
-                  : {
-                      'Content-Security-Policy': CSP,
-                    }
+                const headers: ProtocolResponse['headers'] = {
+                  'Content-Security-Policy': CSP,
+                  // Ensure that the client doesn't try to interpret a file as
+                  // one with 'application/pdf' mime type and therefore open it
+                  // in the PDF viewer.
+                  'X-Content-Type-Options': 'nosniff',
+                }
+                ;(response as ProtocolResponse).headers = headers
+
+                if (open_apps[id].internet_access) {
+                  delete headers['Content-Security-Policy']
+                }
+
                 callback(response)
               }
               const url = UrlParser(request.url)
@@ -128,9 +135,20 @@ export default class DCWebxdc extends SplitOut {
                 filename = filename.substr(1)
               }
 
+              let mimeType: string | undefined = Mime.lookup(filename) || ''
+              // Make sure that the browser doesn't open files in the PDF viewer.
+              // TODO is this the only mime type that opens the PDF viewer?
+              // TODO consider a mime type whitelist instead.
+              if (mimeType === 'application/pdf') {
+                // TODO make sure that `callback` won't internally set mime type back
+                // to 'application/pdf' (at the time of writing it's not the case).
+                // Otherwise consider explicitly setting it as a header.
+                mimeType = undefined
+              }
+
               if (filename === WRAPPER_PATH) {
                 respond({
-                  mimeType: Mime.lookup(filename) || '',
+                  mimeType,
                   data: await readFile(
                     join(htmlDistDir(), '/webxdc_wrapper.html')
                   ),
@@ -145,7 +163,7 @@ export default class DCWebxdc extends SplitOut {
 
                 // initializes the preload script, the actual implementation of `window.webxdc` is found there: static/webxdc-preload.js
                 respond({
-                  mimeType: Mime.lookup(filename) || '',
+                  mimeType,
                   data: Buffer.from(
                     `window.parent.webxdc_internal.setup("${selfAddr}","${displayName}")
                   window.webxdc = window.parent.webxdc`
@@ -163,7 +181,7 @@ export default class DCWebxdc extends SplitOut {
                   )
 
                   respond({
-                    mimeType: Mime.lookup(filename) || '',
+                    mimeType,
                     data: blob,
                   })
                 } catch (error) {
