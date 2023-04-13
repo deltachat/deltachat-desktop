@@ -145,7 +145,9 @@ function buildContextMenu(
     throw new Error('cannot show context menu for undefined message')
   }
 
-  const isLink = clickTarget && !clickTarget.getAttribute('x-not-a-link')
+  const isLink = Boolean(
+    clickTarget && !clickTarget.getAttribute('x-not-a-link')
+  )
   const email = clickTarget?.getAttribute('x-target-email')
   const link: string =
     clickTarget?.getAttribute('x-target-url') || clickTarget?.href || ''
@@ -174,11 +176,6 @@ function buildContextMenu(
         runtime.writeClipboardText(selectedText as string)
       },
     }
-  } else if (link !== '' && isLink) {
-    copy_item = {
-      label: tx('menu_copy_link_to_clipboard'),
-      action: () => runtime.writeClipboardText(link),
-    }
   } else if (email) {
     copy_item = {
       label: tx('menu_copy_email_to_clipboard'),
@@ -205,6 +202,13 @@ function buildContextMenu(
         label: tx('reply_privately'),
         action: privateReply.bind(null, message),
       },
+    // copy link
+    link !== '' &&
+      isLink && {
+        label: tx('menu_copy_link_to_clipboard'),
+        action: () => runtime.writeClipboardText(link),
+      },
+    // copy item (selection or all text)
     text !== '' && copy_item,
     // Copy image
     showCopyImage && {
