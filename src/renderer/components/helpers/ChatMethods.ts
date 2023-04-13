@@ -176,7 +176,9 @@ export async function sendCallInvitation(
     await joinCall(screenContext, messageId)
   } catch (error: todo) {
     log.error('failed send call invitation', error)
-    screenContext.openDialog(AlertDialog, { message: error.toString() })
+    screenContext.openDialog(AlertDialog, {
+      message: error?.message || error.toString(),
+    })
   }
 }
 

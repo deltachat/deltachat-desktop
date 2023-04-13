@@ -13,6 +13,8 @@ import { MEDIA_EXTENSIONS } from '../../../shared/constants'
 
 import { sendCallInvitation } from '../helpers/ChatMethods'
 import { Type } from '../../backend-com'
+import { useStore } from '../../stores/store'
+import SettingsStoreInstance from '../../stores/settings'
 //function to populate Menu
 const MenuAttachmentItems = ({
   itemsArray,
@@ -44,6 +46,7 @@ const MenuAttachment = ({
 }) => {
   const tx = useTranslationFunction()
   const screenContext = useContext(ScreenContext)
+  const [settings] = useStore(SettingsStoreInstance)
   const addFilenameFile = async () => {
     //function for files
     const file = await runtime.showOpenFileDialog({
@@ -94,7 +97,7 @@ const MenuAttachment = ({
   }
   // item array used to populate menu
   const items = [
-    {
+    settings?.settings.webrtc_instance && {
       id: 0,
       icon: 'phone' as IconName,
       text: tx('videochat'),
@@ -115,7 +118,7 @@ const MenuAttachment = ({
       onClick: addFilenameFile.bind(null),
       attachment: 'attachment-files',
     },
-  ]
+  ].filter(item => !!item) as MenuAttachmentItemObject[]
 
   return (
     <div className='attachment-button'>
