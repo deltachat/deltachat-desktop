@@ -10,6 +10,7 @@
 - do not save custom video chat provider if it only contains whitespaces
 - fix show error messages when starting a video chat
 - don't show video chat in attachment menu when the feature is turned off
+- fix "Always Load Remote Images" should be hidden for contact requests #3180
 
 <a id="1_36_1"></a>
 
