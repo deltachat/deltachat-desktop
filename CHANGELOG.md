@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_36_2"></a>
+
+## [1.36.2] - 2023-04-14
+
 ### Changed
 - Update inApp help (11.4.2023)
 - improve confirm abort dialog for setup second device #3173
@@ -1964,7 +1968,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.36.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/1.36.2...HEAD
+
+[1.36.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.36.1...v1.36.2
 
 [1.36.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.36.0...v1.36.1
 
