@@ -155,10 +155,15 @@ export function openHtmlEmailWindow(
         },
       }),
     }
-    const menu = electron.Menu.buildFromTemplate([
-      menuItems.always_show(),
-      menuItems.dont_ask(),
-    ])
+    let menu: Electron.Menu
+    if (isContactRequest) {
+      menu = electron.Menu.buildFromTemplate([menuItems.dont_ask()])
+    } else {
+      menu = electron.Menu.buildFromTemplate([
+        menuItems.always_show(),
+        menuItems.dont_ask(),
+      ])
+    }
     menu.popup({ window, x, y })
   })
 
