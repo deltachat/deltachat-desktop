@@ -8,6 +8,8 @@
 
 ### Fixed
 - do not save custom video chat provider if it only contains whitespaces
+- fix show error messages when starting a video chat
+- don't show video chat in attachment menu when the feature is turned off
 
 <a id="1_36_1"></a>
 
