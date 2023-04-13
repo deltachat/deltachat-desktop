@@ -6,6 +6,9 @@
 - Update inApp help (11.4.2023)
 - improve confirm abort dialog for setup second device #3173
 
+### Fixed
+- do not save custom video chat provider if it only contains whitespaces
+
 <a id="1_36_1"></a>
 
 ## [1.36.1] - 2023-04-09

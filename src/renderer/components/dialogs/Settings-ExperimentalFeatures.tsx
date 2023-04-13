@@ -131,7 +131,7 @@ export function EditVideochatInstanceDialog({
   }
   const onClickOk = () => {
     onClose()
-    onOk(configValue)
+    onOk(configValue.trim()) // the trim is here to not save custom provider if it only contains whitespaces
   }
   const onChangeRadio = (event: FormEvent<HTMLInputElement>) => {
     const currentRadioValue = event.currentTarget.value as RadioButtonValue
