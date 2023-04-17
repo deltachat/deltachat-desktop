@@ -325,6 +325,10 @@ function makeBrowserView(allow_remote_content: boolean, html_content: string) {
   })
 
   sandboxedView.webContents.loadURL('email://index.html')
+  sandboxedView.webContents.insertCSS(`:root {
+      color: black;
+      background-color: white;
+    }`)
 
   sandboxedView.webContents.on(
     'will-navigate',
