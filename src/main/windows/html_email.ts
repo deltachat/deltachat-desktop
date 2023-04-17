@@ -37,6 +37,13 @@ export function openHtmlEmailWindow(
     open_windows[window_id].focus()
     return
   }
+  const initialBounds = DesktopSettings.state.HTMLEmailWindowBounds || {
+    height: 621,
+    width: 800,
+    x: undefined,
+    y: undefined,
+  }
+
   const window = (open_windows[window_id] = new electron.BrowserWindow({
     backgroundColor: '#282828',
     // backgroundThrottling: false, // do not throttle animations/timers when page is background
@@ -46,8 +53,10 @@ export function openHtmlEmailWindow(
     minWidth: 400,
     show: false,
     title: `${truncateText(subject, 42)} – ${truncateText(from, 40)}`,
-    height: 621,
-    width: 800,
+    height: initialBounds.height,
+    width: initialBounds.width,
+    x: initialBounds.x,
+    y: initialBounds.y,
     webPreferences: {
       nodeIntegration: false,
       preload: join(
@@ -176,8 +185,13 @@ export function openHtmlEmailWindow(
         ...bounds,
         y: new_y,
       })
+      DesktopSettings.update({ HTMLEmailWindowBounds: window_bounds })
     }
   )
+  window.on('moved', () => {
+    const window_bounds = window.getBounds()
+    DesktopSettings.update({ HTMLEmailWindowBounds: window_bounds })
+  })
 
   const update_restrictions = async (
     _ev: any,

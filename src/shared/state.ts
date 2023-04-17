@@ -6,6 +6,7 @@ export function getDefaultState(): DesktopSettingsType {
    */
   return {
     bounds: {},
+    HTMLEmailWindowBounds: undefined,
     enterKeySends: false,
     notifications: true,
     showNotificationContent: true,
