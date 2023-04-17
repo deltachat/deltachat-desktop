@@ -71,7 +71,10 @@
       window.frames[0].window.addEventListener('keydown', keydown_handler)
     },
     fill_up_connections: async () => {
+      /** @type {HTMLProgressElement} */
       const loadingProgress = document.getElementById('progress')
+      const numIterations = 50
+      loadingProgress.max = numIterations
       const loadingDiv = document.getElementById('loading')
       const iframe = document.getElementById('frame')
 
@@ -85,7 +88,7 @@
       }
 
       try {
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < numIterations; i++) {
           connections.push(new RTCPeerConnection(cert))
           connections.push(new RTCPeerConnection(cert))
           connections.push(new RTCPeerConnection(cert))
@@ -97,7 +100,7 @@
           connections.push(new RTCPeerConnection(cert))
           connections.push(new RTCPeerConnection(cert))
           await new Promise(res => setTimeout(res, 0)) // this is to view loading bar, it returns to the ev loop
-          loadingProgress.value = i
+          loadingProgress.value = i + 1
         }
         try {
           connections.push(new RTCPeerConnection(cert))
