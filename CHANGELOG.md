@@ -2,14 +2,14 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- remember html email window positioning and size.
+
 ### Fixed
 - always display html emails in black text on white background by default, fixes white text on white background when the OS was in dark theme mode
 - fix: webxdc loading progress bar finishing at 50% (not 100)
 
 <a id="1_36_2"></a>
-
-### Changed
-- remember html email window positioning and size.
 
 ## [1.36.2] - 2023-04-14
 

@@ -6,7 +6,7 @@ export function updateDeviceChats(accountId: number) {
     'changelog-version-1.36.0-version1',
     `What's new in 1.36.0?
 
-💻📱 Use Delta Chat on all your devices easily - just follow three simple steps at \"Settings / Add Second Device\" (experimental)
+💻📱 Use Delta Chat on all your devices easily - just follow three simple steps at "Settings / Add Second Device" (experimental)
 ✉️ Open HTML emails securely in internal sandboxed viewer
 ✨ Many smaller bug fixes and general improvements
 
