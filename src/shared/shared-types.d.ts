@@ -32,15 +32,16 @@ export type sendMessageParams = {
   quoteMessageId?: number
 }
 
+type Bounds = {
+  height: number
+  width: number
+  x: number
+  y: number
+}
+
 export interface DesktopSettingsType {
-  bounds:
-    | {
-        height: number
-        width: number
-        x: number
-        y: number
-      }
-    | {}
+  bounds: Bounds | {}
+  HTMLEmailWindowBounds: Bounds | undefined
   chatViewBgImg?: string
   /** @deprecated replaced by lastAccount */
   credentials?: Credentials

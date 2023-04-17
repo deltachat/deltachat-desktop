@@ -4,6 +4,9 @@
 
 <a id="1_36_2"></a>
 
+### Changed
+- remember html email window positioning and size.
+
 ## [1.36.2] - 2023-04-14
 
 ### Changed
