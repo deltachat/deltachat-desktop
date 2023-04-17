@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_36_3"></a>
+
+## [1.36.3] - 2023-04-17
+
 ### Changed
 - remember html email window positioning and size.
 - update deltachat-node and deltachat/jsonrpc-client to `v1.112.7`
@@ -1976,7 +1980,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.36.2...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.36.3...HEAD
+
+[1.36.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.36.2...v1.36.3
 
 [1.36.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.36.1...v1.36.2
 
