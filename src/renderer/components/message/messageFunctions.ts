@@ -9,6 +9,7 @@ import {
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { internalOpenWebxdc } from '../../system-integration/webxdc'
+import moment from 'moment'
 /**
  * json representation of the message object we get from the backend
  */
@@ -123,7 +124,9 @@ export async function openMessageHTML(messageId: number) {
     sender: { displayName },
     subject,
     chatId,
+    receivedTimestamp,
   } = await BackendRemote.rpc.getMessage(accountId, messageId)
+  const receiveTime = moment(receivedTimestamp * 1000).format('LLLL')
   const { isContactRequest } = await BackendRemote.rpc.getBasicChatInfo(
     accountId,
     chatId
@@ -133,6 +136,7 @@ export async function openMessageHTML(messageId: number) {
     isContactRequest,
     subject,
     displayName,
+    receiveTime,
     content
   )
 }

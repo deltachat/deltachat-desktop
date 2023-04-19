@@ -230,9 +230,17 @@ export async function init(cwd: string, logHandler: LogHandler) {
       isContactRequest: boolean,
       subject: string,
       sender: string,
+      receiveTime: string,
       content: string
     ) => {
-      openHtmlEmailWindow(window_id, isContactRequest, subject, sender, content)
+      openHtmlEmailWindow(
+        window_id,
+        isContactRequest,
+        subject,
+        sender,
+        receiveTime,
+        content
+      )
     }
   )
 

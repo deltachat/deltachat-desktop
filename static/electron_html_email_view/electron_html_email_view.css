@@ -31,7 +31,7 @@ div.header > .title p {
   font-size: 1em;
 }
 
-#sender {
+div.header > .title > p.details {
   font-size: 0.8em;
 }
 
