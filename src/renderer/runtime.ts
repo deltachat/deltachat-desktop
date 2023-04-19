@@ -39,6 +39,7 @@ interface Runtime {
     isContactRequest: boolean,
     subject: string,
     sender: string,
+    receiveTime: string,
     content: string
   ): void
   getDesktopSettings(): Promise<DesktopSettingsType>
@@ -151,6 +152,7 @@ class Browser implements Runtime {
     _isContactRequest: boolean,
     _subject: string,
     _sender: string,
+    _receiveTime: string,
     _content: string
   ): void {
     throw new Error('Method not implemented.')
@@ -314,6 +316,7 @@ class Electron implements Runtime {
     isContactRequest: boolean,
     subject: string,
     sender: string,
+    receiveTime: string,
     content: string
   ): void {
     ipcBackend.invoke(
@@ -322,6 +325,7 @@ class Electron implements Runtime {
       isContactRequest,
       subject,
       sender,
+      receiveTime,
       content
     )
   }

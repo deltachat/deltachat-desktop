@@ -21,8 +21,10 @@ const open_windows: { [window_id: string]: BrowserWindow } = {}
 /**
  *
  * @param window_id that we know if it's already open, should be accountid+"-"+msgid
+ * @param isContactRequest
  * @param subject
  * @param from
+ * @param receiveTime
  * @param htmlEmail
  */
 export function openHtmlEmailWindow(
@@ -30,6 +32,7 @@ export function openHtmlEmailWindow(
   isContactRequest: boolean,
   subject: string,
   from: string,
+  receiveTime: string,
   htmlEmail: string
 ) {
   if (open_windows[window_id]) {
@@ -77,6 +80,7 @@ export function openHtmlEmailWindow(
   window.webContents.ipc.handle('html_email:get_info', _ => ({
     subject,
     from,
+    receiveTime,
     networkButtonLabelText: tx('load_remote_content'),
     toggle_network: loadRemoteContentAtStart,
   }))
