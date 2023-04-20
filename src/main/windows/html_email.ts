@@ -331,20 +331,17 @@ function makeBrowserView(
       callback: (response: Electron.ProtocolResponse) => void
     ) => {
       try {
-        const url = basename(req.url.split('?')[0])
-        const blob = Buffer.from(
-          await getDCJsonrpcClient().getHttpBlob(account_id, req.url),
-          'base64'
+        const response = await getDCJsonrpcClient().getHttpResponse(
+          account_id,
+          req.url
         )
-
-        const mimeType = Mime.lookup(url)
-        log.debug(mimeType, blob)
+        const blob = Buffer.from(response.blob, 'base64')
         callback({
           statusCode: 200,
-          mimeType: mimeType || undefined,
           data: blob,
           headers: {
             'Content-Security-Policy': CSP_ALLOW,
+            'Content-Type': `${response.mimetype}; ${response.encoding}`,
           },
         })
       } catch (error) {
