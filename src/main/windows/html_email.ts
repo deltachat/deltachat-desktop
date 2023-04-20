@@ -268,7 +268,7 @@ export function openHtmlEmailWindow(
     if (bounds) sandboxedView.setBounds(bounds)
 
     // for debugging email
-    sandboxedView.webContents.openDevTools({ mode: 'detach' })
+    // sandboxedView.webContents.openDevTools({ mode: 'detach' })
   }
 
   window.webContents.ipc.handle('html-view:change-network', update_restrictions)
