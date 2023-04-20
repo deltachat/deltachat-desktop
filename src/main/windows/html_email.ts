@@ -9,7 +9,7 @@ import electron, {
   WebContents,
 } from 'electron'
 import { appIcon, htmlDistDir } from '../application-constants'
-import { join, basename } from 'path'
+import { join } from 'path'
 import { DesktopSettings } from '../desktop_settings'
 import { truncateText } from '../../shared/util'
 import { tx } from '../load-translations'
@@ -17,7 +17,6 @@ import { open_url } from '../open_url'
 import { loadTheme } from '../themes'
 import { getDCJsonrpcClient } from '../ipc'
 import { getLogger } from '../../shared/logger'
-import Mime from 'mime-types'
 
 const log = getLogger('html_email')
 
