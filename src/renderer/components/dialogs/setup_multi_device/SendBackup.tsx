@@ -27,7 +27,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
   const [qrContent, setQrContent] = useState<string | null>(null)
   const [progress, setProgress] = useState<number | null>(null)
   const [stage, setStage] = useState<
-    null | 'preparing' | 'awaiting_scan' | 'transfering' | 'error'
+    null | 'preparing' | 'awaiting_scan' | 'transferring' | 'error'
   >(null)
   const [error, setError] = useState<string | null>(null)
   const [wasCopied, setCopied] = useState(false)
@@ -40,7 +40,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
     return onDCEvent(accountId, 'ImexProgress', ({ progress }) => {
       setProgress(progress)
       if (stage === 'awaiting_scan') {
-        setStage('transfering')
+        setStage('transferring')
       }
     })
   }, [stage])
@@ -147,7 +147,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
                 )}
                 {stage === 'preparing' && <>{tx('preparing_account')}</>}
 
-                {stage === 'transfering' && <>{tx('transfering')}</>}
+                {stage === 'transferring' && <>{tx('transferring')}</>}
 
                 {progress && stage !== 'awaiting_scan' && (
                   <progress value={progress} max={1000}></progress>
