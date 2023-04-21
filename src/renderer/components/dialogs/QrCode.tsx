@@ -122,10 +122,14 @@ export function QrCodeShowQrInner({
   const imageContextMenu = useContextMenu([
     {
       label: tx('menu_copy_image_to_clipboard'),
-      action: () => {
+      action: async () => {
         if (svgUrlRef.current) {
           const img = document.createElement('img')
           img.src = svgUrlRef.current
+          // wait for image to load
+          await new Promise(resolve => {
+            img.onload = resolve
+          })
           const canvas = document.createElement('canvas')
           canvas.height = 630
           canvas.width = 515

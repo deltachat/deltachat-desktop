@@ -2,8 +2,11 @@
 
 ## [Unreleased][unreleased]
 
-## Added
+### Added
 - add received timestamp to html email view
+
+### Fixed
+- fix copy qrcode to clipboard
 
 <a id="1_36_3"></a>
 
