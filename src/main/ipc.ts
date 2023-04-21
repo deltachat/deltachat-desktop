@@ -47,10 +47,15 @@ const DeltaChatController: typeof import('./deltachat/controller').default = (()
 
 const app = rawApp as ExtendedAppMainProcess
 
+let dcController: typeof DeltaChatController.prototype
+export function getDCJsonrpcClient() {
+  return dcController.jsonrpcRemote.rpc
+}
+
 /** returns shutdown function */
 export async function init(cwd: string, logHandler: LogHandler) {
   const main = mainWindow
-  const dcController = new DeltaChatController(cwd)
+  dcController = new DeltaChatController(cwd)
   await dcController.init()
 
   ipcMain.once('ipcReady', _e => {
@@ -227,6 +232,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
     async (
       _ev,
       window_id: string,
+      accountId: number,
       isContactRequest: boolean,
       subject: string,
       sender: string,
@@ -235,6 +241,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
     ) => {
       openHtmlEmailWindow(
         window_id,
+        accountId,
         isContactRequest,
         subject,
         sender,

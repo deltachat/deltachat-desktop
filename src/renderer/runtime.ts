@@ -36,6 +36,7 @@ interface Runtime {
    */
   openMessageHTML(
     window_id: string,
+    accountId: number,
     isContactRequest: boolean,
     subject: string,
     sender: string,
@@ -149,6 +150,7 @@ class Browser implements Runtime {
   }
   openMessageHTML(
     _window_id: string,
+    _accountId: number,
     _isContactRequest: boolean,
     _subject: string,
     _sender: string,
@@ -313,6 +315,7 @@ class Electron implements Runtime {
   }
   openMessageHTML(
     window_id: string,
+    accountId: number,
     isContactRequest: boolean,
     subject: string,
     sender: string,
@@ -322,6 +325,7 @@ class Electron implements Runtime {
     ipcBackend.invoke(
       'openMessageHTML',
       window_id,
+      accountId,
       isContactRequest,
       subject,
       sender,

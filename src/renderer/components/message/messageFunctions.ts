@@ -133,6 +133,7 @@ export async function openMessageHTML(messageId: number) {
   )
   runtime.openMessageHTML(
     `${accountId}.${messageId}`,
+    accountId,
     isContactRequest,
     subject,
     displayName,

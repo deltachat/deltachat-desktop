@@ -15,6 +15,10 @@ import { truncateText } from '../../shared/util'
 import { tx } from '../load-translations'
 import { open_url } from '../open_url'
 import { loadTheme } from '../themes'
+import { getDCJsonrpcClient } from '../ipc'
+import { getLogger } from '../../shared/logger'
+
+const log = getLogger('html_email')
 
 const open_windows: { [window_id: string]: BrowserWindow } = {}
 
@@ -29,6 +33,7 @@ const open_windows: { [window_id: string]: BrowserWindow } = {}
  */
 export function openHtmlEmailWindow(
   window_id: string,
+  account_id: number,
   isContactRequest: boolean,
   subject: string,
   from: string,
@@ -124,6 +129,7 @@ export function openHtmlEmailWindow(
   })
 
   let sandboxedView: BrowserView = makeBrowserView(
+    account_id,
     loadRemoteContentAtStart,
     htmlEmail
   )
@@ -255,7 +261,7 @@ export function openHtmlEmailWindow(
     window.removeBrowserView(sandboxedView)
     context_menu_handle()
     sandboxedView.webContents.close()
-    sandboxedView = makeBrowserView(allow_network, htmlEmail)
+    sandboxedView = makeBrowserView(account_id, allow_network, htmlEmail)
     window.setBrowserView(sandboxedView)
     context_menu_handle = createContextMenu(window, sandboxedView.webContents)
     if (bounds) sandboxedView.setBounds(bounds)
@@ -289,12 +295,16 @@ form-action 'none';
 script-src 'none';
 `
 
-function makeBrowserView(allow_remote_content: boolean, html_content: string) {
+function makeBrowserView(
+  account_id: number,
+  allow_remote_content: boolean,
+  html_content: string
+) {
   const ses = session.fromPartition(`${Date.now()}`, { cache: false })
 
+  ses.setProxy({ mode: 'fixed_servers', proxyRules: 'not-existing-proxy:80' })
   if (!allow_remote_content) {
     // block network access
-    ses.setProxy({ mode: 'fixed_servers', proxyRules: 'not-existing-proxy:80' })
     ses.protocol.interceptHttpProtocol('http', (_req, callback) => {
       callback({ statusCode: 404, data: '' })
     })
@@ -313,6 +323,39 @@ function makeBrowserView(allow_remote_content: boolean, html_content: string) {
       },
     })
   })
+
+  if (allow_remote_content) {
+    const callback = async (
+      req: Electron.ProtocolRequest,
+      callback: (response: Electron.ProtocolResponse) => void
+    ) => {
+      try {
+        const response = await getDCJsonrpcClient().getHttpResponse(
+          account_id,
+          req.url
+        )
+        const blob = Buffer.from(response.blob, 'base64')
+        callback({
+          statusCode: 200,
+          data: blob,
+          headers: {
+            'Content-Security-Policy': CSP_ALLOW,
+            'Content-Type': `${response.mimetype}; ${response.encoding}`,
+          },
+        })
+      } catch (error) {
+        log.info('remote content failed to load', req.url, error)
+        callback({
+          statusCode: 400,
+          data: Buffer.from((error as any)?.message),
+          mimeType: 'text/plain',
+        })
+      }
+    }
+
+    ses.protocol.interceptBufferProtocol('http', callback)
+    ses.protocol.interceptBufferProtocol('https', callback)
+  }
 
   const sandboxedView = new BrowserView({
     webPreferences: {
