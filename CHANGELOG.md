@@ -5,8 +5,13 @@
 ### Added
 - add received timestamp to html email view
 
+
+### Changed
+- webxdc message: icon change hover cursor to pointer
+
 ### Fixed
 - fix copy qrcode to clipboard
+
 
 <a id="1_36_3"></a>
 
