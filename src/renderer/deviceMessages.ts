@@ -22,4 +22,14 @@ Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANG
       'https://delta.chat/en/2023-03-27-third-independent-security-audit'
     )
   )
+
+  BackendRemote.rpc.addDeviceMessage(
+    accountId,
+    'changelog-version-1.36.4-version1',
+    `What's new in 1.36.4?
+
+✨ We fixed some bugs and improved the html email viewer.
+
+Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1_36_4`
+  )
 }

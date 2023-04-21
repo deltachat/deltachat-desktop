@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_36_4"></a>
+
+## [1.36.4] - 2023-04-21
+
 ### Added
 - add received timestamp to html email view
 
@@ -1991,7 +1995,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.36.3...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.36.4...HEAD
+
+[1.36.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.36.3...v1.36.4
 
 [1.36.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.36.2...v1.36.3
 
