@@ -5,9 +5,9 @@
 ### Added
 - add received timestamp to html email view
 
-
 ### Changed
 - webxdc message: icon change hover cursor to pointer
+- update deltachat-node and deltachat/jsonrpc-client to `v1.112.8`
 
 ### Fixed
 - fix copy qrcode to clipboard
