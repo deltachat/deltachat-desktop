@@ -5,6 +5,9 @@
 ## Added
 - add received timestamp to html email view
 
+### Changed
+- webxdc message: icon change hover cursor to pointer
+
 <a id="1_36_3"></a>
 
 ## [1.36.3] - 2023-04-17
