@@ -101,6 +101,7 @@ export function init(options: { hidden: boolean }) {
     'media',
     'mediaKeySystem',
     'accessibility-events',
+    'clipboard-sanitized-write',
     // not used:
     //  "display-capture", - not used
     //  "geolocation", - not used
