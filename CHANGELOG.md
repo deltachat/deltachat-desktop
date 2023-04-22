@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+
+### Fixed
+- fix some emojis not getting larger in emoji only messages
+
 <a id="1_36_4"></a>
 
 ## [1.36.4] - 2023-04-21
