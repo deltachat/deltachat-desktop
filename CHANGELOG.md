@@ -5,6 +5,7 @@
 
 ### Fixed
 - fix some emojis not getting larger in emoji only messages
+- add missing languages to supported languages in appx manifest
 
 <a id="1_36_4"></a>
 
