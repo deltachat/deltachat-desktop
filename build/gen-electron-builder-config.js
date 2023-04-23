@@ -57,7 +57,7 @@ build['mac'] = {
   extendInfo: {
     NSCameraUsageDescription: 'For scanning qr codes.',
     // NSMicrophoneUsageDescription: "For voice messages",
-    ITSAppUsesNonExemptEncryption: false
+    ITSAppUsesNonExemptEncryption: false,
   },
   gatekeeperAssess: true,
   hardenedRuntime: true,
@@ -109,6 +109,51 @@ build['appx'] = {
   publisher: 'CN=C13753E5-D590-467C-9FCA-6799E1A5EC1E',
   publisherDisplayName: 'merlinux',
   identityName: 'merlinux.DeltaChat',
+  // supported languages are on https://learn.microsoft.com/en-us/windows/apps/publish/publish-your-app/supported-languages?pivots=store-installer-msix
+  languages: [
+    'ar',
+    'az',
+    'bg',
+    'ca',
+    'cs',
+    // 'ckb', not supported by ms-store
+    'da',
+    'de',
+    'en',
+    'el',
+    // 'eo',  not supported by ms-store
+    'es',
+    'eu',
+    'fa',
+    'fi',
+    'fr',
+    'gl',
+    'hr',
+    'hu',
+    'id',
+    'it',
+    'ja-jp',
+    'km',
+    'ko',
+    'lt',
+    'nb',
+    'nl-nl',
+    'pl',
+    'pt',
+    'pt-BR',
+    'ru',
+    // 'sc', not supported by ms-store
+    'sk',
+    'sq',
+    'sr',
+    'sv',
+    'ta',
+    'te',
+    'tr',
+    'uk',
+    'zh-cn',
+    'zh-tw',
+  ],
 }
 
 // see https://www.electron.build/configuration/nsis
