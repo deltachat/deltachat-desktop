@@ -100,22 +100,26 @@ export default class DeltaChatController extends EventEmitter {
       mainWindow.send('json-rpc-message', response)
       if (response.indexOf('event') !== -1)
         try {
-          const { method, params } = JSON.parse(response)
-          if (method === 'event') {
-            const { contextId, event } = params
+          const { result } = JSON.parse(response)
+          const { context_id, event } = result
+          if (
+            typeof context_id !== undefined &&
+            typeof event === 'object' &&
+            event.type
+          ) {
             if (event.type === 'Warning') {
-              logCoreEvent.warn(contextId, event.msg)
+              logCoreEvent.warn(context_id, event.msg)
             } else if (event.type === 'Info') {
-              logCoreEvent.info(contextId, event.msg)
+              logCoreEvent.info(context_id, event.msg)
             } else if (event.type.startsWith('Error')) {
-              logCoreEvent.error(contextId, event.msg)
+              logCoreEvent.error(context_id, event.msg)
             } else if (app.rc['log-debug']) {
               // in debug mode log all core events
               const event_clone = Object.assign({}, event) as Partial<
                 typeof event
               >
               delete event_clone.type
-              logCoreEvent.debug(event.type, contextId, event)
+              logCoreEvent.debug(event.type, context_id, event)
             }
           }
         } catch (error) {
@@ -128,7 +132,7 @@ export default class DeltaChatController extends EventEmitter {
       this.account_manager.jsonRpcRequest(message)
     })
 
-    this._jsonrpcRemote = new JRPCDeltaChat(mainProcessTransport)
+    this._jsonrpcRemote = new JRPCDeltaChat(mainProcessTransport, true)
 
     if (DesktopSettings.state.syncAllAccounts) {
       log.info('Ready, starting accounts io...')
