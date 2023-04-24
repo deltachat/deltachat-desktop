@@ -572,152 +572,144 @@ class MessageListStore extends Store<MessageListState> {
       ),
       400
     ),
-    fetchMoreMessagesTop: this.scheduler.queuedEffect(
-      this.scheduler.lockedEffect(
-        'scroll',
-        async () => {
-          this.log.debug(`fetchMoreMessagesTop`)
-          const state = this.state
-          const id = this.chatId
-          const oldestFetchedMessageListItemIndex = Math.max(
-            state.oldestFetchedMessageListItemIndex - PAGE_SIZE,
-            0
+    fetchMoreMessagesTop: this.scheduler.lockedQueuedEffect(
+      'scroll',
+      async () => {
+        this.log.debug(`fetchMoreMessagesTop`)
+        const state = this.state
+        const id = this.chatId
+        const oldestFetchedMessageListItemIndex = Math.max(
+          state.oldestFetchedMessageListItemIndex - PAGE_SIZE,
+          0
+        )
+        const lastMessageIndexOnLastPage =
+          state.oldestFetchedMessageListItemIndex
+        if (lastMessageIndexOnLastPage === 0) {
+          this.log.debug(
+            'FETCH_MORE_MESSAGES: lastMessageIndexOnLastPage is zero, returning'
           )
-          const lastMessageIndexOnLastPage =
-            state.oldestFetchedMessageListItemIndex
-          if (lastMessageIndexOnLastPage === 0) {
-            this.log.debug(
-              'FETCH_MORE_MESSAGES: lastMessageIndexOnLastPage is zero, returning'
-            )
-            return false
-          }
-          const fetchedMessageListItems = state.messageListItems.slice(
-            oldestFetchedMessageListItemIndex,
-            lastMessageIndexOnLastPage
+          return false
+        }
+        const fetchedMessageListItems = state.messageListItems.slice(
+          oldestFetchedMessageListItemIndex,
+          lastMessageIndexOnLastPage
+        )
+        if (fetchedMessageListItems.length === 0) {
+          this.log.debug(
+            'fetchMoreMessagesTop: fetchedMessageListItems.length is zero, returning'
           )
-          if (fetchedMessageListItems.length === 0) {
-            this.log.debug(
-              'fetchMoreMessagesTop: fetchedMessageListItems.length is zero, returning'
-            )
-            return false
-          }
+          return false
+        }
 
-          const newMessageCacheItems =
-            (await loadMessages(
-              this.accountId,
-              state.messageListItems,
-              oldestFetchedMessageListItemIndex,
-              lastMessageIndexOnLastPage - 1
-            ).catch(err => this.log.error('loadMessages failed', err))) || {}
-
-          this.reducer.appendMessagePageTop({
-            id,
-            newMessageCacheItems,
+        const newMessageCacheItems =
+          (await loadMessages(
+            this.accountId,
+            state.messageListItems,
             oldestFetchedMessageListItemIndex,
-          })
-          return true
-        },
-        'fetchMoreMessagesTop'
-      ),
+            lastMessageIndexOnLastPage - 1
+          ).catch(err => this.log.error('loadMessages failed', err))) || {}
+
+        this.reducer.appendMessagePageTop({
+          id,
+          newMessageCacheItems,
+          oldestFetchedMessageListItemIndex,
+        })
+        return true
+      },
       'fetchMoreMessagesTop'
     ),
-    fetchMoreMessagesBottom: this.scheduler.queuedEffect(
-      this.scheduler.lockedEffect(
-        'scroll',
-        async () => {
-          const state = this.state
+    fetchMoreMessagesBottom: this.scheduler.lockedQueuedEffect(
+      'scroll',
+      async () => {
+        const state = this.state
 
-          const newestFetchedMessageListItemIndex =
-            state.newestFetchedMessageListItemIndex + 1
-          const newNewestFetchedMessageListItemIndex = Math.min(
-            newestFetchedMessageListItemIndex + PAGE_SIZE,
-            state.messageListItems.length - 1
+        const newestFetchedMessageListItemIndex =
+          state.newestFetchedMessageListItemIndex + 1
+        const newNewestFetchedMessageListItemIndex = Math.min(
+          newestFetchedMessageListItemIndex + PAGE_SIZE,
+          state.messageListItems.length - 1
+        )
+        if (
+          newestFetchedMessageListItemIndex === state.messageListItems.length
+        ) {
+          //log.debug('fetchMoreMessagesBottom: no more messages, returning')
+          return false
+        }
+        this.log.debug(`fetchMoreMessagesBottom`)
+
+        const fetchedMessageListItems = state.messageListItems.slice(
+          newestFetchedMessageListItemIndex,
+          newNewestFetchedMessageListItemIndex + 1
+        )
+        if (fetchedMessageListItems.length === 0) {
+          this.log.debug(
+            'fetchMoreMessagesBottom: fetchedMessageListItems.length is zero, returning',
+            JSON.stringify({
+              newestFetchedMessageIndex: newestFetchedMessageListItemIndex,
+              newNewestFetchedMessageIndex:
+                newNewestFetchedMessageListItemIndex,
+              messageIds: state.messageListItems,
+            })
           )
-          if (
-            newestFetchedMessageListItemIndex === state.messageListItems.length
-          ) {
-            //log.debug('fetchMoreMessagesBottom: no more messages, returning')
-            return false
-          }
-          this.log.debug(`fetchMoreMessagesBottom`)
+          return false
+        }
 
-          const fetchedMessageListItems = state.messageListItems.slice(
+        const newMessageCacheItems =
+          (await loadMessages(
+            this.accountId,
+            state.messageListItems,
             newestFetchedMessageListItemIndex,
-            newNewestFetchedMessageListItemIndex + 1
-          )
-          if (fetchedMessageListItems.length === 0) {
-            this.log.debug(
-              'fetchMoreMessagesBottom: fetchedMessageListItems.length is zero, returning',
-              JSON.stringify({
-                newestFetchedMessageIndex: newestFetchedMessageListItemIndex,
-                newNewestFetchedMessageIndex: newNewestFetchedMessageListItemIndex,
-                messageIds: state.messageListItems,
-              })
-            )
-            return false
-          }
+            newNewestFetchedMessageListItemIndex
+          ).catch(err => this.log.error('loadMessages failed', err))) || {}
 
-          const newMessageCacheItems =
-            (await loadMessages(
-              this.accountId,
-              state.messageListItems,
-              newestFetchedMessageListItemIndex,
-              newNewestFetchedMessageListItemIndex
-            ).catch(err => this.log.error('loadMessages failed', err))) || {}
-
-          this.reducer.appendMessagePageBottom({
-            newMessageCacheItems,
-            newestFetchedMessageIndex: newNewestFetchedMessageListItemIndex,
-          })
-          return true
-        },
-        'fetchMoreMessagesBottom'
-      ),
+        this.reducer.appendMessagePageBottom({
+          newMessageCacheItems,
+          newestFetchedMessageIndex: newNewestFetchedMessageListItemIndex,
+        })
+        return true
+      },
       'fetchMoreMessagesBottom'
     ),
-    refresh: this.scheduler.queuedEffect(
-      this.scheduler.lockedEffect(
-        'scroll',
-        async () => {
-          this.log.debug(`refresh`, this)
-          const state = this.state
-          const messageListItems = await BackendRemote.rpc.getMessageListItems(
+    refresh: this.scheduler.lockedQueuedEffect(
+      'scroll',
+      async () => {
+        this.log.debug(`refresh`, this)
+        const state = this.state
+        const messageListItems = await BackendRemote.rpc.getMessageListItems(
+          this.accountId,
+          this.chatId,
+          false,
+          true
+        )
+        let {
+          newestFetchedMessageListItemIndex,
+          oldestFetchedMessageListItemIndex,
+        } = state
+        newestFetchedMessageListItemIndex = Math.min(
+          newestFetchedMessageListItemIndex,
+          messageListItems.length - 1
+        )
+        oldestFetchedMessageListItemIndex = Math.max(
+          oldestFetchedMessageListItemIndex,
+          0
+        )
+
+        const messageCache =
+          (await loadMessages(
             this.accountId,
-            this.chatId,
-            false,
-            true
-          )
-          let {
-            newestFetchedMessageListItemIndex,
-            oldestFetchedMessageListItemIndex,
-          } = state
-          newestFetchedMessageListItemIndex = Math.min(
-            newestFetchedMessageListItemIndex,
-            messageListItems.length - 1
-          )
-          oldestFetchedMessageListItemIndex = Math.max(
-            oldestFetchedMessageListItemIndex,
-            0
-          )
-
-          const messageCache =
-            (await loadMessages(
-              this.accountId,
-              messageListItems,
-              oldestFetchedMessageListItemIndex,
-              newestFetchedMessageListItemIndex
-            ).catch(err => this.log.error('loadMessages failed', err))) || {}
-
-          this.reducer.refresh(
             messageListItems,
-            messageCache,
-            newestFetchedMessageListItemIndex,
-            oldestFetchedMessageListItemIndex
-          )
-          return true
-        },
-        'refresh'
-      ),
+            oldestFetchedMessageListItemIndex,
+            newestFetchedMessageListItemIndex
+          ).catch(err => this.log.error('loadMessages failed', err))) || {}
+
+        this.reducer.refresh(
+          messageListItems,
+          messageCache,
+          newestFetchedMessageListItemIndex,
+          oldestFetchedMessageListItemIndex
+        )
+        return true
+      },
       'refresh'
     ),
     onEventIncomingMessage: this.scheduler.queuedEffect(async () => {
