@@ -53,8 +53,8 @@ pipeline {
                 echo 'Deploying deltachat desktop communicator...'
                 sh 'docker-compose up -d buildsection'
                 sh 'echo $CREDENTIALS_PSW | docker login -u $CREDENTIALS_USR --password-stdin'
-                sh 'docker tag build-agent:latest cholewa-p/deltachatlab07'
-                sh 'docker push cholewa-p/deltachatlab07'
+                sh 'docker tag build-agent:latest cholewa-p/deltachat'
+                sh 'docker push cholewa-p/deltachat'
             }
             post {
                 success {
