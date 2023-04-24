@@ -45,7 +45,7 @@ class ElectronDeltachat extends BaseDeltaChat<ElectronTransport> {
     /** noop */
   }
   constructor() {
-    super(new ElectronTransport())
+    super(new ElectronTransport(), true)
   }
 }
 
