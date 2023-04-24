@@ -316,10 +316,11 @@ class MessageListStore extends Store<MessageListState> {
           true
         )
 
-        const firstUnreadMsgId = await BackendRemote.rpc.getFirstUnreadMessageOfChat(
-          this.accountId,
-          this.chatId
-        )
+        const firstUnreadMsgId =
+          await BackendRemote.rpc.getFirstUnreadMessageOfChat(
+            this.accountId,
+            this.chatId
+          )
         if (firstUnreadMsgId !== null) {
           setTimeout(() => {
             this.effect.jumpToMessage(firstUnreadMsgId, false)
@@ -393,9 +394,8 @@ class MessageListStore extends Store<MessageListState> {
               0,
               jumpToMessageStackLength - 1
             )
-            jumpToMessageId = this.state.jumpToMessageStack[
-              jumpToMessageStackLength - 1
-            ]
+            jumpToMessageId =
+              this.state.jumpToMessageStack[jumpToMessageStackLength - 1]
             message = await BackendRemote.rpc.getMessage(
               accountId,
               jumpToMessageId as number
@@ -720,9 +720,8 @@ class MessageListStore extends Store<MessageListState> {
         true
       )
       let indexEnd = -1
-      const last_item = this.state.messageListItems[
-        this.state.messageListItems.length - 1
-      ]
+      const last_item =
+        this.state.messageListItems[this.state.messageListItems.length - 1]
 
       let indexStart = messageListItems.findIndex(item => {
         if (last_item.kind !== item.kind) {
