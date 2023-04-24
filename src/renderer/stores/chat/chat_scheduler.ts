@@ -27,45 +27,6 @@ export class ChatStoreScheduler {
     return this.locks[key]
   }
 
-  /**  This effect will only get executed if the lock is unlocked. If it's still locked, this effect
-   * will get dropped/not executed. If you want the effect to get executed as soon as the lock with
-   * lockNameis unlocked, use lockedQueuedEffect.*/
-  lockedEffect<T extends Function>(
-    lockName: keyof ChatStoreLocks,
-    effect: T,
-    effectName: string
-  ): T {
-    const fn: T = ((async (...args: any) => {
-      if (this.isLocked(lockName) === true) {
-        log.debug(`lockedEffect: ${effectName}: We're locked, dropping effect`)
-        return false
-      }
-
-      //log.debug(`lockedEffect: ${effectName}: locking`)
-      this.lock(lockName)
-      let returnValue
-      try {
-        returnValue = await effect(...args)
-      } catch (err) {
-        log.error(`lockedEffect: ${effectName}: error in called effect: ${err}`)
-        this.unlock(lockName)
-        return
-      }
-      if (returnValue === false) {
-        /*log.debug(
-              `lockedEffect: ${effectName}: return value was false, unlocking`
-            )*/
-        this.unlock(lockName)
-      } else {
-        /*log.debug(
-              `lockedEffect: ${effectName}: return value was NOT false, keeping it locked`
-            )*/
-      }
-      return returnValue
-    }) as unknown) as T
-    return fn
-  }
-
   tickRunQueuedEffect() {
     setTimeout(async () => {
       log.debug('effectQueue: running queued effects')
