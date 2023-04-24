@@ -4,8 +4,10 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building deltachat desktop communicator...'
+                 withEnv(["PATH=$PATH:/usr/app/deltachat/Docker"]){
                 sh 'docker-compose build buildsection'
                 sh 'docker-compose logs > build_result.txt'
+                 }
             }
             post {
                 success {
@@ -25,9 +27,11 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing deltachat desktop communicator...'
+                 withEnv(["PATH=$PATH:/usr/app/deltachat/Docker"]){
                 sh 'docker-compose  build  testsection'
                 sh 'docker-compose  up testsection'
                 sh 'docker-compose logs > test_result.txt'
+                 }
             }
             post {
                 success {
@@ -49,12 +53,14 @@ pipeline {
 				CREDENTIALS = credentials('docker_credentials')
 			}	
             steps {
+                withEnv(["PATH=$PATH:/usr/app/deltachat/Docker"]){
                 archiveArtifacts(artifacts: '**/*.txt', followSymlinks: false)
                 echo 'Deploying deltachat desktop communicator...'
                 sh 'docker-compose up -d buildsection'
                 sh 'echo $CREDENTIALS_PSW | docker login -u $CREDENTIALS_USR --password-stdin'
                 sh 'docker tag build-agent:latest cholewa-p/deltachat'
                 sh 'docker push cholewa-p/deltachat'
+                }
             }
             post {
                 success {
