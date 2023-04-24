@@ -1,3 +1,9 @@
+.DS_STORE
+.DS_Store
+*.docx
+.DS_Store
+**/.DS_Store
+
 .cache/
 html-dist/
 tsc-dist/
