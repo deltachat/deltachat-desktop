@@ -132,7 +132,7 @@ export default class DeltaChatController extends EventEmitter {
       this.account_manager.jsonRpcRequest(message)
     })
 
-    this._jsonrpcRemote = new JRPCDeltaChat(mainProcessTransport, true)
+    this._jsonrpcRemote = new JRPCDeltaChat(mainProcessTransport, false)
 
     if (DesktopSettings.state.syncAllAccounts) {
       log.info('Ready, starting accounts io...')
