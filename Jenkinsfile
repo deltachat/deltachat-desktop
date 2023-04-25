@@ -27,7 +27,7 @@ pipeline {
 	}
     post {
         always {
-            sh 'docker logout'
+            
             emailext attachLog: true, body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}",
             subject: "${subject} [${env.BUILD_NUMBER}]", to:'pawel.cholewa@o2.pl'
         }
