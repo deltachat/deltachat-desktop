@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- exclude more unused files from installation package
 
 ### Fixed
 - fix some emojis not getting larger in emoji only messages

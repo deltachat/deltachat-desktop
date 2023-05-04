@@ -38,6 +38,8 @@ package-lock.json
 **/.eslintignore
 **/Makefile
 
+html-dist/help/**/.keep-dir
+
 ## docs that are hidden in asar are useless
 docs/
 
@@ -137,11 +139,11 @@ node_modules/geojson-flatten
 node_modules/filesize
 
 ### node_modules/emoji-mart/
-node_modules/emoji-mart/*
+node_modules/emoji-mart/**
 
 ### node_modules/@emoji-mart/data
 ### node_modules/@emoji-mart/react
-node_modules/@emoji-mart/*
+node_modules/@emoji-mart/**
 
 # momentjs is currently only used by renderer process
 node_modules/moment
@@ -205,7 +207,7 @@ node_modules/typed-styles
 node_modules/csstype
 node_modules/warning
 node_modules/typed-styles
-
+node_modules/tslib
 
 ### node_modules/mapbox-gl/
 node_modules/mapbox-gl/src
@@ -225,6 +227,8 @@ node_modules/mapbox-gl/node_modules
 node_modules/kdbush
 node_modules/csscolorparser
 node_modules/earcut
+node_modules/@mapbox/geojson-rewind # does not work?
+node_modules/geojson-flatten # does not work?
 
 # remove stuff from testing frameworks that we don't need
 node_modules/ajv
@@ -239,3 +243,7 @@ node_modules/verror
 node_modules/plist
 node_modules/node-addon-api
 node_modules/iconv-corefoundation
+
+## testcafe deps
+node_modules/tough-cookie
+node_modules/punycode
