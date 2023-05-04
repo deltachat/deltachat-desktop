@@ -188,7 +188,7 @@ export default function ChatList(props: {
   // scroll to selected chat ---
   const listRefRef = useRef<List<any>>(null)
   const selectedChatIndex = chatListIds.findIndex(
-    ([chatId, _messageId]) => chatId === selectedChatId
+    chatId => chatId === selectedChatId
   )
 
   const scrollSelectedChatIntoView = useCallback((index: number) => {
@@ -222,7 +222,7 @@ export default function ChatList(props: {
     showArchivedChats,
   ])
 
-  const selectFirstChat = () => selectChat(chatListIds[0][0])
+  const selectFirstChat = () => selectChat(chatListIds[0])
 
   // KeyboardShortcuts ---------
   useKeyBindingAction(KeybindAction.ChatList_ScrollToSelectedChat, () =>
@@ -232,9 +232,9 @@ export default function ChatList(props: {
   useKeyBindingAction(KeybindAction.ChatList_SelectNextChat, () => {
     if (selectedChatId === null) return selectFirstChat()
     const selectedChatIndex = chatListIds.findIndex(
-      ([chatId, _messageId]) => chatId === selectedChatId
+      chatId => chatId === selectedChatId
     )
-    const [newChatId] = chatListIds[selectedChatIndex + 1] || []
+    const newChatId = chatListIds[selectedChatIndex + 1]
     if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
       selectChat(newChatId)
     }
@@ -243,9 +243,9 @@ export default function ChatList(props: {
   useKeyBindingAction(KeybindAction.ChatList_SelectPreviousChat, () => {
     if (selectedChatId === null) return selectFirstChat()
     const selectedChatIndex = chatListIds.findIndex(
-      ([chatId, _messageId]) => chatId === selectedChatId
+      chatId => chatId === selectedChatId
     )
-    const [newChatId] = chatListIds[selectedChatIndex - 1] || []
+    const newChatId = chatListIds[selectedChatIndex - 1]
     if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
       selectChat(newChatId)
     }
@@ -458,7 +458,7 @@ function translate_n(key: string, quantity: number) {
 
 /** functions for the chat virtual list */
 export function useLogicVirtualChatList(
-  chatListIds: [number, number][],
+  chatListIds: number[],
   listFlags: number | null
 ) {
   const accountId = selectedAccountId()
@@ -482,16 +482,14 @@ export function useLogicVirtualChatList(
   }>({})
 
   const isChatLoaded: (index: number) => boolean = index =>
-    !!chatLoadState[chatListIds[index][0]]
+    !!chatLoadState[chatListIds[index]]
   const loadChats: (
     startIndex: number,
     stopIndex: number
   ) => Promise<void> = async (startIndex, stopIndex) => {
     const entries = chatListIds.slice(startIndex, stopIndex + 1)
     setChatLoading(state => {
-      entries.forEach(
-        ([chatId, _msgId]) => (state[chatId] = LoadStatus.FETCHING)
-      )
+      entries.forEach(chatId => (state[chatId] = LoadStatus.FETCHING))
       return state
     })
     const chats = await BackendRemote.rpc.getChatlistItemsByEntries(
@@ -500,7 +498,7 @@ export function useLogicVirtualChatList(
     )
     setChatCache(cache => ({ ...cache, ...chats }))
     setChatLoading(state => {
-      entries.forEach(([chatId, _msgId]) => (state[chatId] = LoadStatus.LOADED))
+      entries.forEach(chatId => (state[chatId] = LoadStatus.LOADED))
       return state
     })
   }
@@ -525,7 +523,7 @@ export function useLogicVirtualChatList(
         null,
         null
       )
-      const result = chatlist.find(([chat]) => chat === chatId)
+      const result = chatlist.find(chat => chat === chatId)
       if (result) {
         setChatLoading(state => ({
           ...state,
@@ -598,7 +596,7 @@ export function useLogicVirtualChatList(
           Number(v)
         )
         const toBeRefreshed = chatListItems.filter(
-          ([chatId]) => inCurrentCache.indexOf(chatId) !== -1
+          chatId => inCurrentCache.indexOf(chatId) !== -1
         )
         const chats = await BackendRemote.rpc.getChatlistItemsByEntries(
           accountId,

@@ -14,7 +14,7 @@ export const ChatListItemRowChat = React.memo<{
   index: number
   data: {
     selectedChatId: number | null
-    chatListIds: [number, number][]
+    chatListIds: number[]
     chatCache: {
       [id: number]: Type.ChatListItemFetchResult | undefined
     }
@@ -30,7 +30,7 @@ export const ChatListItemRowChat = React.memo<{
     onChatClick,
     openContextMenu,
   } = data
-  const [chatId] = chatListIds[index]
+  const chatId = chatListIds[index]
   return (
     <div style={style}>
       <ChatListItem
