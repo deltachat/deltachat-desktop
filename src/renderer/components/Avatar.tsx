@@ -38,6 +38,7 @@ export function Avatar(props: {
   wasSeenRecently?: boolean
   style?: htmlDivProps['style']
   onClick?: () => void
+  className?: string
 }) {
   const {
     avatarPath,
@@ -48,6 +49,7 @@ export function Avatar(props: {
     small,
     wasSeenRecently,
     onClick,
+    className,
   } = props
 
   const content = avatarPath ? (
@@ -60,7 +62,11 @@ export function Avatar(props: {
 
   return (
     <div
-      className={classNames('avatar', { large, small, wasSeenRecently })}
+      className={classNames(
+        'avatar',
+        { large, small, wasSeenRecently },
+        className
+      )}
       onClick={onClick}
     >
       {content}

@@ -156,7 +156,7 @@ export default function ChatList(props: {
   const CHATLISTITEM_CONTACT_HEIGHT =
     Number(useThemeCssVar('--SPECIAL-chatlist-item-contact-height')) || 64
   const CHATLISTITEM_MESSAGE_HEIGHT =
-    Number(useThemeCssVar('--SPECIAL-chatlist-item-message-height')) || 64
+    Number(useThemeCssVar('--SPECIAL-chatlist-item-message-height')) || 72
   const DIVIDER_HEIGHT =
     Number(useThemeCssVar('--SPECIAL-chatlist-divider-height')) || 40
 

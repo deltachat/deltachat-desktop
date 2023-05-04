@@ -6,6 +6,7 @@
 - exclude more unused files from installation package
 - update deltachat-node and deltachat/jsonrpc-client to `v1.115.0`
 - remove message id from chatlistitem
+- Improved message search results
 
 ### Fixed
 - fix some emojis not getting larger in emoji only messages
