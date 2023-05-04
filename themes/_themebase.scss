@@ -16,6 +16,7 @@ $hover-contrast-change: 2%;
   --colorPrimary: #{$colorPrimary};
   --colorDanger: #{$colorDanger};
   --colorNone: #{$colorNone};
+  --bgPrimary: #{$bgPrimary};
   --ovalButtonBg: #{$ovalButtonBg};
   --ovalButtonBgHover: #{changeContrast($ovalButtonBg, 70%)};
   --ovalButtonText: #{$ovalButtonText};
