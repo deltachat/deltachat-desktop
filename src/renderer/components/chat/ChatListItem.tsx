@@ -10,6 +10,7 @@ import { T } from '@deltachat/jsonrpc-client'
 import { getLogger } from '../../../shared/logger'
 import { useContextMenu } from '../ContextMenu'
 import { selectedAccountId } from '../../ScreenController'
+import { InlineVerifiedIcon } from '../VerifiedIcon'
 
 const log = getLogger('renderer/chatlist/item')
 
@@ -27,12 +28,19 @@ function Header({
   name,
   isPinned,
   isMuted,
-}: Pick<ChatListItemType, 'lastUpdated' | 'name' | 'isPinned' | 'isMuted'>) {
+  isProtected,
+}: Pick<
+  ChatListItemType,
+  'lastUpdated' | 'name' | 'isPinned' | 'isMuted' | 'isProtected'
+>) {
   const tx = window.static_translate
   return (
     <div className='header'>
       <div className='name'>
-        <span>{name + ' '}</span>
+        <span>
+          {name}
+          {isProtected && <InlineVerifiedIcon />}
+        </span>
       </div>
       {isMuted && <div className='mute_icon' aria-label={tx('mute')} />}
       {isPinned && <div className='pin_icon' aria-label={tx('pin')} />}
@@ -228,7 +236,6 @@ function ChatListItemNormal({
           displayName: chatListItem.name,
           avatarPath: chatListItem.avatarPath || undefined,
           color: chatListItem.color,
-          isVerified: chatListItem.isProtected,
           wasSeenRecently: chatListItem.wasSeenRecently,
         }}
       />
@@ -236,6 +243,7 @@ function ChatListItemNormal({
         <Header
           lastUpdated={chatListItem.lastUpdated}
           name={chatListItem.name}
+          isProtected={chatListItem.isProtected}
           isPinned={chatListItem.isPinned}
           isMuted={chatListItem.isMuted}
         />
@@ -313,17 +321,31 @@ export const ChatListItemMessageResult = React.memo<{
   const { msr, onClick, queryStr } = props
   if (typeof msr === 'undefined') return <PlaceholderChatListItem />
   return (
-    <div role='button' onClick={onClick} className='pseudo-chat-list-item'>
-      <Avatar
-        avatarPath={msr.authorProfileImage}
-        color={msr.authorColor}
-        displayName={msr.authorName}
-      />
+    <div
+      role='button'
+      onClick={onClick}
+      className='pseudo-chat-list-item message-search-result'
+    >
+      <div className='avatars'>
+        <Avatar
+          className='big'
+          avatarPath={msr.chatProfileImage}
+          color={msr.chatColor}
+          displayName={msr.chatName}
+        />
+        <Avatar
+          className='small'
+          avatarPath={msr.authorProfileImage}
+          color={msr.authorColor}
+          displayName={msr.authorName}
+        />
+      </div>
       <div className='content'>
         <div className='header'>
           <div className='name'>
             <span>
-              {msr.authorName + (msr.chatName ? ' in ' + msr.chatName : '')}
+              {msr.chatName}
+              {msr.isChatProtected && <InlineVerifiedIcon />}
             </span>
           </div>
           <div>
@@ -333,6 +355,19 @@ export const ChatListItemMessageResult = React.memo<{
               module='timestamp'
             />
           </div>
+        </div>
+        <div className='message-result-author-line'>
+          <div className='author-name'>{msr.authorName}</div>
+          {msr.isChatContactRequest && (
+            <div className='label'>
+              {window.static_translate('chat_request_label')}
+            </div>
+          )}
+          {msr.isChatArchived && (
+            <div className='label'>
+              {window.static_translate('chat_archived_label')}
+            </div>
+          )}
         </div>
         <div className='chat-list-item-message'>
           <div className='text'>{rMessage(msr.message, queryStr)}</div>
@@ -367,10 +402,10 @@ const rMessage = (msg: string, query: string) => {
   const after = text.slice(pos_of_search_term_in_text + query.length)
 
   return (
-    <div>
+    <>
       {(truncate ? '...' : '') + before}
       <b>{search_term}</b>
       {after}
-    </div>
+    </>
   )
 }
