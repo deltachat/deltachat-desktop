@@ -11,6 +11,7 @@
 ### Fixed
 - fix some emojis not getting larger in emoji only messages
 - add missing languages to supported languages in appx manifest
+- fix show verification state of chat in chatlist
 
 <a id="1_36_4"></a>
 
