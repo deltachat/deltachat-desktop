@@ -333,12 +333,12 @@ export const ChatListItemMessageResult = React.memo<{
           color={msr.chatColor}
           displayName={msr.chatName}
         />
-        <Avatar
+        {!(msr.chatType === C.DC_CHAT_TYPE_SINGLE && msr.authorId !== C.DC_CONTACT_ID_SELF ) && <Avatar
           className='small'
           avatarPath={msr.authorProfileImage}
           color={msr.authorColor}
           displayName={msr.authorName}
-        />
+        />}
       </div>
       <div className='content'>
         <div className='header'>
