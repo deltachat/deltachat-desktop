@@ -209,15 +209,9 @@ function buildContextMenu(
 
   return [
     {
-      label: 'React with 👍 🚀 ❤️ ⭐ 👎',
+      label: 'React with ❤️',
       action: () => {
-        BackendRemote.rpc.sendReaction(selectedAccountId(), message.id, [
-          '👍',
-          '🚀',
-          '❤️',
-          '⭐',
-          '👎',
-        ])
+        BackendRemote.rpc.sendReaction(selectedAccountId(), message.id, ['❤️'])
       },
     },
     {

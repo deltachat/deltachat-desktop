@@ -42,11 +42,20 @@ async function react(
   emoji: string,
   remove: boolean
 ) {
-  let emojis = [...own_emojis]
+  // code for having multiple reactions per user
+  // let emojis = [...own_emojis]
+  // if (remove) {
+  //   emojis = emojis.filter(e => e !== emoji)
+  // } else {
+  //   emojis.push(emoji)
+  // }
+  // await BackendRemote.rpc.sendReaction(selectedAccountId(), messageId, emojis)
+
   if (remove) {
-    emojis = emojis.filter(e => e !== emoji)
+    await BackendRemote.rpc.sendReaction(selectedAccountId(), messageId, [])
   } else {
-    emojis.push(emoji)
+    await BackendRemote.rpc.sendReaction(selectedAccountId(), messageId, [
+      emoji,
+    ])
   }
-  await BackendRemote.rpc.sendReaction(selectedAccountId(), messageId, emojis)
 }
