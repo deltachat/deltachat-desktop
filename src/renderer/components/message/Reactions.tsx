@@ -11,20 +11,17 @@ export function Reactions({
   reactions: T.Reactions
   messageId: number
 }) {
-  const emojis = Object.keys(reactions.reactions)
+  const emojis = reactions.reactions
   const own_emojis = reactions.reactionsByContact[C.DC_CONTACT_ID_SELF] || []
 
   // TODO: on hover show who reacted? maybe lazy loading onhover set title of show custom popover
   return (
     <div className='message-reactions'>
-      {emojis.map(emoji => {
-        const count = reactions.reactions[emoji]
-        const is_own = own_emojis.includes(emoji)
-
+      {emojis.map(({ emoji, isFromSelf, count }) => {
         return (
           <span
-            className={`reaction ${is_own && 'own'}`}
-            onClick={react.bind(null, messageId, own_emojis, emoji, is_own)}
+            className={`reaction ${isFromSelf && 'own'}`}
+            onClick={react.bind(null, messageId, own_emojis, emoji, isFromSelf)}
             key={emoji}
           >
             {emoji}
