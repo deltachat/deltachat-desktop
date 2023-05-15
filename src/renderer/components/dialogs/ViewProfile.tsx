@@ -9,7 +9,7 @@ import {
 } from './DeltaDialog'
 import ChatListItem from '../chat/ChatListItem'
 import { useChatList } from '../chat/ChatListHelpers'
-import { C } from '@deltachat/jsonrpc-client'
+import { C, T } from '@deltachat/jsonrpc-client'
 import {
   MessagesDisplayContext,
   ScreenContext,
@@ -23,7 +23,11 @@ import { useThemeCssVar } from '../../ThemeManager'
 import { DialogProps } from './DialogController'
 import { Card, Elevation } from '@blueprintjs/core'
 import { DeltaInput } from '../Login-Styles'
-import { selectChat } from '../helpers/ChatMethods'
+import {
+  openEncryptionInfoDialog,
+  openViewProfileDialog,
+  selectChat,
+} from '../helpers/ChatMethods'
 import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import moment from 'moment'
@@ -166,6 +170,8 @@ export function ViewProfileInner({
   const CHATLISTITEM_CHAT_HEIGHT =
     Number(useThemeCssVar('--SPECIAL-chatlist-item-chat-height')) || 64
 
+  const screenContext = useContext(ScreenContext)
+
   return (
     <>
       <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -222,6 +228,29 @@ export function ViewProfileInner({
         </div>
         {!isDeviceMessage && (
           <>
+            <DeltaDialogContentTextSeparator
+              text={contact.isVerified ? tx('verified_contact') : tx('contact')}
+            />
+            <div className='contact-security-status'>
+              {contact.isVerified && !contact.verifierAddr && (
+                <div>
+                  <InlineVerifiedIcon />
+                  Verified
+                </div>
+              )}
+              {contact.isVerified && contact.verifierAddr && (
+                <div
+                  className='clickable'
+                  onClick={() =>
+                    contact.verifierId &&
+                    openViewProfileDialog(screenContext, contact.verifierId)
+                  }
+                >
+                  <InlineVerifiedIcon />
+                  Verified by {contact.verifierAddr}
+                </div>
+              )}
+            </div>
             <DeltaDialogContentTextSeparator
               text={tx('profile_shared_chats')}
             />

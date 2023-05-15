@@ -40,3 +40,21 @@ div.profile-info-container {
     padding: 0px 20px;
   }
 }
+
+.contact-security-status {
+  & > div {
+    padding: 10px 16px;
+
+    & > img {
+      width: 1.15em;
+      height: 1.15em;
+      margin-inline-start: 0.3em;
+      margin-inline-end: 0.3em;
+      vertical-align: middle;
+    }
+
+    &.clickable:hover {
+      background-color: var(--chatListItemBgHover);
+    }
+  }
+}
