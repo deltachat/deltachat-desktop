@@ -35,9 +35,6 @@
   "clear_chat": {
     "message": "Clear Chat"
   },
-  "last_seen": {
-    "message": "Last seen %1$s"
-  },
   "search_in_chat": {
     "message": "Search in Chat"
   },

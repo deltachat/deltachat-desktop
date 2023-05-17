@@ -39,7 +39,7 @@ function LastSeen({ timestamp }: { timestamp: number }) {
     lastSeenString = tx('last_seen_unknown')
   } else {
     const date = moment(timestamp * 1000).fromNow()
-    lastSeenString = tx('last_seen', date)
+    lastSeenString = tx('last_seen_relative', date)
     lastSeenAbsolute = tx(
       'last_seen_at',
       moment(timestamp * 1000).toLocaleString()
@@ -173,7 +173,7 @@ export function ViewProfileInner({
             {contact.isVerified && !contact.verifierAddr && (
               <div>
                 <InlineVerifiedIcon />
-                Verified
+                {tx('verified')}
               </div>
             )}
             {contact.isVerified && contact.verifierAddr && (
@@ -185,7 +185,7 @@ export function ViewProfileInner({
                 }
               >
                 <InlineVerifiedIcon />
-                Verified by {contact.verifierAddr}
+                {tx('verified_by', contact.verifierAddr)}
               </div>
             )}
             {contact.lastSeen !== 0 && (
