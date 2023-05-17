@@ -23,10 +23,7 @@ import { useThemeCssVar } from '../../ThemeManager'
 import { DialogProps } from './DialogController'
 import { Card, Elevation } from '@blueprintjs/core'
 import { DeltaInput } from '../Login-Styles'
-import {
-  openViewProfileDialog,
-  selectChat,
-} from '../helpers/ChatMethods'
+import { openViewProfileDialog, selectChat } from '../helpers/ChatMethods'
 import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import moment from 'moment'
@@ -193,7 +190,10 @@ export function ViewProfileInner({
             )}
             {contact.lastSeen !== 0 && (
               <div>
-                {/* todo clock icon */}{' '}
+                <img
+                  className='material-icon'
+                  src='../images/icons/schedule.svg'
+                />
                 <LastSeen timestamp={contact.lastSeen} />
               </div>
             )}

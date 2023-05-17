@@ -42,9 +42,11 @@ div.profile-info-container {
 }
 
 .contact-attributes {
-  margin: 20px auto;
-  & > div {
+  margin: 20px;
+  font-size: 1.08em;
 
+  & > div {
+    margin-bottom: 8px;
     & > img {
       width: 1.15em;
       height: 1.15em;
@@ -54,7 +56,7 @@ div.profile-info-container {
     }
 
     &.clickable:hover {
-      background-color: var(--chatListItemBgHover);
+      cursor: pointer;
     }
   }
 }
