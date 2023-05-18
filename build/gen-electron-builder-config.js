@@ -141,6 +141,7 @@ build['appx'] = {
     'pl',
     'pt',
     'pt-BR',
+    'ro',
     'ru',
     // 'sc', not supported by ms-store
     'sk',

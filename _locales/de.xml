@@ -29,6 +29,7 @@
     <string name="emoji">Emoji</string>
     <string name="attachment">Anhang</string>
     <string name="back">Zurück</string>
+    <string name="verified">Verifiziert</string>
     <string name="close">Schließen</string>
     <string name="forward">Weiterleiten</string>
     <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
@@ -95,6 +96,8 @@
     <string name="last_month">Letzter Monat</string>
     <!-- Placeholder replaced by date or time, resulting in "Last seen at 12:13 AM" or "Last seen Nov 12" -->
     <string name="last_seen_at">Zuletzt gesehen %1$s</string>
+    <!-- The placeholder will be replaced by a relative point in time as "3 minutes ago" (see https://momentjs.com for more examples and languages)-->
+    <string name="last_seen_relative">Zuletzt gesehen %1$s</string>
     <string name="last_seen_unknown">Zuletzt gesehen: Unbekannt</string>
     <!-- Shown beside messages that are "N minutes old". Prefer short strings, or well-known abbreviations. -->
     <plurals name="n_minutes">
@@ -156,7 +159,8 @@
     <string name="capture">Aufnehmen</string>
     <string name="switch_camera">Kamera wechseln</string>
     <string name="toggle_fullscreen">Vollbildmodus umschalten</string>
-    <string name="location">Ort</string>
+    <string name="location">Standort</string>
+    <string name="locations">Standorte</string>
     <string name="gallery">Galerie</string>
     <string name="images_and_videos">Bilder und Videos</string>
     <string name="file">Datei</string>
@@ -203,8 +207,7 @@
     <string name="menu_toggle_keyboard">Emojis einblenden</string>
     <string name="menu_edit_group">Gruppe bearbeiten</string>
     <string name="menu_group_name_and_image">Gruppenname und -bild</string>
-    <string name="menu_show_map">Karte anzeigen</string>
-    <string name="menu_show_global_map">Alle Standorte anzeigen</string>
+    <string name="menu_show_global_map">Alle Standorte</string>
     <string name="menu_archive_chat">Chat archivieren</string>
     <string name="menu_unarchive_chat">Archivieren rückgängig</string>
     <string name="menu_add_attachment">Dateien anhängen</string>
@@ -884,6 +887,8 @@
     <string name="secure_join_replies">%1$s antwortet. Warte, zur Gruppe hinzugefügt zu werden...</string>
     <string name="contact_verified">%1$s verifiziert.</string>
     <string name="contact_not_verified">Kann %1$s nicht verifizieren</string>
+    <!-- Shown in contact profile. The placeholder will be replaced by the name of the contact that verified the contact shown. -->
+    <string name="verified_by">Verifiziert von %1$s</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
     <string name="contact_setup_changed">Geändertes Setup für %1$s</string>
     <string name="verified_group_explain">Verifizierte Gruppen (experimentell) bieten Schutz gegen aktive Angriffe mittels Zwei-Faktor-Authentifizierung aller Mitglieder und immer aktiver Ende-zu-Ende-Verschlüsselung.</string>
@@ -1053,7 +1058,6 @@
 
 
     <!-- device messages for updates -->
-    <string name="update_1_34_android">Was ist neu in 1.34?\n\n🤗 Bessere Kontaktlisten: Sortiert nach \"Zuletzt gesehen\" und innerhalb von 10 Minuten gesehene Kontakte werden mit einem Punkt markiert 🟢\n\n📑 Neue Tabs in Chat-Profilen: \"Audio\" und \"Private Apps\"\n\n🖼️ Wenn Ihnen jemand eine \"Private App\" (z.B. von https://webxdc.org ) schickt, können Sie diese zum Startbildschirm hinzufügen</string>
     <!-- placeholder will be replaced by the URL https://get.delta.chat/#changelogs -->
     <string name="update_1_36_android">1.36 Highlights\n\n💻📱 Verwenden Sie Delta Chat auf all Ihren Geräten: Folgen Sie einfach den drei Schritten unter \"Einstellungen / Zweitgerät hinzufügen\" (experimentell)\n\n🖼🔍 Haben Sie jemals nach einem Bild gesucht und konnten sich nicht an den Chat erinnern? Dann ist \"Alle Medien\" aus dem Hauptmenü wie für Sie gemacht\n\nWas noch? Benachrichtigungen für alle Accounts, Chat leeren und mehr, %1$s</string>
     <!-- placeholder will be replaced by the URL https://delta.chat/en/2023-03-27-third-independent-security-audit -->

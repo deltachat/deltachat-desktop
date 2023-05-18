@@ -155,6 +155,7 @@
     <string name="switch_camera">Ndërro kamera</string>
     <string name="toggle_fullscreen">Kalo në / Dil nga mënyra sa krejt ekrani</string>
     <string name="location">Vendndodhje</string>
+    <string name="locations">Vendndodhje</string>
     <string name="gallery">Galeri</string>
     <string name="images_and_videos">Figura dhe video</string>
     <string name="file">Kartelë</string>
@@ -201,7 +202,6 @@
     <string name="menu_toggle_keyboard">Shfaq/fshih tastierë emoji</string>
     <string name="menu_edit_group">Përpunoni grup</string>
     <string name="menu_group_name_and_image">Emër dhe figurë grupi</string>
-    <string name="menu_show_map">Shfaq hartë</string>
     <string name="menu_show_global_map">Shfaqi krejt vendndodhjet</string>
     <string name="menu_archive_chat">Arkivoje fjalosjen</string>
     <string name="menu_unarchive_chat">Çarkivoje fjalosjen</string>
@@ -1048,7 +1048,6 @@
 
 
     <!-- device messages for updates -->
-    <string name="update_1_34_android">Ç’ka të re në 1.34?\n\n🤗 Lista më miqësore kontaktesh: Renditur sipas parë së fundi dhe kontakteve të parë brenda 10 minutash u vihet një shenjë 🟢\n\n📑 Faqe të reja në profile fjalosjesh: “Audio” dhe “Aplikacione Private”\n\n🖼️ Nëse dikush ju dërgon një “Aplikacion Privat” (p.sh., që nga https://webxdc.org ), mund ta shtoni te skena e kreut</string>
     <!-- placeholder will be replaced by the URL https://get.delta.chat/#changelogs -->
     <string name="update_1_36_android">Gjëra në pah për 1.36\n\n💻📱 Përdoreni kollaj Delta Chat-in në krejt pajisjet tuaja - thjesht ndiqni tre hapa të thjeshtë te “Rregullime / Shtoni Pajisje të Dytë” (eksperimentale)\n\n🖼🔍 Ju ka qëlluar të kërkoni për një figurë dhe s’mbanit mend bisedën? “Krejt Mediat” prej menusë kryesorë është e juaja!\n\nPo tjetër? Njoftime për krejt llogaritë, spastrim fjalosjesh, etj, në %1$s</string>
     <!-- placeholder will be replaced by the URL https://delta.chat/en/2023-03-27-third-independent-security-audit -->

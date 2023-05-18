@@ -29,6 +29,7 @@
     <string name="emoji">Emoji</string>
     <string name="attachment">Bijlage</string>
     <string name="back">Terug</string>
+    <string name="verified">Goedgekeurd</string>
     <string name="close">Sluiten</string>
     <string name="forward">Doorsturen</string>
     <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
@@ -95,6 +96,8 @@
     <string name="last_month">Vorige maand</string>
     <!-- Placeholder replaced by date or time, resulting in "Last seen at 12:13 AM" or "Last seen Nov 12" -->
     <string name="last_seen_at">Laatst gezien om %1$s</string>
+    <!-- The placeholder will be replaced by a relative point in time as "3 minutes ago" (see https://momentjs.com for more examples and languages)-->
+    <string name="last_seen_relative">Laatst gezien: %1$s</string>
     <string name="last_seen_unknown">Laatst gezien: onbekend</string>
     <!-- Shown beside messages that are "N minutes old". Prefer short strings, or well-known abbreviations. -->
     <plurals name="n_minutes">
@@ -157,6 +160,7 @@
     <string name="switch_camera">Andere camera</string>
     <string name="toggle_fullscreen">Beeldvullende modus aan/uit</string>
     <string name="location">Locatie</string>
+    <string name="locations">Locaties</string>
     <string name="gallery">Galerij</string>
     <string name="images_and_videos">Foto\'s en video\'s</string>
     <string name="file">Bestand</string>
@@ -203,7 +207,6 @@
     <string name="menu_toggle_keyboard">Emoji-toetsenbord tonen/verbergen</string>
     <string name="menu_edit_group">Groep aanpassen</string>
     <string name="menu_group_name_and_image">Groepsnaam en -afbeelding</string>
-    <string name="menu_show_map">Kaart tonen</string>
     <string name="menu_show_global_map">Alle locaties tonen</string>
     <string name="menu_archive_chat">Gesprek archiveren</string>
     <string name="menu_unarchive_chat">Gesprek de-archiveren</string>
@@ -884,6 +887,8 @@
     <string name="secure_join_replies">%1$s heefn geantwoord en wacht op toelating tot de groep…</string>
     <string name="contact_verified">%1$s is goedgekeurd.</string>
     <string name="contact_not_verified">Kan %1$s niet goedkeuren</string>
+    <!-- Shown in contact profile. The placeholder will be replaced by the name of the contact that verified the contact shown. -->
+    <string name="verified_by">Goedgekeurd door %1$s</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
     <string name="contact_setup_changed">Gewijzigde instellingen voor %1$s</string>
     <string name="verified_group_explain">Goedgekeurde groepen (experimenteel) zijn extra beveiligd tegen aanvallen van buitenaf. Leden worden goedgekeurd door andere leden en berichten zijn altijd eind-tot-eind versleuteld.</string>
@@ -1053,7 +1058,6 @@
 
 
     <!-- device messages for updates -->
-    <string name="update_1_34_android">Wat is er nieuw en verbeterd in 1.34?\n\n🤗 Handigere contactpersoonslijsten: sorteren op laatst gezien en contactpersonen die de afgelopen 10 minuten actief waren worden voortaan gemarkeerd met een stip 🟢\n\n📑 Nieuwe pagina\'s in profielen: audio en privé-apps\n\n🖼️ Als iemand je een privé-app stuurt (bijv. van https://webxdc.org ), dan kun je deze toevoegen aan het startscherm.</string>
     <!-- placeholder will be replaced by the URL https://get.delta.chat/#changelogs -->
     <string name="update_1_36_android">1.36 - Kenmerken\n\n💻📱 Gebruik Delta Chat eenvoudig op ál je apparaten aan de hand van drie stappen via ‘Instellingen → Tweede apparaat toevoegen’ (experimenteel)\n\n🖼🔍 Heb je wel eens een afbeelding proberen te vinden, maar wist je niet meer in welk gesprek deze stond? ‘Alle media’ in het hoofdmenu is je nieuwe beste vriend!\n\nWat nog meer? Meldingen van alle accounts, gesprekken wissen en meer op %1$s</string>
     <!-- placeholder will be replaced by the URL https://delta.chat/en/2023-03-27-third-independent-security-audit -->
