@@ -60,7 +60,9 @@
     <!-- Possible answers to the question are: Never, Always, Once -->
     <string name="load_remote_content_ask">Las imágenes remotas pueden ser usadas para seguirte.\n\nLa opción también permite cargar fuentes y otros contenidos. Inclusive si están deshabilitadas, quizás puedas ver imágenes embebidas o en caché.\n\n¿Cargar imágenes remotas?</string>
     <string name="always">Siempre</string>
+    <string name="always_load_remote_images">Cargar imágenes remotas siempre</string>
     <string name="once">Una vez</string>
+    <string name="show_warning">Mostrar advertencia</string>
     <string name="show_password">Mostrar contraseña</string>
     <string name="hide_password">Ocultar contraseña</string>
     <string name="not_now">Ahora no</string>
@@ -209,7 +211,6 @@
     <string name="menu_toggle_keyboard">Alternar teclado emoji</string>
     <string name="menu_edit_group">Editar grupo</string>
     <string name="menu_group_name_and_image">Nombre e imagen de grupo</string>
-    <string name="menu_show_map">Mostrar mapa</string>
     <string name="menu_show_global_map">Mostrar todas las ubicaciones</string>
     <string name="menu_archive_chat">Archivar chat</string>
     <string name="menu_unarchive_chat">Des-archivar chat</string>
@@ -496,6 +497,7 @@
     <string name="multidevice_abort">¿Cancelar la configuración del nuevo dispositivo?</string>
     <string name="multidevice_abort_will_invalidate_copied_qr">Esto invalidará el código QR copiado al portapapeles </string>
     <string name="multidevice_experimental_hint">(experimental, requiere versión 1.36)</string>
+    <string name="multidevice_transfer_done_devicemsg">ℹ️ Cuenta transferida a tu otro dispositivo.</string>
     <!-- Shown beside progress bar, stay short -->
     <string name="preparing_account">Preparando cuenta…</string>
     <!-- Shown beside progress bar, stay short -->
@@ -1065,7 +1067,6 @@
 
 
     <!-- device messages for updates -->
-    <string name="update_1_34_android">¿Qué hay de nuevo en 1.34?\n\n🤗 Lista de contactos más intuitiva: Ordenada por visto por última vez y los contactos vistos hace menos de 10 minutos son marcados con un punto 🟢\n\n📑 Nuevas pestañas en los perfiles de los chats: \"Audio\" y \"Aplicaciones privadas\"\n\n🖼️ Si alguien te envía una \"Aplicación privada\" (ej. de https://webxdc.org ), puedes añadirla a la pantalla principal del teléfono</string>
     <!-- placeholder will be replaced by the URL https://get.delta.chat/#changelogs -->
     <string name="update_1_36_android">1.36 Cambios principales\n\n💻📱 Utiliza Delta Chat en todos tus dispositivos fácilmente - sólo tienes que seguir tres sencillos pasos en \"Ajustes / Añadir otro dispositivo\" (experimental)\n\n🖼🔍 ¿Alguna vez has buscado una imagen sin recordar en cual chat? \"Toda la multimedia\" del menú principal es lo que necesitas!\n\n¿Qué más? Notificaciones para todas las cuentas, vaciar chat, y mucho más en %1$s</string>
     <!-- placeholder will be replaced by the URL https://delta.chat/en/2023-03-27-third-independent-security-audit -->

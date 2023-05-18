@@ -7,6 +7,8 @@
 - update deltachat-node and deltachat/jsonrpc-client to `v1.115.0`
 - remove message id from chatlistitem
 - Improved message search results
+- Update translations (18.05.2023)
+- add `română` language
 
 ### Fixed
 - fix some emojis not getting larger in emoji only messages

@@ -201,7 +201,6 @@
     <string name="menu_toggle_keyboard">Включване/изключване на Emoji клавиатура</string>
     <string name="menu_edit_group">Редактиране на група</string>
     <string name="menu_group_name_and_image">Име и изображение на група</string>
-    <string name="menu_show_map">Показване на карта</string>
     <string name="menu_show_global_map">Показване на всички местоположения</string>
     <string name="menu_archive_chat">Поставяне на чата в архив</string>
     <string name="menu_unarchive_chat">Премахване на чата от архив</string>
@@ -868,23 +867,23 @@
     <string name="qrshow_join_contact_no_connection_toast">Няма връзка към Интернет, не може да бъде извършена настройка чрез QR код.</string>
     <string name="qraccount_ask_create_and_login">Да бъде ли създаден нов адрес за електронна поща на \"%1$s\" и да бъде ли осъществено влизане там?</string>
     <string name="qraccount_ask_create_and_login_another">Да бъде ли създаден нов адрес за електронна поща в \"%1$s\" и да бъде ли осъществено влизане там?\n\nВашият съществуващ акаунт няма да бъде изтрит. Използвайте опцията \"Превключване към друг акаунт\", за да превключвате между Вашите акаунти.</string>
-    <string name="qraccount_success_enter_name">Влизането е успешно — Вашият адрес за електронна поща е %1$s\n\nАко желаете, може да въведете име и изображение за профила, който ще бъде показван на хората, на които пишете.</string>
-    <string name="qraccount_qr_code_cannot_be_used">Не може да бъде създаден нов акаунт със сканирания QR код</string>
-    <string name="qraccount_use_on_new_install">Сканираният QR код е за настройка на нов акаунт. Можете да сканирате QR кода, когато създавате нова инсталация на Delta Chat.</string>
+    <string name="qraccount_success_enter_name">Влизането е успешно — Вашият адрес за електронна поща е %1$s\n\nАко желаете, може да въведете име и изображение за Вашия профил. Те ще бъдат показвани на хората, на които пишете.</string>
+    <string name="qraccount_qr_code_cannot_be_used">Не може да бъде създаден нов акаунт със сканирания QR код.</string>
+    <string name="qraccount_use_on_new_install">Сканираният QR код е за установяване на нов акаунт. Можете да сканирате QR кода, когато създавате нова инсталация на Delta Chat.</string>
     <!-- the placeholder will be replaced by the e-mail address of the account -->
     <string name="qrlogin_ask_login">Желаете ли да влезете в \"%1$s\"?</string>
     <!-- the placeholder will be replaced by the e-mail address of the account -->
     <string name="qrlogin_ask_login_another">Желаете ли да влезете в \"%1$s\"?\n\nСъщестуващият Ви акаунт няма да бъде изтрит. Превключвайте между акаунтите си чрез \"Превключване към друг акаунт\".</string>
     <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
-    <string name="secure_join_started">%1$s Ви покани да се присъедините към тази група.\n\nИзчаква се устройството на %2$s да отговори...</string>
+    <string name="secure_join_started">%1$s Ви покани да се присъедините към тази група.\n\nИзчаква се устройството на %2$s да отговори…</string>
     <!-- placeholder will be replaced by the name of the inviter. -->
-    <string name="secure_join_replies">%1$s отговори, изчаква се да бъдете добавени към групата...</string>
+    <string name="secure_join_replies">%1$s отговори, изчаква се да бъдете добавени към групата…</string>
     <string name="contact_verified">%1$s е проверен.</string>
     <string name="contact_not_verified">Не може да бъде проверен %1$s.</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
     <string name="contact_setup_changed">Настройката за %1$s е сменена.</string>
-    <string name="verified_group_explain">Проверените групи (експериментална възможност) предоставят защита срещу активни атаки. Членовете се проверяват посредством втори фактор от други членове и съобщенията винаги са криптирани \"от край до край\".</string>
-    <string name="copy_qr_data_success">URL адресът на QR кода е копиран в клипборд</string>
+    <string name="verified_group_explain">Проверените групи (експериментална възможност) предоставят защита срещу активни атаки. Членовете се проверяват посредством втори фактор от други членове и съобщенията винаги се криптират \"от край до край\".</string>
+    <string name="copy_qr_data_success">URL адресът от QR кода е копиран в клипборда</string>
     <string name="mailto_dialog_header_select_chat">Изберете чат, към който да бъде пратено съобщението</string>
     <!-- first placeholder is the name of the chat -->
     <string name="confirm_replace_draft">%1$s вече има съобщение чернова, искате ли да го замените?</string>
@@ -894,12 +893,12 @@
     <string name="notify_dismiss">Затваряне</string>
     <string name="notify_reply_button">Отговор</string>
     <string name="notify_new_message">Ново съобщение</string>
-    <string name="notify_background_connection_enabled">Разрешена е връзката във фонов режим</string>
+    <string name="notify_background_connection_enabled">Връзката във фонов режим е разрешена</string>
     <string name="notify_priority_high">Висок</string>
     <string name="notify_priority_max">Най-висок</string>
     <string name="notify_name_and_message">Име и съобщение</string>
     <string name="notify_name_only">Само име</string>
-    <string name="notify_no_name_or_message">Няма име или съобщение</string>
+    <string name="notify_no_name_or_message">Без име или съобщение</string>
 
 
     <!-- permissions -->
@@ -925,7 +924,7 @@
 
     <!-- strings introduced on desktop. we want to share strings between the os, in general, please do not add generic strings here -->
     <string name="about_offical_app_desktop">Това е официалното настолно приложение Delta Chat.</string>
-    <string name="about_licensed_under_desktop">Този софтуер е лицензиран под GNU GPL версия 3 и изходният код е наличен в GitHub.</string>
+    <string name="about_licensed_under_desktop">Този софтуер е лицензиран под GNU GPL версия 3. Изходният код е наличен в GitHub.</string>
     <string name="welcome_desktop">Добре дошли в Delta Chat</string>
     <string name="login_known_accounts_title_desktop">Познати акаунти</string>
     <string name="global_menu_preferences_language_desktop">Език</string>
@@ -938,14 +937,14 @@
     <string name="global_menu_edit_copy_desktop">Копиране</string>
     <string name="global_menu_edit_paste_desktop">Поставяне</string>
     <string name="global_menu_view_desktop">Разглеждане</string>
-    <string name="global_menu_view_floatontop_desktop">Изобразянане върху всички останали</string>
+    <string name="global_menu_view_floatontop_desktop">Изобразяване върху всички останали</string>
     <string name="global_menu_view_developer_desktop">Разработчик</string>
     <string name="global_menu_view_developer_tools_desktop">Инструменти за разработчици</string>
     <string name="global_menu_help_desktop">Помощ</string>
     <string name="global_menu_help_learn_desktop">Научете повече за Delta Chat</string>
     <string name="global_menu_help_contribute_desktop">Допринесете в GitHub</string>
     <string name="global_menu_help_report_desktop">Съобщаване за проблем</string>
-    <string name="global_menu_help_about_desktop">За Delta Chat</string>
+    <string name="global_menu_help_about_desktop">Относно Delta Chat</string>
     <string name="global_menu_file_open_desktop">Отваряне на Delta Chat</string>
     <string name="global_menu_minimize_to_tray">Минимизиране</string>
     <string name="no_chat_selected_suggestion_desktop">Изберете чат или създайте нов</string>
@@ -963,13 +962,11 @@
     <string name="select_group_image_desktop">Изберете изображение за групата</string>
     <string name="imex_progress_title_desktop">Прогрес в създаването на резервно копие</string>
     <string name="export_backup_desktop">Експорт на резервно копие</string>
-    <string name="show_key_transfer_message_desktop">1
-votes
-Изпратихте Вашия ключ до себе си. Преминете на другото устройство и отворете съобщението за настройка. Би трябвало да Ви бъде поискан код за настройка. Въведете следните цифри:</string>
+    <string name="show_key_transfer_message_desktop">Изпратихте Вашия ключ до себе си. Преминете на другото устройство и отворете съобщението за настройка. Би трябвало да Ви бъде поискан код за настройка. Въведете следните цифри:</string>
     <string name="autocrypt_correct_desktop">Найстроката на Autocrypt е прехвърлена.</string>
     <string name="autocrypt_incorrect_desktop">Неправилен код за настройка. Моля, опитайте отново.</string>
     <string name="create_chat_error_desktop">Неуспешно създаване на чат.</string>
-    <string name="forget_login_confirmation_desktop">Да бъде ли изтрит този запис за влизане? Всичко ще бъде изтрито, включително Вашата настройка за криптиране \"от край до край\", контакти, чатове, съобщения и медийни файлове. Това действие не може да бъде отменено.</string>
+    <string name="forget_login_confirmation_desktop">Да бъде ли изтрита тази регистрация? Всичко ще бъде изтрито, включително Вашата настройка за криптиране \"от край до край\", контакти, чатове, съобщения и медийни файлове. Това действие не може да бъде отменено.</string>
     <string name="account_info_hover_tooltip_desktop2">E-Mail: %1$s\nРазмер: %2$s\n Идентификатор на акаунт: %3$s</string>
     <string name="message_detail_sent_desktop">изпратено</string>
     <string name="message_detail_received_desktop">получено</string>
@@ -978,7 +975,7 @@ votes
     <string name="explain_desktop_minimized_disabled_tray_pref">Показването на икона в системната лента не може да бъде забранено, тъй като Delta Chat е стартиран с опцията --minimized.</string>
     <string name="no_spellcheck_suggestions_found">Няма открити предложения за правопис.</string>
     <string name="show_window">Показване на прозореца</string>
-    <string name="login_socks5_experimental_warning">Понастоящем поддръжката за SOCKS5 е експериментална. Използвайте на собствен риск. Ако въведете адрес в полето \"Електронна поща\", ще бъде осъществено DNS търсене, което няма да премине през SOCKS5 тунела.</string>
+    <string name="login_socks5_experimental_warning">Понастоящем поддръжката за SOCKS5 е експериментална. Използвайте на собствен риск. Ако въведете адрес в полето \"Електронна поща\", ще бъде осъществено DNS търсене извън SOCKS5 тунела.</string>
 
     <!-- title of the "keybindings" dialog (for the keybindings names as such, where possible the normal command strings are used) -->
     <string name="keybindings">Обвързвания на клавиши към команди</string>
@@ -989,14 +986,14 @@ votes
     <!-- command to put the cursor to the message input field -->
     <string name="focus_message_input">Поставяне на текстовия курсор в полето \"Съобщение\"</string>
     <string name="force_refresh_network">Принудително опресняване на мрежата</string>
-    <string name="insert_newline">Вмъкване на нов ред</string>
+    <string name="insert_newline">Вмъкване на символ за нов ред</string>
 
     <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">Статус на доставката: Грешка</string>
     <string name="a11y_encryption_padlock">Катинар за криптиране</string>
     <string name="a11y_delivery_status_sending">Статус на доставката: Изпраща се</string>
     <string name="a11y_delivery_status_draft">Статус на доставката: Чернова</string>
-    <string name="a11y_delivery_status_delivered">Статус на доставката: доставено</string>
+    <string name="a11y_delivery_status_delivered">Статус на доставката: Доставено</string>
     <string name="a11y_delivery_status_read">Статус на доставката: Прочетено</string>
     <string name="a11y_delivery_status_invalid">Невалиден статус на доставката</string>
     <string name="a11y_message_context_menu_btn_label">Действия, свързани със съобщението</string>
@@ -1005,7 +1002,7 @@ votes
 
     <!-- iOS specific strings, developers: please take care to remove strings that are no longer used! -->
     <string name="stop_sharing_location">Споделянето на местоположението да бъде спряно</string>
-    <string name="a11y_voice_message_hint_ios">След като приключите със записа, докоснете двукратно, за да го изпратите. За да го отмените, приплъзнете с два пръста.</string>
+    <string name="a11y_voice_message_hint_ios">След като приключите със записа, докоснете двукратно, за да го изпратите. За да го отхвърлите, приплъзнете с два пръста.</string>
     <string name="a11y_connectivity_hint">Докоснете двукратно, за да видите информация за връзката.</string>
     <string name="login_error_no_internet_connection">Няма връзка към интернет, влизането е неуспешно.</string>
     <string name="share_account_not_configured">Акаунтът не е конфигуриран.</string>
@@ -1052,7 +1049,6 @@ votes
 
 
     <!-- device messages for updates -->
-    <string name="update_1_34_android">Какво е новото в 1.34?\n\n🤗 Още по-дружелюбни списъци с контакти: Подредени по последно видян; контактите, видени в рамките на 10 минути, се маркират с точка 🟢\n\n📑 Нови страници в чат профилите: \"Аудио\" и \"Частни приложения\"\n\n🖼️ Ако някой Ви изпрати \"Частно приложение\" (напр. от https://webxdc.org ), можете да го добавите към началния екран</string>
     <!-- placeholder will be replaced by the URL https://get.delta.chat/#changelogs -->
     <string name="update_1_36_android">Акценти в 1.36\n\n💻📱 Използвайте лесно Delta Chat на всички свои устройства - просто следвайте три прости стъпки в \"Настройки / Добавяне на допълнително устройство\" (експериментална възможност)\n\n🖼🔍 Някога да сте търсили изображение, без да можете да си спомните чата? \"Всички медийни файлове\" от главното меню е за Вас!\n\nКакво друго? Уведомления във всички акаунти, изчистване на чата, както и още възможности, които може да видите на %1$s</string>
     <!-- placeholder will be replaced by the URL https://delta.chat/en/2023-03-27-third-independent-security-audit -->
