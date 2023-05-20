@@ -8,7 +8,7 @@
 - remove message id from chatlistitem
 - Improved message search results
 - Update translations (18.05.2023)
-- add `română` language
+- add Romanian translation
 
 ### Fixed
 - fix some emojis not getting larger in emoji only messages
