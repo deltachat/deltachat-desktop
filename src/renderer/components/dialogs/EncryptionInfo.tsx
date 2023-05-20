@@ -13,7 +13,10 @@ export default function EncryptionInfo({
   isOpen,
   onClose,
 }: {
-  chatListItem: Type.ChatListItemFetchResult & { type: 'ChatListItem' }
+  chatListItem: Pick<
+    Type.ChatListItemFetchResult & { type: 'ChatListItem' },
+    'id' | 'dmChatContact'
+  >
   isOpen: boolean
   onClose: DialogProps['onClose']
 }) {

@@ -23,52 +23,33 @@ import { useThemeCssVar } from '../../ThemeManager'
 import { DialogProps } from './DialogController'
 import { Card, Elevation } from '@blueprintjs/core'
 import { DeltaInput } from '../Login-Styles'
-import { selectChat } from '../helpers/ChatMethods'
+import { openViewProfileDialog, selectChat } from '../helpers/ChatMethods'
 import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import moment from 'moment'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 
-const ProfileInfoName = ({
-  name,
-  isVerified,
-  address,
-  lastSeen,
-}: {
-  name: string
-  isVerified: boolean
-  address: string
-  lastSeen: number
-}) => {
+function LastSeen({ timestamp }: { timestamp: number }) {
   const tx = useTranslationFunction()
   let lastSeenString = ''
   let lastSeenAbsolute: string | undefined = undefined
 
   // Dates from 1970 mean that contact has never been seen
-  if (lastSeen == 0) {
+  if (timestamp == 0) {
     lastSeenString = tx('last_seen_unknown')
   } else {
-    const date = moment(lastSeen * 1000).fromNow()
-    lastSeenString = tx('last_seen', date)
+    const date = moment(timestamp * 1000).fromNow()
+    lastSeenString = tx('last_seen_relative', date)
     lastSeenAbsolute = tx(
       'last_seen_at',
-      moment(lastSeen * 1000).toLocaleString()
+      moment(timestamp * 1000).toLocaleString()
     )
   }
 
   return (
-    <div className='profile-info-name-container'>
-      <div>
-        <p className='group-name'>
-          {name}
-          {isVerified && <InlineVerifiedIcon />}
-        </p>
-      </div>
-      <div className='address'>{address}</div>
-      <div className='last-seen' title={lastSeenAbsolute}>
-        {lastSeenString}
-      </div>
-    </div>
+    <span className='last-seen' title={lastSeenAbsolute}>
+      {lastSeenString}
+    </span>
   )
 }
 
@@ -166,6 +147,8 @@ export function ViewProfileInner({
   const CHATLISTITEM_CHAT_HEIGHT =
     Number(useThemeCssVar('--SPECIAL-chatlist-item-chat-height')) || 64
 
+  const screenContext = useContext(ScreenContext)
+
   return (
     <>
       <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -174,14 +157,46 @@ export function ViewProfileInner({
             <ClickForFullscreenAvatarWrapper filename={contact.profileImage}>
               <ProfileInfoAvatar contact={contact} />
             </ClickForFullscreenAvatarWrapper>
-            <ProfileInfoName
-              name={contact.displayName}
-              isVerified={contact.isVerified}
-              address={
-                isDeviceMessage ? tx('device_talk_subtitle') : contact.address
-              }
-              lastSeen={contact.lastSeen}
-            />
+            <div className='profile-info-name-container'>
+              <div>
+                <p className='group-name'>
+                  {contact.displayName}
+                  {/* {isVerified && <InlineVerifiedIcon />} */}
+                </p>
+              </div>
+              <div className='address'>
+                {isDeviceMessage ? tx('device_talk_subtitle') : contact.address}
+              </div>
+            </div>
+          </div>
+          <div className='contact-attributes'>
+            {contact.isVerified && !contact.verifierAddr && (
+              <div>
+                <InlineVerifiedIcon />
+                {tx('verified')}
+              </div>
+            )}
+            {contact.isVerified && contact.verifierAddr && (
+              <div
+                className='clickable'
+                onClick={() =>
+                  contact.verifierId &&
+                  openViewProfileDialog(screenContext, contact.verifierId)
+                }
+              >
+                <InlineVerifiedIcon />
+                {tx('verified_by', contact.verifierAddr)}
+              </div>
+            )}
+            {contact.lastSeen !== 0 && (
+              <div>
+                <img
+                  className='material-icon'
+                  src='../images/icons/schedule.svg'
+                />
+                <LastSeen timestamp={contact.lastSeen} />
+              </div>
+            )}
           </div>
           <div
             style={{

@@ -40,3 +40,23 @@ div.profile-info-container {
     padding: 0px 20px;
   }
 }
+
+.contact-attributes {
+  margin: 20px;
+  font-size: 1.08em;
+
+  & > div {
+    margin-bottom: 8px;
+    & > img {
+      width: 1.15em;
+      height: 1.15em;
+      margin-inline-start: 0.3em;
+      margin-inline-end: 0.3em;
+      vertical-align: middle;
+    }
+
+    &.clickable:hover {
+      cursor: pointer;
+    }
+  }
+}
