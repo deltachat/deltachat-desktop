@@ -101,25 +101,25 @@ export default class DeltaChatController extends EventEmitter {
       if (response.indexOf('event') !== -1)
         try {
           const { result } = JSON.parse(response)
-          const { context_id, event } = result
+          const { contextId, event } = result
           if (
-            typeof context_id !== undefined &&
+            typeof contextId !== undefined &&
             typeof event === 'object' &&
             event.type
           ) {
             if (event.type === 'Warning') {
-              logCoreEvent.warn(context_id, event.msg)
+              logCoreEvent.warn(contextId, event.msg)
             } else if (event.type === 'Info') {
-              logCoreEvent.info(context_id, event.msg)
+              logCoreEvent.info(contextId, event.msg)
             } else if (event.type.startsWith('Error')) {
-              logCoreEvent.error(context_id, event.msg)
+              logCoreEvent.error(contextId, event.msg)
             } else if (app.rc['log-debug']) {
               // in debug mode log all core events
               const event_clone = Object.assign({}, event) as Partial<
                 typeof event
               >
               delete event_clone.type
-              logCoreEvent.debug(event.type, context_id, event)
+              logCoreEvent.debug(event.type, contextId, event)
             }
           }
         } catch (error) {
