@@ -91,7 +91,7 @@ If you have a AUR helper like yay or paru installed, you can install it by runni
 Otherwise you can still do it manually:
 
 <details>
-<summary>Show Manual Steps</summary>
+<summary>Show manual steps</summary>
 
 ```sh
 # Download the latest snapshot of the PKGBUILD
