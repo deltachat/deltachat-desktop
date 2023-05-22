@@ -180,6 +180,7 @@
     .chat-list-item-message {
       margin-top: 0;
       .text {
+        display: inline-block;
         max-width: fit-content;
       }
     }
