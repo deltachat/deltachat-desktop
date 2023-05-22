@@ -126,7 +126,7 @@ Simply install the `.dmg` file as you do it with all other software on mac.
 
 ### Windows <a id="windows"></a>
 
-You can find the downloads for windows on <https://get.delta.chat>, though we recomend using the [microsoft store release](https://www.microsoft.com/en-us/p/deltachat/9pjtxx7hn3pk?activetab=pivot:overviewtab), because there you get automatic updates.
+You can find the downloads for windows on <https://get.delta.chat>, though we recomend using the [Microsoft Store release](https://www.microsoft.com/en-us/p/deltachat/9pjtxx7hn3pk?activetab=pivot:overviewtab), because there you get automatic updates.
 
 ### From Source <a id="source"></a>
 
