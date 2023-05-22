@@ -57,7 +57,7 @@
     - [MacOS](#mac-os-)
       - [Homebrew](#homebrew)
       - [DMG](#dmg)
-    - [Windows](#windows-)
+    - [Windows](#windows)
     - [From Source](#from-source-)
     - [Troubleshooting](#troubleshooting-)
   - [Configuration and Databases](#configuration-and-databases-)
@@ -125,7 +125,7 @@ $ brew install --cask deltachat
 
 Simply install the `.dmg` file as you do it with all other software on mac.
 
-### Windows
+### Windows <a id="windows"></a>
 
 You can find the downloads for windows on <https://get.delta.chat>, though we recomend using the [microsoft store release](https://www.microsoft.com/en-us/p/deltachat/9pjtxx7hn3pk?activetab=pivot:overviewtab), because there you get automatic updates.
 
