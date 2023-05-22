@@ -23,7 +23,6 @@
 
 [How to make custom Themes](./docs/THEMES.md)
 
-
 </td><td>
 
 [Logging](./docs/LOGGING.md)

@@ -18,6 +18,7 @@ see https://github.com/deltachat/deltachat-desktop/issues/1590 for the original 
 If you are getting an OpenSSL error message at the first start up you need to install OpenSSL.
 
 macOS:
+
 ```
 $ brew install openssl
 ```
