@@ -279,6 +279,9 @@ function ViewGroupInner(props: {
                   contacts={chat.contacts}
                   showRemove={!chatDisabled}
                   onClick={contact => {
+                    if (contact.id === C.DC_CONTACT_ID_SELF) {
+                      return
+                    }
                     setProfileContact(contact)
                     setViewMode('profile')
                   }}
