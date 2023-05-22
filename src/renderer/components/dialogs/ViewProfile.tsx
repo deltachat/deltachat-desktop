@@ -76,7 +76,8 @@ export default function ViewProfile(props: {
   const tx = window.static_translate
   const { openDialog } = useContext(ScreenContext)
   const [contact, setContact] = useState<Type.Contact>(props.contact)
-  const isDeviceMessage = contact.id === C.DC_CONTACT_ID_DEVICE
+  const isDeviceChat = contact.id === C.DC_CONTACT_ID_DEVICE
+  const isSelfChat = contact.id === C.DC_CONTACT_ID_SELF
 
   const onClickEdit = () => {
     openDialog(EditContactNameDialog, {
@@ -102,7 +103,7 @@ export default function ViewProfile(props: {
       <DeltaDialogHeader
         title={tx('menu_view_profile')}
         onClickEdit={onClickEdit}
-        showEditButton={!isDeviceMessage}
+        showEditButton={!(isDeviceChat || isSelfChat)}
         showCloseButton={true}
         onClose={onClose}
       />
@@ -128,7 +129,8 @@ export function ViewProfileInner({
     chatListIds,
     null
   )
-  const isDeviceMessage = contact.id === C.DC_CONTACT_ID_DEVICE
+  const isDeviceChat = contact.id === C.DC_CONTACT_ID_DEVICE
+  const isSelfChat = contact.id === C.DC_CONTACT_ID_SELF
 
   const tx = window.static_translate
 
@@ -149,6 +151,18 @@ export function ViewProfileInner({
 
   const screenContext = useContext(ScreenContext)
 
+  let displayNameLine = contact.displayName
+  let addressLine = contact.address
+  let statusText = contact.status
+
+  if (isDeviceChat) {
+    addressLine = tx('device_talk_subtitle')
+  } else if (isSelfChat) {
+    displayNameLine = tx('saved_messages')
+    addressLine = tx('chat_self_talk_subtitle')
+    statusText = tx('saved_messages_explain')
+  }
+
   return (
     <>
       <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -160,44 +174,44 @@ export function ViewProfileInner({
             <div className='profile-info-name-container'>
               <div>
                 <p className='group-name'>
-                  {contact.displayName}
+                  {displayNameLine}
                   {/* {isVerified && <InlineVerifiedIcon />} */}
                 </p>
               </div>
-              <div className='address'>
-                {isDeviceMessage ? tx('device_talk_subtitle') : contact.address}
-              </div>
+              <div className='address'>{addressLine}</div>
             </div>
           </div>
-          <div className='contact-attributes'>
-            {contact.isVerified && !contact.verifierAddr && (
-              <div>
-                <InlineVerifiedIcon />
-                {tx('verified')}
-              </div>
-            )}
-            {contact.isVerified && contact.verifierAddr && (
-              <div
-                className='clickable'
-                onClick={() =>
-                  contact.verifierId &&
-                  openViewProfileDialog(screenContext, contact.verifierId)
-                }
-              >
-                <InlineVerifiedIcon />
-                {tx('verified_by', contact.verifierAddr)}
-              </div>
-            )}
-            {contact.lastSeen !== 0 && (
-              <div>
-                <img
-                  className='material-icon'
-                  src='../images/icons/schedule.svg'
-                />
-                <LastSeen timestamp={contact.lastSeen} />
-              </div>
-            )}
-          </div>
+          {!isSelfChat && (
+            <div className='contact-attributes'>
+              {contact.isVerified && !contact.verifierAddr && (
+                <div>
+                  <InlineVerifiedIcon />
+                  {tx('verified')}
+                </div>
+              )}
+              {contact.isVerified && contact.verifierAddr && (
+                <div
+                  className='clickable'
+                  onClick={() =>
+                    contact.verifierId &&
+                    openViewProfileDialog(screenContext, contact.verifierId)
+                  }
+                >
+                  <InlineVerifiedIcon />
+                  {tx('verified_by', contact.verifierAddr)}
+                </div>
+              )}
+              {contact.lastSeen !== 0 && (
+                <div>
+                  <img
+                    className='material-icon'
+                    src='../images/icons/schedule.svg'
+                  />
+                  <LastSeen timestamp={contact.lastSeen} />
+                </div>
+              )}
+            </div>
+          )}
           <div
             style={{
               display: 'flex',
@@ -205,7 +219,7 @@ export function ViewProfileInner({
               justifyContent: 'center',
             }}
           >
-            {!isDeviceMessage && (
+            {!isDeviceChat && (
               <button
                 aria-label={tx('send_message')}
                 onClick={onSendMessage}
@@ -216,7 +230,7 @@ export function ViewProfileInner({
               </button>
             )}
           </div>
-          {contact.status != '' && (
+          {statusText != '' && (
             <>
               <DeltaDialogContentTextSeparator
                 text={tx('pref_default_status_label')}
@@ -229,13 +243,13 @@ export function ViewProfileInner({
                     closeProfileDialog: onClose,
                   }}
                 >
-                  <MessageBody text={contact.status} />
+                  <MessageBody text={statusText} />
                 </MessagesDisplayContext.Provider>
               </div>
             </>
           )}
         </div>
-        {!isDeviceMessage && (
+        {!(isDeviceChat || isSelfChat) && (
           <>
             <DeltaDialogContentTextSeparator
               text={tx('profile_shared_chats')}
