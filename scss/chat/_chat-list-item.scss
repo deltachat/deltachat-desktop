@@ -63,6 +63,7 @@
       margin-top: 3px;
 
       & > .text {
+        display: flex;
         align-items: center;
         max-width: calc(100% - 18px);
         height: 1.3em;
@@ -179,6 +180,7 @@
     .chat-list-item-message {
       margin-top: 0;
       .text {
+        display: inline-block;
         max-width: fit-content;
       }
     }
