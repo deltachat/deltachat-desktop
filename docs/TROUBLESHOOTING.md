@@ -12,3 +12,13 @@ sudo apt-get install -y libgdk-pixbuf2.0-dev libnss3 libgtk-3-dev libasound2-dev
 ```
 
 see https://github.com/deltachat/deltachat-desktop/issues/1590 for the original issue this was reported to
+
+## OpenSSL error
+
+If you are getting an OpenSSL error message at the first start up you need to install OpenSSL.
+
+macOS:
+
+```
+$ brew install openssl
+```

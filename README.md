@@ -1,32 +1,68 @@
-# deltachat-desktop
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+
+# Delta Chat Desktop <a id="deltachat-desktop"></a>
 
 **Desktop Application for [delta.chat](https://delta.chat)**
 
 <center><img src="README_ASSETS/screenshot.png"/></center>
 
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
-[![npm test](https://github.com/deltachat/deltachat-desktop/workflows/npm%20test/badge.svg)](https://github.com/deltachat/deltachat-desktop/actions?query=workflow%3A%22npm+test%22+branch%3Amaster)
-[![Build Status](https://travis-ci.org/deltachat/deltachat-desktop.svg?branch=master)](https://travis-ci.org/deltachat/deltachat-desktop)
+## Documentation Links <a id="docs"></a>
+
+<table>
+  <thead>
+    <tr><th>For Users</th><th>For Developers</th></tr>
+  </thead>
+<tbody>
+<tr><td>
+
+[TROUBLESHOOTING](./docs/TROUBLESHOOTING.md)
+
+[CLI flags](./docs/CLI_FLAGS.md)
+
+[Keybindings](./docs/KEYBINDINGS.md)
+
+[How to make custom Themes](./docs/THEMES.md)
+
+</td><td>
+
+[Logging](./docs/LOGGING.md)
+
+[Documentation for Developers](./docs/DEVELOPMENT.md)
+
+[Styling Guidelines](./docs/STYLES.md)
+
+[How to update core](./docs/UPDATE_CORE.md)
+
+[How to do end to end testing](./docs/E2E-TESTING.md)
+
+[How to do a release](./docs/RELEASE_WORKFLOW.md)
+
+</td>
+</tr>
+</tbody>
+</table>
 
 ## Table of Contents
 
 <details><summary>Click to expand</summary>
 
 - [deltachat-desktop](#deltachat-desktop)
+  - [Documentation Links](#docs)
   - [Table of Contents](#table-of-contents)
-  - [Install ](#install-)
-    - [Linux ](#linux-)
-      - [Flatpak ](#flatpak-)
-      - [Arch Linux ](#arch-linux-)
-    - [Mac OS ](#mac-os-)
-    - [Homebrew](#homebrew)
-    - [DMG](#dmg)
-    - [From Source ](#from-source-)
-    - [Troubleshooting ](#troubleshooting-)
-  - [Configuration and Databases ](#configuration-and-databases-)
-  - [How to Contribute ](#how-to-contribute-)
-  - [Logging ](#logging-)
-  - [License ](#license-)
+  - [Install](#install-)
+    - [Linux](#linux-)
+      - [Flatpak](#flatpak-)
+      - [Arch Linux](#arch-linux-)
+    - [MacOS](#mac-os-)
+      - [Homebrew](#homebrew)
+      - [DMG](#dmg)
+    - [Windows](#windows)
+    - [From Source](#from-source-)
+    - [Troubleshooting](#troubleshooting-)
+  - [Configuration and Databases](#configuration-and-databases-)
+  - [How to Contribute](#how-to-contribute-)
+  - [Logging](#logging-)
+  - [License](#license-)
 
 </details>
 
@@ -50,9 +86,12 @@ also has a setup guide for many Linux platforms.
 
 > **WARNING: Currently the AUR package compiles from latest master. This can be more recent as the latest release, introduce new features but also new bugs.**
 
-If you have a AUR helper like yay installed, you can install it by running `yay -S deltachat-desktop-git` and following the instruction in your terminal.
+If you have a AUR helper like yay or paru installed, you can install it by running `yay -S deltachat-desktop-git` and following the instruction in your terminal.
 
 Otherwise you can still do it manually:
+
+<details>
+<summary>Show manual steps</summary>
 
 ```sh
 # Download the latest snapshot of the PKGBUILD
@@ -71,23 +110,23 @@ makepkg -si
 sudo pacman -U deltachat-desktop-git-<version>.tar.xz
 ```
 
+</details>
+
 ### Mac OS <a id="mac"></a>
 
-### Homebrew
+#### Homebrew
 
 ```
 $ brew install --cask deltachat
 ```
 
-### DMG
+#### DMG
 
 Simply install the `.dmg` file as you do it with all other software on mac.
 
-If you are getting an OpenSSL error message at the first start up you need to install OpenSSL.
+### Windows <a id="windows"></a>
 
-```
-$ brew install openssl
-```
+You can find the downloads for windows on <https://get.delta.chat>, though we recomend using the [Microsoft Store release](https://www.microsoft.com/en-us/p/deltachat/9pjtxx7hn3pk?activetab=pivot:overviewtab), because there you get automatic updates.
 
 ### From Source <a id="source"></a>
 
