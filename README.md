@@ -33,7 +33,7 @@
 
 [How to update core](./docs/UPDATE_CORE.md)
 
-[How to do E2E testing](./docs/E2E-TESTING.md)
+[How to do end to end testing](./docs/E2E-TESTING.md)
 
 [How to do a release](./docs/RELEASE_WORKFLOW.md)
 
