@@ -61,7 +61,7 @@ const Composer = forwardRef<
     draftState: DraftObject
     removeQuote: () => void
     updateDraftText: (text: string, InputChatId: number) => void
-    addFileToDraft: (file: string) => void
+    addFileToDraft: (file: string) => Promise<void>
     removeFile: () => void
     clearDraft: () => void
   }
@@ -211,7 +211,9 @@ const Composer = forwardRef<
     try {
       // Write clipboard to file then attach it to the draft
       const path = await runtime.writeClipboardToTempFile()
-      addFileToDraft(path)
+      await addFileToDraft(path)
+      // delete file again after it was sucessfuly added
+      await runtime.removeTempFile(path)
     } catch (err) {
       log.error('Failed to paste file.', err)
     }
@@ -350,7 +352,7 @@ export function useDraft(
   draftState: DraftObject
   removeQuote: () => void
   updateDraftText: (text: string, InputChatId: number) => void
-  addFileToDraft: (file: string) => void
+  addFileToDraft: (file: string) => Promise<void>
   removeFile: () => void
   clearDraft: () => void
 } {
@@ -499,9 +501,9 @@ export function useDraft(
   }, [saveDraft])
 
   const addFileToDraft = useCallback(
-    (file: string) => {
+    async (file: string) => {
       draftRef.current.file = file
-      saveDraft()
+      return saveDraft()
     },
     [saveDraft]
   )

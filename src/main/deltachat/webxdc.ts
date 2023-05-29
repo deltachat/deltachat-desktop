@@ -14,6 +14,7 @@ import { platform } from 'os'
 import { tx } from '../load-translations'
 import { DcOpenWebxdcParameters } from '../../shared/shared-types'
 import { DesktopSettings } from '../desktop_settings'
+import { window as main_window } from '../windows/main'
 
 const open_apps: {
   [instanceId: string]: {
@@ -397,6 +398,29 @@ If you think that's a bug and you need that permission, then please open an issu
         description
       )
     })
+
+    ipcMain.handle(
+      'webxdc.sendFileToChat',
+      (
+        event,
+        file: { file_name: string; file_content: string } | null,
+        text: string | null
+      ) => {
+        const key = Object.keys(open_apps).find(
+          key => open_apps[key].win.webContents === event.sender
+        )
+        if (!key) {
+          log.error(
+            'webxdc.sendFileToChat failed, app not found in list of open ones'
+          )
+          return
+        }
+        // forward to main window
+        main_window?.webContents.send('webxdc.sendFileToChat', file, text)
+        main_window?.focus()
+        open_apps[key].win.destroy()
+      }
+    )
 
     ipcMain.handle('close-all-webxdc', () => {
       this._closeAll()

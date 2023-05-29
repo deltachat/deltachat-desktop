@@ -1,4 +1,4 @@
-import { copyFile, mkdir, rm } from 'fs/promises'
+import { copyFile, writeFile, mkdir, rm } from 'fs/promises'
 import {
   app as rawApp,
   clipboard,
@@ -22,7 +22,6 @@ import { platform } from 'os'
 import { existsSync } from 'fs'
 import { set_has_unread, updateTrayIcon } from './tray'
 import mimeTypes from 'mime-types'
-import { writeFile } from 'fs/promises'
 import { openHtmlEmailWindow } from './windows/html_email'
 
 const log = getLogger('main/ipc')
@@ -190,6 +189,10 @@ export async function init(cwd: string, logHandler: LogHandler) {
   ipcMain.handle('app.writeClipboardToTempFile', () =>
     writeClipboardToTempFile()
   )
+  ipcMain.handle('app.writeTempFile', (_ev, name, content) =>
+    writeTempFile(name, content)
+  )
+  ipcMain.handle('app.removeTempFile', (_ev, path) => removeTempFile(path))
 
   ipcMain.handle('electron.shell.openExternal', (_ev, url) =>
     shell.openExternal(url)
@@ -258,6 +261,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
 }
 
 async function writeClipboardToTempFile(): Promise<string> {
+  await mkdir(join(rawApp.getPath('temp'), 'draft/'), { recursive: true })
   const formats = clipboard.availableFormats().sort()
   log.debug('Clipboard available formats:', formats)
   if (formats.length <= 0) {
@@ -265,6 +269,7 @@ async function writeClipboardToTempFile(): Promise<string> {
   }
   const pathToFile = join(
     rawApp.getPath('temp'),
+    'draft',
     `paste.${mimeTypes.extension(formats[0]) || 'bin'}`
   )
   const buf =
@@ -274,4 +279,26 @@ async function writeClipboardToTempFile(): Promise<string> {
   log.debug(`Writing clipboard ${formats[0]} to file ${pathToFile}`)
   await writeFile(pathToFile, buf, 'binary')
   return pathToFile
+}
+
+async function writeTempFile(name: string, content: string): Promise<string> {
+  await mkdir(join(rawApp.getPath('temp'), 'draft/'), { recursive: true })
+  const pathToFile = join(rawApp.getPath('temp'), 'draft/', name)
+  log.debug(`Writing base64 encoded file ${pathToFile}`)
+  await writeFile(pathToFile, Buffer.from(content, 'utf8'), 'binary')
+  return pathToFile
+}
+
+async function removeTempFile(path: string) {
+  if (
+    path.indexOf(rawApp.getPath('temp')) === -1 ||
+    path.indexOf('..') !== -1
+  ) {
+    log.error(
+      'removeTempFile was called with a path that is outside of the temp dir: ',
+      path
+    )
+    throw new Error('Path is outside of the temp folder')
+  }
+  await rm(path)
 }

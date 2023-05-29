@@ -28,6 +28,16 @@ type ReceivedStatusUpdate<T> = {
   summary?: string
 }
 
+type sendOptions =
+  | {
+      file: File
+      text?: string
+    }
+  | {
+      file?: File
+      text: string
+    }
+
 interface Webxdc<T> {
   /** Returns the peer's own address.
    *  This is esp. useful if you want to differ between different peers - just send the address along with the payload,
@@ -54,6 +64,14 @@ interface Webxdc<T> {
    * @param description short, human-readable description what this update is about. this is shown eg. as a fallback text in an email program.
    */
   sendUpdate(update: SendingStatusUpdate<T>, description: string): void
+  /**
+   * Send a message with file, text or both to a chat.
+   * Asks user to what Chat to send the message to.
+   * Always exits the xdc, please save your app state before calling this function
+   * @param content
+   * @returns returns a promise that never resolves (because the xdc closes), but is rejected on error.
+   */
+  sendToChat(content: sendOptions): Promise<void>
 }
 
 ////////// ANCHOR: global

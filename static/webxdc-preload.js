@@ -51,7 +51,42 @@
       return Promise.resolve([])
     },
     sendUpdate: (update, description) =>
-      ipcRenderer.invoke('webxdc.sendUpdate', JSON.stringify(update), description),
+      ipcRenderer.invoke(
+        'webxdc.sendUpdate',
+        JSON.stringify(update),
+        description
+      ),
+    sendToChat: async content => {
+      if (!content.file && !content.text) {
+        return Promise.reject(
+          'Error from sendToChat: either file or text need to be set'
+        )
+      }
+      const data_start = ';base64,'
+      /** @type {{file_name: string, file_content: string} | null} */
+      let file = null
+      if (content.file) {
+        const base64Content =
+          content.file &&
+          (await new Promise((resolve, reject) => {
+            const reader = new FileReader()
+            reader.readAsDataURL(content.file)
+            reader.onload = () => {
+              /** @type {string} */
+              let data = reader.result
+              resolve(data.slice(data.indexOf(data_start) + data_start.length))
+            }
+            reader.onerror = () => reject(reader.error)
+          }))
+
+        file = {
+          file_name: content.file.name,
+          file_content: base64Content,
+        }
+      }
+
+      await ipcRenderer.invoke('webxdc.sendFileToChat', file, content.text)
+    },
   }
 
   const connections = []
