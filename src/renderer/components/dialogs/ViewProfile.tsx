@@ -129,6 +129,7 @@ export function ViewProfileInner({
     chatListIds,
     null
   )
+  const [selfChatAvatar, setSelfChatAvatar] = useState<string | null>(null)
   const isDeviceChat = contact.id === C.DC_CONTACT_ID_DEVICE
   const isSelfChat = contact.id === C.DC_CONTACT_ID_SELF
 
@@ -145,6 +146,22 @@ export function ViewProfileInner({
     )
     onChatClick(dmChatId)
   }
+
+  useEffect(() => {
+    if (isSelfChat) {
+      ;(async () => {
+        const chatid = await BackendRemote.rpc.createChatByContactId(
+          accountId,
+          C.DC_CONTACT_ID_SELF
+        )
+        const { profileImage } = await BackendRemote.rpc.getBasicChatInfo(
+          accountId,
+          chatid
+        )
+        setSelfChatAvatar(profileImage)
+      })()
+    }
+  }, [accountId, isSelfChat])
 
   const CHATLISTITEM_CHAT_HEIGHT =
     Number(useThemeCssVar('--SPECIAL-chatlist-item-chat-height')) || 64
@@ -168,8 +185,16 @@ export function ViewProfileInner({
       <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
         <div>
           <div className='profile-info-container'>
-            <ClickForFullscreenAvatarWrapper filename={contact.profileImage}>
-              <ProfileInfoAvatar contact={contact} />
+            <ClickForFullscreenAvatarWrapper
+              filename={isSelfChat ? selfChatAvatar : contact.profileImage}
+            >
+              {isSelfChat ? (
+                <ProfileInfoAvatar
+                  contact={{ ...contact, profileImage: selfChatAvatar }}
+                />
+              ) : (
+                <ProfileInfoAvatar contact={contact} />
+              )}
             </ClickForFullscreenAvatarWrapper>
             <div className='profile-info-name-container'>
               <div>
