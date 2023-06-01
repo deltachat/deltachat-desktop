@@ -59,7 +59,7 @@
     sendToChat: async content => {
       if (!content.file && !content.text) {
         return Promise.reject(
-          'Error from sendToChat: either file or text need to be set'
+          'Error from sendToChat: Invalid empty message, at least one of text or file should be provided'
         )
       }
       /** @type {(file: Blob) => Promise<string>} */
