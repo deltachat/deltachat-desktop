@@ -33,7 +33,7 @@ export default function WebxdcSaveToChatDialog(props: {
   const onChatClick = async (chatId: number) => {
     let path = null
     if (file) {
-      path = await runtime.writeTempFile(file.file_name, file.file_content)
+      path = await runtime.writeTempFileFromBase64(file.file_name, file.file_content)
     }
     await saveToChatAction(chatId, messageText, path)
     if (path) {

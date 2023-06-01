@@ -189,8 +189,8 @@ export async function init(cwd: string, logHandler: LogHandler) {
   ipcMain.handle('app.writeClipboardToTempFile', () =>
     writeClipboardToTempFile()
   )
-  ipcMain.handle('app.writeTempFile', (_ev, name, content) =>
-    writeTempFile(name, content)
+  ipcMain.handle('app.writeTempFileFromBase64', (_ev, name, content) =>
+    writeTempFileFromBase64(name, content)
   )
   ipcMain.handle('app.removeTempFile', (_ev, path) => removeTempFile(path))
 
@@ -281,11 +281,11 @@ async function writeClipboardToTempFile(): Promise<string> {
   return pathToFile
 }
 
-async function writeTempFile(name: string, content: string): Promise<string> {
+async function writeTempFileFromBase64(name: string, content: string): Promise<string> {
   await mkdir(join(rawApp.getPath('temp'), 'draft/'), { recursive: true })
   const pathToFile = join(rawApp.getPath('temp'), 'draft/', name)
   log.debug(`Writing base64 encoded file ${pathToFile}`)
-  await writeFile(pathToFile, Buffer.from(content, 'utf8'), 'binary')
+  await writeFile(pathToFile, Buffer.from(content, 'base64'), 'binary')
   return pathToFile
 }
 

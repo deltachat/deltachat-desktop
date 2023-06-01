@@ -107,7 +107,7 @@ interface Runtime {
     cb: (data: { accountId: number; chatId: number; msgId: number }) => void
   ): void
   writeClipboardToTempFile(): Promise<string>
-  writeTempFile(name: string, content: string): Promise<string>
+  writeTempFileFromBase64(name: string, content: string): Promise<string>
   removeTempFile(path: string): Promise<void>
   getWebxdcDiskUsage(
     accountId: number
@@ -221,7 +221,7 @@ class Browser implements Runtime {
   async writeClipboardToTempFile(): Promise<string> {
     throw new Error('Method not implemented.')
   }
-  writeTempFile(_name: string, _content: string): Promise<string> {
+  writeTempFileFromBase64(_name: string, _content: string): Promise<string> {
     throw new Error('Method not implemented.')
   }
   removeTempFile(_name: string): Promise<void> {
@@ -401,8 +401,8 @@ class Electron implements Runtime {
   async writeClipboardToTempFile(): Promise<string> {
     return ipcBackend.invoke('app.writeClipboardToTempFile')
   }
-  writeTempFile(name: string, content: string): Promise<string> {
-    return ipcBackend.invoke('app.writeTempFile', name, content)
+  writeTempFileFromBase64(name: string, content: string): Promise<string> {
+    return ipcBackend.invoke('app.writeTempFileFromBase64', name, content)
   }
   removeTempFile(path: string): Promise<void> {
     return ipcBackend.invoke('app.removeTempFile', path)
