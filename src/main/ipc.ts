@@ -281,7 +281,10 @@ async function writeClipboardToTempFile(): Promise<string> {
   return pathToFile
 }
 
-async function writeTempFileFromBase64(name: string, content: string): Promise<string> {
+async function writeTempFileFromBase64(
+  name: string,
+  content: string
+): Promise<string> {
   await mkdir(join(rawApp.getPath('temp'), 'draft/'), { recursive: true })
   const pathToFile = join(rawApp.getPath('temp'), 'draft/', name)
   log.debug(`Writing base64 encoded file ${pathToFile}`)

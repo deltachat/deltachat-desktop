@@ -33,7 +33,10 @@ export default function WebxdcSaveToChatDialog(props: {
   const onChatClick = async (chatId: number) => {
     let path = null
     if (file) {
-      path = await runtime.writeTempFileFromBase64(file.file_name, file.file_content)
+      path = await runtime.writeTempFileFromBase64(
+        file.file_name,
+        file.file_content
+      )
     }
     await saveToChatAction(chatId, messageText, path)
     if (path) {
@@ -51,7 +54,10 @@ export default function WebxdcSaveToChatDialog(props: {
   const noResults = chatListIds.length === 0 && queryStr !== ''
   return (
     <DeltaDialogBase isOpen={true} onClose={onClose} fixed>
-      <DeltaDialogHeader onClose={onClose} title={tx('chat_share_with_title')} />
+      <DeltaDialogHeader
+        onClose={onClose}
+        title={tx('chat_share_with_title')}
+      />
       <div
         className={classNames(
           Classes.DIALOG_BODY,
