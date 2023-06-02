@@ -4,6 +4,7 @@
 
 ### Added
 - Show thumbnail in chatlist summary of image, sticker and webxdc messages
+- add webxdc api `sendToChat` #3240
 
 ### Changed
 - exclude more unused files from installation package
@@ -18,6 +19,7 @@
 - add missing languages to supported languages in appx manifest
 - fix show verification state of chat in chatlist
 - fix make self contact not clickable in group member list
+- remove pasted images from temp folder #2927
 
 <a id="1_36_4"></a>
 

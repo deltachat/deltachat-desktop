@@ -107,6 +107,8 @@ interface Runtime {
     cb: (data: { accountId: number; chatId: number; msgId: number }) => void
   ): void
   writeClipboardToTempFile(): Promise<string>
+  writeTempFileFromBase64(name: string, content: string): Promise<string>
+  removeTempFile(path: string): Promise<void>
   getWebxdcDiskUsage(
     accountId: number
   ): Promise<{
@@ -130,21 +132,34 @@ interface Runtime {
     | ((kind: 'about' | 'keybindings' | 'settings') => void)
     | undefined
   onOpenQrUrl: ((url: string) => void) | undefined
+  onWebxcSendToChat:
+    | ((
+        file: { file_name: string; file_content: string } | null,
+        text: string | null
+      ) => void)
+    | undefined
 }
 
 class Browser implements Runtime {
-  onOpenQrUrl: ((url: string) => void) | undefined
+  onChooseLanguage: ((locale: string) => Promise<void>) | undefined
+  onThemeUpdate: (() => void) | undefined
   onShowDialog:
     | ((kind: 'about' | 'keybindings' | 'settings') => void)
     | undefined
+  onOpenQrUrl: ((url: string) => void) | undefined
+  onWebxcSendToChat:
+    | ((
+        file: { file_name: string; file_content: string } | null,
+        text: string | null
+      ) => void)
+    | undefined
+
   emitUIFullyReady(): void {
     throw new Error('Method not implemented.')
   }
   onDragFileOut(_file: string): void {
     throw new Error('Method not implemented.')
   }
-  onThemeUpdate: (() => void) | undefined
-  onChooseLanguage: ((locale: string) => Promise<void>) | undefined
   emitUIReady(): void {
     throw new Error('Method not implemented.')
   }
@@ -204,6 +219,12 @@ class Browser implements Runtime {
     throw new Error('Method not implemented.')
   }
   async writeClipboardToTempFile(): Promise<string> {
+    throw new Error('Method not implemented.')
+  }
+  writeTempFileFromBase64(_name: string, _content: string): Promise<string> {
+    throw new Error('Method not implemented.')
+  }
+  removeTempFile(_name: string): Promise<void> {
     throw new Error('Method not implemented.')
   }
   setNotificationCallback(
@@ -298,6 +319,12 @@ class Browser implements Runtime {
   }
 }
 class Electron implements Runtime {
+  onWebxcSendToChat:
+    | ((
+        file: { file_name: string; file_content: string } | null,
+        text: string | null
+      ) => void)
+    | undefined
   onOpenQrUrl: ((url: string) => void) | undefined
   onShowDialog:
     | ((kind: 'about' | 'keybindings' | 'settings') => void)
@@ -373,6 +400,12 @@ class Electron implements Runtime {
   }
   async writeClipboardToTempFile(): Promise<string> {
     return ipcBackend.invoke('app.writeClipboardToTempFile')
+  }
+  writeTempFileFromBase64(name: string, content: string): Promise<string> {
+    return ipcBackend.invoke('app.writeTempFileFromBase64', name, content)
+  }
+  removeTempFile(path: string): Promise<void> {
+    return ipcBackend.invoke('app.removeTempFile', path)
   }
   private notificationCallback: (data: {
     accountId: number
@@ -511,6 +544,15 @@ class Electron implements Runtime {
     )
     ipcBackend.on('showSettingsDialog', () => this.onShowDialog?.('settings'))
     ipcBackend.on('open-url', (_ev, url) => this.onOpenQrUrl?.(url))
+    ipcBackend.on('open-url', (_ev, url) => this.onOpenQrUrl?.(url))
+    ipcBackend.on(
+      'webxdc.sendToChat',
+      (
+        _ev,
+        file: { file_name: string; file_content: string } | null,
+        text: string | null
+      ) => this.onWebxcSendToChat?.(file, text)
+    )
   }
   openHelpWindow(): void {
     ipcBackend.send('help', window.localeData.locale)
