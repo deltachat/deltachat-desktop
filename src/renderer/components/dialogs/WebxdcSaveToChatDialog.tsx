@@ -51,7 +51,7 @@ export default function WebxdcSaveToChatDialog(props: {
   const noResults = chatListIds.length === 0 && queryStr !== ''
   return (
     <DeltaDialogBase isOpen={true} onClose={onClose} fixed>
-      <DeltaDialogHeader onClose={onClose} title={tx('webxdc_send_to_chat')} />
+      <DeltaDialogHeader onClose={onClose} title={tx('chat_share_with_title')} />
       <div
         className={classNames(
           Classes.DIALOG_BODY,
