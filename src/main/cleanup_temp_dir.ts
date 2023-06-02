@@ -20,16 +20,18 @@ export async function cleanupDraftTempDir() {
     }
 
     const files = await readdir(path)
-    log.debug(
-      `found old ${files.length} temporary draft files, trying to delete them now`
-    )
-    const promises = []
-    for (const file in files) {
-      log.debug('delete', join(getDraftTempDir(), file))
-      promises.push(rm(join(getDraftTempDir(), file)))
+    if (files.length !== 0) {
+        log.debug(
+          `found old ${files.length} temporary draft files, trying to delete them now`
+        )
+        const promises = []
+        for (const file in files) {
+          log.debug('delete', join(getDraftTempDir(), file))
+          promises.push(rm(join(getDraftTempDir(), file)))
+        }
+    
+        await Promise.all(promises)
     }
-
-    await Promise.all(promises)
 
     // delete dir at the end
     await rmdir(path)
