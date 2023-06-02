@@ -195,14 +195,15 @@ export function DraftAttachment({
       </audio>
     )
   } else {
-    const { fileName, fileBytes, fileMime } = attachment
+    const { file, fileName, fileBytes, fileMime } = attachment
     const extension = getExtension(attachment)
+
     return (
       <div className={classNames('message-attachment-generic')}>
         <div
           className='file-icon'
           draggable='true'
-          onDragStart={ev => fileName && dragAttachmentOut(fileName, ev)}
+          onDragStart={ev => file && dragAttachmentOut(file, ev)}
           title={fileMime || 'null'}
         >
           {extension ? (
