@@ -8,7 +8,6 @@ import type { EventEmitter } from 'events'
 import contextMenu from './electron-context-menu'
 import { findOutIfWeAreRunningAsAppx } from './isAppx'
 import { getHelpMenu } from './help_menu'
-import { rm } from 'fs/promises'
 
 // Hardening: prohibit all DNS queries, except for Mapbox
 // (see src/renderer/components/map/MapComponent.tsx)
@@ -64,7 +63,6 @@ import {
   getLogsPath,
   getAccountsPath,
   getCustomThemesPath,
-  getDraftTempDir,
 } from './application-constants'
 mkdirSync(getConfigPath(), { recursive: true })
 mkdirSync(getLogsPath(), { recursive: true })
