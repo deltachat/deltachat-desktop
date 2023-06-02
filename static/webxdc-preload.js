@@ -121,7 +121,7 @@
         }
       }
 
-      await ipcRenderer.invoke('webxdc.sendFileToChat', file, content.text)
+      await ipcRenderer.invoke('webxdc.sendToChat', file, content.text)
     },
   }
 

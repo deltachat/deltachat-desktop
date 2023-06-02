@@ -400,7 +400,7 @@ If you think that's a bug and you need that permission, then please open an issu
     })
 
     ipcMain.handle(
-      'webxdc.sendFileToChat',
+      'webxdc.sendToChat',
       (
         event,
         file: { file_name: string; file_content: string } | null,
@@ -411,12 +411,12 @@ If you think that's a bug and you need that permission, then please open an issu
         )
         if (!key) {
           log.error(
-            'webxdc.sendFileToChat failed, app not found in list of open ones'
+            'webxdc.sendToChat failed, app not found in list of open ones'
           )
           return
         }
         // forward to main window
-        main_window?.webContents.send('webxdc.sendFileToChat', file, text)
+        main_window?.webContents.send('webxdc.sendToChat', file, text)
         main_window?.focus()
         open_apps[key].win.destroy()
       }

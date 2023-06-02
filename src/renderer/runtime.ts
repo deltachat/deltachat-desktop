@@ -132,7 +132,7 @@ interface Runtime {
     | ((kind: 'about' | 'keybindings' | 'settings') => void)
     | undefined
   onOpenQrUrl: ((url: string) => void) | undefined
-  onWebxdcSendFile:
+  onWebxcSendToChat:
     | ((
         file: { file_name: string; file_content: string } | null,
         text: string | null
@@ -147,7 +147,7 @@ class Browser implements Runtime {
     | ((kind: 'about' | 'keybindings' | 'settings') => void)
     | undefined
   onOpenQrUrl: ((url: string) => void) | undefined
-  onWebxdcSendFile:
+  onWebxcSendToChat:
     | ((
         file: { file_name: string; file_content: string } | null,
         text: string | null
@@ -319,7 +319,7 @@ class Browser implements Runtime {
   }
 }
 class Electron implements Runtime {
-  onWebxdcSendFile:
+  onWebxcSendToChat:
     | ((
         file: { file_name: string; file_content: string } | null,
         text: string | null
@@ -546,12 +546,12 @@ class Electron implements Runtime {
     ipcBackend.on('open-url', (_ev, url) => this.onOpenQrUrl?.(url))
     ipcBackend.on('open-url', (_ev, url) => this.onOpenQrUrl?.(url))
     ipcBackend.on(
-      'webxdc.sendFileToChat',
+      'webxdc.sendToChat',
       (
         _ev,
         file: { file_name: string; file_content: string } | null,
         text: string | null
-      ) => this.onWebxdcSendFile?.(file, text)
+      ) => this.onWebxcSendToChat?.(file, text)
     )
   }
   openHelpWindow(): void {

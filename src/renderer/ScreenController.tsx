@@ -20,7 +20,7 @@ import { debouncedUpdateBadgeCounter } from './system-integration/badge-counter'
 import { updateDeviceChats } from './deviceMessages'
 import { runtime } from './runtime'
 import { DcEventType } from '@deltachat/jsonrpc-client'
-import WebxdcSaveToChatDialog from './components/dialogs/WebxdcSaveToChatDialog'
+import WebxdcSaveToChatDialog from './components/dialogs/WebxdcSendToChatDialog'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -162,7 +162,7 @@ export default class ScreenController extends Component {
     }
 
     runtime.onOpenQrUrl = processOpenQrUrl
-    runtime.onWebxdcSendFile = (file, text) => {
+    runtime.onWebxcSendToChat = (file, text) => {
       ;(this.openDialog as OpenDialogFunctionType)(WebxdcSaveToChatDialog, {
         messageText: text,
         file,

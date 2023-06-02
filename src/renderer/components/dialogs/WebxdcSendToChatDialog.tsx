@@ -38,7 +38,7 @@ export default function WebxdcSaveToChatDialog(props: {
         file.file_content
       )
     }
-    await saveToChatAction(chatId, messageText, path)
+    await sendToChatAction(chatId, messageText, path)
     if (path) {
       await runtime.removeTempFile(path)
     }
@@ -112,7 +112,7 @@ export default function WebxdcSaveToChatDialog(props: {
   )
 }
 
-async function saveToChatAction(
+async function sendToChatAction(
   chatId: number,
   messageText: string | null,
   file: string | null
