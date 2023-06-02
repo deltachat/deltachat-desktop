@@ -8,6 +8,7 @@ import type { EventEmitter } from 'events'
 import contextMenu from './electron-context-menu'
 import { findOutIfWeAreRunningAsAppx } from './isAppx'
 import { getHelpMenu } from './help_menu'
+import { rm } from 'fs/promises'
 
 // Hardening: prohibit all DNS queries, except for Mapbox
 // (see src/renderer/components/map/MapComponent.tsx)
@@ -63,6 +64,7 @@ import {
   getLogsPath,
   getAccountsPath,
   getCustomThemesPath,
+  getDraftTempDir,
 } from './application-constants'
 mkdirSync(getConfigPath(), { recursive: true })
 mkdirSync(getLogsPath(), { recursive: true })
@@ -157,6 +159,11 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
   cleanupLogFolder().catch(err =>
     log.error('Cleanup of old logfiles failed: ', err)
   )
+
+  // cleanupDraftTempDir
+  rm(getDraftTempDir(), { recursive: true }).catch(err =>
+    log.error('Cleanup of old temp files failed: ', err)
+  )
 }
 
 ;(app as EventEmitter).once('ipcReady', () => {
@@ -209,6 +216,11 @@ export function quit(e?: Electron.Event) {
 
   // does stop io and other things
   ipc_shutdown_function && ipc_shutdown_function()
+
+  // cleanupDraftTempDir
+  rm(getDraftTempDir(), { recursive: true }).catch(err =>
+    log.error('Cleanup of old temp files failed: ', err)
+  )
 
   function doQuit() {
     log.info('Quitting now. Bye.')

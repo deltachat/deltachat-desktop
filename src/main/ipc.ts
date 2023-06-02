@@ -8,7 +8,7 @@ import {
   shell,
 } from 'electron'
 import { getLogger } from '../shared/logger'
-import { getLogsPath } from './application-constants'
+import { getDraftTempDir, getLogsPath } from './application-constants'
 import { LogHandler } from './log-handler'
 import { ExtendedAppMainProcess } from './types'
 import * as mainWindow from './windows/main'
@@ -261,15 +261,14 @@ export async function init(cwd: string, logHandler: LogHandler) {
 }
 
 async function writeClipboardToTempFile(): Promise<string> {
-  await mkdir(join(rawApp.getPath('temp'), 'draft/'), { recursive: true })
+  await mkdir(getDraftTempDir(), { recursive: true })
   const formats = clipboard.availableFormats().sort()
   log.debug('Clipboard available formats:', formats)
   if (formats.length <= 0) {
     throw new Error('No files to write')
   }
   const pathToFile = join(
-    rawApp.getPath('temp'),
-    'draft',
+    getDraftTempDir(),
     `paste.${mimeTypes.extension(formats[0]) || 'bin'}`
   )
   const buf =
@@ -285,8 +284,8 @@ async function writeTempFileFromBase64(
   name: string,
   content: string
 ): Promise<string> {
-  await mkdir(join(rawApp.getPath('temp'), 'draft/'), { recursive: true })
-  const pathToFile = join(rawApp.getPath('temp'), 'draft/', name)
+  await mkdir(getDraftTempDir(), { recursive: true })
+  const pathToFile = join(getDraftTempDir(), name)
   log.debug(`Writing base64 encoded file ${pathToFile}`)
   await writeFile(pathToFile, Buffer.from(content, 'base64'), 'binary')
   return pathToFile

@@ -1,6 +1,6 @@
 import appConfig from './application-config'
 import { dirname, join } from 'path'
-import { screen } from 'electron'
+import { app, screen } from 'electron'
 
 export function appIcon() {
   const iconFormat = process.platform === 'win32' ? '.ico' : '.png'
@@ -58,6 +58,12 @@ export function getAccountsPath() {
 
 export function getCustomThemesPath() {
   return join(getConfigPath(), 'custom-themes')
+}
+
+// this is used for temporary files (because core expects file paths, can not accept blobs directly yet)
+// used when sending file from webxdc and when pasting a file from clipboard
+export function getDraftTempDir() {
+  return join(app.getPath('temp'), 'chat.delta.desktop-draft')
 }
 
 export const supportedURISchemes = [
