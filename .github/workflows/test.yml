@@ -31,10 +31,15 @@ jobs:
     - name: npm test-unit
       run: |
         npm run test-unit
+    - name: prepare testcafe
+      run: |
+        cd e2e_tests
+        npm ci
     - uses: DevExpress/testcafe-action@latest
+      working-directory: ./e2e_tests
       with:
-        version: "1.15.0"
-        args: "--skip-js-errors electron:. ./test/testcafe/test.js ./test/testcafe/messagelist_tests.ts"
+        version: "2.6.2"
+        args: "--skip-js-errors \"electron:../\" \"./testcafe/*\" --compilerOptions.typescript.configPath=./testcafe/tsconfig.json"
       env:
         DCC_NEW_TMP_EMAIL: ${{secrets.DCC_NEW_TMP_EMAIL}}
         NODE_ENV: test
