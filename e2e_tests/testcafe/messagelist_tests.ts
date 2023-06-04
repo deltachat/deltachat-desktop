@@ -1,7 +1,7 @@
 import { ClientFunction, Selector } from 'testcafe'
 import { waitForReact } from 'testcafe-react-selectors'
 import { ReactSelector } from 'testcafe-react-selectors'
-import { createTmpUser } from '../integration/fixtures/config'
+import { createTmpUser } from '../../test/integration/fixtures/config'
 import { C, DeltaChat } from 'deltachat-node'
 import type { Context } from 'deltachat-node/node/dist/context'
 import { join } from 'path'

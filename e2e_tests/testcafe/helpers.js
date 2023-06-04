@@ -1,6 +1,6 @@
 //@ts-check
 import { Selector, t, ClientFunction  } from 'testcafe'
-import { createTmpUser } from '../integration/fixtures/config'
+import { createTmpUser } from '../../test/integration/fixtures/config'
 
 const waitForLogin = 50000
 
@@ -36,4 +36,5 @@ export async function loginWithTmpUser () {
   return account
 }
 
+//@ts-ignore
 export const translate = ClientFunction((...args) => window.static_translate(...args))

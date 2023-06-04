@@ -1,0 +1,14 @@
+{
+    "name": "deltachat-desktop-e2e-tests",
+    "private": true,
+    "scripts": {
+      "start-test": "TEST_DIR=\".test_tmp_data\" NODE_ENV=test npx testcafe --skip-js-errors \"electron:../\" \"./testcafe/*\" --compilerOptions.typescript.configPath=./testcafe/tsconfig.json"
+    },
+    "dependencies": {
+        "testcafe": "2.6.2",
+        "testcafe-browser-provider-electron": "0.0.19",
+        "testcafe-react-selectors": "^5.0.3"
+    },
+    "devDependencies": {}
+  }
+  

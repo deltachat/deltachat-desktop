@@ -9,16 +9,18 @@ import contextMenu from './electron-context-menu'
 import { findOutIfWeAreRunningAsAppx } from './isAppx'
 import { getHelpMenu } from './help_menu'
 
-// Hardening: prohibit all DNS queries, except for Mapbox
-// (see src/renderer/components/map/MapComponent.tsx)
-// The `~NOTFOUND` string is here:
-// https://chromium.googlesource.com/chromium/src/+/6459548ee396bbe1104978b01e19fcb1bb68d0e5/net/dns/mapped_host_resolver.cc#46
-// Chromium docs that touch on `--host-resolver-rules` and DNS:
-// https://www.chromium.org/developers/design-documents/network-stack/socks-proxy/
-// https://www.chromium.org/developers/design-documents/dns-prefetching/
-const hostRules = 'MAP * ~NOTFOUND, EXCLUDE *.mapbox.com'
-rawApp.commandLine.appendSwitch('host-resolver-rules', hostRules)
-rawApp.commandLine.appendSwitch('host-rules', hostRules)
+if (process.env.NODE_ENV !== 'test') {
+  // Hardening: prohibit all DNS queries, except for Mapbox
+  // (see src/renderer/components/map/MapComponent.tsx)
+  // The `~NOTFOUND` string is here:
+  // https://chromium.googlesource.com/chromium/src/+/6459548ee396bbe1104978b01e19fcb1bb68d0e5/net/dns/mapped_host_resolver.cc#46
+  // Chromium docs that touch on `--host-resolver-rules` and DNS:
+  // https://www.chromium.org/developers/design-documents/network-stack/socks-proxy/
+  // https://www.chromium.org/developers/design-documents/dns-prefetching/
+  const hostRules = 'MAP * ~NOTFOUND, EXCLUDE *.mapbox.com'
+  rawApp.commandLine.appendSwitch('host-resolver-rules', hostRules)
+  rawApp.commandLine.appendSwitch('host-rules', hostRules)
+}
 
 if (rc['version'] === true || rc['v'] === true) {
   /* ignore-console-log */
