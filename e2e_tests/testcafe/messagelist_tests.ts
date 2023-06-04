@@ -46,21 +46,26 @@ fixture`Test Messagelist`
     }
 
     // setup testing
-    const account_a = await createTmpUser()
-    const account_b = await createTmpUser()
+    const [account_a, account_b] = await Promise.all([
+      createTmpUser(),
+      createTmpUser(),
+    ])
 
     // device b, the contact we chat with
     console.log('configure device_b...')
     const device_b = new DeltaChat(tmp_dirs.device_b_dir)
     device_b.startEvents()
     const device_b_context = device_b.accountContext(device_b.addAccount())
-    await device_b_context.configure({
-      addr: account_b.email,
-      mail_pw: account_b.password,
-      e2ee_enabled: 0, // encryption is disabled, because otherwise multidevice would be more complicated
-    })
-    device_b.startIO()
-    console.log('configure device_b done')
+    const device_b_configuration_promise = device_b_context
+      .configure({
+        addr: account_b.email,
+        mail_pw: account_b.password,
+        e2ee_enabled: 0, // encryption is disabled, because otherwise multidevice would be more complicated
+      })
+      .then(() => {
+        device_b.startIO()
+        console.log('configure device_b done')
+      })
 
     device_b.on('ALL', (event, accountid, data1, data2) => {
       //   console.debug('[B]: ', event, data1, data2)
@@ -83,9 +88,12 @@ fixture`Test Messagelist`
     const device_a = new DeltaChat(tmp_dirs.device_a_dir)
     device_a.startEvents()
     const device_a_context = device_a.accountContext(device_a.addAccount())
-    await device_a_context.configure(account_a_config)
-    device_a.startIO()
-    console.log('configure device_a done')
+    const device_a_configuration_promise = device_a_context
+      .configure(account_a_config)
+      .then(() => {
+        device_a.startIO()
+        console.log('configure device_a done')
+      })
 
     // setup account on desktop - does not work because desktop is loaded at the start of the test
     // console.log("configure desktop account...");
@@ -94,6 +102,9 @@ fixture`Test Messagelist`
     // const desktop_context = desktop.accountContext(desktop.addAccount())
     // await desktop_context.configure(account_a_config)
     // console.log("configure desktop account done");
+
+    await device_b_configuration_promise
+    await device_a_configuration_promise
 
     config = {
       account_a_email: account_a.email,
@@ -122,14 +133,21 @@ fixture`Test Messagelist`
   .beforeEach(async () => {
     await waitForReact()
   })
+  .after(async () => {
+    console.log('cleaning up test dir /accounts')
+    try {
+      rmSync(join(__dirname, '../.test_tmp_data/accounts'), { recursive: true })
+    } catch (error) {}
+    console.log('cleaned up test dir /accounts')
+  })
 
 test('prepare testing: login to account A with desktop', async t => {
   //   const account_item = ReactSelector('AccountItem').withText(
   //     config.account_a_email
   //   )
   await t
-  .click('#action-login-to-email')
-  .typeText('#addr', config.account_a_email)
+    .click('#action-login-to-email')
+    .typeText('#addr', config.account_a_email)
     .typeText('#mail_pw', config.account_a_password)
     .click('#action-login')
   await t
