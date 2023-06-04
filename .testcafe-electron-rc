@@ -4,5 +4,5 @@
     "openDevTools": true,
     "selectorTimeout": 50000,
     "assertTimeout": 20000,
-    "testSpeed": 0.6
+    "testSpeed": 1
 }
