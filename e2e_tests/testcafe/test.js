@@ -1,7 +1,15 @@
 //@ts-check
+import { rmSync } from 'fs'
+import { join } from 'path'
 import { Selector } from 'testcafe'
 import { waitForReact } from 'testcafe-react-selectors'
 import { loginWithTmpUser, logout, clickThreeDotMenuItem, translate, clickSideBarItem } from './helpers'
+
+console.log('cleaning up test dir')
+try {
+  rmSync(join(__dirname, '../.test_tmp_data'), { recursive: true })
+} catch (error) {}
+console.log('cleaned up test dir')
 
 /* global fixture, test */
 '.bp4-navbar-heading'
@@ -47,7 +55,7 @@ test('shows correct headline', async t => {
     .typeText('#mail_pw', 'bar')
     .click("#action-login")
     .expect(Selector('.delta-dialog-content > p').innerText)
-    .contains('Bad email-address: Email "foo" must contain \'@\' character')
+    .contains('Email "foo" must contain \'@\' character')
 })
 
 test('login works', async t => {
