@@ -14,7 +14,7 @@ const updateRefs: { [key: string]: () => void } = {}
 // to prevent same key on same timestamp
 let deduplicationCounter = 0
 
-function updateTimestamps() {
+export function updateTimestamps() {
   if (document.hidden) {
     log.debug('updateTS: canceled page not visible')
     return

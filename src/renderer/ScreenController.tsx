@@ -21,6 +21,8 @@ import { updateDeviceChats } from './deviceMessages'
 import { runtime } from './runtime'
 import { DcEventType } from '@deltachat/jsonrpc-client'
 import WebxdcSaveToChatDialog from './components/dialogs/WebxdcSendToChatDialog'
+import { updateTimestamps } from './components/conversations/Timestamp'
+import { debounce } from 'debounce'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -168,6 +170,13 @@ export default class ScreenController extends Component {
         file,
       })
     }
+    runtime.onResumeFromSleep = debounce(() => {
+      log.info('onResumeFromSleep')
+      // update timestamps
+      updateTimestamps()
+      // call maybe network
+      BackendRemote.rpc.maybeNetwork()
+    }, 1000)
 
     this.startup().then(() => {
       runtime.emitUIFullyReady()

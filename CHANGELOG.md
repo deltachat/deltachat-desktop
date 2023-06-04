@@ -22,6 +22,7 @@
 - fix show verification state of chat in chatlist
 - fix make self contact not clickable in group member list
 - remove pasted images from temp folder #2927
+- update timestamps and reconnect after resuming after sleep
 
 <a id="1_36_4"></a>
 
