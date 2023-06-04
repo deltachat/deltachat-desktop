@@ -238,16 +238,8 @@ test('create chat with bot, so it is not a contact request', async t => {
 
   await t.expect(Selector('.FixedDeltaDialog').exists).ok()
   await t.typeText('.FixedDeltaDialog input', config.account_b_email)
-  await t
-    .expect(
-      Selector('div.display-name').withText(await translate('menu_new_contact'))
-        .exists
-    )
-    .ok()
   await t.click(
-    Selector('div.display-name')
-      .withText(await translate('menu_new_contact'))
-      .parent(0)
+    Selector('#newcontact div').withText(config.account_b_email)
   )
   await clickChatByName(t, config.account_b_email)
   await send_msg(t, 'test')

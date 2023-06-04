@@ -2,7 +2,7 @@
     "mainWindowUrl": "./html-dist/test.html",
     "appPath": ".",
     "openDevTools": true,
-    "selectorTimeout": 50000,
+    "selectorTimeout": 12000,
     "assertTimeout": 20000,
     "testSpeed": 1
 }
