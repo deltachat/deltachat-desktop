@@ -34,10 +34,13 @@ jobs:
         npm run test-unit
     - name: prepare testcafe
       working-directory: ./e2e_tests
+      run: |
+        npm ci
+    - name: run testcafe
+      working-directory: ./e2e_tests
       env:
         DCC_NEW_TMP_EMAIL: ${{secrets.DCC_NEW_TMP_EMAIL}}
         NODE_ENV: test
         TEST_DIR: .test_tmp_data
       run: |
-        npm ci
         xvfb-run --server-args="-screen 0 1280x720x24" npm run start-test
