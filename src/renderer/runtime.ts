@@ -138,9 +138,11 @@ interface Runtime {
         text: string | null
       ) => void)
     | undefined
+  onResumeFromSleep: (() => void) | undefined
 }
 
 class Browser implements Runtime {
+  onResumeFromSleep: (() => void) | undefined
   onChooseLanguage: ((locale: string) => Promise<void>) | undefined
   onThemeUpdate: (() => void) | undefined
   onShowDialog:
@@ -319,6 +321,7 @@ class Browser implements Runtime {
   }
 }
 class Electron implements Runtime {
+  onResumeFromSleep: (() => void) | undefined
   onWebxcSendToChat:
     | ((
         file: { file_name: string; file_content: string } | null,
@@ -553,6 +556,7 @@ class Electron implements Runtime {
         text: string | null
       ) => this.onWebxcSendToChat?.(file, text)
     )
+    ipcBackend.on('onResumeFromSleep', () => this.onResumeFromSleep?.())
   }
   openHelpWindow(): void {
     ipcBackend.send('help', window.localeData.locale)

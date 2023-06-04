@@ -289,3 +289,5 @@ ipcMain.handle('restart_app', async _ev => {
   app.relaunch()
   app.quit()
 })
+
+import './resume_from_sleep'
