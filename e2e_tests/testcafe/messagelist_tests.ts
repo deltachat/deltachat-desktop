@@ -9,7 +9,7 @@ import { rmSync } from 'fs'
 
 console.log('cleaning up test dir')
 try {
-  rmSync(join(__dirname, '../../.test_tmp_data'), { recursive: true })
+  rmSync(join(__dirname, '../.test_tmp_data'), { recursive: true })
 } catch (error) {}
 console.log('cleaned up test dir')
 
