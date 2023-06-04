@@ -3,7 +3,13 @@ import { rmSync } from 'fs'
 import { join } from 'path'
 import { Selector } from 'testcafe'
 import { waitForReact } from 'testcafe-react-selectors'
-import { loginWithTmpUser, logout, clickThreeDotMenuItem, translate, clickSideBarItem } from './helpers'
+import {
+  loginWithTmpUser,
+  logout,
+  clickThreeDotMenuItem,
+  translate,
+  clickSideBarItem,
+} from './helpers'
 
 console.log('cleaning up test dir')
 try {
@@ -12,7 +18,7 @@ try {
 console.log('cleaned up test dir')
 
 /* global fixture, test */
-'.bp4-navbar-heading'
+;('.bp4-navbar-heading')
 const waitForLogin = 5000
 const conf = {}
 const testMessage = 'Test message'
@@ -53,7 +59,7 @@ test('shows correct headline', async t => {
     .click('#action-login-to-email')
     .typeText('#addr', 'foo')
     .typeText('#mail_pw', 'bar')
-    .click("#action-login")
+    .click('#action-login')
     .expect(Selector('.delta-dialog-content > p').innerText)
     .contains('Email "foo" must contain \'@\' character')
 })
@@ -91,53 +97,48 @@ test('both login buttons are shown', async t => {
 
 test('create chat', async t => {
   await goBackToAccountOverviewIfNeeded(t)
-  await t
-    .click(accountButton1)
+  await t.click(accountButton1)
   await clickSideBarItem(await translate('menu_new_chat'))
   await t.expect(Selector('.FixedDeltaDialog').exists).ok()
   await t.typeText('.FixedDeltaDialog input', conf.account2.email)
-  await t
-    .expect(Selector('div.display-name').withText(await translate('menu_new_contact')).exists)
-    .ok()
   await t.click(
-    Selector('div.display-name')
-      .withText(await translate('menu_new_contact'))
-      .parent(0)
+    Selector('div.display-name').withText(await translate('menu_new_contact'))
   )
   await clickChatByName(t, conf.account2.email)
 })
 
 test('write message', async t => {
   await goBackToAccountOverviewIfNeeded(t)
-  await t
-    .click(accountButton1)
+  await t.click(accountButton1)
   await clickChatByName(t, conf.account2.email)
   await t
     .typeText('#composer-textarea', testMessage)
-    .click("button[aria-label='" + await translate('menu_send') + "']")
+    .click("button[aria-label='" + (await translate('menu_send')) + "']")
     .expect(Selector('#message-list li').count)
     .eql(1)
   await logout()
 })
 
 test('open settings dialog and close with escape', async t => {
-
   await goBackToAccountOverviewIfNeeded(t)
-  const SettingsShouldBeOpen = async ()=>{
+  const SettingsShouldBeOpen = async () => {
     await t
-    .expect(
-      Selector(
-        '.bp4-dialog-header.bp4-dialog-header-border-bottom > .bp4-heading'
-      ).innerText
-    )
-    .eql(await translate('menu_settings'))
+      .expect(
+        Selector(
+          '.bp4-dialog-header.bp4-dialog-header-border-bottom > .bp4-heading'
+        ).innerText
+      )
+      .eql(await translate('menu_settings'))
   }
-  const SettingsShouldBeClosed = async ()=>{
-    await t.wait(1000).expect(
-      Selector(
-        '.bp4-dialog-header.bp4-dialog-header-border-bottom > .bp4-heading'
-      ).exists
-    ).notOk()
+  const SettingsShouldBeClosed = async () => {
+    await t
+      .wait(1000)
+      .expect(
+        Selector(
+          '.bp4-dialog-header.bp4-dialog-header-border-bottom > .bp4-heading'
+        ).exists
+      )
+      .notOk()
   }
 
   await t.click(accountButton1)
@@ -151,20 +152,17 @@ test('open settings dialog and close with escape', async t => {
   await t.pressKey('Ctrl+,')
   await SettingsShouldBeOpen()
   // check close via close button
-  await t.click(Selector(".SettingsDialog .close-btn"))
+  await t.click(Selector('.SettingsDialog .close-btn'))
   await SettingsShouldBeClosed()
   await logout()
 })
 
 if (process.env.CI !== 'true') {
   test('Contact request and receive message works', async t => {
-  await goBackToAccountOverviewIfNeeded(t)
+    await goBackToAccountOverviewIfNeeded(t)
+    await t.click(accountButton2)
     await t
-      .click(accountButton2)
-      await t
-      .expect(
-        Selector('.chat-list-item.is-contact-request').exists
-      )
+      .expect(Selector('.chat-list-item.is-contact-request').exists)
       .ok({ timeout: 30000 })
 
     await t.click('.chat-list-item.is-contact-request')
@@ -174,5 +172,4 @@ if (process.env.CI !== 'true') {
       .expect(Selector('.text').withText(testMessage).exists)
       .ok()
   })
-
 }
