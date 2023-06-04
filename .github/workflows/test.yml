@@ -11,11 +11,10 @@ on:
 jobs:
   test:
     name: Tests and E2E Tests
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
+    # script uses enviroment vars in unix syntax, windows can not read them
+    # macos-latest doesn't work currently: ERROR UnableToAccessScreenRecordingAPIError: The find-window process cannot access the Screen Recording API.
     strategy:
-      os: ubuntu-latest
-      # script uses enviroment vars in unix syntax, windows can not read them
-      # macos-latest doesn't work currently: ERROR UnableToAccessScreenRecordingAPIError: The find-window process cannot access the Screen Recording API.
       fail-fast: false # don't fail fast, because some tests can be flaky so better we get all results
     steps:
     - uses: actions/checkout@v1
