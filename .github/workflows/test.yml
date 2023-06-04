@@ -13,8 +13,9 @@ jobs:
     name: Tests and E2E Tests
     runs-on: ${{ matrix.os }}
     strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest] # macos-latest doesn't work currently: ERROR UnableToAccessScreenRecordingAPIError: The find-window process cannot access the Screen Recording API.
+      os: ubuntu-latest
+      # script uses enviroment vars in unix syntax, windows can not read them
+      # macos-latest doesn't work currently: ERROR UnableToAccessScreenRecordingAPIError: The find-window process cannot access the Screen Recording API.
       fail-fast: false # don't fail fast, because some tests can be flaky so better we get all results
     steps:
     - uses: actions/checkout@v1
@@ -32,15 +33,11 @@ jobs:
       run: |
         npm run test-unit
     - name: prepare testcafe
-      run: |
-        cd e2e_tests
-        npm ci
-    - uses: DevExpress/testcafe-action@latest
       working-directory: ./e2e_tests
-      with:
-        version: "2.6.2"
-        args: "--skip-js-errors \"electron:../\" \"./testcafe/*\" --compilerOptions.typescript.configPath=./testcafe/tsconfig.json"
       env:
         DCC_NEW_TMP_EMAIL: ${{secrets.DCC_NEW_TMP_EMAIL}}
         NODE_ENV: test
         TEST_DIR: .test_tmp_data
+      run: |
+        npm ci
+        xvfb-run --server-args="-screen 0 1280x720x24" npm run start-test
