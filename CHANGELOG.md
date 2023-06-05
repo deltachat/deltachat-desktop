@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_37_0"></a>
+
+## [1.37.0] - 2023-06-05
+
 ### Added
 - Show thumbnail in chatlist summary of image, sticker and webxdc messages
 - add webxdc api `sendToChat` #3240
@@ -9,7 +13,7 @@
 
 ### Changed
 - exclude more unused files from installation package
-- update deltachat-node and deltachat/jsonrpc-client to `v1.115.0`
+- update deltachat-node and deltachat/jsonrpc-client to `v1.116.0`
 - remove message id from chatlistitem
 - Improved message search results
 - Update translations (18.05.2023)
@@ -2017,7 +2021,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.36.4...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.37.0...HEAD
+
+[1.37.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.36.4...v1.37.0
 
 [1.36.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.36.3...v1.36.4
 
