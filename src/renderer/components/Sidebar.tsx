@@ -102,6 +102,11 @@ const Sidebar = React.memo(
       ActionEmitter.emitAction(KeybindAction.ChatList_SwitchToArchiveView)
     }
 
+    const onOpenGlobalGallery = () => {
+      setSidebarState('invisible')
+      ActionEmitter.emitAction(KeybindAction.GlobalGallery_Open)
+    }
+
     useEffect(() => {
       window.addEventListener('keyup', onEscapeKeyUp)
       return () => {
@@ -171,6 +176,13 @@ const Sidebar = React.memo(
             onClick={onOpenArchivedChats}
           >
             {tx('chat_archived_chats_title')}
+          </div>
+          <div
+            key='global_gallery'
+            className='sidebar-item'
+            onClick={onOpenGlobalGallery}
+          >
+            {tx('menu_all_media')}
           </div>
           <div key='settings' className='sidebar-item' onClick={onOpenSettings}>
             {tx('menu_settings')}
