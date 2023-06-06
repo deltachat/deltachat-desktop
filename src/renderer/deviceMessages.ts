@@ -28,9 +28,9 @@ Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANG
     'changelog-version-1.37.0-version0',
     `What's new in 1.37.0?
     
-🖼️ Show thumbnail in chatlist summary of image, sticker and webxdc messages
+🖼️ Show thumbnail in chatlist of image, sticker and webxdc messages
 🔍 Improved design for message search results
-📎 Removed upper limit on Attachment size
+📎 Removed upper limit on attachment size
 ☕ Wake up from standby now reconnects more reliably 
 ✨ We fixed some bugs and improved stability
 
