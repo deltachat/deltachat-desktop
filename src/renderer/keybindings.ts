@@ -18,6 +18,7 @@ export enum KeybindAction {
   KeybindingCheatSheet_Open = 'keybindinginfo:open',
   MessageList_PageUp = 'msglist:pageup',
   MessageList_PageDown = 'msglist:pagedown',
+  GlobalGallery_Open = 'globalgallery:open',
 
   // Actions that are not necessarily triggered by keybindings
   ChatList_SwitchToArchiveView = 'chatlist:switch-to-archive-view',

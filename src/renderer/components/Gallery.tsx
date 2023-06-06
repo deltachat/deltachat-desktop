@@ -31,7 +31,7 @@ const MediaTabs: Readonly<
   },
 }
 
-type mediaProps = { chatId: number }
+type mediaProps = { chatId: number | 'all' }
 
 export default class Gallery extends Component<
   mediaProps,
@@ -67,16 +67,11 @@ export default class Gallery extends Component<
       throw new Error('chat id missing')
     }
     const msgTypes = MediaTabs[id].values
-
     const accountId = selectedAccountId()
+    const chatId = this.props.chatId !== 'all' ? this.props.chatId : null
+
     BackendRemote.rpc
-      .getChatMedia(
-        accountId,
-        this.props.chatId,
-        msgTypes[0],
-        msgTypes[1],
-        null
-      )
+      .getChatMedia(accountId, chatId, msgTypes[0], msgTypes[1], null)
       .then(async media_ids => {
         // throws if some media is not found
         const all_media_fetch_results = await BackendRemote.rpc.getMessages(
