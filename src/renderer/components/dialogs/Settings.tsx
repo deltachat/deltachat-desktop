@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useCallback } from 'react'
 import { Elevation, Card } from '@blueprintjs/core'
 
 import { ScreenContext, useTranslationFunction } from '../../contexts'
@@ -23,6 +23,10 @@ import SettingsStoreInstance, {
 import { runtime } from '../../runtime'
 import { donationUrl } from '../../../shared/constants'
 import { SendBackupDialog } from './setup_multi_device/SendBackup'
+import { selectedAccountId } from '../../ScreenController'
+import { BackendRemote, onDCEvent } from '../../backend-com'
+import { C } from '@deltachat/jsonrpc-client'
+import SettingsConnectivityDialog from './Settings-Connectivity'
 
 export function flipDeltaBoolean(value: string) {
   return value === '1' ? '0' : '1'
@@ -112,6 +116,7 @@ export default function Settings(props: DialogProps) {
     }
   })
 
+  const { onClose } = props
   const settingsStore = useSettingsStore()[0]
 
   const { openDialog } = useContext(ScreenContext)
@@ -245,6 +250,7 @@ export default function Settings(props: DialogProps) {
                 >
                   {tx('multidevice_title')}
                 </SettingsIconButton>
+                <SettingsButtonConnectivity />
                 <SettingsIconButton
                   iconName='code-tags'
                   onClick={() => setSettingsMode('advanced')}
@@ -347,8 +353,6 @@ export default function Settings(props: DialogProps) {
     )
   }
 
-  const { onClose } = props
-
   return (
     <DeltaDialogBase
       isOpen={props.isOpen}
@@ -360,5 +364,46 @@ export default function Settings(props: DialogProps) {
     >
       {renderDialogContent()}
     </DeltaDialogBase>
+  )
+}
+
+function SettingsButtonConnectivity() {
+  const { openDialog } = useContext(ScreenContext)
+  const [connectivityString, setConnectivityString] = useState('')
+  const accountId = selectedAccountId()
+
+  const updateConnectivity = useCallback(async () => {
+    const connectivity = await BackendRemote.rpc.getConnectivity(accountId)
+
+    let connectivityString = ''
+    if (connectivity >= C.DC_CONNECTIVITY_CONNECTED) {
+      connectivityString = window.static_translate('connectivity_connected')
+    } else if (connectivity >= C.DC_CONNECTIVITY_WORKING) {
+      connectivityString = window
+        .static_translate('connectivity_updating')
+        .replace('…', '')
+    } else if (connectivity >= C.DC_CONNECTIVITY_CONNECTING) {
+      connectivityString = window
+        .static_translate('connectivity_connecting')
+        .replace('…', '')
+    } else if (connectivity >= C.DC_CONNECTIVITY_NOT_CONNECTED) {
+      connectivityString = window.static_translate('connectivity_not_connected')
+    }
+    setConnectivityString(`(${connectivityString})`)
+  }, [accountId])
+
+  useEffect(() => {
+    updateConnectivity()
+    return onDCEvent(accountId, 'ConnectivityChanged', updateConnectivity)
+  }, [updateConnectivity, accountId])
+
+  const tx = useTranslationFunction()
+  return (
+    <SettingsIconButton
+      iconName='swap_vert'
+      onClick={() => openDialog(SettingsConnectivityDialog)}
+    >
+      {tx('connectivity') + ' ' + connectivityString}
+    </SettingsIconButton>
   )
 }

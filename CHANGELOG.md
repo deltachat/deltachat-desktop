@@ -4,6 +4,7 @@
 
 ### Changed
 - Settings: Move Experimental Features into Advanced
+- Settings: Move Connectivity button down and give it an icon (like on android and ios)
 
 <a id="1_37_0"></a>
 
