@@ -1,5 +1,5 @@
 import { Card, Elevation } from '@blueprintjs/core'
-import React, { useEffect, useState, useContext, useCallback } from 'react'
+import React, { useState, useContext } from 'react'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
 
 import { avatarInitial, ClickForFullscreenAvatarWrapper } from '../Avatar'
@@ -12,14 +12,12 @@ import {
 } from './DeltaDialog'
 import { SettingsButton } from './Settings'
 import { runtime } from '../../runtime'
-import { C } from '@deltachat/jsonrpc-client'
 import { DialogProps } from './DialogController'
 import SettingsAccountDialog from './Settings-Account'
-import SettingsConnectivityDialog from './Settings-Connectivity'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
-import { BackendRemote, onDCEvent } from '../../backend-com'
+import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 
 export default function SettingsProfile({
@@ -29,37 +27,11 @@ export default function SettingsProfile({
   onClose: any
 }) {
   const { openDialog } = useContext(ScreenContext)
-  const [connectivityString, setConnectivityString] = useState('')
-  const accountId = selectedAccountId()
-
-  const updateConnectivity = useCallback(async () => {
-    const connectivity = await BackendRemote.rpc.getConnectivity(accountId)
-
-    let connectivityString = ''
-    if (connectivity >= C.DC_CONNECTIVITY_CONNECTED) {
-      connectivityString = window.static_translate('connectivity_connected')
-    } else if (connectivity >= C.DC_CONNECTIVITY_WORKING) {
-      connectivityString = window
-        .static_translate('connectivity_updating')
-        .replace('…', '')
-    } else if (connectivity >= C.DC_CONNECTIVITY_CONNECTING) {
-      connectivityString = window
-        .static_translate('connectivity_connecting')
-        .replace('…', '')
-    } else if (connectivity >= C.DC_CONNECTIVITY_NOT_CONNECTED) {
-      connectivityString = window.static_translate('connectivity_not_connected')
-    }
-    setConnectivityString(`(${connectivityString})`)
-  }, [accountId])
 
   const initial = avatarInitial(
     settingsStore.selfContact.displayName || '',
     settingsStore.selfContact.address
   )
-  useEffect(() => {
-    updateConnectivity()
-    return onDCEvent(accountId, 'ConnectivityChanged', updateConnectivity)
-  }, [updateConnectivity, accountId])
 
   const tx = useTranslationFunction()
   const profileBlobUrl = runtime.transformBlobURL(
@@ -103,15 +75,6 @@ export default function SettingsProfile({
         }
       >
         {tx('pref_password_and_account_settings')}
-      </SettingsButton>
-      <SettingsButton
-        onClick={async () => {
-          openDialog(SettingsConnectivityDialog, {
-            settingsStore,
-          })
-        }}
-      >
-        {tx('connectivity') + ' ' + connectivityString}
       </SettingsButton>
     </>
   )
