@@ -5,7 +5,6 @@ import { ScreenContext, useTranslationFunction } from '../../contexts'
 
 import { DesktopSettingsType } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
-import { SettingsExperimentalFeatures } from './Settings-ExperimentalFeatures'
 import {
   DeltaDialogBase,
   DeltaDialogHeader,
@@ -252,12 +251,6 @@ export default function Settings(props: DialogProps) {
                 >
                   {tx('menu_advanced')}
                 </SettingsIconButton>
-                <SettingsIconButton
-                  iconName='test-tube'
-                  onClick={() => setSettingsMode('experimental_features')}
-                >
-                  {tx('pref_experimental_features')}
-                </SettingsIconButton>
                 {!runtime.getRuntimeInfo().isMac && (
                   <SettingsIconButton
                     iconName='favorite'
@@ -267,25 +260,6 @@ export default function Settings(props: DialogProps) {
                     {tx('pref_donate')}
                   </SettingsIconButton>
                 )}
-              </Card>
-            </DeltaDialogBody>
-          </>
-        )}
-        {settingsMode === 'experimental_features' && (
-          <>
-            <DeltaDialogHeader
-              title={tx('pref_experimental_features')}
-              showBackButton={true}
-              onClickBack={() => setSettingsMode('main')}
-              showCloseButton={true}
-              onClose={onClose}
-            />
-            <DeltaDialogBody>
-              <Card elevation={Elevation.ONE}>
-                <SettingsExperimentalFeatures
-                  settingsStore={settingsStore}
-                  renderDTSettingSwitch={renderDTSettingSwitch}
-                />
               </Card>
             </DeltaDialogBody>
           </>

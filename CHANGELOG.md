@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- Settings: Move Experimental Features into Advanced
+
 <a id="1_37_0"></a>
 
 ## [1.37.0] - 2023-06-05
