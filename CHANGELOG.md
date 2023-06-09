@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- update in-app help
+
 <a id="1_37_0"></a>
 
 ## [1.37.0] - 2023-06-05
