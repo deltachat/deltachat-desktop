@@ -3,7 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Changed
-- update in-app help
+- update in-app help (2023-06-07)
 
 <a id="1_37_0"></a>
 
