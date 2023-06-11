@@ -195,6 +195,9 @@ const Composer = forwardRef<
     if (!e.clipboardData.files.length) {
       return
     }
+    // when there is a file then don't paste text
+    // https://github.com/deltachat/deltachat-desktop/issues/3261
+    e.preventDefault()
 
     // File object
     // https://www.electronjs.org/docs/api/file-object
@@ -209,6 +212,7 @@ const Composer = forwardRef<
     }
 
     try {
+      e.preventDefault()
       // Write clipboard to file then attach it to the draft
       const path = await runtime.writeClipboardToTempFile()
       await addFileToDraft(path)
