@@ -14,6 +14,7 @@
       schemes: ['mailto'],
     },
   ],
+  fileAssociations: [{ ext: 'xdc', name: 'Webxdc app' }],
   files: [
     '**/*',
     '!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}',

@@ -1,5 +1,7 @@
 import { app as rawApp, ipcMain } from 'electron'
 import type { EventEmitter } from 'events'
+import { readFile } from 'fs/promises'
+import { basename } from 'path'
 import { getLogger } from '../shared/logger'
 import { supportedURISchemes } from './application-constants'
 import { showDeltaChat } from './tray'
@@ -63,6 +65,28 @@ app.on('open-url', (event, url) => {
     window?.focus()
   }
   open_url(url)
+})
+
+app.on('open-file', async (event, path) => {
+  log.info('open file')
+  if (event) {
+    event.preventDefault()
+    app.focus()
+    window?.focus()
+  }
+  // hacky code - abuses webxdc sendToChat
+  // todo make this code nicer and maybe show even a custom dialog that shows what is being sent?
+  const buffer = await readFile(path)
+  if (!app.ipcReady) {
+    // TODO this code actually does not work on first startup, because ipc is ready,
+    // but user is not looged in and the screen context callback does not exist yet.
+    await new Promise(res => (app as any).once('ipcReady', res))
+  }
+  window?.webContents.send(
+    'webxdc.sendToChat',
+    { file_name: basename(path), file_content: buffer.toString('base64') },
+    null
+  )
 })
 
 // Iterate over arguments and look out for uris

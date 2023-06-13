@@ -32,6 +32,12 @@ build['protocols'] = [
   },
 ]
 
+build['fileAssociations'] = [{
+  ext: "xdc",
+  name: "Webxdc app",
+  // icon - default, which means build/ext\.(ico|icns)
+}]
+
 build['files'] = files
 build['asarUnpack'] = ['node_modules/deltachat-node/']
 
