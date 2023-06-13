@@ -212,7 +212,6 @@ const Composer = forwardRef<
     }
 
     try {
-      e.preventDefault()
       // Write clipboard to file then attach it to the draft
       const path = await runtime.writeClipboardToTempFile()
       await addFileToDraft(path)
