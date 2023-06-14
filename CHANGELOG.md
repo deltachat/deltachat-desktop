@@ -8,6 +8,9 @@
 - update in-app help (2023-06-07)
 - If clipboard contains a file and text, then only paste the file into deltachat. #3261
 
+### Fixed
+- possibly fix asking for camera permission on MacOS #3252
+
 <a id="1_37_0"></a>
 
 ## [1.37.0] - 2023-06-05
