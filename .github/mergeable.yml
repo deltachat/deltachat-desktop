@@ -31,7 +31,7 @@ mergeable:
           summary: 'changelog ok'
     error: 
       - do: checks
-          status: 'action_required'
-          payload:
-            title: Changelog check error
-            summary: 'changelog check error'
+        status: 'action_required'
+        payload:
+          title: Changelog check error
+          summary: 'changelog check error'
