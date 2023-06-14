@@ -3,16 +3,20 @@ mergeable:
   - when: pull_request.*
     name: 'Changelog check'
     validate:
-      - do: or
-        validate:
-          - do: dependent
-            changed:
-              file: 'src/**'
-              required: ['CHANGELOG.md']
-          - do: dependent
-            changed:
-              file: 'scss/**'
-              required: ['CHANGELOG.md']
+      - do: dependent
+        changed:
+        file: 'src/**'
+        required: ['CHANGELOG.md']
+      # - do: or
+      #   validate:
+      #     - do: dependent
+      #       changed:
+      #         file: 'src/**'
+      #         required: ['CHANGELOG.md']
+          # - do: dependent
+          #   changed:
+          #     file: 'scss/**'
+          #     required: ['CHANGELOG.md']
           # - do: dependent
           #   changed:
           #     file: 'static/help/**'
