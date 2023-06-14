@@ -3,7 +3,7 @@ mergeable:
   - when: pull_request.*
     name: 'Changelog check'
     validate:
-      - do: or
+      - do: and
         validate:
           - do: dependent
             changed:
@@ -23,3 +23,9 @@ mergeable:
         payload:
           title: Changelog needs to be updated
           summary: 'Please update the changelog'
+    error: 
+      - do: checks
+        status: 'action_required'
+        payload:
+          title: error
+          summary: 'Changelog check error'
