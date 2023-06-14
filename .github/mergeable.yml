@@ -30,8 +30,8 @@ mergeable:
           title: Changelog ok
           summary: 'changelog ok'
     error: 
-    - do: checks
-        status: 'action_required'
-        payload:
-          title: Changelog check error
-          summary: 'changelog check error'
+      - do: checks
+          status: 'action_required'
+          payload:
+            title: Changelog check error
+            summary: 'changelog check error'
