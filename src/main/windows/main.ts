@@ -1,5 +1,10 @@
 import debounce from 'debounce'
-import electron, { BrowserWindow, Rectangle, session } from 'electron'
+import electron, {
+  BrowserWindow,
+  Rectangle,
+  session,
+  systemPreferences,
+} from 'electron'
 import { appWindowTitle } from '../../shared/constants'
 import { getLogger } from '../../shared/logger'
 import { appIcon, windowDefaults, htmlDistDir } from '../application-constants'
@@ -126,11 +131,21 @@ export function init(options: { hidden: boolean }) {
     }
   }
   window.webContents.session.setPermissionCheckHandler((_wc, permission) => {
+    if (permission === 'camera') {
+      return systemPreferences.getMediaAccessStatus('camera') === 'granted'
+    }
+    // if (permission === "microphone") {
+    //   return systemPreferences.getMediaAccessStatus("microphone") === "granted"
+    // }
     return permission_handler(permission as any)
   })
   window.webContents.session.setPermissionRequestHandler(
     (_wc, permission, callback) => {
-      callback(permission_handler(permission))
+      if (permission === 'media') {
+        systemPreferences.askForMediaAccess('camera').then(callback)
+      } else {
+        callback(permission_handler(permission))
+      }
     }
   )
 }
