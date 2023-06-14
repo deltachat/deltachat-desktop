@@ -2,13 +2,17 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_37_1"></a>
+
+## [1.37.1] - 2023-06-14
+
 ### Changed
 - Settings: Move Experimental Features into Advanced
 - Settings: Move Connectivity button down and give it an icon (like on android and ios)
 - update in-app help (2023-06-07)
-- If clipboard contains a file and text, then only paste the file into deltachat. #3261
 
 ### Fixed
+- If clipboard contains a file and text, then only paste the file into deltachat. #3261
 - possibly fix asking for camera permission on MacOS #3252
 
 <a id="1_37_0"></a>
@@ -2030,7 +2034,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.37.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.37.1...HEAD
+
+[1.37.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.37.0...v1.37.1
 
 [1.37.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.36.4...v1.37.0
 
