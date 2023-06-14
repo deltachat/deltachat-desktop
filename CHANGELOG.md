@@ -1,7 +1,7 @@
 # Changelog
 
 ## [Unreleased][unreleased]
-up
+
 ### Changed
 - Settings: Move Experimental Features into Advanced
 - Settings: Move Connectivity button down and give it an icon (like on android and ios)
