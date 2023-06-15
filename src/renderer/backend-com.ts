@@ -71,32 +71,14 @@ export namespace EffectfulBackendActions {
     window.__refetchChatlist && window.__refetchChatlist()
   }
 
-  export async function blockChat(account_id: number, chatId: number) {
-    await BackendRemote.rpc.blockChat(account_id, chatId)
-    window.__refetchChatlist && window.__refetchChatlist()
+  export async function blockChat(accountId: number, chatId: number) {
+    await BackendRemote.rpc.blockChat(accountId, chatId)
+    clearNotificationsForChat(accountId, chatId)
   }
 
   export async function deleteChat(accountId: number, chatId: number) {
     await BackendRemote.rpc.deleteChat(accountId, chatId)
     clearNotificationsForChat(accountId, chatId)
-    const lastChatId = await BackendRemote.rpc.getConfig(
-      accountId,
-      'ui.lastchatid'
-    )
-    if (lastChatId !== null && parseInt(lastChatId) === chatId) {
-      await BackendRemote.rpc.setConfig(accountId, 'ui.lastchatid', null)
-    }
-    window.__refetchChatlist && window.__refetchChatlist()
-  }
-
-  export async function blockContact(accountId: number, contactId: number) {
-    await BackendRemote.rpc.blockContact(accountId, contactId)
-    window.__refetchChatlist && window.__refetchChatlist()
-  }
-
-  export async function unBlockContact(accountId: number, contactId: number) {
-    await BackendRemote.rpc.unblockContact(accountId, contactId)
-    window.__refetchChatlist && window.__refetchChatlist()
   }
 }
 
