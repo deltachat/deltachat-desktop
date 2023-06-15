@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { getLogger } from '../../../shared/logger'
 import { debounce } from 'debounce'
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote, onDCEvent } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 
 const log = getLogger('renderer/helpers/ChatList')
@@ -101,18 +101,8 @@ export function useChatList(
       debouncedGetChatListEntries(listFlags, queryStr, queryContactId)
     }
 
-    window.__refetchChatlist = refetchChatlist
-    const emitter = BackendRemote.getContextEvents(accountId)
-    emitter.on('MsgsChanged', refetchChatlist)
-    emitter.on('IncomingMsg', refetchChatlist)
-    emitter.on('ChatModified', refetchChatlist)
     debouncedGetChatListEntries(listFlags, queryStr, queryContactId)
-    return () => {
-      emitter.off('MsgsChanged', refetchChatlist)
-      emitter.off('IncomingMsg', refetchChatlist)
-      emitter.off('ChatModified', refetchChatlist)
-      window.__refetchChatlist = undefined
-    }
+    return onDCEvent(accountId, 'UIChatListChanged', refetchChatlist)
   }, [
     listFlags,
     queryStr,
