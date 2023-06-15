@@ -37,7 +37,7 @@ export default function UnblockContacts({ onClose }: DialogProps) {
     })
 
     if (confirmed) {
-      BackendRemote.rpc.unblockContact(accountId, id)
+      await BackendRemote.rpc.unblockContact(accountId, id)
     }
   }
 
