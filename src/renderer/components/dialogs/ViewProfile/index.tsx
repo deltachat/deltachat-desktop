@@ -123,10 +123,8 @@ export function ViewProfileInner({
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
   const { chatListIds } = useChatList(null, '', contact.id)
-  const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
-    chatListIds,
-    null
-  )
+  const { isChatLoaded, loadChats, chatCache } =
+    useLogicVirtualChatList(chatListIds)
   const [selfChatAvatar, setSelfChatAvatar] = useState<string | null>(null)
   const [verifier, setVerifier] = useState<null | {
     label: string

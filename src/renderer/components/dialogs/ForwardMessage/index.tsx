@@ -31,10 +31,8 @@ export default function ForwardMessage(props: {
 
   const { message, onClose } = props
   const { chatListIds, queryStr, setQueryStr } = useChatList(LIST_FLAGS)
-  const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
-    chatListIds,
-    LIST_FLAGS
-  )
+  const { isChatLoaded, loadChats, chatCache } =
+    useLogicVirtualChatList(chatListIds)
 
   const onChatClick = async (chatId: number) => {
     const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
