@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- Update translations (17.06.2023)
+
 <a id="1_37_1"></a>
 
 ## [1.37.1] - 2023-06-14
