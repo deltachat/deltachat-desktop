@@ -4,7 +4,7 @@ import SplitOut from './splitout'
 import { getLogger } from '../../shared/logger'
 const log = getLogger('main/deltachat/webxdc')
 import Mime from 'mime-types'
-import { Menu, ProtocolResponse, nativeImage, shell } from 'electron'
+import { Menu, ProtocolResponse, nativeImage, shell, dialog } from 'electron'
 import { join } from 'path'
 import { readdir, stat, rmdir, writeFile, readFile } from 'fs/promises'
 import { getConfigPath, htmlDistDir } from '../application-constants'
@@ -401,7 +401,7 @@ If you think that's a bug and you need that permission, then please open an issu
 
     ipcMain.handle(
       'webxdc.sendToChat',
-      (
+      async (
         event,
         file: { file_name: string; file_content: string } | null,
         text: string | null
@@ -415,10 +415,19 @@ If you think that's a bug and you need that permission, then please open an issu
           )
           return
         }
-        // forward to main window
-        main_window?.webContents.send('webxdc.sendToChat', file, text)
-        main_window?.focus()
-        open_apps[key].win.destroy()
+        const { response: buttonIndex } = await dialog.showMessageBox(
+          open_apps[key].win,
+          {
+            message: tx('chat_share_with_title'),
+            buttons: [tx('cancel'), tx('select_chat')],
+          }
+        )
+        if (buttonIndex === 1) {
+          // forward to main window
+          main_window?.webContents.send('webxdc.sendToChat', file, text)
+          main_window?.focus()
+          open_apps[key].win.destroy()
+        }
       }
     )
 

@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- Added confirmation dialog to `webxdc.sendToChat` api #3269
+
 <a id="1_37_1"></a>
 
 ## [1.37.1] - 2023-06-14
