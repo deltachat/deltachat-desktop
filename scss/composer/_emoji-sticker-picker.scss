@@ -1,7 +1,9 @@
 $esp-height: 70vh;
 $esp-header-height: 40px;
 $esp-footer-height: 30px;
+$esp-border-color: #00000017;
 $emojimart-search-height: 31px + 6px;
+
 
 .emoji-sticker-picker {
   position: fixed;
@@ -13,7 +15,7 @@ $emojimart-search-height: 31px + 6px;
   background-color: var(--emojiStickerPicker-Background);
   border-radius: var(--emojiStickerPicker-BorderRadius);
   overflow: hidden;
-  box-shadow: 0px 0px 0px 1px #00000017;
+  box-shadow: 0px 0px 0px 1px $esp-border-color;
 
   div.emoji-or-sticker-header-nav {
     width: 100%;
@@ -84,16 +86,18 @@ $emojimart-search-height: 31px + 6px;
   div.sticker-picker {
     background: var(--emojiMartBg);
     width: 100%;
-    margin-top: -1px;
-    overflow: overlay;
+    display: flex;
+    overflow: auto;
+    flex-direction: column;
 
     .sticker-container {
-      padding: 0px 6px;
-      overflow-y: scroll;
+      flex: 1;
+      padding: 0px 12px 12px;
+      overflow-y: auto;
 
       .sticker-pack {
         & > .title {
-          padding: 5px 6px;
+          padding: 8px 0px;
           color: grey;
           font-size: large;
           font-weight: 500;
@@ -101,22 +105,20 @@ $emojimart-search-height: 31px + 6px;
           font-family: $roboto;
           font-size: 16px;
           font-weight: 500;
-          height: 28px;
-          line-height: 18.4px;
+          position: sticky;
+          top: 0;
+          background-color: var(--emojiStickerPicker-Background);
         }
         & > .container {
           display: flex;
           flex-wrap: wrap;
           justify-content: space-between;
-          margin: 5px 0px;
 
           & > .sticker {
             display: flex;
             justify-content: center;
             width: 133px;
             height: 133px;
-            margin: 5px 0px;
-            padding: 3px;
             border-radius: 4px;
 
             &:hover {
@@ -131,6 +133,15 @@ $emojimart-search-height: 31px + 6px;
             }
           }
         }
+      }
+    }
+
+    .sticker-actions-container {
+      border-top: 1px solid $esp-border-color;
+      padding: 12px;
+
+      > .delta-button-round {
+        margin: 0;
       }
     }
   }

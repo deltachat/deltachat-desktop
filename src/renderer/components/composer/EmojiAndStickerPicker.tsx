@@ -70,7 +70,6 @@ export const StickerPicker = (props: {
 
   return (
     <div className='sticker-picker'>
-      <button onClick={onOpenStickerFolder}>Open Sticker Folder</button>
       <div className='sticker-container'>
         {Object.keys(stickers).map(stickerPackName => {
           return (
@@ -83,6 +82,11 @@ export const StickerPicker = (props: {
             />
           )
         })}
+      </div>
+      <div className='sticker-actions-container'>
+        <button className='delta-button-round' onClick={onOpenStickerFolder}>
+          Open Sticker Folder
+        </button>
       </div>
     </div>
   )
