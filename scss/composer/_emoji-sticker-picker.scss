@@ -19,7 +19,7 @@ $emojimart-search-height: 31px + 6px;
 
   div.emoji-or-sticker-header-nav {
     width: 100%;
-    height: calc(#{$esp-header-height} + 1px);
+    height: $esp-header-height;
     display: flex;
     border-bottom: 1px solid #00000017;
 
@@ -106,7 +106,7 @@ $emojimart-search-height: 31px + 6px;
           font-size: 16px;
           font-weight: 500;
           position: sticky;
-          top: 0;
+          top: -1px;
           background-color: var(--emojiStickerPicker-Background);
         }
         & > .container {
