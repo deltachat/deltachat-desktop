@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Changed
+- update deltachat-node and deltachat/jsonrpc-client to `v1.117.0`
 - Update translations (17.06.2023)
 
 <a id="1_37_1"></a>
