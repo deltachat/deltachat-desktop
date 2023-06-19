@@ -17,10 +17,7 @@ Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANG
   BackendRemote.rpc.addDeviceMessage(
     accountId,
     'changelog-version-1.36.0-audit',
-    tx(
-      'update_1_36_audit',
-      'https://delta.chat/en/2023-05-22-webxdc-security'
-    )
+    tx('update_1_36_audit', 'https://delta.chat/en/2023-05-22-webxdc-security')
   )
 
   BackendRemote.rpc.addDeviceMessage(
