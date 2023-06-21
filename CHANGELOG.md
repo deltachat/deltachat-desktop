@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+
+### Fixed
+- fix: if systemPreferences.askForMediaAccess is not available, then don't call it (broke qr scan under linux (and maybe also under windows, was not tested))
+
 <a id="1_38_0"></a>
 
 ## [1.38.0] - 2023-06-19
