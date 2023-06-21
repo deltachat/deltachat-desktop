@@ -7,6 +7,7 @@
 
 ### Fixed
 - fix: if systemPreferences.askForMediaAccess is not available, then don't call it (broke qr scan under linux (and maybe also under windows, was not tested))
+- fix: only allow one instance of `sendToChat()` (the old one is now replaced by the new one) #3281
 
 <a id="1_38_0"></a>
 

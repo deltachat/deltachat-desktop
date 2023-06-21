@@ -47,6 +47,7 @@ export default class ScreenController extends Component {
   onShowKeybindings: any
   onShowSettings: any
   selectedAccountId: number | undefined
+  openSendToDialogId?: number
 
   constructor(public props: {}) {
     super(props)
@@ -165,10 +166,17 @@ export default class ScreenController extends Component {
 
     runtime.onOpenQrUrl = processOpenQrUrl
     runtime.onWebxcSendToChat = (file, text) => {
-      ;(this.openDialog as OpenDialogFunctionType)(WebxdcSaveToChatDialog, {
-        messageText: text,
-        file,
-      })
+      if (this.openSendToDialogId) {
+        this.closeDialog(this.openSendToDialogId)
+        this.openSendToDialogId = undefined
+      }
+      this.openSendToDialogId = (this.openDialog as OpenDialogFunctionType)(
+        WebxdcSaveToChatDialog,
+        {
+          messageText: text,
+          file,
+        }
+      )
     }
     runtime.onResumeFromSleep = debounce(() => {
       log.info('onResumeFromSleep')
