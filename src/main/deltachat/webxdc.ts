@@ -418,7 +418,6 @@ If you think that's a bug and you need that permission, then please open an issu
         // forward to main window
         main_window?.webContents.send('webxdc.sendToChat', file, text)
         main_window?.focus()
-        open_apps[key].win.destroy()
       }
     )
 
