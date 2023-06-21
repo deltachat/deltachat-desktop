@@ -131,17 +131,17 @@ export function init(options: { hidden: boolean }) {
     }
   }
   window.webContents.session.setPermissionCheckHandler((_wc, permission) => {
-    if (permission === 'camera') {
+    if (systemPreferences.getMediaAccessStatus && permission === 'camera') {
       return systemPreferences.getMediaAccessStatus('camera') === 'granted'
     }
-    // if (permission === "microphone") {
+    // if (systemPreferences.getMediaAccessStatus && permission === "microphone") {
     //   return systemPreferences.getMediaAccessStatus("microphone") === "granted"
     // }
     return permission_handler(permission as any)
   })
   window.webContents.session.setPermissionRequestHandler(
     (_wc, permission, callback) => {
-      if (permission === 'media') {
+      if (systemPreferences.askForMediaAccess && permission === 'media') {
         systemPreferences.askForMediaAccess('camera').then(callback)
       } else {
         callback(permission_handler(permission))
