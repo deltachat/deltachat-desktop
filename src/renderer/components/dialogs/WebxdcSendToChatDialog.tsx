@@ -51,13 +51,14 @@ export default function WebxdcSaveToChatDialog(props: {
   const CHATLISTITEM_CHAT_HEIGHT =
     Number(useThemeCssVar('--SPECIAL-chatlist-item-chat-height')) || 64
 
+  const title = file
+    ? tx('send_file_to', file.file_name)
+    : tx('send_message_to')
+
   const noResults = chatListIds.length === 0 && queryStr !== ''
   return (
     <DeltaDialogBase isOpen={true} onClose={onClose} fixed>
-      <DeltaDialogHeader
-        onClose={onClose}
-        title={tx('chat_share_with_title')}
-      />
+      <DeltaDialogHeader onClose={onClose} title={title} />
       <div
         className={classNames(
           Classes.DIALOG_BODY,
