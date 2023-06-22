@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- common strings without special context -->
+    <string name="app_name">Dêltā Čat</string>
+    <string name="ok">xā</string>
+    <string name="cancel">raď</string>
+    <string name="clear_search">roftênê pitiniďên</string>
+    <string name="yes">harêy</string>
+    <string name="no">na</string>
+    <string name="select">pêsand</string>
+    <string name="on">rušên</string>
+    <string name="off">kur</string>
+    <string name="def">pîš farz</string>
+    <string name="default_value">pîš farz (%1$s)</string>
+    <string name="default_value_as_above">pîš farz (jurê ro\')</string>
+    <string name="custom">sêfârêši</string>
+    <string name="none">hičkoyêki</string>
+    <string name="automatic">xotkār</string>
+    <string name="open">gušiďên</string>
+    <string name="download">dānlod</string>
+    <string name="downloading">honêy dānlod êbu...</string>
+    <string name="join">avoďên</string>
+    <string name="rejoin">zênu avoďên</string>
+    <string name="delete">pāk kerdên</string>
+    <string name="info">zêbār</string>
+    <string name="update">vê ru kerdên</string>
+    <string name="back">vorgaštên</string>
+    <string name="close">bastên</string>
+    <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
+    <string name="resend">zênu bêfêšn</string>
+    <string name="mute">bî dong</string>
+    <string name="save">zaft</string>
+    <string name="chat">goftoloft</string>
+    <string name="media">vārasgar</string>
+    <string name="start_chat">nāhāďên pā goftoloft</string>
+    <!-- Placeholder text when something is loading -->
+    <string name="loading">honêy bār êvane...</string>
+    <string name="hide">bîďār kerdên</string>
+    <string name="always">hamiša</string>
+    <string name="once">him ya kêrat</string>
+    <string name="not_now">sako na</string>
+    <string name="one_moment">yadamow...</string>
+    <string name="done">anjom vâbi</string>
+    <string name="error">xatā</string>
+    <string name="now">sako</string>
+    </resources>

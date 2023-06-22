@@ -4,6 +4,7 @@
 
 ### Changed
 - don't close webxdc on `sendToChat()`
+- Update translations (22.06.2023)
 
 ### Fixed
 - fix: if systemPreferences.askForMediaAccess is not available, then don't call it (broke qr scan under linux (and maybe also under windows, was not tested))
