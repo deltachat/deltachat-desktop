@@ -61,5 +61,14 @@
   },
   "later": {
     "message": "Later"
+  },
+  "no_stickers_yet": {
+    "message": "No stickers yet"
+  },
+  "add_stickers_instructions": {
+    "message": "Add some using the button below."
+  },
+  "open_sticker_folder": {
+    "message": "Open Sticker Folder"
   }
 }

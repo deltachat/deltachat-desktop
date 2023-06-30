@@ -61,6 +61,8 @@ export const StickerPicker = ({
   chatId: number
   setShowEmojiPicker: (enabled: boolean) => void
 }) => {
+  const tx = useTranslationFunction()
+
   const onOpenStickerFolder = async () => {
     const folder = await BackendRemote.rpc.miscGetStickerFolder(
       selectedAccountId()
@@ -90,20 +92,20 @@ export const StickerPicker = ({
               className='delta-button-round'
               onClick={onOpenStickerFolder}
             >
-              Open Sticker Folder
+              {tx('open_sticker_folder')}
             </button>
           </div>
         </>
       ) : (
         <div className='sticker-container'>
           <div className='no-stickers'>
-            <h2 className='title'>No stickers yet</h2>
-            <p className='description'>Add some using the button below.</p>
+            <h2 className='title'>{tx('no_stickers_yet')}</h2>
+            <p className='description'>{tx('add_stickers_instructions')}</p>
             <button
               className='delta-button-round'
               onClick={onOpenStickerFolder}
             >
-              Open Sticker Folder
+              {tx('open_sticker_folder')}
             </button>
           </div>
         </div>
