@@ -4,7 +4,6 @@ $esp-footer-height: 30px;
 $esp-border-color: #00000017;
 $emojimart-search-height: 31px + 6px;
 
-
 .emoji-sticker-picker {
   position: fixed;
   z-index: 10;
@@ -91,9 +90,19 @@ $emojimart-search-height: 31px + 6px;
     flex-direction: column;
 
     .sticker-container {
+      display: flex;
+      flex-direction: column;
       flex: 1;
       padding: 0px 12px 12px;
       overflow-y: auto;
+
+      .no-stickers {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+      }
 
       .sticker-pack {
         & > .title {

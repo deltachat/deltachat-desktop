@@ -15,7 +15,7 @@ import Picker from '@emoji-mart/react'
 import type { EmojiData } from 'emoji-mart/index'
 import { useThemeCssVar } from '../../ThemeManager'
 
-export const StickerDiv = (props: {
+const DisplayedStickerPack = (props: {
   stickerPackName: string
   stickerPackImages: string[]
   chatId: number
@@ -68,26 +68,46 @@ export const StickerPicker = (props: {
     runtime.openPath(folder)
   }
 
+  const stickerPackNames = Object.keys(stickers)
+
   return (
     <div className='sticker-picker'>
-      <div className='sticker-container'>
-        {Object.keys(stickers).map(stickerPackName => {
-          return (
-            <StickerDiv
-              chatId={chatId}
-              key={stickerPackName}
-              stickerPackName={stickerPackName}
-              stickerPackImages={stickers[stickerPackName]}
-              setShowEmojiPicker={setShowEmojiPicker}
-            />
-          )
-        })}
-      </div>
-      <div className='sticker-actions-container'>
-        <button className='delta-button-round' onClick={onOpenStickerFolder}>
-          Open Sticker Folder
-        </button>
-      </div>
+      {stickerPackNames.length > 0 ? (
+        <>
+          <div className='sticker-container'>
+            {stickerPackNames.map(name => (
+              <DisplayedStickerPack
+                chatId={chatId}
+                key={name}
+                stickerPackName={name}
+                stickerPackImages={stickers[name]}
+                setShowEmojiPicker={setShowEmojiPicker}
+              />
+            ))}
+          </div>
+          <div className='sticker-actions-container'>
+            <button
+              className='delta-button-round'
+              onClick={onOpenStickerFolder}
+            >
+              Open Sticker Folder
+            </button>
+          </div>
+        </>
+      ) : (
+        <div className='sticker-container'>
+          <div className='no-stickers'>
+            <h2 className='title'>No stickers yet</h2>
+            <p className='description'>Add some using the button below.</p>
+            <button
+              className='delta-button-round'
+              onClick={onOpenStickerFolder}
+            >
+              Open Sticker Folder
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
