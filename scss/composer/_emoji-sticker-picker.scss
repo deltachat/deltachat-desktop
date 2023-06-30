@@ -130,7 +130,14 @@ $emojimart-search-height: 31px + 6px;
             height: 133px;
             border-radius: 4px;
 
-            &:hover {
+            align-items: center;
+            padding: 0;
+            margin: 0;
+            background-color: transparent;
+            border-color: transparent;
+
+            &:hover,
+            &:focus {
               background-color: lightgrey;
               cursor: pointer;
             }

@@ -15,18 +15,17 @@ import Picker from '@emoji-mart/react'
 import type { EmojiData } from 'emoji-mart/index'
 import { useThemeCssVar } from '../../ThemeManager'
 
-const DisplayedStickerPack = (props: {
+const DisplayedStickerPack = ({
+  stickerPackName,
+  stickerPackImages,
+  chatId,
+  setShowEmojiPicker,
+}: {
   stickerPackName: string
   stickerPackImages: string[]
   chatId: number
   setShowEmojiPicker: (enabled: boolean) => void
 }) => {
-  const {
-    stickerPackName,
-    stickerPackImages,
-    chatId,
-    setShowEmojiPicker,
-  } = props
   const onClickSticker = (fileName: string) => {
     const stickerPath = fileName.replace('file://', '')
     BackendRemote.rpc
@@ -39,28 +38,29 @@ const DisplayedStickerPack = (props: {
     <div className='sticker-pack'>
       <div className='title'>{stickerPackName}</div>
       <div className='container'>
-        {stickerPackImages.map((filePath, index) => {
-          return (
-            <div className='sticker' key={index}>
-              <img
-                src={filePath}
-                onClick={onClickSticker.bind(null, filePath)}
-              />
-            </div>
-          )
-        })}
+        {stickerPackImages.map((filePath, index) => (
+          <button
+            className='sticker'
+            key={index}
+            onClick={() => onClickSticker(filePath)}
+          >
+            <img src={filePath} />
+          </button>
+        ))}
       </div>
     </div>
   )
 }
 
-export const StickerPicker = (props: {
+export const StickerPicker = ({
+  stickers,
+  chatId,
+  setShowEmojiPicker,
+}: {
   stickers: { [key: string]: string[] }
   chatId: number
   setShowEmojiPicker: (enabled: boolean) => void
 }) => {
-  const { stickers, chatId, setShowEmojiPicker } = props
-
   const onOpenStickerFolder = async () => {
     const folder = await BackendRemote.rpc.miscGetStickerFolder(
       selectedAccountId()
