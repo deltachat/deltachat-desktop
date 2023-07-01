@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+
+### Fixed
+- fix: clicking start on an already open webxdc app now opens it again even when it was minimised #3294
+
 <a id="1_38_1"></a>
 
 ## [1.38.1] - 2023-06-23
