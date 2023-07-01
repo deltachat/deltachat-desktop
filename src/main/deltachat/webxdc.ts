@@ -81,7 +81,11 @@ export default class DCWebxdc extends SplitOut {
             'webxdc instance for this app is already open, trying to focus it',
             { msg_id }
           )
-          open_apps[`${accountId}.${msg_id}`].win.focus()
+          const window = open_apps[`${accountId}.${msg_id}`].win
+          if (window.isMinimized()) {
+            window.restore()
+          }
+          window.focus()
           return
         }
 
