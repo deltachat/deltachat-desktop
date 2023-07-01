@@ -323,10 +323,7 @@ const Composer = forwardRef<
             <span />
           </div>
           <div className='send-button-wrapper' onClick={composerSendMessage}>
-            <button
-              aria-label={tx('menu_send')}
-              tabIndex={showEmojiPicker ? -1 : undefined}
-            />
+            <button aria-label={tx('menu_send')} />
           </div>
         </div>
         {showEmojiPicker && (
