@@ -194,7 +194,7 @@ export function useContactSearch(
   }
 
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    updateSearch(e.target.value)
+    updateSearch(e.target.value.trim())
 
   return [searchString, onSearchChange, updateSearch] as [
     string,
