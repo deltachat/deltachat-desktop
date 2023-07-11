@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useState,
 } from 'react'
+import classNames from "classnames"
 import { MessageWrapper } from './MessageWrapper'
 import ChatStore, {
   useChatStore,
@@ -579,14 +580,19 @@ function JumpDownButton({
   ) => Promise<void>
   jumpToMessageStack: number[]
 }) {
+  let countToShow: string = countUnreadMessages.toString()
+  if (countUnreadMessages > 99) {
+    countToShow = '99+'
+  }
+
   return (
     <>
       <div className='jump-down-button'>
         <div
-          className='counter'
+          className={classNames('counter', countToShow.length === 3 && 'counter-3digits')}
           style={countUnreadMessages === 0 ? { visibility: 'hidden' } : {}}
         >
-          {countUnreadMessages}
+          {countToShow}
         </div>
         <div
           className='button'
