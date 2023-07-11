@@ -194,7 +194,7 @@ export function useContactSearch(
   }
 
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    updateSearch(e.target.value.trim())
+    updateSearch(e.target.value)
 
   return [searchString, onSearchChange, updateSearch] as [
     string,
@@ -416,7 +416,7 @@ export function AddMemberInnerDialog({
 
     const contactId = await BackendRemote.rpc.createContact(
       accountId,
-      queryStr,
+      queryStr.trim(),
       null
     )
     const contact = await BackendRemote.rpc.getContact(accountId, contactId)
