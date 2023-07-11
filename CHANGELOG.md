@@ -5,7 +5,7 @@
 
 ### Fixed
 - fix: clicking start on an already open webxdc app now opens it again even when it was minimised #3294
-- fix: Email address is now trimmed in create chat dialogue(#3299)
+- fix: whitespaces are now removed from Email address when creating a contacts from the Create Chat dialog(#3299)
 
 <a id="1_38_1"></a>
 
