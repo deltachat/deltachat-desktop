@@ -6,6 +6,7 @@
 ### Fixed
 - fix: clicking start on an already open webxdc app now opens it again even when it was minimised #3294
 - fix: text is now smaller in the unread badge on the top of the jump down button(#3068)
+- fix: links in quoted texts should not be clickable (#3290)
 
 <a id="1_38_1"></a>
 

@@ -547,6 +547,7 @@
   a {
     text-decoration: underline;
     color: var(--messageTextLink);
+    pointer-events: none;
   }
 }
 
