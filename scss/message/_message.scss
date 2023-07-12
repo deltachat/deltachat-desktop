@@ -98,6 +98,7 @@
     padding-left: 12px;
     padding-top: 10px;
     padding-bottom: 10px;
+    
 
     .msg-body {
       &.msg-body--clickable > .text {
@@ -301,6 +302,7 @@
         .quoted-text {
           color: white;
         }
+
       }
     }
   }
@@ -547,6 +549,7 @@
   a {
     text-decoration: underline;
     color: var(--messageTextLink);
+    pointer-events: none;
   }
 }
 
