@@ -118,7 +118,9 @@ export function useContactsMap(listFlags: number, queryStr: string) {
   return [contacts, updateContacts] as [typeof contacts, typeof updateContacts]
 }
 
-export function useContactsNew(listFlags: number, initialQueryStr: string) {
+
+// if trim is provided and is true, the queryStr is trimmed for contact search and for checking validity of the string as an Email address
+export function useContactsNew(listFlags: number, initialQueryStr: string, trim?: boolean) {
   const [state, setState] = useState<{
     contacts: Type.Contact[]
     queryStrIsValidEmail: boolean
@@ -131,10 +133,10 @@ export function useContactsNew(listFlags: number, initialQueryStr: string) {
         const contacts = await BackendRemote.rpc.getContacts(
           accountId,
           listFlags,
-          queryStr
+          trim ? queryStr.trim() : queryStr
         )
         const queryStrIsValidEmail = await BackendRemote.rpc.checkEmailValidity(
-          queryStr
+          trim ? queryStr.trim() : queryStr
         )
         setState({ contacts, queryStrIsValidEmail })
       }, 200),
