@@ -552,6 +552,8 @@
 
 .quoted-text > a {
   pointer-events: none;
+  text-decoration: none;
+  color: var(--messageQuotedText);
 }
 
 .author-wrapper {
