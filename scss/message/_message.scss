@@ -550,6 +550,8 @@
   }
 }
 
+/* This is for making links in quoted texts unclickable and 
+   have an appereance like the rest of text in there */
 .quoted-text > a {
   pointer-events: none;
   text-decoration: none;
