@@ -547,8 +547,11 @@
   a {
     text-decoration: underline;
     color: var(--messageTextLink);
-    pointer-events: none;
   }
+}
+
+.quoted-text > a {
+  pointer-events: none;
 }
 
 .author-wrapper {
