@@ -118,12 +118,8 @@ export function useContactsMap(listFlags: number, queryStr: string) {
   return [contacts, updateContacts] as [typeof contacts, typeof updateContacts]
 }
 
-// if trim is provided and is true, the queryStr is trimmed for contact search and for checking validity of the string as an Email address
-export function useContactsNew(
-  listFlags: number,
-  initialQueryStr: string,
-  trim?: boolean
-) {
+// The queryStr is trimmed for contact search and for checking validity of the string as an Email address
+export function useContactsNew(listFlags: number, initialQueryStr: string) {
   const [state, setState] = useState<{
     contacts: Type.Contact[]
     queryStrIsValidEmail: boolean
