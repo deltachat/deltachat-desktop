@@ -416,7 +416,7 @@ export function AddMemberInnerDialog({
 
     const contactId = await BackendRemote.rpc.createContact(
       accountId,
-      queryStr,
+      queryStr.trim(),
       null
     )
     const contact = await BackendRemote.rpc.getContact(accountId, contactId)
