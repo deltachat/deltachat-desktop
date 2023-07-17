@@ -61,8 +61,7 @@ export default function CreateChat(props: {
 
   const [{ contacts, queryStrIsValidEmail }, updateContacts] = useContactsNew(
     C.DC_GCL_ADD_SELF,
-    '',
-    true
+    ''
   )
   const [queryStr, onSearchChange] = useContactSearch(updateContacts)
 

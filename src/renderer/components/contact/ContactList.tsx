@@ -132,10 +132,10 @@ export function useContactsNew(listFlags: number, initialQueryStr: string) {
         const contacts = await BackendRemote.rpc.getContacts(
           accountId,
           listFlags,
-          trim ? queryStr.trim() : queryStr
+          queryStr.trim()
         )
         const queryStrIsValidEmail = await BackendRemote.rpc.checkEmailValidity(
-          trim ? queryStr.trim() : queryStr
+          queryStr.trim()
         )
         setState({ contacts, queryStrIsValidEmail })
       }, 200),
