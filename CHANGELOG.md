@@ -8,6 +8,7 @@
 - fix: Including whitespace in search query does not cause problem when if the search query is an email address(#3299)
 - fix: text is now smaller in the unread badge on the top of the jump down button(#3068)
 - fix: links in quoted texts should not be clickable (#3290)
+- fix: remove unsupported language code, this broke the installation from the ms store on windows #3292
 
 <a id="1_38_1"></a>
 

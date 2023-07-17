@@ -785,7 +785,6 @@
     identityName: 'merlinux.DeltaChat',
     languages: [
       'ar',
-      'az',
       'bg',
       'ca',
       'cs',
@@ -811,7 +810,7 @@
       'nl-nl',
       'pl',
       'pt',
-      'pt-BR',
+      'pt-br',
       'ro',
       'ru',
       'sk',
