@@ -15,7 +15,7 @@ import {
   PseudoListItemAddMember,
 } from '../helpers/PseudoListItem'
 import { DialogProps } from './DialogController'
-import { ViewProfileInner } from './ViewProfile'
+import ViewProfile from './ViewProfile'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { useState, useContext, useEffect, useCallback, useMemo } from 'react'
 import React from 'react'
@@ -216,10 +216,14 @@ function ViewGroupInner(props: {
   const [profileContact, setProfileContact] = useState<Type.Contact | null>(
     null
   )
+  
+  if (viewMode === 'profile' && !profileContact) {
+    console.error('[ViewGroup] viewMode is profile but profileContact is null. Showing the main view instead')
+  }
 
   return (
     <>
-      {viewMode === 'main' && (
+      {(viewMode === 'main' || (viewMode === "profile" && !profileContact)) && (
         <>
           <DeltaDialogHeader
             title={
@@ -292,23 +296,12 @@ function ViewGroupInner(props: {
           </div>
         </>
       )}
-      {viewMode === 'profile' && (
-        <>
-          <DeltaDialogHeader
-            title={tx('menu_view_profile')}
-            showBackButton={true}
-            onClickBack={() => setViewMode('main')}
-            showCloseButton={true}
-            onClose={onClose}
-          />
-          <DeltaDialogBody noFooter>
-            <DeltaDialogContent noPadding>
-              {profileContact && (
-                <ViewProfileInner contact={profileContact} onClose={onClose} />
-              )}
-            </DeltaDialogContent>
-          </DeltaDialogBody>
-        </>
+      {(viewMode === 'profile' && profileContact) && (
+        <ViewProfile
+          isOpen
+          onClose={onClose}
+          contact={profileContact}
+        />
       )}
     </>
   )
