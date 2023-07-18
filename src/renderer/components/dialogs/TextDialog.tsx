@@ -16,7 +16,7 @@ type TextDialogProps = {
   message?: string
   onOk: (value: string) => void
   onCancel?: () => void
-  placeholder?: string,
+  placeholder?: string
   type?: string
 }
 
