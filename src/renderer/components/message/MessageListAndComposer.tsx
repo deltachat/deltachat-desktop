@@ -173,6 +173,9 @@ export default function MessageListAndComposer({
     ) {
       return
     }
+    if (window.__getOpenDialogsNumber() === 0) {
+      return
+    }
 
     e.preventDefault()
     e.stopPropagation()
@@ -202,6 +205,7 @@ export default function MessageListAndComposer({
     window.addEventListener('mouseup', onMouseUp)
     document.addEventListener('selectionchange', onSelectionChange)
     window.addEventListener('keyup', onEscapeKeyUp)
+    log.debug('number of open dialogs:', window.__getOpenDialogsNumber())
     messageInputRef?.current?.focus()
     return () => {
       window.removeEventListener('mouseup', onMouseUp)

@@ -73,6 +73,7 @@ export default class ScreenController extends Component {
     window.__openDialog = this.openDialog.bind(this)
     window.__userFeedback = this.userFeedback.bind(this)
     window.__closeDialog = this.closeDialog.bind(this)
+    window.__getOpenDialogsNumber = this.getOpenDialogsNumber.bind(this)
     window.__changeScreen = this.changeScreen.bind(this)
     window.__selectAccount = this.selectAccount.bind(this)
     window.__screen = this.state.screen
@@ -219,6 +220,13 @@ export default class ScreenController extends Component {
 
   showKeyBindings() {
     ActionEmitter.emitAction(KeybindAction.KeybindingCheatSheet_Open)
+  }
+
+  getOpenDialogsNumber() {
+    if (!this.dialogController.current) {
+      throw new Error('dialog controller not ready')
+    }
+    return this.dialogController.current.getOpenDialogsNumber()
   }
 
   openDialog(...args: Parameters<OpenDialogFunctionType>) {
