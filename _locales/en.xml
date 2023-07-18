@@ -653,7 +653,7 @@
     <string name="pref_other">Other</string>
     <string name="pref_backup">Backup</string>
     <string name="pref_backup_explain">Back Up Chats to External Storage</string>
-    <string name="pref_backup_export_explain">A backup helps you to set up a new installation on this or on another device.\n\nThe backup will contain all messages, contacts and chats and your end-to-end Autocrypt setup. Keep the backup file in a safe place or delete it as soon as possible.</string>
+    <string name="pref_backup_export_explain">A backup helps you to set up a new installation on this or on another device.\n\nThe backup will contain all messages, contacts and chats and your end-to-end Autocrypt setup. You can encrypt your backup, not including the attachments such as images, medias and other files, with a password. Empty password means no password. Remember to keep your backup somewhere safe, especially if you don't encrypt it.</string>
     <string name="pref_backup_export_start_button">Start Backup</string>
     <string name="pref_backup_written_to_x">Backup written successfully to \"%1$s\".</string>
     <string name="pref_managekeys_menu_title">Manage Keys</string>

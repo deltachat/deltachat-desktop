@@ -53,7 +53,7 @@ function onBackupExport() {
 
   openDialog('TextDialog', {
     message: tx('pref_backup_export_explain'),
-    placeholder: tx('passphrase'),
+    placeholder: tx('password'),
     type: 'password',
     onOk: async (passphrase: string) => {
       const opts: OpenDialogOptions = {
