@@ -217,7 +217,7 @@ function ViewGroupInner(props: {
   )
 
   if (viewMode === 'profile' && !profileContact) {
-    console.error(
+    log.error(
       '[ViewGroup] viewMode is profile but profileContact is null. Showing the main view instead'
     )
   }
