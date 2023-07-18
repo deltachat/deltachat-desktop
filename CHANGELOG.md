@@ -9,6 +9,7 @@
 - fix: text is now smaller in the unread badge on the top of the jump down button(#3068)
 - fix: links in quoted texts should not be clickable (#3290)
 - fix: remove unsupported language code, this broke the installation from the ms store on windows #3292
+- fix: show edit button if a contact's profile is shown from group view(#3267)
 
 <a id="1_38_1"></a>
 
