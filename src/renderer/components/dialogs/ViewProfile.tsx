@@ -5,7 +5,6 @@ import {
   DeltaDialogBody,
   DeltaDialogContent,
   DeltaDialogContentTextSeparator,
-  DeltaDialogOkCancelFooter,
 } from './DeltaDialog'
 import ChatListItem from '../chat/ChatListItem'
 import { useChatList } from '../chat/ChatListHelpers'
@@ -20,9 +19,6 @@ import { useLogicVirtualChatList, ChatListPart } from '../chat/ChatList'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import MessageBody from '../message/MessageBody'
 import { useThemeCssVar } from '../../ThemeManager'
-import { DialogProps } from './DialogController'
-import { Card, Elevation } from '@blueprintjs/core'
-import { DeltaInput } from '../Login-Styles'
 import { openViewProfileDialog, selectChat } from '../helpers/ChatMethods'
 import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
