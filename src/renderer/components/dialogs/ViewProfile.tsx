@@ -28,6 +28,7 @@ import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import moment from 'moment'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
+import TextDialog from './TextDialog'
 
 function LastSeen({ timestamp }: { timestamp: number }) {
   const tx = useTranslationFunction()
@@ -80,14 +81,10 @@ export default function ViewProfile(props: {
   const isSelfChat = contact.id === C.DC_CONTACT_ID_SELF
 
   const onClickEdit = () => {
-    openDialog(EditContactNameDialog, {
-      contactName: contact.name,
-      onOk: async (contactName: string) => {
-        await BackendRemote.rpc.changeContactName(
-          accountId,
-          contact.id,
-          contactName
-        )
+    openDialog(TextDialog, {
+      defaultValue: contact.name,
+      onOk: async (value: string) => {
+        await BackendRemote.rpc.changeContactName(accountId, contact.id, value)
       },
     })
   }
@@ -310,58 +307,5 @@ export function ViewProfileInner({
         )}
       </div>
     </>
-  )
-}
-
-export function EditContactNameDialog({
-  isOpen,
-  onClose,
-  onOk,
-  onCancel,
-  contactName: initialGroupName,
-}: DialogProps) {
-  const [contactName, setContactName] = useState(initialGroupName)
-  const tx = useTranslationFunction()
-
-  const onClickCancel = () => {
-    onClose()
-    onCancel && onCancel()
-  }
-  const onClickOk = () => {
-    onClose()
-    onOk(contactName)
-  }
-  return (
-    <DeltaDialogBase
-      onClose={onClose}
-      isOpen={isOpen}
-      canOutsideClickClose={false}
-      style={{
-        top: '15vh',
-        width: '500px',
-        maxHeight: '70vh',
-        height: 'auto',
-      }}
-      fixed
-    >
-      <DeltaDialogHeader title={tx('menu_edit_name')} />
-      <DeltaDialogBody>
-        <Card elevation={Elevation.ONE}>
-          <DeltaInput
-            key='contactname'
-            id='contactname'
-            placeholder={tx('name_desktop')}
-            value={contactName}
-            onChange={(
-              event: React.FormEvent<HTMLElement> &
-                React.ChangeEvent<HTMLInputElement>
-            ) => {
-              setContactName(event.target.value)
-            }}
-          />
-        </Card>
-      </DeltaDialogBody>
-      <DeltaDialogOkCancelFooter onCancel={onClickCancel} onOk={onClickOk} />
-    </DeltaDialogBase>
   )
 }
