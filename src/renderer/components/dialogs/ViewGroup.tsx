@@ -216,14 +216,16 @@ function ViewGroupInner(props: {
   const [profileContact, setProfileContact] = useState<Type.Contact | null>(
     null
   )
-  
+
   if (viewMode === 'profile' && !profileContact) {
-    console.error('[ViewGroup] viewMode is profile but profileContact is null. Showing the main view instead')
+    console.error(
+      '[ViewGroup] viewMode is profile but profileContact is null. Showing the main view instead'
+    )
   }
 
   return (
     <>
-      {(viewMode === 'main' || (viewMode === "profile" && !profileContact)) && (
+      {(viewMode === 'main' || (viewMode === 'profile' && !profileContact)) && (
         <>
           <DeltaDialogHeader
             title={
@@ -296,12 +298,8 @@ function ViewGroupInner(props: {
           </div>
         </>
       )}
-      {(viewMode === 'profile' && profileContact) && (
-        <ViewProfile
-          isOpen
-          onClose={onClose}
-          contact={profileContact}
-        />
+      {viewMode === 'profile' && profileContact && (
+        <ViewProfile isOpen onClose={onClose} contact={profileContact} />
       )}
     </>
   )
