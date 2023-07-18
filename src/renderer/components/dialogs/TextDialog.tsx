@@ -16,7 +16,8 @@ type TextDialogProps = {
   message?: string
   onOk: (value: string) => void
   onCancel?: () => void
-  placeholder?: string
+  placeholder?: string,
+  type?: string
 }
 
 export default function TextDialog({
@@ -26,6 +27,7 @@ export default function TextDialog({
   onCancel,
   defaultValue,
   placeholder,
+  type,
   message,
 }: DialogProps & TextDialogProps) {
   const [value, setValue] = useState(defaultValue || '')
@@ -66,6 +68,7 @@ export default function TextDialog({
             id='contactname'
             placeholder={placeholder}
             value={value}
+            type={type}
             onChange={(
               event: React.FormEvent<HTMLElement> &
                 React.ChangeEvent<HTMLInputElement>
