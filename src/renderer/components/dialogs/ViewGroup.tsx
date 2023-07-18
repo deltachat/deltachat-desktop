@@ -4,7 +4,6 @@ import {
   DeltaDialogBase,
   DeltaDialogHeader,
   DeltaDialogBody,
-  DeltaDialogContent,
   DeltaDialogOkCancelFooter,
 } from './DeltaDialog'
 import { useContactSearch, AddMemberInnerDialog } from './CreateChat'
