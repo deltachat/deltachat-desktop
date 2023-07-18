@@ -51,14 +51,10 @@ function onBackupExport() {
   const closeDialog = window.__closeDialog
   const userFeedback = window.__userFeedback
 
-  openDialog('ConfirmationDialog', {
+  openDialog('TextDialog', {
     message: tx('pref_backup_export_explain'),
-    yesIsPrimary: true,
-    confirmLabel: tx('ok'),
-    cb: async (yes: boolean) => {
-      if (!yes) {
-        return
-      }
+    placeholder: tx('passphrase'),
+    onOk: async (passphrase: string) => {
       const opts: OpenDialogOptions = {
         title: tx('export_backup_desktop'),
         defaultPath: runtime.getAppPath('downloads'),
@@ -83,7 +79,7 @@ function onBackupExport() {
 
       const dialog_number = openDialog(ExportProgressDialog)
       try {
-        await BackendRemote.rpc.exportBackup(accountId, destination, null)
+        await BackendRemote.rpc.exportBackup(accountId, destination, passphrase)
       } catch (error) {
         // TODO/QUESTION - how are errors shown to user?
         log.error('backup-export failed:', error)

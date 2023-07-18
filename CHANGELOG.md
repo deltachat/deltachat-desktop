@@ -10,6 +10,10 @@
 - fix: links in quoted texts should not be clickable (#3290)
 - fix: remove unsupported language code, this broke the installation from the ms store on windows #3292
 
+### Changed
+
+- Ask passphrase for exporting backup.
+
 <a id="1_38_1"></a>
 
 ## [1.38.1] - 2023-06-23

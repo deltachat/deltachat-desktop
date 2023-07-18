@@ -13,9 +13,10 @@ import { useTranslationFunction } from '../../contexts'
 
 type TextDialogProps = {
   defaultValue?: string
-  description?: string
+  message?: string
   onOk: (value: string) => void
   onCancel?: () => void
+  placeholder?: string
 }
 
 export default function TextDialog({
@@ -24,7 +25,8 @@ export default function TextDialog({
   onOk,
   onCancel,
   defaultValue,
-  description,
+  placeholder,
+  message,
 }: DialogProps & TextDialogProps) {
   const [value, setValue] = useState(defaultValue || '')
   const tx = useTranslationFunction()
@@ -53,16 +55,16 @@ export default function TextDialog({
       <DeltaDialogHeader title={tx('menu_edit_name')} />
       <DeltaDialogBody>
         <Card elevation={Elevation.ONE}>
-          {description && (
+          {message && (
             <DeltaDialogContent>
-              <p>{description}</p>
+              <p>{message}</p>
             </DeltaDialogContent>
           )}
 
           <DeltaInput
             key='contactname'
             id='contactname'
-            placeholder={tx('name_desktop')}
+            placeholder={placeholder}
             value={value}
             onChange={(
               event: React.FormEvent<HTMLElement> &

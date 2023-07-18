@@ -17,6 +17,7 @@ import MuteChat from './MuteChat'
 import QrCode from './QrCode'
 import DisappearingMessages from './DisappearingMessages'
 import ChatAuditLogDialog from './ChatAuditLogDialog'
+import TextDialog from './TextDialog'
 import { getLogger } from '../../../shared/logger'
 
 export const allDialogs: { [key: string]: any } = {
@@ -38,6 +39,7 @@ export const allDialogs: { [key: string]: any } = {
   DisappearingMessages,
   ChatAuditLogDialog,
   QrCode,
+  TextDialog,
 }
 
 export type DialogId = keyof typeof allDialogs | string

@@ -86,6 +86,7 @@ export default function ViewProfile(props: {
       onOk: async (value: string) => {
         await BackendRemote.rpc.changeContactName(accountId, contact.id, value)
       },
+      placeholder: tx('name_desktop'),
     })
   }
 
