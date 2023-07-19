@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- fix: make a chat item background look hovered when a context menu is open for it (#3228)
 
 <a id="1_40_0"></a>
 

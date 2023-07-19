@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ChatListItem, {
   PlaceholderChatListItem,
   ChatListItemMessageResult,
@@ -31,6 +31,8 @@ export const ChatListItemRowChat = React.memo<{
     openContextMenu,
   } = data
   const chatId = chatListIds[index]
+  const [hoverChatListItem, setHoverChatListItem] = useState(false)
+
   return (
     <div style={style}>
       <ChatListItem
@@ -39,9 +41,13 @@ export const ChatListItemRowChat = React.memo<{
         onClick={onChatClick.bind(null, chatId)}
         onContextMenu={event => {
           const chat = chatCache[chatId]
-          if (chat?.type === 'ChatListItem')
+          if (chat?.type === 'ChatListItem') {
+            setHoverChatListItem(true)
             openContextMenu(event, chat, selectedChatId)
+            setHoverChatListItem(false)
+          }
         }}
+        hover={hoverChatListItem}
       />
     </div>
   )

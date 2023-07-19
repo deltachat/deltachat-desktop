@@ -141,11 +141,13 @@ export const PlaceholderChatListItem = React.memo(_ => {
 function ChatListItemArchiveLink({
   onClick,
   chatListItem,
+  hover,
 }: {
   onClick: () => void
   chatListItem: Type.ChatListItemFetchResult & {
     type: 'ArchiveLink'
   }
+  hover?: boolean
 }) {
   const tx = window.static_translate
 
@@ -167,6 +169,7 @@ function ChatListItemArchiveLink({
       onClick={onClick}
       onContextMenu={onContextMenu}
       className={'chat-list-item archive-link-item'}
+      style={hover ? { backgroundColor: 'var(--chatListItemBgHover)' } : {}}
     >
       <div className='avatar'>
         <img className='content' src='../images/icons/icon-archive.svg' />
@@ -230,6 +233,7 @@ function ChatListItemNormal({
   onClick,
   isSelected,
   onContextMenu,
+  hover,
 }: {
   chatListItem: Type.ChatListItemFetchResult & {
     type: 'ChatListItem'
@@ -237,6 +241,7 @@ function ChatListItemNormal({
   onClick: () => void
   onContextMenu?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
   isSelected?: boolean
+  hover?: boolean
 }) {
   return (
     <div
@@ -250,6 +255,7 @@ function ChatListItemNormal({
         muted: chatListItem.isMuted,
         selected: isSelected,
       })}
+      style={hover ? { backgroundColor: 'var(--chatListItemBgHover)' } : {}}
     >
       <Avatar
         {...{
@@ -289,11 +295,12 @@ type ChatListItemProps = {
   onClick: () => void
   onContextMenu?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
   isSelected?: boolean
+  hover?: boolean
 }
 
 const ChatListItem = React.memo<ChatListItemProps>(
   props => {
-    const { chatListItem, onClick } = props
+    const { chatListItem, onClick, hover } = props
 
     // if not loaded by virtual list yet
     if (typeof chatListItem === 'undefined') return <PlaceholderChatListItem />
@@ -305,6 +312,7 @@ const ChatListItem = React.memo<ChatListItemProps>(
           onClick={onClick}
           isSelected={props.isSelected}
           onContextMenu={props.onContextMenu}
+          hover={hover}
         />
       )
     } else if (chatListItem.type == 'Error') {
@@ -321,6 +329,7 @@ const ChatListItem = React.memo<ChatListItemProps>(
         <ChatListItemArchiveLink
           chatListItem={chatListItem}
           onClick={onClick}
+          hover={hover}
         />
       )
     } else {
