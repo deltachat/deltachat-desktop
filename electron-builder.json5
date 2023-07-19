@@ -411,6 +411,7 @@
       Comment: 'Delta Chat email-based messenger',
       Keywords: 'dc;chat;delta;messaging;messenger;email',
     },
+    description: 'The Email messenger\nWith Delta Chat, you can use your existing Email account as a messenger. End-to-End Encryption with Autocrypt is supported and you can have interactive chat experiences using webxdc apps(https://webxdc.org).',
     files: [
       '**/*',
       '!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}',
