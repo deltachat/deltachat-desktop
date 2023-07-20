@@ -109,7 +109,7 @@ export default class ComposerMessageInput extends React.Component<
         )
       ) {
         // Focus on the current selection, hack for focusing on newlines
-        if (window.__getOpenDialogsNumber() !== 0) {
+        if (window.__hasOpenDialogs()) {
           this.textareaRef.current.blur()
           this.textareaRef.current.focus()
         }

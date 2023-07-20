@@ -3,7 +3,7 @@ import { getMessageFunction, LocaleData } from '../shared/localize'
 import {
   OpenDialogFunctionType,
   CloseDialogFunctionType,
-  GetOpenDialogsNumberFunctionType,
+  HasOpenDialogsFunctionType,
 } from './components/dialogs/DialogController'
 import { userFeedback, Screens } from './ScreenController'
 
@@ -22,7 +22,7 @@ declare global {
     __openDialog: OpenDialogFunctionType
     __userFeedback: (message: userFeedback | false) => void
     __closeDialog: CloseDialogFunctionType
-    __getOpenDialogsNumber: GetOpenDialogsNumberFunctionType
+    __hasOpenDialogs: HasOpenDialogsFunctionType
     __changeScreen: (screen: Screens) => void
     __selectAccount: (accountId: number) => void
     readonly __selectedAccountId: number | undefined
