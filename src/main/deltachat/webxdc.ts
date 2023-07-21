@@ -38,6 +38,7 @@ const CSP =
   script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: ;\
   connect-src 'self' data: blob: ;\
   img-src 'self' data: blob: ;\
+  media-src 'self' data: blob: ;\
   webrtc 'block'"
 
 const WRAPPER_PATH = 'webxdc-wrapper.45870014933640136498.html'
