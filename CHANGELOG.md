@@ -10,6 +10,7 @@
 - fix: links in quoted texts should not be clickable (#3290)
 - fix: remove unsupported language code, this broke the installation from the ms store on windows #3292
 - fix: Proper description for Linux packages(#3209)
+- fix: When opening new chat dialogue, it's always focused(#3286)
 - fix: No draft is saved if the message contains only whitespace(#3220)
 
 <a id="1_38_1"></a>
