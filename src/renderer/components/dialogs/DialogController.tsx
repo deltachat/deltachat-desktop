@@ -65,6 +65,7 @@ let dialogCounter = 1
 
 export type OpenDialogFunctionType = typeof DialogController.prototype.openDialog
 export type CloseDialogFunctionType = typeof DialogController.prototype.closeDialog
+export type HasOpenDialogsFunctionType = typeof DialogController.prototype.hasOpenDialogs
 
 export default class DialogController extends React.Component<
   any,
@@ -80,6 +81,11 @@ export default class DialogController extends React.Component<
     this.state = { dialogs: {} }
     this.openDialog = this.openDialog.bind(this)
     this.closeDialog = this.closeDialog.bind(this)
+    this.hasOpenDialogs = this.hasOpenDialogs.bind(this)
+  }
+
+  hasOpenDialogs(): boolean {
+    return Object.keys(this.state.dialogs).length !== 0
   }
 
   openDialog<T extends { [key: string]: any }>(
