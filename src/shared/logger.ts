@@ -3,9 +3,7 @@ import StackFrame from 'stackframe'
 import { RC_Config } from './shared-types'
 import { stdout } from 'process'
 
-
 stdout.on('error', () => {})
-
 
 const startTime = Date.now()
 
