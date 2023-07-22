@@ -298,7 +298,11 @@ function ViewGroupInner(props: {
         </>
       )}
       {viewMode === 'profile' && profileContact && (
-        <ViewProfile isOpen onClose={onClose} contact={profileContact} />
+        <ViewProfile
+          isOpen
+          onClose={() => setViewMode('main')}
+          contact={profileContact}
+        />
       )}
     </>
   )
