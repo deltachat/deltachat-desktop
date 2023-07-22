@@ -250,4 +250,21 @@
       frame.contentWindow.window.addEventListener('keydown', keydown_handler)
     else console.log('attaching F12 handler failed, frame not found')
   }
+
+  contextBridge.exposeInMainWorld('webxdc_custom', {
+    /**
+     *
+     * @param {string} file_name
+     * @param {string} base64_content
+     * @param {string} icon_data_url
+     */
+    desktopDragFileOut: (file_name, base64_content, icon_data_url) => {
+      ipcRenderer.invoke(
+        'webxdc:custom:drag-file-out',
+        file_name,
+        base64_content,
+        icon_data_url
+      )
+    },
+  })
 })()
