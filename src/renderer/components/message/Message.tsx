@@ -189,6 +189,9 @@ function buildContextMenu(
   const showAttachmentOptions = !!message.file && !message.isSetupmessage
   const showCopyImage = !!message.file && message.viewType === 'Image'
 
+  const showResend =
+    message.viewType === 'Webxdc' && message.sender.id === C.DC_CONTACT_ID_SELF
+
   return [
     // Reply
     !conversationType.isDeviceChat && {
@@ -251,6 +254,13 @@ function buildContextMenu(
       label: tx('menu_forward'),
       action: openForwardDialog.bind(null, message),
     },
+    // Resend Message
+    showResend && {
+      label: tx('resend'),
+      action: () => {
+        BackendRemote.rpc.resendMessages(selectedAccountId(), [message.id])
+      },
+    },
     // Message details
     {
       label: tx('menu_message_details'),
@@ -261,10 +271,6 @@ function buildContextMenu(
       label: tx('delete_message_desktop'),
       action: confirmDeleteMessage.bind(null, message),
     },
-    // showRetry && {
-    //   label:tx('retry_send'),
-    //   action: onRetrySend
-    // },
   ]
 }
 
