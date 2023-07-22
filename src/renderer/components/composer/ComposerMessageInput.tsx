@@ -47,7 +47,7 @@ export default class ComposerMessageInput extends React.Component<
 
     this.saveDraft = debounce(() => {
       const { text, chatId } = this.state
-      this.props.updateDraftText(text, chatId)
+      this.props.updateDraftText(text.trim() === '' ? '' : text, chatId)
     }, 1000)
 
     this.textareaRef = React.createRef()
@@ -109,8 +109,10 @@ export default class ComposerMessageInput extends React.Component<
         )
       ) {
         // Focus on the current selection, hack for focusing on newlines
-        this.textareaRef.current.blur()
-        this.textareaRef.current.focus()
+        if (window.__hasOpenDialogs()) {
+          this.textareaRef.current.blur()
+          this.textareaRef.current.focus()
+        }
       }
 
       this.setCursorPosition = false
