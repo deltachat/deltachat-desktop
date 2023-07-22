@@ -13,6 +13,7 @@
 - fix: When opening new chat dialogue, it's always focused(#3286)
 - fix: No draft is saved if the message contains only whitespace(#3220)
 - fix: webxdc CSP allow media from `blob:` and `data:`
+- fix: Fix problem of crashing Delta Chat when it can't write to standard output (#3323)
 
 <a id="1_38_1"></a>
 
