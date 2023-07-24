@@ -1,6 +1,12 @@
 import { createWriteStream } from 'fs'
 import { join } from 'path'
 import { getLogsPath } from './application-constants'
+import { stdout, stderr } from 'process'
+
+stdout.on('error', () => {})
+stderr.on('error', () => {})
+// ^ Without this, the app will run into infinite exceptions
+// when it can't write to stdout or stderr
 
 function logName() {
   const dir = getLogsPath()
