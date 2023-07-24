@@ -11,6 +11,7 @@
 - fix: fix duplicated status updates race condition bug in webxdc #3296
 - fix: remove unsupported language code, this broke the installation from the ms store on windows #3292
 - fix: show edit button if a contact's profile is shown from group view(#3267)
+- fix: Proper description for Linux packages(#3209)
 - fix: When opening new chat dialogue, it's always focused(#3286)
 - fix: No draft is saved if the message contains only whitespace(#3220)
 - fix: webxdc CSP allow media from `blob:` and `data:`
