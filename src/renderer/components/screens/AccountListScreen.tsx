@@ -102,7 +102,7 @@ export default function AccountListScreen({
                   }}
                 />
                 {syncAllAccounts !== null && (
-                  <div className="sync-all-switch">
+                  <div className='sync-all-switch'>
                     <Switch
                       checked={syncAllAccounts}
                       label={tx('sync_all')}
@@ -122,7 +122,7 @@ export default function AccountListScreen({
                       alignIndicator={Alignment.LEFT}
                     />
                   </div>
-              )}
+                )}
               </DeltaDialogContent>
             </DeltaDialogBody>
           </>
