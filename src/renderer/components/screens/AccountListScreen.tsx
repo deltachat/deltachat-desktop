@@ -119,7 +119,7 @@ export default function AccountListScreen({
                         }
                         setSyncAllAccounts(new_state)
                       }}
-                      alignIndicator={Alignment.RIGHT}
+                      alignIndicator={Alignment.LEFT}
                     />
                   </div>
               )}
