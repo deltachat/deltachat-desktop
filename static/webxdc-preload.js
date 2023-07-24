@@ -256,7 +256,7 @@
      *
      * @param {string} file_name
      * @param {string} base64_content
-     * @param {string} icon_data_url
+     * @param {string | undefined} icon_data_url
      */
     desktopDragFileOut: (file_name, base64_content, icon_data_url) => {
       ipcRenderer.invoke(
