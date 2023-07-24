@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- add: `webxdc_custom.desktopDragFileOut` api
 
 ### Fixed
 - fix: clicking start on an already open webxdc app now opens it again even when it was minimised #3294
