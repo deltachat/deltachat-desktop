@@ -79,7 +79,6 @@ export default function ViewGroup(props: {
   isBroadcast: boolean
 }) {
   const { isOpen, onClose, isBroadcast } = props
-  const [viewMode, setViewMode] = useState('main')
 
   const chat = useChat(props.chat)
 
@@ -93,13 +92,7 @@ export default function ViewGroup(props: {
         height: 'calc(100vh - 50px)',
       }}
     >
-      <ViewGroupInner
-        viewMode={viewMode}
-        setViewMode={setViewMode}
-        onClose={onClose}
-        chat={chat}
-        isBroadcast={isBroadcast}
-      />
+      <ViewGroupInner onClose={onClose} chat={chat} isBroadcast={isBroadcast} />
     </DeltaDialogBase>
   )
 }
@@ -135,14 +128,12 @@ export const useGroup = (chat: Type.FullChat) => {
 }
 
 function ViewGroupInner(props: {
-  viewMode: string
-  setViewMode: (newViewMode: string) => void
   onClose: DialogProps['onClose']
   chat: Type.FullChat
   isBroadcast: boolean
 }) {
   const { openDialog } = useContext(ScreenContext)
-  const { viewMode, setViewMode, onClose, chat, isBroadcast } = props
+  const { onClose, chat, isBroadcast } = props
   const tx = useTranslationFunction()
 
   const chatDisabled = !chat.canSend
@@ -216,15 +207,9 @@ function ViewGroupInner(props: {
     null
   )
 
-  if (viewMode === 'profile' && !profileContact) {
-    log.error(
-      '[ViewGroup] viewMode is profile but profileContact is null. Showing the main view instead'
-    )
-  }
-
   return (
     <>
-      {(viewMode === 'main' || (viewMode === 'profile' && !profileContact)) && (
+      {!profileContact && (
         <>
           <DeltaDialogHeader
             title={
@@ -288,7 +273,6 @@ function ViewGroupInner(props: {
                       return
                     }
                     setProfileContact(contact)
-                    setViewMode('profile')
                   }}
                   onRemoveClick={showRemoveGroupMemberConfirmationDialog}
                 />
@@ -297,10 +281,10 @@ function ViewGroupInner(props: {
           </div>
         </>
       )}
-      {viewMode === 'profile' && profileContact && (
+      {profileContact && (
         <ViewProfile
           isOpen
-          onBack={() => setViewMode('main')}
+          onBack={() => setProfileContact(null)}
           onClose={onClose}
           contact={profileContact}
         />
