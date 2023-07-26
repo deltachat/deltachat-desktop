@@ -58,5 +58,15 @@ div.profile-info-container {
     &.clickable:hover {
       cursor: pointer;
     }
+    
+    & > i.material-icon {
+      -webkit-mask-image: url(../images/icons/schedule.svg);
+      display: inline-block;
+      height: 1.15rem;
+      width: 1.15rem;
+      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-size: 1.15rem;
+      background-color: rgb(255, 255, 255);
+    }
   }
 }
