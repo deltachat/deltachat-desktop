@@ -45,3 +45,9 @@ img.material-icon {
   vertical-align: middle;
   transform: translate(0px, -0.07em);
 }
+
+i.material-svg-icon {
+  -webkit-mask-repeat: no-repeat;
+  background-color: var(--globalText);
+  display: inline-block;
+}

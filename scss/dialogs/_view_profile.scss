@@ -59,14 +59,11 @@ div.profile-info-container {
       cursor: pointer;
     }
 
-    & > i.material-icon {
+    & > i.material-icon-schedule {
       -webkit-mask-image: url(../images/icons/schedule.svg);
-      display: inline-block;
       height: 1.15em;
       width: 1.15em;
-      -webkit-mask-repeat: no-repeat;
       -webkit-mask-size: 1.15em;
-      background-color: var(--globalText);
       margin-inline-start: 0.3em;
       margin-inline-end: 0.3em;
     }
