@@ -1,5 +1,6 @@
 const { writeFileSync, readFileSync } = require('fs')
 const { join } = require('path')
+const { isAppxSupportedLanguage } = require('./appx_languages')
 const exclude_list = readFileSync(
   join(__dirname, 'packageignore_list'),
   'utf-8'
@@ -98,10 +99,66 @@ build['linux'] = {
   },
   files: [...files, PREBUILD_FILTERS.NOT_MAC, PREBUILD_FILTERS.NOT_WINDOWS],
   icon: 'build/icon.icns', // electron builder gets the icon out of the mac icon archive
+  description: 'The Email messenger\nWith Delta Chat, you can use your existing Email account as a messenger. End-to-End Encryption with Autocrypt is supported and you can have interactive chat experiences using webxdc apps(https://webxdc.org).',
 }
 build['win'] = {
   icon: 'images/deltachat.ico',
   files: [...files, PREBUILD_FILTERS.NOT_MAC, PREBUILD_FILTERS.NOT_LINUX],
+}
+
+// supported languages are on https://learn.microsoft.com/en-us/windows/apps/publish/publish-your-app/supported-languages?pivots=store-installer-msix
+const languages = [
+  'ar',
+  'bg',
+  'ca',
+  'cs',
+  // 'ckb', not supported by ms-store
+  'da',
+  'de',
+  'en',
+  'el',
+  // 'eo',  not supported by ms-store
+  'es',
+  'eu',
+  'fa',
+  'fi',
+  'fr',
+  'gl',
+  'hr',
+  'hu',
+  'id',
+  'it',
+  'ja-jp',
+  'km',
+  'ko',
+  'lt',
+  'nb',
+  'nl-nl',
+  'pl',
+  'pt',
+  'pt-BR',
+  'ro',
+  'ru',
+  // 'sc', not supported by ms-store
+  'sk',
+  'sq',
+  'sr',
+  'sv',
+  'ta',
+  'te',
+  'tr',
+  'uk',
+  'zh-cn',
+  'zh-tw',
+].map(code => code.toLowerCase())
+
+const unsupported_languages = languages.filter(
+  code => !isAppxSupportedLanguage(code)
+)
+if (unsupported_languages.length > 0) {
+  throw new Error(
+    'Unsupported appx languages:' + JSON.stringify(unsupported_languages)
+  )
 }
 
 build['appx'] = {
@@ -109,52 +166,7 @@ build['appx'] = {
   publisher: 'CN=C13753E5-D590-467C-9FCA-6799E1A5EC1E',
   publisherDisplayName: 'merlinux',
   identityName: 'merlinux.DeltaChat',
-  // supported languages are on https://learn.microsoft.com/en-us/windows/apps/publish/publish-your-app/supported-languages?pivots=store-installer-msix
-  languages: [
-    'ar',
-    'az',
-    'bg',
-    'ca',
-    'cs',
-    // 'ckb', not supported by ms-store
-    'da',
-    'de',
-    'en',
-    'el',
-    // 'eo',  not supported by ms-store
-    'es',
-    'eu',
-    'fa',
-    'fi',
-    'fr',
-    'gl',
-    'hr',
-    'hu',
-    'id',
-    'it',
-    'ja-jp',
-    'km',
-    'ko',
-    'lt',
-    'nb',
-    'nl-nl',
-    'pl',
-    'pt',
-    'pt-BR',
-    'ro',
-    'ru',
-    // 'sc', not supported by ms-store
-    'sk',
-    'sq',
-    'sr',
-    'sv',
-    'ta',
-    'te',
-    'tr',
-    'uk',
-    'zh-cn',
-    'zh-tw',
-  ],
+  languages,
 }
 
 // see https://www.electron.build/configuration/nsis

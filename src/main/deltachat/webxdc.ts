@@ -15,6 +15,7 @@ import { tx } from '../load-translations'
 import { DcOpenWebxdcParameters } from '../../shared/shared-types'
 import { DesktopSettings } from '../desktop_settings'
 import { window as main_window } from '../windows/main'
+import { writeTempFileFromBase64 } from '../ipc'
 
 const open_apps: {
   [instanceId: string]: {
@@ -38,6 +39,7 @@ const CSP =
   script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: ;\
   connect-src 'self' data: blob: ;\
   img-src 'self' data: blob: ;\
+  media-src 'self' data: blob: ;\
   webrtc 'block'"
 
 const WRAPPER_PATH = 'webxdc-wrapper.45870014933640136498.html'
@@ -171,7 +173,8 @@ export default class DCWebxdc extends SplitOut {
                   mimeType,
                   data: Buffer.from(
                     `window.parent.webxdc_internal.setup("${selfAddr}","${displayName}")
-                  window.webxdc = window.parent.webxdc`
+                  window.webxdc = window.parent.webxdc
+                  window.webxdc_custom = window.parent.webxdc_custom`
                   ),
                 })
               } else {
@@ -428,6 +431,30 @@ If you think that's a bug and you need that permission, then please open an issu
     ipcMain.handle('close-all-webxdc', () => {
       this._closeAll()
     })
+
+    ipcMain.handle(
+      'webxdc:custom:drag-file-out',
+      async (
+        event,
+        file_name: string,
+        base64_content: string,
+        icon_data_url?: string
+      ) => {
+        const path = await writeTempFileFromBase64(file_name, base64_content)
+        let icon: string | Electron.NativeImage = join(
+          __dirname,
+          '../../../images/electron-file-drag-out.png'
+        )
+        if (icon_data_url) {
+          icon = nativeImage.createFromDataURL(icon_data_url)
+        }
+        // if xdc extract icon?
+        event.sender.startDrag({
+          file: path,
+          icon,
+        })
+      }
+    )
 
     ipcMain.handle(
       'webxdc:status-update',

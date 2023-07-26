@@ -280,7 +280,7 @@ async function writeClipboardToTempFile(): Promise<string> {
   return pathToFile
 }
 
-async function writeTempFileFromBase64(
+export async function writeTempFileFromBase64(
   name: string,
   content: string
 ): Promise<string> {
