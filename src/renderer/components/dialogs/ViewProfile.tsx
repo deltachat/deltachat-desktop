@@ -228,9 +228,7 @@ export function ViewProfileInner({
               )}
               {contact.lastSeen !== 0 && (
                 <div>
-                  <i
-                    className='material-icon'
-                  />
+                  <i className='material-icon' />
                   <LastSeen timestamp={contact.lastSeen} />
                 </div>
               )}
