@@ -228,9 +228,8 @@ export function ViewProfileInner({
               )}
               {contact.lastSeen !== 0 && (
                 <div>
-                  <img
+                  <i
                     className='material-icon'
-                    src='../images/icons/schedule.svg'
                   />
                   <LastSeen timestamp={contact.lastSeen} />
                 </div>
