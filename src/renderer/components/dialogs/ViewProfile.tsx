@@ -69,8 +69,9 @@ export default function ViewProfile(props: {
   isOpen: boolean
   onClose: () => void
   contact: Type.Contact
+  onBack?: () => void
 }) {
-  const { isOpen, onClose } = props
+  const { isOpen, onClose, onBack } = props
 
   const accountId = selectedAccountId()
   const tx = window.static_translate
@@ -106,6 +107,8 @@ export default function ViewProfile(props: {
         showEditButton={!(isDeviceChat || isSelfChat)}
         showCloseButton={true}
         onClose={onClose}
+        showBackButton={Boolean(onBack)}
+        onClickBack={onBack}
       />
       <DeltaDialogBody noFooter>
         <DeltaDialogContent noPadding>

@@ -156,7 +156,12 @@ export default class Gallery extends Component<
                   </ul>
                 </div>
               )}
-              <div className='item-container'>
+              <div
+                className='item-container'
+                style={{
+                  justifyContent: medias.length < 1 ? 'center' : undefined,
+                }}
+              >
                 {medias.length < 1 ? (
                   <p className='no-media-message'>{emptyTabMessage}</p>
                 ) : (

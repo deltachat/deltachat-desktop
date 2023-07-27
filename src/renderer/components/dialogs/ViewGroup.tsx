@@ -4,7 +4,6 @@ import {
   DeltaDialogBase,
   DeltaDialogHeader,
   DeltaDialogBody,
-  DeltaDialogContent,
   DeltaDialogOkCancelFooter,
 } from './DeltaDialog'
 import { useContactSearch, AddMemberInnerDialog } from './CreateChat'
@@ -15,7 +14,7 @@ import {
   PseudoListItemAddMember,
 } from '../helpers/PseudoListItem'
 import { DialogProps } from './DialogController'
-import { ViewProfileInner } from './ViewProfile'
+import ViewProfile from './ViewProfile'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { useState, useContext, useEffect, useCallback, useMemo } from 'react'
 import React from 'react'
@@ -80,7 +79,6 @@ export default function ViewGroup(props: {
   isBroadcast: boolean
 }) {
   const { isOpen, onClose, isBroadcast } = props
-  const [viewMode, setViewMode] = useState('main')
 
   const chat = useChat(props.chat)
 
@@ -94,13 +92,7 @@ export default function ViewGroup(props: {
         height: 'calc(100vh - 50px)',
       }}
     >
-      <ViewGroupInner
-        viewMode={viewMode}
-        setViewMode={setViewMode}
-        onClose={onClose}
-        chat={chat}
-        isBroadcast={isBroadcast}
-      />
+      <ViewGroupInner onClose={onClose} chat={chat} isBroadcast={isBroadcast} />
     </DeltaDialogBase>
   )
 }
@@ -136,14 +128,12 @@ export const useGroup = (chat: Type.FullChat) => {
 }
 
 function ViewGroupInner(props: {
-  viewMode: string
-  setViewMode: (newViewMode: string) => void
   onClose: DialogProps['onClose']
   chat: Type.FullChat
   isBroadcast: boolean
 }) {
   const { openDialog } = useContext(ScreenContext)
-  const { viewMode, setViewMode, onClose, chat, isBroadcast } = props
+  const { onClose, chat, isBroadcast } = props
   const tx = useTranslationFunction()
 
   const chatDisabled = !chat.canSend
@@ -219,7 +209,7 @@ function ViewGroupInner(props: {
 
   return (
     <>
-      {viewMode === 'main' && (
+      {!profileContact && (
         <>
           <DeltaDialogHeader
             title={
@@ -283,7 +273,6 @@ function ViewGroupInner(props: {
                       return
                     }
                     setProfileContact(contact)
-                    setViewMode('profile')
                   }}
                   onRemoveClick={showRemoveGroupMemberConfirmationDialog}
                 />
@@ -292,23 +281,13 @@ function ViewGroupInner(props: {
           </div>
         </>
       )}
-      {viewMode === 'profile' && (
-        <>
-          <DeltaDialogHeader
-            title={tx('menu_view_profile')}
-            showBackButton={true}
-            onClickBack={() => setViewMode('main')}
-            showCloseButton={true}
-            onClose={onClose}
-          />
-          <DeltaDialogBody noFooter>
-            <DeltaDialogContent noPadding>
-              {profileContact && (
-                <ViewProfileInner contact={profileContact} onClose={onClose} />
-              )}
-            </DeltaDialogContent>
-          </DeltaDialogBody>
-        </>
+      {profileContact && (
+        <ViewProfile
+          isOpen
+          onBack={() => setProfileContact(null)}
+          onClose={onClose}
+          contact={profileContact}
+        />
       )}
     </>
   )

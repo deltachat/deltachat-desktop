@@ -89,26 +89,6 @@ export default function AccountListScreen({
               <h4 className='bp4-heading'>
                 {tx('login_known_accounts_title_desktop')}
               </h4>
-              {syncAllAccounts !== null && (
-                <Switch
-                  checked={syncAllAccounts}
-                  label={tx('sync_all')}
-                  onChange={async () => {
-                    const new_state = !syncAllAccounts
-                    await runtime.setDesktopSetting(
-                      'syncAllAccounts',
-                      new_state
-                    )
-                    if (new_state) {
-                      BackendRemote.rpc.startIoForAllAccounts()
-                    } else {
-                      BackendRemote.rpc.stopIoForAllAccounts()
-                    }
-                    setSyncAllAccounts(new_state)
-                  }}
-                  alignIndicator={Alignment.RIGHT}
-                />
-              )}
             </div>
             <DeltaDialogBody>
               <DeltaDialogContent noPadding={true}>
@@ -121,6 +101,28 @@ export default function AccountListScreen({
                     onAddAccount,
                   }}
                 />
+                {syncAllAccounts !== null && (
+                  <div className='sync-all-switch'>
+                    <Switch
+                      checked={syncAllAccounts}
+                      label={tx('sync_all')}
+                      onChange={async () => {
+                        const new_state = !syncAllAccounts
+                        await runtime.setDesktopSetting(
+                          'syncAllAccounts',
+                          new_state
+                        )
+                        if (new_state) {
+                          BackendRemote.rpc.startIoForAllAccounts()
+                        } else {
+                          BackendRemote.rpc.stopIoForAllAccounts()
+                        }
+                        setSyncAllAccounts(new_state)
+                      }}
+                      alignIndicator={Alignment.LEFT}
+                    />
+                  </div>
+                )}
               </DeltaDialogContent>
             </DeltaDialogBody>
           </>
