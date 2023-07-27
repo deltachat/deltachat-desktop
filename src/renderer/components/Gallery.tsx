@@ -159,7 +159,7 @@ export default class Gallery extends Component<
               <div
                 className='item-container'
                 style={
-                  medias.length < 1 ? { justifyContent: 'center' } : undefined
+                   { justifyContent: medias.length < 1 ? 'center': undefined } 
                 }
               >
                 {medias.length < 1 ? (
