@@ -54,10 +54,26 @@ export default function CreateChat(props: {
   isOpen: DialogProps['isOpen']
   onClose: DialogProps['onClose']
 }) {
-  const { isOpen, onClose } = props
+  const isOpen = props.isOpen
   const tx = useTranslationFunction()
   const { userFeedback } = useContext(ScreenContext)
-  const [viewMode, setViewMode] = useState('main')
+  const [viewModeStack, setViewModeStack] = useState(['main'])
+  const [_openDialogsNumber, setOpenDialogsNumber] = useState(1)
+
+  const setViewMode = (mode: string) => {
+    setViewModeStack(viewModeStack.concat(mode))
+    setOpenDialogsNumber(viewModeStack.length + 1)
+  }
+
+  const onClose = () => {
+    if (viewModeStack.length === 1) {
+      props.onClose()
+    } else {
+      viewModeStack.pop()
+      setViewModeStack(viewModeStack)
+      setOpenDialogsNumber(viewModeStack.length)
+    }
+  }
 
   const [{ contacts, queryStrIsValidEmail }, updateContacts] = useContactsNew(
     C.DC_GCL_ADD_SELF,
@@ -134,6 +150,8 @@ export default function CreateChat(props: {
       />
     )
   }
+
+  const viewMode = viewModeStack[viewModeStack.length - 1]
 
   return (
     <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>

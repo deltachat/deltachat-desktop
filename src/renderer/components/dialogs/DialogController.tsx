@@ -75,10 +75,12 @@ export default class DialogController extends React.Component<
     }
   }
 > {
+  public dialogsStack: number[]
   constructor(props: any) {
     super(props)
 
     this.state = { dialogs: {} }
+    this.dialogsStack = []
     this.openDialog = this.openDialog.bind(this)
     this.closeDialog = this.closeDialog.bind(this)
     this.hasOpenDialogs = this.hasOpenDialogs.bind(this)
@@ -121,6 +123,7 @@ export default class DialogController extends React.Component<
         },
       }
     })
+    this.dialogsStack.push(id)
     return id
   }
 
@@ -131,6 +134,7 @@ export default class DialogController extends React.Component<
       log.debug(`Close dialog with id: ${id}`)
       return { ...prevState, dialogs }
     })
+    this.dialogsStack.pop()
   }
 
   render() {
