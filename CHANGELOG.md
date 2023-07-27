@@ -19,6 +19,7 @@
 - fix: No draft is saved if the message contains only whitespace(#3220)
 - fix: webxdc CSP allow media from `blob:` and `data:`
 - fix: Center the "no media" text in Gallery
+- fix: The media fullscreen screen is now always closed using Esc key(#2919)
 
 <a id="1_38_1"></a>
 
