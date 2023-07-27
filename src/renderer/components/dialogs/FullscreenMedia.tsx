@@ -193,7 +193,7 @@ export default function FullscreenMedia(props: {
       className='attachment-overlay'
       onClose={onClose}
     >
-      <div className='render-media-wrapper'>
+      <div className='render-media-wrapper' tabIndex={0}>
         {elm && (
           <div className='btn-wrapper'>
             <div
