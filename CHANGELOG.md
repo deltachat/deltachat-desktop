@@ -22,6 +22,7 @@
 - fix: Center the "no media" text in Gallery
 - fix: The media fullscreen screen is now always closed using Esc key(#2919)
 - fix: Fix problem of crashing Delta Chat when it can't write to standard output (#3323)
+- fix: Fix problem of returning exception on quit (#2201)
 
 <a id="1_38_1"></a>
 
