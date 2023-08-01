@@ -5,6 +5,9 @@
 ### Added
 - add: `webxdc_custom.desktopDragFileOut` api
 
+### Changed
+- Update translations (01.07.2023)
+
 ### Fixed
 - fix: clicking start on an already open webxdc app now opens it again even when it was minimised #3294
 - fix: Including whitespace in search query does not cause problem when if the search query is an email address(#3299)
