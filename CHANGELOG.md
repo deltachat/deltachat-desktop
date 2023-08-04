@@ -7,6 +7,7 @@
 
 ### Changed
 - Update translations (01.07.2023)
+- changed: make verified icon green
 
 ### Fixed
 - fix: clicking start on an already open webxdc app now opens it again even when it was minimised #3294
@@ -26,6 +27,7 @@
 - fix: The media fullscreen screen is now always closed using Esc key(#2919)
 - fix: Fix problem of crashing Delta Chat when it can't write to standard output (#3323)
 - fix: Fix problem of returning exception on quit (#2201)
+- fix: same icon size in navbar as in chatlist
 
 <a id="1_38_1"></a>
 
