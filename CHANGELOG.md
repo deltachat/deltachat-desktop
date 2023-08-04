@@ -9,6 +9,7 @@
 - Update translations (01.07.2023)
 - Update offline help
 - changed: make verified icon green
+- use filename property for saving files (see #3330 for details)
 
 ### Fixed
 - fix: clicking start on an already open webxdc app now opens it again even when it was minimised #3294
