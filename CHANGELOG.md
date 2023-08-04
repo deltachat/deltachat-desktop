@@ -7,6 +7,7 @@
 
 ### Changed
 - Update translations (01.07.2023)
+- Update offline help
 - changed: make verified icon green
 
 ### Fixed
