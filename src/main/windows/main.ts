@@ -159,6 +159,10 @@ export function send(channel: string, ...args: any[]) {
     log.warn("window not defined, can't send ipc to renderer")
     return
   }
+  if (window.webContents.isDestroyed()) {
+    log.warn('window.webContents is destroyed. not sending message')
+    return
+  }
   try {
     window.webContents.send(channel, ...args)
   } catch (error) {
