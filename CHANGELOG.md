@@ -7,6 +7,7 @@
 
 ### Changed
 - Update translations (01.07.2023)
+- changed: make verified icon green
 
 ### Fixed
 - fix: clicking start on an already open webxdc app now opens it again even when it was minimised #3294
