@@ -3,6 +3,16 @@
 ## [Unreleased][unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+
+<a id="1_39_0"></a>
+
+## [1.39.0] - 2023-08-05
+### Added
 - add: `webxdc_custom.desktopDragFileOut` api
 
 ### Changed
@@ -2085,7 +2095,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.38.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.39.0...HEAD
+
+[1.39.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.38.1...v1.39.0
 
 [1.38.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.38.0...v1.38.1
 
