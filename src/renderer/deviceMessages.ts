@@ -33,4 +33,14 @@ Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANG
 
 Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1_38_0`
   )
+
+  BackendRemote.rpc.addDeviceMessage(
+    accountId,
+    'changelog-version-1.39.0-version0',
+    `What's new in 1.39.0?
+
+✨ We fixed many small bugs and improved stability
+
+Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1_39_0`
+  )
 }
