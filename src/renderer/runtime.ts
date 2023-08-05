@@ -74,7 +74,7 @@ interface Runtime {
   showOpenFileDialog(
     options: Electron.OpenDialogOptions
   ): Promise<string | null>
-  downloadFile(pathToFile: string): Promise<void>
+  downloadFile(pathToSource: string, filename: string): Promise<void>
   transformBlobURL(blob: string): string
   readClipboardText(): Promise<string>
   writeClipboardText(text: string): Promise<void>
@@ -273,7 +273,7 @@ class Browser implements Runtime {
   getAppPath(_name: string): string {
     throw new Error('Method not implemented.')
   }
-  downloadFile(_pathToFile: string): Promise<void> {
+  downloadFile(_pathToSource: string, _filename: string): Promise<void> {
     throw new Error('Method not implemented.')
   }
   async readClipboardText(): Promise<string> {
@@ -462,8 +462,8 @@ class Electron implements Runtime {
   getAppPath(name: Parameters<Runtime['getAppPath']>[0]): string {
     return app_getPath(name)
   }
-  async downloadFile(pathToFile: string): Promise<void> {
-    await ipcBackend.invoke('saveFile', pathToFile)
+  async downloadFile(pathToSource: string, filename: string): Promise<void> {
+    await ipcBackend.invoke('saveFile', pathToSource, filename)
   }
   readClipboardText(): Promise<string> {
     return ipcBackend.invoke('electron.clipboard.readText')

@@ -9,6 +9,7 @@
 - Update translations (01.07.2023)
 - Update offline help
 - changed: make verified icon green
+- use filename property for saving files (see #3330 for details)
 - update deltachat-node and deltachat/jsonrpc-client to `v1.119.0`
 
 ### Fixed

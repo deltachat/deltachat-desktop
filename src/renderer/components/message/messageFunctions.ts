@@ -18,8 +18,12 @@ export function onDownload(msg: Type.Message) {
   if (!msg.file) {
     log.error('message has no file to download:', msg)
     throw new Error('message has no file to download')
+  } else if (!msg.fileName) {
+    log.error('message has no filename to download:', msg)
+    throw new Error('message has no file name to download')
+  } else {
+    runtime.downloadFile(msg.file, msg.fileName)
   }
-  msg.file && runtime.downloadFile(msg.file)
 }
 
 export function openAttachmentInShell(msg: Type.Message) {

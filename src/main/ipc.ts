@@ -13,7 +13,7 @@ import { LogHandler } from './log-handler'
 import { ExtendedAppMainProcess } from './types'
 import * as mainWindow from './windows/main'
 import { openHelpWindow } from './windows/help'
-import path, { basename, extname, join, posix, sep } from 'path'
+import path, { extname, join, posix, sep } from 'path'
 import { DesktopSettings } from './desktop_settings'
 import { getConfigPath } from './application-constants'
 import { inspect } from 'util'
@@ -117,47 +117,50 @@ export async function init(cwd: string, logHandler: LogHandler) {
     return dialog.showOpenDialog(mainWindow.window, options)
   })
 
-  ipcMain.handle('saveFile', async (_ev, source) => {
-    if (!mainWindow.window) {
-      throw new Error('window does not exist, this should never happen')
-    }
-
-    let base_path = DesktopSettings.state.lastSaveDialogLocation
-      ? DesktopSettings.state.lastSaveDialogLocation
-      : app.getPath('downloads')
-
-    if (!existsSync(base_path)) {
-      base_path = app.getPath('downloads')
-    }
-
-    const { canceled, filePath } = await dialog.showSaveDialog(
-      mainWindow.window,
-      {
-        defaultPath: join(base_path, basename(source)),
+  ipcMain.handle(
+    'saveFile',
+    async (_ev, pathToSource: string, filename: string) => {
+      if (!mainWindow.window) {
+        throw new Error('window does not exist, this should never happen')
       }
-    )
 
-    if (!canceled && filePath) {
-      try {
-        await copyFile(source, filePath)
-      } catch (error: any) {
-        if (error.code == 'EACCES') {
-          dialog.showErrorBox(
-            'Permission Error',
-            `Cannot write in this folder. You don't have write permission`
-          )
-        } else {
-          dialog.showErrorBox(
-            'Unhandled Error',
-            `Cannot copy file. Error: ${error}`
-          )
+      let base_path = DesktopSettings.state.lastSaveDialogLocation
+        ? DesktopSettings.state.lastSaveDialogLocation
+        : app.getPath('downloads')
+
+      if (!existsSync(base_path)) {
+        base_path = app.getPath('downloads')
+      }
+
+      const { canceled, filePath } = await dialog.showSaveDialog(
+        mainWindow.window,
+        {
+          defaultPath: join(base_path, filename),
         }
+      )
+
+      if (!canceled && filePath) {
+        try {
+          await copyFile(pathToSource, filePath)
+        } catch (error: any) {
+          if (error.code == 'EACCES') {
+            dialog.showErrorBox(
+              'Permission Error',
+              `Cannot write in this folder. You don't have write permission`
+            )
+          } else {
+            dialog.showErrorBox(
+              'Unhandled Error',
+              `Cannot copy file. Error: ${error}`
+            )
+          }
+        }
+        DesktopSettings.update({
+          lastSaveDialogLocation: path.dirname(filePath),
+        })
       }
-      DesktopSettings.update({
-        lastSaveDialogLocation: path.dirname(filePath),
-      })
     }
-  })
+  )
 
   ipcMain.handle('get-desktop-settings', async _ev => {
     return DesktopSettings.state
