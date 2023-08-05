@@ -33,4 +33,5 @@ Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANG
 
 Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1_38_0`
   )
+
 }
