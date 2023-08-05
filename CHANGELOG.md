@@ -9,6 +9,7 @@
 - Update translations (01.07.2023)
 - Update offline help
 - changed: make verified icon green
+- update deltachat-node and deltachat/jsonrpc-client to `v1.119.0`
 
 ### Fixed
 - fix: clicking start on an already open webxdc app now opens it again even when it was minimised #3294
