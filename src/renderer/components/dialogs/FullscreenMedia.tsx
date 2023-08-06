@@ -414,6 +414,23 @@ function QrCodeHighlight({
   const height = Math.abs(code.corners[3].y - code.corners[0].y) * scalingRatio
   const width = Math.abs(code.corners[2].x - code.corners[0].x) * scalingRatio
 
+  // const scalePoint = (point: { x: number; y: number }, factor:number) =>{
+  //   return { x: point.x *factor, y: point.y *factor }
+  // }
+
+  // function distance(
+  //   pointA: { x: number; y: number },
+  //   pointB: { x: number; y: number }
+  // ) {
+  //   var dx = pointA.x - pointB.x // delta x
+  //   var dy = pointA.y - pointB.y // delta y
+  //   var dist = Math.sqrt(dx * dx + dy * dy) // distance
+  //   return dist
+  // }
+
+  // const height = distance(scalePoint(code.corners[3], scalingRatio), scalePoint(code.corners[0], scalingRatio)) 
+  // const width = distance(scalePoint(code.corners[2], scalingRatio), scalePoint(code.corners[0], scalingRatio))
+
   const onClick = () => {
     if (code.data['content']) {
       processOpenQrUrl(
@@ -433,26 +450,41 @@ function QrCodeHighlight({
   ])
 
   return (
-    <div
-      className='qrcode-highlight'
-      style={{
-        borderColor,
-        translate: `${x}px ${y}px`,
-        height: `${height}px`,
-        width: `${width}px`,
-        cursor: isError ? 'default' : 'pointer',
-      }}
-      title={
-        code.data['error'] ||
-        String.fromCharCode.apply(null, code.data['content']?.payload)
-      }
-      onClick={onClick}
-      onContextMenu={code.data['content'] && menu}
-    >
-      {code.data['error']}
-      <br />
-      {JSON.stringify(code.corners)}
-      QRCODE {String.fromCharCode.apply(null, code.data['content']?.payload)}
-    </div>
+    <>
+      {code.corners.map((c, i) => (
+        <div
+          key={JSON.stringify(c)}
+          style={{
+            translate: `${c.x * scalingRatio}px ${c.y * scalingRatio}px`,
+            background: 'yellow',
+            position: 'absolute',
+          }}
+        >
+          {i}
+        </div>
+      ))}
+      <div
+        key={'highlight'}
+        className='qrcode-highlight'
+        style={{
+          borderColor,
+          translate: `${x}px ${y}px`,
+          height: `${height}px`,
+          width: `${width}px`,
+          cursor: isError ? 'default' : 'pointer',
+        }}
+        title={
+          code.data['error'] ||
+          String.fromCharCode.apply(null, code.data['content']?.payload)
+        }
+        onClick={onClick}
+        onContextMenu={code.data['content'] && menu}
+      >
+        {code.data['error']}
+        <br />
+        {JSON.stringify(code.corners)}
+        QRCODE {String.fromCharCode.apply(null, code.data['content']?.payload)}
+      </div>
+    </>
   )
 }
