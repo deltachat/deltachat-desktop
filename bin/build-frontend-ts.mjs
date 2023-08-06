@@ -52,6 +52,10 @@ async function bundle(production, minify = false) {
     'node_modules/@deltachat/message_parser_wasm/message_parser_wasm_bg.wasm',
     'html-dist/message_parser_wasm_bg.wasm'
   )
+  await copyFile(
+    'node_modules/quircs-wasm/quircs_wasm_bg.wasm',
+    'html-dist/quircs_wasm_bg.wasm'
+  )
 }
 
 let wasmPlugin = {

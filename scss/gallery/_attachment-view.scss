@@ -38,14 +38,33 @@
     padding: 5px;
 
     .download-btn {
-      height: 32px;
-      width: 32px;
-      display: inline-block;
-      vertical-align: text-bottom;
       @include color-svg(
         '../images/download.svg',
         var(--fullScreenMediaButtons)
       );
+    }
+
+    .qrhighlight-on-btn {
+      @include color-svg(
+        '../images/qrhighlight-on.svg',
+        var(--fullScreenMediaButtons)
+      );
+    }
+
+    .qrhighlight-off-btn {
+      @include color-svg(
+        '../images/qrhighlight-off.svg',
+        var(--fullScreenMediaButtons)
+      );
+    }
+
+    .download-btn,
+    .qrhighlight-on-btn,
+    .qrhighlight-off-btn {
+      height: 32px;
+      width: 32px;
+      display: inline-block;
+      vertical-align: text-bottom;
 
       &:hover {
         background-color: var(--fullScreenMediaButtons);
@@ -86,4 +105,35 @@
 
 .react-transform-wrapper {
   overflow: unset !important;
+}
+
+.attachment-overlay {
+  .qr-code-highlight-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    .qr-code-highlight-img-area {
+      position: absolute;
+
+      .qrcode-highlight {
+        border: 1.6px solid orange;
+        border-radius: 4px;
+        min-height: 10px;
+        min-width: 10px;
+
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.25);
+          color: white;
+          border-width: 1.9px;
+        }
+
+        color: darkblue;
+        overflow: hidden;
+        position: absolute;
+      }
+    }
+  }
 }

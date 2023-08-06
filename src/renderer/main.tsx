@@ -5,7 +5,8 @@ import { printProcessLogLevelInfo } from '../shared/logger'
 
 import App from './App'
 import { runtime } from './runtime'
-import init from '@deltachat/message_parser_wasm'
+import initMessageParser from '@deltachat/message_parser_wasm'
+import initQuircs from 'quircs-wasm'
 import initSystemIntegration from './system-integration'
 
 async function main() {
@@ -13,7 +14,10 @@ async function main() {
   try {
     runtime.initialize()
     printProcessLogLevelInfo()
-    await init('./message_parser_wasm_bg.wasm')
+    await Promise.all([
+      initMessageParser('./message_parser_wasm_bg.wasm'),
+      initQuircs('./quircs_wasm_bg.wasm'),
+    ])
 
     initSystemIntegration()
 
