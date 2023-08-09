@@ -188,7 +188,7 @@ export function QrCodeShowQrInner({
 }
 
 export function QrCodeScanQrInner(
-  props: PropsWithChildren<{
+  props: React.PropsWithChildren<{
     subtitle: string
     onClose: () => void
   }>
