@@ -114,7 +114,12 @@ export default function WelcomeScreen({
 }) {
   const tx = useTranslationFunction()
   const { openDialog } = useContext(ScreenContext)
-  const onClickScanQr = () => openDialog('ImportQrCode')
+  const onClickScanQr = () =>
+    openDialog('ImportQrCode', { subtitle: tx('qrscan_hint') })
+  const onClickSecondDevice = () =>
+    openDialog('ImportQrCode', {
+      subtitle: tx('multidevice_open_settings_on_other_device'),
+    })
   const [showBackButton, setShowBackButton] = useState(false)
 
   useEffect(() => {
@@ -184,7 +189,7 @@ export default function WelcomeScreen({
                   </button>
                   <button
                     className='delta-button-round secondary'
-                    onClick={onClickScanQr}
+                    onClick={onClickSecondDevice}
                   >
                     {tx('multidevice_receiver_title')}
                   </button>
