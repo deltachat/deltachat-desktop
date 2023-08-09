@@ -56,6 +56,9 @@
   "show_webxdc_in_chat": {
     "message": "Show Private App in Chat"
   },
+  "receive_backup": {
+    "message": "Receiving backup from second device"
+  },
   "save_sticker": {
     "message": "Save Sticker"
   },
