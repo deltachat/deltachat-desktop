@@ -13,6 +13,7 @@
 
 ## [1.39.0] - 2023-08-05
 ### Added
+- Guide user tapping "Welcome / Add Second Device" what to do on the other device
 - add: `webxdc_custom.desktopDragFileOut` api
 
 ### Changed

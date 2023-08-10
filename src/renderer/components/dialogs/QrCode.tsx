@@ -68,7 +68,9 @@ export default function QrCode({
           onClose={onClose}
         />
       )}
-      {!showQrCode && <QrCodeScanQrInner onClose={onClose} />}
+      {!showQrCode && (
+        <QrCodeScanQrInner subtitle={tx('qrscan_hint')} onClose={onClose} />
+      )}
     </DeltaDialogBase>
   )
 }
@@ -185,13 +187,18 @@ export function QrCodeShowQrInner({
   )
 }
 
-export function QrCodeScanQrInner({ onClose }: { onClose: () => void }) {
+export function QrCodeScanQrInner(
+  props: React.PropsWithChildren<{
+    subtitle: string
+    onClose: () => void
+  }>
+) {
   const tx = window.static_translate
 
   const processingQrCode = useRef(false)
 
   const onDone = () => {
-    onClose()
+    props.onClose()
     processingQrCode.current = false
   }
 
@@ -279,7 +286,7 @@ export function QrCodeScanQrInner({ onClose }: { onClose: () => void }) {
               />
             </div>
             <div className='scan-qr-red-line' />
-            <p className='scan-qr-description'>{tx('qrscan_hint')}</p>
+            <p className='scan-qr-description'>{props.subtitle}</p>
           </div>
         </DeltaDialogContent>
       </DeltaDialogBody>
@@ -288,7 +295,7 @@ export function QrCodeScanQrInner({ onClose }: { onClose: () => void }) {
           <p className={'delta-button bold primary'} onClick={openMenu}>
             {tx('menu_more_options')}
           </p>
-          <p className={'delta-button bold primary'} onClick={onClose}>
+          <p className={'delta-button bold primary'} onClick={props.onClose}>
             {tx('close')}
           </p>
         </DeltaDialogFooterActions>
