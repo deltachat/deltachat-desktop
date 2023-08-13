@@ -5,6 +5,9 @@
 ### Added
 
 ### Changed
+- update `@deltachat/message_parser_wasm` to `0.6.0`, which fixes 2 bugs:
+ - Fixed problem of IPv6 links being detected as punycode
+ - Fixed the bug of brackets being parsed as part of the email address
 
 ### Fixed
 - fix missing translation string in setup second device progress dialog
