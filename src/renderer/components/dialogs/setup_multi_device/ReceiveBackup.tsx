@@ -51,7 +51,7 @@ export function ImportBackupTransferProgressDialog({
   return (
     <DeltaDialog
       onClose={onClose}
-      title={tx('receive_backup')}
+      title={tx('multidevice_receiver_title')}
       isOpen={isOpen}
       style={{ top: '40%' }}
     >
