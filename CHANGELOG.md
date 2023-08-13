@@ -11,6 +11,7 @@
 
 ### Fixed
 - fix missing translation string in setup second device progress dialog
+- fix device message ordering
 
 
 <a id="1_39_0"></a>
