@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- fix missing translation string in setup second device progress dialog
 
 
 <a id="1_39_0"></a>
