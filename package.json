@@ -75,7 +75,7 @@
   "dependencies": {
     "@blueprintjs/core": "^4.1.2",
     "@deltachat/jsonrpc-client": "^1.119.0",
-    "@deltachat/message_parser_wasm": "^0.5.1",
+    "@deltachat/message_parser_wasm": "^0.6.0",
     "@deltachat/react-qr-reader": "^4.0.0",
     "@emoji-mart/data": "1.1.2",
     "@emoji-mart/react": "1.1.1",
