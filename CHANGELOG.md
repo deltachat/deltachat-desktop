@@ -5,6 +5,14 @@
 ### Added
 
 ### Changed
+
+### Fixed
+
+<a id="1_40_0"></a>
+
+## [1.40.0] - 2023-08-13
+
+### Changed
 - update `@deltachat/message_parser_wasm` to `0.6.0`, which fixes 2 bugs:
  - Fixed problem of IPv6 links being detected as punycode
  - Fixed the bug of brackets being parsed as part of the email address
@@ -2101,7 +2109,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.39.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.0...HEAD
+
+[1.39.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.39.0...v1.40.0
 
 [1.39.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.38.1...v1.39.0
 
