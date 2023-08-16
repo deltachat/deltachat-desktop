@@ -69,6 +69,8 @@ export interface DesktopSettingsType {
   HTMLEmailAskForRemoteLoadingConfirmation: boolean
   /** always loads remote content without asking, for non contact requests  */
   HTMLEmailAlwaysLoadRemoteContent: boolean
+  /** Set true for a chat so that the missing files error in gallery won't be shown again **/
+  DontShowMissingFilesError?: { [chatId: number]: boolean }
 }
 
 export interface RC_Config {
