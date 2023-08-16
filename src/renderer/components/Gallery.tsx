@@ -46,8 +46,8 @@ type GalleryErrorsProps = {
 function GalleryErrors({ onClose, errors }: GalleryErrorsProps) {
   return (
     <div className='loading-errors' onClick={() => onClose(false)}>
-      The following messages failed to load, please report these
-      errors to the developers:
+      The following messages failed to load, please report these errors to the
+      developers:
       <ul>
         {errors.map(error => (
           <li key={error.msgId}>
@@ -58,7 +58,7 @@ function GalleryErrors({ onClose, errors }: GalleryErrorsProps) {
       <button onClick={() => onClose(false)}>Close</button>
       <button onClick={() => onClose(true)}>Close and Don't show again</button>
     </div>
-  );
+  )
 }
 
 export default class Gallery extends Component<
@@ -83,9 +83,9 @@ export default class Gallery extends Component<
     runtime.getDesktopSettings().then((settings: DesktopSettingsType) => {
       let showErrorsSettings = settings.DontShowMissingFilesError
       if (showErrorsSettings && showErrorsSettings[props.chatId]) {
-        this.setState({ showErrors: false });
+        this.setState({ showErrors: false })
       }
-    });
+    })
   }
 
   componentDidMount() {
@@ -180,19 +180,28 @@ export default class Gallery extends Component<
           <div className='bp4-tab-panel' role='tabpanel'>
             <div className='gallery'>
               {errors.length > 0 && showErrors && (
-                <GalleryErrors onClose={(neverShowAgain: boolean) => {
-                  this.setState({ showErrors: false });
-                  if (neverShowAgain) {
-                    runtime.getDesktopSettings().then((settings: DesktopSettingsType) => {
-                      let showErrorsSettings = settings.DontShowMissingFilesError
-                      if (!showErrorsSettings) {
-                        showErrorsSettings = {}
-                      }
-                      showErrorsSettings[this.props.chatId] = true
-                      SettingsStoreInstance.effect.setDesktopSetting("DontShowMissingFilesError", showErrorsSettings);
-                    });
-                  }
-                }} errors={errors} />
+                <GalleryErrors
+                  onClose={(neverShowAgain: boolean) => {
+                    this.setState({ showErrors: false })
+                    if (neverShowAgain) {
+                      runtime
+                        .getDesktopSettings()
+                        .then((settings: DesktopSettingsType) => {
+                          let showErrorsSettings =
+                            settings.DontShowMissingFilesError
+                          if (!showErrorsSettings) {
+                            showErrorsSettings = {}
+                          }
+                          showErrorsSettings[this.props.chatId] = true
+                          SettingsStoreInstance.effect.setDesktopSetting(
+                            'DontShowMissingFilesError',
+                            showErrorsSettings
+                          )
+                        })
+                    }
+                  }}
+                  errors={errors}
+                />
               )}
               <div
                 className='item-container'

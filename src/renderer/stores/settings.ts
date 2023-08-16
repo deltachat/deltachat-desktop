@@ -133,10 +133,7 @@ class SettingsStore extends Store<SettingsStoreState | null> {
         rc,
       })
     },
-    setDesktopSetting: async (
-      key: keyof DesktopSettingsType,
-      value: any
-    ) => {
+    setDesktopSetting: async (key: keyof DesktopSettingsType, value: any) => {
       try {
         await runtime.setDesktopSetting(key, value)
         this.reducer.setDesktopSetting(key, value)
