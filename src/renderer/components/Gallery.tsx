@@ -4,6 +4,9 @@ import MediaAttachment from './attachment/mediaAttachment'
 import { getLogger } from '../../shared/logger'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
+import SettingsStoreInstance from '../stores/settings'
+import { runtime } from '../runtime'
+import { DesktopSettingsType } from '../../shared/shared-types.d'
 
 const log = getLogger('renderer/Gallery')
 
@@ -33,13 +36,39 @@ const MediaTabs: Readonly<
 
 type mediaProps = { chatId: number }
 
+type Error = { msgId: number; error: string }
+
+type GalleryErrorsProps = {
+  onClose: (neverShowAgain: boolean) => void
+  errors: Error[]
+}
+
+function GalleryErrors({ onClose, errors }: GalleryErrorsProps) {
+  return (
+    <div className='loading-errors' onClick={() => onClose(false)}>
+      The following messages failed to load, please report these
+      errors to the developers:
+      <ul>
+        {errors.map(error => (
+          <li key={error.msgId}>
+            {error.msgId} {'->'} {error.error}
+          </li>
+        ))}
+      </ul>
+      <button onClick={() => onClose(false)}>Close</button>
+      <button onClick={() => onClose(true)}>Close and Don't show again</button>
+    </div>
+  );
+}
+
 export default class Gallery extends Component<
   mediaProps,
   {
     id: MediaTabKey
     msgTypes: Type.Viewtype[]
     medias: Type.Message[]
-    errors: { msgId: number; error: string }[]
+    errors: Error[]
+    showErrors: boolean
   }
 > {
   constructor(props: mediaProps) {
@@ -49,7 +78,14 @@ export default class Gallery extends Component<
       msgTypes: MediaTabs.images.values,
       medias: [],
       errors: [],
+      showErrors: true,
     }
+    runtime.getDesktopSettings().then((settings: DesktopSettingsType) => {
+      let showErrorsSettings = settings.DontShowMissingFilesError
+      if (showErrorsSettings && showErrorsSettings[props.chatId]) {
+        this.setState({ showErrors: false });
+      }
+    });
   }
 
   componentDidMount() {
@@ -118,7 +154,7 @@ export default class Gallery extends Component<
   }
 
   render() {
-    const { medias, id, errors } = this.state
+    const { medias, id, errors, showErrors } = this.state
     const tx = window.static_translate // static because dynamic isn't too important here
     const emptyTabMessage = this.emptyTabMessage(id)
 
@@ -143,18 +179,20 @@ export default class Gallery extends Component<
           </ul>
           <div className='bp4-tab-panel' role='tabpanel'>
             <div className='gallery'>
-              {errors.length > 0 && (
-                <div className='loading-errors'>
-                  The following messages failed to load, please report these
-                  errors to the developers:
-                  <ul>
-                    {errors.map(error => (
-                      <li key={error.msgId}>
-                        {error.msgId} {'->'} {error.error}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              {errors.length > 0 && showErrors && (
+                <GalleryErrors onClose={(neverShowAgain: boolean) => {
+                  this.setState({ showErrors: false });
+                  if (neverShowAgain) {
+                    runtime.getDesktopSettings().then((settings: DesktopSettingsType) => {
+                      let showErrorsSettings = settings.DontShowMissingFilesError
+                      if (!showErrorsSettings) {
+                        showErrorsSettings = {}
+                      }
+                      showErrorsSettings[this.props.chatId] = true
+                      SettingsStoreInstance.effect.setDesktopSetting("DontShowMissingFilesError", showErrorsSettings);
+                    });
+                  }
+                }} errors={errors} />
               )}
               <div
                 className='item-container'
