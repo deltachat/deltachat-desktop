@@ -135,7 +135,7 @@ class SettingsStore extends Store<SettingsStoreState | null> {
     },
     setDesktopSetting: async (
       key: keyof DesktopSettingsType,
-      value: string | number | boolean
+      value: any
     ) => {
       try {
         await runtime.setDesktopSetting(key, value)
