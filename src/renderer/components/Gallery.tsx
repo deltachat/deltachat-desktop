@@ -81,7 +81,7 @@ export default class Gallery extends Component<
       showErrors: true,
     }
     runtime.getDesktopSettings().then((settings: DesktopSettingsType) => {
-      let showErrorsSettings = settings.DontShowMissingFilesError
+      const showErrorsSettings = settings.DontShowMissingFilesError
       if (showErrorsSettings && showErrorsSettings[props.chatId]) {
         this.setState({ showErrors: false })
       }
