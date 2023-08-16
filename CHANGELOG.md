@@ -8,6 +8,7 @@
 
 ### Fixed
 
+ - Fixed error in Gallery cannot be closed(#3339)
 
 <a id="1_39_0"></a>
 
