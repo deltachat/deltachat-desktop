@@ -119,7 +119,7 @@ export default class ScreenController extends Component {
     const account = await BackendRemote.rpc.getAccountInfo(
       this.selectedAccountId
     )
-    if (account.type === 'Configured') {
+    if (account.kind === 'Configured') {
       this.changeScreen(Screens.Main)
       updateDeviceChats(this.selectedAccountId)
     } else {

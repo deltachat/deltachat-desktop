@@ -126,23 +126,23 @@ export function startBackendLogging() {
       }
 
       if (
-        event.type == 'Info' ||
-        event.type == 'Warning' ||
-        event.type == 'Error'
+        event.kind == 'Info' ||
+        event.kind == 'Warning' ||
+        event.kind == 'Error'
       ) {
         data = event.msg
-      } else if (event.type == 'ConnectivityChanged') {
+      } else if (event.kind == 'ConnectivityChanged') {
         // has no arguments
         data = ''
       } else {
         const event_clone = Object.assign({}, event) as Partial<typeof event>
-        delete event_clone.type
+        delete event_clone.kind
         data = event_clone
       }
 
       /* ignore-console-log */
       console.debug(
-        `%c${isActiveAccount ? '👤' : '👻'}${accountId}%c📡 ${event.type}`,
+        `%c${isActiveAccount ? '👤' : '👻'}${accountId}%c📡 ${event.kind}`,
         `background:${accountColor};border-radius:8px 0 0 8px;padding:2px 4px;`,
         `background:${eventColor};border-radius:0 2px 2px 0;padding:2px 4px;`,
         data

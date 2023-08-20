@@ -151,11 +151,11 @@ function AccountSelection({
   const removeAccount = (account: Type.Account) => {
     const header = tx(
       'ask_delete_value',
-      account.type == 'Configured' ? account.addr || '?' : '[unconfigured]'
+      account.kind == 'Configured' ? account.addr || '?' : '[unconfigured]'
     )
     const message = tx(
       'delete_account_explain_with_name',
-      account.type == 'Configured' ? account.addr || '?' : '[unconfigured]'
+      account.kind == 'Configured' ? account.addr || '?' : '[unconfigured]'
     )
     openDialog('ConfirmationDialog', {
       header,
@@ -279,7 +279,7 @@ function AccountItem({
   const tx = useTranslationFunction()
 
   let inner
-  if (login.type === 'Configured') {
+  if (login.kind === 'Configured') {
     const title = tx('account_info_hover_tooltip_desktop2', [
       login.addr || 'null',
       account_size,

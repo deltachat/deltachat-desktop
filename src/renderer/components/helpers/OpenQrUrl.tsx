@@ -155,7 +155,7 @@ export default async function processOpenQrUrl(
     return
   }
 
-  const allowedQrCodesOnWelcomeScreen: Type.Qr['type'][] = [
+  const allowedQrCodesOnWelcomeScreen: Type.Qr['kind'][] = [
     'account',
     'login',
     'text',
@@ -164,7 +164,7 @@ export default async function processOpenQrUrl(
   ]
 
   if (
-    !allowedQrCodesOnWelcomeScreen.includes(checkQr.type) &&
+    !allowedQrCodesOnWelcomeScreen.includes(checkQr.kind) &&
     screen !== Screens.Main
   ) {
     closeProcessDialog()
@@ -175,7 +175,7 @@ export default async function processOpenQrUrl(
     return
   }
 
-  if (checkQr.type === 'account' || checkQr.type === 'login') {
+  if (checkQr.kind === 'account' || checkQr.kind === 'login') {
     closeProcessDialog()
 
     if (!skipLoginConfirmation) {
@@ -184,20 +184,20 @@ export default async function processOpenQrUrl(
         (await BackendRemote.rpc.getAllAccountIds()).length == 1
 
       const message: string =
-        checkQr.type === 'account'
+        checkQr.kind === 'account'
           ? is_singular_term
             ? 'qraccount_ask_create_and_login'
             : 'qraccount_ask_create_and_login_another'
-          : checkQr.type === 'login'
+          : checkQr.kind === 'login'
           ? is_singular_term
             ? 'qrlogin_ask_login'
             : 'qrlogin_ask_login_another'
           : '?'
 
       const replacementValue =
-        checkQr.type === 'account'
+        checkQr.kind === 'account'
           ? checkQr.domain
-          : checkQr.type === 'login'
+          : checkQr.kind === 'login'
           ? checkQr.address
           : ''
 
@@ -249,7 +249,7 @@ export default async function processOpenQrUrl(
     }
 
     return
-  } else if (checkQr.type === 'askVerifyContact') {
+  } else if (checkQr.kind === 'askVerifyContact') {
     const accountId = selectedAccountId()
     const contact = await BackendRemote.rpc.getContact(
       accountId,
@@ -265,7 +265,7 @@ export default async function processOpenQrUrl(
         }
       },
     })
-  } else if (checkQr.type === 'askVerifyGroup') {
+  } else if (checkQr.kind === 'askVerifyGroup') {
     const accountId = selectedAccountId()
     closeProcessDialog()
     window.__openDialog('ConfirmationDialog', {
@@ -278,7 +278,7 @@ export default async function processOpenQrUrl(
         return
       },
     })
-  } else if (checkQr.type === 'fprOk') {
+  } else if (checkQr.kind === 'fprOk') {
     const accountId = selectedAccountId()
     const contact = await BackendRemote.rpc.getContact(
       accountId,
@@ -290,7 +290,7 @@ export default async function processOpenQrUrl(
       confirmLabel: tx('ok'),
       cb: callback,
     })
-  } else if (checkQr.type === 'withdrawVerifyContact') {
+  } else if (checkQr.kind === 'withdrawVerifyContact') {
     closeProcessDialog()
     window.__openDialog(ConfirmationDialog, {
       message: tx('withdraw_verifycontact_explain'),
@@ -303,7 +303,7 @@ export default async function processOpenQrUrl(
         callback(null)
       },
     })
-  } else if (checkQr.type === 'reviveVerifyContact') {
+  } else if (checkQr.kind === 'reviveVerifyContact') {
     closeProcessDialog()
     window.__openDialog(ConfirmationDialog, {
       message: tx('revive_verifycontact_explain'),
@@ -316,7 +316,7 @@ export default async function processOpenQrUrl(
         callback(null)
       },
     })
-  } else if (checkQr.type === 'withdrawVerifyGroup') {
+  } else if (checkQr.kind === 'withdrawVerifyGroup') {
     closeProcessDialog()
     window.__openDialog(ConfirmationDialog, {
       message: tx('withdraw_verifygroup_explain', checkQr.grpname),
@@ -329,7 +329,7 @@ export default async function processOpenQrUrl(
         callback(null)
       },
     })
-  } else if (checkQr.type === 'reviveVerifyGroup') {
+  } else if (checkQr.kind === 'reviveVerifyGroup') {
     closeProcessDialog()
     window.__openDialog(ConfirmationDialog, {
       message: tx('revive_verifygroup_explain', checkQr.grpname),
@@ -342,7 +342,7 @@ export default async function processOpenQrUrl(
         callback(null)
       },
     })
-  } else if (checkQr.type === 'backup') {
+  } else if (checkQr.kind === 'backup') {
     closeProcessDialog()
     if (screen === Screens.Main) {
       window.__openDialog('AlertDialog', {
@@ -360,7 +360,7 @@ export default async function processOpenQrUrl(
     closeProcessDialog()
     window.__openDialog(copyContentAlertDialog, {
       message:
-        checkQr.type === 'url'
+        checkQr.kind === 'url'
           ? tx('qrscan_contains_url', url)
           : tx('qrscan_contains_text', url),
       content: url,

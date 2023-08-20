@@ -21,7 +21,7 @@ import { selectedAccountId } from '../../ScreenController'
 // const log = getLogger('renderer/ChatListContextMenu')
 
 function archiveStateMenu(
-  chat: Type.ChatListItemFetchResult & { type: 'ChatListItem' },
+  chat: Type.ChatListItemFetchResult & { kind: 'ChatListItem' },
   tx: ReturnType<typeof useTranslationFunction>,
   isTheSelectedChat: boolean
 ): ContextMenuItem[] {
@@ -62,7 +62,7 @@ function archiveStateMenu(
 export function useChatListContextMenu(): {
   openContextMenu: (
     event: React.MouseEvent<any, MouseEvent>,
-    chatListItem: Type.ChatListItemFetchResult & { type: 'ChatListItem' },
+    chatListItem: Type.ChatListItemFetchResult & { kind: 'ChatListItem' },
     selectedChatId: number | null
   ) => Promise<void>
   activeContextMenuChatId: number | null

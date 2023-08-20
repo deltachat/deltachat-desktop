@@ -46,7 +46,7 @@ export const ChatListItemRowChat = React.memo<{
         onClick={onChatClick.bind(null, chatId)}
         onContextMenu={event => {
           const chat = chatCache[chatId]
-          if (chat?.type === 'ChatListItem') {
+          if (chat?.kind === 'ChatListItem')
             openContextMenu(event, chat, selectedChatId)
           }
         }}

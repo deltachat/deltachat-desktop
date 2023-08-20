@@ -240,7 +240,7 @@ class MessageListStore extends Store<MessageListState> {
     },
     messageChanged: (message: Type.Message) => {
       const messageLoadResult: Type.MessageLoadResult = {
-        variant: 'message',
+        kind: 'message',
         ...message,
       }
       this.setState(state => {
