@@ -73,10 +73,7 @@ export default class DeltaChatController extends EventEmitter {
     await this.migrateToAccountsApiIfNeeded()
 
     log.debug('Initiating DeltaChatNode')
-    this._inner_account_manager = new DeltaChatNode(
-      this.cwd,
-      'deltachat-desktop'
-    )
+    this._inner_account_manager = new DeltaChatNode(this.cwd, true)
 
     const mainProcessTransport = new ElectronMainTransport(message => {
       message.id = `main-${message.id}`
