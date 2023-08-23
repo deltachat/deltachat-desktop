@@ -3,11 +3,14 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- add: "always on top" option to webxdc titlebar menu.
 
 ### Changed
 
 ### Fixed
 - fix: show webxdc titlebar also on mac -> make show sourcecode link accessible on macOS
+- fix: hide devtool option in webxdc titlebar menu when it is not enabled.
+- fix: remove reload options that don't work from webxdc titlebar menu.
 
 <a id="1_40_0"></a>
 

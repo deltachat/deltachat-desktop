@@ -4,7 +4,13 @@ import SplitOut from './splitout'
 import { getLogger } from '../../shared/logger'
 const log = getLogger('main/deltachat/webxdc')
 import Mime from 'mime-types'
-import { Menu, ProtocolResponse, nativeImage, shell } from 'electron'
+import {
+  Menu,
+  ProtocolResponse,
+  nativeImage,
+  shell,
+  MenuItemConstructorOptions,
+} from 'electron'
 import { join } from 'path'
 import { readdir, stat, rmdir, writeFile, readFile } from 'fs/promises'
 import { getConfigPath, htmlDistDir } from '../application-constants'
@@ -254,7 +260,41 @@ export default class DCWebxdc extends SplitOut {
                 },
               ],
             },
-            { role: 'viewMenu' },
+            {
+              label: tx('global_menu_view_desktop'),
+              submenu: [
+                ...(DesktopSettings.state.enableWebxdcDevTools
+                  ? [
+                      {
+                        label: tx('global_menu_view_developer_tools_desktop'),
+                        role: 'toggleDevTools',
+                      } as MenuItemConstructorOptions,
+                    ]
+                  : []),
+                { type: 'separator' },
+                { role: 'resetZoom' },
+                { role: 'zoomIn' },
+                { role: 'zoomOut' },
+                { type: 'separator' },
+                {
+                  label: tx('global_menu_view_floatontop_desktop'),
+                  type: 'checkbox',
+                  checked: webxdc_windows.isAlwaysOnTop(),
+                  click: () => {
+                    webxdc_windows.setAlwaysOnTop(
+                      !webxdc_windows.isAlwaysOnTop()
+                    )
+                    if (platform() !== 'darwin') {
+                      webxdc_windows.setMenu(makeMenu())
+                    } else {
+                      // change to webxdc menu
+                      Menu.setApplicationMenu(makeMenu())
+                    }
+                  },
+                },
+                { role: 'togglefullscreen' },
+              ],
+            },
             {
               label: tx('menu_help'),
               submenu: [
@@ -283,7 +323,7 @@ export default class DCWebxdc extends SplitOut {
 
         webxdc_windows.on('focus', () => {
           if (process.platform === 'darwin') {
-            // change back to webxdc menu
+            // change to webxdc menu
             Menu.setApplicationMenu(makeMenu())
           }
         })
