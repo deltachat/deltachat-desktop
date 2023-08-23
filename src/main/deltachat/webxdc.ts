@@ -16,6 +16,7 @@ import { DcOpenWebxdcParameters } from '../../shared/shared-types'
 import { DesktopSettings } from '../desktop_settings'
 import { window as main_window } from '../windows/main'
 import { writeTempFileFromBase64 } from '../ipc'
+import { refresh as refreshTitleMenu } from '../menu'
 
 const open_apps: {
   [instanceId: string]: {
@@ -240,44 +241,58 @@ export default class DCWebxdc extends SplitOut {
           internet_access: webxdcInfo['internetAccess'],
         }
 
+        const makeMenu = () =>
+          Menu.buildFromTemplate([
+            {
+              label: tx('global_menu_file_desktop'),
+              submenu: [
+                {
+                  label: tx('global_menu_file_quit_desktop'),
+                  click: () => {
+                    webxdc_windows.close()
+                  },
+                },
+              ],
+            },
+            { role: 'viewMenu' },
+            {
+              label: tx('menu_help'),
+              submenu: [
+                {
+                  label: tx('source_code'),
+                  enabled: !!webxdcInfo.sourceCodeUrl,
+                  icon: app_icon?.resize({ width: 24 }) || undefined,
+                  click: () =>
+                    webxdcInfo.sourceCodeUrl &&
+                    shell.openExternal(webxdcInfo.sourceCodeUrl),
+                },
+                {
+                  type: 'separator',
+                },
+                {
+                  label: tx('what_is_webxdc'),
+                  click: () => shell.openExternal('https://webxdc.org'),
+                },
+              ],
+            },
+          ])
+
         if (platform() !== 'darwin') {
-          webxdc_windows.setMenu(
-            Menu.buildFromTemplate([
-              {
-                label: tx('global_menu_file_desktop'),
-                submenu: [
-                  {
-                    label: tx('global_menu_file_quit_desktop'),
-                    click: () => {
-                      webxdc_windows.close()
-                    },
-                  },
-                ],
-              },
-              { role: 'viewMenu' },
-              {
-                label: tx('menu_help'),
-                submenu: [
-                  {
-                    label: tx('source_code'),
-                    enabled: !!webxdcInfo.sourceCodeUrl,
-                    icon: app_icon?.resize({ width: 24 }) || undefined,
-                    click: () =>
-                      webxdcInfo.sourceCodeUrl &&
-                      shell.openExternal(webxdcInfo.sourceCodeUrl),
-                  },
-                  {
-                    type: 'separator',
-                  },
-                  {
-                    label: tx('what_is_webxdc'),
-                    click: () => shell.openExternal('https://webxdc.org'),
-                  },
-                ],
-              },
-            ])
-          )
+          webxdc_windows.setMenu(makeMenu())
         }
+
+        webxdc_windows.on('focus', () => {
+          if (process.platform === 'darwin') {
+            // change back to webxdc menu
+            Menu.setApplicationMenu(makeMenu())
+          }
+        })
+        webxdc_windows.on('blur', () => {
+          if (process.platform === 'darwin') {
+            // change back to main-window menu
+            refreshTitleMenu()
+          }
+        })
 
         webxdc_windows.once('closed', () => {
           delete open_apps[`${accountId}.${msg_id}`]

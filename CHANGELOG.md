@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- fix: show webxdc titlebar also on mac -> make show sourcecode link accessible on macOS
 
 <a id="1_40_0"></a>
 
