@@ -32,6 +32,7 @@ const MediaTabs: Readonly<
 }
 
 type mediaProps = { chatId: number | 'all' }
+type Error = { msgId: number, error: string }
 
 export default class Gallery extends Component<
   mediaProps,
@@ -39,7 +40,7 @@ export default class Gallery extends Component<
     id: MediaTabKey
     msgTypes: Type.Viewtype[]
     medias: Type.Message[]
-    errors: { msgId: number; error: string }[]
+    errors: Error[]
   }
 > {
   constructor(props: mediaProps) {
@@ -138,25 +139,7 @@ export default class Gallery extends Component<
           </ul>
           <div className='bp4-tab-panel' role='tabpanel'>
             <div className='gallery'>
-              {errors.length > 0 && (
-                <div className='loading-errors'>
-                  The following messages failed to load, please report these
-                  errors to the developers:
-                  <ul>
-                    {errors.map(error => (
-                      <li key={error.msgId}>
-                        {error.msgId} {'->'} {error.error}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              <div
-                className='item-container'
-                style={{
-                  justifyContent: medias.length < 1 ? 'center' : undefined,
-                }}
-              >
+              <div className='item-container'>
                 {medias.length < 1 ? (
                   <p className='no-media-message'>{emptyTabMessage}</p>
                 ) : (
@@ -170,7 +153,15 @@ export default class Gallery extends Component<
                         <MediaAttachment message={message} />
                       </div>
                     )
-                  })}
+                  })
+                  .concat(
+                    errors.map(error => {
+                      return (
+                        <div title={error.error} className='item' key={error.msgId}>
+                          <i className='attachment-content red-cross' /> 
+                        </div>
+                      )
+                    }))}
               </div>
             </div>
           </div>
