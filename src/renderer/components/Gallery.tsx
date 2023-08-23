@@ -32,7 +32,7 @@ const MediaTabs: Readonly<
 }
 
 type mediaProps = { chatId: number | 'all' }
-type Error = { msgId: number, error: string }
+type Error = { msgId: number; error: string }
 
 export default class Gallery extends Component<
   mediaProps,
@@ -157,11 +157,16 @@ export default class Gallery extends Component<
                   .concat(
                     errors.map(error => {
                       return (
-                        <div title={error.error} className='item' key={error.msgId}>
-                          <i className='attachment-content red-cross' /> 
+                        <div
+                          title={error.error}
+                          className='item'
+                          key={error.msgId}
+                        >
+                          <i className='attachment-content red-cross' />
                         </div>
                       )
-                    }))}
+                    })
+                  )}
               </div>
             </div>
           </div>
