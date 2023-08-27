@@ -189,8 +189,7 @@ function buildContextMenu(
   const showAttachmentOptions = !!message.file && !message.isSetupmessage
   const showCopyImage = !!message.file && message.viewType === 'Image'
 
-  const showResend =
-    message.viewType === 'Webxdc' && message.sender.id === C.DC_CONTACT_ID_SELF
+  const showResend = message.sender.id === C.DC_CONTACT_ID_SELF
 
   return [
     // Reply

@@ -5,6 +5,7 @@
 ### Added
 - add: "always on top" option to webxdc titlebar menu.
 - add: context menu entry to resend webxdc messages
+- add: context menu entry to resend self sent messages
 
 ### Changed
 - remove jitsi as a default Video Chat instance, because they added a sign-in requirement #3366
