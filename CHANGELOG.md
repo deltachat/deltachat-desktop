@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- fix contact createion in new chat dialog not working with leading or trailing spaces. #3357
 
 <a id="1_40_0"></a>
 

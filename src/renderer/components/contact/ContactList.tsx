@@ -171,10 +171,10 @@ export function useContactIds(listFlags: number, queryStr: string | undefined) {
         const contactIds = await BackendRemote.rpc.getContactIds(
           accountId,
           listFlags,
-          queryStr || null
+          queryStr?.trim() || null
         )
         const queryStrIsValidEmail = await BackendRemote.rpc.checkEmailValidity(
-          queryStr || ''
+          queryStr?.trim() || ''
         )
         setState({ contactIds, queryStrIsValidEmail })
       }, 200),
