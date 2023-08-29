@@ -8,6 +8,8 @@
 
 ### Fixed
 - fix: make a chat item background look hovered when a context menu is open for it (#3228)
+- fix contact creation  in new chat dialog not working with leading or trailing spaces. #3357
+
 
 <a id="1_40_0"></a>
 

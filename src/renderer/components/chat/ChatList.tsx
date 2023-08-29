@@ -137,7 +137,7 @@ export default function ChatList(props: {
 
     const contactId = await BackendRemote.rpc.createContact(
       selectedAccountId(),
-      queryStr,
+      queryStr.trim(),
       null
     )
     await createChatByContactIdAndSelectIt(contactId)
@@ -406,7 +406,7 @@ export default function ChatList(props: {
                     queryStrIsValidEmail && (
                       <div style={{ width: width }}>
                         <PseudoListItemAddContact
-                          queryStr={queryStr || ''}
+                          queryStr={queryStr?.trim() || ''}
                           queryStrIsEmail={queryStrIsValidEmail}
                           onClick={addContactOnClick}
                         />
