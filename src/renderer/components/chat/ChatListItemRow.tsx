@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import ChatListItem, {
   PlaceholderChatListItem,
   ChatListItemMessageResult,
@@ -19,7 +19,12 @@ export const ChatListItemRowChat = React.memo<{
       [id: number]: Type.ChatListItemFetchResult | undefined
     }
     onChatClick: (chatId: number) => void
-    openContextMenu: ReturnType<typeof useChatListContextMenu>
+    openContextMenu: ReturnType<
+      typeof useChatListContextMenu
+    >['openContextMenu']
+    activeContextMenuChatId: ReturnType<
+      typeof useChatListContextMenu
+    >['activeContextMenuChatId']
   }
   style: React.CSSProperties
 }>(({ index, data, style }) => {
@@ -29,9 +34,9 @@ export const ChatListItemRowChat = React.memo<{
     chatCache,
     onChatClick,
     openContextMenu,
+    activeContextMenuChatId,
   } = data
   const chatId = chatListIds[index]
-  const [hoverChatListItem, setHoverChatListItem] = useState(false)
 
   return (
     <div style={style}>
@@ -42,12 +47,10 @@ export const ChatListItemRowChat = React.memo<{
         onContextMenu={event => {
           const chat = chatCache[chatId]
           if (chat?.type === 'ChatListItem') {
-            setHoverChatListItem(true)
             openContextMenu(event, chat, selectedChatId)
-            setHoverChatListItem(false)
           }
         }}
-        hover={hoverChatListItem}
+        isContextMenuActive={activeContextMenuChatId === chatId}
       />
     </div>
   )

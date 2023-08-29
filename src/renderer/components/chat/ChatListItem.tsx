@@ -8,7 +8,7 @@ import { BackendRemote, Type } from '../../backend-com'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { T } from '@deltachat/jsonrpc-client'
 import { getLogger } from '../../../shared/logger'
-import { useContextMenu } from '../ContextMenu'
+import { useContextMenuWithActiveState } from '../ContextMenu'
 import { selectedAccountId } from '../../ScreenController'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import { runtime } from '../../runtime'
@@ -141,17 +141,14 @@ export const PlaceholderChatListItem = React.memo(_ => {
 function ChatListItemArchiveLink({
   onClick,
   chatListItem,
-  hover,
 }: {
   onClick: () => void
   chatListItem: Type.ChatListItemFetchResult & {
     type: 'ArchiveLink'
   }
-  hover?: boolean
 }) {
   const tx = window.static_translate
-
-  const onContextMenu = useContextMenu([
+  const { onContextMenu, isContextMenuActive } = useContextMenuWithActiveState([
     {
       label: tx('mark_all_as_read'),
       action: () => {
@@ -168,8 +165,9 @@ function ChatListItemArchiveLink({
       role='button'
       onClick={onClick}
       onContextMenu={onContextMenu}
-      className={'chat-list-item archive-link-item'}
-      style={hover ? { backgroundColor: 'var(--chatListItemBgHover)' } : {}}
+      className={`chat-list-item archive-link-item ${
+        isContextMenuActive ? 'context-menu-active' : ''
+      }`}
     >
       <div className='avatar'>
         <img className='content' src='../images/icons/icon-archive.svg' />
@@ -233,6 +231,7 @@ function ChatListItemNormal({
   onClick,
   isSelected,
   onContextMenu,
+  isContextMenuActive,
   hover,
 }: {
   chatListItem: Type.ChatListItemFetchResult & {
@@ -240,6 +239,7 @@ function ChatListItemNormal({
   }
   onClick: () => void
   onContextMenu?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  isContextMenuActive?: boolean
   isSelected?: boolean
   hover?: boolean
 }) {
@@ -254,6 +254,7 @@ function ChatListItemNormal({
         pinned: chatListItem.isPinned,
         muted: chatListItem.isMuted,
         selected: isSelected,
+        'context-menu-active': isContextMenuActive,
       })}
       style={hover ? { backgroundColor: 'var(--chatListItemBgHover)' } : {}}
     >
@@ -294,6 +295,7 @@ type ChatListItemProps = {
   chatListItem: Type.ChatListItemFetchResult | undefined
   onClick: () => void
   onContextMenu?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  isContextMenuActive?: boolean
   isSelected?: boolean
   hover?: boolean
 }
@@ -312,6 +314,7 @@ const ChatListItem = React.memo<ChatListItemProps>(
           onClick={onClick}
           isSelected={props.isSelected}
           onContextMenu={props.onContextMenu}
+          isContextMenuActive={props.isContextMenuActive}
           hover={hover}
         />
       )
@@ -329,7 +332,6 @@ const ChatListItem = React.memo<ChatListItemProps>(
         <ChatListItemArchiveLink
           chatListItem={chatListItem}
           onClick={onClick}
-          hover={hover}
         />
       )
     } else {
@@ -339,7 +341,8 @@ const ChatListItem = React.memo<ChatListItemProps>(
   (prevProps, nextProps) => {
     const shouldRerender =
       prevProps.chatListItem !== nextProps.chatListItem ||
-      prevProps.isSelected !== nextProps.isSelected
+      prevProps.isSelected !== nextProps.isSelected ||
+      prevProps.isContextMenuActive !== nextProps.isContextMenuActive
     return !shouldRerender
   }
 )
