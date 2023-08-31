@@ -6,11 +6,13 @@
 - add: "always on top" option to webxdc titlebar menu.
 
 ### Changed
+- remove jitsi as a default Video Chat instance, because they added a sign-in requirement #3366
 
 ### Fixed
 - fix: show webxdc titlebar also on mac -> make show sourcecode link accessible on macOS
 - fix: hide devtool option in webxdc titlebar menu when it is not enabled.
 - fix: remove reload options that don't work from webxdc titlebar menu.
+- fix: contact creation in new chat dialog not working with leading or trailing spaces. #3357
 
 <a id="1_40_0"></a>
 
