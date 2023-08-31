@@ -32,15 +32,14 @@ const MediaTabs: Readonly<
 }
 
 type mediaProps = { chatId: number | 'all' }
-type Error = { msgId: number; error: string }
+type Error = { error: string, sortTimestamp: number }
 
 export default class Gallery extends Component<
   mediaProps,
   {
     id: MediaTabKey
     msgTypes: Type.Viewtype[]
-    medias: Type.Message[]
-    errors: Error[]
+    medias: (Type.Message | Error)[]
   }
 > {
   constructor(props: mediaProps) {
@@ -49,7 +48,6 @@ export default class Gallery extends Component<
       id: 'images',
       msgTypes: MediaTabs.images.values,
       medias: [],
-      errors: [],
     }
   }
 
@@ -79,18 +77,16 @@ export default class Gallery extends Component<
           accountId,
           media_ids
         )
-        const medias: Type.Message[] = []
-        const errors = []
+        const medias: (Type.Message | Error)[] = []
         for (const msgId of media_ids) {
           const result = all_media_fetch_results[msgId]
           if (result.variant === 'message') {
             medias.push(result)
           } else {
-            errors.push({ msgId, error: result.error })
+            medias.push({ error: result.error, sortTimestamp: 0 });
           }
         }
-        log.errorWithoutStackTrace('messages failed to load:', errors)
-        this.setState({ id, msgTypes, medias, errors })
+        this.setState({ id, msgTypes, medias })
         this.forceUpdate()
       })
       .catch(log.error.bind(log))
@@ -114,7 +110,7 @@ export default class Gallery extends Component<
   }
 
   render() {
-    const { medias, id, errors } = this.state
+    const { medias, id } = this.state
     const tx = window.static_translate // static because dynamic isn't too important here
     const emptyTabMessage = this.emptyTabMessage(id)
 
@@ -148,25 +144,21 @@ export default class Gallery extends Component<
                 {medias
                   .sort((a, b) => b.sortTimestamp - a.sortTimestamp)
                   .map(message => {
-                    return (
-                      <div className='item' key={message.id}>
-                        <MediaAttachment message={message} />
-                      </div>
-                    )
-                  })
-                  .concat(
-                    errors.map(error => {
+                    if (typeof message.error === 'string') {
                       return (
-                        <div
-                          title={error.error}
-                          className='item'
-                          key={error.msgId}
-                        >
-                          <i className='attachment-content red-cross' />
+                        <div className='item' key={message.error}>
+                          No image! error! 
+                        </div>
+                      );
+                    } else {
+                      message = message as Type.Message
+                      return (
+                        <div className='item' key={message.id}>
+                          <MediaAttachment message={message} />
                         </div>
                       )
-                    })
-                  )}
+                    }
+                  })}
               </div>
             </div>
           </div>
