@@ -247,13 +247,32 @@ export default class DCWebxdc extends SplitOut {
           internet_access: webxdcInfo['internetAccess'],
         }
 
-        const makeMenu = () =>
-          Menu.buildFromTemplate([
+        const isMac = platform() === 'darwin'
+
+        const makeMenu = () => {
+          const appMenu: Electron.MenuItemConstructorOptions[] = [
+            {
+              label: tx('global_menu_file_desktop'),
+              submenu: [
+                { role: 'hide' },
+                { role: 'hideOthers' },
+                { role: 'unhide' },
+                { type: 'separator' },
+                {
+                  label: tx('global_menu_file_quit_desktop'),
+                  role: 'quit',
+                },
+              ],
+            },
+          ]
+
+          return Menu.buildFromTemplate([
+            ...(isMac ? appMenu : []),
             {
               label: tx('global_menu_file_desktop'),
               submenu: [
                 {
-                  label: tx('global_menu_file_quit_desktop'),
+                  label: tx('global_menu_file_close_webxdc_window'),
                   click: () => {
                     webxdc_windows.close()
                   },
@@ -316,19 +335,20 @@ export default class DCWebxdc extends SplitOut {
               ],
             },
           ])
+        }
 
-        if (platform() !== 'darwin') {
+        if (!isMac) {
           webxdc_windows.setMenu(makeMenu())
         }
 
         webxdc_windows.on('focus', () => {
-          if (process.platform === 'darwin') {
+          if (isMac) {
             // change to webxdc menu
             Menu.setApplicationMenu(makeMenu())
           }
         })
         webxdc_windows.on('blur', () => {
-          if (process.platform === 'darwin') {
+          if (isMac) {
             // change back to main-window menu
             refreshTitleMenu()
           }
