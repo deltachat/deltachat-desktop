@@ -90,11 +90,7 @@ export function SettingsExperimentalFeatures({
   )
 }
 
-type RadioButtonValue =
-  | 'disabled'
-  | 'custom'
-  | 'systemli'
-  | 'autistici'
+type RadioButtonValue = 'disabled' | 'custom' | 'systemli' | 'autistici'
 
 export function EditVideochatInstanceDialog({
   isOpen,
