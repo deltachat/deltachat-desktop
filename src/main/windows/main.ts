@@ -13,6 +13,7 @@ import { refreshTrayContextMenu } from '../tray'
 import { join } from 'path'
 import { DesktopSettings } from '../desktop_settings'
 import { Session } from 'electron/main'
+import { refresh as refreshTitleMenu } from '../menu'
 const log = getLogger('main/mainWindow')
 
 export let window: (BrowserWindow & { hidden?: boolean }) | null = null
@@ -96,6 +97,7 @@ export function init(options: { hidden: boolean }) {
   window.on('focus', () => {
     main_window.hidden = false
     refreshTrayContextMenu()
+    refreshTitleMenu()
   })
 
   const allowed_web_permissions = [
