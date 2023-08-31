@@ -7,6 +7,7 @@
 
 ### Changed
 - remove jitsi as a default Video Chat instance, because they added a sign-in requirement #3366
+- update deltachat-node and deltachat/jsonrpc-client to `v1.119.1`
 
 ### Fixed
 - fix: show webxdc titlebar also on mac -> make show sourcecode link accessible on macOS
