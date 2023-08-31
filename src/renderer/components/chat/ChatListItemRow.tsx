@@ -19,7 +19,12 @@ export const ChatListItemRowChat = React.memo<{
       [id: number]: Type.ChatListItemFetchResult | undefined
     }
     onChatClick: (chatId: number) => void
-    openContextMenu: ReturnType<typeof useChatListContextMenu>
+    openContextMenu: ReturnType<
+      typeof useChatListContextMenu
+    >['openContextMenu']
+    activeContextMenuChatId: ReturnType<
+      typeof useChatListContextMenu
+    >['activeContextMenuChatId']
   }
   style: React.CSSProperties
 }>(({ index, data, style }) => {
@@ -29,8 +34,10 @@ export const ChatListItemRowChat = React.memo<{
     chatCache,
     onChatClick,
     openContextMenu,
+    activeContextMenuChatId,
   } = data
   const chatId = chatListIds[index]
+
   return (
     <div style={style}>
       <ChatListItem
@@ -39,9 +46,11 @@ export const ChatListItemRowChat = React.memo<{
         onClick={onChatClick.bind(null, chatId)}
         onContextMenu={event => {
           const chat = chatCache[chatId]
-          if (chat?.type === 'ChatListItem')
+          if (chat?.type === 'ChatListItem') {
             openContextMenu(event, chat, selectedChatId)
+          }
         }}
+        isContextMenuActive={activeContextMenuChatId === chatId}
       />
     </div>
   )
