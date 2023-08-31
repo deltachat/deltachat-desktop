@@ -14,7 +14,6 @@ import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
 
-const VIDEO_CHAT_INSTANCE_JITSI = 'https://meet.jit.si/$ROOM'
 const VIDEO_CHAT_INSTANCE_SYSTEMLI = 'https://meet.systemli.org/$ROOM'
 const VIDEO_CHAT_INSTANCE_AUTISTICI = 'https://vc.autistici.org/$ROOM'
 
@@ -52,8 +51,6 @@ export function SettingsExperimentalFeatures({
       return 'Systemli'
     } else if (instance === VIDEO_CHAT_INSTANCE_AUTISTICI) {
       return 'Autistici'
-    } else if (instance === VIDEO_CHAT_INSTANCE_JITSI) {
-      return 'Jitsi'
     }
     return instance
   }
@@ -93,12 +90,7 @@ export function SettingsExperimentalFeatures({
   )
 }
 
-type RadioButtonValue =
-  | 'disabled'
-  | 'jitsi'
-  | 'custom'
-  | 'systemli'
-  | 'autistici'
+type RadioButtonValue = 'disabled' | 'custom' | 'systemli' | 'autistici'
 
 export function EditVideochatInstanceDialog({
   isOpen,
@@ -118,8 +110,6 @@ export function EditVideochatInstanceDialog({
       return 'systemli'
     } else if (configValue === VIDEO_CHAT_INSTANCE_AUTISTICI) {
       return 'autistici'
-    } else if (configValue === VIDEO_CHAT_INSTANCE_JITSI) {
-      return 'jitsi'
     } else {
       return 'custom'
     }
@@ -145,9 +135,6 @@ export function EditVideochatInstanceDialog({
     } else if (currentRadioValue === 'autistici') {
       newConfigValue = VIDEO_CHAT_INSTANCE_AUTISTICI
       setRadioValue('autistici')
-    } else if (currentRadioValue === 'jitsi') {
-      newConfigValue = VIDEO_CHAT_INSTANCE_JITSI
-      setRadioValue('jitsi')
     } else {
       newConfigValue = settingsStore.settings['webrtc_instance']
       setRadioValue('custom')
@@ -185,7 +172,6 @@ export function EditVideochatInstanceDialog({
             <Radio key='select-none' label={tx('off')} value='disabled' />
             <Radio key='select-systemli' label='Systemli' value='systemli' />
             <Radio key='select-autistici' label='Autistici' value='autistici' />
-            <Radio key='select-jitsi' label='Jitsi' value='jitsi' />
             <Radio
               key='select-custom'
               label={tx('custom')}
