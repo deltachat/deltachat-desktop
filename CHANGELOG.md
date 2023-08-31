@@ -9,6 +9,7 @@
 
 ### Fixed
 - fix contact creation in new chat dialog not working with leading or trailing spaces. #3357
+- fix filename sanitation bug in webxdc send api
 
 <a id="1_40_0"></a>
 
