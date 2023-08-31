@@ -6,6 +6,7 @@
 
 ### Changed
 - remove jitsi as a default Video Chat instance, because they added a sign-in requirement #3366
+- update deltachat-node and deltachat/jsonrpc-client to `v1.119.1`
 
 ### Fixed
 - fix contact creation in new chat dialog not working with leading or trailing spaces. #3357
