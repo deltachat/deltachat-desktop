@@ -4,7 +4,13 @@ import SplitOut from './splitout'
 import { getLogger } from '../../shared/logger'
 const log = getLogger('main/deltachat/webxdc')
 import Mime from 'mime-types'
-import { Menu, ProtocolResponse, nativeImage, shell } from 'electron'
+import {
+  Menu,
+  ProtocolResponse,
+  nativeImage,
+  shell,
+  MenuItemConstructorOptions,
+} from 'electron'
 import { join } from 'path'
 import { readdir, stat, rmdir, writeFile, readFile } from 'fs/promises'
 import { getConfigPath, htmlDistDir } from '../application-constants'
@@ -16,6 +22,7 @@ import { DcOpenWebxdcParameters } from '../../shared/shared-types'
 import { DesktopSettings } from '../desktop_settings'
 import { window as main_window } from '../windows/main'
 import { writeTempFileFromBase64 } from '../ipc'
+import { refresh as refreshTitleMenu } from '../menu'
 
 const open_apps: {
   [instanceId: string]: {
@@ -240,44 +247,112 @@ export default class DCWebxdc extends SplitOut {
           internet_access: webxdcInfo['internetAccess'],
         }
 
-        if (platform() !== 'darwin') {
-          webxdc_windows.setMenu(
-            Menu.buildFromTemplate([
-              {
-                label: tx('global_menu_file_desktop'),
-                submenu: [
-                  {
-                    label: tx('global_menu_file_quit_desktop'),
-                    click: () => {
-                      webxdc_windows.close()
-                    },
+        const isMac = platform() === 'darwin'
+
+        const makeMenu = () => {
+          const appMenu: Electron.MenuItemConstructorOptions[] = [
+            {
+              label: tx('global_menu_file_desktop'),
+              submenu: [
+                { role: 'hide' },
+                { role: 'hideOthers' },
+                { role: 'unhide' },
+                { type: 'separator' },
+                {
+                  label: tx('global_menu_file_quit_desktop'),
+                  role: 'quit',
+                },
+              ],
+            },
+          ]
+
+          return Menu.buildFromTemplate([
+            ...(isMac ? appMenu : []),
+            {
+              label: tx('global_menu_file_desktop'),
+              submenu: [
+                {
+                  label: tx('global_menu_file_close_webxdc_window'),
+                  click: () => {
+                    webxdc_windows.close()
                   },
-                ],
-              },
-              { role: 'viewMenu' },
-              {
-                label: tx('menu_help'),
-                submenu: [
-                  {
-                    label: tx('source_code'),
-                    enabled: !!webxdcInfo.sourceCodeUrl,
-                    icon: app_icon?.resize({ width: 24 }) || undefined,
-                    click: () =>
-                      webxdcInfo.sourceCodeUrl &&
-                      shell.openExternal(webxdcInfo.sourceCodeUrl),
+                },
+              ],
+            },
+            {
+              label: tx('global_menu_view_desktop'),
+              submenu: [
+                ...(DesktopSettings.state.enableWebxdcDevTools
+                  ? [
+                      {
+                        label: tx('global_menu_view_developer_tools_desktop'),
+                        role: 'toggleDevTools',
+                      } as MenuItemConstructorOptions,
+                    ]
+                  : []),
+                { type: 'separator' },
+                { role: 'resetZoom' },
+                { role: 'zoomIn' },
+                { role: 'zoomOut' },
+                { type: 'separator' },
+                {
+                  label: tx('global_menu_view_floatontop_desktop'),
+                  type: 'checkbox',
+                  checked: webxdc_windows.isAlwaysOnTop(),
+                  click: () => {
+                    webxdc_windows.setAlwaysOnTop(
+                      !webxdc_windows.isAlwaysOnTop()
+                    )
+                    if (platform() !== 'darwin') {
+                      webxdc_windows.setMenu(makeMenu())
+                    } else {
+                      // change to webxdc menu
+                      Menu.setApplicationMenu(makeMenu())
+                    }
                   },
-                  {
-                    type: 'separator',
-                  },
-                  {
-                    label: tx('what_is_webxdc'),
-                    click: () => shell.openExternal('https://webxdc.org'),
-                  },
-                ],
-              },
-            ])
-          )
+                },
+                { role: 'togglefullscreen' },
+              ],
+            },
+            {
+              label: tx('menu_help'),
+              submenu: [
+                {
+                  label: tx('source_code'),
+                  enabled: !!webxdcInfo.sourceCodeUrl,
+                  icon: app_icon?.resize({ width: 24 }) || undefined,
+                  click: () =>
+                    webxdcInfo.sourceCodeUrl &&
+                    shell.openExternal(webxdcInfo.sourceCodeUrl),
+                },
+                {
+                  type: 'separator',
+                },
+                {
+                  label: tx('what_is_webxdc'),
+                  click: () => shell.openExternal('https://webxdc.org'),
+                },
+              ],
+            },
+          ])
         }
+
+        if (!isMac) {
+          webxdc_windows.setMenu(makeMenu())
+        }
+
+        webxdc_windows.on('focus', () => {
+          if (isMac) {
+            // change to webxdc menu
+            Menu.setApplicationMenu(makeMenu())
+          }
+        })
+        webxdc_windows.on('blur', () => {
+          if (isMac) {
+            // change back to main-window menu
+            refreshTitleMenu()
+          }
+        })
 
         webxdc_windows.once('closed', () => {
           delete open_apps[`${accountId}.${msg_id}`]
