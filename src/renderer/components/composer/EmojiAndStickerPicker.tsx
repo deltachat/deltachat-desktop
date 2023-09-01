@@ -89,7 +89,7 @@ export const StickerPicker = ({
           </div>
           <div className='sticker-actions-container'>
             <button
-              className='delta-button-round'
+              className='delta-button-round secondary'
               onClick={onOpenStickerFolder}
             >
               {tx('open_sticker_folder')}

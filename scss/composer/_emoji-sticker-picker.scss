@@ -154,11 +154,7 @@ $emojimart-search-height: 31px + 6px;
 
     .sticker-actions-container {
       border-top: 1px solid $esp-border-color;
-      padding: 12px;
-
-      > .delta-button-round {
-        margin: 0;
-      }
+      padding: 0px 12px;
     }
   }
 }
