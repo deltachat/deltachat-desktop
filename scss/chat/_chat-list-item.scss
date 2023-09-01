@@ -128,7 +128,8 @@
     font-weight: bold;
   }
 
-  &:hover {
+  &:hover,
+  &.context-menu-active {
     background-color: var(--chatListItemBgHover);
   }
 }

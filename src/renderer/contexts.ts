@@ -6,7 +6,11 @@ import { OpenDialogFunctionType } from './components/dialogs/DialogController'
 
 export const ScreenContext = React.createContext({
   openDialog: ((_fnc: any, _props?: any) => {}) as OpenDialogFunctionType,
-  openContextMenu: (..._args: Parameters<showFnType>) => {},
+  /** shows a context menu
+   * @returns a promise with no return value that gets resolved when the context menu disapears again
+   * regardless what action the user took or if they canceled the dialog
+   */
+  openContextMenu: async (..._args: Parameters<showFnType>) => {},
   closeDialog: (_id: number) => {},
   userFeedback: (_message: false | userFeedback) => {},
   changeScreen: (_screen: Screens) => {},

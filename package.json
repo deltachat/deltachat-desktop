@@ -74,7 +74,7 @@
   },
   "dependencies": {
     "@blueprintjs/core": "^4.1.2",
-    "@deltachat/jsonrpc-client": "^1.119.0",
+    "@deltachat/jsonrpc-client": "^1.120.0",
     "@deltachat/message_parser_wasm": "^0.6.0",
     "@deltachat/react-qr-reader": "^4.0.0",
     "@emoji-mart/data": "1.1.2",
@@ -83,7 +83,7 @@
     "application-config": "^1.0.1",
     "classnames": "^2.3.1",
     "debounce": "^1.2.0",
-    "deltachat-node": "^1.119.0",
+    "deltachat-node": "^1.120.0",
     "emoji-js-clean": "^4.0.0",
     "emoji-mart": "5.5.2",
     "error-stack-parser": "^2.0.7",

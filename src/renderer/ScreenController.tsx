@@ -243,11 +243,15 @@ export default class ScreenController extends Component {
     this.dialogController.current?.closeDialog(...args)
   }
 
-  openContextMenu(...args: Parameters<showFnType>) {
+  /** shows a context menu
+   * @returns a promise with no return value that gets resolved when the context menu disapears again
+   * regardless what action the user took or if they canceled the dialog
+   */
+  openContextMenu(...args: Parameters<showFnType>): Promise<void> {
     if (!this.contextMenuShowFn) {
       throw new Error('Context Menu Controller not available')
     }
-    this.contextMenuShowFn(...args)
+    return this.contextMenuShowFn(...args)
   }
 
   renderScreen() {

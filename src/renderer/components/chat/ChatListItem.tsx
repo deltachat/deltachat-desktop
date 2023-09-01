@@ -8,7 +8,7 @@ import { BackendRemote, Type } from '../../backend-com'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { T } from '@deltachat/jsonrpc-client'
 import { getLogger } from '../../../shared/logger'
-import { useContextMenu } from '../ContextMenu'
+import { useContextMenuWithActiveState } from '../ContextMenu'
 import { selectedAccountId } from '../../ScreenController'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import { runtime } from '../../runtime'
@@ -148,8 +148,7 @@ function ChatListItemArchiveLink({
   }
 }) {
   const tx = window.static_translate
-
-  const onContextMenu = useContextMenu([
+  const { onContextMenu, isContextMenuActive } = useContextMenuWithActiveState([
     {
       label: tx('mark_all_as_read'),
       action: () => {
@@ -166,7 +165,9 @@ function ChatListItemArchiveLink({
       role='button'
       onClick={onClick}
       onContextMenu={onContextMenu}
-      className={'chat-list-item archive-link-item'}
+      className={`chat-list-item archive-link-item ${
+        isContextMenuActive ? 'context-menu-active' : ''
+      }`}
     >
       <div className='avatar'>
         <img className='content' src='../images/icons/icon-archive.svg' />
@@ -230,13 +231,17 @@ function ChatListItemNormal({
   onClick,
   isSelected,
   onContextMenu,
+  isContextMenuActive,
+  hover,
 }: {
   chatListItem: Type.ChatListItemFetchResult & {
     type: 'ChatListItem'
   }
   onClick: () => void
   onContextMenu?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  isContextMenuActive?: boolean
   isSelected?: boolean
+  hover?: boolean
 }) {
   return (
     <div
@@ -249,7 +254,9 @@ function ChatListItemNormal({
         pinned: chatListItem.isPinned,
         muted: chatListItem.isMuted,
         selected: isSelected,
+        'context-menu-active': isContextMenuActive,
       })}
+      style={hover ? { backgroundColor: 'var(--chatListItemBgHover)' } : {}}
     >
       <Avatar
         {...{
@@ -288,12 +295,14 @@ type ChatListItemProps = {
   chatListItem: Type.ChatListItemFetchResult | undefined
   onClick: () => void
   onContextMenu?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  isContextMenuActive?: boolean
   isSelected?: boolean
+  hover?: boolean
 }
 
 const ChatListItem = React.memo<ChatListItemProps>(
   props => {
-    const { chatListItem, onClick } = props
+    const { chatListItem, onClick, hover } = props
 
     // if not loaded by virtual list yet
     if (typeof chatListItem === 'undefined') return <PlaceholderChatListItem />
@@ -305,6 +314,8 @@ const ChatListItem = React.memo<ChatListItemProps>(
           onClick={onClick}
           isSelected={props.isSelected}
           onContextMenu={props.onContextMenu}
+          isContextMenuActive={props.isContextMenuActive}
+          hover={hover}
         />
       )
     } else if (chatListItem.type == 'Error') {
@@ -330,7 +341,8 @@ const ChatListItem = React.memo<ChatListItemProps>(
   (prevProps, nextProps) => {
     const shouldRerender =
       prevProps.chatListItem !== nextProps.chatListItem ||
-      prevProps.isSelected !== nextProps.isSelected
+      prevProps.isSelected !== nextProps.isSelected ||
+      prevProps.isContextMenuActive !== nextProps.isContextMenuActive
     return !shouldRerender
   }
 )

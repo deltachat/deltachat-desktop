@@ -130,7 +130,7 @@ export default function ChatList(props: {
     showArchivedChats
   )
 
-  const openContextMenu = useChatListContextMenu()
+  const { openContextMenu, activeContextMenuChatId } = useChatListContextMenu()
 
   const addContactOnClick = async () => {
     if (!queryStrIsValidEmail || !queryStr) return
@@ -262,8 +262,16 @@ export default function ChatList(props: {
       chatCache,
       onChatClick,
       openContextMenu,
+      activeContextMenuChatId,
     }
-  }, [selectedChatId, chatListIds, chatCache, onChatClick, openContextMenu])
+  }, [
+    selectedChatId,
+    chatListIds,
+    chatCache,
+    onChatClick,
+    openContextMenu,
+    activeContextMenuChatId,
+  ])
 
   const contactlistData = useMemo(() => {
     return {
