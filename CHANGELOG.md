@@ -3,13 +3,23 @@
 ## [Unreleased][unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+<a id="1_40_1"></a>
+
+## [1.40.1] - 2023-09-01
+
+### Added
 - add: "always on top" option to webxdc titlebar menu.
 - add: context menu entry to resend webxdc messages
 - add: context menu entry to resend self sent messages
 
 ### Changed
 - remove jitsi as a default Video Chat instance, because they added a sign-in requirement #3366
-- update deltachat-node and deltachat/jsonrpc-client to `v1.112.0`
+- update deltachat-node and deltachat/jsonrpc-client to `v1.120.0`
     - mainly bugfixes, also fixes a memory leak
 - Update translations (01.09.2023)
 - update UI for sticker selector
