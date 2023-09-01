@@ -19,7 +19,7 @@
 
 ### Changed
 - remove jitsi as a default Video Chat instance, because they added a sign-in requirement #3366
-- update deltachat-node and deltachat/jsonrpc-client to `v1.112.0`
+- update deltachat-node and deltachat/jsonrpc-client to `v1.120.0`
     - mainly bugfixes, also fixes a memory leak
 - Update translations (01.09.2023)
 - update UI for sticker selector
