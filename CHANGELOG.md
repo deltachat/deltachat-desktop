@@ -8,6 +8,7 @@
 ### Changed
 - remove jitsi as a default Video Chat instance, because they added a sign-in requirement #3366
 - update deltachat-node and deltachat/jsonrpc-client to `v1.119.1`
+- Update translations (01.09.2023)
 
 ### Fixed
 - fix: make a chat item background look hovered when a context menu is open for it (#3228)
