@@ -65,11 +65,8 @@
   "later": {
     "message": "Later"
   },
-  "no_stickers_yet": {
-    "message": "No stickers yet"
-  },
   "add_stickers_instructions": {
-    "message": "Add some using the button below."
+    "message": "To add stickers, press \"Open Sticker Folder\" and drag image and sticker files to that folder."
   },
   "open_sticker_folder": {
     "message": "Open Sticker Folder"

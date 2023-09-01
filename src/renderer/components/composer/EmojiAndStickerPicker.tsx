@@ -99,7 +99,6 @@ export const StickerPicker = ({
       ) : (
         <div className='sticker-container'>
           <div className='no-stickers'>
-            <h2 className='title'>{tx('no_stickers_yet')}</h2>
             <p className='description'>{tx('add_stickers_instructions')}</p>
             <button
               className='delta-button-round'

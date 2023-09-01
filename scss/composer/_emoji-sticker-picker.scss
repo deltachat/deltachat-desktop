@@ -102,6 +102,11 @@ $emojimart-search-height: 31px + 6px;
         justify-content: center;
         align-items: center;
         flex: 1;
+
+        & > .description {
+          font-size: large;
+          text-align: center;
+        }
       }
 
       .sticker-pack {
