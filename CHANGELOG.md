@@ -3,6 +3,16 @@
 ## [Unreleased][unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+<a id="1_40_1"></a>
+
+## [1.40.1] - 2023-09-01
+
+### Added
 - add: "always on top" option to webxdc titlebar menu.
 - add: context menu entry to resend webxdc messages
 - add: context menu entry to resend self sent messages
