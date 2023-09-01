@@ -14,6 +14,7 @@
 - Update translations (01.09.2023)
 
 ### Fixed
+- fix: filename sanitation bug in webxdc send api
 - fix: make a chat item background look hovered when a context menu is open for it (#3228)
 - fix: show webxdc titlebar also on mac -> make show sourcecode link accessible on macOS
 - fix: hide devtool option in webxdc titlebar menu when it is not enabled.

@@ -13,7 +13,7 @@ import { LogHandler } from './log-handler'
 import { ExtendedAppMainProcess } from './types'
 import * as mainWindow from './windows/main'
 import { openHelpWindow } from './windows/help'
-import path, { extname, join, posix, sep } from 'path'
+import path, { basename, extname, join, posix, sep } from 'path'
 import { DesktopSettings } from './desktop_settings'
 import { getConfigPath } from './application-constants'
 import { inspect } from 'util'
@@ -288,7 +288,7 @@ export async function writeTempFileFromBase64(
   content: string
 ): Promise<string> {
   await mkdir(getDraftTempDir(), { recursive: true })
-  const pathToFile = join(getDraftTempDir(), name)
+  const pathToFile = join(getDraftTempDir(), basename(name))
   log.debug(`Writing base64 encoded file ${pathToFile}`)
   await writeFile(pathToFile, Buffer.from(content, 'base64'), 'binary')
   return pathToFile
