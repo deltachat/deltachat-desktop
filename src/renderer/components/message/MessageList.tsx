@@ -6,13 +6,13 @@ import React, {
   useEffect,
   useState,
 } from 'react'
+import classNames from 'classnames'
 import { MessageWrapper } from './MessageWrapper'
 import ChatStore, {
   useChatStore,
   ChatStoreStateWithChatSet,
 } from '../../stores/chat'
 import { C } from '@deltachat/jsonrpc-client'
-import type { ChatTypes } from 'deltachat-node'
 import moment from 'moment'
 
 import { getLogger } from '../../../shared/logger'
@@ -24,6 +24,12 @@ import { useMessageList } from '../../stores/messagelist'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { debouncedUpdateBadgeCounter } from '../../system-integration/badge-counter'
 const log = getLogger('render/components/message/MessageList')
+
+type ChatTypes =
+  | C.DC_CHAT_TYPE_GROUP
+  | C.DC_CHAT_TYPE_MAILINGLIST
+  | C.DC_CHAT_TYPE_SINGLE
+  | C.DC_CHAT_TYPE_UNDEFINED
 
 const onWindowFocus = (accountId: number) => {
   log.debug('window focused')
@@ -579,14 +585,22 @@ function JumpDownButton({
   ) => Promise<void>
   jumpToMessageStack: number[]
 }) {
+  let countToShow: string = countUnreadMessages.toString()
+  if (countUnreadMessages > 99) {
+    countToShow = '99+'
+  }
+
   return (
     <>
       <div className='jump-down-button'>
         <div
-          className='counter'
+          className={classNames(
+            'counter',
+            countToShow.length === 3 && 'counter-3digits'
+          )}
           style={countUnreadMessages === 0 ? { visibility: 'hidden' } : {}}
         >
-          {countUnreadMessages}
+          {countToShow}
         </div>
         <div
           className='button'

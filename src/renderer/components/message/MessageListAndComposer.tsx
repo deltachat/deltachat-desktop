@@ -173,6 +173,9 @@ export default function MessageListAndComposer({
     ) {
       return
     }
+    if (!window.__hasOpenDialogs()) {
+      return
+    }
 
     e.preventDefault()
     e.stopPropagation()

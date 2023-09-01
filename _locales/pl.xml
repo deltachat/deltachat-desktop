@@ -31,6 +31,7 @@
     <string name="back">Wróć</string>
     <string name="verified">Zweryfikowano</string>
     <string name="close">Zamknij</string>
+    <string name="close_window">Zamknij okno</string>
     <string name="forward">Przekaż</string>
     <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
     <string name="resend">Wyślij ponownie</string>
@@ -443,6 +444,11 @@
     <string name="start_app">Uruchom…</string>
     <!-- this is a warning that is shown when one tries to send something to a chat that is not yet accepted. -->
     <string name="accept_request_first">Najpierw zaakceptuj prośbę o czat.</string>
+    <!-- title shown above a list of chats where one should be selected (eg. when sharing files from a webxdc). the placeholder will be replaced by a file name -->
+    <string name="send_file_to">Wyślij „%1$s” do…</string>
+    <!-- title shown above a list contacts where one should be selected (eg. when a webxdc attempts to send a message to a chat) -->
+    <string name="send_message_to">Wyślij wiadomość do…</string>
+
     <!-- map -->
     <string name="filter_map_on_time">Pokaż lokalizacje w ramach czasowych</string>
     <string name="show_location_traces">Pokaż ślady</string>

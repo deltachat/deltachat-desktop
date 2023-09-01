@@ -1,7 +1,7 @@
 import { BackendRemote } from './backend-com'
 
-export function updateDeviceChats(accountId: number) {
-  BackendRemote.rpc.addDeviceMessage(
+export async function updateDeviceChats(accountId: number) {
+  await BackendRemote.rpc.addDeviceMessage(
     accountId,
     'changelog-version-1.36.0-version1',
     `What's new in 1.36.0?
@@ -14,13 +14,13 @@ Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANG
   )
 
   const tx = window.static_translate
-  BackendRemote.rpc.addDeviceMessage(
+  await BackendRemote.rpc.addDeviceMessage(
     accountId,
     'changelog-version-1.36.0-audit',
     tx('update_1_36_audit', 'https://delta.chat/en/2023-05-22-webxdc-security')
   )
 
-  BackendRemote.rpc.addDeviceMessage(
+  await BackendRemote.rpc.addDeviceMessage(
     accountId,
     'changelog-version-1.38.0-version0',
     `What's new in 1.38.0?

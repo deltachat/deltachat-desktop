@@ -13,6 +13,7 @@ import { refreshTrayContextMenu } from '../tray'
 import { join } from 'path'
 import { DesktopSettings } from '../desktop_settings'
 import { Session } from 'electron/main'
+import { refresh as refreshTitleMenu } from '../menu'
 const log = getLogger('main/mainWindow')
 
 export let window: (BrowserWindow & { hidden?: boolean }) | null = null
@@ -96,6 +97,7 @@ export function init(options: { hidden: boolean }) {
   window.on('focus', () => {
     main_window.hidden = false
     refreshTrayContextMenu()
+    refreshTitleMenu()
   })
 
   const allowed_web_permissions = [
@@ -157,6 +159,10 @@ export function hide() {
 export function send(channel: string, ...args: any[]) {
   if (!window) {
     log.warn("window not defined, can't send ipc to renderer")
+    return
+  }
+  if (window.webContents.isDestroyed()) {
+    log.warn('window.webContents is destroyed. not sending message')
     return
   }
   try {

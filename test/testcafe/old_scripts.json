@@ -1,0 +1,5 @@
+{
+  "test-e2e-ci": "env NODE_ENV=test testcafe --skip-js-errors \"electron:./\" \"./test/testcafe/test.js\" && npm run test-e2e-msglist",
+  "test-e2e": "env NODE_ENV=test testcafe --skip-js-errors \"electron:./\" \"./test/testcafe/test.js\" && npm run test-e2e-msglist",
+  "test-e2e-msglist": " TEST_DIR=\".test_tmp_data\" NODE_ENV=test npx testcafe --skip-js-errors \"electron:./\" \"./test/testcafe/messagelist_tests.ts\" --compilerOptions.typescript.configPath=test/testcafe/tsconfig.json"
+}

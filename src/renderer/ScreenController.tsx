@@ -73,6 +73,7 @@ export default class ScreenController extends Component {
     window.__openDialog = this.openDialog.bind(this)
     window.__userFeedback = this.userFeedback.bind(this)
     window.__closeDialog = this.closeDialog.bind(this)
+    window.__hasOpenDialogs = this.hasOpenDialogs.bind(this)
     window.__changeScreen = this.changeScreen.bind(this)
     window.__selectAccount = this.selectAccount.bind(this)
     window.__screen = this.state.screen
@@ -221,6 +222,13 @@ export default class ScreenController extends Component {
     ActionEmitter.emitAction(KeybindAction.KeybindingCheatSheet_Open)
   }
 
+  hasOpenDialogs() {
+    if (!this.dialogController.current) {
+      throw new Error('dialog controller not ready')
+    }
+    return this.dialogController.current.hasOpenDialogs()
+  }
+
   openDialog(...args: Parameters<OpenDialogFunctionType>) {
     if (!this.dialogController.current) {
       throw new Error('dialog controller not ready')
@@ -235,11 +243,15 @@ export default class ScreenController extends Component {
     this.dialogController.current?.closeDialog(...args)
   }
 
-  openContextMenu(...args: Parameters<showFnType>) {
+  /** shows a context menu
+   * @returns a promise with no return value that gets resolved when the context menu disapears again
+   * regardless what action the user took or if they canceled the dialog
+   */
+  openContextMenu(...args: Parameters<showFnType>): Promise<void> {
     if (!this.contextMenuShowFn) {
       throw new Error('Context Menu Controller not available')
     }
-    this.contextMenuShowFn(...args)
+    return this.contextMenuShowFn(...args)
   }
 
   renderScreen() {

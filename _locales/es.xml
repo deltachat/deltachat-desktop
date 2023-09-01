@@ -50,7 +50,7 @@
     <string name="show_full_message">Mostrar mensaje completo…</string>
     <string name="show_full_message_in_browser">Mostrar mensaje completo en el navegador…</string>
     <!-- Stay short here, say ~16 characters. The source string could also be "All Read", maybe that hint can make translations easier :) -->
-    <string name="mark_all_as_read">Marcar todo leído</string>
+    <string name="mark_all_as_read">Marcar todo como leído</string>
     <!-- Shortest text for "Mark as being read". In english, this could be "Read" (past tense of "to read"), in german, this could be "Gelesen". -->
     <string name="mark_as_read_short">Leído</string>
     <!-- Placeholder text when something is loading -->
@@ -61,7 +61,7 @@
     <!-- Possible answers to the question are: Never, Always, Once -->
     <string name="load_remote_content_ask">Las imágenes remotas pueden ser usadas para seguirte.\n\nLa opción también permite cargar fuentes y otros contenidos. Inclusive si están deshabilitadas, quizás puedas ver imágenes embebidas o en caché.\n\n¿Cargar imágenes remotas?</string>
     <string name="always">Siempre</string>
-    <string name="always_load_remote_images">Cargar imágenes remotas siempre</string>
+    <string name="always_load_remote_images">Cargar siempre imágenes remotas</string>
     <string name="once">Una vez</string>
     <string name="show_warning">Mostrar advertencia</string>
     <string name="show_password">Mostrar contraseña</string>
@@ -428,6 +428,11 @@
     <string name="start_app">Iniciar…</string>
     <!-- this is a warning that is shown when one tries to send something to a chat that is not yet accepted. -->
     <string name="accept_request_first">Primero acepte la solicitud de chat.</string>
+    <!-- title shown above a list of chats where one should be selected (eg. when sharing files from a webxdc). the placeholder will be replaced by a file name -->
+    <string name="send_file_to">Enviar \"%1$s\" a…</string>
+    <!-- title shown above a list contacts where one should be selected (eg. when a webxdc attempts to send a message to a chat) -->
+    <string name="send_message_to">Enviar mensaje a…</string>
+
     <!-- map -->
     <string name="filter_map_on_time">Mostrar ubicaciones en el marco de tiempo</string>
     <string name="show_location_traces">Mostrar trazas</string>

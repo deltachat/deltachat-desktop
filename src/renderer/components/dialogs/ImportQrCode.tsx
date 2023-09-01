@@ -3,9 +3,11 @@ import DeltaDialog from './DeltaDialog'
 import { QrCodeScanQrInner } from './QrCode'
 
 export default function ImportQrCode({
+  subtitle,
   onClose,
   isOpen,
 }: {
+  subtitle: string
   onClose: () => void
   isOpen: boolean
 }) {
@@ -18,7 +20,7 @@ export default function ImportQrCode({
       onClose={onClose}
       showCloseButton={false}
     >
-      <QrCodeScanQrInner onClose={onClose} />
+      <QrCodeScanQrInner subtitle={subtitle} onClose={onClose} />
     </DeltaDialog>
   )
 }

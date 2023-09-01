@@ -411,8 +411,9 @@
     <string name="start_app">Fillo…</string>
     <!-- this is a warning that is shown when one tries to send something to a chat that is not yet accepted. -->
     <string name="accept_request_first">Ju lutemi, së pari pranoni kërkesën për fjalosje.</string>
-    <!-- placeholder will be replaced by a file name -->
+    <!-- title shown above a list of chats where one should be selected (eg. when sharing files from a webxdc). the placeholder will be replaced by a file name -->
     <string name="send_file_to">Dërgoni “%1$s” për …</string>
+    <!-- title shown above a list contacts where one should be selected (eg. when a webxdc attempts to send a message to a chat) -->
     <string name="send_message_to">Dërgoni Mesazh për…</string>
 
     <!-- map -->
@@ -1061,4 +1062,9 @@
     <string name="update_1_36_android">Gjëra në pah për 1.36\n\n💻📱 Përdoreni kollaj Delta Chat-in në krejt pajisjet tuaja - thjesht ndiqni tre hapa të thjeshtë te “Rregullime / Shtoni Pajisje të Dytë” (eksperimentale)\n\n🖼🔍 Ju ka qëlluar të kërkoni për një figurë dhe s’mbanit mend bisedën? “Krejt Mediat” prej menusë kryesorë është e juaja!\n\nPo tjetër? Njoftime për krejt llogaritë, spastrim fjalosjesh, etj, në %1$s</string>
     <!-- placeholder will be replaced by the URL https://delta.chat/en/2023-03-27-third-independent-security-audit -->
     <string name="update_1_36_audit">Këtu s’bisedojmë shumë mbi sigurinë, por jini të sigurt, kujdesemi për të: Shihni %1$s për lajme të reja të mbara 👌</string>
-    </resources>
+    <!-- placeholder will be replaced by the URL https://get.delta.chat/#changelogs -->
+    <string name="update_1_38_android">U hodh në qarkullim 1.38:\n\n📎 U hoq kufiri i sipërm për madhësi bashkëngjitjesh\n\n🗜️ Tanimë ngjishen edhe figurat PNG (foto ekrani!)\n\n⌨️ Për Zhvillues: Aplikacione më të mirë për fjalosje me sendToChat() dhe importFiles() (Çfarë është Webxdc? → https://webxdc.org)\n\n… dhe më tepër te %1$s</string>
+    <!-- placeholder will be replaced by the URL https://get.delta.chat/#changelogs -->
+    <string name="update_1_38_ios">U hodh në qarkullim 1.38:\n\n🖼🔍 Ju ka qëlluar të kërkoni për një figurë dhe të mos ju kujtohet fjalosja? Po qe kështu, butoni “Krejt Mediat” është për ju!\n\n🧹 “Spastro Fjalosje” prej profilesh\n\n📎 U hoq kufiri i sipërm për madhësi figurash\n\n🗜️ Tanimë ngjishen edhe figurat PNG (foto ekrani!)\n\n… dhe më tepër te %1$s</string>
+
+</resources>

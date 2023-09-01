@@ -31,6 +31,7 @@
     <string name="back">Geri</string>
     <string name="verified">Doğrulandı</string>
     <string name="close">Kapat</string>
+    <string name="close_window">Pencereyi Kapat</string>
     <string name="forward">İlet</string>
     <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
     <string name="resend">Yeniden Gönder</string>
@@ -40,7 +41,7 @@
     <string name="unarchive">Arşivleme</string>
     <string name="mute">Sessize Al</string>
     <string name="ephemeral_messages">Kaybolan İletiler</string>
-    <string name="ephemeral_messages_hint">Delta Chat\'i kullanıyorlarsa, bu sohbetin tüm üyelerine uygulanır; onlar hâlâ iletileri kopyalayabilir, kaydedebilir ve iletebilir ya da diğer e-posta istemcilerini kullanabilir.</string>
+    <string name="ephemeral_messages_hint">Onlar Delta Chat\'i kullanıyorsa, bu sohbetin tüm üyelerine uygulanır; onlar hâlâ iletileri kopyalayabilir, kaydedebilir ve iletebilir ya da diğer e-posta istemcilerini kullanabilir.</string>
     <string name="save">Kaydet</string>
     <string name="chat">Sohbet</string>
     <string name="media">Ortam</string>
@@ -303,19 +304,19 @@
     <string name="file_saved_to">Dosya \"%1$s\" üzerine kaydedildi.</string>
 
     <string name="videochat">Video Sohbeti</string>
-    <string name="videochat_invite_user_to_videochat">%1$s bir video sohbetine davet edilsin mi?</string>
+    <string name="videochat_invite_user_to_videochat">%1$s bir video sohbetine çağrılsın mı?</string>
     <string name="videochat_invite_user_hint">Bu, her iki uçta da uyumlu bir uygulama ya da tarayıcı gerektirir.</string>
-    <string name="videochat_contact_invited_hint">%1$s video sohbetine davet etti.</string>
-    <string name="videochat_you_invited_hint">Bir video sohbeti daveti gönderdiniz.</string>
+    <string name="videochat_contact_invited_hint">%1$s bir video sohbetine çağrıldı.</string>
+    <string name="videochat_you_invited_hint">Bir video sohbeti çağrısı gönderdiniz.</string>
     <string name="videochat_tap_to_join">Katılmak için Dokunun</string>
     <string name="videochat_tap_to_open">Açmak için Dokunun</string>
     <string name="videochat_instance">Video Sohbeti Örneği</string>
     <string name="videochat_instance_placeholder">Video Sohbeti Örneğiniz</string>
-    <string name="videochat_instance_example">Örnekler: https://meet.jit.si/$ROOM ya da basicwebrtc:https://your-server</string>
+    <string name="videochat_instance_example">Örnek: https://your-server.org/$ROOM</string>
     <string name="videochat_instance_explain_2">Etkinleştirilirse, her sohbetten video sohbeti başlatabilirsiniz. Her iki uçta da uyumlu bir uygulama ya da bir tarayıcı gerektirir.</string>
-    <string name="videochat_instance_from_qr">\"%1$s\" diğerlerini video sohbetlerine davet etmek için kullanılsın mı?\n\nBir kez ayarlandığında, her sohbetten video sohbeti başlatabilirsiniz. Bu, video sohbetleri için herhangi bir önceki ayarın yerini alır.</string>
-    <string name="videochat_invitation">Video sohbeti daveti</string>
-    <string name="videochat_invitation_body">Bir video sohbetine davet edildiniz; katılmak için %1$s öğesini tıklayın.</string>
+    <string name="videochat_instance_from_qr">\"%1$s\" diğerlerini video sohbetlerine çağırmak için kullanılsın mı?\n\nBir kez ayarlandığında, her sohbetten video sohbeti başlatabilirsiniz. Bu, video sohbetleri için herhangi bir önceki ayarın yerini alır.</string>
+    <string name="videochat_invitation">Video sohbeti çağrısı</string>
+    <string name="videochat_invitation_body">Bir video sohbetine çağrıldınız; katılmak için %1$s öğesini tıklayın.</string>
 
     <!-- get confirmations -->
     <string name="ask_leave_group">Bu gruptan ayrılmak istediğinizden emin misiniz?</string>
@@ -413,8 +414,9 @@
     <string name="start_app">Başlat…</string>
     <!-- this is a warning that is shown when one tries to send something to a chat that is not yet accepted. -->
     <string name="accept_request_first">Lütfen önce sohbet isteğini kabul edin.</string>
-    <!-- placeholder will be replaced by a file name -->
+    <!-- title shown above a list of chats where one should be selected (eg. when sharing files from a webxdc). the placeholder will be replaced by a file name -->
     <string name="send_file_to">\"%1$s\" dosyasını gönder…</string>
+    <!-- title shown above a list contacts where one should be selected (eg. when a webxdc attempts to send a message to a chat) -->
     <string name="send_message_to">İletiyi gönder…</string>
 
     <!-- map -->
@@ -487,7 +489,7 @@
     <string name="multidevice_receiver_title">İkinci Aygıt Olarak Ayarla</string>
     <string name="multidevice_open_settings_on_other_device">Birinci aygıtta “Ayarlar / İkinci Aygıt Ekle”ye gidin ve orada gösterilen kodu tarayın</string>
     <string name="multidevice_receiver_scanning_ask">Diğer aygıttan gelen hesap bu aygıta kopyalansın mı?</string>
-    <string name="multidevice_abort">İkinci aygıtı ayarlamaktan vazgeçilsin mi?</string>
+    <string name="multidevice_abort">İkinci aygıtı ayarlamadan vazgeçilsin mi?</string>
     <string name="multidevice_abort_will_invalidate_copied_qr">Bu, panoya kopyalanan QR kodunu geçersizleştirecek.</string>
     <string name="multidevice_experimental_hint">(deneysel, sürüm 1.36 gerekli)</string>
     <string name="multidevice_transfer_done_devicemsg">ℹ️ Hesap, ikinci aygıtınıza aktarıldı.</string>
@@ -528,7 +530,7 @@
 
     <!-- welcome and login -->
     <string name="welcome_chat_over_email">E-Posta Üzerinden Sohbet.</string>
-    <string name="scan_invitation_code">Davet Kodunu Tara</string>
+    <string name="scan_invitation_code">Çağrı Kodunu Tara</string>
     <string name="welcome_intro1_message">Dünyanın en geniş kitleli ulağı. Özgür ve bağımsız.</string>
     <string name="login_title">Giriş Yap</string>
     <string name="login_header">E-Posta Hesabınıza Giriş Yapın</string>
@@ -614,7 +616,7 @@
     <string name="pref_vibrate">Titret</string>
     <string name="pref_screen_security">Ekran Güvenliği</string>
     <!-- Translators: Must indicate that there is no guarantee as the system may not honor our request. -->
-    <string name="pref_screen_security_explain">Yeni listesinde ve uygulamanın içinde ekran görüntülerinin engellenmesini iste</string>
+    <string name="pref_screen_security_explain">En son listesinde ve uygulamanın içinde ekran görüntülerinin engellenmesini iste</string>
     <string name="pref_screen_security_please_restart_hint">Ekran güvenliği ayarını uygulamak için lütfen uygulamayı yeniden başlatın.</string>
     <string name="pref_notifications">Bildirimler</string>
     <string name="pref_notifications_show">Göster</string>
@@ -811,7 +813,7 @@
     <string name="ephemeral_timer_1_day_by_other">%1$s tarafından kaybolan iletiler zamanlayıcısı 1 gün olarak ayarlandı.</string>
     <string name="ephemeral_timer_1_week_by_you">Kaybolan iletiler zamanlayıcısını 1 hafta olarak ayarladınız.</string>
     <!-- %1$s will be replaced by name and address of the contact -->
-    <string name="ephemeral_timer_1_week_by_other">%1$s tarafından kaybolan iletiler zamanlayıcısı 1 gün olarak ayarlandı.</string>
+    <string name="ephemeral_timer_1_week_by_other">%1$s tarafından kaybolan iletiler zamanlayıcısı 1 hafta olarak ayarlandı.</string>
     <!-- %1$s will be replaced by the number of minutes (always >1) the timer is set to -->
     <string name="ephemeral_timer_minutes_by_you">Kaybolan iletiler zamanlayıcısını %1$s dakika olarak ayarladınız.</string>
     <!-- %1$s will be replaced by the number of minutes (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
@@ -865,14 +867,14 @@
     <!-- "could" in the meaning of "possible at some point in the past, but no longer possible today" -->
     <string name="revive_verifygroup_explain">Bu QR kodu, \"%1$s\" grubuna katılmak için diğerleri tarafından taranmış olabilir.\n\nQR kodu bu aygıtta etkin değil.</string>
     <string name="revive_qr_code">QR Kodunu Etkinleştir</string>
-    <string name="qrshow_title">QR Davet Kodu</string>
+    <string name="qrshow_title">QR Çağrı Kodu</string>
     <string name="qrshow_x_joining">%1$s katılıyor.</string>
     <string name="qrshow_x_verified">%1$s doğrulandı.</string>
     <string name="qrshow_x_has_joined_group">%1$s gruba katıldı.</string>
-    <string name="qrshow_join_group_title">QR Davet Kodu</string>
+    <string name="qrshow_join_group_title">QR Çağrı Kodu</string>
     <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by the group name, eg. "Scan to join group \"Testing group\"" -->
     <string name="qrshow_join_group_hint">\"%1$s\" grubuna katılmak için bunu tarayın</string>
-    <string name="qrshow_join_contact_title">QR Davet Kodu</string>
+    <string name="qrshow_join_contact_title">QR Çağrı Kodu</string>
     <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and address eg. "Scan to chat with Alice (alice@example.org)" -->
     <string name="qrshow_join_contact_hint">%1$s ile sohbet etmek için bunu tarayın</string>
     <string name="qrshow_join_contact_no_connection_toast">Internet bağlantısı yok; QR kodu ayarlaması gerçekleştirilemiyor.</string>
@@ -886,7 +888,7 @@
     <!-- the placeholder will be replaced by the e-mail address of the account -->
     <string name="qrlogin_ask_login_another">\"%1$s\" adresine giriş yapılsın mı?\n\nVarolan hesabınız silinmeyecek. Hesaplarınız arasında geçiş yapmak için \"Hesabı Değiştir\" öğesini kullanın.</string>
     <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
-    <string name="secure_join_started">%1$s sizi bu gruba katılmaya davet etti.\n\n%2$s kişisinin aygıtının yanıt vermesi bekleniyor…</string>
+    <string name="secure_join_started">%1$s sizi bu gruba katılmaya çağırdı.\n\n%2$s kişisinin aygıtının yanıt vermesi bekleniyor…</string>
     <!-- placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_replies">%1$s yanıtladı; gruba eklenmesi bekleniyor…</string>
     <string name="contact_verified">%1$s doğrulandı.</string>
@@ -1069,6 +1071,6 @@
     <!-- placeholder will be replaced by the URL https://get.delta.chat/#changelogs -->
     <string name="update_1_38_android">1.38 çıktı:\n\n📎 İlişiklerin daha yüksek boyut sınırlaması kaldırıldı\n\n🗜️ PNG görselleri (ekran görüntüleri!) de artık sıkıştırılıyor\n\n⌨️ Geliştiriciler için: Sohbetler için sendToChat() ve importFiles() ile uygulamalar (Webxdc nedir? → https://webxdc.org) daha iyi\n\n… ve daha fazlası için %1$s</string>
     <!-- placeholder will be replaced by the URL https://get.delta.chat/#changelogs -->
-    <string name="update_1_38_ios">1.38 çıktı:\n\n🖼🔍 Hiç bir görseli ararken sohbeti anımsayamadığınız oldu mu? Öyleyse \"Tüm Ortamlar\" düğmesi sizin!\n\n🧹 Profillerden \"Sohbeti Temizle\"\n\n📎 İlişiklerin daha yüksek boyut sınırlaması kaldırıldı\n\n🗜️ PNG görselleri (ekran görüntüleri!) de artık sıkıştırılıyor\n\n… ve daha fazlası için 1%1$s</string>
+    <string name="update_1_38_ios">1.38 çıktı:\n\n🖼🔍 Hiç bir görseli ararken sohbeti anımsayamadığınız oldu mu? Öyleyse \"Tüm Ortamlar\" düğmesi sizin!\n\n🧹 Profillerden \"Sohbeti Temizle\"\n\n📎 İlişiklerin daha yüksek boyut sınırlaması kaldırıldı\n\n🗜️ PNG görselleri (ekran görüntüleri!) de artık sıkıştırılıyor\n\n… ve daha fazlası için %1$s</string>
 
 </resources>

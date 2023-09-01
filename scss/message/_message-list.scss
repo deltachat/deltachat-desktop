@@ -36,8 +36,12 @@
       background-color: var(--colorPrimary);
       color: #fff;
       line-height: 25px;
-      font-size: 15px;
+      font-size: 13px;
       text-align: center;
+    }
+
+    .counter-3digits {
+      font-size: 11px !important;
     }
 
     .button {

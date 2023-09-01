@@ -130,14 +130,14 @@ export default function ChatList(props: {
     showArchivedChats
   )
 
-  const openContextMenu = useChatListContextMenu()
+  const { openContextMenu, activeContextMenuChatId } = useChatListContextMenu()
 
   const addContactOnClick = async () => {
     if (!queryStrIsValidEmail || !queryStr) return
 
     const contactId = await BackendRemote.rpc.createContact(
       selectedAccountId(),
-      queryStr,
+      queryStr.trim(),
       null
     )
     await createChatByContactIdAndSelectIt(contactId)
@@ -262,8 +262,16 @@ export default function ChatList(props: {
       chatCache,
       onChatClick,
       openContextMenu,
+      activeContextMenuChatId,
     }
-  }, [selectedChatId, chatListIds, chatCache, onChatClick, openContextMenu])
+  }, [
+    selectedChatId,
+    chatListIds,
+    chatCache,
+    onChatClick,
+    openContextMenu,
+    activeContextMenuChatId,
+  ])
 
   const contactlistData = useMemo(() => {
     return {
@@ -398,7 +406,7 @@ export default function ChatList(props: {
                     queryStrIsValidEmail && (
                       <div style={{ width: width }}>
                         <PseudoListItemAddContact
-                          queryStr={queryStr || ''}
+                          queryStr={queryStr?.trim() || ''}
                           queryStrIsEmail={queryStrIsValidEmail}
                           onClick={addContactOnClick}
                         />

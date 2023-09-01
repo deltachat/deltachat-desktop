@@ -9,19 +9,37 @@
   let callback = null
   var last_serial = 0
   let setUpdateListenerPromise = null
+  let is_running = false
+  let scheduled = false
+  const innerOnStatusUpdate = async () => {
+    const updates = JSON.parse(
+      await ipcRenderer.invoke('webxdc.getAllUpdates', last_serial)
+    )
+    for (let update of updates) {
+      last_serial = update.max_serial
+      callback(update)
+    }
+    if (setUpdateListenerPromise) {
+      setUpdateListenerPromise()
+      setUpdateListenerPromise = null
+    }
+  }
+
   const onStatusUpdate = async () => {
+    if (is_running) {
+      scheduled = true
+      return
+    }
+    is_running = true
     if (callback) {
-      const updates = JSON.parse(
-        await ipcRenderer.invoke('webxdc.getAllUpdates', last_serial)
-      )
-      for (let update of updates) {
-        last_serial = update.serial
-        callback(update)
-      }
-      if (setUpdateListenerPromise) {
-        setUpdateListenerPromise()
-        setUpdateListenerPromise = null
-      }
+      await innerOnStatusUpdate()
+    }
+    if (scheduled) {
+      scheduled = false
+      await onStatusUpdate()
+      is_running = false
+    } else {
+      is_running = false
     }
   }
   ipcRenderer.on('webxdc.statusUpdate', _ev => {
@@ -232,4 +250,21 @@
       frame.contentWindow.window.addEventListener('keydown', keydown_handler)
     else console.log('attaching F12 handler failed, frame not found')
   }
+
+  contextBridge.exposeInMainWorld('webxdc_custom', {
+    /**
+     *
+     * @param {string} file_name
+     * @param {string} base64_content
+     * @param {string | undefined} icon_data_url
+     */
+    desktopDragFileOut: (file_name, base64_content, icon_data_url) => {
+      ipcRenderer.invoke(
+        'webxdc:custom:drag-file-out',
+        file_name,
+        base64_content,
+        icon_data_url
+      )
+    },
+  })
 })()

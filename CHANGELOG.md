@@ -2,6 +2,74 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- add: "always on top" option to webxdc titlebar menu.
+- add: context menu entry to resend webxdc messages
+- add: context menu entry to resend self sent messages
+
+### Changed
+- remove jitsi as a default Video Chat instance, because they added a sign-in requirement #3366
+- update deltachat-node and deltachat/jsonrpc-client to `v1.112.0`
+    - mainly bugfixes, also fixes a memory leak
+- Update translations (01.09.2023)
+
+### Fixed
+- fix: filename sanitation bug in webxdc send api
+- fix: make a chat item background look hovered when a context menu is open for it (#3228)
+- fix: show webxdc titlebar also on mac -> make show sourcecode link accessible on macOS
+- fix: hide devtool option in webxdc titlebar menu when it is not enabled.
+- fix: remove reload options that don't work from webxdc titlebar menu.
+- fix: contact creation in new chat dialog not working with leading or trailing spaces. #3357
+
+
+<a id="1_40_0"></a>
+
+## [1.40.0] - 2023-08-13
+
+### Changed
+- update `@deltachat/message_parser_wasm` to `0.6.0`, which fixes 2 bugs:
+ - Fixed problem of IPv6 links being detected as punycode
+ - Fixed the bug of brackets being parsed as part of the email address
+
+### Fixed
+- fix missing translation string in setup second device progress dialog
+- fix device message ordering
+
+
+<a id="1_39_0"></a>
+
+## [1.39.0] - 2023-08-05
+### Added
+- Guide user tapping "Welcome / Add Second Device" what to do on the other device
+- add: `webxdc_custom.desktopDragFileOut` api
+
+### Changed
+- Update translations (01.07.2023)
+- Update offline help
+- changed: make verified icon green
+- use filename property for saving files (see #3330 for details)
+- update deltachat-node and deltachat/jsonrpc-client to `v1.119.0`
+
+### Fixed
+- fix: clicking start on an already open webxdc app now opens it again even when it was minimised #3294
+- fix: Including whitespace in search query does not cause problem when if the search query is an email address(#3299)
+- fix: text is now smaller in the unread badge on the top of the jump down button(#3068)
+- fix: links in quoted texts should not be clickable (#3290)
+- fix: move "Sync All" switch in Account List to bottom (#2963)
+- fix: fix duplicated status updates race condition bug in webxdc #3296
+- fix: remove unsupported language code, this broke the installation from the ms store on windows #3292
+- fix: show edit button if a contact's profile is shown from group view(#3267)
+- fix: Proper description for Linux packages(#3209)
+- fix: When opening new chat dialogue, it's always focused(#3286)
+- fix: No draft is saved if the message contains only whitespace(#3220)
+- fix: webxdc CSP allow media from `blob:` and `data:`
+- fix: Fix colour of clock icon in ViewProfile dialogue (#3329)
+- fix: Center the "no media" text in Gallery
+- fix: The media fullscreen screen is now always closed using Esc key(#2919)
+- fix: Fix problem of crashing Delta Chat when it can't write to standard output (#3323)
+- fix: Fix problem of returning exception on quit (#2201)
+- fix: same icon size in navbar as in chatlist
+
 <a id="1_38_1"></a>
 
 ## [1.38.1] - 2023-06-23
@@ -2055,7 +2123,11 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.38.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.0...HEAD
+
+[1.39.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.39.0...v1.40.0
+
+[1.39.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.38.1...v1.39.0
 
 [1.38.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.38.0...v1.38.1
 
