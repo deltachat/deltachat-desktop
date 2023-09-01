@@ -272,7 +272,7 @@ export default class DCWebxdc extends SplitOut {
               label: tx('global_menu_file_desktop'),
               submenu: [
                 {
-                  label: tx('global_menu_file_close_webxdc_window'),
+                  label: tx('close_window'),
                   click: () => {
                     webxdc_windows.close()
                   },
