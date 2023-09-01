@@ -1,6 +1,7 @@
 $esp-height: 70vh;
 $esp-header-height: 40px;
 $esp-footer-height: 30px;
+$esp-border-color: #00000017;
 $emojimart-search-height: 31px + 6px;
 
 .emoji-sticker-picker {
@@ -13,11 +14,11 @@ $emojimart-search-height: 31px + 6px;
   background-color: var(--emojiStickerPicker-Background);
   border-radius: var(--emojiStickerPicker-BorderRadius);
   overflow: hidden;
-  box-shadow: 0px 0px 0px 1px #00000017;
+  box-shadow: 0px 0px 0px 1px $esp-border-color;
 
   div.emoji-or-sticker-header-nav {
     width: 100%;
-    height: calc(#{$esp-header-height} + 1px);
+    height: $esp-header-height;
     display: flex;
     border-bottom: 1px solid #00000017;
 
@@ -84,16 +85,33 @@ $emojimart-search-height: 31px + 6px;
   div.sticker-picker {
     background: var(--emojiMartBg);
     width: 100%;
-    margin-top: -1px;
-    overflow: overlay;
+    display: flex;
+    overflow: auto;
+    flex-direction: column;
 
     .sticker-container {
-      padding: 0px 6px;
-      overflow-y: scroll;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      padding: 0px 12px 12px;
+      overflow-y: auto;
+
+      .no-stickers {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+
+        & > .description {
+          font-size: large;
+          text-align: center;
+        }
+      }
 
       .sticker-pack {
         & > .title {
-          padding: 5px 6px;
+          padding: 8px 0px;
           color: grey;
           font-size: large;
           font-weight: 500;
@@ -101,25 +119,30 @@ $emojimart-search-height: 31px + 6px;
           font-family: $roboto;
           font-size: 16px;
           font-weight: 500;
-          height: 28px;
-          line-height: 18.4px;
+          position: sticky;
+          top: -1px;
+          background-color: var(--emojiStickerPicker-Background);
         }
         & > .container {
           display: flex;
           flex-wrap: wrap;
           justify-content: space-between;
-          margin: 5px 0px;
 
           & > .sticker {
             display: flex;
             justify-content: center;
             width: 133px;
             height: 133px;
-            margin: 5px 0px;
-            padding: 3px;
             border-radius: 4px;
 
-            &:hover {
+            align-items: center;
+            padding: 0;
+            margin: 0;
+            background-color: transparent;
+            border-color: transparent;
+
+            &:hover,
+            &:focus {
               background-color: lightgrey;
               cursor: pointer;
             }
@@ -132,6 +155,11 @@ $emojimart-search-height: 31px + 6px;
           }
         }
       }
+    }
+
+    .sticker-actions-container {
+      border-top: 1px solid $esp-border-color;
+      padding: 0px 12px;
     }
   }
 }

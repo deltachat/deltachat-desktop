@@ -12,6 +12,7 @@
 - update deltachat-node and deltachat/jsonrpc-client to `v1.112.0`
     - mainly bugfixes, also fixes a memory leak
 - Update translations (01.09.2023)
+- update UI for sticker selector
 
 ### Fixed
 - fix: filename sanitation bug in webxdc send api

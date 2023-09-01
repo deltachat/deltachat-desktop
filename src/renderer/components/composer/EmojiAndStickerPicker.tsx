@@ -15,18 +15,17 @@ import Picker from '@emoji-mart/react'
 import type { EmojiData } from 'emoji-mart/index'
 import { useThemeCssVar } from '../../ThemeManager'
 
-export const StickerDiv = (props: {
+const DisplayedStickerPack = ({
+  stickerPackName,
+  stickerPackImages,
+  chatId,
+  setShowEmojiPicker,
+}: {
   stickerPackName: string
   stickerPackImages: string[]
   chatId: number
   setShowEmojiPicker: (enabled: boolean) => void
 }) => {
-  const {
-    stickerPackName,
-    stickerPackImages,
-    chatId,
-    setShowEmojiPicker,
-  } = props
   const onClickSticker = (fileName: string) => {
     const stickerPath = fileName.replace('file://', '')
     BackendRemote.rpc
@@ -39,27 +38,30 @@ export const StickerDiv = (props: {
     <div className='sticker-pack'>
       <div className='title'>{stickerPackName}</div>
       <div className='container'>
-        {stickerPackImages.map((filePath, index) => {
-          return (
-            <div className='sticker' key={index}>
-              <img
-                src={filePath}
-                onClick={onClickSticker.bind(null, filePath)}
-              />
-            </div>
-          )
-        })}
+        {stickerPackImages.map((filePath, index) => (
+          <button
+            className='sticker'
+            key={index}
+            onClick={() => onClickSticker(filePath)}
+          >
+            <img src={filePath} />
+          </button>
+        ))}
       </div>
     </div>
   )
 }
 
-export const StickerPicker = (props: {
+export const StickerPicker = ({
+  stickers,
+  chatId,
+  setShowEmojiPicker,
+}: {
   stickers: { [key: string]: string[] }
   chatId: number
   setShowEmojiPicker: (enabled: boolean) => void
 }) => {
-  const { stickers, chatId, setShowEmojiPicker } = props
+  const tx = useTranslationFunction()
 
   const onOpenStickerFolder = async () => {
     const folder = await BackendRemote.rpc.miscGetStickerFolder(
@@ -68,22 +70,45 @@ export const StickerPicker = (props: {
     runtime.openPath(folder)
   }
 
+  const stickerPackNames = Object.keys(stickers)
+
   return (
     <div className='sticker-picker'>
-      <button onClick={onOpenStickerFolder}>Open Sticker Folder</button>
-      <div className='sticker-container'>
-        {Object.keys(stickers).map(stickerPackName => {
-          return (
-            <StickerDiv
-              chatId={chatId}
-              key={stickerPackName}
-              stickerPackName={stickerPackName}
-              stickerPackImages={stickers[stickerPackName]}
-              setShowEmojiPicker={setShowEmojiPicker}
-            />
-          )
-        })}
-      </div>
+      {stickerPackNames.length > 0 ? (
+        <>
+          <div className='sticker-container'>
+            {stickerPackNames.map(name => (
+              <DisplayedStickerPack
+                chatId={chatId}
+                key={name}
+                stickerPackName={name}
+                stickerPackImages={stickers[name]}
+                setShowEmojiPicker={setShowEmojiPicker}
+              />
+            ))}
+          </div>
+          <div className='sticker-actions-container'>
+            <button
+              className='delta-button-round secondary'
+              onClick={onOpenStickerFolder}
+            >
+              {tx('open_sticker_folder')}
+            </button>
+          </div>
+        </>
+      ) : (
+        <div className='sticker-container'>
+          <div className='no-stickers'>
+            <p className='description'>{tx('add_stickers_instructions')}</p>
+            <button
+              className='delta-button-round'
+              onClick={onOpenStickerFolder}
+            >
+              {tx('open_sticker_folder')}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
