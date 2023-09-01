@@ -66,7 +66,7 @@
     "message": "Later"
   },
   "add_stickers_instructions": {
-    "message": "To add stickers, press \"Open Sticker Folder\" and drag image and sticker files to that folder."
+    "message": "To add stickers, tap \"Open Sticker Folder\", create a subfolder for your sticker pack, and drag image and sticker files there"
   },
   "open_sticker_folder": {
     "message": "Open Sticker Folder"
