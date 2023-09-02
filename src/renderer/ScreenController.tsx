@@ -166,7 +166,7 @@ export default class ScreenController extends Component {
     }
 
     runtime.onOpenQrUrl = processOpenQrUrl
-    runtime.onWebxcSendToChat = (file, text) => {
+    runtime.onWebxdcSendToChat = (file, text) => {
       if (this.openSendToDialogId) {
         this.closeDialog(this.openSendToDialogId)
         this.openSendToDialogId = undefined
