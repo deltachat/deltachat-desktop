@@ -132,7 +132,7 @@ interface Runtime {
     | ((kind: 'about' | 'keybindings' | 'settings') => void)
     | undefined
   onOpenQrUrl: ((url: string) => void) | undefined
-  onWebxcSendToChat:
+  onWebxdcSendToChat:
     | ((
         file: { file_name: string; file_content: string } | null,
         text: string | null
@@ -149,7 +149,7 @@ class Browser implements Runtime {
     | ((kind: 'about' | 'keybindings' | 'settings') => void)
     | undefined
   onOpenQrUrl: ((url: string) => void) | undefined
-  onWebxcSendToChat:
+  onWebxdcSendToChat:
     | ((
         file: { file_name: string; file_content: string } | null,
         text: string | null
@@ -322,7 +322,7 @@ class Browser implements Runtime {
 }
 class Electron implements Runtime {
   onResumeFromSleep: (() => void) | undefined
-  onWebxcSendToChat:
+  onWebxdcSendToChat:
     | ((
         file: { file_name: string; file_content: string } | null,
         text: string | null
@@ -554,7 +554,7 @@ class Electron implements Runtime {
         _ev,
         file: { file_name: string; file_content: string } | null,
         text: string | null
-      ) => this.onWebxcSendToChat?.(file, text)
+      ) => this.onWebxdcSendToChat?.(file, text)
     )
     ipcBackend.on('onResumeFromSleep', () => this.onResumeFromSleep?.())
   }
