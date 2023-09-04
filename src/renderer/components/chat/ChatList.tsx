@@ -430,7 +430,6 @@ export default function ChatList(props: {
                 className='floating-action-button'
                 onClick={onCreateChat}
                 id='new-chat-button'
-                style={{ left: width - 65 }}
               >
                 <div
                   className='Icon'
