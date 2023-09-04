@@ -99,6 +99,10 @@ export function ExperimentalFeatures({ settingsStore }: Props) {
       >
         {tx('videochat')}
       </SettingsSelector>
+      <DesktopSettingsSwitch
+        settingsKey='hideAccountsSidebar'
+        label='Hide Accounts sidebar'
+      />
     </>
   )
 }

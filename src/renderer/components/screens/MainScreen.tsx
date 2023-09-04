@@ -246,7 +246,7 @@ export default function MainScreen() {
   return (
     <div className='main-screen'>
       <div className='navbar-wrapper'>
-        <Navbar fixedToTop>
+        <Navbar>
           <NavbarGroup align={Alignment.LEFT}>
             <div
               className='sidebar-icon'

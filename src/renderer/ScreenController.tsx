@@ -20,6 +20,7 @@ import About from './components/dialogs/About'
 import { KeybindingsContextProvider } from './contexts/KeybindingsContext'
 import { DialogContext } from './contexts/DialogContext'
 import WebxdcSaveToChatDialog from './components/dialogs/WebxdcSendToChat'
+import { AccountListSidebar } from './components/screens/AccountListSidebar'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -76,8 +77,7 @@ export default class ScreenController extends Component {
       if (allAccountIds && allAccountIds.length > 0) {
         this.changeScreen(Screens.AccountList)
       } else {
-        const accountId = await BackendRemote.rpc.addAccount()
-        await this.selectAccount(accountId)
+        await this.addAndSelectAccount()
       }
     }
   }
@@ -119,6 +119,13 @@ export default class ScreenController extends Component {
     runtime.setDesktopSetting('lastAccount', accountId)
     log.info('system_info', await BackendRemote.rpc.getSystemInfo())
     log.info('account_info', await BackendRemote.rpc.getInfo(accountId))
+  }
+
+  async addAndSelectAccount(): Promise<number> {
+    const accountId = await BackendRemote.rpc.addAccount()
+    updateDeviceChats(accountId, true) // skip changelog
+    await this.selectAccount(accountId)
+    return accountId
   }
 
   userFeedback(message: userFeedback | false) {
@@ -239,11 +246,7 @@ export default class ScreenController extends Component {
           <AccountListScreen
             {...{
               selectAccount: this.selectAccount,
-              onAddAccount: async () => {
-                const accountId = await BackendRemote.rpc.addAccount()
-                updateDeviceChats(accountId, true) // skip changelog
-                await this.selectAccount(accountId)
-              },
+              onAddAccount: this.addAndSelectAccount.bind(this),
             }}
           />
         )
@@ -272,6 +275,11 @@ export default class ScreenController extends Component {
         >
           <KeybindingsContextProvider>
             {this.renderScreen()}
+            <AccountListSidebar
+              selectedAccountId={this.selectedAccountId}
+              onAddAccount={this.addAndSelectAccount.bind(this)}
+              onSelectAccount={this.selectAccount.bind(this)}
+            />
           </KeybindingsContextProvider>
         </ScreenContext.Provider>
       </div>
