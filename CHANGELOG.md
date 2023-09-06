@@ -5,6 +5,7 @@
 ### Added
 
 ### Changed
+- update electron from `v22.3.2` to version `v22.3.23`
 
 ### Fixed
 
