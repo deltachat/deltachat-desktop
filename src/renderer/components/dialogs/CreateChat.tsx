@@ -65,7 +65,9 @@ export default function CreateChat(props: {
     C.DC_GCL_ADD_SELF,
     ''
   )
-  const [queryStr, onSearchChange, _, refreshContacts] = useContactSearch(updateContacts)
+  const [queryStr, onSearchChange, _, refreshContacts] = useContactSearch(
+    updateContacts
+  )
 
   const chooseContact = async ({ id }: Type.Contact) => {
     try {
@@ -142,7 +144,10 @@ export default function CreateChat(props: {
       message: tx('ask_delete_contact', contact.address),
       confirmLabel: tx('delete'),
       cb: yes => {
-        yes && BackendRemote.rpc.deleteContact(accountId, contact.id).then(refreshContacts)
+        yes &&
+          BackendRemote.rpc
+            .deleteContact(accountId, contact.id)
+            .then(refreshContacts)
       },
     })
   }
@@ -212,7 +217,7 @@ export function useContactSearch(
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     updateSearch(e.target.value)
 
-  const refresh = ()=>updateContacts(searchString)
+  const refresh = () => updateContacts(searchString)
 
   return [searchString, onSearchChange, updateSearch, refresh] as [
     searchString: string,

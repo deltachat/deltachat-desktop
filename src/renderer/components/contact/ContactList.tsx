@@ -26,7 +26,7 @@ export function ContactList2(props: {
     showRemove,
     onRemoveClick,
     disabledContacts,
-    onContactContextMenu
+    onContactContextMenu,
   } = props
   return (
     <div>
@@ -48,7 +48,7 @@ export function ContactList2(props: {
           showRemove: showRemove || false,
           onRemoveClick,
           disabled,
-          onContextMenu: onContactContextMenu?.bind(null, contact)
+          onContextMenu: onContactContextMenu?.bind(null, contact),
         })
       })}
     </div>

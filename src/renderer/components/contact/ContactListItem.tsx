@@ -53,7 +53,7 @@ export function ContactListItem(props: {
     checked,
     showRemove,
     disabled,
-    onContextMenu
+    onContextMenu,
   } = props
   const onCheckboxClick = (e?: React.SyntheticEvent) => {
     if (disabled) return
