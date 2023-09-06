@@ -133,7 +133,7 @@ export function init(options: { hidden: boolean }) {
     }
   }
   window.webContents.session.setPermissionCheckHandler((_wc, permission) => {
-    if (systemPreferences.getMediaAccessStatus && permission === 'camera') {
+    if (systemPreferences.getMediaAccessStatus && permission === 'media') {
       return systemPreferences.getMediaAccessStatus('camera') === 'granted'
     }
     // if (systemPreferences.getMediaAccessStatus && permission === "microphone") {
