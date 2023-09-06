@@ -6,6 +6,7 @@
 
 ### Changed
 - update `@deltachat/message_parser_wasm` to `0.7.0`, which adds support for unicode #hashtags
+- update electron from `v22.3.2` to version `v22.3.23`
 
 ### Fixed
 
