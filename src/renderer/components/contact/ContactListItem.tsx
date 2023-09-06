@@ -44,6 +44,7 @@ export function ContactListItem(props: {
   onCheckboxClick?: (contact: Type.Contact) => void
   onRemoveClick?: (contact: Type.Contact) => void
   disabled?: boolean
+  onContextMenu?: () => void
 }) {
   const {
     contact,
@@ -52,6 +53,7 @@ export function ContactListItem(props: {
     checked,
     showRemove,
     disabled,
+    onContextMenu
   } = props
   const onCheckboxClick = (e?: React.SyntheticEvent) => {
     if (disabled) return
@@ -75,6 +77,7 @@ export function ContactListItem(props: {
         onClick && onClick(contact)
         onCheckboxClick()
       }}
+      onContextMenu={onContextMenu}
     >
       <div style={{ width: '100%' }}>
         <Contact contact={contact} />

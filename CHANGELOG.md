@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- option to delete contacts in list when creating a new chat
 
 ### Changed
 
