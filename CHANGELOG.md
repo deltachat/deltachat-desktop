@@ -5,6 +5,7 @@
 ### Added
 
 ### Changed
+- update `@deltachat/message_parser_wasm` to `0.7.0`, which adds support for unicode #hashtags
 
 ### Fixed
 
