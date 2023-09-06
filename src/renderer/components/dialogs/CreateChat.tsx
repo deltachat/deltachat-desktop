@@ -49,6 +49,7 @@ import { useSettingsStore } from '../../stores/settings'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
+import ConfirmationDialog from './ConfirmationDialog'
 
 export default function CreateChat(props: {
   isOpen: DialogProps['isOpen']
@@ -56,14 +57,17 @@ export default function CreateChat(props: {
 }) {
   const { isOpen, onClose } = props
   const tx = useTranslationFunction()
-  const { userFeedback } = useContext(ScreenContext)
+  const { userFeedback, openDialog } = useContext(ScreenContext)
   const [viewMode, setViewMode] = useState('main')
+  const accountId = selectedAccountId()
 
   const [{ contacts, queryStrIsValidEmail }, updateContacts] = useContactsNew(
     C.DC_GCL_ADD_SELF,
     ''
   )
-  const [queryStr, onSearchChange] = useContactSearch(updateContacts)
+  const [queryStr, onSearchChange, _, refreshContacts] = useContactSearch(
+    updateContacts
+  )
 
   const chooseContact = async ({ id }: Type.Contact) => {
     try {
@@ -135,6 +139,19 @@ export default function CreateChat(props: {
     )
   }
 
+  const onContactContextMenu = (contact: Type.Contact) => {
+    openDialog(ConfirmationDialog, {
+      message: tx('ask_delete_contact', contact.address),
+      confirmLabel: tx('delete'),
+      cb: yes => {
+        yes &&
+          BackendRemote.rpc
+            .deleteContact(accountId, contact.id)
+            .then(refreshContacts)
+      },
+    })
+  }
+
   return (
     <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
       {viewMode.startsWith('main') && (
@@ -153,7 +170,11 @@ export default function CreateChat(props: {
             <Card>
               <div className='create-chat-contact-list-wrapper'>
                 {renderAddGroupIfNeeded()}
-                <ContactList2 contacts={contacts} onClick={chooseContact} />
+                <ContactList2
+                  contacts={contacts}
+                  onClick={chooseContact}
+                  onContactContextMenu={onContactContextMenu}
+                />
                 {renderAddContactIfNeeded()}
               </div>
             </Card>
@@ -196,10 +217,13 @@ export function useContactSearch(
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     updateSearch(e.target.value)
 
-  return [searchString, onSearchChange, updateSearch] as [
-    string,
-    typeof onSearchChange,
-    typeof updateSearch
+  const refresh = () => updateContacts(searchString)
+
+  return [searchString, onSearchChange, updateSearch, refresh] as [
+    searchString: string,
+    onSearchChange: typeof onSearchChange,
+    updateSearch: typeof updateSearch,
+    refresh: typeof refresh
   ]
 }
 

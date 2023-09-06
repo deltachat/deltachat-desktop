@@ -15,6 +15,7 @@ export function ContactList2(props: {
   showRemove?: boolean
   onRemoveClick?: (contact: Type.Contact) => void
   disabledContacts?: number[]
+  onContactContextMenu?: (contact: Type.Contact) => void
 }) {
   const {
     contacts,
@@ -25,6 +26,7 @@ export function ContactList2(props: {
     showRemove,
     onRemoveClick,
     disabledContacts,
+    onContactContextMenu,
   } = props
   return (
     <div>
@@ -46,6 +48,7 @@ export function ContactList2(props: {
           showRemove: showRemove || false,
           onRemoveClick,
           disabled,
+          onContextMenu: onContactContextMenu?.bind(null, contact),
         })
       })}
     </div>

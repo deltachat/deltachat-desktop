@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- option to delete contacts in list when creating a new chat
 
 ### Changed
 - update `@deltachat/message_parser_wasm` to `0.7.0`, which adds support for unicode #hashtags
