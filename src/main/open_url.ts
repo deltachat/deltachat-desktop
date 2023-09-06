@@ -91,7 +91,7 @@ export function openUrlFromArgv(argv: string[]) {
   }
 }
 
-app.on('second-instance', (_event: Event, argv: string[]) => {
+app.on('second-instance', (_event, argv)=>{
   log.debug('Someone tried to run a second instance')
   openUrlFromArgv(argv)
   if (window) {
