@@ -6,12 +6,11 @@ const log = getLogger('main/deltachat/webxdc')
 import Mime from 'mime-types'
 import {
   Menu,
-  ProtocolResponse,
   nativeImage,
   shell,
   MenuItemConstructorOptions,
-  clipboard,
   dialog,
+  clipboard,
 } from 'electron'
 import { join } from 'path'
 import { readdir, stat, rmdir, writeFile, readFile } from 'fs/promises'
@@ -60,27 +59,23 @@ export default class DCWebxdc extends SplitOut {
 
     // icon protocol
     app.whenReady().then(() => {
-      protocol.registerBufferProtocol(
-        'webxdc-icon',
-        async (request, callback) => {
-          const [a, m] = request.url.substr(12).split('.')
-          const [accountId, messageId] = [Number(a), Number(m)]
-          try {
-            const { icon } = await this.rpc.getWebxdcInfo(accountId, messageId)
-            const blob = Buffer.from(
-              await this.rpc.getWebxdcBlob(accountId, messageId, icon),
-              'base64'
-            )
-            callback({
-              mimeType: Mime.lookup(icon) || '',
-              data: blob,
-            })
-          } catch (error) {
-            log.error('failed to load webxdc icon for:', error)
-            callback({ statusCode: 404 })
-          }
+      protocol.handle('webxdc-icon', async request => {
+        const [a, m] = request.url.substr(12).split('.')
+        const [accountId, messageId] = [Number(a), Number(m)]
+        try {
+          const { icon } = await this.rpc.getWebxdcInfo(accountId, messageId)
+          const blob = Buffer.from(
+            await this.rpc.getWebxdcBlob(accountId, messageId, icon),
+            'base64'
+          )
+          return new Response(blob, {
+            headers: { 'content-type': Mime.lookup(icon) || '' },
+          })
+        } catch (error) {
+          log.error('failed to load webxdc icon for:', error)
+          return new Response('', { status: 404 })
         }
-      )
+      })
     })
 
     // actual webxdc instances
@@ -116,101 +111,92 @@ export default class DCWebxdc extends SplitOut {
 
         if (!accounts_sessions.includes(accountId)) {
           accounts_sessions.push(accountId)
-          ses.protocol.registerBufferProtocol(
-            'webxdc',
-            async (request, callback) => {
-              const respond = (response: Omit<ProtocolResponse, 'headers'>) => {
-                const headers: ProtocolResponse['headers'] = {
-                  'Content-Security-Policy': CSP,
-                  // Ensure that the client doesn't try to interpret a file as
-                  // one with 'application/pdf' mime type and therefore open it
-                  // in the PDF viewer.
-                  'X-Content-Type-Options': 'nosniff',
+          ses.protocol.handle('webxdc', async request => {
+            const get_headers = (mime_type: string | undefined) => {
+              const headers = new Headers()
+              if (!open_apps[id].internet_access) {
+                headers.append('Content-Security-Policy', CSP)
+              }
+              headers.append('X-Content-Type-Options', 'nosniff')
+              if (mime_type) {
+                headers.append('content-type', mime_type)
+              }
+              return headers
+            }
+
+            const url = UrlParser(request.url)
+            const [account, msg] = url.hostname.split('.')
+            const id = `${account}.${msg}`
+
+            if (!open_apps[id]) {
+              return new Response('', { status: 500 })
+            }
+
+            let filename = url.pathname
+            // remove leading / trailing "/"
+            if (filename.endsWith('/')) {
+              filename = filename.substr(0, filename.length - 1)
+            }
+            if (filename.startsWith('/')) {
+              filename = filename.substr(1)
+            }
+
+            let mimeType: string | undefined = Mime.lookup(filename) || ''
+            // Make sure that the browser doesn't open files in the PDF viewer.
+            // TODO is this the only mime type that opens the PDF viewer?
+            // TODO consider a mime type whitelist instead.
+            if (mimeType === 'application/pdf') {
+              // TODO make sure that `callback` won't internally set mime type back
+              // to 'application/pdf' (at the time of writing it's not the case).
+              // Otherwise consider explicitly setting it as a header.
+              mimeType = undefined
+            }
+
+            if (filename === WRAPPER_PATH) {
+              return new Response(
+                await readFile(join(htmlDistDir(), '/webxdc_wrapper.html')),
+                {
+                  headers: get_headers(mimeType),
                 }
-                ;(response as ProtocolResponse).headers = headers
+              )
+            } else if (filename === 'webxdc.js') {
+              const displayName = Buffer.from(
+                displayname || addr || 'unknown'
+              ).toString('base64')
+              const selfAddr = Buffer.from(addr || 'unknown@unknown').toString(
+                'base64'
+              )
 
-                if (open_apps[id].internet_access) {
-                  delete headers['Content-Security-Policy']
-                }
-
-                callback(response)
-              }
-              const url = UrlParser(request.url)
-              const [account, msg] = url.hostname.split('.')
-              const id = `${account}.${msg}`
-
-              if (!open_apps[id]) {
-                return
-              }
-
-              let filename = url.pathname
-              // remove leading / trailing "/"
-              if (filename.endsWith('/')) {
-                filename = filename.substr(0, filename.length - 1)
-              }
-              if (filename.startsWith('/')) {
-                filename = filename.substr(1)
-              }
-
-              let mimeType: string | undefined = Mime.lookup(filename) || ''
-              // Make sure that the browser doesn't open files in the PDF viewer.
-              // TODO is this the only mime type that opens the PDF viewer?
-              // TODO consider a mime type whitelist instead.
-              if (mimeType === 'application/pdf') {
-                // TODO make sure that `callback` won't internally set mime type back
-                // to 'application/pdf' (at the time of writing it's not the case).
-                // Otherwise consider explicitly setting it as a header.
-                mimeType = undefined
-              }
-
-              if (filename === WRAPPER_PATH) {
-                respond({
-                  mimeType,
-                  data: await readFile(
-                    join(htmlDistDir(), '/webxdc_wrapper.html')
-                  ),
-                })
-              } else if (filename === 'webxdc.js') {
-                const displayName = Buffer.from(
-                  displayname || addr || 'unknown'
-                ).toString('base64')
-                const selfAddr = Buffer.from(
-                  addr || 'unknown@unknown'
-                ).toString('base64')
-
-                // initializes the preload script, the actual implementation of `window.webxdc` is found there: static/webxdc-preload.js
-                respond({
-                  mimeType,
-                  data: Buffer.from(
-                    `window.parent.webxdc_internal.setup("${selfAddr}","${displayName}")
+              // initializes the preload script, the actual implementation of `window.webxdc` is found there: static/webxdc-preload.js
+              return new Response(
+                Buffer.from(
+                  `window.parent.webxdc_internal.setup("${selfAddr}","${displayName}")
                   window.webxdc = window.parent.webxdc
                   window.webxdc_custom = window.parent.webxdc_custom`
-                  ),
-                })
-              } else {
-                try {
-                  const blob = Buffer.from(
-                    await this.rpc.getWebxdcBlob(
-                      open_apps[id].accountId,
-                      open_apps[id].msgId,
-                      filename
-                    ),
-                    'base64'
-                  )
-
-                  respond({
-                    mimeType,
-                    data: blob,
-                  })
-                } catch (error) {
-                  log.error('webxdc: load blob:', error)
-                  respond({
-                    statusCode: 404,
-                  })
+                ),
+                {
+                  headers: get_headers(mimeType),
                 }
+              )
+            } else {
+              try {
+                const blob = Buffer.from(
+                  await this.rpc.getWebxdcBlob(
+                    open_apps[id].accountId,
+                    open_apps[id].msgId,
+                    filename
+                  ),
+                  'base64'
+                )
+                return new Response(blob, {
+                  headers: get_headers(mimeType),
+                })
+              } catch (error) {
+                log.error('webxdc: load blob:', error)
+                return new Response('', { status: 404 })
               }
             }
-          )
+          })
         }
 
         const app_icon = icon_blob && nativeImage?.createFromBuffer(icon_blob)

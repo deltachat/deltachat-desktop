@@ -315,39 +315,34 @@ function makeBrowserView(
   ses.setProxy({ mode: 'fixed_servers', proxyRules: 'not-existing-proxy:80' })
   if (!allow_remote_content) {
     // block network access
-    ses.protocol.interceptHttpProtocol('http', (_req, callback) => {
-      callback({ statusCode: 404, data: '' })
+    ses.protocol.handle('http', () => {
+      return new Response('', { status: 404 })
     })
-    ses.protocol.interceptHttpProtocol('https', (_req, callback) => {
-      callback({ statusCode: 404, data: '' })
+    ses.protocol.handle('https', () => {
+      return new Response('', { status: 404 })
     })
   }
 
-  ses.protocol.registerBufferProtocol('email', (_req, callback) => {
-    callback({
-      statusCode: 200,
-      data: Buffer.from(html_content),
-      mimeType: 'text/html',
+  ses.protocol.handle('email', () => {
+    return new Response(Buffer.from(html_content), {
+      status: 200,
       headers: {
+        'content-type': 'text/html',
         'Content-Security-Policy': allow_remote_content ? CSP_ALLOW : CSP_DENY,
       },
     })
   })
 
   if (allow_remote_content) {
-    const callback = async (
-      req: Electron.ProtocolRequest,
-      callback: (response: Electron.ProtocolResponse) => void
-    ) => {
+    const callback = async (req: Request) => {
       try {
         const response = await getDCJsonrpcClient().getHttpResponse(
           account_id,
           req.url
         )
         const blob = Buffer.from(response.blob, 'base64')
-        callback({
-          statusCode: 200,
-          data: blob,
+        return new Response(blob, {
+          status: 200,
           headers: {
             'Content-Security-Policy': CSP_ALLOW,
             'Content-Type': `${response.mimetype}; ${response.encoding}`,
@@ -355,16 +350,17 @@ function makeBrowserView(
         })
       } catch (error) {
         log.info('remote content failed to load', req.url, error)
-        callback({
-          statusCode: 400,
-          data: Buffer.from((error as any)?.message),
-          mimeType: 'text/plain',
+        return new Response(Buffer.from((error as any)?.message), {
+          status: 400,
+          headers: {
+            mimeType: 'text/plain',
+          },
         })
       }
     }
 
-    ses.protocol.interceptBufferProtocol('http', callback)
-    ses.protocol.interceptBufferProtocol('https', callback)
+    ses.protocol.handle('http', callback)
+    ses.protocol.handle('https', callback)
   }
 
   const sandboxedView = new BrowserView({
