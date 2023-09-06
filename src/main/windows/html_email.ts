@@ -430,7 +430,7 @@ function makeBrowserView(
 
 const createContextMenu = (win: BrowserWindow, webContents: WebContents) => {
   const handleContextMenu = (
-    _event: Event,
+    _event: any,
     props: Electron.ContextMenuParams
   ) => {
     const { editFlags } = props
