@@ -2146,9 +2146,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.2...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.2-fixed-tag...HEAD
 
-[1.40.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.1...v1.40.2
+[1.40.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.1...v1.40.2-fixed-tag
 
 [1.40.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.0...v1.40.1
 
