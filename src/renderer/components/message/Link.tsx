@@ -13,6 +13,7 @@ import chatStore from '../../stores/chat'
 import reactStringReplace from 'react-string-replace'
 import { runtime } from '../../runtime'
 import { LinkDestination } from '@deltachat/message_parser_wasm'
+import { openLinkSafely } from '../helpers/LinkConfirmation'
 
 const log = getLogger('renderer/LabeledLink')
 
@@ -52,7 +53,7 @@ export const LabeledLink = ({
 
     //check if domain is trusted, or if there is no domain like on mailto just open it
     if (isDeviceChat || !hostName || isDomainTrusted(hostName)) {
-      runtime.openLink(target)
+      openLinkSafely(target)
       return
     }
     // not trusted - ask for confirmation from user
@@ -133,7 +134,7 @@ function labeledLinkConfirmationDialog(
                     // trust url
                     trustDomain(hostname)
                   }
-                  runtime.openLink(target)
+                  openLinkSafely(target)
                 }}
               >
                 {tx('open')}
@@ -164,7 +165,7 @@ export const Link = ({ destination }: { destination: LinkDestination }) => {
         punycode.punycode_encoded_url
       )
     } else {
-      runtime.openLink(target)
+      openLinkSafely(target)
     }
   }
   return (
@@ -229,7 +230,7 @@ function openPunycodeUrlConfirmationDialog(
                 className={`delta-button bold primary`}
                 onClick={() => {
                   onClose()
-                  runtime.openLink(asciiUrl)
+                  openLinkSafely(asciiUrl)
                 }}
               >
                 {tx('open')}

@@ -493,8 +493,12 @@ class Electron implements Runtime {
   openLink(link: string): void {
     if (link.startsWith('mailto:')) {
       processOpenQrUrl(link)
-    } else {
+    } else if (link.startsWith('http:') || link.startsWith('https:')) {
       ipcBackend.invoke('electron.shell.openExternal', link)
+    } else {
+      log.error('tried to open a non mailto or http/https external link', {
+        link,
+      })
     }
   }
   private rc_config: RC_Config | null = null
