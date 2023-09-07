@@ -233,12 +233,7 @@
   })
 
   const keydown_handler = ev => {
-    if (ev.key == 'F12') {
-      ipcRenderer.invoke('webxdc.toggle_dev_tools')
-      ev.preventDefault()
-      ev.stopImmediatePropagation()
-      ev.stopPropagation()
-    } else if (ev.key == 'Escape') {
+    if (ev.key == 'Escape') {
       ipcRenderer.invoke('webxdc.exitFullscreen')
     }
   }

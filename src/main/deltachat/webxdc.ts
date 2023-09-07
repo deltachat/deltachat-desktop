@@ -421,14 +421,17 @@ If you think that's a bug and you need that permission, then please open an issu
             callback(permission_handler(permission))
           }
         )
+
+        webxdc_windows.webContents.on('before-input-event', (event, input) => {
+          if (input.key.toLowerCase() === 'f12') {
+            if (DesktopSettings.state.enableWebxdcDevTools) {
+              webxdc_windows.webContents.toggleDevTools()
+              event.preventDefault()
+            }
+          }
+        })
       }
     )
-
-    ipcMain.handle('webxdc.toggle_dev_tools', async event => {
-      if (DesktopSettings.state.enableWebxdcDevTools) {
-        event.sender.toggleDevTools()
-      }
-    })
 
     ipcMain.handle('webxdc.exitFullscreen', async event => {
       const key = Object.keys(open_apps).find(

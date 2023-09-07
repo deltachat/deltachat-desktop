@@ -8,6 +8,8 @@
 - Offer to copy non-HTTP links to the clipboard instead of trying to open them.
 
 ### Fixed
+- webxdc: fix a bug where the webxdc was able to open the dev tools.
+Also make opening devtools with F12 more reliable.
 
 <a id="1_40_2"></a>
 
