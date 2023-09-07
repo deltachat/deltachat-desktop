@@ -3,14 +3,22 @@
 ## [Unreleased][unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+<a id="1_40_2"></a>
+
+## [1.40.2] - 2023-09-07
+
+### Added
 - option to delete contacts in list when creating a new chat
 
 ### Changed
 - update `@deltachat/message_parser_wasm` to `0.7.0`, which adds support for unicode #hashtags
 - update electron from `v22.3.2` to version `v22.3.23`
 - update deltachat-node and deltachat/jsonrpc-client to `v1.121.0`
-
-### Fixed
 
 <a id="1_40_1"></a>
 
@@ -2138,9 +2146,13 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.2...HEAD
 
-[1.39.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.39.0...v1.40.0
+[1.40.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.1...v1.40.2
+
+[1.40.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.0...v1.40.1
+
+[1.40.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.39.0...v1.40.0
 
 [1.39.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.38.1...v1.39.0
 
