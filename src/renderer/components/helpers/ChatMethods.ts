@@ -1,7 +1,6 @@
 import ChatStore, { ChatView } from '../../stores/chat'
 import { ScreenContext, unwrapContext } from '../../contexts'
 import { C } from '@deltachat/jsonrpc-client'
-import { runtime } from '../../runtime'
 import { getLogger } from '../../../shared/logger'
 import AlertDialog from '../dialogs/AlertDialog'
 import { BackendRemote, EffectfulBackendActions, Type } from '../../backend-com'
@@ -12,6 +11,7 @@ import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import { T } from '@deltachat/jsonrpc-client'
 import { sendMessageParams } from '../../../shared/shared-types'
 import chatStore from '../../stores/chat'
+import { openLinkSafely } from './LinkConfirmation'
 
 const log = getLogger('renderer/message')
 
@@ -202,7 +202,7 @@ export async function joinCall(
       throw new Error('Message has no video chat url')
     }
 
-    return runtime.openLink(message.videochatUrl)
+    return openLinkSafely(message.videochatUrl)
   } catch (error: todo) {
     log.error('failed to join call', error)
     screenContext.openDialog(AlertDialog, { message: error.toString() })

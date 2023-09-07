@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react'
-import { runtime } from '../../runtime'
+import { openLinkSafely } from './LinkConfirmation'
 
 export default class ClickableLink extends React.Component<
   PropsWithChildren<{
@@ -9,7 +9,7 @@ export default class ClickableLink extends React.Component<
 > {
   onClick(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
     event.preventDefault()
-    runtime.openLink(this.props.href)
+    openLinkSafely(this.props.href)
   }
 
   render() {
