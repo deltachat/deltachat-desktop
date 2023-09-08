@@ -5,6 +5,15 @@
 ### Added
 
 ### Changed
+
+### Fixed
+
+
+<a id="1_40_3"></a>
+
+## [1.40.3] - 2023-09-08
+
+### Changed
 - Offer to copy non-HTTP links to the clipboard instead of trying to open them.
 
 ### Fixed
@@ -2150,7 +2159,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.2-fixed-tag...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.3...HEAD
+
+[1.40.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.2-fixed-tag...v1.40.3
 
 [1.40.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.1...v1.40.2-fixed-tag
 
