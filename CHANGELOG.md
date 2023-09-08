@@ -10,6 +10,7 @@
 ### Fixed
 - webxdc: fix a bug where the webxdc was able to open the dev tools.
 Also make opening devtools with F12 more reliable.
+- packaging: fix corrupted .desktop file
 
 <a id="1_40_2"></a>
 
