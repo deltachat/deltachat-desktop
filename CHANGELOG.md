@@ -4,6 +4,8 @@
 
 ### Added
 
+ - Show video chat instance URLs as subtitles #3369
+
 ### Changed
 - remove jitsi as a default Video Chat instance, because they added a sign-in requirement #3366
 
