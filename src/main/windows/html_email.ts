@@ -395,11 +395,7 @@ function makeBrowserView(
       if (url.startsWith('mailto:')) {
         open_url(url)
       } else {
-        if (
-          url.startsWith('http:') ||
-          url.startsWith('https:') ||
-          url.startsWith('mailto:')
-        ) {
+        if (url.startsWith('http:') || url.startsWith('https:')) {
           shell.openExternal(url)
         } else {
           dialog
