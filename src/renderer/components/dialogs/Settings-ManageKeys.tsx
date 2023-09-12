@@ -5,7 +5,6 @@ import type { OpenDialogOptions } from 'electron'
 import { runtime } from '../../runtime'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import { DcEventType } from '@deltachat/jsonrpc-client'
 
 async function onKeysImport() {
   const tx = window.static_translate
@@ -25,24 +24,17 @@ async function onKeysImport() {
     message: tx('pref_managekeys_import_explain', filename),
     confirmLabel: tx('yes'),
     cancelLabel: tx('no'),
-    cb: (yes: boolean) => {
+    cb: async (yes: boolean) => {
       if (!yes) {
         return
       }
       const text = tx('pref_managekeys_secret_keys_imported_from_x', filename)
-      const onImexProgress = ({ progress }: DcEventType<'ImexProgress'>) => {
-        if (progress !== 1000) {
-          return
-        }
-        window.__userFeedback({ type: 'success', text })
-      }
-      const emitter = BackendRemote.getContextEvents(selectedAccountId())
-      emitter.on('ImexProgress', onImexProgress)
-      BackendRemote.rpc
-        .importSelfKeys(selectedAccountId(), filename, null)
-        .finally(() => {
-          emitter.off('ImexProgress', onImexProgress)
-        })
+      await BackendRemote.rpc.importSelfKeys(
+        selectedAccountId(),
+        filename,
+        null
+      )
+      window.__userFeedback({ type: 'success', text })
     },
   })
 }

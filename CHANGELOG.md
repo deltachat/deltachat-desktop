@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- Display the toast after successful key import.
 
 
 <a id="1_40_3"></a>
