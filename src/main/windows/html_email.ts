@@ -17,6 +17,7 @@ import { open_url } from '../open_url'
 import { loadTheme } from '../themes'
 import { getDCJsonrpcClient } from '../ipc'
 import { getLogger } from '../../shared/logger'
+import { clipboard } from 'electron/common'
 
 const log = getLogger('html_email')
 
@@ -131,7 +132,8 @@ export function openHtmlEmailWindow(
   let sandboxedView: BrowserView = makeBrowserView(
     account_id,
     loadRemoteContentAtStart,
-    htmlEmail
+    htmlEmail,
+    window
   )
   window.setBrowserView(sandboxedView)
   let context_menu_handle = createContextMenu(window, sandboxedView.webContents)
@@ -261,7 +263,12 @@ export function openHtmlEmailWindow(
     window.removeBrowserView(sandboxedView)
     context_menu_handle()
     sandboxedView.webContents.close()
-    sandboxedView = makeBrowserView(account_id, allow_network, htmlEmail)
+    sandboxedView = makeBrowserView(
+      account_id,
+      allow_network,
+      htmlEmail,
+      window
+    )
     window.setBrowserView(sandboxedView)
     context_menu_handle = createContextMenu(window, sandboxedView.webContents)
     if (bounds) sandboxedView.setBounds(bounds)
@@ -298,7 +305,8 @@ script-src 'none';
 function makeBrowserView(
   account_id: number,
   allow_remote_content: boolean,
-  html_content: string
+  html_content: string,
+  window: BrowserWindow
 ) {
   const ses = session.fromPartition(`${Date.now()}`, { cache: false })
 
@@ -387,7 +395,24 @@ function makeBrowserView(
       if (url.startsWith('mailto:')) {
         open_url(url)
       } else {
-        shell.openExternal(url)
+        if (
+          url.startsWith('http:') ||
+          url.startsWith('https:') ||
+          url.startsWith('mailto:')
+        ) {
+          shell.openExternal(url)
+        } else {
+          dialog
+            .showMessageBox(window, {
+              buttons: [tx('no'), tx('menu_copy_link_to_clipboard')],
+              message: tx('desktop_offer_copy_non_web_link_to_clipboard', url),
+            })
+            .then(({ response }) => {
+              if (response == 1) {
+                clipboard.writeText(url)
+              }
+            })
+        }
       }
     }
   )

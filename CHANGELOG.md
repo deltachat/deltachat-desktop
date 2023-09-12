@@ -5,6 +5,7 @@
 ### Added
 
 ### Changed
+- Offer to copy non-HTTP links to the clipboard instead of trying to open them in webxdc source code link and inside of html emails.
 
 ### Fixed
 

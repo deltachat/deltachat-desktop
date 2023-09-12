@@ -10,6 +10,8 @@ import {
   nativeImage,
   shell,
   MenuItemConstructorOptions,
+  clipboard,
+  dialog,
 } from 'electron'
 import { join } from 'path'
 import { readdir, stat, rmdir, writeFile, readFile } from 'fs/promises'
@@ -321,9 +323,32 @@ export default class DCWebxdc extends SplitOut {
                   label: tx('source_code'),
                   enabled: !!webxdcInfo.sourceCodeUrl,
                   icon: app_icon?.resize({ width: 24 }) || undefined,
-                  click: () =>
-                    webxdcInfo.sourceCodeUrl &&
-                    shell.openExternal(webxdcInfo.sourceCodeUrl),
+                  click: () => {
+                    if (
+                      webxdcInfo.sourceCodeUrl?.startsWith('https:') ||
+                      webxdcInfo.sourceCodeUrl?.startsWith('http:')
+                    ) {
+                      shell.openExternal(webxdcInfo.sourceCodeUrl)
+                    } else if (webxdcInfo.sourceCodeUrl) {
+                      const url = webxdcInfo.sourceCodeUrl
+                      dialog
+                        .showMessageBox(webxdc_windows, {
+                          buttons: [
+                            tx('no'),
+                            tx('menu_copy_link_to_clipboard'),
+                          ],
+                          message: tx(
+                            'desktop_offer_copy_non_web_link_to_clipboard',
+                            url
+                          ),
+                        })
+                        .then(({ response }) => {
+                          if (response == 1) {
+                            clipboard.writeText(url)
+                          }
+                        })
+                    }
+                  },
                 },
                 {
                   type: 'separator',
