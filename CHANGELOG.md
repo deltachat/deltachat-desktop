@@ -4,6 +4,8 @@
 
 ### Added
 
+ - Show video chat instance URLs as subtitles #3369
+
 ### Changed
 
 ### Fixed
