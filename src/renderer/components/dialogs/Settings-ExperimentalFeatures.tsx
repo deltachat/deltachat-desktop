@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react'
-import classNames from 'classnames'
 import { Card, Elevation } from '@blueprintjs/core'
 import { RenderDTSettingSwitchType, SettingsSelector } from './Settings'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
@@ -14,78 +13,11 @@ import { DialogProps } from './DialogController'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
+import RadioGroup from '../RadioGroup'
+import Radio from '../Radio'
 
 const VIDEO_CHAT_INSTANCE_SYSTEMLI = 'https://meet.systemli.org/$ROOM'
 const VIDEO_CHAT_INSTANCE_AUTISTICI = 'https://vc.autistici.org/$ROOM'
-
-type RadioProps = {
-  onSelect?: () => void
-  selected?: boolean
-  label: string
-  value: string
-  className?: string
-  name?: string
-  subtitle?: string
-}
-
-type RadioGroupProps = {
-  onChange?: (value: string) => void
-  children: any
-  selectedValue: string
-  name: string
-}
-
-function Radio({
-  onSelect,
-  selected,
-  label,
-  value,
-  className,
-  name,
-  subtitle,
-}: RadioProps) {
-  const id: string = Math.floor(Math.random() * 10000).toString()
-  return (
-    <div className={classNames('radiobutton', className)}>
-      <input
-        id={id}
-        name={name}
-        type='radio'
-        onClick={() => onSelect && onSelect()}
-        value={value}
-        defaultChecked={Boolean(selected)}
-      />
-      <label htmlFor={id} className={classNames(!subtitle && 'no-subtitle')}>
-        <span>{label}</span>
-        {subtitle && <span>{subtitle}</span>}
-      </label>
-    </div>
-  )
-}
-
-function RadioGroup({
-  onChange,
-  children,
-  selectedValue,
-  name,
-}: RadioGroupProps) {
-  return (
-    <form>
-      <fieldset className='radiogroup'>
-        {children.map((radio: any) => {
-          return (
-            <Radio
-              {...radio.props}
-              selected={radio.props.value === selectedValue}
-              onSelect={() => onChange && onChange(radio.props.value)}
-              name={name}
-            />
-          )
-        })}
-      </fieldset>
-    </form>
-  )
-}
 
 export function SettingsExperimentalFeatures({
   settingsStore,
