@@ -1,6 +1,5 @@
-import React, { useState, useContext } from 'react'
-import classNames from 'classnames'
-import { Card, Elevation } from '@blueprintjs/core'
+import React, { useState, useContext, FormEvent } from 'react'
+import { Card, Elevation, Radio, RadioGroup } from '@blueprintjs/core'
 import { RenderDTSettingSwitchType, SettingsSelector } from './Settings'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { DeltaInput } from '../Login-Styles'
@@ -17,75 +16,6 @@ import SettingsStoreInstance, {
 
 const VIDEO_CHAT_INSTANCE_SYSTEMLI = 'https://meet.systemli.org/$ROOM'
 const VIDEO_CHAT_INSTANCE_AUTISTICI = 'https://vc.autistici.org/$ROOM'
-
-type RadioProps = {
-  onSelect?: () => void
-  selected?: boolean
-  label: string
-  value: string
-  className?: string
-  name?: string
-  subtitle?: string
-}
-
-type RadioGroupProps = {
-  onChange?: (value: string) => void
-  children: any
-  selectedValue: string
-  name: string
-}
-
-function Radio({
-  onSelect,
-  selected,
-  label,
-  value,
-  className,
-  name,
-  subtitle,
-}: RadioProps) {
-  const id: string = Math.floor(Math.random() * 10000).toString()
-  return (
-    <div className={classNames('radiobutton', className)}>
-      <input
-        id={id}
-        name={name}
-        type='radio'
-        onClick={() => onSelect && onSelect()}
-        value={value}
-        defaultChecked={Boolean(selected)}
-      />
-      <label htmlFor={id} className={classNames(!subtitle && 'no-subtitle')}>
-        <span>{label}</span>
-        {subtitle && <span>{subtitle}</span>}
-      </label>
-    </div>
-  )
-}
-
-function RadioGroup({
-  onChange,
-  children,
-  selectedValue,
-  name,
-}: RadioGroupProps) {
-  return (
-    <form>
-      <fieldset className='radiogroup'>
-        {children.map((radio: any) => {
-          return (
-            <Radio
-              {...radio.props}
-              selected={radio.props.value === selectedValue}
-              onSelect={() => onChange && onChange(radio.props.value)}
-              name={name}
-            />
-          )
-        })}
-      </fieldset>
-    </form>
-  )
-}
 
 export function SettingsExperimentalFeatures({
   settingsStore,
@@ -193,15 +123,16 @@ export function EditVideochatInstanceDialog({
     onClose()
     onOk(configValue.trim()) // the trim is here to not save custom provider if it only contains whitespaces
   }
-  const onChangeRadio = (value: string) => {
+  const onChangeRadio = (event: FormEvent<HTMLInputElement>) => {
+    const currentRadioValue = event.currentTarget.value as RadioButtonValue
     let newConfigValue = ''
-    if (value === 'disabled') {
+    if (currentRadioValue === 'disabled') {
       newConfigValue = ''
       setRadioValue('disabled')
-    } else if (value === 'systemli') {
+    } else if (currentRadioValue === 'systemli') {
       newConfigValue = VIDEO_CHAT_INSTANCE_SYSTEMLI
       setRadioValue('systemli')
-    } else if (value === 'autistici') {
+    } else if (currentRadioValue === 'autistici') {
       newConfigValue = VIDEO_CHAT_INSTANCE_AUTISTICI
       setRadioValue('autistici')
     } else {
@@ -209,10 +140,6 @@ export function EditVideochatInstanceDialog({
       setRadioValue('custom')
     }
     setConfigValue(newConfigValue)
-  }
-
-  const subtitle = (value: string) => {
-    return value.replace('$ROOM', '')
   }
 
   return (
@@ -241,24 +168,10 @@ export function EditVideochatInstanceDialog({
             {tx('videochat_instance_explain_2')}
           </div>
 
-          <RadioGroup
-            onChange={onChangeRadio}
-            selectedValue={radioValue}
-            name='videochat-instance'
-          >
+          <RadioGroup onChange={onChangeRadio} selectedValue={radioValue}>
             <Radio key='select-none' label={tx('off')} value='disabled' />
-            <Radio
-              key='select-systemli'
-              label='Systemli'
-              value='systemli'
-              subtitle={subtitle(VIDEO_CHAT_INSTANCE_SYSTEMLI)}
-            />
-            <Radio
-              key='select-autistici'
-              label='Autistici'
-              value='autistici'
-              subtitle={subtitle(VIDEO_CHAT_INSTANCE_AUTISTICI)}
-            />
+            <Radio key='select-systemli' label='Systemli' value='systemli' />
+            <Radio key='select-autistici' label='Autistici' value='autistici' />
             <Radio
               key='select-custom'
               label={tx('custom')}
