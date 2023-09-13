@@ -5,6 +5,7 @@
 ### Added
 
  - Show video chat instance URLs as subtitles #3369
+ - Add an unread badge if there are unread notifs from other accounts
 
 ### Changed
 

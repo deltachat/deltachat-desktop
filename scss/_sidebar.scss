@@ -165,3 +165,28 @@
     -webkit-transform: translateX(-100%);
   }
 }
+/*
+  @keyframes unread-badge-bg-anim {
+      from {
+	background-color: color-mix(in srgb, var(--colorPrimary), transparent 100%);
+      }
+      to {
+	background-color: color-mix(in srgb, var(--colorPrimary), transparent 20%);
+      }
+    }
+    */
+// TODO: When Electron was upgraded, uncomment these to add animation.
+// color-mix has been added in Chrome and other browsers in early 2023
+div.unread-badge {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  position: relative;
+  background-color: var(--colorPrimary);
+  /*
+      animation-duration: 1.5s;
+      animation-name: unread-badge-bg-anim;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
+      */
+}
