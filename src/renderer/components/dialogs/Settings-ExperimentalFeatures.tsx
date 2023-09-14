@@ -49,9 +49,9 @@ export function SettingsExperimentalFeatures({
   const showVideochatInstance = (instance: string) => {
     if (instance === '') {
       return tx('off')
-    } else if (instance === VIDEO_CHAT_INSTANCE_SYSTEMLI) {
+    } else if (instance === VIDEO_CHAT_INSTANCE_SYSTEML {
       return 'Systemli'
-    } else if (instance === VIDEO_CHAT_INSTANCE_AUTISTICI) {
+    } else if (instance === VIDEO_CHAT_INSTANCE_AUTISTIC {
       return 'Autistici'
     }
     return instance
@@ -108,9 +108,9 @@ export function EditVideochatInstanceDialog({
   const [radioValue, setRadioValue] = useState<RadioButtonValue>(() => {
     if (configValue === '') {
       return 'disabled'
-    } else if (configValue === VIDEO_CHAT_INSTANCE_SYSTEMLI) {
+    } else if (configValue === VIDEO_CHAT_INSTANCE_SYSTEML {
       return 'systemli'
-    } else if (configValue === VIDEO_CHAT_INSTANCE_AUTISTICI) {
+    } else if (configValue === VIDEO_CHAT_INSTANCE_AUTISTIC {
       return 'autistici'
     } else {
       return 'custom'
@@ -141,10 +141,6 @@ export function EditVideochatInstanceDialog({
       setRadioValue('custom')
     }
     setConfigValue(newConfigValue)
-  }
-
-  const subtitle = (value: string) => {
-    return value.replace('$ROOM', '')
   }
 
   return (
@@ -183,13 +179,13 @@ export function EditVideochatInstanceDialog({
               key='select-systemli'
               label='Systemli'
               value='systemli'
-              subtitle={subtitle(VIDEO_CHAT_INSTANCE_SYSTEMLI)}
+              subtitle={VIDEO_CHAT_INSTANCE_SYSTEMLI}
             />
             <Radio
               key='select-autistici'
               label='Autistici'
               value='autistici'
-              subtitle={subtitle(VIDEO_CHAT_INSTANCE_AUTISTICI)}
+              subtitle={VIDEO_CHAT_INSTANCE_AUTISTICI}
             />
             <Radio
               key='select-custom'
