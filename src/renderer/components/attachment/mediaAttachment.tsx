@@ -3,6 +3,7 @@ import {
   openAttachmentInShell,
   onDownload,
   openWebxdc,
+  confirmDeleteMessage,
 } from '../message/messageFunctions'
 import { ScreenContext, unwrapContext } from '../../contexts'
 import {
@@ -18,11 +19,12 @@ import { OpenDialogFunctionType } from '../dialogs/DialogController'
 import { runtime } from '../../runtime'
 
 import filesizeConverter from 'filesize'
-import { jumpToMessage } from '../helpers/ChatMethods'
+import { deleteMessage, jumpToMessage } from '../helpers/ChatMethods'
 import { getLogger } from '../../../shared/logger'
 import { truncateText } from '../../../shared/util'
 import { Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 
 const log = getLogger('mediaAttachment')
 
@@ -69,6 +71,15 @@ const contextMenuFactory = (
       label: tx('menu_message_details'),
       action: openDialog.bind(null, 'MessageDetail', { id: msgId }),
     },
+    {
+      label: tx('delete'),
+      action: () =>
+        openDialog(ConfirmationDialog, {
+          message: tx('ask_delete_message'),
+          confirmLabel: tx('delete'),
+          cb: (yes: boolean) => yes && deleteMessage(msgId),
+        }),
+    },
   ]
 }
 
@@ -97,7 +108,15 @@ function getBrokenMediaContextMenu(
   const tx = window.static_translate
   return makeContextMenu(
     [
-      
+      {
+        label: tx('delete'),
+        action: () =>
+          openDialog(ConfirmationDialog, {
+            message: tx('ask_delete_message'),
+            confirmLabel: tx('delete'),
+            cb: (yes: boolean) => yes && deleteMessage(msgId),
+          }),
+      },
     ],
     openContextMenu
   )
