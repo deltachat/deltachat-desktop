@@ -4,6 +4,8 @@
 
 ### Added
 
+ - Show video chat instance URLs as subtitles #3369
+
 ### Changed
 - Offer to copy non-HTTP links to the clipboard instead of trying to open them in webxdc source code link and inside of html emails.
 - update electron from `v22.3.23` to version `v22.3.24`
