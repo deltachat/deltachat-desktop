@@ -84,6 +84,7 @@ export default class Gallery extends Component<
       throw new Error('chat id missing')
     }
     const msgTypes = MediaTabs[id].values
+    const newElement = MediaTabs[id].element
     const accountId = selectedAccountId()
     const chatId = this.props.chatId !== 'all' ? this.props.chatId : null
 
@@ -98,6 +99,7 @@ export default class Gallery extends Component<
         this.setState({
           id,
           msgTypes,
+          element: newElement,
           mediaMessageIds: media_ids,
           mediaLoadResult,
         })
