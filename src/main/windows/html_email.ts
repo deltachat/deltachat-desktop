@@ -18,6 +18,7 @@ import { loadTheme } from '../themes'
 import { getDCJsonrpcClient } from '../ipc'
 import { getLogger } from '../../shared/logger'
 import { clipboard } from 'electron/common'
+import * as mainWindow from './main'
 
 const log = getLogger('html_email')
 
@@ -394,6 +395,7 @@ function makeBrowserView(
       e.preventDefault()
       if (url.startsWith('mailto:')) {
         open_url(url)
+        mainWindow.window?.show()
       } else {
         if (url.startsWith('http:') || url.startsWith('https:')) {
           shell.openExternal(url)

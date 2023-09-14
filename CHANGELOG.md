@@ -9,6 +9,8 @@
 
 ### Fixed
 - fix duplicated calling of 'open-url'
+- fix html mail getting restrictions of webxdc window
+- fix: when clicking on mailto link in html email show main window even when it was hidden.
 
 <a id="1_40_3"></a>
 
