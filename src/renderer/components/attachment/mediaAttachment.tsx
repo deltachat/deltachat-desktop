@@ -97,14 +97,7 @@ function getBrokenMediaContextMenu(
   const tx = window.static_translate
   return makeContextMenu(
     [
-      {
-        label: tx('show_in_chat'),
-        action: () => jumpToMessage(msgId),
-      },
-      {
-        label: tx('menu_message_details'),
-        action: openDialog.bind(null, 'MessageDetail', { id: msgId }),
-      },
+      
     ],
     openContextMenu
   )
