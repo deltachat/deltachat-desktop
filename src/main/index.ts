@@ -245,7 +245,9 @@ app.on('before-quit', e => quit(e))
 app.on('window-all-closed', (e: Electron.Event) => quit(e))
 
 app.on('web-contents-created', (_ev, contents) => {
-  const is_webxdc = contents.session.storagePath?.indexOf('webxdc_') !== -1
+  const is_webxdc =
+    contents.session.storagePath &&
+    contents.session.storagePath.indexOf('webxdc_') !== -1
   if (is_webxdc) {
     contents.on('will-navigate', (e, navigationUrl) => {
       if (navigationUrl.startsWith('webxdc://')) {
@@ -255,7 +257,7 @@ app.on('web-contents-created', (_ev, contents) => {
         // handle mailto in dc
         e.preventDefault()
         open_url(navigationUrl)
-        mainWindow.window?.focus()
+        mainWindow.window?.show()
       } else {
         // prevent navigation to unknown scheme
         e.preventDefault()
@@ -263,7 +265,7 @@ app.on('web-contents-created', (_ev, contents) => {
     })
   } else {
     contents.on('will-navigate', (e, navigationUrl) => {
-      log.warn('blocked naviagation attempt to', navigationUrl)
+      log.warn('blocked navigation attempt to', navigationUrl)
       e.preventDefault()
     })
   }

@@ -5,11 +5,14 @@
 ### Added
 
 ### Changed
+- Offer to copy non-HTTP links to the clipboard instead of trying to open them in webxdc source code link and inside of html emails.
 - update electron from `v22.3.23` to version `v22.3.24`
 
 ### Fixed
+- fix duplicated calling of 'open-url'
+- fix html mail getting restrictions of webxdc window
+- fix: when clicking on mailto link in html email show main window even when it was hidden.
 - Display the toast after successful key import.
-
 
 <a id="1_40_3"></a>
 
