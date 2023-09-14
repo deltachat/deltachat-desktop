@@ -3,7 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
-
+ - Global Gallery
  - Show video chat instance URLs as subtitles #3369
 
 ### Changed
