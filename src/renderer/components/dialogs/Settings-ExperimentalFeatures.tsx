@@ -77,6 +77,15 @@ export function SettingsExperimentalFeatures({
       {renderDTSettingSwitch({
         key: 'enableWebxdcDevTools',
         label: 'Enable Webxdc Devtools',
+        // See https://delta.chat/en/2023-05-22-webxdc-security,
+        // "XDC-01-004 WP1: Data exfiltration via desktop app DevTools"
+        //
+        // Although thanks to another hardening measure this shouldn't be
+        // easy to pull off. Namely, direct internet access is sort of
+        // disabled for the Electron part of the app:
+        // 853b584251a5dacf60ebc616f7fb10edffb5c5e5/src/main/index.ts#L12-L21
+        description:
+          'Careful: opening developer tools on a malicious webxdc app could lead to the app getting access to the Internet',
       })}
       <SettingsSelector
         onClick={onClickEdit.bind(null, false)}
