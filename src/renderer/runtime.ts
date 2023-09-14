@@ -551,7 +551,6 @@ class Electron implements Runtime {
     )
     ipcBackend.on('showSettingsDialog', () => this.onShowDialog?.('settings'))
     ipcBackend.on('open-url', (_ev, url) => this.onOpenQrUrl?.(url))
-    ipcBackend.on('open-url', (_ev, url) => this.onOpenQrUrl?.(url))
     ipcBackend.on(
       'webxdc.sendToChat',
       (
