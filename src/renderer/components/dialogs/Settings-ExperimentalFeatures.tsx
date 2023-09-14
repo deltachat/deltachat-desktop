@@ -49,9 +49,9 @@ export function SettingsExperimentalFeatures({
   const showVideochatInstance = (instance: string) => {
     if (instance === '') {
       return tx('off')
-    } else if (instance === VIDEO_CHAT_INSTANCE_SYSTEML {
+    } else if (instance === VIDEO_CHAT_INSTANCE_SYSTEMLI) {
       return 'Systemli'
-    } else if (instance === VIDEO_CHAT_INSTANCE_AUTISTIC {
+    } else if (instance === VIDEO_CHAT_INSTANCE_AUTISTICI) {
       return 'Autistici'
     }
     return instance
@@ -108,9 +108,9 @@ export function EditVideochatInstanceDialog({
   const [radioValue, setRadioValue] = useState<RadioButtonValue>(() => {
     if (configValue === '') {
       return 'disabled'
-    } else if (configValue === VIDEO_CHAT_INSTANCE_SYSTEML {
+    } else if (configValue === VIDEO_CHAT_INSTANCE_SYSTEMLI) {
       return 'systemli'
-    } else if (configValue === VIDEO_CHAT_INSTANCE_AUTISTIC {
+    } else if (configValue === VIDEO_CHAT_INSTANCE_AUTISTICI) {
       return 'autistici'
     } else {
       return 'custom'
