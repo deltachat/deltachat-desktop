@@ -32,7 +32,7 @@ const MediaTabs: Readonly<
 }
 
 type mediaProps = { chatId: number | 'all' }
-type Error = { error: string, sortTimestamp: number }
+type Error = { error: string }
 
 export default class Gallery extends Component<
   mediaProps,
@@ -83,9 +83,10 @@ export default class Gallery extends Component<
           if (result.variant === 'message') {
             medias.push(result)
           } else {
-            medias.push({ error: result.error, sortTimestamp: 0 });
+            medias.push({ error: result.error });
           }
         }
+        medias.reverse()
         this.setState({ id, msgTypes, medias })
         this.forceUpdate()
       })
@@ -142,7 +143,6 @@ export default class Gallery extends Component<
                   ''
                 )}
                 {medias
-                  .sort((a, b) => b.sortTimestamp - a.sortTimestamp)
                   .map(message => {
                     if (typeof message.error === 'string') {
                       return (
