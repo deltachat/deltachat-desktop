@@ -5,6 +5,7 @@
 ### Added
 
 ### Changed
+- update electron from `v22.3.23` to version `v22.3.24`
 
 ### Fixed
 - Display the toast after successful key import.
