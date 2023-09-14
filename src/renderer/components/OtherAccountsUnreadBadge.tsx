@@ -20,9 +20,10 @@ export default function OtherAccountsUnreadBadge(props: ComponentProps) {
   ] = useState<boolean>(false)
 
   const settings = useSettingsStore()[0]
-  if (settings === null) return null
 
   useEffect(() => {
+    if (settings === null) return
+    if (settings.desktopSettings.syncAllAccounts === false) return
     let updating = false
     const update = () => {
       if (updating) return
@@ -46,9 +47,9 @@ export default function OtherAccountsUnreadBadge(props: ComponentProps) {
       )
 
     return update
-  }, [settings.desktopSettings.syncAllAccounts])
+  }, [settings])
 
-  if (settings.desktopSettings.syncAllAccounts && haveOtherAccountsUnread) {
+  if (settings && settings.desktopSettings.syncAllAccounts && haveOtherAccountsUnread) {
     return <div className='unread-badge' style={{ ...props }} />
   } else {
     return null
