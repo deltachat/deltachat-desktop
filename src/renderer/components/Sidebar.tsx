@@ -13,12 +13,12 @@ import { VERSION } from '../../shared/build-info'
 import { ActionEmitter, KeybindAction } from '../keybindings'
 import SettingsConnectivityDialog from './dialogs/Settings-Connectivity'
 import { debounceWithInit } from './chat/ChatListHelpers'
-import UnreadBadge from './UnreadBadge'
 import {
   BackendRemote,
   EffectfulBackendActions,
   onDCEvent,
 } from '../backend-com'
+import OtherAccountsUnreadBadge from './OtherAccountsUnreadBadge'
 
 export type SidebarState = 'init' | 'visible' | 'invisible'
 
@@ -26,11 +26,9 @@ const Sidebar = React.memo(
   ({
     sidebarState,
     setSidebarState,
-    haveOtherAccountsUnread,
   }: {
     sidebarState: SidebarState
     setSidebarState: React.Dispatch<React.SetStateAction<SidebarState>>
-    haveOtherAccountsUnread: boolean
   }) => {
     const screenContext = useContext(ScreenContext)
     const settings = useSettingsStore()[0]
@@ -183,9 +181,7 @@ const Sidebar = React.memo(
           </div>
           <div key='logout' className='sidebar-item' onClick={onLogout}>
             {tx('switch_account')}
-            {haveOtherAccountsUnread && (
-              <UnreadBadge top='-38px' left='-14px' />
-            )}
+            <OtherAccountsUnreadBadge top='-38px' left='-14px' />
           </div>
           <div className='footer'>
             <Link href='https://delta.chat' label={'Delta Chat Desktop'} />

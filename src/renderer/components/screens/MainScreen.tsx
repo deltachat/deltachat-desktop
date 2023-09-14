@@ -19,8 +19,6 @@ import {
   selectChat,
   setChatView,
 } from '../helpers/ChatMethods'
-import { BackendRemote, onDCEvent } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
 
 import {
   Alignment,
@@ -44,7 +42,7 @@ import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 import { Type } from '../../backend-com'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import { SettingsProfileDialog } from '../dialogs/Settings-Profile'
-import UnreadBadge from '../UnreadBadge'
+import OtherAccountsUnreadBadge from '../OtherAccountsUnreadBadge'
 
 const log = getLogger('renderer/main-screen')
 
@@ -53,36 +51,6 @@ export default function MainScreen() {
   const [queryChatId, setQueryChatId] = useState<null | number>(null)
   const [sidebarState, setSidebarState] = useState<SidebarState>('init')
   const [showArchivedChats, setShowArchivedChats] = useState<boolean>(false)
-  const [
-    haveOtherAccountsUnread,
-    setHaveOtherAccountsUnread,
-  ] = useState<boolean>(false)
-
-  useEffect(() => {
-    let updating = false
-    const update = () => {
-      if (updating) return
-      updating = true
-      BackendRemote.rpc.getAllAccountIds().then(accountIds => {
-        accountIds = accountIds.filter(id => id !== selectedAccountId())
-        for (const accountId of accountIds) {
-          BackendRemote.rpc.getFreshMsgs(accountId).then(ids => {
-            if (ids.length > 0) setHaveOtherAccountsUnread(true)
-          })
-        }
-      })
-      updating = false
-    }
-    update()
-
-    BackendRemote.rpc
-      .getAllAccountIds()
-      .then(accountIds =>
-        accountIds.map(id => onDCEvent(id, 'IncomingMsg', update))
-      )
-
-    return update
-  })
 
   // Small hack/misuse of keyBindingAction to setShowArchivedChats from other components (especially
   // ViewProfile when selecting a shared chat/group)
@@ -236,9 +204,7 @@ export default function MainScreen() {
               id='hamburger-menu-button'
             >
               <Icon icon='menu' aria-label={tx('main_menu')} iconSize={20} />
-              {haveOtherAccountsUnread && (
-                <UnreadBadge top='-26px' left='14px' />
-              )}
+              <OtherAccountsUnreadBadge top='-26px' left='14px' />
             </div>
             {queryStr.length === 0 && showArchivedChats && (
               <>
@@ -373,11 +339,7 @@ export default function MainScreen() {
         />
         {MessageListView}
       </div>
-      <Sidebar
-        sidebarState={sidebarState}
-        setSidebarState={setSidebarState}
-        haveOtherAccountsUnread={haveOtherAccountsUnread}
-      />
+      <Sidebar sidebarState={sidebarState} setSidebarState={setSidebarState} />
       <ConnectivityToast />
     </div>
   )

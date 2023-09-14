@@ -21,6 +21,9 @@ $hover-contrast-change: 2%;
   --ovalButtonBgHover: #{changeContrast($ovalButtonBg, 70%)};
   --ovalButtonText: #{$ovalButtonText};
   --ovalButtonTextHover: #{desaturate(invert($ovalButtonText), 1)};
+  /* UnreadBadge */
+  --unreadBadgeColor1: #{$colorPrimary};
+  --unreadBadgeColor2: mix(#{$colorPrimary}, transparent, 20%);
   /* NavBar */
   --navBarBackground: #{$bgNavBar};
   --navBarText: #{$textNavBar};
