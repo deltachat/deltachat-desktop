@@ -157,7 +157,7 @@ export function ImageAttachment({
         onContextMenu={onContextMenu}
       >
         <div className='attachment-content'>
-          {tx('attachment_failed_to_load')}: {load_result.error}
+          {tx('attachment_failed_to_load')}
         </div>
       </div>
     )
@@ -206,7 +206,7 @@ export function VideoAttachment({
         onContextMenu={onContextMenu}
       >
         <div className='attachment-content'>
-          {tx('attachment_failed_to_load')}: {load_result.error}
+          {tx('attachment_failed_to_load')}
         </div>
       </div>
     )
@@ -261,7 +261,7 @@ export function AudioAttachment({
         onContextMenu={onContextMenu}
       >
         <div className='attachment-content'>
-          {tx('attachment_failed_to_load')}: {load_result.error}
+          {tx('attachment_failed_to_load')}
         </div>
       </div>
     )
@@ -317,7 +317,7 @@ export function FileAttachment({
         onContextMenu={onContextMenu}
       >
         <div className='attachment-content'>
-          {tx('attachment_failed_to_load')}: {load_result.error}
+          {tx('attachment_failed_to_load')}
         </div>
       </div>
     )
@@ -379,7 +379,7 @@ export function WebxdcAttachment({
         onContextMenu={onContextMenu}
       >
         <div className='attachment-content'>
-          {tx('attachment_failed_to_load')}: {load_result.error}
+          {tx('attachment_failed_to_load')}
         </div>
       </div>
     )
