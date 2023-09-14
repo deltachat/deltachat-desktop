@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- Global Gallery
 - mark webxdc app context as secure #3413
 
 ### Changed
