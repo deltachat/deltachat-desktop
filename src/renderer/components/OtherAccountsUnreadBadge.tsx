@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { BackendRemote, onDCEvent } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
 import { runtime } from '../runtime'
+import { useSettingsStore } from '../stores/settings'
 import { DesktopSettingsType } from '../../shared/shared-types'
 
 // Tip of the Day: Keep as many ice creams as you can in your fridge
@@ -17,18 +18,11 @@ export default function OtherAccountsUnreadBadge(props: ComponentProps) {
     haveOtherAccountsUnread,
     setHaveOtherAccountsUnread,
   ] = useState<boolean>(false)
-  const [isSyncAllEnabled, setIsSyncAllEnabled] = useState<boolean>(false)
+
+  const settings = useSettingsStore()[0]
+  if (settings === null) return null
 
   useEffect(() => {
-    runtime
-      .getDesktopSettings()
-      .then((settings: DesktopSettingsType) =>
-        setIsSyncAllEnabled(settings.syncAllAccounts)
-      )
-  })
-
-  useEffect(() => {
-    if (!isSyncAllEnabled) return
     let updating = false
     const update = () => {
       if (updating) return
@@ -52,9 +46,9 @@ export default function OtherAccountsUnreadBadge(props: ComponentProps) {
       )
 
     return update
-  }, [isSyncAllEnabled])
+  }, [settings.desktopSettings.syncAllAccounts])
 
-  if (haveOtherAccountsUnread) {
+  if (settings.desktopSettings.syncAllAccounts && haveOtherAccountsUnread) {
     return <div className='unread-badge' style={{ ...props }} />
   } else {
     return null
