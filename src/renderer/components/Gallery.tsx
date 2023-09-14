@@ -1,6 +1,13 @@
 import React, { Component } from 'react'
 import { ScreenContext } from '../contexts'
-import MediaAttachment from './attachment/mediaAttachment'
+import {
+  AudioAttachment,
+  FileAttachment,
+  GalleryAttachmentElementProps,
+  ImageAttachment,
+  VideoAttachment,
+  WebxdcAttachment,
+} from './attachment/mediaAttachment'
 import { getLogger } from '../../shared/logger'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
@@ -11,35 +18,44 @@ type MediaTabKey = 'images' | 'video' | 'audio' | 'files' | 'webxdc_apps'
 
 const MediaTabs: Readonly<
   {
-    [key in MediaTabKey]: { values: Type.Viewtype[] }
+    [key in MediaTabKey]: {
+      values: Type.Viewtype[]
+      element: (props: GalleryAttachmentElementProps) => JSX.Element
+    }
   }
 > = {
   images: {
     values: ['Gif', 'Image'],
+    element: ImageAttachment,
   },
   video: {
     values: ['Video'],
+    element: VideoAttachment,
   },
   audio: {
     values: ['Audio', 'Voice'],
+    element: AudioAttachment,
   },
   files: {
     values: ['File'],
+    element: FileAttachment,
   },
   webxdc_apps: {
     values: ['Webxdc'],
+    element: WebxdcAttachment,
   },
 }
 
 type mediaProps = { chatId: number | 'all' }
-type Error = { error: string }
 
 export default class Gallery extends Component<
   mediaProps,
   {
     id: MediaTabKey
     msgTypes: Type.Viewtype[]
-    medias: (Type.Message | Error)[]
+    element: (props: GalleryAttachmentElementProps) => JSX.Element
+    mediaMessageIds: number[]
+    mediaLoadResult: Record<number, Type.MessageLoadResult>
   }
 > {
   constructor(props: mediaProps) {
@@ -47,7 +63,9 @@ export default class Gallery extends Component<
     this.state = {
       id: 'images',
       msgTypes: MediaTabs.images.values,
-      medias: [],
+      element: ImageAttachment,
+      mediaMessageIds: [],
+      mediaLoadResult: {},
     }
   }
 
@@ -72,22 +90,17 @@ export default class Gallery extends Component<
     BackendRemote.rpc
       .getChatMedia(accountId, chatId, msgTypes[0], msgTypes[1], null)
       .then(async media_ids => {
-        // throws if some media is not found
-        const all_media_fetch_results = await BackendRemote.rpc.getMessages(
+        const mediaLoadResult = await BackendRemote.rpc.getMessages(
           accountId,
           media_ids
         )
-        const medias: (Type.Message | Error)[] = []
-        for (const msgId of media_ids) {
-          const result = all_media_fetch_results[msgId]
-          if (result.variant === 'message') {
-            medias.push(result)
-          } else {
-            medias.push({ error: result.error });
-          }
-        }
-        medias.reverse()
-        this.setState({ id, msgTypes, medias })
+        media_ids.reverse() // order newest up - if we need different ordering we need to do it in core
+        this.setState({
+          id,
+          msgTypes,
+          mediaMessageIds: media_ids,
+          mediaLoadResult,
+        })
         this.forceUpdate()
       })
       .catch(log.error.bind(log))
@@ -111,7 +124,7 @@ export default class Gallery extends Component<
   }
 
   render() {
-    const { medias, id } = this.state
+    const { mediaMessageIds, mediaLoadResult, id } = this.state
     const tx = window.static_translate // static because dynamic isn't too important here
     const emptyTabMessage = this.emptyTabMessage(id)
 
@@ -137,28 +150,19 @@ export default class Gallery extends Component<
           <div className='bp4-tab-panel' role='tabpanel'>
             <div className='gallery'>
               <div className='item-container'>
-                {medias.length < 1 ? (
+                {mediaMessageIds.length < 1 ? (
                   <p className='no-media-message'>{emptyTabMessage}</p>
                 ) : (
                   ''
                 )}
-                {medias
-                  .map(message => {
-                    if (typeof message.error === 'string') {
-                      return (
-                        <div className='item' key={message.error}>
-                          No image! error! 
-                        </div>
-                      );
-                    } else {
-                      message = message as Type.Message
-                      return (
-                        <div className='item' key={message.id}>
-                          <MediaAttachment message={message} />
-                        </div>
-                      )
-                    }
-                  })}
+                {mediaMessageIds.map(msgId => {
+                  const message = mediaLoadResult[msgId]
+                  return (
+                    <div className='item' key={msgId}>
+                      <this.state.element msgId={msgId} load_result={message} />
+                    </div>
+                  )
+                })}
               </div>
             </div>
           </div>
