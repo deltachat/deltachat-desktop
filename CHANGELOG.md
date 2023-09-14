@@ -2,9 +2,12 @@
 
 ## [Unreleased][unreleased]
 
-### Added
+<a id="1_40_4"></a>
 
- - Show video chat instance URLs as subtitles #3369
+## [1.40.4] - 2023-09-14
+
+### Added
+- Show video chat instance URLs as subtitles #3369
 
 ### Changed
 - Offer to copy non-HTTP links to the clipboard instead of trying to open them in webxdc source code link and inside of html emails.
@@ -2166,7 +2169,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.3...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.4...HEAD
+
+[1.40.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.3...v1.40.4
 
 [1.40.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.2-fixed-tag...v1.40.3
 
