@@ -152,7 +152,7 @@ For development with local deltachat-core read the [docs](docs/UPDATE_CORE.md)
 
 ### Troubleshooting <a id="troubleshooting"></a>
 
-This module builds on top of `deltachat-core-rust`, which in turn has external dependencies. Instructions below assumes a Linux system (e.g. Ubuntu 18.10).
+This module builds on top of [`deltachat-core-rust`](https://github.com/deltachat/deltachat-core-rust), which in turn has external dependencies. Instructions below assumes a Linux system (e.g. Ubuntu 18.10).
 
 If you get errors when running `npm install`, they might be related to the _build_ dependency `rust`.
 
@@ -161,10 +161,9 @@ Follow the instruction on <https://rustup.rs/> to install rust and cargo.
 
 Then try running `npm install` again.
 
-Make sure that your nodejs version is `16.0.0` or newer.
+Make sure that your nodejs version is `18.0.0` or newer.
 
-If you still get errors look at the instructions in the deltchat-node and
-deltachat-rust-core README files to set things up **or write an issue**.
+If you still get errors look at the instructions in the [`deltachat-node`](https://github.com/deltachat/deltachat-node) and [`deltachat-core-rust`](https://github.com/deltachat/deltachat-core-rust) README files to set things up [`or write an issue`](https://github.com/deltachat/deltachat-desktop/issues/new/choose).
 
 ## Configuration and Databases <a id="config-and-db"></a>
 
