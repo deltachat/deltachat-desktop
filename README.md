@@ -163,7 +163,7 @@ Then try running `npm install` again.
 
 Make sure that your nodejs version is `18.0.0` or newer.
 
-If you still get errors look at the instructions in the [`deltachat-node`](https://github.com/deltachat/deltachat-node) and [`deltachat-core-rust`](https://github.com/deltachat/deltachat-core-rust) README files to set things up [`or write an issue`](https://github.com/deltachat/deltachat-desktop/issues/new/choose).
+If you still get errors look at the instructions in the [`deltachat-node`](https://github.com/deltachat/deltachat-core-rust/tree/master/node) and [`deltachat-core-rust`](https://github.com/deltachat/deltachat-core-rust) README files to set things up [`or write an issue`](https://github.com/deltachat/deltachat-desktop/issues/new/choose).
 
 ## Configuration and Databases <a id="config-and-db"></a>
 
