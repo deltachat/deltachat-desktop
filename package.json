@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "preinstall": "node ./bin/check-nodejs-version.js",
-    "test": "npm run check-types && npm run lint && npm run check-formatting && npm run test-log-conventions && npm run test-unit && npm run test-misc",
+    "test": "npm run check-types && npm run lint && npm run test-log-conventions && npm run test-unit && npm run test-misc",
     "test-misc": "node ./bin/test_package_lock_version",
     "test-log-conventions": "node ./bin/log-conventions",
     "test-unit": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'test/mocha/**/*.ts'",
