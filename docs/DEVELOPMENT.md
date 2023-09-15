@@ -2,8 +2,6 @@
 
 ## Table of Contents
 
-> table of contents is coming soon [TODO]
-
 <details><summary>Click to expand</summary>
 
 - [Quick Tips](#quick-tipps)
