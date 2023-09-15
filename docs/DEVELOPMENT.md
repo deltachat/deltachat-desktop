@@ -24,10 +24,6 @@
 
 </details>
 
-## Quick Tips <!-- TODO find a better name for this section --> <a id="quick-tipps"></a>
-
-- if you work with SCSS make sure you read [docs/STYLES.md](./STYLES.md)
-
 ## How to Contribute <a id="how-to-contribute"></a>
 
 ### Run the Code <a id="run-the-code"></a>
@@ -77,6 +73,8 @@ const unused_var = 'This line would normally trigger some linting errors'
 Running `npm run lint` when using VS Code will make VS Code display the found problems.
 
 We set up the linting using this guide: https://github.com/typescript-eslint/typescript-eslint/blob/master/docs/getting-started/linting/README.md
+
+If you work with SCSS make sure you read [docs/STYLES.md](./STYLES.md)
 
 ### Tests <a id="tests"></a>
 
