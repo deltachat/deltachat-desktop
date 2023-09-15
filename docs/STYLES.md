@@ -1,7 +1,6 @@
 # CSS Guidelines
 
-We use `prettier` for code formatting,
-use `npm run fix-formatting` before committing to format the code.
+We use `prettier` for CSS formatting. Use `npm run lint:fix` before committing to format the code.
 
 ## How we go about styles
 

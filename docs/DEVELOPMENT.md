@@ -2,11 +2,8 @@
 
 ## Table of Contents
 
-> table of contents is coming soon [TODO]
-
 <details><summary>Click to expand</summary>
 
-- [Quick Tips](#quick-tipps)
 - [How to Contribute](#how-to-contribute)
   - [Run the Code](#run-the-code)
   - [Code Style](#code-style)
@@ -25,12 +22,6 @@
   - [URI Schemes on linux](#linux-uri-schemes)
 
 </details>
-
-## Quick Tips <!-- TODO find a better name for this section --> <a id="quick-tipps"></a>
-
-- We use `prettier` for code formatting,
-  use `npm run fix-formatting` before committing to format the code.
-- if you work with SCSS make sure you read [docs/STYLES.md](./STYLES.md)
 
 ## How to Contribute <a id="how-to-contribute"></a>
 
@@ -57,49 +48,38 @@ After making your changes, go in the deltachat/electron Dev-console and press `F
 
 ### Code Style <a id="code-style"></a>
 
-#### Linting <a id="linting"></a>
+We use a combination of [`ESLint`](https://eslint.org) and [`Prettier`](https://prettier.io/) to cover linting/formatting of different types of files.
 
-We use [ESLint](https://eslint.org) with [TypeScript](https://typescriptlang.org/) rules to catch common bad-practices.
+- [`ESLint`](https://eslint.org) is used with [`TypeScript`](https://typescriptlang.org/) rules to catch common bad practices in all `.js`, `.ts` and `.tsx` files
+- [`Prettier`](https://prettier.io/) with rules inspired by [`StandardJS`](https://standardjs.com/) to cover formatting in all `.scss`, `.js`, `.ts`, `.tsx`, `.json` and `.md` files
 
 Commands:
 
 ```sh
-# Run to test
+# Check formatting and code problems
 npm run lint
-# fix autofixable problems and fix formatting
-npm run lint:fix-format
+# Fix autofixable problems and fix formatting
+npm run lint:fix
 ```
 
 Ignore a line:
 
 ```js
 // eslint-disable-next-line
-var unused_var = 'This line would normally trigger some linting errors'
+const unused_var = 'This line would normally trigger some linting errors'
 ```
 
-When using VS Code run `npm run lint`. This makes VS Code display the found problems.
+Running `npm run lint` when using VS Code will make VS Code display the found problems.
 
 We set up the linting using this guide: https://github.com/typescript-eslint/typescript-eslint/blob/master/docs/getting-started/linting/README.md
 
-#### Code Formatting <a id="code-formatting"></a>
-
-We use [Prettier](https://prettier.io/) for formatting with some rules that were inspired by [StandardJS](https://standardjs.com/).
-
-Commands:
-
-```sh
-# check formatting
-npm run check-formatting
-# fix formatting
-npm run fix-formatting
-```
+If you work with SCSS make sure you read [docs/STYLES.md](./STYLES.md)
 
 ### Tests <a id="tests"></a>
 
 Running `npm test` does the following:
 
-- runs `eslint`
-- runs `prettier` to check the code formatting
+- runs `ESLint` and `Prettier` to check the code formatting
 - runs the unit tests
 - checks for illegal use of `console.log()`
 
