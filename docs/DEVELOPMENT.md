@@ -59,7 +59,7 @@ Commands:
 # Check formatting and code problems
 npm run lint
 # Fix autofixable problems and fix formatting
-npm run lint:fix-format
+npm run lint:fix
 ```
 
 Ignore a line:
