@@ -4,7 +4,6 @@
 
 <details><summary>Click to expand</summary>
 
-- [Quick Tips](#quick-tipps)
 - [How to Contribute](#how-to-contribute)
   - [Run the Code](#run-the-code)
   - [Code Style](#code-style)
