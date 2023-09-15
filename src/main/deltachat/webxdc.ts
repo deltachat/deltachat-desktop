@@ -282,6 +282,42 @@ export default class DCWebxdc extends SplitOut {
               ],
             },
             {
+              label: tx('global_menu_edit_desktop'),
+              submenu: [
+                {
+                  label: tx('global_menu_edit_undo_desktop'),
+                  role: 'undo',
+                },
+                {
+                  label: tx('global_menu_edit_redo_desktop'),
+                  role: 'redo',
+                },
+                {
+                  type: 'separator',
+                },
+                {
+                  label: tx('global_menu_edit_cut_desktop'),
+                  role: 'cut',
+                },
+                {
+                  label: tx('global_menu_edit_copy_desktop'),
+                  role: 'copy',
+                },
+                {
+                  label: tx('global_menu_edit_paste_desktop'),
+                  role: 'paste',
+                },
+                {
+                  label: tx('delete'),
+                  role: 'delete',
+                },
+                {
+                  label: tx('menu_select_all'),
+                  role: 'selectAll',
+                },
+              ],
+            },
+            {
               label: tx('global_menu_view_desktop'),
               submenu: [
                 ...(DesktopSettings.state.enableWebxdcDevTools
