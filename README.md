@@ -152,7 +152,7 @@ For development with local deltachat-core read the [docs](docs/UPDATE_CORE.md)
 
 ### Troubleshooting <a id="troubleshooting"></a>
 
-This module builds on top of [`deltachat-core-rust`](https://github.com/deltachat/deltachat-core-rust), which in turn has external dependencies. Instructions below assumes a Linux system (e.g. Ubuntu 18.10).
+This module builds on top of [`deltachat-core-rust`](https://github.com/deltachat/deltachat-core-rust), which in turn has external dependencies. The instructions below assume a Linux system (e.g. Ubuntu 18.10).
 
 If you get errors when running `npm install`, they might be related to the _build_ dependency `rust`.
 
