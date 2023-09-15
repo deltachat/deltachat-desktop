@@ -80,8 +80,7 @@ If you work with SCSS make sure you read [docs/STYLES.md](./STYLES.md)
 
 Running `npm test` does the following:
 
-- runs `eslint`
-- runs `prettier` to check the code formatting
+- runs `ESLint` and `Prettier` to check the code formatting
 - runs the unit tests
 - checks for illegal use of `console.log()`
 
