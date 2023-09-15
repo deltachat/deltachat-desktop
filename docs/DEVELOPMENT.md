@@ -26,8 +26,6 @@
 
 ## Quick Tips <!-- TODO find a better name for this section --> <a id="quick-tipps"></a>
 
-- We use `prettier` for code formatting,
-  use `npm run fix-formatting` before committing to format the code.
 - if you work with SCSS make sure you read [docs/STYLES.md](./STYLES.md)
 
 ## How to Contribute <a id="how-to-contribute"></a>
