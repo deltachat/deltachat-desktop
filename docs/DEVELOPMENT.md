@@ -50,7 +50,7 @@ After making your changes, go in the deltachat/electron Dev-console and press `F
 
 We use a combination of [`ESLint`](https://eslint.org) and [`Prettier`](https://prettier.io/) to cover linting/formatting of different types of files.
 
-- [`ESLint`](https://eslint.org) is used with [`TypeScript`](https://typescriptlang.org/) rules to catch common bad practices in all `.js`, `.jsx`, `.ts` and `.tsx` files
+- [`ESLint`](https://eslint.org) is used with [`TypeScript`](https://typescriptlang.org/) rules to catch common bad practices in all `.js`, `.ts` and `.tsx` files
 - [`Prettier`](https://prettier.io/) with rules inspired by [`StandardJS`](https://standardjs.com/) to cover formatting in all `.scss`, `.js`, `.ts`, `.tsx`, `.json` and `.md` files
 
 Commands:
