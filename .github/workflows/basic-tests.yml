@@ -31,12 +31,9 @@ jobs:
     - name: Check Typescript Types
       run: |
         npm run check-types
-    - name: Run ESLint
+    - name: Run ESLint and Prettier
       run: |
         npm run lint
-    - name: Check Formatting
-      run: |
-        npm run check-formatting
     - name: Check for misplaced console.log statements
       run: |
         npm run test-log-conventions
