@@ -56,7 +56,7 @@ We use a combination of [`ESLint`](https://eslint.org) and [`Prettier`](https://
 Commands:
 
 ```sh
-# Check formatting
+# Check formatting and code problems
 npm run lint
 # Fix autofixable problems and fix formatting
 npm run lint:fix-format
