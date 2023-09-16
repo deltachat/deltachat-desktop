@@ -145,7 +145,7 @@ For the usage please look at existing code, the types and the doc comments.
 
 ### CI <a id="ci"></a>
 
-For Continuous Integration we currently use Travis and Github Actions.
+For Continuous Integration we use GitHub Actions.
 
 ### Packaging <a id="packaging"></a>
 
