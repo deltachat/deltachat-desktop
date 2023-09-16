@@ -48,32 +48,49 @@ After making your changes, go in the deltachat/electron Dev-console and press `F
 
 ### Code Style <a id="code-style"></a>
 
-We use a combination of [`ESLint`](https://eslint.org) and [`Prettier`](https://prettier.io/) to cover linting/formatting of different types of files.
+#### Checking Code Style
 
-- [`ESLint`](https://eslint.org) is used with [`TypeScript`](https://typescriptlang.org/) rules to catch common bad practices in all `.js`, `.ts` and `.tsx` files
-- [`Prettier`](https://prettier.io/) with rules inspired by [`StandardJS`](https://standardjs.com/) to cover formatting in all `.scss`, `.js`, `.ts`, `.tsx`, `.json` and `.md` files
-
-Commands:
+The primary command for checking any changes made to the code is:
 
 ```sh
-# Check formatting and code problems
-npm run lint
-# Fix autofixable problems and fix formatting
-npm run lint:fix
+npm run check
 ```
 
-Ignore a line:
+This command in turn splits up into the following commands:
+
+- `npm run check:types` -> Runs `tsc` to make sure the `TypeScript` code is ok
+- `npm run check:lint` -> Runs [`eslint`](https://eslint.org) with [`TypeScript`](https://typescriptlang.org/) rules to check for common bad practices in all `.js`, `.ts` and `.tsx` files
+- `npm run check:format` -> Runs [`Prettier`](https://prettier.io/) with rules inspired by [`StandardJS`](https://standardjs.com/) to check formatting in all `.scss`, `.js`, `.ts`, `.tsx`, `.json` and `.md` files
+
+Sometimes `eslint` complains on code lines that for whatever reason doesn't fit well with the project style. Lines like this can be ignored by using `// eslint-disable-next-line` on the line prior to the line you would like to ignore:
 
 ```js
 // eslint-disable-next-line
 const unused_var = 'This line would normally trigger some linting errors'
 ```
 
-Running `npm run lint` when using VS Code will make VS Code display the found problems.
+We set up the linting using this [`guide`](https://github.com/typescript-eslint/typescript-eslint/blob/master/docs/getting-started/linting/README.md)
 
-We set up the linting using this guide: https://github.com/typescript-eslint/typescript-eslint/blob/master/docs/getting-started/linting/README.md
+If you work with SCSS make sure you read [`docs/STYLES.md`](./STYLES.md)
 
-If you work with SCSS make sure you read [docs/STYLES.md](./STYLES.md)
+If you're unsure it's always safe to run `npm run check` to check everything. If you know what you're doing you can run the lower level commands for a more fine grained check.
+
+#### Fixing Code Style
+
+If the code style check fails you can try to have it fixed for you. The primary command for doing this is:
+
+```sh
+npm run fix
+```
+
+This command in turn splits up into the following commands:
+
+- `npm run fix:lint` -> Runs [`eslint`](https://eslint.org) to attempt fixing any issues in all `.js`, `.ts` and `.tsx` files
+- `npm run fix:format` -> Runs [`Prettier`](https://prettier.io/) to attempt fixing formatting in all `.scss`, `.js`, `.ts`, `.tsx`, `.json` and `.md` files
+
+Running `npm run check:lint` when using VS Code will make VS Code display the found problems.
+
+If you're unsure it's always safe to run `npm run fix` to fix everything. If you know what you're doing you can run the lower level commands for a more fine grained fix.
 
 ### Tests <a id="tests"></a>
 
