@@ -10,7 +10,7 @@
     "test-log-conventions": "node ./bin/log-conventions",
     "test-unit": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'test/mocha/**/*.ts'",
     "check-types": "tsc -b src/check-all-tsconfig.json",
-    "lint": "eslint . --ext .js,,.ts,.tsx && prettier --check \"scss/**/*.scss\" && prettier --check \"src/**/*.{js,ts,tsx,json}\" && prettier --check \"**/*.md\"",
+    "lint": "eslint . --ext .js,.ts,.tsx && prettier --check \"scss/**/*.scss\" && prettier --check \"src/**/*.{js,ts,tsx,json}\" && prettier --check \"**/*.md\"",
     "lint:fix": "eslint . --ext .js,,.ts,.tsx --fix || true && prettier --write \"scss/**/*.scss\" && prettier --write \"src/**/*.{js,ts,tsx,json}\" && prettier --write \"**/*.md\"",
     "dev": "npm run build && npm run start --",
     "start": "electron . --devmode --disable-http-cache --translation-watch",
