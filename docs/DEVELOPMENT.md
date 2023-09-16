@@ -73,6 +73,8 @@ We set up the linting using this [`guide`](https://github.com/typescript-eslint/
 
 If you work with SCSS make sure you read [`docs/STYLES.md`](./STYLES.md)
 
+Running `npm run check:lint` when using VS Code will make VS Code display the found problems.
+
 If you're unsure it's always safe to run `npm run check` to check everything. If you know what you're doing you can run the lower level commands for a more fine grained check.
 
 #### Fixing Code Style
@@ -87,8 +89,6 @@ This command in turn splits up into the following commands:
 
 - `npm run fix:lint` -> Runs [`eslint`](https://eslint.org) to attempt fixing any issues in all `.js`, `.ts` and `.tsx` files
 - `npm run fix:format` -> Runs [`Prettier`](https://prettier.io/) to attempt fixing formatting in all `.scss`, `.js`, `.ts`, `.tsx`, `.json` and `.md` files
-
-Running `npm run check:lint` when using VS Code will make VS Code display the found problems.
 
 If you're unsure it's always safe to run `npm run fix` to fix everything. If you know what you're doing you can run the lower level commands for a more fine grained fix.
 
