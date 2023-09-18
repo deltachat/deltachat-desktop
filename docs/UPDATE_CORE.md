@@ -24,7 +24,7 @@ These files are automatically built by GitHub CI in the core repository and then
 
 **NOTE** Publishing files to `npm` requires permission to do so. If you don't have the permissions to publish, ask someone else that does or ask to be added.
 
-## Update to a development version (for a pull request that needs a new core to be tested)
+## Update to a development version
 
 So you are prototyping a new function and have a desktop and a core pr and want to link the core pr in the desktop pr so that the CI can properly test your pull request.
 
