@@ -2,7 +2,7 @@
 
 [DeltaChat core](https://github.com/deltachat/deltachat-core-rust) is the base library that all clients and bots build upon and is the heart of DeltaChat.
 
-To update core you need to update 2 dependencies:
+To update the desktop application to a new core you need to update the following dependencies:
 
 - `deltachat-node` - contains the core library, node bindings for the cffi and the node-gyp glue to make it work
 - `@deltachat/jsonrpc-client` - The types for communicating with the core using the JSON-RPC API are contained within this module.
