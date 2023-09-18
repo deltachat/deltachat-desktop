@@ -1,7 +1,6 @@
 # Update core
 
-[DeltaChat core](https://github.com/deltachat/deltachat-core-rust) is the hearth of DeltaChat, it is the base library
-that all clients and bots build upon.
+[DeltaChat core](https://github.com/deltachat/deltachat-core-rust) is the base library that all clients and bots build upon and is the heart of DeltaChat.
 
 To update core you need to update 2 dependencies:
 
