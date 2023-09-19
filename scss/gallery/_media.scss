@@ -10,7 +10,6 @@ $tab-height: 46px;
   overflow: hidden;
 
   & .gallery {
-    overflow: scroll;
     height: calc(100vh - #{$tab-height} - #{$nav-bar-height});
 
     & > .item-container {
