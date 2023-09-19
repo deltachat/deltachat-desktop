@@ -214,9 +214,9 @@ export default class Gallery extends Component<
                       minWidth = 322
                     }
 
-                    const itemsPerRow = Math.floor(
+                    const itemsPerRow = Math.max(Math.floor(
                       widthWithoutScrollbar / minWidth
-                    )
+                    ), 1)
 
                     let itemWidth = widthWithoutScrollbar / itemsPerRow
 
