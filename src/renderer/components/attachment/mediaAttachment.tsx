@@ -3,7 +3,6 @@ import {
   openAttachmentInShell,
   onDownload,
   openWebxdc,
-  confirmDeleteMessage,
 } from '../message/messageFunctions'
 import { ScreenContext, unwrapContext } from '../../contexts'
 import {
@@ -183,7 +182,7 @@ export function ImageAttachment({
           <img
             className='attachment-content'
             src={runtime.transformBlobURL(file)}
-            loading="lazy"
+            loading='lazy'
           />
         )}
       </div>
@@ -306,10 +305,11 @@ export function AudioAttachment({
   }
 }
 
-export function FileAttachment({
+export function FileAttachmentRow({
   msgId,
   load_result,
-}: GalleryAttachmentElementProps) {
+  queryText,
+}: GalleryAttachmentElementProps & { queryText?: string }) {
   const screenContext = useContext(ScreenContext)
   const tx = window.static_translate
 
@@ -362,7 +362,11 @@ export function FileAttachment({
           ) : null}
         </div>
         <div className='text-part'>
-          <div className='name'>{fileName}</div>
+          <div className='name'>
+            {queryText && fileName
+              ? highlightQuery(fileName, queryText)
+              : fileName}
+          </div>
           <div className='size'>
             {fileBytes ? filesizeConverter(fileBytes) : '?'}
           </div>
@@ -370,6 +374,28 @@ export function FileAttachment({
       </div>
     )
   }
+}
+
+const highlightQuery = (msg: string, query: string) => {
+  const pos_of_search_term = msg.toLowerCase().indexOf(query.toLowerCase())
+  if (pos_of_search_term == -1) return msg
+  const text = msg
+  const pos_of_search_term_in_text = pos_of_search_term
+
+  const before = text.slice(0, pos_of_search_term_in_text)
+  const search_term = text.slice(
+    pos_of_search_term_in_text,
+    pos_of_search_term_in_text + query.length
+  )
+  const after = text.slice(pos_of_search_term_in_text + query.length)
+
+  return (
+    <>
+      {before}
+      <span className='highlight'>{search_term}</span>
+      {after}
+    </>
+  )
 }
 
 export function WebxdcAttachment({
