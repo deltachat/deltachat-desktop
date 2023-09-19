@@ -174,7 +174,7 @@ export default class Gallery extends Component<
                     : undefined,
               }}
             >
-              {!(this.state.id === 'images' || this.state.id === 'video') && (
+              {this.state.id === 'files' && (
                 <div className='item-container'>
                   {mediaMessageIds.length < 1 ? (
                     <p className='no-media-message'>{emptyTabMessage}</p>
@@ -195,23 +195,48 @@ export default class Gallery extends Component<
                 </div>
               )}
 
-              {(this.state.id === 'images' || this.state.id === 'video') && (
+              {this.state.id !== 'files' && (
                 <AutoSizer>
                   {({ width, height }) => {
-                    const size = 200 // TODO: calc this stuff
-                    const itemsPerRow = Math.floor(width / size)
+                    const widthWithoutScrollbar = width - 6
+
+                    let minWidth = 160
+
+                    if (this.state.id === 'webxdc_apps') {
+                      minWidth = 300
+                    }
+                    if (this.state.id === 'audio') {
+                      minWidth = 322
+                    }
+
+                    const itemsPerRow = Math.floor(
+                      widthWithoutScrollbar / minWidth
+                    )
+
+                    let itemWidth = widthWithoutScrollbar / itemsPerRow
+
                     const rowCount = Math.ceil(
                       mediaMessageIds.length / itemsPerRow
                     )
+
+                    let itemHeight = itemWidth
+
+                    if (this.state.id === 'webxdc_apps') {
+                      itemHeight = 64
+                    }
+                    if (this.state.id === 'audio') {
+                      itemHeight = 88
+                    }
 
                     return (
                       <FixedSizeGrid
                         width={width}
                         height={height}
-                        columnWidth={size}
-                        rowHeight={size}
+                        columnWidth={itemWidth}
+                        rowHeight={itemHeight}
                         columnCount={itemsPerRow}
                         rowCount={rowCount}
+                        
                       >
                         {({ columnIndex, rowIndex, style }) => {
                           const msgId =
