@@ -146,7 +146,7 @@ export default class Gallery extends Component<
 
     return (
       <div className='media-view'>
-        <div className='bp4-tabs' style={{ minWidth: 200 }}>
+        <div style={{ minWidth: 200 }}>
           <ul className='bp4-tab-list .modifier' role='tablist'>
             {Object.keys(MediaTabs).map(realId => {
               const id = realId as MediaTabKey
@@ -163,7 +163,7 @@ export default class Gallery extends Component<
               )
             })}
           </ul>
-          <div className='bp4-tab-panel' role='tabpanel'>
+          <div role='tabpanel'>
             <div
               className='gallery'
               key={this.state.msgTypes.join('.') + String(this.props.chatId)}
