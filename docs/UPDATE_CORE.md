@@ -1,9 +1,8 @@
 # Update core
 
-[DeltaChat core](https://github.com/deltachat/deltachat-core-rust) is the hearth of DeltaChat, it is the base library
-that all clients and bots build upon.
+[DeltaChat core](https://github.com/deltachat/deltachat-core-rust) is the base library that all clients and bots build upon and is the heart of DeltaChat.
 
-To update core you need to update 2 dependencies:
+To update the desktop application to a new core you need to update the following dependencies:
 
 - `deltachat-node` - contains the core library, node bindings for the cffi and the node-gyp glue to make it work
 - `@deltachat/jsonrpc-client` - The types for communicating with the core using the JSON-RPC API are contained within this module.
@@ -15,10 +14,18 @@ Let's say the core version you want to upgrade to is `X.Y.Z`.
 1. `npm i deltachat-node@X.Y.Z @deltachat/jsonrpc-client@X.Y.Z`
 2. mention that you updated those dependencies in `CHANGELOG.md`
 
-If the core version is not uploaded to NPM yet, then you need to upload the files from our download server to NPM via `npm publish [url] --access=public` (if you have the rights to do so, otherwise ask us to do it).
-They are built by GitHub CI in the core repo and then uploaded to https://download.delta.chat/node/.
+If version `X.Y.Z` hasn't yet been published to `npm`, then you need to publish the files from our download server to `npm` via the following commands:
 
-## Update to a development version (for a pull request that needs a new core to be tested)
+```sh
+npm publish https://download.delta.chat/node/deltachat-node-vX.Y.Z.tar.gz --access=public
+npm publish https://download.delta.chat/node/deltachat-jsonrpc-client-vX.Y.Z.tar.gz --access=public
+```
+
+These files are automatically built by GitHub CI in the core repository and then uploaded to https://download.delta.chat/node/.
+
+**NOTE** Publishing files to `npm` requires permission to do so. If you don't have the permissions to publish, ask someone else that does or ask to be added.
+
+## Update to a development version
 
 So you are prototyping a new function and have a desktop and a core pr and want to link the core pr in the desktop pr so that the CI can properly test your pull request.
 
