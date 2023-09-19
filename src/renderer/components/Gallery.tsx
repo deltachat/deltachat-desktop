@@ -236,7 +236,7 @@ export default class Gallery extends Component<
                         rowHeight={itemHeight}
                         columnCount={itemsPerRow}
                         rowCount={rowCount}
-                        
+                        overscanRowCount={10}
                       >
                         {({ columnIndex, rowIndex, style }) => {
                           const msgId =
