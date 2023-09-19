@@ -71,6 +71,12 @@
       color: grey;
     }
   }
+
+  &.broken {
+    .name {
+      color: var(--colorDanger);
+    }
+  }
 }
 
 .media-attachment-generic {
@@ -145,6 +151,16 @@
       margin-top: 3px;
     }
   }
+
+  &.broken {
+    & > .file-icon {
+      cursor: unset;
+    }
+    .name,
+    .file-extension {
+      color: var(--colorDanger);
+    }
+  }
 }
 
 .media-attachment-webxdc {
@@ -193,6 +209,15 @@
       user-select: text;
       position: relative;
       word-break: break-all;
+    }
+  }
+
+  &.broken {
+    & > .icon {
+      background-color: var(--colorDanger);
+    }
+    .name {
+      color: var(--colorDanger);
     }
   }
 }
