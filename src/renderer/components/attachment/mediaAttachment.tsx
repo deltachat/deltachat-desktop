@@ -256,10 +256,14 @@ export function AudioAttachment({
     const onContextMenu = getBrokenMediaContextMenu(screenContext, msgId)
     return (
       <div
-        className={'media-attachment-media broken'}
+        className={'media-attachment-audio broken'}
         title={load_result.error}
         onContextMenu={onContextMenu}
       >
+        <div className='heading'>
+          <div className='name'>? Error ?</div>
+          <span className='date'>?</span>
+        </div>
         <div className='attachment-content'>
           {tx('attachment_failed_to_load')}
         </div>
@@ -312,12 +316,16 @@ export function FileAttachment({
     const onContextMenu = getBrokenMediaContextMenu(screenContext, msgId)
     return (
       <div
-        className={'media-attachment-media broken'}
+        className={'media-attachment-generic broken'}
         title={load_result.error}
         onContextMenu={onContextMenu}
       >
-        <div className='attachment-content'>
-          {tx('attachment_failed_to_load')}
+        <div className='file-icon'>
+          <div className='file-extension'>?</div>
+        </div>
+        <div className='text-part'>
+          <div className='name'>{tx('attachment_failed_to_load')}</div>
+          <div className='size'>{'?'}</div>
         </div>
       </div>
     )
@@ -374,12 +382,14 @@ export function WebxdcAttachment({
     const onContextMenu = getBrokenMediaContextMenu(screenContext, msgId)
     return (
       <div
-        className={'media-attachment-media broken'}
+        className={'media-attachment-webxdc broken'}
         title={load_result.error}
         onContextMenu={onContextMenu}
       >
-        <div className='attachment-content'>
-          {tx('attachment_failed_to_load')}
+        <div className='icon'></div>
+        <div className='text-part'>
+          <div className='name'>{tx('attachment_failed_to_load')}</div>
+          <div className='summary'></div>
         </div>
       </div>
     )
