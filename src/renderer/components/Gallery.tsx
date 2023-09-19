@@ -11,6 +11,8 @@ import {
 import { getLogger } from '../../shared/logger'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
+import AutoSizer from 'react-virtualized-auto-sizer'
+import { FixedSizeGrid } from 'react-window'
 
 const log = getLogger('renderer/Gallery')
 
@@ -69,7 +71,7 @@ export default class Gallery extends Component<
     }
   }
 
-  reset(){
+  reset() {
     this.setState({
       id: 'images',
       msgTypes: MediaTabs.images.values,
@@ -165,22 +167,79 @@ export default class Gallery extends Component<
             <div
               className='gallery'
               key={this.state.msgTypes.join('.') + String(this.props.chatId)}
+              style={{
+                overflow:
+                  this.state.id !== 'images' && this.state.id !== 'video'
+                    ? 'scroll'
+                    : undefined,
+              }}
             >
-              <div className='item-container'>
-                {mediaMessageIds.length < 1 ? (
-                  <p className='no-media-message'>{emptyTabMessage}</p>
-                ) : (
-                  ''
-                )}
-                {mediaMessageIds.map(msgId => {
-                  const message = mediaLoadResult[msgId]
-                  return (
-                    <div className='item' key={msgId}>
-                      <this.state.element msgId={msgId} load_result={message} />
-                    </div>
-                  )
-                })}
-              </div>
+              {!(this.state.id === 'images' || this.state.id === 'video') && (
+                <div className='item-container'>
+                  {mediaMessageIds.length < 1 ? (
+                    <p className='no-media-message'>{emptyTabMessage}</p>
+                  ) : (
+                    ''
+                  )}
+                  {mediaMessageIds.map(msgId => {
+                    const message = mediaLoadResult[msgId]
+                    return (
+                      <div className='item' key={msgId}>
+                        <this.state.element
+                          msgId={msgId}
+                          load_result={message}
+                        />
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+
+              {(this.state.id === 'images' || this.state.id === 'video') && (
+                <AutoSizer>
+                  {({ width, height }) => {
+                    const size = 200 // TODO: calc this stuff
+                    const itemsPerRow = Math.floor(width / size)
+                    const rowCount = Math.ceil(
+                      mediaMessageIds.length / itemsPerRow
+                    )
+
+                    return (
+                      <FixedSizeGrid
+                        width={width}
+                        height={height}
+                        columnWidth={size}
+                        rowHeight={size}
+                        columnCount={itemsPerRow}
+                        rowCount={rowCount}
+                      >
+                        {({ columnIndex, rowIndex, style }) => {
+                          const msgId =
+                            mediaMessageIds[
+                              rowIndex * itemsPerRow + columnIndex
+                            ]
+                          const message = mediaLoadResult[msgId]
+                          if (!message) {
+                            return null
+                          }
+                          return (
+                            <div
+                              style={{ ...style, border: '1px solid black' }}
+                              className='item'
+                              key={msgId}
+                            >
+                              <this.state.element
+                                msgId={msgId}
+                                load_result={message}
+                              />
+                            </div>
+                          )
+                        }}
+                      </FixedSizeGrid>
+                    )
+                  }}
+                </AutoSizer>
+              )}
             </div>
           </div>
         </div>
