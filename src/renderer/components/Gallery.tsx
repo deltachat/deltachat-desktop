@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
+import React, { ChangeEvent, Component } from 'react'
 import { ScreenContext } from '../contexts'
 import {
   AudioAttachment,
-  FileAttachment,
+  FileAttachmentRow,
   GalleryAttachmentElementProps,
   ImageAttachment,
   VideoAttachment,
@@ -40,7 +40,7 @@ const MediaTabs: Readonly<
   },
   files: {
     values: ['File'],
-    element: FileAttachment,
+    element: FileAttachmentRow,
   },
   webxdc_apps: {
     values: ['Webxdc'],
@@ -59,6 +59,7 @@ export default class Gallery extends Component<
     mediaMessageIds: number[]
     mediaLoadResult: Record<number, Type.MessageLoadResult>
     loading: boolean
+    queryText: string
   }
 > {
   constructor(props: mediaProps) {
@@ -70,6 +71,7 @@ export default class Gallery extends Component<
       mediaMessageIds: [],
       mediaLoadResult: {},
       loading: true,
+      queryText: '',
     }
   }
 
@@ -81,6 +83,7 @@ export default class Gallery extends Component<
       mediaMessageIds: [],
       mediaLoadResult: {},
       loading: true,
+      queryText: '',
     })
   }
 
@@ -127,6 +130,10 @@ export default class Gallery extends Component<
       .catch(log.error.bind(log))
   }
 
+  onChangeInput(ev: ChangeEvent<HTMLInputElement>) {
+    this.setState({ queryText: ev.target.value })
+  }
+
   emptyTabMessage(id: MediaTabKey): string {
     const tx = window.static_translate // static because dynamic isn't too important here
     switch (id) {
@@ -145,9 +152,27 @@ export default class Gallery extends Component<
   }
 
   render() {
-    const { mediaMessageIds, mediaLoadResult, id, loading } = this.state
+    const {
+      mediaMessageIds,
+      mediaLoadResult,
+      id,
+      loading,
+      queryText,
+    } = this.state
     const tx = window.static_translate // static because dynamic isn't too important here
     const emptyTabMessage = this.emptyTabMessage(id)
+
+    const filteredMediaMessageIds = mediaMessageIds.filter(id => {
+      const result = mediaLoadResult[id]
+      if (
+        result.variant === 'message' &&
+        result.fileName?.indexOf(queryText) !== -1
+      ) {
+        return true
+      } else {
+        return false
+      }
+    })
 
     return (
       <div className='media-view'>
@@ -169,14 +194,18 @@ export default class Gallery extends Component<
             })}
           </ul>
           <div role='tabpanel'>
+            {this.state.id === 'files' && (
+              <input
+                type='text'
+                placeholder='search files'
+                onChange={this.onChangeInput.bind(this)}
+              />
+            )}
             <div
               className='gallery'
               key={this.state.msgTypes.join('.') + String(this.props.chatId)}
               style={{
-                overflow:
-                  this.state.id !== 'images' && this.state.id !== 'video'
-                    ? 'scroll'
-                    : undefined,
+                overflow: this.state.id === 'files' ? 'scroll' : undefined,
               }}
             >
               {mediaMessageIds.length < 1 && !loading && (
@@ -187,13 +216,14 @@ export default class Gallery extends Component<
 
               {this.state.id === 'files' && (
                 <div className='item-container'>
-                  {mediaMessageIds.map(msgId => {
+                  {filteredMediaMessageIds.map(msgId => {
                     const message = mediaLoadResult[msgId]
                     return (
                       <div className='item' key={msgId}>
-                        <this.state.element
+                        <FileAttachmentRow
                           msgId={msgId}
                           load_result={message}
+                          queryText={queryText}
                         />
                       </div>
                     )
@@ -214,11 +244,12 @@ export default class Gallery extends Component<
                       minWidth = 322
                     }
 
-                    const itemsPerRow = Math.max(Math.floor(
-                      widthWithoutScrollbar / minWidth
-                    ), 1)
+                    const itemsPerRow = Math.max(
+                      Math.floor(widthWithoutScrollbar / minWidth),
+                      1
+                    )
 
-                    let itemWidth = widthWithoutScrollbar / itemsPerRow
+                    const itemWidth = widthWithoutScrollbar / itemsPerRow
 
                     const rowCount = Math.ceil(
                       mediaMessageIds.length / itemsPerRow
@@ -233,9 +264,7 @@ export default class Gallery extends Component<
                     }
 
                     const border =
-                      this.state.id === 'audio'
-                        ? '1px solid black'
-                        : undefined
+                      this.state.id === 'audio' ? '1px solid black' : undefined
 
                     return (
                       <FixedSizeGrid
