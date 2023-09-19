@@ -58,6 +58,7 @@ export default class Gallery extends Component<
     element: (props: GalleryAttachmentElementProps) => JSX.Element
     mediaMessageIds: number[]
     mediaLoadResult: Record<number, Type.MessageLoadResult>
+    loading: boolean
   }
 > {
   constructor(props: mediaProps) {
@@ -68,6 +69,7 @@ export default class Gallery extends Component<
       element: ImageAttachment,
       mediaMessageIds: [],
       mediaLoadResult: {},
+      loading: true,
     }
   }
 
@@ -78,6 +80,7 @@ export default class Gallery extends Component<
       element: ImageAttachment,
       mediaMessageIds: [],
       mediaLoadResult: {},
+      loading: true,
     })
   }
 
@@ -101,6 +104,7 @@ export default class Gallery extends Component<
     const newElement = MediaTabs[id].element
     const accountId = selectedAccountId()
     const chatId = this.props.chatId !== 'all' ? this.props.chatId : null
+    this.setState({ loading: true })
 
     BackendRemote.rpc
       .getChatMedia(accountId, chatId, msgTypes[0], msgTypes[1], null)
@@ -116,6 +120,7 @@ export default class Gallery extends Component<
           element: newElement,
           mediaMessageIds: media_ids,
           mediaLoadResult,
+          loading: false,
         })
         this.forceUpdate()
       })
@@ -140,7 +145,7 @@ export default class Gallery extends Component<
   }
 
   render() {
-    const { mediaMessageIds, mediaLoadResult, id } = this.state
+    const { mediaMessageIds, mediaLoadResult, id, loading } = this.state
     const tx = window.static_translate // static because dynamic isn't too important here
     const emptyTabMessage = this.emptyTabMessage(id)
 
@@ -174,14 +179,15 @@ export default class Gallery extends Component<
                     : undefined,
               }}
             >
-              <div className='item-container'>
-                {mediaMessageIds.length < 1 ? (
+              {mediaMessageIds.length < 1 && !loading && (
+                <div className='item-container'>
                   <p className='no-media-message'>{emptyTabMessage}</p>
-                ) : (
-                  ''
-                )}
-                {this.state.id === 'files' &&
-                  mediaMessageIds.map(msgId => {
+                </div>
+              )}
+
+              {this.state.id === 'files' && (
+                <div className='item-container'>
+                  {mediaMessageIds.map(msgId => {
                     const message = mediaLoadResult[msgId]
                     return (
                       <div className='item' key={msgId}>
@@ -192,7 +198,8 @@ export default class Gallery extends Component<
                       </div>
                     )
                   })}
-              </div>
+                </div>
+              )}
 
               {this.state.id !== 'files' && (
                 <AutoSizer>
