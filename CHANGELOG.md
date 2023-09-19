@@ -28,6 +28,9 @@
 - fix "Verified by" is shown weirdly for contacts that were verified directly #3421
 - fix copy text inserts extra linebreaks
 
+### Fixed
+- fix clipboard not working in webxdc apps
+
 <a id="1_40_4"></a>
 
 ## [1.40.4] - 2023-09-14
