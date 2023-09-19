@@ -31,6 +31,9 @@
 - fix copy text inserts extra linebreaks
 - improve video message - wide enough to show controls
 
+### Fixed
+- fix clipboard not working in webxdc apps
+
 <a id="1_40_4"></a>
 
 ## [1.40.4] - 2023-09-14
