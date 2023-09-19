@@ -206,7 +206,6 @@
     .summary {
       // Handling really long names - cut them off
       overflow-x: hidden;
-      white-space: pre-line;
       user-select: text;
       position: relative;
       word-break: break-all;
