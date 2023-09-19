@@ -174,14 +174,14 @@ export default class Gallery extends Component<
                     : undefined,
               }}
             >
-              {this.state.id === 'files' && (
-                <div className='item-container'>
-                  {mediaMessageIds.length < 1 ? (
-                    <p className='no-media-message'>{emptyTabMessage}</p>
-                  ) : (
-                    ''
-                  )}
-                  {mediaMessageIds.map(msgId => {
+              <div className='item-container'>
+                {mediaMessageIds.length < 1 ? (
+                  <p className='no-media-message'>{emptyTabMessage}</p>
+                ) : (
+                  ''
+                )}
+                {this.state.id === 'files' &&
+                  mediaMessageIds.map(msgId => {
                     const message = mediaLoadResult[msgId]
                     return (
                       <div className='item' key={msgId}>
@@ -192,8 +192,7 @@ export default class Gallery extends Component<
                       </div>
                     )
                   })}
-                </div>
-              )}
+              </div>
 
               {this.state.id !== 'files' && (
                 <AutoSizer>
@@ -204,8 +203,7 @@ export default class Gallery extends Component<
 
                     if (this.state.id === 'webxdc_apps') {
                       minWidth = 300
-                    }
-                    if (this.state.id === 'audio') {
+                    } else if (this.state.id === 'audio') {
                       minWidth = 322
                     }
 
@@ -223,10 +221,15 @@ export default class Gallery extends Component<
 
                     if (this.state.id === 'webxdc_apps') {
                       itemHeight = 64
-                    }
-                    if (this.state.id === 'audio') {
+                    } else if (this.state.id === 'audio') {
                       itemHeight = 88
                     }
+
+                    const border =
+                      this.state.id === 'audio' ||
+                      this.state.id === 'webxdc_apps'
+                        ? '1px solid black'
+                        : undefined
 
                     return (
                       <FixedSizeGrid
@@ -249,7 +252,7 @@ export default class Gallery extends Component<
                           }
                           return (
                             <div
-                              style={{ ...style, border: '1px solid black' }}
+                              style={{ ...style, border }}
                               className='item'
                               key={msgId}
                             >
