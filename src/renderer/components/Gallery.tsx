@@ -209,7 +209,7 @@ export default class Gallery extends Component<
                     let minWidth = 160
 
                     if (this.state.id === 'webxdc_apps') {
-                      minWidth = 300
+                      minWidth = 265
                     } else if (this.state.id === 'audio') {
                       minWidth = 322
                     }
@@ -227,14 +227,13 @@ export default class Gallery extends Component<
                     let itemHeight = itemWidth
 
                     if (this.state.id === 'webxdc_apps') {
-                      itemHeight = 64
+                      itemHeight = 61
                     } else if (this.state.id === 'audio') {
                       itemHeight = 88
                     }
 
                     const border =
-                      this.state.id === 'audio' ||
-                      this.state.id === 'webxdc_apps'
+                      this.state.id === 'audio'
                         ? '1px solid black'
                         : undefined
 
