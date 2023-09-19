@@ -168,10 +168,11 @@
   display: flex;
   flex-direction: row;
   width: 300px;
-  margin: 5px 3px;
+  margin: 3.5px 3px;
 
   &:hover {
     background-color: var(--galleryWebxdcItem);
+    border-radius: calc(44px * 0.07); // same radius as webxdc icon
   }
 
   & > .icon {
