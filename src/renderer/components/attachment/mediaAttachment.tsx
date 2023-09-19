@@ -183,6 +183,7 @@ export function ImageAttachment({
           <img
             className='attachment-content'
             src={runtime.transformBlobURL(file)}
+            loading="lazy"
           />
         )}
       </div>
