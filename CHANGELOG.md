@@ -15,6 +15,7 @@
 
 ### Fixed
 - fix clipboard not working in webxdc apps
+- fix scroll to top when switching tabs
 
 <a id="1_40_4"></a>
 
