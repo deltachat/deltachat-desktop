@@ -5,15 +5,16 @@
   cursor: pointer;
 
   overflow: hidden;
+  height: 100%;
+  width: 100%;
+  border-radius: 2px;
+  padding: 2px;
 
   & > .attachment-content {
     object-fit: cover;
-    width: 120pt;
-    height: 120pt;
-
-    // The padding on the bottom of the bubble produces 4 extra pixels of space at the
-    //   bottom, so this doesn't match up with the padding numbers above.
-    margin-bottom: -4px;
+    width: 100%;
+    height: 100%;
+    border-radius: 2px;
 
     // redundant with attachment-container, but we get cursor flashing on move otherwise
     cursor: pointer;
