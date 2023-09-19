@@ -69,13 +69,25 @@ export default class Gallery extends Component<
     }
   }
 
+  reset(){
+    this.setState({
+      id: 'images',
+      msgTypes: MediaTabs.images.values,
+      element: ImageAttachment,
+      mediaMessageIds: [],
+      mediaLoadResult: {},
+    })
+  }
+
   componentDidMount() {
     this.onSelect(this.state.id)
   }
 
   componentDidUpdate(prevProps: mediaProps) {
     if (this.props.chatId !== prevProps.chatId) {
-      this.onSelect(this.state.id)
+      // reset
+      this.reset()
+      this.onSelect('images')
     }
   }
 
@@ -150,7 +162,10 @@ export default class Gallery extends Component<
             })}
           </ul>
           <div className='bp4-tab-panel' role='tabpanel'>
-            <div className='gallery'>
+            <div
+              className='gallery'
+              key={this.state.msgTypes.join('.') + String(this.props.chatId)}
+            >
               <div className='item-container'>
                 {mediaMessageIds.length < 1 ? (
                   <p className='no-media-message'>{emptyTabMessage}</p>
