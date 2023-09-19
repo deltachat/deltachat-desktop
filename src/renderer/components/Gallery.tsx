@@ -1,6 +1,13 @@
 import React, { Component } from 'react'
 import { ScreenContext } from '../contexts'
-import MediaAttachment from './attachment/mediaAttachment'
+import {
+  AudioAttachment,
+  FileAttachment,
+  GalleryAttachmentElementProps,
+  ImageAttachment,
+  VideoAttachment,
+  WebxdcAttachment,
+} from './attachment/mediaAttachment'
 import { getLogger } from '../../shared/logger'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
@@ -11,23 +18,31 @@ type MediaTabKey = 'images' | 'video' | 'audio' | 'files' | 'webxdc_apps'
 
 const MediaTabs: Readonly<
   {
-    [key in MediaTabKey]: { values: Type.Viewtype[] }
+    [key in MediaTabKey]: {
+      values: Type.Viewtype[]
+      element: (props: GalleryAttachmentElementProps) => JSX.Element
+    }
   }
 > = {
   images: {
     values: ['Gif', 'Image'],
+    element: ImageAttachment,
   },
   video: {
     values: ['Video'],
+    element: VideoAttachment,
   },
   audio: {
     values: ['Audio', 'Voice'],
+    element: AudioAttachment,
   },
   files: {
     values: ['File'],
+    element: FileAttachment,
   },
   webxdc_apps: {
     values: ['Webxdc'],
+    element: WebxdcAttachment,
   },
 }
 
@@ -38,8 +53,9 @@ export default class Gallery extends Component<
   {
     id: MediaTabKey
     msgTypes: Type.Viewtype[]
-    medias: Type.Message[]
-    errors: { msgId: number; error: string }[]
+    element: (props: GalleryAttachmentElementProps) => JSX.Element
+    mediaMessageIds: number[]
+    mediaLoadResult: Record<number, Type.MessageLoadResult>
   }
 > {
   constructor(props: mediaProps) {
@@ -47,8 +63,9 @@ export default class Gallery extends Component<
     this.state = {
       id: 'images',
       msgTypes: MediaTabs.images.values,
-      medias: [],
-      errors: [],
+      element: ImageAttachment,
+      mediaMessageIds: [],
+      mediaLoadResult: {},
     }
   }
 
@@ -67,29 +84,25 @@ export default class Gallery extends Component<
       throw new Error('chat id missing')
     }
     const msgTypes = MediaTabs[id].values
+    const newElement = MediaTabs[id].element
     const accountId = selectedAccountId()
     const chatId = this.props.chatId !== 'all' ? this.props.chatId : null
 
     BackendRemote.rpc
       .getChatMedia(accountId, chatId, msgTypes[0], msgTypes[1], null)
       .then(async media_ids => {
-        // throws if some media is not found
-        const all_media_fetch_results = await BackendRemote.rpc.getMessages(
+        const mediaLoadResult = await BackendRemote.rpc.getMessages(
           accountId,
           media_ids
         )
-        const medias: Type.Message[] = []
-        const errors = []
-        for (const msgId of media_ids) {
-          const result = all_media_fetch_results[msgId]
-          if (result.variant === 'message') {
-            medias.push(result)
-          } else {
-            errors.push({ msgId, error: result.error })
-          }
-        }
-        log.errorWithoutStackTrace('messages failed to load:', errors)
-        this.setState({ id, msgTypes, medias, errors })
+        media_ids.reverse() // order newest up - if we need different ordering we need to do it in core
+        this.setState({
+          id,
+          msgTypes,
+          element: newElement,
+          mediaMessageIds: media_ids,
+          mediaLoadResult,
+        })
         this.forceUpdate()
       })
       .catch(log.error.bind(log))
@@ -113,7 +126,7 @@ export default class Gallery extends Component<
   }
 
   render() {
-    const { medias, id, errors } = this.state
+    const { mediaMessageIds, mediaLoadResult, id } = this.state
     const tx = window.static_translate // static because dynamic isn't too important here
     const emptyTabMessage = this.emptyTabMessage(id)
 
@@ -138,39 +151,20 @@ export default class Gallery extends Component<
           </ul>
           <div className='bp4-tab-panel' role='tabpanel'>
             <div className='gallery'>
-              {errors.length > 0 && (
-                <div className='loading-errors'>
-                  The following messages failed to load, please report these
-                  errors to the developers:
-                  <ul>
-                    {errors.map(error => (
-                      <li key={error.msgId}>
-                        {error.msgId} {'->'} {error.error}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              <div
-                className='item-container'
-                style={{
-                  justifyContent: medias.length < 1 ? 'center' : undefined,
-                }}
-              >
-                {medias.length < 1 ? (
+              <div className='item-container'>
+                {mediaMessageIds.length < 1 ? (
                   <p className='no-media-message'>{emptyTabMessage}</p>
                 ) : (
                   ''
                 )}
-                {medias
-                  .sort((a, b) => b.sortTimestamp - a.sortTimestamp)
-                  .map(message => {
-                    return (
-                      <div className='item' key={message.id}>
-                        <MediaAttachment message={message} />
-                      </div>
-                    )
-                  })}
+                {mediaMessageIds.map(msgId => {
+                  const message = mediaLoadResult[msgId]
+                  return (
+                    <div className='item' key={msgId}>
+                      <this.state.element msgId={msgId} load_result={message} />
+                    </div>
+                  )
+                })}
               </div>
             </div>
           </div>

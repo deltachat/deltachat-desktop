@@ -186,6 +186,7 @@ Also make opening devtools with F12 more reliable.
 - Show thumbnail in chatlist summary of image, sticker and webxdc messages
 - add webxdc api `sendToChat` #3240
 - add webxdc api `importFiles`
+- add context menu option to delete media-messages from gallery
 
 ### Changed
 - exclude more unused files from installation package
