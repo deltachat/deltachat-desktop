@@ -196,7 +196,7 @@ export default class Gallery extends Component<
           <div role='tabpanel'>
             {this.state.id === 'files' && (
               <input
-                type='text'
+                type='search'
                 placeholder='search files'
                 onChange={this.onChangeInput.bind(this)}
               />
