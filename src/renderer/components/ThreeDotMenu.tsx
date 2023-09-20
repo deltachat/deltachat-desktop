@@ -15,22 +15,6 @@ import { useSettingsStore } from '../stores/settings'
 import { Type } from '../backend-com'
 import { ActionEmitter, KeybindAction } from '../keybindings'
 
-export function DeltaMenuItem({
-  text,
-  onClick,
-}: {
-  text: string
-  onClick: (event: React.MouseEvent<HTMLLIElement, MouseEvent>) => void
-}) {
-  return (
-    <li onClick={onClick}>
-      <a className='bp4-menu-item bp4-popover-dismiss'>
-        <div className='bp4-text-overflow-ellipsis bp4-fill'>{text}</div>
-      </a>
-    </li>
-  )
-}
-
 export function useThreeDotMenu(selectedChat: Type.FullChat | null) {
   const screenContext = useContext(ScreenContext)
   const settingsStore = useSettingsStore()[0]
