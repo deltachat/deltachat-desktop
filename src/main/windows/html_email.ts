@@ -386,6 +386,28 @@ function makeBrowserView(
       background-color: white;
     }`)
 
+  const openLink = (url: string) => {
+    if (url.startsWith('mailto:')) {
+      open_url(url)
+      mainWindow.window?.show()
+    } else {
+      if (url.startsWith('http:') || url.startsWith('https:')) {
+        shell.openExternal(url)
+      } else {
+        dialog
+          .showMessageBox(window, {
+            buttons: [tx('no'), tx('menu_copy_link_to_clipboard')],
+            message: tx('desktop_offer_copy_non_web_link_to_clipboard', url),
+          })
+          .then(({ response }) => {
+            if (response == 1) {
+              clipboard.writeText(url)
+            }
+          })
+      }
+    }
+  }
+
   sandboxedView.webContents.on(
     'will-navigate',
     (e: electron.Event, url: string) => {
@@ -393,27 +415,14 @@ function makeBrowserView(
       // before our drag-and-drop handlers have been initialized.
       // Also handle clicking links inside of the message.
       e.preventDefault()
-      if (url.startsWith('mailto:')) {
-        open_url(url)
-        mainWindow.window?.show()
-      } else {
-        if (url.startsWith('http:') || url.startsWith('https:')) {
-          shell.openExternal(url)
-        } else {
-          dialog
-            .showMessageBox(window, {
-              buttons: [tx('no'), tx('menu_copy_link_to_clipboard')],
-              message: tx('desktop_offer_copy_non_web_link_to_clipboard', url),
-            })
-            .then(({ response }) => {
-              if (response == 1) {
-                clipboard.writeText(url)
-              }
-            })
-        }
-      }
+      openLink(url)
     }
   )
+
+  sandboxedView.webContents.setWindowOpenHandler(details => {
+    openLink(details.url)
+    return { action: 'deny' }
+  })
 
   return sandboxedView
 }
