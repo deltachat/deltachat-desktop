@@ -209,7 +209,8 @@ export default class Gallery extends Component<
               }}
             >
               {mediaMessageIds.length < 1 && !loading && (
-                <div className='item-container'>
+                <div className='empty-screen'>
+                  {/* IDEA: when we have someone doing illustrations this would be a great place to add some */}
                   <p className='no-media-message'>{emptyTabMessage}</p>
                 </div>
               )}
