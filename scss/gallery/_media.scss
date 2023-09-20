@@ -12,12 +12,25 @@ $tab-height: 46px;
   & .gallery {
     height: calc(100vh - #{$tab-height} - #{$nav-bar-height});
 
-    & > .item-container {
+    & > .item-container { // still used by file view
       display: flex;
       flex-wrap: wrap;
       padding: 10px 0px;
       & > .item {
         padding: 5px 5px 5px 5px;
+      }
+    }
+
+    & > .empty-screen {
+      display: flex;
+      padding: 10px 10px;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      width: 100%;
+      & > .no-media-message {
+        font-size: 1.1rem;
+        text-align: center;
       }
     }
 
@@ -31,12 +44,6 @@ $tab-height: 46px;
         margin: 0;
       }
     }
-  }
-  .no-media-message {
-    font-size: 1.1rem;
-    text-align: center;
-    margin-top: 5rem;
-    margin-left: 0.5rem;
   }
 
   .bp4-tab-panel {
