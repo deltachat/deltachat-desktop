@@ -53,7 +53,7 @@ export default function OtherAccountsUnreadBadge({
 
     update()
     return update
-  }, [settings])
+  }, [settings?.desktopSettings.syncAllAccounts])
 
   if (settings?.desktopSettings.syncAllAccounts && otherAccountsUnreadCount) {
     if (big) {
