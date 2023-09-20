@@ -144,8 +144,8 @@
       word-break: break-all;
 
       .highlight {
-        background-color: yellow;
-        color: black;
+        background-color: var(--colorPrimary);
+        color: white;
         border-radius: 1.8px;
       }
     }
