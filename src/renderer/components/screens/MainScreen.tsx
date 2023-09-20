@@ -204,7 +204,9 @@ export default function MainScreen() {
               id='hamburger-menu-button'
             >
               <Icon icon='menu' aria-label={tx('main_menu')} iconSize={20} />
-              <OtherAccountsUnreadBadge top='-26px' left='14px' />
+              <OtherAccountsUnreadBadge
+                style={{ top: '-26px', left: '14px' }}
+              />
             </div>
             {queryStr.length === 0 && showArchivedChats && (
               <>

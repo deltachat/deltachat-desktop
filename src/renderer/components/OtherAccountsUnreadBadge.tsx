@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import { BackendRemote, onDCEvent } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
-import { runtime } from '../runtime'
 import { useSettingsStore } from '../stores/settings'
-import { DesktopSettingsType } from '../../shared/shared-types'
 
 // Tip of the Day: Keep as many ice creams as you can in your fridge
 // for the ice cream outage days. FREE ICE CREAM FOR EVERY1! --Farooq
 
 type ComponentProps = {
-  top: string
-  left: string
+  style: any
+  big?: boolean
 }
 
-export default function OtherAccountsUnreadBadge(props: ComponentProps) {
+export default function OtherAccountsUnreadBadge({
+  style,
+  big,
+}: ComponentProps) {
   const [
-    haveOtherAccountsUnread,
-    setHaveOtherAccountsUnread,
-  ] = useState<boolean>(false)
+    otherAccountsUnreadCount,
+    setOtherAccountsUnreadCount,
+  ] = useState<number>(0)
 
   const settings = useSettingsStore()[0]
 
@@ -29,16 +30,20 @@ export default function OtherAccountsUnreadBadge(props: ComponentProps) {
       if (updating) return
       updating = true
       BackendRemote.rpc.getAllAccountIds().then(accountIds => {
+        try {
+          selectedAccountId()
+        } catch {
+          return
+        }
         accountIds = accountIds.filter(id => id !== selectedAccountId())
         for (const accountId of accountIds) {
           BackendRemote.rpc.getFreshMsgs(accountId).then(ids => {
-            if (ids.length > 0) setHaveOtherAccountsUnread(true)
+            setOtherAccountsUnreadCount(otherAccountsUnreadCount + ids.length)
           })
         }
       })
       updating = false
     }
-    update()
 
     BackendRemote.rpc
       .getAllAccountIds()
@@ -46,11 +51,20 @@ export default function OtherAccountsUnreadBadge(props: ComponentProps) {
         accountIds.map(id => onDCEvent(id, 'IncomingMsg', update))
       )
 
+    update()
     return update
   }, [settings])
 
-  if (settings && settings.desktopSettings.syncAllAccounts && haveOtherAccountsUnread) {
-    return <div className='unread-badge' style={{ ...props }} />
+  if (settings?.desktopSettings.syncAllAccounts && otherAccountsUnreadCount) {
+    if (big) {
+      return (
+        <div className='unread-badge-big' style={{ ...style }}>
+          {otherAccountsUnreadCount}
+        </div>
+      )
+    } else {
+      return <div className='unread-badge-small' style={{ ...style }} />
+    }
   } else {
     return null
   }

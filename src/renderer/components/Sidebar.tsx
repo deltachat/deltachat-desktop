@@ -181,7 +181,10 @@ const Sidebar = React.memo(
           </div>
           <div key='logout' className='sidebar-item' onClick={onLogout}>
             {tx('switch_account')}
-            <OtherAccountsUnreadBadge top='-38px' left='-14px' />
+            <OtherAccountsUnreadBadge
+              style={{ top: '-38px', left: '110px' }}
+              big
+            />
           </div>
           <div className='footer'>
             <Link href='https://delta.chat' label={'Delta Chat Desktop'} />
