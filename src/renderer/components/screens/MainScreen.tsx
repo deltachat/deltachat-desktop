@@ -156,7 +156,13 @@ export default function MainScreen() {
     searchChats('')
     setQueryChatId(null)
   })
-  const onClickThreeDotMenu = useThreeDotMenu(selectedChat.chat)
+  const onClickThreeDotMenu = useThreeDotMenu(
+    selectedChat.chat,
+    alternativeView === 'global-gallery' ||
+      selectedChat?.activeView === ChatView.Media
+      ? 'gallery'
+      : 'chat'
+  )
 
   if (!selectedChat) {
     log.error('selectedChat is undefined')
@@ -334,23 +340,23 @@ export default function MainScreen() {
                     />
                   )}
                 </span>
-                <span
-                  style={{
-                    marginLeft: 0,
-                    marginRight: '3px',
-                  }}
-                >
-                  <Button
-                    className='icon-rotated'
-                    minimal
-                    icon='more'
-                    id='three-dot-menu-button'
-                    aria-label={tx('main_menu')}
-                    onClick={onClickThreeDotMenu}
-                  />
-                </span>
               </>
             )}
+            <span
+              style={{
+                marginLeft: 0,
+                marginRight: '3px',
+              }}
+            >
+              <Button
+                className='icon-rotated'
+                minimal
+                icon='more'
+                id='three-dot-menu-button'
+                aria-label={tx('main_menu')}
+                onClick={onClickThreeDotMenu}
+              />
+            </span>
           </NavbarGroup>
         </Navbar>
       </div>
