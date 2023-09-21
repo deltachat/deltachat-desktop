@@ -4,6 +4,8 @@
 
 ### Added
 - Global Gallery
+- Show date when scrolling gallery
+- add option to view images and videos in the gallery cropped to grid or in their original aspect ratio
 - mark webxdc app context as secure #3413
 - Experimental: Related Chats
 - Developer option to disable IMAP IDLE #4803
@@ -27,6 +29,7 @@
 - fix: remove duplicated search button on "search in chat" #3014
 - fix "Verified by" is shown weirdly for contacts that were verified directly #3421
 - fix copy text inserts extra linebreaks
+
 
 ### Fixed
 - fix clipboard not working in webxdc apps
