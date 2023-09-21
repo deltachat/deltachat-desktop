@@ -6,10 +6,7 @@ export function useStore<T extends Store<any>>(
 ): [T extends Store<infer S> ? S : any, T['dispatch']] {
   const [state, setState] = useState(StoreInstance.getState())
 
-  useEffect(() => {
-    StoreInstance.subscribe(setState)
-    return () => StoreInstance.unsubscribe(setState)
-  }, [StoreInstance])
+  useEffect(() => StoreInstance.subscribe(setState), [StoreInstance])
   // TODO: better return an object to allow destructuring
   return [state, StoreInstance.dispatch.bind(StoreInstance)]
 }
@@ -69,7 +66,7 @@ export class Store<S> {
 
   unsubscribe(listener: (state: S) => void) {
     const index = this.listeners.indexOf(listener)
-    this.listeners.splice(index, 1)
+    if (index !== -1) this.listeners.splice(index, 1)
   }
 
   attachEffect(effect: (action: Action, state: S) => void) {
