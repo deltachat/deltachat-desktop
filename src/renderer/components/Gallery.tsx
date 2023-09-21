@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Component } from 'react'
+import React, { ChangeEvent, Component, createRef } from 'react'
 import { ScreenContext } from '../contexts'
 import {
   AudioAttachment,
@@ -14,7 +14,7 @@ import { selectedAccountId } from '../ScreenController'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { FixedSizeGrid } from 'react-window'
 import SettingsStoreInstance, { SettingsStoreState } from '../stores/settings'
-import moment, { Moment } from 'moment'
+import moment from 'moment'
 
 const log = getLogger('renderer/Gallery')
 
@@ -63,9 +63,9 @@ export default class Gallery extends Component<
     loading: boolean
     queryText: string
     GalleryImageKeepAspectRatio?: boolean
-    dateMoment?: Moment
   }
 > {
+  dateHeader = createRef<HTMLDivElement>()
   constructor(props: mediaProps) {
     super(props)
     this.state = {
@@ -77,7 +77,6 @@ export default class Gallery extends Component<
       loading: true,
       queryText: '',
       GalleryImageKeepAspectRatio: false,
-      dateMoment: undefined,
     }
 
     this.settingsStoreListener = this.settingsStoreListener.bind(this)
@@ -92,7 +91,6 @@ export default class Gallery extends Component<
       mediaLoadResult: {},
       loading: true,
       queryText: '',
-      dateMoment: undefined,
     })
   }
 
@@ -152,7 +150,6 @@ export default class Gallery extends Component<
           mediaMessageIds: media_ids,
           mediaLoadResult,
           loading: false,
-          dateMoment: undefined,
         })
         this.forceUpdate()
       })
@@ -182,9 +179,10 @@ export default class Gallery extends Component<
 
   updateFirstVisibleMessage(message: Type.MessageLoadResult) {
     if (message.variant === 'message') {
-      this.setState({
-        dateMoment: moment(message.timestamp * 1000),
-      })
+      if (this.dateHeader.current)
+        this.dateHeader.current.innerText = moment(
+          message.timestamp * 1000
+        ).format('LL')
     }
   }
 
@@ -233,10 +231,8 @@ export default class Gallery extends Component<
                 </li>
               )
             })}
-            {showDateHeader && this.state.dateMoment && (
-              <div className='big-date'>
-                {this.state.dateMoment.format('LL')}
-              </div>
+            {showDateHeader && (
+              <div className='big-date' ref={this.dateHeader}></div>
             )}
           </ul>
           <div role='tabpanel'>
