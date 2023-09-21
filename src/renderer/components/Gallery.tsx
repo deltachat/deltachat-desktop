@@ -14,6 +14,7 @@ import { selectedAccountId } from '../ScreenController'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { FixedSizeGrid } from 'react-window'
 import SettingsStoreInstance, { SettingsStoreState } from '../stores/settings'
+import moment, { Moment } from 'moment'
 
 const log = getLogger('renderer/Gallery')
 
@@ -62,6 +63,7 @@ export default class Gallery extends Component<
     loading: boolean
     queryText: string
     GalleryImageKeepAspectRatio?: boolean
+    dateMoment?: Moment
   }
 > {
   constructor(props: mediaProps) {
@@ -75,6 +77,7 @@ export default class Gallery extends Component<
       loading: true,
       queryText: '',
       GalleryImageKeepAspectRatio: false,
+      dateMoment: undefined,
     }
 
     this.settingsStoreListener = this.settingsStoreListener.bind(this)
@@ -89,6 +92,7 @@ export default class Gallery extends Component<
       mediaLoadResult: {},
       loading: true,
       queryText: '',
+      dateMoment: undefined,
     })
   }
 
@@ -148,6 +152,7 @@ export default class Gallery extends Component<
           mediaMessageIds: media_ids,
           mediaLoadResult,
           loading: false,
+          dateMoment: undefined,
         })
         this.forceUpdate()
       })
@@ -175,6 +180,14 @@ export default class Gallery extends Component<
     }
   }
 
+  updateFirstVisibleMessage(message: Type.MessageLoadResult) {
+    if (message.variant === 'message') {
+      this.setState({
+        dateMoment: moment(message.timestamp * 1000),
+      })
+    }
+  }
+
   render() {
     const {
       mediaMessageIds,
@@ -199,6 +212,9 @@ export default class Gallery extends Component<
       }
     })
 
+    const showDateHeader =
+      this.state.id !== 'files' && this.state.id !== 'webxdc_apps'
+
     return (
       <div className='media-view'>
         <div style={{ minWidth: 200 }}>
@@ -217,6 +233,11 @@ export default class Gallery extends Component<
                 </li>
               )
             })}
+            {showDateHeader && this.state.dateMoment && (
+              <div className='big-date'>
+                {this.state.dateMoment.format('LL')}
+              </div>
+            )}
           </ul>
           <div role='tabpanel'>
             {this.state.id === 'files' && (
@@ -303,6 +324,21 @@ export default class Gallery extends Component<
                         columnCount={itemsPerRow}
                         rowCount={rowCount}
                         overscanRowCount={10}
+                        onItemsRendered={({
+                          visibleColumnStartIndex,
+                          visibleRowStartIndex,
+                        }) => {
+                          const msgId =
+                            mediaMessageIds[
+                              visibleRowStartIndex * itemsPerRow +
+                                visibleColumnStartIndex
+                            ]
+                          const message = mediaLoadResult[msgId]
+                          if (!message) {
+                            return
+                          }
+                          this.updateFirstVisibleMessage(message)
+                        }}
                       >
                         {({ columnIndex, rowIndex, style }) => {
                           const msgId =

@@ -9,6 +9,15 @@ $tab-height: 46px;
   max-height: calc(100vh - 50px);
   overflow: hidden;
 
+  .big-date {
+    flex-grow: 1;
+    text-align: end;
+    align-self: center;
+    padding-right: 12px;
+    font-size: 22px;
+    font-weight: bold;
+  }
+
   & .gallery {
     height: calc(100vh - #{$tab-height} - #{$nav-bar-height});
 
