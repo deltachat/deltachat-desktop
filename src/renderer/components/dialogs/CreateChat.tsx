@@ -190,7 +190,6 @@ export default function CreateChat(props: {
       )}
       {viewMode.startsWith('createGroup') && (
         <CreateGroupInner
-          isVerified={false}
           {...{ viewMode, setViewMode, onClose }}
         />
       )}
@@ -636,7 +635,7 @@ function CreateGroupInner(props: {
   viewMode: string
   setViewMode: (newViewMode: string) => void
   onClose: DialogProps['onClose']
-  isVerified: boolean
+  isVerified?: boolean
 }) {
   const { openDialog } = useContext(ScreenContext)
   const { viewMode, setViewMode, onClose, isVerified } = props
@@ -650,7 +649,7 @@ function CreateGroupInner(props: {
     groupId,
     lazilyCreateOrUpdateGroup,
     finishCreateGroup,
-  ] = useCreateGroup(isVerified, groupName, groupImage, groupMembers, onClose)
+  ] = useCreateGroup(Boolean(isVerified), groupName, groupImage, groupMembers, onClose)
 
   const viewPrefix = isVerified ? 'createVerifiedGroup' : 'createGroup'
 
