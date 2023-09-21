@@ -12,7 +12,7 @@
     "check:format": "prettier --check \"scss/**/*.scss\" \"src/**/*.{js,ts,tsx,json}\" \"**/*.md\"",
     "fix": "npm run fix:lint && npm run fix:format",
     "fix:lint": "eslint . --ext .js,.ts,.tsx --fix || true",
-    "fix:format": "prettier --write \"scss/**/*.scss\" && prettier --write \"src/**/*.{js,ts,tsx,json}\" && prettier --write \"**/*.md\"",
+    "fix:format": "prettier --write \"scss/**/*.scss\" \"src/**/*.{js,ts,tsx,json}\" \"**/*.md\"",
     "test-misc": "node ./bin/test_package_lock_version",
     "test-log-conventions": "node ./bin/log-conventions",
     "test-unit": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'test/mocha/**/*.ts'",
