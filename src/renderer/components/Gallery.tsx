@@ -13,6 +13,7 @@ import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { FixedSizeGrid } from 'react-window'
+import SettingsStoreInstance, { SettingsStoreState } from '../stores/settings'
 
 const log = getLogger('renderer/Gallery')
 
@@ -60,6 +61,7 @@ export default class Gallery extends Component<
     mediaLoadResult: Record<number, Type.MessageLoadResult>
     loading: boolean
     queryText: string
+    GalleryImageKeepAspectRatio?: boolean
   }
 > {
   constructor(props: mediaProps) {
@@ -72,7 +74,10 @@ export default class Gallery extends Component<
       mediaLoadResult: {},
       loading: true,
       queryText: '',
+      GalleryImageKeepAspectRatio: false,
     }
+
+    this.settingsStoreListener = this.settingsStoreListener.bind(this)
   }
 
   reset() {
@@ -89,6 +94,25 @@ export default class Gallery extends Component<
 
   componentDidMount() {
     this.onSelect(this.state.id)
+    SettingsStoreInstance.subscribe(this.settingsStoreListener)
+    this.setState({
+      GalleryImageKeepAspectRatio:
+        SettingsStoreInstance.state?.desktopSettings
+          .GalleryImageKeepAspectRatio,
+    })
+  }
+
+  componentWillUnmount() {
+    SettingsStoreInstance.unsubscribe(this.settingsStoreListener)
+  }
+
+  settingsStoreListener(state: SettingsStoreState | null) {
+    if (state) {
+      this.setState({
+        GalleryImageKeepAspectRatio:
+          state.desktopSettings.GalleryImageKeepAspectRatio,
+      })
+    }
   }
 
   componentDidUpdate(prevProps: mediaProps) {
@@ -158,6 +182,7 @@ export default class Gallery extends Component<
       id,
       loading,
       queryText,
+      GalleryImageKeepAspectRatio,
     } = this.state
     const tx = window.static_translate // static because dynamic isn't too important here
     const emptyTabMessage = this.emptyTabMessage(id)
@@ -202,7 +227,9 @@ export default class Gallery extends Component<
               />
             )}
             <div
-              className='gallery'
+              className={`gallery gallery-image-object-fit_${
+                GalleryImageKeepAspectRatio ? 'contain' : 'cover'
+              }`}
               key={this.state.msgTypes.join('.') + String(this.props.chatId)}
               style={{
                 overflow: this.state.id === 'files' ? 'scroll' : undefined,

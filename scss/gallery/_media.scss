@@ -12,7 +12,8 @@ $tab-height: 46px;
   & .gallery {
     height: calc(100vh - #{$tab-height} - #{$nav-bar-height});
 
-    & > .item-container { // still used by file view
+    & > .item-container {
+      // .item-container is still used by file view
       display: flex;
       flex-wrap: wrap;
       padding: 10px 0px;
@@ -43,6 +44,13 @@ $tab-height: 46px;
         font-size: medium;
         margin: 0;
       }
+    }
+
+    &.gallery-image-object-fit_contain {
+      --gallery-image-object-fit: contain;
+    }
+    &.gallery-image-object-fit_cover {
+      --gallery-image-object-fit: cover;
     }
   }
 

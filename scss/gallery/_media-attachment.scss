@@ -11,7 +11,7 @@
   padding: 2px;
 
   & > .attachment-content {
-    object-fit: cover;
+    object-fit: var(--gallery-image-object-fit);
     width: 100%;
     height: 100%;
     border-radius: 2px;

@@ -82,5 +82,11 @@
   },
   "group_related_chats": {
     "message": "Related Chats"
+  },
+  "gallery_image_aspect_ratio_keep": {
+    "message": "Image aspect ratio keep"
+  },
+  "gallery_image_aspect_ratio_grid": {
+    "message": "Image aspect ratio grid"
   }
 }
