@@ -11,13 +11,16 @@ import {
   clearChat,
 } from './helpers/ChatMethods'
 import { ContextMenuItem } from './ContextMenu'
-import { useSettingsStore } from '../stores/settings'
+import SettingsStoreInstance, { useSettingsStore } from '../stores/settings'
 import { Type } from '../backend-com'
 import { ActionEmitter, KeybindAction } from '../keybindings'
 
-export function useThreeDotMenu(selectedChat: Type.FullChat | null) {
+export function useThreeDotMenu(
+  selectedChat: Type.FullChat | null,
+  mode: 'chat' | 'gallery' = 'chat'
+) {
   const screenContext = useContext(ScreenContext)
-  const settingsStore = useSettingsStore()[0]
+  const [settingsStore] = useSettingsStore()
   const tx = useTranslationFunction()
 
   let menu: (ContextMenuItem | false)[] = [false]
@@ -104,6 +107,25 @@ export function useThreeDotMenu(selectedChat: Type.FullChat | null) {
       {
         label: tx('menu_delete_chat'),
         action: onDeleteChat,
+      },
+    ]
+  }
+
+  if (mode == 'gallery' && settingsStore?.desktopSettings) {
+    const { GalleryImageKeepAspectRatio } = settingsStore.desktopSettings
+    menu = [
+      {
+        label: tx(
+          `gallery_image_aspect_ratio_${
+            GalleryImageKeepAspectRatio ? 'grid' : 'keep'
+          }`
+        ),
+        action: async () => {
+          await SettingsStoreInstance.effect.setDesktopSetting(
+            'GalleryImageKeepAspectRatio',
+            !GalleryImageKeepAspectRatio
+          )
+        },
       },
     ]
   }
