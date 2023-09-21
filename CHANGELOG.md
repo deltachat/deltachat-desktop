@@ -4,6 +4,8 @@
 
 ### Added
 - Global Gallery
+- Show date when scrolling gallery
+- add option to view images and videos in the gallery cropped to grid or in their original aspect ratio
 - mark webxdc app context as secure #3413
 
 ### Changed
@@ -12,6 +14,7 @@
 ### Fixed
 - fix clipboard not working in webxdc apps
 - fix `target=_blank` links in html emails don't work #3408
+
 
 ### Fixed
 - fix clipboard not working in webxdc apps
