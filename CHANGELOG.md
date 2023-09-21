@@ -4,6 +4,8 @@
 
 ### Added
 - Global Gallery
+- Show date when scrolling gallery
+- add option to view images and videos in the gallery cropped to grid or in their original aspect ratio
 - mark webxdc app context as secure #3413
 - Experimental: Related Chats
 - Developer option to disable IMAP IDLE #4803
@@ -30,6 +32,7 @@
 - open help, webxdc and html email windows with always on top flag, if main window has that flag. 
 - fix copy text inserts extra linebreaks
 - improve video message - wide enough to show controls
+
 
 ### Fixed
 - fix clipboard not working in webxdc apps
