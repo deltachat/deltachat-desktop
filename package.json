@@ -9,7 +9,7 @@
     "check": "npm run check:types && npm run check:lint && npm run check:format",
     "check:types": "tsc -b src/check-all-tsconfig.json",
     "check:lint": "eslint . --ext .js,.ts,.tsx",
-    "check:format": "prettier --check \"scss/**/*.scss\" && prettier --check \"src/**/*.{js,ts,tsx,json}\" && prettier --check \"**/*.md\"",
+    "check:format": "prettier --check \"scss/**/*.scss\" \"src/**/*.{js,ts,tsx,json}\" \"**/*.md\"",
     "fix": "npm run fix:lint && npm run fix:format",
     "fix:lint": "eslint . --ext .js,.ts,.tsx --fix || true",
     "fix:format": "prettier --write \"scss/**/*.scss\" && prettier --write \"src/**/*.{js,ts,tsx,json}\" && prettier --write \"**/*.md\"",
