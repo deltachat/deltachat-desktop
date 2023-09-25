@@ -22,6 +22,7 @@
 - fix html mail getting restrictions of webxdc window
 - fix: when clicking on mailto link in html email show main window even when it was hidden.
 - Display the toast after successful key import.
+- fix the bug where non-contact email addresses are not shown when creating a group #3363
 
 <a id="1_40_3"></a>
 
