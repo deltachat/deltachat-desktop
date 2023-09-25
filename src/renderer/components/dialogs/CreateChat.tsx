@@ -190,9 +190,7 @@ export default function CreateChat(props: {
         </>
       )}
       {viewMode.startsWith('createGroup') && (
-        <CreateGroupInner
-          {...{ viewMode, setViewMode, onClose }}
-        />
+        <CreateGroupInner {...{ viewMode, setViewMode, onClose }} />
       )}
       {viewMode.startsWith('createVerifiedGroup') && (
         <CreateGroupInner isVerified {...{ viewMode, setViewMode, onClose }} />
@@ -650,7 +648,13 @@ function CreateGroupInner(props: {
     groupId,
     lazilyCreateOrUpdateGroup,
     finishCreateGroup,
-  ] = useCreateGroup(Boolean(isVerified), groupName, groupImage, groupMembers, onClose)
+  ] = useCreateGroup(
+    Boolean(isVerified),
+    groupName,
+    groupImage,
+    groupMembers,
+    onClose
+  )
 
   const viewPrefix = isVerified ? 'createVerifiedGroup' : 'createGroup'
 
@@ -666,15 +670,13 @@ function CreateGroupInner(props: {
   */
   const [groupContacts, setGroupContacts] = useState<Type.Contact[]>([])
 
-  useMemo(
-    () => {
-      BackendRemote.rpc.getContactsByIds(accountId, groupMembers).then((records) => {
+  useMemo(() => {
+    BackendRemote.rpc
+      .getContactsByIds(accountId, groupMembers)
+      .then(records => {
         setGroupContacts(Object.entries(records).map(([_, contact]) => contact))
       })
-    },
-    [accountId, groupMembers]
-  )
-      
+  }, [accountId, groupMembers])
 
   const showAddMemberDialog = () => {
     const listFlags = isVerified
@@ -691,7 +693,6 @@ function CreateGroupInner(props: {
     })
   }
 
-  console.log(groupContacts)
   return (
     <>
       {viewMode.startsWith(viewPrefix + '-showQrCode') && (
