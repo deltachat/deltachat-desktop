@@ -5,6 +5,7 @@ import React, {
   useRef,
   useLayoutEffect,
   useEffect,
+  useMemo,
   ChangeEvent,
   useCallback,
 } from 'react'
@@ -189,10 +190,7 @@ export default function CreateChat(props: {
         </>
       )}
       {viewMode.startsWith('createGroup') && (
-        <CreateGroupInner
-          isVerified={false}
-          {...{ viewMode, setViewMode, onClose }}
-        />
+        <CreateGroupInner {...{ viewMode, setViewMode, onClose }} />
       )}
       {viewMode.startsWith('createVerifiedGroup') && (
         <CreateGroupInner isVerified {...{ viewMode, setViewMode, onClose }} />
@@ -636,7 +634,7 @@ function CreateGroupInner(props: {
   viewMode: string
   setViewMode: (newViewMode: string) => void
   onClose: DialogProps['onClose']
-  isVerified: boolean
+  isVerified?: boolean
 }) {
   const { openDialog } = useContext(ScreenContext)
   const { viewMode, setViewMode, onClose, isVerified } = props
@@ -650,7 +648,13 @@ function CreateGroupInner(props: {
     groupId,
     lazilyCreateOrUpdateGroup,
     finishCreateGroup,
-  ] = useCreateGroup(isVerified, groupName, groupImage, groupMembers, onClose)
+  ] = useCreateGroup(
+    Boolean(isVerified),
+    groupName,
+    groupImage,
+    groupMembers,
+    onClose
+  )
 
   const viewPrefix = isVerified ? 'createVerifiedGroup' : 'createGroup'
 
@@ -658,11 +662,15 @@ function CreateGroupInner(props: {
   const [qrCodeSVG, setQrCodeSvg] = useState<string | undefined>(undefined)
 
   const [errorMissingGroupName, setErrorMissingGroupName] = useState(false)
+  const [groupContacts, setGroupContacts] = useState<Type.Contact[]>([])
 
-  const searchContacts = useContacts(
-    isVerified ? C.DC_GCL_VERIFIED_ONLY | C.DC_GCL_ADD_SELF : C.DC_GCL_ADD_SELF,
-    ''
-  )[0]
+  useMemo(() => {
+    BackendRemote.rpc
+      .getContactsByIds(accountId, groupMembers)
+      .then(records => {
+        setGroupContacts(Object.entries(records).map(([_, contact]) => contact))
+      })
+  }, [accountId, groupMembers])
 
   const showAddMemberDialog = () => {
     const listFlags = isVerified
@@ -672,11 +680,13 @@ function CreateGroupInner(props: {
     openDialog(AddMemberDialog, {
       listFlags,
       groupMembers,
-      onOk: (members: number[]) =>
-        members.forEach(contactId => addGroupMember({ id: contactId })),
+      onOk: (members: number[]) => {
+        members.forEach(contactId => addGroupMember({ id: contactId }))
+      },
       isBroadcast: false,
     })
   }
+
   return (
     <>
       {viewMode.startsWith(viewPrefix + '-showQrCode') && (
@@ -742,9 +752,7 @@ function CreateGroupInner(props: {
                   }}
                 />
                 <ContactList2
-                  contacts={searchContacts.filter(
-                    ({ id }) => groupMembers.indexOf(id) !== -1
-                  )}
+                  contacts={groupContacts}
                   onClick={() => {}}
                   showRemove
                   onRemoveClick={c => {
