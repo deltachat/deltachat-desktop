@@ -662,12 +662,6 @@ function CreateGroupInner(props: {
   const [qrCodeSVG, setQrCodeSvg] = useState<string | undefined>(undefined)
 
   const [errorMissingGroupName, setErrorMissingGroupName] = useState(false)
-  /*
-  const searchContacts = useContacts(
-    isVerified ? C.DC_GCL_VERIFIED_ONLY | C.DC_GCL_ADD_SELF : C.DC_GCL_ADD_SELF,
-    ''
-  )[0]
-  */
   const [groupContacts, setGroupContacts] = useState<Type.Contact[]>([])
 
   useMemo(() => {
