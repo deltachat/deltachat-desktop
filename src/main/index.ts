@@ -35,6 +35,28 @@ protocol.registerSchemesAsPrivileged([
   {
     scheme: 'webxdc',
     privileges: {
+      // This gives apps access to APIs such as
+      // - Web Cryptography
+      // - Web Share
+      // , also see https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts/features_restricted_to_secure_contexts
+      //
+      // To give a brief explanation of what "secure context" is:
+      // Generally all websites served thorugh `https` (and not through `http`)
+      // are in a "secure context".
+      //
+      // For reference:
+      // - https://support.delta.chat/t/allow-access-to-camera-geolocation-other-web-apis/2446?u=wofwca
+      //
+      // Note that APIs requiring explicit user permission (such as camera)
+      // still don't work, see
+      // https://github.com/deltachat/deltachat-desktop/blob/455a4d01501ed82f9d8e0a36064ffbc3981722ee/src/main/deltachat/webxdc.ts#L457-L473
+      //
+      // In terms of `isSecureContext`, webxdc apps are similar to files,
+      // extensions, and FirefoxOS apps, i.e. ["Packaged Applications"]
+      // (https://w3c.github.io/webappsec-secure-contexts/#packaged-applications),
+      // so `secure: true` is applicable.
+      secure: true,
+
       allowServiceWorkers: true,
       standard: true,
       supportFetchAPI: true,
