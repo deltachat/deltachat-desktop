@@ -144,9 +144,9 @@ function ViewGroupInner(props: {
 
   useEffect(() => {
     BackendRemote.rpc
-      .getSimilarChatlistEntries(selectedAccountId(), chat.id)
-      .then(entries => {
-        setChatListIds(entries.map(item => item[0]))
+      .getSimilarChatIds(selectedAccountId(), chat.id)
+      .then(chatIds => {
+        setChatListIds(chatIds)
       })
   }, [chat.id])
 
