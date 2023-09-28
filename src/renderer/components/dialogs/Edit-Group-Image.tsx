@@ -3,7 +3,7 @@ import React, { useContext } from 'react'
 import { ScreenContext } from '../../contexts'
 import { Avatar } from '../Avatar'
 import { useContextMenu } from '../ContextMenu'
-import FullscreenMedia from './FullscreenMedia'
+import FullscreenMedia, { NeighboringMediaMode } from './FullscreenMedia'
 
 export const GroupImage = (props: {
   groupImage?: string | null
@@ -31,6 +31,7 @@ export const GroupImage = (props: {
         fileMime: 'image/x',
         file: groupImage,
       } as T.Message,
+      neighboringMedia: NeighboringMediaMode.Off,
     })
 
   const openContextMenu = useContextMenu([
