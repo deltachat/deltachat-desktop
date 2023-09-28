@@ -4,6 +4,7 @@
 
 ### Added
 - mark webxdc app context as secure #3413
+- Experimental: Related Chats
 
 ### Changed
 - update deltachat-node and deltachat/jsonrpc-client to `v1.123.0`
