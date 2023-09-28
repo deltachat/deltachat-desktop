@@ -12,7 +12,8 @@ async function onKeysImport() {
   const opts: OpenDialogOptions = {
     title: tx('pref_managekeys_import_secret_keys'),
     defaultPath: runtime.getAppPath('downloads'),
-    properties: ['openDirectory'],
+    properties: ['openFile'],
+    filters: [{ extensions: ['asc'], name: 'PGP Key' }],
   }
 
   const filename = await runtime.showOpenFileDialog(opts)
