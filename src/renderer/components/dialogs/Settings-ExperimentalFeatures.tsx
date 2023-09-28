@@ -71,6 +71,7 @@ export function SettingsExperimentalFeatures({
       {renderDTSettingSwitch({
         key: 'enableChatAuditLog',
         label: tx('menu_chat_audit_log'),
+        description: tx('chat_audit_log_description'),
       })}
       {renderDTSettingSwitch({
         key: 'experimentalEnableMarkdownInMessages',

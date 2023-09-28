@@ -12,6 +12,7 @@
 ### Fixed
 - fix clipboard not working in webxdc apps
 - fix `target=_blank` links in html emails don't work #3408
+- add description for enableChatAuditLog setting
 
 <a id="1_40_4"></a>
 
