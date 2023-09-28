@@ -37,7 +37,7 @@ export function windowDefaults() {
       y,
     },
     headerHeight,
-    minWidth: 450,
+    minWidth: 700,
     minHeight: 450,
     main: targetFile,
     preload: join(__dirname, '..', '..', 'html-dist', 'preload.js'),

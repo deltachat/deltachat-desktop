@@ -43,6 +43,7 @@ import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 import { Type } from '../../backend-com'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import { SettingsProfileDialog } from '../dialogs/Settings-Profile'
+import classNames from 'classnames'
 
 const log = getLogger('renderer/main-screen')
 
@@ -312,28 +313,46 @@ export default function MainScreen() {
                     minimal
                     large
                     active={selectedChat.activeView === ChatView.MessageList}
-                    // aria-selected={!view}
                     icon={'chat'}
                     aria-label={tx('chat')}
                   />
-                  <Button
+                  <NavBarTabButton
+                    label={tx('images')}
                     onClick={() => setChatView(ChatView.Media)}
-                    minimal
-                    large
+                    icon='photo_library'
                     active={selectedChat.activeView === ChatView.Media}
-                    // aria-selected={view}
-                    icon={'media'}
-                    aria-label={tx('media')}
+                  />
+                  <NavBarTabButton
+                    label={tx('video')}
+                    onClick={() => {}}
+                    icon='video_library'
+                    active={false}
+                  />
+                  <NavBarTabButton
+                    label={tx('audio')}
+                    onClick={() => {}}
+                    icon='library_music'
+                    active={false}
+                  />
+                  <NavBarTabButton
+                    label={tx('documents')}
+                    onClick={() => {}}
+                    icon='folder_copy'
+                    active={false}
+                  />
+                  <NavBarTabButton
+                    label={tx('webxdc_apps')}
+                    onClick={() => {}}
+                    icon='apps'
+                    active={false}
                   />
                   {settingsStore?.desktopSettings
                     .enableOnDemandLocationStreaming && (
-                    <Button
-                      minimal
-                      large
-                      icon='map'
+                    <NavBarTabButton
+                      label={tx('tab_map')}
                       onClick={() => setChatView(ChatView.Map)}
+                      icon='map'
                       active={selectedChat.activeView === ChatView.Map}
-                      aria-label={tx('tab_map')}
                     />
                   )}
                 </span>
@@ -404,4 +423,39 @@ function chatSubtitle(chat: Type.FullChat) {
     }
   }
   return 'ErrTitle'
+}
+
+function NavBarTabButton({
+  icon,
+  active,
+  label,
+  onClick,
+}: {
+  /** name of material icon file from images/icons minus the path and ".svg" */
+  icon: string
+  active: boolean
+  label: string
+  onClick: () => void
+}) {
+  const iconUrl = `url("../images/icons/${icon}.svg")`
+  return (
+    <button
+      className={classNames('navbar-tab-button', {
+        active,
+      })}
+      aria-label={label}
+      aria-selected={active}
+      // role="tab"
+      title={label}
+      onClick={onClick}
+    >
+      <span
+        className='navbar-icon'
+        style={{
+          WebkitMaskImage: iconUrl,
+          maskImage: iconUrl,
+        }}
+      ></span>
+    </button>
+  )
 }

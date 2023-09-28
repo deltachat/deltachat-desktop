@@ -60,14 +60,43 @@
 
   span.views {
     margin-left: auto;
-    margin-right: 15px;
+    margin-right: 3px;
     display: flex;
 
     .bp4-button {
+      // deprecated, please remove as soon as we can
       margin: 0px;
       position: relative;
       height: 50px;
       border-radius: 0px;
+      padding: 5px 13px;
+    }
+
+    button.navbar-tab-button {
+      border: none;
+      margin: 0px;
+      position: relative;
+      height: 50px;
+      background: transparent;
+      padding: 1px 3px;
+
+      span.navbar-icon {
+        --navbar-icon-height: 20px;
+        -webkit-mask-repeat: no-repeat;
+        background-color: var(--navBarText);
+        display: inline-block;
+        height: var(--navbar-icon-height);
+        width: var(--navbar-icon-height);
+        -webkit-mask-size: var(--navbar-icon-height);
+        vertical-align: middle;
+      }
+
+      &:hover {
+        background: rgba(143, 153, 168, 0.15);
+      }
+      &.active {
+        background: rgba(143, 153, 168, 0.3);
+      }
     }
   }
 

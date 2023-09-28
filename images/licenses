@@ -3,10 +3,16 @@ many of the files here are from google's material icons, some are made by us.
 
 exact Licenses:
 
-Google's material icons - Apache 2:
+Google's material icons - Apache 2 (https://github.com/google/material-design-icons/tree/master):
 - icons/favorite.svg
 - icons/open_in_new.svg
 - icons/schedule.svg
 - icons/swap_vert.svg
+- icons/apps.svg
+- icons/photo_library.svg
+- icons/video_library.svg
+- icons/library_music.svg
+- icons/folder_copy.svg
+- icons/map.svg
 
 // TODO

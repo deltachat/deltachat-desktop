@@ -10,6 +10,8 @@
 
 ### Changed
 - update deltachat-node and deltachat/jsonrpc-client to `v1.123.0`
+- move gallery tabs into navbar
+- increase minimum window width from `450` to `700`
 
 ### Fixed
 - fix clipboard not working in webxdc apps
