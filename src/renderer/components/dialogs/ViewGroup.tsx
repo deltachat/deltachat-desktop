@@ -35,6 +35,7 @@ import { selectedAccountId } from '../../ScreenController'
 import { modifyGroup } from '../helpers/ChatMethods'
 import { DcEventType } from '@deltachat/jsonrpc-client'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
+import { useSettingsStore } from '../../stores/settings'
 
 const log = getLogger('renderer/ViewGroup')
 
@@ -139,16 +140,18 @@ function ViewGroupInner(props: {
   const { openDialog } = useContext(ScreenContext)
   const { onClose, chat, isBroadcast } = props
   const tx = useTranslationFunction()
+  const [settings] = useSettingsStore()
+  const isRelatedChatsEnabled =
+    settings?.desktopSettings.EnableRelatedChats || false
 
   const [chatListIds, setChatListIds] = useState<number[]>([])
 
   useEffect(() => {
-    BackendRemote.rpc
-      .getSimilarChatIds(selectedAccountId(), chat.id)
-      .then(chatIds => {
-        setChatListIds(chatIds)
-      })
-  }, [chat.id])
+    if (isRelatedChatsEnabled)
+      BackendRemote.rpc
+        .getSimilarChatIds(selectedAccountId(), chat.id)
+        .then(chatIds => setChatListIds(chatIds))
+  }, [chat.id, isRelatedChatsEnabled])
 
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
     chatListIds,
@@ -265,30 +268,36 @@ function ViewGroupInner(props: {
                   {groupName} {chat.isProtected && <InlineVerifiedIcon />}
                 </p>
               </div>
-              <div className='group-separator'>{tx('group_related_chats')}</div>
-              <div className='group-related-chats-list-wrapper'>
-                <ChatListPart
-                  isRowLoaded={isChatLoaded}
-                  loadMoreRows={loadChats}
-                  rowCount={chatListIds.length}
-                  width={400}
-                  height={CHATLISTITEM_CHAT_HEIGHT * chatListIds.length}
-                  itemKey={index => 'key' + chatListIds[index]}
-                  itemHeight={CHATLISTITEM_CHAT_HEIGHT}
-                >
-                  {({ index, style }) => {
-                    const chatId = chatListIds[index]
-                    return (
-                      <div style={style}>
-                        <ChatListItem
-                          chatListItem={chatCache[chatId] || undefined}
-                          onClick={onChatClick.bind(null, chatId)}
-                        />
-                      </div>
-                    )
-                  }}
-                </ChatListPart>
-              </div>
+              {isRelatedChatsEnabled && (
+                <>
+                  <div className='group-separator'>
+                    {tx('group_related_chats')}
+                  </div>
+                  <div className='group-related-chats-list-wrapper'>
+                    <ChatListPart
+                      isRowLoaded={isChatLoaded}
+                      loadMoreRows={loadChats}
+                      rowCount={chatListIds.length}
+                      width={400}
+                      height={CHATLISTITEM_CHAT_HEIGHT * chatListIds.length}
+                      itemKey={index => 'key' + chatListIds[index]}
+                      itemHeight={CHATLISTITEM_CHAT_HEIGHT}
+                    >
+                      {({ index, style }) => {
+                        const chatId = chatListIds[index]
+                        return (
+                          <div style={style}>
+                            <ChatListItem
+                              chatListItem={chatCache[chatId] || undefined}
+                              onClick={onChatClick.bind(null, chatId)}
+                            />
+                          </div>
+                        )
+                      }}
+                    </ChatListPart>
+                  </div>
+                </>
+              )}
               <div className='group-separator'>
                 {!isBroadcast
                   ? tx(
