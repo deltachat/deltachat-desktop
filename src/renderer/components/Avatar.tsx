@@ -4,7 +4,9 @@ import { useContext } from 'react'
 import classNames from 'classnames'
 import { ScreenContext } from '../contexts'
 import { Type } from '../backend-com'
-import FullscreenMedia from './dialogs/FullscreenMedia'
+import FullscreenMedia, {
+  NeighboringMediaMode,
+} from './dialogs/FullscreenMedia'
 import { T } from '@deltachat/jsonrpc-client'
 
 export function QRAvatar() {
@@ -109,6 +111,7 @@ export function ClickForFullscreenAvatarWrapper(props: {
             fileMime: 'image/x',
             file: props.filename,
           } as T.Message,
+          neighboringMedia: NeighboringMediaMode.Off,
         })
       }}
       style={{

@@ -92,9 +92,6 @@ const getMediaActions = (
       contextMenuFactory.bind(null, message, openDialog),
       openContextMenu
     ),
-    openFullscreenMedia: openDialog.bind(null, 'FullscreenMedia', {
-      msg: message,
-    }),
     downloadMedia: onDownload.bind(null, message),
     openInShell: openAttachmentInShell.bind(null, message),
   }
@@ -143,7 +140,10 @@ export type GalleryAttachmentElementProps = {
 export function ImageAttachment({
   msgId,
   load_result,
-}: GalleryAttachmentElementProps) {
+  openFullscreenMedia,
+}: GalleryAttachmentElementProps & {
+  openFullscreenMedia: (message: Type.Message) => void
+}) {
   const screenContext = useContext(ScreenContext)
   const tx = window.static_translate
 
@@ -162,18 +162,20 @@ export function ImageAttachment({
     )
   } else {
     const message = load_result
-    const {
-      openContextMenu,
-      openFullscreenMedia,
-      openInShell,
-    } = getMediaActions(screenContext, message)
+    const { openContextMenu, openInShell } = getMediaActions(
+      screenContext,
+      message
+    )
     const { file, fileMime } = message
     const hasSupportedFormat = isImage(fileMime)
     const isBroken = !file || !hasSupportedFormat
+
     return (
       <div
         className={`media-attachment-media${isBroken ? ` broken` : ''}`}
-        onClick={isBroken ? openInShell : openFullscreenMedia}
+        onClick={
+          isBroken ? openInShell : openFullscreenMedia.bind(null, message)
+        }
         onContextMenu={openContextMenu}
       >
         {isBroken ? (
@@ -193,7 +195,10 @@ export function ImageAttachment({
 export function VideoAttachment({
   msgId,
   load_result,
-}: GalleryAttachmentElementProps) {
+  openFullscreenMedia,
+}: GalleryAttachmentElementProps & {
+  openFullscreenMedia: (message: Type.Message) => void
+}) {
   const screenContext = useContext(ScreenContext)
   const tx = window.static_translate
 
@@ -214,7 +219,7 @@ export function VideoAttachment({
     const message = load_result
     const {
       openContextMenu,
-      openFullscreenMedia,
+
       openInShell,
     } = getMediaActions(screenContext, message)
     const { file, fileMime } = message
@@ -223,7 +228,9 @@ export function VideoAttachment({
     return (
       <div
         className={`media-attachment-media${isBroken ? ` broken` : ''}`}
-        onClick={isBroken ? openInShell : openFullscreenMedia}
+        onClick={
+          isBroken ? openInShell : openFullscreenMedia.bind(null, message)
+        }
         onContextMenu={openContextMenu}
       >
         {isBroken ? (
