@@ -265,9 +265,7 @@ function ViewGroupInner(props: {
                   {groupName} {chat.isProtected && <InlineVerifiedIcon />}
                 </p>
               </div>
-              <div className='group-separator'>
-                {tx('profile_shared_chats')}
-              </div>
+              <div className='group-separator'>{tx('group_related_chats')}</div>
               <div style={{ marginLeft: '-20px' }}>
                 <ChatListPart
                   isRowLoaded={isChatLoaded}
