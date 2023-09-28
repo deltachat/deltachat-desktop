@@ -11,8 +11,9 @@ import { preventDefault } from '../../../shared/util'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 import { useContextMenu } from '../ContextMenu'
 import { jumpToMessage } from '../helpers/ChatMethods'
-import { BackendRemote, Type } from '../../backend-com'
+import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import debounce from 'debounce'
 
 const log = getLogger('renderer/fullscreen_media')
 
@@ -46,23 +47,33 @@ export default function FullscreenMedia(props: {
 
   const [mediaMessageList, setMediaMessageList] = useState<number[]>([])
   useEffect(() => {
-    if (props.neighboringMedia === NeighboringMediaMode.Off) {
-      setMediaMessageList([])
-    } else {
-      const { viewType, chatId } = props.msg
-      // workaround to get gifs and images into the same media list
-      let additionalViewType: Type.Viewtype | null = null
-      if (props.msg.viewType === 'Image') {
-        additionalViewType = 'Gif'
-      } else if (props.msg.viewType === 'Gif') {
-        additionalViewType = 'Image'
+    const update = () => {
+      if (props.neighboringMedia === NeighboringMediaMode.Off) {
+        setMediaMessageList([])
+      } else {
+        const { viewType, chatId } = props.msg
+        // workaround to get gifs and images into the same media list
+        let additionalViewType: Type.Viewtype | null = null
+        if (props.msg.viewType === 'Image') {
+          additionalViewType = 'Gif'
+        } else if (props.msg.viewType === 'Gif') {
+          additionalViewType = 'Image'
+        }
+        const scope =
+          props.neighboringMedia === NeighboringMediaMode.Global ? null : chatId
+        BackendRemote.rpc
+          .getChatMedia(accountId, scope, viewType, additionalViewType, null)
+          .then(setMediaMessageList)
       }
-      const scope =
-        props.neighboringMedia === NeighboringMediaMode.Global ? null : chatId
-      BackendRemote.rpc
-        .getChatMedia(accountId, scope, viewType, additionalViewType, null)
-        .then(setMediaMessageList)
     }
+    update()
+    const debouncedUpdate = debounce(update, 400)
+    const listeners = [
+      onDCEvent(accountId, 'MsgsChanged', debouncedUpdate),
+      onDCEvent(accountId, 'IncomingMsgBunch', debouncedUpdate),
+      onDCEvent(accountId, 'MsgDeleted', debouncedUpdate),
+    ]
+    return () => listeners.every(cleanup => cleanup())
   }, [props.msg, props.neighboringMedia, accountId])
 
   const { file, fileMime } = msg
