@@ -266,7 +266,7 @@ function ViewGroupInner(props: {
                 </p>
               </div>
               <div className='group-separator'>{tx('group_related_chats')}</div>
-              <div style={{ marginLeft: '-20px' }}>
+              <div className='group-related-chats-list-wrapper'>
                 <ChatListPart
                   isRowLoaded={isChatLoaded}
                   loadMoreRows={loadChats}
