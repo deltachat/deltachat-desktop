@@ -16,10 +16,18 @@ import { selectedAccountId } from '../../ScreenController'
 
 const log = getLogger('renderer/fullscreen_media')
 
+export enum NeighboringMediaMode {
+  Chat,
+  Global,
+  Off,
+}
+
 export default function FullscreenMedia(props: {
   msg: Type.Message
+  neighboringMedia: NeighboringMediaMode
   onClose: DialogProps['onClose']
 }) {
+  const accountId = selectedAccountId()
   const tx = window.static_translate
   const { onClose } = props
 
@@ -35,6 +43,28 @@ export default function FullscreenMedia(props: {
     previous: false,
     next: false,
   })
+
+  const [mediaMessageList, setMediaMessageList] = useState<number[]>([])
+  useEffect(() => {
+    if (props.neighboringMedia === NeighboringMediaMode.Off) {
+      setMediaMessageList([])
+    } else {
+      const { viewType, chatId } = props.msg
+      // workaround to get gifs and images into the same media list
+      let additionalViewType: Type.Viewtype | null = null
+      if (props.msg.viewType === 'Image') {
+        additionalViewType = 'Gif'
+      } else if (props.msg.viewType === 'Gif') {
+        additionalViewType = 'Image'
+      }
+      const scope =
+        props.neighboringMedia === NeighboringMediaMode.Global ? null : chatId
+      BackendRemote.rpc
+        .getChatMedia(accountId, scope, viewType, additionalViewType, null)
+        .then(setMediaMessageList)
+    }
+  }, [props.msg, props.neighboringMedia, accountId])
+
   const { file, fileMime } = msg
 
   if (!file) {
@@ -130,15 +160,15 @@ export default function FullscreenMedia(props: {
     if (!msg.id) {
       return
     }
-    previousNextMessageId.current = await getNeighboringMedia(
+    previousNextMessageId.current = await getNeighboringMsgIds(
       msg.id,
-      msg.viewType
+      mediaMessageList
     )
     setShowPrevNextMsgBtns({
       previous: previousNextMessageId.current[0] !== null,
       next: previousNextMessageId.current[1] !== null,
     })
-  }, [msg])
+  }, [msg, mediaMessageList])
 
   useEffect(() => {
     updatePreviousNextMessageId()
@@ -235,25 +265,10 @@ export default function FullscreenMedia(props: {
   )
 }
 
-async function getNeighboringMedia(
-  messageId: number,
-  viewType: Type.Viewtype
-): Promise<[previousMessageId: number | null, nextMessageId: number | null]> {
-  const accountId = selectedAccountId()
-
-  // workaround to get gifs and images into the same media list
-  let additionalViewType: Type.Viewtype | null = null
-  if (viewType === 'Image') {
-    additionalViewType = 'Gif'
-  } else if (viewType === 'Gif') {
-    additionalViewType = 'Image'
-  }
-
-  return await BackendRemote.rpc.getNeighboringChatMedia(
-    accountId,
-    messageId,
-    viewType,
-    additionalViewType,
-    null
-  )
+async function getNeighboringMsgIds(messageId: number, list: number[]) {
+  const index = list.indexOf(messageId)
+  return [list[index - 1] || null, list[index + 1] || null] as [
+    previousMessageId: number | null,
+    nextMessageId: number | null
+  ]
 }

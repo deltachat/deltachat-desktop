@@ -15,16 +15,25 @@ import AutoSizer from 'react-virtualized-auto-sizer'
 import { FixedSizeGrid } from 'react-window'
 import SettingsStoreInstance, { SettingsStoreState } from '../stores/settings'
 import moment from 'moment'
+import FullscreenMedia, {
+  NeighboringMediaMode,
+} from './dialogs/FullscreenMedia'
 
 const log = getLogger('renderer/Gallery')
 
 type MediaTabKey = 'images' | 'video' | 'audio' | 'files' | 'webxdc_apps'
 
+type GalleryElement = (
+  props: GalleryAttachmentElementProps & {
+    openFullscreenMedia: (message: Type.Message) => void
+  }
+) => JSX.Element
+
 const MediaTabs: Readonly<
   {
     [key in MediaTabKey]: {
       values: Type.Viewtype[]
-      element: (props: GalleryAttachmentElementProps) => JSX.Element
+      element: GalleryElement
     }
   }
 > = {
@@ -57,7 +66,7 @@ export default class Gallery extends Component<
   {
     id: MediaTabKey
     msgTypes: Type.Viewtype[]
-    element: (props: GalleryAttachmentElementProps) => JSX.Element
+    element: GalleryElement
     mediaMessageIds: number[]
     mediaLoadResult: Record<number, Type.MessageLoadResult>
     loading: boolean
@@ -184,6 +193,16 @@ export default class Gallery extends Component<
           message.timestamp * 1000
         ).format('LL')
     }
+  }
+
+  openFullscreenMedia(message: Type.Message) {
+    window.__openDialog(FullscreenMedia, {
+      msg: message,
+      neighboringMedia:
+        this.props.chatId === 'all'
+          ? NeighboringMediaMode.Global
+          : NeighboringMediaMode.Chat,
+    })
   }
 
   render() {
@@ -354,6 +373,9 @@ export default class Gallery extends Component<
                               <this.state.element
                                 msgId={msgId}
                                 load_result={message}
+                                openFullscreenMedia={this.openFullscreenMedia.bind(
+                                  this
+                                )}
                               />
                             </div>
                           )
