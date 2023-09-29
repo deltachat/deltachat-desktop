@@ -29,5 +29,6 @@ export function getDefaultState(): DesktopSettingsType {
     enableWebxdcDevTools: false,
     HTMLEmailAskForRemoteLoadingConfirmation: true,
     HTMLEmailAlwaysLoadRemoteContent: false,
+    EnableRelatedChats: false,
   }
 }

@@ -6,9 +6,13 @@ import {
   DeltaDialogBody,
   DeltaDialogOkCancelFooter,
 } from './DeltaDialog'
+import ChatListItem from '../chat/ChatListItem'
 import { useContactSearch, AddMemberInnerDialog } from './CreateChat'
 import { QrCodeShowQrInner } from './QrCode'
+import { selectChat } from '../helpers/ChatMethods'
+import { useThemeCssVar } from '../../ThemeManager'
 import { ContactList2, useContactsMap } from '../contact/ContactList'
+import { useLogicVirtualChatList, ChatListPart } from '../chat/ChatList'
 import {
   PseudoListItemShowQrCode,
   PseudoListItemAddMember,
@@ -31,6 +35,7 @@ import { selectedAccountId } from '../../ScreenController'
 import { modifyGroup } from '../helpers/ChatMethods'
 import { DcEventType } from '@deltachat/jsonrpc-client'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
+import { useSettingsStore } from '../../stores/settings'
 
 const log = getLogger('renderer/ViewGroup')
 
@@ -135,6 +140,23 @@ function ViewGroupInner(props: {
   const { openDialog } = useContext(ScreenContext)
   const { onClose, chat, isBroadcast } = props
   const tx = useTranslationFunction()
+  const [settings] = useSettingsStore()
+  const isRelatedChatsEnabled =
+    settings?.desktopSettings.EnableRelatedChats || false
+
+  const [chatListIds, setChatListIds] = useState<number[]>([])
+
+  useEffect(() => {
+    if (isRelatedChatsEnabled)
+      BackendRemote.rpc
+        .getSimilarChatIds(selectedAccountId(), chat.id)
+        .then(chatIds => setChatListIds(chatIds))
+  }, [chat.id, isRelatedChatsEnabled])
+
+  const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
+    chatListIds,
+    null
+  )
 
   const chatDisabled = !chat.canSend
 
@@ -207,6 +229,14 @@ function ViewGroupInner(props: {
     null
   )
 
+  const onChatClick = (chatId: number) => {
+    selectChat(chatId)
+    onClose()
+  }
+
+  const CHATLISTITEM_CHAT_HEIGHT =
+    Number(useThemeCssVar('--SPECIAL-chatlist-item-chat-height')) || 64
+
   return (
     <>
       {!profileContact && (
@@ -238,6 +268,36 @@ function ViewGroupInner(props: {
                   {groupName} {chat.isProtected && <InlineVerifiedIcon />}
                 </p>
               </div>
+              {isRelatedChatsEnabled && (
+                <>
+                  <div className='group-separator'>
+                    {tx('group_related_chats')}
+                  </div>
+                  <div className='group-related-chats-list-wrapper'>
+                    <ChatListPart
+                      isRowLoaded={isChatLoaded}
+                      loadMoreRows={loadChats}
+                      rowCount={chatListIds.length}
+                      width={400}
+                      height={CHATLISTITEM_CHAT_HEIGHT * chatListIds.length}
+                      itemKey={index => 'key' + chatListIds[index]}
+                      itemHeight={CHATLISTITEM_CHAT_HEIGHT}
+                    >
+                      {({ index, style }) => {
+                        const chatId = chatListIds[index]
+                        return (
+                          <div style={style}>
+                            <ChatListItem
+                              chatListItem={chatCache[chatId] || undefined}
+                              onClick={onChatClick.bind(null, chatId)}
+                            />
+                          </div>
+                        )
+                      }}
+                    </ChatListPart>
+                  </div>
+                </>
+              )}
               <div className='group-separator'>
                 {!isBroadcast
                   ? tx(

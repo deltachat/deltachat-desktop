@@ -73,5 +73,8 @@
   },
   "desktop_offer_copy_non_web_link_to_clipboard": {
     "message": "The link \"%1$d\" can not be opened in the web browser. Do you want to copy the link to the clipboard instead?"
+  },
+  "group_related_chats": {
+    "message": "Related Chats"
   }
 }
