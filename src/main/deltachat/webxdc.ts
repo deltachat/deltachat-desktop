@@ -25,6 +25,7 @@ import { DesktopSettings } from '../desktop_settings'
 import { window as main_window } from '../windows/main'
 import { writeTempFileFromBase64 } from '../ipc'
 import { refresh as refreshTitleMenu } from '../menu'
+import { T } from '@deltachat/jsonrpc-client'
 
 const open_apps: {
   [instanceId: string]: {
@@ -233,11 +234,7 @@ export default class DCWebxdc extends SplitOut {
               'webxdc-preload.js'
             ),
           },
-          title: `${
-            webxdcInfo.document
-              ? truncateText(webxdcInfo.document, 32) + ' - '
-              : ''
-          }${truncateText(webxdcInfo.name, 42)} – ${chatName}`,
+          title: makeTitle(webxdcInfo, chatName),
           icon: app_icon || undefined,
           width: 375,
           height: 667,
@@ -604,6 +601,23 @@ If you think that's a bug and you need that permission, then please open an issu
         }
       }
     )
+
+    ipcMain.handle(
+      'webxdc:message-changed',
+      async (_ev, accountId: number, instanceId: number) => {
+        const instance = open_apps[`${accountId}.${instanceId}`]
+        if (instance) {
+          const { chatId, webxdcInfo } = await this.rpc.getMessage(
+            accountId,
+            instanceId
+          )
+          const { name } = await this.rpc.getBasicChatInfo(accountId, chatId)
+          if (instance.win && webxdcInfo) {
+            instance.win.title = makeTitle(webxdcInfo, name)
+          }
+        }
+      }
+    )
     ipcMain.handle(
       'webxdc:instance-deleted',
       (_ev, accountId: number, instanceId: number) => {
@@ -625,6 +639,12 @@ If you think that's a bug and you need that permission, then please open an issu
       open_apps[open_app].win.close()
     }
   }
+}
+
+function makeTitle(webxdcInfo: T.WebxdcMessageInfo, chatName: string): string {
+  return `${
+    webxdcInfo.document ? truncateText(webxdcInfo.document, 32) + ' - ' : ''
+  }${truncateText(webxdcInfo.name, 42)} – ${chatName}`
 }
 
 function partitionFromAccountId(accountId: number) {
