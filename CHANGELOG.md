@@ -14,6 +14,7 @@
 - fix `target=_blank` links in html emails don't work #3408
 - add description for enableChatAuditLog setting
 - fix: import key from file instead of folder, fixes #1863
+- fix webxdc title not updated in document title changes #3412
 
 <a id="1_40_4"></a>
 
