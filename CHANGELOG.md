@@ -8,6 +8,7 @@
 ### Changed
 - update deltachat-node and deltachat/jsonrpc-client to `v1.123.0`
 - add a dark theme for the "Help" and the webxdc loading screen
+- improve the look of the webxdc loading screen
 
 ### Fixed
 - fix clipboard not working in webxdc apps
