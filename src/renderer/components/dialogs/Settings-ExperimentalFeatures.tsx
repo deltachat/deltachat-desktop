@@ -15,6 +15,7 @@ import SettingsStoreInstance, {
 } from '../../stores/settings'
 import RadioGroup from '../RadioGroup'
 import Radio from '../Radio'
+import blobStore from '../../stores/blobstore'
 
 const VIDEO_CHAT_INSTANCE_SYSTEMLI = 'https://meet.systemli.org/$ROOM'
 const VIDEO_CHAT_INSTANCE_AUTISTICI = 'https://vc.autistici.org/$ROOM'
@@ -27,6 +28,12 @@ export function SettingsExperimentalFeatures({
   settingsStore: SettingsStoreState
 }) {
   const tx = window.static_translate
+  blobStore.load(VIDEO_CHAT_INSTANCE_AUTISTICI.replace('$ROOM', ''))
+  blobStore.load(VIDEO_CHAT_INSTANCE_SYSTEMLI.replace('$ROOM', ''))
+  function getVideoChatIcon(url: string) : any {
+    let b = blobStore.get(url.replace('$ROOM', ''))
+    return b ? <img src={URL.createObjectURL(b)} /> : undefined
+  }
   const { openDialog } = useContext(ScreenContext)
 
   const onClickEdit = async () => {
@@ -43,6 +50,7 @@ export function SettingsExperimentalFeatures({
         }
       },
       settingsStore,
+      getVideoChatIcon
     })
   }
 
@@ -103,13 +111,19 @@ export function SettingsExperimentalFeatures({
 
 type RadioButtonValue = 'disabled' | 'custom' | 'systemli' | 'autistici'
 
+type EditVideochatInstanceDialogAdditionalProps = {
+  settingsStore: SettingsStoreState
+  getVideoChatIcon: (url: string) => any
+}
+
 export function EditVideochatInstanceDialog({
   isOpen,
   onClose,
   onOk,
   onCancel,
   settingsStore,
-}: DialogProps & { settingsStore: SettingsStoreState }) {
+  getVideoChatIcon,
+}: DialogProps & EditVideochatInstanceDialogAdditionalProps) {
   const tx = useTranslationFunction()
   const [configValue, setConfigValue] = useState(
     settingsStore.settings['webrtc_instance']
@@ -189,12 +203,14 @@ export function EditVideochatInstanceDialog({
               label='Systemli'
               value='systemli'
               subtitle={VIDEO_CHAT_INSTANCE_SYSTEMLI}
+              icon={getVideoChatIcon(VIDEO_CHAT_INSTANCE_SYSTEMLI)}
             />
             <Radio
               key='select-autistici'
               label='Autistici'
               value='autistici'
               subtitle={VIDEO_CHAT_INSTANCE_AUTISTICI}
+              icon={getVideoChatIcon(VIDEO_CHAT_INSTANCE_AUTISTICI)}
             />
             <Radio
               key='select-custom'
