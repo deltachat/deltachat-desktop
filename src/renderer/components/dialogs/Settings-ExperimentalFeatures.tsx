@@ -30,7 +30,7 @@ export function SettingsExperimentalFeatures({
   const tx = window.static_translate
   blobStore.load(VIDEO_CHAT_INSTANCE_AUTISTICI.replace('$ROOM', ''))
   blobStore.load(VIDEO_CHAT_INSTANCE_SYSTEMLI.replace('$ROOM', ''))
-  function getVideoChatIcon(url: string) : any {
+  function getVideoChatIcon(url: string): any {
     let b = blobStore.get(url.replace('$ROOM', ''))
     return b ? <img src={URL.createObjectURL(b)} /> : undefined
   }
@@ -50,7 +50,7 @@ export function SettingsExperimentalFeatures({
         }
       },
       settingsStore,
-      getVideoChatIcon
+      getVideoChatIcon,
     })
   }
 

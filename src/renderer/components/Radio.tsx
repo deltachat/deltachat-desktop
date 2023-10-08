@@ -33,7 +33,7 @@ export default function Radio({
         value={value}
         defaultChecked={Boolean(selected)}
       />
-      { icon }
+      {icon}
       <label htmlFor={id} className={classNames(!subtitle && 'no-subtitle')}>
         <span>{label}</span>
         {subtitle && <span>{subtitle}</span>}
