@@ -41,6 +41,11 @@ export default function SettingsImapFolderHandling({
         key: 'only_fetch_mvbox',
         description: tx('pref_only_fetch_mvbox_explain'),
       })}
+      {renderDeltaSwitch2({
+        label: tx('pref_disable_idle_title'),
+        key: 'disable_idle',
+        description: tx('pref_disable_idle_explain'),
+      })}
     </>
   )
 }

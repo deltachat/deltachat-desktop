@@ -23,6 +23,7 @@ export interface SettingsStoreState {
     webrtc_instance: string
     download_limit: string
     only_fetch_mvbox: string
+    disable_idle: string
     'ui.lastchatid': string
   }
   desktopSettings: DesktopSettingsType
@@ -44,6 +45,7 @@ const settingsKeys: Array<keyof SettingsStoreState['settings']> = [
   'webrtc_instance',
   'download_limit',
   'only_fetch_mvbox',
+  'disable_idle',
   'ui.lastchatid',
 ]
 

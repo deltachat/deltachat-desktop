@@ -32,6 +32,12 @@
   "pref_donate": {
     "message": "Donate"
   },
+  "pref_disable_idle_title": {
+    "message": "Disable IMAP IDLE"
+  },
+  "pref_disable_idle_explain": {
+    "message": "Do not use IMAP IDLE extension even if the server supports it. Enabling this option will delay message retrieval, enable it only for testing."
+  },
   "clear_chat": {
     "message": "Clear Chat"
   },

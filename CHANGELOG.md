@@ -5,6 +5,7 @@
 ### Added
 - mark webxdc app context as secure #3413
 - Experimental: Related Chats
+- Developer option to disable IMAP IDLE #4803
 
 ### Changed
 - update deltachat-node and deltachat/jsonrpc-client to `v1.123.0`
