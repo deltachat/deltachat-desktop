@@ -4,7 +4,7 @@
   let is_ready = false
 
   /**
-   * @type {Parameters<import('./webxdc').Webxdc["setUpdateListener"]>[0]|null}
+   * @type {Parameters<import('webxdc-types').Webxdc["setUpdateListener"]>[0]|null}
    */
   let callback = null
   var last_serial = 0
@@ -47,7 +47,7 @@
   })
 
   /**
-   * @type {import('./webxdc').Webxdc}
+   * @type {import('webxdc-types').Webxdc}
    */
 
   const api = {
