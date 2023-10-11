@@ -107,6 +107,7 @@
     "stackframe": "^1.2.1",
     "url-parse": "^1.5.9",
     "use-debounce": "^3.3.0",
+    "webxdc-types": "^1.0.0",
     "ws": "7.5.9"
   },
   "devDependencies": {
