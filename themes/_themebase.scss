@@ -181,6 +181,7 @@ $hover-contrast-change: 2%;
   --addMemberChipBackgroundColor: #{$bgSecondary};
   --searchInputBackgroundColor: #52768700;
   --galleryWebxdcItem: #{changeContrast($bgPrimary, 10%)};
+  --galleryFileRowHover: #{changeContrast($bgPrimary, 7%)};
   --recently-seen-indicator-color: #34c759;
 
   /* Emoji & Sticker picker overwrites */

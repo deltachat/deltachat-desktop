@@ -331,10 +331,10 @@ export function FileAttachmentRow({
         <div className='file-icon'>
           <div className='file-extension'>?</div>
         </div>
-        <div className='text-part'>
-          <div className='name'>{tx('attachment_failed_to_load')}</div>
-          <div className='size'>{'?'}</div>
-        </div>
+
+        <div className='name'>{tx('attachment_failed_to_load')}</div>
+        <div className='size'>{'?'}</div>
+        <div className='date'>{'?'}</div>
       </div>
     )
   } else {
@@ -343,7 +343,7 @@ export function FileAttachmentRow({
       screenContext,
       message
     )
-    const { fileName, fileBytes, fileMime, file } = message
+    const { fileName, fileBytes, fileMime, file, timestamp } = message
 
     const extension = getExtension(message)
     return (
@@ -368,15 +368,21 @@ export function FileAttachmentRow({
             </div>
           ) : null}
         </div>
-        <div className='text-part'>
-          <div className='name'>
-            {queryText && fileName
-              ? highlightQuery(fileName, queryText)
-              : fileName}
-          </div>
-          <div className='size'>
-            {fileBytes ? filesizeConverter(fileBytes) : '?'}
-          </div>
+
+        <div className='name'>
+          {queryText && fileName
+            ? highlightQuery(fileName, queryText)
+            : fileName}
+        </div>
+        <div className='size'>
+          {fileBytes ? filesizeConverter(fileBytes) : '?'}
+        </div>
+        <div className='date'>
+          <Timestamp
+            timestamp={timestamp * 1000}
+            module={''}
+            extended={false}
+          />
         </div>
       </div>
     )
