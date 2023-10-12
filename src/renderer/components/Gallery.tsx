@@ -12,7 +12,7 @@ import { getLogger } from '../../shared/logger'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
 import AutoSizer from 'react-virtualized-auto-sizer'
-import { FixedSizeGrid } from 'react-window'
+import { FixedSizeGrid, FixedSizeList } from 'react-window'
 import SettingsStoreInstance, { SettingsStoreState } from '../stores/settings'
 import moment from 'moment'
 import FullscreenMedia, {
@@ -235,7 +235,11 @@ export default class Gallery extends Component<
     return (
       <div className='media-view'>
         <div style={{ minWidth: 200 }}>
-          <ul className='bp4-tab-list .modifier' role='tablist'>
+          <ul
+            className='bp4-tab-list .modifier'
+            role='tablist'
+            style={{ display: 'flex', alignItems: 'center' }}
+          >
             {Object.keys(MediaTabs).map(realId => {
               const id = realId as MediaTabKey
               return (
@@ -253,23 +257,23 @@ export default class Gallery extends Component<
             {showDateHeader && (
               <div className='big-date' ref={this.dateHeader}></div>
             )}
+            {this.state.id === 'files' && (
+              <>
+                <div style={{ flexGrow: 1 }}></div>
+                <input
+                  type='search'
+                  placeholder='search files'
+                  onChange={this.onChangeInput.bind(this)}
+                />
+              </>
+            )}
           </ul>
           <div role='tabpanel'>
-            {this.state.id === 'files' && (
-              <input
-                type='search'
-                placeholder='search files'
-                onChange={this.onChangeInput.bind(this)}
-              />
-            )}
             <div
               className={`gallery gallery-image-object-fit_${
                 GalleryImageKeepAspectRatio ? 'contain' : 'cover'
               }`}
               key={this.state.msgTypes.join('.') + String(this.props.chatId)}
-              style={{
-                overflow: this.state.id === 'files' ? 'scroll' : undefined,
-              }}
             >
               {mediaMessageIds.length < 1 && !loading && (
                 <div className='empty-screen'>
@@ -279,21 +283,19 @@ export default class Gallery extends Component<
               )}
 
               {this.state.id === 'files' && (
-                <div className='item-container'>
-                  {filteredMediaMessageIds.map(msgId => {
-                    const message = mediaLoadResult[msgId]
-                    return (
-                      <div className='item' key={msgId}>
-                        <FileAttachmentRow
-                          msgId={msgId}
-                          load_result={message}
-                          queryText={queryText}
-                        />
-                      </div>
-                    )
-                  })}
-                </div>
+                <AutoSizer>
+                  {({ width, height }) => (
+                    <FileTable
+                      width={width}
+                      height={height}
+                      mediaLoadResult={mediaLoadResult}
+                      mediaMessageIds={filteredMediaMessageIds}
+                      queryText={queryText}
+                    ></FileTable>
+                  )}
+                </AutoSizer>
               )}
+              {/* TODO empty state for no search result on files, maybe including query text */}
 
               {this.state.id !== 'files' && (
                 <AutoSizer>
@@ -394,3 +396,45 @@ export default class Gallery extends Component<
 }
 
 Gallery.contextType = ScreenContext
+
+function FileTable({
+  width,
+  height,
+  mediaMessageIds,
+  mediaLoadResult,
+  queryText,
+}: {
+  width: number
+  height: number
+  mediaMessageIds: number[]
+  mediaLoadResult: Record<number, Type.MessageLoadResult>
+  queryText: string
+}) {
+  return (
+    <FixedSizeList
+      width={width}
+      height={height}
+      itemSize={60}
+      itemCount={mediaMessageIds.length}
+      overscanCount={10}
+      itemData={mediaMessageIds}
+    >
+      {({ index, style, data }) => {
+        const msgId = data[index]
+        const message = mediaLoadResult[msgId]
+        if (!message) {
+          return null
+        }
+        return (
+          <div style={style} className='item' key={msgId}>
+            <FileAttachmentRow
+              msgId={msgId}
+              load_result={message}
+              queryText={queryText}
+            />
+          </div>
+        )
+      }}
+    </FixedSizeList>
+  )
+}

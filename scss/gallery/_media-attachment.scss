@@ -83,17 +83,19 @@
 .media-attachment-generic {
   display: flex;
   flex-direction: row;
-  width: 300px;
-  margin: 5px 3px;
+  width: 100%;
+  padding: 5px;
+
+  &:hover {
+    background: var(--galleryFileRowHover);
+    border-radius: 5px;
+  }
 
   & > .file-icon {
     background: url('../images/file-gradient.svg') no-repeat center;
-    height: 44px;
-    width: 56px;
-    margin-left: -13px;
-    margin-right: -14px;
-    margin-bottom: -4px;
-    cursor: pointer;
+    height: 49px;
+    $file-icon-width: 42px;
+    width: $file-icon-width;
 
     // So we can center the extension text inside this icon
     display: flex;
@@ -101,14 +103,14 @@
     align-items: center;
 
     & > .file-extension {
-      font-size: 10px;
+      font-size: 8px;
       line-height: 13px;
       letter-spacing: 0.1px;
       text-transform: uppercase;
 
       // Along with flow layout in parent item, centers text
       text-align: center;
-      width: 25px;
+      width: $file-icon-width;
       margin-left: auto;
       margin-right: auto;
 
@@ -122,41 +124,59 @@
     }
   }
 
-  & > .text-part {
+  align-items: center;
+  position: relative;
+
+  $size_width: 70px;
+  $date_width: 120px;
+
+  & > .name {
     flex-grow: 1;
-    margin-left: 8px;
-    // The width of the icon plus our 8px margin
-    max-width: calc(100% - 37px);
+    //width: calc(100% - $size_width - $date_width);
+  }
+  & > .size {
+    width: $size_width;
+    flex-shrink: 0;
+  }
+  & > .date {
+    width: $date_width;
+    flex-shrink: 0;
+  }
 
-    & > .name {
-      color: var(--messageAttachmentFileInfo);
-      font-size: 14px;
-      line-height: 18px;
-      font-weight: 300;
-      margin-top: 2px;
+  & > .name {
+    color: var(--messageAttachmentFileInfo);
+    font-size: 14px;
+    line-height: 18px;
 
-      // Handling really long filenames - cut them off
-      overflow-x: hidden;
-      display: inline-block;
-      white-space: pre-line;
-      user-select: text;
-      position: relative;
-      word-break: break-all;
+    // Handling really long filenames - cut them off
+    overflow-x: hidden;
+    display: inline-block;
+    white-space: pre-line;
+    user-select: text;
+    position: relative;
+    word-break: break-all;
 
-      .highlight {
-        background-color: var(--colorPrimary);
-        color: white;
-        border-radius: 1.8px;
-      }
+    .highlight {
+      background-color: var(--colorPrimary);
+      color: white;
+      border-radius: 1.8px;
     }
+  }
 
-    & > .size {
-      color: var(--messageAttachmentFileInfo);
-      font-size: 11px;
-      line-height: 16px;
-      letter-spacing: 0.3px;
-      margin-top: 3px;
-    }
+  & > .date {
+    color: var(--messageAttachmentFileInfo);
+    font-size: 14px;
+    line-height: 18px;
+    text-align: end;
+  }
+
+  & > .size {
+    color: var(--messageAttachmentFileInfo);
+    font-size: 11px;
+    line-height: 16px;
+    letter-spacing: 0.3px;
+    margin-top: 3px;
+    text-align: end;
   }
 
   &.broken {
