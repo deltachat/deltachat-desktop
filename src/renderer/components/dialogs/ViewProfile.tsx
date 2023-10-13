@@ -28,6 +28,9 @@ import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import moment from 'moment'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
+import { getLogger } from '../../../shared/logger'
+
+const log = getLogger('renderer/dialogs/ViewProfile')
 
 function LastSeen({ timestamp }: { timestamp: number }) {
   const tx = useTranslationFunction()
@@ -133,6 +136,10 @@ export function ViewProfileInner({
     null
   )
   const [selfChatAvatar, setSelfChatAvatar] = useState<string | null>(null)
+  const [cachedVerifier, setCachedVerifier] = useState<null | {
+    label: string
+    action?: () => void
+  }>(null)
   const isDeviceChat = contact.id === C.DC_CONTACT_ID_DEVICE
   const isSelfChat = contact.id === C.DC_CONTACT_ID_SELF
 
@@ -165,6 +172,38 @@ export function ViewProfileInner({
       })()
     }
   }, [accountId, isSelfChat])
+
+  useEffect(() => {
+    ;(async () => {
+      if (contact.verifierId === null) {
+        setCachedVerifier({ label: tx('verified') })
+      } else if (contact.verifierId === C.DC_CONTACT_ID_SELF) {
+        setCachedVerifier({ label: tx('verified_by_you') })
+      } else {
+        setCachedVerifier(null) // make sure it rather shows nothing than wrong values
+        const verifierContactId = contact.verifierId
+        try {
+          const { address } = await BackendRemote.rpc.getContact(
+            accountId,
+            verifierContactId
+          )
+          setCachedVerifier({
+            label: tx('verified_by', address),
+            action: () =>
+              openViewProfileDialog(screenContext, verifierContactId),
+          })
+        } catch (error) {
+          log.error('failed to load verifier contact', error)
+          setCachedVerifier({
+            label:
+              'verified by: failed to load verifier contact, please report this issue',
+            action: () =>
+              openViewProfileDialog(screenContext, verifierContactId),
+          })
+        }
+      }
+    })()
+  }, [accountId, contact.id, contact.verifierId])
 
   const CHATLISTITEM_CHAT_HEIGHT =
     Number(useThemeCssVar('--SPECIAL-chatlist-item-chat-height')) || 64
@@ -211,22 +250,13 @@ export function ViewProfileInner({
           </div>
           {!isSelfChat && (
             <div className='contact-attributes'>
-              {contact.isVerified && !contact.verifierAddr && (
-                <div>
-                  <InlineVerifiedIcon />
-                  {tx('verified')}
-                </div>
-              )}
-              {contact.isVerified && contact.verifierAddr && (
+              {contact.isVerified && cachedVerifier && (
                 <div
-                  className='clickable'
-                  onClick={() =>
-                    contact.verifierId &&
-                    openViewProfileDialog(screenContext, contact.verifierId)
-                  }
+                  className={cachedVerifier.action && 'clickable'}
+                  onClick={cachedVerifier.action}
                 >
                   <InlineVerifiedIcon />
-                  {tx('verified_by', contact.verifierAddr)}
+                  {cachedVerifier.label}
                 </div>
               )}
               {contact.lastSeen !== 0 && (
