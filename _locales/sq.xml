@@ -31,6 +31,7 @@
     <string name="back">Mbrapsht</string>
     <string name="verified">Verifikuar</string>
     <string name="close">Mbylle</string>
+    <string name="close_window">Mbylle Dritaren</string>
     <string name="forward">Përpara</string>
     <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
     <string name="resend">Ridërgoje</string>
@@ -641,6 +642,8 @@
     <string name="pref_manage_keys">Administroni kyçe</string>
     <string name="pref_use_system_emoji">Përdor emoji sistemi</string>
     <string name="pref_use_system_emoji_explain">Çaktivizo mbulimin e brendshëm Delta Chat për emoji-t</string>
+    <string name="pref_use_inapp_camera">Përdor Kamerën e Vetë Aplikacionit</string>
+    <string name="pref_use_inapp_camera_explain">Kamera e vetë aplikacionit, zakonisht, ka më pak veçori se kamera e sistemit</string>
     <string name="pref_app_access">Hyrje aplikacioni</string>
     <string name="pref_chats">Fjalosje</string>
     <string name="pref_in_chat_sounds">Tinguj brenda fjalosjeje</string>
@@ -716,6 +719,8 @@
     <string name="emoji_symbols">Simbole</string>
     <string name="emoji_flags">Flamuj</string>
 
+    <!-- Reactions -->
+    <string name="reactions">Reagime</string>
 
     <!-- automatically delete message -->
     <string name="delete_old_messages">Fshiji mesazhet e vjetër</string>
@@ -891,6 +896,7 @@
     <string name="contact_not_verified">S\’verifikohet dot %1$s</string>
     <!-- Shown in contact profile. The placeholder will be replaced by the name of the contact that verified the contact shown. -->
     <string name="verified_by">Verifikuar nga %1$s</string>
+    <string name="verified_by_you">Verifikuar nga ju</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
     <string name="contact_setup_changed">U ndryshua rregullimi për %1$s</string>
     <string name="verified_group_explain">Grupet e verifikuara (eksperimentale) furnizojnë siguri kundër sulmesh aktive. Anëtarët janë të verifikuar me një faktor të dytë nga anëtarë të tjerë dhe mesazhet janë përherë të fshehtëzuara skaj më skaj.</string>
@@ -910,6 +916,7 @@
     <string name="notify_name_and_message">Emër dhe mesazh</string>
     <string name="notify_name_only">Vetëm emër</string>
     <string name="notify_no_name_or_message">Pa emër apo mesazh</string>
+    <string name="notifications_disabled">Njoftimet të çaktivizuara</string>
 
 
     <!-- permissions -->
@@ -919,6 +926,7 @@
     <string name="perm_explain_access_to_mic_denied">Delta Chat lyp leje mbi Mikrofonin që të mund të dërgojë mesazhe audio, por kjo i është mohuar. Ju lutemi, vazhdoni te menuja e rregullimeve të aplikacionit, përzgjidhni \"Leje\", dhe aktivizojini për \"Mikrofonin\".</string>
     <string name="perm_explain_access_to_storage_denied">Delta Chat lyp leje mbi Depozitimin që të mund të bashkëngjisë apo eksportojë foto, video ose audio, por kjo i është mohuar. Ju lutemi, vazhdoni te menuja e rregullimeve të aplikacionit, përzgjidhni \"Leje\", dhe aktivizojini për \"Depozitimin\".</string>
     <string name="perm_explain_access_to_location_denied">Delta Chat lyp leje mbi Vendndodhjen që të mund të bashkëngjisë një vendndodhje, por kjo i është mohuar. Ju lutemi, vazhdoni te menuja e rregullimeve të aplikacionit, përzgjidhni \"Leje\", dhe aktivizojini për \"Vendndodhjen\".</string>
+    <string name="perm_explain_access_to_notifications_denied">Që të merrni njoftime, kaloni te “Rregullime Sistemi / Aplikacione / Delta Chat” dhe aktivizoni “Njoftime”.</string>
 
     <!-- ImageEditorHud -->
     <string name="ImageEditorHud_draw_anywhere_to_blur">Që të turbullohet, vizatoni kudo qoftë</string>

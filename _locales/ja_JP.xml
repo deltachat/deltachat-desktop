@@ -528,7 +528,6 @@ https://delta.chat</string>
     <string name="emoji_symbols">シンボル</string>
     <string name="emoji_flags">フラッグ</string>
 
-
     <!-- automatically delete message -->
     <string name="delete_old_messages">古いメッセージの削除</string>
     <string name="autodel_device_title">端末からメッセージを削除する</string>
@@ -653,8 +652,6 @@ https://delta.chat</string>
     <string name="notify_name_and_message">名前とメッセージ</string>
     <string name="notify_name_only">名前のみ</string>
     <string name="notify_no_name_or_message">名前もメッセージも非表示</string>
-
-
     <!-- permissions -->
     <string name="perm_required_title">アクセス許可が必要です</string>
     <string name="perm_continue">続行</string>
