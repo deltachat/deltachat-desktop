@@ -9,6 +9,7 @@
 ### Changed
 - update deltachat-node and deltachat/jsonrpc-client to `v1.124.1`
 - add a dark theme for the "Help" and the webxdc loading screen
+- improve the look of the webxdc loading screen
 - update `@deltachat/message_parser_wasm` to `0.8.0`, which adds linkification to links on more generic URI schemes.
 - Update translations (13.10.2023)
 - better search in chat design which shows more results (remove redundant chat info and combine both headers)
@@ -20,6 +21,7 @@
 - fix: import key from file instead of folder, fixes #1863
 - fix webxdc title not updated in document title changes #3412
 - fix: remove duplicated search button on "search in chat" #3014
+- fix "Verified by" is shown weirdly for contacts that were verified directly #3421
 
 <a id="1_40_4"></a>
 
