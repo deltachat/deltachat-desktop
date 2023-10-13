@@ -218,7 +218,7 @@
           console.log('could create 501th connection, this should never happen')
           ipcRenderer.invoke('webxdc.exit')
         } catch (error) {
-          loadingDiv.innerHTML = ''
+          loadingDiv.remove();
           iframe.src = 'index.html'
           iframe.contentWindow.window.addEventListener(
             'keydown',

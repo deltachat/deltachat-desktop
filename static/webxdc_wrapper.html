@@ -22,17 +22,36 @@
         top: 0;
         width: 100%;
       }
+      #loading {
+        position: absolute;
+        background-color: Canvas;
+        inset: 0;
+      }
       #progress {
         width: 100%;
+        border-radius: 0;
+        display: block;
+        height: 5px;
+      }
+      #progress::-webkit-progress-bar {
+        background-color: transparent;
+      }
+      #progress::-webkit-progress-value {
+        background-color: #3D66FF;
+      }
+      @media (prefers-color-scheme: dark) {
+        #progress::-webkit-progress-value {
+          background-color: #A1C4FF;
+        }
       }
     </style>
   </head>
   <body>
-    <div id="loading">
-      <progress id="progress" value="0"></progress>
-    </div>
     <div class="iframe-container">
       <iframe id="frame"></iframe>
+      <div id="loading">
+        <progress id="progress" value="0"></progress>
+      </div>
     </div>
     <script>
       const iframe = document.getElementById('frame')
