@@ -74,6 +74,10 @@ export function SettingsExperimentalFeatures({
         description: tx('chat_audit_log_description'),
       })}
       {renderDTSettingSwitch({
+        key: 'EnableRelatedChats',
+        label: tx('group_related_chats'),
+      })}
+      {renderDTSettingSwitch({
         key: 'experimentalEnableMarkdownInMessages',
         label: 'Render Markdown in Messages',
       })}

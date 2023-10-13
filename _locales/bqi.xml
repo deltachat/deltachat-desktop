@@ -341,7 +341,6 @@
     <string name="emoji_symbols">nemāďā</string>
     <string name="emoji_flags">bêyraqā</string>
 
-
     <!-- automatically delete message -->
     <string name="delete_old_messages">pāk kerdên payomā qaďimi</string>
     <string name="autodel_device_title">pāk kerdên payomā zê dasgā</string>
@@ -371,8 +370,6 @@
     <string name="notify_name_and_message">nom vo payom</string>
     <string name="notify_name_only">têynā nom</string>
     <string name="notify_no_name_or_message">nom yā payomi nî</string>
-
-
     <string name="global_menu_preferences_language_desktop">zow</string>
     <string name="global_menu_file_desktop">fāyl</string>
     <string name="global_menu_file_quit_desktop">vê dar zêyďên</string>

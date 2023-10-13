@@ -4,11 +4,14 @@
 
 ### Added
 - mark webxdc app context as secure #3413
+- Experimental: Related Chats
 
 ### Changed
-- update deltachat-node and deltachat/jsonrpc-client to `v1.123.0`
+- update deltachat-node and deltachat/jsonrpc-client to `v1.124.1`
 - add a dark theme for the "Help" and the webxdc loading screen
 - improve the look of the webxdc loading screen
+- update `@deltachat/message_parser_wasm` to `0.8.0`, which adds linkification to links on more generic URI schemes.
+- Update translations (13.10.2023)
 
 ### Fixed
 - fix clipboard not working in webxdc apps
@@ -16,6 +19,7 @@
 - add description for enableChatAuditLog setting
 - fix: import key from file instead of folder, fixes #1863
 - fix webxdc title not updated in document title changes #3412
+- fix "Verified by" is shown weirdly for contacts that were verified directly #3421
 
 <a id="1_40_4"></a>
 
@@ -23,6 +27,7 @@
 
 ### Added
 - Show video chat instance URLs as subtitles #3369
+- Add similar chats to group profile #3379
 
 ### Changed
 - Offer to copy non-HTTP links to the clipboard instead of trying to open them in webxdc source code link and inside of html emails.
