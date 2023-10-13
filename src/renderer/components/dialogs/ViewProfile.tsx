@@ -136,7 +136,7 @@ export function ViewProfileInner({
     null
   )
   const [selfChatAvatar, setSelfChatAvatar] = useState<string | null>(null)
-  const [cachedVerifier, setCachedVerifier] = useState<null | {
+  const [verifier, setVerifier] = useState<null | {
     label: string
     action?: () => void
   }>(null)
@@ -176,25 +176,25 @@ export function ViewProfileInner({
   useEffect(() => {
     ;(async () => {
       if (contact.verifierId === null) {
-        setCachedVerifier({ label: tx('verified') })
+        setVerifier({ label: tx('verified') })
       } else if (contact.verifierId === C.DC_CONTACT_ID_SELF) {
-        setCachedVerifier({ label: tx('verified_by_you') })
+        setVerifier({ label: tx('verified_by_you') })
       } else {
-        setCachedVerifier(null) // make sure it rather shows nothing than wrong values
+        setVerifier(null) // make sure it rather shows nothing than wrong values
         const verifierContactId = contact.verifierId
         try {
           const { address } = await BackendRemote.rpc.getContact(
             accountId,
             verifierContactId
           )
-          setCachedVerifier({
+          setVerifier({
             label: tx('verified_by', address),
             action: () =>
               openViewProfileDialog(screenContext, verifierContactId),
           })
         } catch (error) {
           log.error('failed to load verifier contact', error)
-          setCachedVerifier({
+          setVerifier({
             label:
               'verified by: failed to load verifier contact, please report this issue',
             action: () =>
@@ -250,13 +250,13 @@ export function ViewProfileInner({
           </div>
           {!isSelfChat && (
             <div className='contact-attributes'>
-              {contact.isVerified && cachedVerifier && (
+              {contact.isVerified && verifier && (
                 <div
-                  className={cachedVerifier.action && 'clickable'}
-                  onClick={cachedVerifier.action}
+                  className={verifier.action && 'clickable'}
+                  onClick={verifier.action}
                 >
                   <InlineVerifiedIcon />
-                  {cachedVerifier.label}
+                  {verifier.label}
                 </div>
               )}
               {contact.lastSeen !== 0 && (
