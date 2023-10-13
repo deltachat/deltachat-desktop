@@ -7,7 +7,7 @@
 - Experimental: Related Chats
 
 ### Changed
-- update deltachat-node and deltachat/jsonrpc-client to `v1.123.0`
+- update deltachat-node and deltachat/jsonrpc-client to `v1.124.1`
 - add a dark theme for the "Help" and the webxdc loading screen
 - update `@deltachat/message_parser_wasm` to `0.8.0`, which adds linkification to links on more generic URI schemes.
 
