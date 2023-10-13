@@ -18,6 +18,7 @@
 - add description for enableChatAuditLog setting
 - fix: import key from file instead of folder, fixes #1863
 - fix webxdc title not updated in document title changes #3412
+- fix: remove duplicated search button on "search in chat" #3014
 
 <a id="1_40_4"></a>
 

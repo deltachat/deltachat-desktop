@@ -227,6 +227,9 @@ export default function MainScreen() {
                 value={queryStr}
                 className='icon-rotated'
                 inputRef={searchRef}
+                extraCleanAction={
+                  queryChatId ? () => setQueryChatId(null) : undefined
+                }
               />
             )}
           </NavbarGroup>

@@ -320,12 +320,12 @@ export default function ChatList(props: {
                     displayName={searchChatInfo.name}
                   />
                   <div className='chat-name'>{searchChatInfo.name}</div>
-                  <button
+                  {/* <button
                     onClick={() => props.onExitSearch?.()}
                     aria-label={tx('exit_search')}
                   >
                     X
-                  </button>
+                  </button> */}
                 </div>
                 <div className='search-result-divider' style={{ width: width }}>
                   {translate_n('n_messages', messageResultIds.length)}
