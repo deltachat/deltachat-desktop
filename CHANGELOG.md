@@ -11,6 +11,7 @@
 - add a dark theme for the "Help" and the webxdc loading screen
 - update `@deltachat/message_parser_wasm` to `0.8.0`, which adds linkification to links on more generic URI schemes.
 - Update translations (13.10.2023)
+- better search in chat design which shows more results (remove redundant chat info and combine both headers)
 
 ### Fixed
 - fix clipboard not working in webxdc apps

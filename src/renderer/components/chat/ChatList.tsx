@@ -36,7 +36,6 @@ import { useThemeCssVar } from '../../ThemeManager'
 import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { DcEvent, DcEventType, T } from '@deltachat/jsonrpc-client'
-import { Avatar } from '../Avatar'
 
 const enum LoadStatus {
   FETCHING = 1,
@@ -309,26 +308,8 @@ export default function ChatList(props: {
               <div>
                 <div className='search-result-divider' style={{ width: width }}>
                   {tx('search_in_chat')}
-                </div>
-                <div
-                  className='search-in-chat-label'
-                  style={{ width, height: '64px' }}
-                >
-                  <Avatar
-                    avatarPath={searchChatInfo.profileImage}
-                    color={searchChatInfo.color}
-                    displayName={searchChatInfo.name}
-                  />
-                  <div className='chat-name'>{searchChatInfo.name}</div>
-                  {/* <button
-                    onClick={() => props.onExitSearch?.()}
-                    aria-label={tx('exit_search')}
-                  >
-                    X
-                  </button> */}
-                </div>
-                <div className='search-result-divider' style={{ width: width }}>
-                  {translate_n('n_messages', messageResultIds.length)}
+                  {messageResultIds.length !== 0 &&
+                    ': ' + translate_n('n_messages', messageResultIds.length)}
                 </div>
                 <ChatListPart
                   isRowLoaded={isMessageLoaded}
@@ -336,10 +317,8 @@ export default function ChatList(props: {
                   rowCount={messageResultIds.length}
                   width={width}
                   height={
-                    // take remaining space
-                    height -
-                    DIVIDER_HEIGHT * 2 -
-                    64 /* height of chat label above */
+                    /* take remaining space */
+                    height - DIVIDER_HEIGHT
                   }
                   itemKey={index => 'key' + messageResultIds[index]}
                   itemData={messagelistData}
