@@ -1,6 +1,10 @@
 import React, { useState, useContext } from 'react'
 import { Card, Elevation } from '@blueprintjs/core'
-import { RenderDeltaSwitch2Type, RenderDTSettingSwitchType, SettingsSelector } from './Settings'
+import {
+  RenderDeltaSwitch2Type,
+  RenderDTSettingSwitchType,
+  SettingsSelector,
+} from './Settings'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { DeltaInput } from '../Login-Styles'
 import {
@@ -22,7 +26,7 @@ const VIDEO_CHAT_INSTANCE_AUTISTICI = 'https://vc.autistici.org/$ROOM'
 export function SettingsExperimentalFeatures({
   settingsStore,
   renderDTSettingSwitch,
-  renderDeltaSwitch2
+  renderDeltaSwitch2,
 }: {
   renderDTSettingSwitch: RenderDTSettingSwitchType
   settingsStore: SettingsStoreState
