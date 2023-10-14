@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { Card, Elevation } from '@blueprintjs/core'
-import { RenderDTSettingSwitchType, SettingsSelector } from './Settings'
+import { RenderDeltaSwitch2Type, RenderDTSettingSwitchType, SettingsSelector } from './Settings'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { DeltaInput } from '../Login-Styles'
 import {
@@ -22,9 +22,11 @@ const VIDEO_CHAT_INSTANCE_AUTISTICI = 'https://vc.autistici.org/$ROOM'
 export function SettingsExperimentalFeatures({
   settingsStore,
   renderDTSettingSwitch,
+  renderDeltaSwitch2
 }: {
   renderDTSettingSwitch: RenderDTSettingSwitchType
   settingsStore: SettingsStoreState
+  renderDeltaSwitch2: RenderDeltaSwitch2Type
 }) {
   const tx = window.static_translate
   const { openDialog } = useContext(ScreenContext)
@@ -93,6 +95,11 @@ export function SettingsExperimentalFeatures({
         // 853b584251a5dacf60ebc616f7fb10edffb5c5e5/src/main/index.ts#L12-L21
         description:
           'Careful: opening developer tools on a malicious webxdc app could lead to the app getting access to the Internet',
+      })}
+      {renderDeltaSwitch2({
+        label: tx('pref_disable_idle_title'),
+        key: 'disable_idle',
+        description: tx('pref_disable_idle_explain'),
       })}
       <SettingsSelector
         onClick={onClickEdit.bind(null, false)}
