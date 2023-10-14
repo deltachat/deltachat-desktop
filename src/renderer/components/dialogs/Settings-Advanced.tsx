@@ -41,6 +41,7 @@ export function SettingsAdvanced({
       <SettingsExperimentalFeatures
         settingsStore={settingsStore}
         renderDTSettingSwitch={renderDTSettingSwitch}
+        renderDeltaSwitch2={renderDeltaSwitch2}
       />
     </>
   )
