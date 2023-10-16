@@ -38,7 +38,7 @@ export function defaultCredentials(credentials?: Credentials): Credentials {
     send_port: '',
     send_security: '',
     smtp_certificate_checks: '',
-    socks5_enabled: '',
+    socks5_enabled: '0',
     socks5_host: '',
     socks5_port: '',
     socks5_user: '',
