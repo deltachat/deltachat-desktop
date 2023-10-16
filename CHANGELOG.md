@@ -14,6 +14,7 @@
 - update `@deltachat/message_parser_wasm` to `0.8.0`, which adds linkification to links on more generic URI schemes.
 - Update translations (13.10.2023)
 - better search in chat design which shows more results (remove redundant chat info and combine both headers)
+- update electron from `v22.3.24` to version `v22.3.27`
 
 ### Fixed
 - fix clipboard not working in webxdc apps
