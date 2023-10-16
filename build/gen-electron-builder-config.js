@@ -99,7 +99,7 @@ build['linux'] = {
   },
   files: [...files, PREBUILD_FILTERS.NOT_MAC, PREBUILD_FILTERS.NOT_WINDOWS],
   icon: 'build/icon.icns', // electron builder gets the icon out of the mac icon archive
-  description: 'The Email messenger. With Delta Chat, you can use your existing Email account as a messenger. End-to-End Encryption with Autocrypt is supported and you can have interactive chat experiences using webxdc apps(https://webxdc.org).',
+  description: 'The Email messenger (https://delta.chat)',
 }
 build['win'] = {
   icon: 'images/deltachat.ico',
