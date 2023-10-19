@@ -15,6 +15,7 @@
 - Update translations (13.10.2023)
 - better search in chat design which shows more results (remove redundant chat info and combine both headers)
 - shorten package description, because some debian had problems with our large description.
+- update electron from `v22.3.24` to version `v22.3.27`
 
 ### Fixed
 - fix clipboard not working in webxdc apps
