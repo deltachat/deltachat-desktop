@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Classes } from '@blueprintjs/core'
+import { Classes } from '@blueprintjs/core'
 import {
   DeltaDialogBase,
   DeltaDialogFooter,
@@ -52,7 +52,7 @@ export default function WebxdcSaveToChatDialog(props: {
 
   const onSaveClick = async () => {
     if (file) {
-      let tmp_file = await runtime.writeTempFileFromBase64(
+      const tmp_file = await runtime.writeTempFileFromBase64(
         file.file_name,
         file.file_content
       )
