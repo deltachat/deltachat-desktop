@@ -48,17 +48,20 @@ img.material-icon {
 
 i.material-svg-icon {
   -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
   background-color: var(--globalText);
   display: inline-block;
   height: 1.15em;
   width: 1.15em;
   -webkit-mask-size: 1.15em;
+  mask-size: 1.15em;
   margin-inline-start: 0.3em;
   margin-inline-end: 0.3em;
   vertical-align: middle;
 }
 
 i.material-icon-schedule {
+  mask-image: url(../images/icons/schedule.svg);
   -webkit-mask-image: url(../images/icons/schedule.svg);
   transform: translate(0px, -0.07em);
 }
