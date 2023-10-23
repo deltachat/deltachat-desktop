@@ -83,7 +83,7 @@
 .media-attachment-generic {
   display: flex;
   flex-direction: row;
-  width: 100%;
+  width: calc(100% - 5px);
   padding: 5px;
 
   &:hover {
