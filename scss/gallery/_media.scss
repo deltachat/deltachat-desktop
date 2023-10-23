@@ -20,17 +20,7 @@ $tab-height: 46px;
 
   & .gallery {
     height: calc(100vh - #{$tab-height} - #{$nav-bar-height});
-
-    & > .item-container {
-      // .item-container is still used by file view
-      display: flex;
-      flex-wrap: wrap;
-      padding: 10px 0px;
-      & > .item {
-        padding: 5px 5px 5px 5px;
-      }
-    }
-
+  
     & > .empty-screen {
       display: flex;
       padding: 10px 10px;
