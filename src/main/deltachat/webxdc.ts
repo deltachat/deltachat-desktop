@@ -238,6 +238,7 @@ export default class DCWebxdc extends SplitOut {
           icon: app_icon || undefined,
           width: 375,
           height: 667,
+          alwaysOnTop: main_window?.isAlwaysOnTop()
         })
         open_apps[`${accountId}.${msg_id}`] = {
           win: webxdc_windows,
