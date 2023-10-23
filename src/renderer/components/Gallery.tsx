@@ -283,17 +283,26 @@ export default class Gallery extends Component<
               )}
 
               {this.state.id === 'files' && (
-                <AutoSizer>
-                  {({ width, height }) => (
-                    <FileTable
-                      width={width}
-                      height={height}
-                      mediaLoadResult={mediaLoadResult}
-                      mediaMessageIds={filteredMediaMessageIds}
-                      queryText={queryText}
-                    ></FileTable>
+                <>
+                  <AutoSizer>
+                    {({ width, height }) => (
+                      <FileTable
+                        width={width}
+                        height={height}
+                        mediaLoadResult={mediaLoadResult}
+                        mediaMessageIds={filteredMediaMessageIds}
+                        queryText={queryText}
+                      ></FileTable>
+                    )}
+                  </AutoSizer>
+                  {filteredMediaMessageIds.length === 0 && (
+                    <div className='empty-screen'>
+                      <p className='no-media-message'>
+                        {tx('search_no_result_for_x', queryText)}
+                      </p>
+                    </div>
                   )}
-                </AutoSizer>
+                </>
               )}
               {/* TODO empty state for no search result on files, maybe including query text */}
 
