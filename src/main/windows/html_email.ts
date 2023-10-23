@@ -78,7 +78,7 @@ export function openHtmlEmailWindow(
       allowRunningInsecureContent: false,
       contextIsolation: true,
     },
-    alwaysOnTop: mainWindow?.isAlwaysOnTop()
+    alwaysOnTop: mainWindow?.isAlwaysOnTop(),
   }))
   window.webContents.setZoomFactor(DesktopSettings.state.zoomFactor)
 

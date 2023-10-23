@@ -59,7 +59,7 @@ export async function openHelpWindow(locale: string) {
       sandbox: true,
       spellcheck: false,
     },
-    alwaysOnTop: main_window?.isAlwaysOnTop()
+    alwaysOnTop: main_window?.isAlwaysOnTop(),
   }))
 
   const url = await getHelpFileForLang(locale)
