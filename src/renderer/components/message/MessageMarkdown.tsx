@@ -81,7 +81,7 @@ function renderElement(elm: ParsedElement, key?: number): JSX.Element {
       return <BotCommandSuggestion key={key} suggestion={elm.c} />
 
     case 'Linebreak':
-      return <div key={key} className='line-break' />
+      return <span key={key}>{"\n"}</span>
 
     case 'Text':
       return <span key={key}>{elm.c}</span>

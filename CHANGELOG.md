@@ -25,6 +25,7 @@
 - fix webxdc title not updated in document title changes #3412
 - fix: remove duplicated search button on "search in chat" #3014
 - fix "Verified by" is shown weirdly for contacts that were verified directly #3421
+- fix copy text inserts extra linebreaks
 
 <a id="1_40_4"></a>
 
