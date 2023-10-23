@@ -20,7 +20,7 @@ $tab-height: 46px;
 
   & .gallery {
     height: calc(100vh - #{$tab-height} - #{$nav-bar-height});
-  
+
     & > .empty-screen {
       display: flex;
       padding: 10px 10px;
