@@ -26,6 +26,7 @@
 - fix: remove duplicated search button on "search in chat" #3014
 - fix "Verified by" is shown weirdly for contacts that were verified directly #3421
 - open help, webxdc and html email windows with always on top flag, if main window has that flag. 
+- fix copy text inserts extra linebreaks
 
 <a id="1_40_4"></a>
 

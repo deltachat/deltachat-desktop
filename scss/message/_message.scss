@@ -117,18 +117,6 @@
         cursor: default;
 
         margin-right: 10px;
-
-        .double-line-break {
-          height: 28px;
-        }
-
-        .line-break {
-          height: 0px;
-        }
-
-        .line-break + .line-break {
-          height: 14px;
-        }
       }
     }
 
