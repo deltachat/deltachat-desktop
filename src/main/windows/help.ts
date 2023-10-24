@@ -6,6 +6,7 @@ import { join } from 'path'
 import { stat } from 'fs/promises'
 import { appWindowTitle } from '../../shared/constants'
 import { tx } from '../load-translations'
+import { window as main_window } from '../windows/main'
 
 const log = getLogger('main/help')
 const app = rawApp as ExtendedAppMainProcess
@@ -58,6 +59,7 @@ export async function openHelpWindow(locale: string) {
       sandbox: true,
       spellcheck: false,
     },
+    alwaysOnTop: main_window?.isAlwaysOnTop(),
   }))
 
   const url = await getHelpFileForLang(locale)
