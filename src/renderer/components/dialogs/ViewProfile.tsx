@@ -130,6 +130,7 @@ export function ViewProfileInner({
   onClose: () => void
 }) {
   const accountId = selectedAccountId()
+  const screenContext = useContext(ScreenContext)
   const { chatListIds } = useChatList(null, '', contact.id)
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
     chatListIds,
@@ -203,12 +204,10 @@ export function ViewProfileInner({
         }
       }
     })()
-  }, [accountId, contact.id, contact.verifierId])
+  }, [accountId, contact.id, contact.verifierId, screenContext, tx])
 
   const CHATLISTITEM_CHAT_HEIGHT =
     Number(useThemeCssVar('--SPECIAL-chatlist-item-chat-height')) || 64
-
-  const screenContext = useContext(ScreenContext)
 
   let displayNameLine = contact.displayName
   let addressLine = contact.address
