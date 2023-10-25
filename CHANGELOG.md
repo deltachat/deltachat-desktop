@@ -6,6 +6,7 @@
 - mark webxdc app context as secure #3413
 - Experimental: Related Chats
 - Developer option to disable IMAP IDLE #4803
+- add option to save to file system to webxdc "send to chat"-dialog
 
 ### Changed
 - update deltachat-node and deltachat/jsonrpc-client to `v1.125.0`

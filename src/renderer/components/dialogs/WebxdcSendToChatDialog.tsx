@@ -1,6 +1,11 @@
 import React from 'react'
-import { Card, Classes } from '@blueprintjs/core'
-import { DeltaDialogBase, DeltaDialogHeader } from './DeltaDialog'
+import { Classes } from '@blueprintjs/core'
+import {
+  DeltaDialogBase,
+  DeltaDialogFooter,
+  DeltaDialogFooterActions,
+  DeltaDialogHeader,
+} from './DeltaDialog'
 import ChatListItem from '../chat/ChatListItem'
 import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
 import classNames from 'classnames'
@@ -45,6 +50,18 @@ export default function WebxdcSaveToChatDialog(props: {
     onClose()
   }
 
+  const onSaveClick = async () => {
+    if (file) {
+      const tmp_file = await runtime.writeTempFileFromBase64(
+        file.file_name,
+        file.file_content
+      )
+      onClose()
+      await runtime.downloadFile(tmp_file, file.file_name)
+      await runtime.removeTempFile(tmp_file)
+    }
+  }
+
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setQueryStr(e.target.value)
 
@@ -63,52 +80,59 @@ export default function WebxdcSaveToChatDialog(props: {
         className={classNames(
           Classes.DIALOG_BODY,
           'bp4-dialog-body-no-footer',
-          'mailto-dialog'
+          'webxdc-send-to-chat-dialog'
         )}
       >
-        <Card style={{ padding: '0px' }}>
-          <div className='select-chat-chat-list'>
-            <input
-              className='search-input'
-              onChange={onSearchChange}
-              value={queryStr}
-              placeholder={tx('contacts_enter_name_or_email')}
-              autoFocus
-              spellCheck={false}
-            />
-            {noResults && queryStr && (
-              <PseudoListItemNoSearchResults queryStr={queryStr} />
-            )}
-            <div style={noResults ? { height: '0px' } : {}} className='results'>
-              <AutoSizer>
-                {({ width, height }) => (
-                  <ChatListPart
-                    isRowLoaded={isChatLoaded}
-                    loadMoreRows={loadChats}
-                    rowCount={chatListIds.length}
-                    width={width}
-                    height={height}
-                    itemKey={index => 'key' + chatListIds[index]}
-                    itemHeight={CHATLISTITEM_CHAT_HEIGHT}
-                  >
-                    {({ index, style }) => {
-                      const chatId = chatListIds[index]
-                      return (
-                        <div style={style}>
-                          <ChatListItem
-                            chatListItem={chatCache[chatId] || undefined}
-                            onClick={onChatClick.bind(null, chatId)}
-                          />
-                        </div>
-                      )
-                    }}
-                  </ChatListPart>
-                )}
-              </AutoSizer>
-            </div>
+        <div className='select-chat-chat-list'>
+          <input
+            className='search-input'
+            onChange={onSearchChange}
+            value={queryStr}
+            placeholder={tx('contacts_enter_name_or_email')}
+            autoFocus
+            spellCheck={false}
+          />
+          {noResults && queryStr && (
+            <PseudoListItemNoSearchResults queryStr={queryStr} />
+          )}
+          <div style={noResults ? { height: '0px' } : {}} className='results'>
+            <AutoSizer>
+              {({ width, height }) => (
+                <ChatListPart
+                  isRowLoaded={isChatLoaded}
+                  loadMoreRows={loadChats}
+                  rowCount={chatListIds.length}
+                  width={width}
+                  height={height}
+                  itemKey={index => 'key' + chatListIds[index]}
+                  itemHeight={CHATLISTITEM_CHAT_HEIGHT}
+                >
+                  {({ index, style }) => {
+                    const chatId = chatListIds[index]
+                    return (
+                      <div style={style}>
+                        <ChatListItem
+                          chatListItem={chatCache[chatId] || undefined}
+                          onClick={onChatClick.bind(null, chatId)}
+                        />
+                      </div>
+                    )
+                  }}
+                </ChatListPart>
+              )}
+            </AutoSizer>
           </div>
-        </Card>
+        </div>
       </div>
+      <DeltaDialogFooter>
+        <DeltaDialogFooterActions style={{ justifyContent: 'start' }}>
+          {file && (
+            <p className={'delta-button bold primary'} onClick={onSaveClick}>
+              {tx('save_as')}
+            </p>
+          )}
+        </DeltaDialogFooterActions>
+      </DeltaDialogFooter>
     </DeltaDialogBase>
   )
 }
