@@ -73,7 +73,9 @@ export default function FullscreenMedia(props: {
       onDCEvent(accountId, 'IncomingMsgBunch', debouncedUpdate),
       onDCEvent(accountId, 'MsgDeleted', debouncedUpdate),
     ]
-    return () => listeners.every(cleanup => cleanup())
+    return () => {
+      listeners.every(cleanup => cleanup())
+    }
   }, [props.msg, props.neighboringMedia, accountId])
 
   const { file, fileMime } = msg
