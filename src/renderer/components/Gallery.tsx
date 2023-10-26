@@ -304,7 +304,6 @@ export default class Gallery extends Component<
                   )}
                 </>
               )}
-              {/* TODO empty state for no search result on files, maybe including query text */}
 
               {this.state.id !== 'files' && (
                 <AutoSizer>
