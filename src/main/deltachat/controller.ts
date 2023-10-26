@@ -136,6 +136,9 @@ export default class DeltaChatController extends EventEmitter {
       this.account_manager.startIO()
       log.info('Started accounts io.')
     }
+    for (const account of await this.jsonrpcRemote.rpc.getAllAccountIds()) {
+      this.jsonrpcRemote.rpc.setConfig(account, "verified_one_on_one_chats", "1")
+    } 
   }
 
   async migrateToAccountsApiIfNeeded() {
