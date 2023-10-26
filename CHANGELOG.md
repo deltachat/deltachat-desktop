@@ -34,6 +34,7 @@
 - fix copy text inserts extra linebreaks
 - improve video message - wide enough to show controls
 - gallery: fix scroll to top when switching tabs
+- fix: context menu items could take up multiple lines
 
 <a id="1_40_4"></a>
 
