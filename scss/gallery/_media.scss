@@ -57,4 +57,13 @@ $tab-height: 46px;
   .bp4-tab-panel {
     margin-top: 0;
   }
+
+  .searchbar {
+    input {
+      border: none;
+      border-bottom: 1px solid grey;
+      background: transparent;
+      color: var(--textPrimary);
+    }
+  }
 }

@@ -260,11 +260,13 @@ export default class Gallery extends Component<
             {this.state.id === 'files' && (
               <>
                 <div style={{ flexGrow: 1 }}></div>
-                <input
-                  type='search'
-                  placeholder='search files'
-                  onChange={this.onChangeInput.bind(this)}
-                />
+                <div className='searchbar'>
+                  <input
+                    type='search'
+                    placeholder='search files'
+                    onChange={this.onChangeInput.bind(this)}
+                  />
+                </div>
               </>
             )}
           </ul>
