@@ -10,6 +10,7 @@
 - Experimental: Related Chats
 - Developer option to disable IMAP IDLE #4803
 - add option to save to file system to webxdc "send to chat"-dialog
+- add context menu option to delete media-messages from gallery
 
 ### Changed
 - update deltachat-node and deltachat/jsonrpc-client to `v1.127.0`
@@ -32,11 +33,7 @@
 - open help, webxdc and html email windows with always on top flag, if main window has that flag. 
 - fix copy text inserts extra linebreaks
 - improve video message - wide enough to show controls
-
-
-### Fixed
-- fix clipboard not working in webxdc apps
-- fix scroll to top when switching tabs
+- gallery: fix scroll to top when switching tabs
 
 <a id="1_40_4"></a>
 
@@ -196,7 +193,6 @@ Also make opening devtools with F12 more reliable.
 - Show thumbnail in chatlist summary of image, sticker and webxdc messages
 - add webxdc api `sendToChat` #3240
 - add webxdc api `importFiles`
-- add context menu option to delete media-messages from gallery
 
 ### Changed
 - exclude more unused files from installation package
