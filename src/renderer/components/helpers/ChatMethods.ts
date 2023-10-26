@@ -17,7 +17,7 @@ const log = getLogger('renderer/message')
 
 type Chat =
   | Type.FullChat
-  | (Type.ChatListItemFetchResult & { type: 'ChatListItem' })
+  | (Type.ChatListItemFetchResult & { kind: 'ChatListItem' })
 
 export const selectChat = (chatId: number) => {
   ChatStore.effect.selectChat(chatId)
@@ -99,7 +99,7 @@ export function openBlockFirstContactOfChatDialog(
 ) {
   const tx = window.static_translate
   const dmChatContact =
-    (selectedChat as Type.ChatListItemFetchResult & { type: 'ChatListItem' })
+    (selectedChat as Type.ChatListItemFetchResult & { kind: 'ChatListItem' })
       .dmChatContact || (selectedChat as Type.FullChat).contactIds[0]
   const accountId = selectedAccountId()
 
@@ -121,7 +121,7 @@ export function openBlockFirstContactOfChatDialog(
 
 export function openEncryptionInfoDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
-  chatListItem: Type.ChatListItemFetchResult & { type: 'ChatListItem' }
+  chatListItem: Type.ChatListItemFetchResult & { kind: 'ChatListItem' }
 ) {
   screenContext.openDialog('EncryptionInfo', { chatListItem })
 }
@@ -156,11 +156,9 @@ export async function openMuteChatDialog(
 }
 
 export async function unMuteChat(chatId: number) {
-  await BackendRemote.rpc.setChatMuteDuration(
-    selectedAccountId(),
-    chatId,
-    'NotMuted'
-  )
+  await BackendRemote.rpc.setChatMuteDuration(selectedAccountId(), chatId, {
+    kind: 'NotMuted',
+  })
 }
 
 export async function sendCallInvitation(

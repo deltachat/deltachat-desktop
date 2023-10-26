@@ -539,7 +539,7 @@ export function useLogicVirtualChatList(
     }: Extract<
       DcEvent,
       {
-        type:
+        kind:
           | 'MsgRead'
           | 'MsgDelivered'
           | 'MsgFailed'

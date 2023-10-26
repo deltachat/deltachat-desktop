@@ -140,7 +140,7 @@ export default function WelcomeScreen({
   const onCancel = async () => {
     try {
       const acInfo = await BackendRemote.rpc.getAccountInfo(selectedAccountId)
-      if (acInfo.type === 'Unconfigured') {
+      if (acInfo.kind === 'Unconfigured') {
         await EffectfulBackendActions.logout()
         await EffectfulBackendActions.removeAccount(selectedAccountId)
       }

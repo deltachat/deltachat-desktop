@@ -73,10 +73,7 @@ export default class DeltaChatController extends EventEmitter {
     await this.migrateToAccountsApiIfNeeded()
 
     log.debug('Initiating DeltaChatNode')
-    this._inner_account_manager = new DeltaChatNode(
-      this.cwd,
-      'deltachat-desktop'
-    )
+    this._inner_account_manager = new DeltaChatNode(this.cwd, true)
 
     const mainProcessTransport = new ElectronMainTransport(message => {
       message.id = `main-${message.id}`
@@ -105,21 +102,21 @@ export default class DeltaChatController extends EventEmitter {
           if (
             typeof contextId !== undefined &&
             typeof event === 'object' &&
-            event.type
+            event.kind
           ) {
-            if (event.type === 'Warning') {
+            if (event.kind === 'Warning') {
               logCoreEvent.warn(contextId, event.msg)
-            } else if (event.type === 'Info') {
+            } else if (event.kind === 'Info') {
               logCoreEvent.info(contextId, event.msg)
-            } else if (event.type.startsWith('Error')) {
+            } else if (event.kind.startsWith('Error')) {
               logCoreEvent.error(contextId, event.msg)
             } else if (app.rc['log-debug']) {
               // in debug mode log all core events
               const event_clone = Object.assign({}, event) as Partial<
                 typeof event
               >
-              delete event_clone.type
-              logCoreEvent.debug(event.type, contextId, event)
+              delete event_clone.kind
+              logCoreEvent.debug(event.kind, contextId, event)
             }
           }
         } catch (error) {

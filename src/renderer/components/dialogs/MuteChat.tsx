@@ -17,12 +17,24 @@ export default function MuteChat({
   const tx = window.static_translate
 
   const MUTE_DURATIONS: [Type.MuteDuration, string][] = [
-    ['NotMuted', tx('off')],
-    [{ Until: Timespans.ONE_HOUR_IN_SECONDS }, tx('mute_for_one_hour')],
-    [{ Until: Timespans.TWO_HOURS_IN_SECONDS }, tx('mute_for_two_hours')],
-    [{ Until: Timespans.ONE_DAY_IN_SECONDS }, tx('mute_for_one_day')],
-    [{ Until: Timespans.ONE_WEEK_IN_SECONDS }, tx('mute_for_seven_days')],
-    ['Forever', tx('mute_forever')],
+    [{ kind: 'NotMuted' }, tx('off')],
+    [
+      { kind: 'Until', duration: Timespans.ONE_HOUR_IN_SECONDS },
+      tx('mute_for_one_hour'),
+    ],
+    [
+      { kind: 'Until', duration: Timespans.TWO_HOURS_IN_SECONDS },
+      tx('mute_for_two_hours'),
+    ],
+    [
+      { kind: 'Until', duration: Timespans.ONE_DAY_IN_SECONDS },
+      tx('mute_for_one_day'),
+    ],
+    [
+      { kind: 'Until', duration: Timespans.ONE_WEEK_IN_SECONDS },
+      tx('mute_for_seven_days'),
+    ],
+    [{ kind: 'Forever' }, tx('mute_forever')],
   ]
   const MUTE_DURATION_OPTIONS: SelectDialogOption[] = MUTE_DURATIONS.map(
     ([_, label], index) => [String(index), label]

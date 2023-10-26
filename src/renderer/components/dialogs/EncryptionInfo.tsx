@@ -14,7 +14,7 @@ export default function EncryptionInfo({
   onClose,
 }: {
   chatListItem: Pick<
-    Type.ChatListItemFetchResult & { type: 'ChatListItem' },
+    Type.ChatListItemFetchResult & { kind: 'ChatListItem' },
     'id' | 'dmChatContact'
   >
   isOpen: boolean

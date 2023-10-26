@@ -51,7 +51,7 @@ onReady(() => {
 
   const onLocationChange = (
     accountId: number,
-    { chatId }: Extract<DcEvent, { type: 'MsgsChanged' | 'IncomingMsg' }>
+    { chatId }: Extract<DcEvent, { kind: 'MsgsChanged' | 'IncomingMsg' }>
   ) => {
     if (accountId === window.__selectedAccountId) {
       const { selectedChat, mapSettings } = locationStore.getState()

@@ -21,7 +21,7 @@ function FreshMessageCounter({ counter }: { counter: number }) {
 }
 
 type ChatListItemType = Type.ChatListItemFetchResult & {
-  type: 'ChatListItem'
+  kind: 'ChatListItem'
 }
 
 function Header({
@@ -144,7 +144,7 @@ function ChatListItemArchiveLink({
 }: {
   onClick: () => void
   chatListItem: Type.ChatListItemFetchResult & {
-    type: 'ArchiveLink'
+    kind: 'ArchiveLink'
   }
 }) {
   const tx = window.static_translate
@@ -187,7 +187,7 @@ function ChatListItemError({
   onContextMenu,
 }: {
   chatListItem: Type.ChatListItemFetchResult & {
-    type: 'Error'
+    kind: 'Error'
   }
   onClick: () => void
   onContextMenu?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
@@ -235,7 +235,7 @@ function ChatListItemNormal({
   hover,
 }: {
   chatListItem: Type.ChatListItemFetchResult & {
-    type: 'ChatListItem'
+    kind: 'ChatListItem'
   }
   onClick: () => void
   onContextMenu?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
@@ -307,7 +307,7 @@ const ChatListItem = React.memo<ChatListItemProps>(
     // if not loaded by virtual list yet
     if (typeof chatListItem === 'undefined') return <PlaceholderChatListItem />
 
-    if (chatListItem.type == 'ChatListItem') {
+    if (chatListItem.kind == 'ChatListItem') {
       return (
         <ChatListItemNormal
           chatListItem={chatListItem}
@@ -318,7 +318,7 @@ const ChatListItem = React.memo<ChatListItemProps>(
           hover={hover}
         />
       )
-    } else if (chatListItem.type == 'Error') {
+    } else if (chatListItem.kind == 'Error') {
       return (
         <ChatListItemError
           chatListItem={chatListItem}
@@ -327,7 +327,7 @@ const ChatListItem = React.memo<ChatListItemProps>(
           onContextMenu={props.onContextMenu}
         />
       )
-    } else if (chatListItem.type == 'ArchiveLink') {
+    } else if (chatListItem.kind == 'ArchiveLink') {
       return (
         <ChatListItemArchiveLink
           chatListItem={chatListItem}

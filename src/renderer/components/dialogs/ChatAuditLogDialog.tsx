@@ -206,7 +206,7 @@ export default function ChatAuditLogDialog(props: {
                 log.debug(`Missing message with id ${id}`)
                 return
               }
-              if (message.variant !== 'message') {
+              if (message.kind !== 'message') {
                 log.debug(`Loading of message with id ${id} failed`)
                 return (
                   <li key={id} className='info'>

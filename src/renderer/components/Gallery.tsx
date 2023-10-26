@@ -87,7 +87,7 @@ export default class Gallery extends Component<
         const errors = []
         for (const msgId of media_ids) {
           const result = all_media_fetch_results[msgId]
-          if (result.variant === 'message') {
+          if (result.kind === 'message') {
             medias.push(result)
           } else {
             errors.push({ msgId, error: result.error })

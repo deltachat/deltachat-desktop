@@ -116,8 +116,8 @@ export namespace EffectfulBackendActions {
 }
 
 type ContextEvents = { ALL: (event: DcEvent) => void } & {
-  [Property in DcEvent['type']]: (
-    event: Extract<DcEvent, { type: Property }>
+  [Property in DcEvent['kind']]: (
+    event: Extract<DcEvent, { kind: Property }>
   ) => void
 }
 

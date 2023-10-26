@@ -513,7 +513,7 @@ export const MessageListInner = React.memo(
 
             if (messageId.kind === 'message') {
               const message = messageCache[messageId.msg_id]
-              if (message?.variant === 'message') {
+              if (message?.kind === 'message') {
                 return (
                   <MessageWrapper
                     key={messageId.msg_id}
@@ -525,7 +525,7 @@ export const MessageListInner = React.memo(
                     }
                   />
                 )
-              } else if (message?.variant === 'loadingError') {
+              } else if (message?.kind === 'loadingError') {
                 return (
                   <div className='info-message' id={String(messageId.msg_id)}>
                     <div
