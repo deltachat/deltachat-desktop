@@ -14,8 +14,9 @@ $tab-height: 46px;
     text-align: end;
     align-self: center;
     padding-right: 12px;
-    font-size: 22px;
-    font-weight: bold;
+    font-size: 18px;
+    color: var(--summary-text-color);
+    white-space: nowrap;
   }
 
   & .gallery {
