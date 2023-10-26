@@ -116,9 +116,7 @@ export function useThreeDotMenu(
     menu = [
       {
         label: tx(
-          `gallery_image_aspect_ratio_${
-            GalleryImageKeepAspectRatio ? 'grid' : 'keep'
-          }`
+          GalleryImageKeepAspectRatio ? 'square_grid' : 'aspect_ratio_grid'
         ),
         action: async () => {
           await SettingsStoreInstance.effect.setDesktopSetting(
