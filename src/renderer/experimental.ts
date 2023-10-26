@@ -1,16 +1,26 @@
 import { getLogger } from '../shared/logger'
 import { BackendRemote } from './backend-com'
 import { printCallCounterResult } from './debug-tools'
+import { runtime } from './runtime'
 import { selectedAccountId } from './ScreenController'
 
 const log = getLogger('renderer/experiments')
 
 class Experimental {
-  help = `
+  help() {
+    console.log(`
 These functions are highly experimental, use at your own risk.
 - importContacts (contacts:[email,name][]) // for mass importing contacts
     example: type "exp.importContacts([['email1@example.com', 'Heinz Herlich'],['bea@example.com','Berta Bissig']])"
-    `
+- getAllAccounts() // list all accounts
+
+only for debugging:
+- testErrorLogging()
+- getContextEmitters()
+- printCallCounterResult() // for profiling you can track what is called how often with 'countCall(label: string)'
+- .rpc // only available in devmode, gives full access to jsonrpc
+    `)
+  }
   constructor() {
     window.exp = this
   }
@@ -46,6 +56,15 @@ These functions are highly experimental, use at your own risk.
 
   printCallCounterResult() {
     printCallCounterResult()
+  }
+
+  get rpc() {
+    if (!runtime.getRC_Config().devmode) {
+      throw new Error(
+        "you need to enable devmode to access this. This is dangerous don't continue if you don't know what you are doing."
+      )
+    }
+    return BackendRemote.rpc
   }
 }
 
