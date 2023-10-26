@@ -18,6 +18,8 @@ import moment from 'moment'
 import FullscreenMedia, {
   NeighboringMediaMode,
 } from './dialogs/FullscreenMedia'
+import { debounce } from 'debounce'
+import InfiniteLoader from 'react-window-infinite-loader'
 
 const log = getLogger('renderer/Gallery')
 
@@ -61,6 +63,11 @@ const MediaTabs: Readonly<
 
 type mediaProps = { chatId: number | 'all' }
 
+const enum LoadStatus {
+  FETCHING = 1,
+  LOADED = 2,
+}
+
 export default class Gallery extends Component<
   mediaProps,
   {
@@ -68,13 +75,16 @@ export default class Gallery extends Component<
     msgTypes: Type.Viewtype[]
     element: GalleryElement
     mediaMessageIds: number[]
-    mediaLoadResult: Record<number, Type.MessageLoadResult>
+    mediaLoadResults: Record<number, Type.MessageLoadResult>
+    mediaLoadState: Record<number, LoadStatus>
     loading: boolean
     queryText: string
     GalleryImageKeepAspectRatio?: boolean
   }
 > {
   dateHeader = createRef<HTMLDivElement>()
+  accountId: number
+
   constructor(props: mediaProps) {
     super(props)
     this.state = {
@@ -82,13 +92,25 @@ export default class Gallery extends Component<
       msgTypes: MediaTabs.images.values,
       element: ImageAttachment,
       mediaMessageIds: [],
-      mediaLoadResult: {},
+      mediaLoadResults: {},
+      mediaLoadState: {},
       loading: true,
       queryText: '',
       GalleryImageKeepAspectRatio: false,
     }
 
     this.settingsStoreListener = this.settingsStoreListener.bind(this)
+    this.wasMediaLoadRequested = this.wasMediaLoadRequested.bind(this)
+    this.messageDeletionListener = debounce(
+      this.messageDeletionListener.bind(this),
+      200,
+      false
+    )
+    this.msgsChangeListener = this.msgsChangeListener.bind(this)
+    this.loadMessages = this.loadMessages.bind(this)
+
+    this.accountId = selectedAccountId()
+    this.activeAccountEvents = BackendRemote.getContextEvents(this.accountId)
   }
 
   reset() {
@@ -97,12 +119,19 @@ export default class Gallery extends Component<
       msgTypes: MediaTabs.images.values,
       element: ImageAttachment,
       mediaMessageIds: [],
-      mediaLoadResult: {},
+      mediaLoadResults: {},
+      mediaLoadState: {},
       loading: true,
       queryText: '',
     })
   }
 
+  wasMediaLoadRequested(index: number) {
+    const { mediaLoadState, mediaMessageIds } = this.state
+    return !!mediaLoadState[mediaMessageIds[index]]
+  }
+
+  activeAccountEvents: ReturnType<typeof BackendRemote.getContextEvents>
   componentDidMount() {
     this.onSelect(this.state.id)
     SettingsStoreInstance.subscribe(this.settingsStoreListener)
@@ -111,10 +140,22 @@ export default class Gallery extends Component<
         SettingsStoreInstance.state?.desktopSettings
           .GalleryImageKeepAspectRatio,
     })
+
+    this.activeAccountEvents.on('MsgDeleted', this.messageDeletionListener)
+    this.activeAccountEvents.on(
+      'IncomingMsgBunch',
+      this.reloadMessageIdsOnEvent
+    )
+    this.activeAccountEvents.on('MsgsChanged', this.msgsChangeListener)
   }
 
   componentWillUnmount() {
     SettingsStoreInstance.unsubscribe(this.settingsStoreListener)
+    this.activeAccountEvents.off('MsgDeleted', this.messageDeletionListener)
+    this.activeAccountEvents.off(
+      'IncomingMsgBunch',
+      this.reloadMessageIdsOnEvent
+    )
   }
 
   settingsStoreListener(state: SettingsStoreState | null) {
@@ -126,6 +167,44 @@ export default class Gallery extends Component<
     }
   }
 
+  messageDeletionListener({ msgId }: { chatId: number; msgId: number }) {
+    if (this.state.mediaMessageIds.indexOf(msgId)) {
+      this.reloadMessageIdsOnEvent()
+    }
+  }
+
+  /** reload media ids */
+  reloadMessageIdsOnEvent() {
+    const id = this.state.id
+    const chatId = this.props.chatId
+    this.loadMessageIds(id)
+      .then(msg_ids => {
+        if (id !== this.state.id || chatId !== this.props.chatId) {
+          log.warn(
+            'not the same chat anymore',
+            id,
+            this.state.id,
+            chatId,
+            this.props.chatId
+          )
+          return
+        }
+        this.setState({ mediaMessageIds: msg_ids })
+      })
+      .catch(log.error.bind(log))
+  }
+
+  async msgsChangeListener({ msgId }: { chatId: number; msgId: number }) {
+    if (msgId && this.state.mediaMessageIds.includes(msgId)) {
+      const messages = await BackendRemote.rpc.getMessages(this.accountId, [
+        msgId,
+      ])
+      this.setState(state => ({
+        mediaLoadResults: { ...state.mediaLoadResults, ...messages },
+      }))
+    }
+  }
+
   componentDidUpdate(prevProps: mediaProps) {
     if (this.props.chatId !== prevProps.chatId) {
       // reset
@@ -134,35 +213,74 @@ export default class Gallery extends Component<
     }
   }
 
-  onSelect(id: MediaTabKey) {
+  async loadMessages(startIndex: number, stopIndex: number) {
+    const id = this.state.id
+    const chatId = this.props.chatId
+    const ids = this.state.mediaMessageIds.slice(startIndex, stopIndex + 1)
+    this.setState(state => {
+      const newMediaLoadState = { ...state.mediaLoadState }
+      ids.forEach(chatId => (newMediaLoadState[chatId] = LoadStatus.FETCHING))
+      return { mediaLoadState: newMediaLoadState }
+    })
+    const messages = await BackendRemote.rpc.getMessages(this.accountId, ids)
+    if (id !== this.state.id || chatId !== this.props.chatId) {
+      log.warn(
+        'not the same chat anymore',
+        id,
+        this.state.id,
+        chatId,
+        this.props.chatId
+      )
+      return
+    }
+    this.setState(state => {
+      const newMediaLoadState = { ...state.mediaLoadState }
+      ids.forEach(chatId => (newMediaLoadState[chatId] = LoadStatus.FETCHING))
+      return {
+        mediaLoadResults: { ...state.mediaLoadResults, ...messages },
+        mediaLoadState: newMediaLoadState,
+      }
+    })
+  }
+
+  async loadMessageIds(id: MediaTabKey) {
+    const msgTypes = MediaTabs[id].values
+    const chatId = this.props.chatId !== 'all' ? this.props.chatId : null
+    const ids = await BackendRemote.rpc.getChatMedia(
+      this.accountId,
+      chatId,
+      msgTypes[0],
+      msgTypes[1],
+      null
+    )
+    // order newest up - if we need different ordering we need to do it in core
+    return ids.reverse()
+  }
+
+  async onSelect(id: MediaTabKey) {
     if (!this.props.chatId) {
       throw new Error('chat id missing')
     }
-    const msgTypes = MediaTabs[id].values
+
     const newElement = MediaTabs[id].element
-    const accountId = selectedAccountId()
-    const chatId = this.props.chatId !== 'all' ? this.props.chatId : null
+
     this.setState({ loading: true })
 
-    BackendRemote.rpc
-      .getChatMedia(accountId, chatId, msgTypes[0], msgTypes[1], null)
-      .then(async media_ids => {
-        const mediaLoadResult = await BackendRemote.rpc.getMessages(
-          accountId,
-          media_ids
-        )
-        media_ids.reverse() // order newest up - if we need different ordering we need to do it in core
-        this.setState({
-          id,
-          msgTypes,
-          element: newElement,
-          mediaMessageIds: media_ids,
-          mediaLoadResult,
-          loading: false,
-        })
-        this.forceUpdate()
-      })
-      .catch(log.error.bind(log))
+    try {
+    } catch (error) {
+      log.error(error)
+    }
+    const media_ids = await this.loadMessageIds(id)
+
+    this.setState({
+      id,
+      element: newElement,
+      mediaMessageIds: media_ids,
+      mediaLoadResults: {},
+      mediaLoadState: {},
+      loading: false,
+    })
+    this.forceUpdate()
   }
 
   onChangeInput(ev: ChangeEvent<HTMLInputElement>) {
@@ -208,7 +326,7 @@ export default class Gallery extends Component<
   render() {
     const {
       mediaMessageIds,
-      mediaLoadResult,
+      mediaLoadResults,
       id,
       loading,
       queryText,
@@ -217,17 +335,18 @@ export default class Gallery extends Component<
     const tx = window.static_translate // static because dynamic isn't too important here
     const emptyTabMessage = this.emptyTabMessage(id)
 
-    const filteredMediaMessageIds = mediaMessageIds.filter(id => {
-      const result = mediaLoadResult[id]
-      if (
-        result.variant === 'message' &&
-        result.fileName?.indexOf(queryText) !== -1
-      ) {
-        return true
-      } else {
-        return false
-      }
-    })
+    const filteredMediaMessageIds: number[] = []
+    // mediaMessageIds.filter(id => {
+    //   const result = mediaLoadResult[id]
+    //   if (
+    //     result.variant === 'message' &&
+    //     result.fileName?.indexOf(queryText) !== -1
+    //   ) {
+    //     return true
+    //   } else {
+    //     return false
+    //   }
+    // })
 
     const showDateHeader =
       this.state.id !== 'files' && this.state.id !== 'webxdc_apps'
@@ -273,7 +392,7 @@ export default class Gallery extends Component<
               className={`gallery gallery-image-object-fit_${
                 GalleryImageKeepAspectRatio ? 'contain' : 'cover'
               }`}
-              key={this.state.msgTypes.join('.') + String(this.props.chatId)}
+              key={this.state.id + String(this.props.chatId)}
             >
               {mediaMessageIds.length < 1 && !loading && (
                 <div className='empty-screen'>
@@ -289,7 +408,9 @@ export default class Gallery extends Component<
                       <FileTable
                         width={width}
                         height={height}
-                        mediaLoadResult={mediaLoadResult}
+                        loadMoreItems={this.loadMessages}
+                        isItemLoaded={this.wasMediaLoadRequested}
+                        mediaLoadResult={mediaLoadResults}
                         mediaMessageIds={filteredMediaMessageIds}
                         queryText={queryText}
                       ></FileTable>
@@ -342,56 +463,87 @@ export default class Gallery extends Component<
                       this.state.id === 'audio' ? '1px solid black' : undefined
 
                     return (
-                      <FixedSizeGrid
-                        width={width}
-                        height={height}
-                        columnWidth={itemWidth}
-                        rowHeight={itemHeight}
-                        columnCount={itemsPerRow}
-                        rowCount={rowCount}
-                        overscanRowCount={10}
-                        onItemsRendered={({
-                          visibleColumnStartIndex,
-                          visibleRowStartIndex,
-                        }) => {
-                          const msgId =
-                            mediaMessageIds[
-                              visibleRowStartIndex * itemsPerRow +
-                                visibleColumnStartIndex
-                            ]
-                          const message = mediaLoadResult[msgId]
-                          if (!message) {
-                            return
-                          }
-                          this.updateFirstVisibleMessage(message)
-                        }}
+                      <InfiniteLoader
+                        isItemLoaded={this.wasMediaLoadRequested}
+                        itemCount={rowCount}
+                        loadMoreItems={(start, stop)=>{this.loadMessages(start, stop)}}
                       >
-                        {({ columnIndex, rowIndex, style }) => {
-                          const msgId =
-                            mediaMessageIds[
-                              rowIndex * itemsPerRow + columnIndex
-                            ]
-                          const message = mediaLoadResult[msgId]
-                          if (!message) {
-                            return null
-                          }
-                          return (
-                            <div
-                              style={{ ...style, border }}
-                              className='item'
-                              key={msgId}
-                            >
-                              <this.state.element
-                                msgId={msgId}
-                                load_result={message}
-                                openFullscreenMedia={this.openFullscreenMedia.bind(
-                                  this
-                                )}
-                              />
-                            </div>
-                          )
-                        }}
-                      </FixedSizeGrid>
+                        {({ onItemsRendered, ref }) => (
+                          <FixedSizeGrid
+                            ref={ref}
+                            width={width}
+                            height={height}
+                            columnWidth={itemWidth}
+                            rowHeight={itemHeight}
+                            columnCount={itemsPerRow}
+                            rowCount={rowCount}
+                            overscanRowCount={10}
+                            onItemsRendered={({
+                              visibleColumnStartIndex,
+                              visibleRowStartIndex,
+                              visibleColumnStopIndex,
+                              visibleRowStopIndex,
+                              overscanColumnStartIndex,
+                              overscanColumnStopIndex,
+                              overscanRowStartIndex,
+                              overscanRowStopIndex,
+                            }) => {
+                              const convertedIndexes = {
+                                visibleStartIndex:
+                                  visibleRowStartIndex * itemsPerRow +
+                                  visibleColumnStartIndex,
+                                visibleStopIndex:
+                                  visibleRowStopIndex * itemsPerRow +
+                                  visibleColumnStopIndex,
+                                overscanStartIndex:
+                                  overscanRowStartIndex * itemsPerRow +
+                                  overscanColumnStartIndex,
+                                overscanStopIndex:
+                                  overscanRowStopIndex * itemsPerRow +
+                                  overscanColumnStopIndex,
+                              }
+                              console.log(convertedIndexes);
+                              onItemsRendered(convertedIndexes)
+                              const msgId =
+                                mediaMessageIds[
+                                  visibleRowStartIndex * itemsPerRow +
+                                    visibleColumnStartIndex
+                                ]
+                              const message = mediaLoadResults[msgId]
+                              if (!message) {
+                                return
+                              }
+                              this.updateFirstVisibleMessage(message)
+                            }}
+                          >
+                            {({ columnIndex, rowIndex, style }) => {
+                              const msgId =
+                                mediaMessageIds[
+                                  rowIndex * itemsPerRow + columnIndex
+                                ]
+                              const message = mediaLoadResults[msgId]
+                              if (!message) {
+                                return null
+                              }
+                              return (
+                                <div
+                                  style={{ ...style, border }}
+                                  className='item'
+                                  key={msgId}
+                                >
+                                  <this.state.element
+                                    msgId={msgId}
+                                    load_result={message}
+                                    openFullscreenMedia={this.openFullscreenMedia.bind(
+                                      this
+                                    )}
+                                  />
+                                </div>
+                              )
+                            }}
+                          </FixedSizeGrid>
+                        )}
+                      </InfiniteLoader>
                     )
                   }}
                 </AutoSizer>
@@ -412,38 +564,53 @@ function FileTable({
   mediaMessageIds,
   mediaLoadResult,
   queryText,
+  isItemLoaded,
+  loadMoreItems,
 }: {
   width: number
   height: number
   mediaMessageIds: number[]
   mediaLoadResult: Record<number, Type.MessageLoadResult>
   queryText: string
+  isItemLoaded: (index: number) => boolean
+  loadMoreItems: (startIndex: number, stopIndex: number) => void | Promise<void>
 }) {
   return (
-    <FixedSizeList
-      width={width}
-      height={height}
-      itemSize={60}
+    <InfiniteLoader
+      isItemLoaded={isItemLoaded}
       itemCount={mediaMessageIds.length}
-      overscanCount={10}
-      itemData={mediaMessageIds}
+      loadMoreItems={loadMoreItems}
     >
-      {({ index, style, data }) => {
-        const msgId = data[index]
-        const message = mediaLoadResult[msgId]
-        if (!message) {
-          return null
-        }
-        return (
-          <div style={style} className='item' key={msgId}>
-            <FileAttachmentRow
-              msgId={msgId}
-              load_result={message}
-              queryText={queryText}
-            />
-          </div>
-        )
-      }}
-    </FixedSizeList>
+      {({ onItemsRendered, ref }) => (
+        <FixedSizeList
+          ref={ref}
+          onItemsRendered={onItemsRendered}
+          width={width}
+          height={height}
+          itemSize={60}
+          itemCount={mediaMessageIds.length}
+          overscanCount={10}
+          itemData={mediaMessageIds}
+        >
+          {({ index, style, data }) => {
+            const msgId = data[index]
+            const message = mediaLoadResult[msgId]
+            //loading item??
+            if (!message) {
+              return null
+            }
+            return (
+              <div style={style} className='item' key={msgId}>
+                <FileAttachmentRow
+                  msgId={msgId}
+                  load_result={message}
+                  queryText={queryText}
+                />
+              </div>
+            )
+          }}
+        </FixedSizeList>
+      )}
+    </InfiniteLoader>
   )
 }
