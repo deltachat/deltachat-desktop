@@ -10,9 +10,7 @@
 - Experimental: Related Chats
 - Developer option to disable IMAP IDLE #4803
 - add option to save to file system to webxdc "send to chat"-dialog
-- add context menu option to delete media-messages from gallery
-- add full jsonrpc to experimental api (only in --devmode)
-- Verified DM/1on1 Chats
+- Add image compression
 
 ### Changed
 - update deltachat-node and deltachat/jsonrpc-client to `v1.127.1`
@@ -23,6 +21,7 @@
 - better search in chat design which shows more results (remove redundant chat info and combine both headers)
 - shorten package description, because some debian had problems with our large description.
 - update electron from `v22.3.24` to version `v22.3.27`
+- Images are now compressed unless you send them as files
 
 ### Fixed
 - fix clipboard not working in webxdc apps
