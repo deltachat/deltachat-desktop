@@ -77,6 +77,7 @@ export default function MessageListAndComposer({
   } = useDraft(
     chatStore.chat.id,
     chatStore.chat.isContactRequest,
+    chatStore.chat.isProtectionBroken,
     messageInputRef
   )
 

@@ -285,7 +285,7 @@ const Composer = forwardRef<
             openDialog(ProtectionBrokenDialog, { name: selectedChat.name })
           }}
         >
-          {tx('more_info')}
+          {tx('more_info_desktop')}
         </div>
         <div
           className='contact-request-button'
@@ -377,6 +377,7 @@ export type DraftObject = { chatId: number } & Pick<
 export function useDraft(
   chatId: number | null,
   isContactRequest: boolean,
+  isProtectionBroken: boolean,
   inputRef: React.MutableRefObject<ComposerMessageInput | null>
 ): {
   draftState: DraftObject
@@ -453,7 +454,7 @@ export function useDraft(
     return () => {
       window.__reloadDraft = null
     }
-  }, [chatId, loadDraft, isContactRequest])
+  }, [chatId, loadDraft, isContactRequest, isProtectionBroken])
 
   const saveDraft = useCallback(async () => {
     if (chatId === null) {
