@@ -24,7 +24,7 @@ import { MessageTypeAttachmentSubset } from '../attachment/Attachment'
 import { runtime } from '../../runtime'
 import { C } from 'deltachat-node/node/dist/constants'
 import { confirmDialog } from '../message/messageFunctions'
-import { VerificationBrokenDialog } from '../dialogs/VerificationBroken'
+import { ProtectionBrokenDialog } from '../dialogs/ProtectionStatusDialog'
 
 const log = getLogger('renderer/composer')
 
@@ -282,7 +282,7 @@ const Composer = forwardRef<
         <div
           className='contact-request-button'
           onClick={async () => {
-            openDialog(VerificationBrokenDialog, { name: selectedChat.name })
+            openDialog(ProtectionBrokenDialog, { name: selectedChat.name })
           }}
         >
           {tx('more_info')}

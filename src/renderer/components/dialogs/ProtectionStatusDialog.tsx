@@ -11,7 +11,13 @@ import {
 import type { DialogProps } from './DialogController'
 import QrCode from './QrCode'
 
-export function VerificationBrokenDialog({
+const WebLinks = {
+  Broken: "https://staging.delta.chat/733/en/help#verificationbroken",
+  Enabled: "https://staging.delta.chat/733/en/help#verifiedchats"
+}
+
+
+export function ProtectionBrokenDialog({
   name,
   isOpen,
   onClose,
@@ -36,7 +42,7 @@ export function VerificationBrokenDialog({
           <p
             className='delta-button bold primary'
             onClick={() =>
-              runtime.openLink('https://delta.chat/help#verificationbroken')
+              runtime.openLink(WebLinks.Broken)
             } /* TODO better link to inApp help at some point? */
             style={{ marginRight: '10px' }}
           >
@@ -57,6 +63,44 @@ export function VerificationBrokenDialog({
             }}
           >
             {tx('qrscan_title')}
+          </p>
+          <p className={`delta-button bold primary`} onClick={() => onClose()}>
+            {tx('ok')}
+          </p>
+        </DeltaDialogFooterActions>
+      </DeltaDialogFooter>
+    </SmallDialog>
+  )
+}
+
+
+export function ProtectionEnabledDialog({
+  isOpen,
+  onClose,
+}: DialogProps) {
+  const tx = useTranslationFunction()
+
+  return (
+    <SmallDialog isOpen={isOpen} onClose={onClose}>
+      <div className='bp4-dialog-body-with-padding'>
+        <p
+          style={{
+            wordBreak: 'break-word',
+          }}
+        >
+          {tx('chat_protection_enabled_explanation')}
+        </p>
+      </div>
+      <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
+        <DeltaDialogFooterActions>
+          <p
+            className='delta-button bold primary'
+            onClick={() =>
+              runtime.openLink(WebLinks.Enabled)
+            } /* TODO better link to inApp help at some point? */
+            style={{ marginRight: '10px' }}
+          >
+            {tx('learn_more')}
           </p>
           <p className={`delta-button bold primary`} onClick={() => onClose()}>
             {tx('ok')}

@@ -37,7 +37,7 @@ import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { ContextMenuItem } from '../ContextMenu'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import { VerificationBrokenDialog } from '../dialogs/VerificationBroken'
+import { ProtectionBrokenDialog, ProtectionEnabledDialog } from '../dialogs/ProtectionStatusDialog'
 import AlertDialog from '../dialogs/AlertDialog'
 
 const Avatar = (
@@ -333,9 +333,9 @@ export default function Message(props: {
               selectedAccountId(),
               message.chatId
             )
-            openDialog(VerificationBrokenDialog, { name })
+            openDialog(ProtectionBrokenDialog, { name })
           } else if (isProtectionEnabledMsg){
-            openDialog(AlertDialog, {message: "TODO DIALOG"})
+            openDialog(ProtectionEnabledDialog)
           }
         }}
       >
