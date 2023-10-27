@@ -13,6 +13,7 @@ import { useSettingsStore } from '../../stores/settings'
 import { Type } from '../../backend-com'
 import { C } from '@deltachat/jsonrpc-client'
 import { sendMessage } from '../helpers/ChatMethods'
+import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -90,18 +91,18 @@ export default function MessageListAndComposer({
 
     e.preventDefault()
     e.stopPropagation()
-    const sanitizedFileList: Pick<File, 'name' | 'path'>[] = []
+    const sanitizedFileList: Pick<File, 'name' | 'path' | 'type'>[] = []
     {
       const fileList: FileList = (e.target as any).files || e.dataTransfer.files
       // TODO maybe add a clause here for windows because that uses backslash instead of slash
       const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
       for (let i = 0; i < fileList.length; i++) {
-        const { path, name } = fileList[i]
+        const { path, name, type } = fileList[i]
         // TODO filter out folders somehow
         // if that is possible without a backend call to check whether the file exists,
         // maybe some browser api like FileReader could help
         if (!forbiddenPathRegEx.test(path.replace('\\', '/'))) {
-          sanitizedFileList.push({ path, name })
+          sanitizedFileList.push({ path, name, type })
         } else {
           log.warn(
             'Prevented a file from being send again while dragging it out',
@@ -116,7 +117,12 @@ export default function MessageListAndComposer({
       return
     }
     if (fileCount === 1) {
-      addFileToDraft(sanitizedFileList[0].path)
+      const msgViewType: Viewtype = sanitizedFileList[0].type.startsWith(
+        'image'
+      )
+        ? 'Image'
+        : 'File'
+      addFileToDraft(sanitizedFileList[0].path, msgViewType)
       return
     }
     // This is a desktop specific "hack" to support sending multiple attachments at once.
@@ -144,7 +150,7 @@ export default function MessageListAndComposer({
         if (!yes) return
 
         for (const file of sanitizedFileList) {
-          sendMessage(chatId, { filename: file.path })
+          sendMessage(chatId, { file: file.path, viewtype: 'File' })
         }
       },
     })

@@ -32,13 +32,4 @@ export const enum AutodeleteDuration {
   ONE_YEAR = Timespans.ONE_YEAR_IN_SECONDS,
 }
 
-export const MEDIA_EXTENSIONS = [
-  'jpg',
-  'jpeg',
-  'png',
-  'apng',
-  'gif',
-  'mkv',
-  'avi',
-  'mp4',
-]
+export const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'apng', 'gif']

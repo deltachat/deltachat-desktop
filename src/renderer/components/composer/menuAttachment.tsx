@@ -9,12 +9,13 @@ import {
 } from '@blueprintjs/core'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { runtime } from '../../runtime'
-import { MEDIA_EXTENSIONS } from '../../../shared/constants'
 
 import { sendCallInvitation } from '../helpers/ChatMethods'
 import { Type } from '../../backend-com'
 import { useStore } from '../../stores/store'
 import SettingsStoreInstance from '../../stores/settings'
+import { IMAGE_EXTENSIONS } from '../../../shared/constants'
+import { T } from '@deltachat/jsonrpc-client'
 //function to populate Menu
 const MenuAttachmentItems = ({
   itemsArray,
@@ -41,7 +42,7 @@ const MenuAttachment = ({
   addFileToDraft,
   selectedChat,
 }: {
-  addFileToDraft: (file: string) => void
+  addFileToDraft: (file: string, viewType: T.Viewtype) => void
   selectedChat: Type.FullChat | null
 }) => {
   const tx = useTranslationFunction()
@@ -60,7 +61,7 @@ const MenuAttachment = ({
       defaultPath: runtime.getAppPath('home'),
     })
     if (file) {
-      addFileToDraft(file)
+      addFileToDraft(file, 'File')
     }
   }
   //function for media
@@ -68,15 +69,15 @@ const MenuAttachment = ({
     const file = await runtime.showOpenFileDialog({
       filters: [
         {
-          name: 'Media',
-          extensions: MEDIA_EXTENSIONS,
+          name: tx('image'),
+          extensions: IMAGE_EXTENSIONS,
         },
       ],
       properties: ['openFile'],
       defaultPath: runtime.getAppPath('home'),
     })
     if (file) {
-      addFileToDraft(file)
+      addFileToDraft(file, 'Image')
     }
   }
 
@@ -107,7 +108,7 @@ const MenuAttachment = ({
     {
       id: 1,
       icon: 'media' as IconName,
-      text: tx('media'),
+      text: tx('image'),
       onClick: addFilenameMedia.bind(null),
       attachment: 'attachment-images',
     },

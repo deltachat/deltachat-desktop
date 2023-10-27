@@ -110,7 +110,8 @@ export async function privateReply(msg: Type.Message) {
     chatId,
     oldDraft?.text || null,
     oldDraft?.file || null,
-    quotedMessageId
+    quotedMessageId,
+    'Text'
   )
 
   // select chat

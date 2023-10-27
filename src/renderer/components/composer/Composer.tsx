@@ -7,7 +7,7 @@ import React, {
   useCallback,
   useContext,
 } from 'react'
-import MenuAttachment from '../attachment/menuAttachment'
+import MenuAttachment from './menuAttachment'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import ComposerMessageInput from './ComposerMessageInput'
 import { getLogger } from '../../../shared/logger'
@@ -25,6 +25,8 @@ import { runtime } from '../../runtime'
 import { C } from 'deltachat-node/node/dist/constants'
 import { confirmDialog } from '../message/messageFunctions'
 import { ProtectionBrokenDialog } from '../dialogs/ProtectionStatusDialog'
+import { T } from '@deltachat/jsonrpc-client'
+import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 
 const log = getLogger('renderer/composer')
 
@@ -64,7 +66,7 @@ const Composer = forwardRef<
     draftState: DraftObject
     removeQuote: () => void
     updateDraftText: (text: string, InputChatId: number) => void
-    addFileToDraft: (file: string) => Promise<void>
+    addFileToDraft: (file: string, viewType: T.Viewtype) => Promise<void>
     removeFile: () => void
     clearDraft: () => void
   }
@@ -111,11 +113,12 @@ const Composer = forwardRef<
 
       const sendMessagePromise = sendMessage(chatId, {
         text: replaceColonsSafe(message),
-        filename: draftState.file || undefined,
-        quoteMessageId:
+        file: draftState.file || undefined,
+        quotedMessageId:
           draftState.quote?.kind === 'WithMessage'
             ? draftState.quote.messageId
-            : undefined,
+            : null,
+        viewtype: draftState.viewType,
       })
 
       /* clear it here to make sure the draft is cleared */
@@ -211,16 +214,18 @@ const Composer = forwardRef<
 
     log.debug(`paste: received file: "${file.path}" "${file.name}"`)
 
+    const msgType: Viewtype = file.type.startsWith('image') ? 'Image' : 'File'
+
     // file.path is always set to empty string?
     if (file.path) {
-      addFileToDraft(file.path)
+      addFileToDraft(file.path, msgType)
       return
     }
 
     try {
       // Write clipboard to file then attach it to the draft
       const path = await runtime.writeClipboardToTempFile()
-      await addFileToDraft(path)
+      await addFileToDraft(path, msgType)
       // delete file again after it was sucessfuly added
       await runtime.removeTempFile(path)
     } catch (err) {
@@ -321,6 +326,7 @@ const Composer = forwardRef<
             <div className='attachment-quote-section is-attachment'>
               {/* TODO make this pretty: draft image/video/attachment */}
               {/* <p>file: {draftState.file}</p> */}
+              {/* {draftState.viewType} */}
               <DraftAttachment attachment={draftState} />
               <QuoteOrDraftRemoveButton onClick={removeFile} />
             </div>
@@ -370,7 +376,7 @@ export default Composer
 
 export type DraftObject = { chatId: number } & Pick<
   Type.Message,
-  'text' | 'file' | 'quote'
+  'text' | 'file' | 'quote' | 'viewType'
 > &
   MessageTypeAttachmentSubset
 
@@ -383,7 +389,7 @@ export function useDraft(
   draftState: DraftObject
   removeQuote: () => void
   updateDraftText: (text: string, InputChatId: number) => void
-  addFileToDraft: (file: string) => Promise<void>
+  addFileToDraft: (file: string, viewType: T.Viewtype) => Promise<void>
   removeFile: () => void
   clearDraft: () => void
 } {
@@ -395,6 +401,7 @@ export function useDraft(
     fileMime: null,
     fileName: null,
     quote: null,
+    viewType: 'Unknown',
   })
   const draftRef = useRef<DraftObject>({
     chatId: chatId || 0,
@@ -404,6 +411,7 @@ export function useDraft(
     fileMime: null,
     fileName: null,
     quote: null,
+    viewType: 'Unknown',
   })
   draftRef.current = draftState
 
@@ -416,6 +424,7 @@ export function useDraft(
       fileMime: null,
       fileName: null,
       quote: null,
+      viewType: 'Text',
     }))
     inputRef.current?.focus()
   }, [chatId, inputRef])
@@ -479,7 +488,8 @@ export function useDraft(
         chatId,
         draft.text,
         draft.file !== '' ? draft.file : null,
-        draft.quote?.kind === 'WithMessage' ? draft.quote.messageId : null
+        draft.quote?.kind === 'WithMessage' ? draft.quote.messageId : null,
+        draft.viewType
       )
     } else {
       await BackendRemote.rpc.removeDraft(accountId, chatId)
@@ -532,8 +542,9 @@ export function useDraft(
   }, [saveDraft])
 
   const addFileToDraft = useCallback(
-    async (file: string) => {
+    async (file: string, viewType: Viewtype) => {
       draftRef.current.file = file
+      draftRef.current.viewType = viewType
       return saveDraft()
     },
     [saveDraft]
