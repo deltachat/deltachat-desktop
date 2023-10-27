@@ -56,6 +56,7 @@ const Composer = forwardRef<
     isDisabled: boolean
     disabledReason: string
     isContactRequest: boolean
+    isProtectionBroken: boolean
     selectedChat: Type.FullChat
     messageInputRef: React.MutableRefObject<ComposerMessageInput | null>
     draftState: DraftObject
@@ -70,6 +71,7 @@ const Composer = forwardRef<
     isDisabled,
     disabledReason,
     isContactRequest,
+    isProtectionBroken,
     selectedChat,
     messageInputRef,
     draftState,
@@ -267,6 +269,27 @@ const Composer = forwardRef<
           }}
         >
           {tx('accept')}
+        </div>
+      </div>
+    )
+  } else if (isProtectionBroken) {
+    return (
+      <div ref={ref} className='composer contact-request'>
+        <div
+          className='contact-request-button'
+          onClick={async () => {
+            //TODO DIalog
+          }}
+        >
+          {tx('more_info')}
+        </div>
+        <div
+          className='contact-request-button'
+          onClick={() => {
+            EffectfulBackendActions.acceptChat(selectedAccountId(), chatId)
+          }}
+        >
+          {tx('ok')}
         </div>
       </div>
     )

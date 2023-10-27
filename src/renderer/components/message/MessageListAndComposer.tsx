@@ -239,6 +239,7 @@ export default function MessageListAndComposer({
         isDisabled={disabled}
         disabledReason={disabledReason}
         isContactRequest={chatStore.chat.isContactRequest}
+        isProtectionBroken={chatStore.chat.isProtectionBroken}
         messageInputRef={messageInputRef}
         draftState={draftState}
         updateDraftText={updateDraftText}
