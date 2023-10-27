@@ -402,13 +402,10 @@ export function ConfigureProgressDialog({
             throw new Error('No account selected')
           }
 
-          await BackendRemote.rpc.batchSetConfig(
-            window.__selectedAccountId,
-            {
-              ...credentials,
-              verified_one_on_one_chats: "1"
-            }
-          )
+          await BackendRemote.rpc.batchSetConfig(window.__selectedAccountId, {
+            ...credentials,
+            verified_one_on_one_chats: '1',
+          })
           await BackendRemote.rpc.configure(window.__selectedAccountId)
 
           // on successful configure:

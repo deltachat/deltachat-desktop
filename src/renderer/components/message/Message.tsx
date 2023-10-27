@@ -37,6 +37,8 @@ import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { ContextMenuItem } from '../ContextMenu'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import { VerificationBrokenDialog } from '../dialogs/VerificationBroken'
+import AlertDialog from '../dialogs/AlertDialog'
 
 const Avatar = (
   contact: Type.Contact,
@@ -313,18 +315,31 @@ export default function Message(props: {
   // Info Message
   if (message.isInfo) {
     const isWebxdcInfo = message.systemMessageType === 'WebxdcInfoMessage'
+    const isProtectionBrokenMsg =
+      message.systemMessageType === 'ChatProtectionDisabled'
+    const isProtectionEnabledMsg =
+      message.systemMessageType === 'ChatProtectionEnabled'
 
     return (
       <div
         className={'info-message' + (isWebxdcInfo ? ' webxdc-info' : '')}
         id={String(message.id)}
         onContextMenu={showMenu}
-        onClick={() => {
-          isWebxdcInfo &&
-            message.parentId &&
+        onClick={async () => {
+          if (isWebxdcInfo && message.parentId) {
             jumpToMessage(message.parentId, true, message.id)
+          } else if (isProtectionBrokenMsg) {
+            const { name } = await BackendRemote.rpc.getBasicChatInfo(
+              selectedAccountId(),
+              message.chatId
+            )
+            openDialog(VerificationBrokenDialog, { name })
+          } else if (isProtectionEnabledMsg){
+            openDialog(AlertDialog, {message: "TODO DIALOG"})
+          }
         }}
       >
+        {/* todo icon for protection messages */}
         <div className='bubble'>
           {isWebxdcInfo && message.parentId && (
             <img

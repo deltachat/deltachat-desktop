@@ -5,9 +5,10 @@ import React, {
   forwardRef,
   useLayoutEffect,
   useCallback,
+  useContext,
 } from 'react'
 import MenuAttachment from '../attachment/menuAttachment'
-import { useTranslationFunction } from '../../contexts'
+import { ScreenContext, useTranslationFunction } from '../../contexts'
 import ComposerMessageInput from './ComposerMessageInput'
 import { getLogger } from '../../../shared/logger'
 import { EmojiAndStickerPicker } from './EmojiAndStickerPicker'
@@ -23,6 +24,7 @@ import { MessageTypeAttachmentSubset } from '../attachment/Attachment'
 import { runtime } from '../../runtime'
 import { C } from 'deltachat-node/node/dist/constants'
 import { confirmDialog } from '../message/messageFunctions'
+import { VerificationBrokenDialog } from '../dialogs/VerificationBroken'
 
 const log = getLogger('renderer/composer')
 
@@ -86,6 +88,8 @@ const Composer = forwardRef<
 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
   const pickerButtonRef = useRef<HTMLDivElement>(null)
+
+  const { openDialog } = useContext(ScreenContext)
 
   const composerSendMessage = async () => {
     if (chatId === null) {
@@ -278,7 +282,7 @@ const Composer = forwardRef<
         <div
           className='contact-request-button'
           onClick={async () => {
-            //TODO DIalog
+            openDialog(VerificationBrokenDialog, { name: selectedChat.name })
           }}
         >
           {tx('more_info')}
