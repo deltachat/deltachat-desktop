@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { CSSProperties, useContext } from 'react'
 import { BackendRemote } from '../../backend-com'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { runtime } from '../../runtime'
@@ -38,7 +38,7 @@ export function ProtectionBrokenDialog({
         </p>
       </div>
       <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
-        <DeltaDialogFooterActions>
+        <DeltaDialogFooterActions style={{justifyContent: 'space-between'} as CSSProperties}>
           <p
             className='delta-button bold primary'
             onClick={() =>
@@ -92,7 +92,7 @@ export function ProtectionEnabledDialog({
         </p>
       </div>
       <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
-        <DeltaDialogFooterActions>
+        <DeltaDialogFooterActions style={{justifyContent: 'space-between'} as CSSProperties}>
           <p
             className='delta-button bold primary'
             onClick={() =>
