@@ -107,7 +107,7 @@ export default function Attachment({
         )}
       >
         <video
-          className='attachment-content'
+          className='attachment-content video-content'
           src={runtime.transformBlobURL(message.file)}
           controls={true}
         />
