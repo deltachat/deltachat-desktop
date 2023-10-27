@@ -168,7 +168,8 @@ async function sendToChatAction(
     chatId,
     messageText,
     file,
-    null
+    null,
+    file ? 'File' : 'Text'
   )
 
   window.__reloadDraft && window.__reloadDraft()

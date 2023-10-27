@@ -127,7 +127,8 @@ export async function doMailtoAction(chatId: number, messageText: string) {
     chatId,
     messageText,
     null,
-    null
+    null,
+    'Text'
   )
 
   window.__reloadDraft && window.__reloadDraft()

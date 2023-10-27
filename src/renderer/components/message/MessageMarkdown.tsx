@@ -219,7 +219,8 @@ function BotCommandSuggestion({ suggestion }: { suggestion: string }) {
       chatID,
       suggestion,
       null,
-      null
+      null,
+      'Text'
     )
 
     window.__reloadDraft && window.__reloadDraft()

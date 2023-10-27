@@ -25,6 +25,7 @@ export interface SettingsStoreState {
     only_fetch_mvbox: string
     disable_idle: string
     'ui.lastchatid': string
+    media_quality: string
   }
   desktopSettings: DesktopSettingsType
   rc: RC_Config
@@ -47,6 +48,7 @@ const settingsKeys: Array<keyof SettingsStoreState['settings']> = [
   'only_fetch_mvbox',
   'disable_idle',
   'ui.lastchatid',
+  'media_quality',
 ]
 
 class SettingsStore extends Store<SettingsStoreState | null> {

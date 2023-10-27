@@ -488,7 +488,7 @@ export default class MapComponent extends React.Component<
       return
     }
     const latLng = Object.assign({}, this.poiLocation)
-    sendMessage(selectedChat.id, { text: message, location: latLng })
+    sendMessage(selectedChat.id, { text: message, location: [latLng.lat, latLng.lng] })
 
     if (this.contextMenuPopup) {
       this.contextMenuPopup.remove()
