@@ -8,6 +8,7 @@
 - Developer option to disable IMAP IDLE #4803
 - add option to save to file system to webxdc "send to chat"-dialog
 - add full jsonrpc to experimental api (only in --devmode)
+- Verified DM/1on1 Chats
 
 ### Changed
 - update deltachat-node and deltachat/jsonrpc-client to `v1.127.0`
