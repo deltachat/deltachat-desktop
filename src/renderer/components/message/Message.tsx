@@ -37,8 +37,10 @@ import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { ContextMenuItem } from '../ContextMenu'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import { ProtectionBrokenDialog, ProtectionEnabledDialog } from '../dialogs/ProtectionStatusDialog'
-import AlertDialog from '../dialogs/AlertDialog'
+import {
+  ProtectionBrokenDialog,
+  ProtectionEnabledDialog,
+} from '../dialogs/ProtectionStatusDialog'
 
 const Avatar = (
   contact: Type.Contact,
@@ -334,12 +336,21 @@ export default function Message(props: {
               message.chatId
             )
             openDialog(ProtectionBrokenDialog, { name })
-          } else if (isProtectionEnabledMsg){
+          } else if (isProtectionEnabledMsg) {
             openDialog(ProtectionEnabledDialog)
           }
         }}
       >
-        {/* todo icon for protection messages */}
+        {(isProtectionBrokenMsg || isProtectionEnabledMsg) && (
+          <img
+            className='verified-icon-info-msg'
+            src={
+              isProtectionBrokenMsg
+                ? '../images/verified_broken.svg'
+                : '../images/verified.svg'
+            }
+          />
+        )}
         <div className='bubble'>
           {isWebxdcInfo && message.parentId && (
             <img

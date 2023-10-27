@@ -420,6 +420,12 @@
   margin: 26px 0px;
   overflow-wrap: anywhere;
 
+  img.verified-icon-info-msg {
+    --size: 64px;
+    width: var(--size);
+    height: var(--size);
+  }
+
   .bubble {
     display: inline-block;
     text-align: center;
