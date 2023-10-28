@@ -288,7 +288,11 @@ export function AudioAttachment({
         onContextMenu={openContextMenu}
       >
         <div className='heading'>
-          <div className='name'>{message?.sender.displayName}</div>
+          <div className='name'>
+            {message?.overrideSenderName
+              ? `~${message.overrideSenderName}`
+              : message?.sender.displayName}
+          </div>
           <Timestamp
             timestamp={message?.timestamp * 1000}
             extended
