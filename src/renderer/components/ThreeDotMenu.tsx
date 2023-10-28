@@ -112,16 +112,16 @@ export function useThreeDotMenu(
   }
 
   if (mode == 'gallery' && settingsStore?.desktopSettings) {
-    const { GalleryImageKeepAspectRatio } = settingsStore.desktopSettings
+    const { galleryImageKeepAspectRatio } = settingsStore.desktopSettings
     menu = [
       {
         label: tx(
-          GalleryImageKeepAspectRatio ? 'square_grid' : 'aspect_ratio_grid'
+          galleryImageKeepAspectRatio ? 'square_grid' : 'aspect_ratio_grid'
         ),
         action: async () => {
           await SettingsStoreInstance.effect.setDesktopSetting(
-            'GalleryImageKeepAspectRatio',
-            !GalleryImageKeepAspectRatio
+            'galleryImageKeepAspectRatio',
+            !galleryImageKeepAspectRatio
           )
         },
       },

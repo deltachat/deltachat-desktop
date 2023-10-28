@@ -88,5 +88,8 @@
   },
   "square_grid": {
     "message": "Square Grid"
+  },
+  "search_files": {
+    "message": "Search Files"
   }
 }
