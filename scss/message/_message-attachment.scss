@@ -26,6 +26,11 @@
 
     // redundant with attachment-container, but we get cursor flashing on move otherwise
     cursor: pointer;
+
+    &.video-content {
+      min-width: 300px;
+      background-color: black;
+    }
   }
 
   & > .video-play-btn {
