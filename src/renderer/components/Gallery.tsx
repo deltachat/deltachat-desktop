@@ -220,17 +220,13 @@ export default class Gallery extends Component<
 
     const filteredMediaMessageIds = mediaMessageIds.filter(id => {
       const result = mediaLoadResult[id]
-      if (
-        result.kind === 'message' &&
-        result.fileName?.indexOf(queryText) !== -1
-      ) {
-        return true
-      } else {
-        return false
-      }
+      return (
+        result.kind === 'message' && result.fileName?.indexOf(queryText) !== -1
+      )
     })
 
-    const showDateHeader = currentTab !== 'files' && currentTab !== 'webxdc_apps'
+    const showDateHeader =
+      currentTab !== 'files' && currentTab !== 'webxdc_apps'
 
     return (
       <div className='media-view'>
