@@ -69,7 +69,7 @@ export interface DesktopSettingsType {
   HTMLEmailAskForRemoteLoadingConfirmation: boolean
   /** always loads remote content without asking, for non contact requests  */
   HTMLEmailAlwaysLoadRemoteContent: boolean
-  EnableRelatedChats: boolean
+  enableRelatedChats: boolean
 }
 
 export interface RC_Config {

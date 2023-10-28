@@ -142,7 +142,7 @@ function ViewGroupInner(props: {
   const tx = useTranslationFunction()
   const [settings] = useSettingsStore()
   const isRelatedChatsEnabled =
-    settings?.desktopSettings.EnableRelatedChats || false
+    settings?.desktopSettings.enableRelatedChats || false
 
   const [chatListIds, setChatListIds] = useState<number[]>([])
 
