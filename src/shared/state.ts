@@ -30,6 +30,6 @@ export function getDefaultState(): DesktopSettingsType {
     HTMLEmailAskForRemoteLoadingConfirmation: true,
     HTMLEmailAlwaysLoadRemoteContent: false,
     enableRelatedChats: false,
-    GalleryImageKeepAspectRatio: false,
+    galleryImageKeepAspectRatio: false,
   }
 }

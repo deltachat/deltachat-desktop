@@ -71,7 +71,7 @@ export interface DesktopSettingsType {
   HTMLEmailAlwaysLoadRemoteContent: boolean
   enableRelatedChats: boolean
   /** gallery image & video - keep aspect ratio (true) or cover (false) */
-  GalleryImageKeepAspectRatio: boolean
+  galleryImageKeepAspectRatio: boolean
 }
 
 export interface RC_Config {

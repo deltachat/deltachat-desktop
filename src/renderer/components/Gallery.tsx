@@ -64,28 +64,28 @@ type mediaProps = { chatId: number | 'all' }
 export default class Gallery extends Component<
   mediaProps,
   {
-    id: MediaTabKey
+    currentTab: MediaTabKey
     msgTypes: Type.Viewtype[]
     element: GalleryElement
     mediaMessageIds: number[]
     mediaLoadResult: Record<number, Type.MessageLoadResult>
     loading: boolean
     queryText: string
-    GalleryImageKeepAspectRatio?: boolean
+    galleryImageKeepAspectRatio?: boolean
   }
 > {
   dateHeader = createRef<HTMLDivElement>()
   constructor(props: mediaProps) {
     super(props)
     this.state = {
-      id: 'images',
+      currentTab: 'images',
       msgTypes: MediaTabs.images.values,
       element: ImageAttachment,
       mediaMessageIds: [],
       mediaLoadResult: {},
       loading: true,
       queryText: '',
-      GalleryImageKeepAspectRatio: false,
+      galleryImageKeepAspectRatio: false,
     }
 
     this.settingsStoreListener = this.settingsStoreListener.bind(this)
@@ -93,7 +93,7 @@ export default class Gallery extends Component<
 
   reset() {
     this.setState({
-      id: 'images',
+      currentTab: 'images',
       msgTypes: MediaTabs.images.values,
       element: ImageAttachment,
       mediaMessageIds: [],
@@ -104,12 +104,12 @@ export default class Gallery extends Component<
   }
 
   componentDidMount() {
-    this.onSelect(this.state.id)
+    this.onSelect(this.state.currentTab)
     SettingsStoreInstance.subscribe(this.settingsStoreListener)
     this.setState({
-      GalleryImageKeepAspectRatio:
+      galleryImageKeepAspectRatio:
         SettingsStoreInstance.state?.desktopSettings
-          .GalleryImageKeepAspectRatio,
+          .galleryImageKeepAspectRatio,
     })
   }
 
@@ -120,8 +120,8 @@ export default class Gallery extends Component<
   settingsStoreListener(state: SettingsStoreState | null) {
     if (state) {
       this.setState({
-        GalleryImageKeepAspectRatio:
-          state.desktopSettings.GalleryImageKeepAspectRatio,
+        galleryImageKeepAspectRatio:
+          state.desktopSettings.galleryImageKeepAspectRatio,
       })
     }
   }
@@ -134,12 +134,12 @@ export default class Gallery extends Component<
     }
   }
 
-  onSelect(id: MediaTabKey) {
+  onSelect(tab: MediaTabKey) {
     if (!this.props.chatId) {
       throw new Error('chat id missing')
     }
-    const msgTypes = MediaTabs[id].values
-    const newElement = MediaTabs[id].element
+    const msgTypes = MediaTabs[tab].values
+    const newElement = MediaTabs[tab].element
     const accountId = selectedAccountId()
     const chatId = this.props.chatId !== 'all' ? this.props.chatId : null
     this.setState({ loading: true })
@@ -153,7 +153,7 @@ export default class Gallery extends Component<
         )
         media_ids.reverse() // order newest up - if we need different ordering we need to do it in core
         this.setState({
-          id,
+          currentTab: tab,
           msgTypes,
           element: newElement,
           mediaMessageIds: media_ids,
@@ -169,9 +169,9 @@ export default class Gallery extends Component<
     this.setState({ queryText: ev.target.value })
   }
 
-  emptyTabMessage(id: MediaTabKey): string {
+  emptyTabMessage(tab: MediaTabKey): string {
     const tx = window.static_translate // static because dynamic isn't too important here
-    switch (id) {
+    switch (tab) {
       case 'images':
         return tx('tab_image_empty_hint')
       case 'video':
@@ -187,7 +187,7 @@ export default class Gallery extends Component<
   }
 
   updateFirstVisibleMessage(message: Type.MessageLoadResult) {
-    if (message.variant === 'message') {
+    if (message.kind === 'message') {
       if (this.dateHeader.current)
         this.dateHeader.current.innerText = moment(
           message.timestamp * 1000
@@ -209,18 +209,19 @@ export default class Gallery extends Component<
     const {
       mediaMessageIds,
       mediaLoadResult,
-      id,
+      currentTab,
       loading,
       queryText,
-      GalleryImageKeepAspectRatio,
+      galleryImageKeepAspectRatio,
+      msgTypes,
     } = this.state
     const tx = window.static_translate // static because dynamic isn't too important here
-    const emptyTabMessage = this.emptyTabMessage(id)
+    const emptyTabMessage = this.emptyTabMessage(currentTab)
 
     const filteredMediaMessageIds = mediaMessageIds.filter(id => {
       const result = mediaLoadResult[id]
       if (
-        result.variant === 'message' &&
+        result.kind === 'message' &&
         result.fileName?.indexOf(queryText) !== -1
       ) {
         return true
@@ -229,8 +230,7 @@ export default class Gallery extends Component<
       }
     })
 
-    const showDateHeader =
-      this.state.id !== 'files' && this.state.id !== 'webxdc_apps'
+    const showDateHeader = currentTab !== 'files' && currentTab !== 'webxdc_apps'
 
     return (
       <div className='media-view'>
@@ -241,29 +241,29 @@ export default class Gallery extends Component<
             style={{ display: 'flex', alignItems: 'center' }}
           >
             {Object.keys(MediaTabs).map(realId => {
-              const id = realId as MediaTabKey
+              const tabId = realId as MediaTabKey
               return (
                 <li
-                  key={id}
+                  key={tabId}
                   className='bp4-tab'
                   role='tab'
-                  aria-selected={this.state.id === id}
-                  onClick={() => this.onSelect(id)}
+                  aria-selected={currentTab === tabId}
+                  onClick={() => this.onSelect(tabId)}
                 >
-                  {tx(id)}
+                  {tx(tabId)}
                 </li>
               )
             })}
             {showDateHeader && (
               <div className='big-date' ref={this.dateHeader}></div>
             )}
-            {this.state.id === 'files' && (
+            {currentTab === 'files' && (
               <>
                 <div style={{ flexGrow: 1 }}></div>
                 <div className='searchbar'>
                   <input
                     type='search'
-                    placeholder='search files'
+                    placeholder={tx('search_files')}
                     onChange={this.onChangeInput.bind(this)}
                   />
                 </div>
@@ -273,9 +273,9 @@ export default class Gallery extends Component<
           <div role='tabpanel'>
             <div
               className={`gallery gallery-image-object-fit_${
-                GalleryImageKeepAspectRatio ? 'contain' : 'cover'
+                galleryImageKeepAspectRatio ? 'contain' : 'cover'
               }`}
-              key={this.state.msgTypes.join('.') + String(this.props.chatId)}
+              key={msgTypes.join('.') + String(this.props.chatId)}
             >
               {mediaMessageIds.length < 1 && !loading && (
                 <div className='empty-screen'>
@@ -284,7 +284,7 @@ export default class Gallery extends Component<
                 </div>
               )}
 
-              {this.state.id === 'files' && (
+              {currentTab === 'files' && (
                 <>
                   <AutoSizer>
                     {({ width, height }) => (
@@ -307,16 +307,16 @@ export default class Gallery extends Component<
                 </>
               )}
 
-              {this.state.id !== 'files' && (
+              {currentTab !== 'files' && (
                 <AutoSizer>
                   {({ width, height }) => {
                     const widthWithoutScrollbar = width - 6
 
                     let minWidth = 160
 
-                    if (this.state.id === 'webxdc_apps') {
+                    if (currentTab === 'webxdc_apps') {
                       minWidth = 265
-                    } else if (this.state.id === 'audio') {
+                    } else if (currentTab === 'audio') {
                       minWidth = 322
                     }
 
@@ -333,9 +333,9 @@ export default class Gallery extends Component<
 
                     let itemHeight = itemWidth
 
-                    if (this.state.id === 'webxdc_apps') {
+                    if (currentTab === 'webxdc_apps') {
                       itemHeight = 61
-                    } else if (this.state.id === 'audio') {
+                    } else if (currentTab === 'audio') {
                       itemHeight = 94
                     }
 
