@@ -147,7 +147,7 @@ export function ImageAttachment({
   const screenContext = useContext(ScreenContext)
   const tx = window.static_translate
 
-  if (load_result.variant === 'loadingError') {
+  if (load_result.kind === 'loadingError') {
     const onContextMenu = getBrokenMediaContextMenu(screenContext, msgId)
     return (
       <div
@@ -202,7 +202,7 @@ export function VideoAttachment({
   const screenContext = useContext(ScreenContext)
   const tx = window.static_translate
 
-  if (load_result.variant === 'loadingError') {
+  if (load_result.kind === 'loadingError') {
     const onContextMenu = getBrokenMediaContextMenu(screenContext, msgId)
     return (
       <div
@@ -259,7 +259,7 @@ export function AudioAttachment({
   const screenContext = useContext(ScreenContext)
   const tx = window.static_translate
 
-  if (load_result.variant === 'loadingError') {
+  if (load_result.kind === 'loadingError') {
     const onContextMenu = getBrokenMediaContextMenu(screenContext, msgId)
     return (
       <div
@@ -291,7 +291,7 @@ export function AudioAttachment({
           <div className='name'>
             {message?.overrideSenderName
               ? `~${message.overrideSenderName}`
-              : message?.sender.displayName}
+              : message?.sender?.displayName}
           </div>
           <Timestamp
             timestamp={message?.timestamp * 1000}
@@ -324,7 +324,7 @@ export function FileAttachmentRow({
   const screenContext = useContext(ScreenContext)
   const tx = window.static_translate
 
-  if (load_result.variant === 'loadingError') {
+  if (load_result.kind === 'loadingError') {
     const onContextMenu = getBrokenMediaContextMenu(screenContext, msgId)
     return (
       <div
@@ -422,7 +422,7 @@ export function WebxdcAttachment({
   const screenContext = useContext(ScreenContext)
   const tx = window.static_translate
 
-  if (load_result.variant === 'loadingError') {
+  if (load_result.kind === 'loadingError') {
     const onContextMenu = getBrokenMediaContextMenu(screenContext, msgId)
     return (
       <div
