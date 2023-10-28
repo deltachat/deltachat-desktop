@@ -336,11 +336,8 @@ export default class Gallery extends Component<
                     if (this.state.id === 'webxdc_apps') {
                       itemHeight = 61
                     } else if (this.state.id === 'audio') {
-                      itemHeight = 88
+                      itemHeight = 94
                     }
-
-                    const border =
-                      this.state.id === 'audio' ? '1px solid black' : undefined
 
                     return (
                       <FixedSizeGrid
@@ -378,7 +375,7 @@ export default class Gallery extends Component<
                           }
                           return (
                             <div
-                              style={{ ...style, border }}
+                              style={{ ...style }}
                               className='item'
                               key={msgId}
                             >

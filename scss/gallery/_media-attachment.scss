@@ -66,11 +66,25 @@
       font-size: 17px;
       display: inline-block;
       font-weight: bold;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      max-width: calc(100% - 90px);
     }
     & > span.date {
       float: right;
       color: grey;
     }
+  }
+
+  audio {
+    width: 100%;
+  }
+  
+  // overwrite chromium user agent styles to make it look a tiny bit better
+  // but the real solution would be using a custom player
+  audio::-webkit-media-controls-panel, audio::-webkit-media-controls-enclosure {
+    background: transparent;
   }
 
   &.broken {
