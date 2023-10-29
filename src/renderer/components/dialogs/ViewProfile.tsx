@@ -184,12 +184,12 @@ export function ViewProfileInner({
         setVerifier(null) // make sure it rather shows nothing than wrong values
         const verifierContactId = contact.verifierId
         try {
-          const { address } = await BackendRemote.rpc.getContact(
+          const { nameAndAddr } = await BackendRemote.rpc.getContact(
             accountId,
             verifierContactId
           )
           setVerifier({
-            label: tx('verified_by', address),
+            label: tx('verified_by', nameAndAddr),
             action: () =>
               openViewProfileDialog(screenContext, verifierContactId),
           })
@@ -253,6 +253,7 @@ export function ViewProfileInner({
                 <div
                   className={verifier.action && 'clickable'}
                   onClick={verifier.action}
+                  style={{ display: 'flex' }}
                 >
                   <InlineVerifiedIcon />
                   {verifier.label}
