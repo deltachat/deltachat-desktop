@@ -418,12 +418,15 @@
   width: 100%;
   text-align: center;
   margin: 26px 0px;
-  overflow-wrap: anywhere;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   img.verified-icon-info-msg {
     --size: 64px;
     width: var(--size);
     height: var(--size);
+    margin-bottom: 10px;
   }
 
   .bubble {
