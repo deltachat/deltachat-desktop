@@ -12,10 +12,9 @@ import type { DialogProps } from './DialogController'
 import QrCode from './QrCode'
 
 const WebLinks = {
-  Broken: "https://staging.delta.chat/733/en/help#verificationbroken",
-  Enabled: "https://staging.delta.chat/733/en/help#verifiedchats"
+  Broken: 'https://staging.delta.chat/733/en/help#verificationbroken',
+  Enabled: 'https://staging.delta.chat/733/en/help#verifiedchats',
 }
-
 
 export function ProtectionBrokenDialog({
   name,
@@ -38,7 +37,9 @@ export function ProtectionBrokenDialog({
         </p>
       </div>
       <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
-        <DeltaDialogFooterActions style={{justifyContent: 'space-between'} as CSSProperties}>
+        <DeltaDialogFooterActions
+          style={{ justifyContent: 'space-between' } as CSSProperties}
+        >
           <p
             className='delta-button bold primary'
             onClick={() =>
@@ -73,11 +74,7 @@ export function ProtectionBrokenDialog({
   )
 }
 
-
-export function ProtectionEnabledDialog({
-  isOpen,
-  onClose,
-}: DialogProps) {
+export function ProtectionEnabledDialog({ isOpen, onClose }: DialogProps) {
   const tx = useTranslationFunction()
 
   return (
@@ -92,7 +89,9 @@ export function ProtectionEnabledDialog({
         </p>
       </div>
       <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
-        <DeltaDialogFooterActions style={{justifyContent: 'space-between'} as CSSProperties}>
+        <DeltaDialogFooterActions
+          style={{ justifyContent: 'space-between' } as CSSProperties}
+        >
           <p
             className='delta-button bold primary'
             onClick={() =>
