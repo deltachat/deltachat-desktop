@@ -11,13 +11,15 @@
 - Developer option to disable IMAP IDLE #4803
 - add option to save to file system to webxdc "send to chat"-dialog
 - add context menu option to delete media-messages from gallery
+- add full jsonrpc to experimental api (only in --devmode)
+- Verified DM/1on1 Chats
 
 ### Changed
-- update deltachat-node and deltachat/jsonrpc-client to `v1.127.0`
+- update deltachat-node and deltachat/jsonrpc-client to `v1.127.1`
 - add a dark theme for the "Help" and the webxdc loading screen
 - improve the look of the webxdc loading screen
 - update `@deltachat/message_parser_wasm` to `0.8.0`, which adds linkification to links on more generic URI schemes.
-- Update translations (13.10.2023)
+- Update translations (27.10.2023)
 - better search in chat design which shows more results (remove redundant chat info and combine both headers)
 - shorten package description, because some debian had problems with our large description.
 - update electron from `v22.3.24` to version `v22.3.27`

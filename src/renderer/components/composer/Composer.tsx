@@ -5,9 +5,10 @@ import React, {
   forwardRef,
   useLayoutEffect,
   useCallback,
+  useContext,
 } from 'react'
 import MenuAttachment from '../attachment/menuAttachment'
-import { useTranslationFunction } from '../../contexts'
+import { ScreenContext, useTranslationFunction } from '../../contexts'
 import ComposerMessageInput from './ComposerMessageInput'
 import { getLogger } from '../../../shared/logger'
 import { EmojiAndStickerPicker } from './EmojiAndStickerPicker'
@@ -23,6 +24,7 @@ import { MessageTypeAttachmentSubset } from '../attachment/Attachment'
 import { runtime } from '../../runtime'
 import { C } from 'deltachat-node/node/dist/constants'
 import { confirmDialog } from '../message/messageFunctions'
+import { ProtectionBrokenDialog } from '../dialogs/ProtectionStatusDialog'
 
 const log = getLogger('renderer/composer')
 
@@ -56,6 +58,7 @@ const Composer = forwardRef<
     isDisabled: boolean
     disabledReason: string
     isContactRequest: boolean
+    isProtectionBroken: boolean
     selectedChat: Type.FullChat
     messageInputRef: React.MutableRefObject<ComposerMessageInput | null>
     draftState: DraftObject
@@ -70,6 +73,7 @@ const Composer = forwardRef<
     isDisabled,
     disabledReason,
     isContactRequest,
+    isProtectionBroken,
     selectedChat,
     messageInputRef,
     draftState,
@@ -84,6 +88,8 @@ const Composer = forwardRef<
 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
   const pickerButtonRef = useRef<HTMLDivElement>(null)
+
+  const { openDialog } = useContext(ScreenContext)
 
   const composerSendMessage = async () => {
     if (chatId === null) {
@@ -270,6 +276,27 @@ const Composer = forwardRef<
         </div>
       </div>
     )
+  } else if (isProtectionBroken) {
+    return (
+      <div ref={ref} className='composer contact-request'>
+        <div
+          className='contact-request-button'
+          onClick={async () => {
+            openDialog(ProtectionBrokenDialog, { name: selectedChat.name })
+          }}
+        >
+          {tx('more_info_desktop')}
+        </div>
+        <div
+          className='contact-request-button'
+          onClick={() => {
+            EffectfulBackendActions.acceptChat(selectedAccountId(), chatId)
+          }}
+        >
+          {tx('ok')}
+        </div>
+      </div>
+    )
   } else if (isDisabled) {
     if (disabledReason) {
       return (
@@ -350,6 +377,7 @@ export type DraftObject = { chatId: number } & Pick<
 export function useDraft(
   chatId: number | null,
   isContactRequest: boolean,
+  isProtectionBroken: boolean,
   inputRef: React.MutableRefObject<ComposerMessageInput | null>
 ): {
   draftState: DraftObject
@@ -426,7 +454,7 @@ export function useDraft(
     return () => {
       window.__reloadDraft = null
     }
-  }, [chatId, loadDraft, isContactRequest])
+  }, [chatId, loadDraft, isContactRequest, isProtectionBroken])
 
   const saveDraft = useCallback(async () => {
     if (chatId === null) {

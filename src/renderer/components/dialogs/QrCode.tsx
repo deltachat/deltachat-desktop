@@ -30,8 +30,9 @@ export default function QrCode({
   onClose,
   qrCodeSVG,
   qrCode,
-}: DialogProps) {
-  const [showQrCode, setShowQrCode] = useState(true)
+  selectScan,
+}: { selectScan?: true; qrCodeSVG: string; qrCode: string } & DialogProps) {
+  const [showQrCode, setShowQrCode] = useState(!selectScan)
 
   const [addr, setAddr] = useState('')
   useEffect(() => {

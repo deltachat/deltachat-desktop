@@ -173,6 +173,12 @@ export async function updateCoreStrings() {
   strings[C.DC_STR_EPHEMERAL_TIMER_WEEKS_BY_OTHER] = tx(
     'ephemeral_timer_weeks_by_other'
   )
+  strings[C.DC_STR_CHAT_PROTECTION_ENABLED] = tx(
+    'chat_protection_enabled_tap_to_learn_more'
+  )
+  strings[C.DC_STR_CHAT_PROTECTION_DISABLED] = tx(
+    'chat_protection_broken_tap_to_learn_more'
+  )
 
   strings[C.DC_STR_BACKUP_TRANSFER_QR] = tx('multidevice_qr_subtitle')
 
