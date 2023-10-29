@@ -342,21 +342,23 @@ export default function MainScreen() {
                 </span>
               </>
             )}
-            <span
-              style={{
-                marginLeft: 0,
-                marginRight: '3px',
-              }}
-            >
-              <Button
-                className='icon-rotated'
-                minimal
-                icon='more'
-                id='three-dot-menu-button'
-                aria-label={tx('main_menu')}
-                onClick={onClickThreeDotMenu}
-              />
-            </span>
+            {(selectedChat.chat || alternativeView === 'global-gallery') && (
+              <span
+                style={{
+                  marginLeft: 0,
+                  marginRight: '3px',
+                }}
+              >
+                <Button
+                  className='icon-rotated'
+                  minimal
+                  icon='more'
+                  id='three-dot-menu-button'
+                  aria-label={tx('main_menu')}
+                  onClick={onClickThreeDotMenu}
+                />
+              </span>
+            )}
           </NavbarGroup>
         </Navbar>
       </div>
