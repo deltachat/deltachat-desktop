@@ -11,29 +11,16 @@ import {
   clearChat,
 } from './helpers/ChatMethods'
 import { ContextMenuItem } from './ContextMenu'
-import { useSettingsStore } from '../stores/settings'
+import SettingsStoreInstance, { useSettingsStore } from '../stores/settings'
 import { Type } from '../backend-com'
 import { ActionEmitter, KeybindAction } from '../keybindings'
 
-export function DeltaMenuItem({
-  text,
-  onClick,
-}: {
-  text: string
-  onClick: (event: React.MouseEvent<HTMLLIElement, MouseEvent>) => void
-}) {
-  return (
-    <li onClick={onClick}>
-      <a className='bp4-menu-item bp4-popover-dismiss'>
-        <div className='bp4-text-overflow-ellipsis bp4-fill'>{text}</div>
-      </a>
-    </li>
-  )
-}
-
-export function useThreeDotMenu(selectedChat: Type.FullChat | null) {
+export function useThreeDotMenu(
+  selectedChat: Type.FullChat | null,
+  mode: 'chat' | 'gallery' = 'chat'
+) {
   const screenContext = useContext(ScreenContext)
-  const settingsStore = useSettingsStore()[0]
+  const [settingsStore] = useSettingsStore()
   const tx = useTranslationFunction()
 
   let menu: (ContextMenuItem | false)[] = [false]
@@ -120,6 +107,23 @@ export function useThreeDotMenu(selectedChat: Type.FullChat | null) {
       {
         label: tx('menu_delete_chat'),
         action: onDeleteChat,
+      },
+    ]
+  }
+
+  if (mode == 'gallery' && settingsStore?.desktopSettings) {
+    const { galleryImageKeepAspectRatio } = settingsStore.desktopSettings
+    menu = [
+      {
+        label: tx(
+          galleryImageKeepAspectRatio ? 'square_grid' : 'aspect_ratio_grid'
+        ),
+        action: async () => {
+          await SettingsStoreInstance.effect.setDesktopSetting(
+            'galleryImageKeepAspectRatio',
+            !galleryImageKeepAspectRatio
+          )
+        },
       },
     ]
   }

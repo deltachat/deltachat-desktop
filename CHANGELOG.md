@@ -3,10 +3,14 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- Global Gallery
+- Show date when scrolling gallery
+- add option to view images and videos in the gallery cropped to grid or in their original aspect ratio
 - mark webxdc app context as secure #3413
 - Experimental: Related Chats
 - Developer option to disable IMAP IDLE #4803
 - add option to save to file system to webxdc "send to chat"-dialog
+- add context menu option to delete media-messages from gallery
 - add full jsonrpc to experimental api (only in --devmode)
 - Verified DM/1on1 Chats
 
@@ -30,6 +34,9 @@
 - fix "Verified by" is shown weirdly for contacts that were verified directly #3421
 - open help, webxdc and html email windows with always on top flag, if main window has that flag. 
 - fix copy text inserts extra linebreaks
+- improve video message - wide enough to show controls
+- gallery: fix scroll to top when switching tabs
+- fix: context menu items could take up multiple lines
 
 <a id="1_40_4"></a>
 

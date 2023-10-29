@@ -69,7 +69,9 @@ export interface DesktopSettingsType {
   HTMLEmailAskForRemoteLoadingConfirmation: boolean
   /** always loads remote content without asking, for non contact requests  */
   HTMLEmailAlwaysLoadRemoteContent: boolean
-  EnableRelatedChats: boolean
+  enableRelatedChats: boolean
+  /** gallery image & video - keep aspect ratio (true) or cover (false) */
+  galleryImageKeepAspectRatio: boolean
 }
 
 export interface RC_Config {

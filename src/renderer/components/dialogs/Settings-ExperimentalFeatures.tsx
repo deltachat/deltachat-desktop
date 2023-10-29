@@ -80,7 +80,7 @@ export function SettingsExperimentalFeatures({
         description: tx('chat_audit_log_description'),
       })}
       {renderDTSettingSwitch({
-        key: 'EnableRelatedChats',
+        key: 'enableRelatedChats',
         label: tx('group_related_chats'),
       })}
       {renderDTSettingSwitch({

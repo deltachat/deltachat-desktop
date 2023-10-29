@@ -17,6 +17,9 @@ import { getDirection } from '../../../shared/util'
 
 import filesizeConverter from 'filesize'
 import { Type } from '../../backend-com'
+import FullscreenMedia, {
+  NeighboringMediaMode,
+} from '../dialogs/FullscreenMedia'
 
 // const MINIMUM_IMG_HEIGHT = 150
 // const MAXIMUM_IMG_HEIGHT = 300
@@ -44,7 +47,10 @@ export default function Attachment({
     if (message.viewType === 'Sticker') return
     ev.stopPropagation()
     if (isDisplayableByFullscreenMedia(message.fileMime)) {
-      openDialog('FullscreenMedia', { msg: message })
+      openDialog(FullscreenMedia, {
+        msg: message,
+        neighboringMedia: NeighboringMediaMode.Chat,
+      })
     } else {
       openAttachmentInShell(message)
     }
@@ -107,7 +113,7 @@ export default function Attachment({
         )}
       >
         <video
-          className='attachment-content'
+          className='attachment-content video-content'
           src={runtime.transformBlobURL(message.file)}
           controls={true}
         />

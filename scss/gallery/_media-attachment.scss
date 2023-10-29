@@ -5,15 +5,16 @@
   cursor: pointer;
 
   overflow: hidden;
+  height: 100%;
+  width: 100%;
+  border-radius: 2px;
+  padding: 2px;
 
   & > .attachment-content {
-    object-fit: cover;
-    width: 120pt;
-    height: 120pt;
-
-    // The padding on the bottom of the bubble produces 4 extra pixels of space at the
-    //   bottom, so this doesn't match up with the padding numbers above.
-    margin-bottom: -4px;
+    object-fit: var(--gallery-image-object-fit);
+    width: 100%;
+    height: 100%;
+    border-radius: 2px;
 
     // redundant with attachment-container, but we get cursor flashing on move otherwise
     cursor: pointer;
@@ -65,10 +66,31 @@
       font-size: 17px;
       display: inline-block;
       font-weight: bold;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      max-width: calc(100% - 90px);
     }
     & > span.date {
       float: right;
       color: grey;
+    }
+  }
+
+  audio {
+    width: 100%;
+  }
+
+  // overwrite chromium user agent styles to make it look a tiny bit better
+  // but the real solution would be using a custom player
+  audio::-webkit-media-controls-panel,
+  audio::-webkit-media-controls-enclosure {
+    background: transparent;
+  }
+
+  &.broken {
+    .name {
+      color: var(--colorDanger);
     }
   }
 }
@@ -76,17 +98,19 @@
 .media-attachment-generic {
   display: flex;
   flex-direction: row;
-  width: 300px;
-  margin: 5px 3px;
+  width: calc(100% - 5px);
+  padding: 5px;
+
+  &:hover {
+    background: var(--galleryFileRowHover);
+    border-radius: 5px;
+  }
 
   & > .file-icon {
     background: url('../images/file-gradient.svg') no-repeat center;
-    height: 44px;
-    width: 56px;
-    margin-left: -13px;
-    margin-right: -14px;
-    margin-bottom: -4px;
-    cursor: pointer;
+    height: 49px;
+    $file-icon-width: 42px;
+    width: $file-icon-width;
 
     // So we can center the extension text inside this icon
     display: flex;
@@ -94,14 +118,14 @@
     align-items: center;
 
     & > .file-extension {
-      font-size: 10px;
+      font-size: 8px;
       line-height: 13px;
       letter-spacing: 0.1px;
       text-transform: uppercase;
 
       // Along with flow layout in parent item, centers text
       text-align: center;
-      width: 25px;
+      width: $file-icon-width;
       margin-left: auto;
       margin-right: auto;
 
@@ -115,34 +139,68 @@
     }
   }
 
-  & > .text-part {
+  align-items: center;
+  position: relative;
+
+  $size_width: 70px;
+  $date_width: 120px;
+
+  & > .name {
     flex-grow: 1;
-    margin-left: 8px;
-    // The width of the icon plus our 8px margin
-    max-width: calc(100% - 37px);
+    //width: calc(100% - $size_width - $date_width);
+  }
+  & > .size {
+    width: $size_width;
+    flex-shrink: 0;
+  }
+  & > .date {
+    width: $date_width;
+    flex-shrink: 0;
+  }
 
-    & > .name {
-      color: var(--messageAttachmentFileInfo);
-      font-size: 14px;
-      line-height: 18px;
-      font-weight: 300;
-      margin-top: 2px;
+  & > .name {
+    color: var(--messageAttachmentFileInfo);
+    font-size: 14px;
+    line-height: 18px;
 
-      // Handling really long filenames - cut them off
-      overflow-x: hidden;
-      display: inline-block;
-      white-space: pre-line;
-      user-select: text;
-      position: relative;
-      word-break: break-all;
+    // Handling really long filenames - cut them off
+    overflow-x: hidden;
+    display: inline-block;
+    white-space: pre-line;
+    user-select: text;
+    position: relative;
+    word-break: break-all;
+
+    .highlight {
+      background-color: var(--colorPrimary);
+      color: white;
+      border-radius: 1.8px;
     }
+  }
 
-    & > .size {
-      color: var(--messageAttachmentFileInfo);
-      font-size: 11px;
-      line-height: 16px;
-      letter-spacing: 0.3px;
-      margin-top: 3px;
+  & > .date {
+    color: var(--messageAttachmentFileInfo);
+    font-size: 14px;
+    line-height: 18px;
+    text-align: end;
+  }
+
+  & > .size {
+    color: var(--messageAttachmentFileInfo);
+    font-size: 11px;
+    line-height: 16px;
+    letter-spacing: 0.3px;
+    margin-top: 3px;
+    text-align: end;
+  }
+
+  &.broken {
+    & > .file-icon {
+      cursor: unset;
+    }
+    .name,
+    .file-extension {
+      color: var(--colorDanger);
     }
   }
 }
@@ -151,10 +209,11 @@
   display: flex;
   flex-direction: row;
   width: 300px;
-  margin: 5px 3px;
+  margin: 3.5px 3px;
 
   &:hover {
     background-color: var(--galleryWebxdcItem);
+    border-radius: calc(44px * 0.07); // same radius as webxdc icon
   }
 
   & > .icon {
@@ -189,10 +248,18 @@
     .summary {
       // Handling really long names - cut them off
       overflow-x: hidden;
-      white-space: pre-line;
       user-select: text;
       position: relative;
       word-break: break-all;
+    }
+  }
+
+  &.broken {
+    & > .icon {
+      background-color: var(--colorDanger);
+    }
+    .name {
+      color: var(--colorDanger);
     }
   }
 }

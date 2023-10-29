@@ -82,5 +82,14 @@
   },
   "group_related_chats": {
     "message": "Related Chats"
+  },
+  "aspect_ratio_grid": {
+    "message": "Aspect Ratio Grid"
+  },
+  "square_grid": {
+    "message": "Square Grid"
+  },
+  "search_files": {
+    "message": "Search Files"
   }
 }

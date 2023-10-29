@@ -18,6 +18,7 @@ import {
   openViewProfileDialog,
   selectChat,
   setChatView,
+  unselectChat,
 } from '../helpers/ChatMethods'
 
 import {
@@ -61,6 +62,19 @@ export default function MainScreen() {
 
   const screenContext = useContext(ScreenContext)
   const selectedChat = useChatStore()
+
+  const [alternativeView, setAlternativeView] = useState<
+    null | 'global-gallery'
+  >(null)
+  useEffect(() => {
+    if (selectedChat.chat?.id) {
+      setAlternativeView(null)
+    }
+  }, [selectedChat.chat?.id])
+  useKeyBindingAction(KeybindAction.GlobalGallery_Open, () => {
+    unselectChat()
+    setAlternativeView('global-gallery')
+  })
 
   const onChatClick = (chatId: number) => {
     if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) return setShowArchivedChats(true)
@@ -142,7 +156,13 @@ export default function MainScreen() {
     searchChats('')
     setQueryChatId(null)
   })
-  const onClickThreeDotMenu = useThreeDotMenu(selectedChat.chat)
+  const onClickThreeDotMenu = useThreeDotMenu(
+    selectedChat.chat,
+    alternativeView === 'global-gallery' ||
+      selectedChat?.activeView === ChatView.Media
+      ? 'gallery'
+      : 'chat'
+  )
 
   if (!selectedChat) {
     log.error('selectedChat is undefined')
@@ -168,6 +188,8 @@ export default function MainScreen() {
           </RecoverableCrashScreen>
         )
     }
+  } else if (alternativeView === 'global-gallery') {
+    MessageListView = <Gallery chatId={'all'} />
   } else {
     const style: React.CSSProperties = settingsStore
       ? getBackgroundImageStyle(settingsStore.desktopSettings)
@@ -234,6 +256,19 @@ export default function MainScreen() {
             )}
           </NavbarGroup>
           <NavbarGroup align={Alignment.RIGHT}>
+            {alternativeView === 'global-gallery' && (
+              <NavbarHeading
+                style={{
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  width: '100%',
+                }}
+                onClick={onTitleClick}
+              >
+                {tx('menu_all_media')}
+              </NavbarHeading>
+            )}
             {selectedChat.chat && (
               <NavbarHeading
                 style={{
@@ -305,23 +340,23 @@ export default function MainScreen() {
                     />
                   )}
                 </span>
-                <span
-                  style={{
-                    marginLeft: 0,
-                    marginRight: '3px',
-                  }}
-                >
-                  <Button
-                    className='icon-rotated'
-                    minimal
-                    icon='more'
-                    id='three-dot-menu-button'
-                    aria-label={tx('main_menu')}
-                    onClick={onClickThreeDotMenu}
-                  />
-                </span>
               </>
             )}
+            <span
+              style={{
+                marginLeft: 0,
+                marginRight: '3px',
+              }}
+            >
+              <Button
+                className='icon-rotated'
+                minimal
+                icon='more'
+                id='three-dot-menu-button'
+                aria-label={tx('main_menu')}
+                onClick={onClickThreeDotMenu}
+              />
+            </span>
           </NavbarGroup>
         </Navbar>
       </div>
