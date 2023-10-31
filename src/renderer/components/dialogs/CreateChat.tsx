@@ -330,7 +330,9 @@ export const ChatSettingsSetNameAndProfileImage = ({
         <div className='group-name-input-wrapper'>
           <input
             className='group-name-input'
-            placeholder={type === 'group' ? tx('group_name') : tx('group_name')}
+            placeholder={
+              type === 'group' ? tx('group_name') : tx('name_desktop')
+            }
             value={chatName}
             onChange={onChange}
             autoFocus
@@ -340,7 +342,7 @@ export const ChatSettingsSetNameAndProfileImage = ({
             <p className='input-error'>
               {type === 'group'
                 ? tx('group_please_enter_group_name')
-                : tx('group_please_enter_group_name')}
+                : tx('please_enter_broadcast_list_name')}
             </p>
           )}
         </div>

@@ -2,7 +2,7 @@ import { ScreenContext, useTranslationFunction } from '../../contexts'
 import React, { useContext, useEffect, useState } from 'react'
 import { H6, Icon } from '@blueprintjs/core'
 import { ThemeManager } from '../../ThemeManager'
-import { SettingsSelector } from './Settings'
+import { RenderDTSettingSwitchType, SettingsSelector } from './Settings'
 import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
 import { runtime } from '../../runtime'
 import {
@@ -11,7 +11,9 @@ import {
   Theme,
 } from '../../../shared/shared-types'
 import { join } from 'path'
-import SettingsStoreInstance from '../../stores/settings'
+import SettingsStoreInstance, {
+  SettingsStoreState,
+} from '../../stores/settings'
 import { getLogger } from '../../../shared/logger'
 
 const log = getLogger('renderer/settings/appearance')
@@ -191,9 +193,13 @@ function BackgroundSelector({
 export default function SettingsAppearance({
   rc,
   desktopSettings,
+  settingsStore,
+  renderDTSettingSwitch,
 }: {
   rc: RC_Config
   desktopSettings: DesktopSettingsType
+  settingsStore: SettingsStoreState
+  renderDTSettingSwitch: RenderDTSettingSwitchType
 }) {
   const { activeTheme } = desktopSettings
 
@@ -281,6 +287,12 @@ export default function SettingsAppearance({
               )
         }}
       />
+      <br />
+      <br />
+      <SettingsTrayIcon
+        settingsStore={settingsStore}
+        renderDTSettingSwitch={renderDTSettingSwitch}
+      />
     </>
   )
 }
@@ -294,4 +306,29 @@ async function setThemeFunction(address: string) {
     log.error('set theme failed: ', error)
     return false
   }
+}
+
+function SettingsTrayIcon({
+  settingsStore,
+  renderDTSettingSwitch,
+}: {
+  settingsStore: SettingsStoreState
+  renderDTSettingSwitch: RenderDTSettingSwitchType
+}) {
+  const tx = window.static_translate
+  return (
+    <>
+      {renderDTSettingSwitch({
+        key: 'minimizeToTray',
+        label: tx('pref_show_tray_icon'),
+        disabled: settingsStore.rc.minimized,
+        disabledValue: settingsStore.rc.minimized,
+      })}
+      {settingsStore.rc.minimized && (
+        <div className='bp4-callout'>
+          {tx('explain_desktop_minimized_disabled_tray_pref')}
+        </div>
+      )}
+    </>
+  )
 }

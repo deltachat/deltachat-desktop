@@ -81,7 +81,7 @@ export function SettingsExperimentalFeatures({
       })}
       {renderDTSettingSwitch({
         key: 'enableRelatedChats',
-        label: tx('group_related_chats'),
+        label: tx('related_chats'),
       })}
       {renderDTSettingSwitch({
         key: 'experimentalEnableMarkdownInMessages',
@@ -101,9 +101,9 @@ export function SettingsExperimentalFeatures({
           'Careful: opening developer tools on a malicious webxdc app could lead to the app getting access to the Internet',
       })}
       {renderDeltaSwitch2({
-        label: tx('pref_disable_idle_title'),
+        label: tx('disable_imap_idle'),
         key: 'disable_idle',
-        description: tx('pref_disable_idle_explain'),
+        description: tx('disable_imap_idle_explain'),
       })}
       <SettingsSelector
         onClick={onClickEdit.bind(null, false)}

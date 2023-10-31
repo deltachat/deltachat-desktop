@@ -96,7 +96,7 @@ async function showGroupedNotification(
   if (!SettingsStoreInstance.state?.desktopSettings.showNotificationContent) {
     runtime.showNotification({
       title: appName,
-      body: tx('notify_new_messages'),
+      body: tx('new_messages'),
       icon: null,
       chatId: 0,
       messageId: 0,
@@ -119,7 +119,7 @@ async function showGroupedNotification(
         const { chatName, chatProfileImage } = notificationInfo
         runtime.showNotification({
           title: chatName,
-          body: tx('notify_bundle_new_messages_in_one_chat', String(msgCount)),
+          body: tx('chat_n_new_messages', String(msgCount), {quantity: msgCount }),
           icon: chatProfileImage || null,
           chatId: chatIds[0],
           messageId: 0, // just select chat on click, no specific message
@@ -131,8 +131,8 @@ async function showGroupedNotification(
         // body: "324 new messages in 6 chats"
         const chatCount = chatIds.length
         runtime.showNotification({
-          title: tx('notify_new_messages'), // IDEA: when we support notifications from multiple accounts, then show account displayname here?
-          body: tx('notify_bundle_new_messages', [
+          title: tx('new_messages'), // IDEA: when we support notifications from multiple accounts, then show account displayname here?
+          body: tx('n_messages_in_m_chats', [
             String(msgCount),
             String(chatCount),
           ]),

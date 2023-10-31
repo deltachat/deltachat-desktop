@@ -42,7 +42,7 @@ function buildContextMenu(
     },
     // Show Webxdc in Chat
     message.systemMessageType == 'WebxdcInfoMessage' && {
-      label: tx('show_webxdc_in_chat'),
+      label: tx('show_app_in_chat'),
       action: () => {
         if (message.parentId) {
           closeDialogCallback()

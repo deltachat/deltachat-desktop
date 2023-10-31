@@ -243,9 +243,7 @@ function ViewGroupInner(props: {
         <>
           <DeltaDialogHeader
             title={
-              !isBroadcast
-                ? tx('menu_edit_group')
-                : tx('menu_edit_broadcast_list')
+              !isBroadcast ? tx('menu_edit_group') : tx('edit_broadcast_list')
             }
             onClickEdit={onClickEdit}
             showEditButton={!chatDisabled}
@@ -271,7 +269,7 @@ function ViewGroupInner(props: {
               {isRelatedChatsEnabled && (
                 <>
                   <div className='group-separator'>
-                    {tx('group_related_chats')}
+                    {tx('related_chats')}
                   </div>
                   <div className='group-related-chats-list-wrapper'>
                     <ChatListPart
@@ -507,7 +505,7 @@ export function EditGroupNameDialog({
             >
               {!isBroadcast
                 ? tx('group_please_enter_group_name')
-                : tx('broadcast_please_enter_broadcast_list_name')}
+                : tx('please_enter_broadcast_list_name')}
             </p>
           )}
         </Card>

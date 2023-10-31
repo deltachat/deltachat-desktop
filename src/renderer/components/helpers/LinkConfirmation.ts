@@ -12,7 +12,7 @@ export function openLinkSafely(url: string) {
     runtime.openLink(url)
   } else {
     window.__openDialog(ConfirmationDialog, {
-      message: tx('desktop_offer_copy_non_web_link_to_clipboard', url),
+      message: tx('ask_copy_unopenable_link_to_clipboard', url),
       confirmLabel: tx('menu_copy_link_to_clipboard'),
       cancelLabel: tx('no'),
       cb: yes => yes && runtime.writeClipboardText(url),
