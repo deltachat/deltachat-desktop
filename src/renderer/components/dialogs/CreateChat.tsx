@@ -936,7 +936,7 @@ function CreateBroadcastInner(props: {
               finishCreateBroadcast()
             }}
           >
-            {tx('create_broadcast_list')}
+            {tx('create')}
           </p>
         </DeltaDialogFooterActions>
       </DeltaDialogFooter>
