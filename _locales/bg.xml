@@ -283,7 +283,6 @@
     <string name="source_code">Изходен код</string>
     <!-- Menu item beside an app/chat that adds an icon to the system's home screen. If the user taps that icon, the app/chat is opened directly. -->
     <string name="add_to_home_screen">Добавяне към началния екран</string>
-
     <string name="mute_for_one_hour">Спиране на звука за 1 час</string>
     <string name="mute_for_two_hours">Спиране на звука за 2 часа</string>
     <string name="mute_for_one_day">Спиране на звука за 1 ден</string>
@@ -699,7 +698,6 @@
     <string name="profile_image_delete">Изтриване на изображението на профила</string>
     <string name="pref_show_tray_icon">Показване на иконата в System Tray</string>
     <string name="pref_edit_profile">Редактиране на профил</string>
-
     <!-- Emoji picker and categories -->
     <string name="emoji_search_results">Резултати от търсенето</string>
     <string name="emoji_not_found">Не е открито Emoji</string>
@@ -882,7 +880,6 @@
     <string name="verified_by">Проверен от%1$s</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
     <string name="contact_setup_changed">Настройката за %1$s е сменена.</string>
-    <string name="verified_group_explain">Проверените групи (експериментална възможност) предоставят защита срещу активни атаки. Членовете се проверяват посредством втори фактор от други членове и съобщенията винаги се криптират \"от край до край\".</string>
     <string name="copy_qr_data_success">URL адресът от QR кода е копиран в клипборда</string>
     <string name="mailto_dialog_header_select_chat">Изберете чат, към който да бъде пратено съобщението</string>
     <!-- first placeholder is the name of the chat -->

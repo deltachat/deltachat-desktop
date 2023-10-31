@@ -270,7 +270,6 @@
     <string name="source_code">Lähdekoodi</string>
     <!-- Menu item beside an app/chat that adds an icon to the system's home screen. If the user taps that icon, the app/chat is opened directly. -->
     <string name="add_to_home_screen">Lisää aloitusnäytölle</string>
-
     <string name="mute_for_one_hour">Mykistä 1 tunniksi</string>
     <string name="mute_for_two_hours">Mykistä 2 tunniksi</string>
     <string name="mute_for_one_day">Mykistä 1 päiväksi</string>
@@ -659,7 +658,6 @@
     <string name="profile_image_delete">Poista profiilikuva</string>
     <string name="pref_show_tray_icon">Näytä työkalupalkin kuvake</string>
     <string name="pref_edit_profile">Muokkaa profiilia</string>
-
     <!-- Emoji picker and categories -->
     <string name="emoji_search_results">Hakutulokset</string>
     <string name="emoji_not_found">Emojia ei löytynyt</string>
@@ -840,7 +838,6 @@
     <string name="contact_not_verified">Ei voida varmistaa %1$s.</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
     <string name="contact_setup_changed">Asetukset muutettu kohteessa %1$s.</string>
-    <string name="verified_group_explain">(Kokeelliset) varmistetut ryhmät suojaavat aktiivisilta hyökkäyksiltä. Jokainen käyttäjä varmistetaan erikseen ja viestit ovat aina päästä-päähän-salattuja.</string>
     <string name="copy_qr_data_success">QR-osoite kopioitu leikepöydälle</string>
     <string name="mailto_dialog_header_select_chat">Valitse keskustelu viestien lähettämiseen</string>
     <!-- first placeholder is the name of the chat -->

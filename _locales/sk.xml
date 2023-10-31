@@ -286,7 +286,6 @@
     <string name="source_code">Zdrojový kód</string>
     <!-- Menu item beside an app/chat that adds an icon to the system's home screen. If the user taps that icon, the app/chat is opened directly. -->
     <string name="add_to_home_screen">Pridať na domovskú obrazovku</string>
-
     <string name="mute_for_one_hour">Stíšiť na 1 hodinu</string>
     <string name="mute_for_two_hours">Stíšiť na 2 hodiny</string>
     <string name="mute_for_one_day">Stíšiť na 1 deň</string>
@@ -685,7 +684,6 @@
     <string name="profile_image_delete">Odstrániť profilový obrázok</string>
     <string name="pref_show_tray_icon">Zobraziť ikonu v systémovej lište</string>
     <string name="pref_edit_profile">Upraviť profil</string>
-
     <!-- Emoji picker and categories -->
     <string name="emoji_search_results">Výsledky vyhľadávania</string>
     <string name="emoji_not_found">Nenašli sa žiadne emodži</string>
@@ -864,7 +862,6 @@
     <string name="contact_not_verified">Cannot verify %1$s.</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
     <string name="contact_setup_changed">Zmena nastavenia pre %1$s.</string>
-    <string name="verified_group_explain">Overené skupiny (experimentálne) poskytujú bezpečnosť proti aktívnym útokom. Členovia sú overovaní druhým faktorom ostatnými členmi a správy sú vždy šifrované end-to-end.</string>
     <string name="copy_qr_data_success">Skopírovaná adresa URL QR do schránky</string>
     <string name="mailto_dialog_header_select_chat">Vyberte konverzáciu, kam bude správa odoslaná</string>
     <!-- first placeholder is the name of the chat -->
