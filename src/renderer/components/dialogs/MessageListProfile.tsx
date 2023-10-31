@@ -7,7 +7,7 @@ import {
 } from './DeltaDialog'
 import {
   useGroupImage,
-  GroupSettingsSetNameAndProfileImage,
+  ChatSettingsSetNameAndProfileImage,
 } from './CreateChat'
 
 import { DialogProps } from './DialogController'
@@ -35,15 +35,16 @@ export default function MailingListProfile(props: {
       <DeltaDialogHeader title={tx('mailing_list')} />
       <div className={Classes.DIALOG_BODY}>
         <Card>
-          <GroupSettingsSetNameAndProfileImage
+          <ChatSettingsSetNameAndProfileImage
             groupImage={groupImage}
             onSetGroupImage={onSetGroupImage}
             onUnsetGroupImage={onUnsetGroupImage}
-            groupName={groupName}
-            setGroupName={setGroupName}
-            errorMissingGroupName={errorMissingGroupName}
-            setErrorMissingGroupName={setErrorMissingGroupName}
+            chatName={groupName}
+            setChatName={setGroupName}
+            errorMissingChatName={errorMissingGroupName}
+            setErrorMissingChatName={setErrorMissingGroupName}
             color={chat.color}
+            type='group'
           />
           <div style={{ padding: '15px 0px' }}>
             {tx('mailing_list_profile_info')}

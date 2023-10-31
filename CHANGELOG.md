@@ -37,6 +37,10 @@
 - gallery: fix scroll to top when switching tabs
 - fix: context menu items could take up multiple lines
 
+### Added
+
+- Ask for broadcast name when creating one
+
 <a id="1_40_4"></a>
 
 ## [1.40.4] - 2023-09-14

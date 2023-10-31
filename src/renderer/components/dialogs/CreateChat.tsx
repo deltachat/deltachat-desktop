@@ -283,45 +283,51 @@ export function useGroupMembers(initialMemebers: number[]) {
   ]
 }
 
-export const GroupSettingsSetNameAndProfileImage = ({
+export const ChatSettingsSetNameAndProfileImage = ({
   groupImage,
   onSetGroupImage,
   onUnsetGroupImage,
-  groupName,
-  setGroupName,
-  errorMissingGroupName,
-  setErrorMissingGroupName,
+  chatName,
+  setChatName,
+  errorMissingChatName,
+  setErrorMissingChatName,
   color,
+  type,
 }: {
   groupImage?: string | null
-  onSetGroupImage: () => void
-  onUnsetGroupImage: () => void
-  groupName: string
-  setGroupName: (newGroupName: string) => void
-  errorMissingGroupName: boolean
-  setErrorMissingGroupName: React.Dispatch<React.SetStateAction<boolean>>
+  onSetGroupImage?: () => void
+  onUnsetGroupImage?: () => void
+  chatName: string
+  setChatName: (newGroupName: string) => void
+  errorMissingChatName: boolean
+  setErrorMissingChatName: React.Dispatch<React.SetStateAction<boolean>>
   color?: string
+  type: 'group' | 'broadcast'
 }) => {
   const tx = useTranslationFunction()
   const onChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    if (target.value.length > 0) setErrorMissingGroupName(false)
-    setGroupName(target.value)
+    if (target.value.length > 0) setErrorMissingChatName(false)
+    setChatName(target.value)
+  }
+  if (type === 'group' && !(onSetGroupImage && onUnsetGroupImage)) {
+    throw new Error('if type is group, onSetGroupImage and onUnsetGroupImage must be present')
   }
   return (
     <>
       <div className='group-settings-container'>
+        { type === 'group' && onUnsetGroupImage && onSetGroupImage && 
         <GroupImage
           style={{ float: 'left' }}
           groupImage={groupImage}
           onSetGroupImage={onSetGroupImage}
           onUnsetGroupImage={onUnsetGroupImage}
-          groupName={groupName}
+          groupName={chatName}
           color={color}
-        />
+        /> }
         <input
           className='group-name-input'
-          placeholder={tx('group_name')}
-          value={groupName}
+          placeholder={type === 'group' ? tx('group_name') : tx('group_name')}
+          value={chatName}
           onChange={onChange}
           autoFocus
           style={{
@@ -333,7 +339,7 @@ export const GroupSettingsSetNameAndProfileImage = ({
           spellCheck={false}
         />
       </div>
-      {errorMissingGroupName && (
+      {errorMissingChatName && (
         <p
           style={{
             color: 'var(--colorDanger)',
@@ -343,7 +349,7 @@ export const GroupSettingsSetNameAndProfileImage = ({
             marginBottom: '-18px',
           }}
         >
-          {tx('group_please_enter_group_name')}
+          {type === 'group' ? tx('group_please_enter_group_name') : tx('group_please_enter_group_name')}
         </p>
       )}
     </>
@@ -711,14 +717,15 @@ function CreateGroupInner(props: {
           />
           <div className={Classes.DIALOG_BODY}>
             <Card>
-              <GroupSettingsSetNameAndProfileImage
+              <ChatSettingsSetNameAndProfileImage
                 groupImage={groupImage}
                 onSetGroupImage={onSetGroupImage}
                 onUnsetGroupImage={onUnsetGroupImage}
-                groupName={groupName}
-                setGroupName={setGroupName}
-                errorMissingGroupName={errorMissingGroupName}
-                setErrorMissingGroupName={setErrorMissingGroupName}
+                chatName={groupName}
+                setChatName={setGroupName}
+                errorMissingChatName={errorMissingGroupName}
+                setErrorMissingChatName={setErrorMissingGroupName}
+                type='group'
               />
               <div className='group-separator'>
                 {tx(
@@ -793,6 +800,7 @@ function CreateGroupInner(props: {
 
 const useCreateBroadcast = (
   broadcastRecipients: number[],
+  name: string,
   onClose: DialogProps['onClose']
 ) => {
   const [broadcastId, setBroadcastId] = useState(-1)
@@ -810,6 +818,7 @@ const useCreateBroadcast = (
           await BackendRemote.rpc.addContactToChat(accountId, bId, contactId)
         }
       }
+      await BackendRemote.rpc.setChatName(accountId, bId, name)
     }
     return bId
   }
@@ -828,15 +837,17 @@ function CreateBroadcastInner(props: {
   const { openDialog } = useContext(ScreenContext)
   const { setViewMode, onClose } = props
   const tx = useTranslationFunction()
-
+  
+  const [broadcastName, setBroadcastName] = useState<string>('')
   const [
     broadcastRecipients,
     removeBroadcastRecipient,
     addBroadcastRecipient,
   ] = useGroupMembers([])
-  const finishCreateBroadcast = useCreateBroadcast(broadcastRecipients, onClose)
+  const finishCreateBroadcast = useCreateBroadcast(broadcastRecipients, broadcastName, onClose)
 
   const searchContacts = useContacts(C.DC_GCL_ADD_SELF, '')[0]
+  const [errorMissingChatName, setErrorMissingChatName] = useState<boolean>(false)
 
   const showAddMemberDialog = () => {
     const listFlags = C.DC_GCL_ADD_SELF
@@ -851,6 +862,8 @@ function CreateBroadcastInner(props: {
       isBroadcast: true,
     })
   }
+
+
   return (
     <>
       <DeltaDialogHeader title={tx('new_broadcast_list')} />
@@ -868,6 +881,14 @@ function CreateBroadcastInner(props: {
               ⚠️ {tx('broadcast_list_warning')}
             </p>
           </div>
+          <br />
+          <ChatSettingsSetNameAndProfileImage
+            chatName={broadcastName}
+            setChatName={setBroadcastName}
+            errorMissingChatName={errorMissingChatName}
+            setErrorMissingChatName={setErrorMissingChatName}
+            type='broadcast'
+          />
           <br />
           {broadcastRecipients.length > 0 && (
             <div className='group-separator'>
@@ -907,7 +928,13 @@ function CreateBroadcastInner(props: {
           </p>
           <p
             className='delta-button primary bold'
-            onClick={() => finishCreateBroadcast()}
+            onClick={() => {
+              if (broadcastName === '') {
+                setErrorMissingChatName(true)
+                return
+              }
+              finishCreateBroadcast()
+            }}
           >
             {tx('create_broadcast_list')}
           </p>
