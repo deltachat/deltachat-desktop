@@ -37,6 +37,21 @@ div.group-settings-container {
     text-overflow: ellipsis;
     line-height: 1;
   }
+
+  div.group-name-input-wrapper {
+    margin-left: 17px;
+
+    input.group-name-input {
+      // width: calc(100% - 65px - 17px);
+      top: -7px;
+      position: relative;
+    }
+
+    p.input-error {
+      color: var(--colorDanger);
+      position: absolute;
+    }
+  }
 }
 
 div.group-member-contact-list-wrapper {

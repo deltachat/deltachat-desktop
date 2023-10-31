@@ -327,36 +327,24 @@ export const ChatSettingsSetNameAndProfileImage = ({
             color={color}
           />
         )}
-        <input
-          className='group-name-input'
-          placeholder={type === 'group' ? tx('group_name') : tx('group_name')}
-          value={chatName}
-          onChange={onChange}
-          autoFocus
-          style={{
-            marginLeft: '17px',
-            width: 'calc(100% - 65px - 17px)',
-            top: '-7px',
-            position: 'relative',
-          }}
-          spellCheck={false}
-        />
+        <div className='group-name-input-wrapper'>
+          <input
+            className='group-name-input'
+            placeholder={type === 'group' ? tx('group_name') : tx('group_name')}
+            value={chatName}
+            onChange={onChange}
+            autoFocus
+            spellCheck={false}
+          />
+          {errorMissingChatName && (
+            <p className='input-error'>
+              {type === 'group'
+                ? tx('group_please_enter_group_name')
+                : tx('group_please_enter_group_name')}
+            </p>
+          )}
+        </div>
       </div>
-      {errorMissingChatName && (
-        <p
-          style={{
-            color: 'var(--colorDanger)',
-            marginLeft: '80px',
-            position: 'relative',
-            top: '-30px',
-            marginBottom: '-18px',
-          }}
-        >
-          {type === 'group'
-            ? tx('group_please_enter_group_name')
-            : tx('group_please_enter_group_name')}
-        </p>
-      )}
     </>
   )
 }
