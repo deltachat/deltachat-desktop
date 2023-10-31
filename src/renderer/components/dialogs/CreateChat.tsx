@@ -310,20 +310,23 @@ export const ChatSettingsSetNameAndProfileImage = ({
     setChatName(target.value)
   }
   if (type === 'group' && !(onSetGroupImage && onUnsetGroupImage)) {
-    throw new Error('if type is group, onSetGroupImage and onUnsetGroupImage must be present')
+    throw new Error(
+      'if type is group, onSetGroupImage and onUnsetGroupImage must be present'
+    )
   }
   return (
     <>
       <div className='group-settings-container'>
-        { type === 'group' && onUnsetGroupImage && onSetGroupImage && 
-        <GroupImage
-          style={{ float: 'left' }}
-          groupImage={groupImage}
-          onSetGroupImage={onSetGroupImage}
-          onUnsetGroupImage={onUnsetGroupImage}
-          groupName={chatName}
-          color={color}
-        /> }
+        {type === 'group' && onUnsetGroupImage && onSetGroupImage && (
+          <GroupImage
+            style={{ float: 'left' }}
+            groupImage={groupImage}
+            onSetGroupImage={onSetGroupImage}
+            onUnsetGroupImage={onUnsetGroupImage}
+            groupName={chatName}
+            color={color}
+          />
+        )}
         <input
           className='group-name-input'
           placeholder={type === 'group' ? tx('group_name') : tx('group_name')}
@@ -349,7 +352,9 @@ export const ChatSettingsSetNameAndProfileImage = ({
             marginBottom: '-18px',
           }}
         >
-          {type === 'group' ? tx('group_please_enter_group_name') : tx('group_please_enter_group_name')}
+          {type === 'group'
+            ? tx('group_please_enter_group_name')
+            : tx('group_please_enter_group_name')}
         </p>
       )}
     </>
@@ -837,17 +842,23 @@ function CreateBroadcastInner(props: {
   const { openDialog } = useContext(ScreenContext)
   const { setViewMode, onClose } = props
   const tx = useTranslationFunction()
-  
+
   const [broadcastName, setBroadcastName] = useState<string>('')
   const [
     broadcastRecipients,
     removeBroadcastRecipient,
     addBroadcastRecipient,
   ] = useGroupMembers([])
-  const finishCreateBroadcast = useCreateBroadcast(broadcastRecipients, broadcastName, onClose)
+  const finishCreateBroadcast = useCreateBroadcast(
+    broadcastRecipients,
+    broadcastName,
+    onClose
+  )
 
   const searchContacts = useContacts(C.DC_GCL_ADD_SELF, '')[0]
-  const [errorMissingChatName, setErrorMissingChatName] = useState<boolean>(false)
+  const [errorMissingChatName, setErrorMissingChatName] = useState<boolean>(
+    false
+  )
 
   const showAddMemberDialog = () => {
     const listFlags = C.DC_GCL_ADD_SELF
@@ -862,7 +873,6 @@ function CreateBroadcastInner(props: {
       isBroadcast: true,
     })
   }
-
 
   return (
     <>

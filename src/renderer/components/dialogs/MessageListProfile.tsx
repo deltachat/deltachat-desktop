@@ -5,10 +5,7 @@ import {
   DeltaDialogHeader,
   DeltaDialogOkCancelFooter,
 } from './DeltaDialog'
-import {
-  useGroupImage,
-  ChatSettingsSetNameAndProfileImage,
-} from './CreateChat'
+import { useGroupImage, ChatSettingsSetNameAndProfileImage } from './CreateChat'
 
 import { DialogProps } from './DialogController'
 import { Type } from '../../backend-com'
