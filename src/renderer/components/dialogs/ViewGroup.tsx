@@ -268,9 +268,7 @@ function ViewGroupInner(props: {
               </div>
               {isRelatedChatsEnabled && (
                 <>
-                  <div className='group-separator'>
-                    {tx('related_chats')}
-                  </div>
+                  <div className='group-separator'>{tx('related_chats')}</div>
                   <div className='group-related-chats-list-wrapper'>
                     <ChatListPart
                       isRowLoaded={isChatLoaded}
