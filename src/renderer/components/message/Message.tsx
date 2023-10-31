@@ -239,7 +239,7 @@ function buildContextMenu(
       },
     // Save Sticker to sticker collection
     message.viewType === 'Sticker' && {
-      label: tx('save_sticker'),
+      label: tx('add_sticker_to_collection'),
       action: () =>
         BackendRemote.rpc.miscSaveSticker(
           selectedAccountId(),

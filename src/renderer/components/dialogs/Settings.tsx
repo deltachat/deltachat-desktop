@@ -263,7 +263,7 @@ export default function Settings(props: DialogProps) {
                     onClick={() => runtime.openLink(donationUrl)}
                     isLink
                   >
-                    {tx('pref_donate')}
+                    {tx('donate')}
                   </SettingsIconButton>
                 )}
               </Card>
@@ -324,6 +324,8 @@ export default function Settings(props: DialogProps) {
                 <SettingsAppearance
                   rc={settingsStore.rc}
                   desktopSettings={settingsStore.desktopSettings}
+                  settingsStore={settingsStore}
+                  renderDTSettingSwitch={renderDTSettingSwitch}
                 />
               </Card>
             </DeltaDialogBody>

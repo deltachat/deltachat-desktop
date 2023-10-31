@@ -372,7 +372,7 @@ export default class DCWebxdc extends SplitOut {
                             tx('menu_copy_link_to_clipboard'),
                           ],
                           message: tx(
-                            'desktop_offer_copy_non_web_link_to_clipboard',
+                            'ask_copy_unopenable_link_to_clipboard',
                             url
                           ),
                         })

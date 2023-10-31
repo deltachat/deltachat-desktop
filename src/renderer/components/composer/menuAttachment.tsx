@@ -22,7 +22,6 @@ const MenuAttachmentItems = ({
 }: {
   itemsArray: MenuAttachmentItemObject[]
 }) => {
-  const tx = useTranslationFunction()
   return (
     <>
       {itemsArray.map((item: MenuAttachmentItemObject) => (
@@ -31,7 +30,6 @@ const MenuAttachmentItems = ({
           icon={item.icon}
           text={item.text}
           onClick={item.onClick}
-          aria-label={tx(item.attachment)}
         />
       ))}
     </>
@@ -97,27 +95,24 @@ const MenuAttachment = ({
     })
   }
   // item array used to populate menu
-  const items = [
+  const items: MenuAttachmentItemObject[] = [
     settings?.settings.webrtc_instance && {
       id: 0,
       icon: 'phone' as IconName,
       text: tx('videochat'),
       onClick: onVideoChat,
-      attachment: 'attachment-images',
     },
     {
       id: 1,
       icon: 'media' as IconName,
       text: tx('image'),
       onClick: addFilenameMedia.bind(null),
-      attachment: 'attachment-images',
     },
     {
       id: 2,
       icon: 'document' as IconName,
       text: tx('file'),
       onClick: addFilenameFile.bind(null),
-      attachment: 'attachment-files',
     },
   ].filter(item => !!item) as MenuAttachmentItemObject[]
 
@@ -137,11 +132,10 @@ const MenuAttachment = ({
   )
 }
 
-export type MenuAttachmentItemObject = {
+type MenuAttachmentItemObject = {
   id: number
   icon: IconName
   text: string
   onClick: todo
-  attachment: string
 }
 export default MenuAttachment

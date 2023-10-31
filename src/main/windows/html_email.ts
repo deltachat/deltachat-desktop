@@ -398,7 +398,7 @@ function makeBrowserView(
         dialog
           .showMessageBox(window, {
             buttons: [tx('no'), tx('menu_copy_link_to_clipboard')],
-            message: tx('desktop_offer_copy_non_web_link_to_clipboard', url),
+            message: tx('ask_copy_unopenable_link_to_clipboard', url),
           })
           .then(({ response }) => {
             if (response == 1) {

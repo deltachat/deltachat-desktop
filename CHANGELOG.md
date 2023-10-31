@@ -22,6 +22,7 @@
 - shorten package description, because some debian had problems with our large description.
 - update electron from `v22.3.24` to version `v22.3.27`
 - Images are now compressed unless you send them as files
+- move tray icon option to Appearance
 
 ### Fixed
 - fix clipboard not working in webxdc apps
