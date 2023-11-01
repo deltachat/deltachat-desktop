@@ -9,6 +9,8 @@
 > - update windows to 10 or 11
 > - switch to linux (or dual boot it) 
 > - contact delta@merlinux.eu if you have money and want to sponsor a special legacy build of deltachat desktop 1.41-1.42.
+>
+> - Core is now built on Debian 10: now requires glibc 2.28, ubuntu 18 is not supported anymore.
 
 ### Added
 - Global Gallery
