@@ -1,6 +1,6 @@
 const { versions } = require('process')
 
-const MIN_NODE_VERSION = 16
+const MIN_NODE_VERSION = 18
 
 const majorVersion = versions.node.split('.')[0]
 if (majorVersion < MIN_NODE_VERSION) {
