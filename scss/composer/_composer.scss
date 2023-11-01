@@ -127,8 +127,9 @@
         width: 25px;
         height: 25px;
         margin-top: calc((40px - 25px) / 2);
-        background-image: url(../images/microphone.svg);
-        background-size: contain;
+        -webkit-mask-image: url(../images/microphone.svg);
+        -webkit-mask-size: contain;
+        background-color: var(--composerPlaceholderText);
       }
     }
 
