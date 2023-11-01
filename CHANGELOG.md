@@ -2,6 +2,14 @@
 
 ## [Unreleased][unreleased]
 
+> Since we needed to upgrade electron this version drops support for windows 7, 8 and 8.1
+> https://www.electronjs.org/blog/windows-7-to-8-1-deprecation-notice
+> If you are using DC on these platforms you have the following options:
+> - Keep using 1.40.4
+> - update windows to 10 or 11
+> - switch to linux (or dual boot it) 
+> - contact delta@merlinux.eu if you have money and want to sponsor a special legacy build of deltachat desktop 1.41-1.42.
+
 ### Added
 - Global Gallery
 - Show date when scrolling gallery
@@ -20,9 +28,10 @@
 - Update translations (31.10.2023)
 - better search in chat design which shows more results (remove redundant chat info and combine both headers)
 - shorten package description, because some debian had problems with our large description.
-- update electron from `v22.3.24` to version `v22.3.27`
 - Images are now compressed unless you send them as files
 - move tray icon option to Appearance
+- update minimum nodejs version from `16` to `18`
+- update electron from `v22.3.24` to version `v26.4.2`
 
 ### Fixed
 - fix clipboard not working in webxdc apps

@@ -161,7 +161,7 @@ Follow the instruction on <https://rustup.rs/> to install rust and cargo.
 
 Then try running `npm install` again.
 
-Make sure that your nodejs version is `16.0.0` or newer.
+Make sure that your nodejs version is `18.0.0` or newer.
 
 If you still get errors look at the instructions in the [`deltachat-node`](https://github.com/deltachat/deltachat-core-rust/tree/master/node) and [`deltachat-core-rust`](https://github.com/deltachat/deltachat-core-rust) README files to set things up [`or write an issue`](https://github.com/deltachat/deltachat-desktop/issues/new/choose).
 
