@@ -275,7 +275,7 @@ app.on('web-contents-created', (_ev, contents) => {
     contents.session.storagePath &&
     contents.session.storagePath.indexOf('webxdc_') !== -1
   if (is_webxdc) {
-    const webxdc_open_url = (url: string) => {
+    const webxdcOpenUrl = (url: string) => {
       if (url.startsWith('mailto:') || url.startsWith('openpgp4fpr:')) {
         // handle mailto in dc
         open_url(url)
@@ -290,7 +290,7 @@ app.on('web-contents-created', (_ev, contents) => {
       } else if (navigationUrl.startsWith('mailto:')) {
         // handle mailto in dc
         ev.preventDefault()
-        webxdc_open_url(navigationUrl)
+        webxdcOpenUrl(navigationUrl)
       } else {
         // prevent navigation to unknown scheme
         ev.preventDefault()
@@ -304,7 +304,7 @@ app.on('web-contents-created', (_ev, contents) => {
       } else if (ev.url.startsWith('mailto:')) {
         // handle mailto in dc
         ev.preventDefault()
-        webxdc_open_url(ev.url)
+        webxdcOpenUrl(ev.url)
       } else {
         // prevent navigation to unknown scheme
         ev.preventDefault()
@@ -312,7 +312,7 @@ app.on('web-contents-created', (_ev, contents) => {
     })
 
     contents.setWindowOpenHandler(_details => {
-      webxdc_open_url(_details.url)
+      webxdcOpenUrl(_details.url)
       // prevent new windows from being created when clicking on links
       return { action: 'deny' }
     })
