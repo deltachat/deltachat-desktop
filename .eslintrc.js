@@ -1,12 +1,14 @@
 module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint'],
+  plugins: [
+    '@typescript-eslint',
+  ],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'prettier',
     'prettier/@typescript-eslint',
+    'plugin:prettier/recommended',
     'plugin:react-hooks/recommended',
   ],
   rules: {
@@ -22,11 +24,12 @@ module.exports = {
       'error',
       { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
     ],
-    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-empty-function': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-namespace': 'off',
-    '@typescript-eslint/ban-ts-comment': 'off',
     'no-case-declarations': 'warn',
+    'prettier/prettier': 'warn',
   },
 }
