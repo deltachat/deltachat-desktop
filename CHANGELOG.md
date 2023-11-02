@@ -27,7 +27,7 @@
 - add a dark theme for the "Help" and the webxdc loading screen
 - improve the look of the webxdc loading screen
 - update `@deltachat/message_parser_wasm` to `0.8.0`, which adds linkification to links on more generic URI schemes.
-- Update translations (31.10.2023)
+- Update translations (02.11.2023)
 - better search in chat design which shows more results (remove redundant chat info and combine both headers)
 - shorten package description, because some debian had problems with our large description.
 - Images are now compressed unless you send them as files
