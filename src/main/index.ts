@@ -183,6 +183,7 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
   )
   cleanupDraftTempDir()
 
+  // NOTE: Make sure to use `powerMonitor` only when electron signals it is ready
   initialisePowerMonitor()
 }
 
