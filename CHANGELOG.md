@@ -21,6 +21,7 @@
 - Developer option to disable IMAP IDLE #4803
 - add option to save to file system to webxdc "send to chat"-dialog
 - Add image compression
+- open `mailto:` and `openpgp4fpr:` links from webxdc in deltachat #3355
 
 ### Changed
 - update deltachat-node and deltachat/jsonrpc-client to `v1.127.2`

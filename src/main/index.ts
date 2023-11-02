@@ -271,30 +271,57 @@ app.on('web-contents-created', (_ev, contents) => {
     contents.session.storagePath &&
     contents.session.storagePath.indexOf('webxdc_') !== -1
   if (is_webxdc) {
-    contents.on('will-navigate', (e, navigationUrl) => {
+    const webxdc_open_url = (url: string) => {
+      if (url.startsWith('mailto:') || url.startsWith('openpgp4fpr:')) {
+        // handle mailto in dc
+        open_url(url)
+        mainWindow.window?.show()
+      }
+    }
+
+    contents.on('will-navigate', (ev, navigationUrl) => {
       if (navigationUrl.startsWith('webxdc://')) {
         // allow internal webxdc nav
         return
       } else if (navigationUrl.startsWith('mailto:')) {
         // handle mailto in dc
-        e.preventDefault()
-        open_url(navigationUrl)
-        mainWindow.window?.show()
+        ev.preventDefault()
+        webxdc_open_url(navigationUrl)
       } else {
         // prevent navigation to unknown scheme
-        e.preventDefault()
+        ev.preventDefault()
       }
+    })
+    
+    contents.on('will-frame-navigate', ev => {
+      if (ev.url.startsWith('webxdc://')) {
+        // allow internal webxdc nav
+        return
+      } else if (ev.url.startsWith('mailto:')) {
+        // handle mailto in dc
+        ev.preventDefault()
+        webxdc_open_url(ev.url)
+      } else {
+        // prevent navigation to unknown scheme
+        ev.preventDefault()
+      }
+    })
+
+    contents.setWindowOpenHandler(_details => {
+      webxdc_open_url(_details.url)
+      // prevent new windows from being created when clicking on links
+      return { action: 'deny' }
     })
   } else {
     contents.on('will-navigate', (e, navigationUrl) => {
       log.warn('blocked navigation attempt to', navigationUrl)
       e.preventDefault()
     })
+    contents.setWindowOpenHandler(_details => {
+      // prevent new windows from being created when clicking on links
+      return { action: 'deny' }
+    })
   }
-  contents.setWindowOpenHandler(_details => {
-    // prevent new windows from being created when clicking on links
-    return { action: 'deny' }
-  })
 
   // Prevent webview tags from being created,
   // if you need them make sure to read https://www.electronjs.org/docs/latest/tutorial/security#12-verify-webview-options-before-creation
