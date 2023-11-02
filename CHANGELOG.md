@@ -49,6 +49,7 @@
 - gallery: fix scroll to top when switching tabs
 - fix: context menu items could take up multiple lines
 - fix: retrieve bounds directly from window and check if null on resize or move event #3461
+- fix: initialise power monitor after electron signals readyness to avoid electron failing with SIGTRAP #3460
 
 ### Added
 
