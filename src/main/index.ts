@@ -296,7 +296,7 @@ app.on('web-contents-created', (_ev, contents) => {
         ev.preventDefault()
       }
     })
-    
+
     contents.on('will-frame-navigate', ev => {
       if (ev.url.startsWith('webxdc://')) {
         // allow internal webxdc nav
