@@ -78,8 +78,11 @@ export function init(options: { hidden: boolean }) {
     e.preventDefault()
   })
 
-  const saveBounds = debounce((e: any) => {
-    DesktopSettings.update({ bounds: e.sender.getBounds() })
+  const saveBounds = debounce(() => {
+    const bounds = window?.getBounds()
+    if (bounds) {
+      DesktopSettings.update({ bounds })
+    }
   }, 1000)
 
   window.on('move', saveBounds)
