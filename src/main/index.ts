@@ -8,6 +8,7 @@ import type { EventEmitter } from 'events'
 import contextMenu from './electron-context-menu'
 import { findOutIfWeAreRunningAsAppx } from './isAppx'
 import { getHelpMenu } from './help_menu'
+import { initialisePowerMonitor } from './resume_from_sleep'
 
 // Hardening: prohibit all DNS queries, except for Mapbox
 // (see src/renderer/components/map/MapComponent.tsx)
@@ -181,6 +182,9 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
     log.error('Cleanup of old logfiles failed: ', err)
   )
   cleanupDraftTempDir()
+
+  // NOTE: Make sure to use `powerMonitor` only when electron signals it is ready
+  initialisePowerMonitor()
 }
 
 ;(app as EventEmitter).once('ipcReady', () => {
@@ -313,5 +317,3 @@ ipcMain.handle('restart_app', async _ev => {
   app.relaunch()
   app.quit()
 })
-
-import './resume_from_sleep'
