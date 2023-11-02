@@ -34,6 +34,7 @@
 - move tray icon option to Appearance
 - update minimum nodejs version from `16` to `18`
 - update electron from `v22.3.24` to version `v26.4.2`
+- show prettier linter warnings through eslint #3463
 
 ### Fixed
 - fix clipboard not working in webxdc apps
