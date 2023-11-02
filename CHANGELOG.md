@@ -48,6 +48,7 @@
 - improve video message - wide enough to show controls
 - gallery: fix scroll to top when switching tabs
 - fix: context menu items could take up multiple lines
+- fix: initialise power monitor after electron signals readyness to avoid electron failing with SIGTRAP
 
 ### Added
 
