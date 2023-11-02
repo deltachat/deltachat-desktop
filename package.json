@@ -135,6 +135,7 @@
     "esbuild": "^0.14.51",
     "eslint": "^8.2.0",
     "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react-hooks": "^4.3.0",
     "mocha": "^9.2.2",
     "node-fetch": "^2.6.7",
