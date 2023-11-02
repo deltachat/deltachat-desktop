@@ -48,6 +48,7 @@
 - improve video message - wide enough to show controls
 - gallery: fix scroll to top when switching tabs
 - fix: context menu items could take up multiple lines
+- fix: retrieve bounds directly from window and check if null on resize or move event #3461
 
 ### Added
 
