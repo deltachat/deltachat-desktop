@@ -9,18 +9,12 @@ export function parseMailto(
     )
   }
 
-  const query: {
-    to?: string
-    subject?: string
-    body?: string
-    cc?: string
-    bcc?: string
-  } = mailto_url.searchParams as any
-  const address = mailto_url.pathname || query.to || null
+  const query: URLSearchParams = mailto_url.searchParams
+  const address = mailto_url.pathname || query.get('to') || null
 
   return {
     to: address && decodeURIComponent(address).trim(),
-    subject: query.subject,
-    body: query.body,
+    subject: query.get('subject') || undefined,
+    body: query.get('body') || undefined,
   }
 }
