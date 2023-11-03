@@ -110,7 +110,7 @@ export default class DCWebxdc extends SplitOut {
 
         if (!accounts_sessions.includes(accountId)) {
           accounts_sessions.push(accountId)
-          ses.protocol.handle('webxdc', async (request: any) => {
+          ses.protocol.handle('webxdc', async request => {
             const get_headers = (mime_type: string | undefined) => {
               const headers = new Headers()
               if (!open_apps[id].internet_access) {
