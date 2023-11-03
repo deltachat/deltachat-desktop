@@ -11,9 +11,7 @@ import { ChatListPart, useLogicVirtualChatList } from '../chat/ChatList'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { useChatList } from '../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../ThemeManager'
-import { selectChat } from '../helpers/ChatMethods'
-import { BackendRemote } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
+import { doMailtoAction } from '../helpers/MailtoUrl'
 
 export default function MailtoDialog(props: {
   messageText: string
@@ -98,38 +96,4 @@ export default function MailtoDialog(props: {
       </div>
     </DeltaDialogBase>
   )
-}
-
-export async function doMailtoAction(chatId: number, messageText: string) {
-  const accountId = selectedAccountId()
-
-  const chat = await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
-  const draft = await BackendRemote.rpc.getDraft(accountId, chatId)
-
-  selectChat(chatId)
-
-  if (draft) {
-    // ask if the draft should be replaced
-    const continue_process = await new Promise((resolve, _reject) => {
-      window.__openDialog('ConfirmationDialog', {
-        message: window.static_translate('confirm_replace_draft', chat.name),
-        confirmLabel: window.static_translate('replace_draft'),
-        cb: resolve,
-      })
-    })
-    if (!continue_process) {
-      return
-    }
-  }
-
-  await BackendRemote.rpc.miscSetDraft(
-    accountId,
-    chatId,
-    messageText,
-    null,
-    null,
-    'Text'
-  )
-
-  window.__reloadDraft && window.__reloadDraft()
 }
