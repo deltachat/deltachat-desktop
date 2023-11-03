@@ -8,7 +8,12 @@ import {
 import { getLogger } from '../../../shared/logger'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { MessagesDisplayContext } from '../../contexts'
-import { selectChat, setChatView } from '../helpers/ChatMethods'
+import {
+  createChatByContactIdAndSelectIt,
+  createChatByEmail,
+  selectChat,
+  setChatView,
+} from '../helpers/ChatMethods'
 import { ChatView } from '../../stores/chat'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
@@ -107,20 +112,11 @@ export function message2React(message: string): JSX.Element {
 }
 
 function EmailLink({ email }: { email: string }): JSX.Element {
-  const openChatWithEmail = async () => {
-    const accountId = selectedAccountId()
-    let contactId = await BackendRemote.rpc.lookupContactIdByAddr(
-      accountId,
-      email
-    )
-    if (contactId === null) {
-      contactId = await BackendRemote.rpc.createContact(accountId, email, null)
+  const handleClick = async () => {
+    const chatId = await createChatByEmail(email)
+    if (chatId) {
+      selectChat(chatId)
     }
-    const chatId = await BackendRemote.rpc.createChatByContactId(
-      accountId,
-      contactId
-    )
-    selectChat(chatId)
   }
 
   return (
@@ -128,7 +124,7 @@ function EmailLink({ email }: { email: string }): JSX.Element {
       href={'#'}
       x-not-a-link='email'
       x-target-email={email}
-      onClick={openChatWithEmail}
+      onClick={handleClick}
     >
       {email}
     </a>

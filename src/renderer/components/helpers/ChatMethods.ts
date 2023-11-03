@@ -206,6 +206,43 @@ export async function joinCall(
   }
 }
 
+export async function createChatByEmail(email: string): Promise<number | null> {
+  const accountId = selectedAccountId()
+
+  let contactId = await BackendRemote.rpc.lookupContactIdByAddr(
+    accountId,
+    email
+  )
+
+  // @TODO: Needs implementation in core, see related PR:
+  // https://github.com/deltachat/deltachat-core-rust/pull/4918
+  const chatId = contactId
+    ? await BackendRemote.rpc.getChatIdByContactId(accountId, contactId)
+    : null
+
+  if (chatId) {
+    return chatId
+  }
+
+  const continueProcess = await new Promise((resolve, _reject) => {
+    window.__openDialog('ConfirmationDialog', {
+      message: window.static_translate('confirm_creating_chat'),
+      confirmLabel: window.static_translate('create_chat'),
+      cb: resolve,
+    })
+  })
+
+  if (!continueProcess) {
+    return null
+  }
+
+  if (!contactId) {
+    contactId = await BackendRemote.rpc.createContact(accountId, email, null)
+  }
+
+  return await BackendRemote.rpc.createChatByContactId(accountId, contactId)
+}
+
 export async function createChatByContactIdAndSelectIt(
   contactId: number
 ): Promise<void> {
