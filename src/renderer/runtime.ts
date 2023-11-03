@@ -9,7 +9,6 @@ import {
 import { setLogHandler } from '../shared/logger'
 import type { dialog, app } from 'electron'
 import { getLogger } from '../shared/logger'
-import processOpenQrUrl from './components/helpers/OpenQrUrl'
 import { LocaleData } from '../shared/localize'
 import processMailtoUrl from './components/helpers/MailtoUrl'
 
