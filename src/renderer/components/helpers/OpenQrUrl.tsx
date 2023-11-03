@@ -12,15 +12,13 @@ import {
 import { Spinner } from '@blueprintjs/core'
 import { DialogProps } from '../dialogs/DialogController'
 import { runtime } from '../../runtime'
-import { parseMailto } from '../../../shared/parse_mailto'
-import MailtoDialog, { doMailtoAction } from '../dialogs/MailtoDialog'
 import { getLogger } from '../../../shared/logger'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import AlertDialog from '../dialogs/AlertDialog'
-import { selectChat } from './ChatMethods'
 import { EffectfulBackendActions } from '../../backend-com'
 import { BackendRemote, Type } from '../../backend-com'
 import { ImportBackupTransferProgressDialog } from '../dialogs/setup_multi_device/ReceiveBackup'
+import processMailtoUrl from './MailtoUrl'
 
 const log = getLogger('renderer/processOpenUrl')
 
@@ -69,55 +67,6 @@ async function setConfigFromQrCatchingErrorInAlert(qrContent: string) {
     if (error instanceof Error) {
       window.__openDialog(AlertDialog, { message: error.message })
     }
-  }
-}
-
-export async function processMailtoUrl(url: string, callback: any = null) {
-  const tx = window.static_translate
-  log.debug('processing mailto url:', url)
-
-  try {
-    const accountId = selectedAccountId()
-    const mailto = parseMailto(url)
-    const messageText = mailto.subject
-      ? mailto.subject + (mailto.body ? '\n\n' + mailto.body : '')
-      : mailto.body
-
-    if (mailto.to) {
-      let contactId = await BackendRemote.rpc.lookupContactIdByAddr(
-        accountId,
-        mailto.to
-      )
-      if (contactId === null) {
-        contactId = await BackendRemote.rpc.createContact(
-          accountId,
-          mailto.to,
-          null
-        )
-      }
-      const chatId = await BackendRemote.rpc.createChatByContactId(
-        accountId,
-        contactId
-      )
-      if (messageText) {
-        await doMailtoAction(chatId, messageText)
-      } else {
-        selectChat(chatId)
-      }
-    } else {
-      if (messageText) {
-        window.__openDialog(MailtoDialog, { messageText })
-      }
-    }
-
-    callback && callback()
-  } catch (error) {
-    log.error('mailto decoding error', error)
-
-    window.__openDialog('AlertDialog', {
-      message: tx('mailto_link_could_not_be_decoded', url),
-      cb: callback,
-    })
   }
 }
 
