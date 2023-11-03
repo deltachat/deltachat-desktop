@@ -15,7 +15,6 @@ import {
 import { join } from 'path'
 import { readdir, stat, rmdir, writeFile, readFile } from 'fs/promises'
 import { getConfigPath, htmlDistDir } from '../application-constants'
-import UrlParser from 'url-parse'
 import { truncateText } from '../../shared/util'
 import { platform } from 'os'
 import { tx } from '../load-translations'
@@ -111,7 +110,7 @@ export default class DCWebxdc extends SplitOut {
 
         if (!accounts_sessions.includes(accountId)) {
           accounts_sessions.push(accountId)
-          ses.protocol.handle('webxdc', async request => {
+          ses.protocol.handle('webxdc', async (request: any) => {
             const get_headers = (mime_type: string | undefined) => {
               const headers = new Headers()
               if (!open_apps[id].internet_access) {
@@ -124,7 +123,7 @@ export default class DCWebxdc extends SplitOut {
               return headers
             }
 
-            const url = UrlParser(request.url)
+            const url = new URL(request.url)
             const [account, msg] = url.hostname.split('.')
             const id = `${account}.${msg}`
 

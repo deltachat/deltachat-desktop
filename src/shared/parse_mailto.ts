@@ -1,9 +1,7 @@
-import UrlParser from 'url-parse'
-
 export function parseMailto(
   mailtoURL: string
 ): { to?: string | null; subject?: string; body?: string } {
-  const mailto_url = UrlParser(mailtoURL)
+  const mailto_url = new URL(mailtoURL)
 
   if (mailto_url.protocol.toLowerCase() !== 'mailto:') {
     throw new Error(
@@ -17,10 +15,7 @@ export function parseMailto(
     body?: string
     cc?: string
     bcc?: string
-  } = UrlParser.qs.parse(
-    (mailto_url.query as any) as string /* typings package is old and doesn't reflect reality*/
-  )
-
+  } = mailto_url.searchParams as any
   const address = mailto_url.pathname || query.to || null
 
   return {

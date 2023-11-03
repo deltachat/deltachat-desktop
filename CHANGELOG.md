@@ -37,6 +37,7 @@
 - update electron from `v22.3.24` to version `v26.4.2`
 - show prettier linter warnings through eslint #3463
 - move "Forward" and "Reply" close together in the message menu
+- Removed `url-parse` dependency replacing it with modern APIs
 
 ### Fixed
 - fix clipboard not working in webxdc apps
