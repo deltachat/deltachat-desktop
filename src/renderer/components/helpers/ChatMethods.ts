@@ -206,6 +206,13 @@ export async function joinCall(
   }
 }
 
+/**
+ * Creates a new chat with given email address and returns chat id.
+ *
+ * In case an unknown email address was chosen or a chat does not exist yet the
+ * user will be prompted with a confirmation dialogue. In case the user aborts the
+ * action `null` is returned.
+ */
 export async function createChatByEmail(email: string): Promise<number | null> {
   const accountId = selectedAccountId()
 
@@ -214,8 +221,6 @@ export async function createChatByEmail(email: string): Promise<number | null> {
     email
   )
 
-  // @TODO: Needs implementation in core, see related PR:
-  // https://github.com/deltachat/deltachat-core-rust/pull/4918
   const chatId = contactId
     ? await BackendRemote.rpc.getChatIdByContactId(accountId, contactId)
     : null
@@ -224,6 +229,7 @@ export async function createChatByEmail(email: string): Promise<number | null> {
     return chatId
   }
 
+  // Ask user if they want to proceed with creating a new contact and / or chat
   const continueProcess = await new Promise((resolve, _reject) => {
     window.__openDialog('ConfirmationDialog', {
       message: window.static_translate('confirm_creating_chat'),
@@ -362,4 +368,45 @@ export async function modifyGroup(
       add.map(id => BackendRemote.rpc.addContactToChat(accountId, chatId, id))
     )
   }
+}
+
+/**
+ * Create draft message in given chat.
+ *
+ * In case a draft message already exists, the user is asked if they want to
+ * replace it.
+ */
+export async function createDraftMessage(chatId: number, messageText: string) {
+  const accountId = selectedAccountId()
+
+  const draft = await BackendRemote.rpc.getDraft(accountId, chatId)
+
+  selectChat(chatId)
+
+  if (draft) {
+    const { name } = await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
+
+    // ask if the draft should be replaced
+    const continueProcess = await new Promise((resolve, _reject) => {
+      window.__openDialog('ConfirmationDialog', {
+        message: window.static_translate('confirm_replace_draft', name),
+        confirmLabel: window.static_translate('replace_draft'),
+        cb: resolve,
+      })
+    })
+    if (!continueProcess) {
+      return
+    }
+  }
+
+  await BackendRemote.rpc.miscSetDraft(
+    accountId,
+    chatId,
+    messageText,
+    null,
+    null,
+    'Text'
+  )
+
+  window.__reloadDraft && window.__reloadDraft()
 }

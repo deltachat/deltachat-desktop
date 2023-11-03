@@ -1,12 +1,23 @@
 import MailtoDialog from '../dialogs/MailtoDialog'
-import { BackendRemote } from '../../backend-com'
 import { getLogger } from '../../../shared/logger'
 import { parseMailto } from '../../../shared/parse_mailto'
-import { createChatByEmail, selectChat } from './ChatMethods'
-import { selectedAccountId } from '../../ScreenController'
+import {
+  createChatByEmail,
+  createDraftMessage,
+  selectChat,
+} from './ChatMethods'
 
 const log = getLogger('renderer/processMailtoUrl')
 
+/**
+ * Handles `mailto:` links.
+ *
+ * By default this selects a chat with the email address specified in the link.
+ *
+ * In case this link contains a subject and / or body a draft message will be
+ * created. If no email address was given, the user is asked to select a
+ * receiver.
+ */
 export default async function processMailtoUrl(
   url: string,
   callback: any = null
@@ -16,22 +27,29 @@ export default async function processMailtoUrl(
 
   try {
     const mailto = parseMailto(url)
+
     const messageText = mailto.subject
       ? mailto.subject + (mailto.body ? '\n\n' + mailto.body : '')
       : mailto.body
 
     if (mailto.to) {
+      // Attempt creating a new chat based on email address. This method might
+      // return `null` when the user did _not_ confirm creating a new chat
       const chatId = await createChatByEmail(mailto.to)
 
       if (chatId) {
         if (messageText) {
-          await doMailtoAction(chatId, messageText)
+          await createDraftMessage(chatId, messageText)
         } else {
           selectChat(chatId)
         }
       }
-    } else if (messageText) {
-      window.__openDialog(MailtoDialog, { messageText })
+    } else {
+      if (messageText) {
+        // Body but no email address was given in link, show a dialogue to
+        // select a receiver
+        window.__openDialog(MailtoDialog, { messageText })
+      }
     }
 
     callback && callback()
@@ -43,39 +61,4 @@ export default async function processMailtoUrl(
       cb: callback,
     })
   }
-}
-
-export async function doMailtoAction(chatId: number, messageText: string) {
-  const accountId = selectedAccountId()
-
-  const draft = await BackendRemote.rpc.getDraft(accountId, chatId)
-
-  selectChat(chatId)
-
-  if (draft) {
-    const { name } = await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
-
-    // ask if the draft should be replaced
-    const continueProcess = await new Promise((resolve, _reject) => {
-      window.__openDialog('ConfirmationDialog', {
-        message: window.static_translate('confirm_replace_draft', name),
-        confirmLabel: window.static_translate('replace_draft'),
-        cb: resolve,
-      })
-    })
-    if (!continueProcess) {
-      return
-    }
-  }
-
-  await BackendRemote.rpc.miscSetDraft(
-    accountId,
-    chatId,
-    messageText,
-    null,
-    null,
-    'Text'
-  )
-
-  window.__reloadDraft && window.__reloadDraft()
 }

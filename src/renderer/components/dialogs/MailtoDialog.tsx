@@ -11,7 +11,7 @@ import { ChatListPart, useLogicVirtualChatList } from '../chat/ChatList'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { useChatList } from '../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../ThemeManager'
-import { doMailtoAction } from '../helpers/MailtoUrl'
+import { createDraftMessage } from '../helpers/ChatMethods'
 
 export default function MailtoDialog(props: {
   messageText: string
@@ -27,7 +27,7 @@ export default function MailtoDialog(props: {
   )
 
   const onChatClick = async (chatId: number) => {
-    doMailtoAction(chatId, messageText)
+    createDraftMessage(chatId, messageText)
     onClose()
   }
 
