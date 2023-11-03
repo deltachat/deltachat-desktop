@@ -109,7 +109,7 @@ export default function EnterAutocryptSetupMessage({
     if (result === false) {
       userFeedback({
         type: 'error',
-        text: tx('autocrypt_incorrect_desktop'),
+        text: tx('autocrypt_bad_setup_code'),
       })
       return
     }
@@ -148,7 +148,7 @@ export default function EnterAutocryptSetupMessage({
   return (
     <DeltaDialog
       isOpen={isOpen}
-      title={tx('autocrypt_key_transfer_desktop')}
+      title={tx('autocrypt_continue_transfer_title')}
       onClose={onClose}
     >
       {body}
