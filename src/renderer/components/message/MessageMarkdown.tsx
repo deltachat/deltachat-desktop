@@ -9,7 +9,6 @@ import { getLogger } from '../../../shared/logger'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { MessagesDisplayContext } from '../../contexts'
 import {
-  createChatByContactIdAndSelectIt,
   createChatByEmail,
   selectChat,
   setChatView,
