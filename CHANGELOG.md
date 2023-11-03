@@ -53,6 +53,7 @@
 - fix: retrieve bounds directly from window and check if null on resize or move event #3461
 - fix: initialise power monitor after electron signals readyness to avoid electron failing with SIGTRAP #3460
 - centering of username component in settings view #3467
+- fix wording of autocrypt setup messages
 
 ### Added
 
