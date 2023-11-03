@@ -62,16 +62,17 @@ export default async function processMailtoUrl(
 export async function doMailtoAction(chatId: number, messageText: string) {
   const accountId = selectedAccountId()
 
-  const chat = await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
   const draft = await BackendRemote.rpc.getDraft(accountId, chatId)
 
   selectChat(chatId)
 
   if (draft) {
+    const { name } = await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
+
     // ask if the draft should be replaced
     const continue_process = await new Promise((resolve, _reject) => {
       window.__openDialog('ConfirmationDialog', {
-        message: window.static_translate('confirm_replace_draft', chat.name),
+        message: window.static_translate('confirm_replace_draft', name),
         confirmLabel: window.static_translate('replace_draft'),
         cb: resolve,
       })
