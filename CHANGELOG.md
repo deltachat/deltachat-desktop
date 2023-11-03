@@ -22,6 +22,7 @@
 - add option to save to file system to webxdc "send to chat"-dialog
 - Add image compression
 - open `mailto:` and `openpgp4fpr:` links from webxdc in deltachat #3355
+- show confirm dialogue when creating new chat after clicking mail address #3469
 
 ### Changed
 - update deltachat-node and deltachat/jsonrpc-client to `v1.128.0`
