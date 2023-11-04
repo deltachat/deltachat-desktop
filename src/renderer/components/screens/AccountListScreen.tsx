@@ -86,9 +86,7 @@ export default function AccountListScreen({
                 'bp4-dialog-header-border-bottom'
               )}
             >
-              <h4 className='bp4-heading'>
-                {tx('switch_account')}
-              </h4>
+              <h4 className='bp4-heading'>{tx('switch_account')}</h4>
             </div>
             <DeltaDialogBody>
               <DeltaDialogContent noPadding={true}>

@@ -33,9 +33,7 @@ function ExportProgressDialog(props: DialogProps) {
     <SmallDialog isOpen={props.isOpen} onClose={() => {}}>
       <DeltaDialogBody>
         <DeltaDialogContent>
-          <H5 style={{ marginTop: '20px' }}>
-            {tx('export_backup_desktop')}
-          </H5>
+          <H5 style={{ marginTop: '20px' }}>{tx('export_backup_desktop')}</H5>
           <DeltaProgressBar intent={Intent.PRIMARY} progress={progress} />
         </DeltaDialogContent>
       </DeltaDialogBody>
