@@ -87,7 +87,7 @@ export default function AccountListScreen({
               )}
             >
               <h4 className='bp4-heading'>
-                {tx('login_known_accounts_title_desktop')}
+                {tx('switch_account')}
               </h4>
             </div>
             <DeltaDialogBody>
