@@ -208,6 +208,11 @@ function buildContextMenu(
         label: tx('reply_privately'),
         action: privateReply.bind(null, message),
       },
+    // Forward message
+    {
+      label: tx('forward'),
+      action: openForwardDialog.bind(null, message),
+    },
     // copy link
     link !== '' &&
       isLink && {
@@ -251,11 +256,6 @@ function buildContextMenu(
     showAttachmentOptions && {
       label: tx('save_as'),
       action: onDownload.bind(null, message),
-    },
-    // Forward message
-    {
-      label: tx('menu_forward'),
-      action: openForwardDialog.bind(null, message),
     },
     // Resend Message
     showResend && {
