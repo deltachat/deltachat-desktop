@@ -150,7 +150,7 @@ export function useChatListContextMenu(): {
             // Encryption Info
             !chatListItem.isDeviceTalk &&
               !chatListItem.isSelfTalk && {
-                label: tx('encryption_info_desktop'),
+                label: tx('encryption_info_title_desktop'),
                 action: onEncrInfo,
               },
             // Leave group
