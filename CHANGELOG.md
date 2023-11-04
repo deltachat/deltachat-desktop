@@ -36,6 +36,7 @@
 - update minimum nodejs version from `16` to `18`
 - update electron from `v22.3.24` to version `v26.4.2`
 - show prettier linter warnings through eslint #3463
+- move "Forward" and "Reply" close together in the message menu
 
 ### Fixed
 - fix clipboard not working in webxdc apps
@@ -54,6 +55,7 @@
 - fix: initialise power monitor after electron signals readyness to avoid electron failing with SIGTRAP #3460
 - centering of username component in settings view #3467
 - fix wording of autocrypt setup messages
+- fix wording of menu entries and dialog titles
 
 ### Added
 
