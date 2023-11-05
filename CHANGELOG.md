@@ -22,22 +22,27 @@
 - add option to save to file system to webxdc "send to chat"-dialog
 - Add image compression
 - open `mailto:` and `openpgp4fpr:` links from webxdc in deltachat #3355
+- Ask for broadcast name when creating one
 
 ### Changed
-- update deltachat-node and deltachat/jsonrpc-client to `v1.128.0`
 - add a dark theme for the "Help" and the webxdc loading screen
 - improve the look of the webxdc loading screen
-- update `@deltachat/message_parser_wasm` to `0.8.0`, which adds linkification to links on more generic URI schemes.
 - Update translations (05.11.2023)
 - better search in chat design which shows more results (remove redundant chat info and combine both headers)
 - shorten package description, because some debian had problems with our large description.
 - Images are now compressed unless you send them as files
 - move tray icon option to Appearance
-- update minimum nodejs version from `16` to `18`
-- update electron from `v22.3.24` to version `v26.4.2`
 - show prettier linter warnings through eslint #3463
 - move "Forward" and "Reply" close together in the message menu
-- Removed `url-parse` dependency replacing it with modern APIs
+- update dependencies
+  - update minimum nodejs version from `16` to `18`
+  - update `electron` from `v22.3.24` to version `v26.4.2`
+  - update `electron-builder` from `23.0.4` to `24.6.4`
+  - update `@electron/notarize` from (`electron-notarize` package name) `^1.0.0` to `^2.1.0`
+  - update deltachat-node and deltachat/jsonrpc-client to `v1.128.0`
+  - update `@deltachat/message_parser_wasm` to `0.8.0`, which adds linkification to links on more generic URI schemes.
+  - Removed `url-parse` dependency replacing it with modern APIs
+
 
 ### Fixed
 - fix clipboard not working in webxdc apps
@@ -59,10 +64,6 @@
 - fix wording of menu entries and dialog titles
 - fix window store installation (remove unknown language code from supported languages)
 - fix `null` account name when leaving the field empty bug
-
-### Added
-
-- Ask for broadcast name when creating one
 
 <a id="1_40_4"></a>
 
