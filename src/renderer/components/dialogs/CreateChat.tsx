@@ -468,7 +468,6 @@ export function AddMemberInnerDialog({
         nameAndAddr: '',
         isBlocked: false,
         isVerified: false,
-        verifierAddr: null,
         verifierId: null,
         wasSeenRecently: false,
       }
