@@ -177,7 +177,7 @@ export function ViewProfileInner({
   useEffect(() => {
     ;(async () => {
       if (contact.verifierId === null) {
-        setVerifier({ label: tx('verified') })
+        setVerifier(null)
       } else if (contact.verifierId === C.DC_CONTACT_ID_SELF) {
         setVerifier({ label: tx('verified_by_you') })
       } else {
@@ -249,7 +249,7 @@ export function ViewProfileInner({
           </div>
           {!isSelfChat && (
             <div className='contact-attributes'>
-              {contact.isVerified && verifier && (
+              {verifier && (
                 <div
                   className={verifier.action && 'clickable'}
                   onClick={verifier.action}
