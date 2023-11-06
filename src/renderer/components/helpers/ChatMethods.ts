@@ -231,7 +231,7 @@ export async function createChatByEmail(email: string): Promise<number | null> {
 
   // Ask user if they want to proceed with creating a new contact and / or chat
   const continueProcess = await new Promise((resolve, _reject) => {
-    window.__openDialog('ConfirmationDialog', {
+    window.__openDialog(ConfirmationDialog, {
       message: window.static_translate('ask_start_chat_with', email),
       confirmLabel: window.static_translate('ok'),
       cb: resolve,
