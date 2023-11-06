@@ -34,6 +34,8 @@
 - move tray icon option to Appearance
 - show prettier linter warnings through eslint #3463
 - move "Forward" and "Reply" close together in the message menu
+- for the "introduced by" line, only use verifier_id (no ContactObject.is_verified)
+- show verification icon in title of view profile if verified dm chat exists.
 - update dependencies
   - update minimum nodejs version from `16` to `18`
   - update `electron` from `v22.3.24` to version `v26.4.2`
