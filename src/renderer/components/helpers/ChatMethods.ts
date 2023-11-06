@@ -214,6 +214,7 @@ export async function joinCall(
  * action `null` is returned.
  */
 export async function createChatByEmail(email: string): Promise<number | null> {
+  const tx = window.static_translate
   const accountId = selectedAccountId()
 
   let contactId = await BackendRemote.rpc.lookupContactIdByAddr(
@@ -232,8 +233,8 @@ export async function createChatByEmail(email: string): Promise<number | null> {
   // Ask user if they want to proceed with creating a new contact and / or chat
   const continueProcess = await new Promise((resolve, _reject) => {
     window.__openDialog(ConfirmationDialog, {
-      message: window.static_translate('ask_start_chat_with', email),
-      confirmLabel: window.static_translate('ok'),
+      message: tx('ask_start_chat_with', email),
+      confirmLabel: tx('ok'),
       cb: resolve,
     })
   })
