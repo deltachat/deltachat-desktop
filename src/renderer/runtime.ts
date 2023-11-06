@@ -9,8 +9,8 @@ import {
 import { setLogHandler } from '../shared/logger'
 import type { dialog, app } from 'electron'
 import { getLogger } from '../shared/logger'
-import processOpenQrUrl from './components/helpers/OpenQrUrl'
 import { LocaleData } from '../shared/localize'
+import processMailtoUrl from './components/helpers/MailtoUrl'
 
 const log = getLogger('renderer/runtime')
 
@@ -499,7 +499,7 @@ class Electron implements Runtime {
   }
   openLink(link: string): void {
     if (link.startsWith('mailto:')) {
-      processOpenQrUrl(link)
+      processMailtoUrl(link)
     } else if (link.startsWith('http:') || link.startsWith('https:')) {
       ipcBackend.invoke('electron.shell.openExternal', link)
     } else {
