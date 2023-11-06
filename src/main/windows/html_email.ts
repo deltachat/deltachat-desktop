@@ -327,7 +327,7 @@ function makeBrowserView(
     return new Response(Buffer.from(html_content), {
       status: 200,
       headers: {
-        'content-type': 'text/html',
+        'content-type': 'text/html; charset=utf-8',
         'Content-Security-Policy': allow_remote_content ? CSP_ALLOW : CSP_DENY,
       },
     })
