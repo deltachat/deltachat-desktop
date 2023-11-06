@@ -260,10 +260,6 @@ export async function createChatByContactIdAndSelectIt(
     contactId
   )
 
-  if (!chatId) {
-    throw new Error(window.static_translate('create_chat_error_desktop'))
-  }
-
   const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
 
   if (chat && chat.archived) {

@@ -39,7 +39,7 @@ export default function SettingsProfile({
   )
   return (
     <>
-      <div className='profile-image-username' style={{ marginBottom: '10px' }}>
+      <div className='profile-image-username' style={{ marginBottom: '20px' }}>
         <div className='profile-image-selector'>
           {profileBlobUrl ? (
             <ClickForFullscreenAvatarWrapper filename={profileBlobUrl}>

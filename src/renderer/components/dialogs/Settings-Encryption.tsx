@@ -23,7 +23,7 @@ export function KeyViewPanel({
     <React.Fragment>
       <div>
         <Card>
-          <Callout>{tx('show_key_transfer_message_desktop')}</Callout>
+          <Callout>{tx('autocrypt_send_asm_explain_after')}</Callout>
           <div>
             <InputTransferKey
               autocryptkey={autocryptKey.split('-')}
@@ -49,7 +49,7 @@ function InitiatePanel({ onClick }: { onClick: todo }) {
   return (
     <div className={Classes.DIALOG_BODY}>
       <Card>
-        <Callout>{tx('initiate_key_transfer_desktop')}</Callout>
+        <Callout>{tx('autocrypt_send_asm_explain_before')}</Callout>
         <p
           className='delta-button bold'
           style={{ float: 'right', marginTop: '20px' }}
@@ -95,7 +95,7 @@ export function SendAutocryptSetupMessage({
   return (
     <DeltaDialog
       isOpen={isOpen}
-      title={tx('autocrypt_key_transfer_desktop')}
+      title={tx('autocrypt_send_asm_title')}
       onClose={onClose}
     >
       {body}

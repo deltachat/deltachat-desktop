@@ -29,7 +29,7 @@
 - add a dark theme for the "Help" and the webxdc loading screen
 - improve the look of the webxdc loading screen
 - update `@deltachat/message_parser_wasm` to `0.8.0`, which adds linkification to links on more generic URI schemes.
-- Update translations (31.10.2023)
+- Update translations (05.11.2023)
 - better search in chat design which shows more results (remove redundant chat info and combine both headers)
 - shorten package description, because some debian had problems with our large description.
 - Images are now compressed unless you send them as files
@@ -37,6 +37,8 @@
 - update minimum nodejs version from `16` to `18`
 - update electron from `v22.3.24` to version `v26.4.2`
 - show prettier linter warnings through eslint #3463
+- move "Forward" and "Reply" close together in the message menu
+- Removed `url-parse` dependency replacing it with modern APIs
 
 ### Fixed
 - fix clipboard not working in webxdc apps
@@ -53,6 +55,10 @@
 - fix: context menu items could take up multiple lines
 - fix: retrieve bounds directly from window and check if null on resize or move event #3461
 - fix: initialise power monitor after electron signals readyness to avoid electron failing with SIGTRAP #3460
+- centering of username component in settings view #3467
+- fix wording of autocrypt setup messages
+- fix wording of menu entries and dialog titles
+- fix window store installation (remove unknown language code from supported languages)
 
 ### Added
 

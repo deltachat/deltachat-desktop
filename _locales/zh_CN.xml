@@ -29,10 +29,13 @@
     <string name="emoji">Emoji</string>
     <string name="attachment">附件</string>
     <string name="back">返回</string>
+    <!-- this string is deprecated; the new wording is "introduced by ..." -->
     <string name="verified">已验证</string>
     <string name="close">关闭</string>
     <string name="close_window">关闭窗口</string>
     <string name="forward">转发</string>
+    <string name="create">创建</string>
+    <string name="later">稍后</string>
     <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
     <string name="resend">重新发送</string>
     <!-- Verb "to archive", as in "put a chat in the archive", not a noun "The Archive". -->
@@ -49,7 +52,6 @@
     <string name="main_menu">主菜单</string>
     <string name="start_chat">开始聊天</string>
     <string name="show_full_message">显示完整消息… </string>
-    <string name="show_full_message_in_browser">在浏览器中显示完整消息…</string>
     <!-- Stay short here, say ~16 characters. The source string could also be "All Read", maybe that hint can make translations easier :) -->
     <string name="mark_all_as_read">将所有标记为已读</string>
     <!-- Shortest text for "Mark as being read". In english, this could be "Read" (past tense of "to read"), in german, this could be "Gelesen". -->
@@ -136,6 +138,9 @@
     <string name="gif">Gif</string>
     <!-- "Stickers" as known from other messengers; in some languages, the English "Sticker" is fine. -->
     <string name="sticker">贴纸</string>
+    <string name="add_to_sticker_collection">添加到表情集</string>
+    <string name="add_stickers_instructions">要添加表情包，轻按“打开表情包文件夹”为你的表情包新建一个子文件夹，并把图片和表情符号拖动至此</string>
+    <string name="open_sticker_folder">打开表情包文件夹</string>
     <string name="images">图像</string>
     <string name="audio">音频</string>
     <string name="voice_message">语音消息</string>
@@ -146,7 +151,6 @@
     <string name="video">视频</string>
     <string name="documents">文档</string>
     <string name="contact">联系人</string>
-    <string name="verified_contact">已验证的联系人</string>
     <string name="camera">相机</string>
     <!-- As in "start a video recording" or "take a photo"; eg. the description of the "shutter button" in cameras -->
     <string name="capture">捕获</string>
@@ -162,7 +166,6 @@
     <string name="webxdc_app">私人应用</string>
     <!-- plural of "App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
     <string name="webxdc_apps">私人应用</string>
-    <string name="files_and_webxdx_apps">文件和私人应用</string>
     <string name="unknown">未知</string>
 
     <string name="green">绿色</string>
@@ -188,14 +191,15 @@
     <string name="menu_new_contact">新建联系人</string>
     <string name="menu_new_chat">新建聊天</string>
     <string name="menu_new_group">新建群组</string>
-    <!-- Use the same wording as "Subject" to help people coming from the e-mail context; eg. "Betreff" in German -->
-    <string name="new_group_or_subject">新建群组或邮件主题</string>
-    <string name="menu_new_verified_group">新建已验证群组</string>
+    <string name="clone_chat">克隆聊天</string>
     <!-- consider keeping the term "broadcast" as in WhatsApp or Telegram -->
     <string name="broadcast_list">广播列表</string>
     <string name="broadcast_lists">广播列表</string>
     <string name="new_broadcast_list">新建广播列表</string>
     <string name="add_recipients">添加接收者</string>
+    <string name="edit_broadcast_list">编辑广播列表</string>
+    <string name="broadcast_list_name">广播列表名称</string>
+    <string name="please_enter_broadcast_list_name">请属于广播列表的名称</string>
     <string name="menu_send">发送</string>
     <string name="menu_toggle_keyboard">切换 emoji 键盘</string>
     <string name="menu_edit_group">编辑群组</string>
@@ -220,6 +224,7 @@
     <string name="menu_copy_image_to_clipboard">复制图像</string>
     <string name="menu_copy_email_to_clipboard">复制电子邮件</string>
     <string name="paste_from_clipboard">从剪贴板粘贴</string>
+    <string name="ask_copy_unopenable_link_to_clipboard">无法在浏览器中打开链接 “%1$d”。你要将链接复制到剪贴板吗？</string>
     <string name="menu_forward">转发消息</string>
     <string name="menu_reply">回复消息</string>
     <string name="menu_mute">通知静音</string>
@@ -229,6 +234,7 @@
     <string name="menu_all_media">所有媒体</string>
     <!-- Command to jump to the original message corresponding to a gallery image or document -->
     <string name="show_in_chat">在聊天中显示</string>
+    <string name="show_app_in_chat">在聊天中显示应用</string>
     <string name="menu_share">分享</string>
     <!-- Verb "to block sth." usually a mailing list or a contact, not a noun -->
     <string name="block">屏蔽</string>
@@ -240,6 +246,7 @@
     <string name="menu_scroll_to_bottom">滚动至底部</string>
     <string name="menu_scroll_to_top">滚动至顶部</string>
     <string name="menu_help">帮助</string>
+    <string name="what_is_webxdc">Webxdc 是什么？</string>
     <string name="privacy_policy">隐私政策</string>
     <string name="menu_select_all">全选</string>
     <string name="select_chat">选择聊天</string>
@@ -276,6 +283,8 @@
     <string name="source_code">源代码</string>
     <!-- Menu item beside an app/chat that adds an icon to the system's home screen. If the user taps that icon, the app/chat is opened directly. -->
     <string name="add_to_home_screen">添加到主屏幕</string>
+    <string name="donate">捐赠</string>
+
     <string name="mute_for_one_hour">静音 1 小时</string>
     <string name="mute_for_two_hours">静音 2 小时</string>
     <string name="mute_for_one_day">静音 1 天</string>
@@ -425,6 +434,8 @@
 
     <!-- search -->
     <string name="search">搜索</string>
+    <string name="search_in_chat">搜索聊天</string>
+    <string name="search_files">搜索文件</string>
     <string name="search_explain">搜索聊天、联系人和消息</string>
     <string name="search_no_result_for_x">没有找到有关\"%s\"的结果</string>
 
@@ -440,6 +451,7 @@
     <string name="group_self_not_in_group">为了执行此操作，您必须是群组成员。</string>
     <string name="profile_encryption">加密</string>
     <string name="profile_shared_chats">共有聊天</string>
+    <string name="related_chats">相关聊天</string>
     <string name="tab_contact">联系人</string>
     <string name="tab_group">群组</string>
     <string name="tab_gallery">图库</string>
@@ -454,6 +466,10 @@
     <string name="tab_webxdc_empty_hint">在此聊天中分享的私人应用会出现在这里</string>
     <string name="tab_all_media_empty_hint">任何聊天中分享的媒体文件都将出现在这里</string>
     <string name="media_preview">媒体预览</string>
+    <!-- option to show images in the gallery with the correct width/height aspect (instead of square); other gallery apps may be a source of inspiration for translation :) -->
+    <string name="aspect_ratio_grid">宽高比网格</string>
+    <!-- option to show images in the gallery as square (instead of using correct width/height) -->
+    <string name="square_grid">方形网格</string>
     <string name="send_message">发送消息</string>
     <!-- Placeholder %1$s will be replaced by the name of the contact changing their address. Placeholders %2$s and %3$s will be replaced by old/new email addresses. -->
     <string name="aeap_addr_changed">%1$s 将邮箱从 %2$s 更改为 %3$s</string>
@@ -515,7 +531,6 @@
     <!-- welcome and login -->
     <string name="welcome_chat_over_email">通过电子邮件聊天。</string>
     <string name="scan_invitation_code">扫描邀请码</string>
-    <string name="welcome_intro1_message">本通讯软件有着世界上最广泛的受众。自由且自主。</string>
     <string name="login_title">登录</string>
     <string name="login_header">登录您的电子邮件账户</string>
     <string name="login_explain">使用现有电子邮件帐户登录</string>
@@ -540,8 +555,6 @@
     <string name="login_socks5_port">SOCKS5 端口</string>
     <string name="login_socks5_user">SOCKS5 用户名</string>
     <string name="login_socks5_password">SOCKS5 密码</string>
-    <!-- Translators: %1$s will be replaced by an e-mail address -->
-    <string name="login_oauth2_checking_addr">正在检查 %1$s</string>
     <string name="login_info_oauth2_title">使用简易设置继续？</string>
     <string name="login_info_oauth2_text">输入的电子邮件地址支持简化设置（OAuth 2.0）。\n\n在下一步中，请允许 Delta Chat 充当您的“通过电子邮件聊天”应用程序。\n\n不存在 Delta Chat 服务器，您的数据保留于您的设备！</string>
     <string name="login_certificate_checks">证书检查</string>
@@ -642,6 +655,10 @@
     <string name="pref_backup">备份</string>
     <string name="pref_backup_explain">将聊天备份至外部存储</string>
     <string name="pref_backup_export_explain">备份可帮助您在此设备或另一台设备上设置全新安装的本应用。\n\n备份将包含所有消息、联系人、聊天以及端到端的 Autocrypt 设置。请将备份文件保存在安全的地方，或尽快将其删除。</string>
+    <!-- the placeholder will be replaced by the name of the account's email address -->
+    <string name="pref_backup_export_x">导出 %1$s</string>
+    <!-- the placeholder will be replaced by the number of accounts to export; the number is always larger than 1 -->
+    <string name="pref_backup_export_all">导出全部 %1$d 个账户</string>
     <string name="pref_backup_export_start_button">开始备份</string>
     <string name="pref_backup_written_to_x">备份已成功写入到“%1$s”。</string>
     <string name="pref_managekeys_menu_title">管理密钥</string>
@@ -692,6 +709,9 @@
     <string name="profile_image_delete">删除个人资料图片</string>
     <string name="pref_show_tray_icon">显示托盘图标</string>
     <string name="pref_edit_profile">编辑个人资料</string>
+    <string name="disable_imap_idle">禁用 IMAP IDLE</string>
+    <string name="disable_imap_idle_explain">即便服务器支持，也不要使用 IMAP IDLE 扩展。启用后会造成消息获取延迟，请仅出于测试目的启用该功能。</string>
+
     <!-- Emoji picker and categories -->
     <string name="emoji_search_results">搜索结果</string>
     <string name="emoji_not_found">未找到 emoji</string>
@@ -738,7 +758,7 @@
     <string name="autocrypt_send_asm_title">发送 Autocrypt 设置消息</string>
     <string name="autocrypt_send_asm_explain_before">Autocrypt 设置消息安全地共享您的端到端设置至其他兼容 Autocrypt 的应用程序。\n\n该设置将通过在此显示的、必须在另一台设备上输入的设置码进行加密。</string>
     <string name="autocrypt_send_asm_button">发送 Autocrypt 设置消息</string>
-    <string name="autocrypt_send_asm_explain_after">您的设置已发送给您自己。切换到另一台设备并打开该设置消息。 您将被要求输入设置码。 输入以下数字：\n\n%1$s</string>
+    <string name="autocrypt_send_asm_explain_after">您的设置已发送给您自己。切换到另一台设备并打开该设置消息。 您将被要求输入设置码。 输入以下数字：</string>
     <string name="autocrypt_prefer_e2ee">优先使用端到端加密</string>
     <string name="autocrypt_asm_subject">Autocrypt 设置消息</string>
     <string name="autocrypt_asm_general_body">这是用于在客户端之间传输端到端设置的 Autocrypt 设置消息。\n\n要解密并使用您的设置，请在兼容 Autocrypt 的客户端中打开本消息，然后输入生成设备上显示的设置码。</string>
@@ -881,12 +901,11 @@
     <string name="secure_join_replies">%1$s 已回复，等待被加入群组…</string>
     <string name="contact_verified">%1$s 已验证。</string>
     <string name="contact_not_verified">无法验证 %1$s。</string>
-    <!-- Shown in contact profile. The placeholder will be replaced by the name of the contact that verified the contact shown. -->
+    <!-- Shown in contact profile. The placeholder will be replaced by the name of the contact that introduced the contact. -->
     <string name="verified_by">验证人 %1$s</string>
     <string name="verified_by_you">由您验证</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
     <string name="contact_setup_changed">%1$s 的加密设置已更改。</string>
-    <string name="verified_group_explain">已验证的群组确保端到端加密。只有带绿色验证钩形符号的联系人才能被加群</string>
     <string name="verified_contact_required_explain">要确保端到端加密，你只能将带有略色验证标识的联系人到此群中。\n\n你可以亲自和未验证联系人线下碰面并扫描联系人二维码来验证。</string>
     <string name="copy_qr_data_success">已复制二维码链接到剪贴板</string>
     <string name="mailto_dialog_header_select_chat">选择要发送消息的聊天</string>
@@ -905,6 +924,10 @@
     <string name="notify_name_only">仅名称</string>
     <string name="notify_no_name_or_message">不显示名称或消息</string>
     <string name="notifications_disabled">已禁用通知</string>
+    <string name="new_messages">新消息</string>
+    <string name="n_messages_in_m_chats">%1$d 条消息，位于 %2$d 个聊天内</string>
+
+
     <!-- permissions -->
     <string name="perm_required_title">需要权限</string>
     <string name="perm_continue">继续</string>
@@ -931,6 +954,7 @@
     <string name="about_offical_app_desktop">这是 Delta Chat 官方桌面应用。</string>
     <string name="about_licensed_under_desktop">本软件在 GNU GPL 版本 3 下获得授权，其源代码可从 GitHub 获得。</string>
     <string name="welcome_desktop">欢迎使用 Delta Chat</string>
+    <!-- deprecated, use switch_account -->
     <string name="login_known_accounts_title_desktop">已知账户</string>
     <string name="global_menu_preferences_language_desktop">语言</string>
     <string name="global_menu_file_desktop">文件</string>
@@ -958,18 +982,25 @@
     <string name="delete_message_desktop">删除消息</string>
     <string name="more_info_desktop">更多信息</string>
     <string name="timestamp_format_m_desktop">MMM D</string>
+    <!-- deprecated, use encryption_info_title_desktop or profile_encryption -->
     <string name="encryption_info_desktop">显示加密信息</string>
     <string name="remove_desktop">移除</string>
     <string name="save_desktop">保存</string>
     <string name="name_desktop">名称</string>
+    <!-- deprecated, use autocrypt_send_asm_title / autocrypt_continue_transfer_title -->
     <string name="autocrypt_key_transfer_desktop">Autocrypt 密钥传输</string>
+    <!-- deprecated, use autocrypt_send_asm_explain_before -->
     <string name="initiate_key_transfer_desktop">Autocrypt 设置消息安全地共享您的端到端设置至其他兼容 Autocrypt 的应用程序。该设置将通过在此显示的、必须在另一台设备上输入的设置码进行加密。</string>
     <string name="select_group_image_desktop">选择群组图像</string>
+    <!-- deprecated, use export_backup_desktop instead -->
     <string name="imex_progress_title_desktop">备份进度</string>
     <string name="export_backup_desktop">导出备份</string>
+    <!-- deprecated, use autocrypt_send_asm_explain_after instead -->
     <string name="show_key_transfer_message_desktop">您的密钥已发送给您自己。切换到另一台设备并打开该设置消息。 您将被要求输入设置码。 输入以下数字：</string>
     <string name="autocrypt_correct_desktop">Autocrypt 设置已传输 。</string>
+    <!-- deprecated, use autocrypt_bad_setup_code instead -->
     <string name="autocrypt_incorrect_desktop">不正确的设置码。请重试。</string>
+    <!-- deprecated, rare errors should be english only for easier searchability -->
     <string name="create_chat_error_desktop">无法创建聊天。</string>
     <string name="forget_login_confirmation_desktop">删除此登录？ 一切都将被删除，包括您的端到端设置、联系人、聊天、消息及媒体。 此操作无法撤消。</string>
     <string name="account_info_hover_tooltip_desktop2">电子邮件：%1$s\n大小：%2$s\n账户 Id：%3$s</string>
