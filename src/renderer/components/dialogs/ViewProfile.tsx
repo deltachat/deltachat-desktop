@@ -9,7 +9,7 @@ import {
 } from './DeltaDialog'
 import ChatListItem from '../chat/ChatListItem'
 import { useChatList } from '../chat/ChatListHelpers'
-import { C } from '@deltachat/jsonrpc-client'
+import { C, T } from '@deltachat/jsonrpc-client'
 import {
   MessagesDisplayContext,
   ScreenContext,
@@ -141,6 +141,8 @@ export function ViewProfileInner({
     label: string
     action?: () => void
   }>(null)
+  const [contactDMChat, setContactDMChat] = useState<null | T.BasicChat>(null)
+
   const isDeviceChat = contact.id === C.DC_CONTACT_ID_DEVICE
   const isSelfChat = contact.id === C.DC_CONTACT_ID_SELF
 
@@ -157,6 +159,22 @@ export function ViewProfileInner({
     )
     onChatClick(dmChatId)
   }
+
+  useEffect(() => {
+    ;(async () => {
+      const chatId = await BackendRemote.rpc.getChatIdByContactId(
+        accountId,
+        contact.id
+      )
+      if (chatId) {
+        setContactDMChat(
+          await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
+        )
+      } else {
+        setContactDMChat(null)
+      }
+    })()
+  }, [accountId, contact.id])
 
   useEffect(() => {
     if (isSelfChat) {
@@ -177,7 +195,7 @@ export function ViewProfileInner({
   useEffect(() => {
     ;(async () => {
       if (contact.verifierId === null) {
-        setVerifier({ label: tx('verified') })
+        setVerifier(null)
       } else if (contact.verifierId === C.DC_CONTACT_ID_SELF) {
         setVerifier({ label: tx('verified_by_you') })
       } else {
@@ -241,7 +259,7 @@ export function ViewProfileInner({
               <div>
                 <p className='group-name'>
                   {displayNameLine}
-                  {/* {isVerified && <InlineVerifiedIcon />} */}
+                  {contactDMChat?.isProtected && <InlineVerifiedIcon />}
                 </p>
               </div>
               <div className='address'>{addressLine}</div>
@@ -249,7 +267,7 @@ export function ViewProfileInner({
           </div>
           {!isSelfChat && (
             <div className='contact-attributes'>
-              {contact.isVerified && verifier && (
+              {verifier && (
                 <div
                   className={verifier.action && 'clickable'}
                   onClick={verifier.action}
