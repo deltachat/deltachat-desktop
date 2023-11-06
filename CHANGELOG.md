@@ -57,6 +57,7 @@
 - centering of username component in settings view #3467
 - fix wording of autocrypt setup messages
 - fix wording of menu entries and dialog titles
+- fix window store installation (remove unknown language code from supported languages)
 
 ### Added
 
