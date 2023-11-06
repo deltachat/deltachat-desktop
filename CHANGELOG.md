@@ -70,6 +70,9 @@
 - fix `null` account name when leaving the field empty bug
 
 
+### Removed
+- remove 40KiB download on demand option
+
 <a id="1_40_4"></a>
 
 ## [1.40.4] - 2023-09-14
