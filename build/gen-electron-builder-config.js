@@ -142,7 +142,7 @@ const languages = [
   // 'sc', not supported by ms-store
   'sk',
   'sq',
-  'sr',
+  // sr', not supported by ms-store - although ms page mentions it as supported
   'sv',
   'ta',
   'te',
