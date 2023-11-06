@@ -58,6 +58,7 @@
 - fix wording of autocrypt setup messages
 - fix wording of menu entries and dialog titles
 - fix window store installation (remove unknown language code from supported languages)
+- fix `null` account name when leaving the field empty bug
 
 ### Added
 
