@@ -178,7 +178,10 @@ export function SettingsEditProfileDialogInner({
       'selfavatar',
       profilePicture ? profilePicture : null
     )
-    SettingsStoreInstance.effect.setCoreSetting('displayname', displayname)
+    SettingsStoreInstance.effect.setCoreSetting(
+      'displayname',
+      displayname || ''
+    )
     SettingsStoreInstance.effect.setCoreSetting('selfstatus', selfstatus || '')
     onClose()
   }
