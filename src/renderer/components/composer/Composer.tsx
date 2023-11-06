@@ -538,6 +538,7 @@ export function useDraft(
 
   const removeFile = useCallback(() => {
     draftRef.current.file = ''
+    draftRef.current.viewType = 'Text'
     saveDraft()
   }, [saveDraft])
 
