@@ -17,7 +17,6 @@ export default function SettingsDownloadOnDemand(props: {
 
   const options: { label: string; value: number }[] = [
     { label: tx('pref_show_emails_all'), value: 0 },
-    { label: tx('up_to_x', '40 KiB'), value: 40960 },
     {
       label: tx('up_to_x_most_worse_quality_images', '160 KiB'),
       value: 163840,
