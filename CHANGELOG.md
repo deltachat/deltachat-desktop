@@ -66,7 +66,9 @@
 - fix wording of autocrypt setup messages
 - fix wording of menu entries and dialog titles
 - fix window store installation (remove unknown language code from supported languages)
+- fix emojis in some html emails (force charset utf-8)
 - fix `null` account name when leaving the field empty bug
+
 
 <a id="1_40_4"></a>
 
