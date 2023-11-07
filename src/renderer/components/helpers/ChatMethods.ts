@@ -1,6 +1,7 @@
+import { T, C } from '@deltachat/jsonrpc-client'
+
 import ChatStore, { ChatView } from '../../stores/chat'
 import { ScreenContext, unwrapContext } from '../../contexts'
-import { C } from '@deltachat/jsonrpc-client'
 import { getLogger } from '../../../shared/logger'
 import AlertDialog from '../dialogs/AlertDialog'
 import { BackendRemote, EffectfulBackendActions, Type } from '../../backend-com'
@@ -8,10 +9,8 @@ import { selectedAccountId } from '../../ScreenController'
 import ViewGroup from '../dialogs/ViewGroup'
 import ViewProfile from '../dialogs/ViewProfile'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
-import { T } from '@deltachat/jsonrpc-client'
 import chatStore from '../../stores/chat'
 import { openLinkSafely } from './LinkConfirmation'
-import { areMembersVerified } from '../dialogs/CreateChat'
 
 const log = getLogger('renderer/message')
 
@@ -410,4 +409,21 @@ export async function createDraftMessage(chatId: number, messageText: string) {
   )
 
   window.__reloadDraft && window.__reloadDraft()
+}
+
+/**
+ * Returns true if all contacts of a given list are verified, otherwise false.
+ */
+export async function areAllContactsVerified(
+  accountId: number,
+  contactIds: number[]
+): Promise<boolean> {
+  const contacts = await BackendRemote.rpc.getContactsByIds(
+    accountId,
+    contactIds
+  )
+
+  return !contactIds.some(contactId => {
+    return !contacts[contactId].isVerified
+  })
 }
