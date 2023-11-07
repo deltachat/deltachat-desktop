@@ -741,6 +741,23 @@ const AddMemberChip = (props: {
   )
 }
 
+/**
+ * Returns true if all contacts of a group are verified, otherwise returns false.
+ */
+async function isGroupVerified(
+  accountId: number,
+  groupMembers: number[]
+): Promise<boolean> {
+  const contacts = await BackendRemote.rpc.getContactsByIds(
+    accountId,
+    groupMembers
+  )
+
+  return !groupMembers.some(contactId => {
+    return !contacts[contactId].isVerified
+  })
+}
+
 const useCreateGroup = (
   groupName: string,
   groupImage: string | null | undefined,
@@ -750,11 +767,12 @@ const useCreateGroup = (
   const accountId = selectedAccountId()
 
   const createGroup = useCallback(async () => {
+    const isVerified = await isGroupVerified(accountId, groupMembers)
+
     const chatId = await BackendRemote.rpc.createGroupChat(
       accountId,
       groupName,
-      // @TODO: Automatically determine if group is verified
-      false
+      isVerified
     )
 
     if (groupImage && groupImage !== '') {
