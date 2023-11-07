@@ -15,7 +15,7 @@ import { C } from '@deltachat/jsonrpc-client'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import {
   useContacts,
-  ContactList2,
+  ContactList,
   useContactsNew,
 } from '../contact/ContactList'
 import {
@@ -165,7 +165,7 @@ export default function CreateChat(props: {
             <Card>
               <div className='create-chat-contact-list-wrapper'>
                 {renderAddGroupIfNeeded()}
-                <ContactList2
+                <ContactList
                   contacts={contacts}
                   onClick={chooseContact}
                   onContactContextMenu={onContactContextMenu}
@@ -523,7 +523,7 @@ export function AddMemberInnerDialog({
             className='group-member-contact-list-wrapper'
             ref={contactListRef}
           >
-            <ContactList2
+            <ContactList
               contacts={Array.from(searchContacts.values())}
               onClick={() => {}}
               showCheckbox
@@ -700,7 +700,7 @@ function CreateGroupInner(props: {
               onClick={showAddMemberDialog}
               isBroadcast={false}
             />
-            <ContactList2
+            <ContactList
               contacts={groupContacts}
               onClick={() => {}}
               showRemove
@@ -849,7 +849,7 @@ function CreateBroadcastInner(props: {
               onClick={showAddMemberDialog}
               isBroadcast
             />
-            <ContactList2
+            <ContactList
               contacts={searchContacts.filter(
                 ({ id }) => broadcastRecipients.indexOf(id) !== -1
               )}

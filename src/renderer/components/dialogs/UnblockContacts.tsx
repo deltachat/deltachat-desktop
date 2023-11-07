@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import DeltaDialog, { DeltaDialogBody, DeltaDialogContent } from './DeltaDialog'
 
-import { ContactList2 } from '../contact/ContactList'
+import { ContactList } from '../contact/ContactList'
 import { ScreenContext } from '../../contexts'
 import { DialogProps } from './DialogController'
 import debounce from 'debounce'
@@ -65,7 +65,7 @@ export default function UnblockContacts(props: {
                 backgroundColor: 'var(--bp4DialogBgPrimary)',
               }}
             >
-              <ContactList2
+              <ContactList
                 contacts={blockedContacts}
                 onClick={onUnblockContact}
               />
