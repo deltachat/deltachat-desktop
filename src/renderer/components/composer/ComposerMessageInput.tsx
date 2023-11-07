@@ -1,5 +1,6 @@
 import React from 'react'
 import debounce from 'debounce'
+import moment from 'moment'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { getLogger } from '../../../shared/logger'
 
@@ -18,6 +19,7 @@ type ComposerMessageInputState = {
   chatId: number
   // error?:boolean|Error
   loadingDraft: boolean
+  recordedDuration: moment.Duration | null
 }
 
 export default class ComposerMessageInput extends React.Component<
@@ -28,14 +30,44 @@ export default class ComposerMessageInput extends React.Component<
   setCursorPosition: number | false
   textareaRef: React.RefObject<HTMLTextAreaElement>
   saveDraft: () => void
+  recorder: MediaRecorder | null = null
+  updateRecordedSecondsInterval: number | null = null
+  voiceData: Blob[] = []
+  gumError: any
   constructor(props: ComposerMessageInputProps) {
     super(props)
     this.state = {
       text: '',
       chatId: props.chatId,
       loadingDraft: true,
+      recordedDuration: null,
     }
-
+    navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then(stream => {
+      this.recorder = new MediaRecorder(stream, { mimeType: 'audio/aac' })
+      this.recorder.onstart = () => {
+        this.setState({ recordedDuration: moment.duration() })
+        this.updateRecordedSecondsInterval = window.setInterval(() => 
+          this.setState(prevState => {
+            let recordedDuration = prevState.recordedDuration?.clone() || moment.duration()
+            recordedDuration.add(1)
+            return { recordedDuration: recordedDuration }
+          })
+        , 1000)
+      }
+      this.recorder.ondataavailable = (evt: BlobEvent) => this.voiceData.push(evt.data)
+      this.recorder.onstop = () => {
+        let _duration = this.state.recordedDuration?.asSeconds() || 0
+        if (_duration === 0)
+          log.error('duration of voice is zero while the mediarecorder has stopped. this must not happen')
+        this.setState({ recordedDuration: null })
+        // send the voice message
+        console.log(this.voiceData)
+        this.voiceData = []
+      }
+    })
+    .catch((reason: any) => {
+      this.gumError = reason
+    })
     this.composerSize = 48
     this.setComposerSize = this.setComposerSize.bind(this)
     this.setCursorPosition = false
@@ -52,6 +84,9 @@ export default class ComposerMessageInput extends React.Component<
 
     this.textareaRef = React.createRef()
     this.focus = this.focus.bind(this)
+    this.isRecording = this.isRecording.bind(this)
+    this.startRecording = this.startRecording.bind(this)
+    this.stopRecording = this.stopRecording.bind(this)
   }
 
   componentDidMount() {
@@ -91,6 +126,24 @@ export default class ComposerMessageInput extends React.Component<
 
   clearText() {
     this.setState({ text: '' })
+  }
+  
+  startRecording() : any {
+    if (this.recorder) {
+      this.recorder.start()
+    } else {
+      return this.gumError
+    }
+  }
+
+  stopRecording() {
+    if (this.recorder?.state === 'recording') {
+      this.recorder?.stop()
+    }
+  }
+
+  isRecording() {
+    return this.recorder?.state
   }
 
   componentDidUpdate(

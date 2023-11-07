@@ -2,6 +2,7 @@ import React, {
   useRef,
   useState,
   useEffect,
+  useMemo,
   forwardRef,
   useLayoutEffect,
   useCallback,
@@ -88,27 +89,7 @@ const Composer = forwardRef<
 
   const chatId = selectedChat.id
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
-  const [recordedDuration, setRecordedDuration] = useState<moment.Duration | null>(null)
-  let updateRecordedSecondsInterval: number | 0 = 0
-  
-  let recorder: MediaRecorder | null = null
-  let data: Blob[] = []
-  navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then(stream => {
-    recorder = new MediaRecorder(stream)
-    recorder.onstart = () => {
-    data = []
-    }
-  
-    recorder.ondataavailable = (ev: BlobEvent) => {
-      data.push(ev.data);
-    }
-
-    recorder.onstop = () => {
-      clearInterval(updateRecordedSecondsInterval)
-    }
-  })
-
-  
+ 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
   const pickerButtonRef = useRef<HTMLDivElement>(null)
 
@@ -359,27 +340,17 @@ const Composer = forwardRef<
             selectedChat={selectedChat}
           />
           <div className='microphone-button'
-          onMouseDown={() => {
-                if (recorder) {
-                  recorder.start()
-                } else {
-                  // TODO: Show that the user hasn't got a mic
-                }
-                setRecordedDuration(moment.duration())
-                updateRecordedSecondsInterval = window.setInterval(() => 
-                  setRecordedDuration(recordedDuration ? recordedDuration.add({ seconds: 1 }) : moment.duration()), 1000)
-              }}
-              onMouseUp={() => {
-                setRecordedDuration(null)
-                recorder?.stop()
-              }}
-              aria-label={tx('voice_send')}>
-                <span />
+            onMouseDown={() => {
+              messageInputRef.current?.startRecording()
+            }}
+            onMouseUp={() => {
+              messageInputRef.current?.stopRecording()
+            }}
+            aria-label={tx('voice_send')}
+          >
+            <span />
           </div>
-          {recordedDuration !== null &&
-            <RecordingDuration duration={recordedDuration} />
-          }
-          {settingsStore && recordedDuration === null && (
+          {settingsStore &&  (
             <ComposerMessageInput
               ref={messageInputRef}
               enterKeySends={settingsStore?.desktopSettings.enterKeySends}
