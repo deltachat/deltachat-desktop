@@ -1,5 +1,13 @@
-import { C } from '@deltachat/jsonrpc-client'
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
+import { C, DcEventType } from '@deltachat/jsonrpc-client'
 import { Card, Classes, Elevation } from '@blueprintjs/core'
+
 import {
   DeltaDialogBase,
   DeltaDialogHeader,
@@ -20,8 +28,6 @@ import {
 import { DialogProps } from './DialogController'
 import ViewProfile from './ViewProfile'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
-import { useState, useContext, useEffect, useCallback, useMemo } from 'react'
-import React from 'react'
 import {
   Avatar,
   avatarInitial,
@@ -33,7 +39,6 @@ import { getLogger } from '../../../shared/logger'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { modifyGroup } from '../helpers/ChatMethods'
-import { DcEventType } from '@deltachat/jsonrpc-client'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import { useSettingsStore } from '../../stores/settings'
 
@@ -197,9 +202,7 @@ function ViewGroupInner(props: {
     })
   }
 
-  const listFlags = chat.isProtected
-    ? C.DC_GCL_VERIFIED_ONLY | C.DC_GCL_ADD_SELF
-    : C.DC_GCL_ADD_SELF
+  const listFlags = C.DC_GCL_ADD_SELF
 
   const showAddMemberDialog = () => {
     openDialog(AddMemberDialog, {
