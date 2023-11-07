@@ -27,6 +27,7 @@ import { confirmDialog } from '../message/messageFunctions'
 import { ProtectionBrokenDialog } from '../dialogs/ProtectionStatusDialog'
 import { T } from '@deltachat/jsonrpc-client'
 import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
+import moment from 'moment'
 
 const log = getLogger('renderer/composer')
 
@@ -87,8 +88,7 @@ const Composer = forwardRef<
 
   const chatId = selectedChat.id
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
-  const [recordingStartTime, setRecordingStartTime] = useState(-1)
-  const [recordedSeconds, setRecordedSeconds] = useState(0)
+  const [recordedDuration, setRecordedDuration] = useState<moment.Duration | null>(null)
   let updateRecordedSecondsInterval: number | 0 = 0
   
   let recorder: MediaRecorder | null = null
@@ -365,21 +365,21 @@ const Composer = forwardRef<
                 } else {
                   // TODO: Show that the user hasn't got a mic
                 }
-                setRecordingStartTime((new Date()).valueOf())
+                setRecordedDuration(moment.duration())
                 updateRecordedSecondsInterval = window.setInterval(() => 
-                  setRecordedSeconds((new Date()).valueOf() - recordingStartTime), 1000)
+                  setRecordedDuration(recordedDuration ? recordedDuration.add({ seconds: 1 }) : moment.duration()), 1000)
               }}
               onMouseUp={() => {
-                setRecordingStartTime(0)
+                setRecordedDuration(null)
                 recorder?.stop()
               }}
               aria-label={tx('voice_send')}>
                 <span />
           </div>
-          {recordingStartTime > 0 &&
-            <RecordingDuration seconds={recordedSeconds} />
+          {recordedDuration !== null &&
+            <RecordingDuration duration={recordedDuration} />
           }
-          {settingsStore && recordingStartTime <= 0 && (
+          {settingsStore && recordedDuration === null && (
             <ComposerMessageInput
               ref={messageInputRef}
               enterKeySends={settingsStore?.desktopSettings.enterKeySends}
@@ -618,18 +618,13 @@ export function useDraft(
 }
 
 
-function RecordingDuration({ seconds }: {
-  seconds: number
+function RecordingDuration({ duration }: {
+  duration: moment.Duration
 }) {
-  let minutes = 0
-  while (seconds >= 60) {
-    seconds /= 60
-    minutes++
-  }
   return (
     <div className='recording-duration message-input-area'>
       <p>
-        {minutes} : {seconds.toFixed(0)}
+        {duration.humanize()}
       </p>
     </div>
   )
