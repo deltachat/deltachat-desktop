@@ -15,7 +15,11 @@ import {
   DeltaDialogOkCancelFooter,
 } from './DeltaDialog'
 import ChatListItem from '../chat/ChatListItem'
-import { useContactSearch, AddMemberInnerDialog } from './CreateChat'
+import {
+  useContactSearch,
+  AddMemberInnerDialog,
+  areMembersVerified,
+} from './CreateChat'
 import { QrCodeShowQrInner } from './QrCode'
 import { selectChat } from '../helpers/ChatMethods'
 import { useThemeCssVar } from '../../ThemeManager'
@@ -115,22 +119,36 @@ export const useGroup = (chat: Type.FullChat) => {
   const [groupImage, setGroupImage] = useState(chat.profileImage)
 
   useEffect(() => {
-    ;(async () => {
-      modifyGroup(chat.id, groupName, groupImage, groupMembers)
-    })()
+    modifyGroup(chat.id, groupName, groupImage, groupMembers)
   }, [groupName, groupImage, groupMembers, chat.id])
 
   const removeGroupMember = (contactId: number) =>
     setGroupMembers(members => members.filter(mId => mId !== contactId))
-  const addGroupMember = (contactId: number) =>
-    setGroupMembers(members => [...members, contactId])
+
+  const addGroupMembers = async (newGroupMembers: number[]) => {
+    const accountId = selectedAccountId()
+
+    // We can only add verified contacts to a protected group
+    if (chat.isProtected) {
+      const membersVerified = await areMembersVerified(
+        accountId,
+        newGroupMembers
+      )
+      if (!membersVerified) {
+        // @TODO: Show dialogue here
+        return
+      }
+    }
+
+    setGroupMembers(members => [...members, ...newGroupMembers])
+  }
 
   return {
     groupName,
     setGroupName,
     groupMembers,
     setGroupMembers,
-    addGroupMember,
+    addGroupMembers,
     removeGroupMember,
     groupImage,
     setGroupImage,
@@ -169,7 +187,7 @@ function ViewGroupInner(props: {
     groupName,
     setGroupName,
     groupMembers,
-    addGroupMember,
+    addGroupMembers,
     removeGroupMember,
     groupImage,
     setGroupImage,
@@ -208,9 +226,7 @@ function ViewGroupInner(props: {
     openDialog(AddMemberDialog, {
       listFlags,
       groupMembers,
-      onOk: (members: number[]) => {
-        members.forEach(addGroupMember)
-      },
+      onOk: addGroupMembers,
       isBroadcast: isBroadcast,
     })
   }

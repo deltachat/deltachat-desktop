@@ -11,6 +11,7 @@ import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import { T } from '@deltachat/jsonrpc-client'
 import chatStore from '../../stores/chat'
 import { openLinkSafely } from './LinkConfirmation'
+import { areMembersVerified } from '../dialogs/CreateChat'
 
 const log = getLogger('renderer/message')
 
@@ -338,11 +339,14 @@ export async function modifyGroup(
 ) {
   const accountId = selectedAccountId()
   log.debug('action - modify group', { chatId, name, image, members })
-  await BackendRemote.rpc.setChatName(accountId, chatId, name)
+
   const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
   if (!chat) {
     throw new Error('chat is undefined, this should not happen')
   }
+
+  await BackendRemote.rpc.setChatName(accountId, chatId, name)
+
   if (typeof image !== 'undefined' && chat.profileImage !== image) {
     await BackendRemote.rpc.setChatProfileImage(
       accountId,

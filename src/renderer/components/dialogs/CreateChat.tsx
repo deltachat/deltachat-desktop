@@ -742,9 +742,9 @@ const AddMemberChip = (props: {
 }
 
 /**
- * Returns true if all contacts of a group are verified, otherwise returns false.
+ * Returns true if all contacts of a given list are verified, otherwise returns false.
  */
-async function isGroupVerified(
+export async function areMembersVerified(
   accountId: number,
   groupMembers: number[]
 ): Promise<boolean> {
@@ -767,7 +767,7 @@ const useCreateGroup = (
   const accountId = selectedAccountId()
 
   const createGroup = useCallback(async () => {
-    const isVerified = await isGroupVerified(accountId, groupMembers)
+    const isVerified = await areMembersVerified(accountId, groupMembers)
 
     const chatId = await BackendRemote.rpc.createGroupChat(
       accountId,
