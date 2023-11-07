@@ -52,14 +52,37 @@ import ConfirmationDialog from './ConfirmationDialog'
 
 type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
 
-export default function CreateChat(props: {
+type CreateChatProps = {
   isOpen: DialogProps['isOpen']
   onClose: DialogProps['onClose']
-}) {
+}
+
+export default function CreateChat(props: CreateChatProps) {
   const { isOpen, onClose } = props
+  const [viewMode, setViewMode] = useState<ViewMode>('main')
+
+  return (
+    <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
+      {viewMode == 'main' && <CreateChatMain {...{ setViewMode, onClose }} />}
+      {viewMode == 'createGroup' && (
+        <CreateGroup {...{ setViewMode, onClose }} />
+      )}
+      {viewMode == 'createBroadcastList' && (
+        <CreateBroadcastList {...{ setViewMode, onClose }} />
+      )}
+    </DeltaDialogBase>
+  )
+}
+
+type CreateChatMainProps = {
+  setViewMode: (newViewMode: ViewMode) => void
+  onClose: DialogProps['onClose']
+}
+
+function CreateChatMain(props: CreateChatMainProps) {
+  const { setViewMode, onClose } = props
   const tx = useTranslationFunction()
   const { userFeedback, openDialog } = useContext(ScreenContext)
-  const [viewMode, setViewMode] = useState<ViewMode>('main')
   const accountId = selectedAccountId()
 
   const [{ contacts, queryStrIsValidEmail }, updateContacts] = useContactsNew(
@@ -148,48 +171,277 @@ export default function CreateChat(props: {
   }
 
   return (
-    <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
-      {viewMode.startsWith('main') && (
-        <>
-          <DeltaDialogHeader>
-            <input
-              className='search-input'
-              onChange={onSearchChange}
-              value={queryStr}
-              placeholder={tx('contacts_enter_name_or_email')}
-              autoFocus
-              spellCheck={false}
+    <>
+      <DeltaDialogHeader>
+        <input
+          className='search-input'
+          onChange={onSearchChange}
+          value={queryStr}
+          placeholder={tx('contacts_enter_name_or_email')}
+          autoFocus
+          spellCheck={false}
+        />
+      </DeltaDialogHeader>
+      <DeltaDialogBody>
+        <Card>
+          <div className='create-chat-contact-list-wrapper'>
+            {renderAddGroupIfNeeded()}
+            <ContactList
+              contacts={contacts}
+              onClick={chooseContact}
+              onContactContextMenu={onContactContextMenu}
             />
-          </DeltaDialogHeader>
-          <DeltaDialogBody>
-            <Card>
-              <div className='create-chat-contact-list-wrapper'>
-                {renderAddGroupIfNeeded()}
-                <ContactList
-                  contacts={contacts}
-                  onClick={chooseContact}
-                  onContactContextMenu={onContactContextMenu}
-                />
-                {renderAddContactIfNeeded()}
-              </div>
-            </Card>
-          </DeltaDialogBody>
-          <DeltaDialogFooter>
-            <DeltaDialogFooterActions>
-              <p className={'delta-button bold primary'} onClick={onClose}>
-                {tx('close')}
-              </p>
-            </DeltaDialogFooterActions>
-          </DeltaDialogFooter>
-        </>
-      )}
-      {viewMode.startsWith('createGroup') && (
-        <CreateGroupInner {...{ viewMode, setViewMode, onClose }} />
-      )}
-      {viewMode.startsWith('createBroadcastList') && (
-        <CreateBroadcastInner {...{ viewMode, setViewMode, onClose }} />
-      )}
-    </DeltaDialogBase>
+            {renderAddContactIfNeeded()}
+          </div>
+        </Card>
+      </DeltaDialogBody>
+      <DeltaDialogFooter>
+        <DeltaDialogFooterActions>
+          <p className={'delta-button bold primary'} onClick={onClose}>
+            {tx('close')}
+          </p>
+        </DeltaDialogFooterActions>
+      </DeltaDialogFooter>
+    </>
+  )
+}
+
+type CreateGroupProps = {
+  setViewMode: (newViewMode: ViewMode) => void
+  onClose: DialogProps['onClose']
+  isVerified?: boolean
+}
+
+function CreateGroup(props: CreateGroupProps) {
+  const { openDialog } = useContext(ScreenContext)
+  const { setViewMode, onClose, isVerified } = props
+  const tx = useTranslationFunction()
+  const accountId = selectedAccountId()
+
+  const [groupName, setGroupName] = useState('')
+  const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage()
+  const [groupMembers, removeGroupMember, addGroupMember] = useGroupMembers([1])
+  const [
+    _groupId,
+    _lazilyCreateOrUpdateGroup,
+    finishCreateGroup,
+  ] = useCreateGroup(
+    Boolean(isVerified),
+    groupName,
+    groupImage,
+    groupMembers,
+    onClose
+  )
+
+  const [errorMissingGroupName, setErrorMissingGroupName] = useState(false)
+  const [groupContacts, setGroupContacts] = useState<Type.Contact[]>([])
+
+  useMemo(() => {
+    BackendRemote.rpc
+      .getContactsByIds(accountId, groupMembers)
+      .then(records => {
+        setGroupContacts(Object.entries(records).map(([_, contact]) => contact))
+      })
+  }, [accountId, groupMembers])
+
+  const showAddMemberDialog = () => {
+    const listFlags = isVerified
+      ? C.DC_GCL_VERIFIED_ONLY | C.DC_GCL_ADD_SELF
+      : C.DC_GCL_ADD_SELF
+
+    openDialog(AddMemberDialog, {
+      listFlags,
+      groupMembers,
+      onOk: (members: number[]) => {
+        members.forEach(contactId => addGroupMember({ id: contactId }))
+      },
+      isBroadcast: false,
+    })
+  }
+
+  return (
+    <>
+      <DeltaDialogHeader title={tx('menu_new_group')} />
+      <div className={Classes.DIALOG_BODY}>
+        <Card>
+          <ChatSettingsSetNameAndProfileImage
+            groupImage={groupImage}
+            onSetGroupImage={onSetGroupImage}
+            onUnsetGroupImage={onUnsetGroupImage}
+            chatName={groupName}
+            setChatName={setGroupName}
+            errorMissingChatName={errorMissingGroupName}
+            setErrorMissingChatName={setErrorMissingGroupName}
+            type='group'
+          />
+          <div className='group-separator'>
+            {tx(
+              'n_members',
+              groupMembers.length.toString(),
+              groupMembers.length <= 1 ? 'one' : 'other'
+            )}
+          </div>
+          <div className='group-member-contact-list-wrapper'>
+            <PseudoListItemAddMember
+              onClick={showAddMemberDialog}
+              isBroadcast={false}
+            />
+            <ContactList
+              contacts={groupContacts}
+              onClick={() => {}}
+              showRemove
+              onRemoveClick={c => {
+                removeGroupMember(c)
+              }}
+            />
+          </div>
+        </Card>
+      </div>
+      <DeltaDialogFooter>
+        <DeltaDialogFooterActions>
+          <p
+            className='delta-button primary bold'
+            style={{ marginRight: '10px' }}
+            onClick={() => setViewMode('main')}
+          >
+            {tx('cancel')}
+          </p>
+          <p
+            className='delta-button primary bold'
+            onClick={() => {
+              if (groupName === '') {
+                setErrorMissingGroupName(true)
+                return
+              }
+              finishCreateGroup()
+            }}
+          >
+            {tx('group_create_button')}
+          </p>
+        </DeltaDialogFooterActions>
+      </DeltaDialogFooter>
+    </>
+  )
+}
+
+type CreateBroadcastListProps = {
+  setViewMode: (newViewMode: ViewMode) => void
+  onClose: DialogProps['onClose']
+}
+
+function CreateBroadcastList(props: CreateBroadcastListProps) {
+  const { openDialog } = useContext(ScreenContext)
+  const { setViewMode, onClose } = props
+  const tx = useTranslationFunction()
+
+  const [broadcastName, setBroadcastName] = useState<string>('')
+  const [
+    broadcastRecipients,
+    removeBroadcastRecipient,
+    addBroadcastRecipient,
+  ] = useGroupMembers([])
+  const finishCreateBroadcast = useCreateBroadcast(
+    broadcastRecipients,
+    broadcastName,
+    onClose
+  )
+
+  const searchContacts = useContacts(C.DC_GCL_ADD_SELF, '')[0]
+  const [errorMissingChatName, setErrorMissingChatName] = useState<boolean>(
+    false
+  )
+
+  const showAddMemberDialog = () => {
+    const listFlags = C.DC_GCL_ADD_SELF
+
+    openDialog(AddMemberDialog, {
+      listFlags,
+      groupMembers: broadcastRecipients,
+      onOk: (recipients: number[]) =>
+        recipients.forEach(contactId =>
+          addBroadcastRecipient({ id: contactId })
+        ),
+      isBroadcast: true,
+    })
+  }
+
+  return (
+    <>
+      <DeltaDialogHeader title={tx('new_broadcast_list')} />
+      <div className={Classes.DIALOG_BODY}>
+        <Card style={{ paddingTop: '0px' }}>
+          <div className='broadcast-list-hint'>
+            <p>{tx('chat_new_broadcast_hint')}</p>
+            <p
+              style={{
+                marginTop: '3px',
+                color: 'var(--colorDanger)',
+                fontWeight: 'bold',
+              }}
+            >
+              ⚠️ {tx('broadcast_list_warning')}
+            </p>
+          </div>
+          <br />
+          <ChatSettingsSetNameAndProfileImage
+            chatName={broadcastName}
+            setChatName={setBroadcastName}
+            errorMissingChatName={errorMissingChatName}
+            setErrorMissingChatName={setErrorMissingChatName}
+            type='broadcast'
+          />
+          <br />
+          {broadcastRecipients.length > 0 && (
+            <div className='group-separator'>
+              {tx(
+                'n_recipients',
+                broadcastRecipients.length.toString(),
+                broadcastRecipients.length == 1 ? 'one' : 'other'
+              )}
+            </div>
+          )}
+          <div className='group-member-contact-list-wrapper'>
+            <PseudoListItemAddMember
+              onClick={showAddMemberDialog}
+              isBroadcast
+            />
+            <ContactList
+              contacts={searchContacts.filter(
+                ({ id }) => broadcastRecipients.indexOf(id) !== -1
+              )}
+              onClick={() => {}}
+              showRemove
+              onRemoveClick={c => {
+                removeBroadcastRecipient(c)
+              }}
+            />
+          </div>
+        </Card>
+      </div>
+      <DeltaDialogFooter>
+        <DeltaDialogFooterActions>
+          <p
+            className='delta-button primary bold'
+            style={{ marginRight: '10px' }}
+            onClick={() => setViewMode('main')}
+          >
+            {tx('cancel')}
+          </p>
+          <p
+            className='delta-button primary bold'
+            onClick={() => {
+              if (broadcastName === '') {
+                setErrorMissingChatName(true)
+                return
+              }
+              finishCreateBroadcast()
+            }}
+          >
+            {tx('create')}
+          </p>
+        </DeltaDialogFooterActions>
+      </DeltaDialogFooter>
+    </>
   )
 }
 
@@ -621,123 +873,6 @@ const useCreateGroup = (
   ]
 }
 
-function CreateGroupInner(props: {
-  viewMode: ViewMode
-  setViewMode: (newViewMode: ViewMode) => void
-  onClose: DialogProps['onClose']
-  isVerified?: boolean
-}) {
-  const { openDialog } = useContext(ScreenContext)
-  const { setViewMode, onClose, isVerified } = props
-  const tx = useTranslationFunction()
-  const accountId = selectedAccountId()
-
-  const [groupName, setGroupName] = useState('')
-  const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage()
-  const [groupMembers, removeGroupMember, addGroupMember] = useGroupMembers([1])
-  const [
-    _groupId,
-    _lazilyCreateOrUpdateGroup,
-    finishCreateGroup,
-  ] = useCreateGroup(
-    Boolean(isVerified),
-    groupName,
-    groupImage,
-    groupMembers,
-    onClose
-  )
-
-  const [errorMissingGroupName, setErrorMissingGroupName] = useState(false)
-  const [groupContacts, setGroupContacts] = useState<Type.Contact[]>([])
-
-  useMemo(() => {
-    BackendRemote.rpc
-      .getContactsByIds(accountId, groupMembers)
-      .then(records => {
-        setGroupContacts(Object.entries(records).map(([_, contact]) => contact))
-      })
-  }, [accountId, groupMembers])
-
-  const showAddMemberDialog = () => {
-    const listFlags = isVerified
-      ? C.DC_GCL_VERIFIED_ONLY | C.DC_GCL_ADD_SELF
-      : C.DC_GCL_ADD_SELF
-
-    openDialog(AddMemberDialog, {
-      listFlags,
-      groupMembers,
-      onOk: (members: number[]) => {
-        members.forEach(contactId => addGroupMember({ id: contactId }))
-      },
-      isBroadcast: false,
-    })
-  }
-
-  return (
-    <>
-      <DeltaDialogHeader title={tx('menu_new_group')} />
-      <div className={Classes.DIALOG_BODY}>
-        <Card>
-          <ChatSettingsSetNameAndProfileImage
-            groupImage={groupImage}
-            onSetGroupImage={onSetGroupImage}
-            onUnsetGroupImage={onUnsetGroupImage}
-            chatName={groupName}
-            setChatName={setGroupName}
-            errorMissingChatName={errorMissingGroupName}
-            setErrorMissingChatName={setErrorMissingGroupName}
-            type='group'
-          />
-          <div className='group-separator'>
-            {tx(
-              'n_members',
-              groupMembers.length.toString(),
-              groupMembers.length <= 1 ? 'one' : 'other'
-            )}
-          </div>
-          <div className='group-member-contact-list-wrapper'>
-            <PseudoListItemAddMember
-              onClick={showAddMemberDialog}
-              isBroadcast={false}
-            />
-            <ContactList
-              contacts={groupContacts}
-              onClick={() => {}}
-              showRemove
-              onRemoveClick={c => {
-                removeGroupMember(c)
-              }}
-            />
-          </div>
-        </Card>
-      </div>
-      <DeltaDialogFooter>
-        <DeltaDialogFooterActions>
-          <p
-            className='delta-button primary bold'
-            style={{ marginRight: '10px' }}
-            onClick={() => setViewMode('main')}
-          >
-            {tx('cancel')}
-          </p>
-          <p
-            className='delta-button primary bold'
-            onClick={() => {
-              if (groupName === '') {
-                setErrorMissingGroupName(true)
-                return
-              }
-              finishCreateGroup()
-            }}
-          >
-            {tx('group_create_button')}
-          </p>
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
-    </>
-  )
-}
-
 const useCreateBroadcast = (
   broadcastRecipients: number[],
   name: string,
@@ -768,123 +903,4 @@ const useCreateBroadcast = (
     selectChat(bId)
   }
   return finishCreateBroadcast as typeof finishCreateBroadcast
-}
-
-function CreateBroadcastInner(props: {
-  setViewMode: (newViewMode: ViewMode) => void
-  onClose: DialogProps['onClose']
-}) {
-  const { openDialog } = useContext(ScreenContext)
-  const { setViewMode, onClose } = props
-  const tx = useTranslationFunction()
-
-  const [broadcastName, setBroadcastName] = useState<string>('')
-  const [
-    broadcastRecipients,
-    removeBroadcastRecipient,
-    addBroadcastRecipient,
-  ] = useGroupMembers([])
-  const finishCreateBroadcast = useCreateBroadcast(
-    broadcastRecipients,
-    broadcastName,
-    onClose
-  )
-
-  const searchContacts = useContacts(C.DC_GCL_ADD_SELF, '')[0]
-  const [errorMissingChatName, setErrorMissingChatName] = useState<boolean>(
-    false
-  )
-
-  const showAddMemberDialog = () => {
-    const listFlags = C.DC_GCL_ADD_SELF
-
-    openDialog(AddMemberDialog, {
-      listFlags,
-      groupMembers: broadcastRecipients,
-      onOk: (recipients: number[]) =>
-        recipients.forEach(contactId =>
-          addBroadcastRecipient({ id: contactId })
-        ),
-      isBroadcast: true,
-    })
-  }
-
-  return (
-    <>
-      <DeltaDialogHeader title={tx('new_broadcast_list')} />
-      <div className={Classes.DIALOG_BODY}>
-        <Card style={{ paddingTop: '0px' }}>
-          <div className='broadcast-list-hint'>
-            <p>{tx('chat_new_broadcast_hint')}</p>
-            <p
-              style={{
-                marginTop: '3px',
-                color: 'var(--colorDanger)',
-                fontWeight: 'bold',
-              }}
-            >
-              ⚠️ {tx('broadcast_list_warning')}
-            </p>
-          </div>
-          <br />
-          <ChatSettingsSetNameAndProfileImage
-            chatName={broadcastName}
-            setChatName={setBroadcastName}
-            errorMissingChatName={errorMissingChatName}
-            setErrorMissingChatName={setErrorMissingChatName}
-            type='broadcast'
-          />
-          <br />
-          {broadcastRecipients.length > 0 && (
-            <div className='group-separator'>
-              {tx(
-                'n_recipients',
-                broadcastRecipients.length.toString(),
-                broadcastRecipients.length == 1 ? 'one' : 'other'
-              )}
-            </div>
-          )}
-          <div className='group-member-contact-list-wrapper'>
-            <PseudoListItemAddMember
-              onClick={showAddMemberDialog}
-              isBroadcast
-            />
-            <ContactList
-              contacts={searchContacts.filter(
-                ({ id }) => broadcastRecipients.indexOf(id) !== -1
-              )}
-              onClick={() => {}}
-              showRemove
-              onRemoveClick={c => {
-                removeBroadcastRecipient(c)
-              }}
-            />
-          </div>
-        </Card>
-      </div>
-      <DeltaDialogFooter>
-        <DeltaDialogFooterActions>
-          <p
-            className='delta-button primary bold'
-            style={{ marginRight: '10px' }}
-            onClick={() => setViewMode('main')}
-          >
-            {tx('cancel')}
-          </p>
-          <p
-            className='delta-button primary bold'
-            onClick={() => {
-              if (broadcastName === '') {
-                setErrorMissingChatName(true)
-                return
-              }
-              finishCreateBroadcast()
-            }}
-          >
-            {tx('create')}
-          </p>
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
-    </>
-  )
 }
