@@ -364,9 +364,13 @@ div.group-image-wrapper div.group-image-edit-button {
   top: -4px;
 }
 
-.contact-list-item#addmember > .contact > .avatar > .content,
-.contact-list-item#action-go-to-login > .contact > .avatar > .content,
-.contact-list-item#newgroup > .contact > .avatar > .content,
+.contact-list-item#addmember,
+.contact-list-item#action-go-to-login,
+.contact-list-item#newgroup {
+  & > .contact > .avatar > .content {
+    color: white;
+  }
+}
 
 .chat-list .search-result-divider {
   background: transparent;
