@@ -209,12 +209,11 @@ function CreateChatMain(props: CreateChatMainProps) {
 type CreateGroupProps = {
   setViewMode: (newViewMode: ViewMode) => void
   onClose: DialogProps['onClose']
-  isVerified?: boolean
 }
 
 function CreateGroup(props: CreateGroupProps) {
   const { openDialog } = useContext(ScreenContext)
-  const { setViewMode, onClose, isVerified } = props
+  const { setViewMode, onClose } = props
   const tx = useTranslationFunction()
   const accountId = selectedAccountId()
 
@@ -222,7 +221,6 @@ function CreateGroup(props: CreateGroupProps) {
   const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage()
   const [groupMembers, removeGroupMember, addGroupMember] = useGroupMembers([1])
   const finishCreateGroup = useCreateGroup(
-    Boolean(isVerified),
     groupName,
     groupImage,
     groupMembers,
@@ -241,12 +239,8 @@ function CreateGroup(props: CreateGroupProps) {
   }, [accountId, groupMembers])
 
   const showAddMemberDialog = () => {
-    const listFlags = isVerified
-      ? C.DC_GCL_VERIFIED_ONLY | C.DC_GCL_ADD_SELF
-      : C.DC_GCL_ADD_SELF
-
     openDialog(AddMemberDialog, {
-      listFlags,
+      listFlags: C.DC_GCL_ADD_SELF,
       groupMembers,
       onOk: (members: number[]) => {
         members.forEach(contactId => addGroupMember({ id: contactId }))
@@ -742,7 +736,6 @@ const AddMemberChip = (props: {
 }
 
 const useCreateGroup = (
-  verified: boolean,
   groupName: string,
   groupImage: string | null | undefined,
   groupMembers: number[],
@@ -754,7 +747,8 @@ const useCreateGroup = (
     const chatId = await BackendRemote.rpc.createGroupChat(
       accountId,
       groupName,
-      verified
+      // @TODO: Automatically determine if group is verified
+      false
     )
 
     if (groupImage && groupImage !== '') {
@@ -768,7 +762,7 @@ const useCreateGroup = (
     }
 
     return chatId
-  }, [accountId, groupImage, groupMembers, groupName, verified])
+  }, [accountId, groupImage, groupMembers, groupName])
 
   return async () => {
     if (groupName === '') {
