@@ -1,4 +1,5 @@
 import { C } from '@deltachat/jsonrpc-client'
+
 import { getLogger } from '../shared/logger'
 import { BackendRemote } from './backend-com'
 
@@ -8,6 +9,7 @@ export async function updateCoreStrings() {
   log.info('loading core translations')
   const tx = window.static_translate
   const strings: { [key: number]: string } = {}
+
   // TODO: Check if we need the uncommented core translations
   strings[C.DC_STR_NOMESSAGES] = tx('chat_no_messages')
   strings[C.DC_STR_SELF] = tx('self')
@@ -32,6 +34,7 @@ export async function updateCoreStrings() {
   strings[C.DC_STR_AC_SETUP_MSG_BODY] = tx('autocrypt_asm_general_body')
   strings[C.DC_STR_CANNOT_LOGIN] = tx('login_error_cannot_login')
   strings[C.DC_STR_DEVICE_MESSAGES] = tx('device_talk')
+  strings[C.DC_STR_NEW_GROUP_SEND_FIRST_MESSAGE] = tx('chat_new_group_hint')
   strings[C.DC_STR_SAVED_MESSAGES] = tx('saved_messages')
   strings[C.DC_STR_CONTACT_VERIFIED] = tx('contact_verified')
   strings[C.DC_STR_CONTACT_NOT_VERIFIED] = tx('contact_not_verified')
@@ -50,7 +53,6 @@ export async function updateCoreStrings() {
   strings[C.DC_STR_CONFIGURATION_FAILED] = tx('configuration_failed_with_error')
   strings[C.DC_STR_REPLY_NOUN] = tx('reply_noun')
   strings[C.DC_STR_FORWARDED] = tx('forwarded')
-
   //strings[C.DC_STR_MSGLOCATIONENABLED] = tx('')
   //strings[C.DC_STR_MSGLOCATIONDISABLED] = tx('')
   strings[C.DC_STR_LOCATION] = tx('location')
@@ -88,7 +90,6 @@ export async function updateCoreStrings() {
   strings[C.DC_STR_NOT_CONNECTED] = tx('connectivity_not_connected')
   strings[C.DC_STR_AEAP_ADDR_CHANGED] = tx('aeap_addr_changed')
   strings[C.DC_STR_AEAP_EXPLANATION_AND_LINK] = tx('aeap_explanation')
-
   strings[C.DC_STR_GROUP_NAME_CHANGED_BY_YOU] = tx('group_name_changed_by_you')
   strings[C.DC_STR_GROUP_NAME_CHANGED_BY_OTHER] = tx(
     'group_name_changed_by_other'
@@ -179,7 +180,6 @@ export async function updateCoreStrings() {
   strings[C.DC_STR_CHAT_PROTECTION_DISABLED] = tx(
     'chat_protection_broken_tap_to_learn_more'
   )
-
   strings[C.DC_STR_BACKUP_TRANSFER_QR] = tx('multidevice_qr_subtitle')
 
   await BackendRemote.rpc.setStockStrings(strings)
