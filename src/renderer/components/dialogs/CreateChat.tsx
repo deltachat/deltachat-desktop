@@ -1,13 +1,13 @@
 import React, {
-  Fragment,
-  useState,
-  useContext,
-  useRef,
-  useLayoutEffect,
-  useEffect,
-  useMemo,
   ChangeEvent,
+  Fragment,
   useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
 } from 'react'
 import { Card, Classes } from '@blueprintjs/core'
 import { C } from '@deltachat/jsonrpc-client'
@@ -221,11 +221,7 @@ function CreateGroup(props: CreateGroupProps) {
   const [groupName, setGroupName] = useState('')
   const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage()
   const [groupMembers, removeGroupMember, addGroupMember] = useGroupMembers([1])
-  const [
-    _groupId,
-    _lazilyCreateOrUpdateGroup,
-    finishCreateGroup,
-  ] = useCreateGroup(
+  const finishCreateGroup = useCreateGroup(
     Boolean(isVerified),
     groupName,
     groupImage,
@@ -833,44 +829,37 @@ const useCreateGroup = (
   groupMembers: number[],
   onClose: DialogProps['onClose']
 ) => {
-  const [groupId, setGroupId] = useState(-1)
   const accountId = selectedAccountId()
 
-  const lazilyCreateOrUpdateGroup = async (finishing: boolean) => {
-    let gId = groupId
-    if (gId === -1) {
-      gId = await BackendRemote.rpc.createGroupChat(
-        accountId,
-        groupName,
-        verified
-      )
-      setGroupId(gId)
-    } else {
-      await BackendRemote.rpc.setChatName(accountId, gId, groupName)
+  const createGroup = useCallback(async () => {
+    const chatId = await BackendRemote.rpc.createGroupChat(
+      accountId,
+      groupName,
+      verified
+    )
+
+    if (groupImage && groupImage !== '') {
+      await BackendRemote.rpc.setChatProfileImage(accountId, chatId, groupImage)
     }
-    if (finishing === true) {
-      if (groupImage && groupImage !== '') {
-        await BackendRemote.rpc.setChatProfileImage(accountId, gId, groupImage)
-      }
-      for (const contactId of groupMembers) {
-        if (contactId !== C.DC_CONTACT_ID_SELF) {
-          await BackendRemote.rpc.addContactToChat(accountId, gId, contactId)
-        }
+
+    for (const contactId of groupMembers) {
+      if (contactId !== C.DC_CONTACT_ID_SELF) {
+        await BackendRemote.rpc.addContactToChat(accountId, chatId, contactId)
       }
     }
-    return gId
-  }
-  const finishCreateGroup = async () => {
-    if (groupName === '') return
-    const gId = await lazilyCreateOrUpdateGroup(true)
+
+    return chatId
+  }, [accountId, groupImage, groupMembers, groupName, verified])
+
+  return async () => {
+    if (groupName === '') {
+      return
+    }
+
+    const chatId = await createGroup()
     onClose()
-    selectChat(gId)
+    selectChat(chatId)
   }
-  return [groupId, lazilyCreateOrUpdateGroup, finishCreateGroup] as [
-    number,
-    typeof lazilyCreateOrUpdateGroup,
-    typeof finishCreateGroup
-  ]
 }
 
 const useCreateBroadcast = (
