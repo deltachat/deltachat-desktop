@@ -11,7 +11,7 @@ import { useContactSearch, AddMemberInnerDialog } from './CreateChat'
 import { QrCodeShowQrInner } from './QrCode'
 import { selectChat } from '../helpers/ChatMethods'
 import { useThemeCssVar } from '../../ThemeManager'
-import { ContactList2, useContactsMap } from '../contact/ContactList'
+import { ContactList, useContactsMap } from '../contact/ContactList'
 import { useLogicVirtualChatList, ChatListPart } from '../chat/ChatList'
 import {
   PseudoListItemShowQrCode,
@@ -321,7 +321,7 @@ function ViewGroupInner(props: {
                     )}
                   </>
                 )}
-                <ContactList2
+                <ContactList
                   contacts={chat.contacts}
                   showRemove={!chatDisabled}
                   onClick={contact => {

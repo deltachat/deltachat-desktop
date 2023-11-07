@@ -6,7 +6,7 @@ import { debounceWithInit } from '../chat/ChatListHelpers'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 
-export function ContactList2(props: {
+export function ContactList(props: {
   contacts: Type.Contact[]
   onClick?: (contact: Type.Contact) => void
   showCheckbox?: boolean
