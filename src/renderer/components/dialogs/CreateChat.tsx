@@ -38,6 +38,7 @@ import { GroupImage } from './Edit-Group-Image'
 import { DialogProps } from './DialogController'
 import { runtime } from '../../runtime'
 import {
+  areAllContactsVerified,
   createChatByContactIdAndSelectIt,
   selectChat,
 } from '../helpers/ChatMethods'
@@ -741,23 +742,6 @@ const AddMemberChip = (props: {
   )
 }
 
-/**
- * Returns true if all contacts of a given list are verified, otherwise returns false.
- */
-export async function areMembersVerified(
-  accountId: number,
-  groupMembers: number[]
-): Promise<boolean> {
-  const contacts = await BackendRemote.rpc.getContactsByIds(
-    accountId,
-    groupMembers
-  )
-
-  return !groupMembers.some(contactId => {
-    return !contacts[contactId].isVerified
-  })
-}
-
 const useCreateGroup = (
   groupName: string,
   groupImage: string | null | undefined,
@@ -767,7 +751,7 @@ const useCreateGroup = (
   const accountId = selectedAccountId()
 
   const createGroup = useCallback(async () => {
-    const isVerified = await areMembersVerified(accountId, groupMembers)
+    const isVerified = await areAllContactsVerified(accountId, groupMembers)
 
     const chatId = await BackendRemote.rpc.createGroupChat(
       accountId,

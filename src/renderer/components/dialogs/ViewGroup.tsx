@@ -15,13 +15,9 @@ import {
   DeltaDialogOkCancelFooter,
 } from './DeltaDialog'
 import ChatListItem from '../chat/ChatListItem'
-import {
-  useContactSearch,
-  AddMemberInnerDialog,
-  areMembersVerified,
-} from './CreateChat'
+import { useContactSearch, AddMemberInnerDialog } from './CreateChat'
 import { QrCodeShowQrInner } from './QrCode'
-import { selectChat } from '../helpers/ChatMethods'
+import { areAllContactsVerified, selectChat } from '../helpers/ChatMethods'
 import { useThemeCssVar } from '../../ThemeManager'
 import { ContactList, useContactsMap } from '../contact/ContactList'
 import { useLogicVirtualChatList, ChatListPart } from '../chat/ChatList'
@@ -130,7 +126,7 @@ export const useGroup = (chat: Type.FullChat) => {
 
     // We can only add verified contacts to a protected group
     if (chat.isProtected) {
-      const membersVerified = await areMembersVerified(
+      const membersVerified = await areAllContactsVerified(
         accountId,
         newGroupMembers
       )
