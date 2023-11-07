@@ -10,7 +10,7 @@ import React, {
   useState,
 } from 'react'
 import { Card, Classes } from '@blueprintjs/core'
-import { C } from '@deltachat/jsonrpc-client'
+import { T, C } from '@deltachat/jsonrpc-client'
 
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import {
@@ -219,7 +219,9 @@ function CreateGroup(props: CreateGroupProps) {
 
   const [groupName, setGroupName] = useState('')
   const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage()
-  const [groupMembers, removeGroupMember, addGroupMember] = useGroupMembers([1])
+  const [groupMembers, removeGroupMember, addGroupMember] = useGroupMembers([
+    C.DC_CONTACT_ID_SELF,
+  ])
   const finishCreateGroup = useCreateGroup(
     groupName,
     groupImage,
@@ -552,7 +554,11 @@ export function AddMemberInnerDialog({
   const tx = window.static_translate
 
   const _onOk = () => {
-    onOk(contactIdsToAdd.map(c => c.id))
+    if (contactIdsToAdd.length === 0) {
+      return
+    }
+
+    onOk(contactIdsToAdd.map(member => member.id))
   }
 
   const _onCancel = async () => {
@@ -703,7 +709,7 @@ export function AddMemberInnerDialog({
       </DeltaDialogBody>
       <DeltaDialogOkCancelFooter
         onCancel={_onCancel}
-        onOk={contactIdsToAdd.length === 0 ? () => {} : _onOk}
+        onOk={_onOk}
         disableOK={contactIdsToAdd.length === 0 ? true : false}
       />
     </>
@@ -854,19 +860,24 @@ export function useGroupImage(image?: string | null) {
   ]
 }
 
-export function useGroupMembers(initialMemebers: number[]) {
-  const [groupMembers, setGroupMembers] = useState(initialMemebers)
+type ContactWithId = T.Contact | { id: number }
 
-  const removeGroupMember = ({ id }: Type.Contact | { id: number }) =>
-    id !== 1 &&
+export function useGroupMembers(initialMembers: number[]) {
+  const [groupMembers, setGroupMembers] = useState(initialMembers)
+
+  const removeGroupMember = ({ id }: ContactWithId) =>
+    id !== C.DC_CONTACT_ID_SELF &&
     setGroupMembers(prevMembers => prevMembers.filter(gId => gId !== id))
-  const addGroupMember = ({ id }: Type.Contact | { id: number }) =>
+
+  const addGroupMember = ({ id }: ContactWithId) =>
     setGroupMembers(prevMembers => [...prevMembers, id])
-  const addRemoveGroupMember = ({ id }: Type.Contact | { id: number }) => {
-    groupMembers.indexOf(id) !== -1
+
+  const addRemoveGroupMember = ({ id }: ContactWithId) => {
+    groupMembers.includes(id)
       ? removeGroupMember({ id })
       : addGroupMember({ id })
   }
+
   const addGroupMembers = (ids: number[]) => {
     setGroupMembers(prevMembers => {
       return [...prevMembers, ...ids]
