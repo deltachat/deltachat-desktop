@@ -801,34 +801,30 @@ const useCreateGroup = (
 
 const useCreateBroadcast = (
   broadcastRecipients: number[],
-  name: string,
+  groupName: string,
   onClose: DialogProps['onClose']
 ) => {
-  const [broadcastId, setBroadcastId] = useState(-1)
   const accountId = selectedAccountId()
 
-  const lazilyCreateOrUpdateBroadcast = async (finishing: boolean) => {
-    let bId = broadcastId
-    if (bId === -1) {
-      bId = await BackendRemote.rpc.createBroadcastList(accountId)
-      setBroadcastId(bId)
-    }
-    if (finishing === true) {
-      for (const contactId of broadcastRecipients) {
-        if (contactId !== C.DC_CONTACT_ID_SELF) {
-          await BackendRemote.rpc.addContactToChat(accountId, bId, contactId)
-        }
+  const createBroadcastList = async () => {
+    const chatId = await BackendRemote.rpc.createBroadcastList(accountId)
+
+    for (const contactId of broadcastRecipients) {
+      if (contactId !== C.DC_CONTACT_ID_SELF) {
+        await BackendRemote.rpc.addContactToChat(accountId, chatId, contactId)
       }
-      await BackendRemote.rpc.setChatName(accountId, bId, name)
     }
-    return bId
+
+    await BackendRemote.rpc.setChatName(accountId, chatId, groupName)
+
+    return chatId
   }
-  const finishCreateBroadcast = async () => {
-    const bId = await lazilyCreateOrUpdateBroadcast(true)
+
+  return async () => {
+    const chatId = await createBroadcastList()
     onClose()
-    selectChat(bId)
+    selectChat(chatId)
   }
-  return finishCreateBroadcast as typeof finishCreateBroadcast
 }
 
 export function useContactSearch(
