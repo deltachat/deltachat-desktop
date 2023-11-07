@@ -20,7 +20,6 @@ import {
 } from '../contact/ContactList'
 import {
   PseudoListItem,
-  PseudoListItemShowQrCode,
   PseudoListItemAddMember,
   PseudoListItemAddContact,
 } from '../helpers/PseudoListItem'
@@ -37,7 +36,6 @@ import {
 import { GroupImage } from './Edit-Group-Image'
 
 import { DialogProps } from './DialogController'
-import { QrCodeShowQrInner } from './QrCode'
 import { runtime } from '../../runtime'
 import {
   createChatByContactIdAndSelectIt,
@@ -52,6 +50,8 @@ import { selectedAccountId } from '../../ScreenController'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import ConfirmationDialog from './ConfirmationDialog'
 
+type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
+
 export default function CreateChat(props: {
   isOpen: DialogProps['isOpen']
   onClose: DialogProps['onClose']
@@ -59,7 +59,7 @@ export default function CreateChat(props: {
   const { isOpen, onClose } = props
   const tx = useTranslationFunction()
   const { userFeedback, openDialog } = useContext(ScreenContext)
-  const [viewMode, setViewMode] = useState('main')
+  const [viewMode, setViewMode] = useState<ViewMode>('main')
   const accountId = selectedAccountId()
 
   const [{ contacts, queryStrIsValidEmail }, updateContacts] = useContactsNew(
@@ -91,20 +91,14 @@ export default function CreateChat(props: {
           id='newgroup'
           cutoff='+'
           text={tx('menu_new_group')}
-          onClick={() => setViewMode('createGroup-main')}
-        />
-        <PseudoListItem
-          id='newverifiedgroup'
-          cutoff='+'
-          text={tx('menu_new_verified_group')}
-          onClick={() => setViewMode('createVerifiedGroup-main')}
+          onClick={() => setViewMode('createGroup')}
         />
         {settingsStore?.desktopSettings.enableBroadcastLists && (
           <PseudoListItem
             id='newbroadcastlist'
             cutoff='+'
             text={tx('new_broadcast_list')}
-            onClick={() => setViewMode('createBroadcastList-main')}
+            onClick={() => setViewMode('createBroadcastList')}
           />
         )}
       </Fragment>
@@ -191,9 +185,6 @@ export default function CreateChat(props: {
       )}
       {viewMode.startsWith('createGroup') && (
         <CreateGroupInner {...{ viewMode, setViewMode, onClose }} />
-      )}
-      {viewMode.startsWith('createVerifiedGroup') && (
-        <CreateGroupInner isVerified {...{ viewMode, setViewMode, onClose }} />
       )}
       {viewMode.startsWith('createBroadcastList') && (
         <CreateBroadcastInner {...{ viewMode, setViewMode, onClose }} />
@@ -631,13 +622,13 @@ const useCreateGroup = (
 }
 
 function CreateGroupInner(props: {
-  viewMode: string
-  setViewMode: (newViewMode: string) => void
+  viewMode: ViewMode
+  setViewMode: (newViewMode: ViewMode) => void
   onClose: DialogProps['onClose']
   isVerified?: boolean
 }) {
   const { openDialog } = useContext(ScreenContext)
-  const { viewMode, setViewMode, onClose, isVerified } = props
+  const { setViewMode, onClose, isVerified } = props
   const tx = useTranslationFunction()
   const accountId = selectedAccountId()
 
@@ -645,8 +636,8 @@ function CreateGroupInner(props: {
   const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage()
   const [groupMembers, removeGroupMember, addGroupMember] = useGroupMembers([1])
   const [
-    groupId,
-    lazilyCreateOrUpdateGroup,
+    _groupId,
+    _lazilyCreateOrUpdateGroup,
     finishCreateGroup,
   ] = useCreateGroup(
     Boolean(isVerified),
@@ -655,11 +646,6 @@ function CreateGroupInner(props: {
     groupMembers,
     onClose
   )
-
-  const viewPrefix = isVerified ? 'createVerifiedGroup' : 'createGroup'
-
-  const [qrCode, setQrCode] = useState('')
-  const [qrCodeSVG, setQrCodeSvg] = useState<string | undefined>(undefined)
 
   const [errorMissingGroupName, setErrorMissingGroupName] = useState(false)
   const [groupContacts, setGroupContacts] = useState<Type.Contact[]>([])
@@ -689,105 +675,65 @@ function CreateGroupInner(props: {
 
   return (
     <>
-      {viewMode.startsWith(viewPrefix + '-showQrCode') && (
-        <>
-          <DeltaDialogHeader title={tx('qrshow_title')} />
-          <QrCodeShowQrInner
-            onBack={() => {
-              setViewMode(viewPrefix + '-main')
-            }}
-            qrCode={qrCode}
-            qrCodeSVG={qrCodeSVG}
-            description={tx('qrshow_join_group_hint', [groupName])}
+      <DeltaDialogHeader title={tx('menu_new_group')} />
+      <div className={Classes.DIALOG_BODY}>
+        <Card>
+          <ChatSettingsSetNameAndProfileImage
+            groupImage={groupImage}
+            onSetGroupImage={onSetGroupImage}
+            onUnsetGroupImage={onUnsetGroupImage}
+            chatName={groupName}
+            setChatName={setGroupName}
+            errorMissingChatName={errorMissingGroupName}
+            setErrorMissingChatName={setErrorMissingGroupName}
+            type='group'
           />
-        </>
-      )}
-      {viewMode.startsWith(viewPrefix + '-main') && (
-        <>
-          <DeltaDialogHeader
-            title={
-              isVerified ? tx('menu_new_verified_group') : tx('menu_new_group')
-            }
-          />
-          <div className={Classes.DIALOG_BODY}>
-            <Card>
-              <ChatSettingsSetNameAndProfileImage
-                groupImage={groupImage}
-                onSetGroupImage={onSetGroupImage}
-                onUnsetGroupImage={onUnsetGroupImage}
-                chatName={groupName}
-                setChatName={setGroupName}
-                errorMissingChatName={errorMissingGroupName}
-                setErrorMissingChatName={setErrorMissingGroupName}
-                type='group'
-              />
-              <div className='group-separator'>
-                {tx(
-                  'n_members',
-                  groupMembers.length.toString(),
-                  groupMembers.length <= 1 ? 'one' : 'other'
-                )}
-              </div>
-              <div className='group-member-contact-list-wrapper'>
-                <PseudoListItemAddMember
-                  onClick={showAddMemberDialog}
-                  isBroadcast={false}
-                />
-                <PseudoListItemShowQrCode
-                  onClick={async () => {
-                    if (groupId === -1 && groupName === '') {
-                      setErrorMissingGroupName(true)
-                      return
-                    }
-                    const gId = await lazilyCreateOrUpdateGroup(false)
-                    const [
-                      qrCode,
-                      qrCodeSVG,
-                    ] = await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(
-                      accountId,
-                      gId
-                    )
-                    setQrCode(qrCode)
-                    setQrCodeSvg(qrCodeSVG)
-                    setViewMode(viewPrefix + '-showQrCode')
-                  }}
-                />
-                <ContactList2
-                  contacts={groupContacts}
-                  onClick={() => {}}
-                  showRemove
-                  onRemoveClick={c => {
-                    removeGroupMember(c)
-                  }}
-                />
-              </div>
-            </Card>
+          <div className='group-separator'>
+            {tx(
+              'n_members',
+              groupMembers.length.toString(),
+              groupMembers.length <= 1 ? 'one' : 'other'
+            )}
           </div>
-          <DeltaDialogFooter>
-            <DeltaDialogFooterActions>
-              <p
-                className='delta-button primary bold'
-                style={{ marginRight: '10px' }}
-                onClick={() => setViewMode('main')}
-              >
-                {tx('cancel')}
-              </p>
-              <p
-                className='delta-button primary bold'
-                onClick={() => {
-                  if (groupName === '') {
-                    setErrorMissingGroupName(true)
-                    return
-                  }
-                  finishCreateGroup()
-                }}
-              >
-                {tx('group_create_button')}
-              </p>
-            </DeltaDialogFooterActions>
-          </DeltaDialogFooter>
-        </>
-      )}
+          <div className='group-member-contact-list-wrapper'>
+            <PseudoListItemAddMember
+              onClick={showAddMemberDialog}
+              isBroadcast={false}
+            />
+            <ContactList2
+              contacts={groupContacts}
+              onClick={() => {}}
+              showRemove
+              onRemoveClick={c => {
+                removeGroupMember(c)
+              }}
+            />
+          </div>
+        </Card>
+      </div>
+      <DeltaDialogFooter>
+        <DeltaDialogFooterActions>
+          <p
+            className='delta-button primary bold'
+            style={{ marginRight: '10px' }}
+            onClick={() => setViewMode('main')}
+          >
+            {tx('cancel')}
+          </p>
+          <p
+            className='delta-button primary bold'
+            onClick={() => {
+              if (groupName === '') {
+                setErrorMissingGroupName(true)
+                return
+              }
+              finishCreateGroup()
+            }}
+          >
+            {tx('group_create_button')}
+          </p>
+        </DeltaDialogFooterActions>
+      </DeltaDialogFooter>
     </>
   )
 }
@@ -825,7 +771,7 @@ const useCreateBroadcast = (
 }
 
 function CreateBroadcastInner(props: {
-  setViewMode: (newViewMode: string) => void
+  setViewMode: (newViewMode: ViewMode) => void
   onClose: DialogProps['onClose']
 }) {
   const { openDialog } = useContext(ScreenContext)
