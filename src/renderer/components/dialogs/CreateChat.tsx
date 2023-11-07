@@ -441,87 +441,6 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
   )
 }
 
-export function useContactSearch(
-  updateContacts: (searchString: string) => void
-) {
-  const [searchString, setSearchString] = useState('')
-
-  const updateSearch = (searchString: string) => {
-    setSearchString(searchString)
-    updateContacts(searchString)
-  }
-
-  const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    updateSearch(e.target.value)
-
-  const refresh = () => updateContacts(searchString)
-
-  return [searchString, onSearchChange, updateSearch, refresh] as [
-    searchString: string,
-    onSearchChange: typeof onSearchChange,
-    updateSearch: typeof updateSearch,
-    refresh: typeof refresh
-  ]
-}
-
-export function useGroupImage(image?: string | null) {
-  const [groupImage, setGroupImage] = useState(image)
-  const tx = window.static_translate
-
-  const onSetGroupImage = async () => {
-    const file = await runtime.showOpenFileDialog({
-      title: tx('select_group_image_desktop'),
-      filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }],
-      properties: ['openFile'],
-      defaultPath: runtime.getAppPath('pictures'),
-    })
-    if (file) {
-      setGroupImage(file)
-    }
-  }
-  const onUnsetGroupImage = () => setGroupImage('')
-
-  return [groupImage, onSetGroupImage, onUnsetGroupImage] as [
-    typeof groupImage,
-    typeof onSetGroupImage,
-    typeof onUnsetGroupImage
-  ]
-}
-
-export function useGroupMembers(initialMemebers: number[]) {
-  const [groupMembers, setGroupMembers] = useState(initialMemebers)
-
-  const removeGroupMember = ({ id }: Type.Contact | { id: number }) =>
-    id !== 1 &&
-    setGroupMembers(prevMembers => prevMembers.filter(gId => gId !== id))
-  const addGroupMember = ({ id }: Type.Contact | { id: number }) =>
-    setGroupMembers(prevMembers => [...prevMembers, id])
-  const addRemoveGroupMember = ({ id }: Type.Contact | { id: number }) => {
-    groupMembers.indexOf(id) !== -1
-      ? removeGroupMember({ id })
-      : addGroupMember({ id })
-  }
-  const addGroupMembers = (ids: number[]) => {
-    setGroupMembers(prevMembers => {
-      return [...prevMembers, ...ids]
-    })
-  }
-
-  return [
-    groupMembers,
-    removeGroupMember,
-    addGroupMember,
-    addRemoveGroupMember,
-    addGroupMembers,
-  ] as [
-    number[],
-    typeof removeGroupMember,
-    typeof addGroupMember,
-    typeof addRemoveGroupMember,
-    typeof addGroupMembers
-  ]
-}
-
 export const ChatSettingsSetNameAndProfileImage = ({
   groupImage,
   onSetGroupImage,
@@ -892,4 +811,85 @@ const useCreateBroadcast = (
     selectChat(bId)
   }
   return finishCreateBroadcast as typeof finishCreateBroadcast
+}
+
+export function useContactSearch(
+  updateContacts: (searchString: string) => void
+) {
+  const [searchString, setSearchString] = useState('')
+
+  const updateSearch = (searchString: string) => {
+    setSearchString(searchString)
+    updateContacts(searchString)
+  }
+
+  const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    updateSearch(e.target.value)
+
+  const refresh = () => updateContacts(searchString)
+
+  return [searchString, onSearchChange, updateSearch, refresh] as [
+    searchString: string,
+    onSearchChange: typeof onSearchChange,
+    updateSearch: typeof updateSearch,
+    refresh: typeof refresh
+  ]
+}
+
+export function useGroupImage(image?: string | null) {
+  const [groupImage, setGroupImage] = useState(image)
+  const tx = window.static_translate
+
+  const onSetGroupImage = async () => {
+    const file = await runtime.showOpenFileDialog({
+      title: tx('select_group_image_desktop'),
+      filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }],
+      properties: ['openFile'],
+      defaultPath: runtime.getAppPath('pictures'),
+    })
+    if (file) {
+      setGroupImage(file)
+    }
+  }
+  const onUnsetGroupImage = () => setGroupImage('')
+
+  return [groupImage, onSetGroupImage, onUnsetGroupImage] as [
+    typeof groupImage,
+    typeof onSetGroupImage,
+    typeof onUnsetGroupImage
+  ]
+}
+
+export function useGroupMembers(initialMemebers: number[]) {
+  const [groupMembers, setGroupMembers] = useState(initialMemebers)
+
+  const removeGroupMember = ({ id }: Type.Contact | { id: number }) =>
+    id !== 1 &&
+    setGroupMembers(prevMembers => prevMembers.filter(gId => gId !== id))
+  const addGroupMember = ({ id }: Type.Contact | { id: number }) =>
+    setGroupMembers(prevMembers => [...prevMembers, id])
+  const addRemoveGroupMember = ({ id }: Type.Contact | { id: number }) => {
+    groupMembers.indexOf(id) !== -1
+      ? removeGroupMember({ id })
+      : addGroupMember({ id })
+  }
+  const addGroupMembers = (ids: number[]) => {
+    setGroupMembers(prevMembers => {
+      return [...prevMembers, ...ids]
+    })
+  }
+
+  return [
+    groupMembers,
+    removeGroupMember,
+    addGroupMember,
+    addRemoveGroupMember,
+    addGroupMembers,
+  ] as [
+    number[],
+    typeof removeGroupMember,
+    typeof addGroupMember,
+    typeof addRemoveGroupMember,
+    typeof addGroupMembers
+  ]
 }
