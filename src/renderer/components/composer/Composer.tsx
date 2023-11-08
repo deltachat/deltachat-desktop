@@ -87,7 +87,7 @@ const Composer = forwardRef<
 
   const chatId = selectedChat.id
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
-
+ 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
   const pickerButtonRef = useRef<HTMLDivElement>(null)
 
@@ -337,7 +337,19 @@ const Composer = forwardRef<
             addFileToDraft={addFileToDraft}
             selectedChat={selectedChat}
           />
-          {settingsStore && (
+          <button className='microphone-button'
+            onMouseDown={() => {
+              messageInputRef.current?.startRecording()
+              console.log(messageInputRef)
+            }}
+            onMouseUp={() => {
+              messageInputRef.current?.stopRecording()
+            }}
+            aria-label={tx('voice_send')}
+          >
+            <span />
+          </button>
+          {settingsStore &&  (
             <ComposerMessageInput
               ref={messageInputRef}
               enterKeySends={settingsStore?.desktopSettings.enterKeySends}

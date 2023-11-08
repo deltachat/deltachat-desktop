@@ -87,6 +87,7 @@
         }
       }
     }
+    
 
     .emoji-button {
       height: 40px;
@@ -105,6 +106,37 @@
         margin-top: calc((40px - 25px) / 2);
         background-image: url(../images/emoji.png);
         background-size: contain;
+      }
+    }
+    
+    .microphone-button {
+      height: 40px;
+      padding-right: 3px;
+      padding-left: 0px;
+      padding-bottom: 8px;
+      background-color: var(--composerBg);
+      border: none;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      &:focus {
+        outline: none;
+      }
+      &:active {
+        span {
+          background-color: red;
+        }
+      }
+      span {
+        display: block;
+        width: 25px;
+        height: 25px;
+        margin-top: calc((40px - 25px) / 2);
+        -webkit-mask-image: url(../images/microphone.svg);
+        -webkit-mask-size: contain;
+        background-color: var(--composerPlaceholderText);
       }
     }
 
@@ -139,8 +171,16 @@
         }
       }
     }
+    
+    .recording-duration {
+      display: flex;
+      justify-content: center;
+      flex-direction: row;
+      align-items: center;
+      flex-grow: 1;
+    }
 
-    textarea.message-input-area {
+    .message-input-area {
       flex-grow: 1;
       resize: unset;
       padding: 0px;
