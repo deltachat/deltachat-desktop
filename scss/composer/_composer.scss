@@ -87,6 +87,7 @@
         }
       }
     }
+    
 
     .emoji-button {
       height: 40px;
@@ -104,6 +105,29 @@
         height: 25px;
         margin-top: calc((40px - 25px) / 2);
         background-image: url(../images/emoji.png);
+        background-size: contain;
+      }
+    }
+    
+    .microphone-button {
+      height: 40px;
+      padding-right: 3px;
+      padding-left: 0px;
+      background-color: var(--composerBg);
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      &:focus {
+        outline: none;
+      }
+      span {
+        display: block;
+        width: 25px;
+        height: 25px;
+        margin-top: calc((40px - 25px) / 2);
+        background-image: url(../images/microphone.svg);
         background-size: contain;
       }
     }
@@ -139,8 +163,15 @@
         }
       }
     }
+    
+    .recording-duration {
+      display: flex;
+      justify-content: center;
+      flex-direction: row;
+      align-items: center;
+    }
 
-    textarea.message-input-area {
+    .message-input-area {
       flex-grow: 1;
       resize: unset;
       padding: 0px;

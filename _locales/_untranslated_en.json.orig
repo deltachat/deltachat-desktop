@@ -2,6 +2,8 @@
   "broadcast_list_warning": {
     "comment": "this won't be translated, as our goal is to have encrypted broadcast lists - simon & bjoern as of oct 2023",
     "message": "Broadcast Lists are always unencrypted because they use blind copy (BCC)"
+<<<<<<< HEAD
+=======
   },
   "pref_donate": {
     "message": "Donate"
@@ -50,5 +52,6 @@
   },
   "voice_send": {
     "message": "Send a voice message"
+>>>>>>> 62786603 (voice messages draft)
   }
 }

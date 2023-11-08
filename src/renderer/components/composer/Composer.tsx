@@ -87,7 +87,28 @@ const Composer = forwardRef<
 
   const chatId = selectedChat.id
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+  const [recordingStartTime, setRecordingStartTime] = useState(-1)
+  const [recordedSeconds, setRecordedSeconds] = useState(0)
+  let updateRecordedSecondsInterval: number | 0 = 0
+  
+  let recorder: MediaRecorder | null = null
+  let data: Blob[] = []
+  navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then(stream => {
+    recorder = new MediaRecorder(stream)
+    recorder.onstart = () => {
+    data = []
+    }
+  
+    recorder.ondataavailable = (ev: BlobEvent) => {
+      data.push(ev.data);
+    }
 
+    recorder.onstop = () => {
+      clearInterval(updateRecordedSecondsInterval)
+    }
+  })
+
+  
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
   const pickerButtonRef = useRef<HTMLDivElement>(null)
 
@@ -337,7 +358,28 @@ const Composer = forwardRef<
             addFileToDraft={addFileToDraft}
             selectedChat={selectedChat}
           />
-          {settingsStore && (
+          <div className='microphone-button'
+          onMouseDown={() => {
+                if (recorder) {
+                  recorder.start()
+                } else {
+                  // TODO: Show that the user hasn't got a mic
+                }
+                setRecordingStartTime((new Date()).valueOf())
+                updateRecordedSecondsInterval = window.setInterval(() => 
+                  setRecordedSeconds((new Date()).valueOf() - recordingStartTime), 1000)
+              }}
+              onMouseUp={() => {
+                setRecordingStartTime(0)
+                recorder?.stop()
+              }}
+              aria-label={tx('voice_send')}>
+                <span />
+          </div>
+          {recordingStartTime > 0 &&
+            <RecordingDuration seconds={recordedSeconds} />
+          }
+          {settingsStore && recordingStartTime <= 0 && (
             <ComposerMessageInput
               ref={messageInputRef}
               enterKeySends={settingsStore?.desktopSettings.enterKeySends}
@@ -573,4 +615,22 @@ export function useDraft(
     removeFile,
     clearDraft,
   }
+}
+
+
+function RecordingDuration({ seconds }: {
+  seconds: number
+}) {
+  let minutes = 0
+  while (seconds >= 60) {
+    seconds /= 60
+    minutes++
+  }
+  return (
+    <div className='recording-duration message-input-area'>
+      <p>
+        {minutes} : {seconds.toFixed(0)}
+      </p>
+    </div>
+  )
 }
