@@ -270,23 +270,40 @@ export default class ComposerMessageInput extends React.Component<
   }
 
   render() {
-    return (
-      <textarea
-        className='message-input-area'
-        id='composer-textarea'
-        ref={this.textareaRef}
-        rows={1}
-        // intent={this.state.error ? 'danger' : 'none'}
-        // large
-        value={this.state.text}
-        onKeyDown={this.onKeyDown}
-        onChange={this.onChange}
-        onPaste={this.props.onPaste}
-        placeholder={window.static_translate('write_message_desktop')}
-        disabled={this.state.loadingDraft}
-        dir='auto'
-        spellCheck={true}
-      />
-    )
+    const { recordedDuration, text, loadingDraft } = this.state
+    if (recordedDuration) {
+      return <RecordingDuration duration={recordedDuration} />
+    } else {
+      return (
+        <textarea
+          className='message-input-area'
+          id='composer-textarea'
+          ref={this.textareaRef}
+          rows={1}
+          // intent={this.state.error ? 'danger' : 'none'}
+          // large
+          value={text}
+          onKeyDown={this.onKeyDown}
+          onChange={this.onChange}
+          onPaste={this.props.onPaste}
+          placeholder={window.static_translate('write_message_desktop')}
+          disabled={loadingDraft}
+          dir='auto'
+          spellCheck={true}
+        />
+      )
+    }
   }
+}
+
+function RecordingDuration({ duration }: {
+  duration: moment.Duration
+}) {
+  return (
+    <div className='recording-duration message-input-area'>
+      <p>
+        {duration.humanize()}
+      </p>
+    </div>
+  )
 }

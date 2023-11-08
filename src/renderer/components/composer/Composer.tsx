@@ -28,7 +28,6 @@ import { confirmDialog } from '../message/messageFunctions'
 import { ProtectionBrokenDialog } from '../dialogs/ProtectionStatusDialog'
 import { T } from '@deltachat/jsonrpc-client'
 import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
-import moment from 'moment'
 
 const log = getLogger('renderer/composer')
 
@@ -586,17 +585,4 @@ export function useDraft(
     removeFile,
     clearDraft,
   }
-}
-
-
-function RecordingDuration({ duration }: {
-  duration: moment.Duration
-}) {
-  return (
-    <div className='recording-duration message-input-area'>
-      <p>
-        {duration.humanize()}
-      </p>
-    </div>
-  )
 }
