@@ -2,7 +2,6 @@ import React, {
   useRef,
   useState,
   useEffect,
-  useMemo,
   forwardRef,
   useLayoutEffect,
   useCallback,
@@ -338,9 +337,10 @@ const Composer = forwardRef<
             addFileToDraft={addFileToDraft}
             selectedChat={selectedChat}
           />
-          <div className='microphone-button'
+          <button className='microphone-button'
             onMouseDown={() => {
               messageInputRef.current?.startRecording()
+              console.log(messageInputRef)
             }}
             onMouseUp={() => {
               messageInputRef.current?.stopRecording()
@@ -348,7 +348,7 @@ const Composer = forwardRef<
             aria-label={tx('voice_send')}
           >
             <span />
-          </div>
+          </button>
           {settingsStore &&  (
             <ComposerMessageInput
               ref={messageInputRef}

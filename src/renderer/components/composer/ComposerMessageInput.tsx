@@ -31,7 +31,7 @@ export default class ComposerMessageInput extends React.Component<
   textareaRef: React.RefObject<HTMLTextAreaElement>
   saveDraft: () => void
   recorder: MediaRecorder | null = null
-  updateRecordedSecondsInterval: number | null = null
+  updateRecordedDurationInterval: number | null = null
   voiceData: Blob[] = []
   gumError: any
   constructor(props: ComposerMessageInputProps) {
@@ -43,26 +43,26 @@ export default class ComposerMessageInput extends React.Component<
       recordedDuration: null,
     }
     navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then(stream => {
-      this.recorder = new MediaRecorder(stream, { mimeType: 'audio/aac' })
+      this.recorder = new MediaRecorder(stream)
       this.recorder.onstart = () => {
-        this.setState({ recordedDuration: moment.duration() })
-        this.updateRecordedSecondsInterval = window.setInterval(() => 
+        this.updateRecordedDurationInterval = window.setInterval(() => 
           this.setState(prevState => {
             let recordedDuration = prevState.recordedDuration?.clone() || moment.duration()
-            recordedDuration.add(1)
+            recordedDuration.add(0.1, 's')
             return { recordedDuration: recordedDuration }
           })
-        , 1000)
+        , 100)
       }
       this.recorder.ondataavailable = (evt: BlobEvent) => this.voiceData.push(evt.data)
       this.recorder.onstop = () => {
-        let _duration = this.state.recordedDuration?.asSeconds() || 0
-        if (_duration === 0)
+        let duration = this.state.recordedDuration?.asSeconds() || 0
+        if (duration === 0)
           log.error('duration of voice is zero while the mediarecorder has stopped. this must not happen')
         this.setState({ recordedDuration: null })
         // send the voice message
         console.log(this.voiceData)
         this.voiceData = []
+        this.updateRecordedDurationInterval && window.clearInterval(this.updateRecordedDurationInterval)
       }
     })
     .catch((reason: any) => {
@@ -299,10 +299,13 @@ export default class ComposerMessageInput extends React.Component<
 function RecordingDuration({ duration }: {
   duration: moment.Duration
 }) {
+  let minutes = duration.asMinutes()
+  let seconds = Math.ceil((minutes - Math.floor(minutes)) * 60)
+  minutes = Math.floor(minutes)
   return (
-    <div className='recording-duration message-input-area'>
+    <div className='recording-duration'>
       <p>
-        {duration.humanize()}
+        {minutes} : {seconds}
       </p>
     </div>
   )

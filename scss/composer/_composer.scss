@@ -113,7 +113,9 @@
       height: 40px;
       padding-right: 3px;
       padding-left: 0px;
+      padding-bottom: 8px;
       background-color: var(--composerBg);
+      border: none;
 
       &:hover {
         cursor: pointer;
@@ -121,6 +123,11 @@
 
       &:focus {
         outline: none;
+      }
+      &:active {
+        span {
+          background-color: red;
+        }
       }
       span {
         display: block;
@@ -170,6 +177,7 @@
       justify-content: center;
       flex-direction: row;
       align-items: center;
+      flex-grow: 1;
     }
 
     .message-input-area {
