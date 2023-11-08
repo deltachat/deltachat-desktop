@@ -24,6 +24,7 @@
 - open `mailto:` and `openpgp4fpr:` links from webxdc in deltachat #3355
 - show confirm dialogue when creating new chat after clicking mail address #3469
 - Ask for broadcast name when creating one
+- Sending voice messages
 
 ### Changed
 - add a dark theme for the "Help" and the webxdc loading screen
@@ -74,9 +75,6 @@
 - remove 40KiB download on demand option
 
 
-### added
-
-- voice messages
 <a id="1_40_4"></a>
 
 ## [1.40.4] - 2023-09-14
