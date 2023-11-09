@@ -262,7 +262,7 @@ export async function createChatByContactIdAndSelectIt(
 
   const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
 
-  if (chat && chat.archived) {
+  if (chat.archived) {
     log.debug('chat was archived, unarchiving it')
     await BackendRemote.rpc.setChatVisibility(
       selectedAccountId(),
@@ -340,9 +340,6 @@ export async function modifyGroup(
   log.debug('action - modify group', { chatId, name, image, members })
 
   const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
-  if (!chat) {
-    throw new Error('chat is undefined, this should not happen')
-  }
 
   await BackendRemote.rpc.setChatName(accountId, chatId, name)
 
