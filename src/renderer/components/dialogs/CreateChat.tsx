@@ -23,7 +23,6 @@ import {
   PseudoListItemAddMember,
   PseudoListItemAddContact,
 } from '../helpers/PseudoListItem'
-
 import {
   DeltaDialogBase,
   DeltaDialogHeader,
@@ -32,9 +31,7 @@ import {
   DeltaDialogFooter,
   DeltaDialogFooterActions,
 } from './DeltaDialog'
-
 import { GroupImage } from './Edit-Group-Image'
-
 import { DialogProps } from './DialogController'
 import { runtime } from '../../runtime'
 import {
@@ -50,6 +47,7 @@ import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import ConfirmationDialog from './ConfirmationDialog'
+import { VerifiedContactsRequiredDialog } from './ProtectionStatusDialog'
 
 type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
 
@@ -249,6 +247,7 @@ function CreateGroup(props: CreateGroupProps) {
         members.forEach(contactId => addGroupMember({ id: contactId }))
       },
       isBroadcast: false,
+      isVerificationRequired: false,
     })
   }
 
@@ -513,7 +512,8 @@ export function AddMemberInnerDialog({
   queryStr,
   searchContacts,
   groupMembers,
-  isBroadcast,
+  isBroadcast = false,
+  isVerificationRequired = false,
 }: {
   onOk: (addMembers: number[]) => void
   onCancel: Parameters<typeof DeltaDialogOkCancelFooter>[0]['onCancel']
@@ -521,8 +521,12 @@ export function AddMemberInnerDialog({
   queryStr: string
   searchContacts: Map<number, Type.Contact>
   groupMembers: number[]
-  isBroadcast?: boolean
+  isBroadcast: boolean
+  isVerificationRequired: boolean
 }) {
+  const tx = window.static_translate
+  const { openDialog } = useContext(ScreenContext)
+
   const contactIdsInGroup: number[] = [...searchContacts]
     .filter(([contactId, _contact]) => groupMembers.indexOf(contactId) !== -1)
     .map(([contactId, _contact]) => contactId)
@@ -541,18 +545,57 @@ export function AddMemberInnerDialog({
     onSearchChange(query)
   }
 
-  const addOrRemoveMember = useCallback(
+  const [contactsToDeleteOnCancel, setContactsToDeleteOnCancel] = useState<
+    number[]
+  >([])
+
+  const addMember = useCallback(
     (contact: Type.Contact) => {
-      if (contactIdsToAdd.findIndex(c => c.id === contact.id) === -1) {
-        setContactIdsToAdd([...contactIdsToAdd, contact])
-      } else {
-        setContactIdsToAdd(contactIdsToAdd.filter(c => c.id !== contact.id))
+      if (isVerificationRequired && !contact.isVerified) {
+        openDialog(VerifiedContactsRequiredDialog)
+        return
       }
+
+      setContactIdsToAdd([...contactIdsToAdd, contact])
+    },
+    [contactIdsToAdd, isVerificationRequired, openDialog]
+  )
+
+  const removeMember = useCallback(
+    (contact: Type.Contact) => {
+      setContactIdsToAdd(contactIdsToAdd.filter(c => c.id !== contact.id))
     },
     [contactIdsToAdd]
   )
 
-  const tx = window.static_translate
+  const toggleMember = useCallback(
+    (contact: Type.Contact) => {
+      if (!contactIdsToAdd.find(c => c.id === contact.id)) {
+        addMember(contact)
+      } else {
+        removeMember(contact)
+      }
+    },
+    [addMember, contactIdsToAdd, removeMember]
+  )
+
+  const createNewContact = useCallback(async () => {
+    if (!queryStrIsValidEmail) return
+
+    const accountId = selectedAccountId()
+
+    const contactId = await BackendRemote.rpc.createContact(
+      accountId,
+      queryStr.trim(),
+      null
+    )
+    const contact = await BackendRemote.rpc.getContact(accountId, contactId)
+    toggleMember(contact)
+    setContactsToDeleteOnCancel(value => [...value, contactId])
+    onSearchChange({
+      target: { value: '' },
+    } as ChangeEvent<HTMLInputElement>)
+  }, [toggleMember, onSearchChange, queryStr, queryStrIsValidEmail])
 
   const _onOk = () => {
     if (contactIdsToAdd.length === 0) {
@@ -587,28 +630,6 @@ export function AddMemberInnerDialog({
   useLayoutEffect(applyCSSHacks, [inputRef, contactIdsToAdd])
   useEffect(applyCSSHacks, [])
 
-  const [contactsToDeleteOnCancel, setContactsToDeleteOnCancel] = useState<
-    number[]
-  >([])
-
-  const addContactOnClick = useCallback(async () => {
-    if (!queryStrIsValidEmail) return
-
-    const accountId = selectedAccountId()
-
-    const contactId = await BackendRemote.rpc.createContact(
-      accountId,
-      queryStr.trim(),
-      null
-    )
-    const contact = await BackendRemote.rpc.getContact(accountId, contactId)
-    addOrRemoveMember(contact)
-    setContactsToDeleteOnCancel(value => [...value, contactId])
-    onSearchChange({
-      target: { value: '' },
-    } as ChangeEvent<HTMLInputElement>)
-  }, [addOrRemoveMember, onSearchChange, queryStr, queryStrIsValidEmail])
-
   const renderAddContactIfNeeded = () => {
     if (queryStr === '' || searchContacts.size !== 0) {
       return null
@@ -636,7 +657,7 @@ export function AddMemberInnerDialog({
           showCheckbox={true}
           checked={false}
           showRemove={false}
-          onCheckboxClick={addContactOnClick}
+          onCheckboxClick={createNewContact}
         />
       )
     } else {
@@ -670,7 +691,7 @@ export function AddMemberInnerDialog({
               {contactIdsToAdd.map(contact => {
                 return AddMemberChip({
                   contact,
-                  onRemoveClick: addOrRemoveMember,
+                  onRemoveClick: toggleMember,
                 })
               })}
               <input
@@ -702,7 +723,7 @@ export function AddMemberInnerDialog({
                 )
               }}
               disabledContacts={contactIdsInGroup.concat(C.DC_CONTACT_ID_SELF)}
-              onCheckboxClick={addOrRemoveMember}
+              onCheckboxClick={toggleMember}
             />
             {renderAddContactIfNeeded()}
           </div>

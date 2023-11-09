@@ -17,7 +17,7 @@ import {
 import ChatListItem from '../chat/ChatListItem'
 import { useContactSearch, AddMemberInnerDialog } from './CreateChat'
 import { QrCodeShowQrInner } from './QrCode'
-import { areAllContactsVerified, selectChat } from '../helpers/ChatMethods'
+import { selectChat } from '../helpers/ChatMethods'
 import { useThemeCssVar } from '../../ThemeManager'
 import { ContactList, useContactsMap } from '../contact/ContactList'
 import { useLogicVirtualChatList, ChatListPart } from '../chat/ChatList'
@@ -122,20 +122,6 @@ export const useGroup = (chat: Type.FullChat) => {
     setGroupMembers(members => members.filter(mId => mId !== contactId))
 
   const addGroupMembers = async (newGroupMembers: number[]) => {
-    const accountId = selectedAccountId()
-
-    // We can only add verified contacts to a protected group
-    if (chat.isProtected) {
-      const membersVerified = await areAllContactsVerified(
-        accountId,
-        newGroupMembers
-      )
-      if (!membersVerified) {
-        // @TODO: Show dialogue here
-        return
-      }
-    }
-
     setGroupMembers(members => [...members, ...newGroupMembers])
   }
 
@@ -224,6 +210,7 @@ function ViewGroupInner(props: {
       groupMembers,
       onOk: addGroupMembers,
       isBroadcast: isBroadcast,
+      isVerificationRequired: chat.isProtected,
     })
   }
 
@@ -365,13 +352,20 @@ function ViewGroupInner(props: {
 }
 
 export function AddMemberDialog({
-  onClose,
   isOpen,
-  listFlags,
-  groupMembers,
+  onClose,
   onOk,
-  isBroadcast,
-}: DialogProps) {
+  groupMembers,
+  listFlags,
+  isBroadcast = false,
+  isVerificationRequired = false,
+}: {
+  onOk: (members: number[]) => void
+  groupMembers: number[]
+  listFlags: number
+  isBroadcast?: boolean
+  isVerificationRequired?: boolean
+} & DialogProps) {
   const [searchContacts, updateSearchContacts] = useContactsMap(listFlags, '')
   const [queryStr, onSearchChange] = useContactSearch(updateSearchContacts)
   return (
@@ -398,7 +392,8 @@ export function AddMemberDialog({
         queryStr,
         searchContacts,
         groupMembers,
-        isBroadcast: isBroadcast,
+        isBroadcast,
+        isVerificationRequired,
       })}
     </DeltaDialogBase>
   )
