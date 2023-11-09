@@ -31,5 +31,6 @@ module.exports = {
     '@typescript-eslint/no-namespace': 'off',
     'no-case-declarations': 'warn',
     'prettier/prettier': 'warn',
+    'no-constant-binary-expression': 'error',
   },
 }

@@ -100,7 +100,7 @@ export default class DeltaChatController extends EventEmitter {
           const { result } = JSON.parse(response)
           const { contextId, event } = result
           if (
-            typeof contextId !== undefined &&
+            contextId !== undefined &&
             typeof event === 'object' &&
             event.kind
           ) {
