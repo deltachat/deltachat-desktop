@@ -24,6 +24,7 @@
 - open `mailto:` and `openpgp4fpr:` links from webxdc in deltachat #3355
 - show confirm dialogue when creating new chat after clicking mail address #3469
 - Ask for broadcast name when creating one
+- Automatically create verified group when all users are verified #3492
 
 ### Changed
 - add a dark theme for the "Help" and the webxdc loading screen
@@ -45,7 +46,6 @@
   - update deltachat-node and deltachat/jsonrpc-client to `v1.129.0`
   - update `@deltachat/message_parser_wasm` to `0.8.0`, which adds linkification to links on more generic URI schemes.
   - Removed `url-parse` dependency replacing it with modern APIs
-
 
 ### Fixed
 - fix clipboard not working in webxdc apps
