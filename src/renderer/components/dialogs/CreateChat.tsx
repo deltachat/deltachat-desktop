@@ -43,7 +43,7 @@ import { Avatar } from '../Avatar'
 import { AddMemberDialog } from './ViewGroup'
 import { ContactListItem } from '../contact/ContactListItem'
 import { useSettingsStore } from '../../stores/settings'
-import { BackendRemote, Type } from '../../backend-com'
+import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import ConfirmationDialog from './ConfirmationDialog'
@@ -90,6 +90,14 @@ function CreateChatMain(props: CreateChatMainProps) {
   )
   const [queryStr, onSearchChange, _, refreshContacts] = useContactSearch(
     updateContacts
+  )
+
+  useEffect(
+    () =>
+      onDCEvent(accountId, 'ContactsChanged', () => {
+        refreshContacts()
+      }),
+    [accountId, refreshContacts]
   )
 
   const chooseContact = async ({ id }: Type.Contact) => {
