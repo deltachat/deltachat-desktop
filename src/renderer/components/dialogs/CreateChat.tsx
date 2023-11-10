@@ -511,6 +511,7 @@ export function AddMemberInnerDialog({
   onSearchChange,
   queryStr,
   searchContacts,
+  refreshContacts,
   groupMembers,
   isBroadcast = false,
   isVerificationRequired = false,
@@ -520,6 +521,7 @@ export function AddMemberInnerDialog({
   onSearchChange: ReturnType<typeof useContactSearch>[1]
   queryStr: string
   searchContacts: Map<number, Type.Contact>
+  refreshContacts: () => void
   groupMembers: number[]
   isBroadcast: boolean
   isVerificationRequired: boolean
@@ -537,12 +539,7 @@ export function AddMemberInnerDialog({
     C.DC_GCL_ADD_SELF,
     ''
   )
-  const [
-    _searchString,
-    onSearchChangeNewContact,
-    _updateSearch,
-    refreshContacts,
-  ] = useContactSearch(updateContacts)
+  const [_, onSearchChangeNewContact] = useContactSearch(updateContacts)
 
   const onSearchChangeValidation = (query: ChangeEvent<HTMLInputElement>) => {
     if (searchContacts.size === 0) {
