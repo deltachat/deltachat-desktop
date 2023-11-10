@@ -92,14 +92,6 @@ function CreateChatMain(props: CreateChatMainProps) {
     updateContacts
   )
 
-  useEffect(
-    () =>
-      onDCEvent(accountId, 'ContactsChanged', () => {
-        refreshContacts()
-      }),
-    [accountId, refreshContacts]
-  )
-
   const chooseContact = async ({ id }: Type.Contact) => {
     try {
       await createChatByContactIdAndSelectIt(id)
@@ -534,6 +526,7 @@ export function AddMemberInnerDialog({
 }) {
   const tx = window.static_translate
   const { openDialog } = useContext(ScreenContext)
+  const accountId = selectedAccountId()
 
   const contactIdsInGroup: number[] = [...searchContacts]
     .filter(([contactId, _contact]) => groupMembers.indexOf(contactId) !== -1)
@@ -544,7 +537,12 @@ export function AddMemberInnerDialog({
     C.DC_GCL_ADD_SELF,
     ''
   )
-  const [_, onSearchChangeNewContact] = useContactSearch(updateContacts)
+  const [
+    _searchString,
+    onSearchChangeNewContact,
+    _updateSearch,
+    refreshContacts,
+  ] = useContactSearch(updateContacts)
 
   const onSearchChangeValidation = (query: ChangeEvent<HTMLInputElement>) => {
     if (searchContacts.size === 0) {
@@ -552,6 +550,14 @@ export function AddMemberInnerDialog({
     }
     onSearchChange(query)
   }
+
+  useEffect(
+    () =>
+      onDCEvent(accountId, 'ContactsChanged', () => {
+        refreshContacts()
+      }),
+    [accountId, refreshContacts]
+  )
 
   const [contactsToDeleteOnCancel, setContactsToDeleteOnCancel] = useState<
     number[]
@@ -590,8 +596,6 @@ export function AddMemberInnerDialog({
   const createNewContact = useCallback(async () => {
     if (!queryStrIsValidEmail) return
 
-    const accountId = selectedAccountId()
-
     const contactId = await BackendRemote.rpc.createContact(
       accountId,
       queryStr.trim(),
@@ -603,7 +607,7 @@ export function AddMemberInnerDialog({
     onSearchChange({
       target: { value: '' },
     } as ChangeEvent<HTMLInputElement>)
-  }, [toggleMember, onSearchChange, queryStr, queryStrIsValidEmail])
+  }, [accountId, toggleMember, onSearchChange, queryStr, queryStrIsValidEmail])
 
   const _onOk = () => {
     if (contactIdsToAdd.length === 0) {
