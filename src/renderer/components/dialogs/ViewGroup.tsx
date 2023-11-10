@@ -367,7 +367,9 @@ export function AddMemberDialog({
   isVerificationRequired?: boolean
 } & DialogProps) {
   const [searchContacts, updateSearchContacts] = useContactsMap(listFlags, '')
-  const [queryStr, onSearchChange] = useContactSearch(updateSearchContacts)
+  const [queryStr, onSearchChange, _, refreshContacts] = useContactSearch(
+    updateSearchContacts
+  )
   return (
     <DeltaDialogBase
       onClose={onClose}
@@ -391,6 +393,7 @@ export function AddMemberDialog({
         onSearchChange,
         queryStr,
         searchContacts,
+        refreshContacts,
         groupMembers,
         isBroadcast,
         isVerificationRequired,
