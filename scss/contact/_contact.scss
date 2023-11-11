@@ -18,15 +18,21 @@
     // height: 54px;
     margin-left: 10px;
     .chat-list & {
-      width: calc(100% - 84px);
+      width: calc(100% - 37px);
     }
     .display-name {
       font-weight: bold;
       margin-bottom: 0px;
       margin-top: 3px;
       white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+
+      display: inline-flex;
+      max-width: 100%;
+      align-items: center;
+      .truncated {
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
     }
     .email {
       color: var(--contactEmailColor);
