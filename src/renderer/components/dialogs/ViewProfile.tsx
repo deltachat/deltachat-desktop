@@ -9,7 +9,7 @@ import {
 } from './DeltaDialog'
 import ChatListItem from '../chat/ChatListItem'
 import { useChatList } from '../chat/ChatListHelpers'
-import { C, T } from '@deltachat/jsonrpc-client'
+import { C } from '@deltachat/jsonrpc-client'
 import {
   MessagesDisplayContext,
   ScreenContext,
@@ -141,7 +141,6 @@ export function ViewProfileInner({
     label: string
     action?: () => void
   }>(null)
-  const [contactDMChat, setContactDMChat] = useState<null | T.BasicChat>(null)
 
   const isDeviceChat = contact.id === C.DC_CONTACT_ID_DEVICE
   const isSelfChat = contact.id === C.DC_CONTACT_ID_SELF
@@ -159,22 +158,6 @@ export function ViewProfileInner({
     )
     onChatClick(dmChatId)
   }
-
-  useEffect(() => {
-    ;(async () => {
-      const chatId = await BackendRemote.rpc.getChatIdByContactId(
-        accountId,
-        contact.id
-      )
-      if (chatId) {
-        setContactDMChat(
-          await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
-        )
-      } else {
-        setContactDMChat(null)
-      }
-    })()
-  }, [accountId, contact.id])
 
   useEffect(() => {
     if (isSelfChat) {
@@ -259,7 +242,7 @@ export function ViewProfileInner({
               <div>
                 <p className='group-name'>
                   {displayNameLine}
-                  {contactDMChat?.isProtected && <InlineVerifiedIcon />}
+                  {contact.isProfileVerified && <InlineVerifiedIcon />}
                 </p>
               </div>
               <div className='address'>{addressLine}</div>
