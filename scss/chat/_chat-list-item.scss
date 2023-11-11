@@ -38,6 +38,12 @@
         font-size: medium;
         & > span {
           user-select: none;
+          display: inline-flex;
+          max-width: 100%;
+          .truncated {
+            text-overflow: ellipsis;
+            overflow: hidden;
+          }
         }
       }
 

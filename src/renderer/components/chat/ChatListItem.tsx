@@ -39,7 +39,7 @@ function Header({
     <div className='header'>
       <div className='name'>
         <span>
-          {name}
+          <span className="truncated">{name}</span>
           {isProtected && <InlineVerifiedIcon />}
         </span>
       </div>
