@@ -43,7 +43,7 @@
   - update `electron` from `v22.3.24` to version `v26.4.2`
   - update `electron-builder` from `23.0.4` to `24.6.4`
   - update `@electron/notarize` from (`electron-notarize` package name) `^1.0.0` to `^2.1.0`
-  - update deltachat-node and deltachat/jsonrpc-client to `v1.129.0`
+  - update deltachat-node and deltachat/jsonrpc-client to `v1.130.0`
   - update `@deltachat/message_parser_wasm` to `0.8.0`, which adds linkification to links on more generic URI schemes.
   - Removed `url-parse` dependency replacing it with modern APIs
 
