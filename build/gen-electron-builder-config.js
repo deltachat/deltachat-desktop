@@ -36,6 +36,7 @@ build['fileAssociations'] = [{
   ext: "xdc",
   name: "Webxdc app",
   // icon - default, which means build/ext\.(ico|icns)
+  mimeType: "application/x-webxdc"
 }]
 
 build['files'] = files
