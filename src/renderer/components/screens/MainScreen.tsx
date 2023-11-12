@@ -288,7 +288,7 @@ export default function MainScreen() {
                 />
                 <div style={{ marginLeft: '7px', overflow: 'hidden' }}>
                   <div className='navbar-chat-name'>
-                    <div className='truncated'>{selectedChat.chat.name}</div>                  
+                    <div className='truncated'>{selectedChat.chat.name}</div>
                     <div className='chat_property_icons'>
                       {selectedChat.chat.isProtected && <InlineVerifiedIcon />}
                       {selectedChat.chat.ephemeralTimer !== 0 && (

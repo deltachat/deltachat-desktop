@@ -39,7 +39,7 @@ function Header({
     <div className='header'>
       <div className='name'>
         <span>
-          <span className="truncated">{name}</span>
+          <span className='truncated'>{name}</span>
           {isProtected && <InlineVerifiedIcon />}
         </span>
       </div>
@@ -385,7 +385,7 @@ export const ChatListItemMessageResult = React.memo<{
         <div className='header'>
           <div className='name'>
             <span>
-              {msr.chatName}
+              <span className='truncated'>{msr.chatName}</span>
               {msr.isChatProtected && <InlineVerifiedIcon />}
             </span>
           </div>
