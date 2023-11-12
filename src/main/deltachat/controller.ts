@@ -74,7 +74,7 @@ export default class DeltaChatController extends EventEmitter {
     await this.migrateToAccountsApiIfNeeded()
 
     log.debug('Initiating DeltaChatNode')
-    const writable = !rc_config['multiple-instances'] 
+    const writable = !rc_config['multiple-instances']
     this._inner_account_manager = new DeltaChatNode(this.cwd, writable)
 
     const mainProcessTransport = new ElectronMainTransport(message => {
