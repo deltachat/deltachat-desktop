@@ -26,6 +26,6 @@ Logging
 
 For more info on logging see LOGGING.md.
 
-*--multiple-instances is possible unstable - to avoid risks don't open the same account in multiple windows at a time, 
+*--multiple-instances is possible unstable - to avoid risks don't open the same account in multiple windows at a time and disable sync all, 
 also you can not manage accounts with this option enabled (no account adding or removing)`)
 }
