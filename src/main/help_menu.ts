@@ -12,7 +12,7 @@ Flag
 
 Development Options
 --translation-watch             enable auto-reload for _locales/_untranslated_en.json
---dev-mode"                     opens electron devtools and activates --log-debug & --log-to-console"
+--dev-mode                      opens electron devtools and activates --log-debug & --log-to-console
 
 Theme
 --theme <theme-id>              set a specific theme (see THEMES.md)
@@ -25,5 +25,7 @@ Logging
 --no-color                      Disable colors in the output of main process
 
 For more info on logging see LOGGING.md.
-*--multiple-instances  is possible unstable - to avoid risks don't open the same account in multiple windows at a time`)
+
+*--multiple-instances is possible unstable - to avoid risks don't open the same account in multiple windows at a time and disable sync all, 
+also you can not manage accounts with this option enabled (no account adding or removing)`)
 }

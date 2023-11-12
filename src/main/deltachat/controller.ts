@@ -14,6 +14,7 @@ import { rm } from 'fs/promises'
 import DCWebxdc from './webxdc'
 import { DesktopSettings } from '../desktop_settings'
 import { yerpc, BaseDeltaChat } from '@deltachat/jsonrpc-client'
+import rc_config from '../rc'
 
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat')
@@ -73,7 +74,8 @@ export default class DeltaChatController extends EventEmitter {
     await this.migrateToAccountsApiIfNeeded()
 
     log.debug('Initiating DeltaChatNode')
-    this._inner_account_manager = new DeltaChatNode(this.cwd, true)
+    const writable = !rc_config['multiple-instances']
+    this._inner_account_manager = new DeltaChatNode(this.cwd, writable)
 
     const mainProcessTransport = new ElectronMainTransport(message => {
       message.id = `main-${message.id}`

@@ -140,7 +140,12 @@ Promise.all([
   .then(onReady)
   .catch(error => {
     log.critical('Fatal Error during init', error)
-    dialog.showErrorBox('Fatal Error during init', '' + error)
+    dialog.showErrorBox(
+      'Fatal Error during init',
+      '' +
+        error +
+        '\n\nAlso make sure you are not trying to run multiple instances of deltachat.'
+    )
     process.exit(1)
   })
 
