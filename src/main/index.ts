@@ -342,8 +342,8 @@ app.on('web-contents-created', (_ev, contents) => {
 
 contextMenu()
 
-import { openUrlFromArgv, open_url } from './open_url'
-openUrlFromArgv(process.argv)
+import { openUrlsAndFilesFromArgv, open_url } from './open_url'
+openUrlsAndFilesFromArgv(process.argv)
 
 ipcMain.handle('restart_app', async _ev => {
   app.relaunch()

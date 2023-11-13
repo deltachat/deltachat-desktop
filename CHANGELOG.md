@@ -25,6 +25,7 @@
 - show confirm dialogue when creating new chat after clicking mail address #3469
 - Ask for broadcast name when creating one
 - Automatically create verified group when all users are verified #3492
+- register on system as handler for webxdc files
 
 ### Changed
 - add a dark theme for the "Help" and the webxdc loading screen
