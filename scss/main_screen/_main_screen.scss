@@ -3,8 +3,12 @@
     font-size: medium;
     font-weight: bold;
     cursor: pointer;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    display: flex;
+
+    .truncated {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
     .chat_property_icons {
       display: inline-block;

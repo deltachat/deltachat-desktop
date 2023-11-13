@@ -8,11 +8,14 @@
   display: inline-block;
   font-weight: normal;
 
+  height: var(--local-avatar-size);
+  width: var(--local-avatar-size);
+  margin: var(--local-avatar-vertical-margin) 0;
+
   div.content,
   img.content {
     height: var(--local-avatar-size);
     width: var(--local-avatar-size);
-    margin: var(--local-avatar-vertical-margin) 0;
     border-radius: 100%;
     pointer-events: none;
   }
@@ -37,7 +40,6 @@
 
       height: var(--local-avatar-size);
       width: var(--local-avatar-size);
-      margin: var(--local-avatar-vertical-margin) 0;
 
       background-color: var(--recently-seen-indicator-color);
       mask: url('../images/avatar/online-avatar-dot.svg') no-repeat center;
