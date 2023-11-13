@@ -70,6 +70,7 @@
 - fix emojis in some html emails (force charset utf-8)
 - fix `null` account name when leaving the field empty bug
 - fix text truncation so verified icon is always shown on ViewGroup, ViewProfile, ContactListItems, Navbar and on ChatlistItem
+- fix scrollbar caused flickering in ViewProfile
 
 
 ### Removed

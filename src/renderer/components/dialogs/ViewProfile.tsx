@@ -114,7 +114,7 @@ export default function ViewProfile(props: {
         onClickBack={onBack}
       />
       <DeltaDialogBody noFooter>
-        <DeltaDialogContent noPadding>
+        <DeltaDialogContent noPadding noOverflow>
           <ViewProfileInner contact={contact} onClose={onClose} />
         </DeltaDialogContent>
       </DeltaDialogBody>
