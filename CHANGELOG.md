@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_41_0"></a>
+
+## [1.41.0] - 2023-11-13
+
 > Since we needed to upgrade electron this version drops support for windows 7, 8 and 8.1
 > https://www.electronjs.org/blog/windows-7-to-8-1-deprecation-notice
 > If you are using DC on these platforms you have the following options:
@@ -2245,7 +2249,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.4...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.0...HEAD
+
+[1.41.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.4...v1.41.0
 
 [1.40.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.3...v1.40.4
 
