@@ -69,11 +69,7 @@ protocol.registerSchemesAsPrivileged([
 const app = rawApp as ExtendedAppMainProcess
 app.rc = rc
 
-if (
-  process.platform !== 'darwin' &&
-  rc['multiple-instances'] === false &&
-  !app.requestSingleInstanceLock()
-) {
+if (rc['multiple-instances'] === false && !app.requestSingleInstanceLock()) {
   /* ignore-console-log */
   console.error('Only one instance allowed. Quitting.')
   app.quit()

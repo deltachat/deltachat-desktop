@@ -2,6 +2,11 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- macOS: prevent second instances when runing from terminal
+
+<a id="1_41_1"></a>
+
 ## [1.41.1] - 2023-11-14
 
 ### Changed
