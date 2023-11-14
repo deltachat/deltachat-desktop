@@ -4,7 +4,7 @@ import { DcEventType } from '@deltachat/jsonrpc-client'
 import { debounce } from 'debounce'
 
 import MainScreen from './components/screens/MainScreen'
-// import processOpenQrUrl from './components/helpers/OpenQrUrl'
+import processOpenQrUrl from './components/helpers/OpenQrUrl'
 import { getLogger } from '../shared/logger'
 import { ContextMenuLayer, OpenContextMenu } from './components/ContextMenu'
 import { ActionEmitter, KeybindAction } from './keybindings'
@@ -18,7 +18,7 @@ import { runtime } from './runtime'
 import WebxdcSaveToChatDialog from './components/dialogs/WebxdcSendToChatDialog'
 import { updateTimestamps } from './components/conversations/Timestamp'
 import { ScreenContext } from './contexts/ScreenContext'
-import { DialogContext } from './contexts/DialogContext'
+import { DialogContext, DialogContextProvider } from './contexts/DialogContext'
 import About from './components/dialogs/About'
 
 const log = getLogger('renderer/ScreenController')
@@ -155,13 +155,16 @@ export default class ScreenController extends Component {
       }
     }
 
-    // @TODO
-    // runtime.onOpenQrUrl = processOpenQrUrl
+    runtime.onOpenQrUrl = (url: string) => {
+      processOpenQrUrl(this.context.openDialog, this.context.closeDialog, url)
+    }
+
     runtime.onWebxdcSendToChat = (file, text) => {
       if (this.openSendToDialogId) {
         this.context.closeDialog(this.openSendToDialogId)
         this.openSendToDialogId = undefined
       }
+
       this.openSendToDialogId = this.context.openDialog(
         WebxdcSaveToChatDialog,
         {
@@ -170,6 +173,7 @@ export default class ScreenController extends Component {
         }
       )
     }
+
     runtime.onResumeFromSleep = debounce(() => {
       log.info('onResumeFromSleep')
       // update timestamps
@@ -286,7 +290,7 @@ export default class ScreenController extends Component {
             screen: this.state.screen,
           }}
         >
-          {this.renderScreen()}
+          <DialogContextProvider>{this.renderScreen()}</DialogContextProvider>
         </ScreenContext.Provider>
       </div>
     )
