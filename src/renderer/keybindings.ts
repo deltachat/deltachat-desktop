@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 
 import { getLogger } from '../shared/logger'
-import KeybindingCheatSheet from './components/dialogs/KeybindingCheatSheet'
+// @TODO
+// import KeybindingCheatSheet from './components/dialogs/KeybindingCheatSheet'
 import { Screens } from './ScreenController'
 
 const log = getLogger('renderer/keybindings')
@@ -149,15 +150,17 @@ ActionEmitter.registerHandler(KeybindAction.Settings_Open, () => {
   if (window.__screen === Screens.Main) {
     // only if user is logged in
     // open settings if not already opened
-    if (!window.__settingsOpened && window.__openDialog) {
-      window.__openDialog('Settings')
-    }
+    // @TODO
+    // if (!window.__settingsOpened && window.__openDialog) {
+    //   window.__openDialog('Settings')
+    // }
   }
 })
 
 ActionEmitter.registerHandler(KeybindAction.KeybindingCheatSheet_Open, () => {
   if (!window.__keybindingsDialogOpened) {
-    window.__openDialog(KeybindingCheatSheet)
+    // @TODO
+    // window.__openDialog(KeybindingCheatSheet)
   }
 })
 
