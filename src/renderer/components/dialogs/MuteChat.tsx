@@ -1,8 +1,10 @@
-import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
 import React from 'react'
+
+import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
 import { Timespans } from '../../../shared/constants'
 import { selectedAccountId } from '../../ScreenController'
 import { BackendRemote, Type } from '../../backend-com'
+import { useTranslationFunction } from '../../hooks/useTranslationFunction'
 
 export default function MuteChat({
   isOpen,
@@ -14,7 +16,7 @@ export default function MuteChat({
   chatId: number
 }) {
   const accountId = selectedAccountId()
-  const tx = window.static_translate
+  const tx = useTranslationFunction()
 
   const MUTE_DURATIONS: [Type.MuteDuration, string][] = [
     [{ kind: 'NotMuted' }, tx('off')],

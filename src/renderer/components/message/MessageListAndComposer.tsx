@@ -15,7 +15,7 @@ import { useSettingsStore } from '../../stores/settings'
 import { Type } from '../../backend-com'
 import { sendMessage } from '../helpers/ChatMethods'
 import { useDialog } from '../../hooks/useDialog'
-import ConfirmationDialog from '../dialogs/ConfirmationDialog'
+import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -113,11 +113,13 @@ export default function MessageListAndComposer({
         }
       }
     }
-    const tx = window.static_translate
+
     const fileCount = sanitizedFileList.length
+
     if (fileCount === 0) {
       return
     }
+
     if (fileCount === 1) {
       const msgViewType: Viewtype = sanitizedFileList[0].type.startsWith(
         'image'
@@ -129,28 +131,13 @@ export default function MessageListAndComposer({
     }
 
     // This is a desktop specific "hack" to support sending multiple attachments at once.
-    openDialog(ConfirmationDialog, {
-      message: '@TODO',
-      // @TODO: This probably needs its own component
-      // <>
-      //   {tx(
-      //     'ask_send_following_n_files_to',
-      //     fileCount > 1
-      //       ? [String(fileCount), chatStore.chat.name]
-      //       : [chatStore.chat.name],
-      //     {
-      //       quantity: fileCount,
-      //     }
-      //   )}
-      //   <ul className='drop-file-dialog-file-list'>
-      //     {sanitizedFileList.map(({ name }) => (
-      //       <li key={name}>{' - ' + name}</li>
-      //     ))}
-      //   </ul>
-      // </>
-      confirmLabel: tx('menu_send'),
-      cb: async (yes: boolean) => {
-        if (!yes) return
+    openDialog(ConfirmSendingFiles, {
+      sanitizedFileList,
+      chatName: chatStore.chat.name,
+      onClick: (isConfirmed: boolean) => {
+        if (!isConfirmed) {
+          return
+        }
 
         for (const file of sanitizedFileList) {
           sendMessage(chatId, { file: file.path, viewtype: 'File' })
