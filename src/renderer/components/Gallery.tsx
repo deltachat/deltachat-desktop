@@ -18,7 +18,7 @@ import SettingsStoreInstance, { SettingsStoreState } from '../stores/settings'
 import FullscreenMedia, {
   NeighboringMediaMode,
 } from './dialogs/FullscreenMedia'
-import { ScreenContext } from '../contexts/ScreenContext'
+import { DialogContext } from '../contexts/DialogContext'
 
 const log = getLogger('renderer/Gallery')
 
@@ -60,10 +60,10 @@ const MediaTabs: Readonly<
   },
 }
 
-type mediaProps = { chatId: number | 'all' }
+type Props = { chatId: number | 'all' }
 
 export default class Gallery extends Component<
-  mediaProps,
+  Props,
   {
     currentTab: MediaTabKey
     msgTypes: Type.Viewtype[]
@@ -76,8 +76,9 @@ export default class Gallery extends Component<
   }
 > {
   dateHeader = createRef<HTMLDivElement>()
-  constructor(props: mediaProps) {
+  constructor(props: Props) {
     super(props)
+
     this.state = {
       currentTab: 'images',
       msgTypes: MediaTabs.images.values,
@@ -127,7 +128,7 @@ export default class Gallery extends Component<
     }
   }
 
-  componentDidUpdate(prevProps: mediaProps) {
+  componentDidUpdate(prevProps: Props) {
     if (this.props.chatId !== prevProps.chatId) {
       // reset
       this.reset()
@@ -197,8 +198,7 @@ export default class Gallery extends Component<
   }
 
   openFullscreenMedia(message: Type.Message) {
-    // @TODO
-    window.__openDialog(FullscreenMedia, {
+    this.context.openDialog(FullscreenMedia, {
       msg: message,
       neighboringMedia:
         this.props.chatId === 'all'
@@ -400,7 +400,7 @@ export default class Gallery extends Component<
   }
 }
 
-Gallery.contextType = ScreenContext
+Gallery.contextType = DialogContext
 
 function FileTable({
   width,

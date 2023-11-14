@@ -1,8 +1,12 @@
 import React from 'react'
+
 import { runtime } from '../../runtime'
 import { VERSION, GIT_REF } from '../../../shared/build-info'
 import { getLogger } from '../../../shared/logger'
+import { DialogContext } from '../../contexts/DialogContext'
+
 const log = getLogger('renderer/react-crashhandler')
+
 export class CrashScreen extends React.Component {
   state = {
     hasError: false,
@@ -41,7 +45,7 @@ export class CrashScreen extends React.Component {
               onClick={_ =>
                 runtime.openLink(
                   // @TODO
-                  openDialog,
+                  this.context.openDialog,
                   'https://github.com/deltachat/deltachat-desktop/issues'
                 )
               }
@@ -73,3 +77,5 @@ export class CrashScreen extends React.Component {
     }
   }
 }
+
+CrashScreen.contextType = DialogContext

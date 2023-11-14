@@ -15,9 +15,11 @@ import { BackendRemote } from './backend-com'
 import { debouncedUpdateBadgeCounter } from './system-integration/badge-counter'
 import { updateDeviceChats } from './deviceMessages'
 import { runtime } from './runtime'
-// import WebxdcSaveToChatDialog from './components/dialogs/WebxdcSendToChatDialog'
+import WebxdcSaveToChatDialog from './components/dialogs/WebxdcSendToChatDialog'
 import { updateTimestamps } from './components/conversations/Timestamp'
 import { ScreenContext } from './contexts/ScreenContext'
+import { DialogContext } from './contexts/DialogContext'
+import About from './components/dialogs/About'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -41,7 +43,7 @@ export default class ScreenController extends Component {
   onShowKeybindings: any
   onShowSettings: any
   selectedAccountId: number | undefined
-  openSendToDialogId?: number
+  openSendToDialogId?: string
 
   constructor(public props: {}) {
     super(props)
@@ -61,10 +63,7 @@ export default class ScreenController extends Component {
     this.onShowSettings = this.showSettings.bind(this)
     this.selectAccount = this.selectAccount.bind(this)
 
-    // window.__openDialog = this.openDialog.bind(this)
     window.__userFeedback = this.userFeedback.bind(this)
-    // window.__closeDialog = this.closeDialog.bind(this)
-    // window.__hasOpenDialogs = this.hasOpenDialogs.bind(this)
     window.__changeScreen = this.changeScreen.bind(this)
     window.__selectAccount = this.selectAccount.bind(this)
     window.__screen = this.state.screen
@@ -158,19 +157,19 @@ export default class ScreenController extends Component {
 
     // @TODO
     // runtime.onOpenQrUrl = processOpenQrUrl
-    // runtime.onWebxdcSendToChat = (file, text) => {
-    //   if (this.openSendToDialogId) {
-    //     this.closeDialog(this.openSendToDialogId)
-    //     this.openSendToDialogId = undefined
-    //   }
-    //   this.openSendToDialogId = (this.openDialog as OpenDialogFunctionType)(
-    //     WebxdcSaveToChatDialog,
-    //     {
-    //       messageText: text,
-    //       file,
-    //     }
-    //   )
-    // }
+    runtime.onWebxdcSendToChat = (file, text) => {
+      if (this.openSendToDialogId) {
+        this.context.closeDialog(this.openSendToDialogId)
+        this.openSendToDialogId = undefined
+      }
+      this.openSendToDialogId = this.context.openDialog(
+        WebxdcSaveToChatDialog,
+        {
+          messageText: text,
+          file,
+        }
+      )
+    }
     runtime.onResumeFromSleep = debounce(() => {
       log.info('onResumeFromSleep')
       // update timestamps
@@ -203,8 +202,7 @@ export default class ScreenController extends Component {
   }
 
   showAbout() {
-    // @TODO
-    // this.openDialog('About')
+    this.context.openDialog(About)
   }
 
   showSettings() {
@@ -294,6 +292,8 @@ export default class ScreenController extends Component {
     )
   }
 }
+
+ScreenController.contextType = DialogContext
 
 export function selectedAccountId(): number {
   const selectedAccountId = window.__selectedAccountId
