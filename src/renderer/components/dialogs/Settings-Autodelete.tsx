@@ -1,6 +1,7 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { H5 } from '@blueprintjs/core'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
+import classNames from 'classnames'
+
 import {
   DeltaDialogBody,
   DeltaDialogContent,
@@ -10,16 +11,18 @@ import {
   SmallSelectDialog,
   SelectDialogOption,
 } from './DeltaDialog'
-import { DialogProps } from './DialogController'
 import { SettingsSelector } from './Settings'
 import { AutodeleteDuration } from '../../../shared/constants'
 import { DeltaCheckbox } from '../contact/ContactListItem'
-import classNames from 'classnames'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import { useDialog } from '../../hooks/useDialog'
+import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 function durationToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)
@@ -128,9 +131,8 @@ export default function SettingsAutodelete({
 }: {
   settingsStore: SettingsStoreState
 }) {
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const accountId = selectedAccountId()
-
   const tx = useTranslationFunction()
 
   const AUTODELETE_DURATION_OPTIONS_SERVER = [
@@ -181,6 +183,7 @@ export default function SettingsAutodelete({
           )
           return
         }
+
         openDialog(AutodeleteConfirmationDialog, {
           fromServer,
           estimateCount,

@@ -1,9 +1,10 @@
 import React from 'react'
 import classNames from 'classnames'
+
 import Timestamp from '../conversations/Timestamp'
 import { isImage, isVideo } from '../attachment/Attachment'
-import { i18nContext } from '../../contexts'
 import { msgStatus } from '../../../shared/shared-types'
+import { I18nContext } from '../../contexts/I18nContext'
 
 export default class MessageMetaData extends React.Component<{
   padlock: boolean
@@ -34,7 +35,7 @@ export default class MessageMetaData extends React.Component<{
     )
 
     return (
-      <i18nContext.Consumer>
+      <I18nContext.Consumer>
         {tx => (
           <div
             className={classNames('metadata', {
@@ -67,7 +68,7 @@ export default class MessageMetaData extends React.Component<{
             ) : null}
           </div>
         )}
-      </i18nContext.Consumer>
+      </I18nContext.Consumer>
     )
   }
 }

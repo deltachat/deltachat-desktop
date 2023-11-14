@@ -1,13 +1,12 @@
 import React from 'react'
-import { useContext } from 'react'
-
 import classNames from 'classnames'
-import { ScreenContext } from '../contexts'
+import { T } from '@deltachat/jsonrpc-client'
+
 import { Type } from '../backend-com'
 import FullscreenMedia, {
   NeighboringMediaMode,
 } from './dialogs/FullscreenMedia'
-import { T } from '@deltachat/jsonrpc-client'
+import { useDialog } from '../hooks/useDialog'
 
 export function QRAvatar() {
   return (
@@ -99,7 +98,8 @@ export function ClickForFullscreenAvatarWrapper(props: {
   filename: string | null
   children: React.ReactNode
 }) {
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
+
   return (
     <div
       onClick={() => {

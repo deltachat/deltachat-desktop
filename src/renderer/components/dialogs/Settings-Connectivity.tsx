@@ -9,10 +9,11 @@ import {
   DeltaDialogHeader,
 } from './DeltaDialog'
 import { debounceWithInit } from '../chat/ChatListHelpers'
-import { DialogProps } from './DialogController'
-import { useTranslationFunction } from '../../contexts'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 const INHERIT_STYLES = ['line-height', 'background-color', 'color', 'font-size']
 const OverwrittenStyles =

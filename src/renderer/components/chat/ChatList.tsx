@@ -2,11 +2,20 @@ import React, {
   useRef,
   useEffect,
   useState,
-  useContext,
   useCallback,
   ComponentType,
   useMemo,
 } from 'react'
+import {
+  FixedSizeList as List,
+  ListChildComponentProps,
+  ListItemKeySelector,
+} from 'react-window'
+import { C, DcEvent, DcEventType, T } from '@deltachat/jsonrpc-client'
+import AutoSizer from 'react-virtualized-auto-sizer'
+import InfiniteLoader from 'react-window-infinite-loader'
+
+import { useContactIds } from '../contact/ContactList'
 import { useChatListContextMenu } from './ChatListContextMenu'
 import { useMessageResults, useChatList } from './ChatListHelpers'
 import {
@@ -15,19 +24,7 @@ import {
   ChatListItemRowMessage,
 } from './ChatListItemRow'
 import { PseudoListItemAddContact } from '../helpers/PseudoListItem'
-import { C } from '@deltachat/jsonrpc-client'
-import { useContactIds } from '../contact/ContactList'
-import AutoSizer from 'react-virtualized-auto-sizer'
-import {
-  FixedSizeList as List,
-  ListChildComponentProps,
-  ListItemKeySelector,
-} from 'react-window'
-import InfiniteLoader from 'react-window-infinite-loader'
-
-import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
-
 import {
   createChatByContactIdAndSelectIt,
   selectChat,
@@ -35,7 +32,9 @@ import {
 import { useThemeCssVar } from '../../ThemeManager'
 import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import { DcEvent, DcEventType, T } from '@deltachat/jsonrpc-client'
+import { useDialog } from '../../hooks/useDialog'
+import CreateChat from '../dialogs/CreateChat'
+import { useTranslationFunction } from '../../hooks/useTranslationFunction'
 
 const enum LoadStatus {
   FETCHING = 1,
@@ -142,12 +141,10 @@ export default function ChatList(props: {
     await createChatByContactIdAndSelectIt(contactId)
     props.onExitSearch && props.onExitSearch()
   }
-  const screenContext = useContext(ScreenContext)
-
-  const { openDialog } = screenContext
+  const { openDialog } = useDialog()
 
   const onCreateChat = () => {
-    screenContext.openDialog('CreateChat', {})
+    openDialog(CreateChat)
   }
 
   const CHATLISTITEM_CHAT_HEIGHT =
@@ -276,9 +273,8 @@ export default function ChatList(props: {
     return {
       contactCache,
       contactIds,
-      screenContext,
     }
-  }, [contactCache, contactIds, screenContext])
+  }, [contactCache, contactIds])
 
   const messagelistData = useMemo(() => {
     return { messageResultIds, messageCache, openDialog, queryStr }

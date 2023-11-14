@@ -1,7 +1,8 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import classNames from 'classnames'
+import filesizeConverter from 'filesize'
+
 import { openAttachmentInShell } from '../message/messageFunctions'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
 import {
   isDisplayableByFullscreenMedia,
   isImage,
@@ -14,15 +15,12 @@ import {
 import { runtime } from '../../runtime'
 import { ConversationType } from '../message/MessageList'
 import { getDirection } from '../../../shared/util'
-
-import filesizeConverter from 'filesize'
 import { Type } from '../../backend-com'
 import FullscreenMedia, {
   NeighboringMediaMode,
 } from '../dialogs/FullscreenMedia'
-
-// const MINIMUM_IMG_HEIGHT = 150
-// const MAXIMUM_IMG_HEIGHT = 300
+import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import { useDialog } from '../../hooks/useDialog'
 
 type AttachmentProps = {
   text?: string
@@ -38,7 +36,7 @@ export default function Attachment({
   hasQuote,
 }: AttachmentProps) {
   const tx = useTranslationFunction()
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   if (!message.file) {
     return null
   }

@@ -1,17 +1,18 @@
-import React, { useContext } from 'react'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
+import React from 'react'
+import { C } from '@deltachat/jsonrpc-client'
+
 import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
 import { SettingsSelector } from './Settings'
-
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
-import { C } from '@deltachat/jsonrpc-client'
+import { useDialog } from '../../hooks/useDialog'
+import { useTranslationFunction } from '../../hooks/useTranslationFunction'
 
 export default function SettingsOutgoingMediaQuality(props: {
   settings: SettingsStoreState['settings']
 }) {
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const { settings } = props
   const tx = useTranslationFunction()
 

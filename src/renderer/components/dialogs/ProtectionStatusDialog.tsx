@@ -1,7 +1,6 @@
-import React, { useContext } from 'react'
+import React from 'react'
 
 import { BackendRemote } from '../../backend-com'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { runtime } from '../../runtime'
 import { selectedAccountId } from '../../ScreenController'
 import {
@@ -10,8 +9,10 @@ import {
   DeltaDialogFooterActions,
 } from './DeltaDialog'
 import QrCode from './QrCode'
+import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import { useDialog } from '../../hooks/useDialog'
 
-import type { DialogProps } from './DialogController'
+import type { DialogProps } from '../../contexts/DialogContext'
 
 const VERIFICATION_BROKEN_URL =
   'https://staging.delta.chat/733/en/help#verificationbroken'
@@ -26,7 +27,7 @@ export function ProtectionBrokenDialog({
   onClose,
 }: { name: string } & DialogProps) {
   const tx = useTranslationFunction()
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const accountId = selectedAccountId()
 
   const onQRScan = async () => {
@@ -39,7 +40,7 @@ export function ProtectionBrokenDialog({
   }
 
   const onLearnMore = () => {
-    runtime.openLink(VERIFICATION_BROKEN_URL)
+    runtime.openLink(openDialog, VERIFICATION_BROKEN_URL)
   }
 
   return (
@@ -75,7 +76,7 @@ export function VerifiedContactsRequiredDialog({
   onClose,
 }: DialogProps) {
   const tx = useTranslationFunction()
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const accountId = selectedAccountId()
 
   const onQRScan = async () => {
@@ -88,7 +89,7 @@ export function VerifiedContactsRequiredDialog({
   }
 
   const onLearnMore = () => {
-    runtime.openLink(VERIFICATION_REQUIRED_URL)
+    runtime.openLink(openDialog, VERIFICATION_REQUIRED_URL)
   }
 
   return (
@@ -121,9 +122,10 @@ export function VerifiedContactsRequiredDialog({
 
 export function ProtectionEnabledDialog({ isOpen, onClose }: DialogProps) {
   const tx = useTranslationFunction()
+  const { openDialog } = useDialog()
 
   const onLearnMore = () => {
-    runtime.openLink(VERIFICATION_ENABLED_URL)
+    runtime.openLink(openDialog, VERIFICATION_ENABLED_URL)
   }
 
   return (

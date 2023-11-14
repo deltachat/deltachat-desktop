@@ -5,6 +5,9 @@ import React, {
   useEffect,
   useLayoutEffect,
 } from 'react'
+import classNames from 'classnames'
+import QrReader from '@deltachat/react-qr-reader'
+
 import {
   DeltaDialogBase,
   DeltaDialogFooter,
@@ -12,16 +15,17 @@ import {
   DeltaDialogBody,
   DeltaDialogContent,
 } from './DeltaDialog'
-import { DialogProps } from './DialogController'
-import { useTranslationFunction, ScreenContext } from '../../contexts'
-import classNames from 'classnames'
-import QrReader from '@deltachat/react-qr-reader'
 import processOpenQrUrl from '../helpers/OpenQrUrl'
 import { getLogger } from '../../../shared/logger'
 import { useContextMenu } from '../ContextMenu'
 import { runtime } from '../../runtime'
 import { selectChat } from '../helpers/ChatMethods'
 import { BackendRemote } from '../../backend-com'
+import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import { ScreenContext } from '../../contexts/ScreenContext'
+import { useDialog } from '../../hooks/useDialog'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 const log = getLogger('renderer/dialogs/QrCode')
 
@@ -194,7 +198,8 @@ export function QrCodeScanQrInner(
     onClose: () => void
   }>
 ) {
-  const tx = window.static_translate
+  const tx = useTranslationFunction()
+  const { openDialog, closeDialog } = useDialog()
 
   const processingQrCode = useRef(false)
 
@@ -214,7 +219,7 @@ export function QrCodeScanQrInner(
     if (data && processingQrCode.current === false) {
       processingQrCode.current = true
       try {
-        await processOpenQrUrl(data, handleScanResult)
+        await processOpenQrUrl(openDialog, closeDialog, data, handleScanResult)
       } catch (err) {
         processingQrCode.current = false
         throw err

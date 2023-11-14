@@ -5,14 +5,13 @@ import React, {
   forwardRef,
   useLayoutEffect,
   useCallback,
-  useContext,
 } from 'react'
+import { C, T } from '@deltachat/jsonrpc-client'
+
 import MenuAttachment from './menuAttachment'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
 import ComposerMessageInput from './ComposerMessageInput'
 import { getLogger } from '../../../shared/logger'
 import { EmojiAndStickerPicker } from './EmojiAndStickerPicker'
-import type { EmojiData, BaseEmoji } from 'emoji-mart/index'
 import { replaceColonsSafe } from '../conversations/emoji'
 import { Quote } from '../message/Message'
 import { DraftAttachment } from '../attachment/messageAttachment'
@@ -22,11 +21,13 @@ import { BackendRemote, EffectfulBackendActions, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { MessageTypeAttachmentSubset } from '../attachment/Attachment'
 import { runtime } from '../../runtime'
-import { C } from 'deltachat-node/node/dist/constants'
 import { confirmDialog } from '../message/messageFunctions'
 import { ProtectionBrokenDialog } from '../dialogs/ProtectionStatusDialog'
-import { T } from '@deltachat/jsonrpc-client'
-import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
+import { useDialog } from '../../hooks/useDialog'
+import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+
+import type { EmojiData, BaseEmoji } from 'emoji-mart/index'
+import type { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 
 const log = getLogger('renderer/composer')
 
@@ -91,7 +92,7 @@ const Composer = forwardRef<
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
   const pickerButtonRef = useRef<HTMLDivElement>(null)
 
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
 
   const composerSendMessage = async () => {
     if (chatId === null) {
@@ -255,6 +256,7 @@ const Composer = forwardRef<
               // if chat gets deleted instead of blocked ask user for confirmation
               if (
                 !(await confirmDialog(
+                  openDialog,
                   tx('ask_delete_named_chat', selectedChat.name),
                   tx('delete'),
                   true

@@ -1,12 +1,14 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { H5 } from '@blueprintjs/core'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
+import { C } from '@deltachat/jsonrpc-client'
+
 import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
 import { SettingsSelector } from './Settings'
-import { C } from '@deltachat/jsonrpc-client'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
+import { useDialog } from '../../hooks/useDialog'
+import { useTranslationFunction } from '../../hooks/useTranslationFunction'
 
 function showToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)
@@ -28,9 +30,9 @@ export default function SettingsCommunication({
 }: {
   settingsStore: SettingsStoreState
 }) {
-  const { openDialog } = useContext(ScreenContext)
-
+  const { openDialog } = useDialog()
   const tx = useTranslationFunction()
+
   const SHOW_EMAIL_OPTIONS: SelectDialogOption[] = [
     [String(C.DC_SHOW_EMAILS_OFF), tx('pref_show_emails_no')],
     [

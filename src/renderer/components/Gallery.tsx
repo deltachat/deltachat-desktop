@@ -1,5 +1,8 @@
 import React, { ChangeEvent, Component, createRef } from 'react'
-import { ScreenContext } from '../contexts'
+import AutoSizer from 'react-virtualized-auto-sizer'
+import { FixedSizeGrid, FixedSizeList } from 'react-window'
+import moment from 'moment'
+
 import {
   AudioAttachment,
   FileAttachmentRow,
@@ -11,13 +14,11 @@ import {
 import { getLogger } from '../../shared/logger'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
-import AutoSizer from 'react-virtualized-auto-sizer'
-import { FixedSizeGrid, FixedSizeList } from 'react-window'
 import SettingsStoreInstance, { SettingsStoreState } from '../stores/settings'
-import moment from 'moment'
 import FullscreenMedia, {
   NeighboringMediaMode,
 } from './dialogs/FullscreenMedia'
+import { ScreenContext } from '../contexts/ScreenContext'
 
 const log = getLogger('renderer/Gallery')
 
@@ -196,6 +197,7 @@ export default class Gallery extends Component<
   }
 
   openFullscreenMedia(message: Type.Message) {
+    // @TODO
     window.__openDialog(FullscreenMedia, {
       msg: message,
       neighboringMedia:

@@ -1,13 +1,13 @@
 import React, { useContext } from 'react'
-import { LabeledLink, Link } from './Link'
 import {
   parse_desktop_set,
   parse_text,
   ParsedElement,
 } from '@deltachat/message_parser_wasm/message_parser_wasm'
+
+import { LabeledLink, Link } from './Link'
 import { getLogger } from '../../../shared/logger'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
-import { MessagesDisplayContext } from '../../contexts'
 import {
   createChatByEmail,
   selectChat,
@@ -17,6 +17,9 @@ import { ChatView } from '../../stores/chat'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import SettingsStoreInstance from '../../stores/settings'
+import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
+import ConfirmationDialog from '../dialogs/ConfirmationDialog'
+import { useDialog } from '../../hooks/useDialog'
 
 const log = getLogger('renderer/message-markdown')
 
@@ -111,8 +114,10 @@ export function message2React(message: string): JSX.Element {
 }
 
 function EmailLink({ email }: { email: string }): JSX.Element {
+  const { openDialog } = useDialog()
+
   const handleClick = async () => {
-    const chatId = await createChatByEmail(email)
+    const chatId = await createChatByEmail(openDialog, email)
     if (chatId) {
       selectChat(chatId)
     }
@@ -151,7 +156,9 @@ function TagLink({ tag }: { tag: string }) {
 }
 
 function BotCommandSuggestion({ suggestion }: { suggestion: string }) {
+  const { openDialog } = useDialog()
   const message_display_context = useContext(MessagesDisplayContext)
+
   const applySuggestion = async () => {
     if (!message_display_context) {
       return
@@ -198,7 +205,7 @@ function BotCommandSuggestion({ suggestion }: { suggestion: string }) {
     if (draft) {
       // ask if the draft should be replaced
       const continue_process = await new Promise((resolve, _reject) => {
-        window.__openDialog('ConfirmationDialog', {
+        openDialog(ConfirmationDialog, {
           message: window.static_translate('confirm_replace_draft', name),
           confirmLabel: window.static_translate('replace_draft'),
           cb: resolve,

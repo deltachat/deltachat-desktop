@@ -1,5 +1,9 @@
 import React from 'react'
 import { Classes } from '@blueprintjs/core'
+import classNames from 'classnames'
+import { C } from '@deltachat/jsonrpc-client'
+import AutoSizer from 'react-virtualized-auto-sizer'
+
 import {
   DeltaDialogBase,
   DeltaDialogFooter,
@@ -8,25 +12,26 @@ import {
 } from './DeltaDialog'
 import ChatListItem from '../chat/ChatListItem'
 import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
-import classNames from 'classnames'
-import { DialogProps } from './DialogController'
-
-import { C } from '@deltachat/jsonrpc-client'
 import { ChatListPart, useLogicVirtualChatList } from '../chat/ChatList'
-import AutoSizer from 'react-virtualized-auto-sizer'
 import { useChatList } from '../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../ThemeManager'
 import { selectChat } from '../helpers/ChatMethods'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { runtime } from '../../runtime'
+import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import { useDialog } from '../../hooks/useDialog'
+import ConfirmationDialog from './ConfirmationDialog'
+
+import type { DialogProps, OpenDialog } from '../../contexts/DialogContext'
 
 export default function WebxdcSaveToChatDialog(props: {
   messageText: string | null
   file: { file_name: string; file_content: string } | null
   onClose: DialogProps['onClose']
 }) {
-  const tx = window.static_translate
+  const tx = useTranslationFunction()
+  const { openDialog } = useDialog()
   const { onClose, messageText, file } = props
   const listFlags = C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS
   const { chatListIds, queryStr, setQueryStr } = useChatList(listFlags)
@@ -43,7 +48,7 @@ export default function WebxdcSaveToChatDialog(props: {
         file.file_content
       )
     }
-    await sendToChatAction(chatId, messageText, path)
+    await sendToChatAction(openDialog, chatId, messageText, path)
     if (path) {
       await runtime.removeTempFile(path)
     }
@@ -138,6 +143,7 @@ export default function WebxdcSaveToChatDialog(props: {
 }
 
 async function sendToChatAction(
+  openDialog: OpenDialog,
   chatId: number,
   messageText: string | null,
   file: string | null
@@ -152,7 +158,7 @@ async function sendToChatAction(
   if (draft) {
     // ask if the draft should be replaced
     const continue_process = await new Promise((resolve, _reject) => {
-      window.__openDialog('ConfirmationDialog', {
+      openDialog(ConfirmationDialog, {
         message: window.static_translate('confirm_replace_draft', chat.name),
         confirmLabel: window.static_translate('replace_draft'),
         cb: resolve,

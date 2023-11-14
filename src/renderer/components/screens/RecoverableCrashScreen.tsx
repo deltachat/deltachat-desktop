@@ -65,6 +65,8 @@ export class RecoverableCrashScreen extends React.Component<{
               href='#'
               onClick={_ =>
                 runtime.openLink(
+                  // @TODO
+                  openDialog,
                   'https://github.com/deltachat/deltachat-desktop/issues'
                 )
               }

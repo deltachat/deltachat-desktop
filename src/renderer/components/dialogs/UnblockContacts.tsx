@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react'
-import DeltaDialog, { DeltaDialogBody, DeltaDialogContent } from './DeltaDialog'
-
-import { ContactList } from '../contact/ContactList'
-import { ScreenContext } from '../../contexts'
-import { DialogProps } from './DialogController'
+import React, { useState, useEffect } from 'react'
 import debounce from 'debounce'
+
+import DeltaDialog, { DeltaDialogBody, DeltaDialogContent } from './DeltaDialog'
+import { ContactList } from '../contact/ContactList'
 import {
   BackendRemote,
   EffectfulBackendActions,
@@ -12,16 +10,17 @@ import {
   Type,
 } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import { useDialog } from '../../hooks/useDialog'
+import ConfirmationDialog from './ConfirmationDialog'
 
-export default function UnblockContacts(props: {
-  isOpen: DialogProps['isOpen']
-  onClose: DialogProps['onClose']
-}) {
+import type { DialogProps } from '../../contexts/DialogContext'
+
+export default function UnblockContacts(props: DialogProps) {
   const { isOpen, onClose } = props
   const [blockedContacts, setBlockedContacts] = useState<Type.Contact[] | null>(
     null
   )
-  const screenContext = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const accountId = selectedAccountId()
 
   useEffect(() => {
@@ -37,7 +36,7 @@ export default function UnblockContacts(props: {
   }, [accountId])
 
   const onUnblockContact = ({ id }: { id: number }) => {
-    screenContext.openDialog('ConfirmationDialog', {
+    openDialog(ConfirmationDialog, {
       message: tx('ask_unblock_contact'),
       confirmLabel: tx('menu_unblock_contact'),
       cb: (yes: boolean) =>

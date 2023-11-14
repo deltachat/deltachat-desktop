@@ -1,12 +1,13 @@
 import React, { useState, useContext } from 'react'
 import { Card, Callout, Spinner, Classes } from '@blueprintjs/core'
+import { T } from '@deltachat/jsonrpc-client'
+
 import InputTransferKey from './AutocryptSetupMessage'
 import DeltaDialog from './DeltaDialog'
-import { ScreenContext } from '../../contexts'
 import { getLogger } from '../../../shared/logger'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import { T } from '@deltachat/jsonrpc-client'
+import { ScreenContext } from '../../contexts/ScreenContext'
 
 const log = getLogger('frontend/dialogs/EnterAutocryptSetupMessage')
 

@@ -1,11 +1,11 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Card, Elevation, H5 } from '@blueprintjs/core'
 import filesizeConverter from 'filesize'
-import { ScreenContext } from '../../contexts'
 
 import ConfirmationDialog from './ConfirmationDialog'
 import { runtime } from '../../runtime'
 import { selectedAccountId } from '../../ScreenController'
+import { useDialog } from '../../hooks/useDialog'
 
 export default function SettingsWebxdc() {
   const accountId = selectedAccountId()
@@ -20,7 +20,7 @@ export default function SettingsWebxdc() {
 
   useEffect(() => updateUsage(), [updateUsage])
 
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const tx = window.static_translate
 
   const deleteData = () => {

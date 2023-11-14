@@ -1,10 +1,10 @@
-import React, { useState, useContext, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
+
 import { Credentials } from '../../../shared/shared-types'
 import LoginForm, {
   defaultCredentials,
   ConfigureProgressDialog,
 } from '../LoginForm'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
 import {
   DeltaDialogFooter,
   DeltaDialogFooterActions,
@@ -13,6 +13,8 @@ import {
   DeltaDialogContent,
   DeltaDialogHeader,
 } from '../dialogs/DeltaDialog'
+import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import { useDialog } from '../../hooks/useDialog'
 
 import type ScreenController from '../../ScreenController'
 
@@ -24,7 +26,7 @@ export default function AccountSetupScreen({
   accountId: number
 }) {
   const tx = useTranslationFunction()
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
 
   const [credentials, setCredentials] = useState<Credentials>(
     defaultCredentials()

@@ -5,15 +5,17 @@ import React, {
   PropsWithChildren,
 } from 'react'
 import classNames from 'classnames'
-import { useTranslationFunction } from '../../contexts'
+import data from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
+
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { runtime } from '../../runtime'
 import { jumpToMessage } from '../helpers/ChatMethods'
-import data from '@emoji-mart/data'
-import Picker from '@emoji-mart/react'
-import type { EmojiData } from 'emoji-mart/index'
 import { useThemeCssVar } from '../../ThemeManager'
+
+import type { EmojiData } from 'emoji-mart/index'
+import { useTranslationFunction } from '../../hooks/useTranslationFunction'
 
 const DisplayedStickerPack = ({
   stickerPackName,

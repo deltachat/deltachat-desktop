@@ -1,21 +1,22 @@
 import React, { useState } from 'react'
 import { Card, Classes } from '@blueprintjs/core'
+
 import {
   DeltaDialogBase,
   DeltaDialogHeader,
   DeltaDialogOkCancelFooter,
 } from './DeltaDialog'
 import { useGroupImage, ChatSettingsSetNameAndProfileImage } from './CreateChat'
-
-import { DialogProps } from './DialogController'
 import { Type } from '../../backend-com'
 import { modifyGroup } from '../helpers/ChatMethods'
 
-export default function MailingListProfile(props: {
-  isOpen: DialogProps['isOpen']
-  onClose: DialogProps['onClose']
-  chat: Type.FullChat
-}) {
+import type { DialogProps } from '../../contexts/DialogContext'
+
+export default function MailingListProfile(
+  props: {
+    chat: Type.FullChat
+  } & DialogProps
+) {
   const { isOpen, onClose, chat } = props
 
   const tx = window.static_translate

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { DialogProps } from './DialogController'
+
 import {
   SmallDialog,
   DeltaDialogFooter,
@@ -7,6 +7,8 @@ import {
 } from './DeltaDialog'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 export default function EncryptionInfo({
   chatListItem,

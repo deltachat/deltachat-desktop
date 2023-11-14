@@ -1,3 +1,8 @@
+import React, { useContext } from 'react'
+import reactStringReplace from 'react-string-replace'
+import classNames from 'classnames'
+import { C } from '@deltachat/jsonrpc-client'
+
 import {
   onDownload,
   openAttachmentInShell,
@@ -10,28 +15,18 @@ import {
   downloadFullMessage,
   openWebxdc,
 } from './messageFunctions'
-import React, { useContext } from 'react'
-import reactStringReplace from 'react-string-replace'
-
-import classNames from 'classnames'
 import MessageBody from './MessageBody'
 import MessageMetaData from './MessageMetaData'
-
 import Attachment from '../attachment/messageAttachment'
 import { isGenericAttachment } from '../attachment/Attachment'
-import { useTranslationFunction, ScreenContext } from '../../contexts'
 import {
   joinCall,
   jumpToMessage,
   openViewProfileDialog,
 } from '../helpers/ChatMethods'
-import { C } from '@deltachat/jsonrpc-client'
-// import { getLogger } from '../../../shared/logger'
 import { runtime } from '../../runtime'
 import { AvatarFromContact } from '../Avatar'
 import { ConversationType } from './MessageList'
-// const log = getLogger('renderer/message')
-
 import { getDirection, truncateText } from '../../../shared/util'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { ContextMenuItem } from '../ContextMenu'
@@ -41,6 +36,11 @@ import {
   ProtectionBrokenDialog,
   ProtectionEnabledDialog,
 } from '../dialogs/ProtectionStatusDialog'
+import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import { ScreenContext } from '../../contexts/ScreenContext'
+import { useDialog } from '../../hooks/useDialog'
+import EnterAutocryptSetupMessage from '../dialogs/EnterAutocryptSetupMessage'
+import { OpenDialog } from '../../contexts/DialogContext'
 
 const Avatar = (
   contact: Type.Contact,
@@ -135,12 +135,12 @@ function buildContextMenu(
     message,
     text,
     conversationType,
-  }: // onRetrySend,
-  {
+    openDialog,
+  }: {
     message: Type.Message | null
     text?: string
     conversationType: ConversationType
-    // onRetrySend: Function
+    openDialog: OpenDialog
   },
   clickTarget: HTMLAnchorElement | null
 ): (false | ContextMenuItem)[] {
@@ -211,7 +211,7 @@ function buildContextMenu(
     // Forward message
     {
       label: tx('forward'),
-      action: openForwardDialog.bind(null, message),
+      action: openForwardDialog.bind(null, openDialog, message),
     },
     // copy link
     link !== '' &&
@@ -267,12 +267,12 @@ function buildContextMenu(
     // Message details
     {
       label: tx('menu_message_details'),
-      action: openMessageInfo.bind(null, message),
+      action: openMessageInfo.bind(null, openDialog, message),
     },
     // Delete message
     {
       label: tx('delete_message_desktop'),
-      action: confirmDeleteMessage.bind(null, message),
+      action: confirmDeleteMessage.bind(null, openDialog, message),
     },
   ]
 }
@@ -289,7 +289,8 @@ export default function Message(props: {
   const tx = useTranslationFunction()
 
   const screenContext = useContext(ScreenContext)
-  const { openContextMenu, openDialog } = screenContext
+  const { openDialog } = useDialog()
+  const { openContextMenu } = screenContext
 
   const showMenu: (
     event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement, MouseEvent>
@@ -301,6 +302,7 @@ export default function Message(props: {
         message,
         text: text || undefined,
         conversationType,
+        openDialog,
       },
       target
     )
@@ -375,13 +377,13 @@ export default function Message(props: {
   }
   // Normal Message
   const onContactClick = async (contact: Type.Contact) => {
-    openViewProfileDialog(screenContext, contact.id)
+    openViewProfileDialog(openDialog, contact.id)
   }
 
   let onClickMessageBody
   if (isSetupmessage) {
     onClickMessageBody = () =>
-      openDialog('EnterAutocryptSetupMessage', { message })
+      openDialog(EnterAutocryptSetupMessage, { message })
   }
 
   let content
@@ -396,7 +398,7 @@ export default function Message(props: {
         <div
           className='info-button'
           onContextMenu={showMenu}
-          onClick={joinCall.bind(null, screenContext, id)}
+          onClick={joinCall.bind(null, openDialog, id)}
         >
           {direction === 'incoming'
             ? tx('videochat_contact_invited_hint', message.sender.displayName)
@@ -417,7 +419,7 @@ export default function Message(props: {
             hasLocation={hasLocation}
             timestamp={message.timestamp * 1000}
             padlock={message.showPadlock}
-            onClickError={openMessageInfo.bind(null, message)}
+            onClickError={openMessageInfo.bind(null, openDialog, message)}
           />
         </div>
       </div>
@@ -542,7 +544,7 @@ export default function Message(props: {
             hasLocation={hasLocation}
             timestamp={message.timestamp * 1000}
             padlock={message.showPadlock}
-            onClickError={openMessageInfo.bind(null, message)}
+            onClickError={openMessageInfo.bind(null, openDialog, message)}
           />
         </div>
       </div>
@@ -557,7 +559,7 @@ export const Quote = ({
   quote: Type.MessageQuote
   msgParentId?: number
 }) => {
-  const tx = window.static_translate
+  const tx = useTranslationFunction()
 
   const hasMessage = quote.kind === 'WithMessage'
 

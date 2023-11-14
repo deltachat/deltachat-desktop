@@ -1,21 +1,15 @@
-import React, {
-  useEffect,
-  useState,
-  useCallback,
-  useMemo,
-  useContext,
-} from 'react'
+import React, { useEffect, useState, useCallback, useMemo } from 'react'
+import { C } from '@deltachat/jsonrpc-client'
+import { debounce } from 'debounce'
 
 import { getLogger } from '../../shared/logger'
-import { ScreenContext, useTranslationFunction } from '../contexts'
 import { useKeyBindingAction, KeybindAction } from '../keybindings'
-import { C } from '@deltachat/jsonrpc-client'
-
-import { debounce } from 'debounce'
 import { debounceWithInit } from './chat/ChatListHelpers'
 import SettingsConnectivityDialog from './dialogs/Settings-Connectivity'
 import { BackendRemote, onDCEvent } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
+import { useDialog } from '../hooks/useDialog'
+import { useTranslationFunction } from '../hooks/useTranslationFunction'
 
 const log = getLogger('renderer/components/ConnectivityToast')
 
@@ -152,7 +146,7 @@ export default function ConnectivityToast() {
     setTimeout(() => maybeNetwork(), 100)
   }
 
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const onInfoTextClick = useCallback(() => {
     openDialog(SettingsConnectivityDialog)
   }, [openDialog])

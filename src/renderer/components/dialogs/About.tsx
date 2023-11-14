@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import reactStringReplace from 'react-string-replace'
+
 import { getLogger } from '../../../shared/logger'
 import DeltaDialog, { DeltaDialogBody, DeltaDialogFooter } from './DeltaDialog'
 import { gitHubUrl, gitHubLicenseUrl } from '../../../shared/constants'
 import { VERSION, GIT_REF } from '../../../shared/build-info'
 import ClickableLink from '../helpers/ClickableLink'
-import { useTranslationFunction } from '../../contexts'
 import { runtime } from '../../runtime'
 import { BackendRemote } from '../../backend-com'
+import { useTranslationFunction } from '../../hooks/useTranslationFunction'
 
 const log = getLogger('renderer/dialogs/About')
 

@@ -1,10 +1,11 @@
 import React from 'react'
+
+import { useTranslationFunction } from '../../hooks/useTranslationFunction'
 import {
   SmallDialog,
   DeltaDialogFooter,
   DeltaDialogFooterActions,
 } from './DeltaDialog'
-import { useTranslationFunction } from '../../contexts'
 
 export default function AlertDialog({
   message,

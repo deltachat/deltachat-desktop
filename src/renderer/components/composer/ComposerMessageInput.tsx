@@ -108,11 +108,12 @@ export default class ComposerMessageInput extends React.Component<
           'em-emoji-picker'
         )
       ) {
+        // @TODO
         // Focus on the current selection, hack for focusing on newlines
-        if (window.__hasOpenDialogs()) {
-          this.textareaRef.current.blur()
-          this.textareaRef.current.focus()
-        }
+        // if (window.__hasOpenDialogs()) {
+        //   this.textareaRef.current.blur()
+        //   this.textareaRef.current.focus()
+        // }
       }
 
       this.setCursorPosition = false

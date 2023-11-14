@@ -1,6 +1,5 @@
 import { Card, Elevation } from '@blueprintjs/core'
-import React, { useState, useContext } from 'react'
-import { useTranslationFunction, ScreenContext } from '../../contexts'
+import React, { useState } from 'react'
 
 import { avatarInitial, ClickForFullscreenAvatarWrapper } from '../Avatar'
 import { DeltaInput, DeltaTextarea } from '../Login-Styles'
@@ -12,13 +11,16 @@ import {
 } from './DeltaDialog'
 import { SettingsButton } from './Settings'
 import { runtime } from '../../runtime'
-import { DialogProps } from './DialogController'
 import SettingsAccountDialog from './Settings-Account'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import { useDialog } from '../../hooks/useDialog'
+import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 export default function SettingsProfile({
   settingsStore,
@@ -26,14 +28,14 @@ export default function SettingsProfile({
   settingsStore: SettingsStoreState
   onClose: any
 }) {
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
+  const tx = useTranslationFunction()
 
   const initial = avatarInitial(
     settingsStore.selfContact.displayName || '',
     settingsStore.selfContact.address
   )
 
-  const tx = useTranslationFunction()
   const profileBlobUrl = runtime.transformBlobURL(
     settingsStore.selfContact.profileImage || ''
   )

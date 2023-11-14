@@ -13,12 +13,12 @@ export type DialogProps = {
 
 type DialogElementConstructor<T> = JSXElementConstructor<DialogProps & T>
 
-type OpenDialog = <T extends { [key: string]: any }>(
+export type OpenDialog = <T extends { [key: string]: any }>(
   dialogElement: DialogElementConstructor<T>,
   additionalProps?: T
 ) => DialogId
 
-type CloseDialog = (id: DialogId) => void
+export type CloseDialog = (id: DialogId) => void
 
 type DialogContextValue = {
   hasOpenDialogs: boolean

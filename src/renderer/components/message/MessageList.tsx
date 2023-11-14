@@ -7,22 +7,23 @@ import React, {
   useState,
 } from 'react'
 import classNames from 'classnames'
+import { C, T } from '@deltachat/jsonrpc-client'
+import moment from 'moment'
+
 import { MessageWrapper } from './MessageWrapper'
 import ChatStore, {
   useChatStore,
   ChatStoreStateWithChatSet,
 } from '../../stores/chat'
-import { C } from '@deltachat/jsonrpc-client'
-import moment from 'moment'
-
 import { getLogger } from '../../../shared/logger'
-import { MessagesDisplayContext, useTranslationFunction } from '../../contexts'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
-import { T } from '@deltachat/jsonrpc-client'
 import { selectedAccountId } from '../../ScreenController'
 import { useMessageList } from '../../stores/messagelist'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { debouncedUpdateBadgeCounter } from '../../system-integration/badge-counter'
+import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
+import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+
 const log = getLogger('render/components/message/MessageList')
 
 type ChatTypes =

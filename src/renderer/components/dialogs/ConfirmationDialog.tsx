@@ -1,11 +1,13 @@
 import React from 'react'
+
 import {
   SmallDialog,
   DeltaDialogFooter,
   DeltaDialogFooterActions,
 } from './DeltaDialog'
-import { useTranslationFunction } from '../../contexts'
-import type { DialogProps } from './DialogController'
+import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 export default function ConfirmationDialog({
   message,

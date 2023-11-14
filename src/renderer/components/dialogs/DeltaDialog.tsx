@@ -1,7 +1,8 @@
 import React, { useState, PropsWithChildren } from 'react'
 import { Dialog, Classes, RadioGroup, Radio } from '@blueprintjs/core'
 import classNames from 'classnames'
-import { DialogProps } from './DialogController'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 export const DeltaDialogBase = React.memo<
   React.PropsWithChildren<{
@@ -110,30 +111,6 @@ const DeltaDialog = React.memo<
 })
 
 export default DeltaDialog
-
-export function useDialog<T extends (props: any) => JSX.Element>(
-  DialogComponent: T
-) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [props, setProps] = useState({})
-  const showDialog = (
-    props: T extends (props: infer U) => JSX.Element ? U : never
-  ) => {
-    setProps(props || {})
-    setIsOpen(true)
-  }
-  const dismissDialog = () => {
-    setIsOpen(false)
-  }
-  const onClose = dismissDialog
-
-  const renderDialog: () => JSX.Element | null = () => {
-    if (!isOpen) return null
-    const Component = DialogComponent as (props: any) => JSX.Element
-    return <Component {...{ ...props, isOpen, onClose }} />
-  }
-  return [renderDialog, showDialog] as [typeof renderDialog, typeof showDialog]
-}
 
 export function DeltaDialogHeader(props: {
   title?: string

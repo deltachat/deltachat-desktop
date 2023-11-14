@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import {
   Button,
   Position,
@@ -7,15 +7,18 @@ import {
   MenuItem,
   IconName,
 } from '@blueprintjs/core'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
-import { runtime } from '../../runtime'
+import { T } from '@deltachat/jsonrpc-client'
 
+import { runtime } from '../../runtime'
 import { sendCallInvitation } from '../helpers/ChatMethods'
 import { Type } from '../../backend-com'
 import { useStore } from '../../stores/store'
 import SettingsStoreInstance from '../../stores/settings'
 import { IMAGE_EXTENSIONS } from '../../../shared/constants'
-import { T } from '@deltachat/jsonrpc-client'
+import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import { useDialog } from '../../hooks/useDialog'
+import ConfirmationDialog from '../dialogs/ConfirmationDialog'
+
 //function to populate Menu
 const MenuAttachmentItems = ({
   itemsArray,
@@ -44,7 +47,7 @@ const MenuAttachment = ({
   selectedChat: Type.FullChat | null
 }) => {
   const tx = useTranslationFunction()
-  const screenContext = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const [settings] = useStore(SettingsStoreInstance)
   const addFilenameFile = async () => {
     //function for files
@@ -83,13 +86,13 @@ const MenuAttachment = ({
     if (!selectedChat) {
       return
     }
-    screenContext.openDialog('ConfirmationDialog', {
+    openDialog(ConfirmationDialog, {
       header: tx('videochat_invite_user_to_videochat', selectedChat.name),
       message: tx('videochat_invite_user_hint'),
       confirmLabel: tx('ok'),
       cb: (yes: boolean) => {
         if (yes) {
-          sendCallInvitation(screenContext, selectedChat.id)
+          sendCallInvitation(openDialog, selectedChat.id)
         }
       },
     })

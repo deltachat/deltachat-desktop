@@ -1,13 +1,15 @@
 import { Card, Classes, Elevation, Intent } from '@blueprintjs/core'
 import { DcEventType } from '@deltachat/jsonrpc-client'
 import React, { useEffect, useState } from 'react'
+
 import { getLogger } from '../../../../shared/logger'
 import { BackendRemote } from '../../../backend-com'
-import { useTranslationFunction } from '../../../contexts'
+import { useTranslationFunction } from '../../../hooks/useTranslationFunction'
 import { selectedAccountId } from '../../../ScreenController'
 import { DeltaProgressBar } from '../../Login-Styles'
 import DeltaDialog from '../DeltaDialog'
-import { DialogProps } from '../DialogController'
+
+import type { DialogProps } from '../../../contexts/DialogContext'
 
 const log = getLogger('renderer/receive_backup')
 
@@ -15,7 +17,9 @@ export function ImportBackupTransferProgressDialog({
   onClose,
   isOpen,
   QrWithToken,
-}: DialogProps) {
+}: DialogProps & {
+  QrWithToken: string
+}) {
   const [importProgress, setImportProgress] = useState(0.0)
   const [error, setError] = useState<string | null>(null)
 

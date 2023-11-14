@@ -1,18 +1,17 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react'
-import { i18nContext } from './contexts'
+import moment from 'moment'
+
 import ScreenController from './ScreenController'
 import attachKeybindingsListener from './keybindings'
-
 import { translate, LocaleData } from '../shared/localize'
 import { ThemeManager, ThemeContext } from './ThemeManager'
-
-import moment from 'moment'
 import { CrashScreen } from './components/screens/CrashScreen'
 import { runtime } from './runtime'
 import { updateCoreStrings } from './stockStrings'
 import { getLogger } from '../shared/logger'
 import { BackendRemote } from './backend-com'
 import { runPostponedFunctions } from './onready'
+import { I18nContext } from './contexts/I18nContext'
 
 attachKeybindingsListener()
 
@@ -78,9 +77,9 @@ export default function App(_props: any) {
   return (
     <CrashScreen>
       <ThemeContextWrapper>
-        <i18nContext.Provider value={window.static_translate}>
+        <I18nContext.Provider value={window.static_translate}>
           <ScreenController />
-        </i18nContext.Provider>
+        </I18nContext.Provider>
       </ThemeContextWrapper>
     </CrashScreen>
   )

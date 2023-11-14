@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { C, DcEventType } from '@deltachat/jsonrpc-client'
 import { Card, Classes, Elevation } from '@blueprintjs/core'
 
@@ -25,9 +19,7 @@ import {
   PseudoListItemShowQrCode,
   PseudoListItemAddMember,
 } from '../helpers/PseudoListItem'
-import { DialogProps } from './DialogController'
 import ViewProfile from './ViewProfile'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
 import {
   Avatar,
   avatarInitial,
@@ -41,6 +33,10 @@ import { selectedAccountId } from '../../ScreenController'
 import { modifyGroup } from '../helpers/ChatMethods'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import { useSettingsStore } from '../../stores/settings'
+import { DialogProps } from '../../contexts/DialogContext'
+import { useDialog } from '../../hooks/useDialog'
+import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import ConfirmationDialog from './ConfirmationDialog'
 
 const log = getLogger('renderer/ViewGroup')
 
@@ -82,12 +78,12 @@ export function useChat(initialChat: Type.FullChat): Type.FullChat {
   return chat
 }
 
-export default function ViewGroup(props: {
-  isOpen: DialogProps['isOpen']
-  onClose: DialogProps['onClose']
-  chat: Type.FullChat
-  isBroadcast: boolean
-}) {
+export default function ViewGroup(
+  props: {
+    chat: Type.FullChat
+    isBroadcast: boolean
+  } & DialogProps
+) {
   const { isOpen, onClose, isBroadcast } = props
 
   const chat = useChat(props.chat)
@@ -142,9 +138,9 @@ function ViewGroupInner(props: {
   chat: Type.FullChat
   isBroadcast: boolean
 }) {
-  const { openDialog } = useContext(ScreenContext)
-  const { onClose, chat, isBroadcast } = props
+  const { openDialog } = useDialog()
   const tx = useTranslationFunction()
+  const { onClose, chat, isBroadcast } = props
   const [settings] = useSettingsStore()
   const isRelatedChatsEnabled =
     settings?.desktopSettings.enableRelatedChats || false
@@ -176,7 +172,7 @@ function ViewGroupInner(props: {
   } = useGroup(chat)
 
   const showRemoveGroupMemberConfirmationDialog = (contact: Type.Contact) => {
-    openDialog('ConfirmationDialog', {
+    openDialog(ConfirmationDialog, {
       message: !isBroadcast
         ? tx('ask_remove_members', contact.nameAndAddr)
         : tx('ask_remove_from_broadcast', contact.nameAndAddr),
@@ -194,7 +190,7 @@ function ViewGroupInner(props: {
       groupName,
       groupImage,
       groupColor: chat.color,
-      onOk: (groupName: string, groupImage: string) => {
+      onOk: (groupName: string, groupImage: any) => {
         groupName.length > 1 && setGroupName(groupName)
         setGroupImage(groupImage)
       },
@@ -434,27 +430,33 @@ export function ShowQRDialog({
 }
 
 export function EditGroupNameDialog({
-  onClose,
-  onOk,
-  onCancel,
-  isOpen,
-  isBroadcast,
-  groupName: initialGroupName,
   groupColor,
   groupImage: initialGroupImage,
-}: DialogProps) {
+  groupName: initialGroupName,
+  isBroadcast,
+  onOk,
+  ...dialogProps
+}: {
+  groupColor: string
+  groupImage: any
+  groupName: string
+  isBroadcast: boolean
+  onOk: (groupName: string, groupImage?: string) => void
+} & DialogProps) {
+  const { isOpen, onClose } = dialogProps
   const [groupName, setGroupName] = useState(initialGroupName)
   const [groupImage, setGroupImage] = useState(initialGroupImage)
   const tx = useTranslationFunction()
 
   const onClickCancel = () => {
     onClose()
-    onCancel && onCancel()
   }
+
   const onClickOk = () => {
     onClose()
     onOk(groupName, groupImage)
   }
+
   return (
     <DeltaDialogBase
       onClose={onClose}
@@ -534,7 +536,7 @@ export function GroupImageSelector({
 }: {
   groupName: string
   groupColor: string
-  groupImage: string
+  groupImage?: string
   setGroupImage: (groupImage: string) => void
 }) {
   const tx = window.static_translate
