@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- update deltachat-node and deltachat/jsonrpc-client to `v1.131.2`
+
 ### Fixed
 - macOS: prevent second instances when runing from terminal
 
