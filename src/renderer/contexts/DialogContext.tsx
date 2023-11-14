@@ -1,8 +1,16 @@
-import React, { Fragment, useCallback, useMemo, useState } from 'react'
+import React, {
+  createElement,
+  Fragment,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react'
 
 import type { JSXElementConstructor, PropsWithChildren } from 'react'
 
-type DialogId = number
+import { generateRandomUUID } from '../utils/random'
+
+type DialogId = string
 
 export type DialogProps = {
   isOpen: boolean
@@ -24,11 +32,9 @@ type DialogContextValue = {
   closeDialog: CloseDialog
 }
 
-const INITIAL_DIALOG_ID: DialogId = 1
-
 const initialValues: DialogContextValue = {
   hasOpenDialogs: false,
-  openDialog: _ => 1,
+  openDialog: _ => '',
   closeDialog: _ => {},
 }
 
@@ -37,46 +43,38 @@ export const DialogContext = React.createContext<DialogContextValue>(
 )
 
 export const DialogContextProvider = ({ children }: PropsWithChildren<{}>) => {
-  const [nextId, setNextId] = useState<DialogId>(INITIAL_DIALOG_ID)
   const [dialogs, setDialogs] = useState<{ [id: DialogId]: JSX.Element }>({})
 
-  const getNextId = useCallback(() => {
-    const newId = nextId
-    setNextId(id => id + 1)
-    return newId
-  }, [nextId])
-
-  const closeDialog = useCallback(
-    (id: DialogId) => {
-      const { [id]: _, ...rest } = dialogs
-      setDialogs(rest)
-    },
-    [dialogs]
-  )
+  const closeDialog = useCallback((id: DialogId) => {
+    setDialogs(({ [id]: _, ...rest }) => rest)
+  }, [])
 
   const openDialog = useCallback<OpenDialog>(
     (dialogElement, additionalProps) => {
-      const newDialogId = getNextId()
+      const newDialogId = generateRandomUUID()
 
-      // From this point on we are only interested in the `DialogProps`
-      const Dialog = dialogElement as DialogElementConstructor<DialogProps>
-
-      const newDialog = (
-        <Dialog
-          isOpen
-          onClose={() => closeDialog(newDialogId)}
-          {...additionalProps}
-        />
+      const newDialog = createElement(
+        // From this point on we are only interested in the `DialogProps`
+        dialogElement as DialogElementConstructor<DialogProps>,
+        {
+          isOpen: true,
+          onClose: () => {
+            closeDialog(newDialogId)
+          },
+          ...additionalProps,
+        }
       )
 
-      setDialogs({
-        ...dialogs,
-        [newDialogId]: newDialog,
+      setDialogs(dialogs => {
+        return {
+          ...dialogs,
+          [newDialogId]: newDialog,
+        }
       })
 
       return newDialogId
     },
-    [closeDialog, dialogs, getNextId]
+    [closeDialog]
   )
 
   const hasOpenDialogs = useMemo(() => {
@@ -93,7 +91,7 @@ export const DialogContextProvider = ({ children }: PropsWithChildren<{}>) => {
     <DialogContext.Provider value={value}>
       {children}
       {Object.keys(dialogs).map(id => {
-        return <Fragment key={`dialog-${id}`}>{dialogs[parseInt(id)]}</Fragment>
+        return <Fragment key={`dialog-${id}`}>{dialogs[id]}</Fragment>
       })}
     </DialogContext.Provider>
   )
