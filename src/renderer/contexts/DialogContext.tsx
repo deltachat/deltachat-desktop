@@ -57,6 +57,7 @@ export const DialogContextProvider = ({ children }: PropsWithChildren<{}>) => {
         // From this point on we are only interested in the `DialogProps`
         dialogElement as DialogElementConstructor<DialogProps>,
         {
+          key: `dialog-${newDialogId}`,
           isOpen: true,
           onClose: () => {
             closeDialog(newDialogId)
@@ -91,7 +92,7 @@ export const DialogContextProvider = ({ children }: PropsWithChildren<{}>) => {
     <DialogContext.Provider value={value}>
       {children}
       {Object.keys(dialogs).map(id => {
-        return <Fragment key={`dialog-${id}`}>{dialogs[id]}</Fragment>
+        return dialogs[id]
       })}
     </DialogContext.Provider>
   )
