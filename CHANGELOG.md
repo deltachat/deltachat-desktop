@@ -2,6 +2,11 @@
 
 ## [Unreleased][unreleased]
 
+## [1.41.1] - 2023-11-14
+
+### Changed
+- fix notarisation for macOS dmg
+
 <a id="1_41_0"></a>
 
 ## [1.41.0] - 2023-11-13
@@ -2249,7 +2254,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.1...HEAD
+
+[1.41.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.0...v1.41.1
 
 [1.41.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.4...v1.41.0
 
