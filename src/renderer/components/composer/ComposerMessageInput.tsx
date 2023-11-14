@@ -1,7 +1,9 @@
 import React from 'react'
 import debounce from 'debounce'
+
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { getLogger } from '../../../shared/logger'
+import { DialogContext } from '../../contexts/DialogContext'
 
 const log = getLogger('renderer/composer/ComposerMessageInput')
 
@@ -108,12 +110,11 @@ export default class ComposerMessageInput extends React.Component<
           'em-emoji-picker'
         )
       ) {
-        // @TODO
         // Focus on the current selection, hack for focusing on newlines
-        // if (window.__hasOpenDialogs()) {
-        //   this.textareaRef.current.blur()
-        //   this.textareaRef.current.focus()
-        // }
+        if (this.context.hasOpenDialogs) {
+          this.textareaRef.current.blur()
+          this.textareaRef.current.focus()
+        }
       }
 
       this.setCursorPosition = false
@@ -238,3 +239,5 @@ export default class ComposerMessageInput extends React.Component<
     )
   }
 }
+
+ComposerMessageInput.contextType = DialogContext
