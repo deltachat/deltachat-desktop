@@ -12,7 +12,7 @@ export type DialogProps = {
 type DialogElementConstructor<T> = JSXElementConstructor<DialogProps & T>
 
 type OpenDialog = <T extends { [key: string]: any }>(
-  DialogElement: DialogElementConstructor<T>,
+  dialogElement: DialogElementConstructor<T>,
   additionalProps?: T
 ) => DialogId
 
@@ -23,6 +23,8 @@ type DialogContextValue = {
   openDialog: OpenDialog
   closeDialog: CloseDialog
 }
+
+const INITIAL_DIALOG_ID: DialogId = 1
 
 const initialValues: DialogContextValue = {
   hasOpenDialogs: false,
@@ -35,8 +37,14 @@ export const DialogContext = React.createContext<DialogContextValue>(
 )
 
 export const DialogContextProvider = ({ children }: PropsWithChildren<{}>) => {
-  const [nextId, setNextId] = useState<DialogId>(1)
+  const [nextId, setNextId] = useState<DialogId>(INITIAL_DIALOG_ID)
   const [dialogs, setDialogs] = useState<{ [id: DialogId]: JSX.Element }>({})
+
+  const getNextId = useCallback(() => {
+    const newId = nextId
+    setNextId(id => id + 1)
+    return newId
+  }, [nextId])
 
   const closeDialog = useCallback(
     (id: DialogId) => {
@@ -47,11 +55,11 @@ export const DialogContextProvider = ({ children }: PropsWithChildren<{}>) => {
   )
 
   const openDialog = useCallback<OpenDialog>(
-    (DialogElement, additionalProps) => {
-      const newDialogId = nextId
-      setNextId(id => id + 1)
+    (dialogElement, additionalProps) => {
+      const newDialogId = getNextId()
 
-      const Dialog = DialogElement as JSXElementConstructor<DialogProps>
+      // From this point on we are only interested in the `DialogProps`
+      const Dialog = dialogElement as DialogElementConstructor<DialogProps>
 
       const newDialog = (
         <Dialog
@@ -68,21 +76,21 @@ export const DialogContextProvider = ({ children }: PropsWithChildren<{}>) => {
 
       return newDialogId
     },
-    [closeDialog, dialogs, nextId]
+    [closeDialog, dialogs, getNextId]
   )
 
-  const state = useMemo(() => {
-    const hasOpenDialogs = Object.keys(dialogs).length > 0
+  const hasOpenDialogs = useMemo(() => {
+    return Object.keys(dialogs).length > 0
+  }, [dialogs])
 
-    return {
-      hasOpenDialogs,
-      openDialog,
-      closeDialog,
-    }
-  }, [dialogs, openDialog, closeDialog])
+  const value = {
+    hasOpenDialogs,
+    openDialog,
+    closeDialog,
+  }
 
   return (
-    <DialogContext.Provider value={state}>
+    <DialogContext.Provider value={value}>
       {children}
       {Object.keys(dialogs).map(id => {
         return <Fragment key={`dialog-${id}`}>{dialogs[parseInt(id)]}</Fragment>
