@@ -84,11 +84,9 @@ export const DialogContextProvider = ({ children }: PropsWithChildren<{}>) => {
   return (
     <DialogContext.Provider value={state}>
       {children}
-      <Fragment>
-        {Object.keys(dialogs).map(id => {
-          return <div key={`dialog-${id}`}>{dialogs[parseInt(id)]}</div>
-        })}
-      </Fragment>
+      {Object.keys(dialogs).map(id => {
+        return <Fragment key={`dialog-${id}`}>{dialogs[parseInt(id)]}</Fragment>
+      })}
     </DialogContext.Provider>
   )
 }
