@@ -32,7 +32,7 @@ export async function openHelpWindow(locale: string, anchor?: string) {
     win.focus()
     if (anchor) {
       win.webContents.executeJavaScript(`
-        document.getElementById(atob("${btoa(anchor)}"))?.scrollIntoView()
+        document.getElementById(atob("${btoa(anchor)}"))?.scrollIntoView({"behavior":"smooth"})
       `)
     }
     return
@@ -73,13 +73,13 @@ export async function openHelpWindow(locale: string, anchor?: string) {
 
   win.loadFile(url)
 
-  win.once('ready-to-show', () => {
-    help_window.show()
+  win.once('ready-to-show', async () => {
     if (anchor) {
-      help_window.webContents.executeJavaScript(`
-        document.getElementById(atob("${btoa(anchor)}"))?.scrollIntoView()
+      await help_window.webContents.executeJavaScript(`
+      document.getElementById(atob("${btoa(anchor)}"))?.scrollIntoView({"behavior":"instant"})
       `)
     }
+    help_window.show()
   })
 
   if (win.setSheetOffset) {
