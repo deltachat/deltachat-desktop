@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_41_2"></a>
+
+## [1.41.2] - 2023-11-15
+
 ### Changed
 - update deltachat-node and deltachat/jsonrpc-client to `v1.131.2`
 - Update inApp help (15.11.2023)
@@ -2267,7 +2271,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.2...HEAD
+
+[1.41.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.1...v1.41.2
 
 [1.41.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.0...v1.41.1
 
