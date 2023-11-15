@@ -27,9 +27,16 @@ async function getHelpFileForLang(locale: string) {
 
 let win: BrowserWindow | null = null
 
-export async function openHelpWindow(locale: string) {
+export async function openHelpWindow(locale: string, anchor?: string) {
   if (win) {
     win.focus()
+    if (anchor) {
+      win.webContents.executeJavaScript(`
+        document.getElementById(atob("${btoa(
+          anchor
+        )}"))?.scrollIntoView({"behavior":"smooth"})
+      `)
+    }
     return
   }
 
@@ -68,7 +75,14 @@ export async function openHelpWindow(locale: string) {
 
   win.loadFile(url)
 
-  win.once('ready-to-show', () => {
+  win.once('ready-to-show', async () => {
+    if (anchor) {
+      await help_window.webContents.executeJavaScript(`
+      document.getElementById(atob("${btoa(
+        anchor
+      )}"))?.scrollIntoView({"behavior":"instant"})
+      `)
+    }
     help_window.show()
   })
 

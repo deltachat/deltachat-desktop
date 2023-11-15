@@ -13,12 +13,9 @@ import QrCode from './QrCode'
 
 import type { DialogProps } from './DialogController'
 
-const VERIFICATION_BROKEN_URL =
-  'https://staging.delta.chat/733/en/help#verificationbroken'
-const VERIFICATION_ENABLED_URL =
-  'https://staging.delta.chat/733/en/help#verifiedchats'
-const VERIFICATION_REQUIRED_URL =
-  'https://staging.delta.chat/746/en/help#howtoe2ee'
+const VERIFICATION_BROKEN_ANCHOR = 'nocryptanymore'
+const VERIFICATION_ENABLED_ANCHOR = 'e2eeguarantee'
+const VERIFICATION_REQUIRED_ANCHOR = 'howtoe2ee'
 
 export function ProtectionBrokenDialog({
   name,
@@ -39,7 +36,7 @@ export function ProtectionBrokenDialog({
   }
 
   const onLearnMore = () => {
-    runtime.openLink(VERIFICATION_BROKEN_URL)
+    runtime.openHelpWindow(VERIFICATION_BROKEN_ANCHOR)
   }
 
   return (
@@ -88,7 +85,7 @@ export function VerifiedContactsRequiredDialog({
   }
 
   const onLearnMore = () => {
-    runtime.openLink(VERIFICATION_REQUIRED_URL)
+    runtime.openHelpWindow(VERIFICATION_REQUIRED_ANCHOR)
   }
 
   return (
@@ -123,7 +120,7 @@ export function ProtectionEnabledDialog({ isOpen, onClose }: DialogProps) {
   const tx = useTranslationFunction()
 
   const onLearnMore = () => {
-    runtime.openLink(VERIFICATION_ENABLED_URL)
+    runtime.openHelpWindow(VERIFICATION_ENABLED_ANCHOR)
   }
 
   return (

@@ -7,6 +7,7 @@
 - Update inApp help (15.11.2023)
 - make help's "scroll to top" button less intrusive
 - streamline profile titles
+- use local help for guaranteed end-to-end encryption more info
 
 ### Fixed
 - macOS: prevent second instances when runing from terminal
