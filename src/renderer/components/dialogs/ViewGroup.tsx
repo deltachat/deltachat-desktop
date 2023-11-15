@@ -245,7 +245,7 @@ function ViewGroupInner(props: {
         <>
           <DeltaDialogHeader
             title={
-              !isBroadcast ? tx('menu_edit_group') : tx('edit_broadcast_list')
+              !isBroadcast ? tx('tab_group') : tx('broadcast_list')
             }
             onClickEdit={onClickEdit}
             showEditButton={!chatDisabled}

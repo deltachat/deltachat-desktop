@@ -105,7 +105,7 @@ export default function ViewProfile(props: {
   return (
     <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
       <DeltaDialogHeader
-        title={tx('profile')}
+        title={tx('contact')}
         onClickEdit={onClickEdit}
         showEditButton={!(isDeviceChat || isSelfChat)}
         showCloseButton={true}
