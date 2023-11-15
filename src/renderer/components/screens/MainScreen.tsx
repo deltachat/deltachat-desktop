@@ -29,7 +29,7 @@ import {
   Button,
   Icon,
 } from '@blueprintjs/core'
-import { useKeyBindingAction, KeybindAction } from '../../keybindings'
+import { KeybindAction } from '../../keybindings'
 import { Avatar } from '../Avatar'
 import ConnectivityToast from '../ConnectivityToast'
 import { C } from '@deltachat/jsonrpc-client'
@@ -44,6 +44,7 @@ import { InlineVerifiedIcon } from '../VerifiedIcon'
 import { SettingsProfileDialog } from '../dialogs/Settings-Profile'
 import { useDialog } from '../../hooks/useDialog'
 import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import { useKeyBindingAction } from '../../hooks/useKeyBindingAction'
 
 const log = getLogger('renderer/main-screen')
 

@@ -16,13 +16,14 @@ import ChatStore, {
   ChatStoreStateWithChatSet,
 } from '../../stores/chat'
 import { getLogger } from '../../../shared/logger'
-import { KeybindAction, useKeyBindingAction } from '../../keybindings'
+import { KeybindAction } from '../../keybindings'
 import { selectedAccountId } from '../../ScreenController'
 import { useMessageList } from '../../stores/messagelist'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { debouncedUpdateBadgeCounter } from '../../system-integration/badge-counter'
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
 import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import { useKeyBindingAction } from '../../hooks/useKeyBindingAction'
 
 const log = getLogger('render/components/message/MessageList')
 

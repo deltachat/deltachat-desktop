@@ -3,13 +3,14 @@ import { C } from '@deltachat/jsonrpc-client'
 import { debounce } from 'debounce'
 
 import { getLogger } from '../../shared/logger'
-import { useKeyBindingAction, KeybindAction } from '../keybindings'
+import { KeybindAction } from '../keybindings'
 import { debounceWithInit } from './chat/ChatListHelpers'
 import SettingsConnectivityDialog from './dialogs/Settings-Connectivity'
 import { BackendRemote, onDCEvent } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
 import { useDialog } from '../hooks/useDialog'
 import { useTranslationFunction } from '../hooks/useTranslationFunction'
+import { useKeyBindingAction } from '../hooks/useKeyBindingAction'
 
 const log = getLogger('renderer/components/ConnectivityToast')
 

@@ -13,13 +13,11 @@ import {
   DeltaDialogHeader,
 } from './DeltaDialog'
 
-export default function KeybindingCheatSheet(props: {
-  isOpen: boolean
-  onClose: () => void
-}) {
+import type { DialogProps } from '../../contexts/DialogContext'
+
+export default function KeybindingCheatSheet(props: DialogProps) {
   const { isOpen, onClose } = props
   const tx = useTranslationFunction()
-
   const settingsStore = useSettingsStore()[0]
 
   useEffect(() => {

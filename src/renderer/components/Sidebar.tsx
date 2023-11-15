@@ -23,6 +23,7 @@ import CreateChat from './dialogs/CreateChat'
 import UnblockContacts from './dialogs/UnblockContacts'
 import { useTranslationFunction } from '../hooks/useTranslationFunction'
 import About from './dialogs/About'
+import Settings from './dialogs/Settings'
 
 export type SidebarState = 'init' | 'visible' | 'invisible'
 
@@ -66,7 +67,9 @@ const Sidebar = React.memo(
 
     const onOpenSettings = () => {
       setSidebarState('invisible')
-      ActionEmitter.emitAction(KeybindAction.Settings_Open)
+      if (!window.__settingsOpened) {
+        openDialog(Settings)
+      }
     }
 
     const onShowQRCode = async () => {

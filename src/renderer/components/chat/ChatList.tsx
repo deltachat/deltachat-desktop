@@ -24,7 +24,7 @@ import {
   ChatListItemRowMessage,
 } from './ChatListItemRow'
 import { PseudoListItemAddContact } from '../helpers/PseudoListItem'
-import { KeybindAction, useKeyBindingAction } from '../../keybindings'
+import { KeybindAction } from '../../keybindings'
 import {
   createChatByContactIdAndSelectIt,
   selectChat,
@@ -35,6 +35,7 @@ import { selectedAccountId } from '../../ScreenController'
 import { useDialog } from '../../hooks/useDialog'
 import CreateChat from '../dialogs/CreateChat'
 import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import { useKeyBindingAction } from '../../hooks/useKeyBindingAction'
 
 const enum LoadStatus {
   FETCHING = 1,

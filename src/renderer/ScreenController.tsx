@@ -20,6 +20,7 @@ import { updateTimestamps } from './components/conversations/Timestamp'
 import { ScreenContext } from './contexts/ScreenContext'
 import { DialogContext, DialogContextProvider } from './contexts/DialogContext'
 import About from './components/dialogs/About'
+import { KeybindingsContextProvider } from './contexts/KeybindingsContext'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -290,7 +291,11 @@ export default class ScreenController extends Component {
             screen: this.state.screen,
           }}
         >
-          <DialogContextProvider>{this.renderScreen()}</DialogContextProvider>
+          <DialogContextProvider>
+            <KeybindingsContextProvider>
+              {this.renderScreen()}
+            </KeybindingsContextProvider>
+          </DialogContextProvider>
         </ScreenContext.Provider>
       </div>
     )

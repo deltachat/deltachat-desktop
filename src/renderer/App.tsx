@@ -2,7 +2,6 @@ import React, { useState, useEffect, useLayoutEffect } from 'react'
 import moment from 'moment'
 
 import ScreenController from './ScreenController'
-import attachKeybindingsListener from './keybindings'
 import { translate, LocaleData } from '../shared/localize'
 import { ThemeManager, ThemeContext } from './ThemeManager'
 import { CrashScreen } from './components/screens/CrashScreen'
@@ -12,8 +11,7 @@ import { getLogger } from '../shared/logger'
 import { BackendRemote } from './backend-com'
 import { runPostponedFunctions } from './onready'
 import { I18nContext } from './contexts/I18nContext'
-
-attachKeybindingsListener()
+import { KeybindingsContextProvider } from './contexts/KeybindingsContext'
 
 export default function App(_props: any) {
   const [localeData, setLocaleData] = useState<LocaleData | null>(null)
