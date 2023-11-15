@@ -15,6 +15,9 @@ html {
   position: fixed;
   bottom: 8px;
   right: 8px;
+  opacity: 0.9;
+  border: 0;
+  border-radius: 5px
 }
 
 body {

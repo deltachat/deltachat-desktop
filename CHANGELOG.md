@@ -5,6 +5,7 @@
 ### Changed
 - update deltachat-node and deltachat/jsonrpc-client to `v1.131.2`
 - Update inApp help (15.11.2023)
+- make help's "scroll to top" button less intrusive
 
 ### Fixed
 - macOS: prevent second instances when runing from terminal
