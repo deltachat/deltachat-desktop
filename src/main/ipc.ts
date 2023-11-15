@@ -76,8 +76,8 @@ export async function init(cwd: string, logHandler: LogHandler) {
     })
   })
 
-  ipcMain.on('help', async (_ev, locale) => {
-    await openHelpWindow(locale)
+  ipcMain.on('help', async (_ev, locale, anchor?: string) => {
+    await openHelpWindow(locale, anchor)
   })
 
   ipcMain.on('reload-main-window', () => {
