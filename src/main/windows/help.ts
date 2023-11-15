@@ -91,6 +91,7 @@ export async function openHelpWindow(locale: string) {
     const body = document.getElementsByTagName('body')[0];
     const back_btn = document.createElement('button');
     back_btn.className = 'back-btn';
+    back_btn.style = "opacity: 0.9; border: 0; border-radius: 5px"
     back_btn.onclick = (ev) => {document.body.scrollTop = 0; document.documentElement.scrollTop = 0;};
     back_btn.innerText = '↑ ${tx('menu_scroll_to_top')}';
     body.append(back_btn);
