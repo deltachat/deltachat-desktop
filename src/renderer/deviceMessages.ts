@@ -26,7 +26,7 @@ Thanks for testing this pre-release version, for more information and to five us
     BackendRemote.rpc.addDeviceMessage(
       accountId,
       'changelog-version-1.41.0-ms-store',
-      `If you wonder why you get a test version when you downloaded from Microsoft Store, we had a [bug that prevented installation](https://github.com/deltachat/deltachat-desktop/issues/3292) from there , we fixed it in the test version and decided to give you early access to it.
+      `If you wonder why you get a test version: We fixed a [bug that blocked installations from the Microsoft Store](https://github.com/deltachat/deltachat-desktop/issues/3292) in the test version and decided to give you early access to it :)
 If you encounter any bugs, please [notify us.](https://support.delta.chat/t/help-testing-the-upcoming-1-41-x-release/2793)`
     )
   }
