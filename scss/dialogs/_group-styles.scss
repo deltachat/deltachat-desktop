@@ -11,6 +11,15 @@ input.group-name-input {
   user-select: text;
 }
 
+p.group-name {
+  display: flex;
+  p.trucated-name {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin-bottom: 0;
+  }
+}
+
 input.group-name-input {
   border-bottom: solid;
   border-color: var(--loginInputFocusColor);

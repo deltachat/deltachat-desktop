@@ -10,7 +10,7 @@ function ContactName(
   return (
     <div className='contact-name'>
       <div className='display-name'>
-        {displayName}
+        <span className='truncated'>{displayName}</span>
         {isVerified && <InlineVerifiedIcon />}
       </div>
       <div className='email'>{address}</div>

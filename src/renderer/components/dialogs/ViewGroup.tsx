@@ -261,7 +261,8 @@ function ViewGroupInner(props: {
                   />
                 </ClickForFullscreenAvatarWrapper>
                 <p className='group-name' style={{ marginLeft: '17px' }}>
-                  {groupName} {chat.isProtected && <InlineVerifiedIcon />}
+                  <p className='trucated-name'>{groupName}</p>
+                  {chat.isProtected && <InlineVerifiedIcon />}
                 </p>
               </div>
               {isRelatedChatsEnabled && (

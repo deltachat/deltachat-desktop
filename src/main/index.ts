@@ -69,11 +69,7 @@ protocol.registerSchemesAsPrivileged([
 const app = rawApp as ExtendedAppMainProcess
 app.rc = rc
 
-if (
-  process.platform !== 'darwin' &&
-  rc['multiple-instances'] === false &&
-  !app.requestSingleInstanceLock()
-) {
+if (rc['multiple-instances'] === false && !app.requestSingleInstanceLock()) {
   /* ignore-console-log */
   console.error('Only one instance allowed. Quitting.')
   app.quit()
@@ -342,8 +338,8 @@ app.on('web-contents-created', (_ev, contents) => {
 
 contextMenu()
 
-import { openUrlFromArgv, open_url } from './open_url'
-openUrlFromArgv(process.argv)
+import { openUrlsAndFilesFromArgv, open_url } from './open_url'
+openUrlsAndFilesFromArgv(process.argv)
 
 ipcMain.handle('restart_app', async _ev => {
   app.relaunch()

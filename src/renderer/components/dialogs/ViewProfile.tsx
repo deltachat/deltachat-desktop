@@ -113,7 +113,7 @@ export default function ViewProfile(props: {
         onClickBack={onBack}
       />
       <DeltaDialogBody noFooter>
-        <DeltaDialogContent noPadding>
+        <DeltaDialogContent noPadding noOverflow>
           <ViewProfileInner contact={contact} onClose={onClose} />
         </DeltaDialogContent>
       </DeltaDialogBody>
@@ -238,8 +238,8 @@ export function ViewProfileInner({
             <div className='profile-info-name-container'>
               <div>
                 <p className='group-name'>
-                  {displayNameLine}
-                  {contact.isVerified && <InlineVerifiedIcon />}
+                  <p className='trucated-name'>{displayNameLine}</p>
+                  {contact.isProfileVerified && <InlineVerifiedIcon />}
                 </p>
               </div>
               <div className='address'>{addressLine}</div>

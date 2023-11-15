@@ -2,6 +2,24 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- update deltachat-node and deltachat/jsonrpc-client to `v1.131.2`
+- Update inApp help (15.11.2023)
+
+### Fixed
+- macOS: prevent second instances when runing from terminal
+
+<a id="1_41_1"></a>
+
+## [1.41.1] - 2023-11-14
+
+### Changed
+- fix notarisation for macOS dmg
+
+<a id="1_41_0"></a>
+
+## [1.41.0] - 2023-11-13
+
 > Since we needed to upgrade electron this version drops support for windows 7, 8 and 8.1
 > https://www.electronjs.org/blog/windows-7-to-8-1-deprecation-notice
 > If you are using DC on these platforms you have the following options:
@@ -25,6 +43,7 @@
 - show confirm dialogue when creating new chat after clicking mail address #3469
 - Ask for broadcast name when creating one
 - Automatically create verified group when all users are verified #3492
+- register on system as handler for webxdc files
 
 ### Changed
 - add a dark theme for the "Help" and the webxdc loading screen
@@ -43,7 +62,7 @@
   - update `electron` from `v22.3.24` to version `v26.4.2`
   - update `electron-builder` from `23.0.4` to `24.6.4`
   - update `@electron/notarize` from (`electron-notarize` package name) `^1.0.0` to `^2.1.0`
-  - update deltachat-node and deltachat/jsonrpc-client to `v1.130.0`
+  - update deltachat-node and deltachat/jsonrpc-client to `v1.131.1`
   - update `@deltachat/message_parser_wasm` to `0.8.0`, which adds linkification to links on more generic URI schemes.
   - Removed `url-parse` dependency replacing it with modern APIs
 
@@ -68,6 +87,8 @@
 - fix window store installation (remove unknown language code from supported languages)
 - fix emojis in some html emails (force charset utf-8)
 - fix `null` account name when leaving the field empty bug
+- fix text truncation so verified icon is always shown on ViewGroup, ViewProfile, ContactListItems, Navbar and on ChatlistItem
+- fix scrollbar caused flickering in ViewProfile
 
 
 ### Removed
@@ -2242,7 +2263,11 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.4...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.1...HEAD
+
+[1.41.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.0...v1.41.1
+
+[1.41.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.4...v1.41.0
 
 [1.40.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.3...v1.40.4
 
