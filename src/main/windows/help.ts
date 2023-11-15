@@ -32,7 +32,9 @@ export async function openHelpWindow(locale: string, anchor?: string) {
     win.focus()
     if (anchor) {
       win.webContents.executeJavaScript(`
-        document.getElementById(atob("${btoa(anchor)}"))?.scrollIntoView({"behavior":"smooth"})
+        document.getElementById(atob("${btoa(
+          anchor
+        )}"))?.scrollIntoView({"behavior":"smooth"})
       `)
     }
     return
@@ -76,7 +78,9 @@ export async function openHelpWindow(locale: string, anchor?: string) {
   win.once('ready-to-show', async () => {
     if (anchor) {
       await help_window.webContents.executeJavaScript(`
-      document.getElementById(atob("${btoa(anchor)}"))?.scrollIntoView({"behavior":"instant"})
+      document.getElementById(atob("${btoa(
+        anchor
+      )}"))?.scrollIntoView({"behavior":"instant"})
       `)
     }
     help_window.show()
