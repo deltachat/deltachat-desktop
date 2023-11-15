@@ -8,6 +8,7 @@
 
 ### Fixed
 - macOS: prevent second instances when runing from terminal
+- fix status text overflow in ViewProfile #3515
 
 <a id="1_41_1"></a>
 
