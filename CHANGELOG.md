@@ -4,6 +4,7 @@
 
 ### Changed
 - update `@deltachat/message_parser_wasm` to `0.9.0`, which fixes a bug with BotCommandSuggestion parsing
+- update `electron` from `v26.4.2` to version `v26.6.0`
 
 <a id="1_41_2"></a>
 
