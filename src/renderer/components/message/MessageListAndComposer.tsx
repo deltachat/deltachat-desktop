@@ -1,4 +1,7 @@
 import React, { useRef, useContext, useEffect } from 'react'
+import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
+import { join, parse } from 'path'
+
 import Composer, { useDraft } from '../composer/Composer'
 import { getLogger } from '../../../shared/logger'
 import MessageList from './MessageList'
@@ -6,14 +9,11 @@ import { ScreenContext } from '../../contexts'
 import { ChatStoreStateWithChatSet } from '../../stores/chat'
 import ComposerMessageInput from '../composer/ComposerMessageInput'
 import { DesktopSettingsType } from '../../../shared/shared-types'
-import { join, parse } from 'path'
 import { runtime } from '../../runtime'
 import { RecoverableCrashScreen } from '../screens/RecoverableCrashScreen'
 import { useSettingsStore } from '../../stores/settings'
-import { Type } from '../../backend-com'
-import { C } from '@deltachat/jsonrpc-client'
 import { sendMessage } from '../helpers/ChatMethods'
-import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
+import useIsChatDisabled from '../composer/useIsChatDisabled'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -220,7 +220,7 @@ export default function MessageListAndComposer({
     }
   }, [])
 
-  const [disabled, disabledReason] = isChatReadonly(chatStore.chat)
+  const [isDisabled, disabledReason] = useIsChatDisabled(chatStore.chat)
 
   const settingsStore = useSettingsStore()[0]
   const style = settingsStore
@@ -243,7 +243,7 @@ export default function MessageListAndComposer({
       <Composer
         ref={refComposer}
         selectedChat={chatStore.chat}
-        isDisabled={disabled}
+        isDisabled={isDisabled}
         disabledReason={disabledReason}
         isContactRequest={chatStore.chat.isContactRequest}
         isProtectionBroken={chatStore.chat.isProtectionBroken}
@@ -257,27 +257,4 @@ export default function MessageListAndComposer({
       />
     </div>
   )
-}
-
-export function isChatReadonly(
-  chat: Pick<
-    Type.FullChat,
-    'isContactRequest' | 'isDeviceChat' | 'chatType' | 'selfInGroup' | 'canSend'
-  >
-): [isDisabled: boolean, disabledReason: string] {
-  if (chat.canSend) {
-    return [false, '']
-  } else {
-    if (chat.isContactRequest) {
-      return [true, 'messaging_disabled_deaddrop']
-    } else if (chat.isDeviceChat === true) {
-      return [true, 'messaging_disabled_device_chat']
-    } else if (chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST) {
-      return [true, 'messaging_disabled_mailing_list']
-    } else if (chat.chatType === C.DC_CHAT_TYPE_GROUP && !chat.selfInGroup) {
-      return [true, 'messaging_disabled_not_in_group']
-    } else {
-      return [true, 'UNKNOWN DISABLED REASON']
-    }
-  }
 }
