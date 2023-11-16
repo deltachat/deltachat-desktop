@@ -20,7 +20,7 @@ export default function useIsChatDisabled(
 
   if (chat.isContactRequest) {
     return [true, DisabledChatReasons.DEADDROP]
-  } else if (chat.isDeviceChat === true) {
+  } else if (chat.isDeviceChat) {
     return [true, DisabledChatReasons.DEVICE_CHAT]
   } else if (chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST) {
     return [true, DisabledChatReasons.MAILING_LIST]

@@ -20,7 +20,6 @@ const DisabledMessageInput = forwardRef<any, Props>(
         case DisabledChatReasons.DEADDROP:
           return tx('messaging_disabled_deaddrop')
         case DisabledChatReasons.UNKNOWN:
-          return tx('messaging_disabled_unknown')
         default:
           return tx('messaging_disabled_unknown')
       }
