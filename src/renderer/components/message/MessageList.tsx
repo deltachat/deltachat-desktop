@@ -26,9 +26,10 @@ import { debouncedUpdateBadgeCounter } from '../../system-integration/badge-coun
 const log = getLogger('render/components/message/MessageList')
 
 type ChatTypes =
-  | C.DC_CHAT_TYPE_GROUP
-  | C.DC_CHAT_TYPE_MAILINGLIST
   | C.DC_CHAT_TYPE_SINGLE
+  | C.DC_CHAT_TYPE_GROUP
+  | C.DC_CHAT_TYPE_BROADCAST
+  | C.DC_CHAT_TYPE_MAILINGLIST
   | C.DC_CHAT_TYPE_UNDEFINED
 
 const onWindowFocus = (accountId: number) => {
