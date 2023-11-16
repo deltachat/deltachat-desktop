@@ -5,6 +5,7 @@
 ### Changed
 - update `@deltachat/message_parser_wasm` to `0.9.0`, which fixes a bug with BotCommandSuggestion parsing
 - update `electron` from `v26.4.2` to version `v26.6.0`
+- update deltachat-node and deltachat/jsonrpc-client to `v1.131.3`
 
 ### Fixed
 - fix: files search not case-insensitive
