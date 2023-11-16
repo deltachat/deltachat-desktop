@@ -15,12 +15,13 @@ import { selectedAccountId } from '../../ScreenController'
 
 enum DisappearingMessageDuration {
   OFF = Timespans.ZERO_SECONDS,
-  THIRTY_SECONDS = Timespans.THIRTY_SECONDS,
   ONE_MINUTE = Timespans.ONE_MINUTE_IN_SECONDS,
+  FIVE_MINUTES = Timespans.ONE_MINUTE_IN_SECONDS * 5,
+  THIRTY_MINUTES = Timespans.ONE_MINUTE_IN_SECONDS * 30,
   ONE_HOUR = Timespans.ONE_HOUR_IN_SECONDS,
   ONE_DAY = Timespans.ONE_DAY_IN_SECONDS,
   ONE_WEEK = Timespans.ONE_WEEK_IN_SECONDS,
-  FOUR_WEEKS = Timespans.FOUR_WEEKS_IN_SECONDS,
+  FIVE_WEEKS = Timespans.ONE_WEEK_IN_SECONDS * 5,
 }
 
 function SelectDisappearingMessageDuration({
@@ -51,33 +52,38 @@ function SelectDisappearingMessageDuration({
       />
       <Radio
         key={'eph-1'}
-        label={tx('after_30_seconds')}
-        value={String(DisappearingMessageDuration.THIRTY_SECONDS)}
-      />
-      <Radio
-        key={'eph-2'}
         label={tx('after_1_minute')}
         value={String(DisappearingMessageDuration.ONE_MINUTE)}
       />
       <Radio
+        key={'eph-2'}
+        label={tx('after_5_minutes')}
+        value={String(DisappearingMessageDuration.FIVE_MINUTES)}
+      />
+      <Radio
         key={'eph-3'}
+        label={tx('after_30_minutes')}
+        value={String(DisappearingMessageDuration.THIRTY_MINUTES)}
+      />
+      <Radio
+        key={'eph-4'}
         label={tx('autodel_after_1_hour')}
         value={String(DisappearingMessageDuration.ONE_HOUR)}
       />
       <Radio
-        key={'eph-4'}
+        key={'eph-5'}
         label={tx('autodel_after_1_day')}
         value={String(DisappearingMessageDuration.ONE_DAY)}
       />
       <Radio
-        key={'eph-5'}
+        key={'eph-6'}
         label={tx('autodel_after_1_week')}
         value={String(DisappearingMessageDuration.ONE_WEEK)}
       />
       <Radio
-        key={'eph-6'}
-        label={tx('autodel_after_4_weeks')}
-        value={String(DisappearingMessageDuration.FOUR_WEEKS)}
+        key={'eph-7'}
+        label={tx('after_5_weeks')}
+        value={String(DisappearingMessageDuration.FIVE_WEEKS)}
       />
     </RadioGroup>
   )
