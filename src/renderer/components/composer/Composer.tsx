@@ -305,7 +305,7 @@ const Composer = forwardRef<
       </div>
     )
   } else if (isDisabled) {
-    return <DisabledMessageInput ref={ref} reason={disabledReason} />
+    return <DisabledMessageInput reason={disabledReason} />
   } else {
     return (
       <div className='composer' ref={ref}>
