@@ -82,7 +82,7 @@ function SelectDisappearingMessageDuration({
       />
       <Radio
         key={'eph-7'}
-        label={tx('autodel_after_5_weeks')}
+        label={tx('after_5_weeks')}
         value={String(DisappearingMessageDuration.FIVE_WEEKS)}
       />
     </RadioGroup>
