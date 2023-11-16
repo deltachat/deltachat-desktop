@@ -18,8 +18,6 @@ const DisabledMessageInput = ({ reason }: Props) => {
         return tx('messaging_disabled_not_in_group')
       case DisabledChatReasons.DEADDROP:
         return tx('messaging_disabled_deaddrop')
-      case DisabledChatReasons.UNKNOWN:
-        return 'UNKNOWN_DISABLED_CHAT_REASON'
     }
   }, [reason, tx])
 

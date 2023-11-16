@@ -5,7 +5,6 @@ export enum DisabledChatReasons {
   DEVICE_CHAT,
   MAILING_LIST,
   NOT_IN_GROUP,
-  UNKNOWN,
 }
 
 export default function useIsChatDisabled(
@@ -28,5 +27,7 @@ export default function useIsChatDisabled(
     return [true, DisabledChatReasons.NOT_IN_GROUP]
   }
 
-  return [true, DisabledChatReasons.UNKNOWN]
+  throw new Error(
+    'Could not determine read-only state of chat due to invalid chat information'
+  )
 }
