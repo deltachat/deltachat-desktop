@@ -23,7 +23,7 @@ export default function MuteChat({
       tx('mute_for_one_hour'),
     ],
     [
-      { kind: 'Until', duration: Timespans.TWO_HOURS_IN_SECONDS },
+      { kind: 'Until', duration: Timespans.ONE_HOUR_IN_SECONDS * 2 },
       tx('mute_for_two_hours'),
     ],
     [

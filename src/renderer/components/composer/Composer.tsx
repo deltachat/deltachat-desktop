@@ -27,6 +27,8 @@ import { confirmDialog } from '../message/messageFunctions'
 import { ProtectionBrokenDialog } from '../dialogs/ProtectionStatusDialog'
 import { T } from '@deltachat/jsonrpc-client'
 import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
+import DisabledMessageInput from './DisabledMessageInput'
+import { DisabledChatReasons } from './useIsChatDisabled'
 
 const log = getLogger('renderer/composer')
 
@@ -58,7 +60,7 @@ const Composer = forwardRef<
   any,
   {
     isDisabled: boolean
-    disabledReason: string
+    disabledReason?: DisabledChatReasons
     isContactRequest: boolean
     isProtectionBroken: boolean
     selectedChat: Type.FullChat
@@ -303,15 +305,7 @@ const Composer = forwardRef<
       </div>
     )
   } else if (isDisabled) {
-    if (disabledReason) {
-      return (
-        <div ref={ref} className='composer composer--disabled-message-input'>
-          {tx(disabledReason)}
-        </div>
-      )
-    } else {
-      return <span />
-    }
+    return <DisabledMessageInput ref={ref} reason={disabledReason} />
   } else {
     return (
       <div className='composer' ref={ref}>
