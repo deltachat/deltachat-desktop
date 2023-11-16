@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- update `@deltachat/message_parser_wasm` to `0.9.0`, which fixes a bug with BotCommandSuggestion parsing
+
 <a id="1_41_2"></a>
 
 ## [1.41.2] - 2023-11-15
