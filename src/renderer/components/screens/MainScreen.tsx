@@ -118,11 +118,6 @@ export default function MainScreen() {
       ]
       if (lastChatId) {
         selectChat(Number(lastChatId))
-      } else {
-        // Welcome the user with the "Device Messages" chat in case no chat was
-        // selected previously (for example when they've just joined Delta Chat
-        // for the first time)
-        selectChat(C.DC_CONTACT_ID_DEVICE)
       }
     })
   }
