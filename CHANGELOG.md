@@ -6,12 +6,14 @@
 - update `@deltachat/message_parser_wasm` to `0.9.0`, which fixes a bug with BotCommandSuggestion parsing
 - update `electron` from `v26.4.2` to version `v26.6.0`
 - update deltachat-node and deltachat/jsonrpc-client to `v1.131.4`
+- update local help (16.nov.2023)
 - Update options for disappearing messages #3530
 - Do not show redundant read-only message when in device messages chat #3532
 
 ### Fixed
 - fix: files search not case-insensitive
 - fix: bug in emoji detection for jumbomoji #3508
+- Fix: Do not show reply option in read-only groups #3536
 
 <a id="1_41_2"></a>
 

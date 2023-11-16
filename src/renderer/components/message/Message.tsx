@@ -192,22 +192,31 @@ function buildContextMenu(
 
   const showAttachmentOptions = !!message.file && !message.isSetupmessage
   const showCopyImage = !!message.file && message.viewType === 'Image'
-
   const showResend = message.sender.id === C.DC_CONTACT_ID_SELF
+
+  // Do not show "reply" in read-only chats
+  const showReply =
+    !conversationType.isDeviceChat &&
+    conversationType.chatType !== C.DC_CHAT_TYPE_BROADCAST &&
+    conversationType.chatType !== C.DC_CHAT_TYPE_MAILINGLIST
+
+  // Only show in groups, don't show on info messages or outgoing messages
+  const showReplyPrivately =
+    (conversationType.chatType === C.DC_CHAT_TYPE_GROUP ||
+      conversationType.chatType === C.DC_CHAT_TYPE_MAILINGLIST) &&
+    message.fromId > C.DC_CONTACT_ID_LAST_SPECIAL
 
   return [
     // Reply
-    !conversationType.isDeviceChat && {
+    showReply && {
       label: tx('reply_noun'),
       action: setQuoteInDraft.bind(null, message.id),
     },
-    // Reply privately -> only show in groups, don't show on info messages or outgoing messages
-    (conversationType.chatType === C.DC_CHAT_TYPE_GROUP ||
-      conversationType.chatType === C.DC_CHAT_TYPE_MAILINGLIST) &&
-      message.fromId > C.DC_CONTACT_ID_LAST_SPECIAL && {
-        label: tx('reply_privately'),
-        action: privateReply.bind(null, message),
-      },
+    // Reply privately
+    showReplyPrivately && {
+      label: tx('reply_privately'),
+      action: privateReply.bind(null, message),
+    },
     // Forward message
     {
       label: tx('forward'),
