@@ -12,6 +12,7 @@
 ### Fixed
 - fix: files search not case-insensitive
 - fix: bug in emoji detection for jumbomoji #3508
+- Improve layout and fix unknown locale of DisabledMessageInput #3537
 
 <a id="1_41_2"></a>
 
