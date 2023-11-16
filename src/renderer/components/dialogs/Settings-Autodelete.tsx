@@ -49,27 +49,6 @@ function durationToString(configValue: number | string) {
   }
 }
 
-const AUTODELETE_DURATION_OPTIONS_SERVER = [
-  AutodeleteDuration.NEVER,
-  AutodeleteDuration.AT_ONCE,
-  AutodeleteDuration.THIRTY_SECONDS,
-  AutodeleteDuration.ONE_MINUTE,
-  AutodeleteDuration.ONE_HOUR,
-  AutodeleteDuration.ONE_DAY,
-  AutodeleteDuration.ONE_WEEK,
-  AutodeleteDuration.FOUR_WEEKS,
-  AutodeleteDuration.ONE_YEAR,
-].map(value => [String(value), durationToString(value)] as SelectDialogOption)
-
-const AUTODELETE_DURATION_OPTIONS_DEVICE = [
-  AutodeleteDuration.NEVER,
-  AutodeleteDuration.ONE_HOUR,
-  AutodeleteDuration.ONE_DAY,
-  AutodeleteDuration.ONE_WEEK,
-  AutodeleteDuration.FOUR_WEEKS,
-  AutodeleteDuration.ONE_YEAR,
-].map(value => [String(value), durationToString(value)] as SelectDialogOption)
-
 export function AutodeleteConfirmationDialog({
   fromServer,
   estimateCount,
@@ -150,9 +129,29 @@ export default function SettingsAutodelete({
 }: {
   settingsStore: SettingsStoreState
 }) {
+  const AUTODELETE_DURATION_OPTIONS_SERVER = [
+    AutodeleteDuration.NEVER,
+    AutodeleteDuration.AT_ONCE,
+    AutodeleteDuration.THIRTY_SECONDS,
+    AutodeleteDuration.ONE_MINUTE,
+    AutodeleteDuration.ONE_HOUR,
+    AutodeleteDuration.ONE_DAY,
+    AutodeleteDuration.ONE_WEEK,
+    AutodeleteDuration.FOUR_WEEKS,
+    AutodeleteDuration.ONE_YEAR,
+  ].map(value => [String(value), durationToString(value)] as SelectDialogOption)
+
+  const AUTODELETE_DURATION_OPTIONS_DEVICE = [
+    AutodeleteDuration.NEVER,
+    AutodeleteDuration.ONE_HOUR,
+    AutodeleteDuration.ONE_DAY,
+    AutodeleteDuration.ONE_WEEK,
+    AutodeleteDuration.FOUR_WEEKS,
+    AutodeleteDuration.ONE_YEAR,
+  ].map(value => [String(value), durationToString(value)] as SelectDialogOption)
+
   const { openDialog } = useContext(ScreenContext)
   const accountId = selectedAccountId()
-
   const tx = useTranslationFunction()
 
   const onOpenDialog = async (fromServer: boolean) => {
