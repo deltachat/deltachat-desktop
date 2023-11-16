@@ -19,7 +19,7 @@ const DisabledMessageInput = ({ reason }: Props) => {
       case DisabledChatReasons.DEADDROP:
         return tx('messaging_disabled_deaddrop')
       case DisabledChatReasons.UNKNOWN:
-        return 'UNKNOWN_DISABLED_CHAT_REASON'
+        throw new Error('Invalid read-only chat status')
     }
   }, [reason, tx])
 
