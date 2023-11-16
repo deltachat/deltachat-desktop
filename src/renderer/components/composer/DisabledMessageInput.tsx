@@ -18,8 +18,10 @@ const DisabledMessageInput = ({ reason }: Props) => {
         return tx('messaging_disabled_not_in_group')
       case DisabledChatReasons.DEADDROP:
         return tx('messaging_disabled_deaddrop')
-      case DisabledChatReasons.UNKNOWN:
-        throw new Error('Invalid read-only chat status')
+      case DisabledChatReasons.DEVICE_CHAT:
+        return tx('messaging_disabled_device_chat')
+      default:
+        throw new Error('Unknown read-only chat status')
     }
   }, [reason, tx])
 
