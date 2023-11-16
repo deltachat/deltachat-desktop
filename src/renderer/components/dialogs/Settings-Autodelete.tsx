@@ -30,8 +30,6 @@ function durationToString(configValue: number | string) {
       return tx('never')
     case AutodeleteDuration.AT_ONCE:
       return tx('autodel_at_once')
-    case AutodeleteDuration.THIRTY_SECONDS:
-      return tx('after_30_seconds')
     case AutodeleteDuration.ONE_MINUTE:
       return tx('after_1_minute')
     case AutodeleteDuration.ONE_HOUR:
@@ -40,8 +38,8 @@ function durationToString(configValue: number | string) {
       return tx('autodel_after_1_day')
     case AutodeleteDuration.ONE_WEEK:
       return tx('autodel_after_1_week')
-    case AutodeleteDuration.FOUR_WEEKS:
-      return tx('autodel_after_4_weeks')
+    case AutodeleteDuration.FIVE_WEEKS:
+      return tx('after_5_weeks')
     case AutodeleteDuration.ONE_YEAR:
       return tx('autodel_after_1_year')
     default:
@@ -129,24 +127,22 @@ export default function SettingsAutodelete({
 }: {
   settingsStore: SettingsStoreState
 }) {
-  const AUTODELETE_DURATION_OPTIONS_SERVER = [
-    AutodeleteDuration.NEVER,
-    AutodeleteDuration.AT_ONCE,
-    AutodeleteDuration.THIRTY_SECONDS,
-    AutodeleteDuration.ONE_MINUTE,
-    AutodeleteDuration.ONE_HOUR,
-    AutodeleteDuration.ONE_DAY,
-    AutodeleteDuration.ONE_WEEK,
-    AutodeleteDuration.FOUR_WEEKS,
-    AutodeleteDuration.ONE_YEAR,
-  ].map(value => [String(value), durationToString(value)] as SelectDialogOption)
-
   const AUTODELETE_DURATION_OPTIONS_DEVICE = [
     AutodeleteDuration.NEVER,
     AutodeleteDuration.ONE_HOUR,
     AutodeleteDuration.ONE_DAY,
     AutodeleteDuration.ONE_WEEK,
-    AutodeleteDuration.FOUR_WEEKS,
+    AutodeleteDuration.FIVE_WEEKS,
+    AutodeleteDuration.ONE_YEAR,
+  ].map(value => [String(value), durationToString(value)] as SelectDialogOption)
+
+  const AUTODELETE_DURATION_OPTIONS_SERVER = [
+    AutodeleteDuration.NEVER,
+    AutodeleteDuration.AT_ONCE,
+    AutodeleteDuration.ONE_HOUR,
+    AutodeleteDuration.ONE_DAY,
+    AutodeleteDuration.ONE_WEEK,
+    AutodeleteDuration.FIVE_WEEKS,
     AutodeleteDuration.ONE_YEAR,
   ].map(value => [String(value), durationToString(value)] as SelectDialogOption)
 
