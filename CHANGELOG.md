@@ -9,6 +9,7 @@
 
 ### Fixed
 - fix: files search not case-insensitive
+- fix: bug in emoji detection for jumbomoji #3508
 
 <a id="1_41_2"></a>
 
