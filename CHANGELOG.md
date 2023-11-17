@@ -2,12 +2,16 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- Vietnamese language
+
 ### Changed
 - update `@deltachat/message_parser_wasm` to `0.9.0`, which fixes a bug with BotCommandSuggestion parsing
 - update `electron` from `v26.4.2` to version `v26.6.0`
 - Select device message chat automatically to welcome first users #3531
 - update deltachat-node and deltachat/jsonrpc-client to `v1.131.4`
 - update local help (16.nov.2023)
+- Update translations (17.11.2023)
 - Update options for disappearing messages #3530
 - Do not show redundant read-only message when in device messages chat #3532
 

@@ -4,7 +4,7 @@
     <string name="app_name">دلتاچت</string>
     <string name="ok">تأیید</string>
     <string name="cancel">لغو</string>
-    <string name="clear_search">پاک کردن جست‌وجو</string>
+   <string name="clear_search">پاک کردن جست‌وجو</string>
     <string name="yes">بله</string>
     <string name="no">خیر</string>
     <string name="select">انتخاب</string>
@@ -760,7 +760,6 @@ https://meet.jit.si/$ROOM
     <!-- system messages -->
     <string name="systemmsg_read_receipt_subject">پیام باز شد</string>
     <string name="systemmsg_read_receipt_body">پیام\"%1$s\" که ارسال کرده بودید در ثفحه گیرنده نمایش داده شد\n\n. تضمینی وجود ندارد که محتوای پیام را خوانده باشد. </string>
-    <string name="systemmsg_cannot_decrypt">این پیام را نمی‌توان رمزگشایی کرد.\n\n• ممکن است بهتر باشد که به همین پیام پاسخ داده و از ارسال کننده بخواهید دوباره آن را بفرستد. \n\n• اگر دوباره دلتاچت را نصب کرده‌اید یا از یک رایانامه دیگر هم روی این دستگاه یا دستگاه دیگر استفاده می‌کنید ممکن است لازم باشد یک پیام برپاسازی اتوکریپت از آن دستگاه ارسال کنید. </string>
     <string name="systemmsg_unknown_sender_for_chat">فرستنده در این گفت و گو ناشناس است. برای جزئیات بیشتر به \"اطلاعات\" مراجعه کنید.</string>
     <string name="systemmsg_subject_for_new_contact">پیام از%1$s</string>
     <string name="systemmsg_failed_sending_to">ارسال ناموفق پیام به %1$s.</string>
@@ -949,8 +948,6 @@ GNU GPL ورژن ۳
  GitHub
  در دسترس است.</string>
     <string name="welcome_desktop">به دلتاچت خوش‌آمدید</string>
-    <!-- deprecated, use switch_account -->
-    <string name="login_known_accounts_title_desktop">اکانت‌های شناخته شده</string>
     <string name="global_menu_preferences_language_desktop">زبان</string>
     <string name="global_menu_file_desktop">پرونده</string>
     <string name="global_menu_file_quit_desktop">خروج</string>
@@ -977,26 +974,12 @@ GNU GPL ورژن ۳
     <string name="delete_message_desktop">حذف پیام</string>
     <string name="more_info_desktop">جزئیات بیشتر </string>
     <string name="timestamp_format_m_desktop">MMM D</string>
-    <!-- deprecated, use encryption_info_title_desktop or profile_encryption -->
-    <string name="encryption_info_desktop">نمایش مشخصات رمزگذاری</string>
     <string name="remove_desktop">حذف</string>
     <string name="save_desktop">ذخیره</string>
     <string name="name_desktop">نام</string>
-    <!-- deprecated, use autocrypt_send_asm_title / autocrypt_continue_transfer_title -->
-    <string name="autocrypt_key_transfer_desktop">انتقال کلید اتوکریپت</string>
-    <!-- deprecated, use autocrypt_send_asm_explain_before -->
-    <string name="initiate_key_transfer_desktop">یک پیام برپاسازی اتوکریپت، برپاسازی رمزگذاری سرتاسرتان را به‌امنی با دیگر برنامه‌های سازگار با اتوکریپت هم‌رسانی می‌کند. برپاسازی با یک کد برپاسازی رمزگذاری خواهند شد که در اینجا نمایش داده می‌شود که باید آن  را در دستگاه دیگر وارد کنید. </string>
     <string name="select_group_image_desktop">انتخاب تصویر گروه</string>
-    <!-- deprecated, use export_backup_desktop instead -->
-    <string name="imex_progress_title_desktop">فرایند تهیه نسخه پشتیبان</string>
     <string name="export_backup_desktop">صادر کردن نسخه پشتیبان</string>
-    <!-- deprecated, use autocrypt_send_asm_explain_after instead -->
-    <string name="show_key_transfer_message_desktop">کلید برایتان ارسال شد. به دستگاه دیگر رفته و پیام نصب را باز کنید. از شما یک کد نصب خواسته می‌شود. این ارقام را آن‌جا وارد کنید:</string>
     <string name="autocrypt_correct_desktop">برپاسازی اتوکریپت انتقال یافت.</string>
-    <!-- deprecated, use autocrypt_bad_setup_code instead -->
-    <string name="autocrypt_incorrect_desktop">کد نصب نادرست. لطفا دوباره امتحان کنید. </string>
-    <!-- deprecated, rare errors should be english only for easier searchability -->
-    <string name="create_chat_error_desktop">امکان ایجاد گپ وجود ندارد. </string>
     <string name="forget_login_confirmation_desktop">پاک کردن این ورود؟ همه‌چیز پاک می‌شود که شامل رمزگذاری سرتاسر، مخاطبین، گپ‌ها، پیام‌ها و رسانه می‌شود. این عملیات قابل بازگردانی نیست.</string>
     <string name="account_info_hover_tooltip_desktop2">رایانامه: %1$s
 فضا: %2$s
@@ -1081,21 +1064,4 @@ GNU GPL ورژن ۳
     <string name="perm_enable_bg_already_done">قبلا اجازه دسترسی به فعالیت در پس زمینه را به دلتاچت داده‌اید. \n\n اگر پیام‌ها هنوز هم در شرایط پس زمینه نمی‌آمد لطفا تنظیمات سیستم را نیز بررسی نمایید. </string>
 
 
-    <!-- device messages for updates -->
-    <!-- placeholder will be replaced by the URL https://get.delta.chat/#changelogs -->
-    <string name="update_1_38_android">نسخه ۱.۳۸ بیرون اومده:\n\n
-📎 حد بیشینه پیوست‌ها حذف شده\n\n
-🗜️ تصویر‌های پی‌ان‌جی(نماگرفت‌ها!) الآن بخوبی فشرده می‌شوند\n\n
-⌨️ برای توسعه‌دهندگان: برنامه‌های بهتر برای چت‌ها با توابع sendToChats و importFiles(وب‌ایکس‌دی‌ای چیست؟→ https://webxdc.org)\n\n…
-و بیش‌تر در %1$s </string>
-    <!-- placeholder will be replaced by the URL https://get.delta.chat/#changelogs -->
-    <string name="update_1_38_ios">نگارش ۱٫۳۸ بیرون است:
-\n\n
-🖼🔍 برای یک تصویر جست‌وجو می‌کردید و گپ مربوط به آن را به یاد نمی‌آوردید؟ پس دکمهٔ «تمام رسانه‌ها» دقیقاً به کارتان می آید!\n\n
-🧹 «پاک‌کردن گپ» از نمایه‌ها\n\n
-📎 حذف حد بیشینهٔ اندازه پیوست‌ها
-\n\n🗜️
-تصاویر پی‌ان‌جی (نماگرفت‌ها!) هم‌اکنون به‌خوبی فشرده می‌شوند
-\n\n…
-و بیشتر در %1$s</string>
-</resources>
+    </resources>

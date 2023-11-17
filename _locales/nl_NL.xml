@@ -4,6 +4,8 @@
     <string name="app_name">Delta Chat</string>
     <string name="ok">Oké</string>
     <string name="cancel">Annuleren</string>
+   <!-- the word "or" to separate blocks in the user interface that are mutually exclusive -->
+    <string name="or_separator">of</string>
     <string name="clear_search">Zoekopdracht wissen</string>
     <string name="yes">Ja</string>
     <string name="no">Nee</string>
@@ -788,7 +790,7 @@
     <!-- system messages -->
     <string name="systemmsg_read_receipt_subject">Leesbevestiging</string>
     <string name="systemmsg_read_receipt_body">Het door jou verstuurde bericht, “%1$s”, heeft het scherm van de ontvanger bereikt.\n\nDit betekent echter niet dat het ook gelezen is.</string>
-    <string name="systemmsg_cannot_decrypt">Dit bericht kan niet worden ontsleuteld.\n\n• Het kan helpen dit bericht te beantwoorden en de afzender te vragen het opnieuw te versturen.\n\n• Als je Delta Chat of een andere e-mailapp opnieuw hebt geïnstalleerd op dit of een ander apparaat, verstuur het instelbericht dan opnieuw.</string>
+    <string name="systemmsg_cannot_decrypt">Dit bericht kan niet worden ontsleuteld.\n\n• Het kan helpen dit bericht te beantwoorden en de afzender te vragen het opnieuw te versturen.\n\n• Als je Delta Chat of een andere e-mailapp opnieuw hebt geïnstalleerd, voeg het dan toe als tweede apparaat of importeer een reservekopie.</string>
     <string name="systemmsg_unknown_sender_for_chat">Dit gesprek bevat een onbekende afzender. Zie ‘Informatie’ voor meer informatie.</string>
     <string name="systemmsg_subject_for_new_contact">Bericht van %1$s</string>
     <string name="systemmsg_failed_sending_to">Het bericht kan niet worden verstuurd aan %1$s.</string>
@@ -799,6 +801,8 @@
     <string name="group_image_changed_by_you">Je hebt de groepsafbeelding gewijzigd.</string>
     <!-- %1$s will be replaced by name and address of the contact who did the action -->
     <string name="group_image_changed_by_other">De groepsafbeelding is gewijzigd door %1$s.</string>
+    <!-- %1$s will be replaced by name and address of the contact added to the group -->
+    <string name="member_x_added">‘%1$s’ is toegevoegd.</string>
     <!-- %1$s will be replaced by name and address of the contact added to the group -->
     <string name="add_member_by_you">Je hebt ‘%1$s’ toegevoegd.</string>
     <!-- %1$s will be replaced by name and address of the contact added to the group, %2$s will be replaced by name and address of the contact who did the action -->
@@ -969,8 +973,6 @@
     <string name="about_offical_app_desktop">Dit is de officiële Delta Chat-computerapp.</string>
     <string name="about_licensed_under_desktop">Deze software is vrijgegeven onder de GNU GPL versie 3 en de broncode is beschikbaar op GitHub.</string>
     <string name="welcome_desktop">Welkom bij Delta Chat</string>
-    <!-- deprecated, use switch_account -->
-    <string name="login_known_accounts_title_desktop">Bekende accounts</string>
     <string name="global_menu_preferences_language_desktop">Taal</string>
     <string name="global_menu_file_desktop">Bestand</string>
     <string name="global_menu_file_quit_desktop">Afsluiten</string>
@@ -997,26 +999,12 @@
     <string name="delete_message_desktop">Bericht verwijderen</string>
     <string name="more_info_desktop">Meer informatie</string>
     <string name="timestamp_format_m_desktop">MMM D</string>
-    <!-- deprecated, use encryption_info_title_desktop or profile_encryption -->
-    <string name="encryption_info_desktop">Versleutelingsinformatie tonen</string>
     <string name="remove_desktop">Verwijderen</string>
     <string name="save_desktop">Opslaan</string>
     <string name="name_desktop">Naam</string>
-    <!-- deprecated, use autocrypt_send_asm_title / autocrypt_continue_transfer_title -->
-    <string name="autocrypt_key_transfer_desktop">Autocrypt-sleuteloverdracht</string>
-    <!-- deprecated, use autocrypt_send_asm_explain_before -->
-    <string name="initiate_key_transfer_desktop">Een ‘Autocrypt-instelbericht’ deelt je eind-tot-eindinstellingen veilig met andere Autocrypt-compatibele apps. De instellingen zijn versleuteld middels een code die hier wordt getoond en moet worden overgetypt op het andere apparaat.</string>
     <string name="select_group_image_desktop">Kies een groepsafbeelding</string>
-    <!-- deprecated, use export_backup_desktop instead -->
-    <string name="imex_progress_title_desktop">Back-upvoortgang</string>
     <string name="export_backup_desktop">Back-up exporteren</string>
-    <!-- deprecated, use autocrypt_send_asm_explain_after instead -->
-    <string name="show_key_transfer_message_desktop">D sleutel is aan jezelf verstuurd. Ga naar het andere apparaat en open het instelbericht. Je zou nu moeten worden gevraagd om een code. Typ de volgende getallen in het invoerveld:</string>
     <string name="autocrypt_correct_desktop">Autocrypt-instellingen overgedragen!</string>
-    <!-- deprecated, use autocrypt_bad_setup_code instead -->
-    <string name="autocrypt_incorrect_desktop">Onjuiste instelcode; probeer het opnieuw.</string>
-    <!-- deprecated, rare errors should be english only for easier searchability -->
-    <string name="create_chat_error_desktop">Kan geen gesprek beginnen.</string>
     <string name="forget_login_confirmation_desktop">Wil je dit account verwijderen? Alles wordt verwijderd: je eind-tot-eindinstellingen, contactpersonen, gesprekken, berichten en media. Deze actie kan niet ongedaan worden gemaakt.</string>
     <string name="account_info_hover_tooltip_desktop2">E-mail: %1$s\nGrootte: %2$s\nAccount-id: %3$s</string>
     <string name="message_detail_sent_desktop">verstuurd</string>
@@ -1100,8 +1088,7 @@
 
 
     <!-- device messages for updates -->
+    <string name="update_1_42_common">Wijzigingslog:\n\n💌 een-op-eengesprekken hebben voortaan gegarandeerd eind-tot-eindversleuteling bij gebruik van goedgekeurde contactpersonen\n\n😌 omwille van eenvoud worden zulke contactpersonen en gesprekken voorzien van groene vinkjes\n\n👥 groepen worden automatisch voorzien van gegarandeerde eind-tot-eindversleuteling (indien mogelijk)\n\n🔄 goedgekeurd, geblokkeerd, gearchiveerd, vastgemaakt en genegeerd wordt voortaan naar alle apparaten gesynchroniseerd</string>
     <!-- placeholder will be replaced by the URL https://get.delta.chat/#changelogs -->
-    <string name="update_1_38_android">1.38 is uitgebracht:\n\n📎 Het maximale bijlagelimiet is opgeheven\n\n🗜️ Png-afbeeldingen (schermfoto\'s!) worden voortaan ook verkleind\n\n⌨️ Voor ontwikkelaars: verbeterde apps in chats met behulp van sendToChat() en importFiles() (Wat is Webxdc? → https://webxdc.org)\n\n… en meer op %1$s</string>
-    <!-- placeholder will be replaced by the URL https://get.delta.chat/#changelogs -->
-    <string name="update_1_38_ios">1.38 is uitgebracht:\n\n🖼🔍 Op zoek naar een afbeelding, maar vergeten in welk gesprek die stond? Zoek niet langer: je hebt nu de knop ‘Alle media’ tot je beschikking!\n\n🧹 ‘Gesprek wissen’ kan voortaan vanuit profielen\n\n📎 Het maximale bijlagelimiet is opgeheven\n\n🗜️ Png-afbeeldingen (schermfoto\'s!) worden voortaan ook verkleind\n\n… en meer op %1$s</string>
+    <string name="update_1_42_android">Binnenkort beschikbaar: verbeteringen aan de camera, spraakberichten, reservekopieën, schermlezer, achtergronden per account, galerijselectie, webxdc in horizontale modus… of lees alles op %1$s</string>
 </resources>

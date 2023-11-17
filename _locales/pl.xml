@@ -4,7 +4,7 @@
     <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
     <string name="cancel">Anuluj</string>
-    <string name="clear_search">Wyczyść wyszukiwanie</string>
+   <string name="clear_search">Wyczyść wyszukiwanie</string>
     <string name="yes">Tak</string>
     <string name="no">Nie</string>
     <string name="select">Zaznacz</string>
@@ -789,7 +789,6 @@
     <!-- system messages -->
     <string name="systemmsg_read_receipt_subject">Potwierdzenie odczytu</string>
     <string name="systemmsg_read_receipt_body">To jest potwierdzenie odczytu dla wiadomości ”%1$s„.\n\nTo potwierdzenie odczytu tylko informuje, że wiadomość została wyświetlona na urządzeniu odbiorcy. Nie ma gwarancji, że odbiorca przeczytał treść wiadomości.</string>
-    <string name="systemmsg_cannot_decrypt">Tej wiadomości nie można odszyfrować.\n\n• Możesz teraz pomóc odpowiadając po prostu na tą wiadomość i poprosić nadawcę o ponowne wysłanie wiadomości.\n\n• W przypadku ponownego zainstalowania Delta Chat lub innego programu mailowego na tym lub innym urządzeniu, może być konieczne wysłanie stąd klucza automatycznego szyfrowania.</string>
     <string name="systemmsg_unknown_sender_for_chat">Nieznany nadawca tego czatu. Więcej szczegółów znajdziesz w sekcji „Informacje”.</string>
     <string name="systemmsg_subject_for_new_contact">Wiadomość od %1$s</string>
     <string name="systemmsg_failed_sending_to">Nie udało się wysłać wiadomości do %1$s.</string>
@@ -963,8 +962,6 @@
     <string name="about_offical_app_desktop">To jest oficjalna aplikacja Delta Chat Desktop.</string>
     <string name="about_licensed_under_desktop">To oprogramowanie jest objęte licencją GNU GPL w wersji 3, a kod źródłowy jest dostępny na GitHub.</string>
     <string name="welcome_desktop">Witaj w Delta Chat</string>
-    <!-- deprecated, use switch_account -->
-    <string name="login_known_accounts_title_desktop">Znane konta</string>
     <string name="global_menu_preferences_language_desktop">Wybierz język</string>
     <string name="global_menu_file_desktop">Plik</string>
     <string name="global_menu_file_quit_desktop">Zamknij</string>
@@ -991,26 +988,12 @@
     <string name="delete_message_desktop">Usuń wiadomość</string>
     <string name="more_info_desktop">Więcej informacji</string>
     <string name="timestamp_format_m_desktop">D MMM</string>
-    <!-- deprecated, use encryption_info_title_desktop or profile_encryption -->
-    <string name="encryption_info_desktop">Pokaż informacje o szyfrowaniu</string>
     <string name="remove_desktop">Usuń</string>
     <string name="save_desktop">Zapisz</string>
     <string name="name_desktop">Nazwa</string>
-    <!-- deprecated, use autocrypt_send_asm_title / autocrypt_continue_transfer_title -->
-    <string name="autocrypt_key_transfer_desktop">Transfer klucza Autocrypt</string>
-    <!-- deprecated, use autocrypt_send_asm_explain_before -->
-    <string name="initiate_key_transfer_desktop">Wiadomość konfiguracyjna automatycznego szyfrowania bezpiecznie udostępnia twoją konfigurację end-to-end innym aplikacjom zgodnym z Autocrypt. Klucz zostanie zaszyfrowany za pomocą wyświetlonego tutaj kodu konfiguracyjnego, który należy wpisać na drugim urządzeniu.</string>
     <string name="select_group_image_desktop">Wybierz obraz grupy</string>
-    <!-- deprecated, use export_backup_desktop instead -->
-    <string name="imex_progress_title_desktop">Postęp tworzenia kopii zapasowej </string>
     <string name="export_backup_desktop">Eksport kopii zapasowej</string>
-    <!-- deprecated, use autocrypt_send_asm_explain_after instead -->
-    <string name="show_key_transfer_message_desktop">Twój klucz został wysłany do ciebie. Przełącz się na inne urządzenie i otwórz komunikat konfiguracji. Powinieneś zostać poproszony o kod instalacyjny. Wpisz następujące cyfry w wierszu polecenia. Po zakończeniu Twoje drugie urządzenie będzie gotowe do użycia funkcji Autocrypt.</string>
     <string name="autocrypt_correct_desktop">Pomyślnie przetransferowano konfigurację Autocrypt!</string>
-    <!-- deprecated, use autocrypt_bad_setup_code instead -->
-    <string name="autocrypt_incorrect_desktop">Nieprawidłowy kod konfiguracji. Spróbuj ponownie.</string>
-    <!-- deprecated, rare errors should be english only for easier searchability -->
-    <string name="create_chat_error_desktop">Nie można utworzyć czatu.</string>
     <string name="forget_login_confirmation_desktop">Usunąć ten login? Wszystko zostanie usunięte, w tym kompletna konfiguracja, kontakty, czaty, wiadomości i multimedia. Ta akcja jest ostateczna i nie można jej odwrócić.</string>
     <string name="account_info_hover_tooltip_desktop2">E-mail: %1$s\nRozmiar: %2$s\nID konta: %3$s</string>
     <string name="message_detail_sent_desktop">wysłane</string>
@@ -1093,9 +1076,4 @@
     <string name="perm_enable_bg_already_done">Pozwolono już Delta Chat na odbieranie wiadomości w tle.\n\nJeśli wiadomości nadal nie docierają w tle, sprawdź też ustawienia systemu.</string>
 
 
-    <!-- device messages for updates -->
-    <!-- placeholder will be replaced by the URL https://get.delta.chat/#changelogs -->
-    <string name="update_1_38_android">1.38 wydane:\n\n📎 Usunięto górny limit rozmiaru załączników\n\n🗜️ Obrazy PNG (zrzuty ekranu!) są teraz również kompresowane\n\n⌨️ Dla deweloperów: Lepsze aplikacje do czatów z sendToChat() i importFiles() (Co to jest Webxdc? → https://webxdc.org)\n\n… i więcej na %1$s</string>
-    <!-- placeholder will be replaced by the URL https://get.delta.chat/#changelogs -->
-    <string name="update_1_38_ios">1.38 wydane:\n\n🖼🔍 Czy kiedykolwiek szukałeś obrazu i nie pamiętałeś czatu? W takim razie przycisk „Wszystkie multimedia” jest Twój!\n\n🧹 „Wyczyść czat” z profili\n\n📎 Usunięto górny limit rozmiaru załączników\n\n🗜️ Obrazy PNG (zrzuty ekranu!) są teraz również kompresowane\n\n… i więcej na %1$s</string>
-</resources>
+    </resources>

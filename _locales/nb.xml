@@ -4,7 +4,7 @@
     <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
     <string name="cancel">Avbryt</string>
-    <string name="yes">Ja</string>
+   <string name="yes">Ja</string>
     <string name="no">Nei</string>
     <string name="select">Velg</string>
     <string name="on">På</string>
@@ -370,7 +370,6 @@
     <!-- system messages -->
     <string name="systemmsg_read_receipt_subject">Meldingskvittering</string>
     <string name="systemmsg_read_receipt_body">Dette er en meldingskvittering for meldingen \"%1$s\".\n\nDenne meldingskvitteringen bekrefter bare at meldingen ble vist på mottakerens enhet. Det finnes ingen garanti for at mottakeren har lest meldingsinnholdet.</string>
-    <string name="systemmsg_cannot_decrypt">Denne meldingen kan ikke dekrypteres.\n\n• Det kan hjelpe å svare på denne meldingen og spørre avsenderen om å sende den igjen.\n\n• I fall du har reinstallert Delta Chat eller et annet e-postprogram på denne eller en annen enhet, kan du sende en Autocrypt-oppsettsmelding derfra.</string>
     <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name -->
     <string name="group_name_changed_by_you">Gruppenavn endret fra \"%1$s\" til \"%2$s\" av meg.</string>
     <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name, %3$s will be replaced by name and address of the contact who did the action. -->
@@ -431,14 +430,8 @@
     <string name="encryption_info_title_desktop">Krypteringsinfo</string>
     <string name="delete_message_desktop">Slett melding</string>
     <string name="more_info_desktop">Mer informasjon</string>
-    <!-- deprecated, use encryption_info_title_desktop or profile_encryption -->
-    <string name="encryption_info_desktop">Krypteringsinfo</string>
     <string name="remove_desktop">Fjerne</string>
     <string name="save_desktop">Lagre</string>
     <string name="name_desktop">Navn</string>
-    <!-- deprecated, use autocrypt_send_asm_title / autocrypt_continue_transfer_title -->
-    <string name="autocrypt_key_transfer_desktop">Autocrypt-nøkkeloverføring</string>
-    <!-- deprecated, use autocrypt_send_asm_explain_before -->
-    <string name="initiate_key_transfer_desktop">The Autocrypt-nøkkeloverføring krever at e-postklienten på den andre enheten er Autocrypt-kompatibel.\n\nDu kan så sende din hemmelige nøkkel til deg selv. Nøkkelen vil bli kryptert av en oppsettskode som vises her og må skrives inn på den andre enheten.</string>
     <string name="export_backup_desktop">Eksporter sikkerhetskopi</string>
     </resources>
