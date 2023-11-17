@@ -1,3 +1,10 @@
+import React, { useContext } from 'react'
+import reactStringReplace from 'react-string-replace'
+import { C, T } from '@deltachat/jsonrpc-client'
+import classNames from 'classnames'
+
+import MessageBody from './MessageBody'
+import MessageMetaData from './MessageMetaData'
 import {
   onDownload,
   openAttachmentInShell,
@@ -10,13 +17,6 @@ import {
   downloadFullMessage,
   openWebxdc,
 } from './messageFunctions'
-import React, { useContext } from 'react'
-import reactStringReplace from 'react-string-replace'
-
-import classNames from 'classnames'
-import MessageBody from './MessageBody'
-import MessageMetaData from './MessageMetaData'
-
 import Attachment from '../attachment/messageAttachment'
 import { isGenericAttachment } from '../attachment/Attachment'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
@@ -25,13 +25,9 @@ import {
   jumpToMessage,
   openViewProfileDialog,
 } from '../helpers/ChatMethods'
-import { C } from '@deltachat/jsonrpc-client'
-// import { getLogger } from '../../../shared/logger'
 import { runtime } from '../../runtime'
 import { AvatarFromContact } from '../Avatar'
 import { ConversationType } from './MessageList'
-// const log = getLogger('renderer/message')
-
 import { getDirection, truncateText } from '../../../shared/util'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { ContextMenuItem } from '../ContextMenu'
@@ -135,12 +131,12 @@ function buildContextMenu(
     message,
     text,
     conversationType,
-  }: // onRetrySend,
-  {
+    chat,
+  }: {
     message: Type.Message | null
     text?: string
     conversationType: ConversationType
-    // onRetrySend: Function
+    chat: T.FullChat
   },
   clickTarget: HTMLAnchorElement | null
 ): (false | ContextMenuItem)[] {
@@ -195,10 +191,7 @@ function buildContextMenu(
   const showResend = message.sender.id === C.DC_CONTACT_ID_SELF
 
   // Do not show "reply" in read-only chats
-  const showReply =
-    !conversationType.isDeviceChat &&
-    conversationType.chatType !== C.DC_CHAT_TYPE_BROADCAST &&
-    conversationType.chatType !== C.DC_CHAT_TYPE_MAILINGLIST
+  const showReply = chat.canSend
 
   // Only show in groups, don't show on info messages or outgoing messages
   const showReplyPrivately =
@@ -289,20 +282,25 @@ function buildContextMenu(
 export default function Message(props: {
   message: Type.Message
   conversationType: ConversationType
-  /* onRetrySend */
 }) {
   const { message, conversationType } = props
   const { id, viewType, text, hasLocation, isSetupmessage, hasHtml } = message
   const direction = getDirection(message)
   const status = mapCoreMsgStatus2String(message.state)
   const tx = useTranslationFunction()
+  const accountId = selectedAccountId()
 
   const screenContext = useContext(ScreenContext)
   const { openContextMenu, openDialog } = screenContext
 
   const showMenu: (
     event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement, MouseEvent>
-  ) => void = event => {
+  ) => Promise<void> = async event => {
+    const chat = await BackendRemote.rpc.getFullChatById(
+      accountId,
+      message.chatId
+    )
+
     // the event.t is a workaround for labled links, as they will be able to contain markdown formatting in the label in the future.
     const target = ((event as any).t || event.target) as HTMLAnchorElement
     const items = buildContextMenu(
@@ -310,6 +308,7 @@ export default function Message(props: {
         message,
         text: text || undefined,
         conversationType,
+        chat,
       },
       target
     )
