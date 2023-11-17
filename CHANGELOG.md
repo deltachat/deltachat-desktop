@@ -14,6 +14,7 @@
 - fix: files search not case-insensitive
 - fix: bug in emoji detection for jumbomoji #3508
 - Fix: Do not show reply option in read-only groups #3536
+- Use `dc_chat_can_send` to show or hide reply functionality #3541
 
 <a id="1_41_2"></a>
 
