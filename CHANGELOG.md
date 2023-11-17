@@ -13,6 +13,7 @@
 ### Fixed
 - fix: files search not case-insensitive
 - fix: bug in emoji detection for jumbomoji #3508
+- Improve layout and fix unknown locale of DisabledMessageInput #3537
 - Fix: Do not show reply option in read-only groups #3536
 - Use `dc_chat_can_send` to show or hide reply functionality #3541
 
