@@ -155,6 +155,7 @@ const languages = [
   'te',
   'tr',
   'uk',
+  'vi',
   'zh-cn',
   'zh-tw',
 ].map(code => code.toLowerCase())
