@@ -20,8 +20,10 @@ const DisabledMessageInput = ({ reason }: Props) => {
         return tx('messaging_disabled_deaddrop')
       case DisabledChatReasons.DEVICE_CHAT:
         return tx('messaging_disabled_device_chat')
+      case DisabledChatReasons.UNKNOWN:
+        return 'messaging_disabled_unknown'
       default:
-        throw new Error('Unknown read-only chat status')
+        throw new Error('Invalid read-only chat status')
     }
   }, [reason, tx])
 
@@ -30,7 +32,7 @@ const DisabledMessageInput = ({ reason }: Props) => {
     return null
   }
 
-  // If we're in the device message chat we also do not want to show anything
+  // If we're in the "device message" chat we also do not want to show anything
   if (reason === DisabledChatReasons.DEVICE_CHAT) {
     return null
   }
