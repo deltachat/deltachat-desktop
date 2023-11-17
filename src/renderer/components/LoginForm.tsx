@@ -1,7 +1,10 @@
 /* eslint-disable camelcase */
 
-import { C } from '@deltachat/jsonrpc-client'
+import { C, DcEventType } from '@deltachat/jsonrpc-client'
 import React, { useEffect, useState } from 'react'
+import { Collapse, Dialog } from '@blueprintjs/core'
+import { useDebouncedCallback } from 'use-debounce/lib'
+
 import {
   DeltaInput,
   DeltaPasswordInput,
@@ -9,17 +12,15 @@ import {
   DeltaProgressBar,
   DeltaSwitch,
 } from './Login-Styles'
-import { Collapse, Dialog } from '@blueprintjs/core'
 import ClickableLink from './helpers/ClickableLink'
 import { DialogProps } from './dialogs/DialogController'
 import { DeltaDialogContent, DeltaDialogFooter } from './dialogs/DeltaDialog'
 import { Credentials } from '../../shared/shared-types'
 import { useTranslationFunction, i18nContext } from '../contexts'
-import { useDebouncedCallback } from 'use-debounce/lib'
 import { getLogger } from '../../shared/logger'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
-import { DcEventType } from '@deltachat/jsonrpc-client'
+import SettingsStoreInstance from '../stores/settings'
 
 const log = getLogger('renderer/loginForm')
 
@@ -428,17 +429,20 @@ export function ConfigureProgressDialog({
             ...credentials,
             verified_one_on_one_chats: '1',
           }
+          await BackendRemote.rpc.batchSetConfig(accountId, initialConfig)
+
+          // Configure user account _after_ setting the credentials
+          await BackendRemote.rpc.configure(accountId)
 
           // Select "Device Messages" chat as the initial one. This will serve
           // as a first introduction to the app after they've entered
           const deviceChatId = await getDeviceChatId(accountId)
           if (deviceChatId) {
-            initialConfig['ui.lastchatid'] = String(deviceChatId)
+            SettingsStoreInstance.effect.setCoreSetting(
+              'ui.lastchatid',
+              String(deviceChatId)
+            )
           }
-
-          // Configure user account _after_ setting the credentials
-          await BackendRemote.rpc.batchSetConfig(accountId, initialConfig)
-          await BackendRemote.rpc.configure(accountId)
 
           // Yay! We're done and ready to go
           onClose()
