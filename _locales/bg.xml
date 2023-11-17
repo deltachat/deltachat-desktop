@@ -4,7 +4,7 @@
     <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
     <string name="cancel">Отказ</string>
-    <string name="clear_search">Изчистване на търсенето</string>
+   <string name="clear_search">Изчистване на търсенето</string>
     <string name="yes">Да</string>
     <string name="no">Не</string>
     <string name="select">Избор</string>
@@ -748,7 +748,6 @@
     <!-- system messages -->
     <string name="systemmsg_read_receipt_subject">Съобщението е отворено</string>
     <string name="systemmsg_read_receipt_body">Съобщението \"%1$s\", което изпратихте, беше показано на екрана на получателя.\n\nТова не е гаранция, че съдържанието му е прочетено.</string>
-    <string name="systemmsg_cannot_decrypt">Това съобщение не може да бъде декриптирано.\n\n• Може би ще помогне просто да отговорите на това съобщение и да поискате от подателя да го изпрати отново.\n\n• В случай, че сте преинсталирали Delta Chat или друга програма за електронна поща на това или друго устройство, бихте могли да изпратите съобщение за настройка на Autocrypt от там.</string>
     <string name="systemmsg_unknown_sender_for_chat">Неизвестен подател за този чат. Вижте \"информация\" за повече подробности.</string>
     <string name="systemmsg_subject_for_new_contact">Съобщение от %1$s</string>
     <string name="systemmsg_failed_sending_to">Неуспешно изпращане на съобщение до %1$s.</string>
@@ -912,8 +911,6 @@
     <string name="about_offical_app_desktop">Това е официалното настолно приложение Delta Chat.</string>
     <string name="about_licensed_under_desktop">Този софтуер е лицензиран под GNU GPL версия 3. Изходният код е наличен в GitHub.</string>
     <string name="welcome_desktop">Добре дошли в Delta Chat</string>
-    <!-- deprecated, use switch_account -->
-    <string name="login_known_accounts_title_desktop">Познати акаунти</string>
     <string name="global_menu_preferences_language_desktop">Език</string>
     <string name="global_menu_file_desktop">Файл</string>
     <string name="global_menu_file_quit_desktop">Напускане</string>
@@ -940,26 +937,12 @@
     <string name="delete_message_desktop">Изтриване на съобщение</string>
     <string name="more_info_desktop">Повече информация</string>
     <string name="timestamp_format_m_desktop">MMM D</string>
-    <!-- deprecated, use encryption_info_title_desktop or profile_encryption -->
-    <string name="encryption_info_desktop">Показване на информация за криптирането</string>
     <string name="remove_desktop">Премахване</string>
     <string name="save_desktop">Запис</string>
     <string name="name_desktop">Име</string>
-    <!-- deprecated, use autocrypt_send_asm_title / autocrypt_continue_transfer_title -->
-    <string name="autocrypt_key_transfer_desktop">Прехвърляне на ключ на Autocrypt</string>
-    <!-- deprecated, use autocrypt_send_asm_explain_before -->
-    <string name="initiate_key_transfer_desktop">Съобщението за настройка на Autocrypt споделя по сигурен начин Вашата настройка за криптиране \"от край до край\" с други приложения, съвместими с Autocrypt. Настройката ще бъде криптирана с код, показан тук, който трябва да бъде въведен на другото устройство.</string>
     <string name="select_group_image_desktop">Изберете изображение за групата</string>
-    <!-- deprecated, use export_backup_desktop instead -->
-    <string name="imex_progress_title_desktop">Прогрес в създаването на резервно копие</string>
     <string name="export_backup_desktop">Експорт на резервно копие</string>
-    <!-- deprecated, use autocrypt_send_asm_explain_after instead -->
-    <string name="show_key_transfer_message_desktop">Изпратихте Вашия ключ до себе си. Преминете на другото устройство и отворете съобщението за настройка. Би трябвало да Ви бъде поискан код за настройка. Въведете следните цифри:</string>
     <string name="autocrypt_correct_desktop">Найстроката на Autocrypt е прехвърлена.</string>
-    <!-- deprecated, use autocrypt_bad_setup_code instead -->
-    <string name="autocrypt_incorrect_desktop">Неправилен код за настройка. Моля, опитайте отново.</string>
-    <!-- deprecated, rare errors should be english only for easier searchability -->
-    <string name="create_chat_error_desktop">Неуспешно създаване на чат.</string>
     <string name="forget_login_confirmation_desktop">Да бъде ли изтрита тази регистрация? Всичко ще бъде изтрито, включително Вашата настройка за криптиране \"от край до край\", контакти, чатове, съобщения и медийни файлове. Това действие не може да бъде отменено.</string>
     <string name="account_info_hover_tooltip_desktop2">E-Mail: %1$s\nРазмер: %2$s\n Идентификатор на акаунт: %3$s</string>
     <string name="message_detail_sent_desktop">изпратено</string>
@@ -1042,9 +1025,4 @@
     <string name="perm_enable_bg_already_done">Вече разрешихте Delta Chat да получава съобщения във фонов режим.\n\nАко съобщенията все още не пристигат във фонов режим, моля проверете Вашите системни настройки.</string>
 
 
-    <!-- device messages for updates -->
-    <!-- placeholder will be replaced by the URL https://get.delta.chat/#changelogs -->
-    <string name="update_1_38_android">Излезе версия 1.38:\n\n📎 Премахната е горната граница на размера на прикачените файлове\n\n🗜️ Изображенията в PNG формат (екранни снимки!) вече също се компресират\n\n⌨️ За разработчици: По-добри приложения за чатове с помощта на sendToChat() и importFiles() (Какво е Webxdc? → https://webxdc.org)\n\n… и още на %1$s</string>
-    <!-- placeholder will be replaced by the URL https://get.delta.chat/#changelogs -->
-    <string name="update_1_38_ios">Излезе версия 1.38:\n\n🖼🔍 Случвало ли ви се е да търсите изображение и да не можете да си спомните чата? Тогава бутонът \"Всички медии\" е Ваш!\n\n🧹 \"Изчистване на чата\" от профилите\n\n📎 Премахната горна граница на размера на прикачените файлове\n\n🗜️ Изображенията в PNG формат (екранни снимки!) вече също се компресират\n\n… и още на %1$s</string>
-</resources>
+    </resources>
