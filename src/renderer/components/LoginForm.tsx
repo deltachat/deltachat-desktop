@@ -443,7 +443,7 @@ export function ConfigureProgressDialog({
               'ui.lastchatid',
               String(deviceChatId)
             )
-            // SettingsStoreInstance is reloaded the first time the main screen in shown
+            // SettingsStoreInstance is reloaded the first time the main screen is shown
           }
 
           // Yay! We're done and ready to go
