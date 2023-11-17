@@ -438,10 +438,12 @@ export function ConfigureProgressDialog({
           // as a first introduction to the app after they've entered
           const deviceChatId = await getDeviceChatId(accountId)
           if (deviceChatId) {
-            SettingsStoreInstance.effect.setCoreSetting(
+            await BackendRemote.rpc.setConfig(
+              accountId,
               'ui.lastchatid',
               String(deviceChatId)
             )
+            // SettingsStoreInstance is reloaded the first time the main screen in shown
           }
 
           // Yay! We're done and ready to go
