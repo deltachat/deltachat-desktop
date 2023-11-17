@@ -21,6 +21,8 @@ const DisabledMessageInput = ({ reason }: Props) => {
       case DisabledChatReasons.DEVICE_CHAT:
         return tx('messaging_disabled_device_chat')
       case DisabledChatReasons.UNKNOWN:
+        // Unknown cases are likely to be caused by a bug somewhere else,
+        // but we don't want to crash the UI
         return 'messaging_disabled_unknown'
       default:
         throw new Error('Invalid read-only chat status')
