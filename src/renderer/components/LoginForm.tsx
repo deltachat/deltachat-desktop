@@ -20,7 +20,6 @@ import { useTranslationFunction, i18nContext } from '../contexts'
 import { getLogger } from '../../shared/logger'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
-import SettingsStoreInstance from '../stores/settings'
 
 const log = getLogger('renderer/loginForm')
 
