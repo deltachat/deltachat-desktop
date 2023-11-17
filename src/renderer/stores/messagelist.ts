@@ -679,7 +679,7 @@ class MessageListStore extends Store<MessageListState> {
       this.scheduler.lockedEffect(
         'scroll',
         async () => {
-          this.log.debug(`refresh`, this)
+          // this.log.debug(`refresh`, this)
           const state = this.state
           const messageListItems = await BackendRemote.rpc.getMessageListItems(
             this.accountId,
