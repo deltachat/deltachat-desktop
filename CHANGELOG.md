@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_41_3"></a>
+
+## [1.41.3] - 2023-11-17
+
 ### Added
 - Vietnamese language
 
@@ -2292,7 +2296,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.2...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.3...HEAD
+
+[1.41.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.2...v1.41.3
 
 [1.41.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.1...v1.41.2
 
