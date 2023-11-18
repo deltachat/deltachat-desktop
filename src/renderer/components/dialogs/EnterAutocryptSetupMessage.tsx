@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { Card, Callout, Spinner, Classes } from '@blueprintjs/core'
+import { Card, Callout, Classes } from '@blueprintjs/core'
 import InputTransferKey from './AutocryptSetupMessage'
 import DeltaDialog from './DeltaDialog'
 import { ScreenContext } from '../../contexts'
@@ -10,13 +10,46 @@ import { T } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('frontend/dialogs/EnterAutocryptSetupMessage')
 
-export function SetupMessagePanel({
-  setupCodeBegin,
-  continueKeyTransfer,
+export default function EnterAutocryptSetupMessage({
+  onClose,
+  message,
 }: {
-  setupCodeBegin: string
-  continueKeyTransfer: typeof EnterAutocryptSetupMessage.prototype.continueKeyTransfer
+  onClose: () => void
+  message: T.Message
 }) {
+  const { userFeedback } = useContext(ScreenContext)
+  const [loading, setLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const isOpen = !!message
+  const setupCodeBegin = message && message.setupCodeBegin
+
+  const tx = window.static_translate
+
+  const continueKeyTransfer = async (key: string) => {
+    if (loading) {
+      log.error('continueKeyTransfer already started')
+    }
+    setLoading(true)
+
+    try {
+      await BackendRemote.rpc.continueAutocryptKeyTransfer(
+        selectedAccountId(),
+        message.id,
+        key
+      )
+      userFeedback({
+        type: 'success',
+        text: tx('autocrypt_correct_desktop'),
+      })
+      onClose()
+    } catch (error: any) {
+      setError(String(error?.['message'] ? error.message : error))
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const [key, setKey] = useState<string[]>([
     setupCodeBegin,
     ...Array(8).fill(''),
@@ -56,93 +89,8 @@ export function SetupMessagePanel({
 
   const onClick = () => continueKeyTransfer(key.join(''))
 
-  const tx = window.static_translate
-
-  log.debug(`render: key: ${key}`)
-
-  return (
-    <>
-      <div>
-        <Card>
-          <Callout>
-            {tx('autocrypt_continue_transfer_please_enter_code')}
-          </Callout>
-          <InputTransferKey autocryptkey={key} onChange={handleChangeKey} />
-        </Card>
-      </div>
-      <div className={Classes.DIALOG_FOOTER}>
-        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-          <p className='delta-button primary bold' onClick={onClick}>
-            {tx('ok')}
-          </p>
-        </div>
-      </div>
-    </>
-  )
-}
-
-export default function EnterAutocryptSetupMessage({
-  onClose,
-  message,
-}: {
-  onClose: () => void
-  message: T.Message
-}) {
-  const { userFeedback } = useContext(ScreenContext)
-  const [loading, setLoading] = useState<boolean>(false)
-
-  const isOpen = !!message
-  const setupCodeBegin = message && message.setupCodeBegin
-
-  const tx = window.static_translate
-
-  const continueKeyTransfer = async (key: string) => {
-    setLoading(true)
-
-    const result = await BackendRemote.rpc.continueAutocryptKeyTransfer(
-      selectedAccountId(),
-      message.id,
-      key
-    )
-    setLoading(false)
-
-    if (result === false) {
-      userFeedback({
-        type: 'error',
-        text: tx('autocrypt_bad_setup_code'),
-      })
-      return
-    }
-
-    userFeedback({
-      type: 'success',
-      text: tx('autocrypt_correct_desktop'),
-    })
-    onClose()
-  }
-
-  let body
-  if (loading) {
-    body = (
-      <div className={Classes.DIALOG_BODY}>
-        <Card>
-          <Callout>
-            <Spinner />
-          </Callout>
-        </Card>
-      </div>
-    )
-  } else {
-    if (!setupCodeBegin) {
-      throw new Error('setupCodeBegin is missing')
-    }
-
-    body = (
-      <SetupMessagePanel
-        setupCodeBegin={setupCodeBegin}
-        continueKeyTransfer={continueKeyTransfer}
-      />
-    )
+  if (!setupCodeBegin) {
+    throw new Error('setupCodeBegin is missing')
   }
 
   return (
@@ -151,7 +99,27 @@ export default function EnterAutocryptSetupMessage({
       title={tx('autocrypt_continue_transfer_title')}
       onClose={onClose}
     >
-      {body}
+      <div>
+        <Card>
+          <Callout>
+            {tx('autocrypt_continue_transfer_please_enter_code')}
+          </Callout>
+          {error && (
+            <Callout color='red'>
+              {tx('autocrypt_bad_setup_code')}
+              {error}
+            </Callout>
+          )}
+          <InputTransferKey autocryptkey={key} onChange={handleChangeKey} />
+        </Card>
+      </div>
+      <div className={Classes.DIALOG_FOOTER}>
+        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+          <p className='delta-button primary bold' onClick={onClick}>
+            {loading ? tx('loading') : tx('ok')}
+          </p>
+        </div>
+      </div>
     </DeltaDialog>
   )
 }
