@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- fix bug where composer was locked after joining a group via qr code
+
 <a id="1_41_3"></a>
 
 ## [1.41.3] - 2023-11-17
