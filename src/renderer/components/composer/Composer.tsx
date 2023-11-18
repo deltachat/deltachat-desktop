@@ -87,12 +87,40 @@ const Composer = forwardRef<
 
   const chatId = selectedChat.id
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
- 
+
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
   const pickerButtonRef = useRef<HTMLDivElement>(null)
 
   const { openDialog } = useContext(ScreenContext)
-
+  
+  const sendVoiceMessage = (voiceData: Blob) => {
+    let reader = new FileReader()
+    reader.readAsDataURL(voiceData)
+    reader.onloadend = async () => {
+      if (!reader.result) {
+        log.error('Cannot convert blob to base64. reader.result is null')
+        return
+      }
+      const b64 = reader.result.toString().split(',')[1]
+      const filename = b64.slice(0, 12).toString() + '.webm'
+      const path = await runtime.writeTempFileFromBase64(filename, b64)
+      try {
+        await sendMessage(chatId, {
+          text: '',
+          file: path,
+          quotedMessageId:
+            draftState.quote?.kind === 'WithMessage'
+              ? draftState.quote.messageId
+              : null,
+          viewtype: 'Voice',
+        })
+      } catch (err) {
+        log.error('Cannot send message:', err)
+        // show error dialogue
+      }
+      await runtime.removeTempFile(path)
+    }
+  }
   const composerSendMessage = async () => {
     if (chatId === null) {
       throw new Error('chat id is undefined')
@@ -337,10 +365,10 @@ const Composer = forwardRef<
             addFileToDraft={addFileToDraft}
             selectedChat={selectedChat}
           />
-          <button className='microphone-button'
+          <button
+            className='microphone-button'
             onMouseDown={() => {
               messageInputRef.current?.startRecording()
-              console.log(messageInputRef)
             }}
             onMouseUp={() => {
               messageInputRef.current?.stopRecording()
@@ -349,11 +377,12 @@ const Composer = forwardRef<
           >
             <span />
           </button>
-          {settingsStore &&  (
+          {settingsStore && (
             <ComposerMessageInput
               ref={messageInputRef}
               enterKeySends={settingsStore?.desktopSettings.enterKeySends}
               sendMessage={composerSendMessage}
+              sendVoiceMessage={sendVoiceMessage}
               chatId={chatId}
               updateDraftText={updateDraftText}
               onPaste={handlePaste}
