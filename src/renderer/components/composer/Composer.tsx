@@ -444,6 +444,9 @@ export function useDraft(
           inputRef.current?.setText(newDraft.text)
         }
         inputRef.current?.setState({ loadingDraft: false })
+        setTimeout(() => {
+          inputRef.current?.focus()
+        })
       })
     },
     [clearDraft, inputRef]
