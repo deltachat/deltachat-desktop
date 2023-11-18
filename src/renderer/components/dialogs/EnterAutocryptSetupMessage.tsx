@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react'
-import { Card, Callout, Classes } from '@blueprintjs/core'
 import InputTransferKey from './AutocryptSetupMessage'
 import DeltaDialog from './DeltaDialog'
 import { ScreenContext } from '../../contexts'
@@ -98,23 +97,22 @@ export default function EnterAutocryptSetupMessage({
       isOpen={isOpen}
       title={tx('autocrypt_continue_transfer_title')}
       onClose={onClose}
+      className='enter-autocrypt-setup-message-dialog'
     >
-      <div>
-        <Card>
-          <Callout>
-            {tx('autocrypt_continue_transfer_please_enter_code')}
-          </Callout>
-          {error && (
-            <Callout color='red'>
-              {tx('autocrypt_bad_setup_code')}
-              {error}
-            </Callout>
-          )}
-          <InputTransferKey autocryptkey={key} onChange={handleChangeKey} />
-        </Card>
+      <div className='dialog-body'>
+        <p>{tx('autocrypt_continue_transfer_please_enter_code')}</p>
+        {error && (
+          <p className='autocrypt-setup-error'>
+            {tx('autocrypt_bad_setup_code')}
+            <br />
+            {error}
+          </p>
+        )}
+        <InputTransferKey autocryptkey={key} onChange={handleChangeKey} />
       </div>
-      <div className={Classes.DIALOG_FOOTER}>
-        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+
+      <div className={'bp4-dialog-footer'}>
+        <div className={'bp4-dialog-footer-actions'}>
           <p className='delta-button primary bold' onClick={onClick}>
             {loading ? tx('loading') : tx('ok')}
           </p>
