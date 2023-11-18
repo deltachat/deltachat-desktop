@@ -92,9 +92,9 @@ const Composer = forwardRef<
   const pickerButtonRef = useRef<HTMLDivElement>(null)
 
   const { openDialog } = useContext(ScreenContext)
-  
+
   const sendVoiceMessage = (voiceData: Blob) => {
-    let reader = new FileReader()
+    const reader = new FileReader()
     reader.readAsDataURL(voiceData)
     reader.onloadend = async () => {
       if (!reader.result) {

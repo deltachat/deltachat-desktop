@@ -34,8 +34,6 @@ export default class ComposerMessageInput extends React.Component<
   recorder: MediaRecorder | null = null
   updateRecordedDurationInterval: number | null = null
   voiceData: Blob[] = []
-  gumError: any
-  lastDataArrived: boolean = false
   constructor(props: ComposerMessageInputProps) {
     super(props)
     this.state = {
