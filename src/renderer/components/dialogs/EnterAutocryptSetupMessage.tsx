@@ -67,11 +67,11 @@ export default function EnterAutocryptSetupMessage({
 
     log.debug(`handleChangeKey: data-index ${index} value: ${value}`)
     if (
-      value !== "" && // fix: allow deleting the whole field
+      value !== '' && // fix: allow deleting the whole field
       (value.length > 4 ||
-      isNaN(valueNumber) ||
-      valueNumber < 0 ||
-      valueNumber > 9999)
+        isNaN(valueNumber) ||
+        valueNumber < 0 ||
+        valueNumber > 9999)
     ) {
       log.debug(`handleChangeKey: changed value is invalid`)
       return false
