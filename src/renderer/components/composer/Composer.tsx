@@ -18,7 +18,12 @@ import { Quote } from '../message/Message'
 import { DraftAttachment } from '../attachment/messageAttachment'
 import { sendMessage, unselectChat } from '../helpers/ChatMethods'
 import { useSettingsStore } from '../../stores/settings'
-import { BackendRemote, EffectfulBackendActions, onDCEvent, Type } from '../../backend-com'
+import {
+  BackendRemote,
+  EffectfulBackendActions,
+  onDCEvent,
+  Type,
+} from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { MessageTypeAttachmentSubset } from '../attachment/Attachment'
 import { runtime } from '../../runtime'
@@ -97,12 +102,12 @@ const Composer = forwardRef<
   const accountId = selectedAccountId()
 
   useEffect(() => {
-     return onDCEvent(accountId, "SecurejoinJoinerProgress", ({progress}) => {
+    return onDCEvent(accountId, 'SecurejoinJoinerProgress', ({ progress }) => {
       // fix bug where composer was locked after joining a group via qr code
       if (progress === 1000) {
         window.__reloadDraft && window.__reloadDraft()
       }
-     })
+    })
   }, [accountId])
 
   const composerSendMessage = async () => {
