@@ -60,9 +60,6 @@ export default function EnterAutocryptSetupMessage({
   const handleChangeKey = (
     event: React.FormEvent<HTMLElement> | React.ChangeEvent<HTMLInputElement>
   ) => {
-    if (!(event.target as any).value) {
-      return
-    }
     const eventTarget = event.target as HTMLInputElement
     const value = eventTarget.value
     const valueNumber = Number(value)
@@ -70,10 +67,11 @@ export default function EnterAutocryptSetupMessage({
 
     log.debug(`handleChangeKey: data-index ${index} value: ${value}`)
     if (
-      value.length > 4 ||
+      value !== "" && // fix: allow deleting the whole field
+      (value.length > 4 ||
       isNaN(valueNumber) ||
       valueNumber < 0 ||
-      valueNumber > 9999
+      valueNumber > 9999)
     ) {
       log.debug(`handleChangeKey: changed value is invalid`)
       return false
