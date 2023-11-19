@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- fix: show error in autocrypt setup enter key dialog when the typed in key is invalid
+- fix bug: allow deleting first number in autocrypt enter setup key dialog
+
 <a id="1_41_3"></a>
 
 ## [1.41.3] - 2023-11-17
