@@ -16,18 +16,26 @@ export default function EnterAutocryptSetupMessage({
   onClose: () => void
   message: T.Message
 }) {
+  const tx = window.static_translate
+  const isOpen = !!message
+
   const { userFeedback } = useContext(ScreenContext)
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
 
-  const isOpen = !!message
-  const setupCodeBegin = message && message.setupCodeBegin
+  if (!message?.setupCodeBegin) {
+    throw new Error('setupCodeBegin is missing')
+  }
 
-  const tx = window.static_translate
+  const [key, setKey] = useState<string[]>([
+    message.setupCodeBegin,
+    ...Array(8).fill(''),
+  ])
 
-  const continueKeyTransfer = async (key: string) => {
+  const continueKeyTransfer = async () => {
     if (loading) {
       log.error('continueKeyTransfer already started')
+      return
     }
     setLoading(true)
 
@@ -35,7 +43,7 @@ export default function EnterAutocryptSetupMessage({
       await BackendRemote.rpc.continueAutocryptKeyTransfer(
         selectedAccountId(),
         message.id,
-        key
+        key.join('')
       )
       userFeedback({
         type: 'success',
@@ -48,11 +56,6 @@ export default function EnterAutocryptSetupMessage({
       setLoading(false)
     }
   }
-
-  const [key, setKey] = useState<string[]>([
-    setupCodeBegin,
-    ...Array(8).fill(''),
-  ])
 
   const handleChangeKey = (
     event: React.FormEvent<HTMLElement> | React.ChangeEvent<HTMLInputElement>
@@ -80,16 +83,12 @@ export default function EnterAutocryptSetupMessage({
 
     log.debug(`handleChangeKey: updatedKey: ${JSON.stringify(updatedKey)}`)
     setKey(updatedKey)
+
+    // focus next field
     if (value.length === 4) {
       const next = index + 1
       if (next <= 8) document.getElementById('autocrypt-input-' + next)?.focus()
     }
-  }
-
-  const onClick = () => continueKeyTransfer(key.join(''))
-
-  if (!setupCodeBegin) {
-    throw new Error('setupCodeBegin is missing')
   }
 
   return (
@@ -113,7 +112,10 @@ export default function EnterAutocryptSetupMessage({
 
       <div className={'bp4-dialog-footer'}>
         <div className={'bp4-dialog-footer-actions'}>
-          <p className='delta-button primary bold' onClick={onClick}>
+          <p
+            className='delta-button primary bold'
+            onClick={continueKeyTransfer}
+          >
             {loading ? tx('loading') : tx('ok')}
           </p>
         </div>
