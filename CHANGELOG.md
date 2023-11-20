@@ -4,6 +4,7 @@
 
 ### Fixed
 - fix bug where composer was locked after joining a group via qr code
+- fix double message context menu #3550
 
 <a id="1_41_3"></a>
 
