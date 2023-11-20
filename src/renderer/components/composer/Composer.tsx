@@ -83,6 +83,7 @@ const Composer = forwardRef<
     updateDraftText,
     addFileToDraft,
     removeFile,
+    clearDraft,
   } = props
 
   const chatId = selectedChat.id
@@ -93,7 +94,7 @@ const Composer = forwardRef<
 
   const { openDialog } = useContext(ScreenContext)
 
-  const sendVoiceMessage = (voiceData: Blob) => {
+  const saveVoiceAsDraft = (voiceData: Blob) => {
     const reader = new FileReader()
     reader.readAsDataURL(voiceData)
     reader.onloadend = async () => {
@@ -105,25 +106,36 @@ const Composer = forwardRef<
       const filename = b64.slice(0, 12).toString() + '.webm'
       const path = await runtime.writeTempFileFromBase64(filename, b64)
       try {
-        await sendMessage(chatId, {
-          text: '',
-          file: path,
-          quotedMessageId:
-            draftState.quote?.kind === 'WithMessage'
-              ? draftState.quote.messageId
-              : null,
-          viewtype: 'Voice',
-        })
+        addFileToDraft(path, 'Voice')
       } catch (err) {
         log.error('Cannot send message:', err)
         // show error dialogue
       }
-      await runtime.removeTempFile(path)
     }
   }
   const composerSendMessage = async () => {
     if (chatId === null) {
       throw new Error('chat id is undefined')
+    }
+    if (draftState.file && draftState.viewType === 'Voice') {
+      // okay, it's a voice message we have to send
+      try {
+        await sendMessage(chatId, {
+          text: '',
+          file: draftState.file,
+          viewtype: 'Voice',
+          quotedMessageId:
+            draftState.quote?.kind === 'WithMessage'
+              ? draftState.quote.messageId
+              : null,
+        })
+        await BackendRemote.rpc.removeDraft(selectedAccountId(), chatId)
+        clearDraft()
+        window.__reloadDraft && window.__reloadDraft()
+      } catch (e) {
+        log.error('Cannot send voice message:', e)
+      }
+      return
     }
     if (!messageInputRef.current) {
       throw new Error('messageInputRef is undefined')
@@ -350,7 +362,7 @@ const Composer = forwardRef<
               <QuoteOrDraftRemoveButton onClick={removeQuote} />
             </div>
           )}
-          {draftState.file && (
+          {draftState.file && draftState.viewType.toLowerCase() !== 'voice' && (
             <div className='attachment-quote-section is-attachment'>
               {/* TODO make this pretty: draft image/video/attachment */}
               {/* <p>file: {draftState.file}</p> */}
@@ -374,20 +386,27 @@ const Composer = forwardRef<
               messageInputRef.current?.stopRecording()
             }}
             aria-label={tx('voice_send')}
+            disabled={Boolean(draftState.file)}
           >
             <span />
           </button>
-          {settingsStore && (
-            <ComposerMessageInput
-              ref={messageInputRef}
-              enterKeySends={settingsStore?.desktopSettings.enterKeySends}
-              sendMessage={composerSendMessage}
-              sendVoiceMessage={sendVoiceMessage}
-              chatId={chatId}
-              updateDraftText={updateDraftText}
-              onPaste={handlePaste}
-            />
+          {settingsStore &&
+            !draftState.file &&
+            draftState.viewType.toLowerCase() !== 'voice' && (
+              <ComposerMessageInput
+                ref={messageInputRef}
+                enterKeySends={settingsStore?.desktopSettings.enterKeySends}
+                sendMessage={composerSendMessage}
+                saveVoiceAsDraft={saveVoiceAsDraft}
+                chatId={chatId}
+                updateDraftText={updateDraftText}
+                onPaste={handlePaste}
+              />
+            )}
+          {draftState.file && draftState.viewType.toLowerCase() === 'voice' && (
+            <VoiceMessage file={draftState.file} />
           )}
+
           <div
             className='emoji-button'
             ref={pickerButtonRef}
@@ -614,4 +633,12 @@ export function useDraft(
     removeFile,
     clearDraft,
   }
+}
+
+function VoiceMessage({ file }: { file: string }) {
+  return (
+    <div className='recording-duration'>
+      <audio src={file} autoPlay={false} className='voice-message-preview' />
+    </div>
+  )
 }

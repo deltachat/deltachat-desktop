@@ -12,7 +12,7 @@ type ComposerMessageInputProps = {
   enterKeySends: boolean
   onPaste?: (e: React.ClipboardEvent<HTMLTextAreaElement>) => void
   updateDraftText: (text: string, InputChatId: number) => void
-  sendVoiceMessage: (voiceData: Blob) => void
+  saveVoiceAsDraft: (voiceData: Blob) => void
 }
 
 type ComposerMessageInputState = {
@@ -135,7 +135,7 @@ export default class ComposerMessageInput extends React.Component<
             // show alert dialogue
             return
           }
-          this.props.sendVoiceMessage(voiceData)
+          this.props.saveVoiceAsDraft(voiceData)
         }
         this.recorder.onstop = () => {
           const duration = this.state.recordedDuration?.asSeconds() || 0

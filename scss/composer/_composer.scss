@@ -137,6 +137,10 @@
         -webkit-mask-size: contain;
         background-color: var(--composerPlaceholderText);
       }
+
+      svg.cross {
+        display: none;
+      }
     }
 
     .send-button-wrapper {
@@ -175,8 +179,11 @@
       display: flex;
       justify-content: center;
       flex-direction: row;
-      align-items: center;
+      align-items: stretch;
       flex-grow: 1;
+      margin-bottom: 4px;
+      margin-top: 4px;
+      height: 4vh !important;
     }
 
     .message-input-area {
