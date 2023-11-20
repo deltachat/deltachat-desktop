@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Fixed
+- fix displaying sticker that has wrong mimetype
 - fix bug where composer was locked after joining a group via qr code
 
 <a id="1_41_3"></a>
