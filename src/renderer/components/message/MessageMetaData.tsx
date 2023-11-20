@@ -29,7 +29,7 @@ export default class MessageMetaData extends React.Component<{
       timestamp,
       hasLocation,
       onClickError,
-      viewType
+      viewType,
     } = this.props
 
     const withImageNoCaption = Boolean(
@@ -41,7 +41,8 @@ export default class MessageMetaData extends React.Component<{
         {tx => (
           <div
             className={classNames('metadata', {
-              'with-image-no-caption': withImageNoCaption || viewType === 'Sticker',
+              'with-image-no-caption':
+                withImageNoCaption || viewType === 'Sticker',
             })}
           >
             {username !== undefined ? (

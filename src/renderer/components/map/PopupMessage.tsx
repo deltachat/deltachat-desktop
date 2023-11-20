@@ -24,7 +24,7 @@ export default class PopupMessage extends React.Component<{
             padlock={message.showPadlock}
             username={username}
             fileMime={null}
-            viewType="Unknown"
+            viewType='Unknown'
           />
         </div>
       )
