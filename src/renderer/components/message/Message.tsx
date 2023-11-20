@@ -297,7 +297,7 @@ export default function Message(props: {
     event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement, MouseEvent>
   ) => Promise<void> = async event => {
     event.preventDefault() // prevent default runtime context menu from opening
-    
+
     const chat = await BackendRemote.rpc.getFullChatById(
       accountId,
       message.chatId
