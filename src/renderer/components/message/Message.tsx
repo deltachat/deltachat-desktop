@@ -426,6 +426,7 @@ export default function Message(props: {
             timestamp={message.timestamp * 1000}
             padlock={message.showPadlock}
             onClickError={openMessageInfo.bind(null, message)}
+            viewType={'VideochatInvitation'}
           />
         </div>
       </div>
@@ -551,6 +552,7 @@ export default function Message(props: {
             timestamp={message.timestamp * 1000}
             padlock={message.showPadlock}
             onClickError={openMessageInfo.bind(null, message)}
+            viewType={message.viewType}
           />
         </div>
       </div>
