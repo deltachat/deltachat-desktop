@@ -61,6 +61,7 @@ export default class ComposerMessageInput extends React.Component<
     this.isRecording = this.isRecording.bind(this)
     this.startRecording = this.startRecording.bind(this)
     this.stopRecording = this.stopRecording.bind(this)
+    this.hasText = this.hasText.bind(this)
   }
 
   componentDidMount() {
@@ -169,6 +170,10 @@ export default class ComposerMessageInput extends React.Component<
     const voiceData = new Blob(this.voiceData)
     this.voiceData = []
     return voiceData
+  }
+
+  hasText(): boolean {
+    return !Boolean(this.getText().match(/^\s*$/))
   }
 
   componentDidUpdate(

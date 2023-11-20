@@ -7,6 +7,7 @@ import React, {
   useCallback,
   useContext,
 } from 'react'
+import classNames from 'classnames'
 import MenuAttachment from './menuAttachment'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import ComposerMessageInput from './ComposerMessageInput'
@@ -117,36 +118,16 @@ const Composer = forwardRef<
     if (chatId === null) {
       throw new Error('chat id is undefined')
     }
-    if (draftState.file && draftState.viewType === 'Voice') {
-      // okay, it's a voice message we have to send
-      try {
-        await sendMessage(chatId, {
-          text: '',
-          file: draftState.file,
-          viewtype: 'Voice',
-          quotedMessageId:
-            draftState.quote?.kind === 'WithMessage'
-              ? draftState.quote.messageId
-              : null,
-        })
-        await BackendRemote.rpc.removeDraft(selectedAccountId(), chatId)
-        clearDraft()
-        window.__reloadDraft && window.__reloadDraft()
-      } catch (e) {
-        log.error('Cannot send voice message:', e)
-      }
-      return
-    }
-    if (!messageInputRef.current) {
+    if (!messageInputRef.current && (!draftState.file) || (draftState.file && draftState.viewType !== 'Voice')) {
       throw new Error('messageInputRef is undefined')
     }
-    const textareaRef = messageInputRef.current.textareaRef.current
+    const textareaRef = messageInputRef.current?.textareaRef.current
     if (textareaRef) {
       textareaRef.disabled = true
     }
     try {
-      const message = messageInputRef.current.getText()
-      if (message.match(/^\s*$/) && !draftState.file) {
+      const message = messageInputRef.current?.getText() || ''
+      if (messageInputRef.current?.hasText() && !draftState.file) {
         log.debug(`Empty message: don't send it...`)
         return
       }
@@ -173,7 +154,7 @@ const Composer = forwardRef<
       if (textareaRef) {
         textareaRef.disabled = false
       }
-      messageInputRef.current.focus()
+      messageInputRef.current?.focus()
     }
   }
 
@@ -378,7 +359,7 @@ const Composer = forwardRef<
             selectedChat={selectedChat}
           />
           <button
-            className='microphone-button'
+            className={classNames('microphone-button', draftState.file && 'disabled')}
             onMouseDown={() => {
               messageInputRef.current?.startRecording()
             }}
@@ -386,7 +367,7 @@ const Composer = forwardRef<
               messageInputRef.current?.stopRecording()
             }}
             aria-label={tx('voice_send')}
-            disabled={Boolean(draftState.file)}
+            disabled={Boolean(draftState.file || messageInputRef.current?.hasText())}
           >
             <span />
           </button>
