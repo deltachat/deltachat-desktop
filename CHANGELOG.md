@@ -2,7 +2,17 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- Update local help (2023-11-20)
+- update deltachat-node and deltachat/jsonrpc-client to `v1.131.5`
+
 ### Fixed
+- fix displaying sticker that has wrong mimetype
+- fix bug where composer was locked after joining a group via qr code
+- fix double message context menu #3550
+- focus after loading draft fixes:
+  - fix composer / draft-area not getting focus after click in command #3493
+  - fix composer does not get focused when selecting a chat with a draft #3495
 - fix: show error in autocrypt setup enter key dialog when the typed in key is invalid
 - fix bug: allow deleting first number in autocrypt enter setup key dialog
 

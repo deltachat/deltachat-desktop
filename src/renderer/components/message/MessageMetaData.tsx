@@ -4,6 +4,7 @@ import Timestamp from '../conversations/Timestamp'
 import { isImage, isVideo } from '../attachment/Attachment'
 import { i18nContext } from '../../contexts'
 import { msgStatus } from '../../../shared/shared-types'
+import { T } from '@deltachat/jsonrpc-client'
 
 export default class MessageMetaData extends React.Component<{
   padlock: boolean
@@ -15,6 +16,7 @@ export default class MessageMetaData extends React.Component<{
   timestamp: number
   hasLocation?: boolean
   onClickError?: () => void
+  viewType: T.Viewtype
 }> {
   render() {
     const {
@@ -27,6 +29,7 @@ export default class MessageMetaData extends React.Component<{
       timestamp,
       hasLocation,
       onClickError,
+      viewType,
     } = this.props
 
     const withImageNoCaption = Boolean(
@@ -38,7 +41,8 @@ export default class MessageMetaData extends React.Component<{
         {tx => (
           <div
             className={classNames('metadata', {
-              'with-image-no-caption': withImageNoCaption,
+              'with-image-no-caption':
+                withImageNoCaption || viewType === 'Sticker',
             })}
           >
             {username !== undefined ? (

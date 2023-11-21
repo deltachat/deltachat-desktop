@@ -296,6 +296,8 @@ export default function Message(props: {
   const showMenu: (
     event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement, MouseEvent>
   ) => Promise<void> = async event => {
+    event.preventDefault() // prevent default runtime context menu from opening
+
     const chat = await BackendRemote.rpc.getFullChatById(
       accountId,
       message.chatId
@@ -314,7 +316,6 @@ export default function Message(props: {
     )
     const [cursorX, cursorY] = [event.clientX, event.clientY]
 
-    event.preventDefault() // prevent default runtime context menu from opening
     openContextMenu({
       cursorX,
       cursorY,
@@ -426,6 +427,7 @@ export default function Message(props: {
             timestamp={message.timestamp * 1000}
             padlock={message.showPadlock}
             onClickError={openMessageInfo.bind(null, message)}
+            viewType={'VideochatInvitation'}
           />
         </div>
       </div>
@@ -551,6 +553,7 @@ export default function Message(props: {
             timestamp={message.timestamp * 1000}
             padlock={message.showPadlock}
             onClickError={openMessageInfo.bind(null, message)}
+            viewType={message.viewType}
           />
         </div>
       </div>

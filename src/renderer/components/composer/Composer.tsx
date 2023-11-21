@@ -18,7 +18,12 @@ import { Quote } from '../message/Message'
 import { DraftAttachment } from '../attachment/messageAttachment'
 import { sendMessage, unselectChat } from '../helpers/ChatMethods'
 import { useSettingsStore } from '../../stores/settings'
-import { BackendRemote, EffectfulBackendActions, Type } from '../../backend-com'
+import {
+  BackendRemote,
+  EffectfulBackendActions,
+  onDCEvent,
+  Type,
+} from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { MessageTypeAttachmentSubset } from '../attachment/Attachment'
 import { runtime } from '../../runtime'
@@ -94,6 +99,16 @@ const Composer = forwardRef<
   const pickerButtonRef = useRef<HTMLDivElement>(null)
 
   const { openDialog } = useContext(ScreenContext)
+  const accountId = selectedAccountId()
+
+  useEffect(() => {
+    return onDCEvent(accountId, 'SecurejoinJoinerProgress', ({ progress }) => {
+      // fix bug where composer was locked after joining a group via qr code
+      if (progress === 1000) {
+        window.__reloadDraft && window.__reloadDraft()
+      }
+    })
+  }, [accountId])
 
   const composerSendMessage = async () => {
     if (chatId === null) {
@@ -444,6 +459,9 @@ export function useDraft(
           inputRef.current?.setText(newDraft.text)
         }
         inputRef.current?.setState({ loadingDraft: false })
+        setTimeout(() => {
+          inputRef.current?.focus()
+        })
       })
     },
     [clearDraft, inputRef]
