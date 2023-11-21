@@ -240,9 +240,7 @@ function ViewGroupInner(props: {
       {!profileContact && (
         <>
           <DeltaDialogHeader
-            title={
-              !isBroadcast ? tx('menu_edit_group') : tx('edit_broadcast_list')
-            }
+            title={!isBroadcast ? tx('tab_group') : tx('broadcast_list')}
             onClickEdit={onClickEdit}
             showEditButton={!chatDisabled}
             showCloseButton={true}

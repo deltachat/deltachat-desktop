@@ -59,7 +59,7 @@ interface Runtime {
   reloadWebContent(): void
   openLogFile(): void
   getCurrentLogLocation(): string
-  openHelpWindow(): void
+  openHelpWindow(anchor?: string): void
   /**
    * get the commandline arguments
    */
@@ -310,7 +310,7 @@ class Browser implements Runtime {
   getRC_Config(): RC_Config {
     throw new Error('Method not implemented.')
   }
-  openHelpWindow(): void {
+  openHelpWindow(_anchor?: string): void {
     throw new Error('Method not implemented.')
   }
   openLogFile(): void {
@@ -546,7 +546,7 @@ class Electron implements Runtime {
         })
       )
     }, this.getRC_Config())
-    ipcBackend.on('showHelpDialog', this.openHelpWindow)
+    ipcBackend.on('showHelpDialog', this.openHelpWindow.bind(null, undefined))
     ipcBackend.on('ClickOnNotification', (_ev, data) =>
       this.notificationCallback(data)
     )
@@ -570,8 +570,8 @@ class Electron implements Runtime {
     )
     ipcBackend.on('onResumeFromSleep', () => this.onResumeFromSleep?.())
   }
-  openHelpWindow(): void {
-    ipcBackend.send('help', window.localeData.locale)
+  openHelpWindow(anchor?: string): void {
+    ipcBackend.send('help', window.localeData.locale, anchor)
   }
   openLogFile(): void {
     ipcBackend.invoke('electron.shell.openPath', this.getCurrentLogLocation())

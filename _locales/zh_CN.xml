@@ -4,6 +4,8 @@
     <string name="app_name">Delta Chat</string>
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
+   <!-- the word "or" to separate blocks in the user interface that are mutually exclusive -->
+    <string name="or_separator">或</string>
     <string name="clear_search">清除搜索</string>
     <string name="yes">是</string>
     <string name="no">否</string>
@@ -773,7 +775,7 @@
     <!-- system messages -->
     <string name="systemmsg_read_receipt_subject">消息已被打开</string>
     <string name="systemmsg_read_receipt_body">您发送的“%1$s”消息已在接收者的屏幕上显示过。\n\n这并不保证内容已被阅读。</string>
-    <string name="systemmsg_cannot_decrypt">此消息无法解密。\n\n• 回复此消息并要求发送者重发该消息可能会有所帮助。\n\n• 如果您在此设备或其他设备上重新安装了 Delta Chat 或其他电子邮件程序，则可能需要从别处发送 Autocrypt 设置消息。</string>
+    <string name="systemmsg_cannot_decrypt">无法解密此消息。\n\n• 简化对此消息的回复并请求发送方再次发送消息可能会有帮助。\n\n•  如果你刚重新安装 Delta Chat，你最好立即重新设置 Delta Chat 并选择“添加为第二台设备”或导入备份文件。</string>
     <string name="systemmsg_unknown_sender_for_chat">此聊天发送者未知。查看“信息”来获取更多详情。</string>
     <string name="systemmsg_subject_for_new_contact">来自 %1$s 的消息</string>
     <string name="systemmsg_failed_sending_to">发送消息给 %1$s 失败。</string>
@@ -784,6 +786,8 @@
     <string name="group_image_changed_by_you">你更改了群组图像</string>
     <!-- %1$s will be replaced by name and address of the contact who did the action -->
     <string name="group_image_changed_by_other">%1$s 更改了群组图像</string>
+    <!-- %1$s will be replaced by name and address of the contact added to the group -->
+    <string name="member_x_added">添加了成员 %1$s 。</string>
     <!-- %1$s will be replaced by name and address of the contact added to the group -->
     <string name="add_member_by_you">你添加了成员 %1$s</string>
     <!-- %1$s will be replaced by name and address of the contact added to the group, %2$s will be replaced by name and address of the contact who did the action -->
@@ -954,8 +958,6 @@
     <string name="about_offical_app_desktop">这是 Delta Chat 官方桌面应用。</string>
     <string name="about_licensed_under_desktop">本软件在 GNU GPL 版本 3 下获得授权，其源代码可从 GitHub 获得。</string>
     <string name="welcome_desktop">欢迎使用 Delta Chat</string>
-    <!-- deprecated, use switch_account -->
-    <string name="login_known_accounts_title_desktop">已知账户</string>
     <string name="global_menu_preferences_language_desktop">语言</string>
     <string name="global_menu_file_desktop">文件</string>
     <string name="global_menu_file_quit_desktop">退出</string>
@@ -982,26 +984,12 @@
     <string name="delete_message_desktop">删除消息</string>
     <string name="more_info_desktop">更多信息</string>
     <string name="timestamp_format_m_desktop">MMM D</string>
-    <!-- deprecated, use encryption_info_title_desktop or profile_encryption -->
-    <string name="encryption_info_desktop">显示加密信息</string>
     <string name="remove_desktop">移除</string>
     <string name="save_desktop">保存</string>
     <string name="name_desktop">名称</string>
-    <!-- deprecated, use autocrypt_send_asm_title / autocrypt_continue_transfer_title -->
-    <string name="autocrypt_key_transfer_desktop">Autocrypt 密钥传输</string>
-    <!-- deprecated, use autocrypt_send_asm_explain_before -->
-    <string name="initiate_key_transfer_desktop">Autocrypt 设置消息安全地共享您的端到端设置至其他兼容 Autocrypt 的应用程序。该设置将通过在此显示的、必须在另一台设备上输入的设置码进行加密。</string>
     <string name="select_group_image_desktop">选择群组图像</string>
-    <!-- deprecated, use export_backup_desktop instead -->
-    <string name="imex_progress_title_desktop">备份进度</string>
     <string name="export_backup_desktop">导出备份</string>
-    <!-- deprecated, use autocrypt_send_asm_explain_after instead -->
-    <string name="show_key_transfer_message_desktop">您的密钥已发送给您自己。切换到另一台设备并打开该设置消息。 您将被要求输入设置码。 输入以下数字：</string>
     <string name="autocrypt_correct_desktop">Autocrypt 设置已传输 。</string>
-    <!-- deprecated, use autocrypt_bad_setup_code instead -->
-    <string name="autocrypt_incorrect_desktop">不正确的设置码。请重试。</string>
-    <!-- deprecated, rare errors should be english only for easier searchability -->
-    <string name="create_chat_error_desktop">无法创建聊天。</string>
     <string name="forget_login_confirmation_desktop">删除此登录？ 一切都将被删除，包括您的端到端设置、联系人、聊天、消息及媒体。 此操作无法撤消。</string>
     <string name="account_info_hover_tooltip_desktop2">电子邮件：%1$s\n大小：%2$s\n账户 Id：%3$s</string>
     <string name="message_detail_sent_desktop">发送于</string>
@@ -1085,8 +1073,7 @@
 
 
     <!-- device messages for updates -->
+    <string name="update_1_42_common">新变化\n\n💌 对引入的联系人，一对一聊天确保端到端加密\n\n😌 为了方便识别，这样的联系人和聊天会带有绿色钩形符号\n\n👥 如果可能，自动创建确保端到端加密的群\n\n🔄 在所有设备间同步接受/拦截、存档、固定、静音</string>
     <!-- placeholder will be replaced by the URL https://get.delta.chat/#changelogs -->
-    <string name="update_1_38_android">1.38 版发布啦：\n\n📎 删除了附件大小上限 \n\n🗜️ PNG 图片(截屏文件!) 现在同样被压缩\n\n⌨️ 对于开发者: 更好的聊天应用，sendToChat() 和 importFiles() (什么是 Webxdc? → https://webxdc.org)\n\n… 更多内容请访问 %1$s</string>
-    <!-- placeholder will be replaced by the URL https://get.delta.chat/#changelogs -->
-    <string name="update_1_38_ios">1.38版发布啦：\n\n🖼🔍 尝试搜索某张图片却记不得到底在哪个聊天会话中吗? 别急，试试“所有媒体”按钮吧。\n\n🧹从个人资料部分“清除聊天”\n\n📎 删除了附件大小上限\n\n🗜️ PNG 图片(截屏文件！) 现在同样被压缩\n\n… 更多内容请访问 %1$s</string>
+    <string name="update_1_42_android">留心相机、语音消息、backup-all、屏幕阅读器、不同账户壁纸、图库全选、webxdc landscape 等方面的更多改进… 或访问 %1$s 进行了解</string>
 </resources>

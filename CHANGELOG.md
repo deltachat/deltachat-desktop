@@ -2,12 +2,50 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- fix displaying sticker that has wrong mimetype
+- fix bug where composer was locked after joining a group via qr code
+- fix double message context menu #3550
+
+<a id="1_41_3"></a>
+
+## [1.41.3] - 2023-11-17
+
+### Added
+- Vietnamese language
+
+### Changed
+- update `@deltachat/message_parser_wasm` to `0.9.0`, which fixes a bug with BotCommandSuggestion parsing
+- update `electron` from `v26.4.2` to version `v26.6.0`
+- Select device message chat automatically to welcome first users #3531
+- update deltachat-node and deltachat/jsonrpc-client to `v1.131.4`
+- update local help (16.nov.2023)
+- Update translations (17.11.2023)
+- Update options for disappearing messages #3530
+- Do not show redundant read-only message when in device messages chat #3532
+
+### Fixed
+- fix: files search not case-insensitive
+- fix: bug in emoji detection for jumbomoji #3508
+- Improve layout and fix unknown locale of DisabledMessageInput #3537
+- Fix: Do not show reply option in read-only groups #3536
+- Use `dc_chat_can_send` to show or hide reply functionality #3541
+- fix translation key for `add_to_sticker_collection` in context menu
+
+<a id="1_41_2"></a>
+
+## [1.41.2] - 2023-11-15
+
 ### Changed
 - update deltachat-node and deltachat/jsonrpc-client to `v1.131.2`
 - Update inApp help (15.11.2023)
+- make help's "scroll to top" button less intrusive
+- streamline profile titles
+- use local help for guaranteed end-to-end encryption more info
 
 ### Fixed
 - macOS: prevent second instances when runing from terminal
+- fix status text overflow in ViewProfile #3515
 
 <a id="1_41_1"></a>
 
@@ -2263,7 +2301,11 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.3...HEAD
+
+[1.41.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.2...v1.41.3
+
+[1.41.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.1...v1.41.2
 
 [1.41.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.0...v1.41.1
 

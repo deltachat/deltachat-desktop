@@ -223,7 +223,8 @@ export default class Gallery extends Component<
     const filteredMediaMessageIds = mediaMessageIds.filter(id => {
       const result = mediaLoadResult[id]
       return (
-        result.kind === 'message' && result.fileName?.indexOf(queryText) !== -1
+        result.kind === 'message' &&
+        result.fileName?.toLowerCase().indexOf(queryText.toLowerCase()) !== -1
       )
     })
 

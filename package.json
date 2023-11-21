@@ -1,6 +1,6 @@
 {
   "name": "deltachat-desktop",
-  "version": "1.41.1",
+  "version": "1.41.3",
   "description": "Desktop Application for delta.chat",
   "main": "index.js",
   "scripts": {
@@ -76,8 +76,8 @@
   },
   "dependencies": {
     "@blueprintjs/core": "^4.1.2",
-    "@deltachat/jsonrpc-client": "^1.131.2",
-    "@deltachat/message_parser_wasm": "^0.8.0",
+    "@deltachat/jsonrpc-client": "^1.131.4",
+    "@deltachat/message_parser_wasm": "^0.9.0",
     "@deltachat/react-qr-reader": "^4.0.0",
     "@emoji-mart/data": "1.1.2",
     "@emoji-mart/react": "1.1.1",
@@ -85,7 +85,7 @@
     "application-config": "^1.0.1",
     "classnames": "^2.3.1",
     "debounce": "^1.2.0",
-    "deltachat-node": "^1.131.2",
+    "deltachat-node": "^1.131.4",
     "emoji-js-clean": "^4.0.0",
     "emoji-mart": "5.5.2",
     "error-stack-parser": "^2.0.7",
@@ -128,7 +128,7 @@
     "@typescript-eslint/parser": "^5.3.1",
     "chai": "^4.3.4",
     "chokidar": "^3.5.3",
-    "electron": "^26.4.2",
+    "electron": "^26.6.0",
     "electron-builder": "^24.6.4",
     "esbuild": "^0.14.51",
     "eslint": "^8.53.0",

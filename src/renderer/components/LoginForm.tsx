@@ -1,9 +1,8 @@
 /* eslint-disable camelcase */
 
-import { C } from '@deltachat/jsonrpc-client'
+import { C, DcEventType } from '@deltachat/jsonrpc-client'
 import React, { useEffect, useState } from 'react'
 import { Collapse, Dialog } from '@blueprintjs/core'
-import { DcEventType } from '@deltachat/jsonrpc-client'
 import { useDebouncedCallback } from 'use-debounce/lib'
 
 import {
@@ -47,6 +46,30 @@ export function defaultCredentials(credentials?: Credentials): Credentials {
     socks5_password: '',
   }
   return { ...defaultCredentials, ...credentials }
+}
+
+/**
+ * Helper method to determine the chat id of the "Device Messages" read-only chat.
+ *
+ * Note that there's currently no API to retrieve this id from the backend, this
+ * is why we're iterating over all currently available chats instead.
+ */
+async function getDeviceChatId(accountId: number): Promise<number | null> {
+  const chatIds = await BackendRemote.rpc.getChatlistEntries(
+    accountId,
+    null,
+    null,
+    null
+  )
+
+  for (const chatId of chatIds) {
+    const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
+    if (chat.isDeviceChat) {
+      return chatId
+    }
+  }
+
+  return null
 }
 
 type LoginProps = React.PropsWithChildren<{
@@ -371,6 +394,7 @@ export function ConfigureProgressDialog({
   const [error, setError] = useState('')
   const [configureFailed, setConfigureFailed] = useState(false)
   const accountId = selectedAccountId()
+  const tx = useTranslationFunction()
 
   const onConfigureProgress = ({
     progress,
@@ -400,17 +424,29 @@ export function ConfigureProgressDialog({
     () => {
       ;(async () => {
         try {
-          if (window.__selectedAccountId === undefined) {
-            throw new Error('No account selected')
-          }
-
-          await BackendRemote.rpc.batchSetConfig(window.__selectedAccountId, {
+          // Prepare initial configuration
+          const initialConfig: { [key: string]: string } = {
             ...credentials,
             verified_one_on_one_chats: '1',
-          })
-          await BackendRemote.rpc.configure(window.__selectedAccountId)
+          }
+          await BackendRemote.rpc.batchSetConfig(accountId, initialConfig)
 
-          // on successful configure:
+          // Configure user account _after_ setting the credentials
+          await BackendRemote.rpc.configure(accountId)
+
+          // Select "Device Messages" chat as the initial one. This will serve
+          // as a first introduction to the app after they've entered
+          const deviceChatId = await getDeviceChatId(accountId)
+          if (deviceChatId) {
+            await BackendRemote.rpc.setConfig(
+              accountId,
+              'ui.lastchatid',
+              String(deviceChatId)
+            )
+            // SettingsStoreInstance is reloaded the first time the main screen is shown
+          }
+
+          // Yay! We're done and ready to go
           onClose()
           onSuccess && onSuccess()
         } catch (err: any) {
@@ -430,8 +466,6 @@ export function ConfigureProgressDialog({
       emitter.off('ConfigureProgress', onConfigureProgress)
     }
   }, [accountId])
-
-  const tx = useTranslationFunction()
 
   return (
     <Dialog

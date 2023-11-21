@@ -4,6 +4,8 @@
     <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
     <string name="cancel">Annulla</string>
+   <!-- the word "or" to separate blocks in the user interface that are mutually exclusive -->
+    <string name="or_separator">o</string>
     <string name="clear_search">Cancella Ricerca</string>
     <string name="yes">Sì</string>
     <string name="no">No</string>
@@ -803,7 +805,7 @@
     <!-- system messages -->
     <string name="systemmsg_read_receipt_subject">Ricevuta di lettura</string>
     <string name="systemmsg_read_receipt_body">Questa è una ricevuta di lettura del messaggio \"%1$s\".\n\nCiò significa che il messaggio è stato mostrato nel dispositivo del destinatario, ma non necessariamente che il contenuto è stato letto.</string>
-    <string name="systemmsg_cannot_decrypt">Questo messaggio non può essere decrittato.\n\n• Potrebbe essere sufficiente rispondere a questo messaggio e chiedere al mittente di rispedirlo.\n\n• Se hai reinstallato Delta Chat o usi un altro client email dovresti inviare un Messaggio di configurazione Autocrypt dal dispositivo originario.</string>
+    <string name="systemmsg_cannot_decrypt">Questo messaggio non può essere decrittografato.\n\n• Potrebbe essere già utile rispondere semplicemente a questo messaggio e chiedere al mittente d\'inviare nuovamente il messaggio.\n\n• Se hai appena reinstallato Delta Chat, è meglio se riconfiguri ora Delta Chat e scegli \"Aggiungi come secondo dispositivo\" o importa un backup.</string>
     <string name="systemmsg_unknown_sender_for_chat">Mittente sconosciuto per questa chat. Vedi \'info\' per maggiori dettagli.</string>
     <string name="systemmsg_subject_for_new_contact">Messaggio da %1$s</string>
     <string name="systemmsg_failed_sending_to">Impossibile inviare il messaggio a %1$s.</string>
@@ -814,6 +816,8 @@
     <string name="group_image_changed_by_you">Hai cambiato l\'immagine del gruppo.</string>
     <!-- %1$s will be replaced by name and address of the contact who did the action -->
     <string name="group_image_changed_by_other">Immagine del gruppo cambiata da %1$s.</string>
+    <!-- %1$s will be replaced by name and address of the contact added to the group -->
+    <string name="member_x_added">Membro %1$s aggiunto.</string>
     <!-- %1$s will be replaced by name and address of the contact added to the group -->
     <string name="add_member_by_you">Hai aggiunto un membro %1$s.</string>
     <!-- %1$s will be replaced by name and address of the contact added to the group, %2$s will be replaced by name and address of the contact who did the action -->
@@ -984,8 +988,6 @@
     <string name="about_offical_app_desktop">Questa è l\'app Desktop Delta Chat ufficiale.</string>
     <string name="about_licensed_under_desktop">Questo software è concesso in licenza con GNU GPL versione 3 e il codice sorgente è disponibile su GitHub.</string>
     <string name="welcome_desktop">Benvenuto in Delta Chat</string>
-    <!-- deprecated, use switch_account -->
-    <string name="login_known_accounts_title_desktop">Account Conosciuti</string>
     <string name="global_menu_preferences_language_desktop">Lingua</string>
     <string name="global_menu_file_desktop">File</string>
     <string name="global_menu_file_quit_desktop">Esci</string>
@@ -1012,26 +1014,12 @@
     <string name="delete_message_desktop">Elimina Messaggio</string>
     <string name="more_info_desktop">Maggiori Informazioni</string>
     <string name="timestamp_format_m_desktop">D MMM</string>
-    <!-- deprecated, use encryption_info_title_desktop or profile_encryption -->
-    <string name="encryption_info_desktop">Mostra Info Cifratura</string>
     <string name="remove_desktop">Rimuovi</string>
     <string name="save_desktop">Salva</string>
     <string name="name_desktop">Nome</string>
-    <!-- deprecated, use autocrypt_send_asm_title / autocrypt_continue_transfer_title -->
-    <string name="autocrypt_key_transfer_desktop">Trasferimento chiave Autocrypt</string>
-    <!-- deprecated, use autocrypt_send_asm_explain_before -->
-    <string name="initiate_key_transfer_desktop">Un Messaggio di Configurazione Autocrypt condivide in modo sicuro la tua configurazione end-to-end con altre applicazioni compatibili con Autocrypt. La configurazione sarà criptata da un codice di configurazione visualizzato qui e deve essere digitato sull\'altro dispositivo.</string>
     <string name="select_group_image_desktop">Seleziona Immagine Gruppo</string>
-    <!-- deprecated, use export_backup_desktop instead -->
-    <string name="imex_progress_title_desktop">Avanzamento Backup</string>
     <string name="export_backup_desktop">Esporta Backup</string>
-    <!-- deprecated, use autocrypt_send_asm_explain_after instead -->
-    <string name="show_key_transfer_message_desktop">La tua chiave ti è stata inviata. Passa all\'altro dispositivo, apri il messaggio di configurazione e inserisci il seguente codice quando richiesto. Una volta fatto, il dispositivo sarà pronto per usare Autocrypt.</string>
     <string name="autocrypt_correct_desktop">Configurazione di Autocrypt trasferita.</string>
-    <!-- deprecated, use autocrypt_bad_setup_code instead -->
-    <string name="autocrypt_incorrect_desktop">Codice di impostazione errato. Si prega di riprovare.</string>
-    <!-- deprecated, rare errors should be english only for easier searchability -->
-    <string name="create_chat_error_desktop">Impossibile creare una chat.</string>
     <string name="forget_login_confirmation_desktop">Eliminare questo accesso? Tutto verrà eliminato, inclusa la configurazione end-to-end, i contatti, le chat, i messaggi e i media. Questa azione non può essere annullata.</string>
     <string name="account_info_hover_tooltip_desktop2">E-Mail: %1$s\nDimensione: %2$s\nAccount Id: %3$s</string>
     <string name="message_detail_sent_desktop">inviato</string>
@@ -1115,8 +1103,7 @@
 
 
     <!-- device messages for updates -->
+    <string name="update_1_42_common">Novità:\n\n💌 le chat individuali garantiscono ora la crittografia end-to-end per i contatti introdotti\n\n😌 per la semplicità di tutti, contrassegniamo questi contatti e chat con segni di spunta verdi\n\n👥 i gruppi sono creati automaticamente con crittografia end-to-end garantita, se possibile\n\n🔄 Accettato/Bloccato, Archiviato, Appuntato, Disattivato è sincronizzato su tutti i tuoi dispositivi</string>
     <!-- placeholder will be replaced by the URL https://get.delta.chat/#changelogs -->
-    <string name="update_1_38_android">La 1.38 è uscita:\n\n📎 Rimosso il limite massimo di dimensione degli allegati\n\n🗜️ immagini PNG (screenshot!) ora sono anche compresse\n\n⌨️ Per gli sviluppatori: Migliori applicazioni per le chat con sendToChat() e importFiles() (Cos\'è Webxdc? → https://webxdc.org)\n\n... e altro ancora su %1$s</string>
-    <!-- placeholder will be replaced by the URL https://get.delta.chat/#changelogs -->
-    <string name="update_1_38_ios">La 1.38 è uscita:\n\n🖼🔍 Mai cercato un\'immagine e non ricordavi la chat? Allora il pulsante \"Tutti i media\" è vostro!\n\n🧹 \"Cancella Messaggi\" dai profili\n\n📎 Rimosso il limite massimo di dimensione degli allegati\n\n🗜️ immagini PNG (screenshot!) ora sono anche compresse\n\n... e altro ancora su %1$s</string>
+    <string name="update_1_42_android">Tieni d\'occhio gli ulteriori miglioramenti nella fotocamera, nei messaggi vocali, nel backup di tutto, nella lettura dello schermo, negli sfondi per account, nella selezione di tutte le gallerie, nel panorama webxdc... oppure leggili su %1$s</string>
 </resources>

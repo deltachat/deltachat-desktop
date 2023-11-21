@@ -105,6 +105,8 @@ export type Theme = {
 export type RuntimeInfo = {
   /** used to determine wether to use command key in shortcuts or not */
   isMac: boolean
+  /** currently used to check for an additional device message */
+  isAppx: boolean
 }
 
 export interface DcNotification {

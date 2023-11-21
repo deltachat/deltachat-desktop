@@ -1,17 +1,18 @@
 .composer {
   background-color: var(--composerBg);
   border-left: 1px solid rgba(16, 22, 26, 0.1);
+
   &.composer--disabled-message-input {
     --composerHeight: 40px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    padding: calc((var(--composerHeight) - 16px) / 2);
     height: var(--composerHeight);
+    padding: 3px;
     color: #999;
     overflow: hidden;
-
-    @media only screen and (max-width: 830px) {
-      padding: 0px 3px;
-    }
   }
 
   &.contact-request {

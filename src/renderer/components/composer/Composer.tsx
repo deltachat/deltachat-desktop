@@ -17,7 +17,12 @@ import { Quote } from '../message/Message'
 import { DraftAttachment } from '../attachment/messageAttachment'
 import { sendMessage, unselectChat } from '../helpers/ChatMethods'
 import { useSettingsStore } from '../../stores/settings'
-import { BackendRemote, EffectfulBackendActions, Type } from '../../backend-com'
+import {
+  BackendRemote,
+  EffectfulBackendActions,
+  onDCEvent,
+  Type,
+} from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { MessageTypeAttachmentSubset } from '../attachment/Attachment'
 import { runtime } from '../../runtime'
@@ -25,6 +30,8 @@ import { confirmDialog } from '../message/messageFunctions'
 import { ProtectionBrokenDialog } from '../dialogs/ProtectionStatusDialog'
 import { useDialog } from '../../hooks/useDialog'
 import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import DisabledMessageInput from './DisabledMessageInput'
+import { DisabledChatReasons } from './useIsChatDisabled'
 
 import type { EmojiData, BaseEmoji } from 'emoji-mart/index'
 import type { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
@@ -59,7 +66,7 @@ const Composer = forwardRef<
   any,
   {
     isDisabled: boolean
-    disabledReason: string
+    disabledReason?: DisabledChatReasons
     isContactRequest: boolean
     isProtectionBroken: boolean
     selectedChat: Type.FullChat
@@ -93,6 +100,16 @@ const Composer = forwardRef<
   const pickerButtonRef = useRef<HTMLDivElement>(null)
 
   const { openDialog } = useDialog()
+  const accountId = selectedAccountId()
+
+  useEffect(() => {
+    return onDCEvent(accountId, 'SecurejoinJoinerProgress', ({ progress }) => {
+      // fix bug where composer was locked after joining a group via qr code
+      if (progress === 1000) {
+        window.__reloadDraft && window.__reloadDraft()
+      }
+    })
+  }, [accountId])
 
   const composerSendMessage = async () => {
     if (chatId === null) {
@@ -305,15 +322,7 @@ const Composer = forwardRef<
       </div>
     )
   } else if (isDisabled) {
-    if (disabledReason) {
-      return (
-        <div ref={ref} className='composer composer--disabled-message-input'>
-          {tx(disabledReason)}
-        </div>
-      )
-    } else {
-      return <span />
-    }
+    return <DisabledMessageInput reason={disabledReason} />
   } else {
     return (
       <div className='composer' ref={ref}>

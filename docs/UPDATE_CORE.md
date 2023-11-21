@@ -25,6 +25,8 @@ These files are automatically built by GitHub CI in the core repository and then
 
 **NOTE** Publishing files to `npm` requires permission to do so. If you don't have the permissions to publish, ask someone else that does or ask to be added.
 
+> bash shortcut `TAG=1.131.3 npm i deltachat-node@$TAG @deltachat/jsonrpc-client@$TAG`
+
 ## Update to a development version
 
 So you are prototyping a new function and have a desktop and a core pr and want to link the core pr in the desktop pr so that the CI can properly test your pull request.

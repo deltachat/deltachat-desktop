@@ -1,8 +1,10 @@
 import React, { useContext } from 'react'
 import reactStringReplace from 'react-string-replace'
 import classNames from 'classnames'
-import { C } from '@deltachat/jsonrpc-client'
+import { C, T } from '@deltachat/jsonrpc-client'
 
+import MessageBody from './MessageBody'
+import MessageMetaData from './MessageMetaData'
 import {
   onDownload,
   openAttachmentInShell,
@@ -15,8 +17,6 @@ import {
   downloadFullMessage,
   openWebxdc,
 } from './messageFunctions'
-import MessageBody from './MessageBody'
-import MessageMetaData from './MessageMetaData'
 import Attachment from '../attachment/messageAttachment'
 import { isGenericAttachment } from '../attachment/Attachment'
 import {
@@ -136,11 +136,13 @@ function buildContextMenu(
     text,
     conversationType,
     openDialog,
+    chat,
   }: {
     message: Type.Message | null
     text?: string
     conversationType: ConversationType
     openDialog: OpenDialog
+    chat: T.FullChat
   },
   clickTarget: HTMLAnchorElement | null
 ): (false | ContextMenuItem)[] {
@@ -192,22 +194,28 @@ function buildContextMenu(
 
   const showAttachmentOptions = !!message.file && !message.isSetupmessage
   const showCopyImage = !!message.file && message.viewType === 'Image'
-
   const showResend = message.sender.id === C.DC_CONTACT_ID_SELF
+
+  // Do not show "reply" in read-only chats
+  const showReply = chat.canSend
+
+  // Only show in groups, don't show on info messages or outgoing messages
+  const showReplyPrivately =
+    (conversationType.chatType === C.DC_CHAT_TYPE_GROUP ||
+      conversationType.chatType === C.DC_CHAT_TYPE_MAILINGLIST) &&
+    message.fromId > C.DC_CONTACT_ID_LAST_SPECIAL
 
   return [
     // Reply
-    !conversationType.isDeviceChat && {
+    showReply && {
       label: tx('reply_noun'),
       action: setQuoteInDraft.bind(null, message.id),
     },
-    // Reply privately -> only show in groups, don't show on info messages or outgoing messages
-    (conversationType.chatType === C.DC_CHAT_TYPE_GROUP ||
-      conversationType.chatType === C.DC_CHAT_TYPE_MAILINGLIST) &&
-      message.fromId > C.DC_CONTACT_ID_LAST_SPECIAL && {
-        label: tx('reply_privately'),
-        action: privateReply.bind(null, message),
-      },
+    // Reply privately
+    showReplyPrivately && {
+      label: tx('reply_privately'),
+      action: privateReply.bind(null, message),
+    },
     // Forward message
     {
       label: tx('forward'),
@@ -244,7 +252,7 @@ function buildContextMenu(
       },
     // Save Sticker to sticker collection
     message.viewType === 'Sticker' && {
-      label: tx('add_sticker_to_collection'),
+      label: tx('add_to_sticker_collection'),
       action: () =>
         BackendRemote.rpc.miscSaveSticker(
           selectedAccountId(),
@@ -280,13 +288,13 @@ function buildContextMenu(
 export default function Message(props: {
   message: Type.Message
   conversationType: ConversationType
-  /* onRetrySend */
 }) {
   const { message, conversationType } = props
   const { id, viewType, text, hasLocation, isSetupmessage, hasHtml } = message
   const direction = getDirection(message)
   const status = mapCoreMsgStatus2String(message.state)
   const tx = useTranslationFunction()
+  const accountId = selectedAccountId()
 
   const screenContext = useContext(ScreenContext)
   const { openDialog } = useDialog()
@@ -294,7 +302,14 @@ export default function Message(props: {
 
   const showMenu: (
     event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement, MouseEvent>
-  ) => void = event => {
+  ) => Promise<void> = async event => {
+    event.preventDefault() // prevent default runtime context menu from opening
+
+    const chat = await BackendRemote.rpc.getFullChatById(
+      accountId,
+      message.chatId
+    )
+
     // the event.t is a workaround for labled links, as they will be able to contain markdown formatting in the label in the future.
     const target = ((event as any).t || event.target) as HTMLAnchorElement
     const items = buildContextMenu(
@@ -303,12 +318,12 @@ export default function Message(props: {
         text: text || undefined,
         conversationType,
         openDialog,
+        chat,
       },
       target
     )
     const [cursorX, cursorY] = [event.clientX, event.clientY]
 
-    event.preventDefault() // prevent default runtime context menu from opening
     openContextMenu({
       cursorX,
       cursorY,
@@ -420,6 +435,7 @@ export default function Message(props: {
             timestamp={message.timestamp * 1000}
             padlock={message.showPadlock}
             onClickError={openMessageInfo.bind(null, openDialog, message)}
+            viewType={'VideochatInvitation'}
           />
         </div>
       </div>
@@ -545,6 +561,7 @@ export default function Message(props: {
             timestamp={message.timestamp * 1000}
             padlock={message.showPadlock}
             onClickError={openMessageInfo.bind(null, openDialog, message)}
+            viewType={message.viewType}
           />
         </div>
       </div>

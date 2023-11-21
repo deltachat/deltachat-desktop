@@ -51,12 +51,14 @@ function onClickNotification(
 const notifications: { [key: number]: Notification[] } = {}
 
 function clearNotificationsForChat(_: any, chatId: number) {
+  log.debug('clearNotificationsForChat', { chatId, notifications })
   if (notifications[chatId]) {
     for (const notify of notifications[chatId]) {
       notify.close()
     }
     delete notifications[chatId]
   }
+  log.debug('after cleared Notifications', { chatId, notifications })
 }
 
 function clearAll() {

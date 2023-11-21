@@ -23,6 +23,7 @@ import { existsSync } from 'fs'
 import { set_has_unread, updateTrayIcon } from './tray'
 import mimeTypes from 'mime-types'
 import { openHtmlEmailWindow } from './windows/html_email'
+import { appx } from './isAppx'
 
 const log = getLogger('main/ipc')
 const DeltaChatController: typeof import('./deltachat/controller').default = (() => {
@@ -76,8 +77,8 @@ export async function init(cwd: string, logHandler: LogHandler) {
     })
   })
 
-  ipcMain.on('help', async (_ev, locale) => {
-    await openHelpWindow(locale)
+  ipcMain.on('help', async (_ev, locale, anchor?: string) => {
+    await openHelpWindow(locale, anchor)
   })
 
   ipcMain.on('reload-main-window', () => {
@@ -102,6 +103,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
   ipcMain.on('get-runtime-info', ev => {
     const info: RuntimeInfo = {
       isMac: platform() === 'darwin',
+      isAppx: appx,
     }
     ev.returnValue = info
   })
