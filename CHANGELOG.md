@@ -9,6 +9,9 @@
 - fix displaying sticker that has wrong mimetype
 - fix bug where composer was locked after joining a group via qr code
 - fix double message context menu #3550
+- focus after loading draft fixes:
+  - fix composer / draft-area not getting focus after click in command #3493
+  - fix composer does not get focused when selecting a chat with a draft #3495
 
 <a id="1_41_3"></a>
 
