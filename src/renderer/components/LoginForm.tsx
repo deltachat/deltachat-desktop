@@ -2,7 +2,7 @@
 
 import { C, DcEventType } from '@deltachat/jsonrpc-client'
 import React, { useEffect, useState } from 'react'
-import { Collapse, Dialog } from '@blueprintjs/core'
+import { Collapse } from '@blueprintjs/core'
 import { useDebouncedCallback } from 'use-debounce/lib'
 
 import {
@@ -13,7 +13,11 @@ import {
   DeltaSwitch,
 } from './Login-Styles'
 import ClickableLink from './helpers/ClickableLink'
-import { DeltaDialogContent, DeltaDialogFooter } from './dialogs/DeltaDialog'
+import {
+  DeltaDialogBase,
+  DeltaDialogContent,
+  DeltaDialogFooter,
+} from './dialogs/DeltaDialog'
 import { Credentials } from '../../shared/shared-types'
 import { getLogger } from '../../shared/logger'
 import { BackendRemote, Type } from '../backend-com'
@@ -468,10 +472,9 @@ export function ConfigureProgressDialog({
   }, [accountId])
 
   return (
-    <Dialog
-      isOpen={true}
+    <DeltaDialogBase
       onClose={onClose}
-      className='delta-dialog small-dialog'
+      className='small-dialog'
       canEscapeKeyClose={false}
       canOutsideClickClose={false}
     >
@@ -522,6 +525,6 @@ export function ConfigureProgressDialog({
           </DeltaDialogFooter>
         </>
       )}
-    </Dialog>
+    </DeltaDialogBase>
   )
 }
