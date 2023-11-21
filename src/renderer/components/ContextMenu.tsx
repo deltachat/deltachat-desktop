@@ -5,15 +5,30 @@ import React, {
   useRef,
   useCallback,
 } from 'react'
+import classNames from 'classnames'
 
 import useContextMenu from '../hooks/useContextMenu'
 
-export type ContextMenuItem = { label: string; action: () => void }
+type ContextMenuItemActionable = { action: () => void; subitems?: never }
+
+type ContextMenuItemExpandable = {
+  action?: never
+  subitems: (ContextMenuItem | undefined)[]
+}
+
+export type ContextMenuItem = { label: string } & (
+  | ContextMenuItemActionable
+  | ContextMenuItemExpandable
+)
 
 type showFnArguments = {
   cursorX: number
   cursorY: number
   items: (ContextMenuItem | false)[]
+}
+
+type ContextMenuLevel = {
+  items: ContextMenuItem[]
 }
 
 /**
@@ -35,6 +50,7 @@ export function ContextMenuLayer({
   const layerRef = useRef<HTMLDivElement>(null)
   const cursorX = useRef<number>(0)
   const cursorY = useRef<number>(0)
+
   const [active, setActive] = useState(false)
   const [currentItems, setCurrentItems] = useState<ContextMenuItem[]>([])
   const [position, setPosition] = useState<{ top: number; left: number }>({
@@ -73,47 +89,31 @@ export function ContextMenuLayer({
     if (!menuEl || !layerRef.current) {
       return
     }
+
     if (cursorX.current == null || cursorY.current == null) {
       throw new Error('Somehow the cursor for context menu was not set')
     }
-    const style = window.getComputedStyle(layerRef.current)
 
-    const getValue = (key: string) =>
-      Number(style.getPropertyValue(key).replace('px', ''))
-
-    const space = {
-      height: getValue('height'),
-      width: getValue('width'),
-    }
-
-    const x = cursorX.current,
-      y = cursorY.current
+    const { height: layerHeight, width: layerWidth } =
+      layerRef.current.getBoundingClientRect()
 
     const menu = {
       height: menuEl.clientHeight,
       width: menuEl.clientWidth,
     }
 
-    // Finding Orientation
-    let top = 0,
-      left = 0
+    // Place at cursor first
+    let top = cursorY.current,
+      left = cursorX.current
 
-    // Right or Left
-    if (x + menu.width <= space.width) {
-      // Right
-      left = x
-    } else {
-      // Left
-      left = x - menu.width
+    // If doesn't fit move to the left
+    if (left + menu.width > layerWidth) {
+      left -= menu.width
     }
 
-    // Bottom or Top
-    if (y + menu.height <= space.height) {
-      // Bottom
-      top = y
-    } else {
-      // Top
-      top = y - menu.height
+    // If doesn't fit move down
+    if (top + menu.height > layerHeight) {
+      top -= menu.height
     }
 
     // Displaying Menu
@@ -159,27 +159,68 @@ export function ContextMenu(props: {
   openCallback: (el: HTMLDivElement | null) => void
   closeCallback: () => void
 }) {
-  const menuRef = useRef<HTMLDivElement>(null)
   const didOpen = useRef<boolean>(false)
+  // References to each level menu element
+  const menuLevelEls = useRef<HTMLDivElement[]>([])
+  // Array of indices for ContextMenuItem picked on each level,
+  // always one item less than menuLevelEls
+  const [openSublevels, setSublevels] = useState<number[]>([])
+  // Which one of the last sublevel items the keyboard is focused on
+  const keyboardFocus = useRef<number>(-1)
+
+  let items = props.items.filter(val => val !== false) as ContextMenuItem[]
+
+  const levelItems: ContextMenuLevel[] = [{ items }]
+
+  for (let i = 0; i < openSublevels.length; ++i) {
+    const idx = openSublevels[i]
+
+    items = items[idx].subitems as ContextMenuItem[]
+    levelItems.push({
+      items,
+    })
+  }
+
   useLayoutEffect(() => {
-    if (!menuRef.current) {
-      throw new Error()
+    if (menuLevelEls.current.length == 0) {
+      throw new Error('Somethings wrong with menu elements')
+    }
+    let prevOffset = props.left + menuLevelEls.current[0].clientWidth
+
+    for (let i = 0; i < openSublevels.length; ++i) {
+      const prevElement = menuLevelEls.current[i] as HTMLDivElement
+      const curElement = menuLevelEls.current[i + 1]
+      const menuEl = prevElement.children[openSublevels[i]]
+      if (!menuEl) {
+        throw Error("There's no focus on previous menu")
+      }
+      const bounds = menuEl.getBoundingClientRect()
+      curElement.style.top = bounds.top + 'px'
+      curElement.style.left = prevOffset + 'px'
+      prevOffset += curElement.clientWidth
     }
     if (didOpen.current) {
       return
     }
+
     didOpen.current = true
-    menuRef.current.focus()
-    if (typeof props.openCallback === 'function')
-      props.openCallback(menuRef.current)
-    //document.querySelector<HTMLDivElement>('div.dc-context-menu')?.focus()
+    if (typeof props.openCallback === 'function') {
+      props.openCallback(menuLevelEls.current[0])
+    }
   })
 
   useEffect(() => {
+    menuLevelEls.current = menuLevelEls.current.slice(
+      0,
+      openSublevels.length + 1
+    )
+    const parent = menuLevelEls.current[openSublevels.length]
+
+    if (keyboardFocus.current > -1) {
+      ;(parent.children[keyboardFocus.current] as HTMLDivElement).focus()
+    }
+
     const onKeyDown = (ev: KeyboardEvent) => {
-      const parent = document.querySelector<HTMLDivElement>(
-        'div.dc-context-menu'
-      )
       const current = parent?.querySelector(':focus')
 
       if (ev.key == 'ArrowDown') {
@@ -194,12 +235,25 @@ export function ContextMenu(props: {
         } else {
           ;(parent?.lastElementChild as HTMLDivElement).focus()
         }
+      } else if (ev.key == 'ArrowLeft') {
+        setSublevels(l => l.slice(0, Math.max(0, l.length - 1)))
+        keyboardFocus.current = openSublevels[openSublevels.length - 1]
+      } else if (ev.key == 'ArrowRight') {
+        if (current) {
+          const index = +((current as HTMLDivElement).dataset
+            .expandableIndex as string)
+          if (!isNaN(index)) {
+            setSublevels(l => [...l, index])
+            keyboardFocus.current = 0
+          }
+        }
       } else if (ev.key == 'Enter') {
         if (current) {
           ;(current as HTMLDivElement)?.click()
         }
       } else if (ev.key == 'Escape') {
         props.closeCallback()
+        keyboardFocus.current = -1
       }
       // preventDefaultForScrollKeys
       else if (ScrollKeysToBlock.includes(ev.code)) {
@@ -209,15 +263,20 @@ export function ContextMenu(props: {
     }
 
     const onOutsideClick = (ev: MouseEvent | TouchEvent) => {
-      const parent = document.querySelector('div.dc-context-menu')
-      if (!parent) {
-        return
-      }
+      let isOnMenu = false
 
-      let isOnMenu = ev.target === parent
-      for (const child of parent.children) {
-        if (ev.target === child) {
-          isOnMenu = true
+      for (const menuEl of menuLevelEls.current) {
+        isOnMenu = ev.target === menuEl
+        if (!isOnMenu) {
+          for (const child of menuEl.children) {
+            if (ev.target === child) {
+              isOnMenu = true
+              break
+            }
+          }
+        }
+        if (isOnMenu) {
+          break
         }
       }
 
@@ -240,32 +299,55 @@ export function ContextMenu(props: {
     }
   })
 
-  const items = props.items.filter(val => val !== false) as ContextMenuItem[]
-
   return (
-    <div
-      ref={menuRef}
-      className='dc-context-menu'
-      style={{
-        top: `${props.top}px`,
-        left: `${props.left}px`,
-      }}
-      role='menu'
-      tabIndex={-1}
-    >
-      {items.map((item, index) => (
+    <div>
+      {levelItems.map((level, levelIdx) => (
         <div
-          className='item'
-          onClick={() => {
-            didOpen.current = false
-            props.closeCallback()
-            item.action()
-          }}
+          ref={el => (menuLevelEls.current[levelIdx] = el as HTMLDivElement)}
+          key={levelIdx}
+          className='dc-context-menu'
+          role='menu'
           tabIndex={-1}
-          role='menuitem'
-          key={index}
+          style={{
+            top: `${props.top}px`,
+            left: `${props.left}px`,
+          }}
         >
-          {item.label}
+          {level.items.map((item, index) => (
+            <div
+              className={classNames({
+                item: true,
+                selected: index === openSublevels[levelIdx],
+              })}
+              onClick={(ev: React.MouseEvent) => {
+                if (item.subitems) {
+                  setSublevels(l => [...l.slice(0, levelIdx), index])
+                  keyboardFocus.current = 0
+                  ev.stopPropagation()
+                } else {
+                  setSublevels(l => l.slice(0, levelIdx))
+                  keyboardFocus.current = -1
+                  didOpen.current = false
+                  props.closeCallback()
+                  item.action()
+                }
+              }}
+              onMouseOver={() => {
+                if (item.subitems) {
+                  setSublevels(l => [...l.slice(0, levelIdx), index])
+                } else {
+                  setSublevels(l => l.slice(0, levelIdx))
+                }
+              }}
+              tabIndex={-1}
+              role='menuitem'
+              key={index}
+              {...(item.subitems && { 'data-expandable-index': index })}
+            >
+              {item.label}
+              {item.subitems && <div className='right-icon'></div>}
+            </div>
+          ))}
         </div>
       ))}
     </div>
