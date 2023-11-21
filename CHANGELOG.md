@@ -4,6 +4,7 @@
 
 ### Changed
 - Update local help (2023-11-20)
+- Update translations (2023-11-22)
 - update deltachat-node and deltachat/jsonrpc-client to `v1.131.6`
 
 ### Fixed
