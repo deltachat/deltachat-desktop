@@ -13,6 +13,8 @@
 - focus after loading draft fixes:
   - fix composer / draft-area not getting focus after click in command #3493
   - fix composer does not get focused when selecting a chat with a draft #3495
+- fix: show error in autocrypt setup enter key dialog when the typed in key is invalid
+- fix bug: allow deleting first number in autocrypt enter setup key dialog
 
 <a id="1_41_3"></a>
 
