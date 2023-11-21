@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_41_4"></a>
+
+## [1.41.4] - 2023-11-22
+
 ### Changed
 - Update local help (2023-11-20)
 - Update translations (2023-11-22)
