@@ -9,6 +9,8 @@ import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { ScreenContext } from '../../contexts/ScreenContext'
 
+import type { DialogProps } from '../../contexts/DialogContext'
+
 const log = getLogger('frontend/dialogs/EnterAutocryptSetupMessage')
 
 export function SetupMessagePanel({
@@ -86,13 +88,11 @@ export default function EnterAutocryptSetupMessage({
   onClose,
   message,
 }: {
-  onClose: () => void
   message: T.Message
-}) {
+} & DialogProps) {
   const { userFeedback } = useContext(ScreenContext)
   const [loading, setLoading] = useState<boolean>(false)
 
-  const isOpen = !!message
   const setupCodeBegin = message && message.setupCodeBegin
 
   const tx = window.static_translate
@@ -148,7 +148,6 @@ export default function EnterAutocryptSetupMessage({
 
   return (
     <DeltaDialog
-      isOpen={isOpen}
       title={tx('autocrypt_continue_transfer_title')}
       onClose={onClose}
     >

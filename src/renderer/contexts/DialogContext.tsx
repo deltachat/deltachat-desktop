@@ -7,7 +7,6 @@ import { generateRandomUUID } from '../utils/random'
 type DialogId = string
 
 export type DialogProps = {
-  isOpen: boolean
   onClose: () => void
 }
 
@@ -52,7 +51,6 @@ export const DialogContextProvider = ({ children }: PropsWithChildren<{}>) => {
         dialogElement as DialogElementConstructor<DialogProps>,
         {
           key: `dialog-${newDialogId}`,
-          isOpen: true,
           onClose: () => {
             closeDialog(newDialogId)
           },

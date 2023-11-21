@@ -14,11 +14,10 @@ import { useDialog } from '../../hooks/useDialog'
 import ConfirmationDialog from './ConfirmationDialog'
 
 import type { OpenDialogOptions } from 'electron'
-import type { DialogProps } from '../../contexts/DialogContext'
 
 const log = getLogger('renderer/Settings/Backup')
 
-function ExportProgressDialog(props: DialogProps) {
+function ExportProgressDialog() {
   const tx = useTranslationFunction()
   const [progress, setProgress] = useState(0.0)
 
@@ -35,7 +34,7 @@ function ExportProgressDialog(props: DialogProps) {
   }, [accountId])
 
   return (
-    <SmallDialog isOpen={props.isOpen} onClose={() => {}}>
+    <SmallDialog onClose={() => {}}>
       <DeltaDialogBody>
         <DeltaDialogContent>
           <H5 style={{ marginTop: '20px' }}>{tx('export_backup_desktop')}</H5>

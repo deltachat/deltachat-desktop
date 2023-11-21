@@ -84,13 +84,12 @@ export default function ViewGroup(
     isBroadcast: boolean
   } & DialogProps
 ) {
-  const { isOpen, onClose, isBroadcast } = props
+  const { onClose, isBroadcast } = props
 
   const chat = useChat(props.chat)
 
   return (
     <DeltaDialogBase
-      isOpen={isOpen}
       onClose={onClose}
       fixed
       style={{
@@ -336,7 +335,6 @@ function ViewGroupInner(props: {
       )}
       {profileContact && (
         <ViewProfile
-          isOpen
           onBack={() => setProfileContact(null)}
           onClose={onClose}
           contact={profileContact}
@@ -347,7 +345,6 @@ function ViewGroupInner(props: {
 }
 
 export function AddMemberDialog({
-  isOpen,
   onClose,
   onOk,
   groupMembers,
@@ -368,7 +365,6 @@ export function AddMemberDialog({
   return (
     <DeltaDialogBase
       onClose={onClose}
-      isOpen={isOpen}
       canOutsideClickClose={false}
       style={{
         top: '15vh',
@@ -399,7 +395,6 @@ export function AddMemberDialog({
 
 export function ShowQRDialog({
   onClose,
-  isOpen,
   qrCode,
   groupName,
   qrCodeSVG,
@@ -409,7 +404,6 @@ export function ShowQRDialog({
   return (
     <DeltaDialogBase
       onClose={onClose}
-      isOpen={isOpen}
       canOutsideClickClose={false}
       style={{
         top: '15vh',
@@ -442,7 +436,7 @@ export function EditGroupNameDialog({
   isBroadcast: boolean
   onOk: (groupName: string, groupImage?: string) => void
 } & DialogProps) {
-  const { isOpen, onClose } = dialogProps
+  const { onClose } = dialogProps
   const [groupName, setGroupName] = useState(initialGroupName)
   const [groupImage, setGroupImage] = useState(initialGroupImage)
   const tx = useTranslationFunction()
@@ -459,7 +453,6 @@ export function EditGroupNameDialog({
   return (
     <DeltaDialogBase
       onClose={onClose}
-      isOpen={isOpen}
       canOutsideClickClose={false}
       style={{
         top: '15vh',

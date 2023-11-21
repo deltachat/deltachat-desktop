@@ -388,7 +388,7 @@ export function ConfigureProgressDialog({
   credentials: Partial<Credentials>
   onSuccess?: () => void
 } & DialogProps) {
-  const { isOpen, onClose } = dialogProps
+  const { onClose } = dialogProps
   const [progress, setProgress] = useState(0)
   const [progressComment, setProgressComment] = useState('')
   const [error, setError] = useState('')
@@ -469,7 +469,7 @@ export function ConfigureProgressDialog({
 
   return (
     <Dialog
-      isOpen={isOpen}
+      isOpen={true}
       onClose={onClose}
       className='delta-dialog small-dialog'
       canEscapeKeyClose={false}

@@ -17,7 +17,7 @@ export default function MailingListProfile(
     chat: Type.FullChat
   } & DialogProps
 ) {
-  const { isOpen, onClose, chat } = props
+  const { onClose, chat } = props
 
   const tx = window.static_translate
 
@@ -29,7 +29,7 @@ export default function MailingListProfile(
   const onUpdateGroup = useEdit(groupName, groupImage, chat.id, onClose)
 
   return (
-    <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
+    <DeltaDialogBase onClose={onClose} fixed>
       <DeltaDialogHeader title={tx('mailing_list')} />
       <div className={Classes.DIALOG_BODY}>
         <Card>

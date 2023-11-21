@@ -25,7 +25,6 @@ const log = getLogger('renderer/components/AccountsScreen')
 
 function ImportBackupProgressDialog({
   onClose,
-  isOpen,
   backupFile,
 }: DialogProps & {
   backupFile: string
@@ -71,8 +70,6 @@ function ImportBackupProgressDialog({
     <DeltaDialog
       onClose={onClose}
       title={tx('import_backup_title')}
-      // canOutsideClickClose
-      isOpen={isOpen}
       style={{ top: '40%' }}
     >
       <div className={Classes.DIALOG_BODY}>
@@ -183,7 +180,6 @@ export default function WelcomeScreen({
     <div className='login-screen'>
       <div className='window'>
         <DeltaDialogBase
-          isOpen={true}
           backdropProps={{ className: 'no-backdrop' }}
           onClose={() => {}}
           fixed={true}

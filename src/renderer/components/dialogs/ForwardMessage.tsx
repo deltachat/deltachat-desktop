@@ -56,13 +56,12 @@ export default function ForwardMessage(props: {
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setQueryStr(e.target.value)
 
-  const isOpen = !!message
   const noResults = chatListIds.length === 0 && queryStr !== ''
 
   const CHATLISTITEM_CHAT_HEIGHT =
     Number(useThemeCssVar('--SPECIAL-chatlist-item-chat-height')) || 64
   return (
-    <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
+    <DeltaDialogBase onClose={onClose} fixed>
       <DeltaDialogHeader
         onClose={onClose}
         title={tx('forward_to')}

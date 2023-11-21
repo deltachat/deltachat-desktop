@@ -93,7 +93,6 @@ export default function ChatAuditLogDialog(props: {
 }) {
   const { openDialog } = useDialog()
   const { selectedChat, onClose } = props
-  const isOpen = !!selectedChat
 
   const [loading, setLoading] = useState(true)
   const [msgEntries, setMsgEntries] = useState<Type.MessageListItem[]>([])
@@ -166,7 +165,6 @@ export default function ChatAuditLogDialog(props: {
 
   return (
     <DeltaDialogBase
-      isOpen={isOpen}
       onClose={onClose}
       fixed
       className={'audit-log-dialog'}

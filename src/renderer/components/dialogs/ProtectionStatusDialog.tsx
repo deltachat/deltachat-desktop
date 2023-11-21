@@ -20,7 +20,6 @@ const VERIFICATION_REQUIRED_ANCHOR = 'howtoe2ee'
 
 export function ProtectionBrokenDialog({
   name,
-  isOpen,
   onClose,
 }: { name: string } & DialogProps) {
   const tx = useTranslationFunction()
@@ -41,7 +40,7 @@ export function ProtectionBrokenDialog({
   }
 
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
+    <SmallDialog onClose={onClose}>
       <div className='bp4-dialog-body-with-padding'>
         <p style={{ wordBreak: 'break-word' }}>
           {tx('chat_protection_broken_explanation', name)}
@@ -68,10 +67,7 @@ export function ProtectionBrokenDialog({
   )
 }
 
-export function VerifiedContactsRequiredDialog({
-  isOpen,
-  onClose,
-}: DialogProps) {
+export function VerifiedContactsRequiredDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
   const accountId = selectedAccountId()
@@ -90,7 +86,7 @@ export function VerifiedContactsRequiredDialog({
   }
 
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
+    <SmallDialog onClose={onClose}>
       <div className='bp4-dialog-body-with-padding'>
         <p style={{ wordBreak: 'break-word' }}>
           {tx('verified_contact_required_explain')}
@@ -117,7 +113,7 @@ export function VerifiedContactsRequiredDialog({
   )
 }
 
-export function ProtectionEnabledDialog({ isOpen, onClose }: DialogProps) {
+export function ProtectionEnabledDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
 
   const onLearnMore = () => {
@@ -125,7 +121,7 @@ export function ProtectionEnabledDialog({ isOpen, onClose }: DialogProps) {
   }
 
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
+    <SmallDialog onClose={onClose}>
       <div className='bp4-dialog-body-with-padding'>
         <p style={{ wordBreak: 'break-word' }}>
           {tx('chat_protection_enabled_explanation')}

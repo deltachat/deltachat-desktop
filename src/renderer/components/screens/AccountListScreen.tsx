@@ -77,7 +77,6 @@ export default function AccountListScreen({
     <div className='login-screen'>
       <div className='window'>
         <DeltaDialogBase
-          isOpen={true}
           backdropProps={{ className: 'no-backdrop' }}
           onClose={() => {}}
           fixed={true}

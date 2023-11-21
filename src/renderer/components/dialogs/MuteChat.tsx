@@ -7,11 +7,9 @@ import { BackendRemote, Type } from '../../backend-com'
 import { useTranslationFunction } from '../../hooks/useTranslationFunction'
 
 export default function MuteChat({
-  isOpen,
   onClose,
   chatId,
 }: {
-  isOpen: boolean
   onClose: () => void
   chatId: number
 }) {
@@ -52,7 +50,6 @@ export default function MuteChat({
       title={tx('menu_mute')}
       values={MUTE_DURATION_OPTIONS}
       selectedValue={'0'} // first option selected by default which is "not muted"
-      isOpen={isOpen}
       onSave={onSave}
       onClose={onClose}
     />

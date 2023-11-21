@@ -12,16 +12,13 @@ import type { DialogProps } from '../../contexts/DialogContext'
 
 export default function EncryptionInfo({
   chatListItem,
-  isOpen,
   onClose,
 }: {
   chatListItem: Pick<
     Type.ChatListItemFetchResult & { kind: 'ChatListItem' },
     'id' | 'dmChatContact'
   >
-  isOpen: boolean
-  onClose: DialogProps['onClose']
-}) {
+} & DialogProps) {
   const [encryptionInfo, setEncryptionInfo] = useState('Fetching...')
   useEffect(() => {
     if (!chatListItem) return
@@ -39,7 +36,7 @@ export default function EncryptionInfo({
 
   const tx = window.static_translate
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
+    <SmallDialog onClose={onClose}>
       <div className='bp4-dialog-body-with-padding'>
         <p style={{ whiteSpace: 'pre-wrap' }}>
           {!encryptionInfo && 'Fetching...'}

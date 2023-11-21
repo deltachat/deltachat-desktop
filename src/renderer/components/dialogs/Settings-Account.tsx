@@ -20,18 +20,11 @@ import { useTranslationFunction } from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
-export default function SettingsAccountDialog({
-  isOpen,
-  onClose,
-}: {
-  isOpen: DialogProps['isOpen']
-  onClose: DialogProps['onClose']
-}) {
+export default function SettingsAccountDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
   return (
     <DeltaDialogBase
       onClose={onClose}
-      isOpen={isOpen}
       canOutsideClickClose={false}
       style={{
         maxHeight: 'calc(100% - 100px)',

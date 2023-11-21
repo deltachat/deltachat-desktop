@@ -15,7 +15,6 @@ const log = getLogger('renderer/receive_backup')
 
 export function ImportBackupTransferProgressDialog({
   onClose,
-  isOpen,
   QrWithToken,
 }: DialogProps & {
   QrWithToken: string
@@ -56,7 +55,6 @@ export function ImportBackupTransferProgressDialog({
     <DeltaDialog
       onClose={onClose}
       title={tx('multidevice_receiver_title')}
-      isOpen={isOpen}
       style={{ top: '40%' }}
     >
       <div className={Classes.DIALOG_BODY}>

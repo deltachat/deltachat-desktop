@@ -6,7 +6,6 @@ import type { DialogProps } from '../../contexts/DialogContext'
 
 export const DeltaDialogBase = React.memo<
   React.PropsWithChildren<{
-    isOpen: boolean
     onClose: () => void
     canEscapeKeyClose?: boolean
     showCloseButton?: boolean
@@ -21,7 +20,7 @@ export const DeltaDialogBase = React.memo<
   return (
     <>
       <Dialog
-        isOpen={props.isOpen}
+        isOpen={true}
         onClose={props.onClose}
         canOutsideClickClose={
           typeof props.canOutsideClickClose === 'undefined'
@@ -77,21 +76,20 @@ function DeltaDialogEditButton(props: React.HTMLAttributes<HTMLDivElement>) {
 }
 
 const DeltaDialog = React.memo<
-  React.PropsWithChildren<{
-    isOpen: boolean
-    onClose: () => void
-    title: string
-    fixed?: boolean
-    className?: string
-    style?: React.CSSProperties
-    onClickBack?: () => void
-    showBackButton?: boolean
-    showCloseButton?: boolean
-  }>
+  React.PropsWithChildren<
+    {
+      title: string
+      fixed?: boolean
+      className?: string
+      style?: React.CSSProperties
+      onClickBack?: () => void
+      showBackButton?: boolean
+      showCloseButton?: boolean
+    } & DialogProps
+  >
 >(props => {
   return (
     <DeltaDialogBase
-      isOpen={props.isOpen}
       onClose={props.onClose}
       fixed={props.fixed}
       className={props.className}
@@ -246,15 +244,10 @@ export function DeltaDialogButton(
   )
 }
 
-export function SmallDialog(
-  props: PropsWithChildren<{
-    isOpen: DialogProps['isOpen']
-    onClose: DialogProps['onClose']
-  }>
-) {
+export function SmallDialog(props: PropsWithChildren<DialogProps>) {
   return (
     <Dialog
-      isOpen={props.isOpen}
+      isOpen={true}
       onClose={props.onClose}
       canOutsideClickClose
       className='delta-dialog small-dialog'
@@ -271,7 +264,6 @@ export function SmallSelectDialog({
   values,
   onSave,
   title,
-  isOpen,
   onClose,
   onSelect,
   onCancel,
@@ -279,8 +271,6 @@ export function SmallSelectDialog({
   title: string
   selectedValue: string
   values: SelectDialogOption[]
-
-  isOpen: DialogProps['isOpen']
   onClose: DialogProps['onClose']
   onSave?: (selectedValue: string) => void
   onSelect?: (selectedValue: string) => void
@@ -302,7 +292,7 @@ export function SmallSelectDialog({
 
   const tx = window.static_translate
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
+    <SmallDialog onClose={onClose}>
       <DeltaDialogHeader title={title} />
       <DeltaDialogBody>
         <DeltaDialogContent>

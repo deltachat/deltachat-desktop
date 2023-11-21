@@ -121,11 +121,7 @@ export default function MessageDetail(props: {
   }
 
   return (
-    <DeltaDialog
-      title={tx('menu_message_details')}
-      isOpen={isOpen}
-      onClose={onClose}
-    >
+    <DeltaDialog title={tx('menu_message_details')} onClose={onClose}>
       <DeltaDialogBody noFooter>{body}</DeltaDialogBody>
     </DeltaDialog>
   )

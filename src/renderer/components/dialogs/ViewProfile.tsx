@@ -67,13 +67,13 @@ function ProfileInfoAvatar({ contact }: { contact: Type.Contact }) {
   })
 }
 
-export default function ViewProfile(props: {
-  isOpen: boolean
-  onClose: () => void
-  contact: Type.Contact
-  onBack?: () => void
-}) {
-  const { isOpen, onClose, onBack } = props
+export default function ViewProfile(
+  props: {
+    contact: Type.Contact
+    onBack?: () => void
+  } & DialogProps
+) {
+  const { onClose, onBack } = props
 
   const accountId = selectedAccountId()
   const tx = window.static_translate
@@ -102,7 +102,7 @@ export default function ViewProfile(props: {
   }, [accountId, contact.id])
 
   return (
-    <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
+    <DeltaDialogBase onClose={onClose} fixed>
       <DeltaDialogHeader
         title={tx('contact')}
         onClickEdit={onClickEdit}
@@ -351,7 +351,7 @@ export function EditContactNameDialog({
 } & DialogProps) {
   const [contactName, setContactName] = useState(initialGroupName)
   const tx = useTranslationFunction()
-  const { onClose, isOpen } = dialogProps
+  const { onClose } = dialogProps
 
   const onClickCancel = () => {
     onClose()
@@ -365,7 +365,6 @@ export function EditContactNameDialog({
   return (
     <DeltaDialogBase
       onClose={onClose}
-      isOpen={isOpen}
       canOutsideClickClose={false}
       style={{
         top: '15vh',

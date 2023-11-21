@@ -19,19 +19,12 @@ const INHERIT_STYLES = ['line-height', 'background-color', 'color', 'font-size']
 const OverwrittenStyles =
   'font-family: Arial, Helvetica, sans-serif;font-variant-ligatures: none;'
 
-export default function SettingsConnectivityDialog({
-  onClose,
-  isOpen,
-}: {
-  isOpen: DialogProps['isOpen']
-  onClose: DialogProps['onClose']
-}) {
+export default function SettingsConnectivityDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
 
   return (
     <DeltaDialogBase
       onClose={onClose}
-      isOpen={isOpen}
       canOutsideClickClose={true}
       style={{
         maxHeight: 'calc(100% - 100px)',

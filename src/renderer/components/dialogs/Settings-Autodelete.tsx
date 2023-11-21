@@ -53,7 +53,6 @@ export function AutodeleteConfirmationDialog({
   fromServer,
   estimateCount,
   seconds,
-  isOpen,
   onClose,
 }: {
   fromServer: boolean
@@ -75,7 +74,7 @@ export function AutodeleteConfirmationDialog({
   const tx = window.static_translate
 
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
+    <SmallDialog onClose={onClose}>
       <DeltaDialogHeader
         title={
           fromServer ? tx('autodel_server_title') : tx('autodel_device_title')

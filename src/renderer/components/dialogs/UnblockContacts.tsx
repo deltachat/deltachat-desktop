@@ -16,7 +16,7 @@ import ConfirmationDialog from './ConfirmationDialog'
 import type { DialogProps } from '../../contexts/DialogContext'
 
 export default function UnblockContacts(props: DialogProps) {
-  const { isOpen, onClose } = props
+  const { onClose } = props
   const [blockedContacts, setBlockedContacts] = useState<Type.Contact[] | null>(
     null
   )
@@ -48,7 +48,6 @@ export default function UnblockContacts(props: DialogProps) {
   if (blockedContacts === null) return null
   return (
     <DeltaDialog
-      isOpen={isOpen}
       onClose={onClose}
       title={tx('pref_blocked_contacts')}
       fixed={true}

@@ -11,7 +11,6 @@ import { getLogger } from '../shared/logger'
 import { BackendRemote } from './backend-com'
 import { runPostponedFunctions } from './onready'
 import { I18nContext } from './contexts/I18nContext'
-import { KeybindingsContextProvider } from './contexts/KeybindingsContext'
 
 export default function App(_props: any) {
   const [localeData, setLocaleData] = useState<LocaleData | null>(null)

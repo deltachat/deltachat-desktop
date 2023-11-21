@@ -65,13 +65,7 @@ function InitiatePanel({ onClick }: { onClick: todo }) {
   )
 }
 
-export function SendAutocryptSetupMessage({
-  onClose: _onClose,
-  isOpen,
-}: {
-  onClose: Function
-  isOpen: boolean
-}) {
+export function SendAutocryptSetupMessage({ onClose: _onClose }: DialogProps) {
   const [key, setKey] = useState<string | null>(null)
 
   const onClose = () => {
@@ -96,11 +90,7 @@ export function SendAutocryptSetupMessage({
   }
 
   return (
-    <DeltaDialog
-      isOpen={isOpen}
-      title={tx('autocrypt_send_asm_title')}
-      onClose={onClose}
-    >
+    <DeltaDialog title={tx('autocrypt_send_asm_title')} onClose={onClose}>
       {body}
     </DeltaDialog>
   )

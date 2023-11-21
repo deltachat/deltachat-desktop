@@ -2,21 +2,19 @@ import React from 'react'
 import DeltaDialog from './DeltaDialog'
 import { QrCodeScanQrInner } from './QrCode'
 
+import type { DialogProps } from '../../contexts/DialogContext'
+
 export default function ImportQrCode({
   subtitle,
   onClose,
-  isOpen,
 }: {
   subtitle: string
-  onClose: () => void
-  isOpen: boolean
-}) {
+} & DialogProps) {
   const tx = window.static_translate
   return (
     <DeltaDialog
       className='delta-dialog'
       title={tx('qrscan_title')}
-      isOpen={isOpen}
       onClose={onClose}
       showCloseButton={false}
     >

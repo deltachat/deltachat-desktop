@@ -93,7 +93,6 @@ function SelectDisappearingMessageDuration({
 }
 
 export default function DisappearingMessage({
-  isOpen,
   onClose,
   chatId,
 }: {
@@ -103,7 +102,6 @@ export default function DisappearingMessage({
     disappearingMessageDuration,
     setDisappearingMessageDuration,
   ] = useState<DisappearingMessageDuration>(DisappearingMessageDuration.OFF)
-  const [loading, setLoading] = useState(true)
   const tx = useTranslationFunction()
 
   useEffect(() => {
@@ -113,7 +111,6 @@ export default function DisappearingMessage({
         chatId
       )
       setDisappearingMessageDuration(ephemeralTimer)
-      setLoading(false)
     })()
   }, [chatId])
 
@@ -127,7 +124,7 @@ export default function DisappearingMessage({
   }
 
   return (
-    <SmallDialog isOpen={isOpen && !loading} onClose={onClose}>
+    <SmallDialog onClose={onClose}>
       <DeltaDialogHeader title={tx('ephemeral_messages')} />
       <DeltaDialogBody>
         <DeltaDialogContent>

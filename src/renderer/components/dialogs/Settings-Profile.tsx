@@ -250,27 +250,23 @@ export function SettingsEditProfileDialogInner({
 
 export function SettingsProfileDialog({
   onClose,
-  isOpen,
   settingsStore,
   title,
   cancelLabel,
   confirmLabel,
   firstSetup = false,
 }: {
-  isOpen: DialogProps['isOpen']
-  onClose: DialogProps['onClose']
   settingsStore: SettingsStoreState
   title?: string
   cancelLabel?: string
   confirmLabel?: string
   firstSetup?: boolean
-}) {
+} & DialogProps) {
   const tx = useTranslationFunction()
   title = title || tx('pref_edit_profile')
   return (
     <DeltaDialogBase
       onClose={onClose}
-      isOpen={isOpen}
       canOutsideClickClose={false}
       style={{
         maxHeight: 'calc(100% - 100px)',

@@ -126,7 +126,6 @@ export function SendBackupDialog({ onClose }: DialogProps) {
     <DeltaDialogBase
       onClose={cancel}
       canEscapeKeyClose={true}
-      isOpen={true}
       canOutsideClickClose={false}
       style={{ width: 'unset' }}
     >

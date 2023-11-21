@@ -10,6 +10,8 @@ import { runtime } from '../../runtime'
 import { BackendRemote } from '../../backend-com'
 import { useTranslationFunction } from '../../hooks/useTranslationFunction'
 
+import type { DialogProps } from '../../contexts/DialogContext'
+
 const log = getLogger('renderer/dialogs/About')
 
 function getInfo() {
@@ -62,8 +64,8 @@ export function DCInfo(_props: any) {
   )
 }
 
-export default function About(props: { isOpen: boolean; onClose: () => void }) {
-  const { isOpen, onClose } = props
+export default function About(props: DialogProps) {
+  const { onClose } = props
   const tx = useTranslationFunction()
 
   const desktopString = reactStringReplace(
@@ -95,11 +97,7 @@ export default function About(props: { isOpen: boolean; onClose: () => void }) {
   )
 
   return (
-    <DeltaDialog
-      isOpen={isOpen}
-      title={tx('global_menu_help_about_desktop')}
-      onClose={onClose}
-    >
+    <DeltaDialog title={tx('global_menu_help_about_desktop')} onClose={onClose}>
       <DeltaDialogBody>
         <div
           style={{ background: 'var(--bp4DialogBgPrimary)', padding: '21px' }}

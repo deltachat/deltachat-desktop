@@ -31,7 +31,6 @@ const log = getLogger('renderer/processOpenUrl')
 export function ProcessQrCodeDialog({
   onCancel,
   onClose,
-  isOpen,
 }: DialogProps & {
   onCancel: () => Promise<void>
 }) {
@@ -45,7 +44,7 @@ export function ProcessQrCodeDialog({
   }
 
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
+    <SmallDialog onClose={onClose}>
       <DeltaDialogBody>
         <DeltaDialogContent style={{ height: '80px', padding: '20px' }}>
           <Spinner />
@@ -339,7 +338,6 @@ export default async function processOpenQrUrl(
 }
 
 function CopyContentAlertDialog({
-  isOpen,
   onClose,
   message,
   content,
@@ -348,7 +346,7 @@ function CopyContentAlertDialog({
   const tx = useTranslationFunction()
 
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
+    <SmallDialog onClose={onClose}>
       <div className='bp4-dialog-body-with-padding'>
         <p style={{ wordBreak: 'break-word' }}>{message}</p>
       </div>

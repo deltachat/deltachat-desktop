@@ -16,7 +16,7 @@ import {
 import type { DialogProps } from '../../contexts/DialogContext'
 
 export default function KeybindingCheatSheet(props: DialogProps) {
-  const { isOpen, onClose } = props
+  const { onClose } = props
   const tx = useTranslationFunction()
   const settingsStore = useSettingsStore()[0]
 
@@ -29,7 +29,6 @@ export default function KeybindingCheatSheet(props: DialogProps) {
 
   return (
     <DeltaDialogBase
-      isOpen={isOpen}
       onClose={onClose}
       fixed={false}
       className='keyboard-hint-cheatsheet-dialog'

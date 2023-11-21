@@ -21,7 +21,7 @@ export default function ConfirmSendingFiles({
   chatName,
   ...dialogProps
 }: Props) {
-  const { isOpen, onClose } = dialogProps
+  const { onClose } = dialogProps
   const tx = useTranslationFunction()
 
   const handleCancel = () => {
@@ -37,7 +37,7 @@ export default function ConfirmSendingFiles({
   const fileCount = sanitizedFileList.length
 
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
+    <SmallDialog onClose={onClose}>
       <div className='bp4-dialog-body-with-padding'>
         <p style={{ wordBreak: 'break-word' }}>
           {tx(

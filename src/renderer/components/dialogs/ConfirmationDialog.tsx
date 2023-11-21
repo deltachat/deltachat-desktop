@@ -27,7 +27,6 @@ export default function ConfirmationDialog({
   noMargin?: boolean
   header?: string
 } & DialogProps) {
-  const isOpen = !!message
   const tx = useTranslationFunction()
 
   const onClick = (yes: boolean) => {
@@ -36,7 +35,7 @@ export default function ConfirmationDialog({
   }
 
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
+    <SmallDialog onClose={onClose}>
       <div className='bp4-dialog-body-with-padding'>
         {header && (
           <div

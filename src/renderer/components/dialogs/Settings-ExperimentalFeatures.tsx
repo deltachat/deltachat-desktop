@@ -130,7 +130,7 @@ export function EditVideochatInstanceDialog({
   settingsStore: SettingsStoreState
   onOk: (configValue: string) => Promise<void>
 }) {
-  const { isOpen, onClose } = dialogProps
+  const { onClose } = dialogProps
   const tx = useTranslationFunction()
   const [configValue, setConfigValue] = useState(
     settingsStore.settings['webrtc_instance']
@@ -177,7 +177,6 @@ export function EditVideochatInstanceDialog({
   return (
     <DeltaDialogBase
       onClose={onClose}
-      isOpen={isOpen}
       canOutsideClickClose={false}
       style={{
         top: '15vh',

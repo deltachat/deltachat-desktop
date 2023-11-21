@@ -30,7 +30,6 @@ import type { DialogProps } from '../../contexts/DialogContext'
 const log = getLogger('renderer/dialogs/QrCode')
 
 export default function QrCode({
-  isOpen,
   onClose,
   qrCodeSVG,
   qrCode,
@@ -50,7 +49,7 @@ export default function QrCode({
   const tx = useTranslationFunction()
 
   return (
-    <DeltaDialogBase isOpen={isOpen} onClose={onClose}>
+    <DeltaDialogBase onClose={onClose}>
       <div className='qr-code-switch'>
         <p
           className={classNames({ active: showQrCode })}

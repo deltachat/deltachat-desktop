@@ -43,7 +43,7 @@ export default function MailtoDialog(props: {
 
   const noResults = chatListIds.length === 0 && queryStr !== ''
   return (
-    <DeltaDialogBase isOpen={true} onClose={onClose} fixed>
+    <DeltaDialogBase onClose={onClose} fixed>
       <DeltaDialogHeader
         onClose={onClose}
         title={tx('mailto_dialog_header_select_chat')}

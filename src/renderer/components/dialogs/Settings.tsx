@@ -358,7 +358,6 @@ export default function Settings(props: DialogProps) {
 
   return (
     <DeltaDialogBase
-      isOpen={props.isOpen}
       onClose={() => {
         props.onClose()
       }}

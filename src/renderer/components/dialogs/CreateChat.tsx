@@ -55,11 +55,11 @@ import type { DialogProps } from '../../contexts/DialogContext'
 type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
 
 export default function CreateChat(props: DialogProps) {
-  const { isOpen, onClose } = props
+  const { onClose } = props
   const [viewMode, setViewMode] = useState<ViewMode>('main')
 
   return (
-    <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
+    <DeltaDialogBase onClose={onClose} fixed>
       {viewMode == 'main' && <CreateChatMain {...{ setViewMode, onClose }} />}
       {viewMode == 'createGroup' && (
         <CreateGroup {...{ setViewMode, onClose }} />
