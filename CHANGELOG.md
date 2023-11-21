@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- Refactor dialog logic and add additional helper methods #3512
+
 ### Fixed
 - fix displaying sticker that has wrong mimetype
 - fix bug where composer was locked after joining a group via qr code
