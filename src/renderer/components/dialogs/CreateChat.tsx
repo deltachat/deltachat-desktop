@@ -655,9 +655,10 @@ export function AddMemberInnerDialog({
         profileImage: '',
         nameAndAddr: '',
         isBlocked: false,
+        isVerified: false,
         verifierId: null,
         wasSeenRecently: false,
-        isVerified: false,
+        isProfileVerified: false,
       }
       return (
         <ContactListItem
