@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- Update local help (2023-11-20)
+
 ### Fixed
 - fix displaying sticker that has wrong mimetype
 - fix bug where composer was locked after joining a group via qr code
