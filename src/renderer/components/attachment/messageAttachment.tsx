@@ -64,7 +64,7 @@ export default function Attachment({
   // const dimensions = message.msg.dimensions || {}
   // Calculating height to prevent reflow when image loads
   // const height = Math.max(MINIMUM_IMG_HEIGHT, (dimensions as any).height || 0)
-  if (isImage(message.fileMime)) {
+  if (isImage(message.fileMime) || message.viewType === 'Sticker') {
     if (!message.file) {
       return (
         <div
