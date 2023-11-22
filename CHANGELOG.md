@@ -4,7 +4,7 @@
 
 ### Changed
 - Update local help (2023-11-20)
-- update deltachat-node and deltachat/jsonrpc-client to `v1.131.5`
+- update deltachat-node and deltachat/jsonrpc-client to `v1.131.6`
 
 ### Fixed
 - fix displaying sticker that has wrong mimetype
