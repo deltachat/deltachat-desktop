@@ -2,6 +2,20 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_42_0"></a>
+
+## [1.42.0] - 2023-11-23
+
+> Since we needed to upgrade electron this version drops support for windows 7, 8 and 8.1
+> https://www.electronjs.org/blog/windows-7-to-8-1-deprecation-notice
+> If you are using DC on these platforms you have the following options:
+> - Keep using 1.40.4
+> - update windows to 10 or 11
+> - switch to linux (or dual boot it) 
+> - contact delta@merlinux.eu if you have money and want to sponsor the development of a special legacy build of deltachat desktop 1.42 for windows 7/8/8.1.
+>
+> - Core is now built on Debian 10: now requires glibc 2.28, so ubuntu 18 is not supported anymore.
+
 ### Fixed
 - fix clear chat sometimes not refreshing the messagelist
 
@@ -2318,7 +2332,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.3...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.42.0...HEAD
+
+[1.42.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.3...v1.42.0
 
 [1.41.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.2...v1.41.3
 
