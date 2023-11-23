@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- fix clear chat sometimes not refreshing the messagelist
+
 <a id="1_41_4"></a>
 
 ## [1.41.4] - 2023-11-22
