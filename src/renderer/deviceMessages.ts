@@ -16,6 +16,6 @@ export async function updateDeviceChats(accountId: number) {
 🖼️ Global Gallery with your pictures, documents, media across all chats
 ✨ many more improvements and bugfixes
 
-Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1_41_0`
+Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1_42_0`
   )
 }
