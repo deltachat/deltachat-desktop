@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- update deltachat-node and deltachat/jsonrpc-client to `v1.131.7`
+  - Revert "fix: check UIDNEXT with a STATUS command before going IDLE". This fixes mail.163.com which has broken STATUS command.
+
 <a id="1_42_0"></a>
 
 ## [1.42.0] - 2023-11-23
