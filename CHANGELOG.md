@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_42_1"></a>
+
+## [1.42.1] - 2023-11-23
+
 ### Changed
 - update deltachat-node and deltachat/jsonrpc-client to `v1.131.7`
   - Revert "fix: check UIDNEXT with a STATUS command before going IDLE". This fixes mail.163.com which has broken STATUS command.
@@ -2336,7 +2340,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.42.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.42.1...HEAD
+
+[1.42.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.42.0...v1.42.1
 
 [1.42.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.3...v1.42.0
 
