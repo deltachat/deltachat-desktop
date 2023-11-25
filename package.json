@@ -85,7 +85,6 @@
     "application-config": "^1.0.1",
     "classnames": "^2.3.2",
     "debounce": "^1.2.0",
-    "deltachat-node": "^1.137.3",
     "emoji-js-clean": "^4.0.0",
     "emoji-mart": "5.5.2",
     "error-stack-parser": "^2.0.7",
