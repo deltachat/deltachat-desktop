@@ -16,7 +16,7 @@ export class StdioServer {
   binary_name() {
     const p = platform()
     const a = arch()
-    if (p === 'darwin' && a === 'x64') {
+    if (p === 'darwin' && a === 'arm64') {
       return 'deltachat-rpc-server-aarch64-macos'
     } else if (p === 'win32' && a === 'x64') {
       return 'deltachat-rpc-server-win64.exe'
