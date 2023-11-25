@@ -1,5 +1,6 @@
 import { ChildProcessWithoutNullStreams, spawn } from 'child_process'
 import path from 'node:path'
+import { platform, arch } from 'os'
 
 export class StdioServer {
   cmd_path: string
@@ -8,12 +9,19 @@ export class StdioServer {
     public on_data: (reponse: string) => void,
     public accounts_path: string
   ) {
-    this.cmd_path = path.join(
-      __dirname,
-      '../../../',
-      'deltachat-rpc-server-aarch64-macos'
-    )
+    this.cmd_path = path.join(__dirname, '../../../', this.binary_name())
     this.server_process = null
+  }
+
+  binary_name() {
+    const p = platform()
+    const a = arch()
+    if (p === 'darwin' && a === 'x64') {
+      return 'deltachat-rpc-server-aarch64-macos'
+    } else if (p === 'win32' && a === 'x64') {
+      return 'deltachat-rpc-server-win64.exe'
+    }
+    throw new Error(`Unsupported platform: ${platform} arch: ${arch}`)
   }
 
   start() {
@@ -23,7 +31,7 @@ export class StdioServer {
 
     let buffer = ''
     this.server_process.stdout.on('data', data => {
-      console.log(`stdout: ${data}`)
+      // console.log(`stdout: ${data}`)
       buffer += data.toString()
       while (true) {
         const pos_end_line = buffer.indexOf('\n')
