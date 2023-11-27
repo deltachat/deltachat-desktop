@@ -325,6 +325,8 @@ export async function clearChat(openDialog: OpenDialog, chatId: number) {
     }),
     cb: async yes => {
       if (yes) {
+        // workaround event race where it tried to load already deleted messages by unloading the chat first.
+        unselectChat()
         await BackendRemote.rpc.deleteMessages(accountID, messages_to_delete)
         selectChat(chatId)
       }
