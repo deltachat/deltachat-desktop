@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- Chore: Introduce CSS modules in build pipeline #3571
+
 <a id="1_42_1"></a>
 
 ## [1.42.1] - 2023-11-23
