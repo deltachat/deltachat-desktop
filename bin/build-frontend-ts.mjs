@@ -2,12 +2,10 @@
 import { spawn } from 'child_process'
 import { build } from 'esbuild'
 import { copyFile, readFile } from 'fs/promises'
-import path, { join } from 'path'
-/**
- *
- * @param {string[]} args arguments for the command
- * @param {import('child_process').SpawnOptionsWithoutStdio} [options]
- */
+import path from 'path'
+
+import { compile } from 'sass'
+
 async function run(command, args, options, listener = undefined) {
   return new Promise((resolve, reject) => {
     console.log(`- Executing "${command} ${args.join(' ')}"`)
@@ -45,7 +43,7 @@ async function bundle(production, minify = false) {
     define: {
       'process.env.NODE_ENV': production ? '"production"' : '"development"',
     },
-    plugins: [wasmPlugin],
+    plugins: [wasmPlugin, sassPlugin],
   })
 
   await copyFile(
@@ -54,7 +52,17 @@ async function bundle(production, minify = false) {
   )
 }
 
-let wasmPlugin = {
+const sassPlugin = {
+  name: 'sass',
+  setup(build) {
+    build.onLoad({ filter: /\.module\.scss$/ }, (args) => {
+      const { css } = compile(args.path);
+      return { contents: css, loader: 'local-css' };
+    });
+  },
+}
+
+const wasmPlugin = {
   name: 'wasm',
   setup(build) {
     // Resolve ".wasm" files to a path with a namespace
