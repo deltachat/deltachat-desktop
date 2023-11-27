@@ -83,7 +83,7 @@
     "@emoji-mart/react": "1.1.1",
     "@mapbox/geojson-extent": "^1.0.0",
     "application-config": "^1.0.1",
-    "classnames": "^2.3.1",
+    "classnames": "^2.3.2",
     "debounce": "^1.2.0",
     "deltachat-node": "^1.131.6",
     "emoji-js-clean": "^4.0.0",
@@ -106,7 +106,7 @@
     "source-map-support": "^0.5.19",
     "stackframe": "^1.2.1",
     "use-debounce": "^3.3.0",
-    "webxdc-types": "^1.0.0",
+    "webxdc-types": "^1.0.1",
     "ws": "7.5.9"
   },
   "devDependencies": {
@@ -130,7 +130,7 @@
     "chokidar": "^3.5.3",
     "electron": "^26.6.0",
     "electron-builder": "^24.6.4",
-    "esbuild": "^0.14.51",
+    "esbuild": "^0.19.8",
     "eslint": "^8.53.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-prettier": "^4.2.1",
@@ -138,9 +138,10 @@
     "mocha": "^9.2.2",
     "node-fetch": "^2.6.7",
     "prettier": "2.2.1",
-    "sass": "^1.26.5",
+    "sass": "^1.69.5",
     "ts-node": "^10.4.0",
     "typescript": "^4.4.4",
+    "typescript-plugin-css-modules": "^5.0.2",
     "walk": "^2.3.14",
     "xml-js": "^1.6.8"
   }
