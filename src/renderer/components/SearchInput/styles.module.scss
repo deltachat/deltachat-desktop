@@ -1,68 +1,51 @@
 .searchInput {
-  -ms-flex: 1 1 auto;
-  -webkit-box-flex: 1;
-  background-color: transparent;
+  background-color: var(--searchInputBackgroundColor);
+  border-radius: 3px;
   border: 0px;
+  box-shadow: none;
   caret-color: var(--navBarSearchPlaceholder);
-  color: var(--globalText);
+  color: var(--navBarText);
   flex: 1 1 auto;
   font-size: 18px;
+  font-weight: normal;
+  left: 69px;
   line-height: inherit;
+  margin-left: 0px;
+  margin-right: 0px;
   margin: 0;
   overflow: hidden;
+  padding-left: unset !important;
+  position: absolute;
+  text-indent: 0px;
   text-overflow: ellipsis;
   white-space: nowrap;
+  width: calc(30vw - 75px - 10px);
   word-wrap: normal;
 
-  &.wrap {
-    margin-left: 40px;
-    padding: 10px 0px;
-    width: calc(100% - 80px);
-
-    .bp4-navbar & {
-      margin-left: 0px;
-    }
+  &::placeholder {
+    user-select: none;
+    color: var(--navBarSearchPlaceholder);
   }
 }
 
 .searchClearButton {
+  left: calc(30vw - 30px);
+  min-height: 0px;
+  min-width: 0px;
   position: absolute;
   z-index: 10;
-  left: calc(30vw - 30px);
 
-  &:before {
-    font-weight: normal !important;
+  &::before {
+    color: white !important;
     font-size: medium !important;
+    font-weight: normal !important;
+  }
+
+  &:hover {
+    background-color: transparent !important;
   }
 }
 
-.searchClearButtonHidden {
+.hidden {
   display: none;
-
-  &.bp4-button[class*='bp4-icon-']::before {
-    color: white;
-  }
-
-  &.bp4-button.bp4-minimal:hover {
-    background-color: unset;
-  }
-}
-
-.lalaTest {
-  background-color: var(--searchInputBackgroundColor);
-  border-radius: 3px;
-  color: var(--navBarText);
-  font-size: 18px;
-  font-weight: normal;
-  left: 69px;
-  margin-left: 0px;
-  margin-right: 0px;
-  margin: 0;
-  position: absolute;
-  text-indent: 0px;
-  width: calc(30vw - 75px - 10px);
-
-  &::placeholder {
-    user-select: none;
-  }
 }

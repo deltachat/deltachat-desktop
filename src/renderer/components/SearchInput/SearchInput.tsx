@@ -29,7 +29,7 @@ export function SearchInput(props: Props) {
         autoFocus
         onChange={onChange}
         value={value}
-        className={classNames(styles.lalaTest, 'icon-rotated')}
+        className={classNames(styles.searchInput)}
         ref={props.inputRef}
         spellCheck={false}
       />
