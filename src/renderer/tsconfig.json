@@ -11,7 +11,10 @@
     "esModuleInterop": true,
     "moduleResolution": "node",
     "strictNullChecks": true,
-    "strict": true
+    "strict": true,
+    "plugins": [
+      { "name": "typescript-plugin-css-modules" }
+    ]
   },
   "references": [
     {
