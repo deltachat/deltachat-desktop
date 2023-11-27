@@ -11,9 +11,7 @@
     "esModuleInterop": true,
     "strictNullChecks": true,
     "strict": true,
-    "plugins": [
-      { "name": "typescript-plugin-css-modules" }
-    ]
+    "plugins": [{ "name": "typescript-plugin-css-modules" }]
   },
   "include": ["./**/*.ts", "./**/*.js"]
 }
