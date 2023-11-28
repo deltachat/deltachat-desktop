@@ -5,6 +5,10 @@ import esbuild from 'esbuild'
 import { ESLint } from 'eslint'
 import { compile } from 'sass'
 
+/**
+ * Helper method returning a bundle configuration which is shared amongst
+ * different `esbuild` methods.
+ */
 function config(options) {
   const { isProduction, isMinify } = options
 
@@ -21,6 +25,13 @@ function config(options) {
   }
 }
 
+/**
+ * `esbuild` plugin checking for linter errors and warnings. It prints them in the
+ * console and reports them further to `esbuild`.
+ *
+ * Since `eslint` also has a TypeScript plugin we see all the type errors here as
+ * well.
+ */
 const eslintPlugin = {
   name: 'eslint',
   setup(build) {
@@ -65,6 +76,9 @@ const eslintPlugin = {
   },
 }
 
+/**
+ * `esbuild` plugin to allow SCSS in CSS modules.
+ */
 const sassPlugin = {
   name: 'sass',
   setup(build) {
@@ -75,6 +89,9 @@ const sassPlugin = {
   },
 }
 
+/**
+ * `esbuild` plugin decoding WebAssembly and automatically embedding it in the build.
+ */
 const wasmPlugin = {
   name: 'wasm',
   setup(build) {
@@ -102,6 +119,12 @@ const wasmPlugin = {
   },
 }
 
+/**
+ * `esbuild` plugin to report to the user if a bundle process started or ended.
+ *
+ * This is especially useful to find out if a warning or error got fixed after
+ * a change.
+ */
 const reporterPlugin = {
   name: 'reporter',
   setup(build) {
@@ -119,6 +142,9 @@ const reporterPlugin = {
   },
 }
 
+/**
+ * Bundle all files with `esbuild`.
+ */
 async function bundle(options) {
   await esbuild.build(options)
 
@@ -128,6 +154,10 @@ async function bundle(options) {
   )
 }
 
+/**
+ * Start watching for all files with `esbuild`, on change of any watched
+ * file this will trigger a build.
+ */
 async function watch(options) {
   const context = await esbuild.context(options)
   await context.watch()
