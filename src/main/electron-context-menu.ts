@@ -25,14 +25,14 @@ import { tx } from './load-translations'
 
 type todo = any
 
-type MenuItems = electron.MenuItemConstructorOptions | electron.MenuItem
+type MenuItem = electron.MenuItemConstructorOptions | electron.MenuItem
 
 const webContents = (win: BrowserWindow) => win.webContents
 
 const removeUnusedMenuItems = (
-  menuTemplate: (MenuItems | false | undefined)[]
-): MenuItems[] => {
-  let notDeletedPreviousElement: MenuItems
+  menuTemplate: (MenuItem | false | undefined)[]
+): MenuItem[] => {
+  let notDeletedPreviousElement: MenuItem
 
   return menuTemplate
     .filter(menuItem => {
@@ -47,8 +47,8 @@ const removeUnusedMenuItems = (
     })
     .filter((item, index, array) => {
       // We've filtered all booleans above, just TS doesn't know that yet
-      const menuItem = item as MenuItems
-      const items = array as MenuItems[]
+      const menuItem = item as MenuItem
+      const items = array as MenuItem[]
 
       const toDelete =
         menuItem.type === 'separator' &&
@@ -61,7 +61,7 @@ const removeUnusedMenuItems = (
         : menuItem
 
       return !toDelete
-    }) as MenuItems[]
+    }) as MenuItem[]
 }
 
 const create = (win: BrowserWindow) => {
@@ -177,7 +177,7 @@ const create = (win: BrowserWindow) => {
       }
     }
 
-    let menuTemplate: MenuItems[] = [
+    let menuTemplate: MenuItem[] = [
       dictionarySuggestions.length > 0 && defaultActions.separator(),
       ...dictionarySuggestions,
       defaultActions.separator(),
@@ -198,7 +198,7 @@ const create = (win: BrowserWindow) => {
     menuTemplate = removeUnusedMenuItems(menuTemplate)
 
     if (menuTemplate.length > 0) {
-      const menu = electron.Menu.buildFromTemplate(menuTemplate as MenuItems[])
+      const menu = electron.Menu.buildFromTemplate(menuTemplate as MenuItem[])
 
       menu.popup({ window: win })
     }
