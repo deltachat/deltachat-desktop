@@ -229,7 +229,7 @@ const Composer = forwardRef<
     // https://www.electronjs.org/docs/api/file-object
     const file = e.clipboardData.files[0]
 
-    log.debug(`paste: received file: "${file.path}" "${file.name}"`)
+    log.debug(`paste: received file: "${file.path}" "${file.name}" ${file.type}`, e.clipboardData.files)
 
     const msgType: Viewtype = file.type.startsWith('image') ? 'Image' : 'File'
 
