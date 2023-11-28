@@ -25,28 +25,52 @@ import { tx } from './load-translations'
 
 type todo = any
 
+type NotDeletedMenuItems =
+  | electron.MenuItemConstructorOptions
+  | electron.MenuItem
+
 const webContents = (win: BrowserWindow) => win.webContents
 
 const removeUnusedMenuItems = (
-  menuTemplate: (electron.MenuItemConstructorOptions | electron.MenuItem)[]
-) => {
-  let notDeletedPreviousElement:
+  menuTemplate: (
     | electron.MenuItemConstructorOptions
     | electron.MenuItem
+    | boolean
+  )[]
+): NotDeletedMenuItems[] => {
+  let notDeletedPreviousElement: NotDeletedMenuItems
 
   return menuTemplate
-    .filter(menuItem => menuItem !== undefined && menuItem.visible !== false)
-    .filter((menuItem, index, array) => {
+    .filter(menuItem => {
+      // We can pass in `false` values into this list as a workaround to remove them here, just to be
+      // safe we're also removing all booleans, including `true` values, altogether
+      if (typeof menuItem === 'boolean') {
+        return false
+      } else if (typeof menuItem === 'undefined') {
+        return false
+      } else if (typeof menuItem === 'object' && menuItem.visible === false) {
+        return false
+      }
+
+      return true
+    })
+    .filter((item, index, array) => {
+      // We've filtered all booleans above, just TS doesn't know that yet
+      const menuItem = item as NotDeletedMenuItems
+      const items = array as NotDeletedMenuItems[]
+
       const toDelete =
         menuItem.type === 'separator' &&
         (!notDeletedPreviousElement ||
           index === array.length - 1 ||
-          array[index + 1].type === 'separator')
+          items[index + 1].type === 'separator')
+
       notDeletedPreviousElement = toDelete
         ? notDeletedPreviousElement
         : menuItem
+
       return !toDelete
-    })
+    }) as NotDeletedMenuItems[]
 }
 
 const create = (win: BrowserWindow) => {
@@ -165,6 +189,7 @@ const create = (win: BrowserWindow) => {
     let menuTemplate: (
       | electron.MenuItemConstructorOptions
       | electron.MenuItem
+      | boolean
     )[] = [
       dictionarySuggestions.length > 0 && defaultActions.separator(),
       ...dictionarySuggestions,
@@ -186,7 +211,9 @@ const create = (win: BrowserWindow) => {
     menuTemplate = removeUnusedMenuItems(menuTemplate)
 
     if (menuTemplate.length > 0) {
-      const menu = electron.Menu.buildFromTemplate(menuTemplate)
+      const menu = electron.Menu.buildFromTemplate(
+        menuTemplate as NotDeletedMenuItems[]
+      )
 
       menu.popup({ window: win })
     }
