@@ -206,8 +206,16 @@
     linear-gradient(grey 40px, transparent 0),
     linear-gradient(grey 40px, transparent 0),
     linear-gradient(grey 40px, transparent 0);
-  background-size: 56px 56px, 200px 18px, 300px 16px, 40px 16px;
-  background-position: 6px, 67px 12px, 67px 35px, 96% 12px;
+  background-size:
+    56px 56px,
+    200px 18px,
+    300px 16px,
+    40px 16px;
+  background-position:
+    6px,
+    67px 12px,
+    67px 35px,
+    96% 12px;
   opacity: 0.1;
 }
 

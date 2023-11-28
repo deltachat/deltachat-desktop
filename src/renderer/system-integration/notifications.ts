@@ -68,10 +68,8 @@ async function showNotification(
     })
   } else {
     try {
-      const notificationInfo = await BackendRemote.rpc.getMessageNotificationInfo(
-        accountId,
-        messageId
-      )
+      const notificationInfo =
+        await BackendRemote.rpc.getMessageNotificationInfo(accountId, messageId)
       const { chatName, summaryPrefix, summaryText } = notificationInfo
       runtime.showNotification({
         title: chatName,
@@ -112,10 +110,11 @@ async function showGroupedNotification(
         // can show profile image of chat
         // title: chatName
         // body: "5 new Messages in ChatName"
-        const notificationInfo = await BackendRemote.rpc.getMessageNotificationInfo(
-          accountId,
-          notifications[0].messageId
-        )
+        const notificationInfo =
+          await BackendRemote.rpc.getMessageNotificationInfo(
+            accountId,
+            notifications[0].messageId
+          )
         const { chatName, chatProfileImage } = notificationInfo
         runtime.showNotification({
           title: chatName,

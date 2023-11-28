@@ -77,9 +77,8 @@ export function SendAutocryptSetupMessage({
   }
 
   const initiateKeyTransfer = async () => {
-    const key = await BackendRemote.rpc.initiateAutocryptKeyTransfer(
-      selectedAccountId()
-    )
+    const key =
+      await BackendRemote.rpc.initiateAutocryptKeyTransfer(selectedAccountId())
     setKey(key)
   }
 

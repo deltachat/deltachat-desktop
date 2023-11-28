@@ -45,10 +45,10 @@ export function useMessageResults(
     [chatId]
   )
 
-  useEffect(() => debouncedSearchMessages(queryStr), [
-    queryStr,
-    debouncedSearchMessages,
-  ])
+  useEffect(
+    () => debouncedSearchMessages(queryStr),
+    [queryStr, debouncedSearchMessages]
+  )
 
   return ids
 }

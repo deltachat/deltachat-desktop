@@ -169,13 +169,14 @@ export default function MessageList({
       }
     })
   }
-  const unreadMessageInViewIntersectionObserver: MutableRefObject<IntersectionObserver> = useRef(
-    new IntersectionObserver(onUnreadMessageInView, {
-      root: null,
-      rootMargin: '0px',
-      threshold: [0, 1],
-    })
-  )
+  const unreadMessageInViewIntersectionObserver: MutableRefObject<IntersectionObserver> =
+    useRef(
+      new IntersectionObserver(onUnreadMessageInView, {
+        root: null,
+        rootMargin: '0px',
+        threshold: [0, 1],
+      })
+    )
 
   useEffect(() => {
     const onFocus = onWindowFocus.bind(null, accountId)

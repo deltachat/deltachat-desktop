@@ -59,7 +59,7 @@ export default function SettingsDownloadOnDemand(props: {
   return (
     <>
       <SettingsSelector
-        onClick={onOpenDialog.bind(null, false)}
+        onClick={onOpenDialog.bind(null)}
         currentValue={current_limit}
       >
         {tx('auto_download_messages')}
