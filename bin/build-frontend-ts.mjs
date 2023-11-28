@@ -10,7 +10,14 @@ import { compile } from 'sass'
  * different `esbuild` methods.
  */
 function config(options) {
-  const { isProduction, isMinify } = options
+  const { isProduction, isMinify, isWatch } = options
+
+  const plugins = [wasmPlugin, sassPlugin]
+  if (isWatch) {
+    // Only add eslint plugin during development as it affects build-times significantly
+    plugins.push(eslintPlugin)
+    plugins.push(reporterPlugin)
+  }
 
   return {
     entryPoints: ['src/renderer/main.tsx'],
@@ -21,7 +28,7 @@ function config(options) {
     define: {
       'process.env.NODE_ENV': isProduction ? '"production"' : '"development"',
     },
-    plugins: [eslintPlugin, wasmPlugin, sassPlugin, reporterPlugin],
+    plugins,
   }
 }
 
@@ -164,6 +171,7 @@ async function main(isWatch = false, isProduction = false, isMinify = false) {
   const options = config({
     isProduction: !isWatch && isProduction,
     isMinify: (!isWatch && isMinify) || isProduction,
+    isWatch,
   })
 
   if (isWatch) {
