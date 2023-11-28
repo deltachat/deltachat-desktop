@@ -3,7 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Changed
-- Chore: Introduce CSS modules in build pipeline #3571
+- Chore: Use native watch mode and CSS modules of esbuild #3571
 
 <a id="1_42_1"></a>
 
