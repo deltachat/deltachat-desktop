@@ -13,8 +13,8 @@ function config(options) {
   const { isProduction, isMinify, isWatch } = options
 
   const plugins = [wasmPlugin, sassPlugin]
-  if (isWatch) {
-    // Only add eslint plugin during development as it affects build-times significantly
+  if (isWatch || isProduction) {
+    // Make eslint optional as it affects build times significantly
     plugins.push(eslintPlugin)
     plugins.push(reporterPlugin)
   }
