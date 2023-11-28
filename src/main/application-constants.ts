@@ -18,10 +18,8 @@ export function windowDefaults() {
     targetFile = 'test.html'
     defaultWidth = 1100
   }
-  const {
-    height: screenHeight,
-    width: screenWidth,
-  } = screen.getPrimaryDisplay().workAreaSize
+  const { height: screenHeight, width: screenWidth } =
+    screen.getPrimaryDisplay().workAreaSize
   const headerHeight = 38
   // NOTE(maxph): we have a padding of 66px on the left of the buttons
   const defaultHeight = Math.min(802 + headerHeight, screenHeight)

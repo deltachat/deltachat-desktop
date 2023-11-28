@@ -89,15 +89,12 @@ function getLocaleMessages(file: string) {
   }
 }
 
-ipcMain.handle(
-  'getLocaleData',
-  (_ev, locale?: string): LocaleData => {
-    if (locale) {
-      loadTranslations(locale)
-    }
-    return getCurrentLocaleDate()
+ipcMain.handle('getLocaleData', (_ev, locale?: string): LocaleData => {
+  if (locale) {
+    loadTranslations(locale)
   }
-)
+  return getCurrentLocaleDate()
+})
 
 ipcMain.handle('setLocale', (_ev, locale: string) => {
   setLanguage(locale)

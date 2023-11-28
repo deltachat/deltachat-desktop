@@ -45,9 +45,8 @@ export function translate(
         message = entry[opts.quantity]
       } else if (typeof opts.quantity === 'number') {
         message =
-          entry[
-            (opts.quantity as unknown) as keyof LocaleData['messages'][0]
-          ] || opts.quantity === 1
+          entry[opts.quantity as unknown as keyof LocaleData['messages'][0]] ||
+          opts.quantity === 1
             ? entry['one']
             : entry['other']
       } else {

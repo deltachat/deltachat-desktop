@@ -152,11 +152,10 @@ export function useContactsNew(listFlags: number, initialQueryStr: string) {
     [listFlags, debouncedGetContacts2]
   )
 
-  useEffect(() => debouncedGetContacts2(listFlags, initialQueryStr), [
-    listFlags,
-    initialQueryStr,
-    debouncedGetContacts2,
-  ])
+  useEffect(
+    () => debouncedGetContacts2(listFlags, initialQueryStr),
+    [listFlags, initialQueryStr, debouncedGetContacts2]
+  )
 
   return [state, search] as [typeof state, typeof search]
 }

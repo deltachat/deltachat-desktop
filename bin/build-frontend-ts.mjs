@@ -1,5 +1,5 @@
-import { copyFile, readFile } from 'fs/promises'
 import path from 'path'
+import { copyFile, readFile } from 'fs/promises'
 
 import esbuild from 'esbuild'
 import { ESLint } from 'eslint'
@@ -28,9 +28,6 @@ function config(options) {
 /**
  * `esbuild` plugin checking for linter errors and warnings. It prints them in the
  * console and reports them further to `esbuild`.
- *
- * Since `eslint` also has a TypeScript plugin we see all the type errors here as
- * well.
  */
 const eslintPlugin = {
   name: 'eslint',
@@ -129,14 +126,14 @@ const reporterPlugin = {
   name: 'reporter',
   setup(build) {
     build.onStart(() => {
-      console.log('- Start eslint build ...')
+      console.log('- Start esbuild ...')
     })
 
     build.onEnd(async (args) => {
       const errors = args.errors.length
       const warnings = args.warnings.length
       console.log(
-        `- Finished eslint build with ${warnings} warnings and ${errors} errors`,
+        `- Finished esbuild with ${warnings} warnings and ${errors} errors`,
       )
     })
   },
@@ -170,7 +167,6 @@ async function main(isWatch = false, isProduction = false, isMinify = false) {
   })
 
   if (isWatch) {
-    console.log('- Start watching with esbuild for changes ...')
     await watch(options)
   } else {
     await bundle(options)

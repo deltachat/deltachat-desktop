@@ -1,6 +1,8 @@
-export function parseMailto(
-  mailtoURL: string
-): { to?: string | null; subject?: string; body?: string } {
+export function parseMailto(mailtoURL: string): {
+  to?: string | null
+  subject?: string
+  body?: string
+} {
   const mailto_url = new URL(mailtoURL)
 
   if (mailto_url.protocol.toLowerCase() !== 'mailto:') {

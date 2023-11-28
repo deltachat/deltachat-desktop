@@ -151,7 +151,9 @@ $scrollbarTransparency: 0.5;
 }
 
 .bp4-dialog {
-  box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 4px 8px rgba(16, 22, 26, 0.2),
+  box-shadow:
+    0 0 0 1px rgba(16, 22, 26, 0.1),
+    0 4px 8px rgba(16, 22, 26, 0.2),
     0 0 30px 0px rgba(16, 22, 26, 0.2);
   transition: none;
 }

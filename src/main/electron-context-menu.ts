@@ -35,12 +35,7 @@ const removeUnusedMenuItems = (
     | electron.MenuItem
 
   return menuTemplate
-    .filter(
-      menuItem =>
-        menuItem !== undefined &&
-        menuItem !== false &&
-        menuItem.visible !== false
-    )
+    .filter(menuItem => menuItem !== undefined && menuItem.visible !== false)
     .filter((menuItem, index, array) => {
       const toDelete =
         menuItem.type === 'separator' &&

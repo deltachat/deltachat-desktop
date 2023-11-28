@@ -35,7 +35,7 @@ export class ChatStoreScheduler {
     effect: T,
     effectName: string
   ): T {
-    const fn: T = ((async (...args: any) => {
+    const fn: T = (async (...args: any) => {
       if (this.isLocked(lockName) === true) {
         log.debug(`lockedEffect: ${effectName}: We're locked, dropping effect`)
         return false
@@ -62,7 +62,7 @@ export class ChatStoreScheduler {
             )*/
       }
       return returnValue
-    }) as unknown) as T
+    }) as unknown as T
     return fn
   }
 
@@ -95,7 +95,7 @@ export class ChatStoreScheduler {
 
   /**  This effect will get added to the end of the queue. The queue is getting executed one after the other. */
   queuedEffect<T extends Function>(effect: T, effectName: string): T {
-    const fn: T = ((async (...args: any) => {
+    const fn: T = (async (...args: any) => {
       const lockQueue = () => {
         //log.debug(`queuedEffect: ${effectName}: locking`)
         this.lock('queue')
@@ -131,7 +131,7 @@ export class ChatStoreScheduler {
 
       //log.debug(`queuedEffect: ${effectName}: done`)
       return returnValue
-    }) as unknown) as T
+    }) as unknown as T
     return fn
   }
 
@@ -141,7 +141,7 @@ export class ChatStoreScheduler {
     effect: T,
     effectName: string
   ): T {
-    const fn: T = ((async (...args: any) => {
+    const fn: T = (async (...args: any) => {
       const lockQueue = () => {
         //log.debug(`lockedQueuedEffect: ${effectName}: locking`)
         this.lock('queue')
@@ -190,7 +190,7 @@ export class ChatStoreScheduler {
 
       log.debug(`lockedQueuedEffect: ${effectName}: done`)
       return returnValue
-    }) as unknown) as T
+    }) as unknown as T
     return fn
   }
 }

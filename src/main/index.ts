@@ -151,7 +151,7 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
   any,
   any,
   any,
-  any
+  any,
 ]) {
   // can fail due to user error so running it first is better (cli argument)
   acceptThemeCLI()

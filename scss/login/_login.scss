@@ -134,7 +134,9 @@ div.delta-form-group {
     .bp4-select::after {
       top: 0px;
       content: '^';
-      font: 17px 'Consolas', monospace;
+      font:
+        17px 'Consolas',
+        monospace;
       transform: rotate(180deg);
     }
     .bp4-select {
