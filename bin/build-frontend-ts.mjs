@@ -169,14 +169,11 @@ async function main(isWatch = false, isProduction = false, isMinify = false) {
     isMinify: (!isWatch && isMinify) || isProduction,
   })
 
-  isWatch && console.log('- Start watching for changes ...')
-  !isWatch && console.log('- Bundle once ...')
-
   if (isWatch) {
+    console.log('- Start watching with esbuild for changes ...')
     await watch(options)
   } else {
     await bundle(options)
-    console.log('- Build completed')
   }
 }
 
