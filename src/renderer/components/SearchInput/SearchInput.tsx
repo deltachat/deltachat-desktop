@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ChangeEvent } from 'react'
 import classNames from 'classnames'
 
 import { useTranslationFunction } from '../../contexts'
@@ -6,20 +6,26 @@ import { SearchClearButton } from './'
 
 import styles from './styles.module.scss'
 
+import type { Ref } from 'react'
+
 type Props = {
-  onChange: (
-    event: React.ChangeEvent<HTMLInputElement> | { target: { value: '' } }
-  ) => void
-  value: string
   id: string
-  inputRef?: React.ClassAttributes<HTMLInputElement>['ref']
-  /** if this is defined clear button is always shown, like with search in chat */
-  extraCleanAction?: () => void
+  inputRef?: Ref<HTMLInputElement>
+  onChange: (queryStr: string) => void
+  value: string
 }
 
-export function SearchInput(props: Props) {
-  const { onChange, value, id, extraCleanAction } = props
+export function SearchInput({ onChange, value, id, inputRef }: Props) {
   const tx = useTranslationFunction()
+  const isEmpty = value.length === 0
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onChange(event.target.value)
+  }
+
+  const handleClear = () => {
+    onChange('')
+  }
 
   return (
     <>
@@ -27,19 +33,15 @@ export function SearchInput(props: Props) {
         id={id}
         placeholder={tx('search')}
         autoFocus
-        onChange={onChange}
+        onChange={handleChange}
         value={value}
         className={classNames(styles.searchInput, {
-          [styles.active]: value.length > 0,
+          [styles.active]: !isEmpty,
         })}
-        ref={props.inputRef}
+        ref={inputRef}
         spellCheck={false}
       />
-      <SearchClearButton
-        value={value}
-        onChange={onChange}
-        extraCleanAction={extraCleanAction}
-      />
+      <SearchClearButton onClick={handleClear} isHidden={isEmpty} />
     </>
   )
 }

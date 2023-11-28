@@ -2,13 +2,11 @@ import React from 'react'
 import { Component, createRef } from 'react'
 
 import { ScreenContext } from './contexts'
-import MainScreen from './components/screens/MainScreen'
 import DialogController, {
   OpenDialogFunctionType,
   CloseDialogFunctionType,
 } from './components/dialogs/DialogController'
 import processOpenQrUrl from './components/helpers/OpenQrUrl'
-
 import { getLogger } from '../shared/logger'
 import { ContextMenuLayer, showFnType } from './components/ContextMenu'
 import { ActionEmitter, KeybindAction } from './keybindings'
@@ -23,6 +21,8 @@ import { DcEventType } from '@deltachat/jsonrpc-client'
 import WebxdcSaveToChatDialog from './components/dialogs/WebxdcSendToChatDialog'
 import { updateTimestamps } from './components/conversations/Timestamp'
 import { debounce } from 'debounce'
+import { MainScreen } from './components/MainScreen'
+import { SearchContextProvider } from './contexts/SearchContext'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -257,7 +257,13 @@ export default class ScreenController extends Component {
   renderScreen() {
     switch (this.state.screen) {
       case Screens.Main:
-        return <MainScreen />
+        return (
+          <>
+            <SearchContextProvider>
+              <MainScreen />
+            </SearchContextProvider>
+          </>
+        )
       case Screens.Login:
         if (this.selectedAccountId === undefined) {
           throw new Error('Selected account not defined')
