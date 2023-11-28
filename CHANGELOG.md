@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- update deltachat-node and deltachat/jsonrpc-client to `v1.131.8`
+  - more fixes for mail.163.com
+
 <a id="1_42_1"></a>
 
 ## [1.42.1] - 2023-11-23
