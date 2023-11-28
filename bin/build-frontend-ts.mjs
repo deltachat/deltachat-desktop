@@ -1,39 +1,9 @@
 import path from 'path'
 import { copyFile, readFile } from 'fs/promises'
-import { spawn } from 'child_process'
 
 import esbuild from 'esbuild'
 import { ESLint } from 'eslint'
 import { compile } from 'sass'
-
-/**
- * Helper method running a `tsc` process, printing type-check errors into the
- * console.
- *
- * Please note that this process is not connected to `esbuild` and simply just
- * reports type errors to us via stdout.
- */
-function startTypeChecker() {
-  const command = 'npx tsc -b src/renderer --pretty -w --preserveWatchOutput'
-
-  const tscProcess = spawn(command, {
-    shell: true,
-    cwd: process.cwd(),
-  })
-
-  tscProcess.stdout.pipe(process.stdout)
-  tscProcess.stderr.pipe(process.stderr)
-
-  tscProcess.on('exit', code => {
-    if (code != 0) {
-      console.log(command + 'exited with ERR CODE ' + code)
-    }
-  })
-
-  process.on('beforeExit', () => {
-    tscProcess.kill('SIGKILL')
-  })
-}
 
 /**
  * Helper method returning a bundle configuration which is shared amongst
@@ -197,7 +167,6 @@ async function main(isWatch = false, isProduction = false, isMinify = false) {
   })
 
   if (isWatch) {
-    startTypeChecker()
     await watch(options)
   } else {
     await bundle(options)
