@@ -1,4 +1,8 @@
 .navbar-wrapper {
+  .icon-rotated > .bp4-icon > svg:not([fill]) {
+    transform: rotate(90deg);
+  }
+
   .bp4-navbar {
     padding: 0px;
     background-color: var(--navBarBackground);
