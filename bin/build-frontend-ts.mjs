@@ -1,64 +1,77 @@
-//@ts-check
-import { spawn } from 'child_process'
-import { build } from 'esbuild'
 import { copyFile, readFile } from 'fs/promises'
 import path from 'path'
 
+import esbuild from 'esbuild'
+import { ESLint } from 'eslint'
 import { compile } from 'sass'
 
-async function run(command, args, options, listener = undefined) {
-  return new Promise((resolve, reject) => {
-    console.log(`- Executing "${command} ${args.join(' ')}"`)
-    const p = spawn(command, args, {
-      shell: true,
-      cwd: process.cwd(),
-      ...options,
-    })
-    p.stdout.pipe(process.stdout)
-    if (listener) {
-      p.stdout.on('data', listener)
-    }
-    p.stderr.pipe(process.stderr)
-    p.on('close', resolve)
-    p.on('error', reject)
-    p.on('exit', code => {
-      if (code != 0) {
-        console.log(command + 'exited with ERR CODE ' + code)
-        reject('ERR CODE ' + code)
-      }
-    })
-    process.on('beforeExit', () => {
-      p.kill('SIGKILL')
-    })
-  })
-}
+function config(options) {
+  const { isProduction, isMinify } = options
 
-async function bundle(production, minify = false) {
-  await build({
+  return {
     entryPoints: ['src/renderer/main.tsx'],
     bundle: true,
-    minify,
+    minify: isMinify,
     sourcemap: true,
     outfile: 'html-dist/bundle.js',
     define: {
-      'process.env.NODE_ENV': production ? '"production"' : '"development"',
+      'process.env.NODE_ENV': isProduction ? '"production"' : '"development"',
     },
-    plugins: [wasmPlugin, sassPlugin],
-  })
+    plugins: [eslintPlugin, wasmPlugin, sassPlugin, reporterPlugin],
+  }
+}
 
-  await copyFile(
-    'node_modules/@deltachat/message_parser_wasm/message_parser_wasm_bg.wasm',
-    'html-dist/message_parser_wasm_bg.wasm'
-  )
+const eslintPlugin = {
+  name: 'eslint',
+  setup(build) {
+    const eslint = new ESLint()
+    const filesToLint = []
+
+    build.onLoad({ filter: /\.(?:jsx?|tsx?)$/ }, (args) => {
+      if (!args.path.includes('node_modules')) {
+        filesToLint.push(args.path)
+      }
+
+      return null
+    })
+
+    build.onEnd(async () => {
+      const results = await eslint.lintFiles(filesToLint)
+      const formatter = await eslint.loadFormatter('stylish')
+      const output = await formatter.format(results)
+
+      const warnings = results.reduce(
+        (count, result) => count + result.warningCount,
+        0,
+      )
+      const errors = results.reduce(
+        (count, result) => count + result.errorCount,
+        0,
+      )
+
+      if (output.length > 0) {
+        console.log(output)
+      }
+
+      return {
+        ...(warnings > 0 && {
+          warnings: [{ text: `${warnings} warnings were found by eslint!` }],
+        }),
+        ...(errors > 0 && {
+          errors: [{ text: `${errors} errors were found by eslint!` }],
+        }),
+      }
+    })
+  },
 }
 
 const sassPlugin = {
   name: 'sass',
   setup(build) {
     build.onLoad({ filter: /\.module\.scss$/ }, (args) => {
-      const { css } = compile(args.path);
-      return { contents: css, loader: 'local-css' };
-    });
+      const { css } = compile(args.path)
+      return { contents: css, loader: 'local-css' }
+    })
   },
 }
 
@@ -66,7 +79,7 @@ const wasmPlugin = {
   name: 'wasm',
   setup(build) {
     // Resolve ".wasm" files to a path with a namespace
-    build.onResolve({ filter: /\.wasm$/ }, args => {
+    build.onResolve({ filter: /\.wasm$/ }, (args) => {
       if (args.resolveDir === '') {
         return // Ignore unresolvable paths
       }
@@ -78,80 +91,70 @@ const wasmPlugin = {
       }
     })
 
-    // Virtual modules in the "wasm-binary" namespace contain the
-    // actual bytes of the WebAssembly file. This uses esbuild's
-    // built-in "binary" loader instead of manually embedding the
-    // binary data inside JavaScript code ourselves.
-    build.onLoad({ filter: /.*/, namespace: 'wasm-binary' }, async args => ({
+    // Virtual modules in the "wasm-binary" namespace contain the actual bytes
+    // of the WebAssembly file. This uses esbuild's built-in "binary" loader
+    // instead of manually embedding the binary data inside JavaScript code
+    // ourselves.
+    build.onLoad({ filter: /.*/, namespace: 'wasm-binary' }, async (args) => ({
       contents: await readFile(args.path),
       loader: 'binary',
     }))
   },
 }
 
-async function main(watch_ = false, production_, minify_ = false) {
-  let watchTscProcess = Promise.resolve()
+const reporterPlugin = {
+  name: 'reporter',
+  setup(build) {
+    build.onStart(() => {
+      console.log('- Start eslint build ...')
+    })
 
-  const watch = watch_
-  const production = !watch && production_
-  const minify = (!watch && minify_) || production
-
-  watch && console.log('- First Compile...')
-  !watch && console.log('- Compile esbuild ...')
-  await bundle(production, minify)
-
-  if (watch) {
-    // TODO remove typescript watch and watch files directly
-    let isBundling = false
-    let isScheduled = false
-
-    const BundleIfNeeded = () => {
-      if (isBundling) {
-        isScheduled = true
-      } else {
-        isBundling = true
-        bundle(false)
-          .then(() => {
-            console.log('- bundling done')
-            isBundling = false
-            if (isScheduled) {
-              isScheduled = false
-              BundleIfNeeded()
-            }
-          })
-          .catch(console.log.bind(null, 'bundling failed'))
-      }
-    }
-
-    /** @type {(chunk:Buffer)=>void} chunk */
-    const TSCoutput = chunk => {
-      if (
-        chunk
-          .toString()
-          .indexOf('Found 0 errors. Watching for file changes.') !== -1
-      ) {
-        BundleIfNeeded()
-      }
-    }
-
-    watchTscProcess = run(
-      'npx',
-      'tsc -b src/renderer --pretty -w --preserveWatchOutput'.split(' '),
-      {},
-      TSCoutput
-    )
-  } else {
-    console.log('- build completed')
-  }
-
-  await Promise.all([watchTscProcess])
+    build.onEnd(async (args) => {
+      const errors = args.errors.length
+      const warnings = args.warnings.length
+      console.log(
+        `- Finished eslint build with ${warnings} warnings and ${errors} errors`,
+      )
+    })
+  },
 }
 
-// console.log(process.argv.indexOf('-w'))
-const watch = process.argv.indexOf('-w') !== -1
-const minify = process.argv.indexOf('-m') !== -1
+async function bundle(options) {
+  await esbuild.build(options)
 
-main(watch, process.env['NODE_ENV'] === 'production', minify).catch(err => {
+  await copyFile(
+    'node_modules/@deltachat/message_parser_wasm/message_parser_wasm_bg.wasm',
+    'html-dist/message_parser_wasm_bg.wasm',
+  )
+}
+
+async function watch(options) {
+  const context = await esbuild.context(options)
+  await context.watch()
+}
+
+async function main(isWatch = false, isProduction = false, isMinify = false) {
+  const options = config({
+    isProduction: !isWatch && isProduction,
+    isMinify: (!isWatch && isMinify) || isProduction,
+  })
+
+  isWatch && console.log('- Start watching for changes ...')
+  !isWatch && console.log('- Bundle once ...')
+
+  if (isWatch) {
+    await watch(options)
+  } else {
+    await bundle(options)
+    console.log('- Build completed')
+  }
+}
+
+const isWatch = process.argv.indexOf('-w') !== -1
+const isMinify = process.argv.indexOf('-m') !== -1
+const isProduction = process.env['NODE_ENV'] === 'production'
+
+main(isWatch, isProduction, isMinify).catch((err) => {
   console.error(err)
   process.exitCode = 1
 })
