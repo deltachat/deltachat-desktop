@@ -118,7 +118,7 @@
     "@types/mapbox-gl": "^0.54.5",
     "@types/mime-types": "^2.1.0",
     "@types/mocha": "^9.0.0",
-    "@types/node": "^20.10.0",
+    "@types/node": "^18.18.13",
     "@types/node-fetch": "^2.6.9",
     "@types/rc": "^1.1.0",
     "@types/react": "^17.0.2",
