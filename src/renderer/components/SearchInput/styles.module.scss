@@ -1,51 +1,45 @@
+:root {
+  --borderRadius: 10px;
+  --closeButtonSize: 30px;
+}
+
 .searchInput {
   background-color: var(--searchInputBackgroundColor);
-  border-radius: 3px;
-  border: 0px;
-  box-shadow: none;
+  border-radius: var(--borderRadius);
+  border: 0;
   caret-color: var(--navBarSearchPlaceholder);
   color: var(--navBarText);
-  flex: 1 1 auto;
-  font-size: 18px;
-  font-weight: normal;
-  left: 69px;
-  line-height: inherit;
-  margin-left: 0px;
-  margin-right: 0px;
-  margin: 0;
-  overflow: hidden;
-  padding-left: unset !important;
-  position: absolute;
-  text-indent: 0px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: calc(30vw - 75px - 10px);
-  word-wrap: normal;
+  font-size: 16px;
+  line-height: 1;
+  padding-bottom: 0;
+  padding-left: 10px !important;
+  padding-right: 0;
+  padding-top: 0;
+  width: 100%;
+  height: var(--closeButtonSize);
 
   &::placeholder {
-    user-select: none;
     color: var(--navBarSearchPlaceholder);
+  }
+
+  &.active {
+    padding-right: calc(var(--closeButtonSize) + 5px);
   }
 }
 
 .searchClearButton {
-  left: calc(30vw - 30px);
-  min-height: 0px;
-  min-width: 0px;
+  border-radius: var(--borderRadius);
+  left: calc(30vw - var(--closeButtonSize) - 10px);
+  min-height: var(--closeButtonSize);
+  min-width: var(--closeButtonSize);
   position: absolute;
-  z-index: 10;
 
   &::before {
-    color: white !important;
-    font-size: medium !important;
-    font-weight: normal !important;
+    color: var(--navBarText) !important;
+    font-size: 16px !important;
   }
 
-  &:hover {
-    background-color: transparent !important;
+  &.hidden {
+    display: none;
   }
-}
-
-.hidden {
-  display: none;
 }

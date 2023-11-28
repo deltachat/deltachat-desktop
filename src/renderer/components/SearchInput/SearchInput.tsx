@@ -29,7 +29,9 @@ export function SearchInput(props: Props) {
         autoFocus
         onChange={onChange}
         value={value}
-        className={classNames(styles.searchInput)}
+        className={classNames(styles.searchInput, {
+          [styles.active]: value.length > 0,
+        })}
         ref={props.inputRef}
         spellCheck={false}
       />
