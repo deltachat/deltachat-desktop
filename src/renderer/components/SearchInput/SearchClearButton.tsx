@@ -2,7 +2,7 @@ import React from 'react'
 import classNames from 'classnames'
 import { Icon } from '@blueprintjs/core'
 
-import styles from './styles.module.css'
+import styles from './styles.module.scss'
 
 type Props = {
   onChange: (event: { target: { value: '' } }) => void

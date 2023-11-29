@@ -1,17 +1,16 @@
-:root {
-  --local-borderRadius: 10px;
-  --local-closeButtonSize: 30px;
-}
+$backgroundColorHover: rgba(143, 153, 168, 0.15);
+$borderRadius: 10px;
+$closeButtonSize: 30px;
 
 .searchInput {
   background-color: var(--searchInputBackgroundColor);
-  border-radius: var(--local-borderRadius);
+  border-radius: $borderRadius;
   border: 0;
   caret-color: var(--navBarText);
   color: var(--navBarText);
   flex: 1;
   font-size: 16px;
-  height: var(--local-closeButtonSize);
+  height: $closeButtonSize;
   padding-bottom: 0;
   padding-left: 10px;
   padding-right: 0;
@@ -22,30 +21,28 @@
   }
 
   &.active {
-    padding-right: calc(var(--local-closeButtonSize) + 5px);
+    padding-right: calc($closeButtonSize + 5px);
   }
 }
 
 .searchClearButton {
-  --backgroundColorHover: rgba(143, 153, 168, 0.15);
-
   align-items: center;
   background-color: transparent;
-  border-radius: var(--local-borderRadius);
+  border-radius: $borderRadius;
   border: 0;
   display: flex;
-  height: var(--local-closeButtonSize);
+  height: $closeButtonSize;
   justify-content: center;
-  left: calc(30vw - var(--local-closeButtonSize) - 5px);
+  left: calc(30vw - $closeButtonSize - 5px);
   padding-bottom: 0;
   padding-left: 1px;
   padding-right: 0;
   padding-top: 0;
   position: absolute;
-  width: var(--local-closeButtonSize);
+  width: $closeButtonSize;
 
   &:hover {
-    background-color: var(--backgroundColorHover);
+    background-color: $backgroundColorHover;
   }
 
   &.hidden {

@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import { useTranslationFunction } from '../../contexts'
 import { SearchClearButton } from './'
 
-import styles from './styles.module.css'
+import styles from './styles.module.scss'
 
 type Props = {
   onChange: (
