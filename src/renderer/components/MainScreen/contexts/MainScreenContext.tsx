@@ -4,23 +4,19 @@ import type { PropsWithChildren } from 'react'
 
 export type SidebarState = 'init' | 'visible' | 'invisible'
 
-export type AlternativeView = null | 'global-gallery'
+export type MainView = 'chats' | 'global-gallery' | 'archive'
 
 type MainScreenContextValue = {
-  alternativeView: AlternativeView
-  showArchivedChats: boolean
+  mainView: MainView
   sidebarState: SidebarState
-  setAlternativeView: React.Dispatch<React.SetStateAction<AlternativeView>>
-  setShowArchivedChats: React.Dispatch<React.SetStateAction<boolean>>
+  setMainView: React.Dispatch<React.SetStateAction<MainView>>
   setSidebarState: React.Dispatch<React.SetStateAction<SidebarState>>
 }
 
 const initialValues: MainScreenContextValue = {
-  alternativeView: null,
-  showArchivedChats: false,
+  mainView: 'chats',
   sidebarState: 'init',
-  setAlternativeView: _ => {},
-  setShowArchivedChats: _ => {},
+  setMainView: _ => {},
   setSidebarState: _ => {},
 }
 
@@ -30,22 +26,15 @@ export const MainScreenContext =
 export const MainScreenContextProvider = ({
   children,
 }: PropsWithChildren<{}>) => {
-  const [alternativeView, setAlternativeView] = useState<AlternativeView>(
-    initialValues.alternativeView
-  )
-  const [showArchivedChats, setShowArchivedChats] = useState(
-    initialValues.showArchivedChats
-  )
+  const [mainView, setMainView] = useState<MainView>(initialValues.mainView)
   const [sidebarState, setSidebarState] = useState<SidebarState>(
     initialValues.sidebarState
   )
 
   const value = {
-    alternativeView,
-    showArchivedChats,
+    mainView,
     sidebarState,
-    setAlternativeView,
-    setShowArchivedChats,
+    setMainView,
     setSidebarState,
   }
 

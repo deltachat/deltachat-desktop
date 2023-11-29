@@ -18,64 +18,59 @@ import {
   EffectfulBackendActions,
   onDCEvent,
 } from '../backend-com'
-import { MainScreenContext } from './MainScreen/contexts/MainScreenContext'
+import { useSidebar } from './MainScreen/hooks/useSidebar'
+import { useMainView } from './MainScreen/hooks/useMainView'
 
 const Sidebar = React.memo(() => {
   const screenContext = useContext(ScreenContext)
-
-  const {
-    setSidebarState,
-    sidebarState,
-    setShowArchivedChats,
-    setAlternativeView,
-  } = useContext(MainScreenContext)
+  const { hideSidebar, sidebarState } = useSidebar()
+  const { switchToGlobalGallery, switchToArchive } = useMainView()
 
   const settings = useSettingsStore()[0]
   const accountId = selectedAccountId()
   const tx = useTranslationFunction()
 
   const onCreateChat = () => {
-    setSidebarState('invisible')
+    hideSidebar()
     screenContext.openDialog('CreateChat', {})
   }
 
   const onUnblockContacts = () => {
-    setSidebarState('invisible')
+    hideSidebar()
     screenContext.openDialog('UnblockContacts', {})
   }
 
   const onLogout = async () => {
-    setSidebarState('invisible')
+    hideSidebar()
     unselectChat()
     await EffectfulBackendActions.logout()
     screenContext.changeScreen(Screens.AccountList)
   }
 
   const onOpenHelp = () => {
-    setSidebarState('invisible')
+    hideSidebar()
     runtime.openHelpWindow()
   }
 
   const onOpenConnectivity = () => {
-    setSidebarState('invisible')
+    hideSidebar()
     screenContext.openDialog(SettingsConnectivityDialog)
   }
 
   const onOpenSettings = () => {
-    setSidebarState('invisible')
+    hideSidebar()
     ActionEmitter.emitAction(KeybindAction.Settings_Open)
   }
 
   const onShowQRCode = async () => {
-    setSidebarState('invisible')
+    hideSidebar()
     const [qrCode, qrCodeSVG] =
       await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(accountId, null)
-
     screenContext.openDialog(QrCode, { qrCode, qrCodeSVG })
   }
 
   const onSelectSavedMessages = async () => {
-    setSidebarState('invisible')
+    hideSidebar()
     const savedMessagesChatId = await BackendRemote.rpc.createChatByContactId(
       accountId,
       C.DC_CONTACT_ID_SELF
@@ -84,32 +79,26 @@ const Sidebar = React.memo(() => {
   }
 
   const onOpenAbout = () => {
-    setSidebarState('invisible')
+    hideSidebar()
     screenContext.openDialog('About')
   }
 
   const onOpenArchivedChats = () => {
-    setSidebarState('invisible')
-    setShowArchivedChats(true)
+    hideSidebar()
+    switchToArchive()
 
     // @TODO: Also reset search query here + move it all into a more business logic part (since we can also trigger archive screen via keybindings)
   }
 
   const onOpenGlobalGallery = () => {
-    setSidebarState('invisible')
-    setAlternativeView('global-gallery')
-    // @TODO: Do we have key bindings here as well?
+    hideSidebar()
+    switchToGlobalGallery()
   }
 
   useEffect(() => {
-    const onEscapeKeyUp = (ev: KeyboardEvent) => {
-      if (ev.key === 'Escape') {
-        setSidebarState(old => {
-          if (old === 'init') {
-            return 'init'
-          }
-          return 'invisible'
-        })
+    const onEscapeKeyUp = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        hideSidebar()
       }
     }
 
@@ -118,17 +107,14 @@ const Sidebar = React.memo(() => {
     return () => {
       window.removeEventListener('keyup', onEscapeKeyUp)
     }
-  })
+  }, [hideSidebar])
 
   if (settings === null) return null
 
   return (
     <>
       {sidebarState === 'visible' && (
-        <div
-          className='backdrop'
-          onClick={() => setSidebarState('invisible')}
-        />
+        <div className='backdrop' onClick={hideSidebar} />
       )}
       <div
         className={classNames(

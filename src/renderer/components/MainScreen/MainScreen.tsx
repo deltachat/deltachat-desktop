@@ -1,9 +1,8 @@
-import React, { useContext, useRef, useEffect } from 'react'
+import React, { useContext, useRef, useEffect, useCallback } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import Gallery from '../Gallery'
-// import { useThreeDotMenu } from '../ThreeDotMenu'
 import ChatList from '../chat/ChatList'
 import MessageListAndComposer, {
   getBackgroundImageStyle,
@@ -13,29 +12,19 @@ import {
   ChatStoreStateWithChatSet,
   ChatView,
 } from '../../stores/chat'
-import {
-  // openViewGroupDialog,
-  // openViewProfileDialog,
-  selectChat,
-  // setChatView,
-  unselectChat,
-} from '../helpers/ChatMethods'
+import { selectChat } from '../helpers/ChatMethods'
 import { useKeyBindingAction, KeybindAction } from '../../keybindings'
 import ConnectivityToast from '../ConnectivityToast'
 import MapComponent from '../map/MapComponent'
-// import MailingListProfile from '../dialogs/MessageListProfile'
 import { getLogger } from '../../../shared/logger'
 import Sidebar from '../Sidebar'
 import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
-// import { Type } from '../../backend-com'
 import { SettingsProfileDialog } from '../dialogs/Settings-Profile'
 import { TopBar } from '../TopBar'
 import { RecoverableCrashScreen } from '../screens/RecoverableCrashScreen'
-import {
-  MainScreenContext,
-  MainScreenContextProvider,
-} from './contexts/MainScreenContext'
+import { MainScreenContextProvider } from './contexts/MainScreenContext'
 import { SearchContext } from '../../contexts/SearchContext'
+import { useMainView } from './hooks/useMainView'
 
 import styles from './styles.module.scss'
 
@@ -43,62 +32,10 @@ const log = getLogger('renderer/main-screen')
 
 export function MainScreen() {
   const screenContext = useContext(ScreenContext)
-
-  const {
-    alternativeView,
-    showArchivedChats,
-    setAlternativeView,
-    setShowArchivedChats,
-  } = useContext(MainScreenContext)
-
-  const { queryStr, queryChatId, searchChats } = useContext(SearchContext)
-
   const tx = useTranslationFunction()
   const selectedChat = useChatStore()
 
-  // Small hack/misuse of keyBindingAction to setShowArchivedChats from other components (especially
-  // ViewProfile when selecting a shared chat/group)
-  useKeyBindingAction(KeybindAction.ChatList_SwitchToArchiveView, () =>
-    setShowArchivedChats(true)
-  )
-  useKeyBindingAction(KeybindAction.ChatList_SwitchToNormalView, () =>
-    setShowArchivedChats(false)
-  )
-  useKeyBindingAction(KeybindAction.GlobalGallery_Open, () => {
-    unselectChat()
-    setAlternativeView('global-gallery')
-  })
-
-  useEffect(() => {
-    if (selectedChat.chat?.id) {
-      setAlternativeView(null)
-    }
-  }, [selectedChat.chat?.id, setAlternativeView])
-
-  const onChatClick = (chatId: number) => {
-    if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) return setShowArchivedChats(true)
-    selectChat(chatId)
-  }
-
-  // const onTitleClick = () => {
-  //   if (!selectedChat.chat) return
-
-  //   if (selectedChat.chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST) {
-  //     screenContext.openDialog(MailingListProfile, {
-  //       chat: selectedChat.chat,
-  //     })
-  //   } else if (
-  //     selectedChat.chat.chatType === C.DC_CHAT_TYPE_GROUP ||
-  //     selectedChat.chat.chatType === C.DC_CHAT_TYPE_BROADCAST
-  //   ) {
-  //     openViewGroupDialog(screenContext, selectedChat.chat)
-  //   } else {
-  //     if (selectedChat.chat.contactIds && selectedChat.chat.contactIds[0]) {
-  //       openViewProfileDialog(screenContext, selectedChat.chat.contactIds[0])
-  //     }
-  //   }
-  // }
-
+  // @TODO: Move into own component
   const isFirstLoad = useRef(true)
   if (isFirstLoad.current) {
     isFirstLoad.current = false
@@ -111,11 +48,10 @@ export function MainScreen() {
     })
   }
 
-  const settingsStore = useSettingsStore()[0]
-
+  // @TODO: Move into own component
   useEffect(() => {
     SettingsStoreInstance.effect.load().then(() => {
-      // make sure it uses new version of settings store instance
+      // Make sure it uses new version of settings store instance
       const settingsStore = SettingsStoreInstance.state
       if (settingsStore && window.__askForName) {
         window.__askForName = false
@@ -130,31 +66,42 @@ export function MainScreen() {
     })
   }, [screenContext, tx])
 
-  // const onClickThreeDotMenu = useThreeDotMenu(
-  //   selectedChat.chat,
-  //   alternativeView === 'global-gallery' ||
-  //     selectedChat?.activeView === ChatView.Media
-  //     ? 'gallery'
-  //     : 'chat'
-  // )
-
   if (!selectedChat) {
     log.error('selectedChat is undefined')
     return null
   }
 
-  let MessageListView
+  return (
+    <MainScreenContextProvider>
+      <MainScreenKeyBindings />
+      <div className={styles.mainScreen}>
+        <TopBar />
+        <>
+          <SecondaryView />
+          <PrimaryView />
+        </>
+        <Sidebar />
+        <ConnectivityToast />
+      </div>
+    </MainScreenContextProvider>
+  )
+}
+
+function PrimaryView() {
+  const { mainView } = useMainView()
+  const settingsStore = useSettingsStore()[0]
+  const tx = useTranslationFunction()
+  const selectedChat = useChatStore()
+
   if (selectedChat.chat !== null) {
     switch (selectedChat.activeView) {
       case ChatView.Media:
-        MessageListView = <Gallery chatId={selectedChat.chat.id} />
-        break
+        return <Gallery chatId={selectedChat.chat.id} />
       case ChatView.Map:
-        MessageListView = <MapComponent selectedChat={selectedChat.chat} />
-        break
+        return <MapComponent selectedChat={selectedChat.chat} />
       case ChatView.MessageList:
       default:
-        MessageListView = (
+        return (
           <RecoverableCrashScreen reset_on_change_key={selectedChat.chat.id}>
             <MessageListAndComposer
               chatStore={selectedChat as ChatStoreStateWithChatSet}
@@ -162,14 +109,14 @@ export function MainScreen() {
           </RecoverableCrashScreen>
         )
     }
-  } else if (alternativeView === 'global-gallery') {
-    MessageListView = <Gallery chatId={'all'} />
+  } else if (mainView === 'global-gallery') {
+    return <Gallery chatId={'all'} />
   } else {
     const style: React.CSSProperties = settingsStore
       ? getBackgroundImageStyle(settingsStore.desktopSettings)
       : {}
 
-    MessageListView = (
+    return (
       <div className='message-list-and-composer' style={style}>
         <div
           className='message-list-and-composer__message-list'
@@ -184,56 +131,49 @@ export function MainScreen() {
       </div>
     )
   }
+}
+
+function SecondaryView() {
+  const { mainView, switchToChat, switchToArchive } = useMainView()
+  const { queryStr, queryChatId, searchChats } = useContext(SearchContext)
+  const selectedChat = useChatStore()
+
+  const handleChatClick = useCallback(
+    (chatId: number) => {
+      if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) {
+        switchToArchive()
+      } else {
+        switchToChat(chatId)
+      }
+    },
+    [switchToArchive, switchToChat]
+  )
 
   return (
-    <MainScreenContextProvider>
-      <div className={styles.mainScreen}>
-        <div>
-          <TopBar />
-          <ChatList
-            queryStr={queryStr}
-            showArchivedChats={showArchivedChats}
-            onChatClick={onChatClick}
-            selectedChatId={selectedChat.chat ? selectedChat.chat.id : null}
-            queryChatId={queryChatId}
-            onExitSearch={() => {
-              searchChats('')
-            }}
-          />
-          {MessageListView}
-        </div>
-        <Sidebar />
-        <ConnectivityToast />
-      </div>
-    </MainScreenContextProvider>
+    <ChatList
+      queryStr={queryStr}
+      showArchivedChats={mainView === 'archive'}
+      onChatClick={handleChatClick}
+      selectedChatId={selectedChat.chat ? selectedChat.chat.id : null}
+      queryChatId={queryChatId}
+      onExitSearch={() => {
+        searchChats('')
+      }}
+    />
   )
 }
 
-// function chatSubtitle(chat: Type.FullChat) {
-//   const tx = window.static_translate
-//   if (chat.id && chat.id > C.DC_CHAT_ID_LAST_SPECIAL) {
-//     if (chat.chatType === C.DC_CHAT_TYPE_GROUP) {
-//       return tx('n_members', [String(chat.contacts.length)], {
-//         quantity: chat.contacts.length,
-//       })
-//     } else if (chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST) {
-//       if (chat.mailingListAddress) {
-//         return `${tx('mailing_list')} – ${chat.mailingListAddress}`
-//       } else {
-//         return tx('mailing_list')
-//       }
-//     } else if (chat.chatType === C.DC_CHAT_TYPE_BROADCAST) {
-//       return tx('n_recipients', [String(chat.contacts.length)], {
-//         quantity: chat.contacts.length,
-//       })
-//     } else if (chat.contacts.length >= 1) {
-//       if (chat.isSelfTalk) {
-//         return tx('chat_self_talk_subtitle')
-//       } else if (chat.isDeviceChat) {
-//         return tx('device_talk_subtitle')
-//       }
-//       return chat.contacts[0].address
-//     }
-//   }
-//   return 'ErrTitle'
-// }
+// Small hack/misuse of keyBindingAction to setShowArchivedChats from other
+// components (especially ViewProfile when selecting a shared chat/group)
+function MainScreenKeyBindings() {
+  const { switchToArchive, switchToGlobalGallery, switchToChat } = useMainView()
+
+  useKeyBindingAction(KeybindAction.ChatList_SwitchToNormalView, switchToChat)
+  useKeyBindingAction(
+    KeybindAction.ChatList_SwitchToArchiveView,
+    () => switchToArchive
+  )
+  useKeyBindingAction(KeybindAction.GlobalGallery_Open, switchToGlobalGallery)
+
+  return null
+}
