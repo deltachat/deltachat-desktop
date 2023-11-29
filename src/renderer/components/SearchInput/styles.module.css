@@ -9,14 +9,13 @@
   border: 0;
   caret-color: var(--navBarSearchPlaceholder);
   color: var(--navBarText);
+  flex: 1;
   font-size: 16px;
   height: var(--local-closeButtonSize);
-  line-height: 1;
   padding-bottom: 0;
   padding-left: 10px !important;
   padding-right: 0;
   padding-top: 0;
-  width: 100%;
 
   &::placeholder {
     color: var(--navBarSearchPlaceholder);
