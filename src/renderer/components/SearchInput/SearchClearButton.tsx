@@ -1,5 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
+import { Icon } from '@blueprintjs/core'
 
 import styles from './styles.module.scss'
 
@@ -14,12 +15,12 @@ export function SearchClearButton(props: Props) {
   return (
     <button
       aria-label='Clear'
-      className={classNames(
-        styles.searchClearButton,
-        'bp4-dialog-close-button bp4-button bp4-minimal bp4-icon-large bp4-icon-cross',
-        { [styles.hidden]: isHidden }
-      )}
+      className={classNames(styles.searchClearButton, {
+        [styles.hidden]: isHidden,
+      })}
       onClick={onClick}
-    />
+    >
+      <Icon icon='cross' size={16} />
+    </button>
   )
 }

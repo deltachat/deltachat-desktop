@@ -3,7 +3,16 @@
 ## [Unreleased][unreleased]
 
 ### Changed
-- Chore: Use native watch mode and CSS modules of esbuild #3571
+
+- Design improvements & refactorings
+  - Search input #3572
+- Chore: Improve bundle-tooling #3571
+  - Use native watch mode and CSS modules of esbuild
+  - Support SCSS in modules
+  - Show eslint errors when bundling during development
+  - Use `watch:frontend:types` script for type-checking during development
+  - Update esbuild to v0.19.8
+  - Update typescript to v5.3.2
 
 <a id="1_42_1"></a>
 

@@ -1,42 +1,48 @@
-:root {
-  --borderRadius: 10px;
-  --closeButtonSize: 30px;
-}
+$backgroundColorHover: rgba(143, 153, 168, 0.15);
+$borderRadius: 10px;
+$closeButtonSize: 30px;
 
 .searchInput {
   background-color: var(--searchInputBackgroundColor);
-  border-radius: var(--borderRadius);
+  border-radius: $borderRadius;
   border: 0;
-  caret-color: var(--navBarSearchPlaceholder);
+  caret-color: var(--navBarText);
   color: var(--navBarText);
+  flex: 1;
   font-size: 16px;
-  line-height: 1;
+  height: $closeButtonSize;
   padding-bottom: 0;
-  padding-left: 10px !important;
+  padding-left: 10px;
   padding-right: 0;
   padding-top: 0;
-  width: 100%;
-  height: var(--closeButtonSize);
 
   &::placeholder {
     color: var(--navBarSearchPlaceholder);
   }
 
   &.active {
-    padding-right: calc(var(--closeButtonSize) + 5px);
+    padding-right: calc($closeButtonSize + 5px);
   }
 }
 
 .searchClearButton {
-  border-radius: var(--borderRadius);
-  left: calc(30vw - var(--closeButtonSize) - 10px);
-  min-height: var(--closeButtonSize);
-  min-width: var(--closeButtonSize);
+  align-items: center;
+  background-color: transparent;
+  border-radius: $borderRadius;
+  border: 0;
+  display: flex;
+  height: $closeButtonSize;
+  justify-content: center;
+  left: calc(30vw - $closeButtonSize - 5px);
+  padding-bottom: 0;
+  padding-left: 1px;
+  padding-right: 0;
+  padding-top: 0;
   position: absolute;
+  width: $closeButtonSize;
 
-  &::before {
-    color: var(--navBarText) !important;
-    font-size: 16px !important;
+  &:hover {
+    background-color: $backgroundColorHover;
   }
 
   &.hidden {
