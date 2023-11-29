@@ -138,8 +138,14 @@
         background-color: var(--composerPlaceholderText);
       }
 
-      svg.cross {
+      & > svg.cross {
         display: none;
+      }
+
+      &:disabled > svg.cross {
+        display: block;
+        position: relative;
+        top: -25px;
       }
     }
 
