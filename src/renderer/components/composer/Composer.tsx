@@ -370,6 +370,9 @@ const Composer = forwardRef<
             disabled={Boolean(draftState.file || messageInputRef.current?.hasText())}
           >
             <span />
+            <svg className='cross' stroke='red' fill='red' viewBox='0 0 25 25'>
+              <line x1='25' x2='0' y1='0' y2='25' />
+            </svg>
           </button>
           {settingsStore &&
             !draftState.file &&
