@@ -27,7 +27,7 @@
 }
 
 .searchClearButton {
-  --background-color-hover: rgba(143, 153, 168, 0.15);
+  --backgroundColorHover: rgba(143, 153, 168, 0.15);
 
   align-items: center;
   background-color: transparent;
@@ -45,7 +45,7 @@
   width: var(--local-closeButtonSize);
 
   &:hover {
-    background-color: var(--background-color-hover);
+    background-color: var(--backgroundColorHover);
   }
 
   &.hidden {
