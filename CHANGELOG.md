@@ -4,6 +4,8 @@
 
 ### Changed
 - Chore: Use native watch mode and CSS modules of esbuild #3571
+- Design improvements & refactorings
+  - Search input #3572
 
 <a id="1_42_1"></a>
 
