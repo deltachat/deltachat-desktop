@@ -13,7 +13,7 @@
   font-size: 16px;
   height: var(--local-closeButtonSize);
   padding-bottom: 0;
-  padding-left: 10px !important;
+  padding-left: 10px;
   padding-right: 0;
   padding-top: 0;
 
@@ -27,15 +27,25 @@
 }
 
 .searchClearButton {
-  border-radius: var(--local-borderRadius);
-  left: calc(30vw - var(--local-closeButtonSize) - 10px);
-  min-height: var(--local-closeButtonSize);
-  min-width: var(--local-closeButtonSize);
-  position: absolute;
+  --background-color-hover: rgba(143, 153, 168, 0.15);
 
-  &::before {
-    color: var(--navBarText) !important;
-    font-size: 16px !important;
+  align-items: center;
+  background-color: transparent;
+  border-radius: var(--local-borderRadius);
+  border: 0;
+  display: flex;
+  height: var(--local-closeButtonSize);
+  justify-content: center;
+  left: calc(30vw - var(--local-closeButtonSize) - 5px);
+  padding-bottom: 0;
+  padding-left: 1px;
+  padding-right: 0;
+  padding-top: 0;
+  position: absolute;
+  width: var(--local-closeButtonSize);
+
+  &:hover {
+    background-color: var(--background-color-hover);
   }
 
   &.hidden {
