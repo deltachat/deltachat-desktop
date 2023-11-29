@@ -114,35 +114,28 @@ function ArchivedChatsTitle(props: { onHide: () => void }) {
 function TopBarRight() {
   const { mainView } = useMainView()
   const selectedChat = useChatStore()
-
-  return (
-    <NavbarGroup align={Alignment.RIGHT}>
-      {mainView === 'global-gallery' && <GlobalGalleryTitle />}
-      {selectedChat.chat && (
-        <>
-          <ChatTitle chat={selectedChat.chat} />
-          <ChatMenu activeView={selectedChat.activeView} />
-        </>
-      )}
-      {(selectedChat.chat || mainView === 'global-gallery') && <ThreeDotMenu />}
-    </NavbarGroup>
-  )
-}
-
-function GlobalGalleryTitle() {
   const tx = useTranslationFunction()
 
   return (
-    <NavbarHeading
-      style={{
-        cursor: 'pointer',
-        display: 'flex',
-        alignItems: 'center',
-        width: '100%',
-      }}
-    >
-      {tx('menu_all_media')}
-    </NavbarHeading>
+    <NavbarGroup align={Alignment.RIGHT}>
+      <NavbarHeading
+        style={{
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          width: '100%',
+        }}
+      >
+        {mainView === 'global-gallery' && tx('menu_all_media')}
+        {selectedChat.chat && (
+          <>
+            <ChatTitle chat={selectedChat.chat} />
+            <ChatMenu activeView={selectedChat.activeView} />
+          </>
+        )}
+      </NavbarHeading>
+      {(selectedChat.chat || mainView === 'global-gallery') && <ThreeDotMenu />}
+    </NavbarGroup>
   )
 }
 
@@ -151,8 +144,6 @@ function ChatTitle({ chat }: { chat: Type.FullChat }) {
   const tx = useTranslationFunction()
 
   const onTitleClick = () => {
-    if (!chat) return
-
     if (chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST) {
       screenContext.openDialog(MailingListProfile, {
         chat,
@@ -170,15 +161,7 @@ function ChatTitle({ chat }: { chat: Type.FullChat }) {
   }
 
   return (
-    <NavbarHeading
-      style={{
-        cursor: 'pointer',
-        display: 'flex',
-        alignItems: 'center',
-        width: '100%',
-      }}
-      onClick={onTitleClick}
-    >
+    <div onClick={onTitleClick}>
       <Avatar
         displayName={chat.name}
         color={chat.color}
@@ -203,7 +186,7 @@ function ChatTitle({ chat }: { chat: Type.FullChat }) {
           <ChatSubtitle chat={chat} />
         </div>
       </div>
-    </NavbarHeading>
+    </div>
   )
 }
 
