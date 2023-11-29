@@ -30,6 +30,7 @@ $closeButtonSize: 30px;
   background-color: transparent;
   border-radius: $borderRadius;
   border: 0;
+  color: var(--navBarText);
   display: flex;
   height: $closeButtonSize;
   justify-content: center;
