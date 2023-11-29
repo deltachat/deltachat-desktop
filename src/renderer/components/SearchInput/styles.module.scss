@@ -1,37 +1,37 @@
 :root {
-  --borderRadius: 10px;
-  --closeButtonSize: 30px;
+  --local-borderRadius: 10px;
+  --local-closeButtonSize: 30px;
 }
 
 .searchInput {
   background-color: var(--searchInputBackgroundColor);
-  border-radius: var(--borderRadius);
+  border-radius: var(--local-borderRadius);
   border: 0;
   caret-color: var(--navBarSearchPlaceholder);
   color: var(--navBarText);
   font-size: 16px;
+  height: var(--local-closeButtonSize);
   line-height: 1;
   padding-bottom: 0;
   padding-left: 10px !important;
   padding-right: 0;
   padding-top: 0;
   width: 100%;
-  height: var(--closeButtonSize);
 
   &::placeholder {
     color: var(--navBarSearchPlaceholder);
   }
 
   &.active {
-    padding-right: calc(var(--closeButtonSize) + 5px);
+    padding-right: calc(var(--local-closeButtonSize) + 5px);
   }
 }
 
 .searchClearButton {
-  border-radius: var(--borderRadius);
-  left: calc(30vw - var(--closeButtonSize) - 10px);
-  min-height: var(--closeButtonSize);
-  min-width: var(--closeButtonSize);
+  border-radius: var(--local-borderRadius);
+  left: calc(30vw - var(--local-closeButtonSize) - 10px);
+  min-height: var(--local-closeButtonSize);
+  min-width: var(--local-closeButtonSize);
   position: absolute;
 
   &::before {
