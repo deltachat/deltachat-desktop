@@ -7,7 +7,7 @@
   background-color: var(--searchInputBackgroundColor);
   border-radius: var(--local-borderRadius);
   border: 0;
-  caret-color: var(--navBarSearchPlaceholder);
+  caret-color: var(--navBarText);
   color: var(--navBarText);
   flex: 1;
   font-size: 16px;
