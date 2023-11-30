@@ -1,0 +1,37 @@
+.settings {
+  .bp4-card:first-child {
+    padding-top: 0px;
+  }
+}
+
+.settingsIconButton {
+  display: flex;
+  height: 40px;
+  left: -20px;
+  padding: 0px 20px;
+  position: relative;
+  width: calc(100% + 40px);
+
+  &:hover {
+    background-color: var(--chatListItemBgHover);
+    cursor: pointer;
+  }
+
+  button {
+    background-color: unset;
+    border: none;
+    color: var(--globalText);
+    flex-grow: 1;
+    line-height: 40px;
+    margin-left: 20px;
+    padding: 0;
+    text-align: start;
+  }
+}
+
+.icon {
+  -webkit-mask-size: 80%;
+  background-color: var(--settingsIconColor);
+  height: 100%;
+  width: 24px;
+}

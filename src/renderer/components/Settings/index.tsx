@@ -20,11 +20,20 @@ import { SettingsAdvanced } from '../dialogs/Settings-Advanced'
 import SettingsIconButton from './SettingsIconButton'
 import SettingsConnectivityButton from './SettingsConnectivityButton'
 
+import styles from './styles.module.scss'
+
+type SettingsView =
+  | 'main'
+  | 'chats_and_media'
+  | 'notifications'
+  | 'appearance'
+  | 'advanced'
+
 export default function Settings({ isOpen, onClose }: DialogProps) {
   const { openDialog } = useContext(ScreenContext)
   const settingsStore = useSettingsStore()[0]!
   const tx = useTranslationFunction()
-  const [settingsMode, setSettingsMode] = useState('main')
+  const [settingsMode, setSettingsMode] = useState<SettingsView>('main')
 
   useEffect(() => {
     if (window.__settingsOpened) {
@@ -42,7 +51,7 @@ export default function Settings({ isOpen, onClose }: DialogProps) {
     <DeltaDialogBase
       isOpen={isOpen}
       onClose={onClose}
-      className='SettingsDialog'
+      className={styles.settings}
       fixed
     >
       {settingsMode === 'main' && (

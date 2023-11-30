@@ -1,0 +1,24 @@
+.settingsButton {
+  position: relative;
+  height: 40px;
+  width: calc(100% + 40px);
+  left: -20px;
+
+  &:hover {
+    background-color: var(--chatListItemBgHover);
+    cursor: pointer;
+  }
+
+  button {
+    margin-left: 20px;
+    padding: 0;
+    flex-grow: 1;
+
+    background-color: unset;
+    border: none;
+
+    text-align: start;
+    line-height: 40px;
+    color: var(--globalText);
+  }
+}
