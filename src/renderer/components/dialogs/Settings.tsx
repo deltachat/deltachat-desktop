@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react'
 import { Elevation, Card } from '@blueprintjs/core'
+import { C } from '@deltachat/jsonrpc-client'
 
 import { ScreenContext, useTranslationFunction } from '../../contexts'
-
 import { DesktopSettingsType } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
 import {
@@ -25,7 +25,6 @@ import { donationUrl } from '../../../shared/constants'
 import { SendBackupDialog } from './setup_multi_device/SendBackup'
 import { selectedAccountId } from '../../ScreenController'
 import { BackendRemote, onDCEvent } from '../../backend-com'
-import { C } from '@deltachat/jsonrpc-client'
 import SettingsConnectivityDialog from './Settings-Connectivity'
 
 export function flipDeltaBoolean(value: string) {
