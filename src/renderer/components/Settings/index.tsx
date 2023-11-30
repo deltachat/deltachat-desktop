@@ -20,10 +20,9 @@ import { SettingsAdvanced } from '../dialogs/Settings-Advanced'
 import SettingsIconButton from './SettingsIconButton'
 import SettingsConnectivityButton from './SettingsConnectivityButton'
 
-export default function Settings(props: DialogProps) {
-  const { onClose } = props
+export default function Settings({ isOpen, onClose }: DialogProps) {
   const { openDialog } = useContext(ScreenContext)
-  const settingsStore = useSettingsStore()[0]
+  const settingsStore = useSettingsStore()[0]!
   const tx = useTranslationFunction()
   const [settingsMode, setSettingsMode] = useState('main')
 
@@ -37,168 +36,149 @@ export default function Settings(props: DialogProps) {
     return () => {
       window.__settingsOpened = false
     }
-  })
-
-  const renderDialogContent = () => {
-    if (!settingsStore) return null
-
-    if (
-      Object.keys(settingsStore.settings || {}).length === 0 ||
-      !settingsStore.desktopSettings
-    ) {
-      return null
-    }
-
-    return (
-      <>
-        {settingsMode === 'main' && (
-          <>
-            <DeltaDialogHeader
-              title={tx('menu_settings')}
-              onClose={onClose}
-              showCloseButton={true}
-            />
-            <DeltaDialogBody>
-              <Card elevation={Elevation.ONE} style={{ paddingTop: '0px' }}>
-                <SettingsProfile
-                  settingsStore={settingsStore}
-                  onClose={props.onClose}
-                />
-                <br />
-                <SettingsIconButton
-                  iconName='forum'
-                  onClick={() => setSettingsMode('chats_and_media')}
-                >
-                  {tx('pref_chats_and_media')}
-                </SettingsIconButton>
-                <SettingsIconButton
-                  iconName='bell'
-                  onClick={() => setSettingsMode('notifications')}
-                >
-                  {tx('pref_notifications')}
-                </SettingsIconButton>
-                <SettingsIconButton
-                  iconName='brightness-6'
-                  onClick={() => setSettingsMode('appearance')}
-                >
-                  {tx('pref_appearance')}
-                </SettingsIconButton>
-                <SettingsIconButton
-                  iconName='devices'
-                  onClick={() => {
-                    openDialog(SendBackupDialog)
-                    props.onClose()
-                  }}
-                >
-                  {tx('multidevice_title')}
-                </SettingsIconButton>
-                <SettingsConnectivityButton />
-                <SettingsIconButton
-                  iconName='code-tags'
-                  onClick={() => setSettingsMode('advanced')}
-                >
-                  {tx('menu_advanced')}
-                </SettingsIconButton>
-                {!runtime.getRuntimeInfo().isMac && (
-                  <SettingsIconButton
-                    iconName='favorite'
-                    onClick={() => runtime.openLink(donationUrl)}
-                    isLink
-                  >
-                    {tx('donate')}
-                  </SettingsIconButton>
-                )}
-              </Card>
-            </DeltaDialogBody>
-          </>
-        )}
-        {settingsMode === 'chats_and_media' && (
-          <>
-            <DeltaDialogHeader
-              title={tx('pref_chats_and_media')}
-              showBackButton={true}
-              onClickBack={() => setSettingsMode('main')}
-              showCloseButton={true}
-              onClose={onClose}
-            />
-            <DeltaDialogBody>
-              <Card elevation={Elevation.ONE}>
-                <SettingsChatsAndMedia
-                  settingsStore={settingsStore}
-                  desktopSettings={settingsStore.desktopSettings}
-                />
-              </Card>
-            </DeltaDialogBody>
-          </>
-        )}
-        {settingsMode === 'notifications' && (
-          <>
-            <DeltaDialogHeader
-              title={tx('pref_notifications')}
-              showBackButton={true}
-              onClickBack={() => setSettingsMode('main')}
-              showCloseButton={true}
-              onClose={onClose}
-            />
-            <DeltaDialogBody>
-              <Card elevation={Elevation.ONE}>
-                <SettingsNotifications
-                  desktopSettings={settingsStore.desktopSettings}
-                />
-              </Card>
-            </DeltaDialogBody>
-          </>
-        )}
-        {settingsMode === 'appearance' && (
-          <>
-            <DeltaDialogHeader
-              title={tx('pref_appearance')}
-              showBackButton={true}
-              onClickBack={() => setSettingsMode('main')}
-              showCloseButton={true}
-              onClose={onClose}
-            />
-            <DeltaDialogBody>
-              <Card elevation={Elevation.ONE}>
-                <SettingsAppearance
-                  rc={settingsStore.rc}
-                  desktopSettings={settingsStore.desktopSettings}
-                  settingsStore={settingsStore}
-                />
-              </Card>
-            </DeltaDialogBody>
-          </>
-        )}
-        {settingsMode === 'advanced' && (
-          <>
-            <DeltaDialogHeader
-              title={tx('menu_advanced')}
-              showBackButton={true}
-              onClickBack={() => setSettingsMode('main')}
-              showCloseButton={true}
-              onClose={onClose}
-            />
-            <DeltaDialogBody>
-              <Card elevation={Elevation.ONE}>
-                <SettingsAdvanced settingsStore={settingsStore} />
-              </Card>
-            </DeltaDialogBody>
-          </>
-        )}
-      </>
-    )
-  }
+  }, [])
 
   return (
     <DeltaDialogBase
-      isOpen={props.isOpen}
-      onClose={() => {
-        props.onClose()
-      }}
+      isOpen={isOpen}
+      onClose={onClose}
       className='SettingsDialog'
       fixed
     >
-      {renderDialogContent()}
+      {settingsMode === 'main' && (
+        <>
+          <DeltaDialogHeader
+            title={tx('menu_settings')}
+            onClose={onClose}
+            showCloseButton={true}
+          />
+          <DeltaDialogBody>
+            <Card elevation={Elevation.ONE} style={{ paddingTop: '0px' }}>
+              <SettingsProfile
+                settingsStore={settingsStore}
+                onClose={onClose}
+              />
+              <br />
+              <SettingsIconButton
+                iconName='forum'
+                onClick={() => setSettingsMode('chats_and_media')}
+              >
+                {tx('pref_chats_and_media')}
+              </SettingsIconButton>
+              <SettingsIconButton
+                iconName='bell'
+                onClick={() => setSettingsMode('notifications')}
+              >
+                {tx('pref_notifications')}
+              </SettingsIconButton>
+              <SettingsIconButton
+                iconName='brightness-6'
+                onClick={() => setSettingsMode('appearance')}
+              >
+                {tx('pref_appearance')}
+              </SettingsIconButton>
+              <SettingsIconButton
+                iconName='devices'
+                onClick={() => {
+                  openDialog(SendBackupDialog)
+                  onClose()
+                }}
+              >
+                {tx('multidevice_title')}
+              </SettingsIconButton>
+              <SettingsConnectivityButton />
+              <SettingsIconButton
+                iconName='code-tags'
+                onClick={() => setSettingsMode('advanced')}
+              >
+                {tx('menu_advanced')}
+              </SettingsIconButton>
+              {!runtime.getRuntimeInfo().isMac && (
+                <SettingsIconButton
+                  iconName='favorite'
+                  onClick={() => runtime.openLink(donationUrl)}
+                  isLink
+                >
+                  {tx('donate')}
+                </SettingsIconButton>
+              )}
+            </Card>
+          </DeltaDialogBody>
+        </>
+      )}
+      {settingsMode === 'chats_and_media' && (
+        <>
+          <DeltaDialogHeader
+            title={tx('pref_chats_and_media')}
+            showBackButton={true}
+            onClickBack={() => setSettingsMode('main')}
+            showCloseButton={true}
+            onClose={onClose}
+          />
+          <DeltaDialogBody>
+            <Card elevation={Elevation.ONE}>
+              <SettingsChatsAndMedia
+                settingsStore={settingsStore}
+                desktopSettings={settingsStore.desktopSettings}
+              />
+            </Card>
+          </DeltaDialogBody>
+        </>
+      )}
+      {settingsMode === 'notifications' && (
+        <>
+          <DeltaDialogHeader
+            title={tx('pref_notifications')}
+            showBackButton={true}
+            onClickBack={() => setSettingsMode('main')}
+            showCloseButton={true}
+            onClose={onClose}
+          />
+          <DeltaDialogBody>
+            <Card elevation={Elevation.ONE}>
+              <SettingsNotifications
+                desktopSettings={settingsStore.desktopSettings}
+              />
+            </Card>
+          </DeltaDialogBody>
+        </>
+      )}
+      {settingsMode === 'appearance' && (
+        <>
+          <DeltaDialogHeader
+            title={tx('pref_appearance')}
+            showBackButton={true}
+            onClickBack={() => setSettingsMode('main')}
+            showCloseButton={true}
+            onClose={onClose}
+          />
+          <DeltaDialogBody>
+            <Card elevation={Elevation.ONE}>
+              <SettingsAppearance
+                rc={settingsStore.rc}
+                desktopSettings={settingsStore.desktopSettings}
+                settingsStore={settingsStore}
+              />
+            </Card>
+          </DeltaDialogBody>
+        </>
+      )}
+      {settingsMode === 'advanced' && (
+        <>
+          <DeltaDialogHeader
+            title={tx('menu_advanced')}
+            showBackButton={true}
+            onClickBack={() => setSettingsMode('main')}
+            showCloseButton={true}
+            onClose={onClose}
+          />
+          <DeltaDialogBody>
+            <Card elevation={Elevation.ONE}>
+              <SettingsAdvanced settingsStore={settingsStore} />
+            </Card>
+          </DeltaDialogBody>
+        </>
+      )}
     </DeltaDialogBase>
   )
 }
