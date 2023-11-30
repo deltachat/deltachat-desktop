@@ -1,11 +1,9 @@
 import { join } from 'path'
-
 import React, { useContext, useEffect, useState } from 'react'
 import { H6, Icon } from '@blueprintjs/core'
 
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { ThemeManager } from '../../ThemeManager'
-import { RenderDTSettingSwitchType } from '../Settings/Settings'
 import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
 import { runtime } from '../../runtime'
 import {
@@ -18,8 +16,112 @@ import SettingsStoreInstance, {
 } from '../../stores/settings'
 import { getLogger } from '../../../shared/logger'
 import SettingsSelector from '../SettingsSelector'
+import { DesktopSettingsSwitch } from '../SettingsSwitch'
 
 const log = getLogger('renderer/settings/appearance')
+
+type Props = {
+  rc: RC_Config
+  desktopSettings: DesktopSettingsType
+  settingsStore: SettingsStoreState
+}
+
+export default function SettingsAppearance({
+  rc,
+  desktopSettings,
+  settingsStore,
+}: Props) {
+  const { activeTheme } = desktopSettings
+  const { openDialog } = useContext(ScreenContext)
+  const [availableThemes, setAvailableThemes] = useState<Theme[]>([])
+  const tx = useTranslationFunction()
+
+  useEffect(() => {
+    ;(async () => {
+      const availableThemes = await runtime.getAvailableThemes()
+
+      setAvailableThemes(
+        availableThemes.filter(
+          t => !t.is_prototype || t.address === activeTheme || rc.devmode
+        )
+      )
+    })()
+  }, [rc.devmode, activeTheme])
+
+  const setTheme = async (theme: string) => {
+    if (await setThemeFunction(theme)) {
+      SettingsStoreInstance.effect.setDesktopSetting('activeTheme', theme)
+      await ThemeManager.refresh()
+    }
+  }
+
+  const onCancel = async () => setTheme(activeTheme)
+  const onSelect = setTheme
+
+  const onOpenSelectThemeDialog = async () => {
+    const values: SelectDialogOption[] = [
+      ['system', tx('automatic')],
+      ...availableThemes.map(({ address, name, is_prototype }: Theme) => {
+        return [
+          address,
+          `${name}${address.startsWith('custom') ? ' (Custom)' : ''}${
+            is_prototype ? ' (prototype)' : ''
+          }`,
+        ] as SelectDialogOption
+      }),
+    ]
+
+    openDialog(SmallSelectDialog, {
+      values,
+      selectedValue: activeTheme,
+      title: tx('pref_theme'),
+      onSelect,
+      onCancel,
+    })
+  }
+
+  const shortCurrentValue = () => {
+    if (activeTheme === 'system') {
+      return tx('automatic')
+    }
+    const theme = availableThemes.find(
+      ({ address }: { address: string }) => address === activeTheme
+    )
+    if (!theme) return 'Loading...'
+
+    return theme.name
+  }
+
+  return (
+    <>
+      <SettingsSelector
+        onClick={onOpenSelectThemeDialog}
+        currentValue={shortCurrentValue()}
+      >
+        {tx('pref_theme')}
+      </SettingsSelector>
+      <br />
+      <H6>{tx('pref_background')}</H6>
+      <BackgroundSelector
+        desktopSettings={desktopSettings}
+        onChange={(val: string) => {
+          val.startsWith('#')
+            ? SettingsStoreInstance.effect.setDesktopSetting(
+                'chatViewBgImg',
+                `color: ${val}`
+              )
+            : SettingsStoreInstance.effect.setDesktopSetting(
+                'chatViewBgImg',
+                val
+              )
+        }}
+      />
+      <br />
+      <br />
+      <SettingsTrayIcon settingsStore={settingsStore} />
+    </>
+  )
+}
 
 const enum SetBackgroundAction {
   default,
@@ -193,113 +295,6 @@ function BackgroundSelector({
   )
 }
 
-export default function SettingsAppearance({
-  rc,
-  desktopSettings,
-  settingsStore,
-  renderDTSettingSwitch,
-}: {
-  rc: RC_Config
-  desktopSettings: DesktopSettingsType
-  settingsStore: SettingsStoreState
-  renderDTSettingSwitch: RenderDTSettingSwitchType
-}) {
-  const { activeTheme } = desktopSettings
-
-  const { openDialog } = useContext(ScreenContext)
-
-  const [availableThemes, setAvailableThemes] = useState<Theme[]>([])
-  useEffect(() => {
-    ;(async () => {
-      const availableThemes = await runtime.getAvailableThemes()
-
-      setAvailableThemes(
-        availableThemes.filter(
-          t => !t.is_prototype || t.address === activeTheme || rc.devmode
-        )
-      )
-    })()
-  }, [rc.devmode, activeTheme])
-
-  const setTheme = async (theme: string) => {
-    if (await setThemeFunction(theme)) {
-      SettingsStoreInstance.effect.setDesktopSetting('activeTheme', theme)
-      await ThemeManager.refresh()
-    }
-  }
-
-  const onCancel = async () => setTheme(activeTheme)
-  const onSelect = setTheme
-
-  const onOpenSelectThemeDialog = async () => {
-    const values: SelectDialogOption[] = [
-      ['system', tx('automatic')],
-      ...availableThemes.map(({ address, name, is_prototype }: Theme) => {
-        return [
-          address,
-          `${name}${address.startsWith('custom') ? ' (Custom)' : ''}${
-            is_prototype ? ' (prototype)' : ''
-          }`,
-        ] as SelectDialogOption
-      }),
-    ]
-
-    openDialog(SmallSelectDialog, {
-      values,
-      selectedValue: activeTheme,
-      title: tx('pref_theme'),
-      onSelect,
-      onCancel,
-    })
-  }
-
-  const shortCurrentValue = () => {
-    if (activeTheme === 'system') {
-      return tx('automatic')
-    }
-    const theme = availableThemes.find(
-      ({ address }: { address: string }) => address === activeTheme
-    )
-    if (!theme) return 'Loading...'
-
-    return theme.name
-  }
-
-  const tx = useTranslationFunction()
-  return (
-    <>
-      <SettingsSelector
-        onClick={onOpenSelectThemeDialog}
-        currentValue={shortCurrentValue()}
-      >
-        {tx('pref_theme')}
-      </SettingsSelector>
-      <br />
-      <H6>{tx('pref_background')}</H6>
-      <BackgroundSelector
-        desktopSettings={desktopSettings}
-        onChange={(val: string) => {
-          val.startsWith('#')
-            ? SettingsStoreInstance.effect.setDesktopSetting(
-                'chatViewBgImg',
-                `color: ${val}`
-              )
-            : SettingsStoreInstance.effect.setDesktopSetting(
-                'chatViewBgImg',
-                val
-              )
-        }}
-      />
-      <br />
-      <br />
-      <SettingsTrayIcon
-        settingsStore={settingsStore}
-        renderDTSettingSwitch={renderDTSettingSwitch}
-      />
-    </>
-  )
-}
-
 async function setThemeFunction(address: string) {
   try {
     runtime.resolveThemeAddress(address)
@@ -313,20 +308,19 @@ async function setThemeFunction(address: string) {
 
 function SettingsTrayIcon({
   settingsStore,
-  renderDTSettingSwitch,
 }: {
   settingsStore: SettingsStoreState
-  renderDTSettingSwitch: RenderDTSettingSwitchType
 }) {
-  const tx = window.static_translate
+  const tx = useTranslationFunction()
+
   return (
     <>
-      {renderDTSettingSwitch({
-        key: 'minimizeToTray',
-        label: tx('pref_show_tray_icon'),
-        disabled: settingsStore.rc.minimized,
-        disabledValue: settingsStore.rc.minimized,
-      })}
+      <DesktopSettingsSwitch
+        key='minimizeToTray'
+        label={tx('pref_show_tray_icon')}
+        disabled={settingsStore.rc.minimized}
+        disabledValue={settingsStore.rc.minimized}
+      />
       {settingsStore.rc.minimized && (
         <div className='bp4-callout'>
           {tx('explain_desktop_minimized_disabled_tray_pref')}

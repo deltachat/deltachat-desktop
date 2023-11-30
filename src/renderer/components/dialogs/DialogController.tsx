@@ -1,4 +1,5 @@
 import React from 'react'
+
 import MessageDetail from './MessageDetail'
 import FullscreenMedia from './FullscreenMedia'
 import EnterAutocryptSetupMessage from './EnterAutocryptSetupMessage'

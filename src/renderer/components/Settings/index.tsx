@@ -1,17 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Elevation, Card } from '@blueprintjs/core'
 
-import { DesktopSettingsType } from '../../../shared/shared-types'
-import SettingsStoreInstance, {
-  SettingsStoreState,
-  useSettingsStore,
-} from '../../stores/settings'
+import { useSettingsStore } from '../../stores/settings'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import {
   DeltaDialogBase,
   DeltaDialogBody,
   DeltaDialogHeader,
-  DeltaSwitch2,
 } from '../dialogs/DeltaDialog'
 import SettingsProfile from '../dialogs/Settings-Profile'
 import { SendBackupDialog } from '../dialogs/setup_multi_device/SendBackup'
@@ -25,39 +20,13 @@ import { SettingsAdvanced } from '../dialogs/Settings-Advanced'
 import SettingsIconButton from './SettingsIconButton'
 import SettingsConnectivityButton from './SettingsConnectivityButton'
 
-export function flipDeltaBoolean(value: string) {
-  return value === '1' ? '0' : '1'
-}
-
-export type RenderDTSettingSwitchType = ({
-  key,
-  label,
-  description,
-  disabled,
-  disabledValue,
-}: {
-  key: keyof DesktopSettingsType
-  label: string
-  description?: string
-  disabled?: boolean
-  disabledValue?: boolean
-}) => JSX.Element | null
-
-export type RenderDeltaSwitch2Type = ({
-  key,
-  label,
-  description,
-  disabled,
-  disabledValue,
-}: {
-  key: keyof SettingsStoreState['settings']
-  label: string
-  description?: string
-  disabled?: boolean
-  disabledValue?: boolean
-}) => void
-
 export default function Settings(props: DialogProps) {
+  const { onClose } = props
+  const { openDialog } = useContext(ScreenContext)
+  const settingsStore = useSettingsStore()[0]
+  const tx = useTranslationFunction()
+  const [settingsMode, setSettingsMode] = useState('main')
+
   useEffect(() => {
     if (window.__settingsOpened) {
       throw new Error(
@@ -69,87 +38,6 @@ export default function Settings(props: DialogProps) {
       window.__settingsOpened = false
     }
   })
-
-  const { onClose } = props
-  const settingsStore = useSettingsStore()[0]
-
-  const { openDialog } = useContext(ScreenContext)
-
-  const tx = useTranslationFunction()
-  const [settingsMode, setSettingsMode] = useState('main')
-
-  /*
-   * render switch for Desktop Settings
-   */
-  const renderDTSettingSwitch: RenderDTSettingSwitchType = ({
-    key,
-    label,
-    description,
-    disabled,
-    disabledValue,
-  }: {
-    key: keyof DesktopSettingsType
-    label: string
-    description?: string
-    disabled?: boolean
-    disabledValue?: boolean
-  }) => {
-    if (!settingsStore) {
-      return null
-    }
-    const value =
-      disabled === true && typeof disabledValue !== 'undefined'
-        ? disabledValue
-        : settingsStore.desktopSettings[key] === true
-    return (
-      <DeltaSwitch2
-        label={label}
-        description={description}
-        value={value}
-        onClick={() => {
-          SettingsStoreInstance.effect.setDesktopSetting(
-            key,
-            !settingsStore.desktopSettings[key]
-          )
-        }}
-        disabled={disabled}
-      />
-    )
-  }
-
-  const renderDeltaSwitch2: RenderDeltaSwitch2Type = ({
-    key,
-    label,
-    description,
-    disabled,
-    disabledValue,
-  }: {
-    key: keyof SettingsStoreState['settings']
-    label: string
-    description?: string
-    disabled?: boolean
-    disabledValue?: boolean
-  }) => {
-    if (!settingsStore) return
-    const value =
-      disabled === true && typeof disabledValue !== 'undefined'
-        ? disabledValue
-        : settingsStore.settings[key] === '1'
-    return (
-      <DeltaSwitch2
-        label={label}
-        value={value}
-        description={description}
-        onClick={() => {
-          SettingsStoreInstance.effect.setCoreSetting(
-            key,
-            flipDeltaBoolean(settingsStore.settings[key])
-          )
-        }}
-        disabled={disabled}
-      />
-    )
-  }
 
   const renderDialogContent = () => {
     if (!settingsStore) return null
@@ -238,8 +126,6 @@ export default function Settings(props: DialogProps) {
                 <SettingsChatsAndMedia
                   settingsStore={settingsStore}
                   desktopSettings={settingsStore.desktopSettings}
-                  renderDeltaSwitch2={renderDeltaSwitch2}
-                  renderDTSettingSwitch={renderDTSettingSwitch}
                 />
               </Card>
             </DeltaDialogBody>
@@ -258,7 +144,6 @@ export default function Settings(props: DialogProps) {
               <Card elevation={Elevation.ONE}>
                 <SettingsNotifications
                   desktopSettings={settingsStore.desktopSettings}
-                  renderDTSettingSwitch={renderDTSettingSwitch}
                 />
               </Card>
             </DeltaDialogBody>
@@ -279,7 +164,6 @@ export default function Settings(props: DialogProps) {
                   rc={settingsStore.rc}
                   desktopSettings={settingsStore.desktopSettings}
                   settingsStore={settingsStore}
-                  renderDTSettingSwitch={renderDTSettingSwitch}
                 />
               </Card>
             </DeltaDialogBody>
@@ -296,11 +180,7 @@ export default function Settings(props: DialogProps) {
             />
             <DeltaDialogBody>
               <Card elevation={Elevation.ONE}>
-                <SettingsAdvanced
-                  settingsStore={settingsStore}
-                  renderDeltaSwitch2={renderDeltaSwitch2}
-                  renderDTSettingSwitch={renderDTSettingSwitch}
-                />
+                <SettingsAdvanced settingsStore={settingsStore} />
               </Card>
             </DeltaDialogBody>
           </>

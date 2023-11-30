@@ -1,8 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { Card, H5, Classes, Callout } from '@blueprintjs/core'
 
-import { RenderDeltaSwitch2Type } from '../Settings/Settings'
-import { ScreenContext } from '../../contexts'
+import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { DialogProps } from './DialogController'
 import InputTransferKey from './AutocryptSetupMessage'
 import DeltaDialog, {
@@ -12,6 +11,7 @@ import DeltaDialog, {
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import SettingsButton from '../SettingsButton'
+import { CoreSettingsSwitch } from '../SettingsSwitch'
 
 export function KeyViewPanel({
   onClose,
@@ -20,7 +20,8 @@ export function KeyViewPanel({
   onClose: DialogProps['onClose']
   autocryptKey: string
 }) {
-  const tx = window.static_translate
+  const tx = useTranslationFunction()
+
   return (
     <React.Fragment>
       <div>
@@ -47,7 +48,8 @@ export function KeyViewPanel({
 }
 
 function InitiatePanel({ onClick }: { onClick: todo }) {
-  const tx = window.static_translate
+  const tx = useTranslationFunction()
+
   return (
     <div className={Classes.DIALOG_BODY}>
       <Card>
@@ -71,6 +73,7 @@ export function SendAutocryptSetupMessage({
   onClose: Function
   isOpen: boolean
 }) {
+  const tx = useTranslationFunction()
   const [key, setKey] = useState<string | null>(null)
 
   const onClose = () => {
@@ -83,8 +86,6 @@ export function SendAutocryptSetupMessage({
       await BackendRemote.rpc.initiateAutocryptKeyTransfer(selectedAccountId())
     setKey(key)
   }
-
-  const tx = window.static_translate
 
   let body
   if (key) {
@@ -104,20 +105,17 @@ export function SendAutocryptSetupMessage({
   )
 }
 
-export default function SettingsEncryption({
-  renderDeltaSwitch2,
-}: {
-  renderDeltaSwitch2: RenderDeltaSwitch2Type
-}) {
+export default function SettingsEncryption() {
   const { openDialog } = useContext(ScreenContext)
-  const tx = window.static_translate
+  const tx = useTranslationFunction()
+
   return (
     <>
       <H5>{tx('autocrypt')}</H5>
-      {renderDeltaSwitch2({
-        key: 'e2ee_enabled',
-        label: tx('autocrypt_prefer_e2ee'),
-      })}
+      <CoreSettingsSwitch
+        key='e2ee_enabled'
+        label={tx('autocrypt_prefer_e2ee')}
+      />
       <SettingsButton
         style={{ color: 'var(--colorPrimary)', fontWeight: 'lighter' }}
         onClick={() => openDialog(SendAutocryptSetupMessage)}

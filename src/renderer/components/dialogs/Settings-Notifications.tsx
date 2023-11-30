@@ -1,26 +1,27 @@
 import React from 'react'
-import { RenderDTSettingSwitchType } from './Settings'
-import { DesktopSettingsType } from '../../../shared/shared-types'
 
-export default function SettingsNotifications({
-  desktopSettings,
-  renderDTSettingSwitch,
-}: {
+import { DesktopSettingsType } from '../../../shared/shared-types'
+import { DesktopSettingsSwitch } from '../SettingsSwitch'
+import { useTranslationFunction } from '../../contexts'
+
+type Props = {
   desktopSettings: DesktopSettingsType
-  renderDTSettingSwitch: RenderDTSettingSwitchType
-}) {
-  const tx = window.static_translate
+}
+
+export default function SettingsNotifications({ desktopSettings }: Props) {
+  const tx = useTranslationFunction()
+
   return (
     <>
-      {renderDTSettingSwitch({
-        key: 'notifications',
-        label: tx('pref_notifications_explain'),
-      })}
-      {renderDTSettingSwitch({
-        key: 'showNotificationContent',
-        label: tx('pref_show_notification_content_explain'),
-        disabled: !desktopSettings['notifications'],
-      })}
+      <DesktopSettingsSwitch
+        key='notifications'
+        label={tx('pref_notifications_explain')}
+      />
+      <DesktopSettingsSwitch
+        key='showNotificationContent'
+        label={tx('pref_show_notification_content_explain')}
+        disabled={!desktopSettings['notifications']}
+      />
     </>
   )
 }
