@@ -41,7 +41,7 @@ import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 import { Type } from '../../backend-com'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import { SettingsProfileDialog } from '../dialogs/Settings-Profile'
-import { SearchInput } from '../SearchInput'
+import SearchInput from '../SearchInput'
 
 const log = getLogger('renderer/main-screen')
 

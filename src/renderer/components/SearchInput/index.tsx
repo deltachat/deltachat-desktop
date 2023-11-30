@@ -2,7 +2,7 @@ import React from 'react'
 import classNames from 'classnames'
 
 import { useTranslationFunction } from '../../contexts'
-import { SearchClearButton } from './'
+import { SearchClearButton } from './SearchClearButton'
 
 import styles from './styles.module.scss'
 
@@ -17,7 +17,7 @@ type Props = {
   extraCleanAction?: () => void
 }
 
-export function SearchInput(props: Props) {
+export default function SearchInput(props: Props) {
   const { onChange, value, id, extraCleanAction } = props
   const tx = useTranslationFunction()
 
