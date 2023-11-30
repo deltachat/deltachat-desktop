@@ -1,6 +1,6 @@
 import React from 'react'
 
-export function SettingsIconButton(props: any) {
+export default function SettingsIconButton(props: any) {
   const { onClick, iconName, children, isLink, ...otherProps } = props
   return (
     <div className='SettingsIconButton' onClick={onClick}>

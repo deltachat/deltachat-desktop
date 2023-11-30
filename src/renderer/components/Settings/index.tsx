@@ -22,8 +22,8 @@ import { SettingsChatsAndMedia } from '../dialogs/Settings-ChatsAndMedia'
 import SettingsNotifications from '../dialogs/Settings-Notifications'
 import SettingsAppearance from '../dialogs/Settings-Appearance'
 import { SettingsAdvanced } from '../dialogs/Settings-Advanced'
-import { SettingsIconButton } from './SettingsIconButton'
-import { SettingsConnectivityButton } from './SettingsConnectivityButton'
+import SettingsIconButton from './SettingsIconButton'
+import SettingsConnectivityButton from './SettingsConnectivityButton'
 
 export function flipDeltaBoolean(value: string) {
   return value === '1' ? '0' : '1'
@@ -57,7 +57,7 @@ export type RenderDeltaSwitch2Type = ({
   disabledValue?: boolean
 }) => void
 
-export function Settings(props: DialogProps) {
+export default function Settings(props: DialogProps) {
   useEffect(() => {
     if (window.__settingsOpened) {
       throw new Error(

@@ -1,13 +1,13 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
+import SettingsConnectivityDialog from '../dialogs/Settings-Connectivity'
+import SettingsIconButton from './SettingsIconButton'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
-import { SettingsIconButton } from './SettingsIconButton'
-import SettingsConnectivityDialog from '../dialogs/Settings-Connectivity'
 import { selectedAccountId } from '../../ScreenController'
 
-export function SettingsConnectivityButton() {
+export default function SettingsConnectivityButton() {
   const { openDialog } = useContext(ScreenContext)
   const [connectivityString, setConnectivityString] = useState('')
   const accountId = selectedAccountId()
