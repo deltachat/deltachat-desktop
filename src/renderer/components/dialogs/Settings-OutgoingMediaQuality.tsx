@@ -1,12 +1,12 @@
 import React, { useContext } from 'react'
+import { C } from '@deltachat/jsonrpc-client'
+
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
-import { SettingsSelector } from './Settings'
-
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
-import { C } from '@deltachat/jsonrpc-client'
+import SettingsSelector from '../SettingsSelector'
 
 export default function SettingsOutgoingMediaQuality(props: {
   settings: SettingsStoreState['settings']

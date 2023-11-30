@@ -10,7 +10,6 @@ import {
   DeltaDialogBase,
   DeltaDialogHeader,
 } from './DeltaDialog'
-import { SettingsButton } from './Settings'
 import { runtime } from '../../runtime'
 import { DialogProps } from './DialogController'
 import SettingsAccountDialog from './Settings-Account'
@@ -19,6 +18,7 @@ import SettingsStoreInstance, {
 } from '../../stores/settings'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import SettingsButton from '../SettingsButton'
 
 export default function SettingsProfile({
   settingsStore,

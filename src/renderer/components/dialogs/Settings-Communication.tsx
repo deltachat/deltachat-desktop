@@ -1,12 +1,13 @@
 import React, { useContext } from 'react'
 import { H5 } from '@blueprintjs/core'
+import { C } from '@deltachat/jsonrpc-client'
+
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
-import { SettingsSelector } from './Settings'
-import { C } from '@deltachat/jsonrpc-client'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
+import SettingsSelector from '../SettingsSelector'
 
 function showToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)

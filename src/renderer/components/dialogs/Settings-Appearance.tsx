@@ -1,8 +1,11 @@
-import { ScreenContext, useTranslationFunction } from '../../contexts'
+import { join } from 'path'
+
 import React, { useContext, useEffect, useState } from 'react'
 import { H6, Icon } from '@blueprintjs/core'
+
+import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { ThemeManager } from '../../ThemeManager'
-import { RenderDTSettingSwitchType, SettingsSelector } from './Settings'
+import { RenderDTSettingSwitchType } from '../Settings/Settings'
 import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
 import { runtime } from '../../runtime'
 import {
@@ -10,11 +13,11 @@ import {
   RC_Config,
   Theme,
 } from '../../../shared/shared-types'
-import { join } from 'path'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
 import { getLogger } from '../../../shared/logger'
+import SettingsSelector from '../SettingsSelector'
 
 const log = getLogger('renderer/settings/appearance')
 
@@ -154,14 +157,14 @@ function BackgroundSelector({
             className='custom-image'
             aria-label={tx('pref_background_custom_image')}
           >
-            <Icon icon='media' iconSize={30} />
+            <Icon icon='media' size={30} />
           </div>
           <div
             onClick={onButton.bind(null, SetBackgroundAction.customColor)}
             className='custom-color'
             aria-label={tx('pref_background_custom_color')}
           >
-            <Icon icon='tint' iconSize={30} />
+            <Icon icon='tint' size={30} />
           </div>
         </div>
       </div>

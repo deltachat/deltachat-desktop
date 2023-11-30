@@ -13,7 +13,6 @@ import {
   SelectDialogOption,
 } from './DeltaDialog'
 import { DialogProps } from './DialogController'
-import { SettingsSelector } from './Settings'
 import { AutodeleteDuration } from '../../../shared/constants'
 import { DeltaCheckbox } from '../contact/ContactListItem'
 import SettingsStoreInstance, {
@@ -21,6 +20,7 @@ import SettingsStoreInstance, {
 } from '../../stores/settings'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import SettingsSelector from '../SettingsSelector'
 
 function durationToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)

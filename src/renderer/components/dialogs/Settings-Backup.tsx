@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { H5, Intent } from '@blueprintjs/core'
-import { SettingsButton } from './Settings'
-import type { OpenDialogOptions } from 'electron'
+import { DcEventType } from '@deltachat/jsonrpc-client'
+
 import { DialogProps } from './DialogController'
 import { DeltaDialogBody, DeltaDialogContent, SmallDialog } from './DeltaDialog'
 import { DeltaProgressBar } from '../Login-Styles'
@@ -10,7 +10,10 @@ import { runtime } from '../../runtime'
 import { getLogger } from '../../../shared/logger'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import { DcEventType } from '@deltachat/jsonrpc-client'
+
+import type { OpenDialogOptions } from 'electron'
+import SettingsButton from '../SettingsButton'
+
 const log = getLogger('renderer/Settings/Backup')
 
 function ExportProgressDialog(props: DialogProps) {

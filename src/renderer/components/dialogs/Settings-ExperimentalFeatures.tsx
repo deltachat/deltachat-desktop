@@ -1,10 +1,10 @@
 import React, { useState, useContext } from 'react'
 import { Card, Elevation } from '@blueprintjs/core'
+
 import {
   RenderDeltaSwitch2Type,
   RenderDTSettingSwitchType,
-  SettingsSelector,
-} from './Settings'
+} from '../Settings/Settings'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { DeltaInput } from '../Login-Styles'
 import {
@@ -19,6 +19,7 @@ import SettingsStoreInstance, {
 } from '../../stores/settings'
 import RadioGroup from '../RadioGroup'
 import Radio from '../Radio'
+import SettingsSelector from '../SettingsSelector'
 
 const VIDEO_CHAT_INSTANCE_SYSTEMLI = 'https://meet.systemli.org/$ROOM'
 const VIDEO_CHAT_INSTANCE_AUTISTICI = 'https://vc.autistici.org/$ROOM'

@@ -1,10 +1,12 @@
 import React from 'react'
 import { H5 } from '@blueprintjs/core'
-import { SettingsButton } from './Settings'
-import type { OpenDialogOptions } from 'electron'
+
 import { runtime } from '../../runtime'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+
+import type { OpenDialogOptions } from 'electron'
+import SettingsButton from '../SettingsButton'
 
 async function onKeysImport() {
   const tx = window.static_translate

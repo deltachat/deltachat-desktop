@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { Card, H5, Classes, Callout } from '@blueprintjs/core'
-import { RenderDeltaSwitch2Type, SettingsButton } from './Settings'
+
+import { RenderDeltaSwitch2Type } from '../Settings/Settings'
 import { ScreenContext } from '../../contexts'
 import { DialogProps } from './DialogController'
 import InputTransferKey from './AutocryptSetupMessage'
@@ -10,6 +11,7 @@ import DeltaDialog, {
 } from './DeltaDialog'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import SettingsButton from '../SettingsButton'
 
 export function KeyViewPanel({
   onClose,
