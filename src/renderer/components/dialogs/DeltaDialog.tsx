@@ -464,13 +464,13 @@ export const DeltaSwitch2 = ({
               disabled === false && onClick()
             }}
             readOnly
-          ></input>
+          />
           <span
             className={classNames('delta-switch2-indicator', {
               checked: value,
               disabled,
             })}
-          ></span>
+          />
         </label>
       </div>
     </label>

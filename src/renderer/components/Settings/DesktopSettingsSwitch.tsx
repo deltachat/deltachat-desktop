@@ -1,39 +1,16 @@
 import React from 'react'
 
 import { DesktopSettingsType } from '../../../shared/shared-types'
-import SettingsStoreInstance, {
-  SettingsStoreState,
-  useSettingsStore,
-} from '../../stores/settings'
+import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 import { DeltaSwitch2 } from '../dialogs/DeltaDialog'
 
-export type RenderDTSettingSwitchType = ({
-  key,
-  label,
-  description,
-  disabled,
-  disabledValue,
-}: {
+type Props = {
   key: keyof DesktopSettingsType
   label: string
   description?: string
   disabled?: boolean
   disabledValue?: boolean
-}) => JSX.Element | null
-
-export type RenderDeltaSwitch2Type = ({
-  key,
-  label,
-  description,
-  disabled,
-  disabledValue,
-}: {
-  key: keyof SettingsStoreState['settings']
-  label: string
-  description?: string
-  disabled?: boolean
-  disabledValue?: boolean
-}) => void
+}
 
 /*
  * Switch for Desktop Settings
@@ -44,13 +21,7 @@ export default function DesktopSettingsSwitch({
   description,
   disabled,
   disabledValue,
-}: {
-  key: keyof DesktopSettingsType
-  label: string
-  description?: string
-  disabled?: boolean
-  disabledValue?: boolean
-}) {
+}: Props) {
   const settingsStore = useSettingsStore()[0]!
 
   const value =

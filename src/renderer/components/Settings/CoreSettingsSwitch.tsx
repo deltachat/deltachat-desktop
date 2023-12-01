@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { DesktopSettingsType } from '../../../shared/shared-types'
 import SettingsStoreInstance, {
   SettingsStoreState,
   useSettingsStore,
@@ -11,33 +10,13 @@ function flipDeltaBoolean(value: string) {
   return value === '1' ? '0' : '1'
 }
 
-export type RenderDTSettingSwitchType = ({
-  key,
-  label,
-  description,
-  disabled,
-  disabledValue,
-}: {
-  key: keyof DesktopSettingsType
-  label: string
-  description?: string
-  disabled?: boolean
-  disabledValue?: boolean
-}) => JSX.Element | null
-
-export type RenderDeltaSwitch2Type = ({
-  key,
-  label,
-  description,
-  disabled,
-  disabledValue,
-}: {
+type Props = {
   key: keyof SettingsStoreState['settings']
   label: string
   description?: string
   disabled?: boolean
   disabledValue?: boolean
-}) => void
+}
 
 /*
  * Switch for Core Settings
@@ -48,13 +27,7 @@ export default function CoreSettingsSwitch({
   description,
   disabled,
   disabledValue,
-}: {
-  key: keyof SettingsStoreState['settings']
-  label: string
-  description?: string
-  disabled?: boolean
-  disabledValue?: boolean
-}) {
+}: Props) {
   const settingsStore = useSettingsStore()[0]!
 
   const value =
