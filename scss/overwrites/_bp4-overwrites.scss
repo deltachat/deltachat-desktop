@@ -1,34 +1,7 @@
 $bp4-dialog-radius: 2px;
 
-.bp4-dialog {
-  position: absolute !important;
-  max-height: calc(100vh - 50px);
-  max-width: 90vw;
-  margin: 0px;
-  padding: 0px;
-  background: var(--bp4DialogBgSecondary);
-  border-radius: $bp4-dialog-radius;
-  box-shadow:
-    0 0 0 1px rgba(16, 22, 26, 0.1),
-    0 4px 8px rgba(16, 22, 26, 0.2),
-    0 0 20px 3px rgba(16, 22, 26, 0.2);
-}
-
-.bp4-dialog-body {
-  margin: 0px;
-  display: flex;
-  flex-direction: column;
-  max-height: 90vh;
-  overflow: overlay;
-}
-
 .bp4-dialog-body-with-padding {
   padding: 20px;
-}
-
-.bp4-dialog-body-no-footer {
-  border-bottom-left-radius: $bp4-dialog-radius;
-  border-bottom-right-radius: $bp4-dialog-radius;
 }
 
 .bp4-dialog-footer-border-top {
@@ -98,27 +71,11 @@ $bp4-dialog-radius: 2px;
   background-color: var(--bp4ButtonHoverBg);
 }
 
-// .bp4-button[class*="bp4-intent-"]:active {
-//   box-shadow: 0 0 0 1px rgba(16,22,26,.4),inset 0 1px 2px rgba(16,22,26,.2);
-// }
-
 .bp4-button.bp4-minimal {
   color: var(--bp4ButtonText);
 }
 .bp4-button.bp4-minimal:hover {
   color: inherit; // todo adjust this to be an extra var
-}
-
-.bp4-dialog-header {
-  padding: 20px;
-
-  background-color: var(--bp4DialogHeaderBg);
-
-  // We should have one variable for dialog/context menu border radius
-  border-radius: 2px 2px 0 0;
-
-  -webkit-box-shadow: unset;
-  box-shadow: unset;
 }
 
 .bp4-dialog-header-border-bottom {

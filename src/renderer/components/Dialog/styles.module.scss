@@ -1,13 +1,43 @@
+$dialogBorderRadius: 2px;
+
 .dialog {
+  max-height: calc(100vh - 50px);
+  max-width: 90vw;
+  margin: 0px;
+  padding: 0px;
+  background-color: var(--bp4DialogBgSecondary);
+  border-radius: $dialogBorderRadius;
+  box-shadow:
+    0 0 0 1px rgba(16, 22, 26, 0.1),
+    0 4px 8px rgba(16, 22, 26, 0.2),
+    0 0 20px 3px rgba(16, 22, 26, 0.2);
+
   &.fixed {
-    height: calc(100% - 50px);
+    position: absolute;
     top: 25px;
     width: 400px;
   }
 }
 
 .dialogHeader {
+  background-color: var(--bp4DialogHeaderBg);
   border-bottom: var(--outlineProperties);
+  border-radius: $dialogBorderRadius;
+  box-shadow: unset;
+  padding: 20px;
+}
+
+.dialogBody {
+  margin: 0px;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  overflow: overlay;
+
+  .noFooter {
+    border-bottom-left-radius: $dialogBorderRadius;
+    border-bottom-right-radius: $dialogBorderRadius;
+  }
 }
 
 .headerButton {

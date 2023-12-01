@@ -4,9 +4,10 @@ import { Classes } from '@blueprintjs/core'
 
 import type { CSSProperties, PropsWithChildren } from 'react'
 
+import styles from './styles.module.scss'
+
 type Props = PropsWithChildren<{
   noFooter?: boolean
-  ref?: todo
   style?: CSSProperties
   id?: string
 }>
@@ -16,9 +17,8 @@ export default function DialogBody(props: Props) {
 
   return (
     <div
-      ref={props.ref}
-      className={classNames(Classes.DIALOG_BODY, {
-        'bp4-dialog-body-no-footer': noFooter !== false,
+      className={classNames(Classes.DIALOG_BODY, styles.dialogBody, {
+        [styles.noFooter]: noFooter,
       })}
       style={style}
       id={id}

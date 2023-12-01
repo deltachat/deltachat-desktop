@@ -15,7 +15,6 @@ export default function ImportQrCode({ subtitle, onClose, isOpen }: Props) {
 
   return (
     <DialogWithHeader
-      className='delta-dialog'
       title={tx('qrscan_title')}
       isOpen={isOpen}
       onClose={onClose}
