@@ -3,7 +3,6 @@ import CloseButton from './CloseButton'
 import CloseFooterAction from './CloseFooterAction'
 import Dialog from './Dialog'
 import DialogBody from './DialogBody'
-import DialogContent from './DialogContent'
 import DialogFooter from './DialogFooter'
 import DialogHeader from './DialogHeader'
 import DialogHeading from './DialogHeading'
@@ -17,7 +16,6 @@ export {
   CloseButton,
   CloseFooterAction,
   DialogBody,
-  DialogContent,
   DialogFooter,
   DialogHeader,
   DialogHeading,

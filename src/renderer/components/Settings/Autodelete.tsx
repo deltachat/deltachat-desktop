@@ -14,12 +14,7 @@ import { selectedAccountId } from '../../ScreenController'
 import SettingsSelector from './SettingsSelector'
 import SmallSelectDialog, { SelectDialogOption } from '../SmallSelectDialog'
 import SmallDialog from '../SmallDialog'
-import {
-  DialogBody,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-} from '../Dialog'
+import { DialogBody, DialogFooter, DialogHeader } from '../Dialog'
 
 function durationToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)
@@ -166,18 +161,16 @@ function AutodeleteConfirmationDialog({
         }
       />
       <DialogBody>
-        <DialogContent>
-          <p style={{ whiteSpace: 'pre-line' }}>
-            {tx(fromServer ? 'autodel_server_ask' : 'autodel_device_ask', [
-              String(estimateCount),
-              durationToString(seconds),
-            ])}
-          </p>
-          <div style={{ display: 'flex' }}>
-            <DeltaCheckbox checked={isConfirmed} onClick={toggleIsConfirmed} />
-            <div style={{ alignSelf: 'center' }}>{tx('autodel_confirm')}</div>
-          </div>
-        </DialogContent>
+        <p style={{ whiteSpace: 'pre-line' }}>
+          {tx(fromServer ? 'autodel_server_ask' : 'autodel_device_ask', [
+            String(estimateCount),
+            durationToString(seconds),
+          ])}
+        </p>
+        <div style={{ display: 'flex' }}>
+          <DeltaCheckbox checked={isConfirmed} onClick={toggleIsConfirmed} />
+          <div style={{ alignSelf: 'center' }}>{tx('autodel_confirm')}</div>
+        </div>
       </DialogBody>
       <DialogFooter
         style={{

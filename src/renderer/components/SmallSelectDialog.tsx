@@ -2,13 +2,7 @@ import React, { useState } from 'react'
 import { RadioGroup, Radio } from '@blueprintjs/core'
 
 import SmallDialog from './SmallDialog'
-import {
-  DialogBody,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  FooterActions,
-} from './Dialog'
+import { DialogBody, DialogFooter, DialogHeader, FooterActions } from './Dialog'
 import { DialogProps } from './dialogs/DialogController'
 import { useTranslationFunction } from '../contexts'
 
@@ -54,18 +48,14 @@ export default function SmallSelectDialog({
     <SmallDialog isOpen={isOpen} onClose={onClose}>
       <DialogHeader title={title} />
       <DialogBody>
-        <DialogContent>
-          <RadioGroup onChange={onChange} selectedValue={actualSelectedValue}>
-            {values.map((element, index) => {
-              const [value, label] = element
-              return (
-                <Radio key={'select-' + index} label={label} value={value} />
-              )
-            })}
-          </RadioGroup>
-        </DialogContent>
+        <RadioGroup onChange={onChange} selectedValue={actualSelectedValue}>
+          {values.map((element, index) => {
+            const [value, label] = element
+            return <Radio key={'select-' + index} label={label} value={value} />
+          })}
+        </RadioGroup>
       </DialogBody>
-      <DialogFooter style={{ marginTop: '0px', padding: '20px' }}>
+      <DialogFooter>
         <FooterActions>
           <p
             className='delta-button primary bold'

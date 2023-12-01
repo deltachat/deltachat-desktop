@@ -19,7 +19,7 @@ import { useTranslationFunction, i18nContext } from '../contexts'
 import { getLogger } from '../../shared/logger'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
-import { DialogContent, DialogFooter } from './Dialog'
+import { DialogBody, DialogFooter } from './Dialog'
 
 const log = getLogger('renderer/loginForm')
 
@@ -476,12 +476,10 @@ export function ConfigureProgressDialog({
     >
       {!configureFailed && (
         <>
-          <div className='bp4-dialog-body-with-padding'>
-            <DialogContent>
-              <DeltaProgressBar progress={progress} />
-              <p style={{ userSelect: 'auto' }}>{progressComment}</p>
-            </DialogContent>
-          </div>
+          <DialogBody>
+            <DeltaProgressBar progress={progress} />
+            <p style={{ userSelect: 'auto' }}>{progressComment}</p>
+          </DialogBody>
           <DialogFooter
             style={{
               display: 'flex',
@@ -498,11 +496,9 @@ export function ConfigureProgressDialog({
       )}
       {configureFailed && (
         <>
-          <div className='bp4-dialog-body-with-padding'>
-            <DialogContent>
-              <p style={{ userSelect: 'auto' }}>{error}</p>
-            </DialogContent>
-          </div>
+          <DialogBody>
+            <p style={{ userSelect: 'auto' }}>{error}</p>
+          </DialogBody>
           <DialogFooter
             style={{
               display: 'flex',

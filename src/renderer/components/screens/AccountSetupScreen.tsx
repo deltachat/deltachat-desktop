@@ -6,15 +6,14 @@ import LoginForm, {
   ConfigureProgressDialog,
 } from '../LoginForm'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
-
-import type ScreenController from '../../ScreenController'
 import Dialog, {
   DialogBody,
-  DialogContent,
   DialogFooter,
   DialogHeader,
   FooterActions,
 } from '../Dialog'
+
+import type ScreenController from '../../ScreenController'
 
 export default function AccountSetupScreen({
   selectAccount,
@@ -67,14 +66,12 @@ export default function AccountSetupScreen({
         >
           <DialogHeader title={tx('login_explain')} />
           <DialogBody>
-            <DialogContent>
-              <div className='login'>
-                <LoginForm
-                  credentials={credentials}
-                  setCredentials={setCredentials}
-                />
-              </div>
-            </DialogContent>
+            <div className='login'>
+              <LoginForm
+                credentials={credentials}
+                setCredentials={setCredentials}
+              />
+            </div>
           </DialogBody>
           <DialogFooter>
             <FooterActions>

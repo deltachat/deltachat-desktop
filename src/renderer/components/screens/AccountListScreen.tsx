@@ -15,7 +15,7 @@ import {
   Type,
 } from '../../backend-com'
 import { runtime } from '../../runtime'
-import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
+import Dialog, { DialogBody, DialogHeader } from '../Dialog'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
@@ -76,40 +76,38 @@ export default function AccountListScreen({
           canEscapeKeyClose={true}
         >
           <DialogHeader title={tx('switch_account')} />
-          <DialogBody>
-            <DialogContent noPadding={true}>
-              <AccountSelection
-                {...{
-                  refreshAccounts,
-                  selectAccount,
-                  logins,
-                  showUnread: syncAllAccounts || false,
-                  onAddAccount,
-                }}
-              />
-              {syncAllAccounts !== null && (
-                <div className='sync-all-switch'>
-                  <Switch
-                    checked={syncAllAccounts}
-                    label={tx('sync_all')}
-                    onChange={async () => {
-                      const new_state = !syncAllAccounts
-                      await runtime.setDesktopSetting(
-                        'syncAllAccounts',
-                        new_state
-                      )
-                      if (new_state) {
-                        BackendRemote.rpc.startIoForAllAccounts()
-                      } else {
-                        BackendRemote.rpc.stopIoForAllAccounts()
-                      }
-                      setSyncAllAccounts(new_state)
-                    }}
-                    alignIndicator={Alignment.LEFT}
-                  />
-                </div>
-              )}
-            </DialogContent>
+          <DialogBody noPadding>
+            <AccountSelection
+              {...{
+                refreshAccounts,
+                selectAccount,
+                logins,
+                showUnread: syncAllAccounts || false,
+                onAddAccount,
+              }}
+            />
+            {syncAllAccounts !== null && (
+              <div className='sync-all-switch'>
+                <Switch
+                  checked={syncAllAccounts}
+                  label={tx('sync_all')}
+                  onChange={async () => {
+                    const new_state = !syncAllAccounts
+                    await runtime.setDesktopSetting(
+                      'syncAllAccounts',
+                      new_state
+                    )
+                    if (new_state) {
+                      BackendRemote.rpc.startIoForAllAccounts()
+                    } else {
+                      BackendRemote.rpc.stopIoForAllAccounts()
+                    }
+                    setSyncAllAccounts(new_state)
+                  }}
+                  alignIndicator={Alignment.LEFT}
+                />
+              </div>
+            )}
           </DialogBody>
         </Dialog>
       </div>

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Elevation, Card } from '@blueprintjs/core'
 
 import { useSettingsStore } from '../../stores/settings'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
@@ -14,8 +13,6 @@ import Notifications from './Notifications'
 import Appearance from './Appearance'
 import Advanced from './Advanced'
 import Profile from './Profile'
-
-import styles from './styles.module.scss'
 import Dialog, { DialogBody, DialogHeader } from '../Dialog'
 
 type SettingsView =
@@ -44,58 +41,56 @@ export default function Settings({ isOpen, onClose }: DialogProps) {
   }, [])
 
   return (
-    <Dialog isOpen={isOpen} onClose={onClose} className={styles.settings} fixed>
+    <Dialog isOpen={isOpen} onClose={onClose} fixed>
       {settingsMode === 'main' && (
         <>
           <DialogHeader title={tx('menu_settings')} onClose={onClose} />
           <DialogBody>
-            <Card elevation={Elevation.ONE} style={{ paddingTop: '0px' }}>
-              <Profile settingsStore={settingsStore} onClose={onClose} />
-              <br />
+            <Profile settingsStore={settingsStore} onClose={onClose} />
+            <br />
+            <SettingsIconButton
+              iconName='forum'
+              onClick={() => setSettingsMode('chats_and_media')}
+            >
+              {tx('pref_chats_and_media')}
+            </SettingsIconButton>
+            <SettingsIconButton
+              iconName='bell'
+              onClick={() => setSettingsMode('notifications')}
+            >
+              {tx('pref_notifications')}
+            </SettingsIconButton>
+            <SettingsIconButton
+              iconName='brightness-6'
+              onClick={() => setSettingsMode('appearance')}
+            >
+              {tx('pref_appearance')}
+            </SettingsIconButton>
+            <SettingsIconButton
+              iconName='devices'
+              onClick={() => {
+                openDialog(SendBackupDialog)
+                onClose()
+              }}
+            >
+              {tx('multidevice_title')}
+            </SettingsIconButton>
+            <ConnectivityButton />
+            <SettingsIconButton
+              iconName='code-tags'
+              onClick={() => setSettingsMode('advanced')}
+            >
+              {tx('menu_advanced')}
+            </SettingsIconButton>
+            {!runtime.getRuntimeInfo().isMac && (
               <SettingsIconButton
-                iconName='forum'
-                onClick={() => setSettingsMode('chats_and_media')}
+                iconName='favorite'
+                onClick={() => runtime.openLink(donationUrl)}
+                isLink
               >
-                {tx('pref_chats_and_media')}
+                {tx('donate')}
               </SettingsIconButton>
-              <SettingsIconButton
-                iconName='bell'
-                onClick={() => setSettingsMode('notifications')}
-              >
-                {tx('pref_notifications')}
-              </SettingsIconButton>
-              <SettingsIconButton
-                iconName='brightness-6'
-                onClick={() => setSettingsMode('appearance')}
-              >
-                {tx('pref_appearance')}
-              </SettingsIconButton>
-              <SettingsIconButton
-                iconName='devices'
-                onClick={() => {
-                  openDialog(SendBackupDialog)
-                  onClose()
-                }}
-              >
-                {tx('multidevice_title')}
-              </SettingsIconButton>
-              <ConnectivityButton />
-              <SettingsIconButton
-                iconName='code-tags'
-                onClick={() => setSettingsMode('advanced')}
-              >
-                {tx('menu_advanced')}
-              </SettingsIconButton>
-              {!runtime.getRuntimeInfo().isMac && (
-                <SettingsIconButton
-                  iconName='favorite'
-                  onClick={() => runtime.openLink(donationUrl)}
-                  isLink
-                >
-                  {tx('donate')}
-                </SettingsIconButton>
-              )}
-            </Card>
+            )}
           </DialogBody>
         </>
       )}
@@ -107,12 +102,10 @@ export default function Settings({ isOpen, onClose }: DialogProps) {
             onClose={onClose}
           />
           <DialogBody>
-            <Card elevation={Elevation.ONE}>
-              <ChatsAndMedia
-                settingsStore={settingsStore}
-                desktopSettings={settingsStore.desktopSettings}
-              />
-            </Card>
+            <ChatsAndMedia
+              settingsStore={settingsStore}
+              desktopSettings={settingsStore.desktopSettings}
+            />
           </DialogBody>
         </>
       )}
@@ -124,9 +117,7 @@ export default function Settings({ isOpen, onClose }: DialogProps) {
             onClose={onClose}
           />
           <DialogBody>
-            <Card elevation={Elevation.ONE}>
-              <Notifications desktopSettings={settingsStore.desktopSettings} />
-            </Card>
+            <Notifications desktopSettings={settingsStore.desktopSettings} />
           </DialogBody>
         </>
       )}
@@ -138,13 +129,11 @@ export default function Settings({ isOpen, onClose }: DialogProps) {
             onClose={onClose}
           />
           <DialogBody>
-            <Card elevation={Elevation.ONE}>
-              <Appearance
-                rc={settingsStore.rc}
-                desktopSettings={settingsStore.desktopSettings}
-                settingsStore={settingsStore}
-              />
-            </Card>
+            <Appearance
+              rc={settingsStore.rc}
+              desktopSettings={settingsStore.desktopSettings}
+              settingsStore={settingsStore}
+            />
           </DialogBody>
         </>
       )}
@@ -156,9 +145,7 @@ export default function Settings({ isOpen, onClose }: DialogProps) {
             onClose={onClose}
           />
           <DialogBody>
-            <Card elevation={Elevation.ONE}>
-              <Advanced settingsStore={settingsStore} />
-            </Card>
+            <Advanced settingsStore={settingsStore} />
           </DialogBody>
         </>
       )}

@@ -8,7 +8,6 @@ import { selectedAccountId } from '../../ScreenController'
 import SmallDialog from '../SmallDialog'
 import {
   DialogBody,
-  DialogContent,
   DialogFooter,
   DialogHeader,
   FooterActions,
@@ -129,15 +128,11 @@ export default function DisappearingMessage({
       <SmallDialog isOpen={isOpen} onClose={onClose}>
         <DialogHeader title={tx('ephemeral_messages')} />
         <DialogBody>
-          <DialogContent>
-            <SelectDisappearingMessageDuration
-              disappearingMessageDuration={disappearingMessageDuration}
-              onSelectDisappearingMessageDuration={
-                setDisappearingMessageDuration
-              }
-            />
-            <p>{tx('ephemeral_messages_hint')}</p>
-          </DialogContent>
+          <SelectDisappearingMessageDuration
+            disappearingMessageDuration={disappearingMessageDuration}
+            onSelectDisappearingMessageDuration={setDisappearingMessageDuration}
+          />
+          <p>{tx('ephemeral_messages_hint')}</p>
         </DialogBody>
         <DialogFooter style={{ padding: '20px' }}>
           <FooterActions>

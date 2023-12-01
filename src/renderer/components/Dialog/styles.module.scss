@@ -1,4 +1,5 @@
 $dialogBorderRadius: 2px;
+$dialogPadding: 20px;
 
 .dialog {
   max-height: calc(100vh - 50px);
@@ -24,7 +25,10 @@ $dialogBorderRadius: 2px;
   background-color: var(--bp4DialogHeaderBg);
   border-bottom: var(--outlineProperties);
   display: flex;
-  padding: 20px;
+  padding-bottom: $dialogPadding;
+  padding-left: $dialogPadding;
+  padding-right: $dialogPadding;
+  padding-top: $dialogPadding;
   user-select: none;
 }
 
@@ -34,20 +38,31 @@ $dialogBorderRadius: 2px;
   font-size: 18px;
   font-weight: 600;
   line-height: inherit;
-  margin: 10px 0;
+  margin: 0;
   overflow: hidden;
-  padding: 0;
   text-overflow: ellipsis;
   white-space: nowrap;
   word-wrap: normal;
 }
 
 .dialogBody {
-  margin: 0;
+  background-color: var(--bp4DialogHeaderBg);
   display: flex;
   flex-direction: column;
   max-height: 90vh;
   overflow: overlay;
+  padding-bottom: $dialogPadding;
+  padding-left: $dialogPadding;
+  padding-right: $dialogPadding;
+  padding-top: 0;
+
+  &.noPadding {
+    padding: 0;
+  }
+
+  &.noOverflow {
+    overflow: hidden;
+  }
 }
 
 .headerButton {

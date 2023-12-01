@@ -24,7 +24,6 @@ import { InlineVerifiedIcon } from '../VerifiedIcon'
 import { getLogger } from '../../../shared/logger'
 import Dialog, {
   DialogBody,
-  DialogContent,
   DialogHeader,
   OkCancelFooterAction,
 } from '../Dialog'
@@ -112,10 +111,8 @@ export default function ViewProfile(props: {
         onClose={onClose}
         onClickBack={onBack}
       />
-      <DialogBody>
-        <DialogContent noPadding noOverflow>
-          <ViewProfileInner contact={contact} onClose={onClose} />
-        </DialogContent>
+      <DialogBody noPadding noOverflow>
+        <ViewProfileInner contact={contact} onClose={onClose} />
       </DialogBody>
     </Dialog>
   )

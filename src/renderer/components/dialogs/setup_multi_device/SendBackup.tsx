@@ -9,7 +9,7 @@ import { selectedAccountId } from '../../../ScreenController'
 import ConfirmationDialog from '../ConfirmationDialog'
 import { DialogProps } from '../DialogController'
 import Dialog, {
-  DialogContent,
+  DialogBody,
   DialogFooter,
   DialogHeader,
   FooterActions,
@@ -130,7 +130,8 @@ export function SendBackupDialog({ onClose }: DialogProps) {
       style={{ width: 'unset' }}
     >
       <DialogHeader title={tx('multidevice_title')} />
-      <DialogContent className='send-backup-dialog'>
+      // @TODO "send-backup-dialog" class
+      <DialogBody>
         <div className='container'>
           <div className='content'>
             {error}
@@ -169,7 +170,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
             </div>
           )}
         </div>
-      </DialogContent>
+      </DialogBody>
       <DialogFooter>
         <FooterActions style={{ alignItems: 'center' }}>
           {inProgress && (

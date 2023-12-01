@@ -11,7 +11,7 @@ import {
   Type,
 } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import { DialogBody, DialogContent, DialogWithHeader } from '../Dialog'
+import { DialogBody, DialogWithHeader } from '../Dialog'
 
 export default function UnblockContacts(props: {
   isOpen: DialogProps['isOpen']
@@ -55,23 +55,21 @@ export default function UnblockContacts(props: {
       fixed={true}
     >
       <DialogBody>
-        <DialogContent>
-          {blockedContacts.length === 0 && <p>{tx('blocked_empty_hint')}</p>}
-          {blockedContacts.length > 0 && (
-            <div
-              style={{
-                overflow: 'scroll',
-                height: '100%',
-                backgroundColor: 'var(--bp4DialogBgPrimary)',
-              }}
-            >
-              <ContactList
-                contacts={blockedContacts}
-                onClick={onUnblockContact}
-              />
-            </div>
-          )}
-        </DialogContent>
+        {blockedContacts.length === 0 && <p>{tx('blocked_empty_hint')}</p>}
+        {blockedContacts.length > 0 && (
+          <div
+            style={{
+              overflow: 'scroll',
+              height: '100%',
+              backgroundColor: 'var(--bp4DialogBgPrimary)',
+            }}
+          >
+            <ContactList
+              contacts={blockedContacts}
+              onClick={onUnblockContact}
+            />
+          </div>
+        )}
       </DialogBody>
     </DialogWithHeader>
   )

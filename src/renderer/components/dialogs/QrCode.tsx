@@ -16,12 +16,7 @@ import { useContextMenu } from '../ContextMenu'
 import { runtime } from '../../runtime'
 import { selectChat } from '../helpers/ChatMethods'
 import { BackendRemote } from '../../backend-com'
-import Dialog, {
-  DialogBody,
-  DialogContent,
-  DialogFooter,
-  FooterActions,
-} from '../Dialog'
+import Dialog, { DialogBody, DialogFooter, FooterActions } from '../Dialog'
 
 const log = getLogger('renderer/dialogs/QrCode')
 
@@ -151,21 +146,19 @@ export function QrCodeShowQrInner({
 
   return (
     <>
-      <DialogBody>
-        <DialogContent noOverflow noPadding style={{ height: '500px' }}>
-          {svgUrl && (
-            <img
-              style={{
-                width: '100%',
-                height: '100%',
-                userSelect: 'none',
-                paddingTop: '16px',
-              }}
-              src={svgUrl}
-              onContextMenu={imageContextMenu}
-            />
-          )}
-        </DialogContent>
+      <DialogBody noOverflow noPadding>
+        {svgUrl && (
+          <img
+            style={{
+              width: '100%',
+              height: '100%',
+              userSelect: 'none',
+              paddingTop: '16px',
+            }}
+            src={svgUrl}
+            onContextMenu={imageContextMenu}
+          />
+        )}
       </DialogBody>
       <DialogFooter>
         <FooterActions style={{ justifyContent: 'space-between' }}>
@@ -262,34 +255,32 @@ export function QrCodeScanQrInner(
 
   return (
     <>
-      <DialogBody>
-        <DialogContent noPadding>
-          <div className='import-qr-code-dialog'>
-            <div style={{ marginBottom: '-19px' }}>
-              <div>
-                <QrReader
-                  delay={300}
-                  onError={handleError}
-                  onScan={handleScan}
-                  style={{ width: '100%' }}
-                  facingMode='user'
-                />
-              </div>
-            </div>
-            <div className='qr-image-loader'>
+      <DialogBody noPadding>
+        <div className='import-qr-code-dialog'>
+          <div style={{ marginBottom: '-19px' }}>
+            <div>
               <QrReader
                 delay={300}
-                ref={qrImageReader}
                 onError={handleError}
                 onScan={handleScan}
                 style={{ width: '100%' }}
-                legacyMode
+                facingMode='user'
               />
             </div>
-            <div className='scan-qr-red-line' />
-            <p className='scan-qr-description'>{props.subtitle}</p>
           </div>
-        </DialogContent>
+          <div className='qr-image-loader'>
+            <QrReader
+              delay={300}
+              ref={qrImageReader}
+              onError={handleError}
+              onScan={handleScan}
+              style={{ width: '100%' }}
+              legacyMode
+            />
+          </div>
+          <div className='scan-qr-red-line' />
+          <p className='scan-qr-description'>{props.subtitle}</p>
+        </div>
       </DialogBody>
       <DialogFooter>
         <FooterActions style={{ justifyContent: 'space-between' }}>

@@ -14,12 +14,7 @@ import { BackendRemote, Type } from '../../backend-com'
 import { ImportBackupTransferProgressDialog } from '../dialogs/setup_multi_device/ReceiveBackup'
 import processMailtoUrl from './MailtoUrl'
 import SmallDialog from '../SmallDialog'
-import {
-  DialogBody,
-  DialogContent,
-  DialogFooter,
-  FooterActions,
-} from '../Dialog'
+import { DialogBody, DialogFooter, FooterActions } from '../Dialog'
 
 const log = getLogger('renderer/processOpenUrl')
 
@@ -40,11 +35,9 @@ export function ProcessQrCodeDialog({
   return (
     <SmallDialog isOpen={isOpen} onClose={onClose}>
       <DialogBody>
-        <DialogContent style={{ height: '80px', padding: '20px' }}>
-          <Spinner />
-        </DialogContent>
+        <Spinner />
       </DialogBody>
-      <DialogFooter style={{ padding: '0px 20px 10px' }}>
+      <DialogFooter>
         <FooterActions>
           <p className='delta-button bold primary' onClick={onCancel}>
             {tx('cancel')}
