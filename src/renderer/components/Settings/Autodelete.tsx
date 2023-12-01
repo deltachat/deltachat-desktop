@@ -172,30 +172,32 @@ function AutodeleteConfirmationDialog({
           <div style={{ alignSelf: 'center' }}>{tx('autodel_confirm')}</div>
         </div>
       </DialogBody>
-      <DialogFooter
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginTop: '0px',
-          padding: '7px 13px 10px 13px',
-        }}
-      >
-        <p
-          className='delta-button danger bold'
-          onClick={() => {
-            onClose()
+      <DialogFooter>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginTop: '0px',
+            padding: '7px 13px 10px 13px',
           }}
         >
-          {tx('cancel')}
-        </p>
-        <p
-          className={classNames('delta-button primary bold', {
-            disabled: !isConfirmed,
-          })}
-          onClick={onOk}
-        >
-          {tx('ok')}
-        </p>
+          <p
+            className='delta-button danger bold'
+            onClick={() => {
+              onClose()
+            }}
+          >
+            {tx('cancel')}
+          </p>
+          <p
+            className={classNames('delta-button primary bold', {
+              disabled: !isConfirmed,
+            })}
+            onClick={onOk}
+          >
+            {tx('ok')}
+          </p>
+        </div>
       </DialogFooter>
     </SmallDialog>
   )

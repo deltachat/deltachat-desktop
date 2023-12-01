@@ -1,4 +1,3 @@
-import { Card, Elevation } from '@blueprintjs/core'
 import React, { useState } from 'react'
 
 import { useTranslationFunction } from '../../../contexts'
@@ -12,6 +11,7 @@ import { DeltaInput, DeltaTextarea } from '../../Login-Styles'
 import ProfileImageSelector from './ProfileImageSelector'
 import Dialog, {
   DialogBody,
+  DialogContent,
   DialogHeader,
   OkCancelFooterAction,
 } from '../../Dialog'
@@ -34,7 +34,9 @@ export default function EditProfileDialog({
   firstSetup?: boolean
 }) {
   const tx = useTranslationFunction()
+
   title = title || tx('pref_edit_profile')
+
   return (
     <Dialog
       onClose={onClose}
@@ -71,9 +73,11 @@ function EditProfileDialogInner({
   firstSetup?: boolean
 }) {
   const tx = useTranslationFunction()
+
   const [displayname, setDisplayname] = useState(
     settingsStore.settings.displayname
   )
+
   const [selfstatus, setSelfstatus] = useState(
     settingsStore.settings.selfstatus
   )
@@ -85,6 +89,7 @@ function EditProfileDialogInner({
   const onCancel = () => {
     onClose()
   }
+
   const onOk = async () => {
     await BackendRemote.rpc.setConfig(
       selectedAccountId(),
@@ -98,10 +103,11 @@ function EditProfileDialogInner({
     SettingsStoreInstance.effect.setCoreSetting('selfstatus', selfstatus || '')
     onClose()
   }
+
   return (
     <>
       <DialogBody>
-        <Card elevation={Elevation.ONE}>
+        <DialogContent>
           <div
             className='profile-image-username center'
             style={{ marginBottom: '30px' }}
@@ -147,7 +153,7 @@ function EditProfileDialogInner({
               }}
             />
           )}
-        </Card>
+        </DialogContent>
       </DialogBody>
       <OkCancelFooterAction
         cancelLabel={cancelLabel}

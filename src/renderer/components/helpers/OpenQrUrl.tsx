@@ -333,7 +333,7 @@ function copyContentAlertDialog({
       <div className='bp4-dialog-body-with-padding'>
         <p style={{ wordBreak: 'break-word' }}>{message}</p>
       </div>
-      <DialogFooter style={{ padding: '0px 20px 10px' }}>
+      <DialogFooter>
         <FooterActions>
           <p
             className='delta-button bold primary'

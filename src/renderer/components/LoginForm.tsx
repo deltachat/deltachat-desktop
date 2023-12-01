@@ -480,14 +480,7 @@ export function ConfigureProgressDialog({
             <DeltaProgressBar progress={progress} />
             <p style={{ userSelect: 'auto' }}>{progressComment}</p>
           </DialogBody>
-          <DialogFooter
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginTop: '0px',
-              padding: '7px 13px 10px 13px',
-            }}
-          >
+          <DialogFooter>
             <p className='delta-button danger bold' onClick={onCancel}>
               {tx('cancel')}
             </p>
@@ -499,14 +492,7 @@ export function ConfigureProgressDialog({
           <DialogBody>
             <p style={{ userSelect: 'auto' }}>{error}</p>
           </DialogBody>
-          <DialogFooter
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginTop: '0px',
-              padding: '7px 13px 10px 13px',
-            }}
-          >
+          <DialogFooter>
             <p
               className='delta-button primary bold'
               onClick={onClose}

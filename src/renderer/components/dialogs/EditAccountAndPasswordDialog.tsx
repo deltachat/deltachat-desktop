@@ -1,4 +1,3 @@
-import { Card, Elevation } from '@blueprintjs/core'
 import React, { useState, useContext, useEffect } from 'react'
 
 import { useTranslationFunction, ScreenContext } from '../../contexts'
@@ -12,6 +11,7 @@ import LoginForm, {
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import Dialog, {
   DialogBody,
+  DialogContent,
   DialogHeader,
   OkCancelFooterAction,
 } from '../Dialog'
@@ -123,14 +123,14 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
   return (
     <>
       <DialogBody>
-        <Card elevation={Elevation.ONE}>
+        <DialogContent>
           {accountSettings && (
             <LoginForm
               credentials={accountSettings}
               setCredentials={setAccountSettings}
             />
           )}
-        </Card>
+        </DialogContent>
       </DialogBody>
       <OkCancelFooterAction onCancel={() => onClose()} onOk={onUpdate} />
     </>

@@ -134,7 +134,7 @@ export default function DisappearingMessage({
           />
           <p>{tx('ephemeral_messages_hint')}</p>
         </DialogBody>
-        <DialogFooter style={{ padding: '20px' }}>
+        <DialogFooter>
           <FooterActions>
             <p className='delta-button primary bold' onClick={onClose}>
               {tx('cancel')}

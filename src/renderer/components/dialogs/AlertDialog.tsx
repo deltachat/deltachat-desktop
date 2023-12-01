@@ -24,7 +24,7 @@ export default function AlertDialog({ message, onClose, cb }: Props) {
       <div className='bp4-dialog-body-with-padding'>
         <p style={{ userSelect: 'auto' }}>{message}</p>
       </div>
-      <DialogFooter style={{ padding: '0px 20px 10px' }}>
+      <DialogFooter>
         <FooterActions>
           <p className='delta-button bold primary' onClick={() => onClick()}>
             {tx('ok')}

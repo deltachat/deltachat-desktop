@@ -58,7 +58,7 @@ export default function ConfirmationDialog({
           {message}
         </p>
       </div>
-      <DialogFooter style={{ padding: '0px 20px 10px' }}>
+      <DialogFooter>
         <FooterActions>
           <p
             className='delta-button bold primary'

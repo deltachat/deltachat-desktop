@@ -1,52 +1,39 @@
 import React from 'react'
-import classNames from 'classnames'
 
 import DialogFooter from './DialogFooter'
+import FooterActionButton from './FooterActionButton'
 import FooterActions from './FooterActions'
 import { useTranslationFunction } from '../../contexts'
 
 type Props = {
-  onCancel: () => any
-  onOk: () => any
-  disableOK?: boolean
   cancelLabel?: string
   confirmLabel?: string
+  disableOK?: boolean
+  onCancel: () => void
+  onOk: () => void
 }
 
 export default function OkCancelFooterAction({
   onCancel,
   onOk,
-  disableOK,
+  disableOK = false,
   cancelLabel,
   confirmLabel,
 }: Props) {
   const tx = useTranslationFunction()
 
-  disableOK = disableOK === true ? true : false
   cancelLabel = cancelLabel || tx('cancel')
   confirmLabel = confirmLabel || tx('ok')
 
   return (
     <DialogFooter>
       <FooterActions>
-        <p
-          className='delta-button primary bold'
-          style={{ marginRight: '10px' }}
-          onClick={onCancel}
-        >
+        <FooterActionButton onClick={onCancel}>
           {cancelLabel}
-        </p>
-        <p
-          className={classNames(
-            'delta-button bold primary test-selector-confirm',
-            {
-              disabled: disableOK,
-            }
-          )}
-          onClick={onOk}
-        >
+        </FooterActionButton>
+        <FooterActionButton disabled={disableOK} onClick={onOk}>
           {confirmLabel}
-        </p>
+        </FooterActionButton>
       </FooterActions>
     </DialogFooter>
   )

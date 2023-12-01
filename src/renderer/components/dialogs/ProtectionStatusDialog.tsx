@@ -41,7 +41,7 @@ export function ProtectionBrokenDialog({
           {tx('chat_protection_broken_explanation', name)}
         </p>
       </div>
-      <DialogFooter style={{ padding: '0px 20px 10px' }}>
+      <DialogFooter>
         <FooterActions style={{ justifyContent: 'space-between' }}>
           <p
             className='delta-button bold primary'
@@ -88,21 +88,23 @@ export function VerifiedContactsRequiredDialog({
           {tx('verified_contact_required_explain')}
         </p>
       </div>
-      <DialogFooter style={{ padding: '0px 20px 10px' }}>
-        <FooterActions style={{ justifyContent: 'space-between' }}>
-          <p
-            className='delta-button bold primary'
-            onClick={onLearnMore}
-            style={{ marginRight: '10px' }}
-          >
-            {tx('learn_more')}
-          </p>
-          <p className={`delta-button bold primary`} onClick={onQRScan}>
-            {tx('qrscan_title')}
-          </p>
-          <p className={`delta-button bold primary`} onClick={onClose}>
-            {tx('ok')}
-          </p>
+      <DialogFooter>
+        <FooterActions>
+          <div style={{ justifyContent: 'space-between' }}>
+            <p
+              className='delta-button bold primary'
+              onClick={onLearnMore}
+              style={{ marginRight: '10px' }}
+            >
+              {tx('learn_more')}
+            </p>
+            <p className={`delta-button bold primary`} onClick={onQRScan}>
+              {tx('qrscan_title')}
+            </p>
+            <p className={`delta-button bold primary`} onClick={onClose}>
+              {tx('ok')}
+            </p>
+          </div>
         </FooterActions>
       </DialogFooter>
     </SmallDialog>
@@ -123,18 +125,20 @@ export function ProtectionEnabledDialog({ isOpen, onClose }: DialogProps) {
           {tx('chat_protection_enabled_explanation')}
         </p>
       </div>
-      <DialogFooter style={{ padding: '0px 20px 10px' }}>
-        <FooterActions style={{ justifyContent: 'space-between' }}>
-          <p
-            className='delta-button bold primary'
-            onClick={onLearnMore}
-            style={{ marginRight: '10px' }}
-          >
-            {tx('learn_more')}
-          </p>
-          <p className={`delta-button bold primary`} onClick={onClose}>
-            {tx('ok')}
-          </p>
+      <DialogFooter>
+        <FooterActions>
+          <div style={{ justifyContent: 'space-between' }}>
+            <p
+              className='delta-button bold primary'
+              onClick={onLearnMore}
+              style={{ marginRight: '10px' }}
+            >
+              {tx('learn_more')}
+            </p>
+            <p className={`delta-button bold primary`} onClick={onClose}>
+              {tx('ok')}
+            </p>
+          </div>
         </FooterActions>
       </DialogFooter>
     </SmallDialog>

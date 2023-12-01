@@ -2,7 +2,7 @@ $dialogPaddingVertical: 20px;
 $dialogPaddingHorizontal: 30px;
 
 .dialog {
-  background-color: var(--bp4DialogBgSecondary);
+  background-color: var(--bp4DialogBgPrimary);
   border-radius: 10px;
   box-shadow:
     0 0 0 1px rgba(16, 22, 26, 0.1),
@@ -47,7 +47,7 @@ $dialogPaddingHorizontal: 30px;
 }
 
 .dialogBody {
-  background-color: var(--bp4DialogHeaderBg);
+  background-color: var(--bp4DialogBgPrimary);
   display: flex;
   flex-direction: column;
   max-height: 90vh;
@@ -58,6 +58,18 @@ $dialogPaddingHorizontal: 30px;
 .dialogContent {
   padding-left: $dialogPaddingHorizontal;
   padding-right: $dialogPaddingHorizontal;
+}
+
+.dialogFooter {
+  background-color: var(--bp4DialogBgPrimary);
+  padding-bottom: $dialogPaddingVertical;
+  padding-left: $dialogPaddingHorizontal;
+  padding-right: $dialogPaddingHorizontal;
+}
+
+.footerActions {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .headerButton {
@@ -88,4 +100,38 @@ $dialogPaddingHorizontal: 30px;
 
 .backButton {
   margin-right: 20px;
+}
+
+.footerActionButton {
+  background-color: transparent;
+  border: 0;
+  border-radius: 5px;
+  color: var(--colorPrimary);
+  cursor: pointer;
+  font-size: initial;
+  font-weight: bold;
+  letter-spacing: 2px;
+  padding: 10px;
+  text-transform: uppercase;
+
+  &:hover {
+    background-color: #f1f1f1;
+  }
+
+  &:disabled {
+    color: grey;
+    cursor: default;
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
+
+  & + & {
+    margin-left: 1px;
+  }
+
+  &.danger {
+    color: var(--colorDanger);
+  }
 }
