@@ -40,7 +40,7 @@ export default function ConnectivityButton() {
 
   return (
     <SettingsIconButton
-      iconName='swap_vert'
+      iconPath='../images/icons/swap_vert.svg'
       onClick={() => openDialog(ConnectivityDialog)}
     >
       {tx('connectivity') + ' ' + connectivityString}

@@ -1,28 +1,50 @@
 import React from 'react'
+import { Icon, IconProps } from '@blueprintjs/core'
+
+import type { PropsWithChildren } from 'react'
+import type { DialogProps } from '../dialogs/DialogController'
 
 import styles from './styles.module.scss'
 
-export default function SettingsIconButton(props: any) {
-  const { onClick, iconName, children, isLink, ...otherProps } = props
+type Props = PropsWithChildren<{
+  /* Choose an icon from BlueprintJS */
+  iconName?: IconProps['icon']
+  /* Choose an icon via file path */
+  iconPath?: string
+  /* Additionally indicate that this is a link */
+  isLink?: boolean
+}> &
+  Pick<DialogProps, 'onClick'>
 
+export default function SettingsIconButton({
+  children,
+  iconName,
+  iconPath,
+  isLink = false,
+  onClick,
+}: Props) {
   return (
-    <div className={styles.settingsIconButton} onClick={onClick}>
-      <div
-        className={styles.icon}
-        style={{
-          WebkitMask:
-            'url(../images/icons/' + iconName + '.svg) no-repeat center',
-        }}
-      ></div>
-      <button {...otherProps}>{children}</button>
+    <button className={styles.settingsIconButton} onClick={onClick}>
+      {iconPath && (
+        <div
+          className={styles.settingsIconMask}
+          style={{
+            WebkitMask: `url(${iconPath}) no-repeat center`,
+          }}
+        />
+      )}
+      {iconName && (
+        <Icon className={styles.settingsIconSVG} icon={iconName} size={22} />
+      )}
+      <span className={styles.settingsIconButtonLabel}>{children}</span>
       {isLink && (
         <div
-          className={styles.icon}
+          className={styles.settingsIconMask}
           style={{
             WebkitMask: 'url(../images/icons/open_in_new.svg) no-repeat center',
           }}
-        ></div>
+        />
       )}
-    </div>
+    </button>
   )
 }
