@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import reactStringReplace from 'react-string-replace'
+
 import { getLogger } from '../../../shared/logger'
-import DeltaDialog, { DeltaDialogBody, DeltaDialogFooter } from './DeltaDialog'
 import { gitHubUrl, gitHubLicenseUrl } from '../../../shared/constants'
 import { VERSION, GIT_REF } from '../../../shared/build-info'
 import ClickableLink from '../helpers/ClickableLink'
 import { useTranslationFunction } from '../../contexts'
 import { runtime } from '../../runtime'
 import { BackendRemote } from '../../backend-com'
+import { DialogBody, DialogFooter, DialogWithHeader } from '../Dialog'
 
 const log = getLogger('renderer/dialogs/About')
 
@@ -94,12 +95,12 @@ export default function About(props: { isOpen: boolean; onClose: () => void }) {
   )
 
   return (
-    <DeltaDialog
+    <DialogWithHeader
       isOpen={isOpen}
       title={tx('global_menu_help_about_desktop')}
       onClose={onClose}
     >
-      <DeltaDialogBody>
+      <DialogBody>
         <div
           style={{ background: 'var(--bp4DialogBgPrimary)', padding: '21px' }}
         >
@@ -114,8 +115,8 @@ export default function About(props: { isOpen: boolean; onClose: () => void }) {
           </p>
           <DCInfo />
         </div>
-      </DeltaDialogBody>
-      <DeltaDialogFooter />
-    </DeltaDialog>
+      </DialogBody>
+      <DialogFooter />
+    </DialogWithHeader>
   )
 }

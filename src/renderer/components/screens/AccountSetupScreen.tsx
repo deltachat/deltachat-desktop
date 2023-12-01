@@ -1,20 +1,20 @@
 import React, { useState, useContext, useEffect, useCallback } from 'react'
+
 import { Credentials } from '../../../shared/shared-types'
 import LoginForm, {
   defaultCredentials,
   ConfigureProgressDialog,
 } from '../LoginForm'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
-import {
-  DeltaDialogFooter,
-  DeltaDialogFooterActions,
-  DeltaDialogBase,
-  DeltaDialogBody,
-  DeltaDialogContent,
-  DeltaDialogHeader,
-} from '../dialogs/DeltaDialog'
 
 import type ScreenController from '../../ScreenController'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  FooterActions,
+} from '../Dialog'
 
 export default function AccountSetupScreen({
   selectAccount,
@@ -59,25 +59,25 @@ export default function AccountSetupScreen({
   return (
     <div className='login-screen'>
       <div className='window'>
-        <DeltaDialogBase
+        <Dialog
           isOpen={true}
           backdropProps={{ className: 'no-backdrop' }}
           onClose={() => {}}
           fixed={true}
         >
-          <DeltaDialogHeader title={tx('login_explain')} />
-          <DeltaDialogBody>
-            <DeltaDialogContent>
+          <DialogHeader title={tx('login_explain')} />
+          <DialogBody>
+            <DialogContent>
               <div className='login'>
                 <LoginForm
                   credentials={credentials}
                   setCredentials={setCredentials}
                 />
               </div>
-            </DeltaDialogContent>
-          </DeltaDialogBody>
-          <DeltaDialogFooter>
-            <DeltaDialogFooterActions>
+            </DialogContent>
+          </DialogBody>
+          <DialogFooter>
+            <FooterActions>
               <p
                 id='action-cancel'
                 className={'delta-button bold primary'}
@@ -92,9 +92,9 @@ export default function AccountSetupScreen({
               >
                 {tx('login_title')}
               </p>
-            </DeltaDialogFooterActions>
-          </DeltaDialogFooter>
-        </DeltaDialogBase>
+            </FooterActions>
+          </DialogFooter>
+        </Dialog>
       </div>
     </div>
   )

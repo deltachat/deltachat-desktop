@@ -1,12 +1,12 @@
 import React, { useState, useContext } from 'react'
 import { T } from '@deltachat/jsonrpc-client'
 
-import DeltaDialog from './DeltaDialog'
 import { ScreenContext } from '../../contexts'
 import { getLogger } from '../../../shared/logger'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import InputTransferKey from '../InputTransferKey'
+import { DialogWithHeader } from '../Dialog'
 
 const log = getLogger('frontend/dialogs/EnterAutocryptSetupMessage')
 
@@ -91,7 +91,7 @@ export default function EnterAutocryptSetupMessage({
   }
 
   return (
-    <DeltaDialog
+    <DialogWithHeader
       isOpen={isOpen}
       title={tx('autocrypt_continue_transfer_title')}
       onClose={onClose}
@@ -119,6 +119,6 @@ export default function EnterAutocryptSetupMessage({
           </p>
         </div>
       </div>
-    </DeltaDialog>
+    </DialogWithHeader>
   )
 }

@@ -3,12 +3,6 @@ import { Card, Elevation } from '@blueprintjs/core'
 
 import { useTranslationFunction } from '../../contexts'
 import { DeltaInput } from '../Login-Styles'
-import {
-  DeltaDialogBase,
-  DeltaDialogHeader,
-  DeltaDialogBody,
-  DeltaDialogOkCancelFooter,
-} from './DeltaDialog'
 import { DialogProps } from './DialogController'
 import { SettingsStoreState } from '../../stores/settings'
 import RadioGroup from '../RadioGroup'
@@ -17,6 +11,11 @@ import {
   VIDEO_CHAT_INSTANCE_AUTISTICI,
   VIDEO_CHAT_INSTANCE_SYSTEMLI,
 } from '../../../shared/constants'
+import Dialog, {
+  DialogBody,
+  DialogHeader,
+  OkCancelFooterAction,
+} from '../Dialog'
 
 type RadioButtonValue = 'disabled' | 'custom' | 'systemli' | 'autistici'
 
@@ -70,7 +69,7 @@ export default function EditVideochatInstanceDialog({
   }
 
   return (
-    <DeltaDialogBase
+    <Dialog
       onClose={onClose}
       isOpen={isOpen}
       canOutsideClickClose={false}
@@ -82,8 +81,8 @@ export default function EditVideochatInstanceDialog({
       }}
       fixed
     >
-      <DeltaDialogHeader title={tx('videochat')} />
-      <DeltaDialogBody>
+      <DialogHeader title={tx('videochat')} />
+      <DialogBody>
         <Card elevation={Elevation.ONE}>
           <div
             className='bp4-callout'
@@ -143,8 +142,8 @@ export default function EditVideochatInstanceDialog({
             </>
           )}
         </Card>
-      </DeltaDialogBody>
-      <DeltaDialogOkCancelFooter onCancel={onClickCancel} onOk={onClickOk} />
-    </DeltaDialogBase>
+      </DialogBody>
+      <OkCancelFooterAction onCancel={onClickCancel} onOk={onClickOk} />
+    </Dialog>
   )
 }

@@ -1,20 +1,21 @@
 import { Classes, Card, Elevation, Intent } from '@blueprintjs/core'
 import React, { useEffect, useState, useContext } from 'react'
+import { DcEventType } from '@deltachat/jsonrpc-client'
+
 import { getLogger } from '../../../shared/logger'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { runtime } from '../../runtime'
-import DeltaDialog, {
-  DeltaDialogBase,
-  DeltaDialogBody,
-  DeltaDialogContent,
-  DeltaDialogHeader,
-} from '../dialogs/DeltaDialog'
 import { DeltaProgressBar } from '../Login-Styles'
 import { DialogProps } from '../dialogs/DialogController'
 import { Screens, selectedAccountId } from '../../ScreenController'
 import { BackendRemote, EffectfulBackendActions } from '../../backend-com'
 import processOpenQrUrl from '../helpers/OpenQrUrl'
-import { DcEventType } from '@deltachat/jsonrpc-client'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogHeader,
+  DialogWithHeader,
+} from '../Dialog'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
@@ -61,7 +62,7 @@ function ImportBackupProgressDialog({
 
   const tx = useTranslationFunction()
   return (
-    <DeltaDialog
+    <DialogWithHeader
       onClose={onClose}
       title={tx('import_backup_title')}
       // canOutsideClickClose
@@ -81,7 +82,7 @@ function ImportBackupProgressDialog({
           />
         </Card>
       </div>
-    </DeltaDialog>
+    </DialogWithHeader>
   )
 }
 
@@ -166,7 +167,7 @@ export default function WelcomeScreen({
   return (
     <div className='login-screen'>
       <div className='window'>
-        <DeltaDialogBase
+        <Dialog
           isOpen={true}
           backdropProps={{ className: 'no-backdrop' }}
           onClose={() => {}}
@@ -174,17 +175,16 @@ export default function WelcomeScreen({
           canEscapeKeyClose={true}
         >
           <>
-            <DeltaDialogHeader
+            <DialogHeader
               showBackButton={showBackButton}
               onClickBack={onCancel}
               title={tx('add_account')}
             />
-            <DeltaDialogBody id='welcome-dialog-body'>
-              <DeltaDialogContent id='welcome-dialog-content'>
+            <DialogBody id='welcome-dialog-body'>
+              <DialogContent id='welcome-dialog-content'>
                 <div className='welcome-deltachat'>
                   <img className='delta-icon' src='../images/intro1.png' />
                   <p className='f1'>{tx('welcome_chat_over_email')}</p>
-                  {/* <p className='f2'>{tx('welcome_intro1_message')}</p> */}
                   <button
                     id='action-login-to-email'
                     className='delta-button-round'
@@ -206,10 +206,10 @@ export default function WelcomeScreen({
                   </button>
                   <ImportButton />
                 </div>
-              </DeltaDialogContent>
-            </DeltaDialogBody>
+              </DialogContent>
+            </DialogBody>
           </>
-        </DeltaDialogBase>
+        </Dialog>
       </div>
     </div>
   )

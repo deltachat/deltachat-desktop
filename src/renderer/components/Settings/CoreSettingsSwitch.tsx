@@ -4,7 +4,7 @@ import SettingsStoreInstance, {
   SettingsStoreState,
   useSettingsStore,
 } from '../../stores/settings'
-import { DeltaSwitch2 } from '../dialogs/DeltaDialog'
+import SettingsSwitch from './SettingsSwitch'
 
 function flipDeltaBoolean(value: string) {
   return value === '1' ? '0' : '1'
@@ -36,7 +36,7 @@ export default function CoreSettingsSwitch({
       : settingsStore.settings[settingsKey] === '1'
 
   return (
-    <DeltaSwitch2
+    <SettingsSwitch
       label={label}
       value={value}
       description={description}

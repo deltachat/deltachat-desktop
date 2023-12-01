@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from 'react'
+
 import { DialogProps } from './DialogController'
-import {
-  SmallDialog,
-  DeltaDialogFooter,
-  DeltaDialogFooterActions,
-} from './DeltaDialog'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import SmallDialog from '../SmallDialog'
+import { DialogFooter, FooterActions } from '../Dialog'
 
-export default function EncryptionInfo({
-  chatListItem,
-  isOpen,
-  onClose,
-}: {
+type Props = {
   chatListItem: Pick<
     Type.ChatListItemFetchResult & { kind: 'ChatListItem' },
     'id' | 'dmChatContact'
   >
   isOpen: boolean
   onClose: DialogProps['onClose']
-}) {
+}
+
+export default function EncryptionInfo({
+  chatListItem,
+  isOpen,
+  onClose,
+}: Props) {
   const [encryptionInfo, setEncryptionInfo] = useState('Fetching...')
   useEffect(() => {
     if (!chatListItem) return
@@ -43,8 +43,8 @@ export default function EncryptionInfo({
           {!encryptionInfo && 'Fetching...'}
           {encryptionInfo && encryptionInfo}
         </p>
-        <DeltaDialogFooter>
-          <DeltaDialogFooterActions>
+        <DialogFooter>
+          <FooterActions>
             <p
               className='delta-button primary bold'
               style={{ float: 'right', userSelect: 'text' }}
@@ -52,8 +52,8 @@ export default function EncryptionInfo({
             >
               {tx('ok')}
             </p>
-          </DeltaDialogFooterActions>
-        </DeltaDialogFooter>
+          </FooterActions>
+        </DialogFooter>
       </div>
     </SmallDialog>
   )

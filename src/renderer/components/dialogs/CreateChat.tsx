@@ -23,14 +23,6 @@ import {
   PseudoListItemAddMember,
   PseudoListItemAddContact,
 } from '../helpers/PseudoListItem'
-import {
-  DeltaDialogBase,
-  DeltaDialogHeader,
-  DeltaDialogBody,
-  DeltaDialogOkCancelFooter,
-  DeltaDialogFooter,
-  DeltaDialogFooterActions,
-} from './DeltaDialog'
 import GroupImage from '../GroupImage'
 import { DialogProps } from './DialogController'
 import { runtime } from '../../runtime'
@@ -48,6 +40,13 @@ import { selectedAccountId } from '../../ScreenController'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import ConfirmationDialog from './ConfirmationDialog'
 import { VerifiedContactsRequiredDialog } from './ProtectionStatusDialog'
+import Dialog, {
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+  FooterActions,
+  OkCancelFooterAction,
+} from '../Dialog'
 
 type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
 
@@ -61,7 +60,7 @@ export default function CreateChat(props: CreateChatProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('main')
 
   return (
-    <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
+    <Dialog isOpen={isOpen} onClose={onClose} fixed>
       {viewMode == 'main' && <CreateChatMain {...{ setViewMode, onClose }} />}
       {viewMode == 'createGroup' && (
         <CreateGroup {...{ setViewMode, onClose }} />
@@ -69,7 +68,7 @@ export default function CreateChat(props: CreateChatProps) {
       {viewMode == 'createBroadcastList' && (
         <CreateBroadcastList {...{ setViewMode, onClose }} />
       )}
-    </DeltaDialogBase>
+    </Dialog>
   )
 }
 
@@ -170,7 +169,7 @@ function CreateChatMain(props: CreateChatMainProps) {
 
   return (
     <>
-      <DeltaDialogHeader>
+      <DialogHeader>
         <input
           className='search-input'
           onChange={onSearchChange}
@@ -179,8 +178,8 @@ function CreateChatMain(props: CreateChatMainProps) {
           autoFocus
           spellCheck={false}
         />
-      </DeltaDialogHeader>
-      <DeltaDialogBody>
+      </DialogHeader>
+      <DialogBody>
         <Card>
           <div className='create-chat-contact-list-wrapper'>
             {renderAddGroupIfNeeded()}
@@ -192,14 +191,14 @@ function CreateChatMain(props: CreateChatMainProps) {
             {renderAddContactIfNeeded()}
           </div>
         </Card>
-      </DeltaDialogBody>
-      <DeltaDialogFooter>
-        <DeltaDialogFooterActions>
+      </DialogBody>
+      <DialogFooter>
+        <FooterActions>
           <p className={'delta-button bold primary'} onClick={onClose}>
             {tx('close')}
           </p>
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
+        </FooterActions>
+      </DialogFooter>
     </>
   )
 }
@@ -252,7 +251,7 @@ function CreateGroup(props: CreateGroupProps) {
 
   return (
     <>
-      <DeltaDialogHeader title={tx('menu_new_group')} />
+      <DialogHeader title={tx('menu_new_group')} />
       <div className={Classes.DIALOG_BODY}>
         <Card>
           <ChatSettingsSetNameAndProfileImage
@@ -288,8 +287,8 @@ function CreateGroup(props: CreateGroupProps) {
           </div>
         </Card>
       </div>
-      <DeltaDialogFooter>
-        <DeltaDialogFooterActions>
+      <DialogFooter>
+        <FooterActions>
           <p
             className='delta-button primary bold'
             style={{ marginRight: '10px' }}
@@ -309,8 +308,8 @@ function CreateGroup(props: CreateGroupProps) {
           >
             {tx('group_create_button')}
           </p>
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
+        </FooterActions>
+      </DialogFooter>
     </>
   )
 }
@@ -354,7 +353,7 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
 
   return (
     <>
-      <DeltaDialogHeader title={tx('new_broadcast_list')} />
+      <DialogHeader title={tx('new_broadcast_list')} />
       <div className={Classes.DIALOG_BODY}>
         <Card style={{ paddingTop: '0px' }}>
           <div className='broadcast-list-hint'>
@@ -405,8 +404,8 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
           </div>
         </Card>
       </div>
-      <DeltaDialogFooter>
-        <DeltaDialogFooterActions>
+      <DialogFooter>
+        <FooterActions>
           <p
             className='delta-button primary bold'
             style={{ marginRight: '10px' }}
@@ -426,8 +425,8 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
           >
             {tx('create')}
           </p>
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
+        </FooterActions>
+      </DialogFooter>
     </>
   )
 }
@@ -512,7 +511,7 @@ export function AddMemberInnerDialog({
   isVerificationRequired = false,
 }: {
   onOk: (addMembers: number[]) => void
-  onCancel: Parameters<typeof DeltaDialogOkCancelFooter>[0]['onCancel']
+  onCancel: Parameters<typeof OkCancelFooterAction>[0]['onCancel']
   onSearchChange: ReturnType<typeof useContactSearch>[1]
   queryStr: string
   searchContacts: Map<number, Type.Contact>
@@ -687,10 +686,10 @@ export function AddMemberInnerDialog({
 
   return (
     <>
-      <DeltaDialogHeader
+      <DialogHeader
         title={!isBroadcast ? tx('group_add_members') : tx('add_recipients')}
       />
-      <DeltaDialogBody style={{ overflow: 'hidden' }}>
+      <DialogBody style={{ overflow: 'hidden' }}>
         <Card style={{ padding: '0px 20px', height: '100%' }}>
           <div className='AddMemberChipsWrapper'>
             <div className='AddMemberChips'>
@@ -734,8 +733,8 @@ export function AddMemberInnerDialog({
             {renderAddContactIfNeeded()}
           </div>
         </Card>
-      </DeltaDialogBody>
-      <DeltaDialogOkCancelFooter
+      </DialogBody>
+      <OkCancelFooterAction
         onCancel={_onCancel}
         onOk={_onOk}
         disableOK={contactIdsToAdd.length === 0 ? true : false}

@@ -4,12 +4,9 @@ import { BackendRemote } from '../../backend-com'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { runtime } from '../../runtime'
 import { selectedAccountId } from '../../ScreenController'
-import {
-  SmallDialog,
-  DeltaDialogFooter,
-  DeltaDialogFooterActions,
-} from './DeltaDialog'
 import QrCode from './QrCode'
+import SmallDialog from '../SmallDialog'
+import { DialogFooter, FooterActions } from '../Dialog'
 
 import type { DialogProps } from './DialogController'
 
@@ -44,8 +41,8 @@ export function ProtectionBrokenDialog({
           {tx('chat_protection_broken_explanation', name)}
         </p>
       </div>
-      <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
-        <DeltaDialogFooterActions style={{ justifyContent: 'space-between' }}>
+      <DialogFooter style={{ padding: '0px 20px 10px' }}>
+        <FooterActions style={{ justifyContent: 'space-between' }}>
           <p
             className='delta-button bold primary'
             onClick={onLearnMore}
@@ -59,8 +56,8 @@ export function ProtectionBrokenDialog({
           <p className={`delta-button bold primary`} onClick={onClose}>
             {tx('ok')}
           </p>
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
+        </FooterActions>
+      </DialogFooter>
     </SmallDialog>
   )
 }
@@ -91,8 +88,8 @@ export function VerifiedContactsRequiredDialog({
           {tx('verified_contact_required_explain')}
         </p>
       </div>
-      <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
-        <DeltaDialogFooterActions style={{ justifyContent: 'space-between' }}>
+      <DialogFooter style={{ padding: '0px 20px 10px' }}>
+        <FooterActions style={{ justifyContent: 'space-between' }}>
           <p
             className='delta-button bold primary'
             onClick={onLearnMore}
@@ -106,8 +103,8 @@ export function VerifiedContactsRequiredDialog({
           <p className={`delta-button bold primary`} onClick={onClose}>
             {tx('ok')}
           </p>
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
+        </FooterActions>
+      </DialogFooter>
     </SmallDialog>
   )
 }
@@ -126,8 +123,8 @@ export function ProtectionEnabledDialog({ isOpen, onClose }: DialogProps) {
           {tx('chat_protection_enabled_explanation')}
         </p>
       </div>
-      <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
-        <DeltaDialogFooterActions style={{ justifyContent: 'space-between' }}>
+      <DialogFooter style={{ padding: '0px 20px 10px' }}>
+        <FooterActions style={{ justifyContent: 'space-between' }}>
           <p
             className='delta-button bold primary'
             onClick={onLearnMore}
@@ -138,8 +135,8 @@ export function ProtectionEnabledDialog({ isOpen, onClose }: DialogProps) {
           <p className={`delta-button bold primary`} onClick={onClose}>
             {tx('ok')}
           </p>
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
+        </FooterActions>
+      </DialogFooter>
     </SmallDialog>
   )
 }

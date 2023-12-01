@@ -6,8 +6,8 @@ import { ScreenContext, useTranslationFunction } from '../../contexts'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
-import { SelectDialogOption, SmallSelectDialog } from '../dialogs/DeltaDialog'
 import SettingsSelector from './SettingsSelector'
+import SmallSelectDialog, { SelectDialogOption } from '../SmallSelectDialog'
 
 function showToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)

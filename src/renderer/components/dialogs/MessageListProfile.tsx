@@ -1,15 +1,11 @@
 import React, { useState } from 'react'
 import { Card, Classes } from '@blueprintjs/core'
-import {
-  DeltaDialogBase,
-  DeltaDialogHeader,
-  DeltaDialogOkCancelFooter,
-} from './DeltaDialog'
-import { useGroupImage, ChatSettingsSetNameAndProfileImage } from './CreateChat'
 
+import { useGroupImage, ChatSettingsSetNameAndProfileImage } from './CreateChat'
 import { DialogProps } from './DialogController'
 import { Type } from '../../backend-com'
 import { modifyGroup } from '../helpers/ChatMethods'
+import Dialog, { DialogHeader, OkCancelFooterAction } from '../Dialog'
 
 export default function MailingListProfile(props: {
   isOpen: DialogProps['isOpen']
@@ -28,8 +24,8 @@ export default function MailingListProfile(props: {
   const onUpdateGroup = useEdit(groupName, groupImage, chat.id, onClose)
 
   return (
-    <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
-      <DeltaDialogHeader title={tx('mailing_list')} />
+    <Dialog isOpen={isOpen} onClose={onClose} fixed>
+      <DialogHeader title={tx('mailing_list')} />
       <div className={Classes.DIALOG_BODY}>
         <Card>
           <ChatSettingsSetNameAndProfileImage
@@ -48,8 +44,8 @@ export default function MailingListProfile(props: {
           </div>
         </Card>
       </div>
-      <DeltaDialogOkCancelFooter onCancel={onClose} onOk={onUpdateGroup} />
-    </DeltaDialogBase>
+      <OkCancelFooterAction onCancel={onClose} onOk={onUpdateGroup} />
+    </Dialog>
   )
 }
 

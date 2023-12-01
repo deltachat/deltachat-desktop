@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react'
-import DeltaDialog, { DeltaDialogBody, DeltaDialogContent } from './DeltaDialog'
+import debounce from 'debounce'
 
 import { ContactList } from '../contact/ContactList'
 import { ScreenContext } from '../../contexts'
 import { DialogProps } from './DialogController'
-import debounce from 'debounce'
 import {
   BackendRemote,
   EffectfulBackendActions,
@@ -12,6 +11,7 @@ import {
   Type,
 } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import { DialogBody, DialogContent, DialogWithHeader } from '../Dialog'
 
 export default function UnblockContacts(props: {
   isOpen: DialogProps['isOpen']
@@ -48,14 +48,14 @@ export default function UnblockContacts(props: {
   const tx = window.static_translate
   if (blockedContacts === null) return null
   return (
-    <DeltaDialog
+    <DialogWithHeader
       isOpen={isOpen}
       onClose={onClose}
       title={tx('pref_blocked_contacts')}
       fixed={true}
     >
-      <DeltaDialogBody>
-        <DeltaDialogContent>
+      <DialogBody>
+        <DialogContent>
           {blockedContacts.length === 0 && <p>{tx('blocked_empty_hint')}</p>}
           {blockedContacts.length > 0 && (
             <div
@@ -71,8 +71,8 @@ export default function UnblockContacts(props: {
               />
             </div>
           )}
-        </DeltaDialogContent>
-      </DeltaDialogBody>
-    </DeltaDialog>
+        </DialogContent>
+      </DialogBody>
+    </DialogWithHeader>
   )
 }

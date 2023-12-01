@@ -1,20 +1,16 @@
 import React from 'react'
-import {
-  SmallDialog,
-  DeltaDialogFooter,
-  DeltaDialogFooterActions,
-} from './DeltaDialog'
-import { useTranslationFunction } from '../../contexts'
 
-export default function AlertDialog({
-  message,
-  onClose,
-  cb,
-}: {
+import { useTranslationFunction } from '../../contexts'
+import SmallDialog from '../SmallDialog'
+import { DialogFooter, FooterActions } from '../Dialog'
+
+type Props = {
   cb?: () => void
   message: string | JSX.Element
   onClose: () => void
-}) {
+}
+
+export default function AlertDialog({ message, onClose, cb }: Props) {
   const tx = useTranslationFunction()
   const isOpen = !!message
 
@@ -28,13 +24,13 @@ export default function AlertDialog({
       <div className='bp4-dialog-body-with-padding'>
         <p style={{ userSelect: 'auto' }}>{message}</p>
       </div>
-      <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
-        <DeltaDialogFooterActions>
+      <DialogFooter style={{ padding: '0px 20px 10px' }}>
+        <FooterActions>
           <p className='delta-button bold primary' onClick={() => onClick()}>
             {tx('ok')}
           </p>
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
+        </FooterActions>
+      </DialogFooter>
     </SmallDialog>
   )
 }

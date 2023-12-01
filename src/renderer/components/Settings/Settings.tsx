@@ -3,11 +3,6 @@ import { Elevation, Card } from '@blueprintjs/core'
 
 import { useSettingsStore } from '../../stores/settings'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
-import {
-  DeltaDialogBase,
-  DeltaDialogBody,
-  DeltaDialogHeader,
-} from '../dialogs/DeltaDialog'
 import { SendBackupDialog } from '../dialogs/setup_multi_device/SendBackup'
 import { runtime } from '../../runtime'
 import { DialogProps } from '../dialogs/DialogController'
@@ -21,6 +16,7 @@ import Advanced from './Advanced'
 import Profile from './Profile'
 
 import styles from './styles.module.scss'
+import Dialog, { DialogBody, DialogHeader } from '../Dialog'
 
 type SettingsView =
   | 'main'
@@ -48,20 +44,15 @@ export default function Settings({ isOpen, onClose }: DialogProps) {
   }, [])
 
   return (
-    <DeltaDialogBase
-      isOpen={isOpen}
-      onClose={onClose}
-      className={styles.settings}
-      fixed
-    >
+    <Dialog isOpen={isOpen} onClose={onClose} className={styles.settings} fixed>
       {settingsMode === 'main' && (
         <>
-          <DeltaDialogHeader
+          <DialogHeader
             title={tx('menu_settings')}
             onClose={onClose}
             showCloseButton={true}
           />
-          <DeltaDialogBody>
+          <DialogBody>
             <Card elevation={Elevation.ONE} style={{ paddingTop: '0px' }}>
               <Profile settingsStore={settingsStore} onClose={onClose} />
               <br />
@@ -109,54 +100,54 @@ export default function Settings({ isOpen, onClose }: DialogProps) {
                 </SettingsIconButton>
               )}
             </Card>
-          </DeltaDialogBody>
+          </DialogBody>
         </>
       )}
       {settingsMode === 'chats_and_media' && (
         <>
-          <DeltaDialogHeader
+          <DialogHeader
             title={tx('pref_chats_and_media')}
             showBackButton={true}
             onClickBack={() => setSettingsMode('main')}
             showCloseButton={true}
             onClose={onClose}
           />
-          <DeltaDialogBody>
+          <DialogBody>
             <Card elevation={Elevation.ONE}>
               <ChatsAndMedia
                 settingsStore={settingsStore}
                 desktopSettings={settingsStore.desktopSettings}
               />
             </Card>
-          </DeltaDialogBody>
+          </DialogBody>
         </>
       )}
       {settingsMode === 'notifications' && (
         <>
-          <DeltaDialogHeader
+          <DialogHeader
             title={tx('pref_notifications')}
             showBackButton={true}
             onClickBack={() => setSettingsMode('main')}
             showCloseButton={true}
             onClose={onClose}
           />
-          <DeltaDialogBody>
+          <DialogBody>
             <Card elevation={Elevation.ONE}>
               <Notifications desktopSettings={settingsStore.desktopSettings} />
             </Card>
-          </DeltaDialogBody>
+          </DialogBody>
         </>
       )}
       {settingsMode === 'appearance' && (
         <>
-          <DeltaDialogHeader
+          <DialogHeader
             title={tx('pref_appearance')}
             showBackButton={true}
             onClickBack={() => setSettingsMode('main')}
             showCloseButton={true}
             onClose={onClose}
           />
-          <DeltaDialogBody>
+          <DialogBody>
             <Card elevation={Elevation.ONE}>
               <Appearance
                 rc={settingsStore.rc}
@@ -164,25 +155,25 @@ export default function Settings({ isOpen, onClose }: DialogProps) {
                 settingsStore={settingsStore}
               />
             </Card>
-          </DeltaDialogBody>
+          </DialogBody>
         </>
       )}
       {settingsMode === 'advanced' && (
         <>
-          <DeltaDialogHeader
+          <DialogHeader
             title={tx('menu_advanced')}
             showBackButton={true}
             onClickBack={() => setSettingsMode('main')}
             showCloseButton={true}
             onClose={onClose}
           />
-          <DeltaDialogBody>
+          <DialogBody>
             <Card elevation={Elevation.ONE}>
               <Advanced settingsStore={settingsStore} />
             </Card>
-          </DeltaDialogBody>
+          </DialogBody>
         </>
       )}
-    </DeltaDialogBase>
+    </Dialog>
   )
 }

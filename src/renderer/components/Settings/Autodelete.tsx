@@ -3,15 +3,6 @@ import { H5 } from '@blueprintjs/core'
 import classNames from 'classnames'
 
 import { ScreenContext, useTranslationFunction } from '../../contexts'
-import {
-  DeltaDialogBody,
-  DeltaDialogContent,
-  DeltaDialogFooter,
-  DeltaDialogHeader,
-  SmallDialog,
-  SmallSelectDialog,
-  SelectDialogOption,
-} from '../dialogs/DeltaDialog'
 import { DialogProps } from '../dialogs/DialogController'
 import { AutodeleteDuration } from '../../../shared/constants'
 import { DeltaCheckbox } from '../contact/ContactListItem'
@@ -21,6 +12,14 @@ import SettingsStoreInstance, {
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import SettingsSelector from './SettingsSelector'
+import SmallSelectDialog, { SelectDialogOption } from '../SmallSelectDialog'
+import SmallDialog from '../SmallDialog'
+import {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+} from '../Dialog'
 
 function durationToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)
@@ -157,17 +156,17 @@ function AutodeleteConfirmationDialog({
     onClose()
   }
 
-  const tx = window.static_translate
+  const tx = useTranslationFunction()
 
   return (
     <SmallDialog isOpen={isOpen} onClose={onClose}>
-      <DeltaDialogHeader
+      <DialogHeader
         title={
           fromServer ? tx('autodel_server_title') : tx('autodel_device_title')
         }
       />
-      <DeltaDialogBody>
-        <DeltaDialogContent>
+      <DialogBody>
+        <DialogContent>
           <p style={{ whiteSpace: 'pre-line' }}>
             {tx(fromServer ? 'autodel_server_ask' : 'autodel_device_ask', [
               String(estimateCount),
@@ -178,9 +177,9 @@ function AutodeleteConfirmationDialog({
             <DeltaCheckbox checked={isConfirmed} onClick={toggleIsConfirmed} />
             <div style={{ alignSelf: 'center' }}>{tx('autodel_confirm')}</div>
           </div>
-        </DeltaDialogContent>
-      </DeltaDialogBody>
-      <DeltaDialogFooter
+        </DialogContent>
+      </DialogBody>
+      <DialogFooter
         style={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -204,7 +203,7 @@ function AutodeleteConfirmationDialog({
         >
           {tx('ok')}
         </p>
-      </DeltaDialogFooter>
+      </DialogFooter>
     </SmallDialog>
   )
 }

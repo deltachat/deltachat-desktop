@@ -5,17 +5,16 @@ import { useTranslationFunction } from '../../../contexts'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../../stores/settings'
-import {
-  DeltaDialogBase,
-  DeltaDialogBody,
-  DeltaDialogHeader,
-  DeltaDialogOkCancelFooter,
-} from '../DeltaDialog'
 import { DialogProps } from '../DialogController'
 import { BackendRemote } from '../../../backend-com'
 import { selectedAccountId } from '../../../ScreenController'
 import { DeltaInput, DeltaTextarea } from '../../Login-Styles'
 import ProfileImageSelector from './ProfileImageSelector'
+import Dialog, {
+  DialogBody,
+  DialogHeader,
+  OkCancelFooterAction,
+} from '../../Dialog'
 
 export default function EditProfileDialog({
   onClose,
@@ -37,7 +36,7 @@ export default function EditProfileDialog({
   const tx = useTranslationFunction()
   title = title || tx('pref_edit_profile')
   return (
-    <DeltaDialogBase
+    <Dialog
       onClose={onClose}
       isOpen={isOpen}
       canOutsideClickClose={false}
@@ -46,7 +45,7 @@ export default function EditProfileDialog({
         width: '500px',
       }}
     >
-      <DeltaDialogHeader title={title} />
+      <DialogHeader title={title} />
       {EditProfileDialogInner({
         settingsStore,
         onClose,
@@ -54,7 +53,7 @@ export default function EditProfileDialog({
         confirmLabel,
         firstSetup,
       })}
-    </DeltaDialogBase>
+    </Dialog>
   )
 }
 
@@ -101,7 +100,7 @@ function EditProfileDialogInner({
   }
   return (
     <>
-      <DeltaDialogBody noFooter>
+      <DialogBody noFooter>
         <Card elevation={Elevation.ONE}>
           <div
             className='profile-image-username center'
@@ -149,8 +148,8 @@ function EditProfileDialogInner({
             />
           )}
         </Card>
-      </DeltaDialogBody>
-      <DeltaDialogOkCancelFooter
+      </DialogBody>
+      <OkCancelFooterAction
         cancelLabel={cancelLabel}
         confirmLabel={confirmLabel}
         onCancel={onCancel}

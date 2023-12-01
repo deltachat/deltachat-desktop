@@ -1,11 +1,20 @@
 import React from 'react'
-import {
-  SmallDialog,
-  DeltaDialogFooter,
-  DeltaDialogFooterActions,
-} from './DeltaDialog'
+
 import { useTranslationFunction } from '../../contexts'
+import SmallDialog from '../SmallDialog'
+import { DialogFooter, FooterActions } from '../Dialog'
+
 import type { DialogProps } from './DialogController'
+
+type Props = {
+  message: string
+  cancelLabel?: string
+  confirmLabel?: string
+  cb: (yes: boolean) => void
+  isConfirmDanger?: boolean
+  noMargin?: boolean
+  header?: string
+} & DialogProps
 
 export default function ConfirmationDialog({
   message,
@@ -16,15 +25,7 @@ export default function ConfirmationDialog({
   isConfirmDanger = false,
   noMargin = false,
   header,
-}: {
-  message: string
-  cancelLabel?: string
-  confirmLabel?: string
-  cb: (yes: boolean) => void
-  isConfirmDanger?: boolean
-  noMargin?: boolean
-  header?: string
-} & DialogProps) {
+}: Props) {
   const isOpen = !!message
   const tx = useTranslationFunction()
 
@@ -57,8 +58,8 @@ export default function ConfirmationDialog({
           {message}
         </p>
       </div>
-      <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
-        <DeltaDialogFooterActions>
+      <DialogFooter style={{ padding: '0px 20px 10px' }}>
+        <FooterActions>
           <p
             className='delta-button bold primary'
             onClick={() => onClick(false)}
@@ -74,8 +75,8 @@ export default function ConfirmationDialog({
           >
             {confirmLabel || tx('yes')}
           </p>
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
+        </FooterActions>
+      </DialogFooter>
     </SmallDialog>
   )
 }

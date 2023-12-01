@@ -1,20 +1,20 @@
+import AutoSizer from 'react-virtualized-auto-sizer'
 import React from 'react'
+import classNames from 'classnames'
+import { C, T } from '@deltachat/jsonrpc-client'
 import { Card, Classes } from '@blueprintjs/core'
-import { DeltaDialogBase, DeltaDialogHeader } from './DeltaDialog'
+
 import ChatListItem from '../chat/ChatListItem'
 import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
-import classNames from 'classnames'
 import { DialogProps } from './DialogController'
-
-import { C, T } from '@deltachat/jsonrpc-client'
 import { ChatListPart, useLogicVirtualChatList } from '../chat/ChatList'
-import AutoSizer from 'react-virtualized-auto-sizer'
 import { useChatList } from '../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../ThemeManager'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { forwardMessage, selectChat } from '../helpers/ChatMethods'
 import { confirmForwardMessage } from '../message/messageFunctions'
+import Dialog, { DialogHeader } from '../Dialog'
 
 export default function ForwardMessage(props: {
   message: T.Message
@@ -52,11 +52,8 @@ export default function ForwardMessage(props: {
   const CHATLISTITEM_CHAT_HEIGHT =
     Number(useThemeCssVar('--SPECIAL-chatlist-item-chat-height')) || 64
   return (
-    <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
-      <DeltaDialogHeader
-        onClose={onClose}
-        title={tx('forward_to')}
-      ></DeltaDialogHeader>
+    <Dialog isOpen={isOpen} onClose={onClose} fixed>
+      <DialogHeader onClose={onClose} title={tx('forward_to')} />
       <div
         className={classNames(
           Classes.DIALOG_BODY,
@@ -108,6 +105,6 @@ export default function ForwardMessage(props: {
           </div>
         </Card>
       </div>
-    </DeltaDialogBase>
+    </Dialog>
   )
 }

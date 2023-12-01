@@ -1,15 +1,11 @@
+import AutoSizer from 'react-virtualized-auto-sizer'
 import React, { useState, useContext, useEffect } from 'react'
-import {
-  DeltaDialogBase,
-  DeltaDialogHeader,
-  DeltaDialogBody,
-  DeltaDialogContent,
-  DeltaDialogContentTextSeparator,
-  DeltaDialogOkCancelFooter,
-} from './DeltaDialog'
+import moment from 'moment'
+import { C } from '@deltachat/jsonrpc-client'
+import { Card, Elevation } from '@blueprintjs/core'
+
 import ChatListItem from '../chat/ChatListItem'
 import { useChatList } from '../chat/ChatListHelpers'
-import { C } from '@deltachat/jsonrpc-client'
 import {
   MessagesDisplayContext,
   ScreenContext,
@@ -17,18 +13,22 @@ import {
 } from '../../contexts'
 import { Avatar, ClickForFullscreenAvatarWrapper } from '../Avatar'
 import { useLogicVirtualChatList, ChatListPart } from '../chat/ChatList'
-import AutoSizer from 'react-virtualized-auto-sizer'
 import MessageBody from '../message/MessageBody'
 import { useThemeCssVar } from '../../ThemeManager'
 import { DialogProps } from './DialogController'
-import { Card, Elevation } from '@blueprintjs/core'
 import { DeltaInput } from '../Login-Styles'
 import { openViewProfileDialog, selectChat } from '../helpers/ChatMethods'
 import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import moment from 'moment'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import { getLogger } from '../../../shared/logger'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogHeader,
+  OkCancelFooterAction,
+} from '../Dialog'
+import ContentTextSeparator from '../Dialog/ContentTextSeparator'
 
 const log = getLogger('renderer/dialogs/ViewProfile')
 
@@ -103,8 +103,8 @@ export default function ViewProfile(props: {
   }, [accountId, contact.id])
 
   return (
-    <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
-      <DeltaDialogHeader
+    <Dialog isOpen={isOpen} onClose={onClose} fixed>
+      <DialogHeader
         title={tx('contact')}
         onClickEdit={onClickEdit}
         showEditButton={!(isDeviceChat || isSelfChat)}
@@ -113,12 +113,12 @@ export default function ViewProfile(props: {
         showBackButton={Boolean(onBack)}
         onClickBack={onBack}
       />
-      <DeltaDialogBody noFooter>
-        <DeltaDialogContent noPadding noOverflow>
+      <DialogBody noFooter>
+        <DialogContent noPadding noOverflow>
           <ViewProfileInner contact={contact} onClose={onClose} />
-        </DeltaDialogContent>
-      </DeltaDialogBody>
-    </DeltaDialogBase>
+        </DialogContent>
+      </DialogBody>
+    </Dialog>
   )
 }
 
@@ -288,9 +288,7 @@ export function ViewProfileInner({
           </div>
           {statusText != '' && (
             <>
-              <DeltaDialogContentTextSeparator
-                text={tx('pref_default_status_label')}
-              />
+              <ContentTextSeparator text={tx('pref_default_status_label')} />
               <div className='status-text'>
                 <MessagesDisplayContext.Provider
                   value={{
@@ -307,9 +305,7 @@ export function ViewProfileInner({
         </div>
         {!(isDeviceChat || isSelfChat) && (
           <>
-            <DeltaDialogContentTextSeparator
-              text={tx('profile_shared_chats')}
-            />
+            <ContentTextSeparator text={tx('profile_shared_chats')} />
             <div className='mutual-chats' style={{ flexGrow: 1 }}>
               <AutoSizer>
                 {({ width, height }) => (
@@ -363,7 +359,7 @@ export function EditContactNameDialog({
     onOk(contactName)
   }
   return (
-    <DeltaDialogBase
+    <Dialog
       onClose={onClose}
       isOpen={isOpen}
       canOutsideClickClose={false}
@@ -375,8 +371,8 @@ export function EditContactNameDialog({
       }}
       fixed
     >
-      <DeltaDialogHeader title={tx('menu_edit_name')} />
-      <DeltaDialogBody>
+      <DialogHeader title={tx('menu_edit_name')} />
+      <DialogBody>
         <Card elevation={Elevation.ONE}>
           <DeltaInput
             key='contactname'
@@ -391,8 +387,8 @@ export function EditContactNameDialog({
             }}
           />
         </Card>
-      </DeltaDialogBody>
-      <DeltaDialogOkCancelFooter onCancel={onClickCancel} onOk={onClickOk} />
-    </DeltaDialogBase>
+      </DialogBody>
+      <OkCancelFooterAction onCancel={onClickCancel} onOk={onClickOk} />
+    </Dialog>
   )
 }

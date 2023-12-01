@@ -3,15 +3,12 @@ import { Card, H5, Classes, Callout } from '@blueprintjs/core'
 
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { DialogProps } from '../dialogs/DialogController'
-import DeltaDialog, {
-  DeltaDialogFooter,
-  DeltaDialogFooterActions,
-} from '../dialogs/DeltaDialog'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import SettingsButton from './SettingsButton'
 import CoreSettingsSwitch from './CoreSettingsSwitch'
 import InputTransferKey from '../InputTransferKey'
+import { DialogFooter, DialogWithHeader, FooterActions } from '../Dialog'
 
 export default function Encryption() {
   const { openDialog } = useContext(ScreenContext)
@@ -58,13 +55,13 @@ export function KeyViewPanel({
           </div>
         </Card>
       </div>
-      <DeltaDialogFooter>
-        <DeltaDialogFooterActions>
+      <DialogFooter>
+        <FooterActions>
           <p className='delta-button bold' onClick={onClose}>
             {tx('done')}
           </p>
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
+        </FooterActions>
+      </DialogFooter>
     </React.Fragment>
   )
 }
@@ -117,12 +114,12 @@ export function SendAutocryptSetupMessage({
   }
 
   return (
-    <DeltaDialog
+    <DialogWithHeader
       isOpen={isOpen}
       title={tx('autocrypt_send_asm_title')}
       onClose={onClose}
     >
       {body}
-    </DeltaDialog>
+    </DialogWithHeader>
   )
 }

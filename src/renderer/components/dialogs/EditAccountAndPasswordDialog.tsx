@@ -2,12 +2,6 @@ import { Card, Elevation } from '@blueprintjs/core'
 import React, { useState, useContext, useEffect } from 'react'
 
 import { useTranslationFunction, ScreenContext } from '../../contexts'
-import {
-  DeltaDialogBody,
-  DeltaDialogOkCancelFooter,
-  DeltaDialogBase,
-  DeltaDialogHeader,
-} from '../dialogs/DeltaDialog'
 import { DialogProps } from '../dialogs/DialogController'
 import { BackendRemote } from '../../backend-com'
 import { Credentials } from '../../../shared/shared-types'
@@ -16,6 +10,11 @@ import LoginForm, {
   defaultCredentials,
 } from '../LoginForm'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
+import Dialog, {
+  DialogBody,
+  DialogHeader,
+  OkCancelFooterAction,
+} from '../Dialog'
 
 export default function EditAccountAndPasswordDialog({
   isOpen,
@@ -24,7 +23,7 @@ export default function EditAccountAndPasswordDialog({
   const tx = useTranslationFunction()
 
   return (
-    <DeltaDialogBase
+    <Dialog
       onClose={onClose}
       isOpen={isOpen}
       canOutsideClickClose={false}
@@ -33,9 +32,9 @@ export default function EditAccountAndPasswordDialog({
         width: '500px',
       }}
     >
-      <DeltaDialogHeader title={tx('pref_password_and_account_settings')} />
+      <DialogHeader title={tx('pref_password_and_account_settings')} />
       {EditAccountInner(onClose)}
-    </DeltaDialogBase>
+    </Dialog>
   )
 }
 
@@ -123,7 +122,7 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
   if (accountSettings === null) return null
   return (
     <>
-      <DeltaDialogBody noFooter>
+      <DialogBody noFooter>
         <Card elevation={Elevation.ONE}>
           {accountSettings && (
             <LoginForm
@@ -132,8 +131,8 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
             />
           )}
         </Card>
-      </DeltaDialogBody>
-      <DeltaDialogOkCancelFooter onCancel={() => onClose()} onOk={onUpdate} />
+      </DialogBody>
+      <OkCancelFooterAction onCancel={() => onClose()} onOk={onUpdate} />
     </>
   )
 }

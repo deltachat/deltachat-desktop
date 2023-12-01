@@ -5,12 +5,12 @@ import React, {
   useContext,
   useCallback,
 } from 'react'
-import { DeltaDialogBase, DeltaDialogCloseButton } from './DeltaDialog'
-import { DialogProps } from './DialogController'
 import { C } from '@deltachat/jsonrpc-client'
+import moment from 'moment'
+
+import { DialogProps } from './DialogController'
 import { getLogger } from '../../../shared/logger'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
-import moment from 'moment'
 import {
   openMessageInfo,
   setQuoteInDraft,
@@ -22,6 +22,7 @@ import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { runtime } from '../../runtime'
 import { jumpToMessage } from '../helpers/ChatMethods'
+import Dialog, { CloseButton } from '../Dialog'
 
 const log = getLogger('render/ChatAuditLog')
 
@@ -158,7 +159,7 @@ export default function ChatAuditLogDialog(props: {
   const tx = useTranslationFunction()
 
   return (
-    <DeltaDialogBase
+    <Dialog
       isOpen={isOpen}
       onClose={onClose}
       fixed
@@ -171,7 +172,7 @@ export default function ChatAuditLogDialog(props: {
           <h4>{tx('chat_audit_log_title', selectedChat.name)}</h4>
           <h5>{tx('chat_audit_log_description')}</h5>
         </div>
-        <DeltaDialogCloseButton onClick={onClose} />
+        <CloseButton onClick={onClose} />
       </div>
 
       {loading ? (
@@ -250,6 +251,6 @@ export default function ChatAuditLogDialog(props: {
           </ul>
         </div>
       )}
-    </DeltaDialogBase>
+    </Dialog>
   )
 }

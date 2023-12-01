@@ -1,15 +1,9 @@
 import React from 'react'
+import { Spinner } from '@blueprintjs/core'
+
 import { ConfigureProgressDialog } from '../LoginForm'
 import { Screens, selectedAccountId } from '../../ScreenController'
 import { useTranslationFunction } from '../../contexts'
-import {
-  DeltaDialogFooter,
-  DeltaDialogFooterActions,
-  DeltaDialogBody,
-  DeltaDialogContent,
-  SmallDialog,
-} from '../dialogs/DeltaDialog'
-import { Spinner } from '@blueprintjs/core'
 import { DialogProps } from '../dialogs/DialogController'
 import { runtime } from '../../runtime'
 import { getLogger } from '../../../shared/logger'
@@ -19,6 +13,13 @@ import { EffectfulBackendActions } from '../../backend-com'
 import { BackendRemote, Type } from '../../backend-com'
 import { ImportBackupTransferProgressDialog } from '../dialogs/setup_multi_device/ReceiveBackup'
 import processMailtoUrl from './MailtoUrl'
+import SmallDialog from '../SmallDialog'
+import {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  FooterActions,
+} from '../Dialog'
 
 const log = getLogger('renderer/processOpenUrl')
 
@@ -38,18 +39,18 @@ export function ProcessQrCodeDialog({
 
   return (
     <SmallDialog isOpen={isOpen} onClose={onClose}>
-      <DeltaDialogBody>
-        <DeltaDialogContent style={{ height: '80px', padding: '20px' }}>
+      <DialogBody>
+        <DialogContent style={{ height: '80px', padding: '20px' }}>
           <Spinner />
-        </DeltaDialogContent>
-      </DeltaDialogBody>
-      <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
-        <DeltaDialogFooterActions>
+        </DialogContent>
+      </DialogBody>
+      <DialogFooter style={{ padding: '0px 20px 10px' }}>
+        <FooterActions>
           <p className='delta-button bold primary' onClick={onCancel}>
             {tx('cancel')}
           </p>
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
+        </FooterActions>
+      </DialogFooter>
     </SmallDialog>
   )
 }
@@ -339,8 +340,8 @@ function copyContentAlertDialog({
       <div className='bp4-dialog-body-with-padding'>
         <p style={{ wordBreak: 'break-word' }}>{message}</p>
       </div>
-      <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
-        <DeltaDialogFooterActions>
+      <DialogFooter style={{ padding: '0px 20px 10px' }}>
+        <FooterActions>
           <p
             className='delta-button bold primary'
             onClick={() => {
@@ -358,8 +359,8 @@ function copyContentAlertDialog({
           >
             {tx('ok')}
           </p>
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
+        </FooterActions>
+      </DialogFooter>
     </SmallDialog>
   )
 }

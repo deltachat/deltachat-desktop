@@ -8,12 +8,6 @@ import React, {
 import { C, DcEventType } from '@deltachat/jsonrpc-client'
 import { Card, Classes, Elevation } from '@blueprintjs/core'
 
-import {
-  DeltaDialogBase,
-  DeltaDialogHeader,
-  DeltaDialogBody,
-  DeltaDialogOkCancelFooter,
-} from './DeltaDialog'
 import ChatListItem from '../chat/ChatListItem'
 import { useContactSearch, AddMemberInnerDialog } from './CreateChat'
 import { QrCodeShowQrInner } from './QrCode'
@@ -41,6 +35,11 @@ import { selectedAccountId } from '../../ScreenController'
 import { modifyGroup } from '../helpers/ChatMethods'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import { useSettingsStore } from '../../stores/settings'
+import Dialog, {
+  DialogBody,
+  DialogHeader,
+  OkCancelFooterAction,
+} from '../Dialog'
 
 const log = getLogger('renderer/ViewGroup')
 
@@ -94,7 +93,7 @@ export default function ViewGroup(props: {
   const chat = useChat(props.chat)
 
   return (
-    <DeltaDialogBase
+    <Dialog
       isOpen={isOpen}
       onClose={onClose}
       fixed
@@ -104,7 +103,7 @@ export default function ViewGroup(props: {
       }}
     >
       <ViewGroupInner onClose={onClose} chat={chat} isBroadcast={isBroadcast} />
-    </DeltaDialogBase>
+    </Dialog>
   )
 }
 
@@ -244,7 +243,7 @@ function ViewGroupInner(props: {
     <>
       {!profileContact && (
         <>
-          <DeltaDialogHeader
+          <DialogHeader
             title={!isBroadcast ? tx('tab_group') : tx('broadcast_list')}
             onClickEdit={onClickEdit}
             showEditButton={!chatDisabled}
@@ -370,7 +369,7 @@ export function AddMemberDialog({
   const [queryStr, onSearchChange, _, refreshContacts] =
     useContactSearch(updateSearchContacts)
   return (
-    <DeltaDialogBase
+    <Dialog
       onClose={onClose}
       isOpen={isOpen}
       canOutsideClickClose={false}
@@ -397,7 +396,7 @@ export function AddMemberDialog({
         isBroadcast,
         isVerificationRequired,
       })}
-    </DeltaDialogBase>
+    </Dialog>
   )
 }
 
@@ -411,7 +410,7 @@ export function ShowQRDialog({
   const tx = useTranslationFunction()
 
   return (
-    <DeltaDialogBase
+    <Dialog
       onClose={onClose}
       isOpen={isOpen}
       canOutsideClickClose={false}
@@ -422,13 +421,13 @@ export function ShowQRDialog({
       }}
       fixed
     >
-      <DeltaDialogHeader title={tx('qrshow_title')} onClose={onClose} />
+      <DialogHeader title={tx('qrshow_title')} onClose={onClose} />
       <QrCodeShowQrInner
         qrCode={qrCode}
         qrCodeSVG={qrCodeSVG}
         description={tx('qrshow_join_group_hint', [groupName])}
       />
-    </DeltaDialogBase>
+    </Dialog>
   )
 }
 
@@ -455,7 +454,7 @@ export function EditGroupNameDialog({
     onOk(groupName, groupImage)
   }
   return (
-    <DeltaDialogBase
+    <Dialog
       onClose={onClose}
       isOpen={isOpen}
       canOutsideClickClose={false}
@@ -467,14 +466,14 @@ export function EditGroupNameDialog({
       }}
       fixed
     >
-      <DeltaDialogHeader
+      <DialogHeader
         title={
           !isBroadcast
             ? tx('menu_group_name_and_image')
             : tx('menu_broadcast_list_name')
         }
       />
-      <DeltaDialogBody>
+      <DialogBody>
         <Card elevation={Elevation.ONE}>
           <div
             className='profile-image-username center'
@@ -519,9 +518,9 @@ export function EditGroupNameDialog({
             </p>
           )}
         </Card>
-      </DeltaDialogBody>
-      <DeltaDialogOkCancelFooter onCancel={onClickCancel} onOk={onClickOk} />
-    </DeltaDialogBase>
+      </DialogBody>
+      <OkCancelFooterAction onCancel={onClickCancel} onOk={onClickOk} />
+    </Dialog>
   )
 }
 

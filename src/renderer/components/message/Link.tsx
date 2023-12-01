@@ -1,19 +1,16 @@
 import React, { useContext, useState } from 'react'
+import { LinkDestination } from '@deltachat/message_parser_wasm'
+
 import { ScreenContext } from '../../contexts'
 import { OpenDialogFunctionType } from '../dialogs/DialogController'
-import {
-  SmallDialog,
-  DeltaDialogFooterActions,
-  DeltaDialogFooter,
-} from '../dialogs/DeltaDialog'
 import { DeltaCheckbox } from '../contact/ContactListItem'
 import { getLogger } from '../../../shared/logger'
-
 import chatStore from '../../stores/chat'
 import reactStringReplace from 'react-string-replace'
 import { runtime } from '../../runtime'
-import { LinkDestination } from '@deltachat/message_parser_wasm'
 import { openLinkSafely } from '../helpers/LinkConfirmation'
+import SmallDialog from '../SmallDialog'
+import { DialogFooter, FooterActions } from '../Dialog'
 
 const log = getLogger('renderer/LabeledLink')
 
@@ -112,8 +109,8 @@ function labeledLinkConfirmationDialog(
               )}
             </div>
           </div>
-          <DeltaDialogFooter>
-            <DeltaDialogFooterActions>
+          <DialogFooter>
+            <FooterActions>
               <p
                 className={`delta-button bold primary`}
                 onClick={() => {
@@ -139,8 +136,8 @@ function labeledLinkConfirmationDialog(
               >
                 {tx('open')}
               </p>
-            </DeltaDialogFooterActions>
-          </DeltaDialogFooter>
+            </FooterActions>
+          </DialogFooter>
         </div>
       </SmallDialog>
     )
@@ -221,8 +218,8 @@ function openPunycodeUrlConfirmationDialog(
               )
             )}
           </p>
-          <DeltaDialogFooter>
-            <DeltaDialogFooterActions>
+          <DialogFooter>
+            <FooterActions>
               <p className={`delta-button bold primary`} onClick={onClose}>
                 {tx('no')}
               </p>
@@ -235,8 +232,8 @@ function openPunycodeUrlConfirmationDialog(
               >
                 {tx('open')}
               </p>
-            </DeltaDialogFooterActions>
-          </DeltaDialogFooter>
+            </FooterActions>
+          </DialogFooter>
         </div>
       </SmallDialog>
     )

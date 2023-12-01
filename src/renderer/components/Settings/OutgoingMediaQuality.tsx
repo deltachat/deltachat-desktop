@@ -5,8 +5,8 @@ import { ScreenContext, useTranslationFunction } from '../../contexts'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
-import { SelectDialogOption, SmallSelectDialog } from '../dialogs/DeltaDialog'
 import SettingsSelector from './SettingsSelector'
+import SmallSelectDialog, { SelectDialogOption } from '../SmallSelectDialog'
 
 export default function OutgoingMediaQuality(props: {
   settings: SettingsStoreState['settings']

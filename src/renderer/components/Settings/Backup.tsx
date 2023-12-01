@@ -3,11 +3,6 @@ import { H5, Intent } from '@blueprintjs/core'
 import { DcEventType } from '@deltachat/jsonrpc-client'
 
 import { DialogProps } from '../dialogs/DialogController'
-import {
-  DeltaDialogBody,
-  DeltaDialogContent,
-  SmallDialog,
-} from '../dialogs/DeltaDialog'
 import { DeltaProgressBar } from '../Login-Styles'
 import { useTranslationFunction } from '../../contexts'
 import { runtime } from '../../runtime'
@@ -17,6 +12,8 @@ import { selectedAccountId } from '../../ScreenController'
 import SettingsButton from './SettingsButton'
 
 import type { OpenDialogOptions } from 'electron'
+import { DialogBody, DialogContent } from '../Dialog'
+import SmallDialog from '../SmallDialog'
 
 const log = getLogger('renderer/Settings/Backup')
 
@@ -51,12 +48,12 @@ function ExportProgressDialog(props: DialogProps) {
 
   return (
     <SmallDialog isOpen={props.isOpen} onClose={() => {}}>
-      <DeltaDialogBody>
-        <DeltaDialogContent>
+      <DialogBody>
+        <DialogContent>
           <H5 style={{ marginTop: '20px' }}>{tx('export_backup_desktop')}</H5>
           <DeltaProgressBar intent={Intent.PRIMARY} progress={progress} />
-        </DeltaDialogContent>
-      </DeltaDialogBody>
+        </DialogContent>
+      </DialogBody>
     </SmallDialog>
   )
 }

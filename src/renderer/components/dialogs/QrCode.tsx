@@ -5,23 +5,23 @@ import React, {
   useEffect,
   useLayoutEffect,
 } from 'react'
-import {
-  DeltaDialogBase,
-  DeltaDialogFooter,
-  DeltaDialogFooterActions,
-  DeltaDialogBody,
-  DeltaDialogContent,
-} from './DeltaDialog'
-import { DialogProps } from './DialogController'
-import { useTranslationFunction, ScreenContext } from '../../contexts'
 import classNames from 'classnames'
 import QrReader from '@deltachat/react-qr-reader'
+
+import { DialogProps } from './DialogController'
+import { useTranslationFunction, ScreenContext } from '../../contexts'
 import processOpenQrUrl from '../helpers/OpenQrUrl'
 import { getLogger } from '../../../shared/logger'
 import { useContextMenu } from '../ContextMenu'
 import { runtime } from '../../runtime'
 import { selectChat } from '../helpers/ChatMethods'
 import { BackendRemote } from '../../backend-com'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  FooterActions,
+} from '../Dialog'
 
 const log = getLogger('renderer/dialogs/QrCode')
 
@@ -46,7 +46,7 @@ export default function QrCode({
   const tx = useTranslationFunction()
 
   return (
-    <DeltaDialogBase isOpen={isOpen} onClose={onClose}>
+    <Dialog isOpen={isOpen} onClose={onClose}>
       <div className='qr-code-switch'>
         <p
           className={classNames({ active: showQrCode })}
@@ -72,7 +72,7 @@ export default function QrCode({
       {!showQrCode && (
         <QrCodeScanQrInner subtitle={tx('qrscan_hint')} onClose={onClose} />
       )}
-    </DeltaDialogBase>
+    </Dialog>
   )
 }
 
@@ -151,8 +151,8 @@ export function QrCodeShowQrInner({
 
   return (
     <>
-      <DeltaDialogBody>
-        <DeltaDialogContent noOverflow noPadding style={{ height: '500px' }}>
+      <DialogBody>
+        <DialogContent noOverflow noPadding style={{ height: '500px' }}>
           {svgUrl && (
             <img
               style={{
@@ -165,10 +165,10 @@ export function QrCodeShowQrInner({
               onContextMenu={imageContextMenu}
             />
           )}
-        </DeltaDialogContent>
-      </DeltaDialogBody>
-      <DeltaDialogFooter>
-        <DeltaDialogFooterActions style={{ justifyContent: 'space-between' }}>
+        </DialogContent>
+      </DialogBody>
+      <DialogFooter>
+        <FooterActions style={{ justifyContent: 'space-between' }}>
           <p className={'delta-button bold primary'} onClick={onCopy}>
             {tx('global_menu_edit_copy_desktop')}
           </p>
@@ -182,8 +182,8 @@ export function QrCodeShowQrInner({
               {tx('back')}
             </p>
           )}
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
+        </FooterActions>
+      </DialogFooter>
     </>
   )
 }
@@ -262,8 +262,8 @@ export function QrCodeScanQrInner(
 
   return (
     <>
-      <DeltaDialogBody>
-        <DeltaDialogContent noPadding>
+      <DialogBody>
+        <DialogContent noPadding>
           <div className='import-qr-code-dialog'>
             <div style={{ marginBottom: '-19px' }}>
               <div>
@@ -289,18 +289,18 @@ export function QrCodeScanQrInner(
             <div className='scan-qr-red-line' />
             <p className='scan-qr-description'>{props.subtitle}</p>
           </div>
-        </DeltaDialogContent>
-      </DeltaDialogBody>
-      <DeltaDialogFooter>
-        <DeltaDialogFooterActions style={{ justifyContent: 'space-between' }}>
+        </DialogContent>
+      </DialogBody>
+      <DialogFooter>
+        <FooterActions style={{ justifyContent: 'space-between' }}>
           <p className={'delta-button bold primary'} onClick={openMenu}>
             {tx('menu_more_options')}
           </p>
           <p className={'delta-button bold primary'} onClick={props.onClose}>
             {tx('close')}
           </p>
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
+        </FooterActions>
+      </DialogFooter>
     </>
   )
 }

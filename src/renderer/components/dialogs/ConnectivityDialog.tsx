@@ -1,17 +1,12 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react'
 import { Card, Elevation } from '@blueprintjs/core'
 
-import {
-  DeltaDialogBody,
-  DeltaDialogCloseFooter,
-  DeltaDialogBase,
-  DeltaDialogHeader,
-} from './DeltaDialog'
 import { debounceWithInit } from '../chat/ChatListHelpers'
 import { DialogProps } from './DialogController'
 import { useTranslationFunction } from '../../contexts'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import Dialog, { CloseFooterAction, DialogBody, DialogHeader } from '../Dialog'
 
 const INHERIT_STYLES = ['line-height', 'background-color', 'color', 'font-size']
 const OverwrittenStyles =
@@ -21,7 +16,7 @@ export default function ConnectivityDialog({ onClose, isOpen }: DialogProps) {
   const tx = useTranslationFunction()
 
   return (
-    <DeltaDialogBase
+    <Dialog
       onClose={onClose}
       isOpen={isOpen}
       canOutsideClickClose={true}
@@ -30,10 +25,10 @@ export default function ConnectivityDialog({ onClose, isOpen }: DialogProps) {
         width: '500px',
       }}
     >
-      <DeltaDialogHeader title={tx('connectivity')} />
+      <DialogHeader title={tx('connectivity')} />
       {ConnectivityDialogInner()}
-      <DeltaDialogCloseFooter onClose={onClose} />
-    </DeltaDialogBase>
+      <CloseFooterAction onClose={onClose} />
+    </Dialog>
   )
 }
 
@@ -58,7 +53,7 @@ function ConnectivityDialogInner() {
 
   return (
     <>
-      <DeltaDialogBody noFooter>
+      <DialogBody noFooter>
         <Card elevation={Elevation.ONE} style={{ paddingTop: '0px' }}>
           <div ref={styleSensor} style={{ height: '100%', width: '100%' }}>
             <iframe
@@ -73,7 +68,7 @@ function ConnectivityDialogInner() {
             />
           </div>
         </Card>
-      </DeltaDialogBody>
+      </DialogBody>
     </>
   )
 }

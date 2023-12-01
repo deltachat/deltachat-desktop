@@ -7,14 +7,13 @@ import { ScreenContext } from '../../../contexts'
 import { runtime } from '../../../runtime'
 import { selectedAccountId } from '../../../ScreenController'
 import ConfirmationDialog from '../ConfirmationDialog'
-import {
-  DeltaDialogBase,
-  DeltaDialogContent,
-  DeltaDialogFooter,
-  DeltaDialogFooterActions,
-  DeltaDialogHeader,
-} from '../DeltaDialog'
 import { DialogProps } from '../DialogController'
+import Dialog, {
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  FooterActions,
+} from '../../Dialog'
 
 const log = getLogger('renderer/send_backup')
 
@@ -123,15 +122,15 @@ export function SendBackupDialog({ onClose }: DialogProps) {
   const tx = window.static_translate
 
   return (
-    <DeltaDialogBase
+    <Dialog
       onClose={cancel}
       canEscapeKeyClose={true}
       isOpen={true}
       canOutsideClickClose={false}
       style={{ width: 'unset' }}
     >
-      <DeltaDialogHeader title={tx('multidevice_title')} />
-      <DeltaDialogContent className='send-backup-dialog'>
+      <DialogHeader title={tx('multidevice_title')} />
+      <DialogContent className='send-backup-dialog'>
         <div className='container'>
           <div className='content'>
             {error}
@@ -170,9 +169,9 @@ export function SendBackupDialog({ onClose }: DialogProps) {
             </div>
           )}
         </div>
-      </DeltaDialogContent>
-      <DeltaDialogFooter>
-        <DeltaDialogFooterActions style={{ alignItems: 'center' }}>
+      </DialogContent>
+      <DialogFooter>
+        <FooterActions style={{ alignItems: 'center' }}>
           {inProgress && (
             <>
               <p
@@ -221,8 +220,8 @@ export function SendBackupDialog({ onClose }: DialogProps) {
               </p>
             </>
           )}
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
-    </DeltaDialogBase>
+        </FooterActions>
+      </DialogFooter>
+    </Dialog>
   )
 }

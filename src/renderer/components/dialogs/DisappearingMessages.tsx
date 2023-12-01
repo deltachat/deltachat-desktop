@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import {
-  DeltaDialogBody,
-  DeltaDialogFooter,
-  DeltaDialogContent,
-  SmallDialog,
-  DeltaDialogHeader,
-  DeltaDialogFooterActions,
-} from './DeltaDialog'
 import { RadioGroup, Radio } from '@blueprintjs/core'
+
 import { Timespans } from '../../../shared/constants'
 import { useTranslationFunction } from '../../contexts'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import SmallDialog from '../SmallDialog'
+import {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  FooterActions,
+} from '../Dialog'
 
 enum DisappearingMessageDuration {
   OFF = Timespans.ZERO_SECONDS,
@@ -126,9 +127,9 @@ export default function DisappearingMessage({
   return (
     !loading && (
       <SmallDialog isOpen={isOpen} onClose={onClose}>
-        <DeltaDialogHeader title={tx('ephemeral_messages')} />
-        <DeltaDialogBody>
-          <DeltaDialogContent>
+        <DialogHeader title={tx('ephemeral_messages')} />
+        <DialogBody>
+          <DialogContent>
             <SelectDisappearingMessageDuration
               disappearingMessageDuration={disappearingMessageDuration}
               onSelectDisappearingMessageDuration={
@@ -136,18 +137,18 @@ export default function DisappearingMessage({
               }
             />
             <p>{tx('ephemeral_messages_hint')}</p>
-          </DeltaDialogContent>
-        </DeltaDialogBody>
-        <DeltaDialogFooter style={{ padding: '20px' }}>
-          <DeltaDialogFooterActions>
+          </DialogContent>
+        </DialogBody>
+        <DialogFooter style={{ padding: '20px' }}>
+          <FooterActions>
             <p className='delta-button primary bold' onClick={onClose}>
               {tx('cancel')}
             </p>
             <p className='delta-button primary bold' onClick={saveAndClose}>
               {tx('save_desktop')}
             </p>
-          </DeltaDialogFooterActions>
-        </DeltaDialogFooter>
+          </FooterActions>
+        </DialogFooter>
       </SmallDialog>
     )
   )

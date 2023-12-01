@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+
 import { useTranslationFunction } from '../../contexts'
 import { useSettingsStore } from '../../stores/settings'
 import {
@@ -6,11 +7,7 @@ import {
   getKeybindings,
   ShortcutGroup,
 } from '../KeyboardShortcutHint'
-import {
-  DeltaDialogBase,
-  DeltaDialogBody,
-  DeltaDialogHeader,
-} from './DeltaDialog'
+import Dialog, { DialogBody, DialogHeader } from '../Dialog'
 
 export default function KeybindingCheatSheet(props: {
   isOpen: boolean
@@ -29,19 +26,18 @@ export default function KeybindingCheatSheet(props: {
   }, [])
 
   return (
-    <DeltaDialogBase
+    <Dialog
       isOpen={isOpen}
       onClose={onClose}
       fixed={false}
       className='keyboard-hint-cheatsheet-dialog'
       showCloseButton={true}
     >
-      <DeltaDialogHeader onClose={onClose} showCloseButton={true}>
+      <DialogHeader onClose={onClose} showCloseButton={true}>
         <h4 className='bp4-heading'>{tx('keybindings')}</h4>
         <CheatSheetKeyboardShortcut />
-      </DeltaDialogHeader>
-
-      <DeltaDialogBody>
+      </DialogHeader>
+      <DialogBody>
         <div className='keyboard-hint-dialog-body'>
           {settingsStore &&
             getKeybindings(settingsStore.desktopSettings).map(entry => {
@@ -63,7 +59,7 @@ export default function KeybindingCheatSheet(props: {
               }
             })}
         </div>
-      </DeltaDialogBody>
-    </DeltaDialogBase>
+      </DialogBody>
+    </Dialog>
   )
 }

@@ -14,12 +14,12 @@ import {
 } from './Login-Styles'
 import ClickableLink from './helpers/ClickableLink'
 import { DialogProps } from './dialogs/DialogController'
-import { DeltaDialogContent, DeltaDialogFooter } from './dialogs/DeltaDialog'
 import { Credentials } from '../../shared/shared-types'
 import { useTranslationFunction, i18nContext } from '../contexts'
 import { getLogger } from '../../shared/logger'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
+import { DialogContent, DialogFooter } from './Dialog'
 
 const log = getLogger('renderer/loginForm')
 
@@ -477,12 +477,12 @@ export function ConfigureProgressDialog({
       {!configureFailed && (
         <>
           <div className='bp4-dialog-body-with-padding'>
-            <DeltaDialogContent>
+            <DialogContent>
               <DeltaProgressBar progress={progress} />
               <p style={{ userSelect: 'auto' }}>{progressComment}</p>
-            </DeltaDialogContent>
+            </DialogContent>
           </div>
-          <DeltaDialogFooter
+          <DialogFooter
             style={{
               display: 'flex',
               justifyContent: 'space-between',
@@ -493,17 +493,17 @@ export function ConfigureProgressDialog({
             <p className='delta-button danger bold' onClick={onCancel}>
               {tx('cancel')}
             </p>
-          </DeltaDialogFooter>
+          </DialogFooter>
         </>
       )}
       {configureFailed && (
         <>
           <div className='bp4-dialog-body-with-padding'>
-            <DeltaDialogContent>
+            <DialogContent>
               <p style={{ userSelect: 'auto' }}>{error}</p>
-            </DeltaDialogContent>
+            </DialogContent>
           </div>
-          <DeltaDialogFooter
+          <DialogFooter
             style={{
               display: 'flex',
               justifyContent: 'space-between',
@@ -518,7 +518,7 @@ export function ConfigureProgressDialog({
             >
               {tx('ok')}
             </p>
-          </DeltaDialogFooter>
+          </DialogFooter>
         </>
       )}
     </Dialog>

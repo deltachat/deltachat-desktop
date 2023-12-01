@@ -1,24 +1,26 @@
 import React from 'react'
+import classNames from 'classnames'
 import { Card, Classes } from '@blueprintjs/core'
-import { DeltaDialogBase, DeltaDialogHeader } from './DeltaDialog'
+import AutoSizer from 'react-virtualized-auto-sizer'
+import { C } from '@deltachat/jsonrpc-client'
+
 import ChatListItem from '../chat/ChatListItem'
 import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
-import classNames from 'classnames'
 import { DialogProps } from './DialogController'
-
-import { C } from '@deltachat/jsonrpc-client'
 import { ChatListPart, useLogicVirtualChatList } from '../chat/ChatList'
-import AutoSizer from 'react-virtualized-auto-sizer'
 import { useChatList } from '../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../ThemeManager'
 import { createDraftMessage } from '../helpers/ChatMethods'
+import Dialog, { DialogHeader } from '../Dialog'
+import { useTranslationFunction } from '../../contexts'
 
 export default function MailtoDialog(props: {
   messageText: string
   onClose: DialogProps['onClose']
 }) {
-  const tx = window.static_translate
   const { onClose, messageText } = props
+
+  const tx = useTranslationFunction()
   const listFlags = C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS
   const { chatListIds, queryStr, setQueryStr } = useChatList(listFlags)
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
@@ -38,9 +40,10 @@ export default function MailtoDialog(props: {
     Number(useThemeCssVar('--SPECIAL-chatlist-item-chat-height')) || 64
 
   const noResults = chatListIds.length === 0 && queryStr !== ''
+
   return (
-    <DeltaDialogBase isOpen={true} onClose={onClose} fixed>
-      <DeltaDialogHeader
+    <Dialog isOpen={true} onClose={onClose} fixed>
+      <DialogHeader
         onClose={onClose}
         title={tx('mailto_dialog_header_select_chat')}
       />
@@ -94,6 +97,6 @@ export default function MailtoDialog(props: {
           </div>
         </Card>
       </div>
-    </DeltaDialogBase>
+    </Dialog>
   )
 }

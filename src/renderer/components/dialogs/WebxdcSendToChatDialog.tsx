@@ -1,32 +1,28 @@
 import React from 'react'
 import { Classes } from '@blueprintjs/core'
-import {
-  DeltaDialogBase,
-  DeltaDialogFooter,
-  DeltaDialogFooterActions,
-  DeltaDialogHeader,
-} from './DeltaDialog'
+import classNames from 'classnames'
+import { C } from '@deltachat/jsonrpc-client'
+import AutoSizer from 'react-virtualized-auto-sizer'
+
 import ChatListItem from '../chat/ChatListItem'
 import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
-import classNames from 'classnames'
 import { DialogProps } from './DialogController'
-
-import { C } from '@deltachat/jsonrpc-client'
 import { ChatListPart, useLogicVirtualChatList } from '../chat/ChatList'
-import AutoSizer from 'react-virtualized-auto-sizer'
 import { useChatList } from '../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../ThemeManager'
 import { selectChat } from '../helpers/ChatMethods'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { runtime } from '../../runtime'
+import { useTranslationFunction } from '../../contexts'
+import Dialog, { DialogFooter, DialogHeader, FooterActions } from '../Dialog'
 
 export default function WebxdcSaveToChatDialog(props: {
   messageText: string | null
   file: { file_name: string; file_content: string } | null
   onClose: DialogProps['onClose']
 }) {
-  const tx = window.static_translate
+  const tx = useTranslationFunction()
   const { onClose, messageText, file } = props
   const listFlags = C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS
   const { chatListIds, queryStr, setQueryStr } = useChatList(listFlags)
@@ -74,8 +70,8 @@ export default function WebxdcSaveToChatDialog(props: {
 
   const noResults = chatListIds.length === 0 && queryStr !== ''
   return (
-    <DeltaDialogBase isOpen={true} onClose={onClose} fixed>
-      <DeltaDialogHeader onClose={onClose} title={title} />
+    <Dialog isOpen={true} onClose={onClose} fixed>
+      <DialogHeader onClose={onClose} title={title} />
       <div
         className={classNames(
           Classes.DIALOG_BODY,
@@ -124,16 +120,16 @@ export default function WebxdcSaveToChatDialog(props: {
           </div>
         </div>
       </div>
-      <DeltaDialogFooter>
-        <DeltaDialogFooterActions style={{ justifyContent: 'start' }}>
+      <DialogFooter>
+        <FooterActions style={{ justifyContent: 'start' }}>
           {file && (
             <p className={'delta-button bold primary'} onClick={onSaveClick}>
               {tx('save_as')}
             </p>
           )}
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
-    </DeltaDialogBase>
+        </FooterActions>
+      </DialogFooter>
+    </Dialog>
   )
 }
 

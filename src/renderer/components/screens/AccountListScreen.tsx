@@ -1,17 +1,13 @@
-import { Classes, Switch, Alignment, Icon } from '@blueprintjs/core'
-import classNames from 'classnames'
-import { getLogger } from '../../../shared/logger'
-import debounce from 'debounce'
 import React, { useContext, useEffect, useState } from 'react'
+import classNames from 'classnames'
+import debounce from 'debounce'
+import { Classes, Switch, Alignment, Icon } from '@blueprintjs/core'
+
+import { getLogger } from '../../../shared/logger'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
 import ScreenController from '../../ScreenController'
 import { Avatar } from '../Avatar'
 import { PseudoContact } from '../contact/Contact'
-import {
-  DeltaDialogBase,
-  DeltaDialogBody,
-  DeltaDialogContent,
-} from '../dialogs/DeltaDialog'
 import filesizeConverter from 'filesize'
 import {
   BackendRemote,
@@ -20,6 +16,7 @@ import {
   Type,
 } from '../../backend-com'
 import { runtime } from '../../runtime'
+import Dialog, { DialogBody, DialogContent } from '../Dialog'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
@@ -72,7 +69,7 @@ export default function AccountListScreen({
   return (
     <div className='login-screen'>
       <div className='window'>
-        <DeltaDialogBase
+        <Dialog
           isOpen={true}
           backdropProps={{ className: 'no-backdrop' }}
           onClose={() => {}}
@@ -88,8 +85,8 @@ export default function AccountListScreen({
             >
               <h4 className='bp4-heading'>{tx('switch_account')}</h4>
             </div>
-            <DeltaDialogBody>
-              <DeltaDialogContent noPadding={true}>
+            <DialogBody>
+              <DialogContent noPadding={true}>
                 <AccountSelection
                   {...{
                     refreshAccounts,
@@ -121,10 +118,10 @@ export default function AccountListScreen({
                     />
                   </div>
                 )}
-              </DeltaDialogContent>
-            </DeltaDialogBody>
+              </DialogContent>
+            </DialogBody>
           </>
-        </DeltaDialogBase>
+        </Dialog>
       </div>
     </div>
   )
