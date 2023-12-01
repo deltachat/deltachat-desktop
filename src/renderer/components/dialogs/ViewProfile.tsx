@@ -240,7 +240,7 @@ export function ViewProfileInner({
             <div className='profile-info-name-container'>
               <div>
                 <p className='group-name'>
-                  <p className='trucated-name'>{displayNameLine}</p>
+                  <span className='trucated-name'>{displayNameLine}</span>
                   {contact.isProfileVerified && <InlineVerifiedIcon />}
                 </p>
               </div>
