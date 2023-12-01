@@ -1,14 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react'
-import classNames from 'classnames'
 import debounce from 'debounce'
-import { Classes, Switch, Alignment, Icon } from '@blueprintjs/core'
+import filesizeConverter from 'filesize'
+import { Switch, Alignment, Icon } from '@blueprintjs/core'
 
 import { getLogger } from '../../../shared/logger'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
 import ScreenController from '../../ScreenController'
 import { Avatar } from '../Avatar'
 import { PseudoContact } from '../contact/Contact'
-import filesizeConverter from 'filesize'
 import {
   BackendRemote,
   EffectfulBackendActions,
@@ -16,7 +15,7 @@ import {
   Type,
 } from '../../backend-com'
 import { runtime } from '../../runtime'
-import Dialog, { DialogBody, DialogContent } from '../Dialog'
+import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
@@ -76,51 +75,42 @@ export default function AccountListScreen({
           fixed={true}
           canEscapeKeyClose={true}
         >
-          <>
-            <div
-              className={classNames(
-                Classes.DIALOG_HEADER,
-                'bp4-dialog-header-border-bottom'
+          <DialogHeader title={tx('switch_account')} />
+          <DialogBody>
+            <DialogContent noPadding={true}>
+              <AccountSelection
+                {...{
+                  refreshAccounts,
+                  selectAccount,
+                  logins,
+                  showUnread: syncAllAccounts || false,
+                  onAddAccount,
+                }}
+              />
+              {syncAllAccounts !== null && (
+                <div className='sync-all-switch'>
+                  <Switch
+                    checked={syncAllAccounts}
+                    label={tx('sync_all')}
+                    onChange={async () => {
+                      const new_state = !syncAllAccounts
+                      await runtime.setDesktopSetting(
+                        'syncAllAccounts',
+                        new_state
+                      )
+                      if (new_state) {
+                        BackendRemote.rpc.startIoForAllAccounts()
+                      } else {
+                        BackendRemote.rpc.stopIoForAllAccounts()
+                      }
+                      setSyncAllAccounts(new_state)
+                    }}
+                    alignIndicator={Alignment.LEFT}
+                  />
+                </div>
               )}
-            >
-              <h4 className='bp4-heading'>{tx('switch_account')}</h4>
-            </div>
-            <DialogBody>
-              <DialogContent noPadding={true}>
-                <AccountSelection
-                  {...{
-                    refreshAccounts,
-                    selectAccount,
-                    logins,
-                    showUnread: syncAllAccounts || false,
-                    onAddAccount,
-                  }}
-                />
-                {syncAllAccounts !== null && (
-                  <div className='sync-all-switch'>
-                    <Switch
-                      checked={syncAllAccounts}
-                      label={tx('sync_all')}
-                      onChange={async () => {
-                        const new_state = !syncAllAccounts
-                        await runtime.setDesktopSetting(
-                          'syncAllAccounts',
-                          new_state
-                        )
-                        if (new_state) {
-                          BackendRemote.rpc.startIoForAllAccounts()
-                        } else {
-                          BackendRemote.rpc.stopIoForAllAccounts()
-                        }
-                        setSyncAllAccounts(new_state)
-                      }}
-                      alignIndicator={Alignment.LEFT}
-                    />
-                  </div>
-                )}
-              </DialogContent>
-            </DialogBody>
-          </>
+            </DialogContent>
+          </DialogBody>
         </Dialog>
       </div>
     </div>

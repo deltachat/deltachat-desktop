@@ -7,7 +7,7 @@ import {
   getKeybindings,
   ShortcutGroup,
 } from '../KeyboardShortcutHint'
-import Dialog, { DialogBody, DialogHeader } from '../Dialog'
+import Dialog, { DialogBody, DialogHeader, DialogHeading } from '../Dialog'
 
 export default function KeybindingCheatSheet(props: {
   isOpen: boolean
@@ -32,8 +32,10 @@ export default function KeybindingCheatSheet(props: {
       className='keyboard-hint-cheatsheet-dialog'
     >
       <DialogHeader onClose={onClose}>
-        <h4 className='bp4-heading'>{tx('keybindings')}</h4>
-        <CheatSheetKeyboardShortcut />
+        <DialogHeading>
+          {tx('keybindings')}
+          <CheatSheetKeyboardShortcut />
+        </DialogHeading>
       </DialogHeader>
       <DialogBody>
         <div className='keyboard-hint-dialog-body'>

@@ -20,12 +20,26 @@ $dialogBorderRadius: 2px;
 }
 
 .dialogHeader {
+  align-items: center;
   background-color: var(--bp4DialogHeaderBg);
   border-bottom: var(--outlineProperties);
-  border-radius: $dialogBorderRadius;
-  box-shadow: unset;
+  display: flex;
   padding: 20px;
   user-select: none;
+}
+
+.dialogHeading {
+  color: var(--bp4Heading);
+  flex: 1 1 auto;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: inherit;
+  margin: 10px 0;
+  overflow: hidden;
+  padding: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
 }
 
 .dialogBody {
