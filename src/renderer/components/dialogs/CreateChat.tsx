@@ -689,7 +689,7 @@ export function AddMemberInnerDialog({
       <DialogHeader
         title={!isBroadcast ? tx('group_add_members') : tx('add_recipients')}
       />
-      <DialogBody style={{ overflow: 'hidden' }}>
+      <DialogBody>
         <Card style={{ padding: '0px 20px', height: '100%' }}>
           <div className='AddMemberChipsWrapper'>
             <div className='AddMemberChips'>

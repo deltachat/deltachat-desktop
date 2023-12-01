@@ -112,7 +112,7 @@ export default function ViewProfile(props: {
         onClose={onClose}
         onClickBack={onBack}
       />
-      <DialogBody noFooter>
+      <DialogBody>
         <DialogContent noPadding noOverflow>
           <ViewProfileInner contact={contact} onClose={onClose} />
         </DialogContent>

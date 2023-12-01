@@ -125,7 +125,7 @@ export default function MessageDetail(props: {
       isOpen={isOpen}
       onClose={onClose}
     >
-      <DialogBody noFooter>{body}</DialogBody>
+      <DialogBody>{body}</DialogBody>
     </DialogWithHeader>
   )
 }

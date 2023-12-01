@@ -100,7 +100,7 @@ function EditProfileDialogInner({
   }
   return (
     <>
-      <DialogBody noFooter>
+      <DialogBody>
         <Card elevation={Elevation.ONE}>
           <div
             className='profile-image-username center'

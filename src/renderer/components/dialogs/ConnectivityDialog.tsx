@@ -53,7 +53,7 @@ function ConnectivityDialogInner() {
 
   return (
     <>
-      <DialogBody noFooter>
+      <DialogBody>
         <Card elevation={Elevation.ONE} style={{ paddingTop: '0px' }}>
           <div ref={styleSensor} style={{ height: '100%', width: '100%' }}>
             <iframe

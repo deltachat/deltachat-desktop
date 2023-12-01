@@ -33,11 +33,6 @@ $dialogBorderRadius: 2px;
   flex-direction: column;
   max-height: 90vh;
   overflow: overlay;
-
-  .noFooter {
-    border-bottom-left-radius: $dialogBorderRadius;
-    border-bottom-right-radius: $dialogBorderRadius;
-  }
 }
 
 .headerButton {

@@ -122,7 +122,7 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
   if (accountSettings === null) return null
   return (
     <>
-      <DialogBody noFooter>
+      <DialogBody>
         <Card elevation={Elevation.ONE}>
           {accountSettings && (
             <LoginForm

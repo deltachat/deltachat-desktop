@@ -2,27 +2,17 @@ import React from 'react'
 import classNames from 'classnames'
 import { Classes } from '@blueprintjs/core'
 
-import type { CSSProperties, PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react'
 
 import styles from './styles.module.scss'
 
-type Props = PropsWithChildren<{
-  noFooter?: boolean
-  style?: CSSProperties
-  id?: string
-}>
+type Props = PropsWithChildren<{}>
 
 export default function DialogBody(props: Props) {
-  const { noFooter, children, style, id } = props
+  const { children } = props
 
   return (
-    <div
-      className={classNames(Classes.DIALOG_BODY, styles.dialogBody, {
-        [styles.noFooter]: noFooter,
-      })}
-      style={style}
-      id={id}
-    >
+    <div className={classNames(Classes.DIALOG_BODY, styles.dialogBody)}>
       {children}
     </div>
   )

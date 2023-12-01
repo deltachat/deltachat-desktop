@@ -174,40 +174,38 @@ export default function WelcomeScreen({
           fixed={true}
           canEscapeKeyClose={true}
         >
-          <>
-            <DialogHeader
-              onClickBack={showBackButton ? onCancel : undefined}
-              title={tx('add_account')}
-            />
-            <DialogBody id='welcome-dialog-body'>
-              <DialogContent id='welcome-dialog-content'>
-                <div className='welcome-deltachat'>
-                  <img className='delta-icon' src='../images/intro1.png' />
-                  <p className='f1'>{tx('welcome_chat_over_email')}</p>
-                  <button
-                    id='action-login-to-email'
-                    className='delta-button-round'
-                    onClick={() => window.__changeScreen(Screens.Login)}
-                  >
-                    {tx('login_header')}
-                  </button>
-                  <button
-                    className='delta-button-round secondary'
-                    onClick={onClickSecondDevice}
-                  >
-                    {tx('multidevice_receiver_title')}
-                  </button>
-                  <button
-                    className='delta-button-round secondary'
-                    onClick={onClickScanQr}
-                  >
-                    {tx('scan_invitation_code')}
-                  </button>
-                  <ImportButton />
-                </div>
-              </DialogContent>
-            </DialogBody>
-          </>
+          <DialogHeader
+            onClickBack={showBackButton ? onCancel : undefined}
+            title={tx('add_account')}
+          />
+          <DialogBody>
+            <DialogContent id='welcome-dialog-content'>
+              <div className='welcome-deltachat'>
+                <img className='delta-icon' src='../images/intro1.png' />
+                <p className='f1'>{tx('welcome_chat_over_email')}</p>
+                <button
+                  id='action-login-to-email'
+                  className='delta-button-round'
+                  onClick={() => window.__changeScreen(Screens.Login)}
+                >
+                  {tx('login_header')}
+                </button>
+                <button
+                  className='delta-button-round secondary'
+                  onClick={onClickSecondDevice}
+                >
+                  {tx('multidevice_receiver_title')}
+                </button>
+                <button
+                  className='delta-button-round secondary'
+                  onClick={onClickScanQr}
+                >
+                  {tx('scan_invitation_code')}
+                </button>
+                <ImportButton />
+              </div>
+            </DialogContent>
+          </DialogBody>
         </Dialog>
       </div>
     </div>
