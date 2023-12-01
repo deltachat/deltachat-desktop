@@ -12,14 +12,15 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   iconSize: IconProps['size']
 }
 
-export default function HeaderButton({ className, ...props }: Props) {
+export default function HeaderButton({
+  className,
+  icon,
+  iconSize,
+  ...props
+}: Props) {
   return (
     <button className={classNames(styles.headerButton, className)} {...props}>
-      <Icon
-        className={styles.headerButtonIcon}
-        icon={props.icon}
-        size={props.iconSize}
-      />
+      <Icon className={styles.headerButtonIcon} icon={icon} size={iconSize} />
     </button>
   )
 }
