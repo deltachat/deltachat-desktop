@@ -3,8 +3,8 @@ $dialogBorderRadius: 2px;
 .dialog {
   max-height: calc(100vh - 50px);
   max-width: 90vw;
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
   background-color: var(--bp4DialogBgSecondary);
   border-radius: $dialogBorderRadius;
   box-shadow:
@@ -25,10 +25,11 @@ $dialogBorderRadius: 2px;
   border-radius: $dialogBorderRadius;
   box-shadow: unset;
   padding: 20px;
+  user-select: none;
 }
 
 .dialogBody {
-  margin: 0px;
+  margin: 0;
   display: flex;
   flex-direction: column;
   max-height: 90vh;
