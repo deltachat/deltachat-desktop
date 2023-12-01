@@ -9,12 +9,6 @@
     }
   }
 
-  &.FixedDeltaDialog {
-    top: 25px;
-    width: 400px;
-    height: calc(100% - 50px);
-  }
-
   .delta-dialog-content {
     flex: 1 1 auto;
     padding: 0px 20px;
@@ -97,7 +91,6 @@
     text-overflow: ellipsis;
     white-space: pre;
   }
-
 }
 
 .DialogSwitch {

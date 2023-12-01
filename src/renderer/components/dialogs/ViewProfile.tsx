@@ -102,15 +102,14 @@ export default function ViewProfile(props: {
     })
   }, [accountId, contact.id])
 
+  const showEditButton = !(isDeviceChat || isSelfChat)
+
   return (
     <Dialog isOpen={isOpen} onClose={onClose} fixed>
       <DialogHeader
         title={tx('contact')}
-        onClickEdit={onClickEdit}
-        showEditButton={!(isDeviceChat || isSelfChat)}
-        showCloseButton={true}
+        onClickEdit={showEditButton ? onClickEdit : undefined}
         onClose={onClose}
-        showBackButton={Boolean(onBack)}
         onClickBack={onBack}
       />
       <DialogBody noFooter>

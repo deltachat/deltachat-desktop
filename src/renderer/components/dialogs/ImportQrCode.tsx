@@ -19,7 +19,6 @@ export default function ImportQrCode({ subtitle, onClose, isOpen }: Props) {
       title={tx('qrscan_title')}
       isOpen={isOpen}
       onClose={onClose}
-      showCloseButton={false}
     >
       <QrCodeScanQrInner subtitle={subtitle} onClose={onClose} />
     </DialogWithHeader>

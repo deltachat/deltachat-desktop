@@ -246,8 +246,6 @@ function ViewGroupInner(props: {
           <DialogHeader
             title={!isBroadcast ? tx('tab_group') : tx('broadcast_list')}
             onClickEdit={onClickEdit}
-            showEditButton={!chatDisabled}
-            showCloseButton={true}
             onClose={onClose}
           />
           <div className={Classes.DIALOG_BODY}>

@@ -176,8 +176,7 @@ export default function WelcomeScreen({
         >
           <>
             <DialogHeader
-              showBackButton={showBackButton}
-              onClickBack={onCancel}
+              onClickBack={showBackButton ? onCancel : undefined}
               title={tx('add_account')}
             />
             <DialogBody id='welcome-dialog-body'>

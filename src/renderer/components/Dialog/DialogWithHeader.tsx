@@ -3,17 +3,17 @@ import React from 'react'
 import Dialog from './Dialog'
 import DialogHeader from './DialogHeader'
 
-type Props = React.PropsWithChildren<{
-  isOpen: boolean
-  onClose: () => void
-  title: string
-  fixed?: boolean
-  className?: string
-  style?: React.CSSProperties
-  onClickBack?: () => void
-  showBackButton?: boolean
-  showCloseButton?: boolean
-}>
+import type { DialogProps } from '../dialogs/DialogController'
+
+type Props = React.PropsWithChildren<
+  {
+    className?: string
+    fixed?: boolean
+    onClickBack?: () => void
+    style?: React.CSSProperties
+    title: string
+  } & Pick<DialogProps, 'isOpen' | 'onClose'>
+>
 
 const DialogWithHeader = React.memo<Props>(props => {
   return (
@@ -23,13 +23,10 @@ const DialogWithHeader = React.memo<Props>(props => {
       fixed={props.fixed}
       className={props.className}
       style={props.style}
-      showCloseButton={props.showCloseButton}
     >
       <DialogHeader
         onClose={props.onClose}
         onClickBack={props.onClickBack}
-        showBackButton={props.showBackButton}
-        showCloseButton={props.showCloseButton}
         title={props.title}
       />
       {props.children}

@@ -29,11 +29,9 @@ export default function KeybindingCheatSheet(props: {
     <Dialog
       isOpen={isOpen}
       onClose={onClose}
-      fixed={false}
       className='keyboard-hint-cheatsheet-dialog'
-      showCloseButton={true}
     >
-      <DialogHeader onClose={onClose} showCloseButton={true}>
+      <DialogHeader onClose={onClose}>
         <h4 className='bp4-heading'>{tx('keybindings')}</h4>
         <CheatSheetKeyboardShortcut />
       </DialogHeader>

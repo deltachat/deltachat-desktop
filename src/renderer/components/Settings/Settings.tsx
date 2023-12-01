@@ -47,11 +47,7 @@ export default function Settings({ isOpen, onClose }: DialogProps) {
     <Dialog isOpen={isOpen} onClose={onClose} className={styles.settings} fixed>
       {settingsMode === 'main' && (
         <>
-          <DialogHeader
-            title={tx('menu_settings')}
-            onClose={onClose}
-            showCloseButton={true}
-          />
+          <DialogHeader title={tx('menu_settings')} onClose={onClose} />
           <DialogBody>
             <Card elevation={Elevation.ONE} style={{ paddingTop: '0px' }}>
               <Profile settingsStore={settingsStore} onClose={onClose} />
@@ -107,9 +103,7 @@ export default function Settings({ isOpen, onClose }: DialogProps) {
         <>
           <DialogHeader
             title={tx('pref_chats_and_media')}
-            showBackButton={true}
             onClickBack={() => setSettingsMode('main')}
-            showCloseButton={true}
             onClose={onClose}
           />
           <DialogBody>
@@ -126,9 +120,7 @@ export default function Settings({ isOpen, onClose }: DialogProps) {
         <>
           <DialogHeader
             title={tx('pref_notifications')}
-            showBackButton={true}
             onClickBack={() => setSettingsMode('main')}
-            showCloseButton={true}
             onClose={onClose}
           />
           <DialogBody>
@@ -142,9 +134,7 @@ export default function Settings({ isOpen, onClose }: DialogProps) {
         <>
           <DialogHeader
             title={tx('pref_appearance')}
-            showBackButton={true}
             onClickBack={() => setSettingsMode('main')}
-            showCloseButton={true}
             onClose={onClose}
           />
           <DialogBody>
@@ -162,9 +152,7 @@ export default function Settings({ isOpen, onClose }: DialogProps) {
         <>
           <DialogHeader
             title={tx('menu_advanced')}
-            showBackButton={true}
             onClickBack={() => setSettingsMode('main')}
-            showCloseButton={true}
             onClose={onClose}
           />
           <DialogBody>

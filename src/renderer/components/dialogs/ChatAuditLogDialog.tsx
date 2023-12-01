@@ -165,8 +165,8 @@ export default function ChatAuditLogDialog(props: {
       fixed
       className={'audit-log-dialog'}
       style={{ width: 'calc(100vw - 50px)', maxWidth: '733px' }}
-      showCloseButton={true}
     >
+      // @TODO: Can we re-use something here?
       <div className='bp4-dialog-header bp4-dialog-header-border-bottom'>
         <div className='heading'>
           <h4>{tx('chat_audit_log_title', selectedChat.name)}</h4>
@@ -174,7 +174,6 @@ export default function ChatAuditLogDialog(props: {
         </div>
         <CloseButton onClick={onClose} />
       </div>
-
       {loading ? (
         <div>{tx('loading')}</div>
       ) : (

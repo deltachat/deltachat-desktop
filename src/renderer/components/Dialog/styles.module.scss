@@ -1,3 +1,15 @@
+.dialog {
+  &.fixed {
+    height: calc(100% - 50px);
+    top: 25px;
+    width: 400px;
+  }
+}
+
+.dialogHeader {
+  border-bottom: var(--outlineProperties);
+}
+
 .headerButton {
   align-items: center;
   background-color: transparent;
