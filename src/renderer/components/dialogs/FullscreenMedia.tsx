@@ -248,7 +248,7 @@ export default function FullscreenMedia(props: {
             <Icon
               onClick={onClose}
               icon='cross'
-              iconSize={32}
+              size={32}
               color={'grey'}
               aria-label={tx('close')}
             />
@@ -259,7 +259,7 @@ export default function FullscreenMedia(props: {
             <Icon
               onClick={preventDefault(previousImage)}
               icon='chevron-left'
-              iconSize={60}
+              size={60}
             />
           </div>
         )}
@@ -268,7 +268,7 @@ export default function FullscreenMedia(props: {
             <Icon
               onClick={preventDefault(nextImage)}
               icon='chevron-right'
-              iconSize={60}
+              size={60}
             />
           </div>
         )}
