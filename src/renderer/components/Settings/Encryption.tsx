@@ -2,16 +2,38 @@ import React, { useContext, useState } from 'react'
 import { Card, H5, Classes, Callout } from '@blueprintjs/core'
 
 import { ScreenContext, useTranslationFunction } from '../../contexts'
-import { DialogProps } from './DialogController'
-import InputTransferKey from './AutocryptSetupMessage'
+import { DialogProps } from '../dialogs/DialogController'
 import DeltaDialog, {
   DeltaDialogFooter,
   DeltaDialogFooterActions,
-} from './DeltaDialog'
+} from '../dialogs/DeltaDialog'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import SettingsButton from '../SettingsButton'
-import { CoreSettingsSwitch } from '../SettingsSwitch'
+import SettingsButton from './SettingsButton'
+import CoreSettingsSwitch from './CoreSettingsSwitch'
+import InputTransferKey from '../InputTransferKey'
+
+export default function Encryption() {
+  const { openDialog } = useContext(ScreenContext)
+  const tx = useTranslationFunction()
+
+  return (
+    <>
+      <H5>{tx('autocrypt')}</H5>
+      <CoreSettingsSwitch
+        key='e2ee_enabled'
+        label={tx('autocrypt_prefer_e2ee')}
+      />
+      <SettingsButton
+        style={{ color: 'var(--colorPrimary)', fontWeight: 'lighter' }}
+        onClick={() => openDialog(SendAutocryptSetupMessage)}
+      >
+        {tx('autocrypt_send_asm_button')}
+      </SettingsButton>
+      <div className='bp4-callout'>{tx('autocrypt_explain')}</div>
+    </>
+  )
+}
 
 export function KeyViewPanel({
   onClose,
@@ -102,27 +124,5 @@ export function SendAutocryptSetupMessage({
     >
       {body}
     </DeltaDialog>
-  )
-}
-
-export default function SettingsEncryption() {
-  const { openDialog } = useContext(ScreenContext)
-  const tx = useTranslationFunction()
-
-  return (
-    <>
-      <H5>{tx('autocrypt')}</H5>
-      <CoreSettingsSwitch
-        key='e2ee_enabled'
-        label={tx('autocrypt_prefer_e2ee')}
-      />
-      <SettingsButton
-        style={{ color: 'var(--colorPrimary)', fontWeight: 'lighter' }}
-        onClick={() => openDialog(SendAutocryptSetupMessage)}
-      >
-        {tx('autocrypt_send_asm_button')}
-      </SettingsButton>
-      <div className='bp4-callout'>{tx('autocrypt_explain')}</div>
-    </>
   )
 }

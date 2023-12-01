@@ -40,48 +40,9 @@ export type RenderDeltaSwitch2Type = ({
 }) => void
 
 /*
- * Switch for Desktop Settings
- */
-export function DesktopSettingsSwitch({
-  key,
-  label,
-  description,
-  disabled,
-  disabledValue,
-}: {
-  key: keyof DesktopSettingsType
-  label: string
-  description?: string
-  disabled?: boolean
-  disabledValue?: boolean
-}) {
-  const settingsStore = useSettingsStore()[0]!
-
-  const value =
-    disabled === true && typeof disabledValue !== 'undefined'
-      ? disabledValue
-      : settingsStore.desktopSettings[key] === true
-
-  return (
-    <DeltaSwitch2
-      label={label}
-      description={description}
-      value={value}
-      onClick={() => {
-        SettingsStoreInstance.effect.setDesktopSetting(
-          key,
-          !settingsStore.desktopSettings[key]
-        )
-      }}
-      disabled={disabled}
-    />
-  )
-}
-
-/*
  * Switch for Core Settings
  */
-export function CoreSettingsSwitch({
+export default function CoreSettingsSwitch({
   key,
   label,
   description,

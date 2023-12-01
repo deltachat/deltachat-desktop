@@ -1,19 +1,25 @@
 import { T } from '@deltachat/jsonrpc-client'
 import React, { useContext } from 'react'
-import { ScreenContext } from '../../contexts'
-import { Avatar } from '../Avatar'
-import { useContextMenu } from '../ContextMenu'
-import FullscreenMedia, { NeighboringMediaMode } from './FullscreenMedia'
 
-export const GroupImage = (props: {
+import { ScreenContext, useTranslationFunction } from '../contexts'
+import { Avatar } from './Avatar'
+import { useContextMenu } from './ContextMenu'
+import FullscreenMedia, {
+  NeighboringMediaMode,
+} from './dialogs/FullscreenMedia'
+
+type Props = {
   groupImage?: string | null
   onSetGroupImage: () => void
   onUnsetGroupImage: () => void
   style?: React.CSSProperties
   groupName?: string
   color?: string
-}) => {
-  const tx = window.static_translate
+}
+
+export default function GroupImage(props: Props) {
+  const tx = useTranslationFunction()
+
   const {
     groupImage,
     onSetGroupImage,

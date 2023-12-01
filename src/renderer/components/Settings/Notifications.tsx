@@ -1,14 +1,14 @@
 import React from 'react'
 
 import { DesktopSettingsType } from '../../../shared/shared-types'
-import { DesktopSettingsSwitch } from '../SettingsSwitch'
 import { useTranslationFunction } from '../../contexts'
+import DesktopSettingsSwitch from './DesktopSettingsSwitch'
 
 type Props = {
   desktopSettings: DesktopSettingsType
 }
 
-export default function SettingsNotifications({ desktopSettings }: Props) {
+export default function Notifications({ desktopSettings }: Props) {
   const tx = useTranslationFunction()
 
   return (

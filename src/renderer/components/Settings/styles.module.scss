@@ -4,6 +4,31 @@
   }
 }
 
+.settingsButton {
+  position: relative;
+  height: 40px;
+  width: calc(100% + 40px);
+  left: -20px;
+
+  &:hover {
+    background-color: var(--chatListItemBgHover);
+    cursor: pointer;
+  }
+
+  button {
+    margin-left: 20px;
+    padding: 0;
+    flex-grow: 1;
+
+    background-color: unset;
+    border: none;
+
+    text-align: start;
+    line-height: 40px;
+    color: var(--globalText);
+  }
+}
+
 .settingsIconButton {
   display: flex;
   height: 40px;
@@ -34,4 +59,41 @@
   background-color: var(--settingsIconColor);
   height: 100%;
   width: 24px;
+}
+
+.settingsSelector {
+  display: flex;
+  position: relative;
+  height: 40px;
+  width: calc(100% + 40px);
+  left: -20px;
+  justify-content: space-between;
+
+  &:hover {
+    background-color: var(--chatListItemBgHover);
+    cursor: pointer;
+  }
+
+  button {
+    max-width: 50%;
+    margin-left: 20px;
+    padding: 0;
+
+    background-color: unset;
+    border: none;
+
+    text-align: left;
+    line-height: normal;
+    color: var(--globalText);
+  }
+
+  .CurrentValue {
+    padding-right: 20px;
+    line-height: 40px;
+    color: var(--colorPrimary);
+    font-weight: lighter;
+    max-width: 50%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
 }

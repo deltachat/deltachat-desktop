@@ -1,31 +1,28 @@
-import { useEffect, useState, useContext } from 'react'
 import { Card, Elevation } from '@blueprintjs/core'
-import React from 'react'
-import LoginForm, {
-  ConfigureProgressDialog,
-  defaultCredentials,
-} from '../LoginForm'
+import React, { useState, useContext, useEffect } from 'react'
 
+import { useTranslationFunction, ScreenContext } from '../../contexts'
 import {
   DeltaDialogBody,
   DeltaDialogOkCancelFooter,
   DeltaDialogBase,
   DeltaDialogHeader,
-} from './DeltaDialog'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
-import { Credentials } from '../../../shared/shared-types'
-import { DialogProps } from './DialogController'
-import ConfirmationDialog from './ConfirmationDialog'
+} from '../dialogs/DeltaDialog'
+import { DialogProps } from '../dialogs/DialogController'
 import { BackendRemote } from '../../backend-com'
+import { Credentials } from '../../../shared/shared-types'
+import LoginForm, {
+  ConfigureProgressDialog,
+  defaultCredentials,
+} from '../LoginForm'
+import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 
-export default function SettingsAccountDialog({
+export default function EditAccountAndPasswordDialog({
   isOpen,
   onClose,
-}: {
-  isOpen: DialogProps['isOpen']
-  onClose: DialogProps['onClose']
-}) {
+}: DialogProps) {
   const tx = useTranslationFunction()
+
   return (
     <DeltaDialogBase
       onClose={onClose}
@@ -37,12 +34,12 @@ export default function SettingsAccountDialog({
       }}
     >
       <DeltaDialogHeader title={tx('pref_password_and_account_settings')} />
-      {SettingsAccountInner(onClose)}
+      {EditAccountInner(onClose)}
     </DeltaDialogBase>
   )
 }
 
-export function SettingsAccountInner(onClose: () => void) {
+function EditAccountInner(onClose: DialogProps['onClose']) {
   const [initial_settings, setInitialAccountSettings] =
     useState<Credentials>(defaultCredentials())
 

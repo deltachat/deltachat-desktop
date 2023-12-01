@@ -3,13 +3,13 @@ import { H5 } from '@blueprintjs/core'
 
 import { SettingsStoreState } from '../../stores/settings'
 import { useTranslationFunction } from '../../contexts'
-import { CoreSettingsSwitch } from '../SettingsSwitch'
+import CoreSettingsSwitch from './CoreSettingsSwitch'
 
 type Props = {
   settingsStore: SettingsStoreState
 }
 
-export default function SettingsImapFolderHandling({ settingsStore }: Props) {
+export default function ImapFolderHandling({ settingsStore }: Props) {
   const tx = useTranslationFunction()
   const disableIfOnlyFetchMvBoxIsTrue =
     settingsStore.settings.only_fetch_mvbox === '1'

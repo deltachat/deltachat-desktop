@@ -4,18 +4,20 @@ import { ScreenContext, useTranslationFunction } from '../../contexts'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
-import SettingsSelector from '../SettingsSelector'
-import EditVideochatInstanceDialog from './EditVideochatInstanceDialog'
-import { CoreSettingsSwitch, DesktopSettingsSwitch } from '../SettingsSwitch'
-
-export const VIDEO_CHAT_INSTANCE_SYSTEMLI = 'https://meet.systemli.org/$ROOM'
-export const VIDEO_CHAT_INSTANCE_AUTISTICI = 'https://vc.autistici.org/$ROOM'
+import SettingsSelector from './SettingsSelector'
+import DesktopSettingsSwitch from './DesktopSettingsSwitch'
+import CoreSettingsSwitch from './CoreSettingsSwitch'
+import EditVideochatInstanceDialog from '../dialogs/EditVideochatInstanceDialog'
+import {
+  VIDEO_CHAT_INSTANCE_AUTISTICI,
+  VIDEO_CHAT_INSTANCE_SYSTEMLI,
+} from '../../../shared/constants'
 
 type Props = {
   settingsStore: SettingsStoreState
 }
 
-export function SettingsExperimentalFeatures({ settingsStore }: Props) {
+export function ExperimentalFeatures({ settingsStore }: Props) {
   const tx = useTranslationFunction()
   const { openDialog } = useContext(ScreenContext)
 

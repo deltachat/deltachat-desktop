@@ -3,11 +3,11 @@ import { H5 } from '@blueprintjs/core'
 import { C } from '@deltachat/jsonrpc-client'
 
 import { ScreenContext, useTranslationFunction } from '../../contexts'
-import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
-import SettingsSelector from '../SettingsSelector'
+import { SelectDialogOption, SmallSelectDialog } from '../dialogs/DeltaDialog'
+import SettingsSelector from './SettingsSelector'
 
 function showToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)
@@ -24,7 +24,7 @@ function showToString(configValue: number | string) {
   }
 }
 
-export default function SettingsCommunication({
+export default function Communication({
   settingsStore,
 }: {
   settingsStore: SettingsStoreState

@@ -1,26 +1,27 @@
 import React from 'react'
 import { H5 } from '@blueprintjs/core'
 
-import SettingsAutodelete from './Settings-Autodelete'
-import SettingsBackup from './Settings-Backup'
-import SettingsCommunication from './Settings-Communication'
-import SettingsDownloadOnDemand from './Settings-DownloadOnDemand'
 import {
   enterKeySendsKeyboardShortcuts,
   KeybordShortcutHintInSettings,
 } from '../KeyboardShortcutHint'
 import { DesktopSettingsType } from '../../../shared/shared-types'
 import { SettingsStoreState } from '../../stores/settings'
-import SettingsOutgoingMediaQuality from './Settings-OutgoingMediaQuality'
-import { CoreSettingsSwitch, DesktopSettingsSwitch } from '../SettingsSwitch'
 import { useTranslationFunction } from '../../contexts'
+import Communication from './Communication'
+import OutgoingMediaQuality from './OutgoingMediaQuality'
+import DownloadOnDemand from './DownloadOnDemand'
+import DesktopSettingsSwitch from './DesktopSettingsSwitch'
+import CoreSettingsSwitch from './CoreSettingsSwitch'
+import Autodelete from './Autodelete'
+import Backup from './Backup'
 
 type Props = {
   settingsStore: SettingsStoreState
   desktopSettings: DesktopSettingsType
 }
 
-export function SettingsChatsAndMedia({
+export default function ChatsAndMedia({
   settingsStore,
   desktopSettings,
 }: Props) {
@@ -28,9 +29,9 @@ export function SettingsChatsAndMedia({
 
   return (
     <>
-      <SettingsCommunication settingsStore={settingsStore} />
-      <SettingsOutgoingMediaQuality settings={settingsStore.settings} />
-      <SettingsDownloadOnDemand settings={settingsStore.settings} />
+      <Communication settingsStore={settingsStore} />
+      <OutgoingMediaQuality settings={settingsStore.settings} />
+      <DownloadOnDemand settings={settingsStore.settings} />
       <DesktopSettingsSwitch
         key='enterKeySends'
         label={tx('pref_enter_sends_explain')}
@@ -46,10 +47,10 @@ export function SettingsChatsAndMedia({
       <CoreSettingsSwitch key='mdns_enabled' label={tx('pref_read_receipts')} />
       <br />
       <br />
-      <SettingsAutodelete settingsStore={settingsStore} />
+      <Autodelete settingsStore={settingsStore} />
       <br />
       <br />
-      <SettingsBackup />
+      <Backup />
     </>
   )
 }

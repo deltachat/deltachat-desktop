@@ -1,12 +1,29 @@
 import React from 'react'
 import { H5 } from '@blueprintjs/core'
 
-import { runtime } from '../../runtime'
 import { BackendRemote } from '../../backend-com'
+import { runtime } from '../../runtime'
 import { selectedAccountId } from '../../ScreenController'
+import { useTranslationFunction } from '../../contexts'
+import SettingsButton from './SettingsButton'
 
 import type { OpenDialogOptions } from 'electron'
-import SettingsButton from '../SettingsButton'
+
+export default function ManageKeys() {
+  const tx = useTranslationFunction()
+
+  return (
+    <>
+      <H5>{tx('pref_managekeys_menu_title')}</H5>
+      <SettingsButton onClick={onKeysExport}>
+        {tx('pref_managekeys_export_secret_keys')}...
+      </SettingsButton>
+      <SettingsButton onClick={onKeysImport}>
+        {tx('pref_managekeys_import_secret_keys')}...
+      </SettingsButton>
+    </>
+  )
+}
 
 async function onKeysImport() {
   const tx = window.static_translate
@@ -79,19 +96,4 @@ async function onKeysExport() {
       })
     },
   })
-}
-
-export default function SettingsManageKeys() {
-  const tx = window.static_translate
-  return (
-    <>
-      <H5>{tx('pref_managekeys_menu_title')}</H5>
-      <SettingsButton onClick={onKeysExport}>
-        {tx('pref_managekeys_export_secret_keys')}...
-      </SettingsButton>
-      <SettingsButton onClick={onKeysImport}>
-        {tx('pref_managekeys_import_secret_keys')}...
-      </SettingsButton>
-    </>
-  )
 }

@@ -16,7 +16,7 @@ import Radio from '../Radio'
 import {
   VIDEO_CHAT_INSTANCE_AUTISTICI,
   VIDEO_CHAT_INSTANCE_SYSTEMLI,
-} from './SettingsExperimentalFeatures'
+} from '../../../shared/constants'
 
 type RadioButtonValue = 'disabled' | 'custom' | 'systemli' | 'autistici'
 

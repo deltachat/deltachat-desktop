@@ -4,7 +4,7 @@ import { H6, Icon } from '@blueprintjs/core'
 
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { ThemeManager } from '../../ThemeManager'
-import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
+import { SmallSelectDialog, SelectDialogOption } from '../dialogs/DeltaDialog'
 import { runtime } from '../../runtime'
 import {
   DesktopSettingsType,
@@ -15,8 +15,8 @@ import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
 import { getLogger } from '../../../shared/logger'
-import SettingsSelector from '../SettingsSelector'
-import { DesktopSettingsSwitch } from '../SettingsSwitch'
+import SettingsSelector from './SettingsSelector'
+import DesktopSettingsSwitch from './DesktopSettingsSwitch'
 
 const log = getLogger('renderer/settings/appearance')
 
@@ -26,7 +26,7 @@ type Props = {
   settingsStore: SettingsStoreState
 }
 
-export default function SettingsAppearance({
+export default function Appearance({
   rc,
   desktopSettings,
   settingsStore,

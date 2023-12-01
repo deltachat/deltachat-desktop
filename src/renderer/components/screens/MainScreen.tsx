@@ -42,7 +42,7 @@ import Sidebar, { SidebarState } from '../Sidebar'
 import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 import { Type } from '../../backend-com'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
-import { SettingsProfileDialog } from '../dialogs/Settings-Profile'
+import EditProfileDialog from '../dialogs/EditProfileDialog'
 
 const log = getLogger('renderer/main-screen')
 
@@ -130,7 +130,7 @@ export default function MainScreen() {
       const settingsStore = SettingsStoreInstance.state
       if (settingsStore && window.__askForName) {
         window.__askForName = false
-        screenContext.openDialog(SettingsProfileDialog, {
+        screenContext.openDialog(EditProfileDialog, {
           settingsStore,
           title: 'Account setup',
           confirmLabel: tx('ok'),
@@ -222,7 +222,7 @@ export default function MainScreen() {
               onClick={() => setSidebarState('visible')}
               id='hamburger-menu-button'
             >
-              <Icon icon='menu' aria-label={tx('main_menu')} iconSize={20} />
+              <Icon icon='menu' aria-label={tx('main_menu')} size={20} />
             </div>
             {queryStr.length === 0 && showArchivedChats && (
               <>

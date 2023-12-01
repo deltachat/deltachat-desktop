@@ -1,11 +1,12 @@
 import React, { useState, useContext } from 'react'
-import InputTransferKey from './AutocryptSetupMessage'
+import { T } from '@deltachat/jsonrpc-client'
+
 import DeltaDialog from './DeltaDialog'
 import { ScreenContext } from '../../contexts'
 import { getLogger } from '../../../shared/logger'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import { T } from '@deltachat/jsonrpc-client'
+import InputTransferKey from '../InputTransferKey'
 
 const log = getLogger('frontend/dialogs/EnterAutocryptSetupMessage')
 

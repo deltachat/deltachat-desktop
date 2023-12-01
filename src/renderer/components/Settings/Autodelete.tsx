@@ -11,8 +11,8 @@ import {
   SmallDialog,
   SmallSelectDialog,
   SelectDialogOption,
-} from './DeltaDialog'
-import { DialogProps } from './DialogController'
+} from '../dialogs/DeltaDialog'
+import { DialogProps } from '../dialogs/DialogController'
 import { AutodeleteDuration } from '../../../shared/constants'
 import { DeltaCheckbox } from '../contact/ContactListItem'
 import SettingsStoreInstance, {
@@ -20,7 +20,7 @@ import SettingsStoreInstance, {
 } from '../../stores/settings'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import SettingsSelector from '../SettingsSelector'
+import SettingsSelector from './SettingsSelector'
 
 function durationToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)
@@ -47,82 +47,7 @@ function durationToString(configValue: number | string) {
   }
 }
 
-export function AutodeleteConfirmationDialog({
-  fromServer,
-  estimateCount,
-  seconds,
-  isOpen,
-  onClose,
-}: {
-  fromServer: boolean
-  estimateCount: number
-  seconds: number
-} & DialogProps) {
-  const [isConfirmed, setIsConfirmed] = useState(false)
-  const toggleIsConfirmed = () => setIsConfirmed(isConfirmed => !isConfirmed)
-
-  const onOk = () => {
-    if (isConfirmed === false) return
-    SettingsStoreInstance.effect.setCoreSetting(
-      fromServer ? 'delete_server_after' : 'delete_device_after',
-      seconds.toString()
-    )
-    onClose()
-  }
-
-  const tx = window.static_translate
-
-  return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
-      <DeltaDialogHeader
-        title={
-          fromServer ? tx('autodel_server_title') : tx('autodel_device_title')
-        }
-      />
-      <DeltaDialogBody>
-        <DeltaDialogContent>
-          <p style={{ whiteSpace: 'pre-line' }}>
-            {tx(fromServer ? 'autodel_server_ask' : 'autodel_device_ask', [
-              String(estimateCount),
-              durationToString(seconds),
-            ])}
-          </p>
-          <div style={{ display: 'flex' }}>
-            <DeltaCheckbox checked={isConfirmed} onClick={toggleIsConfirmed} />
-            <div style={{ alignSelf: 'center' }}>{tx('autodel_confirm')}</div>
-          </div>
-        </DeltaDialogContent>
-      </DeltaDialogBody>
-      <DeltaDialogFooter
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginTop: '0px',
-          padding: '7px 13px 10px 13px',
-        }}
-      >
-        <p
-          className='delta-button danger bold'
-          onClick={() => {
-            onClose()
-          }}
-        >
-          {tx('cancel')}
-        </p>
-        <p
-          className={classNames('delta-button primary bold', {
-            disabled: !isConfirmed,
-          })}
-          onClick={onOk}
-        >
-          {tx('ok')}
-        </p>
-      </DeltaDialogFooter>
-    </SmallDialog>
-  )
-}
-
-export default function SettingsAutodelete({
+export default function Autodelete({
   settingsStore,
 }: {
   settingsStore: SettingsStoreState
@@ -206,5 +131,80 @@ export default function SettingsAutodelete({
         {tx('autodel_server_title')}
       </SettingsSelector>
     </>
+  )
+}
+
+function AutodeleteConfirmationDialog({
+  fromServer,
+  estimateCount,
+  seconds,
+  isOpen,
+  onClose,
+}: {
+  fromServer: boolean
+  estimateCount: number
+  seconds: number
+} & DialogProps) {
+  const [isConfirmed, setIsConfirmed] = useState(false)
+  const toggleIsConfirmed = () => setIsConfirmed(isConfirmed => !isConfirmed)
+
+  const onOk = () => {
+    if (isConfirmed === false) return
+    SettingsStoreInstance.effect.setCoreSetting(
+      fromServer ? 'delete_server_after' : 'delete_device_after',
+      seconds.toString()
+    )
+    onClose()
+  }
+
+  const tx = window.static_translate
+
+  return (
+    <SmallDialog isOpen={isOpen} onClose={onClose}>
+      <DeltaDialogHeader
+        title={
+          fromServer ? tx('autodel_server_title') : tx('autodel_device_title')
+        }
+      />
+      <DeltaDialogBody>
+        <DeltaDialogContent>
+          <p style={{ whiteSpace: 'pre-line' }}>
+            {tx(fromServer ? 'autodel_server_ask' : 'autodel_device_ask', [
+              String(estimateCount),
+              durationToString(seconds),
+            ])}
+          </p>
+          <div style={{ display: 'flex' }}>
+            <DeltaCheckbox checked={isConfirmed} onClick={toggleIsConfirmed} />
+            <div style={{ alignSelf: 'center' }}>{tx('autodel_confirm')}</div>
+          </div>
+        </DeltaDialogContent>
+      </DeltaDialogBody>
+      <DeltaDialogFooter
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginTop: '0px',
+          padding: '7px 13px 10px 13px',
+        }}
+      >
+        <p
+          className='delta-button danger bold'
+          onClick={() => {
+            onClose()
+          }}
+        >
+          {tx('cancel')}
+        </p>
+        <p
+          className={classNames('delta-button primary bold', {
+            disabled: !isConfirmed,
+          })}
+          onClick={onOk}
+        >
+          {tx('ok')}
+        </p>
+      </DeltaDialogFooter>
+    </SmallDialog>
   )
 }

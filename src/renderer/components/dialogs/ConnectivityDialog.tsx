@@ -1,6 +1,5 @@
-import { useEffect, useMemo, useState, useRef } from 'react'
+import React, { useEffect, useMemo, useState, useRef } from 'react'
 import { Card, Elevation } from '@blueprintjs/core'
-import React from 'react'
 
 import {
   DeltaDialogBody,
@@ -18,13 +17,7 @@ const INHERIT_STYLES = ['line-height', 'background-color', 'color', 'font-size']
 const OverwrittenStyles =
   'font-family: Arial, Helvetica, sans-serif;font-variant-ligatures: none;'
 
-export default function SettingsConnectivityDialog({
-  onClose,
-  isOpen,
-}: {
-  isOpen: DialogProps['isOpen']
-  onClose: DialogProps['onClose']
-}) {
+export default function ConnectivityDialog({ onClose, isOpen }: DialogProps) {
   const tx = useTranslationFunction()
 
   return (
@@ -38,32 +31,13 @@ export default function SettingsConnectivityDialog({
       }}
     >
       <DeltaDialogHeader title={tx('connectivity')} />
-      {SettingsConnectivityInner()}
+      {ConnectivityDialogInner()}
       <DeltaDialogCloseFooter onClose={onClose} />
     </DeltaDialogBase>
   )
 }
 
-export async function getConnectivityHTML(
-  styleSensor: React.MutableRefObject<HTMLDivElement | null>
-): Promise<string> {
-  let cHTML = await BackendRemote.rpc.getConnectivityHtml(selectedAccountId())
-
-  if (styleSensor.current) {
-    const cstyle = window.getComputedStyle(styleSensor.current)
-    let resulting_style = ''
-    for (const property of INHERIT_STYLES) {
-      resulting_style += `${property}: ${cstyle.getPropertyValue(property)};`
-    }
-    cHTML = cHTML.replace(
-      '</style>',
-      `</style><style> html {${resulting_style}${OverwrittenStyles}}</style>`
-    )
-  }
-  return cHTML
-}
-
-export function SettingsConnectivityInner() {
+function ConnectivityDialogInner() {
   const accountId = selectedAccountId()
   const [connectivityHTML, setConnectivityHTML] = useState('')
   const styleSensor = useRef<HTMLDivElement | null>(null)
@@ -102,4 +76,23 @@ export function SettingsConnectivityInner() {
       </DeltaDialogBody>
     </>
   )
+}
+
+async function getConnectivityHTML(
+  styleSensor: React.MutableRefObject<HTMLDivElement | null>
+): Promise<string> {
+  let cHTML = await BackendRemote.rpc.getConnectivityHtml(selectedAccountId())
+
+  if (styleSensor.current) {
+    const cstyle = window.getComputedStyle(styleSensor.current)
+    let resulting_style = ''
+    for (const property of INHERIT_STYLES) {
+      resulting_style += `${property}: ${cstyle.getPropertyValue(property)};`
+    }
+    cHTML = cHTML.replace(
+      '</style>',
+      `</style><style> html {${resulting_style}${OverwrittenStyles}}</style>`
+    )
+  }
+  return cHTML
 }

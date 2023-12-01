@@ -2,19 +2,36 @@ import React, { useState, useEffect } from 'react'
 import { H5, Intent } from '@blueprintjs/core'
 import { DcEventType } from '@deltachat/jsonrpc-client'
 
-import { DialogProps } from './DialogController'
-import { DeltaDialogBody, DeltaDialogContent, SmallDialog } from './DeltaDialog'
+import { DialogProps } from '../dialogs/DialogController'
+import {
+  DeltaDialogBody,
+  DeltaDialogContent,
+  SmallDialog,
+} from '../dialogs/DeltaDialog'
 import { DeltaProgressBar } from '../Login-Styles'
 import { useTranslationFunction } from '../../contexts'
 import { runtime } from '../../runtime'
 import { getLogger } from '../../../shared/logger'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import SettingsButton from './SettingsButton'
 
 import type { OpenDialogOptions } from 'electron'
-import SettingsButton from '../SettingsButton'
 
 const log = getLogger('renderer/Settings/Backup')
+
+export default function Backup() {
+  const tx = useTranslationFunction()
+
+  return (
+    <>
+      <H5>{tx('pref_backup')}</H5>
+      <SettingsButton onClick={onBackupExport}>
+        {tx('export_backup_desktop')}
+      </SettingsButton>
+    </>
+  )
+}
 
 function ExportProgressDialog(props: DialogProps) {
   const tx = useTranslationFunction()
@@ -94,16 +111,4 @@ function onBackupExport() {
       }
     },
   })
-}
-
-export default function SettingsBackup() {
-  const tx = useTranslationFunction()
-  return (
-    <>
-      <H5>{tx('pref_backup')}</H5>
-      <SettingsButton onClick={onBackupExport}>
-        {tx('export_backup_desktop')}
-      </SettingsButton>
-    </>
-  )
 }

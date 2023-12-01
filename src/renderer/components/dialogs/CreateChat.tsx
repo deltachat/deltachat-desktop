@@ -31,7 +31,7 @@ import {
   DeltaDialogFooter,
   DeltaDialogFooterActions,
 } from './DeltaDialog'
-import { GroupImage } from './Edit-Group-Image'
+import GroupImage from '../GroupImage'
 import { DialogProps } from './DialogController'
 import { runtime } from '../../runtime'
 import {

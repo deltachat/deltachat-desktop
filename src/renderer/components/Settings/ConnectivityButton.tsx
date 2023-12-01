@@ -1,13 +1,13 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
-import SettingsConnectivityDialog from '../dialogs/Settings-Connectivity'
 import SettingsIconButton from './SettingsIconButton'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { selectedAccountId } from '../../ScreenController'
+import ConnectivityDialog from '../dialogs/ConnectivityDialog'
 
-export default function SettingsConnectivityButton() {
+export default function ConnectivityButton() {
   const { openDialog } = useContext(ScreenContext)
   const [connectivityString, setConnectivityString] = useState('')
   const accountId = selectedAccountId()
@@ -41,7 +41,7 @@ export default function SettingsConnectivityButton() {
   return (
     <SettingsIconButton
       iconName='swap_vert'
-      onClick={() => openDialog(SettingsConnectivityDialog)}
+      onClick={() => openDialog(ConnectivityDialog)}
     >
       {tx('connectivity') + ' ' + connectivityString}
     </SettingsIconButton>

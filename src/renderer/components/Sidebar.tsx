@@ -1,23 +1,23 @@
 import classNames from 'classnames'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
+import { C } from '@deltachat/jsonrpc-client'
+
 import { ScreenContext, useTranslationFunction } from '../contexts'
 import { runtime } from '../runtime'
 import { Screens, selectedAccountId } from '../ScreenController'
 import QrCode from './dialogs/QrCode'
 import { selectChat, unselectChat } from './helpers/ChatMethods'
-
 import { useSettingsStore } from '../stores/settings'
 import { Avatar } from './Avatar'
-import { C } from '@deltachat/jsonrpc-client'
 import { VERSION } from '../../shared/build-info'
 import { ActionEmitter, KeybindAction } from '../keybindings'
-import SettingsConnectivityDialog from './dialogs/Settings-Connectivity'
 import { debounceWithInit } from './chat/ChatListHelpers'
 import {
   BackendRemote,
   EffectfulBackendActions,
   onDCEvent,
 } from '../backend-com'
+import ConnectivityDialog from './dialogs/ConnectivityDialog'
 
 export type SidebarState = 'init' | 'visible' | 'invisible'
 
@@ -55,7 +55,7 @@ const Sidebar = React.memo(
 
     const onOpenConnectivity = () => {
       setSidebarState('invisible')
-      screenContext.openDialog(SettingsConnectivityDialog)
+      screenContext.openDialog(ConnectivityDialog)
     }
 
     const onOpenSettings = () => {
