@@ -33,7 +33,7 @@ export default function ChatsAndMedia({
       <OutgoingMediaQuality settings={settingsStore.settings} />
       <DownloadOnDemand settings={settingsStore.settings} />
       <DesktopSettingsSwitch
-        key='enterKeySends'
+        settingsKey='enterKeySends'
         label={tx('pref_enter_sends_explain')}
       />
       <KeybordShortcutHintInSettings
@@ -44,7 +44,10 @@ export default function ChatsAndMedia({
       <br />
       <br />
       <H5>{tx('pref_privacy')}</H5>
-      <CoreSettingsSwitch key='mdns_enabled' label={tx('pref_read_receipts')} />
+      <CoreSettingsSwitch
+        settingsKey='mdns_enabled'
+        label={tx('pref_read_receipts')}
+      />
       <br />
       <br />
       <Autodelete settingsStore={settingsStore} />

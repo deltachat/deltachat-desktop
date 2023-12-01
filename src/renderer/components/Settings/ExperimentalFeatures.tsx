@@ -52,29 +52,29 @@ export function ExperimentalFeatures({ settingsStore }: Props) {
   return (
     <>
       <DesktopSettingsSwitch
-        key='enableBroadcastLists'
+        settingsKey='enableBroadcastLists'
         label={tx('broadcast_lists')}
         description={tx('chat_new_broadcast_hint')}
       />
       <DesktopSettingsSwitch
-        key='enableOnDemandLocationStreaming'
+        settingsKey='enableOnDemandLocationStreaming'
         label={tx('pref_on_demand_location_streaming')}
       />
       <DesktopSettingsSwitch
-        key='enableChatAuditLog'
+        settingsKey='enableChatAuditLog'
         label={tx('menu_chat_audit_log')}
         description={tx('chat_audit_log_description')}
       />
       <DesktopSettingsSwitch
-        key='enableRelatedChats'
+        settingsKey='enableRelatedChats'
         label={tx('related_chats')}
       />
       <DesktopSettingsSwitch
-        key='experimentalEnableMarkdownInMessages'
+        settingsKey='experimentalEnableMarkdownInMessages'
         label='Render Markdown in Messages'
       />
       <DesktopSettingsSwitch
-        key='enableWebxdcDevTools'
+        settingsKey='enableWebxdcDevTools'
         label='Enable Webxdc Devtools'
         // See https://delta.chat/en/2023-05-22-webxdc-security,
         // "XDC-01-004 WP1: Data exfiltration via desktop app DevTools"
@@ -87,7 +87,7 @@ export function ExperimentalFeatures({ settingsStore }: Props) {
       />
       <CoreSettingsSwitch
         label={tx('disable_imap_idle')}
-        key='disable_idle'
+        settingsKey='disable_idle'
         description={tx('disable_imap_idle_explain')}
       />
       <SettingsSelector

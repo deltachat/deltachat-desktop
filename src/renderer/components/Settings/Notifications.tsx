@@ -14,11 +14,11 @@ export default function Notifications({ desktopSettings }: Props) {
   return (
     <>
       <DesktopSettingsSwitch
-        key='notifications'
+        settingsKey='notifications'
         label={tx('pref_notifications_explain')}
       />
       <DesktopSettingsSwitch
-        key='showNotificationContent'
+        settingsKey='showNotificationContent'
         label={tx('pref_show_notification_content_explain')}
         disabled={!desktopSettings['notifications']}
       />

@@ -316,7 +316,7 @@ function SettingsTrayIcon({
   return (
     <>
       <DesktopSettingsSwitch
-        key='minimizeToTray'
+        settingsKey='minimizeToTray'
         label={tx('pref_show_tray_icon')}
         disabled={settingsStore.rc.minimized}
         disabledValue={settingsStore.rc.minimized}

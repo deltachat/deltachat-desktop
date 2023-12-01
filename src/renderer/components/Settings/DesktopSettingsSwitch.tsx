@@ -5,7 +5,7 @@ import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 import { DeltaSwitch2 } from '../dialogs/DeltaDialog'
 
 type Props = {
-  key: keyof DesktopSettingsType
+  settingsKey: keyof DesktopSettingsType
   label: string
   description?: string
   disabled?: boolean
@@ -16,7 +16,7 @@ type Props = {
  * Switch for Desktop Settings
  */
 export default function DesktopSettingsSwitch({
-  key,
+  settingsKey,
   label,
   description,
   disabled,
@@ -27,7 +27,7 @@ export default function DesktopSettingsSwitch({
   const value =
     disabled === true && typeof disabledValue !== 'undefined'
       ? disabledValue
-      : settingsStore.desktopSettings[key] === true
+      : settingsStore.desktopSettings[settingsKey] === true
 
   return (
     <DeltaSwitch2
@@ -36,8 +36,8 @@ export default function DesktopSettingsSwitch({
       value={value}
       onClick={() => {
         SettingsStoreInstance.effect.setDesktopSetting(
-          key,
-          !settingsStore.desktopSettings[key]
+          settingsKey,
+          !settingsStore.desktopSettings[settingsKey]
         )
       }}
       disabled={disabled}

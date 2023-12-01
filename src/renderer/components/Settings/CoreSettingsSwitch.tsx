@@ -11,7 +11,7 @@ function flipDeltaBoolean(value: string) {
 }
 
 type Props = {
-  key: keyof SettingsStoreState['settings']
+  settingsKey: keyof SettingsStoreState['settings']
   label: string
   description?: string
   disabled?: boolean
@@ -22,7 +22,7 @@ type Props = {
  * Switch for Core Settings
  */
 export default function CoreSettingsSwitch({
-  key,
+  settingsKey,
   label,
   description,
   disabled,
@@ -33,7 +33,7 @@ export default function CoreSettingsSwitch({
   const value =
     disabled === true && typeof disabledValue !== 'undefined'
       ? disabledValue
-      : settingsStore.settings[key] === '1'
+      : settingsStore.settings[settingsKey] === '1'
 
   return (
     <DeltaSwitch2
@@ -42,8 +42,8 @@ export default function CoreSettingsSwitch({
       description={description}
       onClick={() => {
         SettingsStoreInstance.effect.setCoreSetting(
-          key,
-          flipDeltaBoolean(settingsStore.settings[key])
+          settingsKey,
+          flipDeltaBoolean(settingsStore.settings[settingsKey])
         )
       }}
       disabled={disabled}

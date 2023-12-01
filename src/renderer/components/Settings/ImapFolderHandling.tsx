@@ -19,25 +19,25 @@ export default function ImapFolderHandling({ settingsStore }: Props) {
       <H5>{tx('pref_imap_folder_handling')}</H5>
       <CoreSettingsSwitch
         label={tx('pref_watch_sent_folder')}
-        key='sentbox_watch'
+        settingsKey='sentbox_watch'
         disabled={disableIfOnlyFetchMvBoxIsTrue}
         disabledValue={false}
       />
       <CoreSettingsSwitch
         label={tx('pref_send_copy_to_self')}
-        key='bcc_self'
+        settingsKey='bcc_self'
         description={tx('pref_send_copy_to_self_explain')}
       />
       <CoreSettingsSwitch
         label={tx('pref_auto_folder_moves')}
-        key='mvbox_move'
+        settingsKey='mvbox_move'
         description={tx('pref_auto_folder_moves_explain')}
         disabled={disableIfOnlyFetchMvBoxIsTrue}
         disabledValue={false}
       />
       <CoreSettingsSwitch
         label={tx('pref_only_fetch_mvbox_title')}
-        key='only_fetch_mvbox'
+        settingsKey='only_fetch_mvbox'
         description={tx('pref_only_fetch_mvbox_explain')}
       />
     </>

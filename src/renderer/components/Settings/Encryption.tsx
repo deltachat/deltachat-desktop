@@ -21,7 +21,7 @@ export default function Encryption() {
     <>
       <H5>{tx('autocrypt')}</H5>
       <CoreSettingsSwitch
-        key='e2ee_enabled'
+        settingsKey='e2ee_enabled'
         label={tx('autocrypt_prefer_e2ee')}
       />
       <SettingsButton
