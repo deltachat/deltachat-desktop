@@ -1,29 +1,15 @@
 .audit-log-dialog {
-  .bp4-dialog-header {
-    padding: 14px 15px 9px 13px;
-  }
-
   .heading {
     flex: 1 1 auto;
     margin: 0;
     line-height: inherit;
 
-    & > h4 {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      word-wrap: normal;
-      margin: 0;
-      line-height: inherit;
-      font-size: 18px;
-    }
+  }
 
-    & > h5 {
-      margin: 0;
-      margin-top: 1px;
-      font-weight: normal;
-      font-size: 14px;
-    }
+  h5 {
+    margin: 0;
+    font-weight: normal;
+    font-size: 14px;
   }
 
   div.no-content {
@@ -44,7 +30,6 @@
 
   ul {
     list-style: none;
-    padding-left: 12px;
     li.time {
       div {
         text-transform: capitalize;

@@ -76,7 +76,7 @@ export default function AccountListScreen({
           canEscapeKeyClose={true}
         >
           <DialogHeader title={tx('switch_account')} />
-          <DialogBody noPadding>
+          <DialogBody>
             <AccountSelection
               {...{
                 refreshAccounts,

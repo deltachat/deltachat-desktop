@@ -174,7 +174,6 @@ export default function WelcomeScreen({
             title={tx('add_account')}
           />
           <DialogBody>
-            // @TODO id=welcome-dialog-content
             <div className='welcome-deltachat'>
               <img className='delta-icon' src='../images/intro1.png' />
               <p className='f1'>{tx('welcome_chat_over_email')}</p>

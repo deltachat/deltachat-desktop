@@ -130,9 +130,8 @@ export function SendBackupDialog({ onClose }: DialogProps) {
       style={{ width: 'unset' }}
     >
       <DialogHeader title={tx('multidevice_title')} />
-      // @TODO "send-backup-dialog" class
       <DialogBody>
-        <div className='container'>
+        <div className='container send-backup-dialog'>
           <div className='content'>
             {error}
             {!inProgress && (

@@ -146,7 +146,7 @@ export function QrCodeShowQrInner({
 
   return (
     <>
-      <DialogBody noOverflow noPadding>
+      <DialogBody>
         {svgUrl && (
           <img
             style={{
@@ -255,7 +255,7 @@ export function QrCodeScanQrInner(
 
   return (
     <>
-      <DialogBody noPadding>
+      <DialogBody>
         <div className='import-qr-code-dialog'>
           <div style={{ marginBottom: '-19px' }}>
             <div>
