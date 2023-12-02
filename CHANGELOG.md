@@ -5,6 +5,7 @@
 ### Changed
 - update deltachat-node and deltachat/jsonrpc-client to `v1.131.9`
   - more fixes for mail.163.com
+- update esbuild to v0.19.8
 
 ### Fixed
 - log error when webxdc status update send fails
