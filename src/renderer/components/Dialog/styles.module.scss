@@ -69,7 +69,22 @@ $dialogPaddingHorizontal: 30px;
 
 .footerActions {
   display: flex;
-  justify-content: flex-end;
+
+  .spaceBetween {
+    justify-content: 'space-between';
+  }
+
+  .start {
+    justify-content: 'flex-start';
+  }
+
+  .end {
+    justify-content: 'flex-end';
+  }
+
+  .center {
+    justify-content: 'center';
+  }
 }
 
 .headerButton {

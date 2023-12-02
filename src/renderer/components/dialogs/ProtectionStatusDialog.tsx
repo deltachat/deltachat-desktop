@@ -42,7 +42,7 @@ export function ProtectionBrokenDialog({
         </p>
       </div>
       <DialogFooter>
-        <FooterActions style={{ justifyContent: 'space-between' }}>
+        <FooterActions align='spaceBetween'>
           <p
             className='delta-button bold primary'
             onClick={onLearnMore}

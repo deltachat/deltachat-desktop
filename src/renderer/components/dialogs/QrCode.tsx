@@ -161,7 +161,7 @@ export function QrCodeShowQrInner({
         )}
       </DialogBody>
       <DialogFooter>
-        <FooterActions style={{ justifyContent: 'space-between' }}>
+        <FooterActions align='spaceBetween'>
           <p className={'delta-button bold primary'} onClick={onCopy}>
             {tx('global_menu_edit_copy_desktop')}
           </p>
@@ -283,7 +283,7 @@ export function QrCodeScanQrInner(
         </div>
       </DialogBody>
       <DialogFooter>
-        <FooterActions style={{ justifyContent: 'space-between' }}>
+        <FooterActions align='spaceBetween'>
           <p className={'delta-button bold primary'} onClick={openMenu}>
             {tx('menu_more_options')}
           </p>

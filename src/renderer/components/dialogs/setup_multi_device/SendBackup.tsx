@@ -171,7 +171,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
         </div>
       </DialogBody>
       <DialogFooter>
-        <FooterActions style={{ alignItems: 'center' }}>
+        <FooterActions align='center'>
           {inProgress && (
             <>
               <p

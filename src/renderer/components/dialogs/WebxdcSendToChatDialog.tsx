@@ -121,7 +121,7 @@ export default function WebxdcSaveToChatDialog(props: {
         </div>
       </div>
       <DialogFooter>
-        <FooterActions style={{ justifyContent: 'start' }}>
+        <FooterActions align='start'>
           {file && (
             <p className={'delta-button bold primary'} onClick={onSaveClick}>
               {tx('save_as')}
