@@ -6,6 +6,9 @@
 - update deltachat-node and deltachat/jsonrpc-client to `v1.131.8`
   - more fixes for mail.163.com
 
+### Fixed
+- make starting of html email view more reliable (remove race condition)
+
 <a id="1_42_1"></a>
 
 ## [1.42.1] - 2023-11-23
