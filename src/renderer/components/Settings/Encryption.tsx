@@ -21,10 +21,7 @@ export default function Encryption() {
         settingsKey='e2ee_enabled'
         label={tx('autocrypt_prefer_e2ee')}
       />
-      <SettingsButton
-        style={{ color: 'var(--colorPrimary)', fontWeight: 'lighter' }}
-        onClick={() => openDialog(SendAutocryptSetupMessage)}
-      >
+      <SettingsButton onClick={() => openDialog(SendAutocryptSetupMessage)}>
         {tx('autocrypt_send_asm_button')}
       </SettingsButton>
       <div className='bp4-callout'>{tx('autocrypt_explain')}</div>

@@ -1,13 +1,17 @@
 import React from 'react'
 
+import type { PropsWithChildren } from 'react'
+
 import styles from './styles.module.scss'
 
-export default function SettingsButton(props: any) {
-  const { onClick, children, ...otherProps } = props
+type Props = PropsWithChildren<{
+  onClick: () => void
+}>
 
+export default function SettingsButton({ children, onClick }: Props) {
   return (
-    <div className={styles.settingsButton} onClick={onClick}>
-      <button {...otherProps}>{children}</button>
-    </div>
+    <button className={styles.settingsButton} onClick={onClick}>
+      {children}
+    </button>
   )
 }

@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react'
-import { H5 } from '@blueprintjs/core'
 import classNames from 'classnames'
 
 import { ScreenContext, useTranslationFunction } from '../../contexts'
@@ -107,7 +106,6 @@ export default function Autodelete({
 
   return (
     <>
-      <H5>{tx('delete_old_messages')}</H5>
       <SettingsSelector
         onClick={onOpenDialog.bind(null, false)}
         currentValue={durationToString(

@@ -60,6 +60,14 @@ $paddingVertical: 20px;
 .dialogContent {
   padding-left: $paddingHorizontal;
   padding-right: $paddingHorizontal;
+
+  &.paddingTop {
+    padding-top: 5px;
+  }
+
+  &.paddingBottom {
+    padding-bottom: 5px;
+  }
 }
 
 .dialogFooter {

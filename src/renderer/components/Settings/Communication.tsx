@@ -1,5 +1,4 @@
-import React, { useContext } from 'react'
-import { H5 } from '@blueprintjs/core'
+import React, { useCallback, useContext } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
 import { ScreenContext, useTranslationFunction } from '../../contexts'
@@ -24,45 +23,42 @@ function showToString(configValue: number | string) {
   }
 }
 
-export default function Communication({
-  settingsStore,
-}: {
+type Props = {
   settingsStore: SettingsStoreState
-}) {
+}
+
+export default function Communication({ settingsStore }: Props) {
   const { openDialog } = useContext(ScreenContext)
-
   const tx = useTranslationFunction()
-  const SHOW_EMAIL_OPTIONS: SelectDialogOption[] = [
-    [String(C.DC_SHOW_EMAILS_OFF), tx('pref_show_emails_no')],
-    [
-      String(C.DC_SHOW_EMAILS_ACCEPTED_CONTACTS),
-      tx('pref_show_emails_accepted_contacts'),
-    ],
-    [String(C.DC_SHOW_EMAILS_ALL), tx('pref_show_emails_all')],
-  ]
 
-  const onOpenDialog = async () => {
+  const onOpenDialog = useCallback(async () => {
+    const values: SelectDialogOption[] = [
+      [String(C.DC_SHOW_EMAILS_OFF), tx('pref_show_emails_no')],
+      [
+        String(C.DC_SHOW_EMAILS_ACCEPTED_CONTACTS),
+        tx('pref_show_emails_accepted_contacts'),
+      ],
+      [String(C.DC_SHOW_EMAILS_ALL), tx('pref_show_emails_all')],
+    ]
+
     openDialog(SmallSelectDialog, {
-      values: SHOW_EMAIL_OPTIONS,
+      values,
       selectedValue: String(settingsStore.settings['show_emails']),
       title: tx('pref_show_emails'),
       onSave: async (show: string) => {
         SettingsStoreInstance.effect.setCoreSetting('show_emails', show)
       },
     })
-  }
+  }, [openDialog, settingsStore.settings, tx])
 
   if (!settingsStore.settings['show_emails']) return null
 
   return (
-    <>
-      <H5>{tx('pref_chats')}</H5>
-      <SettingsSelector
-        onClick={onOpenDialog.bind(null)}
-        currentValue={showToString(settingsStore.settings['show_emails'])}
-      >
-        {tx('pref_show_emails')}
-      </SettingsSelector>
-    </>
+    <SettingsSelector
+      onClick={onOpenDialog.bind(null)}
+      currentValue={showToString(settingsStore.settings['show_emails'])}
+    >
+      {tx('pref_show_emails')}
+    </SettingsSelector>
   )
 }

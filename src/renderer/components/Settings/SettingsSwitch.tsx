@@ -1,46 +1,39 @@
 import React from 'react'
 import classNames from 'classnames'
 
+import Switch from '../Switch'
+
+import styles from './styles.module.scss'
+
 type Props = {
-  label: string
-  value: boolean
   description?: string
-  onClick: () => void
   disabled?: boolean
+  label: string
+  onClick: () => void
+  value: boolean
 }
 
 export default function SettingsSwitch({
-  label,
   description,
-  value,
+  disabled = false,
+  label,
   onClick,
-  disabled,
+  value,
 }: Props) {
-  disabled = disabled === true ? true : false
-
   return (
-    <label className={classNames('DialogSwitch', { disabled })}>
-      <div className='left'>
-        <div className='label'>{label}</div>
-        {description && <div className='description'>{description}</div>}
+    <label
+      className={classNames(styles.settingsSwitch, {
+        [styles.disabled]: disabled,
+      })}
+    >
+      <div className={styles.settingsSwitchLeft}>
+        <span>{label}</span>
+        {description && (
+          <div className={styles.settingsSwitchDescription}>{description}</div>
+        )}
       </div>
-      <div className='right'>
-        <label className='delta-switch2 bp4-switch bp4-align-right inactive'>
-          <input
-            type='checkbox'
-            checked={value}
-            onClick={() => {
-              disabled === false && onClick()
-            }}
-            readOnly
-          />
-          <span
-            className={classNames('delta-switch2-indicator', {
-              checked: value,
-              disabled,
-            })}
-          />
-        </label>
+      <div className={styles.settingsSwitchRight}>
+        <Switch checked={value} disabled={disabled} onChange={onClick} />
       </div>
     </label>
   )

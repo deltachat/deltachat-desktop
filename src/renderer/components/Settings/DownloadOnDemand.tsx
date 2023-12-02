@@ -57,13 +57,11 @@ export default function DownloadOnDemand(props: {
         )
 
   return (
-    <>
-      <SettingsSelector
-        onClick={onOpenDialog.bind(null)}
-        currentValue={current_limit}
-      >
-        {tx('auto_download_messages')}
-      </SettingsSelector>
-    </>
+    <SettingsSelector
+      onClick={onOpenDialog.bind(null)}
+      currentValue={current_limit}
+    >
+      {tx('auto_download_messages')}
+    </SettingsSelector>
   )
 }

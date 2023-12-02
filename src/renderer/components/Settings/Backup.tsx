@@ -21,12 +21,9 @@ export default function Backup() {
   const tx = useTranslationFunction()
 
   return (
-    <>
-      <H5>{tx('pref_backup')}</H5>
-      <SettingsButton onClick={onBackupExport}>
-        {tx('export_backup_desktop')}
-      </SettingsButton>
-    </>
+    <SettingsButton onClick={onBackupExport}>
+      {tx('export_backup_desktop')}
+    </SettingsButton>
   )
 }
 

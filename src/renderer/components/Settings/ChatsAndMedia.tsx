@@ -1,5 +1,4 @@
 import React from 'react'
-import { H5 } from '@blueprintjs/core'
 
 import {
   enterKeySendsKeyboardShortcuts,
@@ -15,6 +14,9 @@ import DesktopSettingsSwitch from './DesktopSettingsSwitch'
 import CoreSettingsSwitch from './CoreSettingsSwitch'
 import Autodelete from './Autodelete'
 import Backup from './Backup'
+import SettingsSeparator from './SettingsSeparator'
+import SettingsHeading from './SettingsHeading'
+import { DialogContent } from '../Dialog'
 
 type Props = {
   settingsStore: SettingsStoreState
@@ -29,6 +31,7 @@ export default function ChatsAndMedia({
 
   return (
     <>
+      <SettingsHeading>{tx('pref_chats')}</SettingsHeading>
       <Communication settingsStore={settingsStore} />
       <OutgoingMediaQuality settings={settingsStore.settings} />
       <DownloadOnDemand settings={settingsStore.settings} />
@@ -36,23 +39,24 @@ export default function ChatsAndMedia({
         settingsKey='enterKeySends'
         label={tx('pref_enter_sends_explain')}
       />
-      <KeybordShortcutHintInSettings
-        actions={enterKeySendsKeyboardShortcuts(
-          desktopSettings['enterKeySends']
-        )}
-      />
-      <br />
-      <br />
-      <H5>{tx('pref_privacy')}</H5>
+      <DialogContent paddingTop>
+        <KeybordShortcutHintInSettings
+          actions={enterKeySendsKeyboardShortcuts(
+            desktopSettings['enterKeySends']
+          )}
+        />
+      </DialogContent>
+      <SettingsSeparator />
+      <SettingsHeading>{tx('pref_privacy')}</SettingsHeading>
       <CoreSettingsSwitch
         settingsKey='mdns_enabled'
         label={tx('pref_read_receipts')}
       />
-      <br />
-      <br />
+      <SettingsSeparator />
+      <SettingsHeading>{tx('delete_old_messages')}</SettingsHeading>
       <Autodelete settingsStore={settingsStore} />
-      <br />
-      <br />
+      <SettingsSeparator />
+      <SettingsHeading>{tx('pref_backup')}</SettingsHeading>
       <Backup />
     </>
   )
