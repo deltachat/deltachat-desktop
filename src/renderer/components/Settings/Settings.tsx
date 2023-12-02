@@ -51,7 +51,7 @@ export default function Settings({ isOpen, onClose }: DialogProps) {
           <DialogBody>
             <Profile settingsStore={settingsStore} />
             <SettingsIconButton
-              iconName='user'
+              icon='person'
               onClick={() => {
                 openDialog(EditProfileDialog, {
                   settingsStore,
@@ -61,7 +61,7 @@ export default function Settings({ isOpen, onClose }: DialogProps) {
               {tx('pref_edit_profile')}
             </SettingsIconButton>
             <SettingsIconButton
-              iconName='lock'
+              icon='list'
               onClick={() => {
                 openDialog(EditAccountAndPasswordDialog, {
                   settingsStore,
@@ -72,25 +72,25 @@ export default function Settings({ isOpen, onClose }: DialogProps) {
             </SettingsIconButton>
             <SettingsSeparator />
             <SettingsIconButton
-              iconPath='../images/icons/forum.svg'
+              icon='forum'
               onClick={() => setSettingsMode('chats_and_media')}
             >
               {tx('pref_chats_and_media')}
             </SettingsIconButton>
             <SettingsIconButton
-              iconPath='../images/icons/bell.svg'
+              icon='bell'
               onClick={() => setSettingsMode('notifications')}
             >
               {tx('pref_notifications')}
             </SettingsIconButton>
             <SettingsIconButton
-              iconPath='../images/icons/brightness-6.svg'
+              icon='brightness-6'
               onClick={() => setSettingsMode('appearance')}
             >
               {tx('pref_appearance')}
             </SettingsIconButton>
             <SettingsIconButton
-              iconPath='../images/icons/devices.svg'
+              icon='devices'
               onClick={() => {
                 openDialog(SendBackupDialog)
                 onClose()
@@ -100,14 +100,14 @@ export default function Settings({ isOpen, onClose }: DialogProps) {
             </SettingsIconButton>
             <ConnectivityButton />
             <SettingsIconButton
-              iconPath='../images/icons/code-tags.svg'
+              icon='code-tags'
               onClick={() => setSettingsMode('advanced')}
             >
               {tx('menu_advanced')}
             </SettingsIconButton>
             {!runtime.getRuntimeInfo().isMac && (
               <SettingsIconButton
-                iconPath='../images/icons/favorite.svg'
+                icon='favorite'
                 onClick={() => runtime.openLink(donationUrl)}
                 isLink
               >

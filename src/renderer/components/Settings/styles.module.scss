@@ -68,15 +68,8 @@ $settingsHeight: 40px;
   text-align: start;
 }
 
-.settingsIconMask {
-  -webkit-mask-size: 80%;
+.settingsIcon {
   background-color: var(--settingsIconColor);
-  height: 100%;
-  width: 24px;
-}
-
-.settingsIconSVG {
-  color: var(--settingsIconColor);
 }
 
 .settingsSelector {
