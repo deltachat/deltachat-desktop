@@ -1,5 +1,4 @@
 import React from 'react'
-import { H5 } from '@blueprintjs/core'
 
 import { SettingsStoreState } from '../../stores/settings'
 import { useTranslationFunction } from '../../contexts'
@@ -16,7 +15,6 @@ export default function ImapFolderHandling({ settingsStore }: Props) {
 
   return (
     <>
-      <H5>{tx('pref_imap_folder_handling')}</H5>
       <CoreSettingsSwitch
         label={tx('pref_watch_sent_folder')}
         settingsKey='sentbox_watch'

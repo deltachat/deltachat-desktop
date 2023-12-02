@@ -27,9 +27,21 @@ export default function SettingsSwitch({
       })}
     >
       <div className={styles.settingsSwitchLeft}>
-        <span>{label}</span>
+        <span
+          className={classNames(styles.settingsSwitchLabel, {
+            [styles.disabled]: disabled,
+          })}
+        >
+          {label}
+        </span>
         {description && (
-          <div className={styles.settingsSwitchDescription}>{description}</div>
+          <div
+            className={classNames(styles.settingsSwitchDescription, {
+              [styles.disabled]: disabled,
+            })}
+          >
+            {description}
+          </div>
         )}
       </div>
       <div className={styles.settingsSwitchRight}>

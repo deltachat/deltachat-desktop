@@ -1,4 +1,3 @@
-import { H5 } from '@blueprintjs/core'
 import React from 'react'
 
 import { SettingsStoreState } from '../../stores/settings'
@@ -7,6 +6,8 @@ import { useTranslationFunction } from '../../contexts'
 import { ExperimentalFeatures } from './ExperimentalFeatures'
 import ImapFolderHandling from './ImapFolderHandling'
 import ManageKeys from './ManageKeys'
+import SettingsHeading from './SettingsHeading'
+import SettingsSeparator from './SettingsSeparator'
 
 type Props = {
   settingsStore: SettingsStoreState
@@ -17,16 +18,16 @@ export default function Advanced({ settingsStore }: Props) {
 
   return (
     <>
+      <SettingsHeading>{tx('autocrypt')}</SettingsHeading>
       <Encryption />
-      <br />
-      <br />
+      <SettingsSeparator />
+      <SettingsHeading>{tx('pref_imap_folder_handling')}</SettingsHeading>
       <ImapFolderHandling settingsStore={settingsStore} />
-      <br />
-      <br />
+      <SettingsSeparator />
+      <SettingsHeading>{tx('pref_managekeys_menu_title')}</SettingsHeading>
       <ManageKeys />
-      <br />
-      <br />
-      <H5>{tx('pref_experimental_features')}</H5>
+      <SettingsSeparator />
+      <SettingsHeading>{tx('pref_experimental_features')}</SettingsHeading>
       <ExperimentalFeatures settingsStore={settingsStore} />
     </>
   )

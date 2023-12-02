@@ -29,10 +29,16 @@ $settingsHeight: 40px;
   padding-left: 30px;
   padding-right: 30px;
   text-align: left;
+  width: 100%;
 
   &:hover {
     background-color: var(--chatListItemBgHover);
     cursor: pointer;
+  }
+
+  &.highlight {
+    color: var(--colorPrimary);
+    font-weight: bold;
   }
 }
 
@@ -47,6 +53,7 @@ $settingsHeight: 40px;
   padding-left: 30px;
   padding-right: 30px;
   padding-top: 0;
+  width: 100%;
 
   &:hover {
     background-color: var(--chatListItemBgHover);
@@ -102,23 +109,16 @@ $settingsHeight: 40px;
   align-items: center;
   cursor: pointer;
   display: flex;
-  height: $settingsHeight;
   justify-content: space-between;
+  min-height: $settingsHeight;
+  padding-bottom: 10px;
   padding-left: 30px;
   padding-right: 30px;
+  padding-top: 10px;
   user-select: none;
 
   &:hover {
     background-color: var(--chatListItemBgHover);
-  }
-
-  &.disabled {
-    .left {
-      .label,
-      .description {
-        color: rgba(92, 112, 128, 0.6);
-      }
-    }
   }
 }
 
@@ -127,9 +127,22 @@ $settingsHeight: 40px;
   flex-direction: column;
 }
 
+.settingsSwitchLabel {
+  color: var(--globalText);
+
+  &.disabled {
+    color: rgba(92, 112, 128, 0.6);
+  }
+}
+
 .settingsSwitchDescription {
   color: var(--chat-list-item-archived-label-border);
   font-size: smaller;
+  margin-top: 3px;
+
+  &.disabled {
+    color: rgba(92, 112, 128, 0.6);
+  }
 }
 
 .settingsSwitchRight {

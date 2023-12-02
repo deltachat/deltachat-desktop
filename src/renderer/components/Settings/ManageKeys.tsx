@@ -1,5 +1,4 @@
 import React from 'react'
-import { H5 } from '@blueprintjs/core'
 
 import { BackendRemote } from '../../backend-com'
 import { runtime } from '../../runtime'
@@ -14,7 +13,6 @@ export default function ManageKeys() {
 
   return (
     <>
-      <H5>{tx('pref_managekeys_menu_title')}</H5>
       <SettingsButton onClick={onKeysExport}>
         {tx('pref_managekeys_export_secret_keys')}...
       </SettingsButton>

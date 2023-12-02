@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Card, H5, Classes, Callout } from '@blueprintjs/core'
+import { Card, Classes } from '@blueprintjs/core'
 
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { DialogProps } from '../dialogs/DialogController'
@@ -9,6 +9,7 @@ import SettingsButton from './SettingsButton'
 import CoreSettingsSwitch from './CoreSettingsSwitch'
 import InputTransferKey from '../InputTransferKey'
 import { DialogFooter, DialogWithHeader, FooterActions } from '../Dialog'
+import Callout from '../Callout'
 
 export default function Encryption() {
   const { openDialog } = useContext(ScreenContext)
@@ -16,15 +17,17 @@ export default function Encryption() {
 
   return (
     <>
-      <H5>{tx('autocrypt')}</H5>
       <CoreSettingsSwitch
         settingsKey='e2ee_enabled'
         label={tx('autocrypt_prefer_e2ee')}
       />
-      <SettingsButton onClick={() => openDialog(SendAutocryptSetupMessage)}>
+      <SettingsButton
+        highlight
+        onClick={() => openDialog(SendAutocryptSetupMessage)}
+      >
         {tx('autocrypt_send_asm_button')}
       </SettingsButton>
-      <div className='bp4-callout'>{tx('autocrypt_explain')}</div>
+      <Callout>{tx('autocrypt_explain')}</Callout>
     </>
   )
 }
