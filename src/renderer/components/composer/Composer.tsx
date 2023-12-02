@@ -334,6 +334,7 @@ const Composer = forwardRef<
       return <span />
     }
   } else {
+    const voiceMessageDisabled = Boolean(draftState.file || messageInputRef.current?.hasText())
     return (
       <div className='composer' ref={ref}>
         <div className='upper-bar'>
@@ -366,12 +367,12 @@ const Composer = forwardRef<
             onMouseUp={() => {
               messageInputRef.current?.stopRecording()
             }}
-            aria-label={tx('voice_send')}
-            disabled={Boolean(draftState.file || messageInputRef.current?.hasText())}
+            aria-label={voiceMessageDisabled ? tx('voice_send_cannot') : tx('voice_send')}
+            disabled={voiceMessageDisabled}
           >
             <span />
             <svg className='cross' stroke='red' fill='red' viewBox='0 0 25 25'>
-              <line x1='25' x2='0' y1='0' y2='25' />
+              <line x1='20' x2='5' y1='5' y2='20' stroke-width='2'/>
             </svg>
           </button>
           {settingsStore &&
