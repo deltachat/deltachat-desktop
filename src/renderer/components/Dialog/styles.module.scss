@@ -1,5 +1,6 @@
-$dialogPaddingVertical: 20px;
-$dialogPaddingHorizontal: 30px;
+$headerButtonSize: 30px;
+$paddingHorizontal: 30px;
+$paddingVertical: 20px;
 
 .dialog {
   background-color: var(--bp4DialogBgPrimary);
@@ -27,23 +28,24 @@ $dialogPaddingHorizontal: 30px;
   border-bottom: var(--outlineProperties);
   display: flex;
   padding-bottom: 20px;
-  padding-left: $dialogPaddingHorizontal;
-  padding-right: $dialogPaddingHorizontal - 5px;
-  padding-top: $dialogPaddingVertical;
+  padding-left: $paddingHorizontal;
+  padding-right: $paddingHorizontal - 5px;
+  padding-top: $paddingVertical;
   user-select: none;
 }
 
 .dialogHeading {
+  align-items: center;
   color: var(--bp4Heading);
+  display: flex;
   flex: 1 1 auto;
   font-size: 18px;
   font-weight: 600;
-  line-height: inherit;
+  height: $headerButtonSize;
   margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  word-wrap: normal;
 }
 
 .dialogBody {
@@ -52,39 +54,19 @@ $dialogPaddingHorizontal: 30px;
   flex-direction: column;
   max-height: 90vh;
   overflow: overlay;
-  padding-bottom: $dialogPaddingVertical;
+  padding-bottom: $paddingVertical;
 }
 
 .dialogContent {
-  padding-left: $dialogPaddingHorizontal;
-  padding-right: $dialogPaddingHorizontal;
+  padding-left: $paddingHorizontal;
+  padding-right: $paddingHorizontal;
 }
 
 .dialogFooter {
   background-color: var(--bp4DialogBgPrimary);
-  padding-bottom: $dialogPaddingVertical;
-  padding-left: $dialogPaddingHorizontal;
-  padding-right: $dialogPaddingHorizontal;
-}
-
-.footerActions {
-  display: flex;
-
-  .spaceBetween {
-    justify-content: 'space-between';
-  }
-
-  .start {
-    justify-content: 'flex-start';
-  }
-
-  .end {
-    justify-content: 'flex-end';
-  }
-
-  .center {
-    justify-content: 'center';
-  }
+  padding-bottom: $paddingVertical;
+  padding-left: $paddingHorizontal;
+  padding-right: $paddingHorizontal;
 }
 
 .headerButton {
@@ -95,10 +77,10 @@ $dialogPaddingHorizontal: 30px;
   color: var(--bp4DialogHeaderIcon);
   cursor: pointer;
   display: flex;
-  height: 30px;
+  height: $headerButtonSize;
   justify-content: center;
   padding: 0;
-  width: 30px;
+  width: $headerButtonSize;
 
   & + & {
     margin-left: 5px;
@@ -115,6 +97,26 @@ $dialogPaddingHorizontal: 30px;
 
 .backButton {
   margin-right: 20px;
+}
+
+.footerActions {
+  display: flex;
+
+  &.spaceBetween {
+    justify-content: space-between;
+  }
+
+  &.start {
+    justify-content: flex-start;
+  }
+
+  &.end {
+    justify-content: flex-end;
+  }
+
+  &.center {
+    justify-content: center;
+  }
 }
 
 .footerActionButton {
