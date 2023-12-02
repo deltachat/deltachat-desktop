@@ -103,11 +103,15 @@ export default class ComposerMessageInput extends React.Component<
     this.setState({ text: '' })
   }
 
+  hasText(): boolean {
+    return !Boolean(this.getText().match(/^\s*$/))
+  }
+
   startRecording() {
     navigator.mediaDevices
       .getUserMedia({ audio: true, video: false })
       .then(stream => {
-        this.recorder = new MediaRecorder(stream, { mimeType: 'audio/webm' })
+        this.recorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' })
         this.recorder.onstart = () => {
           this.updateRecordedDurationInterval = window.setInterval(
             () =>
@@ -170,10 +174,6 @@ export default class ComposerMessageInput extends React.Component<
     const voiceData = new Blob(this.voiceData)
     this.voiceData = []
     return voiceData
-  }
-
-  hasText(): boolean {
-    return !Boolean(this.getText().match(/^\s*$/))
   }
 
   componentDidUpdate(

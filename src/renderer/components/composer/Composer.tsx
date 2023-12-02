@@ -106,12 +106,10 @@ const Composer = forwardRef<
       const b64 = reader.result.toString().split(',')[1]
       const filename = b64.slice(0, 12).toString() + '.webm'
       const path = await runtime.writeTempFileFromBase64(filename, b64)
-      try {
-        addFileToDraft(path, 'Voice')
-      } catch (err) {
-        log.error('Cannot send message:', err)
-        // show error dialogue
-      }
+      addFileToDraft(path, 'Voice').catch((reason: any) => {
+        log.error('Cannot send message:', reason)
+        // show some error dialogue
+      })
     }
   }
   const composerSendMessage = async () => {
