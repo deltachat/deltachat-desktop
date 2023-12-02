@@ -1,12 +1,16 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react'
-import { Card, Elevation } from '@blueprintjs/core'
 
 import { debounceWithInit } from '../chat/ChatListHelpers'
 import { DialogProps } from './DialogController'
 import { useTranslationFunction } from '../../contexts'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import Dialog, { CloseFooterAction, DialogBody, DialogHeader } from '../Dialog'
+import Dialog, {
+  CloseFooterAction,
+  DialogBody,
+  DialogContent,
+  DialogHeader,
+} from '../Dialog'
 
 const INHERIT_STYLES = ['line-height', 'background-color', 'color', 'font-size']
 const OverwrittenStyles =
@@ -52,24 +56,22 @@ function ConnectivityDialogInner() {
   }, [accountId, updateConnectivity])
 
   return (
-    <>
-      <DialogBody>
-        <Card elevation={Elevation.ONE} style={{ paddingTop: '0px' }}>
-          <div ref={styleSensor} style={{ height: '100%', width: '100%' }}>
-            <iframe
-              style={{
-                border: 0,
-                height: '100%',
-                width: '100%',
-                minHeight: '320px',
-              }}
-              srcDoc={connectivityHTML}
-              sandbox={''}
-            />
-          </div>
-        </Card>
-      </DialogBody>
-    </>
+    <DialogBody>
+      <DialogContent>
+        <div ref={styleSensor} style={{ height: '100%', width: '100%' }}>
+          <iframe
+            style={{
+              border: 0,
+              height: '100%',
+              width: '100%',
+              minHeight: '320px',
+            }}
+            srcDoc={connectivityHTML}
+            sandbox={''}
+          />
+        </div>
+      </DialogContent>
+    </DialogBody>
   )
 }
 

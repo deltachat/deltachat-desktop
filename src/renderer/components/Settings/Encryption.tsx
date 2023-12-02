@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react'
-import { Card, Classes } from '@blueprintjs/core'
 
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { DialogProps } from '../dialogs/DialogController'
@@ -8,7 +7,14 @@ import { selectedAccountId } from '../../ScreenController'
 import SettingsButton from './SettingsButton'
 import CoreSettingsSwitch from './CoreSettingsSwitch'
 import InputTransferKey from '../InputTransferKey'
-import { DialogFooter, DialogWithHeader, FooterActions } from '../Dialog'
+import {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogWithHeader,
+  FooterActionButton,
+  FooterActions,
+} from '../Dialog'
 import Callout from '../Callout'
 
 export default function Encryption() {
@@ -42,27 +48,25 @@ export function KeyViewPanel({
   const tx = useTranslationFunction()
 
   return (
-    <React.Fragment>
-      <div>
-        <Card>
-          <Callout>{tx('autocrypt_send_asm_explain_after')}</Callout>
-          <div>
-            <InputTransferKey
-              autocryptkey={autocryptKey.split('-')}
-              disabled
-              onChange={undefined}
-            />
-          </div>
-        </Card>
-      </div>
+    <>
+      <DialogBody>
+        <Callout>{tx('autocrypt_send_asm_explain_after')}</Callout>
+        <DialogContent>
+          <InputTransferKey
+            autocryptkey={autocryptKey.split('-')}
+            disabled
+            onChange={undefined}
+          />
+        </DialogContent>
+      </DialogBody>
       <DialogFooter>
-        <FooterActions>
-          <p className='delta-button bold' onClick={onClose}>
+        <FooterActions align='center'>
+          <FooterActionButton onClick={onClose}>
             {tx('done')}
-          </p>
+          </FooterActionButton>
         </FooterActions>
       </DialogFooter>
-    </React.Fragment>
+    </>
   )
 }
 
@@ -70,18 +74,16 @@ function InitiatePanel({ onClick }: { onClick: todo }) {
   const tx = useTranslationFunction()
 
   return (
-    <div className={Classes.DIALOG_BODY}>
-      <Card>
+    <>
+      <DialogBody>
         <Callout>{tx('autocrypt_send_asm_explain_before')}</Callout>
-        <p
-          className='delta-button bold'
-          style={{ float: 'right', marginTop: '20px' }}
-          onClick={onClick}
-        >
-          {tx('ok')}
-        </p>
-      </Card>
-    </div>
+      </DialogBody>
+      <DialogFooter>
+        <FooterActions align='center'>
+          <FooterActionButton onClick={onClick}>{tx('ok')}</FooterActionButton>
+        </FooterActions>
+      </DialogFooter>
+    </>
   )
 }
 
@@ -101,8 +103,9 @@ export function SendAutocryptSetupMessage({
   }
 
   const initiateKeyTransfer = async () => {
-    const key =
-      await BackendRemote.rpc.initiateAutocryptKeyTransfer(selectedAccountId())
+    const key = await BackendRemote.rpc.initiateAutocryptKeyTransfer(
+      selectedAccountId()
+    )
     setKey(key)
   }
 
