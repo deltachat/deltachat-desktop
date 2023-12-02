@@ -5,5 +5,8 @@
   },
   "voice_send": {
     "message": "Send a voice message"
+  },
+  "voice_send_cannot": {
+    "message": "Send a voice message (disabled)"
   }
 }
