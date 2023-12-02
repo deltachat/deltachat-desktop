@@ -1,25 +1,33 @@
-import React, { useContext, useEffect } from 'react'
-import { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
+
 import { getLogger } from '../../../../shared/logger'
 import { BackendRemote, onDCEvent } from '../../../backend-com'
-import { ScreenContext } from '../../../contexts'
-
+import { ScreenContext, useTranslationFunction } from '../../../contexts'
 import { runtime } from '../../../runtime'
 import { selectedAccountId } from '../../../ScreenController'
 import ConfirmationDialog from '../ConfirmationDialog'
-import { DialogProps } from '../DialogController'
 import Dialog, {
   DialogBody,
+  DialogContent,
   DialogFooter,
   DialogHeader,
   FooterActions,
 } from '../../Dialog'
+import FooterActionButton from '../../Dialog/FooterActionButton'
+
+import type { PropsWithChildren } from 'react'
+import type { DialogProps } from '../DialogController'
+
+import styles from './styles.module.scss'
 
 const log = getLogger('renderer/send_backup')
 
 const TROUBLESHOOTING_URL = 'https://delta.chat/en/help#multiclient'
 
 export function SendBackupDialog({ onClose }: DialogProps) {
+  const tx = useTranslationFunction()
+  const { openDialog } = useContext(ScreenContext)
+
   const [inProgress, setInProgress] = useState<boolean>(false)
   const [qrCodeSVG, setQrSvg] = useState<string | null>(null)
   const [svgUrl, setSvgUrl] = useState<string | null>(null)
@@ -30,8 +38,6 @@ export function SendBackupDialog({ onClose }: DialogProps) {
   >(null)
   const [error, setError] = useState<string | null>(null)
   const [wasCopied, setCopied] = useState(false)
-
-  const { openDialog } = useContext(ScreenContext)
 
   useEffect(() => {
     const accountId = selectedAccountId()
@@ -100,6 +106,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
     if (stage === 'error' || stage === null) {
       return onClose()
     }
+
     openDialog(ConfirmationDialog, {
       ...(wasCopied
         ? {
@@ -119,66 +126,55 @@ export function SendBackupDialog({ onClose }: DialogProps) {
     })
   }
 
-  const tx = window.static_translate
-
   return (
     <Dialog
       onClose={cancel}
       canEscapeKeyClose={true}
       isOpen={true}
       canOutsideClickClose={false}
-      style={{ width: 'unset' }}
     >
       <DialogHeader title={tx('multidevice_title')} />
-      <DialogBody>
-        <div className='container send-backup-dialog'>
-          <div className='content'>
-            {error}
-            {!inProgress && (
-              <>
-                <p>{tx('multidevice_this_creates_a_qr_code')}</p>
-              </>
-            )}
-            {inProgress && (
-              <>
+      {!inProgress && (
+        <>
+          <DialogBody>
+            <DialogContent>
+              <p>{tx('multidevice_this_creates_a_qr_code')}</p>
+            </DialogContent>
+          </DialogBody>
+          <DialogFooter>
+            <FooterActions align='spaceBetween'>
+              <FooterActionButton onClick={cancel}>
+                {tx('cancel')}
+              </FooterActionButton>
+              <FooterActionButton onClick={startNetworkedTransfer}>
+                {tx('perm_continue')}
+              </FooterActionButton>
+            </FooterActions>
+          </DialogFooter>
+        </>
+      )}
+      {inProgress && (
+        <>
+          <DialogBody>
+            <DialogContent>
+              <SendBackup>
+                {error}
                 {stage === 'awaiting_scan' && svgUrl && qrContent && (
                   <img className='setup-qr' src={svgUrl} />
                 )}
                 {stage === 'preparing' && <>{tx('preparing_account')}</>}
-
                 {stage === 'transferring' && <>{tx('transferring')}</>}
-
                 {progress && stage !== 'awaiting_scan' && (
                   <progress value={progress} max={1000}></progress>
                 )}
-              </>
-            )}
-          </div>
-          {inProgress && (
-            <div className='dialog-sidebar'>
-              <div className='explain' key='networked'>
-                <ol>
-                  <li>
-                    {tx('multidevice_install_dc_on_other_device')}{' '}
-                    {tx('multidevice_experimental_hint')}
-                  </li>
-                  <li>{tx('multidevice_same_network_hint')}</li>
-                  <li>{tx('multidevice_tap_scan_on_other_device')}</li>
-                </ol>
-              </div>
-            </div>
-          )}
-        </div>
-      </DialogBody>
-      <DialogFooter>
-        <FooterActions align='center'>
-          {inProgress && (
-            <>
-              <p
-                className='delta-button bold primary setup-new-device-troubleshooting-btn'
+                <SendBackupSteps />
+              </SendBackup>
+            </DialogContent>
+          </DialogBody>
+          <DialogFooter>
+            <FooterActions align='center'>
+              <FooterActionButton
                 onClick={() => runtime.openLink(TROUBLESHOOTING_URL)}
-                style={{ marginRight: '10px' }}
-                role='button'
               >
                 {tx('troubleshooting')}{' '}
                 <div
@@ -187,41 +183,41 @@ export function SendBackupDialog({ onClose }: DialogProps) {
                     WebkitMask:
                       'url(../images/icons/open_in_new.svg) no-repeat center',
                   }}
-                ></div>
-              </p>
+                />
+              </FooterActionButton>
               {stage === 'awaiting_scan' && svgUrl && qrContent && (
-                <p
-                  className='delta-button bold primary'
-                  onClick={copyQrToClipboard}
-                  role='button'
-                >
+                <FooterActionButton onClick={copyQrToClipboard}>
                   {tx('global_menu_edit_copy_desktop')}
-                </p>
+                </FooterActionButton>
               )}
-              <div style={{ flexGrow: 1 }}>{/** spacer */}</div>
-            </>
-          )}
-          <p
-            className={`delta-button bold primary`}
-            onClick={cancel}
-            role='button'
-          >
-            {tx('cancel')}
-          </p>
-          {!inProgress && (
-            <>
-              <div style={{ flexGrow: 1 }}>{/** spacer */}</div>
-              <p
-                className='delta-button bold primary'
-                onClick={startNetworkedTransfer}
-                role='button'
-              >
-                {tx('perm_continue')}
-              </p>
-            </>
-          )}
-        </FooterActions>
-      </DialogFooter>
+              <FooterActionButton onClick={cancel}>
+                {tx('cancel')}
+              </FooterActionButton>
+            </FooterActions>
+          </DialogFooter>
+        </>
+      )}
     </Dialog>
+  )
+}
+
+function SendBackup({ children }: PropsWithChildren<{}>) {
+  return <div className={styles.sendBackup}>{children}</div>
+}
+
+function SendBackupSteps() {
+  const tx = useTranslationFunction()
+
+  return (
+    <div className={styles.sendBackupSteps}>
+      <ol className={styles.sendBackupStepsList}>
+        <li>
+          {tx('multidevice_install_dc_on_other_device')}{' '}
+          {tx('multidevice_experimental_hint')}
+        </li>
+        <li>{tx('multidevice_same_network_hint')}</li>
+        <li>{tx('multidevice_tap_scan_on_other_device')}</li>
+      </ol>
+    </div>
   )
 }

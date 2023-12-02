@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 
 import { useSettingsStore } from '../../stores/settings'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
-import { SendBackupDialog } from '../dialogs/setup_multi_device/SendBackup'
+import { SendBackupDialog } from '../dialogs/SetupMultiDevice'
 import { runtime } from '../../runtime'
 import { DialogProps } from '../dialogs/DialogController'
 import { donationUrl } from '../../../shared/constants'

@@ -470,7 +470,6 @@ export function ConfigureProgressDialog({
     <Dialog
       isOpen={isOpen}
       onClose={onClose}
-      className='delta-dialog small-dialog'
       canEscapeKeyClose={false}
       canOutsideClickClose={false}
     >

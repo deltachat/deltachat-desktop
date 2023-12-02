@@ -60,11 +60,11 @@ $paddingVertical: 20px;
   padding-right: $paddingHorizontal;
 
   &.paddingTop {
-    padding-top: 5px;
+    padding-top: $paddingVertical;
   }
 
   &.paddingBottom {
-    padding-bottom: 5px;
+    padding-bottom: $paddingVertical;
   }
 }
 

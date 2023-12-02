@@ -1,8 +1,14 @@
 import React from 'react'
 
 import { useTranslationFunction } from '../../contexts'
-import SmallDialog from '../SmallDialog'
-import { DialogFooter, FooterActions } from '../Dialog'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  FooterActions,
+} from '../Dialog'
+import FooterActionButton from '../Dialog/FooterActionButton'
 
 import type { DialogProps } from './DialogController'
 
@@ -23,7 +29,6 @@ export default function ConfirmationDialog({
   cb,
   onClose,
   isConfirmDanger = false,
-  noMargin = false,
   header,
 }: Props) {
   const isOpen = !!message
@@ -35,48 +40,26 @@ export default function ConfirmationDialog({
   }
 
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
-      <div className='bp4-dialog-body-with-padding'>
-        {header && (
-          <div
-            style={{
-              fontSize: '1.5em',
-              fontWeight: 'lighter',
-              marginBottom: '6px',
-              overflow: 'auto',
-              wordBreak: 'break-word',
-            }}
-          >
-            {header}
-          </div>
-        )}
-        <p
-          style={{
-            wordBreak: 'break-word',
-          }}
-        >
-          {message}
-        </p>
-      </div>
+    <Dialog isOpen={isOpen} onClose={onClose}>
+      {header && <DialogHeader title={header} />}
+      <DialogBody>
+        <DialogContent paddingTop={header === undefined}>
+          <p>{message}</p>
+        </DialogContent>
+      </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <p
-            className='delta-button bold primary'
-            onClick={() => onClick(false)}
-            style={noMargin ? {} : { marginRight: '10px' }}
-          >
+          <FooterActionButton onClick={() => onClick(false)}>
             {cancelLabel || tx('cancel')}
-          </p>
-          <p
-            className={`delta-button bold primary ${
-              isConfirmDanger ? 'danger' : 'primary'
-            } test-selector-confirm`}
+          </FooterActionButton>
+          <FooterActionButton
+            danger={isConfirmDanger}
             onClick={() => onClick(true)}
           >
             {confirmLabel || tx('yes')}
-          </p>
+          </FooterActionButton>
         </FooterActions>
       </DialogFooter>
-    </SmallDialog>
+    </Dialog>
   )
 }

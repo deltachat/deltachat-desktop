@@ -1,6 +1,6 @@
 import { join } from 'path'
 import React, { useContext, useEffect, useState } from 'react'
-import { H6, Icon } from '@blueprintjs/core'
+import { Icon } from '@blueprintjs/core'
 
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { ThemeManager } from '../../ThemeManager'
@@ -17,6 +17,8 @@ import { getLogger } from '../../../shared/logger'
 import SettingsSelector from './SettingsSelector'
 import DesktopSettingsSwitch from './DesktopSettingsSwitch'
 import SmallSelectDialog, { SelectDialogOption } from '../SmallSelectDialog'
+import SettingsHeading from './SettingsHeading'
+import { DialogContent } from '../Dialog'
 
 const log = getLogger('renderer/settings/appearance')
 
@@ -100,22 +102,23 @@ export default function Appearance({
       >
         {tx('pref_theme')}
       </SettingsSelector>
-      <br />
-      <H6>{tx('pref_background')}</H6>
-      <BackgroundSelector
-        desktopSettings={desktopSettings}
-        onChange={(val: string) => {
-          val.startsWith('#')
-            ? SettingsStoreInstance.effect.setDesktopSetting(
-                'chatViewBgImg',
-                `color: ${val}`
-              )
-            : SettingsStoreInstance.effect.setDesktopSetting(
-                'chatViewBgImg',
-                val
-              )
-        }}
-      />
+      <SettingsHeading>{tx('pref_background')}</SettingsHeading>
+      <DialogContent>
+        <BackgroundSelector
+          desktopSettings={desktopSettings}
+          onChange={(val: string) => {
+            val.startsWith('#')
+              ? SettingsStoreInstance.effect.setDesktopSetting(
+                  'chatViewBgImg',
+                  `color: ${val}`
+                )
+              : SettingsStoreInstance.effect.setDesktopSetting(
+                  'chatViewBgImg',
+                  val
+                )
+          }}
+        />
+      </DialogContent>
       <br />
       <br />
       <SettingsTrayIcon settingsStore={settingsStore} />

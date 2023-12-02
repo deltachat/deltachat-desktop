@@ -11,10 +11,10 @@ import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import AlertDialog from '../dialogs/AlertDialog'
 import { EffectfulBackendActions } from '../../backend-com'
 import { BackendRemote, Type } from '../../backend-com'
-import { ImportBackupTransferProgressDialog } from '../dialogs/setup_multi_device/ReceiveBackup'
 import processMailtoUrl from './MailtoUrl'
 import SmallDialog from '../SmallDialog'
 import { DialogBody, DialogFooter, FooterActions } from '../Dialog'
+import { ReceiveBackupDialog } from '../dialogs/SetupMultiDevice'
 
 const log = getLogger('renderer/processOpenUrl')
 
@@ -301,7 +301,7 @@ export default async function processOpenQrUrl(
         cb: callback,
       })
     } else {
-      window.__openDialog(ImportBackupTransferProgressDialog, {
+      window.__openDialog(ReceiveBackupDialog, {
         QrWithToken: url,
       })
     }

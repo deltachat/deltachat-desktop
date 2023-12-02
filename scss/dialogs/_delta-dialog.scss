@@ -1,14 +1,4 @@
 .delta-dialog {
-  &.small-dialog {
-    min-width: 350px !important;
-    max-width: 70vw;
-    padding-bottom: 0px !important;
-    background-color: var(--bp4DialogBgPrimary) !important;
-    .bp4-dialog-footer {
-      padding: 0 0px 0px;
-    }
-  }
-
   .delta-dialog-content {
     flex: 1 1 auto;
     padding: 0px 20px;

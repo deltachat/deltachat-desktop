@@ -39,7 +39,7 @@ export default function ChatsAndMedia({
         settingsKey='enterKeySends'
         label={tx('pref_enter_sends_explain')}
       />
-      <DialogContent paddingTop>
+      <DialogContent>
         <KeybordShortcutHintInSettings
           actions={enterKeySendsKeyboardShortcuts(
             desktopSettings['enterKeySends']

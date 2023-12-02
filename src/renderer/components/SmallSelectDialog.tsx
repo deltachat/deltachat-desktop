@@ -2,9 +2,16 @@ import React, { useState } from 'react'
 import { RadioGroup, Radio } from '@blueprintjs/core'
 
 import SmallDialog from './SmallDialog'
-import { DialogBody, DialogFooter, DialogHeader, FooterActions } from './Dialog'
+import {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  FooterActions,
+} from './Dialog'
 import { DialogProps } from './dialogs/DialogController'
 import { useTranslationFunction } from '../contexts'
+import FooterActionButton from './Dialog/FooterActionButton'
 
 export type SelectDialogOption = [value: string, label: string]
 
@@ -48,27 +55,30 @@ export default function SmallSelectDialog({
     <SmallDialog isOpen={isOpen} onClose={onClose}>
       <DialogHeader title={title} />
       <DialogBody>
-        <RadioGroup onChange={onChange} selectedValue={actualSelectedValue}>
-          {values.map((element, index) => {
-            const [value, label] = element
-            return <Radio key={'select-' + index} label={label} value={value} />
-          })}
-        </RadioGroup>
+        <DialogContent>
+          <RadioGroup onChange={onChange} selectedValue={actualSelectedValue}>
+            {values.map((element, index) => {
+              const [value, label] = element
+              return (
+                <Radio key={'select-' + index} label={label} value={value} />
+              )
+            })}
+          </RadioGroup>
+        </DialogContent>
       </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <p
-            className='delta-button primary bold'
+          <FooterActionButton
             onClick={() => {
               onCancel && onCancel()
               onClose()
             }}
           >
             {tx('cancel')}
-          </p>
-          <p className='delta-button primary bold' onClick={saveAndClose}>
+          </FooterActionButton>
+          <FooterActionButton onClick={saveAndClose}>
             {tx('save_desktop')}
-          </p>
+          </FooterActionButton>
         </FooterActions>
       </DialogFooter>
     </SmallDialog>

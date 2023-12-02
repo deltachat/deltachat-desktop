@@ -12,7 +12,7 @@ import { DialogWithHeader } from '../../Dialog'
 
 const log = getLogger('renderer/receive_backup')
 
-export function ImportBackupTransferProgressDialog({
+export function ReceiveBackupDialog({
   onClose,
   isOpen,
   QrWithToken,

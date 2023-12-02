@@ -1,7 +1,8 @@
 import React, { PropsWithChildren } from 'react'
-import { Dialog as BlueprintDialog } from '@blueprintjs/core'
 
-import { DialogProps } from './dialogs/DialogController'
+import Dialog from './Dialog'
+
+import type { DialogProps } from './dialogs/DialogController'
 
 type Props = PropsWithChildren<{
   isOpen: DialogProps['isOpen']
@@ -10,13 +11,8 @@ type Props = PropsWithChildren<{
 
 export default function SmallDialog(props: Props) {
   return (
-    <BlueprintDialog
-      isOpen={props.isOpen}
-      onClose={props.onClose}
-      canOutsideClickClose
-      className='delta-dialog small-dialog'
-    >
+    <Dialog isOpen={props.isOpen} onClose={props.onClose} canOutsideClickClose>
       {props.children}
-    </BlueprintDialog>
+    </Dialog>
   )
 }
