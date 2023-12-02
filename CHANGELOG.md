@@ -10,6 +10,9 @@
 ### Fixed
 - log error when webxdc status update send fails
 
+### Fixed
+- make starting of html email view more reliable (remove race condition)
+
 <a id="1_42_1"></a>
 
 ## [1.42.1] - 2023-11-23
