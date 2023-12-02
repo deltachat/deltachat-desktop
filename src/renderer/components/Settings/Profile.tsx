@@ -2,18 +2,19 @@ import React from 'react'
 
 import { avatarInitial } from '../Avatar'
 import { runtime } from '../../runtime'
-import { SettingsStoreState } from '../../stores/settings'
 import LargeProfileImage from '../LargeProfileImage'
+
+import type { SettingsStoreState } from '../../stores/settings'
 
 import styles from './styles.module.scss'
 
-export default function Profile({
-  settingsStore,
-}: {
+type Props = {
   settingsStore: SettingsStoreState
-}) {
+}
+
+export default function Profile({ settingsStore }: Props) {
   const initials = avatarInitial(
-    settingsStore.selfContact.displayName || '',
+    settingsStore.settings.displayname || '',
     settingsStore.selfContact.address
   )
 

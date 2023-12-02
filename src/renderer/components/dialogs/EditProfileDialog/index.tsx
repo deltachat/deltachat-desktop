@@ -113,7 +113,7 @@ function EditProfileDialogInner({
             style={{ marginBottom: '30px' }}
           >
             <ProfileImageSelector
-              displayName={settingsStore.settings['displayname']}
+              displayName={settingsStore.settings.displayname}
               addr={settingsStore.selfContact.address}
               color={settingsStore.selfContact.color}
               profilePicture={profilePicture}
