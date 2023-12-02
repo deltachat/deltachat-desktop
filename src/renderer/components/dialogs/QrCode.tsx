@@ -8,15 +8,16 @@ import React, {
 import classNames from 'classnames'
 import QrReader from '@deltachat/react-qr-reader'
 
-import { DialogProps } from './DialogController'
-import { useTranslationFunction, ScreenContext } from '../../contexts'
+import Dialog, { DialogBody, DialogFooter, FooterActions } from '../Dialog'
+import FooterActionButton from '../Dialog/FooterActionButton'
 import processOpenQrUrl from '../helpers/OpenQrUrl'
+import { BackendRemote } from '../../backend-com'
+import { DialogProps } from './DialogController'
 import { getLogger } from '../../../shared/logger'
-import { useContextMenu } from '../ContextMenu'
 import { runtime } from '../../runtime'
 import { selectChat } from '../helpers/ChatMethods'
-import { BackendRemote } from '../../backend-com'
-import Dialog, { DialogBody, DialogFooter, FooterActions } from '../Dialog'
+import { useContextMenu } from '../ContextMenu'
+import { useTranslationFunction, ScreenContext } from '../../contexts'
 
 const log = getLogger('renderer/dialogs/QrCode')
 
@@ -27,9 +28,10 @@ export default function QrCode({
   qrCode,
   selectScan,
 }: { selectScan?: true; qrCodeSVG: string; qrCode: string } & DialogProps) {
+  const tx = useTranslationFunction()
   const [showQrCode, setShowQrCode] = useState(!selectScan)
-
   const [addr, setAddr] = useState('')
+
   useEffect(() => {
     if (window.__selectedAccountId) {
       BackendRemote.rpc
@@ -37,8 +39,6 @@ export default function QrCode({
         .then(addr => setAddr(addr || ''))
     }
   }, [])
-
-  const tx = useTranslationFunction()
 
   return (
     <Dialog isOpen={isOpen} onClose={onClose}>
@@ -162,18 +162,18 @@ export function QrCodeShowQrInner({
       </DialogBody>
       <DialogFooter>
         <FooterActions align='spaceBetween'>
-          <p className={'delta-button bold primary'} onClick={onCopy}>
+          <FooterActionButton onClick={onCopy}>
             {tx('global_menu_edit_copy_desktop')}
-          </p>
+          </FooterActionButton>
           {onClose && (
-            <p className={'delta-button bold primary'} onClick={onClose}>
+            <FooterActionButton onClick={onClose}>
               {tx('close')}
-            </p>
+            </FooterActionButton>
           )}
           {onBack && (
-            <p className={'delta-button bold primary'} onClick={onBack}>
+            <FooterActionButton onClick={onBack}>
               {tx('back')}
-            </p>
+            </FooterActionButton>
           )}
         </FooterActions>
       </DialogFooter>
@@ -187,8 +187,7 @@ export function QrCodeScanQrInner(
     onClose: () => void
   }>
 ) {
-  const tx = window.static_translate
-
+  const tx = useTranslationFunction()
   const processingQrCode = useRef(false)
 
   const onDone = () => {
@@ -284,12 +283,12 @@ export function QrCodeScanQrInner(
       </DialogBody>
       <DialogFooter>
         <FooterActions align='spaceBetween'>
-          <p className={'delta-button bold primary'} onClick={openMenu}>
+          <FooterActionButton onClick={openMenu}>
             {tx('menu_more_options')}
-          </p>
-          <p className={'delta-button bold primary'} onClick={props.onClose}>
+          </FooterActionButton>
+          <FooterActionButton onClick={props.onClose}>
             {tx('close')}
-          </p>
+          </FooterActionButton>
         </FooterActions>
       </DialogFooter>
     </>

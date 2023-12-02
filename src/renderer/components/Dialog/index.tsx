@@ -9,6 +9,7 @@ import DialogHeader from './DialogHeader'
 import DialogHeading from './DialogHeading'
 import DialogWithHeader from './DialogWithHeader'
 import EditButton from './EditButton'
+import FooterActionButton from './FooterActionButton'
 import FooterActions from './FooterActions'
 import OkCancelFooterAction from './OkCancelFooterAction'
 
@@ -23,6 +24,7 @@ export {
   DialogHeading,
   DialogWithHeader,
   EditButton,
+  FooterActionButton,
   FooterActions,
   OkCancelFooterAction,
 }

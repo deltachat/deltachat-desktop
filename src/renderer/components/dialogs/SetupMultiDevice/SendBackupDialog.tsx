@@ -14,6 +14,7 @@ import Dialog, {
   FooterActions,
 } from '../../Dialog'
 import FooterActionButton from '../../Dialog/FooterActionButton'
+import Icon from '../../Icon'
 
 import type { PropsWithChildren } from 'react'
 import type { DialogProps } from '../DialogController'
@@ -158,38 +159,39 @@ export function SendBackupDialog({ onClose }: DialogProps) {
           <DialogBody>
             <DialogContent>
               <SendBackup>
-                {error}
-                {stage === 'awaiting_scan' && svgUrl && qrContent && (
-                  <img className='setup-qr' src={svgUrl} />
-                )}
-                {stage === 'preparing' && <>{tx('preparing_account')}</>}
-                {stage === 'transferring' && <>{tx('transferring')}</>}
-                {progress && stage !== 'awaiting_scan' && (
-                  <progress value={progress} max={1000}></progress>
-                )}
+                <SendBackupMain>
+                  {error}
+                  {stage === 'awaiting_scan' && svgUrl && qrContent && (
+                    <img className={styles.qrCode} src={svgUrl} />
+                  )}
+                  {stage === 'preparing' && <>{tx('preparing_account')}</>}
+                  {stage === 'transferring' && <>{tx('transferring')}</>}
+                  {progress && stage !== 'awaiting_scan' && (
+                    <>
+                      <br />
+                      <progress value={progress} max={1000} />
+                    </>
+                  )}
+                </SendBackupMain>
                 <SendBackupSteps />
               </SendBackup>
             </DialogContent>
           </DialogBody>
           <DialogFooter>
-            <FooterActions align='center'>
-              <FooterActionButton
-                onClick={() => runtime.openLink(TROUBLESHOOTING_URL)}
-              >
-                {tx('troubleshooting')}{' '}
-                <div
-                  className='link-icon'
-                  style={{
-                    WebkitMask:
-                      'url(../images/icons/open_in_new.svg) no-repeat center',
-                  }}
-                />
-              </FooterActionButton>
-              {stage === 'awaiting_scan' && svgUrl && qrContent && (
-                <FooterActionButton onClick={copyQrToClipboard}>
-                  {tx('global_menu_edit_copy_desktop')}
+            <FooterActions align='spaceBetween'>
+              <span className={styles.buttonGroup}>
+                <FooterActionButton
+                  onClick={() => runtime.openLink(TROUBLESHOOTING_URL)}
+                >
+                  {tx('troubleshooting')}&nbsp;
+                  <Icon icon='open_in_new' size={20} />
                 </FooterActionButton>
-              )}
+                {stage === 'awaiting_scan' && svgUrl && qrContent && (
+                  <FooterActionButton onClick={copyQrToClipboard}>
+                    {tx('global_menu_edit_copy_desktop')}
+                  </FooterActionButton>
+                )}
+              </span>
               <FooterActionButton onClick={cancel}>
                 {tx('cancel')}
               </FooterActionButton>
@@ -203,6 +205,10 @@ export function SendBackupDialog({ onClose }: DialogProps) {
 
 function SendBackup({ children }: PropsWithChildren<{}>) {
   return <div className={styles.sendBackup}>{children}</div>
+}
+
+function SendBackupMain({ children }: PropsWithChildren<{}>) {
+  return <div className={styles.sendBackupMain}>{children}</div>
 }
 
 function SendBackupSteps() {
