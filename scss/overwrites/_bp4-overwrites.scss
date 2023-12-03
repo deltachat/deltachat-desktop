@@ -1,20 +1,3 @@
-$bp4-dialog-radius: 2px;
-
-.bp4-dialog-body-with-padding {
-  padding: 20px;
-}
-
-.bp4-dialog-footer-border-top {
-  border-top: var(--outlineProperties);
-}
-
-.bp4-dialog-footer {
-  background-color: var(--bp4DialogBgPrimary);
-  margin: 0;
-  padding: 15px;
-  border-radius: $bp4-dialog-radius;
-}
-
 .bp4-card {
   background-color: var(--bp4DialogBgPrimary);
   border-radius: 0px;
@@ -78,10 +61,6 @@ $bp4-dialog-radius: 2px;
   color: inherit; // todo adjust this to be an extra var
 }
 
-.bp4-dialog-header-border-bottom {
-  border-bottom: var(--outlineProperties);
-}
-
 .bp4-input {
   background-color: var(--bp4InputBg);
   color: var(--bp4InputText);
@@ -135,12 +114,6 @@ $bp4-dialog-radius: 2px;
 .bp4-control:hover input:checked ~ .bp4-control-indicator {
   box-shadow: var(--bp4SwitchKnobShadowChecked);
   background: var(--bp4SwitchKnobChecked);
-}
-
-.bp4-dialog-header .bp4-icon-large,
-.bp4-dialog-header .bp4-icon {
-  // the sliders/dials icon in the dialog header in the settings dialog
-  color: var(--bp4DialogHeaderIcon);
 }
 
 .bp4-menu {
