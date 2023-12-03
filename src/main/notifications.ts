@@ -27,6 +27,7 @@ function createNotification(data: DcNotification): Notification {
     body: data.body,
     icon,
     timeoutType: 'default',
+    silent: !data.playSystemSound,
   }
 
   if (process.platform === 'win32') {

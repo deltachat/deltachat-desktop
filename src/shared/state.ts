@@ -31,5 +31,6 @@ export function getDefaultState(): DesktopSettingsType {
     HTMLEmailAlwaysLoadRemoteContent: false,
     enableRelatedChats: false,
     galleryImageKeepAspectRatio: false,
+    notificationTonePath: 'system',
   }
 }

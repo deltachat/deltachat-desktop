@@ -1,0 +1,120 @@
+.notification-settings {
+  .notification-tone-selector {
+    border: none;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    padding: 0;
+
+    // --roundness: 12px;
+
+    & > .notification-tone {
+      width: 100%;
+    //   border: 1px solid grey;
+
+    //   &:first-child {
+    //     border-radius: var(--roundness) var(--roundness) 0 0;
+    //     border-top-width: 1px;
+    //   }
+
+    //   &:last-child {
+    //     border-radius: 0 0 var(--roundness) var(--roundness);
+    //     border-bottom-width: 1px;
+    //   }
+
+      &.selected {
+        // todo derive this from primary color
+        background: rgb(0 126 255 / 20%);
+        border-radius: 11px;
+        .selection-indicator {
+            display: block;
+        }
+      }
+
+      input {
+        display: none;
+      }
+
+      .selection-indicator {
+            display: none;
+            mask-image: url("../images/icons/done_outline.svg");
+            -webkit-mask-image: url("../images/icons/done_outline.svg");
+
+            height: 36px;
+            width: 36px;
+            margin-inline-end: 6px;
+  
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            background-color: var(--globalText);
+            -webkit-mask-size: 32px;
+            mask-size: 32px;
+  
+            -webkit-mask-position: center;
+            mask-position: center;
+      }
+
+      &.special-option {
+        & > label {
+          & > button {
+            opacity: 0.2;
+            -webkit-mask-size: 28px;
+            mask-size: 28px;
+            user-select: none;
+            cursor: unset;
+            pointer-events: none;
+          }
+        }
+      }
+
+      border-top-width: 0.5px;
+      border-bottom-width: 0.5px;
+
+      padding: 4px 6px;
+
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      & > label {
+        padding-left: 4px;
+        padding-right: 4px;
+        height: 36px;
+        flex-grow: 1;
+        display: inline-flex;
+        align-items: center;
+
+        & > button {
+          height: 36px;
+          width: 36px;
+          margin-inline-end: 6px;
+
+          -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+          background-color: var(--globalText);
+          -webkit-mask-size: 32px;
+          mask-size: 32px;
+          opacity: 0.8;
+
+          border: none;
+
+          -webkit-mask-position: center;
+          mask-position: center;
+        }
+
+        & > div {
+          display: inline-flex;
+          justify-content: space-between;
+          flex-direction: column;
+          & > span:nth-child(1) {
+            // the label
+            color: var(--bp4InputText);
+          }
+          & > span:nth-child(2) {
+            // the subtitle
+            color: var(--bp4InputPlaceholder);
+          }
+        }
+      }
+    }
+  }
+}

@@ -57,6 +57,8 @@ async function showNotification(
 ) {
   const tx = window.static_translate
 
+  const { playSystemSound } = playSound()
+
   if (!SettingsStoreInstance.state?.desktopSettings.showNotificationContent) {
     runtime.showNotification({
       title: appName,
@@ -65,6 +67,7 @@ async function showNotification(
       chatId,
       messageId,
       accountId,
+      playSystemSound,
     })
   } else {
     try {
@@ -80,6 +83,7 @@ async function showNotification(
         chatId,
         messageId,
         accountId,
+        playSystemSound,
       })
     } catch (error) {
       log.error('failed to create notification for message: ', messageId, error)
@@ -93,6 +97,8 @@ async function showGroupedNotification(
 ) {
   const tx = window.static_translate
 
+  const { playSystemSound } = playSound()
+
   if (!SettingsStoreInstance.state?.desktopSettings.showNotificationContent) {
     runtime.showNotification({
       title: appName,
@@ -101,6 +107,7 @@ async function showGroupedNotification(
       chatId: 0,
       messageId: 0,
       accountId,
+      playSystemSound,
     })
   } else {
     const chatIds = [...new Set(notifications.map(({ chatId }) => chatId))]
@@ -126,6 +133,7 @@ async function showGroupedNotification(
           chatId: chatIds[0],
           messageId: 0, // just select chat on click, no specific message
           accountId,
+          playSystemSound,
         })
       } else {
         // messages from diffent chats
@@ -142,6 +150,7 @@ async function showGroupedNotification(
           chatId: 0,
           messageId: 0,
           accountId,
+          playSystemSound,
         })
       }
     } catch (error) {
@@ -246,4 +255,18 @@ export function initNotifications() {
       }
     }
   })
+}
+
+function playSound(): { playSystemSound: boolean } {
+  const tone =
+    SettingsStoreInstance.state?.desktopSettings.notificationTonePath ||
+    'system'
+  if (tone !== 'silent') {
+    const audio_src = runtime.resolveNotificationSound(tone)
+    if (audio_src) {
+      const audio = new Audio(audio_src)
+      audio.play()
+    }
+  }
+  return { playSystemSound: tone === 'system' }
 }

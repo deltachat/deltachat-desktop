@@ -1,0 +1,27 @@
+Upstream-Name: lomiri-sounds
+Source: https://gitlab.com/ubports/core/lomiri-sounds
+Upstream-Contact: Dalton Durst <dalton@ubports.com>
+
+Files: A440.ogg
+       Ede.ogg
+Copyright: 2018, Anonymous
+License: CC0-1.0
+
+Files: Blip.ogg
+       Mallet.ogg
+       Positive.ogg
+       Rhodes.ogg
+       Slick.ogg
+       Soft_delay.ogg
+       Xylo.ogg
+Copyright: 2013, Canonical Ltd.
+License: CC-BY-SA-3.0
+
+Files: Sintesis.ogg
+Copyright: 2018, Mauricio Duarte
+License: CC-BY-4.0
+
+
+Files: Noti_Karinding.ogg
+Copyright: 2018, Wayne Taylor
+License: CC-BY-4.0

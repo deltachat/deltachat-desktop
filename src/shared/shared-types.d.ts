@@ -29,6 +29,8 @@ type Bounds = {
   y: number
 }
 
+export type NotificationTonePath = string | 'system' | 'silent'
+
 export interface DesktopSettingsType {
   bounds: Bounds | {}
   HTMLEmailWindowBounds: Bounds | undefined
@@ -62,6 +64,13 @@ export interface DesktopSettingsType {
   enableRelatedChats: boolean
   /** gallery image & video - keep aspect ratio (true) or cover (false) */
   galleryImageKeepAspectRatio: boolean
+  /** selected notification tone
+   * `silent` - no tone
+   * `system` - system sound
+   * `built-in:[id]`
+   * `custom:[filename]` - saved to user data dir, like the background image
+   */
+  notificationTonePath: NotificationTonePath
 }
 
 export interface RC_Config {
@@ -117,7 +126,8 @@ export interface DcNotification {
   chatId: number
   messageId: number
   // for future
-  accountId: number
+  accountId: number,
+  playSystemSound: boolean
 }
 
 export interface DcOpenWebxdcParameters {

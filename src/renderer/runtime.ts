@@ -2,6 +2,7 @@ import {
   DcNotification,
   DcOpenWebxdcParameters,
   DesktopSettingsType,
+  NotificationTonePath,
   RC_Config,
   RuntimeInfo,
   Theme,
@@ -125,6 +126,9 @@ interface Runtime {
   resolveThemeAddress(address: string): Promise<string>
   saveBackgroundImage(file: string, isDefaultPicture: boolean): Promise<string>
   onDragFileOut(file: string): void
+  resolveNotificationSound(
+    notificationTonePath: NotificationTonePath
+  ): string | null
 
   // callbacks to set
   onChooseLanguage: ((locale: string) => Promise<void>) | undefined
@@ -143,6 +147,9 @@ interface Runtime {
 }
 
 class Browser implements Runtime {
+  resolveNotificationSound(_notificationTonePath: string): string | null {
+    throw new Error('Method not implemented.')
+  }
   onResumeFromSleep: (() => void) | undefined
   onChooseLanguage: ((locale: string) => Promise<void>) | undefined
   onThemeUpdate: (() => void) | undefined
@@ -325,6 +332,18 @@ class Browser implements Runtime {
   }
 }
 class Electron implements Runtime {
+  resolveNotificationSound(notificationTonePath: string): string | null {
+    if (notificationTonePath.startsWith('built-in:')) {
+      const [_, file] = notificationTonePath.split(':')
+      return '../sounds/' + file.replace('..', '')
+    } else if (notificationTonePath.startsWith('custom:')) {
+      // TODO
+
+      return null
+    } else {
+      return null
+    }
+  }
   onResumeFromSleep: (() => void) | undefined
   onWebxdcSendToChat:
     | ((
