@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { RadioGroup, Radio } from '@blueprintjs/core'
 
-import SmallDialog from './SmallDialog'
-import {
+import Dialog, {
   DialogBody,
   DialogContent,
   DialogFooter,
@@ -52,7 +51,7 @@ export default function SmallSelectDialog({
   }
 
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
+    <Dialog isOpen={isOpen} onClose={onClose}>
       <DialogHeader title={title} />
       <DialogBody>
         <DialogContent>
@@ -81,6 +80,6 @@ export default function SmallSelectDialog({
           </FooterActionButton>
         </FooterActions>
       </DialogFooter>
-    </SmallDialog>
+    </Dialog>
   )
 }
