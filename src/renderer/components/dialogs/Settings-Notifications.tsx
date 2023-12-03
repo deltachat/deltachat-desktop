@@ -195,7 +195,7 @@ function ToneSelector({
                 selected={tone.value === selectedTone}
                 onSelect={() =>
                   SettingsStoreInstance.effect.setDesktopSetting(
-                    'NotificationTonePath',
+                    'notificationTonePath',
                     tone.value
                   )
                 }
