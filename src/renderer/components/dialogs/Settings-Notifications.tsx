@@ -173,13 +173,13 @@ function ToneSelector({
     if (audio_player.current) {
       audio_player.current.pause()
     }
-    if(playing === value){
+    if (playing === value) {
       setPlaying(null)
       return
     }
 
     // get audio path
-    let audio_path: string | null = runtime.resolveNotificationSound(value)
+    const audio_path: string | null = runtime.resolveNotificationSound(value)
     if (!audio_path) {
       setPlaying(null)
       return
@@ -235,29 +235,25 @@ function AudioOption({
 }) {
   const id = 'noti-tone' + data.value
 
-  let icon =
-    playing ? 'stop' : 'play_arrow'
+  let icon = playing ? 'stop' : 'play_arrow'
 
   if (data.type === 'special') {
-    if(data.value === 'silent'){
-      icon = "volume_off"
-    } else if (data.value === 'system'){
-      icon = "settings_input_component"
+    if (data.value === 'silent') {
+      icon = 'volume_off'
+    } else if (data.value === 'system') {
+      icon = 'settings_input_component'
     }
   }
 
-  const buttonImage = `url(../images/icons/${
-    icon
-  }.svg)`
- 
+  const buttonImage = `url(../images/icons/${icon}.svg)`
+
   return (
     <div
       className={classNames('notification-tone', {
         'special-option': data.type === 'special',
-        'selected': selected,
+        selected: selected,
       })}
     >
-
       <label
         htmlFor={id}
         className={classNames({

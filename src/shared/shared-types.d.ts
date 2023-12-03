@@ -126,7 +126,7 @@ export interface DcNotification {
   chatId: number
   messageId: number
   // for future
-  accountId: number,
+  accountId: number
   playSystemSound: boolean
 }
 
