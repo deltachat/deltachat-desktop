@@ -12,7 +12,13 @@ import AlertDialog from '../dialogs/AlertDialog'
 import { EffectfulBackendActions } from '../../backend-com'
 import { BackendRemote, Type } from '../../backend-com'
 import processMailtoUrl from './MailtoUrl'
-import Dialog, { DialogBody, DialogFooter, FooterActions } from '../Dialog'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  FooterActionButton,
+  FooterActions,
+} from '../Dialog'
 import { ReceiveBackupDialog } from '../dialogs/SetupMultiDevice'
 
 const log = getLogger('renderer/processOpenUrl')
@@ -38,9 +44,9 @@ export function ProcessQrCodeDialog({
       </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <p className='delta-button bold primary' onClick={onCancel}>
+          <FooterActionButton onClick={onCancel}>
             {tx('cancel')}
-          </p>
+          </FooterActionButton>
         </FooterActions>
       </DialogFooter>
     </Dialog>
@@ -327,30 +333,31 @@ function copyContentAlertDialog({
   cb,
 }: DialogProps & { message: string; content: string; cb: () => void }) {
   const tx = window.static_translate
+
   return (
     <Dialog isOpen={isOpen} onClose={onClose}>
-      <div className='bp4-dialog-body-with-padding'>
-        <p style={{ wordBreak: 'break-word' }}>{message}</p>
-      </div>
+      <DialogBody>
+        <DialogContent paddingTop>
+          <p>{message}</p>
+        </DialogContent>
+      </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <p
-            className='delta-button bold primary'
+          <FooterActionButton
             onClick={() => {
               runtime.writeClipboardText(content).then(onClose)
             }}
           >
             {tx('global_menu_edit_copy_desktop')}
-          </p>
-          <p
-            className='delta-button bold primary'
+          </FooterActionButton>
+          <FooterActionButton
             onClick={() => {
               cb && cb()
               onClose()
             }}
           >
             {tx('ok')}
-          </p>
+          </FooterActionButton>
         </FooterActions>
       </DialogFooter>
     </Dialog>
