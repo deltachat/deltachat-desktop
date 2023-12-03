@@ -11,16 +11,19 @@ $paddingVertical: 20px;
     0 0 20px 3px rgba(16, 22, 26, 0.2);
   margin: 0;
   max-height: calc(100vh - 50px);
-  max-width: 800px;
+  max-width: 733px;
   min-width: 350px;
-  overflow: hidden;
+  overflow: overlay;
   padding: 0;
   width: unset;
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
 
   &.fixed {
     position: absolute;
     top: 25px;
-    width: 400px;
   }
 }
 
@@ -45,7 +48,7 @@ $paddingVertical: 20px;
   font-weight: 600;
   height: $headerButtonSize;
   margin: 0;
-  overflow: hidden;
+  overflow-x: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -53,7 +56,6 @@ $paddingVertical: 20px;
 .dialogBody {
   background-color: var(--bp4DialogBgPrimary);
   max-height: 90vh;
-  overflow: overlay;
   padding-bottom: $paddingVertical;
 }
 
@@ -82,7 +84,6 @@ $paddingVertical: 20px;
   background-color: transparent;
   border-radius: 5px;
   border: 0;
-  color: var(--bp4DialogHeaderIcon);
   cursor: pointer;
   display: flex;
   height: $headerButtonSize;
@@ -100,6 +101,7 @@ $paddingVertical: 20px;
 }
 
 .headerButtonIcon {
+  background-color: var(--bp4DialogHeaderIcon);
   margin: 0 !important;
 }
 

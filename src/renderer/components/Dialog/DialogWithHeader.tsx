@@ -9,9 +9,10 @@ type Props = React.PropsWithChildren<
   {
     className?: string
     fixed?: boolean
+    height?: number
     onClickBack?: () => void
-    style?: React.CSSProperties
     title: string
+    width?: number
   } & Pick<DialogProps, 'isOpen' | 'onClose'>
 >
 
@@ -22,7 +23,8 @@ const DialogWithHeader = React.memo<Props>(props => {
       onClose={props.onClose}
       fixed={props.fixed}
       className={props.className}
-      style={props.style}
+      width={props.width}
+      height={props.height}
     >
       <DialogHeader
         onClose={props.onClose}

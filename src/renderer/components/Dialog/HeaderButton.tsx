@@ -1,15 +1,16 @@
 import React from 'react'
 import classNames from 'classnames'
-import { Icon } from '@blueprintjs/core'
+
+import Icon from '../Icon'
 
 import type { ButtonHTMLAttributes } from 'react'
-import type { IconProps } from '@blueprintjs/core'
+import type { IconName } from '../Icon'
 
 import styles from './styles.module.scss'
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
-  icon: IconProps['icon']
-  iconSize: IconProps['size']
+  icon: IconName
+  iconSize: number
 }
 
 export default function HeaderButton({

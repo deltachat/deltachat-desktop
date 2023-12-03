@@ -6,6 +6,8 @@ import type { DialogProps } from '../dialogs/DialogController'
 
 import styles from './styles.module.scss'
 
+const DEFAULT_WIDTH = 500
+
 type Props = React.PropsWithChildren<
   {
     backdropProps?: any
@@ -13,7 +15,8 @@ type Props = React.PropsWithChildren<
     canOutsideClickClose?: boolean
     className?: string
     fixed?: boolean
-    style?: React.CSSProperties
+    height?: number
+    width?: number
   } & Pick<DialogProps, 'isOpen' | 'onClose'>
 >
 
@@ -22,6 +25,8 @@ const Dialog = React.memo<Props>(
     children,
     canOutsideClickClose = true,
     canEscapeKeyClose = true,
+    width = DEFAULT_WIDTH,
+    height,
     ...props
   }) => {
     return (
@@ -34,7 +39,10 @@ const Dialog = React.memo<Props>(
         className={classNames(styles.dialog, props.className, {
           [styles.fixed]: props.fixed,
         })}
-        style={props.style}
+        style={{
+          width: width && `${width}px`,
+          height: height && `${height}px`,
+        }}
       >
         {children}
       </BlueprintDialog>
