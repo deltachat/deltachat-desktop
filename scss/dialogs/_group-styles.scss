@@ -61,13 +61,13 @@ input.group-name-input {
   }
 }
 
-.group-member-contact-list-wrapper {
-  overflow: scroll;
-  max-height: calc(100% - 46px);
-}
-
 .group-image-wrapper {
   position: relative;
+
+  .chat-list-item {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 
   .group-image-edit-button {
     position: absolute;
