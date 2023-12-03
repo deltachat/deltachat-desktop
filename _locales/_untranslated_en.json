@@ -5,5 +5,8 @@
   },
   "pref_notification_tone":{
     "message": "Notification Tone"
+  },
+  "pref_test_notification":{
+    "message": "Trigger Test Notification"
   }
 }

@@ -5,6 +5,7 @@ import { BackendRemote } from '../backend-com'
 import { isImage } from '../components/attachment/Attachment'
 import { jumpToMessage } from '../components/helpers/ChatMethods'
 import { runtime } from '../runtime'
+import { selectedAccountId } from '../ScreenController'
 import SettingsStoreInstance from '../stores/settings'
 
 const log = getLogger('renderer/notifications')
@@ -50,6 +51,12 @@ function incomingMessageHandler(
   queuedNotifications[accountId].push({ chatId, messageId })
 }
 
+const TEST_NOTIFICATION_CHAT_ID = -5 // core will never return negative values
+
+export async function showTestNotification() {
+  showNotification(selectedAccountId(), TEST_NOTIFICATION_CHAT_ID, 0)
+}
+
 async function showNotification(
   accountId: number,
   chatId: number,
@@ -71,10 +78,25 @@ async function showNotification(
     })
   } else {
     try {
-      const notificationInfo = await BackendRemote.rpc.getMessageNotificationInfo(
-        accountId,
-        messageId
-      )
+      let notificationInfo: T.MessageNotificationInfo
+      if (chatId === TEST_NOTIFICATION_CHAT_ID) {
+        notificationInfo = {
+          accountId: accountId,
+          chatId: TEST_NOTIFICATION_CHAT_ID,
+          chatName: 'Chat Name (Test Notification)',
+          chatProfileImage: null,
+          id: 0,
+          image: null,
+          imageMimeType: null,
+          summaryPrefix: null,
+          summaryText: 'This is a test message',
+        }
+      } else {
+        notificationInfo = await BackendRemote.rpc.getMessageNotificationInfo(
+          accountId,
+          messageId
+        )
+      }
       const { chatName, summaryPrefix, summaryText } = notificationInfo
       runtime.showNotification({
         title: chatName,

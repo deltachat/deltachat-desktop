@@ -4,6 +4,7 @@ import { DesktopSettingsType } from '../../../shared/shared-types'
 import classNames from 'classnames'
 import SettingsStoreInstance from '../../stores/settings'
 import { runtime } from '../../runtime'
+import { showTestNotification } from '../../system-integration/notifications'
 
 export default function SettingsNotifications({
   desktopSettings,
@@ -24,10 +25,19 @@ export default function SettingsNotifications({
         label: tx('pref_show_notification_content_explain'),
         disabled: !desktopSettings['notifications'],
       })}
+      <TestNotificationButton />
       <h3>{tx('pref_notification_tone')}</h3>
       <ToneSelector selectedTone={desktopSettings.notificationTonePath} />
     </div>
   )
+}
+
+function TestNotificationButton() {
+  const tx = window.static_translate
+
+  const onClick = () => showTestNotification()
+
+  return <button onClick={onClick}>{tx('pref_test_notification')}</button>
 }
 
 type Tone =
