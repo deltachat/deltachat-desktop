@@ -10,6 +10,7 @@
   - Use `watch:frontend:types` script for type-checking during development
   - Update esbuild to v0.19.8
   - Update typescript to v5.3.2
+- Refactor dialog components, improved styling for settings #3575
 
 <a id="1_42_2"></a>
 
