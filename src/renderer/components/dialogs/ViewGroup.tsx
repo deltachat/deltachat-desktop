@@ -93,7 +93,7 @@ export default function ViewGroup(props: {
   const chat = useChat(props.chat)
 
   return (
-    <Dialog height={1000} width={400} isOpen={isOpen} onClose={onClose} fixed>
+    <Dialog width={400} isOpen={isOpen} onClose={onClose} fixed>
       <ViewGroupInner onClose={onClose} chat={chat} isBroadcast={isBroadcast} />
     </Dialog>
   )
@@ -358,10 +358,10 @@ export function AddMemberDialog({
     useContactSearch(updateSearchContacts)
   return (
     <Dialog
-      onClose={onClose}
-      isOpen={isOpen}
       canOutsideClickClose={false}
+      isOpen={isOpen}
       fixed
+      onClose={onClose}
     >
       {AddMemberInnerDialog({
         onOk: addMembers => {

@@ -3,31 +3,32 @@ import React, { useState, useContext, useEffect } from 'react'
 import moment from 'moment'
 import { C } from '@deltachat/jsonrpc-client'
 
-import ChatListItem from '../chat/ChatListItem'
-import { useChatList } from '../chat/ChatListHelpers'
+import ChatListItem from '../../chat/ChatListItem'
+import { useChatList } from '../../chat/ChatListHelpers'
 import {
   MessagesDisplayContext,
   ScreenContext,
   useTranslationFunction,
-} from '../../contexts'
-import { Avatar, ClickForFullscreenAvatarWrapper } from '../Avatar'
-import { useLogicVirtualChatList, ChatListPart } from '../chat/ChatList'
-import MessageBody from '../message/MessageBody'
-import { useThemeCssVar } from '../../ThemeManager'
-import { DialogProps } from './DialogController'
-import { DeltaInput } from '../Login-Styles'
-import { openViewProfileDialog, selectChat } from '../helpers/ChatMethods'
-import { BackendRemote, onDCEvent, Type } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
-import { InlineVerifiedIcon } from '../VerifiedIcon'
-import { getLogger } from '../../../shared/logger'
+} from '../../../contexts'
+import { Avatar, ClickForFullscreenAvatarWrapper } from '../../Avatar'
+import { useLogicVirtualChatList, ChatListPart } from '../../chat/ChatList'
+import MessageBody from '../../message/MessageBody'
+import { useThemeCssVar } from '../../../ThemeManager'
+import { DialogProps } from '../DialogController'
+import { DeltaInput } from '../../Login-Styles'
+import { openViewProfileDialog, selectChat } from '../../helpers/ChatMethods'
+import { BackendRemote, onDCEvent, Type } from '../../../backend-com'
+import { selectedAccountId } from '../../../ScreenController'
+import { InlineVerifiedIcon } from '../../VerifiedIcon'
+import { getLogger } from '../../../../shared/logger'
 import Dialog, {
   DialogBody,
   DialogContent,
   DialogHeader,
   OkCancelFooterAction,
-} from '../Dialog'
-import ContentTextSeparator from '../Dialog/ContentTextSeparator'
+} from '../../Dialog'
+
+import styles from './styles.module.scss'
 
 const log = getLogger('renderer/dialogs/ViewProfile')
 
@@ -104,14 +105,20 @@ export default function ViewProfile(props: {
   const showEditButton = !(isDeviceChat || isSelfChat)
 
   return (
-    <Dialog width={400} height={700} isOpen={isOpen} onClose={onClose} fixed>
+    <Dialog
+      width={400}
+      isOpen={isOpen}
+      onClose={onClose}
+      fixed
+      className={styles.viewProfileDialog}
+    >
       <DialogHeader
         title={tx('contact')}
         onClickEdit={showEditButton ? onClickEdit : undefined}
         onClose={onClose}
         onClickBack={onBack}
       />
-      <DialogBody>
+      <DialogBody className={styles.viewProfileDialogBody}>
         <ViewProfileInner contact={contact} onClose={onClose} />
       </DialogBody>
     </Dialog>
@@ -221,48 +228,50 @@ export function ViewProfileInner({
   return (
     <>
       <div>
-        <div className='profile-info-container'>
-          <ClickForFullscreenAvatarWrapper
-            filename={isSelfChat ? selfChatAvatar : contact.profileImage}
-          >
-            {isSelfChat ? (
-              <ProfileInfoAvatar
-                contact={{ ...contact, profileImage: selfChatAvatar }}
-              />
-            ) : (
-              <ProfileInfoAvatar contact={contact} />
-            )}
-          </ClickForFullscreenAvatarWrapper>
-          <div className='profile-info-name-container'>
-            <div>
-              <p className='group-name'>
-                <span className='trucated-name'>{displayNameLine}</span>
-                {contact.isProfileVerified && <InlineVerifiedIcon />}
-              </p>
-            </div>
-            <div className='address'>{addressLine}</div>
-          </div>
-        </div>
-        {!isSelfChat && (
-          <div className='contact-attributes'>
-            {verifier && (
-              <div
-                className={verifier.action && 'clickable'}
-                onClick={verifier.action}
-                style={{ display: 'flex' }}
-              >
-                <InlineVerifiedIcon />
-                {verifier.label}
-              </div>
-            )}
-            {contact.lastSeen !== 0 && (
+        <DialogContent>
+          <div className='profile-info-container'>
+            <ClickForFullscreenAvatarWrapper
+              filename={isSelfChat ? selfChatAvatar : contact.profileImage}
+            >
+              {isSelfChat ? (
+                <ProfileInfoAvatar
+                  contact={{ ...contact, profileImage: selfChatAvatar }}
+                />
+              ) : (
+                <ProfileInfoAvatar contact={contact} />
+              )}
+            </ClickForFullscreenAvatarWrapper>
+            <div className='profile-info-name-container'>
               <div>
-                <i className='material-svg-icon material-icon-schedule' />
-                <LastSeen timestamp={contact.lastSeen} />
+                <p className='group-name'>
+                  <span className='trucated-name'>{displayNameLine}</span>
+                  {contact.isProfileVerified && <InlineVerifiedIcon />}
+                </p>
               </div>
-            )}
+              <div className='address'>{addressLine}</div>
+            </div>
           </div>
-        )}
+          {!isSelfChat && (
+            <div className='contact-attributes'>
+              {verifier && (
+                <div
+                  className={verifier.action && 'clickable'}
+                  onClick={verifier.action}
+                  style={{ display: 'flex' }}
+                >
+                  <InlineVerifiedIcon />
+                  {verifier.label}
+                </div>
+              )}
+              {contact.lastSeen !== 0 && (
+                <div>
+                  <i className='material-svg-icon material-icon-schedule' />
+                  <LastSeen timestamp={contact.lastSeen} />
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
         <div
           style={{
             display: 'flex',
@@ -283,7 +292,9 @@ export function ViewProfileInner({
         </div>
         {statusText != '' && (
           <>
-            <ContentTextSeparator text={tx('pref_default_status_label')} />
+            <div className='group-separator'>
+              {tx('pref_default_status_label')}
+            </div>
             <div className='status-text'>
               <MessagesDisplayContext.Provider
                 value={{
@@ -300,7 +311,7 @@ export function ViewProfileInner({
       </div>
       {!(isDeviceChat || isSelfChat) && (
         <>
-          <ContentTextSeparator text={tx('profile_shared_chats')} />
+          <div className='group-separator'>{tx('profile_shared_chats')}</div>
           <div className='mutual-chats' style={{ flexGrow: 1 }}>
             <AutoSizer>
               {({ width, height }) => (

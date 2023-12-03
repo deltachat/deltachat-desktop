@@ -168,7 +168,7 @@ export function QrCodeShowQrInner({
         </DialogContent>
       </DialogBody>
       <DialogFooter>
-        <FooterActions align='spaceBetween'>
+        <FooterActions align={!onClose && !onBack ? 'center' : 'spaceBetween'}>
           <FooterActionButton onClick={onCopy}>
             {tx('global_menu_edit_copy_desktop')}
           </FooterActionButton>

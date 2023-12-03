@@ -61,7 +61,7 @@ export default function CreateChat(props: CreateChatProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('main')
 
   return (
-    <Dialog isOpen={isOpen} onClose={onClose} fixed>
+    <Dialog width={400} isOpen={isOpen} onClose={onClose} fixed>
       {viewMode == 'main' && <CreateChatMain {...{ setViewMode, onClose }} />}
       {viewMode == 'createGroup' && (
         <CreateGroup {...{ setViewMode, onClose }} />
@@ -181,17 +181,13 @@ function CreateChatMain(props: CreateChatMainProps) {
         />
       </DialogHeader>
       <DialogBody>
-        <DialogContent>
-          <div className='create-chat-contact-list-wrapper'>
-            {renderAddGroupIfNeeded()}
-            <ContactList
-              contacts={contacts}
-              onClick={chooseContact}
-              onContactContextMenu={onContactContextMenu}
-            />
-            {renderAddContactIfNeeded()}
-          </div>
-        </DialogContent>
+        {renderAddGroupIfNeeded()}
+        <ContactList
+          contacts={contacts}
+          onClick={chooseContact}
+          onContactContextMenu={onContactContextMenu}
+        />
+        {renderAddContactIfNeeded()}
       </DialogBody>
       <DialogFooter>
         <FooterActions>
@@ -265,28 +261,28 @@ function CreateGroup(props: CreateGroupProps) {
             setErrorMissingChatName={setErrorMissingGroupName}
             type='group'
           />
-          <div className='group-separator'>
-            {tx(
-              'n_members',
-              groupMembers.length.toString(),
-              groupMembers.length <= 1 ? 'one' : 'other'
-            )}
-          </div>
-          <div className='group-member-contact-list-wrapper'>
-            <PseudoListItemAddMember
-              onClick={showAddMemberDialog}
-              isBroadcast={false}
-            />
-            <ContactList
-              contacts={groupContacts}
-              onClick={() => {}}
-              showRemove
-              onRemoveClick={c => {
-                removeGroupMember(c)
-              }}
-            />
-          </div>
         </DialogContent>
+        <div className='group-separator'>
+          {tx(
+            'n_members',
+            groupMembers.length.toString(),
+            groupMembers.length <= 1 ? 'one' : 'other'
+          )}
+        </div>
+        <div className='group-member-contact-list-wrapper'>
+          <PseudoListItemAddMember
+            onClick={showAddMemberDialog}
+            isBroadcast={false}
+          />
+          <ContactList
+            contacts={groupContacts}
+            onClick={() => {}}
+            showRemove
+            onRemoveClick={c => {
+              removeGroupMember(c)
+            }}
+          />
+        </div>
       </DialogBody>
       <DialogFooter>
         <FooterActions>
@@ -681,49 +677,44 @@ export function AddMemberInnerDialog({
         title={!isBroadcast ? tx('group_add_members') : tx('add_recipients')}
       />
       <DialogBody>
-        <DialogContent>
-          <div className='AddMemberChipsWrapper'>
-            <div className='AddMemberChips'>
-              {contactIdsToAdd.map(contact => {
-                return AddMemberChip({
-                  contact,
-                  onRemoveClick: toggleMember,
-                })
-              })}
-              <input
-                ref={inputRef}
-                className='search-input group-member-search'
-                onChange={onSearchChangeValidation}
-                onKeyDown={event => {
-                  addContactOnKeyDown(event)
-                }}
-                value={queryStr}
-                placeholder={tx('search')}
-                autoFocus
-                spellCheck={false}
-              />
-            </div>
-          </div>
-          <div
-            className='group-member-contact-list-wrapper'
-            ref={contactListRef}
-          >
-            <ContactList
-              contacts={Array.from(searchContacts.values())}
-              onClick={() => {}}
-              showCheckbox
-              isChecked={contact => {
-                return (
-                  contactIdsToAdd.findIndex(c => c.id === contact.id) !== -1 ||
-                  contactIdsInGroup.indexOf(contact.id) !== -1
-                )
+        <div className='AddMemberChipsWrapper'>
+          <div className='AddMemberChips'>
+            {contactIdsToAdd.map(contact => {
+              return AddMemberChip({
+                contact,
+                onRemoveClick: toggleMember,
+              })
+            })}
+            <input
+              ref={inputRef}
+              className='search-input group-member-search'
+              onChange={onSearchChangeValidation}
+              onKeyDown={event => {
+                addContactOnKeyDown(event)
               }}
-              disabledContacts={contactIdsInGroup.concat(C.DC_CONTACT_ID_SELF)}
-              onCheckboxClick={toggleMember}
+              value={queryStr}
+              placeholder={tx('search')}
+              autoFocus
+              spellCheck={false}
             />
-            {renderAddContactIfNeeded()}
           </div>
-        </DialogContent>
+        </div>
+        <div className='group-member-contact-list-wrapper' ref={contactListRef}>
+          <ContactList
+            contacts={Array.from(searchContacts.values())}
+            onClick={() => {}}
+            showCheckbox
+            isChecked={contact => {
+              return (
+                contactIdsToAdd.findIndex(c => c.id === contact.id) !== -1 ||
+                contactIdsInGroup.indexOf(contact.id) !== -1
+              )
+            }}
+            disabledContacts={contactIdsInGroup.concat(C.DC_CONTACT_ID_SELF)}
+            onCheckboxClick={toggleMember}
+          />
+          {renderAddContactIfNeeded()}
+        </div>
       </DialogBody>
       <OkCancelFooterAction
         onCancel={_onCancel}

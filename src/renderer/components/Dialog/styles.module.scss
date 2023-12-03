@@ -9,17 +9,15 @@ $paddingVertical: 20px;
     0 0 0 1px rgba(16, 22, 26, 0.1),
     0 4px 8px rgba(16, 22, 26, 0.2),
     0 0 20px 3px rgba(16, 22, 26, 0.2);
+  display: flex;
+  flex-direction: column;
   margin: 0;
-  max-height: calc(100vh - 50px);
+  max-height: calc(100% - 50px);
   max-width: 733px;
   min-width: 350px;
-  overflow: overlay;
+  overflow: hidden;
   padding: 0;
   width: unset;
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
 
   &.fixed {
     position: absolute;
@@ -55,8 +53,14 @@ $paddingVertical: 20px;
 
 .dialogBody {
   background-color: var(--bp4DialogBgPrimary);
+  flex: 1 1 auto;
   max-height: 90vh;
+  overflow: overlay;
   padding-bottom: $paddingVertical;
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
 }
 
 .dialogContent {

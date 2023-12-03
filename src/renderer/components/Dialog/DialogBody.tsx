@@ -5,6 +5,12 @@ import type { PropsWithChildren } from 'react'
 
 import styles from './styles.module.scss'
 
-export default function DialogBody({ children }: PropsWithChildren<{}>) {
-  return <main className={classNames(styles.dialogBody)}>{children}</main>
+type Props = PropsWithChildren<{
+  className?: string
+}>
+
+export default function DialogBody({ children, className }: Props) {
+  return (
+    <main className={classNames(styles.dialogBody, className)}>{children}</main>
+  )
 }

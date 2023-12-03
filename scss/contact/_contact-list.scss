@@ -1,7 +1,7 @@
 .contact-list-item {
   display: flex;
   padding-left: 20px;
-  padding-right: 20px;
+
   &:hover {
     background-color: var(--contactListItemBgHover);
   }
@@ -20,11 +20,6 @@
       cursor: 'default';
     }
   }
-}
-
-div.create-chat-contact-list-wrapper {
-  margin: -20px;
-  background-color: var(--bp4DialogBgPrimary);
 }
 
 .delta-checkbox {
@@ -87,13 +82,11 @@ div.create-chat-contact-list-wrapper {
 }
 
 .AddMemberChipsWrapper {
+  border-bottom: solid 2px #d3d3d3;
   max-height: 33%;
   overflow: scroll;
-  border-bottom: solid 1px #d3d3d3;
-  margin-left: -20px;
-  margin-right: -20px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 30px;
+  padding-right: 30px;
 
   .AddMemberChips {
     display: flex;

@@ -1,9 +1,11 @@
-div.profile-info-container {
+.profile-info-container {
   display: flex;
   width: calc(100% - 65px);
+
   .avatar.large {
     --local-avatar-vertical-margin: 0;
   }
+
   .profile-info-name-container {
     margin: auto 0px auto 17px;
     flex-grow: 1;
