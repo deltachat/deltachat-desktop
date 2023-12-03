@@ -521,12 +521,17 @@ If you think that's a bug and you need that permission, then please open an issu
         return
       }
       const { accountId, msgId } = open_apps[key]
-      return await this.rpc.sendWebxdcStatusUpdate(
-        accountId,
-        msgId,
-        update,
-        description
-      )
+      try {
+        return await this.rpc.sendWebxdcStatusUpdate(
+          accountId,
+          msgId,
+          update,
+          description
+        )
+      } catch (error) {
+        log.error('webxdc.sendUpdate failed:', error)
+        throw error
+      }
     })
 
     ipcMain.handle(
