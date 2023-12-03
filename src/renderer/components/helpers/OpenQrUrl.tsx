@@ -12,8 +12,7 @@ import AlertDialog from '../dialogs/AlertDialog'
 import { EffectfulBackendActions } from '../../backend-com'
 import { BackendRemote, Type } from '../../backend-com'
 import processMailtoUrl from './MailtoUrl'
-import SmallDialog from '../SmallDialog'
-import { DialogBody, DialogFooter, FooterActions } from '../Dialog'
+import Dialog, { DialogBody, DialogFooter, FooterActions } from '../Dialog'
 import { ReceiveBackupDialog } from '../dialogs/SetupMultiDevice'
 
 const log = getLogger('renderer/processOpenUrl')
@@ -33,7 +32,7 @@ export function ProcessQrCodeDialog({
   }
 
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
+    <Dialog isOpen={isOpen} onClose={onClose}>
       <DialogBody>
         <Spinner />
       </DialogBody>
@@ -44,7 +43,7 @@ export function ProcessQrCodeDialog({
           </p>
         </FooterActions>
       </DialogFooter>
-    </SmallDialog>
+    </Dialog>
   )
 }
 
@@ -329,7 +328,7 @@ function copyContentAlertDialog({
 }: DialogProps & { message: string; content: string; cb: () => void }) {
   const tx = window.static_translate
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
+    <Dialog isOpen={isOpen} onClose={onClose}>
       <div className='bp4-dialog-body-with-padding'>
         <p style={{ wordBreak: 'break-word' }}>{message}</p>
       </div>
@@ -354,6 +353,6 @@ function copyContentAlertDialog({
           </p>
         </FooterActions>
       </DialogFooter>
-    </SmallDialog>
+    </Dialog>
   )
 }

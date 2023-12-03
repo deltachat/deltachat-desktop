@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { H5, Intent } from '@blueprintjs/core'
 import { DcEventType } from '@deltachat/jsonrpc-client'
+import { Intent } from '@blueprintjs/core'
 
 import { DialogProps } from '../dialogs/DialogController'
 import { DeltaProgressBar } from '../Login-Styles'
@@ -10,8 +10,7 @@ import { getLogger } from '../../../shared/logger'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import SettingsButton from './SettingsButton'
-import { DialogBody } from '../Dialog'
-import SmallDialog from '../SmallDialog'
+import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
 
 import type { OpenDialogOptions } from 'electron'
 
@@ -44,12 +43,14 @@ function ExportProgressDialog(props: DialogProps) {
   }, [accountId])
 
   return (
-    <SmallDialog isOpen={props.isOpen} onClose={() => {}}>
+    <Dialog isOpen={props.isOpen} onClose={() => {}}>
+      <DialogHeader title={tx('export_backup_desktop')} />
       <DialogBody>
-        <H5 style={{ marginTop: '20px' }}>{tx('export_backup_desktop')}</H5>
-        <DeltaProgressBar intent={Intent.PRIMARY} progress={progress} />
+        <DialogContent>
+          <DeltaProgressBar intent={Intent.PRIMARY} progress={progress} />
+        </DialogContent>
       </DialogBody>
-    </SmallDialog>
+    </Dialog>
   )
 }
 

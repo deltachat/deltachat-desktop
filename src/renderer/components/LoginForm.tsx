@@ -2,7 +2,7 @@
 
 import { C, DcEventType } from '@deltachat/jsonrpc-client'
 import React, { useEffect, useState } from 'react'
-import { Collapse, Dialog } from '@blueprintjs/core'
+import { Collapse } from '@blueprintjs/core'
 import { useDebouncedCallback } from 'use-debounce/lib'
 
 import {
@@ -19,7 +19,13 @@ import { useTranslationFunction, i18nContext } from '../contexts'
 import { getLogger } from '../../shared/logger'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
-import { DialogBody, DialogFooter } from './Dialog'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  FooterActionButton,
+  FooterActions,
+} from './Dialog'
 
 const log = getLogger('renderer/loginForm')
 
@@ -476,29 +482,33 @@ export function ConfigureProgressDialog({
       {!configureFailed && (
         <>
           <DialogBody>
-            <DeltaProgressBar progress={progress} />
-            <p style={{ userSelect: 'auto' }}>{progressComment}</p>
+            <DialogContent paddingTop>
+              <DeltaProgressBar progress={progress} />
+              <p>{progressComment}</p>
+            </DialogContent>
           </DialogBody>
           <DialogFooter>
-            <p className='delta-button danger bold' onClick={onCancel}>
-              {tx('cancel')}
-            </p>
+            <FooterActions>
+              <FooterActionButton danger onClick={onCancel}>
+                {tx('cancel')}
+              </FooterActionButton>
+            </FooterActions>
           </DialogFooter>
         </>
       )}
       {configureFailed && (
         <>
           <DialogBody>
-            <p style={{ userSelect: 'auto' }}>{error}</p>
+            <DialogContent paddingTop>
+              <p>{error}</p>
+            </DialogContent>
           </DialogBody>
           <DialogFooter>
-            <p
-              className='delta-button primary bold'
-              onClick={onClose}
-              style={{ marginLeft: 'auto' }}
-            >
-              {tx('ok')}
-            </p>
+            <FooterActions>
+              <FooterActionButton onClick={onClose}>
+                {tx('ok')}
+              </FooterActionButton>
+            </FooterActions>
           </DialogFooter>
         </>
       )}

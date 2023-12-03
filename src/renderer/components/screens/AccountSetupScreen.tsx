@@ -8,8 +8,10 @@ import LoginForm, {
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import Dialog, {
   DialogBody,
+  DialogContent,
   DialogFooter,
   DialogHeader,
+  FooterActionButton,
   FooterActions,
 } from '../Dialog'
 
@@ -62,33 +64,27 @@ export default function AccountSetupScreen({
           isOpen={true}
           backdropProps={{ className: 'no-backdrop' }}
           onClose={() => {}}
-          fixed={true}
+          fixed
         >
           <DialogHeader title={tx('login_explain')} />
           <DialogBody>
-            <div className='login'>
-              <LoginForm
-                credentials={credentials}
-                setCredentials={setCredentials}
-              />
-            </div>
+            <DialogContent>
+              <div className='login'>
+                <LoginForm
+                  credentials={credentials}
+                  setCredentials={setCredentials}
+                />
+              </div>
+            </DialogContent>
           </DialogBody>
           <DialogFooter>
             <FooterActions>
-              <p
-                id='action-cancel'
-                className={'delta-button bold primary'}
-                onClick={() => selectAccount(accountId)}
-              >
+              <FooterActionButton onClick={() => selectAccount(accountId)}>
                 {tx('cancel')}
-              </p>
-              <p
-                id='action-login'
-                className={'delta-button bold primary'}
-                onClick={onClickLogin}
-              >
+              </FooterActionButton>
+              <FooterActionButton onClick={onClickLogin}>
                 {tx('login_title')}
-              </p>
+              </FooterActionButton>
             </FooterActions>
           </DialogFooter>
         </Dialog>

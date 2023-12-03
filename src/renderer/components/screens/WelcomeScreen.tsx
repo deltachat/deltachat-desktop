@@ -166,11 +166,12 @@ export default function WelcomeScreen({
     <div className='login-screen'>
       <div className='window'>
         <Dialog
-          isOpen={true}
           backdropProps={{ className: 'no-backdrop' }}
-          onClose={() => {}}
-          fixed={true}
           canEscapeKeyClose={true}
+          fixed={true}
+          isOpen={true}
+          onClose={() => {}}
+          width={400}
         >
           <DialogHeader
             onClickBack={showBackButton ? onCancel : undefined}
