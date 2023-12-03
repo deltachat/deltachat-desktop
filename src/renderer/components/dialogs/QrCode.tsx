@@ -8,7 +8,12 @@ import React, {
 import classNames from 'classnames'
 import QrReader from '@deltachat/react-qr-reader'
 
-import Dialog, { DialogBody, DialogFooter, FooterActions } from '../Dialog'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  FooterActions,
+} from '../Dialog'
 import FooterActionButton from '../Dialog/FooterActionButton'
 import processOpenQrUrl from '../helpers/OpenQrUrl'
 import { BackendRemote } from '../../backend-com'
@@ -147,18 +152,20 @@ export function QrCodeShowQrInner({
   return (
     <>
       <DialogBody>
-        {svgUrl && (
-          <img
-            style={{
-              width: '100%',
-              height: '100%',
-              userSelect: 'none',
-              paddingTop: '16px',
-            }}
-            src={svgUrl}
-            onContextMenu={imageContextMenu}
-          />
-        )}
+        <DialogContent>
+          {svgUrl && (
+            <img
+              style={{
+                width: '100%',
+                height: '100%',
+                userSelect: 'none',
+                paddingTop: '16px',
+              }}
+              src={svgUrl}
+              onContextMenu={imageContextMenu}
+            />
+          )}
+        </DialogContent>
       </DialogBody>
       <DialogFooter>
         <FooterActions align='spaceBetween'>

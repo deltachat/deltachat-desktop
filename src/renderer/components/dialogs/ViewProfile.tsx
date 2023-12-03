@@ -2,7 +2,6 @@ import AutoSizer from 'react-virtualized-auto-sizer'
 import React, { useState, useContext, useEffect } from 'react'
 import moment from 'moment'
 import { C } from '@deltachat/jsonrpc-client'
-import { Card, Elevation } from '@blueprintjs/core'
 
 import ChatListItem from '../chat/ChatListItem'
 import { useChatList } from '../chat/ChatListHelpers'
@@ -24,6 +23,7 @@ import { InlineVerifiedIcon } from '../VerifiedIcon'
 import { getLogger } from '../../../shared/logger'
 import Dialog, {
   DialogBody,
+  DialogContent,
   DialogHeader,
   OkCancelFooterAction,
 } from '../Dialog'
@@ -104,7 +104,7 @@ export default function ViewProfile(props: {
   const showEditButton = !(isDeviceChat || isSelfChat)
 
   return (
-    <Dialog isOpen={isOpen} onClose={onClose} fixed>
+    <Dialog width={400} height={700} isOpen={isOpen} onClose={onClose} fixed>
       <DialogHeader
         title={tx('contact')}
         onClickEdit={showEditButton ? onClickEdit : undefined}
@@ -220,118 +220,116 @@ export function ViewProfileInner({
 
   return (
     <>
-      <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-        <div>
-          <div className='profile-info-container'>
-            <ClickForFullscreenAvatarWrapper
-              filename={isSelfChat ? selfChatAvatar : contact.profileImage}
-            >
-              {isSelfChat ? (
-                <ProfileInfoAvatar
-                  contact={{ ...contact, profileImage: selfChatAvatar }}
-                />
-              ) : (
-                <ProfileInfoAvatar contact={contact} />
-              )}
-            </ClickForFullscreenAvatarWrapper>
-            <div className='profile-info-name-container'>
-              <div>
-                <p className='group-name'>
-                  <span className='trucated-name'>{displayNameLine}</span>
-                  {contact.isProfileVerified && <InlineVerifiedIcon />}
-                </p>
-              </div>
-              <div className='address'>{addressLine}</div>
-            </div>
-          </div>
-          {!isSelfChat && (
-            <div className='contact-attributes'>
-              {verifier && (
-                <div
-                  className={verifier.action && 'clickable'}
-                  onClick={verifier.action}
-                  style={{ display: 'flex' }}
-                >
-                  <InlineVerifiedIcon />
-                  {verifier.label}
-                </div>
-              )}
-              {contact.lastSeen !== 0 && (
-                <div>
-                  <i className='material-svg-icon material-icon-schedule' />
-                  <LastSeen timestamp={contact.lastSeen} />
-                </div>
-              )}
-            </div>
-          )}
-          <div
-            style={{
-              display: 'flex',
-              margin: '20px 0px',
-              justifyContent: 'center',
-            }}
+      <div>
+        <div className='profile-info-container'>
+          <ClickForFullscreenAvatarWrapper
+            filename={isSelfChat ? selfChatAvatar : contact.profileImage}
           >
-            {!isDeviceChat && (
-              <button
-                aria-label={tx('send_message')}
-                onClick={onSendMessage}
-                className={'delta-button-round'}
-                style={{ marginTop: '0px' }}
+            {isSelfChat ? (
+              <ProfileInfoAvatar
+                contact={{ ...contact, profileImage: selfChatAvatar }}
+              />
+            ) : (
+              <ProfileInfoAvatar contact={contact} />
+            )}
+          </ClickForFullscreenAvatarWrapper>
+          <div className='profile-info-name-container'>
+            <div>
+              <p className='group-name'>
+                <span className='trucated-name'>{displayNameLine}</span>
+                {contact.isProfileVerified && <InlineVerifiedIcon />}
+              </p>
+            </div>
+            <div className='address'>{addressLine}</div>
+          </div>
+        </div>
+        {!isSelfChat && (
+          <div className='contact-attributes'>
+            {verifier && (
+              <div
+                className={verifier.action && 'clickable'}
+                onClick={verifier.action}
+                style={{ display: 'flex' }}
               >
-                {tx('send_message')}
-              </button>
+                <InlineVerifiedIcon />
+                {verifier.label}
+              </div>
+            )}
+            {contact.lastSeen !== 0 && (
+              <div>
+                <i className='material-svg-icon material-icon-schedule' />
+                <LastSeen timestamp={contact.lastSeen} />
+              </div>
             )}
           </div>
-          {statusText != '' && (
-            <>
-              <ContentTextSeparator text={tx('pref_default_status_label')} />
-              <div className='status-text'>
-                <MessagesDisplayContext.Provider
-                  value={{
-                    context: 'contact_profile_status',
-                    contact_id: contact.id,
-                    closeProfileDialog: onClose,
-                  }}
-                >
-                  <MessageBody text={statusText} />
-                </MessagesDisplayContext.Provider>
-              </div>
-            </>
+        )}
+        <div
+          style={{
+            display: 'flex',
+            margin: '20px 0px',
+            justifyContent: 'center',
+          }}
+        >
+          {!isDeviceChat && (
+            <button
+              aria-label={tx('send_message')}
+              onClick={onSendMessage}
+              className={'delta-button-round'}
+              style={{ marginTop: '0px' }}
+            >
+              {tx('send_message')}
+            </button>
           )}
         </div>
-        {!(isDeviceChat || isSelfChat) && (
+        {statusText != '' && (
           <>
-            <ContentTextSeparator text={tx('profile_shared_chats')} />
-            <div className='mutual-chats' style={{ flexGrow: 1 }}>
-              <AutoSizer>
-                {({ width, height }) => (
-                  <ChatListPart
-                    isRowLoaded={isChatLoaded}
-                    loadMoreRows={loadChats}
-                    rowCount={chatListIds.length}
-                    width={width}
-                    height={height}
-                    itemKey={index => 'key' + chatListIds[index]}
-                    itemHeight={CHATLISTITEM_CHAT_HEIGHT}
-                  >
-                    {({ index, style }) => {
-                      const chatId = chatListIds[index]
-                      return (
-                        <div style={style}>
-                          <ChatListItem
-                            chatListItem={chatCache[chatId] || undefined}
-                            onClick={onChatClick.bind(null, chatId)}
-                          />
-                        </div>
-                      )
-                    }}
-                  </ChatListPart>
-                )}
-              </AutoSizer>
+            <ContentTextSeparator text={tx('pref_default_status_label')} />
+            <div className='status-text'>
+              <MessagesDisplayContext.Provider
+                value={{
+                  context: 'contact_profile_status',
+                  contact_id: contact.id,
+                  closeProfileDialog: onClose,
+                }}
+              >
+                <MessageBody text={statusText} />
+              </MessagesDisplayContext.Provider>
             </div>
           </>
         )}
       </div>
+      {!(isDeviceChat || isSelfChat) && (
+        <>
+          <ContentTextSeparator text={tx('profile_shared_chats')} />
+          <div className='mutual-chats' style={{ flexGrow: 1 }}>
+            <AutoSizer>
+              {({ width, height }) => (
+                <ChatListPart
+                  isRowLoaded={isChatLoaded}
+                  loadMoreRows={loadChats}
+                  rowCount={chatListIds.length}
+                  width={width}
+                  height={height}
+                  itemKey={index => 'key' + chatListIds[index]}
+                  itemHeight={CHATLISTITEM_CHAT_HEIGHT}
+                >
+                  {({ index, style }) => {
+                    const chatId = chatListIds[index]
+                    return (
+                      <div style={style}>
+                        <ChatListItem
+                          chatListItem={chatCache[chatId] || undefined}
+                          onClick={onChatClick.bind(null, chatId)}
+                        />
+                      </div>
+                    )
+                  }}
+                </ChatListPart>
+              )}
+            </AutoSizer>
+          </div>
+        </>
+      )}
     </>
   )
 }
@@ -356,20 +354,14 @@ export function EditContactNameDialog({
   }
   return (
     <Dialog
-      onClose={onClose}
-      isOpen={isOpen}
       canOutsideClickClose={false}
-      style={{
-        top: '15vh',
-        width: '500px',
-        maxHeight: '70vh',
-        height: 'auto',
-      }}
       fixed
+      isOpen={isOpen}
+      onClose={onClose}
     >
       <DialogHeader title={tx('menu_edit_name')} />
       <DialogBody>
-        <Card elevation={Elevation.ONE}>
+        <DialogContent>
           <DeltaInput
             key='contactname'
             id='contactname'
@@ -382,7 +374,7 @@ export function EditContactNameDialog({
               setContactName(event.target.value)
             }}
           />
-        </Card>
+        </DialogContent>
       </DialogBody>
       <OkCancelFooterAction onCancel={onClickCancel} onOk={onClickOk} />
     </Dialog>

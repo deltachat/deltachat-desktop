@@ -6,13 +6,15 @@
     margin-bottom: 7px;
 
     .key {
-      display: inline-block;
-      padding: 3px 10px;
-      border-radius: 4px;
       background: var(--keybindingKeyBackground);
-      box-shadow: 0px 3px var(--keybindingKeyShadow);
+      border-radius: 4px;
       border: 1px var(--keybindingKeyBorder) solid;
+      box-shadow: 0px 3px var(--keybindingKeyShadow);
       color: var(--keybindingKeyFontColor);
+      display: inline-block;
+      font-size: 14px;
+      font-weight: 400;
+      padding: 3px 10px;
 
       &:hover,
       &.pressed {

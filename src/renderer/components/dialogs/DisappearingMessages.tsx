@@ -5,11 +5,12 @@ import { Timespans } from '../../../shared/constants'
 import { useTranslationFunction } from '../../contexts'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import SmallDialog from '../SmallDialog'
-import {
+import Dialog, {
   DialogBody,
+  DialogContent,
   DialogFooter,
   DialogHeader,
+  FooterActionButton,
   FooterActions,
 } from '../Dialog'
 
@@ -125,26 +126,30 @@ export default function DisappearingMessage({
   const tx = useTranslationFunction()
   return (
     !loading && (
-      <SmallDialog isOpen={isOpen} onClose={onClose}>
+      <Dialog isOpen={isOpen} onClose={onClose}>
         <DialogHeader title={tx('ephemeral_messages')} />
         <DialogBody>
-          <SelectDisappearingMessageDuration
-            disappearingMessageDuration={disappearingMessageDuration}
-            onSelectDisappearingMessageDuration={setDisappearingMessageDuration}
-          />
-          <p>{tx('ephemeral_messages_hint')}</p>
+          <DialogContent>
+            <SelectDisappearingMessageDuration
+              disappearingMessageDuration={disappearingMessageDuration}
+              onSelectDisappearingMessageDuration={
+                setDisappearingMessageDuration
+              }
+            />
+            <p>{tx('ephemeral_messages_hint')}</p>
+          </DialogContent>
         </DialogBody>
         <DialogFooter>
           <FooterActions>
-            <p className='delta-button primary bold' onClick={onClose}>
+            <FooterActionButton onClick={onClose}>
               {tx('cancel')}
-            </p>
-            <p className='delta-button primary bold' onClick={saveAndClose}>
+            </FooterActionButton>
+            <FooterActionButton onClick={saveAndClose}>
               {tx('save_desktop')}
-            </p>
+            </FooterActionButton>
           </FooterActions>
         </DialogFooter>
-      </SmallDialog>
+      </Dialog>
     )
   )
 }

@@ -8,7 +8,7 @@ import ClickableLink from '../helpers/ClickableLink'
 import { useTranslationFunction } from '../../contexts'
 import { runtime } from '../../runtime'
 import { BackendRemote } from '../../backend-com'
-import { DialogBody, DialogFooter, DialogWithHeader } from '../Dialog'
+import { DialogBody, DialogContent, DialogWithHeader } from '../Dialog'
 
 const log = getLogger('renderer/dialogs/About')
 
@@ -96,14 +96,14 @@ export default function About(props: { isOpen: boolean; onClose: () => void }) {
 
   return (
     <DialogWithHeader
+      width={600}
+      height={500}
       isOpen={isOpen}
       title={tx('global_menu_help_about_desktop')}
       onClose={onClose}
     >
       <DialogBody>
-        <div
-          style={{ background: 'var(--bp4DialogBgPrimary)', padding: '21px' }}
-        >
+        <DialogContent>
           <p
             style={{ color: 'grey', userSelect: 'all' }}
           >{`Version ${VERSION} (git: ${GIT_REF})`}</p>
@@ -114,9 +114,8 @@ export default function About(props: { isOpen: boolean; onClose: () => void }) {
             {versionString}
           </p>
           <DCInfo />
-        </div>
+        </DialogContent>
       </DialogBody>
-      <DialogFooter />
     </DialogWithHeader>
   )
 }

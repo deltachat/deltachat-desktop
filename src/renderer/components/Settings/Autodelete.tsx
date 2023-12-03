@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react'
-import classNames from 'classnames'
 
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { DialogProps } from '../dialogs/DialogController'
@@ -12,8 +11,14 @@ import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import SettingsSelector from './SettingsSelector'
 import SmallSelectDialog, { SelectDialogOption } from '../SmallSelectDialog'
-import SmallDialog from '../SmallDialog'
-import { DialogBody, DialogFooter, DialogHeader } from '../Dialog'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  FooterActionButton,
+  FooterActions,
+} from '../Dialog'
 
 function durationToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)
@@ -152,51 +157,40 @@ function AutodeleteConfirmationDialog({
   const tx = useTranslationFunction()
 
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
+    <Dialog isOpen={isOpen} onClose={onClose}>
       <DialogHeader
         title={
           fromServer ? tx('autodel_server_title') : tx('autodel_device_title')
         }
       />
       <DialogBody>
-        <p style={{ whiteSpace: 'pre-line' }}>
-          {tx(fromServer ? 'autodel_server_ask' : 'autodel_device_ask', [
-            String(estimateCount),
-            durationToString(seconds),
-          ])}
-        </p>
-        <div style={{ display: 'flex' }}>
-          <DeltaCheckbox checked={isConfirmed} onClick={toggleIsConfirmed} />
-          <div style={{ alignSelf: 'center' }}>{tx('autodel_confirm')}</div>
-        </div>
+        <DialogContent>
+          <p style={{ whiteSpace: 'pre-line' }}>
+            {tx(fromServer ? 'autodel_server_ask' : 'autodel_device_ask', [
+              String(estimateCount),
+              durationToString(seconds),
+            ])}
+          </p>
+          <div style={{ display: 'flex' }}>
+            <DeltaCheckbox checked={isConfirmed} onClick={toggleIsConfirmed} />
+            <div style={{ alignSelf: 'center' }}>{tx('autodel_confirm')}</div>
+          </div>
+        </DialogContent>
       </DialogBody>
       <DialogFooter>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginTop: '0px',
-            padding: '7px 13px 10px 13px',
-          }}
-        >
-          <p
-            className='delta-button danger bold'
+        <FooterActions align='spaceBetween'>
+          <FooterActionButton
             onClick={() => {
               onClose()
             }}
           >
             {tx('cancel')}
-          </p>
-          <p
-            className={classNames('delta-button primary bold', {
-              disabled: !isConfirmed,
-            })}
-            onClick={onOk}
-          >
+          </FooterActionButton>
+          <FooterActionButton disabled={!isConfirmed} onClick={onOk}>
             {tx('ok')}
-          </p>
-        </div>
+          </FooterActionButton>
+        </FooterActions>
       </DialogFooter>
-    </SmallDialog>
+    </Dialog>
   )
 }

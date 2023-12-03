@@ -44,7 +44,7 @@ export default function Settings({ isOpen, onClose }: DialogProps) {
   }, [])
 
   return (
-    <Dialog isOpen={isOpen} onClose={onClose} fixed>
+    <Dialog isOpen={isOpen} onClose={onClose} fixed width={400}>
       {settingsMode === 'main' && (
         <>
           <DialogHeader title={tx('menu_settings')} onClose={onClose} />

@@ -1,6 +1,4 @@
 import React from 'react'
-import classNames from 'classnames'
-import { Card, Classes } from '@blueprintjs/core'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { C } from '@deltachat/jsonrpc-client'
 
@@ -11,7 +9,7 @@ import { ChatListPart, useLogicVirtualChatList } from '../chat/ChatList'
 import { useChatList } from '../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../ThemeManager'
 import { createDraftMessage } from '../helpers/ChatMethods'
-import Dialog, { DialogHeader } from '../Dialog'
+import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
 import { useTranslationFunction } from '../../contexts'
 
 export default function MailtoDialog(props: {
@@ -47,56 +45,55 @@ export default function MailtoDialog(props: {
         onClose={onClose}
         title={tx('mailto_dialog_header_select_chat')}
       />
-      <div
-        className={classNames(
-          Classes.DIALOG_BODY,
-          'bp4-dialog-body-no-footer',
-          'mailto-dialog'
-        )}
-      >
-        <Card style={{ padding: '0px' }}>
-          <div className='select-chat-chat-list'>
-            <input
-              className='search-input'
-              onChange={onSearchChange}
-              value={queryStr}
-              placeholder={tx('contacts_enter_name_or_email')}
-              autoFocus
-              spellCheck={false}
-            />
-            {noResults && queryStr && (
-              <PseudoListItemNoSearchResults queryStr={queryStr} />
-            )}
-            <div style={noResults ? { height: '0px' } : {}} className='results'>
-              <AutoSizer>
-                {({ width, height }) => (
-                  <ChatListPart
-                    isRowLoaded={isChatLoaded}
-                    loadMoreRows={loadChats}
-                    rowCount={chatListIds.length}
-                    width={width}
-                    height={height}
-                    itemKey={index => 'key' + chatListIds[index]}
-                    itemHeight={CHATLISTITEM_CHAT_HEIGHT}
-                  >
-                    {({ index, style }) => {
-                      const chatId = chatListIds[index]
-                      return (
-                        <div style={style}>
-                          <ChatListItem
-                            chatListItem={chatCache[chatId] || undefined}
-                            onClick={onChatClick.bind(null, chatId)}
-                          />
-                        </div>
-                      )
-                    }}
-                  </ChatListPart>
-                )}
-              </AutoSizer>
+      <DialogBody>
+        <DialogContent>
+          <div className='mailto-dialog'>
+            <div className='select-chat-chat-list'>
+              <input
+                className='search-input'
+                onChange={onSearchChange}
+                value={queryStr}
+                placeholder={tx('contacts_enter_name_or_email')}
+                autoFocus
+                spellCheck={false}
+              />
+              {noResults && queryStr && (
+                <PseudoListItemNoSearchResults queryStr={queryStr} />
+              )}
+              <div
+                style={noResults ? { height: '0px' } : {}}
+                className='results'
+              >
+                <AutoSizer>
+                  {({ width, height }) => (
+                    <ChatListPart
+                      isRowLoaded={isChatLoaded}
+                      loadMoreRows={loadChats}
+                      rowCount={chatListIds.length}
+                      width={width}
+                      height={height}
+                      itemKey={index => 'key' + chatListIds[index]}
+                      itemHeight={CHATLISTITEM_CHAT_HEIGHT}
+                    >
+                      {({ index, style }) => {
+                        const chatId = chatListIds[index]
+                        return (
+                          <div style={style}>
+                            <ChatListItem
+                              chatListItem={chatCache[chatId] || undefined}
+                              onClick={onChatClick.bind(null, chatId)}
+                            />
+                          </div>
+                        )
+                      }}
+                    </ChatListPart>
+                  )}
+                </AutoSizer>
+              </div>
             </div>
           </div>
-        </Card>
-      </div>
+        </DialogContent>
+      </DialogBody>
     </Dialog>
   )
 }

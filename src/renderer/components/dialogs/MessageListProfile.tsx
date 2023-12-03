@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
-import { Card, Classes } from '@blueprintjs/core'
 
 import { useGroupImage, ChatSettingsSetNameAndProfileImage } from './CreateChat'
 import { DialogProps } from './DialogController'
 import { Type } from '../../backend-com'
 import { modifyGroup } from '../helpers/ChatMethods'
-import Dialog, { DialogHeader, OkCancelFooterAction } from '../Dialog'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogHeader,
+  OkCancelFooterAction,
+} from '../Dialog'
 
 export default function MailingListProfile(props: {
   isOpen: DialogProps['isOpen']
@@ -26,8 +30,8 @@ export default function MailingListProfile(props: {
   return (
     <Dialog isOpen={isOpen} onClose={onClose} fixed>
       <DialogHeader title={tx('mailing_list')} />
-      <div className={Classes.DIALOG_BODY}>
-        <Card>
+      <DialogBody>
+        <DialogContent>
           <ChatSettingsSetNameAndProfileImage
             groupImage={groupImage}
             onSetGroupImage={onSetGroupImage}
@@ -42,8 +46,8 @@ export default function MailingListProfile(props: {
           <div style={{ padding: '15px 0px' }}>
             {tx('mailing_list_profile_info')}
           </div>
-        </Card>
-      </div>
+        </DialogContent>
+      </DialogBody>
       <OkCancelFooterAction onCancel={onClose} onOk={onUpdateGroup} />
     </Dialog>
   )

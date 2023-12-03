@@ -69,10 +69,10 @@ export default function AccountListScreen({
     <div className='login-screen'>
       <div className='window'>
         <Dialog
+          width={400}
           isOpen={true}
           backdropProps={{ className: 'no-backdrop' }}
           onClose={() => {}}
-          fixed={true}
           canEscapeKeyClose={true}
         >
           <DialogHeader title={tx('switch_account')} />

@@ -6,7 +6,6 @@ import React, {
   useState,
 } from 'react'
 import { C, DcEventType } from '@deltachat/jsonrpc-client'
-import { Card, Classes, Elevation } from '@blueprintjs/core'
 
 import ChatListItem from '../chat/ChatListItem'
 import { useContactSearch, AddMemberInnerDialog } from './CreateChat'
@@ -37,6 +36,7 @@ import { InlineVerifiedIcon } from '../VerifiedIcon'
 import { useSettingsStore } from '../../stores/settings'
 import Dialog, {
   DialogBody,
+  DialogContent,
   DialogHeader,
   OkCancelFooterAction,
 } from '../Dialog'
@@ -93,15 +93,7 @@ export default function ViewGroup(props: {
   const chat = useChat(props.chat)
 
   return (
-    <Dialog
-      isOpen={isOpen}
-      onClose={onClose}
-      fixed
-      style={{
-        maxHeight: 'unset',
-        height: 'calc(100vh - 50px)',
-      }}
-    >
+    <Dialog height={1000} width={400} isOpen={isOpen} onClose={onClose} fixed>
       <ViewGroupInner onClose={onClose} chat={chat} isBroadcast={isBroadcast} />
     </Dialog>
   )
@@ -248,8 +240,8 @@ function ViewGroupInner(props: {
             onClickEdit={onClickEdit}
             onClose={onClose}
           />
-          <div className={Classes.DIALOG_BODY}>
-            <Card>
+          <DialogBody>
+            <DialogContent>
               <div className='group-settings-container'>
                 <ClickForFullscreenAvatarWrapper filename={groupImage}>
                   <Avatar
@@ -265,75 +257,73 @@ function ViewGroupInner(props: {
                   {chat.isProtected && <InlineVerifiedIcon />}
                 </p>
               </div>
-              {isRelatedChatsEnabled && (
+            </DialogContent>
+            {isRelatedChatsEnabled && (
+              <>
+                <div className='group-separator'>{tx('related_chats')}</div>
+                <div className='group-related-chats-list-wrapper'>
+                  <ChatListPart
+                    isRowLoaded={isChatLoaded}
+                    loadMoreRows={loadChats}
+                    rowCount={chatListIds.length}
+                    width={400}
+                    height={CHATLISTITEM_CHAT_HEIGHT * chatListIds.length}
+                    itemKey={index => 'key' + chatListIds[index]}
+                    itemHeight={CHATLISTITEM_CHAT_HEIGHT}
+                  >
+                    {({ index, style }) => {
+                      const chatId = chatListIds[index]
+                      return (
+                        <div style={style}>
+                          <ChatListItem
+                            chatListItem={chatCache[chatId] || undefined}
+                            onClick={onChatClick.bind(null, chatId)}
+                          />
+                        </div>
+                      )
+                    }}
+                  </ChatListPart>
+                </div>
+              </>
+            )}
+            <div className='group-separator'>
+              {!isBroadcast
+                ? tx(
+                    'n_members',
+                    groupMembers.length.toString(),
+                    groupMembers.length == 1 ? 'one' : 'other'
+                  )
+                : tx(
+                    'n_recipients',
+                    groupMembers.length.toString(),
+                    groupMembers.length == 1 ? 'one' : 'other'
+                  )}
+            </div>
+            <div className='group-member-contact-list-wrapper'>
+              {!chatDisabled && (
                 <>
-                  <div className='group-separator'>{tx('related_chats')}</div>
-                  <div className='group-related-chats-list-wrapper'>
-                    <ChatListPart
-                      isRowLoaded={isChatLoaded}
-                      loadMoreRows={loadChats}
-                      rowCount={chatListIds.length}
-                      width={400}
-                      height={CHATLISTITEM_CHAT_HEIGHT * chatListIds.length}
-                      itemKey={index => 'key' + chatListIds[index]}
-                      itemHeight={CHATLISTITEM_CHAT_HEIGHT}
-                    >
-                      {({ index, style }) => {
-                        const chatId = chatListIds[index]
-                        return (
-                          <div style={style}>
-                            <ChatListItem
-                              chatListItem={chatCache[chatId] || undefined}
-                              onClick={onChatClick.bind(null, chatId)}
-                            />
-                          </div>
-                        )
-                      }}
-                    </ChatListPart>
-                  </div>
+                  <PseudoListItemAddMember
+                    onClick={() => showAddMemberDialog()}
+                    isBroadcast={isBroadcast}
+                  />
+                  {!isBroadcast && (
+                    <PseudoListItemShowQrCode onClick={() => showQRDialog()} />
+                  )}
                 </>
               )}
-              <div className='group-separator'>
-                {!isBroadcast
-                  ? tx(
-                      'n_members',
-                      groupMembers.length.toString(),
-                      groupMembers.length == 1 ? 'one' : 'other'
-                    )
-                  : tx(
-                      'n_recipients',
-                      groupMembers.length.toString(),
-                      groupMembers.length == 1 ? 'one' : 'other'
-                    )}
-              </div>
-              <div className='group-member-contact-list-wrapper'>
-                {!chatDisabled && (
-                  <>
-                    <PseudoListItemAddMember
-                      onClick={() => showAddMemberDialog()}
-                      isBroadcast={isBroadcast}
-                    />
-                    {!isBroadcast && (
-                      <PseudoListItemShowQrCode
-                        onClick={() => showQRDialog()}
-                      />
-                    )}
-                  </>
-                )}
-                <ContactList
-                  contacts={chat.contacts}
-                  showRemove={!chatDisabled}
-                  onClick={contact => {
-                    if (contact.id === C.DC_CONTACT_ID_SELF) {
-                      return
-                    }
-                    setProfileContact(contact)
-                  }}
-                  onRemoveClick={showRemoveGroupMemberConfirmationDialog}
-                />
-              </div>
-            </Card>
-          </div>
+              <ContactList
+                contacts={chat.contacts}
+                showRemove={!chatDisabled}
+                onClick={contact => {
+                  if (contact.id === C.DC_CONTACT_ID_SELF) {
+                    return
+                  }
+                  setProfileContact(contact)
+                }}
+                onRemoveClick={showRemoveGroupMemberConfirmationDialog}
+              />
+            </div>
+          </DialogBody>
         </>
       )}
       {profileContact && (
@@ -371,11 +361,6 @@ export function AddMemberDialog({
       onClose={onClose}
       isOpen={isOpen}
       canOutsideClickClose={false}
-      style={{
-        top: '15vh',
-        width: '500px',
-        maxHeight: '70vh',
-      }}
       fixed
     >
       {AddMemberInnerDialog({
@@ -412,11 +397,6 @@ export function ShowQRDialog({
       onClose={onClose}
       isOpen={isOpen}
       canOutsideClickClose={false}
-      style={{
-        top: '15vh',
-        width: '500px',
-        maxHeight: '70vh',
-      }}
       fixed
     >
       <DialogHeader title={tx('qrshow_title')} onClose={onClose} />
@@ -456,12 +436,6 @@ export function EditGroupNameDialog({
       onClose={onClose}
       isOpen={isOpen}
       canOutsideClickClose={false}
-      style={{
-        top: '15vh',
-        width: '500px',
-        maxHeight: '70vh',
-        height: 'auto',
-      }}
       fixed
     >
       <DialogHeader
@@ -472,7 +446,7 @@ export function EditGroupNameDialog({
         }
       />
       <DialogBody>
-        <Card elevation={Elevation.ONE}>
+        <DialogContent>
           <div
             className='profile-image-username center'
             style={{ marginBottom: '30px' }}
@@ -515,7 +489,7 @@ export function EditGroupNameDialog({
                 : tx('please_enter_broadcast_list_name')}
             </p>
           )}
-        </Card>
+        </DialogContent>
       </DialogBody>
       <OkCancelFooterAction onCancel={onClickCancel} onOk={onClickOk} />
     </Dialog>

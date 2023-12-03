@@ -3,8 +3,14 @@ import React, { useState, useEffect } from 'react'
 import { DialogProps } from './DialogController'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import SmallDialog from '../SmallDialog'
-import { DialogFooter, FooterActions } from '../Dialog'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  FooterActionButton,
+  FooterActions,
+} from '../Dialog'
+import { useTranslationFunction } from '../../contexts'
 
 type Props = {
   chatListItem: Pick<
@@ -35,26 +41,23 @@ export default function EncryptionInfo({
     ).then(setEncryptionInfo)
   }, [chatListItem])
 
-  const tx = window.static_translate
+  const tx = useTranslationFunction()
+
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
-      <div className='bp4-dialog-body-with-padding'>
-        <p style={{ whiteSpace: 'pre-wrap' }}>
-          {!encryptionInfo && 'Fetching...'}
-          {encryptionInfo && encryptionInfo}
-        </p>
-        <DialogFooter>
-          <FooterActions>
-            <p
-              className='delta-button primary bold'
-              style={{ float: 'right', userSelect: 'text' }}
-              onClick={onClose}
-            >
-              {tx('ok')}
-            </p>
-          </FooterActions>
-        </DialogFooter>
-      </div>
-    </SmallDialog>
+    <Dialog isOpen={isOpen} onClose={onClose}>
+      <DialogBody>
+        <DialogContent paddingTop>
+          <p>
+            {!encryptionInfo && 'Fetching...'}
+            {encryptionInfo && encryptionInfo}
+          </p>
+        </DialogContent>
+      </DialogBody>
+      <DialogFooter>
+        <FooterActions>
+          <FooterActionButton onClick={onClose}>{tx('ok')}</FooterActionButton>
+        </FooterActions>
+      </DialogFooter>
+    </Dialog>
   )
 }

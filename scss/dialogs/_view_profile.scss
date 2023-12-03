@@ -1,5 +1,4 @@
 div.profile-info-container {
-  margin-left: 20px;
   display: flex;
   width: calc(100% - 65px);
   .avatar.large {
@@ -43,7 +42,8 @@ div.profile-info-container {
 }
 
 .contact-attributes {
-  margin: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
   font-size: 1.08em;
 
   & > div {

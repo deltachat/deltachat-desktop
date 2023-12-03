@@ -1,8 +1,6 @@
 import AutoSizer from 'react-virtualized-auto-sizer'
 import React from 'react'
-import classNames from 'classnames'
 import { C, T } from '@deltachat/jsonrpc-client'
-import { Card, Classes } from '@blueprintjs/core'
 
 import ChatListItem from '../chat/ChatListItem'
 import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
@@ -14,7 +12,7 @@ import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { forwardMessage, selectChat } from '../helpers/ChatMethods'
 import { confirmForwardMessage } from '../message/messageFunctions'
-import Dialog, { DialogHeader } from '../Dialog'
+import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
 
 export default function ForwardMessage(props: {
   message: T.Message
@@ -54,13 +52,8 @@ export default function ForwardMessage(props: {
   return (
     <Dialog isOpen={isOpen} onClose={onClose} fixed>
       <DialogHeader onClose={onClose} title={tx('forward_to')} />
-      <div
-        className={classNames(
-          Classes.DIALOG_BODY,
-          '.bp4-dialog-body-no-footer'
-        )}
-      >
-        <Card style={{ padding: '0px' }}>
+      <DialogBody>
+        <DialogContent>
           <div className='forward-message-account-input'>
             <input
               className='search-input'
@@ -103,8 +96,8 @@ export default function ForwardMessage(props: {
               </AutoSizer>
             </div>
           </div>
-        </Card>
-      </div>
+        </DialogContent>
+      </DialogBody>
     </Dialog>
   )
 }

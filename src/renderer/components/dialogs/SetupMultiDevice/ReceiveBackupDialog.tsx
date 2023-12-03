@@ -1,4 +1,4 @@
-import { Card, Classes, Elevation, Intent } from '@blueprintjs/core'
+import { Intent } from '@blueprintjs/core'
 import { DcEventType } from '@deltachat/jsonrpc-client'
 import React, { useEffect, useState } from 'react'
 
@@ -8,7 +8,7 @@ import { useTranslationFunction } from '../../../contexts'
 import { selectedAccountId } from '../../../ScreenController'
 import { DeltaProgressBar } from '../../Login-Styles'
 import { DialogProps } from '../DialogController'
-import { DialogWithHeader } from '../../Dialog'
+import { DialogBody, DialogContent, DialogWithHeader } from '../../Dialog'
 
 const log = getLogger('renderer/receive_backup')
 
@@ -54,10 +54,9 @@ export function ReceiveBackupDialog({
       onClose={onClose}
       title={tx('multidevice_receiver_title')}
       isOpen={isOpen}
-      style={{ top: '40%' }}
     >
-      <div className={Classes.DIALOG_BODY}>
-        <Card elevation={Elevation.ONE}>
+      <DialogBody>
+        <DialogContent>
           {error && (
             <p>
               {tx('error')}: {error}
@@ -67,8 +66,8 @@ export function ReceiveBackupDialog({
             progress={importProgress}
             intent={!error ? Intent.SUCCESS : Intent.DANGER}
           />
-        </Card>
-      </div>
+        </DialogContent>
+      </DialogBody>
     </DialogWithHeader>
   )
 }

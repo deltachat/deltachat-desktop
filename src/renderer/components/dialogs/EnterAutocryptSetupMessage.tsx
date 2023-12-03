@@ -6,7 +6,14 @@ import { getLogger } from '../../../shared/logger'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import InputTransferKey from '../InputTransferKey'
-import { DialogWithHeader } from '../Dialog'
+import {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogWithHeader,
+  FooterActionButton,
+  FooterActions,
+} from '../Dialog'
 
 const log = getLogger('frontend/dialogs/EnterAutocryptSetupMessage')
 
@@ -93,32 +100,29 @@ export default function EnterAutocryptSetupMessage({
   return (
     <DialogWithHeader
       isOpen={isOpen}
-      title={tx('autocrypt_continue_transfer_title')}
       onClose={onClose}
-      className='enter-autocrypt-setup-message-dialog'
+      title={tx('autocrypt_continue_transfer_title')}
     >
-      <div className='dialog-body'>
-        <p>{tx('autocrypt_continue_transfer_please_enter_code')}</p>
-        {error && (
-          <p className='autocrypt-setup-error'>
-            {tx('autocrypt_bad_setup_code')}
-            <br />
-            {error}
-          </p>
-        )}
-        <InputTransferKey autocryptkey={key} onChange={handleChangeKey} />
-      </div>
-
-      <div className={'bp4-dialog-footer'}>
-        <div className={'bp4-dialog-footer-actions'}>
-          <p
-            className='delta-button primary bold'
-            onClick={continueKeyTransfer}
-          >
+      <DialogBody>
+        <DialogContent>
+          <p>{tx('autocrypt_continue_transfer_please_enter_code')}</p>
+          {error && (
+            <p className='autocrypt-setup-error'>
+              {tx('autocrypt_bad_setup_code')}
+              <br />
+              {error}
+            </p>
+          )}
+          <InputTransferKey autocryptkey={key} onChange={handleChangeKey} />
+        </DialogContent>
+      </DialogBody>
+      <DialogFooter>
+        <FooterActions>
+          <FooterActionButton onClick={continueKeyTransfer}>
             {loading ? tx('loading') : tx('ok')}
-          </p>
-        </div>
-      </div>
+          </FooterActionButton>
+        </FooterActions>
+      </DialogFooter>
     </DialogWithHeader>
   )
 }

@@ -9,7 +9,6 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { Card, Classes } from '@blueprintjs/core'
 import { T, C } from '@deltachat/jsonrpc-client'
 
 import { ScreenContext, useTranslationFunction } from '../../contexts'
@@ -42,8 +41,10 @@ import ConfirmationDialog from './ConfirmationDialog'
 import { VerifiedContactsRequiredDialog } from './ProtectionStatusDialog'
 import Dialog, {
   DialogBody,
+  DialogContent,
   DialogFooter,
   DialogHeader,
+  FooterActionButton,
   FooterActions,
   OkCancelFooterAction,
 } from '../Dialog'
@@ -180,7 +181,7 @@ function CreateChatMain(props: CreateChatMainProps) {
         />
       </DialogHeader>
       <DialogBody>
-        <Card>
+        <DialogContent>
           <div className='create-chat-contact-list-wrapper'>
             {renderAddGroupIfNeeded()}
             <ContactList
@@ -190,13 +191,13 @@ function CreateChatMain(props: CreateChatMainProps) {
             />
             {renderAddContactIfNeeded()}
           </div>
-        </Card>
+        </DialogContent>
       </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <p className={'delta-button bold primary'} onClick={onClose}>
+          <FooterActionButton onClick={onClose}>
             {tx('close')}
-          </p>
+          </FooterActionButton>
         </FooterActions>
       </DialogFooter>
     </>
@@ -252,8 +253,8 @@ function CreateGroup(props: CreateGroupProps) {
   return (
     <>
       <DialogHeader title={tx('menu_new_group')} />
-      <div className={Classes.DIALOG_BODY}>
-        <Card>
+      <DialogBody>
+        <DialogContent>
           <ChatSettingsSetNameAndProfileImage
             groupImage={groupImage}
             onSetGroupImage={onSetGroupImage}
@@ -285,19 +286,14 @@ function CreateGroup(props: CreateGroupProps) {
               }}
             />
           </div>
-        </Card>
-      </div>
+        </DialogContent>
+      </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <p
-            className='delta-button primary bold'
-            style={{ marginRight: '10px' }}
-            onClick={() => setViewMode('main')}
-          >
+          <FooterActionButton onClick={() => setViewMode('main')}>
             {tx('cancel')}
-          </p>
-          <p
-            className='delta-button primary bold'
+          </FooterActionButton>
+          <FooterActionButton
             onClick={() => {
               if (groupName === '') {
                 setErrorMissingGroupName(true)
@@ -307,7 +303,7 @@ function CreateGroup(props: CreateGroupProps) {
             }}
           >
             {tx('group_create_button')}
-          </p>
+          </FooterActionButton>
         </FooterActions>
       </DialogFooter>
     </>
@@ -354,8 +350,8 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
   return (
     <>
       <DialogHeader title={tx('new_broadcast_list')} />
-      <div className={Classes.DIALOG_BODY}>
-        <Card style={{ paddingTop: '0px' }}>
+      <DialogBody>
+        <DialogContent>
           <div className='broadcast-list-hint'>
             <p>{tx('chat_new_broadcast_hint')}</p>
             <p
@@ -402,19 +398,14 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
               }}
             />
           </div>
-        </Card>
-      </div>
+        </DialogContent>
+      </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <p
-            className='delta-button primary bold'
-            style={{ marginRight: '10px' }}
-            onClick={() => setViewMode('main')}
-          >
+          <FooterActionButton onClick={() => setViewMode('main')}>
             {tx('cancel')}
-          </p>
-          <p
-            className='delta-button primary bold'
+          </FooterActionButton>
+          <FooterActionButton
             onClick={() => {
               if (broadcastName === '') {
                 setErrorMissingChatName(true)
@@ -424,7 +415,7 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
             }}
           >
             {tx('create')}
-          </p>
+          </FooterActionButton>
         </FooterActions>
       </DialogFooter>
     </>
@@ -690,7 +681,7 @@ export function AddMemberInnerDialog({
         title={!isBroadcast ? tx('group_add_members') : tx('add_recipients')}
       />
       <DialogBody>
-        <Card style={{ padding: '0px 20px', height: '100%' }}>
+        <DialogContent>
           <div className='AddMemberChipsWrapper'>
             <div className='AddMemberChips'>
               {contactIdsToAdd.map(contact => {
@@ -732,7 +723,7 @@ export function AddMemberInnerDialog({
             />
             {renderAddContactIfNeeded()}
           </div>
-        </Card>
+        </DialogContent>
       </DialogBody>
       <OkCancelFooterAction
         onCancel={_onCancel}

@@ -23,15 +23,7 @@ export default function EditAccountAndPasswordDialog({
   const tx = useTranslationFunction()
 
   return (
-    <Dialog
-      onClose={onClose}
-      isOpen={isOpen}
-      canOutsideClickClose={false}
-      style={{
-        maxHeight: 'calc(100% - 100px)',
-        width: '500px',
-      }}
-    >
+    <Dialog canOutsideClickClose={false} isOpen={isOpen} onClose={onClose}>
       <DialogHeader title={tx('pref_password_and_account_settings')} />
       {EditAccountInner(onClose)}
     </Dialog>

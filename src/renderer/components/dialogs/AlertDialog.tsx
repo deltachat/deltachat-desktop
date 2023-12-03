@@ -1,8 +1,13 @@
 import React from 'react'
 
 import { useTranslationFunction } from '../../contexts'
-import SmallDialog from '../SmallDialog'
-import { DialogFooter, FooterActions } from '../Dialog'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  FooterActionButton,
+  FooterActions,
+} from '../Dialog'
 
 type Props = {
   cb?: () => void
@@ -20,17 +25,17 @@ export default function AlertDialog({ message, onClose, cb }: Props) {
   }
 
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
-      <div className='bp4-dialog-body-with-padding'>
-        <p style={{ userSelect: 'auto' }}>{message}</p>
-      </div>
+    <Dialog isOpen={isOpen} onClose={onClose}>
+      <DialogBody>
+        <DialogContent>
+          <p>{message}</p>
+        </DialogContent>
+      </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <p className='delta-button bold primary' onClick={() => onClick()}>
-            {tx('ok')}
-          </p>
+          <FooterActionButton onClick={onClick}>{tx('ok')}</FooterActionButton>
         </FooterActions>
       </DialogFooter>
-    </SmallDialog>
+    </Dialog>
   )
 }

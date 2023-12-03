@@ -34,6 +34,7 @@ export default function KeybindingCheatSheet(props: {
       <DialogHeader onClose={onClose}>
         <DialogHeading>
           {tx('keybindings')}
+          &nbsp;&nbsp;
           <CheatSheetKeyboardShortcut />
         </DialogHeading>
       </DialogHeader>

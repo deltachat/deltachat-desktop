@@ -129,10 +129,11 @@ export function SendBackupDialog({ onClose }: DialogProps) {
 
   return (
     <Dialog
-      onClose={cancel}
       canEscapeKeyClose={true}
-      isOpen={true}
       canOutsideClickClose={false}
+      isOpen={true}
+      onClose={cancel}
+      width={600}
     >
       <DialogHeader title={tx('multidevice_title')} />
       {!inProgress && (

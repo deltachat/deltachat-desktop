@@ -38,15 +38,7 @@ export default function EditProfileDialog({
   title = title || tx('pref_edit_profile')
 
   return (
-    <Dialog
-      onClose={onClose}
-      isOpen={isOpen}
-      canOutsideClickClose={false}
-      style={{
-        maxHeight: 'calc(100% - 100px)',
-        width: '500px',
-      }}
-    >
+    <Dialog canOutsideClickClose={false} isOpen={isOpen} onClose={onClose}>
       <DialogHeader title={title} />
       {EditProfileDialogInner({
         settingsStore,

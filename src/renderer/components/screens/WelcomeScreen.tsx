@@ -1,6 +1,6 @@
-import { Classes, Card, Elevation, Intent } from '@blueprintjs/core'
 import React, { useEffect, useState, useContext } from 'react'
 import { DcEventType } from '@deltachat/jsonrpc-client'
+import { Intent } from '@blueprintjs/core'
 
 import { getLogger } from '../../../shared/logger'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
@@ -10,7 +10,12 @@ import { DialogProps } from '../dialogs/DialogController'
 import { Screens, selectedAccountId } from '../../ScreenController'
 import { BackendRemote, EffectfulBackendActions } from '../../backend-com'
 import processOpenQrUrl from '../helpers/OpenQrUrl'
-import Dialog, { DialogBody, DialogHeader, DialogWithHeader } from '../Dialog'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogHeader,
+  DialogWithHeader,
+} from '../Dialog'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
@@ -60,12 +65,10 @@ function ImportBackupProgressDialog({
     <DialogWithHeader
       onClose={onClose}
       title={tx('import_backup_title')}
-      // canOutsideClickClose
       isOpen={isOpen}
-      style={{ top: '40%' }}
     >
-      <div className={Classes.DIALOG_BODY}>
-        <Card elevation={Elevation.ONE}>
+      <DialogBody>
+        <DialogContent>
           {error && (
             <p>
               {tx('error')}: {error}
@@ -75,8 +78,8 @@ function ImportBackupProgressDialog({
             progress={importProgress}
             intent={!error ? Intent.SUCCESS : Intent.DANGER}
           />
-        </Card>
-      </div>
+        </DialogContent>
+      </DialogBody>
     </DialogWithHeader>
   )
 }

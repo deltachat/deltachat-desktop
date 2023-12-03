@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Card, Elevation } from '@blueprintjs/core'
 
 import { useTranslationFunction } from '../../contexts'
 import { DeltaInput } from '../Login-Styles'
@@ -13,9 +12,11 @@ import {
 } from '../../../shared/constants'
 import Dialog, {
   DialogBody,
+  DialogContent,
   DialogHeader,
   OkCancelFooterAction,
 } from '../Dialog'
+import Callout from '../Callout'
 
 type RadioButtonValue = 'disabled' | 'custom' | 'systemli' | 'autistici'
 
@@ -69,31 +70,11 @@ export default function EditVideochatInstanceDialog({
   }
 
   return (
-    <Dialog
-      onClose={onClose}
-      isOpen={isOpen}
-      canOutsideClickClose={false}
-      style={{
-        top: '15vh',
-        width: '500px',
-        maxHeight: '70vh',
-        height: 'auto',
-      }}
-      fixed
-    >
+    <Dialog onClose={onClose} isOpen={isOpen} canOutsideClickClose={false}>
       <DialogHeader title={tx('videochat')} />
       <DialogBody>
-        <Card elevation={Elevation.ONE}>
-          <div
-            className='bp4-callout'
-            style={{
-              marginBottom: '20px',
-              marginTop: '-20px',
-            }}
-          >
-            {tx('videochat_instance_explain_2')}
-          </div>
-
+        <Callout>{tx('videochat_instance_explain_2')}</Callout>
+        <DialogContent>
           <RadioGroup
             onChange={onChangeRadio}
             selectedValue={radioValue}
@@ -119,29 +100,26 @@ export default function EditVideochatInstanceDialog({
               className={'test-videochat-custom'}
             />
           </RadioGroup>
-          {radioValue === 'custom' && (
-            <>
-              <br />
-              <div>
-                <DeltaInput
-                  key='custom_webrtc_instance'
-                  id='custom_webrtc_instance'
-                  value={configValue}
-                  placeholder={tx('videochat_instance_placeholder')}
-                  onChange={(
-                    event: React.FormEvent<HTMLElement> &
-                      React.ChangeEvent<HTMLInputElement>
-                  ) => {
-                    setConfigValue(event.target.value)
-                  }}
-                />
-                <div className='bp4-callout'>
-                  {tx('videochat_instance_example')}
-                </div>
-              </div>
-            </>
-          )}
-        </Card>
+        </DialogContent>
+        {radioValue === 'custom' && (
+          <>
+            <DialogContent paddingTop>
+              <DeltaInput
+                key='custom_webrtc_instance'
+                id='custom_webrtc_instance'
+                value={configValue}
+                placeholder={tx('videochat_instance_placeholder')}
+                onChange={(
+                  event: React.FormEvent<HTMLElement> &
+                    React.ChangeEvent<HTMLInputElement>
+                ) => {
+                  setConfigValue(event.target.value)
+                }}
+              />
+            </DialogContent>
+            <Callout>{tx('videochat_instance_example')}</Callout>
+          </>
+        )}
       </DialogBody>
       <OkCancelFooterAction onCancel={onClickCancel} onOk={onClickOk} />
     </Dialog>

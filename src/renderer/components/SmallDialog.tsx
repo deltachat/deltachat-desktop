@@ -11,7 +11,7 @@ type Props = PropsWithChildren<{
 
 export default function SmallDialog(props: Props) {
   return (
-    <Dialog isOpen={props.isOpen} onClose={props.onClose} canOutsideClickClose>
+    <Dialog canOutsideClickClose isOpen={props.isOpen} onClose={props.onClose}>
       {props.children}
     </Dialog>
   )
