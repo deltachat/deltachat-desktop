@@ -15,7 +15,7 @@ import { runtime } from '../../runtime'
 import { ConversationType } from '../message/MessageList'
 import { getDirection } from '../../../shared/util'
 
-import filesizeConverter from 'filesize'
+import { filesize } from 'filesize'
 import { Type } from '../../backend-com'
 import FullscreenMedia, {
   NeighboringMediaMode,
@@ -159,7 +159,7 @@ export default function Attachment({
         <div className='text-part'>
           <div className='name'>{fileName}</div>
           <div className='size'>
-            {fileBytes ? filesizeConverter(fileBytes) : '?'}
+            {fileBytes ? filesize(fileBytes) : '?'}
           </div>
         </div>
       </div>
@@ -221,7 +221,7 @@ export function DraftAttachment({
         <div className='text-part'>
           <div className='name'>{fileName}</div>
           <div className='size'>
-            {fileBytes ? filesizeConverter(fileBytes) : '?'}
+            {fileBytes ? filesize(fileBytes) : '?'}
           </div>
         </div>
       </div>

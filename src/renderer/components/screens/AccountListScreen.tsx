@@ -12,7 +12,7 @@ import {
   DeltaDialogBody,
   DeltaDialogContent,
 } from '../dialogs/DeltaDialog'
-import filesizeConverter from 'filesize'
+import { filesize } from 'filesize'
 import {
   BackendRemote,
   EffectfulBackendActions,
@@ -257,7 +257,7 @@ function AccountItem({
       .getAccountFileSize(login.id)
       .catch(log.error)
       .then(bytes => {
-        bytes && setSize(filesizeConverter(bytes))
+        bytes && setSize(filesize(bytes))
       })
   }, [login.id])
 
