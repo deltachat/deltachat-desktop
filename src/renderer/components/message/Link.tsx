@@ -17,14 +17,15 @@ import { openLinkSafely } from '../helpers/LinkConfirmation'
 
 const log = getLogger('renderer/LabeledLink')
 
-
 function trustDomain(domain: string) {
   log.info('trustDomain', domain)
   localStorage.setItem(`trustedDomains.${domain}`, 'true')
 }
 
 function isDomainTrusted(domain: string): boolean {
-  const trustedDomains = JSON.parse(localStorage.getItem('trustedDomains') || '[]')
+  const trustedDomains = JSON.parse(
+    localStorage.getItem('trustedDomains') || '[]'
+  )
   if (trustedDomains.include(domain)) {
     return true
   }
