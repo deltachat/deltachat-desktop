@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+
+ - Improved trusted domain storage and retrieval
+
 <a id="1_42_2"></a>
 
 ## [1.42.2] - 2023-12-02
