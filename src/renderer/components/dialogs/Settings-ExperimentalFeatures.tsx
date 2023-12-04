@@ -20,8 +20,38 @@ import SettingsStoreInstance, {
 import RadioGroup from '../RadioGroup'
 import Radio from '../Radio'
 
-const VIDEO_CHAT_INSTANCE_SYSTEMLI = 'https://meet.systemli.org/$ROOM'
-const VIDEO_CHAT_INSTANCE_AUTISTICI = 'https://vc.autistici.org/$ROOM'
+const VIDEO_CHAT_INSTANCES = [
+  ['Systemli', 'https://meet.systemli.org/$ROOM'],
+  ['Autistici', 'https://vc.autistici.org/$ROOM'],
+]
+
+function getVideoChatInstanceName(url: string): string | null {
+  for (const [instance_name, instance_url] of VIDEO_CHAT_INSTANCES) {
+    if (instance_url === url) return instance_name
+  }
+  return null
+}
+
+function getVideoChatInstanceUrl(name: string): string | null {
+  for (const [instance_name, instance_url] of VIDEO_CHAT_INSTANCES) {
+    if (instance_name === name) return instance_url
+  }
+  return null
+}
+
+function getVideoChatInstanceIcon(name: string, n: number | undefined): string | null {
+  const instanceUrl = getVideoChatInstanceUrl(name)
+  if (!instanceUrl)
+    return null
+  let icon = videoChatIconStore.get(instanceUrl)
+  if (icon)
+    return icon
+  else if (n === 100)
+    return 
+  }
+}
+
+
 
 export function SettingsExperimentalFeatures({
   settingsStore,
@@ -55,12 +85,9 @@ export function SettingsExperimentalFeatures({
   const showVideochatInstance = (instance: string) => {
     if (instance === '') {
       return tx('off')
-    } else if (instance === VIDEO_CHAT_INSTANCE_SYSTEMLI) {
-      return 'Systemli'
-    } else if (instance === VIDEO_CHAT_INSTANCE_AUTISTICI) {
-      return 'Autistici'
+    } else {
+      return getVideoChatInstanceName(instance) || tx('custom')
     }
-    return instance
   }
 
   return (
@@ -117,7 +144,7 @@ export function SettingsExperimentalFeatures({
   )
 }
 
-type RadioButtonValue = 'disabled' | 'custom' | 'systemli' | 'autistici'
+type RadioButtonValue = 'disabled' | 'custom' | string
 
 export function EditVideochatInstanceDialog({
   isOpen,
@@ -133,14 +160,10 @@ export function EditVideochatInstanceDialog({
   const [radioValue, setRadioValue] = useState<RadioButtonValue>(() => {
     if (configValue === '') {
       return 'disabled'
-    } else if (configValue === VIDEO_CHAT_INSTANCE_SYSTEMLI) {
-      return 'systemli'
-    } else if (configValue === VIDEO_CHAT_INSTANCE_AUTISTICI) {
-      return 'autistici'
     } else {
-      return 'custom'
+      return getVideoChatInstanceName(configValue) || 'custom'
     }
-  })
+ })
 
   const onClickCancel = () => {
     onClose()
@@ -148,19 +171,18 @@ export function EditVideochatInstanceDialog({
   }
   const onClickOk = () => {
     onClose()
-    onOk(configValue.trim()) // the trim is here to not save custom provider if it only contains whitespaces
+    onOk(configValue.trim())
+    // the trim is here to not save custom provider if it only contains whitespaces
   }
   const onChangeRadio = (value: string) => {
     let newConfigValue = ''
+    let instanceUrl = getVideoChatInstanceUrl(value)
     if (value === 'disabled') {
       newConfigValue = ''
       setRadioValue('disabled')
-    } else if (value === 'systemli') {
-      newConfigValue = VIDEO_CHAT_INSTANCE_SYSTEMLI
-      setRadioValue('systemli')
-    } else if (value === 'autistici') {
-      newConfigValue = VIDEO_CHAT_INSTANCE_AUTISTICI
-      setRadioValue('autistici')
+    } else if (instanceUrl) {
+      newConfigValue = instanceUrl
+      setRadioValue(value)
     } else {
       newConfigValue = settingsStore.settings['webrtc_instance']
       setRadioValue('custom')
