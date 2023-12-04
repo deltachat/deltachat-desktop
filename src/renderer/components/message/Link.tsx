@@ -28,6 +28,7 @@ function isDomainTrusted(domain: string): boolean {
   if (trustedDomains.include(domain)) {
     return true
   }
+  // TODO: Remove these lines few versions later
   return Boolean(localStorage.getItem(`trustedDomains.${domain}`))
 }
 
