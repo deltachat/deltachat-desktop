@@ -378,9 +378,7 @@ export function FileAttachmentRow({
             ? highlightQuery(fileName, queryText)
             : fileName}
         </div>
-        <div className='size'>
-          {fileBytes ? filesize(fileBytes) : '?'}
-        </div>
+        <div className='size'>{fileBytes ? filesize(fileBytes) : '?'}</div>
         <div className='date'>
           <Timestamp
             timestamp={timestamp * 1000}

@@ -158,9 +158,7 @@ export default function Attachment({
         </div>
         <div className='text-part'>
           <div className='name'>{fileName}</div>
-          <div className='size'>
-            {fileBytes ? filesize(fileBytes) : '?'}
-          </div>
+          <div className='size'>{fileBytes ? filesize(fileBytes) : '?'}</div>
         </div>
       </div>
     )
@@ -220,9 +218,7 @@ export function DraftAttachment({
         </div>
         <div className='text-part'>
           <div className='name'>{fileName}</div>
-          <div className='size'>
-            {fileBytes ? filesize(fileBytes) : '?'}
-          </div>
+          <div className='size'>{fileBytes ? filesize(fileBytes) : '?'}</div>
         </div>
       </div>
     )
