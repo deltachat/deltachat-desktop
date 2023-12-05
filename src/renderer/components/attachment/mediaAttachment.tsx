@@ -17,7 +17,7 @@ import { makeContextMenu } from '../ContextMenu'
 import { OpenDialogFunctionType } from '../dialogs/DialogController'
 import { runtime } from '../../runtime'
 
-import filesizeConverter from 'filesize'
+import { filesize } from 'filesize'
 import { deleteMessage, jumpToMessage } from '../helpers/ChatMethods'
 import { getLogger } from '../../../shared/logger'
 import { truncateText } from '../../../shared/util'
@@ -378,9 +378,7 @@ export function FileAttachmentRow({
             ? highlightQuery(fileName, queryText)
             : fileName}
         </div>
-        <div className='size'>
-          {fileBytes ? filesizeConverter(fileBytes) : '?'}
-        </div>
+        <div className='size'>{fileBytes ? filesize(fileBytes) : '?'}</div>
         <div className='date'>
           <Timestamp
             timestamp={timestamp * 1000}
