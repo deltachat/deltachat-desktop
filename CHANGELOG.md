@@ -4,7 +4,7 @@
 
 ### Changed
 
- - Upgrade `filesize` dependency
+ - Upgrade `filesize` dependency from `8.0.6` to `10.1.0`
 
 <a id="1_42_2"></a>
 
