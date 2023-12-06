@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback } from 'react'
+import React, { useState, useContext, useCallback, useMemo } from 'react'
 import { Card, Elevation } from '@blueprintjs/core'
 import {
   RenderDeltaSwitch2Type,
@@ -19,6 +19,8 @@ import SettingsStoreInstance, {
 } from '../../stores/settings'
 import RadioGroup from '../RadioGroup'
 import Radio from '../Radio'
+import { BackendRemote } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 const VIDEO_CHAT_INSTANCES = [
   ['Systemli', 'https://meet.systemli.org/$ROOM'],
@@ -40,25 +42,25 @@ function getVideoChatInstanceUrl(name: string): string | null {
 }
 
 function useVideoChatInstanceIcon() {
-  const [videoChatIcons, setVideoChatIcons] = useState<Record<string, Blob>>({})
+  const [videoChatIcons, setVideoChatIcons] = useState<Record<string, string>>({})
 
   const getVideoChatIcon = useCallback(
     (name: string) => {
-      return videoChatIcons[name] || null
+      return videoChatIcons[name] || undefined
     },
     [videoChatIcons]
   )
 
-  for (const [instance_name, instance_url] of VIDEO_CHAT_INSTANCES) {
-    fetch(instance_url.replace('$ROOM', 'favicon.ico')).then(response =>
-      response.blob().then(blob =>
+  useMemo(() => {
+      for (const [instanceName, instanceUrl] of VIDEO_CHAT_INSTANCES) {
+      BackendRemote.rpc.getHttpResponse(selectedAccountId(), instanceUrl.replace('$ROOM', 'favicon.ico')).then(response =>
         setVideoChatIcons({
           ...videoChatIcons,
-          [instance_name]: blob,
+          [instanceName]: 'data:image/vnd.microsoft.icon;base64,' + response.blob,
         })
       )
-    )
-  }
+    }
+  }, [])
   return getVideoChatIcon
 }
 
@@ -201,6 +203,24 @@ export function EditVideochatInstanceDialog({
     setConfigValue(newConfigValue)
   }
 
+  let radioGroupChildren = [
+    <Radio key='select-none' label={tx('off')} value='disabled' />, 
+    VIDEO_CHAT_INSTANCES.map(([instanceName, instanceUrl]) => (
+      <Radio
+        key={instanceName}
+        label={instanceName}
+        value={instanceName}
+        subtitle={instanceUrl}
+        icon={getVideoChatIcon(instanceName)}
+      />
+    )),
+    <Radio
+      key='select-custom'
+      label={tx('custom')}
+      value='custom'
+      className={'test-videochat-custom'}
+    />,
+  ]
   return (
     <DeltaDialogBase
       onClose={onClose}
@@ -232,22 +252,7 @@ export function EditVideochatInstanceDialog({
             selectedValue={radioValue}
             name='videochat-instance'
           >
-            <Radio key='select-none' label={tx('off')} value='disabled' />
-            {VIDEO_CHAT_INSTANCES.map(([instanceName, instanceUrl]) => (
-              <Radio
-                key={instanceName}
-                label={instanceName}
-                value={instanceName}
-                subtitle={instanceUrl}
-                icon={getVideoChatIcon(instanceName)}
-              />
-            ))}
-            <Radio
-              key='select-custom'
-              label={tx('custom')}
-              value='custom'
-              className={'test-videochat-custom'}
-            />
+          { radioGroupChildren.flat() }
           </RadioGroup>
           {radioValue === 'custom' && (
             <>
