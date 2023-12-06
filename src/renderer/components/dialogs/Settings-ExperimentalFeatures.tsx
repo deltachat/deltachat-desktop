@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useCallback } from 'react'
 import { Card, Elevation } from '@blueprintjs/core'
 import {
   RenderDeltaSwitch2Type,
@@ -39,19 +39,28 @@ function getVideoChatInstanceUrl(name: string): string | null {
   return null
 }
 
-function getVideoChatInstanceIcon(name: string, n: number | undefined): string | null {
-  const instanceUrl = getVideoChatInstanceUrl(name)
-  if (!instanceUrl)
-    return null
-  let icon = videoChatIconStore.get(instanceUrl)
-  if (icon)
-    return icon
-  else if (n === 100)
-    return 
+function useVideoChatInstanceIcon() {
+  const [videoChatIcons, setVideoChatIcons] = useState<Record<string, Blob>>({})
+
+  const getVideoChatIcon = useCallback(
+    (name: string) => {
+      return videoChatIcons[name] || null
+    },
+    [videoChatIcons]
+  )
+
+  for (const [instance_name, instance_url] of VIDEO_CHAT_INSTANCES) {
+    fetch(instance_url.replace('$ROOM', 'favicon.ico')).then(response =>
+      response.blob().then(blob =>
+        setVideoChatIcons({
+          ...videoChatIcons,
+          [instance_name]: blob,
+        })
+      )
+    )
   }
+  return getVideoChatIcon
 }
-
-
 
 export function SettingsExperimentalFeatures({
   settingsStore,
@@ -163,7 +172,9 @@ export function EditVideochatInstanceDialog({
     } else {
       return getVideoChatInstanceName(configValue) || 'custom'
     }
- })
+  })
+
+  const getVideoChatIcon = useVideoChatInstanceIcon()
 
   const onClickCancel = () => {
     onClose()
@@ -176,7 +187,7 @@ export function EditVideochatInstanceDialog({
   }
   const onChangeRadio = (value: string) => {
     let newConfigValue = ''
-    let instanceUrl = getVideoChatInstanceUrl(value)
+    const instanceUrl = getVideoChatInstanceUrl(value)
     if (value === 'disabled') {
       newConfigValue = ''
       setRadioValue('disabled')
@@ -222,18 +233,15 @@ export function EditVideochatInstanceDialog({
             name='videochat-instance'
           >
             <Radio key='select-none' label={tx('off')} value='disabled' />
-            <Radio
-              key='select-systemli'
-              label='Systemli'
-              value='systemli'
-              subtitle={VIDEO_CHAT_INSTANCE_SYSTEMLI}
-            />
-            <Radio
-              key='select-autistici'
-              label='Autistici'
-              value='autistici'
-              subtitle={VIDEO_CHAT_INSTANCE_AUTISTICI}
-            />
+            {VIDEO_CHAT_INSTANCES.map(([instanceName, instanceUrl]) => (
+              <Radio
+                key={instanceName}
+                label={instanceName}
+                value={instanceName}
+                subtitle={instanceUrl}
+                icon={getVideoChatIcon(instanceName)}
+              />
+            ))}
             <Radio
               key='select-custom'
               label={tx('custom')}
