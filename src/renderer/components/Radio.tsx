@@ -9,7 +9,7 @@ type RadioProps = {
   className?: string
   name?: string
   subtitle?: string
-  icon?: Blob
+  icon?: string
 }
 
 export default function Radio({
@@ -25,7 +25,7 @@ export default function Radio({
   const id: string = Math.floor(Math.random() * 10000).toString()
   return (
     <div className={classNames('radiobutton', className)}>
-      {icon && <img src={URL.createObjectURL(icon)} /> }
+      {icon && <img src={icon} />}
       <input
         id={id}
         name={name}
