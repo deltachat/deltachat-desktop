@@ -4,14 +4,14 @@
     "rootDir": ".",
     "sourceMap": true,
     "noImplicitAny": true,
-    "module": "es6",
-    "target": "es6",
+    "module": "es2020",
+    "target": "es2020",
     "jsx": "react",
     "allowJs": false,
     "esModuleInterop": true,
     "moduleResolution": "node",
     "strictNullChecks": true,
-    "strict": true
+    "strict": true,
   },
   "references": [
     {
