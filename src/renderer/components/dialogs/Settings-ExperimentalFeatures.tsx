@@ -46,12 +46,18 @@ function useVideoChatInstanceIcon() {
     blob: string
     instanceName: string
   }
-  const [videoChatIcons, dispatch] = useReducer((videoChatIcons: Record<string, string>, { blob, instanceName }: Action) => {
+  const [videoChatIcons, dispatch] = useReducer(
+    (
+      videoChatIcons: Record<string, string>,
+      { blob, instanceName }: Action
+    ) => {
       return {
         ...videoChatIcons,
         [instanceName]: 'data:image/vnd.microsoft.icon;base64,' + blob,
       }
-    }, {})
+    },
+    {}
+  )
   const [ran, setRan] = useState<boolean>(false)
   const getVideoChatIcon = useCallback(
     (name: string) => videoChatIcons[name] || undefined,
@@ -60,12 +66,15 @@ function useVideoChatInstanceIcon() {
   if (!ran) {
     for (const [instanceName, instanceUrl] of VIDEO_CHAT_INSTANCES) {
       const url = instanceUrl.replace('$ROOM', 'favicon.ico')
-      BackendRemote.rpc.getHttpResponse(selectedAccountId(), url).then(response =>
-        dispatch({
-          blob: response.blob,
-          instanceName,
-        }))
-     }
+      BackendRemote.rpc
+        .getHttpResponse(selectedAccountId(), url)
+        .then(response =>
+          dispatch({
+            blob: response.blob,
+            instanceName,
+          })
+        )
+    }
     setRan(true)
   }
   return getVideoChatIcon
@@ -171,7 +180,6 @@ type EditVideochatInstanceDialogExtraProps = {
   getVideoChatIcon: (name: string) => string | undefined
 }
 
-
 export function EditVideochatInstanceDialog({
   isOpen,
   onClose,
@@ -191,7 +199,6 @@ export function EditVideochatInstanceDialog({
       return getVideoChatInstanceName(configValue) || 'custom'
     }
   })
-
 
   const onClickCancel = () => {
     onClose()
@@ -218,8 +225,8 @@ export function EditVideochatInstanceDialog({
     setConfigValue(newConfigValue)
   }
 
-  let radioGroupChildren = [
-    <Radio key='select-none' label={tx('off')} value='disabled' />, 
+  const radioGroupChildren = [
+    <Radio key='select-none' label={tx('off')} value='disabled' />,
     VIDEO_CHAT_INSTANCES.map(([instanceName, instanceUrl]) => (
       <Radio
         key={instanceName}
@@ -268,7 +275,7 @@ export function EditVideochatInstanceDialog({
             selectedValue={radioValue}
             name='videochat-instance'
           >
-            { radioGroupChildren.flat() }
+            {radioGroupChildren.flat()}
           </RadioGroup>
           {radioValue === 'custom' && (
             <>
