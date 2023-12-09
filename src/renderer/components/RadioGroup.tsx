@@ -14,7 +14,6 @@ export default function RadioGroup({
   selectedValue,
   name,
 }: RadioGroupProps) {
-  console.log(children)
   return (
     <form>
       <fieldset className='radiogroup'>

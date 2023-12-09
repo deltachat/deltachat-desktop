@@ -10,6 +10,7 @@ type RadioProps = {
   name?: string
   subtitle?: string
   icon?: string
+  iconStyle?: any
 }
 
 export default function Radio({
@@ -21,11 +22,11 @@ export default function Radio({
   name,
   subtitle,
   icon,
+  iconStyle,
 }: RadioProps) {
   const id: string = Math.floor(Math.random() * 10000).toString()
   return (
     <div className={classNames('radiobutton', className)}>
-      {icon && <img src={icon} />}
       <input
         id={id}
         name={name}
@@ -34,6 +35,7 @@ export default function Radio({
         value={value}
         defaultChecked={Boolean(selected)}
       />
+      {icon && <img src={icon} style={iconStyle} />}
       <label htmlFor={id} className={classNames(!subtitle && 'no-subtitle')}>
         <span>{label}</span>
         {subtitle && <span>{subtitle}</span>}
