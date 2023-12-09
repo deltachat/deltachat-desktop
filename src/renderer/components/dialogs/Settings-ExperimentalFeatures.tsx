@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import React, { useState, useContext, useCallback, useMemo } from 'react'
-=======
-import React, { useState, useContext, useCallback } from 'react'
->>>>>>> ed43ccb55213ec6601dbb5015370c772f4a1b9d5
+import React, { useState, useContext, useCallback, useReducer } from 'react'
 import { Card, Elevation } from '@blueprintjs/core'
 import {
   RenderDeltaSwitch2Type,
@@ -46,46 +42,32 @@ function getVideoChatInstanceUrl(name: string): string | null {
 }
 
 function useVideoChatInstanceIcon() {
-<<<<<<< HEAD
-  const [videoChatIcons, setVideoChatIcons] = useState<Record<string, string>>({})
-
+  type Action = {
+    blob: string
+    instanceName: string
+  }
+  const [videoChatIcons, dispatch] = useReducer((videoChatIcons: Record<string, string>, { blob, instanceName }: Action) => {
+      return {
+        ...videoChatIcons,
+        [instanceName]: 'data:image/vnd.microsoft.icon;base64,' + blob,
+      }
+    }, {})
+  const [ran, setRan] = useState<boolean>(false)
   const getVideoChatIcon = useCallback(
-    (name: string) => {
-      return videoChatIcons[name] || undefined
-=======
-  const [videoChatIcons, setVideoChatIcons] = useState<Record<string, Blob>>({})
-
-  const getVideoChatIcon = useCallback(
-    (name: string) => {
-      return videoChatIcons[name] || null
->>>>>>> ed43ccb55213ec6601dbb5015370c772f4a1b9d5
-    },
+    (name: string) => videoChatIcons[name] || undefined,
     [videoChatIcons]
   )
-
-<<<<<<< HEAD
-  useMemo(() => {
-      for (const [instanceName, instanceUrl] of VIDEO_CHAT_INSTANCES) {
-      BackendRemote.rpc.getHttpResponse(selectedAccountId(), instanceUrl.replace('$ROOM', 'favicon.ico')).then(response =>
-        setVideoChatIcons({
-          ...videoChatIcons,
-          [instanceName]: 'data:image/vnd.microsoft.icon;base64,' + response.blob,
-        })
-      )
-    }
-  }, [])
-=======
-  for (const [instance_name, instance_url] of VIDEO_CHAT_INSTANCES) {
-    fetch(instance_url.replace('$ROOM', 'favicon.ico')).then(response =>
-      response.blob().then(blob =>
-        setVideoChatIcons({
-          ...videoChatIcons,
-          [instance_name]: blob,
-        })
-      )
-    )
+  if (!ran) {
+    for (const [instanceName, instanceUrl] of VIDEO_CHAT_INSTANCES) {
+      const url = instanceUrl.replace('$ROOM', 'favicon.ico')
+      BackendRemote.rpc.getHttpResponse(selectedAccountId(), url).then(response =>
+        dispatch({
+          blob: response.blob,
+          instanceName,
+        }))
+     }
+    setRan(true)
   }
->>>>>>> ed43ccb55213ec6601dbb5015370c772f4a1b9d5
   return getVideoChatIcon
 }
 
@@ -100,6 +82,7 @@ export function SettingsExperimentalFeatures({
 }) {
   const tx = window.static_translate
   const { openDialog } = useContext(ScreenContext)
+  const getVideoChatIcon = useVideoChatInstanceIcon()
 
   const onClickEdit = async () => {
     openDialog(EditVideochatInstanceDialog, {
@@ -114,6 +97,7 @@ export function SettingsExperimentalFeatures({
           SettingsStoreInstance.effect.setDesktopSetting('enableAVCalls', true)
         }
       },
+      getVideoChatIcon,
       settingsStore,
     })
   }
@@ -182,13 +166,20 @@ export function SettingsExperimentalFeatures({
 
 type RadioButtonValue = 'disabled' | 'custom' | string
 
+type EditVideochatInstanceDialogExtraProps = {
+  settingsStore: SettingsStoreState
+  getVideoChatIcon: (name: string) => string | undefined
+}
+
+
 export function EditVideochatInstanceDialog({
   isOpen,
   onClose,
   onOk,
   onCancel,
   settingsStore,
-}: DialogProps & { settingsStore: SettingsStoreState }) {
+  getVideoChatIcon,
+}: DialogProps & EditVideochatInstanceDialogExtraProps) {
   const tx = useTranslationFunction()
   const [configValue, setConfigValue] = useState(
     settingsStore.settings['webrtc_instance']
@@ -201,7 +192,6 @@ export function EditVideochatInstanceDialog({
     }
   })
 
-  const getVideoChatIcon = useVideoChatInstanceIcon()
 
   const onClickCancel = () => {
     onClose()
@@ -237,6 +227,7 @@ export function EditVideochatInstanceDialog({
         value={instanceName}
         subtitle={instanceUrl}
         icon={getVideoChatIcon(instanceName)}
+        iconStyle={{ borderRadius: '6px', padding: '4px' }}
       />
     )),
     <Radio
@@ -277,26 +268,7 @@ export function EditVideochatInstanceDialog({
             selectedValue={radioValue}
             name='videochat-instance'
           >
-<<<<<<< HEAD
-          { radioGroupChildren.flat() }
-=======
-            <Radio key='select-none' label={tx('off')} value='disabled' />
-            {VIDEO_CHAT_INSTANCES.map(([instanceName, instanceUrl]) => (
-              <Radio
-                key={instanceName}
-                label={instanceName}
-                value={instanceName}
-                subtitle={instanceUrl}
-                icon={getVideoChatIcon(instanceName)}
-              />
-            ))}
-            <Radio
-              key='select-custom'
-              label={tx('custom')}
-              value='custom'
-              className={'test-videochat-custom'}
-            />
->>>>>>> ed43ccb55213ec6601dbb5015370c772f4a1b9d5
+            { radioGroupChildren.flat() }
           </RadioGroup>
           {radioValue === 'custom' && (
             <>
