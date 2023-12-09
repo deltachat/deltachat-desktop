@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+ - Video chat instances icons
+
 ### Changed
 
  - Upgrade `filesize` dependency from `8.0.6` to `10.1.0`
