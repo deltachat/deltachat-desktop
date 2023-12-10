@@ -5,6 +5,8 @@ import React, {
   MutableRefObject,
   useEffect,
   useState,
+  useMemo,
+  useReducer,
 } from 'react'
 import classNames from 'classnames'
 import { MessageWrapper } from './MessageWrapper'
@@ -90,13 +92,17 @@ function useUnreadCount(
   return freshMessageCounter
 }
 
+type MessageListProps = {
+  chatStore: ChatStoreStateWithChatSet,
+  refComposer: todo,
+  setSelectedMessages: (selectedMessages: number[]) => void
+}
+
 export default function MessageList({
   chatStore,
   refComposer,
-}: {
-  chatStore: ChatStoreStateWithChatSet
-  refComposer: todo
-}) {
+  setSelectedMessages
+}: MessageListProps) {
   const accountId = selectedAccountId()
   const {
     store: {
@@ -117,6 +123,24 @@ export default function MessageList({
     fetchMoreBottom,
     fetchMoreTop,
   } = useMessageList(accountId, chatStore.chat.id)
+  type MessageSelectAction = {
+    type: 'select' | 'unselect',
+    messageId: number,
+  }
+  const [selectedMessages, _dispatch] = useReducer((selectedMessages: number[], action: MessageSelectAction) => {
+      const { type, messageId } = action
+      switch (type) {
+        case 'select':
+          return [...selectedMessages, messageId]
+        case 'unselect':
+          selectedMessages = selectedMessages.filter((id) => id !== messageId)
+      }
+      return selectedMessages
+    }, [])
+  const selectMessage = (messageId: number) => _dispatch({ type: 'select', messageId })
+  const unselectMessage = (messageId: number) => _dispatch({ type: 'unselect', messageId })
+  useMemo(() => setSelectedMessages(selectedMessages), [selectedMessages])
+
 
   const countUnreadMessages = useUnreadCount(
     accountId,
@@ -415,6 +439,9 @@ export default function MessageList({
           unreadMessageInViewIntersectionObserver
         }
         loadMissingMessages={loadMissingMessages}
+        selectMessage={selectMessage}
+        unselectMessage={unselectMessage}
+        selectedMessages={selectedMessages}
       />
       {showJumpDownButton && (
         <JumpDownButton
@@ -447,6 +474,9 @@ export const MessageListInner = React.memo(
     loaded: boolean
     unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
     loadMissingMessages: () => Promise<void>
+    selectMessage: (messageId: number) => void
+    unselectMessage: (messageId: number) => void
+    selectedMessages: number[]
   }) => {
     const {
       onScroll,
@@ -458,8 +488,10 @@ export const MessageListInner = React.memo(
       loaded,
       unreadMessageInViewIntersectionObserver,
       loadMissingMessages,
+      selectedMessages,
+      selectMessage,
+      unselectMessage,
     } = props
-
     if (!chatStore.chat.id) {
       throw new Error('no chat id')
     }
@@ -472,7 +504,8 @@ export const MessageListInner = React.memo(
       isDeviceChat: chatStore.chat.isDeviceChat as boolean,
       chatType: chatStore.chat.chatType as number,
     }
-
+    
+    const isSelectMode = useMemo(() => selectedMessages.length !== 0, [selectedMessages])
     useKeyBindingAction(KeybindAction.MessageList_PageUp, () => {
       if (messageListRef.current) {
         messageListRef.current.scrollTop =
@@ -502,40 +535,46 @@ export const MessageListInner = React.memo(
       <div id='message-list' ref={messageListRef} onScroll={onScroll}>
         <ul>
           {messageListItems.length === 0 && <EmptyChatMessage />}
-          {activeView.map(messageId => {
-            if (messageId.kind === 'dayMarker') {
+          {activeView.map((messageListItem) => {
+            const kind = messageListItem.kind
+            if (kind === 'dayMarker') {
+              const timestamp = messageListItem.timestamp 
               return (
                 <DayMarker
-                  key={`daymarker-${messageId.timestamp}`}
-                  timestamp={messageId.timestamp}
+                  key={`daymarker-${timestamp}`}
+                  timestamp={timestamp}
                 />
               )
             }
-
-            if (messageId.kind === 'message') {
-              const message = messageCache[messageId.msg_id]
+            if (kind === 'message') {
+              const msgId = messageListItem.msg_id
+              const message = messageCache[msgId]
               if (message?.kind === 'message') {
                 return (
                   <MessageWrapper
-                    key={messageId.msg_id}
-                    key2={`${messageId.msg_id}`}
+                    key={msgId}
+                    key2={`${msgId}`}
                     message={message}
                     conversationType={conversationType}
                     unreadMessageInViewIntersectionObserver={
                       unreadMessageInViewIntersectionObserver
                     }
+                    selectMessage={() => selectMessage(msgId)}
+                    unselectMessage={() => unselectMessage(msgId)}
+                    isSelected={selectedMessages.includes(msgId)}
+                    isSelectMode={isSelectMode}
                   />
                 )
               } else if (message?.kind === 'loadingError') {
                 return (
-                  <div className='info-message' id={String(messageId.msg_id)}>
+                  <div className='info-message' id={String(msgId)}>
                     <div
                       className='bubble'
                       style={{
                         backgroundColor: 'rgba(55,0,0,0.5)',
                       }}
                     >
-                      loading message {messageId.msg_id} failed: {message.error}
+                      loading message {msgId} failed: {message.error}
                     </div>
                   </div>
                 )
@@ -544,14 +583,14 @@ export const MessageListInner = React.memo(
                 // it is debounced later so we can call it here multiple times and it's ok
                 setTimeout(loadMissingMessages)
                 return (
-                  <div className='info-message' id={String(messageId.msg_id)}>
+                  <div className='info-message' id={String(msgId)}>
                     <div
                       className='bubble'
                       style={{
                         backgroundColor: 'rgba(55,0,0,0.5)',
                       }}
                     >
-                      Loading Message {messageId.msg_id}
+                      Loading Message {msgId}
                     </div>
                   </div>
                 )
@@ -568,7 +607,8 @@ export const MessageListInner = React.memo(
       prevProps.messageCache === nextProps.messageCache &&
       prevProps.oldestFetchedMessageIndex ===
         nextProps.oldestFetchedMessageIndex &&
-      prevProps.onScroll === nextProps.onScroll
+      prevProps.onScroll === nextProps.onScroll &&
+      prevProps.selectedMessages.length === nextProps.selectedMessages.length
     return areEqual
   }
 )

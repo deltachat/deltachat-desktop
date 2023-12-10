@@ -132,11 +132,13 @@ function buildContextMenu(
     text,
     conversationType,
     chat,
+    selectMessage
   }: {
     message: Type.Message | null
     text?: string
     conversationType: ConversationType
     chat: T.FullChat
+    selectMessage: () => void
   },
   clickTarget: HTMLAnchorElement | null
 ): (false | ContextMenuItem)[] {
@@ -276,14 +278,31 @@ function buildContextMenu(
       label: tx('delete_message_desktop'),
       action: confirmDeleteMessage.bind(null, message),
     },
+    // Select Message
+    {
+      label: tx('select_message'),
+      action: selectMessage.bind(null)
+    }
   ]
 }
 
-export default function Message(props: {
+type MessageProps = {
   message: Type.Message
   conversationType: ConversationType
-}) {
-  const { message, conversationType } = props
+  selectMessage: () => void
+  unselectMessage: () => void
+  isSelected: boolean
+  isSelectMode: boolean
+}
+
+export default function Message({
+  message,
+  conversationType,
+  selectMessage,
+  unselectMessage,
+  isSelected,
+  isSelectMode
+  } : MessageProps) {
   const { id, viewType, text, hasLocation, isSetupmessage, hasHtml } = message
   const direction = getDirection(message)
   const status = mapCoreMsgStatus2String(message.state)
@@ -297,6 +316,7 @@ export default function Message(props: {
     event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement, MouseEvent>
   ) => Promise<void> = async event => {
     event.preventDefault() // prevent default runtime context menu from opening
+    if (isSelectMode) return
 
     const chat = await BackendRemote.rpc.getFullChatById(
       accountId,
@@ -311,6 +331,7 @@ export default function Message(props: {
         text: text || undefined,
         conversationType,
         chat,
+        selectMessage,
       },
       target
     )
@@ -472,7 +493,6 @@ export default function Message(props: {
   /** Whether to show author name and avatar */
   const showAuthor =
     conversationType.hasMultipleParticipants || message?.overrideSenderName
-
   return (
     <div
       onContextMenu={showMenu}
@@ -482,16 +502,17 @@ export default function Message(props: {
         { 'type-sticker': viewType === 'Sticker' },
         { error: status === 'error' },
         { forwarded: message.isForwarded },
-        { 'has-html': hasHtml }
+        { 'has-html': hasHtml },
       )}
       id={message.id.toString()}
+      onClick={ isSelectMode ? () => isSelected ? unselectMessage() : selectMessage() : undefined }
     >
       {showAuthor &&
         direction === 'incoming' &&
         Avatar(message.sender, onContactClick)}
       <div
         onContextMenu={showMenu}
-        className='msg-container'
+        className={classNames('msg-container', isSelected && 'selected')}
         style={{ borderColor: message.sender.color }}
       >
         {message.isForwarded &&

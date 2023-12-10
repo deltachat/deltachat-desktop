@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useEffect } from 'react'
+import React, { useRef, useContext, useEffect, useState, useMemo } from 'react'
 import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 import { join, parse } from 'path'
 
@@ -81,7 +81,9 @@ export default function MessageListAndComposer({
     chatStore.chat.isProtectionBroken,
     messageInputRef
   )
-
+  
+  const [selectedMessages, setSelectedMessages] = useState<number[]>([])
+  const isSelectMode = useMemo(() => selectedMessages.length !== 0, [selectedMessages])
   const onDrop = (e: React.DragEvent<any>) => {
     if (chatStore.chat === null) {
       log.warn('droped something, but no chat is selected')
@@ -236,9 +238,10 @@ export default function MessageListAndComposer({
       onDrop={onDrop.bind({ props: { chat: chatStore } })}
       onDragOver={onDragOver}
     >
+      { isSelectMode && <SelectedMessagesActions {...selectedMessages} /> }
       <div className='message-list-and-composer__message-list'>
         <RecoverableCrashScreen reset_on_change_key={chatStore.chat.id}>
-          <MessageList chatStore={chatStore} refComposer={refComposer} />
+          <MessageList chatStore={chatStore} refComposer={refComposer} setSelectedMessages={setSelectedMessages} />
         </RecoverableCrashScreen>
       </div>
       <Composer
