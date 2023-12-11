@@ -9,9 +9,9 @@ export default function SelectedMessagesActions({
 }) {
   const tx = useTranslationFunction()
   return (
-    <div className='selectedmessagesctions'>
-      <Button>Forward</Button>
-      <Button>Delete</Button>
+    <div className='selected-messages-actions'>
+      <Button type='primary'>Forward</Button>
+      <Button type='danger'>Delete</Button>
       <div>
         {tx(
           'selected_messages_number',
