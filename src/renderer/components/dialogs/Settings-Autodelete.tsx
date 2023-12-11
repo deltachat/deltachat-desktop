@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react'
 import { H5 } from '@blueprintjs/core'
-import classNames from 'classnames'
 
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import {
@@ -21,6 +20,7 @@ import SettingsStoreInstance, {
 } from '../../stores/settings'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import Button from '../ui/Button'
 
 function durationToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)
@@ -101,22 +101,12 @@ export function AutodeleteConfirmationDialog({
           padding: '7px 13px 10px 13px',
         }}
       >
-        <p
-          className='delta-button danger bold'
-          onClick={() => {
-            onClose()
-          }}
-        >
+        <Button type='danger' onClick={onClose}>
           {tx('cancel')}
-        </p>
-        <p
-          className={classNames('delta-button primary bold', {
-            disabled: !isConfirmed,
-          })}
-          onClick={onOk}
-        >
+        </Button>
+        <Button type='primary' disabled={!isConfirmed} onClick={onOk}>
           {tx('ok')}
-        </p>
+        </Button>
       </DeltaDialogFooter>
     </SmallDialog>
   )

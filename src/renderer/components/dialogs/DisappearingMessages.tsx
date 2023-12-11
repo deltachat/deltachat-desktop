@@ -12,6 +12,7 @@ import { Timespans } from '../../../shared/constants'
 import { useTranslationFunction } from '../../contexts'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import Button from '../ui/Button'
 
 enum DisappearingMessageDuration {
   OFF = Timespans.ZERO_SECONDS,
@@ -142,12 +143,12 @@ export default function DisappearingMessage({
         </DeltaDialogBody>
         <DeltaDialogFooter style={{ padding: '20px' }}>
           <DeltaDialogFooterActions>
-            <p className='delta-button primary bold' onClick={onClose}>
+            <Button type='primary' onClick={onClose}>
               {tx('cancel')}
-            </p>
-            <p className='delta-button primary bold' onClick={saveAndClose}>
+            </Button>
+            <Button type='primary' onClick={saveAndClose}>
               {tx('save_desktop')}
-            </p>
+            </Button>
           </DeltaDialogFooterActions>
         </DeltaDialogFooter>
       </SmallDialog>

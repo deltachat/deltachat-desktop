@@ -29,6 +29,7 @@ import { selectedAccountId } from '../../ScreenController'
 import moment from 'moment'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import { getLogger } from '../../../shared/logger'
+import Button from '../ui/Button'
 
 const log = getLogger('renderer/dialogs/ViewProfile')
 
@@ -276,14 +277,14 @@ export function ViewProfileInner({
             }}
           >
             {!isDeviceChat && (
-              <button
+              <Button
                 aria-label={tx('send_message')}
                 onClick={onSendMessage}
-                className={'delta-button-round'}
+                round
                 style={{ marginTop: '0px' }}
               >
                 {tx('send_message')}
-              </button>
+              </Button>
             )}
           </div>
           {statusText != '' && (

@@ -20,6 +20,7 @@ import { selectChat } from '../helpers/ChatMethods'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { runtime } from '../../runtime'
+import Button from '../ui/Button'
 
 export default function WebxdcSaveToChatDialog(props: {
   messageText: string | null
@@ -127,9 +128,9 @@ export default function WebxdcSaveToChatDialog(props: {
       <DeltaDialogFooter>
         <DeltaDialogFooterActions style={{ justifyContent: 'start' }}>
           {file && (
-            <p className={'delta-button bold primary'} onClick={onSaveClick}>
+            <Button type='primary' onClick={onSaveClick}>
               {tx('save_as')}
-            </p>
+            </Button>
           )}
         </DeltaDialogFooterActions>
       </DeltaDialogFooter>

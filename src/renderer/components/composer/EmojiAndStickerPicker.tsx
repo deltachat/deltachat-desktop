@@ -14,6 +14,7 @@ import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 import type { EmojiData } from 'emoji-mart/index'
 import { useThemeCssVar } from '../../ThemeManager'
+import Button from '../ui/Button'
 
 const DisplayedStickerPack = ({
   stickerPackName,
@@ -88,24 +89,18 @@ export const StickerPicker = ({
             ))}
           </div>
           <div className='sticker-actions-container'>
-            <button
-              className='delta-button-round secondary'
-              onClick={onOpenStickerFolder}
-            >
+            <Button round type='secondary' onClick={onOpenStickerFolder}>
               {tx('open_sticker_folder')}
-            </button>
+            </Button>
           </div>
         </>
       ) : (
         <div className='sticker-container'>
           <div className='no-stickers'>
             <p className='description'>{tx('add_stickers_instructions')}</p>
-            <button
-              className='delta-button-round'
-              onClick={onOpenStickerFolder}
-            >
+            <Button round onClick={onOpenStickerFolder}>
               {tx('open_sticker_folder')}
-            </button>
+            </Button>
           </div>
         </div>
       )}

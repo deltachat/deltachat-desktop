@@ -10,6 +10,7 @@ import {
   DeltaDialogFooterActions,
 } from './DeltaDialog'
 import QrCode from './QrCode'
+import Button from '../ui/Button'
 
 import type { DialogProps } from './DialogController'
 
@@ -48,19 +49,19 @@ export function ProtectionBrokenDialog({
       </div>
       <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
         <DeltaDialogFooterActions style={{ justifyContent: 'space-between' }}>
-          <p
-            className='delta-button bold primary'
+          <Button
+            type='primary'
             onClick={onLearnMore}
             style={{ marginRight: '10px' }}
           >
             {tx('learn_more')}
-          </p>
-          <p className={`delta-button bold primary`} onClick={onQRScan}>
+          </Button>
+          <Button type='primary' onClick={onQRScan}>
             {tx('qrscan_title')}
-          </p>
-          <p className={`delta-button bold primary`} onClick={onClose}>
+          </Button>
+          <Button type='primary' onClick={onClose}>
             {tx('ok')}
-          </p>
+          </Button>
         </DeltaDialogFooterActions>
       </DeltaDialogFooter>
     </SmallDialog>
@@ -97,19 +98,19 @@ export function VerifiedContactsRequiredDialog({
       </div>
       <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
         <DeltaDialogFooterActions style={{ justifyContent: 'space-between' }}>
-          <p
-            className='delta-button bold primary'
+          <Button
+            type='primary'
             onClick={onLearnMore}
             style={{ marginRight: '10px' }}
           >
             {tx('learn_more')}
-          </p>
-          <p className={`delta-button bold primary`} onClick={onQRScan}>
+          </Button>
+          <Button type='primary' onClick={onQRScan}>
             {tx('qrscan_title')}
-          </p>
-          <p className={`delta-button bold primary`} onClick={onClose}>
+          </Button>
+          <Button type='primary' onClick={onClose}>
             {tx('ok')}
-          </p>
+          </Button>
         </DeltaDialogFooterActions>
       </DeltaDialogFooter>
     </SmallDialog>
@@ -132,16 +133,16 @@ export function ProtectionEnabledDialog({ isOpen, onClose }: DialogProps) {
       </div>
       <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
         <DeltaDialogFooterActions style={{ justifyContent: 'space-between' }}>
-          <p
-            className='delta-button bold primary'
+          <Button
+            type='primary'
             onClick={onLearnMore}
             style={{ marginRight: '10px' }}
           >
             {tx('learn_more')}
-          </p>
-          <p className={`delta-button bold primary`} onClick={onClose}>
+          </Button>
+          <Button type='primary' onClick={onClose}>
             {tx('ok')}
-          </p>
+          </Button>
         </DeltaDialogFooterActions>
       </DeltaDialogFooter>
     </SmallDialog>

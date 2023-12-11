@@ -17,8 +17,8 @@ import { DialogProps } from './DialogController'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
-import RadioGroup from '../RadioGroup'
-import Radio from '../Radio'
+import RadioGroup from '../ui/RadioGroup'
+import Radio from '../ui/Radio'
 
 const VIDEO_CHAT_INSTANCE_SYSTEMLI = 'https://meet.systemli.org/$ROOM'
 const VIDEO_CHAT_INSTANCE_AUTISTICI = 'https://vc.autistici.org/$ROOM'

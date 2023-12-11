@@ -41,6 +41,7 @@ import { selectedAccountId } from '../../ScreenController'
 import { modifyGroup } from '../helpers/ChatMethods'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import { useSettingsStore } from '../../stores/settings'
+import Button from '../ui/Button'
 
 const log = getLogger('renderer/ViewGroup')
 
@@ -566,21 +567,21 @@ export function GroupImageSelector({
         <span style={{ backgroundColor: groupColor }}>{initial}</span>
       )}
       <>
-        <button
+        <Button
           aria-label={tx('change_group_image')}
           onClick={onClickSelectGroupImage}
-          className={'delta-button-round'}
+          round
         >
           {tx('change_group_image')}
-        </button>
-        <button
+        </Button>
+        <Button
           aria-label={tx('remove_group_image')}
           onClick={onClickRemoveGroupImage}
-          className={'delta-button-round'}
           disabled={groupImage === '' || groupImage === null}
+          round
         >
           {tx('remove_group_image')}
-        </button>
+        </Button>
       </>
     </div>
   )

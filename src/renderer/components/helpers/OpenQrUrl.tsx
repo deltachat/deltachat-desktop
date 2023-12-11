@@ -19,6 +19,7 @@ import { EffectfulBackendActions } from '../../backend-com'
 import { BackendRemote, Type } from '../../backend-com'
 import { ImportBackupTransferProgressDialog } from '../dialogs/setup_multi_device/ReceiveBackup'
 import processMailtoUrl from './MailtoUrl'
+import Button from '../ui/Button'
 
 const log = getLogger('renderer/processOpenUrl')
 
@@ -45,9 +46,9 @@ export function ProcessQrCodeDialog({
       </DeltaDialogBody>
       <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
         <DeltaDialogFooterActions>
-          <p className='delta-button bold primary' onClick={onCancel}>
+          <Button type='primary' onClick={onCancel}>
             {tx('cancel')}
-          </p>
+          </Button>
         </DeltaDialogFooterActions>
       </DeltaDialogFooter>
     </SmallDialog>
@@ -341,23 +342,23 @@ function copyContentAlertDialog({
       </div>
       <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
         <DeltaDialogFooterActions>
-          <p
-            className='delta-button bold primary'
+          <Button
+            type='primary'
             onClick={() => {
               runtime.writeClipboardText(content).then(onClose)
             }}
           >
             {tx('global_menu_edit_copy_desktop')}
-          </p>
-          <p
-            className='delta-button bold primary'
+          </Button>
+          <Button
+            type='primary'
             onClick={() => {
               cb && cb()
               onClose()
             }}
           >
             {tx('ok')}
-          </p>
+          </Button>
         </DeltaDialogFooterActions>
       </DeltaDialogFooter>
     </SmallDialog>

@@ -11,6 +11,7 @@ import React, {
 } from 'react'
 import { Card, Classes } from '@blueprintjs/core'
 import { T, C } from '@deltachat/jsonrpc-client'
+import Button from '../ui/Button'
 
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import {
@@ -196,9 +197,9 @@ function CreateChatMain(props: CreateChatMainProps) {
       </DeltaDialogBody>
       <DeltaDialogFooter>
         <DeltaDialogFooterActions>
-          <p className={'delta-button bold primary'} onClick={onClose}>
+          <Button type='primary' onClick={onClose}>
             {tx('close')}
-          </p>
+          </Button>
         </DeltaDialogFooterActions>
       </DeltaDialogFooter>
     </>
@@ -291,15 +292,15 @@ function CreateGroup(props: CreateGroupProps) {
       </div>
       <DeltaDialogFooter>
         <DeltaDialogFooterActions>
-          <p
-            className='delta-button primary bold'
+          <Button
+            type='primary'
             style={{ marginRight: '10px' }}
             onClick={() => setViewMode('main')}
           >
             {tx('cancel')}
-          </p>
-          <p
-            className='delta-button primary bold'
+          </Button>
+          <Button
+            type='primary'
             onClick={() => {
               if (groupName === '') {
                 setErrorMissingGroupName(true)
@@ -309,7 +310,7 @@ function CreateGroup(props: CreateGroupProps) {
             }}
           >
             {tx('group_create_button')}
-          </p>
+          </Button>
         </DeltaDialogFooterActions>
       </DeltaDialogFooter>
     </>
@@ -412,15 +413,15 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
       </div>
       <DeltaDialogFooter>
         <DeltaDialogFooterActions>
-          <p
-            className='delta-button primary bold'
+          <Button
+            type='primary'
             style={{ marginRight: '10px' }}
             onClick={() => setViewMode('main')}
           >
             {tx('cancel')}
-          </p>
-          <p
-            className='delta-button primary bold'
+          </Button>
+          <Button
+            type='primary'
             onClick={() => {
               if (broadcastName === '') {
                 setErrorMissingChatName(true)
@@ -430,7 +431,7 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
             }}
           >
             {tx('create')}
-          </p>
+          </Button>
         </DeltaDialogFooterActions>
       </DeltaDialogFooter>
     </>

@@ -14,6 +14,7 @@ import reactStringReplace from 'react-string-replace'
 import { runtime } from '../../runtime'
 import { LinkDestination } from '@deltachat/message_parser_wasm'
 import { openLinkSafely } from '../helpers/LinkConfirmation'
+import Button from '../ui/Button'
 
 const log = getLogger('renderer/LabeledLink')
 
@@ -114,20 +115,20 @@ function labeledLinkConfirmationDialog(
           </div>
           <DeltaDialogFooter>
             <DeltaDialogFooterActions>
-              <p
-                className={`delta-button bold primary`}
+              <Button
+                type='primary'
                 onClick={() => {
                   runtime.writeClipboardText(target).then(() => onClose())
                 }}
                 style={{ marginRight: 'auto' }}
               >
                 {tx('copy')}
-              </p>
-              <p className={`delta-button bold primary`} onClick={onClose}>
+              </Button>
+              <Button type='primary' onClick={onClose}>
                 {tx('cancel')}
-              </p>
-              <p
-                className={`delta-button bold primary`}
+              </Button>
+              <Button
+                type='primary'
                 onClick={() => {
                   onClose()
                   if (isChecked) {
@@ -138,7 +139,7 @@ function labeledLinkConfirmationDialog(
                 }}
               >
                 {tx('open')}
-              </p>
+              </Button>
             </DeltaDialogFooterActions>
           </DeltaDialogFooter>
         </div>
@@ -223,18 +224,18 @@ function openPunycodeUrlConfirmationDialog(
           </p>
           <DeltaDialogFooter>
             <DeltaDialogFooterActions>
-              <p className={`delta-button bold primary`} onClick={onClose}>
+              <Button type='primary' onClick={onClose}>
                 {tx('no')}
-              </p>
-              <p
-                className={`delta-button bold primary`}
+              </Button>
+              <Button
+                type='primary'
                 onClick={() => {
                   onClose()
                   openLinkSafely(asciiUrl)
                 }}
               >
                 {tx('open')}
-              </p>
+              </Button>
             </DeltaDialogFooterActions>
           </DeltaDialogFooter>
         </div>

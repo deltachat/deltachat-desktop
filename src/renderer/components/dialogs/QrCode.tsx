@@ -22,6 +22,7 @@ import { useContextMenu } from '../ContextMenu'
 import { runtime } from '../../runtime'
 import { selectChat } from '../helpers/ChatMethods'
 import { BackendRemote } from '../../backend-com'
+import Button from '../ui/Button'
 
 const log = getLogger('renderer/dialogs/QrCode')
 
@@ -169,18 +170,18 @@ export function QrCodeShowQrInner({
       </DeltaDialogBody>
       <DeltaDialogFooter>
         <DeltaDialogFooterActions style={{ justifyContent: 'space-between' }}>
-          <p className={'delta-button bold primary'} onClick={onCopy}>
+          <Button type='primary' onClick={onCopy}>
             {tx('global_menu_edit_copy_desktop')}
-          </p>
+          </Button>
           {onClose && (
-            <p className={'delta-button bold primary'} onClick={onClose}>
+            <Button type='primary' onClick={onClose}>
               {tx('close')}
-            </p>
+            </Button>
           )}
           {onBack && (
-            <p className={'delta-button bold primary'} onClick={onBack}>
+            <Button type='primary' onClick={onBack}>
               {tx('back')}
-            </p>
+            </Button>
           )}
         </DeltaDialogFooterActions>
       </DeltaDialogFooter>
@@ -293,12 +294,12 @@ export function QrCodeScanQrInner(
       </DeltaDialogBody>
       <DeltaDialogFooter>
         <DeltaDialogFooterActions style={{ justifyContent: 'space-between' }}>
-          <p className={'delta-button bold primary'} onClick={openMenu}>
+          <Button type='primary' onClick={openMenu}>
             {tx('menu_more_options')}
-          </p>
-          <p className={'delta-button bold primary'} onClick={props.onClose}>
+          </Button>
+          <Button type='primary' onClick={props.onClose}>
             {tx('close')}
-          </p>
+          </Button>
         </DeltaDialogFooterActions>
       </DeltaDialogFooter>
     </>

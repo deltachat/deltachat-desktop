@@ -20,6 +20,7 @@ import { useTranslationFunction, i18nContext } from '../contexts'
 import { getLogger } from '../../shared/logger'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
+import Button from './ui/Button'
 
 const log = getLogger('renderer/loginForm')
 
@@ -403,7 +404,7 @@ export function ConfigureProgressDialog({
     setProgressComment(comment || '')
   }
 
-  const onCancel = async (_event: any) => {
+  const onCancel = async () => {
     try {
       if (window.__selectedAccountId === undefined) {
         throw new Error('no selected account')
@@ -490,9 +491,9 @@ export function ConfigureProgressDialog({
               padding: '7px 13px 10px 13px',
             }}
           >
-            <p className='delta-button danger bold' onClick={onCancel}>
+            <Button type='danger' onClick={onCancel}>
               {tx('cancel')}
-            </p>
+            </Button>
           </DeltaDialogFooter>
         </>
       )}
@@ -511,13 +512,13 @@ export function ConfigureProgressDialog({
               padding: '7px 13px 10px 13px',
             }}
           >
-            <p
-              className='delta-button primary bold'
-              onClick={onClose}
+            <Button
+              type='primary'
               style={{ marginLeft: 'auto' }}
+              onClick={onClose}
             >
               {tx('ok')}
-            </p>
+            </Button>
           </DeltaDialogFooter>
         </>
       )}

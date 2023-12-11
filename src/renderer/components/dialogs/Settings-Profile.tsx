@@ -19,6 +19,7 @@ import SettingsStoreInstance, {
 } from '../../stores/settings'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import Button from '../ui/Button'
 
 export default function SettingsProfile({
   settingsStore,
@@ -124,21 +125,21 @@ export function ProfileImageSelector({
         <span style={{ backgroundColor: color }}>{initial}</span>
       )}
       <>
-        <button
+        <Button
           aria-label={tx('profile_image_select')}
           onClick={onClickSelectPicture}
-          className={'delta-button-round'}
+          round
         >
           {tx('profile_image_select')}
-        </button>
-        <button
+        </Button>
+        <Button
           aria-label={tx('profile_image_delete')}
           onClick={onClickRemovePicture}
-          className={'delta-button-round'}
           disabled={!profilePicture}
+          round
         >
           {tx('profile_image_delete')}
-        </button>
+        </Button>
       </>
     </div>
   )

@@ -342,15 +342,15 @@ export function SmallSelectDialog({
       </DeltaDialogBody>
       <DeltaDialogFooter style={{ marginTop: '0px', padding: '20px' }}>
         <DeltaDialogFooterActions>
-          <Button onClick={() => {
-            onCancel && onCancel()
-            onClose()
-            }}>
+          <Button
+            onClick={() => {
+              onCancel && onCancel()
+              onClose()
+            }}
+          >
             {tx('cancel')}
           </Button>
-          <Button onClick={saveAndClose}>
-            {tx('save_desktop')}
-          </Button>
+          <Button onClick={saveAndClose}>{tx('save_desktop')}</Button>
         </DeltaDialogFooterActions>
       </DeltaDialogFooter>
     </SmallDialog>
@@ -396,16 +396,10 @@ export function DeltaDialogOkCancelFooter({
   return (
     <DeltaDialogFooter>
       <DeltaDialogFooterActions>
-        <Button
-          onClick={onCancel}
-          style={{ marginRight: '10px' }}
-        >
+        <Button onClick={onCancel} style={{ marginRight: '10px' }}>
           {cancelLabel}
         </Button>
-        <Button
-          className={disableOK && 'disabled'}
-          onClick={onOk}
-        >
+        <Button className={disableOK && 'disabled'} onClick={onOk}>
           {confirmLabel}
         </Button>
       </DeltaDialogFooterActions>
@@ -419,9 +413,7 @@ export function DeltaDialogCloseFooter({ onClose }: { onClose: () => any }) {
   return (
     <DeltaDialogFooter>
       <DeltaDialogFooterActions>
-        <Button onClick={onClose}>
-          {tx('close')}
-        </Button>
+        <Button onClick={onClose}>{tx('close')}</Button>
       </DeltaDialogFooterActions>
     </DeltaDialogFooter>
   )

@@ -37,6 +37,7 @@ import {
   ProtectionBrokenDialog,
   ProtectionEnabledDialog,
 } from '../dialogs/ProtectionStatusDialog'
+import Button from '../ui/Button'
 
 const Avatar = (
   contact: Type.Contact,
@@ -132,7 +133,7 @@ function buildContextMenu(
     text,
     conversationType,
     chat,
-    selectMessage
+    selectMessage,
   }: {
     message: Type.Message | null
     text?: string
@@ -281,8 +282,8 @@ function buildContextMenu(
     // Select Message
     {
       label: tx('select_message'),
-      action: selectMessage.bind(null)
-    }
+      action: selectMessage.bind(null),
+    },
   ]
 }
 
@@ -301,8 +302,8 @@ export default function Message({
   selectMessage,
   unselectMessage,
   isSelected,
-  isSelectMode
-  } : MessageProps) {
+  isSelectMode,
+}: MessageProps) {
   const { id, viewType, text, hasLocation, isSetupmessage, hasHtml } = message
   const direction = getDirection(message)
   const status = mapCoreMsgStatus2String(message.state)
@@ -502,10 +503,14 @@ export default function Message({
         { 'type-sticker': viewType === 'Sticker' },
         { error: status === 'error' },
         { forwarded: message.isForwarded },
-        { 'has-html': hasHtml },
+        { 'has-html': hasHtml }
       )}
       id={message.id.toString()}
-      onClick={ isSelectMode ? () => isSelected ? unselectMessage() : selectMessage() : undefined }
+      onClick={
+        isSelectMode
+          ? () => (isSelected ? unselectMessage() : selectMessage())
+          : undefined
+      }
     >
       {showAuthor &&
         direction === 'incoming' &&
@@ -697,12 +702,9 @@ function WebxdcMessageContent({ message }: { message: Type.Message }) {
           (only works in saved messages)
         </div>
       )}
-      <button
-        className={'delta-button-round'}
-        onClick={() => openWebxdc(message.id)}
-      >
+      <Button round onClick={() => openWebxdc(message.id)}>
         {tx('start_app')}
-      </button>
+      </Button>
     </div>
   )
 }

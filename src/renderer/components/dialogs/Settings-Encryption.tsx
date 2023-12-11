@@ -10,6 +10,7 @@ import DeltaDialog, {
 } from './DeltaDialog'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import Button from '../ui/Button'
 
 export function KeyViewPanel({
   onClose,
@@ -35,9 +36,7 @@ export function KeyViewPanel({
       </div>
       <DeltaDialogFooter>
         <DeltaDialogFooterActions>
-          <p className='delta-button bold' onClick={onClose}>
-            {tx('done')}
-          </p>
+          <Button onClick={onClose}>{tx('done')}</Button>
         </DeltaDialogFooterActions>
       </DeltaDialogFooter>
     </React.Fragment>
@@ -50,13 +49,9 @@ function InitiatePanel({ onClick }: { onClick: todo }) {
     <div className={Classes.DIALOG_BODY}>
       <Card>
         <Callout>{tx('autocrypt_send_asm_explain_before')}</Callout>
-        <p
-          className='delta-button bold'
-          style={{ float: 'right', marginTop: '20px' }}
-          onClick={onClick}
-        >
+        <Button style={{ float: 'right', marginTop: '20px' }} onClick={onClick}>
           {tx('ok')}
-        </p>
+        </Button>
       </Card>
     </div>
   )

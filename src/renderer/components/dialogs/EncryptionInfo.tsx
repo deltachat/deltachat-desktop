@@ -7,6 +7,7 @@ import {
 } from './DeltaDialog'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import Button from '../ui/Button'
 
 export default function EncryptionInfo({
   chatListItem,
@@ -45,13 +46,13 @@ export default function EncryptionInfo({
         </p>
         <DeltaDialogFooter>
           <DeltaDialogFooterActions>
-            <p
-              className='delta-button primary bold'
+            <Button
+              type='primary'
               style={{ float: 'right', userSelect: 'text' }}
               onClick={onClose}
             >
               {tx('ok')}
-            </p>
+            </Button>
           </DeltaDialogFooterActions>
         </DeltaDialogFooter>
       </div>

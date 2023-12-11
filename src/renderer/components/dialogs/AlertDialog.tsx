@@ -5,6 +5,7 @@ import {
   DeltaDialogFooterActions,
 } from './DeltaDialog'
 import { useTranslationFunction } from '../../contexts'
+import Button from '../ui/Button'
 
 export default function AlertDialog({
   message,
@@ -30,9 +31,9 @@ export default function AlertDialog({
       </div>
       <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
         <DeltaDialogFooterActions>
-          <p className='delta-button bold primary' onClick={() => onClick()}>
+          <Button type='primary' onClick={onClick}>
             {tx('ok')}
-          </p>
+          </Button>
         </DeltaDialogFooterActions>
       </DeltaDialogFooter>
     </SmallDialog>

@@ -6,6 +6,7 @@ import {
 } from './DeltaDialog'
 import { useTranslationFunction } from '../../contexts'
 import type { DialogProps } from './DialogController'
+import Button from '../ui/Button'
 
 export default function ConfirmationDialog({
   message,
@@ -59,21 +60,20 @@ export default function ConfirmationDialog({
       </div>
       <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
         <DeltaDialogFooterActions>
-          <p
-            className='delta-button bold primary'
+          <Button
+            type='primary'
             onClick={() => onClick(false)}
             style={noMargin ? {} : { marginRight: '10px' }}
           >
             {cancelLabel || tx('cancel')}
-          </p>
-          <p
-            className={`delta-button bold primary ${
-              isConfirmDanger ? 'danger' : 'primary'
-            } test-selector-confirm`}
+          </Button>
+          <Button
+            type={isConfirmDanger ? 'danger' : 'primary'}
+            className='test-selector-confirm'
             onClick={() => onClick(true)}
           >
             {confirmLabel || tx('yes')}
-          </p>
+          </Button>
         </DeltaDialogFooterActions>
       </DeltaDialogFooter>
     </SmallDialog>

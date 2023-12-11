@@ -14,6 +14,7 @@ import { RecoverableCrashScreen } from '../screens/RecoverableCrashScreen'
 import { useSettingsStore } from '../../stores/settings'
 import { sendMessage } from '../helpers/ChatMethods'
 import useIsChatDisabled from '../composer/useIsChatDisabled'
+import SelectedMessagesActions from './SelectedMessagesActions'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -81,9 +82,11 @@ export default function MessageListAndComposer({
     chatStore.chat.isProtectionBroken,
     messageInputRef
   )
-  
+
   const [selectedMessages, setSelectedMessages] = useState<number[]>([])
-  const isSelectMode = useMemo(() => selectedMessages.length !== 0, [selectedMessages])
+  const isSelectMode = useMemo(() => selectedMessages.length !== 0, [
+    selectedMessages,
+  ])
   const onDrop = (e: React.DragEvent<any>) => {
     if (chatStore.chat === null) {
       log.warn('droped something, but no chat is selected')
@@ -238,10 +241,16 @@ export default function MessageListAndComposer({
       onDrop={onDrop.bind({ props: { chat: chatStore } })}
       onDragOver={onDragOver}
     >
-      { isSelectMode && <SelectedMessagesActions {...selectedMessages} /> }
+      {isSelectMode && (
+        <SelectedMessagesActions selectedMessages={selectedMessages} />
+      )}
       <div className='message-list-and-composer__message-list'>
         <RecoverableCrashScreen reset_on_change_key={chatStore.chat.id}>
-          <MessageList chatStore={chatStore} refComposer={refComposer} setSelectedMessages={setSelectedMessages} />
+          <MessageList
+            chatStore={chatStore}
+            refComposer={refComposer}
+            setSelectedMessages={setSelectedMessages}
+          />
         </RecoverableCrashScreen>
       </div>
       <Composer

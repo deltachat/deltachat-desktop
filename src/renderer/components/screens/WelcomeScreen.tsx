@@ -15,6 +15,7 @@ import { Screens, selectedAccountId } from '../../ScreenController'
 import { BackendRemote, EffectfulBackendActions } from '../../backend-com'
 import processOpenQrUrl from '../helpers/OpenQrUrl'
 import { DcEventType } from '@deltachat/jsonrpc-client'
+import Button from '../ui/Button'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
@@ -103,12 +104,9 @@ const ImportButton = function ImportButton() {
   }
 
   return (
-    <button
-      className='delta-button-round secondary'
-      onClick={onClickImportBackup}
-    >
+    <Button type='secondary' round onClick={onClickImportBackup}>
       {tx('import_backup_title')}
-    </button>
+    </Button>
   )
 }
 
@@ -185,25 +183,18 @@ export default function WelcomeScreen({
                   <img className='delta-icon' src='../images/intro1.png' />
                   <p className='f1'>{tx('welcome_chat_over_email')}</p>
                   {/* <p className='f2'>{tx('welcome_intro1_message')}</p> */}
-                  <button
+                  <Button
                     id='action-login-to-email'
-                    className='delta-button-round'
                     onClick={() => window.__changeScreen(Screens.Login)}
                   >
                     {tx('login_header')}
-                  </button>
-                  <button
-                    className='delta-button-round secondary'
-                    onClick={onClickSecondDevice}
-                  >
+                  </Button>
+                  <Button type='secondary' onClick={onClickSecondDevice}>
                     {tx('multidevice_receiver_title')}
-                  </button>
-                  <button
-                    className='delta-button-round secondary'
-                    onClick={onClickScanQr}
-                  >
+                  </Button>
+                  <Button type='secondary' round onClick={onClickScanQr}>
                     {tx('scan_invitation_code')}
-                  </button>
+                  </Button>
                   <ImportButton />
                 </div>
               </DeltaDialogContent>

@@ -13,6 +13,7 @@ import {
   DeltaDialogContent,
   DeltaDialogHeader,
 } from '../dialogs/DeltaDialog'
+import Button from '../ui/Button'
 
 import type ScreenController from '../../ScreenController'
 
@@ -79,20 +80,16 @@ export default function AccountSetupScreen({
           </DeltaDialogBody>
           <DeltaDialogFooter>
             <DeltaDialogFooterActions>
-              <p
+              <Button
                 id='action-cancel'
-                className={'delta-button bold primary'}
+                type='primary'
                 onClick={() => selectAccount(accountId)}
               >
                 {tx('cancel')}
-              </p>
-              <p
-                id='action-login'
-                className={'delta-button bold primary'}
-                onClick={onClickLogin}
-              >
+              </Button>
+              <Button id='action-login' type='primary' onClick={onClickLogin}>
                 {tx('login_title')}
-              </p>
+              </Button>
             </DeltaDialogFooterActions>
           </DeltaDialogFooter>
         </DeltaDialogBase>

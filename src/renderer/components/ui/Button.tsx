@@ -1,22 +1,43 @@
 import React from 'react'
 import classNames from 'classnames'
 
-
 type ButtonProps = {
   children: any
-  onClick?: () => void
+  onClick?: any
   className?: any
   style?: Record<string, string | number>
+  type?: 'primary' | 'danger' | 'secondary'
+  round?: boolean
+  id?: string
+  'aria-label'?: string
+  disabled?: boolean
 }
 
-export default function Button({ onClick, children, className, style }: ButtonProps) {
+export default function Button({
+  disabled,
+  id,
+  round,
+  onClick,
+  children,
+  className,
+  style,
+  type,
+}: ButtonProps) {
   return (
-    <p
-      className={classNames('delta-button primary bold', className)}
+    <button
+      id={id}
+      className={classNames(
+        'delta-button' + round ? '-round' : '',
+        'bold',
+        className,
+        type,
+        disabled && 'disabled'
+      )}
       onClick={onClick}
-      {...style}
+      style={style}
+      role='button'
     >
       {children}
-    </p>
+    </button>
   )
 }

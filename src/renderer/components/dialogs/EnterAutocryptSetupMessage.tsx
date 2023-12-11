@@ -6,6 +6,7 @@ import { getLogger } from '../../../shared/logger'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { T } from '@deltachat/jsonrpc-client'
+import Button from '../ui/Button'
 
 const log = getLogger('frontend/dialogs/EnterAutocryptSetupMessage')
 
@@ -110,12 +111,9 @@ export default function EnterAutocryptSetupMessage({
 
       <div className={'bp4-dialog-footer'}>
         <div className={'bp4-dialog-footer-actions'}>
-          <p
-            className='delta-button primary bold'
-            onClick={continueKeyTransfer}
-          >
+          <Button type='primary' onClick={continueKeyTransfer}>
             {loading ? tx('loading') : tx('ok')}
-          </p>
+          </Button>
         </div>
       </div>
     </DeltaDialog>

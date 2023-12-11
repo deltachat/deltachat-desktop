@@ -15,6 +15,7 @@ import {
   DeltaDialogHeader,
 } from '../DeltaDialog'
 import { DialogProps } from '../DialogController'
+import Button from '../../ui/Button'
 
 const log = getLogger('renderer/send_backup')
 
@@ -175,11 +176,11 @@ export function SendBackupDialog({ onClose }: DialogProps) {
         <DeltaDialogFooterActions style={{ alignItems: 'center' }}>
           {inProgress && (
             <>
-              <p
-                className='delta-button bold primary setup-new-device-troubleshooting-btn'
+              <Button
+                type='primary'
+                className='setup-new-device-troubleshooting-btn'
                 onClick={() => runtime.openLink(TROUBLESHOOTING_URL)}
                 style={{ marginRight: '10px' }}
-                role='button'
               >
                 {tx('troubleshooting')}{' '}
                 <div
@@ -189,36 +190,24 @@ export function SendBackupDialog({ onClose }: DialogProps) {
                       'url(../images/icons/open_in_new.svg) no-repeat center',
                   }}
                 ></div>
-              </p>
+              </Button>
               {stage === 'awaiting_scan' && svgUrl && qrContent && (
-                <p
-                  className='delta-button bold primary'
-                  onClick={copyQrToClipboard}
-                  role='button'
-                >
+                <Button type='primary' onClick={copyQrToClipboard}>
                   {tx('global_menu_edit_copy_desktop')}
-                </p>
+                </Button>
               )}
               <div style={{ flexGrow: 1 }}>{/** spacer */}</div>
             </>
           )}
-          <p
-            className={`delta-button bold primary`}
-            onClick={cancel}
-            role='button'
-          >
+          <Button type='primary' onClick={cancel}>
             {tx('cancel')}
-          </p>
+          </Button>
           {!inProgress && (
             <>
               <div style={{ flexGrow: 1 }}>{/** spacer */}</div>
-              <p
-                className='delta-button bold primary'
-                onClick={startNetworkedTransfer}
-                role='button'
-              >
+              <Button type='primary' onClick={startNetworkedTransfer}>
                 {tx('perm_continue')}
-              </p>
+              </Button>
             </>
           )}
         </DeltaDialogFooterActions>
