@@ -5,5 +5,8 @@
   },
   "select_message": {
     "message": "Select message"
+  },
+  "selected_messages_number": {
+    "message": "%1$d selected message(s)"
   }
 }
