@@ -3,7 +3,7 @@
 html {
   font-family: Roboto, Apple Color Emoji, NotoEmoji, Helvetica Neue, Arial,
     Helvetica, NotoMono, sans-serif !important;
-  color-scheme: dark light;
+  color-scheme: light dark;
 }
 @media (prefers-color-scheme: light) {
   html {
