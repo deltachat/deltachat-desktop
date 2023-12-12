@@ -27,15 +27,15 @@ export default function Button({
     <button
       id={id}
       className={classNames(
-        'delta-button' + round ? '-round' : '',
+        'delta-button' + (round ? '-round' : ''),
         'bold',
         className,
         type,
-        disabled && 'disabled'
       )}
       onClick={onClick}
       style={style}
       role='button'
+      disabled={disabled}
     >
       {children}
     </button>
