@@ -1,5 +1,14 @@
+@use 'sass:color';
+
 .selected-messages-actions {
   display: flex;
   flex-direction: row;
-  background-color: rgba(165, 100, 0, 0.5);
+  background-color: var(--navBarBackground);
+  justify-content: flex-start;
+  align-items: center;
+  & > div {
+    width: 100%;
+    text-align: right;
+    padding: 8px;
+  }
 }
