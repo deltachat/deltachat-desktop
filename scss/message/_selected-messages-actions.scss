@@ -6,9 +6,13 @@
   background-color: var(--navBarBackground);
   justify-content: flex-start;
   align-items: center;
-  & > div {
+  & > p {
     width: 100%;
     text-align: right;
-    padding: 8px;
+    margin: 8px;
+  }
+  & > button {
+    margin: 4px;
+    margin-bottom: 6px !important;
   }
 }
