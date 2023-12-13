@@ -40,7 +40,10 @@ export default function ForwardMessage(props: {
       const yes = await confirmForwardMessage(messages, chat)
       if (!yes) {
         if (isMany) {
-          const message = await BackendRemote.rpc.getMessage(accountId, messages[0])
+          const message = await BackendRemote.rpc.getMessage(
+            accountId,
+            messages[0]
+          )
           selectChat(message.chatId)
         } else {
           selectChat(messages.chatId)
@@ -48,9 +51,17 @@ export default function ForwardMessage(props: {
       }
     } else {
       if (isMany) {
-        let messageObjects: T.Message[] = await Promise.all(messages.map(async (id) => await BackendRemote.rpc.getMessage(accountId, id)))
-        messageObjects.sort((msgA: T.Message, msgB: T.Message) => msgA.timestamp - msgB.timestamp)
-        const messageIds = messageObjects.map((message: T.Message) => message.id)
+        const messageObjects: T.Message[] = await Promise.all(
+          messages.map(
+            async id => await BackendRemote.rpc.getMessage(accountId, id)
+          )
+        )
+        messageObjects.sort(
+          (msgA: T.Message, msgB: T.Message) => msgA.timestamp - msgB.timestamp
+        )
+        const messageIds = messageObjects.map(
+          (message: T.Message) => message.id
+        )
         for (const messageId of messageIds) {
           await forwardMessage(accountId, messageId, chat.id)
         }

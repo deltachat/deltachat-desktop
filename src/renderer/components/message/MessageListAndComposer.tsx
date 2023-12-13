@@ -1,4 +1,11 @@
-import React, { useRef, useContext, useEffect, useReducer, useMemo, useCallback } from 'react'
+import React, {
+  useRef,
+  useContext,
+  useEffect,
+  useReducer,
+  useMemo,
+  useCallback,
+} from 'react'
 import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 import { join, parse } from 'path'
 
@@ -99,16 +106,23 @@ export default function MessageListAndComposer({
         case 'unselect':
           return selectedMessages.filter(id => id !== messageId)
         case 'reset':
-          return new Array()
+          return []
       }
     },
     []
   )
-  const selectMessage = useCallback<(id: number) => void>((messageId: number) =>
-    _dispatch({ type: 'select', messageId }), [_dispatch])
-  const unselectMessage = useCallback<(id: number) => void>((messageId: number) =>
-    _dispatch({ type: 'unselect', messageId }), [_dispatch])
-  const resetSelected = useCallback<() => void>(() => _dispatch({ type: 'reset' }), [_dispatch])
+  const selectMessage = useCallback<(id: number) => void>(
+    (messageId: number) => _dispatch({ type: 'select', messageId }),
+    [_dispatch]
+  )
+  const unselectMessage = useCallback<(id: number) => void>(
+    (messageId: number) => _dispatch({ type: 'unselect', messageId }),
+    [_dispatch]
+  )
+  const resetSelected = useCallback<() => void>(
+    () => _dispatch({ type: 'reset' }),
+    [_dispatch]
+  )
   const isSelectMode = useMemo(() => selectedMessages.length !== 0, [
     selectedMessages,
   ])

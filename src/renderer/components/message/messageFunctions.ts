@@ -38,7 +38,10 @@ export function openAttachmentInShell(msg: Type.Message) {
   }
 }
 
-export function openForwardDialog(messages: Type.Message | number[], resetSelected?: () => void) {
+export function openForwardDialog(
+  messages: Type.Message | number[],
+  resetSelected?: () => void
+) {
   window.__openDialog('ForwardMessage', { messages, resetSelected })
 }
 
@@ -77,22 +80,29 @@ export async function confirmForwardMessage(
   return yes
 }
 
-export function confirmDeleteMessage(messages: Type.Message | number[], resetSelected?: () => void) {
+export function confirmDeleteMessage(
+  messages: Type.Message | number[],
+  resetSelected?: () => void
+) {
   const tx = window.static_translate
   const isMany = Array.isArray(messages)
   window.__openDialog('ConfirmationDialog', {
-    message: isMany ? tx('ask_delete_message_many', messages.length.toLocaleString()) : tx('ask_delete_message'),
+    message: isMany
+      ? tx('ask_delete_message_many', messages.length.toLocaleString())
+      : tx('ask_delete_message'),
     confirmLabel: tx('delete'),
-    cb: (yes: boolean) => yes && (() => {
-      if (isMany) {
-        for (const messageId of messages) {
-          deleteMessage(messageId)
-          resetSelected && resetSelected()
+    cb: (yes: boolean) =>
+      yes &&
+      (() => {
+        if (isMany) {
+          for (const messageId of messages) {
+            deleteMessage(messageId)
+            resetSelected && resetSelected()
+          }
+        } else {
+          deleteMessage(messages.id)
         }
-      } else {
-        deleteMessage(messages.id)
-      }
-    })(),
+      })(),
   })
 }
 

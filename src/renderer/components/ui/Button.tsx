@@ -30,7 +30,7 @@ export default function Button({
         'delta-button' + (round ? '-round' : ''),
         'bold',
         className,
-        type,
+        type
       )}
       onClick={onClick}
       style={style}

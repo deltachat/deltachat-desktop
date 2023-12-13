@@ -2,11 +2,11 @@ import React from 'react'
 
 import { useTranslationFunction } from '../../contexts'
 import Button from '../ui/Button'
-import { confirmDeleteMessage, openForwardDialog }  from './messageFunctions'
+import { confirmDeleteMessage, openForwardDialog } from './messageFunctions'
 
 export default function SelectedMessagesActions({
   selectedMessages,
-  resetSelected
+  resetSelected,
 }: {
   selectedMessages: number[]
   resetSelected: () => void
@@ -18,17 +18,16 @@ export default function SelectedMessagesActions({
       <Button
         type='primary'
         onClick={() => openForwardDialog(selectedMessages, resetSelected)}
-      >{tx('forward')}</Button>
+      >
+        {tx('forward')}
+      </Button>
       <Button
         type='danger'
         onClick={() => confirmDeleteMessage(selectedMessages, resetSelected)}
       >
         {tx('delete')}
       </Button>
-      <Button
-        type='secondary'
-        onClick={resetSelected}
-      >
+      <Button type='secondary' onClick={resetSelected}>
         {tx('cancel')}
       </Button>
       <p>
