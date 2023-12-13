@@ -219,6 +219,9 @@
     .message-attachment-media {
       border-bottom-left-radius: 1px;
     }
+    &.selected {
+      background-color: black !important;
+    }
   }
 }
 
@@ -263,6 +266,9 @@
     &,
     .message-attachment-media {
       border-bottom-right-radius: 1px;
+    }
+    &.selected {
+      background-color: black;
     }
   }
 }
@@ -635,9 +641,4 @@
       }
     }
   }
-}
-
-.msg-container.selected {
-  background-color: rgb(255, 255, 255) !important;
-  color: rgb(0, 0, 0) !important;
 }
