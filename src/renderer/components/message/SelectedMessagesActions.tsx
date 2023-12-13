@@ -32,7 +32,7 @@ export default function SelectedMessagesActions({
       </Button>
       <p>
         {tx(
-          'selected_messages_number',
+          'n_selected',
           selectedMessages.length.toLocaleString()
         )}
       </p>
