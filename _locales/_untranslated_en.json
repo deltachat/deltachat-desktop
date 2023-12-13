@@ -9,9 +9,6 @@
   "selected_messages_number": {
     "message": "%1$d selected message(s)"
   },
-  "delete": {
-    "message": "Delete"
-  },
   "ask_delete_message_many": {
     "message": "Are you sure you want to delete these %1$d messages?"
   }
