@@ -88,7 +88,15 @@
       }
     }
   }
-
+  &.select-mode {
+    cursor: grab;
+    & > * {
+      cursor: grab !important;
+    }
+    & > .msg-container > .msg-body > * {
+      cursor: grab !important;
+    }
+  }
   .msg-container {
     position: relative;
     display: inline-block;

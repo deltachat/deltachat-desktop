@@ -503,7 +503,8 @@ export default function Message({
         { 'type-sticker': viewType === 'Sticker' },
         { error: status === 'error' },
         { forwarded: message.isForwarded },
-        { 'has-html': hasHtml }
+        { 'has-html': hasHtml },
+        { 'select-mode': isSelectMode }
       )}
       id={message.id.toString()}
       onClick={
