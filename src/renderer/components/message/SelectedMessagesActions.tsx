@@ -25,12 +25,18 @@ export default function SelectedMessagesActions({
       >
         {tx('delete')}
       </Button>
-      <div>
+      <Button
+        type='secondary'
+        onClick={resetSelected}
+      >
+        {tx('cancel')}
+      </Button>
+      <p>
         {tx(
           'selected_messages_number',
           selectedMessages.length.toLocaleString()
         )}
-      </div>
+      </p>
     </div>
   )
 }
