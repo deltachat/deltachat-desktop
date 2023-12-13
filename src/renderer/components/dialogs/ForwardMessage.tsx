@@ -17,36 +17,54 @@ import { forwardMessage, selectChat } from '../helpers/ChatMethods'
 import { confirmForwardMessage } from '../message/messageFunctions'
 
 export default function ForwardMessage(props: {
-  message: T.Message
+  messages: T.Message | number[]
+  resetSelected?: () => void
   onClose: DialogProps['onClose']
 }) {
   const accountId = selectedAccountId()
   const tx = window.static_translate
-  const { message, onClose } = props
+  const { messages, onClose, resetSelected } = props
   const listFlags = C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS
   const { chatListIds, queryStr, setQueryStr } = useChatList(listFlags)
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
     chatListIds,
     listFlags
   )
+  const isMany = Array.isArray(messages)
 
   const onChatClick = async (chatId: number) => {
     const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
     onClose()
     if (!chat.isSelfTalk) {
       selectChat(chat.id)
-      const yes = await confirmForwardMessage(accountId, message, chat)
+      const yes = await confirmForwardMessage(messages, chat)
       if (!yes) {
-        selectChat(message.chatId)
+        if (isMany) {
+          const message = await BackendRemote.rpc.getMessage(accountId, messages[0])
+          selectChat(message.chatId)
+        } else {
+          selectChat(messages.chatId)
+        }
       }
     } else {
-      await forwardMessage(accountId, message.id, chat.id)
+      if (isMany) {
+        console.log("we have to forward many messages")
+        let messageObjects: T.Message[] = await Promise.all(messages.map(async (id) => await BackendRemote.rpc.getMessage(accountId, id)))
+        messageObjects.sort((msgA: T.Message, msgB: T.Message) => msgA.timestamp - msgB.timestamp)
+        const messageIds = messageObjects.map((message: T.Message) => message.id)
+        for (const messageId of messageIds) {
+          await forwardMessage(accountId, messageId, chat.id)
+        }
+        resetSelected && resetSelected()
+      } else {
+        await forwardMessage(accountId, messages.id, chat.id)
+      }
     }
   }
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setQueryStr(e.target.value)
 
-  const isOpen = !!message
+  const isOpen = !!messages
   const noResults = chatListIds.length === 0 && queryStr !== ''
 
   const CHATLISTITEM_CHAT_HEIGHT =

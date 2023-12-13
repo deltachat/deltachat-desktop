@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useEffect, useState, useMemo } from 'react'
+import React, { useRef, useContext, useEffect, useReducer, useMemo, useCallback } from 'react'
 import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 import { join, parse } from 'path'
 
@@ -83,7 +83,32 @@ export default function MessageListAndComposer({
     messageInputRef
   )
 
-  const [selectedMessages, setSelectedMessages] = useState<number[]>([])
+  type MessageSelectAction = {
+    type: 'select' | 'unselect' | 'reset'
+    messageId?: number
+  }
+  const [selectedMessages, _dispatch] = useReducer(
+    (selectedMessages: number[], action: MessageSelectAction) => {
+      const { type, messageId } = action
+      if (!messageId && type !== 'reset') {
+        return selectedMessages
+      }
+      switch (type) {
+        case 'select':
+          return [...selectedMessages, messageId]
+        case 'unselect':
+          return selectedMessages.filter(id => id !== messageId)
+        case 'reset':
+          return new Array()
+      }
+    },
+    []
+  )
+  const selectMessage = useCallback<(id: number) => void>((messageId: number) =>
+    _dispatch({ type: 'select', messageId }), [_dispatch])
+  const unselectMessage = useCallback<(id: number) => void>((messageId: number) =>
+    _dispatch({ type: 'unselect', messageId }), [_dispatch])
+  const resetSelected = useCallback<() => void>(() => _dispatch({ type: 'reset' }), [_dispatch])
   const isSelectMode = useMemo(() => selectedMessages.length !== 0, [
     selectedMessages,
   ])
@@ -242,14 +267,19 @@ export default function MessageListAndComposer({
       onDragOver={onDragOver}
     >
       {isSelectMode && (
-        <SelectedMessagesActions selectedMessages={selectedMessages} />
+        <SelectedMessagesActions
+          selectedMessages={selectedMessages}
+          resetSelected={resetSelected}
+        />
       )}
       <div className='message-list-and-composer__message-list'>
         <RecoverableCrashScreen reset_on_change_key={chatStore.chat.id}>
           <MessageList
             chatStore={chatStore}
             refComposer={refComposer}
-            setSelectedMessages={setSelectedMessages}
+            selectMessage={selectMessage}
+            unselectMessage={unselectMessage}
+            selectedMessages={selectedMessages}
           />
         </RecoverableCrashScreen>
       </div>

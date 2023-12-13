@@ -5,8 +5,6 @@ import React, {
   MutableRefObject,
   useEffect,
   useState,
-  useMemo,
-  useReducer,
 } from 'react'
 import classNames from 'classnames'
 import { MessageWrapper } from './MessageWrapper'
@@ -25,6 +23,7 @@ import { selectedAccountId } from '../../ScreenController'
 import { useMessageList } from '../../stores/messagelist'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { debouncedUpdateBadgeCounter } from '../../system-integration/badge-counter'
+
 const log = getLogger('render/components/message/MessageList')
 
 type ChatTypes =
@@ -95,13 +94,17 @@ function useUnreadCount(
 type MessageListProps = {
   chatStore: ChatStoreStateWithChatSet
   refComposer: todo
-  setSelectedMessages: (selectedMessages: number[]) => void
+  selectMessage: (messageId: number) => void
+  unselectMessage: (messageId: number) => void
+  selectedMessages: number[]
 }
 
 export default function MessageList({
   chatStore,
   refComposer,
-  setSelectedMessages,
+  selectMessage,
+  unselectMessage,
+  selectedMessages,
 }: MessageListProps) {
   const accountId = selectedAccountId()
   const {
@@ -123,31 +126,6 @@ export default function MessageList({
     fetchMoreBottom,
     fetchMoreTop,
   } = useMessageList(accountId, chatStore.chat.id)
-  type MessageSelectAction = {
-    type: 'select' | 'unselect'
-    messageId: number
-  }
-  const [selectedMessages, _dispatch] = useReducer(
-    (selectedMessages: number[], action: MessageSelectAction) => {
-      const { type, messageId } = action
-      switch (type) {
-        case 'select':
-          return [...selectedMessages, messageId]
-        case 'unselect':
-          selectedMessages = selectedMessages.filter(id => id !== messageId)
-      }
-      return selectedMessages
-    },
-    []
-  )
-  const selectMessage = (messageId: number) =>
-    _dispatch({ type: 'select', messageId })
-  const unselectMessage = (messageId: number) =>
-    _dispatch({ type: 'unselect', messageId })
-  useMemo(() => setSelectedMessages(selectedMessages), [
-    selectedMessages,
-    setSelectedMessages,
-  ])
 
   const countUnreadMessages = useUnreadCount(
     accountId,
@@ -512,9 +490,7 @@ export const MessageListInner = React.memo(
       chatType: chatStore.chat.chatType as number,
     }
 
-    const isSelectMode = useMemo(() => selectedMessages.length !== 0, [
-      selectedMessages,
-    ])
+    const isSelectMode = selectedMessages.length !== 0
     useKeyBindingAction(KeybindAction.MessageList_PageUp, () => {
       if (messageListRef.current) {
         messageListRef.current.scrollTop =
@@ -571,7 +547,7 @@ export const MessageListInner = React.memo(
                     selectMessage={() => selectMessage(msgId)}
                     unselectMessage={() => unselectMessage(msgId)}
                     isSelected={selectedMessages.includes(msgId)}
-                    isSelectMode={isSelectMode}
+                    isSelectMode={selectedMessages.length !== 0}
                   />
                 )
               } else if (message?.kind === 'loadingError') {
