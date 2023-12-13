@@ -585,6 +585,7 @@ export default function Message({
           />
         </div>
       </div>
+      { isSelected && <div className='selected-message-mask' /> }
     </div>
   )
 }

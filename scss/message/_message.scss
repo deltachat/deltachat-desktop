@@ -227,9 +227,6 @@
     .message-attachment-media {
       border-bottom-left-radius: 1px;
     }
-    &.selected {
-      background-color: black !important;
-    }
   }
 }
 
@@ -274,9 +271,6 @@
     &,
     .message-attachment-media {
       border-bottom-right-radius: 1px;
-    }
-    &.selected {
-      background-color: black;
     }
   }
 }
@@ -649,4 +643,12 @@
       }
     }
   }
+}
+
+.selected-message-mask {
+  position: absolute;
+  background-color: var(--messageHightlightColor);
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
 }
