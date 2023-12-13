@@ -557,6 +557,7 @@ export default function Message({
               conversationType={conversationType}
               message={message}
               hasQuote={message.quote !== null}
+              isSelectMode={isSelectMode}
             />
           )}
           {message.viewType === 'Webxdc' && (
