@@ -20,6 +20,7 @@ import type { PropsWithChildren } from 'react'
 import type { DialogProps } from '../../../contexts/DialogContext'
 
 import styles from './styles.module.scss'
+import useDialog from '../../../hooks/useDialog'
 
 const log = getLogger('renderer/send_backup')
 
@@ -228,7 +229,4 @@ function SendBackupSteps() {
       </ol>
     </div>
   )
-}
-function useDialog(): { openDialog: any } {
-  throw new Error('Function not implemented.')
 }
