@@ -15,8 +15,8 @@ import {
 import { Credentials } from '../../../shared/shared-types'
 import ConfirmationDialog from './ConfirmationDialog'
 import { BackendRemote } from '../../backend-com'
-import { useDialog } from '../../hooks/useDialog'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 

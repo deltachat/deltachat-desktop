@@ -15,8 +15,8 @@ import { Type } from '../../backend-com'
 import { useStore } from '../../stores/store'
 import SettingsStoreInstance from '../../stores/settings'
 import { IMAGE_EXTENSIONS } from '../../../shared/constants'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
-import { useDialog } from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 
 //function to populate Menu

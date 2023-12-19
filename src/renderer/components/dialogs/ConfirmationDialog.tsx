@@ -5,7 +5,7 @@ import {
   DeltaDialogFooter,
   DeltaDialogFooterActions,
 } from './DeltaDialog'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 

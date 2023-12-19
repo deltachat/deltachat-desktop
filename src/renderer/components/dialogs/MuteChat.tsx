@@ -4,7 +4,7 @@ import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
 import { Timespans } from '../../../shared/constants'
 import { selectedAccountId } from '../../ScreenController'
 import { BackendRemote, Type } from '../../backend-com'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 export default function MuteChat({
   onClose,

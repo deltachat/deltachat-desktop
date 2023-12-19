@@ -22,8 +22,8 @@ import { selectedAccountId } from '../../ScreenController'
 import { runtime } from '../../runtime'
 import { jumpToMessage } from '../helpers/ChatMethods'
 import { ScreenContext } from '../../contexts/ScreenContext'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
-import { useDialog } from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
 
 import type { DialogProps, OpenDialog } from '../../contexts/DialogContext'
 

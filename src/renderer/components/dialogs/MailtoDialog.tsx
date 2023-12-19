@@ -11,8 +11,8 @@ import { ChatListPart, useLogicVirtualChatList } from '../chat/ChatList'
 import { useChatList } from '../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../ThemeManager'
 import { createDraftMessage } from '../helpers/ChatMethods'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
-import { useDialog } from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 

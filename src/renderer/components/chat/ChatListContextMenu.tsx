@@ -16,8 +16,8 @@ import { ContextMenuItem } from '../ContextMenu'
 import MailingListProfile from '../dialogs/MessageListProfile'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
-import { useDialog } from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
 import { ScreenContext } from '../../contexts/ScreenContext'
 
 function archiveStateMenu(

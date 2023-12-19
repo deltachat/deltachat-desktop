@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 
-import { useTranslationFunction } from '../hooks/useTranslationFunction'
+import useTranslationFunction from '../hooks/useTranslationFunction'
 
 export function ClearButton(props: {
   onChange: (event: { target: { value: '' } }) => void

@@ -5,7 +5,7 @@ import { filesize } from 'filesize'
 import ConfirmationDialog from './ConfirmationDialog'
 import { runtime } from '../../runtime'
 import { selectedAccountId } from '../../ScreenController'
-import { useDialog } from '../../hooks/useDialog'
+import useDialog from '../../hooks/useDialog'
 
 export default function SettingsWebxdc() {
   const accountId = selectedAccountId()

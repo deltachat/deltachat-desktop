@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 
 import { getLogger } from '../../../../shared/logger'
 import { BackendRemote } from '../../../backend-com'
-import { useTranslationFunction } from '../../../hooks/useTranslationFunction'
+import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { selectedAccountId } from '../../../ScreenController'
 import { DeltaProgressBar } from '../../Login-Styles'
 import DeltaDialog from '../DeltaDialog'

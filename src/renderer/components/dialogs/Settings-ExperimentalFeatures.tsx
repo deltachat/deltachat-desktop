@@ -18,8 +18,8 @@ import SettingsStoreInstance, {
 } from '../../stores/settings'
 import RadioGroup from '../RadioGroup'
 import Radio from '../Radio'
-import { useDialog } from '../../hooks/useDialog'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 

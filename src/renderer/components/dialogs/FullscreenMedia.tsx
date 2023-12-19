@@ -16,8 +16,8 @@ import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 
 import type { DialogProps } from '../../contexts/DialogContext'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
-import { useDialog } from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
 
 const log = getLogger('renderer/fullscreen_media')
 

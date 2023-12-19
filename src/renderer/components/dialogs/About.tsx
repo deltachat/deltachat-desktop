@@ -8,7 +8,7 @@ import { VERSION, GIT_REF } from '../../../shared/build-info'
 import ClickableLink from '../helpers/ClickableLink'
 import { runtime } from '../../runtime'
 import { BackendRemote } from '../../backend-com'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 

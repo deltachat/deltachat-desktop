@@ -24,8 +24,8 @@ import { SendBackupDialog } from './setup_multi_device/SendBackup'
 import { selectedAccountId } from '../../ScreenController'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import SettingsConnectivityDialog from './Settings-Connectivity'
-import { useDialog } from '../../hooks/useDialog'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 

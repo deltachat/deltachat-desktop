@@ -15,8 +15,8 @@ import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
 import { getLogger } from '../../../shared/logger'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
-import { useDialog } from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
 
 const log = getLogger('renderer/settings/appearance')
 

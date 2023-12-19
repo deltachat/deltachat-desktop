@@ -19,8 +19,8 @@ import SettingsStoreInstance, {
 } from '../../stores/settings'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import { useDialog } from '../../hooks/useDialog'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 

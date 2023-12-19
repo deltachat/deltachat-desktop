@@ -12,7 +12,7 @@ import { getLogger } from '../../../shared/logger'
 import chatStore from '../../stores/chat'
 import { runtime } from '../../runtime'
 import { openLinkSafely } from '../helpers/LinkConfirmation'
-import { useDialog } from '../../hooks/useDialog'
+import useDialog from '../../hooks/useDialog'
 import { OpenDialog } from '../../contexts/DialogContext'
 
 const log = getLogger('renderer/LabeledLink')

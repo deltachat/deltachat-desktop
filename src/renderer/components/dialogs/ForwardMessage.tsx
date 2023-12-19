@@ -14,8 +14,8 @@ import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { forwardMessage, selectChat } from '../helpers/ChatMethods'
 import { confirmForwardMessage } from '../message/messageFunctions'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
-import { useDialog } from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 

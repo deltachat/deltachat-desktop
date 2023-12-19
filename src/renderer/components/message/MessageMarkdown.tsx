@@ -19,7 +19,7 @@ import { selectedAccountId } from '../../ScreenController'
 import SettingsStoreInstance from '../../stores/settings'
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
-import { useDialog } from '../../hooks/useDialog'
+import useDialog from '../../hooks/useDialog'
 
 const log = getLogger('renderer/message-markdown')
 

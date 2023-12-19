@@ -13,8 +13,8 @@ import {
   DeltaDialogContent,
   DeltaDialogHeader,
 } from '../dialogs/DeltaDialog'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
-import { useDialog } from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
 
 import type ScreenController from '../../ScreenController'
 

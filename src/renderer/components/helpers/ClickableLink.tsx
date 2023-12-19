@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react'
 
-import { useDialog } from '../../hooks/useDialog'
+import useDialog from '../../hooks/useDialog'
 import { openLinkSafely } from './LinkConfirmation'
 
 export default function ClickableLink({

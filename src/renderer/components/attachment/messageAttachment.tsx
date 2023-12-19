@@ -19,8 +19,8 @@ import { Type } from '../../backend-com'
 import FullscreenMedia, {
   NeighboringMediaMode,
 } from '../dialogs/FullscreenMedia'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
-import { useDialog } from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
 
 type AttachmentProps = {
   text?: string

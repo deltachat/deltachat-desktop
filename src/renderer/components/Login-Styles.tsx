@@ -7,7 +7,7 @@ import {
   ProgressBar,
   Switch,
 } from '@blueprintjs/core'
-import { useTranslationFunction } from '../hooks/useTranslationFunction'
+import useTranslationFunction from '../hooks/useTranslationFunction'
 
 export const DeltaSelect = React.memo(
   (

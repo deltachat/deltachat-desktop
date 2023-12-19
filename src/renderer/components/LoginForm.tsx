@@ -23,7 +23,7 @@ import { getLogger } from '../../shared/logger'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
 import { I18nContext } from '../contexts/I18nContext'
-import { useTranslationFunction } from '../hooks/useTranslationFunction'
+import useTranslationFunction from '../hooks/useTranslationFunction'
 import { DialogProps } from '../contexts/DialogContext'
 
 const log = getLogger('renderer/loginForm')

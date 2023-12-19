@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import {
   SmallDialog,
   DeltaDialogFooter,

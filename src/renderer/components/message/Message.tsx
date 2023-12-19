@@ -36,9 +36,9 @@ import {
   ProtectionBrokenDialog,
   ProtectionEnabledDialog,
 } from '../dialogs/ProtectionStatusDialog'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { ScreenContext } from '../../contexts/ScreenContext'
-import { useDialog } from '../../hooks/useDialog'
+import useDialog from '../../hooks/useDialog'
 import EnterAutocryptSetupMessage from '../dialogs/EnterAutocryptSetupMessage'
 import { OpenDialog } from '../../contexts/DialogContext'
 

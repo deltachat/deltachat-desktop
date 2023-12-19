@@ -42,9 +42,9 @@ import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 import { Type } from '../../backend-com'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import { SettingsProfileDialog } from '../dialogs/Settings-Profile'
-import { useDialog } from '../../hooks/useDialog'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
-import { useKeyBindingAction } from '../../hooks/useKeyBindingAction'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useKeyBindingAction from '../../hooks/useKeyBindingAction'
 
 const log = getLogger('renderer/main-screen')
 

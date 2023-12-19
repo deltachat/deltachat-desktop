@@ -21,9 +21,9 @@ import { useContextMenu } from '../ContextMenu'
 import { runtime } from '../../runtime'
 import { selectChat } from '../helpers/ChatMethods'
 import { BackendRemote } from '../../backend-com'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { ScreenContext } from '../../contexts/ScreenContext'
-import { useDialog } from '../../hooks/useDialog'
+import useDialog from '../../hooks/useDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 

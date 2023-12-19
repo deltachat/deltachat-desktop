@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 import { getLogger } from '../../../../shared/logger'
 import { BackendRemote, onDCEvent } from '../../../backend-com'
-import { useDialog } from '../../../hooks/useDialog'
+import useDialog from '../../../hooks/useDialog'
 import { runtime } from '../../../runtime'
 import { selectedAccountId } from '../../../ScreenController'
 import ConfirmationDialog from '../ConfirmationDialog'

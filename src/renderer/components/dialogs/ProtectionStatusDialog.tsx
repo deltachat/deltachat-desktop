@@ -9,8 +9,8 @@ import {
   DeltaDialogFooterActions,
 } from './DeltaDialog'
 import QrCode from './QrCode'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
-import { useDialog } from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 

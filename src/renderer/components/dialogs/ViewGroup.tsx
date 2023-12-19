@@ -34,8 +34,8 @@ import { modifyGroup } from '../helpers/ChatMethods'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import { useSettingsStore } from '../../stores/settings'
 import { DialogProps } from '../../contexts/DialogContext'
-import { useDialog } from '../../hooks/useDialog'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import ConfirmationDialog from './ConfirmationDialog'
 
 const log = getLogger('renderer/ViewGroup')

@@ -18,7 +18,7 @@ import { EffectfulBackendActions } from '../../backend-com'
 import { BackendRemote, Type } from '../../backend-com'
 import { ImportBackupTransferProgressDialog } from '../dialogs/setup_multi_device/ReceiveBackup'
 import processMailtoUrl from './MailtoUrl'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type {
   CloseDialog,

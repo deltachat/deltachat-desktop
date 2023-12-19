@@ -15,7 +15,7 @@ import { jumpToMessage } from '../helpers/ChatMethods'
 import { useThemeCssVar } from '../../ThemeManager'
 
 import type { EmojiData } from 'emoji-mart/index'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 const DisplayedStickerPack = ({
   stickerPackName,

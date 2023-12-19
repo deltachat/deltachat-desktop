@@ -22,8 +22,8 @@ import { useMessageList } from '../../stores/messagelist'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { debouncedUpdateBadgeCounter } from '../../system-integration/badge-counter'
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
-import { useKeyBindingAction } from '../../hooks/useKeyBindingAction'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useKeyBindingAction from '../../hooks/useKeyBindingAction'
 
 const log = getLogger('render/components/message/MessageList')
 

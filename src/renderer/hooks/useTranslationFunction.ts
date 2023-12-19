@@ -11,4 +11,6 @@ import { I18nContext } from '../contexts/I18nContext'
  * Otherwise use the `<I18nContext.Consumer>` or when you don't need
  * the dynamic updating functionality use `window.static_translate` directly.
  */
-export const useTranslationFunction = () => useContext(I18nContext)
+export default function useTranslationFunction() {
+  return useContext(I18nContext)
+}

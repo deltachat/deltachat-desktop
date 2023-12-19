@@ -46,9 +46,9 @@ import { selectedAccountId } from '../../ScreenController'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import ConfirmationDialog from './ConfirmationDialog'
 import { VerifiedContactsRequiredDialog } from './ProtectionStatusDialog'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { ScreenContext } from '../../contexts/ScreenContext'
-import { useDialog } from '../../hooks/useDialog'
+import useDialog from '../../hooks/useDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 

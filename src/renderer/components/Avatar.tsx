@@ -6,7 +6,7 @@ import { Type } from '../backend-com'
 import FullscreenMedia, {
   NeighboringMediaMode,
 } from './dialogs/FullscreenMedia'
-import { useDialog } from '../hooks/useDialog'
+import useDialog from '../hooks/useDialog'
 
 export function QRAvatar() {
   return (

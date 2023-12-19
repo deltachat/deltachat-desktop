@@ -6,8 +6,8 @@ import { SettingsSelector } from './Settings'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
-import { useDialog } from '../../hooks/useDialog'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 export default function SettingsOutgoingMediaQuality(props: {
   settings: SettingsStoreState['settings']

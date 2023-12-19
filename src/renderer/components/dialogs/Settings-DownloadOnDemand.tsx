@@ -6,8 +6,8 @@ import { SettingsSelector } from './Settings'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
-import { useDialog } from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
 
 export default function SettingsDownloadOnDemand(props: {
   settings: SettingsStoreState['settings']

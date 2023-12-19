@@ -7,8 +7,8 @@ import { SettingsSelector } from './Settings'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
-import { useDialog } from '../../hooks/useDialog'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 function showToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)

@@ -1,7 +1,7 @@
 import { T } from '@deltachat/jsonrpc-client'
 import React from 'react'
 
-import { useDialog } from '../../hooks/useDialog'
+import useDialog from '../../hooks/useDialog'
 import { Avatar } from '../Avatar'
 import { useContextMenu } from '../ContextMenu'
 import FullscreenMedia, { NeighboringMediaMode } from './FullscreenMedia'

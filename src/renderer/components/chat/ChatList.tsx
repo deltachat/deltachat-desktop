@@ -32,10 +32,10 @@ import {
 import { useThemeCssVar } from '../../ThemeManager'
 import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import { useDialog } from '../../hooks/useDialog'
+import useDialog from '../../hooks/useDialog'
 import CreateChat from '../dialogs/CreateChat'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
-import { useKeyBindingAction } from '../../hooks/useKeyBindingAction'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useKeyBindingAction from '../../hooks/useKeyBindingAction'
 
 const enum LoadStatus {
   FETCHING = 1,

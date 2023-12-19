@@ -10,7 +10,7 @@ import {
   Type,
 } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import { useDialog } from '../../hooks/useDialog'
+import useDialog from '../../hooks/useDialog'
 import ConfirmationDialog from './ConfirmationDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'

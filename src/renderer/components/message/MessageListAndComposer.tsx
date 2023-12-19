@@ -12,7 +12,7 @@ import { runtime } from '../../runtime'
 import { RecoverableCrashScreen } from '../screens/RecoverableCrashScreen'
 import { useSettingsStore } from '../../stores/settings'
 import { sendMessage } from '../helpers/ChatMethods'
-import { useDialog } from '../../hooks/useDialog'
+import useDialog from '../../hooks/useDialog'
 import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
 import useIsChatDisabled from '../composer/useIsChatDisabled'
 

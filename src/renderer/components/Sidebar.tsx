@@ -18,10 +18,10 @@ import {
   onDCEvent,
 } from '../backend-com'
 import { ScreenContext } from '../contexts/ScreenContext'
-import { useDialog } from '../hooks/useDialog'
+import useDialog from '../hooks/useDialog'
 import CreateChat from './dialogs/CreateChat'
 import UnblockContacts from './dialogs/UnblockContacts'
-import { useTranslationFunction } from '../hooks/useTranslationFunction'
+import useTranslationFunction from '../hooks/useTranslationFunction'
 import About from './dialogs/About'
 import Settings from './dialogs/Settings'
 

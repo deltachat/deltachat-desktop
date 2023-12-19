@@ -2,7 +2,7 @@ import React, { PropsWithChildren, CSSProperties } from 'react'
 
 import { PseudoContact } from '../contact/Contact'
 import { QRAvatar } from '../Avatar'
-import { useTranslationFunction } from '../../hooks/useTranslationFunction'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 export function PseudoListItem(
   props: PropsWithChildren<{
