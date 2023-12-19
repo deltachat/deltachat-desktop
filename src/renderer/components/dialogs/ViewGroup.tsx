@@ -58,10 +58,11 @@ export function useChat(initialChat: Type.FullChat): Type.FullChat {
   }, [initialChat.id, accountId])
 
   const onChatModified = useMemo(
-    () => async ({ chatId }: DcEventType<'ChatModified'>) => {
-      if (chatId !== chat.id) return
-      updateChat()
-    },
+    () =>
+      async ({ chatId }: DcEventType<'ChatModified'>) => {
+        if (chatId !== chat.id) return
+        updateChat()
+      },
     [chat.id, updateChat]
   )
 
@@ -359,9 +360,8 @@ export function AddMemberDialog({
   isVerificationRequired?: boolean
 } & DialogProps) {
   const [searchContacts, updateSearchContacts] = useContactsMap(listFlags, '')
-  const [queryStr, onSearchChange, _, refreshContacts] = useContactSearch(
-    updateSearchContacts
-  )
+  const [queryStr, onSearchChange, _, refreshContacts] =
+    useContactSearch(updateSearchContacts)
   return (
     <DeltaDialogBase
       onClose={onClose}

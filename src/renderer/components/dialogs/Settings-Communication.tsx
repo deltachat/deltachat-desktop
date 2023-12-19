@@ -59,7 +59,7 @@ export default function SettingsCommunication({
     <>
       <H5>{tx('pref_chats')}</H5>
       <SettingsSelector
-        onClick={onOpenDialog.bind(null, false)}
+        onClick={onOpenDialog.bind(null)}
         currentValue={showToString(settingsStore.settings['show_emails'])}
       >
         {tx('pref_show_emails')}

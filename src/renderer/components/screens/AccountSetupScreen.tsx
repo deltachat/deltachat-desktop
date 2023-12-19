@@ -28,9 +28,8 @@ export default function AccountSetupScreen({
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
 
-  const [credentials, setCredentials] = useState<Credentials>(
-    defaultCredentials()
-  )
+  const [credentials, setCredentials] =
+    useState<Credentials>(defaultCredentials())
 
   const onClickLogin = useCallback(
     () =>

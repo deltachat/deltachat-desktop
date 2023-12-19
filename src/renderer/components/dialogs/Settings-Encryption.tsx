@@ -74,9 +74,8 @@ export function SendAutocryptSetupMessage({ onClose: _onClose }: DialogProps) {
   }
 
   const initiateKeyTransfer = async () => {
-    const key = await BackendRemote.rpc.initiateAutocryptKeyTransfer(
-      selectedAccountId()
-    )
+    const key =
+      await BackendRemote.rpc.initiateAutocryptKeyTransfer(selectedAccountId())
     setKey(key)
   }
 

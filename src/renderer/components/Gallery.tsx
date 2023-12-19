@@ -30,14 +30,12 @@ type GalleryElement = (
   }
 ) => JSX.Element
 
-const MediaTabs: Readonly<
-  {
-    [key in MediaTabKey]: {
-      values: Type.Viewtype[]
-      element: GalleryElement
-    }
+const MediaTabs: Readonly<{
+  [key in MediaTabKey]: {
+    values: Type.Viewtype[]
+    element: GalleryElement
   }
-> = {
+}> = {
   images: {
     values: ['Gif', 'Image'],
     element: ImageAttachment,

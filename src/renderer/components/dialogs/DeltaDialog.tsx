@@ -280,9 +280,8 @@ export function SmallSelectDialog({
   onSelect?: (selectedValue: string) => void
   onCancel?: () => void
 }) {
-  const [actualSelectedValue, setActualSelectedValue] = useState<string>(
-    selectedValue
-  )
+  const [actualSelectedValue, setActualSelectedValue] =
+    useState<string>(selectedValue)
 
   const onChange = (event: React.FormEvent<HTMLInputElement>) => {
     const actualSelectedValue = String(event.currentTarget.value)

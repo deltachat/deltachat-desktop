@@ -22,7 +22,10 @@ export class Store<S> {
   private reducers: ((action: Action, state: S) => S)[] = []
   private effects: ((action: Action, state: S) => void)[] = []
   private _log: ReturnType<typeof getLogger>
-  constructor(public state: S, name?: string) {
+  constructor(
+    public state: S,
+    name?: string
+  ) {
     if (!name) name = 'Store'
     this._log = getLogger('renderer/stores/' + name)
   }

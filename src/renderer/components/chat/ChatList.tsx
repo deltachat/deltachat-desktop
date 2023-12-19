@@ -592,10 +592,10 @@ export function useLogicVirtualChatList(
     [accountId]
   )
 
-  useEffect(() => onDCEvent(accountId, 'ContactsChanged', onContactChanged), [
-    accountId,
-    onContactChanged,
-  ])
+  useEffect(
+    () => onDCEvent(accountId, 'ContactsChanged', onContactChanged),
+    [accountId, onContactChanged]
+  )
 
   useEffect(() => {
     const emitter = BackendRemote.getContextEvents(accountId)

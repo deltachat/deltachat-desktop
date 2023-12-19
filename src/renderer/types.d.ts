@@ -1,6 +1,10 @@
 declare module '@mapbox/geojson-extent'
 declare module '@deltachat/react-qr-reader'
 
+// Tell tsc that CSS modules are alright
+declare module '*.module.css'
+declare module '*.module.scss'
+
 type todo = any
 
 declare module 'react-virtualized-auto-sizer' {

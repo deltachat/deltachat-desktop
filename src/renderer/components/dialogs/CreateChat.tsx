@@ -87,9 +87,8 @@ function CreateChatMain(props: CreateChatMainProps) {
     C.DC_GCL_ADD_SELF,
     ''
   )
-  const [queryStr, onSearchChange, _, refreshContacts] = useContactSearch(
-    updateContacts
-  )
+  const [queryStr, onSearchChange, _, refreshContacts] =
+    useContactSearch(updateContacts)
 
   const chooseContact = async ({ id }: Type.Contact) => {
     try {
@@ -326,11 +325,8 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
   const tx = useTranslationFunction()
 
   const [broadcastName, setBroadcastName] = useState<string>('')
-  const [
-    broadcastRecipients,
-    removeBroadcastRecipient,
-    addBroadcastRecipient,
-  ] = useGroupMembers([])
+  const [broadcastRecipients, removeBroadcastRecipient, addBroadcastRecipient] =
+    useGroupMembers([])
   const finishCreateBroadcast = useCreateBroadcast(
     broadcastRecipients,
     broadcastName,
@@ -338,9 +334,8 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
   )
 
   const searchContacts = useContacts(C.DC_GCL_ADD_SELF, '')[0]
-  const [errorMissingChatName, setErrorMissingChatName] = useState<boolean>(
-    false
-  )
+  const [errorMissingChatName, setErrorMissingChatName] =
+    useState<boolean>(false)
 
   const showAddMemberDialog = () => {
     const listFlags = C.DC_GCL_ADD_SELF
@@ -625,8 +620,7 @@ export function AddMemberInnerDialog({
   const applyCSSHacks = () => {
     setTimeout(() => inputRef.current?.focus(), 0)
 
-    const offsetHeight =
-      //@ts-ignore
+    const offsetHeight = //@ts-ignore
       document.querySelector('.AddMemberChipsWrapper')?.offsetHeight
     if (!offsetHeight) return
     contactListRef.current?.style.setProperty(
@@ -682,9 +676,11 @@ export function AddMemberInnerDialog({
 
   const addContactOnKeyDown = (ev: React.KeyboardEvent<HTMLInputElement>) => {
     if (ev.key == 'Enter') {
-      ;(document.querySelector<HTMLDivElement>(
-        '.delta-checkbox'
-      ) as HTMLDivElement).click()
+      ;(
+        document.querySelector<HTMLDivElement>(
+          '.delta-checkbox'
+        ) as HTMLDivElement
+      ).click()
     }
   }
 
@@ -860,7 +856,7 @@ export function useContactSearch(
     searchString: string,
     onSearchChange: typeof onSearchChange,
     updateSearch: typeof updateSearch,
-    refresh: typeof refresh
+    refresh: typeof refresh,
   ]
 }
 
@@ -884,7 +880,7 @@ export function useGroupImage(image?: string | null) {
   return [groupImage, onSetGroupImage, onUnsetGroupImage] as [
     typeof groupImage,
     typeof onSetGroupImage,
-    typeof onUnsetGroupImage
+    typeof onUnsetGroupImage,
   ]
 }
 
@@ -923,6 +919,6 @@ export function useGroupMembers(initialMembers: number[]) {
     typeof removeGroupMember,
     typeof addGroupMember,
     typeof addRemoveGroupMember,
-    typeof addGroupMembers
+    typeof addGroupMembers,
   ]
 }

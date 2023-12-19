@@ -27,10 +27,8 @@ export function ProtectionBrokenDialog({
   const accountId = selectedAccountId()
 
   const onQRScan = async () => {
-    const [
-      qrCode,
-      qrCodeSVG,
-    ] = await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(accountId, null)
+    const [qrCode, qrCodeSVG] =
+      await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(accountId, null)
     onClose()
     openDialog(QrCode, { selectScan: true, qrCode, qrCodeSVG })
   }
@@ -73,10 +71,8 @@ export function VerifiedContactsRequiredDialog({ onClose }: DialogProps) {
   const accountId = selectedAccountId()
 
   const onQRScan = async () => {
-    const [
-      qrCode,
-      qrCodeSVG,
-    ] = await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(accountId, null)
+    const [qrCode, qrCodeSVG] =
+      await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(accountId, null)
     onClose()
     openDialog(QrCode, { selectScan: true, qrCode, qrCodeSVG })
   }

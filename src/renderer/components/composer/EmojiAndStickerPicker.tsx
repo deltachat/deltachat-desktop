@@ -66,9 +66,8 @@ export const StickerPicker = ({
   const tx = useTranslationFunction()
 
   const onOpenStickerFolder = async () => {
-    const folder = await BackendRemote.rpc.miscGetStickerFolder(
-      selectedAccountId()
-    )
+    const folder =
+      await BackendRemote.rpc.miscGetStickerFolder(selectedAccountId())
     runtime.openPath(folder)
   }
 

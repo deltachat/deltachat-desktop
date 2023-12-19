@@ -112,9 +112,7 @@ interface Runtime {
   writeClipboardToTempFile(): Promise<string>
   writeTempFileFromBase64(name: string, content: string): Promise<string>
   removeTempFile(path: string): Promise<void>
-  getWebxdcDiskUsage(
-    accountId: number
-  ): Promise<{
+  getWebxdcDiskUsage(accountId: number): Promise<{
     total_size: number
     data_size: number
   }>
@@ -218,9 +216,7 @@ class Browser implements Runtime {
   clearWebxdcDOMStorage(_accountId: number): Promise<void> {
     throw new Error('Method not implemented.')
   }
-  getWebxdcDiskUsage(
-    _accountId: number
-  ): Promise<{
+  getWebxdcDiskUsage(_accountId: number): Promise<{
     total_size: number
     data_size: number
   }> {
@@ -402,9 +398,7 @@ class Electron implements Runtime {
   async clearWebxdcDOMStorage(accountId: number): Promise<void> {
     ipcBackend.invoke('webxdc.clearWebxdcDOMStorage', accountId)
   }
-  getWebxdcDiskUsage(
-    accountId: number
-  ): Promise<{
+  getWebxdcDiskUsage(accountId: number): Promise<{
     total_size: number
     data_size: number
   }> {
@@ -555,8 +549,9 @@ class Electron implements Runtime {
     })
     ipcBackend.on('theme-update', () => this.onThemeUpdate?.())
     ipcBackend.on('showAboutDialog', () => this.onShowDialog?.('about'))
-    ipcBackend.on('showKeybindingsDialog', () =>
-      this.onShowDialog?.('keybindings')
+    ipcBackend.on(
+      'showKeybindingsDialog',
+      () => this.onShowDialog?.('keybindings')
     )
     ipcBackend.on('showSettingsDialog', () => this.onShowDialog?.('settings'))
     ipcBackend.on('open-url', (_ev, url) => this.onOpenQrUrl?.(url))

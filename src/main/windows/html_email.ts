@@ -144,8 +144,8 @@ export function openHtmlEmailWindow(
         label: tx('always_load_remote_images'),
         checked: DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent,
         click() {
-          const newValue = !DesktopSettings.state
-            .HTMLEmailAlwaysLoadRemoteContent
+          const newValue =
+            !DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent
           DesktopSettings.update({
             HTMLEmailAlwaysLoadRemoteContent: newValue,
           })
@@ -165,8 +165,8 @@ export function openHtmlEmailWindow(
         checked: DesktopSettings.state.HTMLEmailAskForRemoteLoadingConfirmation,
         click() {
           DesktopSettings.update({
-            HTMLEmailAskForRemoteLoadingConfirmation: !DesktopSettings.state
-              .HTMLEmailAskForRemoteLoadingConfirmation,
+            HTMLEmailAskForRemoteLoadingConfirmation:
+              !DesktopSettings.state.HTMLEmailAskForRemoteLoadingConfirmation,
           })
         },
       }),

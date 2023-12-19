@@ -43,9 +43,8 @@ export default class ComposerMessageInput extends React.Component<
     this.setCursorPosition = false
     this.onKeyDown = this.onKeyDown.bind(this)
     this.onChange = this.onChange.bind(this)
-    this.insertStringAtCursorPosition = this.insertStringAtCursorPosition.bind(
-      this
-    )
+    this.insertStringAtCursorPosition =
+      this.insertStringAtCursorPosition.bind(this)
 
     this.saveDraft = debounce(() => {
       const { text, chatId } = this.state

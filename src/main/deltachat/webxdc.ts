@@ -421,7 +421,8 @@ export default class DCWebxdc extends SplitOut {
           ev.preventDefault()
         })
 
-        type setPermissionRequestHandler = typeof webxdc_windows.webContents.session.setPermissionRequestHandler
+        type setPermissionRequestHandler =
+          typeof webxdc_windows.webContents.session.setPermissionRequestHandler
         type permission_arg = Parameters<
           Exclude<Parameters<setPermissionRequestHandler>[0], null>
         >[1]

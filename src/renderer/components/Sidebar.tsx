@@ -74,10 +74,8 @@ const Sidebar = React.memo(
 
     const onShowQRCode = async () => {
       setSidebarState('invisible')
-      const [
-        qrCode,
-        qrCodeSVG,
-      ] = await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(accountId, null)
+      const [qrCode, qrCodeSVG] =
+        await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(accountId, null)
 
       openDialog(QrCode, { qrCode, qrCodeSVG })
     }

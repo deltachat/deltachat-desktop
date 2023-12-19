@@ -25,10 +25,10 @@ export async function internalOpenWebxdc(accountId: number, messageId: number) {
   const chatName = (
     await BackendRemote.rpc.getBasicChatInfo(accountId, message.chatId)
   ).name
-  const {
-    addr,
-    displayname,
-  } = await BackendRemote.rpc.batchGetConfig(accountId, ['addr', 'displayname'])
+  const { addr, displayname } = await BackendRemote.rpc.batchGetConfig(
+    accountId,
+    ['addr', 'displayname']
+  )
   runtime.openWebxdc(messageId, {
     accountId,
     addr,

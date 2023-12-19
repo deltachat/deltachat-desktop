@@ -97,7 +97,7 @@ async function convertTranslationsFromXMLToJSON(pathLocales, watch = false) {
           console.log(`converted ${path} in ${time}ms`)
         })
       })
-      console.log('+ watching for file changes...')
+      console.log('+ watching for translation file changes...')
     })
   }
 }
