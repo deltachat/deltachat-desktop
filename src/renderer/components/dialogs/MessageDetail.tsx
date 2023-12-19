@@ -1,10 +1,10 @@
 import React from 'react'
 import moment from 'moment'
-import { Card, Callout } from '@blueprintjs/core'
 
-import DeltaDialog, { DeltaDialogBody } from './DeltaDialog'
 import { selectedAccountId } from '../../ScreenController'
 import { BackendRemote } from '../../backend-com'
+import { DialogBody, DialogContent, DialogWithHeader } from '../Dialog'
+import Callout from '../Callout'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
@@ -61,68 +61,70 @@ class MessageInfo extends React.Component<
 
     return (
       <div className='module-message-detail'>
+        <br />
         <Callout>
           <p>{content}</p>
         </Callout>
-        <table className='module-message-detail__info'>
-          <tbody>
-            <tr>
-              <td className='module-message-detail__label'>
-                {tx('message_detail_sent_desktop')}
-              </td>
-              <td>
-                {moment(sentAt).format('LLLL')}{' '}
-                <span className='module-message-detail__unix-timestamp'>
-                  ({sentAt})
-                </span>
-              </td>
-            </tr>
-            {receivedAt ? (
+        <br />
+        <DialogContent>
+          <table className='module-message-detail__info'>
+            <tbody>
               <tr>
                 <td className='module-message-detail__label'>
-                  {tx('message_detail_received_desktop')}
+                  {tx('message_detail_sent_desktop')}
                 </td>
                 <td>
-                  {moment(receivedAt).format('LLLL')}{' '}
+                  {moment(sentAt).format('LLLL')}{' '}
                   <span className='module-message-detail__unix-timestamp'>
-                    ({receivedAt})
+                    ({sentAt})
                   </span>
                 </td>
               </tr>
-            ) : null}
-            {this.props.messageId && (
-              <tr>
-                <td className='module-message-detail__label'>messageId</td>
-                <td>{this.props.messageId}</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              {receivedAt ? (
+                <tr>
+                  <td className='module-message-detail__label'>
+                    {tx('message_detail_received_desktop')}
+                  </td>
+                  <td>
+                    {moment(receivedAt).format('LLLL')}{' '}
+                    <span className='module-message-detail__unix-timestamp'>
+                      ({receivedAt})
+                    </span>
+                  </td>
+                </tr>
+              ) : null}
+              {this.props.messageId && (
+                <tr>
+                  <td className='module-message-detail__label'>messageId</td>
+                  <td>{this.props.messageId}</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </DialogContent>
       </div>
     )
   }
 }
 
-export default function MessageDetail(props: {
-  id: number
-  onClose: DialogProps['onClose']
-}) {
+export default function MessageDetail(
+  props: {
+    id: number
+  } & DialogProps
+) {
   const { id, onClose } = props
   const isOpen = !!id
   const tx = window.static_translate
 
   let body = <div />
   if (isOpen) {
-    body = (
-      <Card>
-        <MessageInfo messageId={id} />
-      </Card>
-    )
+    body = <MessageInfo messageId={id} />
   }
 
   return (
-    <DeltaDialog title={tx('menu_message_details')} onClose={onClose}>
-      <DeltaDialogBody noFooter>{body}</DeltaDialogBody>
-    </DeltaDialog>
+    <DialogWithHeader title={tx('menu_message_details')} onClose={onClose}>
+      <DialogBody>{body}</DialogBody>
+    </DialogWithHeader>
   )
 }
+

@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { RadioGroup, Radio } from '@blueprintjs/core'
 
-import {
-  DeltaDialogBody,
-  DeltaDialogFooter,
-  DeltaDialogContent,
-  SmallDialog,
-  DeltaDialogHeader,
-  DeltaDialogFooterActions,
-} from './DeltaDialog'
 import { Timespans } from '../../../shared/constants'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  FooterActionButton,
+  FooterActions,
+} from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
@@ -102,7 +102,7 @@ export default function DisappearingMessage({
     disappearingMessageDuration,
     setDisappearingMessageDuration,
   ] = useState<DisappearingMessageDuration>(DisappearingMessageDuration.OFF)
-  const tx = useTranslationFunction()
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     ;(async () => {
@@ -111,6 +111,7 @@ export default function DisappearingMessage({
         chatId
       )
       setDisappearingMessageDuration(ephemeralTimer)
+      setLoading(false)
     })()
   }, [chatId])
 
@@ -123,28 +124,34 @@ export default function DisappearingMessage({
     onClose()
   }
 
+  const tx = useTranslationFunction()
   return (
-    <SmallDialog onClose={onClose}>
-      <DeltaDialogHeader title={tx('ephemeral_messages')} />
-      <DeltaDialogBody>
-        <DeltaDialogContent>
-          <SelectDisappearingMessageDuration
-            disappearingMessageDuration={disappearingMessageDuration}
-            onSelectDisappearingMessageDuration={setDisappearingMessageDuration}
-          />
-          <p>{tx('ephemeral_messages_hint')}</p>
-        </DeltaDialogContent>
-      </DeltaDialogBody>
-      <DeltaDialogFooter style={{ padding: '20px' }}>
-        <DeltaDialogFooterActions>
-          <p className='delta-button primary bold' onClick={onClose}>
-            {tx('cancel')}
-          </p>
-          <p className='delta-button primary bold' onClick={saveAndClose}>
-            {tx('save_desktop')}
-          </p>
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
-    </SmallDialog>
+    !loading && (
+      <Dialog onClose={onClose}>
+        <DialogHeader title={tx('ephemeral_messages')} />
+        <DialogBody>
+          <DialogContent>
+            <SelectDisappearingMessageDuration
+              disappearingMessageDuration={disappearingMessageDuration}
+              onSelectDisappearingMessageDuration={
+                setDisappearingMessageDuration
+              }
+            />
+            <p>{tx('ephemeral_messages_hint')}</p>
+          </DialogContent>
+        </DialogBody>
+        <DialogFooter>
+          <FooterActions>
+            <FooterActionButton onClick={onClose}>
+              {tx('cancel')}
+            </FooterActionButton>
+            <FooterActionButton onClick={saveAndClose}>
+              {tx('save_desktop')}
+            </FooterActionButton>
+          </FooterActions>
+        </DialogFooter>
+      </Dialog>
+    )
   )
 }
+

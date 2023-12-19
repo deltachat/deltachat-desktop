@@ -3,21 +3,21 @@ import { Spinner } from '@blueprintjs/core'
 
 import { ConfigureProgressDialog } from '../LoginForm'
 import { Screens, selectedAccountId } from '../../ScreenController'
-import {
-  DeltaDialogFooter,
-  DeltaDialogFooterActions,
-  DeltaDialogBody,
-  DeltaDialogContent,
-  SmallDialog,
-} from '../dialogs/DeltaDialog'
 import { runtime } from '../../runtime'
 import { getLogger } from '../../../shared/logger'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import AlertDialog from '../dialogs/AlertDialog'
 import { EffectfulBackendActions } from '../../backend-com'
 import { BackendRemote, Type } from '../../backend-com'
-import { ImportBackupTransferProgressDialog } from '../dialogs/setup_multi_device/ReceiveBackup'
 import processMailtoUrl from './MailtoUrl'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  FooterActionButton,
+  FooterActions,
+} from '../Dialog'
+import { ReceiveBackupDialog } from '../dialogs/SetupMultiDevice'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type {
@@ -28,36 +28,34 @@ import type {
 
 const log = getLogger('renderer/processOpenUrl')
 
+type Props = { onCancel?: () => void }
+
 export function ProcessQrCodeDialog({
-  onCancel,
+  onCancel: _onCancel,
   onClose,
-}: DialogProps & {
-  onCancel: () => Promise<void>
-}) {
+}: Props & DialogProps) {
   const tx = useTranslationFunction()
 
-  const handleCancel = async () => {
+  const onCancel = async () => {
     window.__selectedAccountId &&
       (await BackendRemote.rpc.stopOngoingProcess(window.__selectedAccountId))
-    onCancel && onCancel()
+    _onCancel && _onCancel()
     onClose()
   }
 
   return (
-    <SmallDialog onClose={onClose}>
-      <DeltaDialogBody>
-        <DeltaDialogContent style={{ height: '80px', padding: '20px' }}>
-          <Spinner />
-        </DeltaDialogContent>
-      </DeltaDialogBody>
-      <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
-        <DeltaDialogFooterActions>
-          <p className='delta-button bold primary' onClick={handleCancel}>
+    <Dialog onClose={onClose}>
+      <DialogBody>
+        <Spinner />
+      </DialogBody>
+      <DialogFooter>
+        <FooterActions>
+          <FooterActionButton onClick={onCancel}>
             {tx('cancel')}
-          </p>
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
-    </SmallDialog>
+          </FooterActionButton>
+        </FooterActions>
+      </DialogFooter>
+    </Dialog>
   )
 }
 
@@ -97,6 +95,7 @@ export default async function processOpenQrUrl(
   const screen = window.__screen
 
   const processDialogId = openDialog(ProcessQrCodeDialog)
+  // const checkQr: Qr = await BackendRemote.rpc.checkQr(selectedAccountId(), url)
 
   const closeProcessDialog = () => closeDialog(processDialogId)
   let checkQr
@@ -157,17 +156,17 @@ export default async function processOpenQrUrl(
             ? 'qraccount_ask_create_and_login'
             : 'qraccount_ask_create_and_login_another'
           : checkQr.kind === 'login'
-            ? is_singular_term
-              ? 'qrlogin_ask_login'
-              : 'qrlogin_ask_login_another'
-            : '?'
+          ? is_singular_term
+            ? 'qrlogin_ask_login'
+            : 'qrlogin_ask_login_another'
+          : '?'
 
       const replacementValue =
         checkQr.kind === 'account'
           ? checkQr.domain
           : checkQr.kind === 'login'
-            ? checkQr.address
-            : ''
+          ? checkQr.address
+          : ''
 
       const yes = await new Promise(resolve => {
         openDialog(ConfirmationDialog, {
@@ -318,7 +317,7 @@ export default async function processOpenQrUrl(
         cb: callback,
       })
     } else {
-      openDialog(ImportBackupTransferProgressDialog, {
+      openDialog(ReceiveBackupDialog, {
         QrWithToken: url,
       })
     }
@@ -326,7 +325,7 @@ export default async function processOpenQrUrl(
     return
   } else {
     closeProcessDialog()
-    openDialog(CopyContentAlertDialog, {
+    openDialog(copyContentAlertDialog, {
       message:
         checkQr.kind === 'url'
           ? tx('qrscan_contains_url', url)
@@ -337,40 +336,40 @@ export default async function processOpenQrUrl(
   }
 }
 
-function CopyContentAlertDialog({
+function copyContentAlertDialog({
   onClose,
   message,
   content,
   cb,
 }: DialogProps & { message: string; content: string; cb: () => void }) {
-  const tx = useTranslationFunction()
+  const tx = window.static_translate
 
   return (
-    <SmallDialog onClose={onClose}>
-      <div className='bp4-dialog-body-with-padding'>
-        <p style={{ wordBreak: 'break-word' }}>{message}</p>
-      </div>
-      <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
-        <DeltaDialogFooterActions>
-          <p
-            className='delta-button bold primary'
+    <Dialog onClose={onClose}>
+      <DialogBody>
+        <DialogContent paddingTop>
+          <p>{message}</p>
+        </DialogContent>
+      </DialogBody>
+      <DialogFooter>
+        <FooterActions>
+          <FooterActionButton
             onClick={() => {
               runtime.writeClipboardText(content).then(onClose)
             }}
           >
             {tx('global_menu_edit_copy_desktop')}
-          </p>
-          <p
-            className='delta-button bold primary'
+          </FooterActionButton>
+          <FooterActionButton
             onClick={() => {
               cb && cb()
               onClose()
             }}
           >
             {tx('ok')}
-          </p>
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
-    </SmallDialog>
+          </FooterActionButton>
+        </FooterActions>
+      </DialogFooter>
+    </Dialog>
   )
 }

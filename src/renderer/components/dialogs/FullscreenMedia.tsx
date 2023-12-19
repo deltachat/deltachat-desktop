@@ -14,10 +14,10 @@ import { useContextMenu } from '../ContextMenu'
 import { jumpToMessage } from '../helpers/ChatMethods'
 import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-
-import type { DialogProps } from '../../contexts/DialogContext'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 const log = getLogger('renderer/fullscreen_media')
 
@@ -27,11 +27,12 @@ export enum NeighboringMediaMode {
   Off,
 }
 
-export default function FullscreenMedia(props: {
+type Props = {
   msg: Type.Message
   neighboringMedia: NeighboringMediaMode
-  onClose: DialogProps['onClose']
-}) {
+}
+
+export default function FullscreenMedia(props: Props & DialogProps) {
   const accountId = selectedAccountId()
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
@@ -259,7 +260,7 @@ export default function FullscreenMedia(props: {
             <Icon
               onClick={onClose}
               icon='cross'
-              iconSize={32}
+              size={32}
               color={'grey'}
               aria-label={tx('close')}
             />
@@ -270,7 +271,7 @@ export default function FullscreenMedia(props: {
             <Icon
               onClick={preventDefault(previousImage)}
               icon='chevron-left'
-              iconSize={60}
+              size={60}
             />
           </div>
         )}
@@ -279,7 +280,7 @@ export default function FullscreenMedia(props: {
             <Icon
               onClick={preventDefault(nextImage)}
               icon='chevron-right'
-              iconSize={60}
+              size={60}
             />
           </div>
         )}
@@ -293,6 +294,6 @@ async function getNeighboringMsgIds(messageId: number, list: number[]) {
   const index = list.indexOf(messageId)
   return [list[index - 1] || null, list[index + 1] || null] as [
     previousMessageId: number | null,
-    nextMessageId: number | null,
+    nextMessageId: number | null
   ]
 }

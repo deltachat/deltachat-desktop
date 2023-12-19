@@ -10,6 +10,7 @@
   - Use `watch:frontend:types` script for type-checking during development
   - Update esbuild to v0.19.8
   - Update typescript to v5.3.2
+- Refactor dialog components, improved styling for settings #3575
 - Refactor dialog logic and add additional helper methods #3512
 - Upgrade `filesize` dependency from `8.0.6` to `10.1.0`
 - Prefer light theme for the help and webxdc loading pages

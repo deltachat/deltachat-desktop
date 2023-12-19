@@ -16,7 +16,7 @@ button.delta-button-round {
     border-color: rgba(206, 217, 224, 0.5);
     background-image: none;
     cursor: not-allowed;
-    color: var(--globalText);
+    color: rgba(0, 0, 0, 0.2);
     &:hover {
       background-color: rgba(206, 217, 224, 0.5);
     }

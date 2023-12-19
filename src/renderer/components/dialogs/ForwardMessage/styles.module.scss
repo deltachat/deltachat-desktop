@@ -1,0 +1,4 @@
+// We need to force the dialog to full height to make `AutoSizer` work
+.forwardMessageDialog {
+  height: 100%;
+}

@@ -1,23 +1,20 @@
 import React, { useEffect } from 'react'
 
-import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { useSettingsStore } from '../../stores/settings'
 import {
   CheatSheetKeyboardShortcut,
   getKeybindings,
   ShortcutGroup,
 } from '../KeyboardShortcutHint'
-import {
-  DeltaDialogBase,
-  DeltaDialogBody,
-  DeltaDialogHeader,
-} from './DeltaDialog'
+import Dialog, { DialogBody, DialogHeader, DialogHeading } from '../Dialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
 export default function KeybindingCheatSheet(props: DialogProps) {
   const { onClose } = props
   const tx = useTranslationFunction()
+
   const settingsStore = useSettingsStore()[0]
 
   useEffect(() => {
@@ -28,18 +25,15 @@ export default function KeybindingCheatSheet(props: DialogProps) {
   }, [])
 
   return (
-    <DeltaDialogBase
-      onClose={onClose}
-      fixed={false}
-      className='keyboard-hint-cheatsheet-dialog'
-      showCloseButton={true}
-    >
-      <DeltaDialogHeader onClose={onClose} showCloseButton={true}>
-        <h4 className='bp4-heading'>{tx('keybindings')}</h4>
-        <CheatSheetKeyboardShortcut />
-      </DeltaDialogHeader>
-
-      <DeltaDialogBody>
+    <Dialog onClose={onClose} className='keyboard-hint-cheatsheet-dialog'>
+      <DialogHeader onClose={onClose}>
+        <DialogHeading>
+          {tx('keybindings')}
+          &nbsp;&nbsp;
+          <CheatSheetKeyboardShortcut />
+        </DialogHeading>
+      </DialogHeader>
+      <DialogBody>
         <div className='keyboard-hint-dialog-body'>
           {settingsStore &&
             getKeybindings(settingsStore.desktopSettings).map(entry => {
@@ -61,7 +55,8 @@ export default function KeybindingCheatSheet(props: DialogProps) {
               }
             })}
         </div>
-      </DeltaDialogBody>
-    </DeltaDialogBase>
+      </DialogBody>
+    </Dialog>
   )
 }
+

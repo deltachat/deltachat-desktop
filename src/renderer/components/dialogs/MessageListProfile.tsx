@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
-import { Card, Classes } from '@blueprintjs/core'
 
-import {
-  DeltaDialogBase,
-  DeltaDialogHeader,
-  DeltaDialogOkCancelFooter,
-} from './DeltaDialog'
 import { useGroupImage, ChatSettingsSetNameAndProfileImage } from './CreateChat'
 import { Type } from '../../backend-com'
 import { modifyGroup } from '../helpers/ChatMethods'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogHeader,
+  OkCancelFooterAction,
+} from '../Dialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
@@ -19,8 +20,7 @@ export default function MailingListProfile(
 ) {
   const { onClose, chat } = props
 
-  const tx = window.static_translate
-
+  const tx = useTranslationFunction()
   const [groupName, setGroupName] = useState(chat.name)
   const [errorMissingGroupName, setErrorMissingGroupName] = useState(false)
   const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage(
@@ -29,10 +29,10 @@ export default function MailingListProfile(
   const onUpdateGroup = useEdit(groupName, groupImage, chat.id, onClose)
 
   return (
-    <DeltaDialogBase onClose={onClose} fixed>
-      <DeltaDialogHeader title={tx('mailing_list')} />
-      <div className={Classes.DIALOG_BODY}>
-        <Card>
+    <Dialog onClose={onClose} fixed>
+      <DialogHeader title={tx('mailing_list')} />
+      <DialogBody>
+        <DialogContent>
           <ChatSettingsSetNameAndProfileImage
             groupImage={groupImage}
             onSetGroupImage={onSetGroupImage}
@@ -47,10 +47,10 @@ export default function MailingListProfile(
           <div style={{ padding: '15px 0px' }}>
             {tx('mailing_list_profile_info')}
           </div>
-        </Card>
-      </div>
-      <DeltaDialogOkCancelFooter onCancel={onClose} onOk={onUpdateGroup} />
-    </DeltaDialogBase>
+        </DialogContent>
+      </DialogBody>
+      <OkCancelFooterAction onCancel={onClose} onOk={onUpdateGroup} />
+    </Dialog>
   )
 }
 
@@ -70,3 +70,4 @@ const useEdit = (
   }
   return onUpdateGroup
 }
+

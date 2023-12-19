@@ -1,24 +1,34 @@
 import React, { useState, useContext } from 'react'
 import { T } from '@deltachat/jsonrpc-client'
 
-import InputTransferKey from './AutocryptSetupMessage'
-import DeltaDialog from './DeltaDialog'
 import { getLogger } from '../../../shared/logger'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import InputTransferKey from '../InputTransferKey'
+import {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogWithHeader,
+  FooterActionButton,
+  FooterActions,
+} from '../Dialog'
 import { ScreenContext } from '../../contexts/ScreenContext'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 const log = getLogger('frontend/dialogs/EnterAutocryptSetupMessage')
 
-export default function EnterAutocryptSetupMessage({
-  onClose,
-  message,
-}: {
-  onClose: () => void
+type Props = {
   message: T.Message
-}) {
-  const tx = window.static_translate
+}
 
+export default function EnterAutocryptSetupMessage({
+  message,
+  onClose,
+}: Props & DialogProps) {
+  const tx = useTranslationFunction()
   const { userFeedback } = useContext(ScreenContext)
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
@@ -90,33 +100,30 @@ export default function EnterAutocryptSetupMessage({
   }
 
   return (
-    <DeltaDialog
-      title={tx('autocrypt_continue_transfer_title')}
+    <DialogWithHeader
       onClose={onClose}
-      className='enter-autocrypt-setup-message-dialog'
+      title={tx('autocrypt_continue_transfer_title')}
     >
-      <div className='dialog-body'>
-        <p>{tx('autocrypt_continue_transfer_please_enter_code')}</p>
-        {error && (
-          <p className='autocrypt-setup-error'>
-            {tx('autocrypt_bad_setup_code')}
-            <br />
-            {error}
-          </p>
-        )}
-        <InputTransferKey autocryptkey={key} onChange={handleChangeKey} />
-      </div>
-
-      <div className={'bp4-dialog-footer'}>
-        <div className={'bp4-dialog-footer-actions'}>
-          <p
-            className='delta-button primary bold'
-            onClick={continueKeyTransfer}
-          >
+      <DialogBody>
+        <DialogContent>
+          <p>{tx('autocrypt_continue_transfer_please_enter_code')}</p>
+          {error && (
+            <p className='autocrypt-setup-error'>
+              {tx('autocrypt_bad_setup_code')}
+              <br />
+              {error}
+            </p>
+          )}
+          <InputTransferKey autocryptkey={key} onChange={handleChangeKey} />
+        </DialogContent>
+      </DialogBody>
+      <DialogFooter>
+        <FooterActions>
+          <FooterActionButton onClick={continueKeyTransfer}>
             {loading ? tx('loading') : tx('ok')}
-          </p>
-        </div>
-      </div>
-    </DeltaDialog>
+          </FooterActionButton>
+        </FooterActions>
+      </DialogFooter>
+    </DialogWithHeader>
   )
 }
