@@ -156,17 +156,17 @@ export default async function processOpenQrUrl(
             ? 'qraccount_ask_create_and_login'
             : 'qraccount_ask_create_and_login_another'
           : checkQr.kind === 'login'
-          ? is_singular_term
-            ? 'qrlogin_ask_login'
-            : 'qrlogin_ask_login_another'
-          : '?'
+            ? is_singular_term
+              ? 'qrlogin_ask_login'
+              : 'qrlogin_ask_login_another'
+            : '?'
 
       const replacementValue =
         checkQr.kind === 'account'
           ? checkQr.domain
           : checkQr.kind === 'login'
-          ? checkQr.address
-          : ''
+            ? checkQr.address
+            : ''
 
       const yes = await new Promise(resolve => {
         openDialog(ConfirmationDialog, {

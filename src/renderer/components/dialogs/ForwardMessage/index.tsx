@@ -4,7 +4,6 @@ import { C, T } from '@deltachat/jsonrpc-client'
 
 import ChatListItem from '../../chat/ChatListItem'
 import { PseudoListItemNoSearchResults } from '../../helpers/PseudoListItem'
-import { DialogProps } from '../DialogController'
 import { ChatListPart, useLogicVirtualChatList } from '../../chat/ChatList'
 import { useChatList } from '../../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../../ThemeManager'
@@ -13,21 +12,28 @@ import { selectedAccountId } from '../../../ScreenController'
 import { forwardMessage, selectChat } from '../../helpers/ChatMethods'
 import { confirmForwardMessage } from '../../message/messageFunctions'
 import Dialog, { DialogBody, DialogHeader } from '../../Dialog'
+import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import useDialog from '../../../hooks/useDialog'
+
+import type { DialogProps } from '../../../contexts/DialogContext'
 
 import styles from './styles.module.scss'
 
-export default function ForwardMessage(props: {
-  message: T.Message
-  onClose: DialogProps['onClose']
-}) {
-  const accountId = selectedAccountId()
-  const tx = window.static_translate
+const LIST_FLAGS = C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS
+
+export default function ForwardMessage(
+  props: {
+    message: T.Message
+  } & DialogProps
+) {
   const { message, onClose } = props
-  const listFlags = C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS
-  const { chatListIds, queryStr, setQueryStr } = useChatList(listFlags)
+  const accountId = selectedAccountId()
+  const tx = useTranslationFunction()
+  const { openDialog } = useDialog()
+  const { chatListIds, queryStr, setQueryStr } = useChatList(LIST_FLAGS)
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
     chatListIds,
-    listFlags
+    LIST_FLAGS
   )
 
   const onChatClick = async (chatId: number) => {
@@ -35,7 +41,12 @@ export default function ForwardMessage(props: {
     onClose()
     if (!chat.isSelfTalk) {
       selectChat(chat.id)
-      const yes = await confirmForwardMessage(accountId, message, chat)
+      const yes = await confirmForwardMessage(
+        openDialog,
+        accountId,
+        message,
+        chat
+      )
       if (!yes) {
         selectChat(message.chatId)
       }
@@ -46,18 +57,12 @@ export default function ForwardMessage(props: {
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setQueryStr(e.target.value)
 
-  const isOpen = !!message
   const noResults = chatListIds.length === 0 && queryStr !== ''
 
   const CHATLISTITEM_CHAT_HEIGHT =
     Number(useThemeCssVar('--SPECIAL-chatlist-item-chat-height')) || 64
   return (
-    <Dialog
-      className={styles.forwardMessageDialog}
-      isOpen={isOpen}
-      onClose={onClose}
-      fixed
-    >
+    <Dialog className={styles.forwardMessageDialog} onClose={onClose} fixed>
       <DialogHeader onClose={onClose} title={tx('forward_to')} />
       <DialogBody>
         <div className='forward-message-account-input'>

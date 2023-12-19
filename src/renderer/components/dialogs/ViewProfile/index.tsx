@@ -383,4 +383,3 @@ export function EditContactNameDialog({
     </Dialog>
   )
 }
-

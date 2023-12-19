@@ -294,6 +294,6 @@ async function getNeighboringMsgIds(messageId: number, list: number[]) {
   const index = list.indexOf(messageId)
   return [list[index - 1] || null, list[index + 1] || null] as [
     previousMessageId: number | null,
-    nextMessageId: number | null
+    nextMessageId: number | null,
   ]
 }

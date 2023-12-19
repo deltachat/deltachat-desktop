@@ -6,7 +6,7 @@ import CloseButton from './CloseButton'
 import DialogHeading from './DialogHeading'
 import EditButton from './EditButton'
 
-import type { DialogProps } from '../dialogs/DialogController'
+import type { DialogProps } from '../../contexts/DialogContext'
 
 import styles from './styles.module.scss'
 

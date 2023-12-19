@@ -214,12 +214,8 @@ export default function ChatAuditLogDialog(
                     )
                   }
 
-                  const {
-                    text,
-                    timestamp,
-                    systemMessageType,
-                    parentId,
-                  } = message
+                  const { text, timestamp, systemMessageType, parentId } =
+                    message
                   const direction = getDirection(message)
                   const status = mapCoreMsgStatus2String(message.state)
                   const accountId = selectedAccountId()
@@ -263,4 +259,3 @@ export default function ChatAuditLogDialog(
     </Dialog>
   )
 }
-

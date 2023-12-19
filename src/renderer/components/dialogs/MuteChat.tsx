@@ -55,4 +55,3 @@ export default function MuteChat({ onClose, chatId }: Props & DialogProps) {
     />
   )
 }
-

@@ -18,7 +18,6 @@ type Props = {
     Type.ChatListItemFetchResult & { kind: 'ChatListItem' },
     'id' | 'dmChatContact'
   >
-  isOpen: boolean
 }
 
 export default function EncryptionInfo({
@@ -60,4 +59,3 @@ export default function EncryptionInfo({
     </Dialog>
   )
 }
-

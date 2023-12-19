@@ -30,13 +30,11 @@ export default function EditAccountAndPasswordDialog({ onClose }: DialogProps) {
 }
 
 function EditAccountInner(onClose: DialogProps['onClose']) {
-  const [initial_settings, setInitialAccountSettings] = useState<Credentials>(
-    defaultCredentials()
-  )
+  const [initial_settings, setInitialAccountSettings] =
+    useState<Credentials>(defaultCredentials())
 
-  const [accountSettings, _setAccountSettings] = useState<Credentials>(
-    defaultCredentials()
-  )
+  const [accountSettings, _setAccountSettings] =
+    useState<Credentials>(defaultCredentials())
 
   const [disableUpdate, setDisableUpdate] = useState(true)
 
@@ -51,9 +49,8 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
     if (window.__selectedAccountId === undefined) {
       throw new Error('can not load settings when no account is selected')
     }
-    const accountSettings: Credentials = ((await BackendRemote.rpc.batchGetConfig(
-      window.__selectedAccountId,
-      [
+    const accountSettings: Credentials =
+      (await BackendRemote.rpc.batchGetConfig(window.__selectedAccountId, [
         'addr',
         'mail_pw',
         'sentbox_watch',
@@ -76,8 +73,7 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
         'socks5_port',
         'socks5_user',
         'socks5_password',
-      ]
-    )) as unknown) as Credentials
+      ])) as unknown as Credentials
     setInitialAccountSettings(accountSettings)
     _setAccountSettings(accountSettings)
   }
@@ -131,4 +127,3 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
     </>
   )
 }
-

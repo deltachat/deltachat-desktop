@@ -158,7 +158,7 @@ export default function MessageListAndComposer({
       if (selection?.type === 'Range' && selection.rangeCount > 0) {
         return
       }
-      const targetTagName = ((e.target as unknown) as any)?.tagName
+      const targetTagName = (e.target as unknown as any)?.tagName
 
       if (targetTagName === 'INPUT' || targetTagName === 'TEXTAREA') {
         return

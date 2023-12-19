@@ -32,7 +32,7 @@ export default function Communication({ settingsStore }: Props) {
   const { openDialog } = useDialog()
   const tx = useTranslationFunction()
 
-  const onOpenDialog = useCallback(async () => {
+  const onOpenDialog = useCallback(() => {
     const values: SelectDialogOption[] = [
       [String(C.DC_SHOW_EMAILS_OFF), tx('pref_show_emails_no')],
       [
@@ -46,7 +46,7 @@ export default function Communication({ settingsStore }: Props) {
       values,
       selectedValue: String(settingsStore.settings['show_emails']),
       title: tx('pref_show_emails'),
-      onSave: async (show: string) => {
+      onSave: (show: string) => {
         SettingsStoreInstance.effect.setCoreSetting('show_emails', show)
       },
     })

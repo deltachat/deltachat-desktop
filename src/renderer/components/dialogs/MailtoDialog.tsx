@@ -101,4 +101,3 @@ export default function MailtoDialog(props: Props & DialogProps) {
     </Dialog>
   )
 }
-

@@ -93,16 +93,12 @@ function SelectDisappearingMessageDuration({
 }
 
 export default function DisappearingMessage({
-  onClose,
   chatId,
-}: {
-  chatId: number
-} & DialogProps) {
-  const [
-    disappearingMessageDuration,
-    setDisappearingMessageDuration,
-  ] = useState<DisappearingMessageDuration>(DisappearingMessageDuration.OFF)
-  const [loading, setLoading] = useState(true)
+  onClose,
+}: { chatId: number } & DialogProps) {
+  const [disappearingMessageDuration, setDisappearingMessageDuration] =
+    useState<DisappearingMessageDuration>(DisappearingMessageDuration.OFF)
+  const tx = useTranslationFunction()
 
   useEffect(() => {
     ;(async () => {
@@ -111,7 +107,6 @@ export default function DisappearingMessage({
         chatId
       )
       setDisappearingMessageDuration(ephemeralTimer)
-      setLoading(false)
     })()
   }, [chatId])
 
@@ -121,37 +116,32 @@ export default function DisappearingMessage({
       chatId,
       disappearingMessageDuration
     )
+
     onClose()
   }
 
-  const tx = useTranslationFunction()
   return (
-    !loading && (
-      <Dialog onClose={onClose}>
-        <DialogHeader title={tx('ephemeral_messages')} />
-        <DialogBody>
-          <DialogContent>
-            <SelectDisappearingMessageDuration
-              disappearingMessageDuration={disappearingMessageDuration}
-              onSelectDisappearingMessageDuration={
-                setDisappearingMessageDuration
-              }
-            />
-            <p>{tx('ephemeral_messages_hint')}</p>
-          </DialogContent>
-        </DialogBody>
-        <DialogFooter>
-          <FooterActions>
-            <FooterActionButton onClick={onClose}>
-              {tx('cancel')}
-            </FooterActionButton>
-            <FooterActionButton onClick={saveAndClose}>
-              {tx('save_desktop')}
-            </FooterActionButton>
-          </FooterActions>
-        </DialogFooter>
-      </Dialog>
-    )
+    <Dialog onClose={onClose}>
+      <DialogHeader title={tx('ephemeral_messages')} />
+      <DialogBody>
+        <DialogContent>
+          <SelectDisappearingMessageDuration
+            disappearingMessageDuration={disappearingMessageDuration}
+            onSelectDisappearingMessageDuration={setDisappearingMessageDuration}
+          />
+          <p>{tx('ephemeral_messages_hint')}</p>
+        </DialogContent>
+      </DialogBody>
+      <DialogFooter>
+        <FooterActions>
+          <FooterActionButton onClick={onClose}>
+            {tx('cancel')}
+          </FooterActionButton>
+          <FooterActionButton onClick={saveAndClose}>
+            {tx('save_desktop')}
+          </FooterActionButton>
+        </FooterActions>
+      </DialogFooter>
+    </Dialog>
   )
 }
-

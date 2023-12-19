@@ -24,7 +24,7 @@ export function useThreeDotMenu(
   selectedChat: Type.FullChat | null,
   mode: 'chat' | 'gallery' = 'chat'
 ) {
-  const { openDialog } = useDialog()
+  const { openDialog, closeDialog } = useDialog()
   const { openContextMenu } = useContext(ScreenContext)
   const [settingsStore] = useSettingsStore()
   const tx = useTranslationFunction()
@@ -51,10 +51,14 @@ export function useThreeDotMenu(
     const openChatAuditLog = () =>
       openDialog(ChatAuditLogDialog, { selectedChat })
 
-    const onDisappearingMessages = () =>
-      openDialog(DisappearingMessages, {
+    const onDisappearingMessages = () => {
+      const dialogId = openDialog(DisappearingMessages, {
         chatId: selectedChat.id,
+        onClose: () => {
+          closeDialog(dialogId)
+        },
       })
+    }
 
     menu = [
       {

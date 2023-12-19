@@ -3,7 +3,6 @@ import React from 'react'
 import Icon from '../Icon'
 
 import type { PropsWithChildren } from 'react'
-import type { DialogProps } from '../dialogs/DialogController'
 import type { IconName } from '../Icon'
 
 import styles from './styles.module.scss'
@@ -11,8 +10,8 @@ import styles from './styles.module.scss'
 type Props = PropsWithChildren<{
   icon: IconName
   isLink?: boolean
-}> &
-  Pick<DialogProps, 'onClick'>
+  onClick: () => void
+}>
 
 export default function SettingsIconButton({
   children,

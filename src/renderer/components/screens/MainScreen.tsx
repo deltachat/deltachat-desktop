@@ -114,9 +114,8 @@ export default function MainScreen() {
   if (isFirstLoad.current) {
     isFirstLoad.current = false
     SettingsStoreInstance.effect.load().then(() => {
-      const lastChatId = SettingsStoreInstance.getState()?.settings[
-        'ui.lastchatid'
-      ]
+      const lastChatId =
+        SettingsStoreInstance.getState()?.settings['ui.lastchatid']
       if (lastChatId) {
         selectChat(Number(lastChatId))
       }
@@ -411,4 +410,3 @@ function chatSubtitle(chat: Type.FullChat) {
   }
   return 'ErrTitle'
 }
-

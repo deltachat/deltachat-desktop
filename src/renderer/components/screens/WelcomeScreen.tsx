@@ -40,7 +40,7 @@ function ImportBackupProgressDialog({
   const accountId = selectedAccountId()
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       try {
         log.debug(`Starting backup import of ${backupFile}`)
         await BackendRemote.rpc.importBackup(accountId, backupFile, null)
@@ -131,7 +131,7 @@ export default function WelcomeScreen({
   const [showBackButton, setShowBackButton] = useState(false)
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const allAccountIds = await BackendRemote.listAccounts()
       if (allAccountIds && allAccountIds.length > 1) {
         setShowBackButton(true)
@@ -217,4 +217,3 @@ export default function WelcomeScreen({
     </div>
   )
 }
-

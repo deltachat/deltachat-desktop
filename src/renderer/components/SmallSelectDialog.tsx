@@ -35,9 +35,8 @@ export default function SmallSelectDialog({
 }: Props) {
   const tx = useTranslationFunction()
 
-  const [actualSelectedValue, setActualSelectedValue] = useState<string>(
-    selectedValue
-  )
+  const [actualSelectedValue, setActualSelectedValue] =
+    useState<string>(selectedValue)
 
   const onChange = (event: React.FormEvent<HTMLInputElement>) => {
     const actualSelectedValue = String(event.currentTarget.value)

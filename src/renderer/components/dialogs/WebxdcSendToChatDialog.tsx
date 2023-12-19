@@ -184,4 +184,3 @@ async function sendToChatAction(
 
   window.__reloadDraft && window.__reloadDraft()
 }
-

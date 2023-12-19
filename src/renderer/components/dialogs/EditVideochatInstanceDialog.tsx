@@ -24,9 +24,11 @@ type RadioButtonValue = 'disabled' | 'custom' | 'systemli' | 'autistici'
 export default function EditVideochatInstanceDialog({
   onClose,
   onOk,
-  onCancel,
   settingsStore,
-}: DialogProps & { settingsStore: SettingsStoreState }) {
+}: DialogProps & {
+  onOk: (configValue: string) => void
+  settingsStore: SettingsStoreState
+}) {
   const tx = useTranslationFunction()
   const [configValue, setConfigValue] = useState(
     settingsStore.settings['webrtc_instance']
@@ -45,8 +47,8 @@ export default function EditVideochatInstanceDialog({
 
   const onClickCancel = () => {
     onClose()
-    onCancel && onCancel()
   }
+
   const onClickOk = () => {
     onClose()
     onOk(configValue.trim()) // the trim is here to not save custom provider if it only contains whitespaces
@@ -125,4 +127,3 @@ export default function EditVideochatInstanceDialog({
     </Dialog>
   )
 }
-

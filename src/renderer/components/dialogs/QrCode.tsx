@@ -310,4 +310,3 @@ export function QrCodeScanQrInner(
     </>
   )
 }
-
