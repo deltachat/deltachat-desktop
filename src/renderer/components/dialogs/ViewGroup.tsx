@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { C, DcEventType } from '@deltachat/jsonrpc-client'
 
 import ChatListItem from '../chat/ChatListItem'
@@ -18,9 +12,7 @@ import {
   PseudoListItemShowQrCode,
   PseudoListItemAddMember,
 } from '../helpers/PseudoListItem'
-import { DialogProps } from './DialogController'
 import ViewProfile from './ViewProfile'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
 import {
   Avatar,
   avatarInitial,
@@ -40,6 +32,11 @@ import Dialog, {
   DialogHeader,
   OkCancelFooterAction,
 } from '../Dialog'
+import useDialog from '../../hooks/useDialog'
+import ConfirmationDialog from './ConfirmationDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 const log = getLogger('renderer/ViewGroup')
 
@@ -61,11 +58,10 @@ export function useChat(initialChat: Type.FullChat): Type.FullChat {
   }, [initialChat.id, accountId])
 
   const onChatModified = useMemo(
-    () =>
-      async ({ chatId }: DcEventType<'ChatModified'>) => {
-        if (chatId !== chat.id) return
-        updateChat()
-      },
+    () => async ({ chatId }: DcEventType<'ChatModified'>) => {
+      if (chatId !== chat.id) return
+      updateChat()
+    },
     [chat.id, updateChat]
   )
 
@@ -82,18 +78,17 @@ export function useChat(initialChat: Type.FullChat): Type.FullChat {
   return chat
 }
 
-export default function ViewGroup(props: {
-  isOpen: DialogProps['isOpen']
-  onClose: DialogProps['onClose']
-  chat: Type.FullChat
-  isBroadcast: boolean
-}) {
-  const { isOpen, onClose, isBroadcast } = props
-
+export default function ViewGroup(
+  props: {
+    chat: Type.FullChat
+    isBroadcast: boolean
+  } & DialogProps
+) {
+  const { onClose, isBroadcast } = props
   const chat = useChat(props.chat)
 
   return (
-    <Dialog width={400} isOpen={isOpen} onClose={onClose} fixed>
+    <Dialog width={400} onClose={onClose} fixed>
       <ViewGroupInner onClose={onClose} chat={chat} isBroadcast={isBroadcast} />
     </Dialog>
   )
@@ -129,12 +124,13 @@ export const useGroup = (chat: Type.FullChat) => {
   }
 }
 
-function ViewGroupInner(props: {
-  onClose: DialogProps['onClose']
-  chat: Type.FullChat
-  isBroadcast: boolean
-}) {
-  const { openDialog } = useContext(ScreenContext)
+function ViewGroupInner(
+  props: {
+    chat: Type.FullChat
+    isBroadcast: boolean
+  } & DialogProps
+) {
+  const { openDialog } = useDialog()
   const { onClose, chat, isBroadcast } = props
   const tx = useTranslationFunction()
   const [settings] = useSettingsStore()
@@ -168,7 +164,7 @@ function ViewGroupInner(props: {
   } = useGroup(chat)
 
   const showRemoveGroupMemberConfirmationDialog = (contact: Type.Contact) => {
-    openDialog('ConfirmationDialog', {
+    openDialog(ConfirmationDialog, {
       message: !isBroadcast
         ? tx('ask_remove_members', contact.nameAndAddr)
         : tx('ask_remove_from_broadcast', contact.nameAndAddr),
@@ -184,11 +180,16 @@ function ViewGroupInner(props: {
   const onClickEdit = () => {
     openDialog(EditGroupNameDialog, {
       groupName,
-      groupImage,
+      groupImage: groupImage ? groupImage : undefined,
       groupColor: chat.color,
-      onOk: (groupName: string, groupImage: string) => {
-        groupName.length > 1 && setGroupName(groupName)
-        setGroupImage(groupImage)
+      onOk: (groupName: string, groupImage?: string) => {
+        if (groupName.length > 1) {
+          setGroupName(groupName)
+        }
+
+        if (groupImage) {
+          setGroupImage(groupImage)
+        }
       },
       isBroadcast: isBroadcast,
     })
@@ -339,7 +340,6 @@ function ViewGroupInner(props: {
 }
 
 export function AddMemberDialog({
-  isOpen,
   onClose,
   onOk,
   groupMembers,
@@ -354,15 +354,11 @@ export function AddMemberDialog({
   isVerificationRequired?: boolean
 } & DialogProps) {
   const [searchContacts, updateSearchContacts] = useContactsMap(listFlags, '')
-  const [queryStr, onSearchChange, _, refreshContacts] =
-    useContactSearch(updateSearchContacts)
+  const [queryStr, onSearchChange, _, refreshContacts] = useContactSearch(
+    updateSearchContacts
+  )
   return (
-    <Dialog
-      canOutsideClickClose={false}
-      isOpen={isOpen}
-      fixed
-      onClose={onClose}
-    >
+    <Dialog canOutsideClickClose={false} fixed onClose={onClose}>
       {AddMemberInnerDialog({
         onOk: addMembers => {
           onOk(addMembers)
@@ -384,21 +380,15 @@ export function AddMemberDialog({
 }
 
 export function ShowQRDialog({
-  onClose,
-  isOpen,
   qrCode,
   groupName,
   qrCodeSVG,
+  onClose,
 }: { qrCode: string; groupName: string; qrCodeSVG?: string } & DialogProps) {
   const tx = useTranslationFunction()
 
   return (
-    <Dialog
-      onClose={onClose}
-      isOpen={isOpen}
-      canOutsideClickClose={false}
-      fixed
-    >
+    <Dialog onClose={onClose} canOutsideClickClose={false} fixed>
       <DialogHeader title={tx('qrshow_title')} onClose={onClose} />
       <QrCodeShowQrInner
         qrCode={qrCode}
@@ -412,32 +402,32 @@ export function ShowQRDialog({
 export function EditGroupNameDialog({
   onClose,
   onOk,
-  onCancel,
-  isOpen,
   isBroadcast,
   groupName: initialGroupName,
   groupColor,
   groupImage: initialGroupImage,
-}: DialogProps) {
+}: {
+  onOk: (groupName: string, groupImage?: string) => void
+  groupName: string
+  groupImage?: string
+  groupColor: string
+  isBroadcast?: boolean
+} & DialogProps) {
   const [groupName, setGroupName] = useState(initialGroupName)
   const [groupImage, setGroupImage] = useState(initialGroupImage)
   const tx = useTranslationFunction()
 
   const onClickCancel = () => {
     onClose()
-    onCancel && onCancel()
   }
+
   const onClickOk = () => {
     onClose()
     onOk(groupName, groupImage)
   }
+
   return (
-    <Dialog
-      onClose={onClose}
-      isOpen={isOpen}
-      canOutsideClickClose={false}
-      fixed
-    >
+    <Dialog onClose={onClose} canOutsideClickClose={false} fixed>
       <DialogHeader
         title={
           !isBroadcast
@@ -504,7 +494,7 @@ export function GroupImageSelector({
 }: {
   groupName: string
   groupColor: string
-  groupImage: string
+  groupImage?: string
   setGroupImage: (groupImage: string) => void
 }) {
   const tx = window.static_translate

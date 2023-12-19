@@ -1,6 +1,5 @@
-import React, { useContext } from 'react'
+import React from 'react'
 
-import { ScreenContext, useTranslationFunction } from '../../contexts'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
@@ -12,6 +11,8 @@ import {
   VIDEO_CHAT_INSTANCE_AUTISTICI,
   VIDEO_CHAT_INSTANCE_SYSTEMLI,
 } from '../../../shared/constants'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
 
 type Props = {
   settingsStore: SettingsStoreState
@@ -19,7 +20,7 @@ type Props = {
 
 export function ExperimentalFeatures({ settingsStore }: Props) {
   const tx = useTranslationFunction()
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
 
   const onClickEdit = async () => {
     openDialog(EditVideochatInstanceDialog, {

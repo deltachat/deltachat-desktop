@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 
-import { DialogProps } from './DialogController'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import Dialog, {
@@ -10,7 +9,9 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
 } from '../Dialog'
-import { useTranslationFunction } from '../../contexts'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 type Props = {
   chatListItem: Pick<
@@ -18,14 +19,12 @@ type Props = {
     'id' | 'dmChatContact'
   >
   isOpen: boolean
-  onClose: DialogProps['onClose']
 }
 
 export default function EncryptionInfo({
   chatListItem,
-  isOpen,
   onClose,
-}: Props) {
+}: Props & DialogProps) {
   const [encryptionInfo, setEncryptionInfo] = useState('Fetching...')
   useEffect(() => {
     if (!chatListItem) return
@@ -44,7 +43,7 @@ export default function EncryptionInfo({
   const tx = useTranslationFunction()
 
   return (
-    <Dialog isOpen={isOpen} onClose={onClose}>
+    <Dialog onClose={onClose}>
       <DialogBody>
         <DialogContent paddingTop>
           <p>
@@ -61,3 +60,4 @@ export default function EncryptionInfo({
     </Dialog>
   )
 }
+

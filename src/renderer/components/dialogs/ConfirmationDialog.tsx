@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { useTranslationFunction } from '../../contexts'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -9,8 +8,9 @@ import Dialog, {
   FooterActions,
 } from '../Dialog'
 import FooterActionButton from '../Dialog/FooterActionButton'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
-import type { DialogProps } from './DialogController'
+import type { DialogProps } from '../../contexts/DialogContext'
 
 type Props = {
   message: string
@@ -31,7 +31,6 @@ export default function ConfirmationDialog({
   isConfirmDanger = false,
   header,
 }: Props) {
-  const isOpen = !!message
   const tx = useTranslationFunction()
 
   const onClick = (yes: boolean) => {
@@ -40,7 +39,7 @@ export default function ConfirmationDialog({
   }
 
   return (
-    <Dialog isOpen={isOpen} onClose={onClose}>
+    <Dialog onClose={onClose}>
       {header && <DialogHeader title={header} />}
       <DialogBody>
         <DialogContent paddingTop={header === undefined}>

@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
 
-import { useTranslationFunction } from '../../../contexts'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../../stores/settings'
-import { DialogProps } from '../DialogController'
 import { BackendRemote } from '../../../backend-com'
 import { selectedAccountId } from '../../../ScreenController'
 import { DeltaInput, DeltaTextarea } from '../../Login-Styles'
@@ -15,30 +13,30 @@ import Dialog, {
   DialogHeader,
   OkCancelFooterAction,
 } from '../../Dialog'
+import useTranslationFunction from '../../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../../contexts/DialogContext'
 
 export default function EditProfileDialog({
   onClose,
-  isOpen,
   settingsStore,
   title,
   cancelLabel,
   confirmLabel,
   firstSetup = false,
 }: {
-  isOpen: DialogProps['isOpen']
-  onClose: DialogProps['onClose']
   settingsStore: SettingsStoreState
   title?: string
   cancelLabel?: string
   confirmLabel?: string
   firstSetup?: boolean
-}) {
+} & DialogProps) {
   const tx = useTranslationFunction()
 
   title = title || tx('pref_edit_profile')
 
   return (
-    <Dialog canOutsideClickClose={false} isOpen={isOpen} onClose={onClose}>
+    <Dialog canOutsideClickClose={false} onClose={onClose}>
       <DialogHeader title={title} />
       {EditProfileDialogInner({
         settingsStore,

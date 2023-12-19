@@ -11,7 +11,6 @@ import React, {
 } from 'react'
 import { T, C } from '@deltachat/jsonrpc-client'
 
-import { ScreenContext, useTranslationFunction } from '../../contexts'
 import {
   useContacts,
   ContactList,
@@ -23,7 +22,6 @@ import {
   PseudoListItemAddContact,
 } from '../helpers/PseudoListItem'
 import GroupImage from '../GroupImage'
-import { DialogProps } from './DialogController'
 import { runtime } from '../../runtime'
 import {
   areAllContactsVerified,
@@ -38,7 +36,6 @@ import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import ConfirmationDialog from './ConfirmationDialog'
-import { VerifiedContactsRequiredDialog } from './ProtectionStatusDialog'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -48,20 +45,21 @@ import Dialog, {
   FooterActions,
   OkCancelFooterAction,
 } from '../Dialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { ScreenContext } from '../../contexts/ScreenContext'
+import useDialog from '../../hooks/useDialog'
+import { VerifiedContactsRequiredDialog } from './ProtectionStatusDialog'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
 
-type CreateChatProps = {
-  isOpen: DialogProps['isOpen']
-  onClose: DialogProps['onClose']
-}
-
-export default function CreateChat(props: CreateChatProps) {
-  const { isOpen, onClose } = props
+export default function CreateChat(props: DialogProps) {
+  const { onClose } = props
   const [viewMode, setViewMode] = useState<ViewMode>('main')
 
   return (
-    <Dialog width={400} isOpen={isOpen} onClose={onClose} fixed>
+    <Dialog width={400} onClose={onClose} fixed>
       {viewMode == 'main' && <CreateChatMain {...{ setViewMode, onClose }} />}
       {viewMode == 'createGroup' && (
         <CreateGroup {...{ setViewMode, onClose }} />
@@ -81,15 +79,17 @@ type CreateChatMainProps = {
 function CreateChatMain(props: CreateChatMainProps) {
   const { setViewMode, onClose } = props
   const tx = useTranslationFunction()
-  const { userFeedback, openDialog } = useContext(ScreenContext)
+  const { userFeedback } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const accountId = selectedAccountId()
 
   const [{ contacts, queryStrIsValidEmail }, updateContacts] = useContactsNew(
     C.DC_GCL_ADD_SELF,
     ''
   )
-  const [queryStr, onSearchChange, _, refreshContacts] =
-    useContactSearch(updateContacts)
+  const [queryStr, onSearchChange, _, refreshContacts] = useContactSearch(
+    updateContacts
+  )
 
   const chooseContact = async ({ id }: Type.Contact) => {
     try {
@@ -206,7 +206,7 @@ type CreateGroupProps = {
 }
 
 function CreateGroup(props: CreateGroupProps) {
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const { setViewMode, onClose } = props
   const tx = useTranslationFunction()
   const accountId = selectedAccountId()
@@ -312,13 +312,16 @@ type CreateBroadcastListProps = {
 }
 
 function CreateBroadcastList(props: CreateBroadcastListProps) {
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const { setViewMode, onClose } = props
   const tx = useTranslationFunction()
 
   const [broadcastName, setBroadcastName] = useState<string>('')
-  const [broadcastRecipients, removeBroadcastRecipient, addBroadcastRecipient] =
-    useGroupMembers([])
+  const [
+    broadcastRecipients,
+    removeBroadcastRecipient,
+    addBroadcastRecipient,
+  ] = useGroupMembers([])
   const finishCreateBroadcast = useCreateBroadcast(
     broadcastRecipients,
     broadcastName,
@@ -326,8 +329,9 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
   )
 
   const searchContacts = useContacts(C.DC_GCL_ADD_SELF, '')[0]
-  const [errorMissingChatName, setErrorMissingChatName] =
-    useState<boolean>(false)
+  const [errorMissingChatName, setErrorMissingChatName] = useState<boolean>(
+    false
+  )
 
   const showAddMemberDialog = () => {
     const listFlags = C.DC_GCL_ADD_SELF
@@ -507,8 +511,8 @@ export function AddMemberInnerDialog({
   isBroadcast: boolean
   isVerificationRequired: boolean
 }) {
-  const tx = window.static_translate
-  const { openDialog } = useContext(ScreenContext)
+  const tx = useTranslationFunction()
+  const { openDialog } = useDialog()
   const accountId = selectedAccountId()
 
   const contactIdsInGroup: number[] = [...searchContacts]
@@ -607,8 +611,8 @@ export function AddMemberInnerDialog({
   const applyCSSHacks = () => {
     setTimeout(() => inputRef.current?.focus(), 0)
 
-    const offsetHeight = //@ts-ignore
-      document.querySelector('.AddMemberChipsWrapper')?.offsetHeight
+    const offsetHeight = document.querySelector('.AddMemberChipsWrapper') //@ts-ignore
+      ?.offsetHeight
     if (!offsetHeight) return
     contactListRef.current?.style.setProperty(
       'max-height',
@@ -663,11 +667,9 @@ export function AddMemberInnerDialog({
 
   const addContactOnKeyDown = (ev: React.KeyboardEvent<HTMLInputElement>) => {
     if (ev.key == 'Enter') {
-      ;(
-        document.querySelector<HTMLDivElement>(
-          '.delta-checkbox'
-        ) as HTMLDivElement
-      ).click()
+      ;(document.querySelector<HTMLDivElement>(
+        '.delta-checkbox'
+      ) as HTMLDivElement).click()
     }
   }
 
@@ -838,7 +840,7 @@ export function useContactSearch(
     searchString: string,
     onSearchChange: typeof onSearchChange,
     updateSearch: typeof updateSearch,
-    refresh: typeof refresh,
+    refresh: typeof refresh
   ]
 }
 
@@ -862,7 +864,7 @@ export function useGroupImage(image?: string | null) {
   return [groupImage, onSetGroupImage, onUnsetGroupImage] as [
     typeof groupImage,
     typeof onSetGroupImage,
-    typeof onUnsetGroupImage,
+    typeof onUnsetGroupImage
   ]
 }
 
@@ -901,6 +903,7 @@ export function useGroupMembers(initialMembers: number[]) {
     typeof removeGroupMember,
     typeof addGroupMember,
     typeof addRemoveGroupMember,
-    typeof addGroupMembers,
+    typeof addGroupMembers
   ]
 }
+

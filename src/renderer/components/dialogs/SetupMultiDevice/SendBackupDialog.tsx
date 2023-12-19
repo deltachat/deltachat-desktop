@@ -1,8 +1,7 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { getLogger } from '../../../../shared/logger'
 import { BackendRemote, onDCEvent } from '../../../backend-com'
-import { ScreenContext, useTranslationFunction } from '../../../contexts'
 import { runtime } from '../../../runtime'
 import { selectedAccountId } from '../../../ScreenController'
 import ConfirmationDialog from '../ConfirmationDialog'
@@ -15,9 +14,10 @@ import Dialog, {
 } from '../../Dialog'
 import FooterActionButton from '../../Dialog/FooterActionButton'
 import Icon from '../../Icon'
+import useTranslationFunction from '../../../hooks/useTranslationFunction'
 
 import type { PropsWithChildren } from 'react'
-import type { DialogProps } from '../DialogController'
+import type { DialogProps } from '../../../contexts/DialogContext'
 
 import styles from './styles.module.scss'
 
@@ -27,7 +27,7 @@ const TROUBLESHOOTING_URL = 'https://delta.chat/en/help#multiclient'
 
 export function SendBackupDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
 
   const [inProgress, setInProgress] = useState<boolean>(false)
   const [qrCodeSVG, setQrSvg] = useState<string | null>(null)
@@ -131,7 +131,6 @@ export function SendBackupDialog({ onClose }: DialogProps) {
     <Dialog
       canEscapeKeyClose={true}
       canOutsideClickClose={false}
-      isOpen={true}
       onClose={cancel}
       width={600}
     >
@@ -182,7 +181,9 @@ export function SendBackupDialog({ onClose }: DialogProps) {
             <FooterActions align='spaceBetween'>
               <span className={styles.buttonGroup}>
                 <FooterActionButton
-                  onClick={() => runtime.openLink(TROUBLESHOOTING_URL)}
+                  onClick={() =>
+                    runtime.openLink(openDialog, TROUBLESHOOTING_URL)
+                  }
                 >
                   {tx('troubleshooting')}&nbsp;
                   <Icon icon='open_in_new' size={20} />
@@ -228,3 +229,7 @@ function SendBackupSteps() {
     </div>
   )
 }
+function useDialog(): { openDialog: any } {
+  throw new Error('Function not implemented.')
+}
+

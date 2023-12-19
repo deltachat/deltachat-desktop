@@ -4,21 +4,26 @@ import React, { useEffect, useState } from 'react'
 
 import { getLogger } from '../../../../shared/logger'
 import { BackendRemote } from '../../../backend-com'
-import { useTranslationFunction } from '../../../contexts'
 import { selectedAccountId } from '../../../ScreenController'
 import { DeltaProgressBar } from '../../Login-Styles'
-import { DialogProps } from '../DialogController'
 import { DialogBody, DialogContent, DialogWithHeader } from '../../Dialog'
+import useTranslationFunction from '../../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../../contexts/DialogContext'
 
 const log = getLogger('renderer/receive_backup')
 
+type Props = {
+  QrWithToken: string
+}
+
 export function ReceiveBackupDialog({
   onClose,
-  isOpen,
   QrWithToken,
-}: DialogProps) {
+}: Props & DialogProps) {
   const [importProgress, setImportProgress] = useState(0.0)
   const [error, setError] = useState<string | null>(null)
+  const tx = useTranslationFunction()
 
   const onImexProgress = ({ progress }: DcEventType<'ImexProgress'>) => {
     setImportProgress(progress)
@@ -48,12 +53,10 @@ export function ReceiveBackupDialog({
     }
   }, [QrWithToken, onClose, accountId])
 
-  const tx = useTranslationFunction()
   return (
     <DialogWithHeader
       onClose={onClose}
       title={tx('multidevice_receiver_title')}
-      isOpen={isOpen}
     >
       <DialogBody>
         <DialogContent>
@@ -71,3 +74,4 @@ export function ReceiveBackupDialog({
     </DialogWithHeader>
   )
 }
+

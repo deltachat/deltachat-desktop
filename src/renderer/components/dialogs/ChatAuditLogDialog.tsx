@@ -8,9 +8,7 @@ import React, {
 import { C } from '@deltachat/jsonrpc-client'
 import moment from 'moment'
 
-import { DialogProps } from './DialogController'
 import { getLogger } from '../../../shared/logger'
-import { useTranslationFunction, ScreenContext } from '../../contexts'
 import {
   openMessageInfo,
   setQuoteInDraft,
@@ -23,10 +21,16 @@ import { selectedAccountId } from '../../ScreenController'
 import { runtime } from '../../runtime'
 import { jumpToMessage } from '../helpers/ChatMethods'
 import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
+import { ScreenContext } from '../../contexts/ScreenContext'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { DialogProps, OpenDialog } from '../../contexts/DialogContext'
 
 const log = getLogger('render/ChatAuditLog')
 
 function buildContextMenu(
+  openDialog: OpenDialog,
   message: Type.Message,
   isGroup: boolean,
   closeDialogCallback: DialogProps['onClose']
@@ -78,17 +82,18 @@ function buildContextMenu(
     // Message details
     {
       label: tx('menu_message_details'),
-      action: openMessageInfo.bind(null, message),
+      action: openMessageInfo.bind(null, openDialog, message),
     },
   ]
 }
 
-export default function ChatAuditLogDialog(props: {
-  selectedChat: Type.FullChat
-  onClose: DialogProps['onClose']
-}) {
+export default function ChatAuditLogDialog(
+  props: {
+    selectedChat: Type.FullChat
+  } & DialogProps
+) {
   const { selectedChat, onClose } = props
-  const isOpen = !!selectedChat
+  const { openDialog } = useDialog()
 
   const [loading, setLoading] = useState(true)
   const [msgEntries, setMsgEntries] = useState<Type.MessageListItem[]>([])
@@ -107,6 +112,7 @@ export default function ChatAuditLogDialog(props: {
     >
   ) => {
     const items = buildContextMenu(
+      openDialog,
       message,
       selectedChat.chatType === C.DC_CHAT_TYPE_GROUP,
       onClose
@@ -159,13 +165,7 @@ export default function ChatAuditLogDialog(props: {
   const tx = useTranslationFunction()
 
   return (
-    <Dialog
-      className={'audit-log-dialog'}
-      fixed
-      isOpen={isOpen}
-      onClose={onClose}
-      width={700}
-    >
+    <Dialog className={'audit-log-dialog'} fixed onClose={onClose} width={700}>
       <DialogHeader
         onClose={onClose}
         title={tx('chat_audit_log_title', selectedChat.name)}
@@ -214,8 +214,12 @@ export default function ChatAuditLogDialog(props: {
                     )
                   }
 
-                  const { text, timestamp, systemMessageType, parentId } =
-                    message
+                  const {
+                    text,
+                    timestamp,
+                    systemMessageType,
+                    parentId,
+                  } = message
                   const direction = getDirection(message)
                   const status = mapCoreMsgStatus2String(message.state)
                   const accountId = selectedAccountId()
@@ -259,3 +263,4 @@ export default function ChatAuditLogDialog(props: {
     </Dialog>
   )
 }
+

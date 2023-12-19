@@ -2,7 +2,7 @@ import React from 'react'
 
 import { runtime } from '../../../runtime'
 import { avatarInitial } from '../../Avatar'
-import { useTranslationFunction } from '../../../contexts'
+import useTranslationFunction from '../../../hooks/useTranslationFunction'
 
 export default function ProfileImageSelector({
   displayName,

@@ -13,9 +13,7 @@ import {
   DeltaSwitch,
 } from './Login-Styles'
 import ClickableLink from './helpers/ClickableLink'
-import { DialogProps } from './dialogs/DialogController'
 import { Credentials } from '../../shared/shared-types'
-import { useTranslationFunction, i18nContext } from '../contexts'
 import { getLogger } from '../../shared/logger'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
@@ -26,6 +24,10 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
 } from './Dialog'
+import { I18nContext } from '../contexts/I18nContext'
+import useTranslationFunction from '../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../contexts/DialogContext'
 
 const log = getLogger('renderer/loginForm')
 
@@ -176,7 +178,7 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
   const certificate_checks = imap_certificate_checks
 
   return (
-    <i18nContext.Consumer>
+    <I18nContext.Consumer>
       {tx => (
         <div className='login-form'>
           <DeltaInput
@@ -381,19 +383,19 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
           <p className='text'>{tx('login_subheader')}</p>
         </div>
       )}
-    </i18nContext.Consumer>
+    </I18nContext.Consumer>
   )
 }
 
 export function ConfigureProgressDialog({
-  isOpen,
-  onClose,
   credentials,
   onSuccess,
+  ...dialogProps
 }: {
   credentials: Partial<Credentials>
   onSuccess?: () => void
 } & DialogProps) {
+  const { onClose } = dialogProps
   const [progress, setProgress] = useState(0)
   const [progressComment, setProgressComment] = useState('')
   const [error, setError] = useState('')
@@ -474,7 +476,6 @@ export function ConfigureProgressDialog({
 
   return (
     <Dialog
-      isOpen={isOpen}
       onClose={onClose}
       canEscapeKeyClose={false}
       canOutsideClickClose={false}

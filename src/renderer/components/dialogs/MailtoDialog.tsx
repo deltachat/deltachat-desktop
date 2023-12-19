@@ -4,22 +4,26 @@ import { C } from '@deltachat/jsonrpc-client'
 
 import ChatListItem from '../chat/ChatListItem'
 import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
-import { DialogProps } from './DialogController'
 import { ChatListPart, useLogicVirtualChatList } from '../chat/ChatList'
 import { useChatList } from '../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../ThemeManager'
 import { createDraftMessage } from '../helpers/ChatMethods'
 import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
-import { useTranslationFunction } from '../../contexts'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
 
-export default function MailtoDialog(props: {
+import type { DialogProps } from '../../contexts/DialogContext'
+
+type Props = {
   messageText: string
-  onClose: DialogProps['onClose']
-}) {
+}
+
+export default function MailtoDialog(props: Props & DialogProps) {
   const { onClose, messageText } = props
+  const listFlags = C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS
 
   const tx = useTranslationFunction()
-  const listFlags = C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS
+  const { openDialog } = useDialog()
   const { chatListIds, queryStr, setQueryStr } = useChatList(listFlags)
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
     chatListIds,
@@ -27,7 +31,7 @@ export default function MailtoDialog(props: {
   )
 
   const onChatClick = async (chatId: number) => {
-    createDraftMessage(chatId, messageText)
+    createDraftMessage(openDialog, chatId, messageText)
     onClose()
   }
 
@@ -40,7 +44,7 @@ export default function MailtoDialog(props: {
   const noResults = chatListIds.length === 0 && queryStr !== ''
 
   return (
-    <Dialog isOpen={true} onClose={onClose} fixed>
+    <Dialog onClose={onClose} fixed>
       <DialogHeader
         onClose={onClose}
         title={tx('mailto_dialog_header_select_chat')}
@@ -97,3 +101,4 @@ export default function MailtoDialog(props: {
     </Dialog>
   )
 }
+

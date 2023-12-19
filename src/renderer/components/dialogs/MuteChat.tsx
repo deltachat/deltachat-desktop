@@ -4,15 +4,15 @@ import { Timespans } from '../../../shared/constants'
 import { selectedAccountId } from '../../ScreenController'
 import { BackendRemote, Type } from '../../backend-com'
 import SmallSelectDialog, { SelectDialogOption } from '../SmallSelectDialog'
-import { useTranslationFunction } from '../../contexts'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 type Props = {
-  isOpen: boolean
-  onClose: () => void
   chatId: number
 }
 
-export default function MuteChat({ isOpen, onClose, chatId }: Props) {
+export default function MuteChat({ onClose, chatId }: Props & DialogProps) {
   const accountId = selectedAccountId()
   const tx = useTranslationFunction()
 
@@ -50,9 +50,9 @@ export default function MuteChat({ isOpen, onClose, chatId }: Props) {
       title={tx('menu_mute')}
       values={MUTE_DURATION_OPTIONS}
       selectedValue={'0'} // first option selected by default which is "not muted"
-      isOpen={isOpen}
       onSave={onSave}
       onClose={onClose}
     />
   )
 }
+

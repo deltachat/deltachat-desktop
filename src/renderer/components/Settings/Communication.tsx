@@ -1,12 +1,13 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
-import { ScreenContext, useTranslationFunction } from '../../contexts'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
 import SettingsSelector from './SettingsSelector'
 import SmallSelectDialog, { SelectDialogOption } from '../SmallSelectDialog'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 function showToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)
@@ -28,7 +29,7 @@ type Props = {
 }
 
 export default function Communication({ settingsStore }: Props) {
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const tx = useTranslationFunction()
 
   const onOpenDialog = useCallback(async () => {

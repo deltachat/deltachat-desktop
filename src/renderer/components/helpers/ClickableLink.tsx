@@ -1,23 +1,22 @@
 import React, { PropsWithChildren } from 'react'
+
+import useDialog from '../../hooks/useDialog'
 import { openLinkSafely } from './LinkConfirmation'
 
-export default class ClickableLink extends React.Component<
-  PropsWithChildren<{
-    href: string
-    onClick?: (ev: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void
-  }>
-> {
-  onClick(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
+export default function ClickableLink({
+  href,
+  children,
+}: PropsWithChildren<{ href: string }>) {
+  const { openDialog } = useDialog()
+
+  const onClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     event.preventDefault()
-    openLinkSafely(this.props.href)
+    openLinkSafely(openDialog, href)
   }
 
-  render() {
-    const { href, onClick, children } = this.props
-    return (
-      <a href={href} onClick={onClick || this.onClick.bind(this)}>
-        {children}
-      </a>
-    )
-  }
+  return (
+    <a href={href} onClick={onClick}>
+      {children}
+    </a>
+  )
 }

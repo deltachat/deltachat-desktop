@@ -3,13 +3,11 @@ import React from 'react'
 import DialogFooter from './DialogFooter'
 import FooterActionButton from './FooterActionButton'
 import FooterActions from './FooterActions'
-import { useTranslationFunction } from '../../contexts'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
-type Props = {
-  onClose: () => void
-}
+import type { DialogProps } from '../../contexts/DialogContext'
 
-export default function CloseFooterAction({ onClose }: Props) {
+export default function CloseFooterAction({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
 
   return (

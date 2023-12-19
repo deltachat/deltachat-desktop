@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { useSettingsStore } from '../../stores/settings'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { SendBackupDialog } from '../dialogs/SetupMultiDevice'
 import { runtime } from '../../runtime'
-import { DialogProps } from '../dialogs/DialogController'
 import { donationUrl } from '../../../shared/constants'
 import SettingsIconButton from './SettingsIconButton'
 import ConnectivityButton from './ConnectivityButton'
@@ -17,6 +15,10 @@ import Dialog, { DialogBody, DialogHeader } from '../Dialog'
 import EditProfileDialog from '../dialogs/EditProfileDialog'
 import EditAccountAndPasswordDialog from '../dialogs/EditAccountAndPasswordDialog'
 import SettingsSeparator from './SettingsSeparator'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 type SettingsView =
   | 'main'
@@ -25,8 +27,9 @@ type SettingsView =
   | 'appearance'
   | 'advanced'
 
-export default function Settings({ isOpen, onClose }: DialogProps) {
-  const { openDialog } = useContext(ScreenContext)
+export default function Settings({ onClose }: DialogProps) {
+  const { openDialog } = useDialog()
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const settingsStore = useSettingsStore()[0]!
   const tx = useTranslationFunction()
   const [settingsMode, setSettingsMode] = useState<SettingsView>('main')
@@ -44,7 +47,7 @@ export default function Settings({ isOpen, onClose }: DialogProps) {
   }, [])
 
   return (
-    <Dialog isOpen={isOpen} onClose={onClose} fixed width={400}>
+    <Dialog onClose={onClose} fixed width={400}>
       {settingsMode === 'main' && (
         <>
           <DialogHeader title={tx('menu_settings')} onClose={onClose} />
@@ -108,7 +111,7 @@ export default function Settings({ isOpen, onClose }: DialogProps) {
             {!runtime.getRuntimeInfo().isMac && (
               <SettingsIconButton
                 icon='favorite'
-                onClick={() => runtime.openLink(donationUrl)}
+                onClick={() => runtime.openLink(openDialog, donationUrl)}
                 isLink
               >
                 {tx('donate')}

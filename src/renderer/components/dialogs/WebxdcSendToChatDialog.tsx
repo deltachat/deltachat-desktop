@@ -4,7 +4,6 @@ import AutoSizer from 'react-virtualized-auto-sizer'
 
 import ChatListItem from '../chat/ChatListItem'
 import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
-import { DialogProps } from './DialogController'
 import { ChatListPart, useLogicVirtualChatList } from '../chat/ChatList'
 import { useChatList } from '../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../ThemeManager'
@@ -12,7 +11,6 @@ import { selectChat } from '../helpers/ChatMethods'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { runtime } from '../../runtime'
-import { useTranslationFunction } from '../../contexts'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -21,19 +19,28 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
 } from '../Dialog'
+import ConfirmationDialog from './ConfirmationDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
 
-export default function WebxdcSaveToChatDialog(props: {
-  messageText: string | null
-  file: { file_name: string; file_content: string } | null
-  onClose: DialogProps['onClose']
-}) {
-  const tx = useTranslationFunction()
+import type { DialogProps, OpenDialog } from '../../contexts/DialogContext'
+
+const LIST_FLAGS = C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS
+
+export default function WebxdcSaveToChatDialog(
+  props: {
+    messageText: string | null
+    file: { file_name: string; file_content: string } | null
+  } & DialogProps
+) {
   const { onClose, messageText, file } = props
-  const listFlags = C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS
-  const { chatListIds, queryStr, setQueryStr } = useChatList(listFlags)
+
+  const tx = useTranslationFunction()
+  const { openDialog } = useDialog()
+  const { chatListIds, queryStr, setQueryStr } = useChatList(LIST_FLAGS)
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
     chatListIds,
-    listFlags
+    LIST_FLAGS
   )
 
   const onChatClick = async (chatId: number) => {
@@ -44,7 +51,7 @@ export default function WebxdcSaveToChatDialog(props: {
         file.file_content
       )
     }
-    await sendToChatAction(chatId, messageText, path)
+    await sendToChatAction(openDialog, chatId, messageText, path)
     if (path) {
       await runtime.removeTempFile(path)
     }
@@ -75,7 +82,7 @@ export default function WebxdcSaveToChatDialog(props: {
 
   const noResults = chatListIds.length === 0 && queryStr !== ''
   return (
-    <Dialog isOpen={true} onClose={onClose} fixed>
+    <Dialog onClose={onClose} fixed>
       <DialogHeader onClose={onClose} title={title} />
       <DialogBody>
         <div className='webxdc-send-to-chat-dialog'>
@@ -140,6 +147,7 @@ export default function WebxdcSaveToChatDialog(props: {
 }
 
 async function sendToChatAction(
+  openDialog: OpenDialog,
   chatId: number,
   messageText: string | null,
   file: string | null
@@ -154,7 +162,7 @@ async function sendToChatAction(
   if (draft) {
     // ask if the draft should be replaced
     const continue_process = await new Promise((resolve, _reject) => {
-      window.__openDialog('ConfirmationDialog', {
+      openDialog(ConfirmationDialog, {
         message: window.static_translate('confirm_replace_draft', chat.name),
         confirmLabel: window.static_translate('replace_draft'),
         cb: resolve,
@@ -176,3 +184,4 @@ async function sendToChatAction(
 
   window.__reloadDraft && window.__reloadDraft()
 }
+

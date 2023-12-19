@@ -3,7 +3,7 @@ import React from 'react'
 import Dialog from './Dialog'
 import DialogHeader from './DialogHeader'
 
-import type { DialogProps } from '../dialogs/DialogController'
+import type { DialogProps } from '../../contexts/DialogContext'
 
 type Props = React.PropsWithChildren<
   {
@@ -13,13 +13,12 @@ type Props = React.PropsWithChildren<
     onClickBack?: () => void
     title: string
     width?: number
-  } & Pick<DialogProps, 'isOpen' | 'onClose'>
+  } & DialogProps
 >
 
 const DialogWithHeader = React.memo<Props>(props => {
   return (
     <Dialog
-      isOpen={props.isOpen}
       onClose={props.onClose}
       fixed={props.fixed}
       className={props.className}

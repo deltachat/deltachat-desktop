@@ -1,20 +1,14 @@
 import AutoSizer from 'react-virtualized-auto-sizer'
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import moment from 'moment'
 import { C } from '@deltachat/jsonrpc-client'
 
 import ChatListItem from '../../chat/ChatListItem'
 import { useChatList } from '../../chat/ChatListHelpers'
-import {
-  MessagesDisplayContext,
-  ScreenContext,
-  useTranslationFunction,
-} from '../../../contexts'
 import { Avatar, ClickForFullscreenAvatarWrapper } from '../../Avatar'
 import { useLogicVirtualChatList, ChatListPart } from '../../chat/ChatList'
 import MessageBody from '../../message/MessageBody'
 import { useThemeCssVar } from '../../../ThemeManager'
-import { DialogProps } from '../DialogController'
 import { DeltaInput } from '../../Login-Styles'
 import { openViewProfileDialog, selectChat } from '../../helpers/ChatMethods'
 import { BackendRemote, onDCEvent, Type } from '../../../backend-com'
@@ -27,8 +21,13 @@ import Dialog, {
   DialogHeader,
   OkCancelFooterAction,
 } from '../../Dialog'
+import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import useDialog from '../../../hooks/useDialog'
+import { MessagesDisplayContext } from '../../../contexts/MessagesDisplayContext'
 
 import styles from './styles.module.scss'
+
+import type { DialogProps } from '../../../contexts/DialogContext'
 
 const log = getLogger('renderer/dialogs/ViewProfile')
 
@@ -68,17 +67,17 @@ function ProfileInfoAvatar({ contact }: { contact: Type.Contact }) {
   })
 }
 
-export default function ViewProfile(props: {
-  isOpen: boolean
-  onClose: () => void
-  contact: Type.Contact
-  onBack?: () => void
-}) {
-  const { isOpen, onClose, onBack } = props
+export default function ViewProfile(
+  props: {
+    contact: Type.Contact
+    onBack?: () => void
+  } & DialogProps
+) {
+  const { onClose, onBack } = props
 
   const accountId = selectedAccountId()
-  const tx = window.static_translate
-  const { openDialog } = useContext(ScreenContext)
+  const tx = useTranslationFunction()
+  const { openDialog } = useDialog()
   const [contact, setContact] = useState<Type.Contact>(props.contact)
   const isDeviceChat = contact.id === C.DC_CONTACT_ID_DEVICE
   const isSelfChat = contact.id === C.DC_CONTACT_ID_SELF
@@ -107,7 +106,6 @@ export default function ViewProfile(props: {
   return (
     <Dialog
       width={400}
-      isOpen={isOpen}
       onClose={onClose}
       fixed
       className={styles.viewProfileDialog}
@@ -133,7 +131,8 @@ export function ViewProfileInner({
   onClose: () => void
 }) {
   const accountId = selectedAccountId()
-  const screenContext = useContext(ScreenContext)
+  const tx = useTranslationFunction()
+  const { openDialog } = useDialog()
   const { chatListIds } = useChatList(null, '', contact.id)
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
     chatListIds,
@@ -147,8 +146,6 @@ export function ViewProfileInner({
 
   const isDeviceChat = contact.id === C.DC_CONTACT_ID_DEVICE
   const isSelfChat = contact.id === C.DC_CONTACT_ID_SELF
-
-  const tx = window.static_translate
 
   const onChatClick = (chatId: number) => {
     selectChat(chatId)
@@ -194,21 +191,19 @@ export function ViewProfileInner({
           )
           setVerifier({
             label: tx('verified_by', nameAndAddr),
-            action: () =>
-              openViewProfileDialog(screenContext, verifierContactId),
+            action: () => openViewProfileDialog(openDialog, verifierContactId),
           })
         } catch (error) {
           log.error('failed to load verifier contact', error)
           setVerifier({
             label:
               'verified by: failed to load verifier contact, please report this issue',
-            action: () =>
-              openViewProfileDialog(screenContext, verifierContactId),
+            action: () => openViewProfileDialog(openDialog, verifierContactId),
           })
         }
       }
     })()
-  }, [accountId, contact.id, contact.verifierId, screenContext, tx])
+  }, [accountId, contact.id, contact.verifierId, openDialog, tx])
 
   const CHATLISTITEM_CHAT_HEIGHT =
     Number(useThemeCssVar('--SPECIAL-chatlist-item-chat-height')) || 64
@@ -346,30 +341,27 @@ export function ViewProfileInner({
 }
 
 export function EditContactNameDialog({
-  isOpen,
   onClose,
   onOk,
-  onCancel,
   contactName: initialGroupName,
-}: DialogProps) {
+}: {
+  onOk: (contactName: string) => void
+  contactName: string
+} & DialogProps) {
   const [contactName, setContactName] = useState(initialGroupName)
   const tx = useTranslationFunction()
 
   const onClickCancel = () => {
     onClose()
-    onCancel && onCancel()
   }
+
   const onClickOk = () => {
     onClose()
     onOk(contactName)
   }
+
   return (
-    <Dialog
-      canOutsideClickClose={false}
-      fixed
-      isOpen={isOpen}
-      onClose={onClose}
-    >
+    <Dialog canOutsideClickClose={false} fixed onClose={onClose}>
       <DialogHeader title={tx('menu_edit_name')} />
       <DialogBody>
         <DialogContent>
@@ -391,3 +383,4 @@ export function EditContactNameDialog({
     </Dialog>
   )
 }
+

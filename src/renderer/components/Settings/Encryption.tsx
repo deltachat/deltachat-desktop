@@ -1,7 +1,5 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 
-import { ScreenContext, useTranslationFunction } from '../../contexts'
-import { DialogProps } from '../dialogs/DialogController'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import SettingsButton from './SettingsButton'
@@ -16,9 +14,13 @@ import {
   FooterActions,
 } from '../Dialog'
 import Callout from '../Callout'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 export default function Encryption() {
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const tx = useTranslationFunction()
 
   return (
@@ -42,9 +44,8 @@ export function KeyViewPanel({
   onClose,
   autocryptKey,
 }: {
-  onClose: DialogProps['onClose']
   autocryptKey: string
-}) {
+} & DialogProps) {
   const tx = useTranslationFunction()
 
   return (
@@ -87,13 +88,7 @@ function InitiatePanel({ onClick }: { onClick: todo }) {
   )
 }
 
-export function SendAutocryptSetupMessage({
-  onClose: _onClose,
-  isOpen,
-}: {
-  onClose: Function
-  isOpen: boolean
-}) {
+export function SendAutocryptSetupMessage({ onClose: _onClose }: DialogProps) {
   const tx = useTranslationFunction()
   const [key, setKey] = useState<string | null>(null)
 
@@ -103,8 +98,9 @@ export function SendAutocryptSetupMessage({
   }
 
   const initiateKeyTransfer = async () => {
-    const key =
-      await BackendRemote.rpc.initiateAutocryptKeyTransfer(selectedAccountId())
+    const key = await BackendRemote.rpc.initiateAutocryptKeyTransfer(
+      selectedAccountId()
+    )
     setKey(key)
   }
 
@@ -116,11 +112,7 @@ export function SendAutocryptSetupMessage({
   }
 
   return (
-    <DialogWithHeader
-      isOpen={isOpen}
-      title={tx('autocrypt_send_asm_title')}
-      onClose={onClose}
-    >
+    <DialogWithHeader title={tx('autocrypt_send_asm_title')} onClose={onClose}>
       {body}
     </DialogWithHeader>
   )

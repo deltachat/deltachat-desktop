@@ -1,8 +1,7 @@
 import { join } from 'path'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Icon } from '@blueprintjs/core'
 
-import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { ThemeManager } from '../../ThemeManager'
 import { runtime } from '../../runtime'
 import {
@@ -19,6 +18,8 @@ import DesktopSettingsSwitch from './DesktopSettingsSwitch'
 import SmallSelectDialog, { SelectDialogOption } from '../SmallSelectDialog'
 import SettingsHeading from './SettingsHeading'
 import { DialogContent } from '../Dialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
 
 const log = getLogger('renderer/settings/appearance')
 
@@ -34,7 +35,7 @@ export default function Appearance({
   settingsStore,
 }: Props) {
   const { activeTheme } = desktopSettings
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const [availableThemes, setAvailableThemes] = useState<Theme[]>([])
   const tx = useTranslationFunction()
 

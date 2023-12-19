@@ -2,7 +2,6 @@ import classNames from 'classnames'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
-import { ScreenContext, useTranslationFunction } from '../contexts'
 import { runtime } from '../runtime'
 import { Screens, selectedAccountId } from '../ScreenController'
 import QrCode from './dialogs/QrCode'
@@ -18,6 +17,12 @@ import {
   onDCEvent,
 } from '../backend-com'
 import ConnectivityDialog from './dialogs/ConnectivityDialog'
+import useDialog from '../hooks/useDialog'
+import CreateChat from './dialogs/CreateChat'
+import UnblockContacts from './dialogs/UnblockContacts'
+import { ScreenContext } from '../contexts/ScreenContext'
+import About from './dialogs/About'
+import useTranslationFunction from '../hooks/useTranslationFunction'
 
 export type SidebarState = 'init' | 'visible' | 'invisible'
 
@@ -29,23 +34,25 @@ const Sidebar = React.memo(
     sidebarState: SidebarState
     setSidebarState: React.Dispatch<React.SetStateAction<SidebarState>>
   }) => {
-    const screenContext = useContext(ScreenContext)
+    const tx = useTranslationFunction()
     const settings = useSettingsStore()[0]
     const accountId = selectedAccountId()
+    const { openDialog } = useDialog()
+    const { changeScreen } = useContext(ScreenContext)
 
     const onCreateChat = () => {
       setSidebarState('invisible')
-      screenContext.openDialog('CreateChat', {})
+      openDialog(CreateChat)
     }
     const onUnblockContacts = () => {
       setSidebarState('invisible')
-      screenContext.openDialog('UnblockContacts', {})
+      openDialog(UnblockContacts)
     }
     const onLogout = async () => {
       setSidebarState('invisible')
       unselectChat()
       await EffectfulBackendActions.logout()
-      screenContext.changeScreen(Screens.AccountList)
+      changeScreen(Screens.AccountList)
     }
 
     const onOpenHelp = () => {
@@ -55,7 +62,7 @@ const Sidebar = React.memo(
 
     const onOpenConnectivity = () => {
       setSidebarState('invisible')
-      screenContext.openDialog(ConnectivityDialog)
+      openDialog(ConnectivityDialog)
     }
 
     const onOpenSettings = () => {
@@ -65,10 +72,12 @@ const Sidebar = React.memo(
 
     const onShowQRCode = async () => {
       setSidebarState('invisible')
-      const [qrCode, qrCodeSVG] =
-        await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(accountId, null)
+      const [
+        qrCode,
+        qrCodeSVG,
+      ] = await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(accountId, null)
 
-      screenContext.openDialog(QrCode, { qrCode, qrCodeSVG })
+      openDialog(QrCode, { qrCode, qrCodeSVG })
     }
     const onSelectSavedMessages = async () => {
       setSidebarState('invisible')
@@ -81,7 +90,7 @@ const Sidebar = React.memo(
 
     const onOpenAbout = () => {
       setSidebarState('invisible')
-      screenContext.openDialog('About')
+      openDialog(About)
     }
 
     const onEscapeKeyUp = (ev: KeyboardEvent) => {
@@ -111,8 +120,6 @@ const Sidebar = React.memo(
         window.removeEventListener('keyup', onEscapeKeyUp)
       }
     })
-
-    const tx = useTranslationFunction()
 
     if (settings === null) return null
 
@@ -216,10 +223,11 @@ export function Link({
   label?: string
   title?: string
 }) {
+  const { openDialog } = useDialog()
   const onClick = (ev: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     ev.preventDefault()
     ev.stopPropagation()
-    runtime.openLink(href)
+    runtime.openLink(openDialog, href)
   }
   return (
     <a href={href} x-target-url={href} title={title} onClick={onClick}>
@@ -260,3 +268,4 @@ const SidebarConnectivity = () => {
 
   return <>{state}</>
 }
+

@@ -5,10 +5,12 @@ import { getLogger } from '../../../shared/logger'
 import { gitHubUrl, gitHubLicenseUrl } from '../../../shared/constants'
 import { VERSION, GIT_REF } from '../../../shared/build-info'
 import ClickableLink from '../helpers/ClickableLink'
-import { useTranslationFunction } from '../../contexts'
 import { runtime } from '../../runtime'
 import { BackendRemote } from '../../backend-com'
 import { DialogBody, DialogContent, DialogWithHeader } from '../Dialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 const log = getLogger('renderer/dialogs/About')
 
@@ -62,8 +64,7 @@ export function DCInfo(_props: any) {
   )
 }
 
-export default function About(props: { isOpen: boolean; onClose: () => void }) {
-  const { isOpen, onClose } = props
+export default function About({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
 
   const desktopString = reactStringReplace(
@@ -98,7 +99,6 @@ export default function About(props: { isOpen: boolean; onClose: () => void }) {
     <DialogWithHeader
       width={600}
       height={500}
-      isOpen={isOpen}
       title={tx('global_menu_help_about_desktop')}
       onClose={onClose}
     >

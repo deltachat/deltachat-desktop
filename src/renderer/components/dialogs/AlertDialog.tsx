@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { useTranslationFunction } from '../../contexts'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -8,16 +7,17 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
 } from '../Dialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 type Props = {
   cb?: () => void
   message: string | JSX.Element
-  onClose: () => void
-}
+} & DialogProps
 
 export default function AlertDialog({ message, onClose, cb }: Props) {
   const tx = useTranslationFunction()
-  const isOpen = !!message
 
   const onClick = () => {
     cb && cb()
@@ -25,7 +25,7 @@ export default function AlertDialog({ message, onClose, cb }: Props) {
   }
 
   return (
-    <Dialog isOpen={isOpen} onClose={onClose}>
+    <Dialog onClose={onClose}>
       <DialogBody>
         <DialogContent>
           <p>{message}</p>

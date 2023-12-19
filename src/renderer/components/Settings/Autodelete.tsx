@@ -1,7 +1,5 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 
-import { ScreenContext, useTranslationFunction } from '../../contexts'
-import { DialogProps } from '../dialogs/DialogController'
 import { AutodeleteDuration } from '../../../shared/constants'
 import { DeltaCheckbox } from '../contact/ContactListItem'
 import SettingsStoreInstance, {
@@ -19,6 +17,10 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
 } from '../Dialog'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 function durationToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)
@@ -50,6 +52,10 @@ export default function Autodelete({
 }: {
   settingsStore: SettingsStoreState
 }) {
+  const { openDialog } = useDialog()
+  const accountId = selectedAccountId()
+  const tx = useTranslationFunction()
+
   const AUTODELETE_DURATION_OPTIONS_DEVICE = [
     AutodeleteDuration.NEVER,
     AutodeleteDuration.ONE_HOUR,
@@ -68,10 +74,6 @@ export default function Autodelete({
     AutodeleteDuration.FIVE_WEEKS,
     AutodeleteDuration.ONE_YEAR,
   ].map(value => [String(value), durationToString(value)] as SelectDialogOption)
-
-  const { openDialog } = useContext(ScreenContext)
-  const accountId = selectedAccountId()
-  const tx = useTranslationFunction()
 
   const onOpenDialog = async (fromServer: boolean) => {
     openDialog(SmallSelectDialog, {
@@ -100,6 +102,7 @@ export default function Autodelete({
           )
           return
         }
+
         openDialog(AutodeleteConfirmationDialog, {
           fromServer,
           estimateCount,
@@ -135,7 +138,6 @@ function AutodeleteConfirmationDialog({
   fromServer,
   estimateCount,
   seconds,
-  isOpen,
   onClose,
 }: {
   fromServer: boolean
@@ -157,7 +159,7 @@ function AutodeleteConfirmationDialog({
   const tx = useTranslationFunction()
 
   return (
-    <Dialog isOpen={isOpen} onClose={onClose}>
+    <Dialog onClose={onClose}>
       <DialogHeader
         title={
           fromServer ? tx('autodel_server_title') : tx('autodel_device_title')

@@ -1,8 +1,6 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react'
 
 import { debounceWithInit } from '../chat/ChatListHelpers'
-import { DialogProps } from './DialogController'
-import { useTranslationFunction } from '../../contexts'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import Dialog, {
@@ -11,16 +9,19 @@ import Dialog, {
   DialogContent,
   DialogHeader,
 } from '../Dialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 const INHERIT_STYLES = ['line-height', 'background-color', 'color', 'font-size']
 const OverwrittenStyles =
   'font-family: Arial, Helvetica, sans-serif;font-variant-ligatures: none;'
 
-export default function ConnectivityDialog({ onClose, isOpen }: DialogProps) {
+export default function ConnectivityDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
 
   return (
-    <Dialog onClose={onClose} isOpen={isOpen} canOutsideClickClose={true}>
+    <Dialog onClose={onClose} canOutsideClickClose={true}>
       <DialogHeader title={tx('connectivity')} />
       {ConnectivityDialogInner()}
       <CloseFooterAction onClose={onClose} />

@@ -1,8 +1,8 @@
 import React from 'react'
 
 import { SettingsStoreState } from '../../stores/settings'
-import { useTranslationFunction } from '../../contexts'
 import CoreSettingsSwitch from './CoreSettingsSwitch'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 type Props = {
   settingsStore: SettingsStoreState

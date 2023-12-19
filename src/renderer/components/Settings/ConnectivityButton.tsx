@@ -1,14 +1,15 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
 import SettingsIconButton from './SettingsIconButton'
 import { BackendRemote, onDCEvent } from '../../backend-com'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { selectedAccountId } from '../../ScreenController'
 import ConnectivityDialog from '../dialogs/ConnectivityDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
 
 export default function ConnectivityButton() {
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const [connectivityString, setConnectivityString] = useState('')
   const accountId = selectedAccountId()
   const tx = useTranslationFunction()

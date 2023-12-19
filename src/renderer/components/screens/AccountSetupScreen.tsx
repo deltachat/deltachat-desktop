@@ -1,11 +1,10 @@
-import React, { useState, useContext, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 
 import { Credentials } from '../../../shared/shared-types'
 import LoginForm, {
   defaultCredentials,
   ConfigureProgressDialog,
 } from '../LoginForm'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -14,6 +13,8 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
 } from '../Dialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
 
 import type ScreenController from '../../ScreenController'
 
@@ -25,10 +26,11 @@ export default function AccountSetupScreen({
   accountId: number
 }) {
   const tx = useTranslationFunction()
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
 
-  const [credentials, setCredentials] =
-    useState<Credentials>(defaultCredentials())
+  const [credentials, setCredentials] = useState<Credentials>(
+    defaultCredentials()
+  )
 
   const onClickLogin = useCallback(
     () =>
@@ -61,7 +63,6 @@ export default function AccountSetupScreen({
     <div className='login-screen'>
       <div className='window'>
         <Dialog
-          isOpen={true}
           backdropProps={{ className: 'no-backdrop' }}
           onClose={() => {}}
           fixed
@@ -92,3 +93,4 @@ export default function AccountSetupScreen({
     </div>
   )
 }
+

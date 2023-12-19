@@ -1,9 +1,10 @@
 import { T } from '@deltachat/jsonrpc-client'
-import React, { useContext } from 'react'
+import React from 'react'
 
-import { ScreenContext, useTranslationFunction } from '../contexts'
+import useDialog from '../hooks/useDialog'
 import { Avatar } from './Avatar'
 import { useContextMenu } from './ContextMenu'
+import useTranslationFunction from '../hooks/useTranslationFunction'
 import FullscreenMedia, {
   NeighboringMediaMode,
 } from './dialogs/FullscreenMedia'
@@ -29,7 +30,7 @@ export default function GroupImage(props: Props) {
     color,
   } = props
 
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
 
   const showAvatarFullscreen = () =>
     openDialog(FullscreenMedia, {

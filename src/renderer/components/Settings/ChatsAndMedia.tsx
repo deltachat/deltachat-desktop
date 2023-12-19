@@ -6,7 +6,6 @@ import {
 } from '../KeyboardShortcutHint'
 import { DesktopSettingsType } from '../../../shared/shared-types'
 import { SettingsStoreState } from '../../stores/settings'
-import { useTranslationFunction } from '../../contexts'
 import Communication from './Communication'
 import OutgoingMediaQuality from './OutgoingMediaQuality'
 import DownloadOnDemand from './DownloadOnDemand'
@@ -17,6 +16,7 @@ import Backup from './Backup'
 import SettingsSeparator from './SettingsSeparator'
 import SettingsHeading from './SettingsHeading'
 import { DialogContent } from '../Dialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 type Props = {
   settingsStore: SettingsStoreState

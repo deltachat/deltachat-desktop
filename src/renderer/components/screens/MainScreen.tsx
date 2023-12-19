@@ -1,5 +1,14 @@
-import React, { useState, useContext, useRef, useEffect } from 'react'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
+import React, { useState, useRef, useEffect } from 'react'
+import { C } from '@deltachat/jsonrpc-client'
+import {
+  Alignment,
+  Classes,
+  Navbar,
+  NavbarGroup,
+  NavbarHeading,
+  Button,
+  Icon,
+} from '@blueprintjs/core'
 
 import Gallery from '../Gallery'
 import { useThreeDotMenu } from '../ThreeDotMenu'
@@ -20,20 +29,8 @@ import {
   setChatView,
   unselectChat,
 } from '../helpers/ChatMethods'
-
-import {
-  Alignment,
-  Classes,
-  Navbar,
-  NavbarGroup,
-  NavbarHeading,
-  Button,
-  Icon,
-} from '@blueprintjs/core'
-import { useKeyBindingAction, KeybindAction } from '../../keybindings'
 import { Avatar } from '../Avatar'
 import ConnectivityToast from '../ConnectivityToast'
-import { C } from '@deltachat/jsonrpc-client'
 import MapComponent from '../map/MapComponent'
 import MailingListProfile from '../dialogs/MessageListProfile'
 import { getLogger } from '../../../shared/logger'
@@ -43,6 +40,10 @@ import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 import { Type } from '../../backend-com'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import EditProfileDialog from '../dialogs/EditProfileDialog'
+import useKeyBindingAction from '../../hooks/useKeyBindingAction'
+import { KeybindAction } from '../../keybindings'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 const log = getLogger('renderer/main-screen')
 
@@ -60,7 +61,7 @@ export default function MainScreen() {
     setShowArchivedChats(false)
   )
 
-  const screenContext = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const selectedChat = useChatStore()
 
   const [alternativeView, setAlternativeView] = useState<
@@ -92,17 +93,17 @@ export default function MainScreen() {
     if (!selectedChat.chat) return
 
     if (selectedChat.chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST) {
-      screenContext.openDialog(MailingListProfile, {
+      openDialog(MailingListProfile, {
         chat: selectedChat.chat,
       })
     } else if (
       selectedChat.chat.chatType === C.DC_CHAT_TYPE_GROUP ||
       selectedChat.chat.chatType === C.DC_CHAT_TYPE_BROADCAST
     ) {
-      openViewGroupDialog(screenContext, selectedChat.chat)
+      openViewGroupDialog(openDialog, selectedChat.chat)
     } else {
       if (selectedChat.chat.contactIds && selectedChat.chat.contactIds[0]) {
-        openViewProfileDialog(screenContext, selectedChat.chat.contactIds[0])
+        openViewProfileDialog(openDialog, selectedChat.chat.contactIds[0])
       }
     }
   }
@@ -113,8 +114,9 @@ export default function MainScreen() {
   if (isFirstLoad.current) {
     isFirstLoad.current = false
     SettingsStoreInstance.effect.load().then(() => {
-      const lastChatId =
-        SettingsStoreInstance.getState()?.settings['ui.lastchatid']
+      const lastChatId = SettingsStoreInstance.getState()?.settings[
+        'ui.lastchatid'
+      ]
       if (lastChatId) {
         selectChat(Number(lastChatId))
       }
@@ -130,7 +132,7 @@ export default function MainScreen() {
       const settingsStore = SettingsStoreInstance.state
       if (settingsStore && window.__askForName) {
         window.__askForName = false
-        screenContext.openDialog(EditProfileDialog, {
+        openDialog(EditProfileDialog, {
           settingsStore,
           title: 'Account setup',
           confirmLabel: tx('ok'),
@@ -139,7 +141,7 @@ export default function MainScreen() {
         })
       }
     })
-  }, [screenContext, tx])
+  }, [openDialog, tx])
 
   const searchRef = useRef<HTMLInputElement>(null)
 
@@ -409,3 +411,4 @@ function chatSubtitle(chat: Type.FullChat) {
   }
   return 'ErrTitle'
 }
+

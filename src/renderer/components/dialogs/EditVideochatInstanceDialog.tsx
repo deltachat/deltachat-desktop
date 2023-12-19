@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 
-import { useTranslationFunction } from '../../contexts'
 import { DeltaInput } from '../Login-Styles'
-import { DialogProps } from './DialogController'
 import { SettingsStoreState } from '../../stores/settings'
 import RadioGroup from '../RadioGroup'
 import Radio from '../Radio'
@@ -17,11 +15,13 @@ import Dialog, {
   OkCancelFooterAction,
 } from '../Dialog'
 import Callout from '../Callout'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 type RadioButtonValue = 'disabled' | 'custom' | 'systemli' | 'autistici'
 
 export default function EditVideochatInstanceDialog({
-  isOpen,
   onClose,
   onOk,
   onCancel,
@@ -70,7 +70,7 @@ export default function EditVideochatInstanceDialog({
   }
 
   return (
-    <Dialog onClose={onClose} isOpen={isOpen} canOutsideClickClose={false}>
+    <Dialog onClose={onClose} canOutsideClickClose={false}>
       <DialogHeader title={tx('videochat')} />
       <DialogBody>
         <Callout>{tx('videochat_instance_explain_2')}</Callout>
@@ -125,3 +125,4 @@ export default function EditVideochatInstanceDialog({
     </Dialog>
   )
 }
+

@@ -1,12 +1,10 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import { DcEventType } from '@deltachat/jsonrpc-client'
 import { Intent } from '@blueprintjs/core'
 
 import { getLogger } from '../../../shared/logger'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { runtime } from '../../runtime'
 import { DeltaProgressBar } from '../Login-Styles'
-import { DialogProps } from '../dialogs/DialogController'
 import { Screens, selectedAccountId } from '../../ScreenController'
 import { BackendRemote, EffectfulBackendActions } from '../../backend-com'
 import processOpenQrUrl from '../helpers/OpenQrUrl'
@@ -16,14 +14,22 @@ import Dialog, {
   DialogHeader,
   DialogWithHeader,
 } from '../Dialog'
+import { DialogProps } from '../../contexts/DialogContext'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
+import ImportQrCode from '../dialogs/ImportQrCode'
+import AlertDialog from '../dialogs/AlertDialog'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
+type Props = {
+  backupFile: string
+}
+
 function ImportBackupProgressDialog({
   onClose,
-  isOpen,
   backupFile,
-}: DialogProps) {
+}: Props & DialogProps) {
   const [importProgress, setImportProgress] = useState(0.0)
   const [error, setError] = useState<string | null>(null)
 
@@ -34,7 +40,7 @@ function ImportBackupProgressDialog({
   const accountId = selectedAccountId()
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       try {
         log.debug(`Starting backup import of ${backupFile}`)
         await BackendRemote.rpc.importBackup(accountId, backupFile, null)
@@ -62,11 +68,7 @@ function ImportBackupProgressDialog({
 
   const tx = useTranslationFunction()
   return (
-    <DialogWithHeader
-      onClose={onClose}
-      title={tx('import_backup_title')}
-      isOpen={isOpen}
-    >
+    <DialogWithHeader onClose={onClose} title={tx('import_backup_title')}>
       <DialogBody>
         <DialogContent>
           {error && (
@@ -86,6 +88,7 @@ function ImportBackupProgressDialog({
 
 const ImportButton = function ImportButton() {
   const tx = useTranslationFunction()
+  const { openDialog } = useDialog()
 
   async function onClickImportBackup() {
     const file = await runtime.showOpenFileDialog({
@@ -95,7 +98,7 @@ const ImportButton = function ImportButton() {
       defaultPath: runtime.getAppPath('downloads'),
     })
     if (file) {
-      window.__openDialog(ImportBackupProgressDialog, {
+      openDialog(ImportBackupProgressDialog, {
         backupFile: file,
       })
     }
@@ -117,17 +120,18 @@ export default function WelcomeScreen({
   selectedAccountId: number
 }) {
   const tx = useTranslationFunction()
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog, closeDialog } = useDialog()
+
   const onClickScanQr = () =>
-    openDialog('ImportQrCode', { subtitle: tx('qrscan_hint') })
+    openDialog(ImportQrCode, { subtitle: tx('qrscan_hint') })
   const onClickSecondDevice = () =>
-    openDialog('ImportQrCode', {
+    openDialog(ImportQrCode, {
       subtitle: tx('multidevice_open_settings_on_other_device'),
     })
   const [showBackButton, setShowBackButton] = useState(false)
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       const allAccountIds = await BackendRemote.listAccounts()
       if (allAccountIds && allAccountIds.length > 1) {
         setShowBackButton(true)
@@ -135,11 +139,17 @@ export default function WelcomeScreen({
       if (window.__welcome_qr) {
         // this is the "callback" when opening dclogin or dcaccount from an already existing account,
         // the app needs to switch to the welcome screen first.
-        await processOpenQrUrl(window.__welcome_qr, undefined, true)
+        await processOpenQrUrl(
+          openDialog,
+          closeDialog,
+          window.__welcome_qr,
+          undefined,
+          true
+        )
         window.__welcome_qr = undefined
       }
     })()
-  }, [])
+  }, [openDialog, closeDialog])
 
   const onCancel = async () => {
     try {
@@ -151,7 +161,7 @@ export default function WelcomeScreen({
       window.__changeScreen(Screens.AccountList)
     } catch (error) {
       if (error instanceof Error) {
-        window.__openDialog('AlertDialog', {
+        openDialog(AlertDialog, {
           message: error?.message,
           cb: () => {},
         })
@@ -169,7 +179,6 @@ export default function WelcomeScreen({
           backdropProps={{ className: 'no-backdrop' }}
           canEscapeKeyClose={true}
           fixed={true}
-          isOpen={true}
           onClose={() => {}}
           width={400}
         >
@@ -208,3 +217,4 @@ export default function WelcomeScreen({
     </div>
   )
 }
+

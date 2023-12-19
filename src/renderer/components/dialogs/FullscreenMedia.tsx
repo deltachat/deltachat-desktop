@@ -1,19 +1,23 @@
-import { onDownload } from '../message/messageFunctions'
 import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import { Icon, Overlay } from '@blueprintjs/core'
-import { DialogProps } from './DialogController'
+import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
+import debounce from 'debounce'
+
+import { onDownload } from '../message/messageFunctions'
 import { runtime } from '../../runtime'
 import { isImage, isVideo, isAudio } from '../attachment/Attachment'
 import { getLogger } from '../../../shared/logger'
 import { gitHubIssuesUrl } from '../../../shared/constants'
 import { useInitEffect } from '../helpers/hooks'
 import { preventDefault } from '../../../shared/util'
-import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 import { useContextMenu } from '../ContextMenu'
 import { jumpToMessage } from '../helpers/ChatMethods'
 import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import debounce from 'debounce'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 const log = getLogger('renderer/fullscreen_media')
 
@@ -23,13 +27,15 @@ export enum NeighboringMediaMode {
   Off,
 }
 
-export default function FullscreenMedia(props: {
+type Props = {
   msg: Type.Message
   neighboringMedia: NeighboringMediaMode
-  onClose: DialogProps['onClose']
-}) {
+}
+
+export default function FullscreenMedia(props: Props & DialogProps) {
   const accountId = selectedAccountId()
-  const tx = window.static_translate
+  const tx = useTranslationFunction()
+  const { openDialog } = useDialog()
   const { onClose } = props
 
   const [msg, setMsg] = useState(props.msg)
@@ -141,7 +147,10 @@ export default function FullscreenMedia(props: {
         <p>mimeType is "{fileMime}"</p>
         <p>
           Please report this bug on{' '}
-          <a href='#' onClick={() => runtime.openLink(gitHubIssuesUrl)}>
+          <a
+            href='#'
+            onClick={() => runtime.openLink(openDialog, gitHubIssuesUrl)}
+          >
             github
           </a>
         </p>
@@ -158,7 +167,10 @@ export default function FullscreenMedia(props: {
         </p>
         <p>
           Please report this bug on{' '}
-          <a href='#' onClick={() => runtime.openLink(gitHubIssuesUrl)}>
+          <a
+            href='#'
+            onClick={() => runtime.openLink(openDialog, gitHubIssuesUrl)}
+          >
             github
           </a>
         </p>
@@ -282,6 +294,6 @@ async function getNeighboringMsgIds(messageId: number, list: number[]) {
   const index = list.indexOf(messageId)
   return [list[index - 1] || null, list[index + 1] || null] as [
     previousMessageId: number | null,
-    nextMessageId: number | null,
+    nextMessageId: number | null
   ]
 }

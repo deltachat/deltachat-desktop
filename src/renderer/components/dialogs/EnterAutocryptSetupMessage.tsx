@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { T } from '@deltachat/jsonrpc-client'
 
-import { ScreenContext } from '../../contexts'
 import { getLogger } from '../../../shared/logger'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
@@ -14,19 +13,22 @@ import {
   FooterActionButton,
   FooterActions,
 } from '../Dialog'
+import { ScreenContext } from '../../contexts/ScreenContext'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 const log = getLogger('frontend/dialogs/EnterAutocryptSetupMessage')
 
-export default function EnterAutocryptSetupMessage({
-  onClose,
-  message,
-}: {
-  onClose: () => void
+type Props = {
   message: T.Message
-}) {
-  const tx = window.static_translate
-  const isOpen = !!message
+}
 
+export default function EnterAutocryptSetupMessage({
+  message,
+  onClose,
+}: Props & DialogProps) {
+  const tx = useTranslationFunction()
   const { userFeedback } = useContext(ScreenContext)
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
@@ -99,7 +101,6 @@ export default function EnterAutocryptSetupMessage({
 
   return (
     <DialogWithHeader
-      isOpen={isOpen}
       onClose={onClose}
       title={tx('autocrypt_continue_transfer_title')}
     >

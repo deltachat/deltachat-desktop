@@ -1,7 +1,5 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 
-import { useTranslationFunction, ScreenContext } from '../../contexts'
-import { DialogProps } from '../dialogs/DialogController'
 import { BackendRemote } from '../../backend-com'
 import { Credentials } from '../../../shared/shared-types'
 import LoginForm, {
@@ -15,15 +13,16 @@ import Dialog, {
   DialogHeader,
   OkCancelFooterAction,
 } from '../Dialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
 
-export default function EditAccountAndPasswordDialog({
-  isOpen,
-  onClose,
-}: DialogProps) {
+import type { DialogProps } from '../../contexts/DialogContext'
+
+export default function EditAccountAndPasswordDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
 
   return (
-    <Dialog canOutsideClickClose={false} isOpen={isOpen} onClose={onClose}>
+    <Dialog canOutsideClickClose={false} onClose={onClose}>
       <DialogHeader title={tx('pref_password_and_account_settings')} />
       {EditAccountInner(onClose)}
     </Dialog>
@@ -31,11 +30,13 @@ export default function EditAccountAndPasswordDialog({
 }
 
 function EditAccountInner(onClose: DialogProps['onClose']) {
-  const [initial_settings, setInitialAccountSettings] =
-    useState<Credentials>(defaultCredentials())
+  const [initial_settings, setInitialAccountSettings] = useState<Credentials>(
+    defaultCredentials()
+  )
 
-  const [accountSettings, _setAccountSettings] =
-    useState<Credentials>(defaultCredentials())
+  const [accountSettings, _setAccountSettings] = useState<Credentials>(
+    defaultCredentials()
+  )
 
   const [disableUpdate, setDisableUpdate] = useState(true)
 
@@ -44,14 +45,15 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
     _setAccountSettings(value)
   }
 
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
 
   const loadSettings = async () => {
     if (window.__selectedAccountId === undefined) {
       throw new Error('can not load settings when no account is selected')
     }
-    const accountSettings: Credentials =
-      (await BackendRemote.rpc.batchGetConfig(window.__selectedAccountId, [
+    const accountSettings: Credentials = ((await BackendRemote.rpc.batchGetConfig(
+      window.__selectedAccountId,
+      [
         'addr',
         'mail_pw',
         'sentbox_watch',
@@ -74,7 +76,8 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
         'socks5_port',
         'socks5_user',
         'socks5_password',
-      ])) as unknown as Credentials
+      ]
+    )) as unknown) as Credentials
     setInitialAccountSettings(accountSettings)
     _setAccountSettings(accountSettings)
   }
@@ -128,3 +131,4 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
     </>
   )
 }
+

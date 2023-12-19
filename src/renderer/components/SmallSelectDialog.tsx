@@ -8,9 +8,10 @@ import Dialog, {
   DialogHeader,
   FooterActions,
 } from './Dialog'
-import { DialogProps } from './dialogs/DialogController'
-import { useTranslationFunction } from '../contexts'
 import FooterActionButton from './Dialog/FooterActionButton'
+import useTranslationFunction from '../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../contexts/DialogContext'
 
 export type SelectDialogOption = [value: string, label: string]
 
@@ -21,23 +22,22 @@ type Props = {
   onSave?: (selectedValue: string) => void
   onSelect?: (selectedValue: string) => void
   onCancel?: () => void
-  onOpen?: DialogProps['onOpen']
-} & Pick<DialogProps, 'isOpen' | 'onClose'>
+} & DialogProps
 
 export default function SmallSelectDialog({
   selectedValue,
   values,
   onSave,
   title,
-  isOpen,
   onClose,
   onSelect,
   onCancel,
 }: Props) {
   const tx = useTranslationFunction()
 
-  const [actualSelectedValue, setActualSelectedValue] =
-    useState<string>(selectedValue)
+  const [actualSelectedValue, setActualSelectedValue] = useState<string>(
+    selectedValue
+  )
 
   const onChange = (event: React.FormEvent<HTMLInputElement>) => {
     const actualSelectedValue = String(event.currentTarget.value)
@@ -51,7 +51,7 @@ export default function SmallSelectDialog({
   }
 
   return (
-    <Dialog isOpen={isOpen} onClose={onClose}>
+    <Dialog onClose={onClose}>
       <DialogHeader title={title} />
       <DialogBody>
         <DialogContent>

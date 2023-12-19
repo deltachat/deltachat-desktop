@@ -2,23 +2,22 @@ import React from 'react'
 
 import { QrCodeScanQrInner } from './QrCode'
 import { DialogWithHeader } from '../Dialog'
-import { useTranslationFunction } from '../../contexts'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 type Props = {
   subtitle: string
-  onClose: () => void
-  isOpen: boolean
 }
 
-export default function ImportQrCode({ subtitle, onClose, isOpen }: Props) {
+export default function ImportQrCode({
+  subtitle,
+  onClose,
+}: Props & DialogProps) {
   const tx = useTranslationFunction()
 
   return (
-    <DialogWithHeader
-      title={tx('qrscan_title')}
-      isOpen={isOpen}
-      onClose={onClose}
-    >
+    <DialogWithHeader title={tx('qrscan_title')} onClose={onClose}>
       <QrCodeScanQrInner subtitle={subtitle} onClose={onClose} />
     </DialogWithHeader>
   )

@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 
 import { useGroupImage, ChatSettingsSetNameAndProfileImage } from './CreateChat'
-import { DialogProps } from './DialogController'
 import { Type } from '../../backend-com'
 import { modifyGroup } from '../helpers/ChatMethods'
 import Dialog, {
@@ -10,16 +9,18 @@ import Dialog, {
   DialogHeader,
   OkCancelFooterAction,
 } from '../Dialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
-export default function MailingListProfile(props: {
-  isOpen: DialogProps['isOpen']
-  onClose: DialogProps['onClose']
-  chat: Type.FullChat
-}) {
-  const { isOpen, onClose, chat } = props
+import type { DialogProps } from '../../contexts/DialogContext'
 
-  const tx = window.static_translate
+export default function MailingListProfile(
+  props: {
+    chat: Type.FullChat
+  } & DialogProps
+) {
+  const { onClose, chat } = props
 
+  const tx = useTranslationFunction()
   const [groupName, setGroupName] = useState(chat.name)
   const [errorMissingGroupName, setErrorMissingGroupName] = useState(false)
   const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage(
@@ -28,7 +29,7 @@ export default function MailingListProfile(props: {
   const onUpdateGroup = useEdit(groupName, groupImage, chat.id, onClose)
 
   return (
-    <Dialog isOpen={isOpen} onClose={onClose} fixed>
+    <Dialog onClose={onClose} fixed>
       <DialogHeader title={tx('mailing_list')} />
       <DialogBody>
         <DialogContent>
@@ -69,3 +70,4 @@ const useEdit = (
   }
   return onUpdateGroup
 }
+

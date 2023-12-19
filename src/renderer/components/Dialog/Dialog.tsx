@@ -2,7 +2,7 @@ import { Dialog as BlueprintDialog } from '@blueprintjs/core'
 import classNames from 'classnames'
 import React from 'react'
 
-import type { DialogProps } from '../dialogs/DialogController'
+import type { DialogProps } from '../../contexts/DialogContext'
 
 import styles from './styles.module.scss'
 
@@ -17,7 +17,7 @@ type Props = React.PropsWithChildren<
     fixed?: boolean
     height?: number
     width?: number
-  } & Pick<DialogProps, 'isOpen' | 'onClose'>
+  } & DialogProps
 >
 
 const Dialog = React.memo<Props>(
@@ -31,7 +31,7 @@ const Dialog = React.memo<Props>(
   }) => {
     return (
       <BlueprintDialog
-        isOpen={props.isOpen}
+        isOpen
         onClose={props.onClose}
         canOutsideClickClose={canOutsideClickClose}
         canEscapeKeyClose={canEscapeKeyClose}

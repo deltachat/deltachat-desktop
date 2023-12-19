@@ -1,11 +1,12 @@
 import React from 'react'
 import moment from 'moment'
 
-import { DialogProps } from './DialogController'
 import { selectedAccountId } from '../../ScreenController'
 import { BackendRemote } from '../../backend-com'
 import { DialogBody, DialogContent, DialogWithHeader } from '../Dialog'
 import Callout from '../Callout'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 type MessageInfoProps = {
   messageId: number
@@ -106,10 +107,11 @@ class MessageInfo extends React.Component<
   }
 }
 
-export default function MessageDetail(props: {
-  id: number
-  onClose: DialogProps['onClose']
-}) {
+export default function MessageDetail(
+  props: {
+    id: number
+  } & DialogProps
+) {
   const { id, onClose } = props
   const isOpen = !!id
   const tx = window.static_translate
@@ -120,12 +122,9 @@ export default function MessageDetail(props: {
   }
 
   return (
-    <DialogWithHeader
-      title={tx('menu_message_details')}
-      isOpen={isOpen}
-      onClose={onClose}
-    >
+    <DialogWithHeader title={tx('menu_message_details')} onClose={onClose}>
       <DialogBody>{body}</DialogBody>
     </DialogWithHeader>
   )
 }
+

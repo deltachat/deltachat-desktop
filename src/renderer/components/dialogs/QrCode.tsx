@@ -17,22 +17,30 @@ import Dialog, {
 import FooterActionButton from '../Dialog/FooterActionButton'
 import processOpenQrUrl from '../helpers/OpenQrUrl'
 import { BackendRemote } from '../../backend-com'
-import { DialogProps } from './DialogController'
 import { getLogger } from '../../../shared/logger'
 import { runtime } from '../../runtime'
 import { selectChat } from '../helpers/ChatMethods'
 import { useContextMenu } from '../ContextMenu'
-import { useTranslationFunction, ScreenContext } from '../../contexts'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { ScreenContext } from '../../contexts/ScreenContext'
+import useDialog from '../../hooks/useDialog'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 const log = getLogger('renderer/dialogs/QrCode')
 
+type Props = {
+  selectScan?: true
+  qrCodeSVG: string
+  qrCode: string
+}
+
 export default function QrCode({
-  isOpen,
-  onClose,
   qrCodeSVG,
   qrCode,
   selectScan,
-}: { selectScan?: true; qrCodeSVG: string; qrCode: string } & DialogProps) {
+  onClose,
+}: Props & DialogProps) {
   const tx = useTranslationFunction()
   const [showQrCode, setShowQrCode] = useState(!selectScan)
   const [addr, setAddr] = useState('')
@@ -46,7 +54,7 @@ export default function QrCode({
   }, [])
 
   return (
-    <Dialog isOpen={isOpen} onClose={onClose}>
+    <Dialog onClose={onClose}>
       <div className='qr-code-switch'>
         <p
           className={classNames({ active: showQrCode })}
@@ -195,6 +203,7 @@ export function QrCodeScanQrInner(
   }>
 ) {
   const tx = useTranslationFunction()
+  const { openDialog, closeDialog } = useDialog()
   const processingQrCode = useRef(false)
 
   const onDone = () => {
@@ -213,7 +222,7 @@ export function QrCodeScanQrInner(
     if (data && processingQrCode.current === false) {
       processingQrCode.current = true
       try {
-        await processOpenQrUrl(data, handleScanResult)
+        await processOpenQrUrl(openDialog, closeDialog, data, handleScanResult)
       } catch (err) {
         processingQrCode.current = false
         throw err
@@ -301,3 +310,4 @@ export function QrCodeScanQrInner(
     </>
   )
 }
+

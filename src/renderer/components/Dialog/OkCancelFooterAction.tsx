@@ -3,7 +3,7 @@ import React from 'react'
 import DialogFooter from './DialogFooter'
 import FooterActionButton from './FooterActionButton'
 import FooterActions from './FooterActions'
-import { useTranslationFunction } from '../../contexts'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 type Props = {
   cancelLabel?: string

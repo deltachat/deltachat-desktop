@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { ClickForFullscreenAvatarWrapper } from '../Avatar'
-import { useTranslationFunction } from '../../contexts'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import styles from './styles.module.scss'
 
