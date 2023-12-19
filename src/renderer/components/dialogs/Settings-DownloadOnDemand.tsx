@@ -1,17 +1,18 @@
-import React, { useContext } from 'react'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
+import React from 'react'
+import { filesize } from 'filesize'
+
 import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
 import { SettingsSelector } from './Settings'
-
-import filesizeConverter from 'filesize'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
 
 export default function SettingsDownloadOnDemand(props: {
   settings: SettingsStoreState['settings']
 }) {
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const { settings } = props
   const tx = useTranslationFunction()
 
@@ -51,7 +52,7 @@ export default function SettingsDownloadOnDemand(props: {
       ? tx('pref_show_emails_all')
       : tx(
           'up_to_x',
-          filesizeConverter(Number.parseInt(settings['download_limit']), {
+          filesize(Number.parseInt(settings['download_limit']), {
             base: 2,
           })
         )

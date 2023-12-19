@@ -1,14 +1,16 @@
 import React from 'react'
+import { areEqual } from 'react-window'
+
 import ChatListItem, {
   PlaceholderChatListItem,
   ChatListItemMessageResult,
 } from './ChatListItem'
-import { areEqual } from 'react-window'
 import { ContactListItem } from '../contact/ContactListItem'
 import { jumpToMessage, openViewProfileDialog } from '../helpers/ChatMethods'
 import { Type } from '../../backend-com'
+
 import type { useChatListContextMenu } from './ChatListContextMenu'
-import { ScreenContext, unwrapContext } from '../../contexts'
+import { OpenDialog } from '../../contexts/DialogContext'
 
 export const ChatListItemRowChat = React.memo<{
   index: number
@@ -63,11 +65,11 @@ export const ChatListItemRowContact = React.memo<{
       [id: number]: Type.Contact | undefined
     }
     contactIds: number[]
-    screenContext: unwrapContext<typeof ScreenContext>
+    openDialog: OpenDialog
   }
   style: React.CSSProperties
 }>(({ index, data, style }) => {
-  const { contactCache, contactIds, screenContext } = data
+  const { contactCache, contactIds, openDialog } = data
   const contactId = contactIds[index]
   const contact = contactCache[contactId]
   return (
@@ -79,7 +81,7 @@ export const ChatListItemRowContact = React.memo<{
           checked={false}
           showRemove={false}
           onClick={async _ => {
-            openViewProfileDialog(screenContext, contactId)
+            openViewProfileDialog(openDialog, contactId)
           }}
         />
       ) : (
@@ -96,7 +98,7 @@ export const ChatListItemRowMessage = React.memo<{
     messageCache: {
       [id: number]: Type.MessageSearchResult | undefined
     }
-    openDialog: unwrapContext<typeof ScreenContext>['openDialog']
+    openDialog: OpenDialog
     queryStr: string | undefined
   }
   style: React.CSSProperties

@@ -5,12 +5,11 @@ import React, {
   useContext,
   useCallback,
 } from 'react'
-import { DeltaDialogBase, DeltaDialogCloseButton } from './DeltaDialog'
-import { DialogProps } from './DialogController'
-import { C } from '@deltachat/jsonrpc-client'
-import { getLogger } from '../../../shared/logger'
-import { useTranslationFunction, ScreenContext } from '../../contexts'
 import moment from 'moment'
+import { C } from '@deltachat/jsonrpc-client'
+
+import { DeltaDialogBase, DeltaDialogCloseButton } from './DeltaDialog'
+import { getLogger } from '../../../shared/logger'
 import {
   openMessageInfo,
   setQuoteInDraft,
@@ -22,10 +21,16 @@ import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { runtime } from '../../runtime'
 import { jumpToMessage } from '../helpers/ChatMethods'
+import { ScreenContext } from '../../contexts/ScreenContext'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
+
+import type { DialogProps, OpenDialog } from '../../contexts/DialogContext'
 
 const log = getLogger('render/ChatAuditLog')
 
 function buildContextMenu(
+  openDialog: OpenDialog,
   message: Type.Message,
   isGroup: boolean,
   closeDialogCallback: DialogProps['onClose']
@@ -77,7 +82,7 @@ function buildContextMenu(
     // Message details
     {
       label: tx('menu_message_details'),
-      action: openMessageInfo.bind(null, message),
+      action: openMessageInfo.bind(null, openDialog, message),
     },
   ]
 }
@@ -86,8 +91,8 @@ export default function ChatAuditLogDialog(props: {
   selectedChat: Type.FullChat
   onClose: DialogProps['onClose']
 }) {
+  const { openDialog } = useDialog()
   const { selectedChat, onClose } = props
-  const isOpen = !!selectedChat
 
   const [loading, setLoading] = useState(true)
   const [msgEntries, setMsgEntries] = useState<Type.MessageListItem[]>([])
@@ -106,6 +111,7 @@ export default function ChatAuditLogDialog(props: {
     >
   ) => {
     const items = buildContextMenu(
+      openDialog,
       message,
       selectedChat.chatType === C.DC_CHAT_TYPE_GROUP,
       onClose
@@ -159,7 +165,6 @@ export default function ChatAuditLogDialog(props: {
 
   return (
     <DeltaDialogBase
-      isOpen={isOpen}
       onClose={onClose}
       fixed
       className={'audit-log-dialog'}

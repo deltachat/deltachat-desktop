@@ -1,7 +1,6 @@
 import { T, C } from '@deltachat/jsonrpc-client'
 
 import ChatStore, { ChatView } from '../../stores/chat'
-import { ScreenContext, unwrapContext } from '../../contexts'
 import { getLogger } from '../../../shared/logger'
 import AlertDialog from '../dialogs/AlertDialog'
 import { BackendRemote, EffectfulBackendActions, Type } from '../../backend-com'
@@ -11,6 +10,10 @@ import ViewProfile from '../dialogs/ViewProfile'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import chatStore from '../../stores/chat'
 import { openLinkSafely } from './LinkConfirmation'
+import EncryptionInfo from '../dialogs/EncryptionInfo'
+import MuteChat from '../dialogs/MuteChat'
+
+import type { OpenDialog } from '../../contexts/DialogContext'
 
 const log = getLogger('renderer/message')
 
@@ -51,12 +54,10 @@ export async function setChatVisibility(
   if (shouldUnselectChat) unselectChat()
 }
 
-export function openLeaveChatDialog(
-  screenContext: unwrapContext<typeof ScreenContext>,
-  chatId: number
-) {
+export function openLeaveChatDialog(openDialog: OpenDialog, chatId: number) {
   const tx = window.static_translate
-  screenContext.openDialog('ConfirmationDialog', {
+
+  openDialog(ConfirmationDialog, {
     message: tx('ask_leave_group'),
     confirmLabel: tx('menu_leave_group'),
     isConfirmDanger: true,
@@ -67,12 +68,13 @@ export function openLeaveChatDialog(
 }
 
 export function openDeleteChatDialog(
-  screenContext: unwrapContext<typeof ScreenContext>,
+  openDialog: OpenDialog,
   chat: Chat,
   selectedChatId: number | null
 ) {
   const tx = window.static_translate
-  screenContext.openDialog('ConfirmationDialog', {
+
+  openDialog(ConfirmationDialog, {
     message: tx('ask_delete_named_chat', chat.name),
     confirmLabel: tx('delete'),
     isConfirmDanger: true,
@@ -93,7 +95,7 @@ export function openDeleteChatDialog(
  * used to block contacts based on a DM chat/chatlistentry with that contact
  */
 export function openBlockFirstContactOfChatDialog(
-  screenContext: unwrapContext<typeof ScreenContext>,
+  openDialog: OpenDialog,
   selectedChat: Chat
 ) {
   const tx = window.static_translate
@@ -105,7 +107,7 @@ export function openBlockFirstContactOfChatDialog(
   // TODO: CHECK IF THE CHAT IS DM CHAT
 
   if (dmChatContact) {
-    screenContext.openDialog('ConfirmationDialog', {
+    openDialog(ConfirmationDialog, {
       message: tx('ask_block_contact'),
       confirmLabel: tx('menu_block_contact'),
       isConfirmDanger: true,
@@ -119,27 +121,27 @@ export function openBlockFirstContactOfChatDialog(
 }
 
 export function openEncryptionInfoDialog(
-  screenContext: unwrapContext<typeof ScreenContext>,
+  openDialog: OpenDialog,
   chatListItem: Type.ChatListItemFetchResult & { kind: 'ChatListItem' }
 ) {
-  screenContext.openDialog('EncryptionInfo', { chatListItem })
+  openDialog(EncryptionInfo, { chatListItem })
 }
 
 export function openViewGroupDialog(
-  screenContext: unwrapContext<typeof ScreenContext>,
+  openDialog: OpenDialog,
   selectedChat: Type.FullChat
 ) {
-  screenContext.openDialog(ViewGroup, {
+  openDialog(ViewGroup, {
     chat: selectedChat,
     isBroadcast: selectedChat.chatType === C.DC_CHAT_TYPE_BROADCAST,
   })
 }
 
 export async function openViewProfileDialog(
-  screenContext: unwrapContext<typeof ScreenContext>,
+  openDialog: OpenDialog,
   contact_id: number
 ) {
-  screenContext.openDialog(ViewProfile, {
+  openDialog(ViewProfile, {
     contact: await BackendRemote.rpc.getContact(
       selectedAccountId(),
       contact_id
@@ -148,10 +150,10 @@ export async function openViewProfileDialog(
 }
 
 export async function openMuteChatDialog(
-  screenContext: unwrapContext<typeof ScreenContext>,
+  openDialog: OpenDialog,
   chatId: number
 ) {
-  screenContext.openDialog('MuteChat', { chatId })
+  openDialog(MuteChat, { chatId })
 }
 
 export async function unMuteChat(chatId: number) {
@@ -161,7 +163,7 @@ export async function unMuteChat(chatId: number) {
 }
 
 export async function sendCallInvitation(
-  screenContext: unwrapContext<typeof ScreenContext>,
+  openDialog: OpenDialog,
   chatId: number
 ) {
   try {
@@ -170,19 +172,16 @@ export async function sendCallInvitation(
       chatId
     )
     ChatStore.effect.jumpToMessage(messageId, false)
-    await joinCall(screenContext, messageId)
+    await joinCall(openDialog, messageId)
   } catch (error: todo) {
     log.error('failed send call invitation', error)
-    screenContext.openDialog(AlertDialog, {
+    openDialog(AlertDialog, {
       message: error?.message || error.toString(),
     })
   }
 }
 
-export async function joinCall(
-  screenContext: unwrapContext<typeof ScreenContext>,
-  messageId: number
-) {
+export async function joinCall(openDialog: OpenDialog, messageId: number) {
   try {
     const message = await BackendRemote.rpc.getMessage(
       selectedAccountId(),
@@ -199,10 +198,10 @@ export async function joinCall(
       throw new Error('Message has no video chat url')
     }
 
-    return openLinkSafely(message.videochatUrl)
+    return openLinkSafely(openDialog, message.videochatUrl)
   } catch (error: todo) {
     log.error('failed to join call', error)
-    screenContext.openDialog(AlertDialog, { message: error.toString() })
+    openDialog(AlertDialog, { message: error.toString() })
   }
 }
 
@@ -213,7 +212,10 @@ export async function joinCall(
  * user will be prompted with a confirmation dialogue. In case the user aborts the
  * action `null` is returned.
  */
-export async function createChatByEmail(email: string): Promise<number | null> {
+export async function createChatByEmail(
+  openDialog: OpenDialog,
+  email: string
+): Promise<number | null> {
   const tx = window.static_translate
   const accountId = selectedAccountId()
 
@@ -232,7 +234,7 @@ export async function createChatByEmail(email: string): Promise<number | null> {
 
   // Ask user if they want to proceed with creating a new contact and / or chat
   const continueProcess = await new Promise((resolve, _reject) => {
-    window.__openDialog(ConfirmationDialog, {
+    openDialog(ConfirmationDialog, {
       message: tx('ask_start_chat_with', email),
       confirmLabel: tx('ok'),
       cb: resolve,
@@ -307,7 +309,7 @@ export const deleteMessage = (messageId: number) => {
   BackendRemote.rpc.deleteMessages(selectedAccountId(), [messageId])
 }
 
-export async function clearChat(chatId: number) {
+export async function clearChat(openDialog: OpenDialog, chatId: number) {
   const accountID = selectedAccountId()
   const tx = window.static_translate
   const messages_to_delete = await BackendRemote.rpc.getMessageIds(
@@ -317,7 +319,7 @@ export async function clearChat(chatId: number) {
     false
   )
 
-  window.__openDialog(ConfirmationDialog, {
+  openDialog(ConfirmationDialog, {
     message: tx('ask_delete_messages', String(messages_to_delete.length), {
       quantity: messages_to_delete.length,
     }),
@@ -375,7 +377,11 @@ export async function modifyGroup(
  * In case a draft message already exists, the user is asked if they want to
  * replace it.
  */
-export async function createDraftMessage(chatId: number, messageText: string) {
+export async function createDraftMessage(
+  openDialog: OpenDialog,
+  chatId: number,
+  messageText: string
+) {
   const accountId = selectedAccountId()
 
   const draft = await BackendRemote.rpc.getDraft(accountId, chatId)
@@ -387,7 +393,7 @@ export async function createDraftMessage(chatId: number, messageText: string) {
 
     // ask if the draft should be replaced
     const continueProcess = await new Promise((resolve, _reject) => {
-      window.__openDialog('ConfirmationDialog', {
+      openDialog(ConfirmationDialog, {
         message: window.static_translate('confirm_replace_draft', name),
         confirmLabel: window.static_translate('replace_draft'),
         cb: resolve,

@@ -1,8 +1,7 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { Card, H5, Classes, Callout } from '@blueprintjs/core'
+
 import { RenderDeltaSwitch2Type, SettingsButton } from './Settings'
-import { ScreenContext } from '../../contexts'
-import { DialogProps } from './DialogController'
 import InputTransferKey from './AutocryptSetupMessage'
 import DeltaDialog, {
   DeltaDialogFooter,
@@ -10,6 +9,10 @@ import DeltaDialog, {
 } from './DeltaDialog'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 export function KeyViewPanel({
   onClose,
@@ -62,13 +65,7 @@ function InitiatePanel({ onClick }: { onClick: todo }) {
   )
 }
 
-export function SendAutocryptSetupMessage({
-  onClose: _onClose,
-  isOpen,
-}: {
-  onClose: Function
-  isOpen: boolean
-}) {
+export function SendAutocryptSetupMessage({ onClose: _onClose }: DialogProps) {
   const [key, setKey] = useState<string | null>(null)
 
   const onClose = () => {
@@ -92,11 +89,7 @@ export function SendAutocryptSetupMessage({
   }
 
   return (
-    <DeltaDialog
-      isOpen={isOpen}
-      title={tx('autocrypt_send_asm_title')}
-      onClose={onClose}
-    >
+    <DeltaDialog title={tx('autocrypt_send_asm_title')} onClose={onClose}>
       {body}
     </DeltaDialog>
   )
@@ -107,8 +100,9 @@ export default function SettingsEncryption({
 }: {
   renderDeltaSwitch2: RenderDeltaSwitch2Type
 }) {
-  const { openDialog } = useContext(ScreenContext)
-  const tx = window.static_translate
+  const { openDialog } = useDialog()
+  const tx = useTranslationFunction()
+
   return (
     <>
       <H5>{tx('autocrypt')}</H5>

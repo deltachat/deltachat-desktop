@@ -1,10 +1,12 @@
 import React from 'react'
-import DeltaDialog, { DeltaDialogBody } from './DeltaDialog'
 import moment from 'moment'
 import { Card, Callout } from '@blueprintjs/core'
-import { DialogProps } from './DialogController'
+
+import DeltaDialog, { DeltaDialogBody } from './DeltaDialog'
 import { selectedAccountId } from '../../ScreenController'
 import { BackendRemote } from '../../backend-com'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 type MessageInfoProps = {
   messageId: number
@@ -119,11 +121,7 @@ export default function MessageDetail(props: {
   }
 
   return (
-    <DeltaDialog
-      title={tx('menu_message_details')}
-      isOpen={isOpen}
-      onClose={onClose}
-    >
+    <DeltaDialog title={tx('menu_message_details')} onClose={onClose}>
       <DeltaDialogBody noFooter>{body}</DeltaDialogBody>
     </DeltaDialog>
   )

@@ -1,11 +1,13 @@
 import React from 'react'
+
 import {
   SmallDialog,
   DeltaDialogFooter,
   DeltaDialogFooterActions,
 } from './DeltaDialog'
-import { useTranslationFunction } from '../../contexts'
-import type { DialogProps } from './DialogController'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 export default function ConfirmationDialog({
   message,
@@ -25,7 +27,6 @@ export default function ConfirmationDialog({
   noMargin?: boolean
   header?: string
 } & DialogProps) {
-  const isOpen = !!message
   const tx = useTranslationFunction()
 
   const onClick = (yes: boolean) => {
@@ -34,7 +35,7 @@ export default function ConfirmationDialog({
   }
 
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
+    <SmallDialog onClose={onClose}>
       <div className='bp4-dialog-body-with-padding'>
         {header && (
           <div

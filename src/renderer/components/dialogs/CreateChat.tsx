@@ -12,7 +12,6 @@ import React, {
 import { Card, Classes } from '@blueprintjs/core'
 import { T, C } from '@deltachat/jsonrpc-client'
 
-import { ScreenContext, useTranslationFunction } from '../../contexts'
 import {
   useContacts,
   ContactList,
@@ -32,7 +31,6 @@ import {
   DeltaDialogFooterActions,
 } from './DeltaDialog'
 import { GroupImage } from './Edit-Group-Image'
-import { DialogProps } from './DialogController'
 import { runtime } from '../../runtime'
 import {
   areAllContactsVerified,
@@ -48,20 +46,20 @@ import { selectedAccountId } from '../../ScreenController'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import ConfirmationDialog from './ConfirmationDialog'
 import { VerifiedContactsRequiredDialog } from './ProtectionStatusDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { ScreenContext } from '../../contexts/ScreenContext'
+import useDialog from '../../hooks/useDialog'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
 
-type CreateChatProps = {
-  isOpen: DialogProps['isOpen']
-  onClose: DialogProps['onClose']
-}
-
-export default function CreateChat(props: CreateChatProps) {
-  const { isOpen, onClose } = props
+export default function CreateChat(props: DialogProps) {
+  const { onClose } = props
   const [viewMode, setViewMode] = useState<ViewMode>('main')
 
   return (
-    <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
+    <DeltaDialogBase onClose={onClose} fixed>
       {viewMode == 'main' && <CreateChatMain {...{ setViewMode, onClose }} />}
       {viewMode == 'createGroup' && (
         <CreateGroup {...{ setViewMode, onClose }} />
@@ -81,7 +79,8 @@ type CreateChatMainProps = {
 function CreateChatMain(props: CreateChatMainProps) {
   const { setViewMode, onClose } = props
   const tx = useTranslationFunction()
-  const { userFeedback, openDialog } = useContext(ScreenContext)
+  const { userFeedback } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const accountId = selectedAccountId()
 
   const [{ contacts, queryStrIsValidEmail }, updateContacts] = useContactsNew(
@@ -210,7 +209,7 @@ type CreateGroupProps = {
 }
 
 function CreateGroup(props: CreateGroupProps) {
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const { setViewMode, onClose } = props
   const tx = useTranslationFunction()
   const accountId = selectedAccountId()
@@ -321,7 +320,7 @@ type CreateBroadcastListProps = {
 }
 
 function CreateBroadcastList(props: CreateBroadcastListProps) {
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const { setViewMode, onClose } = props
   const tx = useTranslationFunction()
 
@@ -522,7 +521,7 @@ export function AddMemberInnerDialog({
   isVerificationRequired: boolean
 }) {
   const tx = window.static_translate
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const accountId = selectedAccountId()
 
   const contactIdsInGroup: number[] = [...searchContacts]

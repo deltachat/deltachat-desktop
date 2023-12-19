@@ -1,26 +1,24 @@
-import { C } from '@deltachat/jsonrpc-client'
+import { T, C } from '@deltachat/jsonrpc-client'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import ReactDOM from 'react-dom'
+import { Slider, Button, Collapse } from '@blueprintjs/core'
 import debounce from 'debounce'
 import mapboxgl from 'mapbox-gl'
-import { locationStore } from '../../stores/locations'
 import geojsonExtent from '@mapbox/geojson-extent'
 import moment from 'moment'
+
+import { locationStore } from '../../stores/locations'
 import formatRelativeTime from '../conversations/formatRelativeTime'
 import MapLayerFactory from './MapLayerFactory'
-import { Slider, Button, Collapse } from '@blueprintjs/core'
 import PopupMessage from './PopupMessage'
 import * as SessionStorage from '../helpers/SessionStorage'
-import { MessagesDisplayContext } from '../../contexts'
-
 import { state as LocationStoreState } from '../../stores/locations'
-
 import ContextMenu from './ContextMenu'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import { T } from '@deltachat/jsonrpc-client'
 import { sendMessage } from '../helpers/ChatMethods'
+import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
 
 type MapData = {
   contact: Type.Contact

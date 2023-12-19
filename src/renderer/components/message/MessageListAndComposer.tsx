@@ -1,11 +1,10 @@
-import React, { useRef, useContext, useEffect } from 'react'
-import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
+import React, { useRef, useEffect, useCallback } from 'react'
 import { join, parse } from 'path'
+import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 
 import Composer, { useDraft } from '../composer/Composer'
 import { getLogger } from '../../../shared/logger'
 import MessageList from './MessageList'
-import { ScreenContext } from '../../contexts'
 import { ChatStoreStateWithChatSet } from '../../stores/chat'
 import ComposerMessageInput from '../composer/ComposerMessageInput'
 import { DesktopSettingsType } from '../../../shared/shared-types'
@@ -13,6 +12,8 @@ import { runtime } from '../../runtime'
 import { RecoverableCrashScreen } from '../screens/RecoverableCrashScreen'
 import { useSettingsStore } from '../../stores/settings'
 import { sendMessage } from '../helpers/ChatMethods'
+import useDialog from '../../hooks/useDialog'
+import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
 import useIsChatDisabled from '../composer/useIsChatDisabled'
 
 const log = getLogger('renderer/MessageListAndComposer')
@@ -65,7 +66,7 @@ export default function MessageListAndComposer({
 }) {
   const conversationRef = useRef(null)
   const refComposer = useRef(null)
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog, hasOpenDialogs } = useDialog()
 
   const messageInputRef = useRef<ComposerMessageInput>(null)
   const {
@@ -111,11 +112,13 @@ export default function MessageListAndComposer({
         }
       }
     }
-    const tx = window.static_translate
+
     const fileCount = sanitizedFileList.length
+
     if (fileCount === 0) {
       return
     }
+
     if (fileCount === 1) {
       log.debug(`dropped image of type ${sanitizedFileList[0].type}`)
       const msgViewType: Viewtype = sanitizedFileList[0].type.startsWith(
@@ -126,29 +129,15 @@ export default function MessageListAndComposer({
       addFileToDraft(sanitizedFileList[0].path, msgViewType)
       return
     }
+
     // This is a desktop specific "hack" to support sending multiple attachments at once.
-    openDialog('ConfirmationDialog', {
-      message: (
-        <>
-          {tx(
-            'ask_send_following_n_files_to',
-            fileCount > 1
-              ? [String(fileCount), chatStore.chat.name]
-              : [chatStore.chat.name],
-            {
-              quantity: fileCount,
-            }
-          )}
-          <ul className='drop-file-dialog-file-list'>
-            {sanitizedFileList.map(({ name }) => (
-              <li key={name}>{' - ' + name}</li>
-            ))}
-          </ul>
-        </>
-      ),
-      confirmLabel: tx('menu_send'),
-      cb: async (yes: boolean) => {
-        if (!yes) return
+    openDialog(ConfirmSendingFiles, {
+      sanitizedFileList,
+      chatName: chatStore.chat.name,
+      onClick: (isConfirmed: boolean) => {
+        if (!isConfirmed) {
+          return
+        }
 
         for (const file of sanitizedFileList) {
           sendMessage(chatId, { file: file.path, viewtype: 'File' })
@@ -162,34 +151,38 @@ export default function MessageListAndComposer({
     e.stopPropagation()
   }
 
-  const onMouseUp = (e: MouseEvent) => {
-    const selection = window.getSelection()
+  const onMouseUp = useCallback(
+    (e: MouseEvent) => {
+      const selection = window.getSelection()
 
-    if (selection?.type === 'Range' && selection.rangeCount > 0) {
-      return
-    }
-    const targetTagName = (e.target as unknown as any)?.tagName
+      if (selection?.type === 'Range' && selection.rangeCount > 0) {
+        return
+      }
+      const targetTagName = ((e.target as unknown) as any)?.tagName
 
-    if (targetTagName === 'INPUT' || targetTagName === 'TEXTAREA') {
-      return
-    }
+      if (targetTagName === 'INPUT' || targetTagName === 'TEXTAREA') {
+        return
+      }
 
-    // don't force focus on the message input as long as the emoji picker is open
-    if (
-      document.querySelector(':focus')?.tagName?.toLowerCase() ===
-      'em-emoji-picker'
-    ) {
-      return
-    }
-    if (!window.__hasOpenDialogs()) {
-      return
-    }
+      // don't force focus on the message input as long as the emoji picker is open
+      if (
+        document.querySelector(':focus')?.tagName?.toLowerCase() ===
+        'em-emoji-picker'
+      ) {
+        return
+      }
 
-    e.preventDefault()
-    e.stopPropagation()
-    messageInputRef?.current?.focus()
-    return false
-  }
+      if (!hasOpenDialogs) {
+        return
+      }
+
+      e.preventDefault()
+      e.stopPropagation()
+      messageInputRef?.current?.focus()
+      return false
+    },
+    [hasOpenDialogs]
+  )
 
   const onSelectionChange = () => {
     const selection = window.getSelection()
@@ -214,12 +207,13 @@ export default function MessageListAndComposer({
     document.addEventListener('selectionchange', onSelectionChange)
     window.addEventListener('keyup', onEscapeKeyUp)
     messageInputRef?.current?.focus()
+
     return () => {
       window.removeEventListener('mouseup', onMouseUp)
       document.removeEventListener('selectionchange', onSelectionChange)
       window.removeEventListener('keyup', onEscapeKeyUp)
     }
-  }, [])
+  }, [onMouseUp])
 
   const [isDisabled, disabledReason] = useIsChatDisabled(chatStore.chat)
 

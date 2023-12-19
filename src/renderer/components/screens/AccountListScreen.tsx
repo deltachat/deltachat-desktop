@@ -1,9 +1,10 @@
 import { Classes, Switch, Alignment, Icon } from '@blueprintjs/core'
 import classNames from 'classnames'
-import { getLogger } from '../../../shared/logger'
 import debounce from 'debounce'
-import React, { useContext, useEffect, useState } from 'react'
-import { useTranslationFunction, ScreenContext } from '../../contexts'
+import React, { useEffect, useState } from 'react'
+import { filesize } from 'filesize'
+
+import { getLogger } from '../../../shared/logger'
 import ScreenController from '../../ScreenController'
 import { Avatar } from '../Avatar'
 import { PseudoContact } from '../contact/Contact'
@@ -12,7 +13,6 @@ import {
   DeltaDialogBody,
   DeltaDialogContent,
 } from '../dialogs/DeltaDialog'
-import filesizeConverter from 'filesize'
 import {
   BackendRemote,
   EffectfulBackendActions,
@@ -20,6 +20,10 @@ import {
   Type,
 } from '../../backend-com'
 import { runtime } from '../../runtime'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
+import ConfirmationDialog from '../dialogs/ConfirmationDialog'
+import AlertDialog from '../dialogs/AlertDialog'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
@@ -73,7 +77,6 @@ export default function AccountListScreen({
     <div className='login-screen'>
       <div className='window'>
         <DeltaDialogBase
-          isOpen={true}
           backdropProps={{ className: 'no-backdrop' }}
           onClose={() => {}}
           fixed={true}
@@ -144,7 +147,7 @@ function AccountSelection({
   onAddAccount: () => void
 }) {
   const tx = useTranslationFunction()
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
 
   const removeAccount = (account: Type.Account) => {
     const header = tx(
@@ -155,7 +158,7 @@ function AccountSelection({
       'delete_account_explain_with_name',
       account.kind == 'Configured' ? account.addr || '?' : '[unconfigured]'
     )
-    openDialog('ConfirmationDialog', {
+    openDialog(ConfirmationDialog, {
       header,
       message,
       confirmLabel: tx('delete_account'),
@@ -167,7 +170,7 @@ function AccountSelection({
             refreshAccounts()
           } catch (error: any) {
             if (error instanceof Error) {
-              window.__openDialog('AlertDialog', {
+              openDialog(AlertDialog, {
                 message: error?.message,
                 cb: () => {
                   refreshAccounts()
@@ -257,7 +260,7 @@ function AccountItem({
       .getAccountFileSize(login.id)
       .catch(log.error)
       .then(bytes => {
-        bytes && setSize(filesizeConverter(bytes))
+        bytes && setSize(filesize(bytes))
       })
   }, [login.id])
 

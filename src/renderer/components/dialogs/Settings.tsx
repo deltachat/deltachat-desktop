@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Elevation, Card } from '@blueprintjs/core'
-
-import { ScreenContext, useTranslationFunction } from '../../contexts'
+import { C } from '@deltachat/jsonrpc-client'
 
 import { DesktopSettingsType } from '../../../shared/shared-types'
-import { DialogProps } from './DialogController'
 import {
   DeltaDialogBase,
   DeltaDialogHeader,
@@ -25,8 +23,11 @@ import { donationUrl } from '../../../shared/constants'
 import { SendBackupDialog } from './setup_multi_device/SendBackup'
 import { selectedAccountId } from '../../ScreenController'
 import { BackendRemote, onDCEvent } from '../../backend-com'
-import { C } from '@deltachat/jsonrpc-client'
 import SettingsConnectivityDialog from './Settings-Connectivity'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 export function flipDeltaBoolean(value: string) {
   return value === '1' ? '0' : '1'
@@ -104,6 +105,9 @@ export type RenderDeltaSwitch2Type = ({
 }) => void
 
 export default function Settings(props: DialogProps) {
+  const { openDialog } = useDialog()
+  const tx = useTranslationFunction()
+
   useEffect(() => {
     if (window.__settingsOpened) {
       throw new Error(
@@ -119,9 +123,6 @@ export default function Settings(props: DialogProps) {
   const { onClose } = props
   const settingsStore = useSettingsStore()[0]
 
-  const { openDialog } = useContext(ScreenContext)
-
-  const tx = useTranslationFunction()
   const [settingsMode, setSettingsMode] = useState('main')
 
   /*
@@ -260,7 +261,7 @@ export default function Settings(props: DialogProps) {
                 {!runtime.getRuntimeInfo().isMac && (
                   <SettingsIconButton
                     iconName='favorite'
-                    onClick={() => runtime.openLink(donationUrl)}
+                    onClick={() => runtime.openLink(openDialog, donationUrl)}
                     isLink
                   >
                     {tx('donate')}
@@ -357,7 +358,6 @@ export default function Settings(props: DialogProps) {
 
   return (
     <DeltaDialogBase
-      isOpen={props.isOpen}
       onClose={() => {
         props.onClose()
       }}
@@ -370,7 +370,7 @@ export default function Settings(props: DialogProps) {
 }
 
 function SettingsButtonConnectivity() {
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const [connectivityString, setConnectivityString] = useState('')
   const accountId = selectedAccountId()
 

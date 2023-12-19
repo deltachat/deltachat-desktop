@@ -1,8 +1,7 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { H5 } from '@blueprintjs/core'
 import classNames from 'classnames'
 
-import { ScreenContext, useTranslationFunction } from '../../contexts'
 import {
   DeltaDialogBody,
   DeltaDialogContent,
@@ -12,7 +11,6 @@ import {
   SmallSelectDialog,
   SelectDialogOption,
 } from './DeltaDialog'
-import { DialogProps } from './DialogController'
 import { SettingsSelector } from './Settings'
 import { AutodeleteDuration } from '../../../shared/constants'
 import { DeltaCheckbox } from '../contact/ContactListItem'
@@ -21,6 +19,10 @@ import SettingsStoreInstance, {
 } from '../../stores/settings'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 function durationToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)
@@ -51,7 +53,6 @@ export function AutodeleteConfirmationDialog({
   fromServer,
   estimateCount,
   seconds,
-  isOpen,
   onClose,
 }: {
   fromServer: boolean
@@ -73,7 +74,7 @@ export function AutodeleteConfirmationDialog({
   const tx = window.static_translate
 
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
+    <SmallDialog onClose={onClose}>
       <DeltaDialogHeader
         title={
           fromServer ? tx('autodel_server_title') : tx('autodel_device_title')
@@ -127,6 +128,10 @@ export default function SettingsAutodelete({
 }: {
   settingsStore: SettingsStoreState
 }) {
+  const { openDialog } = useDialog()
+  const accountId = selectedAccountId()
+  const tx = useTranslationFunction()
+
   const AUTODELETE_DURATION_OPTIONS_DEVICE = [
     AutodeleteDuration.NEVER,
     AutodeleteDuration.ONE_HOUR,
@@ -145,10 +150,6 @@ export default function SettingsAutodelete({
     AutodeleteDuration.FIVE_WEEKS,
     AutodeleteDuration.ONE_YEAR,
   ].map(value => [String(value), durationToString(value)] as SelectDialogOption)
-
-  const { openDialog } = useContext(ScreenContext)
-  const accountId = selectedAccountId()
-  const tx = useTranslationFunction()
 
   const onOpenDialog = async (fromServer: boolean) => {
     openDialog(SmallSelectDialog, {
@@ -177,6 +178,7 @@ export default function SettingsAutodelete({
           )
           return
         }
+
         openDialog(AutodeleteConfirmationDialog, {
           fromServer,
           estimateCount,

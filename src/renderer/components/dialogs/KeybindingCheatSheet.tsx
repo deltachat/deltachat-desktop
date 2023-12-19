@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
-import { useTranslationFunction } from '../../contexts'
+
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { useSettingsStore } from '../../stores/settings'
 import {
   CheatSheetKeyboardShortcut,
@@ -12,13 +13,11 @@ import {
   DeltaDialogHeader,
 } from './DeltaDialog'
 
-export default function KeybindingCheatSheet(props: {
-  isOpen: boolean
-  onClose: () => void
-}) {
-  const { isOpen, onClose } = props
-  const tx = useTranslationFunction()
+import type { DialogProps } from '../../contexts/DialogContext'
 
+export default function KeybindingCheatSheet(props: DialogProps) {
+  const { onClose } = props
+  const tx = useTranslationFunction()
   const settingsStore = useSettingsStore()[0]
 
   useEffect(() => {
@@ -30,7 +29,6 @@ export default function KeybindingCheatSheet(props: {
 
   return (
     <DeltaDialogBase
-      isOpen={isOpen}
       onClose={onClose}
       fixed={false}
       className='keyboard-hint-cheatsheet-dialog'

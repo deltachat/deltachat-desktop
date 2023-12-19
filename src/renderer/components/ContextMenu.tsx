@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useLayoutEffect, useContext } from 'react'
 import { useRef } from 'react'
-import { ScreenContext, unwrapContext } from '../contexts'
+
+import { ScreenContext } from '../contexts/ScreenContext'
 
 export type ContextMenuItem = { label: string; action: () => void }
 
@@ -14,14 +15,14 @@ type showFnArguments = {
  * @returns a promise with no return value that gets resolved when the context menu disapears again
  * regardless what action the user took or if they canceled the dialog
  */
-export type showFnType = (args: showFnArguments) => Promise<void>
+export type OpenContextMenu = (args: showFnArguments) => Promise<void>
 
 const ScrollKeysToBlock = ['Space', 'PageUp', 'PageDown', 'End', 'Home']
 
 export function ContextMenuLayer({
   setShowFunction,
 }: {
-  setShowFunction: (showFn: showFnType) => void
+  setShowFunction: (showFn: OpenContextMenu) => void
 }) {
   const layerRef = useRef<HTMLDivElement>(null)
   const cursorX = useRef<number>(0)
@@ -269,7 +270,7 @@ type ItemsFactoryFn = () => (ContextMenuItem | false)[]
  */
 export function makeContextMenu(
   itemsOrItemsFactoryFn: (ContextMenuItem | false)[] | ItemsFactoryFn,
-  openContextMenu: unwrapContext<typeof ScreenContext>['openContextMenu']
+  openContextMenu: OpenContextMenu
 ) {
   return (ev: React.MouseEvent<any, MouseEvent>) => {
     ev.preventDefault() // prevent default runtime context menu from opening

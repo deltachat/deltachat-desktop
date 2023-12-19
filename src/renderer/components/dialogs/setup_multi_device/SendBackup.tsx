@@ -1,9 +1,8 @@
-import React, { useContext, useEffect } from 'react'
-import { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+
 import { getLogger } from '../../../../shared/logger'
 import { BackendRemote, onDCEvent } from '../../../backend-com'
-import { ScreenContext } from '../../../contexts'
-
+import useDialog from '../../../hooks/useDialog'
 import { runtime } from '../../../runtime'
 import { selectedAccountId } from '../../../ScreenController'
 import ConfirmationDialog from '../ConfirmationDialog'
@@ -14,7 +13,8 @@ import {
   DeltaDialogFooterActions,
   DeltaDialogHeader,
 } from '../DeltaDialog'
-import { DialogProps } from '../DialogController'
+
+import type { DialogProps } from '../../../contexts/DialogContext'
 
 const log = getLogger('renderer/send_backup')
 
@@ -32,7 +32,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
   const [error, setError] = useState<string | null>(null)
   const [wasCopied, setCopied] = useState(false)
 
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
 
   useEffect(() => {
     const accountId = selectedAccountId()
@@ -126,7 +126,6 @@ export function SendBackupDialog({ onClose }: DialogProps) {
     <DeltaDialogBase
       onClose={cancel}
       canEscapeKeyClose={true}
-      isOpen={true}
       canOutsideClickClose={false}
       style={{ width: 'unset' }}
     >
@@ -177,7 +176,9 @@ export function SendBackupDialog({ onClose }: DialogProps) {
             <>
               <p
                 className='delta-button bold primary setup-new-device-troubleshooting-btn'
-                onClick={() => runtime.openLink(TROUBLESHOOTING_URL)}
+                onClick={() =>
+                  runtime.openLink(openDialog, TROUBLESHOOTING_URL)
+                }
                 style={{ marginRight: '10px' }}
                 role='button'
               >

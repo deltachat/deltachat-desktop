@@ -2,7 +2,7 @@
 
 import { C, DcEventType } from '@deltachat/jsonrpc-client'
 import React, { useEffect, useState } from 'react'
-import { Collapse, Dialog } from '@blueprintjs/core'
+import { Collapse } from '@blueprintjs/core'
 import { useDebouncedCallback } from 'use-debounce/lib'
 
 import {
@@ -13,13 +13,18 @@ import {
   DeltaSwitch,
 } from './Login-Styles'
 import ClickableLink from './helpers/ClickableLink'
-import { DialogProps } from './dialogs/DialogController'
-import { DeltaDialogContent, DeltaDialogFooter } from './dialogs/DeltaDialog'
+import {
+  DeltaDialogBase,
+  DeltaDialogContent,
+  DeltaDialogFooter,
+} from './dialogs/DeltaDialog'
 import { Credentials } from '../../shared/shared-types'
-import { useTranslationFunction, i18nContext } from '../contexts'
 import { getLogger } from '../../shared/logger'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
+import { I18nContext } from '../contexts/I18nContext'
+import useTranslationFunction from '../hooks/useTranslationFunction'
+import { DialogProps } from '../contexts/DialogContext'
 
 const log = getLogger('renderer/loginForm')
 
@@ -170,7 +175,7 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
   const certificate_checks = imap_certificate_checks
 
   return (
-    <i18nContext.Consumer>
+    <I18nContext.Consumer>
       {tx => (
         <div className='login-form'>
           <DeltaInput
@@ -375,19 +380,19 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
           <p className='text'>{tx('login_subheader')}</p>
         </div>
       )}
-    </i18nContext.Consumer>
+    </I18nContext.Consumer>
   )
 }
 
 export function ConfigureProgressDialog({
-  isOpen,
-  onClose,
   credentials,
   onSuccess,
+  ...dialogProps
 }: {
   credentials: Partial<Credentials>
   onSuccess?: () => void
 } & DialogProps) {
+  const { onClose } = dialogProps
   const [progress, setProgress] = useState(0)
   const [progressComment, setProgressComment] = useState('')
   const [error, setError] = useState('')
@@ -467,10 +472,9 @@ export function ConfigureProgressDialog({
   }, [accountId])
 
   return (
-    <Dialog
-      isOpen={isOpen}
+    <DeltaDialogBase
       onClose={onClose}
-      className='delta-dialog small-dialog'
+      className='small-dialog'
       canEscapeKeyClose={false}
       canOutsideClickClose={false}
     >
@@ -521,6 +525,6 @@ export function ConfigureProgressDialog({
           </DeltaDialogFooter>
         </>
       )}
-    </Dialog>
+    </DeltaDialogBase>
   )
 }

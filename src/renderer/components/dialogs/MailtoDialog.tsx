@@ -1,23 +1,27 @@
 import React from 'react'
 import { Card, Classes } from '@blueprintjs/core'
+import classNames from 'classnames'
+import { C } from '@deltachat/jsonrpc-client'
+import AutoSizer from 'react-virtualized-auto-sizer'
+
 import { DeltaDialogBase, DeltaDialogHeader } from './DeltaDialog'
 import ChatListItem from '../chat/ChatListItem'
 import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
-import classNames from 'classnames'
-import { DialogProps } from './DialogController'
-
-import { C } from '@deltachat/jsonrpc-client'
 import { ChatListPart, useLogicVirtualChatList } from '../chat/ChatList'
-import AutoSizer from 'react-virtualized-auto-sizer'
 import { useChatList } from '../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../ThemeManager'
 import { createDraftMessage } from '../helpers/ChatMethods'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 export default function MailtoDialog(props: {
   messageText: string
   onClose: DialogProps['onClose']
 }) {
-  const tx = window.static_translate
+  const tx = useTranslationFunction()
+  const { openDialog } = useDialog()
   const { onClose, messageText } = props
   const listFlags = C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS
   const { chatListIds, queryStr, setQueryStr } = useChatList(listFlags)
@@ -27,7 +31,7 @@ export default function MailtoDialog(props: {
   )
 
   const onChatClick = async (chatId: number) => {
-    createDraftMessage(chatId, messageText)
+    createDraftMessage(openDialog, chatId, messageText)
     onClose()
   }
 
@@ -39,7 +43,7 @@ export default function MailtoDialog(props: {
 
   const noResults = chatListIds.length === 0 && queryStr !== ''
   return (
-    <DeltaDialogBase isOpen={true} onClose={onClose} fixed>
+    <DeltaDialogBase onClose={onClose} fixed>
       <DeltaDialogHeader
         onClose={onClose}
         title={tx('mailto_dialog_header_select_chat')}

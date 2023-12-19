@@ -9,28 +9,22 @@ import {
   DeltaDialogHeader,
 } from './DeltaDialog'
 import { debounceWithInit } from '../chat/ChatListHelpers'
-import { DialogProps } from './DialogController'
-import { useTranslationFunction } from '../../contexts'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 const INHERIT_STYLES = ['line-height', 'background-color', 'color', 'font-size']
 const OverwrittenStyles =
   'font-family: Arial, Helvetica, sans-serif;font-variant-ligatures: none;'
 
-export default function SettingsConnectivityDialog({
-  onClose,
-  isOpen,
-}: {
-  isOpen: DialogProps['isOpen']
-  onClose: DialogProps['onClose']
-}) {
+export default function SettingsConnectivityDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
 
   return (
     <DeltaDialogBase
       onClose={onClose}
-      isOpen={isOpen}
       canOutsideClickClose={true}
       style={{
         maxHeight: 'calc(100% - 100px)',
