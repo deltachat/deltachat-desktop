@@ -2,7 +2,7 @@ import { Classes, Switch, Alignment, Icon } from '@blueprintjs/core'
 import classNames from 'classnames'
 import debounce from 'debounce'
 import React, { useEffect, useState } from 'react'
-import filesizeConverter from 'filesize'
+import { filesize } from 'filesize'
 
 import { getLogger } from '../../../shared/logger'
 import ScreenController from '../../ScreenController'
@@ -260,7 +260,7 @@ function AccountItem({
       .getAccountFileSize(login.id)
       .catch(log.error)
       .then(bytes => {
-        bytes && setSize(filesizeConverter(bytes))
+        bytes && setSize(filesize(bytes))
       })
   }, [login.id])
 

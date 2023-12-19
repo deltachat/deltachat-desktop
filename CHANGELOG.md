@@ -4,6 +4,21 @@
 
 ### Changed
 - Refactor dialog logic and add additional helper methods #3512
+- Upgrade `filesize` dependency from `8.0.6` to `10.1.0`
+- Prefer light theme for the help and webxdc loading pages
+
+<a id="1_42_2"></a>
+
+## [1.42.2] - 2023-12-02
+
+### Changed
+- update deltachat-node and deltachat/jsonrpc-client to `v1.131.9`
+  - more fixes for mail.163.com
+- update esbuild to v0.19.8
+
+### Fixed
+- log error when webxdc status update send fails
+- make starting of html email view more reliable (remove race condition)
 
 <a id="1_42_1"></a>
 
@@ -2343,7 +2358,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.42.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.42.2...HEAD
+
+[1.42.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.42.1...v1.42.2
 
 [1.42.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.42.0...v1.42.1
 

@@ -120,6 +120,7 @@ export default function MessageListAndComposer({
     }
 
     if (fileCount === 1) {
+      log.debug(`dropped image of type ${sanitizedFileList[0].type}`)
       const msgViewType: Viewtype = sanitizedFileList[0].type.startsWith(
         'image'
       )

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Card, Elevation, H5 } from '@blueprintjs/core'
-import filesizeConverter from 'filesize'
+import { filesize } from 'filesize'
 
 import ConfirmationDialog from './ConfirmationDialog'
 import { runtime } from '../../runtime'
@@ -58,14 +58,14 @@ export default function SettingsWebxdc() {
             <tbody>
               <tr>
                 <td>DOMStorage</td>
-                <td>~{filesizeConverter(usage.data_size)}</td>
+                <td>~{filesize(usage.data_size)}</td>
                 <td>
                   <button onClick={deleteData}>Clear</button>
                 </td>
               </tr>
               <tr>
                 <td>Total:</td>
-                <td>{filesizeConverter(usage.total_size)}</td>
+                <td>{filesize(usage.total_size)}</td>
                 <td>
                   <button onClick={resetWebxdcSession}>
                     Hard Reset (restarts deltachat)

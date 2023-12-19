@@ -1,5 +1,5 @@
 import React from 'react'
-import filesizeConverter from 'filesize'
+import { filesize } from 'filesize'
 
 import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
 import { SettingsSelector } from './Settings'
@@ -52,7 +52,7 @@ export default function SettingsDownloadOnDemand(props: {
       ? tx('pref_show_emails_all')
       : tx(
           'up_to_x',
-          filesizeConverter(Number.parseInt(settings['download_limit']), {
+          filesize(Number.parseInt(settings['download_limit']), {
             base: 2,
           })
         )
@@ -60,7 +60,7 @@ export default function SettingsDownloadOnDemand(props: {
   return (
     <>
       <SettingsSelector
-        onClick={onOpenDialog.bind(null, false)}
+        onClick={onOpenDialog.bind(null)}
         currentValue={current_limit}
       >
         {tx('auto_download_messages')}
