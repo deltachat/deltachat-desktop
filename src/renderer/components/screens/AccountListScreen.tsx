@@ -1,18 +1,12 @@
-import { Classes, Switch, Alignment, Icon } from '@blueprintjs/core'
-import classNames from 'classnames'
-import { getLogger } from '../../../shared/logger'
+import React, { useEffect, useState } from 'react'
 import debounce from 'debounce'
-import React, { useContext, useEffect, useState } from 'react'
-import { useTranslationFunction, ScreenContext } from '../../contexts'
+import { filesize } from 'filesize'
+import { Switch, Alignment, Icon } from '@blueprintjs/core'
+
+import { getLogger } from '../../../shared/logger'
 import ScreenController from '../../ScreenController'
 import { Avatar } from '../Avatar'
 import { PseudoContact } from '../contact/Contact'
-import {
-  DeltaDialogBase,
-  DeltaDialogBody,
-  DeltaDialogContent,
-} from '../dialogs/DeltaDialog'
-import filesizeConverter from 'filesize'
 import {
   BackendRemote,
   EffectfulBackendActions,
@@ -20,6 +14,11 @@ import {
   Type,
 } from '../../backend-com'
 import { runtime } from '../../runtime'
+import Dialog, { DialogBody, DialogHeader } from '../Dialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
+import ConfirmationDialog from '../dialogs/ConfirmationDialog'
+import AlertDialog from '../dialogs/AlertDialog'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
@@ -31,9 +30,7 @@ export default function AccountListScreen({
   onAddAccount: () => void
 }) {
   const tx = useTranslationFunction()
-
   const [logins, setLogins] = useState<Type.Account[] | null>(null)
-
   const [syncAllAccounts, setSyncAllAccounts] = useState<boolean | null>(null)
 
   useEffect(() => {
@@ -72,59 +69,47 @@ export default function AccountListScreen({
   return (
     <div className='login-screen'>
       <div className='window'>
-        <DeltaDialogBase
-          isOpen={true}
+        <Dialog
+          width={400}
           backdropProps={{ className: 'no-backdrop' }}
           onClose={() => {}}
-          fixed={true}
           canEscapeKeyClose={true}
         >
-          <>
-            <div
-              className={classNames(
-                Classes.DIALOG_HEADER,
-                'bp4-dialog-header-border-bottom'
-              )}
-            >
-              <h4 className='bp4-heading'>{tx('switch_account')}</h4>
-            </div>
-            <DeltaDialogBody>
-              <DeltaDialogContent noPadding={true}>
-                <AccountSelection
-                  {...{
-                    refreshAccounts,
-                    selectAccount,
-                    logins,
-                    showUnread: syncAllAccounts || false,
-                    onAddAccount,
+          <DialogHeader title={tx('switch_account')} />
+          <DialogBody>
+            <AccountSelection
+              {...{
+                refreshAccounts,
+                selectAccount,
+                logins,
+                showUnread: syncAllAccounts || false,
+                onAddAccount,
+              }}
+            />
+            {syncAllAccounts !== null && (
+              <div className='sync-all-switch'>
+                <Switch
+                  checked={syncAllAccounts}
+                  label={tx('sync_all')}
+                  onChange={async () => {
+                    const new_state = !syncAllAccounts
+                    await runtime.setDesktopSetting(
+                      'syncAllAccounts',
+                      new_state
+                    )
+                    if (new_state) {
+                      BackendRemote.rpc.startIoForAllAccounts()
+                    } else {
+                      BackendRemote.rpc.stopIoForAllAccounts()
+                    }
+                    setSyncAllAccounts(new_state)
                   }}
+                  alignIndicator={Alignment.LEFT}
                 />
-                {syncAllAccounts !== null && (
-                  <div className='sync-all-switch'>
-                    <Switch
-                      checked={syncAllAccounts}
-                      label={tx('sync_all')}
-                      onChange={async () => {
-                        const new_state = !syncAllAccounts
-                        await runtime.setDesktopSetting(
-                          'syncAllAccounts',
-                          new_state
-                        )
-                        if (new_state) {
-                          BackendRemote.rpc.startIoForAllAccounts()
-                        } else {
-                          BackendRemote.rpc.stopIoForAllAccounts()
-                        }
-                        setSyncAllAccounts(new_state)
-                      }}
-                      alignIndicator={Alignment.LEFT}
-                    />
-                  </div>
-                )}
-              </DeltaDialogContent>
-            </DeltaDialogBody>
-          </>
-        </DeltaDialogBase>
+              </div>
+            )}
+          </DialogBody>
+        </Dialog>
       </div>
     </div>
   )
@@ -144,7 +129,7 @@ function AccountSelection({
   onAddAccount: () => void
 }) {
   const tx = useTranslationFunction()
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
 
   const removeAccount = (account: Type.Account) => {
     const header = tx(
@@ -155,7 +140,7 @@ function AccountSelection({
       'delete_account_explain_with_name',
       account.kind == 'Configured' ? account.addr || '?' : '[unconfigured]'
     )
-    openDialog('ConfirmationDialog', {
+    openDialog(ConfirmationDialog, {
       header,
       message,
       confirmLabel: tx('delete_account'),
@@ -167,7 +152,7 @@ function AccountSelection({
             refreshAccounts()
           } catch (error: any) {
             if (error instanceof Error) {
-              window.__openDialog('AlertDialog', {
+              openDialog(AlertDialog, {
                 message: error?.message,
                 cb: () => {
                   refreshAccounts()
@@ -257,7 +242,7 @@ function AccountItem({
       .getAccountFileSize(login.id)
       .catch(log.error)
       .then(bytes => {
-        bytes && setSize(filesizeConverter(bytes))
+        bytes && setSize(filesize(bytes))
       })
   }, [login.id])
 

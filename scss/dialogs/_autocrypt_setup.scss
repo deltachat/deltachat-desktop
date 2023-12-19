@@ -3,7 +3,7 @@
   grid-template-columns: auto auto auto;
   grid-gap: 10px;
   padding: 20px 0px 20px 0px;
-  margin-right: -55px;
+
   & > .row {
     width: 100%;
 
@@ -12,6 +12,7 @@
       float: left;
       border: 1px solid var(--colorNone);
       box-shadow: none;
+      text-align: center;
     }
 
     .bp4-input:focus {

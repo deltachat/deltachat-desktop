@@ -1,32 +1,39 @@
 import React from 'react'
+import { Spinner } from '@blueprintjs/core'
+
 import { ConfigureProgressDialog } from '../LoginForm'
 import { Screens, selectedAccountId } from '../../ScreenController'
-import { useTranslationFunction } from '../../contexts'
-import {
-  DeltaDialogFooter,
-  DeltaDialogFooterActions,
-  DeltaDialogBody,
-  DeltaDialogContent,
-  SmallDialog,
-} from '../dialogs/DeltaDialog'
-import { Spinner } from '@blueprintjs/core'
-import { DialogProps } from '../dialogs/DialogController'
 import { runtime } from '../../runtime'
 import { getLogger } from '../../../shared/logger'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import AlertDialog from '../dialogs/AlertDialog'
 import { EffectfulBackendActions } from '../../backend-com'
 import { BackendRemote, Type } from '../../backend-com'
-import { ImportBackupTransferProgressDialog } from '../dialogs/setup_multi_device/ReceiveBackup'
 import processMailtoUrl from './MailtoUrl'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  FooterActionButton,
+  FooterActions,
+} from '../Dialog'
+import { ReceiveBackupDialog } from '../dialogs/SetupMultiDevice'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type {
+  CloseDialog,
+  DialogProps,
+  OpenDialog,
+} from '../../contexts/DialogContext'
 
 const log = getLogger('renderer/processOpenUrl')
+
+type Props = { onCancel?: () => void }
 
 export function ProcessQrCodeDialog({
   onCancel: _onCancel,
   onClose,
-  isOpen,
-}: DialogProps) {
+}: Props & DialogProps) {
   const tx = useTranslationFunction()
 
   const onCancel = async () => {
@@ -37,24 +44,25 @@ export function ProcessQrCodeDialog({
   }
 
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
-      <DeltaDialogBody>
-        <DeltaDialogContent style={{ height: '80px', padding: '20px' }}>
-          <Spinner />
-        </DeltaDialogContent>
-      </DeltaDialogBody>
-      <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
-        <DeltaDialogFooterActions>
-          <p className='delta-button bold primary' onClick={onCancel}>
+    <Dialog onClose={onClose}>
+      <DialogBody>
+        <Spinner />
+      </DialogBody>
+      <DialogFooter>
+        <FooterActions>
+          <FooterActionButton onClick={onCancel}>
             {tx('cancel')}
-          </p>
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
-    </SmallDialog>
+          </FooterActionButton>
+        </FooterActions>
+      </DialogFooter>
+    </Dialog>
   )
 }
 
-async function setConfigFromQrCatchingErrorInAlert(qrContent: string) {
+async function setConfigFromQrCatchingErrorInAlert(
+  openDialog: OpenDialog,
+  qrContent: string
+) {
   try {
     if (window.__selectedAccountId === undefined) {
       throw new Error('error: no context selected')
@@ -65,12 +73,14 @@ async function setConfigFromQrCatchingErrorInAlert(qrContent: string) {
     )
   } catch (error) {
     if (error instanceof Error) {
-      window.__openDialog(AlertDialog, { message: error.message })
+      openDialog(AlertDialog, { message: error.message })
     }
   }
 }
 
 export default async function processOpenQrUrl(
+  openDialog: OpenDialog,
+  closeDialog: CloseDialog,
   url: string,
   callback: any = null,
   skipLoginConfirmation = false
@@ -78,16 +88,16 @@ export default async function processOpenQrUrl(
   const tx = window.static_translate
 
   if (url.toLowerCase().startsWith('mailto:')) {
-    processMailtoUrl(url, callback)
+    processMailtoUrl(openDialog, url, callback)
     return
   }
 
   const screen = window.__screen
 
-  const processDialogId = window.__openDialog(ProcessQrCodeDialog)
+  const processDialogId = openDialog(ProcessQrCodeDialog)
   // const checkQr: Qr = await BackendRemote.rpc.checkQr(selectedAccountId(), url)
 
-  const closeProcessDialog = () => window.__closeDialog(processDialogId)
+  const closeProcessDialog = () => closeDialog(processDialogId)
   let checkQr
   try {
     checkQr = await BackendRemote.rpc.checkQr(selectedAccountId(), url)
@@ -98,7 +108,7 @@ export default async function processOpenQrUrl(
 
   if (checkQr === null) {
     closeProcessDialog()
-    window.__openDialog(AlertDialog, {
+    openDialog(AlertDialog, {
       message: (
         <>
           {tx('qrscan_failed')}
@@ -125,7 +135,7 @@ export default async function processOpenQrUrl(
     screen !== Screens.Main
   ) {
     closeProcessDialog()
-    window.__openDialog('AlertDialog', {
+    openDialog(AlertDialog, {
       message: tx('Please login first'),
       cb: callback,
     })
@@ -159,7 +169,7 @@ export default async function processOpenQrUrl(
             : ''
 
       const yes = await new Promise(resolve => {
-        window.__openDialog(ConfirmationDialog, {
+        openDialog(ConfirmationDialog, {
           message: tx(message, replacementValue),
           cb: resolve,
           confirmLabel: tx('login'),
@@ -187,7 +197,7 @@ export default async function processOpenQrUrl(
         }
         await BackendRemote.rpc.setConfigFromQr(window.__selectedAccountId, url)
         closeProcessDialog()
-        window.__openDialog(ConfigureProgressDialog, {
+        openDialog(ConfigureProgressDialog, {
           credentials: {},
           onSuccess: () => {
             window.__askForName = true
@@ -197,7 +207,7 @@ export default async function processOpenQrUrl(
         })
       } catch (err: any) {
         closeProcessDialog()
-        window.__openDialog('AlertDialog', {
+        openDialog(AlertDialog, {
           message: err.message || err.toString(),
           cb: callback,
         })
@@ -213,7 +223,7 @@ export default async function processOpenQrUrl(
       checkQr.contact_id
     )
     closeProcessDialog()
-    window.__openDialog('ConfirmationDialog', {
+    openDialog(ConfirmationDialog, {
       message: tx('ask_start_chat_with', contact.address),
       confirmLabel: tx('ok'),
       cb: (confirmed: boolean) => {
@@ -225,7 +235,7 @@ export default async function processOpenQrUrl(
   } else if (checkQr.kind === 'askVerifyGroup') {
     const accountId = selectedAccountId()
     closeProcessDialog()
-    window.__openDialog('ConfirmationDialog', {
+    openDialog(ConfirmationDialog, {
       message: tx('qrscan_ask_join_group', checkQr.grpname),
       confirmLabel: tx('ok'),
       cb: (confirmed: boolean) => {
@@ -242,59 +252,59 @@ export default async function processOpenQrUrl(
       checkQr.contact_id
     )
     closeProcessDialog()
-    window.__openDialog('ConfirmationDialog', {
+    openDialog(ConfirmationDialog, {
       message: `The fingerprint of ${contact.displayName} is valid!`,
       confirmLabel: tx('ok'),
       cb: callback,
     })
   } else if (checkQr.kind === 'withdrawVerifyContact') {
     closeProcessDialog()
-    window.__openDialog(ConfirmationDialog, {
+    openDialog(ConfirmationDialog, {
       message: tx('withdraw_verifycontact_explain'),
       header: tx('withdraw_qr_code'),
       confirmLabel: tx('ok'),
       cb: async yes => {
         if (yes) {
-          await setConfigFromQrCatchingErrorInAlert(url)
+          await setConfigFromQrCatchingErrorInAlert(openDialog, url)
         }
         callback(null)
       },
     })
   } else if (checkQr.kind === 'reviveVerifyContact') {
     closeProcessDialog()
-    window.__openDialog(ConfirmationDialog, {
+    openDialog(ConfirmationDialog, {
       message: tx('revive_verifycontact_explain'),
       header: tx('revive_qr_code'),
       confirmLabel: tx('ok'),
       cb: async yes => {
         if (yes) {
-          await setConfigFromQrCatchingErrorInAlert(url)
+          await setConfigFromQrCatchingErrorInAlert(openDialog, url)
         }
         callback(null)
       },
     })
   } else if (checkQr.kind === 'withdrawVerifyGroup') {
     closeProcessDialog()
-    window.__openDialog(ConfirmationDialog, {
+    openDialog(ConfirmationDialog, {
       message: tx('withdraw_verifygroup_explain', checkQr.grpname),
       header: tx('withdraw_qr_code'),
       confirmLabel: tx('ok'),
       cb: async yes => {
         if (yes) {
-          await setConfigFromQrCatchingErrorInAlert(url)
+          await setConfigFromQrCatchingErrorInAlert(openDialog, url)
         }
         callback(null)
       },
     })
   } else if (checkQr.kind === 'reviveVerifyGroup') {
     closeProcessDialog()
-    window.__openDialog(ConfirmationDialog, {
+    openDialog(ConfirmationDialog, {
       message: tx('revive_verifygroup_explain', checkQr.grpname),
       header: tx('revive_qr_code'),
       confirmLabel: tx('ok'),
       cb: async yes => {
         if (yes) {
-          await setConfigFromQrCatchingErrorInAlert(url)
+          await setConfigFromQrCatchingErrorInAlert(openDialog, url)
         }
         callback(null)
       },
@@ -302,12 +312,12 @@ export default async function processOpenQrUrl(
   } else if (checkQr.kind === 'backup') {
     closeProcessDialog()
     if (screen === Screens.Main) {
-      window.__openDialog('AlertDialog', {
+      openDialog(AlertDialog, {
         message: tx('Please logout first'),
         cb: callback,
       })
     } else {
-      window.__openDialog(ImportBackupTransferProgressDialog, {
+      openDialog(ReceiveBackupDialog, {
         QrWithToken: url,
       })
     }
@@ -315,7 +325,7 @@ export default async function processOpenQrUrl(
     return
   } else {
     closeProcessDialog()
-    window.__openDialog(copyContentAlertDialog, {
+    openDialog(copyContentAlertDialog, {
       message:
         checkQr.kind === 'url'
           ? tx('qrscan_contains_url', url)
@@ -327,39 +337,39 @@ export default async function processOpenQrUrl(
 }
 
 function copyContentAlertDialog({
-  isOpen,
   onClose,
   message,
   content,
   cb,
 }: DialogProps & { message: string; content: string; cb: () => void }) {
   const tx = window.static_translate
+
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
-      <div className='bp4-dialog-body-with-padding'>
-        <p style={{ wordBreak: 'break-word' }}>{message}</p>
-      </div>
-      <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
-        <DeltaDialogFooterActions>
-          <p
-            className='delta-button bold primary'
+    <Dialog onClose={onClose}>
+      <DialogBody>
+        <DialogContent paddingTop>
+          <p>{message}</p>
+        </DialogContent>
+      </DialogBody>
+      <DialogFooter>
+        <FooterActions>
+          <FooterActionButton
             onClick={() => {
               runtime.writeClipboardText(content).then(onClose)
             }}
           >
             {tx('global_menu_edit_copy_desktop')}
-          </p>
-          <p
-            className='delta-button bold primary'
+          </FooterActionButton>
+          <FooterActionButton
             onClick={() => {
               cb && cb()
               onClose()
             }}
           >
             {tx('ok')}
-          </p>
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
-    </SmallDialog>
+          </FooterActionButton>
+        </FooterActions>
+      </DialogFooter>
+    </Dialog>
   )
 }

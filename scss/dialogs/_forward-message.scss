@@ -1,9 +1,9 @@
-$side-padding: 20px;
+$side-padding: 30px;
 
 .forward-message-account-input {
   padding-right: $side-padding;
   padding-left: $side-padding;
-  padding-bottom: $side-padding;
+  padding-bottom: 10px;
 
   .search-input {
     width: 100%;
@@ -12,6 +12,7 @@ $side-padding: 20px;
 
 .forward-message-list-chat-list {
   height: 100%;
+
   .chat-list-item {
     padding-right: $side-padding;
     padding-left: $side-padding;

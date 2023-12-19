@@ -1,47 +1,3 @@
-$bp4-dialog-radius: 2px;
-
-.bp4-dialog {
-  position: absolute !important;
-  max-height: calc(100vh - 50px);
-  max-width: 90vw;
-  margin: 0px;
-  padding: 0px;
-  background: var(--bp4DialogBgSecondary);
-  border-radius: $bp4-dialog-radius;
-  box-shadow:
-    0 0 0 1px rgba(16, 22, 26, 0.1),
-    0 4px 8px rgba(16, 22, 26, 0.2),
-    0 0 20px 3px rgba(16, 22, 26, 0.2);
-}
-
-.bp4-dialog-body {
-  margin: 0px;
-  display: flex;
-  flex-direction: column;
-  max-height: 90vh;
-  overflow: overlay;
-}
-
-.bp4-dialog-body-with-padding {
-  padding: 20px;
-}
-
-.bp4-dialog-body-no-footer {
-  border-bottom-left-radius: $bp4-dialog-radius;
-  border-bottom-right-radius: $bp4-dialog-radius;
-}
-
-.bp4-dialog-footer-border-top {
-  border-top: var(--outlineProperties);
-}
-
-.bp4-dialog-footer {
-  background-color: var(--bp4DialogBgPrimary);
-  margin: 0;
-  padding: 15px;
-  border-radius: $bp4-dialog-radius;
-}
-
 .bp4-card {
   background-color: var(--bp4DialogBgPrimary);
   border-radius: 0px;
@@ -79,12 +35,10 @@ $bp4-dialog-radius: 2px;
   border-radius: 0px;
 }
 
-.bp4-heading {
-  color: var(--bp4Heading);
-}
 .bp4-button[class*='bp4-icon-']::before {
   color: var(--scrollbarThumb);
 }
+
 .bp4-button:not([class*='bp4-intent-'], :icon) {
   color: var(--bp4ButtonText);
   background-color: var(--bp4ButtonBg);
@@ -94,35 +48,17 @@ $bp4-dialog-radius: 2px;
     var(--bp4ButtonGradientBottom)
   );
 }
+
 .bp4-button:not([class*='bp4-intent-'], :icon):hover {
   background-color: var(--bp4ButtonHoverBg);
 }
 
-// .bp4-button[class*="bp4-intent-"]:active {
-//   box-shadow: 0 0 0 1px rgba(16,22,26,.4),inset 0 1px 2px rgba(16,22,26,.2);
-// }
-
 .bp4-button.bp4-minimal {
   color: var(--bp4ButtonText);
 }
+
 .bp4-button.bp4-minimal:hover {
   color: inherit; // todo adjust this to be an extra var
-}
-
-.bp4-dialog-header {
-  padding: 20px;
-
-  background-color: var(--bp4DialogHeaderBg);
-
-  // We should have one variable for dialog/context menu border radius
-  border-radius: 2px 2px 0 0;
-
-  -webkit-box-shadow: unset;
-  box-shadow: unset;
-}
-
-.bp4-dialog-header-border-bottom {
-  border-bottom: var(--outlineProperties);
 }
 
 .bp4-input {
@@ -154,17 +90,15 @@ $bp4-dialog-radius: 2px;
   box-shadow: var(--bp4SwitchKnobShadow);
   background: var(--bp4SwitchKnob);
 }
+
 .bp4-control.bp4-switch input:checked ~ .bp4-control-indicator::before {
   box-shadow: var(--bp4SwitchKnobShadowChecked);
   background: var(--bp4SwitchKnobChecked);
 }
 
 .bp4-control.bp4-switch {
-  padding: 11px 20px;
-  padding-right: 55px !important;
-  margin-left: -20px;
-  margin-right: -20px;
-  margin-bottom: 0px;
+  margin-bottom: 0;
+
   &:hover {
     background-color: var(--chatListItemBgHover);
     cursor: pointer;
@@ -180,11 +114,6 @@ $bp4-dialog-radius: 2px;
 .bp4-control:hover input:checked ~ .bp4-control-indicator {
   box-shadow: var(--bp4SwitchKnobShadowChecked);
   background: var(--bp4SwitchKnobChecked);
-}
-.bp4-dialog-header .bp4-icon-large,
-.bp4-dialog-header .bp4-icon {
-  // the sliders/dials icon in the dialog header in the settings dialog
-  color: var(--bp4DialogHeaderIcon);
 }
 
 .bp4-menu {

@@ -1,5 +1,6 @@
+import moment from 'moment'
+
 import { getLogger } from '../../../shared/logger'
-const log = getLogger('render/msgFunctions')
 import { runtime } from '../../runtime'
 import {
   forwardMessage,
@@ -9,11 +10,17 @@ import {
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { internalOpenWebxdc } from '../../system-integration/webxdc'
-import moment from 'moment'
+import ForwardMessage from '../dialogs/ForwardMessage'
+import ConfirmationDialog from '../dialogs/ConfirmationDialog'
+import MessageDetail from '../dialogs/MessageDetail'
+
+import type { OpenDialog } from '../../contexts/DialogContext'
+
+const log = getLogger('render/msgFunctions')
+
 /**
  * json representation of the message object we get from the backend
  */
-
 export function onDownload(msg: Type.Message) {
   if (!msg.file) {
     log.error('message has no file to download:', msg)
@@ -38,17 +45,21 @@ export function openAttachmentInShell(msg: Type.Message) {
   }
 }
 
-export function openForwardDialog(message: Type.Message) {
-  window.__openDialog('ForwardMessage', { message })
+export function openForwardDialog(
+  openDialog: OpenDialog,
+  message: Type.Message
+) {
+  openDialog(ForwardMessage, { message })
 }
 
 export function confirmDialog(
+  openDialog: OpenDialog,
   message: string,
   confirmLabel: string,
   isConfirmDanger = false
 ): Promise<boolean> {
   return new Promise((res, _rej) => {
-    window.__openDialog('ConfirmationDialog', {
+    openDialog(ConfirmationDialog, {
       message,
       confirmLabel,
       isConfirmDanger,
@@ -60,29 +71,38 @@ export function confirmDialog(
 }
 
 export async function confirmForwardMessage(
+  openDialog: OpenDialog,
   accountId: number,
   message: Type.Message,
   chat: Type.FullChat
 ) {
   const tx = window.static_translate
-  const yes = await confirmDialog(tx('ask_forward', [chat.name]), tx('forward'))
+  const yes = await confirmDialog(
+    openDialog,
+    tx('ask_forward', [chat.name]),
+    tx('forward')
+  )
   if (yes) {
     await forwardMessage(accountId, message.id, chat.id)
   }
   return yes
 }
 
-export function confirmDeleteMessage(msg: Type.Message) {
+export function confirmDeleteMessage(
+  openDialog: OpenDialog,
+  msg: Type.Message
+) {
   const tx = window.static_translate
-  window.__openDialog('ConfirmationDialog', {
+
+  openDialog(ConfirmationDialog, {
     message: tx('ask_delete_message'),
     confirmLabel: tx('delete'),
     cb: (yes: boolean) => yes && deleteMessage(msg.id),
   })
 }
 
-export function openMessageInfo(message: Type.Message) {
-  window.__openDialog('MessageDetail', { id: message.id })
+export function openMessageInfo(openDialog: OpenDialog, message: Type.Message) {
+  openDialog(MessageDetail, { id: message.id })
 }
 
 export function setQuoteInDraft(messageId: number) {

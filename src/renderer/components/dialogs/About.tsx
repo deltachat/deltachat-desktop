@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import reactStringReplace from 'react-string-replace'
+
 import { getLogger } from '../../../shared/logger'
-import DeltaDialog, { DeltaDialogBody, DeltaDialogFooter } from './DeltaDialog'
 import { gitHubUrl, gitHubLicenseUrl } from '../../../shared/constants'
 import { VERSION, GIT_REF } from '../../../shared/build-info'
 import ClickableLink from '../helpers/ClickableLink'
-import { useTranslationFunction } from '../../contexts'
 import { runtime } from '../../runtime'
 import { BackendRemote } from '../../backend-com'
+import { DialogBody, DialogContent, DialogWithHeader } from '../Dialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 const log = getLogger('renderer/dialogs/About')
 
@@ -61,8 +64,7 @@ export function DCInfo(_props: any) {
   )
 }
 
-export default function About(props: { isOpen: boolean; onClose: () => void }) {
-  const { isOpen, onClose } = props
+export default function About({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
 
   const desktopString = reactStringReplace(
@@ -94,15 +96,14 @@ export default function About(props: { isOpen: boolean; onClose: () => void }) {
   )
 
   return (
-    <DeltaDialog
-      isOpen={isOpen}
+    <DialogWithHeader
+      width={600}
+      height={500}
       title={tx('global_menu_help_about_desktop')}
       onClose={onClose}
     >
-      <DeltaDialogBody>
-        <div
-          style={{ background: 'var(--bp4DialogBgPrimary)', padding: '21px' }}
-        >
+      <DialogBody>
+        <DialogContent>
           <p
             style={{ color: 'grey', userSelect: 'all' }}
           >{`Version ${VERSION} (git: ${GIT_REF})`}</p>
@@ -113,9 +114,8 @@ export default function About(props: { isOpen: boolean; onClose: () => void }) {
             {versionString}
           </p>
           <DCInfo />
-        </div>
-      </DeltaDialogBody>
-      <DeltaDialogFooter />
-    </DeltaDialog>
+        </DialogContent>
+      </DialogBody>
+    </DialogWithHeader>
   )
 }

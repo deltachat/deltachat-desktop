@@ -6,6 +6,9 @@ import {
   createDraftMessage,
   selectChat,
 } from './ChatMethods'
+import AlertDialog from '../dialogs/AlertDialog'
+
+import type { OpenDialog } from '../../contexts/DialogContext'
 
 const log = getLogger('renderer/processMailtoUrl')
 
@@ -19,6 +22,7 @@ const log = getLogger('renderer/processMailtoUrl')
  * receiver.
  */
 export default async function processMailtoUrl(
+  openDialog: OpenDialog,
   url: string,
   callback: any = null
 ) {
@@ -35,11 +39,11 @@ export default async function processMailtoUrl(
     if (mailto.to) {
       // Attempt creating a new chat based on email address. This method might
       // return `null` when the user did _not_ confirm creating a new chat
-      const chatId = await createChatByEmail(mailto.to)
+      const chatId = await createChatByEmail(openDialog, mailto.to)
 
       if (chatId) {
         if (messageText) {
-          await createDraftMessage(chatId, messageText)
+          await createDraftMessage(openDialog, chatId, messageText)
         } else {
           selectChat(chatId)
         }
@@ -48,7 +52,7 @@ export default async function processMailtoUrl(
       if (messageText) {
         // Body but no email address was given in link, show a dialogue to
         // select a receiver
-        window.__openDialog(MailtoDialog, { messageText })
+        openDialog(MailtoDialog, { messageText })
       }
     }
 
@@ -56,7 +60,7 @@ export default async function processMailtoUrl(
   } catch (error) {
     log.error('mailto decoding error', error)
 
-    window.__openDialog('AlertDialog', {
+    openDialog(AlertDialog, {
       message: tx('mailto_link_could_not_be_decoded', url),
       cb: callback,
     })

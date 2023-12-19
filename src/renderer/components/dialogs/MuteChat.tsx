@@ -1,20 +1,20 @@
-import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
 import React from 'react'
+
 import { Timespans } from '../../../shared/constants'
 import { selectedAccountId } from '../../ScreenController'
 import { BackendRemote, Type } from '../../backend-com'
+import SmallSelectDialog, { SelectDialogOption } from '../SmallSelectDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
-export default function MuteChat({
-  isOpen,
-  onClose,
-  chatId,
-}: {
-  isOpen: boolean
-  onClose: () => void
+import type { DialogProps } from '../../contexts/DialogContext'
+
+type Props = {
   chatId: number
-}) {
+}
+
+export default function MuteChat({ onClose, chatId }: Props & DialogProps) {
   const accountId = selectedAccountId()
-  const tx = window.static_translate
+  const tx = useTranslationFunction()
 
   const MUTE_DURATIONS: [Type.MuteDuration, string][] = [
     [{ kind: 'NotMuted' }, tx('off')],
@@ -50,7 +50,6 @@ export default function MuteChat({
       title={tx('menu_mute')}
       values={MUTE_DURATION_OPTIONS}
       selectedValue={'0'} // first option selected by default which is "not muted"
-      isOpen={isOpen}
       onSave={onSave}
       onClose={onClose}
     />

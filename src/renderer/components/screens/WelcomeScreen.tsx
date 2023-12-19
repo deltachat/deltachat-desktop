@@ -1,28 +1,35 @@
-import { Classes, Card, Elevation, Intent } from '@blueprintjs/core'
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState } from 'react'
+import { DcEventType } from '@deltachat/jsonrpc-client'
+import { Intent } from '@blueprintjs/core'
+
 import { getLogger } from '../../../shared/logger'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { runtime } from '../../runtime'
-import DeltaDialog, {
-  DeltaDialogBase,
-  DeltaDialogBody,
-  DeltaDialogContent,
-  DeltaDialogHeader,
-} from '../dialogs/DeltaDialog'
 import { DeltaProgressBar } from '../Login-Styles'
-import { DialogProps } from '../dialogs/DialogController'
 import { Screens, selectedAccountId } from '../../ScreenController'
 import { BackendRemote, EffectfulBackendActions } from '../../backend-com'
 import processOpenQrUrl from '../helpers/OpenQrUrl'
-import { DcEventType } from '@deltachat/jsonrpc-client'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogHeader,
+  DialogWithHeader,
+} from '../Dialog'
+import { DialogProps } from '../../contexts/DialogContext'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
+import ImportQrCode from '../dialogs/ImportQrCode'
+import AlertDialog from '../dialogs/AlertDialog'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
+type Props = {
+  backupFile: string
+}
+
 function ImportBackupProgressDialog({
   onClose,
-  isOpen,
   backupFile,
-}: DialogProps) {
+}: Props & DialogProps) {
   const [importProgress, setImportProgress] = useState(0.0)
   const [error, setError] = useState<string | null>(null)
 
@@ -61,15 +68,9 @@ function ImportBackupProgressDialog({
 
   const tx = useTranslationFunction()
   return (
-    <DeltaDialog
-      onClose={onClose}
-      title={tx('import_backup_title')}
-      // canOutsideClickClose
-      isOpen={isOpen}
-      style={{ top: '40%' }}
-    >
-      <div className={Classes.DIALOG_BODY}>
-        <Card elevation={Elevation.ONE}>
+    <DialogWithHeader onClose={onClose} title={tx('import_backup_title')}>
+      <DialogBody>
+        <DialogContent>
           {error && (
             <p>
               {tx('error')}: {error}
@@ -79,14 +80,15 @@ function ImportBackupProgressDialog({
             progress={importProgress}
             intent={!error ? Intent.SUCCESS : Intent.DANGER}
           />
-        </Card>
-      </div>
-    </DeltaDialog>
+        </DialogContent>
+      </DialogBody>
+    </DialogWithHeader>
   )
 }
 
 const ImportButton = function ImportButton() {
   const tx = useTranslationFunction()
+  const { openDialog } = useDialog()
 
   async function onClickImportBackup() {
     const file = await runtime.showOpenFileDialog({
@@ -96,7 +98,7 @@ const ImportButton = function ImportButton() {
       defaultPath: runtime.getAppPath('downloads'),
     })
     if (file) {
-      window.__openDialog(ImportBackupProgressDialog, {
+      openDialog(ImportBackupProgressDialog, {
         backupFile: file,
       })
     }
@@ -118,11 +120,12 @@ export default function WelcomeScreen({
   selectedAccountId: number
 }) {
   const tx = useTranslationFunction()
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog, closeDialog } = useDialog()
+
   const onClickScanQr = () =>
-    openDialog('ImportQrCode', { subtitle: tx('qrscan_hint') })
+    openDialog(ImportQrCode, { subtitle: tx('qrscan_hint') })
   const onClickSecondDevice = () =>
-    openDialog('ImportQrCode', {
+    openDialog(ImportQrCode, {
       subtitle: tx('multidevice_open_settings_on_other_device'),
     })
   const [showBackButton, setShowBackButton] = useState(false)
@@ -136,11 +139,17 @@ export default function WelcomeScreen({
       if (window.__welcome_qr) {
         // this is the "callback" when opening dclogin or dcaccount from an already existing account,
         // the app needs to switch to the welcome screen first.
-        await processOpenQrUrl(window.__welcome_qr, undefined, true)
+        await processOpenQrUrl(
+          openDialog,
+          closeDialog,
+          window.__welcome_qr,
+          undefined,
+          true
+        )
         window.__welcome_qr = undefined
       }
     })()
-  }, [])
+  }, [openDialog, closeDialog])
 
   const onCancel = async () => {
     try {
@@ -152,7 +161,7 @@ export default function WelcomeScreen({
       window.__changeScreen(Screens.AccountList)
     } catch (error) {
       if (error instanceof Error) {
-        window.__openDialog('AlertDialog', {
+        openDialog(AlertDialog, {
           message: error?.message,
           cb: () => {},
         })
@@ -166,50 +175,44 @@ export default function WelcomeScreen({
   return (
     <div className='login-screen'>
       <div className='window'>
-        <DeltaDialogBase
-          isOpen={true}
+        <Dialog
           backdropProps={{ className: 'no-backdrop' }}
-          onClose={() => {}}
-          fixed={true}
           canEscapeKeyClose={true}
+          fixed={true}
+          onClose={() => {}}
+          width={400}
         >
-          <>
-            <DeltaDialogHeader
-              showBackButton={showBackButton}
-              onClickBack={onCancel}
-              title={tx('add_account')}
-            />
-            <DeltaDialogBody id='welcome-dialog-body'>
-              <DeltaDialogContent id='welcome-dialog-content'>
-                <div className='welcome-deltachat'>
-                  <img className='delta-icon' src='../images/intro1.png' />
-                  <p className='f1'>{tx('welcome_chat_over_email')}</p>
-                  {/* <p className='f2'>{tx('welcome_intro1_message')}</p> */}
-                  <button
-                    id='action-login-to-email'
-                    className='delta-button-round'
-                    onClick={() => window.__changeScreen(Screens.Login)}
-                  >
-                    {tx('login_header')}
-                  </button>
-                  <button
-                    className='delta-button-round secondary'
-                    onClick={onClickSecondDevice}
-                  >
-                    {tx('multidevice_receiver_title')}
-                  </button>
-                  <button
-                    className='delta-button-round secondary'
-                    onClick={onClickScanQr}
-                  >
-                    {tx('scan_invitation_code')}
-                  </button>
-                  <ImportButton />
-                </div>
-              </DeltaDialogContent>
-            </DeltaDialogBody>
-          </>
-        </DeltaDialogBase>
+          <DialogHeader
+            onClickBack={showBackButton ? onCancel : undefined}
+            title={tx('add_account')}
+          />
+          <DialogBody>
+            <div className='welcome-deltachat'>
+              <img className='delta-icon' src='../images/intro1.png' />
+              <p className='f1'>{tx('welcome_chat_over_email')}</p>
+              <button
+                id='action-login-to-email'
+                className='delta-button-round'
+                onClick={() => window.__changeScreen(Screens.Login)}
+              >
+                {tx('login_header')}
+              </button>
+              <button
+                className='delta-button-round secondary'
+                onClick={onClickSecondDevice}
+              >
+                {tx('multidevice_receiver_title')}
+              </button>
+              <button
+                className='delta-button-round secondary'
+                onClick={onClickScanQr}
+              >
+                {tx('scan_invitation_code')}
+              </button>
+              <ImportButton />
+            </div>
+          </DialogBody>
+        </Dialog>
       </div>
     </div>
   )

@@ -1,38 +1,46 @@
 import React from 'react'
-import { Classes } from '@blueprintjs/core'
-import {
-  DeltaDialogBase,
-  DeltaDialogFooter,
-  DeltaDialogFooterActions,
-  DeltaDialogHeader,
-} from './DeltaDialog'
+import { C } from '@deltachat/jsonrpc-client'
+import AutoSizer from 'react-virtualized-auto-sizer'
+
 import ChatListItem from '../chat/ChatListItem'
 import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
-import classNames from 'classnames'
-import { DialogProps } from './DialogController'
-
-import { C } from '@deltachat/jsonrpc-client'
 import { ChatListPart, useLogicVirtualChatList } from '../chat/ChatList'
-import AutoSizer from 'react-virtualized-auto-sizer'
 import { useChatList } from '../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../ThemeManager'
 import { selectChat } from '../helpers/ChatMethods'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { runtime } from '../../runtime'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  FooterActionButton,
+  FooterActions,
+} from '../Dialog'
+import ConfirmationDialog from './ConfirmationDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
 
-export default function WebxdcSaveToChatDialog(props: {
-  messageText: string | null
-  file: { file_name: string; file_content: string } | null
-  onClose: DialogProps['onClose']
-}) {
-  const tx = window.static_translate
+import type { DialogProps, OpenDialog } from '../../contexts/DialogContext'
+
+const LIST_FLAGS = C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS
+
+export default function WebxdcSaveToChatDialog(
+  props: {
+    messageText: string | null
+    file: { file_name: string; file_content: string } | null
+  } & DialogProps
+) {
   const { onClose, messageText, file } = props
-  const listFlags = C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS
-  const { chatListIds, queryStr, setQueryStr } = useChatList(listFlags)
+
+  const tx = useTranslationFunction()
+  const { openDialog } = useDialog()
+  const { chatListIds, queryStr, setQueryStr } = useChatList(LIST_FLAGS)
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
     chatListIds,
-    listFlags
+    LIST_FLAGS
   )
 
   const onChatClick = async (chatId: number) => {
@@ -43,7 +51,7 @@ export default function WebxdcSaveToChatDialog(props: {
         file.file_content
       )
     }
-    await sendToChatAction(chatId, messageText, path)
+    await sendToChatAction(openDialog, chatId, messageText, path)
     if (path) {
       await runtime.removeTempFile(path)
     }
@@ -74,70 +82,72 @@ export default function WebxdcSaveToChatDialog(props: {
 
   const noResults = chatListIds.length === 0 && queryStr !== ''
   return (
-    <DeltaDialogBase isOpen={true} onClose={onClose} fixed>
-      <DeltaDialogHeader onClose={onClose} title={title} />
-      <div
-        className={classNames(
-          Classes.DIALOG_BODY,
-          'bp4-dialog-body-no-footer',
-          'webxdc-send-to-chat-dialog'
-        )}
-      >
-        <div className='select-chat-chat-list'>
-          <input
-            className='search-input'
-            onChange={onSearchChange}
-            value={queryStr}
-            placeholder={tx('contacts_enter_name_or_email')}
-            autoFocus
-            spellCheck={false}
-          />
-          {noResults && queryStr && (
-            <PseudoListItemNoSearchResults queryStr={queryStr} />
-          )}
-          <div style={noResults ? { height: '0px' } : {}} className='results'>
-            <AutoSizer>
-              {({ width, height }) => (
-                <ChatListPart
-                  isRowLoaded={isChatLoaded}
-                  loadMoreRows={loadChats}
-                  rowCount={chatListIds.length}
-                  width={width}
-                  height={height}
-                  itemKey={index => 'key' + chatListIds[index]}
-                  itemHeight={CHATLISTITEM_CHAT_HEIGHT}
-                >
-                  {({ index, style }) => {
-                    const chatId = chatListIds[index]
-                    return (
-                      <div style={style}>
-                        <ChatListItem
-                          chatListItem={chatCache[chatId] || undefined}
-                          onClick={onChatClick.bind(null, chatId)}
-                        />
-                      </div>
-                    )
-                  }}
-                </ChatListPart>
+    <Dialog onClose={onClose} fixed>
+      <DialogHeader onClose={onClose} title={title} />
+      <DialogBody>
+        <div className='webxdc-send-to-chat-dialog'>
+          <DialogContent>
+            <div className='select-chat-chat-list'>
+              <input
+                className='search-input'
+                onChange={onSearchChange}
+                value={queryStr}
+                placeholder={tx('contacts_enter_name_or_email')}
+                autoFocus
+                spellCheck={false}
+              />
+              {noResults && queryStr && (
+                <PseudoListItemNoSearchResults queryStr={queryStr} />
               )}
-            </AutoSizer>
-          </div>
+              <div
+                style={noResults ? { height: '0px' } : {}}
+                className='results'
+              >
+                <AutoSizer>
+                  {({ width, height }) => (
+                    <ChatListPart
+                      isRowLoaded={isChatLoaded}
+                      loadMoreRows={loadChats}
+                      rowCount={chatListIds.length}
+                      width={width}
+                      height={height}
+                      itemKey={index => 'key' + chatListIds[index]}
+                      itemHeight={CHATLISTITEM_CHAT_HEIGHT}
+                    >
+                      {({ index, style }) => {
+                        const chatId = chatListIds[index]
+                        return (
+                          <div style={style}>
+                            <ChatListItem
+                              chatListItem={chatCache[chatId] || undefined}
+                              onClick={onChatClick.bind(null, chatId)}
+                            />
+                          </div>
+                        )
+                      }}
+                    </ChatListPart>
+                  )}
+                </AutoSizer>
+              </div>
+            </div>
+          </DialogContent>
         </div>
-      </div>
-      <DeltaDialogFooter>
-        <DeltaDialogFooterActions style={{ justifyContent: 'start' }}>
+      </DialogBody>
+      <DialogFooter>
+        <FooterActions align='start'>
           {file && (
-            <p className={'delta-button bold primary'} onClick={onSaveClick}>
+            <FooterActionButton onClick={onSaveClick}>
               {tx('save_as')}
-            </p>
+            </FooterActionButton>
           )}
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
-    </DeltaDialogBase>
+        </FooterActions>
+      </DialogFooter>
+    </Dialog>
   )
 }
 
 async function sendToChatAction(
+  openDialog: OpenDialog,
   chatId: number,
   messageText: string | null,
   file: string | null
@@ -152,7 +162,7 @@ async function sendToChatAction(
   if (draft) {
     // ask if the draft should be replaced
     const continue_process = await new Promise((resolve, _reject) => {
-      window.__openDialog('ConfirmationDialog', {
+      openDialog(ConfirmationDialog, {
         message: window.static_translate('confirm_replace_draft', chat.name),
         confirmLabel: window.static_translate('replace_draft'),
         cb: resolve,

@@ -29,3 +29,7 @@ export const enum AutodeleteDuration {
 }
 
 export const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'apng', 'gif']
+
+// Videochat Server URLs
+export const VIDEO_CHAT_INSTANCE_SYSTEMLI = 'https://meet.systemli.org/$ROOM'
+export const VIDEO_CHAT_INSTANCE_AUTISTICI = 'https://vc.autistici.org/$ROOM'

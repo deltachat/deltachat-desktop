@@ -1,16 +1,12 @@
 import React from 'react'
-import { Component, createRef } from 'react'
+import { Component } from 'react'
+import { DcEventType } from '@deltachat/jsonrpc-client'
+import { debounce } from 'debounce'
 
-import { ScreenContext } from './contexts'
 import MainScreen from './components/screens/MainScreen'
-import DialogController, {
-  OpenDialogFunctionType,
-  CloseDialogFunctionType,
-} from './components/dialogs/DialogController'
 import processOpenQrUrl from './components/helpers/OpenQrUrl'
-
 import { getLogger } from '../shared/logger'
-import { ContextMenuLayer, showFnType } from './components/ContextMenu'
+import { ContextMenuLayer, OpenContextMenu } from './components/ContextMenu'
 import { ActionEmitter, KeybindAction } from './keybindings'
 import AccountSetupScreen from './components/screens/AccountSetupScreen'
 import AccountListScreen from './components/screens/AccountListScreen'
@@ -19,10 +15,12 @@ import { BackendRemote } from './backend-com'
 import { debouncedUpdateBadgeCounter } from './system-integration/badge-counter'
 import { updateDeviceChats } from './deviceMessages'
 import { runtime } from './runtime'
-import { DcEventType } from '@deltachat/jsonrpc-client'
 import WebxdcSaveToChatDialog from './components/dialogs/WebxdcSendToChatDialog'
 import { updateTimestamps } from './components/conversations/Timestamp'
-import { debounce } from 'debounce'
+import { ScreenContext } from './contexts/ScreenContext'
+import { DialogContext, DialogContextProvider } from './contexts/DialogContext'
+import About from './components/dialogs/About'
+import { KeybindingsContextProvider } from './contexts/KeybindingsContext'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -40,14 +38,13 @@ export enum Screens {
 }
 
 export default class ScreenController extends Component {
-  dialogController: React.RefObject<DialogController>
-  contextMenuShowFn: showFnType | null = null
+  contextMenuShowFn: OpenContextMenu | null = null
   state: { message: userFeedback | false; screen: Screens }
   onShowAbout: any
   onShowKeybindings: any
   onShowSettings: any
   selectedAccountId: number | undefined
-  openSendToDialogId?: number
+  openSendToDialogId?: string
 
   constructor(public props: {}) {
     super(props)
@@ -61,19 +58,13 @@ export default class ScreenController extends Component {
     this.userFeedback = this.userFeedback.bind(this)
     this.userFeedbackClick = this.userFeedbackClick.bind(this)
     this.openContextMenu = this.openContextMenu.bind(this)
-    this.openDialog = this.openDialog.bind(this)
     this.changeScreen = this.changeScreen.bind(this)
-    this.closeDialog = this.closeDialog.bind(this)
     this.onShowAbout = this.showAbout.bind(this)
     this.onShowKeybindings = this.showKeyBindings.bind(this)
     this.onShowSettings = this.showSettings.bind(this)
-    this.dialogController = createRef()
     this.selectAccount = this.selectAccount.bind(this)
 
-    window.__openDialog = this.openDialog.bind(this)
     window.__userFeedback = this.userFeedback.bind(this)
-    window.__closeDialog = this.closeDialog.bind(this)
-    window.__hasOpenDialogs = this.hasOpenDialogs.bind(this)
     window.__changeScreen = this.changeScreen.bind(this)
     window.__selectAccount = this.selectAccount.bind(this)
     window.__screen = this.state.screen
@@ -165,13 +156,17 @@ export default class ScreenController extends Component {
       }
     }
 
-    runtime.onOpenQrUrl = processOpenQrUrl
+    runtime.onOpenQrUrl = (url: string) => {
+      processOpenQrUrl(this.context.openDialog, this.context.closeDialog, url)
+    }
+
     runtime.onWebxdcSendToChat = (file, text) => {
       if (this.openSendToDialogId) {
-        this.closeDialog(this.openSendToDialogId)
+        this.context.closeDialog(this.openSendToDialogId)
         this.openSendToDialogId = undefined
       }
-      this.openSendToDialogId = (this.openDialog as OpenDialogFunctionType)(
+
+      this.openSendToDialogId = this.context.openDialog(
         WebxdcSaveToChatDialog,
         {
           messageText: text,
@@ -179,6 +174,7 @@ export default class ScreenController extends Component {
         }
       )
     }
+
     runtime.onResumeFromSleep = debounce(() => {
       log.info('onResumeFromSleep')
       // update timestamps
@@ -211,7 +207,7 @@ export default class ScreenController extends Component {
   }
 
   showAbout() {
-    this.openDialog('About')
+    this.context.openDialog(About)
   }
 
   showSettings() {
@@ -222,32 +218,13 @@ export default class ScreenController extends Component {
     ActionEmitter.emitAction(KeybindAction.KeybindingCheatSheet_Open)
   }
 
-  hasOpenDialogs() {
-    if (!this.dialogController.current) {
-      throw new Error('dialog controller not ready')
-    }
-    return this.dialogController.current.hasOpenDialogs()
-  }
-
-  openDialog(...args: Parameters<OpenDialogFunctionType>) {
-    if (!this.dialogController.current) {
-      throw new Error('dialog controller not ready')
-    }
-    return this.dialogController.current.openDialog(...args)
-  }
-
-  closeDialog(...args: Parameters<CloseDialogFunctionType>) {
-    if (!this.dialogController.current) {
-      throw new Error('dialog controller not ready')
-    }
-    this.dialogController.current?.closeDialog(...args)
-  }
-
-  /** shows a context menu
+  /**
+   * Shows a context menu.
+   *
    * @returns a promise with no return value that gets resolved when the context menu disapears again
    * regardless what action the user took or if they canceled the dialog
    */
-  openContextMenu(...args: Parameters<showFnType>): Promise<void> {
+  openContextMenu(...args: Parameters<OpenContextMenu>): Promise<void> {
     if (!this.contextMenuShowFn) {
       throw new Error('Context Menu Controller not available')
     }
@@ -308,24 +285,24 @@ export default class ScreenController extends Component {
         )}
         <ScreenContext.Provider
           value={{
-            openDialog: this.openDialog,
             openContextMenu: this.openContextMenu,
-            closeDialog: this.closeDialog,
             userFeedback: this.userFeedback,
             changeScreen: this.changeScreen,
             screen: this.state.screen,
           }}
         >
-          {this.renderScreen()}
-          <DialogController
-            ref={this.dialogController}
-            userFeedback={this.userFeedback}
-          />
+          <DialogContextProvider>
+            <KeybindingsContextProvider>
+              {this.renderScreen()}
+            </KeybindingsContextProvider>
+          </DialogContextProvider>
         </ScreenContext.Provider>
       </div>
     )
   }
 }
+
+ScreenController.contextType = DialogContext
 
 export function selectedAccountId(): number {
   const selectedAccountId = window.__selectedAccountId

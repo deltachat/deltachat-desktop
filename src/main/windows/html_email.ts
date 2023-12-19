@@ -106,13 +106,6 @@ export function openHtmlEmailWindow(
     async () => (await loadTheme(DesktopSettings.state.activeTheme)).data
   )
 
-  window.loadFile(
-    join(
-      htmlDistDir(),
-      'electron_html_email_view/electron_html_email_view.html'
-    )
-  )
-
   window.webContents.on('will-navigate', (e: electron.Event, _url: string) => {
     // Prevent drag-and-drop from navigating the Electron window, which can happen
     // before our drag-and-drop handlers have been initialized.
@@ -280,6 +273,13 @@ export function openHtmlEmailWindow(
   }
 
   window.webContents.ipc.handle('html-view:change-network', update_restrictions)
+
+  window.loadFile(
+    join(
+      htmlDistDir(),
+      'electron_html_email_view/electron_html_email_view.html'
+    )
+  )
 
   // for debugging wrapper
   // window.webContents.openDevTools({ mode: 'detach' })

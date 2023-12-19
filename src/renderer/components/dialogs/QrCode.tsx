@@ -5,36 +5,46 @@ import React, {
   useEffect,
   useLayoutEffect,
 } from 'react'
-import {
-  DeltaDialogBase,
-  DeltaDialogFooter,
-  DeltaDialogFooterActions,
-  DeltaDialogBody,
-  DeltaDialogContent,
-} from './DeltaDialog'
-import { DialogProps } from './DialogController'
-import { useTranslationFunction, ScreenContext } from '../../contexts'
 import classNames from 'classnames'
 import QrReader from '@deltachat/react-qr-reader'
+
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  FooterActions,
+} from '../Dialog'
+import FooterActionButton from '../Dialog/FooterActionButton'
 import processOpenQrUrl from '../helpers/OpenQrUrl'
+import { BackendRemote } from '../../backend-com'
 import { getLogger } from '../../../shared/logger'
-import { useContextMenu } from '../ContextMenu'
 import { runtime } from '../../runtime'
 import { selectChat } from '../helpers/ChatMethods'
-import { BackendRemote } from '../../backend-com'
+import { useContextMenu } from '../ContextMenu'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { ScreenContext } from '../../contexts/ScreenContext'
+import useDialog from '../../hooks/useDialog'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 const log = getLogger('renderer/dialogs/QrCode')
 
+type Props = {
+  selectScan?: true
+  qrCodeSVG: string
+  qrCode: string
+}
+
 export default function QrCode({
-  isOpen,
-  onClose,
   qrCodeSVG,
   qrCode,
   selectScan,
-}: { selectScan?: true; qrCodeSVG: string; qrCode: string } & DialogProps) {
+  onClose,
+}: Props & DialogProps) {
+  const tx = useTranslationFunction()
   const [showQrCode, setShowQrCode] = useState(!selectScan)
-
   const [addr, setAddr] = useState('')
+
   useEffect(() => {
     if (window.__selectedAccountId) {
       BackendRemote.rpc
@@ -43,10 +53,8 @@ export default function QrCode({
     }
   }, [])
 
-  const tx = useTranslationFunction()
-
   return (
-    <DeltaDialogBase isOpen={isOpen} onClose={onClose}>
+    <Dialog onClose={onClose}>
       <div className='qr-code-switch'>
         <p
           className={classNames({ active: showQrCode })}
@@ -72,7 +80,7 @@ export default function QrCode({
       {!showQrCode && (
         <QrCodeScanQrInner subtitle={tx('qrscan_hint')} onClose={onClose} />
       )}
-    </DeltaDialogBase>
+    </Dialog>
   )
 }
 
@@ -151,8 +159,8 @@ export function QrCodeShowQrInner({
 
   return (
     <>
-      <DeltaDialogBody>
-        <DeltaDialogContent noOverflow noPadding style={{ height: '500px' }}>
+      <DialogBody>
+        <DialogContent>
           {svgUrl && (
             <img
               style={{
@@ -165,25 +173,25 @@ export function QrCodeShowQrInner({
               onContextMenu={imageContextMenu}
             />
           )}
-        </DeltaDialogContent>
-      </DeltaDialogBody>
-      <DeltaDialogFooter>
-        <DeltaDialogFooterActions style={{ justifyContent: 'space-between' }}>
-          <p className={'delta-button bold primary'} onClick={onCopy}>
+        </DialogContent>
+      </DialogBody>
+      <DialogFooter>
+        <FooterActions align={!onClose && !onBack ? 'center' : 'spaceBetween'}>
+          <FooterActionButton onClick={onCopy}>
             {tx('global_menu_edit_copy_desktop')}
-          </p>
+          </FooterActionButton>
           {onClose && (
-            <p className={'delta-button bold primary'} onClick={onClose}>
+            <FooterActionButton onClick={onClose}>
               {tx('close')}
-            </p>
+            </FooterActionButton>
           )}
           {onBack && (
-            <p className={'delta-button bold primary'} onClick={onBack}>
+            <FooterActionButton onClick={onBack}>
               {tx('back')}
-            </p>
+            </FooterActionButton>
           )}
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
+        </FooterActions>
+      </DialogFooter>
     </>
   )
 }
@@ -194,8 +202,8 @@ export function QrCodeScanQrInner(
     onClose: () => void
   }>
 ) {
-  const tx = window.static_translate
-
+  const tx = useTranslationFunction()
+  const { openDialog, closeDialog } = useDialog()
   const processingQrCode = useRef(false)
 
   const onDone = () => {
@@ -214,7 +222,7 @@ export function QrCodeScanQrInner(
     if (data && processingQrCode.current === false) {
       processingQrCode.current = true
       try {
-        await processOpenQrUrl(data, handleScanResult)
+        await processOpenQrUrl(openDialog, closeDialog, data, handleScanResult)
       } catch (err) {
         processingQrCode.current = false
         throw err
@@ -262,45 +270,43 @@ export function QrCodeScanQrInner(
 
   return (
     <>
-      <DeltaDialogBody>
-        <DeltaDialogContent noPadding>
-          <div className='import-qr-code-dialog'>
-            <div style={{ marginBottom: '-19px' }}>
-              <div>
-                <QrReader
-                  delay={300}
-                  onError={handleError}
-                  onScan={handleScan}
-                  style={{ width: '100%' }}
-                  facingMode='user'
-                />
-              </div>
-            </div>
-            <div className='qr-image-loader'>
+      <DialogBody>
+        <div className='import-qr-code-dialog'>
+          <div style={{ marginBottom: '-19px' }}>
+            <div>
               <QrReader
                 delay={300}
-                ref={qrImageReader}
                 onError={handleError}
                 onScan={handleScan}
                 style={{ width: '100%' }}
-                legacyMode
+                facingMode='user'
               />
             </div>
-            <div className='scan-qr-red-line' />
-            <p className='scan-qr-description'>{props.subtitle}</p>
           </div>
-        </DeltaDialogContent>
-      </DeltaDialogBody>
-      <DeltaDialogFooter>
-        <DeltaDialogFooterActions style={{ justifyContent: 'space-between' }}>
-          <p className={'delta-button bold primary'} onClick={openMenu}>
+          <div className='qr-image-loader'>
+            <QrReader
+              delay={300}
+              ref={qrImageReader}
+              onError={handleError}
+              onScan={handleScan}
+              style={{ width: '100%' }}
+              legacyMode
+            />
+          </div>
+          <div className='scan-qr-red-line' />
+          <p className='scan-qr-description'>{props.subtitle}</p>
+        </div>
+      </DialogBody>
+      <DialogFooter>
+        <FooterActions align='spaceBetween'>
+          <FooterActionButton onClick={openMenu}>
             {tx('menu_more_options')}
-          </p>
-          <p className={'delta-button bold primary'} onClick={props.onClose}>
+          </FooterActionButton>
+          <FooterActionButton onClick={props.onClose}>
             {tx('close')}
-          </p>
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
+          </FooterActionButton>
+        </FooterActions>
+      </DialogFooter>
     </>
   )
 }
