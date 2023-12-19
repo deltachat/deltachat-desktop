@@ -16,7 +16,6 @@ import ChatList from '../chat/ChatList'
 import MessageListAndComposer, {
   getBackgroundImageStyle,
 } from '../message/MessageListAndComposer'
-import SearchInput from '../SearchInput'
 import {
   useChatStore,
   ChatStoreStateWithChatSet,
@@ -39,6 +38,7 @@ import Sidebar, { SidebarState } from '../Sidebar'
 import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 import { Type } from '../../backend-com'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
+import SearchInput from '../SearchInput'
 import EditProfileDialog from '../dialogs/EditProfileDialog'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
 import { KeybindAction } from '../../keybindings'
@@ -247,7 +247,6 @@ export default function MainScreen() {
                 id='chat-list-search'
                 onChange={handleSearchChange}
                 value={queryStr}
-                className='icon-rotated'
                 inputRef={searchRef}
                 extraCleanAction={
                   queryChatId ? () => setQueryChatId(null) : undefined
