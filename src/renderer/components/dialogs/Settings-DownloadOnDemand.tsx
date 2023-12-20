@@ -1,17 +1,18 @@
-import React, { useContext } from 'react'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
+import React from 'react'
+import { filesize } from 'filesize'
+
 import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
 import { SettingsSelector } from './Settings'
-
-import { filesize } from 'filesize'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
 
 export default function SettingsDownloadOnDemand(props: {
   settings: SettingsStoreState['settings']
 }) {
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const { settings } = props
   const tx = useTranslationFunction()
 

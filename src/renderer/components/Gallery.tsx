@@ -1,5 +1,8 @@
 import React, { ChangeEvent, Component, createRef } from 'react'
-import { ScreenContext } from '../contexts'
+import AutoSizer from 'react-virtualized-auto-sizer'
+import { FixedSizeGrid, FixedSizeList } from 'react-window'
+import moment from 'moment'
+
 import {
   AudioAttachment,
   FileAttachmentRow,
@@ -11,13 +14,11 @@ import {
 import { getLogger } from '../../shared/logger'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
-import AutoSizer from 'react-virtualized-auto-sizer'
-import { FixedSizeGrid, FixedSizeList } from 'react-window'
 import SettingsStoreInstance, { SettingsStoreState } from '../stores/settings'
-import moment from 'moment'
 import FullscreenMedia, {
   NeighboringMediaMode,
 } from './dialogs/FullscreenMedia'
+import { DialogContext } from '../contexts/DialogContext'
 
 const log = getLogger('renderer/Gallery')
 
@@ -57,10 +58,10 @@ const MediaTabs: Readonly<{
   },
 }
 
-type mediaProps = { chatId: number | 'all' }
+type Props = { chatId: number | 'all' }
 
 export default class Gallery extends Component<
-  mediaProps,
+  Props,
   {
     currentTab: MediaTabKey
     msgTypes: Type.Viewtype[]
@@ -73,8 +74,9 @@ export default class Gallery extends Component<
   }
 > {
   dateHeader = createRef<HTMLDivElement>()
-  constructor(props: mediaProps) {
+  constructor(props: Props) {
     super(props)
+
     this.state = {
       currentTab: 'images',
       msgTypes: MediaTabs.images.values,
@@ -124,7 +126,7 @@ export default class Gallery extends Component<
     }
   }
 
-  componentDidUpdate(prevProps: mediaProps) {
+  componentDidUpdate(prevProps: Props) {
     if (this.props.chatId !== prevProps.chatId) {
       // reset
       this.reset()
@@ -194,7 +196,7 @@ export default class Gallery extends Component<
   }
 
   openFullscreenMedia(message: Type.Message) {
-    window.__openDialog(FullscreenMedia, {
+    this.context.openDialog(FullscreenMedia, {
       msg: message,
       neighboringMedia:
         this.props.chatId === 'all'
@@ -397,7 +399,7 @@ export default class Gallery extends Component<
   }
 }
 
-Gallery.contextType = ScreenContext
+Gallery.contextType = DialogContext
 
 function FileTable({
   width,

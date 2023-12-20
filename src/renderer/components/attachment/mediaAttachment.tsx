@@ -1,10 +1,11 @@
 import React, { useContext } from 'react'
+import { filesize } from 'filesize'
+
 import {
   openAttachmentInShell,
   onDownload,
   openWebxdc,
 } from '../message/messageFunctions'
-import { ScreenContext, unwrapContext } from '../../contexts'
 import {
   isImage,
   isVideo,
@@ -13,17 +14,20 @@ import {
   dragAttachmentOut,
 } from './Attachment'
 import Timestamp from '../conversations/Timestamp'
-import { makeContextMenu } from '../ContextMenu'
-import { OpenDialogFunctionType } from '../dialogs/DialogController'
+import { makeContextMenu, OpenContextMenu } from '../ContextMenu'
 import { runtime } from '../../runtime'
-
-import { filesize } from 'filesize'
 import { deleteMessage, jumpToMessage } from '../helpers/ChatMethods'
 import { getLogger } from '../../../shared/logger'
 import { truncateText } from '../../../shared/util'
 import { Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
+import { ScreenContext } from '../../contexts/ScreenContext'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { OpenDialog } from '../../contexts/DialogContext'
+import MessageDetail from '../dialogs/MessageDetail'
 
 const log = getLogger('mediaAttachment')
 
@@ -36,10 +40,7 @@ const hideOpenInShellTypes: Type.Viewtype[] = [
   'Webxdc',
 ]
 
-const contextMenuFactory = (
-  message: Type.Message,
-  openDialog: OpenDialogFunctionType
-) => {
+const contextMenuFactory = (message: Type.Message, openDialog: OpenDialog) => {
   const showCopyImage = message.viewType === 'Image'
   const tx = window.static_translate
   const { id: msgId, viewType } = message
@@ -68,7 +69,9 @@ const contextMenuFactory = (
     },
     {
       label: tx('menu_message_details'),
-      action: openDialog.bind(null, 'MessageDetail', { id: msgId }),
+      action: () => {
+        openDialog(MessageDetail, { id: msgId })
+      },
     },
     {
       label: tx('delete'),
@@ -82,9 +85,10 @@ const contextMenuFactory = (
   ]
 }
 
-/** provides a quick link to comonly used functions to save a few duplicated lines  */
+/** provides a quick link to commonly used functions to save a few duplicated lines  */
 const getMediaActions = (
-  { openDialog, openContextMenu }: unwrapContext<typeof ScreenContext>,
+  openContextMenu: OpenContextMenu,
+  openDialog: OpenDialog,
   message: Type.Message
 ) => {
   return {
@@ -98,7 +102,8 @@ const getMediaActions = (
 }
 
 function getBrokenMediaContextMenu(
-  { openContextMenu, openDialog }: unwrapContext<typeof ScreenContext>,
+  openContextMenu: OpenContextMenu,
+  openDialog: OpenDialog,
   msgId: number
 ) {
   const tx = window.static_translate
@@ -145,10 +150,16 @@ export function ImageAttachment({
   openFullscreenMedia: (message: Type.Message) => void
 }) {
   const screenContext = useContext(ScreenContext)
-  const tx = window.static_translate
+  const { openDialog } = useDialog()
+  const tx = useTranslationFunction()
 
   if (load_result.kind === 'loadingError') {
-    const onContextMenu = getBrokenMediaContextMenu(screenContext, msgId)
+    const onContextMenu = getBrokenMediaContextMenu(
+      screenContext.openContextMenu,
+      openDialog,
+      msgId
+    )
+
     return (
       <div
         className={'media-attachment-media broken'}
@@ -163,7 +174,8 @@ export function ImageAttachment({
   } else {
     const message = load_result
     const { openContextMenu, openInShell } = getMediaActions(
-      screenContext,
+      screenContext.openContextMenu,
+      openDialog,
       message
     )
     const { file, fileMime } = message
@@ -200,10 +212,16 @@ export function VideoAttachment({
   openFullscreenMedia: (message: Type.Message) => void
 }) {
   const screenContext = useContext(ScreenContext)
-  const tx = window.static_translate
+  const { openDialog } = useDialog()
+  const tx = useTranslationFunction()
 
   if (load_result.kind === 'loadingError') {
-    const onContextMenu = getBrokenMediaContextMenu(screenContext, msgId)
+    const onContextMenu = getBrokenMediaContextMenu(
+      screenContext.openContextMenu,
+      openDialog,
+      msgId
+    )
+
     return (
       <div
         className={'media-attachment-media broken'}
@@ -217,11 +235,11 @@ export function VideoAttachment({
     )
   } else {
     const message = load_result
-    const {
-      openContextMenu,
-
-      openInShell,
-    } = getMediaActions(screenContext, message)
+    const { openContextMenu, openInShell } = getMediaActions(
+      screenContext.openContextMenu,
+      openDialog,
+      message
+    )
     const { file, fileMime } = message
     const hasSupportedFormat = isVideo(fileMime)
     const isBroken = !file || !hasSupportedFormat
@@ -257,10 +275,15 @@ export function AudioAttachment({
   load_result,
 }: GalleryAttachmentElementProps) {
   const screenContext = useContext(ScreenContext)
-  const tx = window.static_translate
+  const { openDialog } = useDialog()
+  const tx = useTranslationFunction()
 
   if (load_result.kind === 'loadingError') {
-    const onContextMenu = getBrokenMediaContextMenu(screenContext, msgId)
+    const onContextMenu = getBrokenMediaContextMenu(
+      screenContext.openContextMenu,
+      openDialog,
+      msgId
+    )
     return (
       <div
         className={'media-attachment-audio broken'}
@@ -278,7 +301,11 @@ export function AudioAttachment({
     )
   } else {
     const message = load_result
-    const { openContextMenu } = getMediaActions(screenContext, message)
+    const { openContextMenu } = getMediaActions(
+      screenContext.openContextMenu,
+      openDialog,
+      message
+    )
     const { file, fileMime } = message
     const hasSupportedFormat = isAudio(fileMime)
     const isBroken = !file || !hasSupportedFormat
@@ -322,10 +349,16 @@ export function FileAttachmentRow({
   queryText,
 }: GalleryAttachmentElementProps & { queryText?: string }) {
   const screenContext = useContext(ScreenContext)
-  const tx = window.static_translate
+  const { openDialog } = useDialog()
+  const tx = useTranslationFunction()
 
   if (load_result.kind === 'loadingError') {
-    const onContextMenu = getBrokenMediaContextMenu(screenContext, msgId)
+    const onContextMenu = getBrokenMediaContextMenu(
+      screenContext.openContextMenu,
+      openDialog,
+      msgId
+    )
+
     return (
       <div
         className={'media-attachment-generic broken'}
@@ -344,7 +377,8 @@ export function FileAttachmentRow({
   } else {
     const message = load_result
     const { openContextMenu, openInShell } = getMediaActions(
-      screenContext,
+      screenContext.openContextMenu,
+      openDialog,
       message
     )
     const { fileName, fileBytes, fileMime, file, timestamp } = message
@@ -418,10 +452,16 @@ export function WebxdcAttachment({
   load_result,
 }: GalleryAttachmentElementProps) {
   const screenContext = useContext(ScreenContext)
-  const tx = window.static_translate
+  const { openDialog } = useDialog()
+  const tx = useTranslationFunction()
 
   if (load_result.kind === 'loadingError') {
-    const onContextMenu = getBrokenMediaContextMenu(screenContext, msgId)
+    const onContextMenu = getBrokenMediaContextMenu(
+      screenContext.openContextMenu,
+      openDialog,
+      msgId
+    )
+
     return (
       <div
         className={'media-attachment-webxdc broken'}
@@ -436,7 +476,11 @@ export function WebxdcAttachment({
       </div>
     )
   } else if (load_result.webxdcInfo == null) {
-    const onContextMenu = getBrokenMediaContextMenu(screenContext, msgId)
+    const onContextMenu = getBrokenMediaContextMenu(
+      screenContext.openContextMenu,
+      openDialog,
+      msgId
+    )
     // webxdc info is not set, show different error
     log.error('message.webxdcInfo is undefined, msgid:', msgId)
     return (
@@ -458,7 +502,11 @@ export function WebxdcAttachment({
       </div>
     )
   } else {
-    const { openContextMenu } = getMediaActions(screenContext, load_result)
+    const { openContextMenu } = getMediaActions(
+      screenContext.openContextMenu,
+      openDialog,
+      load_result
+    )
     const { summary, name, document } = load_result.webxdcInfo
     return (
       <div

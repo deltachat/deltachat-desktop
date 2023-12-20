@@ -1,35 +1,30 @@
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useState } from 'react'
 import { Card, Elevation } from '@blueprintjs/core'
 import React from 'react'
+
 import LoginForm, {
   ConfigureProgressDialog,
   defaultCredentials,
 } from '../LoginForm'
-
 import {
   DeltaDialogBody,
   DeltaDialogOkCancelFooter,
   DeltaDialogBase,
   DeltaDialogHeader,
 } from './DeltaDialog'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { Credentials } from '../../../shared/shared-types'
-import { DialogProps } from './DialogController'
 import ConfirmationDialog from './ConfirmationDialog'
 import { BackendRemote } from '../../backend-com'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
-export default function SettingsAccountDialog({
-  isOpen,
-  onClose,
-}: {
-  isOpen: DialogProps['isOpen']
-  onClose: DialogProps['onClose']
-}) {
+import type { DialogProps } from '../../contexts/DialogContext'
+
+export default function SettingsAccountDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
   return (
     <DeltaDialogBase
       onClose={onClose}
-      isOpen={isOpen}
       canOutsideClickClose={false}
       style={{
         maxHeight: 'calc(100% - 100px)',
@@ -56,7 +51,7 @@ export function SettingsAccountInner(onClose: () => void) {
     _setAccountSettings(value)
   }
 
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
 
   const loadSettings = async () => {
     if (window.__selectedAccountId === undefined) {

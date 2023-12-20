@@ -1,11 +1,11 @@
-import React, { useState, useContext } from 'react'
+import React, { useState } from 'react'
 import { Card, Elevation } from '@blueprintjs/core'
+
 import {
   RenderDeltaSwitch2Type,
   RenderDTSettingSwitchType,
   SettingsSelector,
 } from './Settings'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { DeltaInput } from '../Login-Styles'
 import {
   DeltaDialogBase,
@@ -13,12 +13,15 @@ import {
   DeltaDialogBody,
   DeltaDialogOkCancelFooter,
 } from './DeltaDialog'
-import { DialogProps } from './DialogController'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
 import RadioGroup from '../RadioGroup'
 import Radio from '../Radio'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 const VIDEO_CHAT_INSTANCE_SYSTEMLI = 'https://meet.systemli.org/$ROOM'
 const VIDEO_CHAT_INSTANCE_AUTISTICI = 'https://vc.autistici.org/$ROOM'
@@ -33,7 +36,7 @@ export function SettingsExperimentalFeatures({
   renderDeltaSwitch2: RenderDeltaSwitch2Type
 }) {
   const tx = window.static_translate
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
 
   const onClickEdit = async () => {
     openDialog(EditVideochatInstanceDialog, {
@@ -120,12 +123,14 @@ export function SettingsExperimentalFeatures({
 type RadioButtonValue = 'disabled' | 'custom' | 'systemli' | 'autistici'
 
 export function EditVideochatInstanceDialog({
-  isOpen,
-  onClose,
-  onOk,
-  onCancel,
   settingsStore,
-}: DialogProps & { settingsStore: SettingsStoreState }) {
+  onOk,
+  ...dialogProps
+}: DialogProps & {
+  settingsStore: SettingsStoreState
+  onOk: (configValue: string) => Promise<void>
+}) {
+  const { onClose } = dialogProps
   const tx = useTranslationFunction()
   const [configValue, setConfigValue] = useState(
     settingsStore.settings['webrtc_instance']
@@ -144,12 +149,13 @@ export function EditVideochatInstanceDialog({
 
   const onClickCancel = () => {
     onClose()
-    onCancel && onCancel()
   }
+
   const onClickOk = () => {
     onClose()
     onOk(configValue.trim()) // the trim is here to not save custom provider if it only contains whitespaces
   }
+
   const onChangeRadio = (value: string) => {
     let newConfigValue = ''
     if (value === 'disabled') {
@@ -171,7 +177,6 @@ export function EditVideochatInstanceDialog({
   return (
     <DeltaDialogBase
       onClose={onClose}
-      isOpen={isOpen}
       canOutsideClickClose={false}
       style={{
         top: '15vh',

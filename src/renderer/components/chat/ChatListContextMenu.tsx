@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
+import { C } from '@deltachat/jsonrpc-client'
+
 import {
   openLeaveChatDialog,
   openDeleteChatDialog,
@@ -11,14 +12,13 @@ import {
   openMuteChatDialog,
   unMuteChat,
 } from '../helpers/ChatMethods'
-
-import { C } from '@deltachat/jsonrpc-client'
 import { ContextMenuItem } from '../ContextMenu'
 import MailingListProfile from '../dialogs/MessageListProfile'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-
-// const log = getLogger('renderer/ChatListContextMenu')
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
+import { ScreenContext } from '../../contexts/ScreenContext'
 
 function archiveStateMenu(
   chat: Type.ChatListItemFetchResult & { kind: 'ChatListItem' },
@@ -68,6 +68,7 @@ export function useChatListContextMenu(): {
   activeContextMenuChatId: number | null
 } {
   const screenContext = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const accountId = selectedAccountId()
   const [activeContextMenuChatId, setActiveContextMenuChatId] = useState<
     number | null
@@ -78,16 +79,16 @@ export function useChatListContextMenu(): {
     openContextMenu: async (event, chatListItem, selectedChatId) => {
       const tx = window.static_translate
       const onDeleteChat = () =>
-        openDeleteChatDialog(screenContext, chatListItem, selectedChatId)
+        openDeleteChatDialog(openDialog, chatListItem, selectedChatId)
       const onEncrInfo = () =>
-        openEncryptionInfoDialog(screenContext, chatListItem)
+        openEncryptionInfoDialog(openDialog, chatListItem)
       const onViewGroup = async () => {
         // throws error if chat was not found
         const fullChat = await BackendRemote.rpc.getFullChatById(
           accountId,
           chatListItem.id
         )
-        openViewGroupDialog(screenContext, fullChat)
+        openViewGroupDialog(openDialog, fullChat)
       }
       const onViewProfile = async () => {
         const fullChat = await BackendRemote.rpc.getFullChatById(
@@ -98,19 +99,18 @@ export function useChatListContextMenu(): {
           throw new Error('chat was not found')
         }
         if (fullChat.chatType !== C.DC_CHAT_TYPE_MAILINGLIST) {
-          openViewProfileDialog(screenContext, fullChat.contactIds[0])
+          openViewProfileDialog(openDialog, fullChat.contactIds[0])
         } else {
-          screenContext.openDialog(MailingListProfile, {
+          openDialog(MailingListProfile, {
             chat: fullChat,
           })
         }
       }
       const onLeaveGroup = () =>
-        openLeaveChatDialog(screenContext, chatListItem.id)
+        openLeaveChatDialog(openDialog, chatListItem.id)
       const onBlockContact = () =>
-        openBlockFirstContactOfChatDialog(screenContext, chatListItem)
-      const onMuteChat = () =>
-        openMuteChatDialog(screenContext, chatListItem.id)
+        openBlockFirstContactOfChatDialog(openDialog, chatListItem)
+      const onMuteChat = () => openMuteChatDialog(openDialog, chatListItem.id)
       const onUnmuteChat = () => unMuteChat(chatListItem.id)
 
       const menu: (ContextMenuItem | false)[] = chatListItem

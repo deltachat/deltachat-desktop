@@ -1,6 +1,7 @@
-import { ScreenContext, useTranslationFunction } from '../../contexts'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { H6, Icon } from '@blueprintjs/core'
+import { join } from 'path'
+
 import { ThemeManager } from '../../ThemeManager'
 import { RenderDTSettingSwitchType, SettingsSelector } from './Settings'
 import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
@@ -10,11 +11,12 @@ import {
   RC_Config,
   Theme,
 } from '../../../shared/shared-types'
-import { join } from 'path'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
 import { getLogger } from '../../../shared/logger'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
 
 const log = getLogger('renderer/settings/appearance')
 
@@ -202,8 +204,7 @@ export default function SettingsAppearance({
   renderDTSettingSwitch: RenderDTSettingSwitchType
 }) {
   const { activeTheme } = desktopSettings
-
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
 
   const [availableThemes, setAvailableThemes] = useState<Theme[]>([])
   useEffect(() => {

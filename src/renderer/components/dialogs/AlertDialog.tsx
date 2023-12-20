@@ -1,10 +1,13 @@
 import React from 'react'
+
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import {
   SmallDialog,
   DeltaDialogFooter,
   DeltaDialogFooterActions,
 } from './DeltaDialog'
-import { useTranslationFunction } from '../../contexts'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 export default function AlertDialog({
   message,
@@ -13,10 +16,8 @@ export default function AlertDialog({
 }: {
   cb?: () => void
   message: string | JSX.Element
-  onClose: () => void
-}) {
+} & DialogProps) {
   const tx = useTranslationFunction()
-  const isOpen = !!message
 
   const onClick = () => {
     cb && cb()
@@ -24,7 +25,7 @@ export default function AlertDialog({
   }
 
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
+    <SmallDialog onClose={onClose}>
       <div className='bp4-dialog-body-with-padding'>
         <p style={{ userSelect: 'auto' }}>{message}</p>
       </div>

@@ -1,7 +1,6 @@
-import React, { useContext } from 'react'
+import React from 'react'
 
 import { BackendRemote } from '../../backend-com'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { runtime } from '../../runtime'
 import { selectedAccountId } from '../../ScreenController'
 import {
@@ -10,8 +9,10 @@ import {
   DeltaDialogFooterActions,
 } from './DeltaDialog'
 import QrCode from './QrCode'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
 
-import type { DialogProps } from './DialogController'
+import type { DialogProps } from '../../contexts/DialogContext'
 
 const VERIFICATION_BROKEN_ANCHOR = 'nocryptanymore'
 const VERIFICATION_ENABLED_ANCHOR = 'e2eeguarantee'
@@ -19,11 +20,10 @@ const VERIFICATION_REQUIRED_ANCHOR = 'howtoe2ee'
 
 export function ProtectionBrokenDialog({
   name,
-  isOpen,
   onClose,
 }: { name: string } & DialogProps) {
   const tx = useTranslationFunction()
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const accountId = selectedAccountId()
 
   const onQRScan = async () => {
@@ -38,7 +38,7 @@ export function ProtectionBrokenDialog({
   }
 
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
+    <SmallDialog onClose={onClose}>
       <div className='bp4-dialog-body-with-padding'>
         <p style={{ wordBreak: 'break-word' }}>
           {tx('chat_protection_broken_explanation', name)}
@@ -65,12 +65,9 @@ export function ProtectionBrokenDialog({
   )
 }
 
-export function VerifiedContactsRequiredDialog({
-  isOpen,
-  onClose,
-}: DialogProps) {
+export function VerifiedContactsRequiredDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const accountId = selectedAccountId()
 
   const onQRScan = async () => {
@@ -85,7 +82,7 @@ export function VerifiedContactsRequiredDialog({
   }
 
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
+    <SmallDialog onClose={onClose}>
       <div className='bp4-dialog-body-with-padding'>
         <p style={{ wordBreak: 'break-word' }}>
           {tx('verified_contact_required_explain')}
@@ -112,7 +109,7 @@ export function VerifiedContactsRequiredDialog({
   )
 }
 
-export function ProtectionEnabledDialog({ isOpen, onClose }: DialogProps) {
+export function ProtectionEnabledDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
 
   const onLearnMore = () => {
@@ -120,7 +117,7 @@ export function ProtectionEnabledDialog({ isOpen, onClose }: DialogProps) {
   }
 
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
+    <SmallDialog onClose={onClose}>
       <div className='bp4-dialog-body-with-padding'>
         <p style={{ wordBreak: 'break-word' }}>
           {tx('chat_protection_enabled_explanation')}

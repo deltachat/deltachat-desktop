@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import reactStringReplace from 'react-string-replace'
+
 import { getLogger } from '../../../shared/logger'
 import DeltaDialog, { DeltaDialogBody, DeltaDialogFooter } from './DeltaDialog'
 import { gitHubUrl, gitHubLicenseUrl } from '../../../shared/constants'
 import { VERSION, GIT_REF } from '../../../shared/build-info'
 import ClickableLink from '../helpers/ClickableLink'
-import { useTranslationFunction } from '../../contexts'
 import { runtime } from '../../runtime'
 import { BackendRemote } from '../../backend-com'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 const log = getLogger('renderer/dialogs/About')
 
@@ -61,8 +64,8 @@ export function DCInfo(_props: any) {
   )
 }
 
-export default function About(props: { isOpen: boolean; onClose: () => void }) {
-  const { isOpen, onClose } = props
+export default function About(props: DialogProps) {
+  const { onClose } = props
   const tx = useTranslationFunction()
 
   const desktopString = reactStringReplace(
@@ -94,11 +97,7 @@ export default function About(props: { isOpen: boolean; onClose: () => void }) {
   )
 
   return (
-    <DeltaDialog
-      isOpen={isOpen}
-      title={tx('global_menu_help_about_desktop')}
-      onClose={onClose}
-    >
+    <DeltaDialog title={tx('global_menu_help_about_desktop')} onClose={onClose}>
       <DeltaDialogBody>
         <div
           style={{ background: 'var(--bp4DialogBgPrimary)', padding: '21px' }}

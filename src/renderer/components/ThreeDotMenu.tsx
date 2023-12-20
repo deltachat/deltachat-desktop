@@ -1,6 +1,6 @@
 import { C } from '@deltachat/jsonrpc-client'
 import React, { useContext } from 'react'
-import { ScreenContext, useTranslationFunction } from '../contexts'
+
 import {
   openLeaveChatDialog,
   openDeleteChatDialog,
@@ -14,12 +14,18 @@ import { ContextMenuItem } from './ContextMenu'
 import SettingsStoreInstance, { useSettingsStore } from '../stores/settings'
 import { Type } from '../backend-com'
 import { ActionEmitter, KeybindAction } from '../keybindings'
+import useDialog from '../hooks/useDialog'
+import useTranslationFunction from '../hooks/useTranslationFunction'
+import DisappearingMessages from './dialogs/DisappearingMessages'
+import { ScreenContext } from '../contexts/ScreenContext'
+import ChatAuditLogDialog from './dialogs/ChatAuditLogDialog'
 
 export function useThreeDotMenu(
   selectedChat: Type.FullChat | null,
   mode: 'chat' | 'gallery' = 'chat'
 ) {
-  const screenContext = useContext(ScreenContext)
+  const { openDialog } = useDialog()
+  const { openContextMenu } = useContext(ScreenContext)
   const [settingsStore] = useSettingsStore()
   const tx = useTranslationFunction()
 
@@ -34,18 +40,19 @@ export function useThreeDotMenu(
     } = selectedChat
     const isGroup = selectedChat.chatType === C.DC_CHAT_TYPE_GROUP
     const onLeaveGroup = () =>
-      selectedChat && openLeaveChatDialog(screenContext, selectedChat.id)
+      selectedChat && openLeaveChatDialog(openDialog, selectedChat.id)
     const onBlockContact = () =>
-      openBlockFirstContactOfChatDialog(screenContext, selectedChat)
+      openBlockFirstContactOfChatDialog(openDialog, selectedChat)
     const onDeleteChat = () =>
-      openDeleteChatDialog(screenContext, selectedChat, selectedChat.id)
-    const onMuteChat = () => openMuteChatDialog(screenContext, selectedChat.id)
+      openDeleteChatDialog(openDialog, selectedChat, selectedChat.id)
+    const onMuteChat = () => openMuteChatDialog(openDialog, selectedChat.id)
     const onUnmuteChat = () => unMuteChat(selectedChat.id)
+
     const openChatAuditLog = () =>
-      screenContext.openDialog('ChatAuditLogDialog', { selectedChat })
+      openDialog(ChatAuditLogDialog, { selectedChat })
 
     const onDisappearingMessages = () =>
-      screenContext.openDialog('DisappearingMessages', {
+      openDialog(DisappearingMessages, {
         chatId: selectedChat.id,
       })
 
@@ -102,7 +109,7 @@ export function useThreeDotMenu(
         },
       {
         label: tx('clear_chat'),
-        action: clearChat.bind(null, chatId),
+        action: clearChat.bind(null, openDialog, chatId),
       },
       {
         label: tx('menu_delete_chat'),
@@ -139,7 +146,7 @@ export function useThreeDotMenu(
     ]
     event.preventDefault() // prevent default runtime context menu from opening
 
-    screenContext.openContextMenu({
+    openContextMenu({
       cursorX,
       cursorY,
       items: menu,

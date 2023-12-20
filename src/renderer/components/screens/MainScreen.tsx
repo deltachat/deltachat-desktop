@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 import {
   Alignment,
@@ -10,7 +10,6 @@ import {
   Icon,
 } from '@blueprintjs/core'
 
-import { ScreenContext, useTranslationFunction } from '../../contexts'
 import Gallery from '../Gallery'
 import { useThreeDotMenu } from '../ThreeDotMenu'
 import ChatList from '../chat/ChatList'
@@ -29,7 +28,7 @@ import {
   setChatView,
   unselectChat,
 } from '../helpers/ChatMethods'
-import { useKeyBindingAction, KeybindAction } from '../../keybindings'
+import { KeybindAction } from '../../keybindings'
 import { Avatar } from '../Avatar'
 import ConnectivityToast from '../ConnectivityToast'
 import MapComponent from '../map/MapComponent'
@@ -42,6 +41,9 @@ import { Type } from '../../backend-com'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import { SettingsProfileDialog } from '../dialogs/Settings-Profile'
 import SearchInput from '../SearchInput'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useKeyBindingAction from '../../hooks/useKeyBindingAction'
 
 const log = getLogger('renderer/main-screen')
 
@@ -59,7 +61,7 @@ export default function MainScreen() {
     setShowArchivedChats(false)
   )
 
-  const screenContext = useContext(ScreenContext)
+  const { openDialog } = useDialog()
   const selectedChat = useChatStore()
 
   const [alternativeView, setAlternativeView] = useState<
@@ -91,17 +93,17 @@ export default function MainScreen() {
     if (!selectedChat.chat) return
 
     if (selectedChat.chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST) {
-      screenContext.openDialog(MailingListProfile, {
+      openDialog(MailingListProfile, {
         chat: selectedChat.chat,
       })
     } else if (
       selectedChat.chat.chatType === C.DC_CHAT_TYPE_GROUP ||
       selectedChat.chat.chatType === C.DC_CHAT_TYPE_BROADCAST
     ) {
-      openViewGroupDialog(screenContext, selectedChat.chat)
+      openViewGroupDialog(openDialog, selectedChat.chat)
     } else {
       if (selectedChat.chat.contactIds && selectedChat.chat.contactIds[0]) {
-        openViewProfileDialog(screenContext, selectedChat.chat.contactIds[0])
+        openViewProfileDialog(openDialog, selectedChat.chat.contactIds[0])
       }
     }
   }
@@ -129,7 +131,7 @@ export default function MainScreen() {
       const settingsStore = SettingsStoreInstance.state
       if (settingsStore && window.__askForName) {
         window.__askForName = false
-        screenContext.openDialog(SettingsProfileDialog, {
+        openDialog(SettingsProfileDialog, {
           settingsStore,
           title: 'Account setup',
           confirmLabel: tx('ok'),
@@ -138,7 +140,7 @@ export default function MainScreen() {
         })
       }
     })
-  }, [screenContext, tx])
+  }, [openDialog, tx])
 
   const searchRef = useRef<HTMLInputElement>(null)
 
