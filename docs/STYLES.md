@@ -4,26 +4,36 @@ We use `prettier` for CSS formatting. Use `npm run fix:format` before committing
 
 ## How we go about styles
 
-We decided to move away from styled components to pure SCSS, further we're going to remove the BOM syntax that remains from the signal codebase.
+### CSS modules
 
-To avoid collisions you MUST NOT create global styles with generic names that aren't a component.
-Also make sure that global module-classes don't have a class name that is already used (search all files with `grep` or a similar tool)
+- **The goal is to separate every component style-wise as much as possible from each other, so changing the style of a single component doesn't affect anything else**
+- Every CSS file is named `styles.module.css` or `styles.module.scss` when using SCSS
+- It is imported via `import styles from './styles.module.css'`
+- Every CSS module file lives right _next_ to the component
+- Prefer repetition of styles over DRY
 
-When using generic class names like `date`, `avatar`, `username`, `error` make sure to scope them in a component scss class.
+### General
 
-```scss
-.metadata {
-  .date {
-    color: green;
-  }
-  .avatar {
-    background: url('profile.png');
-  }
-  .error {
-    color: red;
-  }
-}
-```
+- Prefer `padding-top`, `padding-bottom`, `padding-left` etc. over `padding` to avoid bugs through order-critical dependencies between properties, except when you only need `padding` or `border` etc.
+- Try to avoid hacky `!important` as much as possible (goal is to get rid of them altogether at one point)
+- If you can choose, prefer CSS over SCSS, CSS supports nesting and variables and cool functions, like `calc`!
+
+### Naming
+
+- Class names and variable names are always camelCase (`.searchInput`, `--borderRadius`, etc.)
+- The class name should represent the React component it relates to (for example `SearchInput` is represented with `.searchInput`)
+- Sub-classes are usually modifiers of the component and can have short, "local" names (like `.active` or `.warning`)
+
+### Ordering
+
+- Properties are sorted alphabetically
+- Order of groups: variables (`--borderRadius`), properties (`height: 10px;`), pseudo elements (`::before`), sub-classes (`.active`), always separated with a newline
+- Classes (`.searchInput` etc.) are also always separated with a newline
+
+### Variables
+
+- "Local" variables (which are used across multiple classes in the same file) are introduced at the beginning of the document. We use SCSS for defining local variables (`$borderRadius: 10px;`)
+- Global variables (used across files) are defined for themes and we use CSS for that (`var(--primaryColor)`)
 
 ## How do we do colors and theming
 
@@ -31,5 +41,4 @@ We use CSS variables for theming, we use SCSS to generate them from a small set 
 
 The scss vars should be named in snake-case (we still use camelCase for some variables, but we decided to switch to snake-case, because electron/chromium doesn't support CSS var autocompletion for camelCase)
 
-<br>
 This document is not final, feel free to ask questions and discuss this with us.
