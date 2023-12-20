@@ -1,0 +1,51 @@
+$backgroundColorHover: rgba(143, 153, 168, 0.15);
+$borderRadius: 10px;
+$closeButtonSize: 30px;
+
+.searchInput {
+  background-color: var(--searchInputBackgroundColor);
+  border-radius: $borderRadius;
+  border: 0;
+  caret-color: var(--navBarText);
+  color: var(--navBarText);
+  flex: 1;
+  font-size: 16px;
+  height: $closeButtonSize;
+  padding-bottom: 0;
+  padding-left: 10px;
+  padding-right: 0;
+  padding-top: 0;
+
+  &::placeholder {
+    color: var(--navBarSearchPlaceholder);
+  }
+
+  &.active {
+    padding-right: calc($closeButtonSize + 5px);
+  }
+}
+
+.searchClearButton {
+  align-items: center;
+  background-color: transparent;
+  border-radius: $borderRadius;
+  border: 0;
+  display: flex;
+  height: $closeButtonSize;
+  justify-content: center;
+  left: calc(30vw - $closeButtonSize - 5px);
+  padding-bottom: 0;
+  padding-left: 1px;
+  padding-right: 0;
+  padding-top: 0;
+  position: absolute;
+  width: $closeButtonSize;
+
+  &:hover {
+    background-color: $backgroundColorHover;
+  }
+
+  &.hidden {
+    display: none;
+  }
+}

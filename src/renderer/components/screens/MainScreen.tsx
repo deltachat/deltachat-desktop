@@ -1,13 +1,22 @@
 import React, { useState, useContext, useRef, useEffect } from 'react'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
+import { C } from '@deltachat/jsonrpc-client'
+import {
+  Alignment,
+  Classes,
+  Navbar,
+  NavbarGroup,
+  NavbarHeading,
+  Button,
+  Icon,
+} from '@blueprintjs/core'
 
+import { ScreenContext, useTranslationFunction } from '../../contexts'
 import Gallery from '../Gallery'
 import { useThreeDotMenu } from '../ThreeDotMenu'
 import ChatList from '../chat/ChatList'
 import MessageListAndComposer, {
   getBackgroundImageStyle,
 } from '../message/MessageListAndComposer'
-import SearchInput from '../SearchInput'
 import {
   useChatStore,
   ChatStoreStateWithChatSet,
@@ -20,20 +29,9 @@ import {
   setChatView,
   unselectChat,
 } from '../helpers/ChatMethods'
-
-import {
-  Alignment,
-  Classes,
-  Navbar,
-  NavbarGroup,
-  NavbarHeading,
-  Button,
-  Icon,
-} from '@blueprintjs/core'
 import { useKeyBindingAction, KeybindAction } from '../../keybindings'
 import { Avatar } from '../Avatar'
 import ConnectivityToast from '../ConnectivityToast'
-import { C } from '@deltachat/jsonrpc-client'
 import MapComponent from '../map/MapComponent'
 import MailingListProfile from '../dialogs/MessageListProfile'
 import { getLogger } from '../../../shared/logger'
@@ -43,6 +41,7 @@ import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 import { Type } from '../../backend-com'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import { SettingsProfileDialog } from '../dialogs/Settings-Profile'
+import SearchInput from '../SearchInput'
 
 const log = getLogger('renderer/main-screen')
 
@@ -246,7 +245,6 @@ export default function MainScreen() {
                 id='chat-list-search'
                 onChange={handleSearchChange}
                 value={queryStr}
-                className='icon-rotated'
                 inputRef={searchRef}
                 extraCleanAction={
                   queryChatId ? () => setQueryChatId(null) : undefined

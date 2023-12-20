@@ -174,19 +174,6 @@ code {
   }
 }
 
-.clear-button {
-  &.clear-button--hidden {
-    display: none;
-  }
-
-  &.bp4-button[class*='bp4-icon-']::before {
-    color: white;
-  }
-  &.bp4-button.bp4-minimal:hover {
-    background-color: unset;
-  }
-}
-
 .crash-screen {
   padding: 10px;
 
