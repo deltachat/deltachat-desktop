@@ -28,7 +28,6 @@ import {
   setChatView,
   unselectChat,
 } from '../helpers/ChatMethods'
-import { KeybindAction } from '../../keybindings'
 import { Avatar } from '../Avatar'
 import ConnectivityToast from '../ConnectivityToast'
 import MapComponent from '../map/MapComponent'
@@ -39,11 +38,12 @@ import Sidebar, { SidebarState } from '../Sidebar'
 import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 import { Type } from '../../backend-com'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
-import { SettingsProfileDialog } from '../dialogs/Settings-Profile'
 import SearchInput from '../SearchInput'
+import EditProfileDialog from '../dialogs/EditProfileDialog'
+import useKeyBindingAction from '../../hooks/useKeyBindingAction'
+import { KeybindAction } from '../../keybindings'
 import useDialog from '../../hooks/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useKeyBindingAction from '../../hooks/useKeyBindingAction'
 
 const log = getLogger('renderer/main-screen')
 
@@ -131,7 +131,7 @@ export default function MainScreen() {
       const settingsStore = SettingsStoreInstance.state
       if (settingsStore && window.__askForName) {
         window.__askForName = false
-        openDialog(SettingsProfileDialog, {
+        openDialog(EditProfileDialog, {
           settingsStore,
           title: 'Account setup',
           confirmLabel: tx('ok'),
@@ -223,7 +223,7 @@ export default function MainScreen() {
               onClick={() => setSidebarState('visible')}
               id='hamburger-menu-button'
             >
-              <Icon icon='menu' aria-label={tx('main_menu')} iconSize={20} />
+              <Icon icon='menu' aria-label={tx('main_menu')} size={20} />
             </div>
             {queryStr.length === 0 && showArchivedChats && (
               <>

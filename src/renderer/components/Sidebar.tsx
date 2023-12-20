@@ -10,20 +10,19 @@ import { useSettingsStore } from '../stores/settings'
 import { Avatar } from './Avatar'
 import { VERSION } from '../../shared/build-info'
 import { ActionEmitter, KeybindAction } from '../keybindings'
-import SettingsConnectivityDialog from './dialogs/Settings-Connectivity'
 import { debounceWithInit } from './chat/ChatListHelpers'
 import {
   BackendRemote,
   EffectfulBackendActions,
   onDCEvent,
 } from '../backend-com'
-import { ScreenContext } from '../contexts/ScreenContext'
+import ConnectivityDialog from './dialogs/ConnectivityDialog'
 import useDialog from '../hooks/useDialog'
 import CreateChat from './dialogs/CreateChat'
 import UnblockContacts from './dialogs/UnblockContacts'
-import useTranslationFunction from '../hooks/useTranslationFunction'
+import { ScreenContext } from '../contexts/ScreenContext'
 import About from './dialogs/About'
-import Settings from './dialogs/Settings'
+import useTranslationFunction from '../hooks/useTranslationFunction'
 
 export type SidebarState = 'init' | 'visible' | 'invisible'
 
@@ -35,10 +34,11 @@ const Sidebar = React.memo(
     sidebarState: SidebarState
     setSidebarState: React.Dispatch<React.SetStateAction<SidebarState>>
   }) => {
-    const screenContext = useContext(ScreenContext)
-    const { openDialog } = useDialog()
+    const tx = useTranslationFunction()
     const settings = useSettingsStore()[0]
     const accountId = selectedAccountId()
+    const { openDialog } = useDialog()
+    const { changeScreen } = useContext(ScreenContext)
 
     const onCreateChat = () => {
       setSidebarState('invisible')
@@ -52,7 +52,7 @@ const Sidebar = React.memo(
       setSidebarState('invisible')
       unselectChat()
       await EffectfulBackendActions.logout()
-      screenContext.changeScreen(Screens.AccountList)
+      changeScreen(Screens.AccountList)
     }
 
     const onOpenHelp = () => {
@@ -62,14 +62,12 @@ const Sidebar = React.memo(
 
     const onOpenConnectivity = () => {
       setSidebarState('invisible')
-      openDialog(SettingsConnectivityDialog)
+      openDialog(ConnectivityDialog)
     }
 
     const onOpenSettings = () => {
       setSidebarState('invisible')
-      if (!window.__settingsOpened) {
-        openDialog(Settings)
-      }
+      ActionEmitter.emitAction(KeybindAction.Settings_Open)
     }
 
     const onShowQRCode = async () => {
@@ -120,8 +118,6 @@ const Sidebar = React.memo(
         window.removeEventListener('keyup', onEscapeKeyUp)
       }
     })
-
-    const tx = useTranslationFunction()
 
     if (settings === null) return null
 
@@ -226,13 +222,11 @@ export function Link({
   title?: string
 }) {
   const { openDialog } = useDialog()
-
   const onClick = (ev: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     ev.preventDefault()
     ev.stopPropagation()
     runtime.openLink(openDialog, href)
   }
-
   return (
     <a href={href} x-target-url={href} title={title} onClick={onClick}>
       {label}

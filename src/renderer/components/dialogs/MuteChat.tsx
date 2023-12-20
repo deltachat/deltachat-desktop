@@ -1,18 +1,18 @@
 import React from 'react'
 
-import { SmallSelectDialog, SelectDialogOption } from './DeltaDialog'
 import { Timespans } from '../../../shared/constants'
 import { selectedAccountId } from '../../ScreenController'
 import { BackendRemote, Type } from '../../backend-com'
+import SmallSelectDialog, { SelectDialogOption } from '../SmallSelectDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
-export default function MuteChat({
-  onClose,
-  chatId,
-}: {
-  onClose: () => void
+import type { DialogProps } from '../../contexts/DialogContext'
+
+type Props = {
   chatId: number
-}) {
+}
+
+export default function MuteChat({ onClose, chatId }: Props & DialogProps) {
   const accountId = selectedAccountId()
   const tx = useTranslationFunction()
 

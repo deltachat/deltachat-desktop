@@ -1,8 +1,10 @@
 import React, { useContext } from 'react'
 import reactStringReplace from 'react-string-replace'
-import { C, T } from '@deltachat/jsonrpc-client'
 import classNames from 'classnames'
+import { C, T } from '@deltachat/jsonrpc-client'
 
+import MessageBody from './MessageBody'
+import MessageMetaData from './MessageMetaData'
 import {
   onDownload,
   openAttachmentInShell,
@@ -15,8 +17,6 @@ import {
   downloadFullMessage,
   openWebxdc,
 } from './messageFunctions'
-import MessageBody from './MessageBody'
-import MessageMetaData from './MessageMetaData'
 import Attachment from '../attachment/messageAttachment'
 import { isGenericAttachment } from '../attachment/Attachment'
 import {
@@ -135,14 +135,14 @@ function buildContextMenu(
     message,
     text,
     conversationType,
-    chat,
     openDialog,
+    chat,
   }: {
     message: Type.Message | null
     text?: string
     conversationType: ConversationType
-    chat: T.FullChat
     openDialog: OpenDialog
+    chat: T.FullChat
   },
   clickTarget: HTMLAnchorElement | null
 ): (false | ContextMenuItem)[] {
@@ -317,8 +317,8 @@ export default function Message(props: {
         message,
         text: text || undefined,
         conversationType,
-        chat,
         openDialog,
+        chat,
       },
       target
     )
@@ -434,8 +434,8 @@ export default function Message(props: {
             hasLocation={hasLocation}
             timestamp={message.timestamp * 1000}
             padlock={message.showPadlock}
-            viewType={'VideochatInvitation'}
             onClickError={openMessageInfo.bind(null, openDialog, message)}
+            viewType={'VideochatInvitation'}
           />
         </div>
       </div>
@@ -560,8 +560,8 @@ export default function Message(props: {
             hasLocation={hasLocation}
             timestamp={message.timestamp * 1000}
             padlock={message.showPadlock}
-            viewType={message.viewType}
             onClickError={openMessageInfo.bind(null, openDialog, message)}
+            viewType={message.viewType}
           />
         </div>
       </div>

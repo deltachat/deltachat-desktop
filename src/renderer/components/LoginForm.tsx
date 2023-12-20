@@ -13,15 +13,17 @@ import {
   DeltaSwitch,
 } from './Login-Styles'
 import ClickableLink from './helpers/ClickableLink'
-import {
-  DeltaDialogBase,
-  DeltaDialogContent,
-  DeltaDialogFooter,
-} from './dialogs/DeltaDialog'
 import { Credentials } from '../../shared/shared-types'
 import { getLogger } from '../../shared/logger'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  FooterActionButton,
+  FooterActions,
+} from './Dialog'
 import { I18nContext } from '../contexts/I18nContext'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 
@@ -473,59 +475,44 @@ export function ConfigureProgressDialog({
   }, [accountId])
 
   return (
-    <DeltaDialogBase
+    <Dialog
       onClose={onClose}
-      className='small-dialog'
       canEscapeKeyClose={false}
       canOutsideClickClose={false}
     >
       {!configureFailed && (
         <>
-          <div className='bp4-dialog-body-with-padding'>
-            <DeltaDialogContent>
+          <DialogBody>
+            <DialogContent paddingTop>
               <DeltaProgressBar progress={progress} />
-              <p style={{ userSelect: 'auto' }}>{progressComment}</p>
-            </DeltaDialogContent>
-          </div>
-          <DeltaDialogFooter
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginTop: '0px',
-              padding: '7px 13px 10px 13px',
-            }}
-          >
-            <p className='delta-button danger bold' onClick={onCancel}>
-              {tx('cancel')}
-            </p>
-          </DeltaDialogFooter>
+              <p>{progressComment}</p>
+            </DialogContent>
+          </DialogBody>
+          <DialogFooter>
+            <FooterActions>
+              <FooterActionButton danger onClick={onCancel}>
+                {tx('cancel')}
+              </FooterActionButton>
+            </FooterActions>
+          </DialogFooter>
         </>
       )}
       {configureFailed && (
         <>
-          <div className='bp4-dialog-body-with-padding'>
-            <DeltaDialogContent>
-              <p style={{ userSelect: 'auto' }}>{error}</p>
-            </DeltaDialogContent>
-          </div>
-          <DeltaDialogFooter
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginTop: '0px',
-              padding: '7px 13px 10px 13px',
-            }}
-          >
-            <p
-              className='delta-button primary bold'
-              onClick={onClose}
-              style={{ marginLeft: 'auto' }}
-            >
-              {tx('ok')}
-            </p>
-          </DeltaDialogFooter>
+          <DialogBody>
+            <DialogContent paddingTop>
+              <p>{error}</p>
+            </DialogContent>
+          </DialogBody>
+          <DialogFooter>
+            <FooterActions>
+              <FooterActionButton onClick={onClose}>
+                {tx('ok')}
+              </FooterActionButton>
+            </FooterActions>
+          </DialogFooter>
         </>
       )}
-    </DeltaDialogBase>
+    </Dialog>
   )
 }

@@ -5,9 +5,9 @@ import { debounce } from 'debounce'
 import { getLogger } from '../../shared/logger'
 import { KeybindAction } from '../keybindings'
 import { debounceWithInit } from './chat/ChatListHelpers'
-import SettingsConnectivityDialog from './dialogs/Settings-Connectivity'
 import { BackendRemote, onDCEvent } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
+import ConnectivityDialog from './dialogs/ConnectivityDialog'
 import useDialog from '../hooks/useDialog'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 import useKeyBindingAction from '../hooks/useKeyBindingAction'
@@ -149,7 +149,7 @@ export default function ConnectivityToast() {
 
   const { openDialog } = useDialog()
   const onInfoTextClick = useCallback(() => {
-    openDialog(SettingsConnectivityDialog)
+    openDialog(ConnectivityDialog)
   }, [openDialog])
 
   const tx = useTranslationFunction()

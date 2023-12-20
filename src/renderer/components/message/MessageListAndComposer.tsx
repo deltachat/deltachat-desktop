@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useCallback } from 'react'
 import { join, parse } from 'path'
+import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 
 import Composer, { useDraft } from '../composer/Composer'
 import { getLogger } from '../../../shared/logger'
@@ -10,12 +11,10 @@ import { DesktopSettingsType } from '../../../shared/shared-types'
 import { runtime } from '../../runtime'
 import { RecoverableCrashScreen } from '../screens/RecoverableCrashScreen'
 import { useSettingsStore } from '../../stores/settings'
-import useIsChatDisabled from '../composer/useIsChatDisabled'
 import { sendMessage } from '../helpers/ChatMethods'
 import useDialog from '../../hooks/useDialog'
 import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
-
-import type { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
+import useIsChatDisabled from '../composer/useIsChatDisabled'
 
 const log = getLogger('renderer/MessageListAndComposer')
 

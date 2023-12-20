@@ -1,18 +1,12 @@
-import { Classes, Switch, Alignment, Icon } from '@blueprintjs/core'
-import classNames from 'classnames'
-import debounce from 'debounce'
 import React, { useEffect, useState } from 'react'
+import debounce from 'debounce'
 import { filesize } from 'filesize'
+import { Switch, Alignment, Icon } from '@blueprintjs/core'
 
 import { getLogger } from '../../../shared/logger'
 import ScreenController from '../../ScreenController'
 import { Avatar } from '../Avatar'
 import { PseudoContact } from '../contact/Contact'
-import {
-  DeltaDialogBase,
-  DeltaDialogBody,
-  DeltaDialogContent,
-} from '../dialogs/DeltaDialog'
 import {
   BackendRemote,
   EffectfulBackendActions,
@@ -20,6 +14,7 @@ import {
   Type,
 } from '../../backend-com'
 import { runtime } from '../../runtime'
+import Dialog, { DialogBody, DialogHeader } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
@@ -35,9 +30,7 @@ export default function AccountListScreen({
   onAddAccount: () => void
 }) {
   const tx = useTranslationFunction()
-
   const [logins, setLogins] = useState<Type.Account[] | null>(null)
-
   const [syncAllAccounts, setSyncAllAccounts] = useState<boolean | null>(null)
 
   useEffect(() => {
@@ -76,58 +69,47 @@ export default function AccountListScreen({
   return (
     <div className='login-screen'>
       <div className='window'>
-        <DeltaDialogBase
+        <Dialog
+          width={400}
           backdropProps={{ className: 'no-backdrop' }}
           onClose={() => {}}
-          fixed={true}
           canEscapeKeyClose={true}
         >
-          <>
-            <div
-              className={classNames(
-                Classes.DIALOG_HEADER,
-                'bp4-dialog-header-border-bottom'
-              )}
-            >
-              <h4 className='bp4-heading'>{tx('switch_account')}</h4>
-            </div>
-            <DeltaDialogBody>
-              <DeltaDialogContent noPadding={true}>
-                <AccountSelection
-                  {...{
-                    refreshAccounts,
-                    selectAccount,
-                    logins,
-                    showUnread: syncAllAccounts || false,
-                    onAddAccount,
+          <DialogHeader title={tx('switch_account')} />
+          <DialogBody>
+            <AccountSelection
+              {...{
+                refreshAccounts,
+                selectAccount,
+                logins,
+                showUnread: syncAllAccounts || false,
+                onAddAccount,
+              }}
+            />
+            {syncAllAccounts !== null && (
+              <div className='sync-all-switch'>
+                <Switch
+                  checked={syncAllAccounts}
+                  label={tx('sync_all')}
+                  onChange={async () => {
+                    const new_state = !syncAllAccounts
+                    await runtime.setDesktopSetting(
+                      'syncAllAccounts',
+                      new_state
+                    )
+                    if (new_state) {
+                      BackendRemote.rpc.startIoForAllAccounts()
+                    } else {
+                      BackendRemote.rpc.stopIoForAllAccounts()
+                    }
+                    setSyncAllAccounts(new_state)
                   }}
+                  alignIndicator={Alignment.LEFT}
                 />
-                {syncAllAccounts !== null && (
-                  <div className='sync-all-switch'>
-                    <Switch
-                      checked={syncAllAccounts}
-                      label={tx('sync_all')}
-                      onChange={async () => {
-                        const new_state = !syncAllAccounts
-                        await runtime.setDesktopSetting(
-                          'syncAllAccounts',
-                          new_state
-                        )
-                        if (new_state) {
-                          BackendRemote.rpc.startIoForAllAccounts()
-                        } else {
-                          BackendRemote.rpc.stopIoForAllAccounts()
-                        }
-                        setSyncAllAccounts(new_state)
-                      }}
-                      alignIndicator={Alignment.LEFT}
-                    />
-                  </div>
-                )}
-              </DeltaDialogContent>
-            </DeltaDialogBody>
-          </>
-        </DeltaDialogBase>
+              </div>
+            )}
+          </DialogBody>
+        </Dialog>
       </div>
     </div>
   )

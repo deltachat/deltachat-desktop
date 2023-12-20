@@ -18,9 +18,9 @@ import { runtime } from './runtime'
 import WebxdcSaveToChatDialog from './components/dialogs/WebxdcSendToChatDialog'
 import { updateTimestamps } from './components/conversations/Timestamp'
 import { ScreenContext } from './contexts/ScreenContext'
-import { DialogContext, DialogContextProvider } from './contexts/DialogContext'
 import About from './components/dialogs/About'
 import { KeybindingsContextProvider } from './contexts/KeybindingsContext'
+import { DialogContext } from './contexts/DialogContext'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -291,11 +291,9 @@ export default class ScreenController extends Component {
             screen: this.state.screen,
           }}
         >
-          <DialogContextProvider>
-            <KeybindingsContextProvider>
-              {this.renderScreen()}
-            </KeybindingsContextProvider>
-          </DialogContextProvider>
+          <KeybindingsContextProvider>
+            {this.renderScreen()}
+          </KeybindingsContextProvider>
         </ScreenContext.Provider>
       </div>
     )

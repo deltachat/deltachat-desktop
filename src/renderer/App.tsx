@@ -11,6 +11,7 @@ import { getLogger } from '../shared/logger'
 import { BackendRemote } from './backend-com'
 import { runPostponedFunctions } from './onready'
 import { I18nContext } from './contexts/I18nContext'
+import { DialogContextProvider } from './contexts/DialogContext'
 
 export default function App(_props: any) {
   const [localeData, setLocaleData] = useState<LocaleData | null>(null)
@@ -75,7 +76,9 @@ export default function App(_props: any) {
     <CrashScreen>
       <ThemeContextWrapper>
         <I18nContext.Provider value={window.static_translate}>
-          <ScreenController />
+          <DialogContextProvider>
+            <ScreenController />
+          </DialogContextProvider>
         </I18nContext.Provider>
       </ThemeContextWrapper>
     </CrashScreen>

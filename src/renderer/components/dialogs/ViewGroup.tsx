@@ -1,13 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { C, DcEventType } from '@deltachat/jsonrpc-client'
-import { Card, Classes, Elevation } from '@blueprintjs/core'
 
-import {
-  DeltaDialogBase,
-  DeltaDialogHeader,
-  DeltaDialogBody,
-  DeltaDialogOkCancelFooter,
-} from './DeltaDialog'
 import ChatListItem from '../chat/ChatListItem'
 import { useContactSearch, AddMemberInnerDialog } from './CreateChat'
 import { QrCodeShowQrInner } from './QrCode'
@@ -33,10 +26,17 @@ import { selectedAccountId } from '../../ScreenController'
 import { modifyGroup } from '../helpers/ChatMethods'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import { useSettingsStore } from '../../stores/settings'
-import { DialogProps } from '../../contexts/DialogContext'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogHeader,
+  OkCancelFooterAction,
+} from '../Dialog'
 import useDialog from '../../hooks/useDialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
 import ConfirmationDialog from './ConfirmationDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 const log = getLogger('renderer/ViewGroup')
 
@@ -86,20 +86,12 @@ export default function ViewGroup(
   } & DialogProps
 ) {
   const { onClose, isBroadcast } = props
-
   const chat = useChat(props.chat)
 
   return (
-    <DeltaDialogBase
-      onClose={onClose}
-      fixed
-      style={{
-        maxHeight: 'unset',
-        height: 'calc(100vh - 50px)',
-      }}
-    >
+    <Dialog width={400} onClose={onClose} fixed>
       <ViewGroupInner onClose={onClose} chat={chat} isBroadcast={isBroadcast} />
-    </DeltaDialogBase>
+    </Dialog>
   )
 }
 
@@ -133,14 +125,15 @@ export const useGroup = (chat: Type.FullChat) => {
   }
 }
 
-function ViewGroupInner(props: {
-  onClose: DialogProps['onClose']
-  chat: Type.FullChat
-  isBroadcast: boolean
-}) {
+function ViewGroupInner(
+  props: {
+    chat: Type.FullChat
+    isBroadcast: boolean
+  } & DialogProps
+) {
   const { openDialog } = useDialog()
-  const tx = useTranslationFunction()
   const { onClose, chat, isBroadcast } = props
+  const tx = useTranslationFunction()
   const [settings] = useSettingsStore()
   const isRelatedChatsEnabled =
     settings?.desktopSettings.enableRelatedChats || false
@@ -188,11 +181,16 @@ function ViewGroupInner(props: {
   const onClickEdit = () => {
     openDialog(EditGroupNameDialog, {
       groupName,
-      groupImage,
+      groupImage: groupImage ? groupImage : undefined,
       groupColor: chat.color,
-      onOk: (groupName: string, groupImage: any) => {
-        groupName.length > 1 && setGroupName(groupName)
-        setGroupImage(groupImage)
+      onOk: (groupName: string, groupImage?: string) => {
+        if (groupName.length > 1) {
+          setGroupName(groupName)
+        }
+
+        if (groupImage) {
+          setGroupImage(groupImage)
+        }
       },
       isBroadcast: isBroadcast,
     })
@@ -239,15 +237,13 @@ function ViewGroupInner(props: {
     <>
       {!profileContact && (
         <>
-          <DeltaDialogHeader
+          <DialogHeader
             title={!isBroadcast ? tx('tab_group') : tx('broadcast_list')}
             onClickEdit={onClickEdit}
-            showEditButton={!chatDisabled}
-            showCloseButton={true}
             onClose={onClose}
           />
-          <div className={Classes.DIALOG_BODY}>
-            <Card>
+          <DialogBody>
+            <DialogContent>
               <div className='group-settings-container'>
                 <ClickForFullscreenAvatarWrapper filename={groupImage}>
                   <Avatar
@@ -263,75 +259,73 @@ function ViewGroupInner(props: {
                   {chat.isProtected && <InlineVerifiedIcon />}
                 </p>
               </div>
-              {isRelatedChatsEnabled && (
+            </DialogContent>
+            {isRelatedChatsEnabled && (
+              <>
+                <div className='group-separator'>{tx('related_chats')}</div>
+                <div className='group-related-chats-list-wrapper'>
+                  <ChatListPart
+                    isRowLoaded={isChatLoaded}
+                    loadMoreRows={loadChats}
+                    rowCount={chatListIds.length}
+                    width={400}
+                    height={CHATLISTITEM_CHAT_HEIGHT * chatListIds.length}
+                    itemKey={index => 'key' + chatListIds[index]}
+                    itemHeight={CHATLISTITEM_CHAT_HEIGHT}
+                  >
+                    {({ index, style }) => {
+                      const chatId = chatListIds[index]
+                      return (
+                        <div style={style}>
+                          <ChatListItem
+                            chatListItem={chatCache[chatId] || undefined}
+                            onClick={onChatClick.bind(null, chatId)}
+                          />
+                        </div>
+                      )
+                    }}
+                  </ChatListPart>
+                </div>
+              </>
+            )}
+            <div className='group-separator'>
+              {!isBroadcast
+                ? tx(
+                    'n_members',
+                    groupMembers.length.toString(),
+                    groupMembers.length == 1 ? 'one' : 'other'
+                  )
+                : tx(
+                    'n_recipients',
+                    groupMembers.length.toString(),
+                    groupMembers.length == 1 ? 'one' : 'other'
+                  )}
+            </div>
+            <div className='group-member-contact-list-wrapper'>
+              {!chatDisabled && (
                 <>
-                  <div className='group-separator'>{tx('related_chats')}</div>
-                  <div className='group-related-chats-list-wrapper'>
-                    <ChatListPart
-                      isRowLoaded={isChatLoaded}
-                      loadMoreRows={loadChats}
-                      rowCount={chatListIds.length}
-                      width={400}
-                      height={CHATLISTITEM_CHAT_HEIGHT * chatListIds.length}
-                      itemKey={index => 'key' + chatListIds[index]}
-                      itemHeight={CHATLISTITEM_CHAT_HEIGHT}
-                    >
-                      {({ index, style }) => {
-                        const chatId = chatListIds[index]
-                        return (
-                          <div style={style}>
-                            <ChatListItem
-                              chatListItem={chatCache[chatId] || undefined}
-                              onClick={onChatClick.bind(null, chatId)}
-                            />
-                          </div>
-                        )
-                      }}
-                    </ChatListPart>
-                  </div>
+                  <PseudoListItemAddMember
+                    onClick={() => showAddMemberDialog()}
+                    isBroadcast={isBroadcast}
+                  />
+                  {!isBroadcast && (
+                    <PseudoListItemShowQrCode onClick={() => showQRDialog()} />
+                  )}
                 </>
               )}
-              <div className='group-separator'>
-                {!isBroadcast
-                  ? tx(
-                      'n_members',
-                      groupMembers.length.toString(),
-                      groupMembers.length == 1 ? 'one' : 'other'
-                    )
-                  : tx(
-                      'n_recipients',
-                      groupMembers.length.toString(),
-                      groupMembers.length == 1 ? 'one' : 'other'
-                    )}
-              </div>
-              <div className='group-member-contact-list-wrapper'>
-                {!chatDisabled && (
-                  <>
-                    <PseudoListItemAddMember
-                      onClick={() => showAddMemberDialog()}
-                      isBroadcast={isBroadcast}
-                    />
-                    {!isBroadcast && (
-                      <PseudoListItemShowQrCode
-                        onClick={() => showQRDialog()}
-                      />
-                    )}
-                  </>
-                )}
-                <ContactList
-                  contacts={chat.contacts}
-                  showRemove={!chatDisabled}
-                  onClick={contact => {
-                    if (contact.id === C.DC_CONTACT_ID_SELF) {
-                      return
-                    }
-                    setProfileContact(contact)
-                  }}
-                  onRemoveClick={showRemoveGroupMemberConfirmationDialog}
-                />
-              </div>
-            </Card>
-          </div>
+              <ContactList
+                contacts={chat.contacts}
+                showRemove={!chatDisabled}
+                onClick={contact => {
+                  if (contact.id === C.DC_CONTACT_ID_SELF) {
+                    return
+                  }
+                  setProfileContact(contact)
+                }}
+                onRemoveClick={showRemoveGroupMemberConfirmationDialog}
+              />
+            </div>
+          </DialogBody>
         </>
       )}
       {profileContact && (
@@ -363,16 +357,7 @@ export function AddMemberDialog({
   const [queryStr, onSearchChange, _, refreshContacts] =
     useContactSearch(updateSearchContacts)
   return (
-    <DeltaDialogBase
-      onClose={onClose}
-      canOutsideClickClose={false}
-      style={{
-        top: '15vh',
-        width: '500px',
-        maxHeight: '70vh',
-      }}
-      fixed
-    >
+    <Dialog canOutsideClickClose={false} fixed onClose={onClose}>
       {AddMemberInnerDialog({
         onOk: addMembers => {
           onOk(addMembers)
@@ -389,54 +374,44 @@ export function AddMemberDialog({
         isBroadcast,
         isVerificationRequired,
       })}
-    </DeltaDialogBase>
+    </Dialog>
   )
 }
 
 export function ShowQRDialog({
-  onClose,
   qrCode,
   groupName,
   qrCodeSVG,
+  onClose,
 }: { qrCode: string; groupName: string; qrCodeSVG?: string } & DialogProps) {
   const tx = useTranslationFunction()
 
   return (
-    <DeltaDialogBase
-      onClose={onClose}
-      canOutsideClickClose={false}
-      style={{
-        top: '15vh',
-        width: '500px',
-        maxHeight: '70vh',
-      }}
-      fixed
-    >
-      <DeltaDialogHeader title={tx('qrshow_title')} onClose={onClose} />
+    <Dialog onClose={onClose} canOutsideClickClose={false} fixed>
+      <DialogHeader title={tx('qrshow_title')} onClose={onClose} />
       <QrCodeShowQrInner
         qrCode={qrCode}
         qrCodeSVG={qrCodeSVG}
         description={tx('qrshow_join_group_hint', [groupName])}
       />
-    </DeltaDialogBase>
+    </Dialog>
   )
 }
 
 export function EditGroupNameDialog({
+  onClose,
+  onOk,
+  isBroadcast,
+  groupName: initialGroupName,
   groupColor,
   groupImage: initialGroupImage,
-  groupName: initialGroupName,
-  isBroadcast,
-  onOk,
-  ...dialogProps
 }: {
-  groupColor: string
-  groupImage: any
-  groupName: string
-  isBroadcast: boolean
   onOk: (groupName: string, groupImage?: string) => void
+  groupName: string
+  groupImage?: string
+  groupColor: string
+  isBroadcast?: boolean
 } & DialogProps) {
-  const { onClose } = dialogProps
   const [groupName, setGroupName] = useState(initialGroupName)
   const [groupImage, setGroupImage] = useState(initialGroupImage)
   const tx = useTranslationFunction()
@@ -451,26 +426,16 @@ export function EditGroupNameDialog({
   }
 
   return (
-    <DeltaDialogBase
-      onClose={onClose}
-      canOutsideClickClose={false}
-      style={{
-        top: '15vh',
-        width: '500px',
-        maxHeight: '70vh',
-        height: 'auto',
-      }}
-      fixed
-    >
-      <DeltaDialogHeader
+    <Dialog onClose={onClose} canOutsideClickClose={false} fixed>
+      <DialogHeader
         title={
           !isBroadcast
             ? tx('menu_group_name_and_image')
             : tx('menu_broadcast_list_name')
         }
       />
-      <DeltaDialogBody>
-        <Card elevation={Elevation.ONE}>
+      <DialogBody>
+        <DialogContent>
           <div
             className='profile-image-username center'
             style={{ marginBottom: '30px' }}
@@ -513,10 +478,10 @@ export function EditGroupNameDialog({
                 : tx('please_enter_broadcast_list_name')}
             </p>
           )}
-        </Card>
-      </DeltaDialogBody>
-      <DeltaDialogOkCancelFooter onCancel={onClickCancel} onOk={onClickOk} />
-    </DeltaDialogBase>
+        </DialogContent>
+      </DialogBody>
+      <OkCancelFooterAction onCancel={onClickCancel} onOk={onClickOk} />
+    </Dialog>
   )
 }
 

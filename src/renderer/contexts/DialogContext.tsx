@@ -31,9 +31,8 @@ const initialValues: DialogContextValue = {
   closeDialog: _ => {},
 }
 
-export const DialogContext = React.createContext<DialogContextValue>(
-  initialValues
-)
+export const DialogContext =
+  React.createContext<DialogContextValue>(initialValues)
 
 export const DialogContextProvider = ({ children }: PropsWithChildren<{}>) => {
   const [dialogs, setDialogs] = useState<{ [id: DialogId]: JSX.Element }>({})

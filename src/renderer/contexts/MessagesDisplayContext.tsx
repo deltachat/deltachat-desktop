@@ -16,6 +16,5 @@ type MessagesDisplayContextValue =
  * This context is currently only used by bot command suggestions
  * that they know in which chat they need to set/replace the draft
  */
-export const MessagesDisplayContext = createContext<MessagesDisplayContextValue>(
-  null
-)
+export const MessagesDisplayContext =
+  createContext<MessagesDisplayContextValue>(null)

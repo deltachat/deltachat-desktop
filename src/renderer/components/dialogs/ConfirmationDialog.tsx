@@ -1,13 +1,26 @@
 import React from 'react'
 
-import {
-  SmallDialog,
-  DeltaDialogFooter,
-  DeltaDialogFooterActions,
-} from './DeltaDialog'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  FooterActions,
+} from '../Dialog'
+import FooterActionButton from '../Dialog/FooterActionButton'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+
+type Props = {
+  message: string
+  cancelLabel?: string
+  confirmLabel?: string
+  cb: (yes: boolean) => void
+  isConfirmDanger?: boolean
+  noMargin?: boolean
+  header?: string
+} & DialogProps
 
 export default function ConfirmationDialog({
   message,
@@ -16,17 +29,8 @@ export default function ConfirmationDialog({
   cb,
   onClose,
   isConfirmDanger = false,
-  noMargin = false,
   header,
-}: {
-  message: string
-  cancelLabel?: string
-  confirmLabel?: string
-  cb: (yes: boolean) => void
-  isConfirmDanger?: boolean
-  noMargin?: boolean
-  header?: string
-} & DialogProps) {
+}: Props) {
   const tx = useTranslationFunction()
 
   const onClick = (yes: boolean) => {
@@ -35,48 +39,26 @@ export default function ConfirmationDialog({
   }
 
   return (
-    <SmallDialog onClose={onClose}>
-      <div className='bp4-dialog-body-with-padding'>
-        {header && (
-          <div
-            style={{
-              fontSize: '1.5em',
-              fontWeight: 'lighter',
-              marginBottom: '6px',
-              overflow: 'auto',
-              wordBreak: 'break-word',
-            }}
-          >
-            {header}
-          </div>
-        )}
-        <p
-          style={{
-            wordBreak: 'break-word',
-          }}
-        >
-          {message}
-        </p>
-      </div>
-      <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
-        <DeltaDialogFooterActions>
-          <p
-            className='delta-button bold primary'
-            onClick={() => onClick(false)}
-            style={noMargin ? {} : { marginRight: '10px' }}
-          >
+    <Dialog onClose={onClose}>
+      {header && <DialogHeader title={header} />}
+      <DialogBody>
+        <DialogContent paddingTop={header === undefined}>
+          <p>{message}</p>
+        </DialogContent>
+      </DialogBody>
+      <DialogFooter>
+        <FooterActions>
+          <FooterActionButton onClick={() => onClick(false)}>
             {cancelLabel || tx('cancel')}
-          </p>
-          <p
-            className={`delta-button bold primary ${
-              isConfirmDanger ? 'danger' : 'primary'
-            } test-selector-confirm`}
+          </FooterActionButton>
+          <FooterActionButton
+            danger={isConfirmDanger}
             onClick={() => onClick(true)}
           >
             {confirmLabel || tx('yes')}
-          </p>
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
-    </SmallDialog>
+          </FooterActionButton>
+        </FooterActions>
+      </DialogFooter>
+    </Dialog>
   )
 }

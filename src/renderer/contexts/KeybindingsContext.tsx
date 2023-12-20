@@ -7,9 +7,9 @@ import {
 } from '../keybindings'
 import useKeyBindingAction from '../hooks/useKeyBindingAction'
 import useDialog from '../hooks/useDialog'
-import Settings from '../components/dialogs/Settings'
 import { Screens } from '../ScreenController'
 import KeybindingCheatSheet from '../components/dialogs/KeybindingCheatSheet'
+import Settings from '../components/Settings'
 
 import type { PropsWithChildren } from 'react'
 

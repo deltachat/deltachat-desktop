@@ -3,12 +3,14 @@ import React from 'react'
 import { BackendRemote } from '../../backend-com'
 import { runtime } from '../../runtime'
 import { selectedAccountId } from '../../ScreenController'
-import {
-  SmallDialog,
-  DeltaDialogFooter,
-  DeltaDialogFooterActions,
-} from './DeltaDialog'
 import QrCode from './QrCode'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  FooterActionButton,
+  FooterActions,
+} from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
 
@@ -38,30 +40,24 @@ export function ProtectionBrokenDialog({
   }
 
   return (
-    <SmallDialog onClose={onClose}>
-      <div className='bp4-dialog-body-with-padding'>
-        <p style={{ wordBreak: 'break-word' }}>
-          {tx('chat_protection_broken_explanation', name)}
-        </p>
-      </div>
-      <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
-        <DeltaDialogFooterActions style={{ justifyContent: 'space-between' }}>
-          <p
-            className='delta-button bold primary'
-            onClick={onLearnMore}
-            style={{ marginRight: '10px' }}
-          >
+    <Dialog onClose={onClose}>
+      <DialogBody>
+        <DialogContent paddingTop>
+          <p>{tx('chat_protection_broken_explanation', name)}</p>
+        </DialogContent>
+      </DialogBody>
+      <DialogFooter>
+        <FooterActions align='spaceBetween'>
+          <FooterActionButton onClick={onLearnMore}>
             {tx('learn_more')}
-          </p>
-          <p className={`delta-button bold primary`} onClick={onQRScan}>
+          </FooterActionButton>
+          <FooterActionButton onClick={onQRScan}>
             {tx('qrscan_title')}
-          </p>
-          <p className={`delta-button bold primary`} onClick={onClose}>
-            {tx('ok')}
-          </p>
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
-    </SmallDialog>
+          </FooterActionButton>
+          <FooterActionButton onClick={onClose}>{tx('ok')}</FooterActionButton>
+        </FooterActions>
+      </DialogFooter>
+    </Dialog>
   )
 }
 
@@ -82,30 +78,24 @@ export function VerifiedContactsRequiredDialog({ onClose }: DialogProps) {
   }
 
   return (
-    <SmallDialog onClose={onClose}>
-      <div className='bp4-dialog-body-with-padding'>
-        <p style={{ wordBreak: 'break-word' }}>
-          {tx('verified_contact_required_explain')}
-        </p>
-      </div>
-      <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
-        <DeltaDialogFooterActions style={{ justifyContent: 'space-between' }}>
-          <p
-            className='delta-button bold primary'
-            onClick={onLearnMore}
-            style={{ marginRight: '10px' }}
-          >
+    <Dialog onClose={onClose}>
+      <DialogBody>
+        <DialogContent paddingTop>
+          <p>{tx('verified_contact_required_explain')}</p>
+        </DialogContent>
+      </DialogBody>
+      <DialogFooter>
+        <FooterActions align='spaceBetween'>
+          <FooterActionButton onClick={onLearnMore}>
             {tx('learn_more')}
-          </p>
-          <p className={`delta-button bold primary`} onClick={onQRScan}>
+          </FooterActionButton>
+          <FooterActionButton onClick={onQRScan}>
             {tx('qrscan_title')}
-          </p>
-          <p className={`delta-button bold primary`} onClick={onClose}>
-            {tx('ok')}
-          </p>
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
-    </SmallDialog>
+          </FooterActionButton>
+          <FooterActionButton onClick={onClose}>{tx('ok')}</FooterActionButton>
+        </FooterActions>
+      </DialogFooter>
+    </Dialog>
   )
 }
 
@@ -117,26 +107,20 @@ export function ProtectionEnabledDialog({ onClose }: DialogProps) {
   }
 
   return (
-    <SmallDialog onClose={onClose}>
-      <div className='bp4-dialog-body-with-padding'>
-        <p style={{ wordBreak: 'break-word' }}>
-          {tx('chat_protection_enabled_explanation')}
-        </p>
-      </div>
-      <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
-        <DeltaDialogFooterActions style={{ justifyContent: 'space-between' }}>
-          <p
-            className='delta-button bold primary'
-            onClick={onLearnMore}
-            style={{ marginRight: '10px' }}
-          >
+    <Dialog onClose={onClose}>
+      <DialogBody>
+        <DialogContent paddingTop>
+          <p>{tx('chat_protection_enabled_explanation')}</p>
+        </DialogContent>
+      </DialogBody>
+      <DialogFooter>
+        <FooterActions align='spaceBetween'>
+          <FooterActionButton onClick={onLearnMore}>
             {tx('learn_more')}
-          </p>
-          <p className={`delta-button bold primary`} onClick={onClose}>
-            {tx('ok')}
-          </p>
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
-    </SmallDialog>
+          </FooterActionButton>
+          <FooterActionButton onClick={onClose}>{tx('ok')}</FooterActionButton>
+        </FooterActions>
+      </DialogFooter>
+    </Dialog>
   )
 }

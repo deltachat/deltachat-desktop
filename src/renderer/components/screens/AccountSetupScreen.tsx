@@ -5,14 +5,14 @@ import LoginForm, {
   defaultCredentials,
   ConfigureProgressDialog,
 } from '../LoginForm'
-import {
-  DeltaDialogFooter,
-  DeltaDialogFooterActions,
-  DeltaDialogBase,
-  DeltaDialogBody,
-  DeltaDialogContent,
-  DeltaDialogHeader,
-} from '../dialogs/DeltaDialog'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  FooterActionButton,
+  FooterActions,
+} from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
 
@@ -61,41 +61,33 @@ export default function AccountSetupScreen({
   return (
     <div className='login-screen'>
       <div className='window'>
-        <DeltaDialogBase
+        <Dialog
           backdropProps={{ className: 'no-backdrop' }}
           onClose={() => {}}
-          fixed={true}
+          fixed
         >
-          <DeltaDialogHeader title={tx('login_explain')} />
-          <DeltaDialogBody>
-            <DeltaDialogContent>
+          <DialogHeader title={tx('login_explain')} />
+          <DialogBody>
+            <DialogContent>
               <div className='login'>
                 <LoginForm
                   credentials={credentials}
                   setCredentials={setCredentials}
                 />
               </div>
-            </DeltaDialogContent>
-          </DeltaDialogBody>
-          <DeltaDialogFooter>
-            <DeltaDialogFooterActions>
-              <p
-                id='action-cancel'
-                className={'delta-button bold primary'}
-                onClick={() => selectAccount(accountId)}
-              >
+            </DialogContent>
+          </DialogBody>
+          <DialogFooter>
+            <FooterActions>
+              <FooterActionButton onClick={() => selectAccount(accountId)}>
                 {tx('cancel')}
-              </p>
-              <p
-                id='action-login'
-                className={'delta-button bold primary'}
-                onClick={onClickLogin}
-              >
+              </FooterActionButton>
+              <FooterActionButton onClick={onClickLogin}>
                 {tx('login_title')}
-              </p>
-            </DeltaDialogFooterActions>
-          </DeltaDialogFooter>
-        </DeltaDialogBase>
+              </FooterActionButton>
+            </FooterActions>
+          </DialogFooter>
+        </Dialog>
       </div>
     </div>
   )

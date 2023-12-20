@@ -1,8 +1,8 @@
 import React from 'react'
 import classNames from 'classnames'
 
-import { useTranslationFunction } from '../../contexts'
 import { SearchClearButton } from './SearchClearButton'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import styles from './styles.module.scss'
 
