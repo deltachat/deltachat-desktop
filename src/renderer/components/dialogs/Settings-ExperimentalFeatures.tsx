@@ -106,7 +106,7 @@ export function SettingsExperimentalFeatures({
         description: tx('disable_imap_idle_explain'),
       })}
       <SettingsSelector
-        onClick={onClickEdit.bind(null, false)}
+        onClick={onClickEdit.bind(null)}
         currentValue={showVideochatInstance(
           settingsStore.settings['webrtc_instance']
         )}

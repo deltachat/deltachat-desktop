@@ -8,7 +8,9 @@ $bp4-dialog-radius: 2px;
   padding: 0px;
   background: var(--bp4DialogBgSecondary);
   border-radius: $bp4-dialog-radius;
-  box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 4px 8px rgba(16, 22, 26, 0.2),
+  box-shadow:
+    0 0 0 1px rgba(16, 22, 26, 0.1),
+    0 4px 8px rgba(16, 22, 26, 0.2),
     0 0 20px 3px rgba(16, 22, 26, 0.2);
 }
 
@@ -56,10 +58,14 @@ $bp4-dialog-radius: 2px;
 
 .bp4-elevation-1,
 .bp4-elevation-0 {
-  box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 0 0 rgba(16, 22, 26, 0),
+  box-shadow:
+    0 0 0 1px rgba(16, 22, 26, 0.1),
+    0 0 0 rgba(16, 22, 26, 0),
     0 1px 1px rgba(16, 22, 26, 0.2);
   &:first-child {
-    box-shadow: 0 0 0 0px rgba(16, 22, 26, 0.1), 0 0 0 rgba(16, 22, 26, 0),
+    box-shadow:
+      0 0 0 0px rgba(16, 22, 26, 0.1),
+      0 0 0 rgba(16, 22, 26, 0),
       0 1px 1px rgba(16, 22, 26, 0.2);
     flex: 1 1 auto;
     margin-bottom: 0px;
@@ -203,7 +209,9 @@ $bp4-dialog-radius: 2px;
 
 .bp4-popover {
   -webkit-box-shadow: none;
-  box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 2px 4px rgba(16, 22, 26, 0.2),
+  box-shadow:
+    0 0 0 1px rgba(16, 22, 26, 0.1),
+    0 2px 4px rgba(16, 22, 26, 0.2),
     0 8px 24px rgba(16, 22, 26, 0.2); // TODO include color into theming
 }
 

@@ -63,9 +63,12 @@ export type DialogProps = {
 
 let dialogCounter = 1
 
-export type OpenDialogFunctionType = typeof DialogController.prototype.openDialog
-export type CloseDialogFunctionType = typeof DialogController.prototype.closeDialog
-export type HasOpenDialogsFunctionType = typeof DialogController.prototype.hasOpenDialogs
+export type OpenDialogFunctionType =
+  typeof DialogController.prototype.openDialog
+export type CloseDialogFunctionType =
+  typeof DialogController.prototype.closeDialog
+export type HasOpenDialogsFunctionType =
+  typeof DialogController.prototype.hasOpenDialogs
 
 export default class DialogController extends React.Component<
   any,

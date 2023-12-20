@@ -32,7 +32,6 @@ $textNavBar: #fff;
 $textPrimary: #010101;
 $textSecondary: #62656a;
 
-
 $scrollbarTransparency: 0.5;
 
 /* Derive the themedata from the theme variables */
@@ -46,7 +45,7 @@ $scrollbarTransparency: 0.5;
   --chatListItemBgHover: rgb(242, 242, 242);
   --cli-search-result-divider: var(--delta-dialog-separator);
   --cli-search-result-divider-border-width: 0px;
-  --emojiMartSelect: var(--chatListItemBgHover)
+  --emojiMartSelect: var(--chatListItemBgHover);
 }
 
 /* overwrite css */

@@ -39,7 +39,7 @@ export default function SettingsOutgoingMediaQuality(props: {
   return (
     <>
       <SettingsSelector
-        onClick={onOpenDialog.bind(null, false)}
+        onClick={onOpenDialog.bind(null)}
         currentValue={
           options.find(
             ({ value }) => settings['media_quality'] === String(value)

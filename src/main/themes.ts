@@ -15,9 +15,10 @@ const log = getLogger('main/themes')
 
 const dc_theme_dir = join(__dirname, '../../themes')
 
-function parseThemeMetaData(
-  rawTheme: string
-): { name: string; description: string } {
+function parseThemeMetaData(rawTheme: string): {
+  name: string
+  description: string
+} {
   const meta_data_block =
     /.theme-meta ?{([^]*)}/gm.exec(rawTheme)?.[1].trim() || ''
 

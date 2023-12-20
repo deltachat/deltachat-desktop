@@ -26,24 +26,25 @@ import { openHtmlEmailWindow } from './windows/html_email'
 import { appx } from './isAppx'
 
 const log = getLogger('main/ipc')
-const DeltaChatController: typeof import('./deltachat/controller').default = (() => {
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    return require('./deltachat/controller').default
-  } catch (error) {
-    log.critical(
-      "Fatal: The DeltaChat Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!",
-      error
-    )
-    dialog.showErrorBox(
-      'Fatal Error',
-      `The DeltaChat Module couldn't be loaded.
+const DeltaChatController: typeof import('./deltachat/controller').default =
+  (() => {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      return require('./deltachat/controller').default
+    } catch (error) {
+      log.critical(
+        "Fatal: The DeltaChat Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!",
+        error
+      )
+      dialog.showErrorBox(
+        'Fatal Error',
+        `The DeltaChat Module couldn't be loaded.
  Please check if all dependencies for deltachat-core are installed!
  The Log file is located in this folder: ${getLogsPath()}\n
  ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
-    )
-  }
-})()
+      )
+    }
+  })()
 
 const app = rawApp as ExtendedAppMainProcess
 

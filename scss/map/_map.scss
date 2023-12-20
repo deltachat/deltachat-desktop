@@ -73,7 +73,11 @@ div.context-menu {
 }
 
 .map-overlay {
-  font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font:
+    12px/20px 'Helvetica Neue',
+    Arial,
+    Helvetica,
+    sans-serif;
   position: fixed;
   width: 160px;
   top: 80px;

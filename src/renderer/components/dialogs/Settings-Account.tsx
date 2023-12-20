@@ -43,13 +43,11 @@ export default function SettingsAccountDialog({
 }
 
 export function SettingsAccountInner(onClose: () => void) {
-  const [initial_settings, setInitialAccountSettings] = useState<Credentials>(
-    defaultCredentials()
-  )
+  const [initial_settings, setInitialAccountSettings] =
+    useState<Credentials>(defaultCredentials())
 
-  const [accountSettings, _setAccountSettings] = useState<Credentials>(
-    defaultCredentials()
-  )
+  const [accountSettings, _setAccountSettings] =
+    useState<Credentials>(defaultCredentials())
 
   const [disableUpdate, setDisableUpdate] = useState(true)
 
@@ -64,9 +62,8 @@ export function SettingsAccountInner(onClose: () => void) {
     if (window.__selectedAccountId === undefined) {
       throw new Error('can not load settings when no account is selected')
     }
-    const accountSettings: Credentials = ((await BackendRemote.rpc.batchGetConfig(
-      window.__selectedAccountId,
-      [
+    const accountSettings: Credentials =
+      (await BackendRemote.rpc.batchGetConfig(window.__selectedAccountId, [
         'addr',
         'mail_pw',
         'sentbox_watch',
@@ -89,8 +86,7 @@ export function SettingsAccountInner(onClose: () => void) {
         'socks5_port',
         'socks5_user',
         'socks5_password',
-      ]
-    )) as unknown) as Credentials
+      ])) as unknown as Credentials
     setInitialAccountSettings(accountSettings)
     _setAccountSettings(accountSettings)
   }

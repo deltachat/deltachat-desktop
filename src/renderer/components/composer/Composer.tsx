@@ -568,10 +568,10 @@ export function useDraft(
 
   useEffect(() => {
     window.__setQuoteInDraft = (messageId: number) => {
-      draftRef.current.quote = (({
+      draftRef.current.quote = {
         kind: 'WithMessage',
         messageId,
-      } as Partial<Type.MessageQuote>) as any) as Type.MessageQuote
+      } as Partial<Type.MessageQuote> as any as Type.MessageQuote
       saveDraft()
       inputRef.current?.focus()
     }
