@@ -18,8 +18,8 @@ import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import SettingsStoreInstance from '../../stores/settings'
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
-import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import useDialog from '../../hooks/useDialog'
+import useConfirmationDialog from '../../hooks/useConfirmationDialog'
 
 const log = getLogger('renderer/message-markdown')
 
@@ -156,62 +156,63 @@ function TagLink({ tag }: { tag: string }) {
 }
 
 function BotCommandSuggestion({ suggestion }: { suggestion: string }) {
-  const { openDialog } = useDialog()
-  const message_display_context = useContext(MessagesDisplayContext)
+  const openConfirmationDialog = useConfirmationDialog()
+  const messageDisplay = useContext(MessagesDisplayContext)
+  const accountId = selectedAccountId()
 
   const applySuggestion = async () => {
-    if (!message_display_context) {
+    if (!messageDisplay) {
       return
     }
-    const accountId = selectedAccountId()
 
     let chatID
-    if (message_display_context.context == 'contact_profile_status') {
+    if (messageDisplay.context == 'contact_profile_status') {
       // Bot command was clicked inside of a contact status
       chatID = await BackendRemote.rpc.createChatByContactId(
         accountId,
-        message_display_context.contact_id
+        messageDisplay.contact_id
       )
       // also select the chat and close the profile window if this is the case
       selectChat(chatID)
-      message_display_context.closeProfileDialog()
-    } else if (message_display_context.context == 'chat_map') {
-      chatID = message_display_context.chatId
+      messageDisplay.closeProfileDialog()
+    } else if (messageDisplay.context == 'chat_map') {
+      chatID = messageDisplay.chatId
       // go back to chat view
       selectChat(chatID)
       setChatView(ChatView.MessageList)
-    } else if (message_display_context.context == 'chat_messagelist') {
+    } else if (messageDisplay.context == 'chat_messagelist') {
       // nothing special to do
-      chatID = message_display_context.chatId
+      chatID = messageDisplay.chatId
     } else {
       log.error(
-        'Error applying BotCommandSuggestion: message_display_context.type is not implemented: ',
+        'Error applying BotCommandSuggestion: MessageDisplayContext.type is not implemented: ',
         //@ts-ignore
-        message_display_context.type
+        messageDisplay.type
       )
       return
     }
+
     // IDEA: Optimisation - unify these two calls in a new backend call that only returns the info we need
     const [chat, draft] = await Promise.all([
       BackendRemote.rpc.getBasicChatInfo(accountId, chatID),
       BackendRemote.rpc.getDraft(accountId, chatID),
     ])
+
     if (!chat) {
       log.error('chat not defined')
       return
     }
+
     const { name } = chat
 
     if (draft) {
-      // ask if the draft should be replaced
-      const continue_process = await new Promise((resolve, _reject) => {
-        openDialog(ConfirmationDialog, {
-          message: window.static_translate('confirm_replace_draft', name),
-          confirmLabel: window.static_translate('replace_draft'),
-          cb: resolve,
-        })
+      // Ask if the draft should be replaced
+      const confirmed = openConfirmationDialog({
+        message: window.static_translate('confirm_replace_draft', name),
+        confirmLabel: window.static_translate('replace_draft'),
       })
-      if (!continue_process) {
+
+      if (!confirmed) {
         return
       }
     }
