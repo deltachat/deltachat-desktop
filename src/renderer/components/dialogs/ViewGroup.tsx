@@ -33,8 +33,8 @@ import Dialog, {
   OkCancelFooterAction,
 } from '../Dialog'
 import useDialog from '../../hooks/useDialog'
-import ConfirmationDialog from './ConfirmationDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useConfirmationDialog from '../../hooks/useConfirmationDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
@@ -131,14 +131,14 @@ function ViewGroupInner(
     isBroadcast: boolean
   } & DialogProps
 ) {
-  const { openDialog } = useDialog()
   const { onClose, chat, isBroadcast } = props
+  const { openDialog } = useDialog()
+  const openConfirmationDialog = useConfirmationDialog()
   const tx = useTranslationFunction()
   const [settings] = useSettingsStore()
+  const [chatListIds, setChatListIds] = useState<number[]>([])
   const isRelatedChatsEnabled =
     settings?.desktopSettings.enableRelatedChats || false
-
-  const [chatListIds, setChatListIds] = useState<number[]>([])
 
   useEffect(() => {
     if (isRelatedChatsEnabled)
@@ -164,19 +164,21 @@ function ViewGroupInner(
     setGroupImage,
   } = useGroup(chat)
 
-  const showRemoveGroupMemberConfirmationDialog = (contact: Type.Contact) => {
-    openDialog(ConfirmationDialog, {
-      message: !isBroadcast
-        ? tx('ask_remove_members', contact.nameAndAddr)
-        : tx('ask_remove_from_broadcast', contact.nameAndAddr),
-      confirmLabel: tx('delete'),
-      cb: (yes: boolean) => {
-        if (yes) {
-          removeGroupMember(contact.id)
-        }
-      },
-    })
-  }
+  const showRemoveGroupMemberConfirmationDialog = useCallback(
+    async (contact: Type.Contact) => {
+      const confirmed = await openConfirmationDialog({
+        message: !isBroadcast
+          ? tx('ask_remove_members', contact.nameAndAddr)
+          : tx('ask_remove_from_broadcast', contact.nameAndAddr),
+        confirmLabel: tx('delete'),
+      })
+
+      if (confirmed) {
+        removeGroupMember(contact.id)
+      }
+    },
+    [isBroadcast, openConfirmationDialog, removeGroupMember, tx]
+  )
 
   const onClickEdit = () => {
     openDialog(EditGroupNameDialog, {
