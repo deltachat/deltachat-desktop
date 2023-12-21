@@ -5,7 +5,7 @@ import ConfirmationDialog, {
   Props as ConfirmationDialogProps,
 } from '../components/dialogs/ConfirmationDialog'
 
-type UseConfirmationDialog = Pick<
+type OpenConfirmationDialog = Pick<
   ConfirmationDialogProps,
   | 'cancelLabel'
   | 'confirmLabel'
@@ -15,18 +15,21 @@ type UseConfirmationDialog = Pick<
   | 'noMargin'
 >
 
-export default function useConfirmationDialog(args: UseConfirmationDialog) {
+export default function useConfirmationDialog() {
   const { openDialog } = useDialog()
 
-  const openConfirmationDialog = useCallback(() => {
-    return new Promise(resolve => {
-      const onUserResult = (confirmed: boolean) => {
-        resolve(confirmed)
-      }
+  const openConfirmationDialog = useCallback(
+    (args: OpenConfirmationDialog) => {
+      return new Promise(resolve => {
+        const onUserResult = (confirmed: boolean) => {
+          resolve(confirmed)
+        }
 
-      openDialog(ConfirmationDialog, { cb: onUserResult, ...args })
-    })
-  }, [openDialog, args])
+        openDialog(ConfirmationDialog, { cb: onUserResult, ...args })
+      })
+    },
+    [openDialog]
+  )
 
   return openConfirmationDialog
 }
