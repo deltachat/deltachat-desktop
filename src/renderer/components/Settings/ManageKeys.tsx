@@ -4,15 +4,14 @@ import { BackendRemote } from '../../backend-com'
 import { runtime } from '../../runtime'
 import { selectedAccountId } from '../../ScreenController'
 import SettingsButton from './SettingsButton'
-import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
+import useConfirmationDialog from '../../hooks/useConfirmationDialog'
 
 import type { OpenDialogOptions } from 'electron'
 
 export default function ManageKeys() {
   const tx = useTranslationFunction()
-  const { openDialog } = useDialog()
+  const openConfirmationDialog = useConfirmationDialog()
 
   const onKeysImport = useCallback(async () => {
     const opts: OpenDialogOptions = {
@@ -27,29 +26,27 @@ export default function ManageKeys() {
       return
     }
 
-    openDialog(ConfirmationDialog, {
+    const confirmed = await openConfirmationDialog({
       message: tx('pref_managekeys_import_explain', filename),
       confirmLabel: tx('yes'),
       cancelLabel: tx('no'),
-      cb: async (yes: boolean) => {
-        if (!yes) {
-          return
-        }
-        const text = tx('pref_managekeys_secret_keys_imported_from_x', filename)
-        await BackendRemote.rpc.importSelfKeys(
-          selectedAccountId(),
-          filename,
-          null
-        )
-        window.__userFeedback({ type: 'success', text })
-      },
     })
-  }, [openDialog, tx])
+
+    if (confirmed) {
+      const text = tx('pref_managekeys_secret_keys_imported_from_x', filename)
+
+      await BackendRemote.rpc.importSelfKeys(
+        selectedAccountId(),
+        filename,
+        null
+      )
+
+      window.__userFeedback({ type: 'success', text })
+    }
+  }, [openConfirmationDialog, tx])
 
   const onKeysExport = useCallback(async () => {
     // TODO: ask for the user's password and check it
-    const tx = window.static_translate
-
     const opts: OpenDialogOptions = {
       title: tx('pref_managekeys_export_secret_keys'),
       defaultPath: runtime.getAppPath('downloads'),
@@ -60,31 +57,31 @@ export default function ManageKeys() {
     if (!destination) {
       return
     }
+
     const title = tx('pref_managekeys_export_explain').replace(
       '%1$s',
       destination
     )
 
-    openDialog(ConfirmationDialog, {
+    const confirmed = await openConfirmationDialog({
       message: title,
       confirmLabel: tx('yes'),
       cancelLabel: tx('no'),
-      cb: async (yes: boolean) => {
-        if (!yes || !destination) {
-          return
-        }
-        await BackendRemote.rpc.exportSelfKeys(
-          selectedAccountId(),
-          destination,
-          null
-        )
-        window.__userFeedback({
-          type: 'success',
-          text: tx('pref_managekeys_secret_keys_exported_to_x', destination),
-        })
-      },
     })
-  }, [openDialog])
+
+    if (confirmed) {
+      await BackendRemote.rpc.exportSelfKeys(
+        selectedAccountId(),
+        destination,
+        null
+      )
+
+      window.__userFeedback({
+        type: 'success',
+        text: tx('pref_managekeys_secret_keys_exported_to_x', destination),
+      })
+    }
+  }, [tx, openConfirmationDialog])
 
   return (
     <>
