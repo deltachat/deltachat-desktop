@@ -98,7 +98,6 @@ export const ChatListItemRowMessage = React.memo<{
     messageCache: {
       [id: number]: Type.MessageSearchResult | undefined
     }
-    openDialog: OpenDialog
     queryStr: string | undefined
   }
   style: React.CSSProperties

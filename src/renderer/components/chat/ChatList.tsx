@@ -36,6 +36,7 @@ import useDialog from '../../hooks/useDialog'
 import CreateChat from '../dialogs/CreateChat'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
+import { OpenDialog } from '../../contexts/DialogContext'
 
 const enum LoadStatus {
   FETCHING = 1,
@@ -270,12 +271,19 @@ export default function ChatList(props: {
     activeContextMenuChatId,
   ])
 
-  const contactlistData = useMemo(() => {
+  const contactlistData: {
+    contactCache: {
+      [id: number]: Type.Contact | undefined
+    }
+    contactIds: number[]
+    openDialog: OpenDialog
+  } = useMemo(() => {
     return {
       contactCache,
       contactIds,
+      openDialog,
     }
-  }, [contactCache, contactIds])
+  }, [contactCache, contactIds, openDialog])
 
   const messagelistData = useMemo(() => {
     return { messageResultIds, messageCache, openDialog, queryStr }
