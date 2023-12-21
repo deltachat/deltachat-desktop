@@ -12,7 +12,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
-type Props = {
+export type Props = {
   message: string
   cancelLabel?: string
   confirmLabel?: string
