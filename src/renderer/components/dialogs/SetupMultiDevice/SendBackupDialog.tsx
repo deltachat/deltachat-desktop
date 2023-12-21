@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 
 import { getLogger } from '../../../../shared/logger'
 import { BackendRemote, onDCEvent } from '../../../backend-com'
 import { runtime } from '../../../runtime'
 import { selectedAccountId } from '../../../ScreenController'
-import ConfirmationDialog from '../ConfirmationDialog'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -16,6 +15,7 @@ import FooterActionButton from '../../Dialog/FooterActionButton'
 import Icon from '../../Icon'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import useDialog from '../../../hooks/useDialog'
+import useConfirmationDialog from '../../../hooks/useConfirmationDialog'
 
 import type { PropsWithChildren } from 'react'
 import type { DialogProps } from '../../../contexts/DialogContext'
@@ -29,6 +29,7 @@ const TROUBLESHOOTING_URL = 'https://delta.chat/en/help#multiclient'
 export function SendBackupDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
+  const openConfirmationDialog = useConfirmationDialog()
 
   const [inProgress, setInProgress] = useState<boolean>(false)
   const [qrCodeSVG, setQrSvg] = useState<string | null>(null)
@@ -104,12 +105,12 @@ export function SendBackupDialog({ onClose }: DialogProps) {
     }
   }
 
-  const cancel = async () => {
+  const cancel = useCallback(async () => {
     if (stage === 'error' || stage === null) {
       return onClose()
     }
 
-    openDialog(ConfirmationDialog, {
+    const confirmed = await openConfirmationDialog({
       ...(wasCopied
         ? {
             header: tx('multidevice_abort'),
@@ -118,15 +119,12 @@ export function SendBackupDialog({ onClose }: DialogProps) {
         : { message: tx('multidevice_abort') }),
       confirmLabel: tx('yes'),
       cancelLabel: tx('no'),
-      cb: (yes: boolean) => {
-        if (yes) {
-          BackendRemote.rpc
-            .stopOngoingProcess(selectedAccountId())
-            .then(onClose)
-        }
-      },
     })
-  }
+
+    if (confirmed) {
+      BackendRemote.rpc.stopOngoingProcess(selectedAccountId()).then(onClose)
+    }
+  }, [onClose, openConfirmationDialog, stage, tx, wasCopied])
 
   return (
     <Dialog
