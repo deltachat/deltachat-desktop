@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import debounce from 'debounce'
 import { filesize } from 'filesize'
 import { Switch, Alignment, Icon } from '@blueprintjs/core'
@@ -19,6 +19,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import AlertDialog from '../dialogs/AlertDialog'
+import useConfirmationDialog from '../../hooks/useConfirmationDialog'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
@@ -130,43 +131,48 @@ function AccountSelection({
 }) {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
+  const openConfirmationDialog = useConfirmationDialog()
 
-  const removeAccount = (account: Type.Account) => {
-    const header = tx(
-      'ask_delete_value',
-      account.kind == 'Configured' ? account.addr || '?' : '[unconfigured]'
-    )
-    const message = tx(
-      'delete_account_explain_with_name',
-      account.kind == 'Configured' ? account.addr || '?' : '[unconfigured]'
-    )
-    openDialog(ConfirmationDialog, {
-      header,
-      message,
-      confirmLabel: tx('delete_account'),
-      isConfirmDanger: true,
-      cb: async (yes: boolean) => {
-        if (yes) {
-          try {
-            await EffectfulBackendActions.removeAccount(account.id)
-            refreshAccounts()
-          } catch (error: any) {
-            if (error instanceof Error) {
-              openDialog(AlertDialog, {
-                message: error?.message,
-                cb: () => {
-                  refreshAccounts()
-                },
-              })
-            } else {
-              log.error('unexpected error type', error)
-              throw error
-            }
+  const removeAccount = useCallback(
+    async (account: Type.Account) => {
+      const header = tx(
+        'ask_delete_value',
+        account.kind == 'Configured' ? account.addr || '?' : '[unconfigured]'
+      )
+
+      const message = tx(
+        'delete_account_explain_with_name',
+        account.kind == 'Configured' ? account.addr || '?' : '[unconfigured]'
+      )
+
+      const confirmed = await openConfirmationDialog({
+        header,
+        message,
+        confirmLabel: tx('delete_account'),
+        isConfirmDanger: true,
+      })
+
+      if (confirmed) {
+        try {
+          await EffectfulBackendActions.removeAccount(account.id)
+          refreshAccounts()
+        } catch (error: any) {
+          if (error instanceof Error) {
+            openDialog(AlertDialog, {
+              message: error?.message,
+              cb: () => {
+                refreshAccounts()
+              },
+            })
+          } else {
+            log.error('unexpected error type', error)
+            throw error
           }
         }
-      },
-    })
-  }
+      }
+    },
+    [openConfirmationDialog, openDialog, refreshAccounts, tx]
+  )
 
   useEffect(() => {
     const onKeyDown = (ev: KeyboardEvent) => {
