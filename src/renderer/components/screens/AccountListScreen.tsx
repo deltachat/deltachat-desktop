@@ -17,7 +17,6 @@ import { runtime } from '../../runtime'
 import Dialog, { DialogBody, DialogHeader } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
-import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import AlertDialog from '../dialogs/AlertDialog'
 import useConfirmationDialog from '../../hooks/useConfirmationDialog'
 
