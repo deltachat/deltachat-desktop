@@ -10,19 +10,17 @@ import {
 } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { DialogBody, DialogContent, DialogWithHeader } from '../Dialog'
-import ConfirmationDialog from './ConfirmationDialog'
-import useDialog from '../../hooks/useDialog'
+import useConfirmationDialog from '../../hooks/useConfirmationDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
-export default function UnblockContacts(props: DialogProps) {
-  const { onClose } = props
+export default function UnblockContacts({ onClose }: DialogProps) {
   const [blockedContacts, setBlockedContacts] = useState<Type.Contact[] | null>(
     null
   )
   const accountId = selectedAccountId()
-  const { openDialog } = useDialog()
+  const openConfirmationDialog = useConfirmationDialog()
   const tx = useTranslationFunction()
 
   useEffect(() => {
@@ -37,13 +35,15 @@ export default function UnblockContacts(props: DialogProps) {
     )
   }, [accountId])
 
-  const onUnblockContact = ({ id }: { id: number }) => {
-    openDialog(ConfirmationDialog, {
+  const onUnblockContact = async ({ id }: { id: number }) => {
+    const confirmed = await openConfirmationDialog({
       message: tx('ask_unblock_contact'),
       confirmLabel: tx('menu_unblock_contact'),
-      cb: (yes: boolean) =>
-        yes && EffectfulBackendActions.unBlockContact(accountId, id),
     })
+
+    if (confirmed) {
+      EffectfulBackendActions.unBlockContact(accountId, id)
+    }
   }
 
   if (blockedContacts === null) return null
