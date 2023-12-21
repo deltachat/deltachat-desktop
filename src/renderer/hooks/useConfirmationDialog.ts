@@ -18,7 +18,7 @@ type OpenConfirmationDialog = Pick<
 export default function useConfirmationDialog() {
   const { openDialog } = useDialog()
 
-  const openConfirmationDialog = useCallback(
+  return useCallback(
     (args: OpenConfirmationDialog) => {
       return new Promise(resolve => {
         const onUserResult = (confirmed: boolean) => {
@@ -30,6 +30,4 @@ export default function useConfirmationDialog() {
     },
     [openDialog]
   )
-
-  return openConfirmationDialog
 }
