@@ -15,6 +15,7 @@
 - Refactor dialog logic and add additional helper methods #3512
 - Upgrade `filesize` dependency from `8.0.6` to `10.1.0`
 - Prefer light theme for the help and webxdc loading pages
+- Helper method to easily use confirmation dialogs #3601
 
 <a id="1_42_2"></a>
 
