@@ -35,7 +35,6 @@ import { useSettingsStore } from '../../stores/settings'
 import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
-import ConfirmationDialog from './ConfirmationDialog'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -51,6 +50,7 @@ import useDialog from '../../hooks/useDialog'
 import { VerifiedContactsRequiredDialog } from './ProtectionStatusDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import useConfirmationDialog from '../../hooks/useConfirmationDialog'
 
 type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
 
@@ -80,7 +80,7 @@ function CreateChatMain(props: CreateChatMainProps) {
   const { setViewMode, onClose } = props
   const tx = useTranslationFunction()
   const { userFeedback } = useContext(ScreenContext)
-  const { openDialog } = useDialog()
+  const openConfirmationDialog = useConfirmationDialog()
   const accountId = selectedAccountId()
 
   const [{ contacts, queryStrIsValidEmail }, updateContacts] = useContactsNew(
@@ -154,18 +154,21 @@ function CreateChatMain(props: CreateChatMainProps) {
     )
   }
 
-  const onContactContextMenu = (contact: Type.Contact) => {
-    openDialog(ConfirmationDialog, {
-      message: tx('ask_delete_contact', contact.address),
-      confirmLabel: tx('delete'),
-      cb: yes => {
-        yes &&
-          BackendRemote.rpc
-            .deleteContact(accountId, contact.id)
-            .then(refreshContacts)
-      },
-    })
-  }
+  const onContactContextMenu = useCallback(
+    async (contact: Type.Contact) => {
+      const confirmed = await openConfirmationDialog({
+        message: tx('ask_delete_contact', contact.address),
+        confirmLabel: tx('delete'),
+      })
+
+      if (confirmed) {
+        BackendRemote.rpc
+          .deleteContact(accountId, contact.id)
+          .then(refreshContacts)
+      }
+    },
+    [accountId, openConfirmationDialog, refreshContacts, tx]
+  )
 
   return (
     <>

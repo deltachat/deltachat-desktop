@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import {
   Button,
   Position,
@@ -17,9 +17,9 @@ import SettingsStoreInstance from '../../stores/settings'
 import { IMAGE_EXTENSIONS } from '../../../shared/constants'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
-import ConfirmationDialog from '../dialogs/ConfirmationDialog'
+import useConfirmationDialog from '../../hooks/useConfirmationDialog'
 
-//function to populate Menu
+// Function to populate Menu
 const MenuAttachmentItems = ({
   itemsArray,
 }: {
@@ -38,7 +38,8 @@ const MenuAttachmentItems = ({
     </>
   )
 }
-//main component that creates the menu and popover
+
+// Main component that creates the menu and popover
 const MenuAttachment = ({
   addFileToDraft,
   selectedChat,
@@ -47,10 +48,12 @@ const MenuAttachment = ({
   selectedChat: Type.FullChat | null
 }) => {
   const tx = useTranslationFunction()
+  const openConfirmationDialog = useConfirmationDialog()
   const { openDialog } = useDialog()
   const [settings] = useStore(SettingsStoreInstance)
+
   const addFilenameFile = async () => {
-    //function for files
+    // function for files
     const file = await runtime.showOpenFileDialog({
       filters: [
         {
@@ -61,12 +64,14 @@ const MenuAttachment = ({
       properties: ['openFile'],
       defaultPath: runtime.getAppPath('home'),
     })
+
     if (file) {
       addFileToDraft(file, 'File')
     }
   }
-  //function for media
+
   const addFilenameMedia = async () => {
+    // function for media
     const file = await runtime.showOpenFileDialog({
       filters: [
         {
@@ -77,26 +82,28 @@ const MenuAttachment = ({
       properties: ['openFile'],
       defaultPath: runtime.getAppPath('home'),
     })
+
     if (file) {
       addFileToDraft(file, 'Image')
     }
   }
 
-  const onVideoChat = () => {
+  const onVideoChat = useCallback(async () => {
     if (!selectedChat) {
       return
     }
-    openDialog(ConfirmationDialog, {
+
+    const confirmed = await openConfirmationDialog({
       header: tx('videochat_invite_user_to_videochat', selectedChat.name),
       message: tx('videochat_invite_user_hint'),
       confirmLabel: tx('ok'),
-      cb: (yes: boolean) => {
-        if (yes) {
-          sendCallInvitation(openDialog, selectedChat.id)
-        }
-      },
     })
-  }
+
+    if (confirmed) {
+      sendCallInvitation(openDialog, selectedChat.id)
+    }
+  }, [openConfirmationDialog, openDialog, selectedChat, tx])
+
   // item array used to populate menu
   const items: MenuAttachmentItemObject[] = [
     settings?.settings.webrtc_instance && {
@@ -141,4 +148,5 @@ type MenuAttachmentItemObject = {
   text: string
   onClick: todo
 }
+
 export default MenuAttachment

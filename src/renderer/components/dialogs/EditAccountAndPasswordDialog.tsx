@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 
 import { BackendRemote } from '../../backend-com'
 import { Credentials } from '../../../shared/shared-types'
@@ -6,7 +6,6 @@ import LoginForm, {
   ConfigureProgressDialog,
   defaultCredentials,
 } from '../LoginForm'
-import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -15,6 +14,7 @@ import Dialog, {
 } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
+import useConfirmationDialog from '../../hooks/useConfirmationDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
@@ -38,12 +38,14 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
 
   const [disableUpdate, setDisableUpdate] = useState(true)
 
+  const { openDialog } = useDialog()
+  const openConfirmationDialog = useConfirmationDialog()
+  const tx = useTranslationFunction()
+
   const setAccountSettings = (value: Credentials) => {
     disableUpdate === true && setDisableUpdate(false)
     _setAccountSettings(value)
   }
-
-  const { openDialog } = useDialog()
 
   const loadSettings = async () => {
     if (window.__selectedAccountId === undefined) {
@@ -82,9 +84,7 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
     loadSettings()
   }, [])
 
-  const tx = window.static_translate
-
-  const onUpdate = () => {
+  const onUpdate = useCallback(async () => {
     if (disableUpdate) return
     const onSuccess = () => onClose()
 
@@ -96,19 +96,30 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
     }
 
     if (initial_settings.addr !== accountSettings.addr) {
-      openDialog(ConfirmationDialog, {
+      const confirmed = await openConfirmationDialog({
         confirmLabel: tx('perm_continue'),
         isConfirmDanger: true,
         message: tx('aeap_explanation', [
           initial_settings.addr || '',
           accountSettings.addr || '',
         ]),
-        cb: yes => yes && update(),
       })
+
+      if (confirmed) {
+        update()
+      }
     } else {
       update()
     }
-  }
+  }, [
+    accountSettings,
+    disableUpdate,
+    initial_settings.addr,
+    onClose,
+    openConfirmationDialog,
+    openDialog,
+    tx,
+  ])
 
   if (accountSettings === null) return null
   return (
