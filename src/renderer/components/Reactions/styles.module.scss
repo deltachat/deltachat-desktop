@@ -1,4 +1,27 @@
-.reaction {
-  // @TODO
-  background-color: red;
+.reactions {
+  margin-top: 6px;
+}
+
+.emoji {
+  background-color: rgba(128, 128, 128, 0.4);
+  border-radius: 20px;
+  border: 1px transparent solid;
+  font-weight: bold;
+  margin-left: 2px;
+  margin-right: 2px;
+  padding: 2px 6px;
+
+  &:first {
+    margin-left: 0;
+  }
+
+  &:hover {
+    border-color: rgba(128, 128, 128, 0.5);
+    background-color: rgba(128, 128, 128, 0.3);
+  }
+
+  &.isFromSelf {
+    background-color: rgba(128, 128, 128, 0.6);
+    border-color: rgba(128, 128, 128, 0.7);
+  }
 }
