@@ -40,7 +40,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
 import EnterAutocryptSetupMessage from '../dialogs/EnterAutocryptSetupMessage'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
-import { Reactions } from './Reactions'
+import Reactions from '../Reactions'
 
 import type { OpenDialog } from '../../contexts/DialogContext'
 
