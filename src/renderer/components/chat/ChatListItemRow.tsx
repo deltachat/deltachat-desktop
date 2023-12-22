@@ -8,26 +8,41 @@ import ChatListItem, {
 import { ContactListItem } from '../contact/ContactListItem'
 import { jumpToMessage, openViewProfileDialog } from '../helpers/ChatMethods'
 import { Type } from '../../backend-com'
+import useDialog from '../../hooks/useDialog'
 
 import type { useChatListContextMenu } from './ChatListContextMenu'
-import { OpenDialog } from '../../contexts/DialogContext'
+
+export type ChatListItemData = {
+  selectedChatId: number | null
+  chatListIds: number[]
+  chatCache: {
+    [id: number]: Type.ChatListItemFetchResult | undefined
+  }
+  onChatClick: (chatId: number) => void
+  openContextMenu: ReturnType<typeof useChatListContextMenu>['openContextMenu']
+  activeContextMenuChatId: ReturnType<
+    typeof useChatListContextMenu
+  >['activeContextMenuChatId']
+}
+
+export type MessageChatListItemData = {
+  messageResultIds: number[]
+  messageCache: {
+    [id: number]: Type.MessageSearchResult | undefined
+  }
+  queryStr: string | undefined
+}
+
+export type ContactChatListItemData = {
+  contactCache: {
+    [id: number]: Type.Contact | undefined
+  }
+  contactIds: number[]
+}
 
 export const ChatListItemRowChat = React.memo<{
   index: number
-  data: {
-    selectedChatId: number | null
-    chatListIds: number[]
-    chatCache: {
-      [id: number]: Type.ChatListItemFetchResult | undefined
-    }
-    onChatClick: (chatId: number) => void
-    openContextMenu: ReturnType<
-      typeof useChatListContextMenu
-    >['openContextMenu']
-    activeContextMenuChatId: ReturnType<
-      typeof useChatListContextMenu
-    >['activeContextMenuChatId']
-  }
+  data: ChatListItemData
   style: React.CSSProperties
 }>(({ index, data, style }) => {
   const {
@@ -60,18 +75,14 @@ export const ChatListItemRowChat = React.memo<{
 
 export const ChatListItemRowContact = React.memo<{
   index: number
-  data: {
-    contactCache: {
-      [id: number]: Type.Contact | undefined
-    }
-    contactIds: number[]
-    openDialog: OpenDialog
-  }
+  data: ContactChatListItemData
   style: React.CSSProperties
 }>(({ index, data, style }) => {
-  const { contactCache, contactIds, openDialog } = data
+  const { contactCache, contactIds } = data
   const contactId = contactIds[index]
   const contact = contactCache[contactId]
+  const { openDialog } = useDialog()
+
   return (
     <div style={style}>
       {contact ? (
@@ -93,14 +104,7 @@ export const ChatListItemRowContact = React.memo<{
 
 export const ChatListItemRowMessage = React.memo<{
   index: number
-  data: {
-    messageResultIds: number[]
-    messageCache: {
-      [id: number]: Type.MessageSearchResult | undefined
-    }
-    openDialog: OpenDialog
-    queryStr: string | undefined
-  }
+  data: MessageChatListItemData
   style: React.CSSProperties
 }>(({ index, data, style }) => {
   const { messageResultIds, messageCache, queryStr } = data

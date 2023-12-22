@@ -37,6 +37,12 @@ import CreateChat from '../dialogs/CreateChat'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
 
+import type {
+  ChatListItemData,
+  ContactChatListItemData,
+  MessageChatListItemData,
+} from './ChatListItemRow'
+
 const enum LoadStatus {
   FETCHING = 1,
   LOADED = 2,
@@ -62,7 +68,10 @@ export function ChatListPart({
   height: number
   itemKey: ListItemKeySelector<any>
   setListRef?: (ref: List<any> | null) => void
-  itemData?: any
+  itemData?:
+    | ChatListItemData
+    | ContactChatListItemData
+    | MessageChatListItemData
   itemHeight: number
 }) {
   return (
@@ -270,7 +279,12 @@ export default function ChatList(props: {
     activeContextMenuChatId,
   ])
 
-  const contactlistData = useMemo(() => {
+  const contactlistData: {
+    contactCache: {
+      [id: number]: Type.Contact | undefined
+    }
+    contactIds: number[]
+  } = useMemo(() => {
     return {
       contactCache,
       contactIds,
@@ -278,8 +292,8 @@ export default function ChatList(props: {
   }, [contactCache, contactIds])
 
   const messagelistData = useMemo(() => {
-    return { messageResultIds, messageCache, openDialog, queryStr }
-  }, [messageResultIds, messageCache, openDialog, queryStr])
+    return { messageResultIds, messageCache, queryStr }
+  }, [messageResultIds, messageCache, queryStr])
 
   const [searchChatInfo, setSearchChatInfo] = useState<T.FullChat | null>(null)
   useEffect(() => {
