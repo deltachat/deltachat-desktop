@@ -73,13 +73,17 @@ export function useMessageList(accountId: number, chatId: number) {
           store.effect.onEventMessagesChanged(msgId)
         }
       }),
-      onDCEvent(accountId, 'ReactionsChanged', ({ chatId: eventChatId, msgId }) => {
-        if (msgId === 0 && (eventChatId === 0 || eventChatId === chatId)) {
-          store.effect.refresh()
-        } else {
-          store.effect.onEventMessagesChanged(msgId)
+      onDCEvent(
+        accountId,
+        'ReactionsChanged',
+        ({ chatId: eventChatId, msgId }) => {
+          if (msgId === 0 && (eventChatId === 0 || eventChatId === chatId)) {
+            store.effect.refresh()
+          } else {
+            store.effect.onEventMessagesChanged(msgId)
+          }
         }
-      }),
+      ),
       onDCEvent(accountId, 'MsgFailed', ({ chatId: eventChatId, msgId }) => {
         if (chatId === eventChatId) {
           store.effect.onEventMessagesChanged(msgId)
