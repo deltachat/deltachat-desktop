@@ -97,7 +97,7 @@ export default function MessageListAndComposer({
   const [selectedMessages, _dispatch] = useReducer(
     (selectedMessages: number[], action: MessageSelectAction) => {
       const { type, messageId } = action
-      if (!messageId && type !== 'reset') {
+      if (!messageId) {
         return selectedMessages
       }
       switch (type) {
