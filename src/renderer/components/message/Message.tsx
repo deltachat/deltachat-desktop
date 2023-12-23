@@ -281,7 +281,7 @@ function buildContextMenu(
     },
     // Select Message
     {
-      label: tx('select_message'),
+      label: tx('select'),
       action: selectMessage.bind(null),
     },
   ]

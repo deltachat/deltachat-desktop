@@ -3,9 +3,6 @@
     "comment": "this won't be translated, as our goal is to have encrypted broadcast lists - simon & bjoern as of oct 2023",
     "message": "Broadcast Lists are always unencrypted because they use blind copy (BCC)"
   },
-  "select_message": {
-    "message": "Select message"
-  },
   "ask_delete_message_many": {
     "message": "Are you sure you want to delete these %1$d messages?"
   }
