@@ -106,11 +106,7 @@ const ImportButton = function ImportButton() {
   }
 
   return (
-    <Button
-      type='secondary'
-      round
-      onClick={onClickImportBackup}
-    >
+    <Button type='secondary' round onClick={onClickImportBackup}>
       {tx('import_backup_title')}
     </Button>
   )
@@ -199,18 +195,10 @@ export default function WelcomeScreen({
               >
                 {tx('login_header')}
               </Button>
-              <Button
-                round
-                type='secondary'
-                onClick={onClickSecondDevice}
-              >
+              <Button round type='secondary' onClick={onClickSecondDevice}>
                 {tx('multidevice_receiver_title')}
               </Button>
-              <Button
-                round
-                type='secondary'
-                onClick={onClickScanQr}
-              >
+              <Button round type='secondary' onClick={onClickScanQr}>
                 {tx('scan_invitation_code')}
               </Button>
               <ImportButton />

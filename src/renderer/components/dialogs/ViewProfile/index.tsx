@@ -276,14 +276,15 @@ export function ViewProfileInner({
           }}
         >
           {!isDeviceChat && (
-            <Button
-              aria-label={tx('send_message')}
-              onClick={onSendMessage}
-              round
-              style={{ marginTop: '0px' }}
-            >
-              {tx('send_message')}
-            </Button>
+            <span style={{ marginTop: '0x' }}>
+              <Button
+                aria-label={tx('send_message')}
+                onClick={onSendMessage}
+                round
+              >
+                {tx('send_message')}
+              </Button>
+            </span>
           )}
         </div>
         {statusText != '' && (
