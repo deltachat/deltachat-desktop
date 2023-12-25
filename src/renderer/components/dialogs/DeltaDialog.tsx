@@ -369,21 +369,18 @@ export function DeltaDialogOkCancelFooter({
   return (
     <DeltaDialogFooter>
       <DeltaDialogFooterActions>
-        <Button
-          type='primary'
-          style={{ marginRight: '10px' }}
-          onClick={onCancel}
-        >
-          {cancelLabel}
-        </Button>
+        <span style={{ marginRight: '10px' }}>
+          <Button
+            type='primary'
+            onClick={onCancel}
+          >
+            {cancelLabel}
+          </Button>
+        </span>
         <Button
           //className={ 'delta-button bold primary' + disableOK ? " disabled" : "" }
-          className={classNames(
-            'test-selector-confirm',
-            {
-              disabled: disableOK,
-            }
-          )}
+          className='test-selector-confirm'
+          disabled={disableOK}
           onClick={onOk}
         >
           {confirmLabel}
