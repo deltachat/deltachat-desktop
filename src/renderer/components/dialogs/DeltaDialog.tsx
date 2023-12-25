@@ -370,10 +370,7 @@ export function DeltaDialogOkCancelFooter({
     <DeltaDialogFooter>
       <DeltaDialogFooterActions>
         <span style={{ marginRight: '10px' }}>
-          <Button
-            type='primary'
-            onClick={onCancel}
-          >
+          <Button type='primary' onClick={onCancel}>
             {cancelLabel}
           </Button>
         </span>
