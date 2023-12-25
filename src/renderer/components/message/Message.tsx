@@ -44,6 +44,7 @@ import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import Reactions from '../Reactions'
 import ShortcutMenu from '../ShortcutMenu'
 import InvalidUnencryptedMailDialog from '../dialogs/InvalidUnencryptedMail'
+import Button from '../ui/Button'
 
 import styles from './styles.module.scss'
 
@@ -777,12 +778,9 @@ function WebxdcMessageContent({ message }: { message: T.Message }) {
           (only works in saved messages)
         </div>
       )}
-      <button
-        className={'delta-button-round'}
-        onClick={() => openWebxdc(message.id)}
-      >
+      <Button round onClick={() => openWebxdc(message.id)}>
         {tx('start_app')}
-      </button>
+      </Button>
     </div>
   )
 }

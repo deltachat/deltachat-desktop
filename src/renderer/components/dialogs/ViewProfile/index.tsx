@@ -28,6 +28,7 @@ import ProfileInfoHeader from '../../ProfileInfoHeader'
 import styles from './styles.module.scss'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
+import Button from '../../ui/Button'
 
 const log = getLogger('renderer/dialogs/ViewProfile')
 
@@ -251,14 +252,14 @@ export function ViewProfileInner({
           }}
         >
           {!isDeviceChat && (
-            <button
+            <Button
               aria-label={tx('send_message')}
               onClick={onSendMessage}
-              className={'delta-button-round'}
+              round
               style={{ marginTop: '0px' }}
             >
               {tx('send_message')}
-            </button>
+            </Button>
           )}
         </div>
         {statusText != '' && (

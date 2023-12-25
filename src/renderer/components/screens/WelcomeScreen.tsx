@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { DcEventType } from '@deltachat/jsonrpc-client'
 import { Intent } from '@blueprintjs/core'
+import { dirname } from 'path'
 
 import { getLogger } from '../../../shared/logger'
 import { runtime } from '../../runtime'
@@ -20,7 +21,7 @@ import useDialog from '../../hooks/useDialog'
 import ImportQrCode from '../dialogs/ImportQrCode'
 import AlertDialog from '../dialogs/AlertDialog'
 import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
-import { dirname } from 'path'
+import Button from '../ui/Button'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
@@ -111,12 +112,13 @@ const ImportButton = function ImportButton() {
   }
 
   return (
-    <button
-      className='delta-button-round secondary'
+    <Button
+      type='secondary'
+      round
       onClick={onClickImportBackup}
     >
       {tx('import_backup_title')}
-    </button>
+    </Button>
   )
 }
 
@@ -199,25 +201,27 @@ export default function WelcomeScreen({
             <div className='welcome-deltachat'>
               <img className='delta-icon' src='../images/intro1.png' />
               <p className='f1'>{tx('welcome_chat_over_email')}</p>
-              <button
+              <Button
                 id='action-login-to-email'
-                className='delta-button-round'
+                round
                 onClick={() => window.__changeScreen(Screens.Login)}
               >
                 {tx('login_header')}
-              </button>
-              <button
-                className='delta-button-round secondary'
+              </Button>
+              <Button
+                round
+                type='secondary'
                 onClick={onClickSecondDevice}
               >
                 {tx('multidevice_receiver_title')}
-              </button>
-              <button
-                className='delta-button-round secondary'
+              </Button>
+              <Button
+                round
+                type='secondary'
                 onClick={onClickScanQr}
               >
                 {tx('scan_invitation_code')}
-              </button>
+              </Button>
               <ImportButton />
             </div>
           </DialogBody>

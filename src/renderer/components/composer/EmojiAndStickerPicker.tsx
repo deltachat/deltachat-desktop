@@ -12,6 +12,7 @@ import { runtime } from '../../runtime'
 import { jumpToMessage } from '../helpers/ChatMethods'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import EmojiPicker from '../EmojiPicker'
+import Button from '../ui/Button'
 
 import styles from './styles.module.scss'
 
@@ -89,24 +90,24 @@ export const StickerPicker = ({
             ))}
           </div>
           <div className='sticker-actions-container'>
-            <button
-              className='delta-button-round secondary'
+            <Button
+              round type='secondary'
               onClick={onOpenStickerFolder}
             >
               {tx('open_sticker_folder')}
-            </button>
+            </Button>
           </div>
         </>
       ) : (
         <div className='sticker-container'>
           <div className='no-stickers'>
             <p className='description'>{tx('add_stickers_instructions')}</p>
-            <button
-              className='delta-button-round'
+            <Button
+              round 
               onClick={onOpenStickerFolder}
             >
               {tx('open_sticker_folder')}
-            </button>
+            </Button>
           </div>
         </div>
       )}
