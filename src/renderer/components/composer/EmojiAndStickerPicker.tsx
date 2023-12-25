@@ -102,12 +102,12 @@ export const StickerPicker = ({
         <div className='sticker-container'>
           <div className='no-stickers'>
             <p className='description'>{tx('add_stickers_instructions')}</p>
-            <button
+            <Button
               round 
               onClick={onOpenStickerFolder}
             >
               {tx('open_sticker_folder')}
-            </button>
+            </Button>
           </div>
         </div>
       )}
