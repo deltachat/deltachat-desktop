@@ -2,7 +2,7 @@ import React from 'react'
 import classNames from 'classnames'
 
 type ButtonProps = React.PropsWithChildren<{
-  type: 'secondary' | 'primary' | 'danger'
+  type?: 'secondary' | 'primary' | 'danger'
   onClick: any
   round?: boolean
   id?: string
