@@ -8,6 +8,7 @@ import {
 } from './DeltaDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import Button from '../ui/Button'
 
 type Props = {
   onClick: (isConfirmed: boolean) => void
@@ -56,12 +57,12 @@ export default function ConfirmSendingFiles({
       </div>
       <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
         <DeltaDialogFooterActions>
-          <p className='delta-button bold primary' onClick={handleCancel}>
+          <Button type='primary' onClick={handleCancel}>
             {tx('cancel')}
-          </p>
-          <p className={`delta-button bold primary`} onClick={handleConfirm}>
+          </Button>
+          <Button type='primary' onClick={handleConfirm}>
             {tx('menu_send')}
-          </p>
+          </Button>
         </DeltaDialogFooterActions>
       </DeltaDialogFooter>
     </SmallDialog>

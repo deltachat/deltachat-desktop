@@ -3,6 +3,7 @@ import { Dialog, Classes, RadioGroup, Radio } from '@blueprintjs/core'
 import classNames from 'classnames'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import Button from '../ui/Button'
 
 export const DeltaDialogBase = React.memo<
   React.PropsWithChildren<
@@ -311,18 +312,18 @@ export function SmallSelectDialog({
       </DeltaDialogBody>
       <DeltaDialogFooter style={{ marginTop: '0px', padding: '20px' }}>
         <DeltaDialogFooterActions>
-          <p
-            className='delta-button primary bold'
+          <Button
+            type='primary'
             onClick={() => {
               onCancel && onCancel()
               onClose()
             }}
           >
             {tx('cancel')}
-          </p>
-          <p className='delta-button primary bold' onClick={saveAndClose}>
+          </Button>
+          <Button type='primary' onClick={saveAndClose}>
             {tx('save_desktop')}
-          </p>
+          </Button>
         </DeltaDialogFooterActions>
       </DeltaDialogFooter>
     </SmallDialog>
@@ -368,17 +369,17 @@ export function DeltaDialogOkCancelFooter({
   return (
     <DeltaDialogFooter>
       <DeltaDialogFooterActions>
-        <p
-          className='delta-button primary bold'
+        <Button
+          type='primary'
           style={{ marginRight: '10px' }}
           onClick={onCancel}
         >
           {cancelLabel}
-        </p>
-        <p
+        </Button>
+        <Button
           //className={ 'delta-button bold primary' + disableOK ? " disabled" : "" }
           className={classNames(
-            'delta-button bold primary test-selector-confirm',
+            'test-selector-confirm',
             {
               disabled: disableOK,
             }
@@ -386,7 +387,7 @@ export function DeltaDialogOkCancelFooter({
           onClick={onOk}
         >
           {confirmLabel}
-        </p>
+        </Button>
       </DeltaDialogFooterActions>
     </DeltaDialogFooter>
   )
@@ -398,9 +399,9 @@ export function DeltaDialogCloseFooter({ onClose }: { onClose: () => any }) {
   return (
     <DeltaDialogFooter>
       <DeltaDialogFooterActions>
-        <p className={'delta-button bold primary'} onClick={onClose}>
+        <Button type='primary' onClick={onClose}>
           {tx('close')}
-        </p>
+        </Button>
       </DeltaDialogFooterActions>
     </DeltaDialogFooter>
   )

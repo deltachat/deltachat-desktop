@@ -11,6 +11,7 @@ import { DialogBody, DialogContent, DialogWithHeader } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import Button from '../ui/Button'
 
 const log = getLogger('renderer/dialogs/About')
 
@@ -56,9 +57,9 @@ export function DCInfo(_props: any) {
         </table>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <button className='delta-button-round' onClick={copy2Clipboard}>
+        <Button round onClick={copy2Clipboard}>
           {tx('copy_json')}
-        </button>
+        </Button>
       </div>
     </>
   )

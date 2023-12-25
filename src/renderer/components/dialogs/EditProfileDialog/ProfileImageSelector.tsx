@@ -3,6 +3,7 @@ import React from 'react'
 import { runtime } from '../../../runtime'
 import { avatarInitial } from '../../Avatar'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import Button from '../../ui/Button'
 
 export default function ProfileImageSelector({
   displayName,
@@ -48,21 +49,21 @@ export default function ProfileImageSelector({
         <span style={{ backgroundColor: color }}>{initial}</span>
       )}
       <>
-        <button
+        <Button
           aria-label={tx('profile_image_select')}
           onClick={onClickSelectPicture}
-          className={'delta-button-round'}
+          round
         >
           {tx('profile_image_select')}
-        </button>
-        <button
+        </Button>
+        <Button
           aria-label={tx('profile_image_delete')}
           onClick={onClickRemovePicture}
-          className={'delta-button-round'}
+          round
           disabled={!profilePicture}
         >
           {tx('profile_image_delete')}
-        </button>
+        </Button>
       </>
     </div>
   )

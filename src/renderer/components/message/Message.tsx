@@ -41,6 +41,7 @@ import { ScreenContext } from '../../contexts/ScreenContext'
 import useDialog from '../../hooks/useDialog'
 import EnterAutocryptSetupMessage from '../dialogs/EnterAutocryptSetupMessage'
 import { OpenDialog } from '../../contexts/DialogContext'
+import Button from '../ui/Button'
 
 const Avatar = (
   contact: Type.Contact,
@@ -684,12 +685,12 @@ function WebxdcMessageContent({ message }: { message: Type.Message }) {
           (only works in saved messages)
         </div>
       )}
-      <button
-        className={'delta-button-round'}
+      <Button
+        round
         onClick={() => openWebxdc(message.id)}
       >
         {tx('start_app')}
-      </button>
+      </Button>
     </div>
   )
 }

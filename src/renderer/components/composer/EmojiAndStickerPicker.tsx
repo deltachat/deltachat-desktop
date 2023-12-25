@@ -16,6 +16,7 @@ import { useThemeCssVar } from '../../ThemeManager'
 
 import type { EmojiData } from 'emoji-mart/index'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import Button from '../ui/Button'
 
 const DisplayedStickerPack = ({
   stickerPackName,
@@ -89,12 +90,12 @@ export const StickerPicker = ({
             ))}
           </div>
           <div className='sticker-actions-container'>
-            <button
-              className='delta-button-round secondary'
+            <Button
+              round type='secondary'
               onClick={onOpenStickerFolder}
             >
               {tx('open_sticker_folder')}
-            </button>
+            </Button>
           </div>
         </>
       ) : (
@@ -102,7 +103,7 @@ export const StickerPicker = ({
           <div className='no-stickers'>
             <p className='description'>{tx('add_stickers_instructions')}</p>
             <button
-              className='delta-button-round'
+              round 
               onClick={onOpenStickerFolder}
             >
               {tx('open_sticker_folder')}
