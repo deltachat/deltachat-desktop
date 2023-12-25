@@ -6,13 +6,12 @@ type ButtonProps = React.PropsWithChildren<{
   onClick: any
   round?: boolean
   id?: string
-  style?: any
   'aria-label'?: string
   disabled?: boolean
   className?: any
 }>
 
-export default function Button({ children, className, disabled, type, round, onClick, style, id, ...props}: ButtonProps) {
+export default function Button({ children, className, disabled, type, round, onClick, id, ...props}: ButtonProps) {
   return (
     <button
       id={id}
@@ -20,7 +19,6 @@ export default function Button({ children, className, disabled, type, round, onC
       role='button'
       className={classNames('delta-button' + (round ? '-round': ''), 'bold', type, className)}
       onClick={onClick}
-      style={style}
       aria-label={props['aria-label']}
       >
         {children}
