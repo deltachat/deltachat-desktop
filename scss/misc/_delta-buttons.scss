@@ -16,7 +16,7 @@ button.delta-button-round {
     border-color: rgba(206, 217, 224, 0.5);
     background-image: none;
     cursor: not-allowed;
-    color: rgba(0, 0, 0, 0.2);
+    color: var(--globalText);
     &:hover {
       background-color: rgba(206, 217, 224, 0.5);
     }
@@ -35,6 +35,56 @@ button.delta-button-round {
   }
 }
 
+button.delta-button {
+  color: var(--colorNone);
+  background-color: rgba(0, 0, 0, 0);
+  padding: 0 2px;
+  margin-bottom: 0px;
+  letter-spacing: 0px;
+  font-size: initial;
+  font-weight: 'initial';
+  text-align: center;
+  text-transform: uppercase;
+  padding: 5px;
+  border-style: solid;
+  border-color: transparent;
+  border-radius: 2px;
+  &:hover {
+    cursor: pointer;
+    background-color: #f1f1f1;
+  }
+
+  &.no-padding {
+    padding: 0px;
+  }
+
+  &.bold {
+    letter-spacing: 2px;
+    font-weight: bold;
+  }
+
+  &.light-bold {
+    letter-spacing: 1px;
+    font-weight: 100;
+  }
+
+  &.primary {
+    color: var(--colorPrimary);
+  }
+
+  &.danger {
+    color: var(--colorDanger);
+  }
+
+  &:disabled {
+    color: grey;
+    cursor: default;
+    &:hover {
+      cursor: default;
+      background-color: none;
+    }
+  }
+}
 button.delta-button-tab {
   padding: 8px;
   margin: 5px;
