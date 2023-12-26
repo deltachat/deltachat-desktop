@@ -92,9 +92,8 @@ function useUnreadCount(
   return freshMessageCounter
 }
 
-
 type MessageListProps = {
-  chatStore: ChatStoreStateWithChatSet,
+  chatStore: ChatStoreStateWithChatSet
   refComposer: todo
   selectMessage: (id: number) => void
   unselectMessage: (id: number) => void
@@ -478,7 +477,7 @@ export const MessageListInner = React.memo(
       loadMissingMessages,
       unselectMessage,
       selectMessage,
-      selectedMessages
+      selectedMessages,
     } = props
 
     if (!chatStore.chat.id) {

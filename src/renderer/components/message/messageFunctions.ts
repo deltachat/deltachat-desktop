@@ -86,7 +86,7 @@ export async function confirmForwardMessage(
   const isMany = Array.isArray(messages)
   if (yes) {
     if (isMany) {
-      for (let messageId of messages)
+      for (const messageId of messages)
         await forwardMessage(accountId, messageId, chat.id)
     } else {
       await forwardMessage(accountId, messages.id, chat.id)
@@ -109,7 +109,7 @@ export function confirmDeleteMessage(
       if (yes) {
         const isMany = Array.isArray(messages)
         if (isMany) {
-          for (let messageId of messages) {
+          for (const messageId of messages) {
             deleteMessage(messageId)
           }
         } else {
@@ -117,7 +117,7 @@ export function confirmDeleteMessage(
         }
         onDelete && onDelete()
       }
-    }
+    },
   })
 }
 

@@ -51,7 +51,10 @@ export default function ForwardMessage(props: {
       )
       if (!yes) {
         if (isMany) {
-          const message_ = await BackendRemote.rpc.getMessage(accountId, message[0])
+          const message_ = await BackendRemote.rpc.getMessage(
+            accountId,
+            message[0]
+          )
           selectChat(message_.chatId)
         } else {
           selectChat(message.chatId)

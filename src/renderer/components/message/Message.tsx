@@ -138,7 +138,7 @@ function buildContextMenu(
     conversationType,
     openDialog,
     chat,
-    selectMessage
+    selectMessage,
   }: {
     message: Type.Message | null
     text?: string
@@ -289,7 +289,7 @@ function buildContextMenu(
     {
       label: tx('select'),
       action: selectMessage,
-    }
+    },
   ]
 }
 
@@ -302,7 +302,14 @@ type MessageProps = {
   isSelected: boolean
 }
 
-export default function Message({ isSelected, message, conversationType, selectMessage, unselectMessage, isSelectMode}: MessageProps) {
+export default function Message({
+  isSelected,
+  message,
+  conversationType,
+  selectMessage,
+  unselectMessage,
+  isSelectMode,
+}: MessageProps) {
   const { id, viewType, text, hasLocation, isSetupmessage, hasHtml } = message
   const direction = getDirection(message)
   const status = mapCoreMsgStatus2String(message.state)
@@ -333,7 +340,7 @@ export default function Message({ isSelected, message, conversationType, selectM
         conversationType,
         openDialog,
         chat,
-        selectMessage
+        selectMessage,
       },
       target
     )
@@ -508,7 +515,11 @@ export default function Message({ isSelected, message, conversationType, selectM
         { 'has-html': hasHtml }
       )}
       id={message.id.toString()}
-      onClick={isSelectMode ? () => (isSelected ? unselectMessage() : selectMessage()) : undefined }
+      onClick={
+        isSelectMode
+          ? () => (isSelected ? unselectMessage() : selectMessage())
+          : undefined
+      }
     >
       {showAuthor &&
         direction === 'incoming' &&

@@ -9,15 +9,28 @@ type SelectedMessagesActionProps = {
   selectedMessages: number[]
 }
 
-export default function SelectedMessagesAction({ resetSelected, selectedMessages }: SelectedMessagesActionProps) {
-  const tx = useTranslationFunction() 
+export default function SelectedMessagesAction({
+  resetSelected,
+  selectedMessages,
+}: SelectedMessagesActionProps) {
+  const tx = useTranslationFunction()
   const { openDialog } = useDialog()
   return (
     <div className='selected-messages-action'>
-      <button className='delta-button primary bold' onClick={() => openForwardDialog(openDialog, selectedMessages, resetSelected)}>
+      <button
+        className='delta-button primary bold'
+        onClick={() =>
+          openForwardDialog(openDialog, selectedMessages, resetSelected)
+        }
+      >
         {tx('forward')}
       </button>
-      <button className='delta-button danger bold' onClick={() => confirmDeleteMessage(openDialog, selectedMessages, resetSelected)}>
+      <button
+        className='delta-button danger bold'
+        onClick={() =>
+          confirmDeleteMessage(openDialog, selectedMessages, resetSelected)
+        }
+      >
         {tx('delete')}
       </button>
       <button className='delta-button secondary bold' onClick={resetSelected}>
