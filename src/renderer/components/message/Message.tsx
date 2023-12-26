@@ -138,12 +138,14 @@ function buildContextMenu(
     conversationType,
     openDialog,
     chat,
+    selectMessage
   }: {
     message: Type.Message | null
     text?: string
     conversationType: ConversationType
     openDialog: OpenDialog
     chat: T.FullChat
+    selectMessage: () => void
   },
   clickTarget: HTMLAnchorElement | null
 ): (false | ContextMenuItem)[] {
@@ -283,14 +285,24 @@ function buildContextMenu(
       label: tx('delete_message_desktop'),
       action: confirmDeleteMessage.bind(null, openDialog, message),
     },
+    // Select
+    {
+      label: tx('select'),
+      action: selectMessage,
+    }
   ]
 }
 
-export default function Message(props: {
+type MessageProps = {
   message: Type.Message
   conversationType: ConversationType
-}) {
-  const { message, conversationType } = props
+  selectMessage: () => void
+  unselectMessage: () => void
+  isSelectMode: boolean
+  isSelected: boolean
+}
+
+export default function Message({ isSelected, message, conversationType, selectMessage, unselectMessage, isSelectMode}: MessageProps) {
   const { id, viewType, text, hasLocation, isSetupmessage, hasHtml } = message
   const direction = getDirection(message)
   const status = mapCoreMsgStatus2String(message.state)
@@ -305,6 +317,7 @@ export default function Message(props: {
     event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement, MouseEvent>
   ) => Promise<void> = async event => {
     event.preventDefault() // prevent default runtime context menu from opening
+    if (isSelectMode) return
 
     const chat = await BackendRemote.rpc.getFullChatById(
       accountId,
@@ -320,6 +333,7 @@ export default function Message(props: {
         conversationType,
         openDialog,
         chat,
+        selectMessage
       },
       target
     )
@@ -494,6 +508,7 @@ export default function Message(props: {
         { 'has-html': hasHtml }
       )}
       id={message.id.toString()}
+      onClick={isSelectMode ? () => (isSelected ? unselectMessage() : selectMessage()) : undefined }
     >
       {showAuthor &&
         direction === 'incoming' &&
@@ -539,6 +554,7 @@ export default function Message(props: {
               conversationType={conversationType}
               message={message}
               hasQuote={message.quote !== null}
+              isSelectMode={isSelectMode}
             />
           )}
           {message.viewType === 'Webxdc' && (

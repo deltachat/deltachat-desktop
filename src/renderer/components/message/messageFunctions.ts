@@ -47,9 +47,10 @@ export function openAttachmentInShell(msg: Type.Message) {
 
 export function openForwardDialog(
   openDialog: OpenDialog,
-  message: Type.Message
+  messages: Type.Message | number[],
+  onForward?: () => void
 ) {
-  openDialog(ForwardMessage, { message })
+  openDialog(ForwardMessage, { messages, onForward })
 }
 
 export function confirmDialog(
@@ -73,7 +74,7 @@ export function confirmDialog(
 export async function confirmForwardMessage(
   openDialog: OpenDialog,
   accountId: number,
-  message: Type.Message,
+  messages: Type.Message | number[],
   chat: Type.FullChat
 ) {
   const tx = window.static_translate
@@ -82,22 +83,41 @@ export async function confirmForwardMessage(
     tx('ask_forward', [chat.name]),
     tx('forward')
   )
+  const isMany = Array.isArray(messages)
   if (yes) {
-    await forwardMessage(accountId, message.id, chat.id)
+    if (isMany) {
+      for (let messageId of messages)
+        await forwardMessage(accountId, messageId, chat.id)
+    } else {
+      await forwardMessage(accountId, messages.id, chat.id)
+    }
   }
   return yes
 }
 
 export function confirmDeleteMessage(
   openDialog: OpenDialog,
-  msg: Type.Message
+  messages: Type.Message | number[],
+  onDelete?: () => void
 ) {
   const tx = window.static_translate
 
   openDialog(ConfirmationDialog, {
     message: tx('ask_delete_message'),
     confirmLabel: tx('delete'),
-    cb: (yes: boolean) => yes && deleteMessage(msg.id),
+    cb: (yes: boolean) => {
+      if (yes) {
+        const isMany = Array.isArray(messages)
+        if (isMany) {
+          for (let messageId of messages) {
+            deleteMessage(messageId)
+          }
+        } else {
+          deleteMessage(messages.id)
+        }
+        onDelete && onDelete()
+      }
+    }
   })
 }
 

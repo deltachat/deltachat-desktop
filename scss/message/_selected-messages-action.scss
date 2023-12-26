@@ -1,0 +1,16 @@
+.selected-messages-actions {
+  display: flex;
+  flex-direction: row;
+  background-color: var(--navBarBackground);
+  justify-content: flex-start;
+  align-items: center;
+  & > p {
+    width: 100%;
+    text-align: right;
+    margin: 8px;
+  }
+  & > button {
+    margin: 4px;
+    margin-bottom: 6px !important;
+  }
+}

@@ -12,6 +12,10 @@ type RenderMessageProps = {
   message: Type.Message
   conversationType: ConversationType
   unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
+  isSelectMode: boolean
+  isSelected: boolean
+  selectMessage: () => void
+  unselectMessage: () => void
 }
 
 export function MessageWrapper(props: RenderMessageProps) {

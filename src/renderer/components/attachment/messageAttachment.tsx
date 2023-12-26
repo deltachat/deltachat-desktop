@@ -27,6 +27,7 @@ type AttachmentProps = {
   conversationType: ConversationType
   message: Type.Message
   hasQuote: boolean
+  isSelectMode: boolean
 }
 
 export default function Attachment({
@@ -34,6 +35,7 @@ export default function Attachment({
   conversationType,
   message,
   hasQuote,
+  isSelectMode,
 }: AttachmentProps) {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
@@ -42,6 +44,7 @@ export default function Attachment({
   }
   const direction = getDirection(message)
   const onClickAttachment = (ev: any) => {
+    if (isSelectMode) return
     if (message.viewType === 'Sticker') return
     ev.stopPropagation()
     if (isDisplayableByFullscreenMedia(message.fileMime)) {
