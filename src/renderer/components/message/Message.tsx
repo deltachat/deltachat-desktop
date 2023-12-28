@@ -41,7 +41,7 @@ import { ScreenContext } from '../../contexts/ScreenContext'
 import useDialog from '../../hooks/useDialog'
 import EnterAutocryptSetupMessage from '../dialogs/EnterAutocryptSetupMessage'
 import { OpenDialog } from '../../contexts/DialogContext'
-import Button from '../ui/Button'
+import SelectModeMask from './SelectModeMask'
 
 const Avatar = (
   contact: Type.Contact,
@@ -516,6 +516,7 @@ export default function Message({
       )}
       id={message.id.toString()}
     >
+      { isSelectMode && <SelectModeMask selectMessage={selectMessage} unselectMessage={unselectMessage} isSelected={isSelected} /> }
       {showAuthor &&
         direction === 'incoming' &&
         Avatar(message.sender, onContactClick)}

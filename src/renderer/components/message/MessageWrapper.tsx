@@ -4,7 +4,6 @@ import { ConversationType } from './MessageList'
 import { Type } from '../../backend-com'
 import { C } from '@deltachat/jsonrpc-client'
 import { getLogger } from '../../../shared/logger'
-import SelectModeMask from './SelectModeMask'
 
 const log = getLogger('renderer/message/MessageWrapper')
 
@@ -76,7 +75,6 @@ export function MessageWrapper(props: RenderMessageProps) {
     <li id={props.key2}>
       <Message {...props} />
       <div className='message-observer-bottom' id={'bottom-' + props.key2} />
-      { isSelectMode && <SelectModeMask selectMessage={selectMessage} unselectMessage={unselectMessage} isSelected={isSelected} /> }
     </li>
   )
 }
