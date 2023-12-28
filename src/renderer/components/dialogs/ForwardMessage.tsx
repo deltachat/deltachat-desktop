@@ -20,12 +20,12 @@ import useDialog from '../../hooks/useDialog'
 import type { DialogProps } from '../../contexts/DialogContext'
 
 type ForwardMessageProps = {
-  message: T.Message | number[]
+  messages: T.Message | number[]
   onClose: DialogProps['onClose']
   onForward?: () => void
 }
 
-export default function ForwardMessage({ message, onClose, onForward }: ForwardMessageProps) {
+export default function ForwardMessage({ messages, onClose, onForward }: ForwardMessageProps) {
   const accountId = selectedAccountId()
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
@@ -39,31 +39,31 @@ export default function ForwardMessage({ message, onClose, onForward }: ForwardM
 
   const onChatClick = async (chatId: number) => {
     const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
-    const isMany = Array.isArray(message)
+    const isMany = Array.isArray(messages)
     onClose()
     if (!chat.isSelfTalk) {
       selectChat(chat.id)
       const yes = await confirmForwardMessage(
         openDialog,
         accountId,
-        message,
+        messages,
         chat
       )
       if (!yes) {
         if (isMany) {
-          const message_ = await BackendRemote.rpc.getMessage(accountId, message[0])
+          const message_ = await BackendRemote.rpc.getMessage(accountId, messages[0])
           selectChat(message_.chatId)
         } else {
-          selectChat(message.chatId)
+          selectChat(messages.chatId)
         }
       }
     } else {
       if (isMany) {
-        for (const messageId of message) {
+        for (const messageId of messages) {
           await forwardMessage(accountId, messageId, chat.id)
         }
       } else {
-        await forwardMessage(accountId, message.id, chat.id)
+        await forwardMessage(accountId, messages.id, chat.id)
       }
       onForward && onForward()
     }
