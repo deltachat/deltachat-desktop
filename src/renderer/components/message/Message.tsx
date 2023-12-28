@@ -42,6 +42,7 @@ import useDialog from '../../hooks/useDialog'
 import EnterAutocryptSetupMessage from '../dialogs/EnterAutocryptSetupMessage'
 import { OpenDialog } from '../../contexts/DialogContext'
 import SelectModeMask from './SelectModeMask'
+import Button from '../ui/Button'
 
 const Avatar = (
   contact: Type.Contact,
