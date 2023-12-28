@@ -4,6 +4,7 @@ import { ConversationType } from './MessageList'
 import { Type } from '../../backend-com'
 import { C } from '@deltachat/jsonrpc-client'
 import { getLogger } from '../../../shared/logger'
+import SelectModeMask from './SelectModeMask'
 
 const log = getLogger('renderer/message/MessageWrapper')
 
@@ -20,6 +21,14 @@ type RenderMessageProps = {
 
 export function MessageWrapper(props: RenderMessageProps) {
   const state = props.message.state
+  const {
+    isSelected,
+    isSelectMode,
+    key2,
+    unreadMessageInViewIntersectionObserver,
+    selectMessage,
+    unselectMessage,
+  } = props
   const shouldInViewObserve =
     state === C.DC_STATE_IN_FRESH || state === C.DC_STATE_IN_NOTICED
 
@@ -29,44 +38,45 @@ export function MessageWrapper(props: RenderMessageProps) {
     if (!shouldInViewObserve) return
 
     log.debug(
-      `MessageWrapper: key: ${props.key2} We should observe this message if in view`
+      `MessageWrapper: key: ${key2} We should observe this message if in view`
     )
 
     const messageBottomElement = document.querySelector('#bottom-' + props.key2)
     if (!messageBottomElement) {
       log.error(
-        `MessageWrapper: key: ${props.key2} couldn't find dom element. Returning`
+        `MessageWrapper: key: ${key2} couldn't find dom element. Returning`
       )
       return
     }
     if (
-      !props.unreadMessageInViewIntersectionObserver.current ||
-      !props.unreadMessageInViewIntersectionObserver.current.observe
+      !unreadMessageInViewIntersectionObserver.current ||
+      !unreadMessageInViewIntersectionObserver.current.observe
     ) {
       log.error(
-        `MessageWrapper: key: ${props.key2} unreadMessageInViewIntersectionObserver is null. Returning`
+        `MessageWrapper: key: ${key2} unreadMessageInViewIntersectionObserver is null. Returning`
       )
       return
     }
 
-    props.unreadMessageInViewIntersectionObserver.current.observe(
+    unreadMessageInViewIntersectionObserver.current.observe(
       messageBottomElement
     )
     log.debug(`MessageWrapper: key: ${props.key2} Successfully observing ;)`)
 
     return () =>
-      props.unreadMessageInViewIntersectionObserver.current?.unobserve(
+      unreadMessageInViewIntersectionObserver.current?.unobserve(
         messageBottomElement
       )
   }, [
-    props.key2,
-    props.unreadMessageInViewIntersectionObserver,
+    key2,
+    unreadMessageInViewIntersectionObserver,
     shouldInViewObserve,
   ])
   return (
     <li id={props.key2}>
       <Message {...props} />
       <div className='message-observer-bottom' id={'bottom-' + props.key2} />
+      { isSelectMode && <SelectModeMask selectMessage={selectMessage} unselectMessage={unselectMessage} isSelected={isSelected} /> }
     </li>
   )
 }

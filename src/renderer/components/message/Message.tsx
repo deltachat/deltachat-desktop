@@ -515,11 +515,6 @@ export default function Message({
         { 'has-html': hasHtml }
       )}
       id={message.id.toString()}
-      onClick={
-        isSelectMode
-          ? () => (isSelected ? unselectMessage() : selectMessage())
-          : undefined
-      }
     >
       {showAuthor &&
         direction === 'incoming' &&

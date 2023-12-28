@@ -1,0 +1,12 @@
+.select-mode-mask {
+  z-index: 9999;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  border-radius: 16px;
+  background-color: transparent;
+  cursor: grab;
+  &.selected {
+    background-color: var(--messageHighlightColor);
+  }
+}
