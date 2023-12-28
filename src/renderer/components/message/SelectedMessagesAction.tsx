@@ -36,9 +36,7 @@ export default function SelectedMessagesAction({
       <button className='delta-button secondary bold' onClick={resetSelected}>
         {tx('cancel')}
       </button>
-      <p>
-        {tx('n_selected', selectedMessages.length.toLocaleString())}
-      </p>
+      <p>{tx('n_selected', selectedMessages.length.toLocaleString())}</p>
     </div>
   )
 }

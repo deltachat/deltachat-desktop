@@ -7,7 +7,11 @@ type SelectModeMaskProps = {
   unselectMessage: () => void
 }
 
-export default function SelectModeMask({ isSelected, selectMessage, unselectMessage }: SelectModeMaskProps) {
+export default function SelectModeMask({
+  isSelected,
+  selectMessage,
+  unselectMessage,
+}: SelectModeMaskProps) {
   return (
     <div
       onClick={isSelected ? unselectMessage : selectMessage}

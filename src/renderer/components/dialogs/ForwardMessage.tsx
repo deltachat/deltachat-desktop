@@ -25,7 +25,11 @@ type ForwardMessageProps = {
   onForward?: () => void
 }
 
-export default function ForwardMessage({ messages, onClose, onForward }: ForwardMessageProps) {
+export default function ForwardMessage({
+  messages,
+  onClose,
+  onForward,
+}: ForwardMessageProps) {
   const accountId = selectedAccountId()
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
@@ -51,7 +55,10 @@ export default function ForwardMessage({ messages, onClose, onForward }: Forward
       )
       if (!yes) {
         if (isMany) {
-          const message_ = await BackendRemote.rpc.getMessage(accountId, messages[0])
+          const message_ = await BackendRemote.rpc.getMessage(
+            accountId,
+            messages[0]
+          )
           selectChat(message_.chatId)
         } else {
           selectChat(messages.chatId)

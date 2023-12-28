@@ -40,7 +40,7 @@ export function MessageWrapper(props: RenderMessageProps) {
       `MessageWrapper: key: ${key2} We should observe this message if in view`
     )
 
-    const messageBottomElement = document.querySelector('#bottom-' + props.key2)
+    const messageBottomElement = document.querySelector('#bottom-' + key2)
     if (!messageBottomElement) {
       log.error(
         `MessageWrapper: key: ${key2} couldn't find dom element. Returning`
@@ -60,21 +60,17 @@ export function MessageWrapper(props: RenderMessageProps) {
     unreadMessageInViewIntersectionObserver.current.observe(
       messageBottomElement
     )
-    log.debug(`MessageWrapper: key: ${props.key2} Successfully observing ;)`)
+    log.debug(`MessageWrapper: key: ${key2} Successfully observing ;)`)
 
     return () =>
       unreadMessageInViewIntersectionObserver.current?.unobserve(
         messageBottomElement
       )
-  }, [
-    key2,
-    unreadMessageInViewIntersectionObserver,
-    shouldInViewObserve,
-  ])
+  }, [key2, unreadMessageInViewIntersectionObserver, shouldInViewObserve])
   return (
-    <li id={props.key2}>
+    <li id={key2}>
       <Message {...props} />
-      <div className='message-observer-bottom' id={'bottom-' + props.key2} />
+      <div className='message-observer-bottom' id={'bottom-' + key2} />
     </li>
   )
 }

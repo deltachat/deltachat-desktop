@@ -516,7 +516,13 @@ export default function Message({
       )}
       id={message.id.toString()}
     >
-      { isSelectMode && <SelectModeMask selectMessage={selectMessage} unselectMessage={unselectMessage} isSelected={isSelected} /> }
+      {isSelectMode && (
+        <SelectModeMask
+          selectMessage={selectMessage}
+          unselectMessage={unselectMessage}
+          isSelected={isSelected}
+        />
+      )}
       {showAuthor &&
         direction === 'incoming' &&
         Avatar(message.sender, onContactClick)}
