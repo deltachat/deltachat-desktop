@@ -21,12 +21,8 @@ type RenderMessageProps = {
 export function MessageWrapper(props: RenderMessageProps) {
   const state = props.message.state
   const {
-    isSelected,
-    isSelectMode,
     key2,
     unreadMessageInViewIntersectionObserver,
-    selectMessage,
-    unselectMessage,
   } = props
   const shouldInViewObserve =
     state === C.DC_STATE_IN_FRESH || state === C.DC_STATE_IN_NOTICED
