@@ -47,10 +47,10 @@ export function openAttachmentInShell(msg: Type.Message) {
 
 export function openForwardDialog(
   openDialog: OpenDialog,
-  messages: Type.Message | number[],
+  message: Type.Message | number[],
   onForward?: () => void
 ) {
-  openDialog(ForwardMessage, { messages, onForward })
+  openDialog(ForwardMessage, { message, onForward })
 }
 
 export function confirmDialog(
