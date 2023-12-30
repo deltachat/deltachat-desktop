@@ -63,7 +63,7 @@ export default function ForwardMessage(props: {
     } else {
       if (isMany) {
         const messageObjects: T.Message[] = await Promise.all(
-          message.map((id) => BackendRemote.rpc.getMessage(accountId, id))
+          message.map(id => BackendRemote.rpc.getMessage(accountId, id))
         )
         messageObjects.sort((msgA, msgB) => msgA.timestamp - msgB.timestamp)
         const messageIds = messageObjects.map(msg => msg.id)
