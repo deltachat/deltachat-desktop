@@ -37,11 +37,9 @@ export default function SelectedMessagesAction({
         {tx('cancel')}
       </button>
       <p>
-        {tx(
-          'n_selected',
-          [selectedMessages.length.toLocaleString()],
-          { quantity: selectedMessages.length }
-          )}
+        {tx('n_selected', [selectedMessages.length.toLocaleString()], {
+          quantity: selectedMessages.length,
+        })}
       </p>
     </div>
   )
