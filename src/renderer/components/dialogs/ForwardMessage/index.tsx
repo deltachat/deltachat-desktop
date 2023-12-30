@@ -62,7 +62,12 @@ export default function ForwardMessage(props: {
       }
     } else {
       if (isMany) {
-        for (const messageId of message) {
+        const messageObjects: T.Message[] = await Promise.all(
+          message.map((id) => BackendRemote.rpc.getMessage(accountId, id))
+        )
+        messageObjects.sort((msgA, msgB) => msgA.timestamp - msgB.timestamp)
+        const messageIds = messageObjects.map(msg => msg.id)
+        for (const messageId of messageIds) {
           await forwardMessage(accountId, messageId, chat.id)
         }
       } else {
