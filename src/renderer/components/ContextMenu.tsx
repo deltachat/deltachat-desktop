@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useLayoutEffect, useContext } from 'react'
-import { useRef } from 'react'
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react'
 
-import { ScreenContext } from '../contexts/ScreenContext'
+import useContextMenu from '../hooks/useContextMenu'
 
 export type ContextMenuItem = { label: string; action: () => void }
 
@@ -11,9 +10,12 @@ type showFnArguments = {
   items: (ContextMenuItem | false)[]
 }
 
-/** shows a context menu
- * @returns a promise with no return value that gets resolved when the context menu disapears again
- * regardless what action the user took or if they canceled the dialog
+/**
+ * Shows a context menu with the given menu items.
+ *
+ * @returns A promise with no return value that gets resolved when the
+ * context menu disappears again, regardless what action the user took or if
+ * they cancelled the dialog.
  */
 export type OpenContextMenu = (args: showFnArguments) => Promise<void>
 
@@ -260,16 +262,24 @@ export function ContextMenu(props: {
   )
 }
 
-type ItemsFactoryFn = () => (ContextMenuItem | false)[]
+/**
+ * List of menu items which are rendered in the context menu.
+ */
+export type ContextMenuItems = (ContextMenuItem | false)[]
 
 /**
- *
- * @param itemsOrItemsFactoryFn menu items or a function that generates the items at the time the menu opens
- * @param openContextMenu reference to the ScreenContext's openContextMenu function
- *
+ * Function that generates the menu items when the context menu opens.
+ */
+export type ContextMenuItemsFactoryFn = () => ContextMenuItems
+
+/**
+ * @param itemsOrItemsFactoryFn menu items or a function that generates the
+ * items at the time the menu opens.
+ * @param openContextMenu reference to the ScreenContext's openContextMenu
+ * function.
  */
 export function makeContextMenu(
-  itemsOrItemsFactoryFn: (ContextMenuItem | false)[] | ItemsFactoryFn,
+  itemsOrItemsFactoryFn: ContextMenuItems | ContextMenuItemsFactoryFn,
   openContextMenu: OpenContextMenu
 ) {
   return (ev: React.MouseEvent<any, MouseEvent>) => {
@@ -289,27 +299,12 @@ export function makeContextMenu(
   }
 }
 
-/**
- *
- * @param itemsOrItemsFactoryFn menu items or a function that generates the items at the time the menu opens
- */
-export function useContextMenu(
-  itemsOrItemsFactoryFn: Parameters<typeof makeContextMenu>[0]
-) {
-  const { openContextMenu } = useContext(ScreenContext)
-  return makeContextMenu(itemsOrItemsFactoryFn, openContextMenu)
-}
-
-/**
- *
- * @param itemsOrItemsFactoryFn menu items or a function that generates the items at the time the menu opens
- */
 export function useContextMenuWithActiveState(
-  itemsOrItemsFactoryFn: Parameters<typeof makeContextMenu>[0]
+  itemsOrItemsFactoryFn: ContextMenuItems | ContextMenuItemsFactoryFn
 ) {
   const [isContextMenuActive, setIsContextMenuActive] = useState(false)
-  const { openContextMenu } = useContext(ScreenContext)
-  const openFn = makeContextMenu(itemsOrItemsFactoryFn, openContextMenu)
+  const openFn = useContextMenu(itemsOrItemsFactoryFn)
+
   return {
     isContextMenuActive,
     onContextMenu: async (ev: React.MouseEvent<any, MouseEvent>) => {
