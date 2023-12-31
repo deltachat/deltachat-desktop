@@ -21,9 +21,9 @@ import { selectedAccountId } from '../../ScreenController'
 import { runtime } from '../../runtime'
 import { jumpToMessage } from '../helpers/ChatMethods'
 import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
-import { ScreenContext } from '../../contexts/ScreenContext'
 import useDialog from '../../hooks/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 
 import type { DialogProps, OpenDialog } from '../../contexts/DialogContext'
 
@@ -103,7 +103,7 @@ export default function ChatAuditLogDialog(
 
   const listView = useRef<HTMLDivElement>(null)
 
-  const { openContextMenu } = useContext(ScreenContext)
+  const { openContextMenu } = useContext(ContextMenuContext)
   const showMenu = (
     message: Type.Message,
     event: React.MouseEvent<

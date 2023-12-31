@@ -37,10 +37,10 @@ import {
   ProtectionEnabledDialog,
 } from '../dialogs/ProtectionStatusDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { ScreenContext } from '../../contexts/ScreenContext'
 import useDialog from '../../hooks/useDialog'
 import EnterAutocryptSetupMessage from '../dialogs/EnterAutocryptSetupMessage'
 import { OpenDialog } from '../../contexts/DialogContext'
+import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 
 const Avatar = (
   contact: Type.Contact,
@@ -296,9 +296,8 @@ export default function Message(props: {
   const tx = useTranslationFunction()
   const accountId = selectedAccountId()
 
-  const screenContext = useContext(ScreenContext)
   const { openDialog } = useDialog()
-  const { openContextMenu } = screenContext
+  const { openContextMenu } = useContext(ContextMenuContext)
 
   const showMenu: (
     event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement, MouseEvent>

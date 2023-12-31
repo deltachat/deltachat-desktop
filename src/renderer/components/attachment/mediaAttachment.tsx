@@ -22,12 +22,12 @@ import { truncateText } from '../../../shared/util'
 import { Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
-import { ScreenContext } from '../../contexts/ScreenContext'
 import useDialog from '../../hooks/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import MessageDetail from '../dialogs/MessageDetail'
+import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 
 import type { OpenDialog } from '../../contexts/DialogContext'
-import MessageDetail from '../dialogs/MessageDetail'
 
 const log = getLogger('mediaAttachment')
 
@@ -149,13 +149,13 @@ export function ImageAttachment({
 }: GalleryAttachmentElementProps & {
   openFullscreenMedia: (message: Type.Message) => void
 }) {
-  const screenContext = useContext(ScreenContext)
   const { openDialog } = useDialog()
   const tx = useTranslationFunction()
+  const contextMenu = useContext(ContextMenuContext)
 
   if (load_result.kind === 'loadingError') {
     const onContextMenu = getBrokenMediaContextMenu(
-      screenContext.openContextMenu,
+      contextMenu.openContextMenu,
       openDialog,
       msgId
     )
@@ -174,7 +174,7 @@ export function ImageAttachment({
   } else {
     const message = load_result
     const { openContextMenu, openInShell } = getMediaActions(
-      screenContext.openContextMenu,
+      contextMenu.openContextMenu,
       openDialog,
       message
     )
@@ -211,13 +211,13 @@ export function VideoAttachment({
 }: GalleryAttachmentElementProps & {
   openFullscreenMedia: (message: Type.Message) => void
 }) {
-  const screenContext = useContext(ScreenContext)
   const { openDialog } = useDialog()
   const tx = useTranslationFunction()
+  const contextMenu = useContext(ContextMenuContext)
 
   if (load_result.kind === 'loadingError') {
     const onContextMenu = getBrokenMediaContextMenu(
-      screenContext.openContextMenu,
+      contextMenu.openContextMenu,
       openDialog,
       msgId
     )
@@ -236,7 +236,7 @@ export function VideoAttachment({
   } else {
     const message = load_result
     const { openContextMenu, openInShell } = getMediaActions(
-      screenContext.openContextMenu,
+      contextMenu.openContextMenu,
       openDialog,
       message
     )
@@ -274,13 +274,13 @@ export function AudioAttachment({
   msgId,
   load_result,
 }: GalleryAttachmentElementProps) {
-  const screenContext = useContext(ScreenContext)
   const { openDialog } = useDialog()
   const tx = useTranslationFunction()
+  const contextMenu = useContext(ContextMenuContext)
 
   if (load_result.kind === 'loadingError') {
     const onContextMenu = getBrokenMediaContextMenu(
-      screenContext.openContextMenu,
+      contextMenu.openContextMenu,
       openDialog,
       msgId
     )
@@ -302,7 +302,7 @@ export function AudioAttachment({
   } else {
     const message = load_result
     const { openContextMenu } = getMediaActions(
-      screenContext.openContextMenu,
+      contextMenu.openContextMenu,
       openDialog,
       message
     )
@@ -348,13 +348,13 @@ export function FileAttachmentRow({
   load_result,
   queryText,
 }: GalleryAttachmentElementProps & { queryText?: string }) {
-  const screenContext = useContext(ScreenContext)
   const { openDialog } = useDialog()
   const tx = useTranslationFunction()
+  const contextMenu = useContext(ContextMenuContext)
 
   if (load_result.kind === 'loadingError') {
     const onContextMenu = getBrokenMediaContextMenu(
-      screenContext.openContextMenu,
+      contextMenu.openContextMenu,
       openDialog,
       msgId
     )
@@ -377,7 +377,7 @@ export function FileAttachmentRow({
   } else {
     const message = load_result
     const { openContextMenu, openInShell } = getMediaActions(
-      screenContext.openContextMenu,
+      contextMenu.openContextMenu,
       openDialog,
       message
     )
@@ -451,13 +451,13 @@ export function WebxdcAttachment({
   msgId,
   load_result,
 }: GalleryAttachmentElementProps) {
-  const screenContext = useContext(ScreenContext)
   const { openDialog } = useDialog()
   const tx = useTranslationFunction()
+  const contextMenu = useContext(ContextMenuContext)
 
   if (load_result.kind === 'loadingError') {
     const onContextMenu = getBrokenMediaContextMenu(
-      screenContext.openContextMenu,
+      contextMenu.openContextMenu,
       openDialog,
       msgId
     )
@@ -477,7 +477,7 @@ export function WebxdcAttachment({
     )
   } else if (load_result.webxdcInfo == null) {
     const onContextMenu = getBrokenMediaContextMenu(
-      screenContext.openContextMenu,
+      contextMenu.openContextMenu,
       openDialog,
       msgId
     )
@@ -503,7 +503,7 @@ export function WebxdcAttachment({
     )
   } else {
     const { openContextMenu } = getMediaActions(
-      screenContext.openContextMenu,
+      contextMenu.openContextMenu,
       openDialog,
       load_result
     )
