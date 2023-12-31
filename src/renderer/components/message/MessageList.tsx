@@ -95,17 +95,11 @@ function useUnreadCount(
 type MessageListProps = {
   chatStore: ChatStoreStateWithChatSet
   refComposer: todo
-  selectMessage: (id: number) => void
-  unselectMessage: (id: number) => void
-  selectedMessages: number[]
 }
 
 export default function MessageList({
   chatStore,
   refComposer,
-  unselectMessage,
-  selectMessage,
-  selectedMessages,
 }: MessageListProps) {
   const accountId = selectedAccountId()
   const {
@@ -426,9 +420,6 @@ export default function MessageList({
           unreadMessageInViewIntersectionObserver
         }
         loadMissingMessages={loadMissingMessages}
-        selectMessage={selectMessage}
-        unselectMessage={unselectMessage}
-        selectedMessages={selectedMessages}
       />
       {showJumpDownButton && (
         <JumpDownButton
@@ -461,9 +452,6 @@ export const MessageListInner = React.memo(
     loaded: boolean
     unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
     loadMissingMessages: () => Promise<void>
-    selectedMessages: number[]
-    unselectMessage: (id: number) => void
-    selectMessage: (id: number) => void
   }) => {
     const {
       onScroll,
@@ -475,9 +463,6 @@ export const MessageListInner = React.memo(
       loaded,
       unreadMessageInViewIntersectionObserver,
       loadMissingMessages,
-      unselectMessage,
-      selectMessage,
-      selectedMessages,
     } = props
 
     if (!chatStore.chat.id) {
@@ -544,10 +529,6 @@ export const MessageListInner = React.memo(
                     unreadMessageInViewIntersectionObserver={
                       unreadMessageInViewIntersectionObserver
                     }
-                    isSelected={selectedMessages.includes(messageId.msg_id)}
-                    isSelectMode={selectedMessages.length !== 0}
-                    selectMessage={() => selectMessage(messageId.msg_id)}
-                    unselectMessage={() => unselectMessage(messageId.msg_id)}
                   />
                 )
               } else if (message?.kind === 'loadingError') {

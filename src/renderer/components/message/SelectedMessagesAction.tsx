@@ -1,20 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { openForwardDialog, confirmDeleteMessage } from './messageFunctions'
 import useDialog from '../../hooks/useDialog'
+import { SelectedMessagesContext } from '../../contexts/SelectedMessagesContext'
 
-type SelectedMessagesActionProps = {
-  resetSelected: () => void
-  selectedMessages: number[]
-}
-
-export default function SelectedMessagesAction({
-  resetSelected,
-  selectedMessages,
-}: SelectedMessagesActionProps) {
+export default function SelectedMessagesAction() {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
+  const { selectedMessages, resetSelected } = useContext(SelectedMessagesContext)
+  if (selectedMessages.length === 0) return null
+
   return (
     <div className='selected-messages-action'>
       <button

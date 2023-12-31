@@ -84,42 +84,7 @@ export default function MessageListAndComposer({
     messageInputRef
   )
 
-  type MessageAction =
-    | {
-        type_: 'select' | 'unselect'
-        messageId: number
-      }
-    | { type_: 'reset'; messageId?: never }
-  const [selectedMessages, _dispatch] = useReducer(
-    (selectedMessages: number[], action: MessageAction) => {
-      switch (action.type_) {
-        case 'select':
-          return [...selectedMessages, action.messageId]
-        case 'unselect':
-          return selectedMessages.filter(id => id !== action.messageId)
-        case 'reset':
-          return []
-      }
-    },
-    []
-  )
-
-  const selectMessage = useCallback<(id: number) => void>(
-    (id: number) => _dispatch({ messageId: id, type_: 'select' }),
-    [_dispatch]
-  )
-
-  const unselectMessage = useCallback<(id: number) => void>(
-    (id: number) => _dispatch({ messageId: id, type_: 'unselect' }),
-    [_dispatch]
-  )
-
-  const resetSelected = useCallback<() => void>(
-    () => _dispatch({ type_: 'reset' }),
-    [_dispatch]
-  )
-
-  const onDrop = (e: React.DragEvent<any>) => {
+    const onDrop = (e: React.DragEvent<any>) => {
     if (chatStore.chat === null) {
       log.warn('droped something, but no chat is selected')
       return
@@ -266,20 +231,12 @@ export default function MessageListAndComposer({
       onDrop={onDrop.bind({ props: { chat: chatStore } })}
       onDragOver={onDragOver}
     >
-      {selectedMessages.length !== 0 && (
-        <SelectedMessagesAction
-          selectedMessages={selectedMessages}
-          resetSelected={resetSelected}
-        />
-      )}
+      <SelectedMessagesAction />
       <div className='message-list-and-composer__message-list'>
         <RecoverableCrashScreen reset_on_change_key={chatStore.chat.id}>
           <MessageList
             chatStore={chatStore}
             refComposer={refComposer}
-            selectMessage={selectMessage}
-            unselectMessage={unselectMessage}
-            selectedMessages={selectedMessages}
           />
         </RecoverableCrashScreen>
       </div>
