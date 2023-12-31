@@ -6,7 +6,6 @@ import { debounce } from 'debounce'
 import MainScreen from './components/screens/MainScreen'
 import processOpenQrUrl from './components/helpers/OpenQrUrl'
 import { getLogger } from '../shared/logger'
-import { ContextMenuLayer, OpenContextMenu } from './components/ContextMenu'
 import { ActionEmitter, KeybindAction } from './keybindings'
 import AccountSetupScreen from './components/screens/AccountSetupScreen'
 import AccountListScreen from './components/screens/AccountListScreen'
@@ -38,7 +37,6 @@ export enum Screens {
 }
 
 export default class ScreenController extends Component {
-  contextMenuShowFn: OpenContextMenu | null = null
   state: { message: userFeedback | false; screen: Screens }
   onShowAbout: any
   onShowKeybindings: any
@@ -57,7 +55,6 @@ export default class ScreenController extends Component {
     this.onSuccess = this.onSuccess.bind(this)
     this.userFeedback = this.userFeedback.bind(this)
     this.userFeedbackClick = this.userFeedbackClick.bind(this)
-    this.openContextMenu = this.openContextMenu.bind(this)
     this.changeScreen = this.changeScreen.bind(this)
     this.onShowAbout = this.showAbout.bind(this)
     this.onShowKeybindings = this.showKeyBindings.bind(this)
@@ -218,19 +215,6 @@ export default class ScreenController extends Component {
     ActionEmitter.emitAction(KeybindAction.KeybindingCheatSheet_Open)
   }
 
-  /**
-   * Shows a context menu.
-   *
-   * @returns a promise with no return value that gets resolved when the context menu disapears again
-   * regardless what action the user took or if they canceled the dialog
-   */
-  openContextMenu(...args: Parameters<OpenContextMenu>): Promise<void> {
-    if (!this.contextMenuShowFn) {
-      throw new Error('Context Menu Controller not available')
-    }
-    return this.contextMenuShowFn(...args)
-  }
-
   renderScreen() {
     switch (this.state.screen) {
       case Screens.Main:
@@ -270,11 +254,6 @@ export default class ScreenController extends Component {
   render() {
     return (
       <div>
-        <ContextMenuLayer
-          setShowFunction={showFn => {
-            this.contextMenuShowFn = showFn
-          }}
-        />
         {this.state.message && (
           <div
             onClick={this.userFeedbackClick}
@@ -285,7 +264,6 @@ export default class ScreenController extends Component {
         )}
         <ScreenContext.Provider
           value={{
-            openContextMenu: this.openContextMenu,
             userFeedback: this.userFeedback,
             changeScreen: this.changeScreen,
             screen: this.state.screen,
