@@ -62,11 +62,13 @@ function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
 
     notify.on('click', Event => {
       onClickNotification(data.accountId, chatId, data.messageId, Event)
-      notifications[chatId] = notifications[chatId].filter(n => n !== notify)
+      notifications[chatId] =
+        notifications[chatId]?.filter(n => n !== notify) || []
       notify.close()
     })
     notify.on('close', () => {
-      notifications[chatId] = notifications[chatId].filter(n => n !== notify)
+      notifications[chatId] =
+        notifications[chatId]?.filter(n => n !== notify) || []
     })
 
     if (notifications[chatId]) {

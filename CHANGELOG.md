@@ -20,6 +20,7 @@
 
 ### Fixed
 - Silently fail when notifications are not supported by OS #3613
+- Fix uncaught Exception when dismissing notifications on windows #3593
 
 <a id="1_42_2"></a>
 
