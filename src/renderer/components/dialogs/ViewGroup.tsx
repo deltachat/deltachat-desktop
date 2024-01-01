@@ -37,6 +37,8 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useConfirmationDialog from '../../hooks/useConfirmationDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import { dirname } from 'path'
+import { cachedLastUsedPath } from '../../utils/cachedLastUsedPath'
 
 const log = getLogger('renderer/ViewGroup')
 
@@ -501,6 +503,10 @@ export function GroupImageSelector({
   const tx = window.static_translate
 
   const onClickSelectGroupImage = async () => {
+    const { defaultPath, setLastPath } = cachedLastUsedPath(
+      'last_directory:group_image',
+      runtime.getAppPath('pictures')
+    )
     const file = await runtime.showOpenFileDialog({
       title: tx('select_your_new_profile_image'),
       filters: [
@@ -510,9 +516,12 @@ export function GroupImageSelector({
         },
       ],
       properties: ['openFile'],
-      defaultPath: runtime.getAppPath('pictures'),
+      defaultPath,
     })
-    if (file) setGroupImage(file)
+    if (file) {
+      setGroupImage(file)
+      setLastPath(dirname(file))
+    }
   }
 
   const onClickRemoveGroupImage = () => setGroupImage('')

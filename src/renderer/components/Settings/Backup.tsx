@@ -14,6 +14,7 @@ import useConfirmationDialog from '../../hooks/useConfirmationDialog'
 
 import type { OpenDialogOptions } from 'electron'
 import type { DcEventType } from '@deltachat/jsonrpc-client'
+import { cachedLastUsedPath } from '../../utils/cachedLastUsedPath'
 
 const log = getLogger('renderer/Settings/Backup')
 
@@ -32,16 +33,21 @@ export default function Backup() {
     })
 
     if (confirmed) {
+      const { defaultPath, setLastPath } = cachedLastUsedPath(
+        'last_directory:backup',
+        runtime.getAppPath('downloads')
+      )
       const opts: OpenDialogOptions = {
         title: tx('export_backup_desktop'),
-        defaultPath: runtime.getAppPath('downloads'),
+        defaultPath,
         buttonLabel: tx('save'),
-        properties: ['openDirectory'],
+        properties: ['openDirectory', 'createDirectory'],
       }
       const destination = await runtime.showOpenFileDialog(opts)
       if (!destination) {
         return
       }
+      setLastPath(destination)
 
       const listenForOutputFile = ({
         path: filename,

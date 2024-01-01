@@ -20,6 +20,7 @@ import SettingsHeading from './SettingsHeading'
 import { DialogContent } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
+import { cachedLastUsedPath } from '../../utils/cachedLastUsedPath'
 
 const log = getLogger('renderer/settings/appearance')
 
@@ -186,6 +187,10 @@ function BackgroundSelector({
         onChange('var(--chatViewBg)')
         break
       case SetBackgroundAction.customImage:
+        const { defaultPath, setLastPath } = cachedLastUsedPath(
+          'last_directory:background_image',
+          runtime.getAppPath('pictures')
+        )
         url = await runtime.showOpenFileDialog({
           title: 'Select Background Image',
           filters: [
@@ -193,10 +198,12 @@ function BackgroundSelector({
             { name: 'All Files', extensions: ['*'] },
           ],
           properties: ['openFile'],
+          defaultPath,
         })
         if (!url) {
           break
         }
+        setLastPath(url)
         SettingsStoreInstance.effect.setDesktopSetting(
           'chatViewBgImg',
           await runtime.saveBackgroundImage(url, false)
