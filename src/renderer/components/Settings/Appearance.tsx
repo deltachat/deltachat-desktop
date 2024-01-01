@@ -178,6 +178,10 @@ function BackgroundSelector({
     type: SetBackgroundAction,
     ev: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
+    const { defaultPath, setLastPath } = cachedLastUsedPath(
+      'last_directory:background_image',
+      runtime.getAppPath('pictures')
+    )
     let url
     switch (type) {
       case SetBackgroundAction.default:
@@ -187,10 +191,6 @@ function BackgroundSelector({
         onChange('var(--chatViewBg)')
         break
       case SetBackgroundAction.customImage:
-        const { defaultPath, setLastPath } = cachedLastUsedPath(
-          'last_directory:background_image',
-          runtime.getAppPath('pictures')
-        )
         url = await runtime.showOpenFileDialog({
           title: 'Select Background Image',
           filters: [
