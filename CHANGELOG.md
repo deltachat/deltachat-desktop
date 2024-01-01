@@ -18,7 +18,7 @@
 - Helper method to easily use confirmation dialogs #3601
 - Refactor using new `useConfirmationDialog` hook #3602
 - update `electron` from `v26.6.0` to version `v26.6.3`
-- hide three-dot-menu when not applicable (map, other gallery tabs) #3523
+- disable three-dot-menu when not applicable (map, other gallery tabs) #3523
 
 ### Fixed
 - Silently fail when notifications are not supported by OS #3613
