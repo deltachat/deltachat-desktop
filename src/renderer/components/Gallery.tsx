@@ -58,7 +58,7 @@ const MediaTabs: Readonly<{
   },
 }
 
-type Props = { chatId: number | 'all', onUpdateView?: () => void }
+type Props = { chatId: number | 'all'; onUpdateView?: () => void }
 
 export default class Gallery extends Component<
   Props,

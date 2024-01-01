@@ -176,11 +176,17 @@ export default function MainScreen() {
             galleryRef.current?.state.currentTab || ''
           ))
     )
-  }, [selectedChat, selectedChat?.activeView, alternativeView, galleryRef])
+  }, [selectedChat, alternativeView, galleryRef])
 
   useEffect(() => {
     updateThreeDotMenuHidded()
-  }, [selectedChat, selectedChat?.activeView, alternativeView, galleryRef])
+  }, [
+    selectedChat,
+    selectedChat?.activeView,
+    alternativeView,
+    galleryRef,
+    updateThreeDotMenuHidded,
+  ])
 
   if (!selectedChat) {
     log.error('selectedChat is undefined')
