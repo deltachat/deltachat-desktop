@@ -18,6 +18,9 @@
 - Helper method to easily use confirmation dialogs #3601
 - Refactor using new `useConfirmationDialog` hook #3602
 
+### Fixed
+- Silently fail when notifications are not supported by OS #3613
+
 <a id="1_42_2"></a>
 
 ## [1.42.2] - 2023-12-02
