@@ -18,6 +18,9 @@
 - Helper method to easily use confirmation dialogs #3601
 - Refactor using new `useConfirmationDialog` hook #3602
 
+### Fixed
+- Introduce own React context for context menus & fix regression #3608
+
 <a id="1_42_2"></a>
 
 ## [1.42.2] - 2023-12-02
