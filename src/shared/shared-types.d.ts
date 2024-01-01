@@ -52,6 +52,7 @@ export interface DesktopSettingsType {
   activeTheme: string
   minimizeToTray: boolean
   syncAllAccounts: boolean
+  /** @deprecated is now not persisted between settings anymore */
   lastSaveDialogLocation: string | undefined
   experimentalEnableMarkdownInMessages: boolean
   enableWebxdcDevTools: boolean
