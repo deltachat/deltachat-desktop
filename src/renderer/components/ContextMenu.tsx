@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from 'react'
+import React, {
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useCallback,
+} from 'react'
 
 import useContextMenu from '../hooks/useContextMenu'
 
@@ -38,30 +44,32 @@ export function ContextMenuLayer({
 
   const endPromiseRef = useRef<(() => void) | null>(null)
 
-  async function show({
-    cursorX: x,
-    cursorY: y,
-    items: rawItems,
-  }: showFnArguments) {
-    if (!layerRef.current) {
-      throw new Error('Somehow the ContextMenuLayer went missing')
-    }
-    // Filter out empty null items
-    // (can happen when constructing the array with inline conditions,
-    // look at the chatlistitem context menu for an example)
-    cursorX.current = x
-    cursorY.current = y
-    const items = rawItems.filter(item => !!item) as ContextMenuItem[]
-    // Get required information
-    setCurrentItems(items)
-    window.__contextMenuActive = true
-    setActive(true)
-    await new Promise<void>((resolve, _reject) => {
-      endPromiseRef.current = resolve
-    })
-  }
+  const show = useCallback(
+    async ({ cursorX: x, cursorY: y, items: rawItems }: showFnArguments) => {
+      if (!layerRef.current) {
+        throw new Error('Somehow the ContextMenuLayer went missing')
+      }
 
-  function showAfter(menuEl: HTMLDivElement | null) {
+      // Filter out empty null items
+      // (can happen when constructing the array with inline conditions,
+      // look at the chatlistitem context menu for an example)
+      cursorX.current = x
+      cursorY.current = y
+      const items = rawItems.filter(item => !!item) as ContextMenuItem[]
+
+      // Get required information
+      setCurrentItems(items)
+      window.__contextMenuActive = true
+      setActive(true)
+
+      await new Promise<void>((resolve, _reject) => {
+        endPromiseRef.current = resolve
+      })
+    },
+    []
+  )
+
+  const showAfter = useCallback((menuEl: HTMLDivElement | null) => {
     if (!menuEl || !layerRef.current) {
       return
     }
@@ -110,18 +118,20 @@ export function ContextMenuLayer({
 
     // Displaying Menu
     setPosition({ top, left })
-  }
+  }, [])
 
-  function cancel() {
+  const cancel = useCallback(() => {
     window.__contextMenuActive = false
     setActive(false)
     setCurrentItems([])
     endPromiseRef.current?.()
-  }
+  }, [])
 
   useEffect(() => {
-    if (typeof setShowFunction === 'function') setShowFunction(show)
-  }, [setShowFunction])
+    if (typeof setShowFunction === 'function') {
+      setShowFunction(show)
+    }
+  }, [setShowFunction, show])
 
   return (
     <div
