@@ -2,3 +2,8 @@
 .forwardMessageDialog {
   height: 100%;
 }
+
+.forwardMessageDialogBody {
+  display: flex;
+  flex-direction: column;
+}
