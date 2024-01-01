@@ -65,7 +65,7 @@ export default function ForwardMessage(props: {
   return (
     <Dialog className={styles.forwardMessageDialog} onClose={onClose} fixed>
       <DialogHeader onClose={onClose} title={tx('forward_to')} />
-      <DialogBody>
+      <DialogBody className={styles.forwardMessageDialogBody}>
         <div className='forward-message-account-input'>
           <input
             className='search-input'
