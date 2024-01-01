@@ -23,6 +23,9 @@
 - Silently fail when notifications are not supported by OS #3613
 - Fix uncaught Exception when dismissing notifications on windows #3593
 
+### Fixed
+- Introduce own React context for context menus & fix regression #3608
+
 <a id="1_42_2"></a>
 
 ## [1.42.2] - 2023-12-02

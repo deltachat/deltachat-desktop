@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useCallback, useContext } from 'react'
 import reactStringReplace from 'react-string-replace'
 import classNames from 'classnames'
 import { C, T } from '@deltachat/jsonrpc-client'
@@ -37,10 +37,10 @@ import {
   ProtectionEnabledDialog,
 } from '../dialogs/ProtectionStatusDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { ScreenContext } from '../../contexts/ScreenContext'
 import useDialog from '../../hooks/useDialog'
 import EnterAutocryptSetupMessage from '../dialogs/EnterAutocryptSetupMessage'
 import { OpenDialog } from '../../contexts/DialogContext'
+import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 
 const Avatar = (
   contact: Type.Contact,
@@ -296,40 +296,42 @@ export default function Message(props: {
   const tx = useTranslationFunction()
   const accountId = selectedAccountId()
 
-  const screenContext = useContext(ScreenContext)
   const { openDialog } = useDialog()
-  const { openContextMenu } = screenContext
+  const { openContextMenu } = useContext(ContextMenuContext)
 
-  const showMenu: (
-    event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement, MouseEvent>
-  ) => Promise<void> = async event => {
-    event.preventDefault() // prevent default runtime context menu from opening
+  const showContextMenu = useCallback(
+    async (
+      event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement, MouseEvent>
+    ) => {
+      event.preventDefault() // prevent default runtime context menu from opening
 
-    const chat = await BackendRemote.rpc.getFullChatById(
-      accountId,
-      message.chatId
-    )
+      const chat = await BackendRemote.rpc.getFullChatById(
+        accountId,
+        message.chatId
+      )
 
-    // the event.t is a workaround for labled links, as they will be able to contain markdown formatting in the label in the future.
-    const target = ((event as any).t || event.target) as HTMLAnchorElement
-    const items = buildContextMenu(
-      {
-        message,
-        text: text || undefined,
-        conversationType,
-        openDialog,
-        chat,
-      },
-      target
-    )
-    const [cursorX, cursorY] = [event.clientX, event.clientY]
+      // the event.t is a workaround for labled links, as they will be able to contain markdown formatting in the label in the future.
+      const target = ((event as any).t || event.target) as HTMLAnchorElement
+      const items = buildContextMenu(
+        {
+          message,
+          text: text || undefined,
+          conversationType,
+          openDialog,
+          chat,
+        },
+        target
+      )
+      const [cursorX, cursorY] = [event.clientX, event.clientY]
 
-    openContextMenu({
-      cursorX,
-      cursorY,
-      items,
-    })
-  }
+      openContextMenu({
+        cursorX,
+        cursorY,
+        items,
+      })
+    },
+    [accountId, conversationType, message, openContextMenu, openDialog, text]
+  )
 
   // Info Message
   if (message.isInfo) {
@@ -343,7 +345,7 @@ export default function Message(props: {
       <div
         className={'info-message' + (isWebxdcInfo ? ' webxdc-info' : '')}
         id={String(message.id)}
-        onContextMenu={showMenu}
+        onContextMenu={showContextMenu}
         onClick={async () => {
           if (isWebxdcInfo && message.parentId) {
             jumpToMessage(message.parentId, true, message.id)
@@ -412,7 +414,7 @@ export default function Message(props: {
         <div className='break' />
         <div
           className='info-button'
-          onContextMenu={showMenu}
+          onContextMenu={showContextMenu}
           onClick={joinCall.bind(null, openDialog, id)}
         >
           {direction === 'incoming'
@@ -483,7 +485,7 @@ export default function Message(props: {
 
   return (
     <div
-      onContextMenu={showMenu}
+      onContextMenu={showContextMenu}
       className={classNames(
         'message',
         direction,
@@ -498,7 +500,7 @@ export default function Message(props: {
         direction === 'incoming' &&
         Avatar(message.sender, onContactClick)}
       <div
-        onContextMenu={showMenu}
+        onContextMenu={showContextMenu}
         className='msg-container'
         style={{ borderColor: message.sender.color }}
       >

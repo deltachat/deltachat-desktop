@@ -18,7 +18,7 @@ import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
-import { ScreenContext } from '../../contexts/ScreenContext'
+import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 
 function archiveStateMenu(
   chat: Type.ChatListItemFetchResult & { kind: 'ChatListItem' },
@@ -67,8 +67,8 @@ export function useChatListContextMenu(): {
   ) => Promise<void>
   activeContextMenuChatId: number | null
 } {
-  const screenContext = useContext(ScreenContext)
   const { openDialog } = useDialog()
+  const { openContextMenu } = useContext(ContextMenuContext)
   const accountId = selectedAccountId()
   const [activeContextMenuChatId, setActiveContextMenuChatId] = useState<
     number | null
@@ -177,7 +177,7 @@ export function useChatListContextMenu(): {
       event.preventDefault() // prevent default runtime context menu from opening
 
       setActiveContextMenuChatId(chatListItem.id)
-      await screenContext.openContextMenu({
+      await openContextMenu({
         cursorX,
         cursorY,
         items: menu,

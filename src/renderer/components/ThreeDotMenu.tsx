@@ -17,15 +17,15 @@ import { ActionEmitter, KeybindAction } from '../keybindings'
 import useDialog from '../hooks/useDialog'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 import DisappearingMessages from './dialogs/DisappearingMessages'
-import { ScreenContext } from '../contexts/ScreenContext'
 import ChatAuditLogDialog from './dialogs/ChatAuditLogDialog'
+import { ContextMenuContext } from '../contexts/ContextMenuContext'
 
 export function useThreeDotMenu(
   selectedChat: Type.FullChat | null,
   mode: 'chat' | 'gallery' = 'chat'
 ) {
   const { openDialog } = useDialog()
-  const { openContextMenu } = useContext(ScreenContext)
+  const { openContextMenu } = useContext(ContextMenuContext)
   const [settingsStore] = useSettingsStore()
   const tx = useTranslationFunction()
 

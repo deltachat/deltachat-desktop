@@ -12,6 +12,7 @@ import { BackendRemote } from './backend-com'
 import { runPostponedFunctions } from './onready'
 import { I18nContext } from './contexts/I18nContext'
 import { DialogContextProvider } from './contexts/DialogContext'
+import { ContextMenuProvider } from './contexts/ContextMenuContext'
 
 export default function App(_props: any) {
   const [localeData, setLocaleData] = useState<LocaleData | null>(null)
@@ -76,9 +77,11 @@ export default function App(_props: any) {
     <CrashScreen>
       <ThemeContextWrapper>
         <I18nContext.Provider value={window.static_translate}>
-          <DialogContextProvider>
-            <ScreenController />
-          </DialogContextProvider>
+          <ContextMenuProvider>
+            <DialogContextProvider>
+              <ScreenController />
+            </DialogContextProvider>
+          </ContextMenuProvider>
         </I18nContext.Provider>
       </ThemeContextWrapper>
     </CrashScreen>

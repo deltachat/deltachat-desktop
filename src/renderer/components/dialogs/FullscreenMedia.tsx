@@ -10,12 +10,12 @@ import { getLogger } from '../../../shared/logger'
 import { gitHubIssuesUrl } from '../../../shared/constants'
 import { useInitEffect } from '../helpers/hooks'
 import { preventDefault } from '../../../shared/util'
-import { useContextMenu } from '../ContextMenu'
 import { jumpToMessage } from '../helpers/ChatMethods'
 import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
+import useContextMenu from '../../hooks/useContextMenu'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
