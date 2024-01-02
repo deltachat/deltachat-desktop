@@ -38,7 +38,7 @@ import useConfirmationDialog from '../../hooks/useConfirmationDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 import { dirname } from 'path'
-import { cachedLastUsedPath } from '../../utils/cachedLastUsedPath'
+import { rememberLastUsedPath } from '../../utils/cachedLastUsedPath'
 
 const log = getLogger('renderer/ViewGroup')
 
@@ -503,7 +503,7 @@ export function GroupImageSelector({
   const tx = window.static_translate
 
   const onClickSelectGroupImage = async () => {
-    const { defaultPath, setLastPath } = cachedLastUsedPath(
+    const { defaultPath, setLastPath } = rememberLastUsedPath(
       'last_directory:group_image',
       runtime.getAppPath('pictures')
     )

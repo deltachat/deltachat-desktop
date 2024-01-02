@@ -1,4 +1,5 @@
 export function cachedLastUsedPath(
+export function rememberLastUsedPath(
   key: `last_directory:${string}`,
   defaultPath: string
 ) {

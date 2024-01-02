@@ -3,7 +3,7 @@ import React from 'react'
 import { runtime } from '../../../runtime'
 import { avatarInitial } from '../../Avatar'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import { cachedLastUsedPath } from '../../../utils/cachedLastUsedPath'
+import { rememberLastUsedPath } from '../../../utils/cachedLastUsedPath'
 import { dirname } from 'path'
 
 export default function ProfileImageSelector({
@@ -23,7 +23,7 @@ export default function ProfileImageSelector({
   const tx = useTranslationFunction()
 
   const onClickSelectPicture = async () => {
-    const { defaultPath, setLastPath } = cachedLastUsedPath(
+    const { defaultPath, setLastPath } = rememberLastUsedPath(
       'last_directory:profile_image',
       runtime.getAppPath('pictures')
     )

@@ -18,7 +18,7 @@ import { IMAGE_EXTENSIONS } from '../../../shared/constants'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
 import useConfirmationDialog from '../../hooks/useConfirmationDialog'
-import { cachedLastUsedPath } from '../../utils/cachedLastUsedPath'
+import { rememberLastUsedPath } from '../../utils/cachedLastUsedPath'
 import { dirname } from 'path'
 
 // Function to populate Menu
@@ -56,7 +56,7 @@ const MenuAttachment = ({
 
   const addFilenameFile = async () => {
     // function for files
-    const { defaultPath, setLastPath } = cachedLastUsedPath(
+    const { defaultPath, setLastPath } = rememberLastUsedPath(
       'last_directory:attachment',
       runtime.getAppPath('home')
     )
@@ -79,7 +79,7 @@ const MenuAttachment = ({
 
   const addFilenameMedia = async () => {
     // function for media
-    const { defaultPath, setLastPath } = cachedLastUsedPath(
+    const { defaultPath, setLastPath } = rememberLastUsedPath(
       'last_directory:attachment',
       runtime.getAppPath('home')
     )
