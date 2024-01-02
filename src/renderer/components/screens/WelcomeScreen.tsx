@@ -19,10 +19,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
 import ImportQrCode from '../dialogs/ImportQrCode'
 import AlertDialog from '../dialogs/AlertDialog'
-import {
-  LastUsedSlot,
-  rememberLastUsedPath,
-} from '../../utils/lastUsedPaths'
+import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 import { dirname } from 'path'
 
 const log = getLogger('renderer/components/AccountsScreen')

@@ -38,10 +38,7 @@ import useConfirmationDialog from '../../hooks/useConfirmationDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 import { dirname } from 'path'
-import {
-  LastUsedSlot,
-  rememberLastUsedPath,
-} from '../../utils/lastUsedPaths'
+import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 
 const log = getLogger('renderer/ViewGroup')
 

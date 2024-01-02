@@ -8,10 +8,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useConfirmationDialog from '../../hooks/useConfirmationDialog'
 
 import type { OpenDialogOptions } from 'electron'
-import {
-  LastUsedSlot,
-  rememberLastUsedPath,
-} from '../../utils/lastUsedPaths'
+import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 import { dirname } from 'path'
 
 export default function ManageKeys() {

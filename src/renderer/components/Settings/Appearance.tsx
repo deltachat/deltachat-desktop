@@ -20,10 +20,7 @@ import SettingsHeading from './SettingsHeading'
 import { DialogContent } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
-import {
-  LastUsedSlot,
-  rememberLastUsedPath,
-} from '../../utils/lastUsedPaths'
+import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 
 const log = getLogger('renderer/settings/appearance')
 

@@ -14,10 +14,7 @@ import useConfirmationDialog from '../../hooks/useConfirmationDialog'
 
 import type { OpenDialogOptions } from 'electron'
 import type { DcEventType } from '@deltachat/jsonrpc-client'
-import {
-  LastUsedSlot,
-  rememberLastUsedPath,
-} from '../../utils/lastUsedPaths'
+import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 
 const log = getLogger('renderer/Settings/Backup')
 

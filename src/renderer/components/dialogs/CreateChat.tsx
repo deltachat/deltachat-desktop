@@ -51,10 +51,7 @@ import { VerifiedContactsRequiredDialog } from './ProtectionStatusDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 import useConfirmationDialog from '../../hooks/useConfirmationDialog'
-import {
-  LastUsedSlot,
-  rememberLastUsedPath,
-} from '../../utils/lastUsedPaths'
+import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 import { dirname } from 'path'
 
 type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'

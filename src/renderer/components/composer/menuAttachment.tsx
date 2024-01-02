@@ -18,10 +18,7 @@ import { IMAGE_EXTENSIONS } from '../../../shared/constants'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
 import useConfirmationDialog from '../../hooks/useConfirmationDialog'
-import {
-  LastUsedSlot,
-  rememberLastUsedPath,
-} from '../../utils/lastUsedPaths'
+import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 import { dirname } from 'path'
 
 // Function to populate Menu
