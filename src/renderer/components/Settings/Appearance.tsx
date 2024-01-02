@@ -20,6 +20,7 @@ import SettingsHeading from './SettingsHeading'
 import { DialogContent } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
+import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 
 const log = getLogger('renderer/settings/appearance')
 
@@ -177,6 +178,9 @@ function BackgroundSelector({
     type: SetBackgroundAction,
     ev: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
+    const { defaultPath, setLastPath } = rememberLastUsedPath(
+      LastUsedSlot.BackgroundImage
+    )
     let url
     switch (type) {
       case SetBackgroundAction.default:
@@ -193,10 +197,12 @@ function BackgroundSelector({
             { name: 'All Files', extensions: ['*'] },
           ],
           properties: ['openFile'],
+          defaultPath,
         })
         if (!url) {
           break
         }
+        setLastPath(url)
         SettingsStoreInstance.effect.setDesktopSetting(
           'chatViewBgImg',
           await runtime.saveBackgroundImage(url, false)

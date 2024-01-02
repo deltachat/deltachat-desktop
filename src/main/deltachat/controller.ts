@@ -274,6 +274,7 @@ export default class DeltaChatController extends EventEmitter {
     DesktopSettings.update({
       lastAccount: undefined,
       lastChats: {},
+      lastSaveDialogLocation: undefined,
     })
 
     // cleanup

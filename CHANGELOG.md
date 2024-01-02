@@ -6,7 +6,7 @@
 - Introduce text formatting for chatlist item summary (use message-parser) #3476
 
 ### Changed
-- update deltachat-node and deltachat/jsonrpc-client to `v1.132.1`
+- Update deltachat-node and deltachat/jsonrpc-client to `v1.132.1`
 - Use native watch mode and CSS modules of esbuild #3571
   - Use native watch mode and CSS modules of esbuild
   - Support SCSS in modules
@@ -22,13 +22,12 @@
 - Helper method to easily use confirmation dialogs #3601
 - Refactor using new `useConfirmationDialog` hook #3602
 - update `electron` from `v26.6.0` to version `v26.6.3`
-- disable three-dot-menu when not applicable (map, other gallery tabs) #3523
+- Remember file open dialog locations across the current session and do not persist last save location across sessions anymore #3615
+- Disable three-dot-menu when not applicable (map, other gallery tabs) #3523
 
 ### Fixed
 - Silently fail when notifications are not supported by OS #3613
 - Fix uncaught Exception when dismissing notifications on windows #3593
-
-### Fixed
 - Introduce own React context for context menus & fix regression #3608
 
 <a id="1_42_2"></a>
