@@ -27,8 +27,7 @@ export default function ProfileImageSelector({
 
   const onClickSelectPicture = async () => {
     const { defaultPath, setLastPath } = rememberLastUsedPath(
-      LastUsedSlot.ProfileImage,
-      runtime.getAppPath('pictures')
+      LastUsedSlot.ProfileImage
     )
     const file = await runtime.showOpenFileDialog({
       title: tx('select_your_new_profile_image'),

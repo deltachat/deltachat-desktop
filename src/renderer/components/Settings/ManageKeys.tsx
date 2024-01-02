@@ -20,8 +20,7 @@ export default function ManageKeys() {
 
   const onKeysImport = useCallback(async () => {
     const { defaultPath, setLastPath } = rememberLastUsedPath(
-      LastUsedSlot.KeyImport,
-      runtime.getAppPath('downloads')
+      LastUsedSlot.KeyImport
     )
     const opts: OpenDialogOptions = {
       title: tx('pref_managekeys_import_secret_keys'),
@@ -59,8 +58,7 @@ export default function ManageKeys() {
     // TODO: ask for the user's password and check it
 
     const { defaultPath, setLastPath } = rememberLastUsedPath(
-      LastUsedSlot.KeyExport,
-      runtime.getAppPath('downloads')
+      LastUsedSlot.KeyExport
     )
     const opts: OpenDialogOptions = {
       title: tx('pref_managekeys_export_secret_keys'),

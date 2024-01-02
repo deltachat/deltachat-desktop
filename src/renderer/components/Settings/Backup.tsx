@@ -37,8 +37,7 @@ export default function Backup() {
 
     if (confirmed) {
       const { defaultPath, setLastPath } = rememberLastUsedPath(
-        LastUsedSlot.Backup,
-        runtime.getAppPath('downloads')
+        LastUsedSlot.Backup
       )
       const opts: OpenDialogOptions = {
         title: tx('export_backup_desktop'),

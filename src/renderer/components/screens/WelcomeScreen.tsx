@@ -97,8 +97,7 @@ const ImportButton = function ImportButton() {
 
   async function onClickImportBackup() {
     const { defaultPath, setLastPath } = rememberLastUsedPath(
-      LastUsedSlot.Backup,
-      runtime.getAppPath('downloads')
+      LastUsedSlot.Backup
     )
     const file = await runtime.showOpenFileDialog({
       title: tx('import_backup_title'),

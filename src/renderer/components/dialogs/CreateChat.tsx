@@ -855,8 +855,7 @@ export function useGroupImage(image?: string | null) {
 
   const onSetGroupImage = async () => {
     const { defaultPath, setLastPath } = rememberLastUsedPath(
-      LastUsedSlot.GroupImage,
-      runtime.getAppPath('pictures')
+      LastUsedSlot.GroupImage
     )
     const file = await runtime.showOpenFileDialog({
       title: tx('select_group_image_desktop'),

@@ -60,8 +60,7 @@ const MenuAttachment = ({
   const addFilenameFile = async () => {
     // function for files
     const { defaultPath, setLastPath } = rememberLastUsedPath(
-      LastUsedSlot.Attachment,
-      runtime.getAppPath('home')
+      LastUsedSlot.Attachment
     )
     const file = await runtime.showOpenFileDialog({
       filters: [
@@ -83,8 +82,7 @@ const MenuAttachment = ({
   const addFilenameMedia = async () => {
     // function for media
     const { defaultPath, setLastPath } = rememberLastUsedPath(
-      LastUsedSlot.Attachment,
-      runtime.getAppPath('home')
+      LastUsedSlot.Attachment
     )
     const file = await runtime.showOpenFileDialog({
       filters: [

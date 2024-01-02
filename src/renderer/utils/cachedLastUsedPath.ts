@@ -1,3 +1,5 @@
+import { runtime } from '../runtime'
+
 export const enum LastUsedSlot {
   Attachment = 'last_directory:attachment',
   ProfileImage = 'last_directory:profile_image',
@@ -8,7 +10,20 @@ export const enum LastUsedSlot {
   KeyExport = 'last_directory:keys_export',
 }
 
-export function rememberLastUsedPath(key: LastUsedSlot, defaultPath: string) {
+const defaultLocations: {
+  [key in LastUsedSlot]: Parameters<typeof runtime.getAppPath>[0]
+} = {
+  [LastUsedSlot.Attachment]: 'home',
+  [LastUsedSlot.ProfileImage]: 'pictures',
+  [LastUsedSlot.GroupImage]: 'pictures',
+  [LastUsedSlot.Backup]: 'downloads',
+  [LastUsedSlot.BackgroundImage]: 'pictures',
+  [LastUsedSlot.KeyImport]: 'downloads',
+  [LastUsedSlot.KeyExport]: 'downloads',
+}
+
+export function rememberLastUsedPath(key: LastUsedSlot) {
+  const defaultPath = runtime.getAppPath(defaultLocations[key])
   const selectedPath = sessionStorage.getItem(key) || defaultPath
 
   const setLastPath = (lastPath: string) => {

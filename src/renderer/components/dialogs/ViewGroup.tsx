@@ -507,8 +507,7 @@ export function GroupImageSelector({
 
   const onClickSelectGroupImage = async () => {
     const { defaultPath, setLastPath } = rememberLastUsedPath(
-      LastUsedSlot.GroupImage,
-      runtime.getAppPath('pictures')
+      LastUsedSlot.GroupImage
     )
     const file = await runtime.showOpenFileDialog({
       title: tx('select_your_new_profile_image'),

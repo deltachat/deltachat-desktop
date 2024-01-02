@@ -182,8 +182,7 @@ function BackgroundSelector({
     ev: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     const { defaultPath, setLastPath } = rememberLastUsedPath(
-      LastUsedSlot.BackgroundImage,
-      runtime.getAppPath('pictures')
+      LastUsedSlot.BackgroundImage
     )
     let url
     switch (type) {
