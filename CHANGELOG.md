@@ -18,8 +18,7 @@
 - Helper method to easily use confirmation dialogs #3601
 - Refactor using new `useConfirmationDialog` hook #3602
 - update `electron` from `v26.6.0` to version `v26.6.3`
-- remember file open dialog locations across the current session
-- do not persist last save location across sessions anymore
+- remember file open dialog locations across the current session and do not persist last save location across sessions anymore #3615
 
 ### Fixed
 - Silently fail when notifications are not supported by OS #3613
