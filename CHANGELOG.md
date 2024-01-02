@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- Introduce text formatting for chatlist item summary (use message-parser) #3476
+
 ### Changed
 - update deltachat-node and deltachat/jsonrpc-client to `v1.132.1`
 - Use native watch mode and CSS modules of esbuild #3571

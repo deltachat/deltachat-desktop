@@ -103,10 +103,60 @@ function renderElement(elm: ParsedElement, key?: number): JSX.Element {
   }
 }
 
-export function message2React(message: string): JSX.Element {
+/** render in preview mode for ChatListItem summary,
+ *  not interactive (links can not be clicked) just looks more similar to the message in the chatview/message-list */
+function renderElementPreview(elm: ParsedElement, key?: number): JSX.Element {
+  switch (elm.t) {
+    case 'CodeBlock':
+    case 'InlineCode':
+      return (
+        <code className='mm-inline-code' key={key}>
+          {elm.c.content}
+        </code>
+      )
+
+    case 'StrikeThrough':
+      return <s key={key}>{elm.c.map(renderElement)}</s>
+
+    case 'Italics':
+      return <i key={key}>{elm.c.map(renderElement)}</i>
+
+    case 'Bold':
+      return <b key={key}>{elm.c.map(renderElement)}</b>
+
+    case 'Link':
+      return <span key={key}>{elm.c.destination.target}</span>
+
+    case 'LabeledLink':
+      return (
+        <>
+          <span key={key}>{elm.c.label.map(renderElement)}</span>{' '}
+        </>
+      )
+
+    case 'Linebreak':
+      return <span key={key}>{''}</span>
+
+    case 'Tag':
+    case 'EmailAddress':
+    case 'BotCommandSuggestion':
+    case 'Text':
+      return <span key={key}>{elm.c}</span>
+    default:
+      //@ts-ignore
+      log.error(`type ${elm.t} not known/implemented yet`, elm)
+      return (
+        <span key={key} style={{ color: 'red' }}>
+          {JSON.stringify(elm)}
+        </span>
+      )
+  }
+}
+
+export function message2React(message: string, preview: boolean): JSX.Element {
   try {
     const elements = parseMessage(message)
-    return <>{elements.map(renderElement)}</>
+    return <>{elements.map(preview ? renderElementPreview : renderElement)}</>
   } catch (error) {
     log.error('parseMessage failed:', { input: message, error })
     return <>{message}</>
