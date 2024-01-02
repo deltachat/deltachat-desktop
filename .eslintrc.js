@@ -43,12 +43,10 @@ module.exports = {
     // Make sure we're exporting and importing TS types as such
     '@typescript-eslint/consistent-type-exports': 'error',
     '@typescript-eslint/consistent-type-imports': 'error',
-    // @TODO
+    // Enforce default parameters to be last
     '@typescript-eslint/default-param-last': 'error',
-    // @TODO
+    // Disallow void type outside of generic or return types
     '@typescript-eslint/no-invalid-void-type': 'warn',
-    // @TODO
-    '@typescript-eslint/no-redeclare': 'error',
     // Do not allow unused vars, except if they're prefixed with an underscore
     '@typescript-eslint/no-unused-vars': [
       'error',
@@ -56,9 +54,9 @@ module.exports = {
     ],
     // Sometimes we need to disable type checking
     '@typescript-eslint/ban-ts-comment': 'off',
-    // @TODO
     '@typescript-eslint/no-explicit-any': 'off',
-    // @TODO
+    // Some parts of the code still make use of TypeScript namespaces, new code
+    // should prefer ECMAScript 2015 modules
     '@typescript-eslint/no-namespace': 'off',
     // Enable `prettier` linter warnings
     'prettier/prettier': 'warn',
@@ -76,9 +74,11 @@ module.exports = {
         distinctGroup: false,
       },
     ],
-    // Sometimes we want to indicate where an import came from by using the default member
+    // Sometimes we want to indicate where an import came from by using the
+    // default member
     'import/no-named-as-default-member': 'off',
-    // Linter gives false positives, as we're overriding namespaces and use CommonJS dependencies
+    // Linter gives false positives, as we're overriding namespaces and use
+    // CommonJS dependencies
     'import/default': 'off',
     // Always expect a single newline after all imports
     'import/newline-after-import': [
