@@ -3,7 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
-- message-parse summary text in chatlist item summary #3476
+- Introduce text formatting for chatlist item summary (use message-parser) #3476
 
 ### Changed
 - update deltachat-node and deltachat/jsonrpc-client to `v1.132.1`
