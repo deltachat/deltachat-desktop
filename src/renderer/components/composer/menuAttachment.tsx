@@ -21,7 +21,7 @@ import useConfirmationDialog from '../../hooks/useConfirmationDialog'
 import {
   LastUsedSlot,
   rememberLastUsedPath,
-} from '../../utils/cachedLastUsedPath'
+} from '../../utils/lastUsedPaths'
 import { dirname } from 'path'
 
 // Function to populate Menu

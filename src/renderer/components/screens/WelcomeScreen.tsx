@@ -22,7 +22,7 @@ import AlertDialog from '../dialogs/AlertDialog'
 import {
   LastUsedSlot,
   rememberLastUsedPath,
-} from '../../utils/cachedLastUsedPath'
+} from '../../utils/lastUsedPaths'
 import { dirname } from 'path'
 
 const log = getLogger('renderer/components/AccountsScreen')

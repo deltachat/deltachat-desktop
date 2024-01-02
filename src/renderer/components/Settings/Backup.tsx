@@ -17,7 +17,7 @@ import type { DcEventType } from '@deltachat/jsonrpc-client'
 import {
   LastUsedSlot,
   rememberLastUsedPath,
-} from '../../utils/cachedLastUsedPath'
+} from '../../utils/lastUsedPaths'
 
 const log = getLogger('renderer/Settings/Backup')
 

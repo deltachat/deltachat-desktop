@@ -23,7 +23,7 @@ import useDialog from '../../hooks/useDialog'
 import {
   LastUsedSlot,
   rememberLastUsedPath,
-} from '../../utils/cachedLastUsedPath'
+} from '../../utils/lastUsedPaths'
 
 const log = getLogger('renderer/settings/appearance')
 

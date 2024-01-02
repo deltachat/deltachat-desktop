@@ -41,7 +41,7 @@ import { dirname } from 'path'
 import {
   LastUsedSlot,
   rememberLastUsedPath,
-} from '../../utils/cachedLastUsedPath'
+} from '../../utils/lastUsedPaths'
 
 const log = getLogger('renderer/ViewGroup')
 

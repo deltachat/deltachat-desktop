@@ -11,7 +11,7 @@ import type { OpenDialogOptions } from 'electron'
 import {
   LastUsedSlot,
   rememberLastUsedPath,
-} from '../../utils/cachedLastUsedPath'
+} from '../../utils/lastUsedPaths'
 import { dirname } from 'path'
 
 export default function ManageKeys() {
