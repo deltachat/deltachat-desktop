@@ -165,10 +165,10 @@ export default function MainScreen() {
   )
   const galleryRef = useRef<Gallery | null>(null)
 
-  const [threeDotMenuHidded, setThreeDotMenuHidded] = useState(false)
+  const [threeDotMenuHidden, setthreeDotMenuHidden] = useState(false)
 
-  const updateThreeDotMenuHidded = useCallback(() => {
-    setThreeDotMenuHidded(
+  const updatethreeDotMenuHidden = useCallback(() => {
+    setthreeDotMenuHidden(
       selectedChat?.activeView === ChatView.Map ||
         ((alternativeView === 'global-gallery' ||
           selectedChat?.activeView === ChatView.Media) &&
@@ -179,13 +179,13 @@ export default function MainScreen() {
   }, [selectedChat, alternativeView, galleryRef])
 
   useEffect(() => {
-    updateThreeDotMenuHidded()
+    updatethreeDotMenuHidden()
   }, [
     selectedChat,
     selectedChat?.activeView,
     alternativeView,
     galleryRef,
-    updateThreeDotMenuHidded,
+    updatethreeDotMenuHidden,
   ])
 
   if (!selectedChat) {
@@ -201,7 +201,7 @@ export default function MainScreen() {
           <Gallery
             ref={galleryRef}
             chatId={selectedChat.chat.id}
-            onUpdateView={updateThreeDotMenuHidded}
+            onUpdateView={updatethreeDotMenuHidden}
           />
         )
         break
@@ -376,11 +376,11 @@ export default function MainScreen() {
                 style={{
                   marginLeft: 0,
                   marginRight: '3px',
-                  ...(threeDotMenuHidded
+                  ...(threeDotMenuHidden
                     ? { opacity: 0.4, pointerEvents: 'none' }
                     : {}),
                 }}
-                aria-disabled={threeDotMenuHidded}
+                aria-disabled={threeDotMenuHidden}
               >
                 <Button
                   className='icon-rotated'
