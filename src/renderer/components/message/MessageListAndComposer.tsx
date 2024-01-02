@@ -84,7 +84,7 @@ export default function MessageListAndComposer({
     messageInputRef
   )
 
-    const onDrop = (e: React.DragEvent<any>) => {
+  const onDrop = (e: React.DragEvent<any>) => {
     if (chatStore.chat === null) {
       log.warn('droped something, but no chat is selected')
       return
@@ -234,10 +234,7 @@ export default function MessageListAndComposer({
       <SelectedMessagesAction />
       <div className='message-list-and-composer__message-list'>
         <RecoverableCrashScreen reset_on_change_key={chatStore.chat.id}>
-          <MessageList
-            chatStore={chatStore}
-            refComposer={refComposer}
-          />
+          <MessageList chatStore={chatStore} refComposer={refComposer} />
         </RecoverableCrashScreen>
       </div>
       <Composer

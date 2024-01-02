@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useCallback } from 'react'
+import React, { useContext, useMemo } from 'react'
 import reactStringReplace from 'react-string-replace'
 import classNames from 'classnames'
 import { C, T } from '@deltachat/jsonrpc-client'
@@ -43,7 +43,7 @@ import EnterAutocryptSetupMessage from '../dialogs/EnterAutocryptSetupMessage'
 import { OpenDialog } from '../../contexts/DialogContext'
 import SelectModeOverlay from './SelectModeOverlay'
 import Button from '../ui/Button'
-import { SelectedMessagesContext } from '../../contexts/SelectedMessagesContext'
+import useSelectedMessages from '../../hooks/useSelectedMessages'
 
 const Avatar = (
   contact: Type.Contact,
@@ -300,11 +300,9 @@ type MessageProps = {
   conversationType: ConversationType
 }
 
-export default function Message({
-  message,
-  conversationType,
-}: MessageProps) {
-  const { id, viewType, text, hasLocation, isSetupmessage, hasHtml } = message
+export default function Message({ message, conversationType }: MessageProps) {
+  const { id, viewType, text, hasLocation, isSetupmessage, hasHtml, chatId } =
+    message
   const direction = getDirection(message)
   const status = mapCoreMsgStatus2String(message.state)
   const tx = useTranslationFunction()
@@ -313,8 +311,11 @@ export default function Message({
   const screenContext = useContext(ScreenContext)
   const { openDialog } = useDialog()
   const { openContextMenu } = screenContext
-  const { selectedMessages, selectMessage } = useContext(SelectedMessagesContext)
-  const isSelectMode = useMemo(() => selectedMessages.length !== 0, [selectedMessages])
+  const { selectedMessages, selectMessage } = useSelectedMessages(chatId)
+  const isSelectMode = useMemo(
+    () => selectedMessages.length !== 0,
+    [selectedMessages]
+  )
 
   const showMenu: (
     event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement, MouseEvent>
@@ -512,7 +513,9 @@ export default function Message({
       )}
       id={message.id.toString()}
     >
-      {isSelectMode && <SelectModeOverlay messageId={message.id}/>}
+      {isSelectMode && (
+        <SelectModeOverlay messageId={message.id} chatId={chatId} />
+      )}
       {showAuthor &&
         direction === 'incoming' &&
         Avatar(message.sender, onContactClick)}
