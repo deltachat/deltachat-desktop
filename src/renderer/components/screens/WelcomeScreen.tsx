@@ -19,7 +19,10 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
 import ImportQrCode from '../dialogs/ImportQrCode'
 import AlertDialog from '../dialogs/AlertDialog'
-import { rememberLastUsedPath } from '../../utils/cachedLastUsedPath'
+import {
+  LastUsedSlot,
+  rememberLastUsedPath,
+} from '../../utils/cachedLastUsedPath'
 import { dirname } from 'path'
 
 const log = getLogger('renderer/components/AccountsScreen')
@@ -94,7 +97,7 @@ const ImportButton = function ImportButton() {
 
   async function onClickImportBackup() {
     const { defaultPath, setLastPath } = rememberLastUsedPath(
-      'last_directory:backup',
+      LastUsedSlot.Backup,
       runtime.getAppPath('downloads')
     )
     const file = await runtime.showOpenFileDialog({

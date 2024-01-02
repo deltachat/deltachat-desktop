@@ -14,7 +14,10 @@ import useConfirmationDialog from '../../hooks/useConfirmationDialog'
 
 import type { OpenDialogOptions } from 'electron'
 import type { DcEventType } from '@deltachat/jsonrpc-client'
-import { rememberLastUsedPath } from '../../utils/cachedLastUsedPath'
+import {
+  LastUsedSlot,
+  rememberLastUsedPath,
+} from '../../utils/cachedLastUsedPath'
 
 const log = getLogger('renderer/Settings/Backup')
 
@@ -34,7 +37,7 @@ export default function Backup() {
 
     if (confirmed) {
       const { defaultPath, setLastPath } = rememberLastUsedPath(
-        'last_directory:backup',
+        LastUsedSlot.Backup,
         runtime.getAppPath('downloads')
       )
       const opts: OpenDialogOptions = {

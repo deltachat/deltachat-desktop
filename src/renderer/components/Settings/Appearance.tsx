@@ -20,7 +20,10 @@ import SettingsHeading from './SettingsHeading'
 import { DialogContent } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
-import { rememberLastUsedPath } from '../../utils/cachedLastUsedPath'
+import {
+  LastUsedSlot,
+  rememberLastUsedPath,
+} from '../../utils/cachedLastUsedPath'
 
 const log = getLogger('renderer/settings/appearance')
 
@@ -179,7 +182,7 @@ function BackgroundSelector({
     ev: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     const { defaultPath, setLastPath } = rememberLastUsedPath(
-      'last_directory:background_image',
+      LastUsedSlot.BackgroundImage,
       runtime.getAppPath('pictures')
     )
     let url

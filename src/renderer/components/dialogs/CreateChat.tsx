@@ -51,7 +51,10 @@ import { VerifiedContactsRequiredDialog } from './ProtectionStatusDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 import useConfirmationDialog from '../../hooks/useConfirmationDialog'
-import { rememberLastUsedPath } from '../../utils/cachedLastUsedPath'
+import {
+  LastUsedSlot,
+  rememberLastUsedPath,
+} from '../../utils/cachedLastUsedPath'
 import { dirname } from 'path'
 
 type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
@@ -852,7 +855,7 @@ export function useGroupImage(image?: string | null) {
 
   const onSetGroupImage = async () => {
     const { defaultPath, setLastPath } = rememberLastUsedPath(
-      'last_directory:group_image',
+      LastUsedSlot.GroupImage,
       runtime.getAppPath('pictures')
     )
     const file = await runtime.showOpenFileDialog({

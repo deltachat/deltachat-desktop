@@ -8,7 +8,10 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useConfirmationDialog from '../../hooks/useConfirmationDialog'
 
 import type { OpenDialogOptions } from 'electron'
-import { rememberLastUsedPath } from '../../utils/cachedLastUsedPath'
+import {
+  LastUsedSlot,
+  rememberLastUsedPath,
+} from '../../utils/cachedLastUsedPath'
 import { dirname } from 'path'
 
 export default function ManageKeys() {
@@ -17,7 +20,7 @@ export default function ManageKeys() {
 
   const onKeysImport = useCallback(async () => {
     const { defaultPath, setLastPath } = rememberLastUsedPath(
-      'last_directory:keys_import',
+      LastUsedSlot.KeyImport,
       runtime.getAppPath('downloads')
     )
     const opts: OpenDialogOptions = {
@@ -56,7 +59,7 @@ export default function ManageKeys() {
     // TODO: ask for the user's password and check it
 
     const { defaultPath, setLastPath } = rememberLastUsedPath(
-      'last_directory:keys_export',
+      LastUsedSlot.KeyExport,
       runtime.getAppPath('downloads')
     )
     const opts: OpenDialogOptions = {
