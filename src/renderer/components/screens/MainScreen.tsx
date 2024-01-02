@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 import {
   Alignment,
@@ -163,6 +163,30 @@ export default function MainScreen() {
       ? 'gallery'
       : 'chat'
   )
+  const galleryRef = useRef<Gallery | null>(null)
+
+  const [threeDotMenuHidden, setthreeDotMenuHidden] = useState(false)
+
+  const updatethreeDotMenuHidden = useCallback(() => {
+    setthreeDotMenuHidden(
+      selectedChat?.activeView === ChatView.Map ||
+        ((alternativeView === 'global-gallery' ||
+          selectedChat?.activeView === ChatView.Media) &&
+          !['images', 'video'].includes(
+            galleryRef.current?.state.currentTab || ''
+          ))
+    )
+  }, [selectedChat, alternativeView, galleryRef])
+
+  useEffect(() => {
+    updatethreeDotMenuHidden()
+  }, [
+    selectedChat,
+    selectedChat?.activeView,
+    alternativeView,
+    galleryRef,
+    updatethreeDotMenuHidden,
+  ])
 
   if (!selectedChat) {
     log.error('selectedChat is undefined')
@@ -173,7 +197,13 @@ export default function MainScreen() {
   if (selectedChat.chat !== null) {
     switch (selectedChat.activeView) {
       case ChatView.Media:
-        MessageListView = <Gallery chatId={selectedChat.chat.id} />
+        MessageListView = (
+          <Gallery
+            ref={galleryRef}
+            chatId={selectedChat.chat.id}
+            onUpdateView={updatethreeDotMenuHidden}
+          />
+        )
         break
       case ChatView.Map:
         MessageListView = <MapComponent selectedChat={selectedChat.chat} />
@@ -346,7 +376,11 @@ export default function MainScreen() {
                 style={{
                   marginLeft: 0,
                   marginRight: '3px',
+                  ...(threeDotMenuHidden
+                    ? { opacity: 0.4, pointerEvents: 'none' }
+                    : {}),
                 }}
+                aria-disabled={threeDotMenuHidden}
               >
                 <Button
                   className='icon-rotated'
