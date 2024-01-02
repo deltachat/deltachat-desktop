@@ -3,10 +3,14 @@ import React, { createContext, useCallback, useState } from 'react'
 import { ContextMenuLayer } from '../components/ContextMenu'
 
 import type { OpenContextMenu } from '../components/ContextMenu'
-import type { PropsWithChildren } from 'react'
+import type { ReactNode } from 'react'
 
 type ContextMenuContextValue = {
   openContextMenu: OpenContextMenu
+}
+
+type Props = {
+  children?: ReactNode
 }
 
 const initialValue = {
@@ -18,7 +22,7 @@ const initialValue = {
 export const ContextMenuContext =
   createContext<ContextMenuContextValue>(initialValue)
 
-export function ContextMenuProvider({ children }: PropsWithChildren<{}>) {
+export function ContextMenuProvider({ children }: Props) {
   const [openContextMenuFn, setOpenContextMenuFn] = useState<OpenContextMenu>(
     // Since React calls initial `useState` values once if they're a function
     // we need to wrap our default function here

@@ -19,7 +19,7 @@ import FooterActionButton from '../../Dialog/FooterActionButton'
 import Icon from '../../Icon'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
-import type { PropsWithChildren } from 'react'
+import type { ReactNode } from 'react'
 
 const log = getLogger('renderer/send_backup')
 
@@ -203,11 +203,15 @@ export function SendBackupDialog({ onClose }: DialogProps) {
   )
 }
 
-function SendBackup({ children }: PropsWithChildren<{}>) {
+type Props = {
+  children?: ReactNode
+}
+
+function SendBackup({ children }: Props) {
   return <div className={styles.sendBackup}>{children}</div>
 }
 
-function SendBackupMain({ children }: PropsWithChildren<{}>) {
+function SendBackupMain({ children }: Props) {
   return <div className={styles.sendBackupMain}>{children}</div>
 }
 

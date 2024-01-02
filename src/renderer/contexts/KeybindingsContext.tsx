@@ -11,13 +11,15 @@ import {
 } from '../keybindings'
 import { Screens } from '../ScreenController'
 
-import type { PropsWithChildren } from 'react'
+import type { ReactNode } from 'react'
+
+type Props = {
+  children?: ReactNode
+}
 
 export const KeybindingsContext = createContext(null)
 
-export const KeybindingsContextProvider = ({
-  children,
-}: PropsWithChildren<{}>) => {
+export const KeybindingsContextProvider = ({ children }: Props) => {
   const { openDialog } = useDialog()
 
   // @TODO: This probably needs another place

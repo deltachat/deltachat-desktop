@@ -40,8 +40,6 @@ module.exports = {
       'memberSyntaxSortOrder': ['none', 'all', 'multiple', 'single'],
       'allowSeparatedGroups': true,
     }],
-    // @TODO
-    // '@typescript-eslint/ban-types': 'off', // reenable later?
     // Make sure we're exporting and importing TS types as such
     '@typescript-eslint/consistent-type-exports': 'error',
     '@typescript-eslint/consistent-type-imports': 'error',

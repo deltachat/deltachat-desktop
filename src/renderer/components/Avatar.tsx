@@ -6,6 +6,7 @@ import FullscreenMedia, {
 } from './dialogs/FullscreenMedia'
 import useDialog from '../hooks/useDialog'
 
+import type { ReactNode } from 'react'
 import type { Type } from '../backend-com'
 import type { T } from '@deltachat/jsonrpc-client'
 
@@ -97,7 +98,7 @@ export function AvatarFromContact(
 
 export function ClickForFullscreenAvatarWrapper(props: {
   filename: string | null
-  children: React.ReactNode
+  children: ReactNode
 }) {
   const { openDialog } = useDialog()
 

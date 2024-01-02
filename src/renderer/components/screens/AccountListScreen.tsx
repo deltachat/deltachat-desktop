@@ -213,7 +213,7 @@ function AccountSelection({
       >
         <PseudoContact cutoff='+' text={tx('add_account')}></PseudoContact>
       </div>
-      {logins.map((login: Type.Account, index: Number) => (
+      {logins.map((login: Type.Account, index: number) => (
         <AccountItem
           key={`login-${index}`}
           login={login}
