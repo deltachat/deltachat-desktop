@@ -12,7 +12,6 @@ module.exports = {
   ],
   rules: {
     '@typescript-eslint/ban-types': 'off', // reenable later?
-    // ---------
     '@typescript-eslint/no-redeclare': 'error',
     '@typescript-eslint/default-param-last': 'error',
     '@typescript-eslint/no-invalid-void-type': 'warn',
@@ -31,5 +30,8 @@ module.exports = {
     'no-case-declarations': 'warn',
     'prettier/prettier': 'warn',
     'no-constant-binary-expression': 'error',
+    // Make sure we're exporting and importing TS types as such
+    '@typescript-eslint/consistent-type-exports': 'error',
+    '@typescript-eslint/consistent-type-imports': 'error',
   },
 }
