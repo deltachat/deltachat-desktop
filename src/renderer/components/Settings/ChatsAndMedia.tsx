@@ -1,22 +1,23 @@
 import React from 'react'
 
+import Autodelete from './Autodelete'
+import Backup from './Backup'
+import Communication from './Communication'
+import CoreSettingsSwitch from './CoreSettingsSwitch'
+import DesktopSettingsSwitch from './DesktopSettingsSwitch'
+import DownloadOnDemand from './DownloadOnDemand'
+import OutgoingMediaQuality from './OutgoingMediaQuality'
+import SettingsHeading from './SettingsHeading'
+import SettingsSeparator from './SettingsSeparator'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { DialogContent } from '../Dialog'
 import {
   enterKeySendsKeyboardShortcuts,
   KeybordShortcutHintInSettings,
 } from '../KeyboardShortcutHint'
-import { DesktopSettingsType } from '../../../shared/shared-types'
-import { SettingsStoreState } from '../../stores/settings'
-import Communication from './Communication'
-import OutgoingMediaQuality from './OutgoingMediaQuality'
-import DownloadOnDemand from './DownloadOnDemand'
-import DesktopSettingsSwitch from './DesktopSettingsSwitch'
-import CoreSettingsSwitch from './CoreSettingsSwitch'
-import Autodelete from './Autodelete'
-import Backup from './Backup'
-import SettingsSeparator from './SettingsSeparator'
-import SettingsHeading from './SettingsHeading'
-import { DialogContent } from '../Dialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { DesktopSettingsType } from '../../../shared/shared-types'
+import type { SettingsStoreState } from '../../stores/settings'
 
 type Props = {
   settingsStore: SettingsStoreState

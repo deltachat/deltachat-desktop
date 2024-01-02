@@ -1,17 +1,20 @@
-import React from 'react'
+import { C } from '@deltachat/jsonrpc-client'
 import classNames from 'classnames'
-import { T, C } from '@deltachat/jsonrpc-client'
+import React from 'react'
 
-import Timestamp from '../conversations/Timestamp'
-import MessageBody from '../message/MessageBody'
-import { Avatar } from '../Avatar'
-import { BackendRemote, Type } from '../../backend-com'
-import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { getLogger } from '../../../shared/logger'
-import { useContextMenuWithActiveState } from '../ContextMenu'
-import { selectedAccountId } from '../../ScreenController'
-import { InlineVerifiedIcon } from '../VerifiedIcon'
+import { BackendRemote } from '../../backend-com'
 import { runtime } from '../../runtime'
+import { selectedAccountId } from '../../ScreenController'
+import { Avatar } from '../Avatar'
+import { useContextMenuWithActiveState } from '../ContextMenu'
+import Timestamp from '../conversations/Timestamp'
+import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
+import MessageBody from '../message/MessageBody'
+import { InlineVerifiedIcon } from '../VerifiedIcon'
+
+import type { Type } from '../../backend-com'
+import type { T } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/chatlist/item')
 

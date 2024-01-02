@@ -1,5 +1,5 @@
-import React from 'react'
 import { Switch as BlueprintSwitch } from '@blueprintjs/core'
+import React from 'react'
 
 import type { SwitchProps } from '@blueprintjs/core'
 

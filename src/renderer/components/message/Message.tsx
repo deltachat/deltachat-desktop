@@ -1,46 +1,49 @@
 import React, { useCallback, useContext } from 'react'
-import reactStringReplace from 'react-string-replace'
+import { C } from '@deltachat/jsonrpc-client'
 import classNames from 'classnames'
-import { C, T } from '@deltachat/jsonrpc-client'
+import reactStringReplace from 'react-string-replace'
 
-import MessageBody from './MessageBody'
-import MessageMetaData from './MessageMetaData'
 import {
+  confirmDeleteMessage,
+  downloadFullMessage,
   onDownload,
   openAttachmentInShell,
   openForwardDialog,
-  openMessageInfo,
-  setQuoteInDraft,
-  privateReply,
   openMessageHTML,
-  confirmDeleteMessage,
-  downloadFullMessage,
+  openMessageInfo,
   openWebxdc,
+  privateReply,
+  setQuoteInDraft,
 } from './messageFunctions'
-import Attachment from '../attachment/messageAttachment'
-import { isGenericAttachment } from '../attachment/Attachment'
+import { getDirection, truncateText } from '../../../shared/util'
 import {
   joinCall,
   jumpToMessage,
   openViewProfileDialog,
 } from '../helpers/ChatMethods'
-import { runtime } from '../../runtime'
-import { AvatarFromContact } from '../Avatar'
-import { ConversationType } from './MessageList'
-import { getDirection, truncateText } from '../../../shared/util'
-import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
-import { ContextMenuItem } from '../ContextMenu'
-import { BackendRemote, Type } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
 import {
   ProtectionBrokenDialog,
   ProtectionEnabledDialog,
 } from '../dialogs/ProtectionStatusDialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
-import EnterAutocryptSetupMessage from '../dialogs/EnterAutocryptSetupMessage'
-import { OpenDialog } from '../../contexts/DialogContext'
+import Attachment from '../attachment/messageAttachment'
+import { AvatarFromContact } from '../Avatar'
+import { BackendRemote } from '../../backend-com'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
+import EnterAutocryptSetupMessage from '../dialogs/EnterAutocryptSetupMessage'
+import { isGenericAttachment } from '../attachment/Attachment'
+import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
+import MessageBody from './MessageBody'
+import MessageMetaData from './MessageMetaData'
+import { runtime } from '../../runtime'
+import { selectedAccountId } from '../../ScreenController'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { ContextMenuItem } from '../ContextMenu'
+import type { ConversationType } from './MessageList'
+import type { OpenDialog } from '../../contexts/DialogContext'
+import type { T } from '@deltachat/jsonrpc-client'
+import type { Type } from '../../backend-com'
 
 const Avatar = (
   contact: Type.Contact,

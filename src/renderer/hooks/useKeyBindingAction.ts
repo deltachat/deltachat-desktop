@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 
-import { ActionEmitter, KeybindAction } from '../keybindings'
+import { ActionEmitter } from '../keybindings'
+
+import type { KeybindAction } from '../keybindings'
 
 export default function useKeyBindingAction(
   action: KeybindAction,

@@ -1,23 +1,18 @@
+import { Button, Menu, MenuItem, Popover, Position } from '@blueprintjs/core'
 import React, { useCallback } from 'react'
-import {
-  Button,
-  Position,
-  Popover,
-  Menu,
-  MenuItem,
-  IconName,
-} from '@blueprintjs/core'
-import { T } from '@deltachat/jsonrpc-client'
 
-import { runtime } from '../../runtime'
-import { sendCallInvitation } from '../helpers/ChatMethods'
-import { Type } from '../../backend-com'
-import { useStore } from '../../stores/store'
-import SettingsStoreInstance from '../../stores/settings'
 import { IMAGE_EXTENSIONS } from '../../../shared/constants'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
 import useConfirmationDialog from '../../hooks/useConfirmationDialog'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { runtime } from '../../runtime'
+import SettingsStoreInstance from '../../stores/settings'
+import { useStore } from '../../stores/store'
+import { sendCallInvitation } from '../helpers/ChatMethods'
+
+import type { Type } from '../../backend-com'
+import type { IconName } from '@blueprintjs/core'
+import type { T } from '@deltachat/jsonrpc-client'
 
 // Function to populate Menu
 const MenuAttachmentItems = ({

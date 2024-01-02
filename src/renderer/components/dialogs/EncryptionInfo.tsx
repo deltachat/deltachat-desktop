@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
-import { BackendRemote, Type } from '../../backend-com'
+import { BackendRemote } from '../../backend-com'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { selectedAccountId } from '../../ScreenController'
 import Dialog, {
   DialogBody,
@@ -9,8 +10,8 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
 } from '../Dialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
 
+import type { Type } from '../../backend-com'
 import type { DialogProps } from '../../contexts/DialogContext'
 
 type Props = {

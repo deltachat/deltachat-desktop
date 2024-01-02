@@ -1,21 +1,17 @@
-import React, {
-  useState,
-  useEffect,
-  forwardRef,
-  PropsWithChildren,
-} from 'react'
-import classNames from 'classnames'
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
+import classNames from 'classnames'
+import React, { forwardRef, useEffect, useState } from 'react'
 
 import { BackendRemote } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { runtime } from '../../runtime'
-import { jumpToMessage } from '../helpers/ChatMethods'
+import { selectedAccountId } from '../../ScreenController'
 import { useThemeCssVar } from '../../ThemeManager'
+import { jumpToMessage } from '../helpers/ChatMethods'
 
 import type { EmojiData } from 'emoji-mart/index'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
+import type { PropsWithChildren } from 'react'
 
 const DisplayedStickerPack = ({
   stickerPackName,

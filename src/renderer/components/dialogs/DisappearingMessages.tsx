@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
-import { RadioGroup, Radio } from '@blueprintjs/core'
+import { Radio, RadioGroup } from '@blueprintjs/core'
+import React, { useEffect, useState } from 'react'
 
 import { Timespans } from '../../../shared/constants'
 import { BackendRemote } from '../../backend-com'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { selectedAccountId } from '../../ScreenController'
 import Dialog, {
   DialogBody,
@@ -12,7 +13,6 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
 } from '../Dialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 

@@ -1,8 +1,10 @@
-import React, { PropsWithChildren, CSSProperties } from 'react'
+import React from 'react'
 
-import { PseudoContact } from '../contact/Contact'
-import { QRAvatar } from '../Avatar'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { QRAvatar } from '../Avatar'
+import { PseudoContact } from '../contact/Contact'
+
+import type { CSSProperties, PropsWithChildren } from 'react'
 
 export function PseudoListItem(
   props: PropsWithChildren<{

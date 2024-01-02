@@ -1,10 +1,13 @@
-import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
-import { ContactListItem } from './ContactListItem'
 import { debounce } from 'debounce'
-import { useInitEffect } from '../helpers/hooks'
-import { debounceWithInit } from '../chat/ChatListHelpers'
-import { BackendRemote, Type } from '../../backend-com'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+
+import { ContactListItem } from './ContactListItem'
+import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import { debounceWithInit } from '../chat/ChatListHelpers'
+import { useInitEffect } from '../helpers/hooks'
+
+import type { Type } from '../../backend-com'
 
 export function ContactList(props: {
   contacts: Type.Contact[]

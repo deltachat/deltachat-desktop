@@ -1,24 +1,28 @@
-import React, { ChangeEvent, Component, createRef } from 'react'
+import moment from 'moment'
+import React, { Component, createRef } from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { FixedSizeGrid, FixedSizeList } from 'react-window'
-import moment from 'moment'
 
 import {
   AudioAttachment,
   FileAttachmentRow,
-  GalleryAttachmentElementProps,
   ImageAttachment,
   VideoAttachment,
   WebxdcAttachment,
 } from './attachment/mediaAttachment'
-import { getLogger } from '../../shared/logger'
-import { BackendRemote, Type } from '../backend-com'
-import { selectedAccountId } from '../ScreenController'
-import SettingsStoreInstance, { SettingsStoreState } from '../stores/settings'
 import FullscreenMedia, {
   NeighboringMediaMode,
 } from './dialogs/FullscreenMedia'
+import { getLogger } from '../../shared/logger'
+import { BackendRemote } from '../backend-com'
 import { DialogContext } from '../contexts/DialogContext'
+import { selectedAccountId } from '../ScreenController'
+import SettingsStoreInstance from '../stores/settings'
+
+import type { GalleryAttachmentElementProps } from './attachment/mediaAttachment'
+import type { Type } from '../backend-com'
+import type { SettingsStoreState } from '../stores/settings'
+import type { ChangeEvent } from 'react'
 
 const log = getLogger('renderer/Gallery')
 

@@ -1,7 +1,8 @@
-import React from 'react'
 import classNames from 'classnames'
-import { getSizeClass, replaceColons } from '../conversations/emoji'
+import React from 'react'
+
 import { message2React } from './MessageMarkdown'
+import { getSizeClass, replaceColons } from '../conversations/emoji'
 
 export default function MessageBody(props: {
   text: string

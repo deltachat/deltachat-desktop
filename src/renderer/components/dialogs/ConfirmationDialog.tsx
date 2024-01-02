@@ -1,5 +1,6 @@
 import React from 'react'
 
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -8,7 +9,6 @@ import Dialog, {
   FooterActions,
 } from '../Dialog'
 import FooterActionButton from '../Dialog/FooterActionButton'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 

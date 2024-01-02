@@ -1,8 +1,14 @@
-import React, { createElement, useCallback, useMemo, useState } from 'react'
-
-import type { JSXElementConstructor, PropsWithChildren } from 'react'
+import React, {
+  createContext,
+  createElement,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react'
 
 import { generateRandomUUID } from '../utils/random'
+
+import type { JSXElementConstructor, PropsWithChildren } from 'react'
 
 type DialogId = string
 
@@ -31,8 +37,7 @@ const initialValues: DialogContextValue = {
   closeDialog: _ => {},
 }
 
-export const DialogContext =
-  React.createContext<DialogContextValue>(initialValues)
+export const DialogContext = createContext<DialogContextValue>(initialValues)
 
 export const DialogContextProvider = ({ children }: PropsWithChildren<{}>) => {
   const [dialogs, setDialogs] = useState<{ [id: DialogId]: JSX.Element }>({})

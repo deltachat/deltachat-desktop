@@ -1,26 +1,27 @@
-import React from 'react'
 import classNames from 'classnames'
 import { filesize } from 'filesize'
+import React from 'react'
 
-import { openAttachmentInShell } from '../message/messageFunctions'
 import {
+  dragAttachmentOut,
+  getExtension,
+  isAudio,
   isDisplayableByFullscreenMedia,
   isImage,
   isVideo,
-  isAudio,
-  getExtension,
-  dragAttachmentOut,
-  MessageTypeAttachmentSubset,
 } from './Attachment'
-import { runtime } from '../../runtime'
-import { ConversationType } from '../message/MessageList'
 import { getDirection } from '../../../shared/util'
-import { Type } from '../../backend-com'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { runtime } from '../../runtime'
 import FullscreenMedia, {
   NeighboringMediaMode,
 } from '../dialogs/FullscreenMedia'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
+import { openAttachmentInShell } from '../message/messageFunctions'
+
+import type { MessageTypeAttachmentSubset } from './Attachment'
+import type { Type } from '../../backend-com'
+import type { ConversationType } from '../message/MessageList'
 
 type AttachmentProps = {
   text?: string

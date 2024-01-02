@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react'
 
+import SettingsButton from './SettingsButton'
 import { BackendRemote } from '../../backend-com'
+import useConfirmationDialog from '../../hooks/useConfirmationDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { runtime } from '../../runtime'
 import { selectedAccountId } from '../../ScreenController'
-import SettingsButton from './SettingsButton'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useConfirmationDialog from '../../hooks/useConfirmationDialog'
 
 import type { OpenDialogOptions } from 'electron'
 

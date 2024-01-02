@@ -1,4 +1,5 @@
 import { getLogger } from './logger'
+
 const log = getLogger('localize')
 
 export interface LocaleData {

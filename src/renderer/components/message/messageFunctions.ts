@@ -1,19 +1,20 @@
 import moment from 'moment'
 
 import { getLogger } from '../../../shared/logger'
+import { BackendRemote } from '../../backend-com'
 import { runtime } from '../../runtime'
-import {
-  forwardMessage,
-  deleteMessage,
-  selectChat,
-} from '../helpers/ChatMethods'
-import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { internalOpenWebxdc } from '../../system-integration/webxdc'
-import ForwardMessage from '../dialogs/ForwardMessage'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
+import ForwardMessage from '../dialogs/ForwardMessage'
 import MessageDetail from '../dialogs/MessageDetail'
+import {
+  deleteMessage,
+  forwardMessage,
+  selectChat,
+} from '../helpers/ChatMethods'
 
+import type { Type } from '../../backend-com'
 import type { OpenDialog } from '../../contexts/DialogContext'
 
 const log = getLogger('render/msgFunctions')

@@ -1,10 +1,16 @@
 import { createWriteStream } from 'fs'
+import { lstat, readdir, unlink } from 'fs/promises'
 import { join } from 'path'
+import { stderr, stdout } from 'process'
+
 import { getLogsPath } from './application-constants'
-import { stdout, stderr } from 'process'
+import { getLogger } from '../shared/logger'
+
+import type { LogHandlerFunction } from '../shared/logger'
 
 stdout.on('error', () => {})
 stderr.on('error', () => {})
+
 // ^ Without this, the app will run into infinite exceptions
 // when it can't write to stdout or stderr
 
@@ -67,9 +73,6 @@ export function createLogHandler() {
   }
 }
 export type LogHandler = ReturnType<typeof createLogHandler>
-
-import { readdir, lstat, unlink } from 'fs/promises'
-import { getLogger, LogHandlerFunction } from '../shared/logger'
 
 export async function cleanupLogFolder() {
   const log = getLogger('logger/log-cleanup')

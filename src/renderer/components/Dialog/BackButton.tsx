@@ -1,10 +1,9 @@
 import React from 'react'
 
 import HeaderButton from './HeaderButton'
+import styles from './styles.module.scss'
 
 import type { ButtonHTMLAttributes } from 'react'
-
-import styles from './styles.module.scss'
 
 export default function BackButton(
   props: ButtonHTMLAttributes<HTMLButtonElement>

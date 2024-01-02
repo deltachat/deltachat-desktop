@@ -1,8 +1,9 @@
+import { join } from 'path'
+
 // @ts-ignore
 import applicationConfig from 'application-config'
-const appConfig = applicationConfig('DeltaChat')
 
-import { join } from 'path'
+const appConfig = applicationConfig('DeltaChat')
 
 if (process.env.TEST_DIR) {
   appConfig.filePath = join(process.env.TEST_DIR, 'config.json')

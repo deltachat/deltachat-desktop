@@ -1,23 +1,23 @@
 import React, { useState } from 'react'
 
-import { DeltaInput } from '../Login-Styles'
-import { SettingsStoreState } from '../../stores/settings'
-import RadioGroup from '../RadioGroup'
-import Radio from '../Radio'
 import {
   VIDEO_CHAT_INSTANCE_AUTISTICI,
   VIDEO_CHAT_INSTANCE_SYSTEMLI,
 } from '../../../shared/constants'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import Callout from '../Callout'
 import Dialog, {
   DialogBody,
   DialogContent,
   DialogHeader,
   OkCancelFooterAction,
 } from '../Dialog'
-import Callout from '../Callout'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { DeltaInput } from '../Login-Styles'
+import Radio from '../Radio'
+import RadioGroup from '../RadioGroup'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import type { SettingsStoreState } from '../../stores/settings'
 
 type RadioButtonValue = 'disabled' | 'custom' | 'systemli' | 'autistici'
 

@@ -1,7 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
+import styles from './styles.module.scss'
 import { getLogger } from '../../../../shared/logger'
 import { BackendRemote, onDCEvent } from '../../../backend-com'
+import useConfirmationDialog from '../../../hooks/useConfirmationDialog'
+import useDialog from '../../../hooks/useDialog'
+import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { runtime } from '../../../runtime'
 import { selectedAccountId } from '../../../ScreenController'
 import Dialog, {
@@ -13,14 +17,9 @@ import Dialog, {
 } from '../../Dialog'
 import FooterActionButton from '../../Dialog/FooterActionButton'
 import Icon from '../../Icon'
-import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import useDialog from '../../../hooks/useDialog'
-import useConfirmationDialog from '../../../hooks/useConfirmationDialog'
 
-import type { PropsWithChildren } from 'react'
 import type { DialogProps } from '../../../contexts/DialogContext'
-
-import styles from './styles.module.scss'
+import type { PropsWithChildren } from 'react'
 
 const log = getLogger('renderer/send_backup')
 

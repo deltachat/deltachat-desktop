@@ -1,6 +1,7 @@
 // @ts-ignore
 // We only really need the emoji data of this module
 import EmojiConvertor from 'emoji-js-clean'
+
 import { getLogger } from '../../../shared/logger'
 
 const log = getLogger('renderer/emoji')

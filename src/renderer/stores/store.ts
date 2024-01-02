@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
+
 import { getLogger } from '../../shared/logger'
 
 export function useStore<T extends Store<any>>(
@@ -82,7 +83,7 @@ export class Store<S> {
 
   setState(
     stateReducer: (currentState: S) => S | undefined,
-    description: String
+    description: string
   ) {
     const modifiedState = stateReducer(this.state)
     if (modifiedState === undefined) return

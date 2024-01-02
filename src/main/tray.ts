@@ -1,11 +1,20 @@
-import { app as rawApp, Menu, Tray, nativeImage, NativeImage } from 'electron'
-import { globalShortcut } from 'electron'
-import * as mainWindow from './windows/main'
-import { ExtendedAppMainProcess } from './types'
-import { getLogger } from '../shared/logger'
 import { join } from 'path'
+
+import {
+  globalShortcut,
+  Menu,
+  nativeImage,
+  app as rawApp,
+  Tray,
+} from 'electron'
+
 import { DesktopSettings } from './desktop_settings'
 import { tx } from './load-translations'
+import * as mainWindow from './windows/main'
+import { getLogger } from '../shared/logger'
+
+import type { ExtendedAppMainProcess } from './types'
+import type { NativeImage } from 'electron'
 
 let tray: Tray | null = null
 let contextMenu: Menu | null = null

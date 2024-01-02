@@ -1,24 +1,27 @@
-import React, { useContext, useState } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
+import { useContext, useState } from 'react'
 
+import { BackendRemote } from '../../backend-com'
+import { ContextMenuContext } from '../../contexts/ContextMenuContext'
+import useDialog from '../../hooks/useDialog'
+import { selectedAccountId } from '../../ScreenController'
+import MailingListProfile from '../dialogs/MessageListProfile'
 import {
-  openLeaveChatDialog,
-  openDeleteChatDialog,
   openBlockFirstContactOfChatDialog,
+  openDeleteChatDialog,
   openEncryptionInfoDialog,
+  openLeaveChatDialog,
+  openMuteChatDialog,
   openViewGroupDialog,
   openViewProfileDialog,
   setChatVisibility,
-  openMuteChatDialog,
   unMuteChat,
 } from '../helpers/ChatMethods'
-import { ContextMenuItem } from '../ContextMenu'
-import MailingListProfile from '../dialogs/MessageListProfile'
-import { BackendRemote, Type } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
-import { ContextMenuContext } from '../../contexts/ContextMenuContext'
+
+import type { Type } from '../../backend-com'
+import type useTranslationFunction from '../../hooks/useTranslationFunction'
+import type { ContextMenuItem } from '../ContextMenu'
+import type React from 'react'
 
 function archiveStateMenu(
   chat: Type.ChatListItemFetchResult & { kind: 'ChatListItem' },

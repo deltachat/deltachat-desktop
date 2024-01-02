@@ -1,12 +1,12 @@
+import init from '@deltachat/message_parser_wasm'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { exp } from './experimental'
-import { printProcessLogLevelInfo } from '../shared/logger'
 
 import App from './App'
+import { exp } from './experimental'
 import { runtime } from './runtime'
-import init from '@deltachat/message_parser_wasm'
 import initSystemIntegration from './system-integration'
+import { printProcessLogLevelInfo } from '../shared/logger'
 
 async function main() {
   exp.help //make sure experimental.ts is used

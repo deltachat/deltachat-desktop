@@ -6,9 +6,9 @@ export function getDirection({ fromId }: { fromId: number }) {
 
 /** wraps a callback so that `event.preventDefault()` is called before it */
 export function preventDefault<EventType extends React.SyntheticEvent | Event>(
-  callback: Function
+  callback: () => void
 ) {
-  const wrapper = (cb: Function, ev: EventType) => {
+  const wrapper = (cb: () => void, ev: EventType) => {
     ev.preventDefault()
     cb()
   }

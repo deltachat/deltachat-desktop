@@ -1,11 +1,14 @@
-import { BaseDeltaChat, yerpc, DcEvent } from '@deltachat/jsonrpc-client'
+import { BaseDeltaChat, yerpc } from '@deltachat/jsonrpc-client'
+
+import { countCall } from './debug-tools'
 import { runtime } from './runtime'
-import { hasDebugEnabled } from '../shared/logger'
+import chatStore from './stores/chat'
+import SettingsStoreInstance from './stores/settings'
 import { debouncedUpdateBadgeCounter } from './system-integration/badge-counter'
 import { clearNotificationsForChat } from './system-integration/notifications'
-import { countCall } from './debug-tools'
-import SettingsStoreInstance from './stores/settings'
-import chatStore from './stores/chat'
+import { hasDebugEnabled } from '../shared/logger'
+
+import type { DcEvent } from '@deltachat/jsonrpc-client'
 
 export { T as Type } from '@deltachat/jsonrpc-client'
 

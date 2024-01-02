@@ -1,5 +1,5 @@
+import { C } from '@deltachat/jsonrpc-client'
 import React, {
-  ChangeEvent,
   Fragment,
   useCallback,
   useContext,
@@ -9,32 +9,24 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { T, C } from '@deltachat/jsonrpc-client'
 
+import { VerifiedContactsRequiredDialog } from './ProtectionStatusDialog'
+import { AddMemberDialog } from './ViewGroup'
+import { BackendRemote, onDCEvent } from '../../backend-com'
+import { ScreenContext } from '../../contexts/ScreenContext'
+import useConfirmationDialog from '../../hooks/useConfirmationDialog'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { runtime } from '../../runtime'
+import { selectedAccountId } from '../../ScreenController'
+import { useSettingsStore } from '../../stores/settings'
+import { Avatar } from '../Avatar'
 import {
-  useContacts,
   ContactList,
+  useContacts,
   useContactsNew,
 } from '../contact/ContactList'
-import {
-  PseudoListItem,
-  PseudoListItemAddMember,
-  PseudoListItemAddContact,
-} from '../helpers/PseudoListItem'
-import GroupImage from '../GroupImage'
-import { runtime } from '../../runtime'
-import {
-  areAllContactsVerified,
-  createChatByContactIdAndSelectIt,
-  selectChat,
-} from '../helpers/ChatMethods'
-import { Avatar } from '../Avatar'
-import { AddMemberDialog } from './ViewGroup'
 import { ContactListItem } from '../contact/ContactListItem'
-import { useSettingsStore } from '../../stores/settings'
-import { BackendRemote, onDCEvent, Type } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
-import { InlineVerifiedIcon } from '../VerifiedIcon'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -44,13 +36,23 @@ import Dialog, {
   FooterActions,
   OkCancelFooterAction,
 } from '../Dialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { ScreenContext } from '../../contexts/ScreenContext'
-import useDialog from '../../hooks/useDialog'
-import { VerifiedContactsRequiredDialog } from './ProtectionStatusDialog'
+import GroupImage from '../GroupImage'
+import {
+  areAllContactsVerified,
+  createChatByContactIdAndSelectIt,
+  selectChat,
+} from '../helpers/ChatMethods'
+import {
+  PseudoListItem,
+  PseudoListItemAddContact,
+  PseudoListItemAddMember,
+} from '../helpers/PseudoListItem'
+import { InlineVerifiedIcon } from '../VerifiedIcon'
 
+import type { Type } from '../../backend-com'
 import type { DialogProps } from '../../contexts/DialogContext'
-import useConfirmationDialog from '../../hooks/useConfirmationDialog'
+import type { T } from '@deltachat/jsonrpc-client'
+import type { ChangeEvent } from 'react'
 
 type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
 

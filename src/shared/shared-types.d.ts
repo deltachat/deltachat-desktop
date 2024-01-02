@@ -30,7 +30,7 @@ type Bounds = {
 }
 
 export interface DesktopSettingsType {
-  bounds: Bounds | {}
+  bounds: Bounds | Record<string, never>
   HTMLEmailWindowBounds: Bounds | undefined
   chatViewBgImg?: string
   /** @deprecated replaced by lastAccount */
@@ -80,7 +80,7 @@ export interface RC_Config {
   h: boolean
 }
 
-import { T } from '@deltachat/jsonrpc-client'
+import type { T } from '@deltachat/jsonrpc-client'
 
 export type msgStatus =
   | 'error'

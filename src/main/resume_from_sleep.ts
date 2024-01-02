@@ -1,4 +1,5 @@
 import { powerMonitor } from 'electron'
+
 import { window } from './windows/main'
 
 function onResumeFromSleep() {

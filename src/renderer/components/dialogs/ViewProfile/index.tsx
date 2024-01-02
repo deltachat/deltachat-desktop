@@ -1,32 +1,32 @@
-import AutoSizer from 'react-virtualized-auto-sizer'
-import React, { useState, useEffect } from 'react'
-import moment from 'moment'
 import { C } from '@deltachat/jsonrpc-client'
+import moment from 'moment'
+import React, { useEffect, useState } from 'react'
+import AutoSizer from 'react-virtualized-auto-sizer'
 
-import ChatListItem from '../../chat/ChatListItem'
-import { useChatList } from '../../chat/ChatListHelpers'
-import { Avatar, ClickForFullscreenAvatarWrapper } from '../../Avatar'
-import { useLogicVirtualChatList, ChatListPart } from '../../chat/ChatList'
-import MessageBody from '../../message/MessageBody'
-import { useThemeCssVar } from '../../../ThemeManager'
-import { DeltaInput } from '../../Login-Styles'
-import { openViewProfileDialog, selectChat } from '../../helpers/ChatMethods'
-import { BackendRemote, onDCEvent, Type } from '../../../backend-com'
-import { selectedAccountId } from '../../../ScreenController'
-import { InlineVerifiedIcon } from '../../VerifiedIcon'
+import styles from './styles.module.scss'
 import { getLogger } from '../../../../shared/logger'
+import { BackendRemote, onDCEvent } from '../../../backend-com'
+import { MessagesDisplayContext } from '../../../contexts/MessagesDisplayContext'
+import useDialog from '../../../hooks/useDialog'
+import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import { selectedAccountId } from '../../../ScreenController'
+import { useThemeCssVar } from '../../../ThemeManager'
+import { Avatar, ClickForFullscreenAvatarWrapper } from '../../Avatar'
+import { ChatListPart, useLogicVirtualChatList } from '../../chat/ChatList'
+import { useChatList } from '../../chat/ChatListHelpers'
+import ChatListItem from '../../chat/ChatListItem'
 import Dialog, {
   DialogBody,
   DialogContent,
   DialogHeader,
   OkCancelFooterAction,
 } from '../../Dialog'
-import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import useDialog from '../../../hooks/useDialog'
-import { MessagesDisplayContext } from '../../../contexts/MessagesDisplayContext'
+import { openViewProfileDialog, selectChat } from '../../helpers/ChatMethods'
+import { DeltaInput } from '../../Login-Styles'
+import MessageBody from '../../message/MessageBody'
+import { InlineVerifiedIcon } from '../../VerifiedIcon'
 
-import styles from './styles.module.scss'
-
+import type { Type } from '../../../backend-com'
 import type { DialogProps } from '../../../contexts/DialogContext'
 
 const log = getLogger('renderer/dialogs/ViewProfile')

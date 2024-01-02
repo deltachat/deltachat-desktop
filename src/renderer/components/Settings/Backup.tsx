@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useCallback } from 'react'
 import { Intent } from '@blueprintjs/core'
+import React, { useCallback, useEffect, useState } from 'react'
 
-import { DeltaProgressBar } from '../Login-Styles'
-import { runtime } from '../../runtime'
+import SettingsButton from './SettingsButton'
 import { getLogger } from '../../../shared/logger'
 import { BackendRemote } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
-import SettingsButton from './SettingsButton'
-import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
 import useConfirmationDialog from '../../hooks/useConfirmationDialog'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { runtime } from '../../runtime'
+import { selectedAccountId } from '../../ScreenController'
+import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
+import { DeltaProgressBar } from '../Login-Styles'
 
-import type { OpenDialogOptions } from 'electron'
 import type { DcEventType } from '@deltachat/jsonrpc-client'
+import type { OpenDialogOptions } from 'electron'
 
 const log = getLogger('renderer/Settings/Backup')
 

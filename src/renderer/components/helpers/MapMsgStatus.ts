@@ -1,5 +1,6 @@
 import { C } from '@deltachat/jsonrpc-client'
-import { msgStatus } from '../../../shared/shared-types'
+
+import type { msgStatus } from '../../../shared/shared-types'
 
 export function mapCoreMsgStatus2String(state: number): msgStatus {
   switch (state) {

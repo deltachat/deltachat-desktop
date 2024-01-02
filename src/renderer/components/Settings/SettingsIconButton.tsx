@@ -1,11 +1,10 @@
 import React from 'react'
 
+import styles from './styles.module.scss'
 import Icon from '../Icon'
 
 import type { IconName } from '../Icon'
 import type { PropsWithChildren } from 'react'
-
-import styles from './styles.module.scss'
 
 type Props = PropsWithChildren<{
   icon: IconName

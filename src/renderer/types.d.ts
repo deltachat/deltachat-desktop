@@ -10,6 +10,7 @@ type todo = any
 declare module 'react-virtualized-auto-sizer' {
   // taken from @types/react-virtualized
   import { PureComponent } from 'react'
+
   export type Size = {
     height: number
     width: number
@@ -69,7 +70,7 @@ declare module 'react-virtualized-auto-sizer' {
       onResize: () => void
       disableHeight: false
       disableWidth: false
-      style: {}
+      style: React.CSSProperties
     }
     constructor(props: AutoSizerProps)
     componentDidMount(): void

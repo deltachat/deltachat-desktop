@@ -1,9 +1,8 @@
-import React from 'react'
 import classNames from 'classnames'
-
-import Icon from '../Icon'
+import React from 'react'
 
 import styles from './styles.module.scss'
+import Icon from '../Icon'
 
 type Props = {
   onChange: (event: { target: { value: '' } }) => void

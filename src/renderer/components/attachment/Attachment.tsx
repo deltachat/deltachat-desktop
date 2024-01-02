@@ -1,6 +1,8 @@
 import mimeTypes from 'mime-types'
-import { Type } from '../../backend-com'
+
 import { runtime } from '../../runtime'
+
+import type { Type } from '../../backend-com'
 
 /* Section - Data Copied in part from Signal */
 // Supported media types in google chrome

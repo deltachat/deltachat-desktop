@@ -1,24 +1,29 @@
+import { join } from 'path'
+
 import electron, {
   BrowserView,
-  BrowserWindow,
+  clipboard,
   dialog,
-  MenuItemConstructorOptions,
   nativeTheme,
   session,
   shell,
-  WebContents,
 } from 'electron'
-import { appIcon, htmlDistDir } from '../application-constants'
-import { join } from 'path'
-import { DesktopSettings } from '../desktop_settings'
+
+import * as mainWindow from './main'
+import { getLogger } from '../../shared/logger'
 import { truncateText } from '../../shared/util'
+import { appIcon, htmlDistDir } from '../application-constants'
+import { DesktopSettings } from '../desktop_settings'
+import { getDCJsonrpcClient } from '../ipc'
 import { tx } from '../load-translations'
 import { open_url } from '../open_url'
 import { loadTheme } from '../themes'
-import { getDCJsonrpcClient } from '../ipc'
-import { getLogger } from '../../shared/logger'
-import { clipboard } from 'electron/common'
-import * as mainWindow from './main'
+
+import type {
+  BrowserWindow,
+  MenuItemConstructorOptions,
+  WebContents,
+} from 'electron'
 
 const log = getLogger('html_email')
 

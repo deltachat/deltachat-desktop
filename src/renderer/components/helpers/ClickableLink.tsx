@@ -1,7 +1,9 @@
-import React, { PropsWithChildren } from 'react'
+import React from 'react'
 
-import useDialog from '../../hooks/useDialog'
 import { openLinkSafely } from './LinkConfirmation'
+import useDialog from '../../hooks/useDialog'
+
+import type { PropsWithChildren } from 'react'
 
 export default function ClickableLink({
   href,

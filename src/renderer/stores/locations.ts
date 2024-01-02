@@ -1,8 +1,10 @@
-import { DcEvent, T } from '@deltachat/jsonrpc-client'
-import { BackendRemote, Type } from '../backend-com'
+import { Store } from './store'
+import { BackendRemote } from '../backend-com'
 import { onReady } from '../onready'
 import { selectedAccountId } from '../ScreenController'
-import { Store } from './store'
+
+import type { Type } from '../backend-com'
+import type { DcEvent, T } from '@deltachat/jsonrpc-client'
 
 export class state {
   selectedChat: Type.FullChat | null = null

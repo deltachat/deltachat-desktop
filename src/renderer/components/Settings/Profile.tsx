@@ -1,12 +1,11 @@
 import React from 'react'
 
-import { avatarInitial } from '../Avatar'
+import styles from './styles.module.scss'
 import { runtime } from '../../runtime'
+import { avatarInitial } from '../Avatar'
 import LargeProfileImage from '../LargeProfileImage'
 
 import type { SettingsStoreState } from '../../stores/settings'
-
-import styles from './styles.module.scss'
 
 type Props = {
   settingsStore: SettingsStoreState

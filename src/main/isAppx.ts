@@ -1,7 +1,8 @@
+import { readFile } from 'fs/promises'
 import { platform } from 'os'
 import { join } from 'path'
+
 import { app } from 'electron'
-import { readFile } from 'fs/promises'
 
 export let appx = false
 

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { DesktopSettingsType } from '../../shared/shared-types'
+
 import { runtime } from '../runtime'
+
+import type { DesktopSettingsType } from '../../shared/shared-types'
 
 const keySymbols: { [key: string]: string } = {
   Control: '^',

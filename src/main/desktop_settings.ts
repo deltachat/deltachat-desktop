@@ -1,10 +1,14 @@
 import { EventEmitter } from 'events'
 import { promisify } from 'util'
-import { getLogger } from '../shared/logger'
-import { DesktopSettingsType } from '../shared/shared-types'
-import { getDefaultState } from '../shared/state'
+
+import { debounce } from 'debounce'
+
 import appConfig from './application-config'
-import debounce from 'debounce'
+import { getLogger } from '../shared/logger'
+import { getDefaultState } from '../shared/state'
+
+import type { DesktopSettingsType } from '../shared/shared-types'
+
 const log = getLogger('main/state')
 
 const SAVE_DEBOUNCE_INTERVAL = 1000

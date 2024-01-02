@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
 import {
   Button,
-  InputGroup,
   FormGroup,
+  InputGroup,
   Intent,
   ProgressBar,
   Switch,
 } from '@blueprintjs/core'
+import React, { useState } from 'react'
+
 import useTranslationFunction from '../hooks/useTranslationFunction'
 
 export const DeltaSelect = React.memo(

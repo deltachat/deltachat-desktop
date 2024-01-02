@@ -1,26 +1,29 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { C } from '@deltachat/jsonrpc-client'
 import {
   Alignment,
+  Button,
   Classes,
+  Icon,
   Navbar,
   NavbarGroup,
   NavbarHeading,
-  Button,
-  Icon,
 } from '@blueprintjs/core'
+import { C } from '@deltachat/jsonrpc-client'
+import React, { useEffect, useRef, useState } from 'react'
 
-import Gallery from '../Gallery'
-import { useThreeDotMenu } from '../ThreeDotMenu'
+import { RecoverableCrashScreen } from './RecoverableCrashScreen'
+import { getLogger } from '../../../shared/logger'
+import useDialog from '../../hooks/useDialog'
+import useKeyBindingAction from '../../hooks/useKeyBindingAction'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { KeybindAction } from '../../keybindings'
+import { ChatView, useChatStore } from '../../stores/chat'
+import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
+import { Avatar } from '../Avatar'
 import ChatList from '../chat/ChatList'
-import MessageListAndComposer, {
-  getBackgroundImageStyle,
-} from '../message/MessageListAndComposer'
-import {
-  useChatStore,
-  ChatStoreStateWithChatSet,
-  ChatView,
-} from '../../stores/chat'
+import ConnectivityToast from '../ConnectivityToast'
+import EditProfileDialog from '../dialogs/EditProfileDialog'
+import MailingListProfile from '../dialogs/MessageListProfile'
+import Gallery from '../Gallery'
 import {
   openViewGroupDialog,
   openViewProfileDialog,
@@ -28,22 +31,18 @@ import {
   setChatView,
   unselectChat,
 } from '../helpers/ChatMethods'
-import { Avatar } from '../Avatar'
-import ConnectivityToast from '../ConnectivityToast'
 import MapComponent from '../map/MapComponent'
-import MailingListProfile from '../dialogs/MessageListProfile'
-import { getLogger } from '../../../shared/logger'
-import { RecoverableCrashScreen } from './RecoverableCrashScreen'
-import Sidebar, { SidebarState } from '../Sidebar'
-import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
-import { Type } from '../../backend-com'
-import { InlineVerifiedIcon } from '../VerifiedIcon'
+import MessageListAndComposer, {
+  getBackgroundImageStyle,
+} from '../message/MessageListAndComposer'
 import SearchInput from '../SearchInput'
-import EditProfileDialog from '../dialogs/EditProfileDialog'
-import useKeyBindingAction from '../../hooks/useKeyBindingAction'
-import { KeybindAction } from '../../keybindings'
-import useDialog from '../../hooks/useDialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
+import Sidebar from '../Sidebar'
+import { useThreeDotMenu } from '../ThreeDotMenu'
+import { InlineVerifiedIcon } from '../VerifiedIcon'
+
+import type { Type } from '../../backend-com'
+import type { ChatStoreStateWithChatSet } from '../../stores/chat'
+import type { SidebarState } from '../Sidebar'
 
 const log = getLogger('renderer/main-screen')
 

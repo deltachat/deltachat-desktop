@@ -1,13 +1,14 @@
-import React from 'react'
 import classNames from 'classnames'
-import { T } from '@deltachat/jsonrpc-client'
+import React, { Component } from 'react'
 
-import Timestamp from '../conversations/Timestamp'
-import { isImage, isVideo } from '../attachment/Attachment'
-import { msgStatus } from '../../../shared/shared-types'
 import { I18nContext } from '../../contexts/I18nContext'
+import { isImage, isVideo } from '../attachment/Attachment'
+import Timestamp from '../conversations/Timestamp'
 
-export default class MessageMetaData extends React.Component<{
+import type { msgStatus } from '../../../shared/shared-types'
+import type { T } from '@deltachat/jsonrpc-client'
+
+export default class MessageMetaData extends Component<{
   padlock: boolean
   username?: string
   fileMime: string | null

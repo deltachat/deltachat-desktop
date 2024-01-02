@@ -1,20 +1,21 @@
-import DeltaChat, { DeltaChat as DeltaChatNode } from 'deltachat-node'
-import { app as rawApp, ipcMain } from 'electron'
 import { EventEmitter } from 'events'
-import { getLogger } from '../../shared/logger'
-import * as mainWindow from '../windows/main'
-import { ExtendedAppMainProcess } from '../types'
-import { Context } from 'deltachat-node/node/dist/context'
-import path, { join } from 'path'
 import { existsSync, lstatSync } from 'fs'
-import { stat, rename, readdir } from 'fs/promises'
-import { getConfigPath } from '../application-constants'
-import { rmdir } from 'fs/promises'
-import { rm } from 'fs/promises'
+import { readdir, rename, rm, rmdir, stat } from 'fs/promises'
+import path, { join } from 'path'
+
+import { BaseDeltaChat, yerpc } from '@deltachat/jsonrpc-client'
+import AccountManager, { DeltaChat as DeltaChatNode } from 'deltachat-node'
+import { ipcMain, app as rawApp } from 'electron'
+
 import DCWebxdc from './webxdc'
+import { getLogger } from '../../shared/logger'
+import { getConfigPath } from '../application-constants'
 import { DesktopSettings } from '../desktop_settings'
-import { yerpc, BaseDeltaChat } from '@deltachat/jsonrpc-client'
 import rc_config from '../rc'
+import * as mainWindow from '../windows/main'
+
+import type { ExtendedAppMainProcess } from '../types'
+import type { Context } from 'deltachat-node/node/dist/context'
 
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat')
@@ -50,8 +51,8 @@ export default class DeltaChatController extends EventEmitter {
    * Created and owned by ipc on the backend
    */
 
-  _inner_account_manager: DeltaChat | null = null
-  get account_manager(): Readonly<DeltaChat> {
+  _inner_account_manager: AccountManager | null = null
+  get account_manager(): Readonly<AccountManager> {
     if (!this._inner_account_manager) {
       throw new Error('account manager is not defined (yet?)')
     }
@@ -193,7 +194,7 @@ export default class DeltaChatController extends EventEmitter {
     }
 
     // Next, create temporary account manager to migrate accounts
-    const tmp_dc = new DeltaChat(path_accounts)
+    const tmp_dc = new AccountManager(path_accounts)
 
     // registerEventHandler
     tmp_dc.startEvents()

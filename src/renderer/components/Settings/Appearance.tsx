@@ -1,25 +1,27 @@
 import { join } from 'path'
-import React, { useEffect, useState } from 'react'
-import { Icon } from '@blueprintjs/core'
 
-import { ThemeManager } from '../../ThemeManager'
+import { Icon } from '@blueprintjs/core'
+import React, { useEffect, useState } from 'react'
+
+import DesktopSettingsSwitch from './DesktopSettingsSwitch'
+import SettingsHeading from './SettingsHeading'
+import SettingsSelector from './SettingsSelector'
+import { getLogger } from '../../../shared/logger'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { runtime } from '../../runtime'
-import {
+import SettingsStoreInstance from '../../stores/settings'
+import { ThemeManager } from '../../ThemeManager'
+import { DialogContent } from '../Dialog'
+import SmallSelectDialog from '../SmallSelectDialog'
+
+import type {
   DesktopSettingsType,
   RC_Config,
   Theme,
 } from '../../../shared/shared-types'
-import SettingsStoreInstance, {
-  SettingsStoreState,
-} from '../../stores/settings'
-import { getLogger } from '../../../shared/logger'
-import SettingsSelector from './SettingsSelector'
-import DesktopSettingsSwitch from './DesktopSettingsSwitch'
-import SmallSelectDialog, { SelectDialogOption } from '../SmallSelectDialog'
-import SettingsHeading from './SettingsHeading'
-import { DialogContent } from '../Dialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
+import type { SettingsStoreState } from '../../stores/settings'
+import type { SelectDialogOption } from '../SmallSelectDialog'
 
 const log = getLogger('renderer/settings/appearance')
 

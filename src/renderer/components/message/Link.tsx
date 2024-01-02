@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
-import { LinkDestination } from '@deltachat/message_parser_wasm'
-
-import { DeltaCheckbox } from '../contact/ContactListItem'
-import { getLogger } from '../../../shared/logger'
-import chatStore from '../../stores/chat'
 import reactStringReplace from 'react-string-replace'
+
+import { getLogger } from '../../../shared/logger'
+import useDialog from '../../hooks/useDialog'
 import { runtime } from '../../runtime'
-import { openLinkSafely } from '../helpers/LinkConfirmation'
+import chatStore from '../../stores/chat'
+import { DeltaCheckbox } from '../contact/ContactListItem'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -14,8 +13,10 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
 } from '../Dialog'
-import useDialog from '../../hooks/useDialog'
-import { OpenDialog } from '../../contexts/DialogContext'
+import { openLinkSafely } from '../helpers/LinkConfirmation'
+
+import type { OpenDialog } from '../../contexts/DialogContext'
+import type { LinkDestination } from '@deltachat/message_parser_wasm'
 
 const log = getLogger('renderer/LabeledLink')
 

@@ -1,7 +1,9 @@
-import React, { PropsWithChildren } from 'react'
+import React from 'react'
 
 import styles from './styles.module.scss'
 
-export default function DialogHeading({ children }: PropsWithChildren<{}>) {
+import type { PropsOnlyChildren } from '../../types'
+
+export default function DialogHeading({ children }: PropsOnlyChildren) {
   return <h4 className={styles.dialogHeading}>{children}</h4>
 }

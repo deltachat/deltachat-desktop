@@ -1,28 +1,28 @@
+import { C } from '@deltachat/jsonrpc-client'
 import classNames from 'classnames'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
-import { C } from '@deltachat/jsonrpc-client'
 
-import { runtime } from '../runtime'
-import { Screens, selectedAccountId } from '../ScreenController'
-import QrCode from './dialogs/QrCode'
-import { selectChat, unselectChat } from './helpers/ChatMethods'
-import { useSettingsStore } from '../stores/settings'
 import { Avatar } from './Avatar'
-import { VERSION } from '../../shared/build-info'
-import { ActionEmitter, KeybindAction } from '../keybindings'
 import { debounceWithInit } from './chat/ChatListHelpers'
+import About from './dialogs/About'
+import ConnectivityDialog from './dialogs/ConnectivityDialog'
+import CreateChat from './dialogs/CreateChat'
+import QrCode from './dialogs/QrCode'
+import UnblockContacts from './dialogs/UnblockContacts'
+import { selectChat, unselectChat } from './helpers/ChatMethods'
+import { VERSION } from '../../shared/build-info'
 import {
   BackendRemote,
   EffectfulBackendActions,
   onDCEvent,
 } from '../backend-com'
-import ConnectivityDialog from './dialogs/ConnectivityDialog'
-import useDialog from '../hooks/useDialog'
-import CreateChat from './dialogs/CreateChat'
-import UnblockContacts from './dialogs/UnblockContacts'
 import { ScreenContext } from '../contexts/ScreenContext'
-import About from './dialogs/About'
+import useDialog from '../hooks/useDialog'
 import useTranslationFunction from '../hooks/useTranslationFunction'
+import { ActionEmitter, KeybindAction } from '../keybindings'
+import { runtime } from '../runtime'
+import { Screens, selectedAccountId } from '../ScreenController'
+import { useSettingsStore } from '../stores/settings'
 
 export type SidebarState = 'init' | 'visible' | 'invisible'
 

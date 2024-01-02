@@ -1,4 +1,3 @@
-import { T } from '@deltachat/jsonrpc-client'
 import { appName } from '../../shared/constants'
 import { getLogger } from '../../shared/logger'
 import { BackendRemote } from '../backend-com'
@@ -6,6 +5,8 @@ import { isImage } from '../components/attachment/Attachment'
 import { jumpToMessage } from '../components/helpers/ChatMethods'
 import { runtime } from '../runtime'
 import SettingsStoreInstance from '../stores/settings'
+
+import type { T } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/notifications')
 

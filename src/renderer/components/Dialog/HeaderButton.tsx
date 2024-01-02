@@ -1,12 +1,11 @@
-import React from 'react'
 import classNames from 'classnames'
-
-import Icon from '../Icon'
-
-import type { ButtonHTMLAttributes } from 'react'
-import type { IconName } from '../Icon'
+import React from 'react'
 
 import styles from './styles.module.scss'
+import Icon from '../Icon'
+
+import type { IconName } from '../Icon'
+import type { ButtonHTMLAttributes } from 'react'
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   icon: IconName

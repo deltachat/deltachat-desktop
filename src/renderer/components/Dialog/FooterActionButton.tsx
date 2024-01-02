@@ -1,9 +1,9 @@
-import React from 'react'
 import classNames from 'classnames'
-
-import type { MouseEventHandler, PropsWithChildren } from 'react'
+import React from 'react'
 
 import styles from './styles.module.scss'
+
+import type { MouseEventHandler, PropsWithChildren } from 'react'
 
 type Props = PropsWithChildren<{
   onClick: MouseEventHandler<HTMLButtonElement>

@@ -1,9 +1,9 @@
-import React from 'react'
 import classNames from 'classnames'
-
-import type { PropsWithChildren } from 'react'
+import React from 'react'
 
 import styles from './styles.module.scss'
+
+import type { PropsWithChildren } from 'react'
 
 type Props = PropsWithChildren<{
   paddingBottom?: boolean

@@ -1,14 +1,13 @@
 import React, { useState } from 'react'
 
-import { AutodeleteDuration } from '../../../shared/constants'
-import { DeltaCheckbox } from '../contact/ContactListItem'
-import SettingsStoreInstance, {
-  SettingsStoreState,
-} from '../../stores/settings'
-import { BackendRemote } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
 import SettingsSelector from './SettingsSelector'
-import SmallSelectDialog, { SelectDialogOption } from '../SmallSelectDialog'
+import { AutodeleteDuration } from '../../../shared/constants'
+import { BackendRemote } from '../../backend-com'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { selectedAccountId } from '../../ScreenController'
+import SettingsStoreInstance from '../../stores/settings'
+import { DeltaCheckbox } from '../contact/ContactListItem'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -17,10 +16,11 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
 } from '../Dialog'
-import useDialog from '../../hooks/useDialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
+import SmallSelectDialog from '../SmallSelectDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import type { SettingsStoreState } from '../../stores/settings'
+import type { SelectDialogOption } from '../SmallSelectDialog'
 
 function durationToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)

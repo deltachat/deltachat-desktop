@@ -1,12 +1,15 @@
+import { C } from '@deltachat/jsonrpc-client'
+
+import { saveLastChatId } from './chat/chat_sideeffects'
 import { Store, useStore } from './store'
+import { BackendRemote } from '../backend-com'
 import { ActionEmitter, KeybindAction } from '../keybindings'
-import { BackendRemote, Type } from '../backend-com'
+import { onReady } from '../onready'
 import { selectedAccountId } from '../ScreenController'
 import { debouncedUpdateBadgeCounter } from '../system-integration/badge-counter'
 import { clearNotificationsForChat } from '../system-integration/notifications'
-import { saveLastChatId } from './chat/chat_sideeffects'
-import { onReady } from '../onready'
-import { C } from '@deltachat/jsonrpc-client'
+
+import type { Type } from '../backend-com'
 
 export const PAGE_SIZE = 11
 

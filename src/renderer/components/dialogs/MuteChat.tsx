@@ -1,12 +1,14 @@
 import React from 'react'
 
 import { Timespans } from '../../../shared/constants'
-import { selectedAccountId } from '../../ScreenController'
-import { BackendRemote, Type } from '../../backend-com'
-import SmallSelectDialog, { SelectDialogOption } from '../SmallSelectDialog'
+import { BackendRemote } from '../../backend-com'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { selectedAccountId } from '../../ScreenController'
+import SmallSelectDialog from '../SmallSelectDialog'
 
+import type { Type } from '../../backend-com'
 import type { DialogProps } from '../../contexts/DialogContext'
+import type { SelectDialogOption } from '../SmallSelectDialog'
 
 type Props = {
   chatId: number

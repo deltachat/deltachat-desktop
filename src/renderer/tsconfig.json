@@ -12,7 +12,10 @@
     "moduleResolution": "node",
     "strictNullChecks": true,
     "strict": true,
-    "plugins": [{ "name": "typescript-plugin-css-modules" }]
+    "plugins": [{ "name": "typescript-plugin-css-modules" }],
+    "paths": {
+      "~/*": ["./src/renderer/*"]
+    }
   },
   "references": [
     {

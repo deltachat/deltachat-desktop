@@ -1,19 +1,18 @@
-import debounce from 'debounce'
-import electron, {
-  BrowserWindow,
-  Rectangle,
-  session,
-  systemPreferences,
-} from 'electron'
+import { join } from 'path'
+
+import { debounce } from 'debounce'
+import electron, { session, systemPreferences } from 'electron'
+
 import { appWindowTitle } from '../../shared/constants'
 import { getLogger } from '../../shared/logger'
-import { appIcon, windowDefaults, htmlDistDir } from '../application-constants'
+import { appIcon, htmlDistDir, windowDefaults } from '../application-constants'
+import { DesktopSettings } from '../desktop_settings'
+import { refresh as refreshTitleMenu } from '../menu'
 import { refreshTrayContextMenu } from '../tray'
 
-import { join } from 'path'
-import { DesktopSettings } from '../desktop_settings'
-import { Session } from 'electron/main'
-import { refresh as refreshTitleMenu } from '../menu'
+import type { BrowserWindow, Rectangle } from 'electron'
+import type { Session } from 'electron/main'
+
 const log = getLogger('main/mainWindow')
 
 export let window: (BrowserWindow & { hidden?: boolean }) | null = null

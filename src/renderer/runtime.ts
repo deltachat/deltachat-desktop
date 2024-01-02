@@ -1,4 +1,9 @@
-import {
+import processMailtoUrl from './components/helpers/MailtoUrl'
+import { getLogger, setLogHandler } from '../shared/logger'
+
+import type { OpenDialog } from './contexts/DialogContext'
+import type { LocaleData } from '../shared/localize'
+import type {
   DcNotification,
   DcOpenWebxdcParameters,
   DesktopSettingsType,
@@ -6,20 +11,14 @@ import {
   RuntimeInfo,
   Theme,
 } from '../shared/shared-types'
-import { setLogHandler } from '../shared/logger'
-import { getLogger } from '../shared/logger'
-import { LocaleData } from '../shared/localize'
-import processMailtoUrl from './components/helpers/MailtoUrl'
-
-import type { dialog, app } from 'electron'
-import type { OpenDialog } from './contexts/DialogContext'
+import type { app, dialog, IpcRenderer } from 'electron'
 
 const log = getLogger('renderer/runtime')
 
 const { app_getPath, ipcRenderer: ipcBackend } = (window as any)
   .electron_functions as {
   // see static/preload.js
-  ipcRenderer: import('electron').IpcRenderer
+  ipcRenderer: IpcRenderer
   app_getPath: typeof app.getPath
 }
 

@@ -1,8 +1,8 @@
 import React from 'react'
 
-import type { PropsWithChildren } from 'react'
-
 import styles from './styles.module.scss'
+
+import type { PropsWithChildren } from 'react'
 
 type Props = PropsWithChildren<{
   onClick: () => void

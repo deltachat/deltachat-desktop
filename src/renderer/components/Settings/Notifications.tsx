@@ -1,8 +1,9 @@
 import React from 'react'
 
-import { DesktopSettingsType } from '../../../shared/shared-types'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
 import DesktopSettingsSwitch from './DesktopSettingsSwitch'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { DesktopSettingsType } from '../../../shared/shared-types'
 
 type Props = {
   desktopSettings: DesktopSettingsType

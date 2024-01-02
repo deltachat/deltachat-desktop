@@ -1,22 +1,10 @@
 /* eslint-disable camelcase */
 
-import { C, DcEventType } from '@deltachat/jsonrpc-client'
-import React, { useEffect, useState } from 'react'
 import { Collapse } from '@blueprintjs/core'
+import { C } from '@deltachat/jsonrpc-client'
+import React, { useEffect, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce/lib'
 
-import {
-  DeltaInput,
-  DeltaPasswordInput,
-  DeltaSelect,
-  DeltaProgressBar,
-  DeltaSwitch,
-} from './Login-Styles'
-import ClickableLink from './helpers/ClickableLink'
-import { Credentials } from '../../shared/shared-types'
-import { getLogger } from '../../shared/logger'
-import { BackendRemote, Type } from '../backend-com'
-import { selectedAccountId } from '../ScreenController'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -24,10 +12,24 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
 } from './Dialog'
+import ClickableLink from './helpers/ClickableLink'
+import {
+  DeltaInput,
+  DeltaPasswordInput,
+  DeltaProgressBar,
+  DeltaSelect,
+  DeltaSwitch,
+} from './Login-Styles'
+import { getLogger } from '../../shared/logger'
+import { BackendRemote } from '../backend-com'
 import { I18nContext } from '../contexts/I18nContext'
 import useTranslationFunction from '../hooks/useTranslationFunction'
+import { selectedAccountId } from '../ScreenController'
 
+import type { Credentials } from '../../shared/shared-types'
+import type { Type } from '../backend-com'
 import type { DialogProps } from '../contexts/DialogContext'
+import type { DcEventType } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/loginForm')
 

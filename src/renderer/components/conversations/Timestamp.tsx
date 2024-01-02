@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react'
 import classNames from 'classnames'
 import moment from 'moment'
+import React, { useCallback, useEffect, useState } from 'react'
+
 import formatRelativeTime from './formatRelativeTime'
 import { getLogger } from '../../../shared/logger'
 

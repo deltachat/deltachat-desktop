@@ -1,24 +1,25 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import debounce from 'debounce'
+import { Alignment, Icon, Switch } from '@blueprintjs/core'
+import { debounce } from 'debounce'
 import { filesize } from 'filesize'
-import { Switch, Alignment, Icon } from '@blueprintjs/core'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { getLogger } from '../../../shared/logger'
-import ScreenController from '../../ScreenController'
-import { Avatar } from '../Avatar'
-import { PseudoContact } from '../contact/Contact'
 import {
   BackendRemote,
   EffectfulBackendActions,
   onDCEvent,
-  Type,
 } from '../../backend-com'
-import { runtime } from '../../runtime'
-import Dialog, { DialogBody, DialogHeader } from '../Dialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
-import AlertDialog from '../dialogs/AlertDialog'
 import useConfirmationDialog from '../../hooks/useConfirmationDialog'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { runtime } from '../../runtime'
+import { Avatar } from '../Avatar'
+import { PseudoContact } from '../contact/Contact'
+import Dialog, { DialogBody, DialogHeader } from '../Dialog'
+import AlertDialog from '../dialogs/AlertDialog'
+
+import type { Type } from '../../backend-com'
+import type ScreenController from '../../ScreenController'
 
 const log = getLogger('renderer/components/AccountsScreen')
 

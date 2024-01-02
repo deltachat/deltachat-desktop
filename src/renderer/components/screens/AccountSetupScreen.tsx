@@ -1,10 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
-import { Credentials } from '../../../shared/shared-types'
-import LoginForm, {
-  defaultCredentials,
-  ConfigureProgressDialog,
-} from '../LoginForm'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -13,9 +10,12 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
 } from '../Dialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
+import LoginForm, {
+  ConfigureProgressDialog,
+  defaultCredentials,
+} from '../LoginForm'
 
+import type { Credentials } from '../../../shared/shared-types'
 import type ScreenController from '../../ScreenController'
 
 export default function AccountSetupScreen({

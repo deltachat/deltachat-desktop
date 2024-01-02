@@ -1,15 +1,15 @@
 import { Intent } from '@blueprintjs/core'
-import { DcEventType } from '@deltachat/jsonrpc-client'
 import React, { useEffect, useState } from 'react'
 
 import { getLogger } from '../../../../shared/logger'
 import { BackendRemote } from '../../../backend-com'
-import { selectedAccountId } from '../../../ScreenController'
-import { DeltaProgressBar } from '../../Login-Styles'
-import { DialogBody, DialogContent, DialogWithHeader } from '../../Dialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import { selectedAccountId } from '../../../ScreenController'
+import { DialogBody, DialogContent, DialogWithHeader } from '../../Dialog'
+import { DeltaProgressBar } from '../../Login-Styles'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
+import type { DcEventType } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/receive_backup')
 

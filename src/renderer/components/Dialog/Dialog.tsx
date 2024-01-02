@@ -2,9 +2,9 @@ import { Dialog as BlueprintDialog } from '@blueprintjs/core'
 import classNames from 'classnames'
 import React from 'react'
 
-import type { DialogProps } from '../../contexts/DialogContext'
-
 import styles from './styles.module.scss'
+
+import type { DialogProps } from '../../contexts/DialogContext'
 
 const DEFAULT_WIDTH = 500
 

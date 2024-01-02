@@ -1,5 +1,5 @@
-import { T } from '@deltachat/jsonrpc-client'
-import { Type } from '../../backend-com'
+import type { Type } from '../../backend-com'
+import type { T } from '@deltachat/jsonrpc-client'
 
 // todo: get this from some settings/config file
 const accessToken =

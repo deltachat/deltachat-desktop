@@ -1,8 +1,8 @@
-import { getLogger } from '../shared/logger'
 import { BackendRemote } from './backend-com'
 import { printCallCounterResult } from './debug-tools'
 import { runtime } from './runtime'
 import { selectedAccountId } from './ScreenController'
+import { getLogger } from '../shared/logger'
 
 const log = getLogger('renderer/experiments')
 

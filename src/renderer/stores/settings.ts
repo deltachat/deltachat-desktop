@@ -1,9 +1,12 @@
 import { C } from '@deltachat/jsonrpc-client'
-import { DesktopSettingsType, RC_Config } from '../../shared/shared-types'
-import { BackendRemote, Type } from '../backend-com'
+
+import { Store, useStore } from './store'
+import { BackendRemote } from '../backend-com'
 import { onReady } from '../onready'
 import { runtime } from '../runtime'
-import { Store, useStore } from './store'
+
+import type { DesktopSettingsType, RC_Config } from '../../shared/shared-types'
+import type { Type } from '../backend-com'
 
 export interface SettingsStoreState {
   accountId: number

@@ -1,8 +1,9 @@
 import React from 'react'
 
-import { DesktopSettingsType } from '../../../shared/shared-types'
-import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 import SettingsSwitch from './SettingsSwitch'
+import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
+
+import type { DesktopSettingsType } from '../../../shared/shared-types'
 
 type Props = {
   settingsKey: keyof DesktopSettingsType

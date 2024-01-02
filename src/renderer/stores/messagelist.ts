@@ -1,18 +1,18 @@
-import { Store } from './store'
-import { ActionEmitter, KeybindAction } from '../keybindings'
 import { C } from '@deltachat/jsonrpc-client'
-import { BackendRemote, onDCEvent, Type } from '../backend-com'
-import { selectedAccountId } from '../ScreenController'
-import { T } from '@deltachat/jsonrpc-client'
-import {
-  ChatViewState,
-  ChatViewReducer,
-  defaultChatViewState,
-} from './chat/chat_view_reducer'
-import { ChatStoreScheduler } from './chat/chat_scheduler'
+import { debounce } from 'debounce'
 import { useEffect, useMemo, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
-import { debounce } from 'debounce'
+
+import { ChatStoreScheduler } from './chat/chat_scheduler'
+import { ChatViewReducer, defaultChatViewState } from './chat/chat_view_reducer'
+import { Store } from './store'
+import { BackendRemote, onDCEvent } from '../backend-com'
+import { ActionEmitter, KeybindAction } from '../keybindings'
+import { selectedAccountId } from '../ScreenController'
+
+import type { ChatViewState } from './chat/chat_view_reducer'
+import type { Type } from '../backend-com'
+import type { T } from '@deltachat/jsonrpc-client'
 
 const PAGE_SIZE = 11
 

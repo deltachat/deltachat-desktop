@@ -2,15 +2,15 @@ import React from 'react'
 import { areEqual } from 'react-window'
 
 import ChatListItem, {
-  PlaceholderChatListItem,
   ChatListItemMessageResult,
+  PlaceholderChatListItem,
 } from './ChatListItem'
+import useDialog from '../../hooks/useDialog'
 import { ContactListItem } from '../contact/ContactListItem'
 import { jumpToMessage, openViewProfileDialog } from '../helpers/ChatMethods'
-import { Type } from '../../backend-com'
-import useDialog from '../../hooks/useDialog'
 
 import type { useChatListContextMenu } from './ChatListContextMenu'
+import type { Type } from '../../backend-com'
 
 export type ChatListItemData = {
   selectedChatId: number | null

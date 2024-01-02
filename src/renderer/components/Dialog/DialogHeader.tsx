@@ -1,14 +1,14 @@
-import React, { PropsWithChildren } from 'react'
 import classNames from 'classnames'
+import React from 'react'
 
 import BackButton from './BackButton'
 import CloseButton from './CloseButton'
 import DialogHeading from './DialogHeading'
 import EditButton from './EditButton'
+import styles from './styles.module.scss'
 
 import type { DialogProps } from '../../contexts/DialogContext'
-
-import styles from './styles.module.scss'
+import type { PropsWithChildren } from 'react'
 
 type Props = PropsWithChildren<{
   title?: string

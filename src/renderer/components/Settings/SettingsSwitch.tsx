@@ -1,9 +1,8 @@
-import React from 'react'
 import classNames from 'classnames'
-
-import Switch from '../Switch'
+import React from 'react'
 
 import styles from './styles.module.scss'
+import Switch from '../Switch'
 
 type Props = {
   description?: string

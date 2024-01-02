@@ -1,5 +1,7 @@
-import { MutableRefObject, useEffect, useRef, useState } from 'react'
 import { debounce } from 'debounce'
+import { useEffect, useRef, useState } from 'react'
+
+import type { MutableRefObject } from 'react'
 
 /** debounce workaround so it can be useful in useFunctions that are used from multiple places at once
  * if defining normally inside it can get redefined, so the delay could be skipped

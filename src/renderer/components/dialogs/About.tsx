@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import reactStringReplace from 'react-string-replace'
 
+import { GIT_REF, VERSION } from '../../../shared/build-info'
+import { gitHubLicenseUrl, gitHubUrl } from '../../../shared/constants'
 import { getLogger } from '../../../shared/logger'
-import { gitHubUrl, gitHubLicenseUrl } from '../../../shared/constants'
-import { VERSION, GIT_REF } from '../../../shared/build-info'
-import ClickableLink from '../helpers/ClickableLink'
-import { runtime } from '../../runtime'
 import { BackendRemote } from '../../backend-com'
-import { DialogBody, DialogContent, DialogWithHeader } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { runtime } from '../../runtime'
+import { DialogBody, DialogContent, DialogWithHeader } from '../Dialog'
+import ClickableLink from '../helpers/ClickableLink'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 

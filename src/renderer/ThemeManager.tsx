@@ -1,6 +1,8 @@
-import { Theme } from '../shared/shared-types'
 import React, { useContext, useMemo } from 'react'
+
 import { runtime } from './runtime'
+
+import type { Theme } from '../shared/shared-types'
 
 export namespace ThemeManager {
   let currentThemeMetaData: Theme

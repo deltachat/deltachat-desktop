@@ -1,4 +1,6 @@
-import React, { CSSProperties } from 'react'
+import React from 'react'
+
+import type { CSSProperties } from 'react'
 
 export function InlineVerifiedIcon({ style }: { style?: CSSProperties }) {
   return (

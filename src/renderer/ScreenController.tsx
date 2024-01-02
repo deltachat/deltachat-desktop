@@ -1,25 +1,25 @@
-import React from 'react'
-import { Component } from 'react'
-import { DcEventType } from '@deltachat/jsonrpc-client'
 import { debounce } from 'debounce'
+import React, { Component } from 'react'
 
-import MainScreen from './components/screens/MainScreen'
-import processOpenQrUrl from './components/helpers/OpenQrUrl'
-import { getLogger } from '../shared/logger'
-import { ActionEmitter, KeybindAction } from './keybindings'
-import AccountSetupScreen from './components/screens/AccountSetupScreen'
-import AccountListScreen from './components/screens/AccountListScreen'
-import WelcomeScreen from './components/screens/WelcomeScreen'
 import { BackendRemote } from './backend-com'
-import { debouncedUpdateBadgeCounter } from './system-integration/badge-counter'
-import { updateDeviceChats } from './deviceMessages'
-import { runtime } from './runtime'
-import WebxdcSaveToChatDialog from './components/dialogs/WebxdcSendToChatDialog'
 import { updateTimestamps } from './components/conversations/Timestamp'
-import { ScreenContext } from './contexts/ScreenContext'
 import About from './components/dialogs/About'
-import { KeybindingsContextProvider } from './contexts/KeybindingsContext'
+import WebxdcSaveToChatDialog from './components/dialogs/WebxdcSendToChatDialog'
+import processOpenQrUrl from './components/helpers/OpenQrUrl'
+import AccountListScreen from './components/screens/AccountListScreen'
+import AccountSetupScreen from './components/screens/AccountSetupScreen'
+import MainScreen from './components/screens/MainScreen'
+import WelcomeScreen from './components/screens/WelcomeScreen'
 import { DialogContext } from './contexts/DialogContext'
+import { KeybindingsContextProvider } from './contexts/KeybindingsContext'
+import { ScreenContext } from './contexts/ScreenContext'
+import { updateDeviceChats } from './deviceMessages'
+import { ActionEmitter, KeybindAction } from './keybindings'
+import { runtime } from './runtime'
+import { debouncedUpdateBadgeCounter } from './system-integration/badge-counter'
+import { getLogger } from '../shared/logger'
+
+import type { DcEventType } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -44,8 +44,9 @@ export default class ScreenController extends Component {
   selectedAccountId: number | undefined
   openSendToDialogId?: string
 
-  constructor(public props: {}) {
-    super(props)
+  constructor() {
+    super({})
+
     this.state = {
       message: false,
       screen: Screens.Loading,

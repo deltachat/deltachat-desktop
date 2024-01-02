@@ -1,13 +1,14 @@
-import React, { useCallback } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
+import React, { useCallback } from 'react'
 
-import SettingsStoreInstance, {
-  SettingsStoreState,
-} from '../../stores/settings'
 import SettingsSelector from './SettingsSelector'
-import SmallSelectDialog, { SelectDialogOption } from '../SmallSelectDialog'
 import useDialog from '../../hooks/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import SettingsStoreInstance from '../../stores/settings'
+import SmallSelectDialog from '../SmallSelectDialog'
+
+import type { SettingsStoreState } from '../../stores/settings'
+import type { SelectDialogOption } from '../SmallSelectDialog'
 
 function showToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)

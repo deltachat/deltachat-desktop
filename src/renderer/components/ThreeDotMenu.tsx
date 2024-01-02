@@ -1,24 +1,26 @@
 import { C } from '@deltachat/jsonrpc-client'
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 
+import ChatAuditLogDialog from './dialogs/ChatAuditLogDialog'
+import DisappearingMessages from './dialogs/DisappearingMessages'
 import {
-  openLeaveChatDialog,
-  openDeleteChatDialog,
-  openBlockFirstContactOfChatDialog,
-  setChatVisibility,
-  openMuteChatDialog,
-  unMuteChat,
   clearChat,
+  openBlockFirstContactOfChatDialog,
+  openDeleteChatDialog,
+  openLeaveChatDialog,
+  openMuteChatDialog,
+  setChatVisibility,
+  unMuteChat,
 } from './helpers/ChatMethods'
-import { ContextMenuItem } from './ContextMenu'
-import SettingsStoreInstance, { useSettingsStore } from '../stores/settings'
-import { Type } from '../backend-com'
-import { ActionEmitter, KeybindAction } from '../keybindings'
+import { ContextMenuContext } from '../contexts/ContextMenuContext'
 import useDialog from '../hooks/useDialog'
 import useTranslationFunction from '../hooks/useTranslationFunction'
-import DisappearingMessages from './dialogs/DisappearingMessages'
-import ChatAuditLogDialog from './dialogs/ChatAuditLogDialog'
-import { ContextMenuContext } from '../contexts/ContextMenuContext'
+import { ActionEmitter, KeybindAction } from '../keybindings'
+import SettingsStoreInstance, { useSettingsStore } from '../stores/settings'
+
+import type { ContextMenuItem } from './ContextMenu'
+import type { Type } from '../backend-com'
+import type React from 'react'
 
 export function useThreeDotMenu(
   selectedChat: Type.FullChat | null,

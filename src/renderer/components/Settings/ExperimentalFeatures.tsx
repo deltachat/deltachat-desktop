@@ -1,18 +1,18 @@
 import React from 'react'
 
-import SettingsStoreInstance, {
-  SettingsStoreState,
-} from '../../stores/settings'
-import SettingsSelector from './SettingsSelector'
-import DesktopSettingsSwitch from './DesktopSettingsSwitch'
 import CoreSettingsSwitch from './CoreSettingsSwitch'
-import EditVideochatInstanceDialog from '../dialogs/EditVideochatInstanceDialog'
+import DesktopSettingsSwitch from './DesktopSettingsSwitch'
+import SettingsSelector from './SettingsSelector'
 import {
   VIDEO_CHAT_INSTANCE_AUTISTICI,
   VIDEO_CHAT_INSTANCE_SYSTEMLI,
 } from '../../../shared/constants'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import SettingsStoreInstance from '../../stores/settings'
+import EditVideochatInstanceDialog from '../dialogs/EditVideochatInstanceDialog'
+
+import type { SettingsStoreState } from '../../stores/settings'
 
 type Props = {
   settingsStore: SettingsStoreState

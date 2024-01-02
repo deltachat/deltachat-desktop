@@ -1,25 +1,26 @@
-import React, { useContext } from 'react'
 import {
   parse_desktop_set,
   parse_text,
-  ParsedElement,
 } from '@deltachat/message_parser_wasm/message_parser_wasm'
+import React, { useContext } from 'react'
 
 import { LabeledLink, Link } from './Link'
 import { getLogger } from '../../../shared/logger'
+import { BackendRemote } from '../../backend-com'
+import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
+import useConfirmationDialog from '../../hooks/useConfirmationDialog'
+import useDialog from '../../hooks/useDialog'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
+import { selectedAccountId } from '../../ScreenController'
+import { ChatView } from '../../stores/chat'
+import SettingsStoreInstance from '../../stores/settings'
 import {
   createChatByEmail,
   selectChat,
   setChatView,
 } from '../helpers/ChatMethods'
-import { ChatView } from '../../stores/chat'
-import { BackendRemote } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
-import SettingsStoreInstance from '../../stores/settings'
-import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
-import useDialog from '../../hooks/useDialog'
-import useConfirmationDialog from '../../hooks/useConfirmationDialog'
+
+import type { ParsedElement } from '@deltachat/message_parser_wasm/message_parser_wasm'
 
 const log = getLogger('renderer/message-markdown')
 

@@ -1,18 +1,20 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react'
 import moment from 'moment'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 
-import ScreenController from './ScreenController'
-import { translate, LocaleData } from '../shared/localize'
-import { ThemeManager, ThemeContext } from './ThemeManager'
-import { CrashScreen } from './components/screens/CrashScreen'
-import { runtime } from './runtime'
-import { updateCoreStrings } from './stockStrings'
-import { getLogger } from '../shared/logger'
 import { BackendRemote } from './backend-com'
-import { runPostponedFunctions } from './onready'
-import { I18nContext } from './contexts/I18nContext'
-import { DialogContextProvider } from './contexts/DialogContext'
+import { CrashScreen } from './components/screens/CrashScreen'
 import { ContextMenuProvider } from './contexts/ContextMenuContext'
+import { DialogContextProvider } from './contexts/DialogContext'
+import { I18nContext } from './contexts/I18nContext'
+import { runPostponedFunctions } from './onready'
+import { runtime } from './runtime'
+import ScreenController from './ScreenController'
+import { updateCoreStrings } from './stockStrings'
+import { ThemeContext, ThemeManager } from './ThemeManager'
+import { translate } from '../shared/localize'
+import { getLogger } from '../shared/logger'
+
+import type { LocaleData } from '../shared/localize'
 
 export default function App(_props: any) {
   const [localeData, setLocaleData] = useState<LocaleData | null>(null)

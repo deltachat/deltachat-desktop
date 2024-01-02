@@ -1,6 +1,8 @@
-import appConfig from './application-config'
 import { dirname, join } from 'path'
+
 import { app, screen } from 'electron'
+
+import appConfig from './application-config'
 
 export function appIcon() {
   const iconFormat = process.platform === 'win32' ? '.ico' : '.png'

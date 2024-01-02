@@ -2,8 +2,8 @@ import React, { createContext, useCallback, useState } from 'react'
 
 import { ContextMenuLayer } from '../components/ContextMenu'
 
-import type { PropsWithChildren } from 'react'
 import type { OpenContextMenu } from '../components/ContextMenu'
+import type { PropsWithChildren } from 'react'
 
 type ContextMenuContextValue = {
   openContextMenu: OpenContextMenu

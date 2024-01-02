@@ -1,13 +1,14 @@
-import { T } from '@deltachat/jsonrpc-client'
 import React from 'react'
 
-import useDialog from '../hooks/useDialog'
 import { Avatar } from './Avatar'
-import useTranslationFunction from '../hooks/useTranslationFunction'
 import FullscreenMedia, {
   NeighboringMediaMode,
 } from './dialogs/FullscreenMedia'
 import useContextMenu from '../hooks/useContextMenu'
+import useDialog from '../hooks/useDialog'
+import useTranslationFunction from '../hooks/useTranslationFunction'
+
+import type { T } from '@deltachat/jsonrpc-client'
 
 type Props = {
   groupImage?: string | null

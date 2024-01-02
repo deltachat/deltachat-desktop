@@ -1,15 +1,12 @@
-import React from 'react'
 import { Spinner } from '@blueprintjs/core'
+import React from 'react'
 
-import { ConfigureProgressDialog } from '../LoginForm'
-import { Screens, selectedAccountId } from '../../ScreenController'
-import { runtime } from '../../runtime'
-import { getLogger } from '../../../shared/logger'
-import ConfirmationDialog from '../dialogs/ConfirmationDialog'
-import AlertDialog from '../dialogs/AlertDialog'
-import { EffectfulBackendActions } from '../../backend-com'
-import { BackendRemote, Type } from '../../backend-com'
 import processMailtoUrl from './MailtoUrl'
+import { getLogger } from '../../../shared/logger'
+import { BackendRemote, EffectfulBackendActions } from '../../backend-com'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { runtime } from '../../runtime'
+import { Screens, selectedAccountId } from '../../ScreenController'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -17,9 +14,12 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
 } from '../Dialog'
+import AlertDialog from '../dialogs/AlertDialog'
+import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import { ReceiveBackupDialog } from '../dialogs/SetupMultiDevice'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { ConfigureProgressDialog } from '../LoginForm'
 
+import type { Type } from '../../backend-com'
 import type {
   CloseDialog,
   DialogProps,

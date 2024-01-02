@@ -1,8 +1,10 @@
 import React from 'react'
-import MessageMetaData from '../message/MessageMetaData'
+
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import MessageBody from '../message/MessageBody'
-import { Type } from '../../backend-com'
+import MessageMetaData from '../message/MessageMetaData'
+
+import type { Type } from '../../backend-com'
 
 export default class PopupMessage extends React.Component<{
   username: string

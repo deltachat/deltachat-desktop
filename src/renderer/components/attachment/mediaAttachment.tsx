@@ -1,33 +1,34 @@
-import React, { useContext } from 'react'
 import { filesize } from 'filesize'
+import React, { useContext } from 'react'
 
 import {
-  openAttachmentInShell,
-  onDownload,
-  openWebxdc,
-} from '../message/messageFunctions'
-import {
+  dragAttachmentOut,
+  getExtension,
+  isAudio,
   isImage,
   isVideo,
-  isAudio,
-  getExtension,
-  dragAttachmentOut,
 } from './Attachment'
-import Timestamp from '../conversations/Timestamp'
-import { makeContextMenu, OpenContextMenu } from '../ContextMenu'
-import { runtime } from '../../runtime'
-import { deleteMessage, jumpToMessage } from '../helpers/ChatMethods'
 import { getLogger } from '../../../shared/logger'
 import { truncateText } from '../../../shared/util'
-import { Type } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
-import ConfirmationDialog from '../dialogs/ConfirmationDialog'
+import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import useDialog from '../../hooks/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { runtime } from '../../runtime'
+import { selectedAccountId } from '../../ScreenController'
+import { makeContextMenu } from '../ContextMenu'
+import Timestamp from '../conversations/Timestamp'
+import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import MessageDetail from '../dialogs/MessageDetail'
-import { ContextMenuContext } from '../../contexts/ContextMenuContext'
+import { deleteMessage, jumpToMessage } from '../helpers/ChatMethods'
+import {
+  onDownload,
+  openAttachmentInShell,
+  openWebxdc,
+} from '../message/messageFunctions'
 
+import type { Type } from '../../backend-com'
 import type { OpenDialog } from '../../contexts/DialogContext'
+import type { OpenContextMenu } from '../ContextMenu'
 
 const log = getLogger('mediaAttachment')
 

@@ -1,17 +1,15 @@
-import path from 'path'
 import fs from 'fs'
+import path from 'path'
 
-import { getLogger } from '../shared/logger'
-const log = getLogger('load-translations')
-
-import {
-  getMessageFunction,
-  LocaleData,
-  translate as getTranslateFunction,
-} from '../shared/localize'
+import { ipcMain } from 'electron'
 
 import { refresh as refreshMenu } from './menu'
-import { ipcMain } from 'electron'
+import { translate as getTranslateFunction } from '../shared/localize'
+import { getLogger } from '../shared/logger'
+
+import type { getMessageFunction, LocaleData } from '../shared/localize'
+
+const log = getLogger('load-translations')
 
 let currentlocaleData: LocaleData | null = null
 

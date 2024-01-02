@@ -1,21 +1,21 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { BackendRemote } from '../../backend-com'
-import { Credentials } from '../../../shared/shared-types'
-import LoginForm, {
-  ConfigureProgressDialog,
-  defaultCredentials,
-} from '../LoginForm'
+import useConfirmationDialog from '../../hooks/useConfirmationDialog'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import Dialog, {
   DialogBody,
   DialogContent,
   DialogHeader,
   OkCancelFooterAction,
 } from '../Dialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
-import useConfirmationDialog from '../../hooks/useConfirmationDialog'
+import LoginForm, {
+  ConfigureProgressDialog,
+  defaultCredentials,
+} from '../LoginForm'
 
+import type { Credentials } from '../../../shared/shared-types'
 import type { DialogProps } from '../../contexts/DialogContext'
 
 export default function EditAccountAndPasswordDialog({ onClose }: DialogProps) {

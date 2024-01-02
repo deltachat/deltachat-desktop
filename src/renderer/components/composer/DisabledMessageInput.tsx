@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 
-import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { DisabledChatReasons } from './useIsChatDisabled'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 type Props = {
   reason?: DisabledChatReasons

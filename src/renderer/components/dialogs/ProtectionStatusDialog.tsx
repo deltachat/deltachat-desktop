@@ -1,9 +1,11 @@
 import React from 'react'
 
+import QrCode from './QrCode'
 import { BackendRemote } from '../../backend-com'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { runtime } from '../../runtime'
 import { selectedAccountId } from '../../ScreenController'
-import QrCode from './QrCode'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -11,8 +13,6 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
 } from '../Dialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 

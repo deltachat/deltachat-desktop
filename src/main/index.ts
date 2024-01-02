@@ -1,14 +1,21 @@
+/* eslint-disable import/newline-after-import */
+/* eslint-disable import/order */
 console.time('init')
 
-import { mkdirSync, Stats, watchFile } from 'fs'
-import { app as rawApp, dialog, ipcMain, protocol } from 'electron'
+import { mkdirSync, watchFile } from 'fs'
+
+import { dialog, ipcMain, protocol, app as rawApp } from 'electron'
+
+import { BUILD_TIMESTAMP, GIT_REF, VERSION } from '../shared/build-info'
+import { getLogger, setLogHandler } from '../shared/logger'
 import rc from './rc'
-import { VERSION, GIT_REF, BUILD_TIMESTAMP } from '../shared/build-info'
-import type { EventEmitter } from 'events'
 import contextMenu from './electron-context-menu'
 import { findOutIfWeAreRunningAsAppx } from './isAppx'
 import { getHelpMenu } from './help_menu'
 import { initialisePowerMonitor } from './resume_from_sleep'
+
+import type { Stats } from 'fs'
+import type { EventEmitter } from 'events'
 
 // Hardening: prohibit all DNS queries, except for Mapbox
 // (see src/renderer/components/map/MapComponent.tsx)
@@ -78,19 +85,20 @@ if (rc['multiple-instances'] === false && !app.requestSingleInstanceLock()) {
 
 // Setup folders
 import {
-  getConfigPath,
-  getLogsPath,
   getAccountsPath,
+  getConfigPath,
   getCustomThemesPath,
+  getLogsPath,
 } from './application-constants'
+
 mkdirSync(getConfigPath(), { recursive: true })
 mkdirSync(getLogsPath(), { recursive: true })
 mkdirSync(getCustomThemesPath(), { recursive: true })
 
 // Setup Logger
 import { cleanupLogFolder, createLogHandler } from './log-handler'
+
 const logHandler = createLogHandler()
-import { getLogger, setLogHandler } from '../shared/logger'
 const log = getLogger('main/index')
 setLogHandler(logHandler.log, rc)
 log.info(`Deltachat Version ${VERSION} ${GIT_REF} ${BUILD_TIMESTAMP}`)
@@ -117,8 +125,9 @@ import * as ipc from './ipc'
 import { init as initMenu } from './menu'
 import { DesktopSettings } from './desktop_settings'
 import * as mainWindow from './windows/main'
-import { ExtendedAppMainProcess } from './types'
-import { updateTrayIcon, hideDeltaChat, showDeltaChat } from './tray'
+
+import type { ExtendedAppMainProcess } from './types'
+import { hideDeltaChat, showDeltaChat, updateTrayIcon } from './tray'
 import './notifications'
 import { acceptThemeCLI } from './themes'
 import { webxdcStartUpCleanup } from './deltachat/webxdc'
@@ -338,7 +347,8 @@ app.on('web-contents-created', (_ev, contents) => {
 
 contextMenu()
 
-import { openUrlsAndFilesFromArgv, open_url } from './open_url'
+import { open_url, openUrlsAndFilesFromArgv } from './open_url'
+
 openUrlsAndFilesFromArgv(process.argv)
 
 ipcMain.handle('restart_app', async _ev => {

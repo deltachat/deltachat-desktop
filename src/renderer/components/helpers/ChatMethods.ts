@@ -1,19 +1,21 @@
-import { T, C } from '@deltachat/jsonrpc-client'
+import { C } from '@deltachat/jsonrpc-client'
 
-import ChatStore, { ChatView } from '../../stores/chat'
-import { getLogger } from '../../../shared/logger'
-import AlertDialog from '../dialogs/AlertDialog'
-import { BackendRemote, EffectfulBackendActions, Type } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
-import ViewGroup from '../dialogs/ViewGroup'
-import ViewProfile from '../dialogs/ViewProfile'
-import ConfirmationDialog from '../dialogs/ConfirmationDialog'
-import chatStore from '../../stores/chat'
 import { openLinkSafely } from './LinkConfirmation'
+import { getLogger } from '../../../shared/logger'
+import { BackendRemote, EffectfulBackendActions } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
+import ChatStore from '../../stores/chat'
+import AlertDialog from '../dialogs/AlertDialog'
+import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import EncryptionInfo from '../dialogs/EncryptionInfo'
 import MuteChat from '../dialogs/MuteChat'
+import ViewGroup from '../dialogs/ViewGroup'
+import ViewProfile from '../dialogs/ViewProfile'
 
+import type { Type } from '../../backend-com'
 import type { OpenDialog } from '../../contexts/DialogContext'
+import type { ChatView } from '../../stores/chat'
+import type { T } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/message')
 
@@ -294,7 +296,7 @@ export async function sendMessage(
     ...message,
   })
   // jump down on sending
-  chatStore.effect.jumpToMessage(id, false)
+  ChatStore.effect.jumpToMessage(id, false)
 }
 
 export function forwardMessage(

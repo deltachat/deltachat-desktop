@@ -1,5 +1,5 @@
+import { Radio, RadioGroup } from '@blueprintjs/core'
 import React, { useState } from 'react'
-import { RadioGroup, Radio } from '@blueprintjs/core'
 
 import Dialog, {
   DialogBody,

@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
 
-import { useGroupImage, ChatSettingsSetNameAndProfileImage } from './CreateChat'
-import { Type } from '../../backend-com'
-import { modifyGroup } from '../helpers/ChatMethods'
+import { ChatSettingsSetNameAndProfileImage, useGroupImage } from './CreateChat'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import Dialog, {
   DialogBody,
   DialogContent,
   DialogHeader,
   OkCancelFooterAction,
 } from '../Dialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { modifyGroup } from '../helpers/ChatMethods'
 
+import type { Type } from '../../backend-com'
 import type { DialogProps } from '../../contexts/DialogContext'
 
 export default function MailingListProfile(

@@ -1,16 +1,16 @@
+import { C } from '@deltachat/jsonrpc-client'
 import React from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
-import { C } from '@deltachat/jsonrpc-client'
 
-import ChatListItem from '../chat/ChatListItem'
-import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { useThemeCssVar } from '../../ThemeManager'
 import { ChatListPart, useLogicVirtualChatList } from '../chat/ChatList'
 import { useChatList } from '../chat/ChatListHelpers'
-import { useThemeCssVar } from '../../ThemeManager'
-import { createDraftMessage } from '../helpers/ChatMethods'
+import ChatListItem from '../chat/ChatListItem'
 import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
+import { createDraftMessage } from '../helpers/ChatMethods'
+import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 

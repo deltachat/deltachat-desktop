@@ -1,40 +1,41 @@
+import { C } from '@deltachat/jsonrpc-client'
 import React, {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
   useRef,
   useState,
-  useEffect,
-  forwardRef,
-  useLayoutEffect,
-  useCallback,
 } from 'react'
-import { C, T } from '@deltachat/jsonrpc-client'
 
-import MenuAttachment from './menuAttachment'
 import ComposerMessageInput from './ComposerMessageInput'
-import { getLogger } from '../../../shared/logger'
+import DisabledMessageInput from './DisabledMessageInput'
 import { EmojiAndStickerPicker } from './EmojiAndStickerPicker'
-import { replaceColonsSafe } from '../conversations/emoji'
-import { Quote } from '../message/Message'
-import { DraftAttachment } from '../attachment/messageAttachment'
-import { sendMessage, unselectChat } from '../helpers/ChatMethods'
-import { useSettingsStore } from '../../stores/settings'
+import MenuAttachment from './menuAttachment'
+import { getLogger } from '../../../shared/logger'
 import {
   BackendRemote,
   EffectfulBackendActions,
   onDCEvent,
-  Type,
 } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
-import { MessageTypeAttachmentSubset } from '../attachment/Attachment'
-import { runtime } from '../../runtime'
-import { confirmDialog } from '../message/messageFunctions'
-import { ProtectionBrokenDialog } from '../dialogs/ProtectionStatusDialog'
 import useDialog from '../../hooks/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import DisabledMessageInput from './DisabledMessageInput'
-import { DisabledChatReasons } from './useIsChatDisabled'
+import { runtime } from '../../runtime'
+import { selectedAccountId } from '../../ScreenController'
+import { useSettingsStore } from '../../stores/settings'
+import { DraftAttachment } from '../attachment/messageAttachment'
+import { replaceColonsSafe } from '../conversations/emoji'
+import { ProtectionBrokenDialog } from '../dialogs/ProtectionStatusDialog'
+import { sendMessage, unselectChat } from '../helpers/ChatMethods'
+import { Quote } from '../message/Message'
+import { confirmDialog } from '../message/messageFunctions'
 
-import type { EmojiData, BaseEmoji } from 'emoji-mart/index'
+import type { DisabledChatReasons } from './useIsChatDisabled'
+import type { Type } from '../../backend-com'
+import type { MessageTypeAttachmentSubset } from '../attachment/Attachment'
+import type { T } from '@deltachat/jsonrpc-client'
 import type { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
+import type { BaseEmoji, EmojiData } from 'emoji-mart/index'
 
 const log = getLogger('renderer/composer')
 

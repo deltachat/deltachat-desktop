@@ -1,21 +1,20 @@
 import React, { useState } from 'react'
 
-import SettingsStoreInstance, {
-  SettingsStoreState,
-} from '../../../stores/settings'
-import { BackendRemote } from '../../../backend-com'
-import { selectedAccountId } from '../../../ScreenController'
-import { DeltaInput, DeltaTextarea } from '../../Login-Styles'
 import ProfileImageSelector from './ProfileImageSelector'
+import { BackendRemote } from '../../../backend-com'
+import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import { selectedAccountId } from '../../../ScreenController'
+import SettingsStoreInstance from '../../../stores/settings'
 import Dialog, {
   DialogBody,
   DialogContent,
   DialogHeader,
   OkCancelFooterAction,
 } from '../../Dialog'
-import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import { DeltaInput, DeltaTextarea } from '../../Login-Styles'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
+import type { SettingsStoreState } from '../../../stores/settings'
 
 export default function EditProfileDialog({
   onClose,

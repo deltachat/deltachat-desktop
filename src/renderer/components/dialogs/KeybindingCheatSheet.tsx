@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react'
 
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { useSettingsStore } from '../../stores/settings'
+import Dialog, { DialogBody, DialogHeader, DialogHeading } from '../Dialog'
 import {
   CheatSheetKeyboardShortcut,
   getKeybindings,
   ShortcutGroup,
 } from '../KeyboardShortcutHint'
-import Dialog, { DialogBody, DialogHeader, DialogHeading } from '../Dialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 

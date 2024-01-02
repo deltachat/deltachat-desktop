@@ -1,5 +1,6 @@
 import rc from 'rc'
-import { RC_Config } from '../shared/shared-types'
+
+import type { RC_Config } from '../shared/shared-types'
 
 const defaults: RC_Config = {
   'log-debug': false,

@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 
-import { ContextMenuContext } from '../contexts/ContextMenuContext'
 import { makeContextMenu } from '../components/ContextMenu'
+import { ContextMenuContext } from '../contexts/ContextMenuContext'
 
 import type {
   ContextMenuItems,

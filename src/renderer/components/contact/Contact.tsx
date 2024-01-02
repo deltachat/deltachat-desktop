@@ -1,6 +1,9 @@
-import React, { PropsWithChildren } from 'react'
+import React from 'react'
+
 import { Avatar } from '../Avatar'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
+
+import type { PropsWithChildren } from 'react'
 
 function ContactName(
   displayName: string,

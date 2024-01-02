@@ -1,6 +1,7 @@
-import { useState, useEffect, useMemo } from 'react'
-import { getLogger } from '../../../shared/logger'
 import { debounce } from 'debounce'
+import { useEffect, useMemo, useState } from 'react'
+
+import { getLogger } from '../../../shared/logger'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 

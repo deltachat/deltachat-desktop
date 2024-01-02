@@ -1,8 +1,8 @@
 import React from 'react'
 
 import { QrCodeScanQrInner } from './QrCode'
-import { DialogWithHeader } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { DialogWithHeader } from '../Dialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 

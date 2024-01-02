@@ -1,9 +1,11 @@
-import React, { useLayoutEffect } from 'react'
-import Message from './Message'
-import { ConversationType } from './MessageList'
-import { Type } from '../../backend-com'
 import { C } from '@deltachat/jsonrpc-client'
+import React, { useLayoutEffect } from 'react'
+
+import Message from './Message'
 import { getLogger } from '../../../shared/logger'
+
+import type { ConversationType } from './MessageList'
+import type { Type } from '../../backend-com'
 
 const log = getLogger('renderer/message/MessageWrapper')
 

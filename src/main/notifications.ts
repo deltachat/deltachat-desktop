@@ -1,12 +1,13 @@
 import { platform } from 'os'
-import { app, Notification, nativeImage, ipcMain } from 'electron'
 
-import * as mainWindow from './windows/main'
+import { app, ipcMain, nativeImage, Notification } from 'electron'
+
 import { appIcon } from './application-constants'
-import { DcNotification } from '../shared/shared-types'
+import * as mainWindow from './windows/main'
 import { getLogger } from '../shared/logger'
 
-import type { NativeImage, IpcMainInvokeEvent } from 'electron'
+import type { DcNotification } from '../shared/shared-types'
+import type { IpcMainInvokeEvent, NativeImage } from 'electron'
 
 const log = getLogger('main/notifications')
 

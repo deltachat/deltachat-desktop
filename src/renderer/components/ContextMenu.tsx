@@ -1,9 +1,9 @@
 import React, {
-  useState,
+  useCallback,
   useEffect,
   useLayoutEffect,
   useRef,
-  useCallback,
+  useState,
 } from 'react'
 
 import useContextMenu from '../hooks/useContextMenu'

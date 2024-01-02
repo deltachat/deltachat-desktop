@@ -1,12 +1,15 @@
-import { app as rawApp, BrowserWindow, Menu, shell } from 'electron'
-import { appIcon, htmlDistDir } from '../application-constants'
-import { getLogger } from '../../shared/logger'
-import { ExtendedAppMainProcess } from '../types'
-import { join } from 'path'
 import { stat } from 'fs/promises'
+import { join } from 'path'
+
+import { BrowserWindow, Menu, app as rawApp, shell } from 'electron'
+
 import { appWindowTitle } from '../../shared/constants'
+import { getLogger } from '../../shared/logger'
+import { appIcon, htmlDistDir } from '../application-constants'
 import { tx } from '../load-translations'
 import { window as main_window } from '../windows/main'
+
+import type { ExtendedAppMainProcess } from '../types'
 
 const log = getLogger('main/help')
 const app = rawApp as ExtendedAppMainProcess

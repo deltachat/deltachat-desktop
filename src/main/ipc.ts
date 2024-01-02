@@ -1,50 +1,59 @@
-import { copyFile, writeFile, mkdir, rm } from 'fs/promises'
+import { existsSync } from 'fs'
+import { copyFile, mkdir, rm, writeFile } from 'fs/promises'
+import { platform } from 'os'
+import path, { basename, extname, join, posix, sep } from 'path'
+import { inspect } from 'util'
+
 import {
-  app as rawApp,
   clipboard,
   dialog,
   ipcMain,
   nativeImage,
+  app as rawApp,
   shell,
 } from 'electron'
-import { getLogger } from '../shared/logger'
-import { getDraftTempDir, getLogsPath } from './application-constants'
-import { LogHandler } from './log-handler'
-import { ExtendedAppMainProcess } from './types'
-import * as mainWindow from './windows/main'
-import { openHelpWindow } from './windows/help'
-import path, { basename, extname, join, posix, sep } from 'path'
-import { DesktopSettings } from './desktop_settings'
-import { getConfigPath } from './application-constants'
-import { inspect } from 'util'
-import { DesktopSettingsType, RuntimeInfo } from '../shared/shared-types'
-import { platform } from 'os'
-import { existsSync } from 'fs'
-import { set_has_unread, updateTrayIcon } from './tray'
 import mimeTypes from 'mime-types'
-import { openHtmlEmailWindow } from './windows/html_email'
+
+import {
+  getConfigPath,
+  getDraftTempDir,
+  getLogsPath,
+} from './application-constants'
+import { DesktopSettings } from './desktop_settings'
 import { appx } from './isAppx'
+import { set_has_unread, updateTrayIcon } from './tray'
+import { openHelpWindow } from './windows/help'
+import { openHtmlEmailWindow } from './windows/html_email'
+import * as mainWindow from './windows/main'
+import { getLogger } from '../shared/logger'
+
+import type { LogHandler } from './log-handler'
+import type { ExtendedAppMainProcess } from './types'
+import type { DesktopSettingsType, RuntimeInfo } from '../shared/shared-types'
 
 const log = getLogger('main/ipc')
-const DeltaChatController: typeof import('./deltachat/controller').default =
-  (() => {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      return require('./deltachat/controller').default
-    } catch (error) {
-      log.critical(
-        "Fatal: The DeltaChat Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!",
-        error
-      )
-      dialog.showErrorBox(
-        'Fatal Error',
-        `The DeltaChat Module couldn't be loaded.
+
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+type NewType = typeof import('./deltachat/controller').default
+
+const DeltaChatController: NewType = (() => {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    return require('./deltachat/controller').default
+  } catch (error) {
+    log.critical(
+      "Fatal: The DeltaChat Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!",
+      error
+    )
+    dialog.showErrorBox(
+      'Fatal Error',
+      `The DeltaChat Module couldn't be loaded.
  Please check if all dependencies for deltachat-core are installed!
  The Log file is located in this folder: ${getLogsPath()}\n
  ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
-      )
-    }
-  })()
+    )
+  }
+})()
 
 const app = rawApp as ExtendedAppMainProcess
 

@@ -1,10 +1,9 @@
 import React from 'react'
 
-import SettingsStoreInstance, {
-  SettingsStoreState,
-  useSettingsStore,
-} from '../../stores/settings'
 import SettingsSwitch from './SettingsSwitch'
+import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
+
+import type { SettingsStoreState } from '../../stores/settings'
 
 function flipDeltaBoolean(value: string) {
   return value === '1' ? '0' : '1'

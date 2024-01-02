@@ -1,4 +1,6 @@
-import { T, C } from '@deltachat/jsonrpc-client'
+import { C } from '@deltachat/jsonrpc-client'
+
+import type { T } from '@deltachat/jsonrpc-client'
 
 export enum DisabledChatReasons {
   DEADDROP,

@@ -1,16 +1,17 @@
-import React from 'react'
 import { C } from '@deltachat/jsonrpc-client'
+import React from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
 
-import ChatListItem from '../chat/ChatListItem'
-import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
+import ConfirmationDialog from './ConfirmationDialog'
+import { BackendRemote } from '../../backend-com'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { runtime } from '../../runtime'
+import { selectedAccountId } from '../../ScreenController'
+import { useThemeCssVar } from '../../ThemeManager'
 import { ChatListPart, useLogicVirtualChatList } from '../chat/ChatList'
 import { useChatList } from '../chat/ChatListHelpers'
-import { useThemeCssVar } from '../../ThemeManager'
-import { selectChat } from '../helpers/ChatMethods'
-import { BackendRemote } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
-import { runtime } from '../../runtime'
+import ChatListItem from '../chat/ChatListItem'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -19,9 +20,8 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
 } from '../Dialog'
-import ConfirmationDialog from './ConfirmationDialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
+import { selectChat } from '../helpers/ChatMethods'
+import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
 
 import type { DialogProps, OpenDialog } from '../../contexts/DialogContext'
 

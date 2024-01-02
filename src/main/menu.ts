@@ -1,19 +1,22 @@
+import { readFileSync } from 'fs'
+import { basename, join } from 'path'
+
 import { Menu, shell } from 'electron'
+
+import { getConfigPath, getLogsPath } from './application-constants'
+import { DesktopSettings } from './desktop_settings'
+import { appx, getAppxPath } from './isAppx'
+import { getCurrentLocaleDate, tx } from './load-translations'
+import * as mainWindow from './windows/main'
 import {
+  appWindowTitle,
   gitHubIssuesUrl,
   gitHubUrl,
   homePageUrl,
-  appWindowTitle,
 } from '../shared/constants'
 import { getLogger } from '../shared/logger'
-import { getConfigPath, getLogsPath } from './application-constants'
-import { LogHandler } from './log-handler'
-import * as mainWindow from './windows/main'
-import { readFileSync } from 'fs'
-import { basename, join } from 'path'
-import { DesktopSettings } from './desktop_settings'
-import { getCurrentLocaleDate, tx } from './load-translations'
-import { appx, getAppxPath } from './isAppx'
+
+import type { LogHandler } from './log-handler'
 
 const log = getLogger('main/menu')
 

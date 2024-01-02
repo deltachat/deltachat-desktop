@@ -1,24 +1,25 @@
-import React, { useEffect, useState } from 'react'
-import { DcEventType } from '@deltachat/jsonrpc-client'
 import { Intent } from '@blueprintjs/core'
+import React, { useEffect, useState } from 'react'
 
 import { getLogger } from '../../../shared/logger'
-import { runtime } from '../../runtime'
-import { DeltaProgressBar } from '../Login-Styles'
-import { Screens, selectedAccountId } from '../../ScreenController'
 import { BackendRemote, EffectfulBackendActions } from '../../backend-com'
-import processOpenQrUrl from '../helpers/OpenQrUrl'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { runtime } from '../../runtime'
+import { Screens, selectedAccountId } from '../../ScreenController'
 import Dialog, {
   DialogBody,
   DialogContent,
   DialogHeader,
   DialogWithHeader,
 } from '../Dialog'
-import { DialogProps } from '../../contexts/DialogContext'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
-import ImportQrCode from '../dialogs/ImportQrCode'
 import AlertDialog from '../dialogs/AlertDialog'
+import ImportQrCode from '../dialogs/ImportQrCode'
+import processOpenQrUrl from '../helpers/OpenQrUrl'
+import { DeltaProgressBar } from '../Login-Styles'
+
+import type { DialogProps } from '../../contexts/DialogContext'
+import type { DcEventType } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/components/AccountsScreen')
 

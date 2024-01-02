@@ -1,23 +1,23 @@
-import AutoSizer from 'react-virtualized-auto-sizer'
+import { C } from '@deltachat/jsonrpc-client'
 import React from 'react'
-import { C, T } from '@deltachat/jsonrpc-client'
-
-import ChatListItem from '../../chat/ChatListItem'
-import { PseudoListItemNoSearchResults } from '../../helpers/PseudoListItem'
-import { ChatListPart, useLogicVirtualChatList } from '../../chat/ChatList'
-import { useChatList } from '../../chat/ChatListHelpers'
-import { useThemeCssVar } from '../../../ThemeManager'
-import { BackendRemote } from '../../../backend-com'
-import { selectedAccountId } from '../../../ScreenController'
-import { forwardMessage, selectChat } from '../../helpers/ChatMethods'
-import { confirmForwardMessage } from '../../message/messageFunctions'
-import Dialog, { DialogBody, DialogHeader } from '../../Dialog'
-import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import useDialog from '../../../hooks/useDialog'
-
-import type { DialogProps } from '../../../contexts/DialogContext'
+import AutoSizer from 'react-virtualized-auto-sizer'
 
 import styles from './styles.module.scss'
+import { BackendRemote } from '../../../backend-com'
+import useDialog from '../../../hooks/useDialog'
+import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import { selectedAccountId } from '../../../ScreenController'
+import { useThemeCssVar } from '../../../ThemeManager'
+import { ChatListPart, useLogicVirtualChatList } from '../../chat/ChatList'
+import { useChatList } from '../../chat/ChatListHelpers'
+import ChatListItem from '../../chat/ChatListItem'
+import Dialog, { DialogBody, DialogHeader } from '../../Dialog'
+import { forwardMessage, selectChat } from '../../helpers/ChatMethods'
+import { PseudoListItemNoSearchResults } from '../../helpers/PseudoListItem'
+import { confirmForwardMessage } from '../../message/messageFunctions'
+
+import type { DialogProps } from '../../../contexts/DialogContext'
+import type { T } from '@deltachat/jsonrpc-client'
 
 const LIST_FLAGS = C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS
 

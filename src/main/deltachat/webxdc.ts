@@ -1,29 +1,37 @@
-import { app, BrowserWindow, protocol, ipcMain, session } from 'electron/main'
-import type DeltaChatController from './controller'
-import SplitOut from './splitout'
-import { getLogger } from '../../shared/logger'
-const log = getLogger('main/deltachat/webxdc')
-import Mime from 'mime-types'
+import { readdir, readFile, rmdir, stat, writeFile } from 'fs/promises'
+import { platform } from 'os'
+import { join } from 'path'
+
 import {
+  app,
+  BrowserWindow,
+  clipboard,
+  dialog,
+  ipcMain,
   Menu,
   nativeImage,
+  protocol,
+  session,
   shell,
-  MenuItemConstructorOptions,
-  dialog,
-  clipboard,
 } from 'electron'
-import { join } from 'path'
-import { readdir, stat, rmdir, writeFile, readFile } from 'fs/promises'
-import { getConfigPath, htmlDistDir } from '../application-constants'
+import Mime from 'mime-types'
+
+import SplitOut from './splitout'
+import { getLogger } from '../../shared/logger'
 import { truncateText } from '../../shared/util'
-import { platform } from 'os'
-import { tx } from '../load-translations'
-import { DcOpenWebxdcParameters } from '../../shared/shared-types'
+import { getConfigPath, htmlDistDir } from '../application-constants'
 import { DesktopSettings } from '../desktop_settings'
-import { window as main_window } from '../windows/main'
 import { writeTempFileFromBase64 } from '../ipc'
+import { tx } from '../load-translations'
 import { refresh as refreshTitleMenu } from '../menu'
-import { T } from '@deltachat/jsonrpc-client'
+import { window as main_window } from '../windows/main'
+
+import type DeltaChatController from './controller'
+import type { DcOpenWebxdcParameters } from '../../shared/shared-types'
+import type { T } from '@deltachat/jsonrpc-client'
+import type { MenuItemConstructorOptions } from 'electron'
+
+const log = getLogger('main/deltachat/webxdc')
 
 const open_apps: {
   [instanceId: string]: {

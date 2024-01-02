@@ -1,30 +1,31 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useContext,
-  useCallback,
-} from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 import moment from 'moment'
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 
 import { getLogger } from '../../../shared/logger'
-import {
-  openMessageInfo,
-  setQuoteInDraft,
-  privateReply,
-} from '../message/messageFunctions'
 import { getDirection } from '../../../shared/util'
-import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
-import { BackendRemote, Type } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
-import { runtime } from '../../runtime'
-import { jumpToMessage } from '../helpers/ChatMethods'
-import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
+import { BackendRemote } from '../../backend-com'
+import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import useDialog from '../../hooks/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { ContextMenuContext } from '../../contexts/ContextMenuContext'
+import { runtime } from '../../runtime'
+import { selectedAccountId } from '../../ScreenController'
+import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
+import { jumpToMessage } from '../helpers/ChatMethods'
+import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
+import {
+  openMessageInfo,
+  privateReply,
+  setQuoteInDraft,
+} from '../message/messageFunctions'
 
+import type { Type } from '../../backend-com'
 import type { DialogProps, OpenDialog } from '../../contexts/DialogContext'
 
 const log = getLogger('render/ChatAuditLog')

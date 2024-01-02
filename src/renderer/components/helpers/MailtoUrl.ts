@@ -1,12 +1,12 @@
-import MailtoDialog from '../dialogs/MailtoDialog'
-import { getLogger } from '../../../shared/logger'
-import { parseMailto } from '../../../shared/parse_mailto'
 import {
   createChatByEmail,
   createDraftMessage,
   selectChat,
 } from './ChatMethods'
+import { getLogger } from '../../../shared/logger'
+import { parseMailto } from '../../../shared/parse_mailto'
 import AlertDialog from '../dialogs/AlertDialog'
+import MailtoDialog from '../dialogs/MailtoDialog'
 
 import type { OpenDialog } from '../../contexts/DialogContext'
 

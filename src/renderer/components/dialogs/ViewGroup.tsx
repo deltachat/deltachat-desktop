@@ -1,42 +1,43 @@
+import { C } from '@deltachat/jsonrpc-client'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { C, DcEventType } from '@deltachat/jsonrpc-client'
 
-import ChatListItem from '../chat/ChatListItem'
-import { useContactSearch, AddMemberInnerDialog } from './CreateChat'
+import { AddMemberInnerDialog, useContactSearch } from './CreateChat'
 import { QrCodeShowQrInner } from './QrCode'
-import { selectChat } from '../helpers/ChatMethods'
-import { useThemeCssVar } from '../../ThemeManager'
-import { ContactList, useContactsMap } from '../contact/ContactList'
-import { useLogicVirtualChatList, ChatListPart } from '../chat/ChatList'
-import {
-  PseudoListItemShowQrCode,
-  PseudoListItemAddMember,
-} from '../helpers/PseudoListItem'
 import ViewProfile from './ViewProfile'
+import { getLogger } from '../../../shared/logger'
+import { BackendRemote } from '../../backend-com'
+import useConfirmationDialog from '../../hooks/useConfirmationDialog'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { runtime } from '../../runtime'
+import { selectedAccountId } from '../../ScreenController'
+import { useSettingsStore } from '../../stores/settings'
+import { useThemeCssVar } from '../../ThemeManager'
 import {
   Avatar,
   avatarInitial,
   ClickForFullscreenAvatarWrapper,
 } from '../Avatar'
-import { runtime } from '../../runtime'
-import { DeltaInput } from '../Login-Styles'
-import { getLogger } from '../../../shared/logger'
-import { BackendRemote, Type } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
-import { modifyGroup } from '../helpers/ChatMethods'
-import { InlineVerifiedIcon } from '../VerifiedIcon'
-import { useSettingsStore } from '../../stores/settings'
+import { ChatListPart, useLogicVirtualChatList } from '../chat/ChatList'
+import ChatListItem from '../chat/ChatListItem'
+import { ContactList, useContactsMap } from '../contact/ContactList'
 import Dialog, {
   DialogBody,
   DialogContent,
   DialogHeader,
   OkCancelFooterAction,
 } from '../Dialog'
-import useDialog from '../../hooks/useDialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useConfirmationDialog from '../../hooks/useConfirmationDialog'
+import { modifyGroup, selectChat } from '../helpers/ChatMethods'
+import {
+  PseudoListItemAddMember,
+  PseudoListItemShowQrCode,
+} from '../helpers/PseudoListItem'
+import { DeltaInput } from '../Login-Styles'
+import { InlineVerifiedIcon } from '../VerifiedIcon'
 
+import type { Type } from '../../backend-com'
 import type { DialogProps } from '../../contexts/DialogContext'
+import type { DcEventType } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/ViewGroup')
 

@@ -1,12 +1,13 @@
-import React from 'react'
 import classNames from 'classnames'
-import { T } from '@deltachat/jsonrpc-client'
+import React from 'react'
 
-import { Type } from '../backend-com'
 import FullscreenMedia, {
   NeighboringMediaMode,
 } from './dialogs/FullscreenMedia'
 import useDialog from '../hooks/useDialog'
+
+import type { Type } from '../backend-com'
+import type { T } from '@deltachat/jsonrpc-client'
 
 export function QRAvatar() {
   return (

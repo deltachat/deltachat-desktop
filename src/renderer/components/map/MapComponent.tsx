@@ -1,30 +1,33 @@
-import { T, C } from '@deltachat/jsonrpc-client'
-import React from 'react'
-import ReactDOMServer from 'react-dom/server'
-import ReactDOM from 'react-dom'
-import { Slider, Button, Collapse } from '@blueprintjs/core'
-import debounce from 'debounce'
-import mapboxgl from 'mapbox-gl'
+import { Button, Collapse, Slider } from '@blueprintjs/core'
+import { C } from '@deltachat/jsonrpc-client'
 import geojsonExtent from '@mapbox/geojson-extent'
+import { debounce } from 'debounce'
+import mapboxgl from 'mapbox-gl'
 import moment from 'moment'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import ReactDOMServer from 'react-dom/server'
 
-import { locationStore } from '../../stores/locations'
-import formatRelativeTime from '../conversations/formatRelativeTime'
+import ContextMenu from './ContextMenu'
 import MapLayerFactory from './MapLayerFactory'
 import PopupMessage from './PopupMessage'
-import * as SessionStorage from '../helpers/SessionStorage'
-import { state as LocationStoreState } from '../../stores/locations'
-import ContextMenu from './ContextMenu'
-import { BackendRemote, Type } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
-import { sendMessage } from '../helpers/ChatMethods'
+import { BackendRemote } from '../../backend-com'
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
+import { selectedAccountId } from '../../ScreenController'
+import { locationStore } from '../../stores/locations'
+import formatRelativeTime from '../conversations/formatRelativeTime'
+import { sendMessage } from '../helpers/ChatMethods'
+import * as SessionStorage from '../helpers/SessionStorage'
+
+import type { Type } from '../../backend-com'
+import type { state as LocationStoreState } from '../../stores/locations'
+import type { T } from '@deltachat/jsonrpc-client'
 
 type MapData = {
   contact: Type.Contact
   pathLayerId: string
   pointsLayerId: string
-  hidden: Boolean
+  hidden: boolean
   marker?: mapboxgl.Marker
 }
 

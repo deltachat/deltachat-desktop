@@ -1,16 +1,16 @@
-import React from 'react'
+import React, { Component } from 'react'
 
-import { runtime } from '../../runtime'
-import { VERSION, GIT_REF } from '../../../shared/build-info'
+import { GIT_REF, VERSION } from '../../../shared/build-info'
 import { getLogger } from '../../../shared/logger'
 import { DialogContext } from '../../contexts/DialogContext'
+import { runtime } from '../../runtime'
 
 const log = getLogger('renderer/react-crashhandler')
 
 /**
  * if props.reset_on_change_key changes the RecoverableCrashScreen is reset
  */
-export class RecoverableCrashScreen extends React.Component<{
+export class RecoverableCrashScreen extends Component<{
   reset_on_change_key: string | number
 }> {
   state = {

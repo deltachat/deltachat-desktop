@@ -1,9 +1,9 @@
+import { debounce } from 'debounce'
 import React from 'react'
-import debounce from 'debounce'
 
-import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { getLogger } from '../../../shared/logger'
 import { DialogContext } from '../../contexts/DialogContext'
+import { ActionEmitter, KeybindAction } from '../../keybindings'
 
 const log = getLogger('renderer/composer/ComposerMessageInput')
 

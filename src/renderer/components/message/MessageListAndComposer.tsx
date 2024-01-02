@@ -1,20 +1,22 @@
-import React, { useRef, useEffect, useCallback } from 'react'
 import { join, parse } from 'path'
-import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 
-import Composer, { useDraft } from '../composer/Composer'
-import { getLogger } from '../../../shared/logger'
+import React, { useCallback, useEffect, useRef } from 'react'
+
 import MessageList from './MessageList'
-import { ChatStoreStateWithChatSet } from '../../stores/chat'
-import ComposerMessageInput from '../composer/ComposerMessageInput'
-import { DesktopSettingsType } from '../../../shared/shared-types'
-import { runtime } from '../../runtime'
-import { RecoverableCrashScreen } from '../screens/RecoverableCrashScreen'
-import { useSettingsStore } from '../../stores/settings'
-import { sendMessage } from '../helpers/ChatMethods'
+import { getLogger } from '../../../shared/logger'
 import useDialog from '../../hooks/useDialog'
-import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
+import { runtime } from '../../runtime'
+import { useSettingsStore } from '../../stores/settings'
+import Composer, { useDraft } from '../composer/Composer'
 import useIsChatDisabled from '../composer/useIsChatDisabled'
+import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
+import { sendMessage } from '../helpers/ChatMethods'
+import { RecoverableCrashScreen } from '../screens/RecoverableCrashScreen'
+
+import type { DesktopSettingsType } from '../../../shared/shared-types'
+import type { ChatStoreStateWithChatSet } from '../../stores/chat'
+import type ComposerMessageInput from '../composer/ComposerMessageInput'
+import type { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 
 const log = getLogger('renderer/MessageListAndComposer')
 

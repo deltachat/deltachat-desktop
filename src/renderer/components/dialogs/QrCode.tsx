@@ -1,13 +1,20 @@
+import QrReader from '@deltachat/react-qr-reader'
+import classNames from 'classnames'
 import React, {
-  useState,
   useContext,
-  useRef,
   useEffect,
   useLayoutEffect,
+  useRef,
+  useState,
 } from 'react'
-import classNames from 'classnames'
-import QrReader from '@deltachat/react-qr-reader'
 
+import { getLogger } from '../../../shared/logger'
+import { BackendRemote } from '../../backend-com'
+import { ScreenContext } from '../../contexts/ScreenContext'
+import useContextMenu from '../../hooks/useContextMenu'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { runtime } from '../../runtime'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -15,15 +22,8 @@ import Dialog, {
   FooterActions,
 } from '../Dialog'
 import FooterActionButton from '../Dialog/FooterActionButton'
-import processOpenQrUrl from '../helpers/OpenQrUrl'
-import { BackendRemote } from '../../backend-com'
-import { getLogger } from '../../../shared/logger'
-import { runtime } from '../../runtime'
 import { selectChat } from '../helpers/ChatMethods'
-import { ScreenContext } from '../../contexts/ScreenContext'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
-import useContextMenu from '../../hooks/useContextMenu'
+import processOpenQrUrl from '../helpers/OpenQrUrl'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 

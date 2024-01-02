@@ -1,10 +1,9 @@
-import React from 'react'
 import classNames from 'classnames'
+import React from 'react'
 
 import { SearchClearButton } from './SearchClearButton'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-
 import styles from './styles.module.scss'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 type Props = {
   onChange: (

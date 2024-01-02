@@ -1,16 +1,19 @@
 import { existsSync, watchFile } from 'fs'
-import { readFile, readdir } from 'fs/promises'
-import { join, basename } from 'path'
-import { Theme } from '../shared/shared-types'
+import { readdir, readFile } from 'fs/promises'
+import { basename, join } from 'path'
+
+import { ipcMain, nativeTheme, app as rawApp } from 'electron'
+
 import { getCustomThemesPath } from './application-constants'
-import { app as rawApp, ipcMain, nativeTheme } from 'electron'
-import { ExtendedAppMainProcess } from './types'
+import { DesktopSettings } from './desktop_settings'
 import * as mainWindow from './windows/main'
+import { getLogger } from '../shared/logger'
+
+import type { ExtendedAppMainProcess } from './types'
+import type { Theme } from '../shared/shared-types'
 
 const app = rawApp as ExtendedAppMainProcess
 
-import { getLogger } from '../shared/logger'
-import { DesktopSettings } from './desktop_settings'
 const log = getLogger('main/themes')
 
 const dc_theme_dir = join(__dirname, '../../themes')

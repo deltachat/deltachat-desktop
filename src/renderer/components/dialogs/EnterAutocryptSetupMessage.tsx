@@ -1,10 +1,10 @@
-import React, { useState, useContext } from 'react'
-import { T } from '@deltachat/jsonrpc-client'
+import React, { useContext, useState } from 'react'
 
 import { getLogger } from '../../../shared/logger'
 import { BackendRemote } from '../../backend-com'
+import { ScreenContext } from '../../contexts/ScreenContext'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { selectedAccountId } from '../../ScreenController'
-import InputTransferKey from '../InputTransferKey'
 import {
   DialogBody,
   DialogContent,
@@ -13,10 +13,10 @@ import {
   FooterActionButton,
   FooterActions,
 } from '../Dialog'
-import { ScreenContext } from '../../contexts/ScreenContext'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
+import InputTransferKey from '../InputTransferKey'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import type { T } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('frontend/dialogs/EnterAutocryptSetupMessage')
 

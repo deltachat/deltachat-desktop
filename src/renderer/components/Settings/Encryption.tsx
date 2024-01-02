@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 
-import { BackendRemote } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
-import SettingsButton from './SettingsButton'
 import CoreSettingsSwitch from './CoreSettingsSwitch'
-import InputTransferKey from '../InputTransferKey'
+import SettingsButton from './SettingsButton'
+import { BackendRemote } from '../../backend-com'
+import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { selectedAccountId } from '../../ScreenController'
+import Callout from '../Callout'
 import {
   DialogBody,
   DialogContent,
@@ -13,9 +15,7 @@ import {
   FooterActionButton,
   FooterActions,
 } from '../Dialog'
-import Callout from '../Callout'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
+import InputTransferKey from '../InputTransferKey'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 

@@ -1,47 +1,40 @@
-import React, {
-  useRef,
-  useEffect,
-  useState,
-  useCallback,
-  ComponentType,
-  useMemo,
-} from 'react'
-import {
-  FixedSizeList as List,
-  ListChildComponentProps,
-  ListItemKeySelector,
-} from 'react-window'
-import { C, DcEvent, DcEventType, T } from '@deltachat/jsonrpc-client'
+import { C } from '@deltachat/jsonrpc-client'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
+import { FixedSizeList as List } from 'react-window'
 import InfiniteLoader from 'react-window-infinite-loader'
 
-import { useContactIds } from '../contact/ContactList'
 import { useChatListContextMenu } from './ChatListContextMenu'
-import { useMessageResults, useChatList } from './ChatListHelpers'
+import { useChatList, useMessageResults } from './ChatListHelpers'
 import {
   ChatListItemRowChat,
   ChatListItemRowContact,
   ChatListItemRowMessage,
 } from './ChatListItemRow'
-import { PseudoListItemAddContact } from '../helpers/PseudoListItem'
+import { BackendRemote, onDCEvent } from '../../backend-com'
+import useDialog from '../../hooks/useDialog'
+import useKeyBindingAction from '../../hooks/useKeyBindingAction'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { KeybindAction } from '../../keybindings'
+import { selectedAccountId } from '../../ScreenController'
+import { useThemeCssVar } from '../../ThemeManager'
+import { useContactIds } from '../contact/ContactList'
+import CreateChat from '../dialogs/CreateChat'
 import {
   createChatByContactIdAndSelectIt,
   selectChat,
 } from '../helpers/ChatMethods'
-import { useThemeCssVar } from '../../ThemeManager'
-import { BackendRemote, onDCEvent, Type } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
-import useDialog from '../../hooks/useDialog'
-import CreateChat from '../dialogs/CreateChat'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useKeyBindingAction from '../../hooks/useKeyBindingAction'
+import { PseudoListItemAddContact } from '../helpers/PseudoListItem'
 
 import type {
   ChatListItemData,
   ContactChatListItemData,
   MessageChatListItemData,
 } from './ChatListItemRow'
+import type { Type } from '../../backend-com'
+import type { DcEvent, DcEventType, T } from '@deltachat/jsonrpc-client'
+import type { ComponentType } from 'react'
+import type { ListChildComponentProps, ListItemKeySelector } from 'react-window'
 
 const enum LoadStatus {
   FETCHING = 1,

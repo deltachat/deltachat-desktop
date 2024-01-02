@@ -1,15 +1,15 @@
-import React, { useEffect, useMemo, useState, useRef } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 
-import { debounceWithInit } from '../chat/ChatListHelpers'
 import { BackendRemote, onDCEvent } from '../../backend-com'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { selectedAccountId } from '../../ScreenController'
+import { debounceWithInit } from '../chat/ChatListHelpers'
 import Dialog, {
   CloseFooterAction,
   DialogBody,
   DialogContent,
   DialogHeader,
 } from '../Dialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 

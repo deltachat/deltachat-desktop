@@ -1,29 +1,29 @@
+import { C } from '@deltachat/jsonrpc-client'
+import classNames from 'classnames'
+import moment from 'moment'
 import React, {
-  useRef,
   useCallback,
-  useLayoutEffect,
-  MutableRefObject,
   useEffect,
+  useLayoutEffect,
+  useRef,
   useState,
 } from 'react'
-import classNames from 'classnames'
-import { C, T } from '@deltachat/jsonrpc-client'
-import moment from 'moment'
 
 import { MessageWrapper } from './MessageWrapper'
-import ChatStore, {
-  useChatStore,
-  ChatStoreStateWithChatSet,
-} from '../../stores/chat'
 import { getLogger } from '../../../shared/logger'
+import { BackendRemote, onDCEvent } from '../../backend-com'
+import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
+import useKeyBindingAction from '../../hooks/useKeyBindingAction'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { KeybindAction } from '../../keybindings'
 import { selectedAccountId } from '../../ScreenController'
+import ChatStore, { useChatStore } from '../../stores/chat'
 import { useMessageList } from '../../stores/messagelist'
-import { BackendRemote, onDCEvent } from '../../backend-com'
 import { debouncedUpdateBadgeCounter } from '../../system-integration/badge-counter'
-import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useKeyBindingAction from '../../hooks/useKeyBindingAction'
+
+import type { ChatStoreStateWithChatSet } from '../../stores/chat'
+import type { T } from '@deltachat/jsonrpc-client'
+import type { MutableRefObject } from 'react'
 
 const log = getLogger('render/components/message/MessageList')
 

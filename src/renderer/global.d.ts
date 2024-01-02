@@ -1,5 +1,6 @@
-import { getMessageFunction, LocaleData } from '../shared/localize'
-import { userFeedback, Screens } from './ScreenController'
+import type { Screens, userFeedback } from './ScreenController'
+import type { getMessageFunction, LocaleData } from '../shared/localize'
+import type { IpcRenderer } from 'electron'
 
 declare global {
   interface Window {
@@ -11,7 +12,7 @@ declare global {
       // see static/preload.js,
       // but when importing other things, please do it in runtime.ts
       // we will move the ipcRenderer there too eventually
-      ipcRenderer: import('electron').IpcRenderer
+      ipcRenderer: IpcRenderer
     }
     __userFeedback: (message: userFeedback | false) => void
     __changeScreen: (screen: Screens) => void
