@@ -103,7 +103,8 @@ function renderElement(elm: ParsedElement, key?: number): JSX.Element {
   }
 }
 
-/** render in preview mode for ChatListItem summary, not interactive but looks rendered */
+/** render in preview mode for ChatListItem summary,
+ *  not interactive (links can not be clicked) just looks more similar to the message in the chatview/message-list */
 function renderElementPreview(elm: ParsedElement, key?: number): JSX.Element {
   switch (elm.t) {
     case 'CodeBlock':
