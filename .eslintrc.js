@@ -57,10 +57,6 @@ module.exports = {
     // Sometimes we need to disable type checking
     '@typescript-eslint/ban-ts-comment': 'off',
     // @TODO
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
-    // @TODO
-    '@typescript-eslint/no-empty-function': 'off',
-    // @TODO
     '@typescript-eslint/no-explicit-any': 'off',
     // @TODO
     '@typescript-eslint/no-namespace': 'off',
