@@ -3,11 +3,11 @@ import React from 'react'
 
 import useDialog from '../hooks/useDialog'
 import { Avatar } from './Avatar'
-import { useContextMenu } from './ContextMenu'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 import FullscreenMedia, {
   NeighboringMediaMode,
 } from './dialogs/FullscreenMedia'
+import useContextMenu from '../hooks/useContextMenu'
 
 type Props = {
   groupImage?: string | null
