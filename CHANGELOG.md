@@ -6,7 +6,7 @@
 - ContextMenu now handles multiple sublevels #3116
   - ContextMenuItem has a subitems array
   - Hovering outside of the menu closes last opened sublevel
-  - ChatListContextMenu mute option now opens a submenu with duration options insead of a dialog
+  - ChatListContextMenu mute option now opens a submenu with duration options instead of a dialog
 
 ### Changed
 - Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.132.1`

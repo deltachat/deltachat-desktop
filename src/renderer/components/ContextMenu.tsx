@@ -141,6 +141,10 @@ export function ContextMenuLayer({
     >
       {active && currentItems.length > 0 && (
         <ContextMenu
+          rightLimit={
+            (layerRef.current as HTMLElement).clientLeft +
+            (layerRef.current as HTMLElement).clientWidth
+          }
           top={position.top}
           left={position.left}
           items={currentItems}
@@ -155,6 +159,7 @@ export function ContextMenuLayer({
 export function ContextMenu(props: {
   top: number
   left: number
+  rightLimit: number
   items: (ContextMenuItem | false)[]
   openCallback: (el: HTMLDivElement | null) => void
   closeCallback: () => void
@@ -170,22 +175,34 @@ export function ContextMenu(props: {
 
   let items = props.items.filter(val => val !== false) as ContextMenuItem[]
 
+  const { closeCallback } = props
+
   const levelItems: ContextMenuLevel[] = [{ items }]
 
-  for (let i = 0; i < openSublevels.length; ++i) {
-    const idx = openSublevels[i]
-
+  for (const idx of openSublevels) {
     items = items[idx].subitems as ContextMenuItem[]
     levelItems.push({
       items,
     })
   }
+  const expandMenu = (index: number, fromLevel?: number) => {
+    if (fromLevel !== undefined) {
+      setSublevels(l => [...l.slice(0, fromLevel), index])
+    } else {
+      setSublevels(l => [...l, index])
+    }
+  }
+
+  const collapseMenu = (toLevel: number) => {
+    setSublevels(l => l.slice(0, toLevel))
+  }
 
   useLayoutEffect(() => {
     if (menuLevelEls.current.length == 0) {
-      throw new Error('Somethings wrong with menu elements')
+      throw new Error('No context menu elements available to display')
     }
-    let prevOffset = props.left + menuLevelEls.current[0].clientWidth
+    let prevOffset = props.left
+    let curOffset = props.left + menuLevelEls.current[0].clientWidth
 
     for (let i = 0; i < openSublevels.length; ++i) {
       const prevElement = menuLevelEls.current[i] as HTMLDivElement
@@ -195,9 +212,15 @@ export function ContextMenu(props: {
         throw Error("There's no focus on previous menu")
       }
       const bounds = menuEl.getBoundingClientRect()
+      const nextOffset = curOffset + curElement.clientWidth
+
+      if (nextOffset > props.rightLimit) {
+        curOffset = prevOffset - curElement.clientWidth
+      }
       curElement.style.top = bounds.top + 'px'
-      curElement.style.left = prevOffset + 'px'
-      prevOffset += curElement.clientWidth
+      curElement.style.left = curOffset + 'px'
+
+      prevOffset = nextOffset
     }
     if (didOpen.current) {
       return
@@ -240,10 +263,10 @@ export function ContextMenu(props: {
         keyboardFocus.current = openSublevels[openSublevels.length - 1]
       } else if (ev.key == 'ArrowRight') {
         if (current) {
-          const index = +((current as HTMLDivElement).dataset
-            .expandableIndex as string)
+          const el = current as HTMLDivElement
+          const index = parseInt(el.dataset.expandableIndex as string, 10)
           if (!isNaN(index)) {
-            setSublevels(l => [...l, index])
+            expandMenu(index)
             keyboardFocus.current = 0
           }
         }
@@ -252,7 +275,7 @@ export function ContextMenu(props: {
           ;(current as HTMLDivElement)?.click()
         }
       } else if (ev.key == 'Escape') {
-        props.closeCallback()
+        closeCallback()
         keyboardFocus.current = -1
       }
       // preventDefaultForScrollKeys
@@ -263,29 +286,17 @@ export function ContextMenu(props: {
     }
 
     const onOutsideClick = (ev: MouseEvent | TouchEvent) => {
-      let isOnMenu = false
-
-      for (const menuEl of menuLevelEls.current) {
-        isOnMenu = ev.target === menuEl
-        if (!isOnMenu) {
-          for (const child of menuEl.children) {
-            if (ev.target === child) {
-              isOnMenu = true
-              break
-            }
-          }
-        }
-        if (isOnMenu) {
-          break
-        }
-      }
+      const target = ev.target as HTMLElement
+      const isOnMenu = menuLevelEls.current.find(
+        menuEl => target === menuEl || target.parentElement === menuEl
+      )
 
       if (!isOnMenu) {
-        props.closeCallback()
+        closeCallback()
       }
     }
 
-    const onResize = (_ev: UIEvent) => props.closeCallback()
+    const onResize = (_ev: UIEvent) => closeCallback()
 
     document.addEventListener('keydown', onKeyDown)
     document.addEventListener('mousedown', onOutsideClick)
@@ -297,7 +308,7 @@ export function ContextMenu(props: {
       document.removeEventListener('touchstart', onOutsideClick)
       window.removeEventListener('resize', onResize)
     }
-  })
+  }, [openSublevels, menuLevelEls, closeCallback])
 
   return (
     <div>
@@ -321,22 +332,22 @@ export function ContextMenu(props: {
               })}
               onClick={(ev: React.MouseEvent) => {
                 if (item.subitems) {
-                  setSublevels(l => [...l.slice(0, levelIdx), index])
+                  expandMenu(index, levelIdx)
                   keyboardFocus.current = 0
                   ev.stopPropagation()
                 } else {
-                  setSublevels(l => l.slice(0, levelIdx))
+                  collapseMenu(levelIdx)
                   keyboardFocus.current = -1
                   didOpen.current = false
-                  props.closeCallback()
+                  closeCallback()
                   item.action()
                 }
               }}
               onMouseOver={() => {
                 if (item.subitems) {
-                  setSublevels(l => [...l.slice(0, levelIdx), index])
+                  expandMenu(index, levelIdx)
                 } else {
-                  setSublevels(l => l.slice(0, levelIdx))
+                  collapseMenu(levelIdx)
                 }
               }}
               tabIndex={-1}
