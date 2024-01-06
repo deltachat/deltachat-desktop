@@ -225,7 +225,8 @@ export default class ScreenController extends Component {
   renderScreen() {
     switch (this.state.screen) {
       case Screens.Main:
-        return <MainScreen />
+        // the key attribute here is a hack to force a clean rerendering when account changes
+        return <MainScreen key={String(this.selectedAccountId)} />
       case Screens.Login:
         if (this.selectedAccountId === undefined) {
           throw new Error('Selected account not defined')
