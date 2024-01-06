@@ -18,6 +18,8 @@ import { IMAGE_EXTENSIONS } from '../../../shared/constants'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
 import useConfirmationDialog from '../../hooks/useConfirmationDialog'
+import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
+import { dirname } from 'path'
 
 // Function to populate Menu
 const MenuAttachmentItems = ({
@@ -54,6 +56,9 @@ const MenuAttachment = ({
 
   const addFilenameFile = async () => {
     // function for files
+    const { defaultPath, setLastPath } = rememberLastUsedPath(
+      LastUsedSlot.Attachment
+    )
     const file = await runtime.showOpenFileDialog({
       filters: [
         {
@@ -62,16 +67,20 @@ const MenuAttachment = ({
         },
       ],
       properties: ['openFile'],
-      defaultPath: runtime.getAppPath('home'),
+      defaultPath,
     })
 
     if (file) {
+      setLastPath(dirname(file))
       addFileToDraft(file, 'File')
     }
   }
 
   const addFilenameMedia = async () => {
     // function for media
+    const { defaultPath, setLastPath } = rememberLastUsedPath(
+      LastUsedSlot.Attachment
+    )
     const file = await runtime.showOpenFileDialog({
       filters: [
         {
@@ -80,10 +89,11 @@ const MenuAttachment = ({
         },
       ],
       properties: ['openFile'],
-      defaultPath: runtime.getAppPath('home'),
+      defaultPath,
     })
 
     if (file) {
+      setLastPath(dirname(file))
       addFileToDraft(file, 'Image')
     }
   }

@@ -3,6 +3,11 @@ import React from 'react'
 import { runtime } from '../../../runtime'
 import { avatarInitial } from '../../Avatar'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import {
+  LastUsedSlot,
+  rememberLastUsedPath,
+} from '../../../utils/lastUsedPaths'
+import { dirname } from 'path'
 
 export default function ProfileImageSelector({
   displayName,
@@ -21,6 +26,9 @@ export default function ProfileImageSelector({
   const tx = useTranslationFunction()
 
   const onClickSelectPicture = async () => {
+    const { defaultPath, setLastPath } = rememberLastUsedPath(
+      LastUsedSlot.ProfileImage
+    )
     const file = await runtime.showOpenFileDialog({
       title: tx('select_your_new_profile_image'),
       filters: [
@@ -30,9 +38,12 @@ export default function ProfileImageSelector({
         },
       ],
       properties: ['openFile'],
-      defaultPath: runtime.getAppPath('pictures'),
+      defaultPath,
     })
-    if (file) setProfilePicture(file)
+    if (file) {
+      setProfilePicture(file)
+      setLastPath(dirname(file))
+    }
   }
 
   const onClickRemovePicture = () => setProfilePicture('')

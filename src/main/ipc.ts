@@ -120,6 +120,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
     return dialog.showOpenDialog(mainWindow.window, options)
   })
 
+  let lastSaveDialogLocation: string | undefined = undefined
   ipcMain.handle(
     'saveFile',
     async (_ev, pathToSource: string, filename: string) => {
@@ -127,9 +128,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
         throw new Error('window does not exist, this should never happen')
       }
 
-      let base_path = DesktopSettings.state.lastSaveDialogLocation
-        ? DesktopSettings.state.lastSaveDialogLocation
-        : app.getPath('downloads')
+      let base_path = lastSaveDialogLocation || app.getPath('downloads')
 
       if (!existsSync(base_path)) {
         base_path = app.getPath('downloads')
@@ -158,9 +157,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
             )
           }
         }
-        DesktopSettings.update({
-          lastSaveDialogLocation: path.dirname(filePath),
-        })
+        lastSaveDialogLocation = path.dirname(filePath)
       }
     }
   )

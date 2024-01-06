@@ -3,7 +3,6 @@ import classNames from 'classnames'
 import { T, C } from '@deltachat/jsonrpc-client'
 
 import Timestamp from '../conversations/Timestamp'
-import MessageBody from '../message/MessageBody'
 import { Avatar } from '../Avatar'
 import { BackendRemote, Type } from '../../backend-com'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
@@ -12,6 +11,7 @@ import { useContextMenuWithActiveState } from '../ContextMenu'
 import { selectedAccountId } from '../../ScreenController'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import { runtime } from '../../runtime'
+import { message2React } from '../message/MessageMarkdown'
 
 const log = getLogger('renderer/chatlist/item')
 
@@ -110,9 +110,7 @@ function Message({
             src={runtime.getWebxdcIconURL(selectedAccountId(), lastMessageId)}
           />
         )}
-        <div>
-          <MessageBody text={summaryText2 || ''} disableJumbomoji preview />
-        </div>
+        <div>{message2React(summaryText2 || '', true)}</div>
       </div>
       {isContactRequest && (
         <div className='label'>
@@ -218,7 +216,7 @@ function ChatListItemError({
         </div>
         <div className='chat-list-item-message'>
           <div className='text' title={chatListItem.error}>
-            <MessageBody text={chatListItem.error} disableJumbomoji preview />
+            {chatListItem.error}
           </div>
         </div>
       </div>

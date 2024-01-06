@@ -8,15 +8,20 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useConfirmationDialog from '../../hooks/useConfirmationDialog'
 
 import type { OpenDialogOptions } from 'electron'
+import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
+import { dirname } from 'path'
 
 export default function ManageKeys() {
   const tx = useTranslationFunction()
   const openConfirmationDialog = useConfirmationDialog()
 
   const onKeysImport = useCallback(async () => {
+    const { defaultPath, setLastPath } = rememberLastUsedPath(
+      LastUsedSlot.KeyImport
+    )
     const opts: OpenDialogOptions = {
       title: tx('pref_managekeys_import_secret_keys'),
-      defaultPath: runtime.getAppPath('downloads'),
+      defaultPath,
       properties: ['openFile'],
       filters: [{ extensions: ['asc'], name: 'PGP Key' }],
     }
@@ -25,6 +30,7 @@ export default function ManageKeys() {
     if (!filename) {
       return
     }
+    setLastPath(dirname(filename))
 
     const confirmed = await openConfirmationDialog({
       message: tx('pref_managekeys_import_explain', filename),
@@ -47,16 +53,21 @@ export default function ManageKeys() {
 
   const onKeysExport = useCallback(async () => {
     // TODO: ask for the user's password and check it
+
+    const { defaultPath, setLastPath } = rememberLastUsedPath(
+      LastUsedSlot.KeyExport
+    )
     const opts: OpenDialogOptions = {
       title: tx('pref_managekeys_export_secret_keys'),
-      defaultPath: runtime.getAppPath('downloads'),
-      properties: ['openDirectory'],
+      defaultPath,
+      properties: ['openDirectory', 'createDirectory'],
     }
 
     const destination = await runtime.showOpenFileDialog(opts)
     if (!destination) {
       return
     }
+    setLastPath(destination)
 
     const title = tx('pref_managekeys_export_explain').replace(
       '%1$s',

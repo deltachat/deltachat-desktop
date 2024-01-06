@@ -19,6 +19,8 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
 import ImportQrCode from '../dialogs/ImportQrCode'
 import AlertDialog from '../dialogs/AlertDialog'
+import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
+import { dirname } from 'path'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
@@ -91,16 +93,20 @@ const ImportButton = function ImportButton() {
   const { openDialog } = useDialog()
 
   async function onClickImportBackup() {
+    const { defaultPath, setLastPath } = rememberLastUsedPath(
+      LastUsedSlot.Backup
+    )
     const file = await runtime.showOpenFileDialog({
       title: tx('import_backup_title'),
       properties: ['openFile'],
       filters: [{ name: '.tar or .bak', extensions: ['tar', 'bak'] }],
-      defaultPath: runtime.getAppPath('downloads'),
+      defaultPath,
     })
     if (file) {
       openDialog(ImportBackupProgressDialog, {
         backupFile: file,
       })
+      setLastPath(dirname(file))
     }
   }
 
