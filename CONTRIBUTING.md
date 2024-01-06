@@ -5,7 +5,6 @@ Thank you for looking for ways to help on Delta Chat Desktop!
 This document tries to outline some conventions that may not be obvious
 and aims to give a good starting point to new contributors.
 
-
 ## Reporting Bugs
 
 If you found a bug, [report it on Github](https://github.com/deltachat/deltachat-desktop/issues).
@@ -20,7 +19,6 @@ Please search both open and closed issues to make sure your bug report is not a 
 
 For community interactions around Delta Chat
 please read our [Community Standards](https://delta.chat/community-standards).
-
 
 ## Proposing Features
 
@@ -41,7 +39,6 @@ Some rough ideas, that may be helpful when thinking about how to enhance things:
 - Offer only things that are highly useful to many people in primary UI.
   If really needed, bury other things eg. in some menus.
 - The app should be for the many, not for the few.
-
 
 ## Contributing Code
 
@@ -67,7 +64,6 @@ Add a meaningful line to CHANGELOG.md that is at least roughly understandable by
 If the changes affect the user interface,
 screenshots are very helpful,
 esp. before/after screenshots.
-
 
 ### Coding Conventions
 
@@ -125,6 +121,7 @@ Project maintainers can also merge it, as long as they take on the responsibilit
 Translations are done via [Transifex](https://explore.transifex.com/delta-chat/),
 you can log in there with your E-Mail Address or with a Github or Google handle.
 You find two projects there:
+
 - "Delta Chat App" contains the strings used in the app's UI
 - "Delta Chat Website" contains the offline help from "Settings / Help"
   as well as the pages used on <https://delta.chat>
