@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { BackendRemote } from '../../backend-com'
 import { runtime } from '../../runtime'
 import { Avatar } from '../Avatar'
+import classNames from 'classnames'
 
 export function AccountListSidebar({
   selectedAccountId,
@@ -37,6 +38,8 @@ export function AccountListSidebar({
     runtime.setDesktopSetting('syncAllAccounts', true).then(refresh)
   }
 
+  const [hasMouseOver, setMouseOver] = useState<boolean>(false)
+
   if (!isVisible) {
     return null
   }
@@ -62,9 +65,13 @@ export function AccountListSidebar({
   // - [ ] make sure app works fine when bar is shown and when bar is hidden
 
   return (
-    <div className='account-list-sidebar'>
-      Hi
-      {selectedAccountId}
+    <div
+      className={classNames('account-list-sidebar', {
+        hideScrollbarThumb: !hasMouseOver,
+      })}
+      onMouseEnter={setMouseOver.bind(null, true)}
+      onMouseLeave={setMouseOver.bind(null, false)}
+    >
       {accounts.map(account => (
         <div className='account' onClick={() => onSelectAccount(account.id)}>
           {account.kind == 'Configured' ? (
