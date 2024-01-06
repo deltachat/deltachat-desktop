@@ -16,14 +16,14 @@ export function AccountListSidebar({
 }) {
   const [isVisible, setVisibility] = useState(false)
   const [accounts, setAccounts] = useState<T.Account[]>([])
-  const [syncAllAccounts, setSyncAllAccounts] = useState<boolean | null>(null)
+  // const [syncAllAccounts, setSyncAllAccounts] = useState<boolean | null>(null)
 
   const refresh = useMemo(
     () => async () => {
       const accounts = await BackendRemote.rpc.getAllAccounts()
       setAccounts(accounts)
       const desktopSettings = await runtime.getDesktopSettings()
-      setSyncAllAccounts(desktopSettings.syncAllAccounts)
+      // setSyncAllAccounts(desktopSettings.syncAllAccounts)
       // see if the sidebar should be visible
       setVisibility(accounts.length > 1 && !desktopSettings.hideAccountsSidebar)
     },
@@ -34,9 +34,9 @@ export function AccountListSidebar({
     refresh()
   }, [selectedAccountId, refresh])
 
-  const toggleSyncAllAccounts = (newValue: boolean) => {
-    runtime.setDesktopSetting('syncAllAccounts', true).then(refresh)
-  }
+  // const toggleSyncAllAccounts = (newValue: boolean) => {
+  //   runtime.setDesktopSetting('syncAllAccounts', true).then(refresh)
+  // }
 
   const [hasMouseOver, setMouseOver] = useState<boolean>(false)
 
