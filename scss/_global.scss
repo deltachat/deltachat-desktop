@@ -223,31 +223,59 @@ samp {
 
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
+    align-items: center;
 
     --als-avatar-size: 42px;
     --als-avatar-margin: 4px;
+    --als-active-indicator-color: white;
 
     .account {
       margin-top: var(--als-avatar-margin);
       margin-bottom: var(--als-avatar-margin);
-      height: var( --als-avatar-size);
+      height: var(--als-avatar-size);
       .avatar {
-        --local-avatar-size: var( --als-avatar-size);
+        --local-avatar-size: var(--als-avatar-size);
         --local-avatar-vertical-margin: 0px;
         // --local-avatar-font-size: 26px;
 
-        div.content, img.content {
+        div.content,
+        img.content {
           border-radius: 22%;
+        }
+      }
+
+      &.active,
+      &:hover {
+        .avatar::before {
+          content: ' ';
+          position: absolute;
+          overflow: hidden;
+          background: var(--als-active-indicator-color);
+
+          --als-active-indicator-height: 25px;
+
+          top: calc(
+            calc(var(--als-avatar-size) / 2) - calc(
+                var(--als-active-indicator-height) / 2
+              )
+          );
+          margin-inline-start: -12px;
+          height: var(--als-active-indicator-height);
+          width: 9px;
+          border-radius: 20px;
         }
       }
 
       &:hover {
         .avatar {
-          div.content, img.content {
+          div.content,
+          img.content {
             border-radius: 10%;
             transition: border-radius 0.1s ease-in;
           }
+        }
+        .avatar::before {
+          --als-active-indicator-height: 15px;
         }
       }
     }

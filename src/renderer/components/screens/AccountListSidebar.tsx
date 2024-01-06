@@ -73,7 +73,12 @@ export function AccountListSidebar({
       onMouseLeave={setMouseOver.bind(null, false)}
     >
       {accounts.map(account => (
-        <div className='account' onClick={() => onSelectAccount(account.id)}>
+        <div
+          className={classNames('account', {
+            active: selectedAccountId === account.id,
+          })}
+          onClick={() => onSelectAccount(account.id)}
+        >
           {account.kind == 'Configured' ? (
             <Avatar
               {...{
