@@ -62,10 +62,7 @@ Otherwise fork the repository and create a branch in your fork.
 
 Please add a meaningful description to your PR
 so that reviewers get an idea about what the modifications are supposed to do.
-
-A meaningful PR title is helpful for [updating `CHANGELOG.md` on releases](./RELEASE.md)
-(CHANGELOG.md is updated manually
-to only add things that are at least roughly understandable by the end user)
+Add a meaningful line to CHANGELOG.md that is at least roughly understandable by the end user.
 
 If the changes affect the user interface,
 screenshots are very helpful,
@@ -121,7 +118,7 @@ To ensure the correct merge merge strategy, merging left up to the PR author:
 If you do not have write access to the repository,
 you may leave a note in the PR about the desired merge strategy.
 
-Project leaders can also merge it, as long as they take on the responsibility (care for fixing `master` again if the pr broke it).
+Project maintainers can also merge it, as long as they take on the responsibility (care for fixing `master` again if the pr broke it).
 
 ## Translations
 
