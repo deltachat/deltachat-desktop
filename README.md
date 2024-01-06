@@ -25,6 +25,8 @@
 
 </td><td>
 
+[Contribution Guidelines](./CONTRIBUTING.md)
+
 [Logging](./docs/LOGGING.md)
 
 [Documentation for Developers](./docs/DEVELOPMENT.md)
