@@ -274,12 +274,14 @@ export default class ScreenController extends Component {
           }}
         >
           <KeybindingsContextProvider>
-            {this.renderScreen()}
-            <AccountListSidebar
-              selectedAccountId={this.selectedAccountId}
-              onAddAccount={this.addAndSelectAccount.bind(this)}
-              onSelectAccount={this.selectAccount.bind(this)}
-            />
+            <div className='main-container'>
+              <AccountListSidebar
+                selectedAccountId={this.selectedAccountId}
+                onAddAccount={this.addAndSelectAccount.bind(this)}
+                onSelectAccount={this.selectAccount.bind(this)}
+              />
+              {this.renderScreen()}
+            </div>
           </KeybindingsContextProvider>
         </ScreenContext.Provider>
       </div>
