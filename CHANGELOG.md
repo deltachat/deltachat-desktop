@@ -3,9 +3,17 @@
 ## [Unreleased][unreleased]
 
 ### Added
-- Introduce text formatting for chatlist item summary (use message-parser) #3476
+
+- ContextMenu now handles multiple sublevels #3116
+  - ContextMenuItem has a subitems array
+  - Hovering outside of the menu closes last opened sublevel
+  - ChatListContextMenu mute option now opens a submenu with duration options instead of a dialog
 
 ### Changed
+- Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.132.1`
+- Update `electron` from `v26.6.0` to version `v26.6.3`
+- Update `filesize` dependency from `8.0.6` to `10.1.0`
+- Introduce text formatting for chatlist item summary (use message-parser) #3476
 - Update deltachat-node and deltachat/jsonrpc-client to `v1.132.1`
 - Use native watch mode and CSS modules of esbuild #3571
   - Use native watch mode and CSS modules of esbuild
@@ -17,13 +25,13 @@
 - Refactor dialog components, improved styling for settings #3575
 - Refactor and improve design of search input components #3572
 - Refactor dialog logic and add additional helper methods #3512
-- Upgrade `filesize` dependency from `8.0.6` to `10.1.0`
 - Prefer light theme for the help and webxdc loading pages
 - Helper method to easily use confirmation dialogs #3601
 - Refactor using new `useConfirmationDialog` hook #3602
 - update `electron` from `v26.6.0` to version `v26.6.3`
 - Remember file open dialog locations across the current session and do not persist last save location across sessions anymore #3615
 - Disable three-dot-menu when not applicable (map, other gallery tabs) #3523
+
 
 ### Fixed
 - Silently fail when notifications are not supported by OS #3613
@@ -143,7 +151,7 @@
 > If you are using DC on these platforms you have the following options:
 > - Keep using 1.40.4
 > - update windows to 10 or 11
-> - switch to linux (or dual boot it) 
+> - switch to linux (or dual boot it)
 > - contact delta@merlinux.eu if you have money and want to sponsor a special legacy build of deltachat desktop 1.41-1.42.
 >
 > - Core is now built on Debian 10: now requires glibc 2.28, ubuntu 18 is not supported anymore.
@@ -192,7 +200,7 @@
 - fix webxdc title not updated in document title changes #3412
 - fix: remove duplicated search button on "search in chat" #3014
 - fix "Verified by" is shown weirdly for contacts that were verified directly #3421
-- open help, webxdc and html email windows with always on top flag, if main window has that flag. 
+- open help, webxdc and html email windows with always on top flag, if main window has that flag.
 - fix copy text inserts extra linebreaks
 - improve video message - wide enough to show controls
 - gallery: fix scroll to top when switching tabs
@@ -640,7 +648,7 @@ Also make opening devtools with F12 more reliable.
 - prevent double context menu on macOS
 - fix setting color chat background color #2659
 - Fix that results of search in chat are not ordered by newest first
-- Fix messagelist overscrolling #2956 
+- Fix messagelist overscrolling #2956
 - Fix messagelist not jumping to correct message #2953
 - fix chat audit log #2967
 - fix that results of search in chat are not ordered by newest first
@@ -816,7 +824,7 @@ Also make opening devtools with F12 more reliable.
 - fixed height for webxdc icons in messages
 - Better empty gallery tab messages
 - allow internal webxdc navigation (multiple html files)
-- fix random search result position (#2631) 
+- fix random search result position (#2631)
 - fix: signature field in Edit Profile is not labeled when empty (#2579)
 - Keyboard shortcut preview for "Send on Enter" setting
 - Keyboard shortcut reference dialog (cheatsheet), accessible via `Ctrl + /` or `Cmd + /`
@@ -959,11 +967,11 @@ Also make opening devtools with F12 more reliable.
 - Fix connectivity view title @IrvinLara9 #2480
 - Do not double log core events
 - Fix Bulgarian language name (uppercase first letter)
-- Fix signature text styling @ejgonzalez17 
+- Fix signature text styling @ejgonzalez17
 - Fix missing image formats @ejgonzalez17
 - momentjs isn't localized on first startup
 - Fix connectivity status hiding composer @trujillo9616
-- Fix overflow in Confirmation Dialog @Abhijnan-Bajpai 
+- Fix overflow in Confirmation Dialog @Abhijnan-Bajpai
 - Fix the profile picture removal @cavesdev #2472
 - Fix the horizontal scroll in autocrypt dialogs @cavesdev #2277
 - Add logging in by pressing enter in AccountSetupScreen
@@ -1242,7 +1250,7 @@ Also make opening devtools with F12 more reliable.
 ### Changed
 
 - Disable fontligatures completely
-- Rename message context menu entry "Copy" to "Copy Text" [#2294](https://github.com/deltachat/deltachat-desktop/issues/2294) 
+- Rename message context menu entry "Copy" to "Copy Text" [#2294](https://github.com/deltachat/deltachat-desktop/issues/2294)
 
 ## [1.15.2] - 2021-03-03
 
@@ -1353,9 +1361,9 @@ Also make opening devtools with F12 more reliable.
 - Fix "copy link" context menu option for labeled links
 - Fix exception when opening second instance of deltachat and tray icon is disabled
 - Fix showing/focusing deltachat on second instance
-- Hide reply context menu option in device chat 
+- Hide reply context menu option in device chat
 - Fix messages sometimes overflowing
-- Fix resizing of quote after fetching author 
+- Fix resizing of quote after fetching author
 - Fix state update on unmounted components in Timestamp and LoginScreen
 - Fix non emojis getting displayed big (see [#1989](https://github.com/deltachat/deltachat-desktop/issues/1989))
 - Fix selecting a chat focus composer input (see [#1986](https://github.com/deltachat/deltachat-desktop/issues/1986))
@@ -1394,7 +1402,7 @@ Also make opening devtools with F12 more reliable.
 - Change "More info" translation to "Message Details"
 - Through the emoji mart update, frequent emojis are now not sorted immediately, fixes [#1177](https://github.com/deltachat/deltachat-desktop/issues/1177)
 - gallery media display type is chosen via viewType now and if the mime type is not displayable by the browser an error is shown
-- minor gallery style adjustments 
+- minor gallery style adjustments
 - Own Context Menu Implementation that makes development easier
 - Update translations
 - Update deltachat-node to v1.50.0
@@ -1542,11 +1550,11 @@ Also make opening devtools with F12 more reliable.
 
 - fix using the system language if no language is selected
 - fix a bug where the user would end up with multiple contexts after reloading from a frontend crash
-- fix Chat-view does not scroll down on incoming message [#1783](https://github.com/deltachat/deltachat-desktop/issues/1783) 
+- fix Chat-view does not scroll down on incoming message [#1783](https://github.com/deltachat/deltachat-desktop/issues/1783)
 
 ### Changed
 
-- when opening the emoji picker its search bar gets now focused and when closing it the composer gets focused 
+- when opening the emoji picker its search bar gets now focused and when closing it the composer gets focused
 
 ### Technical
 

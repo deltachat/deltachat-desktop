@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
+import { Timespans } from '../../../shared/constants'
 import {
   openLeaveChatDialog,
   openDeleteChatDialog,
@@ -9,7 +10,6 @@ import {
   openViewGroupDialog,
   openViewProfileDialog,
   setChatVisibility,
-  openMuteChatDialog,
   unMuteChat,
 } from '../helpers/ChatMethods'
 import { ContextMenuItem } from '../ContextMenu'
@@ -110,7 +110,6 @@ export function useChatListContextMenu(): {
         openLeaveChatDialog(openDialog, chatListItem.id)
       const onBlockContact = () =>
         openBlockFirstContactOfChatDialog(openDialog, chatListItem)
-      const onMuteChat = () => openMuteChatDialog(openDialog, chatListItem.id)
       const onUnmuteChat = () => unMuteChat(chatListItem.id)
 
       const menu: (ContextMenuItem | false)[] = chatListItem
@@ -125,7 +124,70 @@ export function useChatListContextMenu(): {
             !chatListItem.isMuted
               ? {
                   label: tx('menu_mute'),
-                  action: onMuteChat,
+                  subitems: [
+                    {
+                      label: tx('mute_for_one_hour'),
+                      action: () => {
+                        BackendRemote.rpc.setChatMuteDuration(
+                          accountId,
+                          chatListItem.id,
+                          {
+                            kind: 'Until',
+                            duration: Timespans.ONE_HOUR_IN_SECONDS,
+                          }
+                        )
+                      },
+                    },
+                    {
+                      label: tx('mute_for_two_hours'),
+                      action: () => {
+                        BackendRemote.rpc.setChatMuteDuration(
+                          accountId,
+                          chatListItem.id,
+                          {
+                            kind: 'Until',
+                            duration: Timespans.ONE_HOUR_IN_SECONDS * 2,
+                          }
+                        )
+                      },
+                    },
+                    {
+                      label: tx('mute_for_one_day'),
+                      action: () => {
+                        BackendRemote.rpc.setChatMuteDuration(
+                          accountId,
+                          chatListItem.id,
+                          {
+                            kind: 'Until',
+                            duration: Timespans.ONE_DAY_IN_SECONDS,
+                          }
+                        )
+                      },
+                    },
+                    {
+                      label: tx('mute_for_seven_days'),
+                      action: () => {
+                        BackendRemote.rpc.setChatMuteDuration(
+                          accountId,
+                          chatListItem.id,
+                          {
+                            kind: 'Until',
+                            duration: Timespans.ONE_WEEK_IN_SECONDS,
+                          }
+                        )
+                      },
+                    },
+                    {
+                      label: tx('mute_forever'),
+                      action: () => {
+                        BackendRemote.rpc.setChatMuteDuration(
+                          accountId,
+                          chatListItem.id,
+                          { kind: 'Forever' }
+                        )
+                      },
+                    },
+                  ],
                 }
               : {
                   label: tx('menu_unmute'),

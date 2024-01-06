@@ -1,24 +1,25 @@
 import { C } from '@deltachat/jsonrpc-client'
 import React, { useContext } from 'react'
 
+import { Timespans } from '../../shared/constants'
 import {
   openLeaveChatDialog,
   openDeleteChatDialog,
   openBlockFirstContactOfChatDialog,
   setChatVisibility,
-  openMuteChatDialog,
   unMuteChat,
   clearChat,
 } from './helpers/ChatMethods'
 import { ContextMenuItem } from './ContextMenu'
 import SettingsStoreInstance, { useSettingsStore } from '../stores/settings'
-import { Type } from '../backend-com'
+import { BackendRemote, Type } from '../backend-com'
 import { ActionEmitter, KeybindAction } from '../keybindings'
 import useDialog from '../hooks/useDialog'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 import DisappearingMessages from './dialogs/DisappearingMessages'
 import ChatAuditLogDialog from './dialogs/ChatAuditLogDialog'
 import { ContextMenuContext } from '../contexts/ContextMenuContext'
+import { selectedAccountId } from '../ScreenController'
 
 export function useThreeDotMenu(
   selectedChat: Type.FullChat | null,
@@ -38,6 +39,7 @@ export function useThreeDotMenu(
       id: chatId,
       canSend,
     } = selectedChat
+    const accountId = selectedAccountId()
     const isGroup = selectedChat.chatType === C.DC_CHAT_TYPE_GROUP
     const onLeaveGroup = () =>
       selectedChat && openLeaveChatDialog(openDialog, selectedChat.id)
@@ -45,7 +47,6 @@ export function useThreeDotMenu(
       openBlockFirstContactOfChatDialog(openDialog, selectedChat)
     const onDeleteChat = () =>
       openDeleteChatDialog(openDialog, selectedChat, selectedChat.id)
-    const onMuteChat = () => openMuteChatDialog(openDialog, selectedChat.id)
     const onUnmuteChat = () => unMuteChat(selectedChat.id)
 
     const openChatAuditLog = () =>
@@ -82,7 +83,70 @@ export function useThreeDotMenu(
       !selectedChat.isMuted
         ? {
             label: tx('menu_mute'),
-            action: onMuteChat,
+            subitems: [
+              {
+                label: tx('mute_for_one_hour'),
+                action: () => {
+                  BackendRemote.rpc.setChatMuteDuration(
+                    accountId,
+                    selectedChat.id,
+                    {
+                      kind: 'Until',
+                      duration: Timespans.ONE_HOUR_IN_SECONDS,
+                    }
+                  )
+                },
+              },
+              {
+                label: tx('mute_for_two_hours'),
+                action: () => {
+                  BackendRemote.rpc.setChatMuteDuration(
+                    accountId,
+                    selectedChat.id,
+                    {
+                      kind: 'Until',
+                      duration: Timespans.ONE_HOUR_IN_SECONDS * 2,
+                    }
+                  )
+                },
+              },
+              {
+                label: tx('mute_for_one_day'),
+                action: () => {
+                  BackendRemote.rpc.setChatMuteDuration(
+                    accountId,
+                    selectedChat.id,
+                    {
+                      kind: 'Until',
+                      duration: Timespans.ONE_DAY_IN_SECONDS,
+                    }
+                  )
+                },
+              },
+              {
+                label: tx('mute_for_seven_days'),
+                action: () => {
+                  BackendRemote.rpc.setChatMuteDuration(
+                    accountId,
+                    selectedChat.id,
+                    {
+                      kind: 'Until',
+                      duration: Timespans.ONE_WEEK_IN_SECONDS,
+                    }
+                  )
+                },
+              },
+              {
+                label: tx('mute_forever'),
+                action: () => {
+                  BackendRemote.rpc.setChatMuteDuration(
+                    accountId,
+                    selectedChat.id,
+                    { kind: 'Forever' }
+                  )
+                },
+              },
+            ],
           }
         : {
             label: tx('menu_unmute'),

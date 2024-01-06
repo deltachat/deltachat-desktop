@@ -34,8 +34,23 @@
     line-height: 20px;
     padding: 5px 12px;
     white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-    &:hover {
+    & .right-icon {
+      width: 18px;
+      height: 18px;
+      @include color-svg(
+        '../images/icons/navigate_next.svg',
+        var(--bp4MenuText),
+        100%
+      );
+      transform: translate(11px, -0.07em);
+    }
+
+    &:hover,
+    &.selected {
       background-color: var(--chatListItemBgHover);
     }
     &:focus {
