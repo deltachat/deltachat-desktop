@@ -223,13 +223,17 @@ samp {
 
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-end;
+
+    --als-avatar-size: 42px;
+    --als-avatar-margin: 4px;
 
     .account {
-      margin-top: 4px;
-      margin-bottom: 4px;
+      margin-top: var(--als-avatar-margin);
+      margin-bottom: var(--als-avatar-margin);
+      height: var( --als-avatar-size);
       .avatar {
-        --local-avatar-size: 42px;
+        --local-avatar-size: var( --als-avatar-size);
         --local-avatar-vertical-margin: 0px;
         // --local-avatar-font-size: 26px;
 
