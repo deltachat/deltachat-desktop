@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import reactStringReplace from 'react-string-replace'
 import classNames from 'classnames'
 import { C, T } from '@deltachat/jsonrpc-client'
@@ -41,7 +41,9 @@ import { ScreenContext } from '../../contexts/ScreenContext'
 import useDialog from '../../hooks/useDialog'
 import EnterAutocryptSetupMessage from '../dialogs/EnterAutocryptSetupMessage'
 import { OpenDialog } from '../../contexts/DialogContext'
+import SelectModeOverlay from './SelectModeOverlay'
 import Button from '../ui/Button'
+import useSelectedMessages from '../../hooks/useSelectedMessages'
 
 const Avatar = (
   contact: Type.Contact,
@@ -138,12 +140,14 @@ function buildContextMenu(
     conversationType,
     openDialog,
     chat,
+    selectMessage,
   }: {
     message: Type.Message | null
     text?: string
     conversationType: ConversationType
     openDialog: OpenDialog
     chat: T.FullChat
+    selectMessage: () => void
   },
   clickTarget: HTMLAnchorElement | null
 ): (false | ContextMenuItem)[] {
@@ -283,15 +287,22 @@ function buildContextMenu(
       label: tx('delete_message_desktop'),
       action: confirmDeleteMessage.bind(null, openDialog, message),
     },
+    // Select
+    {
+      label: tx('select'),
+      action: selectMessage,
+    },
   ]
 }
 
-export default function Message(props: {
+type MessageProps = {
   message: Type.Message
   conversationType: ConversationType
-}) {
-  const { message, conversationType } = props
-  const { id, viewType, text, hasLocation, isSetupmessage, hasHtml } = message
+}
+
+export default function Message({ message, conversationType }: MessageProps) {
+  const { id, viewType, text, hasLocation, isSetupmessage, hasHtml, chatId } =
+    message
   const direction = getDirection(message)
   const status = mapCoreMsgStatus2String(message.state)
   const tx = useTranslationFunction()
@@ -300,11 +311,17 @@ export default function Message(props: {
   const screenContext = useContext(ScreenContext)
   const { openDialog } = useDialog()
   const { openContextMenu } = screenContext
+  const { selectedMessages, selectMessage } = useSelectedMessages(chatId)
+  const isSelectMode = useMemo(
+    () => selectedMessages.length !== 0,
+    [selectedMessages]
+  )
 
   const showMenu: (
     event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement, MouseEvent>
   ) => Promise<void> = async event => {
     event.preventDefault() // prevent default runtime context menu from opening
+    if (isSelectMode) return
 
     const chat = await BackendRemote.rpc.getFullChatById(
       accountId,
@@ -320,6 +337,7 @@ export default function Message(props: {
         conversationType,
         openDialog,
         chat,
+        selectMessage: selectMessage.bind(null, message.id),
       },
       target
     )
@@ -495,6 +513,9 @@ export default function Message(props: {
       )}
       id={message.id.toString()}
     >
+      {isSelectMode && (
+        <SelectModeOverlay messageId={message.id} chatId={chatId} />
+      )}
       {showAuthor &&
         direction === 'incoming' &&
         Avatar(message.sender, onContactClick)}
@@ -539,6 +560,7 @@ export default function Message(props: {
               conversationType={conversationType}
               message={message}
               hasQuote={message.quote !== null}
+              isSelectMode={isSelectMode}
             />
           )}
           {message.viewType === 'Webxdc' && (

@@ -19,15 +19,21 @@ import useDialog from '../../hooks/useDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
-export default function ForwardMessage(props: {
-  message: T.Message
+type ForwardMessageProps = {
+  messages: T.Message | number[]
   onClose: DialogProps['onClose']
-}) {
+  onForward?: () => void
+}
+
+export default function ForwardMessage({
+  messages,
+  onClose,
+  onForward,
+}: ForwardMessageProps) {
   const accountId = selectedAccountId()
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
 
-  const { message, onClose } = props
   const listFlags = C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS
   const { chatListIds, queryStr, setQueryStr } = useChatList(listFlags)
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
@@ -37,20 +43,36 @@ export default function ForwardMessage(props: {
 
   const onChatClick = async (chatId: number) => {
     const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
+    const isMany = Array.isArray(messages)
     onClose()
     if (!chat.isSelfTalk) {
       selectChat(chat.id)
       const yes = await confirmForwardMessage(
         openDialog,
         accountId,
-        message,
+        messages,
         chat
       )
       if (!yes) {
-        selectChat(message.chatId)
+        if (isMany) {
+          const message_ = await BackendRemote.rpc.getMessage(
+            accountId,
+            messages[0]
+          )
+          selectChat(message_.chatId)
+        } else {
+          selectChat(messages.chatId)
+        }
       }
     } else {
-      await forwardMessage(accountId, message.id, chat.id)
+      if (isMany) {
+        for (const messageId of messages) {
+          await forwardMessage(accountId, messageId, chat.id)
+        }
+      } else {
+        await forwardMessage(accountId, messages.id, chat.id)
+      }
+      onForward && onForward()
     }
   }
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from 'react'
+import React, { useRef, useEffect, useCallback, useReducer } from 'react'
 import { join, parse } from 'path'
 import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 
@@ -15,6 +15,7 @@ import { sendMessage } from '../helpers/ChatMethods'
 import useDialog from '../../hooks/useDialog'
 import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
 import useIsChatDisabled from '../composer/useIsChatDisabled'
+import SelectedMessagesAction from './SelectedMessagesAction'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -230,6 +231,7 @@ export default function MessageListAndComposer({
       onDrop={onDrop.bind({ props: { chat: chatStore } })}
       onDragOver={onDragOver}
     >
+      <SelectedMessagesAction />
       <div className='message-list-and-composer__message-list'>
         <RecoverableCrashScreen reset_on_change_key={chatStore.chat.id}>
           <MessageList chatStore={chatStore} refComposer={refComposer} />

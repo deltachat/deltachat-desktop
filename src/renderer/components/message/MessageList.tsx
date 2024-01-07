@@ -92,13 +92,15 @@ function useUnreadCount(
   return freshMessageCounter
 }
 
+type MessageListProps = {
+  chatStore: ChatStoreStateWithChatSet
+  refComposer: todo
+}
+
 export default function MessageList({
   chatStore,
   refComposer,
-}: {
-  chatStore: ChatStoreStateWithChatSet
-  refComposer: todo
-}) {
+}: MessageListProps) {
   const accountId = selectedAccountId()
   const {
     store: {
