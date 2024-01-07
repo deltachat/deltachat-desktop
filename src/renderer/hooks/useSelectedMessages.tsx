@@ -2,19 +2,26 @@ import { useReducer, useCallback } from 'react'
 import {
   MessageId,
   ChatId,
-  SelectedMessagesValue,
 } from '../contexts/SelectedMessagesContext'
+
+export type SelectedMessagesPerChatValue = {
+  selectedMessages: MessageId[]
+  selectMessage: (msgId: MessageId) => void
+  unselectMessage: (msgId: MessageId) => void
+  resetSelected: () => void
+}
+
 
 export default function useSelectedMessages(
   chatId: MessageId
-): SelectedMessagesValue {
+): SelectedMessagesPerChatValue {
   type MessageAction =
     | {
         type_: 'select' | 'unselect'
         messageId: MessageId
       }
     | { type_: 'reset'; messageId?: never }
-  const [selectedMessagesPerChat, _dispatch] = useReducer(
+  const [selectedMessagesValue, _dispatch] = useReducer(
     (
       selectedMessagesPerChat: Record<ChatId, MessageId[]>,
       action: MessageAction
@@ -56,8 +63,8 @@ export default function useSelectedMessages(
     [_dispatch, chatId]
   )
 
-  const value: SelectedMessagesValue = {
-    selectedMessages: selectedMessagesPerChat[chatId] || [],
+  const value: SelectedMessagesPerChatValue = {
+    selectedMessages: selectedMessagesValue[chatId] || [],
     selectMessage,
     unselectMessage,
     resetSelected,

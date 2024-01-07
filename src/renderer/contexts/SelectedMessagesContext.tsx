@@ -4,17 +4,12 @@ export type MessageId = number
 export type ChatId = number
 
 export type SelectedMessagesValue = {
-  selectedMessages: MessageId[]
-  selectMessage: (id: MessageId) => void
-  unselectMessage: (id: MessageId) => void
-  resetSelected: () => void
+  selectedMessages: Record<ChatId, MessageId[]>
+  selectMessage: (chatId: ChatId, msgId: MessageId) => void
+  unselectMessage: (chatId: ChatId, msgId: MessageId) => void
+  resetSelected: (chatId: ChatId) => void
 }
 
-const SelectedMessagesContext = createContext<SelectedMessagesValue>({
-  selectedMessages: [],
-  selectMessage: (_id: MessageId) => {},
-  unselectMessage: (_id: MessageId) => {},
-  resetSelected: () => {},
-})
+const SelectedMessagesContext = createContext<SelectedMessagesValue | null>(null)
 
 export default SelectedMessagesContext
