@@ -1,28 +1,15 @@
-p.group-name,
 input.group-name-input {
-  margin-left: 0px;
-  margin-bottom: 0px;
-  font-size: x-large;
-  width: 100%;
-  border: 0;
-  height: auto;
   background-color: transparent;
-  color: var(--bp4MenuText);
-  user-select: text;
-}
-
-p.group-name {
-  display: flex;
-  p.trucated-name {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    margin-bottom: 0;
-  }
-}
-
-input.group-name-input {
   border-bottom: solid;
   border-color: var(--loginInputFocusColor);
+  border: 0;
+  color: var(--bp4MenuText);
+  font-size: x-large;
+  height: auto;
+  margin-bottom: 0px;
+  margin-left: 0px;
+  user-select: text;
+  width: 100%;
 }
 
 .group-separator {
@@ -40,19 +27,8 @@ input.group-name-input {
   display: flex;
   margin-bottom: 20px;
 
-  .group-name {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1;
-  }
-
   .group-name-input-wrapper {
     margin-left: 17px;
-
-    input.group-name-input {
-      top: -7px;
-      position: relative;
-    }
 
     p.input-error {
       color: var(--colorDanger);

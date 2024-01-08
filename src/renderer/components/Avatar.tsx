@@ -8,6 +8,8 @@ import FullscreenMedia, {
 } from './dialogs/FullscreenMedia'
 import useDialog from '../hooks/useDialog'
 
+import type { PropsWithChildren } from 'react'
+
 export function QRAvatar() {
   return (
     <div className='avatar'>
@@ -94,10 +96,11 @@ export function AvatarFromContact(
   )
 }
 
-export function ClickForFullscreenAvatarWrapper(props: {
-  filename: string | null
-  children: React.ReactNode
-}) {
+export function ClickForFullscreenAvatarWrapper(
+  props: PropsWithChildren<{
+    filename?: string
+  }>
+) {
   const { openDialog } = useDialog()
 
   return (
