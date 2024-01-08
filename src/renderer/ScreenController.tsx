@@ -14,12 +14,12 @@ import { BackendRemote } from './backend-com'
 import { debouncedUpdateBadgeCounter } from './system-integration/badge-counter'
 import { updateDeviceChats } from './deviceMessages'
 import { runtime } from './runtime'
-import WebxdcSaveToChatDialog from './components/dialogs/WebxdcSendToChatDialog'
 import { updateTimestamps } from './components/conversations/Timestamp'
 import { ScreenContext } from './contexts/ScreenContext'
 import About from './components/dialogs/About'
 import { KeybindingsContextProvider } from './contexts/KeybindingsContext'
 import { DialogContext } from './contexts/DialogContext'
+import WebxdcSaveToChatDialog from './components/dialogs/WebxdcSendToChat'
 
 const log = getLogger('renderer/ScreenController')
 
