@@ -1,13 +1,13 @@
 input.group-name-input {
   background-color: transparent;
+  border: 0;
   border-bottom: solid;
   border-color: var(--loginInputFocusColor);
-  border: 0;
   color: var(--bp4MenuText);
   font-size: x-large;
   height: auto;
-  margin-bottom: 0px;
-  margin-left: 0px;
+  margin-bottom: 0;
+  margin-left: 0;
   user-select: text;
   width: 100%;
 }
