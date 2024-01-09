@@ -9,12 +9,12 @@ import type { T } from '@deltachat/jsonrpc-client'
 import styles from './styles.module.scss'
 
 type Props = {
-  reactions: T.Reactions
+  reactions: T.Reactions | null
   messageId: number
 }
 
 export default function Reactions({ reactions, messageId }: Props) {
-  const emojis = reactions.reactions
+  const emojis = reactions ? reactions.reactions : []
 
   const sendReaction = useCallback(
     async (emoji: string, remove: boolean) => {
@@ -29,7 +29,6 @@ export default function Reactions({ reactions, messageId }: Props) {
     [messageId]
   )
 
-  // @TODO: Show a list of who reacted? Maybe lazy loading onhover set title of show custom popover
   return (
     <div className={styles.reactions}>
       {emojis.map(({ emoji, isFromSelf, count }) => {

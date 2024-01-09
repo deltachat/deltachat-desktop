@@ -44,6 +44,8 @@ import Reactions from '../Reactions'
 
 import type { OpenDialog } from '../../contexts/DialogContext'
 
+import styles from './styles.module.scss'
+
 const Avatar = (
   contact: Type.Contact,
   onContactClick: (contact: Type.Contact) => void
@@ -208,30 +210,6 @@ function buildContextMenu(
     message.fromId > C.DC_CONTACT_ID_LAST_SPECIAL
 
   return [
-    {
-      label: 'React with ❤️',
-      action: () => {
-        BackendRemote.rpc.sendReaction(selectedAccountId(), message.id, ['❤️'])
-      },
-    },
-    {
-      label: 'React with 👍',
-      action: () => {
-        BackendRemote.rpc.sendReaction(selectedAccountId(), message.id, ['👍'])
-      },
-    },
-    {
-      label: 'React with 👎',
-      action: () => {
-        BackendRemote.rpc.sendReaction(selectedAccountId(), message.id, ['👎'])
-      },
-    },
-    {
-      label: 'Remove own Reaction',
-      action: () => {
-        BackendRemote.rpc.sendReaction(selectedAccountId(), message.id, [])
-      },
-    },
     // Reply
     showReply && {
       label: tx('reply_noun'),
@@ -314,6 +292,7 @@ function buildContextMenu(
 export default function Message(props: {
   message: Type.Message
   conversationType: ConversationType
+  isHover: boolean
 }) {
   const { message, conversationType } = props
   const { id, viewType, text, hasLocation, isSetupmessage, hasHtml } = message
@@ -580,20 +559,20 @@ export default function Message(props: {
               {tx('show_full_message')}
             </div>
           )}
-          {message.reactions && (
+          <footer className={styles.messageFooter}>
             <Reactions messageId={message.id} reactions={message.reactions} />
-          )}
-          <MessageMetaData
-            fileMime={(!isSetupmessage && message.fileMime) || null}
-            direction={direction}
-            status={status}
-            hasText={text !== null && text !== ''}
-            hasLocation={hasLocation}
-            timestamp={message.timestamp * 1000}
-            padlock={message.showPadlock}
-            onClickError={openMessageInfo.bind(null, openDialog, message)}
-            viewType={message.viewType}
-          />
+            <MessageMetaData
+              fileMime={(!isSetupmessage && message.fileMime) || null}
+              direction={direction}
+              status={status}
+              hasText={text !== null && text !== ''}
+              hasLocation={hasLocation}
+              timestamp={message.timestamp * 1000}
+              padlock={message.showPadlock}
+              onClickError={openMessageInfo.bind(null, openDialog, message)}
+              viewType={message.viewType}
+            />
+          </footer>
         </div>
       </div>
     </div>
