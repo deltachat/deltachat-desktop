@@ -11,7 +11,7 @@ type Props = {
   color?: string
   displayName: string
   isVerified: boolean
-  wasSeenRecently: boolean
+  wasSeenRecently?: boolean
 }
 
 export default function ProfileInfoHeader({
@@ -20,7 +20,7 @@ export default function ProfileInfoHeader({
   color,
   displayName,
   isVerified,
-  wasSeenRecently,
+  wasSeenRecently = false,
 }: Props) {
   return (
     <div className={styles.profileInfoHeader}>

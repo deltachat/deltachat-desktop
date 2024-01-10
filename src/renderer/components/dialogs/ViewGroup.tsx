@@ -32,9 +32,9 @@ import useDialog from '../../hooks/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useConfirmationDialog from '../../hooks/useConfirmationDialog'
 import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
+import ProfileInfoHeader from '../ProfileInfoHeader'
 
 import type { DialogProps } from '../../contexts/DialogContext'
-import ProfileInfoHeader from '../ProfileInfoHeader'
 
 const log = getLogger('renderer/ViewGroup')
 
@@ -249,7 +249,6 @@ function ViewGroupInner(
                 color={chat.color}
                 displayName={groupName}
                 isVerified={chat.isProtected}
-                wasSeenRecently={chat.wasSeenRecently}
               />
             </DialogContent>
             {isRelatedChatsEnabled && (
