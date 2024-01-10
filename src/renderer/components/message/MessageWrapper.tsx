@@ -62,16 +62,16 @@ export function MessageWrapper(props: RenderMessageProps) {
     shouldInViewObserve,
   ])
 
-  const onMouseEnter = () => {
+  const onMouseOver = () => {
     setIsHover(true)
   }
 
-  const onMouseLeave = () => {
+  const onMouseOut = () => {
     setIsHover(false)
   }
 
   return (
-    <li id={props.key2} onMouseOut={onMouseLeave} onMouseOver={onMouseEnter}>
+    <li id={props.key2} onMouseOut={onMouseOut} onMouseOver={onMouseOver}>
       <Message isHover={isHover} {...props} />
       <div className='message-observer-bottom' id={'bottom-' + props.key2} />
     </li>
