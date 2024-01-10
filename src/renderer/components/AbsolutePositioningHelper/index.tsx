@@ -5,16 +5,31 @@ import styles from './styles.module.scss'
 import type { ReactNode } from 'react'
 
 type Props = {
+  /** Desired x position of element, usually determined by a user click event */
   x: number
+
+  /** Desired y position of element, usually determined by a user click event */
   y: number
-  children?: ReactNode
+
+  /** Element which will be absolutely positioned and automatically adjusted */
+  children: ReactNode
 }
 
+/**
+ * Helper component which fixes it's wrapped components absolutely on the screen,
+ * if possible, centered and above the desired position. The position is usually
+ * determined by an user mouse event.
+ *
+ * Additionally it makes sure the wrapped components are not crossing the window's
+ * boundaries. In that case the position will be automatically adjusted.
+ *
+ * Note: This does not adjust the element after window size changes. Usually you
+ * want to cancel what you're doing with this component after a window resize
+ * or scroll.
+ */
 export default function AbsolutePositioningHelper(props: Props) {
   const ref = useRef<HTMLDivElement>(null)
   const [dimensions, setDimensions] = useState({
-    refX: 0,
-    refY: 0,
     refWidth: 0,
     refHeight: 0,
     windowWidth: window.innerWidth,
@@ -22,10 +37,6 @@ export default function AbsolutePositioningHelper(props: Props) {
   })
 
   // Observe size & position changes of the wrapped "ref" element.
-  //
-  // Note: This does not adjust the element after window size changes. Usually
-  // you want to cancel what you're doing with this component after a window
-  // resize or scroll.
   useLayoutEffect(() => {
     if (!ref.current) {
       return
@@ -38,18 +49,11 @@ export default function AbsolutePositioningHelper(props: Props) {
         return
       }
 
-      const {
-        x: refX,
-        y: refY,
-        width: refWidth,
-        height: refHeight,
-      } = entries[0].contentRect
+      const { width: refWidth, height: refHeight } = entries[0].contentRect
 
       setDimensions({
         windowWidth: window.innerWidth,
         windowHeight: window.innerHeight,
-        refX,
-        refY,
         refWidth,
         refHeight,
       })
@@ -62,17 +66,30 @@ export default function AbsolutePositioningHelper(props: Props) {
     }
   }, [])
 
-  // Adjust element position when displayed too far to the right
-  const x =
-    props.x + dimensions.refWidth > dimensions.windowWidth
-      ? props.x - dimensions.refWidth
-      : props.x
+  let x
 
-  // .. and when too far to the bottom
-  const y =
-    props.y + dimensions.refHeight > dimensions.windowHeight
-      ? props.y - dimensions.refHeight
-      : props.y
+  // Adjust element position to be centered
+  x = props.x - dimensions.refWidth / 2
+
+  // Change the x position when it is too far to the right and leaving the window
+  if (x + dimensions.refWidth > dimensions.windowWidth) {
+    x = props.x - dimensions.refWidth
+  }
+
+  // .. and when it is too far to the left
+  if (x < dimensions.refWidth / 2) {
+    x = props.x
+  }
+
+  let y
+
+  // Adjust element to be above the initial y position
+  y = props.y - dimensions.refHeight
+
+  // Change the y position when it is too far to the top and leaving the window
+  if (y < dimensions.refHeight) {
+    y = props.y
+  }
 
   return (
     <div
