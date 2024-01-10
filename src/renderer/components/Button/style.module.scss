@@ -1,4 +1,4 @@
-button.delta-button-round {
+.deltaButtonRound {
   margin: 10px 0px;
   background-color: var(--bp4-input-focused);
   box-shadow: none;
@@ -35,7 +35,7 @@ button.delta-button-round {
   }
 }
 
-button.delta-button {
+.deltaButton {
   color: var(--colorNone);
   background-color: rgba(0, 0, 0, 0);
   padding: 0 2px;

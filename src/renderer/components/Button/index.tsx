@@ -1,5 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
+import styles from './style.module.scss'
 
 type ButtonProps = React.PropsWithChildren<{
   type?: 'secondary' | 'primary' | 'danger'
@@ -27,9 +28,9 @@ export default function Button({
       disabled={!!disabled}
       role='button'
       className={classNames(
-        'delta-button' + (round ? '-round' : ''),
-        'bold',
-        type,
+        round ? styles.deltaButtonRound : styles.deltaButton,
+        styles.bold,
+        type && styles[type],
         className
       )}
       onClick={onClick}
