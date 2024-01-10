@@ -5,7 +5,6 @@ import { C } from '@deltachat/jsonrpc-client'
 
 import ChatListItem from '../../chat/ChatListItem'
 import { useChatList } from '../../chat/ChatListHelpers'
-import { Avatar, ClickForFullscreenAvatarWrapper } from '../../Avatar'
 import { useLogicVirtualChatList, ChatListPart } from '../../chat/ChatList'
 import MessageBody from '../../message/MessageBody'
 import { useThemeCssVar } from '../../../ThemeManager'
@@ -24,6 +23,7 @@ import Dialog, {
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import useDialog from '../../../hooks/useDialog'
 import { MessagesDisplayContext } from '../../../contexts/MessagesDisplayContext'
+import ProfileInfoHeader from '../../ProfileInfoHeader'
 
 import styles from './styles.module.scss'
 
@@ -53,18 +53,6 @@ function LastSeen({ timestamp }: { timestamp: number }) {
       {lastSeenString}
     </span>
   )
-}
-
-function ProfileInfoAvatar({ contact }: { contact: Type.Contact }) {
-  const { displayName, profileImage, wasSeenRecently } = contact
-  const color = contact.color
-  return Avatar({
-    avatarPath: profileImage,
-    color,
-    displayName,
-    large: true,
-    wasSeenRecently,
-  })
 }
 
 export default function ViewProfile(
@@ -208,44 +196,32 @@ export function ViewProfileInner({
   const CHATLISTITEM_CHAT_HEIGHT =
     Number(useThemeCssVar('--SPECIAL-chatlist-item-chat-height')) || 64
 
-  let displayNameLine = contact.displayName
+  let displayName = contact.displayName
   let addressLine = contact.address
   let statusText = contact.status
+  let avatarPath = contact.profileImage
 
   if (isDeviceChat) {
     addressLine = tx('device_talk_subtitle')
   } else if (isSelfChat) {
-    displayNameLine = tx('saved_messages')
+    displayName = tx('saved_messages')
     addressLine = tx('chat_self_talk_subtitle')
     statusText = tx('saved_messages_explain')
+    avatarPath = selfChatAvatar
   }
 
   return (
     <>
       <div>
         <DialogContent>
-          <div className='profile-info-container'>
-            <ClickForFullscreenAvatarWrapper
-              filename={isSelfChat ? selfChatAvatar : contact.profileImage}
-            >
-              {isSelfChat ? (
-                <ProfileInfoAvatar
-                  contact={{ ...contact, profileImage: selfChatAvatar }}
-                />
-              ) : (
-                <ProfileInfoAvatar contact={contact} />
-              )}
-            </ClickForFullscreenAvatarWrapper>
-            <div className='profile-info-name-container'>
-              <div>
-                <p className='group-name'>
-                  <span className='trucated-name'>{displayNameLine}</span>
-                  {contact.isProfileVerified && <InlineVerifiedIcon />}
-                </p>
-              </div>
-              <div className='address'>{addressLine}</div>
-            </div>
-          </div>
+          <ProfileInfoHeader
+            address={addressLine}
+            avatarPath={avatarPath ? avatarPath : undefined}
+            color={contact.color}
+            displayName={displayName}
+            isVerified={contact.isProfileVerified}
+            wasSeenRecently={contact.wasSeenRecently}
+          />
           {!isSelfChat && (
             <div className='contact-attributes'>
               {verifier && (

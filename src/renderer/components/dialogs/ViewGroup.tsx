@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { C, DcEventType } from '@deltachat/jsonrpc-client'
+import { dirname } from 'path'
 
 import ChatListItem from '../chat/ChatListItem'
 import { useContactSearch, AddMemberInnerDialog } from './CreateChat'
@@ -13,18 +14,13 @@ import {
   PseudoListItemAddMember,
 } from '../helpers/PseudoListItem'
 import ViewProfile from './ViewProfile'
-import {
-  Avatar,
-  avatarInitial,
-  ClickForFullscreenAvatarWrapper,
-} from '../Avatar'
+import { avatarInitial } from '../Avatar'
 import { runtime } from '../../runtime'
 import { DeltaInput } from '../Login-Styles'
 import { getLogger } from '../../../shared/logger'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { modifyGroup } from '../helpers/ChatMethods'
-import { InlineVerifiedIcon } from '../VerifiedIcon'
 import { useSettingsStore } from '../../stores/settings'
 import Dialog, {
   DialogBody,
@@ -35,10 +31,10 @@ import Dialog, {
 import useDialog from '../../hooks/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useConfirmationDialog from '../../hooks/useConfirmationDialog'
+import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
+import ProfileInfoHeader from '../ProfileInfoHeader'
 
 import type { DialogProps } from '../../contexts/DialogContext'
-import { dirname } from 'path'
-import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 
 const log = getLogger('renderer/ViewGroup')
 
@@ -247,22 +243,13 @@ function ViewGroupInner(
             onClose={onClose}
           />
           <DialogBody>
-            <DialogContent>
-              <div className='group-settings-container'>
-                <ClickForFullscreenAvatarWrapper filename={groupImage}>
-                  <Avatar
-                    displayName={groupName}
-                    avatarPath={groupImage}
-                    color={chat.color}
-                    wasSeenRecently={chat.wasSeenRecently}
-                    large
-                  />
-                </ClickForFullscreenAvatarWrapper>
-                <p className='group-name' style={{ marginLeft: '17px' }}>
-                  <p className='trucated-name'>{groupName}</p>
-                  {chat.isProtected && <InlineVerifiedIcon />}
-                </p>
-              </div>
+            <DialogContent paddingBottom>
+              <ProfileInfoHeader
+                avatarPath={groupImage ? groupImage : undefined}
+                color={chat.color}
+                displayName={groupName}
+                isVerified={chat.isProtected}
+              />
             </DialogContent>
             {isRelatedChatsEnabled && (
               <>
