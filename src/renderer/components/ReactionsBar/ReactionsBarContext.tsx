@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
 import AbsolutePositioningHelper from '../AbsolutePositioningHelper'
+import OutsideClickHelper from '../OutsideClickHelper'
 import ReactionsShortcutBar from '.'
 
 import type { PropsWithChildren } from 'react'
@@ -37,9 +38,11 @@ export const ReactionsBarProvider = ({ children }: PropsWithChildren<{}>) => {
   return (
     <ReactionsBarContext.Provider value={value}>
       {visible && (
-        <AbsolutePositioningHelper x={position.x} y={position.y}>
-          <ReactionsShortcutBar />
-        </AbsolutePositioningHelper>
+        <OutsideClickHelper onClick={hideReactionsBar}>
+          <AbsolutePositioningHelper x={position.x} y={position.y}>
+            <ReactionsShortcutBar />
+          </AbsolutePositioningHelper>
+        </OutsideClickHelper>
       )}
       {children}
     </ReactionsBarContext.Provider>
