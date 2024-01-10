@@ -370,21 +370,6 @@
   }
 }
 
-/* Spec: container > 438px and container < 593px*/
-@media (min-width: 800px) and (max-width: 925px) {
-  .message {
-    max-width: 374px;
-
-    &.incoming {
-      margin-right: auto;
-    }
-
-    &.outgoing {
-      margin-left: auto;
-    }
-  }
-}
-
 // Spec: container > 593px
 @media (min-width: 926px) {
   .message {
