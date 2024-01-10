@@ -307,7 +307,10 @@ export default function Message(props: {
 
   const showContextMenu = useCallback(
     async (
-      event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement, MouseEvent>
+      event: React.MouseEvent<
+        HTMLDivElement | HTMLAnchorElement | HTMLDivElement,
+        MouseEvent
+      >
     ) => {
       event.preventDefault() // prevent default runtime context menu from opening
 
@@ -576,7 +579,11 @@ export default function Message(props: {
           </footer>
         </div>
       </div>
-      <ShortcutMenu message={message} visible={props.isHover} />
+      <ShortcutMenu
+        message={message}
+        showContextMenu={showContextMenu}
+        visible={props.isHover}
+      />
     </div>
   )
 }

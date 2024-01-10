@@ -6,9 +6,12 @@ import { useReactionsBar } from '../ReactionsBar'
 
 import styles from './styles.module.scss'
 
+type OnButtonClick = React.MouseEvent<HTMLButtonElement, MouseEvent>
+
 type Props = {
   visible: boolean
   message: T.Message
+  showContextMenu: (event: OnButtonClick) => Promise<void>
 }
 
 export default function ShortcutMenu(props: Props) {
@@ -22,6 +25,7 @@ export default function ShortcutMenu(props: Props) {
         messageId={props.message.id}
         reactions={props.message.reactions}
       />
+      <ContextMenuButton onClick={props.showContextMenu} />
     </div>
   )
 }
@@ -33,7 +37,7 @@ function ReactButton(props: {
   const { showReactionsBar } = useReactionsBar()
   const myReaction = getMyReaction(props.reactions)
 
-  const onClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const onClick = (event: OnButtonClick) => {
     // We don't want `OutsideClickHelper` to catch this event, causing
     // the reaction bar to directly hide again when switching to other
     // messages by clicking the "react" button
@@ -50,7 +54,11 @@ function ReactButton(props: {
     })
   }
 
-  return <button onClick={onClick}>React</button>
+  return <button onClick={onClick}>:-)</button>
+}
+
+function ContextMenuButton(props: { onClick: (event: OnButtonClick) => void }) {
+  return <button onClick={props.onClick}>...</button>
 }
 
 function getMyReaction(reactions: T.Message['reactions']): string | undefined {
