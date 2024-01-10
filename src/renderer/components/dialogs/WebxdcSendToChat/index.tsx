@@ -1,38 +1,40 @@
 import React from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 import AutoSizer from 'react-virtualized-auto-sizer'
+import classNames from 'classnames'
 
-import ChatListItem from '../chat/ChatListItem'
-import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
-import { ChatListPart, useLogicVirtualChatList } from '../chat/ChatList'
-import { useChatList } from '../chat/ChatListHelpers'
-import { useThemeCssVar } from '../../ThemeManager'
-import { selectChat } from '../helpers/ChatMethods'
-import { BackendRemote } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
-import { runtime } from '../../runtime'
+import ChatListItem from '../../chat/ChatListItem'
+import { PseudoListItemNoSearchResults } from '../../helpers/PseudoListItem'
+import { ChatListPart, useLogicVirtualChatList } from '../../chat/ChatList'
+import { useChatList } from '../../chat/ChatListHelpers'
+import { useThemeCssVar } from '../../../ThemeManager'
+import { selectChat } from '../../helpers/ChatMethods'
+import { BackendRemote } from '../../../backend-com'
+import { selectedAccountId } from '../../../ScreenController'
+import { runtime } from '../../../runtime'
 import Dialog, {
   DialogBody,
-  DialogContent,
   DialogFooter,
   DialogHeader,
   FooterActionButton,
   FooterActions,
-} from '../Dialog'
-import ConfirmationDialog from './ConfirmationDialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
+} from '../../Dialog'
+import ConfirmationDialog from '../ConfirmationDialog'
+import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import useDialog from '../../../hooks/useDialog'
 
-import type { DialogProps, OpenDialog } from '../../contexts/DialogContext'
+import styles from './styles.module.scss'
+
+import type { DialogProps, OpenDialog } from '../../../contexts/DialogContext'
+
+type Props = {
+  messageText: string | null
+  file: { file_name: string; file_content: string } | null
+} & DialogProps
 
 const LIST_FLAGS = C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS
 
-export default function WebxdcSaveToChatDialog(
-  props: {
-    messageText: string | null
-    file: { file_name: string; file_content: string } | null
-  } & DialogProps
-) {
+export default function WebxdcSaveToChatDialog(props: Props) {
   const { onClose, messageText, file } = props
 
   const tx = useTranslationFunction()
@@ -82,55 +84,51 @@ export default function WebxdcSaveToChatDialog(
 
   const noResults = chatListIds.length === 0 && queryStr !== ''
   return (
-    <Dialog onClose={onClose} fixed>
+    <Dialog className={styles.sendToChatDialog} onClose={onClose} fixed>
       <DialogHeader onClose={onClose} title={title} />
-      <DialogBody>
-        <div className='webxdc-send-to-chat-dialog'>
-          <DialogContent>
-            <div className='select-chat-chat-list'>
-              <input
-                className='search-input'
-                onChange={onSearchChange}
-                value={queryStr}
-                placeholder={tx('contacts_enter_name_or_email')}
-                autoFocus
-                spellCheck={false}
-              />
-              {noResults && queryStr && (
-                <PseudoListItemNoSearchResults queryStr={queryStr} />
-              )}
-              <div
-                style={noResults ? { height: '0px' } : {}}
-                className='results'
+      <DialogBody
+        className={classNames(
+          'webxdc-send-to-chat-dialog',
+          styles.sendToChatDialogBody
+        )}
+      >
+        <input
+          className='search-input'
+          onChange={onSearchChange}
+          value={queryStr}
+          placeholder={tx('contacts_enter_name_or_email')}
+          autoFocus
+          spellCheck={false}
+        />
+        {noResults && queryStr && (
+          <PseudoListItemNoSearchResults queryStr={queryStr} />
+        )}
+        <div className='results' style={{ height: noResults ? '0px' : '100%' }}>
+          <AutoSizer>
+            {({ width, height }) => (
+              <ChatListPart
+                isRowLoaded={isChatLoaded}
+                loadMoreRows={loadChats}
+                rowCount={chatListIds.length}
+                width={width}
+                height={height}
+                itemKey={index => 'key' + chatListIds[index]}
+                itemHeight={CHATLISTITEM_CHAT_HEIGHT}
               >
-                <AutoSizer>
-                  {({ width, height }) => (
-                    <ChatListPart
-                      isRowLoaded={isChatLoaded}
-                      loadMoreRows={loadChats}
-                      rowCount={chatListIds.length}
-                      width={width}
-                      height={height}
-                      itemKey={index => 'key' + chatListIds[index]}
-                      itemHeight={CHATLISTITEM_CHAT_HEIGHT}
-                    >
-                      {({ index, style }) => {
-                        const chatId = chatListIds[index]
-                        return (
-                          <div style={style}>
-                            <ChatListItem
-                              chatListItem={chatCache[chatId] || undefined}
-                              onClick={onChatClick.bind(null, chatId)}
-                            />
-                          </div>
-                        )
-                      }}
-                    </ChatListPart>
-                  )}
-                </AutoSizer>
-              </div>
-            </div>
-          </DialogContent>
+                {({ index, style }) => {
+                  const chatId = chatListIds[index]
+                  return (
+                    <div style={style}>
+                      <ChatListItem
+                        chatListItem={chatCache[chatId] || undefined}
+                        onClick={onChatClick.bind(null, chatId)}
+                      />
+                    </div>
+                  )
+                }}
+              </ChatListPart>
+            )}
+          </AutoSizer>
         </div>
       </DialogBody>
       <DialogFooter>
