@@ -28,7 +28,7 @@ import ProfileInfoHeader from '../../ProfileInfoHeader'
 import styles from './styles.module.scss'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
-import Button from '../../ui/Button'
+import Button from '../../Button'
 
 const log = getLogger('renderer/dialogs/ViewProfile')
 

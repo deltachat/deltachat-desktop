@@ -35,7 +35,7 @@ import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 import ProfileInfoHeader from '../ProfileInfoHeader'
 
 import type { DialogProps } from '../../contexts/DialogContext'
-import Button from '../ui/Button'
+import Button from '../Button'
 
 const log = getLogger('renderer/ViewGroup')
 

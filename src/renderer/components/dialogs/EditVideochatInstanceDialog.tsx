@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 
 import { DeltaInput } from '../Login-Styles'
 import { SettingsStoreState } from '../../stores/settings'
-import RadioGroup from '../ui/RadioGroup'
-import Radio from '../ui/Radio'
+import RadioGroup from '../RadioGroup'
+import Radio from '../Radio'
 import {
   VIDEO_CHAT_INSTANCE_AUTISTICI,
   VIDEO_CHAT_INSTANCE_SYSTEMLI,

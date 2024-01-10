@@ -11,7 +11,7 @@ import { DialogBody, DialogContent, DialogWithHeader } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
-import Button from '../ui/Button'
+import Button from '../Button'
 
 const log = getLogger('renderer/dialogs/About')
 

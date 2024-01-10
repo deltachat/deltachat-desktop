@@ -44,7 +44,7 @@ import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import Reactions from '../Reactions'
 import ShortcutMenu from '../ShortcutMenu'
 import InvalidUnencryptedMailDialog from '../dialogs/InvalidUnencryptedMail'
-import Button from '../ui/Button'
+import Button from '../Button'
 
 import styles from './styles.module.scss'
 

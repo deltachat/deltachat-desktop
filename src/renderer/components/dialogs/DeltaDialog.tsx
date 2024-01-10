@@ -3,7 +3,7 @@ import { Dialog, Classes, RadioGroup, Radio } from '@blueprintjs/core'
 import classNames from 'classnames'
 
 import type { DialogProps } from '../../contexts/DialogContext'
-import Button from '../ui/Button'
+import Button from '../Button'
 
 export const DeltaDialogBase = React.memo<
   React.PropsWithChildren<
