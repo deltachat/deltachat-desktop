@@ -186,6 +186,7 @@
 // States that modify the message bubble appearance
 
 .message.incoming {
+  flex-direction: row-reverse;
   margin-left: 0;
   margin-right: 32px;
 

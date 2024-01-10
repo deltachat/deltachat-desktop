@@ -1,4 +1,18 @@
+$shortcutMenuWidth: 100px;
+
 .messageFooter {
   display: flex;
   justify-content: space-between;
+}
+
+.shortcutMenu {
+  display: flex;
+  align-items: center;
+  flex: 0 0 $shortcutMenuWidth;
+  visibility: hidden;
+  width: $shortcutMenuWidth;
+
+  &.visible {
+    visibility: visible;
+  }
 }

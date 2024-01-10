@@ -41,10 +41,11 @@ import useDialog from '../../hooks/useDialog'
 import EnterAutocryptSetupMessage from '../dialogs/EnterAutocryptSetupMessage'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import Reactions from '../Reactions'
-
-import type { OpenDialog } from '../../contexts/DialogContext'
+import ShortcutMenu from './ShortcutMenu'
 
 import styles from './styles.module.scss'
+
+import type { OpenDialog } from '../../contexts/DialogContext'
 
 const Avatar = (
   contact: Type.Contact,
@@ -501,9 +502,7 @@ export default function Message(props: {
       )}
       id={message.id.toString()}
     >
-      {showAuthor &&
-        direction === 'incoming' &&
-        Avatar(message.sender, onContactClick)}
+      <ShortcutMenu visible={props.isHover} />
       <div
         onContextMenu={showContextMenu}
         className='msg-container'
@@ -575,6 +574,9 @@ export default function Message(props: {
           </footer>
         </div>
       </div>
+      {showAuthor &&
+        direction === 'incoming' &&
+        Avatar(message.sender, onContactClick)}
     </div>
   )
 }
