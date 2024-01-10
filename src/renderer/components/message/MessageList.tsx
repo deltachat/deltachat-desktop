@@ -24,6 +24,7 @@ import { debouncedUpdateBadgeCounter } from '../../system-integration/badge-coun
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
+import ReactionsShortcutBar from '../ReactionsShortcutBar'
 
 const log = getLogger('render/components/message/MessageList')
 
@@ -503,6 +504,7 @@ export const MessageListInner = React.memo(
 
     return (
       <div id='message-list' ref={messageListRef} onScroll={onScroll}>
+        <ReactionsShortcutBar />
         <ul>
           {messageListItems.length === 0 && <EmptyChatMessage />}
           {activeView.map(messageId => {
