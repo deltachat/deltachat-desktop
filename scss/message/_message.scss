@@ -388,7 +388,7 @@
 // Spec: container > 593px
 @media (min-width: 926px) {
   .message {
-    max-width: 66%;
+    max-width: 75%;
 
     &.incoming {
       margin-right: auto;
@@ -402,7 +402,7 @@
 
 @media (max-width: 925px) {
   .message {
-    max-width: 90%;
+    max-width: 100%;
 
     &.incoming {
       margin-right: auto;
