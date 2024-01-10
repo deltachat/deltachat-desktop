@@ -502,7 +502,9 @@ export default function Message(props: {
       )}
       id={message.id.toString()}
     >
-      <ShortcutMenu visible={props.isHover} />
+      {showAuthor &&
+        direction === 'incoming' &&
+        Avatar(message.sender, onContactClick)}
       <div
         onContextMenu={showContextMenu}
         className='msg-container'
@@ -574,9 +576,7 @@ export default function Message(props: {
           </footer>
         </div>
       </div>
-      {showAuthor &&
-        direction === 'incoming' &&
-        Avatar(message.sender, onContactClick)}
+      <ShortcutMenu visible={props.isHover} />
     </div>
   )
 }

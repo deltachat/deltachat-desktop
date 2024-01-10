@@ -186,7 +186,6 @@
 // States that modify the message bubble appearance
 
 .message.incoming {
-  flex-direction: row-reverse;
   margin-left: 0;
   margin-right: 32px;
 
@@ -223,9 +222,10 @@
 }
 
 .message.outgoing {
+  flex-direction: row-reverse;
   float: right;
-  margin-right: 0;
   margin-left: 32px;
+  margin-right: 0;
 
   .metadata:not(.with-image-no-caption) {
     & > .date {
