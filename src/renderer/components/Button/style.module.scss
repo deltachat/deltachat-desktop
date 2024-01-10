@@ -1,66 +1,28 @@
-.deltaButtonRound {
-  margin: 10px 0px;
-  background-color: var(--bp4-input-focused);
-  box-shadow: none;
-  background-clip: unset;
-  background-image: none;
-  border-radius: 8px;
-  border-color: var(--bp4-input-focused);
-  border-style: solid !important;
-  padding: 10px 15px;
-  color: white;
-  text-transform: uppercase;
-  font-weight: bold;
-  &:disabled {
-    background-color: rgba(206, 217, 224, 0.5);
-    border-color: rgba(206, 217, 224, 0.5);
-    background-image: none;
-    cursor: not-allowed;
-    color: var(--globalText);
-    &:hover {
-      background-color: rgba(206, 217, 224, 0.5);
-    }
-  }
-  &:hover {
-    background-color: var(--bp4-input-focused);
-    box-shadow: none;
-    background-clip: unset;
-  }
-  &.secondary {
-    background-color: var(--bp4ButtonBg);
-    border: 1px;
-    border-color: var(--bp4ButtonText);
-    border-style: solid;
-    color: var(--bp4ButtonText);
-  }
-}
-
 .deltaButton {
   color: var(--colorNone);
-  background-color: rgba(0, 0, 0, 0);
+  background-color: transparent;
+  background-image: unset;
   padding: 0 2px;
   margin-bottom: 0px;
-  letter-spacing: 0px;
+  letter-spacing: 2px;
+  font-weight: bold;
   font-size: initial;
-  font-weight: 'initial';
   text-align: center;
   text-transform: uppercase;
   padding: 5px;
   border-style: solid;
   border-color: transparent;
   border-radius: 2px;
+
   &:hover {
+    background-color: var(--bp4-input-focused);
+    box-shadow: none;
+    background-clip: unset;
     cursor: pointer;
-    background-color: #f1f1f1;
   }
 
   &.no-padding {
     padding: 0px;
-  }
-
-  &.bold {
-    letter-spacing: 2px;
-    font-weight: bold;
   }
 
   &.light-bold {
@@ -76,12 +38,42 @@
     color: var(--colorDanger);
   }
 
+  &.secondary {
+    background-color: var(--bp4ButtonBg);
+    border: 1px;
+    border-color: var(--bp4ButtonText);
+    border-style: solid;
+    color: var(--bp4ButtonText);
+  }
+
   &:disabled {
     color: grey;
     cursor: default;
     &:hover {
       cursor: default;
       background-color: none;
+    }
+  }
+
+  &.round {
+    margin: 10px 0px !important;
+    background-color: var(--bp4-input-focused) !important;
+    box-shadow: none;
+    border-radius: 8px;
+    border-color: var(--bp4-input-focused) !important;
+    border-style: solid !important;
+    padding: 10px 15px;
+    color: white;
+    
+    &:disabled {
+      background-color: rgba(206, 217, 224, 0.5) !important;
+      border-color: rgba(206, 217, 224, 0.5) !important;
+      background-image: none;
+      cursor: not-allowed;
+      color: var(--globalText);
+      &:hover {
+        background-color: rgba(206, 217, 224, 0.5) !important;
+      }
     }
   }
 }
