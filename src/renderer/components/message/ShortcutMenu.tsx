@@ -13,7 +13,8 @@ export default function ShortcutMenu(props: Props) {
   const { showReactionsBar } = useReactionsShortcutBar()
 
   const onClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    showReactionsBar(event.clientX, event.clientY)
+    const { x, y, width } = event.currentTarget.getBoundingClientRect()
+    showReactionsBar(x + width / 2, y)
   }
 
   return (
