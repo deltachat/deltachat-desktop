@@ -10,22 +10,25 @@ type Props = {
  * Helper component which will call a function as soon as a click _outside_ of
  * the children components was detected.
  */
-export default function OutsideClickHelper(props: PropsWithChildren<Props>) {
+export default function OutsideClickHelper({
+  onClick,
+  children,
+}: PropsWithChildren<Props>) {
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const onClick = (event: MouseEvent) => {
+    const handleClick = (event: MouseEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {
-        props.onClick()
+        onClick()
       }
     }
 
-    window.addEventListener('click', onClick)
+    window.addEventListener('click', handleClick)
 
     return () => {
-      window.removeEventListener('click', onClick)
+      window.removeEventListener('click', handleClick)
     }
-  })
+  }, [onClick])
 
-  return <div ref={ref}>{props.children}</div>
+  return <div ref={ref}>{children}</div>
 }

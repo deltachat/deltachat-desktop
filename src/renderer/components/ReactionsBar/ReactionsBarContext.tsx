@@ -38,11 +38,11 @@ export const ReactionsBarProvider = ({ children }: PropsWithChildren<{}>) => {
   return (
     <ReactionsBarContext.Provider value={value}>
       {visible && (
-        <OutsideClickHelper onClick={hideReactionsBar}>
-          <AbsolutePositioningHelper x={position.x} y={position.y}>
+        <AbsolutePositioningHelper x={position.x} y={position.y}>
+          <OutsideClickHelper onClick={hideReactionsBar}>
             <ReactionsShortcutBar />
-          </AbsolutePositioningHelper>
-        </OutsideClickHelper>
+          </OutsideClickHelper>
+        </AbsolutePositioningHelper>
       )}
       {children}
     </ReactionsBarContext.Provider>
