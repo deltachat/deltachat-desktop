@@ -5,22 +5,15 @@ import ReactionsShortcutBar from '.'
 
 import type { PropsWithChildren } from 'react'
 
-type ReactionsShortcutBarValue = {
+type ReactionsBarValue = {
   showReactionsBar: (x: number, y: number) => void
   hideReactionsBar: () => void
 }
 
-const initialValues = {
-  showReactionsBar: () => {},
-  hideReactionsBar: () => {},
-}
+export const ReactionsBarContext =
+  React.createContext<ReactionsBarValue | null>(null)
 
-export const ReactionsShortcutBarContext =
-  React.createContext<ReactionsShortcutBarValue>(initialValues)
-
-export const ReactionsShortcutBarProvider = ({
-  children,
-}: PropsWithChildren<{}>) => {
+export const ReactionsBarProvider = ({ children }: PropsWithChildren<{}>) => {
   const [visible, setVisible] = useState(false)
   const [position, setPosition] = useState({
     x: 0,
@@ -36,19 +29,19 @@ export const ReactionsShortcutBarProvider = ({
     setVisible(false)
   }
 
-  const value = {
+  const value: ReactionsBarValue = {
     showReactionsBar,
     hideReactionsBar,
   }
 
   return (
-    <ReactionsShortcutBarContext.Provider value={value}>
+    <ReactionsBarContext.Provider value={value}>
       {visible && (
         <AbsolutePositioningHelper x={position.x} y={position.y}>
           <ReactionsShortcutBar />
         </AbsolutePositioningHelper>
       )}
       {children}
-    </ReactionsShortcutBarContext.Provider>
+    </ReactionsBarContext.Provider>
   )
 }

@@ -24,7 +24,7 @@ import { debouncedUpdateBadgeCounter } from '../../system-integration/badge-coun
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
-import { useReactionsShortcutBar } from '../ReactionsShortcutBar'
+import { useReactionsBar } from '../ReactionsBar'
 
 const log = getLogger('render/components/message/MessageList')
 
@@ -120,7 +120,7 @@ export default function MessageList({
     fetchMoreBottom,
     fetchMoreTop,
   } = useMessageList(accountId, chatStore.chat.id)
-  const { hideReactionsBar } = useReactionsShortcutBar()
+  const { hideReactionsBar } = useReactionsBar()
 
   const countUnreadMessages = useUnreadCount(
     accountId,

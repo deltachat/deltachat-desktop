@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 
-import useReactionsShortcutBar from '../ReactionsShortcutBar/useReactionsShortcutBar'
+import { useReactionsBar } from '../ReactionsBar'
 
 import styles from './styles.module.scss'
 
@@ -10,7 +10,7 @@ type Props = {
 }
 
 export default function ShortcutMenu(props: Props) {
-  const { showReactionsBar } = useReactionsShortcutBar()
+  const { showReactionsBar } = useReactionsBar()
 
   const onClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const { x, y, width } = event.currentTarget.getBoundingClientRect()
