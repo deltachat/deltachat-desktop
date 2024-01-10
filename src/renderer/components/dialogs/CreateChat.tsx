@@ -28,7 +28,7 @@ import {
   createChatByContactIdAndSelectIt,
   selectChat,
 } from '../helpers/ChatMethods'
-import { Avatar } from '../Avatar'
+import { Avatar, QRAvatar } from '../Avatar'
 import { AddMemberDialog } from './ViewGroup'
 import { ContactListItem } from '../contact/ContactListItem'
 import { useSettingsStore } from '../../stores/settings'
@@ -53,6 +53,7 @@ import type { DialogProps } from '../../contexts/DialogContext'
 import useConfirmationDialog from '../../hooks/useConfirmationDialog'
 import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 import { dirname } from 'path'
+import QrCode from './QrCode'
 
 type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
 
@@ -84,6 +85,7 @@ function CreateChatMain(props: CreateChatMainProps) {
   const { userFeedback } = useContext(ScreenContext)
   const openConfirmationDialog = useConfirmationDialog()
   const accountId = selectedAccountId()
+  const { openDialog } = useDialog()
 
   const [{ contacts, queryStrIsValidEmail }, updateContacts] = useContactsNew(
     C.DC_GCL_ADD_SELF,
@@ -105,6 +107,13 @@ function CreateChatMain(props: CreateChatMainProps) {
   }
   const settingsStore = useSettingsStore()[0]
 
+  const openQRScan = async () => {
+    const [qrCode, qrCodeSVG] =
+      await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(accountId, null)
+    openDialog(QrCode, { qrCode, qrCodeSVG, selectScan: true })
+    onClose()
+  }
+
   const renderAddGroupIfNeeded = () => {
     if (queryStr !== '') return null
     return (
@@ -123,6 +132,13 @@ function CreateChatMain(props: CreateChatMainProps) {
             onClick={() => setViewMode('createBroadcastList')}
           />
         )}
+        <PseudoListItem
+          id='showqrcode'
+          text={tx('qrscan_title')}
+          onClick={openQRScan}
+        >
+          <QRAvatar />
+        </PseudoListItem>
       </Fragment>
     )
   }
