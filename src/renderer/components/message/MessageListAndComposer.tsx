@@ -15,7 +15,7 @@ import { sendMessage } from '../helpers/ChatMethods'
 import useDialog from '../../hooks/useDialog'
 import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
 import useIsChatDisabled from '../composer/useIsChatDisabled'
-import { ReactionsShortcutBarProvider } from '../ReactionsShortcutBar/ReactionsShortcutBarContext'
+import { ReactionsShortcutBarProvider } from '../ReactionsShortcutBar'
 
 const log = getLogger('renderer/MessageListAndComposer')
 

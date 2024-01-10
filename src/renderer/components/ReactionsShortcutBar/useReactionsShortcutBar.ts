@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 
-import { ReactionsShortcutBarContext } from './ReactionsShortcutBarContext'
+import { ReactionsShortcutBarContext } from '.'
 
 export default function useReactionsShortcutBar() {
   const { showReactionsBar, hideReactionsBar } = useContext(

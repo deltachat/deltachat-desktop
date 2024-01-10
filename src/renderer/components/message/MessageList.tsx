@@ -24,7 +24,7 @@ import { debouncedUpdateBadgeCounter } from '../../system-integration/badge-coun
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
-import useReactionsShortcutBar from '../ReactionsShortcutBar/useReactionsShortcutBar'
+import { useReactionsShortcutBar } from '../ReactionsShortcutBar'
 
 const log = getLogger('render/components/message/MessageList')
 
