@@ -561,7 +561,7 @@ export default function Message(props: {
             </div>
           )}
           <footer className={styles.messageFooter}>
-            <Reactions messageId={message.id} reactions={message.reactions} />
+            <Reactions reactions={message.reactions} />
             <MessageMetaData
               fileMime={(!isSetupmessage && message.fileMime) || null}
               direction={direction}
@@ -576,7 +576,7 @@ export default function Message(props: {
           </footer>
         </div>
       </div>
-      <ShortcutMenu visible={props.isHover} />
+      <ShortcutMenu message={message} visible={props.isHover} />
     </div>
   )
 }

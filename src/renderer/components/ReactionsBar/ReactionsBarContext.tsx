@@ -6,8 +6,15 @@ import ReactionsShortcutBar from '.'
 
 import type { PropsWithChildren } from 'react'
 
+export type ShowReactionBar = {
+  messageId: number
+  myReaction?: string
+  x: number
+  y: number
+}
+
 type ReactionsBarValue = {
-  showReactionsBar: (x: number, y: number) => void
+  showReactionsBar: (args: ShowReactionBar) => void
   hideReactionsBar: () => void
 }
 
@@ -15,19 +22,14 @@ export const ReactionsBarContext =
   React.createContext<ReactionsBarValue | null>(null)
 
 export const ReactionsBarProvider = ({ children }: PropsWithChildren<{}>) => {
-  const [visible, setVisible] = useState(false)
-  const [position, setPosition] = useState({
-    x: 0,
-    y: 0,
-  })
+  const [barArgs, setBarArgs] = useState<ShowReactionBar | null>(null)
 
-  const showReactionsBar = (x: number, y: number) => {
-    setPosition({ x, y })
-    setVisible(true)
+  const showReactionsBar = (args: ShowReactionBar) => {
+    setBarArgs(args)
   }
 
   const hideReactionsBar = () => {
-    setVisible(false)
+    setBarArgs(null)
   }
 
   const value: ReactionsBarValue = {
@@ -37,10 +39,13 @@ export const ReactionsBarProvider = ({ children }: PropsWithChildren<{}>) => {
 
   return (
     <ReactionsBarContext.Provider value={value}>
-      {visible && (
-        <AbsolutePositioningHelper x={position.x} y={position.y}>
+      {barArgs !== null && (
+        <AbsolutePositioningHelper x={barArgs.x} y={barArgs.y}>
           <OutsideClickHelper onClick={hideReactionsBar}>
-            <ReactionsShortcutBar />
+            <ReactionsShortcutBar
+              messageId={barArgs.messageId}
+              myReaction={barArgs.myReaction}
+            />
           </OutsideClickHelper>
         </AbsolutePositioningHelper>
       )}

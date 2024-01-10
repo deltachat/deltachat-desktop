@@ -1,6 +1,12 @@
-.reactionsShortcutBar {
-  // @TODO: This is just for testing
+.reactionsBar {
   background-color: red;
-  height: 50px;
-  width: 200px;
+}
+
+.reactionsBarEmoji {
+  border: 0;
+  font-size: 30px;
+
+  &.isFromSelf {
+    background-color: red;
+  }
 }
