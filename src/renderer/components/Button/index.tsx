@@ -9,12 +9,10 @@ type ButtonProps = React.PropsWithChildren<{
   id?: string
   'aria-label'?: string
   disabled?: boolean
-  className?: any
 }>
 
 export default function Button({
   children,
-  className,
   disabled,
   type,
   round,
@@ -28,10 +26,9 @@ export default function Button({
       disabled={!!disabled}
       role='button'
       className={classNames(
-        round ? styles.deltaButtonRound : styles.deltaButton,
-        styles.bold,
+        styles.deltaButton,
+        round && styles.round,
         type && styles[type],
-        className
       )}
       onClick={onClick}
       aria-label={props['aria-label']}
