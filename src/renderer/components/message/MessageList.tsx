@@ -24,7 +24,7 @@ import { debouncedUpdateBadgeCounter } from '../../system-integration/badge-coun
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
-import ReactionsShortcutBar from '../ReactionsShortcutBar'
+import { ReactionsShortcutBarProvider } from '../ReactionsShortcutBar/ReactionsShortcutBarContext'
 
 const log = getLogger('render/components/message/MessageList')
 
@@ -403,31 +403,35 @@ export default function MessageList({
   }, [refComposer])
 
   return (
-    <MessagesDisplayContext.Provider
-      value={{ context: 'chat_messagelist', chatId: chatStore.chat.id }}
-    >
-      <MessageListInner
-        onScroll={onScroll}
-        oldestFetchedMessageIndex={oldestFetchedMessageListItemIndex}
-        messageListItems={messageListItems}
-        activeView={activeView}
-        messageCache={messageCache}
-        messageListRef={messageListRef}
-        chatStore={chatStore}
-        loaded={loaded}
-        unreadMessageInViewIntersectionObserver={
-          unreadMessageInViewIntersectionObserver
-        }
-        loadMissingMessages={loadMissingMessages}
-      />
-      {showJumpDownButton && (
-        <JumpDownButton
-          countUnreadMessages={countUnreadMessages}
-          jumpToMessage={jumpToMessage}
-          jumpToMessageStack={jumpToMessageStack}
+    // @TODO: We might want to merge both contexts together, `MessagesDisplayContext`
+    // looks already useful. Will look at it a bit later and re-evaluate
+    <ReactionsShortcutBarProvider>
+      <MessagesDisplayContext.Provider
+        value={{ context: 'chat_messagelist', chatId: chatStore.chat.id }}
+      >
+        <MessageListInner
+          onScroll={onScroll}
+          oldestFetchedMessageIndex={oldestFetchedMessageListItemIndex}
+          messageListItems={messageListItems}
+          activeView={activeView}
+          messageCache={messageCache}
+          messageListRef={messageListRef}
+          chatStore={chatStore}
+          loaded={loaded}
+          unreadMessageInViewIntersectionObserver={
+            unreadMessageInViewIntersectionObserver
+          }
+          loadMissingMessages={loadMissingMessages}
         />
-      )}
-    </MessagesDisplayContext.Provider>
+        {showJumpDownButton && (
+          <JumpDownButton
+            countUnreadMessages={countUnreadMessages}
+            jumpToMessage={jumpToMessage}
+            jumpToMessageStack={jumpToMessageStack}
+          />
+        )}
+      </MessagesDisplayContext.Provider>
+    </ReactionsShortcutBarProvider>
   )
 }
 
@@ -504,7 +508,6 @@ export const MessageListInner = React.memo(
 
     return (
       <div id='message-list' ref={messageListRef} onScroll={onScroll}>
-        <ReactionsShortcutBar />
         <ul>
           {messageListItems.length === 0 && <EmptyChatMessage />}
           {activeView.map(messageId => {
