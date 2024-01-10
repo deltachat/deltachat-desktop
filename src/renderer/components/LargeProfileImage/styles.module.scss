@@ -13,8 +13,10 @@ $imageSize: 100px;
   color: white;
   display: flex;
   font-size: 64px;
-  height: 100%;
+  height: $imageSize;
   justify-content: center;
+  object-fit: cover;
+  object-position: center;
   pointer-events: none;
-  width: 100%;
+  width: $imageSize;
 }
