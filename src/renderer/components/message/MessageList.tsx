@@ -24,7 +24,7 @@ import { debouncedUpdateBadgeCounter } from '../../system-integration/badge-coun
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
-import { ReactionsShortcutBarProvider } from '../ReactionsShortcutBar/ReactionsShortcutBarContext'
+import useReactionsShortcutBar from '../ReactionsShortcutBar/useReactionsShortcutBar'
 
 const log = getLogger('render/components/message/MessageList')
 
@@ -120,6 +120,7 @@ export default function MessageList({
     fetchMoreBottom,
     fetchMoreTop,
   } = useMessageList(accountId, chatStore.chat.id)
+  const { hideReactionsBar } = useReactionsShortcutBar()
 
   const countUnreadMessages = useUnreadCount(
     accountId,
@@ -208,9 +209,11 @@ export default function MessageList({
         return
       }
       if (scheduler.isLocked('scroll') === true) {
-        //console.log('onScroll: locked, returning')
         return
       }
+
+      hideReactionsBar()
+
       const distanceToTop = messageListRef.current.scrollTop
       const distanceToBottom =
         messageListRef.current.scrollHeight -
@@ -229,7 +232,6 @@ export default function MessageList({
         clearJumpStack()
       }
 
-      //console.log('onScroll', distanceToTop, distanceToBottom)
       if (distanceToTop < 200 && distanceToBottom < 200) {
         log.debug('onScroll: Lets try loading messages from both ends')
         setTimeout(() => fetchMoreTop(), 0)
@@ -252,14 +254,15 @@ export default function MessageList({
       }
     },
     [
-      fetchMoreTop,
+      clearJumpStack,
       fetchMoreBottom,
+      fetchMoreTop,
+      hideReactionsBar,
+      messageListItems.length,
+      newestFetchedMessageListItemIndex,
+      scheduler,
       setShowJumpDownButton,
       showJumpDownButton,
-      newestFetchedMessageListItemIndex,
-      messageListItems.length,
-      scheduler,
-      clearJumpStack,
     ]
   )
 
@@ -403,35 +406,31 @@ export default function MessageList({
   }, [refComposer])
 
   return (
-    // @TODO: We might want to merge both contexts together, `MessagesDisplayContext`
-    // looks already useful. Will look at it a bit later and re-evaluate
-    <ReactionsShortcutBarProvider>
-      <MessagesDisplayContext.Provider
-        value={{ context: 'chat_messagelist', chatId: chatStore.chat.id }}
-      >
-        <MessageListInner
-          onScroll={onScroll}
-          oldestFetchedMessageIndex={oldestFetchedMessageListItemIndex}
-          messageListItems={messageListItems}
-          activeView={activeView}
-          messageCache={messageCache}
-          messageListRef={messageListRef}
-          chatStore={chatStore}
-          loaded={loaded}
-          unreadMessageInViewIntersectionObserver={
-            unreadMessageInViewIntersectionObserver
-          }
-          loadMissingMessages={loadMissingMessages}
+    <MessagesDisplayContext.Provider
+      value={{ context: 'chat_messagelist', chatId: chatStore.chat.id }}
+    >
+      <MessageListInner
+        onScroll={onScroll}
+        oldestFetchedMessageIndex={oldestFetchedMessageListItemIndex}
+        messageListItems={messageListItems}
+        activeView={activeView}
+        messageCache={messageCache}
+        messageListRef={messageListRef}
+        chatStore={chatStore}
+        loaded={loaded}
+        unreadMessageInViewIntersectionObserver={
+          unreadMessageInViewIntersectionObserver
+        }
+        loadMissingMessages={loadMissingMessages}
+      />
+      {showJumpDownButton && (
+        <JumpDownButton
+          countUnreadMessages={countUnreadMessages}
+          jumpToMessage={jumpToMessage}
+          jumpToMessageStack={jumpToMessageStack}
         />
-        {showJumpDownButton && (
-          <JumpDownButton
-            countUnreadMessages={countUnreadMessages}
-            jumpToMessage={jumpToMessage}
-            jumpToMessageStack={jumpToMessageStack}
-          />
-        )}
-      </MessagesDisplayContext.Provider>
-    </ReactionsShortcutBarProvider>
+      )}
+    </MessagesDisplayContext.Provider>
   )
 }
 

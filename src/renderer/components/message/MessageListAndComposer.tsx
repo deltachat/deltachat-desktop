@@ -15,6 +15,7 @@ import { sendMessage } from '../helpers/ChatMethods'
 import useDialog from '../../hooks/useDialog'
 import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
 import useIsChatDisabled from '../composer/useIsChatDisabled'
+import { ReactionsShortcutBarProvider } from '../ReactionsShortcutBar/ReactionsShortcutBarContext'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -232,7 +233,9 @@ export default function MessageListAndComposer({
     >
       <div className='message-list-and-composer__message-list'>
         <RecoverableCrashScreen reset_on_change_key={chatStore.chat.id}>
-          <MessageList chatStore={chatStore} refComposer={refComposer} />
+          <ReactionsShortcutBarProvider>
+            <MessageList chatStore={chatStore} refComposer={refComposer} />
+          </ReactionsShortcutBarProvider>
         </RecoverableCrashScreen>
       </div>
       <Composer
