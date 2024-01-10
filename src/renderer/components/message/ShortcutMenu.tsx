@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import classNames from 'classnames'
 import { C, T } from '@deltachat/jsonrpc-client'
 
@@ -30,20 +30,8 @@ function ReactButton(props: {
   messageId: number
   reactions: T.Message['reactions']
 }) {
-  const { reactions, messageId } = props
   const { showReactionsBar } = useReactionsBar()
-
-  const myReaction = useMemo(() => {
-    if (
-      reactions &&
-      C.DC_CONTACT_ID_SELF in reactions.reactionsByContact &&
-      reactions.reactionsByContact[C.DC_CONTACT_ID_SELF].length > 0
-    ) {
-      return reactions.reactionsByContact[C.DC_CONTACT_ID_SELF][0]
-    }
-
-    return undefined
-  }, [reactions])
+  const myReaction = getMyReaction(props.reactions)
 
   const onClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     // We don't want `OutsideClickHelper` to catch this event, causing
@@ -55,7 +43,7 @@ function ReactButton(props: {
     const { x, y, width } = event.currentTarget.getBoundingClientRect()
 
     showReactionsBar({
-      messageId,
+      messageId: props.messageId,
       myReaction,
       x: x + width / 2,
       y,
@@ -63,4 +51,16 @@ function ReactButton(props: {
   }
 
   return <button onClick={onClick}>React</button>
+}
+
+function getMyReaction(reactions: T.Message['reactions']): string | undefined {
+  if (
+    reactions &&
+    C.DC_CONTACT_ID_SELF in reactions.reactionsByContact &&
+    reactions.reactionsByContact[C.DC_CONTACT_ID_SELF].length > 0
+  ) {
+    return reactions.reactionsByContact[C.DC_CONTACT_ID_SELF][0]
+  }
+
+  return undefined
 }
