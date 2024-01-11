@@ -11,7 +11,7 @@ import {
   ListChildComponentProps,
   ListItemKeySelector,
 } from 'react-window'
-import { C, DcEvent, DcEventType, T } from '@deltachat/jsonrpc-client'
+import { C, T } from '@deltachat/jsonrpc-client'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import InfiniteLoader from 'react-window-infinite-loader'
 
@@ -590,9 +590,8 @@ function useLogicChatPart(
   showArchivedChats: boolean
 ) {
   const { chatListIds, setQueryStr, setListFlags } = useChatList()
-  const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
-    chatListIds
-  )
+  const { isChatLoaded, loadChats, chatCache } =
+    useLogicVirtualChatList(chatListIds)
 
   // effects
   useEffect(() => {
