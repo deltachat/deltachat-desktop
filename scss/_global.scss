@@ -221,6 +221,8 @@ samp {
 
     width: 58px;
 
+    flex-shrink: 0;
+    
     display: flex;
     flex-direction: column;
     align-items: center;
