@@ -87,6 +87,23 @@ export namespace EffectfulBackendActions {
     ;(window.__selectedAccountId as any) = undefined
   }
 
+  // used for account sidebar
+  export async function unSelectAccount() {
+    if (window.__selectedAccountId === undefined) {
+      throw new Error('no account selected')
+    }
+
+    SettingsStoreInstance.effect.clear()
+
+    if (!(await runtime.getDesktopSettings()).syncAllAccounts) {
+      await BackendRemote.rpc.stopIo(window.__selectedAccountId)
+    }
+
+    // switching account - so no need to clear lastAccount on disk
+
+    ;(window.__selectedAccountId as any) = undefined
+  }
+
   // TODO make a core events for these chatlist events instead of faking them in desktop
   export async function acceptChat(account_id: number, chatId: number) {
     await BackendRemote.rpc.acceptChat(account_id, chatId)
