@@ -232,6 +232,8 @@ samp {
     --als-active-indicator-color: white;
 
     .account {
+      position: relative;
+
       margin-top: var(--als-avatar-margin);
       margin-bottom: var(--als-avatar-margin);
       height: var(--als-avatar-size);
@@ -278,6 +280,31 @@ samp {
         }
         .avatar::before {
           --als-active-indicator-height: 15px;
+        }
+      }
+
+      .account-badge {
+        position: absolute;
+        z-index: 102;
+        bottom: -6px;
+        right: -5px;
+
+        .fresh-message-counter,
+        .bg-sync-disabled {
+          color: var(--unreadCountLabel);
+          background-color: var(--unreadCountBg);
+          text-align: center;
+          font-size: 9pt;
+          height: 18px;
+          padding: 0px 4pt;
+          line-height: 18px;
+          border-radius: 10px;
+          font-weight: bold;
+        }
+
+        .bg-sync-disabled {
+          background-color: grey;
+          padding: 0px 3pt;
         }
       }
     }
