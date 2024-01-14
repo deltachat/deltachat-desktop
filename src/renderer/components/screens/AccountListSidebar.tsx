@@ -93,7 +93,9 @@ export function AccountListSidebar({
           )}
         </div>
       ))}
-      <button onClick={onAddAccount}>+</button>
+      <button className='add-button' onClick={onAddAccount}>
+        +
+      </button>
     </div>
   )
 }
