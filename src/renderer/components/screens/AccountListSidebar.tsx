@@ -1,6 +1,10 @@
 import { T } from '@deltachat/jsonrpc-client'
 import React, { useEffect, useMemo, useState } from 'react'
-import { BackendRemote, onDCEvent } from '../../backend-com'
+import {
+  BackendRemote,
+  EffectfulBackendActions,
+  onDCEvent,
+} from '../../backend-com'
 import { runtime } from '../../runtime'
 import { Avatar } from '../Avatar'
 import classNames from 'classnames'
@@ -20,6 +24,15 @@ export function AccountListSidebar({
   const [isVisible, setVisibility] = useState(false)
   const [accounts, setAccounts] = useState<T.Account[]>([])
   // const [syncAllAccounts, setSyncAllAccounts] = useState<boolean | null>(null)
+
+  const selectAccount = async (accountId: number) => {
+    if (selectedAccountId === accountId) {
+      return
+    }
+
+    await EffectfulBackendActions.unSelectAccount()
+    await onSelectAccount(accountId)
+  }
 
   const refresh = useMemo(
     () => async () => {
@@ -80,7 +93,7 @@ export function AccountListSidebar({
           key={account.id}
           account={account}
           isSelected={selectedAccountId === account.id}
-          onSelectAccount={onSelectAccount}
+          onSelectAccount={selectAccount}
         />
       ))}
       <button className='add-button' onClick={onAddAccount}>
