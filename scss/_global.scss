@@ -222,7 +222,7 @@ samp {
     width: 58px;
 
     flex-shrink: 0;
-    
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -279,6 +279,28 @@ samp {
         .avatar::before {
           --als-active-indicator-height: 15px;
         }
+      }
+    }
+
+    .add-button {
+      margin-top: var(--als-avatar-margin);
+      margin-bottom: var(--als-avatar-margin);
+      min-height: var(--als-avatar-size);
+      min-width: var(--als-avatar-size);
+      background: none;
+
+      --add-button-color: var(--deltaChatPrimaryFgLight);
+
+      color: var(--add-button-color);
+
+      border-radius: 22%;
+      border: 1.3pt solid var(--add-button-color);
+      font-size: 22px;
+      &:hover {
+        --add-button-color: var(--deltaChatPrimaryFg);
+        border-radius: 10%;
+        border-width: 1.5pt;
+        font-weight: bold;
       }
     }
 
