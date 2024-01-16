@@ -1,10 +1,6 @@
 import { T } from '@deltachat/jsonrpc-client'
 import React, { useEffect, useMemo, useState } from 'react'
-import {
-  BackendRemote,
-  EffectfulBackendActions,
-  onDCEvent,
-} from '../../backend-com'
+import { BackendRemote, onDCEvent } from '../../backend-com'
 import { runtime } from '../../runtime'
 import { Avatar } from '../Avatar'
 import classNames from 'classnames'
@@ -30,7 +26,6 @@ export function AccountListSidebar({
       return
     }
 
-    await EffectfulBackendActions.unSelectAccount()
     await onSelectAccount(accountId)
   }
 
@@ -168,6 +163,8 @@ function AccountItem({
           </div>
         )}
       </div>
+
+      <div className='tooltip'></div>
     </div>
   )
 }

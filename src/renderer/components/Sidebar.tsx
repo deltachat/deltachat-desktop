@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import React, { useContext, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
 import { runtime } from '../runtime'
@@ -10,15 +10,10 @@ import { Avatar } from './Avatar'
 import { VERSION } from '../../shared/build-info'
 import { ActionEmitter, KeybindAction } from '../keybindings'
 import { debounceWithInit } from './chat/ChatListHelpers'
-import {
-  BackendRemote,
-  EffectfulBackendActions,
-  onDCEvent,
-} from '../backend-com'
+import { BackendRemote, onDCEvent } from '../backend-com'
 import ConnectivityDialog from './dialogs/ConnectivityDialog'
 import useDialog from '../hooks/useDialog'
 import CreateChat from './dialogs/CreateChat'
-import { ScreenContext } from '../contexts/ScreenContext'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 
 export type SidebarState = 'init' | 'visible' | 'invisible'
@@ -35,18 +30,10 @@ const Sidebar = React.memo(
     const settings = useSettingsStore()[0]
     const accountId = selectedAccountId()
     const { openDialog } = useDialog()
-    const { changeScreen } = useContext(ScreenContext)
 
     const onCreateChat = () => {
       setSidebarState('invisible')
       openDialog(CreateChat)
-    }
-
-    const onLogout = async () => {
-      setSidebarState('invisible')
-      unselectChat()
-      await EffectfulBackendActions.logout()
-      changeScreen(Screens.AccountList)
     }
 
     const onOpenConnectivity = () => {
@@ -156,9 +143,6 @@ const Sidebar = React.memo(
           </div>
           <div key='settings' className='sidebar-item' onClick={onOpenSettings}>
             {tx('menu_settings')}
-          </div>
-          <div key='logout' className='sidebar-item' onClick={onLogout}>
-            {tx('switch_account')}
           </div>
           <div className='footer'>
             <Link href='https://delta.chat' label={'Delta Chat Desktop'} />
