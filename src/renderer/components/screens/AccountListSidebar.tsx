@@ -49,7 +49,7 @@ export function AccountListSidebar({
   // - [X] unread badge for accounts
 
   // - [ ] Fix chat menu (3dot)
-  // - [ ] fix gallery
+  // - [X] fix gallery
   // - [ ] fix map
   // - [X] main screen needs to be fully rerendered (currently chtlist bugs around because it keeps prior state)
 

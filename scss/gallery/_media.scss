@@ -3,9 +3,7 @@ $tab-height: 46px;
 .media-view {
   width: calc(100% - var(--chat-list-width, 30%));
   background-color: var(--galleryBg);
-  float: right;
   padding-left: 10px;
-  margin-top: $nav-bar-height;
   max-height: calc(100vh - 50px);
   overflow: hidden;
 
