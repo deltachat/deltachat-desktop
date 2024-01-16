@@ -130,10 +130,11 @@ export default class ScreenController extends Component {
     const previousAccountId = this.selectedAccountId
 
     SettingsStoreInstance.effect.clear()
-    runtime.closeAllWebxdcInstances() // TODO remove this (add account id to webxdc title?)
 
     if (!(await runtime.getDesktopSettings()).syncAllAccounts) {
       await BackendRemote.rpc.stopIo(previousAccountId)
+      // does not work if previous account will be disabled, so better close it
+      runtime.closeAllWebxdcInstances()
     }
 
     runtime.setDesktopSetting('lastAccount', undefined)
