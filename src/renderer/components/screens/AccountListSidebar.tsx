@@ -1,7 +1,6 @@
 import { T } from '@deltachat/jsonrpc-client'
 import React, { useEffect, useMemo, useState } from 'react'
 import { BackendRemote, onDCEvent } from '../../backend-com'
-import { runtime } from '../../runtime'
 import { Avatar } from '../Avatar'
 import classNames from 'classnames'
 import debounce from 'debounce'
@@ -39,8 +38,6 @@ export function AccountListSidebar({
     refresh()
   }, [selectedAccountId, refresh])
 
-  const [hasMouseOver, setMouseOver] = useState<boolean>(false)
-
   // TODO
   // - [X] basic css allignment of sidebar
   // - [X] show / hide when appropriate
@@ -59,16 +56,8 @@ export function AccountListSidebar({
   // - [ ] check when creating a notification if account is muted
   // - [ ] show notifications for other accounts also when window is in foreground
 
-  // - [ ] make sure app works fine when bar is shown and when bar is hidden
-
   return (
-    <div
-      className={classNames('account-list-sidebar', {
-        hideScrollbarThumb: !hasMouseOver,
-      })}
-      onMouseEnter={setMouseOver.bind(null, true)}
-      onMouseLeave={setMouseOver.bind(null, false)}
-    >
+    <div className='account-list-sidebar'>
       {accounts.map(account => (
         <AccountItem
           key={account.id}

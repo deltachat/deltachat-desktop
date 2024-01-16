@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import debounce from 'debounce'
 import { filesize } from 'filesize'
-import { Switch, Alignment, Icon } from '@blueprintjs/core'
+import { Icon } from '@blueprintjs/core'
 
 import { getLogger } from '../../../shared/logger'
 import ScreenController from '../../ScreenController'

@@ -327,13 +327,7 @@ samp {
     overflow-y: scroll;
     scrollbar-width: 3px;
     &::-webkit-scrollbar {
-      width: 3px;
-    }
-    &::-webkit-scrollbar-track {
-      background-color: var(--accountSidebarBg);
-    }
-    &.hideScrollbarThumb::-webkit-scrollbar-thumb {
-      background: transparent;
+      width: 0px;
     }
   }
 
