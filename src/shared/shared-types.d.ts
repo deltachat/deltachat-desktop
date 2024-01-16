@@ -52,7 +52,6 @@ export interface DesktopSettingsType {
   activeTheme: string
   minimizeToTray: boolean
   syncAllAccounts: boolean
-  hideAccountsSidebar: boolean
   /** @deprecated The last used file location for the save dialog is now only kept in memory and not persisted anymore between sessions. */
   lastSaveDialogLocation: string | undefined
   experimentalEnableMarkdownInMessages: boolean

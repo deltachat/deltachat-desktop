@@ -17,9 +17,7 @@ export function AccountListSidebar({
   onAddAccount: () => Promise<number>
   onSelectAccount: (accountId: number) => Promise<void>
 }) {
-  const [isVisible, setVisibility] = useState(false)
   const [accounts, setAccounts] = useState<T.Account[]>([])
-  // const [syncAllAccounts, setSyncAllAccounts] = useState<boolean | null>(null)
 
   const selectAccount = async (accountId: number) => {
     if (selectedAccountId === accountId) {
@@ -33,10 +31,6 @@ export function AccountListSidebar({
     () => async () => {
       const accounts = await BackendRemote.rpc.getAllAccounts()
       setAccounts(accounts)
-      const desktopSettings = await runtime.getDesktopSettings()
-      // setSyncAllAccounts(desktopSettings.syncAllAccounts)
-      // see if the sidebar should be visible
-      setVisibility(accounts.length > 1 && !desktopSettings.hideAccountsSidebar)
     },
     []
   )
@@ -45,15 +39,7 @@ export function AccountListSidebar({
     refresh()
   }, [selectedAccountId, refresh])
 
-  // const toggleSyncAllAccounts = (newValue: boolean) => {
-  //   runtime.setDesktopSetting('syncAllAccounts', true).then(refresh)
-  // }
-
   const [hasMouseOver, setMouseOver] = useState<boolean>(false)
-
-  if (!isVisible) {
-    return null
-  }
 
   // TODO
   // - [X] basic css allignment of sidebar

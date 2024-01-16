@@ -13,7 +13,6 @@ import {
   onDCEvent,
   Type,
 } from '../../backend-com'
-import { runtime } from '../../runtime'
 import Dialog, { DialogBody, DialogHeader } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
@@ -31,14 +30,6 @@ export default function AccountListScreen({
 }) {
   const tx = useTranslationFunction()
   const [logins, setLogins] = useState<Type.Account[] | null>(null)
-  const [syncAllAccounts, setSyncAllAccounts] = useState<boolean | null>(null)
-
-  useEffect(() => {
-    ;(async () => {
-      const desktopSettings = await runtime.getDesktopSettings()
-      setSyncAllAccounts(desktopSettings.syncAllAccounts)
-    })()
-  }, [])
 
   const refreshAccounts = async () => {
     const logins = await BackendRemote.listAccounts()
@@ -82,32 +73,9 @@ export default function AccountListScreen({
                 refreshAccounts,
                 selectAccount,
                 logins,
-                showUnread: syncAllAccounts || false,
                 onAddAccount,
               }}
             />
-            {syncAllAccounts !== null && (
-              <div className='sync-all-switch'>
-                <Switch
-                  checked={syncAllAccounts}
-                  label={tx('sync_all')}
-                  onChange={async () => {
-                    const new_state = !syncAllAccounts
-                    await runtime.setDesktopSetting(
-                      'syncAllAccounts',
-                      new_state
-                    )
-                    if (new_state) {
-                      BackendRemote.rpc.startIoForAllAccounts()
-                    } else {
-                      BackendRemote.rpc.stopIoForAllAccounts()
-                    }
-                    setSyncAllAccounts(new_state)
-                  }}
-                  alignIndicator={Alignment.LEFT}
-                />
-              </div>
-            )}
           </DialogBody>
         </Dialog>
       </div>
@@ -119,13 +87,11 @@ function AccountSelection({
   refreshAccounts,
   selectAccount,
   logins,
-  showUnread,
   onAddAccount,
 }: {
   refreshAccounts: () => Promise<void>
   selectAccount: typeof ScreenController.prototype.selectAccount
   logins: Type.Account[]
-  showUnread: boolean
   onAddAccount: () => void
 }) {
   const tx = useTranslationFunction()
@@ -218,7 +184,7 @@ function AccountSelection({
           login={login}
           selectAccount={selectAccount}
           removeAccount={removeAccount}
-          showUnread={showUnread}
+          showUnread={true}
         />
       ))}
     </div>

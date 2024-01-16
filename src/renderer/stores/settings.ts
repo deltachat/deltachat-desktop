@@ -143,6 +143,13 @@ class SettingsStore extends Store<SettingsStoreState | null> {
     ) => {
       try {
         await runtime.setDesktopSetting(key, value)
+        if (key === 'syncAllAccounts') {
+          if (value) {
+            BackendRemote.rpc.startIoForAllAccounts()
+          } else {
+            BackendRemote.rpc.stopIoForAllAccounts()
+          }
+        }
         this.reducer.setDesktopSetting(key, value)
       } catch (error) {
         this.log.error('failed to apply desktop setting:', error)
