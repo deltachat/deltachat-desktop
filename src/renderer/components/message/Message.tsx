@@ -308,7 +308,7 @@ export default function Message(props: {
   const showContextMenu = useCallback(
     async (
       event: React.MouseEvent<
-        HTMLDivElement | HTMLAnchorElement | HTMLDivElement,
+        HTMLButtonElement | HTMLAnchorElement | HTMLDivElement,
         MouseEvent
       >
     ) => {
