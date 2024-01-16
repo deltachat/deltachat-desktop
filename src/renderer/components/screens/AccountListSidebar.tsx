@@ -50,7 +50,7 @@ export function AccountListSidebar({
 
   // - [ ] Fix chat menu (3dot)
   // - [X] fix gallery
-  // - [ ] fix map
+  // - [X] fix map
   // - [X] main screen needs to be fully rerendered (currently chtlist bugs around because it keeps prior state)
 
   // - [X] fake unread badge with disconnected sign for not selected accounts when sync all is deactivated
