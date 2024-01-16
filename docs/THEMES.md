@@ -5,6 +5,10 @@ Themes are CSS files that act as themes by containing many different css variabl
 Most of these variables are small variations of the base colors of the theme so using scss allows us to generate them from the base colors to save us work.
 But of course we can overwrite those variables manually too, we can even overwrite css classes if our theme needs it.
 
+## Notes
+
+- The account sidebar should not be themed
+
 ## Theme codes
 
 There are two types of themes `dc`(built-in) and `custom` themes.
