@@ -7,7 +7,6 @@ import { runtime } from '../../runtime'
 import { getLogger } from '../../../shared/logger'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import AlertDialog from '../dialogs/AlertDialog'
-import { EffectfulBackendActions } from '../../backend-com'
 import { BackendRemote, Type } from '../../backend-com'
 import processMailtoUrl from './MailtoUrl'
 import Dialog, {
@@ -183,8 +182,7 @@ export default async function processOpenQrUrl(
     }
 
     if (screen !== Screens.Welcome) {
-      // log out first
-      await EffectfulBackendActions.logout()
+      // log out first (not needed anymore as selectAccount does this automatically now)
       window.__selectAccount(await BackendRemote.rpc.addAccount())
 
       callback && callback()

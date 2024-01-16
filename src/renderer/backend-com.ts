@@ -1,11 +1,8 @@
 import { BaseDeltaChat, yerpc, DcEvent } from '@deltachat/jsonrpc-client'
 import { runtime } from './runtime'
 import { hasDebugEnabled } from '../shared/logger'
-import { debouncedUpdateBadgeCounter } from './system-integration/badge-counter'
 import { clearNotificationsForChat } from './system-integration/notifications'
 import { countCall } from './debug-tools'
-import SettingsStoreInstance from './stores/settings'
-import chatStore from './stores/chat'
 
 export { T as Type } from '@deltachat/jsonrpc-client'
 
@@ -66,42 +63,6 @@ export namespace EffectfulBackendActions {
 
     // if successful remove webxdc data
     runtime.deleteWebxdcAccountData(account_id)
-  }
-
-  export async function logout() {
-    if (window.__selectedAccountId === undefined) {
-      throw new Error('no account selected')
-    }
-    // clear stores - these do react updates so call them first
-    chatStore.reducer.unselectChat()
-    SettingsStoreInstance.effect.clear()
-
-    runtime.closeAllWebxdcInstances()
-    debouncedUpdateBadgeCounter()
-
-    if (!(await runtime.getDesktopSettings()).syncAllAccounts) {
-      await BackendRemote.rpc.stopIo(window.__selectedAccountId)
-    }
-
-    runtime.setDesktopSetting('lastAccount', undefined)
-    ;(window.__selectedAccountId as any) = undefined
-  }
-
-  // used for account sidebar
-  export async function unSelectAccount() {
-    if (window.__selectedAccountId === undefined) {
-      throw new Error('no account selected')
-    }
-
-    SettingsStoreInstance.effect.clear()
-
-    if (!(await runtime.getDesktopSettings()).syncAllAccounts) {
-      await BackendRemote.rpc.stopIo(window.__selectedAccountId)
-    }
-
-    // switching account - so no need to clear lastAccount on disk
-
-    ;(window.__selectedAccountId as any) = undefined
   }
 
   // TODO make a core events for these chatlist events instead of faking them in desktop

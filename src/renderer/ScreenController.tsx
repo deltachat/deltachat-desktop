@@ -21,6 +21,7 @@ import { KeybindingsContextProvider } from './contexts/KeybindingsContext'
 import { DialogContext } from './contexts/DialogContext'
 import WebxdcSaveToChatDialog from './components/dialogs/WebxdcSendToChat'
 import { AccountListSidebar } from './components/screens/AccountListSidebar'
+import SettingsStoreInstance from './stores/settings'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -61,6 +62,7 @@ export default class ScreenController extends Component {
     this.onShowKeybindings = this.showKeyBindings.bind(this)
     this.onShowSettings = this.showSettings.bind(this)
     this.selectAccount = this.selectAccount.bind(this)
+    this.unSelectAccount = this.unSelectAccount.bind(this)
 
     window.__userFeedback = this.userFeedback.bind(this)
     window.__changeScreen = this.changeScreen.bind(this)
@@ -101,6 +103,8 @@ export default class ScreenController extends Component {
   }
 
   async selectAccount(accountId: number) {
+    await this.unSelectAccount()
+
     this.selectedAccountId = accountId
     ;(window.__selectedAccountId as number) = accountId
 
@@ -119,6 +123,23 @@ export default class ScreenController extends Component {
     runtime.setDesktopSetting('lastAccount', accountId)
     log.info('system_info', await BackendRemote.rpc.getSystemInfo())
     log.info('account_info', await BackendRemote.rpc.getInfo(accountId))
+  }
+
+  async unSelectAccount() {
+    if (this.selectedAccountId === undefined) {
+      return
+    }
+    const previousAccountId = this.selectedAccountId
+
+    SettingsStoreInstance.effect.clear()
+    runtime.closeAllWebxdcInstances() // TODO remove this (add account id to webxdc title?)
+
+    if (!(await runtime.getDesktopSettings()).syncAllAccounts) {
+      await BackendRemote.rpc.stopIo(previousAccountId)
+    }
+
+    runtime.setDesktopSetting('lastAccount', undefined)
+    ;(window.__selectedAccountId as any) = this.selectedAccountId = undefined
   }
 
   async addAndSelectAccount(): Promise<number> {
@@ -241,7 +262,12 @@ export default class ScreenController extends Component {
         if (this.selectedAccountId === undefined) {
           throw new Error('Selected account not defined')
         }
-        return <WelcomeScreen selectedAccountId={this.selectedAccountId} />
+        return (
+          <WelcomeScreen
+            selectedAccountId={this.selectedAccountId}
+            onUnSelectAccount={this.unSelectAccount}
+          />
+        )
       case Screens.AccountList:
         return (
           <AccountListScreen

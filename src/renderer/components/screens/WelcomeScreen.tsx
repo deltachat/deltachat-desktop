@@ -122,8 +122,10 @@ const ImportButton = function ImportButton() {
 
 export default function WelcomeScreen({
   selectedAccountId,
+  onUnSelectAccount,
 }: {
   selectedAccountId: number
+  onUnSelectAccount: () => Promise<void>
 }) {
   const tx = useTranslationFunction()
   const { openDialog, closeDialog } = useDialog()
@@ -161,7 +163,7 @@ export default function WelcomeScreen({
     try {
       const acInfo = await BackendRemote.rpc.getAccountInfo(selectedAccountId)
       if (acInfo.kind === 'Unconfigured') {
-        await EffectfulBackendActions.logout()
+        await onUnSelectAccount()
         await EffectfulBackendActions.removeAccount(selectedAccountId)
       }
       window.__changeScreen(Screens.AccountList)
