@@ -11,7 +11,6 @@ import AccountSetupScreen from './components/screens/AccountSetupScreen'
 import AccountListScreen from './components/screens/AccountListScreen'
 import WelcomeScreen from './components/screens/WelcomeScreen'
 import { BackendRemote } from './backend-com'
-import { debouncedUpdateBadgeCounter } from './system-integration/badge-counter'
 import { updateDeviceChats } from './deviceMessages'
 import { runtime } from './runtime'
 import { updateTimestamps } from './components/conversations/Timestamp'
@@ -117,7 +116,6 @@ export default class ScreenController extends Component {
     } else {
       this.changeScreen(Screens.Welcome)
     }
-    debouncedUpdateBadgeCounter()
 
     await BackendRemote.rpc.startIo(accountId)
     runtime.setDesktopSetting('lastAccount', accountId)
