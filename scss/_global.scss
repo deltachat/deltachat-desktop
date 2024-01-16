@@ -215,6 +215,8 @@ samp {
 
   // todo move these ones into their files
   .account-list-sidebar {
+    --accountSidebarBg: #2c2c2c;
+
     /* sidebar that moves in is z-index 100, so this higher */
     z-index: 101;
     background-color: var(--accountSidebarBg);
@@ -309,7 +311,7 @@ samp {
       min-width: var(--als-avatar-size);
       background: none;
 
-      --add-button-color: var(--deltaChatPrimaryFgLight);
+      --add-button-color: #808080;
 
       color: var(--add-button-color);
 
@@ -317,9 +319,8 @@ samp {
       border: 1.3pt solid var(--add-button-color);
       font-size: 22px;
       &:hover {
-        --add-button-color: var(--deltaChatPrimaryFg);
-        border-width: 1.5pt;
-        font-weight: bold;
+        color: var(--accountSidebarBg);
+        background: var(--add-button-color);
       }
     }
 
