@@ -49,8 +49,8 @@ function ReactButton(props: {
     showReactionsBar({
       messageId: props.messageId,
       myReaction,
-      x: x + width / 2,
-      y,
+      x: Math.round(x + width / 2),
+      y: Math.round(y),
     })
   }
 
