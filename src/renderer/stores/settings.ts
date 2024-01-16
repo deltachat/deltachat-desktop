@@ -4,6 +4,7 @@ import { BackendRemote, Type } from '../backend-com'
 import { onReady } from '../onready'
 import { runtime } from '../runtime'
 import { Store, useStore } from './store'
+import { debouncedUpdateBadgeCounter } from '../system-integration/badge-counter'
 
 export interface SettingsStoreState {
   accountId: number
@@ -149,6 +150,7 @@ class SettingsStore extends Store<SettingsStoreState | null> {
           } else {
             BackendRemote.rpc.stopIoForAllAccounts()
           }
+          debouncedUpdateBadgeCounter()
         }
         this.reducer.setDesktopSetting(key, value)
       } catch (error) {
