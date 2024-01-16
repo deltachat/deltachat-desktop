@@ -6,6 +6,9 @@ import classNames from 'classnames'
 import debounce from 'debounce'
 import { getLogger } from '../../../shared/logger'
 import { useSettingsStore } from '../../stores/settings'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { useContextMenuWithActiveState } from '../ContextMenu'
+import { ActionEmitter, KeybindAction } from '../../keybindings'
 
 export function AccountListSidebar({
   selectedAccountId,
@@ -84,6 +87,8 @@ function AccountItem({
   isSelected: boolean
   onSelectAccount: (accountId: number) => Promise<void>
 }) {
+  const tx = useTranslationFunction()
+
   const [unreadCount, setUnreadCount] = useState<number>(0)
   useEffect(() => {
     const update = debounce(() => {
@@ -105,12 +110,50 @@ function AccountItem({
   const bgSyncDisabled =
     settings?.desktopSettings.syncAllAccounts === false && !isSelected
 
+  const { onContextMenu, isContextMenuActive } = useContextMenuWithActiveState([
+    !bgSyncDisabled &&
+      unreadCount > 0 && {
+        label: tx('mark_all_as_read'),
+        action: () => {
+          markAccountAsRead(account.id)
+        },
+      },
+    {
+      label: tx('menu_all_media'),
+      action: async () => {
+        await onSelectAccount(account.id)
+        // set Timeout forces it to be run after react update
+        setTimeout(() => {
+          ActionEmitter.emitAction(KeybindAction.GlobalGallery_Open)
+        }, 0)
+      },
+    },
+    {
+      label: tx('menu_settings'),
+      action: async () => {
+        await onSelectAccount(account.id)
+        // set Timeout forces it to be run after react update
+        setTimeout(() => {
+          ActionEmitter.emitAction(KeybindAction.Settings_Open)
+        }, 0)
+      },
+    },
+    false && {
+      label: tx('delete_account'),
+      action: async () => {
+        // TODO
+      },
+    },
+  ])
+
   return (
     <div
       className={classNames('account', {
         active: isSelected,
+        'context-menu-active': isContextMenuActive,
       })}
       onClick={() => onSelectAccount(account.id)}
+      onContextMenu={onContextMenu}
     >
       {account.kind == 'Configured' ? (
         <Avatar
@@ -141,5 +184,27 @@ function AccountItem({
 
       <div className='tooltip'></div>
     </div>
+  )
+}
+
+// marks all chats with fresh messages as noticed
+async function markAccountAsRead(accountId: number) {
+  const msgs = await BackendRemote.rpc.getFreshMsgs(accountId)
+  const messages = await BackendRemote.rpc.getMessages(accountId, msgs)
+
+  const uniqueChatIds = new Set<number>()
+  for (const key in messages) {
+    if (Object.prototype.hasOwnProperty.call(messages, key)) {
+      const message = messages[key]
+      if (message.kind === 'message') {
+        uniqueChatIds.add(message.chatId)
+      }
+    }
+  }
+
+  await Promise.all(
+    [...uniqueChatIds].map(chatId =>
+      BackendRemote.rpc.marknoticedChat(accountId, chatId)
+    )
   )
 }
