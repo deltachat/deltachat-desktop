@@ -244,7 +244,7 @@ samp {
 
         div.content,
         img.content {
-          border-radius: 22%;
+          border-radius: 10%;
         }
       }
 
@@ -271,13 +271,6 @@ samp {
       }
 
       &:hover {
-        .avatar {
-          div.content,
-          img.content {
-            border-radius: 10%;
-            transition: border-radius 0.1s ease-in;
-          }
-        }
         .avatar::before {
           --als-active-indicator-height: 15px;
         }
@@ -320,12 +313,11 @@ samp {
 
       color: var(--add-button-color);
 
-      border-radius: 22%;
+      border-radius: 10%;
       border: 1.3pt solid var(--add-button-color);
       font-size: 22px;
       &:hover {
         --add-button-color: var(--deltaChatPrimaryFg);
-        border-radius: 10%;
         border-width: 1.5pt;
         font-weight: bold;
       }
