@@ -51,6 +51,10 @@ export default function AbsolutePositioningHelper(props: Props) {
 
       const { width: refWidth, height: refHeight } = entries[0].contentRect
 
+      if (refWidth === 0 || refHeight === 0) {
+        return
+      }
+
       setDimensions({
         windowWidth: window.innerWidth,
         windowHeight: window.innerHeight,
@@ -93,7 +97,10 @@ export default function AbsolutePositioningHelper(props: Props) {
 
   return (
     <div
-      style={{ left: `${x}px`, top: `${y}px` }}
+      style={{
+        left: `${x}px`,
+        top: `${y}px`,
+      }}
       className={styles.absolutePositioningHelper}
       ref={ref}
     >

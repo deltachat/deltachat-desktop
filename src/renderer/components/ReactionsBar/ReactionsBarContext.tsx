@@ -39,16 +39,19 @@ export const ReactionsBarProvider = ({ children }: PropsWithChildren<{}>) => {
 
   return (
     <ReactionsBarContext.Provider value={value}>
-      {barArgs !== null && (
-        <AbsolutePositioningHelper x={barArgs.x} y={barArgs.y}>
+      <AbsolutePositioningHelper
+        x={barArgs ? barArgs.x : 0}
+        y={barArgs ? barArgs.y : 0}
+      >
+        {barArgs !== null && (
           <OutsideClickHelper onClick={hideReactionsBar}>
             <ReactionsShortcutBar
               messageId={barArgs.messageId}
               myReaction={barArgs.myReaction}
             />
           </OutsideClickHelper>
-        </AbsolutePositioningHelper>
-      )}
+        )}
+      </AbsolutePositioningHelper>
       {children}
     </ReactionsBarContext.Provider>
   )
