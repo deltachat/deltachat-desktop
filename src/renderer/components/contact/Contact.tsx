@@ -2,18 +2,18 @@ import React, { PropsWithChildren } from 'react'
 import { Avatar } from '../Avatar'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 
-function ContactName(
-  displayName: string,
-  address: string,
-  isVerified: boolean
-) {
+export function ContactName(props: {
+  displayName: string
+  address: string
+  isVerified?: boolean
+}) {
   return (
     <div className='contact-name'>
       <div className='display-name'>
-        <span className='truncated'>{displayName}</span>
-        {isVerified && <InlineVerifiedIcon />}
+        <span className='truncated'>{props.displayName}</span>
+        {props.isVerified && <InlineVerifiedIcon />}
       </div>
-      <div className='email'>{address}</div>
+      <div className='email'>{props.address}</div>
     </div>
   )
 }
@@ -47,7 +47,11 @@ export default function Contact(props: {
           wasSeenRecently,
         }}
       />
-      {ContactName(displayName, address, isVerified)}
+      <ContactName
+        displayName={displayName}
+        address={address}
+        isVerified={isVerified}
+      />
     </div>
   )
 }
@@ -72,7 +76,7 @@ export function PseudoContact(
           <div className='pseudo-contact-text'>{text}</div>
         </div>
       )}
-      {subText && ContactName(text, subText, false)}
+      {subText && <ContactName displayName={text} address={subText} />}
     </div>
   )
 }
