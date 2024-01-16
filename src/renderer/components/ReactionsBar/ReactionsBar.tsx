@@ -11,7 +11,7 @@ type Props = {
   myReaction?: string
 }
 
-const DEFAULT_EMOJIS = ['👍', '👎', '❤️']
+const DEFAULT_EMOJIS = ['👍', '👎', '❤️', '😂', '🙁']
 
 export default function ReactionsBar({ messageId, myReaction }: Props) {
   const accountId = selectedAccountId()
