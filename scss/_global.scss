@@ -251,7 +251,8 @@ samp {
       }
 
       &.active,
-      &:hover {
+      &:hover,
+      &.context-menu-active {
         .avatar::before {
           content: ' ';
           position: absolute;
@@ -275,6 +276,13 @@ samp {
       &:hover {
         .avatar::before {
           --als-active-indicator-height: 15px;
+        }
+      }
+
+      &.context-menu-active {
+        .avatar::before {
+          --als-active-indicator-height: 10px;
+          opacity: 0.7;
         }
       }
 
