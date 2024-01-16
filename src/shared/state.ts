@@ -23,7 +23,6 @@ export function getDefaultState(): DesktopSettingsType {
     activeTheme: 'system',
     minimizeToTray: true,
     syncAllAccounts: true,
-    hideAccountsSidebar: false,
     lastSaveDialogLocation: undefined,
     experimentalEnableMarkdownInMessages: false,
     enableWebxdcDevTools: false,
