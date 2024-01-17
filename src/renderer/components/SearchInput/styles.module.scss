@@ -33,13 +33,11 @@ $closeButtonSize: 30px;
   display: flex;
   height: $closeButtonSize;
   justify-content: center;
-  left: calc(30vw - $closeButtonSize - 5px);
   padding-bottom: 0;
   padding-left: 1px;
   padding-right: 0;
   padding-top: 0;
-  position: absolute;
-  width: $closeButtonSize;
+  min-width: $closeButtonSize;
 
   &:hover {
     background-color: $backgroundColorHover;
