@@ -564,7 +564,9 @@ export default function Message(props: {
             </div>
           )}
           <footer className={styles.messageFooter}>
-            {message.reactions && <Reactions reactions={message.reactions} />}
+            {message.reactions && !isSetupmessage && (
+              <Reactions reactions={message.reactions} />
+            )}
             <MessageMetaData
               fileMime={(!isSetupmessage && message.fileMime) || null}
               direction={direction}

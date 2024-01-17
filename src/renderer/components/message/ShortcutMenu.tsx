@@ -21,10 +21,12 @@ export default function ShortcutMenu(props: Props) {
         [styles.visible]: props.visible,
       })}
     >
-      <ReactButton
-        messageId={props.message.id}
-        reactions={props.message.reactions}
-      />
+      {!props.message.isSetupmessage && (
+        <ReactButton
+          messageId={props.message.id}
+          reactions={props.message.reactions}
+        />
+      )}
       <ContextMenuButton onClick={props.showContextMenu} />
     </div>
   )
