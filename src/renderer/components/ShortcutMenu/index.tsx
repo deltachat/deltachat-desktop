@@ -5,19 +5,23 @@ import { C, T } from '@deltachat/jsonrpc-client'
 import { useReactionsBar } from '../ReactionsBar'
 
 import styles from './styles.module.scss'
+import Icon from '../Icon'
 
 type OnButtonClick = React.MouseEvent<HTMLButtonElement, MouseEvent>
 
 type Props = {
-  visible: boolean
+  direction: 'incoming' | 'outgoing'
   message: T.Message
   showContextMenu: (event: OnButtonClick) => Promise<void>
+  visible: boolean
 }
 
 export default function ShortcutMenu(props: Props) {
   return (
     <div
       className={classNames(styles.shortcutMenu, {
+        [styles.incoming]: props.direction === 'incoming',
+        [styles.outgoing]: props.direction === 'outgoing',
         [styles.visible]: props.visible,
       })}
     >
@@ -56,11 +60,19 @@ function ReactButton(props: {
     })
   }
 
-  return <button onClick={onClick}>:-)</button>
+  return (
+    <button className={styles.shortcutMenuButton} onClick={onClick}>
+      <Icon className={styles.shortcutMenuIcon} icon='favorite' />
+    </button>
+  )
 }
 
 function ContextMenuButton(props: { onClick: (event: OnButtonClick) => void }) {
-  return <button onClick={props.onClick}>...</button>
+  return (
+    <button className={styles.shortcutMenuButton} onClick={props.onClick}>
+      <Icon className={styles.shortcutMenuIcon} icon='open_in_new' />
+    </button>
+  )
 }
 
 function getMyReaction(reactions: T.Message['reactions']): string | undefined {

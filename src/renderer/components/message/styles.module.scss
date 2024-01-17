@@ -1,5 +1,3 @@
-$shortcutMenuWidth: 100px;
-
 .message {
   &.withReactions {
     margin-bottom: 10px;
@@ -10,16 +8,4 @@ $shortcutMenuWidth: 100px;
   display: flex;
   flex-direction: row-reverse;
   justify-content: space-between;
-}
-
-.shortcutMenu {
-  display: flex;
-  align-items: center;
-  flex: 0 0 $shortcutMenuWidth;
-  visibility: hidden;
-  width: $shortcutMenuWidth;
-
-  &.visible {
-    visibility: visible;
-  }
 }

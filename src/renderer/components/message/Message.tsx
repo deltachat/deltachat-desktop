@@ -41,7 +41,7 @@ import useDialog from '../../hooks/useDialog'
 import EnterAutocryptSetupMessage from '../dialogs/EnterAutocryptSetupMessage'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import Reactions from '../Reactions'
-import ShortcutMenu from './ShortcutMenu'
+import ShortcutMenu from '../ShortcutMenu'
 
 import styles from './styles.module.scss'
 
@@ -581,6 +581,7 @@ export default function Message(props: {
         </div>
       </div>
       <ShortcutMenu
+        direction={direction}
         message={message}
         showContextMenu={showContextMenu}
         visible={props.isHover}

@@ -1,0 +1,43 @@
+$shortcutMenuWidth: 55px;
+
+.shortcutMenu {
+  align-items: center;
+  display: flex;
+  flex: 0 0 $shortcutMenuWidth;
+  justify-content: space-between;
+  visibility: hidden;
+  width: $shortcutMenuWidth;
+
+  &.visible {
+    visibility: visible;
+  }
+
+  &.incoming {
+    flex-direction: row;
+    margin-left: 10px;
+  }
+
+  &.outgoing {
+    flex-direction: row-reverse;
+    margin-right: 10px;
+  }
+}
+
+.shortcutMenuButton {
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  width: 20px;
+}
+
+.shortcutMenuIcon {
+  background-color: rgba(180, 180, 180, 0.9);
+  display: block;
+
+  &:hover {
+    background-color: #fff;
+  }
+}
