@@ -1,66 +1,19 @@
 import { T } from '@deltachat/jsonrpc-client'
-import React, { useEffect, useMemo, useState } from 'react'
-import { BackendRemote, onDCEvent } from '../../backend-com'
-import { Avatar } from '../Avatar'
+import React, { useEffect, useState } from 'react'
+import { BackendRemote, onDCEvent } from '../../../backend-com'
+import { avatarInitial } from '../../Avatar'
 import classNames from 'classnames'
 import debounce from 'debounce'
-import { getLogger } from '../../../shared/logger'
-import { useSettingsStore } from '../../stores/settings'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { useContextMenuWithActiveState } from '../ContextMenu'
-import { ActionEmitter, KeybindAction } from '../../keybindings'
+import { getLogger } from '../../../../shared/logger'
+import { useSettingsStore } from '../../../stores/settings'
+import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import { useContextMenuWithActiveState } from '../../ContextMenu'
+import { ActionEmitter, KeybindAction } from '../../../keybindings'
 
-export function AccountListSidebar({
-  selectedAccountId,
-  onAddAccount,
-  onSelectAccount,
-}: {
-  selectedAccountId: number | undefined
-  onAddAccount: () => Promise<number>
-  onSelectAccount: (accountId: number) => Promise<void>
-}) {
-  const [accounts, setAccounts] = useState<T.Account[]>([])
-
-  const selectAccount = async (accountId: number) => {
-    if (selectedAccountId === accountId) {
-      return
-    }
-
-    await onSelectAccount(accountId)
-  }
-
-  const refresh = useMemo(
-    () => async () => {
-      const accounts = await BackendRemote.rpc.getAllAccounts()
-      setAccounts(accounts)
-    },
-    []
-  )
-
-  useEffect(() => {
-    refresh()
-  }, [selectedAccountId, refresh])
-
-  return (
-    <div className='account-list-sidebar'>
-      {accounts.map(account => (
-        <AccountItem
-          key={account.id}
-          account={account}
-          isSelected={selectedAccountId === account.id}
-          onSelectAccount={selectAccount}
-        />
-      ))}
-      <button className='add-button' onClick={onAddAccount}>
-        +
-      </button>
-    </div>
-  )
-}
+import styles from './styles.module.scss'
 
 const log = getLogger('AccountsSidebar/AccountItem')
-
-function AccountItem({
+export function AccountItem({
   account,
   isSelected,
   onSelectAccount,
@@ -130,33 +83,46 @@ function AccountItem({
 
   return (
     <div
-      className={classNames('account', {
-        active: isSelected,
-        'context-menu-active': isContextMenuActive,
+      className={classNames(styles['account'], {
+        [styles.active]: isSelected,
+        [styles['context-menu-active']]: isContextMenuActive,
       })}
       onClick={() => onSelectAccount(account.id)}
       onContextMenu={onContextMenu}
     >
       {account.kind == 'Configured' ? (
-        <Avatar
-          {...{
-            avatarPath: account.profileImage || undefined,
-            color: account.color,
-            displayName: account.displayName || '',
-            addr: account.addr || undefined,
-          }}
-        />
+        <div className={styles.avatar}>
+          {' '}
+          {account.profileImage ? (
+            <img
+              className={styles.content}
+              src={'file://' + account.profileImage}
+            />
+          ) : (
+            <div
+              className={styles.content}
+              style={{ backgroundColor: account.color }}
+            >
+              {avatarInitial(
+                account.displayName || '',
+                account.addr || undefined
+              )}
+            </div>
+          )}
+        </div>
       ) : (
-        <Avatar displayName={'?'} addr={'?'} />
+        <div className={styles.avatar}>
+          <div className={styles.content}>?</div>
+        </div>
       )}
 
-      <div className='account-badge'>
+      <div className={styles['account-badge']}>
         {!bgSyncDisabled && unreadCount > 0 && (
-          <div className='fresh-message-counter'>{unreadCount}</div>
+          <div className={styles['fresh-message-counter']}>{unreadCount}</div>
         )}
         {bgSyncDisabled && (
           <div
-            className='bg-sync-disabled'
+            className={styles['bg-sync-disabled']}
             title='Background Sync Disabled, Account is only synced when selected'
           >
             ⏻
@@ -164,12 +130,12 @@ function AccountItem({
         )}
       </div>
 
-      <div className='tooltip'></div>
+      <div className={styles.tooltip}></div>
     </div>
   )
 }
-
 // marks all chats with fresh messages as noticed
+
 async function markAccountAsRead(accountId: number) {
   const msgs = await BackendRemote.rpc.getFreshMsgs(accountId)
   const messages = await BackendRemote.rpc.getMessages(accountId, msgs)

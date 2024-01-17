@@ -19,7 +19,7 @@ import About from './components/dialogs/About'
 import { KeybindingsContextProvider } from './contexts/KeybindingsContext'
 import { DialogContext } from './contexts/DialogContext'
 import WebxdcSaveToChatDialog from './components/dialogs/WebxdcSendToChat'
-import { AccountListSidebar } from './components/screens/AccountListSidebar'
+import { AccountListSidebar } from './components/screens/AccountListSidebar/AccountListSidebar'
 import SettingsStoreInstance from './stores/settings'
 
 const log = getLogger('renderer/ScreenController')
