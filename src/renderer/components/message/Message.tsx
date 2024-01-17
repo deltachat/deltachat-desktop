@@ -564,9 +564,6 @@ export default function Message(props: {
             </div>
           )}
           <footer className={styles.messageFooter}>
-            {message.reactions && !isSetupmessage && (
-              <Reactions reactions={message.reactions} />
-            )}
             <MessageMetaData
               fileMime={(!isSetupmessage && message.fileMime) || null}
               direction={direction}
@@ -578,6 +575,9 @@ export default function Message(props: {
               onClickError={openMessageInfo.bind(null, openDialog, message)}
               viewType={message.viewType}
             />
+            {message.reactions && !isSetupmessage && (
+              <Reactions reactions={message.reactions} />
+            )}
           </footer>
         </div>
       </div>

@@ -1,11 +1,12 @@
 import React from 'react'
 import classNames from 'classnames'
 
+import useDialog from '../../hooks/useDialog'
+import ReactionsDialog from '../dialogs/ReactionsDialog'
+
 import styles from './styles.module.scss'
 
 import type { T } from '@deltachat/jsonrpc-client'
-import useDialog from '../../hooks/useDialog'
-import ReactionsDialog from '../dialogs/ReactionsDialog'
 
 const SHOW_MAX_DIFFERENT_EMOJIS = 5
 
