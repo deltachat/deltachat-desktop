@@ -41,24 +41,6 @@ export function AccountListSidebar({
     refresh()
   }, [selectedAccountId, refresh])
 
-  // TODO
-  // - [X] basic css allignment of sidebar
-  // - [X] show / hide when appropriate
-  // - [X] show all accounts
-  // - [X] hightligh selected account
-  // - [X] unread badge for accounts
-
-  // - [x] Fix chat menu (3dot)
-  // - [X] fix gallery
-  // - [X] fix map
-  // - [X] main screen needs to be fully rerendered (currently chtlist bugs around because it keeps prior state)
-
-  // - [X] fake unread badge with disconnected sign for not selected accounts when sync all is deactivated
-  // - [ ] option to mute account if not active (grey badge if any, if no unread then show mute icon in badge)
-  // - [ ] save property inside of the specified account "ui.desktop.muted-if-in-bg"
-  // - [ ] check when creating a notification if account is muted
-  // - [ ] show notifications for other accounts also when window is in foreground
-
   return (
     <div className='account-list-sidebar'>
       {accounts.map(account => (
