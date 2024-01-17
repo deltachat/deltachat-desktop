@@ -1,11 +1,12 @@
 import React from 'react'
 import classNames from 'classnames'
-import { C, T } from '@deltachat/jsonrpc-client'
 
 import { useReactionsBar } from '../ReactionsBar'
+import Icon from '../Icon'
 
 import styles from './styles.module.scss'
-import Icon from '../Icon'
+
+import type { T } from '@deltachat/jsonrpc-client'
 
 type OnButtonClick = React.MouseEvent<HTMLButtonElement, MouseEvent>
 
@@ -41,7 +42,6 @@ function ReactButton(props: {
   reactions: T.Message['reactions']
 }) {
   const { showReactionsBar } = useReactionsBar()
-  const myReaction = getMyReaction(props.reactions)
 
   const onClick = (event: OnButtonClick) => {
     // We don't want `OutsideClickHelper` to catch this event, causing
@@ -54,7 +54,7 @@ function ReactButton(props: {
 
     showReactionsBar({
       messageId: props.messageId,
-      myReaction,
+      reactions: props.reactions,
       x: Math.round(x + width / 2),
       y: Math.round(y),
     })
@@ -73,16 +73,4 @@ function ContextMenuButton(props: { onClick: (event: OnButtonClick) => void }) {
       <Icon className={styles.shortcutMenuIcon} icon='open_in_new' />
     </button>
   )
-}
-
-function getMyReaction(reactions: T.Message['reactions']): string | undefined {
-  if (
-    reactions &&
-    C.DC_CONTACT_ID_SELF in reactions.reactionsByContact &&
-    reactions.reactionsByContact[C.DC_CONTACT_ID_SELF].length > 0
-  ) {
-    return reactions.reactionsByContact[C.DC_CONTACT_ID_SELF][0]
-  }
-
-  return undefined
 }
