@@ -34,7 +34,7 @@
   }
 }
 
-.account-list-sidebar {
+.accountListSidebar {
   --accountSidebarBg: #2c2c2c;
 
   /* sidebar that moves in is z-index 100, so this higher */
@@ -53,7 +53,7 @@
   --als-avatar-margin: 4px;
   --als-active-indicator-color: white;
 
-  .account {
+  .Account {
     position: relative;
 
     margin-top: var(--als-avatar-margin);
@@ -99,21 +99,21 @@
       }
     }
 
-    &.context-menu-active {
+    &.contextMenuActive {
       .avatar::before {
         --als-active-indicator-height: 10px;
         opacity: 0.7;
       }
     }
 
-    .account-badge {
+    .accountBadge {
       position: absolute;
       z-index: 102;
       bottom: -6px;
       right: -5px;
 
-      .fresh-message-counter,
-      .bg-sync-disabled {
+      .freshMessageCounter,
+      .bgSyncDisabled {
         color: var(--unreadCountLabel);
         background-color: var(--unreadCountBg);
         text-align: center;
@@ -125,7 +125,7 @@
         font-weight: bold;
       }
 
-      .bg-sync-disabled {
+      .bgSyncDisabled {
         background-color: grey;
         padding: 0px 3pt;
       }
@@ -136,7 +136,7 @@
     }
   }
 
-  .add-button {
+  .addButton {
     margin-top: var(--als-avatar-margin);
     margin-bottom: var(--als-avatar-margin);
     min-height: var(--als-avatar-size);
