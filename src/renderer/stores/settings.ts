@@ -150,7 +150,9 @@ class SettingsStore extends Store<SettingsStoreState | null> {
           } else {
             BackendRemote.rpc.stopIoForAllAccounts()
           }
-          BackendRemote.rpc.startIo(this.state.accountId)
+          if(this.state?.accountId) {
+            BackendRemote.rpc.startIo(this.state.accountId)
+          }
           debouncedUpdateBadgeCounter()
         }
         this.reducer.setDesktopSetting(key, value)
