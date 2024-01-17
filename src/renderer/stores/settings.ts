@@ -150,7 +150,7 @@ class SettingsStore extends Store<SettingsStoreState | null> {
           } else {
             BackendRemote.rpc.stopIoForAllAccounts()
           }
-          if(this.state?.accountId) {
+          if (this.state?.accountId) {
             BackendRemote.rpc.startIo(this.state.accountId)
           }
           debouncedUpdateBadgeCounter()

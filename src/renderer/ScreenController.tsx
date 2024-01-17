@@ -102,8 +102,8 @@ export default class ScreenController extends Component {
   }
 
   async selectAccount(accountId: number) {
-    if(accountId === this.selectedAccountId){
-      log.info("account is already selected")
+    if (accountId === this.selectedAccountId) {
+      log.info('account is already selected')
       return
     }
 
