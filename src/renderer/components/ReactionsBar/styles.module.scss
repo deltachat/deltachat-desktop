@@ -1,12 +1,89 @@
+@keyframes moveInBar {
+  0% {
+    opacity: 0;
+    top: 20px;
+  }
+
+  100% {
+    opacity: 1;
+    top: 0;
+  }
+}
+
+@keyframes moveInEmoji {
+  0% {
+    opacity: 0;
+    top: 20px;
+  }
+
+  100% {
+    opacity: 1;
+    top: 0;
+  }
+}
+
 .reactionsBar {
-  background-color: red;
+  animation: moveInBar 150ms;
+  background-color: #666;
+  border-radius: 25px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 4px;
+  position: relative;
+}
+
+.reactionsBarButton {
+  animation: moveInEmoji 250ms;
+  background-color: transparent;
+  border-radius: 50%;
+  border: 0;
+  height: 35px;
+  margin: 0;
+  padding: 5px;
+  position: relative;
+  width: 35px;
+
+  &:hover {
+    .reactionsBarEmoji {
+      top: -20px;
+      left: -10px;
+      font-size: 50px;
+    }
+  }
+
+  & ~ & {
+    margin-left: 15px;
+  }
+
+  &.isFromSelf {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+
+  &.showAllEmojis {
+    background-color: #777;
+    color: #ffffff;
+
+    &::after {
+      content: '⋯';
+      display: inline-block;
+      position: relative;
+      top: 1px;
+    }
+
+    &:hover {
+      background-color: #999;
+    }
+  }
 }
 
 .reactionsBarEmoji {
-  border: 0;
   font-size: 30px;
-
-  &.isFromSelf {
-    background-color: red;
-  }
+  left: 0;
+  position: absolute;
+  top: 0;
+  transition: all cubic-bezier(0, 0, 0, 1) 200ms;
 }

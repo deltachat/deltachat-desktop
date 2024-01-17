@@ -17,6 +17,9 @@ type Props = {
   visible: boolean
 }
 
+/** Move reactions bar slightly higher by x pixels */
+const REACTIONS_BAR_Y_OFFSET = 10
+
 export default function ShortcutMenu(props: Props) {
   return (
     <div
@@ -56,7 +59,7 @@ function ReactButton(props: {
       messageId: props.messageId,
       reactions: props.reactions,
       x: Math.round(x + width / 2),
-      y: Math.round(y),
+      y: Math.round(y) - REACTIONS_BAR_Y_OFFSET,
     })
   }
 

@@ -49,16 +49,22 @@ export default function ReactionsBar({ messageId, myReaction }: Props) {
               <button
                 key={`emoji-${index}`}
                 onClick={() => toggleReaction(emoji)}
-                className={classNames(styles.reactionsBarEmoji, {
+                className={classNames(styles.reactionsBarButton, {
                   [styles.isFromSelf]: myReaction === emoji,
                 })}
               >
-                {emoji}
+                <span className={styles.reactionsBarEmoji}>{emoji}</span>
               </button>
             )
           })}
           {(!myReaction || isMyReactionDefault) && (
-            <button onClick={handleShowAllEmojis}>...</button>
+            <button
+              className={classNames(
+                styles.reactionsBarButton,
+                styles.showAllEmojis
+              )}
+              onClick={handleShowAllEmojis}
+            />
           )}
         </>
       )}
