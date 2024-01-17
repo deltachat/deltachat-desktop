@@ -495,14 +495,13 @@ export default function Message(props: {
   return (
     <div
       onContextMenu={showContextMenu}
-      className={classNames(
-        'message',
-        direction,
-        { 'type-sticker': viewType === 'Sticker' },
-        { error: status === 'error' },
-        { forwarded: message.isForwarded },
-        { 'has-html': hasHtml }
-      )}
+      className={classNames('message', direction, styles.message, {
+        [styles.withReactions]: message.reactions && !isSetupmessage,
+        'type-sticker': viewType === 'Sticker',
+        error: status === 'error',
+        forwarded: message.isForwarded,
+        'has-html': hasHtml,
+      })}
       id={message.id.toString()}
     >
       {showAuthor &&

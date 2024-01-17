@@ -37,12 +37,12 @@ export default function Reactions(props: Props) {
               key={emoji}
             >
               {emoji}
-              {count > 1 && ` ${count}`}
+              {count > 1 && <span className={styles.emojiCount}>{count}</span>}
             </span>
           )
         })}
       {reactions.length > SHOW_MAX_DIFFERENT_EMOJIS && (
-        <span className={classNames(styles.emoji)}>...</span>
+        <span className={classNames(styles.emoji, styles.showMore)} />
       )}
     </div>
   )

@@ -1,5 +1,11 @@
 $shortcutMenuWidth: 100px;
 
+.message {
+  &.withReactions {
+    margin-bottom: 10px;
+  }
+}
+
 .messageFooter {
   display: flex;
   flex-direction: row-reverse;
