@@ -52,5 +52,3 @@ export function AccountListSidebar({
     </div>
   )
 }
-
-
