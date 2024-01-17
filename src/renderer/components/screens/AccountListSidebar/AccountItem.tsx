@@ -83,7 +83,7 @@ export function AccountItem({
 
   return (
     <div
-      className={classNames(styles['account'], {
+      className={classNames(styles.Account, {
         [styles.active]: isSelected,
         [styles['context-menu-active']]: isContextMenuActive,
       })}
@@ -116,13 +116,13 @@ export function AccountItem({
         </div>
       )}
 
-      <div className={styles['account-badge']}>
+      <div className={styles.accountBadge}>
         {!bgSyncDisabled && unreadCount > 0 && (
-          <div className={styles['fresh-message-counter']}>{unreadCount}</div>
+          <div className={styles.freshMessageCounter}>{unreadCount}</div>
         )}
         {bgSyncDisabled && (
           <div
-            className={styles['bg-sync-disabled']}
+            className={styles.bgSyncDisabled}
             title='Background Sync Disabled, Account is only synced when selected'
           >
             ⏻

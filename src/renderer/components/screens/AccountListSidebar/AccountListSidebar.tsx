@@ -37,7 +37,7 @@ export function AccountListSidebar({
   }, [selectedAccountId, refresh])
 
   return (
-    <div className={styles['account-list-sidebar']}>
+    <div className={styles.accountListSidebar}>
       {accounts.map(account => (
         <AccountItem
           key={account.id}
@@ -46,7 +46,7 @@ export function AccountListSidebar({
           onSelectAccount={selectAccount}
         />
       ))}
-      <button className={styles['add-button']} onClick={onAddAccount}>
+      <button className={styles.addButton} onClick={onAddAccount}>
         +
       </button>
     </div>
