@@ -17,10 +17,12 @@ export function AccountItem({
   account,
   isSelected,
   onSelectAccount,
+  updateAccountForHoverInfo,
 }: {
   account: T.Account
   isSelected: boolean
   onSelectAccount: (accountId: number) => Promise<void>
+  updateAccountForHoverInfo: (actingAccount: T.Account, select: boolean) => void
 }) {
   const tx = useTranslationFunction()
 
@@ -89,6 +91,9 @@ export function AccountItem({
       })}
       onClick={() => onSelectAccount(account.id)}
       onContextMenu={onContextMenu}
+      onMouseEnter={() => updateAccountForHoverInfo(account, true)}
+      onMouseLeave={() => updateAccountForHoverInfo(account, false)}
+      x-account-sidebar-account-id={account.id}
     >
       {account.kind == 'Configured' ? (
         <div className={styles.avatar}>
@@ -123,14 +128,13 @@ export function AccountItem({
         {bgSyncDisabled && (
           <div
             className={styles.bgSyncDisabled}
-            title='Background Sync Disabled, Account is only synced when selected'
+            title=''
+            aria-label='Background sync disabled'
           >
             ⏻
           </div>
         )}
       </div>
-
-      <div className={styles.tooltip}></div>
     </div>
   )
 }

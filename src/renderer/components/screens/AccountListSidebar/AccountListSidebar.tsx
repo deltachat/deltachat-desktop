@@ -1,9 +1,10 @@
 import { T } from '@deltachat/jsonrpc-client'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BackendRemote } from '../../../backend-com'
 import { AccountItem } from './AccountItem'
 
 import styles from './styles.module.scss'
+import { AccountHoverInfo } from './AccountHoverInfo'
 
 export function AccountListSidebar({
   selectedAccountId,
@@ -36,19 +37,67 @@ export function AccountListSidebar({
     refresh()
   }, [selectedAccountId, refresh])
 
+  const [accountForHoverInfo, internalSetAccountForHoverInfo] =
+    useState<T.Account | null>(null)
+
+  const updateAccountForHoverInfo = (
+    actingAccount: T.Account,
+    select: boolean
+  ) => {
+    internalSetAccountForHoverInfo(oldAccount => {
+      if (actingAccount === oldAccount && select === false) {
+        // only deselect if it is really deselecting the current one
+        return null
+      }
+      if (select) return actingAccount
+      return null
+    })
+  }
+
+  const hoverInfo = useRef<HTMLDivElement | null>(null)
+
+  const updateHoverInfoPosition = useCallback(() => {
+    if (hoverInfo.current && accountForHoverInfo) {
+      const elem = document.querySelector(
+        `div[x-account-sidebar-account-id="${accountForHoverInfo.id}"]`
+      )
+      if (elem) {
+        const rect = elem.getBoundingClientRect()
+        hoverInfo.current.style.top = `${rect.top}px`
+        hoverInfo.current.style.left = `${rect.right + 15}px`
+      }
+    }
+  }, [accountForHoverInfo])
+
+  useEffect(() => {
+    updateHoverInfoPosition()
+  }, [accountForHoverInfo, updateHoverInfoPosition])
+
   return (
-    <div className={styles.accountListSidebar}>
+    <div
+      className={styles.accountListSidebar}
+      onScroll={updateHoverInfoPosition}
+    >
       {accounts.map(account => (
         <AccountItem
           key={account.id}
           account={account}
           isSelected={selectedAccountId === account.id}
           onSelectAccount={selectAccount}
+          updateAccountForHoverInfo={updateAccountForHoverInfo}
         />
       ))}
       <button className={styles.addButton} onClick={onAddAccount}>
         +
       </button>
+      <div className={styles.AccountHoverInfoContainer} ref={hoverInfo}>
+        {accountForHoverInfo && (
+          <AccountHoverInfo
+            account={accountForHoverInfo}
+            isSelected={selectedAccountId === accountForHoverInfo.id}
+          />
+        )}
+      </div>
     </div>
   )
 }

@@ -130,10 +130,6 @@
         padding: 0px 3pt;
       }
     }
-
-    .tooltip {
-      background-color: rgba($color: #000000, $alpha: 0.85);
-    }
   }
 
   .addButton {
@@ -157,8 +153,42 @@
   }
 
   overflow-y: scroll;
-  scrollbar-width: 3px;
+  scrollbar-width: 0px;
   &::-webkit-scrollbar {
     width: 0px;
   }
+}
+
+.AccountHoverInfoContainer {
+  position: absolute;
+}
+
+.AccountHoverInfo {
+  display: flex;
+  flex-direction: column;
+  top: var(--als-avatar-margin);
+  left: 60px;
+  color: white;
+  background-color: rgba($color: #000000, $alpha: 0.85);
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.HoverInfoProperty {
+  font-size: smaller;
+  color: rgb(180, 180, 180);
+}
+
+.HoverInfoFooter {
+  font-size: smaller;
+  color: #808080;
+}
+
+.ConnectivityDot {
+  display: inline-block;
+  background-color: lightgray;
+  line-height: 1em;
+  min-width: 0.7em;
+  min-height: 0.7em;
+  border-radius: 100%;
 }
