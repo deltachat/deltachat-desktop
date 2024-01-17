@@ -16,6 +16,7 @@ export function AccountHoverInfo({
   account: T.Account
   isSelected: boolean
 }) {
+  const tx = window.static_translate
   const [loadedAccount, setLoadedAccount] = useState(account)
   const [accountSize, setSize] = useState<string>('?')
   const [bgSyncDisabled, setBgSyncDisabled] = useState<boolean>(false)
@@ -43,7 +44,9 @@ export function AccountHoverInfo({
     content = (
       <>
         <b>Unconfigured Account</b>
-        <br />
+        <div className={styles.HoverInfoProperty}>
+          {tx('unconfigured_account_hint')}
+        </div>
       </>
     )
   } else {
