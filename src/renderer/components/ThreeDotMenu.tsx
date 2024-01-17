@@ -202,11 +202,13 @@ export function useThreeDotMenu(
   return (event: React.MouseEvent<any, MouseEvent>) => {
     const threeDotButtonElement = document.querySelector(
       '#three-dot-menu-button'
-    ) as any
+    ) as HTMLDivElement
+
+    const boundingBox = threeDotButtonElement.getBoundingClientRect()
 
     const [cursorX, cursorY] = [
-      threeDotButtonElement.offsetLeft + threeDotButtonElement.clientWidth - 5,
-      threeDotButtonElement.offsetTop + threeDotButtonElement.clientHeight,
+      boundingBox.x + boundingBox.width - 3,
+      boundingBox.y + boundingBox.height - 2,
     ]
     event.preventDefault() // prevent default runtime context menu from opening
 
