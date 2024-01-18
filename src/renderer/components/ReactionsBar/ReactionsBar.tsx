@@ -1,11 +1,10 @@
-import Picker from '@emoji-mart/react'
 import React, { useState } from 'react'
 import classNames from 'classnames'
-import emojiData from '@emoji-mart/data'
 
 import Icon from '../Icon'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import EmojiPicker from '../EmojiPicker'
 
 import styles from './styles.module.scss'
 
@@ -44,15 +43,8 @@ export default function ReactionsBar({ messageId, myReaction }: Props) {
   return (
     <>
       {showAllEmojis && (
-        <Picker
-          autoFocus={true}
-          data={emojiData}
-          native
-          navPosition={'bottom'}
-          onEmojiSelect={(emoji: BaseEmoji) => toggleReaction(emoji.native)}
-          previewPosition={'none'}
-          searchPosition={'sticky'}
-          skinTonePosition={'none'}
+        <EmojiPicker
+          onSelect={(emoji: BaseEmoji) => toggleReaction(emoji.native)}
         />
       )}
       {!showAllEmojis && (

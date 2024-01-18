@@ -1,0 +1,33 @@
+.emojiPicker {
+  & > div {
+    em-emoji-picker {
+      --border-radius: 0px;
+      // unknown effect?
+      --background-rgb: var(--emoji-picker-background-rgb);
+      // background
+      --rgb-background: var(--emoji-picker-background-rgb);
+      // base color for text, seach placeholder an icons
+      --rgb-color: var(--emoji-picker-text-rgb);
+      --rgb-accent: var(--emoji-picker-accent-rgb);
+      // selected input field bg
+      --rgb-input: var(--emoji-picker-selected-input-bg-rgb);
+      // border, scrollbar, in-active search input, emoji hover background
+      --color-border: var(--emoji-picker-border-and-hover-color);
+      --font-family: $roboto;
+      --color-border-over: rgba(0, 0, 0, 0);
+      --shadow: none;
+    }
+  }
+
+  &.full {
+    & > div {
+      width: 100%;
+      height: 100%;
+
+      em-emoji-picker {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+}

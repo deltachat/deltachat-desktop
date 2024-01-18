@@ -5,17 +5,17 @@ import React, {
   PropsWithChildren,
 } from 'react'
 import classNames from 'classnames'
-import data from '@emoji-mart/data'
-import Picker from '@emoji-mart/react'
 
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { runtime } from '../../runtime'
 import { jumpToMessage } from '../helpers/ChatMethods'
-import { useThemeCssVar } from '../../ThemeManager'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import EmojiPicker from '../EmojiPicker'
+
+import styles from './styles.module.scss'
 
 import type { EmojiData } from 'emoji-mart/index'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 const DisplayedStickerPack = ({
   stickerPackName,
@@ -139,7 +139,6 @@ export const EmojiAndStickerPicker = forwardRef<
 >((props, ref) => {
   const accountId = selectedAccountId()
   const { onEmojiSelect, chatId, setShowEmojiPicker } = props
-  const tx = useTranslationFunction()
 
   const [showSticker, setShowSticker] = useState(false)
   const [stickers, setStickers] = useState<{
@@ -151,16 +150,6 @@ export const EmojiAndStickerPicker = forwardRef<
       .miscGetStickers(accountId)
       .then(stickers => setStickers(stickers))
   }, [accountId])
-
-  let emoji_picker_category_style = useThemeCssVar(
-    '--SPECIAL-emoji-picker-category-icon-style'
-  )
-  if (
-    emoji_picker_category_style !== 'solid' &&
-    emoji_picker_category_style !== 'outline'
-  ) {
-    emoji_picker_category_style = 'solid'
-  }
 
   return (
     <div className={'emoji-sticker-picker'} ref={ref}>
@@ -178,39 +167,12 @@ export const EmojiAndStickerPicker = forwardRef<
           Sticker
         </EmojiOrStickerSelectorButton>
       </div>
-
       {!showSticker && (
-        <div className='emoji-picker'>
-          <Picker
-            data={data}
-            style={{ width: '100%', height: '100%' }}
-            i18n={{
-              search: tx('search'),
-              notfound: tx('emoji_not_found'),
-              categories: {
-                search: tx('emoji_search_results'),
-                recent: tx('emoji_recent'),
-                people: tx('emoji_people'),
-                nature: tx('emoji_nature'),
-                foods: tx('emoji_foods'),
-                activity: tx('emoji_activity'),
-                places: tx('emoji_places'),
-                objects: tx('emoji_objects'),
-                symbols: tx('emoji_symbols'),
-                flags: tx('emoji_flags'),
-              },
-            }}
-            native
-            onEmojiSelect={onEmojiSelect}
-            navPosition={'bottom'}
-            previewPosition={'none'}
-            searchPosition={'sticky'}
-            skinTonePosition={'none'}
-            autoFocus={true}
-            dynamicWidth={true}
-            icons={emoji_picker_category_style}
-          />
-        </div>
+        <EmojiPicker
+          className={styles.emojiPicker}
+          full
+          onSelect={onEmojiSelect}
+        />
       )}
       {showSticker && (
         <StickerPicker
