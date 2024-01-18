@@ -244,6 +244,7 @@
     @include color-svg('../images/pin.svg', var(--globalText));
     width: 16px;
     height: 16px;
+    margin-left: 6px;
   }
 }
 
