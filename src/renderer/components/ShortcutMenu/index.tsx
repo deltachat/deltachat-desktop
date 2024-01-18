@@ -65,7 +65,7 @@ function ReactButton(props: {
 
   return (
     <button className={styles.shortcutMenuButton} onClick={onClick}>
-      <Icon className={styles.shortcutMenuIcon} icon='favorite' />
+      <Icon className={styles.shortcutMenuIcon} icon='reaction' />
     </button>
   )
 }
@@ -73,7 +73,7 @@ function ReactButton(props: {
 function ContextMenuButton(props: { onClick: (event: OnButtonClick) => void }) {
   return (
     <button className={styles.shortcutMenuButton} onClick={props.onClick}>
-      <Icon className={styles.shortcutMenuIcon} icon='open_in_new' />
+      <Icon className={styles.shortcutMenuIcon} icon='more' />
     </button>
   )
 }

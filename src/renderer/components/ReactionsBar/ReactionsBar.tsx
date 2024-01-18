@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import classNames from 'classnames'
 import emojiData from '@emoji-mart/data'
 
+import Icon from '../Icon'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 
@@ -42,6 +43,14 @@ export default function ReactionsBar({ messageId, myReaction }: Props) {
 
   return (
     <div className={styles.reactionsBar}>
+      {myReaction && !isMyReactionDefault && (
+        <button
+          onClick={() => toggleReaction(myReaction!)}
+          className={classNames(styles.reactionsBarButton, styles.isFromSelf)}
+        >
+          <span className={styles.reactionsBarEmoji}>{myReaction}</span>
+        </button>
+      )}
       {!showAllEmojis && (
         <>
           {DEFAULT_EMOJIS.map((emoji, index) => {
@@ -64,17 +73,11 @@ export default function ReactionsBar({ messageId, myReaction }: Props) {
                 styles.showAllEmojis
               )}
               onClick={handleShowAllEmojis}
-            />
+            >
+              <Icon className={styles.showAllIcon} icon='more' />
+            </button>
           )}
         </>
-      )}
-      {myReaction && !isMyReactionDefault && (
-        <button
-          onClick={() => toggleReaction(myReaction!)}
-          className={classNames(styles.reactionsBarEmoji, styles.isFromSelf)}
-        >
-          {myReaction}
-        </button>
       )}
       {showAllEmojis && (
         <Picker

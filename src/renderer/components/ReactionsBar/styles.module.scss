@@ -37,42 +37,30 @@
 }
 
 .reactionsBarButton {
+  align-items: center;
   animation: moveInEmoji 250ms;
   background-color: transparent;
   border-radius: 50%;
   border: 0;
-  height: 35px;
+  display: flex;
+  height: 40px;
+  justify-content: center;
   margin: 0;
-  padding: 5px;
+  padding: 0;
   position: relative;
-  width: 35px;
-
-  &:hover {
-    .reactionsBarEmoji {
-      top: -20px;
-      left: -10px;
-      font-size: 50px;
-    }
-  }
+  width: 40px;
 
   & ~ & {
-    margin-left: 15px;
+    margin-left: 10px;
   }
 
   &.isFromSelf {
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: #999;
   }
 
   &.showAllEmojis {
     background-color: #777;
     color: #ffffff;
-
-    &::after {
-      content: '⋯';
-      display: inline-block;
-      position: relative;
-      top: 1px;
-    }
 
     &:hover {
       background-color: #999;
@@ -81,9 +69,20 @@
 }
 
 .reactionsBarEmoji {
-  font-size: 30px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  transition: all cubic-bezier(0, 0, 0, 1) 200ms;
+  font-size: 25px;
+  margin-left: 2px;
+  margin-top: 3px;
+  transition: transform ease-out 200ms;
+}
+
+.reactionsBarButton {
+  &:hover {
+    .reactionsBarEmoji {
+      transform: scale(2) translate3d(0, -8px, 0);
+    }
+  }
+}
+
+.showAllIcon {
+  background-color: #efefef;
 }
