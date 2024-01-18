@@ -46,6 +46,7 @@ export const ReactionsBarProvider = ({ children }: PropsWithChildren<{}>) => {
         {barArgs !== null && (
           <OutsideClickHelper onClick={hideReactionsBar}>
             <ReactionsShortcutBar
+              key={barArgs.messageId}
               messageId={barArgs.messageId}
               myReaction={barArgs.myReaction}
             />
