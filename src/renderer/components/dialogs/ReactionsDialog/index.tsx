@@ -12,7 +12,7 @@ import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { selectedAccountId } from '../../../ScreenController'
 import { BackendRemote } from '../../../backend-com'
 import { AvatarFromContact } from '../../Avatar'
-import { ContactName } from '../../contact/Contact'
+import ContactName from '../../ContactName'
 
 import styles from './styles.module.scss'
 
@@ -82,13 +82,17 @@ function ReactionsDialogList({ reactionsByContact }: Props) {
     <ul className={styles.reactionsDialogList}>
       {contacts.map(contact => {
         return (
-          <li key={contact.id} className={styles.reactionsDialogEntry}>
-            <AvatarFromContact contact={contact} />
-            <ContactName
-              displayName={contact.displayName}
-              address={contact.address}
-            />
-            <span>{contact.emoji}</span>
+          <li key={contact.id} className={styles.reactionsDialogListItem}>
+            <div className={styles.reactionsDialogAvatar}>
+              <AvatarFromContact contact={contact} />
+            </div>
+            <div className={styles.reactionsDialogContactName}>
+              <ContactName
+                displayName={contact.displayName}
+                address={contact.address}
+              />
+            </div>
+            <div className={styles.reactionsDialogEmoji}>{contact.emoji}</div>
           </li>
         )
       })}
