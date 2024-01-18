@@ -31,7 +31,7 @@
 - update `electron` from `v26.6.0` to version `v26.6.3`
 - Remember file open dialog locations across the current session and do not persist last save location across sessions anymore #3615
 - Disable three-dot-menu when not applicable (map, other gallery tabs) #3523
-- move pin icon in chatlist after date (https://support.delta.chat/t/three-small-changes-to-make-delta-chat-better/2886/2)
+- move pin icon in chatlist after date #3636
 
 ### Fixed
 - Silently fail when notifications are not supported by OS #3613
