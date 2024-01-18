@@ -42,17 +42,32 @@ export default function ReactionsBar({ messageId, myReaction }: Props) {
     : false
 
   return (
-    <div className={styles.reactionsBar}>
-      {myReaction && !isMyReactionDefault && (
-        <button
-          onClick={() => toggleReaction(myReaction!)}
-          className={classNames(styles.reactionsBarButton, styles.isFromSelf)}
-        >
-          <span className={styles.reactionsBarEmoji}>{myReaction}</span>
-        </button>
+    <>
+      {showAllEmojis && (
+        <Picker
+          autoFocus={true}
+          data={emojiData}
+          native
+          navPosition={'bottom'}
+          onEmojiSelect={(emoji: BaseEmoji) => toggleReaction(emoji.native)}
+          previewPosition={'none'}
+          searchPosition={'sticky'}
+          skinTonePosition={'none'}
+        />
       )}
       {!showAllEmojis && (
-        <>
+        <div className={styles.reactionsBar}>
+          {myReaction && !isMyReactionDefault && (
+            <button
+              onClick={() => toggleReaction(myReaction!)}
+              className={classNames(
+                styles.reactionsBarButton,
+                styles.isFromSelf
+              )}
+            >
+              <span className={styles.reactionsBarEmoji}>{myReaction}</span>
+            </button>
+          )}
           {DEFAULT_EMOJIS.map((emoji, index) => {
             return (
               <button
@@ -77,20 +92,8 @@ export default function ReactionsBar({ messageId, myReaction }: Props) {
               <Icon className={styles.showAllIcon} icon='more' />
             </button>
           )}
-        </>
+        </div>
       )}
-      {showAllEmojis && (
-        <Picker
-          autoFocus={true}
-          data={emojiData}
-          native
-          navPosition={'bottom'}
-          onEmojiSelect={(emoji: BaseEmoji) => toggleReaction(emoji.native)}
-          previewPosition={'none'}
-          searchPosition={'sticky'}
-          skinTonePosition={'none'}
-        />
-      )}
-    </div>
+    </>
   )
 }
