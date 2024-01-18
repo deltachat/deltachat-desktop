@@ -1,29 +1,19 @@
-@keyframes moveInBar {
+@keyframes moveUpAndFadeIn {
   0% {
     opacity: 0;
-    top: 20px;
+    transform: translate3d(0, 20px, 0);
+    // Make sure that we can't interact with the component while it is animated
+    pointer-events: none;
   }
 
   100% {
     opacity: 1;
-    top: 0;
-  }
-}
-
-@keyframes moveInEmoji {
-  0% {
-    opacity: 0;
-    top: 20px;
-  }
-
-  100% {
-    opacity: 1;
-    top: 0;
+    pointer-events: none;
   }
 }
 
 .reactionsBar {
-  animation: moveInBar 150ms;
+  animation: moveUpAndFadeIn 150ms;
   background-color: #666;
   border-radius: 25px;
   border: 2px solid rgba(0, 0, 0, 0.1);
@@ -33,12 +23,11 @@
   padding-left: 5px;
   padding-right: 5px;
   padding-top: 4px;
-  position: relative;
 }
 
 .reactionsBarButton {
   align-items: center;
-  animation: moveInEmoji 250ms;
+  animation: moveUpAndFadeIn 250ms;
   background-color: transparent;
   border-radius: 50%;
   border: 0;
@@ -47,7 +36,6 @@
   justify-content: center;
   margin: 0;
   padding: 0;
-  position: relative;
   width: 40px;
 
   & ~ & {
