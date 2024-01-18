@@ -97,10 +97,7 @@ export default function AbsolutePositioningHelper(props: Props) {
 
   return (
     <div
-      style={{
-        left: `${x}px`,
-        top: `${y}px`,
-      }}
+      style={{ left: `${x}px`, top: `${y}px` }}
       className={styles.absolutePositioningHelper}
       ref={ref}
     >
