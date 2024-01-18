@@ -33,17 +33,16 @@ export default class MessageMetaData extends React.Component<{
       viewType,
     } = this.props
 
-    const withImageNoCaption = Boolean(
-      !hasText && (isImage(fileMime) || isVideo(fileMime))
-    )
-
     return (
       <I18nContext.Consumer>
         {tx => (
           <div
             className={classNames('metadata', {
-              'with-image-no-caption':
-                withImageNoCaption || viewType === 'Sticker',
+              'with-image-no-caption': isMediaWithoutText(
+                fileMime,
+                hasText,
+                viewType
+              ),
             })}
           >
             {username !== undefined ? (
@@ -75,4 +74,20 @@ export default class MessageMetaData extends React.Component<{
       </I18nContext.Consumer>
     )
   }
+}
+
+/**
+ * Returns true if message contains visual media (image, sticker or video)
+ * without any further text.
+ **/
+export function isMediaWithoutText(
+  fileMime: string | null,
+  hasText: boolean,
+  viewType: T.Viewtype
+): boolean {
+  const withImageNoCaption = Boolean(
+    !hasText && (isImage(fileMime) || isVideo(fileMime))
+  )
+
+  return withImageNoCaption || viewType === 'Sticker'
 }

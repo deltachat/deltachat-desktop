@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import { C, T } from '@deltachat/jsonrpc-client'
 
 import MessageBody from './MessageBody'
-import MessageMetaData from './MessageMetaData'
+import MessageMetaData, { isMediaWithoutText } from './MessageMetaData'
 import {
   onDownload,
   openAttachmentInShell,
@@ -492,6 +492,10 @@ export default function Message(props: {
   const showAuthor =
     conversationType.hasMultipleParticipants || message?.overrideSenderName
 
+  const hasText = text !== null && text !== ''
+  const fileMime = (!isSetupmessage && message.fileMime) || null
+  const isWithoutText = isMediaWithoutText(fileMime, hasText, message.viewType)
+
   return (
     <div
       onContextMenu={showContextMenu}
@@ -562,12 +566,17 @@ export default function Message(props: {
               {tx('show_full_message')}
             </div>
           )}
-          <footer className={styles.messageFooter}>
+          <footer
+            className={classNames(styles.messageFooter, {
+              [styles.onlyMedia]: isWithoutText,
+              [styles.withReactionsNoText]: isWithoutText && message.reactions,
+            })}
+          >
             <MessageMetaData
-              fileMime={(!isSetupmessage && message.fileMime) || null}
+              fileMime={fileMime}
               direction={direction}
               status={status}
-              hasText={text !== null && text !== ''}
+              hasText={hasText}
               hasLocation={hasLocation}
               timestamp={message.timestamp * 1000}
               padlock={message.showPadlock}
