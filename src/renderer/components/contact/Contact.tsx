@@ -1,7 +1,22 @@
 import React, { PropsWithChildren } from 'react'
-
 import { Avatar } from '../Avatar'
-import ContactName from '../ContactName'
+import { InlineVerifiedIcon } from '../VerifiedIcon'
+
+export function ContactName(props: {
+  displayName: string
+  address: string
+  isVerified?: boolean
+}) {
+  return (
+    <div className='contact-name'>
+      <div className='display-name'>
+        <span className='truncated'>{props.displayName}</span>
+        {props.isVerified && <InlineVerifiedIcon />}
+      </div>
+      <div className='email'>{props.address}</div>
+    </div>
+  )
+}
 
 export default function Contact(props: {
   contact: {
