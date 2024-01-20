@@ -44,7 +44,6 @@ function Header({
         </span>
       </div>
       {isMuted && <div className='mute_icon' aria-label={tx('mute')} />}
-      {isPinned && <div className='pin_icon' aria-label={tx('pin')} />}
       <div>
         {lastUpdated && lastUpdated !== 0 && (
           <Timestamp
@@ -54,6 +53,7 @@ function Header({
           />
         )}
       </div>
+      {isPinned && <div className='pin_icon' aria-label={tx('pin')} />}
     </div>
   )
 }
