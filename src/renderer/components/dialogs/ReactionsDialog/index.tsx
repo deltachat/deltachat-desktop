@@ -34,7 +34,7 @@ export default function ReactionsDialog({
   const tx = useTranslationFunction()
 
   return (
-    <Dialog onClose={onClose}>
+    <Dialog width={400} onClose={onClose}>
       <DialogHeader title={tx('reactions')} />
       <DialogBody>
         <DialogContent>
