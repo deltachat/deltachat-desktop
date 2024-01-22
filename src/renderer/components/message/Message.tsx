@@ -38,6 +38,7 @@ import {
 } from '../dialogs/ProtectionStatusDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
+import { useReactionsBar } from '../ReactionsBar'
 import EnterAutocryptSetupMessage from '../dialogs/EnterAutocryptSetupMessage'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import Reactions from '../Reactions'
@@ -141,12 +142,14 @@ function buildContextMenu(
     text,
     conversationType,
     openDialog,
+    handleReactClick,
     chat,
   }: {
     message: Type.Message | null
     text?: string
     conversationType: ConversationType
     openDialog: OpenDialog
+    handleReactClick: () => void
     chat: T.FullChat
   },
   clickTarget: HTMLAnchorElement | null
@@ -226,6 +229,11 @@ function buildContextMenu(
       label: tx('forward'),
       action: openForwardDialog.bind(null, openDialog, message),
     },
+    // Send emoji reaction
+    {
+      label: tx('reactions'),
+      action: handleReactClick,
+    },
     // copy link
     link !== '' &&
       isLink && {
@@ -301,6 +309,7 @@ export default function Message(props: {
   const status = mapCoreMsgStatus2String(message.state)
   const tx = useTranslationFunction()
   const accountId = selectedAccountId()
+  const { showReactionsBar } = useReactionsBar()
 
   const { openDialog } = useDialog()
   const { openContextMenu } = useContext(ContextMenuContext)
@@ -319,6 +328,15 @@ export default function Message(props: {
         message.chatId
       )
 
+      const handleReactClick = () => {
+        showReactionsBar({
+          messageId: message.id,
+          reactions: message.reactions,
+          x: event.clientX,
+          y: event.clientY,
+        })
+      }
+
       // the event.t is a workaround for labled links, as they will be able to contain markdown formatting in the label in the future.
       const target = ((event as any).t || event.target) as HTMLAnchorElement
       const items = buildContextMenu(
@@ -327,6 +345,7 @@ export default function Message(props: {
           text: text || undefined,
           conversationType,
           openDialog,
+          handleReactClick,
           chat,
         },
         target
@@ -339,7 +358,15 @@ export default function Message(props: {
         items,
       })
     },
-    [accountId, conversationType, message, openContextMenu, openDialog, text]
+    [
+      accountId,
+      conversationType,
+      message,
+      openContextMenu,
+      openDialog,
+      showReactionsBar,
+      text,
+    ]
   )
 
   // Info Message

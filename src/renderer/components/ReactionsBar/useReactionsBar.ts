@@ -3,10 +3,21 @@ import { C } from '@deltachat/jsonrpc-client'
 
 import { ReactionsBarContext } from '.'
 
-import type { ShowReactionBar } from './ReactionsBarContext'
+import type { ShowReactionBar, ReactionsBarValue } from './ReactionsBarContext'
 import type { T } from '@deltachat/jsonrpc-client'
 
-export default function useReactionsBar() {
+type UseReactionsBar = Pick<ReactionsBarValue, 'hideReactionsBar'> & {
+  showReactionsBar: (
+    args: Pick<ShowReactionBar, 'messageId' | 'x' | 'y'> & {
+      reactions: T.Message['reactions']
+    }
+  ) => void
+}
+
+/** Move reactions bar slightly higher by x pixels */
+const REACTIONS_BAR_Y_OFFSET = 10
+
+export default function useReactionsBar(): UseReactionsBar {
   const context = useContext(ReactionsBarContext)
 
   if (!context) {
@@ -17,15 +28,13 @@ export default function useReactionsBar() {
 
   return {
     ...context,
-    showReactionsBar: (
-      args: Pick<ShowReactionBar, 'messageId' | 'x' | 'y'> & {
-        reactions: T.Message['reactions']
-      }
-    ) => {
-      const { reactions, ...remainingArgs } = args
+    showReactionsBar: args => {
+      const { reactions, x, y, ...remainingArgs } = args
 
       context.showReactionsBar({
         ...remainingArgs,
+        x: Math.round(x),
+        y: Math.round(y) - REACTIONS_BAR_Y_OFFSET,
         myReaction: getMyReaction(reactions),
       })
     },

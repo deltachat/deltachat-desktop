@@ -13,7 +13,7 @@ export type ShowReactionBar = {
   y: number
 }
 
-type ReactionsBarValue = {
+export type ReactionsBarValue = {
   showReactionsBar: (args: ShowReactionBar) => void
   hideReactionsBar: () => void
 }
