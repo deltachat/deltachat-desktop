@@ -14,10 +14,12 @@
 
 .reactionsBar {
   animation: moveUpAndFadeIn 150ms;
-  background-color: #666;
+  background-color: var(--bp4MenuBg);
   border-radius: 25px;
-  border: 2px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 0 0 1px rgba(16, 22, 26, 0.1),
+    0 2px 4px rgba(16, 22, 26, 0.2),
+    0 8px 24px rgba(16, 22, 26, 0.2);
   display: flex;
   padding-bottom: 4px;
   padding-left: 5px;
@@ -43,16 +45,12 @@
   }
 
   &.isFromSelf {
-    background-color: #999;
+    background-color: var(--chatListItemBgHover);
   }
 
   &.showAllEmojis {
-    background-color: #777;
-    color: #ffffff;
-
-    &:hover {
-      background-color: #999;
-    }
+    background-color: var(--chatListItemBgHover);
+    color: var(--bp4MenuText);
   }
 }
 
@@ -72,5 +70,12 @@
 }
 
 .showAllIcon {
-  background-color: #efefef;
+  background-color: rgb(120, 120, 120);
+}
+
+.reactionsBarPicker {
+  box-shadow:
+    0 0 0 1px rgba(16, 22, 26, 0.1),
+    0 2px 4px rgba(16, 22, 26, 0.2),
+    0 8px 24px rgba(16, 22, 26, 0.2);
 }
