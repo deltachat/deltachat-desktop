@@ -31,7 +31,7 @@ export default function Icon({ size = 20, icon, className }: Props) {
     <span
       className={classNames(styles.icon, className)}
       style={{
-        WebkitMask: `url(../images/icons/${icon}.svg) no-repeat center`,
+        WebkitMaskImage: `url(../images/icons/${icon}.svg)`,
         height: `${size}px`,
         width: `${size}px`,
       }}
