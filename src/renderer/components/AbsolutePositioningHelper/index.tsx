@@ -95,6 +95,20 @@ export default function AbsolutePositioningHelper(props: Props) {
     y = props.y
   }
 
+  // .. and when it is too far to the bottom
+  if (y + dimensions.refHeight > dimensions.windowHeight) {
+    y = props.y - dimensions.refHeight
+  }
+
+  // .. and when the screen is just too small
+  if (y < 0) {
+    y = 0
+  }
+
+  if (x < 0) {
+    x = 0
+  }
+
   return (
     <div
       style={{ left: `${x}px`, top: `${y}px` }}
