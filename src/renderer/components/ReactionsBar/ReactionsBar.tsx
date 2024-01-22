@@ -74,17 +74,15 @@ export default function ReactionsBar({ messageId, myReaction }: Props) {
               </button>
             )
           })}
-          {(!myReaction || isMyReactionDefault) && (
-            <button
-              className={classNames(
-                styles.reactionsBarButton,
-                styles.showAllEmojis
-              )}
-              onClick={handleShowAllEmojis}
-            >
-              <Icon className={styles.showAllIcon} icon='more' />
-            </button>
-          )}
+          <button
+            className={classNames(
+              styles.reactionsBarButton,
+              styles.showAllEmojis
+            )}
+            onClick={handleShowAllEmojis}
+          >
+            <Icon className={styles.showAllIcon} icon='more' />
+          </button>
         </div>
       )}
     </>
