@@ -35,7 +35,6 @@ export default function EmojiPicker({
       })}
     >
       <Picker
-        style={full && { width: '100%', height: '100%' }}
         data={emojiData}
         i18n={{
           search: tx('search'),
