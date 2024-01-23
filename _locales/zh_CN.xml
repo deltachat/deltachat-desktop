@@ -370,7 +370,7 @@
         <item quantity="other">%d 条新消息</item>
     </plurals>
     <!-- The placeholder will be replaced by the name of the recipient in a one-to-one chat. -->
-    <string name="chat_new_one_to_one_hint">发一条消息给 %1$s。即使对方不使用 Delta Chat 也没问题。</string>
+    <string name="chat_new_one_to_one_hint">发一条消息给 %1$s。</string>
     <string name="chat_new_broadcast_hint">在广播列表中，收件人会在和你进行的只读聊天中收到消息</string>
     <string name="chat_new_group_hint">在您发出第一条消息后，其他人才会看到此群组。</string>
     <string name="chat_record_slide_to_cancel">滑动来取消</string>
@@ -605,8 +605,6 @@
     <string name="pref_your_name">您的名称</string>
     <!-- Translators: Visible only to recipients who DO NOT use Delta Chat, so it's the last line in an E-mail and not a "Status". -->
     <string name="pref_default_status_label">签名档</string>
-    <!-- Translators: The URL should not be localized as it is unclear which language the receiver prefers; the language will be automatically detected on the server -->
-    <string name="pref_default_status_text">由我的 Delta Chat Messenger 发送： https://delta.chat</string>
     <string name="pref_enter_sends">回车键发送</string>
     <string name="pref_enter_sends_explain">按回车键发送文本消息</string>
     <string name="pref_outgoing_media_quality">发出媒体质量</string>
@@ -729,6 +727,8 @@
 
     <!-- Reactions -->
     <string name="reactions">回应</string>
+    <!-- Verb, the action of adding a "Reaction" to a message. Used eg. in context menus, similar to "Reply" or "Forward" -->
+    <string name="react">回应</string>
 
     <!-- automatically delete message -->
     <string name="delete_old_messages">删除旧消息</string>
@@ -892,7 +892,10 @@
     <string name="qrshow_join_contact_no_connection_toast">没有互联网连接，无法进行二维码设置。</string>
     <string name="qraccount_ask_create_and_login">在“%1$s”创建新的电子邮件地址并登录？</string>
     <string name="qraccount_ask_create_and_login_another">在“%1$s”创建新的电子邮件地址并登录？\n\n已存在的账户不会被删除。使用“切换账户”来在账户之间切换。</string>
+    <!-- deprecated, use set_name_and_avatar_explain instead -->
     <string name="qraccount_success_enter_name">登录成功——电子邮件地址是 %1$s\n\n如果您愿意，您现在可以去设置一个名称和个人资料图片。它们将显示给您发消息到的人。</string>
+    <string name="set_name_and_avatar_explain">设置一个你的联系人认得出的名字。你还可以设置头像图片</string>
+    <string name="please_enter_name">请输入名字</string>
     <string name="qraccount_qr_code_cannot_be_used">无法使用扫描到的二维码建立新账户。</string>
     <string name="qraccount_use_on_new_install">扫描到的二维码是用于设置新帐户的。设置新的 Delta Chat 安装时，您可以扫描此二维码。</string>
     <!-- the placeholder will be replaced by the e-mail address of the account -->
@@ -910,7 +913,7 @@
     <string name="verified_by_you">由您验证</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
     <string name="contact_setup_changed">%1$s 的加密设置已更改。</string>
-    <string name="verified_contact_required_explain">要确保端到端加密，你只能将带有略色验证标识的联系人到此群中。\n\n你可以亲自和未验证联系人线下碰面并扫描联系人二维码来验证。</string>
+    <string name="verified_contact_required_explain">要确保端到端加密，你只能将带有绿色验证标识的联系人到此群中。\n\n你可以亲自和未验证联系人线下碰面并扫描联系人二维码来验证。</string>
     <string name="copy_qr_data_success">已复制二维码链接到剪贴板</string>
     <string name="mailto_dialog_header_select_chat">选择要发送消息的聊天</string>
     <!-- first placeholder is the name of the chat -->

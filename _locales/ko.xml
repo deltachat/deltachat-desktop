@@ -338,7 +338,7 @@
         <item quantity="other">새 메시지 %d건</item>
     </plurals>
     <!-- The placeholder will be replaced by the name of the recipient in a one-to-one chat. -->
-    <string name="chat_new_one_to_one_hint">%1$s에게 메시지를 보냅니다. Delta Chat 없이도 메시지를 받을 수 있습니다.</string>
+    <string name="chat_new_one_to_one_hint">%1$s에게 메시지를 보냅니다.</string>
     <string name="chat_new_group_hint">당신이 첫 번째 메시지를 보낸 후에만 다른 사용자들이 이 그룹을 볼 것입니다.</string>
     <string name="chat_record_slide_to_cancel">밀어서 취소</string>
     <string name="chat_record_explain">꾹 눌러 음성 메시지를 녹음하고, 떼서 보내시오</string>
@@ -526,8 +526,6 @@
     <string name="pref_your_name">내 이름</string>
     <!-- Translators: Visible only to recipients who DO NOT use Delta Chat, so it's the last line in an E-mail and not a "Status". -->
     <string name="pref_default_status_label">서명 텍스트</string>
-    <!-- Translators: The URL should not be localized as it is unclear which language the receiver prefers; the language will be automatically detected on the server -->
-    <string name="pref_default_status_text">내 델타 채팅 메신저와 함께 전송됨: https://delta.chat</string>
     <string name="pref_enter_sends">엔터키로 메시지 전송</string>
     <string name="pref_enter_sends_explain">Enter 키를 누르면 문자 메시지가 전송됩니다.</string>
     <string name="pref_outgoing_media_quality">발신 미디어 품질</string>
@@ -775,6 +773,7 @@
     <string name="qrshow_join_contact_no_connection_toast">인터넷에 연결되어 있지 않아 QR 코드 설정을 수행할 수 없습니다.</string>
     <string name="qraccount_ask_create_and_login">\"%1$s\"에서 새 이메일 주소를 만들고 로그인하시겠습니까?</string>
     <string name="qraccount_ask_create_and_login_another">\"%1$s\"에서 새 이메일 주소를 만들고 로그인하시겠습니까?\n\n기존 계정은 삭제되지 않습니다. 계정 전환 항목을 사용하여 계정 간을 전환합니다.</string>
+    <!-- deprecated, use set_name_and_avatar_explain instead -->
     <string name="qraccount_success_enter_name">로그인 성공—이메일 주소는 %1$s입니다 \n\n원하는 경우, 이제 다름 사람에게 표시할 이름과 프로필 이미지를 입력할 수 있습니다.</string>
     <string name="qraccount_qr_code_cannot_be_used">스캔한 QR 코드를 사용하여 새 계정을 설정할 수 없습니다.</string>
     <string name="qraccount_use_on_new_install">스캔한 QR 코드는 새 계정을 설정하기 위한 것입니다. 새 델타 채팅 설치를 설정할 때 QR 코드를 스캔할 수 있습니다.</string>

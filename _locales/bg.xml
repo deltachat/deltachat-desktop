@@ -368,7 +368,7 @@
         <item quantity="other">%d нови съобщения</item>
     </plurals>
     <!-- The placeholder will be replaced by the name of the recipient in a one-to-one chat. -->
-    <string name="chat_new_one_to_one_hint">Изпращане на съобщение до %1$s; получателят ще може да го получи дори без Delta Chat</string>
+    <string name="chat_new_one_to_one_hint">Изпращане на съобщение до %1$s.</string>
     <string name="chat_new_group_hint">Другите ще виждат тази група едва след като изпратите първо съобщение.</string>
     <string name="chat_record_slide_to_cancel">Приплъзнете, за да откажете</string>
     <string name="chat_record_explain">Докоснете и задръжте, за да запишете гласово съобщение, отпуснете, за да го изпратите</string>
@@ -590,8 +590,6 @@
     <string name="pref_your_name">Вашето име</string>
     <!-- Translators: Visible only to recipients who DO NOT use Delta Chat, so it's the last line in an E-mail and not a "Status". -->
     <string name="pref_default_status_label">Текст на подписа</string>
-    <!-- Translators: The URL should not be localized as it is unclear which language the receiver prefers; the language will be automatically detected on the server -->
-    <string name="pref_default_status_text">Изпратено с предпочитаното от мен приложение за обмен на съобщения - Delta Chat: https://delta.chat</string>
     <string name="pref_enter_sends">Клавишът Enter изпраща</string>
     <string name="pref_enter_sends_explain">Натискането на клавиша Enter ще изпраща текстовите съобщения</string>
     <string name="pref_outgoing_media_quality">Качество на изходящата медия</string>
@@ -854,6 +852,7 @@
     <string name="qrshow_join_contact_no_connection_toast">Няма връзка към Интернет, не може да бъде извършена настройка чрез QR код.</string>
     <string name="qraccount_ask_create_and_login">Да бъде ли създаден нов адрес за електронна поща на \"%1$s\" и да бъде ли осъществено влизане там?</string>
     <string name="qraccount_ask_create_and_login_another">Да бъде ли създаден нов адрес за електронна поща в \"%1$s\" и да бъде ли осъществено влизане там?\n\nВашият съществуващ акаунт няма да бъде изтрит. Използвайте опцията \"Превключване към друг акаунт\", за да превключвате между Вашите акаунти.</string>
+    <!-- deprecated, use set_name_and_avatar_explain instead -->
     <string name="qraccount_success_enter_name">Влизането е успешно — Вашият адрес за електронна поща е %1$s\n\nАко желаете, може да въведете име и изображение за Вашия профил. Те ще бъдат показвани на хората, на които пишете.</string>
     <string name="qraccount_qr_code_cannot_be_used">Не може да бъде създаден нов акаунт със сканирания QR код.</string>
     <string name="qraccount_use_on_new_install">Сканираният QR код е за установяване на нов акаунт. Можете да сканирате QR кода, когато създавате нова инсталация на Delta Chat.</string>

@@ -385,7 +385,7 @@
         <item quantity="other">%d new messages</item>
     </plurals>
     <!-- The placeholder will be replaced by the name of the recipient in a one-to-one chat. -->
-    <string name="chat_new_one_to_one_hint">Send a message to %1$s; they can even receive it without Delta Chat.</string>
+    <string name="chat_new_one_to_one_hint">Send a message to %1$s.</string>
     <string name="chat_new_broadcast_hint">In a broadcast list, recipients will receive messages in a read-only chat with you.</string>
     <string name="chat_new_group_hint">Others will only see this group after you sent a first message.</string>
     <string name="chat_record_slide_to_cancel">Slide to cancel</string>
@@ -620,8 +620,6 @@
     <string name="pref_your_name">Your Name</string>
     <!-- Translators: Visible only to recipients who DO NOT use Delta Chat, so it's the last line in an E-mail and not a "Status". -->
     <string name="pref_default_status_label">Signature Text</string>
-    <!-- Translators: The URL should not be localized as it is unclear which language the receiver prefers; the language will be automatically detected on the server -->
-    <string name="pref_default_status_text">Sent with my Delta Chat Messenger: https://delta.chat</string>
     <string name="pref_enter_sends">Enter Key Sends</string>
     <string name="pref_enter_sends_explain">Pressing the Enter key will send text messages</string>
     <string name="pref_outgoing_media_quality">Outgoing Media Quality</string>
@@ -744,6 +742,8 @@
 
     <!-- Reactions -->
     <string name="reactions">Reactions</string>
+    <!-- Verb, the action of adding a "Reaction" to a message. Used eg. in context menus, similar to "Reply" or "Forward" -->
+    <string name="react">React</string>
 
     <!-- automatically delete message -->
     <string name="delete_old_messages">Delete Old Messages</string>
@@ -907,7 +907,10 @@
     <string name="qrshow_join_contact_no_connection_toast">No internet connection, can\'t perform QR code setup.</string>
     <string name="qraccount_ask_create_and_login">Create new e-mail address on \"%1$s\" and log in there?</string>
     <string name="qraccount_ask_create_and_login_another">Create new e-mail address on \"%1$s\" and log in there?\n\nYour existing account will not be deleted. Use the \"Switch Account\" item to switch between your accounts.</string>
+    <!-- deprecated, use set_name_and_avatar_explain instead -->
     <string name="qraccount_success_enter_name">Login successful—your e-mail address is %1$s\n\nIf you like, you can now enter a name and an profile image that will be displayed to people you write to.</string>
+    <string name="set_name_and_avatar_explain">Set a name that your contacts will recognize. You can also set a profile image.</string>
+    <string name="please_enter_name">Please enter a name.</string>
     <string name="qraccount_qr_code_cannot_be_used">The scanned QR code cannot be used to set up a new account.</string>
     <string name="qraccount_use_on_new_install">The scanned QR code is for setting up a new account. You can scan the QR code when setting up a new Delta Chat installation.</string>
     <!-- the placeholder will be replaced by the e-mail address of the account -->

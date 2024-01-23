@@ -377,7 +377,7 @@
         <item quantity="other">%d de mesaje noi</item>
     </plurals>
     <!-- The placeholder will be replaced by the name of the recipient in a one-to-one chat. -->
-    <string name="chat_new_one_to_one_hint">Trimiteți un mesaj către %1$s; ei îl pot primi chiar și fără Delta Chat.</string>
+    <string name="chat_new_one_to_one_hint">Trimiteți un mesaj către %1$s.</string>
     <string name="chat_new_group_hint">Ceilalți vor vedea acest grup numai după ce ați trimis un prim mesaj.</string>
     <string name="chat_record_slide_to_cancel">Glisați pentru a anula</string>
     <string name="chat_record_explain">Atingeți continuu pentru a înregistra un mesaj vocal, apoi eliberați-l pentru a-l trimite</string>
@@ -599,8 +599,6 @@
     <string name="pref_your_name">Numele dumneavoastră</string>
     <!-- Translators: Visible only to recipients who DO NOT use Delta Chat, so it's the last line in an E-mail and not a "Status". -->
     <string name="pref_default_status_label">Semnătură Text</string>
-    <!-- Translators: The URL should not be localized as it is unclear which language the receiver prefers; the language will be automatically detected on the server -->
-    <string name="pref_default_status_text">Trimis cu Delta Chat Messenger: https://delta.chat</string>
     <string name="pref_enter_sends">Tasta Enter trimite</string>
     <string name="pref_enter_sends_explain">Apăsarea tastei Enter va trimite mesaje text</string>
     <string name="pref_outgoing_media_quality">Calitatea Mediilor de Ieșire</string>
