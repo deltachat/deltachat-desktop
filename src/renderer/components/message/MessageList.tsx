@@ -24,6 +24,7 @@ import { debouncedUpdateBadgeCounter } from '../../system-integration/badge-coun
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
+import { useReactionsBar } from '../ReactionsBar'
 
 const log = getLogger('render/components/message/MessageList')
 
@@ -119,6 +120,7 @@ export default function MessageList({
     fetchMoreBottom,
     fetchMoreTop,
   } = useMessageList(accountId, chatStore.chat.id)
+  const { hideReactionsBar } = useReactionsBar()
 
   const countUnreadMessages = useUnreadCount(
     accountId,
@@ -207,9 +209,11 @@ export default function MessageList({
         return
       }
       if (scheduler.isLocked('scroll') === true) {
-        //console.log('onScroll: locked, returning')
         return
       }
+
+      hideReactionsBar()
+
       const distanceToTop = messageListRef.current.scrollTop
       const distanceToBottom =
         messageListRef.current.scrollHeight -
@@ -228,7 +232,6 @@ export default function MessageList({
         clearJumpStack()
       }
 
-      //console.log('onScroll', distanceToTop, distanceToBottom)
       if (distanceToTop < 200 && distanceToBottom < 200) {
         log.debug('onScroll: Lets try loading messages from both ends')
         setTimeout(() => fetchMoreTop(), 0)
@@ -251,14 +254,15 @@ export default function MessageList({
       }
     },
     [
-      fetchMoreTop,
+      clearJumpStack,
       fetchMoreBottom,
+      fetchMoreTop,
+      hideReactionsBar,
+      messageListItems.length,
+      newestFetchedMessageListItemIndex,
+      scheduler,
       setShowJumpDownButton,
       showJumpDownButton,
-      newestFetchedMessageListItemIndex,
-      messageListItems.length,
-      scheduler,
-      clearJumpStack,
     ]
   )
 
@@ -493,6 +497,21 @@ export const MessageListInner = React.memo(
       }
     })
 
+    const [currentHoverMessageId, setCurrentHoverMessageId] = useState<
+      number | null
+    >(null)
+
+    const onMouseMove = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+      // Message components are organised as a list
+      const target = event.target as HTMLElement
+      const messageElem = target.closest('li')
+
+      // .. every list element has an HTML `id` tag which contains the message id
+      const id = messageElem ? parseInt(messageElem.id, 10) : null
+
+      setCurrentHoverMessageId(id)
+    }
+
     if (!loaded) {
       return (
         <div id='message-list' ref={messageListRef} onScroll={onScroll}>
@@ -502,7 +521,12 @@ export const MessageListInner = React.memo(
     }
 
     return (
-      <div id='message-list' ref={messageListRef} onScroll={onScroll}>
+      <div
+        id='message-list'
+        ref={messageListRef}
+        onMouseMoveCapture={onMouseMove}
+        onScroll={onScroll}
+      >
         <ul>
           {messageListItems.length === 0 && <EmptyChatMessage />}
           {activeView.map(messageId => {
@@ -520,6 +544,7 @@ export const MessageListInner = React.memo(
               if (message?.kind === 'message') {
                 return (
                   <MessageWrapper
+                    isHover={messageId.msg_id === currentHoverMessageId}
                     key={messageId.msg_id}
                     key2={`${messageId.msg_id}`}
                     message={message}

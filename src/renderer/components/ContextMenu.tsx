@@ -9,7 +9,10 @@ import classNames from 'classnames'
 
 import useContextMenu from '../hooks/useContextMenu'
 
-type ContextMenuItemActionable = { action: () => void; subitems?: never }
+type ContextMenuItemActionable = {
+  action: (event: React.MouseEvent<Element, MouseEvent>) => void
+  subitems?: never
+}
 
 type ContextMenuItemExpandable = {
   action?: never
@@ -340,7 +343,7 @@ export function ContextMenu(props: {
                   keyboardFocus.current = -1
                   didOpen.current = false
                   closeCallback()
-                  item.action()
+                  item.action(ev)
                 }
               }}
               onMouseOver={() => {

@@ -1,0 +1,25 @@
+.reactionsDialogList {
+  margin: 0;
+}
+
+.reactionsDialogListItem {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.reactionsDialogAvatar {
+  flex: 0 0 48px;
+  margin-right: 10px;
+}
+
+.reactionsDialogContactName {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.reactionsDialogEmoji {
+  flex: 0 0 50px;
+  font-size: 20px;
+  text-align: center;
+}

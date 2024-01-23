@@ -8,6 +8,7 @@
   - Hovering outside of the menu closes last opened sublevel
   - ChatListContextMenu mute option now opens a submenu with duration options instead of a dialog
 - Add shortcut to scan qr code to "New Chat" dialog #3623
+- Message reactions with emojis #2964
 
 ### Changed
 - Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.132.1`

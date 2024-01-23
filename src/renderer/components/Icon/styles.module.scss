@@ -1,3 +1,7 @@
 .icon {
   background-color: var(--colorPrimary);
+  display: inline-block;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
 }

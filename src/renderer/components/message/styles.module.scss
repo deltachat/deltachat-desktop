@@ -1,0 +1,23 @@
+.message {
+  &.withReactions {
+    margin-bottom: 10px;
+  }
+}
+
+.messageFooter {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+
+  &.onlyMedia {
+    bottom: 0;
+    left: 0;
+    margin-left: 10px;
+    position: absolute;
+    right: 0;
+  }
+
+  &.withReactionsNoText {
+    margin-bottom: 10px;
+  }
+}

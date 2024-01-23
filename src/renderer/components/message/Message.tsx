@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import { C, T } from '@deltachat/jsonrpc-client'
 
 import MessageBody from './MessageBody'
-import MessageMetaData from './MessageMetaData'
+import MessageMetaData, { isMediaWithoutText } from './MessageMetaData'
 import {
   onDownload,
   openAttachmentInShell,
@@ -38,9 +38,15 @@ import {
 } from '../dialogs/ProtectionStatusDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
+import { useReactionsBar } from '../ReactionsBar'
 import EnterAutocryptSetupMessage from '../dialogs/EnterAutocryptSetupMessage'
-import { OpenDialog } from '../../contexts/DialogContext'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
+import Reactions from '../Reactions'
+import ShortcutMenu from '../ShortcutMenu'
+
+import styles from './styles.module.scss'
+
+import type { OpenDialog } from '../../contexts/DialogContext'
 
 const Avatar = (
   contact: Type.Contact,
@@ -136,12 +142,14 @@ function buildContextMenu(
     text,
     conversationType,
     openDialog,
+    handleReactClick,
     chat,
   }: {
     message: Type.Message | null
     text?: string
     conversationType: ConversationType
     openDialog: OpenDialog
+    handleReactClick: (event: React.MouseEvent<Element, MouseEvent>) => void
     chat: T.FullChat
   },
   clickTarget: HTMLAnchorElement | null
@@ -221,6 +229,11 @@ function buildContextMenu(
       label: tx('forward'),
       action: openForwardDialog.bind(null, openDialog, message),
     },
+    // Send emoji reaction
+    {
+      label: tx('reactions'),
+      action: handleReactClick,
+    },
     // copy link
     link !== '' &&
       isLink && {
@@ -288,6 +301,7 @@ function buildContextMenu(
 export default function Message(props: {
   message: Type.Message
   conversationType: ConversationType
+  isHover: boolean
 }) {
   const { message, conversationType } = props
   const { id, viewType, text, hasLocation, isSetupmessage, hasHtml } = message
@@ -295,13 +309,17 @@ export default function Message(props: {
   const status = mapCoreMsgStatus2String(message.state)
   const tx = useTranslationFunction()
   const accountId = selectedAccountId()
+  const { showReactionsBar } = useReactionsBar()
 
   const { openDialog } = useDialog()
   const { openContextMenu } = useContext(ContextMenuContext)
 
   const showContextMenu = useCallback(
     async (
-      event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement, MouseEvent>
+      event: React.MouseEvent<
+        HTMLButtonElement | HTMLAnchorElement | HTMLDivElement,
+        MouseEvent
+      >
     ) => {
       event.preventDefault() // prevent default runtime context menu from opening
 
@@ -309,6 +327,22 @@ export default function Message(props: {
         accountId,
         message.chatId
       )
+
+      const handleReactClick = (
+        event: React.MouseEvent<Element, MouseEvent>
+      ) => {
+        // We don't want `OutsideClickHelper` to catch this event, causing
+        // the reaction bar to directly hide again when switching to other
+        // messages by clicking the "react" button
+        event.stopPropagation()
+
+        showReactionsBar({
+          messageId: message.id,
+          reactions: message.reactions,
+          x: event.clientX,
+          y: event.clientY,
+        })
+      }
 
       // the event.t is a workaround for labled links, as they will be able to contain markdown formatting in the label in the future.
       const target = ((event as any).t || event.target) as HTMLAnchorElement
@@ -318,6 +352,7 @@ export default function Message(props: {
           text: text || undefined,
           conversationType,
           openDialog,
+          handleReactClick,
           chat,
         },
         target
@@ -330,7 +365,15 @@ export default function Message(props: {
         items,
       })
     },
-    [accountId, conversationType, message, openContextMenu, openDialog, text]
+    [
+      accountId,
+      conversationType,
+      message,
+      openContextMenu,
+      openDialog,
+      showReactionsBar,
+      text,
+    ]
   )
 
   // Info Message
@@ -483,17 +526,20 @@ export default function Message(props: {
   const showAuthor =
     conversationType.hasMultipleParticipants || message?.overrideSenderName
 
+  const hasText = text !== null && text !== ''
+  const fileMime = (!isSetupmessage && message.fileMime) || null
+  const isWithoutText = isMediaWithoutText(fileMime, hasText, message.viewType)
+
   return (
     <div
       onContextMenu={showContextMenu}
-      className={classNames(
-        'message',
-        direction,
-        { 'type-sticker': viewType === 'Sticker' },
-        { error: status === 'error' },
-        { forwarded: message.isForwarded },
-        { 'has-html': hasHtml }
-      )}
+      className={classNames('message', direction, styles.message, {
+        [styles.withReactions]: message.reactions && !isSetupmessage,
+        'type-sticker': viewType === 'Sticker',
+        error: status === 'error',
+        forwarded: message.isForwarded,
+        'has-html': hasHtml,
+      })}
       id={message.id.toString()}
     >
       {showAuthor &&
@@ -554,19 +600,35 @@ export default function Message(props: {
               {tx('show_full_message')}
             </div>
           )}
-          <MessageMetaData
-            fileMime={(!isSetupmessage && message.fileMime) || null}
-            direction={direction}
-            status={status}
-            hasText={text !== null && text !== ''}
-            hasLocation={hasLocation}
-            timestamp={message.timestamp * 1000}
-            padlock={message.showPadlock}
-            onClickError={openMessageInfo.bind(null, openDialog, message)}
-            viewType={message.viewType}
-          />
+          <footer
+            className={classNames(styles.messageFooter, {
+              [styles.onlyMedia]: isWithoutText,
+              [styles.withReactionsNoText]: isWithoutText && message.reactions,
+            })}
+          >
+            <MessageMetaData
+              fileMime={fileMime}
+              direction={direction}
+              status={status}
+              hasText={hasText}
+              hasLocation={hasLocation}
+              timestamp={message.timestamp * 1000}
+              padlock={message.showPadlock}
+              onClickError={openMessageInfo.bind(null, openDialog, message)}
+              viewType={message.viewType}
+            />
+            {message.reactions && !isSetupmessage && (
+              <Reactions reactions={message.reactions} />
+            )}
+          </footer>
         </div>
       </div>
+      <ShortcutMenu
+        direction={direction}
+        message={message}
+        showContextMenu={showContextMenu}
+        visible={props.isHover}
+      />
     </div>
   )
 }

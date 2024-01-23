@@ -1,8 +1,9 @@
 import React, { useLayoutEffect } from 'react'
+import { C } from '@deltachat/jsonrpc-client'
+
 import Message from './Message'
 import { ConversationType } from './MessageList'
 import { Type } from '../../backend-com'
-import { C } from '@deltachat/jsonrpc-client'
 import { getLogger } from '../../../shared/logger'
 
 const log = getLogger('renderer/message/MessageWrapper')
@@ -10,6 +11,7 @@ const log = getLogger('renderer/message/MessageWrapper')
 type RenderMessageProps = {
   key2: string
   message: Type.Message
+  isHover: boolean
   conversationType: ConversationType
   unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
 }
@@ -59,6 +61,7 @@ export function MessageWrapper(props: RenderMessageProps) {
     props.unreadMessageInViewIntersectionObserver,
     shouldInViewObserve,
   ])
+
   return (
     <li id={props.key2}>
       <Message {...props} />

@@ -149,7 +149,6 @@
   .metadata {
     margin-top: 10px;
     margin-bottom: -7px;
-    float: right;
   }
 
   .module-message__img-attachment {
@@ -223,9 +222,10 @@
 }
 
 .message.outgoing {
+  flex-direction: row-reverse;
   float: right;
-  margin-right: 0;
   margin-left: 32px;
+  margin-right: 0;
 
   .metadata:not(.with-image-no-caption) {
     & > .date {
@@ -370,25 +370,10 @@
   }
 }
 
-/* Spec: container > 438px and container < 593px*/
-@media (min-width: 800px) and (max-width: 925px) {
-  .message {
-    max-width: 374px;
-
-    &.incoming {
-      margin-right: auto;
-    }
-
-    &.outgoing {
-      margin-left: auto;
-    }
-  }
-}
-
 // Spec: container > 593px
 @media (min-width: 926px) {
   .message {
-    max-width: 66%;
+    max-width: 75%;
 
     &.incoming {
       margin-right: auto;
@@ -402,7 +387,7 @@
 
 @media (max-width: 925px) {
   .message {
-    max-width: 90%;
+    max-width: 100%;
 
     &.incoming {
       margin-right: auto;

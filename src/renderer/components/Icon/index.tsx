@@ -1,6 +1,8 @@
 import React from 'react'
 import classNames from 'classnames'
 
+import styles from './styles.module.scss'
+
 export type IconName =
   | 'arrow-left'
   | 'bell'
@@ -12,8 +14,10 @@ export type IconName =
   | 'forum'
   | 'lead-pencil'
   | 'list'
+  | 'more'
   | 'open_in_new'
   | 'person'
+  | 'reaction'
   | 'swap_vert'
 
 type Props = {
@@ -22,14 +26,12 @@ type Props = {
   size?: number
 }
 
-import styles from './styles.module.scss'
-
 export default function Icon({ size = 20, icon, className }: Props) {
   return (
     <span
       className={classNames(styles.icon, className)}
       style={{
-        WebkitMask: `url(../images/icons/${icon}.svg) no-repeat center`,
+        WebkitMaskImage: `url(../images/icons/${icon}.svg)`,
         height: `${size}px`,
         width: `${size}px`,
       }}
