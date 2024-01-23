@@ -106,7 +106,8 @@ export default function AbsolutePositioningHelper(props: Props) {
   }
 
   // Hide wrapper if observed element is not rendered yet. Do not remove
-  // it from DOM as we need to learn about it's size as soon as it comes in
+  // it from DOM as we need to learn about it's size as soon as it comes in.
+  // This helps us to prevent weird flickering when React is not ready yet.
   const visibility =
     dimensions.refWidth === 0 || dimensions.refHeight === 0
       ? 'hidden'
