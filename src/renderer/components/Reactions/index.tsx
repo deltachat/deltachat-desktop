@@ -8,6 +8,11 @@ import styles from './styles.module.scss'
 
 import type { T } from '@deltachat/jsonrpc-client'
 
+// With this constant we define how many max. different emojis we display
+// under each message.
+//
+// Reactions are sorted by their frequencies in the core, that is, the
+// most used emojis come first in this list.
 const SHOW_MAX_DIFFERENT_EMOJIS = 5
 
 type Props = {

@@ -69,6 +69,10 @@ function ReactionsDialogList({ reactionsByContact }: Props) {
         Object.values(result).map(contact => {
           return {
             ...contact,
+            // It is not possible to set more than one reaction per user (the
+            // previous one gets automatically overwritten by the core). Even
+            // though `reactionsByContact` is an array there will always be
+            // only one item inside
             emoji: reactionsByContact[contact.id][0],
           }
         })
