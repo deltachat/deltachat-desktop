@@ -231,7 +231,7 @@ function buildContextMenu(
     },
     // Send emoji reaction
     {
-      label: tx('react'),
+      label: tx('reactions'),
       action: handleReactClick,
     },
     // copy link
