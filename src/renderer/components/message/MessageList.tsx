@@ -497,6 +497,21 @@ export const MessageListInner = React.memo(
       }
     })
 
+    const [currentHoverMessageId, setCurrentHoverMessageId] = useState<
+      number | null
+    >(null)
+
+    const onMouseMove = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+      // Message components are organised as a list
+      const target = event.target as HTMLElement
+      const messageElem = target.closest('li')
+
+      // .. every list element has an HTML `id` tag which contains the message id
+      const id = messageElem ? parseInt(messageElem.id, 10) : null
+
+      setCurrentHoverMessageId(id)
+    }
+
     if (!loaded) {
       return (
         <div id='message-list' ref={messageListRef} onScroll={onScroll}>
@@ -506,7 +521,12 @@ export const MessageListInner = React.memo(
     }
 
     return (
-      <div id='message-list' ref={messageListRef} onScroll={onScroll}>
+      <div
+        id='message-list'
+        ref={messageListRef}
+        onMouseMoveCapture={onMouseMove}
+        onScroll={onScroll}
+      >
         <ul>
           {messageListItems.length === 0 && <EmptyChatMessage />}
           {activeView.map(messageId => {
@@ -524,6 +544,7 @@ export const MessageListInner = React.memo(
               if (message?.kind === 'message') {
                 return (
                   <MessageWrapper
+                    isHover={messageId.msg_id === currentHoverMessageId}
                     key={messageId.msg_id}
                     key2={`${messageId.msg_id}`}
                     message={message}

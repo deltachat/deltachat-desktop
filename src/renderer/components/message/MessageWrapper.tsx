@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react'
+import React, { useLayoutEffect } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
 import Message from './Message'
@@ -11,12 +11,12 @@ const log = getLogger('renderer/message/MessageWrapper')
 type RenderMessageProps = {
   key2: string
   message: Type.Message
+  isHover: boolean
   conversationType: ConversationType
   unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
 }
 
 export function MessageWrapper(props: RenderMessageProps) {
-  const [isHover, setIsHover] = useState(false)
   const state = props.message.state
   const shouldInViewObserve =
     state === C.DC_STATE_IN_FRESH || state === C.DC_STATE_IN_NOTICED
@@ -62,17 +62,9 @@ export function MessageWrapper(props: RenderMessageProps) {
     shouldInViewObserve,
   ])
 
-  const onMouseOver = () => {
-    setIsHover(true)
-  }
-
-  const onMouseOut = () => {
-    setIsHover(false)
-  }
-
   return (
-    <li id={props.key2} onMouseOut={onMouseOut} onMouseOver={onMouseOver}>
-      <Message isHover={isHover} {...props} />
+    <li id={props.key2}>
+      <Message {...props} />
       <div className='message-observer-bottom' id={'bottom-' + props.key2} />
     </li>
   )
