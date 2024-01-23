@@ -1,7 +1,7 @@
 @keyframes moveUpAndFadeIn {
   0% {
     opacity: 0;
-    transform: translate3d(0, 20px, 0);
+    transform: translate3d(0, 15px, 0);
     // Make sure that we can't interact with the component while it is animated
     pointer-events: none;
   }
