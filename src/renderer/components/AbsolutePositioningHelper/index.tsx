@@ -105,9 +105,20 @@ export default function AbsolutePositioningHelper(props: Props) {
     y = 0
   }
 
+  // Hide wrapper if observed element is not rendered yet. Do not remove
+  // it from DOM as we need to learn about it's size as soon as it comes in
+  const visibility =
+    dimensions.refWidth === 0 || dimensions.refHeight === 0
+      ? 'hidden'
+      : 'visible'
+
   return (
     <div
-      style={{ left: `${x}px`, top: `${y}px` }}
+      style={{
+        left: `${x}px`,
+        top: `${y}px`,
+        visibility,
+      }}
       className={styles.absolutePositioningHelper}
       ref={ref}
     >
