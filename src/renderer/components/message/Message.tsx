@@ -149,7 +149,7 @@ function buildContextMenu(
     text?: string
     conversationType: ConversationType
     openDialog: OpenDialog
-    handleReactClick: () => void
+    handleReactClick: (event: React.MouseEvent<Element, MouseEvent>) => void
     chat: T.FullChat
   },
   clickTarget: HTMLAnchorElement | null
@@ -328,7 +328,14 @@ export default function Message(props: {
         message.chatId
       )
 
-      const handleReactClick = () => {
+      const handleReactClick = (
+        event: React.MouseEvent<Element, MouseEvent>
+      ) => {
+        // We don't want `OutsideClickHelper` to catch this event, causing
+        // the reaction bar to directly hide again when switching to other
+        // messages by clicking the "react" button
+        event.stopPropagation()
+
         showReactionsBar({
           messageId: message.id,
           reactions: message.reactions,
