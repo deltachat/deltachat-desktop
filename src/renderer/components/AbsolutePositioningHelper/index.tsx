@@ -77,36 +77,32 @@ export default function AbsolutePositioningHelper(props: Props) {
 
   // Change the x position when it is too far to the right and leaving the window
   if (x + dimensions.refWidth > dimensions.windowWidth) {
-    x = props.x - dimensions.refWidth
+    x = dimensions.windowWidth - dimensions.refWidth
   }
 
   // .. and when it is too far to the left
-  if (x < dimensions.refWidth / 2) {
-    x = props.x
+  if (x < 0) {
+    x = 0
   }
 
   let y
 
-  // Adjust element to be above the initial y position
+  // Align element to be above the initial y position
   y = props.y - dimensions.refHeight
 
-  // Change the y position when it is too far to the top and leaving the window
+  // Align the element under the initial y position if it would otherwise cut the top
   if (y < dimensions.refHeight) {
     y = props.y
   }
 
   // .. and when it is too far to the bottom
   if (y + dimensions.refHeight > dimensions.windowHeight) {
-    y = props.y - dimensions.refHeight
+    y = dimensions.windowHeight - dimensions.refHeight
   }
 
   // Finally adjust when the screen is just too small
   if (y < 0) {
     y = 0
-  }
-
-  if (x < 0) {
-    x = 0
   }
 
   return (
