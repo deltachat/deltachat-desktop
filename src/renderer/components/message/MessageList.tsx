@@ -547,6 +547,7 @@ export const MessageListInner = React.memo(
                     isHover={messageId.msg_id === currentHoverMessageId}
                     key={messageId.msg_id}
                     key2={`${messageId.msg_id}`}
+                    chat={chatStore.chat}
                     message={message}
                     conversationType={conversationType}
                     unreadMessageInViewIntersectionObserver={
