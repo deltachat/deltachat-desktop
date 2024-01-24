@@ -41,6 +41,10 @@
 - Fix uncaught Exception when dismissing notifications on windows #3593
 - Introduce own React context for context menus & fix regression #3608
 - Improve position of verified icon in profile info #3627
+- fix: build process: delete old themes before rebuilding. #3645
+
+### Removed
+- removed minimal theme from offical themes because it is unmaintained. #3645
 
 <a id="1_42_2"></a>
 
