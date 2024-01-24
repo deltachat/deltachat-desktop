@@ -41,9 +41,8 @@ export default function Attachment({
     return null
   }
   const direction = getDirection(message)
-  const onClickAttachment = (ev: any) => {
+  const onClickAttachment = () => {
     if (message.viewType === 'Sticker') return
-    ev.stopPropagation()
     if (isDisplayableByFullscreenMedia(message.fileMime)) {
       openDialog(FullscreenMedia, {
         msg: message,
