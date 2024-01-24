@@ -34,6 +34,7 @@
 - Disable three-dot-menu when not applicable (map, other gallery tabs) #3523
 - move pin icon in chatlist after date #3636
 - hide email address for guaranteed e2e DM chats in the titlebar #3629
+- use displayName for contact in verified_by in Contact Dialog (also hide email address) #3629
 
 ### Fixed
 - Silently fail when notifications are not supported by OS #3613

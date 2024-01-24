@@ -173,12 +173,12 @@ export function ViewProfileInner({
         setVerifier(null) // make sure it rather shows nothing than wrong values
         const verifierContactId = contact.verifierId
         try {
-          const { nameAndAddr } = await BackendRemote.rpc.getContact(
+          const { displayName } = await BackendRemote.rpc.getContact(
             accountId,
             verifierContactId
           )
           setVerifier({
-            label: tx('verified_by', nameAndAddr),
+            label: tx('verified_by', displayName),
             action: () => openViewProfileDialog(openDialog, verifierContactId),
           })
         } catch (error) {
