@@ -270,6 +270,7 @@ $scrollbarTransparency: 0.5;
 
 .message.outgoing {
   float: none;
+  flex-direction: row; // show hover shortcuts always at end of the message
 }
 
 .msg-container {
