@@ -17,16 +17,18 @@ export default function OutsideClickHelper({
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const handleClick = (event: MouseEvent) => {
+    const handleClick = (event: MouseEvent | TouchEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {
         onClick()
       }
     }
 
-    window.addEventListener('click', handleClick)
+    document.addEventListener('mousedown', handleClick)
+    document.addEventListener('touchstart', handleClick)
 
     return () => {
-      window.removeEventListener('click', handleClick)
+      document.removeEventListener('mousedown', handleClick)
+      document.removeEventListener('touchstart', handleClick)
     }
   }, [onClick])
 
