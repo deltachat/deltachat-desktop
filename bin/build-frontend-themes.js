@@ -1,10 +1,18 @@
-const { readdir, readFile, writeFile } = require('fs/promises')
+const { readdir, readFile, writeFile, rm } = require('fs/promises')
 const sass = require('sass')
 const { join } = require('path')
 
 const dc_theme_dir = join(__dirname, '../themes')
 ;(async () => {
   const files = await readdir(dc_theme_dir)
+
+  // remove old files
+  await Promise.all(
+    files
+      .filter(f => f.includes('.css'))
+      .map(file => rm(join(dc_theme_dir, file)))
+  )
+
   const themes = files.filter(f => f.includes('.scss') && f.charAt(0) !== '_')
   try {
     const result = await Promise.all(
