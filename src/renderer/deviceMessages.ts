@@ -4,7 +4,7 @@ export async function updateDeviceChats(
   accountId: number,
   skipCurrentChangelog: boolean = false
 ) {
-  const UpdateMessage = async (
+  const addDeviceMessage = async (
     label: string,
     msg: Partial<Parameters<typeof BackendRemote.rpc.addDeviceMessage>[2]>
   ) => {
@@ -26,7 +26,7 @@ export async function updateDeviceChats(
 
   // const tx = window.static_translate
 
-  await UpdateMessage('changelog-version-1.42.0-version0', {
+  await addDeviceMessage('changelog-version-1.42.0-version0', {
     text: `What's new in 1.42.0?
 
 💌 one-to-one chats guarantee end-to-end encryption for introduced contacts now
