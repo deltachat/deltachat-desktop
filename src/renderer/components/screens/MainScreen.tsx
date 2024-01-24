@@ -438,7 +438,7 @@ function chatSubtitle(chat: Type.FullChat) {
       } else if (chat.isDeviceChat) {
         return tx('device_talk_subtitle')
       }
-      if (chat.isProtected){
+      if (chat.isProtected) {
         return null
       } else {
         return chat.contacts[0].address
