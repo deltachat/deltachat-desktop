@@ -1,5 +1,5 @@
 //@ts-check
-;(() => {
+; (() => {
   const { contextBridge, ipcRenderer } = require('electron')
   let is_ready = false
 
@@ -163,6 +163,11 @@
       console.log(element)
       return promise
     },
+    joinGossipTopic: (topic) =>
+      ipcRenderer.invoke(
+        'webxdc.joinGossipTopic',
+        topic
+      ),
   }
 
   const connections = []

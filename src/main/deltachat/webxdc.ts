@@ -305,11 +305,11 @@ export default class DCWebxdc extends SplitOut {
               submenu: [
                 ...(DesktopSettings.state.enableWebxdcDevTools
                   ? [
-                      {
-                        label: tx('global_menu_view_developer_tools_desktop'),
-                        role: 'toggleDevTools',
-                      } as MenuItemConstructorOptions,
-                    ]
+                    {
+                      label: tx('global_menu_view_developer_tools_desktop'),
+                      role: 'toggleDevTools',
+                    } as MenuItemConstructorOptions,
+                  ]
                   : []),
                 { type: 'separator' },
                 { role: 'resetZoom' },
@@ -402,7 +402,7 @@ export default class DCWebxdc extends SplitOut {
           delete open_apps[`${accountId}.${msg_id}`]
         })
 
-        webxdc_windows.once('ready-to-show', () => {})
+        webxdc_windows.once('ready-to-show', () => { })
 
         webxdc_windows.webContents.loadURL(appURL + '/' + WRAPPER_PATH, {
           extraHeaders: 'Content-Security-Policy: ' + CSP,
@@ -534,6 +534,30 @@ If you think that's a bug and you need that permission, then please open an issu
       }
     })
 
+    ipcMain.handle('webxdc.joinGossipTopic', async (event, topic) => {
+      log.error('sending leeeel')
+      const key = Object.keys(open_apps).find(
+        key => open_apps[key].win.webContents === event.sender
+      )
+      if (!key) {
+        log.error(
+          'webxdc.joinGossipTopic failed, app not found in list of open ones'
+        )
+        return
+      }
+      const { accountId, msgId } = open_apps[key]
+      try {
+        return await this.rpc.joinGossipTopic(
+          accountId,
+          msgId,
+          topic
+        )
+      } catch (error) {
+        log.error('webxdc.joinGossipTopic failed:', error)
+        throw error
+      }
+    })
+
     ipcMain.handle(
       'webxdc.sendToChat',
       (
@@ -634,9 +658,8 @@ If you think that's a bug and you need that permission, then please open an issu
 }
 
 function makeTitle(webxdcInfo: T.WebxdcMessageInfo, chatName: string): string {
-  return `${
-    webxdcInfo.document ? truncateText(webxdcInfo.document, 32) + ' - ' : ''
-  }${truncateText(webxdcInfo.name, 42)} – ${chatName}`
+  return `${webxdcInfo.document ? truncateText(webxdcInfo.document, 32) + ' - ' : ''
+    }${truncateText(webxdcInfo.name, 42)} – ${chatName}`
 }
 
 function partitionFromAccountId(accountId: number) {
