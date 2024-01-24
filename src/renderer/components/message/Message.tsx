@@ -38,7 +38,7 @@ import {
 } from '../dialogs/ProtectionStatusDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
-import { useReactionsBar } from '../ReactionsBar'
+import { useReactionsBar, showReactionsUi } from '../ReactionsBar'
 import EnterAutocryptSetupMessage from '../dialogs/EnterAutocryptSetupMessage'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import Reactions from '../Reactions'
@@ -207,6 +207,9 @@ function buildContextMenu(
   // Do not show "reply" in read-only chats
   const showReply = chat.canSend
 
+  // Do not show "react" for system messages
+  const showSendReaction = showReactionsUi(message)
+
   // Only show in groups, don't show on info messages or outgoing messages
   const showReplyPrivately =
     (conversationType.chatType === C.DC_CHAT_TYPE_GROUP ||
@@ -230,7 +233,7 @@ function buildContextMenu(
       action: openForwardDialog.bind(null, openDialog, message),
     },
     // Send emoji reaction
-    {
+    showSendReaction && {
       label: tx('react'),
       action: handleReactClick,
     },

@@ -41,6 +41,11 @@ export default function useReactionsBar(): UseReactionsBar {
   }
 }
 
+/** Returns true if user should be able to send reactions to a message */
+export function showReactionsUi(message: T.Message): boolean {
+  return !message.isInfo && !message.isSetupmessage
+}
+
 function getMyReaction(reactions: T.Message['reactions']): string | undefined {
   if (
     reactions &&

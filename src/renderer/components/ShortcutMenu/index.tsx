@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 
-import { useReactionsBar } from '../ReactionsBar'
+import { showReactionsUi, useReactionsBar } from '../ReactionsBar'
 import Icon from '../Icon'
 
 import styles from './styles.module.scss'
@@ -26,7 +26,7 @@ export default function ShortcutMenu(props: Props) {
         [styles.visible]: props.visible,
       })}
     >
-      {!props.message.isSetupmessage && (
+      {showReactionsUi(props.message) && (
         <ReactButton
           messageId={props.message.id}
           reactions={props.message.reactions}
