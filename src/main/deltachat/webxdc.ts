@@ -535,7 +535,6 @@ If you think that's a bug and you need that permission, then please open an issu
     })
 
     ipcMain.handle('webxdc.joinGossipTopic', async (event, topic) => {
-      log.error('sending leeeel')
       const key = Object.keys(open_apps).find(
         key => open_apps[key].win.webContents === event.sender
       )
@@ -547,7 +546,7 @@ If you think that's a bug and you need that permission, then please open an issu
       }
       const { accountId, msgId } = open_apps[key]
       try {
-        return await this.rpc.joinGossipTopic(
+        await this.rpc.joinGossipTopic(
           accountId,
           msgId,
           topic
