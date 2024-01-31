@@ -34,6 +34,7 @@
 - Hide email address for guaranteed e2e DM chats in the titlebar #3629
 - Use `displayName` for contact in `verified_by` in Contact Dialog (also hide email address) #3629
 - Removed minimal theme from offical themes because it is unmaintained #3645
+- Copy invite link to clipboard instead of only QR code data #3650
 
 ### Fixed
 - Silently fail when notifications are not supported by OS #3613
