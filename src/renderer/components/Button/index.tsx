@@ -26,7 +26,7 @@ export default function Button({
       disabled={!!disabled}
       role='button'
       className={classNames(
-        styles.deltaButton,
+        styles.button,
         round && styles.round,
         type && styles[type]
       )}
