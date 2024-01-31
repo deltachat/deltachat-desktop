@@ -3,27 +3,27 @@ import classNames from 'classnames'
 import styles from './style.module.scss'
 
 type ButtonProps = React.PropsWithChildren<{
-  type?: 'secondary' | 'primary' | 'danger'
-  onClick: any
-  round?: boolean
-  id?: string
   'aria-label'?: string
   disabled?: boolean
+  id?: string
+  onClick: any
+  round?: boolean
+  type?: 'secondary' | 'primary' | 'danger'
 }>
 
 export default function Button({
   children,
-  disabled,
-  type,
-  round,
-  onClick,
+  disabled = false,
   id,
+  onClick,
+  round = false,
+  type,
   ...props
 }: ButtonProps) {
   return (
     <button
       id={id}
-      disabled={!!disabled}
+      disabled={disabled}
       role='button'
       className={classNames(
         styles.button,
