@@ -1,8 +1,8 @@
 import React from 'react'
 
-import type { MouseEventHandler, PropsWithChildren } from 'react'
-
 import Button from '../Button'
+
+import type { MouseEventHandler, PropsWithChildren } from 'react'
 
 type Props = PropsWithChildren<{
   onClick: MouseEventHandler<HTMLButtonElement>

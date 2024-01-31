@@ -24,11 +24,11 @@ import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import useDialog from '../../../hooks/useDialog'
 import { MessagesDisplayContext } from '../../../contexts/MessagesDisplayContext'
 import ProfileInfoHeader from '../../ProfileInfoHeader'
+import Button from '../../Button'
 
 import styles from './styles.module.scss'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
-import Button from '../../Button'
 
 const log = getLogger('renderer/dialogs/ViewProfile')
 
@@ -252,15 +252,13 @@ export function ViewProfileInner({
           }}
         >
           {!isDeviceChat && (
-            <span style={{ marginTop: '0x' }}>
-              <Button
-                aria-label={tx('send_message')}
-                onClick={onSendMessage}
-                round
-              >
-                {tx('send_message')}
-              </Button>
-            </span>
+            <Button
+              aria-label={tx('send_message')}
+              onClick={onSendMessage}
+              round
+            >
+              {tx('send_message')}
+            </Button>
           )}
         </div>
         {statusText != '' && (
