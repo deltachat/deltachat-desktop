@@ -3,14 +3,14 @@
 $color-map-overlay-bg: var(--mapOverlayBg);
 
 .map-wrapper {
-  margin-left: 30vw;
+  margin-left: var(--chat-list-width, 30vw);
   position: absolute;
 }
 
 #map {
   margin-top: 50px;
   height: calc(100vh - 50px);
-  width: 70vw;
+  width: calc(100vw - var(--chat-list-width, 30vw));
 }
 
 .mapboxgl-canvas {
