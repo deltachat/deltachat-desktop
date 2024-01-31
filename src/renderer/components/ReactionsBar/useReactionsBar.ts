@@ -46,7 +46,6 @@ export function showReactionsUi(message: T.Message, chat: T.FullChat): boolean {
   return (
     chat.canSend &&
     !chat.isDeviceChat &&
-    !chat.isMuted &&
     !message.isInfo &&
     !message.isSetupmessage
   )
