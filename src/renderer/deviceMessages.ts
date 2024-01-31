@@ -24,8 +24,6 @@ export async function updateDeviceChats(
     }
   }
 
-  // const tx = window.static_translate
-
   await addDeviceMessage('changelog-version-1.42.0-version0', {
     text: `What's new in 1.42.0?
 
