@@ -33,6 +33,8 @@
 - Remember file open dialog locations across the current session and do not persist last save location across sessions anymore #3615
 - Disable three-dot-menu when not applicable (map, other gallery tabs) #3523
 - Move pin icon in chatlist after date #3636
+- Hide email address for guaranteed e2e DM chats in the titlebar #3629
+- Use `displayName` for contact in `verified_by` in Contact Dialog (also hide email address) #3629
 
 ### Fixed
 - Silently fail when notifications are not supported by OS #3613
