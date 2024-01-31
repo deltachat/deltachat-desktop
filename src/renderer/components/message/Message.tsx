@@ -30,7 +30,7 @@ import { ConversationType } from './MessageList'
 import { getDirection, truncateText } from '../../../shared/util'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { ContextMenuItem } from '../ContextMenu'
-import { BackendRemote, Type } from '../../backend-com'
+import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import {
   ProtectionBrokenDialog,
@@ -38,7 +38,7 @@ import {
 } from '../dialogs/ProtectionStatusDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
-import { useReactionsBar } from '../ReactionsBar'
+import { useReactionsBar, showReactionsUi } from '../ReactionsBar'
 import EnterAutocryptSetupMessage from '../dialogs/EnterAutocryptSetupMessage'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import Reactions from '../Reactions'
@@ -49,8 +49,8 @@ import styles from './styles.module.scss'
 import type { OpenDialog } from '../../contexts/DialogContext'
 
 const Avatar = (
-  contact: Type.Contact,
-  onContactClick: (contact: Type.Contact) => void
+  contact: T.Contact,
+  onContactClick: (contact: T.Contact) => void
 ) => {
   const { profileImage, color, displayName } = contact
 
@@ -82,8 +82,8 @@ const Avatar = (
 }
 
 const AuthorName = (
-  contact: Type.Contact,
-  onContactClick: (contact: Type.Contact) => void,
+  contact: T.Contact,
+  onContactClick: (contact: T.Contact) => void,
   overrideSenderName?: string
 ) => {
   const { color, displayName } = contact
@@ -101,8 +101,8 @@ const AuthorName = (
 }
 
 const ForwardedTitle = (
-  contact: Type.Contact,
-  onContactClick: (contact: Type.Contact) => void,
+  contact: T.Contact,
+  onContactClick: (contact: T.Contact) => void,
   direction: 'incoming' | 'outgoing',
   conversationType: ConversationType,
   overrideSenderName?: string
@@ -145,7 +145,7 @@ function buildContextMenu(
     handleReactClick,
     chat,
   }: {
-    message: Type.Message | null
+    message: T.Message | null
     text?: string
     conversationType: ConversationType
     openDialog: OpenDialog
@@ -207,6 +207,9 @@ function buildContextMenu(
   // Do not show "reply" in read-only chats
   const showReply = chat.canSend
 
+  // Do not show "react" for system messages
+  const showSendReaction = showReactionsUi(message, chat)
+
   // Only show in groups, don't show on info messages or outgoing messages
   const showReplyPrivately =
     (conversationType.chatType === C.DC_CHAT_TYPE_GROUP ||
@@ -230,7 +233,7 @@ function buildContextMenu(
       action: openForwardDialog.bind(null, openDialog, message),
     },
     // Send emoji reaction
-    {
+    showSendReaction && {
       label: tx('react'),
       action: handleReactClick,
     },
@@ -299,7 +302,8 @@ function buildContextMenu(
 }
 
 export default function Message(props: {
-  message: Type.Message
+  chat: T.FullChat
+  message: T.Message
   conversationType: ConversationType
   isHover: boolean
 }) {
@@ -436,7 +440,7 @@ export default function Message(props: {
     )
   }
   // Normal Message
-  const onContactClick = async (contact: Type.Contact) => {
+  const onContactClick = async (contact: T.Contact) => {
     openViewProfileDialog(openDialog, contact.id)
   }
 
@@ -624,6 +628,7 @@ export default function Message(props: {
         </div>
       </div>
       <ShortcutMenu
+        chat={props.chat}
         direction={direction}
         message={message}
         showContextMenu={showContextMenu}
@@ -637,7 +642,7 @@ export const Quote = ({
   quote,
   msgParentId,
 }: {
-  quote: Type.MessageQuote
+  quote: T.MessageQuote
   msgParentId?: number
 }) => {
   const tx = useTranslationFunction()
@@ -715,7 +720,7 @@ export function getAuthorName(
   return overrideSenderName ? `~${overrideSenderName}` : displayName
 }
 
-function WebxdcMessageContent({ message }: { message: Type.Message }) {
+function WebxdcMessageContent({ message }: { message: T.Message }) {
   const tx = useTranslationFunction()
   if (message.viewType !== 'Webxdc') {
     return null

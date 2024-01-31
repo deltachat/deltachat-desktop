@@ -32,15 +32,16 @@
 - update `electron` from `v26.6.0` to version `v26.6.3`
 - Remember file open dialog locations across the current session and do not persist last save location across sessions anymore #3615
 - Disable three-dot-menu when not applicable (map, other gallery tabs) #3523
-- move pin icon in chatlist after date #3636
-- hide email address for guaranteed e2e DM chats in the titlebar #3629
-- use displayName for contact in verified_by in Contact Dialog (also hide email address) #3629
+- Move pin icon in chatlist after date #3636
+- Hide email address for guaranteed e2e DM chats in the titlebar #3629
+- Use `displayName` for contact in `verified_by` in Contact Dialog (also hide email address) #3629
 
 ### Fixed
 - Silently fail when notifications are not supported by OS #3613
 - Fix uncaught Exception when dismissing notifications on windows #3593
 - Introduce own React context for context menus & fix regression #3608
 - Improve position of verified icon in profile info #3627
+- Hide reactions UI for info-, system- or video-invite messages and chats #3642
 
 <a id="1_42_2"></a>
 

@@ -3,18 +3,20 @@ import { C } from '@deltachat/jsonrpc-client'
 
 import Message from './Message'
 import { ConversationType } from './MessageList'
-import { Type } from '../../backend-com'
 import { getLogger } from '../../../shared/logger'
 
-const log = getLogger('renderer/message/MessageWrapper')
+import type { T } from '@deltachat/jsonrpc-client'
 
 type RenderMessageProps = {
   key2: string
-  message: Type.Message
+  chat: T.FullChat
+  message: T.Message
   isHover: boolean
   conversationType: ConversationType
   unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
 }
+
+const log = getLogger('renderer/message/MessageWrapper')
 
 export function MessageWrapper(props: RenderMessageProps) {
   const state = props.message.state
