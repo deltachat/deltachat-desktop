@@ -1,24 +1,34 @@
 .deltaButton {
-  color: var(--colorNone);
   background-color: transparent;
   background-image: unset;
-  padding: 0 2px;
-  margin-bottom: 0px;
-  letter-spacing: 2px;
-  font-weight: bold;
-  font-size: initial;
-  text-align: center;
-  text-transform: uppercase;
-  padding: 5px;
-  border-style: solid;
   border-color: transparent;
   border-radius: 2px;
+  border-style: solid;
+  color: var(--colorNone);
+  font-size: initial;
+  font-weight: bold;
+  letter-spacing: 2px;
+  margin-bottom: 0px;
+  padding: 0 2px;
+  padding: 5px;
+  text-align: center;
+  text-transform: uppercase;
 
   &:hover {
+    background-clip: unset;
     background-color: var(--bp4-input-focused);
     box-shadow: none;
-    background-clip: unset;
     cursor: pointer;
+  }
+
+  &:disabled {
+    color: grey;
+    cursor: default;
+
+    &:hover {
+      background-color: none;
+      cursor: default;
+    }
   }
 
   &.no-padding {
@@ -26,8 +36,8 @@
   }
 
   &.light-bold {
-    letter-spacing: 1px;
     font-weight: 100;
+    letter-spacing: 1px;
   }
 
   &.primary {
@@ -40,37 +50,29 @@
 
   &.secondary {
     background-color: var(--bp4ButtonBg);
-    border: 1px;
     border-color: var(--bp4ButtonText);
     border-style: solid;
+    border: 1px;
     color: var(--bp4ButtonText);
   }
 
-  &:disabled {
-    color: grey;
-    cursor: default;
-    &:hover {
-      cursor: default;
-      background-color: none;
-    }
-  }
-
   &.round {
-    margin: 10px 0px !important;
     background-color: var(--bp4-input-focused) !important;
-    box-shadow: none;
-    border-radius: 8px;
     border-color: var(--bp4-input-focused) !important;
+    border-radius: 8px;
     border-style: solid !important;
-    padding: 10px 15px;
+    box-shadow: none;
     color: white;
+    margin: 10px 0px !important;
+    padding: 10px 15px;
 
     &:disabled {
       background-color: rgba(206, 217, 224, 0.5) !important;
-      border-color: rgba(206, 217, 224, 0.5) !important;
       background-image: none;
-      cursor: not-allowed;
+      border-color: rgba(206, 217, 224, 0.5) !important;
       color: var(--globalText);
+      cursor: not-allowed;
+
       &:hover {
         background-color: rgba(206, 217, 224, 0.5) !important;
       }
