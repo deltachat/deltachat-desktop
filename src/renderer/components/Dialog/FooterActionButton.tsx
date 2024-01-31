@@ -19,7 +19,7 @@ export default function FooterActionButton({
   return (
     <Button
       onClick={onClick}
-      type={ danger ? 'danger' : 'primary' }
+      type={danger ? 'danger' : 'primary'}
       disabled={disabled}
     >
       {children}

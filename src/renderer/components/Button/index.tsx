@@ -28,7 +28,7 @@ export default function Button({
       className={classNames(
         styles.deltaButton,
         round && styles.round,
-        type && styles[type],
+        type && styles[type]
       )}
       onClick={onClick}
       aria-label={props['aria-label']}
