@@ -9,6 +9,7 @@
   - ChatListContextMenu mute option now opens a submenu with duration options instead of a dialog
 - Add shortcut to scan qr code to "New Chat" dialog #3623
 - Message reactions with emojis #2964
+- Show info dialog on tap for invalid unencrypted mails #3652
 
 ### Changed
 - Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.133.2`
