@@ -41,6 +41,16 @@ export default function useReactionsBar(): UseReactionsBar {
   }
 }
 
+/** Returns true if user should be able to send reactions to a message */
+export function showReactionsUi(message: T.Message, chat: T.FullChat): boolean {
+  return (
+    chat.canSend &&
+    !message.isInfo &&
+    !message.isSetupmessage &&
+    message.viewType !== 'VideochatInvitation'
+  )
+}
+
 function getMyReaction(reactions: T.Message['reactions']): string | undefined {
   if (
     reactions &&

@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 
-import { useReactionsBar } from '../ReactionsBar'
+import { showReactionsUi, useReactionsBar } from '../ReactionsBar'
 import Icon from '../Icon'
 
 import styles from './styles.module.scss'
@@ -11,6 +11,7 @@ import type { T } from '@deltachat/jsonrpc-client'
 type OnButtonClick = React.MouseEvent<HTMLButtonElement, MouseEvent>
 
 type Props = {
+  chat: T.FullChat
   direction: 'incoming' | 'outgoing'
   message: T.Message
   showContextMenu: (event: OnButtonClick) => Promise<void>
@@ -26,7 +27,7 @@ export default function ShortcutMenu(props: Props) {
         [styles.visible]: props.visible,
       })}
     >
-      {!props.message.isSetupmessage && (
+      {showReactionsUi(props.message, props.chat) && (
         <ReactButton
           messageId={props.message.id}
           reactions={props.message.reactions}
