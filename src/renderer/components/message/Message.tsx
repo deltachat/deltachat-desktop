@@ -43,6 +43,7 @@ import EnterAutocryptSetupMessage from '../dialogs/EnterAutocryptSetupMessage'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import Reactions from '../Reactions'
 import ShortcutMenu from '../ShortcutMenu'
+import InvalidUnencryptedMailDialog from '../dialogs/InvalidUnencryptedMail'
 
 import styles from './styles.module.scss'
 
@@ -388,6 +389,11 @@ export default function Message(props: {
     const isProtectionEnabledMsg =
       message.systemMessageType === 'ChatProtectionEnabled'
 
+    // Message can't be sent because of `Invalid unencrypted mail to <>`
+    // which is sent by chatmail servers.
+    const isInvalidUnencryptedMail =
+      message.systemMessageType === 'InvalidUnencryptedMail'
+
     return (
       <div
         className={'info-message' + (isWebxdcInfo ? ' webxdc-info' : '')}
@@ -404,6 +410,8 @@ export default function Message(props: {
             openDialog(ProtectionBrokenDialog, { name })
           } else if (isProtectionEnabledMsg) {
             openDialog(ProtectionEnabledDialog)
+          } else if (isInvalidUnencryptedMail) {
+            openDialog(InvalidUnencryptedMailDialog)
           }
         }}
       >
