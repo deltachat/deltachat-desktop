@@ -37,8 +37,6 @@
 .accountListSidebar {
   --accountSidebarBg: #2c2c2c;
 
-  /* sidebar that moves in is z-index 100, so this higher */
-  z-index: 101;
   background-color: var(--accountSidebarBg);
 
   width: 58px;
@@ -161,6 +159,7 @@
 
 .AccountHoverInfoContainer {
   position: absolute;
+  z-index: 200;
 }
 
 .AccountHoverInfo {

@@ -221,6 +221,7 @@ samp {
   .main-screen {
     flex-grow: 1;
     position: relative;
+    overflow: hidden;
 
     .chat-list,
     .message-list-and-composer {
