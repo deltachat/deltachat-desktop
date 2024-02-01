@@ -11,11 +11,10 @@
 - Message reactions with emojis #2964
 
 ### Changed
-- Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.132.1`
+- Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.133.2`
 - Update `electron` from `v26.6.0` to version `v26.6.3`
 - Update `filesize` dependency from `8.0.6` to `10.1.0`
 - Introduce text formatting for chatlist item summary (use message-parser) #3476
-- Update deltachat-node and deltachat/jsonrpc-client to `v1.132.1`
 - Use native watch mode and CSS modules of esbuild #3571
   - Use native watch mode and CSS modules of esbuild
   - Support SCSS in modules
@@ -29,7 +28,6 @@
 - Prefer light theme for the help and webxdc loading pages
 - Helper method to easily use confirmation dialogs #3601
 - Refactor using new `useConfirmationDialog` hook #3602
-- update `electron` from `v26.6.0` to version `v26.6.3`
 - Remember file open dialog locations across the current session and do not persist last save location across sessions anymore #3615
 - Disable three-dot-menu when not applicable (map, other gallery tabs) #3523
 - Move pin icon in chatlist after date #3636
