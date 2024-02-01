@@ -660,6 +660,7 @@ export function AddMemberInnerDialog({
         verifierId: null,
         wasSeenRecently: false,
         isProfileVerified: false,
+        isBot: false,
       }
       return (
         <ContactListItem
