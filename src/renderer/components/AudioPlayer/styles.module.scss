@@ -1,0 +1,11 @@
+.audioPlayer {
+  min-width: 300px;
+  width: 100%;
+
+  // Overwrite user agent styles to make it look a tiny bit better but the real
+  // solution would be using a custom player
+  &::-webkit-media-controls-panel,
+  &::-webkit-media-controls-enclosure {
+    background-color: rgba(200, 200, 200, 0.2);
+  }
+}
