@@ -40,7 +40,7 @@ export async function updateCoreStrings() {
   strings[C.DC_STR_CONTACT_NOT_VERIFIED] = tx('contact_not_verified')
   strings[C.DC_STR_CONTACT_SETUP_CHANGED] = tx('contact_setup_changed')
   strings[C.DC_STR_DEVICE_MESSAGES_HINT] = tx('device_talk_explain')
-  strings[C.DC_STR_WELCOME_MESSAGE] = tx('device_talk_welcome_message')
+  strings[C.DC_STR_WELCOME_MESSAGE] = tx('device_talk_welcome_message2')
   strings[C.DC_STR_UNKNOWN_SENDER_FOR_CHAT] = tx(
     'systemmsg_unknown_sender_for_chat'
   )
