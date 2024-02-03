@@ -418,10 +418,12 @@
     display: inline-block;
     text-align: center;
     padding: 7px 14px;
+    padding-bottom: 5px;
     background-color: var(--infoMessageBubbleBg);
-    border-radius: 10px;
+    border-radius: 20px;
     opacity: 0.9;
     color: var(--infoMessageBubbleText);
+
     .status-icon.sending {
       background-color: var(--infoMessageBubbleText);
     }
@@ -430,6 +432,14 @@
   &.daymarker {
     .bubble {
       font-weight: bold;
+    }
+  }
+
+  &.interactive > .bubble {
+    cursor: pointer;
+
+    &:hover {
+      opacity: 1;
     }
   }
 

@@ -278,7 +278,9 @@
     <string name="device_talk">Aygıt İletileri</string>
     <string name="device_talk_subtitle">Yerel olarak oluşturulan iletiler</string>
     <string name="device_talk_explain">Bu sohbetteki iletiler, uygulama güncelleştirmeleri ve kullanım sırasındaki sorunlar hakkında bilgilendirmek için aygıtınızda oluşturulur.</string>
+    <!-- deprecated, use device_talk_welcome_message2 instead -->
     <string name="device_talk_welcome_message">Delta Chat\'e hoş geldiniz! – Delta Chat, diğer yaygın ulak uygulamaları gibi görünür ve hissettirir; ama merkezi denetim, izleme içermez ya da sizi, arkadaşlarınızı, iş arkadaşlarınızı ya da ailenizi büyük kuruluşlara satmaz.\n\nTeknik olarak Delta Chat, çağdaş bir sohbet arabirimli bir e-posta uygulamasıdır. 👻 olacaksanız, e-posta yeni bir elbisedir\n\nMilyarlarca insanın herhangi biriyle Delta Chat kullanın: Yalnızca onların e-posta adresini kullanın. Alıcıların Delta Chat\'i kurması, web sitelerini ziyaret etmesi ya da herhangi bir yere kaydolması gerekmez - ancak elbette isterlerse onlara 👉 https://get.delta.chat adresini işaret edebilirsiniz</string>
+    <string name="device_talk_welcome_message2">İletişime geçin!\n\n🙌 Her iki aygıtın ana ekranındaki \"QR Kodu\"na dokunun. Bir aygıtta \"QR Kodunu Tara\"yı seçin ve onu diğerine doğrultun\n\n🌍 Aynı odada değilse, video araması aracılığıyla tarayın ya da \"QR Kodu\"ndan bir çağırma bağlantısı paylaşın\n\nDaha sonra: Şimdiye kadar varolan en büyük merkezi olmayan ağ üzerinden ulak deneyiminizin keyfini çıkarın: E-posta. Ve diğer yaygın uygulamaların tersine, merkezi denetim ya da izleme olmadan ya da sizi, arkadaşlarınızı, iş arkadaşlarınızı ya da ailenizi büyük kuruluşlara satmadan.</string>
     <string name="edit_contact">Kişiyi Düzenle</string>
     <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
     <string name="pin_chat">Sohbeti Sabitle</string>
@@ -497,7 +499,7 @@
     <!-- Multi Device -->
     <!-- "Second Device" can also be translated as "Another Device", if that is catchier in the destination language. However, make sure to use the term consistently. -->
     <string name="multidevice_title">İkinci Aygıt Ekle</string>
-    <string name="multidevice_same_network_hint">İki aygıtın da aynı Wi-Fi\'da ya da ağda olduğundan emin olun</string>
+    <string name="multidevice_same_network_hint">Her iki aygıtın da aynı Wi-Fi\'da ya da ağda olduğundan emin olun</string>
     <string name="multidevice_this_creates_a_qr_code">Bu, ikinci aygıtın hesabı kopyalamak için tarayabileceği bir QR kodu oluşturur.</string>
     <string name="multidevice_install_dc_on_other_device">Delta Chat\'i diğer aygıtınıza kurun (https://get.delta.chat)</string>
     <string name="multidevice_tap_scan_on_other_device">Delta Chat\'i başlatın, “İkinci Aygıt Olarak Ekle”ye dokunun ve burada gösterilen kodu tarayın</string>
@@ -862,6 +864,8 @@
     <string name="chat_protection_enabled_explanation">Artık bu sohbetteki tüm iletiler uçtan uca şifreleme güvencelidir.\n\nUçtan uca şifreleme, iletilerinizi sizin ve sohbet ortaklarınızın arasında özel tutar. E-posta sağlayıcınız bile onları okuyamaz.</string>
     <string name="chat_protection_broken_tap_to_learn_more">%1$s başka bir aygıttan bir ileti gönderdi. Daha fazlasını öğrenmek için dokunun.</string>
     <string name="chat_protection_broken_explanation">Uçtan uca şifreleme artık güvencelenemiyor; çünkü büyük olasılıkla %1$s Delta Chat\'i yeniden yükledi ya da başka bir aygıttan ileti gönderdi.\n\nOnlarla kişisel olarak tanışabilir ve güvenceli uçtan uca şifrelemeyi yeniden kurmak için onların QR kodunu yeniden tarayabilirsiniz.</string>
+    <string name="invalid_unencrypted_tap_to_learn_more">⚠️ %1$s, bu sohbet için henüz ayarlanmayan uçtan uca şifrelemeyi gerektirir. Daha fazlasını öğrenmek için dokunun.</string>
+    <string name="invalid_unencrypted_explanation">Uçtan uca şifrelemeyi kurmak için kişilerle kişisel olarak tanışabilir ve onları tanıtmak için onların QR kodunu tarayabilirsiniz.</string>
     <string name="learn_more">Daha Fazlasını Öğrenin</string>
 
     <string name="devicemsg_self_deleted">\"Kaydedilen iletiler\" sohbetini sildiniz.\n\nℹ️ \"Kaydedilen iletiler\" özelliğini yeniden kullanmak için kendinizle yeni bir sohbet oluşturun.</string>

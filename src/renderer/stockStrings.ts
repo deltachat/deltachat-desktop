@@ -180,6 +180,9 @@ export async function updateCoreStrings() {
   strings[C.DC_STR_CHAT_PROTECTION_DISABLED] = tx(
     'chat_protection_broken_tap_to_learn_more'
   )
+  strings[C.DC_STR_INVALID_UNENCRYPTED_MAIL] = tx(
+    'invalid_unencrypted_tap_to_learn_more'
+  )
   strings[C.DC_STR_BACKUP_TRANSFER_QR] = tx('multidevice_qr_subtitle')
 
   await BackendRemote.rpc.setStockStrings(strings)
