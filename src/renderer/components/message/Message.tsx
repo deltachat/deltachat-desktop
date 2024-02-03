@@ -394,26 +394,42 @@ export default function Message(props: {
     const isInvalidUnencryptedMail =
       message.systemMessageType === 'InvalidUnencryptedMail'
 
+    // Some info messages can be clicked by the user to receive further information
+    const isInteractive =
+      (isWebxdcInfo && message.parentId) ||
+      isProtectionEnabledMsg ||
+      isProtectionEnabledMsg ||
+      isInvalidUnencryptedMail
+
+    let onClick
+    if (isInteractive) {
+      onClick = async () => {
+        if (isWebxdcInfo && message.parentId) {
+          jumpToMessage(message.parentId, true, message.id)
+        } else if (isProtectionBrokenMsg) {
+          const { name } = await BackendRemote.rpc.getBasicChatInfo(
+            selectedAccountId(),
+            message.chatId
+          )
+          openDialog(ProtectionBrokenDialog, { name })
+        } else if (isProtectionEnabledMsg) {
+          openDialog(ProtectionEnabledDialog)
+        } else if (isInvalidUnencryptedMail) {
+          openDialog(InvalidUnencryptedMailDialog)
+        }
+      }
+    }
+
     return (
       <div
-        className={'info-message' + (isWebxdcInfo ? ' webxdc-info' : '')}
+        className={classNames(
+          'info-message',
+          isWebxdcInfo && 'webxdc-info',
+          isInteractive && 'interactive'
+        )}
         id={String(message.id)}
         onContextMenu={showContextMenu}
-        onClick={async () => {
-          if (isWebxdcInfo && message.parentId) {
-            jumpToMessage(message.parentId, true, message.id)
-          } else if (isProtectionBrokenMsg) {
-            const { name } = await BackendRemote.rpc.getBasicChatInfo(
-              selectedAccountId(),
-              message.chatId
-            )
-            openDialog(ProtectionBrokenDialog, { name })
-          } else if (isProtectionEnabledMsg) {
-            openDialog(ProtectionEnabledDialog)
-          } else if (isInvalidUnencryptedMail) {
-            openDialog(InvalidUnencryptedMailDialog)
-          }
-        }}
+        onClick={onClick}
       >
         {(isProtectionBrokenMsg || isProtectionEnabledMsg) && (
           <img
