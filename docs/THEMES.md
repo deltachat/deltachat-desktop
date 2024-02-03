@@ -26,6 +26,18 @@ custom:mytheme -> ~/.config/DeltaChat/custom-themes/mytheme.css
 
 There is a special code that is an exception to this: `system` it gets translated into `dc:dark` or `dc:light` depending on the system theme of the host OS.
 
+## Theme Format
+
+Themes are just css files with a header identifying them as a theme:
+```css
+.theme-meta {
+  --name: 'Custom Theme';
+  --description: 'my custom theme.';
+}
+```
+
+You can modify all classes and use all kind of css, but we recommend using the css variables set by [`themes/_themebase.scss`](https://github.com/deltachat/deltachat-desktop/blob/master/themes/_themebase.scss) as these are less likely to change between releases and thus a bit more stable, but in general there are no stability gurantees for theming, so expect to be required to update your theme when you update to a new deltachat desktop version comes out.
+
 ## Setting a theme from CLI
 
 > Warning: This will also (probably) change in the future.
