@@ -24,6 +24,7 @@ import { ScreenContext } from '../../contexts/ScreenContext'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
 import useContextMenu from '../../hooks/useContextMenu'
+import { qrCodeToInviteUrl } from '../../utils/invite'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
@@ -101,7 +102,9 @@ export function QrCodeShowQrInner({
   const tx = useTranslationFunction()
 
   const onCopy = () => {
-    runtime.writeClipboardText(qrCode).then(_ =>
+    const inviteUrl = qrCodeToInviteUrl(qrCode)
+
+    runtime.writeClipboardText(inviteUrl).then(_ =>
       userFeedback({
         type: 'success',
         text: tx('copy_qr_data_success'),

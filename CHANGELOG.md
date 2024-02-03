@@ -9,6 +9,7 @@
   - ChatListContextMenu mute option now opens a submenu with duration options instead of a dialog
 - Add shortcut to scan qr code to "New Chat" dialog #3623
 - Message reactions with emojis #2964
+- Show info dialog on tap for invalid unencrypted mails #3652
 
 ### Changed
 - Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.133.2`
@@ -35,6 +36,7 @@
 - Use `displayName` for contact in `verified_by` in Contact Dialog (also hide email address) #3629
 - Removed minimal theme from offical themes because it is unmaintained #3645
 - Do not add changelog device message on fresh accounts #3639
+- Copy invite link to clipboard instead of only QR code data #3650
 
 ### Fixed
 - Silently fail when notifications are not supported by OS #3613
@@ -43,6 +45,7 @@
 - Improve position of verified icon in profile info #3627
 - Hide reactions UI for info-, system- or video-invite messages and chats #3642
 - Delete old themes before rebuilding in build process #3645
+- More contrast for audio elements in dark mode #3653
 
 <a id="1_42_2"></a>
 
