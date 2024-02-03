@@ -241,6 +241,7 @@ export default class ScreenController extends Component {
               selectAccount: this.selectAccount,
               onAddAccount: async () => {
                 const accountId = await BackendRemote.rpc.addAccount()
+                updateDeviceChats(accountId, true) // skip changelog
                 await this.selectAccount(accountId)
               },
             }}
