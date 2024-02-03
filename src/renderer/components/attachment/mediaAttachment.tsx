@@ -26,6 +26,7 @@ import useDialog from '../../hooks/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import MessageDetail from '../dialogs/MessageDetail'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
+import AudioPlayer from '../AudioPlayer'
 
 import type { OpenDialog } from '../../contexts/DialogContext'
 
@@ -327,9 +328,7 @@ export function AudioAttachment({
           />
         </div>
         {hasSupportedFormat ? (
-          <audio controls>
-            <source src={runtime.transformBlobURL(file || '')} />
-          </audio>
+          <AudioPlayer src={runtime.transformBlobURL(file || '')} />
         ) : (
           <div>
             {window.static_translate(

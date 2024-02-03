@@ -42,6 +42,7 @@
 - Improve position of verified icon in profile info #3627
 - Hide reactions UI for info-, system- or video-invite messages and chats #3642
 - Delete old themes before rebuilding in build process #3645
+- More contrast for audio elements in dark mode #3653
 
 <a id="1_42_2"></a>
 

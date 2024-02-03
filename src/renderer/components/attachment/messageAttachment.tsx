@@ -21,6 +21,7 @@ import FullscreenMedia, {
 } from '../dialogs/FullscreenMedia'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
+import AudioPlayer from '../AudioPlayer'
 
 type AttachmentProps = {
   text?: string
@@ -119,16 +120,15 @@ export default function Attachment({
     )
   } else if (isAudio(message.fileMime)) {
     return (
-      <audio
-        controls
+      <div
         className={classNames(
           'message-attachment-audio',
           withContentBelow ? 'content-below' : null,
           withContentAbove ? 'content-above' : null
         )}
       >
-        <source src={runtime.transformBlobURL(message.file)} />
-      </audio>
+        <AudioPlayer src={runtime.transformBlobURL(message.file)} />
+      </div>
     )
   } else {
     const { fileName, fileBytes, fileMime } = message
@@ -191,11 +191,7 @@ export function DraftAttachment({
       </div>
     )
   } else if (isAudio(attachment.fileMime)) {
-    return (
-      <audio controls className={classNames('message-attachment-audio')}>
-        <source src={runtime.transformBlobURL(attachment.file || '')} />
-      </audio>
-    )
+    return <AudioPlayer src={runtime.transformBlobURL(attachment.file || '')} />
   } else {
     const { file, fileName, fileBytes, fileMime } = attachment
     const extension = getExtension(attachment)
