@@ -249,6 +249,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
       onClose={onClose}
     >
       <div className='render-media-wrapper' tabIndex={0}>
+        <div className='attachment-view'>{elm}</div>
         {elm && (
           <div className='btn-wrapper'>
             <div
@@ -284,7 +285,6 @@ export default function FullscreenMedia(props: Props & DialogProps) {
             />
           </div>
         )}
-        <div className='attachment-view'>{elm}</div>
       </div>
     </Overlay>
   )
