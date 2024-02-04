@@ -327,7 +327,7 @@
   --size: 50px;
   --iconSize: 20px;
   position: fixed;
-  z-index: 20;
+  z-index: 1; // local z-index scoped to the chatlist
   bottom: 15px;
 
   width: var(--size);

@@ -1,4 +1,5 @@
 .chat-list {
+  z-index: 0; // this scopes the z-index of the floating action button to the chatlist
   width: 30%;
   height: $content-height;
   float: left;
