@@ -37,6 +37,7 @@
 - Removed minimal theme from offical themes because it is unmaintained #3645
 - Do not add changelog device message on fresh accounts #3639
 - Copy invite link to clipboard instead of only QR code data #3650
+- Remove unessesary z-index css properties and reorganize the remaining ones #3661
 
 ### Fixed
 - Silently fail when notifications are not supported by OS #3613
