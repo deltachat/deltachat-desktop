@@ -2,7 +2,7 @@
   width: 100vw;
   height: 100vh;
   position: absolute;
-  z-index: 9999;
+  z-index: map-get($z-index, context-menu-layer);
   background-color: transparent;
   pointer-events: none;
 

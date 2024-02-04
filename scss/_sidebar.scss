@@ -5,7 +5,7 @@
   width: 100vw;
   height: 100vh;
   background-color: #1820268c;
-  z-index: 100;
+  z-index: map-get($z-index, sidebar);
 }
 
 .sidebar {
@@ -17,7 +17,7 @@
   max-width: 90vw;
   height: 100vh;
   background-color: var(--sideBarBackground);
-  z-index: 100;
+  z-index: map-get($z-index, sidebar);
 
   transform: translateX(-100%);
   -webkit-transform: translateX(-100%);
