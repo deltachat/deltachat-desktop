@@ -5,12 +5,6 @@
   flex-direction: row;
   align-items: stretch;
 
-  li:hover > & {
-    .reply-button-wrapper {
-      opacity: 1;
-    }
-  }
-
   & > .author-avatar {
     align-self: flex-end;
     bottom: 0px;
@@ -42,49 +36,6 @@
         font-size: 25px;
         line-height: 36px;
         cursor: pointer;
-      }
-    }
-  }
-
-  .reply-button-wrapper {
-    opacity: 0;
-    position: absolute;
-
-    display: flex;
-    align-items: center;
-    height: 100%;
-    bottom: 0;
-    z-index: 10;
-
-    &.incoming {
-      right: -52px;
-    }
-
-    &.outgoing {
-      left: -52px;
-      transform: scale(-1, 1);
-    }
-
-    div.reply {
-      padding: 4px;
-      border-radius: 100%;
-      cursor: pointer;
-      background-color: var(--messageReplyBtnBg);
-
-      &:hover {
-        background-color: var(--messageReplyBtnBgHover);
-        & > div.reply-icon {
-          background-color: var(--messageReplyBtnHover);
-        }
-      }
-
-      div.reply-icon {
-        height: 24px;
-        width: 24px;
-        display: block;
-        /* not used currently */
-        @include color-svg('../images/reply.svg', var(--messageReplyBtn));
-        user-select: none;
       }
     }
   }
