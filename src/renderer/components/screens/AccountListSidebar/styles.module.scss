@@ -1,3 +1,5 @@
+@import "../../../../../scss/variables";
+
 .avatar {
   --local-avatar-size: 48px;
   --local-avatar-vertical-margin: 8px;
@@ -57,6 +59,8 @@
     margin-top: var(--als-avatar-margin);
     margin-bottom: var(--als-avatar-margin);
     height: var(--als-avatar-size);
+    z-index: $z-index-new-local-scope;
+
     .avatar {
       --local-avatar-size: var(--als-avatar-size);
       --local-avatar-vertical-margin: 0px;
@@ -106,7 +110,7 @@
 
     .accountBadge {
       position: absolute;
-      z-index: 102;
+      z-index: map-get($z-index, account-list-sidebar-scope-account-badge);
       bottom: -6px;
       right: -5px;
 
@@ -159,7 +163,7 @@
 
 .AccountHoverInfoContainer {
   position: absolute;
-  z-index: 200;
+  z-index: map-get($z-index, account-hover-info);
 }
 
 .AccountHoverInfo {
