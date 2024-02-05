@@ -12,7 +12,7 @@
 - Show info dialog on tap for invalid unencrypted mails #3652
 
 ### Changed
-- Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.133.2`
+- Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.134.0`
 - Update `electron` from `v26.6.0` to version `v26.6.3`
 - Update `filesize` dependency from `8.0.6` to `10.1.0`
 - Introduce text formatting for chatlist item summary (use message-parser) #3476
