@@ -27,7 +27,7 @@
 
 .scan-qr-description {
   position: relative;
-  z-index: 1;
+  z-index: map-get($z-index, import-qr-code-dialog-scope-scan-qr-description);
   top: -18px;
   margin-top: -18px;
   margin: 0;

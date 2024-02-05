@@ -23,10 +23,11 @@
     bottom: calc(-100% + #{$height} + #{$marginBottom});
     height: $height;
     width: $width;
+    z-index: $z-index-new-local-scope; // needed for .jump-down-button>.counter
 
     .counter {
       position: relative;
-      z-index: 1;
+      z-index: map-get($z-index, jump-down-button-scope-counter);
       width: 25px;
       height: 25px;
       margin: 0 auto;
