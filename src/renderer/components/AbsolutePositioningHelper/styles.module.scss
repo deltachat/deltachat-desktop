@@ -2,5 +2,5 @@
 
 .absolutePositioningHelper {
   position: fixed;
-  z-index: map-get($z-index, absolutePositioningHelper);
+  z-index: map-get($z-index, absolute-positioning-helper);
 }
