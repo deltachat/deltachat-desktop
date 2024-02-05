@@ -1,4 +1,5 @@
 .chat-list {
+  z-index: $z-index-new-local-scope; // needed for .floating-action-button
   width: 30%;
   height: $content-height;
   float: left;

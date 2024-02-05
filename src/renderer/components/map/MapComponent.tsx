@@ -663,6 +663,7 @@ export default class MapComponent extends React.Component<
   render() {
     return (
       <div className='map-wrapper'>
+        <div id='map' />
         <nav id='controls' className='map-overlay top'>
           <Button
             minimal
@@ -724,7 +725,6 @@ export default class MapComponent extends React.Component<
             </div>
           </Collapse>
         </nav>
-        <div id='map' />
         <div style={{ display: 'none' }}>
           <ContextMenu ref={this.contextMenu} onSetPoi={this.sendPoiMessage} />
         </div>

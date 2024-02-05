@@ -19,6 +19,8 @@ div.import-qr-code-dialog {
   .bp4-button {
     margin: 10px;
   }
+
+  z-index: $z-index-new-local-scope; // needed for .scan-qr-description
 }
 
 .qr-data {

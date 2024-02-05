@@ -327,7 +327,7 @@
   --size: 50px;
   --iconSize: 20px;
   position: fixed;
-  z-index: 20;
+  z-index: map-get($z-index, chatlist-scope-floating-action-button);
   bottom: 15px;
 
   width: var(--size);

@@ -144,12 +144,13 @@ code {
   image-rendering: pixelated;
 }
 
+// toast for errors and success messages
 .user-feedback {
   position: fixed;
   top: 60px;
   text-align: center;
   width: 100%;
-  z-index: 100;
+  z-index: map-get($z-index, user-feedback);
   pointer-events: none;
 
   p {

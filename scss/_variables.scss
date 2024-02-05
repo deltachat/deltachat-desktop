@@ -26,3 +26,26 @@ $button-height: 24px;
 $border-radius: 5px;
 
 $font-size: 14px;
+
+// Get these keys via: `map-get($z-index, keyname)`
+$z-index: (
+  // Local Scopes
+  // ============
+  chatlist-scope-floating-action-button: 1,
+  jump-down-button-scope-counter: 1,
+  import-qr-code-dialog-scope-scan-qr-description: 1,
+
+  // Global Scope
+  // ============
+  emoji-sticker-picker: 10,
+
+  sidebar: 100,
+  user-feedback: 100,
+
+  // toast for errors and success messages
+  absolute-positioning-helper: 1000,
+  context-menu-layer: 9999
+);
+
+// setting z-index to 0 creates a new scope for children without changing the ordering of the parent element
+$z-index-new-local-scope: 0;

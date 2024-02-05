@@ -6,7 +6,8 @@ $emojimart-search-height: 31px + 6px;
 
 .emoji-sticker-picker {
   position: fixed;
-  z-index: 10;
+  z-index: map-get($z-index, emoji-sticker-picker);
+
   width: 438px;
   height: $esp-height;
   right: 13px;

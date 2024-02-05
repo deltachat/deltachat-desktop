@@ -29,7 +29,6 @@
   .btn-wrapper {
     float: right;
     position: absolute;
-    z-index: 10;
     background-color: rgba(0, 0, 0, 0.75);
     border-radius: 3px;
 
@@ -66,7 +65,6 @@
   top: calc(50vh - (60px / 2));
   background-color: #3131316b;
   border-radius: 8%;
-  z-index: 1;
 
   .bp4-icon > svg:not([fill]) {
     fill: var(--bp4ButtonHoverBg);
