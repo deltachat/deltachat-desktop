@@ -17,10 +17,10 @@ import { Screens } from '../../../ScreenController'
 
 export function AccountDeletionScreen({
   selectedAccountId,
-  onUnSelectAccount,
+  onDeleteAccount,
 }: {
   selectedAccountId: number
-  onUnSelectAccount: () => Promise<void>
+  onDeleteAccount: (accountId: number) => Promise<void>
 }) {
   const tx = useTranslationFunction()
 
@@ -77,10 +77,7 @@ export function AccountDeletionScreen({
               </FooterActionButton>
               <FooterActionButton
                 danger={true}
-                onClick={async () => {
-                  await onUnSelectAccount()
-                  await EffectfulBackendActions.removeAccount(selectedAccountId)
-                }}
+                onClick={async () => onDeleteAccount(selectedAccountId)}
               >
                 {tx('delete')}
               </FooterActionButton>
