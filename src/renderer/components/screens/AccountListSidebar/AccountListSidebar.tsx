@@ -10,10 +10,12 @@ export function AccountListSidebar({
   selectedAccountId,
   onAddAccount,
   onSelectAccount,
+  openAccountDeletionScreen
 }: {
   selectedAccountId: number | undefined
   onAddAccount: () => Promise<number>
   onSelectAccount: (accountId: number) => Promise<void>
+  openAccountDeletionScreen: (accountId: number) => Promise<void>
 }) {
   const [accounts, setAccounts] = useState<T.Account[]>([])
 
@@ -84,6 +86,7 @@ export function AccountListSidebar({
           account={account}
           isSelected={selectedAccountId === account.id}
           onSelectAccount={selectAccount}
+          openAccountDeletionScreen={openAccountDeletionScreen}
           updateAccountForHoverInfo={updateAccountForHoverInfo}
         />
       ))}

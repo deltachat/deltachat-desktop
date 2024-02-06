@@ -1,0 +1,10 @@
+.AccountDeletionScreen {
+  flex-grow: 1;
+  .Background {
+    background-size: cover;
+    // TODO find a better fire/lava image
+    background-image: url('../images/account_deletion_background.jpg');
+    height: 100vh;
+    margin-top: 0px;
+  }
+}

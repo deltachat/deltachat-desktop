@@ -21,6 +21,7 @@ import { DialogContext } from './contexts/DialogContext'
 import WebxdcSaveToChatDialog from './components/dialogs/WebxdcSendToChat'
 import { AccountListSidebar } from './components/screens/AccountListSidebar/AccountListSidebar'
 import SettingsStoreInstance from './stores/settings'
+import { AccountDeletionScreen } from './components/screens/AccountDeletionScreen/AccountDeletionScreen'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -35,6 +36,7 @@ export enum Screens {
   Login = 'login',
   Loading = 'loading',
   AccountList = 'accountSelection',
+  DeleteAccount = 'deleteAccount'
 }
 
 export default class ScreenController extends Component {
@@ -62,6 +64,7 @@ export default class ScreenController extends Component {
     this.onShowSettings = this.showSettings.bind(this)
     this.selectAccount = this.selectAccount.bind(this)
     this.unSelectAccount = this.unSelectAccount.bind(this)
+    this.openAccountDeletionScreen = this.openAccountDeletionScreen.bind(this)
 
     window.__userFeedback = this.userFeedback.bind(this)
     window.__changeScreen = this.changeScreen.bind(this)
@@ -151,6 +154,11 @@ export default class ScreenController extends Component {
     updateDeviceChats(accountId, true) // skip changelog
     await this.selectAccount(accountId)
     return accountId
+  }
+
+  async openAccountDeletionScreen(accountId: number) {
+    await this.selectAccount(accountId)
+    this.changeScreen(Screens.DeleteAccount)
   }
 
   userFeedback(message: userFeedback | false) {
@@ -281,6 +289,16 @@ export default class ScreenController extends Component {
             }}
           />
         )
+      case Screens.DeleteAccount:
+        if (this.selectedAccountId === undefined) {
+          throw new Error('Selected account not defined')
+        }
+        return (
+          <AccountDeletionScreen
+            selectedAccountId={this.selectedAccountId}
+            onUnSelectAccount={this.unSelectAccount}
+          />
+        )
       default:
         return null
     }
@@ -310,6 +328,7 @@ export default class ScreenController extends Component {
                 selectedAccountId={this.selectedAccountId}
                 onAddAccount={this.addAndSelectAccount.bind(this)}
                 onSelectAccount={this.selectAccount.bind(this)}
+                openAccountDeletionScreen={this.openAccountDeletionScreen.bind(this)}
               />
               {this.renderScreen()}
             </div>
