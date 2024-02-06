@@ -18,10 +18,12 @@ export function AccountItem({
   isSelected,
   onSelectAccount,
   updateAccountForHoverInfo,
+  openAccountDeletionScreen
 }: {
   account: T.Account
   isSelected: boolean
   onSelectAccount: (accountId: number) => Promise<void>
+  openAccountDeletionScreen: (accountId: number) => Promise<void>
   updateAccountForHoverInfo: (actingAccount: T.Account, select: boolean) => void
 }) {
   const tx = useTranslationFunction()
@@ -75,11 +77,9 @@ export function AccountItem({
         }, 0)
       },
     },
-    false && {
+    {
       label: tx('delete_account'),
-      action: async () => {
-        // TODO
-      },
+      action: openAccountDeletionScreen.bind(null, account.id),
     },
   ])
 
