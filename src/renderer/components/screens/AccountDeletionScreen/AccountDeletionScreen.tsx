@@ -57,17 +57,19 @@ export function AccountDeletionScreen({
           />
           <DialogBody>
             <DialogContent paddingTop={false}>
-              {tx('delete_account_ask')}
-              {accountInfo && (
-                <div>
-                  {tx(
-                    'delete_account_explain_with_name',
-                    accountInfo.kind === 'Configured'
-                      ? accountInfo.addr || undefined
-                      : 'Unconfigured'
-                  )}
-                </div>
-              )}
+              <p>{tx('delete_account_ask')}</p>
+              <p>
+                {accountInfo && (
+                  <div>
+                    {tx(
+                      'delete_account_explain_with_name',
+                      accountInfo.kind === 'Configured'
+                        ? accountInfo.addr || undefined
+                        : 'Unconfigured'
+                    )}
+                  </div>
+                )}
+              </p>
             </DialogContent>
           </DialogBody>
           <DialogFooter>
