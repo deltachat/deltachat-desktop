@@ -10,7 +10,7 @@ import { ActionEmitter, KeybindAction } from './keybindings'
 import AccountSetupScreen from './components/screens/AccountSetupScreen'
 import AccountListScreen from './components/screens/AccountListScreen'
 import WelcomeScreen from './components/screens/WelcomeScreen'
-import { BackendRemote } from './backend-com'
+import { BackendRemote, EffectfulBackendActions } from './backend-com'
 import { updateDeviceChats } from './deviceMessages'
 import { runtime } from './runtime'
 import { updateTimestamps } from './components/conversations/Timestamp'
@@ -65,6 +65,7 @@ export default class ScreenController extends Component {
     this.selectAccount = this.selectAccount.bind(this)
     this.unSelectAccount = this.unSelectAccount.bind(this)
     this.openAccountDeletionScreen = this.openAccountDeletionScreen.bind(this)
+    this.onDeleteAccount = this.onDeleteAccount.bind(this)
 
     window.__userFeedback = this.userFeedback.bind(this)
     window.__changeScreen = this.changeScreen.bind(this)
@@ -159,6 +160,12 @@ export default class ScreenController extends Component {
   async openAccountDeletionScreen(accountId: number) {
     await this.selectAccount(accountId)
     this.changeScreen(Screens.DeleteAccount)
+  }
+
+  async onDeleteAccount(accountId: number){
+    await this.unSelectAccount()
+    await EffectfulBackendActions.removeAccount(accountId)
+    this.changeScreen(Screens.AccountList) // TODO: change to no account selected screen
   }
 
   userFeedback(message: userFeedback | false) {
@@ -296,7 +303,7 @@ export default class ScreenController extends Component {
         return (
           <AccountDeletionScreen
             selectedAccountId={this.selectedAccountId}
-            onUnSelectAccount={this.unSelectAccount}
+            onDeleteAccount={this.onDeleteAccount.bind(this)}
           />
         )
       default:
