@@ -11,7 +11,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
-type Props = {
+export type Props = {
   cb?: () => void
   message: string | JSX.Element
 } & DialogProps

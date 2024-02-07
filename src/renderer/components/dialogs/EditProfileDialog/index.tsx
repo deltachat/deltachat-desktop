@@ -10,41 +10,32 @@ import ProfileImageSelector from './ProfileImageSelector'
 import Dialog, {
   DialogBody,
   DialogContent,
+  DialogFooter,
   DialogHeader,
-  OkCancelFooterAction,
+  FooterActionButton,
+  FooterActions,
 } from '../../Dialog'
+import Callout from '../../Callout'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import useAlertDialog from '../../../hooks/useAlertDialog'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
 
-export default function EditProfileDialog({
-  onClose,
-  settingsStore,
-  title,
-  cancelLabel,
-  confirmLabel,
-  firstSetup = false,
-}: {
+type Props = {
   settingsStore: SettingsStoreState
   title?: string
   cancelLabel?: string
   confirmLabel?: string
   firstSetup?: boolean
-} & DialogProps) {
-  const tx = useTranslationFunction()
+} & DialogProps
 
-  title = title || tx('pref_edit_profile')
+export default function EditProfileDialog({ onClose, title, ...props }: Props) {
+  const tx = useTranslationFunction()
 
   return (
     <Dialog canOutsideClickClose={false} onClose={onClose}>
-      <DialogHeader title={title} />
-      {EditProfileDialogInner({
-        settingsStore,
-        onClose,
-        cancelLabel,
-        confirmLabel,
-        firstSetup,
-      })}
+      <DialogHeader title={title || tx('pref_edit_profile')} />
+      {EditProfileDialogInner({ onClose, ...props })}
     </Dialog>
   )
 }
@@ -55,14 +46,9 @@ function EditProfileDialogInner({
   cancelLabel,
   confirmLabel,
   firstSetup = false,
-}: {
-  onClose: DialogProps['onClose']
-  settingsStore: SettingsStoreState
-  cancelLabel?: string
-  confirmLabel?: string
-  firstSetup?: boolean
-}) {
+}: Props) {
   const tx = useTranslationFunction()
+  const openAlertDialog = useAlertDialog()
 
   const [displayname, setDisplayname] = useState(
     settingsStore.settings.displayname
@@ -80,7 +66,15 @@ function EditProfileDialogInner({
     onClose()
   }
 
-  const onOk = async () => {
+  const onConfirm = async () => {
+    // Display name needs to be set when setting up an user account for the
+    // first time after scanning an QRCode with DCACCOUNT scheme (for example
+    // via chatmail server invite code)
+    if (firstSetup && displayname.length === 0) {
+      await openAlertDialog({ message: tx('bla') })
+      return
+    }
+
     await BackendRemote.rpc.setConfig(
       selectedAccountId(),
       'selfavatar',
@@ -122,14 +116,14 @@ function EditProfileDialogInner({
               setDisplayname(event.target.value)
             }}
           />
-          {firstSetup ? (
-            <p className='bp4-callout'>
+          {firstSetup && (
+            <Callout>
               {tx('qraccount_success_enter_name', [
                 settingsStore.selfContact.address,
               ])}
-            </p>
-          ) : null}
-          {firstSetup ? null : (
+            </Callout>
+          )}
+          {!firstSetup && (
             <DeltaTextarea
               key='status'
               id='status'
@@ -145,12 +139,18 @@ function EditProfileDialogInner({
           )}
         </DialogContent>
       </DialogBody>
-      <OkCancelFooterAction
-        cancelLabel={cancelLabel}
-        confirmLabel={confirmLabel}
-        onCancel={onCancel}
-        onOk={onOk}
-      />
+      <DialogFooter>
+        <FooterActions>
+          {!firstSetup && (
+            <FooterActionButton onClick={onCancel}>
+              {cancelLabel}
+            </FooterActionButton>
+          )}
+          <FooterActionButton onClick={onConfirm}>
+            {confirmLabel}
+          </FooterActionButton>
+        </FooterActions>
+      </DialogFooter>
     </>
   )
 }
