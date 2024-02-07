@@ -23,18 +23,15 @@ import type { DialogProps } from '../../../contexts/DialogContext'
 
 type Props = {
   settingsStore: SettingsStoreState
-  title?: string
-  cancelLabel?: string
-  confirmLabel?: string
   firstSetup?: boolean
 } & DialogProps
 
-export default function EditProfileDialog({ onClose, title, ...props }: Props) {
+export default function EditProfileDialog({ onClose, ...props }: Props) {
   const tx = useTranslationFunction()
 
   return (
     <Dialog canOutsideClickClose={false} onClose={onClose}>
-      <DialogHeader title={title || tx('pref_edit_profile')} />
+      <DialogHeader title={tx('pref_profile_info_headline')} />
       {EditProfileDialogInner({ onClose, ...props })}
     </Dialog>
   )
@@ -43,8 +40,6 @@ export default function EditProfileDialog({ onClose, title, ...props }: Props) {
 function EditProfileDialogInner({
   onClose,
   settingsStore,
-  cancelLabel,
-  confirmLabel,
   firstSetup = false,
 }: Props) {
   const tx = useTranslationFunction()
