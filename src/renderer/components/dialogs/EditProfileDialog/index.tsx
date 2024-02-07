@@ -46,11 +46,11 @@ function EditProfileDialogInner({
   const openAlertDialog = useAlertDialog()
 
   const [displayname, setDisplayname] = useState(
-    settingsStore.settings.displayname
+    settingsStore.settings.displayname || ''
   )
 
   const [selfstatus, setSelfstatus] = useState(
-    settingsStore.settings.selfstatus
+    settingsStore.settings.selfstatus || ''
   )
 
   const [profilePicture, setProfilePicture] = useState(
@@ -75,11 +75,8 @@ function EditProfileDialogInner({
       'selfavatar',
       profilePicture ? profilePicture : null
     )
-    SettingsStoreInstance.effect.setCoreSetting(
-      'displayname',
-      displayname || ''
-    )
-    SettingsStoreInstance.effect.setCoreSetting('selfstatus', selfstatus || '')
+    SettingsStoreInstance.effect.setCoreSetting('displayname', displayname)
+    SettingsStoreInstance.effect.setCoreSetting('selfstatus', selfstatus)
     onClose()
   }
 
