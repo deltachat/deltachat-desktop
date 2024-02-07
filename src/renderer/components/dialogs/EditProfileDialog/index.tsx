@@ -137,11 +137,11 @@ function EditProfileDialogInner({
         <FooterActions>
           {!firstSetup && (
             <FooterActionButton onClick={onCancel}>
-              {cancelLabel}
+              {tx('cancel')}
             </FooterActionButton>
           )}
           <FooterActionButton onClick={onConfirm}>
-            {confirmLabel}
+            {tx('ok')}
           </FooterActionButton>
         </FooterActions>
       </DialogFooter>
