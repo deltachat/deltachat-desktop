@@ -127,15 +127,15 @@ export default function MainScreen() {
 
   useEffect(() => {
     SettingsStoreInstance.effect.load().then(() => {
-      // make sure it uses new version of settings store instance
+      // Make sure it uses new version of settings store instance
       const settingsStore = SettingsStoreInstance.state
+
+      // `askForName` flag is set when creating a new account via QR Code (for
+      // example chatmail invite code with DCACCOUNT scheme)
       if (settingsStore && window.__askForName) {
         window.__askForName = false
         openDialog(EditProfileDialog, {
           settingsStore,
-          title: 'Account setup',
-          confirmLabel: tx('ok'),
-          cancelLabel: tx('later'),
           firstSetup: true,
         })
       }
