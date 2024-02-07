@@ -134,8 +134,6 @@ export default function MainScreen() {
         openDialog(EditProfileDialog, {
           settingsStore,
           title: 'Account setup',
-          confirmLabel: tx('ok'),
-          cancelLabel: tx('later'),
           firstSetup: true,
         })
       }
