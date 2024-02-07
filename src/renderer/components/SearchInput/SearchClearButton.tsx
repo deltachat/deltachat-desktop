@@ -29,7 +29,7 @@ export function SearchClearButton(props: Props) {
       })}
       onClick={onClear}
     >
-      <Icon className={styles.searchClearButtonIcon} icon='cross' size={12} />
+      <Icon className={styles.searchClearButtonIcon} icon='cross' size={20} />
     </button>
   )
 }
