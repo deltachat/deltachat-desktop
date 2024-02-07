@@ -71,7 +71,7 @@ function EditProfileDialogInner({
     // first time after scanning an QRCode with DCACCOUNT scheme (for example
     // via chatmail server invite code)
     if (firstSetup && displayname.length === 0) {
-      await openAlertDialog({ message: tx('bla') })
+      await openAlertDialog({ message: tx('please_enter_name') })
       return
     }
 
@@ -116,13 +116,7 @@ function EditProfileDialogInner({
               setDisplayname(event.target.value)
             }}
           />
-          {firstSetup && (
-            <Callout>
-              {tx('qraccount_success_enter_name', [
-                settingsStore.selfContact.address,
-              ])}
-            </Callout>
-          )}
+          {firstSetup && <Callout>{tx('set_name_and_avatar_explain')}</Callout>}
           {!firstSetup && (
             <DeltaTextarea
               key='status'
