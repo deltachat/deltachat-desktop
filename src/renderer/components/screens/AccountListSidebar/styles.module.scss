@@ -39,20 +39,33 @@
 .accountListSidebar {
   --accountSidebarBg: #2c2c2c;
 
+  .MacOSTrafficLightBackground {
+    height: 40px;
+  }
+
   background-color: var(--accountSidebarBg);
 
   width: 66px;
-
-  flex-shrink: 0;
-
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  align-items: center;
 
-  --als-avatar-size: 42px;
-  --als-avatar-margin: 5px;
-  --als-active-indicator-color: white;
-  padding-top: 10px;
+  .accountList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  
+    --als-avatar-size: 42px;
+    --als-avatar-margin: 5px;
+    --als-active-indicator-color: white;
+    padding-top: 2px;
+
+    overflow-y: scroll;
+    scrollbar-width: 0px;
+    &::-webkit-scrollbar {
+      width: 0px;
+    }
+  }
 
   .Account {
     position: relative;
@@ -158,12 +171,6 @@
       color: var(--accountSidebarBg);
       background: var(--add-button-color);
     }
-  }
-
-  overflow-y: scroll;
-  scrollbar-width: 0px;
-  &::-webkit-scrollbar {
-    width: 0px;
   }
 }
 
