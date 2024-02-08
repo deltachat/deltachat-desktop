@@ -12,8 +12,9 @@ import Dialog, {
 
 import styles from './styles.module.scss'
 import { T } from '@deltachat/jsonrpc-client'
-import { BackendRemote, EffectfulBackendActions } from '../../../backend-com'
+import { BackendRemote } from '../../../backend-com'
 import { Screens } from '../../../ScreenController'
+import { avatarInitial } from '../../Avatar'
 
 export function AccountDeletionScreen({
   selectedAccountId,
@@ -57,17 +58,42 @@ export function AccountDeletionScreen({
           <DialogBody>
             <DialogContent paddingTop={false}>
               <p>{tx('delete_account_ask')}</p>
-              <p>
-                {accountInfo && (
-                  <div>
-                    {tx(
-                      'delete_account_explain_with_name',
-                      accountInfo.kind === 'Configured'
-                        ? accountInfo.addr || undefined
-                        : 'Unconfigured'
+              {accountInfo?.kind == 'Configured' && (
+                <div className={styles.accountCard}>
+                  <div className={styles.avatar}>
+                    {accountInfo.profileImage ? (
+                      <img
+                        className={styles.content}
+                        src={'file://' + accountInfo.profileImage}
+                      />
+                    ) : (
+                      <div
+                        className={styles.content}
+                        style={{ backgroundColor: accountInfo.color }}
+                      >
+                        {avatarInitial(
+                          accountInfo.displayName || '',
+                          accountInfo.addr || undefined
+                        )}
+                      </div>
                     )}
                   </div>
-                )}
+                  <div className={styles.accountName}>
+                    <div>
+                      <b>{accountInfo.displayName}</b>
+                    </div>
+                    <div>{accountInfo.addr}</div>
+                  </div>
+                </div>
+              )}
+              <p>
+                {accountInfo &&
+                  tx(
+                    'delete_account_explain_with_name',
+                    accountInfo.kind === 'Configured'
+                      ? accountInfo.addr || undefined
+                      : 'Unconfigured'
+                  )}
               </p>
             </DialogContent>
           </DialogBody>

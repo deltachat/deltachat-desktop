@@ -8,3 +8,53 @@
     margin-top: 0px;
   }
 }
+
+.avatar {
+  --local-avatar-size: 48px;
+  --local-avatar-font-size: 26px;
+
+  position: relative;
+  user-select: none;
+  display: inline-block;
+  font-weight: normal;
+
+  height: var(--local-avatar-size);
+  width: var(--local-avatar-size);
+  margin: 0 0;
+
+  div.content,
+  img.content {
+    height: var(--local-avatar-size);
+    width: var(--local-avatar-size);
+    border-radius: 10%;
+    pointer-events: none;
+  }
+
+  div.content {
+    background-color: #505050;
+    line-height: var(--local-avatar-size);
+    object-fit: cover;
+    color: var(--avatarLabelColor);
+    text-align: center;
+    font-size: var(--local-avatar-font-size);
+  }
+
+  img.content {
+    object-fit: cover;
+  }
+}
+
+.accountCard {
+  display: flex;
+  background: var(--bp4DialogBgSecondary);
+  border-radius: 4px;
+  padding: 8px;
+  margin: 8px;
+}
+
+.accountName {
+  display: flex;
+  flex-direction: column;
+  margin-left: 8px;
+  justify-content: center;
+}
