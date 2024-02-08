@@ -39,6 +39,7 @@
 - Copy invite link to clipboard instead of only QR code data #3650
 - Remove unessesary z-index css properties and reorganize the remaining ones #3661
 - Require setting display name when creating profile after scanning invite code #3663
+- Improve design of profile image selector component #3667
 
 ### Fixed
 - Silently fail when notifications are not supported by OS #3613
