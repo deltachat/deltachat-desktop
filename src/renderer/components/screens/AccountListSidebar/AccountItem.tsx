@@ -18,13 +18,15 @@ export function AccountItem({
   isSelected,
   onSelectAccount,
   updateAccountForHoverInfo,
-  openAccountDeletionScreen
+  openAccountDeletionScreen,
+  syncAllAccounts,
 }: {
   account: T.Account
   isSelected: boolean
   onSelectAccount: (accountId: number) => Promise<void>
   openAccountDeletionScreen: (accountId: number) => Promise<void>
   updateAccountForHoverInfo: (actingAccount: T.Account, select: boolean) => void
+  syncAllAccounts: boolean
 }) {
   const tx = useTranslationFunction()
 
@@ -44,10 +46,7 @@ export function AccountItem({
     return () => cleanup.forEach(off => off())
   }, [account.id])
 
-  const [settings] = useSettingsStore()
-
-  const bgSyncDisabled =
-    settings?.desktopSettings.syncAllAccounts === false && !isSelected
+  const bgSyncDisabled = syncAllAccounts === false && !isSelected
 
   const { onContextMenu, isContextMenuActive } = useContextMenuWithActiveState([
     !bgSyncDisabled &&

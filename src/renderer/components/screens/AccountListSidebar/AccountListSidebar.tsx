@@ -5,12 +5,14 @@ import { AccountItem } from './AccountItem'
 
 import styles from './styles.module.scss'
 import { AccountHoverInfo } from './AccountHoverInfo'
+import { debounce } from 'debounce'
+import { runtime } from '../../../runtime'
 
 export function AccountListSidebar({
   selectedAccountId,
   onAddAccount,
   onSelectAccount,
-  openAccountDeletionScreen
+  openAccountDeletionScreen,
 }: {
   selectedAccountId: number | undefined
   onAddAccount: () => Promise<number>
@@ -27,10 +29,14 @@ export function AccountListSidebar({
     await onSelectAccount(accountId)
   }
 
+  const [syncAllAccounts, setSyncAllAccounts] = useState(true)
+
   const refresh = useMemo(
     () => async () => {
       const accounts = await BackendRemote.rpc.getAllAccounts()
       setAccounts(accounts)
+      const desktopSettings = await runtime.getDesktopSettings()
+      setSyncAllAccounts(desktopSettings.syncAllAccounts)
     },
     []
   )
@@ -75,6 +81,12 @@ export function AccountListSidebar({
     updateHoverInfoPosition()
   }, [accountForHoverInfo, updateHoverInfoPosition])
 
+  useEffect(() => {
+    window.__updateAccountListSidebar = debounce(() => {
+      refresh()
+    }, 200)
+  }, [])
+
   return (
     <div
       className={styles.accountListSidebar}
@@ -88,6 +100,7 @@ export function AccountListSidebar({
           onSelectAccount={selectAccount}
           openAccountDeletionScreen={openAccountDeletionScreen}
           updateAccountForHoverInfo={updateAccountForHoverInfo}
+          syncAllAccounts={syncAllAccounts}
         />
       ))}
       <button className={styles.addButton} onClick={onAddAccount}>
