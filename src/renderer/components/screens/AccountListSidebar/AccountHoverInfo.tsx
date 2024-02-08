@@ -64,7 +64,7 @@ export function AccountHoverInfo({
         )}
         {bgSyncDisabled && (
           <div className={styles.HoverInfoProperty}>
-            ⏻ {'Background Sync Disabled, Account is only synced when selected'}
+            ⏻ {tx("background_sync_disabled_explaination")}
           </div>
         )}
       </>
