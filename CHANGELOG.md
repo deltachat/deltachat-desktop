@@ -10,7 +10,12 @@
 - Add shortcut to scan qr code to "New Chat" dialog #3623
 - Message reactions with emojis #2964
 - Show info dialog on tap for invalid unencrypted mails #3652
+<<<<<<< HEAD
 - Add QR scan button next to search input on main screen #3665
+=======
+- Add Account Switcher Sidebar #3621
+- Add new account deletion screen #3621
+>>>>>>> 833c4f3c (update changelog)
 
 ### Changed
 - Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.134.0`
@@ -40,6 +45,9 @@
 - Copy invite link to clipboard instead of only QR code data #3650
 - Remove unessesary z-index css properties and reorganize the remaining ones #3661
 - Require setting display name when creating profile after scanning invite code #3663
+- badge count is now across all active accounts #3621
+- "sync all accounts" moved to settings under advanced -> experimental #3621
+- webxdc stay open when switching accounts (when you have sync all enabled, which is the default) #3621
 
 ### Fixed
 - Silently fail when notifications are not supported by OS #3613
@@ -52,6 +60,8 @@
 
 ### Removed
 - Remove qr icon in sidebar #3666
+- Remove old Account switcher screen #3621
+- Remove "Switch Account" from Sidebar #3621
 
 <a id="1_42_2"></a>
 
