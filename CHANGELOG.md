@@ -49,6 +49,9 @@
 - Delete old themes before rebuilding in build process #3645
 - More contrast for audio elements in dark mode #3653
 
+### Removed
+- Remove qr icon in sidebar #3666
+
 <a id="1_42_2"></a>
 
 ## [1.42.2] - 2023-12-02
