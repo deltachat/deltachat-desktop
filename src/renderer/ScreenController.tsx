@@ -36,7 +36,7 @@ export enum Screens {
   Login = 'login',
   Loading = 'loading',
   AccountList = 'accountSelection',
-  DeleteAccount = 'deleteAccount'
+  DeleteAccount = 'deleteAccount',
 }
 
 export default class ScreenController extends Component {
@@ -162,7 +162,7 @@ export default class ScreenController extends Component {
     this.changeScreen(Screens.DeleteAccount)
   }
 
-  async onDeleteAccount(accountId: number){
+  async onDeleteAccount(accountId: number) {
     await this.unSelectAccount()
     await EffectfulBackendActions.removeAccount(accountId)
     this.changeScreen(Screens.AccountList) // TODO: change to no account selected screen
@@ -335,7 +335,9 @@ export default class ScreenController extends Component {
                 selectedAccountId={this.selectedAccountId}
                 onAddAccount={this.addAndSelectAccount.bind(this)}
                 onSelectAccount={this.selectAccount.bind(this)}
-                openAccountDeletionScreen={this.openAccountDeletionScreen.bind(this)}
+                openAccountDeletionScreen={this.openAccountDeletionScreen.bind(
+                  this
+                )}
               />
               {this.renderScreen()}
             </div>
