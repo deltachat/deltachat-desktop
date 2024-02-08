@@ -54,9 +54,20 @@ export default function SearchInput(props: Props) {
         ref={props.inputRef}
         spellCheck={false}
       />
-      {hasValue && <SearchInputButton icon='cross' onClick={handleClear} />}
+      {hasValue && (
+        <SearchInputButton
+          aria-label='Clear'
+          icon='cross'
+          onClick={handleClear}
+        />
+      )}
       {!hasValue && (
-        <SearchInputButton size={17} icon='qr' onClick={handleQRScan} />
+        <SearchInputButton
+          aria-label='Scan QR Code'
+          size={17}
+          icon='qr'
+          onClick={handleQRScan}
+        />
       )}
     </>
   )

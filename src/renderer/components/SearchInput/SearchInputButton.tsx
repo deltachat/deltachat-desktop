@@ -7,14 +7,24 @@ import styles from './styles.module.scss'
 import type { IconName } from '../Icon'
 
 type Props = {
+  'aria-label'?: string
   icon: IconName
   onClick: () => void
   size?: number
 }
 
-export default function SearchInputButton({ icon, onClick, size = 20 }: Props) {
+export default function SearchInputButton({
+  icon,
+  onClick,
+  size = 20,
+  ...props
+}: Props) {
   return (
-    <button className={styles.searchInputButton} onClick={onClick}>
+    <button
+      aria-label={props['aria-label']}
+      className={styles.searchInputButton}
+      onClick={onClick}
+    >
       <Icon className={styles.searchInputButtonIcon} icon={icon} size={size} />
     </button>
   )
