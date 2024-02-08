@@ -2,5 +2,14 @@
   "broadcast_list_warning": {
     "comment": "this won't be translated, as our goal is to have encrypted broadcast lists - simon & bjoern as of oct 2023",
     "message": "Broadcast Lists are always unencrypted because they use blind copy (BCC)"
+  },
+  "no_account_selected": {
+    "message": "No Account is selected"
+  },
+  "sync_all_accounts": {
+    "message": "Sync All Accounts in Background"
+  },
+  "background_sync_disabled_explaination": {
+    "message": "Background Sync Disabled, Account is only synced when selected"
   }
 }

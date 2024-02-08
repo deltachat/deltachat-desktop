@@ -101,7 +101,7 @@ export function ExperimentalFeatures({ settingsStore }: Props) {
       </SettingsSelector>
       <DesktopSettingsSwitch
         settingsKey='syncAllAccounts'
-        label={tx('sync_all')}
+        label={tx('sync_all_accounts')}
       />
     </>
   )
