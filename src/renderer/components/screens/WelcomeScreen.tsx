@@ -184,7 +184,6 @@ export default function WelcomeScreen({
     <div className='login-screen'>
       <div className='window'>
         <Dialog
-          backdropProps={{ className: 'no-backdrop' }}
           canEscapeKeyClose={true}
           fixed={true}
           onClose={() => {}}
