@@ -62,7 +62,6 @@ export default function AccountSetupScreen({
     <div className='login-screen'>
       <div className='window'>
         <Dialog
-          backdropProps={{ className: 'no-backdrop' }}
           onClose={() => {}}
           fixed
         >
