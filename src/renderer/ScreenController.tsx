@@ -107,15 +107,14 @@ export default class ScreenController extends Component {
   }
 
   async selectAccount(accountId: number) {
-    if (accountId === this.selectedAccountId) {
+    if (accountId !== this.selectedAccountId) {
+      await this.unSelectAccount()
+      this.selectedAccountId = accountId
+      ;(window.__selectedAccountId as number) = accountId
+    } else {
       log.info('account is already selected')
-      return
+      // do not return here as this can be the state transition between unconfigured to configured
     }
-
-    await this.unSelectAccount()
-
-    this.selectedAccountId = accountId
-    ;(window.__selectedAccountId as number) = accountId
 
     const account = await BackendRemote.rpc.getAccountInfo(
       this.selectedAccountId
