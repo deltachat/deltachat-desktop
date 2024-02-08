@@ -45,7 +45,6 @@ export function AccountDeletionScreen({
     <div className={styles.AccountDeletionScreen}>
       <div className={styles.Background}>
         <Dialog
-          backdropProps={{ className: 'no-backdrop' }}
           canEscapeKeyClose={true}
           fixed={true}
           onClose={() => {}}

@@ -62,7 +62,6 @@ export default function AccountListScreen({
       <div className='window'>
         <Dialog
           width={400}
-          backdropProps={{ className: 'no-backdrop' }}
           onClose={() => {}}
           canEscapeKeyClose={true}
         >
