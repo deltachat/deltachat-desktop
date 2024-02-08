@@ -36,7 +36,6 @@ export enum Screens {
   Login = 'login',
   Loading = 'loading',
   DeleteAccount = 'deleteAccount',
-  // this is mainly used to trigger the state update
   NoAccountSelected = 'noAccountSelected',
 }
 
@@ -263,16 +262,9 @@ export default class ScreenController extends Component {
   }
 
   renderScreen() {
-    if (
-      this.selectedAccountId === undefined ||
-      this.state.screen === Screens.NoAccountSelected
-    ) {
-      return <NoAccountSelectedScreen />
-    }
-
     switch (this.state.screen) {
       case Screens.Main:
-        // the key attribute here is a hack to force a clean rerendering when account changes
+        // the key attribute here is a hack to force a clean rerendering when the account changes
         return <MainScreen key={String(this.selectedAccountId)} />
       case Screens.Login:
         if (this.selectedAccountId === undefined) {
@@ -304,6 +296,8 @@ export default class ScreenController extends Component {
             onDeleteAccount={this.onDeleteAccount.bind(this)}
           />
         )
+      case Screens.NoAccountSelected:
+        return <NoAccountSelectedScreen />
       default:
         return null
     }
