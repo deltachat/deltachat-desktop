@@ -37,6 +37,6 @@ declare global {
           highlight?: boolean,
           addMessageIdToStack?: undefined | number
         ) => Promise<void>)
-    __updateAccountListSidebar: () => void | undefined
+    __updateAccountListSidebar: (() => void) | undefined
   }
 }

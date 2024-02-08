@@ -8,7 +8,6 @@ import processOpenQrUrl from './components/helpers/OpenQrUrl'
 import { getLogger } from '../shared/logger'
 import { ActionEmitter, KeybindAction } from './keybindings'
 import AccountSetupScreen from './components/screens/AccountSetupScreen'
-import AccountListScreen from './components/screens/AccountListScreen'
 import WelcomeScreen from './components/screens/WelcomeScreen'
 import { BackendRemote, EffectfulBackendActions } from './backend-com'
 import { updateDeviceChats } from './deviceMessages'
@@ -22,6 +21,7 @@ import WebxdcSaveToChatDialog from './components/dialogs/WebxdcSendToChat'
 import { AccountListSidebar } from './components/screens/AccountListSidebar/AccountListSidebar'
 import SettingsStoreInstance from './stores/settings'
 import { AccountDeletionScreen } from './components/screens/AccountDeletionScreen/AccountDeletionScreen'
+import { NoAccountSelectedScreen } from './components/screens/NoAccountSelectedScreen/NoAccountSelectedScreen'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -35,8 +35,9 @@ export enum Screens {
   Main = 'main',
   Login = 'login',
   Loading = 'loading',
-  AccountList = 'accountSelection',
   DeleteAccount = 'deleteAccount',
+  // this is mainly used to trigger the state update
+  NoAccountSelected = 'noAccountSelected',
 }
 
 export default class ScreenController extends Component {
@@ -80,7 +81,7 @@ export default class ScreenController extends Component {
     } else {
       const allAccountIds = await BackendRemote.rpc.getAllAccountIds()
       if (allAccountIds && allAccountIds.length > 0) {
-        this.changeScreen(Screens.AccountList)
+        this.changeScreen(Screens.NoAccountSelected)
       } else {
         await this.addAndSelectAccount()
       }
@@ -165,7 +166,7 @@ export default class ScreenController extends Component {
   async onDeleteAccount(accountId: number) {
     await this.unSelectAccount()
     await EffectfulBackendActions.removeAccount(accountId)
-    this.changeScreen(Screens.AccountList) // TODO: change to no account selected screen
+    this.changeScreen(Screens.NoAccountSelected)
   }
 
   userFeedback(message: userFeedback | false) {
@@ -263,6 +264,13 @@ export default class ScreenController extends Component {
   }
 
   renderScreen() {
+    if (
+      this.selectedAccountId === undefined ||
+      this.state.screen === Screens.NoAccountSelected
+    ) {
+      return <NoAccountSelectedScreen />
+    }
+
     switch (this.state.screen) {
       case Screens.Main:
         // the key attribute here is a hack to force a clean rerendering when account changes
@@ -285,15 +293,6 @@ export default class ScreenController extends Component {
           <WelcomeScreen
             selectedAccountId={this.selectedAccountId}
             onUnSelectAccount={this.unSelectAccount}
-          />
-        )
-      case Screens.AccountList:
-        return (
-          <AccountListScreen
-            {...{
-              selectAccount: this.selectAccount,
-              onAddAccount: this.addAndSelectAccount.bind(this),
-            }}
           />
         )
       case Screens.DeleteAccount:

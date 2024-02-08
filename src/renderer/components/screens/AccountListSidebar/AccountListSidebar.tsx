@@ -85,7 +85,7 @@ export function AccountListSidebar({
     window.__updateAccountListSidebar = debounce(() => {
       refresh()
     }, 200)
-  }, [])
+  }, [refresh])
 
   return (
     <div
