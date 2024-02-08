@@ -6,6 +6,7 @@ We use `prettier` for CSS formatting. Use `npm run fix:format` before committing
 
 ### CSS modules
 
+- You can read more about CSS modules [here](https://css-tricks.com/css-modules-part-1-need/)
 - **The goal is to separate every component style-wise as much as possible from each other, so changing the style of a single component doesn't affect anything else**
 - Every CSS file is named `styles.module.css` or `styles.module.scss` when using SCSS
 - It is imported via `import styles from './styles.module.css'`
@@ -15,7 +16,9 @@ We use `prettier` for CSS formatting. Use `npm run fix:format` before committing
 ### General
 
 - Prefer `padding-top`, `padding-bottom`, `padding-left` etc. over `padding` to avoid bugs through order-critical dependencies between properties, except when you only need `padding` or `border` etc.
-- Try to avoid hacky `!important` as much as possible (goal is to get rid of them altogether at one point)
+- Try to avoid hacky `!important` as much as possible (goal is to get rid of them altogether at one point), if your components are well composed and styles isolated you don't need them
+- Avoid setting styles directly on elements via the `style` attribute. Exception: the value is dynamically set through an JavaScript variable
+- Prefer `0` instead of `0px` when setting zero values
 - If you can choose, prefer CSS over SCSS, CSS supports nesting and variables and cool functions, like `calc`!
 
 ### Naming
@@ -24,7 +27,7 @@ We use `prettier` for CSS formatting. Use `npm run fix:format` before committing
 - The class name should represent the React component it relates to (for example `SearchInput` is represented with `.searchInput`)
 - Sub-classes are usually modifiers of the component and can have short, "local" names (like `.active` or `.warning`)
 
-### Ordering
+### Ordering and format
 
 - Properties are sorted alphabetically
 - Order of groups: variables (`--borderRadius`), properties (`height: 10px;`), pseudo elements (`::before`), sub-classes (`.active`), always separated with a newline
@@ -34,6 +37,12 @@ We use `prettier` for CSS formatting. Use `npm run fix:format` before committing
 
 - "Local" variables (which are used across multiple classes in the same file) are introduced at the beginning of the document. We use SCSS for defining local variables (`$borderRadius: 10px;`)
 - Global variables (used across files) are defined for themes and we use CSS for that (`var(--primaryColor)`)
+
+### Legacy
+
+There's still a lot of globally defined CSS code around. Whenever you touch upon styling an old component, use it as an opportunity to refactor it to CSS modules. Usually it is as easy as copy-pasting it into an `styles.module.scss` file and removing the old styles. Watch our for breaking themes!
+
+Sometimes old CSS is not even used, or most of its variations are not used anymore. Whenever you look into refactoring it, have a general analysis first of what is actually really needed.
 
 ## How do we do colors and theming
 
