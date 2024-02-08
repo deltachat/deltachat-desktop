@@ -154,6 +154,7 @@ class SettingsStore extends Store<SettingsStoreState | null> {
             BackendRemote.rpc.startIo(this.state.accountId)
           }
           debouncedUpdateBadgeCounter()
+          window.__updateAccountListSidebar?.()
         }
         this.reducer.setDesktopSetting(key, value)
       } catch (error) {
@@ -174,6 +175,9 @@ class SettingsStore extends Store<SettingsStoreState | null> {
           String(value)
         )
         this.reducer.setCoreSetting(key, value)
+        if (key === 'addr' || key === 'displayname') {
+          window.__updateAccountListSidebar?.()
+        }
       } catch (error) {
         this.log.warn('setConfig failed:', error)
       }
@@ -190,6 +194,15 @@ onReady(() => {
       )
       SettingsStoreInstance.reducer.setSelfContact(selfContact)
     }
+    window.__updateAccountListSidebar?.()
+  })
+  BackendRemote.on('ConfigSynced', (_accountId, { key }) => {
+    if (key === 'addr' || key === 'displayname') {
+      window.__updateAccountListSidebar?.()
+    }
+    // TODO: for #3624 this also needs to update the SettingsStore
+    // but only if the key is one of the cached one
+    // and probably also update only the key that changed
   })
 })
 

@@ -60,11 +60,7 @@ export default function AccountListScreen({
   return (
     <div className='login-screen'>
       <div className='window'>
-        <Dialog
-          width={400}
-          onClose={() => {}}
-          canEscapeKeyClose={true}
-        >
+        <Dialog width={400} onClose={() => {}} canEscapeKeyClose={true}>
           <DialogHeader title={tx('switch_account')} />
           <DialogBody>
             <AccountSelection
