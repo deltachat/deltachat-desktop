@@ -125,10 +125,7 @@ export default function Settings({ onClose }: DialogProps) {
             >
               {tx('menu_help')}
             </SettingsIconButton>
-            <SettingsIconButton
-              icon='info'
-              onClick={() => openDialog(About)}
-            >
+            <SettingsIconButton icon='info' onClick={() => openDialog(About)}>
               {tx('global_menu_help_about_desktop')}
             </SettingsIconButton>
           </DialogBody>

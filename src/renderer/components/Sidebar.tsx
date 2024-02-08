@@ -19,7 +19,6 @@ import {
 import ConnectivityDialog from './dialogs/ConnectivityDialog'
 import useDialog from '../hooks/useDialog'
 import CreateChat from './dialogs/CreateChat'
-import UnblockContacts from './dialogs/UnblockContacts'
 import { ScreenContext } from '../contexts/ScreenContext'
 import About from './dialogs/About'
 import useTranslationFunction from '../hooks/useTranslationFunction'
@@ -44,10 +43,7 @@ const Sidebar = React.memo(
       setSidebarState('invisible')
       openDialog(CreateChat)
     }
-    const onUnblockContacts = () => {
-      setSidebarState('invisible')
-      openDialog(UnblockContacts)
-    }
+
     const onLogout = async () => {
       setSidebarState('invisible')
       unselectChat()
@@ -165,13 +161,6 @@ const Sidebar = React.memo(
           </div>
           <div key='new_chat' className='sidebar-item' onClick={onCreateChat}>
             {tx('menu_new_chat')}
-          </div>
-          <div
-            key='unblock'
-            className='sidebar-item'
-            onClick={onUnblockContacts}
-          >
-            {tx('pref_blocked_contacts')}
           </div>
           <div
             key='archived_chats'
