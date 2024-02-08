@@ -12,6 +12,7 @@ export type IconName =
   | 'devices'
   | 'favorite'
   | 'forum'
+  | 'image'
   | 'lead-pencil'
   | 'list'
   | 'more'

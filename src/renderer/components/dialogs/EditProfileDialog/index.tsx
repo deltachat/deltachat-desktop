@@ -19,6 +19,8 @@ import Callout from '../../Callout'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import useAlertDialog from '../../../hooks/useAlertDialog'
 
+import styles from './styles.module.scss'
+
 import type { DialogProps } from '../../../contexts/DialogContext'
 
 type Props = {
@@ -84,12 +86,9 @@ function EditProfileDialogInner({
     <>
       <DialogBody>
         <DialogContent>
-          <div
-            className='profile-image-username center'
-            style={{ marginBottom: '30px' }}
-          >
+          <div className={styles.editProfileDialog}>
             <ProfileImageSelector
-              displayName={settingsStore.settings.displayname}
+              displayName={displayname}
               addr={settingsStore.selfContact.address}
               color={settingsStore.selfContact.color}
               profilePicture={profilePicture}
@@ -108,7 +107,9 @@ function EditProfileDialogInner({
               setDisplayname(event.target.value)
             }}
           />
-          {firstSetup && <Callout>{tx('set_name_and_avatar_explain')}</Callout>}
+        </DialogContent>
+        {firstSetup && <Callout>{tx('set_name_and_avatar_explain')}</Callout>}
+        <DialogContent>
           {!firstSetup && (
             <DeltaTextarea
               key='status'

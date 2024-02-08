@@ -25,7 +25,7 @@ export default function AlertDialog({ message, onClose, cb }: Props) {
   }
 
   return (
-    <Dialog onClose={onClose}>
+    <Dialog width={350} onClose={onClose}>
       <DialogBody>
         <DialogContent paddingTop>
           <p>{message}</p>
