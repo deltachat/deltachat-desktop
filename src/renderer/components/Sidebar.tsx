@@ -4,7 +4,6 @@ import { C } from '@deltachat/jsonrpc-client'
 
 import { runtime } from '../runtime'
 import { Screens, selectedAccountId } from '../ScreenController'
-import QrCode from './dialogs/QrCode'
 import { selectChat, unselectChat } from './helpers/ChatMethods'
 import { useSettingsStore } from '../stores/settings'
 import { Avatar } from './Avatar'
@@ -70,13 +69,6 @@ const Sidebar = React.memo(
       ActionEmitter.emitAction(KeybindAction.Settings_Open)
     }
 
-    const onShowQRCode = async () => {
-      setSidebarState('invisible')
-      const [qrCode, qrCodeSVG] =
-        await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(accountId, null)
-
-      openDialog(QrCode, { qrCode, qrCodeSVG })
-    }
     const onSelectSavedMessages = async () => {
       setSidebarState('invisible')
       const savedMessagesChatId = await BackendRemote.rpc.createChatByContactId(
@@ -147,9 +139,6 @@ const Sidebar = React.memo(
               color={settings.selfContact.color}
               avatarPath={settings.selfContact.profileImage}
             />
-            <div key='qr' className='quickIcon last' onClick={onShowQRCode}>
-              <div className='icon qr' />
-            </div>
             <div
               key='savedMessages'
               className='quickIcon '
