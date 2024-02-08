@@ -166,7 +166,7 @@ export default function WelcomeScreen({
         await onUnSelectAccount()
         await EffectfulBackendActions.removeAccount(selectedAccountId)
       }
-      window.__changeScreen(Screens.AccountList)
+      window.__changeScreen(Screens.NoAccountSelected)
     } catch (error) {
       if (error instanceof Error) {
         openDialog(AlertDialog, {
