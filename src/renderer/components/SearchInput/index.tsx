@@ -1,8 +1,12 @@
 import React from 'react'
 import classNames from 'classnames'
 
-import { SearchClearButton } from './SearchClearButton'
+import QrCode from '../dialogs/QrCode'
+import SearchInputButton from './SearchInputButton'
+import useDialog from '../../hooks/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { BackendRemote } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
 
 import styles from './styles.module.scss'
 
@@ -13,13 +17,28 @@ type Props = {
   value: string
   id: string
   inputRef?: React.ClassAttributes<HTMLInputElement>['ref']
-  /** if this is defined clear button is always shown, like with search in chat */
-  extraCleanAction?: () => void
+  /** If this is defined clear button is always shown, like with search in chat */
+  onClear?: () => void
 }
 
 export default function SearchInput(props: Props) {
-  const { onChange, value, id, extraCleanAction } = props
+  const accountId = selectedAccountId()
   const tx = useTranslationFunction()
+  const { openDialog } = useDialog()
+  const { onChange, value, id, onClear } = props
+
+  const handleClear = () => {
+    onChange({ target: { value: '' } })
+    onClear?.()
+  }
+
+  const handleQRScan = async () => {
+    const [qrCode, qrCodeSVG] =
+      await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(accountId, null)
+    openDialog(QrCode, { qrCode, qrCodeSVG })
+  }
+
+  const hasValue = value.length > 0 || onClear
 
   return (
     <>
@@ -35,11 +54,10 @@ export default function SearchInput(props: Props) {
         ref={props.inputRef}
         spellCheck={false}
       />
-      <SearchClearButton
-        value={value}
-        onChange={onChange}
-        extraCleanAction={extraCleanAction}
-      />
+      {hasValue && <SearchInputButton icon='cross' onClick={handleClear} />}
+      {!hasValue && (
+        <SearchInputButton size={17} icon='qr' onClick={handleQRScan} />
+      )}
     </>
   )
 }
