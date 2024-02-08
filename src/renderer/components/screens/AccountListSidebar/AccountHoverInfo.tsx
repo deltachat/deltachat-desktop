@@ -43,7 +43,7 @@ export function AccountHoverInfo({
   if (loadedAccount.kind === 'Unconfigured') {
     content = (
       <>
-        <b>Unconfigured Account</b>
+        <b>{tx('unconfigured_account')}</b>
         <div className={styles.HoverInfoProperty}>
           {tx('unconfigured_account_hint')}
         </div>
