@@ -190,9 +190,6 @@ const Sidebar = React.memo(
           <div key='settings' className='sidebar-item' onClick={onOpenSettings}>
             {tx('menu_settings')}
           </div>
-          <div key='help' className='sidebar-item' onClick={onOpenHelp}>
-            {tx('menu_help')}
-          </div>
           <div key='logout' className='sidebar-item' onClick={onLogout}>
             {tx('switch_account')}
           </div>
@@ -202,9 +199,7 @@ const Sidebar = React.memo(
             <Link
               href='https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md'
               label={'v' + VERSION}
-            />{' '}
-            -{' '}
-            <a onClick={onOpenAbout}>{tx('global_menu_help_about_desktop')}</a>
+            />
           </div>
         </div>
       </>
