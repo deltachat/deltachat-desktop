@@ -35,7 +35,10 @@ export default function AccountSetupScreen({
     () =>
       openDialog(ConfigureProgressDialog, {
         credentials,
-        onSuccess: () => selectAccount(accountId),
+        onSuccess: () => {
+          selectAccount(accountId)
+          window.__updateAccountListSidebar?.()
+        },
       }),
     [accountId, openDialog, selectAccount, credentials]
   )
