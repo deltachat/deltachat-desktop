@@ -61,10 +61,7 @@ export default function AccountSetupScreen({
   return (
     <div className='login-screen'>
       <div className='window'>
-        <Dialog
-          onClose={() => {}}
-          fixed
-        >
+        <Dialog onClose={() => {}} fixed>
           <DialogHeader title={tx('login_explain')} />
           <DialogBody>
             <DialogContent>
