@@ -1,14 +1,11 @@
 import React from 'react'
 import classNames from 'classnames'
-import { T } from '@deltachat/jsonrpc-client'
 
 import { Type } from '../backend-com'
-import FullscreenMedia, {
-  NeighboringMediaMode,
-} from './dialogs/FullscreenMedia'
 import useDialog from '../hooks/useDialog'
 
 import type { PropsWithChildren } from 'react'
+import FullscreenAvatar from './dialogs/FullscreenAvatar'
 
 export function QRAvatar() {
   return (
@@ -109,12 +106,8 @@ export function ClickForFullscreenAvatarWrapper(
         if (!props.filename) {
           return
         }
-        openDialog(FullscreenMedia, {
-          msg: {
-            fileMime: 'image/x',
-            file: props.filename,
-          } as T.Message,
-          neighboringMedia: NeighboringMediaMode.Off,
+        openDialog(FullscreenAvatar, {
+          imagePath: props.filename,
         })
       }}
       style={{
