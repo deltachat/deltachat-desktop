@@ -5,6 +5,7 @@ import Icon from '../Icon'
 import styles from './styles.module.scss'
 
 import type { IconName } from '../Icon'
+import classNames from 'classnames'
 
 type Props = {
   'aria-label'?: string
@@ -22,7 +23,7 @@ export default function SearchInputButton({
   return (
     <button
       aria-label={props['aria-label']}
-      className={styles.searchInputButton}
+      className={classNames(styles.searchInputButton, "no-drag")}
       onClick={onClick}
     >
       <Icon className={styles.searchInputButtonIcon} icon={icon} size={size} />

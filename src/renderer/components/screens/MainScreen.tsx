@@ -247,7 +247,7 @@ export default function MainScreen() {
           <NavbarGroup align={Alignment.LEFT}>
             {queryStr.length === 0 && showArchivedChats && (
               <>
-                <div className='archived-chats-title'>
+                <div className='archived-chats-title no-drag'>
                   {tx('chat_archived_chats_title')}
                 </div>
                 <Button
@@ -255,6 +255,7 @@ export default function MainScreen() {
                     Classes.MINIMAL,
                     'icon-rotated',
                     'archived-chats-return-button',
+                    'no-drag'
                   ].join(' ')}
                   icon='undo'
                   onClick={() => setShowArchivedChats(false)}
@@ -282,6 +283,7 @@ export default function MainScreen() {
                   width: '100%',
                 }}
                 onClick={onTitleClick}
+                className='no-drag'
               >
                 {tx('menu_all_media')}
               </NavbarHeading>
@@ -292,8 +294,8 @@ export default function MainScreen() {
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  width: '100%',
                 }}
+                className='no-drag'
                 onClick={onTitleClick}
               >
                 <Avatar
@@ -326,7 +328,7 @@ export default function MainScreen() {
             )}
             {selectedChat.chat && (
               <>
-                <span className='views'>
+                <span className='views no-drag'>
                   <Button
                     onClick={() => setChatView(ChatView.MessageList)}
                     minimal
@@ -368,6 +370,7 @@ export default function MainScreen() {
                     ? { opacity: 0.4, pointerEvents: 'none' }
                     : {}),
                 }}
+                className='no-drag'
                 aria-disabled={threeDotMenuHidden}
               >
                 <Button

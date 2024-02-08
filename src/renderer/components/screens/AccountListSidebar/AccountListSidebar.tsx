@@ -91,6 +91,7 @@ export function AccountListSidebar({
     <div
       className={styles.accountListSidebar}
       onScroll={updateHoverInfoPosition}
+      style={runtime.getRuntimeInfo().isMac ? { paddingTop: '30px' } : {}}
     >
       {accounts.map(account => (
         <AccountItem

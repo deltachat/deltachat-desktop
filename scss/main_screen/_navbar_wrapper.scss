@@ -1,4 +1,7 @@
 .navbar-wrapper {
+  // so it can be used to drag the window around
+  -webkit-app-region: drag;
+
   .icon-rotated > .bp4-icon > svg:not([fill]) {
     transform: rotate(90deg);
   }
@@ -65,4 +68,8 @@
     height: 40px;
     border-radius: 100%;
   }
+}
+
+.no-drag, #hamburger-menu-button, #chat-list-search {
+  -webkit-app-region: no-drag;
 }

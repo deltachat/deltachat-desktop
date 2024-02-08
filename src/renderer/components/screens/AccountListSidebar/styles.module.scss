@@ -41,7 +41,7 @@
 
   background-color: var(--accountSidebarBg);
 
-  width: 58px;
+  width: 66px;
 
   flex-shrink: 0;
 
@@ -50,7 +50,7 @@
   align-items: center;
 
   --als-avatar-size: 42px;
-  --als-avatar-margin: 4px;
+  --als-avatar-margin: 5px;
   --als-active-indicator-color: white;
   padding-top: 5px;
 
@@ -91,7 +91,7 @@
               var(--als-active-indicator-height) / 2
             )
         );
-        margin-inline-start: -12px;
+        margin-inline-start: -15.5px;
         height: var(--als-active-indicator-height);
         width: 8px;
         border-radius: 20px;
