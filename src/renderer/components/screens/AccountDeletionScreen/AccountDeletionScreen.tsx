@@ -92,7 +92,7 @@ export function AccountDeletionScreen({
                     'delete_account_explain_with_name',
                     accountInfo.kind === 'Configured'
                       ? accountInfo.addr || undefined
-                      : 'Unconfigured'
+                      : tx('unconfigured_account')
                   )}
               </p>
             </DialogContent>
