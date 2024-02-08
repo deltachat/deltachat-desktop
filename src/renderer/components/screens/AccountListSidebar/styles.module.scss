@@ -70,6 +70,8 @@
       img.content {
         border-radius: 10%;
       }
+      opacity: 0.7;
+      transition: opacity ease-in 200ms;
     }
 
     &.active,
@@ -92,6 +94,9 @@
         height: var(--als-active-indicator-height);
         width: 8px;
         border-radius: 20px;
+      }
+      .avatar {
+        opacity: 1;
       }
     }
 
