@@ -46,6 +46,7 @@ export default class ScreenController extends Component {
   onShowSettings: any
   selectedAccountId: number | undefined
   openSendToDialogId?: string
+  lastAccountBeforeAddingNewAccount: number | null = null
 
   constructor(public props: {}) {
     super(props)
@@ -66,6 +67,7 @@ export default class ScreenController extends Component {
     this.unSelectAccount = this.unSelectAccount.bind(this)
     this.openAccountDeletionScreen = this.openAccountDeletionScreen.bind(this)
     this.onDeleteAccount = this.onDeleteAccount.bind(this)
+    this.onExitWelcomeScreen = this.onExitWelcomeScreen.bind(this)
 
     window.__userFeedback = this.userFeedback.bind(this)
     window.__changeScreen = this.changeScreen.bind(this)
@@ -150,10 +152,26 @@ export default class ScreenController extends Component {
   }
 
   async addAndSelectAccount(): Promise<number> {
+    if (this.selectedAccountId) {
+      this.lastAccountBeforeAddingNewAccount = this.selectedAccountId
+    }
     const accountId = await BackendRemote.rpc.addAccount()
     updateDeviceChats(accountId, true) // skip changelog
     await this.selectAccount(accountId)
     return accountId
+  }
+
+  async onExitWelcomeScreen(): Promise<void> {
+    if (this.lastAccountBeforeAddingNewAccount) {
+      try {
+        await this.selectAccount(this.lastAccountBeforeAddingNewAccount)
+      } catch (error) {
+        this.changeScreen(Screens.NoAccountSelected)
+      }
+    } else {
+      this.changeScreen(Screens.NoAccountSelected)
+    }
+    this.lastAccountBeforeAddingNewAccount = null
   }
 
   async openAccountDeletionScreen(accountId: number) {
@@ -284,6 +302,7 @@ export default class ScreenController extends Component {
           <WelcomeScreen
             selectedAccountId={this.selectedAccountId}
             onUnSelectAccount={this.unSelectAccount}
+            onExitWelcomeScreen={this.onExitWelcomeScreen}
           />
         )
       case Screens.DeleteAccount:
