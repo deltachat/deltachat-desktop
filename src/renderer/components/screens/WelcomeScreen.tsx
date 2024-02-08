@@ -123,9 +123,11 @@ const ImportButton = function ImportButton() {
 export default function WelcomeScreen({
   selectedAccountId,
   onUnSelectAccount,
+  onExitWelcomeScreen,
 }: {
   selectedAccountId: number
   onUnSelectAccount: () => Promise<void>
+  onExitWelcomeScreen: () => Promise<void>
 }) {
   const tx = useTranslationFunction()
   const { openDialog, closeDialog } = useDialog()
@@ -166,7 +168,7 @@ export default function WelcomeScreen({
         await onUnSelectAccount()
         await EffectfulBackendActions.removeAccount(selectedAccountId)
       }
-      window.__changeScreen(Screens.NoAccountSelected)
+      onExitWelcomeScreen()
     } catch (error) {
       if (error instanceof Error) {
         openDialog(AlertDialog, {
