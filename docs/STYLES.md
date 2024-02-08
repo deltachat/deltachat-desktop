@@ -29,7 +29,6 @@ We use `prettier` for CSS formatting. Use `npm run fix:format` before committing
 
 ### Ordering and format
 
-- Properties are sorted alphabetically
 - Order of groups: variables (`--borderRadius`), properties (`height: 10px;`), pseudo elements (`::before`), sub-classes (`.active`), always separated with a newline
 - Classes (`.searchInput` etc.) are also always separated with a newline
 
