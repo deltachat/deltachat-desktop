@@ -88,24 +88,26 @@ export function AccountListSidebar({
   }, [refresh])
 
   return (
-    <div
-      className={styles.accountListSidebar}
-      onScroll={updateHoverInfoPosition}
-    >
-      {accounts.map(account => (
-        <AccountItem
-          key={account.id}
-          account={account}
-          isSelected={selectedAccountId === account.id}
-          onSelectAccount={selectAccount}
-          openAccountDeletionScreen={openAccountDeletionScreen}
-          updateAccountForHoverInfo={updateAccountForHoverInfo}
-          syncAllAccounts={syncAllAccounts}
-        />
-      ))}
-      <button className={styles.addButton} onClick={onAddAccount}>
-        +
-      </button>
+    <div className={styles.accountListSidebar}>
+      {runtime.getRuntimeInfo().isMac && (
+        <div className={styles.MacOSTrafficLightBackground}></div>
+      )}
+      <div className={styles.accountList} onScroll={updateHoverInfoPosition}>
+        {accounts.map(account => (
+          <AccountItem
+            key={account.id}
+            account={account}
+            isSelected={selectedAccountId === account.id}
+            onSelectAccount={selectAccount}
+            openAccountDeletionScreen={openAccountDeletionScreen}
+            updateAccountForHoverInfo={updateAccountForHoverInfo}
+            syncAllAccounts={syncAllAccounts}
+          />
+        ))}
+        <button className={styles.addButton} onClick={onAddAccount}>
+          +
+        </button>
+      </div>
       <div className={styles.AccountHoverInfoContainer} ref={hoverInfo}>
         {accountForHoverInfo && (
           <AccountHoverInfo
