@@ -56,7 +56,7 @@ export default function AccountDeletionScreen({
             title={tx('delete_account')}
           />
           <DialogBody>
-            <DialogContent paddingTop={false}>
+            <DialogContent>
               <p>{tx('delete_account_ask')}</p>
               {accountInfo?.kind == 'Configured' && (
                 <div className={styles.accountCard}>
