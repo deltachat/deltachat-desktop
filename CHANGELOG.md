@@ -10,12 +10,9 @@
 - Add shortcut to scan qr code to "New Chat" dialog #3623
 - Message reactions with emojis #2964
 - Show info dialog on tap for invalid unencrypted mails #3652
-<<<<<<< HEAD
 - Add QR scan button next to search input on main screen #3665
-=======
 - Add Account Switcher Sidebar #3621
 - Add new account deletion screen #3621
->>>>>>> 833c4f3c (update changelog)
 
 ### Changed
 - Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.134.0`
