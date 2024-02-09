@@ -32,9 +32,6 @@ $keybindingKeyBorder: gray;
 $keybindingKeyShadow: rgba(0, 0, 0, 0.35);
 $ovalButtonBg: #415e6b;
 $ovalButtonText: #fff;
-$sideBarAccountBg: #fff;
-$sideBarAccountEmailText: black;
-$sideBarAccountIconBg: #fff;
 $textPrimary: #010101;
 $textSecondary: #62656a;
 $textNavBar: $textPrimary;
@@ -70,8 +67,6 @@ $scrollbarTransparency: 0.5;
 
   --messageOutgoingBg: var(--messagePadlockOutgoing);
   --messageQuotedText: var(--globalText);
-
-  --sideBarAccountIconHoverBackground: #fff;
 
   --settingsIconColor: black;
   --infoMessageBubbleBg: black;

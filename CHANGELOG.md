@@ -61,7 +61,7 @@
 ### Removed
 - Remove qr icon in sidebar #3666
 - Remove old Account switcher screen #3621
-- Remove "Switch Account" from Sidebar #3621
+- Remove sidebar menu #3621
 
 <a id="1_42_2"></a>
 

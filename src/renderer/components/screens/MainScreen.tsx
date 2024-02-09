@@ -7,7 +7,6 @@ import {
   NavbarGroup,
   NavbarHeading,
   Button,
-  Icon,
 } from '@blueprintjs/core'
 
 import Gallery from '../Gallery'
@@ -34,7 +33,6 @@ import MapComponent from '../map/MapComponent'
 import MailingListProfile from '../dialogs/MessageListProfile'
 import { getLogger } from '../../../shared/logger'
 import { RecoverableCrashScreen } from './RecoverableCrashScreen'
-import Sidebar, { SidebarState } from '../Sidebar'
 import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 import { Type } from '../../backend-com'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
@@ -50,7 +48,6 @@ const log = getLogger('renderer/main-screen')
 export default function MainScreen() {
   const [queryStr, setQueryStr] = useState('')
   const [queryChatId, setQueryChatId] = useState<null | number>(null)
-  const [sidebarState, setSidebarState] = useState<SidebarState>('init')
   const [showArchivedChats, setShowArchivedChats] = useState(false)
   // Small hack/misuse of keyBindingAction to setShowArchivedChats from other components (especially
   // ViewProfile when selecting a shared chat/group)
@@ -248,13 +245,6 @@ export default function MainScreen() {
       <div className='navbar-wrapper'>
         <Navbar>
           <NavbarGroup align={Alignment.LEFT}>
-            <div
-              className='sidebar-icon'
-              onClick={() => setSidebarState('visible')}
-              id='hamburger-menu-button'
-            >
-              <Icon icon='menu' aria-label={tx('main_menu')} size={20} />
-            </div>
             {queryStr.length === 0 && showArchivedChats && (
               <>
                 <div className='archived-chats-title'>
@@ -407,7 +397,6 @@ export default function MainScreen() {
         />
         {MessageListView}
       </div>
-      <Sidebar sidebarState={sidebarState} setSidebarState={setSidebarState} />
       <ConnectivityToast />
     </div>
   )

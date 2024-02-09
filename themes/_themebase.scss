@@ -26,15 +26,6 @@ $hover-contrast-change: 2%;
   --navBarText: #{$textNavBar};
   --navBarSearchPlaceholder: #{changeContrast($textNavBar, 27%)};
   --navBarGroupSubtitle: #{changeContrast($textNavBar, 27%)};
-  /* SideBar */
-  --sideBarBackground: #{$bgPrimary};
-  --sideBarAccountBackground: #{$sideBarAccountBg};
-  --sideBarAccountIconBackground: #{$sideBarAccountIconBg};
-  --sideBarAccountIconHoverBackground: #{changeContrast(
-      $sideBarAccountIconBg,
-      $hover-contrast-change
-    )};
-  --sideBarAccountEmailText: #{$sideBarAccountEmailText};
   /* ChatView */
   --chatViewBg: #{$bgChatView};
   --chatViewBgImgPath: #{$bgImage};
