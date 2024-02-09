@@ -1,4 +1,5 @@
 import React from 'react'
+import { dirname } from 'path'
 
 import { runtime } from '../../../runtime'
 import { avatarInitial } from '../../Avatar'
@@ -7,74 +8,82 @@ import {
   LastUsedSlot,
   rememberLastUsedPath,
 } from '../../../utils/lastUsedPaths'
-import { dirname } from 'path'
+import LargeProfileImage from '../../LargeProfileImage'
+import Icon from '../../Icon'
 
-export default function ProfileImageSelector({
-  displayName,
-  addr,
-  color,
-  profilePicture,
-  setProfilePicture,
-}: {
-  displayName: string
+import styles from './styles.module.scss'
+
+type Props = {
   addr: string
   color: string
+  displayName: string
+  hideDeleteButton?: boolean
   profilePicture: string | null
   setProfilePicture: (path: string) => void
-  hideDeleteButton?: boolean
-}) {
+}
+
+export default function ProfileImageSelector({
+  addr,
+  color,
+  displayName,
+  profilePicture,
+  setProfilePicture,
+}: Props) {
   const tx = useTranslationFunction()
 
-  const onClickSelectPicture = async () => {
+  const handleSelect = async () => {
     const { defaultPath, setLastPath } = rememberLastUsedPath(
       LastUsedSlot.ProfileImage
     )
+
     const file = await runtime.showOpenFileDialog({
       title: tx('select_your_new_profile_image'),
       filters: [
         {
           name: tx('images'),
-          extensions: ['jpg', 'png', 'gif', 'jpeg', 'jpe'],
+          extensions: ['jpg', 'png', 'gif', 'jpeg'],
         },
       ],
       properties: ['openFile'],
       defaultPath,
     })
+
     if (file) {
       setProfilePicture(file)
       setLastPath(dirname(file))
     }
   }
 
-  const onClickRemovePicture = () => setProfilePicture('')
+  const handleRemove = () => setProfilePicture('')
 
-  const initial = avatarInitial(displayName, addr)
+  const imageUrl = profilePicture ? `file://${profilePicture}` : undefined
+  const initials = avatarInitial(displayName, addr)
 
   return (
-    <div className='profile-image-selector'>
-      {/* TODO: show anything else when there is no profile image, like the letter avatar */}
-      {profilePicture ? (
-        <img src={'file://' + profilePicture} alt={tx('pref_profile_photo')} />
-      ) : (
-        <span style={{ backgroundColor: color }}>{initial}</span>
+    <div className={styles.profileImageSelector}>
+      <LargeProfileImage
+        color={color}
+        imageUrl={imageUrl}
+        initials={initials}
+      />
+      {!imageUrl && (
+        <button
+          title={tx('profile_image_select')}
+          className={styles.profileImageSelectorButton}
+          onClick={handleSelect}
+        >
+          <Icon className={styles.profileImageSelectorIcon} icon='image' />
+        </button>
       )}
-      <>
+      {imageUrl && (
         <button
-          aria-label={tx('profile_image_select')}
-          onClick={onClickSelectPicture}
-          className={'delta-button-round'}
+          title={tx('profile_image_delete')}
+          className={styles.profileImageSelectorButton}
+          onClick={handleRemove}
         >
-          {tx('profile_image_select')}
+          <Icon className={styles.profileImageSelectorIcon} icon='cross' />
         </button>
-        <button
-          aria-label={tx('profile_image_delete')}
-          onClick={onClickRemovePicture}
-          className={'delta-button-round'}
-          disabled={!profilePicture}
-        >
-          {tx('profile_image_delete')}
-        </button>
-      </>
+      )}
     </div>
   )
 }
