@@ -14,6 +14,7 @@ import { join } from 'path'
 import { DesktopSettings } from '../desktop_settings'
 import { Session } from 'electron/main'
 import { refresh as refreshTitleMenu } from '../menu'
+import { platform } from 'os'
 const log = getLogger('main/mainWindow')
 
 export let window: (BrowserWindow & { hidden?: boolean }) | null = null
@@ -28,6 +29,8 @@ export function init(options: { hidden: boolean }) {
     defaults.bounds,
     DesktopSettings.state.bounds
   )
+
+  const isMac = platform() === 'darwin'
 
   const main_window = (window = <BrowserWindow & { hidden?: boolean }>(
     new electron.BrowserWindow({
@@ -51,6 +54,8 @@ export function init(options: { hidden: boolean }) {
         allowRunningInsecureContent: false,
         contextIsolation: false,
       },
+      titleBarStyle: isMac ? 'hidden' : 'default',
+      titleBarOverlay: true,
     })
   ))
 
