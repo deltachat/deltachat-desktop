@@ -1,12 +1,14 @@
-import { T } from '@deltachat/jsonrpc-client'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { BackendRemote } from '../../../backend-com'
+import { debounce } from 'debounce'
+
 import AccountItem from './AccountItem'
+import { BackendRemote } from '../../../backend-com'
+import AccountHoverInfo from './AccountHoverInfo'
+import { runtime } from '../../../runtime'
 
 import styles from './styles.module.scss'
-import AccountHoverInfo from './AccountHoverInfo'
-import { debounce } from 'debounce'
-import { runtime } from '../../../runtime'
+
+import type { T } from '@deltachat/jsonrpc-client'
 
 export default function AccountListSidebar({
   selectedAccountId,

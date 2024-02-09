@@ -1,15 +1,16 @@
-import { T } from '@deltachat/jsonrpc-client'
 import React, { useEffect, useState } from 'react'
-import { BackendRemote, onDCEvent } from '../../../backend-com'
-import { avatarInitial } from '../../Avatar'
 import classNames from 'classnames'
 import debounce from 'debounce'
+
+import { BackendRemote, onDCEvent } from '../../../backend-com'
+import { avatarInitial } from '../../Avatar'
 import { getLogger } from '../../../../shared/logger'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { useContextMenuWithActiveState } from '../../ContextMenu'
 import { ActionEmitter, KeybindAction } from '../../../keybindings'
 
 import styles from './styles.module.scss'
+import type { T } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('AccountsSidebar/AccountItem')
 export default function AccountItem({
