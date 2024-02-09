@@ -29,6 +29,7 @@ There is a special code that is an exception to this: `system` it gets translate
 ## Theme Format
 
 Themes are just css files with a header identifying them as a theme:
+
 ```css
 .theme-meta {
   --name: 'Custom Theme';
