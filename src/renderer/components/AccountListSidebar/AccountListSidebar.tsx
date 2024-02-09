@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { debounce } from 'debounce'
 
 import AccountItem from './AccountItem'
-import { BackendRemote } from '../../../backend-com'
+import { BackendRemote } from '../../backend-com'
 import AccountHoverInfo from './AccountHoverInfo'
-import { runtime } from '../../../runtime'
+import { runtime } from '../../runtime'
 
 import styles from './styles.module.scss'
 

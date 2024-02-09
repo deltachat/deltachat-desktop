@@ -2,10 +2,10 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { C, T } from '@deltachat/jsonrpc-client'
 import { filesize } from 'filesize'
 
-import { BackendRemote, onDCEvent } from '../../../backend-com'
-import { getLogger } from '../../../../shared/logger'
-import { runtime } from '../../../runtime'
-import { debounceWithInit } from '../../chat/ChatListHelpers'
+import { BackendRemote, onDCEvent } from '../../backend-com'
+import { getLogger } from '../../../shared/logger'
+import { runtime } from '../../runtime'
+import { debounceWithInit } from '../chat/ChatListHelpers'
 
 import styles from './styles.module.scss'
 
