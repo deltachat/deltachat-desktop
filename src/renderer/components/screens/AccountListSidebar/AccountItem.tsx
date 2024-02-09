@@ -12,7 +12,7 @@ import { ActionEmitter, KeybindAction } from '../../../keybindings'
 import styles from './styles.module.scss'
 
 const log = getLogger('AccountsSidebar/AccountItem')
-export function AccountItem({
+export default function AccountItem({
   account,
   isSelected,
   onSelectAccount,
