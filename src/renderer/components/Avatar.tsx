@@ -1,11 +1,11 @@
 import React from 'react'
 import classNames from 'classnames'
 
-import { Type } from '../backend-com'
 import useDialog from '../hooks/useDialog'
-
-import type { PropsWithChildren } from 'react'
 import FullscreenAvatar from './dialogs/FullscreenAvatar'
+
+import type { Type } from '../backend-com'
+import type { PropsWithChildren } from 'react'
 
 export function QRAvatar() {
   return (
