@@ -213,24 +213,4 @@ samp {
   width: 100%;
   height: 100%;
   overflow: hidden;
-
-  // todo move these ones into their files
-  .login-screen {
-    flex-grow: 1;
-  }
-
-  .main-screen {
-    flex-grow: 1;
-    position: relative;
-    overflow: hidden;
-
-    .chat-list,
-    .message-list-and-composer {
-      margin-top: 0;
-    }
-  }
-
-  .navbar-wrapper {
-    position: relative;
-  }
 }
