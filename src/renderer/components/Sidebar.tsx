@@ -20,7 +20,6 @@ import ConnectivityDialog from './dialogs/ConnectivityDialog'
 import useDialog from '../hooks/useDialog'
 import CreateChat from './dialogs/CreateChat'
 import { ScreenContext } from '../contexts/ScreenContext'
-import About from './dialogs/About'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 
 export type SidebarState = 'init' | 'visible' | 'invisible'
@@ -51,11 +50,6 @@ const Sidebar = React.memo(
       changeScreen(Screens.AccountList)
     }
 
-    const onOpenHelp = () => {
-      setSidebarState('invisible')
-      runtime.openHelpWindow()
-    }
-
     const onOpenConnectivity = () => {
       setSidebarState('invisible')
       openDialog(ConnectivityDialog)
@@ -80,11 +74,6 @@ const Sidebar = React.memo(
         C.DC_CONTACT_ID_SELF
       )
       selectChat(savedMessagesChatId)
-    }
-
-    const onOpenAbout = () => {
-      setSidebarState('invisible')
-      openDialog(About)
     }
 
     const onEscapeKeyUp = (ev: KeyboardEvent) => {
