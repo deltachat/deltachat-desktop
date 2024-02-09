@@ -138,6 +138,29 @@ class SettingsStore extends Store<SettingsStoreState | null> {
         rc,
       })
     },
+    loadCoreKey: async (
+      accountId: number,
+      key: keyof SettingsStoreState['settings']
+    ) => {
+      if (
+        this.state &&
+        this.state.accountId === accountId &&
+        settingsKeys.includes(key)
+      ) {
+        const newValue = await BackendRemote.rpc.getConfig(
+          this.state.accountId,
+          key
+        )
+        console.info('loadCoreKey', key, newValue)
+
+        this.setState(state => {
+          if (state === null || state.accountId !== accountId) {
+            return
+          }
+          return { ...state, settings: { ...state.settings, [key]: newValue } }
+        }, 'set')
+      }
+    },
     setDesktopSetting: async (
       key: keyof DesktopSettingsType,
       value: string | number | boolean
@@ -186,7 +209,8 @@ class SettingsStore extends Store<SettingsStoreState | null> {
 }
 
 onReady(() => {
-  BackendRemote.on('SelfavatarChanged', async accountId => {
+  console.warn('ConfigSynced register')
+  const updateSelfAvatar = async (accountId: number) => {
     if (accountId === window.__selectedAccountId) {
       const selfContact = await BackendRemote.rpc.getContact(
         accountId,
@@ -195,14 +219,17 @@ onReady(() => {
       SettingsStoreInstance.reducer.setSelfContact(selfContact)
     }
     window.__updateAccountListSidebar?.()
-  })
-  BackendRemote.on('ConfigSynced', (_accountId, { key }) => {
+  }
+  // SelfavatarChanged event is deprecated and does not seem to work (neither SelfavatarChanged nor iver the new ConfigSynced)
+  BackendRemote.on('SelfavatarChanged', updateSelfAvatar)
+  BackendRemote.on('ConfigSynced', (accountId, { key }) => {
+    if (key === 'selfavatar') {
+      updateSelfAvatar(accountId)
+    }
     if (key === 'addr' || key === 'displayname') {
       window.__updateAccountListSidebar?.()
     }
-    // TODO: for #3624 this also needs to update the SettingsStore
-    // but only if the key is one of the cached one
-    // and probably also update only the key that changed
+    SettingsStoreInstance.effect.loadCoreKey(accountId, key as any)
   })
 })
 
