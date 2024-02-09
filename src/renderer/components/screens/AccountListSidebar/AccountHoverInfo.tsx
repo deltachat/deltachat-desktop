@@ -9,7 +9,7 @@ import { debounceWithInit } from '../../chat/ChatListHelpers'
 
 const log = getLogger('AccountListSidebar/AccountHoverInfo')
 
-export function AccountHoverInfo({
+export default function AccountHoverInfo({
   account,
   isSelected,
 }: {
