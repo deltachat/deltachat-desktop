@@ -172,7 +172,7 @@ export default async function processOpenQrUrl(
         openDialog(ConfirmationDialog, {
           message: tx(message, replacementValue),
           cb: resolve,
-          confirmLabel: tx('login'),
+          confirmLabel: tx('login_title'),
         })
       })
 

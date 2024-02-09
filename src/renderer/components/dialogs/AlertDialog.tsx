@@ -11,7 +11,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
-type Props = {
+export type Props = {
   cb?: () => void
   message: string | JSX.Element
 } & DialogProps
@@ -27,7 +27,7 @@ export default function AlertDialog({ message, onClose, cb }: Props) {
   return (
     <Dialog onClose={onClose}>
       <DialogBody>
-        <DialogContent>
+        <DialogContent paddingTop>
           <p>{message}</p>
         </DialogContent>
       </DialogBody>
