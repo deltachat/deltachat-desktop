@@ -19,6 +19,7 @@ import useDialog from '../../hooks/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import About from '../dialogs/About'
 
 type SettingsView =
   | 'main'
@@ -108,6 +109,7 @@ export default function Settings({ onClose }: DialogProps) {
             >
               {tx('menu_advanced')}
             </SettingsIconButton>
+            <SettingsSeparator />
             {!runtime.getRuntimeInfo().isMac && (
               <SettingsIconButton
                 icon='favorite'
@@ -117,6 +119,15 @@ export default function Settings({ onClose }: DialogProps) {
                 {tx('donate')}
               </SettingsIconButton>
             )}
+            <SettingsIconButton
+              icon='question_mark'
+              onClick={() => runtime.openHelpWindow()}
+            >
+              {tx('menu_help')}
+            </SettingsIconButton>
+            <SettingsIconButton icon='info' onClick={() => openDialog(About)}>
+              {tx('global_menu_help_about_desktop')}
+            </SettingsIconButton>
           </DialogBody>
         </>
       )}

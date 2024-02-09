@@ -19,9 +19,7 @@ import {
 import ConnectivityDialog from './dialogs/ConnectivityDialog'
 import useDialog from '../hooks/useDialog'
 import CreateChat from './dialogs/CreateChat'
-import UnblockContacts from './dialogs/UnblockContacts'
 import { ScreenContext } from '../contexts/ScreenContext'
-import About from './dialogs/About'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 
 export type SidebarState = 'init' | 'visible' | 'invisible'
@@ -44,20 +42,12 @@ const Sidebar = React.memo(
       setSidebarState('invisible')
       openDialog(CreateChat)
     }
-    const onUnblockContacts = () => {
-      setSidebarState('invisible')
-      openDialog(UnblockContacts)
-    }
+
     const onLogout = async () => {
       setSidebarState('invisible')
       unselectChat()
       await EffectfulBackendActions.logout()
       changeScreen(Screens.AccountList)
-    }
-
-    const onOpenHelp = () => {
-      setSidebarState('invisible')
-      runtime.openHelpWindow()
     }
 
     const onOpenConnectivity = () => {
@@ -84,11 +74,6 @@ const Sidebar = React.memo(
         C.DC_CONTACT_ID_SELF
       )
       selectChat(savedMessagesChatId)
-    }
-
-    const onOpenAbout = () => {
-      setSidebarState('invisible')
-      openDialog(About)
     }
 
     const onEscapeKeyUp = (ev: KeyboardEvent) => {
@@ -167,13 +152,6 @@ const Sidebar = React.memo(
             {tx('menu_new_chat')}
           </div>
           <div
-            key='unblock'
-            className='sidebar-item'
-            onClick={onUnblockContacts}
-          >
-            {tx('pref_blocked_contacts')}
-          </div>
-          <div
             key='archived_chats'
             className='sidebar-item'
             onClick={onOpenArchivedChats}
@@ -190,9 +168,6 @@ const Sidebar = React.memo(
           <div key='settings' className='sidebar-item' onClick={onOpenSettings}>
             {tx('menu_settings')}
           </div>
-          <div key='help' className='sidebar-item' onClick={onOpenHelp}>
-            {tx('menu_help')}
-          </div>
           <div key='logout' className='sidebar-item' onClick={onLogout}>
             {tx('switch_account')}
           </div>
@@ -202,9 +177,7 @@ const Sidebar = React.memo(
             <Link
               href='https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md'
               label={'v' + VERSION}
-            />{' '}
-            -{' '}
-            <a onClick={onOpenAbout}>{tx('global_menu_help_about_desktop')}</a>
+            />
           </div>
         </div>
       </>

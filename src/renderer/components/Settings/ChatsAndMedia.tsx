@@ -17,6 +17,9 @@ import SettingsSeparator from './SettingsSeparator'
 import SettingsHeading from './SettingsHeading'
 import { DialogContent } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/useDialog'
+import UnblockContacts from '../dialogs/UnblockContacts'
+import SettingsButton from './SettingsButton'
 
 type Props = {
   settingsStore: SettingsStoreState
@@ -28,11 +31,15 @@ export default function ChatsAndMedia({
   desktopSettings,
 }: Props) {
   const tx = useTranslationFunction()
+  const { openDialog } = useDialog()
 
   return (
     <>
       <SettingsHeading>{tx('pref_chats')}</SettingsHeading>
       <Communication settingsStore={settingsStore} />
+      <SettingsButton onClick={() => openDialog(UnblockContacts)}>
+        {tx('pref_blocked_contacts')}
+      </SettingsButton>
       <OutgoingMediaQuality settings={settingsStore.settings} />
       <DownloadOnDemand settings={settingsStore.settings} />
       <DesktopSettingsSwitch

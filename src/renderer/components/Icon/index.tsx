@@ -12,11 +12,13 @@ export type IconName =
   | 'devices'
   | 'favorite'
   | 'forum'
+  | 'info'
   | 'lead-pencil'
   | 'list'
   | 'more'
   | 'open_in_new'
   | 'person'
+  | 'question_mark'
   | 'reaction'
   | 'swap_vert'
 
