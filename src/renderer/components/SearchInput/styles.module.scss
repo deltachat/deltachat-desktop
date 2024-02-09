@@ -25,7 +25,7 @@ $closeButtonSize: 30px;
   }
 }
 
-.searchClearButton {
+.searchInputButton {
   align-items: center;
   background-color: transparent;
   border-radius: $borderRadius;
@@ -44,12 +44,8 @@ $closeButtonSize: 30px;
   &:hover {
     background-color: $backgroundColorHover;
   }
-
-  &.hidden {
-    display: none;
-  }
 }
 
-.searchClearButtonIcon {
+.searchInputButtonIcon {
   background-color: var(--navBarText);
 }

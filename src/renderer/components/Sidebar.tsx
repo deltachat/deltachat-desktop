@@ -4,7 +4,6 @@ import { C } from '@deltachat/jsonrpc-client'
 
 import { runtime } from '../runtime'
 import { Screens, selectedAccountId } from '../ScreenController'
-import QrCode from './dialogs/QrCode'
 import { selectChat, unselectChat } from './helpers/ChatMethods'
 import { useSettingsStore } from '../stores/settings'
 import { Avatar } from './Avatar'
@@ -19,9 +18,7 @@ import {
 import ConnectivityDialog from './dialogs/ConnectivityDialog'
 import useDialog from '../hooks/useDialog'
 import CreateChat from './dialogs/CreateChat'
-import UnblockContacts from './dialogs/UnblockContacts'
 import { ScreenContext } from '../contexts/ScreenContext'
-import About from './dialogs/About'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 
 export type SidebarState = 'init' | 'visible' | 'invisible'
@@ -44,20 +41,12 @@ const Sidebar = React.memo(
       setSidebarState('invisible')
       openDialog(CreateChat)
     }
-    const onUnblockContacts = () => {
-      setSidebarState('invisible')
-      openDialog(UnblockContacts)
-    }
+
     const onLogout = async () => {
       setSidebarState('invisible')
       unselectChat()
       await EffectfulBackendActions.logout()
       changeScreen(Screens.AccountList)
-    }
-
-    const onOpenHelp = () => {
-      setSidebarState('invisible')
-      runtime.openHelpWindow()
     }
 
     const onOpenConnectivity = () => {
@@ -70,13 +59,6 @@ const Sidebar = React.memo(
       ActionEmitter.emitAction(KeybindAction.Settings_Open)
     }
 
-    const onShowQRCode = async () => {
-      setSidebarState('invisible')
-      const [qrCode, qrCodeSVG] =
-        await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(accountId, null)
-
-      openDialog(QrCode, { qrCode, qrCodeSVG })
-    }
     const onSelectSavedMessages = async () => {
       setSidebarState('invisible')
       const savedMessagesChatId = await BackendRemote.rpc.createChatByContactId(
@@ -84,11 +66,6 @@ const Sidebar = React.memo(
         C.DC_CONTACT_ID_SELF
       )
       selectChat(savedMessagesChatId)
-    }
-
-    const onOpenAbout = () => {
-      setSidebarState('invisible')
-      openDialog(About)
     }
 
     const onEscapeKeyUp = (ev: KeyboardEvent) => {
@@ -147,9 +124,6 @@ const Sidebar = React.memo(
               color={settings.selfContact.color}
               avatarPath={settings.selfContact.profileImage}
             />
-            <div key='qr' className='quickIcon last' onClick={onShowQRCode}>
-              <div className='icon qr' />
-            </div>
             <div
               key='savedMessages'
               className='quickIcon '
@@ -165,13 +139,6 @@ const Sidebar = React.memo(
           </div>
           <div key='new_chat' className='sidebar-item' onClick={onCreateChat}>
             {tx('menu_new_chat')}
-          </div>
-          <div
-            key='unblock'
-            className='sidebar-item'
-            onClick={onUnblockContacts}
-          >
-            {tx('pref_blocked_contacts')}
           </div>
           <div
             key='archived_chats'
@@ -190,9 +157,6 @@ const Sidebar = React.memo(
           <div key='settings' className='sidebar-item' onClick={onOpenSettings}>
             {tx('menu_settings')}
           </div>
-          <div key='help' className='sidebar-item' onClick={onOpenHelp}>
-            {tx('menu_help')}
-          </div>
           <div key='logout' className='sidebar-item' onClick={onLogout}>
             {tx('switch_account')}
           </div>
@@ -202,9 +166,7 @@ const Sidebar = React.memo(
             <Link
               href='https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md'
               label={'v' + VERSION}
-            />{' '}
-            -{' '}
-            <a onClick={onOpenAbout}>{tx('global_menu_help_about_desktop')}</a>
+            />
           </div>
         </div>
       </>

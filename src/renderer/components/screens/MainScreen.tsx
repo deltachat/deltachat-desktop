@@ -275,12 +275,10 @@ export default function MainScreen() {
             {(showArchivedChats && queryStr.length === 0) || (
               <SearchInput
                 id='chat-list-search'
-                onChange={handleSearchChange}
-                value={queryStr}
                 inputRef={searchRef}
-                extraCleanAction={
-                  queryChatId ? () => setQueryChatId(null) : undefined
-                }
+                onChange={handleSearchChange}
+                onClear={queryChatId ? () => setQueryChatId(null) : undefined}
+                value={queryStr}
               />
             )}
           </NavbarGroup>

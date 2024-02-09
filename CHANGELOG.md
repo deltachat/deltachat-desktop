@@ -10,6 +10,7 @@
 - Add shortcut to scan qr code to "New Chat" dialog #3623
 - Message reactions with emojis #2964
 - Show info dialog on tap for invalid unencrypted mails #3652
+- Add QR scan button next to search input on main screen #3665
 
 ### Changed
 - Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.134.0`
@@ -49,6 +50,9 @@
 - Hide reactions UI for info-, system- or video-invite messages and chats #3642
 - Delete old themes before rebuilding in build process #3645
 - More contrast for audio elements in dark mode #3653
+
+### Removed
+- Remove qr icon in sidebar #3666
 
 <a id="1_42_2"></a>
 
