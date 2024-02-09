@@ -45,7 +45,7 @@
 
   background-color: var(--accountSidebarBg);
 
-  width: 66px;
+  min-width: 66px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
