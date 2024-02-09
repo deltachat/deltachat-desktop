@@ -62,10 +62,6 @@
         width: var(--size);
         height: var(--size);
         background-color: var(--navBarText);
-        &.qr {
-          -webkit-mask: url(../images/qr_icon.svg) no-repeat center;
-          -webkit-mask-size: 50%;
-        }
         &.savedMessages {
           -webkit-mask: url(../images/saved-messages.svg) no-repeat center;
           -webkit-mask-size: 30%;
