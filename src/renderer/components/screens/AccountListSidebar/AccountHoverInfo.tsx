@@ -46,7 +46,7 @@ export default function AccountHoverInfo({
     content = (
       <>
         <b>{tx('unconfigured_account')}</b>
-        <div className={styles.HoverInfoProperty}>
+        <div className={styles.hoverInfoProperty}>
           {tx('unconfigured_account_hint')}
         </div>
       </>
@@ -60,12 +60,12 @@ export default function AccountHoverInfo({
             : loadedAccount.addr}
         </b>
         {showConnection && (
-          <div className={styles.HoverInfoProperty}>
+          <div className={styles.hoverInfoProperty}>
             <Connectivity accountId={account.id} />
           </div>
         )}
         {bgSyncDisabled && (
-          <div className={styles.HoverInfoProperty}>
+          <div className={styles.hoverInfoProperty}>
             ⏻ {tx('background_sync_disabled_explaination')}
           </div>
         )}
@@ -74,9 +74,9 @@ export default function AccountHoverInfo({
   }
 
   return (
-    <div className={styles.AccountHoverInfo} role='tooltip'>
+    <div className={styles.accountHoverInfo} role='tooltip'>
       {content}
-      <div className={styles.HoverInfoFooter}>
+      <div className={styles.hoverInfoFooter}>
         <span>{accountSize}</span> - {account.id}
       </div>
     </div>
@@ -113,7 +113,7 @@ const Connectivity = ({ accountId }: { accountId: number }) => {
   return (
     <>
       <div
-        className={styles.ConnectivityDot}
+        className={styles.connectivityDot}
         style={{ backgroundColor: color }}
       ></div>{' '}
       {label}

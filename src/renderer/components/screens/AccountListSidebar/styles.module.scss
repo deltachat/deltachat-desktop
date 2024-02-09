@@ -39,7 +39,7 @@
 .accountListSidebar {
   --accountSidebarBg: #2c2c2c;
 
-  .MacOSTrafficLightBackground {
+  .macOSTrafficLightBackground {
     height: 40px;
   }
 
@@ -67,7 +67,7 @@
     }
   }
 
-  .Account {
+  .account {
     position: relative;
 
     margin-top: var(--als-avatar-margin);
@@ -174,12 +174,12 @@
   }
 }
 
-.AccountHoverInfoContainer {
+.accountHoverInfoContainer {
   position: absolute;
   z-index: map-get($z-index, account-hover-info);
 }
 
-.AccountHoverInfo {
+.accountHoverInfo {
   display: flex;
   flex-direction: column;
   top: var(--als-avatar-margin);
@@ -190,17 +190,17 @@
   padding: 8px;
 }
 
-.HoverInfoProperty {
+.hoverInfoProperty {
   font-size: smaller;
   color: rgb(180, 180, 180);
 }
 
-.HoverInfoFooter {
+.hoverInfoFooter {
   font-size: smaller;
   color: #808080;
 }
 
-.ConnectivityDot {
+.connectivityDot {
   display: inline-block;
   background-color: lightgray;
   line-height: 1em;

@@ -92,7 +92,7 @@ export default function AccountListSidebar({
   return (
     <div className={styles.accountListSidebar}>
       {runtime.getRuntimeInfo().isMac && (
-        <div className={styles.MacOSTrafficLightBackground}></div>
+        <div className={styles.macOSTrafficLightBackground}></div>
       )}
       <div className={styles.accountList} onScroll={updateHoverInfoPosition}>
         {accounts.map(account => (
@@ -110,7 +110,7 @@ export default function AccountListSidebar({
           +
         </button>
       </div>
-      <div className={styles.AccountHoverInfoContainer} ref={hoverInfo}>
+      <div className={styles.accountHoverInfoContainer} ref={hoverInfo}>
         {accountForHoverInfo && (
           <AccountHoverInfo
             account={accountForHoverInfo}
