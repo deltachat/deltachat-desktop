@@ -50,6 +50,8 @@
 - Hide reactions UI for info-, system- or video-invite messages and chats #3642
 - Delete old themes before rebuilding in build process #3645
 - More contrast for audio elements in dark mode #3653
+- Fix fullscreen view for avatar images #3669
+- fix display of avatars with spaces in the name #3669
 
 ### Removed
 - Remove qr icon in sidebar #3666
