@@ -1,4 +1,8 @@
 .main-screen {
+  flex-grow: 1;
+  position: relative;
+  overflow: hidden;
+
   .navbar-chat-name {
     font-size: medium;
     font-weight: bold;

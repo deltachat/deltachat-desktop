@@ -2,6 +2,8 @@
   // so it can be used to drag the window around
   -webkit-app-region: drag;
 
+  position: relative;
+
   .icon-rotated > .bp4-icon > svg:not([fill]) {
     transform: rotate(90deg);
   }

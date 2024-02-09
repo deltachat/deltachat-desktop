@@ -71,6 +71,7 @@
 }
 
 .login-screen {
+  flex-grow: 1;
   li.login-item {
     display: flex;
     justify-content: space-between;
