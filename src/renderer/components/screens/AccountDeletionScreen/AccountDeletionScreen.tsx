@@ -16,7 +16,7 @@ import { BackendRemote } from '../../../backend-com'
 import { Screens } from '../../../ScreenController'
 import { avatarInitial } from '../../Avatar'
 
-export function AccountDeletionScreen({
+export default function AccountDeletionScreen({
   selectedAccountId,
   onDeleteAccount,
 }: {

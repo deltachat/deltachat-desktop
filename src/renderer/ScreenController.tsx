@@ -20,8 +20,8 @@ import { DialogContext } from './contexts/DialogContext'
 import WebxdcSaveToChatDialog from './components/dialogs/WebxdcSendToChat'
 import { AccountListSidebar } from './components/screens/AccountListSidebar/AccountListSidebar'
 import SettingsStoreInstance from './stores/settings'
-import { AccountDeletionScreen } from './components/screens/AccountDeletionScreen/AccountDeletionScreen'
 import { NoAccountSelectedScreen } from './components/screens/NoAccountSelectedScreen/NoAccountSelectedScreen'
+import AccountDeletionScreen from './components/screens/AccountDeletionScreen/AccountDeletionScreen'
 
 const log = getLogger('renderer/ScreenController')
 
