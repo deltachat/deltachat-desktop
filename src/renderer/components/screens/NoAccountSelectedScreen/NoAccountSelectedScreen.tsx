@@ -8,9 +8,9 @@ export function NoAccountSelectedScreen() {
   const tx = useTranslationFunction()
 
   return (
-    <div className={styles.NoAccountSelectedScreen}>
-      <div className={styles.Background}>
-        <div className={styles.InfoBox}>{tx('no_account_selected')}</div>
+    <div className={styles.noAccountSelectedScreen}>
+      <div className={styles.background}>
+        <div className={styles.infoBox}>{tx('no_account_selected')}</div>
       </div>
     </div>
   )

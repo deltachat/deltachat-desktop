@@ -1,6 +1,6 @@
-.NoAccountSelectedScreen {
+.noAccountSelectedScreen {
   flex-grow: 1;
-  .Background {
+  .background {
     background-size: cover;
     background-image: url('../images/backgrounds/petito-moreno.webp');
     height: 100vh;
@@ -12,7 +12,7 @@
   }
 }
 
-.InfoBox {
+.infoBox {
   display: inline-block;
   text-align: center;
   padding: 7px 14px;

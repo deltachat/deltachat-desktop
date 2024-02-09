@@ -84,7 +84,7 @@ export default function AccountItem({
 
   return (
     <div
-      className={classNames(styles.Account, {
+      className={classNames(styles.account, {
         [styles.active]: isSelected,
         [styles['context-menu-active']]: isContextMenuActive,
       })}
