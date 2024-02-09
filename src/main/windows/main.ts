@@ -55,7 +55,7 @@ export function init(options: { hidden: boolean }) {
         contextIsolation: false,
       },
       titleBarStyle: isMac ? 'hidden' : 'default',
-      titleBarOverlay: true
+      titleBarOverlay: true,
     })
   ))
 

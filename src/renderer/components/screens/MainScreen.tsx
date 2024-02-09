@@ -255,7 +255,7 @@ export default function MainScreen() {
                     Classes.MINIMAL,
                     'icon-rotated',
                     'archived-chats-return-button',
-                    'no-drag'
+                    'no-drag',
                   ].join(' ')}
                   icon='undo'
                   onClick={() => setShowArchivedChats(false)}
