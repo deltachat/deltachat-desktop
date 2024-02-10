@@ -9,6 +9,8 @@ import { runtime } from '../../runtime'
 import styles from './styles.module.scss'
 
 import type { T } from '@deltachat/jsonrpc-client'
+import useDialog from '../../hooks/useDialog'
+import Settings from '../Settings'
 
 export default function AccountListSidebar({
   selectedAccountId,
@@ -21,6 +23,7 @@ export default function AccountListSidebar({
   onSelectAccount: (accountId: number) => Promise<void>
   openAccountDeletionScreen: (accountId: number) => Promise<void>
 }) {
+  const { openDialog } = useDialog()
   const [accounts, setAccounts] = useState<T.Account[]>([])
 
   const selectAccount = async (accountId: number) => {
@@ -89,6 +92,8 @@ export default function AccountListSidebar({
     }, 200)
   }, [refresh])
 
+  const openSettings = () => openDialog(Settings)
+
   return (
     <div className={styles.accountListSidebar}>
       {runtime.getRuntimeInfo().isMac && (
@@ -109,6 +114,12 @@ export default function AccountListSidebar({
         <button className={styles.addButton} onClick={onAddAccount}>
           +
         </button>
+      </div>
+      <div className={styles.buttonsContainer}>
+        <button
+          onClick={openSettings}
+          className={styles.settingsButton}
+        ></button>
       </div>
       <div className={styles.accountHoverInfoContainer} ref={hoverInfo}>
         {accountForHoverInfo && (
