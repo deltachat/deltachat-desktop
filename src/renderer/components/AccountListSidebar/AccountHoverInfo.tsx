@@ -19,15 +19,8 @@ export default function AccountHoverInfo({
   isSelected: boolean
 }) {
   const tx = window.static_translate
-  const [accountSize, setSize] = useState<string>('?')
   const [bgSyncDisabled, setBgSyncDisabled] = useState<boolean>(false)
   useEffect(() => {
-    BackendRemote.rpc
-      .getAccountFileSize(account.id)
-      .catch(log.error)
-      .then(bytes => {
-        bytes && setSize(filesize(bytes))
-      })
     runtime.getDesktopSettings().then(({ syncAllAccounts }) => {
       setBgSyncDisabled(!syncAllAccounts)
     })
@@ -49,11 +42,7 @@ export default function AccountHoverInfo({
   } else {
     content = (
       <>
-        <b>
-          {account.displayName
-            ? account.displayName
-            : account.addr}
-        </b>
+        <b>{account.displayName ? account.displayName : account.addr}</b>
         {showConnection && (
           <div className={styles.hoverInfoProperty}>
             <Connectivity accountId={account.id} />
@@ -72,7 +61,7 @@ export default function AccountHoverInfo({
     <div className={styles.accountHoverInfo} role='tooltip'>
       {content}
       <div className={styles.hoverInfoFooter}>
-        <span>{accountSize}</span> - {account.id}
+        <AccountSize accountId={account.id} /> - {account.id}
       </div>
     </div>
   )
@@ -138,5 +127,31 @@ class Connectivity extends Component<{ accountId: number }, ConnectivityState> {
         {this.state.label}
       </>
     )
+  }
+}
+
+class AccountSize extends Component<{ accountId: number }, { size?: string }> {
+  wasDestroyed = false
+  state = { size: undefined }
+
+  async update() {
+    const bytes = await BackendRemote.rpc
+      .getAccountFileSize(this.props.accountId)
+      .catch(log.error)
+    if (!this.wasDestroyed) {
+      this.setState({ size: bytes ? filesize(bytes) : undefined })
+    }
+  }
+
+  componentDidMount(): void {
+    this.update()
+  }
+
+  componentWillUnmount(): void {
+    this.wasDestroyed = true
+  }
+
+  render(): React.ReactNode {
+    return <span>{this.state.size || '?'}</span>
   }
 }
