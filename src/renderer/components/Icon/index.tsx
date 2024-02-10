@@ -21,6 +21,7 @@ export type IconName =
   | 'qr'
   | 'question_mark'
   | 'reaction'
+  | 'settings'
   | 'swap_vert'
 
 type Props = {
