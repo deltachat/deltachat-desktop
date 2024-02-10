@@ -19,7 +19,6 @@ export default function AccountHoverInfo({
   isSelected: boolean
 }) {
   const tx = window.static_translate
-  const [loadedAccount, setLoadedAccount] = useState(account)
   const [accountSize, setSize] = useState<string>('?')
   const [bgSyncDisabled, setBgSyncDisabled] = useState<boolean>(false)
   useEffect(() => {
@@ -32,17 +31,13 @@ export default function AccountHoverInfo({
     runtime.getDesktopSettings().then(({ syncAllAccounts }) => {
       setBgSyncDisabled(!syncAllAccounts)
     })
-    BackendRemote.rpc
-      .getAccountInfo(account.id)
-      .then(setLoadedAccount)
-      .catch(log.error)
   }, [account.id])
 
   const showConnection = isSelected || !bgSyncDisabled
 
   let content: JSX.Element
 
-  if (loadedAccount.kind === 'Unconfigured') {
+  if (account.kind === 'Unconfigured') {
     content = (
       <>
         <b>{tx('unconfigured_account')}</b>
@@ -55,9 +50,9 @@ export default function AccountHoverInfo({
     content = (
       <>
         <b>
-          {loadedAccount.displayName
-            ? loadedAccount.displayName
-            : loadedAccount.addr}
+          {account.displayName
+            ? account.displayName
+            : account.addr}
         </b>
         {showConnection && (
           <div className={styles.hoverInfoProperty}>
