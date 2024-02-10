@@ -220,7 +220,8 @@ onReady(() => {
     }
     window.__updateAccountListSidebar?.()
   }
-  // SelfavatarChanged event is deprecated and does not seem to work (neither SelfavatarChanged nor iver the new ConfigSynced)
+  // SelfavatarChanged is marked as deprecated in jsonrpc api, but ConfigSynced does not have selfavatar yet
+  // will probably change with https://github.com/deltachat/deltachat-core-rust/pull/5158
   BackendRemote.on('SelfavatarChanged', updateSelfAvatar)
   BackendRemote.on('ConfigSynced', (accountId, { key }) => {
     if (key === 'selfavatar') {
