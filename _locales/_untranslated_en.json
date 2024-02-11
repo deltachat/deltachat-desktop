@@ -11,5 +11,11 @@
   },
   "background_sync_disabled_explaination": {
     "message": "Background Sync Disabled, Account is only synced when selected"
+  },
+  "pref_for_all_accounts":{
+    "message": "For All Accounts"
+  },
+  "pref_for_current_account":{
+    "message": "For The Current Account"
   }
 }
