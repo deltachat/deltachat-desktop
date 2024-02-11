@@ -11,6 +11,7 @@ import styles from './styles.module.scss'
 import type { T } from '@deltachat/jsonrpc-client'
 import useDialog from '../../hooks/useDialog'
 import Settings from '../Settings'
+import { useAccountNotificationStore } from '../../stores/accountNotifications'
 
 export default function AccountListSidebar({
   selectedAccountId,
@@ -25,6 +26,8 @@ export default function AccountListSidebar({
 }) {
   const { openDialog } = useDialog()
   const [accounts, setAccounts] = useState<T.Account[]>([])
+
+  const [{ accounts: noficationSettings }] = useAccountNotificationStore()
 
   const selectAccount = async (accountId: number) => {
     if (selectedAccountId === accountId) {
@@ -109,6 +112,7 @@ export default function AccountListSidebar({
             openAccountDeletionScreen={openAccountDeletionScreen}
             updateAccountForHoverInfo={updateAccountForHoverInfo}
             syncAllAccounts={syncAllAccounts}
+            muted={noficationSettings[account.id]?.muted || false}
           />
         ))}
         <button className={styles.addButton} onClick={onAddAccount}>

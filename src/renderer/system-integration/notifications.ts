@@ -6,6 +6,7 @@ import { isImage } from '../components/attachment/Attachment'
 import { jumpToMessage } from '../components/helpers/ChatMethods'
 import { runtime } from '../runtime'
 import SettingsStoreInstance from '../stores/settings'
+import AccountNotificationStoreInstance from '../stores/accountNotifications'
 
 const log = getLogger('renderer/notifications')
 
@@ -33,8 +34,16 @@ function incomingMessageHandler(
     SettingsStoreInstance.state &&
     !SettingsStoreInstance.state.desktopSettings.notifications
   ) {
-    // notifications are turned off
-    log.debug('notification ignored: notifications are turned off')
+    // notifications are turned off for whole app
+    log.debug(
+      'notification ignored: notifications are turned off for whole app'
+    )
+    return
+  }
+
+  if (AccountNotificationStoreInstance.isAccountMuted(accountId)) {
+    // notifications are turned off for account
+    log.debug('notification ignored: notifications are turned off for account')
     return
   }
 

@@ -11,6 +11,7 @@ import { ActionEmitter, KeybindAction } from '../../keybindings'
 
 import styles from './styles.module.scss'
 import type { T } from '@deltachat/jsonrpc-client'
+import AccountNotificationStoreInstance from '../../stores/accountNotifications'
 
 const log = getLogger('AccountsSidebar/AccountItem')
 export default function AccountItem({
@@ -20,6 +21,7 @@ export default function AccountItem({
   updateAccountForHoverInfo,
   openAccountDeletionScreen,
   syncAllAccounts,
+  muted,
 }: {
   account: T.Account
   isSelected: boolean
@@ -27,6 +29,7 @@ export default function AccountItem({
   openAccountDeletionScreen: (accountId: number) => Promise<void>
   updateAccountForHoverInfo: (actingAccount: T.Account, select: boolean) => void
   syncAllAccounts: boolean
+  muted: boolean
 }) {
   const tx = useTranslationFunction()
 
@@ -56,6 +59,19 @@ export default function AccountItem({
           markAccountAsRead(account.id)
         },
       },
+    muted
+      ? {
+          label: tx('menu_unmute'),
+          action: () => {
+            AccountNotificationStoreInstance.effect.setMuted(account.id, false)
+          },
+        }
+      : {
+          label: tx('menu_mute'),
+          action: () => {
+            AccountNotificationStoreInstance.effect.setMuted(account.id, true)
+          },
+        },
     {
       label: tx('menu_all_media'),
       action: async () => {
