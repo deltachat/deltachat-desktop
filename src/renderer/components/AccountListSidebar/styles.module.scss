@@ -179,15 +179,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-  
+
     padding: 8px 0;
     border-top: 1px #404040 solid;
-  
+
     .settingsButton {
       height: 42px;
       width: 42px;
       border: none;
-  
+
       mask-image: url(../images/icons/settings.svg);
       -webkit-mask-image: url(../images/icons/settings.svg);
       mask-position: center;
@@ -196,16 +196,15 @@
       -webkit-mask-repeat: no-repeat;
       mask-size: contain;
       -webkit-mask-size: contain;
-  
+
       background-color: gray;
-  
+
       &:hover {
         background-color: lightgray;
       }
     }
   }
 }
-
 
 .accountHoverInfoContainer {
   position: absolute;
