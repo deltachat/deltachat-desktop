@@ -151,7 +151,7 @@ class SettingsStore extends Store<SettingsStoreState | null> {
           this.state.accountId,
           key
         )
-        console.info('loadCoreKey', key, newValue)
+        // console.info('loadCoreKey', key, newValue)
 
         this.setState(state => {
           if (state === null || state.accountId !== accountId) {
@@ -209,7 +209,6 @@ class SettingsStore extends Store<SettingsStoreState | null> {
 }
 
 onReady(() => {
-  console.warn('ConfigSynced register')
   const updateSelfAvatar = async (accountId: number) => {
     if (accountId === window.__selectedAccountId) {
       const selfContact = await BackendRemote.rpc.getContact(
