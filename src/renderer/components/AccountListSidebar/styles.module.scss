@@ -1,4 +1,5 @@
 @import '../../../../scss/variables';
+@import '../../../../scss/mixins';
 
 .avatar {
   --local-avatar-size: 48px;
@@ -138,7 +139,8 @@
       right: -5px;
 
       .freshMessageCounter,
-      .bgSyncDisabled {
+      .bgSyncDisabled,
+      .accountMuted {
         color: var(--unreadCountLabel);
         background-color: var(--unreadCountBg);
         text-align: center;
@@ -153,6 +155,25 @@
       .bgSyncDisabled {
         background-color: grey;
         padding: 0px 3pt;
+      }
+
+      .accountMuted {
+        display: flex;
+        align-items: center;
+        vertical-align: middle;
+        width: 22px;
+        padding: 3px;
+
+        .accountMutedIcon {
+          width: 100%;
+          height: 100%;
+          display: inline-block;
+          @include color-svg('../images/mute.png', white);
+        }
+      }
+
+      .accountBadgeMuted {
+        background-color: grey;
       }
     }
   }

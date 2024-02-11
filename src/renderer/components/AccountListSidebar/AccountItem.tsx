@@ -98,6 +98,40 @@ export default function AccountItem({
     },
   ])
 
+  let badgeContent
+
+  if (bgSyncDisabled) {
+    badgeContent = (
+      <div
+        className={styles.bgSyncDisabled}
+        aria-label='Background sync disabled'
+      >
+        ⏻
+      </div>
+    )
+  } else if (unreadCount > 0) {
+    badgeContent = (
+      <div
+        className={classNames(styles.freshMessageCounter, {
+          [styles.accountBadgeMuted]: muted,
+        })}
+      >
+        {unreadCount}
+      </div>
+    )
+  } else if (muted) {
+    badgeContent = (
+      <div
+        className={classNames(styles.accountMuted, {
+          [styles.accountBadgeMuted]: muted,
+        })}
+        aria-label='Account Notifications Muted'
+      >
+        <div className={styles.accountMutedIcon} />
+      </div>
+    )
+  }
+
   return (
     <div
       className={classNames(styles.account, {
@@ -135,21 +169,7 @@ export default function AccountItem({
           <div className={styles.content}>?</div>
         </div>
       )}
-
-      <div className={styles.accountBadge}>
-        {!bgSyncDisabled && unreadCount > 0 && (
-          <div className={styles.freshMessageCounter}>{unreadCount}</div>
-        )}
-        {bgSyncDisabled && (
-          <div
-            className={styles.bgSyncDisabled}
-            title=''
-            aria-label='Background sync disabled'
-          >
-            ⏻
-          </div>
-        )}
-      </div>
+      <div className={classNames(styles.accountBadge)}>{badgeContent}</div>
     </div>
   )
 }
