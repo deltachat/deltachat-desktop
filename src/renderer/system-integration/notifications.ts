@@ -223,10 +223,6 @@ function getNotificationIcon(
 
 export function initNotifications() {
   BackendRemote.on('IncomingMsg', (accountId, { chatId, msgId }) => {
-    if (accountId !== window.__selectedAccountId) {
-      // notifications for different accounts are not supported yet
-      return
-    }
     incomingMessageHandler(accountId, chatId, msgId)
   })
   BackendRemote.on('IncomingMsgBunch', accountId => {
@@ -234,8 +230,7 @@ export function initNotifications() {
   })
   runtime.setNotificationCallback(({ accountId, msgId, chatId }) => {
     if (window.__selectedAccountId !== accountId) {
-      log.error('notification comes from other account')
-      // TODO implement switch account
+      window.__selectAccount(accountId)
     } else {
       if (chatId !== 0) {
         clearNotificationsForChat(accountId, chatId)
