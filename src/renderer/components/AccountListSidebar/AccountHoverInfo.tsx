@@ -61,7 +61,7 @@ export default function AccountHoverInfo({
     <div className={styles.accountHoverInfo} role='tooltip'>
       {content}
       <div className={styles.hoverInfoFooter}>
-        <AccountSize accountId={account.id} /> - {account.id}
+        <AccountSize accountId={account.id} />
       </div>
     </div>
   )
