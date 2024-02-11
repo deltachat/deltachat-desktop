@@ -45,6 +45,7 @@
 - badge count is now across all active accounts #3621
 - "sync all accounts" moved to settings under advanced -> experimental #3621
 - webxdc stay open when switching accounts (when you have sync all enabled, which is the default) #3621
+- Add more versions to about dialog and update the order of information #3677
 
 ### Fixed
 - Silently fail when notifications are not supported by OS #3613
