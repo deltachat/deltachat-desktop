@@ -29,6 +29,7 @@ function config(options) {
       'process.env.NODE_ENV': isProduction ? '"production"' : '"development"',
     },
     plugins,
+    external: ["*.jpg", "*.webp", "*.svg"]
   }
 }
 

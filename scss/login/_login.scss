@@ -71,6 +71,7 @@
 }
 
 .login-screen {
+  flex-grow: 1;
   li.login-item {
     display: flex;
     justify-content: space-between;
@@ -264,36 +265,5 @@ div.delta-form-group {
 
   #action-go-to-login {
     margin-top: 40px;
-  }
-}
-
-.accounts {
-  .contact-list-item {
-    .contact {
-      width: 100%;
-      overflow: hidden;
-
-      .email {
-        display: inline-block;
-        width: 100%;
-      }
-    }
-
-    .unread-badge-container {
-      align-self: center;
-      margin-right: 9px;
-
-      .fresh-message-counter {
-        color: var(--unreadCountLabel);
-        background-color: var(--unreadCountBg);
-        text-align: center;
-        font-size: 9pt;
-        height: 20px;
-        padding: 0 5pt;
-        line-height: 20px;
-        border-radius: 10px;
-        font-weight: bold;
-      }
-    }
   }
 }

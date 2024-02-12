@@ -7,7 +7,6 @@ import {
   NavbarGroup,
   NavbarHeading,
   Button,
-  Icon,
 } from '@blueprintjs/core'
 
 import Gallery from '../Gallery'
@@ -34,7 +33,6 @@ import MapComponent from '../map/MapComponent'
 import MailingListProfile from '../dialogs/MessageListProfile'
 import { getLogger } from '../../../shared/logger'
 import { RecoverableCrashScreen } from './RecoverableCrashScreen'
-import Sidebar, { SidebarState } from '../Sidebar'
 import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 import { Type } from '../../backend-com'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
@@ -50,7 +48,6 @@ const log = getLogger('renderer/main-screen')
 export default function MainScreen() {
   const [queryStr, setQueryStr] = useState('')
   const [queryChatId, setQueryChatId] = useState<null | number>(null)
-  const [sidebarState, setSidebarState] = useState<SidebarState>('init')
   const [showArchivedChats, setShowArchivedChats] = useState(false)
   // Small hack/misuse of keyBindingAction to setShowArchivedChats from other components (especially
   // ViewProfile when selecting a shared chat/group)
@@ -219,7 +216,13 @@ export default function MainScreen() {
         )
     }
   } else if (alternativeView === 'global-gallery') {
-    MessageListView = <Gallery chatId={'all'} />
+    MessageListView = (
+      <Gallery
+        chatId={'all'}
+        ref={galleryRef}
+        onUpdateView={updatethreeDotMenuHidden}
+      />
+    )
   } else {
     const style: React.CSSProperties = settingsStore
       ? getBackgroundImageStyle(settingsStore.desktopSettings)
@@ -246,18 +249,11 @@ export default function MainScreen() {
   return (
     <div className='main-screen'>
       <div className='navbar-wrapper'>
-        <Navbar fixedToTop>
+        <Navbar>
           <NavbarGroup align={Alignment.LEFT}>
-            <div
-              className='sidebar-icon'
-              onClick={() => setSidebarState('visible')}
-              id='hamburger-menu-button'
-            >
-              <Icon icon='menu' aria-label={tx('main_menu')} size={20} />
-            </div>
             {queryStr.length === 0 && showArchivedChats && (
               <>
-                <div className='archived-chats-title'>
+                <div className='archived-chats-title no-drag'>
                   {tx('chat_archived_chats_title')}
                 </div>
                 <Button
@@ -265,6 +261,7 @@ export default function MainScreen() {
                     Classes.MINIMAL,
                     'icon-rotated',
                     'archived-chats-return-button',
+                    'no-drag',
                   ].join(' ')}
                   icon='undo'
                   onClick={() => setShowArchivedChats(false)}
@@ -284,17 +281,18 @@ export default function MainScreen() {
           </NavbarGroup>
           <NavbarGroup align={Alignment.RIGHT}>
             {alternativeView === 'global-gallery' && (
-              <NavbarHeading
-                style={{
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  width: '100%',
-                }}
-                onClick={onTitleClick}
-              >
-                {tx('menu_all_media')}
-              </NavbarHeading>
+              <>
+                <NavbarHeading
+                  style={{
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  {tx('menu_all_media')}
+                </NavbarHeading>
+                <span className='views' />
+              </>
             )}
             {selectedChat.chat && (
               <NavbarHeading
@@ -302,8 +300,8 @@ export default function MainScreen() {
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  width: '100%',
                 }}
+                className='no-drag'
                 onClick={onTitleClick}
               >
                 <Avatar
@@ -336,7 +334,7 @@ export default function MainScreen() {
             )}
             {selectedChat.chat && (
               <>
-                <span className='views'>
+                <span className='views no-drag'>
                   <Button
                     onClick={() => setChatView(ChatView.MessageList)}
                     minimal
@@ -378,6 +376,7 @@ export default function MainScreen() {
                     ? { opacity: 0.4, pointerEvents: 'none' }
                     : {}),
                 }}
+                className='no-drag'
                 aria-disabled={threeDotMenuHidden}
               >
                 <Button
@@ -407,7 +406,6 @@ export default function MainScreen() {
         />
         {MessageListView}
       </div>
-      <Sidebar sidebarState={sidebarState} setSidebarState={setSidebarState} />
       <ConnectivityToast />
     </div>
   )

@@ -1,0 +1,242 @@
+@import '../../../../scss/variables';
+
+.avatar {
+  --local-avatar-size: 48px;
+  --local-avatar-vertical-margin: 8px;
+  --local-avatar-font-size: 26px;
+
+  position: relative;
+  user-select: none;
+  display: inline-block;
+  font-weight: normal;
+
+  height: var(--local-avatar-size);
+  width: var(--local-avatar-size);
+  margin: var(--local-avatar-vertical-margin) 0;
+
+  div.content,
+  img.content {
+    height: var(--local-avatar-size);
+    width: var(--local-avatar-size);
+    border-radius: 100%;
+    pointer-events: none;
+  }
+
+  div.content {
+    background-color: #505050;
+    line-height: var(--local-avatar-size);
+    object-fit: cover;
+    color: var(--avatarLabelColor);
+    text-align: center;
+    font-size: var(--local-avatar-font-size);
+  }
+
+  img.content {
+    object-fit: cover;
+  }
+}
+
+.accountListSidebar {
+  --accountSidebarBg: #2c2c2c;
+
+  .macOSTrafficLightBackground {
+    height: 40px;
+  }
+
+  background-color: var(--accountSidebarBg);
+
+  min-width: 66px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  .accountList {
+    flex-grow: 1;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    --als-avatar-size: 42px;
+    --als-avatar-margin: 5px;
+    --als-active-indicator-color: white;
+    padding-top: 2px;
+
+    overflow-y: scroll;
+    scrollbar-width: 0px;
+    &::-webkit-scrollbar {
+      width: 0px;
+    }
+  }
+
+  .account {
+    position: relative;
+
+    margin-top: var(--als-avatar-margin);
+    margin-bottom: var(--als-avatar-margin);
+    height: var(--als-avatar-size);
+    z-index: $z-index-new-local-scope;
+
+    .avatar {
+      --local-avatar-size: var(--als-avatar-size);
+      --local-avatar-vertical-margin: 0px;
+      // --local-avatar-font-size: 26px;
+
+      div.content,
+      img.content {
+        border-radius: 10%;
+      }
+      opacity: 0.7;
+      transition: opacity ease-in 200ms;
+    }
+
+    &.active,
+    &:hover,
+    &.context-menu-active {
+      .avatar::before {
+        content: ' ';
+        position: absolute;
+        overflow: hidden;
+        background: var(--als-active-indicator-color);
+
+        --als-active-indicator-height: 32px;
+
+        top: calc(
+          calc(var(--als-avatar-size) / 2) - calc(
+              var(--als-active-indicator-height) / 2
+            )
+        );
+        margin-inline-start: -15.5px;
+        height: var(--als-active-indicator-height);
+        width: 8px;
+        border-radius: 20px;
+      }
+      .avatar {
+        opacity: 1;
+      }
+    }
+
+    &:hover {
+      .avatar::before {
+        --als-active-indicator-height: 15px;
+      }
+    }
+
+    &.contextMenuActive {
+      .avatar::before {
+        --als-active-indicator-height: 10px;
+        opacity: 0.7;
+      }
+    }
+
+    .accountBadge {
+      position: absolute;
+      z-index: map-get($z-index, account-list-sidebar-scope-account-badge);
+      bottom: -6px;
+      right: -5px;
+
+      .freshMessageCounter,
+      .bgSyncDisabled {
+        color: var(--unreadCountLabel);
+        background-color: var(--unreadCountBg);
+        text-align: center;
+        font-size: 9pt;
+        height: 18px;
+        padding: 0px 4pt;
+        line-height: 18px;
+        border-radius: 10px;
+        font-weight: bold;
+      }
+
+      .bgSyncDisabled {
+        background-color: grey;
+        padding: 0px 3pt;
+      }
+    }
+  }
+
+  .addButton {
+    margin-top: var(--als-avatar-margin);
+    margin-bottom: var(--als-avatar-margin);
+    min-height: var(--als-avatar-size);
+    min-width: var(--als-avatar-size);
+    background: none;
+
+    --add-button-color: #808080;
+
+    color: var(--add-button-color);
+
+    border-radius: 10%;
+    border: 1.3pt solid var(--add-button-color);
+    font-size: 22px;
+    &:hover {
+      color: var(--accountSidebarBg);
+      background: var(--add-button-color);
+    }
+  }
+
+  .buttonsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 8px 0;
+    border-top: 1px #404040 solid;
+
+    .settingsButton {
+      height: 42px;
+      width: 42px;
+      border: none;
+
+      mask-image: url(../images/icons/settings.svg);
+      -webkit-mask-image: url(../images/icons/settings.svg);
+      mask-position: center;
+      -webkit-mask-position: center;
+      mask-repeat: no-repeat;
+      -webkit-mask-repeat: no-repeat;
+      mask-size: contain;
+      -webkit-mask-size: contain;
+
+      background-color: gray;
+
+      &:hover {
+        background-color: lightgray;
+      }
+    }
+  }
+}
+
+.accountHoverInfoContainer {
+  position: absolute;
+  z-index: map-get($z-index, account-hover-info);
+}
+
+.accountHoverInfo {
+  display: flex;
+  flex-direction: column;
+  top: var(--als-avatar-margin);
+  left: 60px;
+  color: white;
+  background-color: rgba($color: #000000, $alpha: 0.85);
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.hoverInfoProperty {
+  font-size: smaller;
+  color: rgb(180, 180, 180);
+}
+
+.hoverInfoFooter {
+  font-size: smaller;
+  color: #808080;
+}
+
+.connectivityDot {
+  display: inline-block;
+  background-color: lightgray;
+  line-height: 1em;
+  min-width: 0.7em;
+  min-height: 0.7em;
+  border-radius: 100%;
+}

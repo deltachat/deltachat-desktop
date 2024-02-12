@@ -8,10 +8,8 @@ import processOpenQrUrl from './components/helpers/OpenQrUrl'
 import { getLogger } from '../shared/logger'
 import { ActionEmitter, KeybindAction } from './keybindings'
 import AccountSetupScreen from './components/screens/AccountSetupScreen'
-import AccountListScreen from './components/screens/AccountListScreen'
 import WelcomeScreen from './components/screens/WelcomeScreen'
-import { BackendRemote } from './backend-com'
-import { debouncedUpdateBadgeCounter } from './system-integration/badge-counter'
+import { BackendRemote, EffectfulBackendActions } from './backend-com'
 import { updateDeviceChats } from './deviceMessages'
 import { runtime } from './runtime'
 import { updateTimestamps } from './components/conversations/Timestamp'
@@ -20,6 +18,10 @@ import About from './components/dialogs/About'
 import { KeybindingsContextProvider } from './contexts/KeybindingsContext'
 import { DialogContext } from './contexts/DialogContext'
 import WebxdcSaveToChatDialog from './components/dialogs/WebxdcSendToChat'
+import AccountListSidebar from './components/AccountListSidebar/AccountListSidebar'
+import SettingsStoreInstance from './stores/settings'
+import { NoAccountSelectedScreen } from './components/screens/NoAccountSelectedScreen/NoAccountSelectedScreen'
+import AccountDeletionScreen from './components/screens/AccountDeletionScreen/AccountDeletionScreen'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -33,7 +35,8 @@ export enum Screens {
   Main = 'main',
   Login = 'login',
   Loading = 'loading',
-  AccountList = 'accountSelection',
+  DeleteAccount = 'deleteAccount',
+  NoAccountSelected = 'noAccountSelected',
 }
 
 export default class ScreenController extends Component {
@@ -43,6 +46,7 @@ export default class ScreenController extends Component {
   onShowSettings: any
   selectedAccountId: number | undefined
   openSendToDialogId?: string
+  lastAccountBeforeAddingNewAccount: number | null = null
 
   constructor(public props: {}) {
     super(props)
@@ -60,6 +64,10 @@ export default class ScreenController extends Component {
     this.onShowKeybindings = this.showKeyBindings.bind(this)
     this.onShowSettings = this.showSettings.bind(this)
     this.selectAccount = this.selectAccount.bind(this)
+    this.unSelectAccount = this.unSelectAccount.bind(this)
+    this.openAccountDeletionScreen = this.openAccountDeletionScreen.bind(this)
+    this.onDeleteAccount = this.onDeleteAccount.bind(this)
+    this.onExitWelcomeScreen = this.onExitWelcomeScreen.bind(this)
 
     window.__userFeedback = this.userFeedback.bind(this)
     window.__changeScreen = this.changeScreen.bind(this)
@@ -74,10 +82,9 @@ export default class ScreenController extends Component {
     } else {
       const allAccountIds = await BackendRemote.rpc.getAllAccountIds()
       if (allAccountIds && allAccountIds.length > 0) {
-        this.changeScreen(Screens.AccountList)
+        this.changeScreen(Screens.NoAccountSelected)
       } else {
-        const accountId = await BackendRemote.rpc.addAccount()
-        await this.selectAccount(accountId)
+        await this.addAndSelectAccount()
       }
     }
   }
@@ -101,8 +108,14 @@ export default class ScreenController extends Component {
   }
 
   async selectAccount(accountId: number) {
-    this.selectedAccountId = accountId
-    ;(window.__selectedAccountId as number) = accountId
+    if (accountId !== this.selectedAccountId) {
+      await this.unSelectAccount()
+      this.selectedAccountId = accountId
+      ;(window.__selectedAccountId as number) = accountId
+    } else {
+      log.info('account is already selected')
+      // do not return here as this can be the state transition between unconfigured to configured
+    }
 
     const account = await BackendRemote.rpc.getAccountInfo(
       this.selectedAccountId
@@ -113,12 +126,63 @@ export default class ScreenController extends Component {
     } else {
       this.changeScreen(Screens.Welcome)
     }
-    debouncedUpdateBadgeCounter()
 
     await BackendRemote.rpc.startIo(accountId)
     runtime.setDesktopSetting('lastAccount', accountId)
     log.info('system_info', await BackendRemote.rpc.getSystemInfo())
     log.info('account_info', await BackendRemote.rpc.getInfo(accountId))
+  }
+
+  async unSelectAccount() {
+    if (this.selectedAccountId === undefined) {
+      return
+    }
+    const previousAccountId = this.selectedAccountId
+
+    SettingsStoreInstance.effect.clear()
+
+    if (!(await runtime.getDesktopSettings()).syncAllAccounts) {
+      await BackendRemote.rpc.stopIo(previousAccountId)
+      // does not work if previous account will be disabled, so better close it
+      runtime.closeAllWebxdcInstances()
+    }
+
+    runtime.setDesktopSetting('lastAccount', undefined)
+    ;(window.__selectedAccountId as any) = this.selectedAccountId = undefined
+  }
+
+  async addAndSelectAccount(): Promise<number> {
+    if (this.selectedAccountId) {
+      this.lastAccountBeforeAddingNewAccount = this.selectedAccountId
+    }
+    const accountId = await BackendRemote.rpc.addAccount()
+    updateDeviceChats(accountId, true) // skip changelog
+    await this.selectAccount(accountId)
+    return accountId
+  }
+
+  async onExitWelcomeScreen(): Promise<void> {
+    if (this.lastAccountBeforeAddingNewAccount) {
+      try {
+        await this.selectAccount(this.lastAccountBeforeAddingNewAccount)
+      } catch (error) {
+        this.changeScreen(Screens.NoAccountSelected)
+      }
+    } else {
+      this.changeScreen(Screens.NoAccountSelected)
+    }
+    this.lastAccountBeforeAddingNewAccount = null
+  }
+
+  async openAccountDeletionScreen(accountId: number) {
+    await this.selectAccount(accountId)
+    this.changeScreen(Screens.DeleteAccount)
+  }
+
+  async onDeleteAccount(accountId: number) {
+    await this.unSelectAccount()
+    await EffectfulBackendActions.removeAccount(accountId)
+    this.changeScreen(Screens.NoAccountSelected)
   }
 
   userFeedback(message: userFeedback | false) {
@@ -218,7 +282,8 @@ export default class ScreenController extends Component {
   renderScreen() {
     switch (this.state.screen) {
       case Screens.Main:
-        return <MainScreen />
+        // the key attribute here is a hack to force a clean rerendering when the account changes
+        return <MainScreen key={String(this.selectedAccountId)} />
       case Screens.Login:
         if (this.selectedAccountId === undefined) {
           throw new Error('Selected account not defined')
@@ -233,20 +298,25 @@ export default class ScreenController extends Component {
         if (this.selectedAccountId === undefined) {
           throw new Error('Selected account not defined')
         }
-        return <WelcomeScreen selectedAccountId={this.selectedAccountId} />
-      case Screens.AccountList:
         return (
-          <AccountListScreen
-            {...{
-              selectAccount: this.selectAccount,
-              onAddAccount: async () => {
-                const accountId = await BackendRemote.rpc.addAccount()
-                updateDeviceChats(accountId, true) // skip changelog
-                await this.selectAccount(accountId)
-              },
-            }}
+          <WelcomeScreen
+            selectedAccountId={this.selectedAccountId}
+            onUnSelectAccount={this.unSelectAccount}
+            onExitWelcomeScreen={this.onExitWelcomeScreen}
           />
         )
+      case Screens.DeleteAccount:
+        if (this.selectedAccountId === undefined) {
+          throw new Error('Selected account not defined')
+        }
+        return (
+          <AccountDeletionScreen
+            selectedAccountId={this.selectedAccountId}
+            onDeleteAccount={this.onDeleteAccount.bind(this)}
+          />
+        )
+      case Screens.NoAccountSelected:
+        return <NoAccountSelectedScreen />
       default:
         return null
     }
@@ -271,7 +341,17 @@ export default class ScreenController extends Component {
           }}
         >
           <KeybindingsContextProvider>
-            {this.renderScreen()}
+            <div className='main-container'>
+              <AccountListSidebar
+                selectedAccountId={this.selectedAccountId}
+                onAddAccount={this.addAndSelectAccount.bind(this)}
+                onSelectAccount={this.selectAccount.bind(this)}
+                openAccountDeletionScreen={this.openAccountDeletionScreen.bind(
+                  this
+                )}
+              />
+              {this.renderScreen()}
+            </div>
           </KeybindingsContextProvider>
         </ScreenContext.Provider>
       </div>

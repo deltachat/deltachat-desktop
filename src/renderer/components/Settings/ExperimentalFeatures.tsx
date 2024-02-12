@@ -99,6 +99,10 @@ export function ExperimentalFeatures({ settingsStore }: Props) {
       >
         {tx('videochat')}
       </SettingsSelector>
+      <DesktopSettingsSwitch
+        settingsKey='syncAllAccounts'
+        label={tx('sync_all_accounts')}
+      />
     </>
   )
 }

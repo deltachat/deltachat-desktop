@@ -35,7 +35,10 @@ export default function AccountSetupScreen({
     () =>
       openDialog(ConfigureProgressDialog, {
         credentials,
-        onSuccess: () => selectAccount(accountId),
+        onSuccess: () => {
+          selectAccount(accountId)
+          window.__updateAccountListSidebar?.()
+        },
       }),
     [accountId, openDialog, selectAccount, credentials]
   )
@@ -61,11 +64,7 @@ export default function AccountSetupScreen({
   return (
     <div className='login-screen'>
       <div className='window'>
-        <Dialog
-          backdropProps={{ className: 'no-backdrop' }}
-          onClose={() => {}}
-          fixed
-        >
+        <Dialog onClose={() => {}} fixed>
           <DialogHeader title={tx('login_explain')} />
           <DialogBody>
             <DialogContent>

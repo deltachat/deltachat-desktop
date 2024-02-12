@@ -11,6 +11,8 @@
 - Message reactions with emojis #2964
 - Show info dialog on tap for invalid unencrypted mails #3652
 - Add QR scan button next to search input on main screen #3665
+- Add Account Switcher Sidebar #3621
+- Add new account deletion screen #3621
 
 ### Changed
 - Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.134.0`
@@ -41,6 +43,10 @@
 - Remove unessesary z-index css properties and reorganize the remaining ones #3661
 - Require setting display name when creating profile after scanning invite code #3663
 - Improve design of profile image selector component #3667
+- badge count is now across all active accounts #3621
+- "sync all accounts" moved to settings under advanced -> experimental #3621
+- webxdc stay open when switching accounts (when you have sync all enabled, which is the default) #3621
+- Add more versions to about dialog and update the order of information #3677
 
 ### Fixed
 - Silently fail when notifications are not supported by OS #3613
@@ -55,6 +61,8 @@
 
 ### Removed
 - Remove qr icon in sidebar #3666
+- Remove old Account switcher screen #3621
+- Remove sidebar menu #3621
 
 <a id="1_42_2"></a>
 

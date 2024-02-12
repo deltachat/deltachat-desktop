@@ -4,6 +4,7 @@ import { BackendRemote, Type } from '../backend-com'
 import { onReady } from '../onready'
 import { runtime } from '../runtime'
 import { Store, useStore } from './store'
+import { debouncedUpdateBadgeCounter } from '../system-integration/badge-counter'
 
 export interface SettingsStoreState {
   accountId: number
@@ -137,12 +138,47 @@ class SettingsStore extends Store<SettingsStoreState | null> {
         rc,
       })
     },
+    loadCoreKey: async (
+      accountId: number,
+      key: keyof SettingsStoreState['settings']
+    ) => {
+      if (
+        this.state &&
+        this.state.accountId === accountId &&
+        settingsKeys.includes(key)
+      ) {
+        const newValue = await BackendRemote.rpc.getConfig(
+          this.state.accountId,
+          key
+        )
+        // console.info('loadCoreKey', key, newValue)
+
+        this.setState(state => {
+          if (state === null || state.accountId !== accountId) {
+            return
+          }
+          return { ...state, settings: { ...state.settings, [key]: newValue } }
+        }, 'set')
+      }
+    },
     setDesktopSetting: async (
       key: keyof DesktopSettingsType,
       value: string | number | boolean
     ) => {
       try {
         await runtime.setDesktopSetting(key, value)
+        if (key === 'syncAllAccounts') {
+          if (value) {
+            BackendRemote.rpc.startIoForAllAccounts()
+          } else {
+            BackendRemote.rpc.stopIoForAllAccounts()
+          }
+          if (this.state?.accountId) {
+            BackendRemote.rpc.startIo(this.state.accountId)
+          }
+          debouncedUpdateBadgeCounter()
+          window.__updateAccountListSidebar?.()
+        }
         this.reducer.setDesktopSetting(key, value)
       } catch (error) {
         this.log.error('failed to apply desktop setting:', error)
@@ -162,6 +198,9 @@ class SettingsStore extends Store<SettingsStoreState | null> {
           String(value)
         )
         this.reducer.setCoreSetting(key, value)
+        if (key === 'addr' || key === 'displayname') {
+          window.__updateAccountListSidebar?.()
+        }
       } catch (error) {
         this.log.warn('setConfig failed:', error)
       }
@@ -170,7 +209,7 @@ class SettingsStore extends Store<SettingsStoreState | null> {
 }
 
 onReady(() => {
-  BackendRemote.on('SelfavatarChanged', async accountId => {
+  const updateSelfAvatar = async (accountId: number) => {
     if (accountId === window.__selectedAccountId) {
       const selfContact = await BackendRemote.rpc.getContact(
         accountId,
@@ -178,6 +217,19 @@ onReady(() => {
       )
       SettingsStoreInstance.reducer.setSelfContact(selfContact)
     }
+    window.__updateAccountListSidebar?.()
+  }
+  // SelfavatarChanged is marked as deprecated in jsonrpc api, but ConfigSynced does not have selfavatar yet
+  // will probably change with https://github.com/deltachat/deltachat-core-rust/pull/5158
+  BackendRemote.on('SelfavatarChanged', updateSelfAvatar)
+  BackendRemote.on('ConfigSynced', (accountId, { key }) => {
+    if (key === 'selfavatar') {
+      updateSelfAvatar(accountId)
+    }
+    if (key === 'addr' || key === 'displayname') {
+      window.__updateAccountListSidebar?.()
+    }
+    SettingsStoreInstance.effect.loadCoreKey(accountId, key as any)
   })
 })
 

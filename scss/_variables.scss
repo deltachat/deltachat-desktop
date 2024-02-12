@@ -34,13 +34,15 @@ $z-index: (
   chatlist-scope-floating-action-button: 1,
   jump-down-button-scope-counter: 1,
   import-qr-code-dialog-scope-scan-qr-description: 1,
+  account-list-sidebar-scope-account-badge: 1,
 
   // Global Scope
   // ============
   emoji-sticker-picker: 10,
 
-  sidebar: 100,
   user-feedback: 100,
+
+  account-hover-info: 200,
 
   // toast for errors and success messages
   absolute-positioning-helper: 1000,
