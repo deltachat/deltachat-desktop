@@ -59,6 +59,7 @@
 - More contrast for audio elements in dark mode #3653
 - Fix fullscreen view for avatar images #3669
 - fix display of avatars with spaces in the name #3669
+- Show search bar when searching chat in archived mode #3679
 
 ### Removed
 - Remove qr icon in sidebar #3666
