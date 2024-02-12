@@ -99,6 +99,7 @@
         position: absolute;
         overflow: hidden;
         background: var(--als-active-indicator-color);
+        pointer-events: none;
 
         --als-active-indicator-height: 32px;
 
