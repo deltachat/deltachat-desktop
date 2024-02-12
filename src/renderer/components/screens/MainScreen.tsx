@@ -216,7 +216,13 @@ export default function MainScreen() {
         )
     }
   } else if (alternativeView === 'global-gallery') {
-    MessageListView = <Gallery chatId={'all'} />
+    MessageListView = (
+      <Gallery
+        chatId={'all'}
+        ref={galleryRef}
+        onUpdateView={updatethreeDotMenuHidden}
+      />
+    )
   } else {
     const style: React.CSSProperties = settingsStore
       ? getBackgroundImageStyle(settingsStore.desktopSettings)
@@ -275,18 +281,18 @@ export default function MainScreen() {
           </NavbarGroup>
           <NavbarGroup align={Alignment.RIGHT}>
             {alternativeView === 'global-gallery' && (
-              <NavbarHeading
-                style={{
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  width: '100%',
-                }}
-                onClick={onTitleClick}
-                className='no-drag'
-              >
-                {tx('menu_all_media')}
-              </NavbarHeading>
+              <>
+                <NavbarHeading
+                  style={{
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  {tx('menu_all_media')}
+                </NavbarHeading>
+                <span className='views' />
+              </>
             )}
             {selectedChat.chat && (
               <NavbarHeading
