@@ -14,6 +14,7 @@
 - Add Account Switcher Sidebar #3621
 - Add new account deletion screen #3621
 - Open DC Invite Links directly inside delta chat from links clicked in messages and html emails #3683
+- Add multiaccount notifications and mute/disable notifications for specific accounts #3680
 
 ### Changed
 - Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.134.0`
