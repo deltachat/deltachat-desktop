@@ -70,13 +70,12 @@ function renderElement(elm: ParsedElement, key?: number): JSX.Element {
 
     case 'LabeledLink':
       return (
-        <>
+        <span key={key}>
           <LabeledLink
-            key={key}
             destination={elm.c.destination}
             label={<>{elm.c.label.map(renderElement)}</>}
           />{' '}
-        </>
+        </span>
       )
 
     case 'EmailAddress': {
@@ -129,9 +128,9 @@ function renderElementPreview(elm: ParsedElement, key?: number): JSX.Element {
 
     case 'LabeledLink':
       return (
-        <>
-          <span key={key}>{elm.c.label.map(renderElement)}</span>{' '}
-        </>
+        <span key={key}>
+          <span>{elm.c.label.map(renderElement)}</span>{' '}
+        </span>
       )
 
     case 'Linebreak':
