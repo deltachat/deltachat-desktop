@@ -108,6 +108,9 @@ export type RuntimeInfo = {
   isMac: boolean
   /** currently used to check for an additional device message */
   isAppx: boolean
+  /** runtime library versions, be it electron, node, tauri or whatever,
+   *  used for showing to user in the About dialog */
+  versions: { label: string; value: string }[]
 }
 
 export interface DcNotification {

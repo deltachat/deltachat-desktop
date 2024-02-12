@@ -41,7 +41,11 @@ export function DCInfo(_props: any) {
 
   return (
     <>
-      <h3>Version details:</h3>
+      <h3>Debug Info for System &amp; Selected Account</h3>
+      <p>
+        Local Account Id:{' '}
+        <b>{window.__selectedAccountId || '(no account selected)'}</b>
+      </p>
       <div className='dialog-about__dc-details'>
         <table>
           <tbody>
@@ -67,6 +71,16 @@ export function DCInfo(_props: any) {
 export default function About({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
 
+  const [coreVersion, setCoreVersion] = useState('')
+  const [sqliteVersion, setSqliteVersion] = useState('')
+
+  useEffect(() => {
+    BackendRemote.rpc.getSystemInfo().then(info => {
+      setCoreVersion(info['deltachat_core_version'])
+      setSqliteVersion(info['sqlite_version'])
+    })
+  }, [])
+
   const desktopString = reactStringReplace(
     tx('about_offical_app_desktop'),
     'Delta Chat',
@@ -76,7 +90,7 @@ export default function About({ onClose }: DialogProps) {
       </ClickableLink>
     )
   )
-  let versionString = reactStringReplace(
+  let licenceAndSource = reactStringReplace(
     tx('about_licensed_under_desktop'),
     'GNU GPL version 3',
     (_match, _index, offset) => (
@@ -85,8 +99,8 @@ export default function About({ onClose }: DialogProps) {
       </ClickableLink>
     )
   )
-  versionString = reactStringReplace(
-    versionString,
+  licenceAndSource = reactStringReplace(
+    licenceAndSource,
     'GitHub',
     (_match, _index, offset) => (
       <ClickableLink key={offset} href={gitHubUrl}>
@@ -104,15 +118,37 @@ export default function About({ onClose }: DialogProps) {
     >
       <DialogBody>
         <DialogContent>
-          <p
-            style={{ color: 'grey', userSelect: 'all' }}
-          >{`Version ${VERSION} (git: ${GIT_REF})`}</p>
-          <p>
-            {desktopString}
-            <br />
-            <br />
-            {versionString}
-          </p>
+          <p>{desktopString}</p>
+          <p>{licenceAndSource}</p>
+          <h3>Versions</h3>
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <b>Delta Chat Desktop</b>
+                </td>
+                <td
+                  style={{ userSelect: 'all' }}
+                >{`${VERSION} (git: ${GIT_REF})`}</td>
+              </tr>
+              <tr>
+                <td>Delta Chat Core</td>
+                <td style={{ color: 'grey', userSelect: 'all' }}>
+                  {coreVersion}
+                </td>
+              </tr>
+              <tr style={{ color: 'grey' }}>
+                <td>SQLite</td>
+                <td style={{ userSelect: 'all' }}>{sqliteVersion}</td>
+              </tr>
+              {runtime.getRuntimeInfo().versions.map(({ label, value }) => (
+                <tr key={label} style={{ color: 'grey' }}>
+                  <td>{label}</td>
+                  <td style={{ userSelect: 'all' }}>{value}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
           <DCInfo />
         </DialogContent>
       </DialogBody>

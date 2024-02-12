@@ -24,6 +24,7 @@ import { set_has_unread, updateTrayIcon } from './tray'
 import mimeTypes from 'mime-types'
 import { openHtmlEmailWindow } from './windows/html_email'
 import { appx } from './isAppx'
+import { versions } from 'process'
 
 const log = getLogger('main/ipc')
 const DeltaChatController: typeof import('./deltachat/controller').default =
@@ -105,6 +106,10 @@ export async function init(cwd: string, logHandler: LogHandler) {
     const info: RuntimeInfo = {
       isMac: platform() === 'darwin',
       isAppx: appx,
+      versions: [
+        { label: 'electron', value: versions.electron },
+        { label: 'node', value: versions.node },
+      ],
     }
     ev.returnValue = info
   })
