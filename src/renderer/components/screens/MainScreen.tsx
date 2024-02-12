@@ -48,14 +48,15 @@ const log = getLogger('renderer/main-screen')
 export default function MainScreen() {
   const [queryStr, setQueryStr] = useState('')
   const [queryChatId, setQueryChatId] = useState<null | number>(null)
-  const [showArchivedChats, setShowArchivedChats] = useState(false)
-  // Small hack/misuse of keyBindingAction to setShowArchivedChats from other components (especially
-  // ViewProfile when selecting a shared chat/group)
+  const [archivedChatsSelected, setArchivedChatsSelected] = useState(false)
+
+  // Small hack/misuse of keyBindingAction to setArchivedChatsSelected from
+  // other components (especially ViewProfile when selecting a shared chat/group)
   useKeyBindingAction(KeybindAction.ChatList_SwitchToArchiveView, () =>
-    setShowArchivedChats(true)
+    setArchivedChatsSelected(true)
   )
   useKeyBindingAction(KeybindAction.ChatList_SwitchToNormalView, () =>
-    setShowArchivedChats(false)
+    setArchivedChatsSelected(false)
   )
 
   const { openDialog } = useDialog()
@@ -75,7 +76,9 @@ export default function MainScreen() {
   })
 
   const onChatClick = (chatId: number) => {
-    if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) return setShowArchivedChats(true)
+    if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) {
+      return setArchivedChatsSelected(true)
+    }
 
     selectChat(chatId)
   }
@@ -244,14 +247,15 @@ export default function MainScreen() {
     )
   }
 
-  // StandardJS won't let me use '&& { } || { }', so the following code
-  // compares with showArchivedChats twice.
+  const isSearchActive = queryStr.length > 0 || queryChatId !== null
+  const showArchivedChats = !isSearchActive && archivedChatsSelected
+
   return (
     <div className='main-screen'>
       <div className='navbar-wrapper'>
         <Navbar>
           <NavbarGroup align={Alignment.LEFT}>
-            {queryStr.length === 0 && showArchivedChats && (
+            {showArchivedChats && (
               <>
                 <div className='archived-chats-title no-drag'>
                   {tx('chat_archived_chats_title')}
@@ -264,12 +268,12 @@ export default function MainScreen() {
                     'no-drag',
                   ].join(' ')}
                   icon='undo'
-                  onClick={() => setShowArchivedChats(false)}
+                  onClick={() => setArchivedChatsSelected(false)}
                   aria-label={tx('back')}
                 />
               </>
             )}
-            {(showArchivedChats && queryStr.length === 0) || (
+            {!showArchivedChats && (
               <SearchInput
                 id='chat-list-search'
                 inputRef={searchRef}
