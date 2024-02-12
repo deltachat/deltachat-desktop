@@ -384,7 +384,10 @@ function makeBrowserView(
     }`)
 
   const openLink = (url: string) => {
-    if (url.startsWith('mailto:')) {
+    if (
+      url.startsWith('mailto:') ||
+      (url.startsWith('https://i.delta.chat/') && url.includes('#'))
+    ) {
       open_url(url)
       mainWindow.window?.show()
     } else {

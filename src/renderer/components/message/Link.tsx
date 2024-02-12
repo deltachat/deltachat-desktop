@@ -16,6 +16,7 @@ import Dialog, {
 } from '../Dialog'
 import useDialog from '../../hooks/useDialog'
 import { OpenDialog } from '../../contexts/DialogContext'
+import processOpenQrUrl from '../helpers/OpenQrUrl'
 
 const log = getLogger('renderer/LabeledLink')
 
@@ -41,7 +42,7 @@ export const LabeledLink = ({
   label: string | JSX.Element | JSX.Element[]
   destination: LinkDestination
 }) => {
-  const { openDialog } = useDialog()
+  const { openDialog, closeDialog } = useDialog()
   const { target, punycode, hostname } = destination
 
   // encode the punycode to make phishing harder
@@ -52,6 +53,11 @@ export const LabeledLink = ({
     ev.preventDefault()
     ev.stopPropagation()
     const isDeviceChat = chatStore.getState().chat?.isDeviceChat
+
+    if (isInviteLink(target)) {
+      processOpenQrUrl(openDialog, closeDialog, target)
+      return
+    }
 
     //check if domain is trusted, or if there is no domain like on mailto just open it
     if (isDeviceChat || !hostName || isDomainTrusted(hostName)) {
@@ -144,7 +150,7 @@ function labeledLinkConfirmationDialog(
 }
 
 export const Link = ({ destination }: { destination: LinkDestination }) => {
-  const { openDialog } = useDialog()
+  const { openDialog, closeDialog } = useDialog()
 
   const { target, punycode } = destination
   const asciiUrl = punycode ? punycode.punycode_encoded_url : target
@@ -152,6 +158,11 @@ export const Link = ({ destination }: { destination: LinkDestination }) => {
   const onClick = (ev: any) => {
     ev.preventDefault()
     ev.stopPropagation()
+
+    if (isInviteLink(target)) {
+      processOpenQrUrl(openDialog, closeDialog, target)
+      return
+    }
 
     if (punycode) {
       openPunycodeUrlConfirmationDialog(
@@ -239,4 +250,8 @@ function openPunycodeUrlConfirmationDialog(
       </Dialog>
     )
   })
+}
+
+function isInviteLink(url: string) {
+  return url.startsWith('https://i.delta.chat/') && url.includes('#')
 }

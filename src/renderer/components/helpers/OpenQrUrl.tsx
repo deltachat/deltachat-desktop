@@ -81,7 +81,7 @@ export default async function processOpenQrUrl(
   openDialog: OpenDialog,
   closeDialog: CloseDialog,
   url: string,
-  callback: any = null,
+  callback: (...args: todo) => void = (..._args: todo) => {},
   skipLoginConfirmation = false
 ) {
   const tx = window.static_translate
