@@ -239,15 +239,14 @@ export function initNotifications() {
   BackendRemote.on('IncomingMsgBunch', accountId => {
     flushNotifications(accountId)
   })
-  runtime.setNotificationCallback(({ accountId, msgId, chatId }) => {
+  runtime.setNotificationCallback(async ({ accountId, msgId, chatId }) => {
     if (window.__selectedAccountId !== accountId) {
-      window.__selectAccount(accountId)
-    } else {
-      if (chatId !== 0) {
-        clearNotificationsForChat(accountId, chatId)
-        if (msgId !== 0) {
-          jumpToMessage(msgId, true)
-        }
+      await window.__selectAccount(accountId)
+    }
+    if (chatId !== 0) {
+      clearNotificationsForChat(accountId, chatId)
+      if (msgId !== 0) {
+        jumpToMessage(msgId, true)
       }
     }
   })
