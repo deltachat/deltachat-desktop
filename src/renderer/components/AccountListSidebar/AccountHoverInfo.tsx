@@ -1,6 +1,5 @@
 import React, { Component, useEffect, useState } from 'react'
 import { C, T } from '@deltachat/jsonrpc-client'
-import { filesize } from 'filesize'
 import debounce from 'debounce'
 
 import { BackendRemote, onDCEvent } from '../../backend-com'
@@ -58,7 +57,8 @@ export default function AccountHoverInfo({
         )}
         {bgSyncDisabled && (
           <div className={styles.hoverInfoProperty}>
-            ⏻ {tx('background_sync_disabled_explaination')}
+            <span className={styles.hoverInfoDisabledIcon}>⏻</span>{' '}
+            {tx('background_sync_disabled_explaination')}
           </div>
         )}
       </>
@@ -68,9 +68,6 @@ export default function AccountHoverInfo({
   return (
     <div className={styles.accountHoverInfo} role='tooltip'>
       {content}
-      <div className={styles.hoverInfoFooter}>
-        <AccountSize accountId={account.id} />
-      </div>
     </div>
   )
 }
@@ -135,31 +132,5 @@ class Connectivity extends Component<{ accountId: number }, ConnectivityState> {
         {this.state.label}
       </>
     )
-  }
-}
-
-class AccountSize extends Component<{ accountId: number }, { size?: string }> {
-  wasDestroyed = false
-  state = { size: undefined }
-
-  async update() {
-    const bytes = await BackendRemote.rpc
-      .getAccountFileSize(this.props.accountId)
-      .catch(log.error)
-    if (!this.wasDestroyed) {
-      this.setState({ size: bytes ? filesize(bytes) : undefined })
-    }
-  }
-
-  componentDidMount(): void {
-    this.update()
-  }
-
-  componentWillUnmount(): void {
-    this.wasDestroyed = true
-  }
-
-  render(): React.ReactNode {
-    return <span>{this.state.size || '?'}</span>
   }
 }

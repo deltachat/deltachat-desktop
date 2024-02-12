@@ -240,7 +240,7 @@
   top: var(--als-avatar-margin);
   left: 60px;
   color: white;
-  background-color: rgb(22,22,22);
+  background-color: rgb(22, 22, 22);
   border-radius: 4px;
   padding: 8px;
 }
@@ -248,11 +248,6 @@
 .hoverInfoProperty {
   font-size: smaller;
   color: rgb(180, 180, 180);
-}
-
-.hoverInfoFooter {
-  font-size: smaller;
-  color: #808080;
 }
 
 .connectivityDot {
@@ -270,4 +265,10 @@
   @include color-svg('../images/mute.png', white);
   height: 1em;
   width: 1em;
+}
+
+.hoverInfoDisabledIcon {
+  width: 1em;
+  display: inline-block;
+  text-align: center;
 }
