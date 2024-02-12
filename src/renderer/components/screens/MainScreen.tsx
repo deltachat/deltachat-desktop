@@ -82,13 +82,32 @@ export default function MainScreen() {
 
     selectChat(chatId)
   }
+
   const searchChats = (queryStr: string, chatId: number | null = null) => {
     setQueryStr(queryStr)
     setQueryChatId(chatId)
   }
+
   const handleSearchChange = (event: { target: { value: string } }) => {
     setQueryStr(event.target.value)
   }
+
+  const handleSearchClear = useCallback(() => {
+    if (!searchRef.current) {
+      return
+    }
+
+    searchRef.current.value = ''
+    searchChats('')
+    setQueryChatId(null)
+
+    // If we've searched a non-archive chat while being in archive mode
+    // previously we want to get back to normal mode after cancelling
+    if (!selectedChat.chat?.archived && archivedChatsSelected) {
+      setArchivedChatsSelected(false)
+    }
+  }, [archivedChatsSelected, selectedChat.chat?.archived])
+
   const onTitleClick = () => {
     if (!selectedChat.chat) return
 
@@ -149,13 +168,9 @@ export default function MainScreen() {
   })
 
   useKeyBindingAction(KeybindAction.ChatList_ClearSearchInput, () => {
-    if (!searchRef.current) {
-      return
-    }
-    searchRef.current.value = ''
-    searchChats('')
-    setQueryChatId(null)
+    handleSearchClear()
   })
+
   const onClickThreeDotMenu = useThreeDotMenu(
     selectedChat.chat,
     alternativeView === 'global-gallery' ||
@@ -278,7 +293,7 @@ export default function MainScreen() {
                 id='chat-list-search'
                 inputRef={searchRef}
                 onChange={handleSearchChange}
-                onClear={queryChatId ? () => setQueryChatId(null) : undefined}
+                onClear={queryChatId ? () => handleSearchClear() : undefined}
                 value={queryStr}
               />
             )}
