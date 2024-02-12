@@ -14,9 +14,11 @@ const log = getLogger('AccountListSidebar/AccountHoverInfo')
 export default function AccountHoverInfo({
   account,
   isSelected,
+  muted,
 }: {
   account: T.Account
   isSelected: boolean
+  muted: boolean
 }) {
   const tx = window.static_translate
   const [bgSyncDisabled, setBgSyncDisabled] = useState<boolean>(false)
@@ -46,6 +48,12 @@ export default function AccountHoverInfo({
         {showConnection && (
           <div className={styles.hoverInfoProperty}>
             <Connectivity accountId={account.id} />
+          </div>
+        )}
+        {muted && (
+          <div className={styles.hoverInfoProperty}>
+            <div className={styles.hoverInfoMuteIcon} />{' '}
+            {tx('account_muted_description')}
           </div>
         )}
         {bgSyncDisabled && (

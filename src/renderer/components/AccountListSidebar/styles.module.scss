@@ -262,4 +262,12 @@
   min-width: 0.7em;
   min-height: 0.7em;
   border-radius: 100%;
+  margin-inline: 0.15em;
+}
+
+.hoverInfoMuteIcon {
+  display: inline-block;
+  @include color-svg('../images/mute.png', white);
+  height: 1em;
+  width: 1em;
 }

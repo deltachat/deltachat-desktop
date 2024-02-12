@@ -130,6 +130,7 @@ export default function AccountListSidebar({
           <AccountHoverInfo
             account={accountForHoverInfo}
             isSelected={selectedAccountId === accountForHoverInfo.id}
+            muted={noficationSettings[accountForHoverInfo.id]?.muted || false}
           />
         )}
       </div>
