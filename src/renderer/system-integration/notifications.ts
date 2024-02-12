@@ -47,9 +47,9 @@ function incomingMessageHandler(
     return
   }
 
-  if (document.hasFocus()) {
-    // window has focus don't send notification
-    log.debug('notification ignored: window has focus')
+  if (document.hasFocus() && accountId === window.__selectedAccountId) {
+    // window has focus don't send notification for the selected account
+    log.debug('notification ignored: window has focus and account of the notification is selected')
     return
   }
 
