@@ -13,7 +13,7 @@
 - Add QR scan button next to search input on main screen #3665
 - Add Account Switcher Sidebar #3621
 - Add new account deletion screen #3621
-- Open DC Invite Links directly inside delta chat from links clicked in messages and html emails
+- Open DC Invite Links directly inside delta chat from links clicked in messages and html emails #3683
 
 ### Changed
 - Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.134.0`
