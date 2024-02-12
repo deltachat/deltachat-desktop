@@ -141,6 +141,7 @@ export function ContextMenuLayer({
       ref={layerRef}
       className={`dc-context-menu-layer ${active ? 'active' : ''}`}
       onClick={cancel}
+      onContextMenuCapture={cancel}
     >
       {active && currentItems.length > 0 && (
         <ContextMenu
