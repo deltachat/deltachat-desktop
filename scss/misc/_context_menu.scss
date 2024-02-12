@@ -6,9 +6,9 @@
   background-color: transparent;
   pointer-events: none;
 
-  // &.active {
-  //   background-color: rgba(0, 0, 0, 0.3);
-  // }
+  &.active {
+    pointer-events: all;
+  }
 
   // prevent double context menu on macOS
   // (when using touchpad it sometimes selects the text in the context menu, and then show a native context menu on top)
