@@ -288,27 +288,12 @@ export function ContextMenu(props: {
       }
     }
 
-    const onOutsideClick = (ev: MouseEvent | TouchEvent) => {
-      const target = ev.target as HTMLElement
-      const isOnMenu = menuLevelEls.current.find(
-        menuEl => target === menuEl || target.parentElement === menuEl
-      )
-
-      if (!isOnMenu) {
-        closeCallback()
-      }
-    }
-
     const onResize = (_ev: UIEvent) => closeCallback()
 
     document.addEventListener('keydown', onKeyDown)
-    document.addEventListener('mousedown', onOutsideClick)
-    document.addEventListener('touchstart', onOutsideClick)
     window.addEventListener('resize', onResize)
     return () => {
       document.removeEventListener('keydown', onKeyDown)
-      document.removeEventListener('mousedown', onOutsideClick)
-      document.removeEventListener('touchstart', onOutsideClick)
       window.removeEventListener('resize', onResize)
     }
   }, [openSublevels, menuLevelEls, closeCallback])
