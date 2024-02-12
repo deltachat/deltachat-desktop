@@ -47,6 +47,7 @@
 - "sync all accounts" moved to settings under advanced -> experimental #3621
 - webxdc stay open when switching accounts (when you have sync all enabled, which is the default) #3621
 - Add more versions to about dialog and update the order of information #3677
+- Refactor message meta data component #3678
 
 ### Fixed
 - Silently fail when notifications are not supported by OS #3613
@@ -58,7 +59,6 @@
 - More contrast for audio elements in dark mode #3653
 - Fix fullscreen view for avatar images #3669
 - fix display of avatars with spaces in the name #3669
-- Padlock icon sometimes disappearing after resend #3678
 
 ### Removed
 - Remove qr icon in sidebar #3666
