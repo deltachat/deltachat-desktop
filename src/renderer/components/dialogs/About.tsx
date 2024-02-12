@@ -76,8 +76,6 @@ export default function About({ onClose }: DialogProps) {
 
   useEffect(() => {
     BackendRemote.rpc.getSystemInfo().then(info => {
-      console.warn({ info })
-
       setCoreVersion(info['deltachat_core_version'])
       setSqliteVersion(info['sqlite_version'])
     })
