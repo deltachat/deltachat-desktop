@@ -20,7 +20,10 @@ export default function Notifications({ desktopSettings }: Props) {
 
   return (
     <>
-      <SettingsHeading>{tx('pref_for_all_accounts')}</SettingsHeading>
+      <SettingsHeading>{tx('pref_current_account')}</SettingsHeading>
+      <AccountNotificationMutedSwitch label={tx('menu_mute')} />
+      <SettingsSeparator></SettingsSeparator>
+      <SettingsHeading>{tx('pref_all_accounts')}</SettingsHeading>
       <DesktopSettingsSwitch
         settingsKey='notifications'
         label={tx('pref_notifications_explain')}
@@ -30,9 +33,6 @@ export default function Notifications({ desktopSettings }: Props) {
         label={tx('pref_show_notification_content_explain')}
         disabled={!desktopSettings['notifications']}
       />
-      <SettingsSeparator></SettingsSeparator>
-      <SettingsHeading>{tx('pref_for_current_account')}</SettingsHeading>
-      <AccountNotificationMutedSwitch label={tx('menu_mute')} />
     </>
   )
 }

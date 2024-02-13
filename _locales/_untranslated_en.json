@@ -15,10 +15,10 @@
   "muted": {
     "message": "Muted"
   },
-  "pref_for_all_accounts": {
-    "message": "For All Accounts"
+  "pref_all_accounts": {
+    "message": "All Accounts"
   },
-  "pref_for_current_account": {
-    "message": "For The Current Account"
+  "pref_current_account": {
+    "message": "Current Account"
   }
 }
