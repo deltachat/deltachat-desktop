@@ -17,6 +17,7 @@ import Dialog, {
 import useDialog from '../../hooks/useDialog'
 import { OpenDialog } from '../../contexts/DialogContext'
 import processOpenQrUrl from '../helpers/OpenQrUrl'
+import { isInviteLink } from '../../../shared/util'
 
 const log = getLogger('renderer/LabeledLink')
 
@@ -250,8 +251,4 @@ function openPunycodeUrlConfirmationDialog(
       </Dialog>
     )
   })
-}
-
-function isInviteLink(url: string) {
-  return url.startsWith('https://i.delta.chat/') && url.includes('#')
 }

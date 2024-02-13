@@ -11,7 +11,7 @@ import electron, {
 import { appIcon, htmlDistDir } from '../application-constants'
 import { join } from 'path'
 import { DesktopSettings } from '../desktop_settings'
-import { truncateText } from '../../shared/util'
+import { isInviteLink, truncateText } from '../../shared/util'
 import { tx } from '../load-translations'
 import { open_url } from '../open_url'
 import { loadTheme } from '../themes'
@@ -384,10 +384,7 @@ function makeBrowserView(
     }`)
 
   const openLink = (url: string) => {
-    if (
-      url.startsWith('mailto:') ||
-      (url.startsWith('https://i.delta.chat/') && url.includes('#'))
-    ) {
+    if (url.startsWith('mailto:') || isInviteLink(url)) {
       open_url(url)
       mainWindow.window?.show()
     } else {
