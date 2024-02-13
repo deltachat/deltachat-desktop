@@ -11,17 +11,15 @@ $closeButtonSize: 30px;
   flex: 1;
   font-size: 16px;
   height: $closeButtonSize;
+  margin-right: 5px;
   padding-bottom: 0;
-  padding-left: 10px;
-  padding-right: 0;
+  padding-left: 5px;
+  padding-right: 5px;
   padding-top: 0;
+  width: 100%;
 
   &::placeholder {
     color: var(--navBarSearchPlaceholder);
-  }
-
-  &.active {
-    padding-right: calc($closeButtonSize + 5px);
   }
 }
 
