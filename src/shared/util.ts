@@ -22,3 +22,7 @@ export function truncateText(text: string, max_len: number) {
     return text
   }
 }
+
+export function isInviteLink(url: string) {
+  return url.startsWith('https://i.delta.chat/') && url.includes('#')
+}
