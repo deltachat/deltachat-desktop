@@ -12,8 +12,8 @@
   "background_sync_disabled_explaination": {
     "message": "Background Sync Disabled, Account is only synced when selected"
   },
-  "account_muted_description": {
-    "message": "Notifications are disabled for this Account"
+  "muted": {
+    "message": "Muted"
   },
   "pref_for_all_accounts": {
     "message": "For All Accounts"

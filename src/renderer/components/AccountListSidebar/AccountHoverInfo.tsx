@@ -52,7 +52,7 @@ export default function AccountHoverInfo({
         {muted && (
           <div className={styles.hoverInfoProperty}>
             <div className={styles.hoverInfoMuteIcon} />{' '}
-            {tx('account_muted_description')}
+            {tx('muted')}
           </div>
         )}
         {bgSyncDisabled && (
