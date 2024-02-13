@@ -139,8 +139,7 @@
       right: -5px;
 
       .freshMessageCounter,
-      .bgSyncDisabled,
-      .accountMuted {
+      .bgSyncDisabled {
         color: var(--unreadCountLabel);
         background-color: var(--unreadCountBg);
         text-align: center;
@@ -157,23 +156,20 @@
         padding: 0px 3pt;
       }
 
-      .accountMuted {
-        display: flex;
-        align-items: center;
-        vertical-align: middle;
-        width: 22px;
-        padding: 3px;
-
-        .accountMutedIcon {
-          width: 100%;
-          height: 100%;
-          display: inline-block;
-          @include color-svg('../images/mute.png', white);
-        }
-      }
-
       .accountBadgeMuted {
         background-color: grey;
+      }
+    }
+
+    .accountMuted {
+      position: absolute;
+      top: 0;
+
+      .accountMutedIcon {
+        width: 24px;
+        height: 24px;
+        display: block;
+        @include color-svg('../images/mute.png', white, 80%);
       }
     }
   }

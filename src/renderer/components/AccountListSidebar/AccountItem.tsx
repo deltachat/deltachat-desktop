@@ -119,17 +119,6 @@ export default function AccountItem({
         {unreadCount}
       </div>
     )
-  } else if (muted) {
-    badgeContent = (
-      <div
-        className={classNames(styles.accountMuted, {
-          [styles.accountBadgeMuted]: muted,
-        })}
-        aria-label='Account Notifications Muted'
-      >
-        <div className={styles.accountMutedIcon} />
-      </div>
-    )
   }
 
   return (
@@ -167,6 +156,16 @@ export default function AccountItem({
       ) : (
         <div className={styles.avatar}>
           <div className={styles.content}>?</div>
+        </div>
+      )}
+      {muted && (
+        <div
+          className={classNames(styles.accountMuted, {
+            [styles.accountBadgeMuted]: muted,
+          })}
+          aria-label='Account Notifications Muted'
+        >
+          <div className={styles.accountMutedIcon} />
         </div>
       )}
       <div className={classNames(styles.accountBadge)}>{badgeContent}</div>
