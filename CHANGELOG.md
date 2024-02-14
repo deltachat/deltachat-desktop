@@ -5,7 +5,7 @@
 <a id="1_43_0"></a>
 
 ### Fixed
-- Fix broken styles for muted and turned off account badges in multiaccount sidebar
+- Fix broken styles for muted and turned off account badges in multiaccount sidebar #3691
 
 ## [1.43.0] - 2024-02-14
 
