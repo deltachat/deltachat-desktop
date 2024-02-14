@@ -14,6 +14,7 @@
       <li><a href="#welche-app-berechtigungen-benötigt-delta-chat">Welche App-Berechtigungen benötigt Delta Chat?</a></li>
       <li><a href="#was-bedeutet-anheften-stummschalten-archivieren">Was bedeutet Anheften, Stummschalten, Archivieren?</a></li>
       <li><a href="#was-bedeutet-der-grüne-punkt">Was bedeutet der grüne Punkt?</a></li>
+      <li><a href="#ephemeralmsgs">Wie funktionieren “Verschwindende Nachrichten”?</a></li>
       <li><a href="#wie-kann-ich-mein-konto-löschen">Wie kann ich mein Konto löschen?</a></li>
     </ul>
   </li>
@@ -355,6 +356,38 @@ zu anderen Instant-Messengern muss der/die EmpfängerIn nicht Delta Chat install
   <li>Andererseits werden andere nicht immer “sehen, dass Sie online sind”. Wenn Sie Lesebestätigungen deaktiviert haben, sehen sie den grünen Punkt erst, wenn Sie ihnen eine Nachricht senden oder einer Gruppe schreiben, in der sie sich ebenfalls befinden.</li>
 </ul>
     
+      <h3 id="ephemeralmsgs">
+        
+        
+          Wie funktionieren “Verschwindende Nachrichten”? <a href="#ephemeralmsgs" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Sie schalten “Verschwindende Nachrichten”
+oben rechts im Chatfenster,
+durch Auswahl einer Zeitspanne
+zwischen 1 Minute und 5 Wochen ein.</p>
+
+<p>Bis die Einstellung wieder ausgeschaltet wird,
+kümmern sich die Delta-Chat-Apps der Chat-Teilnehmer
+um das Löschen der Nachrichten
+nach der gewählten Zeitspanne.
+Die Zeitspanne beginnt,
+wenn der Empfänger die Nachricht zum ersten Mal in Delta Chat ansieht.
+Die Nachrichten werden dann
+sowohl in den E-Mail-Konten auf dem Server,
+als auch in der App selbst gelöscht.</p>
+
+<p>Beachten Sie, dass Sie sich auf verschwindende Nachrichten nur so lange verlassen können, wie Sie Ihren Chat-Partnern vertrauen;
+böswillige Chatpartner können Fotos machen,
+oder auf andere Weise Nachrichten vor dem Löschen speichern, kopieren oder weiterleiten.</p>
+
+<p>Abgesehen davon,
+wenn ein Chat-Partner Delta Chat deinstalliert,
+werden die Nachrichten nicht aus seinem E-Mail-Konto gelöscht.
+Sie werden höchstwahrscheinlich aber auch nicht mehr entschlüsselt werden können.</p>
+    
       <h3 id="wie-kann-ich-mein-konto-löschen">
         
         
@@ -505,7 +538,7 @@ eine Ende-zu-Ende-Verschlüsselung mit Kontakten und Gruppenchats herzustellen.
 Autocrypt verwendet eine begrenzte und <a href="#openpgp-secure">sichere Untermenge des OpenPGP-Standards</a>.
 Ende-zu-Ende verschlüsselte Nachrichten sind mit einem Vorhängeschloss gekennzeichnet <img style="vertical-align:middle; width:1.2em; margin:1px" src="../lock-icon.png" alt="padlock" /></p>
 
-<p><a href="https://countermitm.readthedocs.io/en/latest/new.html">Secure-Join-Protokolle</a>
+<p><a href="https://securejoin.delta.chat/en/latest/new.html">Secure-Join-Protokolle</a>
 werden für Chats mit garantierter Ende-zu-Ende-Verschlüsselung verwendet, 
 die vor Netzwerkangriffen und kompromittierten Servern schützt.
 Chats, die mit einem grünen Häkchen markiert sind 
@@ -578,7 +611,7 @@ den Sie von Ihrem Chat-Partner in einem zweiten Kanal sehen oder erhalten haben.
 
 <p><strong>Beide, Einlader und Beitretender</strong>:</p>
 
-<p>Warten Sie, während das <a href="https://countermitm.readthedocs.io/en/latest/new.html#setup-contact-protocol">Secure-Join-Protokoll</a> zwischen den Geräten abläuft.</p>
+<p>Warten Sie, während das <a href="https://securejoin.delta.chat/en/latest/new.html#setup-contact-protocol">Secure-Join-Protokoll</a> zwischen den Geräten abläuft.</p>
 
 <ul>
   <li>
@@ -631,7 +664,7 @@ bis du zu demjenigen gelangst, mit dem Sie einen direkten <a href="#howtoe2ee">Q
 Dies bedeutet normalerweise, dass der Kontakt <a href="#nocryptanymore">“eine Nachricht von einem anderen Gerät gesendet hat”</a>.</p>
 
 <p>Für eine ausführlichere Diskussion der “Garantierten Ende-zu-Ende-Verschlüsselung”,
-siehe <a href="https://countermitm.readthedocs.io/en/latest/new.html">Secure-Join-Protokolle</a>
+siehe <a href="https://securejoin.delta.chat/en/latest/new.html">Secure-Join-Protokolle</a>
 und dort speziell den Abschnitt zu “Verified Groups”, dem technischen Begriff
 für “Chats mit grünem Häkchen” oder “Garantierter Ende-zu-Ende-Verschlüsselung”.</p>
     
@@ -924,9 +957,9 @@ auch wenn im Direkt-Chat eine
 <p>Der beste Weg, um sicherzustellen, dass alle Nachrichten Ende-zu-Ende verschlüsselt sind
 und Metadaten so schnell wie möglich gelöscht werden,
 ist <a href="#howtoe2ee">die Verwendung von Chats mit garantierter Ende-zu-Ende-Verschlüsselung</a>
-und die Aktivierung von “Verschwindende Nachrichten”.</p>
+und die Aktivierung von <a href="#ephemeralmsgs">Verschwindende Nachrichten</a>.</p>
 
-<p>Garantiert Ende-zu-Ende-Verschlüsselung schützt vor <a href="https://en.wikipedia.org/wiki/Man-in-the-middle_attack">MITM-Angriffen</a>
+<p>Garantierte Ende-zu-Ende-Verschlüsselung schützt vor <a href="https://en.wikipedia.org/wiki/Man-in-the-middle_attack">MITM-Angriffen</a>
 und das Aktivieren von “Verschwindende Nachrichten” löscht die Nachrichten
 auf dem Server und Lokal nach einer vom Benutzer eingestellten Zeit.</p>
 
@@ -1006,11 +1039,12 @@ Look for something like <strong>Start Autocrypt Setup Transfer</strong> in the s
         
       </h3>
 
+<p>Mit sehr großer Wahrscheinlichkeit besteht das Problem darin, dass Ihr Schlüssel verschlüsselt ist und/oder ein Passwort verwendet. Solche Schlüssel werden von Delta Chat nicht unterstützt. Bitte entfernen Sie die Verschlüsselung und das Passwort und versuchen Sie den Import danach erneut.</p>
+
+<p>Ein weiterer häufiger Fehler ist die falsche Dateiendung.
+Verwenden Sie das ASCII-Armored-Format und die Dateiendung <code class="language-plaintext highlighter-rouge">.asc</code>.</p>
+
 <ul>
-  <li>
-    <p>Wahrscheinlich ist Ihr Schlüssel verschlüsselt und/oder mit einem Passwort geschützt. Solche Schlüssel werden von Delta Chat nicht unterstützt. Bitte entfernen Sie die Verschlüsselung und das Passwort und versuchen Sie den Import danach erneut.
-Wenn Sie das Passwort nicht entfernen möchten, müssen Sie einen E-Mail-Alias zur Nutzung mit Delta Chat anlegen, sodass der Schlüssel von Delta Chat mit diesem E-Mail-Alias verknüpft ist.</p>
-  </li>
   <li>
     <p>Delta Chat unterstützt “gängige” private Schlüsselformate, allerdings ist es unwahrscheinlich, dass wir 100% aller privaten Schlüssel aus sämtlichen Quellen unterstützen.
 Dies ist auch nicht das Hauptaugenmerk von Delta Chat. Tatsächlich besitzt die große Mehrheit der Delta-Chat-NutzerInnen keinen Schlüssel, bevor sie Delta Chat verwendet.
@@ -1075,7 +1109,16 @@ Für andere Programme können Sie online eine Lösung finden.</p>
     <p>Vergewissern Sie sich, dass beide Geräte mit dem <strong>gleichen Wi-Fi, WLAN oder Netzwerk</strong> verbunden sind.</p>
   </li>
   <li>
+    <p>Unter <strong>Windows</strong>, <strong>Systemsteuerung / Netzwerk und Internet</strong> öffnen
+und sicherstellen, dass <strong>Privates Netzwerk</strong> als “Netzwerkprofiltyp” ausgewählt ist.
+(nach der Übertragung kann wieder der ursprüngliche Wert verwendet werden)</p>
+  </li>
+  <li>
     <p>Ihr System verfügt möglicherweise über eine “Personal Firewall”, diese sind dafür bekannt, Probleme zu verursachen (insbesondere bei Windows). <strong>Deaktivieren Sie die Personal Firewall</strong> für Delta Chat auf beiden Seiten und versuchen Sie es erneut</p>
+  </li>
+  <li>
+    <p>In <strong>Gastnetzwerken</strong> z.B. der <strong>Fritz!Box</strong>, können Geräte möglicherweise nicht miteinander kommunizieren.
+Verwenden Sie nach Möglichkeit ein Nicht-Gast-Netzwerk. Wenn Sie Zugriff auf den Router haben, können Sie auch die Kommunikation der Geräte untereinander für die Dauer der Übertragung erlauben.</p>
   </li>
   <li>
     <p>Vergewissern Sie sich, dass das Zielgerät über <strong>genügend Speicher</strong> verfügt</p>
