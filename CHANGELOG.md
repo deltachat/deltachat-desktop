@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_43_0"></a>
+
+## [1.43.0] - 2024-02-14
+
 ### Added
 - ContextMenu now handles multiple sublevels #3116
   - ContextMenuItem has a subitems array
@@ -51,7 +55,7 @@
 - Add more versions to about dialog and update the order of information #3677
 - Refactor message meta data component #3678
 - Use overlay in context menu #3682
-- Update local help (2024-02-14)
+- Update local help (2024-02-14) #3686
 
 ### Fixed
 - Silently fail when notifications are not supported by OS #3613
@@ -2421,7 +2425,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.42.2...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.43.0...HEAD
+
+[1.43.0 https://github.com/deltachat/deltachat-desktop/compare/v1.42.2...v1.43.0
 
 [1.42.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.42.1...v1.42.2
 
