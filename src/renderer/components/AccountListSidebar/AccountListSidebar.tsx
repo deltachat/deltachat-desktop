@@ -1,32 +1,34 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { debounce } from 'debounce'
 
-import AccountItem from './AccountItem'
-import { BackendRemote } from '../../backend-com'
 import AccountHoverInfo from './AccountHoverInfo'
+import AccountItem from './AccountItem'
+import Icon from '../Icon'
+import Settings from '../Settings'
+import useDialog from '../../hooks/useDialog'
+import { BackendRemote } from '../../backend-com'
 import { runtime } from '../../runtime'
+import { useAccountNotificationStore } from '../../stores/accountNotifications'
 
 import styles from './styles.module.scss'
 
 import type { T } from '@deltachat/jsonrpc-client'
-import useDialog from '../../hooks/useDialog'
-import Settings from '../Settings'
-import { useAccountNotificationStore } from '../../stores/accountNotifications'
 
-export default function AccountListSidebar({
-  selectedAccountId,
-  onAddAccount,
-  onSelectAccount,
-  openAccountDeletionScreen,
-}: {
-  selectedAccountId: number | undefined
+type Props = {
   onAddAccount: () => Promise<number>
   onSelectAccount: (accountId: number) => Promise<void>
   openAccountDeletionScreen: (accountId: number) => Promise<void>
-}) {
+  selectedAccountId?: number
+}
+
+export default function AccountListSidebar({
+  onAddAccount,
+  onSelectAccount,
+  openAccountDeletionScreen,
+  selectedAccountId,
+}: Props) {
   const { openDialog } = useDialog()
   const [accounts, setAccounts] = useState<T.Account[]>([])
-
   const [{ accounts: noficationSettings }] = useAccountNotificationStore()
 
   const selectAccount = async (accountId: number) => {
@@ -100,7 +102,7 @@ export default function AccountListSidebar({
   return (
     <div className={styles.accountListSidebar}>
       {runtime.getRuntimeInfo().isMac && (
-        <div className={styles.macOSTrafficLightBackground}></div>
+        <div className={styles.macOSTrafficLightBackground} />
       )}
       <div className={styles.accountList} onScroll={updateHoverInfoPosition}>
         {accounts.map(account => (
@@ -120,10 +122,13 @@ export default function AccountListSidebar({
         </button>
       </div>
       <div className={styles.buttonsContainer}>
-        <button
-          onClick={openSettings}
-          className={styles.settingsButton}
-        ></button>
+        <button className={styles.settingsButton} onClick={openSettings}>
+          <Icon
+            size={38}
+            className={styles.settingsButtonIcon}
+            icon={'settings'}
+          />
+        </button>
       </div>
       <div className={styles.accountHoverInfoContainer} ref={hoverInfo}>
         {accountForHoverInfo && (

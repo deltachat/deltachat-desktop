@@ -1,12 +1,24 @@
 import React, { Component, useEffect, useState } from 'react'
-import { C, T } from '@deltachat/jsonrpc-client'
 import debounce from 'debounce'
+import { C } from '@deltachat/jsonrpc-client'
 
+import Icon from '../Icon'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { getLogger } from '../../../shared/logger'
 import { runtime } from '../../runtime'
 
 import styles from './styles.module.scss'
+
+import type { T } from '@deltachat/jsonrpc-client'
+
+type Props = {
+  account: T.Account
+  isSelected: boolean
+  muted: boolean
+}
+
+type ConnectivityState = { color: string; label: string }
 
 const log = getLogger('AccountListSidebar/AccountHoverInfo')
 
@@ -14,12 +26,9 @@ export default function AccountHoverInfo({
   account,
   isSelected,
   muted,
-}: {
-  account: T.Account
-  isSelected: boolean
-  muted: boolean
-}) {
-  const tx = window.static_translate
+}: Props) {
+  const tx = useTranslationFunction()
+
   const [bgSyncDisabled, setBgSyncDisabled] = useState<boolean>(false)
   useEffect(() => {
     runtime.getDesktopSettings().then(({ syncAllAccounts }) => {
@@ -51,7 +60,11 @@ export default function AccountHoverInfo({
         )}
         {muted && (
           <div className={styles.hoverInfoProperty}>
-            <div className={styles.hoverInfoMuteIcon} />{' '}
+            <Icon
+              icon='audio-muted'
+              size={12}
+              className={styles.hoverInfoMuteIcon}
+            />{' '}
             {tx('muted')}
           </div>
         )}
@@ -72,7 +85,6 @@ export default function AccountHoverInfo({
   )
 }
 
-type ConnectivityState = { color: string; label: string }
 class Connectivity extends Component<{ accountId: number }, ConnectivityState> {
   accountId = this.props.accountId // don't let react change the used account id
   state = { color: '', label: '' }
@@ -128,7 +140,7 @@ class Connectivity extends Component<{ accountId: number }, ConnectivityState> {
         <div
           className={styles.connectivityDot}
           style={{ backgroundColor: this.state.color }}
-        ></div>{' '}
+        />{' '}
         {this.state.label}
       </>
     )
