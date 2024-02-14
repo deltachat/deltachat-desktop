@@ -34,16 +34,16 @@
   support. You can see an
   [example](https://github.com/deltachat/deltachat-desktop/issues/3582) here
   for a checklist. The exact steps are not further defined in this document
-  (yet). Please consult one of the maintainers of this repository.
+  (yet). Please consult one of the maintainers of this repository
 
 > Both test and official releases follow similar steps described further below.
 
 ## Before Releasing
 
 1. Make sure no "blocking" bugs are in the issue tracker. If there's any, try
-   to solve them first.
-2. Pull translations via `npm run translations-update`.
-3. Update the local help files if necessary.
+   to solve them first
+2. Pull translations via `npm run translations-update`
+3. Update the local help files if necessary
 
 ## Releasing
 
@@ -52,7 +52,7 @@
 2. Update the `CHANGELOG.md` file (put the stuff in "unreleased" under a
    section with your new version code)
 3. Do not forget to update the tag links at the end of the `CHANGELOG.md` file!
-4. Change `version` field in `package.json` to `X.Y.Z`.
+4. Change `version` field in `package.json` to `X.Y.Z`
 5. Run `npm install` to update `package-lock.json`
 6. Open a PR for your branch and get it reviewed.
 7. As soon as your PR is approved merge it to `master`
@@ -63,7 +63,7 @@
     git push origin master --tags
     ```
 9. After the PR is merged create a GitHub release for your tag. Copy the
-   relevant part of the `CHANGELOG.md` file into the description field.
+   relevant part of the `CHANGELOG.md` file into the description field
 10. As soon as the new tag is detected by our build machine, it should be
     picked up, build the new release and upload it to:
     `https://download.delta.chat/desktop/[version_code]`
