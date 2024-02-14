@@ -110,7 +110,7 @@ export default function AccountItem({
   if (bgSyncDisabled) {
     badgeContent = (
       <div
-        className={(styles.accountBadgeIcon, styles.bgSyncDisabled)}
+        className={classNames(styles.accountBadgeIcon, styles.bgSyncDisabled)}
         aria-label='Background sync disabled'
       >
         ⏻
