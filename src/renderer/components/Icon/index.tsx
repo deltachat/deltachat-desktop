@@ -5,6 +5,7 @@ import styles from './styles.module.scss'
 
 export type IconName =
   | 'arrow-left'
+  | 'audio-muted'
   | 'bell'
   | 'brightness-6'
   | 'code-tags'

@@ -6,6 +6,7 @@ import { isImage } from '../components/attachment/Attachment'
 import { jumpToMessage } from '../components/helpers/ChatMethods'
 import { runtime } from '../runtime'
 import SettingsStoreInstance from '../stores/settings'
+import AccountNotificationStoreInstance from '../stores/accountNotifications'
 
 const log = getLogger('renderer/notifications')
 
@@ -33,14 +34,24 @@ function incomingMessageHandler(
     SettingsStoreInstance.state &&
     !SettingsStoreInstance.state.desktopSettings.notifications
   ) {
-    // notifications are turned off
-    log.debug('notification ignored: notifications are turned off')
+    // notifications are turned off for whole app
+    log.debug(
+      'notification ignored: notifications are turned off for whole app'
+    )
     return
   }
 
-  if (document.hasFocus()) {
-    // window has focus don't send notification
-    log.debug('notification ignored: window has focus')
+  if (AccountNotificationStoreInstance.isAccountMuted(accountId)) {
+    // notifications are turned off for account
+    log.debug('notification ignored: notifications are turned off for account')
+    return
+  }
+
+  if (document.hasFocus() && accountId === window.__selectedAccountId) {
+    // window has focus don't send notification for the selected account
+    log.debug(
+      'notification ignored: window has focus and account of the notification is selected'
+    )
     return
   }
 
@@ -223,25 +234,19 @@ function getNotificationIcon(
 
 export function initNotifications() {
   BackendRemote.on('IncomingMsg', (accountId, { chatId, msgId }) => {
-    if (accountId !== window.__selectedAccountId) {
-      // notifications for different accounts are not supported yet
-      return
-    }
     incomingMessageHandler(accountId, chatId, msgId)
   })
   BackendRemote.on('IncomingMsgBunch', accountId => {
     flushNotifications(accountId)
   })
-  runtime.setNotificationCallback(({ accountId, msgId, chatId }) => {
+  runtime.setNotificationCallback(async ({ accountId, msgId, chatId }) => {
     if (window.__selectedAccountId !== accountId) {
-      log.error('notification comes from other account')
-      // TODO implement switch account
-    } else {
-      if (chatId !== 0) {
-        clearNotificationsForChat(accountId, chatId)
-        if (msgId !== 0) {
-          jumpToMessage(msgId, true)
-        }
+      await window.__selectAccount(accountId)
+    }
+    if (chatId !== 0) {
+      clearNotificationsForChat(accountId, chatId)
+      if (msgId !== 0) {
+        jumpToMessage(msgId, true)
       }
     }
   })

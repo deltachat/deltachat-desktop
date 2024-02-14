@@ -1,24 +1,34 @@
 import React, { Component, useEffect, useState } from 'react'
-import { C, T } from '@deltachat/jsonrpc-client'
-import { filesize } from 'filesize'
 import debounce from 'debounce'
+import { C } from '@deltachat/jsonrpc-client'
 
+import Icon from '../Icon'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { getLogger } from '../../../shared/logger'
 import { runtime } from '../../runtime'
 
 import styles from './styles.module.scss'
 
+import type { T } from '@deltachat/jsonrpc-client'
+
+type Props = {
+  account: T.Account
+  isSelected: boolean
+  muted: boolean
+}
+
+type ConnectivityState = { color: string; label: string }
+
 const log = getLogger('AccountListSidebar/AccountHoverInfo')
 
 export default function AccountHoverInfo({
   account,
   isSelected,
-}: {
-  account: T.Account
-  isSelected: boolean
-}) {
-  const tx = window.static_translate
+  muted,
+}: Props) {
+  const tx = useTranslationFunction()
+
   const [bgSyncDisabled, setBgSyncDisabled] = useState<boolean>(false)
   useEffect(() => {
     runtime.getDesktopSettings().then(({ syncAllAccounts }) => {
@@ -48,9 +58,20 @@ export default function AccountHoverInfo({
             <Connectivity accountId={account.id} />
           </div>
         )}
+        {muted && (
+          <div className={styles.hoverInfoProperty}>
+            <Icon
+              icon='audio-muted'
+              size={12}
+              className={styles.hoverInfoMuteIcon}
+            />{' '}
+            {tx('muted')}
+          </div>
+        )}
         {bgSyncDisabled && (
           <div className={styles.hoverInfoProperty}>
-            ⏻ {tx('background_sync_disabled_explaination')}
+            <span className={styles.hoverInfoDisabledIcon}>⏻</span>{' '}
+            {tx('background_sync_disabled_explaination')}
           </div>
         )}
       </>
@@ -60,14 +81,10 @@ export default function AccountHoverInfo({
   return (
     <div className={styles.accountHoverInfo} role='tooltip'>
       {content}
-      <div className={styles.hoverInfoFooter}>
-        <AccountSize accountId={account.id} />
-      </div>
     </div>
   )
 }
 
-type ConnectivityState = { color: string; label: string }
 class Connectivity extends Component<{ accountId: number }, ConnectivityState> {
   accountId = this.props.accountId // don't let react change the used account id
   state = { color: '', label: '' }
@@ -123,35 +140,9 @@ class Connectivity extends Component<{ accountId: number }, ConnectivityState> {
         <div
           className={styles.connectivityDot}
           style={{ backgroundColor: this.state.color }}
-        ></div>{' '}
+        />{' '}
         {this.state.label}
       </>
     )
-  }
-}
-
-class AccountSize extends Component<{ accountId: number }, { size?: string }> {
-  wasDestroyed = false
-  state = { size: undefined }
-
-  async update() {
-    const bytes = await BackendRemote.rpc
-      .getAccountFileSize(this.props.accountId)
-      .catch(log.error)
-    if (!this.wasDestroyed) {
-      this.setState({ size: bytes ? filesize(bytes) : undefined })
-    }
-  }
-
-  componentDidMount(): void {
-    this.update()
-  }
-
-  componentWillUnmount(): void {
-    this.wasDestroyed = true
-  }
-
-  render(): React.ReactNode {
-    return <span>{this.state.size || '?'}</span>
   }
 }

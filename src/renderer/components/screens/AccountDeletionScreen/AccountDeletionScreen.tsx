@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { Component, useEffect, useState } from 'react'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import { filesize } from 'filesize'
 
 import Dialog, {
   DialogBody,
@@ -15,6 +16,9 @@ import { T } from '@deltachat/jsonrpc-client'
 import { BackendRemote } from '../../../backend-com'
 import { Screens } from '../../../ScreenController'
 import { avatarInitial } from '../../Avatar'
+import { getLogger } from '../../../../shared/logger'
+
+const log = getLogger('AccountDeletionScreen')
 
 export default function AccountDeletionScreen({
   selectedAccountId,
@@ -83,6 +87,11 @@ export default function AccountDeletionScreen({
                       <b>{accountInfo.displayName}</b>
                     </div>
                     <div>{accountInfo.addr}</div>
+                    <div>
+                      <div className={styles.accountSize}>
+                        <AccountSize accountId={accountInfo.id} />
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
@@ -114,4 +123,30 @@ export default function AccountDeletionScreen({
       </div>
     </div>
   )
+}
+
+class AccountSize extends Component<{ accountId: number }, { size?: string }> {
+  wasDestroyed = false
+  state = { size: undefined }
+
+  async update() {
+    const bytes = await BackendRemote.rpc
+      .getAccountFileSize(this.props.accountId)
+      .catch(log.error)
+    if (!this.wasDestroyed) {
+      this.setState({ size: bytes ? filesize(bytes) : undefined })
+    }
+  }
+
+  componentDidMount(): void {
+    this.update()
+  }
+
+  componentWillUnmount(): void {
+    this.wasDestroyed = true
+  }
+
+  render(): React.ReactNode {
+    return <span>{this.state.size || '?'}</span>
+  }
 }

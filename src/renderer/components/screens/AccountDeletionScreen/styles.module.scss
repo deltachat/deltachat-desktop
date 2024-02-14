@@ -10,8 +10,8 @@
 }
 
 .avatar {
-  --local-avatar-size: 48px;
-  --local-avatar-font-size: 26px;
+  --local-avatar-size: 55px;
+  --local-avatar-font-size: 37px;
 
   position: relative;
   user-select: none;
@@ -57,4 +57,9 @@
   flex-direction: column;
   margin-left: 8px;
   justify-content: center;
+}
+
+.accountSize {
+  font-size: smaller;
+  color: #c0c0c0;
 }

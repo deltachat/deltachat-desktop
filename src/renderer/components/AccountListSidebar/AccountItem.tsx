@@ -8,11 +8,25 @@ import { getLogger } from '../../../shared/logger'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { useContextMenuWithActiveState } from '../ContextMenu'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
+import AccountNotificationStoreInstance from '../../stores/accountNotifications'
+import Icon from '../Icon'
 
 import styles from './styles.module.scss'
+
 import type { T } from '@deltachat/jsonrpc-client'
 
+type Props = {
+  account: T.Account
+  isSelected: boolean
+  onSelectAccount: (accountId: number) => Promise<void>
+  openAccountDeletionScreen: (accountId: number) => Promise<void>
+  updateAccountForHoverInfo: (actingAccount: T.Account, select: boolean) => void
+  syncAllAccounts: boolean
+  muted: boolean
+}
+
 const log = getLogger('AccountsSidebar/AccountItem')
+
 export default function AccountItem({
   account,
   isSelected,
@@ -20,17 +34,11 @@ export default function AccountItem({
   updateAccountForHoverInfo,
   openAccountDeletionScreen,
   syncAllAccounts,
-}: {
-  account: T.Account
-  isSelected: boolean
-  onSelectAccount: (accountId: number) => Promise<void>
-  openAccountDeletionScreen: (accountId: number) => Promise<void>
-  updateAccountForHoverInfo: (actingAccount: T.Account, select: boolean) => void
-  syncAllAccounts: boolean
-}) {
+  muted,
+}: Props) {
   const tx = useTranslationFunction()
-
   const [unreadCount, setUnreadCount] = useState<number>(0)
+
   useEffect(() => {
     const update = debounce(() => {
       BackendRemote.rpc
@@ -38,11 +46,14 @@ export default function AccountItem({
         .then(u => setUnreadCount(u?.length || 0))
         .catch(log.error)
     }, 200)
+
     update()
+
     const cleanup = [
       onDCEvent(account.id, 'IncomingMsg', update),
       onDCEvent(account.id, 'MsgsNoticed', update),
     ]
+
     return () => cleanup.forEach(off => off())
   }, [account.id])
 
@@ -56,6 +67,19 @@ export default function AccountItem({
           markAccountAsRead(account.id)
         },
       },
+    muted
+      ? {
+          label: tx('menu_unmute'),
+          action: () => {
+            AccountNotificationStoreInstance.effect.setMuted(account.id, false)
+          },
+        }
+      : {
+          label: tx('menu_mute'),
+          action: () => {
+            AccountNotificationStoreInstance.effect.setMuted(account.id, true)
+          },
+        },
     {
       label: tx('menu_all_media'),
       action: async () => {
@@ -81,6 +105,28 @@ export default function AccountItem({
       action: openAccountDeletionScreen.bind(null, account.id),
     },
   ])
+
+  let badgeContent
+  if (bgSyncDisabled) {
+    badgeContent = (
+      <div
+        className={(styles.accountBadgeIcon, styles.bgSyncDisabled)}
+        aria-label='Background sync disabled'
+      >
+        ⏻
+      </div>
+    )
+  } else if (unreadCount > 0) {
+    badgeContent = (
+      <div
+        className={classNames(styles.accountBadgeIcon, {
+          [styles.muted]: muted,
+        })}
+      >
+        {unreadCount}
+      </div>
+    )
+  }
 
   return (
     <div
@@ -119,26 +165,17 @@ export default function AccountItem({
           <div className={styles.content}>?</div>
         </div>
       )}
-
-      <div className={styles.accountBadge}>
-        {!bgSyncDisabled && unreadCount > 0 && (
-          <div className={styles.freshMessageCounter}>{unreadCount}</div>
-        )}
-        {bgSyncDisabled && (
-          <div
-            className={styles.bgSyncDisabled}
-            title=''
-            aria-label='Background sync disabled'
-          >
-            ⏻
-          </div>
-        )}
-      </div>
+      {muted && (
+        <div aria-label='Account notifications muted'>
+          <Icon className={styles.accountMutedIcon} icon='audio-muted' />
+        </div>
+      )}
+      <div className={classNames(styles.accountBadge)}>{badgeContent}</div>
     </div>
   )
 }
-// marks all chats with fresh messages as noticed
 
+// Marks all chats with fresh messages as noticed
 async function markAccountAsRead(accountId: number) {
   const msgs = await BackendRemote.rpc.getFreshMsgs(accountId)
   const messages = await BackendRemote.rpc.getMessages(accountId, msgs)

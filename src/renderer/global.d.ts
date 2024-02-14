@@ -15,7 +15,7 @@ declare global {
     }
     __userFeedback: (message: userFeedback | false) => void
     __changeScreen: (screen: Screens) => void
-    __selectAccount: (accountId: number) => void
+    __selectAccount: (accountId: number) => Promise<void>
     readonly __selectedAccountId: number | undefined
     __screen: Screens
     __contextMenuActive: boolean
