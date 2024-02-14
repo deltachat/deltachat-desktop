@@ -12,8 +12,9 @@
       <li><a href="#umí-delta-chat-pracovat-s-e-maily-v-html">Umí Delta Chat pracovat s e-maily v HTML?</a></li>
       <li><a href="#proč-musím-delta-chatu-zadat-mé-e-mailové-heslo-je-to-bezpečné">Proč musím Delta Chatu zadat mé e-mailové heslo? Je to bezpečné?</a></li>
       <li><a href="#jaká-oprávnění-delta-chat-potřebuje">Jaká oprávnění Delta Chat potřebuje?</a></li>
-      <li><a href="#what-means-pinning-muting-archiving">What means Pinning, Muting, Archiving?</a></li>
+      <li><a href="#what-do-pinning-muting-and-archiving-mean">What do Pinning, Muting and Archiving mean?</a></li>
       <li><a href="#what-does-the-green-dot-mean">What does the green dot mean?</a></li>
+      <li><a href="#ephemeralmsgs">How do disappearing messages work?</a></li>
       <li><a href="#how-can-i-delete-my-account">How can I delete my account?</a></li>
     </ul>
   </li>
@@ -330,10 +331,10 @@ Zde je co Delta Chat dělá s těmito povoleními:</p>
   </li>
 </ul>
     
-      <h3 id="what-means-pinning-muting-archiving">
+      <h3 id="what-do-pinning-muting-and-archiving-mean">
         
         
-          What means Pinning, Muting, Archiving? <a href="#what-means-pinning-muting-archiving" class="anchor"></a>
+          What do Pinning, Muting and Archiving mean? <a href="#what-do-pinning-muting-and-archiving-mean" class="anchor"></a>
         
         
       </h3>
@@ -387,6 +388,41 @@ space ;-)</li>
 have turned off read receipts, they will not see the green dot until you
 message them or write to a group they’re in as well.</li>
 </ul>
+    
+      <h3 id="ephemeralmsgs">
+        
+        
+          How do disappearing messages work? <a href="#ephemeralmsgs" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>You can turn on “disappearing messages”
+in the settings of a chat,
+at the top right of the chat window,
+by selecting a time span
+between 1 minute and 5 weeks.</p>
+
+<p>Until the setting is turned off again,
+each chat member’s Delta Chat app takes care
+of deleting the messages
+after the selected time span.
+The time span begins
+when the receiver first sees the message in Delta Chat.
+The messages are deleted
+both in each email account on the server,
+and in the app itself.</p>
+
+<p>Note that you can rely on disappearing messages
+only as long as you trust your chat partners;
+malicious chat partners can take photos,
+or otherwise save, copy or forward messages before deletion.</p>
+
+<p>Apart from that,
+if one chat partner uninstalls Delta Chat,
+the messages will not get deleted from their email account.
+They will most likely also not be decryptable anymore
+(as long as they were encrypted in the first place).</p>
     
       <h3 id="how-can-i-delete-my-account">
         
@@ -558,7 +594,7 @@ Autocrypt uses a limited and <a href="#openpgp-secure">secure subset of the Open
 End-to-End encrypted messages are marked with a padlock 
 <img style="vertical-align:middle; width:1.2em; margin:1px" src="../lock-icon.png" alt="padlock" />.</p>
 
-<p><a href="https://countermitm.readthedocs.io/en/latest/new.html">Secure-Join protocols</a>
+<p><a href="https://securejoin.delta.chat/en/latest/new.html">Secure-Join protocols</a>
 are used for establishing chats with guaranteed end-to-end encryption 
 which protects against network attacks and compromised servers.
 Chats marked with a green checkmark 
@@ -631,7 +667,7 @@ that you see from your chat partner in a second channel.</p>
 
 <p><strong>Both Inviter and Joiner</strong>:</p>
 
-<p>Wait while <a href="https://countermitm.readthedocs.io/en/latest/new.html#setup-contact-protocol">Secure-Join network messages are exchanged</a> between both devices.</p>
+<p>Wait while <a href="https://securejoin.delta.chat/en/latest/new.html#setup-contact-protocol">Secure-Join network messages are exchanged</a> between both devices.</p>
 
 <ul>
   <li>
@@ -685,7 +721,7 @@ but there is no green checkmark in the profile title.
 This usually means that the contact <a href="#nocryptanymore">“sent a message from another device”</a>.</p>
 
 <p>For more in-depth discussion of “guaranteed end-to-end encryption”
-please see <a href="https://countermitm.readthedocs.io/en/latest/new.html">Secure-Join protocols</a>
+please see <a href="https://securejoin.delta.chat/en/latest/new.html">Secure-Join protocols</a>
 and specifically read about “Verified Groups”, the technical term
 of what is called here “green-checkmarked” or “guaranteed end-to-end encrypted” chats.</p>
     
@@ -991,10 +1027,10 @@ even if the direct chat between you two has a
 <p>The best way to ensure every message is end-to-end encrypted,
 and metadata deleted as quickly as possible
 is <a href="#howtoe2ee">using chats with guaranteed end-to-end encryption</a>
-and turning on disappearing messages.</p>
+and turning on <a href="#ephemeralmsgs">disappearing messages</a>.</p>
 
-<p>Guranteed end-to-end encrypted chats protect against <a href="https://en.wikipedia.org/wiki/Man-in-the-middle_attack">MITM attacks</a>
-and turning on “disappearing messages” deletes the messages
+<p>Guaranteed end-to-end encrypted chats protect against <a href="https://en.wikipedia.org/wiki/Man-in-the-middle_attack">MITM attacks</a>
+and turning on disappearing messages deletes the messages
 on the server after a user-configured time.</p>
 
 <p>If you don’t need a longer-lived copy of your messages on the server, 
@@ -1074,9 +1110,12 @@ Caution: Make sure the key is not protected by a password, or remove the passwor
       </h3>
 
 <p>Nejpravděpodobnější příčinou jsou zašifrované klíče, nebo klíče s heslem. 
-Takové klíče Delta Chat nepodporuje.  Můžeš odstranit šifrování nebo heslo a 
+Takové klíče Delta Chat nepodporuje.  Můžeš odstranit šifrování nebo heslo a 
 zkusit to znovu. Pokud je potřeba použít zaheslovaný klíč vytvoř / použij zástupnou 
 adresua a pak přidej nový Delta Chat účet s tímto klíčem.</p>
+
+<p>Another common error is having the wrong file ending.
+Use the ASCII armored format and an <code class="language-plaintext highlighter-rouge">.asc</code> file ending.</p>
 
 <p>Delta Chat podporuje běžné formáty OpenPGP klíčů, nicméně neočekáváme, 
 že soukromé klíče ze všech aplikací budou fungovat. To není cíl, a 
@@ -1143,9 +1182,18 @@ One device is not needed for the other to work.</p>
     <p>Double-check both devices are in the <strong>same Wi-Fi or network</strong></p>
   </li>
   <li>
+    <p>On <strong>Windows</strong>, go to <strong>Control Panel / Network and Internet</strong>
+and make sure, <strong>Private Network</strong> is selected as “Network profile type”
+(after transfer, you can change back to the original value)</p>
+  </li>
+  <li>
     <p>Your system might have a “personal firewall”,
 which is known to cause problems (especially on Windows).
 <strong>Disable the personal firewall</strong> for Delta Chat on both ends and try again</p>
+  </li>
+  <li>
+    <p><strong>Guest Networks</strong> may not allow devices to communicate with each other.
+If possible, use a non-guest network.</p>
   </li>
   <li>
     <p>Ensure there is <strong>enough storage</strong> on the destination device</p>

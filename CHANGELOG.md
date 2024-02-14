@@ -51,6 +51,7 @@
 - Add more versions to about dialog and update the order of information #3677
 - Refactor message meta data component #3678
 - Use overlay in context menu #3682
+- Update local help (2024-02-14)
 
 ### Fixed
 - Silently fail when notifications are not supported by OS #3613
