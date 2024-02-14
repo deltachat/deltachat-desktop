@@ -17,7 +17,7 @@
 - Add multiaccount notifications and mute/disable notifications for specific accounts #3680
 
 ### Changed
-- Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.134.0`
+- Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.135.0`
 - Update `electron` from `v26.6.0` to version `v26.6.3`
 - Update `filesize` dependency from `8.0.6` to `10.1.0`
 - Introduce text formatting for chatlist item summary (use message-parser) #3476
@@ -62,7 +62,7 @@
 - Delete old themes before rebuilding in build process #3645
 - More contrast for audio elements in dark mode #3653
 - Fix fullscreen view for avatar images #3669
-- fix display of avatars with spaces in the name #3669
+- Fix display of avatars with spaces in the name #3669
 - Show search bar when searching chat in archived mode #3679
 
 ### Removed
