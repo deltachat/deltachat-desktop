@@ -98,7 +98,11 @@
         overflow: hidden;
         pointer-events: none;
         position: absolute;
-        top: calc(calc(var(--als-avatar-size) / 2) - calc(var(--als-active-indicator-height) / 2));
+        top: calc(
+          calc(var(--als-avatar-size) / 2) - calc(
+              var(--als-active-indicator-height) / 2
+            )
+        );
         width: 8px;
       }
 
