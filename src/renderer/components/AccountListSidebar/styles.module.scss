@@ -196,12 +196,12 @@
   padding: 0 4pt;
   text-align: center;
 
-  .bgSyncDisabled {
+  &.bgSyncDisabled {
     background-color: grey;
     padding: 0 3pt;
   }
 
-  .muted {
+  &.muted {
     background-color: grey;
   }
 }
