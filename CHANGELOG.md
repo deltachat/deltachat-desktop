@@ -17,7 +17,7 @@
 - Prefer light theme for the help and webxdc loading pages
 - Helper method to easily use confirmation dialogs #3601
 - Refactor using new `useConfirmationDialog` hook #3602
-- Add multi selecting messages for forwarding and deleting
+- Add multi selecting messages for forwarding and deleting #3602
 
 <a id="1_42_2"></a>
 
