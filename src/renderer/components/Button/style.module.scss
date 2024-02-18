@@ -19,7 +19,10 @@
     background-clip: unset;
     background-color: var(--bp4-input-focused);
     box-shadow: none;
+    color: var(--bp4ButtonText) !important;
   }
+
+  
 
   &:disabled {
     color: grey;
