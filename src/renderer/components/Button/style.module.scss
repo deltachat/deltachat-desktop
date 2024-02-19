@@ -19,7 +19,7 @@
 
   &:disabled {
     color: grey;
-    cursor: default;
+    cursor: not-allowed;
 
     &:hover {
       background-color: transparent;
@@ -35,12 +35,12 @@
     letter-spacing: 1px;
   }
 
-  &.primary {
-    color: var(--colorPrimary);
-  }
-
   &.danger {
     color: var(--colorDanger);
+  }
+
+  &.primary {
+    color: var(--colorPrimary);
   }
 
   &.secondary {
@@ -61,7 +61,6 @@
       background-color: rgba(206, 217, 224, 0.5);
       border-color: rgba(206, 217, 224, 0.5);
       color: var(--globalText);
-      cursor: not-allowed;
 
       &:hover {
         background-color: rgba(206, 217, 224, 0.5);
