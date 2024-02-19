@@ -6,31 +6,31 @@
 
 ## Test releases
 
-* Before every official release we make at least one test release, similar to
+- Before every official release we make at least one test release, similar to
   "Release Candidates"
-* Test releases are published to supporters and the userbase through our
+- Test releases are published to supporters and the userbase through our
   community channels, but not through official app stores
-* Create a forum post to inform about the test release, mention what this
+- Create a forum post to inform about the test release, mention what this
   release is about and what should be tested, here is an
   [example](https://support.delta.chat/t/help-testing-the-upcoming-1-41-x-release/2793)
-* The goal is to do more broad user testing, looking for issues which came up
+- The goal is to do more broad user testing, looking for issues which came up
   and gathering feedback
-* Usually after a round of feedback and bug reports we do another test release
+- Usually after a round of feedback and bug reports we do another test release
   and repeat, until the release stabilized
-* Optional: We can use flatpack for test releases as well (they have a
+- Optional: We can use flatpack for test releases as well (they have a
   "testing" branch users can opt-in)
-* Optional: Draft an in-app device message for the new version informing users
+- Optional: Draft an in-app device message for the new version informing users
   of the release highlights and also thanking the testers for testing the app
 
 ## Official releases
 
-* Make sure the latest version number is reflected on the official DeltaChat
+- Make sure the latest version number is reflected on the official DeltaChat
   website, adjust the constants in this file:
   https://github.com/deltachat/deltachat-pages/blob/master/_includes/download-boxes.html
-* An in-app device message for the new official release should exist, if there
+- An in-app device message for the new official release should exist, if there
   is no highlight to mention we can say it's a release focused on stability and
   bug fixes
-* Official releases require individual building steps for each platform we
+- Official releases require individual building steps for each platform we
   support. You can see an
   [example](https://github.com/deltachat/deltachat-desktop/issues/3582) here
   for a checklist. The exact steps are not further defined in this document
@@ -58,10 +58,10 @@
 7. As soon as your PR is approved merge it to `master`
 8. Checkout the latest version on `master` after merging. Tag the latest commit
    with your version number:
-    ```bash
-    git tag <tagname> # for example v1.43.2
-    git push origin master --tags
-    ```
+   ```bash
+   git tag <tagname> # for example v1.43.2
+   git push origin master --tags
+   ```
 9. After the PR is merged create a GitHub release for your tag. Copy the
    relevant part of the `CHANGELOG.md` file into the description field
 10. As soon as the new tag is detected by our build machine, it should be
