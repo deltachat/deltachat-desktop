@@ -398,7 +398,7 @@ export default function Message(props: {
     // Some info messages can be clicked by the user to receive further information
     const isInteractive =
       (isWebxdcInfo && message.parentId) ||
-      isProtectionEnabledMsg ||
+      isProtectionBrokenMsg ||
       isProtectionEnabledMsg ||
       isInvalidUnencryptedMail
 
