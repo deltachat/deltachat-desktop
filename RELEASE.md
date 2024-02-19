@@ -31,10 +31,23 @@
   is no highlight to mention we can say it's a release focused on stability and
   bug fixes
 - Official releases require individual building steps for each platform we
-  support. You can see an
-  [example](https://github.com/deltachat/deltachat-desktop/issues/3582) here
-  for a checklist. The exact steps are not further defined in this document
-  (yet). Please consult one of the maintainers of this repository
+  support. The exact steps are not further defined in this document (yet).
+  Please consult one of the maintainers of this repository
+- When making an official release create a new issue following this template to
+  track its status:
+  ```
+  - [ ] DeltaChat Website
+  - [ ] flathub
+  - [ ] GitHub release
+       - [ ] downloadable files also on GitHub
+  - [ ] MacOS store
+  - [ ] Windows store
+  - [ ] homebrew
+  - [ ] aur
+  - [ ] nix
+  - [ ] (community) snap
+  ```
+  See [example](https://github.com/deltachat/deltachat-desktop/issues/3582)
 
 > Both test and official releases follow similar steps described further below.
 
