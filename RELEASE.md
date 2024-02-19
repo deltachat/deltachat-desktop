@@ -88,3 +88,21 @@
 
 Rebase your PR and redo the steps as necessary. If you are unsure ask another
 contributor on how to proceed in your case.
+
+## Upload build artefacts to GitHub release
+
+You can easily upload the build artefacts into the GitHub release with the help
+of the [GitHub command line tool](https://cli.github.com/). Make sure you've
+followed all steps above and the CI finished its build.
+
+```bash
+# Specify the version you've just released
+export DC_VERSION=v1.42.2
+
+# Download build artefacts from CI
+wget -r --no-parent -l1 --reject html https://download.delta.chat/desktop/$DC_VERSION
+rm download.delta.chat/desktop/$DC_VERSION/*index.html*
+
+# Upload them to the GitHub release
+gh release upload -R deltachat/deltachat-desktop $DC_VERSION download.delta.chat/desktop/$DC_VERSION/*
+```
