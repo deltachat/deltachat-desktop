@@ -49,6 +49,8 @@
   ```
   See [example](https://github.com/deltachat/deltachat-desktop/issues/3582)
 
+---
+
 > Both test and official releases follow similar steps described further below.
 
 ## Before Releasing
