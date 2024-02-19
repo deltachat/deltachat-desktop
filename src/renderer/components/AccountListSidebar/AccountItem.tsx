@@ -166,7 +166,10 @@ export default function AccountItem({
         </div>
       )}
       {muted && (
-        <div aria-label='Account notifications muted'>
+        <div
+          aria-label='Account notifications muted'
+          className={styles.accountMutedIconShadow}
+        >
           <Icon className={styles.accountMutedIcon} icon='audio-muted' />
         </div>
       )}
