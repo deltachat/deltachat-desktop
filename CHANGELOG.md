@@ -12,6 +12,7 @@
 
 ### Fixed
 - Fix broken styles for muted and turned off account badges in multiaccount sidebar #3691
+- "Broken protection" message did not allow opening info dialog on tap #3695
 
 ## [1.43.0] - 2024-02-14
 
