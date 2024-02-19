@@ -13,6 +13,7 @@
 ### Changed
 - Upgrade `electron` from `v26.6.3` to version `v28.2.3` #3693
 - Refactor buttons #3605
+- Update translations (2024-02-19)
 
 ### Fixed
 - Fix broken styles for muted and turned off account badges in multiaccount sidebar #3691
