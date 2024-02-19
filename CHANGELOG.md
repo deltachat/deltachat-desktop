@@ -2,17 +2,23 @@
 
 ## [Unreleased][unreleased]
 
-<a id="1_43_0"></a>
+<a id="1_43_1"></a>
 
-> Due to the electron update macOS 10.13 (High Sierra) and macOS 10.14 (Mojave) are no longer supported, macOS 10.15 (Catalina) or later is the new requirement.
+## [1.43.1] - 2024-02-19
+
+> Due to the electron update macOS 10.13 (High Sierra) and macOS 10.14 (Mojave)
+> are no longer supported, macOS 10.15 (Catalina) or later is the new
+> requirement.
 
 ### Changed
-- upgrade `electron` from `v26.6.3` to version `v28.2.3`
+- Upgrade `electron` from `v26.6.3` to version `v28.2.3` #3693
 - Refactor buttons #3605
 
 ### Fixed
 - Fix broken styles for muted and turned off account badges in multiaccount sidebar #3691
 - "Broken protection" message did not allow opening info dialog on tap #3695
+
+<a id="1_43_0"></a>
 
 ## [1.43.0] - 2024-02-14
 
@@ -2435,7 +2441,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.43.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.43.1...HEAD
+
+[1.43.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.43.0...v1.43.1
 
 [1.43.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.42.2...v1.43.0
 
