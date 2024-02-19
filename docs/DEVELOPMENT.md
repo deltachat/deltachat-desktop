@@ -203,7 +203,7 @@ The commands for windows10 appx and the App Store package for mac are currently 
 
 ### Release Workflow <a id="release"></a>
 
-see [RELEASE_WORKFLOW.md](RELEASE_WORKFLOW.md)
+See [RELEASE.md](./RELEASE.md)
 
 ### Code Structure <a id="code-structure"></a>
 
