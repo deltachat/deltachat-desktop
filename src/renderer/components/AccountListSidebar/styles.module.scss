@@ -43,7 +43,7 @@
   background-color: var(--accountSidebarBg);
   display: flex;
   flex-direction: column;
-  min-width: 66px;
+  min-width: 68px;
   overflow: hidden;
 
   .accountList {
@@ -94,7 +94,7 @@
         border-radius: 20px;
         content: ' ';
         height: var(--als-active-indicator-height);
-        margin-inline-start: -15.5px;
+        margin-inline-start: -16.5px;
         overflow: hidden;
         pointer-events: none;
         position: absolute;
