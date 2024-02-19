@@ -1,25 +1,20 @@
 .button {
   background-color: transparent;
-  background-image: unset;
   border-color: transparent;
   border-radius: 2px;
   border-style: solid;
-  color: var(--colorNone);
+  color: var(--bp4ButtonText);
   cursor: pointer;
   font-size: initial;
   font-weight: bold;
   letter-spacing: 2px;
-  margin-bottom: 0px;
-  padding: 0 2px;
+  margin-bottom: 0;
   padding: 5px;
   text-align: center;
   text-transform: uppercase;
 
   &:hover {
-    background-clip: unset;
-    background-color: var(--bp4-input-focused);
-    box-shadow: none;
-    color: var(--bp4ButtonText) !important;
+    background-color: var(--chatListItemBgHover);
   }
 
   &:disabled {
@@ -27,13 +22,12 @@
     cursor: default;
 
     &:hover {
-      background-color: none;
-      cursor: default;
+      background-color: transparent;
     }
   }
 
   &.no-padding {
-    padding: 0px;
+    padding: 0;
   }
 
   &.light-bold {
@@ -52,30 +46,25 @@
   &.secondary {
     background-color: var(--bp4ButtonBg);
     border-color: var(--bp4ButtonText);
-    border-style: solid;
-    border: 1px;
-    color: var(--bp4ButtonText);
+    border-width: 1px;
   }
 
   &.round {
-    background-color: var(--bp4-input-focused) !important;
-    border-color: var(--bp4-input-focused) !important;
+    background-color: var(--bp4-input-focused);
+    border-color: var(--bp4-input-focused);
     border-radius: 8px;
-    border-style: solid !important;
-    box-shadow: none;
     color: white;
-    margin: 10px 0px !important;
+    margin: 10px 0;
     padding: 10px 15px;
 
     &:disabled {
-      background-color: rgba(206, 217, 224, 0.5) !important;
-      background-image: none;
-      border-color: rgba(206, 217, 224, 0.5) !important;
+      background-color: rgba(206, 217, 224, 0.5);
+      border-color: rgba(206, 217, 224, 0.5);
       color: var(--globalText);
       cursor: not-allowed;
 
       &:hover {
-        background-color: rgba(206, 217, 224, 0.5) !important;
+        background-color: rgba(206, 217, 224, 0.5);
       }
     }
   }
