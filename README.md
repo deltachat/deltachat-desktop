@@ -1,7 +1,5 @@
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
-[![Packaging status](https://repology.org/badge/vertical-allrepos/deltachat-desktop.svg)](https://repology.org/project/deltachat-desktop/versions)
-
 # Delta Chat Desktop <a id="deltachat-desktop"></a>
 
 **Desktop Application for [delta.chat](https://delta.chat)**
@@ -73,6 +71,8 @@
 ## Install <a id="install"></a>
 
 The application can be downloaded from **<https://get.delta.chat>**. Here you'll find binary releases for all supported platforms. See below for platform specific instructions. If you run into any problems please consult the [Troubleshooting](#troubleshooting) section below.
+
+[![Packaging status](https://repology.org/badge/vertical-allrepos/deltachat-desktop.svg)](https://repology.org/project/deltachat-desktop/versions)
 
 ### Linux <a id="linux"></a>
 
