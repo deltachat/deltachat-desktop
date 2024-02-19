@@ -1,5 +1,7 @@
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
+[![Packaging status](https://repology.org/badge/vertical-allrepos/deltachat-desktop.svg)](https://repology.org/project/deltachat-desktop/versions)
+
 # Delta Chat Desktop <a id="deltachat-desktop"></a>
 
 **Desktop Application for [delta.chat](https://delta.chat)**

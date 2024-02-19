@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- Add repology badge to README #3696
+
 <a id="1_43_1"></a>
 
 ## [1.43.1] - 2024-02-19
