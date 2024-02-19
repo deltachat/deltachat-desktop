@@ -129,39 +129,3 @@ $paddingVertical: 20px;
     justify-content: center;
   }
 }
-
-.footerActionButton {
-  align-items: center;
-  background-color: transparent;
-  border-radius: 5px;
-  border: 0;
-  color: var(--colorPrimary);
-  cursor: pointer;
-  display: flex;
-  font-size: initial;
-  font-weight: bold;
-  letter-spacing: 2px;
-  padding: 10px;
-  text-transform: uppercase;
-
-  &:hover {
-    background-color: var(--chatListItemBgHover);
-  }
-
-  &:disabled {
-    color: grey;
-    cursor: default;
-
-    &:hover {
-      background-color: transparent;
-    }
-  }
-
-  & + & {
-    margin-left: 1px;
-  }
-
-  &.danger {
-    color: var(--colorDanger);
-  }
-}

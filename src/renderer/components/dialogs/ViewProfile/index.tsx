@@ -24,6 +24,7 @@ import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import useDialog from '../../../hooks/useDialog'
 import { MessagesDisplayContext } from '../../../contexts/MessagesDisplayContext'
 import ProfileInfoHeader from '../../ProfileInfoHeader'
+import Button from '../../Button'
 
 import styles from './styles.module.scss'
 
@@ -251,14 +252,13 @@ export function ViewProfileInner({
           }}
         >
           {!isDeviceChat && (
-            <button
+            <Button
               aria-label={tx('send_message')}
               onClick={onSendMessage}
-              className={'delta-button-round'}
-              style={{ marginTop: '0px' }}
+              round
             >
               {tx('send_message')}
-            </button>
+            </Button>
           )}
         </div>
         {statusText != '' && (

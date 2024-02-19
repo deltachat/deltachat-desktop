@@ -35,6 +35,7 @@ import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 import ProfileInfoHeader from '../ProfileInfoHeader'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import Button from '../Button'
 
 const log = getLogger('renderer/ViewGroup')
 
@@ -523,21 +524,21 @@ export function GroupImageSelector({
         <span style={{ backgroundColor: groupColor }}>{initial}</span>
       )}
       <>
-        <button
+        <Button
           aria-label={tx('change_group_image')}
           onClick={onClickSelectGroupImage}
-          className={'delta-button-round'}
+          round
         >
           {tx('change_group_image')}
-        </button>
-        <button
+        </Button>
+        <Button
           aria-label={tx('remove_group_image')}
           onClick={onClickRemoveGroupImage}
-          className={'delta-button-round'}
+          round
           disabled={groupImage === '' || groupImage === null}
         >
           {tx('remove_group_image')}
-        </button>
+        </Button>
       </>
     </div>
   )
