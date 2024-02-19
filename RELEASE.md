@@ -79,9 +79,10 @@
    ```
 9. After the PR is merged create a GitHub release for your tag. Copy the
    relevant part of the `CHANGELOG.md` file into the description field
-10. As soon as the new tag is detected by our build machine, it should be
-    picked up, build the new release and upload it to:
-    `https://download.delta.chat/desktop/[version_code]`
+10. As soon as the new tag is detected by our build machine, it will start
+    building releases for various platforms (MacOS, Windows, Linux) and upload
+    them to: `https://download.delta.chat/desktop/[version_code]`. This process
+    takes 2-3 hours.
 
 ## What if the master branch changed in the meantime
 
