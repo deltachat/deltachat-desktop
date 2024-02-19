@@ -57,8 +57,10 @@
 
 1. Make sure no "blocking" bugs are in the issue tracker. If there's any, try
    to solve them first
-2. Pull translations via `npm run translations-update`
+2. Pull translations via `npm run translations-update`, 
 3. Update the local help files if necessary
+4. If you've updated any translations or local help files, make sure that the
+   date of your update is mentioned in the `CHANGELOG.md`
 
 ## Releasing
 
