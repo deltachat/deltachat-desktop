@@ -37,7 +37,7 @@
 
 [How to do end to end testing](./docs/E2E-TESTING.md)
 
-[How to do a release](./docs/RELEASE_WORKFLOW.md)
+[How to do a release](./RELEASE.md)
 
 </td>
 </tr>
