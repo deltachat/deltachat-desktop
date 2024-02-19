@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- slightly wider account sidebar (so trafic lights look more centered on macOS) #3698
+
 <a id="1_43_1"></a>
 
 ## [1.43.1] - 2024-02-19
