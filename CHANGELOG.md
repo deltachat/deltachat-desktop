@@ -4,6 +4,11 @@
 
 <a id="1_43_0"></a>
 
+> Due to the electron update macOS 10.13 (High Sierra) and macOS 10.14 (Mojave) are no longer supported, macOS 10.15 (Catalina) or later is the new requirement.
+
+### Changed
+- upgrade `electron` from `v26.6.3` to version `v28.2.3`
+
 ### Fixed
 - Fix broken styles for muted and turned off account badges in multiaccount sidebar #3691
 
