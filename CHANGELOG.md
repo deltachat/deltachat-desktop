@@ -3,7 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Changed
-- slightly wider account sidebar (so trafic lights look more centered on macOS) #3698
+- slightly wider account sidebar (so traffic lights look more centered on macOS) #3698
 
 <a id="1_43_1"></a>
 
