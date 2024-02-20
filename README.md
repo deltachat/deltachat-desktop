@@ -72,6 +72,8 @@
 
 The application can be downloaded from **<https://get.delta.chat>**. Here you'll find binary releases for all supported platforms. See below for platform specific instructions. If you run into any problems please consult the [Troubleshooting](#troubleshooting) section below.
 
+[![Packaging status](https://repology.org/badge/vertical-allrepos/deltachat-desktop.svg)](https://repology.org/project/deltachat-desktop/versions)
+
 ### Linux <a id="linux"></a>
 
 #### Flatpak <a id="flatpak"></a>
