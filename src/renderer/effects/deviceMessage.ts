@@ -16,7 +16,7 @@ const WHATS_NEW_TEXT = `What's new in 1.42.0?
 
 Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1_42_0`
 
-export const addChangelogOnAccountChange = atomEffect(get => {
+export const updateChangelog = atomEffect(get => {
   const accountId = get(selectedAccountId)
   if (accountId !== null) {
     backend.addDeviceMessage(accountId, WHATS_NEW_LABEL, {
