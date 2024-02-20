@@ -20,3 +20,7 @@ export async function selectAccount(accountId: number) {
   await BackendRemote.rpc.startIo(accountId)
   runtime.setDesktopSetting('lastAccount', accountId)
 }
+
+export async function getAccountInfo(accountId: number) {
+  return await BackendRemote.rpc.getAccountInfo(accountId)
+}
