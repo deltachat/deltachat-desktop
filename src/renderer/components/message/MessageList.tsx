@@ -11,10 +11,7 @@ import { C, T } from '@deltachat/jsonrpc-client'
 import moment from 'moment'
 
 import { MessageWrapper } from './MessageWrapper'
-import ChatStore, {
-  useChatStore,
-  ChatStoreStateWithChatSet,
-} from '../../stores/chat'
+import ChatStore, { ChatStoreStateWithChatSet } from '../../stores/chat'
 import { getLogger } from '../../../shared/logger'
 import { KeybindAction } from '../../keybindings'
 import { selectedAccountId } from '../../ScreenController'
@@ -408,7 +405,11 @@ export default function MessageList({
 
   return (
     <MessagesDisplayContext.Provider
-      value={{ context: 'chat_messagelist', chatId: chatStore.chat.id }}
+      value={{
+        context: 'chat_messagelist',
+        chatId: chatStore.chat.id,
+        isDeviceChat: chatStore.chat.isDeviceChat,
+      }}
     >
       <MessageListInner
         onScroll={onScroll}

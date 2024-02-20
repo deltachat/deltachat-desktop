@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { LinkDestination } from '@deltachat/message_parser_wasm'
 
 import { DeltaCheckbox } from '../contact/ContactListItem'
 import { getLogger } from '../../../shared/logger'
-import chatStore from '../../stores/chat'
 import reactStringReplace from 'react-string-replace'
 import { runtime } from '../../runtime'
 import { openLinkSafely } from '../helpers/LinkConfirmation'
@@ -18,6 +17,7 @@ import useDialog from '../../hooks/useDialog'
 import { OpenDialog } from '../../contexts/DialogContext'
 import processOpenQrUrl from '../helpers/OpenQrUrl'
 import { isInviteLink } from '../../../shared/util'
+import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
 
 const log = getLogger('renderer/LabeledLink')
 
@@ -44,6 +44,7 @@ export const LabeledLink = ({
   destination: LinkDestination
 }) => {
   const { openDialog, closeDialog } = useDialog()
+  const messageDisplay = useContext(MessagesDisplayContext)
   const { target, punycode, hostname } = destination
 
   // encode the punycode to make phishing harder
@@ -53,7 +54,10 @@ export const LabeledLink = ({
   const onClick = (ev: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     ev.preventDefault()
     ev.stopPropagation()
-    const isDeviceChat = chatStore.getState().chat?.isDeviceChat
+    const isDeviceChat =
+      messageDisplay?.context == 'chat_messagelist'
+        ? messageDisplay.isDeviceChat
+        : false
 
     if (isInviteLink(target)) {
       processOpenQrUrl(openDialog, closeDialog, target)
