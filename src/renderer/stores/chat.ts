@@ -268,7 +268,6 @@ export const useChatStore2 = () => {
 }
 
 export default chatStore
-window.__chatStore = chatStore
 
 export type ChatStoreDispatch = Store<ChatStoreState>['dispatch']
 
