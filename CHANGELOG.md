@@ -8,7 +8,7 @@
 
 ### Changed
 - slightly wider account sidebar (so traffic lights look more centered on macOS) #3698
-- remove chatstore global for prevention of possible race condition #3700
+- refactor some components to not use the chatstore singleton directly #3700
 
 
 <a id="1_43_1"></a>
