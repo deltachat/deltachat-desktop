@@ -292,9 +292,7 @@ img-src 'self' data:;
 media-src 'self' data:;
 style-src 'self' data: 'unsafe-inline';
 form-action 'none';
-script-src 'none';`
-  .split('\n')
-  .join('') // since new electron version there can not be linebreaks in the header anymore: https://github.com/deltachat/deltachat-desktop/issues/3701
+script-src 'none';`.replace(/\n/g, '') // since new electron version there can not be linebreaks in the header anymore: https://github.com/deltachat/deltachat-desktop/issues/3701
 const CSP_ALLOW = `
 default-src 'none';
 font-src 'self' data: http: https:;
@@ -304,9 +302,7 @@ media-src 'self' data: http: https:;
 style-src 'self' 'unsafe-inline';
 form-action 'none';
 script-src 'none';
-`
-  .split('\n')
-  .join('') // since new electron version there can not be linebreaks in the header anymore: https://github.com/deltachat/deltachat-desktop/issues/3701
+`.replace(/\n/g, '') // since new electron version there can not be linebreaks in the header anymore: https://github.com/deltachat/deltachat-desktop/issues/3701
 
 function makeBrowserView(
   account_id: number,
