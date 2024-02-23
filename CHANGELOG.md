@@ -10,6 +10,9 @@
 - slightly wider account sidebar (so traffic lights look more centered on macOS) #3698
 - refactor some components to not use the chatstore singleton directly #3700
 
+### Fixed
+- fix broken html email window (CSP got broken with the recent electron update) #3704
+
 
 <a id="1_43_1"></a>
 

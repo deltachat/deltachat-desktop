@@ -292,7 +292,7 @@ img-src 'self' data:;
 media-src 'self' data:;
 style-src 'self' data: 'unsafe-inline';
 form-action 'none';
-script-src 'none';`
+script-src 'none';`.replace(/\n/g, '')
 const CSP_ALLOW = `
 default-src 'none';
 font-src 'self' data: http: https:;
@@ -302,7 +302,7 @@ media-src 'self' data: http: https:;
 style-src 'self' 'unsafe-inline';
 form-action 'none';
 script-src 'none';
-`
+`.replace(/\n/g, '')
 
 function makeBrowserView(
   account_id: number,
