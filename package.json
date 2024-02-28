@@ -95,6 +95,7 @@
     "mapbox-gl": "^1.12.0",
     "mime-types": "^2.1.31",
     "moment": "^2.29.2",
+    "node-dbus-notifier": "^0.3.6",
     "path-browserify": "^1.0.1",
     "rc": "^1.2.8",
     "react": "^17.0.2",
