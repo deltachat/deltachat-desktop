@@ -12,6 +12,7 @@
 
 ### Fixed
 - fix broken html email window (CSP got broken with the recent electron update) #3704
+- remove unexpected empty space (bottom padding) from view profile dialog
 
 
 <a id="1_43_1"></a>
