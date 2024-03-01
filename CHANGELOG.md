@@ -13,6 +13,7 @@
 - fix broken html email window (CSP got broken with the recent electron update) #3704
 - remove unexpected empty space (bottom padding) from view profile dialog #3707
 - Button style regression #3712
+- change export keys open directory confirm button label to "save" #3710
 
 <a id="1_43_1"></a>
 
