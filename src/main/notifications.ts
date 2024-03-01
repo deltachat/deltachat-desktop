@@ -7,7 +7,7 @@ import { DcNotification } from '../shared/shared-types'
 import { getLogger } from '../shared/logger'
 
 import type { NativeImage, IpcMainInvokeEvent } from 'electron'
-import type { NotifyConfig } from 'node-dbus-notifier'
+import type { NotifyConfig } from '@deltachat/node-dbus-notifier'
 
 const log = getLogger('main/notifications')
 
@@ -19,7 +19,7 @@ function onClickNotification(accountId: number, chatId: number, msgId: number) {
 
 if (process.platform === 'linux') {
   ;(async () => {
-    const { Notify } = await import('node-dbus-notifier')
+    const { Notify } = await import('@deltachat/node-dbus-notifier')
     const notifications: { [key: number]: (typeof Notify.prototype)[] } = {}
 
     function createNotification(data: DcNotification): typeof Notify.prototype {
