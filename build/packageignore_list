@@ -238,7 +238,6 @@ node_modules/uri-js
 # electron builder stuff
 node_modules/dmg-license
 node_modules/crc
-node_modules/xmlbuilder
 node_modules/verror
 node_modules/plist
 node_modules/node-addon-api
