@@ -26,6 +26,24 @@ type Props = {
   settingsStore: SettingsStoreState
 }
 
+export function getVideoChatIdByUrl(url: string): string | undefined {
+  const url_ = url
+  for (const [id, { url }] of Object.entries(VIDEO_CHAT_INSTANCES)) {
+    if (url_ === url) {
+      return id
+    }
+  }
+}
+
+function getVideoChatUrlByName(name: string): string | undefined {
+  const name_ = name
+  for (const [_, { url, name }] of Object.entries(VIDEO_CHAT_INSTANCES)) {
+    if (name_ === name) {
+      return url
+    }
+  }
+}
+
 export default function EditVideochatInstanceDialog({
   onClose,
   onOk,
@@ -36,14 +54,11 @@ export default function EditVideochatInstanceDialog({
     settingsStore.settings['webrtc_instance']
   )
   const [radioValue, setRadioValue] = useState<RadioButtonValue>(() => {
-    if (configValue === '')
+    if (configValue === '') {
       return 'disabled'
-    for (const [instanceName, instanceUrl] of Object.entries(VIDEO_CHAT_INSTANCES)) {
-      if (configValue === instanceUrl) {
-        return instanceName
-      }
     }
-    return 'custom'
+    const id = getVideoChatIdByUrl(configValue)
+    return id ? (id as RadioButtonValue) : 'custom'
   })
 
   const onClickCancel = () => {
@@ -61,15 +76,11 @@ export default function EditVideochatInstanceDialog({
       newConfigValue = ''
       setRadioValue('disabled')
     } else {
-      let oneOfDefaults: boolean = false
-      for (const [instanceName, instanceUrl] of Object.entries(VIDEO_CHAT_INSTANCES)) {
-        if (value === instanceName) {
-          newConfigValue = instanceUrl
-          setRadioValue(value)
-          oneOfDefaults = true
-        }
-      }
-      if (!oneOfDefaults) {
+      const url = getVideoChatUrlByName(value)
+      if (url) {
+        newConfigValue = url
+        setRadioValue(value as RadioButtonValue)
+      } else {
         newConfigValue = settingsStore.settings['webrtc_instance']
         setRadioValue('custom')
       }

@@ -30,8 +30,16 @@ export const enum AutodeleteDuration {
 
 export const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'apng', 'gif']
 
-// Videochat Server URLs
+// Videochat Server URLs and icons
 export const VIDEO_CHAT_INSTANCES = {
-  'systemli': 'https://meet.systemli.org/$ROOM',
-  'autistici': 'https://vc.autistici.org/$ROOM',
+  systemli: {
+    name: 'Systemli',
+    url: 'https://meet.systemli.org/$ROOM',
+    icon: '../images/videochat_instances/systemli.ico',
+  },
+  autistici: {
+    name: 'Autistici',
+    url: 'https://vc.autistici.org/$ROOM',
+    icon: '../images/videochat_instances/systemli.ico',
+  },
 }

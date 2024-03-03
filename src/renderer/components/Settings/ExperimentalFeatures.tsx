@@ -7,10 +7,7 @@ import SettingsStoreInstance, {
 import SettingsSelector from './SettingsSelector'
 import DesktopSettingsSwitch from './DesktopSettingsSwitch'
 import CoreSettingsSwitch from './CoreSettingsSwitch'
-import EditVideochatInstanceDialog from '../dialogs/EditVideochatInstanceDialog'
-import {
-  VIDEO_CHAT_INSTANCES,
-} from '../../../shared/constants'
+import EditVideochatInstanceDialog, { getVideoChatIdByUrl } from '../dialogs/EditVideochatInstanceDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
 import SettingsSwitch from './SettingsSwitch'
@@ -44,10 +41,9 @@ export function ExperimentalFeatures({ settingsStore }: Props) {
     if (instance === '') {
       return tx('off')
     } else {
-      for (const [instanceName, instanceUrl] of Object.entries(VIDEO_CHAT_INSTANCES)) {
-        if (instance === instanceUrl) {
-          return instanceName
-        }
+      const id = getVideoChatIdByUrl(instance)
+      if (id) {
+        return id
       }
     }
     return instance
