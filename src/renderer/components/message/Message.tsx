@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import reactStringReplace from 'react-string-replace'
 import classNames from 'classnames'
 import { C, T } from '@deltachat/jsonrpc-client'
@@ -30,7 +30,7 @@ import { ConversationType } from './MessageList'
 import { getDirection, truncateText } from '../../../shared/util'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { ContextMenuItem } from '../ContextMenu'
-import { BackendRemote } from '../../backend-com'
+import { onDCEvent, BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import {
   ProtectionBrokenDialog,
@@ -88,7 +88,19 @@ const AuthorName = (
   onContactClick: (contact: T.Contact) => void,
   overrideSenderName?: string
 ) => {
-  const { color, displayName } = contact
+  const { id, color } = contact
+  const _displayName = contact.displayName
+  const [displayName, setDisplayName] = useState<string>(_displayName)
+  const update = async ({ contactId }: { contactId: number | null }) => {
+    if (contactId === id) {
+      const contact = await BackendRemote.rpc.getContact(
+        selectedAccountId(),
+        contactId
+      )
+      setDisplayName(contact.displayName)
+    }
+  }
+  onDCEvent(selectedAccountId(), 'ContactsChanged', update)
 
   return (
     <span
