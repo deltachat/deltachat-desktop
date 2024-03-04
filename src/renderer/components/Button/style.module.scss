@@ -1,15 +1,18 @@
 .button {
+  align-items: center;
   background-color: transparent;
   border-color: transparent;
-  border-radius: 2px;
+  border-radius: 8px;
   border-style: solid;
-  color: var(--bp4ButtonText);
+  border-width: 1px;
+  color: var(--colorPrimary);
   cursor: pointer;
-  font-size: initial;
+  display: flex;
+  font-size: 16px;
   font-weight: bold;
-  letter-spacing: 2px;
-  margin-bottom: 0;
-  padding: 5px;
+  justify-content: center;
+  margin: 10px 0;
+  padding: 10px 15px;
   text-align: center;
   text-transform: uppercase;
 
@@ -18,53 +21,36 @@
   }
 
   &:disabled {
-    color: grey;
+    background-color: rgba(206, 217, 224, 0.5);
+    border-color: rgba(206, 217, 224, 0.5);
+    color: var(--globalText);
     cursor: not-allowed;
 
     &:hover {
-      background-color: transparent;
+      background-color: rgba(206, 217, 224, 0.5);
     }
   }
 
-  &.no-padding {
-    padding: 0;
-  }
-
-  &.light-bold {
-    font-weight: 100;
-    letter-spacing: 1px;
-  }
-
-  &.danger {
-    color: var(--colorDanger);
-  }
-
   &.primary {
-    color: var(--colorPrimary);
+    background-color: var(--bp4-input-focused);
+    color: white;
+
+    &:hover {
+      background-color: var(--bp4-input-focused);
+    }
   }
 
   &.secondary {
     background-color: var(--bp4ButtonBg);
     border-color: var(--bp4ButtonText);
-    border-width: 1px;
+    color: var(--bp4ButtonText);
   }
 
-  &.round {
-    background-color: var(--bp4-input-focused);
-    border-color: var(--bp4-input-focused);
-    border-radius: 8px;
-    color: white;
-    margin: 10px 0;
-    padding: 10px 15px;
+  &.danger {
+    color: var(--colorDanger);
 
-    &:disabled {
-      background-color: rgba(206, 217, 224, 0.5);
-      border-color: rgba(206, 217, 224, 0.5);
-      color: var(--globalText);
-
-      &:hover {
-        background-color: rgba(206, 217, 224, 0.5);
-      }
+    &:hover {
+      background-color: var(--colorDanger);
     }
   }
 }

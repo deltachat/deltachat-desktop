@@ -1,14 +1,15 @@
 import React from 'react'
 import classNames from 'classnames'
+
 import styles from './style.module.scss'
 
-type ButtonProps = React.PropsWithChildren<{
+type Props = React.PropsWithChildren<{
   'aria-label'?: string
+  className?: string
   disabled?: boolean
   id?: string
   onClick: any
-  round?: boolean
-  type?: 'secondary' | 'primary' | 'danger'
+  type?: 'primary' | 'secondary' | 'danger'
 }>
 
 export default function Button({
@@ -16,10 +17,9 @@ export default function Button({
   disabled = false,
   id,
   onClick,
-  round = false,
   type,
   ...props
-}: ButtonProps) {
+}: Props) {
   return (
     <button
       id={id}
@@ -27,8 +27,8 @@ export default function Button({
       role='button'
       className={classNames(
         styles.button,
-        round && styles.round,
-        type && styles[type]
+        type && styles[type],
+        props.className
       )}
       onClick={onClick}
       aria-label={props['aria-label']}
