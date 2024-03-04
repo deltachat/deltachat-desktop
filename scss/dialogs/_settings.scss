@@ -67,26 +67,6 @@
     align-items: center;
     flex-direction: column;
   }
-  .profile-image-selector {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    img,
-    span {
-      width: 100px;
-      height: 100px;
-      border-radius: 100%;
-      user-select: none;
-      pointer-events: none;
-    }
-    span {
-      line-height: 100px;
-      font-size: 64px;
-      color: white;
-      text-align: center;
-    }
-  }
   .profile-displayname-addr {
     display: flex;
     margin-left: 20px;
