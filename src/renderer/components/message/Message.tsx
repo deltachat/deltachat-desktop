@@ -778,9 +778,7 @@ function WebxdcMessageContent({ message }: { message: T.Message }) {
           (only works in saved messages)
         </div>
       )}
-      <Button round onClick={() => openWebxdc(message.id)}>
-        {tx('start_app')}
-      </Button>
+      <Button onClick={() => openWebxdc(message.id)}>{tx('start_app')}</Button>
     </div>
   )
 }

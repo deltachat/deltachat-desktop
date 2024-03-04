@@ -61,9 +61,7 @@ export function DCInfo(_props: any) {
         </table>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <Button round onClick={copy2Clipboard}>
-          {tx('copy_json')}
-        </Button>
+        <Button onClick={copy2Clipboard}>{tx('copy_json')}</Button>
       </div>
     </>
   )
