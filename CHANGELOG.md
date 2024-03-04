@@ -2,7 +2,6 @@
 
 ## [Unreleased][unreleased]
 
-
 ### Added
 - Add repology badge to README #3696
 
@@ -13,7 +12,7 @@
 ### Fixed
 - fix broken html email window (CSP got broken with the recent electron update) #3704
 - remove unexpected empty space (bottom padding) from view profile dialog #3707
-
+- Button style regression #3712
 
 <a id="1_43_1"></a>
 
