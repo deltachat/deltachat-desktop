@@ -8,6 +8,7 @@
 ### Changed
 - slightly wider account sidebar (so traffic lights look more centered on macOS) #3698
 - refactor some components to not use the chatstore singleton directly #3700
+- Reuse new image selector component for group images #3713
 
 ### Fixed
 - fix broken html email window (CSP got broken with the recent electron update) #3704
