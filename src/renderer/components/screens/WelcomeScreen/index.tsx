@@ -1,33 +1,39 @@
 import React, { useEffect, useState } from 'react'
-import { DcEventType } from '@deltachat/jsonrpc-client'
 import { Intent } from '@blueprintjs/core'
 import { dirname } from 'path'
 
-import { getLogger } from '../../../shared/logger'
-import { runtime } from '../../runtime'
-import { DeltaProgressBar } from '../Login-Styles'
-import { Screens, selectedAccountId } from '../../ScreenController'
-import { BackendRemote, EffectfulBackendActions } from '../../backend-com'
-import processOpenQrUrl from '../helpers/OpenQrUrl'
+import { getLogger } from '../../../../shared/logger'
+import { runtime } from '../../../runtime'
+import { DeltaProgressBar } from '../../Login-Styles'
+import { Screens, selectedAccountId } from '../../../ScreenController'
+import { BackendRemote, EffectfulBackendActions } from '../../../backend-com'
+import processOpenQrUrl from '../../helpers/OpenQrUrl'
 import Dialog, {
   DialogBody,
   DialogContent,
   DialogHeader,
   DialogWithHeader,
-} from '../Dialog'
-import { DialogProps } from '../../contexts/DialogContext'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
-import ImportQrCode from '../dialogs/ImportQrCode'
-import AlertDialog from '../dialogs/AlertDialog'
-import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
-import Button from '../Button'
+} from '../../Dialog'
+import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import useDialog from '../../../hooks/useDialog'
+import ImportQrCode from '../../dialogs/ImportQrCode'
+import AlertDialog from '../../dialogs/AlertDialog'
+import {
+  LastUsedSlot,
+  rememberLastUsedPath,
+} from '../../../utils/lastUsedPaths'
+import Button from '../../Button'
 
-const log = getLogger('renderer/components/AccountsScreen')
+import styles from './styles.module.scss'
+
+import type { DcEventType } from '@deltachat/jsonrpc-client'
+import type { DialogProps } from '../../../contexts/DialogContext'
 
 type Props = {
   backupFile: string
 }
+
+const log = getLogger('renderer/components/AccountsScreen')
 
 function ImportBackupProgressDialog({
   onClose,
@@ -89,7 +95,7 @@ function ImportBackupProgressDialog({
   )
 }
 
-const ImportButton = function ImportButton() {
+function ImportButton() {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
 
@@ -112,7 +118,11 @@ const ImportButton = function ImportButton() {
   }
 
   return (
-    <Button type='secondary' round onClick={onClickImportBackup}>
+    <Button
+      className={styles.welcomeButton}
+      type='secondary'
+      onClick={onClickImportBackup}
+    >
       {tx('import_backup_title')}
     </Button>
   )
@@ -129,35 +139,17 @@ export default function WelcomeScreen({
 }) {
   const tx = useTranslationFunction()
   const { openDialog, closeDialog } = useDialog()
+  const [showBackButton, setShowBackButton] = useState(false)
 
-  const onClickScanQr = () =>
-    openDialog(ImportQrCode, { subtitle: tx('qrscan_hint') })
+  const onClickLogin = () => window.__changeScreen(Screens.Login)
+
   const onClickSecondDevice = () =>
     openDialog(ImportQrCode, {
       subtitle: tx('multidevice_open_settings_on_other_device'),
     })
-  const [showBackButton, setShowBackButton] = useState(false)
 
-  useEffect(() => {
-    ;(async () => {
-      const allAccountIds = await BackendRemote.listAccounts()
-      if (allAccountIds && allAccountIds.length > 1) {
-        setShowBackButton(true)
-      }
-      if (window.__welcome_qr) {
-        // this is the "callback" when opening dclogin or dcaccount from an already existing account,
-        // the app needs to switch to the welcome screen first.
-        await processOpenQrUrl(
-          openDialog,
-          closeDialog,
-          window.__welcome_qr,
-          undefined,
-          true
-        )
-        window.__welcome_qr = undefined
-      }
-    })()
-  }, [openDialog, closeDialog])
+  const onClickScanQr = () =>
+    openDialog(ImportQrCode, { subtitle: tx('qrscan_hint') })
 
   const onCancel = async () => {
     try {
@@ -180,15 +172,31 @@ export default function WelcomeScreen({
     }
   }
 
+  useEffect(() => {
+    ;(async () => {
+      const allAccountIds = await BackendRemote.listAccounts()
+      if (allAccountIds && allAccountIds.length > 1) {
+        setShowBackButton(true)
+      }
+      if (window.__welcome_qr) {
+        // this is the "callback" when opening dclogin or dcaccount from an already existing account,
+        // the app needs to switch to the welcome screen first.
+        await processOpenQrUrl(
+          openDialog,
+          closeDialog,
+          window.__welcome_qr,
+          undefined,
+          true
+        )
+        window.__welcome_qr = undefined
+      }
+    })()
+  }, [openDialog, closeDialog])
+
   return (
     <div className='login-screen'>
       <div className='window'>
-        <Dialog
-          canEscapeKeyClose={true}
-          fixed={true}
-          onClose={() => {}}
-          width={400}
-        >
+        <Dialog canEscapeKeyClose fixed onClose={() => {}} width={400}>
           <DialogHeader
             onClickBack={showBackButton ? onCancel : undefined}
             title={tx('add_account')}
@@ -198,16 +206,24 @@ export default function WelcomeScreen({
               <img className='delta-icon' src='../images/intro1.png' />
               <p className='f1'>{tx('welcome_chat_over_email')}</p>
               <Button
-                id='action-login-to-email'
-                round
-                onClick={() => window.__changeScreen(Screens.Login)}
+                className={styles.welcomeButton}
+                type='primary'
+                onClick={onClickLogin}
               >
                 {tx('login_header')}
               </Button>
-              <Button round type='secondary' onClick={onClickSecondDevice}>
+              <Button
+                className={styles.welcomeButton}
+                type='secondary'
+                onClick={onClickSecondDevice}
+              >
                 {tx('multidevice_receiver_title')}
               </Button>
-              <Button round type='secondary' onClick={onClickScanQr}>
+              <Button
+                className={styles.welcomeButton}
+                type='secondary'
+                onClick={onClickScanQr}
+              >
                 {tx('scan_invitation_code')}
               </Button>
               <ImportButton />
