@@ -6,8 +6,11 @@
   "no_account_selected": {
     "message": "No Account is selected"
   },
-  "sync_all_accounts": {
-    "message": "Sync All Accounts in Background"
+  "pref_background_sync_disabled": {
+    "message": "Disable Background Sync For All Accounts"
+  },
+  "explain_background_sync_disabled": {
+    "message": "Only synchronize the currently selected account; All the other accounts will be deactivated and get no notifications."
   },
   "background_sync_disabled_explaination": {
     "message": "Background Sync Disabled, Account is only synced when selected"

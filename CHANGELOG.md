@@ -19,6 +19,7 @@
 - Make chat title and subtitle unselectable to prevent unusual behaviour #3688
 - changing display name of a contact does not change it immediately in the messages #3703
 - WebXDC button style regression #3718
+- Change wording of "sync all" setting and make it appear disabled by default like the other experimental settings. #3717
 
 <a id="1_43_1"></a>
 
