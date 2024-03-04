@@ -13,7 +13,7 @@
 - fix broken html email window (CSP got broken with the recent electron update) #3704
 - remove unexpected empty space (bottom padding) from view profile dialog #3707
 - Button style regression #3712
-- Make chat subtitle text unselectable to prevent unusual behaviour #3688
+- Make chat title and subtitle unselectable to prevent unusual behaviour #3688
 
 <a id="1_43_1"></a>
 
