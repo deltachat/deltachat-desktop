@@ -1,17 +1,14 @@
 .button {
   align-items: center;
   background-color: transparent;
-  border-color: transparent;
-  border-radius: 8px;
-  border-style: solid;
-  border-width: 1px;
+  border-radius: 5px;
+  border: 0;
   color: var(--colorPrimary);
   cursor: pointer;
   display: flex;
   font-size: 16px;
   font-weight: bold;
   justify-content: center;
-  margin: 10px 0;
   padding: 10px 15px;
   text-align: center;
   text-transform: uppercase;
@@ -39,6 +36,8 @@
   &.secondary {
     background-color: var(--bp4ButtonBg);
     border-color: var(--bp4ButtonText);
+    border-style: solid;
+    border-width: 1.5px;
     color: var(--bp4ButtonText);
   }
 
