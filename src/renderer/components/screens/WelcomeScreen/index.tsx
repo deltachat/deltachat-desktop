@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Intent } from '@blueprintjs/core'
 import { dirname } from 'path'
+import classNames from 'classnames'
 
 import { getLogger } from '../../../../shared/logger'
 import { runtime } from '../../../runtime'
@@ -206,7 +207,7 @@ export default function WelcomeScreen({
               <img className='delta-icon' src='../images/intro1.png' />
               <p className='f1'>{tx('welcome_chat_over_email')}</p>
               <Button
-                className={styles.welcomeButton}
+                className={classNames(styles.welcomeButton, styles.withGap)}
                 type='primary'
                 onClick={onClickLogin}
               >
