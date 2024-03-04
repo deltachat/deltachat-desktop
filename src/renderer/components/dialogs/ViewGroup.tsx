@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { C, DcEventType } from '@deltachat/jsonrpc-client'
-import { dirname } from 'path'
 
 import ChatListItem from '../chat/ChatListItem'
 import { useContactSearch, AddMemberInnerDialog } from './CreateChat'
@@ -15,7 +14,6 @@ import {
 } from '../helpers/PseudoListItem'
 import ViewProfile from './ViewProfile'
 import { avatarInitial } from '../Avatar'
-import { runtime } from '../../runtime'
 import { DeltaInput } from '../Login-Styles'
 import { getLogger } from '../../../shared/logger'
 import { BackendRemote, Type } from '../../backend-com'
@@ -31,11 +29,11 @@ import Dialog, {
 import useDialog from '../../hooks/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useConfirmationDialog from '../../hooks/useConfirmationDialog'
-import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
+import { LastUsedSlot } from '../../utils/lastUsedPaths'
 import ProfileInfoHeader from '../ProfileInfoHeader'
+import ImageSelector from '../ImageSelector'
 
 import type { DialogProps } from '../../contexts/DialogContext'
-import Button from '../Button'
 
 const log = getLogger('renderer/ViewGroup')
 
@@ -477,69 +475,24 @@ export function EditGroupNameDialog({
   )
 }
 
-export function GroupImageSelector({
-  groupName,
-  groupColor,
-  groupImage,
-  setGroupImage,
-}: {
+export function GroupImageSelector(props: {
   groupName: string
   groupColor: string
   groupImage?: string
   setGroupImage: (groupImage: string) => void
 }) {
-  const tx = window.static_translate
-
-  const onClickSelectGroupImage = async () => {
-    const { defaultPath, setLastPath } = rememberLastUsedPath(
-      LastUsedSlot.GroupImage
-    )
-    const file = await runtime.showOpenFileDialog({
-      title: tx('select_your_new_profile_image'),
-      filters: [
-        {
-          name: tx('images'),
-          extensions: ['jpg', 'png', 'gif', 'jpeg', 'jpe'],
-        },
-      ],
-      properties: ['openFile'],
-      defaultPath,
-    })
-    if (file) {
-      setGroupImage(file)
-      setLastPath(dirname(file))
-    }
-  }
-
-  const onClickRemoveGroupImage = () => setGroupImage('')
-
-  const initial = avatarInitial(groupName, '')
+  const tx = useTranslationFunction()
+  const initials = avatarInitial(props.groupName, '')
 
   return (
-    <div className='profile-image-selector'>
-      {/* TODO: show anything else when there is no profile image, like the letter avatar */}
-      {groupImage ? (
-        <img src={'file://' + groupImage} alt={tx('pref_profile_photo')} />
-      ) : (
-        <span style={{ backgroundColor: groupColor }}>{initial}</span>
-      )}
-      <>
-        <Button
-          aria-label={tx('change_group_image')}
-          onClick={onClickSelectGroupImage}
-          type='primary'
-        >
-          {tx('change_group_image')}
-        </Button>
-        <Button
-          aria-label={tx('remove_group_image')}
-          onClick={onClickRemoveGroupImage}
-          type='danger'
-          disabled={groupImage === '' || groupImage === null}
-        >
-          {tx('remove_group_image')}
-        </Button>
-      </>
-    </div>
+    <ImageSelector
+      color={props.groupColor}
+      filePath={props.groupImage}
+      initials={initials}
+      lastUsedSlot={LastUsedSlot.GroupImage}
+      onChange={props.setGroupImage}
+      removeLabel={tx('remove_group_image')}
+      selectLabel={tx('change_group_image')}
+    />
   )
 }
