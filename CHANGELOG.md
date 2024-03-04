@@ -18,6 +18,7 @@
 - change export keys open directory confirm button label to "select" #3710
 - Make chat title and subtitle unselectable to prevent unusual behaviour #3688
 - changing display name of a contact does not change it immediately in the messages #3703
+- Change wording of "sync all" setting and make it appear disabled by default like the other experimental settings.
 
 <a id="1_43_1"></a>
 

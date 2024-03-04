@@ -2,6 +2,7 @@ import React from 'react'
 
 import SettingsStoreInstance, {
   SettingsStoreState,
+  useSettingsStore,
 } from '../../stores/settings'
 import SettingsSelector from './SettingsSelector'
 import DesktopSettingsSwitch from './DesktopSettingsSwitch'
@@ -13,6 +14,7 @@ import {
 } from '../../../shared/constants'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
+import SettingsSwitch from './SettingsSwitch'
 
 type Props = {
   settingsStore: SettingsStoreState
@@ -99,10 +101,26 @@ export function ExperimentalFeatures({ settingsStore }: Props) {
       >
         {tx('videochat')}
       </SettingsSelector>
-      <DesktopSettingsSwitch
-        settingsKey='syncAllAccounts'
-        label={tx('sync_all_accounts')}
-      />
+      <SyncAllAccountsSwitch />
     </>
+  )
+}
+
+export default function SyncAllAccountsSwitch() {
+  const tx = useTranslationFunction()
+  const settingsStore = useSettingsStore()[0]!
+
+  return (
+    <SettingsSwitch
+      label={tx('pref_background_sync_disabled')}
+      description={tx('explain_background_sync_disabled')}
+      value={settingsStore.desktopSettings.syncAllAccounts !== true}
+      onClick={() => {
+        SettingsStoreInstance.effect.setDesktopSetting(
+          'syncAllAccounts',
+          !settingsStore.desktopSettings.syncAllAccounts
+        )
+      }}
+    />
   )
 }
