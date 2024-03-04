@@ -34,10 +34,6 @@
   &.primary {
     background-color: var(--bp4-input-focused);
     color: white;
-
-    &:hover {
-      background-color: var(--bp4-input-focused);
-    }
   }
 
   &.secondary {
@@ -48,9 +44,5 @@
 
   &.danger {
     color: var(--colorDanger);
-
-    &:hover {
-      background-color: var(--colorDanger);
-    }
   }
 }
