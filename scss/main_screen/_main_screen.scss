@@ -8,6 +8,7 @@
     font-weight: bold;
     cursor: pointer;
     display: flex;
+    user-select: none;
 
     .truncated {
       overflow: hidden;
