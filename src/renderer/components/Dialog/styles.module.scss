@@ -129,3 +129,11 @@ $paddingVertical: 20px;
     justify-content: center;
   }
 }
+
+.footerActionButton {
+  letter-spacing: 2px;
+
+  & + & {
+    margin-left: 1px;
+  }
+}

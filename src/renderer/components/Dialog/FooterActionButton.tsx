@@ -4,6 +4,8 @@ import Button from '../Button'
 
 import type { MouseEventHandler, PropsWithChildren } from 'react'
 
+import styles from './styles.module.scss'
+
 type Props = PropsWithChildren<{
   onClick: MouseEventHandler<HTMLButtonElement>
   disabled?: boolean
@@ -18,8 +20,9 @@ export default function FooterActionButton({
 }: Props) {
   return (
     <Button
+      className={styles.footerActionButton}
       onClick={onClick}
-      type={danger ? 'danger' : 'primary'}
+      type={danger ? 'danger' : undefined}
       disabled={disabled}
     >
       {children}

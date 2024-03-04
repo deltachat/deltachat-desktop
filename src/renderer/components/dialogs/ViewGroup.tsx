@@ -527,14 +527,14 @@ export function GroupImageSelector({
         <Button
           aria-label={tx('change_group_image')}
           onClick={onClickSelectGroupImage}
-          round
+          type='primary'
         >
           {tx('change_group_image')}
         </Button>
         <Button
           aria-label={tx('remove_group_image')}
           onClick={onClickRemoveGroupImage}
-          round
+          type='danger'
           disabled={groupImage === '' || groupImage === null}
         >
           {tx('remove_group_image')}
