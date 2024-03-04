@@ -129,3 +129,12 @@ $paddingVertical: 20px;
     justify-content: center;
   }
 }
+
+.footerActionButton {
+  border-radius: 5px;
+  letter-spacing: 2px;
+
+  & + & {
+    margin-left: 1px;
+  }
+}
