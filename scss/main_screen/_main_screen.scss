@@ -45,6 +45,7 @@
     color: var(--navBarGroupSubtitle);
     overflow: hidden;
     text-overflow: ellipsis;
+    user-select: none;
   }
 
   .no-chat-selected-screen {
