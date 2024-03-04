@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import reactStringReplace from 'react-string-replace'
 import classNames from 'classnames'
 import { C, T } from '@deltachat/jsonrpc-client'
@@ -88,25 +88,29 @@ const AuthorName = (
   onContactClick: (contact: T.Contact) => void,
   overrideSenderName?: string
 ) => {
-  const { id, color } = contact
-  const _displayName = contact.displayName
-  const [displayName, setDisplayName] = useState<string>(_displayName)
-  const update = async ({ contactId }: { contactId: number | null }) => {
-    if (contactId === id) {
-      const contact = await BackendRemote.rpc.getContact(
-        selectedAccountId(),
+  const accountId = selectedAccountId()
+  const { color, id } = contact
+  const [displayName, setDisplayName] = useState<string>(contact.displayName)
+
+  useEffect(() => {
+    return onDCEvent(accountId, 'ContactsChanged', async ({ contactId }) => {
+      if (contactId !== id) {
+        return
+      }
+
+      const updatedContact = await BackendRemote.rpc.getContact(
+        accountId,
         contactId
       )
-      setDisplayName(contact.displayName)
-    }
-  }
-  onDCEvent(selectedAccountId(), 'ContactsChanged', update)
+      setDisplayName(updatedContact.displayName)
+    })
+  }, [accountId, id])
 
   return (
     <span
       key='author'
       className='author'
-      style={{ color: color }}
+      style={{ color }}
       onClick={() => onContactClick(contact)}
     >
       {getAuthorName(displayName, overrideSenderName)}
