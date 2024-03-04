@@ -14,6 +14,7 @@
 - fix broken html email window (CSP got broken with the recent electron update) #3704
 - remove unexpected empty space (bottom padding) from view profile dialog #3707
 - Button style regression #3712
+- Wait until chat id got set before displaying message list #3716
 
 <a id="1_43_1"></a>
 
