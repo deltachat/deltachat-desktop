@@ -21,8 +21,8 @@ type Chat =
   | Type.FullChat
   | (Type.ChatListItemFetchResult & { kind: 'ChatListItem' })
 
-export const selectChat = (chatId: number) => {
-  ChatStore.effect.selectChat(chatId)
+export const selectChat = async (chatId: number) => {
+  await ChatStore.effect.selectChat(chatId)
 }
 
 export const setChatView = (view: ChatView) => {

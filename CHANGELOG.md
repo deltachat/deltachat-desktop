@@ -14,6 +14,7 @@
 - fix broken html email window (CSP got broken with the recent electron update) #3704
 - remove unexpected empty space (bottom padding) from view profile dialog #3707
 - Button style regression #3712
+- Wait until chat id got set before displaying message list #3716
 - change export keys open directory confirm button label to "select" #3710
 - Make chat title and subtitle unselectable to prevent unusual behaviour #3688
 - changing display name of a contact does not change it immediately in the messages #3703
