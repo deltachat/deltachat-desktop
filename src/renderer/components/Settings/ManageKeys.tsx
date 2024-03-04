@@ -61,7 +61,7 @@ export default function ManageKeys() {
       title: tx('pref_managekeys_export_secret_keys'),
       defaultPath,
       properties: ['openDirectory', 'createDirectory'],
-      buttonLabel: tx('save'),
+      buttonLabel: tx('select'),
     }
 
     const destination = await runtime.showOpenFileDialog(opts)
