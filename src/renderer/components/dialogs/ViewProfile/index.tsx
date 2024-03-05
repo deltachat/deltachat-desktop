@@ -252,7 +252,11 @@ export function ViewProfileInner({
           }}
         >
           {!isDeviceChat && (
-            <Button aria-label={tx('send_message')} onClick={onSendMessage}>
+            <Button
+              type='primary'
+              aria-label={tx('send_message')}
+              onClick={onSendMessage}
+            >
               {tx('send_message')}
             </Button>
           )}
