@@ -66,6 +66,15 @@ class ChatStore extends Store<ChatStoreState> {
         return modifiedState
       }, 'unselectChat')
     },
+    reset: (newAccountId: number) => {
+      this.setState(_ => {
+        const modifiedState: ChatStoreState = {
+          ...defaultState(),
+          accountId: newAccountId,
+        }
+        return modifiedState
+      }, 'reset')
+    },
     modifiedChat: (payload: { id: number } & Partial<ChatStoreState>) => {
       this.setState(state => {
         const modifiedState: ChatStoreState = {
