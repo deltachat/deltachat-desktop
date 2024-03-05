@@ -2470,7 +2470,7 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.44.0...HEAD
 
 [1.44.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.43.1...v1.44.0
 
