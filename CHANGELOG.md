@@ -6,6 +6,10 @@
 
 ## [1.44.0] - 2024-03-05
 
+> Due to the electron update macOS 10.13 (High Sierra) and macOS 10.14 (Mojave)
+> are no longer supported, macOS 10.15 (Catalina) or later is the new
+> requirement.
+
 ### Added
 - Add repology badge to README #3696
 
