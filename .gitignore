@@ -91,3 +91,5 @@ stub.js
 
 # pnpm lockfile
 pnpm-lock.yaml
+
+deltachat-rpc-server-aarch64-macos
