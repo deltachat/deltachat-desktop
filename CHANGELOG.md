@@ -18,6 +18,7 @@
 - refactor some components to not use the chatstore singleton directly #3700
 - Reuse new image selector component for group images #3713
 - Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.136.1` #3720
+- Update translations (2024-03-05) #3722
 
 ### Fixed
 - fix broken html email window (CSP got broken with the recent electron update) #3704
