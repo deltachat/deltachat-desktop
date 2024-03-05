@@ -24,17 +24,15 @@ export async function updateDeviceChats(
     }
   }
 
-  await addDeviceMessage('changelog-version-1.42.0-version0', {
-    text: `What's new in 1.42.0?
+  await addDeviceMessage('changelog-version-1.44.0-version0', {
+    text: `What's new in 1.44.0?
 
-💌 one-to-one chats guarantee end-to-end encryption for introduced contacts now
-😌 for everyone's simplicity, we mark these contacts and chats with green checkmarks
-👥 groups are created automatically with guaranteed end-to-end encryption if possible
-🔄 Accept/Blocked, Archived, Pinned, Mute is synced across all your devices
-🗜️ Images are now compressed (unless you send them as files)
-🖼️ Global Gallery with your pictures, documents, media across all chats
-✨ many more improvements and bugfixes
+❤️ Send emoji reactions for messages
+🔄 New Account Switcher sidebar with notification management
+🛎️ Get notified for all your accounts
+⚙️ Improved settings dialog
+✨ A whole bunch of refactorings, improvements and bugfixes
 
-Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1_42_0`,
+Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1_44_0`,
   })
 }
