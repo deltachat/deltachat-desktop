@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_44_0"></a>
+
+## [1.44.0] - 2024-03-05
+
 ### Added
 - Add repology badge to README #3696
 
@@ -20,7 +24,7 @@
 - Make chat title and subtitle unselectable to prevent unusual behaviour #3688
 - changing display name of a contact does not change it immediately in the messages #3703
 - WebXDC button style regression #3718
-- Change wording of "sync all" setting and make it appear disabled by default like the other experimental settings. #3717
+- Change wording of "sync all" setting and make it appear disabled by default like the other experimental settings #3717
 
 <a id="1_43_1"></a>
 
@@ -2462,7 +2466,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.43.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.0...HEAD
+
+[1.44.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.43.1...v1.44.0
 
 [1.43.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.43.0...v1.43.1
 
