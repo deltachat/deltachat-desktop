@@ -264,7 +264,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
 
   return () => {
     // the shutdown function
-    dcController._inner_account_manager?.stopIO()
+    dcController.jsonrpcRemote.rpc.stopIoForAllAccounts()
   }
 }
 
