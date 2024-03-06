@@ -33,6 +33,8 @@ import { selectedAccountId } from '../../ScreenController'
 import { ChatView } from '../../contexts/ChatContext'
 import MessageListView from '../MessageListView'
 
+import type { T } from '@deltachat/jsonrpc-client'
+
 export type AlternativeView = 'global-gallery' | null
 
 export default function MainScreen() {
@@ -42,8 +44,7 @@ export default function MainScreen() {
   const [queryStr, setQueryStr] = useState('')
   const [queryChatId, setQueryChatId] = useState<null | number>(null)
   const [archivedChatsSelected, setArchivedChatsSelected] = useState(false)
-  const { activeView, chatId, chat, selectChat, unselectChat, setChatView } =
-    useChat()
+  const { activeView, chatId, chat, selectChat, unselectChat } = useChat()
 
   // Small hack/misuse of keyBindingAction to setArchivedChatsSelected from
   // other components (especially ViewProfile when selecting a shared chat/group)
@@ -99,28 +100,7 @@ export default function MainScreen() {
     }
   }, [archivedChatsSelected, chat?.archived])
 
-  const onTitleClick = () => {
-    if (!chat) {
-      return
-    }
-
-    if (chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST) {
-      openDialog(MailingListProfile, { chat })
-    } else if (
-      chat.chatType === C.DC_CHAT_TYPE_GROUP ||
-      chat.chatType === C.DC_CHAT_TYPE_BROADCAST
-    ) {
-      openViewGroupDialog(openDialog, chat)
-    } else {
-      if (chat.contactIds && chat.contactIds[0]) {
-        openViewProfileDialog(openDialog, chat.contactIds[0])
-      }
-    }
-  }
-
   window.__chatlistSetSearch = searchChats
-
-  const settingsStore = useSettingsStore()[0]
 
   useEffect(() => {
     SettingsStoreInstance.effect.load().then(() => {
@@ -157,8 +137,9 @@ export default function MainScreen() {
   )
   const galleryRef = useRef<Gallery | null>(null)
 
+  // @TODO: This could be refactored into a context which knows about the
+  // gallery tab state
   const [threeDotMenuHidden, setthreeDotMenuHidden] = useState(false)
-
   const updatethreeDotMenuHidden = useCallback(() => {
     setthreeDotMenuHidden(
       activeView === ChatView.Map ||
@@ -169,7 +150,6 @@ export default function MainScreen() {
           ))
     )
   }, [activeView, alternativeView])
-
   useEffect(() => {
     updatethreeDotMenuHidden()
   }, [alternativeView, galleryRef, updatethreeDotMenuHidden])
@@ -211,91 +191,9 @@ export default function MainScreen() {
             )}
           </NavbarGroup>
           <NavbarGroup align={Alignment.RIGHT}>
-            {alternativeView === 'global-gallery' && (
-              <>
-                <NavbarHeading
-                  style={{
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  {tx('menu_all_media')}
-                </NavbarHeading>
-                <span className='views' />
-              </>
-            )}
-            {chat && (
-              <NavbarHeading
-                style={{
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-                className='no-drag'
-                onClick={onTitleClick}
-              >
-                <Avatar
-                  displayName={chat.name}
-                  color={chat.color}
-                  avatarPath={chat.profileImage || undefined}
-                  small
-                  wasSeenRecently={chat.wasSeenRecently}
-                />
-                <div style={{ marginLeft: '7px', overflow: 'hidden' }}>
-                  <div className='navbar-chat-name'>
-                    <div className='truncated'>{chat.name}</div>
-                    <div className='chat_property_icons'>
-                      {chat.isProtected && <InlineVerifiedIcon />}
-                      {chat.ephemeralTimer !== 0 && (
-                        <div
-                          className={'disapearing-messages-icon'}
-                          aria-label={tx(
-                            'a11y_disappearing_messages_activated'
-                          )}
-                        />
-                      )}
-                    </div>
-                  </div>
-                  <div className='navbar-chat-subtile'>
-                    {chatSubtitle(chat)}
-                  </div>
-                </div>
-              </NavbarHeading>
-            )}
-            {chat && (
-              <>
-                <span className='views no-drag'>
-                  <Button
-                    onClick={() => setChatView(ChatView.MessageList)}
-                    minimal
-                    large
-                    active={activeView === ChatView.MessageList}
-                    icon={'chat'}
-                    aria-label={tx('chat')}
-                  />
-                  <Button
-                    onClick={() => setChatView(ChatView.Media)}
-                    minimal
-                    large
-                    active={activeView === ChatView.Media}
-                    icon={'media'}
-                    aria-label={tx('media')}
-                  />
-                  {settingsStore?.desktopSettings
-                    .enableOnDemandLocationStreaming && (
-                    <Button
-                      minimal
-                      large
-                      icon='map'
-                      onClick={() => setChatView(ChatView.Map)}
-                      active={activeView === ChatView.Map}
-                      aria-label={tx('tab_map')}
-                    />
-                  )}
-                </span>
-              </>
-            )}
+            {alternativeView === 'global-gallery' && <GlobalGalleryHeading />}
+            {chat && <ChatHeading chat={chat} />}
+            {chat && <ChatNavButtons />}
             {(chat || alternativeView === 'global-gallery') && (
               <span
                 style={{
@@ -333,7 +231,11 @@ export default function MainScreen() {
             setQueryChatId(null)
           }}
         />
-        <MessageListView alternativeView={alternativeView} />
+        <MessageListView
+          alternativeView={alternativeView}
+          galleryRef={galleryRef}
+          onUpdateGalleryView={updatethreeDotMenuHidden}
+        />
       </div>
       <ConnectivityToast />
     </div>
@@ -371,4 +273,121 @@ function chatSubtitle(chat: Type.FullChat) {
     }
   }
   return 'ErrTitle'
+}
+
+function GlobalGalleryHeading() {
+  const tx = useTranslationFunction()
+
+  return (
+    <>
+      <NavbarHeading
+        style={{
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        {tx('menu_all_media')}
+      </NavbarHeading>
+      <span className='views' />
+    </>
+  )
+}
+
+function ChatHeading({ chat }: { chat: T.FullChat }) {
+  const tx = useTranslationFunction()
+  const { openDialog } = useDialog()
+
+  const onTitleClick = () => {
+    if (!chat) {
+      return
+    }
+
+    if (chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST) {
+      openDialog(MailingListProfile, { chat })
+    } else if (
+      chat.chatType === C.DC_CHAT_TYPE_GROUP ||
+      chat.chatType === C.DC_CHAT_TYPE_BROADCAST
+    ) {
+      openViewGroupDialog(openDialog, chat)
+    } else {
+      if (chat.contactIds && chat.contactIds[0]) {
+        openViewProfileDialog(openDialog, chat.contactIds[0])
+      }
+    }
+  }
+
+  return (
+    <NavbarHeading
+      style={{
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+      }}
+      className='no-drag'
+      onClick={onTitleClick}
+    >
+      <Avatar
+        displayName={chat.name}
+        color={chat.color}
+        avatarPath={chat.profileImage || undefined}
+        small
+        wasSeenRecently={chat.wasSeenRecently}
+      />
+      <div style={{ marginLeft: '7px', overflow: 'hidden' }}>
+        <div className='navbar-chat-name'>
+          <div className='truncated'>{chat.name}</div>
+          <div className='chat_property_icons'>
+            {chat.isProtected && <InlineVerifiedIcon />}
+            {chat.ephemeralTimer !== 0 && (
+              <div
+                className={'disapearing-messages-icon'}
+                aria-label={tx('a11y_disappearing_messages_activated')}
+              />
+            )}
+          </div>
+        </div>
+        <div className='navbar-chat-subtile'>{chatSubtitle(chat)}</div>
+      </div>
+    </NavbarHeading>
+  )
+}
+
+function ChatNavButtons() {
+  const tx = useTranslationFunction()
+  const { activeView, setChatView } = useChat()
+  const settingsStore = useSettingsStore()[0]
+
+  return (
+    <>
+      <span className='views no-drag'>
+        <Button
+          onClick={() => setChatView(ChatView.MessageList)}
+          minimal
+          large
+          active={activeView === ChatView.MessageList}
+          icon={'chat'}
+          aria-label={tx('chat')}
+        />
+        <Button
+          onClick={() => setChatView(ChatView.Media)}
+          minimal
+          large
+          active={activeView === ChatView.Media}
+          icon={'media'}
+          aria-label={tx('media')}
+        />
+        {settingsStore?.desktopSettings.enableOnDemandLocationStreaming && (
+          <Button
+            minimal
+            large
+            icon='map'
+            onClick={() => setChatView(ChatView.Map)}
+            active={activeView === ChatView.Map}
+            aria-label={tx('tab_map')}
+          />
+        )}
+      </span>
+    </>
+  )
 }
