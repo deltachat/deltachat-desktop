@@ -15,23 +15,15 @@ import ChatList from '../chat/ChatList'
 import MessageListAndComposer, {
   getBackgroundImageStyle,
 } from '../message/MessageListAndComposer'
-import {
-  useChatStore,
-  ChatStoreStateWithChatSet,
-  ChatView,
-} from '../../stores/chat'
+import { ChatView } from '../../stores/chat'
 import {
   openViewGroupDialog,
   openViewProfileDialog,
-  selectChat,
-  setChatView,
-  unselectChat,
 } from '../helpers/ChatMethods'
 import { Avatar } from '../Avatar'
 import ConnectivityToast from '../ConnectivityToast'
 import MapComponent from '../map/MapComponent'
 import MailingListProfile from '../dialogs/MessageListProfile'
-import { getLogger } from '../../../shared/logger'
 import { RecoverableCrashScreen } from './RecoverableCrashScreen'
 import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 import { Type } from '../../backend-com'
@@ -42,14 +34,27 @@ import useKeyBindingAction from '../../hooks/useKeyBindingAction'
 import { KeybindAction } from '../../keybindings'
 import useDialog from '../../hooks/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useChat from '../../hooks/useChat'
+import { selectedAccountId } from '../../ScreenController'
 
-const log = getLogger('renderer/main-screen')
+type AlternativeView = 'global-gallery' | null
 
 export default function MainScreen() {
+  const tx = useTranslationFunction()
+  const { openDialog } = useDialog()
+
   const [queryStr, setQueryStr] = useState('')
   const [queryChatId, setQueryChatId] = useState<null | number>(null)
   const [archivedChatsSelected, setArchivedChatsSelected] = useState(false)
-  const [chatStoreReady, setChatStoreReady] = useState(false)
+  const {
+    accountId,
+    activeView,
+    chatId,
+    chat,
+    selectChat,
+    unselectChat,
+    setChatView,
+  } = useChat()
 
   // Small hack/misuse of keyBindingAction to setArchivedChatsSelected from
   // other components (especially ViewProfile when selecting a shared chat/group)
@@ -60,17 +65,12 @@ export default function MainScreen() {
     setArchivedChatsSelected(false)
   )
 
-  const { openDialog } = useDialog()
-  const selectedChat = useChatStore()
-
-  const [alternativeView, setAlternativeView] = useState<
-    null | 'global-gallery'
-  >(null)
+  const [alternativeView, setAlternativeView] = useState<AlternativeView>(null)
   useEffect(() => {
-    if (selectedChat.chat?.id) {
+    if (chatId) {
       setAlternativeView(null)
     }
-  }, [selectedChat.chat?.id])
+  }, [chatId])
   useKeyBindingAction(KeybindAction.GlobalGallery_Open, () => {
     unselectChat()
     setAlternativeView('global-gallery')
@@ -78,10 +78,11 @@ export default function MainScreen() {
 
   const onChatClick = (chatId: number) => {
     if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) {
-      return setArchivedChatsSelected(true)
+      setArchivedChatsSelected(true)
+      return
     }
 
-    selectChat(chatId)
+    selectChat(selectedAccountId(), chatId)
   }
 
   const searchChats = (queryStr: string, chatId: number | null = null) => {
@@ -104,50 +105,32 @@ export default function MainScreen() {
 
     // If we've searched a non-archive chat while being in archive mode
     // previously we want to get back to normal mode after cancelling
-    if (!selectedChat.chat?.archived && archivedChatsSelected) {
+    if (!chat?.archived && archivedChatsSelected) {
       setArchivedChatsSelected(false)
     }
-  }, [archivedChatsSelected, selectedChat.chat?.archived])
+  }, [archivedChatsSelected, chat?.archived])
 
   const onTitleClick = () => {
-    if (!selectedChat.chat) return
+    if (!chat) {
+      return
+    }
 
-    if (selectedChat.chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST) {
-      openDialog(MailingListProfile, {
-        chat: selectedChat.chat,
-      })
+    if (chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST) {
+      openDialog(MailingListProfile, { chat })
     } else if (
-      selectedChat.chat.chatType === C.DC_CHAT_TYPE_GROUP ||
-      selectedChat.chat.chatType === C.DC_CHAT_TYPE_BROADCAST
+      chat.chatType === C.DC_CHAT_TYPE_GROUP ||
+      chat.chatType === C.DC_CHAT_TYPE_BROADCAST
     ) {
-      openViewGroupDialog(openDialog, selectedChat.chat)
+      openViewGroupDialog(openDialog, chat)
     } else {
-      if (selectedChat.chat.contactIds && selectedChat.chat.contactIds[0]) {
-        openViewProfileDialog(openDialog, selectedChat.chat.contactIds[0])
+      if (chat.contactIds && chat.contactIds[0]) {
+        openViewProfileDialog(openDialog, chat.contactIds[0])
       }
     }
   }
 
   window.__chatlistSetSearch = searchChats
 
-  const isFirstLoad = useRef(true)
-  if (isFirstLoad.current) {
-    isFirstLoad.current = false
-    SettingsStoreInstance.effect.load().then(async () => {
-      const lastChatId =
-        SettingsStoreInstance.getState()?.settings['ui.lastchatid']
-      if (lastChatId) {
-        // Selecting the chat populates the chat store with state all
-        // children component will depend on. To make sure we're rendering
-        // these state-critical components _after_ a successful state
-        // transition, we await here and use a `chatStoreReady` flag
-        await selectChat(Number(lastChatId))
-        setChatStoreReady(true)
-      }
-    })
-  }
-
-  const tx = useTranslationFunction()
   const settingsStore = useSettingsStore()[0]
 
   useEffect(() => {
@@ -178,9 +161,8 @@ export default function MainScreen() {
   })
 
   const onClickThreeDotMenu = useThreeDotMenu(
-    selectedChat.chat,
-    alternativeView === 'global-gallery' ||
-      selectedChat?.activeView === ChatView.Media
+    chat,
+    alternativeView === 'global-gallery' || activeView === ChatView.Media
       ? 'gallery'
       : 'chat'
   )
@@ -190,52 +172,39 @@ export default function MainScreen() {
 
   const updatethreeDotMenuHidden = useCallback(() => {
     setthreeDotMenuHidden(
-      selectedChat?.activeView === ChatView.Map ||
+      activeView === ChatView.Map ||
         ((alternativeView === 'global-gallery' ||
-          selectedChat?.activeView === ChatView.Media) &&
+          activeView === ChatView.Media) &&
           !['images', 'video'].includes(
             galleryRef.current?.state.currentTab || ''
           ))
     )
-  }, [selectedChat, alternativeView, galleryRef])
+  }, [activeView, alternativeView])
 
   useEffect(() => {
     updatethreeDotMenuHidden()
-  }, [
-    selectedChat,
-    selectedChat?.activeView,
-    alternativeView,
-    galleryRef,
-    updatethreeDotMenuHidden,
-  ])
-
-  if (!selectedChat) {
-    log.error('selectedChat is undefined')
-    return null
-  }
+  }, [alternativeView, galleryRef, updatethreeDotMenuHidden])
 
   let MessageListView
-  if (selectedChat.chat !== null) {
-    switch (selectedChat.activeView) {
+  if (chat && accountId) {
+    switch (activeView) {
       case ChatView.Media:
         MessageListView = (
           <Gallery
             ref={galleryRef}
-            chatId={selectedChat.chat.id}
+            chatId={chat.id}
             onUpdateView={updatethreeDotMenuHidden}
           />
         )
         break
       case ChatView.Map:
-        MessageListView = <MapComponent selectedChat={selectedChat.chat} />
+        MessageListView = <MapComponent selectedChat={chat} />
         break
       case ChatView.MessageList:
       default:
         MessageListView = (
-          <RecoverableCrashScreen reset_on_change_key={selectedChat.chat.id}>
-            <MessageListAndComposer
-              chatStore={selectedChat as ChatStoreStateWithChatSet}
-            />
+          <RecoverableCrashScreen reset_on_change_key={chat.id}>
+            <MessageListAndComposer accountId={accountId} chat={chat} />
           </RecoverableCrashScreen>
         )
     }
@@ -319,7 +288,7 @@ export default function MainScreen() {
                 <span className='views' />
               </>
             )}
-            {selectedChat.chat && (
+            {chat && (
               <NavbarHeading
                 style={{
                   cursor: 'pointer',
@@ -330,18 +299,18 @@ export default function MainScreen() {
                 onClick={onTitleClick}
               >
                 <Avatar
-                  displayName={selectedChat.chat.name}
-                  color={selectedChat.chat.color}
-                  avatarPath={selectedChat.chat.profileImage || undefined}
+                  displayName={chat.name}
+                  color={chat.color}
+                  avatarPath={chat.profileImage || undefined}
                   small
-                  wasSeenRecently={selectedChat.chat.wasSeenRecently}
+                  wasSeenRecently={chat.wasSeenRecently}
                 />
                 <div style={{ marginLeft: '7px', overflow: 'hidden' }}>
                   <div className='navbar-chat-name'>
-                    <div className='truncated'>{selectedChat.chat.name}</div>
+                    <div className='truncated'>{chat.name}</div>
                     <div className='chat_property_icons'>
-                      {selectedChat.chat.isProtected && <InlineVerifiedIcon />}
-                      {selectedChat.chat.ephemeralTimer !== 0 && (
+                      {chat.isProtected && <InlineVerifiedIcon />}
+                      {chat.ephemeralTimer !== 0 && (
                         <div
                           className={'disapearing-messages-icon'}
                           aria-label={tx(
@@ -352,20 +321,19 @@ export default function MainScreen() {
                     </div>
                   </div>
                   <div className='navbar-chat-subtile'>
-                    {chatSubtitle(selectedChat.chat)}
+                    {chatSubtitle(chat)}
                   </div>
                 </div>
               </NavbarHeading>
             )}
-            {selectedChat.chat && (
+            {chat && (
               <>
                 <span className='views no-drag'>
                   <Button
                     onClick={() => setChatView(ChatView.MessageList)}
                     minimal
                     large
-                    active={selectedChat.activeView === ChatView.MessageList}
-                    // aria-selected={!view}
+                    active={activeView === ChatView.MessageList}
                     icon={'chat'}
                     aria-label={tx('chat')}
                   />
@@ -373,8 +341,7 @@ export default function MainScreen() {
                     onClick={() => setChatView(ChatView.Media)}
                     minimal
                     large
-                    active={selectedChat.activeView === ChatView.Media}
-                    // aria-selected={view}
+                    active={activeView === ChatView.Media}
                     icon={'media'}
                     aria-label={tx('media')}
                   />
@@ -385,14 +352,14 @@ export default function MainScreen() {
                       large
                       icon='map'
                       onClick={() => setChatView(ChatView.Map)}
-                      active={selectedChat.activeView === ChatView.Map}
+                      active={activeView === ChatView.Map}
                       aria-label={tx('tab_map')}
                     />
                   )}
                 </span>
               </>
             )}
-            {(selectedChat.chat || alternativeView === 'global-gallery') && (
+            {(chat || alternativeView === 'global-gallery') && (
               <span
                 style={{
                   marginLeft: 0,
@@ -422,14 +389,14 @@ export default function MainScreen() {
           queryStr={queryStr}
           showArchivedChats={showArchivedChats}
           onChatClick={onChatClick}
-          selectedChatId={selectedChat.chat ? selectedChat.chat.id : null}
+          selectedChatId={chat ? chat.id : null}
           queryChatId={queryChatId}
           onExitSearch={() => {
             setQueryStr('')
             setQueryChatId(null)
           }}
         />
-        {chatStoreReady && MessageListView}
+        {MessageListView}
       </div>
       <ConnectivityToast />
     </div>
