@@ -1,4 +1,4 @@
-import { Store, useStore } from './store'
+import { Store } from './store'
 import { ActionEmitter, KeybindAction } from '../keybindings'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
@@ -269,10 +269,6 @@ chatStore.dispatch = (..._args) => {
 }
 
 const log = chatStore.log
-
-export const useChatStore = () => useStore(chatStore)[0]
-
-export default chatStore
 
 export type ChatStoreDispatch = Store<ChatStoreState>['dispatch']
 
