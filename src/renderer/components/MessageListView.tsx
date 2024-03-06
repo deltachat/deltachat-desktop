@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 
 import Gallery from './Gallery'
 import MapComponent from './map/MapComponent'
@@ -12,13 +12,16 @@ import type { AlternativeView } from './screens/MainScreen'
 
 type Props = {
   alternativeView: AlternativeView
+  galleryRef: any
+  onUpdateGalleryView: () => void
 }
 
-export default function MessageListView({ alternativeView }: Props) {
+export default function MessageListView({
+  galleryRef,
+  alternativeView,
+  onUpdateGalleryView,
+}: Props) {
   const { accountId, activeView, chat } = useChat()
-
-  // @TODO: This should not be handled here
-  const galleryRef = useRef<Gallery | null>(null)
 
   if (chat && accountId) {
     switch (activeView) {
@@ -27,9 +30,7 @@ export default function MessageListView({ alternativeView }: Props) {
           <Gallery
             ref={galleryRef}
             chatId={chat.id}
-            onUpdateView={() => {
-              // @TODO: This should not be handled here
-            }}
+            onUpdateView={onUpdateGalleryView}
           />
         )
       case ChatView.Map:
@@ -47,9 +48,7 @@ export default function MessageListView({ alternativeView }: Props) {
       <Gallery
         chatId={'all'}
         ref={galleryRef}
-        onUpdateView={() => {
-          // @TODO: This should not be handled here
-        }}
+        onUpdateView={onUpdateGalleryView}
       />
     )
   }
