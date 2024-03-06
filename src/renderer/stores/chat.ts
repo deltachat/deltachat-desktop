@@ -271,10 +271,6 @@ chatStore.dispatch = (..._args) => {
 const log = chatStore.log
 
 export const useChatStore = () => useStore(chatStore)[0]
-export const useChatStore2 = () => {
-  const [selectedChat, _chatStoreDispatch] = useStore(chatStore)
-  return { selectedChat }
-}
 
 export default chatStore
 

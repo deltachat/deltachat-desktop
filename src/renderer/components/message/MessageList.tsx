@@ -15,7 +15,6 @@ import { MessageWrapper } from './MessageWrapper'
 import ChatStore, { ChatStoreStateWithChatSet } from '../../stores/chat'
 import { getLogger } from '../../../shared/logger'
 import { KeybindAction } from '../../keybindings'
-import { selectedAccountId } from '../../ScreenController'
 import { useMessageList } from '../../stores/messagelist'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { debouncedUpdateBadgeCounter } from '../../system-integration/badge-counter'
@@ -93,14 +92,13 @@ function useUnreadCount(
   return freshMessageCounter
 }
 
-export default function MessageList({
-  chatStore,
-  refComposer,
-}: {
-  chatStore: ChatStoreStateWithChatSet
-  refComposer: todo
-}) {
-  const accountId = selectedAccountId()
+type Props = {
+  accountId: number
+  chat: T.FullChat
+  refComposer: any
+}
+
+export default function MessageList({ accountId, chat, refComposer }: Props) {
   const {
     store: {
       scheduler,
@@ -119,13 +117,13 @@ export default function MessageList({
     },
     fetchMoreBottom,
     fetchMoreTop,
-  } = useMessageList(accountId, chatStore.chat.id)
+  } = useMessageList(accountId, chat.id)
   const { hideReactionsBar } = useReactionsBar()
 
   const countUnreadMessages = useUnreadCount(
     accountId,
-    chatStore.chat.id,
-    chatStore.chat.freshMessageCounter
+    chat.id,
+    chat.freshMessageCounter
   )
 
   const messageListRef = useRef<HTMLDivElement | null>(null)
@@ -394,7 +392,7 @@ export default function MessageList({
 
     const composerTextarea = refComposer.current.childNodes[1]
     composerTextarea && composerTextarea.focus()
-  }, [refComposer, chatStore.chat.id])
+  }, [refComposer, chat.id])
 
   useLayoutEffect(() => {
     if (!messageListRef.current || !refComposer.current) {
@@ -409,8 +407,8 @@ export default function MessageList({
     <MessagesDisplayContext.Provider
       value={{
         context: 'chat_messagelist',
-        chatId: chatStore.chat.id,
-        isDeviceChat: chatStore.chat.isDeviceChat,
+        chatId: chat.id,
+        isDeviceChat: chat.isDeviceChat,
       }}
     >
       <MessageListInner
