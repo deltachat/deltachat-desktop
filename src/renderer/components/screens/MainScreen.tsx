@@ -12,19 +12,13 @@ import {
 import Gallery from '../Gallery'
 import { useThreeDotMenu } from '../ThreeDotMenu'
 import ChatList from '../chat/ChatList'
-import MessageListAndComposer, {
-  getBackgroundImageStyle,
-} from '../message/MessageListAndComposer'
-import { ChatView } from '../../stores/chat'
 import {
   openViewGroupDialog,
   openViewProfileDialog,
 } from '../helpers/ChatMethods'
 import { Avatar } from '../Avatar'
 import ConnectivityToast from '../ConnectivityToast'
-import MapComponent from '../map/MapComponent'
 import MailingListProfile from '../dialogs/MessageListProfile'
-import { RecoverableCrashScreen } from './RecoverableCrashScreen'
 import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 import { Type } from '../../backend-com'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
@@ -36,8 +30,10 @@ import useDialog from '../../hooks/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useChat from '../../hooks/useChat'
 import { selectedAccountId } from '../../ScreenController'
+import { ChatView } from '../../contexts/ChatContext'
+import MessageListView from '../MessageListView'
 
-type AlternativeView = 'global-gallery' | null
+export type AlternativeView = 'global-gallery' | null
 
 export default function MainScreen() {
   const tx = useTranslationFunction()
@@ -46,15 +42,8 @@ export default function MainScreen() {
   const [queryStr, setQueryStr] = useState('')
   const [queryChatId, setQueryChatId] = useState<null | number>(null)
   const [archivedChatsSelected, setArchivedChatsSelected] = useState(false)
-  const {
-    accountId,
-    activeView,
-    chatId,
-    chat,
-    selectChat,
-    unselectChat,
-    setChatView,
-  } = useChat()
+  const { activeView, chatId, chat, selectChat, unselectChat, setChatView } =
+    useChat()
 
   // Small hack/misuse of keyBindingAction to setArchivedChatsSelected from
   // other components (especially ViewProfile when selecting a shared chat/group)
@@ -184,58 +173,6 @@ export default function MainScreen() {
   useEffect(() => {
     updatethreeDotMenuHidden()
   }, [alternativeView, galleryRef, updatethreeDotMenuHidden])
-
-  let MessageListView
-  if (chat && accountId) {
-    switch (activeView) {
-      case ChatView.Media:
-        MessageListView = (
-          <Gallery
-            ref={galleryRef}
-            chatId={chat.id}
-            onUpdateView={updatethreeDotMenuHidden}
-          />
-        )
-        break
-      case ChatView.Map:
-        MessageListView = <MapComponent selectedChat={chat} />
-        break
-      case ChatView.MessageList:
-      default:
-        MessageListView = (
-          <RecoverableCrashScreen reset_on_change_key={chat.id}>
-            <MessageListAndComposer accountId={accountId} chat={chat} />
-          </RecoverableCrashScreen>
-        )
-    }
-  } else if (alternativeView === 'global-gallery') {
-    MessageListView = (
-      <Gallery
-        chatId={'all'}
-        ref={galleryRef}
-        onUpdateView={updatethreeDotMenuHidden}
-      />
-    )
-  } else {
-    const style: React.CSSProperties = settingsStore
-      ? getBackgroundImageStyle(settingsStore.desktopSettings)
-      : {}
-
-    MessageListView = (
-      <div className='message-list-and-composer' style={style}>
-        <div
-          className='message-list-and-composer__message-list'
-          style={{ display: 'flex' }}
-        >
-          <div className='info-message big' style={{ alignSelf: 'center' }}>
-            <div className='bubble'>
-              {tx('no_chat_selected_suggestion_desktop')}
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
 
   const isSearchActive = queryStr.length > 0 || queryChatId !== null
   const showArchivedChats = !isSearchActive && archivedChatsSelected
@@ -396,7 +333,7 @@ export default function MainScreen() {
             setQueryChatId(null)
           }}
         />
-        {MessageListView}
+        <MessageListView alternativeView={alternativeView} />
       </div>
       <ConnectivityToast />
     </div>
