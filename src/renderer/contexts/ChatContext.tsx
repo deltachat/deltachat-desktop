@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 
-import { BackendRemote } from '../backend-com'
+import { getChat, markChatAsSeen, saveLastChatId } from '../backend/chat'
 
 import type { PropsWithChildren } from 'react'
 import type { T } from '@deltachat/jsonrpc-client'
@@ -30,6 +30,7 @@ export type ChatValue = {
 export const ChatContext = React.createContext<ChatValue | null>(null)
 
 export const ChatProvider = ({ children }: PropsWithChildren<{}>) => {
+  // @TODO: Explore how to refactor account state into its own context
   const [accountId, setAccountId] = useState<number | undefined>()
   const [activeView, setActiveView] = useState(ChatView.MessageList)
   const [chat, setChat] = useState<T.FullChat | undefined>()
@@ -40,12 +41,19 @@ export const ChatProvider = ({ children }: PropsWithChildren<{}>) => {
   }, [])
 
   const selectChat = useCallback(async (accountId: number, chatId: number) => {
+    // Already set known state
     setActiveView(ChatView.MessageList)
-    setAccountId(accountId)
     setChatId(chatId)
+    setAccountId(accountId)
 
-    const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
-    setChat(chat)
+    // Clear system notifications and mark chat as seen in backend
+    markChatAsSeen(accountId, chatId)
+
+    // Remember that user selected this chat to open it again when they come back
+    saveLastChatId(accountId, chatId)
+
+    // Load all chat data we need to get started
+    setChat(await getChat(accountId, chatId))
   }, [])
 
   const unselectChat = useCallback(() => {

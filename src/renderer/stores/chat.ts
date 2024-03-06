@@ -1,4 +1,4 @@
-import { Store } from './store'
+import { Store, useStore } from './store'
 import { ActionEmitter, KeybindAction } from '../keybindings'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
@@ -170,18 +170,6 @@ class ChatStore extends Store<ChatStoreState> {
       }, 0)
     },
 
-    mute: async (payload: {
-      chatId: number
-      muteDuration: Type.MuteDuration
-    }) => {
-      if (payload.chatId !== this.state.chat?.id) return
-
-      await BackendRemote.rpc.setChatMuteDuration(
-        selectedAccountId(),
-        payload.chatId,
-        payload.muteDuration
-      )
-    },
     onEventChatModified: async (chatId: number) => {
       if (this.state.chat?.id !== chatId) {
         return
@@ -260,6 +248,14 @@ chatStore.dispatch = (..._args) => {
 }
 
 const log = chatStore.log
+
+export const useChatStore = () => useStore(chatStore)[0]
+export const useChatStore2 = () => {
+  const [selectedChat, _chatStoreDispatch] = useStore(chatStore)
+  return { selectedChat }
+}
+
+export default chatStore
 
 export type ChatStoreDispatch = Store<ChatStoreState>['dispatch']
 
