@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- Reverted buggy workaround to handle chat store race conditions
+
 <a id="1_44_0"></a>
 
 ## [1.44.0] - 2024-03-05
