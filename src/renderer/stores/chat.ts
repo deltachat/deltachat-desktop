@@ -170,18 +170,6 @@ class ChatStore extends Store<ChatStoreState> {
       }, 0)
     },
 
-    mute: async (payload: {
-      chatId: number
-      muteDuration: Type.MuteDuration
-    }) => {
-      if (payload.chatId !== this.state.chat?.id) return
-
-      await BackendRemote.rpc.setChatMuteDuration(
-        selectedAccountId(),
-        payload.chatId,
-        payload.muteDuration
-      )
-    },
     onEventChatModified: async (chatId: number) => {
       if (this.state.chat?.id !== chatId) {
         return

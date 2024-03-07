@@ -22,7 +22,7 @@ import { ContextMenuContext } from '../contexts/ContextMenuContext'
 import { selectedAccountId } from '../ScreenController'
 
 export function useThreeDotMenu(
-  selectedChat: Type.FullChat | null,
+  selectedChat?: Type.FullChat,
   mode: 'chat' | 'gallery' = 'chat'
 ) {
   const { openDialog } = useDialog()

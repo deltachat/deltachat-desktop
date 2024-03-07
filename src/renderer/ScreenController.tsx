@@ -22,6 +22,7 @@ import AccountListSidebar from './components/AccountListSidebar/AccountListSideb
 import SettingsStoreInstance from './stores/settings'
 import { NoAccountSelectedScreen } from './components/screens/NoAccountSelectedScreen/NoAccountSelectedScreen'
 import AccountDeletionScreen from './components/screens/AccountDeletionScreen/AccountDeletionScreen'
+import { ChatProvider } from './contexts/ChatContext'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -341,17 +342,19 @@ export default class ScreenController extends Component {
           }}
         >
           <KeybindingsContextProvider>
-            <div className='main-container'>
-              <AccountListSidebar
-                selectedAccountId={this.selectedAccountId}
-                onAddAccount={this.addAndSelectAccount.bind(this)}
-                onSelectAccount={this.selectAccount.bind(this)}
-                openAccountDeletionScreen={this.openAccountDeletionScreen.bind(
-                  this
-                )}
-              />
-              {this.renderScreen()}
-            </div>
+            <ChatProvider>
+              <div className='main-container'>
+                <AccountListSidebar
+                  selectedAccountId={this.selectedAccountId}
+                  onAddAccount={this.addAndSelectAccount.bind(this)}
+                  onSelectAccount={this.selectAccount.bind(this)}
+                  openAccountDeletionScreen={this.openAccountDeletionScreen.bind(
+                    this
+                  )}
+                />
+                {this.renderScreen()}
+              </div>
+            </ChatProvider>
           </KeybindingsContextProvider>
         </ScreenContext.Provider>
       </div>

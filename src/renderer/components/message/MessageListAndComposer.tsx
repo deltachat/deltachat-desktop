@@ -5,7 +5,6 @@ import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 import Composer, { useDraft } from '../composer/Composer'
 import { getLogger } from '../../../shared/logger'
 import MessageList from './MessageList'
-import { ChatStoreStateWithChatSet } from '../../stores/chat'
 import ComposerMessageInput from '../composer/ComposerMessageInput'
 import { DesktopSettingsType } from '../../../shared/shared-types'
 import { runtime } from '../../runtime'
@@ -16,6 +15,8 @@ import useDialog from '../../hooks/useDialog'
 import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
 import useIsChatDisabled from '../composer/useIsChatDisabled'
 import { ReactionsBarProvider } from '../ReactionsBar'
+
+import type { T } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -60,13 +61,15 @@ export function getBackgroundImageStyle(
   return style
 }
 
-export default function MessageListAndComposer({
-  chatStore,
-}: {
-  chatStore: ChatStoreStateWithChatSet
-}) {
+type Props = {
+  chat: T.FullChat
+  accountId: number
+}
+
+export default function MessageListAndComposer({ accountId, chat }: Props) {
   const conversationRef = useRef(null)
   const refComposer = useRef(null)
+
   const { openDialog, hasOpenDialogs } = useDialog()
 
   const messageInputRef = useRef<ComposerMessageInput>(null)
@@ -78,21 +81,21 @@ export default function MessageListAndComposer({
     removeFile,
     clearDraft,
   } = useDraft(
-    chatStore.chat.id,
-    chatStore.chat.isContactRequest,
-    chatStore.chat.isProtectionBroken,
+    chat.id,
+    chat.isContactRequest,
+    chat.isProtectionBroken,
     messageInputRef
   )
 
   const onDrop = (e: React.DragEvent<any>) => {
-    if (chatStore.chat === null) {
-      log.warn('droped something, but no chat is selected')
+    if (chat === null) {
+      log.warn('dropped something, but no chat is selected')
       return
     }
-    const chatId = chatStore.chat.id as number
 
     e.preventDefault()
     e.stopPropagation()
+
     const sanitizedFileList: Pick<File, 'name' | 'path' | 'type'>[] = []
     {
       const fileList: FileList = (e.target as any).files || e.dataTransfer.files
@@ -134,14 +137,14 @@ export default function MessageListAndComposer({
     // This is a desktop specific "hack" to support sending multiple attachments at once.
     openDialog(ConfirmSendingFiles, {
       sanitizedFileList,
-      chatName: chatStore.chat.name,
+      chatName: chat.name,
       onClick: (isConfirmed: boolean) => {
         if (!isConfirmed) {
           return
         }
 
         for (const file of sanitizedFileList) {
-          sendMessage(chatId, { file: file.path, viewtype: 'File' })
+          sendMessage(chat.id, { file: file.path, viewtype: 'File' })
         }
       },
     })
@@ -216,7 +219,7 @@ export default function MessageListAndComposer({
     }
   }, [onMouseUp])
 
-  const [isDisabled, disabledReason] = useIsChatDisabled(chatStore.chat)
+  const [isDisabled, disabledReason] = useIsChatDisabled(chat)
 
   const settingsStore = useSettingsStore()[0]
   const style = settingsStore
@@ -228,23 +231,27 @@ export default function MessageListAndComposer({
       className='message-list-and-composer'
       style={style}
       ref={conversationRef}
-      onDrop={onDrop.bind({ props: { chat: chatStore } })}
+      onDrop={onDrop.bind({ props: { chat } })}
       onDragOver={onDragOver}
     >
       <div className='message-list-and-composer__message-list'>
-        <RecoverableCrashScreen reset_on_change_key={chatStore.chat.id}>
+        <RecoverableCrashScreen reset_on_change_key={chat.id}>
           <ReactionsBarProvider>
-            <MessageList chatStore={chatStore} refComposer={refComposer} />
+            <MessageList
+              accountId={accountId}
+              chat={chat}
+              refComposer={refComposer}
+            />
           </ReactionsBarProvider>
         </RecoverableCrashScreen>
       </div>
       <Composer
         ref={refComposer}
-        selectedChat={chatStore.chat}
+        selectedChat={chat}
         isDisabled={isDisabled}
         disabledReason={disabledReason}
-        isContactRequest={chatStore.chat.isContactRequest}
-        isProtectionBroken={chatStore.chat.isProtectionBroken}
+        isContactRequest={chat.isContactRequest}
+        isProtectionBroken={chat.isProtectionBroken}
         messageInputRef={messageInputRef}
         draftState={draftState}
         updateDraftText={updateDraftText}

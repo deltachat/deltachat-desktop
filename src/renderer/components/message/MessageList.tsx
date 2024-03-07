@@ -11,10 +11,9 @@ import { C, T } from '@deltachat/jsonrpc-client'
 import moment from 'moment'
 
 import { MessageWrapper } from './MessageWrapper'
-import ChatStore, { ChatStoreStateWithChatSet } from '../../stores/chat'
+import ChatStore from '../../stores/chat'
 import { getLogger } from '../../../shared/logger'
 import { KeybindAction } from '../../keybindings'
-import { selectedAccountId } from '../../ScreenController'
 import { useMessageList } from '../../stores/messagelist'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { debouncedUpdateBadgeCounter } from '../../system-integration/badge-counter'
@@ -91,14 +90,13 @@ function useUnreadCount(
   return freshMessageCounter
 }
 
-export default function MessageList({
-  chatStore,
-  refComposer,
-}: {
-  chatStore: ChatStoreStateWithChatSet
-  refComposer: todo
-}) {
-  const accountId = selectedAccountId()
+type Props = {
+  accountId: number
+  chat: T.FullChat
+  refComposer: any
+}
+
+export default function MessageList({ accountId, chat, refComposer }: Props) {
   const {
     store: {
       scheduler,
@@ -117,13 +115,13 @@ export default function MessageList({
     },
     fetchMoreBottom,
     fetchMoreTop,
-  } = useMessageList(accountId, chatStore.chat.id)
+  } = useMessageList(accountId, chat.id)
   const { hideReactionsBar } = useReactionsBar()
 
   const countUnreadMessages = useUnreadCount(
     accountId,
-    chatStore.chat.id,
-    chatStore.chat.freshMessageCounter
+    chat.id,
+    chat.freshMessageCounter
   )
 
   const messageListRef = useRef<HTMLDivElement | null>(null)
@@ -392,7 +390,7 @@ export default function MessageList({
 
     const composerTextarea = refComposer.current.childNodes[1]
     composerTextarea && composerTextarea.focus()
-  }, [refComposer, chatStore.chat.id])
+  }, [refComposer, chat.id])
 
   useLayoutEffect(() => {
     if (!messageListRef.current || !refComposer.current) {
@@ -407,8 +405,8 @@ export default function MessageList({
     <MessagesDisplayContext.Provider
       value={{
         context: 'chat_messagelist',
-        chatId: chatStore.chat.id,
-        isDeviceChat: chatStore.chat.isDeviceChat,
+        chatId: chat.id,
+        isDeviceChat: chat.isDeviceChat,
       }}
     >
       <MessageListInner
@@ -418,7 +416,7 @@ export default function MessageList({
         activeView={activeView}
         messageCache={messageCache}
         messageListRef={messageListRef}
-        chatStore={chatStore}
+        chat={chat}
         loaded={loaded}
         unreadMessageInViewIntersectionObserver={
           unreadMessageInViewIntersectionObserver
@@ -452,7 +450,7 @@ export const MessageListInner = React.memo(
     activeView: T.MessageListItem[]
     messageCache: { [msgId: number]: T.MessageLoadResult | undefined }
     messageListRef: React.MutableRefObject<HTMLDivElement | null>
-    chatStore: ChatStoreStateWithChatSet
+    chat: T.FullChat
     loaded: boolean
     unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
     loadMissingMessages: () => Promise<void>
@@ -463,23 +461,19 @@ export const MessageListInner = React.memo(
       messageCache,
       activeView,
       messageListRef,
-      chatStore,
+      chat,
       loaded,
       unreadMessageInViewIntersectionObserver,
       loadMissingMessages,
     } = props
 
-    if (!chatStore.chat.id) {
-      throw new Error('no chat id')
-    }
-
     const conversationType: ConversationType = {
       hasMultipleParticipants:
-        chatStore.chat.chatType === C.DC_CHAT_TYPE_GROUP ||
-        chatStore.chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST ||
-        chatStore.chat.chatType === C.DC_CHAT_TYPE_BROADCAST,
-      isDeviceChat: chatStore.chat.isDeviceChat as boolean,
-      chatType: chatStore.chat.chatType as number,
+        chat.chatType === C.DC_CHAT_TYPE_GROUP ||
+        chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST ||
+        chat.chatType === C.DC_CHAT_TYPE_BROADCAST,
+      isDeviceChat: chat.isDeviceChat as boolean,
+      chatType: chat.chatType as number,
     }
 
     useKeyBindingAction(KeybindAction.MessageList_PageUp, () => {
@@ -530,9 +524,7 @@ export const MessageListInner = React.memo(
         onScroll={onScroll}
       >
         <ul>
-          {messageListItems.length === 0 && (
-            <EmptyChatMessage chatStore={chatStore} />
-          )}
+          {messageListItems.length === 0 && <EmptyChatMessage chat={chat} />}
           {activeView.map(messageId => {
             if (messageId.kind === 'dayMarker') {
               return (
@@ -551,7 +543,7 @@ export const MessageListInner = React.memo(
                     isHover={messageId.msg_id === currentHoverMessageId}
                     key={messageId.msg_id}
                     key2={`${messageId.msg_id}`}
-                    chat={chatStore.chat}
+                    chat={chat}
                     message={message}
                     conversationType={conversationType}
                     unreadMessageInViewIntersectionObserver={

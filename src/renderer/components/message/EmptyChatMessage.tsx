@@ -1,15 +1,16 @@
 import React from 'react'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { ChatStoreStateWithChatSet } from '../../stores/chat'
 import { C } from '@deltachat/jsonrpc-client'
 
-export default function EmptyChatMessage({
-  chatStore,
-}: {
-  chatStore: ChatStoreStateWithChatSet
-}) {
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { T } from '@deltachat/jsonrpc-client'
+
+type Props = {
+  chat: T.FullChat
+}
+
+export default function EmptyChatMessage({ chat }: Props) {
   const tx = useTranslationFunction()
-  const { chat } = chatStore
 
   let emptyChatMessage = tx('chat_new_one_to_one_hint', [chat.name, chat.name])
 
