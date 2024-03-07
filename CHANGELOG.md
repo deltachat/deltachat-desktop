@@ -3,7 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Fixed
-- Reverted buggy workaround to handle chat store race conditions
+- Reverted buggy workaround to handle chat store race conditions #3726
 
 <a id="1_44_0"></a>
 
