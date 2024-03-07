@@ -49,7 +49,6 @@ export default function MainScreen() {
   const [queryStr, setQueryStr] = useState('')
   const [queryChatId, setQueryChatId] = useState<null | number>(null)
   const [archivedChatsSelected, setArchivedChatsSelected] = useState(false)
-  const [chatStoreReady, setChatStoreReady] = useState(false)
 
   // Small hack/misuse of keyBindingAction to setArchivedChatsSelected from
   // other components (especially ViewProfile when selecting a shared chat/group)
@@ -133,16 +132,11 @@ export default function MainScreen() {
   const isFirstLoad = useRef(true)
   if (isFirstLoad.current) {
     isFirstLoad.current = false
-    SettingsStoreInstance.effect.load().then(async () => {
+    SettingsStoreInstance.effect.load().then(() => {
       const lastChatId =
         SettingsStoreInstance.getState()?.settings['ui.lastchatid']
       if (lastChatId) {
-        // Selecting the chat populates the chat store with state all
-        // children component will depend on. To make sure we're rendering
-        // these state-critical components _after_ a successful state
-        // transition, we await here and use a `chatStoreReady` flag
-        await selectChat(Number(lastChatId))
-        setChatStoreReady(true)
+        selectChat(Number(lastChatId))
       }
     })
   }
@@ -429,7 +423,7 @@ export default function MainScreen() {
             setQueryChatId(null)
           }}
         />
-        {chatStoreReady && MessageListView}
+        {MessageListView}
       </div>
       <ConnectivityToast />
     </div>
