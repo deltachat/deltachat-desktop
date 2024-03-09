@@ -13,7 +13,7 @@ const VIDEO_CHAT_INSTANCES = {
   autistici: {
     name: 'Autistici',
     url: 'https://vc.autistici.org/$ROOM',
-    icon: '../images/videochat_instances/systemli.ico',
+    icon: '../images/videochat_instances/autistici.ico',
   },
 }
 
@@ -21,7 +21,7 @@ const getData = async () => {
   let data = {}
   for (const [id, props] of Object.entries(VIDEO_CHAT_INSTANCES)) {
     for (const i = 1; i <= 3; i++) { // max 3 retries
-      const response = await fetch(props.url.replace('$ROOM', 'favicon.ico'))
+      const response = await fetch(props.url.replace('$ROOM', '/images/favicon.ico'))
       if (response.ok) {
         data[id] = {
           buffer: new Uint8Array(await response.arrayBuffer()),
