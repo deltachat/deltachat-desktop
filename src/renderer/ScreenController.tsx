@@ -22,6 +22,8 @@ import AccountListSidebar from './components/AccountListSidebar/AccountListSideb
 import SettingsStoreInstance from './stores/settings'
 import { NoAccountSelectedScreen } from './components/screens/NoAccountSelectedScreen/NoAccountSelectedScreen'
 import AccountDeletionScreen from './components/screens/AccountDeletionScreen/AccountDeletionScreen'
+import chatStore from './stores/chat'
+import { selectChat } from './components/helpers/ChatMethods'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -121,6 +123,18 @@ export default class ScreenController extends Component {
       this.selectedAccountId
     )
     if (account.kind === 'Configured') {
+      // reset global stores
+      chatStore.reducer.reset(selectedAccountId())
+      await SettingsStoreInstance.effect.load()
+      const lastChatId =
+        SettingsStoreInstance.getState()?.settings['ui.lastchatid']
+      if (lastChatId) {
+        try {
+          await selectChat(Number(lastChatId))
+        } catch (error) {
+          log.error('Selecting last chat failed:', error)
+        }
+      }
       this.changeScreen(Screens.Main)
       updateDeviceChats(this.selectedAccountId)
     } else {

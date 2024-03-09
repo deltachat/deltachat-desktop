@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- Fix Bug: When switching accounts after deleting a chat, the message list is blank, similar issues can come up when using the 2nd device flow. #3724
+
 <a id="1_44_0"></a>
 
 ## [1.44.0] - 2024-03-05
