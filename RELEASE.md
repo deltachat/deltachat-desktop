@@ -85,8 +85,8 @@
       - for patch releases the full changelog is not needed, the part that changed from the last release is enough
     - Add a header `# Downloads` with a link to the download page and a link to the release progress issue.
     - for testing releases add a link to the testing forum topic: 
-      ```
-> This release candidate is currently in the testing phase, to learn more read https://support.delta.chat/t/<rest of link>
+      ```md
+      > This release candidate is currently in the testing phase, to learn more read https://support.delta.chat/t/<rest of link>
       ```
 10. As soon as the new tag is detected by our build machine, it will start
     building releases for various platforms (MacOS, Windows, Linux) and upload
