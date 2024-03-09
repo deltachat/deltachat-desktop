@@ -428,7 +428,7 @@ export function ConfigureProgressDialog({
         'failed to stopOngoingProcess' + error.message || error.toString()
       )
       setConfigureFailed(true)
-      // if it failed to canceled but is still sucessful it should behave like normal.
+      // If it fails to cancel but is still successful, it should behave like normal.
       wasCanceled.current = false
     }
     onClose()
