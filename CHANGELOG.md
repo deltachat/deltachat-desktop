@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_44_1"></a>
+
+## [1.44.1] - 2024-03-09
+
 > Due to the electron update macOS 10.13 (High Sierra) and macOS 10.14 (Mojave)
 > are no longer supported, macOS 10.15 (Catalina) or later is the new
 > requirement.
@@ -2482,7 +2486,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.44.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.44.1...HEAD
+
+[1.44.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.44.0...v1.44.1
 
 [1.44.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.43.1...v1.44.0
 
