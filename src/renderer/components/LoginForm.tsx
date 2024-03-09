@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 
 import { C, DcEventType } from '@deltachat/jsonrpc-client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Collapse } from '@blueprintjs/core'
 import { useDebouncedCallback } from 'use-debounce/lib'
 
@@ -390,10 +390,12 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
 export function ConfigureProgressDialog({
   credentials,
   onSuccess,
+  onUserCancellation,
   ...dialogProps
 }: {
   credentials: Partial<Credentials>
   onSuccess?: () => void
+  onUserCancellation?: () => void
 } & DialogProps) {
   const { onClose } = dialogProps
   const [progress, setProgress] = useState(0)
@@ -411,11 +413,14 @@ export function ConfigureProgressDialog({
     setProgressComment(comment || '')
   }
 
+  const wasCanceled = useRef(false)
+
   const onCancel = async (_event: any) => {
     try {
       if (window.__selectedAccountId === undefined) {
         throw new Error('no selected account')
       }
+      wasCanceled.current = true
       await BackendRemote.rpc.stopOngoingProcess(window.__selectedAccountId)
     } catch (error: any) {
       log.error('failed to stopOngoingProcess', error)
@@ -423,6 +428,8 @@ export function ConfigureProgressDialog({
         'failed to stopOngoingProcess' + error.message || error.toString()
       )
       setConfigureFailed(true)
+      // If it fails to cancel but is still successful, it should behave like normal.
+      wasCanceled.current = false
     }
     onClose()
   }
@@ -440,6 +447,11 @@ export function ConfigureProgressDialog({
 
           // Configure user account _after_ setting the credentials
           await BackendRemote.rpc.configure(accountId)
+          if (wasCanceled.current) {
+            onClose()
+            onUserCancellation?.()
+            return
+          }
 
           // Select "Device Messages" chat as the initial one. This will serve
           // as a first introduction to the app after they've entered
@@ -463,7 +475,7 @@ export function ConfigureProgressDialog({
         }
       })()
     },
-    [] // eslint-disable-line react-hooks/exhaustive-deps
+    [wasCanceled] // eslint-disable-line react-hooks/exhaustive-deps
   )
 
   useEffect(() => {

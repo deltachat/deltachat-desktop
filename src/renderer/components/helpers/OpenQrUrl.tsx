@@ -202,6 +202,10 @@ export default async function processOpenQrUrl(
             window.__changeScreen(Screens.Main)
             callback()
           },
+          onUserCancellation: () => {
+            closeProcessDialog()
+            callback()
+          },
         })
       } catch (err: any) {
         closeProcessDialog()
