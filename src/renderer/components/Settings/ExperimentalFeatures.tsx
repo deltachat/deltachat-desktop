@@ -7,7 +7,9 @@ import SettingsStoreInstance, {
 import SettingsSelector from './SettingsSelector'
 import DesktopSettingsSwitch from './DesktopSettingsSwitch'
 import CoreSettingsSwitch from './CoreSettingsSwitch'
-import EditVideochatInstanceDialog, { getVideoChatIdByUrl } from '../dialogs/EditVideochatInstanceDialog'
+import EditVideochatInstanceDialog, {
+  getVideoChatIdByUrl,
+} from '../dialogs/EditVideochatInstanceDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
 import SettingsSwitch from './SettingsSwitch'

@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 
-type RadioProps = {
+export type RadioProps = {
   onSelect?: () => void
   selected?: boolean
   label: string

@@ -4,9 +4,7 @@ import { DeltaInput } from '../Login-Styles'
 import { SettingsStoreState } from '../../stores/settings'
 import RadioGroup from '../RadioGroup'
 import Radio from '../Radio'
-import {
-  VIDEO_CHAT_INSTANCES
-} from '../../../shared/constants'
+import { VIDEO_CHAT_INSTANCES } from '../../../shared/constants'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -18,8 +16,10 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
-
-type RadioButtonValue = 'disabled' | 'custom' | keyof typeof VIDEO_CHAT_INSTANCES
+type RadioButtonValue =
+  | 'disabled'
+  | 'custom'
+  | keyof typeof VIDEO_CHAT_INSTANCES
 
 type Props = {
   onOk: (configValue: string) => void
@@ -87,7 +87,26 @@ export default function EditVideochatInstanceDialog({
     }
     setConfigValue(newConfigValue)
   }
-
+  const radios = [
+    <Radio key='select-none' label={tx('off')} value='disabled' />,
+    ...Object.entries(VIDEO_CHAT_INSTANCES).map(
+      ([instanceId, instanceProps]: [string, any]) => (
+        <Radio
+          key={'select-' + instanceId}
+          label={instanceProps.name}
+          value={instanceId}
+          icon={instanceProps.icon}
+          subtitle={instanceProps.url}
+        />
+      )
+    ),
+    <Radio
+      key='select-custom'
+      label={tx('custom')}
+      value='custom'
+      className='test-videochat-custom'
+    />,
+  ]
   return (
     <Dialog onClose={onClose} canOutsideClickClose={false}>
       <DialogHeader title={tx('videochat')} />
@@ -99,25 +118,7 @@ export default function EditVideochatInstanceDialog({
             selectedValue={radioValue}
             name='videochat-instance'
           >
-            <Radio key='select-none' label={tx('off')} value='disabled' />
-            {
-              Object.entries(VIDEO_CHAT_INSTANCE).map(([instanceName, instanceUrl]: string[]) => {
-                return (
-                  <Radio
-                    key={'select-' + instanceName}
-                    label={instanceName}
-                    value={instanceName}
-                    subtitle={instanceUrl}
-                  />
-                )
-              })
-            }
-            <Radio
-              key='select-custom'
-              label={tx('custom')}
-              value='custom'
-              className={'test-videochat-custom'}
-            />
+            {radios}
           </RadioGroup>
         </DialogContent>
         {radioValue === 'custom' && (
