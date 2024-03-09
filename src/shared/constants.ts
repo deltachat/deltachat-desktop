@@ -40,6 +40,6 @@ export const VIDEO_CHAT_INSTANCES = {
   autistici: {
     name: 'Autistici',
     url: 'https://vc.autistici.org/$ROOM',
-    icon: '../images/videochat_instances/systemli.ico',
+    icon: '../images/videochat_instances/autistici.ico',
   },
 }
