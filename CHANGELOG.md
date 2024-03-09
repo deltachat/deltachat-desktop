@@ -2,6 +2,13 @@
 
 ## [Unreleased][unreleased]
 
+> Due to the electron update macOS 10.13 (High Sierra) and macOS 10.14 (Mojave)
+> are no longer supported, macOS 10.15 (Catalina) or later is the new
+> requirement.
+
+### Changed
+- Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.136.3`
+
 ### Fixed
 - Fix Bug: When switching accounts after deleting a chat, the message list is blank, similar issues can come up when using the 2nd device flow. #3724
 - Fix bug where cancellation of configure led to an undefined state where it looked like the account was configured successfully, but it was not. #3729
