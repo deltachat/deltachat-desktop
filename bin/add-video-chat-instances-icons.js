@@ -1,9 +1,10 @@
 const fs = require('fs')
+const process = require('process')
 
 //const { VIDEO_CHAT_INSTANCES } = require('../src/shared/constants.ts')
 // TODO instead of duplicating these data
 // Videochat Server URLs and icons
-export const VIDEO_CHAT_INSTANCES = {
+const VIDEO_CHAT_INSTANCES = {
   systemli: {
     name: 'Systemli',
     url: 'https://meet.systemli.org/$ROOM',
@@ -22,8 +23,10 @@ const getData = async () => {
     for (const i = 1; i <= 3; i++) { // max 3 retries
       const response = await fetch(props.url.replace('$ROOM', 'favicon.ico'))
       if (response.ok) {
-        const blob = await response.blob()
-        data[id] = blob.toString('base64')
+        data[id] = {
+          buffer: new Uint8Array(await response.arrayBuffer()),
+          file: props.icon,
+        }
         break
       }
     }
@@ -34,12 +37,12 @@ const getData = async () => {
 getData().then((data) => {
   if (Object.entries(data).length < VIDEO_CHAT_INSTANCES.length) {
     console.error('Could not fetch all the icons')
-    exit(1)
+    process.exit(1)
   } else {
-    for (const [id, blob] of Object.entries(data)) {
-      fs.writeFileSync(`../images/${id}.ico`, blob)
+    for (const [_id, { buffer, file }] of Object.entries(data)) {
+      fs.writeFileSync(file, buffer)
     }
     console.log('Written to images/videochat_instances successfully')
-    exit(0)
+    process.exit(0)
   }
 })
