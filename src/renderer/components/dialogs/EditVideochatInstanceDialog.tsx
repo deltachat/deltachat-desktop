@@ -35,10 +35,10 @@ export function getVideoChatIdByUrl(url: string): string | undefined {
   }
 }
 
-function getVideoChatUrlByName(name: string): string | undefined {
-  const name_ = name
-  for (const [_, { url, name }] of Object.entries(VIDEO_CHAT_INSTANCES)) {
-    if (name_ === name) {
+function getVideoChatUrlById(id: string): string | undefined {
+  const id_ = id
+  for (const [id, { url}] of Object.entries(VIDEO_CHAT_INSTANCES)) {
+    if (id_ === id) {
       return url
     }
   }
@@ -76,7 +76,7 @@ export default function EditVideochatInstanceDialog({
       newConfigValue = ''
       setRadioValue('disabled')
     } else {
-      const url = getVideoChatUrlByName(value)
+      const url = getVideoChatUrlById(value)
       if (url) {
         newConfigValue = url
         setRadioValue(value as RadioButtonValue)
@@ -96,6 +96,9 @@ export default function EditVideochatInstanceDialog({
           label={instanceProps.name}
           value={instanceId}
           icon={instanceProps.icon}
+          iconSize='24px'
+          iconRound
+          iconWithBackground
           subtitle={instanceProps.url}
         />
       )
