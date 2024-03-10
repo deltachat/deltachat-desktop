@@ -36,12 +36,8 @@ export function getVideoChatIdByUrl(url: string): string | undefined {
 }
 
 function getVideoChatUrlById(id: string): string | undefined {
-  const id_ = id
-  for (const [id, { url}] of Object.entries(VIDEO_CHAT_INSTANCES)) {
-    if (id_ === id) {
-      return url
-    }
-  }
+  const instance = VIDEO_CHAT_INSTANCES[id]
+  return instance && instance.url
 }
 
 export default function EditVideochatInstanceDialog({
