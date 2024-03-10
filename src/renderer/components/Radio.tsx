@@ -44,7 +44,7 @@ export default function Radio({
           style={{
             width: iconSize,
             height: iconSize,
-            padding: '4px',
+            margin: '4px',
             borderRadius: iconRound ? '4px' : undefined,
             backgroundColor: iconWithBackground
               ? 'var(--textPrimary)'
