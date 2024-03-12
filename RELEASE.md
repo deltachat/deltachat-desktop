@@ -79,8 +79,15 @@
    git tag <tagname> # for example v1.43.2
    git push origin master --tags
    ```
-9. After the PR is merged create a GitHub release for your tag. Copy the
-   relevant part of the `CHANGELOG.md` file into the description field
+9. After the PR is merged create a GitHub release for your tag:
+    - Copy the relevant part of the `CHANGELOG.md` file into the description field
+      - for fresh releases this includes the changelog of the test releases
+      - for patch releases the full changelog is not needed, the part that changed from the last release is enough
+    - Add a header `# Downloads` with a link to the download page and a link to the release progress issue.
+    - for testing releases add a link to the testing forum topic: 
+      ```md
+      > This release candidate is currently in the testing phase, to learn more read https://support.delta.chat/t/<rest of link>
+      ```
 10. As soon as the new tag is detected by our build machine, it will start
     building releases for various platforms (MacOS, Windows, Linux) and upload
     them to: `https://download.delta.chat/desktop/[version_code]`. This process
