@@ -46,6 +46,10 @@
     onStatusUpdate()
   })
 
+  ipcRenderer.on('webxdc.ephemeralStatusUpdate', _ev => {
+    throw new Error('not implemented')
+  })
+
   /**
    * @type {import('webxdc-types').Webxdc}
    */

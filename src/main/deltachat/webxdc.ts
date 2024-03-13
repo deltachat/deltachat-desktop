@@ -550,6 +550,16 @@ If you think that's a bug and you need that permission, then please open an issu
     )
 
     ipcMain.handle(
+      'webxdc:ephemeral-status-update',
+      (_ev, accountId: number, instanceId: number) => {
+        const instance = open_apps[`${accountId}.${instanceId}`]
+        if (instance) {
+          instance.win.webContents.send('webxdc.ephemeralStatusUpdate')
+        }
+      }
+    )
+
+    ipcMain.handle(
       'webxdc:message-changed',
       async (_ev, accountId: number, instanceId: number) => {
         const instance = open_apps[`${accountId}.${instanceId}`]

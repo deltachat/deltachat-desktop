@@ -95,6 +95,7 @@ interface Runtime {
   deleteWebxdcAccountData(accountId: number): Promise<void>
   closeAllWebxdcInstances(): void
   notifyWebxdcStatusUpdate(accountId: number, instanceId: number): void
+  notifyWebxdcEphemeralStatusUpdate(accountId: number, instanceId: number): void
   notifyWebxdcMessageChanged(accountId: number, instanceId: number): void
   notifyWebxdcInstanceDeleted(accountId: number, instanceId: number): void
 
@@ -186,6 +187,9 @@ class Browser implements Runtime {
     throw new Error('Method not implemented.')
   }
   notifyWebxdcStatusUpdate(_accountId: number, _instanceId: number): void {
+    throw new Error('Method not implemented.')
+  }
+  notifyWebxdcEphemeralStatusUpdate(_accountId: number, _instanceId: number): void {
     throw new Error('Method not implemented.')
   }
   notifyWebxdcMessageChanged(_accountId: number, _instanceId: number): void {
@@ -377,6 +381,11 @@ class Electron implements Runtime {
   notifyWebxdcStatusUpdate(accountId: number, instanceId: number): void {
     ipcBackend.invoke('webxdc:status-update', accountId, instanceId)
   }
+
+  notifyWebxdcEphemeralStatusUpdate(accountId: number, instanceId: number): void {
+    ipcBackend.invoke('webxdc:ephemeral-status-update', accountId, instanceId)
+  }
+
   notifyWebxdcMessageChanged(accountId: number, instanceId: number): void {
     ipcBackend.invoke('webxdc:message-changed', accountId, instanceId)
   }
