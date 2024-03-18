@@ -15,9 +15,9 @@ import { selectedAccountId } from '../../ScreenController'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
 import useContextMenu from '../../hooks/useContextMenu'
+import useMessage from '../../hooks/useMessage'
 
 import type { DialogProps } from '../../contexts/DialogContext'
-import useMessage from '../../hooks/useMessage'
 
 const log = getLogger('renderer/fullscreen_media')
 
