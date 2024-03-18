@@ -13,7 +13,7 @@ export enum ChatView {
 
 export type SetView = (nextView: ChatView) => void
 
-export type SelectChat = (accountId: number, chatId: number) => void
+export type SelectChat = (accountId: number, chatId: number) => Promise<void>
 
 export type UnselectChat = () => void
 

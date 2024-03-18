@@ -2,14 +2,12 @@ import { T, C } from '@deltachat/jsonrpc-client'
 
 import ChatStore, { ChatView } from '../../stores/chat'
 import { getLogger } from '../../../shared/logger'
-import AlertDialog from '../dialogs/AlertDialog'
 import { BackendRemote, EffectfulBackendActions, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import ViewGroup from '../dialogs/ViewGroup'
 import ViewProfile from '../dialogs/ViewProfile'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import chatStore from '../../stores/chat'
-import { openLinkSafely } from './LinkConfirmation'
 import EncryptionInfo from '../dialogs/EncryptionInfo'
 import MuteChat from '../dialogs/MuteChat'
 
@@ -160,49 +158,6 @@ export async function unMuteChat(chatId: number) {
   await BackendRemote.rpc.setChatMuteDuration(selectedAccountId(), chatId, {
     kind: 'NotMuted',
   })
-}
-
-export async function sendCallInvitation(
-  openDialog: OpenDialog,
-  chatId: number
-) {
-  try {
-    const messageId = await BackendRemote.rpc.sendVideochatInvitation(
-      selectedAccountId(),
-      chatId
-    )
-    ChatStore.effect.jumpToMessage(messageId, false)
-    await joinCall(openDialog, messageId)
-  } catch (error: todo) {
-    log.error('failed send call invitation', error)
-    openDialog(AlertDialog, {
-      message: error?.message || error.toString(),
-    })
-  }
-}
-
-export async function joinCall(openDialog: OpenDialog, messageId: number) {
-  try {
-    const message = await BackendRemote.rpc.getMessage(
-      selectedAccountId(),
-      messageId
-    )
-
-    if (!message) {
-      throw new Error('Message not found')
-    }
-    if (message.viewType !== 'VideochatInvitation') {
-      throw new Error('Message is not a video chat invitation')
-    }
-    if (!message.videochatUrl) {
-      throw new Error('Message has no video chat url')
-    }
-
-    return openLinkSafely(openDialog, message.videochatUrl)
-  } catch (error: todo) {
-    log.error('failed to join call', error)
-    openDialog(AlertDialog, { message: error.toString() })
-  }
 }
 
 /**

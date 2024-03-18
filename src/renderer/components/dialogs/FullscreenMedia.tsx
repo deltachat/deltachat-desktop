@@ -10,7 +10,6 @@ import { getLogger } from '../../../shared/logger'
 import { gitHubIssuesUrl } from '../../../shared/constants'
 import { useInitEffect } from '../helpers/hooks'
 import { preventDefault } from '../../../shared/util'
-import { jumpToMessage } from '../helpers/ChatMethods'
 import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
@@ -18,6 +17,7 @@ import useDialog from '../../hooks/useDialog'
 import useContextMenu from '../../hooks/useContextMenu'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import useMessage from '../../hooks/useMessage'
 
 const log = getLogger('renderer/fullscreen_media')
 
@@ -36,6 +36,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
   const accountId = selectedAccountId()
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
+  const { jumpToMessage } = useMessage()
   const { onClose } = props
 
   const [msg, setMsg] = useState(props.msg)
@@ -105,7 +106,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
     {
       label: tx('show_in_chat'),
       action: () => {
-        jumpToMessage(msg.id)
+        jumpToMessage(accountId, msg.id)
         onClose()
       },
     },

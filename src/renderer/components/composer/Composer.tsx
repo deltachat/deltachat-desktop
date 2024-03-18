@@ -15,7 +15,6 @@ import { EmojiAndStickerPicker } from './EmojiAndStickerPicker'
 import { replaceColonsSafe } from '../conversations/emoji'
 import { Quote } from '../message/Message'
 import { DraftAttachment } from '../attachment/messageAttachment'
-import { sendMessage, unselectChat } from '../helpers/ChatMethods'
 import { useSettingsStore } from '../../stores/settings'
 import {
   BackendRemote,
@@ -30,6 +29,8 @@ import { confirmDialog } from '../message/messageFunctions'
 import { ProtectionBrokenDialog } from '../dialogs/ProtectionStatusDialog'
 import useDialog from '../../hooks/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useMessage from '../../hooks/useMessage'
+import useChat from '../../hooks/useChat'
 import DisabledMessageInput from './DisabledMessageInput'
 import { DisabledChatReasons } from './useIsChatDisabled'
 
@@ -99,8 +100,11 @@ const Composer = forwardRef<
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
   const pickerButtonRef = useRef<HTMLDivElement>(null)
 
-  const { openDialog } = useDialog()
+  const tx = useTranslationFunction()
   const accountId = selectedAccountId()
+  const { openDialog } = useDialog()
+  const { sendMessage } = useMessage()
+  const { unselectChat } = useChat()
 
   useEffect(() => {
     return onDCEvent(accountId, 'SecurejoinJoinerProgress', ({ progress }) => {
@@ -134,7 +138,7 @@ const Composer = forwardRef<
         return
       }
 
-      const sendMessagePromise = sendMessage(chatId, {
+      const sendMessagePromise = sendMessage(accountId, chatId, {
         text: replaceColonsSafe(message),
         file: draftState.file || undefined,
         quotedMessageId:
@@ -259,7 +263,6 @@ const Composer = forwardRef<
     }
   }
 
-  const tx = useTranslationFunction()
   const settingsStore = useSettingsStore()[0]
 
   useLayoutEffect(() => {

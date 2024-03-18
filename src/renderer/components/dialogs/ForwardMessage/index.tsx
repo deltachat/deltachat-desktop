@@ -1,6 +1,6 @@
 import AutoSizer from 'react-virtualized-auto-sizer'
 import React from 'react'
-import { C, T } from '@deltachat/jsonrpc-client'
+import { C } from '@deltachat/jsonrpc-client'
 
 import ChatListItem from '../../chat/ChatListItem'
 import { PseudoListItemNoSearchResults } from '../../helpers/PseudoListItem'
@@ -9,27 +9,34 @@ import { useChatList } from '../../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../../ThemeManager'
 import { BackendRemote } from '../../../backend-com'
 import { selectedAccountId } from '../../../ScreenController'
-import { forwardMessage, selectChat } from '../../helpers/ChatMethods'
 import { confirmForwardMessage } from '../../message/messageFunctions'
 import Dialog, { DialogBody, DialogHeader } from '../../Dialog'
-import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import useChat from '../../../hooks/useChat'
 import useDialog from '../../../hooks/useDialog'
-
-import type { DialogProps } from '../../../contexts/DialogContext'
+import useMessage from '../../../hooks/useMessage'
+import useTranslationFunction from '../../../hooks/useTranslationFunction'
 
 import styles from './styles.module.scss'
 
-const LIST_FLAGS = C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS
+import type { T } from '@deltachat/jsonrpc-client'
+import type { DialogProps } from '../../../contexts/DialogContext'
 
-export default function ForwardMessage(props: {
+type Props = {
   message: T.Message
   onClose: DialogProps['onClose']
-}) {
+}
+
+const LIST_FLAGS = C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS
+
+export default function ForwardMessage(props: Props) {
+  const { message, onClose } = props
+
   const accountId = selectedAccountId()
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
+  const { selectChat } = useChat()
+  const { forwardMessage } = useMessage()
 
-  const { message, onClose } = props
   const { chatListIds, queryStr, setQueryStr } = useChatList(LIST_FLAGS)
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
     chatListIds,
@@ -40,7 +47,7 @@ export default function ForwardMessage(props: {
     const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
     onClose()
     if (!chat.isSelfTalk) {
-      selectChat(chat.id)
+      selectChat(accountId, chat.id)
       const yes = await confirmForwardMessage(
         openDialog,
         accountId,
@@ -48,7 +55,7 @@ export default function ForwardMessage(props: {
         chat
       )
       if (!yes) {
-        selectChat(message.chatId)
+        selectChat(accountId, message.chatId)
       }
     } else {
       await forwardMessage(accountId, message.id, chat.id)

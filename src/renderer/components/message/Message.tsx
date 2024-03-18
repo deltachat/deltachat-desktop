@@ -19,11 +19,6 @@ import {
 } from './messageFunctions'
 import Attachment from '../attachment/messageAttachment'
 import { isGenericAttachment } from '../attachment/Attachment'
-import {
-  joinCall,
-  jumpToMessage,
-  openViewProfileDialog,
-} from '../helpers/ChatMethods'
 import { runtime } from '../../runtime'
 import { AvatarFromContact } from '../Avatar'
 import { ConversationType } from './MessageList'
@@ -36,8 +31,11 @@ import {
   ProtectionBrokenDialog,
   ProtectionEnabledDialog,
 } from '../dialogs/ProtectionStatusDialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
+import useMessage from '../../hooks/useMessage'
+import useOpenViewProfileDialog from '../../hooks/useOpenViewProfileDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useVideoChat from '../../hooks/useVideoChat'
 import { useReactionsBar, showReactionsUi } from '../ReactionsBar'
 import EnterAutocryptSetupMessage from '../dialogs/EnterAutocryptSetupMessage'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
@@ -328,12 +326,16 @@ export default function Message(props: {
   const { id, viewType, text, hasLocation, isSetupmessage, hasHtml } = message
   const direction = getDirection(message)
   const status = mapCoreMsgStatus2String(message.state)
+
   const tx = useTranslationFunction()
   const accountId = selectedAccountId()
-  const { showReactionsBar } = useReactionsBar()
 
+  const { showReactionsBar } = useReactionsBar()
   const { openDialog } = useDialog()
   const { openContextMenu } = useContext(ContextMenuContext)
+  const openViewProfileDialog = useOpenViewProfileDialog()
+  const { jumpToMessage } = useMessage()
+  const { joinVideoChat } = useVideoChat()
 
   const showContextMenu = useCallback(
     async (
@@ -421,7 +423,7 @@ export default function Message(props: {
     if (isInteractive) {
       onClick = async () => {
         if (isWebxdcInfo && message.parentId) {
-          jumpToMessage(message.parentId, true, message.id)
+          jumpToMessage(accountId, message.parentId, true, message.id)
         } else if (isProtectionBrokenMsg) {
           const { name } = await BackendRemote.rpc.getBasicChatInfo(
             selectedAccountId(),
@@ -481,7 +483,7 @@ export default function Message(props: {
   }
   // Normal Message
   const onContactClick = async (contact: T.Contact) => {
-    openViewProfileDialog(openDialog, contact.id)
+    openViewProfileDialog(accountId, contact.id)
   }
 
   let onClickMessageBody
@@ -502,7 +504,7 @@ export default function Message(props: {
         <div
           className='info-button'
           onContextMenu={showContextMenu}
-          onClick={joinCall.bind(null, openDialog, id)}
+          onClick={() => joinVideoChat(accountId, id)}
         >
           {direction === 'incoming'
             ? tx('videochat_contact_invited_hint', message.sender.displayName)
@@ -685,6 +687,8 @@ export const Quote = ({
   msgParentId?: number
 }) => {
   const tx = useTranslationFunction()
+  const accountId = selectedAccountId()
+  const { jumpToMessage } = useMessage()
 
   const hasMessage = quote.kind === 'WithMessage'
 
@@ -699,7 +703,7 @@ export const Quote = ({
       className='quote-background'
       onClick={() => {
         quote.kind === 'WithMessage' &&
-          jumpToMessage(quote.messageId, true, msgParentId)
+          jumpToMessage(accountId, quote.messageId, true, msgParentId)
       }}
     >
       <div

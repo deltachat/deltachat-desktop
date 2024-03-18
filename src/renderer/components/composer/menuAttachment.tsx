@@ -7,52 +7,42 @@ import {
   MenuItem,
   IconName,
 } from '@blueprintjs/core'
-import { T } from '@deltachat/jsonrpc-client'
+import { dirname } from 'path'
 
 import { runtime } from '../../runtime'
-import { sendCallInvitation } from '../helpers/ChatMethods'
-import { Type } from '../../backend-com'
 import { useStore } from '../../stores/store'
 import SettingsStoreInstance from '../../stores/settings'
 import { IMAGE_EXTENSIONS } from '../../../shared/constants'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
 import useConfirmationDialog from '../../hooks/useConfirmationDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useVideoChat from '../../hooks/useVideoChat'
 import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
-import { dirname } from 'path'
+import { selectedAccountId } from '../../ScreenController'
 
-// Function to populate Menu
-const MenuAttachmentItems = ({
-  itemsArray,
-}: {
-  itemsArray: MenuAttachmentItemObject[]
-}) => {
-  return (
-    <>
-      {itemsArray.map((item: MenuAttachmentItemObject) => (
-        <MenuItem
-          key={item.id}
-          icon={item.icon}
-          text={item.text}
-          onClick={item.onClick}
-        />
-      ))}
-    </>
-  )
+import type { T } from '@deltachat/jsonrpc-client'
+
+type Props = {
+  addFileToDraft: (file: string, viewType: T.Viewtype) => void
+  selectedChat: T.FullChat | null
+}
+
+type MenuAttachmentItemObject = {
+  id: number
+  icon: IconName
+  text: string
+  onClick: todo
 }
 
 // Main component that creates the menu and popover
-const MenuAttachment = ({
+export default function MenuAttachment({
   addFileToDraft,
   selectedChat,
-}: {
-  addFileToDraft: (file: string, viewType: T.Viewtype) => void
-  selectedChat: Type.FullChat | null
-}) => {
+}: Props) {
   const tx = useTranslationFunction()
   const openConfirmationDialog = useConfirmationDialog()
-  const { openDialog } = useDialog()
+  const { sendVideoChatInvitation } = useVideoChat()
   const [settings] = useStore(SettingsStoreInstance)
+  const accountId = selectedAccountId()
 
   const addFilenameFile = async () => {
     // function for files
@@ -110,9 +100,15 @@ const MenuAttachment = ({
     })
 
     if (confirmed) {
-      sendCallInvitation(openDialog, selectedChat.id)
+      sendVideoChatInvitation(accountId, selectedChat.id)
     }
-  }, [openConfirmationDialog, openDialog, selectedChat, tx])
+  }, [
+    accountId,
+    openConfirmationDialog,
+    selectedChat,
+    sendVideoChatInvitation,
+    tx,
+  ])
 
   // item array used to populate menu
   const items: MenuAttachmentItemObject[] = [
@@ -152,11 +148,22 @@ const MenuAttachment = ({
   )
 }
 
-type MenuAttachmentItemObject = {
-  id: number
-  icon: IconName
-  text: string
-  onClick: todo
+// Function to populate Menu
+const MenuAttachmentItems = ({
+  itemsArray,
+}: {
+  itemsArray: MenuAttachmentItemObject[]
+}) => {
+  return (
+    <>
+      {itemsArray.map((item: MenuAttachmentItemObject) => (
+        <MenuItem
+          key={item.id}
+          icon={item.icon}
+          text={item.text}
+          onClick={item.onClick}
+        />
+      ))}
+    </>
+  )
 }
-
-export default MenuAttachment
