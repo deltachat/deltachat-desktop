@@ -8,18 +8,14 @@ import {
 import { LabeledLink, Link } from './Link'
 import { getLogger } from '../../../shared/logger'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
-import {
-  createChatByEmail,
-  selectChat,
-  setChatView,
-} from '../helpers/ChatMethods'
-import { ChatView } from '../../stores/chat'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import SettingsStoreInstance from '../../stores/settings'
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
-import useDialog from '../../hooks/useDialog'
 import useConfirmationDialog from '../../hooks/useConfirmationDialog'
+import { useCreateChatByEmail } from '../../hooks/useCreateChatByEmail'
+import useChat from '../../hooks/useChat'
+import { ChatView } from '../../contexts/ChatContext'
 
 const log = getLogger('renderer/message-markdown')
 
@@ -163,12 +159,14 @@ export function message2React(message: string, preview: boolean): JSX.Element {
 }
 
 function EmailLink({ email }: { email: string }): JSX.Element {
-  const { openDialog } = useDialog()
+  const accountId = selectedAccountId()
+  const createChatByEmail = useCreateChatByEmail()
+  const { selectChat } = useChat()
 
   const handleClick = async () => {
-    const chatId = await createChatByEmail(openDialog, email)
+    const chatId = await createChatByEmail(accountId, email)
     if (chatId) {
-      selectChat(chatId)
+      selectChat(accountId, chatId)
     }
   }
 
@@ -208,30 +206,31 @@ function BotCommandSuggestion({ suggestion }: { suggestion: string }) {
   const openConfirmationDialog = useConfirmationDialog()
   const messageDisplay = useContext(MessagesDisplayContext)
   const accountId = selectedAccountId()
+  const { selectChat, setChatView } = useChat()
 
   const applySuggestion = async () => {
     if (!messageDisplay) {
       return
     }
 
-    let chatID
+    let chatId
     if (messageDisplay.context == 'contact_profile_status') {
       // Bot command was clicked inside of a contact status
-      chatID = await BackendRemote.rpc.createChatByContactId(
+      chatId = await BackendRemote.rpc.createChatByContactId(
         accountId,
         messageDisplay.contact_id
       )
       // also select the chat and close the profile window if this is the case
-      selectChat(chatID)
+      selectChat(accountId, chatId)
       messageDisplay.closeProfileDialog()
     } else if (messageDisplay.context == 'chat_map') {
-      chatID = messageDisplay.chatId
+      chatId = messageDisplay.chatId
       // go back to chat view
-      selectChat(chatID)
+      selectChat(accountId, chatId)
       setChatView(ChatView.MessageList)
     } else if (messageDisplay.context == 'chat_messagelist') {
       // nothing special to do
-      chatID = messageDisplay.chatId
+      chatId = messageDisplay.chatId
     } else {
       log.error(
         'Error applying BotCommandSuggestion: MessageDisplayContext.type is not implemented: ',
@@ -243,8 +242,8 @@ function BotCommandSuggestion({ suggestion }: { suggestion: string }) {
 
     // IDEA: Optimisation - unify these two calls in a new backend call that only returns the info we need
     const [chat, draft] = await Promise.all([
-      BackendRemote.rpc.getBasicChatInfo(accountId, chatID),
-      BackendRemote.rpc.getDraft(accountId, chatID),
+      BackendRemote.rpc.getBasicChatInfo(accountId, chatId),
+      BackendRemote.rpc.getDraft(accountId, chatId),
     ])
 
     if (!chat) {
@@ -268,7 +267,7 @@ function BotCommandSuggestion({ suggestion }: { suggestion: string }) {
 
     await BackendRemote.rpc.miscSetDraft(
       accountId,
-      chatID,
+      chatId,
       suggestion,
       null,
       null,

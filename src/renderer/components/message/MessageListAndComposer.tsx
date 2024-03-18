@@ -10,11 +10,11 @@ import { DesktopSettingsType } from '../../../shared/shared-types'
 import { runtime } from '../../runtime'
 import { RecoverableCrashScreen } from '../screens/RecoverableCrashScreen'
 import { useSettingsStore } from '../../stores/settings'
-import { sendMessage } from '../helpers/ChatMethods'
-import useDialog from '../../hooks/useDialog'
 import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
-import useIsChatDisabled from '../composer/useIsChatDisabled'
 import { ReactionsBarProvider } from '../ReactionsBar'
+import useDialog from '../../hooks/useDialog'
+import useIsChatDisabled from '../composer/useIsChatDisabled'
+import useMessage from '../../hooks/useMessage'
 
 import type { T } from '@deltachat/jsonrpc-client'
 
@@ -71,6 +71,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
   const refComposer = useRef(null)
 
   const { openDialog, hasOpenDialogs } = useDialog()
+  const { sendMessage } = useMessage()
 
   const messageInputRef = useRef<ComposerMessageInput>(null)
   const {
@@ -144,7 +145,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
         }
 
         for (const file of sanitizedFileList) {
-          sendMessage(chat.id, { file: file.path, viewtype: 'File' })
+          sendMessage(accountId, chat.id, { file: file.path, viewtype: 'File' })
         }
       },
     })

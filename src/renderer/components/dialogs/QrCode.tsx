@@ -19,12 +19,13 @@ import processOpenQrUrl from '../helpers/OpenQrUrl'
 import { BackendRemote } from '../../backend-com'
 import { getLogger } from '../../../shared/logger'
 import { runtime } from '../../runtime'
-import { selectChat } from '../helpers/ChatMethods'
 import { ScreenContext } from '../../contexts/ScreenContext'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
 import useContextMenu from '../../hooks/useContextMenu'
+import useChat from '../../hooks/useChat'
 import { qrCodeToInviteUrl } from '../../utils/invite'
+import { selectedAccountId } from '../../ScreenController'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
@@ -206,7 +207,9 @@ export function QrCodeScanQrInner(
   }>
 ) {
   const tx = useTranslationFunction()
+  const accountId = selectedAccountId()
   const { openDialog, closeDialog } = useDialog()
+  const { selectChat } = useChat()
   const processingQrCode = useRef(false)
 
   const onDone = () => {
@@ -215,7 +218,7 @@ export function QrCodeScanQrInner(
   }
 
   const handleScanResult = (chatId: number | null = null) => {
-    chatId && selectChat(chatId)
+    chatId && selectChat(accountId, chatId)
     onDone()
   }
 

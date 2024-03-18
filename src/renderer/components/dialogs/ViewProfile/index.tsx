@@ -9,8 +9,7 @@ import { useLogicVirtualChatList, ChatListPart } from '../../chat/ChatList'
 import MessageBody from '../../message/MessageBody'
 import { useThemeCssVar } from '../../../ThemeManager'
 import { DeltaInput } from '../../Login-Styles'
-import { openViewProfileDialog, selectChat } from '../../helpers/ChatMethods'
-import { BackendRemote, onDCEvent, Type } from '../../../backend-com'
+import { BackendRemote, onDCEvent } from '../../../backend-com'
 import { selectedAccountId } from '../../../ScreenController'
 import { InlineVerifiedIcon } from '../../VerifiedIcon'
 import { getLogger } from '../../../../shared/logger'
@@ -28,7 +27,10 @@ import Button from '../../Button'
 
 import styles from './styles.module.scss'
 
+import type { T } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../../contexts/DialogContext'
+import useChat from '../../../hooks/useChat'
+import useOpenViewProfileDialog from '../../../hooks/useOpenViewProfileDialog'
 
 const log = getLogger('renderer/dialogs/ViewProfile')
 
@@ -58,7 +60,7 @@ function LastSeen({ timestamp }: { timestamp: number }) {
 
 export default function ViewProfile(
   props: {
-    contact: Type.Contact
+    contact: T.Contact
     onBack?: () => void
   } & DialogProps
 ) {
@@ -67,7 +69,7 @@ export default function ViewProfile(
   const accountId = selectedAccountId()
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
-  const [contact, setContact] = useState<Type.Contact>(props.contact)
+  const [contact, setContact] = useState<T.Contact>(props.contact)
   const isDeviceChat = contact.id === C.DC_CONTACT_ID_DEVICE
   const isSelfChat = contact.id === C.DC_CONTACT_ID_SELF
 
@@ -116,12 +118,14 @@ export function ViewProfileInner({
   contact,
   onClose,
 }: {
-  contact: Type.Contact
+  contact: T.Contact
   onClose: () => void
 }) {
   const accountId = selectedAccountId()
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
+  const { selectChat } = useChat()
+  const openViewProfileDialog = useOpenViewProfileDialog()
   const { chatListIds } = useChatList(null, '', contact.id)
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
     chatListIds,
@@ -137,7 +141,7 @@ export function ViewProfileInner({
   const isSelfChat = contact.id === C.DC_CONTACT_ID_SELF
 
   const onChatClick = (chatId: number) => {
-    selectChat(chatId)
+    selectChat(accountId, chatId)
     onClose()
   }
   const onSendMessage = async () => {
@@ -180,19 +184,26 @@ export function ViewProfileInner({
           )
           setVerifier({
             label: tx('verified_by', displayName),
-            action: () => openViewProfileDialog(openDialog, verifierContactId),
+            action: () => openViewProfileDialog(accountId, verifierContactId),
           })
         } catch (error) {
           log.error('failed to load verifier contact', error)
           setVerifier({
             label:
               'verified by: failed to load verifier contact, please report this issue',
-            action: () => openViewProfileDialog(openDialog, verifierContactId),
+            action: () => openViewProfileDialog(accountId, verifierContactId),
           })
         }
       }
     })()
-  }, [accountId, contact.id, contact.verifierId, openDialog, tx])
+  }, [
+    accountId,
+    contact.id,
+    contact.verifierId,
+    openDialog,
+    openViewProfileDialog,
+    tx,
+  ])
 
   const CHATLISTITEM_CHAT_HEIGHT =
     Number(useThemeCssVar('--SPECIAL-chatlist-item-chat-height')) || 64

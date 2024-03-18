@@ -11,6 +11,35 @@ export async function getChat(
   return await BackendRemote.rpc.getFullChatById(accountId, chatId)
 }
 
+/**
+ * Finds basic info, like contact id and the related chat ID of a contact based
+ * on it's email address.
+ *
+ * The contact id can be null if this email address is unknown. If no chat
+ * exists yet with this contact the chat id will be null as well.
+ */
+export async function getChatInfoByEmail(
+  accountId: number,
+  email: string
+): Promise<{
+  chatId: number | null
+  contactId: number | null
+}> {
+  const contactId = await BackendRemote.rpc.lookupContactIdByAddr(
+    accountId,
+    email
+  )
+
+  const chatId = contactId
+    ? await BackendRemote.rpc.getChatIdByContactId(accountId, contactId)
+    : null
+
+  return {
+    contactId,
+    chatId,
+  }
+}
+
 export async function saveLastChatId(accountId: number, chatId: number) {
   await BackendRemote.rpc.setConfig(accountId, 'ui.lastchatid', `${chatId}`)
 }
@@ -36,4 +65,21 @@ export function markChatAsSeen(accountId: number, chatId: number) {
 
   // Remove potential system notifications for this chat
   clearNotificationsForChat(accountId, chatId)
+}
+
+export async function createChatByContactId(
+  accountId: number,
+  contactId: number | null,
+  email?: string
+): Promise<number> {
+  // Create contact first with given email address if it doesn't exist yet
+  if (!contactId) {
+    if (!email) {
+      throw new Error('either contactId or email needs to be set')
+    }
+
+    contactId = await BackendRemote.rpc.createContact(accountId, email, null)
+  }
+
+  return await BackendRemote.rpc.createChatByContactId(accountId, contactId)
 }

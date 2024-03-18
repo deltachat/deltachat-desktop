@@ -378,8 +378,8 @@ export default class Gallery extends Component<
                               key={msgId}
                             >
                               <this.state.element
-                                msgId={msgId}
-                                load_result={message}
+                                messageId={msgId}
+                                loadResult={message}
                                 openFullscreenMedia={this.openFullscreenMedia.bind(
                                   this
                                 )}
@@ -433,8 +433,8 @@ function FileTable({
         return (
           <div style={style} className='item' key={msgId}>
             <FileAttachmentRow
-              msgId={msgId}
-              load_result={message}
+              messageId={msgId}
+              loadResult={message}
               queryText={queryText}
             />
           </div>

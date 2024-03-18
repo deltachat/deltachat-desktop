@@ -16,23 +16,24 @@ import {
 import Timestamp from '../conversations/Timestamp'
 import { makeContextMenu, OpenContextMenu } from '../ContextMenu'
 import { runtime } from '../../runtime'
-import { deleteMessage, jumpToMessage } from '../helpers/ChatMethods'
 import { getLogger } from '../../../shared/logger'
 import { truncateText } from '../../../shared/util'
-import { Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import useDialog from '../../hooks/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useMessage from '../../hooks/useMessage'
 import MessageDetail from '../dialogs/MessageDetail'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import AudioPlayer from '../AudioPlayer'
 
+import type { T } from '@deltachat/jsonrpc-client'
 import type { OpenDialog } from '../../contexts/DialogContext'
+import type { JumpToMessage, DeleteMessage } from '../../hooks/useMessage'
 
 const log = getLogger('mediaAttachment')
 
-const hideOpenInShellTypes: Type.Viewtype[] = [
+const hideOpenInShellTypes: T.Viewtype[] = [
   'Gif',
   'Image',
   'Video',
@@ -41,7 +42,13 @@ const hideOpenInShellTypes: Type.Viewtype[] = [
   'Webxdc',
 ]
 
-const contextMenuFactory = (message: Type.Message, openDialog: OpenDialog) => {
+const contextMenuFactory = (
+  message: T.Message,
+  accountId: number,
+  openDialog: OpenDialog,
+  jumpToMessage: JumpToMessage,
+  deleteMessage: DeleteMessage
+) => {
   const showCopyImage = message.viewType === 'Image'
   const tx = window.static_translate
   const { id: msgId, viewType } = message
@@ -66,7 +73,7 @@ const contextMenuFactory = (message: Type.Message, openDialog: OpenDialog) => {
     },
     {
       label: tx('show_in_chat'),
-      action: () => jumpToMessage(message.id),
+      action: () => jumpToMessage(accountId, message.id),
     },
     {
       label: tx('menu_message_details'),
@@ -80,7 +87,7 @@ const contextMenuFactory = (message: Type.Message, openDialog: OpenDialog) => {
         openDialog(ConfirmationDialog, {
           message: tx('ask_delete_message'),
           confirmLabel: tx('delete'),
-          cb: (yes: boolean) => yes && deleteMessage(msgId),
+          cb: (yes: boolean) => yes && deleteMessage(accountId, msgId),
         }),
     },
   ]
@@ -90,11 +97,21 @@ const contextMenuFactory = (message: Type.Message, openDialog: OpenDialog) => {
 const getMediaActions = (
   openContextMenu: OpenContextMenu,
   openDialog: OpenDialog,
-  message: Type.Message
+  jumpToMessage: JumpToMessage,
+  deleteMessage: DeleteMessage,
+  message: T.Message,
+  accountId: number
 ) => {
   return {
     openContextMenu: makeContextMenu(
-      contextMenuFactory.bind(null, message, openDialog),
+      contextMenuFactory.bind(
+        null,
+        message,
+        accountId,
+        openDialog,
+        jumpToMessage,
+        deleteMessage
+      ),
       openContextMenu
     ),
     downloadMedia: onDownload.bind(null, message),
@@ -105,7 +122,9 @@ const getMediaActions = (
 function getBrokenMediaContextMenu(
   openContextMenu: OpenContextMenu,
   openDialog: OpenDialog,
-  msgId: number
+  deleteMessage: DeleteMessage,
+  messageId: number,
+  accountId: number
 ) {
   const tx = window.static_translate
   return makeContextMenu(
@@ -116,7 +135,7 @@ function getBrokenMediaContextMenu(
           openDialog(ConfirmationDialog, {
             message: tx('ask_delete_message'),
             confirmLabel: tx('delete'),
-            cb: (yes: boolean) => yes && deleteMessage(msgId),
+            cb: (yes: boolean) => yes && deleteMessage(accountId, messageId),
           }),
       },
     ],
@@ -139,32 +158,36 @@ function squareBrokenMediaContent(
 }
 
 export type GalleryAttachmentElementProps = {
-  msgId: number
-  load_result: Type.MessageLoadResult
+  messageId: number
+  loadResult: T.MessageLoadResult
 }
 
 export function ImageAttachment({
-  msgId,
-  load_result,
+  messageId,
+  loadResult,
   openFullscreenMedia,
 }: GalleryAttachmentElementProps & {
-  openFullscreenMedia: (message: Type.Message) => void
+  openFullscreenMedia: (message: T.Message) => void
 }) {
   const { openDialog } = useDialog()
   const tx = useTranslationFunction()
   const contextMenu = useContext(ContextMenuContext)
+  const { jumpToMessage, deleteMessage } = useMessage()
+  const accountId = selectedAccountId()
 
-  if (load_result.kind === 'loadingError') {
+  if (loadResult.kind === 'loadingError') {
     const onContextMenu = getBrokenMediaContextMenu(
       contextMenu.openContextMenu,
       openDialog,
-      msgId
+      deleteMessage,
+      messageId,
+      accountId
     )
 
     return (
       <div
         className={'media-attachment-media broken'}
-        title={load_result.error}
+        title={loadResult.error}
         onContextMenu={onContextMenu}
       >
         <div className='attachment-content'>
@@ -173,11 +196,14 @@ export function ImageAttachment({
       </div>
     )
   } else {
-    const message = load_result
+    const message = loadResult
     const { openContextMenu, openInShell } = getMediaActions(
       contextMenu.openContextMenu,
       openDialog,
-      message
+      jumpToMessage,
+      deleteMessage,
+      message,
+      accountId
     )
     const { file, fileMime } = message
     const hasSupportedFormat = isImage(fileMime)
@@ -206,27 +232,31 @@ export function ImageAttachment({
 }
 
 export function VideoAttachment({
-  msgId,
-  load_result,
+  messageId,
+  loadResult,
   openFullscreenMedia,
 }: GalleryAttachmentElementProps & {
-  openFullscreenMedia: (message: Type.Message) => void
+  openFullscreenMedia: (message: T.Message) => void
 }) {
   const { openDialog } = useDialog()
   const tx = useTranslationFunction()
   const contextMenu = useContext(ContextMenuContext)
+  const { deleteMessage, jumpToMessage } = useMessage()
+  const accountId = selectedAccountId()
 
-  if (load_result.kind === 'loadingError') {
+  if (loadResult.kind === 'loadingError') {
     const onContextMenu = getBrokenMediaContextMenu(
       contextMenu.openContextMenu,
       openDialog,
-      msgId
+      jumpToMessage,
+      messageId,
+      accountId
     )
 
     return (
       <div
         className={'media-attachment-media broken'}
-        title={load_result.error}
+        title={loadResult.error}
         onContextMenu={onContextMenu}
       >
         <div className='attachment-content'>
@@ -235,11 +265,14 @@ export function VideoAttachment({
       </div>
     )
   } else {
-    const message = load_result
+    const message = loadResult
     const { openContextMenu, openInShell } = getMediaActions(
       contextMenu.openContextMenu,
       openDialog,
-      message
+      jumpToMessage,
+      deleteMessage,
+      message,
+      accountId
     )
     const { file, fileMime } = message
     const hasSupportedFormat = isVideo(fileMime)
@@ -272,23 +305,27 @@ export function VideoAttachment({
 }
 
 export function AudioAttachment({
-  msgId,
-  load_result,
+  messageId,
+  loadResult,
 }: GalleryAttachmentElementProps) {
   const { openDialog } = useDialog()
   const tx = useTranslationFunction()
   const contextMenu = useContext(ContextMenuContext)
+  const { deleteMessage, jumpToMessage } = useMessage()
+  const accountId = selectedAccountId()
 
-  if (load_result.kind === 'loadingError') {
+  if (loadResult.kind === 'loadingError') {
     const onContextMenu = getBrokenMediaContextMenu(
       contextMenu.openContextMenu,
       openDialog,
-      msgId
+      deleteMessage,
+      messageId,
+      accountId
     )
     return (
       <div
         className={'media-attachment-audio broken'}
-        title={load_result.error}
+        title={loadResult.error}
         onContextMenu={onContextMenu}
       >
         <div className='heading'>
@@ -301,11 +338,14 @@ export function AudioAttachment({
       </div>
     )
   } else {
-    const message = load_result
+    const message = loadResult
     const { openContextMenu } = getMediaActions(
       contextMenu.openContextMenu,
       openDialog,
-      message
+      jumpToMessage,
+      deleteMessage,
+      message,
+      accountId
     )
     const { file, fileMime } = message
     const hasSupportedFormat = isAudio(fileMime)
@@ -343,25 +383,29 @@ export function AudioAttachment({
 }
 
 export function FileAttachmentRow({
-  msgId,
-  load_result,
+  messageId,
+  loadResult,
   queryText,
 }: GalleryAttachmentElementProps & { queryText?: string }) {
   const { openDialog } = useDialog()
   const tx = useTranslationFunction()
   const contextMenu = useContext(ContextMenuContext)
+  const { deleteMessage, jumpToMessage } = useMessage()
+  const accountId = selectedAccountId()
 
-  if (load_result.kind === 'loadingError') {
+  if (loadResult.kind === 'loadingError') {
     const onContextMenu = getBrokenMediaContextMenu(
       contextMenu.openContextMenu,
       openDialog,
-      msgId
+      deleteMessage,
+      messageId,
+      accountId
     )
 
     return (
       <div
         className={'media-attachment-generic broken'}
-        title={load_result.error}
+        title={loadResult.error}
         onContextMenu={onContextMenu}
       >
         <div className='file-icon'>
@@ -374,11 +418,14 @@ export function FileAttachmentRow({
       </div>
     )
   } else {
-    const message = load_result
+    const message = loadResult
     const { openContextMenu, openInShell } = getMediaActions(
       contextMenu.openContextMenu,
       openDialog,
-      message
+      jumpToMessage,
+      deleteMessage,
+      message,
+      accountId
     )
     const { fileName, fileBytes, fileMime, file, timestamp } = message
 
@@ -447,24 +494,28 @@ const highlightQuery = (msg: string, query: string) => {
 }
 
 export function WebxdcAttachment({
-  msgId,
-  load_result,
+  messageId,
+  loadResult,
 }: GalleryAttachmentElementProps) {
   const { openDialog } = useDialog()
   const tx = useTranslationFunction()
   const contextMenu = useContext(ContextMenuContext)
+  const { jumpToMessage, deleteMessage } = useMessage()
+  const accountId = selectedAccountId()
 
-  if (load_result.kind === 'loadingError') {
+  if (loadResult.kind === 'loadingError') {
     const onContextMenu = getBrokenMediaContextMenu(
       contextMenu.openContextMenu,
       openDialog,
-      msgId
+      deleteMessage,
+      messageId,
+      accountId
     )
 
     return (
       <div
         className={'media-attachment-webxdc broken'}
-        title={load_result.error}
+        title={loadResult.error}
         onContextMenu={onContextMenu}
       >
         <div className='icon'></div>
@@ -474,14 +525,16 @@ export function WebxdcAttachment({
         </div>
       </div>
     )
-  } else if (load_result.webxdcInfo == null) {
+  } else if (loadResult.webxdcInfo == null) {
     const onContextMenu = getBrokenMediaContextMenu(
       contextMenu.openContextMenu,
       openDialog,
-      msgId
+      deleteMessage,
+      messageId,
+      accountId
     )
     // webxdc info is not set, show different error
-    log.error('message.webxdcInfo is undefined, msgid:', msgId)
+    log.error('message.webxdcInfo is undefined, msgid:', messageId)
     return (
       <div
         className='media-attachment-webxdc'
@@ -490,12 +543,12 @@ export function WebxdcAttachment({
       >
         <img
           className='icon'
-          src={runtime.getWebxdcIconURL(selectedAccountId(), msgId)}
+          src={runtime.getWebxdcIconURL(selectedAccountId(), messageId)}
         />
         <div className='text-part'>
           <div className='name'>Error loading info</div>
           <div className='summary'>
-            {'message.webxdcInfo is undefined, msgid:' + msgId}
+            {'message.webxdcInfo is undefined, msgid:' + messageId}
           </div>
         </div>
       </div>
@@ -504,19 +557,22 @@ export function WebxdcAttachment({
     const { openContextMenu } = getMediaActions(
       contextMenu.openContextMenu,
       openDialog,
-      load_result
+      jumpToMessage,
+      deleteMessage,
+      loadResult,
+      accountId
     )
-    const { summary, name, document } = load_result.webxdcInfo
+    const { summary, name, document } = loadResult.webxdcInfo
     return (
       <div
         className='media-attachment-webxdc'
         role='button'
         onContextMenu={openContextMenu}
-        onClick={openWebxdc.bind(null, load_result.id)}
+        onClick={openWebxdc.bind(null, loadResult.id)}
       >
         <img
           className='icon'
-          src={runtime.getWebxdcIconURL(selectedAccountId(), load_result.id)}
+          src={runtime.getWebxdcIconURL(selectedAccountId(), loadResult.id)}
         />
         <div className='text-part'>
           <div

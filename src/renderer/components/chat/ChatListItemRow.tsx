@@ -6,17 +6,18 @@ import ChatListItem, {
   ChatListItemMessageResult,
 } from './ChatListItem'
 import { ContactListItem } from '../contact/ContactListItem'
-import { jumpToMessage, openViewProfileDialog } from '../helpers/ChatMethods'
-import { Type } from '../../backend-com'
-import useDialog from '../../hooks/useDialog'
+import useOpenViewProfileDialog from '../../hooks/useOpenViewProfileDialog'
+import { selectedAccountId } from '../../ScreenController'
 
+import type { T } from '@deltachat/jsonrpc-client'
 import type { useChatListContextMenu } from './ChatListContextMenu'
+import useMessage from '../../hooks/useMessage'
 
 export type ChatListItemData = {
   selectedChatId: number | null
   chatListIds: number[]
   chatCache: {
-    [id: number]: Type.ChatListItemFetchResult | undefined
+    [id: number]: T.ChatListItemFetchResult | undefined
   }
   onChatClick: (chatId: number) => void
   openContextMenu: ReturnType<typeof useChatListContextMenu>['openContextMenu']
@@ -28,14 +29,14 @@ export type ChatListItemData = {
 export type MessageChatListItemData = {
   messageResultIds: number[]
   messageCache: {
-    [id: number]: Type.MessageSearchResult | undefined
+    [id: number]: T.MessageSearchResult | undefined
   }
   queryStr: string | undefined
 }
 
 export type ContactChatListItemData = {
   contactCache: {
-    [id: number]: Type.Contact | undefined
+    [id: number]: T.Contact | undefined
   }
   contactIds: number[]
 }
@@ -81,7 +82,8 @@ export const ChatListItemRowContact = React.memo<{
   const { contactCache, contactIds } = data
   const contactId = contactIds[index]
   const contact = contactCache[contactId]
-  const { openDialog } = useDialog()
+  const accountId = selectedAccountId()
+  const openViewProfileDialog = useOpenViewProfileDialog()
 
   return (
     <div style={style}>
@@ -92,7 +94,7 @@ export const ChatListItemRowContact = React.memo<{
           checked={false}
           showRemove={false}
           onClick={async _ => {
-            openViewProfileDialog(openDialog, contactId)
+            openViewProfileDialog(accountId, contactId)
           }}
         />
       ) : (
@@ -110,6 +112,9 @@ export const ChatListItemRowMessage = React.memo<{
   const { messageResultIds, messageCache, queryStr } = data
   const msrId = messageResultIds[index]
   const messageSearchResult = messageCache[msrId]
+  const { jumpToMessage } = useMessage()
+  const accountId = selectedAccountId()
+
   return (
     <div style={style}>
       {messageSearchResult ? (
@@ -117,7 +122,7 @@ export const ChatListItemRowMessage = React.memo<{
           queryStr={queryStr || ''}
           msr={messageSearchResult}
           onClick={() => {
-            jumpToMessage(msrId)
+            jumpToMessage(accountId, msrId)
           }}
         />
       ) : (

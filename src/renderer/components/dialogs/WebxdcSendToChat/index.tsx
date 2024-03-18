@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import classNames from 'classnames'
@@ -8,7 +8,6 @@ import { PseudoListItemNoSearchResults } from '../../helpers/PseudoListItem'
 import { ChatListPart, useLogicVirtualChatList } from '../../chat/ChatList'
 import { useChatList } from '../../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../../ThemeManager'
-import { selectChat } from '../../helpers/ChatMethods'
 import { BackendRemote } from '../../../backend-com'
 import { selectedAccountId } from '../../../ScreenController'
 import { runtime } from '../../../runtime'
@@ -22,10 +21,11 @@ import Dialog, {
 import ConfirmationDialog from '../ConfirmationDialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import useDialog from '../../../hooks/useDialog'
+import useChat from '../../../hooks/useChat'
 
 import styles from './styles.module.scss'
 
-import type { DialogProps, OpenDialog } from '../../../contexts/DialogContext'
+import type { DialogProps } from '../../../contexts/DialogContext'
 
 type Props = {
   messageText: string | null
@@ -38,7 +38,8 @@ export default function WebxdcSaveToChatDialog(props: Props) {
   const { onClose, messageText, file } = props
 
   const tx = useTranslationFunction()
-  const { openDialog } = useDialog()
+  const accountId = selectedAccountId()
+  const sendToChatAction = useSendToChatAction()
   const { chatListIds, queryStr, setQueryStr } = useChatList(LIST_FLAGS)
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
     chatListIds,
@@ -53,7 +54,7 @@ export default function WebxdcSaveToChatDialog(props: Props) {
         file.file_content
       )
     }
-    await sendToChatAction(openDialog, chatId, messageText, path)
+    await sendToChatAction(accountId, chatId, messageText, path)
     if (path) {
       await runtime.removeTempFile(path)
     }
@@ -144,41 +145,48 @@ export default function WebxdcSaveToChatDialog(props: Props) {
   )
 }
 
-async function sendToChatAction(
-  openDialog: OpenDialog,
-  chatId: number,
-  messageText: string | null,
-  file: string | null
-) {
-  const accountId = selectedAccountId()
+function useSendToChatAction() {
+  const { openDialog } = useDialog()
+  const { selectChat } = useChat()
+  const tx = useTranslationFunction()
 
-  const chat = await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
-  const draft = await BackendRemote.rpc.getDraft(accountId, chatId)
+  return useCallback(
+    async (
+      accountId: number,
+      chatId: number,
+      messageText: string | null,
+      file: string | null
+    ) => {
+      const chat = await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
+      const draft = await BackendRemote.rpc.getDraft(accountId, chatId)
 
-  selectChat(chatId)
+      selectChat(accountId, chatId)
 
-  if (draft) {
-    // ask if the draft should be replaced
-    const continue_process = await new Promise((resolve, _reject) => {
-      openDialog(ConfirmationDialog, {
-        message: window.static_translate('confirm_replace_draft', chat.name),
-        confirmLabel: window.static_translate('replace_draft'),
-        cb: resolve,
-      })
-    })
-    if (!continue_process) {
-      return
-    }
-  }
+      if (draft) {
+        // ask if the draft should be replaced
+        const continueProcess = await new Promise((resolve, _reject) => {
+          openDialog(ConfirmationDialog, {
+            message: tx('confirm_replace_draft', chat.name),
+            confirmLabel: tx('replace_draft'),
+            cb: resolve,
+          })
+        })
+        if (!continueProcess) {
+          return
+        }
+      }
 
-  await BackendRemote.rpc.miscSetDraft(
-    accountId,
-    chatId,
-    messageText,
-    file,
-    null,
-    file ? 'File' : 'Text'
+      await BackendRemote.rpc.miscSetDraft(
+        accountId,
+        chatId,
+        messageText,
+        file,
+        null,
+        file ? 'File' : 'Text'
+      )
+
+      window.__reloadDraft && window.__reloadDraft()
+    },
+    [tx, openDialog, selectChat]
   )
-
-  window.__reloadDraft && window.__reloadDraft()
 }

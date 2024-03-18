@@ -12,10 +12,6 @@ import {
 import Gallery from '../Gallery'
 import { useThreeDotMenu } from '../ThreeDotMenu'
 import ChatList from '../chat/ChatList'
-import {
-  openViewGroupDialog,
-  openViewProfileDialog,
-} from '../helpers/ChatMethods'
 import { Avatar } from '../Avatar'
 import ConnectivityToast from '../ConnectivityToast'
 import MailingListProfile from '../dialogs/MessageListProfile'
@@ -32,6 +28,8 @@ import useChat from '../../hooks/useChat'
 import { selectedAccountId } from '../../ScreenController'
 import { ChatView } from '../../contexts/ChatContext'
 import MessageListView from '../MessageListView'
+import useOpenViewGroupDialog from '../../hooks/useOpenViewGroupDialog'
+import useOpenViewProfileDialog from '../../hooks/useOpenViewProfileDialog'
 
 import type { T } from '@deltachat/jsonrpc-client'
 
@@ -297,6 +295,9 @@ function GlobalGalleryHeading() {
 function ChatHeading({ chat }: { chat: T.FullChat }) {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
+  const openViewGroupDialog = useOpenViewGroupDialog()
+  const openViewProfileDialog = useOpenViewProfileDialog()
+  const accountId = selectedAccountId()
 
   const onTitleClick = () => {
     if (!chat) {
@@ -309,10 +310,10 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
       chat.chatType === C.DC_CHAT_TYPE_GROUP ||
       chat.chatType === C.DC_CHAT_TYPE_BROADCAST
     ) {
-      openViewGroupDialog(openDialog, chat)
+      openViewGroupDialog(chat)
     } else {
       if (chat.contactIds && chat.contactIds[0]) {
-        openViewProfileDialog(openDialog, chat.contactIds[0])
+        openViewProfileDialog(accountId, chat.contactIds[0])
       }
     }
   }

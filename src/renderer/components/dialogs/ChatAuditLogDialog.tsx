@@ -19,18 +19,21 @@ import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { runtime } from '../../runtime'
-import { jumpToMessage } from '../helpers/ChatMethods'
 import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
 import useDialog from '../../hooks/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useMessage from '../../hooks/useMessage'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 
 import type { DialogProps, OpenDialog } from '../../contexts/DialogContext'
+import type { JumpToMessage } from '../../hooks/useMessage'
 
 const log = getLogger('render/ChatAuditLog')
 
 function buildContextMenu(
+  jumpToMessage: JumpToMessage,
   openDialog: OpenDialog,
+  accountId: number,
   message: Type.Message,
   isGroup: boolean,
   closeDialogCallback: DialogProps['onClose']
@@ -42,7 +45,7 @@ function buildContextMenu(
       label: tx('show_in_chat'),
       action: () => {
         closeDialogCallback()
-        setTimeout(() => jumpToMessage(message.id, true))
+        setTimeout(() => jumpToMessage(accountId, message.id, true))
       },
     },
     // Show Webxdc in Chat
@@ -51,7 +54,7 @@ function buildContextMenu(
       action: () => {
         if (message.parentId) {
           closeDialogCallback()
-          jumpToMessage(message.parentId, true)
+          jumpToMessage(accountId, message.parentId, true)
         }
       },
     },
@@ -94,6 +97,8 @@ export default function ChatAuditLogDialog(
 ) {
   const { selectedChat, onClose } = props
   const { openDialog } = useDialog()
+  const { jumpToMessage } = useMessage()
+  const accountId = selectedAccountId()
 
   const [loading, setLoading] = useState(true)
   const [msgEntries, setMsgEntries] = useState<Type.MessageListItem[]>([])
@@ -112,7 +117,9 @@ export default function ChatAuditLogDialog(
     >
   ) => {
     const items = buildContextMenu(
+      jumpToMessage,
       openDialog,
+      accountId,
       message,
       selectedChat.chatType === C.DC_CHAT_TYPE_GROUP,
       onClose
