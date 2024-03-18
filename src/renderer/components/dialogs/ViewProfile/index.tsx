@@ -21,6 +21,8 @@ import Dialog, {
 } from '../../Dialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import useDialog from '../../../hooks/useDialog'
+import useChat from '../../../hooks/useChat'
+import useOpenViewProfileDialog from '../../../hooks/useOpenViewProfileDialog'
 import { MessagesDisplayContext } from '../../../contexts/MessagesDisplayContext'
 import ProfileInfoHeader from '../../ProfileInfoHeader'
 import Button from '../../Button'
@@ -29,8 +31,6 @@ import styles from './styles.module.scss'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../../contexts/DialogContext'
-import useChat from '../../../hooks/useChat'
-import useOpenViewProfileDialog from '../../../hooks/useOpenViewProfileDialog'
 
 const log = getLogger('renderer/dialogs/ViewProfile')
 
