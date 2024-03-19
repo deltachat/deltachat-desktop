@@ -13,6 +13,7 @@ import { runPostponedFunctions } from './onready'
 import { I18nContext } from './contexts/I18nContext'
 import { DialogContextProvider } from './contexts/DialogContext'
 import { ContextMenuProvider } from './contexts/ContextMenuContext'
+import { ChatProvider } from './contexts/ChatContext'
 
 export default function App(_props: any) {
   const [localeData, setLocaleData] = useState<LocaleData | null>(null)
@@ -78,9 +79,11 @@ export default function App(_props: any) {
       <ThemeContextWrapper>
         <I18nContext.Provider value={window.static_translate}>
           <ContextMenuProvider>
-            <DialogContextProvider>
-              <ScreenController />
-            </DialogContextProvider>
+            <ChatProvider>
+              <DialogContextProvider>
+                <ScreenController />
+              </DialogContextProvider>
+            </ChatProvider>
           </ContextMenuProvider>
         </I18nContext.Provider>
       </ThemeContextWrapper>
