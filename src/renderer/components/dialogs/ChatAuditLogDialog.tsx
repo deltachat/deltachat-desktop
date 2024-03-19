@@ -165,7 +165,7 @@ export default function ChatAuditLogDialog(
   const tx = useTranslationFunction()
 
   return (
-    <Dialog className={'audit-log-dialog'} fixed onClose={onClose} width={700}>
+    <Dialog className={'audit-log-dialog'} fixed onClose={onClose}>
       <DialogHeader
         onClose={onClose}
         title={tx('chat_audit_log_title', selectedChat.name)}
