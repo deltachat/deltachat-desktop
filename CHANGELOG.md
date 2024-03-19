@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- fix chat audit dialog was going out of viewport on smaller screens
+- fix long names breaking layout of reactions dialog
+
 <a id="1_44_1"></a>
 
 ## [1.44.1] - 2024-03-09
@@ -16,7 +20,6 @@
 ### Fixed
 - Fix Bug: When switching accounts after deleting a chat, the message list is blank, similar issues can come up when using the 2nd device flow. #3724
 - Fix bug where cancellation of configure led to an undefined state where it looked like the account was configured successfully, but it was not. #3729
-- fix chat audit dialog was going out of viewport on smaller screens
 
 <a id="1_44_0"></a>
 
