@@ -44,12 +44,6 @@ export async function setChatVisibility(
   if (shouldUnselectChat) unselectChat()
 }
 
-export async function unMuteChat(chatId: number) {
-  await BackendRemote.rpc.setChatMuteDuration(selectedAccountId(), chatId, {
-    kind: 'NotMuted',
-  })
-}
-
 /**
  * Creates a new chat with given email address and returns chat id.
  *

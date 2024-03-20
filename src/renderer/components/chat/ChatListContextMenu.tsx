@@ -2,12 +2,13 @@ import React, { useContext, useState } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
 import { Timespans } from '../../../shared/constants'
-import { setChatVisibility, unMuteChat } from '../helpers/ChatMethods'
+import { setChatVisibility } from '../helpers/ChatMethods'
 import { ContextMenuItem } from '../ContextMenu'
 import MailingListProfile from '../dialogs/MessageListProfile'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
+import { unmuteChat } from '../../backend/chat'
 import useChatDialog from '../../hooks/useChatDialog'
 import useDialog from '../../hooks/useDialog'
 import useOpenViewGroupDialog from '../../hooks/useOpenViewGroupDialog'
@@ -112,7 +113,7 @@ export function useChatListContextMenu(): {
       const onLeaveGroup = () => openLeaveChatDialog(accountId, chatListItem.id)
       const onBlockContact = () =>
         openBlockFirstContactOfChatDialog(accountId, chatListItem)
-      const onUnmuteChat = () => unMuteChat(chatListItem.id)
+      const onUnmuteChat = () => unmuteChat(accountId, chatListItem.id)
 
       const menu: (ContextMenuItem | false)[] = chatListItem
         ? [
