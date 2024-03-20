@@ -9,7 +9,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { T, C } from '@deltachat/jsonrpc-client'
+import { C } from '@deltachat/jsonrpc-client'
 
 import {
   useContacts,
@@ -24,7 +24,6 @@ import {
 import GroupImage from '../GroupImage'
 import { runtime } from '../../runtime'
 import {
-  areAllContactsVerified,
   createChatByContactIdAndSelectIt,
   selectChat,
 } from '../helpers/ChatMethods'
@@ -44,16 +43,18 @@ import Dialog, {
   FooterActions,
   OkCancelFooterAction,
 } from '../Dialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { ScreenContext } from '../../contexts/ScreenContext'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/useDialog'
-import { VerifiedContactsRequiredDialog } from './ProtectionStatusDialog'
-
-import type { DialogProps } from '../../contexts/DialogContext'
 import useConfirmationDialog from '../../hooks/useConfirmationDialog'
+import { VerifiedContactsRequiredDialog } from './ProtectionStatusDialog'
 import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 import { dirname } from 'path'
 import QrCode from './QrCode'
+import { areAllContactsVerified } from '../../backend/chat'
+
+import type { T } from '@deltachat/jsonrpc-client'
+import type { DialogProps } from '../../contexts/DialogContext'
 
 type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
 

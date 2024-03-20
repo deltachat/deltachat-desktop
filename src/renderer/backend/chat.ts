@@ -83,3 +83,20 @@ export async function createChatByContactId(
 
   return await BackendRemote.rpc.createChatByContactId(accountId, contactId)
 }
+
+/**
+ * Returns true if all contacts of a given list are verified, otherwise false.
+ */
+export async function areAllContactsVerified(
+  accountId: number,
+  contactIds: number[]
+): Promise<boolean> {
+  const contacts = await BackendRemote.rpc.getContactsByIds(
+    accountId,
+    contactIds
+  )
+
+  return !contactIds.some(contactId => {
+    return !contacts[contactId].isVerified
+  })
+}
