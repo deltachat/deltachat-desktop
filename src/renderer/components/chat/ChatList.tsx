@@ -529,7 +529,7 @@ export function useLogicVirtualChatList(chatListIds: number[]) {
 
     const removeListener = onDCEvent(
       accountId,
-      'UIChatListItemChanged',
+      'ChatListItemChanged',
       async ({ chatId }) => {
         if (chatId === C.DC_CHAT_ID_TRASH) {
           return
