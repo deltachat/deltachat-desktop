@@ -24,7 +24,6 @@ import { NoAccountSelectedScreen } from './components/screens/NoAccountSelectedS
 import AccountDeletionScreen from './components/screens/AccountDeletionScreen/AccountDeletionScreen'
 import chatStore from './stores/chat'
 import { selectChat } from './components/helpers/ChatMethods'
-import { ChatProvider } from './contexts/ChatContext'
 
 const log = getLogger('renderer/ScreenController')
 
