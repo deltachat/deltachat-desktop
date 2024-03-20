@@ -2,7 +2,7 @@ import { C } from '@deltachat/jsonrpc-client'
 import React, { useContext } from 'react'
 
 import { Timespans } from '../../shared/constants'
-import { setChatVisibility, unMuteChat, clearChat } from './helpers/ChatMethods'
+import { setChatVisibility, clearChat } from './helpers/ChatMethods'
 import { ContextMenuItem } from './ContextMenu'
 import SettingsStoreInstance, { useSettingsStore } from '../stores/settings'
 import { BackendRemote } from '../backend-com'
@@ -13,6 +13,7 @@ import useChatDialog from '../hooks/useChatDialog'
 import DisappearingMessages from './dialogs/DisappearingMessages'
 import { ContextMenuContext } from '../contexts/ContextMenuContext'
 import { selectedAccountId } from '../ScreenController'
+import { unmuteChat } from '../backend/chat'
 
 import type { T } from '@deltachat/jsonrpc-client'
 
@@ -52,7 +53,7 @@ export function useThreeDotMenu(
     const onDeleteChat = () =>
       openDeleteChatDialog(accountId, selectedChat, selectedChat.id)
 
-    const onUnmuteChat = () => unMuteChat(selectedChat.id)
+    const onUnmuteChat = () => unmuteChat(accountId, selectedChat.id)
 
     const openChatAuditLog = () => openChatAuditDialog(selectedChat)
 
