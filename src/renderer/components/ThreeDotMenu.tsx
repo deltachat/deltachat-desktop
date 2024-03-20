@@ -2,33 +2,35 @@ import { C } from '@deltachat/jsonrpc-client'
 import React, { useContext } from 'react'
 
 import { Timespans } from '../../shared/constants'
-import {
-  openLeaveChatDialog,
-  openDeleteChatDialog,
-  openBlockFirstContactOfChatDialog,
-  setChatVisibility,
-  unMuteChat,
-  clearChat,
-} from './helpers/ChatMethods'
+import { setChatVisibility, unMuteChat, clearChat } from './helpers/ChatMethods'
 import { ContextMenuItem } from './ContextMenu'
 import SettingsStoreInstance, { useSettingsStore } from '../stores/settings'
-import { BackendRemote, Type } from '../backend-com'
+import { BackendRemote } from '../backend-com'
 import { ActionEmitter, KeybindAction } from '../keybindings'
 import useDialog from '../hooks/useDialog'
 import useTranslationFunction from '../hooks/useTranslationFunction'
+import useChatDialog from '../hooks/useChatDialog'
 import DisappearingMessages from './dialogs/DisappearingMessages'
-import ChatAuditLogDialog from './dialogs/ChatAuditLogDialog'
 import { ContextMenuContext } from '../contexts/ContextMenuContext'
 import { selectedAccountId } from '../ScreenController'
 
+import type { T } from '@deltachat/jsonrpc-client'
+
 export function useThreeDotMenu(
-  selectedChat?: Type.FullChat,
+  selectedChat?: T.FullChat,
   mode: 'chat' | 'gallery' = 'chat'
 ) {
   const { openDialog } = useDialog()
   const { openContextMenu } = useContext(ContextMenuContext)
   const [settingsStore] = useSettingsStore()
   const tx = useTranslationFunction()
+  const accountId = selectedAccountId()
+  const {
+    openBlockFirstContactOfChatDialog,
+    openChatAuditDialog,
+    openDeleteChatDialog,
+    openLeaveChatDialog,
+  } = useChatDialog()
 
   let menu: (ContextMenuItem | false)[] = [false]
   if (selectedChat && selectedChat.id) {
@@ -39,18 +41,20 @@ export function useThreeDotMenu(
       id: chatId,
       canSend,
     } = selectedChat
-    const accountId = selectedAccountId()
     const isGroup = selectedChat.chatType === C.DC_CHAT_TYPE_GROUP
+
     const onLeaveGroup = () =>
-      selectedChat && openLeaveChatDialog(openDialog, selectedChat.id)
+      selectedChat && openLeaveChatDialog(accountId, selectedChat.id)
+
     const onBlockContact = () =>
-      openBlockFirstContactOfChatDialog(openDialog, selectedChat)
+      openBlockFirstContactOfChatDialog(accountId, selectedChat)
+
     const onDeleteChat = () =>
-      openDeleteChatDialog(openDialog, selectedChat, selectedChat.id)
+      openDeleteChatDialog(accountId, selectedChat, selectedChat.id)
+
     const onUnmuteChat = () => unMuteChat(selectedChat.id)
 
-    const openChatAuditLog = () =>
-      openDialog(ChatAuditLogDialog, { selectedChat })
+    const openChatAuditLog = () => openChatAuditDialog(selectedChat)
 
     const onDisappearingMessages = () =>
       openDialog(DisappearingMessages, {
