@@ -2,26 +2,22 @@ import React, { useContext, useState } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
 import { Timespans } from '../../../shared/constants'
-import {
-  openLeaveChatDialog,
-  openDeleteChatDialog,
-  openBlockFirstContactOfChatDialog,
-  openEncryptionInfoDialog,
-  openViewGroupDialog,
-  openViewProfileDialog,
-  setChatVisibility,
-  unMuteChat,
-} from '../helpers/ChatMethods'
+import { setChatVisibility, unMuteChat } from '../helpers/ChatMethods'
 import { ContextMenuItem } from '../ContextMenu'
 import MailingListProfile from '../dialogs/MessageListProfile'
-import { BackendRemote, Type } from '../../backend-com'
+import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
+import useChatDialog from '../../hooks/useChatDialog'
+import useDialog from '../../hooks/useDialog'
+import useOpenViewGroupDialog from '../../hooks/useOpenViewGroupDialog'
+import useOpenViewProfileDialog from '../../hooks/useOpenViewProfileDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+
+import type { T } from '@deltachat/jsonrpc-client'
 
 function archiveStateMenu(
-  chat: Type.ChatListItemFetchResult & { kind: 'ChatListItem' },
+  chat: T.ChatListItemFetchResult & { kind: 'ChatListItem' },
   tx: ReturnType<typeof useTranslationFunction>,
   isTheSelectedChat: boolean
 ): ContextMenuItem[] {
@@ -62,14 +58,23 @@ function archiveStateMenu(
 export function useChatListContextMenu(): {
   openContextMenu: (
     event: React.MouseEvent<any, MouseEvent>,
-    chatListItem: Type.ChatListItemFetchResult & { kind: 'ChatListItem' },
+    chatListItem: T.ChatListItemFetchResult & { kind: 'ChatListItem' },
     selectedChatId: number | null
   ) => Promise<void>
   activeContextMenuChatId: number | null
 } {
   const { openDialog } = useDialog()
+  const {
+    openBlockFirstContactOfChatDialog,
+    openEncryptionInfoDialog,
+    openDeleteChatDialog,
+    openLeaveChatDialog,
+  } = useChatDialog()
+  const openViewGroupDialog = useOpenViewGroupDialog()
+  const openViewProfileDialog = useOpenViewProfileDialog()
   const { openContextMenu } = useContext(ContextMenuContext)
   const accountId = selectedAccountId()
+  const tx = useTranslationFunction()
   const [activeContextMenuChatId, setActiveContextMenuChatId] = useState<
     number | null
   >(null)
@@ -77,18 +82,16 @@ export function useChatListContextMenu(): {
   return {
     activeContextMenuChatId,
     openContextMenu: async (event, chatListItem, selectedChatId) => {
-      const tx = window.static_translate
       const onDeleteChat = () =>
-        openDeleteChatDialog(openDialog, chatListItem, selectedChatId)
-      const onEncrInfo = () =>
-        openEncryptionInfoDialog(openDialog, chatListItem)
+        openDeleteChatDialog(accountId, chatListItem, selectedChatId)
+      const onEncrInfo = () => openEncryptionInfoDialog(chatListItem)
       const onViewGroup = async () => {
         // throws error if chat was not found
         const fullChat = await BackendRemote.rpc.getFullChatById(
           accountId,
           chatListItem.id
         )
-        openViewGroupDialog(openDialog, fullChat)
+        openViewGroupDialog(fullChat)
       }
       const onViewProfile = async () => {
         const fullChat = await BackendRemote.rpc.getFullChatById(
@@ -99,17 +102,16 @@ export function useChatListContextMenu(): {
           throw new Error('chat was not found')
         }
         if (fullChat.chatType !== C.DC_CHAT_TYPE_MAILINGLIST) {
-          openViewProfileDialog(openDialog, fullChat.contactIds[0])
+          openViewProfileDialog(accountId, fullChat.contactIds[0])
         } else {
           openDialog(MailingListProfile, {
             chat: fullChat,
           })
         }
       }
-      const onLeaveGroup = () =>
-        openLeaveChatDialog(openDialog, chatListItem.id)
+      const onLeaveGroup = () => openLeaveChatDialog(accountId, chatListItem.id)
       const onBlockContact = () =>
-        openBlockFirstContactOfChatDialog(openDialog, chatListItem)
+        openBlockFirstContactOfChatDialog(accountId, chatListItem)
       const onUnmuteChat = () => unMuteChat(chatListItem.id)
 
       const menu: (ContextMenuItem | false)[] = chatListItem

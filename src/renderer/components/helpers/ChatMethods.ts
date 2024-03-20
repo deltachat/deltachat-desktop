@@ -1,23 +1,15 @@
-import { T, C } from '@deltachat/jsonrpc-client'
+import { T } from '@deltachat/jsonrpc-client'
 
 import ChatStore, { ChatView } from '../../stores/chat'
 import { getLogger } from '../../../shared/logger'
-import { BackendRemote, EffectfulBackendActions, Type } from '../../backend-com'
+import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import ViewGroup from '../dialogs/ViewGroup'
-import ViewProfile from '../dialogs/ViewProfile'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import chatStore from '../../stores/chat'
-import EncryptionInfo from '../dialogs/EncryptionInfo'
-import MuteChat from '../dialogs/MuteChat'
 
 import type { OpenDialog } from '../../contexts/DialogContext'
 
 const log = getLogger('renderer/message')
-
-type Chat =
-  | Type.FullChat
-  | (Type.ChatListItemFetchResult & { kind: 'ChatListItem' })
 
 export const selectChat = async (chatId: number) => {
   await ChatStore.effect.selectChat(chatId)
@@ -50,108 +42,6 @@ export async function setChatVisibility(
     visibility
   )
   if (shouldUnselectChat) unselectChat()
-}
-
-export function openLeaveChatDialog(openDialog: OpenDialog, chatId: number) {
-  const tx = window.static_translate
-
-  openDialog(ConfirmationDialog, {
-    message: tx('ask_leave_group'),
-    confirmLabel: tx('menu_leave_group'),
-    isConfirmDanger: true,
-    noMargin: true,
-    cb: (yes: boolean) =>
-      yes && BackendRemote.rpc.leaveGroup(selectedAccountId(), chatId),
-  })
-}
-
-export function openDeleteChatDialog(
-  openDialog: OpenDialog,
-  chat: Chat,
-  selectedChatId: number | null
-) {
-  const tx = window.static_translate
-
-  openDialog(ConfirmationDialog, {
-    message: tx('ask_delete_named_chat', chat.name),
-    confirmLabel: tx('delete'),
-    isConfirmDanger: true,
-    cb: (yes: boolean) =>
-      yes &&
-      chat.id &&
-      EffectfulBackendActions.deleteChat(selectedAccountId(), chat.id).then(
-        () => {
-          if (selectedChatId === chat.id) {
-            unselectChat()
-          }
-        }
-      ),
-  })
-}
-
-/**
- * used to block contacts based on a DM chat/chatlistentry with that contact
- */
-export function openBlockFirstContactOfChatDialog(
-  openDialog: OpenDialog,
-  selectedChat: Chat
-) {
-  const tx = window.static_translate
-  const dmChatContact =
-    (selectedChat as Type.ChatListItemFetchResult & { kind: 'ChatListItem' })
-      .dmChatContact || (selectedChat as Type.FullChat).contactIds[0]
-  const accountId = selectedAccountId()
-
-  // TODO: CHECK IF THE CHAT IS DM CHAT
-
-  if (dmChatContact) {
-    openDialog(ConfirmationDialog, {
-      message: tx('ask_block_contact'),
-      confirmLabel: tx('menu_block_contact'),
-      isConfirmDanger: true,
-      cb: (yes: boolean) =>
-        yes &&
-        EffectfulBackendActions.blockContact(accountId, dmChatContact).then(
-          unselectChat
-        ),
-    })
-  }
-}
-
-export function openEncryptionInfoDialog(
-  openDialog: OpenDialog,
-  chatListItem: Type.ChatListItemFetchResult & { kind: 'ChatListItem' }
-) {
-  openDialog(EncryptionInfo, { chatListItem })
-}
-
-export function openViewGroupDialog(
-  openDialog: OpenDialog,
-  selectedChat: Type.FullChat
-) {
-  openDialog(ViewGroup, {
-    chat: selectedChat,
-    isBroadcast: selectedChat.chatType === C.DC_CHAT_TYPE_BROADCAST,
-  })
-}
-
-export async function openViewProfileDialog(
-  openDialog: OpenDialog,
-  contact_id: number
-) {
-  openDialog(ViewProfile, {
-    contact: await BackendRemote.rpc.getContact(
-      selectedAccountId(),
-      contact_id
-    ),
-  })
-}
-
-export async function openMuteChatDialog(
-  openDialog: OpenDialog,
-  chatId: number
-) {
-  openDialog(MuteChat, { chatId })
 }
 
 export async function unMuteChat(chatId: number) {
