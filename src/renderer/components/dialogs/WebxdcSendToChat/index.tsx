@@ -40,10 +40,8 @@ export default function WebxdcSaveToChatDialog(props: Props) {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
   const { chatListIds, queryStr, setQueryStr } = useChatList(LIST_FLAGS)
-  const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
-    chatListIds,
-    LIST_FLAGS
-  )
+  const { isChatLoaded, loadChats, chatCache } =
+    useLogicVirtualChatList(chatListIds)
 
   const onChatClick = async (chatId: number) => {
     let path = null

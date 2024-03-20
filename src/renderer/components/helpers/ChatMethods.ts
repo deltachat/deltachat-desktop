@@ -113,9 +113,9 @@ export function openBlockFirstContactOfChatDialog(
       isConfirmDanger: true,
       cb: (yes: boolean) =>
         yes &&
-        EffectfulBackendActions.blockContact(accountId, dmChatContact).then(
-          unselectChat
-        ),
+        BackendRemote.rpc
+          .blockContact(accountId, dmChatContact)
+          .then(unselectChat),
     })
   }
 }

@@ -144,10 +144,8 @@ function ViewGroupInner(
         .then(chatIds => setChatListIds(chatIds))
   }, [chat.id, isRelatedChatsEnabled])
 
-  const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
-    chatListIds,
-    null
-  )
+  const { isChatLoaded, loadChats, chatCache } =
+    useLogicVirtualChatList(chatListIds)
 
   const chatDisabled = !chat.canSend
 
