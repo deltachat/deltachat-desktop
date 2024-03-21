@@ -130,7 +130,7 @@
     "chai": "^4.3.4",
     "chokidar": "^3.5.3",
     "electron": "^28.2.3",
-    "electron-builder": "^24.6.4",
+    "electron-builder": "^24.13.3",
     "esbuild": "^0.19.8",
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
