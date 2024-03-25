@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- fix chat audit dialog was going out of viewport on smaller screens #3736
+- fix long names breaking layout of reactions dialog #3736
+
 <a id="1_44_1"></a>
 
 ## [1.44.1] - 2024-03-09
