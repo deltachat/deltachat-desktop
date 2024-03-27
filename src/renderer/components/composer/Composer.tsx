@@ -120,6 +120,11 @@ const Composer = forwardRef<
     }
     const textareaRef = messageInputRef.current.textareaRef.current
     if (textareaRef) {
+      if (textareaRef.disabled) {
+        throw new Error(
+          'text area is disabled, this means it is either already sending or loading the draft'
+        )
+      }
       textareaRef.disabled = true
     }
     try {
