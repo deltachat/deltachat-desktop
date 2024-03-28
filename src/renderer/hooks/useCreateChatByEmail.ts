@@ -9,7 +9,7 @@ import type { T } from '@deltachat/jsonrpc-client'
 
 type ChatId = T.FullChat['id']
 
-type UseCreateChatByEmail = (
+export type CreateChatByEmail = (
   accountId: number,
   email: string
 ) => Promise<ChatId | null>
@@ -21,7 +21,7 @@ type UseCreateChatByEmail = (
  * user will be prompted with a confirmation dialogue. In case the user aborts the
  * action null is returned.
  */
-export function useCreateChatByEmail(): UseCreateChatByEmail {
+export function useCreateChatByEmail(): CreateChatByEmail {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
 

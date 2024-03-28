@@ -1,5 +1,3 @@
-import { T } from '@deltachat/jsonrpc-client'
-
 import ChatStore, { ChatView } from '../../stores/chat'
 import { getLogger } from '../../../shared/logger'
 import { BackendRemote, Type } from '../../backend-com'
@@ -29,19 +27,6 @@ export const jumpToMessage = (
 
 export const unselectChat = () => {
   ChatStore.reducer.unselectChat()
-}
-
-export async function setChatVisibility(
-  chatId: number,
-  visibility: T.ChatVisibility,
-  shouldUnselectChat = false
-) {
-  await BackendRemote.rpc.setChatVisibility(
-    selectedAccountId(),
-    chatId,
-    visibility
-  )
-  if (shouldUnselectChat) unselectChat()
 }
 
 /**
@@ -146,31 +131,6 @@ export function forwardMessage(
 
 export const deleteMessage = (messageId: number) => {
   BackendRemote.rpc.deleteMessages(selectedAccountId(), [messageId])
-}
-
-export async function clearChat(openDialog: OpenDialog, chatId: number) {
-  const accountID = selectedAccountId()
-  const tx = window.static_translate
-  const messages_to_delete = await BackendRemote.rpc.getMessageIds(
-    accountID,
-    chatId,
-    false,
-    false
-  )
-
-  openDialog(ConfirmationDialog, {
-    message: tx('ask_delete_messages', String(messages_to_delete.length), {
-      quantity: messages_to_delete.length,
-    }),
-    cb: async yes => {
-      if (yes) {
-        // workaround event race where it tried to load already deleted messages by unloading the chat first.
-        unselectChat()
-        await BackendRemote.rpc.deleteMessages(accountID, messages_to_delete)
-        selectChat(chatId)
-      }
-    },
-  })
 }
 
 export async function modifyGroup(

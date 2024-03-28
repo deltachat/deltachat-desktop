@@ -17,7 +17,7 @@ export default function useChatDialog() {
   const tx = useTranslationFunction()
   const openConfirmationDialog = useConfirmationDialog()
   const { openDialog } = useDialog()
-  const { unselectChat } = useChat()
+  const { selectChat, unselectChat } = useChat()
 
   /**
    * Block contacts based on a DM chat/chatlistentry with that contact.
@@ -51,6 +51,33 @@ export default function useChatDialog() {
       openDialog(ChatAuditLogDialog, { selectedChat })
     },
     [openDialog]
+  )
+
+  const openClearChatDialog = useCallback(
+    async (accountId: number, chatId: number) => {
+      const messagesToDelete = await BackendRemote.rpc.getMessageIds(
+        accountId,
+        chatId,
+        false,
+        false
+      )
+
+      const hasUserConfirmed = await openConfirmationDialog({
+        message: tx('ask_delete_messages', String(messagesToDelete.length), {
+          quantity: messagesToDelete.length,
+        }),
+      })
+
+      if (hasUserConfirmed) {
+        // @TODO: Check this:
+        // Workaround event race where it tried to load already deleted
+        // messages by unloading the chat first.
+        unselectChat()
+        await BackendRemote.rpc.deleteMessages(accountId, messagesToDelete)
+        selectChat(accountId, chatId)
+      }
+    },
+    [openConfirmationDialog, selectChat, tx, unselectChat]
   )
 
   const openDeleteChatDialog = useCallback(
@@ -108,6 +135,7 @@ export default function useChatDialog() {
   return {
     openBlockFirstContactOfChatDialog,
     openChatAuditDialog,
+    openClearChatDialog,
     openDeleteChatDialog,
     openEncryptionInfoDialog,
     openLeaveChatDialog,

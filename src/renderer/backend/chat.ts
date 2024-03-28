@@ -67,6 +67,14 @@ export function markChatAsSeen(accountId: number, chatId: number) {
   clearNotificationsForChat(accountId, chatId)
 }
 
+export async function setChatVisibility(
+  accountId: number,
+  chatId: number,
+  visibility: T.ChatVisibility
+) {
+  await BackendRemote.rpc.setChatVisibility(accountId, chatId, visibility)
+}
+
 export async function createChatByContactId(
   accountId: number,
   contactId: number | null,
