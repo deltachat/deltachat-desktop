@@ -1,14 +1,11 @@
 import MailtoDialog from '../dialogs/MailtoDialog'
 import { getLogger } from '../../../shared/logger'
 import { parseMailto } from '../../../shared/parse_mailto'
-import {
-  createChatByEmail,
-  createDraftMessage,
-  selectChat,
-} from './ChatMethods'
+import { createDraftMessage, selectChat } from './ChatMethods'
 import AlertDialog from '../dialogs/AlertDialog'
 
 import type { OpenDialog } from '../../contexts/DialogContext'
+import type { CreateChatByEmail } from '../../hooks/useCreateChatByEmail'
 
 const log = getLogger('renderer/processMailtoUrl')
 
@@ -22,7 +19,9 @@ const log = getLogger('renderer/processMailtoUrl')
  * receiver.
  */
 export default async function processMailtoUrl(
+  createChatByEmail: CreateChatByEmail,
   openDialog: OpenDialog,
+  accountId: number,
   url: string,
   callback: any = null
 ) {
@@ -39,7 +38,7 @@ export default async function processMailtoUrl(
     if (mailto.to) {
       // Attempt creating a new chat based on email address. This method might
       // return `null` when the user did _not_ confirm creating a new chat
-      const chatId = await createChatByEmail(openDialog, mailto.to)
+      const chatId = await createChatByEmail(accountId, mailto.to)
 
       if (chatId) {
         if (messageText) {

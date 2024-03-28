@@ -2,13 +2,12 @@ import React, { useContext, useState } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
 import { Timespans } from '../../../shared/constants'
-import { setChatVisibility } from '../helpers/ChatMethods'
 import { ContextMenuItem } from '../ContextMenu'
 import MailingListProfile from '../dialogs/MessageListProfile'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
-import { unmuteChat } from '../../backend/chat'
+import { setChatVisibility, unmuteChat } from '../../backend/chat'
 import useChatDialog from '../../hooks/useChatDialog'
 import useDialog from '../../hooks/useDialog'
 import useOpenViewGroupDialog from '../../hooks/useOpenViewGroupDialog'
@@ -16,27 +15,45 @@ import useOpenViewProfileDialog from '../../hooks/useOpenViewProfileDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { T } from '@deltachat/jsonrpc-client'
+import { unselectChat } from '../helpers/ChatMethods'
 
 function archiveStateMenu(
+  accountId: number,
   chat: T.ChatListItemFetchResult & { kind: 'ChatListItem' },
   tx: ReturnType<typeof useTranslationFunction>,
   isTheSelectedChat: boolean
 ): ContextMenuItem[] {
   const archive: ContextMenuItem = {
     label: tx('menu_archive_chat'),
-    action: () => setChatVisibility(chat.id, 'Archived', isTheSelectedChat),
+    action: () => {
+      setChatVisibility(accountId, chat.id, 'Archived')
+      if (isTheSelectedChat) {
+        unselectChat()
+      }
+    },
   }
   const unArchive: ContextMenuItem = {
     label: tx('menu_unarchive_chat'),
-    action: () => setChatVisibility(chat.id, 'Normal', isTheSelectedChat),
+    action: () => {
+      setChatVisibility(accountId, chat.id, 'Normal')
+      if (isTheSelectedChat) {
+        unselectChat()
+      }
+    },
   }
   const pin: ContextMenuItem = {
     label: tx('pin_chat'),
-    action: () => setChatVisibility(chat.id, 'Pinned', chat.isArchived),
+    action: () => {
+      setChatVisibility(accountId, chat.id, 'Pinned')
+
+      if (chat.isArchived) {
+        unselectChat()
+      }
+    },
   }
   const unPin: ContextMenuItem = {
     label: tx('unpin_chat'),
-    action: () => setChatVisibility(chat.id, 'Normal'),
+    action: () => setChatVisibility(accountId, chat.id, 'Normal'),
   }
 
   /*
@@ -119,6 +136,7 @@ export function useChatListContextMenu(): {
         ? [
             // Archive & Pin
             ...archiveStateMenu(
+              accountId,
               chatListItem,
               tx,
               selectedChatId === chatListItem.id

@@ -24,6 +24,7 @@ import type {
   DialogProps,
   OpenDialog,
 } from '../../contexts/DialogContext'
+import type { CreateChatByEmail } from '../../hooks/useCreateChatByEmail'
 
 const log = getLogger('renderer/processOpenUrl')
 
@@ -80,6 +81,8 @@ async function setConfigFromQrCatchingErrorInAlert(
 export default async function processOpenQrUrl(
   openDialog: OpenDialog,
   closeDialog: CloseDialog,
+  createChatByEmail: CreateChatByEmail,
+  accountId: number,
   url: string,
   callback: (...args: todo) => void = (..._args: todo) => {},
   skipLoginConfirmation = false
@@ -87,14 +90,13 @@ export default async function processOpenQrUrl(
   const tx = window.static_translate
 
   if (url.toLowerCase().startsWith('mailto:')) {
-    processMailtoUrl(openDialog, url, callback)
+    processMailtoUrl(createChatByEmail, openDialog, accountId, url, callback)
     return
   }
 
   const screen = window.__screen
 
   const processDialogId = openDialog(ProcessQrCodeDialog)
-  // const checkQr: Qr = await BackendRemote.rpc.checkQr(selectedAccountId(), url)
 
   const closeProcessDialog = () => closeDialog(processDialogId)
   let checkQr
