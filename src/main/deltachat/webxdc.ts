@@ -489,6 +489,29 @@ If you think that's a bug and you need that permission, then please open an issu
       }
     })
 
+    ipcMain.handle('webxdc.sendEphemeralUpdate', async (event, update) => {
+      const key = Object.keys(open_apps).find(
+        key => open_apps[key].win.webContents === event.sender
+      )
+      if (!key) {
+        log.error(
+          'webxdc.sendEphemeralUpdate failed, app not found in list of open ones'
+        )
+        return
+      }
+      const { accountId, msgId } = open_apps[key]
+      try {
+        return await this.rpc.sendWebxdcEphemeralStatusUpdate(
+          accountId,
+          msgId,
+          update
+        )
+      } catch (error) {
+        log.error('webxdc.sendEphemeralUpdate failed:', error)
+        throw error
+      }
+    })
+
     ipcMain.handle(
       'webxdc.sendToChat',
       (
@@ -551,10 +574,10 @@ If you think that's a bug and you need that permission, then please open an issu
 
     ipcMain.handle(
       'webxdc:ephemeral-status-update',
-      (_ev, accountId: number, instanceId: number) => {
+      (_ev, accountId: number, instanceId: number, payload) => {
         const instance = open_apps[`${accountId}.${instanceId}`]
         if (instance) {
-          instance.win.webContents.send('webxdc.ephemeralStatusUpdate')
+          instance.win.webContents.send('webxdc.ephemeralStatusUpdate', payload)
         }
       }
     )

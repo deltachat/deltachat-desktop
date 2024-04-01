@@ -16,10 +16,10 @@ const log = getLogger('renderer/runtime')
 
 const { app_getPath, ipcRenderer: ipcBackend } = (window as any)
   .electron_functions as {
-  // see static/preload.js
-  ipcRenderer: import('electron').IpcRenderer
-  app_getPath: typeof app.getPath
-}
+    // see static/preload.js
+    ipcRenderer: import('electron').IpcRenderer
+    app_getPath: typeof app.getPath
+  }
 
 /**
  * Offers an abstraction Layer to make it easier to make browser client in the future
@@ -95,7 +95,7 @@ interface Runtime {
   deleteWebxdcAccountData(accountId: number): Promise<void>
   closeAllWebxdcInstances(): void
   notifyWebxdcStatusUpdate(accountId: number, instanceId: number): void
-  notifyWebxdcEphemeralStatusUpdate(accountId: number, instanceId: number): void
+  notifyWebxdcEphemeralStatusUpdate(accountId: number, instanceId: number, payload: string): void
   notifyWebxdcMessageChanged(accountId: number, instanceId: number): void
   notifyWebxdcInstanceDeleted(accountId: number, instanceId: number): void
 
@@ -135,15 +135,15 @@ interface Runtime {
   onChooseLanguage: ((locale: string) => Promise<void>) | undefined
   onThemeUpdate: (() => void) | undefined
   onShowDialog:
-    | ((kind: 'about' | 'keybindings' | 'settings') => void)
-    | undefined
+  | ((kind: 'about' | 'keybindings' | 'settings') => void)
+  | undefined
   onOpenQrUrl: ((url: string) => void) | undefined
   onWebxdcSendToChat:
-    | ((
-        file: { file_name: string; file_content: string } | null,
-        text: string | null
-      ) => void)
-    | undefined
+  | ((
+    file: { file_name: string; file_content: string } | null,
+    text: string | null
+  ) => void)
+  | undefined
   onResumeFromSleep: (() => void) | undefined
 }
 
@@ -157,9 +157,9 @@ class Browser implements Runtime {
   onOpenQrUrl: ((url: string) => void) | undefined
   onWebxdcSendToChat:
     | ((
-        file: { file_name: string; file_content: string } | null,
-        text: string | null
-      ) => void)
+      file: { file_name: string; file_content: string } | null,
+      text: string | null
+    ) => void)
     | undefined
 
   openMapsWebxdc(_accountId: number, _chatId?: number | undefined): void {
@@ -189,7 +189,7 @@ class Browser implements Runtime {
   notifyWebxdcStatusUpdate(_accountId: number, _instanceId: number): void {
     throw new Error('Method not implemented.')
   }
-  notifyWebxdcEphemeralStatusUpdate(_accountId: number, _instanceId: number): void {
+  notifyWebxdcEphemeralStatusUpdate(_accountId: number, _instanceId: number, _payload: string): void {
     throw new Error('Method not implemented.')
   }
   notifyWebxdcMessageChanged(_accountId: number, _instanceId: number): void {
@@ -339,9 +339,9 @@ class Electron implements Runtime {
   onResumeFromSleep: (() => void) | undefined
   onWebxdcSendToChat:
     | ((
-        file: { file_name: string; file_content: string } | null,
-        text: string | null
-      ) => void)
+      file: { file_name: string; file_content: string } | null,
+      text: string | null
+    ) => void)
     | undefined
   onOpenQrUrl: ((url: string) => void) | undefined
   onShowDialog:
@@ -382,8 +382,8 @@ class Electron implements Runtime {
     ipcBackend.invoke('webxdc:status-update', accountId, instanceId)
   }
 
-  notifyWebxdcEphemeralStatusUpdate(accountId: number, instanceId: number): void {
-    ipcBackend.invoke('webxdc:ephemeral-status-update', accountId, instanceId)
+  notifyWebxdcEphemeralStatusUpdate(accountId: number, instanceId: number, payload: string): void {
+    ipcBackend.invoke('webxdc:ephemeral-status-update', accountId, instanceId, payload)
   }
 
   notifyWebxdcMessageChanged(accountId: number, instanceId: number): void {
@@ -438,7 +438,7 @@ class Electron implements Runtime {
     accountId: number
     chatId: number
     msgId: number
-  }) => void = () => {}
+  }) => void = () => { }
   setNotificationCallback(
     cb: (data: { accountId: number; chatId: number; msgId: number }) => void
   ): void {
@@ -613,4 +613,4 @@ class Electron implements Runtime {
 const IS_ELECTRON = true
 
 export const runtime: Runtime = IS_ELECTRON ? new Electron() : new Browser()
-;(window as any).r = runtime
+  ; (window as any).r = runtime

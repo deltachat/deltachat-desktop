@@ -7,6 +7,7 @@
    * @type {Parameters<import('webxdc-types').Webxdc["setUpdateListener"]>[0]|null}
    */
   let callback = null
+  let ephemeralCb = null
   var last_serial = 0
   let setUpdateListenerPromise = null
   let is_running = false
@@ -42,12 +43,13 @@
       is_running = false
     }
   }
+
   ipcRenderer.on('webxdc.statusUpdate', _ev => {
     onStatusUpdate()
   })
 
-  ipcRenderer.on('webxdc.ephemeralStatusUpdate', _ev => {
-    throw new Error('not implemented')
+  ipcRenderer.on('webxdc.ephemeralStatusUpdate', payload => {
+    ephemeralCb({payload: payload})
   })
 
   /**
@@ -66,6 +68,9 @@
       onStatusUpdate()
       return promise
     },
+    setEphemeralUpdateListener: (cb) => {
+      ephemeralCb = cb
+    },
     getAllUpdates: () => {
       console.error(
         'getAllUpdates is deprecated and will be removed in the future, it also returns an empty array now, so you really should use setUpdateListener instead.'
@@ -77,6 +82,11 @@
         'webxdc.sendUpdate',
         JSON.stringify(update),
         description
+      ),
+    sendEphemeralUpdate: (payload) =>
+      ipcRenderer.invoke(
+        'webxdc.sendEphemeralUpdate',
+        JSON.stringify(payload)
       ),
     sendToChat: async content => {
       if (!content.file && !content.text) {
