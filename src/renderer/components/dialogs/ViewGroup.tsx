@@ -4,7 +4,6 @@ import { C, DcEventType } from '@deltachat/jsonrpc-client'
 import ChatListItem from '../chat/ChatListItem'
 import { useContactSearch, AddMemberInnerDialog } from './CreateChat'
 import { QrCodeShowQrInner } from './QrCode'
-import { selectChat } from '../helpers/ChatMethods'
 import { useThemeCssVar } from '../../ThemeManager'
 import { ContactList, useContactsMap } from '../contact/ContactList'
 import { useLogicVirtualChatList, ChatListPart } from '../chat/ChatList'
@@ -25,9 +24,10 @@ import Dialog, {
   DialogHeader,
   OkCancelFooterAction,
 } from '../Dialog'
+import useChat from '../../hooks/useChat'
+import useConfirmationDialog from '../../hooks/useConfirmationDialog'
 import useDialog from '../../hooks/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useConfirmationDialog from '../../hooks/useConfirmationDialog'
 import { LastUsedSlot } from '../../utils/lastUsedPaths'
 import ProfileInfoHeader from '../ProfileInfoHeader'
 import ImageSelector from '../ImageSelector'
@@ -37,7 +37,9 @@ import type { DialogProps } from '../../contexts/DialogContext'
 
 const log = getLogger('renderer/ViewGroup')
 
-export function useChat(initialChat: Type.FullChat): Type.FullChat {
+export function useChatWithModifiedEvent(
+  initialChat: Type.FullChat
+): Type.FullChat {
   const [chat, setChat] = useState(initialChat)
 
   const accountId = selectedAccountId()
@@ -83,7 +85,7 @@ export default function ViewGroup(
   } & DialogProps
 ) {
   const { onClose, isBroadcast } = props
-  const chat = useChat(props.chat)
+  const chat = useChatWithModifiedEvent(props.chat)
 
   return (
     <Dialog width={400} onClose={onClose} fixed>
@@ -133,6 +135,7 @@ function ViewGroupInner(
   const accountId = selectedAccountId()
   const openConfirmationDialog = useConfirmationDialog()
   const tx = useTranslationFunction()
+  const { selectChat } = useChat()
   const [settings] = useSettingsStore()
   const [chatListIds, setChatListIds] = useState<number[]>([])
   const isRelatedChatsEnabled =
@@ -210,7 +213,7 @@ function ViewGroupInner(
 
   const showQRDialog = async () => {
     const [qrCode, svg] = await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(
-      selectedAccountId(),
+      accountId,
       chat.id
     )
 
@@ -226,7 +229,7 @@ function ViewGroupInner(
   )
 
   const onChatClick = (chatId: number) => {
-    selectChat(chatId)
+    selectChat(accountId, chatId)
     onClose()
   }
 
