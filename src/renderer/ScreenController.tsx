@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { Component } from 'react'
 import { DcEventType } from '@deltachat/jsonrpc-client'
 import { debounce } from 'debounce'
@@ -22,6 +22,7 @@ import SettingsStoreInstance from './stores/settings'
 import { NoAccountSelectedScreen } from './components/screens/NoAccountSelectedScreen/NoAccountSelectedScreen'
 import AccountDeletionScreen from './components/screens/AccountDeletionScreen/AccountDeletionScreen'
 import Runtime from './components/Runtime'
+import { ChatProvider } from './contexts/ChatContext'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -291,7 +292,14 @@ export default class ScreenController extends Component {
     switch (this.state.screen) {
       case Screens.Main:
         // the key attribute here is a hack to force a clean rerendering when the account changes
-        return <MainScreen key={String(this.selectedAccountId)} />
+        return (
+          <Fragment key={this.selectedAccountId}>
+            <ChatProvider>
+              <Runtime />
+              <MainScreen key={String(this.selectedAccountId)} />
+            </ChatProvider>
+          </Fragment>
+        )
       case Screens.Login:
         if (this.selectedAccountId === undefined) {
           throw new Error('Selected account not defined')
@@ -358,7 +366,6 @@ export default class ScreenController extends Component {
                   this
                 )}
               />
-              <Runtime />
               {this.renderScreen()}
             </div>
           </KeybindingsContextProvider>
