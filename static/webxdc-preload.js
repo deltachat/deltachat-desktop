@@ -69,6 +69,7 @@
       return promise
     },
     setEphemeralUpdateListener: (cb) => {
+      ipcRenderer.invoke('webxdc.sendGossipAdvertisement')
       ephemeralCb = cb
     },
     getAllUpdates: () => {
