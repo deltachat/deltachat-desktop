@@ -2,7 +2,6 @@ import moment from 'moment'
 
 import { getLogger } from '../../../shared/logger'
 import { runtime } from '../../runtime'
-import { selectChat } from '../helpers/ChatMethods'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { internalOpenWebxdc } from '../../system-integration/webxdc'
@@ -109,31 +108,6 @@ export function setQuoteInDraft(messageId: number) {
   } else {
     throw new Error('window.__setQuoteInDraft undefined')
   }
-}
-
-export async function privateReply(msg: Type.Message) {
-  const quotedMessageId = msg.id
-  const contactId = msg.fromId
-  const accountId = selectedAccountId()
-  const chatId = await BackendRemote.rpc.createChatByContactId(
-    accountId,
-    contactId
-  )
-
-  // retrieve existing draft to append the quotedMessageId
-  const oldDraft = await BackendRemote.rpc.getDraft(accountId, chatId)
-
-  await BackendRemote.rpc.miscSetDraft(
-    accountId,
-    chatId,
-    oldDraft?.text || null,
-    oldDraft?.file || null,
-    quotedMessageId,
-    'Text'
-  )
-
-  // select chat
-  selectChat(chatId)
 }
 
 export async function openMessageHTML(messageId: number) {

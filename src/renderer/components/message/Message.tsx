@@ -11,7 +11,6 @@ import {
   openForwardDialog,
   openMessageInfo,
   setQuoteInDraft,
-  privateReply,
   openMessageHTML,
   confirmDeleteMessage,
   downloadFullMessage,
@@ -34,6 +33,7 @@ import {
 import useDialog from '../../hooks/useDialog'
 import useMessage from '../../hooks/useMessage'
 import useOpenViewProfileDialog from '../../hooks/useOpenViewProfileDialog'
+import usePrivateReply from '../../hooks/usePrivateReply'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useVideoChat from '../../hooks/useVideoChat'
 import { useReactionsBar, showReactionsUi } from '../ReactionsBar'
@@ -47,6 +47,7 @@ import Button from '../Button'
 import styles from './styles.module.scss'
 
 import type { OpenDialog } from '../../contexts/DialogContext'
+import type { PrivateReply } from '../../hooks/usePrivateReply'
 
 const Avatar = (
   contact: T.Contact,
@@ -159,6 +160,7 @@ function buildContextMenu(
     text,
     conversationType,
     openDialog,
+    privateReply,
     handleReactClick,
     chat,
   }: {
@@ -167,6 +169,7 @@ function buildContextMenu(
     text?: string
     conversationType: ConversationType
     openDialog: OpenDialog
+    privateReply: PrivateReply
     handleReactClick: (event: React.MouseEvent<Element, MouseEvent>) => void
     chat: T.FullChat
   },
@@ -243,7 +246,9 @@ function buildContextMenu(
     // Reply privately
     showReplyPrivately && {
       label: tx('reply_privately'),
-      action: privateReply.bind(null, message),
+      action: () => {
+        privateReply(accountId, message)
+      },
     },
     // Forward message
     {
@@ -335,6 +340,7 @@ export default function Message(props: {
 
   const { showReactionsBar } = useReactionsBar()
   const { openDialog } = useDialog()
+  const privateReply = usePrivateReply()
   const { openContextMenu } = useContext(ContextMenuContext)
   const openViewProfileDialog = useOpenViewProfileDialog()
   const { jumpToMessage } = useMessage()
@@ -379,6 +385,7 @@ export default function Message(props: {
           text: text || undefined,
           conversationType,
           openDialog,
+          privateReply,
           handleReactClick,
           chat,
         },
@@ -398,6 +405,7 @@ export default function Message(props: {
       message,
       openContextMenu,
       openDialog,
+      privateReply,
       showReactionsBar,
       text,
     ]
