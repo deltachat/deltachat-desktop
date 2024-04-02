@@ -21,8 +21,6 @@ import AccountListSidebar from './components/AccountListSidebar/AccountListSideb
 import SettingsStoreInstance from './stores/settings'
 import { NoAccountSelectedScreen } from './components/screens/NoAccountSelectedScreen/NoAccountSelectedScreen'
 import AccountDeletionScreen from './components/screens/AccountDeletionScreen/AccountDeletionScreen'
-import chatStore from './stores/chat'
-import { selectChat } from './components/helpers/ChatMethods'
 import Runtime from './components/Runtime'
 
 const log = getLogger('renderer/ScreenController')
