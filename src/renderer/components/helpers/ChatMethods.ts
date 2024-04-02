@@ -1,4 +1,4 @@
-import ChatStore, { ChatView } from '../../stores/chat'
+import ChatStore from '../../stores/chat'
 import { getLogger } from '../../../shared/logger'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
@@ -9,42 +9,12 @@ export const selectChat = async (chatId: number) => {
   await ChatStore.effect.selectChat(chatId)
 }
 
-export const setChatView = (view: ChatView) => {
-  ChatStore.effect.setView(view)
-}
-
 export const jumpToMessage = (
   msgId: number,
   highlight?: undefined | boolean,
   msgParentId?: undefined | number
 ) => {
   ChatStore.effect.jumpToMessage(msgId, highlight, msgParentId)
-}
-
-export async function createChatByContactIdAndSelectIt(
-  contactId: number
-): Promise<void> {
-  const accountId = selectedAccountId()
-
-  const chatId = await BackendRemote.rpc.createChatByContactId(
-    accountId,
-    contactId
-  )
-
-  const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
-
-  if (chat.archived) {
-    log.debug('chat was archived, unarchiving it')
-    await BackendRemote.rpc.setChatVisibility(
-      selectedAccountId(),
-      chatId,
-      'Normal'
-    )
-  }
-
-  // TODO update chatlist if its needed
-
-  selectChat(chatId)
 }
 
 export function forwardMessage(
