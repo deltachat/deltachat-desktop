@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { C, DcEventType } from '@deltachat/jsonrpc-client'
+import React, { useCallback, useEffect, useState } from 'react'
+import { C } from '@deltachat/jsonrpc-client'
 
 import ChatListItem from '../chat/ChatListItem'
 import { useContactSearch, AddMemberInnerDialog } from './CreateChat'
@@ -14,8 +14,7 @@ import {
 import ViewProfile from './ViewProfile'
 import { avatarInitial } from '../Avatar'
 import { DeltaInput } from '../Login-Styles'
-import { getLogger } from '../../../shared/logger'
-import { BackendRemote, Type } from '../../backend-com'
+import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { useSettingsStore } from '../../stores/settings'
 import Dialog, {
@@ -33,59 +32,16 @@ import ProfileInfoHeader from '../ProfileInfoHeader'
 import ImageSelector from '../ImageSelector'
 import { modifyGroup } from '../../backend/group'
 
+import type { T } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../contexts/DialogContext'
-
-const log = getLogger('renderer/ViewGroup')
-
-export function useChatWithModifiedEvent(
-  initialChat: Type.FullChat
-): Type.FullChat {
-  const [chat, setChat] = useState(initialChat)
-
-  const accountId = selectedAccountId()
-  const updateChat = useCallback(async () => {
-    const chat = await BackendRemote.rpc.getFullChatById(
-      accountId,
-      initialChat.id
-    )
-
-    if (!chat) {
-      log.error('chat not defined')
-      return
-    }
-    setChat(chat)
-  }, [initialChat.id, accountId])
-
-  const onChatModified = useMemo(
-    () =>
-      async ({ chatId }: DcEventType<'ChatModified'>) => {
-        if (chatId !== chat.id) return
-        updateChat()
-      },
-    [chat.id, updateChat]
-  )
-
-  useEffect(() => {
-    updateChat()
-  }, [initialChat, updateChat])
-  useEffect(() => {
-    const emitter = BackendRemote.getContextEvents(accountId)
-    emitter.on('ChatModified', onChatModified)
-    return () => {
-      emitter.on('ChatModified', onChatModified)
-    }
-  }, [onChatModified, accountId])
-  return chat
-}
 
 export default function ViewGroup(
   props: {
-    chat: Type.FullChat
+    chat: T.FullChat
     isBroadcast: boolean
   } & DialogProps
 ) {
-  const { onClose, isBroadcast } = props
-  const chat = useChatWithModifiedEvent(props.chat)
+  const { onClose, isBroadcast, chat } = props
 
   return (
     <Dialog width={400} onClose={onClose} fixed>
@@ -94,7 +50,7 @@ export default function ViewGroup(
   )
 }
 
-export const useGroup = (accountId: number, chat: Type.FullChat) => {
+export const useGroup = (accountId: number, chat: T.FullChat) => {
   const [groupName, setGroupName] = useState(chat.name)
   const [groupMembers, setGroupMembers] = useState(
     chat.contacts?.map(({ id }) => id)
@@ -126,7 +82,7 @@ export const useGroup = (accountId: number, chat: Type.FullChat) => {
 
 function ViewGroupInner(
   props: {
-    chat: Type.FullChat
+    chat: T.FullChat
     isBroadcast: boolean
   } & DialogProps
 ) {
@@ -166,7 +122,7 @@ function ViewGroupInner(
   } = useGroup(accountId, chat)
 
   const showRemoveGroupMemberConfirmationDialog = useCallback(
-    async (contact: Type.Contact) => {
+    async (contact: T.Contact) => {
       const confirmed = await openConfirmationDialog({
         message: !isBroadcast
           ? tx('ask_remove_members', contact.nameAndAddr)
@@ -224,9 +180,7 @@ function ViewGroupInner(
     })
   }
 
-  const [profileContact, setProfileContact] = useState<Type.Contact | null>(
-    null
-  )
+  const [profileContact, setProfileContact] = useState<T.Contact | null>(null)
 
   const onChatClick = (chatId: number) => {
     selectChat(accountId, chatId)

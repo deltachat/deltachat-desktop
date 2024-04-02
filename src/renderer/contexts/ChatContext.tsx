@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
 import { getChat, markChatAsSeen, saveLastChatId } from '../backend/chat'
+import { BackendRemote } from '../backend-com'
 
 import type { PropsWithChildren } from 'react'
 import type { T } from '@deltachat/jsonrpc-client'
-import { BackendRemote } from '../backend-com'
 
 export enum ChatView {
   Map,
