@@ -9,11 +9,7 @@ import { C } from '@deltachat/jsonrpc-client'
 import moment from 'moment'
 
 import { getLogger } from '../../../shared/logger'
-import {
-  openMessageInfo,
-  setQuoteInDraft,
-  privateReply,
-} from '../message/messageFunctions'
+import { openMessageInfo, setQuoteInDraft } from '../message/messageFunctions'
 import { getDirection } from '../../../shared/util'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { BackendRemote, Type } from '../../backend-com'
@@ -21,18 +17,21 @@ import { selectedAccountId } from '../../ScreenController'
 import { runtime } from '../../runtime'
 import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
 import useDialog from '../../hooks/useDialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useMessage from '../../hooks/useMessage'
+import usePrivateReply from '../../hooks/usePrivateReply'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 
 import type { DialogProps, OpenDialog } from '../../contexts/DialogContext'
 import type { JumpToMessage } from '../../hooks/useMessage'
+import type { PrivateReply } from '../../hooks/usePrivateReply'
 
 const log = getLogger('render/ChatAuditLog')
 
 function buildContextMenu(
   jumpToMessage: JumpToMessage,
   openDialog: OpenDialog,
+  privateReply: PrivateReply,
   accountId: number,
   message: Type.Message,
   isGroup: boolean,
@@ -71,7 +70,7 @@ function buildContextMenu(
       message.fromId > C.DC_CONTACT_ID_LAST_SPECIAL && {
         label: tx('reply_privately'),
         action: () => {
-          privateReply(message)
+          privateReply(accountId, message)
           closeDialogCallback()
         },
       },
@@ -99,6 +98,7 @@ export default function ChatAuditLogDialog(
   const { openDialog } = useDialog()
   const { jumpToMessage } = useMessage()
   const accountId = selectedAccountId()
+  const privateReply = usePrivateReply()
 
   const [loading, setLoading] = useState(true)
   const [msgEntries, setMsgEntries] = useState<Type.MessageListItem[]>([])
@@ -119,6 +119,7 @@ export default function ChatAuditLogDialog(
     const items = buildContextMenu(
       jumpToMessage,
       openDialog,
+      privateReply,
       accountId,
       message,
       selectedChat.chatType === C.DC_CHAT_TYPE_GROUP,

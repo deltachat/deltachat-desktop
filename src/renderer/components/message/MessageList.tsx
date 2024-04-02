@@ -12,7 +12,6 @@ import { C, T } from '@deltachat/jsonrpc-client'
 import moment from 'moment'
 
 import { MessageWrapper } from './MessageWrapper'
-import ChatStore from '../../stores/chat'
 import { getLogger } from '../../../shared/logger'
 import { KeybindAction } from '../../keybindings'
 import { useMessageList } from '../../stores/messagelist'
@@ -130,7 +129,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
   const [showJumpDownButton, setShowJumpDownButton] = useState(false)
 
   const onUnreadMessageInView: IntersectionObserverCallback = entries => {
-    if (ChatStore.state.chat === null) return
+    if (!chat) return
     // Don't mark messages as read if window is not focused
     if (document.hasFocus() === false) return
 
@@ -163,7 +162,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       }
 
       if (messageIdsToMarkAsRead.length > 0) {
-        const chatId = ChatStore.state.chat?.id
+        const chatId = chat?.id
         if (!chatId) return
         BackendRemote.rpc
           .markseenMsgs(accountId, messageIdsToMarkAsRead)
@@ -265,7 +264,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
   )
 
   useLayoutEffect(() => {
-    if (!ChatStore.state.chat) {
+    if (!chat) {
       return
     }
     if (!messageListRef.current) {
@@ -378,11 +377,12 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       }, 0)
     }, 0)
   }, [
+    chat,
     onScroll,
-    viewState,
-    viewState.scrollTo,
-    viewState.lastKnownScrollHeight,
     unlockScroll,
+    viewState,
+    viewState.lastKnownScrollHeight,
+    viewState.scrollTo,
   ])
 
   useLayoutEffect(() => {
