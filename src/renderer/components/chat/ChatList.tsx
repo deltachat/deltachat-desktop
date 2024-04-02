@@ -25,17 +25,15 @@ import {
 } from './ChatListItemRow'
 import { PseudoListItemAddContact } from '../helpers/PseudoListItem'
 import { KeybindAction } from '../../keybindings'
-import {
-  createChatByContactIdAndSelectIt,
-  selectChat,
-} from '../helpers/ChatMethods'
 import { useThemeCssVar } from '../../ThemeManager'
 import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import useDialog from '../../hooks/useDialog'
 import CreateChat from '../dialogs/CreateChat'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useChat from '../../hooks/useChat'
+import useCreateChatByContactId from '../../hooks/useCreateChatByContactId'
+import useDialog from '../../hooks/useDialog'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type {
   ChatListItemData,
@@ -139,6 +137,8 @@ export default function ChatList(props: {
   )
 
   const { openContextMenu, activeContextMenuChatId } = useChatListContextMenu()
+  const createChatByContactId = useCreateChatByContactId()
+  const { selectChat } = useChat()
 
   const addContactOnClick = async () => {
     if (!queryStrIsValidEmail || !queryStr) return
@@ -148,7 +148,7 @@ export default function ChatList(props: {
       queryStr.trim(),
       null
     )
-    await createChatByContactIdAndSelectIt(contactId)
+    await createChatByContactId(accountId, contactId)
     props.onExitSearch && props.onExitSearch()
   }
   const { openDialog } = useDialog()
@@ -228,7 +228,7 @@ export default function ChatList(props: {
     showArchivedChats,
   ])
 
-  const selectFirstChat = () => selectChat(chatListIds[0])
+  const selectFirstChat = () => selectChat(accountId, chatListIds[0])
 
   // KeyboardShortcuts ---------
   useKeyBindingAction(KeybindAction.ChatList_ScrollToSelectedChat, () =>
@@ -242,7 +242,7 @@ export default function ChatList(props: {
     )
     const newChatId = chatListIds[selectedChatIndex + 1]
     if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
-      selectChat(newChatId)
+      selectChat(accountId, newChatId)
     }
   })
 
@@ -253,7 +253,7 @@ export default function ChatList(props: {
     )
     const newChatId = chatListIds[selectedChatIndex - 1]
     if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
-      selectChat(newChatId)
+      selectChat(accountId, newChatId)
     }
   })
 
