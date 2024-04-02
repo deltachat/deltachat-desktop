@@ -21,7 +21,7 @@ export type CreateChatByEmail = (
  * user will be prompted with a confirmation dialogue. In case the user aborts the
  * action null is returned.
  */
-export function useCreateChatByEmail(): CreateChatByEmail {
+export default function useCreateChatByEmail(): CreateChatByEmail {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
 

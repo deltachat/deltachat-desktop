@@ -4,7 +4,6 @@ import { DcEventType } from '@deltachat/jsonrpc-client'
 import { debounce } from 'debounce'
 
 import MainScreen from './components/screens/MainScreen'
-import processOpenQrUrl from './components/helpers/OpenQrUrl'
 import { getLogger } from '../shared/logger'
 import { ActionEmitter, KeybindAction } from './keybindings'
 import AccountSetupScreen from './components/screens/AccountSetupScreen'
@@ -22,6 +21,7 @@ import AccountListSidebar from './components/AccountListSidebar/AccountListSideb
 import SettingsStoreInstance from './stores/settings'
 import { NoAccountSelectedScreen } from './components/screens/NoAccountSelectedScreen/NoAccountSelectedScreen'
 import AccountDeletionScreen from './components/screens/AccountDeletionScreen/AccountDeletionScreen'
+import Runtime from './components/Runtime'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -217,10 +217,6 @@ export default class ScreenController extends Component {
       }
     }
 
-    runtime.onOpenQrUrl = (url: string) => {
-      processOpenQrUrl(this.context.openDialog, this.context.closeDialog, url)
-    }
-
     runtime.onWebxdcSendToChat = (file, text) => {
       if (this.openSendToDialogId) {
         this.context.closeDialog(this.openSendToDialogId)
@@ -350,6 +346,7 @@ export default class ScreenController extends Component {
                   this
                 )}
               />
+              <Runtime />
               {this.renderScreen()}
             </div>
           </KeybindingsContextProvider>

@@ -14,7 +14,6 @@ import Dialog, {
 import FooterActionButton from '../../Dialog/FooterActionButton'
 import Icon from '../../Icon'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import useDialog from '../../../hooks/useDialog'
 import useConfirmationDialog from '../../../hooks/useConfirmationDialog'
 
 import type { PropsWithChildren } from 'react'
@@ -28,7 +27,6 @@ const TROUBLESHOOTING_URL = 'https://delta.chat/en/help#multiclient'
 
 export function SendBackupDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
-  const { openDialog } = useDialog()
   const openConfirmationDialog = useConfirmationDialog()
 
   const [inProgress, setInProgress] = useState<boolean>(false)
@@ -180,9 +178,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
             <FooterActions align='spaceBetween'>
               <span className={styles.buttonGroup}>
                 <FooterActionButton
-                  onClick={() =>
-                    runtime.openLink(openDialog, TROUBLESHOOTING_URL)
-                  }
+                  onClick={() => runtime.openLink(TROUBLESHOOTING_URL)}
                 >
                   {tx('troubleshooting')}&nbsp;
                   <Icon icon='open_in_new' size={20} />

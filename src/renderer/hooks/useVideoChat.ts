@@ -31,7 +31,7 @@ export default function useVideoChat() {
           throw new Error('Message has no video chat url')
         }
 
-        openLinkSafely(message.videochatUrl)
+        openLinkSafely(accountId, message.videochatUrl)
       } catch (error: todo) {
         log.error('failed to join call', error)
         openDialog(AlertDialog, { message: error.toString() })

@@ -13,10 +13,11 @@ import Dialog, {
 } from '../Dialog'
 import useDialog from '../../hooks/useDialog'
 import useOpenLinkSafely from '../../hooks/useOpenLinkSafely'
-import processOpenQrUrl from '../helpers/OpenQrUrl'
+import useProcessQr from '../../hooks/useProcessQr'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { isInviteLink } from '../../../shared/util'
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { selectedAccountId } from '../../ScreenController'
 
 import type { LinkDestination } from '@deltachat/message_parser_wasm'
 import type { DialogProps } from '../../contexts/DialogContext'
@@ -45,9 +46,11 @@ export const LabeledLink = ({
   label: string | JSX.Element | JSX.Element[]
   destination: LinkDestination
 }) => {
-  const { openDialog, closeDialog } = useDialog()
+  const { openDialog } = useDialog()
   const openLinkSafely = useOpenLinkSafely()
+  const processQr = useProcessQr()
   const messageDisplay = useContext(MessagesDisplayContext)
+  const accountId = selectedAccountId()
   const { target, punycode, hostname } = destination
 
   // encode the punycode to make phishing harder
@@ -63,13 +66,13 @@ export const LabeledLink = ({
         : false
 
     if (isInviteLink(target)) {
-      processOpenQrUrl(openDialog, closeDialog, target)
+      processQr(accountId, target)
       return
     }
 
     //check if domain is trusted, or if there is no domain like on mailto just open it
     if (isDeviceChat || !hostName || isDomainTrusted(hostName)) {
-      openLinkSafely(target)
+      openLinkSafely(accountId, target)
       return
     }
     // not trusted - ask for confirmation from user
@@ -96,6 +99,7 @@ function LabeledLinkConfirmationDialog(
   } & DialogProps
 ) {
   const tx = useTranslationFunction()
+  const accountId = selectedAccountId()
   const openLinkSafely = useOpenLinkSafely()
   const [isChecked, setIsChecked] = useState(false)
   const toggleIsChecked = () => setIsChecked(checked => !checked)
@@ -149,7 +153,7 @@ function LabeledLinkConfirmationDialog(
                 // trust url
                 trustDomain(props.hostName)
               }
-              openLinkSafely(props.target)
+              openLinkSafely(accountId, props.target)
             }}
           >
             {tx('open')}
@@ -161,9 +165,11 @@ function LabeledLinkConfirmationDialog(
 }
 
 export const Link = ({ destination }: { destination: LinkDestination }) => {
-  const { openDialog, closeDialog } = useDialog()
+  const { openDialog } = useDialog()
   const openLinkSafely = useOpenLinkSafely()
+  const accountId = selectedAccountId()
   const { target, punycode } = destination
+  const processQr = useProcessQr()
   const asciiUrl = punycode ? punycode.punycode_encoded_url : target
 
   const onClick = (ev: any) => {
@@ -171,7 +177,7 @@ export const Link = ({ destination }: { destination: LinkDestination }) => {
     ev.stopPropagation()
 
     if (isInviteLink(target)) {
-      processOpenQrUrl(openDialog, closeDialog, target)
+      processQr(accountId, target)
       return
     }
 
@@ -182,7 +188,7 @@ export const Link = ({ destination }: { destination: LinkDestination }) => {
         asciiUrl: punycode.punycode_encoded_url,
       })
     } else {
-      openLinkSafely(target)
+      openLinkSafely(accountId, target)
     }
   }
 
@@ -202,6 +208,7 @@ function PunycodeUrlConfirmationDialog(
 ) {
   const tx = useTranslationFunction()
   const openLinkSafely = useOpenLinkSafely()
+  const accountId = selectedAccountId()
 
   return (
     <Dialog onClose={props.onClose}>
@@ -252,7 +259,7 @@ function PunycodeUrlConfirmationDialog(
           <FooterActionButton
             onClick={() => {
               props.onClose()
-              openLinkSafely(props.asciiUrl)
+              openLinkSafely(accountId, props.asciiUrl)
             }}
           >
             {tx('open')}
