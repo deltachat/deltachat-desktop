@@ -2,11 +2,7 @@ import moment from 'moment'
 
 import { getLogger } from '../../../shared/logger'
 import { runtime } from '../../runtime'
-import {
-  forwardMessage,
-  deleteMessage,
-  selectChat,
-} from '../helpers/ChatMethods'
+import { selectChat } from '../helpers/ChatMethods'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { internalOpenWebxdc } from '../../system-integration/webxdc'
@@ -15,6 +11,7 @@ import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import MessageDetail from '../dialogs/MessageDetail'
 
 import type { OpenDialog } from '../../contexts/DialogContext'
+import { deleteMessage, forwardMessage } from '../../backend/message'
 
 const log = getLogger('render/msgFunctions')
 
@@ -90,6 +87,7 @@ export async function confirmForwardMessage(
 
 export function confirmDeleteMessage(
   openDialog: OpenDialog,
+  accountId: number,
   msg: Type.Message
 ) {
   const tx = window.static_translate
@@ -97,7 +95,7 @@ export function confirmDeleteMessage(
   openDialog(ConfirmationDialog, {
     message: tx('ask_delete_message'),
     confirmLabel: tx('delete'),
-    cb: (yes: boolean) => yes && deleteMessage(msg.id),
+    cb: (yes: boolean) => yes && deleteMessage(accountId, msg.id),
   })
 }
 

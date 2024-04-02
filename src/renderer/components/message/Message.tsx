@@ -154,6 +154,7 @@ const ForwardedTitle = (
 
 function buildContextMenu(
   {
+    accountId,
     message,
     text,
     conversationType,
@@ -161,6 +162,7 @@ function buildContextMenu(
     handleReactClick,
     chat,
   }: {
+    accountId: number
     message: T.Message | null
     text?: string
     conversationType: ConversationType
@@ -312,7 +314,7 @@ function buildContextMenu(
     // Delete message
     {
       label: tx('delete_message_desktop'),
-      action: confirmDeleteMessage.bind(null, openDialog, message),
+      action: confirmDeleteMessage.bind(null, openDialog, accountId, message),
     },
   ]
 }
@@ -372,6 +374,7 @@ export default function Message(props: {
       const target = ((event as any).t || event.target) as HTMLAnchorElement
       const items = buildContextMenu(
         {
+          accountId,
           message,
           text: text || undefined,
           conversationType,
