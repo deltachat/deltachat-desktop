@@ -1,9 +1,10 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { getChat, markChatAsSeen, saveLastChatId } from '../backend/chat'
 
 import type { PropsWithChildren } from 'react'
 import type { T } from '@deltachat/jsonrpc-client'
+import { BackendRemote } from '../backend-com'
 
 export enum ChatView {
   Map,
@@ -56,12 +57,71 @@ export const ChatProvider = ({ children }: PropsWithChildren<{}>) => {
     setChat(await getChat(accountId, chatId))
   }, [])
 
+  const refreshChat = useCallback(async () => {
+    if (!accountId || !chatId) {
+      return
+    }
+
+    setChat(await getChat(accountId, chatId))
+  }, [accountId, chatId])
+
   const unselectChat = useCallback(() => {
     setActiveView(ChatView.MessageList)
     setAccountId(undefined)
     setChatId(undefined)
     setChat(undefined)
   }, [])
+
+  // Subscribe to events coming from the core
+  useEffect(() => {
+    const onChatModified = (
+      eventAccountId: number,
+      { chatId: eventChatId }: { chatId: number }
+    ) => {
+      if (eventAccountId !== accountId) {
+        return
+      }
+
+      if (eventChatId !== chatId) {
+        return
+      }
+
+      refreshChat()
+    }
+
+    const onContactsModified = (
+      eventAccountId: number,
+      { contactId }: { contactId: number | null }
+    ) => {
+      if (eventAccountId !== accountId) {
+        return
+      }
+
+      if (!chat) {
+        return
+      }
+
+      if (!contactId) {
+        return
+      }
+
+      if (!chat.contactIds.includes(contactId)) {
+        return
+      }
+
+      refreshChat()
+    }
+
+    BackendRemote.on('ChatModified', onChatModified)
+    BackendRemote.on('ChatEphemeralTimerModified', onChatModified)
+    BackendRemote.on('ContactsChanged', onContactsModified)
+
+    return () => {
+      BackendRemote.off('ChatModified', onChatModified)
+      BackendRemote.off('ChatEphemeralTimerModified', onChatModified)
+      BackendRemote.off('ContactsChanged', onContactsModified)
+    }
+  }, [accountId, chat, chatId, refreshChat])
 
   const value: ChatValue = {
     accountId,
