@@ -8,6 +8,7 @@ import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import { setChatVisibility, unmuteChat } from '../../backend/chat'
+import useChat from '../../hooks/useChat'
 import useChatDialog from '../../hooks/useChatDialog'
 import useDialog from '../../hooks/useDialog'
 import useOpenViewGroupDialog from '../../hooks/useOpenViewGroupDialog'
@@ -15,9 +16,10 @@ import useOpenViewProfileDialog from '../../hooks/useOpenViewProfileDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { T } from '@deltachat/jsonrpc-client'
-import { unselectChat } from '../helpers/ChatMethods'
+import type { UnselectChat } from '../../contexts/ChatContext'
 
 function archiveStateMenu(
+  unselectChat: UnselectChat,
   accountId: number,
   chat: T.ChatListItemFetchResult & { kind: 'ChatListItem' },
   tx: ReturnType<typeof useTranslationFunction>,
@@ -92,6 +94,7 @@ export function useChatListContextMenu(): {
   const openViewProfileDialog = useOpenViewProfileDialog()
   const { openContextMenu } = useContext(ContextMenuContext)
   const accountId = selectedAccountId()
+  const { unselectChat } = useChat()
   const tx = useTranslationFunction()
   const [activeContextMenuChatId, setActiveContextMenuChatId] = useState<
     number | null
@@ -136,6 +139,7 @@ export function useChatListContextMenu(): {
         ? [
             // Archive & Pin
             ...archiveStateMenu(
+              unselectChat,
               accountId,
               chatListItem,
               tx,

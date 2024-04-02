@@ -1,8 +1,7 @@
 import ChatStore, { ChatView } from '../../stores/chat'
 import { getLogger } from '../../../shared/logger'
-import { BackendRemote, Type } from '../../backend-com'
+import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import chatStore from '../../stores/chat'
 
 const log = getLogger('renderer/message')
 
@@ -20,10 +19,6 @@ export const jumpToMessage = (
   msgParentId?: undefined | number
 ) => {
   ChatStore.effect.jumpToMessage(msgId, highlight, msgParentId)
-}
-
-export const unselectChat = () => {
-  ChatStore.reducer.unselectChat()
 }
 
 export async function createChatByContactIdAndSelectIt(
@@ -50,25 +45,6 @@ export async function createChatByContactIdAndSelectIt(
   // TODO update chatlist if its needed
 
   selectChat(chatId)
-}
-
-export async function sendMessage(
-  chatId: number,
-  message: Partial<Type.MessageData>
-) {
-  const id = await BackendRemote.rpc.sendMsg(selectedAccountId(), chatId, {
-    file: null,
-    viewtype: message.file ? 'File' : 'Text',
-    html: null,
-    location: null,
-    overrideSenderName: null,
-    quotedMessageId: null,
-    text: null,
-    // replace defaults with real values
-    ...message,
-  })
-  // jump down on sending
-  chatStore.effect.jumpToMessage(id, false)
 }
 
 export function forwardMessage(
