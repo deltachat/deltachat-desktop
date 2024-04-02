@@ -26,15 +26,9 @@ export default function useQR() {
   const { openDialog, closeDialog } = useDialog()
 
   const setConfigFromQrCatchingErrorInAlert = useCallback(
-    async (qrContent: string) => {
+    async (accountId: number, qrContent: string) => {
       try {
-        if (window.__selectedAccountId === undefined) {
-          throw new Error('error: no context selected')
-        }
-        await BackendRemote.rpc.setConfigFromQr(
-          window.__selectedAccountId,
-          qrContent
-        )
+        await BackendRemote.rpc.setConfigFromQr(accountId, qrContent)
       } catch (error) {
         if (error instanceof Error) {
           openAlertDialog({
@@ -150,13 +144,7 @@ export default function useQR() {
           window.__welcome_qr = url
         } else {
           try {
-            if (window.__selectedAccountId === undefined) {
-              throw new Error('error: no context selected')
-            }
-            await BackendRemote.rpc.setConfigFromQr(
-              window.__selectedAccountId,
-              url
-            )
+            await BackendRemote.rpc.setConfigFromQr(accountId, url)
             closeProcessDialog()
             openDialog(ConfigureProgressDialog, {
               credentials: {},
@@ -234,7 +222,7 @@ export default function useQR() {
         })
 
         if (userConfirmed) {
-          await setConfigFromQrCatchingErrorInAlert(url)
+          await setConfigFromQrCatchingErrorInAlert(accountId, url)
         }
 
         callback && callback()
@@ -248,7 +236,7 @@ export default function useQR() {
         })
 
         if (userConfirmed) {
-          await setConfigFromQrCatchingErrorInAlert(url)
+          await setConfigFromQrCatchingErrorInAlert(accountId, url)
         }
 
         callback && callback()
@@ -262,7 +250,7 @@ export default function useQR() {
         })
 
         if (userConfirmed) {
-          await setConfigFromQrCatchingErrorInAlert(url)
+          await setConfigFromQrCatchingErrorInAlert(accountId, url)
         }
 
         callback && callback()
@@ -276,7 +264,7 @@ export default function useQR() {
         })
 
         if (userConfirmed) {
-          await setConfigFromQrCatchingErrorInAlert(url)
+          await setConfigFromQrCatchingErrorInAlert(accountId, url)
         }
 
         callback && callback()

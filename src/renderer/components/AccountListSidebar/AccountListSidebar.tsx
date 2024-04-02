@@ -5,6 +5,7 @@ import AccountHoverInfo from './AccountHoverInfo'
 import AccountItem from './AccountItem'
 import Icon from '../Icon'
 import Settings from '../Settings'
+import useAccount from '../../hooks/useAccount'
 import useDialog from '../../hooks/useDialog'
 import { BackendRemote } from '../../backend-com'
 import { runtime } from '../../runtime'
@@ -14,30 +15,11 @@ import styles from './styles.module.scss'
 
 import type { T } from '@deltachat/jsonrpc-client'
 
-type Props = {
-  onAddAccount: () => Promise<number>
-  onSelectAccount: (accountId: number) => Promise<void>
-  openAccountDeletionScreen: (accountId: number) => Promise<void>
-  selectedAccountId?: number
-}
-
-export default function AccountListSidebar({
-  onAddAccount,
-  onSelectAccount,
-  openAccountDeletionScreen,
-  selectedAccountId,
-}: Props) {
+export default function AccountListSidebar() {
   const { openDialog } = useDialog()
+  const { accountId, addAccount, selectAccount } = useAccount()
   const [accounts, setAccounts] = useState<T.Account[]>([])
   const [{ accounts: noficationSettings }] = useAccountNotificationStore()
-
-  const selectAccount = async (accountId: number) => {
-    if (selectedAccountId === accountId) {
-      return
-    }
-
-    await onSelectAccount(accountId)
-  }
 
   const [syncAllAccounts, setSyncAllAccounts] = useState(true)
 
@@ -53,7 +35,7 @@ export default function AccountListSidebar({
 
   useEffect(() => {
     refresh()
-  }, [selectedAccountId, refresh])
+  }, [accountId, refresh])
 
   const [accountForHoverInfo, internalSetAccountForHoverInfo] =
     useState<T.Account | null>(null)
@@ -109,7 +91,7 @@ export default function AccountListSidebar({
           <AccountItem
             key={account.id}
             account={account}
-            isSelected={selectedAccountId === account.id}
+            isSelected={accountId === account.id}
             onSelectAccount={selectAccount}
             openAccountDeletionScreen={openAccountDeletionScreen}
             updateAccountForHoverInfo={updateAccountForHoverInfo}
@@ -117,7 +99,7 @@ export default function AccountListSidebar({
             muted={noficationSettings[account.id]?.muted || false}
           />
         ))}
-        <button className={styles.addButton} onClick={onAddAccount}>
+        <button className={styles.addButton} onClick={addAccount}>
           +
         </button>
       </div>
@@ -134,7 +116,7 @@ export default function AccountListSidebar({
         {accountForHoverInfo && (
           <AccountHoverInfo
             account={accountForHoverInfo}
-            isSelected={selectedAccountId === accountForHoverInfo.id}
+            isSelected={accountId === accountForHoverInfo.id}
             muted={noficationSettings[accountForHoverInfo.id]?.muted || false}
           />
         )}

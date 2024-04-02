@@ -115,6 +115,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
     fetchMoreBottom,
     fetchMoreTop,
   } = useMessageList(accountId, chat.id)
+  console.log(accountId, chat.id)
   const { hideReactionsBar } = useReactionsBar()
 
   const countUnreadMessages = useUnreadCount(

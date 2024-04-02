@@ -13,45 +13,49 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
 } from '../Dialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useAccount from '../../hooks/useAccount'
 import useDialog from '../../hooks/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
-import type ScreenController from '../../ScreenController'
-
-export default function AccountSetupScreen({
-  selectAccount,
-  accountId,
-}: {
-  selectAccount: typeof ScreenController.prototype.selectAccount
-  accountId: number
-}) {
+export default function AccountSetupScreen() {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
+  const { accountId, selectAccount } = useAccount()
 
   const [credentials, setCredentials] =
     useState<Credentials>(defaultCredentials())
 
-  const onClickLogin = useCallback(
-    () =>
-      openDialog(ConfigureProgressDialog, {
-        credentials,
-        onSuccess: () => {
-          selectAccount(accountId)
-          window.__updateAccountListSidebar?.()
-        },
-      }),
-    [accountId, openDialog, selectAccount, credentials]
-  )
+  const onLogin = useCallback(() => {
+    if (!accountId) {
+      return
+    }
+
+    openDialog(ConfigureProgressDialog, {
+      credentials,
+      onSuccess: () => {
+        selectAccount(accountId)
+        window.__updateAccountListSidebar?.()
+      },
+    })
+  }, [accountId, openDialog, selectAccount, credentials])
+
+  const onCancel = () => {
+    if (!accountId) {
+      return
+    }
+
+    selectAccount(accountId)
+  }
 
   const onKeyDown = useCallback(
     (ev: KeyboardEvent) => {
       if (ev.code === 'Enter') {
-        onClickLogin()
         ev.stopPropagation()
         ev.preventDefault()
+        onLogin()
       }
     },
-    [onClickLogin]
+    [onLogin]
   )
 
   useEffect(() => {
@@ -78,10 +82,10 @@ export default function AccountSetupScreen({
           </DialogBody>
           <DialogFooter>
             <FooterActions>
-              <FooterActionButton onClick={() => selectAccount(accountId)}>
+              <FooterActionButton onClick={onCancel}>
                 {tx('cancel')}
               </FooterActionButton>
-              <FooterActionButton onClick={onClickLogin}>
+              <FooterActionButton onClick={onLogin}>
                 {tx('login_title')}
               </FooterActionButton>
             </FooterActions>

@@ -6,7 +6,6 @@ import classNames from 'classnames'
 import { getLogger } from '../../../../shared/logger'
 import { runtime } from '../../../runtime'
 import { DeltaProgressBar } from '../../Login-Styles'
-import { Screens, selectedAccountId } from '../../../ScreenController'
 import { BackendRemote, EffectfulBackendActions } from '../../../backend-com'
 import Dialog, {
   DialogBody,
@@ -14,6 +13,8 @@ import Dialog, {
   DialogHeader,
   DialogWithHeader,
 } from '../../Dialog'
+import useAccount from '../../../hooks/useAccount'
+import useAccountId from '../../../hooks/useAccountId'
 import useDialog from '../../../hooks/useDialog'
 import useProcessQr from '../../../hooks/useProcessQr'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
@@ -24,6 +25,7 @@ import {
   rememberLastUsedPath,
 } from '../../../utils/lastUsedPaths'
 import Button from '../../Button'
+import { Screens } from '../../../contexts/ScreenContext'
 
 import styles from './styles.module.scss'
 
@@ -42,12 +44,11 @@ function ImportBackupProgressDialog({
 }: Props & DialogProps) {
   const [importProgress, setImportProgress] = useState(0.0)
   const [error, setError] = useState<string | null>(null)
+  const accountId = useAccountId()
 
   const onImexProgress = ({ progress }: DcEventType<'ImexProgress'>) => {
     setImportProgress(progress)
   }
-
-  const accountId = selectedAccountId()
 
   useEffect(() => {
     ;(async () => {
@@ -129,18 +130,11 @@ function ImportButton() {
   )
 }
 
-export default function WelcomeScreen({
-  selectedAccountId,
-  onUnSelectAccount,
-  onExitWelcomeScreen,
-}: {
-  selectedAccountId: number
-  onUnSelectAccount: () => Promise<void>
-  onExitWelcomeScreen: () => Promise<void>
-}) {
+export default function WelcomeScreen() {
   const tx = useTranslationFunction()
   const { openDialog, closeDialog } = useDialog()
   const processQr = useProcessQr()
+  const { unselectAccount, accountId } = useAccount()
   const [showBackButton, setShowBackButton] = useState(false)
 
   const onClickLogin = () => window.__changeScreen(Screens.Login)
@@ -155,10 +149,10 @@ export default function WelcomeScreen({
 
   const onCancel = async () => {
     try {
-      const acInfo = await BackendRemote.rpc.getAccountInfo(selectedAccountId)
+      const acInfo = await BackendRemote.rpc.getAccountInfo(accountId)
       if (acInfo.kind === 'Unconfigured') {
-        await onUnSelectAccount()
-        await EffectfulBackendActions.removeAccount(selectedAccountId)
+        await unselectAccount()
+        await EffectfulBackendActions.removeAccount(accountId)
       }
       onExitWelcomeScreen()
     } catch (error) {
@@ -183,11 +177,11 @@ export default function WelcomeScreen({
       if (window.__welcome_qr) {
         // this is the "callback" when opening dclogin or dcaccount from an already existing account,
         // the app needs to switch to the welcome screen first.
-        await processQr(selectedAccountId, window.__welcome_qr, undefined, true)
+        await processQr(accountId, window.__welcome_qr, undefined, true)
         window.__welcome_qr = undefined
       }
     })()
-  }, [openDialog, closeDialog, processQr, selectedAccountId])
+  }, [openDialog, closeDialog, processQr, accountId])
 
   return (
     <div className='login-screen'>
