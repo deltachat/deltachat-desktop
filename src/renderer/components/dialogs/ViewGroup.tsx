@@ -18,7 +18,6 @@ import { DeltaInput } from '../Login-Styles'
 import { getLogger } from '../../../shared/logger'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import { modifyGroup } from '../helpers/ChatMethods'
 import { useSettingsStore } from '../../stores/settings'
 import Dialog, {
   DialogBody,
@@ -32,6 +31,7 @@ import useConfirmationDialog from '../../hooks/useConfirmationDialog'
 import { LastUsedSlot } from '../../utils/lastUsedPaths'
 import ProfileInfoHeader from '../ProfileInfoHeader'
 import ImageSelector from '../ImageSelector'
+import { modifyGroup } from '../../backend/group'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
@@ -92,7 +92,7 @@ export default function ViewGroup(
   )
 }
 
-export const useGroup = (chat: Type.FullChat) => {
+export const useGroup = (accountId: number, chat: Type.FullChat) => {
   const [groupName, setGroupName] = useState(chat.name)
   const [groupMembers, setGroupMembers] = useState(
     chat.contacts?.map(({ id }) => id)
@@ -100,8 +100,8 @@ export const useGroup = (chat: Type.FullChat) => {
   const [groupImage, setGroupImage] = useState(chat.profileImage)
 
   useEffect(() => {
-    modifyGroup(chat.id, groupName, groupImage, groupMembers)
-  }, [groupName, groupImage, groupMembers, chat.id])
+    modifyGroup(accountId, chat.id, groupName, groupImage, groupMembers)
+  }, [groupName, groupImage, groupMembers, chat.id, accountId])
 
   const removeGroupMember = (contactId: number) =>
     setGroupMembers(members => members.filter(mId => mId !== contactId))
@@ -130,6 +130,7 @@ function ViewGroupInner(
 ) {
   const { onClose, chat, isBroadcast } = props
   const { openDialog } = useDialog()
+  const accountId = selectedAccountId()
   const openConfirmationDialog = useConfirmationDialog()
   const tx = useTranslationFunction()
   const [settings] = useSettingsStore()
@@ -159,7 +160,7 @@ function ViewGroupInner(
     removeGroupMember,
     groupImage,
     setGroupImage,
-  } = useGroup(chat)
+  } = useGroup(accountId, chat)
 
   const showRemoveGroupMemberConfirmationDialog = useCallback(
     async (contact: Type.Contact) => {
