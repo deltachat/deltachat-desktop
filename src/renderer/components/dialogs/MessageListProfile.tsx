@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 
 import { useGroupImage, ChatSettingsSetNameAndProfileImage } from './CreateChat'
-import { Type } from '../../backend-com'
-import { modifyGroup } from '../helpers/ChatMethods'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -10,23 +8,33 @@ import Dialog, {
   OkCancelFooterAction,
 } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { selectedAccountId } from '../../ScreenController'
+import { modifyGroup } from '../../backend/group'
 
+import type { T } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../contexts/DialogContext'
 
 export default function MailingListProfile(
   props: {
-    chat: Type.FullChat
+    chat: T.FullChat
   } & DialogProps
 ) {
   const { onClose, chat } = props
 
   const tx = useTranslationFunction()
+  const accountId = selectedAccountId()
   const [groupName, setGroupName] = useState(chat.name)
   const [errorMissingGroupName, setErrorMissingGroupName] = useState(false)
   const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage(
     chat.profileImage
   )
-  const onUpdateGroup = useEdit(groupName, groupImage, chat.id, onClose)
+  const onUpdateGroup = useEdit(
+    accountId,
+    groupName,
+    groupImage,
+    chat.id,
+    onClose
+  )
 
   return (
     <Dialog onClose={onClose} fixed>
@@ -55,18 +63,27 @@ export default function MailingListProfile(
 }
 
 const useEdit = (
+  accountId: number,
   groupName: string,
   groupImage: string | null | undefined,
   groupId: number,
   onClose: DialogProps['onClose']
 ) => {
   const updateGroup = async () => {
-    await modifyGroup(groupId, groupName, groupImage || undefined, null)
+    await modifyGroup(
+      accountId,
+      groupId,
+      groupName,
+      groupImage || undefined,
+      null
+    )
   }
+
   const onUpdateGroup = async () => {
     if (groupName === '') return
     await updateGroup()
     onClose()
   }
+
   return onUpdateGroup
 }
