@@ -13,7 +13,6 @@ import { preventDefault } from '../../../shared/util'
 import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
 import useContextMenu from '../../hooks/useContextMenu'
 import useMessage from '../../hooks/useMessage'
 
@@ -35,7 +34,6 @@ type Props = {
 export default function FullscreenMedia(props: Props & DialogProps) {
   const accountId = selectedAccountId()
   const tx = useTranslationFunction()
-  const { openDialog } = useDialog()
   const { jumpToMessage } = useMessage()
   const { onClose } = props
 
@@ -148,10 +146,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
         <p>mimeType is "{fileMime}"</p>
         <p>
           Please report this bug on{' '}
-          <a
-            href='#'
-            onClick={() => runtime.openLink(openDialog, gitHubIssuesUrl)}
-          >
+          <a href='#' onClick={() => runtime.openLink(gitHubIssuesUrl)}>
             github
           </a>
         </p>
@@ -168,10 +163,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
         </p>
         <p>
           Please report this bug on{' '}
-          <a
-            href='#'
-            onClick={() => runtime.openLink(openDialog, gitHubIssuesUrl)}
-          >
+          <a href='#' onClick={() => runtime.openLink(gitHubIssuesUrl)}>
             github
           </a>
         </p>

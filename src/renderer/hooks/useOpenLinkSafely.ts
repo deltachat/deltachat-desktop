@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 
-import ConfirmationDialog from '../components/dialogs/ConfirmationDialog'
-import useDialog from '../hooks/useDialog'
+import useConfirmationDialog from './useConfirmationDialog'
+import useOpenMailtoLink from './useOpenMailtoLink'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 import { runtime } from '../runtime'
 
@@ -9,26 +9,28 @@ import { runtime } from '../runtime'
  * Opens http, https and mailto links, offers to copy all other links.
  */
 export default function useOpenLinkSafely() {
-  const { openDialog } = useDialog()
+  const openMailtoLink = useOpenMailtoLink()
   const tx = useTranslationFunction()
+  const openConfirmationDialog = useConfirmationDialog()
 
   return useCallback(
-    (url: string) => {
-      if (
-        url.startsWith('http:') ||
-        url.startsWith('https:') ||
-        url.startsWith('mailto:')
-      ) {
-        runtime.openLink(openDialog, url)
+    async (accountId: number, url: string) => {
+      if (url.startsWith('mailto:')) {
+        openMailtoLink(accountId, url)
+      } else if (url.startsWith('http:') || url.startsWith('https:')) {
+        runtime.openLink(url)
       } else {
-        openDialog(ConfirmationDialog, {
+        const userConfirmed = await openConfirmationDialog({
           message: tx('ask_copy_unopenable_link_to_clipboard', url),
           confirmLabel: tx('menu_copy_link_to_clipboard'),
           cancelLabel: tx('no'),
-          cb: yes => yes && runtime.writeClipboardText(url),
         })
+
+        if (userConfirmed) {
+          runtime.writeClipboardText(url)
+        }
       }
     },
-    [tx, openDialog]
+    [openMailtoLink, openConfirmationDialog, tx]
   )
 }

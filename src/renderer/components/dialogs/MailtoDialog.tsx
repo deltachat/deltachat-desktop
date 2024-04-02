@@ -7,10 +7,10 @@ import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
 import { ChatListPart, useLogicVirtualChatList } from '../chat/ChatList'
 import { useChatList } from '../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../ThemeManager'
-import { createDraftMessage } from '../helpers/ChatMethods'
+import { selectedAccountId } from '../../ScreenController'
 import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
+import useCreateDraftMessage from '../../hooks/useCreateDraftMesssage'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
@@ -23,7 +23,8 @@ export default function MailtoDialog(props: Props & DialogProps) {
   const listFlags = C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS
 
   const tx = useTranslationFunction()
-  const { openDialog } = useDialog()
+  const createDraftMessage = useCreateDraftMessage()
+  const accountId = selectedAccountId()
   const { chatListIds, queryStr, setQueryStr } = useChatList(listFlags)
   const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
     chatListIds,
@@ -31,7 +32,7 @@ export default function MailtoDialog(props: Props & DialogProps) {
   )
 
   const onChatClick = async (chatId: number) => {
-    createDraftMessage(openDialog, chatId, messageText)
+    createDraftMessage(accountId, chatId, messageText)
     onClose()
   }
 

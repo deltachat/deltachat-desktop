@@ -12,9 +12,9 @@ import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import SettingsStoreInstance from '../../stores/settings'
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
-import useConfirmationDialog from '../../hooks/useConfirmationDialog'
-import { useCreateChatByEmail } from '../../hooks/useCreateChatByEmail'
 import useChat from '../../hooks/useChat'
+import useConfirmationDialog from '../../hooks/useConfirmationDialog'
+import useCreateChatByEmail from '../../hooks/useCreateChatByEmail'
 import { ChatView } from '../../contexts/ChatContext'
 
 const log = getLogger('renderer/message-markdown')
