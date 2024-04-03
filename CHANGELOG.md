@@ -9,6 +9,7 @@
 ### Fixed
 - fix chat audit dialog was going out of viewport on smaller screens #3736
 - fix long names breaking layout of reactions dialog #3736
+- improve chat scroll performance #3743
 
 <a id="1_44_1"></a>
 
