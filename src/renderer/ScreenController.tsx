@@ -123,17 +123,6 @@ export default class ScreenController extends Component {
       this.selectedAccountId
     )
     if (account.kind === 'Configured') {
-      // @TODO
-      // await SettingsStoreInstance.effect.load()
-      // const lastChatId =
-      //   SettingsStoreInstance.getState()?.settings['ui.lastchatid']
-      // if (lastChatId) {
-      //   try {
-      //     await selectChat(Number(lastChatId))
-      //   } catch (error) {
-      //     log.error('Selecting last chat failed:', error)
-      //   }
-      // }
       this.changeScreen(Screens.Main)
       updateDeviceChats(this.selectedAccountId)
     } else {
@@ -291,7 +280,7 @@ export default class ScreenController extends Component {
   renderScreen() {
     switch (this.state.screen) {
       case Screens.Main:
-        return <MainScreen />
+        return <MainScreen accountId={this.selectedAccountId} />
       case Screens.Login:
         if (this.selectedAccountId === undefined) {
           throw new Error('Selected account not defined')

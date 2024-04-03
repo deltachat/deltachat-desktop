@@ -20,16 +20,17 @@ import { Type } from '../../backend-com'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import SearchInput from '../SearchInput'
 import EditProfileDialog from '../dialogs/EditProfileDialog'
-import useKeyBindingAction from '../../hooks/useKeyBindingAction'
-import { KeybindAction } from '../../keybindings'
-import useDialog from '../../hooks/useDialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useChat from '../../hooks/useChat'
-import { selectedAccountId } from '../../ScreenController'
-import { ChatView } from '../../contexts/ChatContext'
 import MessageListView from '../MessageListView'
+import useChat from '../../hooks/useChat'
+import useDialog from '../../hooks/useDialog'
+import useKeyBindingAction from '../../hooks/useKeyBindingAction'
 import useOpenViewGroupDialog from '../../hooks/useOpenViewGroupDialog'
 import useOpenViewProfileDialog from '../../hooks/useOpenViewProfileDialog'
+import useSelectLastChat from '../../hooks/useSelectLastChat'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { ChatView } from '../../contexts/ChatContext'
+import { KeybindAction } from '../../keybindings'
+import { selectedAccountId } from '../../ScreenController'
 
 import type { T } from '@deltachat/jsonrpc-client'
 
@@ -40,6 +41,9 @@ type Props = {
 }
 
 export default function MainScreen({ accountId }: Props) {
+  // Automatically select last known chat when account changed
+  useSelectLastChat(accountId)
+
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
 
