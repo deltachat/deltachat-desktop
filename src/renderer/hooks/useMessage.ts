@@ -62,7 +62,7 @@ export default function useMessage() {
       )
 
       if (message.chatId !== chatId) {
-        await selectChat(accountId, message.chatId)
+        await selectChat(message.chatId)
       }
 
       setChatView(ChatView.MessageList)

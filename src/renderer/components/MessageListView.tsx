@@ -12,17 +12,19 @@ import { RecoverableCrashScreen } from './screens/RecoverableCrashScreen'
 import type { AlternativeView } from './screens/MainScreen'
 
 type Props = {
+  accountId?: number
   alternativeView: AlternativeView
   galleryRef: any
   onUpdateGalleryView: () => void
 }
 
 export default function MessageListView({
+  accountId,
   galleryRef,
   alternativeView,
   onUpdateGalleryView,
 }: Props) {
-  const { accountId, activeView, chat } = useChat()
+  const { activeView, chat } = useChat()
   const { sendMessage } = useMessage()
 
   if (chat && accountId) {

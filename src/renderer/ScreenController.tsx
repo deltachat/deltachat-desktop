@@ -123,18 +123,17 @@ export default class ScreenController extends Component {
       this.selectedAccountId
     )
     if (account.kind === 'Configured') {
-      // reset global stores
-      chatStore.reducer.reset(selectedAccountId())
-      await SettingsStoreInstance.effect.load()
-      const lastChatId =
-        SettingsStoreInstance.getState()?.settings['ui.lastchatid']
-      if (lastChatId) {
-        try {
-          await selectChat(Number(lastChatId))
-        } catch (error) {
-          log.error('Selecting last chat failed:', error)
-        }
-      }
+      // @TODO
+      // await SettingsStoreInstance.effect.load()
+      // const lastChatId =
+      //   SettingsStoreInstance.getState()?.settings['ui.lastchatid']
+      // if (lastChatId) {
+      //   try {
+      //     await selectChat(Number(lastChatId))
+      //   } catch (error) {
+      //     log.error('Selecting last chat failed:', error)
+      //   }
+      // }
       this.changeScreen(Screens.Main)
       updateDeviceChats(this.selectedAccountId)
     } else {
@@ -351,7 +350,7 @@ export default class ScreenController extends Component {
             screen: this.state.screen,
           }}
         >
-          <ChatProvider>
+          <ChatProvider accountId={this.selectedAccountId}>
             <ContextMenuProvider>
               <DialogContextProvider>
                 <Runtime />

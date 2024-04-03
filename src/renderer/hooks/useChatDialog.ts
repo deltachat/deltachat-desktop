@@ -74,7 +74,7 @@ export default function useChatDialog() {
         // messages by unloading the chat first.
         unselectChat()
         await BackendRemote.rpc.deleteMessages(accountId, messagesToDelete)
-        selectChat(accountId, chatId)
+        selectChat(chatId)
       }
     },
     [openConfirmationDialog, selectChat, tx, unselectChat]

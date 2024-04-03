@@ -228,7 +228,7 @@ export default function ChatList(props: {
     showArchivedChats,
   ])
 
-  const selectFirstChat = () => selectChat(accountId, chatListIds[0])
+  const selectFirstChat = () => selectChat(chatListIds[0])
 
   // KeyboardShortcuts ---------
   useKeyBindingAction(KeybindAction.ChatList_ScrollToSelectedChat, () =>
@@ -242,7 +242,7 @@ export default function ChatList(props: {
     )
     const newChatId = chatListIds[selectedChatIndex + 1]
     if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
-      selectChat(accountId, newChatId)
+      selectChat(newChatId)
     }
   })
 
@@ -253,7 +253,7 @@ export default function ChatList(props: {
     )
     const newChatId = chatListIds[selectedChatIndex - 1]
     if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
-      selectChat(accountId, newChatId)
+      selectChat(newChatId)
     }
   })
 

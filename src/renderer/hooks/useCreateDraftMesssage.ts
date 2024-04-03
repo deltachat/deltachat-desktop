@@ -26,7 +26,7 @@ export default function useCreateDraftMessage() {
     async (accountId, chatId, messageText) => {
       const draft = await BackendRemote.rpc.getDraft(accountId, chatId)
 
-      selectChat(accountId, chatId)
+      selectChat(chatId)
 
       if (draft) {
         const { name } = await BackendRemote.rpc.getBasicChatInfo(

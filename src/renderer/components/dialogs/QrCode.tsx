@@ -217,7 +217,7 @@ export function QrCodeScanQrInner(
   }
 
   const handleScanResult = (chatId: number | null = null) => {
-    chatId && selectChat(accountId, chatId)
+    chatId && selectChat(chatId)
     onDone()
   }
 

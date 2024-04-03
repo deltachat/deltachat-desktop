@@ -166,7 +166,7 @@ function EmailLink({ email }: { email: string }): JSX.Element {
   const handleClick = async () => {
     const chatId = await createChatByEmail(accountId, email)
     if (chatId) {
-      selectChat(accountId, chatId)
+      selectChat(chatId)
     }
   }
 
@@ -221,12 +221,12 @@ function BotCommandSuggestion({ suggestion }: { suggestion: string }) {
         messageDisplay.contact_id
       )
       // also select the chat and close the profile window if this is the case
-      selectChat(accountId, chatId)
+      selectChat(chatId)
       messageDisplay.closeProfileDialog()
     } else if (messageDisplay.context == 'chat_map') {
       chatId = messageDisplay.chatId
       // go back to chat view
-      selectChat(accountId, chatId)
+      selectChat(chatId)
       setChatView(ChatView.MessageList)
     } else if (messageDisplay.context == 'chat_messagelist') {
       // nothing special to do

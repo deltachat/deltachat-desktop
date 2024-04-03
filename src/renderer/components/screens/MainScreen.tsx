@@ -35,7 +35,11 @@ import type { T } from '@deltachat/jsonrpc-client'
 
 export type AlternativeView = 'global-gallery' | null
 
-export default function MainScreen() {
+type Props = {
+  accountId?: number
+}
+
+export default function MainScreen({ accountId }: Props) {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
 
@@ -70,7 +74,7 @@ export default function MainScreen() {
       return
     }
 
-    selectChat(selectedAccountId(), chatId)
+    selectChat(chatId)
   }
 
   const searchChats = (queryStr: string, chatId: number | null = null) => {
@@ -230,6 +234,7 @@ export default function MainScreen() {
           }}
         />
         <MessageListView
+          accountId={accountId}
           alternativeView={alternativeView}
           galleryRef={galleryRef}
           onUpdateGalleryView={updatethreeDotMenuHidden}

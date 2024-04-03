@@ -809,7 +809,7 @@ const useCreateGroup = (
 
     const chatId = await createGroup()
     onClose()
-    selectChat(accountId, chatId)
+    selectChat(chatId)
   }
 }
 
@@ -838,7 +838,7 @@ const useCreateBroadcast = (
   return async () => {
     const chatId = await createBroadcastList()
     onClose()
-    selectChat(accountId, chatId)
+    selectChat(chatId)
   }
 }
 

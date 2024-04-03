@@ -49,7 +49,7 @@ export default function useOpenMailtoLink() {
             if (messageText) {
               await createDraftMessage(accountId, chatId, messageText)
             } else {
-              selectChat(accountId, chatId)
+              selectChat(chatId)
             }
           }
         } else {

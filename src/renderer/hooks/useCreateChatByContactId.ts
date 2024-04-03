@@ -20,7 +20,7 @@ export default function useCreateChatByContactId() {
         await setChatVisibility(accountId, chatId, 'Normal')
       }
 
-      selectChat(accountId, chatId)
+      selectChat(chatId)
     },
     [selectChat]
   )

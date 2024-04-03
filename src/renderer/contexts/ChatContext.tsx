@@ -14,12 +14,11 @@ export enum ChatView {
 
 export type SetView = (nextView: ChatView) => void
 
-export type SelectChat = (accountId: number, chatId: number) => Promise<void>
+export type SelectChat = (chatId: number) => Promise<void>
 
 export type UnselectChat = () => void
 
 export type ChatValue = {
-  accountId?: number
   activeView: ChatView
   chat?: T.FullChat
   chatId?: number
@@ -28,34 +27,45 @@ export type ChatValue = {
   unselectChat: UnselectChat
 }
 
+type Props = {
+  accountId?: number
+}
+
 export const ChatContext = React.createContext<ChatValue | null>(null)
 
-export const ChatProvider = ({ children }: PropsWithChildren<{}>) => {
-  // @TODO: Explore how to refactor account state into its own context
-  const [accountId, setAccountId] = useState<number | undefined>()
+export const ChatProvider = ({
+  children,
+  accountId,
+}: PropsWithChildren<Props>) => {
   const [activeView, setActiveView] = useState(ChatView.MessageList)
   const [chat, setChat] = useState<T.FullChat | undefined>()
   const [chatId, setChatId] = useState<number | undefined>()
 
-  const setChatView = useCallback((nextView: ChatView) => {
+  const setChatView = useCallback<SetView>((nextView: ChatView) => {
     setActiveView(nextView)
   }, [])
 
-  const selectChat = useCallback(async (accountId: number, chatId: number) => {
-    // Already set known state
-    setActiveView(ChatView.MessageList)
-    setChatId(chatId)
-    setAccountId(accountId)
+  const selectChat = useCallback<SelectChat>(
+    async (chatId: number) => {
+      if (!accountId) {
+        throw new Error('can not select chat when no `accountId` is given')
+      }
 
-    // Clear system notifications and mark chat as seen in backend
-    markChatAsSeen(accountId, chatId)
+      // Already set known state
+      setActiveView(ChatView.MessageList)
+      setChatId(chatId)
 
-    // Remember that user selected this chat to open it again when they come back
-    saveLastChatId(accountId, chatId)
+      // Clear system notifications and mark chat as seen in backend
+      markChatAsSeen(accountId, chatId)
 
-    // Load all chat data we need to get started
-    setChat(await getChat(accountId, chatId))
-  }, [])
+      // Remember that user selected this chat to open it again when they come back
+      saveLastChatId(accountId, chatId)
+
+      // Load all chat data we need to get started
+      setChat(await getChat(accountId, chatId))
+    },
+    [accountId]
+  )
 
   const refreshChat = useCallback(async () => {
     if (!accountId || !chatId) {
@@ -65,9 +75,8 @@ export const ChatProvider = ({ children }: PropsWithChildren<{}>) => {
     setChat(await getChat(accountId, chatId))
   }, [accountId, chatId])
 
-  const unselectChat = useCallback(() => {
+  const unselectChat = useCallback<UnselectChat>(() => {
     setActiveView(ChatView.MessageList)
-    setAccountId(undefined)
     setChatId(undefined)
     setChat(undefined)
   }, [])
@@ -124,7 +133,6 @@ export const ChatProvider = ({ children }: PropsWithChildren<{}>) => {
   }, [accountId, chat, chatId, refreshChat])
 
   const value: ChatValue = {
-    accountId,
     activeView,
     chat,
     chatId,
@@ -132,6 +140,8 @@ export const ChatProvider = ({ children }: PropsWithChildren<{}>) => {
     setChatView,
     unselectChat,
   }
+
+  console.log(accountId, value)
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>
 }
