@@ -141,7 +141,5 @@ export const ChatProvider = ({
     unselectChat,
   }
 
-  console.log(accountId, value)
-
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>
 }
