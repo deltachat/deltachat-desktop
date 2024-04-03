@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { Component } from 'react'
 import { DcEventType } from '@deltachat/jsonrpc-client'
 import { debounce } from 'debounce'
@@ -15,7 +15,7 @@ import { updateTimestamps } from './components/conversations/Timestamp'
 import { ScreenContext } from './contexts/ScreenContext'
 import About from './components/dialogs/About'
 import { KeybindingsContextProvider } from './contexts/KeybindingsContext'
-import { DialogContext } from './contexts/DialogContext'
+import { DialogContext, DialogContextProvider } from './contexts/DialogContext'
 import WebxdcSaveToChatDialog from './components/dialogs/WebxdcSendToChat'
 import AccountListSidebar from './components/AccountListSidebar/AccountListSidebar'
 import SettingsStoreInstance from './stores/settings'
@@ -23,6 +23,7 @@ import { NoAccountSelectedScreen } from './components/screens/NoAccountSelectedS
 import AccountDeletionScreen from './components/screens/AccountDeletionScreen/AccountDeletionScreen'
 import Runtime from './components/Runtime'
 import { ChatProvider } from './contexts/ChatContext'
+import { ContextMenuProvider } from './contexts/ContextMenuContext'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -291,15 +292,7 @@ export default class ScreenController extends Component {
   renderScreen() {
     switch (this.state.screen) {
       case Screens.Main:
-        // the key attribute here is a hack to force a clean rerendering when the account changes
-        return (
-          <Fragment key={this.selectedAccountId}>
-            <ChatProvider>
-              <Runtime />
-              <MainScreen key={String(this.selectedAccountId)} />
-            </ChatProvider>
-          </Fragment>
-        )
+        return <MainScreen />
       case Screens.Login:
         if (this.selectedAccountId === undefined) {
           throw new Error('Selected account not defined')
@@ -340,7 +333,9 @@ export default class ScreenController extends Component {
 
   render() {
     return (
-      <div>
+      // Important: Key attribute here is forces a clean re-rendering
+      // when the account changes
+      <div key={this.selectedAccountId}>
         {this.state.message && (
           <div
             onClick={this.userFeedbackClick}
@@ -356,19 +351,26 @@ export default class ScreenController extends Component {
             screen: this.state.screen,
           }}
         >
-          <KeybindingsContextProvider>
-            <div className='main-container'>
-              <AccountListSidebar
-                selectedAccountId={this.selectedAccountId}
-                onAddAccount={this.addAndSelectAccount.bind(this)}
-                onSelectAccount={this.selectAccount.bind(this)}
-                openAccountDeletionScreen={this.openAccountDeletionScreen.bind(
-                  this
-                )}
-              />
-              {this.renderScreen()}
-            </div>
-          </KeybindingsContextProvider>
+          <ChatProvider>
+            <ContextMenuProvider>
+              <DialogContextProvider>
+                <Runtime />
+                <KeybindingsContextProvider>
+                  <div className='main-container'>
+                    <AccountListSidebar
+                      selectedAccountId={this.selectedAccountId}
+                      onAddAccount={this.addAndSelectAccount.bind(this)}
+                      onSelectAccount={this.selectAccount.bind(this)}
+                      openAccountDeletionScreen={this.openAccountDeletionScreen.bind(
+                        this
+                      )}
+                    />
+                    {this.renderScreen()}
+                  </div>
+                </KeybindingsContextProvider>
+              </DialogContextProvider>
+            </ContextMenuProvider>
+          </ChatProvider>
         </ScreenContext.Provider>
       </div>
     )
