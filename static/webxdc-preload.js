@@ -48,8 +48,8 @@
     onStatusUpdate()
   })
 
-  ipcRenderer.on('webxdc.ephemeralStatusUpdate', payload => {
-    ephemeralCb({payload: payload})
+  ipcRenderer.on('webxdc.ephemeralStatusUpdate', (ev_, payload) => {
+    ephemeralCb(payload)
   })
 
   /**
