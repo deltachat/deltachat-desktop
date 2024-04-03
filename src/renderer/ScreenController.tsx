@@ -21,7 +21,7 @@ import AccountListSidebar from './components/AccountListSidebar/AccountListSideb
 import SettingsStoreInstance from './stores/settings'
 import { NoAccountSelectedScreen } from './components/screens/NoAccountSelectedScreen/NoAccountSelectedScreen'
 import AccountDeletionScreen from './components/screens/AccountDeletionScreen/AccountDeletionScreen'
-import Runtime from './components/Runtime'
+import RuntimeAdapter from './components/RuntimeAdapter'
 import { ChatProvider } from './contexts/ChatContext'
 import { ContextMenuProvider } from './contexts/ContextMenuContext'
 
@@ -321,9 +321,7 @@ export default class ScreenController extends Component {
 
   render() {
     return (
-      // Important: Key attribute here is forces a clean re-rendering
-      // when the account changes
-      <div key={this.selectedAccountId}>
+      <div>
         {this.state.message && (
           <div
             onClick={this.userFeedbackClick}
@@ -339,10 +337,17 @@ export default class ScreenController extends Component {
             screen: this.state.screen,
           }}
         >
-          <ChatProvider accountId={this.selectedAccountId}>
+          {/*
+            The key attribute here forces a clean re-rendering when the
+            account changes. We needs this to reset the chat context state.
+          */}
+          <ChatProvider
+            key={this.selectedAccountId}
+            accountId={this.selectedAccountId}
+          >
             <ContextMenuProvider>
               <DialogContextProvider>
-                <Runtime />
+                <RuntimeAdapter />
                 <KeybindingsContextProvider>
                   <div className='main-container'>
                     <AccountListSidebar

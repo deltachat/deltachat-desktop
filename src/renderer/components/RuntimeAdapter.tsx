@@ -13,7 +13,7 @@ import type { PropsWithChildren } from 'react'
  * allows us to interact with the underlying Electron runtime and
  * operating system.
  */
-export default function Runtime({ children }: PropsWithChildren<{}>) {
+export default function RuntimeAdapter({ children }: PropsWithChildren<{}>) {
   const processQr = useProcessQr()
   const { jumpToMessage } = useMessage()
 
