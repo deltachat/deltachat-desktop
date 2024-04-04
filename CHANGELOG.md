@@ -4,10 +4,12 @@
 
 ### Changed
 - Update translations (2024-04-04) #3746
+- minor improvements to "add second device" dialog #3748
 
 ### Fixed
 - fix chat audit dialog was going out of viewport on smaller screens #3736
 - fix long names breaking layout of reactions dialog #3736
+- hide "add second device" instructions when transfer has started #3748
 
 <a id="1_44_1"></a>
 
