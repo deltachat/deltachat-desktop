@@ -43,13 +43,12 @@
       is_running = false
     }
   }
-
   ipcRenderer.on('webxdc.statusUpdate', _ev => {
     onStatusUpdate()
   })
 
   ipcRenderer.on('webxdc.ephemeralStatusUpdate', (ev_, payload) => {
-    ephemeralCb(payload)
+    ephemeralCb(JSON.parse(payload))
   })
 
   /**
@@ -68,7 +67,7 @@
       onStatusUpdate()
       return promise
     },
-    setEphemeralUpdateListener: (cb) => {
+    setEphemeralUpdateListener: cb => {
       ipcRenderer.invoke('webxdc.sendGossipAdvertisement')
       ephemeralCb = cb
     },
@@ -84,11 +83,8 @@
         JSON.stringify(update),
         description
       ),
-    sendEphemeralUpdate: (payload) =>
-      ipcRenderer.invoke(
-        'webxdc.sendEphemeralUpdate',
-        JSON.stringify(payload)
-      ),
+    sendEphemeralUpdate: payload =>
+      ipcRenderer.invoke('webxdc.sendEphemeralUpdate', JSON.stringify(payload)),
     sendToChat: async content => {
       if (!content.file && !content.text) {
         return Promise.reject(
@@ -233,7 +229,7 @@
           console.log('could create 501th connection, this should never happen')
           ipcRenderer.invoke('webxdc.exit')
         } catch (error) {
-          loadingDiv.remove();
+          loadingDiv.remove()
           iframe.src = 'index.html'
           iframe.contentWindow.window.addEventListener(
             'keydown',
