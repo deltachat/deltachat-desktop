@@ -557,6 +557,7 @@ export function useLogicVirtualChatList(
           | 'ChatModified'
           | 'MsgsChanged'
           | 'MsgsNoticed'
+          | 'ReactionsChanged'
       }
     >) => {
       if (chatId === C.DC_CHAT_ID_TRASH) {
@@ -620,6 +621,7 @@ export function useLogicVirtualChatList(
     emitter.on('ChatModified', onChatListItemChanged)
     emitter.on('MsgsChanged', onChatListItemChanged)
     emitter.on('MsgsNoticed', onChatListItemChanged)
+    emitter.on('ReactionsChanged', onChatListItemChanged)
 
     return () => {
       emitter.off('MsgRead', onChatListItemChanged)
@@ -629,6 +631,7 @@ export function useLogicVirtualChatList(
       emitter.off('ChatModified', onChatListItemChanged)
       emitter.off('MsgsChanged', onChatListItemChanged)
       emitter.off('MsgsNoticed', onChatListItemChanged)
+      emitter.off('ReactionsChanged', onChatListItemChanged)
     }
   }, [onChatListItemChanged, accountId])
 
