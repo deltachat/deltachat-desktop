@@ -5,6 +5,7 @@ import React, {
   MutableRefObject,
   useEffect,
   useState,
+  useMemo,
 } from 'react'
 import classNames from 'classnames'
 import { C, T } from '@deltachat/jsonrpc-client'
@@ -23,6 +24,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
 import { useReactionsBar } from '../ReactionsBar'
 import EmptyChatMessage from './EmptyChatMessage'
+import { debounce } from 'debounce'
 
 const log = getLogger('render/components/message/MessageList')
 
@@ -514,9 +516,65 @@ export const MessageListInner = React.memo(
       setCurrentHoverMessageId(id)
     }
 
+    // This fixes bad FPS when scrolling the chat on some devices,
+    // e.g. on one of mine, Windows with a not-good GPU.
+    //
+    // About the issue: if you open dev tools and record performance while
+    // endlessly scrolling a chat, you'll see dropped frames.
+    // For me it was ~every second frame, and sometimes it's 4 / 5 frames.
+    // It's not scripting, but GPU seems to be the bottleneck:
+    // it's almost constantly busy.
+    // When `will-change: scroll-position;` is added, GPU seems to still be
+    // involved on every frame (unlike it seems to be on regular websites),
+    // but it takes significantly less than my monitor's refresh period,
+    // thus no frames are dropped.
+    // Another thing is if you check "Scrolling performance issues" on the
+    // "rendering" tab, it tells you that the `#message-list`
+    // "repaints on scroll". This goes away once you add
+    // `will-change: scroll-position;`
+    //
+    // Note, however, that this disables subpixel antialiasing
+    // (makes text blurrier):
+    // - https://stackoverflow.com/questions/24741502/can-i-do-anything-about-repaints-on-scroll-warning-in-chrome-for-overflowscr/32744881#32744881
+    // - https://dev.opera.com/articles/css-will-change-property#does-will-change-affect-the-element-it-is-applied-to-beyond-hinting-the-browser-about-the-changes-to-that-element
+    // This is the main reason why we're adding/removing it dynamically
+    // and not just set it in style sheets.
+    // Though perhaps it's not ideal to set `will-change` only when the user
+    // starts scrolling, because it takes time for the optimization to
+    // take effect, but I couldn't come up with a better time to apply it.
+    //
+    // TODO maybe there is a different, more "proper" way to fix this.
+    // E.g. tinker with `position: absolte`, `z-index` or something IDK.
+    // [MDN docs say](https://developer.mozilla.org/en-US/docs/Web/CSS/will-change):
+    // > `will-change` is intended to be used as a last resort
+    const [scrolledRecently, setScrolledRecently] = useState(false)
+    const debouncedResetScrolledRecently = useMemo(
+      () => debounce(() => setScrolledRecently(false), 3000),
+      []
+    )
+    const onScroll2 = (...args: Parameters<typeof onScroll>) => {
+      const switchedChatRecently = Date.now() - switchedChatAt < 200
+      // Ignore scrolls that are not caused by the user, because this
+      // gives no indication as to whether they're gonna scroll soon.
+      // Maybe they're just jumping between chats.
+      const isScrollProgrammatic = switchedChatRecently
+      if (!isScrollProgrammatic) {
+        setScrolledRecently(true)
+        debouncedResetScrolledRecently()
+      }
+
+      onScroll(...args)
+    }
+    const [prevChatStore, setPrevChatStore] = useState(chatStore)
+    const [switchedChatAt, setSwitchedChatAt] = useState(0)
+    if (chatStore !== prevChatStore) {
+      setPrevChatStore(chatStore)
+      setSwitchedChatAt(Date.now())
+    }
+
     if (!loaded) {
       return (
-        <div id='message-list' ref={messageListRef} onScroll={onScroll}>
+        <div id='message-list' ref={messageListRef} onScroll={onScroll2}>
           <ul></ul>
         </div>
       )
@@ -527,7 +585,10 @@ export const MessageListInner = React.memo(
         id='message-list'
         ref={messageListRef}
         onMouseMoveCapture={onMouseMove}
-        onScroll={onScroll}
+        onScroll={onScroll2}
+        style={{
+          willChange: scrolledRecently ? 'scroll-position' : undefined,
+        }}
       >
         <ul>
           {messageListItems.length === 0 && (
