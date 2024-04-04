@@ -2,11 +2,23 @@
   display: flex;
   flex-wrap: wrap;
   min-width: 300px;
+  justify-content: space-between;
 }
 
 .sendBackupMain {
-  max-width: 339px;
-  min-width: 200px;
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.sendBackupMainProgress {
+  display: flex;
+  flex-direction: column;
+
+  progress {
+    width: 100%;
+  }
 }
 
 .sendBackupSteps {
