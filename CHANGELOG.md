@@ -4,6 +4,7 @@
 
 ### Changed
 - Update translations (2024-04-04) #3746
+- The latest reaction is now shown in the chatlist, if it's newer than the last message #3749
 
 ### Fixed
 - fix chat audit dialog was going out of viewport on smaller screens #3736
