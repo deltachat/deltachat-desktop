@@ -172,7 +172,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
                     </>
                   )}
                 </SendBackupMain>
-                <SendBackupSteps />
+                {stage !== 'transferring' && <SendBackupSteps />}
               </SendBackup>
             </DialogContent>
           </DialogBody>
