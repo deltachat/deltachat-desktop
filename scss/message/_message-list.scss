@@ -85,37 +85,9 @@
   #message-list {
     position: absolute;
     bottom: 0;
+    // There is also `will-change: scroll-position` dynamically set on this
+    // element.
     overflow: scroll;
-    // This fixes bad FPS when scrolling the chat on some devices,
-    // e.g. on one of mine, Windows with a not-good GPU.
-    //
-    // About the issue: if you open dev tools and record performance while
-    // endlessly scrolling a chat, you'll see dropped frames.
-    // For me it was ~every second frame, and sometimes it's 4 / 5 frames.
-    // It's not scripting, but GPU seems to be the bottleneck:
-    // it's almost constantly busy.
-    // When `will-change: scroll-position;` is added, GPU seems to still be
-    // involved on every frame (unlike it seems to be on regular websites),
-    // but it takes significantly less than my monitor's refresh period,
-    // thus no frames are dropped.
-    // Another thing is if you check "Scrolling performance issues" on the
-    // "rendering" tab, it tells you that the `#message-list`
-    // "repaints on scroll". This goes away once you add
-    // `will-change: scroll-position;`
-    //
-    // Note, however, that this disables subpixel antialiasing
-    // (makes text blurrier):
-    // - https://stackoverflow.com/questions/24741502/can-i-do-anything-about-repaints-on-scroll-warning-in-chrome-for-overflowscr/32744881#32744881
-    // - https://dev.opera.com/articles/css-will-change-property#does-will-change-affect-the-element-it-is-applied-to-beyond-hinting-the-browser-about-the-changes-to-that-element
-    // Perhaps we could dynamically remove this property when the list hasn't
-    // been scrolled for a while?
-    //
-    // TODO maybe there is a different, more "proper" way to fix this.
-    // E.g. tinker with `position: absolte`, `z-index` or something IDK.
-    // [MDN docs say](https://developer.mozilla.org/en-US/docs/Web/CSS/will-change):
-    // > `will-change` is intended to be used as a last resort
-    will-change: scroll-position;
-
     max-height: 100%;
     width: 100%;
     padding: 0 0.5em;
