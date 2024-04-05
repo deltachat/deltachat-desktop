@@ -323,7 +323,6 @@ export default function Message(props: {
   chat: T.FullChat
   message: T.Message
   conversationType: ConversationType
-  isHover: boolean
 }) {
   const { message, conversationType } = props
   const { id, viewType, text, hasLocation, isSetupmessage, hasHtml } = message
@@ -673,7 +672,6 @@ export default function Message(props: {
         direction={direction}
         message={message}
         showContextMenu={showContextMenu}
-        visible={props.isHover}
       />
     </div>
   )

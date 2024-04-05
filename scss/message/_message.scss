@@ -1,3 +1,10 @@
+.message-wrapper {
+  --shortcut-menu-visibility: hidden;
+  &:hover {
+    --shortcut-menu-visibility: visible;
+  }
+}
+
 /* Message Bubble */
 .message {
   position: relative;

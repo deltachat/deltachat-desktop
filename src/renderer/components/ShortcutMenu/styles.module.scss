@@ -5,12 +5,8 @@ $shortcutMenuWidth: 65px;
   display: flex;
   flex: 0 0 $shortcutMenuWidth;
   justify-content: space-between;
-  visibility: hidden;
+  visibility: var(--shortcut-menu-visibility);
   width: $shortcutMenuWidth;
-
-  &.visible {
-    visibility: visible;
-  }
 
   &.incoming {
     flex-direction: row;

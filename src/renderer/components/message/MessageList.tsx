@@ -501,21 +501,6 @@ export const MessageListInner = React.memo(
       }
     })
 
-    const [currentHoverMessageId, setCurrentHoverMessageId] = useState<
-      number | null
-    >(null)
-
-    const onMouseMove = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-      // Message components are organised as a list
-      const target = event.target as HTMLElement
-      const messageElem = target.closest('li')
-
-      // .. every list element has an HTML `id` tag which contains the message id
-      const id = messageElem ? parseInt(messageElem.id, 10) : null
-
-      setCurrentHoverMessageId(id)
-    }
-
     // This fixes bad FPS when scrolling the chat on some devices,
     // e.g. on one of mine, Windows with a not-good GPU.
     //
@@ -584,7 +569,6 @@ export const MessageListInner = React.memo(
       <div
         id='message-list'
         ref={messageListRef}
-        onMouseMoveCapture={onMouseMove}
         onScroll={onScroll2}
         style={{
           willChange: scrolledRecently ? 'scroll-position' : undefined,
@@ -609,7 +593,6 @@ export const MessageListInner = React.memo(
               if (message?.kind === 'message') {
                 return (
                   <MessageWrapper
-                    isHover={messageId.msg_id === currentHoverMessageId}
                     key={messageId.msg_id}
                     key2={`${messageId.msg_id}`}
                     chat={chatStore.chat}
