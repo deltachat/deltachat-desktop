@@ -11,7 +11,6 @@ type RenderMessageProps = {
   key2: string
   chat: T.FullChat
   message: T.Message
-  isHover: boolean
   conversationType: ConversationType
   unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
 }
@@ -65,7 +64,7 @@ export function MessageWrapper(props: RenderMessageProps) {
   ])
 
   return (
-    <li id={props.key2}>
+    <li id={props.key2} className='message-wrapper'>
       <Message {...props} />
       <div className='message-observer-bottom' id={'bottom-' + props.key2} />
     </li>

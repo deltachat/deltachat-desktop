@@ -15,7 +15,6 @@ type Props = {
   direction: 'incoming' | 'outgoing'
   message: T.Message
   showContextMenu: (event: OnButtonClick) => Promise<void>
-  visible: boolean
 }
 
 export default function ShortcutMenu(props: Props) {
@@ -24,7 +23,6 @@ export default function ShortcutMenu(props: Props) {
       className={classNames(styles.shortcutMenu, {
         [styles.incoming]: props.direction === 'incoming',
         [styles.outgoing]: props.direction === 'outgoing',
-        [styles.visible]: props.visible,
       })}
     >
       {showReactionsUi(props.message, props.chat) && (
