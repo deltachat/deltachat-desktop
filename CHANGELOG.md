@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- Remember last position & size of webxdc windows #3754
+
 ### Changed
 - Update translations (2024-04-04) #3746
 
