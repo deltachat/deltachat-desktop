@@ -523,7 +523,7 @@ If you think that's a bug and you need that permission, then please open an issu
         return
       }
       const { accountId, msgId } = open_apps[key]
-      this.rpc.sendWebxdcGossipAdvertisement(accountId, msgId)
+      await this.rpc.sendWebxdcGossipAdvertisement(accountId, msgId)
     })
 
     ipcMain.handle(

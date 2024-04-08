@@ -67,8 +67,8 @@
       onStatusUpdate()
       return promise
     },
-    setEphemeralUpdateListener: cb => {
-      ipcRenderer.invoke('webxdc.sendGossipAdvertisement')
+    setEphemeralUpdateListener: async cb => {
+      await ipcRenderer.invoke('webxdc.sendGossipAdvertisement')
       ephemeralCb = cb
     },
     getAllUpdates: () => {
