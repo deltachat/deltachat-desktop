@@ -4,6 +4,7 @@
 
 ### Changed
 - Update translations (2024-04-04) #3746
+- Remove deprecated translations #3756
 
 ### Fixed
 - fix chat audit dialog was going out of viewport on smaller screens #3736
