@@ -19,8 +19,8 @@ const DisabledMessageInput = ({ reason }: Props) => {
       case DisabledChatReasons.DEADDROP:
         return tx('messaging_disabled_deaddrop')
       case DisabledChatReasons.DEVICE_CHAT:
-        // no call to tx(), the bar will be removed below to no clutter UI
-        return 'messaging_disabled_device_chat'
+        // To not clutter UI, hide reasoning bar for "Device Messages"
+        return null
       case DisabledChatReasons.UNKNOWN:
         // Unknown cases are likely to be caused by a new case introduced by a new core update that is not yet handled here,
         // but we don't want to crash the UI
@@ -30,13 +30,7 @@ const DisabledMessageInput = ({ reason }: Props) => {
     }
   }, [reason, tx])
 
-  // If no reason was given we return no component
-  if (!reason) {
-    return null
-  }
-
-  // If we're in the "device message" chat we also do not want to show anything
-  if (reason === DisabledChatReasons.DEVICE_CHAT) {
+  if (!reasonMessage) {
     return null
   }
 
