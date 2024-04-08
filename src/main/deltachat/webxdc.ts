@@ -200,6 +200,12 @@ export default class DCWebxdc extends SplitOut {
 
         const app_icon = icon_blob && nativeImage?.createFromBuffer(icon_blob)
 
+        const lastBounds = DesktopSettings.state.webxdcBounds?.[
+          `${accountId}.${msg_id}`
+        ] ?? {
+          width: 375,
+          height: 667,
+        }
         const webxdc_windows = new BrowserWindow({
           webPreferences: {
             partition: partitionFromAccountId(accountId),
@@ -221,10 +227,15 @@ export default class DCWebxdc extends SplitOut {
           },
           title: makeTitle(webxdcInfo, chatName),
           icon: app_icon || undefined,
-          width: 375,
-          height: 667,
+          width: lastBounds.width,
+          height: lastBounds.height,
           alwaysOnTop: main_window?.isAlwaysOnTop(),
+          show: false,
         })
+        // reposition the window to last position (or default)
+        webxdc_windows.setBounds(lastBounds, true)
+        // show after repositioning to avoid blinking
+        webxdc_windows.show()
         open_apps[`${accountId}.${msg_id}`] = {
           win: webxdc_windows,
           accountId,
@@ -400,6 +411,18 @@ export default class DCWebxdc extends SplitOut {
 
         webxdc_windows.once('closed', () => {
           delete open_apps[`${accountId}.${msg_id}`]
+        })
+
+        webxdc_windows.once('close', () => {
+          const lastBounds = webxdc_windows.getBounds()
+          const id = `${accountId}.${msg_id}`
+          DesktopSettings.update({
+            webxdcBounds: {
+              ...(DesktopSettings.state.webxdcBounds ?? {}),
+              [id]: lastBounds,
+            },
+          })
+          // })
         })
 
         webxdc_windows.once('ready-to-show', () => {})
