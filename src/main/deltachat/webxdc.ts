@@ -413,11 +413,10 @@ export default class DCWebxdc extends SplitOut {
 
         webxdc_windows.once('close', () => {
           const lastBounds = webxdc_windows.getBounds()
-          const id = `${accountId}.${msg_id}`
           DesktopSettings.update({
             webxdcBounds: {
               ...(DesktopSettings.state.webxdcBounds ?? {}),
-              [id]: lastBounds,
+              [`${accountId}.${msg_id}`]: lastBounds,
             },
           })
         })
