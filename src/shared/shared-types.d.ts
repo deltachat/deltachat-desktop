@@ -63,7 +63,6 @@ export interface DesktopSettingsType {
   enableRelatedChats: boolean
   /** gallery image & video - keep aspect ratio (true) or cover (false) */
   galleryImageKeepAspectRatio: boolean
-  webxdcBounds?: { [id: string]: Bounds }
 }
 
 export interface RC_Config {
