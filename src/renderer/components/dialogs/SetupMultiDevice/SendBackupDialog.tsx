@@ -159,21 +159,25 @@ export function SendBackupDialog({ onClose }: DialogProps) {
             <DialogContent>
               <SendBackup>
                 <SendBackupMain>
-                  {error}
                   {stage === 'awaiting_scan' && svgUrl && qrContent && (
                     <img className={styles.qrCode} src={svgUrl} />
                   )}
-                  {stage === 'preparing' && <>{tx('preparing_account')}</>}
-                  {stage === 'transferring' && <>{tx('transferring')}</>}
-                  {progress && stage !== 'awaiting_scan' && (
-                    <>
-                      <br />
-                      <progress value={progress} max={1000} />
-                    </>
-                  )}
+                  <SendBackupMainProgress
+                    style={stage === 'transferring' ? { width: '100%' } : {}}
+                  >
+                    {stage === 'preparing' && <>{tx('preparing_account')}</>}
+                    {stage === 'transferring' && <>{tx('transferring')}</>}
+                    {progress && stage !== 'awaiting_scan' && (
+                      <>
+                        <br />
+                        <progress value={progress} max={1000} />
+                      </>
+                    )}
+                  </SendBackupMainProgress>
                 </SendBackupMain>
-                <SendBackupSteps />
+                {stage !== 'transferring' && <SendBackupSteps />}
               </SendBackup>
+              {error}
             </DialogContent>
           </DialogBody>
           <DialogFooter>
@@ -210,6 +214,17 @@ function SendBackup({ children }: PropsWithChildren<{}>) {
 
 function SendBackupMain({ children }: PropsWithChildren<{}>) {
   return <div className={styles.sendBackupMain}>{children}</div>
+}
+
+function SendBackupMainProgress({
+  children,
+  style,
+}: PropsWithChildren<{ style: React.CSSProperties }>) {
+  return (
+    <div className={styles.sendBackupMainProgress} style={style}>
+      {children}
+    </div>
+  )
 }
 
 function SendBackupSteps() {
