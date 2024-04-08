@@ -227,8 +227,6 @@ export default class DCWebxdc extends SplitOut {
           },
           title: makeTitle(webxdcInfo, chatName),
           icon: app_icon || undefined,
-          width: lastBounds.width,
-          height: lastBounds.height,
           alwaysOnTop: main_window?.isAlwaysOnTop(),
           show: false,
         })
@@ -422,7 +420,6 @@ export default class DCWebxdc extends SplitOut {
               [id]: lastBounds,
             },
           })
-          // })
         })
 
         webxdc_windows.once('ready-to-show', () => {})
