@@ -19,7 +19,8 @@ const DisabledMessageInput = ({ reason }: Props) => {
       case DisabledChatReasons.DEADDROP:
         return tx('messaging_disabled_deaddrop')
       case DisabledChatReasons.DEVICE_CHAT:
-        return tx('messaging_disabled_device_chat')
+        // no call to tx(), the bar will be removed below to no clutter UI
+        return 'messaging_disabled_device_chat'
       case DisabledChatReasons.UNKNOWN:
         // Unknown cases are likely to be caused by a new case introduced by a new core update that is not yet handled here,
         // but we don't want to crash the UI
