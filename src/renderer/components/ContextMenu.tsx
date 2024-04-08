@@ -78,7 +78,7 @@ export function ContextMenuLayer({
 
       // Get required information
       setCurrentItems(items)
-      window.__contextMenuActive = true
+      window.__setContextMenuActive(true)
       setActive(true)
 
       await new Promise<void>((resolve, _reject) => {
@@ -124,7 +124,7 @@ export function ContextMenuLayer({
   }, [])
 
   const cancel = useCallback(() => {
-    window.__contextMenuActive = false
+    window.__setContextMenuActive(false)
     setActive(false)
     setCurrentItems([])
     endPromiseRef.current?.()
@@ -415,11 +415,22 @@ export function useContextMenuWithActiveState(
  * for some reason removing the listeners doesn't work for those
  */
 function preventDefault(e: Event) {
-  if (window.__contextMenuActive) {
-    e.preventDefault()
-  }
+  e.preventDefault()
 }
 const wheelEvent: 'wheel' | 'mousewheel' =
   'onwheel' in document.createElement('div') ? 'wheel' : 'mousewheel'
-document.addEventListener(wheelEvent, preventDefault, { passive: false })
-document.addEventListener('touchmove', preventDefault, { passive: false })
+
+window.__setContextMenuActive = (newVal: boolean): void => {
+  if (newVal) {
+    // Adding the same listener twice in a row has no effect.
+    document.addEventListener(wheelEvent, preventDefault, { passive: false })
+    document.addEventListener('touchmove', preventDefault, { passive: false })
+  } else {
+    document.removeEventListener(wheelEvent, preventDefault)
+    document.removeEventListener('touchmove', preventDefault)
+  }
+  type Writable<T> = {
+    -readonly [P in keyof T]: T[P]
+  }
+  ;(window as Writable<typeof window>).__contextMenuActive = newVal
+}

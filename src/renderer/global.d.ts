@@ -18,7 +18,8 @@ declare global {
     __selectAccount: (accountId: number) => Promise<void>
     readonly __selectedAccountId: number | undefined
     __screen: Screens
-    __contextMenuActive: boolean
+    readonly __contextMenuActive: boolean
+    __setContextMenuActive: (newVal: boolean) => void
     __settingsOpened: boolean
     __keybindingsDialogOpened: boolean
     __setQuoteInDraft: ((msgId: number) => void) | null
