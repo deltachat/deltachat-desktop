@@ -636,12 +636,18 @@ If you think that's a bug and you need that permission, then please open an issu
     ipcMain.handle(
       'webxdc:instance-deleted',
       (_ev, accountId: number, instanceId: number) => {
-        const instance = open_apps[`${accountId}.${instanceId}`]
+        const webxdcId = `${accountId}.${instanceId}`
+        const instance = open_apps[webxdcId]
         if (instance) {
           instance.win.close()
         }
+        if (DesktopSettings.state.webxdcBounds?.[webxdcId]) {
+          const { [webxdcId]: _, ...bounds } =
+            DesktopSettings.state.webxdcBounds
+          DesktopSettings.update({ webxdcBounds: bounds })
+        }
         const s = sessionFromAccountId(accountId)
-        const appURL = `webxdc://${accountId}.${instanceId}.webxdc`
+        const appURL = `webxdc://${webxdcId}.webxdc`
         s.clearStorageData({ origin: appURL })
         s.clearCodeCaches({ urls: [appURL] })
         s.clearCache()
