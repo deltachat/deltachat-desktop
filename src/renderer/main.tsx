@@ -1,19 +1,22 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { exp } from './experimental'
-import { printProcessLogLevelInfo } from '../shared/logger'
+import initMessageParserWasm from '@deltachat/message_parser_wasm'
+import initQRScannerWasm from 'quircs-wasm'
 
 import App from './App'
-import { runtime } from './runtime'
-import init from '@deltachat/message_parser_wasm'
 import initSystemIntegration from './system-integration'
+import { exp } from './experimental'
+import { printProcessLogLevelInfo } from '../shared/logger'
+import { runtime } from './runtime'
 
 async function main() {
   exp.help //make sure experimental.ts is used
   try {
     runtime.initialize()
     printProcessLogLevelInfo()
-    await init('./message_parser_wasm_bg.wasm')
+
+    await initMessageParserWasm('./message_parser_wasm_bg.wasm')
+    await initQRScannerWasm('./quircs_wasm_bg.wasm')
 
     initSystemIntegration()
 

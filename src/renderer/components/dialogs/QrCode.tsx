@@ -6,7 +6,6 @@ import React, {
   useLayoutEffect,
 } from 'react'
 import classNames from 'classnames'
-import QrReader from '@deltachat/react-qr-reader'
 
 import Dialog, {
   DialogBody,
@@ -27,6 +26,7 @@ import { qrCodeToInviteUrl } from '../../utils/invite'
 import { selectedAccountId } from '../../ScreenController'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import QrReader from '../QrReader'
 
 const log = getLogger('renderer/dialogs/QrCode')
 
@@ -276,31 +276,7 @@ export function QrCodeScanQrInner(
   return (
     <>
       <DialogBody>
-        <div className='import-qr-code-dialog'>
-          <div style={{ marginBottom: '-19px' }}>
-            <div>
-              <QrReader
-                delay={300}
-                onError={handleError}
-                onScan={handleScan}
-                style={{ width: '100%' }}
-                facingMode='user'
-              />
-            </div>
-          </div>
-          <div className='qr-image-loader'>
-            <QrReader
-              delay={300}
-              ref={qrImageReader}
-              onError={handleError}
-              onScan={handleScan}
-              style={{ width: '100%' }}
-              legacyMode
-            />
-          </div>
-          <div className='scan-qr-red-line' />
-          <p className='scan-qr-description'>{props.subtitle}</p>
-        </div>
+        <QrReader onScan={handleScan} onError={handleError} />
       </DialogBody>
       <DialogFooter>
         <FooterActions align='spaceBetween'>
