@@ -347,7 +347,7 @@ export default class ScreenController extends Component {
           >
             <ContextMenuProvider>
               <DialogContextProvider>
-                <RuntimeAdapter />
+                <RuntimeAdapter accountId={this.selectedAccountId} />
                 <KeybindingsContextProvider>
                   <div className='main-container'>
                     <AccountListSidebar

@@ -7,11 +7,11 @@ import ChatListItem, {
 } from './ChatListItem'
 import { ContactListItem } from '../contact/ContactListItem'
 import useOpenViewProfileDialog from '../../hooks/useOpenViewProfileDialog'
+import useMessage from '../../hooks/useMessage'
 import { selectedAccountId } from '../../ScreenController'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import type { useChatListContextMenu } from './ChatListContextMenu'
-import useMessage from '../../hooks/useMessage'
 
 export type ChatListItemData = {
   selectedChatId: number | null
