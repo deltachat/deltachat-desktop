@@ -18,7 +18,7 @@ import { getConfigPath, htmlDistDir } from '../application-constants'
 import { truncateText } from '../../shared/util'
 import { platform } from 'os'
 import { tx } from '../load-translations'
-import { DcOpenWebxdcParameters } from '../../shared/shared-types'
+import { Bounds, DcOpenWebxdcParameters } from '../../shared/shared-types'
 import { DesktopSettings } from '../desktop_settings'
 import { window as main_window } from '../windows/main'
 import { writeTempFileFromBase64 } from '../ipc'
@@ -51,6 +51,8 @@ const CSP =
   webrtc 'block'"
 
 const WRAPPER_PATH = 'webxdc-wrapper.45870014933640136498.html'
+
+const BOUNDS_UI_CONFIG_PREFIX = 'ui.desktop.webxdcBounds'
 
 export default class DCWebxdc extends SplitOut {
   constructor(controller: DeltaChatController) {
@@ -200,12 +202,7 @@ export default class DCWebxdc extends SplitOut {
 
         const app_icon = icon_blob && nativeImage?.createFromBuffer(icon_blob)
 
-        const lastBounds = DesktopSettings.state.webxdcBounds?.[
-          `${accountId}.${msg_id}`
-        ] ?? {
-          width: 375,
-          height: 667,
-        }
+        const lastBounds = await getLastBounds(this, accountId, msg_id)
         const webxdc_windows = new BrowserWindow({
           webPreferences: {
             partition: partitionFromAccountId(accountId),
@@ -413,12 +410,7 @@ export default class DCWebxdc extends SplitOut {
 
         webxdc_windows.once('close', () => {
           const lastBounds = webxdc_windows.getBounds()
-          DesktopSettings.update({
-            webxdcBounds: {
-              ...(DesktopSettings.state.webxdcBounds ?? {}),
-              [`${accountId}.${msg_id}`]: lastBounds,
-            },
-          })
+          setLastBounds(this, accountId, msg_id, lastBounds)
         })
 
         webxdc_windows.once('ready-to-show', () => {})
@@ -637,11 +629,7 @@ If you think that's a bug and you need that permission, then please open an issu
         if (instance) {
           instance.win.close()
         }
-        if (DesktopSettings.state.webxdcBounds?.[webxdcId]) {
-          const { [webxdcId]: _, ...bounds } =
-            DesktopSettings.state.webxdcBounds
-          DesktopSettings.update({ webxdcBounds: bounds })
-        }
+        removeLastBounds(this, accountId, instanceId)
         const s = sessionFromAccountId(accountId)
         const appURL = `webxdc://${webxdcId}.webxdc`
         s.clearStorageData({ origin: appURL })
@@ -672,6 +660,54 @@ function sessionFromAccountId(accountId: number) {
   return session.fromPartition(partitionFromAccountId(accountId), {
     cache: false,
   })
+}
+
+async function getLastBounds(
+  splitOut: SplitOut,
+  accountId: number,
+  msgId: number
+): Promise<Partial<Bounds>> {
+  let bounds = {
+    width: 375,
+    height: 667,
+  }
+  try {
+    const raw = await splitOut.rpc.getConfig(
+      accountId,
+      `${BOUNDS_UI_CONFIG_PREFIX}.${msgId}`
+    )
+    if (raw) {
+      bounds = JSON.parse(raw)
+    }
+  } catch (error) {
+    log.debug('failed to retrieve bounds for webxdc', error)
+  }
+  return bounds
+}
+
+function setLastBounds(
+  splitOut: SplitOut,
+  accountId: number,
+  msgId: number,
+  bounds: Bounds
+) {
+  return splitOut.rpc.setConfig(
+    accountId,
+    `${BOUNDS_UI_CONFIG_PREFIX}.${msgId}`,
+    JSON.stringify(bounds)
+  )
+}
+
+function removeLastBounds(
+  splitOut: SplitOut,
+  accountId: number,
+  msgId: number
+) {
+  return splitOut.rpc.setConfig(
+    accountId,
+    `${BOUNDS_UI_CONFIG_PREFIX}.${msgId}`,
+    null
+  )
 }
 
 ipcMain.handle('webxdc.clearWebxdcDOMStorage', (_, accountId: number) => {
