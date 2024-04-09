@@ -26,9 +26,9 @@ import Dialog, {
 } from './Dialog'
 import { I18nContext } from '../contexts/I18nContext'
 import useTranslationFunction from '../hooks/useTranslationFunction'
+import { getDeviceChatId, saveLastChatId } from '../backend/chat'
 
 import type { DialogProps } from '../contexts/DialogContext'
-import { getDeviceChatId, saveLastChatId } from '../backend/chat'
 
 const log = getLogger('renderer/loginForm')
 
