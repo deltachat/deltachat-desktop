@@ -147,8 +147,11 @@ export default class DeltaChatController extends EventEmitter {
     }
   }
 
+  // upgrade accounts from 0.840.0 -> 1.36.4
+  // Format 1: Has a db.sqlite file in each account folder, also has `accounts.toml` file
+  // Format 2: Has `accounts` folder
   async migrateToAccountsApiIfNeeded() {
-    const new_accounts_format = existsSync(path.join(this.cwd, 'accounts.toml'))
+    const new_accounts_format = existsSync(path.join(this.cwd, 'accounts.toml')) // <- marker for ^v1.21
     if (new_accounts_format) return
 
     logMigrate.debug(
@@ -159,6 +162,8 @@ export default class DeltaChatController extends EventEmitter {
     const paths = (await readdir(getConfigPath())).map(filename =>
       join(getConfigPath(), filename)
     )
+
+    // take all accounts that have a db.sqlite file
     const accountFolders = paths.filter(path => {
       // isDeltaAccountFolder
       try {
@@ -189,7 +194,7 @@ export default class DeltaChatController extends EventEmitter {
       logMigrate.info('found old accounts (format 2), we need to migrate...')
 
       // First, rename accounts folder to accounts_old
-      await rename(path_accounts, path_accounts_old)
+      await rename(path_accounts, path_accounts_old) // backup
     }
 
     // Next, create temporary account manager to migrate accounts
@@ -208,8 +213,8 @@ export default class DeltaChatController extends EventEmitter {
       for (const folder of accountFolders) {
         logMigrate.debug(`migrating legacy account "${folder}"`)
         const path_dbfile = path.join(folder, 'db.sqlite')
-        const account_id = tmp_dc.migrateAccount(path_dbfile)
-        if (account_id == 0) {
+        const account_id = tmp_dc.migrateAccount(path_dbfile) // https://rs.delta.chat/src/deltachat/accounts.rs.html#186-249
+        if (account_id == 0) { // TODO: why is this an error?
           logMigrate.error(`Failed to migrate account at path "${path_dbfile}"`)
         } else {
           old_folders_to_delete.push(folder)
@@ -238,7 +243,7 @@ export default class DeltaChatController extends EventEmitter {
           logMigrate.error(`Failed to migrate account at path "${path_dbfile}"`)
         } else {
           // check if there are stickers
-          const old_sticker_folder = join(path_accounts_old, entry, 'stickers')
+          const old_sticker_folder = join(path_accounts_old, entry, 'stickers') // Migrate stickers
           if (existsSync(old_sticker_folder)) {
             logMigrate.debug(
               'found stickers, migrating them',
