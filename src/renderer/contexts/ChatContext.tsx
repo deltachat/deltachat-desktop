@@ -47,36 +47,43 @@ export const ChatProvider = ({
   }, [])
 
   const selectChat = useCallback<SelectChat>(
-    async (chatId: number) => {
+    async (nextChatId: number) => {
       if (!accountId) {
         throw new Error('can not select chat when no `accountId` is given')
       }
 
+      // Jump to last message if user clicked message twice
+      // @TODO: We probably want this to be part of the UI logic instead
+      if (nextChatId === chatId) {
+        window.__internal_jump_to_message?.(undefined, false, undefined)
+      }
+
       // Already set known state
       setActiveView(ChatView.MessageList)
-      setChatId(chatId)
+      setChatId(nextChatId)
 
       // Clear system notifications and mark chat as seen in backend
-      markChatAsSeen(accountId, chatId)
+      markChatAsSeen(accountId, nextChatId)
 
       // Remember that user selected this chat to open it again when they come back
-      saveLastChatId(accountId, chatId)
+      saveLastChatId(accountId, nextChatId)
 
       // Load all chat data we need to get started
       const nextChat = await BackendRemote.rpc.getFullChatById(
         accountId,
-        chatId
+        nextChatId
       )
       setChat(nextChat)
 
       // Switch to "archived" view if selected chat is there
+      // @TODO: We probably want this to be part of the UI logic instead
       ActionEmitter.emitAction(
         nextChat.archived
           ? KeybindAction.ChatList_SwitchToArchiveView
           : KeybindAction.ChatList_SwitchToNormalView
       )
     },
-    [accountId]
+    [accountId, chatId]
   )
 
   const refreshChat = useCallback(async () => {
