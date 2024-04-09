@@ -1,12 +1,19 @@
 $shortcutMenuWidth: 65px;
+$transitionDuration: 50ms;
 
 .shortcutMenu {
   align-items: center;
   display: flex;
   flex: 0 0 $shortcutMenuWidth;
   justify-content: space-between;
-  visibility: var(--shortcut-menu-visibility);
   width: $shortcutMenuWidth;
+
+  visibility: var(--shortcut-menu-visibility);
+  opacity: var(--shortcut-menu-multiplier);
+  transition-duration: $transitionDuration;
+  transition-timing-function: ease-out;
+  // Yes, `visibility` works ok.
+  transition-property: visibility, opacity;
 
   &.incoming {
     flex-direction: row;
@@ -27,6 +34,9 @@ $shortcutMenuWidth: 65px;
   cursor: pointer;
   margin: 0;
   padding: 5px;
+
+  transform: scale(calc(0.75 + 0.25 * var(--shortcut-menu-multiplier)));
+  transition: transform ease-out $transitionDuration;
 }
 
 .shortcutMenuIcon {
