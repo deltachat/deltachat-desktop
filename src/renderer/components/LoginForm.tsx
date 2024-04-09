@@ -28,6 +28,7 @@ import { I18nContext } from '../contexts/I18nContext'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../contexts/DialogContext'
+import { getDeviceChatId, saveLastChatId } from '../backend/chat'
 
 const log = getLogger('renderer/loginForm')
 
@@ -53,30 +54,6 @@ export function defaultCredentials(credentials?: Credentials): Credentials {
     socks5_password: '',
   }
   return { ...defaultCredentials, ...credentials }
-}
-
-/**
- * Helper method to determine the chat id of the "Device Messages" read-only chat.
- *
- * Note that there's currently no API to retrieve this id from the backend, this
- * is why we're iterating over all currently available chats instead.
- */
-async function getDeviceChatId(accountId: number): Promise<number | null> {
-  const chatIds = await BackendRemote.rpc.getChatlistEntries(
-    accountId,
-    null,
-    null,
-    null
-  )
-
-  for (const chatId of chatIds) {
-    const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
-    if (chat.isDeviceChat) {
-      return chatId
-    }
-  }
-
-  return null
 }
 
 type LoginProps = React.PropsWithChildren<{
@@ -457,11 +434,7 @@ export function ConfigureProgressDialog({
           // as a first introduction to the app after they've entered
           const deviceChatId = await getDeviceChatId(accountId)
           if (deviceChatId) {
-            await BackendRemote.rpc.setConfig(
-              accountId,
-              'ui.lastchatid',
-              String(deviceChatId)
-            )
+            await saveLastChatId(accountId, deviceChatId)
             // SettingsStoreInstance is reloaded the first time the main screen is shown
           }
 

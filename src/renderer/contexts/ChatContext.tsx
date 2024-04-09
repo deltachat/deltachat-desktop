@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
+import { ActionEmitter, KeybindAction } from '../keybindings'
 import { markChatAsSeen, saveLastChatId } from '../backend/chat'
 import { BackendRemote } from '../backend-com'
 
@@ -62,7 +63,18 @@ export const ChatProvider = ({
       saveLastChatId(accountId, chatId)
 
       // Load all chat data we need to get started
-      setChat(await BackendRemote.rpc.getFullChatById(accountId, chatId))
+      const nextChat = await BackendRemote.rpc.getFullChatById(
+        accountId,
+        chatId
+      )
+      setChat(nextChat)
+
+      // Switch to "archived" view if selected chat is there
+      ActionEmitter.emitAction(
+        nextChat.archived
+          ? KeybindAction.ChatList_SwitchToArchiveView
+          : KeybindAction.ChatList_SwitchToNormalView
+      )
     },
     [accountId]
   )

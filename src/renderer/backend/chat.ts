@@ -37,6 +37,16 @@ export async function saveLastChatId(accountId: number, chatId: number) {
   await BackendRemote.rpc.setConfig(accountId, 'ui.lastchatid', `${chatId}`)
 }
 
+export async function getLastChatId(accountId: number): Promise<number | null> {
+  const chatId = await BackendRemote.rpc.getConfig(accountId, 'ui.lastchatid')
+
+  if (typeof chatId === 'string') {
+    return parseInt(chatId, 10)
+  }
+
+  return null
+}
+
 export async function muteChat(
   accountId: number,
   chatId: number,
@@ -92,4 +102,30 @@ export async function areAllContactsVerified(
   return !contactIds.some(contactId => {
     return !contacts[contactId].isVerified
   })
+}
+
+/**
+ * Helper method to determine the chat id of the "Device Messages" read-only chat.
+ *
+ * Note that there's currently no API to retrieve this id from the backend, this
+ * is why we're iterating over all currently available chats instead.
+ */
+export async function getDeviceChatId(
+  accountId: number
+): Promise<number | null> {
+  const chatIds = await BackendRemote.rpc.getChatlistEntries(
+    accountId,
+    null,
+    null,
+    null
+  )
+
+  for (const chatId of chatIds) {
+    const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
+    if (chat.isDeviceChat) {
+      return chatId
+    }
+  }
+
+  return null
 }

@@ -1,9 +1,9 @@
 import { useCallback, useEffect } from 'react'
 
-import SettingsStoreInstance from '../stores/settings'
 import useChat from './useChat'
 import useHasChanged from './useHasChanged'
 import { BackendRemote } from '../backend-com'
+import { getLastChatId } from '../backend/chat'
 
 /**
  * Detects account changes and selects last known, selected chat for the user
@@ -21,12 +21,9 @@ export default function useSelectLastChat(accountId?: number) {
     const account = await BackendRemote.rpc.getAccountInfo(accountId)
 
     if (account.kind === 'Configured') {
-      await SettingsStoreInstance.effect.load()
-      const lastChatId =
-        SettingsStoreInstance.getState()?.settings['ui.lastchatid']
-
+      const lastChatId = await getLastChatId(accountId)
       if (lastChatId) {
-        await selectChat(Number(lastChatId))
+        await selectChat(lastChatId)
       }
     }
   }, [accountId, selectChat])
