@@ -13,7 +13,7 @@ import useTranslationFunction from '../hooks/useTranslationFunction'
 import DisappearingMessages from './dialogs/DisappearingMessages'
 import { ContextMenuContext } from '../contexts/ContextMenuContext'
 import { selectedAccountId } from '../ScreenController'
-import { setChatVisibility, unmuteChat } from '../backend/chat'
+import { unmuteChat } from '../backend/chat'
 
 import type { T } from '@deltachat/jsonrpc-client'
 
@@ -165,14 +165,14 @@ export function useThreeDotMenu(
         ? {
             label: tx('menu_unarchive_chat'),
             action: () => {
-              setChatVisibility(accountId, chatId, 'Normal')
+              BackendRemote.rpc.setChatVisibility(accountId, chatId, 'Normal')
               unselectChat()
             },
           }
         : {
             label: tx('menu_archive_chat'),
             action: () => {
-              setChatVisibility(accountId, chatId, 'Archived')
+              BackendRemote.rpc.setChatVisibility(accountId, chatId, 'Archived')
               unselectChat()
             },
           },

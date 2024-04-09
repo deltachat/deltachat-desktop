@@ -7,7 +7,7 @@ import MailingListProfile from '../dialogs/MessageListProfile'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
-import { setChatVisibility, unmuteChat } from '../../backend/chat'
+import { unmuteChat } from '../../backend/chat'
 import useChat from '../../hooks/useChat'
 import useChatDialog from '../../hooks/useChatDialog'
 import useDialog from '../../hooks/useDialog'
@@ -28,7 +28,7 @@ function archiveStateMenu(
   const archive: ContextMenuItem = {
     label: tx('menu_archive_chat'),
     action: () => {
-      setChatVisibility(accountId, chat.id, 'Archived')
+      BackendRemote.rpc.setChatVisibility(accountId, chat.id, 'Archived')
       if (isTheSelectedChat) {
         unselectChat()
       }
@@ -37,7 +37,7 @@ function archiveStateMenu(
   const unArchive: ContextMenuItem = {
     label: tx('menu_unarchive_chat'),
     action: () => {
-      setChatVisibility(accountId, chat.id, 'Normal')
+      BackendRemote.rpc.setChatVisibility(accountId, chat.id, 'Normal')
       if (isTheSelectedChat) {
         unselectChat()
       }
@@ -46,7 +46,7 @@ function archiveStateMenu(
   const pin: ContextMenuItem = {
     label: tx('pin_chat'),
     action: () => {
-      setChatVisibility(accountId, chat.id, 'Pinned')
+      BackendRemote.rpc.setChatVisibility(accountId, chat.id, 'Pinned')
 
       if (chat.isArchived) {
         unselectChat()
@@ -55,7 +55,8 @@ function archiveStateMenu(
   }
   const unPin: ContextMenuItem = {
     label: tx('unpin_chat'),
-    action: () => setChatVisibility(accountId, chat.id, 'Normal'),
+    action: () =>
+      BackendRemote.rpc.setChatVisibility(accountId, chat.id, 'Normal'),
   }
 
   /*

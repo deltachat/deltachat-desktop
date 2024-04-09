@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
-import { getChat, markChatAsSeen, saveLastChatId } from '../backend/chat'
+import { markChatAsSeen, saveLastChatId } from '../backend/chat'
 import { BackendRemote } from '../backend-com'
 
 import type { PropsWithChildren } from 'react'
@@ -62,7 +62,7 @@ export const ChatProvider = ({
       saveLastChatId(accountId, chatId)
 
       // Load all chat data we need to get started
-      setChat(await getChat(accountId, chatId))
+      setChat(await BackendRemote.rpc.getFullChatById(accountId, chatId))
     },
     [accountId]
   )
@@ -72,7 +72,7 @@ export const ChatProvider = ({
       return
     }
 
-    setChat(await getChat(accountId, chatId))
+    setChat(await BackendRemote.rpc.getFullChatById(accountId, chatId))
   }, [accountId, chatId])
 
   const unselectChat = useCallback<UnselectChat>(() => {

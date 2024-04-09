@@ -4,13 +4,6 @@ import { clearNotificationsForChat } from '../system-integration/notifications'
 
 import type { T } from '@deltachat/jsonrpc-client'
 
-export async function getChat(
-  accountId: number,
-  chatId: number
-): Promise<T.FullChat> {
-  return await BackendRemote.rpc.getFullChatById(accountId, chatId)
-}
-
 /**
  * Finds basic info, like contact id and the related chat ID of a contact based
  * on it's email address.
@@ -65,14 +58,6 @@ export function markChatAsSeen(accountId: number, chatId: number) {
 
   // Remove potential system notifications for this chat
   clearNotificationsForChat(accountId, chatId)
-}
-
-export async function setChatVisibility(
-  accountId: number,
-  chatId: number,
-  visibility: T.ChatVisibility
-) {
-  await BackendRemote.rpc.setChatVisibility(accountId, chatId, visibility)
 }
 
 export async function createChatByContactId(

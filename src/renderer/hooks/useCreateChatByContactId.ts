@@ -1,11 +1,8 @@
 import { useCallback } from 'react'
 
 import useChat from './useChat'
-import {
-  createChatByContactId,
-  getChat,
-  setChatVisibility,
-} from '../backend/chat'
+import { createChatByContactId } from '../backend/chat'
+import { BackendRemote } from '../backend-com'
 
 export default function useCreateChatByContactId() {
   const { selectChat } = useChat()
@@ -13,11 +10,11 @@ export default function useCreateChatByContactId() {
   return useCallback(
     async (accountId: number, contactId: number) => {
       const chatId = await createChatByContactId(accountId, contactId)
-      const chat = await getChat(accountId, chatId)
+      const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
 
       // Unarchive chat if it's been in archive and gets activated again
       if (chat.archived) {
-        await setChatVisibility(accountId, chatId, 'Normal')
+        await BackendRemote.rpc.setChatVisibility(accountId, chatId, 'Normal')
       }
 
       selectChat(chatId)

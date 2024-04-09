@@ -10,7 +10,6 @@ import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import MessageDetail from '../dialogs/MessageDetail'
 
 import type { OpenDialog } from '../../contexts/DialogContext'
-import { deleteMessage, forwardMessage } from '../../backend/message'
 
 const log = getLogger('render/msgFunctions')
 
@@ -79,7 +78,7 @@ export async function confirmForwardMessage(
     tx('forward')
   )
   if (yes) {
-    await forwardMessage(accountId, message.id, chat.id)
+    await BackendRemote.rpc.forwardMessages(accountId, [message.id], chat.id)
   }
   return yes
 }
@@ -94,7 +93,8 @@ export function confirmDeleteMessage(
   openDialog(ConfirmationDialog, {
     message: tx('ask_delete_message'),
     confirmLabel: tx('delete'),
-    cb: (yes: boolean) => yes && deleteMessage(accountId, msg.id),
+    cb: (yes: boolean) =>
+      yes && BackendRemote.rpc.deleteMessages(accountId, [msg.id]),
   })
 }
 
