@@ -56,15 +56,10 @@ export default function useMessage() {
       log.debug(`jumpToMessage with messageId: ${msgId}`)
 
       // Check if target message is in same chat, if not switch first
-      const message = await BackendRemote.rpc.getMessage(
-        accountId,
-        msgId as number
-      )
-
+      const message = await BackendRemote.rpc.getMessage(accountId, msgId)
       if (message.chatId !== chatId) {
         await selectChat(message.chatId)
       }
-
       setChatView(ChatView.MessageList)
 
       // Workaround to actual jump to message in regarding mounted component view
