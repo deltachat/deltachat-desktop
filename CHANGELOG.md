@@ -4,6 +4,8 @@
 
 ### Added
 - Remember last position & size of webxdc windows #3754 #3755
+- add quick-key CtrlOrCmd+q for submenu quit #3758
+
 
 ### Changed
 - Update translations (2024-04-04) #3746

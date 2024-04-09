@@ -172,7 +172,11 @@ function getMenuTemplate(logHandler: LogHandler): rawMenuItem[] {
             mainWindow.show()
           },
         },
-        { translate: 'global_menu_file_quit_desktop', role: 'quit' },
+        {
+          translate: 'global_menu_file_quit_desktop',
+          role: 'quit',
+          accelerator: 'Cmd+q',
+        },
       ],
     },
   ]
@@ -193,6 +197,7 @@ function getMenuTemplate(logHandler: LogHandler): rawMenuItem[] {
               {
                 translate: 'global_menu_file_quit_desktop',
                 role: 'quit',
+                accelerator: 'Ctrl+q',
               },
             ],
           },
