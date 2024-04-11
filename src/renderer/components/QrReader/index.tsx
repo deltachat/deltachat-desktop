@@ -5,16 +5,23 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { readBarcodesFromImageData, setZXingModuleOverrides } from 'zxing-wasm'
+import {
+  readBarcodesFromImageData,
+  readBarcodesFromImageFile,
+  setZXingModuleOverrides,
+} from 'zxing-wasm'
+import classNames from 'classnames'
+import { Spinner } from '@blueprintjs/core'
 
+import Icon from '../Icon'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
+import { ScreenContext } from '../../contexts/ScreenContext'
+import { runtime } from '../../runtime'
 
 import styles from './styles.module.scss'
 
 import type { ContextMenuItem } from '../ContextMenu'
-import Icon from '../Icon'
-import classNames from 'classnames'
-import { Spinner } from '@blueprintjs/core'
 
 type FacingMode = 'user' | 'environment'
 
@@ -37,8 +44,13 @@ setZXingModuleOverrides({
 })
 
 export default function QrReader({ onError, onScan }: Props) {
+  const tx = useTranslationFunction()
+  const { openContextMenu } = useContext(ContextMenuContext)
+  const { userFeedback } = useContext(ScreenContext)
+
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const [ready, setReady] = useState(false)
   const [error, setError] = useState(false)
@@ -50,12 +62,87 @@ export default function QrReader({ onError, onScan }: Props) {
     height: 480,
   })
 
-  const { openContextMenu } = useContext(ContextMenuContext)
+  const handleError = useCallback(
+    (error: any) => {
+      if (typeof error === 'string') {
+        onError(error)
+      } else {
+        onError(error.toString())
+      }
+
+      setError(true)
+    },
+    [onError]
+  )
+
+  const handlePasteFromClipboard = useCallback(async () => {
+    try {
+      const data = await runtime.readClipboardText()
+      if (data) {
+        onScan(data)
+      } else {
+        throw new Error('no data in clipboard')
+      }
+    } catch (error) {
+      userFeedback({
+        type: 'error',
+        text: `Reading qrcodedata from clipboard failed: ${error}`,
+      })
+    }
+  }, [onScan, userFeedback])
+
+  const handleImportImage = useCallback(async () => {
+    if (inputRef.current) {
+      inputRef.current.click()
+    }
+  }, [])
+
+  const handleFileInputChange = useCallback(
+    async (event: React.ChangeEvent<HTMLInputElement>) => {
+      let unmounted = false
+      if (!event.target.files || event.target.files.length === 0) {
+        return
+      }
+
+      const file = event.target.files[0]
+      const arrayBuffer = await file.arrayBuffer()
+      const blob = new Blob([new Uint8Array(arrayBuffer)], { type: file.type })
+
+      try {
+        const results = await readBarcodesFromImageFile(blob, {
+          formats: ['QRCode'],
+        })
+
+        if (unmounted) {
+          return
+        }
+
+        results.forEach(result => {
+          onScan(result.text)
+        })
+      } catch (error: any) {
+        handleError(error)
+      }
+
+      return () => {
+        unmounted = true
+      }
+    },
+    [handleError, onScan]
+  )
 
   const handleSelectDevice = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       const [cursorX, cursorY] = [event.clientX, event.clientY]
       const items: ContextMenuItem[] = [
+        {
+          label: tx('load_qr_code_as_image'),
+          action: handleImportImage,
+        },
+        {
+          label: tx('paste_from_clipboard'),
+          action: handlePasteFromClipboard,
+        },
         {
           label: 'Camera',
           subitems: videoDevices.map(device => {
@@ -93,20 +180,15 @@ export default function QrReader({ onError, onScan }: Props) {
         items,
       })
     },
-    [deviceId, facingMode, openContextMenu, videoDevices]
-  )
-
-  const handleError = useCallback(
-    (error: any) => {
-      if (typeof error === 'string') {
-        onError(error)
-      } else {
-        onError(error.toString())
-      }
-
-      setError(true)
-    },
-    [onError]
+    [
+      deviceId,
+      facingMode,
+      handleImportImage,
+      handlePasteFromClipboard,
+      openContextMenu,
+      tx,
+      videoDevices,
+    ]
   )
 
   useEffect(() => {
@@ -274,6 +356,9 @@ export default function QrReader({ onError, onScan }: Props) {
           Error: Could not access video camera
         </div>
       )}
+      <button className={styles.qrReaderButton} onClick={handleSelectDevice}>
+        <Icon icon='settings' size={20} className={styles.qrReaderButtonIcon} />
+      </button>
       {videoDevices.length > 0 && (
         <button className={styles.qrReaderButton} onClick={handleSelectDevice}>
           <Icon
@@ -283,6 +368,13 @@ export default function QrReader({ onError, onScan }: Props) {
           />
         </button>
       )}
+      <input
+        className={styles.qrReaderFileInput}
+        type='file'
+        accept='image/*'
+        ref={inputRef}
+        onChange={handleFileInputChange}
+      />
     </div>
   )
 }

@@ -14,6 +14,7 @@ import Dialog, {
   FooterActions,
 } from '../Dialog'
 import FooterActionButton from '../Dialog/FooterActionButton'
+import QrReader from '../QrReader'
 import { BackendRemote } from '../../backend-com'
 import { getLogger } from '../../../shared/logger'
 import { runtime } from '../../runtime'
@@ -26,7 +27,6 @@ import { qrCodeToInviteUrl } from '../../utils/invite'
 import { selectedAccountId } from '../../ScreenController'
 
 import type { DialogProps } from '../../contexts/DialogContext'
-import QrReader from '../QrReader'
 
 const log = getLogger('renderer/dialogs/QrCode')
 
@@ -221,8 +221,6 @@ export function QrCodeScanQrInner(
     onDone()
   }
 
-  const qrImageReader = useRef<any>()
-
   const handleScan = async (data: string) => {
     if (data && processingQrCode.current === false) {
       processingQrCode.current = true
@@ -241,48 +239,13 @@ export function QrCodeScanQrInner(
     log.error('QrReader error: ' + err)
   }
 
-  const openImageDialog = () => {
-    qrImageReader.current.openImageDialog()
-  }
-
-  const { userFeedback } = useContext(ScreenContext)
-
-  const openMenu = useContextMenu([
-    {
-      label: tx('load_qr_code_as_image'),
-      action: openImageDialog,
-    },
-    {
-      label: tx('paste_from_clipboard'),
-      action: async () => {
-        try {
-          const data = await runtime.readClipboardText()
-          if (data) {
-            handleScan(data)
-          } else {
-            throw 'not data in clipboard'
-          }
-        } catch (error) {
-          log.error('Reading qrcodedata from clipboard failed: ', error)
-          userFeedback({
-            type: 'error',
-            text: 'Reading qrcodedata from clipboard failed: ' + error,
-          })
-        }
-      },
-    },
-  ])
-
   return (
     <>
       <DialogBody>
         <QrReader onScan={handleScan} onError={handleError} />
       </DialogBody>
       <DialogFooter>
-        <FooterActions align='spaceBetween'>
-          <FooterActionButton onClick={openMenu}>
-            {tx('menu_more_options')}
-          </FooterActionButton>
+        <FooterActions>
           <FooterActionButton onClick={props.onClose}>
             {tx('close')}
           </FooterActionButton>
