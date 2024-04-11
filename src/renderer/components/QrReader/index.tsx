@@ -1,14 +1,23 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { read_qrcodes_from_image_data as readQrCodeFromImageData } from 'quircs-wasm'
+import { readBarcodesFromImageData, setZXingModuleOverrides } from 'zxing-wasm'
 
 import styles from './styles.module.scss'
-
-import type { QRCode } from 'quircs-wasm'
 
 type Props = {
   onError: (error: string) => void
   onScan: (data: string) => void
 }
+
+const SCAN_QR_INTERVAL_MS = 50
+
+setZXingModuleOverrides({
+  locateFile: (path, prefix) => {
+    if (path.endsWith('.wasm')) {
+      return `./${path}`
+    }
+    return prefix + path
+  },
+})
 
 export default function QrReader(props: Props) {
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -65,7 +74,7 @@ export default function QrReader(props: Props) {
   }, [])
 
   useEffect(() => {
-    const scan = () => {
+    const scan = async () => {
       const canvas = canvasRef.current
       const video = videoRef.current
 
@@ -91,21 +100,24 @@ export default function QrReader(props: Props) {
         canvas.height
       )
 
-      const data = context.getImageData(0, 0, canvas.width, canvas.height)
-      const results: QRCode[] = readQrCodeFromImageData(data, true)
-
-      results.forEach(({ data }) => {
-        if ('content' in data) {
-          const result = String.fromCharCode.apply(null, data.content.payload)
-          props.onScan(result)
-        } else if ('error' in data) {
-          props.onError(data.error)
+      const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
+      try {
+        const results = await readBarcodesFromImageData(imageData, {
+          formats: ['QRCode'],
+        })
+        results.forEach(result => {
+          props.onScan(result.text)
+        })
+      } catch (error: any) {
+        if (typeof error === 'string') {
+          props.onError(error)
+        } else {
+          props.onError(error.toString())
         }
-      })
+      }
     }
 
-    const interval = window.setInterval(scan, 200)
-
+    const interval = window.setInterval(scan, SCAN_QR_INTERVAL_MS)
     return () => {
       window.clearInterval(interval)
     }

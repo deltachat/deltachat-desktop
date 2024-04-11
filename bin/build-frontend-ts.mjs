@@ -159,8 +159,8 @@ async function bundle(options) {
   )
 
   await copyFile(
-    'node_modules/quircs-wasm/quircs_wasm_bg.wasm',
-    'html-dist/quircs_wasm_bg.wasm',
+    'node_modules/zxing-wasm/dist/full/zxing_full.wasm',
+    'html-dist/zxing_full.wasm',
   )
 }
 

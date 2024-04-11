@@ -96,7 +96,6 @@
     "mime-types": "^2.1.31",
     "moment": "^2.29.2",
     "path-browserify": "^1.0.1",
-    "quircs-wasm": "^0.1.1",
     "rc": "^1.2.8",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -109,7 +108,8 @@
     "stackframe": "^1.2.1",
     "use-debounce": "^3.3.0",
     "webxdc-types": "^1.0.1",
-    "ws": "7.5.9"
+    "ws": "7.5.9",
+    "zxing-wasm": "^1.2.7"
   },
   "devDependencies": {
     "@electron/notarize": "^2.1.0",
