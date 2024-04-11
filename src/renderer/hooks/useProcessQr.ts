@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useContext } from 'react'
 
 import CopyContentAlertDialog from '../components/CopyContentAlertDialog'
 import ProcessQrCodeDialog from '../components/ProcessQrCodeDialog'
@@ -9,6 +9,7 @@ import useDialog from './useDialog'
 import useOpenMailtoLink from './useOpenMailtoLink'
 import useTranslationFunction from './useTranslationFunction'
 import { BackendRemote } from '../backend-com'
+import { ScreenContext } from '../contexts/ScreenContext'
 import { ConfigureProgressDialog } from '../components/LoginForm'
 import { ReceiveBackupDialog } from '../components/dialogs/SetupMultiDevice'
 import { Screens } from '../ScreenController'
@@ -23,6 +24,7 @@ export default function useProcessQR() {
   const openConfirmationDialog = useConfirmationDialog()
   const openMailtoLink = useOpenMailtoLink()
   const tx = useTranslationFunction()
+  const { screen } = useContext(ScreenContext)
   const { openDialog, closeDialog } = useDialog()
 
   const setConfigFromQrCatchingErrorInAlert = useCallback(
@@ -58,16 +60,13 @@ export default function useProcessQR() {
         return
       }
 
-      const screen = window.__screen
-
       const processDialogId = openDialog(ProcessQrCodeDialog)
       const closeProcessDialog = () => closeDialog(processDialogId)
 
-      let checkQr
+      let checkQr = null
       try {
         checkQr = await BackendRemote.rpc.checkQr(accountId, url)
       } catch (err) {
-        checkQr = null
         log.error(err)
       }
 
@@ -76,9 +75,7 @@ export default function useProcessQR() {
         await openAlertDialog({
           message: QrErrorMessage({ url }),
         })
-
         callback && callback()
-
         return
       }
 
@@ -95,12 +92,10 @@ export default function useProcessQR() {
         screen !== Screens.Main
       ) {
         closeProcessDialog()
-
         await openAlertDialog({
           message: tx('Please login first'),
         })
         callback && callback()
-
         return
       }
 
@@ -311,6 +306,7 @@ export default function useProcessQR() {
       openConfirmationDialog,
       openDialog,
       openMailtoLink,
+      screen,
       setConfigFromQrCatchingErrorInAlert,
       tx,
     ]
