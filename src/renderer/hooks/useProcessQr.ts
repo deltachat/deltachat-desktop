@@ -18,7 +18,7 @@ import type { T } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/hooks/useQR')
 
-export default function useQR() {
+export default function useProcessQR() {
   const openAlertDialog = useAlertDialog()
   const openConfirmationDialog = useConfirmationDialog()
   const openMailtoLink = useOpenMailtoLink()
@@ -50,7 +50,7 @@ export default function useQR() {
     async (
       accountId: number,
       url: string,
-      callback?: () => void,
+      callback?: (chatId?: number) => void,
       skipLoginConfirmation?: boolean
     ) => {
       if (url.toLowerCase().startsWith('mailto:')) {
@@ -191,8 +191,8 @@ export default function useQR() {
         })
 
         if (userConfirmed) {
-          BackendRemote.rpc.secureJoin(accountId, url)
-          callback && callback()
+          const chatId = await BackendRemote.rpc.secureJoin(accountId, url)
+          callback && callback(chatId)
         }
       } else if (checkQr.kind === 'askVerifyGroup') {
         closeProcessDialog()
@@ -205,8 +205,6 @@ export default function useQR() {
         if (userConfirmed) {
           await BackendRemote.rpc.secureJoin(accountId, url)
         }
-
-        callback && callback()
         return
       } else if (checkQr.kind === 'fprOk') {
         const contact = await BackendRemote.rpc.getContact(
