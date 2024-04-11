@@ -251,8 +251,8 @@ export default function QrReader({ onError, onScan }: Props) {
         }
 
         setReady(true)
-      } catch (error: any) {
-        handleError(error)
+      } catch {
+        setError(true)
       }
     }
 
@@ -274,7 +274,7 @@ export default function QrReader({ onError, onScan }: Props) {
       setReady(false)
       setError(false)
     }
-  }, [deviceId, facingMode, handleError])
+  }, [deviceId, facingMode])
 
   useEffect(() => {
     let unmounted = false
