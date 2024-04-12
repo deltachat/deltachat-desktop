@@ -18,6 +18,7 @@
 - hide "add second device" instructions when transfer has started #3748
 - improve chat scroll performance #3743, #3747
 - reduce CPU load when moving mouse over chat #3751
+- fix add missing top padding to confirm sending files dialog #3767
 
 <a id="1_44_1"></a>
 
