@@ -2,7 +2,6 @@ import debounce from 'debounce'
 import electron, {
   BrowserWindow,
   Rectangle,
-  net,
   session,
   systemPreferences,
 } from 'electron'
@@ -15,16 +14,15 @@ import {
   ALLOWED_STATIC_FOLDERS,
   getAccountsPath,
   ALLOWED_ACCOUNT_FOLDERS,
-  getConfigPath,
 } from '../application-constants'
 import { refreshTrayContextMenu } from '../tray'
 
-import path, { isAbsolute, join, relative, resolve } from 'path'
+import { isAbsolute, join } from 'path'
 import { DesktopSettings } from '../desktop_settings'
 import { Session } from 'electron/main'
 import { refresh as refreshTitleMenu } from '../menu'
 import { platform } from 'os'
-import { pathToFileURL } from 'url'
+
 const log = getLogger('main/mainWindow')
 
 export let window: (BrowserWindow & { hidden?: boolean }) | null = null
