@@ -28,6 +28,11 @@ function config(options) {
     define: {
       'process.env.NODE_ENV': isProduction ? '"production"' : '"development"',
     },
+    // We want the inlined version of the `zbar-wasm` package as the .wasm paths
+    // are unfortunately hardcoded in this package. We can force esbuild to load
+    // the inlined version through setting a condition which will make esbuild
+    // prefer an package export named after it
+    conditions: ['zbar-inlined'],
     plugins,
     external: ["*.jpg", "*.png", "*.webp", "*.svg"]
   }
@@ -156,11 +161,6 @@ async function bundle(options) {
   await copyFile(
     'node_modules/@deltachat/message_parser_wasm/message_parser_wasm_bg.wasm',
     'html-dist/message_parser_wasm_bg.wasm',
-  )
-
-  await copyFile(
-    'node_modules/zxing-wasm/dist/full/zxing_full.wasm',
-    'html-dist/zxing_full.wasm',
   )
 }
 

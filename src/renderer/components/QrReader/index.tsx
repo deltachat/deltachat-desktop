@@ -6,10 +6,12 @@ import React, {
   useState,
 } from 'react'
 import {
-  readBarcodesFromImageData,
-  readBarcodesFromImageFile,
-  setZXingModuleOverrides,
-} from 'zxing-wasm'
+  ZBarConfigType,
+  ZBarScanner,
+  ZBarSymbolType,
+  getDefaultScanner,
+  scanImageData,
+} from '@undecaf/zbar-wasm'
 import classNames from 'classnames'
 import { Spinner } from '@blueprintjs/core'
 
@@ -30,18 +32,47 @@ type Props = {
   onScan: (data: string) => void
 }
 
+type ImageDimensions = {
+  width: number
+  height: number
+}
+
 const SCAN_QR_INTERVAL_MS = 50
 
-setZXingModuleOverrides({
-  // Tell ZXing where the wasm file is located after it got copied there during
-  // build process
-  locateFile: (path, prefix) => {
-    if (path.endsWith('.wasm')) {
-      return `./${path}`
-    }
-    return prefix + path
-  },
-})
+async function getImageDataFromFile(file: File): Promise<ImageData> {
+  const image = new Image()
+  const reader = new FileReader()
+
+  return new Promise(resolve => {
+    // Extract image data from base64 encoded blob
+    image.addEventListener('load', () => {
+      const canvas = document.createElement('canvas')
+      const context = canvas.getContext('2d')
+      canvas.width = image.width
+      canvas.height = image.height
+
+      if (!context) {
+        return
+      }
+
+      context.drawImage(image, 0, 0)
+
+      const imageData = context.getImageData(0, 0, image.width, image.height)
+      resolve(imageData)
+    })
+
+    // Load image from file as base64 encoded data string
+    reader.addEventListener(
+      'load',
+      () => {
+        image.src = reader.result as string
+      },
+      false
+    )
+
+    reader.readAsDataURL(file)
+  })
+}
 
 export default function QrReader({ onError, onScan }: Props) {
   const tx = useTranslationFunction()
@@ -54,13 +85,40 @@ export default function QrReader({ onError, onScan }: Props) {
 
   const [ready, setReady] = useState(false)
   const [error, setError] = useState(false)
+  const [scanner, setScanner] = useState<ZBarScanner | undefined>(undefined)
   const [videoDevices, setVideoDevices] = useState<MediaDeviceInfo[]>([])
   const [facingMode, setFacingMode] = useState<FacingMode>('user')
   const [deviceId, setDeviceId] = useState<string | undefined>(undefined)
-  const [dimensions, setDimensions] = useState({
+  const [dimensions, setDimensions] = useState<ImageDimensions>({
     width: 640,
     height: 480,
   })
+
+  useEffect(() => {
+    const createScanner = async () => {
+      const qrCodeScanner = await getDefaultScanner()
+
+      // First disable all code types
+      Object.keys(ZBarSymbolType).forEach(key => {
+        qrCodeScanner.setConfig(
+          key as unknown as ZBarSymbolType,
+          ZBarConfigType.ZBAR_CFG_ENABLE,
+          0
+        )
+      })
+
+      // .. and enable only QrCode scanning
+      qrCodeScanner.setConfig(
+        ZBarSymbolType.ZBAR_QRCODE,
+        ZBarConfigType.ZBAR_CFG_ENABLE,
+        1
+      )
+
+      setScanner(qrCodeScanner)
+    }
+
+    createScanner()
+  }, [])
 
   const handleError = useCallback(
     (error: any) => {
@@ -103,22 +161,18 @@ export default function QrReader({ onError, onScan }: Props) {
       if (!event.target.files || event.target.files.length === 0) {
         return
       }
-
       const file = event.target.files[0]
-      const arrayBuffer = await file.arrayBuffer()
-      const blob = new Blob([new Uint8Array(arrayBuffer)], { type: file.type })
 
       try {
-        const results = await readBarcodesFromImageFile(blob, {
-          formats: ['QRCode'],
-        })
+        const imageData = await getImageDataFromFile(file)
+        const results = await scanImageData(imageData, scanner)
 
         if (unmounted) {
           return
         }
 
         results.forEach(result => {
-          onScan(result.text)
+          onScan(result.decode())
         })
       } catch (error: any) {
         handleError(error)
@@ -128,7 +182,7 @@ export default function QrReader({ onError, onScan }: Props) {
         unmounted = true
       }
     },
-    [handleError, onScan]
+    [handleError, onScan, scanner]
   )
 
   const handleSelectDevice = useCallback(
@@ -307,16 +361,14 @@ export default function QrReader({ onError, onScan }: Props) {
 
       const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
       try {
-        const results = await readBarcodesFromImageData(imageData, {
-          formats: ['QRCode'],
-        })
+        const results = await scanImageData(imageData, scanner)
 
         if (unmounted) {
           return
         }
 
         results.forEach(result => {
-          onScan(result.text)
+          onScan(result.decode())
         })
       } catch (error: any) {
         handleError(error)
@@ -328,7 +380,7 @@ export default function QrReader({ onError, onScan }: Props) {
       unmounted = true
       window.clearInterval(interval)
     }
-  }, [handleError, onScan])
+  }, [handleError, onScan, scanner])
 
   return (
     <div className={styles.qrReader}>

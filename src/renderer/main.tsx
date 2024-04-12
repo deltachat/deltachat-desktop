@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import initMessageParserWasm from '@deltachat/message_parser_wasm'
+import initWasm from '@deltachat/message_parser_wasm'
 
 import App from './App'
 import initSystemIntegration from './system-integration'
@@ -14,7 +14,7 @@ async function main() {
     runtime.initialize()
     printProcessLogLevelInfo()
 
-    await initMessageParserWasm('./message_parser_wasm_bg.wasm')
+    await initWasm('./message_parser_wasm_bg.wasm')
 
     initSystemIntegration()
 
