@@ -2,6 +2,7 @@ import electron, {
   BrowserView,
   BrowserWindow,
   dialog,
+  Menu,
   MenuItemConstructorOptions,
   nativeTheme,
   session,
@@ -10,6 +11,7 @@ import electron, {
 } from 'electron'
 import { appIcon, htmlDistDir } from '../application-constants'
 import { join } from 'path'
+import { platform } from 'os'
 import { DesktopSettings } from '../desktop_settings'
 import { isInviteLink, truncateText } from '../../shared/util'
 import { tx } from '../load-translations'
@@ -19,6 +21,7 @@ import { getDCJsonrpcClient } from '../ipc'
 import { getLogger } from '../../shared/logger'
 import { clipboard } from 'electron/common'
 import * as mainWindow from './main'
+import { refresh as refreshTitleMenu } from '../menu'
 
 const log = getLogger('html_email')
 
@@ -122,6 +125,96 @@ export function openHtmlEmailWindow(
   window.on('close', () => {
     context_menu_handle?.()
     delete open_windows[window_id]
+  })
+
+  const isMac = platform() === 'darwin'
+
+  const makeMenu = () => {
+    const appMenu: Electron.MenuItemConstructorOptions[] = [
+      {
+        label: tx('global_menu_file_desktop'),
+        submenu: [
+          { role: 'hide' },
+          { role: 'hideOthers' },
+          { role: 'unhide' },
+          { type: 'separator' },
+          {
+            label: tx('global_menu_file_quit_desktop'),
+            role: 'quit',
+          },
+        ],
+      },
+    ]
+
+    return Menu.buildFromTemplate([
+      ...(isMac ? appMenu : []),
+      {
+        label: tx('global_menu_file_desktop'),
+        submenu: [
+          {
+            label: tx('close_window'),
+            click: () => {
+              window.close()
+            },
+            accelerator: isMac ? 'Cmd+w' : 'Ctrl+w',
+          },
+        ],
+      },
+      {
+        label: tx('global_menu_edit_desktop'),
+        submenu: [
+          {
+            label: tx('global_menu_edit_copy_desktop'),
+            role: 'copy',
+          },
+          {
+            label: tx('menu_select_all'),
+            role: 'selectAll',
+          },
+        ],
+      },
+      {
+        label: tx('global_menu_view_desktop'),
+        submenu: [
+          { role: 'resetZoom' },
+          { role: 'zoomIn' },
+          { role: 'zoomOut' },
+          { type: 'separator' },
+          {
+            label: tx('global_menu_view_floatontop_desktop'),
+            type: 'checkbox',
+            checked: window.isAlwaysOnTop(),
+            click: () => {
+              window.setAlwaysOnTop(!window.isAlwaysOnTop())
+              if (platform() !== 'darwin') {
+                window.setMenu(makeMenu())
+              } else {
+                // change to window menu
+                Menu.setApplicationMenu(makeMenu())
+              }
+            },
+          },
+          { role: 'togglefullscreen' },
+        ],
+      },
+    ])
+  }
+
+  if (!isMac) {
+    window.setMenu(makeMenu())
+  }
+
+  window.on('focus', () => {
+    if (isMac) {
+      // change to webxdc menu
+      Menu.setApplicationMenu(makeMenu())
+    }
+  })
+  window.on('blur', () => {
+    if (isMac) {
+      // change back to main-window menu
+      refreshTitleMenu()
+    }
   })
 
   let sandboxedView: BrowserView = makeBrowserView(

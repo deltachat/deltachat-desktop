@@ -4,9 +4,11 @@ import { getLogger } from '../../shared/logger'
 import { ExtendedAppMainProcess } from '../types'
 import { join } from 'path'
 import { stat } from 'fs/promises'
+import { platform } from 'os'
 import { appWindowTitle } from '../../shared/constants'
 import { tx } from '../load-translations'
 import { window as main_window } from '../windows/main'
+import { refresh as refreshTitleMenu } from '../menu'
 
 const log = getLogger('main/help')
 const app = rawApp as ExtendedAppMainProcess
@@ -115,4 +117,94 @@ export async function openHelpWindow(locale: string, anchor?: string) {
   win.webContents.session.setPermissionRequestHandler(
     (_wc, _permission, callback) => callback(false)
   )
+
+  const isMac = platform() === 'darwin'
+
+  const makeMenu = () => {
+    const appMenu: Electron.MenuItemConstructorOptions[] = [
+      {
+        label: tx('global_menu_file_desktop'),
+        submenu: [
+          { role: 'hide' },
+          { role: 'hideOthers' },
+          { role: 'unhide' },
+          { type: 'separator' },
+          {
+            label: tx('global_menu_file_quit_desktop'),
+            role: 'quit',
+          },
+        ],
+      },
+    ]
+
+    return Menu.buildFromTemplate([
+      ...(isMac ? appMenu : []),
+      {
+        label: tx('global_menu_file_desktop'),
+        submenu: [
+          {
+            label: tx('close_window'),
+            click: () => {
+              window.close()
+            },
+            accelerator: isMac ? 'Cmd+w' : 'Ctrl+w',
+          },
+        ],
+      },
+      {
+        label: tx('global_menu_edit_desktop'),
+        submenu: [
+          {
+            label: tx('global_menu_edit_copy_desktop'),
+            role: 'copy',
+          },
+          {
+            label: tx('menu_select_all'),
+            role: 'selectAll',
+          },
+        ],
+      },
+      {
+        label: tx('global_menu_view_desktop'),
+        submenu: [
+          { role: 'resetZoom' },
+          { role: 'zoomIn' },
+          { role: 'zoomOut' },
+          { type: 'separator' },
+          {
+            label: tx('global_menu_view_floatontop_desktop'),
+            type: 'checkbox',
+            checked: win?.isAlwaysOnTop(),
+            click: () => {
+              win?.setAlwaysOnTop(!win.isAlwaysOnTop())
+              if (isMac) {
+                win?.setMenu(makeMenu())
+              } else {
+                // change to window menu
+                Menu.setApplicationMenu(makeMenu())
+              }
+            },
+          },
+          { role: 'togglefullscreen' },
+        ],
+      },
+    ])
+  }
+
+  if (!isMac) {
+    win.setMenu(makeMenu())
+  }
+
+  win.on('focus', () => {
+    if (isMac) {
+      // change to webxdc menu
+      Menu.setApplicationMenu(makeMenu())
+    }
+  })
+  win.on('blur', () => {
+    if (isMac) {
+      // change back to main-window menu
+      refreshTitleMenu()
+    }
+  })
 }
