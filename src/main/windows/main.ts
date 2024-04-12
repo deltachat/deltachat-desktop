@@ -2,19 +2,29 @@ import debounce from 'debounce'
 import electron, {
   BrowserWindow,
   Rectangle,
+  net,
   session,
   systemPreferences,
 } from 'electron'
 import { appWindowTitle } from '../../shared/constants'
 import { getLogger } from '../../shared/logger'
-import { appIcon, windowDefaults, htmlDistDir } from '../application-constants'
+import {
+  appIcon,
+  windowDefaults,
+  htmlDistDir,
+  ALLOWED_STATIC_FOLDERS,
+  getAccountsPath,
+  ALLOWED_ACCOUNT_FOLDERS,
+  getConfigPath,
+} from '../application-constants'
 import { refreshTrayContextMenu } from '../tray'
 
-import { join } from 'path'
+import path, { isAbsolute, join, relative, resolve } from 'path'
 import { DesktopSettings } from '../desktop_settings'
 import { Session } from 'electron/main'
 import { refresh as refreshTitleMenu } from '../menu'
 import { platform } from 'os'
+import { pathToFileURL } from 'url'
 const log = getLogger('main/mainWindow')
 
 export let window: (BrowserWindow & { hidden?: boolean }) | null = null
@@ -156,6 +166,45 @@ export function init(options: { hidden: boolean }) {
       } else {
         callback(permission_handler(permission))
       }
+    }
+  )
+
+  window.webContents.session.webRequest.onBeforeRequest(
+    { urls: ['file://*'] },
+    (details, callback) => {
+      const pathname = decodeURIComponent(new URL(details.url).pathname)
+
+      if (!isAbsolute(pathname) || pathname.indexOf('..') !== -1) {
+        log.errorWithoutStackTrace('tried to access relative path', pathname)
+        return callback({ cancel: true })
+      }
+      if (pathname.startsWith(getAccountsPath())) {
+        const relativePathInAccounts = pathname.replace(getAccountsPath(), '')
+        const relativePathInAccount = relativePathInAccounts.slice(
+          relativePathInAccounts.indexOf('/', 1) + 1
+        )
+        if (
+          ALLOWED_ACCOUNT_FOLDERS.find(allowedPath =>
+            relativePathInAccount.startsWith(allowedPath)
+          )
+        ) {
+          return callback({ cancel: false })
+        }
+      }
+
+      if (
+        ALLOWED_STATIC_FOLDERS.find(allowedPath =>
+          pathname.startsWith(allowedPath)
+        )
+      ) {
+        return callback({ cancel: false })
+      }
+
+      log.errorWithoutStackTrace(
+        'tried to access path that is not whitelisted',
+        pathname
+      )
+      return callback({ cancel: true })
     }
   )
 }
