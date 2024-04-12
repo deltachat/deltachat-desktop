@@ -8,7 +8,6 @@
 - add window titlebar for html_email- and help window #3770 #3778
 - add quick key `Cmd+W`/`Ctrl+W` to close webxdc-, html_email- and help-window #3770 #3778
 
-
 ### Changed
 - Update translations (2024-04-04) #3746
 - The latest reaction is now shown in the chatlist, if it's newer than the last message #3749
@@ -18,6 +17,7 @@
 - Improve security: restrict file protocol #3769
 - Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.137.3`
 - Change chatlist to use new chatlist changed event from core #3268
+- Refactor QR code reader #3762
 
 ### Fixed
 - fix chat audit dialog was going out of viewport on smaller screens #3736
