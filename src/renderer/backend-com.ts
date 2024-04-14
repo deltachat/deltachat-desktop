@@ -79,6 +79,13 @@ export namespace EffectfulBackendActions {
   export async function deleteChat(accountId: number, chatId: number) {
     await BackendRemote.rpc.deleteChat(accountId, chatId)
     clearNotificationsForChat(accountId, chatId)
+    const lastChatId = await BackendRemote.rpc.getConfig(
+      accountId,
+      'ui.lastchatid'
+    )
+    if (lastChatId !== null && parseInt(lastChatId) === chatId) {
+      await BackendRemote.rpc.setConfig(accountId, 'ui.lastchatid', null)
+    }
     window.__refetchChatlist && window.__refetchChatlist()
   }
 
