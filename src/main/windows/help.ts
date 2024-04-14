@@ -197,7 +197,7 @@ export async function openHelpWindow(locale: string, anchor?: string) {
 
   win.on('focus', () => {
     if (isMac) {
-      // change to webxdc menu
+      // change to help menu
       Menu.setApplicationMenu(makeMenu())
     }
   })
