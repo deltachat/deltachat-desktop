@@ -145,7 +145,7 @@ export async function openHelpWindow(locale: string, anchor?: string) {
           {
             label: tx('close_window'),
             click: () => {
-              window.close()
+              win.close()
             },
             accelerator: isMac ? 'Cmd+w' : 'Ctrl+w',
           },
