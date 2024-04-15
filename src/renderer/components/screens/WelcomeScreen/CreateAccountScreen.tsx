@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
 import ProfileImageSelector from '../../dialogs/EditProfileDialog/ProfileImageSelector'
+import SettingsStoreInstance from '../../../stores/settings'
 import useAlertDialog from '../../../hooks/useAlertDialog'
 import useDialog from '../../../hooks/useDialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
@@ -45,27 +46,49 @@ export default function CreateAccountScreen({
 
   const onConfirm = async () => {
     try {
+      // 1. In this "Instant Onboarding" account creation flow the user is not
+      // asked to manually insert any mail server credentials.
+      //
+      // Internally, the function will call the chatmail instance URL via HTTP
+      // from which it'll receive the address and password as an JSON object.
+      //
+      // After parsing it'll automatically configure the account with the
+      // appropriate keys for login, e.g. `addr` and `mail_pw`
       await BackendRemote.rpc.setConfigFromQr(
         selectedAccountId,
         `dcaccount:${DEFAULT_CHATMAIL_INSTANCE_URL}`
       )
 
-      await BackendRemote.rpc.batchSetConfig(selectedAccountId, {
-        displayname: displayName,
-        selfavatar: profilePicture ? profilePicture : null,
-      })
+      // 2. Additionally we set the `selfavatar` / profile picture and `displayname`
+      // configuration for this account
+      if (profilePicture) {
+        await BackendRemote.rpc.setConfig(
+          selectedAccountId,
+          'selfavatar',
+          profilePicture
+        )
+      }
+      await SettingsStoreInstance.effect.setCoreSetting(
+        'displayname',
+        displayName
+      )
 
+      // 3. Finally we kick-off the actual account creation process by calling `configure`.
+      // This happens inside of this dialog
       openDialog(ConfigureProgressDialog, {
         onSuccess: () => {
-          // Make sure to not ask user later for username in next screen, as
-          // we're setting it here already
+          // 4. Make sure to not ask user later for username in next screen, as
+          // we've set it here already
           window.__askForName = false
+
+          // 5. We redirect the user to the main screen after the account got
+          // successfully created
           window.__changeScreen(Screens.Main)
         },
       })
-    } catch (err: any) {
-      openAlertDialog({
-        message: err.message || err.toString(),
+    } catch (error: any) {
+      await openAlertDialog({
+        message: error.message || error.toString(),
       })
       return
     }
