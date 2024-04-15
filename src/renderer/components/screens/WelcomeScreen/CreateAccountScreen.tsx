@@ -12,14 +12,9 @@ import {
   FooterActionButton,
   FooterActions,
 } from '../../Dialog'
-import SettingsStoreInstance from '../../../stores/settings'
 import { BackendRemote } from '../../../backend-com'
 import { ConfigureProgressDialog } from '../../LoginForm'
 import { Screens } from '../../../ScreenController'
-import {
-  getRandomAlphanumeric,
-  getRandomAlphanumericPunct,
-} from '../../../utils/random'
 
 type Props = {
   selectedAccountId: number
@@ -47,11 +42,10 @@ export default function CreateAccountScreen({
 
   const onConfirm = async () => {
     try {
-      // @TODO: Do we want to do something like this here? Probably not ..
-      const mailDomain = 'nine.testrun.org'
-      const randomUser = getRandomAlphanumeric(9)
-      const randomPassword = getRandomAlphanumericPunct(32)
-      const randomAddress = `${randomUser}@${mailDomain}`
+      await BackendRemote.rpc.setConfigFromQr(
+        selectedAccountId,
+        'dcaccount:https://nine.testrun.org/cgi-bin/newemail.py'
+      )
 
       await BackendRemote.rpc.batchSetConfig(selectedAccountId, {
         displayname: displayName,
@@ -60,8 +54,8 @@ export default function CreateAccountScreen({
 
       openDialog(ConfigureProgressDialog, {
         credentials: {
-          addr: randomAddress,
-          mail_pw: randomPassword,
+          // addr: randomAddress,
+          // mail_pw: randomPassword,
         },
         onSuccess: async () => {
           // Make sure to not ask user later for username in next screen, as
