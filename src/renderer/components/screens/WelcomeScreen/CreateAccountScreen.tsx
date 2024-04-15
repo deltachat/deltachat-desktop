@@ -21,6 +21,9 @@ type Props = {
   onCancel: () => void
 }
 
+const DEFAULT_CHATMAIL_INSTANCE_URL =
+  'https://nine.testrun.org/cgi-bin/newemail.py'
+
 export default function CreateAccountScreen({
   selectedAccountId,
   onCancel,
@@ -44,7 +47,7 @@ export default function CreateAccountScreen({
     try {
       await BackendRemote.rpc.setConfigFromQr(
         selectedAccountId,
-        'dcaccount:https://nine.testrun.org/cgi-bin/newemail.py'
+        `dcaccount:${DEFAULT_CHATMAIL_INSTANCE_URL}`
       )
 
       await BackendRemote.rpc.batchSetConfig(selectedAccountId, {
@@ -53,11 +56,8 @@ export default function CreateAccountScreen({
       })
 
       openDialog(ConfigureProgressDialog, {
-        credentials: {
-          // addr: randomAddress,
-          // mail_pw: randomPassword,
-        },
-        onSuccess: async () => {
+        credentials: {},
+        onSuccess: () => {
           // Make sure to not ask user later for username in next screen, as
           // we're setting it here already
           window.__askForName = false
