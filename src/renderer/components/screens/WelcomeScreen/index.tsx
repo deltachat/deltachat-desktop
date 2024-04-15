@@ -51,7 +51,10 @@ export default function WelcomeScreen(props: Props) {
   return (
     <Dialog fixed onClose={onClose} width={400}>
       {showNextStep ? (
-        <CreateAccountScreen onCancel={onCancelCreateAccount} />
+        <CreateAccountScreen
+          selectedAccountId={props.selectedAccountId}
+          onCancel={onCancelCreateAccount}
+        />
       ) : (
         <OnboardingScreen {...props} onNextStep={onNextStep} />
       )}
