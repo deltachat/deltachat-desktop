@@ -2,6 +2,7 @@ import { useCallback, useContext } from 'react'
 
 import useConfirmationDialog from './useConfirmationDialog'
 import useDialog from '../hooks/useDialog'
+import useSecureJoin from './useSecureJoin'
 import useTranslationFunction from './useTranslationFunction'
 import { BackendRemote } from '../backend-com'
 import { ConfigureProgressDialog } from '../components/LoginForm'
@@ -16,10 +17,11 @@ const DEFAULT_CHATMAIL_INSTANCE_URL =
 
 export default function useInstantOnboarding() {
   const context = useContext(InstantOnboardingContext)
-  const { openDialog } = useDialog()
-  const { screen, changeScreen } = useContext(ScreenContext)
   const openConfirmationDialog = useConfirmationDialog()
   const tx = useTranslationFunction()
+  const { openDialog } = useDialog()
+  const { screen, changeScreen } = useContext(ScreenContext)
+  const { secureJoinContact, secureJoinGroup } = useSecureJoin()
 
   if (!context) {
     throw new Error(
@@ -38,26 +40,31 @@ export default function useInstantOnboarding() {
     async (qrWithUrl?: QrWithUrl) => {
       if (qrWithUrl) {
         const { qr } = qrWithUrl
-        if (qr.kind !== 'account') {
+        if (
+          !['account', 'askVerifyGroup', 'askVerifyContact'].includes(qr.kind)
+        ) {
           throw new Error(
-            'QR code needs to be of kind `account` for instant onboarding flow'
+            'QR code needs to be of kind `account`, `askVerifyGroup` or `askVerifyContact` for instant onboarding flow'
           )
         }
 
-        // Ask user to confirm creating a new account
-        const hasOnlyOneAccount =
-          (await BackendRemote.rpc.getAllAccountIds()).length == 1
-        const message: string = hasOnlyOneAccount
-          ? 'qraccount_ask_create_and_login'
-          : 'qraccount_ask_create_and_login_another'
-        const replacementValue = qr.domain
-        const userConfirmed = await openConfirmationDialog({
-          message: tx(message, replacementValue),
-          confirmLabel: tx('login_title'),
-        })
+        // Ask user to confirm creating a new account if they already have one
+        const numberOfAccounts = (await BackendRemote.rpc.getAllAccountIds())
+          .length
+        if (qr.kind === 'account' && numberOfAccounts > 0) {
+          const message: string =
+            numberOfAccounts === 1
+              ? 'qraccount_ask_create_and_login'
+              : 'qraccount_ask_create_and_login_another'
+          const replacementValue = qr.domain
+          const userConfirmed = await openConfirmationDialog({
+            message: tx(message, replacementValue),
+            confirmLabel: tx('login_title'),
+          })
 
-        if (!userConfirmed) {
-          return
+          if (!userConfirmed) {
+            return
+          }
         }
       }
 
@@ -90,7 +97,9 @@ export default function useInstantOnboarding() {
       profilePicture?: string
     ): Promise<void> => {
       let instanceUrl = `dcaccount:${DEFAULT_CHATMAIL_INSTANCE_URL}`
-      if (welcomeQr) {
+
+      // Use custom chatmail instance if given by QR code
+      if (welcomeQr && welcomeQr.qr.kind === 'account') {
         instanceUrl = welcomeQr.url
       }
 
@@ -110,9 +119,6 @@ export default function useInstantOnboarding() {
           // `configure`. This happens inside of this dialog
           openDialog(ConfigureProgressDialog, {
             onSuccess: async () => {
-              // Clean up after ourselves
-              setWelcomeQr(undefined)
-
               // 3. Additionally we set the `selfavatar` / profile picture
               // and `displayname` configuration for this account
               //
@@ -134,13 +140,24 @@ export default function useInstantOnboarding() {
                 displayName
               )
 
-              // 4. We redirect the user to the main screen after the
+              // 4. If the user created a new account from trying to contact another user
+              // or joining the group we continue with this now
+              if (welcomeQr) {
+                if (welcomeQr.qr.kind === 'askVerifyContact') {
+                  await secureJoinContact(accountId, welcomeQr)
+                } else if (welcomeQr.qr.kind === 'askVerifyGroup') {
+                  await secureJoinGroup(accountId, welcomeQr)
+                }
+              }
+
+              // 5. We redirect the user to the main screen after the
               // account got successfully created.
               //
               // Note: This happens within a timeout to make sure we can
               // finish the process first before unmounting the component
               // which started it
               setTimeout(() => {
+                setWelcomeQr(undefined)
                 setShowInstantOnboarding(false)
                 changeScreen(Screens.Main)
               })
@@ -156,6 +173,8 @@ export default function useInstantOnboarding() {
     [
       changeScreen,
       openDialog,
+      secureJoinContact,
+      secureJoinGroup,
       setShowInstantOnboarding,
       setWelcomeQr,
       welcomeQr,

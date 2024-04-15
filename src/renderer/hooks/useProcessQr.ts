@@ -7,6 +7,7 @@ import useConfirmationDialog from './dialog/useConfirmationDialog'
 import useDialog from './dialog/useDialog'
 import useInstantOnboarding from './useInstantOnboarding'
 import useOpenMailtoLink from './useOpenMailtoLink'
+import useSecureJoin from './useSecureJoin'
 import useTranslationFunction from './useTranslationFunction'
 import { BackendRemote } from '../backend-com'
 import { ReceiveBackupDialog } from '../components/dialogs/SetupMultiDevice'
@@ -23,10 +24,12 @@ export type QrWithUrl = {
 
 const ALLOWED_QR_CODES_ON_WELCOME_SCREEN: T.Qr['kind'][] = [
   'account',
+  'askVerifyContact',
+  'askVerifyGroup',
+  'backup',
   'login',
   'text',
   'url',
-  'backup',
 ]
 
 const log = getLogger('renderer/hooks/useProcessQr')
@@ -45,13 +48,15 @@ async function processQr(accountId: number, url: string): Promise<QrWithUrl> {
 }
 
 export default function useProcessQR() {
-  const openAlertDialog = useAlertDialog()
-  const openConfirmationDialog = useConfirmationDialog()
-  const openMailtoLink = useOpenMailtoLink()
   const tx = useTranslationFunction()
   const { screen } = useContext(ScreenContext)
   const { openDialog } = useDialog()
+  const openAlertDialog = useAlertDialog()
+  const openConfirmationDialog = useConfirmationDialog()
+
+  const openMailtoLink = useOpenMailtoLink()
   const { switchToInstantOnboarding } = useInstantOnboarding()
+  const { secureJoinGroup, secureJoinContact } = useSecureJoin()
 
   const setConfigFromQrCatchingErrorInAlert = useCallback(
     async (accountId: number, qrContent: string) => {
@@ -109,39 +114,53 @@ export default function useProcessQR() {
         return
       }
 
-      if (qr.kind === 'account' || qr.kind === 'login') {
+      // Ask the user if they want to login with the email_address
+      if (qr.kind === 'login') {
+        // @TODO: What actually happens here? Did it ever work before?
+        callback && callback()
+        return
+      }
+
+      // Ask the user if they want to create an account on the given domain
+      if (qr.kind === 'account') {
         await switchToInstantOnboarding(parsed)
         callback && callback()
         return
       }
 
+      // Ask whether to verify the contact; if so, start the protocol with secure join
       if (qr.kind === 'askVerifyContact') {
-        const contact = await BackendRemote.rpc.getContact(
-          accountId,
-          qr.contact_id
-        )
-
-        const userConfirmed = await openConfirmationDialog({
-          message: tx('ask_start_chat_with', contact.address),
-          confirmLabel: tx('ok'),
-        })
-
-        if (userConfirmed) {
-          const chatId = await BackendRemote.rpc.secureJoin(accountId, url)
-          callback && callback(chatId)
-        }
-      } else if (qr.kind === 'askVerifyGroup') {
-        const userConfirmed = await openConfirmationDialog({
-          message: tx('qrscan_ask_join_group', qr.grpname),
-          confirmLabel: tx('ok'),
-        })
-
-        if (userConfirmed) {
-          await BackendRemote.rpc.secureJoin(accountId, url)
+        if (screen === Screens.Welcome) {
+          // Ask user to create a new account with instant onboarding flow before they
+          // can start chatting with the given contact
+          await switchToInstantOnboarding(parsed)
           callback && callback()
+        } else {
+          const chatId = await secureJoinContact(accountId, parsed)
+          if (chatId) {
+            callback && callback(chatId)
+          }
         }
         return
-      } else if (qr.kind === 'fprOk') {
+      }
+
+      // Ask whether to join the group; if so, start the protocol with secure join
+      if (qr.kind === 'askVerifyGroup') {
+        if (screen === Screens.Welcome) {
+          // Ask user to create a new account with instant onboarding flow before they
+          // can join the given group
+          await switchToInstantOnboarding(parsed)
+          callback && callback()
+        } else {
+          const chatId = await secureJoinGroup(accountId, parsed)
+          if (chatId) {
+            callback && callback(chatId)
+          }
+        }
+        return
+      }
+
+      if (qr.kind === 'fprOk') {
         const contact = await BackendRemote.rpc.getContact(
           accountId,
           qr.contact_id
@@ -233,6 +252,8 @@ export default function useProcessQR() {
       openDialog,
       openMailtoLink,
       screen,
+      secureJoinContact,
+      secureJoinGroup,
       setConfigFromQrCatchingErrorInAlert,
       switchToInstantOnboarding,
       tx,

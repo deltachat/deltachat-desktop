@@ -20,7 +20,7 @@ export const InstantOnboardingProvider = ({
   const [showInstantOnboarding, setShowInstantOnboarding] = useState(false)
 
   // Some QR codes invite the user to create a new account on a chatmail
-  // instance or log in to a different one.
+  // instance.
   //
   // Since this QR code can be scanned by the user in literally any situation,
   // also when the user already has an existing account and is logged in, we
