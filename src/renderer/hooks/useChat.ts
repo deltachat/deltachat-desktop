@@ -2,9 +2,9 @@ import { useContext } from 'react'
 
 import { ChatContext } from '../contexts/ChatContext'
 
-import type { ChatValue } from '../contexts/ChatContext'
+import type { ChatContextValue } from '../contexts/ChatContext'
 
-export default function useChat(): ChatValue {
+export default function useChat(): ChatContextValue {
   const context = useContext(ChatContext)
 
   if (!context) {
