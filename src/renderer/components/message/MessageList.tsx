@@ -8,8 +8,9 @@ import React, {
   useMemo,
 } from 'react'
 import classNames from 'classnames'
-import { C, T } from '@deltachat/jsonrpc-client'
 import moment from 'moment'
+import { C } from '@deltachat/jsonrpc-client'
+import { debounce } from 'debounce'
 
 import { MessageWrapper } from './MessageWrapper'
 import { getLogger } from '../../../shared/logger'
@@ -20,11 +21,13 @@ import { debouncedUpdateBadgeCounter } from '../../system-integration/badge-coun
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
+import useHasChanged from '../../hooks/useHasChanged'
 import { useReactionsBar } from '../ReactionsBar'
 import EmptyChatMessage from './EmptyChatMessage'
-import { debounce } from 'debounce'
 
 const log = getLogger('render/components/message/MessageList')
+
+import type { T } from '@deltachat/jsonrpc-client'
 
 type ChatTypes =
   | C.DC_CHAT_TYPE_SINGLE
@@ -544,12 +547,13 @@ export const MessageListInner = React.memo(
 
       onScroll(...args)
     }
-    const [prevChatStore, setPrevChatStore] = useState(chatStore)
+    const hasChatChanged = useHasChanged(chat)
     const [switchedChatAt, setSwitchedChatAt] = useState(0)
-    if (chatStore !== prevChatStore) {
-      setPrevChatStore(chatStore)
-      setSwitchedChatAt(Date.now())
-    }
+    useEffect(() => {
+      if (hasChatChanged) {
+        setSwitchedChatAt(Date.now())
+      }
+    }, [hasChatChanged])
 
     if (!loaded) {
       return (
