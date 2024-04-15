@@ -25,7 +25,7 @@ type Props = {
 const DEFAULT_CHATMAIL_INSTANCE_URL =
   'https://nine.testrun.org/cgi-bin/newemail.py'
 
-export default function CreateAccountScreen({
+export default function InstantAccountScreen({
   selectedAccountId,
   onCancel,
 }: Props) {

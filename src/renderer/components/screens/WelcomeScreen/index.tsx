@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
-import CreateAccountScreen from './CreateAccountScreen'
 import Dialog from '../../Dialog'
+import InstantAccountScreen from './InstantAccountScreen'
 import OnboardingScreen from './OnboardingScreen'
 import useProcessQr from '../../../hooks/useProcessQr'
 
@@ -13,7 +13,7 @@ type Props = {
   onExitWelcomeScreen: () => Promise<void>
 }
 
-export default function WelcomeScreen(props: Props) {
+export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
   const processQr = useProcessQr()
   const [showNextStep, setShowNextStep] = useState(false)
 
@@ -36,27 +36,26 @@ export default function WelcomeScreen(props: Props) {
       if (!window.__welcome_qr) {
         return
       }
-      await processQr(
-        props.selectedAccountId,
-        window.__welcome_qr,
-        undefined,
-        true
-      )
+      await processQr(selectedAccountId, window.__welcome_qr, undefined, true)
       window.__welcome_qr = undefined
     }
 
     checkQRCode()
-  }, [props.selectedAccountId, processQr])
+  }, [selectedAccountId, processQr])
 
   return (
     <Dialog fixed onClose={onClose} width={400}>
       {showNextStep ? (
-        <CreateAccountScreen
-          selectedAccountId={props.selectedAccountId}
+        <InstantAccountScreen
+          selectedAccountId={selectedAccountId}
           onCancel={onCancelCreateAccount}
         />
       ) : (
-        <OnboardingScreen {...props} onNextStep={onNextStep} />
+        <OnboardingScreen
+          selectedAccountId={selectedAccountId}
+          onNextStep={onNextStep}
+          {...props}
+        />
       )}
     </Dialog>
   )
