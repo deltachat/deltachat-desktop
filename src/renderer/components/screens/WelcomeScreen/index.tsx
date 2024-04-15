@@ -17,15 +17,17 @@ import styles from './styles.module.scss'
 
 const log = getLogger('renderer/components/AccountsScreen')
 
+type Props = {
+  selectedAccountId: number
+  onUnSelectAccount: () => Promise<void>
+  onExitWelcomeScreen: () => Promise<void>
+}
+
 export default function WelcomeScreen({
   selectedAccountId,
   onUnSelectAccount,
   onExitWelcomeScreen,
-}: {
-  selectedAccountId: number
-  onUnSelectAccount: () => Promise<void>
-  onExitWelcomeScreen: () => Promise<void>
-}) {
+}: Props) {
   const tx = useTranslationFunction()
   const { openDialog, closeDialog } = useDialog()
   const processQr = useProcessQr()
