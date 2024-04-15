@@ -15,11 +15,10 @@ import ChatList from '../chat/ChatList'
 import { Avatar } from '../Avatar'
 import ConnectivityToast from '../ConnectivityToast'
 import MailingListProfile from '../dialogs/MessageListProfile'
-import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
+import { useSettingsStore } from '../../stores/settings'
 import { Type } from '../../backend-com'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import SearchInput from '../SearchInput'
-import EditProfileDialog from '../dialogs/EditProfileDialog'
 import MessageListView from '../MessageListView'
 import useChat from '../../hooks/chat/useChat'
 import useDialog from '../../hooks/dialog/useDialog'
@@ -45,7 +44,6 @@ export default function MainScreen({ accountId }: Props) {
   useSelectLastChat(accountId)
 
   const tx = useTranslationFunction()
-  const { openDialog } = useDialog()
 
   const [queryStr, setQueryStr] = useState('')
   const [queryChatId, setQueryChatId] = useState<null | number>(null)
@@ -107,23 +105,6 @@ export default function MainScreen({ accountId }: Props) {
   }, [archivedChatsSelected, chat?.archived])
 
   window.__chatlistSetSearch = searchChats
-
-  useEffect(() => {
-    SettingsStoreInstance.effect.load().then(() => {
-      // Make sure it uses new version of settings store instance
-      const settingsStore = SettingsStoreInstance.state
-
-      // `askForName` flag is set when creating a new account via QR Code (for
-      // example chatmail invite code with DCACCOUNT scheme)
-      if (settingsStore && window.__askForName) {
-        window.__askForName = false
-        openDialog(EditProfileDialog, {
-          settingsStore,
-          firstSetup: true,
-        })
-      }
-    })
-  }, [openDialog, tx])
 
   const searchRef = useRef<HTMLInputElement>(null)
 
