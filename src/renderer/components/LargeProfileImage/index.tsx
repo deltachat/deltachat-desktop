@@ -6,7 +6,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import styles from './styles.module.scss'
 
 type Props = {
-  color: string
+  color?: string
   imageUrl?: string
   initials: string
 }

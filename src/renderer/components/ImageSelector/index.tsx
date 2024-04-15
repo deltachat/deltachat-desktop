@@ -10,7 +10,7 @@ import { runtime } from '../../runtime'
 import styles from './styles.module.scss'
 
 type Props = {
-  color: string
+  color?: string
   filePath?: string
   initials: string
   lastUsedSlot: LastUsedSlot
