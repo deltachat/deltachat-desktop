@@ -1,133 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import { Intent } from '@blueprintjs/core'
-import { dirname } from 'path'
 import classNames from 'classnames'
 
-import { getLogger } from '../../../../shared/logger'
-import { runtime } from '../../../runtime'
-import { DeltaProgressBar } from '../../Login-Styles'
-import { Screens, selectedAccountId } from '../../../ScreenController'
-import { BackendRemote, EffectfulBackendActions } from '../../../backend-com'
-import Dialog, {
-  DialogBody,
-  DialogContent,
-  DialogHeader,
-  DialogWithHeader,
-} from '../../Dialog'
+import AlertDialog from '../../dialogs/AlertDialog'
+import Button from '../../Button'
+import Dialog, { DialogBody, DialogHeader } from '../../Dialog'
+import ImportButton from './ImportButton'
+import ImportQrCode from '../../dialogs/ImportQrCode'
 import useDialog from '../../../hooks/dialog/useDialog'
 import useProcessQr from '../../../hooks/useProcessQr'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import ImportQrCode from '../../dialogs/ImportQrCode'
-import AlertDialog from '../../dialogs/AlertDialog'
-import {
-  LastUsedSlot,
-  rememberLastUsedPath,
-} from '../../../utils/lastUsedPaths'
-import Button from '../../Button'
+import { BackendRemote, EffectfulBackendActions } from '../../../backend-com'
+import { Screens } from '../../../ScreenController'
+import { getLogger } from '../../../../shared/logger'
 
 import styles from './styles.module.scss'
 
-import type { DcEventType } from '@deltachat/jsonrpc-client'
-import type { DialogProps } from '../../../contexts/DialogContext'
-
-type Props = {
-  backupFile: string
-}
-
 const log = getLogger('renderer/components/AccountsScreen')
-
-function ImportBackupProgressDialog({
-  onClose,
-  backupFile,
-}: Props & DialogProps) {
-  const [importProgress, setImportProgress] = useState(0.0)
-  const [error, setError] = useState<string | null>(null)
-
-  const onImexProgress = ({ progress }: DcEventType<'ImexProgress'>) => {
-    setImportProgress(progress)
-  }
-
-  const accountId = selectedAccountId()
-
-  useEffect(() => {
-    ;(async () => {
-      try {
-        log.debug(`Starting backup import of ${backupFile}`)
-        await BackendRemote.rpc.importBackup(accountId, backupFile, null)
-        await BackendRemote.rpc.setConfig(
-          accountId,
-          'verified_one_on_one_chats',
-          '1'
-        )
-      } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message)
-        }
-        return
-      }
-      onClose()
-      window.__selectAccount(accountId)
-    })()
-
-    const emitter = BackendRemote.getContextEvents(accountId)
-    emitter.on('ImexProgress', onImexProgress)
-    return () => {
-      emitter.off('ImexProgress', onImexProgress)
-    }
-  }, [backupFile, onClose, accountId])
-
-  const tx = useTranslationFunction()
-  return (
-    <DialogWithHeader onClose={onClose} title={tx('import_backup_title')}>
-      <DialogBody>
-        <DialogContent>
-          {error && (
-            <p>
-              {tx('error')}: {error}
-            </p>
-          )}
-          <DeltaProgressBar
-            progress={importProgress}
-            intent={!error ? Intent.SUCCESS : Intent.DANGER}
-          />
-        </DialogContent>
-      </DialogBody>
-    </DialogWithHeader>
-  )
-}
-
-function ImportButton() {
-  const tx = useTranslationFunction()
-  const { openDialog } = useDialog()
-
-  async function onClickImportBackup() {
-    const { defaultPath, setLastPath } = rememberLastUsedPath(
-      LastUsedSlot.Backup
-    )
-    const file = await runtime.showOpenFileDialog({
-      title: tx('import_backup_title'),
-      properties: ['openFile'],
-      filters: [{ name: '.tar or .bak', extensions: ['tar', 'bak'] }],
-      defaultPath,
-    })
-    if (file) {
-      openDialog(ImportBackupProgressDialog, {
-        backupFile: file,
-      })
-      setLastPath(dirname(file))
-    }
-  }
-
-  return (
-    <Button
-      className={styles.welcomeButton}
-      type='secondary'
-      onClick={onClickImportBackup}
-    >
-      {tx('import_backup_title')}
-    </Button>
-  )
-}
 
 export default function WelcomeScreen({
   selectedAccountId,
