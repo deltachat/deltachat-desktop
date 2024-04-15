@@ -1,9 +1,11 @@
 import { useCallback, useContext } from 'react'
 
-import { InstantOnboardingContext } from '../contexts/InstantOnboardingContext'
+import useConfirmationDialog from './useConfirmationDialog'
 import useDialog from '../hooks/useDialog'
+import useTranslationFunction from './useTranslationFunction'
 import { BackendRemote } from '../backend-com'
 import { ConfigureProgressDialog } from '../components/LoginForm'
+import { InstantOnboardingContext } from '../contexts/InstantOnboardingContext'
 import { ScreenContext } from '../contexts/ScreenContext'
 import { Screens } from '../ScreenController'
 
@@ -16,6 +18,8 @@ export default function useInstantOnboarding() {
   const context = useContext(InstantOnboardingContext)
   const { openDialog } = useDialog()
   const { screen, changeScreen } = useContext(ScreenContext)
+  const openConfirmationDialog = useConfirmationDialog()
+  const tx = useTranslationFunction()
 
   if (!context) {
     throw new Error(
@@ -33,15 +37,31 @@ export default function useInstantOnboarding() {
   const switchToInstantOnboarding = useCallback(
     async (qrWithUrl?: QrWithUrl) => {
       if (qrWithUrl) {
-        if (qrWithUrl.qr.kind === 'account') {
-          setWelcomeQr(qrWithUrl)
-        } else {
+        const { qr } = qrWithUrl
+        if (qr.kind !== 'account') {
           throw new Error(
             'QR code needs to be of kind `account` for instant onboarding flow'
           )
         }
+
+        // Ask user to confirm creating a new account
+        const hasOnlyOneAccount =
+          (await BackendRemote.rpc.getAllAccountIds()).length == 1
+        const message: string = hasOnlyOneAccount
+          ? 'qraccount_ask_create_and_login'
+          : 'qraccount_ask_create_and_login_another'
+        const replacementValue = qr.domain
+        const userConfirmed = await openConfirmationDialog({
+          message: tx(message, replacementValue),
+          confirmLabel: tx('login_title'),
+        })
+
+        if (!userConfirmed) {
+          return
+        }
       }
 
+      setWelcomeQr(qrWithUrl)
       setShowInstantOnboarding(true)
 
       setTimeout(async () => {
@@ -49,12 +69,18 @@ export default function useInstantOnboarding() {
           // Log out first by switching to an (temporary) blank account
           const blankAccount = await BackendRemote.rpc.addAccount()
           window.__selectAccount(blankAccount)
+          changeScreen(Screens.Welcome)
         }
-
-        changeScreen(Screens.Welcome)
       })
     },
-    [changeScreen, screen, setShowInstantOnboarding, setWelcomeQr]
+    [
+      changeScreen,
+      openConfirmationDialog,
+      screen,
+      setShowInstantOnboarding,
+      setWelcomeQr,
+      tx,
+    ]
   )
 
   const createInstantAccount = useCallback(
