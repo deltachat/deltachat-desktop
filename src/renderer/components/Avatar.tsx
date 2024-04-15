@@ -20,7 +20,7 @@ export function QRAvatar() {
 export function avatarInitial(name: string, addr?: string) {
   const nameOrAddr = name || addr
   const codepoint = nameOrAddr && nameOrAddr.codePointAt(0)
-  return codepoint ? String.fromCodePoint(codepoint).toUpperCase() : '#'
+  return codepoint ? String.fromCodePoint(codepoint).toUpperCase() : ''
 }
 
 type htmlDivProps = React.HTMLAttributes<HTMLDivElement>

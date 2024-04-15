@@ -57,30 +57,32 @@ export default function ImageSelector({
   const handleRemove = () => onChange('')
 
   return (
-    <div className={styles.imageSelector}>
-      <LargeProfileImage
-        color={color}
-        imageUrl={imageUrl}
-        initials={initials}
-      />
-      {!imageUrl && (
-        <button
-          title={selectLabel ? selectLabel : tx('profile_image_select')}
-          className={styles.imageSelectorButton}
-          onClick={handleSelect}
-        >
-          <Icon className={styles.imageSelectorIcon} icon='image' />
-        </button>
-      )}
-      {imageUrl && (
-        <button
-          title={removeLabel ? removeLabel : tx('profile_image_delete')}
-          className={styles.imageSelectorButton}
-          onClick={handleRemove}
-        >
-          <Icon className={styles.imageSelectorIcon} icon='cross' />
-        </button>
-      )}
+    <div className={styles.imageSelectorContainer}>
+      <div className={styles.imageSelector}>
+        <LargeProfileImage
+          color={color}
+          imageUrl={imageUrl}
+          initials={initials}
+        />
+        {!imageUrl && (
+          <button
+            title={selectLabel ? selectLabel : tx('profile_image_select')}
+            className={styles.imageSelectorButton}
+            onClick={handleSelect}
+          >
+            <Icon className={styles.imageSelectorIcon} icon='image' />
+          </button>
+        )}
+        {imageUrl && (
+          <button
+            title={removeLabel ? removeLabel : tx('profile_image_delete')}
+            className={styles.imageSelectorButton}
+            onClick={handleRemove}
+          >
+            <Icon className={styles.imageSelectorIcon} icon='cross' />
+          </button>
+        )}
+      </div>
     </div>
   )
 }
