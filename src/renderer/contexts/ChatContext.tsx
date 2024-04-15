@@ -52,7 +52,7 @@ export const ChatProvider = ({
         throw new Error('can not select chat when no `accountId` is given')
       }
 
-      // Jump to last message if user clicked message twice
+      // Jump to last message if user clicked chat twice
       // @TODO: We probably want this to be part of the UI logic instead
       if (nextChatId === chatId) {
         window.__internal_jump_to_message?.(undefined, false, undefined)
