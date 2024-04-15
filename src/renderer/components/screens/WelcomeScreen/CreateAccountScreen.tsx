@@ -56,7 +56,6 @@ export default function CreateAccountScreen({
       })
 
       openDialog(ConfigureProgressDialog, {
-        credentials: {},
         onSuccess: () => {
           // Make sure to not ask user later for username in next screen, as
           // we're setting it here already

@@ -365,12 +365,12 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
 }
 
 export function ConfigureProgressDialog({
-  credentials,
+  credentials = {},
   onSuccess,
   onUserCancellation,
   ...dialogProps
 }: {
-  credentials: Partial<Credentials>
+  credentials?: Partial<Credentials>
   onSuccess?: () => void
   onUserCancellation?: () => void
 } & DialogProps) {
