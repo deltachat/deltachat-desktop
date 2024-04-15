@@ -19,7 +19,7 @@ export type SelectChat = (chatId: number) => Promise<void>
 
 export type UnselectChat = () => void
 
-export type ChatValue = {
+export type ChatContextValue = {
   activeView: ChatView
   chat?: T.FullChat
   chatId?: number
@@ -32,7 +32,7 @@ type Props = {
   accountId?: number
 }
 
-export const ChatContext = React.createContext<ChatValue | null>(null)
+export const ChatContext = React.createContext<ChatContextValue | null>(null)
 
 export const ChatProvider = ({
   children,
@@ -151,7 +151,7 @@ export const ChatProvider = ({
     }
   }, [accountId, chat, chatId, refreshChat])
 
-  const value: ChatValue = {
+  const value: ChatContextValue = {
     activeView,
     chat,
     chatId,
