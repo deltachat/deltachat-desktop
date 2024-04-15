@@ -59,26 +59,32 @@ export default function CreateAccountScreen({
         `dcaccount:${DEFAULT_CHATMAIL_INSTANCE_URL}`
       )
 
-      // 2. Additionally we set the `selfavatar` / profile picture and `displayname`
-      // configuration for this account
-      if (profilePicture) {
-        await BackendRemote.rpc.setConfig(
-          selectedAccountId,
-          'selfavatar',
-          profilePicture
-        )
-      }
-      await SettingsStoreInstance.effect.setCoreSetting(
-        'displayname',
-        displayName
-      )
-
-      // 3. Finally we kick-off the actual account creation process by calling `configure`.
+      // 2. Kick-off the actual account creation process by calling `configure`.
       // This happens inside of this dialog
       openDialog(ConfigureProgressDialog, {
-        onSuccess: () => {
+        onSuccess: async () => {
+          // 3. Additionally we set the `selfavatar` / profile picture and `displayname`
+          // configuration for this account
+          //
+          // Note: We need to set these profile settings _after_ calling `configure` to
+          // make the UI aware of them already.
+          //
+          // @TODO: Not sure why it doesn't work otherwise, the configuration seems to
+          // be set correctly in both cases?
+          if (profilePicture) {
+            await BackendRemote.rpc.setConfig(
+              selectedAccountId,
+              'selfavatar',
+              profilePicture
+            )
+          }
+          await SettingsStoreInstance.effect.setCoreSetting(
+            'displayname',
+            displayName
+          )
+
           // 4. Make sure to not ask user later for username in next screen, as
-          // we've set it here already
+          // we've set it already
           window.__askForName = false
 
           // 5. We redirect the user to the main screen after the account got
