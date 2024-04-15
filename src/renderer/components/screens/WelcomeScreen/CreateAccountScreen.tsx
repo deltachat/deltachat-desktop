@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 
 import ProfileImageSelector from '../../dialogs/EditProfileDialog/ProfileImageSelector'
+import useAlertDialog from '../../../hooks/useAlertDialog'
+import useDialog from '../../../hooks/useDialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { DeltaInput } from '../../Login-Styles'
 import {
@@ -10,8 +12,14 @@ import {
   FooterActionButton,
   FooterActions,
 } from '../../Dialog'
-import { BackendRemote } from '../../../backend-com'
 import SettingsStoreInstance from '../../../stores/settings'
+import { BackendRemote } from '../../../backend-com'
+import { ConfigureProgressDialog } from '../../LoginForm'
+import { Screens } from '../../../ScreenController'
+import {
+  getRandomAlphanumeric,
+  getRandomAlphanumericPunct,
+} from '../../../utils/random'
 
 type Props = {
   selectedAccountId: number
@@ -23,6 +31,8 @@ export default function CreateAccountScreen({
   onCancel,
 }: Props) {
   const tx = useTranslationFunction()
+  const openAlertDialog = useAlertDialog()
+  const { openDialog } = useDialog()
 
   const [displayName, setDisplayName] = useState('')
   const [profilePicture, setProfilePicture] = useState<string | undefined>()
@@ -36,12 +46,36 @@ export default function CreateAccountScreen({
   }
 
   const onConfirm = async () => {
-    await BackendRemote.rpc.setConfig(
-      selectedAccountId,
-      'selfavatar',
-      profilePicture ? profilePicture : null
-    )
-    SettingsStoreInstance.effect.setCoreSetting('displayname', displayName)
+    try {
+      // @TODO: Do we want to do something like this here? Probably not ..
+      const mailDomain = 'nine.testrun.org'
+      const randomUser = getRandomAlphanumeric(9)
+      const randomPassword = getRandomAlphanumericPunct(32)
+      const randomAddress = `${randomUser}@${mailDomain}`
+
+      await BackendRemote.rpc.batchSetConfig(selectedAccountId, {
+        displayname: displayName,
+        selfavatar: profilePicture ? profilePicture : null,
+      })
+
+      openDialog(ConfigureProgressDialog, {
+        credentials: {
+          addr: randomAddress,
+          mail_pw: randomPassword,
+        },
+        onSuccess: async () => {
+          // Make sure to not ask user later for username in next screen, as
+          // we're setting it here already
+          window.__askForName = false
+          window.__changeScreen(Screens.Main)
+        },
+      })
+    } catch (err: any) {
+      openAlertDialog({
+        message: err.message || err.toString(),
+      })
+      return
+    }
   }
 
   return (
