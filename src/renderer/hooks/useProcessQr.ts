@@ -5,18 +5,44 @@ import QrErrorMessage from '../components/QrErrorMessage'
 import useAlertDialog from './dialog/useAlertDialog'
 import useConfirmationDialog from './dialog/useConfirmationDialog'
 import useDialog from './dialog/useDialog'
+import useInstantOnboarding from './useInstantOnboarding'
 import useOpenMailtoLink from './useOpenMailtoLink'
 import useTranslationFunction from './useTranslationFunction'
 import { BackendRemote } from '../backend-com'
-import { ScreenContext } from '../contexts/ScreenContext'
-import { ConfigureProgressDialog } from '../components/LoginForm'
 import { ReceiveBackupDialog } from '../components/dialogs/SetupMultiDevice'
+import { ScreenContext } from '../contexts/ScreenContext'
 import { Screens } from '../ScreenController'
 import { getLogger } from '../../shared/logger'
 
 import type { T } from '@deltachat/jsonrpc-client'
 
-const log = getLogger('renderer/hooks/useQR')
+export type QrWithUrl = {
+  qr: T.Qr
+  url: string
+}
+
+const ALLOWED_QR_CODES_ON_WELCOME_SCREEN: T.Qr['kind'][] = [
+  'account',
+  'login',
+  'text',
+  'url',
+  'backup',
+]
+
+const log = getLogger('renderer/hooks/useProcessQr')
+
+async function processQr(accountId: number, url: string): Promise<QrWithUrl> {
+  const qr = await BackendRemote.rpc.checkQr(accountId, url)
+
+  if (!qr) {
+    throw new Error()
+  }
+
+  return {
+    qr,
+    url,
+  }
+}
 
 export default function useProcessQR() {
   const openAlertDialog = useAlertDialog()
@@ -25,17 +51,15 @@ export default function useProcessQR() {
   const tx = useTranslationFunction()
   const { screen } = useContext(ScreenContext)
   const { openDialog } = useDialog()
+  const { switchToInstantOnboarding } = useInstantOnboarding()
 
   const setConfigFromQrCatchingErrorInAlert = useCallback(
-    async (qrContent: string) => {
+    async (accountId: number, qrContent: string) => {
       try {
-        if (window.__selectedAccountId === undefined) {
+        if (accountId === undefined) {
           throw new Error('error: no context selected')
         }
-        await BackendRemote.rpc.setConfigFromQr(
-          window.__selectedAccountId,
-          qrContent
-        )
+        await BackendRemote.rpc.setConfigFromQr(accountId, qrContent)
       } catch (error) {
         if (error instanceof Error) {
           openAlertDialog({
@@ -51,39 +75,31 @@ export default function useProcessQR() {
     async (
       accountId: number,
       url: string,
-      callback?: (chatId?: number) => void,
-      skipLoginConfirmation?: boolean
+      callback?: (chatId?: number) => void
     ) => {
       if (url.toLowerCase().startsWith('mailto:')) {
         await openMailtoLink(accountId, url, callback)
         return
       }
 
-      let checkQr = null
+      let parsed: QrWithUrl | null = null
       try {
-        checkQr = await BackendRemote.rpc.checkQr(accountId, url)
+        parsed = await processQr(accountId, url)
       } catch (err) {
         log.error(err)
-      }
 
-      if (checkQr === null) {
         await openAlertDialog({
           message: QrErrorMessage({ url }),
         })
+
         callback && callback()
         return
       }
 
-      const allowedQrCodesOnWelcomeScreen: T.Qr['kind'][] = [
-        'account',
-        'login',
-        'text',
-        'url',
-        'backup',
-      ]
+      const { qr } = parsed
 
       if (
-        !allowedQrCodesOnWelcomeScreen.includes(checkQr.kind) &&
+        !ALLOWED_QR_CODES_ON_WELCOME_SCREEN.includes(qr.kind) &&
         screen !== Screens.Main
       ) {
         await openAlertDialog({
@@ -93,77 +109,16 @@ export default function useProcessQR() {
         return
       }
 
-      if (checkQr.kind === 'account' || checkQr.kind === 'login') {
-        if (!skipLoginConfirmation) {
-          // ask if user wants it
-          const is_singular_term =
-            (await BackendRemote.rpc.getAllAccountIds()).length == 1
-
-          const message: string =
-            checkQr.kind === 'account'
-              ? is_singular_term
-                ? 'qraccount_ask_create_and_login'
-                : 'qraccount_ask_create_and_login_another'
-              : checkQr.kind === 'login'
-                ? is_singular_term
-                  ? 'qrlogin_ask_login'
-                  : 'qrlogin_ask_login_another'
-                : '?'
-
-          const replacementValue =
-            checkQr.kind === 'account'
-              ? checkQr.domain
-              : checkQr.kind === 'login'
-                ? checkQr.address
-                : ''
-
-          const userConfirmed = await openConfirmationDialog({
-            message: tx(message, replacementValue),
-            confirmLabel: tx('login_title'),
-          })
-
-          if (!userConfirmed) {
-            return
-          }
-        }
-
-        if (screen !== Screens.Welcome) {
-          // log out first (not needed anymore as selectAccount does this automatically now)
-          window.__selectAccount(await BackendRemote.rpc.addAccount())
-
-          callback && callback()
-          // define callback to call this function again, skipping the question
-          window.__welcome_qr = url
-        } else {
-          try {
-            if (window.__selectedAccountId === undefined) {
-              throw new Error('error: no context selected')
-            }
-            await BackendRemote.rpc.setConfigFromQr(
-              window.__selectedAccountId,
-              url
-            )
-            openDialog(ConfigureProgressDialog, {
-              credentials: {},
-              onSuccess: () => {
-                window.__askForName = true
-                window.__changeScreen(Screens.Main)
-                callback && callback()
-              },
-            })
-          } catch (err: any) {
-            openAlertDialog({
-              message: err.message || err.toString(),
-            })
-            return
-          }
-        }
-
+      if (qr.kind === 'account' || qr.kind === 'login') {
+        await switchToInstantOnboarding(parsed)
+        callback && callback()
         return
-      } else if (checkQr.kind === 'askVerifyContact') {
+      }
+
+      if (qr.kind === 'askVerifyContact') {
         const contact = await BackendRemote.rpc.getContact(
           accountId,
-          checkQr.contact_id
+          qr.contact_id
         )
 
         const userConfirmed = await openConfirmationDialog({
@@ -175,9 +130,9 @@ export default function useProcessQR() {
           const chatId = await BackendRemote.rpc.secureJoin(accountId, url)
           callback && callback(chatId)
         }
-      } else if (checkQr.kind === 'askVerifyGroup') {
+      } else if (qr.kind === 'askVerifyGroup') {
         const userConfirmed = await openConfirmationDialog({
-          message: tx('qrscan_ask_join_group', checkQr.grpname),
+          message: tx('qrscan_ask_join_group', qr.grpname),
           confirmLabel: tx('ok'),
         })
 
@@ -186,10 +141,10 @@ export default function useProcessQR() {
           callback && callback()
         }
         return
-      } else if (checkQr.kind === 'fprOk') {
+      } else if (qr.kind === 'fprOk') {
         const contact = await BackendRemote.rpc.getContact(
           accountId,
-          checkQr.contact_id
+          qr.contact_id
         )
 
         const userConfirmed = await openConfirmationDialog({
@@ -200,7 +155,7 @@ export default function useProcessQR() {
         if (userConfirmed) {
           callback && callback()
         }
-      } else if (checkQr.kind === 'withdrawVerifyContact') {
+      } else if (qr.kind === 'withdrawVerifyContact') {
         const userConfirmed = await openConfirmationDialog({
           message: tx('withdraw_verifycontact_explain'),
           header: tx('withdraw_qr_code'),
@@ -208,11 +163,11 @@ export default function useProcessQR() {
         })
 
         if (userConfirmed) {
-          await setConfigFromQrCatchingErrorInAlert(url)
+          await setConfigFromQrCatchingErrorInAlert(accountId, url)
         }
 
         callback && callback()
-      } else if (checkQr.kind === 'reviveVerifyContact') {
+      } else if (qr.kind === 'reviveVerifyContact') {
         const userConfirmed = await openConfirmationDialog({
           message: tx('revive_verifycontact_explain'),
           header: tx('revive_qr_code'),
@@ -220,35 +175,35 @@ export default function useProcessQR() {
         })
 
         if (userConfirmed) {
-          await setConfigFromQrCatchingErrorInAlert(url)
+          await setConfigFromQrCatchingErrorInAlert(accountId, url)
         }
 
         callback && callback()
-      } else if (checkQr.kind === 'withdrawVerifyGroup') {
+      } else if (qr.kind === 'withdrawVerifyGroup') {
         const userConfirmed = await openConfirmationDialog({
-          message: tx('withdraw_verifygroup_explain', checkQr.grpname),
+          message: tx('withdraw_verifygroup_explain', qr.grpname),
           header: tx('withdraw_qr_code'),
           confirmLabel: tx('ok'),
         })
 
         if (userConfirmed) {
-          await setConfigFromQrCatchingErrorInAlert(url)
+          await setConfigFromQrCatchingErrorInAlert(accountId, url)
         }
 
         callback && callback()
-      } else if (checkQr.kind === 'reviveVerifyGroup') {
+      } else if (qr.kind === 'reviveVerifyGroup') {
         const userConfirmed = await openConfirmationDialog({
-          message: tx('revive_verifygroup_explain', checkQr.grpname),
+          message: tx('revive_verifygroup_explain', qr.grpname),
           header: tx('revive_qr_code'),
           confirmLabel: tx('ok'),
         })
 
         if (userConfirmed) {
-          await setConfigFromQrCatchingErrorInAlert(url)
+          await setConfigFromQrCatchingErrorInAlert(accountId, url)
         }
 
         callback && callback()
-      } else if (checkQr.kind === 'backup') {
+      } else if (qr.kind === 'backup') {
         if (screen === Screens.Main) {
           await openAlertDialog({
             message: tx('Please logout first'),
@@ -264,7 +219,7 @@ export default function useProcessQR() {
       } else {
         openDialog(CopyContentAlertDialog, {
           message:
-            checkQr.kind === 'url'
+            qr.kind === 'url'
               ? tx('qrscan_contains_url', url)
               : tx('qrscan_contains_text', url),
           content: url,
@@ -279,6 +234,7 @@ export default function useProcessQR() {
       openMailtoLink,
       screen,
       setConfigFromQrCatchingErrorInAlert,
+      switchToInstantOnboarding,
       tx,
     ]
   )
