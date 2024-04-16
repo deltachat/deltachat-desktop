@@ -8,7 +8,12 @@ import { platform } from 'os'
 import { appWindowTitle } from '../../shared/constants'
 import { tx } from '../load-translations'
 import { window as main_window } from '../windows/main'
-import { getAppMenu, getFileMenu, refresh as refreshTitleMenu } from '../menu'
+import {
+  getAppMenu,
+  getFileMenu,
+  getHelpMenu,
+  refresh as refreshTitleMenu,
+} from '../menu'
 
 const log = getLogger('main/help')
 const app = rawApp as ExtendedAppMainProcess
@@ -163,6 +168,7 @@ export async function openHelpWindow(locale: string, anchor?: string) {
           { role: 'togglefullscreen' },
         ],
       },
+      getHelpMenu(isMac),
     ])
   }
 
