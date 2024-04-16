@@ -21,7 +21,12 @@ import { getDCJsonrpcClient } from '../ipc'
 import { getLogger } from '../../shared/logger'
 import { clipboard } from 'electron/common'
 import * as mainWindow from './main'
-import { getAppMenu, getFileMenu, refresh as refreshTitleMenu } from '../menu'
+import {
+  getAppMenu,
+  getFileMenu,
+  getHelpMenu,
+  refresh as refreshTitleMenu,
+} from '../menu'
 
 const log = getLogger('html_email')
 
@@ -172,6 +177,7 @@ export function openHtmlEmailWindow(
           { role: 'togglefullscreen' },
         ],
       },
+      getHelpMenu(isMac),
     ])
   }
 

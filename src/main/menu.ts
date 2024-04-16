@@ -249,6 +249,62 @@ export function getEditMenu(): Electron.MenuItemConstructorOptions {
   }
 }
 
+export function getHelpMenu(
+  isMac: boolean
+): Electron.MenuItemConstructorOptions {
+  return {
+    label: tx('global_menu_help_desktop'),
+    role: 'help',
+    submenu: [
+      {
+        label: tx('menu_help'),
+        click: () => {
+          mainWindow.send('showHelpDialog')
+        },
+        accelerator: 'F1',
+      },
+      {
+        label: tx('keybindings'),
+        click: () => {
+          mainWindow.window?.show()
+          mainWindow.window?.focus()
+          mainWindow.send('showKeybindingsDialog')
+        },
+        accelerator: isMac ? 'Cmd+/' : 'Ctrl+/',
+      },
+      {
+        label: tx('global_menu_help_learn_desktop'),
+        click: () => {
+          shell.openExternal(homePageUrl)
+        },
+      },
+      {
+        label: tx('global_menu_help_contribute_desktop'),
+        click: () => {
+          shell.openExternal(gitHubUrl)
+        },
+      },
+      {
+        type: 'separator',
+      },
+      {
+        label: tx('global_menu_help_report_desktop'),
+        click: () => {
+          shell.openExternal(gitHubIssuesUrl)
+        },
+      },
+      {
+        label: tx('global_menu_help_about_desktop'),
+        click: () => {
+          mainWindow.window?.show()
+          mainWindow.window?.focus()
+          mainWindow.send('showAboutDialog')
+        },
+      },
+    ],
+  }
+}
+
 function getMenuTemplate(
   logHandler: LogHandler
 ): Electron.MenuItemConstructorOptions[] {
@@ -323,53 +379,7 @@ function getMenuTemplate(
         },
       ],
     },
-    {
-      label: tx('global_menu_help_desktop'),
-      role: 'help',
-      submenu: [
-        {
-          label: tx('menu_help'),
-          click: () => {
-            mainWindow.send('showHelpDialog')
-          },
-          accelerator: 'F1',
-        },
-        {
-          label: tx('keybindings'),
-          click: () => {
-            mainWindow.send('showKeybindingsDialog')
-          },
-          accelerator: isMac ? 'Cmd+/' : 'Ctrl+/',
-        },
-        {
-          label: tx('global_menu_help_learn_desktop'),
-          click: () => {
-            shell.openExternal(homePageUrl)
-          },
-        },
-        {
-          label: tx('global_menu_help_contribute_desktop'),
-          click: () => {
-            shell.openExternal(gitHubUrl)
-          },
-        },
-        {
-          type: 'separator',
-        },
-        {
-          label: tx('global_menu_help_report_desktop'),
-          click: () => {
-            shell.openExternal(gitHubIssuesUrl)
-          },
-        },
-        {
-          label: tx('global_menu_help_about_desktop'),
-          click: () => {
-            mainWindow.send('showAboutDialog')
-          },
-        },
-      ],
-    },
+    getHelpMenu(isMac),
   ]
 }
 
