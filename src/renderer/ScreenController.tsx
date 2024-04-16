@@ -13,8 +13,7 @@ import { runtime } from './runtime'
 import { updateTimestamps } from './components/conversations/Timestamp'
 import { ScreenContext } from './contexts/ScreenContext'
 import { KeybindingsContextProvider } from './contexts/KeybindingsContext'
-import { DialogContext, DialogContextProvider } from './contexts/DialogContext'
-import WebxdcSaveToChatDialog from './components/dialogs/WebxdcSendToChat'
+import { DialogContextProvider } from './contexts/DialogContext'
 import AccountListSidebar from './components/AccountListSidebar/AccountListSidebar'
 import SettingsStoreInstance from './stores/settings'
 import { NoAccountSelectedScreen } from './components/screens/NoAccountSelectedScreen/NoAccountSelectedScreen'
@@ -42,7 +41,6 @@ export enum Screens {
 export default class ScreenController extends Component {
   state: { message: userFeedback | false; screen: Screens }
   selectedAccountId: number | undefined
-  openSendToDialogId?: string
   lastAccountBeforeAddingNewAccount: number | null = null
 
   constructor(public props: {}) {
@@ -201,21 +199,6 @@ export default class ScreenController extends Component {
   componentDidMount() {
     BackendRemote.on('Error', this.onError)
 
-    runtime.onWebxdcSendToChat = (file, text) => {
-      if (this.openSendToDialogId) {
-        this.context.closeDialog(this.openSendToDialogId)
-        this.openSendToDialogId = undefined
-      }
-
-      this.openSendToDialogId = this.context.openDialog(
-        WebxdcSaveToChatDialog,
-        {
-          messageText: text,
-          file,
-        }
-      )
-    }
-
     runtime.onResumeFromSleep = debounce(() => {
       log.info('onResumeFromSleep')
       // update timestamps
@@ -339,8 +322,6 @@ export default class ScreenController extends Component {
     )
   }
 }
-
-ScreenController.contextType = DialogContext
 
 export function selectedAccountId(): number {
   const selectedAccountId = window.__selectedAccountId

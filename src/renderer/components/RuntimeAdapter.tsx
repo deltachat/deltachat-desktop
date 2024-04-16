@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 import useMessage from '../hooks/chat/useMessage'
 import useProcessQr from '../hooks/useProcessQr'
@@ -7,6 +7,8 @@ import { runtime } from '../runtime'
 
 import type { PropsWithChildren } from 'react'
 import { ActionEmitter, KeybindAction } from '../keybindings'
+import useDialog from '../hooks/dialog/useDialog'
+import WebxdcSaveToChatDialog from './dialogs/WebxdcSendToChat'
 
 type Props = {
   accountId?: number
@@ -59,6 +61,23 @@ export default function RuntimeAdapter({
       }
     }
   }, [accountId, jumpToMessage, processQr])
+
+  const { closeDialog, openDialog } = useDialog()
+  const openSendToDialogId = useRef<string | undefined>(undefined)
+
+  useEffect(() => {
+    runtime.onWebxdcSendToChat = (file, text) => {
+      if (openSendToDialogId.current) {
+        closeDialog(openSendToDialogId.current)
+        openSendToDialogId.current = undefined
+      }
+
+      openSendToDialogId.current = openDialog(WebxdcSaveToChatDialog, {
+        messageText: text,
+        file,
+      })
+    }
+  }, [closeDialog, openDialog])
 
   return <>{children}</>
 }
