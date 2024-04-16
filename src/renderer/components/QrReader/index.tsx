@@ -227,13 +227,17 @@ export default function QrReader({ onError, onScan }: Props) {
     (event: React.MouseEvent<HTMLButtonElement>) => {
       const [cursorX, cursorY] = [event.clientX, event.clientY]
 
-      const cameraItems: ContextMenuItem[] = videoDevices.map(device => {
-        const marker = device.deviceId === deviceId ? ' ✔' : ''
-        return {
-          label: `${device.label}${marker}`,
-          action: () => setDeviceId(device.deviceId),
-        }
-      })
+      // Allow user to select a different camera when more than one is given
+      const cameraItems: ContextMenuItem[] =
+        videoDevices.length > 1
+          ? videoDevices.map(device => {
+              const marker = device.deviceId === deviceId ? ' ✔' : ''
+              return {
+                label: `${device.label}${marker}`,
+                action: () => setDeviceId(device.deviceId),
+              }
+            })
+          : []
 
       const items: ContextMenuItem[] = [
         ...cameraItems,
