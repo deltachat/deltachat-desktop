@@ -1,6 +1,6 @@
 import React from 'react'
 
-import MapComponent from './MapComponent'
+import { MapComponent } from './MapComponent'
 
 type ContextMenuProps = {
   onSetPoi: MapComponent['sendPoiMessage']

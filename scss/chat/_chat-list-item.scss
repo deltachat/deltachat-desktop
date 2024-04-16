@@ -236,7 +236,8 @@
 
 .chat-list-item.pinned {
   background-color: var(--chatListItemBgPinned);
-  &:hover {
+  &:hover,
+  &.context-menu-active:not(.selected) {
     background-color: var(--chatListItemBgPinnedHover);
   }
   .pin_icon {

@@ -5,12 +5,15 @@
 ### Added
 - Remember last position & size of webxdc windows #3754 #3755
 - add quick-key CtrlOrCmd+q for submenu quit #3758
+- add window titlebar for html_email- and help window #3770
+- add quick key `Cmd+W`/`Ctrl+W` to close webxdc-, html_email- and help-window #3770
 
 
 ### Changed
 - Update translations (2024-04-04) #3746
 - minor improvements to "add second device" dialog #3748
 - Remove deprecated translations #3756
+- Refactor chat store into React context #3725
 - Improve security: restrict file protocol #3769
 
 ### Fixed
@@ -19,6 +22,9 @@
 - hide "add second device" instructions when transfer has started #3748
 - improve chat scroll performance #3743, #3747
 - reduce CPU load when moving mouse over chat #3751
+- fix chatlistitem background when context menu for it is shown it is now highlighted correctly on pinned chats #3766
+- fix add missing top padding to confirm sending files dialog #3767
+- remove last selected chat id in ui settings when deleting the selected chat #3772
 
 <a id="1_44_1"></a>
 

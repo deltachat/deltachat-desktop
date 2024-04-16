@@ -9,7 +9,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { T, C } from '@deltachat/jsonrpc-client'
+import { C } from '@deltachat/jsonrpc-client'
 
 import {
   useContacts,
@@ -23,11 +23,6 @@ import {
 } from '../helpers/PseudoListItem'
 import GroupImage from '../GroupImage'
 import { runtime } from '../../runtime'
-import {
-  areAllContactsVerified,
-  createChatByContactIdAndSelectIt,
-  selectChat,
-} from '../helpers/ChatMethods'
 import { Avatar, QRAvatar } from '../Avatar'
 import { AddMemberDialog } from './ViewGroup'
 import { ContactListItem } from '../contact/ContactListItem'
@@ -44,16 +39,20 @@ import Dialog, {
   FooterActions,
   OkCancelFooterAction,
 } from '../Dialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { ScreenContext } from '../../contexts/ScreenContext'
-import useDialog from '../../hooks/useDialog'
+import useChat from '../../hooks/chat/useChat'
+import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
+import useCreateChatByContactId from '../../hooks/chat/useCreateChatByContactId'
+import useDialog from '../../hooks/dialog/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { VerifiedContactsRequiredDialog } from './ProtectionStatusDialog'
-
-import type { DialogProps } from '../../contexts/DialogContext'
-import useConfirmationDialog from '../../hooks/useConfirmationDialog'
 import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 import { dirname } from 'path'
 import QrCode from './QrCode'
+import { areAllContactsVerified } from '../../backend/chat'
+
+import type { T } from '@deltachat/jsonrpc-client'
+import type { DialogProps } from '../../contexts/DialogContext'
 
 type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
 
@@ -86,6 +85,7 @@ function CreateChatMain(props: CreateChatMainProps) {
   const openConfirmationDialog = useConfirmationDialog()
   const accountId = selectedAccountId()
   const { openDialog } = useDialog()
+  const createChatByContactId = useCreateChatByContactId()
 
   const [{ contacts, queryStrIsValidEmail }, updateContacts] = useContactsNew(
     C.DC_GCL_ADD_SELF,
@@ -96,7 +96,7 @@ function CreateChatMain(props: CreateChatMainProps) {
 
   const chooseContact = async ({ id }: Type.Contact) => {
     try {
-      await createChatByContactIdAndSelectIt(id)
+      await createChatByContactId(accountId, id)
     } catch (error: any) {
       return userFeedback({
         type: 'error',
@@ -147,11 +147,11 @@ function CreateChatMain(props: CreateChatMainProps) {
     if (!queryStrIsValidEmail) return
 
     const contactId = await BackendRemote.rpc.createContact(
-      selectedAccountId(),
+      accountId,
       queryStr.trim(),
       null
     )
-    await createChatByContactIdAndSelectIt(contactId)
+    await createChatByContactId(accountId, contactId)
     onClose()
   }
 
@@ -778,6 +778,7 @@ const useCreateGroup = (
   onClose: DialogProps['onClose']
 ) => {
   const accountId = selectedAccountId()
+  const { selectChat } = useChat()
 
   const createGroup = useCallback(async () => {
     const isVerified = await areAllContactsVerified(accountId, groupMembers)
@@ -818,6 +819,7 @@ const useCreateBroadcast = (
   onClose: DialogProps['onClose']
 ) => {
   const accountId = selectedAccountId()
+  const { selectChat } = useChat()
 
   const createBroadcastList = async () => {
     const chatId = await BackendRemote.rpc.createBroadcastList(accountId)

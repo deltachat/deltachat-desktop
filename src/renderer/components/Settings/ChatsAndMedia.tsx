@@ -17,7 +17,7 @@ import SettingsSeparator from './SettingsSeparator'
 import SettingsHeading from './SettingsHeading'
 import { DialogContent } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
+import useDialog from '../../hooks/dialog/useDialog'
 import UnblockContacts from '../dialogs/UnblockContacts'
 import SettingsButton from './SettingsButton'
 

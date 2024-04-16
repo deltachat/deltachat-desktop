@@ -5,7 +5,7 @@ import { runtime } from '../../runtime'
 import { selectedAccountId } from '../../ScreenController'
 import SettingsButton from './SettingsButton'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useConfirmationDialog from '../../hooks/useConfirmationDialog'
+import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
 
 import type { OpenDialogOptions } from 'electron'
 import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'

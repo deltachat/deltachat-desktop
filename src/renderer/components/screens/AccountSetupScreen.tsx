@@ -14,7 +14,7 @@ import Dialog, {
   FooterActions,
 } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
+import useDialog from '../../hooks/dialog/useDialog'
 
 import type ScreenController from '../../ScreenController'
 

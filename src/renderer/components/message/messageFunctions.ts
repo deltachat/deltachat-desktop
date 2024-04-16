@@ -2,11 +2,6 @@ import moment from 'moment'
 
 import { getLogger } from '../../../shared/logger'
 import { runtime } from '../../runtime'
-import {
-  forwardMessage,
-  deleteMessage,
-  selectChat,
-} from '../helpers/ChatMethods'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { internalOpenWebxdc } from '../../system-integration/webxdc'
@@ -83,13 +78,14 @@ export async function confirmForwardMessage(
     tx('forward')
   )
   if (yes) {
-    await forwardMessage(accountId, message.id, chat.id)
+    await BackendRemote.rpc.forwardMessages(accountId, [message.id], chat.id)
   }
   return yes
 }
 
 export function confirmDeleteMessage(
   openDialog: OpenDialog,
+  accountId: number,
   msg: Type.Message
 ) {
   const tx = window.static_translate
@@ -97,7 +93,8 @@ export function confirmDeleteMessage(
   openDialog(ConfirmationDialog, {
     message: tx('ask_delete_message'),
     confirmLabel: tx('delete'),
-    cb: (yes: boolean) => yes && deleteMessage(msg.id),
+    cb: (yes: boolean) =>
+      yes && BackendRemote.rpc.deleteMessages(accountId, [msg.id]),
   })
 }
 
@@ -111,31 +108,6 @@ export function setQuoteInDraft(messageId: number) {
   } else {
     throw new Error('window.__setQuoteInDraft undefined')
   }
-}
-
-export async function privateReply(msg: Type.Message) {
-  const quotedMessageId = msg.id
-  const contactId = msg.fromId
-  const accountId = selectedAccountId()
-  const chatId = await BackendRemote.rpc.createChatByContactId(
-    accountId,
-    contactId
-  )
-
-  // retrieve existing draft to append the quotedMessageId
-  const oldDraft = await BackendRemote.rpc.getDraft(accountId, chatId)
-
-  await BackendRemote.rpc.miscSetDraft(
-    accountId,
-    chatId,
-    oldDraft?.text || null,
-    oldDraft?.file || null,
-    quotedMessageId,
-    'Text'
-  )
-
-  // select chat
-  selectChat(chatId)
 }
 
 export async function openMessageHTML(messageId: number) {

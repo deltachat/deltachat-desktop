@@ -8,6 +8,7 @@ import SettingsIconButton from './SettingsIconButton'
 import ConnectivityButton from './ConnectivityButton'
 import ChatsAndMedia from './ChatsAndMedia'
 import Notifications from './Notifications'
+import About from '../dialogs/About'
 import Appearance from './Appearance'
 import Advanced from './Advanced'
 import Profile from './Profile'
@@ -15,11 +16,10 @@ import Dialog, { DialogBody, DialogHeader } from '../Dialog'
 import EditProfileDialog from '../dialogs/EditProfileDialog'
 import EditAccountAndPasswordDialog from '../dialogs/EditAccountAndPasswordDialog'
 import SettingsSeparator from './SettingsSeparator'
-import useDialog from '../../hooks/useDialog'
+import useDialog from '../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
-import About from '../dialogs/About'
 
 type SettingsView =
   | 'main'
@@ -113,7 +113,7 @@ export default function Settings({ onClose }: DialogProps) {
             {!runtime.getRuntimeInfo().isMac && (
               <SettingsIconButton
                 icon='favorite'
-                onClick={() => runtime.openLink(openDialog, donationUrl)}
+                onClick={() => runtime.openLink(donationUrl)}
                 isLink
               >
                 {tx('donate')}
