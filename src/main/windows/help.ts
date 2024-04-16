@@ -120,6 +120,8 @@ export async function openHelpWindow(locale: string, anchor?: string) {
 
   const isMac = platform() === 'darwin'
 
+  // copied and adapted from webxdc menu
+  // TODO: would make sense to refactor these menus at some point
   const makeMenu = () => {
     const appMenu: Electron.MenuItemConstructorOptions[] = [
       {
@@ -145,7 +147,7 @@ export async function openHelpWindow(locale: string, anchor?: string) {
           {
             label: tx('close_window'),
             click: () => {
-              win.close()
+              win?.close()
             },
             accelerator: isMac ? 'Cmd+w' : 'Ctrl+w',
           },

@@ -129,6 +129,8 @@ export function openHtmlEmailWindow(
 
   const isMac = platform() === 'darwin'
 
+  // copied and adapted from webxdc menu
+  // TODO: would make sense to refactor these menus at some point
   const makeMenu = () => {
     const appMenu: Electron.MenuItemConstructorOptions[] = [
       {
