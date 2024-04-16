@@ -23,5 +23,8 @@
   },
   "pref_current_account": {
     "message": "Current Account"
+  },
+  "camera_access_failed": {
+    "message": "Could not access video camera"
   }
 }

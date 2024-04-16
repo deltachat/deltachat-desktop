@@ -180,7 +180,7 @@ export default function QrReader({ onError, onScan }: Props) {
           handleScanResults(results)
           return
         } else {
-          throw new Error('could not find any results in clipboard image')
+          throw new Error('no data in clipboard image')
         }
       }
 
@@ -193,10 +193,10 @@ export default function QrReader({ onError, onScan }: Props) {
     } catch (error) {
       userFeedback({
         type: 'error',
-        text: `Reading qrcodedata from clipboard failed: ${error}`,
+        text: `${tx('qrscan_failed')}: ${error}`,
       })
     }
-  }, [handleScanResults, onScan, scanner, userFeedback])
+  }, [handleScanResults, onScan, scanner, tx, userFeedback])
 
   const handleImportImage = useCallback(async () => {
     if (inputRef.current) {
@@ -413,7 +413,7 @@ export default function QrReader({ onError, onScan }: Props) {
       />
       {error && (
         <div className={classNames(styles.qrReaderStatus, styles.error)}>
-          Error: Could not access video camera
+          {tx('camera_access_failed')}
         </div>
       )}
       <button className={styles.qrReaderButton} onClick={handleSelectDevice}>
