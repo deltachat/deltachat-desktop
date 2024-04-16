@@ -208,7 +208,7 @@ export function openHtmlEmailWindow(
 
   window.on('focus', () => {
     if (isMac) {
-      // change to webxdc menu
+      // change to email menu
       Menu.setApplicationMenu(makeMenu())
     }
   })
