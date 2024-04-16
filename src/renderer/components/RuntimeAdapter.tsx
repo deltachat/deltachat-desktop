@@ -6,6 +6,7 @@ import { clearNotificationsForChat } from '../system-integration/notifications'
 import { runtime } from '../runtime'
 
 import type { PropsWithChildren } from 'react'
+import { ActionEmitter, KeybindAction } from '../keybindings'
 
 type Props = {
   accountId?: number
@@ -47,6 +48,16 @@ export default function RuntimeAdapter({
         }
       }
     )
+
+    runtime.onShowDialog = kind => {
+      if (kind === 'about') {
+        ActionEmitter.emitAction(KeybindAction.Settings_Open)
+      } else if (kind === 'keybindings') {
+        ActionEmitter.emitAction(KeybindAction.KeybindingCheatSheet_Open)
+      } else if (kind === 'settings') {
+        ActionEmitter.emitAction(KeybindAction.Settings_Open)
+      }
+    }
   }, [accountId, jumpToMessage, processQr])
 
   return <>{children}</>

@@ -74,6 +74,13 @@ export default function About({ onClose }: DialogProps) {
   const [sqliteVersion, setSqliteVersion] = useState('')
 
   useEffect(() => {
+    window.__aboutDialogOpened = true
+    return () => {
+      window.__aboutDialogOpened = false
+    }
+  }, [])
+
+  useEffect(() => {
     BackendRemote.rpc.getSystemInfo().then(info => {
       setCoreVersion(info['deltachat_core_version'])
       setSqliteVersion(info['sqlite_version'])

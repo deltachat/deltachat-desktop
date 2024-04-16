@@ -19,6 +19,7 @@ export enum KeybindAction {
   // Actions that are not necessarily triggered by keybindings
   ChatList_SwitchToArchiveView = 'chatlist:switch-to-archive-view',
   ChatList_SwitchToNormalView = 'chatlist:switch-to-normal-view',
+  AboutDialog_Open = 'about:open',
 
   // Composite Actions (actions that trigger other actions)
   ChatList_FocusAndClearSearchInput = 'chatlist:focus-and-clear-search',
