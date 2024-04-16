@@ -22,6 +22,7 @@ declare global {
     __setContextMenuActive: (newVal: boolean) => void
     __settingsOpened: boolean
     __keybindingsDialogOpened: boolean
+    __aboutDialogOpened: boolean
     __setQuoteInDraft: ((msgId: number) => void) | null
     __reloadDraft: (() => void) | null
     __chatlistSetSearch:

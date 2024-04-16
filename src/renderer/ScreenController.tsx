@@ -5,7 +5,6 @@ import { debounce } from 'debounce'
 
 import MainScreen from './components/screens/MainScreen'
 import { getLogger } from '../shared/logger'
-import { ActionEmitter, KeybindAction } from './keybindings'
 import AccountSetupScreen from './components/screens/AccountSetupScreen'
 import WelcomeScreen from './components/screens/WelcomeScreen'
 import { BackendRemote, EffectfulBackendActions } from './backend-com'
@@ -13,7 +12,6 @@ import { updateDeviceChats } from './deviceMessages'
 import { runtime } from './runtime'
 import { updateTimestamps } from './components/conversations/Timestamp'
 import { ScreenContext } from './contexts/ScreenContext'
-import About from './components/dialogs/About'
 import { KeybindingsContextProvider } from './contexts/KeybindingsContext'
 import { DialogContext, DialogContextProvider } from './contexts/DialogContext'
 import WebxdcSaveToChatDialog from './components/dialogs/WebxdcSendToChat'
@@ -43,9 +41,6 @@ export enum Screens {
 
 export default class ScreenController extends Component {
   state: { message: userFeedback | false; screen: Screens }
-  onShowAbout: any
-  onShowKeybindings: any
-  onShowSettings: any
   selectedAccountId: number | undefined
   openSendToDialogId?: string
   lastAccountBeforeAddingNewAccount: number | null = null
@@ -62,9 +57,6 @@ export default class ScreenController extends Component {
     this.userFeedback = this.userFeedback.bind(this)
     this.userFeedbackClick = this.userFeedbackClick.bind(this)
     this.changeScreen = this.changeScreen.bind(this)
-    this.onShowAbout = this.showAbout.bind(this)
-    this.onShowKeybindings = this.showKeyBindings.bind(this)
-    this.onShowSettings = this.showSettings.bind(this)
     this.selectAccount = this.selectAccount.bind(this)
     this.unSelectAccount = this.unSelectAccount.bind(this)
     this.openAccountDeletionScreen = this.openAccountDeletionScreen.bind(this)
@@ -209,16 +201,6 @@ export default class ScreenController extends Component {
   componentDidMount() {
     BackendRemote.on('Error', this.onError)
 
-    runtime.onShowDialog = kind => {
-      if (kind === 'about') {
-        this.onShowAbout()
-      } else if (kind === 'keybindings') {
-        this.onShowKeybindings()
-      } else if (kind === 'settings') {
-        this.onShowSettings()
-      }
-    }
-
     runtime.onWebxdcSendToChat = (file, text) => {
       if (this.openSendToDialogId) {
         this.context.closeDialog(this.openSendToDialogId)
@@ -263,18 +245,6 @@ export default class ScreenController extends Component {
 
   onSuccess(_event: any, text: string) {
     this.userFeedback({ type: 'success', text })
-  }
-
-  showAbout() {
-    this.context.openDialog(About)
-  }
-
-  showSettings() {
-    ActionEmitter.emitAction(KeybindAction.Settings_Open)
-  }
-
-  showKeyBindings() {
-    ActionEmitter.emitAction(KeybindAction.KeybindingCheatSheet_Open)
   }
 
   renderScreen() {
