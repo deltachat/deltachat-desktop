@@ -1,4 +1,4 @@
-import { Menu, shell } from 'electron'
+import { BrowserWindow, Menu, shell } from 'electron'
 import {
   gitHubIssuesUrl,
   gitHubUrl,
@@ -44,7 +44,7 @@ export function refresh() {
     return
   }
   const template = getMenuTemplate(logHandlerRef)
-  const menu = Menu.buildFromTemplate(setLabels(template))
+  const menu = Menu.buildFromTemplate(template)
   const item = getMenuItem(menu, tx('global_menu_view_floatontop_desktop'))
   if (item) item.checked = mainWindow.isAlwaysOnTop()
   const isMac = process.platform === 'darwin'
@@ -63,26 +63,6 @@ export function init(logHandler: LogHandler) {
 interface rawMenuItem extends Electron.MenuItemConstructorOptions {
   translate?: string
   submenu?: (rawMenuItem | Electron.MenuItemConstructorOptions)[]
-}
-
-function setLabels(menu: rawMenuItem[]): Electron.MenuItemConstructorOptions[] {
-  // JANKY
-  // Electron doesn't allow us to modify the menu with a new template,
-  // so we must modify the labels directly in order to change
-  // the menu item labels when the user changes languages
-
-  doTranslation(menu)
-
-  function doTranslation(menu: rawMenuItem[]) {
-    menu.forEach(item => {
-      if (item.translate) {
-        item.label = tx(item.translate)
-      }
-      if (item.submenu) doTranslation(item.submenu as any)
-    })
-  }
-
-  return menu
 }
 
 function getAvailableLanguages(): Electron.MenuItemConstructorOptions[] {
@@ -140,129 +120,167 @@ function getZoomFactors(): Electron.MenuItemConstructorOptions[] {
   })
 }
 
-function getMenuTemplate(logHandler: LogHandler): rawMenuItem[] {
-  const isMac = process.platform === 'darwin'
-  const AppMenu: rawMenuItem[] = [
+export function getAppMenu(
+  isMainWindow: boolean
+): Electron.MenuItemConstructorOptions {
+  const extraItemsForMainWindow: rawMenuItem[] = [
     {
-      label: appWindowTitle,
-      submenu: [
-        {
-          translate: 'global_menu_help_about_desktop',
-          click: () => {
-            mainWindow.send('showAboutDialog')
-          },
-        },
-        { type: 'separator' },
-        {
-          translate: 'menu_settings',
-          click: () => {
-            mainWindow.send('showSettingsDialog')
-          },
-          accelerator: 'Cmd+,',
-        },
-        { type: 'separator' },
-        { role: 'hide' },
-        { role: 'hideOthers' },
-        { role: 'unhide' },
-        { type: 'separator' },
-        {
-          // because menubar stays when it's closed and apple wants that the user can reopen it via the menu bar
-          translate: 'show_window',
-          click: () => {
-            mainWindow.show()
-          },
-        },
-        {
-          translate: 'global_menu_file_quit_desktop',
-          role: 'quit',
-          accelerator: 'Cmd+q',
-        },
-      ],
+      label: tx('global_menu_help_about_desktop'),
+      click: () => {
+        mainWindow.send('showAboutDialog')
+      },
     },
+    { type: 'separator' },
+    {
+      label: tx('menu_settings'),
+      click: () => {
+        mainWindow.send('showSettingsDialog')
+      },
+      accelerator: 'Cmd+,',
+    },
+    { type: 'separator' },
   ]
+
+  return {
+    label: appWindowTitle,
+    submenu: [
+      ...(isMainWindow ? extraItemsForMainWindow : []),
+      { role: 'hide' },
+      { role: 'hideOthers' },
+      { role: 'unhide' },
+      { type: 'separator' },
+      ...(isMainWindow
+        ? [
+            {
+              // because menubar stays when it's closed and apple wants that the user can reopen it via the menu bar
+              label: tx('show_window'),
+              click: () => {
+                mainWindow.show()
+              },
+            },
+          ]
+        : []),
+      {
+        label: tx('global_menu_file_quit_desktop'),
+        role: 'quit',
+        accelerator: 'Cmd+q',
+      },
+    ],
+  }
+}
+
+export function getFileMenu(
+  window: BrowserWindow | null,
+  isMac: boolean
+): Electron.MenuItemConstructorOptions {
+  const fileMenuNonMac: Electron.MenuItemConstructorOptions = {
+    label: tx('global_menu_file_desktop'),
+    submenu: [
+      {
+        label: tx('menu_settings'),
+        click: () => {
+          mainWindow.send('showSettingsDialog')
+        },
+        accelerator: 'Ctrl+,',
+      },
+      {
+        label: tx('global_menu_file_quit_desktop'),
+        role: 'quit',
+        accelerator: 'Ctrl+q',
+      },
+    ],
+  }
+  const fileMenuMac: Electron.MenuItemConstructorOptions = {
+    label: tx('global_menu_file_desktop'),
+    submenu: [
+      {
+        label: tx('close_window'),
+        click: () => {
+          window?.close()
+          if (isMac) {
+            // change back to main-window menu
+            refresh()
+          }
+        },
+        accelerator: isMac ? 'Cmd+w' : 'Ctrl+w',
+      },
+    ],
+  }
+
+  return isMac ? fileMenuMac : fileMenuNonMac
+}
+
+export function getEditMenu(): Electron.MenuItemConstructorOptions {
+  return {
+    label: tx('global_menu_edit_desktop'),
+    submenu: [
+      {
+        label: tx('global_menu_edit_undo_desktop'),
+        role: 'undo',
+      },
+      {
+        label: tx('global_menu_edit_redo_desktop'),
+        role: 'redo',
+      },
+      {
+        type: 'separator',
+      },
+      {
+        label: tx('global_menu_edit_cut_desktop'),
+        role: 'cut',
+      },
+      {
+        label: tx('global_menu_edit_copy_desktop'),
+        role: 'copy',
+      },
+      {
+        label: tx('global_menu_edit_paste_desktop'),
+        role: 'paste',
+      },
+      {
+        label: tx('delete'),
+        role: 'delete',
+      },
+      {
+        label: tx('menu_select_all'),
+        role: 'selectAll',
+      },
+    ],
+  }
+}
+
+function getMenuTemplate(
+  logHandler: LogHandler
+): Electron.MenuItemConstructorOptions[] {
+  const isMac = process.platform === 'darwin'
   return [
-    ...(isMac ? AppMenu : []),
-    ...(!isMac
-      ? <rawMenuItem[]>[
-          {
-            translate: 'global_menu_file_desktop',
-            submenu: [
-              {
-                translate: 'menu_settings',
-                click: () => {
-                  mainWindow.send('showSettingsDialog')
-                },
-                accelerator: 'Ctrl+,',
-              },
-              {
-                translate: 'global_menu_file_quit_desktop',
-                role: 'quit',
-                accelerator: 'Ctrl+q',
-              },
-            ],
-          },
-        ]
-      : []),
+    ...(isMac ? [getAppMenu(true)] : []),
+    getFileMenu(mainWindow.window, isMac),
+    getEditMenu(),
     {
-      translate: 'global_menu_edit_desktop',
+      label: tx('global_menu_view_desktop'),
       submenu: [
         {
-          translate: 'global_menu_edit_undo_desktop',
-          role: 'undo',
-        },
-        {
-          translate: 'global_menu_edit_redo_desktop',
-          role: 'redo',
-        },
-        {
-          type: 'separator',
-        },
-        {
-          translate: 'global_menu_edit_cut_desktop',
-          role: 'cut',
-        },
-        {
-          translate: 'global_menu_edit_copy_desktop',
-          role: 'copy',
-        },
-        {
-          translate: 'global_menu_edit_paste_desktop',
-          role: 'paste',
-        },
-        {
-          translate: 'delete',
-          role: 'delete',
-        },
-        {
-          translate: 'menu_select_all',
-          role: 'selectAll',
-        },
-      ],
-    },
-    {
-      translate: 'global_menu_view_desktop',
-      submenu: [
-        {
-          translate: 'global_menu_view_floatontop_desktop',
+          label: tx('global_menu_view_floatontop_desktop'),
           type: 'checkbox',
           click: () => mainWindow.toggleAlwaysOnTop(),
         },
         {
-          translate: 'zoom',
+          label: tx('zoom'),
           submenu: getZoomFactors(),
         },
         {
-          translate: 'pref_language',
+          label: tx('pref_language'),
           submenu: getAvailableLanguages(),
         },
         {
           type: 'separator',
         },
         {
-          translate: 'global_menu_view_developer_desktop',
+          label: tx('global_menu_view_developer_desktop'),
           submenu: [
             {
-              translate: 'global_menu_view_developer_tools_desktop',
+              label: tx('global_menu_view_developer_tools_desktop'),
               accelerator:
                 process.platform === 'darwin'
                   ? 'Alt+Command+I'
@@ -270,7 +288,7 @@ function getMenuTemplate(logHandler: LogHandler): rawMenuItem[] {
               click: () => mainWindow.toggleDevTools(),
             },
             {
-              translate: 'menu.view.developer.open.log.folder',
+              label: tx('menu.view.developer.open.log.folder'),
               click: () => {
                 if (appx) {
                   shell.openPath(
@@ -285,7 +303,7 @@ function getMenuTemplate(logHandler: LogHandler): rawMenuItem[] {
               },
             },
             {
-              translate: 'menu.view.developer.open.current.log.file',
+              label: tx('menu.view.developer.open.current.log.file'),
               click: () => {
                 if (appx) {
                   const file = join(
@@ -306,31 +324,31 @@ function getMenuTemplate(logHandler: LogHandler): rawMenuItem[] {
       ],
     },
     {
-      translate: 'global_menu_help_desktop',
+      label: tx('global_menu_help_desktop'),
       role: 'help',
       submenu: [
         {
-          translate: 'menu_help',
+          label: tx('menu_help'),
           click: () => {
             mainWindow.send('showHelpDialog')
           },
           accelerator: 'F1',
         },
         {
-          translate: 'keybindings',
+          label: tx('keybindings'),
           click: () => {
             mainWindow.send('showKeybindingsDialog')
           },
           accelerator: isMac ? 'Cmd+/' : 'Ctrl+/',
         },
         {
-          translate: 'global_menu_help_learn_desktop',
+          label: tx('global_menu_help_learn_desktop'),
           click: () => {
             shell.openExternal(homePageUrl)
           },
         },
         {
-          translate: 'global_menu_help_contribute_desktop',
+          label: tx('global_menu_help_contribute_desktop'),
           click: () => {
             shell.openExternal(gitHubUrl)
           },
@@ -339,13 +357,13 @@ function getMenuTemplate(logHandler: LogHandler): rawMenuItem[] {
           type: 'separator',
         },
         {
-          translate: 'global_menu_help_report_desktop',
+          label: tx('global_menu_help_report_desktop'),
           click: () => {
             shell.openExternal(gitHubIssuesUrl)
           },
         },
         {
-          translate: 'global_menu_help_about_desktop',
+          label: tx('global_menu_help_about_desktop'),
           click: () => {
             mainWindow.send('showAboutDialog')
           },
