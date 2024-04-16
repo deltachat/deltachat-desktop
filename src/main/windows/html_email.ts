@@ -149,7 +149,11 @@ export function openHtmlEmailWindow(
           },
           {
             label: tx('menu_select_all'),
-            role: 'selectAll',
+            click: () => {
+              sandboxedView.webContents.focus()
+              sandboxedView.webContents.selectAll()
+            },
+            accelerator: isMac ? 'Cmd+A' : 'Ctrl+A',
           },
         ],
       },
