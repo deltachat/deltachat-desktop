@@ -37,38 +37,57 @@ type ImageDimensions = {
 
 const SCAN_QR_INTERVAL_MS = 50
 
-async function getImageDataFromFile(file: File): Promise<ImageData> {
-  const image = new Image()
-  const reader = new FileReader()
+/**
+ * Convert file data to base64 string.
+ */
+async function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
 
-  return new Promise(resolve => {
-    // Extract image data from base64 encoded blob
+    try {
+      reader.addEventListener(
+        'load',
+        () => {
+          resolve(reader.result as string)
+        },
+        false
+      )
+
+      reader.readAsDataURL(file)
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+/**
+ * Convert base64-encoded blob string into image data.
+ */
+async function base64ToImageData(base64: string): Promise<ImageData> {
+  return new Promise((resolve, reject) => {
+    const image = new Image()
+
     image.addEventListener('load', () => {
-      const canvas = document.createElement('canvas')
-      const context = canvas.getContext('2d')
-      canvas.width = image.width
-      canvas.height = image.height
+      try {
+        const canvas = document.createElement('canvas')
+        const context = canvas.getContext('2d')
+        canvas.width = image.width
+        canvas.height = image.height
 
-      if (!context) {
-        return
+        if (!context) {
+          return
+        }
+
+        context.drawImage(image, 0, 0)
+
+        const imageData = context.getImageData(0, 0, image.width, image.height)
+        resolve(imageData)
+      } catch (error) {
+        reject(error)
       }
-
-      context.drawImage(image, 0, 0)
-
-      const imageData = context.getImageData(0, 0, image.width, image.height)
-      resolve(imageData)
     })
 
-    // Load image from file as base64 encoded data string
-    reader.addEventListener(
-      'load',
-      () => {
-        image.src = reader.result as string
-      },
-      false
-    )
-
-    reader.readAsDataURL(file)
+    image.src = base64
   })
 }
 
@@ -131,20 +150,46 @@ export default function QrReader({ onError, onScan }: Props) {
   )
 
   const handlePasteFromClipboard = useCallback(async () => {
+    let unmounted = false
+
     try {
+      // Try interpreting the clipboard data as an image
+      const base64 = await runtime.readClipboardImage()
+      if (base64) {
+        const imageData = await base64ToImageData(base64)
+        const results = await scanImageData(imageData, scanner)
+
+        if (unmounted) {
+          return
+        }
+
+        if (results.length > 0) {
+          results.forEach(result => {
+            onScan(result.decode())
+          })
+          return
+        } else {
+          throw new Error('could not find any results in clipboard image')
+        }
+      }
+
+      // .. as a fallback return data from clipboard directly
       const data = await runtime.readClipboardText()
-      if (data) {
-        onScan(data)
-      } else {
+      if (!data) {
         throw new Error('no data in clipboard')
       }
+      onScan(data)
     } catch (error) {
       userFeedback({
         type: 'error',
         text: `Reading qrcodedata from clipboard failed: ${error}`,
       })
     }
-  }, [onScan, userFeedback])
+
+    return () => {
+      unmounted = true
+    }
+  }, [onScan, scanner, userFeedback])
 
   const handleImportImage = useCallback(async () => {
     if (inputRef.current) {
@@ -161,7 +206,8 @@ export default function QrReader({ onError, onScan }: Props) {
       const file = event.target.files[0]
 
       try {
-        const imageData = await getImageDataFromFile(file)
+        const base64 = await fileToBase64(file)
+        const imageData = await base64ToImageData(base64)
         const results = await scanImageData(imageData, scanner)
 
         if (unmounted) {

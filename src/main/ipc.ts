@@ -206,8 +206,11 @@ export async function init(cwd: string, logHandler: LogHandler) {
     shell.openExternal(url)
   )
   ipcMain.handle('electron.shell.openPath', (_ev, path) => shell.openPath(path))
-  ipcMain.handle('electron.clipboard.readText', _ev => {
+  ipcMain.handle('electron.clipboard.readText', () => {
     return clipboard.readText()
+  })
+  ipcMain.handle('electron.clipboard.readImage', () => {
+    return clipboard.readImage().toDataURL()
   })
   ipcMain.handle('electron.clipboard.writeText', (_ev, text) => {
     return clipboard.writeText(text)
