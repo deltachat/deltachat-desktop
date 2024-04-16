@@ -22,7 +22,12 @@ import { Bounds, DcOpenWebxdcParameters } from '../../shared/shared-types'
 import { DesktopSettings } from '../desktop_settings'
 import { window as main_window } from '../windows/main'
 import { writeTempFileFromBase64 } from '../ipc'
-import { refresh as refreshTitleMenu } from '../menu'
+import {
+  getAppMenu,
+  getEditMenu,
+  getFileMenu,
+  refresh as refreshTitleMenu,
+} from '../menu'
 import { T } from '@deltachat/jsonrpc-client'
 
 const open_apps: {
@@ -241,72 +246,10 @@ export default class DCWebxdc extends SplitOut {
         const isMac = platform() === 'darwin'
 
         const makeMenu = () => {
-          const appMenu: Electron.MenuItemConstructorOptions[] = [
-            {
-              label: tx('global_menu_file_desktop'),
-              submenu: [
-                { role: 'hide' },
-                { role: 'hideOthers' },
-                { role: 'unhide' },
-                { type: 'separator' },
-                {
-                  label: tx('global_menu_file_quit_desktop'),
-                  role: 'quit',
-                },
-              ],
-            },
-          ]
-
           return Menu.buildFromTemplate([
-            ...(isMac ? appMenu : []),
-            {
-              label: tx('global_menu_file_desktop'),
-              submenu: [
-                {
-                  label: tx('close_window'),
-                  click: () => {
-                    webxdc_windows.close()
-                  },
-                  accelerator: isMac ? 'Cmd+w' : 'Ctrl+w',
-                },
-              ],
-            },
-            {
-              label: tx('global_menu_edit_desktop'),
-              submenu: [
-                {
-                  label: tx('global_menu_edit_undo_desktop'),
-                  role: 'undo',
-                },
-                {
-                  label: tx('global_menu_edit_redo_desktop'),
-                  role: 'redo',
-                },
-                {
-                  type: 'separator',
-                },
-                {
-                  label: tx('global_menu_edit_cut_desktop'),
-                  role: 'cut',
-                },
-                {
-                  label: tx('global_menu_edit_copy_desktop'),
-                  role: 'copy',
-                },
-                {
-                  label: tx('global_menu_edit_paste_desktop'),
-                  role: 'paste',
-                },
-                {
-                  label: tx('delete'),
-                  role: 'delete',
-                },
-                {
-                  label: tx('menu_select_all'),
-                  role: 'selectAll',
-                },
-              ],
-            },
+            ...(isMac ? [getAppMenu(false)] : []),
+            getFileMenu(webxdc_windows, isMac),
+            getEditMenu(),
             {
               label: tx('global_menu_view_desktop'),
               submenu: [

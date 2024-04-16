@@ -21,7 +21,7 @@ import { getDCJsonrpcClient } from '../ipc'
 import { getLogger } from '../../shared/logger'
 import { clipboard } from 'electron/common'
 import * as mainWindow from './main'
-import { refresh as refreshTitleMenu } from '../menu'
+import { getAppMenu, getFileMenu, refresh as refreshTitleMenu } from '../menu'
 
 const log = getLogger('html_email')
 
@@ -132,36 +132,9 @@ export function openHtmlEmailWindow(
   // copied and adapted from webxdc menu
   // TODO: would make sense to refactor these menus at some point
   const makeMenu = () => {
-    const appMenu: Electron.MenuItemConstructorOptions[] = [
-      {
-        label: tx('global_menu_file_desktop'),
-        submenu: [
-          { role: 'hide' },
-          { role: 'hideOthers' },
-          { role: 'unhide' },
-          { type: 'separator' },
-          {
-            label: tx('global_menu_file_quit_desktop'),
-            role: 'quit',
-          },
-        ],
-      },
-    ]
-
     return Menu.buildFromTemplate([
-      ...(isMac ? appMenu : []),
-      {
-        label: tx('global_menu_file_desktop'),
-        submenu: [
-          {
-            label: tx('close_window'),
-            click: () => {
-              window.close()
-            },
-            accelerator: isMac ? 'Cmd+w' : 'Ctrl+w',
-          },
-        ],
-      },
+      ...(isMac ? [getAppMenu(false)] : []),
+      getFileMenu(window, isMac),
       {
         label: tx('global_menu_edit_desktop'),
         submenu: [

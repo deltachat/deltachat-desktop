@@ -8,7 +8,7 @@ import { platform } from 'os'
 import { appWindowTitle } from '../../shared/constants'
 import { tx } from '../load-translations'
 import { window as main_window } from '../windows/main'
-import { refresh as refreshTitleMenu } from '../menu'
+import { getAppMenu, getFileMenu, refresh as refreshTitleMenu } from '../menu'
 
 const log = getLogger('main/help')
 const app = rawApp as ExtendedAppMainProcess
@@ -123,36 +123,9 @@ export async function openHelpWindow(locale: string, anchor?: string) {
   // copied and adapted from webxdc menu
   // TODO: would make sense to refactor these menus at some point
   const makeMenu = () => {
-    const appMenu: Electron.MenuItemConstructorOptions[] = [
-      {
-        label: tx('global_menu_file_desktop'),
-        submenu: [
-          { role: 'hide' },
-          { role: 'hideOthers' },
-          { role: 'unhide' },
-          { type: 'separator' },
-          {
-            label: tx('global_menu_file_quit_desktop'),
-            role: 'quit',
-          },
-        ],
-      },
-    ]
-
     return Menu.buildFromTemplate([
-      ...(isMac ? appMenu : []),
-      {
-        label: tx('global_menu_file_desktop'),
-        submenu: [
-          {
-            label: tx('close_window'),
-            click: () => {
-              win?.close()
-            },
-            accelerator: isMac ? 'Cmd+w' : 'Ctrl+w',
-          },
-        ],
-      },
+      ...(isMac ? [getAppMenu(false)] : []),
+      getFileMenu(win, isMac),
       {
         label: tx('global_menu_edit_desktop'),
         submenu: [
