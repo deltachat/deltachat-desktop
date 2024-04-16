@@ -12,7 +12,7 @@ import { runtime } from '../../runtime'
 import EmojiPicker from '../EmojiPicker'
 import Button from '../Button'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useMessage from '../../hooks/useMessage'
+import useMessage from '../../hooks/chat/useMessage'
 
 import styles from './styles.module.scss'
 

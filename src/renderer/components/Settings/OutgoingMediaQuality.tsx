@@ -6,7 +6,7 @@ import SettingsStoreInstance, {
 } from '../../stores/settings'
 import SettingsSelector from './SettingsSelector'
 import SmallSelectDialog, { SelectDialogOption } from '../SmallSelectDialog'
-import useDialog from '../../hooks/useDialog'
+import useDialog from '../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 export default function OutgoingMediaQuality(props: {

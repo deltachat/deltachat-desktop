@@ -20,9 +20,9 @@ import Dialog, {
   OkCancelFooterAction,
 } from '../../Dialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import useDialog from '../../../hooks/useDialog'
-import useChat from '../../../hooks/useChat'
-import useOpenViewProfileDialog from '../../../hooks/useOpenViewProfileDialog'
+import useDialog from '../../../hooks/dialog/useDialog'
+import useChat from '../../../hooks/chat/useChat'
+import useOpenViewProfileDialog from '../../../hooks/dialog/useOpenViewProfileDialog'
 import { MessagesDisplayContext } from '../../../contexts/MessagesDisplayContext'
 import ProfileInfoHeader from '../../ProfileInfoHeader'
 import Button from '../../Button'

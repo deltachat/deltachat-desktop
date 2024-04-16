@@ -23,9 +23,9 @@ import Dialog, {
   DialogHeader,
   OkCancelFooterAction,
 } from '../Dialog'
-import useChat from '../../hooks/useChat'
-import useConfirmationDialog from '../../hooks/useConfirmationDialog'
-import useDialog from '../../hooks/useDialog'
+import useChat from '../../hooks/chat/useChat'
+import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
+import useDialog from '../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { LastUsedSlot } from '../../utils/lastUsedPaths'
 import ProfileInfoHeader from '../ProfileInfoHeader'

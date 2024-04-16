@@ -17,7 +17,7 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
 } from '../Dialog'
-import useDialog from '../../hooks/useDialog'
+import useDialog from '../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'

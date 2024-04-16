@@ -1,10 +1,10 @@
 import React from 'react'
 
-import useDialog from '../hooks/useDialog'
-import { Avatar } from './Avatar'
-import useTranslationFunction from '../hooks/useTranslationFunction'
-import useContextMenu from '../hooks/useContextMenu'
 import FullscreenAvatar from './dialogs/FullscreenAvatar'
+import useContextMenu from '../hooks/useContextMenu'
+import useDialog from '../hooks/dialog/useDialog'
+import useTranslationFunction from '../hooks/useTranslationFunction'
+import { Avatar } from './Avatar'
 
 type Props = {
   groupImage?: string | null

@@ -14,7 +14,7 @@ import Dialog, {
 import FooterActionButton from '../../Dialog/FooterActionButton'
 import Icon from '../../Icon'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import useConfirmationDialog from '../../../hooks/useConfirmationDialog'
+import useConfirmationDialog from '../../../hooks/dialog/useConfirmationDialog'
 
 import type { PropsWithChildren } from 'react'
 import type { DialogProps } from '../../../contexts/DialogContext'

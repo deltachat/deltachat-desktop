@@ -20,7 +20,7 @@ import FullscreenMedia, {
   NeighboringMediaMode,
 } from '../dialogs/FullscreenMedia'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
+import useDialog from '../../hooks/dialog/useDialog'
 import AudioPlayer from '../AudioPlayer'
 
 type AttachmentProps = {

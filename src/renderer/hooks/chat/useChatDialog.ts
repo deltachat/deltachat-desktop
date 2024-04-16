@@ -1,13 +1,13 @@
 import { useCallback } from 'react'
 
-import ChatAuditLogDialog from '../components/dialogs/ChatAuditLogDialog'
-import EncryptionInfo from '../components/dialogs/EncryptionInfo'
-import MuteChat from '../components/dialogs/MuteChat'
+import ChatAuditLogDialog from '../../components/dialogs/ChatAuditLogDialog'
+import EncryptionInfo from '../../components/dialogs/EncryptionInfo'
+import MuteChat from '../../components/dialogs/MuteChat'
 import useChat from './useChat'
-import useConfirmationDialog from './useConfirmationDialog'
-import useDialog from './useDialog'
-import useTranslationFunction from './useTranslationFunction'
-import { BackendRemote, EffectfulBackendActions } from '../backend-com'
+import useConfirmationDialog from '../dialog/useConfirmationDialog'
+import useDialog from '../dialog/useDialog'
+import useTranslationFunction from '../useTranslationFunction'
+import { BackendRemote, EffectfulBackendActions } from '../../backend-com'
 
 import type { T } from '@deltachat/jsonrpc-client'
 

@@ -6,8 +6,8 @@ import ChatListItem, {
   ChatListItemMessageResult,
 } from './ChatListItem'
 import { ContactListItem } from '../contact/ContactListItem'
-import useOpenViewProfileDialog from '../../hooks/useOpenViewProfileDialog'
-import useMessage from '../../hooks/useMessage'
+import useOpenViewProfileDialog from '../../hooks/dialog/useOpenViewProfileDialog'
+import useMessage from '../../hooks/chat/useMessage'
 import { selectedAccountId } from '../../ScreenController'
 
 import type { T } from '@deltachat/jsonrpc-client'

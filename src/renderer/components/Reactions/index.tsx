@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 
-import useDialog from '../../hooks/useDialog'
+import useDialog from '../../hooks/dialog/useDialog'
 import ReactionsDialog from '../dialogs/ReactionsDialog'
 
 import styles from './styles.module.scss'

@@ -1,9 +1,9 @@
 import { useCallback } from 'react'
 
-import { BackendRemote } from '../backend-com'
-import { getLogger } from '../../shared/logger'
-import { ChatView } from '../contexts/ChatContext'
 import useChat from './useChat'
+import { BackendRemote } from '../../backend-com'
+import { ChatView } from '../../contexts/ChatContext'
+import { getLogger } from '../../../shared/logger'
 
 import type { T } from '@deltachat/jsonrpc-client'
 

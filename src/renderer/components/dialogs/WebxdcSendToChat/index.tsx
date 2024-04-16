@@ -19,9 +19,9 @@ import Dialog, {
   FooterActions,
 } from '../../Dialog'
 import ConfirmationDialog from '../ConfirmationDialog'
+import useChat from '../../../hooks/chat/useChat'
+import useDialog from '../../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import useDialog from '../../../hooks/useDialog'
-import useChat from '../../../hooks/useChat'
 
 import styles from './styles.module.scss'
 

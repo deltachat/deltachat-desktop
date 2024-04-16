@@ -1,9 +1,9 @@
 import { useCallback } from 'react'
 
-import ConfirmationDialog from '../components/dialogs/ConfirmationDialog'
-import useDialog from './useDialog'
-import useTranslationFunction from './useTranslationFunction'
-import { createChatByContactId, getChatInfoByEmail } from '../backend/chat'
+import ConfirmationDialog from '../../components/dialogs/ConfirmationDialog'
+import useDialog from '../dialog/useDialog'
+import useTranslationFunction from '../useTranslationFunction'
+import { createChatByContactId, getChatInfoByEmail } from '../../backend/chat'
 
 import type { T } from '@deltachat/jsonrpc-client'
 

@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import useConfirmationDialog from './useConfirmationDialog'
+import useConfirmationDialog from './dialog/useConfirmationDialog'
 import useOpenMailtoLink from './useOpenMailtoLink'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 import { runtime } from '../runtime'

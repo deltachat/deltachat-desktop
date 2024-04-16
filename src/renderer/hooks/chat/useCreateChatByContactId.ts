@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 
 import useChat from './useChat'
-import { createChatByContactId } from '../backend/chat'
-import { BackendRemote } from '../backend-com'
+import { BackendRemote } from '../../backend-com'
+import { createChatByContactId } from '../../backend/chat'
 
 export default function useCreateChatByContactId() {
   const { selectChat } = useChat()

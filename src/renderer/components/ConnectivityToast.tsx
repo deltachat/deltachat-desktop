@@ -8,7 +8,7 @@ import { debounceWithInit } from './chat/ChatListHelpers'
 import { BackendRemote, onDCEvent } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
 import ConnectivityDialog from './dialogs/ConnectivityDialog'
-import useDialog from '../hooks/useDialog'
+import useDialog from '../hooks/dialog/useDialog'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 import useKeyBindingAction from '../hooks/useKeyBindingAction'
 

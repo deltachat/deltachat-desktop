@@ -6,7 +6,7 @@ import {
   keyDownEvent2Action,
 } from '../keybindings'
 import useKeyBindingAction from '../hooks/useKeyBindingAction'
-import useDialog from '../hooks/useDialog'
+import useDialog from '../hooks/dialog/useDialog'
 import { Screens } from '../ScreenController'
 import KeybindingCheatSheet from '../components/dialogs/KeybindingCheatSheet'
 import Settings from '../components/Settings'

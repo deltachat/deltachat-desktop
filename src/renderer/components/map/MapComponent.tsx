@@ -18,10 +18,10 @@ import ContextMenu from './ContextMenu'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
-import useMessage from '../../hooks/useMessage'
+import useMessage from '../../hooks/chat/useMessage'
 
 import type { T } from '@deltachat/jsonrpc-client'
-import type { SendMessage } from '../../hooks/useMessage'
+import type { SendMessage } from '../../hooks/chat/useMessage'
 
 type MapData = {
   contact: T.Contact

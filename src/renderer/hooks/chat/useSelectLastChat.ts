@@ -1,9 +1,9 @@
 import { useCallback, useEffect } from 'react'
 
 import useChat from './useChat'
-import useHasChanged from './useHasChanged'
-import { BackendRemote } from '../backend-com'
-import { getLastChatId } from '../backend/chat'
+import useHasChanged from '../useHasChanged'
+import { BackendRemote } from '../../backend-com'
+import { getLastChatId } from '../../backend/chat'
 
 /**
  * Detects account changes and selects last known, selected chat for the user

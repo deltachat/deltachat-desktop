@@ -12,9 +12,9 @@ import { RecoverableCrashScreen } from '../screens/RecoverableCrashScreen'
 import { useSettingsStore } from '../../stores/settings'
 import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
 import { ReactionsBarProvider } from '../ReactionsBar'
-import useDialog from '../../hooks/useDialog'
+import useDialog from '../../hooks/dialog/useDialog'
 import useIsChatDisabled from '../composer/useIsChatDisabled'
-import useMessage from '../../hooks/useMessage'
+import useMessage from '../../hooks/chat/useMessage'
 
 import type { T } from '@deltachat/jsonrpc-client'
 

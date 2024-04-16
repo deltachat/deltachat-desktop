@@ -30,10 +30,10 @@ import {
   ProtectionBrokenDialog,
   ProtectionEnabledDialog,
 } from '../dialogs/ProtectionStatusDialog'
-import useDialog from '../../hooks/useDialog'
-import useMessage from '../../hooks/useMessage'
-import useOpenViewProfileDialog from '../../hooks/useOpenViewProfileDialog'
-import usePrivateReply from '../../hooks/usePrivateReply'
+import useDialog from '../../hooks/dialog/useDialog'
+import useMessage from '../../hooks/chat/useMessage'
+import useOpenViewProfileDialog from '../../hooks/dialog/useOpenViewProfileDialog'
+import usePrivateReply from '../../hooks/chat/usePrivateReply'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useVideoChat from '../../hooks/useVideoChat'
 import { useReactionsBar, showReactionsUi } from '../ReactionsBar'
@@ -47,7 +47,7 @@ import Button from '../Button'
 import styles from './styles.module.scss'
 
 import type { OpenDialog } from '../../contexts/DialogContext'
-import type { PrivateReply } from '../../hooks/usePrivateReply'
+import type { PrivateReply } from '../../hooks/chat/usePrivateReply'
 
 const Avatar = (
   contact: T.Contact,

@@ -14,7 +14,7 @@ import Dialog, {
   DialogHeader,
   DialogWithHeader,
 } from '../../Dialog'
-import useDialog from '../../../hooks/useDialog'
+import useDialog from '../../../hooks/dialog/useDialog'
 import useProcessQr from '../../../hooks/useProcessQr'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import ImportQrCode from '../../dialogs/ImportQrCode'

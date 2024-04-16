@@ -9,7 +9,7 @@ import { useChatList } from '../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../ThemeManager'
 import { selectedAccountId } from '../../ScreenController'
 import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
-import useCreateDraftMessage from '../../hooks/useCreateDraftMesssage'
+import useCreateDraftMessage from '../../hooks/chat/useCreateDraftMesssage'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'

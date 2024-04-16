@@ -13,7 +13,7 @@ import {
   VIDEO_CHAT_INSTANCE_SYSTEMLI,
 } from '../../../shared/constants'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
+import useDialog from '../../hooks/dialog/useDialog'
 import SettingsSwitch from './SettingsSwitch'
 
 type Props = {

@@ -16,7 +16,7 @@ import Dialog, { DialogBody, DialogHeader } from '../Dialog'
 import EditProfileDialog from '../dialogs/EditProfileDialog'
 import EditAccountAndPasswordDialog from '../dialogs/EditAccountAndPasswordDialog'
 import SettingsSeparator from './SettingsSeparator'
-import useDialog from '../../hooks/useDialog'
+import useDialog from '../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'

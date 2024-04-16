@@ -11,7 +11,7 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
 } from '../Dialog'
-import useDialog from '../../hooks/useDialog'
+import useDialog from '../../hooks/dialog/useDialog'
 import useOpenLinkSafely from '../../hooks/useOpenLinkSafely'
 import useProcessQr from '../../hooks/useProcessQr'
 import useTranslationFunction from '../../hooks/useTranslationFunction'

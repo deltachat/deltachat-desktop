@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import useMessage from '../hooks/useMessage'
+import useMessage from '../hooks/chat/useMessage'
 import useProcessQr from '../hooks/useProcessQr'
 import { clearNotificationsForChat } from '../system-integration/notifications'
 import { runtime } from '../runtime'

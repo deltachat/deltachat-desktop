@@ -1,9 +1,9 @@
 import { useCallback } from 'react'
 
 import useChat from './useChat'
-import useConfirmationDialog from './useConfirmationDialog'
-import useTranslationFunction from './useTranslationFunction'
-import { BackendRemote } from '../backend-com'
+import useConfirmationDialog from '../dialog/useConfirmationDialog'
+import useTranslationFunction from '../useTranslationFunction'
+import { BackendRemote } from '../../backend-com'
 
 export type CreateDraftMessage = (
   accountId: number,

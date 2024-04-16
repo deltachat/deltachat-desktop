@@ -14,7 +14,7 @@ import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useContextMenu from '../../hooks/useContextMenu'
-import useMessage from '../../hooks/useMessage'
+import useMessage from '../../hooks/chat/useMessage'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 

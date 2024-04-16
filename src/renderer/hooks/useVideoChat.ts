@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 
 import AlertDialog from '../components/dialogs/AlertDialog'
-import useDialog from './useDialog'
-import useMessage from './useMessage'
+import useDialog from './dialog/useDialog'
+import useMessage from './chat/useMessage'
 import useOpenLinkSafely from './useOpenLinkSafely'
 import { BackendRemote } from '../backend-com'
 import { getLogger } from '../../shared/logger'

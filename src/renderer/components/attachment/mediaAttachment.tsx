@@ -20,16 +20,16 @@ import { getLogger } from '../../../shared/logger'
 import { truncateText } from '../../../shared/util'
 import { selectedAccountId } from '../../ScreenController'
 import ConfirmationDialog from '../dialogs/ConfirmationDialog'
-import useDialog from '../../hooks/useDialog'
+import useDialog from '../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useMessage from '../../hooks/useMessage'
+import useMessage from '../../hooks/chat/useMessage'
 import MessageDetail from '../dialogs/MessageDetail'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import AudioPlayer from '../AudioPlayer'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import type { OpenDialog } from '../../contexts/DialogContext'
-import type { JumpToMessage, DeleteMessage } from '../../hooks/useMessage'
+import type { JumpToMessage, DeleteMessage } from '../../hooks/chat/useMessage'
 
 const log = getLogger('mediaAttachment')
 
