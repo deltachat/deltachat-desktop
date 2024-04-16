@@ -415,7 +415,7 @@ export default function QrReader({ onError, onScan }: Props) {
         <button className={styles.qrReaderButton} onClick={handleSelectDevice}>
           <Icon
             icon='settings'
-            size={20}
+            size={24}
             className={styles.qrReaderButtonIcon}
           />
         </button>
