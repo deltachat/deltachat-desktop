@@ -423,6 +423,9 @@ export default function QrReader({ onError, onScan }: Props) {
       <button className={styles.qrReaderButton} onClick={handleSelectDevice}>
         <Icon icon='settings' size={20} className={styles.qrReaderButtonIcon} />
       </button>
+      <div className={styles.qrReaderOverlay} />
+      {ready && !error && <div className={styles.qrReaderScanLine} />}
+      <div className={styles.qrReaderHint}>{tx('qrscan_hint')}</div>
       {videoDevices.length > 0 && (
         <button className={styles.qrReaderButton} onClick={handleSelectDevice}>
           <Icon

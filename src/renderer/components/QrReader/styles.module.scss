@@ -50,7 +50,7 @@
   height: 375px;
   justify-content: center;
   left: 0;
-  padding: 15px;
+  padding: 30px;
   position: absolute;
   right: 0;
   top: 0;
@@ -66,6 +66,50 @@
 
 .qrReaderError {
   display: block;
+}
+
+.qrReaderOverlay {
+  border: 40px solid rgba(0, 0, 0, 0.2);
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.qrReaderHint {
+  bottom: 0;
+  color: white;
+  left: 0;
+  padding: 10px;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  user-select: none;
+}
+
+.qrReaderScanLine {
+  @keyframes pulsating {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  animation-direction: alternate;
+  animation-duration: 0.6s;
+  animation-iteration-count: infinite;
+  animation-name: pulsating;
+  animation-timing-function: ease-in;
+  border-bottom-color: rgba(255, 255, 255, 0.3);
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  left: 50px;
+  position: absolute;
+  right: 50px;
+  top: 50%;
 }
 
 .qrReaderFileInput {
