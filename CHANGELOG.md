@@ -5,6 +5,8 @@
 ### Added
 - Remember last position & size of webxdc windows #3754 #3755
 - add quick-key CtrlOrCmd+q for submenu quit #3758
+- add window titlebar for html_email- and help window #3770
+- add quick key `Cmd+W`/`Ctrl+W` to close webxdc-, html_email- and help-window #3770
 
 
 ### Changed

@@ -267,6 +267,7 @@ export default class DCWebxdc extends SplitOut {
                   click: () => {
                     webxdc_windows.close()
                   },
+                  accelerator: isMac ? 'Cmd+w' : 'Ctrl+w',
                 },
               ],
             },
