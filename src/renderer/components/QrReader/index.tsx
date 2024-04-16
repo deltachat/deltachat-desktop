@@ -25,8 +25,6 @@ import styles from './styles.module.scss'
 
 import type { ContextMenuItem } from '../ContextMenu'
 
-type FacingMode = 'user' | 'environment'
-
 type Props = {
   onError: (error: string) => void
   onScan: (data: string) => void
@@ -87,7 +85,6 @@ export default function QrReader({ onError, onScan }: Props) {
   const [error, setError] = useState(false)
   const [scanner, setScanner] = useState<ZBarScanner | undefined>(undefined)
   const [videoDevices, setVideoDevices] = useState<MediaDeviceInfo[]>([])
-  const [facingMode, setFacingMode] = useState<FacingMode>('user')
   const [deviceId, setDeviceId] = useState<string | undefined>(undefined)
   const [dimensions, setDimensions] = useState<ImageDimensions>({
     width: 640,
@@ -188,7 +185,17 @@ export default function QrReader({ onError, onScan }: Props) {
   const handleSelectDevice = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       const [cursorX, cursorY] = [event.clientX, event.clientY]
+
+      const cameraItems: ContextMenuItem[] = videoDevices.map(device => {
+        const marker = device.deviceId === deviceId ? ' ✔' : ''
+        return {
+          label: `${device.label}${marker}`,
+          action: () => setDeviceId(device.deviceId),
+        }
+      })
+
       const items: ContextMenuItem[] = [
+        ...cameraItems,
         {
           label: tx('load_qr_code_as_image'),
           action: handleImportImage,
@@ -196,35 +203,6 @@ export default function QrReader({ onError, onScan }: Props) {
         {
           label: tx('paste_from_clipboard'),
           action: handlePasteFromClipboard,
-        },
-        {
-          label: 'Camera',
-          subitems: videoDevices.map(device => {
-            const marker = device.deviceId === deviceId ? ' ✔' : ''
-            return {
-              label: `${device.label}${marker}`,
-              action: () => {
-                setDeviceId(device.deviceId)
-              },
-            }
-          }),
-        },
-        {
-          label: 'Facing Mode',
-          subitems: [
-            {
-              label: `Front${facingMode === 'user' ? ' ✔' : ''}`,
-              action: () => {
-                setFacingMode('user')
-              },
-            },
-            {
-              label: `Back${facingMode === 'environment' ? ' ✔' : ''}`,
-              action: () => {
-                setFacingMode('environment')
-              },
-            },
-          ],
         },
       ]
 
@@ -236,7 +214,6 @@ export default function QrReader({ onError, onScan }: Props) {
     },
     [
       deviceId,
-      facingMode,
       handleImportImage,
       handlePasteFromClipboard,
       openContextMenu,
@@ -270,7 +247,7 @@ export default function QrReader({ onError, onScan }: Props) {
     const getCamera = async () => {
       const videoConstraints: MediaTrackConstraints = {
         deviceId,
-        facingMode,
+        facingMode: 'user',
       }
 
       try {
@@ -328,7 +305,7 @@ export default function QrReader({ onError, onScan }: Props) {
       setReady(false)
       setError(false)
     }
-  }, [deviceId, facingMode])
+  }, [deviceId])
 
   useEffect(() => {
     let unmounted = false
