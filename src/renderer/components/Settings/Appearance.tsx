@@ -19,7 +19,7 @@ import SmallSelectDialog, { SelectDialogOption } from '../SmallSelectDialog'
 import SettingsHeading from './SettingsHeading'
 import { DialogContent } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
+import useDialog from '../../hooks/dialog/useDialog'
 import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 
 const log = getLogger('renderer/settings/appearance')

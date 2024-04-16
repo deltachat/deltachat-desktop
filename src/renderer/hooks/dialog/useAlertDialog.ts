@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import useDialog from './useDialog'
 import AlertDialog, {
   Props as AlertDialogProps,
-} from '../components/dialogs/AlertDialog'
+} from '../../components/dialogs/AlertDialog'
 
 type OpenAlertDialog = Pick<AlertDialogProps, 'message'>
 

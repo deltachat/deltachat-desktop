@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import useDialog from './useDialog'
 import ConfirmationDialog, {
   Props as ConfirmationDialogProps,
-} from '../components/dialogs/ConfirmationDialog'
+} from '../../components/dialogs/ConfirmationDialog'
 
 type OpenConfirmationDialog = Pick<
   ConfirmationDialogProps,

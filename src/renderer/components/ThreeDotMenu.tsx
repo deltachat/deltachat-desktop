@@ -2,33 +2,38 @@ import { C } from '@deltachat/jsonrpc-client'
 import React, { useContext } from 'react'
 
 import { Timespans } from '../../shared/constants'
-import {
-  openLeaveChatDialog,
-  openDeleteChatDialog,
-  openBlockFirstContactOfChatDialog,
-  setChatVisibility,
-  unMuteChat,
-  clearChat,
-} from './helpers/ChatMethods'
 import { ContextMenuItem } from './ContextMenu'
 import SettingsStoreInstance, { useSettingsStore } from '../stores/settings'
-import { BackendRemote, Type } from '../backend-com'
+import { BackendRemote } from '../backend-com'
 import { ActionEmitter, KeybindAction } from '../keybindings'
-import useDialog from '../hooks/useDialog'
+import useChat from '../hooks/chat/useChat'
+import useChatDialog from '../hooks/chat/useChatDialog'
+import useDialog from '../hooks/dialog/useDialog'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 import DisappearingMessages from './dialogs/DisappearingMessages'
-import ChatAuditLogDialog from './dialogs/ChatAuditLogDialog'
 import { ContextMenuContext } from '../contexts/ContextMenuContext'
 import { selectedAccountId } from '../ScreenController'
+import { unmuteChat } from '../backend/chat'
+
+import type { T } from '@deltachat/jsonrpc-client'
 
 export function useThreeDotMenu(
-  selectedChat: Type.FullChat | null,
+  selectedChat?: T.FullChat,
   mode: 'chat' | 'gallery' = 'chat'
 ) {
   const { openDialog } = useDialog()
   const { openContextMenu } = useContext(ContextMenuContext)
   const [settingsStore] = useSettingsStore()
   const tx = useTranslationFunction()
+  const accountId = selectedAccountId()
+  const { unselectChat } = useChat()
+  const {
+    openBlockFirstContactOfChatDialog,
+    openChatAuditDialog,
+    openDeleteChatDialog,
+    openLeaveChatDialog,
+    openClearChatDialog,
+  } = useChatDialog()
 
   let menu: (ContextMenuItem | false)[] = [false]
   if (selectedChat && selectedChat.id) {
@@ -39,18 +44,22 @@ export function useThreeDotMenu(
       id: chatId,
       canSend,
     } = selectedChat
-    const accountId = selectedAccountId()
     const isGroup = selectedChat.chatType === C.DC_CHAT_TYPE_GROUP
-    const onLeaveGroup = () =>
-      selectedChat && openLeaveChatDialog(openDialog, selectedChat.id)
-    const onBlockContact = () =>
-      openBlockFirstContactOfChatDialog(openDialog, selectedChat)
-    const onDeleteChat = () =>
-      openDeleteChatDialog(openDialog, selectedChat, selectedChat.id)
-    const onUnmuteChat = () => unMuteChat(selectedChat.id)
 
-    const openChatAuditLog = () =>
-      openDialog(ChatAuditLogDialog, { selectedChat })
+    const onLeaveGroup = () =>
+      selectedChat && openLeaveChatDialog(accountId, chatId)
+
+    const onBlockContact = () =>
+      openBlockFirstContactOfChatDialog(accountId, selectedChat)
+
+    const onDeleteChat = () =>
+      openDeleteChatDialog(accountId, selectedChat, chatId)
+
+    const onUnmuteChat = () => unmuteChat(accountId, chatId)
+
+    const onChatAudit = () => openChatAuditDialog(selectedChat)
+
+    const onClearChat = () => openClearChatDialog(accountId, chatId)
 
     const onDisappearingMessages = () =>
       openDialog(DisappearingMessages, {
@@ -78,7 +87,7 @@ export function useThreeDotMenu(
         settingsStore !== null &&
         settingsStore.desktopSettings.enableChatAuditLog && {
           label: tx('menu_chat_audit_log'),
-          action: openChatAuditLog,
+          action: onChatAudit,
         },
       !selectedChat.isMuted
         ? {
@@ -155,11 +164,17 @@ export function useThreeDotMenu(
       selectedChat.archived
         ? {
             label: tx('menu_unarchive_chat'),
-            action: () => setChatVisibility(chatId, 'Normal', true),
+            action: () => {
+              BackendRemote.rpc.setChatVisibility(accountId, chatId, 'Normal')
+              unselectChat()
+            },
           }
         : {
             label: tx('menu_archive_chat'),
-            action: () => setChatVisibility(chatId, 'Archived', true),
+            action: () => {
+              BackendRemote.rpc.setChatVisibility(accountId, chatId, 'Archived')
+              unselectChat()
+            },
           },
       !isGroup &&
         !(isSelfTalk || isDeviceChat) && {
@@ -173,7 +188,7 @@ export function useThreeDotMenu(
         },
       {
         label: tx('clear_chat'),
-        action: clearChat.bind(null, openDialog, chatId),
+        action: onClearChat,
       },
       {
         label: tx('menu_delete_chat'),

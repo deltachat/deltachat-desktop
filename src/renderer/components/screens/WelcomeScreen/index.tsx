@@ -8,15 +8,15 @@ import { runtime } from '../../../runtime'
 import { DeltaProgressBar } from '../../Login-Styles'
 import { Screens, selectedAccountId } from '../../../ScreenController'
 import { BackendRemote, EffectfulBackendActions } from '../../../backend-com'
-import processOpenQrUrl from '../../helpers/OpenQrUrl'
 import Dialog, {
   DialogBody,
   DialogContent,
   DialogHeader,
   DialogWithHeader,
 } from '../../Dialog'
+import useDialog from '../../../hooks/dialog/useDialog'
+import useProcessQr from '../../../hooks/useProcessQr'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import useDialog from '../../../hooks/useDialog'
 import ImportQrCode from '../../dialogs/ImportQrCode'
 import AlertDialog from '../../dialogs/AlertDialog'
 import {
@@ -140,6 +140,7 @@ export default function WelcomeScreen({
 }) {
   const tx = useTranslationFunction()
   const { openDialog, closeDialog } = useDialog()
+  const processQr = useProcessQr()
   const [showBackButton, setShowBackButton] = useState(false)
 
   const onClickLogin = () => window.__changeScreen(Screens.Login)
@@ -182,17 +183,11 @@ export default function WelcomeScreen({
       if (window.__welcome_qr) {
         // this is the "callback" when opening dclogin or dcaccount from an already existing account,
         // the app needs to switch to the welcome screen first.
-        await processOpenQrUrl(
-          openDialog,
-          closeDialog,
-          window.__welcome_qr,
-          undefined,
-          true
-        )
+        await processQr(selectedAccountId, window.__welcome_qr, undefined, true)
         window.__welcome_qr = undefined
       }
     })()
-  }, [openDialog, closeDialog])
+  }, [openDialog, closeDialog, processQr, selectedAccountId])
 
   return (
     <div className='login-screen'>

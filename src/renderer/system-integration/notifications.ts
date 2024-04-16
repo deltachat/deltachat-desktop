@@ -1,12 +1,12 @@
-import { T } from '@deltachat/jsonrpc-client'
 import { appName } from '../../shared/constants'
 import { getLogger } from '../../shared/logger'
 import { BackendRemote } from '../backend-com'
 import { isImage } from '../components/attachment/Attachment'
-import { jumpToMessage } from '../components/helpers/ChatMethods'
 import { runtime } from '../runtime'
 import SettingsStoreInstance from '../stores/settings'
 import AccountNotificationStoreInstance from '../stores/accountNotifications'
+
+import type { T } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/notifications')
 
@@ -238,16 +238,5 @@ export function initNotifications() {
   })
   BackendRemote.on('IncomingMsgBunch', accountId => {
     flushNotifications(accountId)
-  })
-  runtime.setNotificationCallback(async ({ accountId, msgId, chatId }) => {
-    if (window.__selectedAccountId !== accountId) {
-      await window.__selectAccount(accountId)
-    }
-    if (chatId !== 0) {
-      clearNotificationsForChat(accountId, chatId)
-      if (msgId !== 0) {
-        jumpToMessage(msgId, true)
-      }
-    }
   })
 }

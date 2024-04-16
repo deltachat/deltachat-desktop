@@ -1,11 +1,9 @@
 import React, { useContext, useState } from 'react'
-import { LinkDestination } from '@deltachat/message_parser_wasm'
 
 import { DeltaCheckbox } from '../contact/ContactListItem'
 import { getLogger } from '../../../shared/logger'
 import reactStringReplace from 'react-string-replace'
 import { runtime } from '../../runtime'
-import { openLinkSafely } from '../helpers/LinkConfirmation'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -13,11 +11,16 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
 } from '../Dialog'
-import useDialog from '../../hooks/useDialog'
-import { OpenDialog } from '../../contexts/DialogContext'
-import processOpenQrUrl from '../helpers/OpenQrUrl'
+import useDialog from '../../hooks/dialog/useDialog'
+import useOpenLinkSafely from '../../hooks/useOpenLinkSafely'
+import useProcessQr from '../../hooks/useProcessQr'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { isInviteLink } from '../../../shared/util'
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
+import { selectedAccountId } from '../../ScreenController'
+
+import type { LinkDestination } from '@deltachat/message_parser_wasm'
+import type { DialogProps } from '../../contexts/DialogContext'
 
 const log = getLogger('renderer/LabeledLink')
 
@@ -43,8 +46,11 @@ export const LabeledLink = ({
   label: string | JSX.Element | JSX.Element[]
   destination: LinkDestination
 }) => {
-  const { openDialog, closeDialog } = useDialog()
+  const { openDialog } = useDialog()
+  const openLinkSafely = useOpenLinkSafely()
+  const processQr = useProcessQr()
   const messageDisplay = useContext(MessagesDisplayContext)
+  const accountId = selectedAccountId()
   const { target, punycode, hostname } = destination
 
   // encode the punycode to make phishing harder
@@ -60,17 +66,17 @@ export const LabeledLink = ({
         : false
 
     if (isInviteLink(target)) {
-      processOpenQrUrl(openDialog, closeDialog, target)
+      processQr(accountId, target)
       return
     }
 
     //check if domain is trusted, or if there is no domain like on mailto just open it
     if (isDeviceChat || !hostName || isDomainTrusted(hostName)) {
-      openLinkSafely(openDialog, target)
+      openLinkSafely(accountId, target)
       return
     }
     // not trusted - ask for confirmation from user
-    labeledLinkConfirmationDialog(openDialog, realUrl, hostName, target)
+    openDialog(LabeledLinkConfirmationDialog, { realUrl, hostName, target })
   }
   return (
     <a
@@ -85,79 +91,85 @@ export const LabeledLink = ({
   )
 }
 
-function labeledLinkConfirmationDialog(
-  openDialog: OpenDialog,
-  sanitizedTarget: string,
-  hostname: string,
-  target: string
+function LabeledLinkConfirmationDialog(
+  props: {
+    realUrl: string
+    hostName: string
+    target: string
+  } & DialogProps
 ) {
-  openDialog(({ onClose }) => {
-    const tx = window.static_translate
-    const [isChecked, setIsChecked] = useState(false)
-    const toggleIsChecked = () => setIsChecked(checked => !checked)
-    return (
-      <Dialog onClose={onClose}>
-        <DialogBody>
-          <DialogContent paddingTop>
-            <p>{tx('open_url_confirmation')}</p>
-            <p
-              style={{
-                overflowWrap: 'break-word',
-                overflowY: 'scroll',
-                maxHeight: '50vh',
-              }}
-            >
-              {sanitizedTarget}
-            </p>
-            <div style={{ display: 'flex' }}>
-              <DeltaCheckbox checked={isChecked} onClick={toggleIsChecked} />
-              <div style={{ alignSelf: 'center' }}>
-                {reactStringReplace(
-                  tx('open_external_url_trust_domain', '$$hostname$$'),
-                  '$$hostname$$',
-                  () => (
-                    <i>{hostname}</i>
-                  )
-                )}
-              </div>
+  const tx = useTranslationFunction()
+  const accountId = selectedAccountId()
+  const openLinkSafely = useOpenLinkSafely()
+  const [isChecked, setIsChecked] = useState(false)
+  const toggleIsChecked = () => setIsChecked(checked => !checked)
+
+  return (
+    <Dialog onClose={props.onClose}>
+      <DialogBody>
+        <DialogContent paddingTop>
+          <p>{tx('open_url_confirmation')}</p>
+          <p
+            style={{
+              overflowWrap: 'break-word',
+              overflowY: 'scroll',
+              maxHeight: '50vh',
+            }}
+          >
+            {props.realUrl}
+          </p>
+          <div style={{ display: 'flex' }}>
+            <DeltaCheckbox checked={isChecked} onClick={toggleIsChecked} />
+            <div style={{ alignSelf: 'center' }}>
+              {reactStringReplace(
+                tx('open_external_url_trust_domain', '$$hostname$$'),
+                '$$hostname$$',
+                () => (
+                  <i>{props.hostName}</i>
+                )
+              )}
             </div>
-          </DialogContent>
-        </DialogBody>
-        <DialogFooter>
-          <FooterActions>
-            <FooterActionButton
-              onClick={() => {
-                runtime.writeClipboardText(target).then(() => onClose())
-              }}
-            >
-              {tx('copy')}
-            </FooterActionButton>
-            <FooterActionButton onClick={onClose}>
-              {tx('cancel')}
-            </FooterActionButton>
-            <FooterActionButton
-              onClick={() => {
-                onClose()
-                if (isChecked) {
-                  // trust url
-                  trustDomain(hostname)
-                }
-                openLinkSafely(openDialog, target)
-              }}
-            >
-              {tx('open')}
-            </FooterActionButton>
-          </FooterActions>
-        </DialogFooter>
-      </Dialog>
-    )
-  })
+          </div>
+        </DialogContent>
+      </DialogBody>
+      <DialogFooter>
+        <FooterActions>
+          <FooterActionButton
+            onClick={() => {
+              runtime
+                .writeClipboardText(props.target)
+                .then(() => props.onClose())
+            }}
+          >
+            {tx('copy')}
+          </FooterActionButton>
+          <FooterActionButton onClick={props.onClose}>
+            {tx('cancel')}
+          </FooterActionButton>
+          <FooterActionButton
+            onClick={() => {
+              props.onClose()
+              if (isChecked) {
+                // trust url
+                trustDomain(props.hostName)
+              }
+              openLinkSafely(accountId, props.target)
+            }}
+          >
+            {tx('open')}
+          </FooterActionButton>
+        </FooterActions>
+      </DialogFooter>
+    </Dialog>
+  )
 }
 
 export const Link = ({ destination }: { destination: LinkDestination }) => {
-  const { openDialog, closeDialog } = useDialog()
-
+  const { openDialog } = useDialog()
+  const openLinkSafely = useOpenLinkSafely()
+  const accountId = selectedAccountId()
   const { target, punycode } = destination
+  const processQr = useProcessQr()
   const asciiUrl = punycode ? punycode.punycode_encoded_url : target
 
   const onClick = (ev: any) => {
@@ -165,21 +177,21 @@ export const Link = ({ destination }: { destination: LinkDestination }) => {
     ev.stopPropagation()
 
     if (isInviteLink(target)) {
-      processOpenQrUrl(openDialog, closeDialog, target)
+      processQr(accountId, target)
       return
     }
 
     if (punycode) {
-      openPunycodeUrlConfirmationDialog(
-        openDialog,
-        punycode.original_hostname,
-        punycode.ascii_hostname,
-        punycode.punycode_encoded_url
-      )
+      openDialog(PunycodeUrlConfirmationDialog, {
+        originalHostname: punycode.original_hostname,
+        asciiHostname: punycode.ascii_hostname,
+        asciiUrl: punycode.punycode_encoded_url,
+      })
     } else {
-      openLinkSafely(openDialog, target)
+      openLinkSafely(accountId, target)
     }
   }
+
   return (
     <a href='#' x-target-url={asciiUrl} title={asciiUrl} onClick={onClick}>
       {target}
@@ -187,72 +199,73 @@ export const Link = ({ destination }: { destination: LinkDestination }) => {
   )
 }
 
-function openPunycodeUrlConfirmationDialog(
-  openDialog: OpenDialog,
-  originalHostname: string,
-  asciiHostname: string,
-  asciiUrl: string
+function PunycodeUrlConfirmationDialog(
+  props: {
+    originalHostname: string
+    asciiHostname: string
+    asciiUrl: string
+  } & DialogProps
 ) {
-  openDialog(({ onClose }) => {
-    const tx = window.static_translate
+  const tx = useTranslationFunction()
+  const openLinkSafely = useOpenLinkSafely()
+  const accountId = selectedAccountId()
 
-    return (
-      <Dialog onClose={onClose}>
-        <DialogBody>
-          <DialogContent paddingTop>
-            <div
-              style={{
-                fontSize: '1.5em',
-                fontWeight: 'lighter',
-                marginBottom: '6px',
-              }}
-            >
-              {tx('puny_code_warning_header')}
-            </div>
-            <p>
-              {reactStringReplace(
-                tx('puny_code_warning_question', '$$asciiHostname$$'),
-                '$$asciiHostname$$',
-                () => (
-                  <b>{asciiHostname}</b>
-                )
-              )}
-            </p>
-            <hr />
-            <p>
-              {reactStringReplace(
-                reactStringReplace(
-                  tx('puny_code_warning_description', [
-                    '$$originalHostname$$',
-                    '$$asciiHostname$$',
-                  ]),
+  return (
+    <Dialog onClose={props.onClose}>
+      <DialogBody>
+        <DialogContent paddingTop>
+          <div
+            style={{
+              fontSize: '1.5em',
+              fontWeight: 'lighter',
+              marginBottom: '6px',
+            }}
+          >
+            {tx('puny_code_warning_header')}
+          </div>
+          <p>
+            {reactStringReplace(
+              tx('puny_code_warning_question', '$$asciiHostname$$'),
+              '$$asciiHostname$$',
+              () => (
+                <b>{props.asciiHostname}</b>
+              )
+            )}
+          </p>
+          <hr />
+          <p>
+            {reactStringReplace(
+              reactStringReplace(
+                tx('puny_code_warning_description', [
                   '$$originalHostname$$',
-                  () => <b>{originalHostname}</b>
-                ),
-                '$$asciiHostname$$',
-                () => (
-                  <b>{asciiHostname}</b>
-                )
-              )}
-            </p>
-          </DialogContent>
-        </DialogBody>
-        <DialogFooter>
-          <FooterActions>
-            <FooterActionButton onClick={onClose}>
-              {tx('no')}
-            </FooterActionButton>
-            <FooterActionButton
-              onClick={() => {
-                onClose()
-                openLinkSafely(openDialog, asciiUrl)
-              }}
-            >
-              {tx('open')}
-            </FooterActionButton>
-          </FooterActions>
-        </DialogFooter>
-      </Dialog>
-    )
-  })
+                  '$$asciiHostname$$',
+                ]),
+                '$$originalHostname$$',
+                () => <b>{props.originalHostname}</b>
+              ),
+              '$$asciiHostname$$',
+              () => (
+                <b>{props.asciiHostname}</b>
+              )
+            )}
+          </p>
+        </DialogContent>
+      </DialogBody>
+      <DialogFooter>
+        <FooterActions>
+          <FooterActionButton onClick={props.onClose}>
+            {tx('no')}
+          </FooterActionButton>
+          <FooterActionButton
+            onClick={() => {
+              props.onClose()
+              openLinkSafely(accountId, props.asciiUrl)
+            }}
+          >
+            {tx('open')}
+          </FooterActionButton>
+        </FooterActions>
+      </DialogFooter>
+    </Dialog>
+  )
 }
