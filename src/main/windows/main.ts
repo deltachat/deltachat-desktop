@@ -172,7 +172,7 @@ export function init(options: { hidden: boolean }) {
     (details, callback) => {
       const pathname = decodeURIComponent(new URL(details.url).pathname)
 
-      if (!isAbsolute(pathname) || pathname.indexOf('..') !== -1) {
+      if (!isAbsolute(pathname) || pathname.includes('..')) {
         log.errorWithoutStackTrace('tried to access relative path', pathname)
         return callback({ cancel: true })
       }
