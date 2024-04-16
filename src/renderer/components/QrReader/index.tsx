@@ -8,6 +8,7 @@ import React, {
 import {
   ZBarConfigType,
   ZBarScanner,
+  ZBarSymbol,
   ZBarSymbolType,
   getDefaultScanner,
   scanImageData,
@@ -136,6 +137,25 @@ export default function QrReader({ onError, onScan }: Props) {
     createScanner()
   }, [])
 
+  const handleScanResults = useCallback(
+    (results: ZBarSymbol[]) => {
+      let unmounted = false
+
+      if (unmounted) {
+        return
+      }
+
+      results.forEach(result => {
+        onScan(result.decode())
+      })
+
+      return () => {
+        unmounted = true
+      }
+    },
+    [onScan]
+  )
+
   const handleError = useCallback(
     (error: any) => {
       if (typeof error === 'string') {
@@ -150,23 +170,14 @@ export default function QrReader({ onError, onScan }: Props) {
   )
 
   const handlePasteFromClipboard = useCallback(async () => {
-    let unmounted = false
-
     try {
       // Try interpreting the clipboard data as an image
       const base64 = await runtime.readClipboardImage()
       if (base64) {
         const imageData = await base64ToImageData(base64)
         const results = await scanImageData(imageData, scanner)
-
-        if (unmounted) {
-          return
-        }
-
         if (results.length > 0) {
-          results.forEach(result => {
-            onScan(result.decode())
-          })
+          handleScanResults(results)
           return
         } else {
           throw new Error('could not find any results in clipboard image')
@@ -185,11 +196,7 @@ export default function QrReader({ onError, onScan }: Props) {
         text: `Reading qrcodedata from clipboard failed: ${error}`,
       })
     }
-
-    return () => {
-      unmounted = true
-    }
-  }, [onScan, scanner, userFeedback])
+  }, [handleScanResults, onScan, scanner, userFeedback])
 
   const handleImportImage = useCallback(async () => {
     if (inputRef.current) {
@@ -199,7 +206,6 @@ export default function QrReader({ onError, onScan }: Props) {
 
   const handleFileInputChange = useCallback(
     async (event: React.ChangeEvent<HTMLInputElement>) => {
-      let unmounted = false
       if (!event.target.files || event.target.files.length === 0) {
         return
       }
@@ -209,23 +215,12 @@ export default function QrReader({ onError, onScan }: Props) {
         const base64 = await fileToBase64(file)
         const imageData = await base64ToImageData(base64)
         const results = await scanImageData(imageData, scanner)
-
-        if (unmounted) {
-          return
-        }
-
-        results.forEach(result => {
-          onScan(result.decode())
-        })
+        handleScanResults(results)
       } catch (error: any) {
         handleError(error)
       }
-
-      return () => {
-        unmounted = true
-      }
     },
-    [handleError, onScan, scanner]
+    [handleError, handleScanResults, scanner]
   )
 
   const handleSelectDevice = useCallback(
@@ -354,8 +349,6 @@ export default function QrReader({ onError, onScan }: Props) {
   }, [deviceId])
 
   useEffect(() => {
-    let unmounted = false
-
     const canvas = canvasRef.current
     const video = videoRef.current
 
@@ -385,14 +378,7 @@ export default function QrReader({ onError, onScan }: Props) {
       const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
       try {
         const results = await scanImageData(imageData, scanner)
-
-        if (unmounted) {
-          return
-        }
-
-        results.forEach(result => {
-          onScan(result.decode())
-        })
+        handleScanResults(results)
       } catch (error: any) {
         handleError(error)
       }
@@ -400,10 +386,9 @@ export default function QrReader({ onError, onScan }: Props) {
 
     const interval = window.setInterval(scan, SCAN_QR_INTERVAL_MS)
     return () => {
-      unmounted = true
       window.clearInterval(interval)
     }
-  }, [handleError, onScan, scanner])
+  }, [handleError, handleScanResults, onScan, scanner])
 
   return (
     <div className={styles.qrReader}>
