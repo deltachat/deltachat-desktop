@@ -256,6 +256,12 @@ export default function QrReader({ onError, onScan }: Props) {
       } catch (error: any) {
         handleError(error)
       }
+
+      // Reset the input element again, otherwise we wouldn't be able to trigger
+      // another `onChange` again when selecting the same image
+      if (inputRef.current) {
+        inputRef.current.value = ''
+      }
     },
     [handleError, handleScanResults, scanner]
   )
