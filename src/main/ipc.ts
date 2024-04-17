@@ -210,17 +210,16 @@ export async function init(cwd: string, logHandler: LogHandler) {
     return clipboard.readText()
   })
   ipcMain.handle('electron.clipboard.readImage', () => {
-    const base64Data = clipboard.readImage().toDataURL()
+    const image = clipboard.readImage()
 
     // Electron just returns an empty base64 string (for example
     // 'data:image/png;base64,' when no image was in the clipboard),
     // we check that here and more conveniently return null instead
-    const separated = base64Data.split(',')
-    if (separated.length != 2 || separated[1] === '') {
+    if (image.isEmpty()) {
       return null
     }
 
-    return base64Data
+    return image.toDataURL()
   })
   ipcMain.handle('electron.clipboard.writeText', (_ev, text) => {
     return clipboard.writeText(text)
