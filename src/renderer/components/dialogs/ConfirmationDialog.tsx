@@ -33,13 +33,18 @@ export default function ConfirmationDialog({
 }: Props) {
   const tx = useTranslationFunction()
 
-  const onClick = (yes: boolean) => {
+  const handleClick = (yes: boolean) => {
     onClose()
     cb(yes)
   }
 
+  const handleClose = () => {
+    onClose()
+    cb(false)
+  }
+
   return (
-    <Dialog onClose={onClose}>
+    <Dialog onClose={handleClose}>
       {header && <DialogHeader title={header} />}
       <DialogBody>
         <DialogContent paddingTop={header === undefined}>
@@ -48,12 +53,12 @@ export default function ConfirmationDialog({
       </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <FooterActionButton onClick={() => onClick(false)}>
+          <FooterActionButton onClick={() => handleClick(false)}>
             {cancelLabel || tx('cancel')}
           </FooterActionButton>
           <FooterActionButton
             danger={isConfirmDanger}
-            onClick={() => onClick(true)}
+            onClick={() => handleClick(true)}
           >
             {confirmLabel || tx('yes')}
           </FooterActionButton>
