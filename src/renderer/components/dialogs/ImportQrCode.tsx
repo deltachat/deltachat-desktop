@@ -10,15 +10,12 @@ type Props = {
   subtitle: string
 }
 
-export default function ImportQrCode({
-  subtitle,
-  onClose,
-}: Props & DialogProps) {
+export default function ImportQrCode({ onClose }: Props & DialogProps) {
   const tx = useTranslationFunction()
 
   return (
     <DialogWithHeader title={tx('qrscan_title')} onClose={onClose}>
-      <QrCodeScanQrInner subtitle={subtitle} onClose={onClose} />
+      <QrCodeScanQrInner onClose={onClose} />
     </DialogWithHeader>
   )
 }
