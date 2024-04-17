@@ -4,6 +4,7 @@ import React, {
   useRef,
   useEffect,
   useLayoutEffect,
+  useCallback,
 } from 'react'
 import classNames from 'classnames'
 
@@ -78,9 +79,7 @@ export default function QrCode({
           onClose={onClose}
         />
       )}
-      {!showQrCode && (
-        <QrCodeScanQrInner subtitle={tx('qrscan_hint')} onClose={onClose} />
-      )}
+      {!showQrCode && <QrCodeScanQrInner onClose={onClose} />}
     </Dialog>
   )
 }
@@ -199,41 +198,46 @@ export function QrCodeShowQrInner({
   )
 }
 
-export function QrCodeScanQrInner(
-  props: React.PropsWithChildren<{
-    subtitle: string
-    onClose: () => void
-  }>
-) {
+export function QrCodeScanQrInner({
+  onClose,
+}: React.PropsWithChildren<{
+  onClose: () => void
+}>) {
   const tx = useTranslationFunction()
   const accountId = selectedAccountId()
   const processQr = useProcessQr()
   const { selectChat } = useChat()
   const processingQrCode = useRef(false)
 
-  const onDone = () => {
-    props.onClose()
+  const onDone = useCallback(() => {
+    onClose()
     processingQrCode.current = false
-  }
+  }, [onClose])
 
-  const handleScanResult = (chatId: number | null = null) => {
-    chatId && selectChat(chatId)
-    onDone()
-  }
+  const handleScanResult = useCallback(
+    (chatId: number | null = null) => {
+      chatId && selectChat(chatId)
+      onDone()
+    },
+    [onDone, selectChat]
+  )
 
-  const handleScan = async (data: string) => {
-    if (data && processingQrCode.current === false) {
-      processingQrCode.current = true
-      try {
-        await processQr(accountId, data, handleScanResult)
-      } catch (err) {
+  const handleScan = useCallback(
+    async (data: string) => {
+      if (data && !processingQrCode.current) {
+        processingQrCode.current = true
+        try {
+          await processQr(accountId, data, handleScanResult)
+        } catch (error: any) {
+          handleError(error)
+        }
         processingQrCode.current = false
-        throw err
+      } else if (processingQrCode.current === true) {
+        log.debug('Already processing a qr code')
       }
-    } else if (processingQrCode.current === true) {
-      log.debug('Already processing a qr code')
-    }
-  }
+    },
+    [accountId, handleScanResult, processQr]
+  )
 
   const handleError = (err: string) => {
     log.error('QrReader error: ' + err)
@@ -246,7 +250,7 @@ export function QrCodeScanQrInner(
       </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <FooterActionButton onClick={props.onClose}>
+          <FooterActionButton onClick={onClose}>
             {tx('close')}
           </FooterActionButton>
         </FooterActions>
