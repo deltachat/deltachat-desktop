@@ -111,6 +111,11 @@ export default function QrReader({ onError, onScan }: Props) {
     height: 480,
   })
 
+  // Create a QR code scanner object from the "zbar" library.
+  //
+  // We use it to detect QR codes in image data. The library offers many other
+  // detection methods as well, we configure it here to only look
+  // for "2D QR-Codes".
   useEffect(() => {
     const createScanner = async () => {
       const qrCodeScanner = await getDefaultScanner()
@@ -137,6 +142,25 @@ export default function QrReader({ onError, onScan }: Props) {
     createScanner()
   }, [])
 
+  // Get all current video devices available to the user.
+  useEffect(() => {
+    const getAllCameras = async () => {
+      const devices = await navigator.mediaDevices.enumerateDevices()
+      setVideoDevices(
+        devices.filter(device => {
+          return device.kind === 'videoinput'
+        })
+      )
+    }
+
+    getAllCameras()
+  }, [])
+
+  // General handler for scanning results coming from the "zbar" library.
+  //
+  // Since there can be multiple results we return all them. Additionally
+  // we have checks in place to make sure we're not firing any callbacks
+  // when this React component has already been unmounted.
   const handleScanResults = useCallback(
     (results: ZBarSymbol[]) => {
       let unmounted = false
@@ -156,6 +180,7 @@ export default function QrReader({ onError, onScan }: Props) {
     [onScan]
   )
 
+  // General handler for errors which might occur during scanning.
   const handleError = useCallback(
     (error: any) => {
       if (typeof error === 'string') {
@@ -169,6 +194,7 @@ export default function QrReader({ onError, onScan }: Props) {
     [onError]
   )
 
+  // Read data from clipboard which potentially can be an image itself.
   const handlePasteFromClipboard = useCallback(async () => {
     try {
       // Try interpreting the clipboard data as an image
@@ -198,6 +224,11 @@ export default function QrReader({ onError, onScan }: Props) {
     }
   }, [handleScanResults, onScan, scanner, tx, userFeedback])
 
+  // Read data from an external image file.
+  //
+  // We first trigger an "file open" dialog by automatically "clicking"
+  // an <input> element. The actual conversion and scanning of the file data
+  // happens afterwards.
   const handleImportImage = useCallback(async () => {
     if (inputRef.current) {
       inputRef.current.click()
@@ -212,6 +243,7 @@ export default function QrReader({ onError, onScan }: Props) {
       const file = event.target.files[0]
 
       try {
+        // Convert file to correct image data and scan it
         const base64 = await fileToBase64(file)
         const imageData = await base64ToImageData(base64)
         const results = await scanImageData(imageData, scanner)
@@ -223,6 +255,7 @@ export default function QrReader({ onError, onScan }: Props) {
     [handleError, handleScanResults, scanner]
   )
 
+  // Show a context menu with different video input options to the user.
   const handleSelectDevice = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       const [cursorX, cursorY] = [event.clientX, event.clientY]
@@ -267,19 +300,8 @@ export default function QrReader({ onError, onScan }: Props) {
     ]
   )
 
-  useEffect(() => {
-    const getAllCameras = async () => {
-      const devices = await navigator.mediaDevices.enumerateDevices()
-      setVideoDevices(
-        devices.filter(device => {
-          return device.kind === 'videoinput'
-        })
-      )
-    }
-
-    getAllCameras()
-  }, [])
-
+  // Whenever a camera was (automatically or manually) selected we attempt
+  // starting a video stream from it which gets rendered in a video element.
   useEffect(() => {
     let activeStream: MediaStream | undefined
     let unmounted = false
@@ -352,6 +374,10 @@ export default function QrReader({ onError, onScan }: Props) {
     }
   }, [deviceId])
 
+  // Frequently scan image data for QR code with "zbar" library.
+  //
+  // We achieve this by extracting the image data from the video element using
+  // an intermediary canvas context.
   useEffect(() => {
     const canvas = canvasRef.current
     const video = videoRef.current
