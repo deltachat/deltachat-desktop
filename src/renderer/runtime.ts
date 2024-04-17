@@ -77,6 +77,10 @@ interface Runtime {
   downloadFile(pathToSource: string, filename: string): Promise<void>
   transformBlobURL(blob: string): string
   readClipboardText(): Promise<string>
+  /**
+   * @returns promise that resolves into base64 encoded image string
+   * or null when no image was given from clipboard
+   */
   readClipboardImage(): Promise<string | null>
   writeClipboardText(text: string): Promise<void>
   writeClipboardImage(path: string): Promise<void>
