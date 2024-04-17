@@ -184,7 +184,7 @@ export default function QrReader({ onError, onScan }: Props) {
         }
       }
 
-      // .. as a fallback return data from clipboard directly
+      // .. otherwise return non-image data from clipboard directly
       const data = await runtime.readClipboardText()
       if (!data) {
         throw new Error('no data in clipboard')

@@ -77,7 +77,7 @@ interface Runtime {
   downloadFile(pathToSource: string, filename: string): Promise<void>
   transformBlobURL(blob: string): string
   readClipboardText(): Promise<string>
-  readClipboardImage(): Promise<string>
+  readClipboardImage(): Promise<string | null>
   writeClipboardText(text: string): Promise<void>
   writeClipboardImage(path: string): Promise<void>
   getAppPath(name: Parameters<typeof app.getPath>[0]): string
@@ -280,7 +280,7 @@ class Browser implements Runtime {
   async readClipboardText(): Promise<string> {
     throw new Error('Method not implemented.')
   }
-  async readClipboardImage(): Promise<string> {
+  async readClipboardImage(): Promise<string | null> {
     throw new Error('Method not implemented.')
   }
   writeClipboardText(_text: string): Promise<void> {
@@ -471,7 +471,7 @@ class Electron implements Runtime {
   readClipboardText(): Promise<string> {
     return ipcBackend.invoke('electron.clipboard.readText')
   }
-  readClipboardImage(): Promise<string> {
+  readClipboardImage(): Promise<string | null> {
     return ipcBackend.invoke('electron.clipboard.readImage')
   }
   writeClipboardText(text: string): Promise<void> {
