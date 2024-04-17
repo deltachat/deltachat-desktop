@@ -1,4 +1,4 @@
-import { BackendRemote } from '../backend-com'
+import { BackendRemote } from '../apiService'
 import { debouncedUpdateBadgeCounter } from '../system-integration/badge-counter'
 import { clearNotificationsForChat } from '../system-integration/notifications'
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote } from '../../apiService'
 import { Credentials } from '../../../shared/shared-types'
 import LoginForm, {
   ConfigureProgressDialog,

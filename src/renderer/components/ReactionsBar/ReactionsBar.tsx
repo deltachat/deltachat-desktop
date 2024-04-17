@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import classNames from 'classnames'
 
 import Icon from '../Icon'
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote } from '../../apiService'
 import { selectedAccountId } from '../../ScreenController'
 import EmojiPicker from '../EmojiPicker'
 

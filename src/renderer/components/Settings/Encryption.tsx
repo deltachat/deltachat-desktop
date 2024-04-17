@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote } from '../../apiService'
 import { selectedAccountId } from '../../ScreenController'
 import SettingsButton from './SettingsButton'
 import CoreSettingsSwitch from './CoreSettingsSwitch'

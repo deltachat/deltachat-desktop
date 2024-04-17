@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react'
 import { DeltaCheckbox } from '../contact/ContactListItem'
 import { getLogger } from '../../../shared/logger'
 import reactStringReplace from 'react-string-replace'
-import { runtime } from '../../runtime'
+import { RuntimeService } from '../../runtime/runtimeService'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -136,9 +136,9 @@ function LabeledLinkConfirmationDialog(
         <FooterActions>
           <FooterActionButton
             onClick={() => {
-              runtime
-                .writeClipboardText(props.target)
-                .then(() => props.onClose())
+              RuntimeService.writeClipboardText(props.target).then(() =>
+                props.onClose()
+              )
             }}
           >
             {tx('copy')}

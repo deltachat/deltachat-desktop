@@ -13,13 +13,13 @@ import useDialog from '../../hooks/dialog/useDialog'
 import useMessage from '../../hooks/chat/useMessage'
 import usePrivateReply from '../../hooks/chat/usePrivateReply'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { BackendRemote, Type } from '../../backend-com'
+import { BackendRemote, Type } from '../../apiService'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import { getDirection } from '../../../shared/util'
 import { getLogger } from '../../../shared/logger'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { openMessageInfo, setQuoteInDraft } from '../message/messageFunctions'
-import { runtime } from '../../runtime'
+import { RuntimeService } from '../../runtime/runtimeService'
 import { selectedAccountId } from '../../ScreenController'
 
 import type { DialogProps, OpenDialog } from '../../contexts/DialogContext'
@@ -241,7 +241,7 @@ export default function ChatAuditLogDialog(
                         {systemMessageType == 'WebxdcInfoMessage' &&
                           parentId && (
                             <img
-                              src={runtime.getWebxdcIconURL(
+                              src={RuntimeService.getWebxdcIconURL(
                                 accountId,
                                 parentId
                               )}

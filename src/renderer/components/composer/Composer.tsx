@@ -21,10 +21,10 @@ import {
   EffectfulBackendActions,
   onDCEvent,
   Type,
-} from '../../backend-com'
+} from '../../apiService'
 import { selectedAccountId } from '../../ScreenController'
 import { MessageTypeAttachmentSubset } from '../attachment/Attachment'
-import { runtime } from '../../runtime'
+import { RuntimeService } from '../../runtime/runtimeService'
 import { confirmDialog } from '../message/messageFunctions'
 import { ProtectionBrokenDialog } from '../dialogs/ProtectionStatusDialog'
 import useDialog from '../../hooks/dialog/useDialog'
@@ -254,10 +254,10 @@ const Composer = forwardRef<
 
     try {
       // Write clipboard to file then attach it to the draft
-      const path = await runtime.writeClipboardToTempFile()
+      const path = await RuntimeService.writeClipboardToTempFile()
       await addFileToDraft(path, msgType)
       // delete file again after it was sucessfuly added
-      await runtime.removeTempFile(path)
+      await RuntimeService.removeTempFile(path)
     } catch (err) {
       log.error('Failed to paste file.', err)
     }

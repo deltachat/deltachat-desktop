@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Icon } from '@blueprintjs/core'
 
 import { ThemeManager } from '../../ThemeManager'
-import { runtime } from '../../runtime'
+import { RuntimeService } from '../../runtime/runtimeService'
 import {
   DesktopSettingsType,
   RC_Config,
@@ -42,7 +42,7 @@ export default function Appearance({
 
   useEffect(() => {
     ;(async () => {
-      const availableThemes = await runtime.getAvailableThemes()
+      const availableThemes = await RuntimeService.getAvailableThemes()
 
       setAvailableThemes(
         availableThemes.filter(
@@ -190,7 +190,7 @@ function BackgroundSelector({
         onChange('var(--chatViewBg)')
         break
       case SetBackgroundAction.customImage:
-        url = await runtime.showOpenFileDialog({
+        url = await RuntimeService.showOpenFileDialog({
           title: 'Select Background Image',
           filters: [
             { name: 'Images', extensions: ['jpg', 'png', 'gif', 'webp'] },
@@ -205,13 +205,13 @@ function BackgroundSelector({
         setLastPath(url)
         SettingsStoreInstance.effect.setDesktopSetting(
           'chatViewBgImg',
-          await runtime.saveBackgroundImage(url, false)
+          await RuntimeService.saveBackgroundImage(url, false)
         )
         break
       case SetBackgroundAction.presetImage:
         SettingsStoreInstance.effect.setDesktopSetting(
           'chatViewBgImg',
-          await runtime.saveBackgroundImage(
+          await RuntimeService.saveBackgroundImage(
             (ev.target as any).dataset.url,
             true
           )
@@ -235,7 +235,7 @@ function BackgroundSelector({
             ...(desktopSettings.chatViewBgImg?.startsWith('img: ')
               ? {
                   backgroundImage: `url("file://${join(
-                    runtime.getConfigPath(),
+                    RuntimeService.getConfigPath(),
                     'background/',
                     desktopSettings.chatViewBgImg.slice(5)
                   )}")`,
@@ -307,8 +307,8 @@ function BackgroundSelector({
 
 async function setThemeFunction(address: string) {
   try {
-    runtime.resolveThemeAddress(address)
-    await runtime.setDesktopSetting('activeTheme', address)
+    RuntimeService.resolveThemeAddress(address)
+    await RuntimeService.setDesktopSetting('activeTheme', address)
     return true
   } catch (error) {
     log.error('set theme failed: ', error)

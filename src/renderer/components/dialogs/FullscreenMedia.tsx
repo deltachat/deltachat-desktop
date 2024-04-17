@@ -4,13 +4,13 @@ import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 import debounce from 'debounce'
 
 import { onDownload } from '../message/messageFunctions'
-import { runtime } from '../../runtime'
+import { RuntimeService } from '../../runtime/runtimeService'
 import { isImage, isVideo, isAudio } from '../attachment/Attachment'
 import { getLogger } from '../../../shared/logger'
 import { gitHubIssuesUrl } from '../../../shared/constants'
 import { useInitEffect } from '../helpers/hooks'
 import { preventDefault } from '../../../shared/util'
-import { BackendRemote, onDCEvent, Type } from '../../backend-com'
+import { BackendRemote, onDCEvent, Type } from '../../apiService'
 import { selectedAccountId } from '../../ScreenController'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useContextMenu from '../../hooks/useContextMenu'
@@ -94,7 +94,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
     {
       label: tx('menu_copy_image_to_clipboard'),
       action: () => {
-        runtime.writeClipboardImage(file)
+        RuntimeService.writeClipboardImage(file)
       },
     },
     {
@@ -126,7 +126,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
                   className='image-context-menu-container'
                   onContextMenu={openMenu}
                 >
-                  <img src={runtime.transformBlobURL(file)} />
+                  <img src={RuntimeService.transformBlobURL(file)} />
                 </div>
               </TransformComponent>
             )
@@ -135,18 +135,22 @@ export default function FullscreenMedia(props: Props & DialogProps) {
       </div>
     )
   } else if (isAudio(fileMime)) {
-    elm = <audio src={runtime.transformBlobURL(file)} controls />
+    elm = <audio src={RuntimeService.transformBlobURL(file)} controls />
   } else if (isVideo(fileMime)) {
-    elm = <video src={runtime.transformBlobURL(file)} controls autoPlay />
+    elm = (
+      <video src={RuntimeService.transformBlobURL(file)} controls autoPlay />
+    )
   } else if (!fileMime) {
     // no file mime
     elm = (
       <div>
-        <p>Error: Unknown mimeType for {runtime.transformBlobURL(file)}</p>
+        <p>
+          Error: Unknown mimeType for {RuntimeService.transformBlobURL(file)}
+        </p>
         <p>mimeType is "{fileMime}"</p>
         <p>
           Please report this bug on{' '}
-          <a href='#' onClick={() => runtime.openLink(gitHubIssuesUrl)}>
+          <a href='#' onClick={() => RuntimeService.openLink(gitHubIssuesUrl)}>
             github
           </a>
         </p>
@@ -159,11 +163,11 @@ export default function FullscreenMedia(props: Props & DialogProps) {
       <div>
         <p>
           Error: Desktop issue: Unknown media type for{' '}
-          {runtime.transformBlobURL(file)} (mimetype: {fileMime})
+          {RuntimeService.transformBlobURL(file)} (mimetype: {fileMime})
         </p>
         <p>
           Please report this bug on{' '}
-          <a href='#' onClick={() => runtime.openLink(gitHubIssuesUrl)}>
+          <a href='#' onClick={() => RuntimeService.openLink(gitHubIssuesUrl)}>
             github
           </a>
         </p>

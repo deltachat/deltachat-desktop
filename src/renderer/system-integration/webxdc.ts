@@ -2,18 +2,18 @@
 // because it opens new "independent" windows
 // and heavily uses the events
 
-import { BackendRemote } from '../backend-com'
-import { runtime } from '../runtime'
+import { BackendRemote } from '../apiService'
+import { RuntimeService } from '../runtime/runtimeService'
 
 export function initWebxdc() {
   BackendRemote.on('WebxdcStatusUpdate', (accountId, { msgId }) => {
-    runtime.notifyWebxdcStatusUpdate(accountId, msgId)
+    RuntimeService.notifyWebxdcStatusUpdate(accountId, msgId)
   })
   BackendRemote.on('MsgsChanged', (accountId, { msgId }) => {
-    runtime.notifyWebxdcMessageChanged(accountId, msgId)
+    RuntimeService.notifyWebxdcMessageChanged(accountId, msgId)
   })
   BackendRemote.on('WebxdcInstanceDeleted', (accountId, { msgId }) => {
-    runtime.notifyWebxdcInstanceDeleted(accountId, msgId)
+    RuntimeService.notifyWebxdcInstanceDeleted(accountId, msgId)
   })
 }
 
@@ -29,7 +29,7 @@ export async function internalOpenWebxdc(accountId: number, messageId: number) {
     accountId,
     ['addr', 'displayname']
   )
-  runtime.openWebxdc(messageId, {
+  RuntimeService.openWebxdc(messageId, {
     accountId,
     addr,
     displayname,

@@ -8,7 +8,7 @@ import {
 import { LabeledLink, Link } from './Link'
 import { getLogger } from '../../../shared/logger'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote } from '../../apiService'
 import { selectedAccountId } from '../../ScreenController'
 import SettingsStoreInstance from '../../stores/settings'
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'

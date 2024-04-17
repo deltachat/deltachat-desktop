@@ -1,7 +1,7 @@
 /// this store is to keep track of what accounts are muted, basically for caching the core ui config key.
 /// in the future it can also cache custom notifcations sounds
 
-import { BackendRemote } from '../backend-com'
+import { BackendRemote } from '../apiService'
 import { onReady } from '../onready'
 import { Store, useStore } from './store'
 

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { runtime } from '../../runtime'
+import { RuntimeService } from '../../runtime/runtimeService'
 import { VERSION, GIT_REF } from '../../../shared/build-info'
 import { getLogger } from '../../../shared/logger'
 import { DialogContext } from '../../contexts/DialogContext'
@@ -43,7 +43,7 @@ export class CrashScreen extends React.Component {
             <a
               href='#'
               onClick={_ =>
-                runtime.openLink(
+                RuntimeService.openLink(
                   'https://github.com/deltachat/deltachat-desktop/issues'
                 )
               }
@@ -53,16 +53,16 @@ export class CrashScreen extends React.Component {
             )
           </h2>
           <p>
-            <button onClick={_ => runtime.reloadWebContent()}>Reload</button>
-            <button onClick={_ => runtime.openLogFile()}>Open Logfile</button>
+            <button onClick={_ => RuntimeService.reloadWebContent()}>Reload</button>
+            <button onClick={_ => RuntimeService.openLogFile()}>Open Logfile</button>
           </p>
           <p>
             <pre className='error-details'>{this.state.error}</pre>
           </p>
           <p>
             Full Log under{' '}
-            <a href='#' onClick={_ => runtime.openLogFile()}>
-              {runtime.getCurrentLogLocation()}
+            <a href='#' onClick={_ => RuntimeService.openLogFile()}>
+              {RuntimeService.getCurrentLogLocation()}
             </a>
           </p>
           <p>

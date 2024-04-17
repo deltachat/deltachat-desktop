@@ -15,7 +15,7 @@ import {
 import ClickableLink from './helpers/ClickableLink'
 import { Credentials } from '../../shared/shared-types'
 import { getLogger } from '../../shared/logger'
-import { BackendRemote, Type } from '../backend-com'
+import { BackendRemote, Type } from '../apiService'
 import { selectedAccountId } from '../ScreenController'
 import Dialog, {
   DialogBody,

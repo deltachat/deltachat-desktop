@@ -1,7 +1,7 @@
 import { Store } from './store'
 import { ActionEmitter, KeybindAction } from '../keybindings'
 import { C } from '@deltachat/jsonrpc-client'
-import { BackendRemote, onDCEvent, Type } from '../backend-com'
+import { BackendRemote, onDCEvent, Type } from '../apiService'
 import { selectedAccountId } from '../ScreenController'
 import { T } from '@deltachat/jsonrpc-client'
 import {

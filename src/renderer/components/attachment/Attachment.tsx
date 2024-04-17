@@ -1,6 +1,6 @@
 import mimeTypes from 'mime-types'
-import { Type } from '../../backend-com'
-import { runtime } from '../../runtime'
+import { Type } from '../../apiService'
+import { RuntimeService } from '../../runtime/runtimeService'
 
 /* Section - Data Copied in part from Signal */
 // Supported media types in google chrome
@@ -81,7 +81,7 @@ export function dragAttachmentOut(
   dragEvent: React.DragEvent<HTMLDivElement>
 ) {
   dragEvent.preventDefault()
-  if (file) runtime.onDragFileOut(file)
+  if (file) RuntimeService.onDragFileOut(file)
 }
 
 export type MessageTypeAttachmentSubset = Pick<

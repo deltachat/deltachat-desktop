@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 
-import { BackendRemote } from '../../backend-com'
-import { runtime } from '../../runtime'
+import { BackendRemote } from '../../apiService'
+import { RuntimeService } from '../../runtime/runtimeService'
 import { selectedAccountId } from '../../ScreenController'
 import SettingsButton from './SettingsButton'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
@@ -26,7 +26,7 @@ export default function ManageKeys() {
       filters: [{ extensions: ['asc'], name: 'PGP Key' }],
     }
 
-    const filename = await runtime.showOpenFileDialog(opts)
+    const filename = await RuntimeService.showOpenFileDialog(opts)
     if (!filename) {
       return
     }
@@ -64,7 +64,7 @@ export default function ManageKeys() {
       buttonLabel: tx('select'),
     }
 
-    const destination = await runtime.showOpenFileDialog(opts)
+    const destination = await RuntimeService.showOpenFileDialog(opts)
     if (!destination) {
       return
     }

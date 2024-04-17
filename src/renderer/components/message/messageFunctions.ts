@@ -1,8 +1,8 @@
 import moment from 'moment'
 
 import { getLogger } from '../../../shared/logger'
-import { runtime } from '../../runtime'
-import { BackendRemote, Type } from '../../backend-com'
+import { RuntimeService } from '../../runtime/runtimeService'
+import { BackendRemote, Type } from '../../apiService'
 import { selectedAccountId } from '../../ScreenController'
 import { internalOpenWebxdc } from '../../system-integration/webxdc'
 import ForwardMessage from '../dialogs/ForwardMessage'
@@ -24,7 +24,7 @@ export function onDownload(msg: Type.Message) {
     log.error('message has no filename to download:', msg)
     throw new Error('message has no file name to download')
   } else {
-    runtime.downloadFile(msg.file, msg.fileName)
+    RuntimeService.downloadFile(msg.file, msg.fileName)
   }
 }
 
@@ -33,7 +33,7 @@ export function openAttachmentInShell(msg: Type.Message) {
     log.error('message has no file to open:', msg)
     throw new Error('message has no file to open')
   }
-  if (!runtime.openPath(msg.file)) {
+  if (!RuntimeService.openPath(msg.file)) {
     log.info(
       "file couldn't be opened, try saving it in a different place and try to open it from there"
     )
@@ -126,7 +126,7 @@ export async function openMessageHTML(messageId: number) {
   const receiveTime = moment(receivedTimestamp * 1000).format('LLLL')
   const { isContactRequest, isProtectionBroken } =
     await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
-  runtime.openMessageHTML(
+  RuntimeService.openMessageHTML(
     `${accountId}.${messageId}`,
     accountId,
     isContactRequest || isProtectionBroken,

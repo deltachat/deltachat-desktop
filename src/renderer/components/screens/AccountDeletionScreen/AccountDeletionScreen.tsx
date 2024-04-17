@@ -13,7 +13,7 @@ import Dialog, {
 
 import styles from './styles.module.scss'
 import { T } from '@deltachat/jsonrpc-client'
-import { BackendRemote } from '../../../backend-com'
+import { BackendRemote } from '../../../apiService'
 import { Screens } from '../../../ScreenController'
 import { avatarInitial } from '../../Avatar'
 import { getLogger } from '../../../../shared/logger'

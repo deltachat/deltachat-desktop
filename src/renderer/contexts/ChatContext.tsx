@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 
 import { ActionEmitter, KeybindAction } from '../keybindings'
 import { markChatAsSeen, saveLastChatId } from '../backend/chat'
-import { BackendRemote } from '../backend-com'
+import { BackendRemote } from '../apiService'
 
 import type { PropsWithChildren } from 'react'
 import type { T } from '@deltachat/jsonrpc-client'

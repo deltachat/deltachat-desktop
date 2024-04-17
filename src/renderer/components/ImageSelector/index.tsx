@@ -5,7 +5,7 @@ import Icon from '../Icon'
 import LargeProfileImage from '../LargeProfileImage'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
-import { runtime } from '../../runtime'
+import { RuntimeService } from '../../runtime/runtimeService'
 
 import styles from './styles.module.scss'
 
@@ -36,7 +36,7 @@ export default function ImageSelector({
   const handleSelect = async () => {
     const { defaultPath, setLastPath } = rememberLastUsedPath(lastUsedSlot)
 
-    const file = await runtime.showOpenFileDialog({
+    const file = await RuntimeService.showOpenFileDialog({
       title: titleLabel ? titleLabel : tx('select_your_new_profile_image'),
       filters: [
         {

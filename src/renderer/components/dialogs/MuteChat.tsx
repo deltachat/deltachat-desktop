@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Timespans } from '../../../shared/constants'
 import { selectedAccountId } from '../../ScreenController'
-import { BackendRemote, Type } from '../../backend-com'
+import { BackendRemote, Type } from '../../apiService'
 import SmallSelectDialog, { SelectDialogOption } from '../SmallSelectDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 

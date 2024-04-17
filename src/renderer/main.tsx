@@ -4,14 +4,14 @@ import { exp } from './experimental'
 import { printProcessLogLevelInfo } from '../shared/logger'
 
 import App from './App'
-import { runtime } from './runtime'
+import { RuntimeService } from './runtime/runtimeService'
 import init from '@deltachat/message_parser_wasm'
 import initSystemIntegration from './system-integration'
 
 async function main() {
   exp.help //make sure experimental.ts is used
   try {
-    runtime.initialize()
+    RuntimeService.initialize()
     printProcessLogLevelInfo()
     await init('./message_parser_wasm_bg.wasm')
 

@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../../stores/settings'
-import { BackendRemote } from '../../../backend-com'
+import { BackendRemote } from '../../../apiService'
 import { selectedAccountId } from '../../../ScreenController'
 import { DeltaInput, DeltaTextarea } from '../../Login-Styles'
 import ProfileImageSelector from './ProfileImageSelector'

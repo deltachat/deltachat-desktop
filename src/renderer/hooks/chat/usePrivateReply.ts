@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 
 import useChat from './useChat'
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote } from '../../apiService'
 import { createChatByContactId } from '../../backend/chat'
 
 import type { T } from '@deltachat/jsonrpc-client'

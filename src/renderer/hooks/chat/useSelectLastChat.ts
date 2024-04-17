@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react'
 
 import useChat from './useChat'
 import useHasChanged from '../useHasChanged'
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote } from '../../apiService'
 import { getLastChatId } from '../../backend/chat'
 
 /**

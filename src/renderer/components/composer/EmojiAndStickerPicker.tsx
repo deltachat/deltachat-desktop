@@ -6,9 +6,9 @@ import React, {
 } from 'react'
 import classNames from 'classnames'
 
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote } from '../../apiService'
 import { selectedAccountId } from '../../ScreenController'
-import { runtime } from '../../runtime'
+import { RuntimeService } from '../../runtime/runtimeService'
 import EmojiPicker from '../EmojiPicker'
 import Button from '../Button'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
@@ -74,7 +74,7 @@ export const StickerPicker = ({
   const onOpenStickerFolder = async () => {
     const folder =
       await BackendRemote.rpc.miscGetStickerFolder(selectedAccountId())
-    runtime.openPath(folder)
+    RuntimeService.openPath(folder)
   }
 
   const stickerPackNames = Object.keys(stickers)

@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import useDialog from '../hooks/dialog/useDialog'
 import FullscreenAvatar from './dialogs/FullscreenAvatar'
 
-import type { Type } from '../backend-com'
+import type { Type } from '../apiService'
 import type { PropsWithChildren } from 'react'
 
 export function QRAvatar() {

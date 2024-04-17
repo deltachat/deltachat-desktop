@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { DesktopSettingsType } from '../../shared/shared-types'
-import { runtime } from '../runtime'
+import { RuntimeService } from '../runtime/runtimeService'
 
 const keySymbols: { [key: string]: string } = {
   Control: '^',
@@ -15,7 +15,7 @@ const keySymbols: { [key: string]: string } = {
 const showOnlySymbolOn = ['ArrowDown', 'ArrowUp']
 
 function get_label(keyboard_key: string) {
-  if (runtime.getRuntimeInfo().isMac) {
+  if (RuntimeService.getRuntimeInfo().isMac) {
     switch (keyboard_key) {
       case 'Alt':
         return 'Option'
@@ -150,7 +150,7 @@ export function KeybordShortcutHintInSettings({
 export function enterKeySendsKeyboardShortcuts(
   enterKeySends: boolean
 ): ShortcutAction[] {
-  const { isMac } = runtime.getRuntimeInfo()
+  const { isMac } = RuntimeService.getRuntimeInfo()
   const tx = window.static_translate
 
   const Enter = ['Enter']
@@ -196,7 +196,7 @@ function Shortcut(action: ShortcutAction): CheatSheetEntryType {
 }
 
 export function CheatSheetKeyboardShortcut() {
-  if (runtime.getRuntimeInfo().isMac) {
+  if (RuntimeService.getRuntimeInfo().isMac) {
     return <KeyboardShortcut elements={['Meta', '/']} />
   } else {
     return <KeyboardShortcut elements={['Control', '/']} />
@@ -206,7 +206,7 @@ export function CheatSheetKeyboardShortcut() {
 export function getKeybindings(
   settings: DesktopSettingsType
 ): CheatSheetEntryType[] {
-  const { isMac } = runtime.getRuntimeInfo()
+  const { isMac } = RuntimeService.getRuntimeInfo()
   const tx = window.static_translate
 
   return [

@@ -8,7 +8,7 @@ import Dialog, {
   FooterActions,
 } from './Dialog'
 import useTranslationFunction from '../hooks/useTranslationFunction'
-import { BackendRemote } from '../backend-com'
+import { BackendRemote } from '../apiService'
 import { selectedAccountId } from '../ScreenController'
 
 import type { DialogProps } from '../contexts/DialogContext'

@@ -1,17 +1,17 @@
 import { Theme } from '../shared/shared-types'
 import React, { useContext, useMemo } from 'react'
-import { runtime } from './runtime'
+import { RuntimeService } from './runtime/runtimeService'
 
 export namespace ThemeManager {
   let currentThemeMetaData: Theme
   let currentThemeChangeHook: () => void = () => {}
 
   export async function refresh() {
-    runtime.onThemeUpdate = refresh
+    RuntimeService.onThemeUpdate = refresh
     const theme: {
       theme: Theme
       data: string
-    } | null = await runtime.getActiveTheme()
+    } | null = await RuntimeService.getActiveTheme()
     if (theme) {
       currentThemeMetaData = theme.theme
       const themeVars = window.document.getElementById('theme-vars')

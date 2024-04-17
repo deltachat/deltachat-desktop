@@ -1,4 +1,4 @@
-import { BackendRemote } from '../backend-com'
+import { BackendRemote } from '../apiService'
 
 export async function modifyGroup(
   accountId: number,

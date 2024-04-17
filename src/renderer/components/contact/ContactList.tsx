@@ -3,7 +3,7 @@ import { ContactListItem } from './ContactListItem'
 import { debounce } from 'debounce'
 import { useInitEffect } from '../helpers/hooks'
 import { debounceWithInit } from '../chat/ChatListHelpers'
-import { BackendRemote, Type } from '../../backend-com'
+import { BackendRemote, Type } from '../../apiService'
 import { selectedAccountId } from '../../ScreenController'
 
 export function ContactList(props: {

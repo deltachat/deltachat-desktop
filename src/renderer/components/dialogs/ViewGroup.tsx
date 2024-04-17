@@ -14,7 +14,7 @@ import {
 import ViewProfile from './ViewProfile'
 import { avatarInitial } from '../Avatar'
 import { DeltaInput } from '../Login-Styles'
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote } from '../../apiService'
 import { selectedAccountId } from '../../ScreenController'
 import { useSettingsStore } from '../../stores/settings'
 import Dialog, {

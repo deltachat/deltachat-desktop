@@ -1,8 +1,8 @@
 import { C } from '@deltachat/jsonrpc-client'
 import { DesktopSettingsType, RC_Config } from '../../shared/shared-types'
-import { BackendRemote, Type } from '../backend-com'
+import { BackendRemote, Type } from '../apiService'
 import { onReady } from '../onready'
-import { runtime } from '../runtime'
+import { RuntimeService } from '../runtime/runtimeService'
 import { Store, useStore } from './store'
 import { debouncedUpdateBadgeCounter } from '../system-integration/badge-counter'
 
@@ -127,9 +127,9 @@ class SettingsStore extends Store<SettingsStoreState | null> {
         accountId,
         C.DC_CONTACT_ID_SELF
       )
-      const desktopSettings = await runtime.getDesktopSettings()
+      const desktopSettings = await RuntimeService.getDesktopSettings()
 
-      const rc = await runtime.getRC_Config()
+      const rc = await RuntimeService.getRC_Config()
       this.reducer.setState({
         settings,
         selfContact,
@@ -166,7 +166,7 @@ class SettingsStore extends Store<SettingsStoreState | null> {
       value: string | number | boolean
     ) => {
       try {
-        await runtime.setDesktopSetting(key, value)
+        await RuntimeService.setDesktopSetting(key, value)
         if (key === 'syncAllAccounts') {
           if (value) {
             BackendRemote.rpc.startIoForAllAccounts()

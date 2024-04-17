@@ -3,7 +3,7 @@ import { DcEventType } from '@deltachat/jsonrpc-client'
 import React, { useEffect, useState } from 'react'
 
 import { getLogger } from '../../../../shared/logger'
-import { BackendRemote } from '../../../backend-com'
+import { BackendRemote } from '../../../apiService'
 import { selectedAccountId } from '../../../ScreenController'
 import { DeltaProgressBar } from '../../Login-Styles'
 import { DialogBody, DialogContent, DialogWithHeader } from '../../Dialog'

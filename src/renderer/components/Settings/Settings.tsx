@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 import { useSettingsStore } from '../../stores/settings'
 import { SendBackupDialog } from '../dialogs/SetupMultiDevice'
-import { runtime } from '../../runtime'
+import { RuntimeService } from '../../runtime/runtimeService'
 import { donationUrl } from '../../../shared/constants'
 import SettingsIconButton from './SettingsIconButton'
 import ConnectivityButton from './ConnectivityButton'
@@ -110,10 +110,10 @@ export default function Settings({ onClose }: DialogProps) {
               {tx('menu_advanced')}
             </SettingsIconButton>
             <SettingsSeparator />
-            {!runtime.getRuntimeInfo().isMac && (
+            {!RuntimeService.getRuntimeInfo().isMac && (
               <SettingsIconButton
                 icon='favorite'
-                onClick={() => runtime.openLink(donationUrl)}
+                onClick={() => RuntimeService.openLink(donationUrl)}
                 isLink
               >
                 {tx('donate')}
@@ -121,7 +121,7 @@ export default function Settings({ onClose }: DialogProps) {
             )}
             <SettingsIconButton
               icon='question_mark'
-              onClick={() => runtime.openHelpWindow()}
+              onClick={() => RuntimeService.openHelpWindow()}
             >
               {tx('menu_help')}
             </SettingsIconButton>

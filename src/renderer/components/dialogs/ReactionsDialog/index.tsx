@@ -10,7 +10,7 @@ import Dialog, {
 import FooterActionButton from '../../Dialog/FooterActionButton'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { selectedAccountId } from '../../../ScreenController'
-import { BackendRemote } from '../../../backend-com'
+import { BackendRemote } from '../../../apiService'
 import { AvatarFromContact } from '../../Avatar'
 import ContactName from '../../ContactName'
 

@@ -12,7 +12,7 @@ import {
   WebxdcAttachment,
 } from './attachment/mediaAttachment'
 import { getLogger } from '../../shared/logger'
-import { BackendRemote, Type } from '../backend-com'
+import { BackendRemote, Type } from '../apiService'
 import { selectedAccountId } from '../ScreenController'
 import SettingsStoreInstance, { SettingsStoreState } from '../stores/settings'
 import FullscreenMedia, {

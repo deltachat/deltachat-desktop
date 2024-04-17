@@ -12,10 +12,10 @@ import {
   dragAttachmentOut,
   MessageTypeAttachmentSubset,
 } from './Attachment'
-import { runtime } from '../../runtime'
+import { RuntimeService } from '../../runtime/runtimeService'
 import { ConversationType } from '../message/MessageList'
 import { getDirection } from '../../../shared/util'
-import { Type } from '../../backend-com'
+import { Type } from '../../apiService'
 import FullscreenMedia, {
   NeighboringMediaMode,
 } from '../dialogs/FullscreenMedia'
@@ -85,7 +85,7 @@ export default function Attachment({
       >
         <img
           className='attachment-content'
-          src={runtime.transformBlobURL(message.file)}
+          src={RuntimeService.transformBlobURL(message.file)}
         />
       </div>
     )
@@ -113,7 +113,7 @@ export default function Attachment({
       >
         <video
           className='attachment-content video-content'
-          src={runtime.transformBlobURL(message.file)}
+          src={RuntimeService.transformBlobURL(message.file)}
           controls={true}
         />
       </div>
@@ -127,7 +127,7 @@ export default function Attachment({
           withContentAbove ? 'content-above' : null
         )}
       >
-        <AudioPlayer src={runtime.transformBlobURL(message.file)} />
+        <AudioPlayer src={RuntimeService.transformBlobURL(message.file)} />
       </div>
     )
   } else {
@@ -176,7 +176,7 @@ export function DraftAttachment({
       <div className={classNames('message-attachment-media')}>
         <img
           className='attachment-content'
-          src={runtime.transformBlobURL(attachment.file || '')}
+          src={RuntimeService.transformBlobURL(attachment.file || '')}
         />
       </div>
     )
@@ -185,13 +185,17 @@ export function DraftAttachment({
       <div className={classNames('message-attachment-media')}>
         <video
           className='attachment-content'
-          src={runtime.transformBlobURL(attachment.file || '')}
+          src={RuntimeService.transformBlobURL(attachment.file || '')}
           controls
         />
       </div>
     )
   } else if (isAudio(attachment.fileMime)) {
-    return <AudioPlayer src={runtime.transformBlobURL(attachment.file || '')} />
+    return (
+      <AudioPlayer
+        src={RuntimeService.transformBlobURL(attachment.file || '')}
+      />
+    )
   } else {
     const { file, fileName, fileBytes, fileMime } = attachment
     const extension = getExtension(attachment)

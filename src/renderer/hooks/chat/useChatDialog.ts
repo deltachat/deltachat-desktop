@@ -7,7 +7,7 @@ import useChat from './useChat'
 import useConfirmationDialog from '../dialog/useConfirmationDialog'
 import useDialog from '../dialog/useDialog'
 import useTranslationFunction from '../useTranslationFunction'
-import { BackendRemote, EffectfulBackendActions } from '../../backend-com'
+import { BackendRemote, EffectfulBackendActions } from '../../apiService'
 
 import type { T } from '@deltachat/jsonrpc-client'
 

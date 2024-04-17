@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { BackendRemote, Type } from '../../backend-com'
+import { BackendRemote, Type } from '../../apiService'
 import { selectedAccountId } from '../../ScreenController'
 import Dialog, {
   DialogBody,

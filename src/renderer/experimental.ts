@@ -1,7 +1,7 @@
 import { getLogger } from '../shared/logger'
-import { BackendRemote } from './backend-com'
+import { BackendRemote } from './apiService'
 import { printCallCounterResult } from './debug-tools'
-import { runtime } from './runtime'
+import { RuntimeService } from './runtime/runtimeService'
 import { selectedAccountId } from './ScreenController'
 
 const log = getLogger('renderer/experiments')
@@ -60,7 +60,7 @@ only for debugging:
   }
 
   get rpc() {
-    if (!runtime.getRC_Config().devmode) {
+    if (!RuntimeService.getRC_Config().devmode) {
       throw new Error(
         "you need to enable devmode to access this. This is dangerous don't continue if you don't know what you are doing."
       )

@@ -2,7 +2,7 @@ import React from 'react'
 import Contact from './Contact'
 import { Icon } from '@blueprintjs/core'
 import classNames from 'classnames'
-import { Type } from '../../backend-com'
+import { Type } from '../../apiService'
 
 export const DeltaCheckbox = (props: {
   checked: boolean

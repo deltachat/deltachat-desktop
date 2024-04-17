@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { avatarInitial } from '../Avatar'
-import { runtime } from '../../runtime'
+import { RuntimeService } from '../../runtime/runtimeService'
 import LargeProfileImage from '../LargeProfileImage'
 
 import type { SettingsStoreState } from '../../stores/settings'
@@ -18,7 +18,7 @@ export default function Profile({ settingsStore }: Props) {
     settingsStore.selfContact.address
   )
 
-  const profileImageUrl = runtime.transformBlobURL(
+  const profileImageUrl = RuntimeService.transformBlobURL(
     settingsStore.selfContact.profileImage || ''
   )
 

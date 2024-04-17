@@ -1,5 +1,5 @@
 import { DcEvent, T } from '@deltachat/jsonrpc-client'
-import { BackendRemote, Type } from '../backend-com'
+import { BackendRemote, Type } from '../apiService'
 import { onReady } from '../onready'
 import { selectedAccountId } from '../ScreenController'
 import { Store } from './store'

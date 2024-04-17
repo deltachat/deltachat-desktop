@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { RadioGroup, Radio } from '@blueprintjs/core'
 
 import { Timespans } from '../../../shared/constants'
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote } from '../../apiService'
 import { selectedAccountId } from '../../ScreenController'
 import Dialog, {
   DialogBody,

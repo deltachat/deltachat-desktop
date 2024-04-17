@@ -6,8 +6,8 @@ import AccountItem from './AccountItem'
 import Icon from '../Icon'
 import Settings from '../Settings'
 import useDialog from '../../hooks/dialog/useDialog'
-import { BackendRemote } from '../../backend-com'
-import { runtime } from '../../runtime'
+import { BackendRemote } from '../../apiService'
+import { RuntimeService } from '../../runtime/runtimeService'
 import { useAccountNotificationStore } from '../../stores/accountNotifications'
 
 import styles from './styles.module.scss'
@@ -45,7 +45,7 @@ export default function AccountListSidebar({
     () => async () => {
       const accounts = await BackendRemote.rpc.getAllAccounts()
       setAccounts(accounts)
-      const desktopSettings = await runtime.getDesktopSettings()
+      const desktopSettings = await RuntimeService.getDesktopSettings()
       setSyncAllAccounts(desktopSettings.syncAllAccounts)
     },
     []
@@ -101,7 +101,7 @@ export default function AccountListSidebar({
 
   return (
     <div className={styles.accountListSidebar}>
-      {runtime.getRuntimeInfo().isMac && (
+      {RuntimeService.getRuntimeInfo().isMac && (
         <div className={styles.macOSTrafficLightBackground} />
       )}
       <div className={styles.accountList} onScroll={updateHoverInfoPosition}>

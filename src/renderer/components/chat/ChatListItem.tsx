@@ -4,13 +4,13 @@ import { T, C } from '@deltachat/jsonrpc-client'
 
 import Timestamp from '../conversations/Timestamp'
 import { Avatar } from '../Avatar'
-import { BackendRemote, Type } from '../../backend-com'
+import { BackendRemote, Type } from '../../apiService'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { getLogger } from '../../../shared/logger'
 import { useContextMenuWithActiveState } from '../ContextMenu'
 import { selectedAccountId } from '../../ScreenController'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
-import { runtime } from '../../runtime'
+import { RuntimeService } from '../../runtime/runtimeService'
 import { message2React } from '../message/MessageMarkdown'
 
 const log = getLogger('renderer/chatlist/item')
@@ -107,7 +107,10 @@ function Message({
         {iswebxdc && lastMessageId && (
           <img
             className='summary_thumbnail'
-            src={runtime.getWebxdcIconURL(selectedAccountId(), lastMessageId)}
+            src={RuntimeService.getWebxdcIconURL(
+              selectedAccountId(),
+              lastMessageId
+            )}
           />
         )}
         <div>{message2React(summaryText2 || '', true)}</div>

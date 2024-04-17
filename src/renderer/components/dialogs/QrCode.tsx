@@ -15,9 +15,9 @@ import Dialog, {
   FooterActions,
 } from '../Dialog'
 import FooterActionButton from '../Dialog/FooterActionButton'
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote } from '../../apiService'
 import { getLogger } from '../../../shared/logger'
-import { runtime } from '../../runtime'
+import { RuntimeService } from '../../runtime/runtimeService'
 import { ScreenContext } from '../../contexts/ScreenContext'
 import useChat from '../../hooks/chat/useChat'
 import useContextMenu from '../../hooks/useContextMenu'
@@ -104,7 +104,7 @@ export function QrCodeShowQrInner({
   const onCopy = () => {
     const inviteUrl = qrCodeToInviteUrl(qrCode)
 
-    runtime.writeClipboardText(inviteUrl).then(_ =>
+    RuntimeService.writeClipboardText(inviteUrl).then(_ =>
       userFeedback({
         type: 'success',
         text: tx('copy_qr_data_success'),
@@ -256,7 +256,7 @@ export function QrCodeScanQrInner(
       label: tx('paste_from_clipboard'),
       action: async () => {
         try {
-          const data = await runtime.readClipboardText()
+          const data = await RuntimeService.readClipboardText()
           if (data) {
             handleScan(data)
           } else {

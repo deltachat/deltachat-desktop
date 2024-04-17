@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import useChat from './useChat'
 import useConfirmationDialog from '../dialog/useConfirmationDialog'
 import useTranslationFunction from '../useTranslationFunction'
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote } from '../../apiService'
 
 export type CreateDraftMessage = (
   accountId: number,

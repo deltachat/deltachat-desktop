@@ -7,7 +7,7 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
 } from './Dialog'
-import { runtime } from '../runtime'
+import { RuntimeService } from '../runtime/runtimeService'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../contexts/DialogContext'
@@ -23,7 +23,7 @@ export default function CopyContentAlertDialog({
   const tx = useTranslationFunction()
 
   const onCopy = async () => {
-    await runtime.writeClipboardText(content)
+    await RuntimeService.writeClipboardText(content)
     onClose()
   }
 

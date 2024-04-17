@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 
 import useChat from './useChat'
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote } from '../../apiService'
 import { ChatView } from '../../contexts/ChatContext'
 import { getLogger } from '../../../shared/logger'
 

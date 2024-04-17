@@ -15,7 +15,7 @@ import {
 } from './Attachment'
 import Timestamp from '../conversations/Timestamp'
 import { makeContextMenu, OpenContextMenu } from '../ContextMenu'
-import { runtime } from '../../runtime'
+import { RuntimeService } from '../../runtime/runtimeService'
 import { getLogger } from '../../../shared/logger'
 import { truncateText } from '../../../shared/util'
 import { selectedAccountId } from '../../ScreenController'
@@ -68,7 +68,7 @@ const contextMenuFactory = (
     showCopyImage && {
       label: tx('menu_copy_image_to_clipboard'),
       action: () => {
-        message.file && runtime.writeClipboardImage(message.file)
+        message.file && RuntimeService.writeClipboardImage(message.file)
       },
     },
     {
@@ -222,7 +222,7 @@ export function ImageAttachment({
         ) : (
           <img
             className='attachment-content'
-            src={runtime.transformBlobURL(file)}
+            src={RuntimeService.transformBlobURL(file)}
             loading='lazy'
           />
         )}
@@ -291,7 +291,7 @@ export function VideoAttachment({
           <>
             <video
               className='attachment-content'
-              src={runtime.transformBlobURL(file)}
+              src={RuntimeService.transformBlobURL(file)}
               controls={false}
             />
             <div className='video-play-btn'>
@@ -368,7 +368,7 @@ export function AudioAttachment({
           />
         </div>
         {hasSupportedFormat ? (
-          <AudioPlayer src={runtime.transformBlobURL(file || '')} />
+          <AudioPlayer src={RuntimeService.transformBlobURL(file || '')} />
         ) : (
           <div>
             {window.static_translate(
@@ -543,7 +543,7 @@ export function WebxdcAttachment({
       >
         <img
           className='icon'
-          src={runtime.getWebxdcIconURL(selectedAccountId(), messageId)}
+          src={RuntimeService.getWebxdcIconURL(selectedAccountId(), messageId)}
         />
         <div className='text-part'>
           <div className='name'>Error loading info</div>
@@ -572,7 +572,10 @@ export function WebxdcAttachment({
       >
         <img
           className='icon'
-          src={runtime.getWebxdcIconURL(selectedAccountId(), loadResult.id)}
+          src={RuntimeService.getWebxdcIconURL(
+            selectedAccountId(),
+            loadResult.id
+          )}
         />
         <div className='text-part'>
           <div

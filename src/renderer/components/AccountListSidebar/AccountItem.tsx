@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import classNames from 'classnames'
 import debounce from 'debounce'
 
-import { BackendRemote, onDCEvent } from '../../backend-com'
+import { BackendRemote, onDCEvent } from '../../apiService'
 import { avatarInitial } from '../Avatar'
 import { getLogger } from '../../../shared/logger'
 import useTranslationFunction from '../../hooks/useTranslationFunction'

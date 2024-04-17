@@ -7,7 +7,7 @@ import {
   EffectfulBackendActions,
   onDCEvent,
   Type,
-} from '../../backend-com'
+} from '../../apiService'
 import { selectedAccountId } from '../../ScreenController'
 import { DialogBody, DialogContent, DialogWithHeader } from '../Dialog'
 import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'

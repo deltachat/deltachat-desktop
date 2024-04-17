@@ -4,9 +4,9 @@ import { C } from '@deltachat/jsonrpc-client'
 
 import Icon from '../Icon'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { BackendRemote, onDCEvent } from '../../backend-com'
+import { BackendRemote, onDCEvent } from '../../apiService'
 import { getLogger } from '../../../shared/logger'
-import { runtime } from '../../runtime'
+import { RuntimeService } from '../../runtime/runtimeService'
 
 import styles from './styles.module.scss'
 
@@ -31,7 +31,7 @@ export default function AccountHoverInfo({
 
   const [bgSyncDisabled, setBgSyncDisabled] = useState<boolean>(false)
   useEffect(() => {
-    runtime.getDesktopSettings().then(({ syncAllAccounts }) => {
+    RuntimeService.getDesktopSettings().then(({ syncAllAccounts }) => {
       setBgSyncDisabled(!syncAllAccounts)
     })
   }, [account.id])

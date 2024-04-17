@@ -5,8 +5,8 @@ import { getLogger } from '../../../shared/logger'
 import { gitHubUrl, gitHubLicenseUrl } from '../../../shared/constants'
 import { VERSION, GIT_REF } from '../../../shared/build-info'
 import ClickableLink from '../helpers/ClickableLink'
-import { runtime } from '../../runtime'
-import { BackendRemote } from '../../backend-com'
+import { RuntimeService } from '../../runtime/runtimeService'
+import { BackendRemote } from '../../apiService'
 import { DialogBody, DialogContent, DialogWithHeader } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
@@ -35,7 +35,7 @@ export function DCInfo(_props: any) {
   }, [])
 
   const copy2Clipboard = () => {
-    runtime.writeClipboardText(JSON.stringify(content, null, 4))
+    RuntimeService.writeClipboardText(JSON.stringify(content, null, 4))
   }
 
   const keys = content && Object.keys(content)
@@ -140,12 +140,14 @@ export default function About({ onClose }: DialogProps) {
                 <td>SQLite</td>
                 <td style={{ userSelect: 'all' }}>{sqliteVersion}</td>
               </tr>
-              {runtime.getRuntimeInfo().versions.map(({ label, value }) => (
-                <tr key={label} style={{ color: 'grey' }}>
-                  <td>{label}</td>
-                  <td style={{ userSelect: 'all' }}>{value}</td>
-                </tr>
-              ))}
+              {RuntimeService.getRuntimeInfo().versions.map(
+                ({ label, value }) => (
+                  <tr key={label} style={{ color: 'grey' }}>
+                    <td>{label}</td>
+                    <td style={{ userSelect: 'all' }}>{value}</td>
+                  </tr>
+                )
+              )}
             </tbody>
           </table>
           <DCInfo />

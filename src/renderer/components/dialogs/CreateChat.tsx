@@ -22,12 +22,12 @@ import {
   PseudoListItemAddContact,
 } from '../helpers/PseudoListItem'
 import GroupImage from '../GroupImage'
-import { runtime } from '../../runtime'
+import { RuntimeService } from '../../runtime/runtimeService'
 import { Avatar, QRAvatar } from '../Avatar'
 import { AddMemberDialog } from './ViewGroup'
 import { ContactListItem } from '../contact/ContactListItem'
 import { useSettingsStore } from '../../stores/settings'
-import { BackendRemote, onDCEvent, Type } from '../../backend-com'
+import { BackendRemote, onDCEvent, Type } from '../../apiService'
 import { selectedAccountId } from '../../ScreenController'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import Dialog, {
@@ -873,7 +873,7 @@ export function useGroupImage(image?: string | null) {
     const { defaultPath, setLastPath } = rememberLastUsedPath(
       LastUsedSlot.GroupImage
     )
-    const file = await runtime.showOpenFileDialog({
+    const file = await RuntimeService.showOpenFileDialog({
       title: tx('select_group_image_desktop'),
       filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }],
       properties: ['openFile'],

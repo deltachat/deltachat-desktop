@@ -9,7 +9,7 @@ import {
 } from '@blueprintjs/core'
 import { dirname } from 'path'
 
-import { runtime } from '../../runtime'
+import { RuntimeService } from '../../runtime/runtimeService'
 import { useStore } from '../../stores/store'
 import SettingsStoreInstance from '../../stores/settings'
 import { IMAGE_EXTENSIONS } from '../../../shared/constants'
@@ -49,7 +49,7 @@ export default function MenuAttachment({
     const { defaultPath, setLastPath } = rememberLastUsedPath(
       LastUsedSlot.Attachment
     )
-    const file = await runtime.showOpenFileDialog({
+    const file = await RuntimeService.showOpenFileDialog({
       filters: [
         {
           name: 'All Files',
@@ -71,7 +71,7 @@ export default function MenuAttachment({
     const { defaultPath, setLastPath } = rememberLastUsedPath(
       LastUsedSlot.Attachment
     )
-    const file = await runtime.showOpenFileDialog({
+    const file = await RuntimeService.showOpenFileDialog({
       filters: [
         {
           name: tx('image'),

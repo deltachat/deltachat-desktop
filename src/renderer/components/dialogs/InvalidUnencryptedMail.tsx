@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { BackendRemote } from '../../backend-com'
-import { runtime } from '../../runtime'
+import { BackendRemote } from '../../apiService'
+import { RuntimeService } from '../../runtime/runtimeService'
 import { selectedAccountId } from '../../ScreenController'
 import QrCode from './QrCode'
 import Dialog, {
@@ -29,7 +29,7 @@ export default function InvalidUnencryptedMailDialog({ onClose }: DialogProps) {
   }
 
   const onLearnMore = () => {
-    runtime.openHelpWindow('howtoe2ee')
+    RuntimeService.openHelpWindow('howtoe2ee')
   }
 
   return (

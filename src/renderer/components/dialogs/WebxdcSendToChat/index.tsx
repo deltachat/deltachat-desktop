@@ -8,9 +8,9 @@ import { PseudoListItemNoSearchResults } from '../../helpers/PseudoListItem'
 import { ChatListPart, useLogicVirtualChatList } from '../../chat/ChatList'
 import { useChatList } from '../../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../../ThemeManager'
-import { BackendRemote } from '../../../backend-com'
+import { BackendRemote } from '../../../apiService'
 import { selectedAccountId } from '../../../ScreenController'
-import { runtime } from '../../../runtime'
+import { RuntimeService } from '../../../runtime/runtimeService'
 import Dialog, {
   DialogBody,
   DialogFooter,
@@ -49,27 +49,27 @@ export default function WebxdcSaveToChatDialog(props: Props) {
   const onChatClick = async (chatId: number) => {
     let path = null
     if (file) {
-      path = await runtime.writeTempFileFromBase64(
+      path = await RuntimeService.writeTempFileFromBase64(
         file.file_name,
         file.file_content
       )
     }
     await sendToChatAction(accountId, chatId, messageText, path)
     if (path) {
-      await runtime.removeTempFile(path)
+      await RuntimeService.removeTempFile(path)
     }
     onClose()
   }
 
   const onSaveClick = async () => {
     if (file) {
-      const tmp_file = await runtime.writeTempFileFromBase64(
+      const tmp_file = await RuntimeService.writeTempFileFromBase64(
         file.file_name,
         file.file_content
       )
       onClose()
-      await runtime.downloadFile(tmp_file, file.file_name)
-      await runtime.removeTempFile(tmp_file)
+      await RuntimeService.downloadFile(tmp_file, file.file_name)
+      await RuntimeService.removeTempFile(tmp_file)
     }
   }
 

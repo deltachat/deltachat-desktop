@@ -27,11 +27,11 @@ import { appx } from './isAppx'
 import { versions } from 'process'
 
 const log = getLogger('main/ipc')
-const DeltaChatController: typeof import('./deltachat/controller').default =
+const DeltaChatController: typeof import('./deltachat/DeltaChatController').default =
   (() => {
     try {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      return require('./deltachat/controller').default
+      return require('./deltachat/DeltaChatController').default
     } catch (error) {
       log.critical(
         "Fatal: The DeltaChat Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!",

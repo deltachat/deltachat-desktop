@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react'
 
 import { getLogger } from '../../../../shared/logger'
-import { BackendRemote, onDCEvent } from '../../../backend-com'
-import { runtime } from '../../../runtime'
+import { BackendRemote, onDCEvent } from '../../../apiService'
+import { RuntimeService } from '../../../runtime/runtimeService'
 import { selectedAccountId } from '../../../ScreenController'
 import Dialog, {
   DialogBody,
@@ -71,7 +71,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
 
   const copyQrToClipboard = () => {
     if (qrContent) {
-      runtime.writeClipboardText(qrContent)
+      RuntimeService.writeClipboardText(qrContent)
       setCopied(true)
     }
   }
@@ -182,7 +182,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
             <FooterActions align='spaceBetween'>
               <span className={styles.buttonGroup}>
                 <FooterActionButton
-                  onClick={() => runtime.openLink(TROUBLESHOOTING_URL)}
+                  onClick={() => RuntimeService.openLink(TROUBLESHOOTING_URL)}
                 >
                   {tx('troubleshooting')}&nbsp;
                   <Icon icon='open_in_new' size={20} />

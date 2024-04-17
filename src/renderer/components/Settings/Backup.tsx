@@ -2,9 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { Intent } from '@blueprintjs/core'
 
 import { DeltaProgressBar } from '../Login-Styles'
-import { runtime } from '../../runtime'
+import { RuntimeService } from '../../runtime/runtimeService'
 import { getLogger } from '../../../shared/logger'
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote } from '../../apiService'
 import { selectedAccountId } from '../../ScreenController'
 import SettingsButton from './SettingsButton'
 import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
@@ -42,7 +42,7 @@ export default function Backup() {
         buttonLabel: tx('save'),
         properties: ['openDirectory', 'createDirectory'],
       }
-      const destination = await runtime.showOpenFileDialog(opts)
+      const destination = await RuntimeService.showOpenFileDialog(opts)
       if (!destination) {
         return
       }

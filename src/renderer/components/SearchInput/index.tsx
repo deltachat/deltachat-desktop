@@ -5,7 +5,7 @@ import QrCode from '../dialogs/QrCode'
 import SearchInputButton from './SearchInputButton'
 import useDialog from '../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote } from '../../apiService'
 import { selectedAccountId } from '../../ScreenController'
 
 import styles from './styles.module.scss'

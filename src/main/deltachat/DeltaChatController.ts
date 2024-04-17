@@ -11,7 +11,7 @@ import { stat, rename, readdir } from 'fs/promises'
 import { getConfigPath } from '../application-constants'
 import { rmdir } from 'fs/promises'
 import { rm } from 'fs/promises'
-import DCWebxdc from './webxdc'
+import WebxdcController from './WebxdcController'
 import { DesktopSettings } from '../desktop_settings'
 import { yerpc, BaseDeltaChat } from '@deltachat/jsonrpc-client'
 import rc_config from '../rc'
@@ -289,7 +289,7 @@ export default class DeltaChatController extends EventEmitter {
     logMigrate.info('migration completed')
   }
 
-  readonly webxdc = new DCWebxdc(this)
+  readonly webxdc = new WebxdcController(this)
 
   onAll(event: string, accountId: number, data1: any, data2: any) {
     if (event === 'DC_EVENT_WARNING') {

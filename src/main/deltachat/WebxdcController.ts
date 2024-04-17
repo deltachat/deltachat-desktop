@@ -1,6 +1,4 @@
 import { app, BrowserWindow, protocol, ipcMain, session } from 'electron/main'
-import type DeltaChatController from './controller'
-import SplitOut from './splitout'
 import { getLogger } from '../../shared/logger'
 const log = getLogger('main/deltachat/webxdc')
 import Mime from 'mime-types'
@@ -23,7 +21,8 @@ import { DesktopSettings } from '../desktop_settings'
 import { window as main_window } from '../windows/main'
 import { writeTempFileFromBase64 } from '../ipc'
 import { refresh as refreshTitleMenu } from '../menu'
-import { T } from '@deltachat/jsonrpc-client'
+import { RawClient, T } from '@deltachat/jsonrpc-client'
+import DeltaChatController from './DeltaChatController'
 
 const open_apps: {
   [instanceId: string]: {
@@ -54,10 +53,16 @@ const WRAPPER_PATH = 'webxdc-wrapper.45870014933640136498.html'
 
 const BOUNDS_UI_CONFIG_PREFIX = 'ui.desktop.webxdcBounds'
 
-export default class DCWebxdc extends SplitOut {
-  constructor(controller: DeltaChatController) {
-    super(controller)
+export default class WebxdcController {
+  private controller: DeltaChatController
 
+  get rpc() {
+    return this.controller.jsonrpcRemote.rpc
+  }
+
+  constructor(controller: DeltaChatController) {
+    // needed to provide access to jsonrpcRemote.rpc
+    this.controller = controller
     // icon protocol
     app.whenReady().then(() => {
       protocol.handle('webxdc-icon', async request => {
@@ -202,7 +207,7 @@ export default class DCWebxdc extends SplitOut {
 
         const app_icon = icon_blob && nativeImage?.createFromBuffer(icon_blob)
 
-        const lastBounds = await getLastBounds(this, accountId, msg_id)
+        const lastBounds = await getLastBounds(this.rpc, accountId, msg_id)
         const webxdc_windows = new BrowserWindow({
           webPreferences: {
             partition: partitionFromAccountId(accountId),
@@ -267,7 +272,6 @@ export default class DCWebxdc extends SplitOut {
                   click: () => {
                     webxdc_windows.close()
                   },
-                  accelerator: isMac ? 'Cmd+w' : 'Ctrl+w',
                 },
               ],
             },
@@ -411,7 +415,7 @@ export default class DCWebxdc extends SplitOut {
 
         webxdc_windows.once('close', () => {
           const lastBounds = webxdc_windows.getBounds()
-          setLastBounds(this, accountId, msg_id, lastBounds)
+          setLastBounds(this.rpc, accountId, msg_id, lastBounds)
         })
 
         webxdc_windows.once('ready-to-show', () => {})
@@ -597,7 +601,7 @@ If you think that's a bug and you need that permission, then please open an issu
     )
 
     ipcMain.handle(
-      'webxdc:status-update',
+      'notifyWebxdcStatusUpdate',
       (_ev, accountId: number, instanceId: number) => {
         const instance = open_apps[`${accountId}.${instanceId}`]
         if (instance) {
@@ -607,7 +611,7 @@ If you think that's a bug and you need that permission, then please open an issu
     )
 
     ipcMain.handle(
-      'webxdc:message-changed',
+      'notifyWebxdcMessageChanged',
       async (_ev, accountId: number, instanceId: number) => {
         const instance = open_apps[`${accountId}.${instanceId}`]
         if (instance) {
@@ -623,14 +627,14 @@ If you think that's a bug and you need that permission, then please open an issu
       }
     )
     ipcMain.handle(
-      'webxdc:instance-deleted',
+      'notifyWebxdcInstanceDeleted',
       (_ev, accountId: number, instanceId: number) => {
         const webxdcId = `${accountId}.${instanceId}`
         const instance = open_apps[webxdcId]
         if (instance) {
           instance.win.close()
         }
-        removeLastBounds(this, accountId, instanceId)
+        removeLastBounds(this.rpc, accountId, instanceId)
         const s = sessionFromAccountId(accountId)
         const appURL = `webxdc://${webxdcId}.webxdc`
         s.clearStorageData({ origin: appURL })
@@ -639,7 +643,6 @@ If you think that's a bug and you need that permission, then please open an issu
       }
     )
   }
-
   _closeAll() {
     for (const open_app of Object.keys(open_apps)) {
       open_apps[open_app].win.close()
@@ -664,7 +667,7 @@ function sessionFromAccountId(accountId: number) {
 }
 
 async function getLastBounds(
-  splitOut: SplitOut,
+  rpc: RawClient,
   accountId: number,
   msgId: number
 ): Promise<Partial<Bounds>> {
@@ -673,7 +676,7 @@ async function getLastBounds(
     height: 667,
   }
   try {
-    const raw = await splitOut.rpc.getConfig(
+    const raw = await rpc.getConfig(
       accountId,
       `${BOUNDS_UI_CONFIG_PREFIX}.${msgId}`
     )
@@ -687,28 +690,20 @@ async function getLastBounds(
 }
 
 function setLastBounds(
-  splitOut: SplitOut,
+  rpc: RawClient,
   accountId: number,
   msgId: number,
   bounds: Bounds
 ) {
-  return splitOut.rpc.setConfig(
+  return rpc.setConfig(
     accountId,
     `${BOUNDS_UI_CONFIG_PREFIX}.${msgId}`,
     JSON.stringify(bounds)
   )
 }
 
-function removeLastBounds(
-  splitOut: SplitOut,
-  accountId: number,
-  msgId: number
-) {
-  return splitOut.rpc.setConfig(
-    accountId,
-    `${BOUNDS_UI_CONFIG_PREFIX}.${msgId}`,
-    null
-  )
+function removeLastBounds(rpc: RawClient, accountId: number, msgId: number) {
+  return rpc.setConfig(accountId, `${BOUNDS_UI_CONFIG_PREFIX}.${msgId}`, null)
 }
 
 ipcMain.handle('webxdc.clearWebxdcDOMStorage', (_, accountId: number) => {

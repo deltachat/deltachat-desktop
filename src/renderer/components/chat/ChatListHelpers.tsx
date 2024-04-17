@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { getLogger } from '../../../shared/logger'
 import { debounce } from 'debounce'
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote } from '../../apiService'
 import { selectedAccountId } from '../../ScreenController'
 
 const log = getLogger('renderer/helpers/ChatList')

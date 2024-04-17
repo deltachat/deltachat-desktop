@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react'
 import { T } from '@deltachat/jsonrpc-client'
 
 import { getLogger } from '../../../shared/logger'
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote } from '../../apiService'
 import { selectedAccountId } from '../../ScreenController'
 import InputTransferKey from '../InputTransferKey'
 import {

@@ -2,7 +2,7 @@ import React from 'react'
 import moment from 'moment'
 
 import { selectedAccountId } from '../../ScreenController'
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote } from '../../apiService'
 import { DialogBody, DialogContent, DialogWithHeader } from '../Dialog'
 import Callout from '../Callout'
 

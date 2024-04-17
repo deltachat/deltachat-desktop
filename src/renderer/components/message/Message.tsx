@@ -18,13 +18,13 @@ import {
 } from './messageFunctions'
 import Attachment from '../attachment/messageAttachment'
 import { isGenericAttachment } from '../attachment/Attachment'
-import { runtime } from '../../runtime'
+import { RuntimeService } from '../../runtime/runtimeService'
 import { AvatarFromContact } from '../Avatar'
 import { ConversationType } from './MessageList'
 import { getDirection, truncateText } from '../../../shared/util'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { ContextMenuItem } from '../ContextMenu'
-import { onDCEvent, BackendRemote } from '../../backend-com'
+import { onDCEvent, BackendRemote } from '../../apiService'
 import { selectedAccountId } from '../../ScreenController'
 import {
   ProtectionBrokenDialog,
@@ -60,7 +60,10 @@ const Avatar = (
   if (profileImage) {
     return (
       <div className='author-avatar' onClick={onClick}>
-        <img alt={displayName} src={runtime.transformBlobURL(profileImage)} />
+        <img
+          alt={displayName}
+          src={RuntimeService.transformBlobURL(profileImage)}
+        />
       </div>
     )
   } else {
@@ -200,7 +203,7 @@ function buildContextMenu(
   let copy_item: ContextMenuItem | false = {
     label: tx('menu_copy_text_to_clipboard'),
     action: () => {
-      text && runtime.writeClipboardText(text)
+      text && RuntimeService.writeClipboardText(text)
     },
   }
 
@@ -208,13 +211,13 @@ function buildContextMenu(
     copy_item = {
       label: tx('menu_copy_selection_to_clipboard'),
       action: () => {
-        runtime.writeClipboardText(selectedText as string)
+        RuntimeService.writeClipboardText(selectedText as string)
       },
     }
   } else if (email) {
     copy_item = {
       label: tx('menu_copy_email_to_clipboard'),
-      action: () => runtime.writeClipboardText(email),
+      action: () => RuntimeService.writeClipboardText(email),
     }
   }
   if (copy_item && message.viewType === 'Sticker') {
@@ -264,7 +267,7 @@ function buildContextMenu(
     link !== '' &&
       isLink && {
         label: tx('menu_copy_link_to_clipboard'),
-        action: () => runtime.writeClipboardText(link),
+        action: () => RuntimeService.writeClipboardText(link),
       },
     // copy item (selection or all text)
     text !== '' && copy_item,
@@ -272,7 +275,7 @@ function buildContextMenu(
     showCopyImage && {
       label: tx('menu_copy_image_to_clipboard'),
       action: () => {
-        runtime.writeClipboardImage(message.file as string)
+        RuntimeService.writeClipboardImage(message.file as string)
       },
     },
     // Copy videocall link to clipboard
@@ -280,7 +283,7 @@ function buildContextMenu(
       message.videochatUrl !== '' && {
         label: tx('menu_copy_link_to_clipboard'),
         action: () =>
-          runtime.writeClipboardText(message.videochatUrl as string),
+          RuntimeService.writeClipboardText(message.videochatUrl as string),
       },
     // Open Attachment
     showAttachmentOptions &&
@@ -473,7 +476,7 @@ export default function Message(props: {
         <div className='bubble'>
           {isWebxdcInfo && message.parentId && (
             <img
-              src={runtime.getWebxdcIconURL(
+              src={RuntimeService.getWebxdcIconURL(
                 selectedAccountId(),
                 message.parentId
               )}
@@ -759,7 +762,10 @@ export const Quote = ({
         {hasMessage && quote.viewType == 'Webxdc' && (
           <img
             className='quoted-webxdc-icon'
-            src={runtime.getWebxdcIconURL(selectedAccountId(), quote.messageId)}
+            src={RuntimeService.getWebxdcIconURL(
+              selectedAccountId(),
+              quote.messageId
+            )}
           />
         )}
       </div>
@@ -789,7 +795,7 @@ function WebxdcMessageContent({ message }: { message: T.Message }) {
   return (
     <div className='webxdc'>
       <img
-        src={runtime.getWebxdcIconURL(selectedAccountId(), message.id)}
+        src={RuntimeService.getWebxdcIconURL(selectedAccountId(), message.id)}
         alt={`icon of ${info.name}`}
         onClick={() => openWebxdc(message.id)}
       />

@@ -5,10 +5,10 @@ import ScreenController from './ScreenController'
 import { translate, LocaleData } from '../shared/localize'
 import { ThemeManager, ThemeContext } from './ThemeManager'
 import { CrashScreen } from './components/screens/CrashScreen'
-import { runtime } from './runtime'
+import { RuntimeService } from './runtime/runtimeService'
 import { updateCoreStrings } from './stockStrings'
 import { getLogger } from '../shared/logger'
-import { BackendRemote } from './backend-com'
+import { BackendRemote } from './apiService'
 import { runPostponedFunctions } from './onready'
 import { I18nContext } from './contexts/I18nContext'
 
@@ -16,7 +16,7 @@ export default function App(_props: any) {
   const [localeData, setLocaleData] = useState<LocaleData | null>(null)
 
   useEffect(() => {
-    runtime.emitUIReady()
+    RuntimeService.emitUIReady()
     window.addEventListener('keydown', function (ev: KeyboardEvent) {
       if (ev.code === 'KeyA' && (ev.metaKey || ev.ctrlKey)) {
         let stop = true
@@ -49,13 +49,13 @@ export default function App(_props: any) {
     startBackendLogging()
     runPostponedFunctions()
     ;(async () => {
-      const desktop_settings = await runtime.getDesktopSettings()
+      const desktop_settings = await RuntimeService.getDesktopSettings()
       await reloadLocaleData(desktop_settings.locale || 'en')
     })()
   }, [])
 
   async function reloadLocaleData(locale: string) {
-    const localeData = await runtime.getLocaleData(locale)
+    const localeData = await RuntimeService.getLocaleData(locale)
     window.localeData = localeData
     window.static_translate = translate(localeData.messages)
     setLocaleData(localeData)
@@ -64,8 +64,8 @@ export default function App(_props: any) {
   }
 
   useEffect(() => {
-    runtime.onChooseLanguage = async (locale: string) => {
-      await runtime.setLocale(locale)
+    RuntimeService.onChooseLanguage = async (locale: string) => {
+      await RuntimeService.setLocale(locale)
       await reloadLocaleData(locale)
     }
   }, [localeData])
@@ -109,7 +109,7 @@ export function startBackendLogging() {
     log2.error('Unhandled Rejection:', event, event.reason)
   })
 
-  const rc = runtime.getRC_Config()
+  const rc = RuntimeService.getRC_Config()
   if (rc['log-debug']) {
     BackendRemote.on('ALL', (accountId, event) => {
       const isActiveAccount = window.__selectedAccountId == accountId

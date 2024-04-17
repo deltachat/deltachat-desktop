@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import useMessage from '../hooks/chat/useMessage'
 import useProcessQr from '../hooks/useProcessQr'
 import { clearNotificationsForChat } from '../system-integration/notifications'
-import { runtime } from '../runtime'
+import { RuntimeService } from '../runtime/runtimeService'
 
 import type { PropsWithChildren } from 'react'
 
@@ -24,7 +24,7 @@ export default function RuntimeAdapter({
   const { jumpToMessage } = useMessage()
 
   useEffect(() => {
-    runtime.onOpenQrUrl = (url: string) => {
+    RuntimeService.onOpenQrUrl = (url: string) => {
       if (!accountId) {
         throw new Error('accountId is not set')
       }
@@ -32,7 +32,7 @@ export default function RuntimeAdapter({
       processQr(accountId, url)
     }
 
-    runtime.setNotificationCallback(
+    RuntimeService.setNotificationCallback(
       async ({ accountId: notificationAccountId, msgId, chatId }) => {
         if (accountId !== notificationAccountId) {
           await window.__selectAccount(notificationAccountId)

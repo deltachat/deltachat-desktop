@@ -7,7 +7,7 @@ import { getLogger } from '../../../shared/logger'
 import MessageList from './MessageList'
 import ComposerMessageInput from '../composer/ComposerMessageInput'
 import { DesktopSettingsType } from '../../../shared/shared-types'
-import { runtime } from '../../runtime'
+import { RuntimeService } from '../../runtime/runtimeService'
 import { RecoverableCrashScreen } from '../screens/RecoverableCrashScreen'
 import { useSettingsStore } from '../../stores/settings'
 import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
@@ -35,15 +35,19 @@ export function getBackgroundImageStyle(
       // migrating in case of absolute filepaths
       const filePath = parse(bgImg.slice(5, bgImg.length - 2)).base
       bgImg = `img: ${filePath}`
-      runtime.setDesktopSetting('chatViewBgImg', bgImg)
+      RuntimeService.setDesktopSetting('chatViewBgImg', bgImg)
     } else if (bgImg.startsWith('#')) {
       // migrating to new prefixes
       bgImg = `color: ${bgImg}`
-      runtime.setDesktopSetting('chatViewBgImg', bgImg)
+      RuntimeService.setDesktopSetting('chatViewBgImg', bgImg)
     }
     if (bgImg.startsWith('img: ')) {
       const filePath = bgImg.slice(5)
-      const bgImgPath = join(runtime.getConfigPath(), 'background/', filePath)
+      const bgImgPath = join(
+        RuntimeService.getConfigPath(),
+        'background/',
+        filePath
+      )
       style.backgroundImage = `url("file://${bgImgPath}")`
     } else if (bgImg.startsWith('color: ')) {
       style.backgroundColor = bgImg.slice(7)
@@ -54,7 +58,7 @@ export function getBackgroundImageStyle(
       style.backgroundImage = 'none'
     } else {
       log.error(
-        `Could not read background image ${bgImg} from config file under ${runtime.getConfigPath()}.`
+        `Could not read background image ${bgImg} from config file under ${RuntimeService.getConfigPath()}.`
       )
     }
   }

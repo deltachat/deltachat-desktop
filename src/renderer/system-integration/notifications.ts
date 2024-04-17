@@ -1,8 +1,8 @@
 import { appName } from '../../shared/constants'
 import { getLogger } from '../../shared/logger'
-import { BackendRemote } from '../backend-com'
+import { BackendRemote } from '../apiService'
 import { isImage } from '../components/attachment/Attachment'
-import { runtime } from '../runtime'
+import { RuntimeService } from '../runtime/runtimeService'
 import SettingsStoreInstance from '../stores/settings'
 import AccountNotificationStoreInstance from '../stores/accountNotifications'
 
@@ -69,7 +69,7 @@ async function showNotification(
   const tx = window.static_translate
 
   if (!SettingsStoreInstance.state?.desktopSettings.showNotificationContent) {
-    runtime.showNotification({
+    RuntimeService.showNotification({
       title: appName,
       body: tx('notify_new_message'),
       icon: null,
@@ -82,7 +82,7 @@ async function showNotification(
       const notificationInfo =
         await BackendRemote.rpc.getMessageNotificationInfo(accountId, messageId)
       const { chatName, summaryPrefix, summaryText } = notificationInfo
-      runtime.showNotification({
+      RuntimeService.showNotification({
         title: chatName,
         body: summaryPrefix ? `${summaryPrefix}: ${summaryText}` : summaryText,
         icon: getNotificationIcon(notificationInfo),
@@ -103,7 +103,7 @@ async function showGroupedNotification(
   const tx = window.static_translate
 
   if (!SettingsStoreInstance.state?.desktopSettings.showNotificationContent) {
-    runtime.showNotification({
+    RuntimeService.showNotification({
       title: appName,
       body: tx('new_messages'),
       icon: null,
@@ -127,7 +127,7 @@ async function showGroupedNotification(
             notifications[0].messageId
           )
         const { chatName, chatProfileImage } = notificationInfo
-        runtime.showNotification({
+        RuntimeService.showNotification({
           title: chatName,
           body: tx('chat_n_new_messages', String(msgCount), {
             quantity: msgCount,
@@ -142,7 +142,7 @@ async function showGroupedNotification(
         // title: "new messages"
         // body: "324 new messages in 6 chats"
         const chatCount = chatIds.length
-        runtime.showNotification({
+        RuntimeService.showNotification({
           title: tx('new_messages'), // IDEA: when we support notifications from multiple accounts, then show account displayname here?
           body: tx('n_messages_in_m_chats', [
             String(msgCount),
@@ -212,12 +212,12 @@ async function flushNotifications(accountId: number) {
 export function clearNotificationsForChat(accountId: number, chatId: number) {
   log.debug('clearNotificationsForChat', accountId, chatId)
   // ask runtime to delete the notifications
-  runtime.clearNotifications(chatId)
+  RuntimeService.clearNotifications(chatId)
 }
 
 export function clearAllNotifications() {
   // ask runtime to delete the notifications
-  runtime.clearAllNotifications()
+  RuntimeService.clearAllNotifications()
 }
 
 function getNotificationIcon(

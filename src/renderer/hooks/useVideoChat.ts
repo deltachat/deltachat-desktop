@@ -4,7 +4,7 @@ import AlertDialog from '../components/dialogs/AlertDialog'
 import useDialog from './dialog/useDialog'
 import useMessage from './chat/useMessage'
 import useOpenLinkSafely from './useOpenLinkSafely'
-import { BackendRemote } from '../backend-com'
+import { BackendRemote } from '../apiService'
 import { getLogger } from '../../shared/logger'
 
 const log = getLogger('hooks/useCall')

@@ -1,4 +1,4 @@
-import { runtime } from '../runtime'
+import { RuntimeService } from '../runtime/runtimeService'
 
 export const enum LastUsedSlot {
   Attachment = 'last_directory:attachment',
@@ -11,7 +11,7 @@ export const enum LastUsedSlot {
 }
 
 const defaultLocations: {
-  [key in LastUsedSlot]: Parameters<typeof runtime.getAppPath>[0]
+  [key in LastUsedSlot]: Parameters<typeof RuntimeService.getAppPath>[0]
 } = {
   [LastUsedSlot.Attachment]: 'home',
   [LastUsedSlot.ProfileImage]: 'pictures',
@@ -23,7 +23,7 @@ const defaultLocations: {
 }
 
 export function rememberLastUsedPath(key: LastUsedSlot) {
-  const defaultPath = runtime.getAppPath(defaultLocations[key])
+  const defaultPath = RuntimeService.getAppPath(defaultLocations[key])
   const selectedPath = sessionStorage.getItem(key) || defaultPath
 
   const setLastPath = (lastPath: string) => {

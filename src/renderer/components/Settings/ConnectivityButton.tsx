@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
 import SettingsIconButton from './SettingsIconButton'
-import { BackendRemote, onDCEvent } from '../../backend-com'
+import { BackendRemote, onDCEvent } from '../../apiService'
 import { selectedAccountId } from '../../ScreenController'
 import ConnectivityDialog from '../dialogs/ConnectivityDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'

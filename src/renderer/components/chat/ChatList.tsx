@@ -26,7 +26,7 @@ import {
 import { PseudoListItemAddContact } from '../helpers/PseudoListItem'
 import { KeybindAction } from '../../keybindings'
 import { useThemeCssVar } from '../../ThemeManager'
-import { BackendRemote, onDCEvent, Type } from '../../backend-com'
+import { BackendRemote, onDCEvent, Type } from '../../apiService'
 import { selectedAccountId } from '../../ScreenController'
 import CreateChat from '../dialogs/CreateChat'
 import useChat from '../../hooks/chat/useChat'

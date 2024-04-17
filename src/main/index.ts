@@ -121,7 +121,7 @@ import { ExtendedAppMainProcess } from './types'
 import { updateTrayIcon, hideDeltaChat, showDeltaChat } from './tray'
 import './notifications'
 import { acceptThemeCLI } from './themes'
-import { webxdcStartUpCleanup } from './deltachat/webxdc'
+import { webxdcStartUpCleanup } from './deltachat/WebxdcController'
 import { cleanupDraftTempDir } from './cleanup_temp_dir'
 
 app.ipcReady = false

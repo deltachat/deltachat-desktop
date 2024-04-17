@@ -1,6 +1,6 @@
 import { debounce } from 'debounce'
-import { BackendRemote } from '../backend-com'
-import { runtime } from '../runtime'
+import { BackendRemote } from '../apiService'
+import { RuntimeService } from '../runtime/runtimeService'
 import AccountNotificationStoreInstance from '../stores/accountNotifications'
 
 async function updateBadgeCounter() {
@@ -16,7 +16,7 @@ async function updateBadgeCounter() {
     )
   ).reduce((previous, current) => previous + current, 0)
 
-  if (!(await runtime.getDesktopSettings()).syncAllAccounts) {
+  if (!(await RuntimeService.getDesktopSettings()).syncAllAccounts) {
     if (window.__selectedAccountId) {
       combined_count = (
         await BackendRemote.rpc.getFreshMsgs(window.__selectedAccountId)
@@ -24,7 +24,7 @@ async function updateBadgeCounter() {
     }
   }
 
-  runtime.setBadgeCounter(combined_count)
+  RuntimeService.setBadgeCounter(combined_count)
 }
 
 export const debouncedUpdateBadgeCounter = debounce(

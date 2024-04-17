@@ -4,10 +4,10 @@ import { dirname } from 'path'
 import classNames from 'classnames'
 
 import { getLogger } from '../../../../shared/logger'
-import { runtime } from '../../../runtime'
+import { RuntimeService } from '../../../runtime/runtimeService'
 import { DeltaProgressBar } from '../../Login-Styles'
 import { Screens, selectedAccountId } from '../../../ScreenController'
-import { BackendRemote, EffectfulBackendActions } from '../../../backend-com'
+import { BackendRemote, EffectfulBackendActions } from '../../../apiService'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -104,7 +104,7 @@ function ImportButton() {
     const { defaultPath, setLastPath } = rememberLastUsedPath(
       LastUsedSlot.Backup
     )
-    const file = await runtime.showOpenFileDialog({
+    const file = await RuntimeService.showOpenFileDialog({
       title: tx('import_backup_title'),
       properties: ['openFile'],
       filters: [{ name: '.tar or .bak', extensions: ['tar', 'bak'] }],

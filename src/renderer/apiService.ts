@@ -1,5 +1,10 @@
-import { BaseDeltaChat, yerpc, DcEvent } from '@deltachat/jsonrpc-client'
-import { runtime } from './runtime'
+import {
+  BaseDeltaChat,
+  yerpc,
+  DcEvent,
+  RawClient,
+} from '@deltachat/jsonrpc-client'
+import { RuntimeService } from './runtime/runtimeService'
 import { hasDebugEnabled } from '../shared/logger'
 import { clearNotificationsForChat } from './system-integration/notifications'
 import { countCall } from './debug-tools'
@@ -8,6 +13,12 @@ export { T as Type } from '@deltachat/jsonrpc-client'
 
 const { BaseTransport } = yerpc
 
+/**
+ * Electron specific implementations RPC transport
+ *
+ * for _send ipcRenderer.invoke 'json-rpc-message' channel
+ * for _onmessage ipcRenderer listens to 'json-rpc-message' channel
+ */
 class ElectronTransport extends BaseTransport {
   constructor() {
     super()
@@ -37,6 +48,9 @@ class ElectronTransport extends BaseTransport {
   }
 }
 
+/**
+ * JSON RPC client with electron specific transport
+ */
 class ElectronDeltachat extends BaseDeltaChat<ElectronTransport> {
   close() {
     /** noop */
@@ -46,7 +60,19 @@ class ElectronDeltachat extends BaseDeltaChat<ElectronTransport> {
   }
 }
 
+/**
+ * instance of rpc client
+ */
 export const BackendRemote: BaseDeltaChat<any> = new ElectronDeltachat()
+
+/**
+ * provide raw client as ApiService
+ * to hide all implementation details
+ *
+ * RawClient type "knows" all available functions
+ * since its type is auto generated in core
+ */
+export const ApiService: RawClient = BackendRemote.rpc
 
 /** Functions with side-effects */
 export namespace EffectfulBackendActions {
@@ -59,25 +85,25 @@ export namespace EffectfulBackendActions {
     }
 
     // remove the account
-    await BackendRemote.rpc.removeAccount(account_id)
+    await ApiService.removeAccount(account_id)
 
     // if successful remove webxdc data
-    runtime.deleteWebxdcAccountData(account_id)
+    RuntimeService.deleteWebxdcAccountData(account_id)
   }
 
   // TODO make a core events for these chatlist events instead of faking them in desktop
   export async function acceptChat(account_id: number, chatId: number) {
-    await BackendRemote.rpc.acceptChat(account_id, chatId)
+    await ApiService.acceptChat(account_id, chatId)
     window.__refetchChatlist && window.__refetchChatlist()
   }
 
   export async function blockChat(account_id: number, chatId: number) {
-    await BackendRemote.rpc.blockChat(account_id, chatId)
+    await ApiService.blockChat(account_id, chatId)
     window.__refetchChatlist && window.__refetchChatlist()
   }
 
   export async function deleteChat(accountId: number, chatId: number) {
-    await BackendRemote.rpc.deleteChat(accountId, chatId)
+    await ApiService.deleteChat(accountId, chatId)
     clearNotificationsForChat(accountId, chatId)
     const lastChatId = await BackendRemote.rpc.getConfig(
       accountId,
@@ -90,12 +116,12 @@ export namespace EffectfulBackendActions {
   }
 
   export async function blockContact(accountId: number, contactId: number) {
-    await BackendRemote.rpc.blockContact(accountId, contactId)
+    await ApiService.blockContact(accountId, contactId)
     window.__refetchChatlist && window.__refetchChatlist()
   }
 
   export async function unBlockContact(accountId: number, contactId: number) {
-    await BackendRemote.rpc.unblockContact(accountId, contactId)
+    await ApiService.unblockContact(accountId, contactId)
     window.__refetchChatlist && window.__refetchChatlist()
   }
 }

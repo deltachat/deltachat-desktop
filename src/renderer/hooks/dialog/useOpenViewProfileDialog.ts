@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 import ViewProfile from '../../components/dialogs/ViewProfile'
 import useDialog from './useDialog'
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote } from '../../apiService'
 
 export default function useOpenViewProfileDialog() {
   const { openDialog } = useDialog()

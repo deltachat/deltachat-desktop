@@ -8,9 +8,9 @@ import { getLogger } from '../shared/logger'
 import { ActionEmitter, KeybindAction } from './keybindings'
 import AccountSetupScreen from './components/screens/AccountSetupScreen'
 import WelcomeScreen from './components/screens/WelcomeScreen'
-import { BackendRemote, EffectfulBackendActions } from './backend-com'
+import { BackendRemote, EffectfulBackendActions } from './apiService'
 import { updateDeviceChats } from './deviceMessages'
-import { runtime } from './runtime'
+import { RuntimeService } from './runtime/runtimeService'
 import { updateTimestamps } from './components/conversations/Timestamp'
 import { ScreenContext } from './contexts/ScreenContext'
 import About from './components/dialogs/About'
@@ -92,7 +92,7 @@ export default class ScreenController extends Component {
   }
 
   private async _getLastUsedAccount(): Promise<number | undefined> {
-    const lastLoggedInAccountId = (await runtime.getDesktopSettings())
+    const lastLoggedInAccountId = (await RuntimeService.getDesktopSettings())
       .lastAccount
     try {
       if (lastLoggedInAccountId) {
@@ -130,7 +130,7 @@ export default class ScreenController extends Component {
     }
 
     await BackendRemote.rpc.startIo(accountId)
-    runtime.setDesktopSetting('lastAccount', accountId)
+    RuntimeService.setDesktopSetting('lastAccount', accountId)
     log.info('system_info', await BackendRemote.rpc.getSystemInfo())
     log.info('account_info', await BackendRemote.rpc.getInfo(accountId))
   }
@@ -143,13 +143,13 @@ export default class ScreenController extends Component {
 
     SettingsStoreInstance.effect.clear()
 
-    if (!(await runtime.getDesktopSettings()).syncAllAccounts) {
+    if (!(await RuntimeService.getDesktopSettings()).syncAllAccounts) {
       await BackendRemote.rpc.stopIo(previousAccountId)
       // does not work if previous account will be disabled, so better close it
-      runtime.closeAllWebxdcInstances()
+      RuntimeService.closeAllWebxdcInstances()
     }
 
-    runtime.setDesktopSetting('lastAccount', undefined)
+    RuntimeService.setDesktopSetting('lastAccount', undefined)
     ;(window.__selectedAccountId as any) = this.selectedAccountId = undefined
   }
 
@@ -209,7 +209,7 @@ export default class ScreenController extends Component {
   componentDidMount() {
     BackendRemote.on('Error', this.onError)
 
-    runtime.onShowDialog = kind => {
+    RuntimeService.onShowDialog = kind => {
       if (kind === 'about') {
         this.onShowAbout()
       } else if (kind === 'keybindings') {
@@ -219,7 +219,7 @@ export default class ScreenController extends Component {
       }
     }
 
-    runtime.onWebxdcSendToChat = (file, text) => {
+    RuntimeService.onWebxdcSendToChat = (file, text) => {
       if (this.openSendToDialogId) {
         this.context.closeDialog(this.openSendToDialogId)
         this.openSendToDialogId = undefined
@@ -234,7 +234,7 @@ export default class ScreenController extends Component {
       )
     }
 
-    runtime.onResumeFromSleep = debounce(() => {
+    RuntimeService.onResumeFromSleep = debounce(() => {
       log.info('onResumeFromSleep')
       // update timestamps
       updateTimestamps()
@@ -243,7 +243,7 @@ export default class ScreenController extends Component {
     }, 1000)
 
     this.startup().then(() => {
-      runtime.emitUIFullyReady()
+      RuntimeService.emitUIFullyReady()
     })
   }
 

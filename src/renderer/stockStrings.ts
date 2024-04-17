@@ -1,7 +1,7 @@
 import { C } from '@deltachat/jsonrpc-client'
 
 import { getLogger } from '../shared/logger'
-import { BackendRemote } from './backend-com'
+import { BackendRemote } from './apiService'
 
 const log = getLogger('renderer/stockstrings')
 

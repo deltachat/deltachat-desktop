@@ -5,7 +5,7 @@ import { DeltaCheckbox } from '../contact/ContactListItem'
 import SettingsStoreInstance, {
   SettingsStoreState,
 } from '../../stores/settings'
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote } from '../../apiService'
 import { selectedAccountId } from '../../ScreenController'
 import SettingsSelector from './SettingsSelector'
 import SmallSelectDialog, { SelectDialogOption } from '../SmallSelectDialog'

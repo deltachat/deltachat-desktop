@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react'
 
 import { debounceWithInit } from '../chat/ChatListHelpers'
-import { BackendRemote, onDCEvent } from '../../backend-com'
+import { BackendRemote, onDCEvent } from '../../apiService'
 import { selectedAccountId } from '../../ScreenController'
 import Dialog, {
   CloseFooterAction,

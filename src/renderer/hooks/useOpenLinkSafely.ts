@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import useConfirmationDialog from './dialog/useConfirmationDialog'
 import useOpenMailtoLink from './useOpenMailtoLink'
 import useTranslationFunction from '../hooks/useTranslationFunction'
-import { runtime } from '../runtime'
+import { RuntimeService } from '../runtime/runtimeService'
 
 /**
  * Opens http, https and mailto links, offers to copy all other links.
@@ -18,7 +18,7 @@ export default function useOpenLinkSafely() {
       if (url.startsWith('mailto:')) {
         openMailtoLink(accountId, url)
       } else if (url.startsWith('http:') || url.startsWith('https:')) {
-        runtime.openLink(url)
+        RuntimeService.openLink(url)
       } else {
         const userConfirmed = await openConfirmationDialog({
           message: tx('ask_copy_unopenable_link_to_clipboard', url),
@@ -27,7 +27,7 @@ export default function useOpenLinkSafely() {
         })
 
         if (userConfirmed) {
-          runtime.writeClipboardText(url)
+          RuntimeService.writeClipboardText(url)
         }
       }
     },

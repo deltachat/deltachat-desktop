@@ -3,7 +3,7 @@ import { basename } from 'path'
 import { Icon, Overlay } from '@blueprintjs/core'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 
-import { runtime } from '../../runtime'
+import { RuntimeService } from '../../runtime/runtimeService'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useContextMenu from '../../hooks/useContextMenu'
 
@@ -20,14 +20,14 @@ export default function FullscreenAvatar(
   ) as React.MutableRefObject<(() => void) | null>
 
   const saveAs = () => {
-    runtime.downloadFile(imagePath, basename(imagePath))
+    RuntimeService.downloadFile(imagePath, basename(imagePath))
   }
 
   const openMenu = useContextMenu([
     {
       label: tx('menu_copy_image_to_clipboard'),
       action: () => {
-        runtime.writeClipboardImage(imagePath)
+        RuntimeService.writeClipboardImage(imagePath)
       },
     },
     {
@@ -52,7 +52,7 @@ export default function FullscreenAvatar(
                       className='image-context-menu-container'
                       onContextMenu={openMenu}
                     >
-                      <img src={runtime.transformBlobURL(imagePath)} />
+                      <img src={RuntimeService.transformBlobURL(imagePath)} />
                     </div>
                   </TransformComponent>
                 )

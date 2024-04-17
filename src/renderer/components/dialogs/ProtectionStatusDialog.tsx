@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { BackendRemote } from '../../backend-com'
-import { runtime } from '../../runtime'
+import { BackendRemote } from '../../apiService'
+import { RuntimeService } from '../../runtime/runtimeService'
 import { selectedAccountId } from '../../ScreenController'
 import QrCode from './QrCode'
 import Dialog, {
@@ -36,7 +36,7 @@ export function ProtectionBrokenDialog({
   }
 
   const onLearnMore = () => {
-    runtime.openHelpWindow(VERIFICATION_BROKEN_ANCHOR)
+    RuntimeService.openHelpWindow(VERIFICATION_BROKEN_ANCHOR)
   }
 
   return (
@@ -74,7 +74,7 @@ export function VerifiedContactsRequiredDialog({ onClose }: DialogProps) {
   }
 
   const onLearnMore = () => {
-    runtime.openHelpWindow(VERIFICATION_REQUIRED_ANCHOR)
+    RuntimeService.openHelpWindow(VERIFICATION_REQUIRED_ANCHOR)
   }
 
   return (
@@ -103,7 +103,7 @@ export function ProtectionEnabledDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
 
   const onLearnMore = () => {
-    runtime.openHelpWindow(VERIFICATION_ENABLED_ANCHOR)
+    RuntimeService.openHelpWindow(VERIFICATION_ENABLED_ANCHOR)
   }
 
   return (
