@@ -252,7 +252,15 @@ export default function QrReader({ onError, onScan }: Props) {
         const base64 = await fileToBase64(file)
         const imageData = await base64ToImageData(base64)
         const results = await scanImageData(imageData, scanner)
-        handleScanResults(results)
+
+        if (results.length > 0) {
+          handleScanResults(results)
+        } else {
+          userFeedback({
+            type: 'error',
+            text: `${tx('qrscan_failed')}: no data in image`,
+          })
+        }
       } catch (error: any) {
         handleError(error)
       }
@@ -263,7 +271,7 @@ export default function QrReader({ onError, onScan }: Props) {
         inputRef.current.value = ''
       }
     },
-    [handleError, handleScanResults, scanner]
+    [handleError, handleScanResults, scanner, tx, userFeedback]
   )
 
   // Show a context menu with different video input options to the user.
