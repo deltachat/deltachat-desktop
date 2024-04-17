@@ -25,6 +25,6 @@
     "message": "Current Account"
   },
   "camera_access_failed": {
-    "message": "Could not access video camera"
+    "message": "Could not access video camera. You might want to check your video permissions or if the camera is used already by another program"
   }
 }
