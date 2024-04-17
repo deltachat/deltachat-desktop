@@ -151,6 +151,11 @@ export default function QrReader({ onError, onScan }: Props) {
           return device.kind === 'videoinput'
         })
       )
+
+      // Automatically select first available video device
+      if (devices.length > 0) {
+        setDeviceId(devices[0].deviceId)
+      }
     }
 
     getAllCameras()
