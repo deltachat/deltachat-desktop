@@ -231,7 +231,7 @@ export default function QrReader({ onError, onScan }: Props) {
       const cameraItems: ContextMenuItem[] =
         videoDevices.length > 1
           ? videoDevices.map(device => {
-              const marker = device.deviceId === deviceId ? ' ✔' : ''
+              const marker = device.deviceId === deviceId ? ' ✓' : ''
               return {
                 label: `${device.label}${marker}`,
                 action: () => setDeviceId(device.deviceId),
