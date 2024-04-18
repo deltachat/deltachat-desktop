@@ -588,10 +588,12 @@ If you think that's a bug and you need that permission, then please open an issu
 
     ipcMain.handle(
       'webxdc:ephemeral-status-update',
-      (_ev, accountId: number, instanceId: number, payload: string) => {
+      async (_ev, accountId: number, instanceId: number, payload: string) => {
         const instance = open_apps[`${accountId}.${instanceId}`]
         if (instance) {
           instance.win.webContents.send('webxdc.ephemeralStatusUpdate', payload)
+        } else {
+          await this.rpc.leaveGossip(accountId, instanceId)
         }
       }
     )
