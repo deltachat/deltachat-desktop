@@ -15,7 +15,7 @@ import ChatList from '../chat/ChatList'
 import { Avatar } from '../Avatar'
 import ConnectivityToast from '../ConnectivityToast'
 import MailingListProfile from '../dialogs/MessageListProfile'
-import { useSettingsStore } from '../../stores/settings'
+import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 import { Type } from '../../backend-com'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import SearchInput from '../SearchInput'
@@ -115,6 +115,11 @@ export default function MainScreen({ accountId }: Props) {
   useKeyBindingAction(KeybindAction.ChatList_ClearSearchInput, () => {
     handleSearchClear()
   })
+
+  useEffect(() => {
+    // Make sure it uses new version of settings store instance
+    SettingsStoreInstance.effect.load()
+  }, [])
 
   const onClickThreeDotMenu = useThreeDotMenu(
     chat,
