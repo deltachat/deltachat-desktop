@@ -13,7 +13,7 @@ type Props = {
 
 export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
   const {
-    cancelInstantOnboarding,
+    resetInstantOnboarding,
     showInstantOnboarding,
     switchToInstantOnboarding,
   } = useInstantOnboarding()
@@ -27,7 +27,7 @@ export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
       {showInstantOnboarding ? (
         <InstantAccountScreen
           selectedAccountId={selectedAccountId}
-          onCancel={() => cancelInstantOnboarding()}
+          onCancel={() => resetInstantOnboarding()}
         />
       ) : (
         <OnboardingScreen

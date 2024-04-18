@@ -1,6 +1,5 @@
 import { useCallback, useContext } from 'react'
 
-import useChat from './chat/useChat'
 import useConfirmationDialog from './dialog/useConfirmationDialog'
 import useDialog from '../hooks/dialog/useDialog'
 import useSecureJoin from './useSecureJoin'
@@ -12,6 +11,7 @@ import { ScreenContext } from '../contexts/ScreenContext'
 import { Screens } from '../ScreenController'
 
 import type { QrWithUrl } from './useProcessQr'
+import type { T } from '@deltachat/jsonrpc-client'
 
 const DEFAULT_CHATMAIL_INSTANCE_URL =
   'https://nine.testrun.org/cgi-bin/newemail.py'
@@ -21,9 +21,8 @@ export default function useInstantOnboarding() {
   const openConfirmationDialog = useConfirmationDialog()
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
-  const { screen, changeScreen } = useContext(ScreenContext)
+  const { screen } = useContext(ScreenContext)
   const { secureJoinContact, secureJoinGroup } = useSecureJoin()
-  const { selectChat } = useChat()
 
   if (!context) {
     throw new Error(
@@ -117,7 +116,7 @@ export default function useInstantOnboarding() {
       accountId: number,
       displayName: string,
       profilePicture?: string
-    ): Promise<void> => {
+    ): Promise<T.FullChat['id'] | null> => {
       let instanceUrl = `dcaccount:${DEFAULT_CHATMAIL_INSTANCE_URL}`
 
       // Use custom chatmail instance if given by QR code
@@ -173,23 +172,7 @@ export default function useInstantOnboarding() {
                 }
               }
 
-              // 5. We redirect the user to the main screen after the
-              // account got successfully created.
-              //
-              // Note: This happens within a timeout to make sure we can
-              // finish the process first before unmounting the component
-              // which started it
-              setTimeout(() => {
-                setWelcomeQr(undefined)
-                setShowInstantOnboarding(false)
-                changeScreen(Screens.Main)
-
-                if (chatId !== null) {
-                  selectChat(chatId)
-                }
-              })
-
-              resolve()
+              resolve(chatId)
             },
           })
         } catch (error: any) {
@@ -197,28 +180,19 @@ export default function useInstantOnboarding() {
         }
       })
     },
-    [
-      changeScreen,
-      openDialog,
-      secureJoinContact,
-      secureJoinGroup,
-      selectChat,
-      setShowInstantOnboarding,
-      setWelcomeQr,
-      welcomeQr,
-    ]
+    [openDialog, secureJoinContact, secureJoinGroup, welcomeQr]
   )
 
-  const cancelInstantOnboarding = () => {
+  const resetInstantOnboarding = () => {
     setWelcomeQr(undefined)
     setShowInstantOnboarding(false)
   }
 
   return {
     createInstantAccount,
+    resetInstantOnboarding,
     showInstantOnboarding,
     switchToInstantOnboarding,
-    cancelInstantOnboarding,
     welcomeQr,
   }
 }

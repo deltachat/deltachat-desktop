@@ -65,7 +65,7 @@ export default function useSecureJoin() {
 
       const userConfirmed = skipUserConfirmation
         ? true
-        : confirmJoinContact(accountId, qrWithUrl)
+        : await confirmJoinContact(accountId, qrWithUrl)
 
       if (userConfirmed) {
         return await BackendRemote.rpc.secureJoin(accountId, url)

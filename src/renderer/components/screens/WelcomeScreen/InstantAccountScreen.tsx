@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 
 import ProfileImageSelector from '../../dialogs/EditProfileDialog/ProfileImageSelector'
 import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
+import useChat from '../../../hooks/chat/useChat'
 import useInstantOnboarding from '../../../hooks/useInstantOnboarding'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { DeltaInput } from '../../Login-Styles'
@@ -13,6 +14,8 @@ import {
   FooterActions,
 } from '../../Dialog'
 import ClickableLink from '../../helpers/ClickableLink'
+import { ScreenContext } from '../../../contexts/ScreenContext'
+import { Screens } from '../../../ScreenController'
 
 type Props = {
   selectedAccountId: number
@@ -25,7 +28,11 @@ export default function InstantAccountScreen({
 }: Props) {
   const tx = useTranslationFunction()
   const openAlertDialog = useAlertDialog()
-  const { createInstantAccount } = useInstantOnboarding()
+  const { changeScreen } = useContext(ScreenContext)
+  const { createInstantAccount, resetInstantOnboarding } =
+    useInstantOnboarding()
+  const { selectChat } = useChat()
+
   const [displayName, setDisplayName] = useState('')
   const [profilePicture, setProfilePicture] = useState<string | undefined>()
 
@@ -39,7 +46,23 @@ export default function InstantAccountScreen({
 
   const onConfirm = async () => {
     try {
-      await createInstantAccount(selectedAccountId, displayName, profilePicture)
+      // Automatically create a "chatmail" account
+      const chatId = await createInstantAccount(
+        selectedAccountId,
+        displayName,
+        profilePicture
+      )
+
+      // We redirect the user to the main screen after the account got
+      // successfully created
+      resetInstantOnboarding()
+      changeScreen(Screens.Main)
+
+      // If the user scanned a QR code to join a contact or group, then
+      // we redirect to the created chat after instant onboarding
+      if (chatId !== null) {
+        selectChat(chatId)
+      }
     } catch (error: any) {
       await openAlertDialog({
         message: error.message || error.toString(),
