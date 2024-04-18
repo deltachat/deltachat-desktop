@@ -11,12 +11,9 @@ export default function useSecureJoin() {
   const openConfirmationDialog = useConfirmationDialog()
   const tx = useTranslationFunction()
 
-  const secureJoinContact = useCallback(
-    async (
-      accountId: number,
-      qrWithUrl: QrWithUrl
-    ): Promise<FullChat['id'] | null> => {
-      const { qr, url } = qrWithUrl
+  const confirmJoinContact = useCallback(
+    async (accountId: number, qrWithUrl: QrWithUrl): Promise<boolean> => {
+      const { qr } = qrWithUrl
       if (qr.kind !== 'askVerifyContact') {
         throw new Error(
           "secureJoinContact requires QR codes of kind 'askVerifyContact'"
@@ -28,10 +25,47 @@ export default function useSecureJoin() {
         qr.contact_id
       )
 
-      const userConfirmed = await openConfirmationDialog({
+      return await openConfirmationDialog({
         message: tx('ask_start_chat_with', contact.address),
         confirmLabel: tx('ok'),
       })
+    },
+    [openConfirmationDialog, tx]
+  )
+
+  const confirmJoinGroup = useCallback(
+    async (qrWithUrl: QrWithUrl) => {
+      const { qr } = qrWithUrl
+      if (qr.kind !== 'askVerifyGroup') {
+        throw new Error(
+          "secureJoinGroup requires QR codes of kind 'askVerifyGroup'"
+        )
+      }
+
+      return await openConfirmationDialog({
+        message: tx('qrscan_ask_join_group', qr.grpname),
+        confirmLabel: tx('ok'),
+      })
+    },
+    [openConfirmationDialog, tx]
+  )
+
+  const secureJoinContact = useCallback(
+    async (
+      accountId: number,
+      qrWithUrl: QrWithUrl,
+      skipUserConfirmation: boolean = false
+    ): Promise<FullChat['id'] | null> => {
+      const { qr, url } = qrWithUrl
+      if (qr.kind !== 'askVerifyContact') {
+        throw new Error(
+          "secureJoinContact requires QR codes of kind 'askVerifyContact'"
+        )
+      }
+
+      const userConfirmed = skipUserConfirmation
+        ? true
+        : confirmJoinContact(accountId, qrWithUrl)
 
       if (userConfirmed) {
         return await BackendRemote.rpc.secureJoin(accountId, url)
@@ -39,13 +73,14 @@ export default function useSecureJoin() {
 
       return null
     },
-    [openConfirmationDialog, tx]
+    [confirmJoinContact]
   )
 
   const secureJoinGroup = useCallback(
     async (
       accountId: number,
-      qrWithUrl: QrWithUrl
+      qrWithUrl: QrWithUrl,
+      skipUserConfirmation: boolean = false
     ): Promise<FullChat['id'] | null> => {
       const { qr, url } = qrWithUrl
       if (qr.kind !== 'askVerifyGroup') {
@@ -54,10 +89,9 @@ export default function useSecureJoin() {
         )
       }
 
-      const userConfirmed = await openConfirmationDialog({
-        message: tx('qrscan_ask_join_group', qr.grpname),
-        confirmLabel: tx('ok'),
-      })
+      const userConfirmed = skipUserConfirmation
+        ? true
+        : await confirmJoinGroup(qrWithUrl)
 
       if (userConfirmed) {
         return await BackendRemote.rpc.secureJoin(accountId, url)
@@ -65,7 +99,7 @@ export default function useSecureJoin() {
 
       return null
     },
-    [openConfirmationDialog, tx]
+    [confirmJoinGroup]
   )
 
   return {

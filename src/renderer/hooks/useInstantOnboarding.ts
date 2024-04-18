@@ -1,5 +1,6 @@
 import { useCallback, useContext } from 'react'
 
+import useChat from './chat/useChat'
 import useConfirmationDialog from './dialog/useConfirmationDialog'
 import useDialog from '../hooks/dialog/useDialog'
 import useSecureJoin from './useSecureJoin'
@@ -22,6 +23,7 @@ export default function useInstantOnboarding() {
   const { openDialog } = useDialog()
   const { screen, changeScreen } = useContext(ScreenContext)
   const { secureJoinContact, secureJoinGroup } = useSecureJoin()
+  const { selectChat } = useChat()
 
   if (!context) {
     throw new Error(
@@ -37,7 +39,7 @@ export default function useInstantOnboarding() {
   } = context
 
   const switchToInstantOnboarding = useCallback(
-    async (qrWithUrl?: QrWithUrl) => {
+    async (accountId: number, qrWithUrl?: QrWithUrl) => {
       if (qrWithUrl) {
         const { qr } = qrWithUrl
         if (
@@ -48,18 +50,44 @@ export default function useInstantOnboarding() {
           )
         }
 
-        // Ask user to confirm creating a new account if they already have one
         const numberOfAccounts = (await BackendRemote.rpc.getAllAccountIds())
           .length
+
         if (qr.kind === 'account' && numberOfAccounts > 0) {
+          // Ask user to confirm creating a new account if they already have one
           const message: string =
             numberOfAccounts === 1
               ? 'qraccount_ask_create_and_login'
               : 'qraccount_ask_create_and_login_another'
-          const replacementValue = qr.domain
           const userConfirmed = await openConfirmationDialog({
-            message: tx(message, replacementValue),
+            message: tx(message, qr.domain),
             confirmLabel: tx('login_title'),
+          })
+
+          if (!userConfirmed) {
+            return
+          }
+        } else if (qr.kind === 'askVerifyGroup') {
+          // Ask the user if they want to create a new account and join the group
+          const userConfirmed = await openConfirmationDialog({
+            message: tx('instantonboarding_with_join_group', qr.grpname),
+            confirmLabel: tx('instantonboarding_lets_get_started'),
+          })
+
+          if (!userConfirmed) {
+            return
+          }
+        } else if (qr.kind === 'askVerifyContact') {
+          // Ask the user if they want to create a new account and start
+          // chatting with contact
+          const contact = await BackendRemote.rpc.getContact(
+            accountId,
+            qr.contact_id
+          )
+
+          const userConfirmed = await openConfirmationDialog({
+            message: tx('instantonboarding_with_join_contact', contact.address),
+            confirmLabel: tx('instantonboarding_lets_get_started'),
           })
 
           if (!userConfirmed) {
@@ -75,19 +103,13 @@ export default function useInstantOnboarding() {
         if (screen !== Screens.Welcome) {
           // Log out first by switching to an (temporary) blank account
           const blankAccount = await BackendRemote.rpc.addAccount()
+
+          // Select blank account, this will also switch the screen to `Welcome`
           window.__selectAccount(blankAccount)
-          changeScreen(Screens.Welcome)
         }
       })
     },
-    [
-      changeScreen,
-      openConfirmationDialog,
-      screen,
-      setShowInstantOnboarding,
-      setWelcomeQr,
-      tx,
-    ]
+    [openConfirmationDialog, screen, setShowInstantOnboarding, setWelcomeQr, tx]
   )
 
   const createInstantAccount = useCallback(
@@ -142,11 +164,12 @@ export default function useInstantOnboarding() {
 
               // 4. If the user created a new account from trying to contact another user
               // or joining the group we continue with this now
+              let chatId: number | null = null
               if (welcomeQr) {
                 if (welcomeQr.qr.kind === 'askVerifyContact') {
-                  await secureJoinContact(accountId, welcomeQr)
+                  chatId = await secureJoinContact(accountId, welcomeQr, true)
                 } else if (welcomeQr.qr.kind === 'askVerifyGroup') {
-                  await secureJoinGroup(accountId, welcomeQr)
+                  chatId = await secureJoinGroup(accountId, welcomeQr, true)
                 }
               }
 
@@ -160,6 +183,10 @@ export default function useInstantOnboarding() {
                 setWelcomeQr(undefined)
                 setShowInstantOnboarding(false)
                 changeScreen(Screens.Main)
+
+                if (chatId !== null) {
+                  selectChat(chatId)
+                }
               })
 
               resolve()
@@ -175,6 +202,7 @@ export default function useInstantOnboarding() {
       openDialog,
       secureJoinContact,
       secureJoinGroup,
+      selectChat,
       setShowInstantOnboarding,
       setWelcomeQr,
       welcomeQr,

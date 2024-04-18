@@ -29,5 +29,14 @@
   },
   "camera_access_failed": {
     "message": "Could not access video camera. You might want to check your video permissions or if the camera is used already by another program"
+  },
+  "instantonboarding_with_join_contact": {
+    "message": "Do you want to create a new DeltaChat account and start chatting with \"%1\"?"
+  },
+  "instantonboarding_with_join_group": {
+    "message": "Do you want to create a new DeltaChat account and join the \"%1\" chat group?"
+  },
+  "instantonboarding_lets_get_started": {
+    "message": "Let's get started!"
   }
 }

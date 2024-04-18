@@ -32,7 +32,7 @@ export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
       ) : (
         <OnboardingScreen
           selectedAccountId={selectedAccountId}
-          onNextStep={() => switchToInstantOnboarding()}
+          onNextStep={() => switchToInstantOnboarding(selectedAccountId)}
           {...props}
         />
       )}

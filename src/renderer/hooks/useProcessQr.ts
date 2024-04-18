@@ -123,7 +123,7 @@ export default function useProcessQR() {
 
       // Ask the user if they want to create an account on the given domain
       if (qr.kind === 'account') {
-        await switchToInstantOnboarding(parsed)
+        await switchToInstantOnboarding(accountId, parsed)
         callback && callback()
         return
       }
@@ -133,7 +133,7 @@ export default function useProcessQR() {
         if (screen === Screens.Welcome) {
           // Ask user to create a new account with instant onboarding flow before they
           // can start chatting with the given contact
-          await switchToInstantOnboarding(parsed)
+          await switchToInstantOnboarding(accountId, parsed)
           callback && callback()
         } else {
           const chatId = await secureJoinContact(accountId, parsed)
@@ -149,7 +149,7 @@ export default function useProcessQR() {
         if (screen === Screens.Welcome) {
           // Ask user to create a new account with instant onboarding flow before they
           // can join the given group
-          await switchToInstantOnboarding(parsed)
+          await switchToInstantOnboarding(accountId, parsed)
           callback && callback()
         } else {
           const chatId = await secureJoinGroup(accountId, parsed)
