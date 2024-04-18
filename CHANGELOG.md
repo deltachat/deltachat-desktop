@@ -15,6 +15,7 @@
 - Remove deprecated translations #3756
 - Refactor chat store into React context #3725
 - Improve security: restrict file protocol #3769
+- Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.137.3`
 
 ### Fixed
 - fix chat audit dialog was going out of viewport on smaller screens #3736
