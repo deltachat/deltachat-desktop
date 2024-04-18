@@ -56,6 +56,7 @@ export default function OnboardingScreen(props: Props) {
         await props.onUnSelectAccount()
         await EffectfulBackendActions.removeAccount(props.selectedAccountId)
       }
+
       props.onExitWelcomeScreen()
     } catch (error) {
       if (error instanceof Error) {

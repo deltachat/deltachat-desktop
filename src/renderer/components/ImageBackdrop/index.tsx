@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames'
 
 import type { PropsWithChildren } from 'react'
 
@@ -13,6 +14,8 @@ export default function ImageBackdrop({
   variant = 'welcome',
 }: PropsWithChildren<Props>) {
   return (
-    <div className={(styles.imageBackdrop, styles[variant])}>{children}</div>
+    <div className={classNames(styles.imageBackdrop, styles[variant])}>
+      {children}
+    </div>
   )
 }
