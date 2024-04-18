@@ -1,9 +1,28 @@
-.welcomeButton {
-  font-size: 14px;
-  margin: 10px 0;
-  width: 75%;
+.welcomeScreenImage {
+  width: 100%;
 
-  &.withGap {
-    margin-top: 40px;
+  @media (max-height: 700px) {
+    display: none;
   }
+}
+
+.welcomeScreenTitle {
+  color: var(--colorNone);
+  font-size: x-large;
+  margin-bottom: 30px;
+  margin-top: 40px;
+  text-align: center;
+}
+
+.welcomeScreenButtonGroup {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin-top: 50px;
+}
+
+.welcomeScreenButton {
+  font-size: 14px;
+  margin: 5px 0;
+  width: 75%;
 }

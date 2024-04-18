@@ -7,8 +7,10 @@ import ImportQrCode from '../../dialogs/ImportQrCode'
 import useDialog from '../../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { BackendRemote, EffectfulBackendActions } from '../../../backend-com'
-import { DialogBody, DialogHeader } from '../../Dialog'
+import { DialogBody, DialogContent, DialogHeader } from '../../Dialog'
 import { getLogger } from '../../../../shared/logger'
+
+import styles from './styles.module.scss'
 
 type Props = {
   selectedAccountId: number
@@ -75,15 +77,38 @@ export default function OnboardingScreen(props: Props) {
         title='Welcome!'
       />
       <DialogBody>
-        <Button type='primary' onClick={props.onNextStep}>
-          Let's get started!
-        </Button>
-        <Button type='secondary' onClick={onScanQRCode}>
-          Scan QR code
-        </Button>
-        <Button type='secondary' onClick={onAlreadyHaveAccount}>
-          I already have an account
-        </Button>
+        <DialogContent>
+          <img
+            className={styles.welcomeScreenImage}
+            src='../images/intro1.png'
+          />
+          <p className={styles.welcomeScreenTitle}>
+            {tx('welcome_chat_over_email')}
+          </p>
+          <div className={styles.welcomeScreenButtonGroup}>
+            <Button
+              className={styles.welcomeScreenButton}
+              type='primary'
+              onClick={props.onNextStep}
+            >
+              Let's get started!
+            </Button>
+            <Button
+              className={styles.welcomeScreenButton}
+              type='secondary'
+              onClick={onScanQRCode}
+            >
+              Scan QR code
+            </Button>
+            <Button
+              className={styles.welcomeScreenButton}
+              type='secondary'
+              onClick={onAlreadyHaveAccount}
+            >
+              I already have an account
+            </Button>
+          </div>
+        </DialogContent>
       </DialogBody>
     </>
   )

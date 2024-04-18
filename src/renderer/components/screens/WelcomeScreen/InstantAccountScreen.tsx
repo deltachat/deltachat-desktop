@@ -8,6 +8,7 @@ import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { DeltaInput } from '../../Login-Styles'
 import {
   DialogBody,
+  DialogContent,
   DialogFooter,
   DialogHeader,
   FooterActionButton,
@@ -74,19 +75,21 @@ export default function InstantAccountScreen({
     <>
       <DialogHeader title='Create new account' onClickBack={onCancel} />
       <DialogBody>
-        <ProfileImageSelector
-          displayName={displayName}
-          profilePicture={profilePicture}
-          setProfilePicture={onChangeProfileImage}
-        />
-        <DeltaInput
-          key='displayName'
-          id='displayName'
-          placeholder={tx('pref_your_name')}
-          value={displayName}
-          onChange={onChangeDisplayName}
-        />
-        <ChatmailInstanceInfo />
+        <DialogContent>
+          <ProfileImageSelector
+            displayName={displayName}
+            profilePicture={profilePicture}
+            setProfilePicture={onChangeProfileImage}
+          />
+          <DeltaInput
+            key='displayName'
+            id='displayName'
+            placeholder={tx('pref_your_name')}
+            value={displayName}
+            onChange={onChangeDisplayName}
+          />
+          <ChatmailInstanceInfo />
+        </DialogContent>
       </DialogBody>
       <DialogFooter>
         <FooterActions>
