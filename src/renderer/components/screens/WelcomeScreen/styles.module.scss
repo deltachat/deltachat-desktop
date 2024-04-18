@@ -1,3 +1,7 @@
+.welcomeScreenBody {
+  padding-bottom: 0;
+}
+
 .welcomeScreenImage {
   width: 100%;
 
@@ -10,7 +14,7 @@
   color: var(--colorNone);
   font-size: x-large;
   margin-bottom: 30px;
-  margin-top: 40px;
+  margin-top: 10px;
   text-align: center;
 }
 
@@ -18,7 +22,7 @@
   align-items: center;
   display: flex;
   flex-direction: column;
-  margin-top: 50px;
+  margin-top: 40px;
 }
 
 .welcomeScreenButton {

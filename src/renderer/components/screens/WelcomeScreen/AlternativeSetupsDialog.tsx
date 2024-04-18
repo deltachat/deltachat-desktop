@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { dirname } from 'path'
 
 import Button from '../../Button'
@@ -12,6 +12,7 @@ import {
   rememberLastUsedPath,
 } from '../../../utils/lastUsedPaths'
 import { Screens } from '../../../ScreenController'
+import { ScreenContext } from '../../../contexts/ScreenContext'
 import { runtime } from '../../../runtime'
 
 // import styles from './styles.module.scss'
@@ -21,6 +22,7 @@ import type { DialogProps } from '../../../contexts/DialogContext'
 export default function AlternativeSetupsDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
+  const { changeScreen } = useContext(ScreenContext)
 
   const onClickSecondDevice = () =>
     openDialog(ImportQrCode, {
@@ -40,6 +42,7 @@ export default function AlternativeSetupsDialog({ onClose }: DialogProps) {
     })
 
     if (file) {
+      onClose()
       openDialog(ImportBackupProgressDialog, {
         backupFile: file,
       })
@@ -47,7 +50,10 @@ export default function AlternativeSetupsDialog({ onClose }: DialogProps) {
     }
   }
 
-  const onClickLogin = () => window.__changeScreen(Screens.Login)
+  const onClickLogin = () => {
+    onClose()
+    changeScreen(Screens.Login)
+  }
 
   return (
     <Dialog onClose={onClose}>

@@ -1,22 +1,20 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
+import Button from '../../Button'
+import Callout from '../../Callout'
+import ClickableLink from '../../helpers/ClickableLink'
 import ProfileImageSelector from '../../dialogs/EditProfileDialog/ProfileImageSelector'
 import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
 import useChat from '../../../hooks/chat/useChat'
 import useInstantOnboarding from '../../../hooks/useInstantOnboarding'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { DeltaInput } from '../../Login-Styles'
-import {
-  DialogBody,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  FooterActionButton,
-  FooterActions,
-} from '../../Dialog'
-import ClickableLink from '../../helpers/ClickableLink'
+import { DialogBody, DialogContent, DialogHeader } from '../../Dialog'
 import { ScreenContext } from '../../../contexts/ScreenContext'
 import { Screens } from '../../../ScreenController'
+
+import styles from './styles.module.scss'
+import { BackendRemote } from '../../../backend-com'
 
 type Props = {
   selectedAccountId: number
@@ -74,8 +72,8 @@ export default function InstantAccountScreen({
   return (
     <>
       <DialogHeader title='Create new account' onClickBack={onCancel} />
-      <DialogBody>
-        <DialogContent>
+      <DialogBody className={styles.welcomeScreenBody}>
+        <DialogContent paddingBottom>
           <ProfileImageSelector
             displayName={displayName}
             profilePicture={profilePicture}
@@ -88,41 +86,76 @@ export default function InstantAccountScreen({
             value={displayName}
             onChange={onChangeDisplayName}
           />
-          <ChatmailInstanceInfo />
+          <div className={styles.welcomeScreenButtonGroup}>
+            <Button
+              className={styles.welcomeScreenButton}
+              type='primary'
+              onClick={onConfirm}
+            >
+              Create account
+            </Button>
+          </div>
         </DialogContent>
+        <ChatmailInstanceInfo accountId={selectedAccountId} />
       </DialogBody>
-      <DialogFooter>
-        <FooterActions>
-          <FooterActionButton onClick={onCancel}>
-            {tx('cancel')}
-          </FooterActionButton>
-          <FooterActionButton onClick={onConfirm}>
-            {tx('ok')}
-          </FooterActionButton>
-        </FooterActions>
-      </DialogFooter>
     </>
   )
 }
 
-function ChatmailInstanceInfo() {
+function ChatmailInstanceInfo(props: { accountId: number }) {
   const { welcomeQr } = useInstantOnboarding()
+  const [contactAddress, setContactAddress] = useState('')
 
-  if (!welcomeQr || welcomeQr.qr.kind !== 'account') {
+  useEffect(() => {
+    const loadContactName = async () => {
+      if (!welcomeQr || welcomeQr.qr.kind !== 'askVerifyContact') {
+        setContactAddress('')
+        return
+      }
+
+      const contact = await BackendRemote.rpc.getContact(
+        props.accountId,
+        welcomeQr.qr.contact_id
+      )
+      setContactAddress(contact.address)
+    }
+
+    loadContactName()
+  }, [props.accountId, welcomeQr])
+
+  if (!welcomeQr) {
     return null
   }
 
-  return (
-    <>
-      <p>Your account will be created on the following instance:</p>
-      <p>
-        <i>{welcomeQr.qr.domain}</i>
-      </p>
-      <p>
-        <ClickableLink href='https://delta.chat'>
-          Show other instances
-        </ClickableLink>
-      </p>
-    </>
-  )
+  if (welcomeQr.qr.kind === 'account') {
+    return (
+      <Callout>
+        <p>Your account will be created on the following instance:</p>
+        <p>
+          <i>{welcomeQr.qr.domain}</i>
+        </p>
+        <p>
+          <ClickableLink href='https://delta.chat'>
+            Show other instances
+          </ClickableLink>
+        </p>
+      </Callout>
+    )
+  } else if (welcomeQr.qr.kind === 'askVerifyGroup') {
+    return (
+      <Callout>
+        <p>
+          Create a new account and join the group \"{welcomeQr.qr.grpname}\"
+        </p>
+      </Callout>
+    )
+  } else if (welcomeQr.qr.kind === 'askVerifyContact') {
+    return (
+      <Callout>
+        <p>Create a new account and chat with {contactAddress}</p>
+      </Callout>
+    )
+  }
+
+  return null
 }
