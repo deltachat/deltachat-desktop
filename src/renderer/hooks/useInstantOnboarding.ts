@@ -1,7 +1,7 @@
 import { useCallback, useContext } from 'react'
 
-import useConfirmationDialog from './useConfirmationDialog'
-import useDialog from '../hooks/useDialog'
+import useConfirmationDialog from './dialog/useConfirmationDialog'
+import useDialog from '../hooks/dialog/useDialog'
 import useSecureJoin from './useSecureJoin'
 import useTranslationFunction from './useTranslationFunction'
 import { BackendRemote } from '../backend-com'

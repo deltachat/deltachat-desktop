@@ -5,7 +5,7 @@ import Button from '../../Button'
 import Dialog, { DialogBody, DialogContent, DialogHeader } from '../../Dialog'
 import ImportBackupProgressDialog from './ImportBackupProgressDialog'
 import ImportQrCode from '../../dialogs/ImportQrCode'
-import useDialog from '../../../hooks/useDialog'
+import useDialog from '../../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import {
   LastUsedSlot,

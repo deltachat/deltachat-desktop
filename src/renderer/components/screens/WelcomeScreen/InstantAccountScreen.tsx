@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import ProfileImageSelector from '../../dialogs/EditProfileDialog/ProfileImageSelector'
-import useAlertDialog from '../../../hooks/useAlertDialog'
+import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
 import useInstantOnboarding from '../../../hooks/useInstantOnboarding'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { DeltaInput } from '../../Login-Styles'
