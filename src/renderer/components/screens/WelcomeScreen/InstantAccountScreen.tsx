@@ -8,18 +8,22 @@ import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
 import useChat from '../../../hooks/chat/useChat'
 import useInstantOnboarding from '../../../hooks/useInstantOnboarding'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import { BackendRemote } from '../../../backend-com'
 import { DeltaInput } from '../../Login-Styles'
 import { DialogBody, DialogContent, DialogHeader } from '../../Dialog'
 import { ScreenContext } from '../../../contexts/ScreenContext'
 import { Screens } from '../../../ScreenController'
 
 import styles from './styles.module.scss'
-import { BackendRemote } from '../../../backend-com'
 
 type Props = {
   selectedAccountId: number
   onCancel: () => void
 }
+
+// URL of page listing chatmail instances
+// @TODO: Insert correct URL
+const INSTANCE_LIST_URL = 'https://delta.chat/'
 
 export default function InstantAccountScreen({
   selectedAccountId,
@@ -123,8 +127,19 @@ function ChatmailInstanceInfo(props: { accountId: number }) {
     loadContactName()
   }, [props.accountId, welcomeQr])
 
+  // When no QR code got scanned by the user we're creating an account on the
+  // default chatmail instance
   if (!welcomeQr) {
-    return null
+    return (
+      <Callout>
+        <p>Your account will be created on the default instance</p>
+        <p>
+          <ClickableLink href={INSTANCE_LIST_URL}>
+            Show other instances
+          </ClickableLink>
+        </p>
+      </Callout>
+    )
   }
 
   if (welcomeQr.qr.kind === 'account') {
@@ -135,7 +150,7 @@ function ChatmailInstanceInfo(props: { accountId: number }) {
           <i>{welcomeQr.qr.domain}</i>
         </p>
         <p>
-          <ClickableLink href='https://delta.chat'>
+          <ClickableLink href={INSTANCE_LIST_URL}>
             Show other instances
           </ClickableLink>
         </p>
