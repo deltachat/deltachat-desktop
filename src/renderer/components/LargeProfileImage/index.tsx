@@ -1,7 +1,8 @@
 import React from 'react'
 
-import { ClickForFullscreenAvatarWrapper } from '../Avatar'
+import Icon from '../Icon'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { ClickForFullscreenAvatarWrapper } from '../Avatar'
 
 import styles from './styles.module.scss'
 
@@ -33,7 +34,15 @@ export default function LargeProfileImage({
           className={styles.largeProfileImageArea}
           style={{ backgroundColor: color }}
         >
-          {initials}
+          {initials ? (
+            initials
+          ) : (
+            <Icon
+              className={styles.largeProfileImageDefaultIcon}
+              icon='person'
+              size={50}
+            />
+          )}
         </span>
       )}
     </div>
