@@ -10,7 +10,7 @@ import {
 } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { DialogBody, DialogContent, DialogWithHeader } from '../Dialog'
-import useConfirmationDialog from '../../hooks/useConfirmationDialog'
+import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'

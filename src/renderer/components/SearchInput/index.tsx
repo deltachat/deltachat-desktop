@@ -3,7 +3,7 @@ import classNames from 'classnames'
 
 import QrCode from '../dialogs/QrCode'
 import SearchInputButton from './SearchInputButton'
-import useDialog from '../../hooks/useDialog'
+import useDialog from '../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'

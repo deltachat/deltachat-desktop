@@ -15,16 +15,16 @@ import Dialog, {
   FooterActions,
 } from '../Dialog'
 import FooterActionButton from '../Dialog/FooterActionButton'
-import processOpenQrUrl from '../helpers/OpenQrUrl'
 import { BackendRemote } from '../../backend-com'
 import { getLogger } from '../../../shared/logger'
 import { runtime } from '../../runtime'
-import { selectChat } from '../helpers/ChatMethods'
 import { ScreenContext } from '../../contexts/ScreenContext'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
+import useChat from '../../hooks/chat/useChat'
 import useContextMenu from '../../hooks/useContextMenu'
+import useProcessQr from '../../hooks/useProcessQr'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { qrCodeToInviteUrl } from '../../utils/invite'
+import { selectedAccountId } from '../../ScreenController'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
@@ -206,7 +206,9 @@ export function QrCodeScanQrInner(
   }>
 ) {
   const tx = useTranslationFunction()
-  const { openDialog, closeDialog } = useDialog()
+  const accountId = selectedAccountId()
+  const processQr = useProcessQr()
+  const { selectChat } = useChat()
   const processingQrCode = useRef(false)
 
   const onDone = () => {
@@ -225,7 +227,7 @@ export function QrCodeScanQrInner(
     if (data && processingQrCode.current === false) {
       processingQrCode.current = true
       try {
-        await processOpenQrUrl(openDialog, closeDialog, data, handleScanResult)
+        await processQr(accountId, data, handleScanResult)
       } catch (err) {
         processingQrCode.current = false
         throw err

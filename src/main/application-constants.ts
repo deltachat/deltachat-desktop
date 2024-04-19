@@ -2,13 +2,15 @@ import appConfig from './application-config'
 import { dirname, join } from 'path'
 import { app, screen } from 'electron'
 
+const AppFilesDir = join(__dirname, '..', '..')
+
 export function appIcon() {
   const iconFormat = process.platform === 'win32' ? '.ico' : '.png'
-  return `${join(__dirname, '..', '..', 'images', 'deltachat' + iconFormat)}`
+  return `${join(AppFilesDir, 'images', 'deltachat' + iconFormat)}`
 }
 
 export function htmlDistDir() {
-  return join(__dirname, '..', '..', 'html-dist')
+  return join(AppFilesDir, 'html-dist')
 }
 
 export function windowDefaults() {
@@ -69,4 +71,26 @@ export const supportedURISchemes = [
   'MAILTO:',
   'DCACCOUNT:',
   'DCLOGIN:',
+]
+
+/// Files that the main window is allowed access over the file protocol
+
+// folders the renderer need to load resources from
+const ALLOWED_RESOURCE_FOLDERS = ['images', 'node_modules', 'html-dist']
+// folders the renderer wants to load source files from (when using the devtools)
+const ALLOWED_SOURCE_FOLDERS = ['src', 'scss', 'node_modules']
+
+const ALLOWED_CONFIG_FOLDERS = ['background']
+
+export const ALLOWED_STATIC_FOLDERS = [
+  ...[...ALLOWED_RESOURCE_FOLDERS, ...ALLOWED_SOURCE_FOLDERS].map(folder =>
+    join(AppFilesDir, folder)
+  ),
+  ...ALLOWED_CONFIG_FOLDERS.map(folder => join(getConfigPath(), folder)),
+]
+
+export const ALLOWED_ACCOUNT_FOLDERS = [
+  'db.sqlite-blobs' /* can this old name still exist? */,
+  'dc.db-blobs',
+  'stickers',
 ]

@@ -2,13 +2,32 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- Remember last position & size of webxdc windows #3754 #3755
+- add quick-key CtrlOrCmd+q for submenu quit #3758
+- add window titlebar for html_email- and help window #3770
+- add quick key `Cmd+W`/`Ctrl+W` to close webxdc-, html_email- and help-window #3770
+
+
 ### Changed
 - Update translations (2024-04-04) #3746
 - The latest reaction is now shown in the chatlist, if it's newer than the last message #3749
+- minor improvements to "add second device" dialog #3748
+- Remove deprecated translations #3756
+- Refactor chat store into React context #3725
+- Improve security: restrict file protocol #3769
+- Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.137.3`
 
 ### Fixed
 - fix chat audit dialog was going out of viewport on smaller screens #3736
 - fix long names breaking layout of reactions dialog #3736
+- hide "add second device" instructions when transfer has started #3748
+- improve chat scroll performance #3743, #3747
+- reduce CPU load when moving mouse over chat #3751
+- fix chatlistitem background when context menu for it is shown it is now highlighted correctly on pinned chats #3766
+- fix add missing top padding to confirm sending files dialog #3767
+- remove last selected chat id in ui settings when deleting the selected chat #3772
+- fix translation keys in keybindings cheat sheet dialog #3779
 
 <a id="1_44_1"></a>
 
@@ -24,6 +43,7 @@
 ### Fixed
 - Fix Bug: When switching accounts after deleting a chat, the message list is blank, similar issues can come up when using the 2nd device flow. #3724
 - Fix bug where cancellation of configure led to an undefined state where it looked like the account was configured successfully, but it was not. #3729
+- Fix double sending #3739
 
 <a id="1_44_0"></a>
 

@@ -14,8 +14,7 @@ import Dialog, {
 import FooterActionButton from '../../Dialog/FooterActionButton'
 import Icon from '../../Icon'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import useDialog from '../../../hooks/useDialog'
-import useConfirmationDialog from '../../../hooks/useConfirmationDialog'
+import useConfirmationDialog from '../../../hooks/dialog/useConfirmationDialog'
 
 import type { PropsWithChildren } from 'react'
 import type { DialogProps } from '../../../contexts/DialogContext'
@@ -28,7 +27,6 @@ const TROUBLESHOOTING_URL = 'https://delta.chat/en/help#multiclient'
 
 export function SendBackupDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
-  const { openDialog } = useDialog()
   const openConfirmationDialog = useConfirmationDialog()
 
   const [inProgress, setInProgress] = useState<boolean>(false)
@@ -159,30 +157,32 @@ export function SendBackupDialog({ onClose }: DialogProps) {
             <DialogContent>
               <SendBackup>
                 <SendBackupMain>
-                  {error}
                   {stage === 'awaiting_scan' && svgUrl && qrContent && (
                     <img className={styles.qrCode} src={svgUrl} />
                   )}
-                  {stage === 'preparing' && <>{tx('preparing_account')}</>}
-                  {stage === 'transferring' && <>{tx('transferring')}</>}
-                  {progress && stage !== 'awaiting_scan' && (
-                    <>
-                      <br />
-                      <progress value={progress} max={1000} />
-                    </>
-                  )}
+                  <SendBackupMainProgress
+                    style={stage === 'transferring' ? { width: '100%' } : {}}
+                  >
+                    {stage === 'preparing' && <>{tx('preparing_account')}</>}
+                    {stage === 'transferring' && <>{tx('transferring')}</>}
+                    {progress && stage !== 'awaiting_scan' && (
+                      <>
+                        <br />
+                        <progress value={progress} max={1000} />
+                      </>
+                    )}
+                  </SendBackupMainProgress>
                 </SendBackupMain>
-                <SendBackupSteps />
+                {stage !== 'transferring' && <SendBackupSteps />}
               </SendBackup>
+              {error}
             </DialogContent>
           </DialogBody>
           <DialogFooter>
             <FooterActions align='spaceBetween'>
               <span className={styles.buttonGroup}>
                 <FooterActionButton
-                  onClick={() =>
-                    runtime.openLink(openDialog, TROUBLESHOOTING_URL)
-                  }
+                  onClick={() => runtime.openLink(TROUBLESHOOTING_URL)}
                 >
                   {tx('troubleshooting')}&nbsp;
                   <Icon icon='open_in_new' size={20} />
@@ -210,6 +210,17 @@ function SendBackup({ children }: PropsWithChildren<{}>) {
 
 function SendBackupMain({ children }: PropsWithChildren<{}>) {
   return <div className={styles.sendBackupMain}>{children}</div>
+}
+
+function SendBackupMainProgress({
+  children,
+  style,
+}: PropsWithChildren<{ style: React.CSSProperties }>) {
+  return (
+    <div className={styles.sendBackupMainProgress} style={style}>
+      {children}
+    </div>
+  )
 }
 
 function SendBackupSteps() {

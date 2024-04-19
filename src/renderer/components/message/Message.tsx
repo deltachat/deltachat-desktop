@@ -11,7 +11,6 @@ import {
   openForwardDialog,
   openMessageInfo,
   setQuoteInDraft,
-  privateReply,
   openMessageHTML,
   confirmDeleteMessage,
   downloadFullMessage,
@@ -19,11 +18,6 @@ import {
 } from './messageFunctions'
 import Attachment from '../attachment/messageAttachment'
 import { isGenericAttachment } from '../attachment/Attachment'
-import {
-  joinCall,
-  jumpToMessage,
-  openViewProfileDialog,
-} from '../helpers/ChatMethods'
 import { runtime } from '../../runtime'
 import { AvatarFromContact } from '../Avatar'
 import { ConversationType } from './MessageList'
@@ -36,8 +30,12 @@ import {
   ProtectionBrokenDialog,
   ProtectionEnabledDialog,
 } from '../dialogs/ProtectionStatusDialog'
+import useDialog from '../../hooks/dialog/useDialog'
+import useMessage from '../../hooks/chat/useMessage'
+import useOpenViewProfileDialog from '../../hooks/dialog/useOpenViewProfileDialog'
+import usePrivateReply from '../../hooks/chat/usePrivateReply'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/useDialog'
+import useVideoChat from '../../hooks/useVideoChat'
 import { useReactionsBar, showReactionsUi } from '../ReactionsBar'
 import EnterAutocryptSetupMessage from '../dialogs/EnterAutocryptSetupMessage'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
@@ -49,6 +47,7 @@ import Button from '../Button'
 import styles from './styles.module.scss'
 
 import type { OpenDialog } from '../../contexts/DialogContext'
+import type { PrivateReply } from '../../hooks/chat/usePrivateReply'
 
 const Avatar = (
   contact: T.Contact,
@@ -156,17 +155,21 @@ const ForwardedTitle = (
 
 function buildContextMenu(
   {
+    accountId,
     message,
     text,
     conversationType,
     openDialog,
+    privateReply,
     handleReactClick,
     chat,
   }: {
+    accountId: number
     message: T.Message | null
     text?: string
     conversationType: ConversationType
     openDialog: OpenDialog
+    privateReply: PrivateReply
     handleReactClick: (event: React.MouseEvent<Element, MouseEvent>) => void
     chat: T.FullChat
   },
@@ -243,7 +246,9 @@ function buildContextMenu(
     // Reply privately
     showReplyPrivately && {
       label: tx('reply_privately'),
-      action: privateReply.bind(null, message),
+      action: () => {
+        privateReply(accountId, message)
+      },
     },
     // Forward message
     {
@@ -314,7 +319,7 @@ function buildContextMenu(
     // Delete message
     {
       label: tx('delete_message_desktop'),
-      action: confirmDeleteMessage.bind(null, openDialog, message),
+      action: confirmDeleteMessage.bind(null, openDialog, accountId, message),
     },
   ]
 }
@@ -323,18 +328,22 @@ export default function Message(props: {
   chat: T.FullChat
   message: T.Message
   conversationType: ConversationType
-  isHover: boolean
 }) {
   const { message, conversationType } = props
   const { id, viewType, text, hasLocation, isSetupmessage, hasHtml } = message
   const direction = getDirection(message)
   const status = mapCoreMsgStatus2String(message.state)
+
   const tx = useTranslationFunction()
   const accountId = selectedAccountId()
-  const { showReactionsBar } = useReactionsBar()
 
+  const { showReactionsBar } = useReactionsBar()
   const { openDialog } = useDialog()
+  const privateReply = usePrivateReply()
   const { openContextMenu } = useContext(ContextMenuContext)
+  const openViewProfileDialog = useOpenViewProfileDialog()
+  const { jumpToMessage } = useMessage()
+  const { joinVideoChat } = useVideoChat()
 
   const showContextMenu = useCallback(
     async (
@@ -370,10 +379,12 @@ export default function Message(props: {
       const target = ((event as any).t || event.target) as HTMLAnchorElement
       const items = buildContextMenu(
         {
+          accountId,
           message,
           text: text || undefined,
           conversationType,
           openDialog,
+          privateReply,
           handleReactClick,
           chat,
         },
@@ -393,6 +404,7 @@ export default function Message(props: {
       message,
       openContextMenu,
       openDialog,
+      privateReply,
       showReactionsBar,
       text,
     ]
@@ -422,7 +434,7 @@ export default function Message(props: {
     if (isInteractive) {
       onClick = async () => {
         if (isWebxdcInfo && message.parentId) {
-          jumpToMessage(message.parentId, true, message.id)
+          jumpToMessage(accountId, message.parentId, true, message.id)
         } else if (isProtectionBrokenMsg) {
           const { name } = await BackendRemote.rpc.getBasicChatInfo(
             selectedAccountId(),
@@ -482,7 +494,7 @@ export default function Message(props: {
   }
   // Normal Message
   const onContactClick = async (contact: T.Contact) => {
-    openViewProfileDialog(openDialog, contact.id)
+    openViewProfileDialog(accountId, contact.id)
   }
 
   let onClickMessageBody
@@ -503,7 +515,7 @@ export default function Message(props: {
         <div
           className='info-button'
           onContextMenu={showContextMenu}
-          onClick={joinCall.bind(null, openDialog, id)}
+          onClick={() => joinVideoChat(accountId, id)}
         >
           {direction === 'incoming'
             ? tx('videochat_contact_invited_hint', message.sender.displayName)
@@ -673,7 +685,6 @@ export default function Message(props: {
         direction={direction}
         message={message}
         showContextMenu={showContextMenu}
-        visible={props.isHover}
       />
     </div>
   )
@@ -687,6 +698,8 @@ export const Quote = ({
   msgParentId?: number
 }) => {
   const tx = useTranslationFunction()
+  const accountId = selectedAccountId()
+  const { jumpToMessage } = useMessage()
 
   const hasMessage = quote.kind === 'WithMessage'
 
@@ -701,7 +714,7 @@ export const Quote = ({
       className='quote-background'
       onClick={() => {
         quote.kind === 'WithMessage' &&
-          jumpToMessage(quote.messageId, true, msgParentId)
+          jumpToMessage(accountId, quote.messageId, true, msgParentId)
       }}
     >
       <div

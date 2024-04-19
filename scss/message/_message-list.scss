@@ -85,6 +85,8 @@
   #message-list {
     position: absolute;
     bottom: 0;
+    // There is also `will-change: scroll-position` dynamically set on this
+    // element.
     overflow: scroll;
     max-height: 100%;
     width: 100%;

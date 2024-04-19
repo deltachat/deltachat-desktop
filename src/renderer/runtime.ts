@@ -9,10 +9,8 @@ import {
 import { setLogHandler } from '../shared/logger'
 import { getLogger } from '../shared/logger'
 import { LocaleData } from '../shared/localize'
-import processMailtoUrl from './components/helpers/MailtoUrl'
 
 import type { dialog, app } from 'electron'
-import type { OpenDialog } from './contexts/DialogContext'
 
 const log = getLogger('renderer/runtime')
 
@@ -72,7 +70,7 @@ interface Runtime {
    * Opens a link in a new Window or in the Browser
    * @param link
    */
-  openLink(openDialog: OpenDialog, link: string): void
+  openLink(link: string): void
   showOpenFileDialog(
     options: Electron.OpenDialogOptions
   ): Promise<string | null>
@@ -297,7 +295,7 @@ class Browser implements Runtime {
   ): Promise<string> {
     throw new Error('Method not implemented.')
   }
-  openLink(_openDialog: OpenDialog, _link: string): void {
+  openLink(_link: string): void {
     throw new Error('Method not implemented.')
   }
   initialize(): void {
@@ -499,13 +497,11 @@ class Electron implements Runtime {
     ))
     return filePaths && filePaths[0]
   }
-  openLink(openDialog: OpenDialog, link: string): void {
-    if (link.startsWith('mailto:')) {
-      processMailtoUrl(openDialog, link)
-    } else if (link.startsWith('http:') || link.startsWith('https:')) {
+  openLink(link: string): void {
+    if (link.startsWith('http:') || link.startsWith('https:')) {
       ipcBackend.invoke('electron.shell.openExternal', link)
     } else {
-      log.error('tried to open a non mailto or http/https external link', {
+      log.error('tried to open a non http/https external link', {
         link,
       })
     }

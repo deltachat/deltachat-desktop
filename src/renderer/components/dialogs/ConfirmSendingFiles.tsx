@@ -41,7 +41,7 @@ export default function ConfirmSendingFiles({
   return (
     <Dialog onClose={onClose}>
       <DialogBody>
-        <DialogContent>
+        <DialogContent paddingTop>
           <p style={{ wordBreak: 'break-word' }}>
             {tx(
               'ask_send_following_n_files_to',

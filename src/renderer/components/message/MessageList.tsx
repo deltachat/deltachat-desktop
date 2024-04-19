@@ -5,26 +5,29 @@ import React, {
   MutableRefObject,
   useEffect,
   useState,
+  useMemo,
 } from 'react'
 import classNames from 'classnames'
-import { C, T } from '@deltachat/jsonrpc-client'
 import moment from 'moment'
+import { C } from '@deltachat/jsonrpc-client'
+import { debounce } from 'debounce'
 
 import { MessageWrapper } from './MessageWrapper'
-import ChatStore, { ChatStoreStateWithChatSet } from '../../stores/chat'
 import { getLogger } from '../../../shared/logger'
 import { KeybindAction } from '../../keybindings'
-import { selectedAccountId } from '../../ScreenController'
 import { useMessageList } from '../../stores/messagelist'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { debouncedUpdateBadgeCounter } from '../../system-integration/badge-counter'
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
+import useHasChanged from '../../hooks/useHasChanged'
 import { useReactionsBar } from '../ReactionsBar'
 import EmptyChatMessage from './EmptyChatMessage'
 
 const log = getLogger('render/components/message/MessageList')
+
+import type { T } from '@deltachat/jsonrpc-client'
 
 type ChatTypes =
   | C.DC_CHAT_TYPE_SINGLE
@@ -91,14 +94,13 @@ function useUnreadCount(
   return freshMessageCounter
 }
 
-export default function MessageList({
-  chatStore,
-  refComposer,
-}: {
-  chatStore: ChatStoreStateWithChatSet
-  refComposer: todo
-}) {
-  const accountId = selectedAccountId()
+type Props = {
+  accountId: number
+  chat: T.FullChat
+  refComposer: any
+}
+
+export default function MessageList({ accountId, chat, refComposer }: Props) {
   const {
     store: {
       scheduler,
@@ -117,20 +119,20 @@ export default function MessageList({
     },
     fetchMoreBottom,
     fetchMoreTop,
-  } = useMessageList(accountId, chatStore.chat.id)
+  } = useMessageList(accountId, chat.id)
   const { hideReactionsBar } = useReactionsBar()
 
   const countUnreadMessages = useUnreadCount(
     accountId,
-    chatStore.chat.id,
-    chatStore.chat.freshMessageCounter
+    chat.id,
+    chat.freshMessageCounter
   )
 
   const messageListRef = useRef<HTMLDivElement | null>(null)
   const [showJumpDownButton, setShowJumpDownButton] = useState(false)
 
   const onUnreadMessageInView: IntersectionObserverCallback = entries => {
-    if (ChatStore.state.chat === null) return
+    if (!chat) return
     // Don't mark messages as read if window is not focused
     if (document.hasFocus() === false) return
 
@@ -163,7 +165,7 @@ export default function MessageList({
       }
 
       if (messageIdsToMarkAsRead.length > 0) {
-        const chatId = ChatStore.state.chat?.id
+        const chatId = chat?.id
         if (!chatId) return
         BackendRemote.rpc
           .markseenMsgs(accountId, messageIdsToMarkAsRead)
@@ -265,7 +267,7 @@ export default function MessageList({
   )
 
   useLayoutEffect(() => {
-    if (!ChatStore.state.chat) {
+    if (!chat) {
       return
     }
     if (!messageListRef.current) {
@@ -378,11 +380,12 @@ export default function MessageList({
       }, 0)
     }, 0)
   }, [
+    chat,
     onScroll,
-    viewState,
-    viewState.scrollTo,
-    viewState.lastKnownScrollHeight,
     unlockScroll,
+    viewState,
+    viewState.lastKnownScrollHeight,
+    viewState.scrollTo,
   ])
 
   useLayoutEffect(() => {
@@ -392,7 +395,7 @@ export default function MessageList({
 
     const composerTextarea = refComposer.current.childNodes[1]
     composerTextarea && composerTextarea.focus()
-  }, [refComposer, chatStore.chat.id])
+  }, [refComposer, chat.id])
 
   useLayoutEffect(() => {
     if (!messageListRef.current || !refComposer.current) {
@@ -407,8 +410,8 @@ export default function MessageList({
     <MessagesDisplayContext.Provider
       value={{
         context: 'chat_messagelist',
-        chatId: chatStore.chat.id,
-        isDeviceChat: chatStore.chat.isDeviceChat,
+        chatId: chat.id,
+        isDeviceChat: chat.isDeviceChat,
       }}
     >
       <MessageListInner
@@ -418,7 +421,7 @@ export default function MessageList({
         activeView={activeView}
         messageCache={messageCache}
         messageListRef={messageListRef}
-        chatStore={chatStore}
+        chat={chat}
         loaded={loaded}
         unreadMessageInViewIntersectionObserver={
           unreadMessageInViewIntersectionObserver
@@ -452,7 +455,7 @@ export const MessageListInner = React.memo(
     activeView: T.MessageListItem[]
     messageCache: { [msgId: number]: T.MessageLoadResult | undefined }
     messageListRef: React.MutableRefObject<HTMLDivElement | null>
-    chatStore: ChatStoreStateWithChatSet
+    chat: T.FullChat
     loaded: boolean
     unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
     loadMissingMessages: () => Promise<void>
@@ -463,23 +466,19 @@ export const MessageListInner = React.memo(
       messageCache,
       activeView,
       messageListRef,
-      chatStore,
+      chat,
       loaded,
       unreadMessageInViewIntersectionObserver,
       loadMissingMessages,
     } = props
 
-    if (!chatStore.chat.id) {
-      throw new Error('no chat id')
-    }
-
     const conversationType: ConversationType = {
       hasMultipleParticipants:
-        chatStore.chat.chatType === C.DC_CHAT_TYPE_GROUP ||
-        chatStore.chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST ||
-        chatStore.chat.chatType === C.DC_CHAT_TYPE_BROADCAST,
-      isDeviceChat: chatStore.chat.isDeviceChat as boolean,
-      chatType: chatStore.chat.chatType as number,
+        chat.chatType === C.DC_CHAT_TYPE_GROUP ||
+        chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST ||
+        chat.chatType === C.DC_CHAT_TYPE_BROADCAST,
+      isDeviceChat: chat.isDeviceChat as boolean,
+      chatType: chat.chatType as number,
     }
 
     useKeyBindingAction(KeybindAction.MessageList_PageUp, () => {
@@ -499,24 +498,66 @@ export const MessageListInner = React.memo(
       }
     })
 
-    const [currentHoverMessageId, setCurrentHoverMessageId] = useState<
-      number | null
-    >(null)
+    // This fixes bad FPS when scrolling the chat on some devices,
+    // e.g. on one of mine, Windows with a not-good GPU.
+    //
+    // About the issue: if you open dev tools and record performance while
+    // endlessly scrolling a chat, you'll see dropped frames.
+    // For me it was ~every second frame, and sometimes it's 4 / 5 frames.
+    // It's not scripting, but GPU seems to be the bottleneck:
+    // it's almost constantly busy.
+    // When `will-change: scroll-position;` is added, GPU seems to still be
+    // involved on every frame (unlike it seems to be on regular websites),
+    // but it takes significantly less than my monitor's refresh period,
+    // thus no frames are dropped.
+    // Another thing is if you check "Scrolling performance issues" on the
+    // "rendering" tab, it tells you that the `#message-list`
+    // "repaints on scroll". This goes away once you add
+    // `will-change: scroll-position;`
+    //
+    // Note, however, that this disables subpixel antialiasing
+    // (makes text blurrier):
+    // - https://stackoverflow.com/questions/24741502/can-i-do-anything-about-repaints-on-scroll-warning-in-chrome-for-overflowscr/32744881#32744881
+    // - https://dev.opera.com/articles/css-will-change-property#does-will-change-affect-the-element-it-is-applied-to-beyond-hinting-the-browser-about-the-changes-to-that-element
+    // This is the main reason why we're adding/removing it dynamically
+    // and not just set it in style sheets.
+    // Though perhaps it's not ideal to set `will-change` only when the user
+    // starts scrolling, because it takes time for the optimization to
+    // take effect, but I couldn't come up with a better time to apply it.
+    //
+    // TODO maybe there is a different, more "proper" way to fix this.
+    // E.g. tinker with `position: absolte`, `z-index` or something IDK.
+    // [MDN docs say](https://developer.mozilla.org/en-US/docs/Web/CSS/will-change):
+    // > `will-change` is intended to be used as a last resort
+    const [scrolledRecently, setScrolledRecently] = useState(false)
+    const debouncedResetScrolledRecently = useMemo(
+      () => debounce(() => setScrolledRecently(false), 3000),
+      []
+    )
+    const onScroll2 = (...args: Parameters<typeof onScroll>) => {
+      const switchedChatRecently = Date.now() - switchedChatAt < 200
+      // Ignore scrolls that are not caused by the user, because this
+      // gives no indication as to whether they're gonna scroll soon.
+      // Maybe they're just jumping between chats.
+      const isScrollProgrammatic = switchedChatRecently
+      if (!isScrollProgrammatic) {
+        setScrolledRecently(true)
+        debouncedResetScrolledRecently()
+      }
 
-    const onMouseMove = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-      // Message components are organised as a list
-      const target = event.target as HTMLElement
-      const messageElem = target.closest('li')
-
-      // .. every list element has an HTML `id` tag which contains the message id
-      const id = messageElem ? parseInt(messageElem.id, 10) : null
-
-      setCurrentHoverMessageId(id)
+      onScroll(...args)
     }
+    const hasChatChanged = useHasChanged(chat)
+    const [switchedChatAt, setSwitchedChatAt] = useState(0)
+    useEffect(() => {
+      if (hasChatChanged) {
+        setSwitchedChatAt(Date.now())
+      }
+    }, [hasChatChanged])
 
     if (!loaded) {
       return (
-        <div id='message-list' ref={messageListRef} onScroll={onScroll}>
+        <div id='message-list' ref={messageListRef} onScroll={onScroll2}>
           <ul></ul>
         </div>
       )
@@ -526,13 +567,13 @@ export const MessageListInner = React.memo(
       <div
         id='message-list'
         ref={messageListRef}
-        onMouseMoveCapture={onMouseMove}
-        onScroll={onScroll}
+        onScroll={onScroll2}
+        style={{
+          willChange: scrolledRecently ? 'scroll-position' : undefined,
+        }}
       >
         <ul>
-          {messageListItems.length === 0 && (
-            <EmptyChatMessage chatStore={chatStore} />
-          )}
+          {messageListItems.length === 0 && <EmptyChatMessage chat={chat} />}
           {activeView.map(messageId => {
             if (messageId.kind === 'dayMarker') {
               return (
@@ -548,10 +589,9 @@ export const MessageListInner = React.memo(
               if (message?.kind === 'message') {
                 return (
                   <MessageWrapper
-                    isHover={messageId.msg_id === currentHoverMessageId}
                     key={messageId.msg_id}
                     key2={`${messageId.msg_id}`}
-                    chat={chatStore.chat}
+                    chat={chat}
                     message={message}
                     conversationType={conversationType}
                     unreadMessageInViewIntersectionObserver={

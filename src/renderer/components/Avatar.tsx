@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 
-import useDialog from '../hooks/useDialog'
+import useDialog from '../hooks/dialog/useDialog'
 import FullscreenAvatar from './dialogs/FullscreenAvatar'
 
 import type { Type } from '../backend-com'

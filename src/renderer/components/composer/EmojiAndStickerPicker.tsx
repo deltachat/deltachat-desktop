@@ -9,31 +9,36 @@ import classNames from 'classnames'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { runtime } from '../../runtime'
-import { jumpToMessage } from '../helpers/ChatMethods'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
 import EmojiPicker from '../EmojiPicker'
 import Button from '../Button'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useMessage from '../../hooks/chat/useMessage'
 
 import styles from './styles.module.scss'
 
 import type { EmojiData } from 'emoji-mart/index'
+
+type Props = {
+  stickerPackName: string
+  stickerPackImages: string[]
+  chatId: number
+  setShowEmojiPicker: (enabled: boolean) => void
+}
 
 const DisplayedStickerPack = ({
   stickerPackName,
   stickerPackImages,
   chatId,
   setShowEmojiPicker,
-}: {
-  stickerPackName: string
-  stickerPackImages: string[]
-  chatId: number
-  setShowEmojiPicker: (enabled: boolean) => void
-}) => {
+}: Props) => {
+  const { jumpToMessage } = useMessage()
+  const accountId = selectedAccountId()
+
   const onClickSticker = (fileName: string) => {
     const stickerPath = fileName.replace('file://', '')
     BackendRemote.rpc
-      .sendSticker(selectedAccountId(), chatId, stickerPath)
-      .then(id => jumpToMessage(id, false))
+      .sendSticker(accountId, chatId, stickerPath)
+      .then(id => jumpToMessage(accountId, id, false))
     setShowEmojiPicker(false)
   }
 

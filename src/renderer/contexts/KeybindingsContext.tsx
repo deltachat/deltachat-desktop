@@ -6,12 +6,13 @@ import {
   keyDownEvent2Action,
 } from '../keybindings'
 import useKeyBindingAction from '../hooks/useKeyBindingAction'
-import useDialog from '../hooks/useDialog'
+import useDialog from '../hooks/dialog/useDialog'
 import { Screens } from '../ScreenController'
 import KeybindingCheatSheet from '../components/dialogs/KeybindingCheatSheet'
 import Settings from '../components/Settings'
 
 import type { PropsWithChildren } from 'react'
+import About from '../components/dialogs/About'
 
 export const KeybindingsContext = createContext(null)
 
@@ -34,6 +35,13 @@ export const KeybindingsContextProvider = ({
   useKeyBindingAction(KeybindAction.KeybindingCheatSheet_Open, () => {
     if (!window.__keybindingsDialogOpened) {
       openDialog(KeybindingCheatSheet)
+    }
+  })
+
+  // @TODO: This probably needs another place
+  useKeyBindingAction(KeybindAction.AboutDialog_Open, () => {
+    if (!window.__aboutDialogOpened) {
+      openDialog(About)
     }
   })
 

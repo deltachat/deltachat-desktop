@@ -4,9 +4,7 @@ import { DcEventType } from '@deltachat/jsonrpc-client'
 import { debounce } from 'debounce'
 
 import MainScreen from './components/screens/MainScreen'
-import processOpenQrUrl from './components/helpers/OpenQrUrl'
 import { getLogger } from '../shared/logger'
-import { ActionEmitter, KeybindAction } from './keybindings'
 import AccountSetupScreen from './components/screens/AccountSetupScreen'
 import WelcomeScreen from './components/screens/WelcomeScreen'
 import { BackendRemote, EffectfulBackendActions } from './backend-com'
@@ -14,16 +12,15 @@ import { updateDeviceChats } from './deviceMessages'
 import { runtime } from './runtime'
 import { updateTimestamps } from './components/conversations/Timestamp'
 import { ScreenContext } from './contexts/ScreenContext'
-import About from './components/dialogs/About'
 import { KeybindingsContextProvider } from './contexts/KeybindingsContext'
-import { DialogContext } from './contexts/DialogContext'
-import WebxdcSaveToChatDialog from './components/dialogs/WebxdcSendToChat'
+import { DialogContextProvider } from './contexts/DialogContext'
 import AccountListSidebar from './components/AccountListSidebar/AccountListSidebar'
 import SettingsStoreInstance from './stores/settings'
 import { NoAccountSelectedScreen } from './components/screens/NoAccountSelectedScreen/NoAccountSelectedScreen'
 import AccountDeletionScreen from './components/screens/AccountDeletionScreen/AccountDeletionScreen'
-import chatStore from './stores/chat'
-import { selectChat } from './components/helpers/ChatMethods'
+import RuntimeAdapter from './components/RuntimeAdapter'
+import { ChatProvider } from './contexts/ChatContext'
+import { ContextMenuProvider } from './contexts/ContextMenuContext'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -43,11 +40,7 @@ export enum Screens {
 
 export default class ScreenController extends Component {
   state: { message: userFeedback | false; screen: Screens }
-  onShowAbout: any
-  onShowKeybindings: any
-  onShowSettings: any
   selectedAccountId: number | undefined
-  openSendToDialogId?: string
   lastAccountBeforeAddingNewAccount: number | null = null
 
   constructor(public props: {}) {
@@ -62,9 +55,6 @@ export default class ScreenController extends Component {
     this.userFeedback = this.userFeedback.bind(this)
     this.userFeedbackClick = this.userFeedbackClick.bind(this)
     this.changeScreen = this.changeScreen.bind(this)
-    this.onShowAbout = this.showAbout.bind(this)
-    this.onShowKeybindings = this.showKeyBindings.bind(this)
-    this.onShowSettings = this.showSettings.bind(this)
     this.selectAccount = this.selectAccount.bind(this)
     this.unSelectAccount = this.unSelectAccount.bind(this)
     this.openAccountDeletionScreen = this.openAccountDeletionScreen.bind(this)
@@ -123,18 +113,6 @@ export default class ScreenController extends Component {
       this.selectedAccountId
     )
     if (account.kind === 'Configured') {
-      // reset global stores
-      chatStore.reducer.reset(selectedAccountId())
-      await SettingsStoreInstance.effect.load()
-      const lastChatId =
-        SettingsStoreInstance.getState()?.settings['ui.lastchatid']
-      if (lastChatId) {
-        try {
-          await selectChat(Number(lastChatId))
-        } catch (error) {
-          log.error('Selecting last chat failed:', error)
-        }
-      }
       this.changeScreen(Screens.Main)
       updateDeviceChats(this.selectedAccountId)
     } else {
@@ -221,35 +199,6 @@ export default class ScreenController extends Component {
   componentDidMount() {
     BackendRemote.on('Error', this.onError)
 
-    runtime.onShowDialog = kind => {
-      if (kind === 'about') {
-        this.onShowAbout()
-      } else if (kind === 'keybindings') {
-        this.onShowKeybindings()
-      } else if (kind === 'settings') {
-        this.onShowSettings()
-      }
-    }
-
-    runtime.onOpenQrUrl = (url: string) => {
-      processOpenQrUrl(this.context.openDialog, this.context.closeDialog, url)
-    }
-
-    runtime.onWebxdcSendToChat = (file, text) => {
-      if (this.openSendToDialogId) {
-        this.context.closeDialog(this.openSendToDialogId)
-        this.openSendToDialogId = undefined
-      }
-
-      this.openSendToDialogId = this.context.openDialog(
-        WebxdcSaveToChatDialog,
-        {
-          messageText: text,
-          file,
-        }
-      )
-    }
-
     runtime.onResumeFromSleep = debounce(() => {
       log.info('onResumeFromSleep')
       // update timestamps
@@ -281,23 +230,10 @@ export default class ScreenController extends Component {
     this.userFeedback({ type: 'success', text })
   }
 
-  showAbout() {
-    this.context.openDialog(About)
-  }
-
-  showSettings() {
-    ActionEmitter.emitAction(KeybindAction.Settings_Open)
-  }
-
-  showKeyBindings() {
-    ActionEmitter.emitAction(KeybindAction.KeybindingCheatSheet_Open)
-  }
-
   renderScreen() {
     switch (this.state.screen) {
       case Screens.Main:
-        // the key attribute here is a hack to force a clean rerendering when the account changes
-        return <MainScreen key={String(this.selectedAccountId)} />
+        return <MainScreen accountId={this.selectedAccountId} />
       case Screens.Login:
         if (this.selectedAccountId === undefined) {
           throw new Error('Selected account not defined')
@@ -354,26 +290,38 @@ export default class ScreenController extends Component {
             screen: this.state.screen,
           }}
         >
-          <KeybindingsContextProvider>
-            <div className='main-container'>
-              <AccountListSidebar
-                selectedAccountId={this.selectedAccountId}
-                onAddAccount={this.addAndSelectAccount.bind(this)}
-                onSelectAccount={this.selectAccount.bind(this)}
-                openAccountDeletionScreen={this.openAccountDeletionScreen.bind(
-                  this
-                )}
-              />
-              {this.renderScreen()}
-            </div>
-          </KeybindingsContextProvider>
+          {/*
+            The key attribute here forces a clean re-rendering when the
+            account changes. We needs this to reset the chat context state.
+          */}
+          <ChatProvider
+            key={this.selectedAccountId}
+            accountId={this.selectedAccountId}
+          >
+            <ContextMenuProvider>
+              <DialogContextProvider>
+                <RuntimeAdapter accountId={this.selectedAccountId} />
+                <KeybindingsContextProvider>
+                  <div className='main-container'>
+                    <AccountListSidebar
+                      selectedAccountId={this.selectedAccountId}
+                      onAddAccount={this.addAndSelectAccount.bind(this)}
+                      onSelectAccount={this.selectAccount.bind(this)}
+                      openAccountDeletionScreen={this.openAccountDeletionScreen.bind(
+                        this
+                      )}
+                    />
+                    {this.renderScreen()}
+                  </div>
+                </KeybindingsContextProvider>
+              </DialogContextProvider>
+            </ContextMenuProvider>
+          </ChatProvider>
         </ScreenContext.Provider>
       </div>
     )
   }
 }
-
-ScreenController.contextType = DialogContext
 
 export function selectedAccountId(): number {
   const selectedAccountId = window.__selectedAccountId

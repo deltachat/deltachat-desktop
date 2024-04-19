@@ -25,17 +25,15 @@ import {
 } from './ChatListItemRow'
 import { PseudoListItemAddContact } from '../helpers/PseudoListItem'
 import { KeybindAction } from '../../keybindings'
-import {
-  createChatByContactIdAndSelectIt,
-  selectChat,
-} from '../helpers/ChatMethods'
 import { useThemeCssVar } from '../../ThemeManager'
 import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import useDialog from '../../hooks/useDialog'
 import CreateChat from '../dialogs/CreateChat'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useChat from '../../hooks/chat/useChat'
+import useCreateChatByContactId from '../../hooks/chat/useCreateChatByContactId'
+import useDialog from '../../hooks/dialog/useDialog'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type {
   ChatListItemData,
@@ -139,6 +137,8 @@ export default function ChatList(props: {
   )
 
   const { openContextMenu, activeContextMenuChatId } = useChatListContextMenu()
+  const createChatByContactId = useCreateChatByContactId()
+  const { selectChat } = useChat()
 
   const addContactOnClick = async () => {
     if (!queryStrIsValidEmail || !queryStr) return
@@ -148,7 +148,7 @@ export default function ChatList(props: {
       queryStr.trim(),
       null
     )
-    await createChatByContactIdAndSelectIt(contactId)
+    await createChatByContactId(accountId, contactId)
     props.onExitSearch && props.onExitSearch()
   }
   const { openDialog } = useDialog()

@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 
-import { DialogContext } from '../contexts/DialogContext'
+import { DialogContext } from '../../contexts/DialogContext'
 
 export default function useDialog() {
   const { openDialog, closeDialog, hasOpenDialogs } = useContext(DialogContext)

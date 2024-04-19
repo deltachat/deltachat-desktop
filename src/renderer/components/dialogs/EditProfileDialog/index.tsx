@@ -17,7 +17,7 @@ import Dialog, {
 } from '../../Dialog'
 import Callout from '../../Callout'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import useAlertDialog from '../../../hooks/useAlertDialog'
+import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
 
 import styles from './styles.module.scss'
 

@@ -1,4 +1,4 @@
-import { T, C } from '@deltachat/jsonrpc-client'
+import { C } from '@deltachat/jsonrpc-client'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import ReactDOM from 'react-dom'
@@ -15,13 +15,16 @@ import PopupMessage from './PopupMessage'
 import * as SessionStorage from '../helpers/SessionStorage'
 import { state as LocationStoreState } from '../../stores/locations'
 import ContextMenu from './ContextMenu'
-import { BackendRemote, Type } from '../../backend-com'
+import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import { sendMessage } from '../helpers/ChatMethods'
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
+import useMessage from '../../hooks/chat/useMessage'
+
+import type { T } from '@deltachat/jsonrpc-client'
+import type { SendMessage } from '../../hooks/chat/useMessage'
 
 type MapData = {
-  contact: Type.Contact
+  contact: T.Contact
   pathLayerId: string
   pointsLayerId: string
   hidden: Boolean
@@ -30,13 +33,14 @@ type MapData = {
 
 type Point = [number, number]
 
-type Contact = Type.Contact & { hidden?: boolean }
+type Contact = T.Contact & { hidden?: boolean }
 
 type MapProps = {
-  selectedChat: Type.FullChat
+  sendMessage: SendMessage
+  selectedChat: T.FullChat
 }
 
-export default class MapComponent extends React.Component<
+export class MapComponent extends React.Component<
   MapProps,
   {
     timeOffset: number
@@ -58,7 +62,7 @@ export default class MapComponent extends React.Component<
   map: mapboxgl.Map | undefined
   popup_mount_node: HTMLDivElement | undefined
   stateFromSession: boolean | undefined
-  currentUser: Type.Contact | undefined
+  currentUser: T.Contact | undefined
   constructor(props: MapProps) {
     super(props)
     this.state = {
@@ -183,7 +187,7 @@ export default class MapComponent extends React.Component<
     this.mapDataStore.clear()
     const { selectedChat } = this.props
     let allPoints: Point[] = []
-    const currentContacts: Type.Contact[] = []
+    const currentContacts: T.Contact[] = []
     ;(this.mapDataStore as any).locationCount = locations.length
     if (locations.length > 0) {
       const contacts = selectedChat.contacts
@@ -420,7 +424,7 @@ export default class MapComponent extends React.Component<
     if (!map) {
       throw new Error('this.map is unset')
     }
-    let message: Type.Message
+    let message: T.Message
     const features = map.queryRenderedFeatures(event.point)
     const contactFeature = features.find(f => {
       return (
@@ -486,7 +490,8 @@ export default class MapComponent extends React.Component<
       return
     }
     const latLng = Object.assign({}, this.poiLocation)
-    sendMessage(selectedChat.id, {
+    const accountId = selectedAccountId()
+    this.props.sendMessage(accountId, selectedChat.id, {
       text: message,
       location: [latLng.lat, latLng.lng],
     })
@@ -627,7 +632,7 @@ export default class MapComponent extends React.Component<
   renderPopupMessage(
     contactName: string,
     formattedDate: string,
-    message: Type.Message | null
+    message: T.Message | null
   ) {
     return (
       <MessagesDisplayContext.Provider
@@ -732,3 +737,14 @@ export default class MapComponent extends React.Component<
     )
   }
 }
+
+// Workaround to introduce `useMessage` hook in classic, class-based React
+// component
+function withSendMessageHook<P>(Component: React.ComponentType<P>) {
+  return function WrappedComponent(props: P) {
+    const { sendMessage } = useMessage()
+    return <Component {...props} sendMessage={sendMessage} />
+  }
+}
+
+export default withSendMessageHook(MapComponent)

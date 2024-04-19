@@ -8,29 +8,31 @@ import React, {
 import { C } from '@deltachat/jsonrpc-client'
 import moment from 'moment'
 
-import { getLogger } from '../../../shared/logger'
-import {
-  openMessageInfo,
-  setQuoteInDraft,
-  privateReply,
-} from '../message/messageFunctions'
-import { getDirection } from '../../../shared/util'
-import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
-import { BackendRemote, Type } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
-import { runtime } from '../../runtime'
-import { jumpToMessage } from '../helpers/ChatMethods'
 import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
-import useDialog from '../../hooks/useDialog'
+import useDialog from '../../hooks/dialog/useDialog'
+import useMessage from '../../hooks/chat/useMessage'
+import usePrivateReply from '../../hooks/chat/usePrivateReply'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { BackendRemote, Type } from '../../backend-com'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
+import { getDirection } from '../../../shared/util'
+import { getLogger } from '../../../shared/logger'
+import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
+import { openMessageInfo, setQuoteInDraft } from '../message/messageFunctions'
+import { runtime } from '../../runtime'
+import { selectedAccountId } from '../../ScreenController'
 
 import type { DialogProps, OpenDialog } from '../../contexts/DialogContext'
+import type { JumpToMessage } from '../../hooks/chat/useMessage'
+import type { PrivateReply } from '../../hooks/chat/usePrivateReply'
 
 const log = getLogger('render/ChatAuditLog')
 
 function buildContextMenu(
+  jumpToMessage: JumpToMessage,
   openDialog: OpenDialog,
+  privateReply: PrivateReply,
+  accountId: number,
   message: Type.Message,
   isGroup: boolean,
   closeDialogCallback: DialogProps['onClose']
@@ -42,7 +44,7 @@ function buildContextMenu(
       label: tx('show_in_chat'),
       action: () => {
         closeDialogCallback()
-        setTimeout(() => jumpToMessage(message.id, true))
+        setTimeout(() => jumpToMessage(accountId, message.id, true))
       },
     },
     // Show Webxdc in Chat
@@ -51,7 +53,7 @@ function buildContextMenu(
       action: () => {
         if (message.parentId) {
           closeDialogCallback()
-          jumpToMessage(message.parentId, true)
+          jumpToMessage(accountId, message.parentId, true)
         }
       },
     },
@@ -68,7 +70,7 @@ function buildContextMenu(
       message.fromId > C.DC_CONTACT_ID_LAST_SPECIAL && {
         label: tx('reply_privately'),
         action: () => {
-          privateReply(message)
+          privateReply(accountId, message)
           closeDialogCallback()
         },
       },
@@ -94,6 +96,9 @@ export default function ChatAuditLogDialog(
 ) {
   const { selectedChat, onClose } = props
   const { openDialog } = useDialog()
+  const { jumpToMessage } = useMessage()
+  const accountId = selectedAccountId()
+  const privateReply = usePrivateReply()
 
   const [loading, setLoading] = useState(true)
   const [msgEntries, setMsgEntries] = useState<Type.MessageListItem[]>([])
@@ -112,7 +117,10 @@ export default function ChatAuditLogDialog(
     >
   ) => {
     const items = buildContextMenu(
+      jumpToMessage,
       openDialog,
+      privateReply,
+      accountId,
       message,
       selectedChat.chatType === C.DC_CHAT_TYPE_GROUP,
       onClose

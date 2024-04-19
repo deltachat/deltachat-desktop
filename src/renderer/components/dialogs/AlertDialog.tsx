@@ -9,11 +9,12 @@ import Dialog, {
 } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
+import type { ReactNode } from 'react'
 import type { DialogProps } from '../../contexts/DialogContext'
 
 export type Props = {
   cb?: () => void
-  message: string | JSX.Element
+  message: string | ReactNode
 } & DialogProps
 
 export default function AlertDialog({ message, onClose, cb }: Props) {

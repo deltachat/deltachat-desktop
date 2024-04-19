@@ -232,11 +232,11 @@ export function getKeybindings(
         keyBindings: [['Control', 'N']],
       },
       {
-        title: tx('help'),
+        title: tx('menu_help'),
         keyBindings: [['F1']],
       },
       {
-        title: tx('settings'),
+        title: tx('menu_settings'),
         keyBindings: [['Control', ','], isMac && ['Meta', ',']],
       },
       {
