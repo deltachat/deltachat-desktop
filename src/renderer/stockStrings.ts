@@ -184,6 +184,8 @@ export async function updateCoreStrings() {
     'invalid_unencrypted_tap_to_learn_more'
   )
   strings[C.DC_STR_BACKUP_TRANSFER_QR] = tx('multidevice_qr_subtitle')
+  strings[C.DC_STR_YOU_REACTED] = tx('reaction_by_you')
+  strings[C.DC_STR_REACTED_BY] = tx('reaction_by_other')
 
   await BackendRemote.rpc.setStockStrings(strings)
 }
