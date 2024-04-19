@@ -75,7 +75,7 @@ export default function OnboardingScreen(props: Props) {
     <>
       <DialogHeader
         onClickBack={showBackButton ? onClickBackButton : undefined}
-        title='Welcome!'
+        title={tx('onboarding_title')}
       />
       <DialogBody>
         <DialogContent>
@@ -84,7 +84,7 @@ export default function OnboardingScreen(props: Props) {
             src='../images/intro1.png'
           />
           <p className={styles.welcomeScreenTitle}>
-            {tx('welcome_chat_over_email')}
+            {tx('onboarding_subtitle')}
           </p>
           <div className={styles.welcomeScreenButtonGroup}>
             <Button
@@ -92,21 +92,21 @@ export default function OnboardingScreen(props: Props) {
               type='primary'
               onClick={props.onNextStep}
             >
-              Let's get started!
+              {tx('onboarding_create_instant_account')}
             </Button>
             <Button
               className={styles.welcomeScreenButton}
               type='secondary'
               onClick={onScanQRCode}
             >
-              Scan QR code
+              {tx('onboarding_scan_qr_code')}
             </Button>
             <Button
               className={styles.welcomeScreenButton}
               type='secondary'
               onClick={onAlreadyHaveAccount}
             >
-              I already have an account
+              {tx('onboarding_alternative_logins')}
             </Button>
           </div>
         </DialogContent>

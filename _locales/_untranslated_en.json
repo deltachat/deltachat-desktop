@@ -30,13 +30,58 @@
   "camera_access_failed": {
     "message": "Could not access video camera. You might want to check your video permissions or if the camera is used already by another program"
   },
-  "instantonboarding_with_join_contact": {
-    "message": "Do you want to create a new DeltaChat account and start chatting with \"%1\"?"
+  "onboarding_title": {
+    "message": "Welcome to DeltaChat!"
   },
-  "instantonboarding_with_join_group": {
+  "onboarding_subtitle": {
+    "message": "Chat over E-Mail"
+  },
+  "onboarding_create_instant_account": {
+    "message": "Let's get started!"
+  },
+  "onboarding_scan_qr_code": {
+    "message": "Scan QR Code"
+  },
+  "onboarding_alternative_logins": {
+    "message": "I already have a login"
+  },
+  "multidevice_setup_option": {
+    "message": "Add as second device"
+  },
+  "import_backup_option": {
+    "message": "Import backup"
+  },
+  "manual_account_setup_option": {
+    "message": "Manual login"
+  },
+  "instant_onboarding_title": {
+    "message": "Your profile"
+  },
+  "instant_onboarding_create": {
+    "message": "Create profile"
+  },
+  "instant_onboarding_default_info": {
+    "message": "Your profile will be created on the default instance"
+  },
+  "instant_onboarding_instance_info": {
+    "message": "Your profile will be created on the following instance:"
+  },
+  "instant_onboarding_show_more_instances": {
+    "message": "Show other instances"
+  },
+  "instant_onboarding_group_info": {
+    "message": "Create a new profile and join the group \"$1\""
+  },
+  "instant_onboarding_contact_info": {
+    "message": "Create a new profile and chat with $1"
+  },
+  "instant_onboarding_confirm_contact": {
+    "message": "Do you want to create a new DeltaChat account and start chatting with %1?"
+  },
+  "instant_onboarding_confirm_group": {
     "message": "Do you want to create a new DeltaChat account and join the \"%1\" chat group?"
   },
-  "instantonboarding_lets_get_started": {
+  "instant_onboarding_confirm_label": {
     "message": "Let's get started!"
   }
 }

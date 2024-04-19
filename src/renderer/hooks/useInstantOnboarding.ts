@@ -69,8 +69,8 @@ export default function useInstantOnboarding() {
         } else if (qr.kind === 'askVerifyGroup') {
           // Ask the user if they want to create a new account and join the group
           const userConfirmed = await openConfirmationDialog({
-            message: tx('instantonboarding_with_join_group', qr.grpname),
-            confirmLabel: tx('instantonboarding_lets_get_started'),
+            message: tx('instant_onboarding_confirm_group', qr.grpname),
+            confirmLabel: tx('instant_onboarding_confirm_label'),
           })
 
           if (!userConfirmed) {
@@ -85,8 +85,8 @@ export default function useInstantOnboarding() {
           )
 
           const userConfirmed = await openConfirmationDialog({
-            message: tx('instantonboarding_with_join_contact', contact.address),
-            confirmLabel: tx('instantonboarding_lets_get_started'),
+            message: tx('instant_onboarding_confirm_contact', contact.address),
+            confirmLabel: tx('instant_onboarding_confirm_label'),
           })
 
           if (!userConfirmed) {

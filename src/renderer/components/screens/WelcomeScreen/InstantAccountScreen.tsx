@@ -17,8 +17,8 @@ import { Screens } from '../../../ScreenController'
 import styles from './styles.module.scss'
 
 type Props = {
-  selectedAccountId: number
   onCancel: () => void
+  selectedAccountId: number
 }
 
 // URL of page listing chatmail instances
@@ -26,8 +26,8 @@ type Props = {
 const INSTANCE_LIST_URL = 'https://delta.chat/'
 
 export default function InstantAccountScreen({
-  selectedAccountId,
   onCancel,
+  selectedAccountId,
 }: Props) {
   const tx = useTranslationFunction()
   const openAlertDialog = useAlertDialog()
@@ -75,7 +75,10 @@ export default function InstantAccountScreen({
 
   return (
     <>
-      <DialogHeader title='Create new account' onClickBack={onCancel} />
+      <DialogHeader
+        onClickBack={onCancel}
+        title={tx('instant_onboarding_title')}
+      />
       <DialogBody className={styles.welcomeScreenBody}>
         <DialogContent paddingBottom>
           <ProfileImageSelector
@@ -90,13 +93,14 @@ export default function InstantAccountScreen({
             value={displayName}
             onChange={onChangeDisplayName}
           />
+          <p>{tx('set_name_and_avatar_explain')}</p>
           <div className={styles.welcomeScreenButtonGroup}>
             <Button
               className={styles.welcomeScreenButton}
               type='primary'
               onClick={onConfirm}
             >
-              Create account
+              {tx('instant_onboarding_create')}
             </Button>
           </div>
         </DialogContent>
@@ -107,6 +111,7 @@ export default function InstantAccountScreen({
 }
 
 function ChatmailInstanceInfo(props: { accountId: number }) {
+  const tx = useTranslationFunction()
   const { welcomeQr } = useInstantOnboarding()
   const [contactAddress, setContactAddress] = useState('')
 
@@ -132,10 +137,10 @@ function ChatmailInstanceInfo(props: { accountId: number }) {
   if (!welcomeQr) {
     return (
       <Callout>
-        <p>Your account will be created on the default instance</p>
+        <p>{tx('instant_onboarding_default_info')}</p>
         <p>
           <ClickableLink href={INSTANCE_LIST_URL}>
-            Show other instances
+            {tx('instant_onboarding_show_more_instances')}
           </ClickableLink>
         </p>
       </Callout>
@@ -145,13 +150,13 @@ function ChatmailInstanceInfo(props: { accountId: number }) {
   if (welcomeQr.qr.kind === 'account') {
     return (
       <Callout>
-        <p>Your account will be created on the following instance:</p>
+        <p>{tx('instant_onboarding_instance_info')}</p>
         <p>
           <i>{welcomeQr.qr.domain}</i>
         </p>
         <p>
           <ClickableLink href={INSTANCE_LIST_URL}>
-            Show other instances
+            {tx('instant_onboarding_show_more_instances')}
           </ClickableLink>
         </p>
       </Callout>
@@ -159,15 +164,13 @@ function ChatmailInstanceInfo(props: { accountId: number }) {
   } else if (welcomeQr.qr.kind === 'askVerifyGroup') {
     return (
       <Callout>
-        <p>
-          Create a new account and join the group \"{welcomeQr.qr.grpname}\"
-        </p>
+        <p>{tx('instant_onboarding_group_info', welcomeQr.qr.grpname)}</p>
       </Callout>
     )
   } else if (welcomeQr.qr.kind === 'askVerifyContact') {
     return (
       <Callout>
-        <p>Create a new account and chat with {contactAddress}</p>
+        <p>{tx('instant_onboarding_contact_info', contactAddress)}</p>
       </Callout>
     )
   }

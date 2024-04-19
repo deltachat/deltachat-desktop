@@ -11,8 +11,8 @@ import {
   LastUsedSlot,
   rememberLastUsedPath,
 } from '../../../utils/lastUsedPaths'
-import { Screens } from '../../../ScreenController'
 import { ScreenContext } from '../../../contexts/ScreenContext'
+import { Screens } from '../../../ScreenController'
 import { runtime } from '../../../runtime'
 
 // import styles from './styles.module.scss'
@@ -61,12 +61,14 @@ export default function AlternativeSetupsDialog({ onClose }: DialogProps) {
       <DialogBody>
         <DialogContent>
           <Button onClick={onClickSecondDevice}>
-            {tx('multidevice_receiver_title')}
+            {tx('multidevice_setup_option')}
           </Button>
           <Button onClick={onClickImportBackup}>
-            {tx('import_backup_title')}
+            {tx('import_backup_option')}
           </Button>
-          <Button onClick={onClickLogin}>{tx('login_header')}</Button>
+          <Button onClick={onClickLogin}>
+            {tx('manual_account_setup_option')}
+          </Button>
         </DialogContent>
       </DialogBody>
     </Dialog>

@@ -26,16 +26,16 @@ export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
   return (
     <ImageBackdrop variant='welcome'>
       <Dialog fixed onClose={onClose} width={400}>
-        {showInstantOnboarding ? (
-          <InstantAccountScreen
-            selectedAccountId={selectedAccountId}
-            onCancel={() => resetInstantOnboarding()}
-          />
-        ) : (
+        {!showInstantOnboarding ? (
           <OnboardingScreen
             selectedAccountId={selectedAccountId}
             onNextStep={() => switchToInstantOnboarding(selectedAccountId)}
             {...props}
+          />
+        ) : (
+          <InstantAccountScreen
+            selectedAccountId={selectedAccountId}
+            onCancel={() => resetInstantOnboarding()}
           />
         )}
       </Dialog>
