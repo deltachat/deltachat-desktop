@@ -30,6 +30,7 @@
 - remove last selected chat id in ui settings when deleting the selected chat #3772
 - fix translation keys in keybindings cheat sheet dialog #3779
 - fix random scroll position and missing redraws when opening "Archive" #3268
+- fix: clear notifications for a contact request when blocking it #3268
 
 <a id="1_44_1"></a>
 
