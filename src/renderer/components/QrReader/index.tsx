@@ -439,8 +439,9 @@ export default function QrReader({ onError, onScan }: Props) {
       )}
       <div className={styles.qrReaderOverlay} />
       {ready && !error && <div className={styles.qrReaderScanLine} />}
-      {/* @TODO: Translation string needs to be changed to `qrscan_hint_desktop` */}
-      {!error && <div className={styles.qrReaderHint}>{tx('qrscan_hint')}</div>}
+      {!error && (
+        <div className={styles.qrReaderHint}>{tx('qrscan_hint_desktop')}</div>
+      )}
       <button className={styles.qrReaderButton} onClick={handleSelectDevice}>
         <Icon icon='settings' size={24} className={styles.qrReaderButtonIcon} />
       </button>

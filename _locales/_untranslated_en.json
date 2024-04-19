@@ -24,6 +24,9 @@
   "pref_current_account": {
     "message": "Current Account"
   },
+  "qrscan_hint_desktop": {
+    "message": "Move the QR code to the camera"
+  },
   "camera_access_failed": {
     "message": "Could not access video camera. You might want to check your video permissions or if the camera is used already by another program"
   }
