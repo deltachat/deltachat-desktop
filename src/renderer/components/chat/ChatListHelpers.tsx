@@ -102,7 +102,7 @@ export function useChatList(
     }
 
     debouncedGetChatListEntries(listFlags, queryStr, queryContactId)
-    return onDCEvent(accountId, 'ChatListChanged', refetchChatlist)
+    return onDCEvent(accountId, 'ChatlistChanged', refetchChatlist)
   }, [
     listFlags,
     queryStr,
