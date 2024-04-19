@@ -97,6 +97,7 @@ export default function InstantAccountScreen({
           <div className={styles.welcomeScreenButtonGroup}>
             <Button
               className={styles.welcomeScreenButton}
+              disabled={displayName.length === 0}
               type='primary'
               onClick={onConfirm}
             >
