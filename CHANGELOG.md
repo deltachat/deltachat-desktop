@@ -17,6 +17,7 @@
 - Refactor chat store into React context #3725
 - Improve security: restrict file protocol #3769
 - Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.137.3`
+- Change chatlist to use new chatlist changed event from core #3268
 
 ### Fixed
 - fix chat audit dialog was going out of viewport on smaller screens #3736
@@ -28,6 +29,8 @@
 - fix add missing top padding to confirm sending files dialog #3767
 - remove last selected chat id in ui settings when deleting the selected chat #3772
 - fix translation keys in keybindings cheat sheet dialog #3779
+- fix random scroll position and missing redraws when opening "Archive" #3268
+- fix: clear notifications for a contact request when blocking it #3268
 
 <a id="1_44_1"></a>
 

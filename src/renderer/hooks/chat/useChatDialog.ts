@@ -39,7 +39,7 @@ export default function useChatDialog() {
       })
 
       if (hasUserConfirmed) {
-        await EffectfulBackendActions.blockContact(accountId, dmChatContact)
+        await BackendRemote.rpc.blockContact(accountId, dmChatContact)
         unselectChat()
       }
     },

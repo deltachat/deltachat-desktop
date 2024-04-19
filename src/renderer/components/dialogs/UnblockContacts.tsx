@@ -2,12 +2,7 @@ import React, { useState, useEffect } from 'react'
 import debounce from 'debounce'
 
 import { ContactList } from '../contact/ContactList'
-import {
-  BackendRemote,
-  EffectfulBackendActions,
-  onDCEvent,
-  Type,
-} from '../../backend-com'
+import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { DialogBody, DialogContent, DialogWithHeader } from '../Dialog'
 import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
@@ -42,7 +37,7 @@ export default function UnblockContacts({ onClose }: DialogProps) {
     })
 
     if (confirmed) {
-      EffectfulBackendActions.unBlockContact(accountId, id)
+      await BackendRemote.rpc.unblockContact(accountId, id)
     }
   }
 

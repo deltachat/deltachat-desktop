@@ -26,10 +26,8 @@ export default function MailtoDialog(props: Props & DialogProps) {
   const createDraftMessage = useCreateDraftMessage()
   const accountId = selectedAccountId()
   const { chatListIds, queryStr, setQueryStr } = useChatList(listFlags)
-  const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
-    chatListIds,
-    listFlags
-  )
+  const { isChatLoaded, loadChats, chatCache } =
+    useLogicVirtualChatList(chatListIds)
 
   const onChatClick = async (chatId: number) => {
     createDraftMessage(accountId, chatId, messageText)

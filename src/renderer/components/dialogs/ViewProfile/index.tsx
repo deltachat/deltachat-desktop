@@ -127,10 +127,8 @@ export function ViewProfileInner({
   const { selectChat } = useChat()
   const openViewProfileDialog = useOpenViewProfileDialog()
   const { chatListIds } = useChatList(null, '', contact.id)
-  const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
-    chatListIds,
-    null
-  )
+  const { isChatLoaded, loadChats, chatCache } =
+    useLogicVirtualChatList(chatListIds)
   const [selfChatAvatar, setSelfChatAvatar] = useState<string | null>(null)
   const [verifier, setVerifier] = useState<null | {
     label: string
