@@ -61,7 +61,7 @@
     "message": "Create profile"
   },
   "instant_onboarding_default_info": {
-    "message": "Your profile will be created on the default instance"
+    "message": "Your profile will be created on the default instance."
   },
   "instant_onboarding_instance_info": {
     "message": "Your profile will be created on the following instance:"
@@ -70,10 +70,10 @@
     "message": "Show other instances"
   },
   "instant_onboarding_group_info": {
-    "message": "Create a new profile and join the group \"$1\""
+    "message": "Create a new profile and join the group \"$1\"."
   },
   "instant_onboarding_contact_info": {
-    "message": "Create a new profile and chat with $1"
+    "message": "Create a new profile and chat with $1."
   },
   "instant_onboarding_confirm_contact": {
     "message": "Do you want to create a new DeltaChat account and start chatting with %1?"

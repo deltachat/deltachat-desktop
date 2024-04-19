@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import Button from '../../Button'
 import Callout from '../../Callout'
 import ClickableLink from '../../helpers/ClickableLink'
+import Icon from '../../Icon'
 import ProfileImageSelector from '../../dialogs/EditProfileDialog/ProfileImageSelector'
 import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
 import useChat from '../../../hooks/chat/useChat'
@@ -13,6 +14,7 @@ import { DeltaInput } from '../../Login-Styles'
 import { DialogBody, DialogContent, DialogHeader } from '../../Dialog'
 import { ScreenContext } from '../../../contexts/ScreenContext'
 import { Screens } from '../../../ScreenController'
+import { runtime } from '../../../runtime'
 
 import styles from './styles.module.scss'
 
@@ -137,8 +139,10 @@ function ChatmailInstanceInfo(props: { accountId: number }) {
   // default chatmail instance
   if (!welcomeQr) {
     return (
-      <Callout>
-        <p>{tx('instant_onboarding_default_info')}</p>
+      <Callout className={styles.instantOnboardingCallout}>
+        <p>
+          {tx('instant_onboarding_default_info')} <HelpButton />
+        </p>
         <p>
           <ClickableLink href={INSTANCE_LIST_URL}>
             {tx('instant_onboarding_show_more_instances')}
@@ -150,8 +154,10 @@ function ChatmailInstanceInfo(props: { accountId: number }) {
 
   if (welcomeQr.qr.kind === 'account') {
     return (
-      <Callout>
-        <p>{tx('instant_onboarding_instance_info')}</p>
+      <Callout className={styles.instantOnboardingCallout}>
+        <p>
+          {tx('instant_onboarding_instance_info')} <HelpButton />
+        </p>
         <p>
           <i>{welcomeQr.qr.domain}</i>
         </p>
@@ -164,17 +170,35 @@ function ChatmailInstanceInfo(props: { accountId: number }) {
     )
   } else if (welcomeQr.qr.kind === 'askVerifyGroup') {
     return (
-      <Callout>
-        <p>{tx('instant_onboarding_group_info', welcomeQr.qr.grpname)}</p>
+      <Callout className={styles.instantOnboardingCallout}>
+        <p>
+          {tx('instant_onboarding_group_info', welcomeQr.qr.grpname)}{' '}
+          <HelpButton />
+        </p>
       </Callout>
     )
   } else if (welcomeQr.qr.kind === 'askVerifyContact') {
     return (
-      <Callout>
-        <p>{tx('instant_onboarding_contact_info', contactAddress)}</p>
+      <Callout className={styles.instantOnboardingCallout}>
+        <p>
+          {tx('instant_onboarding_contact_info', contactAddress)} <HelpButton />
+        </p>
       </Callout>
     )
   }
 
   return null
+}
+
+function HelpButton() {
+  const handleClick = () => {
+    // @TODO: Specify anchor for instant onboarding help chapter
+    runtime.openHelpWindow()
+  }
+
+  return (
+    <button onClick={handleClick} className={styles.instantOnboardingHelp}>
+      <Icon className={styles.instantOnboardingHelpIcon} icon='info' />
+    </button>
+  )
 }

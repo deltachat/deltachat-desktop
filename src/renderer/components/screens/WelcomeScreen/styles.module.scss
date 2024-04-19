@@ -28,5 +28,34 @@
 .welcomeScreenButton {
   font-size: 14px;
   margin: 5px 0;
-  width: 90%;
+  width: 100%;
+}
+
+.instantOnboardingCallout {
+  padding-top: 20px;
+  padding-right: 50px;
+  position: relative;
+}
+
+.instantOnboardingHelp {
+  background-color: transparent;
+  border: 0;
+  display: inline-block;
+  display: inline-block;
+  margin: 17px;
+  outline: 0;
+  padding: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  &:hover {
+    .instantOnboardingHelpIcon {
+      background-color: #000;
+    }
+  }
+}
+
+.instantOnboardingHelpIcon {
+  background-color: #444;
 }
