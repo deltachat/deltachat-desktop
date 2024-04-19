@@ -5,14 +5,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import {
-  ZBarConfigType,
-  ZBarScanner,
-  ZBarSymbol,
-  ZBarSymbolType,
-  getDefaultScanner,
-  scanImageData,
-} from '@undecaf/zbar-wasm'
+import scanQrCode from 'jsqr'
 import classNames from 'classnames'
 import { Spinner } from '@blueprintjs/core'
 
@@ -103,44 +96,12 @@ export default function QrReader({ onError, onScan }: Props) {
 
   const [ready, setReady] = useState(false)
   const [error, setError] = useState(false)
-  const [scanner, setScanner] = useState<ZBarScanner | undefined>(undefined)
   const [videoDevices, setVideoDevices] = useState<MediaDeviceInfo[]>([])
   const [deviceId, setDeviceId] = useState<string | undefined>(undefined)
   const [dimensions, setDimensions] = useState<ImageDimensions>({
     width: 640,
     height: 480,
   })
-
-  // Create a QR code scanner object from the "zbar" library.
-  //
-  // We use it to detect QR codes in image data. The library offers many other
-  // detection methods as well, we configure it here to only look
-  // for "2D QR-Codes".
-  useEffect(() => {
-    const createScanner = async () => {
-      const qrCodeScanner = await getDefaultScanner()
-
-      // First disable all code types
-      Object.keys(ZBarSymbolType).forEach(key => {
-        qrCodeScanner.setConfig(
-          key as unknown as ZBarSymbolType,
-          ZBarConfigType.ZBAR_CFG_ENABLE,
-          0
-        )
-      })
-
-      // .. and enable only QrCode scanning
-      qrCodeScanner.setConfig(
-        ZBarSymbolType.ZBAR_QRCODE,
-        ZBarConfigType.ZBAR_CFG_ENABLE,
-        1
-      )
-
-      setScanner(qrCodeScanner)
-    }
-
-    createScanner()
-  }, [])
 
   // Get all current video devices available to the user.
   useEffect(() => {
@@ -161,22 +122,19 @@ export default function QrReader({ onError, onScan }: Props) {
     getAllCameras()
   }, [])
 
-  // General handler for scanning results coming from the "zbar" library.
+  // General handler for scanning results coming from the "jsqr" library.
   //
-  // Since there can be multiple results we return all them. Additionally
-  // we have checks in place to make sure we're not firing any callbacks
-  // when this React component has already been unmounted.
-  const handleScanResults = useCallback(
-    (results: ZBarSymbol[]) => {
+  // Additionally we have checks in place to make sure we're not firing any
+  // callbacks when this React component has already been unmounted.
+  const handleScanResult = useCallback(
+    result => {
       let unmounted = false
 
       if (unmounted) {
         return
       }
 
-      results.forEach(result => {
-        onScan(result.decode())
-      })
+      onScan(result.data)
 
       return () => {
         unmounted = true
@@ -206,9 +164,13 @@ export default function QrReader({ onError, onScan }: Props) {
       const base64 = await runtime.readClipboardImage()
       if (base64) {
         const imageData = await base64ToImageData(base64)
-        const results = await scanImageData(imageData, scanner)
-        if (results.length > 0) {
-          handleScanResults(results)
+        const result = scanQrCode(
+          imageData.data,
+          imageData.width,
+          imageData.height
+        )
+        if (result) {
+          handleScanResult(result)
           return
         } else {
           throw new Error('no data in clipboard image')
@@ -227,7 +189,7 @@ export default function QrReader({ onError, onScan }: Props) {
         text: `${tx('qrscan_failed')}: ${error}`,
       })
     }
-  }, [handleScanResults, onScan, scanner, tx, userFeedback])
+  }, [handleScanResult, onScan, tx, userFeedback])
 
   // Read data from an external image file.
   //
@@ -251,10 +213,14 @@ export default function QrReader({ onError, onScan }: Props) {
         // Convert file to correct image data and scan it
         const base64 = await fileToBase64(file)
         const imageData = await base64ToImageData(base64)
-        const results = await scanImageData(imageData, scanner)
+        const result = scanQrCode(
+          imageData.data,
+          imageData.width,
+          imageData.height
+        )
 
-        if (results.length > 0) {
-          handleScanResults(results)
+        if (result) {
+          handleScanResult(result)
         } else {
           userFeedback({
             type: 'error',
@@ -271,7 +237,7 @@ export default function QrReader({ onError, onScan }: Props) {
         inputRef.current.value = ''
       }
     },
-    [handleError, handleScanResults, scanner, tx, userFeedback]
+    [handleError, handleScanResult, tx, userFeedback]
   )
 
   // Show a context menu with different video input options to the user.
@@ -393,7 +359,7 @@ export default function QrReader({ onError, onScan }: Props) {
     }
   }, [deviceId])
 
-  // Frequently scan image data for QR code with "zbar" library.
+  // Frequently scan image data for QR code with "jsqr" library.
   //
   // We achieve this by extracting the image data from the video element using
   // an intermediary canvas context.
@@ -426,8 +392,14 @@ export default function QrReader({ onError, onScan }: Props) {
 
       const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
       try {
-        const results = await scanImageData(imageData, scanner)
-        handleScanResults(results)
+        const result = scanQrCode(
+          imageData.data,
+          imageData.width,
+          imageData.height
+        )
+        if (result) {
+          handleScanResult(result)
+        }
       } catch (error: any) {
         handleError(error)
       }
@@ -437,7 +409,7 @@ export default function QrReader({ onError, onScan }: Props) {
     return () => {
       window.clearInterval(interval)
     }
-  }, [handleError, handleScanResults, onScan, scanner])
+  }, [handleError, handleScanResult, onScan])
 
   return (
     <div className={styles.qrReader}>

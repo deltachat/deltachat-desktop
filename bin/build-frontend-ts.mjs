@@ -28,11 +28,6 @@ function config(options) {
     define: {
       'process.env.NODE_ENV': isProduction ? '"production"' : '"development"',
     },
-    // We want the inlined version of the `zbar-wasm` package as the .wasm paths
-    // are unfortunately hardcoded in this package. We can force esbuild to load
-    // the inlined version through setting a condition which will make esbuild
-    // prefer an package export named after it
-    conditions: ['zbar-inlined'],
     plugins,
     external: ["*.jpg", "*.png", "*.webp", "*.svg"]
   }

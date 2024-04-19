@@ -29,13 +29,10 @@
 - fix chatlistitem background when context menu for it is shown it is now highlighted correctly on pinned chats #3766
 - fix add missing top padding to confirm sending files dialog #3767
 - remove last selected chat id in ui settings when deleting the selected chat #3772
-<<<<<<< HEAD
 - fix translation keys in keybindings cheat sheet dialog #3779
 - fix random scroll position and missing redraws when opening "Archive" #3268
 - fix: clear notifications for a contact request when blocking it #3268
-=======
 - Unmount QR scanner and disable camera correctly on abort or exit #3762
->>>>>>> 3ad6ece9 (Update CHANGELOG.md)
 
 <a id="1_44_1"></a>
 
