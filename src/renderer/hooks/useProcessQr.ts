@@ -131,7 +131,6 @@ export default function useProcessQR() {
           })
 
           if (!userConfirmed) {
-            callback && callback()
             return
           }
         }
@@ -166,7 +165,6 @@ export default function useProcessQR() {
             openAlertDialog({
               message: err.message || err.toString(),
             })
-            callback && callback()
             return
           }
         }
@@ -185,11 +183,10 @@ export default function useProcessQR() {
           confirmLabel: tx('ok'),
         })
 
-        let chatId
         if (userConfirmed) {
-          chatId = await BackendRemote.rpc.secureJoin(accountId, url)
+          const chatId = await BackendRemote.rpc.secureJoin(accountId, url)
+          callback && callback(chatId)
         }
-        callback && callback(chatId)
       } else if (checkQr.kind === 'askVerifyGroup') {
         closeProcessDialog()
 
@@ -200,9 +197,8 @@ export default function useProcessQR() {
 
         if (userConfirmed) {
           await BackendRemote.rpc.secureJoin(accountId, url)
+          callback && callback()
         }
-
-        callback && callback()
         return
       } else if (checkQr.kind === 'fprOk') {
         const contact = await BackendRemote.rpc.getContact(
