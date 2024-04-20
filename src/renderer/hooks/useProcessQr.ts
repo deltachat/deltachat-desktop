@@ -185,10 +185,11 @@ export default function useProcessQR() {
           confirmLabel: tx('ok'),
         })
 
+        let chatId
         if (userConfirmed) {
-          const chatId = await BackendRemote.rpc.secureJoin(accountId, url)
-          callback && callback(chatId)
+          chatId = await BackendRemote.rpc.secureJoin(accountId, url)
         }
+        callback && callback(chatId)
       } else if (checkQr.kind === 'askVerifyGroup') {
         closeProcessDialog()
 
@@ -200,6 +201,8 @@ export default function useProcessQR() {
         if (userConfirmed) {
           await BackendRemote.rpc.secureJoin(accountId, url)
         }
+
+        callback && callback()
         return
       } else if (checkQr.kind === 'fprOk') {
         const contact = await BackendRemote.rpc.getContact(
