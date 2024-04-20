@@ -29,7 +29,7 @@ type ImageDimensions = {
   height: number
 }
 
-const SCAN_QR_INTERVAL_MS = 50
+const SCAN_QR_INTERVAL_MS = 250
 
 /**
  * Convert file data to base64 string.
