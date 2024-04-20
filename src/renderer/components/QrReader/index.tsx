@@ -296,7 +296,17 @@ export default function QrReader({ onError, onScan }: Props) {
       return
     }
 
-    const getCamera = async () => {
+    const stopStream = async (stream?: MediaStream) => {
+      if (!stream) {
+        return
+      }
+
+      for (const track of stream.getTracks()) {
+        track.stop()
+      }
+    }
+
+    const startStream = async () => {
       const videoConstraints: MediaTrackConstraints = {
         deviceId,
         facingMode: 'user',
@@ -305,16 +315,21 @@ export default function QrReader({ onError, onScan }: Props) {
       try {
         setReady(false)
 
+        // Stop all streams if some existed before we begin a new one
+        stopStream(activeStream)
+
         const stream = await navigator.mediaDevices.getUserMedia({
           video: videoConstraints,
         })
 
         if (unmounted) {
+          stopStream(stream)
           return
         }
 
         const videoTracks = stream.getVideoTracks()
         if (videoTracks.length === 0) {
+          stopStream(stream)
           throw new Error('no video tracks given')
         }
 
@@ -335,11 +350,12 @@ export default function QrReader({ onError, onScan }: Props) {
 
         setReady(true)
       } catch {
+        stopStream(activeStream)
         setError(true)
       }
     }
 
-    getCamera()
+    startStream()
 
     return () => {
       unmounted = true
@@ -348,11 +364,7 @@ export default function QrReader({ onError, onScan }: Props) {
         video.srcObject = null
       }
 
-      if (activeStream) {
-        for (const track of activeStream.getTracks()) {
-          track.stop()
-        }
-      }
+      stopStream(activeStream)
 
       setReady(false)
       setError(false)
