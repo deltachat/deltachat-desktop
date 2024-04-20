@@ -241,7 +241,7 @@ export default function QrReader({ onError, onScan }: Props) {
   )
 
   // Show a context menu with different video input options to the user.
-  const handleSelectDevice = useCallback(
+  const handleSelectInput = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       const [cursorX, cursorY] = [event.clientX, event.clientY]
 
@@ -442,7 +442,7 @@ export default function QrReader({ onError, onScan }: Props) {
       {!error && (
         <div className={styles.qrReaderHint}>{tx('qrscan_hint_desktop')}</div>
       )}
-      <button className={styles.qrReaderButton} onClick={handleSelectDevice}>
+      <button className={styles.qrReaderButton} onClick={handleSelectInput}>
         <Icon icon='settings' size={24} className={styles.qrReaderButtonIcon} />
       </button>
       <input
