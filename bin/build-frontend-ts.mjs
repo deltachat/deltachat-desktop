@@ -2,6 +2,7 @@ import path from 'path'
 import { copyFile, readFile } from 'fs/promises'
 
 import esbuild from 'esbuild'
+import inlineWorkerPlugin from 'esbuild-plugin-inline-worker'
 import { ESLint } from 'eslint'
 import { compile } from 'sass'
 
@@ -12,7 +13,7 @@ import { compile } from 'sass'
 function config(options) {
   const { isProduction, isMinify, isWatch } = options
 
-  const plugins = [wasmPlugin, sassPlugin]
+  const plugins = [wasmPlugin, sassPlugin, inlineWorkerPlugin()]
   if (isWatch || isProduction) {
     // Make eslint optional as it affects build times significantly
     plugins.push(eslintPlugin)

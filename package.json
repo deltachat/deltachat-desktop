@@ -132,6 +132,7 @@
     "electron": "^28.2.3",
     "electron-builder": "^24.6.4",
     "esbuild": "^0.19.8",
+    "esbuild-plugin-inline-worker": "^0.1.1",
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.1",

@@ -15,6 +15,10 @@ import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import { ScreenContext } from '../../contexts/ScreenContext'
 import { runtime } from '../../runtime'
 
+// @ts-ignore:next-line: We're importing a worker here with the help of the
+// "esbuild-plugin-inline-worker" plugin
+import Worker from './qr.worker.ts'
+
 import styles from './styles.module.scss'
 
 import type { ContextMenuItem } from '../ContextMenu'
@@ -30,6 +34,8 @@ type ImageDimensions = {
 }
 
 const SCAN_QR_INTERVAL_MS = 250
+
+const worker = new Worker()
 
 /**
  * Convert file data to base64 string.
@@ -379,6 +385,14 @@ export default function QrReader({ onError, onScan }: Props) {
     const canvas = canvasRef.current
     const video = videoRef.current
 
+    const handleWorkerMessage = (event: MessageEvent) => {
+      if (event.data) {
+        handleScanResult(event)
+      }
+    }
+
+    worker.addEventListener('message', handleWorkerMessage)
+
     if (!canvas) {
       return
     }
@@ -404,14 +418,7 @@ export default function QrReader({ onError, onScan }: Props) {
 
       const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
       try {
-        const result = scanQrCode(
-          imageData.data,
-          imageData.width,
-          imageData.height
-        )
-        if (result) {
-          handleScanResult(result)
-        }
+        worker.postMessage(imageData)
       } catch (error: any) {
         handleError(error)
       }
@@ -419,6 +426,7 @@ export default function QrReader({ onError, onScan }: Props) {
 
     const interval = window.setInterval(scan, SCAN_QR_INTERVAL_MS)
     return () => {
+      worker.removeEventListener('message', handleWorkerMessage)
       window.clearInterval(interval)
     }
   }, [handleError, handleScanResult, onScan])
