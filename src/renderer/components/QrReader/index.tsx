@@ -38,7 +38,7 @@ const SCAN_QR_INTERVAL_MS = 250
 const worker = new Worker()
 
 /**
- * Convert file data to base64 string.
+ * Convert file data to base64 encoded data URL string.
  */
 async function fileToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
