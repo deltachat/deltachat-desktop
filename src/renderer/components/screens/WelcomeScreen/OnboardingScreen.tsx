@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useLayoutEffect, useState } from 'react'
 
 import AlertDialog from '../../dialogs/AlertDialog'
 import AlternativeSetupsDialog from './AlternativeSetupsDialog'
@@ -34,7 +34,7 @@ export default function OnboardingScreen(props: Props) {
     openDialog(ImportQrCode, { subtitle: tx('qrscan_hint') })
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Show back button when user has already created and configured accounts.
     // On a fresh DC start we will not have any yet.
     const checkAccounts = async () => {
