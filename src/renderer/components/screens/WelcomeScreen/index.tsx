@@ -19,7 +19,7 @@ export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
     showInstantOnboarding,
     switchToInstantOnboarding,
   } = useInstantOnboarding()
-  const [showBackButton, setShowBackButton] = useState(true)
+  const [showBackButton, setShowBackButton] = useState(false)
 
   const onClose = () => {
     // Prevent user from closing dialog
