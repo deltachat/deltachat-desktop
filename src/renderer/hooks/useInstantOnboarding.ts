@@ -1,14 +1,10 @@
 import { useCallback, useContext } from 'react'
 
-import useConfirmationDialog from './dialog/useConfirmationDialog'
 import useDialog from '../hooks/dialog/useDialog'
 import useSecureJoin from './useSecureJoin'
-import useTranslationFunction from './useTranslationFunction'
 import { BackendRemote } from '../backend-com'
 import { ConfigureProgressDialog } from '../components/LoginForm'
 import { InstantOnboardingContext } from '../contexts/InstantOnboardingContext'
-import { ScreenContext } from '../contexts/ScreenContext'
-import { Screens } from '../ScreenController'
 
 import type { QrWithUrl } from './useProcessQr'
 import type { T } from '@deltachat/jsonrpc-client'
@@ -16,12 +12,13 @@ import type { T } from '@deltachat/jsonrpc-client'
 const DEFAULT_CHATMAIL_INSTANCE_URL =
   'https://nine.testrun.org/cgi-bin/newemail.py'
 
+/*
+ * Instant Onboarding allows users to create new email addresses from within the
+ * application, giving them a faster way to get a working profile.
+ */
 export default function useInstantOnboarding() {
   const context = useContext(InstantOnboardingContext)
-  const openConfirmationDialog = useConfirmationDialog()
-  const tx = useTranslationFunction()
   const { openDialog } = useDialog()
-  const { screen } = useContext(ScreenContext)
   const { secureJoinContact, secureJoinGroup } = useSecureJoin()
 
   if (!context) {
@@ -38,77 +35,23 @@ export default function useInstantOnboarding() {
   } = context
 
   const switchToInstantOnboarding = useCallback(
-    async (accountId: number, qrWithUrl?: QrWithUrl) => {
+    async (qrWithUrl?: QrWithUrl) => {
       if (qrWithUrl) {
-        const { qr } = qrWithUrl
         if (
-          !['account', 'askVerifyGroup', 'askVerifyContact'].includes(qr.kind)
+          !['account', 'askVerifyGroup', 'askVerifyContact'].includes(
+            qrWithUrl.qr.kind
+          )
         ) {
           throw new Error(
             'QR code needs to be of kind `account`, `askVerifyGroup` or `askVerifyContact` for instant onboarding flow'
           )
         }
-
-        const numberOfAccounts = (await BackendRemote.rpc.getAllAccountIds())
-          .length
-
-        if (qr.kind === 'account' && numberOfAccounts > 0) {
-          // Ask user to confirm creating a new account if they already have one
-          const message: string =
-            numberOfAccounts === 1
-              ? 'qraccount_ask_create_and_login'
-              : 'qraccount_ask_create_and_login_another'
-          const userConfirmed = await openConfirmationDialog({
-            message: tx(message, qr.domain),
-            confirmLabel: tx('login_title'),
-          })
-
-          if (!userConfirmed) {
-            return
-          }
-        } else if (qr.kind === 'askVerifyGroup') {
-          // Ask the user if they want to create a new account and join the group
-          const userConfirmed = await openConfirmationDialog({
-            message: tx('instant_onboarding_confirm_group', qr.grpname),
-            confirmLabel: tx('instant_onboarding_confirm_label'),
-          })
-
-          if (!userConfirmed) {
-            return
-          }
-        } else if (qr.kind === 'askVerifyContact') {
-          // Ask the user if they want to create a new account and start
-          // chatting with contact
-          const contact = await BackendRemote.rpc.getContact(
-            accountId,
-            qr.contact_id
-          )
-
-          const userConfirmed = await openConfirmationDialog({
-            message: tx('instant_onboarding_confirm_contact', contact.address),
-            confirmLabel: tx('instant_onboarding_confirm_label'),
-          })
-
-          if (!userConfirmed) {
-            return
-          }
-        }
       }
 
       setWelcomeQr(qrWithUrl)
       setShowInstantOnboarding(true)
-
-      setTimeout(async () => {
-        if (screen !== Screens.Welcome) {
-          // Log out first by switching to an (temporary) blank account
-          const blankAccount = await BackendRemote.rpc.addAccount()
-
-          // Select blank account, this will also switch the screen to `Welcome`
-          window.__selectAccount(blankAccount)
-        }
-      })
     },
-    [openConfirmationDialog, screen, setShowInstantOnboarding, setWelcomeQr, tx]
+    [setWelcomeQr, setShowInstantOnboarding]
   )
 
   const createInstantAccount = useCallback(

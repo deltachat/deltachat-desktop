@@ -73,6 +73,67 @@ export default function useProcessQR() {
     [openAlertDialog]
   )
 
+  const startInstantOnboarding = useCallback(
+    async (accountId: number, qrWithUrl: QrWithUrl) => {
+      const { qr } = qrWithUrl
+      const numberOfAccounts = (await BackendRemote.rpc.getAllAccountIds())
+        .length
+
+      if (qr.kind === 'account' && numberOfAccounts > 0) {
+        // Ask user to confirm creating a new account if they already have one
+        const message: string =
+          numberOfAccounts === 1
+            ? 'qraccount_ask_create_and_login'
+            : 'qraccount_ask_create_and_login_another'
+        const userConfirmed = await openConfirmationDialog({
+          message: tx(message, qr.domain),
+          confirmLabel: tx('login_title'),
+        })
+
+        if (!userConfirmed) {
+          return
+        }
+      } else if (qr.kind === 'askVerifyGroup') {
+        // Ask the user if they want to create a new account and join the group
+        const userConfirmed = await openConfirmationDialog({
+          message: tx('instant_onboarding_confirm_group', qr.grpname),
+          confirmLabel: tx('instant_onboarding_confirm_label'),
+        })
+
+        if (!userConfirmed) {
+          return
+        }
+      } else if (qr.kind === 'askVerifyContact') {
+        // Ask the user if they want to create a new account and start
+        // chatting with contact
+        const contact = await BackendRemote.rpc.getContact(
+          accountId,
+          qr.contact_id
+        )
+
+        const userConfirmed = await openConfirmationDialog({
+          message: tx('instant_onboarding_confirm_contact', contact.address),
+          confirmLabel: tx('instant_onboarding_confirm_label'),
+        })
+
+        if (!userConfirmed) {
+          return
+        }
+      }
+
+      await switchToInstantOnboarding(qrWithUrl)
+
+      if (screen !== Screens.Welcome) {
+        // Log out first by switching to an (temporary) blank account
+        const blankAccount = await BackendRemote.rpc.addAccount()
+
+        // Select blank account, this will also switch the screen to `Welcome`
+        await window.__selectAccount(blankAccount)
+      }
+    },
+    [openConfirmationDialog, screen, switchToInstantOnboarding, tx]
+  )
+
   return useCallback(
     async (
       accountId: number,
@@ -113,14 +174,14 @@ export default function useProcessQR() {
 
       // Ask the user if they want to login with given credentials
       if (qr.kind === 'login') {
-        await switchToInstantOnboarding(accountId, parsed)
+        await startInstantOnboarding(accountId, parsed)
         callback && callback()
         return
       }
 
       // Ask the user if they want to create a profile on the given chatmail instance
       if (qr.kind === 'account') {
-        await switchToInstantOnboarding(accountId, parsed)
+        await startInstantOnboarding(accountId, parsed)
         callback && callback()
         return
       }
@@ -130,7 +191,7 @@ export default function useProcessQR() {
         if (screen === Screens.Welcome) {
           // Ask user to create a new account with instant onboarding flow before they
           // can start chatting with the given contact
-          await switchToInstantOnboarding(accountId, parsed)
+          await startInstantOnboarding(accountId, parsed)
           callback && callback()
         } else {
           const chatId = await secureJoinContact(accountId, parsed)
@@ -146,7 +207,7 @@ export default function useProcessQR() {
         if (screen === Screens.Welcome) {
           // Ask user to create a new account with instant onboarding flow before they
           // can join the given group
-          await switchToInstantOnboarding(accountId, parsed)
+          await startInstantOnboarding(accountId, parsed)
           callback && callback()
         } else {
           const chatId = await secureJoinGroup(accountId, parsed)
@@ -252,7 +313,7 @@ export default function useProcessQR() {
       secureJoinContact,
       secureJoinGroup,
       setConfigFromQrCatchingErrorInAlert,
-      switchToInstantOnboarding,
+      startInstantOnboarding,
       tx,
     ]
   )
