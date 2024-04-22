@@ -156,6 +156,11 @@ function ChatmailInstanceInfo() {
   return (
     <Callout className={styles.instantOnboardingCallout}>
       <HelpButton />
+      {/*
+        When no "account" QR code got scanned by the user we're creating an
+        account on the default chatmail instance, otherwise we're showing
+        the selected one.
+      */}
       {welcomeQr && welcomeQr.qr.kind === 'account' ? (
         <>
           <p>{tx('instant_onboarding_instance_info')}</p>
@@ -164,15 +169,20 @@ function ChatmailInstanceInfo() {
           </p>
         </>
       ) : (
-        // When no "account" QR code got scanned by the user we're creating an
-        // account on the default chatmail instance
         <p>{tx('instant_onboarding_default_info')}</p>
       )}
-      <p>
-        <ClickableLink href={INSTANCE_LIST_URL}>
-          {tx('instant_onboarding_show_more_instances')}
-        </ClickableLink>
-      </p>
+      {/*
+        Present a link to the user to choose alternative chatmail instances
+        from. As we can't currently set other instances in Secure Join QR codes
+        we do not display the link in these cases.
+      */}
+      {(!welcomeQr || welcomeQr.qr.kind === 'account') && (
+        <p>
+          <ClickableLink href={INSTANCE_LIST_URL}>
+            {tx('instant_onboarding_show_more_instances')}
+          </ClickableLink>
+        </p>
+      )}
     </Callout>
   )
 }
