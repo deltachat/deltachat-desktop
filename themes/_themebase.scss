@@ -17,10 +17,16 @@ $hover-contrast-change: 2%;
   --colorDanger: #{$colorDanger};
   --colorNone: #{$colorNone};
   --bgPrimary: #{$bgPrimary};
-  --ovalButtonBg: #{$ovalButtonBg};
-  --ovalButtonBgHover: #{changeContrast($ovalButtonBg, 70%)};
-  --ovalButtonText: #{$ovalButtonText};
-  --ovalButtonTextHover: #{desaturate(invert($ovalButtonText), 1)};
+  /* Buttons */
+  --buttonText: #{$colorPrimary};
+  --buttonHover: #{$bgSecondary};
+  --buttonPrimaryBackground: #{$colorPrimary};
+  --buttonPrimaryText: #{$textNavBar};
+  --buttonSecondaryBackground: #{$bgSecondary};
+  --buttonSecondaryText: #{$textSecondary};
+  --buttonDangerText: #{$colorDanger};
+  --buttonDisabledBackground: #{$bgSecondary};
+  --buttonDisabledText: #{changeContrast($textSecondary, 45%)};
   /* NavBar */
   --navBarBackground: #{$bgNavBar};
   --navBarText: #{$textNavBar};
