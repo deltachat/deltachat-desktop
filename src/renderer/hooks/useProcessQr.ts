@@ -61,9 +61,6 @@ export default function useProcessQR() {
   const setConfigFromQrCatchingErrorInAlert = useCallback(
     async (accountId: number, qrContent: string) => {
       try {
-        if (accountId === undefined) {
-          throw new Error('error: no context selected')
-        }
         await BackendRemote.rpc.setConfigFromQr(accountId, qrContent)
       } catch (error) {
         if (error instanceof Error) {
@@ -114,14 +111,14 @@ export default function useProcessQR() {
         return
       }
 
-      // Ask the user if they want to login with the email_address
+      // Ask the user if they want to login with given credentials
       if (qr.kind === 'login') {
-        // @TODO: What actually happens here? Did it ever work before?
+        await switchToInstantOnboarding(accountId, parsed)
         callback && callback()
         return
       }
 
-      // Ask the user if they want to create an account on the given domain
+      // Ask the user if they want to create a profile on the given chatmail instance
       if (qr.kind === 'account') {
         await switchToInstantOnboarding(accountId, parsed)
         callback && callback()
