@@ -95,8 +95,8 @@ export default function InstantAccountScreen({
             value={displayName}
             onChange={onChangeDisplayName}
           />
-          <p>{tx('set_name_and_avatar_explain')}</p>
           <AdditionalActionInfo accountId={selectedAccountId} />
+          <p>{tx('set_name_and_avatar_explain')}</p>
           <div className={styles.welcomeScreenButtonGroup}>
             <Button
               className={styles.welcomeScreenButton}
