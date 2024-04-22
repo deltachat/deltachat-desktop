@@ -96,6 +96,7 @@ export default function InstantAccountScreen({
             onChange={onChangeDisplayName}
           />
           <p>{tx('set_name_and_avatar_explain')}</p>
+          <AdditionalActionInfo accountId={selectedAccountId} />
           <div className={styles.welcomeScreenButtonGroup}>
             <Button
               className={styles.welcomeScreenButton}
@@ -107,13 +108,13 @@ export default function InstantAccountScreen({
             </Button>
           </div>
         </DialogContent>
-        <ChatmailInstanceInfo accountId={selectedAccountId} />
+        <ChatmailInstanceInfo />
       </DialogBody>
     </>
   )
 }
 
-function ChatmailInstanceInfo(props: { accountId: number }) {
+function AdditionalActionInfo(props: { accountId: number }) {
   const tx = useTranslationFunction()
   const { welcomeQr } = useInstantOnboarding()
   const [contactAddress, setContactAddress] = useState('')
@@ -135,59 +136,45 @@ function ChatmailInstanceInfo(props: { accountId: number }) {
     loadContactName()
   }, [props.accountId, welcomeQr])
 
-  // When no QR code got scanned by the user we're creating an account on the
-  // default chatmail instance
   if (!welcomeQr) {
-    return (
-      <Callout className={styles.instantOnboardingCallout}>
-        <p>
-          {tx('instant_onboarding_default_info')} <HelpButton />
-        </p>
-        <p>
-          <ClickableLink href={INSTANCE_LIST_URL}>
-            {tx('instant_onboarding_show_more_instances')}
-          </ClickableLink>
-        </p>
-      </Callout>
-    )
+    return null
   }
 
-  if (welcomeQr.qr.kind === 'account') {
-    return (
-      <Callout className={styles.instantOnboardingCallout}>
-        <p>
-          {tx('instant_onboarding_instance_info')} <HelpButton />
-        </p>
-        <p>
-          <i>{welcomeQr.qr.domain}</i>
-        </p>
-        <p>
-          <ClickableLink href={INSTANCE_LIST_URL}>
-            {tx('instant_onboarding_show_more_instances')}
-          </ClickableLink>
-        </p>
-      </Callout>
-    )
-  } else if (welcomeQr.qr.kind === 'askVerifyGroup') {
-    return (
-      <Callout className={styles.instantOnboardingCallout}>
-        <p>
-          {tx('instant_onboarding_group_info', welcomeQr.qr.grpname)}{' '}
-          <HelpButton />
-        </p>
-      </Callout>
-    )
+  if (welcomeQr.qr.kind === 'askVerifyGroup') {
+    return <p>{tx('instant_onboarding_group_info', welcomeQr.qr.grpname)}</p>
   } else if (welcomeQr.qr.kind === 'askVerifyContact') {
-    return (
-      <Callout className={styles.instantOnboardingCallout}>
-        <p>
-          {tx('instant_onboarding_contact_info', contactAddress)} <HelpButton />
-        </p>
-      </Callout>
-    )
+    return <p>{tx('instant_onboarding_contact_info', contactAddress)}</p>
   }
 
   return null
+}
+
+function ChatmailInstanceInfo() {
+  const tx = useTranslationFunction()
+  const { welcomeQr } = useInstantOnboarding()
+
+  return (
+    <Callout className={styles.instantOnboardingCallout}>
+      <HelpButton />
+      {welcomeQr && welcomeQr.qr.kind === 'account' ? (
+        <>
+          <p>{tx('instant_onboarding_instance_info')}</p>
+          <p>
+            <i>{welcomeQr.qr.domain}</i>
+          </p>
+        </>
+      ) : (
+        // When no "account" QR code got scanned by the user we're creating an
+        // account on the default chatmail instance
+        <p>{tx('instant_onboarding_default_info')}</p>
+      )}
+      <p>
+        <ClickableLink href={INSTANCE_LIST_URL}>
+          {tx('instant_onboarding_show_more_instances')}
+        </ClickableLink>
+      </p>
+    </Callout>
+  )
 }
 
 function HelpButton() {
