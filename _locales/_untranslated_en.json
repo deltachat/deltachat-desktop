@@ -39,17 +39,8 @@
   "onboarding_create_instant_account": {
     "message": "Let's get started!"
   },
-  "onboarding_scan_qr_code": {
-    "message": "Scan QR Code"
-  },
   "onboarding_alternative_logins": {
     "message": "I already have a login"
-  },
-  "multidevice_setup_option": {
-    "message": "Add as second device"
-  },
-  "import_backup_option": {
-    "message": "Import backup"
   },
   "manual_account_setup_option": {
     "message": "Manual login"
@@ -80,8 +71,5 @@
   },
   "instant_onboarding_confirm_group": {
     "message": "Do you want to create a new DeltaChat profile and join the \"%1\" chat group?"
-  },
-  "instant_onboarding_confirm_label": {
-    "message": "Let's get started!"
   }
 }

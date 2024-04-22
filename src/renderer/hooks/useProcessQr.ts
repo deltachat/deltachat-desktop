@@ -97,7 +97,7 @@ export default function useProcessQR() {
         // Ask the user if they want to create a new account and join the group
         const userConfirmed = await openConfirmationDialog({
           message: tx('instant_onboarding_confirm_group', qr.grpname),
-          confirmLabel: tx('instant_onboarding_confirm_label'),
+          confirmLabel: tx('ok'),
         })
 
         if (!userConfirmed) {
@@ -113,7 +113,7 @@ export default function useProcessQR() {
 
         const userConfirmed = await openConfirmationDialog({
           message: tx('instant_onboarding_confirm_contact', contact.address),
-          confirmLabel: tx('instant_onboarding_confirm_label'),
+          confirmLabel: tx('ok'),
         })
 
         if (!userConfirmed) {

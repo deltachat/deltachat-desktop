@@ -62,7 +62,7 @@ export default function OnboardingScreen(props: Props) {
     <>
       <DialogHeader
         onClickBack={props.showBackButton ? onClickBackButton : undefined}
-        title={tx('onboarding_title')}
+        title={tx('welcome_desktop')}
       />
       <DialogBody>
         <DialogContent>
@@ -71,7 +71,7 @@ export default function OnboardingScreen(props: Props) {
             src='../images/intro1.png'
           />
           <p className={styles.welcomeScreenTitle}>
-            {tx('onboarding_subtitle')}
+            {tx('welcome_chat_over_email')}
           </p>
           <div className={styles.welcomeScreenButtonGroup}>
             <Button
@@ -86,7 +86,7 @@ export default function OnboardingScreen(props: Props) {
               type='secondary'
               onClick={onScanQRCode}
             >
-              {tx('onboarding_scan_qr_code')}
+              {tx('qrscan_title')}
             </Button>
             <Button
               className={styles.welcomeScreenButton}

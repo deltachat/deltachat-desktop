@@ -68,14 +68,14 @@ export default function AlternativeSetupsDialog({ onClose }: DialogProps) {
             className={styles.welcomeScreenButton}
             onClick={onClickSecondDevice}
           >
-            {tx('multidevice_setup_option')}
+            {tx('multidevice_receiver_title')}
           </Button>
           <Button
             type='secondary'
             className={styles.welcomeScreenButton}
             onClick={onClickImportBackup}
           >
-            {tx('import_backup_option')}
+            {tx('import_backup_title')}
           </Button>
           <Button
             type='secondary'
