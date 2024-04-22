@@ -47,8 +47,8 @@
     onStatusUpdate()
   })
 
-  ipcRenderer.on('webxdc.ephemeralStatusUpdate', (ev_, payload) => {
-    ephemeralCb(JSON.parse(payload))
+  ipcRenderer.on('webxdc.realtimeData', (ev_, payload) => {
+    ephemeralCb(payload)
   })
 
   /**
@@ -67,7 +67,7 @@
       onStatusUpdate()
       return promise
     },
-    setEphemeralUpdateListener: cb => {
+    setRealtimeListener: cb => {
       ephemeralCb = cb
       return ipcRenderer.invoke('webxdc.sendGossipAdvertisement')
     },
@@ -83,8 +83,8 @@
         JSON.stringify(update),
         description
       ),
-    sendEphemeralUpdate: payload =>
-      ipcRenderer.invoke('webxdc.sendEphemeralUpdate', JSON.stringify(payload)),
+    sendRealtimeData: payload =>
+      ipcRenderer.invoke('webxdc.sendRealtimeData', JSON.stringify(payload)),
     sendToChat: async content => {
       if (!content.file && !content.text) {
         return Promise.reject(

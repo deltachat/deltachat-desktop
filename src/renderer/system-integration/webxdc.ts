@@ -10,12 +10,9 @@ export function initWebxdc() {
   BackendRemote.on('WebxdcStatusUpdate', (accountId, { msgId }) => {
     runtime.notifyWebxdcStatusUpdate(accountId, msgId)
   })
-  BackendRemote.on(
-    'WebxdcEphemeralStatusUpdate',
-    (accountId, { msgId, statusUpdate }) => {
-      runtime.notifyWebxdcEphemeralStatusUpdate(accountId, msgId, statusUpdate)
-    }
-  )
+  BackendRemote.on('WebxdcRealtimeData', (accountId, { msgId, data }) => {
+    runtime.notifyWebxdcRealtimeData(accountId, msgId, data)
+  })
   BackendRemote.on('MsgsChanged', (accountId, { msgId }) => {
     runtime.notifyWebxdcMessageChanged(accountId, msgId)
   })
