@@ -39,8 +39,8 @@ export default function LargeProfileImage({
           ) : (
             <Icon
               className={styles.largeProfileImageDefaultIcon}
-              icon='person'
-              size={50}
+              icon='person-filled'
+              size={70}
             />
           )}
         </span>

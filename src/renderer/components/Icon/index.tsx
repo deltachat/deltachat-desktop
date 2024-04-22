@@ -20,6 +20,7 @@ export type IconName =
   | 'more'
   | 'open_in_new'
   | 'person'
+  | 'person-filled'
   | 'qr'
   | 'question_mark'
   | 'reaction'
