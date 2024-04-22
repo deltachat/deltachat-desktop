@@ -15,7 +15,7 @@ import { ScreenContext } from '../../../contexts/ScreenContext'
 import { Screens } from '../../../ScreenController'
 import { runtime } from '../../../runtime'
 
-// import styles from './styles.module.scss'
+import styles from './styles.module.scss'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
 
@@ -57,16 +57,31 @@ export default function AlternativeSetupsDialog({ onClose }: DialogProps) {
 
   return (
     <Dialog onClose={onClose}>
-      <DialogHeader onClose={onClose} />
+      <DialogHeader
+        title={tx('onboarding_alternative_logins')}
+        onClose={onClose}
+      />
       <DialogBody>
         <DialogContent>
-          <Button onClick={onClickSecondDevice}>
+          <Button
+            type='secondary'
+            className={styles.welcomeScreenButton}
+            onClick={onClickSecondDevice}
+          >
             {tx('multidevice_setup_option')}
           </Button>
-          <Button onClick={onClickImportBackup}>
+          <Button
+            type='secondary'
+            className={styles.welcomeScreenButton}
+            onClick={onClickImportBackup}
+          >
             {tx('import_backup_option')}
           </Button>
-          <Button onClick={onClickLogin}>
+          <Button
+            type='secondary'
+            className={styles.welcomeScreenButton}
+            onClick={onClickLogin}
+          >
             {tx('manual_account_setup_option')}
           </Button>
         </DialogContent>
