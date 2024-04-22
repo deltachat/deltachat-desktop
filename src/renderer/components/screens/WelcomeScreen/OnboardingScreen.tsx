@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react'
+import React from 'react'
 
 import AlertDialog from '../../dialogs/AlertDialog'
 import AlternativeSetupsDialog from './AlternativeSetupsDialog'
@@ -13,10 +13,11 @@ import { getLogger } from '../../../../shared/logger'
 import styles from './styles.module.scss'
 
 type Props = {
-  selectedAccountId: number
-  onUnSelectAccount: () => Promise<void>
   onExitWelcomeScreen: () => Promise<void>
   onNextStep: () => void
+  onUnSelectAccount: () => Promise<void>
+  selectedAccountId: number
+  showBackButton: boolean
 }
 
 const log = getLogger('renderer/components/OnboardingScreen')
@@ -24,7 +25,6 @@ const log = getLogger('renderer/components/OnboardingScreen')
 export default function OnboardingScreen(props: Props) {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
-  const [showBackButton, setShowBackButton] = useState(false)
 
   const onAlreadyHaveAccount = () => {
     openDialog(AlternativeSetupsDialog)
@@ -33,19 +33,6 @@ export default function OnboardingScreen(props: Props) {
   const onScanQRCode = () => {
     openDialog(ImportQrCode, { subtitle: tx('qrscan_hint') })
   }
-
-  useLayoutEffect(() => {
-    // Show back button when user has already created and configured accounts.
-    // On a fresh DC start we will not have any yet.
-    const checkAccounts = async () => {
-      const accounts = await BackendRemote.listAccounts()
-      if (accounts && accounts.length > 1) {
-        setShowBackButton(true)
-      }
-    }
-
-    checkAccounts()
-  }, [])
 
   const onClickBackButton = async () => {
     try {
@@ -74,7 +61,7 @@ export default function OnboardingScreen(props: Props) {
   return (
     <>
       <DialogHeader
-        onClickBack={showBackButton ? onClickBackButton : undefined}
+        onClickBack={props.showBackButton ? onClickBackButton : undefined}
         title={tx('onboarding_title')}
       />
       <DialogBody>
