@@ -1,7 +1,6 @@
 import { useCallback, useContext } from 'react'
 
 import CopyContentAlertDialog from '../components/CopyContentAlertDialog'
-import ProcessQrCodeDialog from '../components/ProcessQrCodeDialog'
 import QrErrorMessage from '../components/QrErrorMessage'
 import useAlertDialog from './dialog/useAlertDialog'
 import useConfirmationDialog from './dialog/useConfirmationDialog'
@@ -25,7 +24,7 @@ export default function useProcessQR() {
   const openMailtoLink = useOpenMailtoLink()
   const tx = useTranslationFunction()
   const { screen } = useContext(ScreenContext)
-  const { openDialog, closeDialog } = useDialog()
+  const { openDialog } = useDialog()
 
   const setConfigFromQrCatchingErrorInAlert = useCallback(
     async (qrContent: string) => {
@@ -60,9 +59,6 @@ export default function useProcessQR() {
         return
       }
 
-      const processDialogId = openDialog(ProcessQrCodeDialog)
-      const closeProcessDialog = () => closeDialog(processDialogId)
-
       let checkQr = null
       try {
         checkQr = await BackendRemote.rpc.checkQr(accountId, url)
@@ -71,7 +67,6 @@ export default function useProcessQR() {
       }
 
       if (checkQr === null) {
-        closeProcessDialog()
         await openAlertDialog({
           message: QrErrorMessage({ url }),
         })
@@ -91,7 +86,6 @@ export default function useProcessQR() {
         !allowedQrCodesOnWelcomeScreen.includes(checkQr.kind) &&
         screen !== Screens.Main
       ) {
-        closeProcessDialog()
         await openAlertDialog({
           message: tx('Please login first'),
         })
@@ -100,8 +94,6 @@ export default function useProcessQR() {
       }
 
       if (checkQr.kind === 'account' || checkQr.kind === 'login') {
-        closeProcessDialog()
-
         if (!skipLoginConfirmation) {
           // ask if user wants it
           const is_singular_term =
@@ -131,7 +123,6 @@ export default function useProcessQR() {
           })
 
           if (!userConfirmed) {
-            callback && callback()
             return
           }
         }
@@ -152,7 +143,6 @@ export default function useProcessQR() {
               window.__selectedAccountId,
               url
             )
-            closeProcessDialog()
             openDialog(ConfigureProgressDialog, {
               credentials: {},
               onSuccess: () => {
@@ -162,11 +152,9 @@ export default function useProcessQR() {
               },
             })
           } catch (err: any) {
-            closeProcessDialog()
             openAlertDialog({
               message: err.message || err.toString(),
             })
-            callback && callback()
             return
           }
         }
@@ -178,8 +166,6 @@ export default function useProcessQR() {
           checkQr.contact_id
         )
 
-        closeProcessDialog()
-
         const userConfirmed = await openConfirmationDialog({
           message: tx('ask_start_chat_with', contact.address),
           confirmLabel: tx('ok'),
@@ -190,8 +176,6 @@ export default function useProcessQR() {
           callback && callback(chatId)
         }
       } else if (checkQr.kind === 'askVerifyGroup') {
-        closeProcessDialog()
-
         const userConfirmed = await openConfirmationDialog({
           message: tx('qrscan_ask_join_group', checkQr.grpname),
           confirmLabel: tx('ok'),
@@ -199,6 +183,7 @@ export default function useProcessQR() {
 
         if (userConfirmed) {
           await BackendRemote.rpc.secureJoin(accountId, url)
+          callback && callback()
         }
         return
       } else if (checkQr.kind === 'fprOk') {
@@ -206,8 +191,6 @@ export default function useProcessQR() {
           accountId,
           checkQr.contact_id
         )
-
-        closeProcessDialog()
 
         const userConfirmed = await openConfirmationDialog({
           message: `The fingerprint of ${contact.displayName} is valid!`,
@@ -218,8 +201,6 @@ export default function useProcessQR() {
           callback && callback()
         }
       } else if (checkQr.kind === 'withdrawVerifyContact') {
-        closeProcessDialog()
-
         const userConfirmed = await openConfirmationDialog({
           message: tx('withdraw_verifycontact_explain'),
           header: tx('withdraw_qr_code'),
@@ -232,8 +213,6 @@ export default function useProcessQR() {
 
         callback && callback()
       } else if (checkQr.kind === 'reviveVerifyContact') {
-        closeProcessDialog()
-
         const userConfirmed = await openConfirmationDialog({
           message: tx('revive_verifycontact_explain'),
           header: tx('revive_qr_code'),
@@ -246,8 +225,6 @@ export default function useProcessQR() {
 
         callback && callback()
       } else if (checkQr.kind === 'withdrawVerifyGroup') {
-        closeProcessDialog()
-
         const userConfirmed = await openConfirmationDialog({
           message: tx('withdraw_verifygroup_explain', checkQr.grpname),
           header: tx('withdraw_qr_code'),
@@ -260,8 +237,6 @@ export default function useProcessQR() {
 
         callback && callback()
       } else if (checkQr.kind === 'reviveVerifyGroup') {
-        closeProcessDialog()
-
         const userConfirmed = await openConfirmationDialog({
           message: tx('revive_verifygroup_explain', checkQr.grpname),
           header: tx('revive_qr_code'),
@@ -274,8 +249,6 @@ export default function useProcessQR() {
 
         callback && callback()
       } else if (checkQr.kind === 'backup') {
-        closeProcessDialog()
-
         if (screen === Screens.Main) {
           await openAlertDialog({
             message: tx('Please logout first'),
@@ -289,7 +262,6 @@ export default function useProcessQR() {
         callback && callback()
         return
       } else {
-        closeProcessDialog()
         openDialog(CopyContentAlertDialog, {
           message:
             checkQr.kind === 'url'
@@ -301,7 +273,6 @@ export default function useProcessQR() {
       }
     },
     [
-      closeDialog,
       openAlertDialog,
       openConfirmationDialog,
       openDialog,

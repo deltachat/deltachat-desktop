@@ -4,9 +4,9 @@ import React, {
   useRef,
   useEffect,
   useLayoutEffect,
+  useCallback,
 } from 'react'
 import classNames from 'classnames'
-import QrReader from '@deltachat/react-qr-reader'
 
 import Dialog, {
   DialogBody,
@@ -15,6 +15,7 @@ import Dialog, {
   FooterActions,
 } from '../Dialog'
 import FooterActionButton from '../Dialog/FooterActionButton'
+import QrReader from '../QrReader'
 import { BackendRemote } from '../../backend-com'
 import { getLogger } from '../../../shared/logger'
 import { runtime } from '../../runtime'
@@ -78,9 +79,7 @@ export default function QrCode({
           onClose={onClose}
         />
       )}
-      {!showQrCode && (
-        <QrCodeScanQrInner subtitle={tx('qrscan_hint')} onClose={onClose} />
-      )}
+      {!showQrCode && <QrCodeScanQrInner onClose={onClose} />}
     </Dialog>
   )
 }
@@ -199,115 +198,59 @@ export function QrCodeShowQrInner({
   )
 }
 
-export function QrCodeScanQrInner(
-  props: React.PropsWithChildren<{
-    subtitle: string
-    onClose: () => void
-  }>
-) {
+export function QrCodeScanQrInner({
+  onClose,
+}: React.PropsWithChildren<{
+  onClose: () => void
+}>) {
   const tx = useTranslationFunction()
   const accountId = selectedAccountId()
   const processQr = useProcessQr()
   const { selectChat } = useChat()
   const processingQrCode = useRef(false)
 
-  const onDone = () => {
-    props.onClose()
+  const onDone = useCallback(() => {
+    onClose()
     processingQrCode.current = false
-  }
+  }, [onClose])
 
-  const handleScanResult = (chatId: number | null = null) => {
-    chatId && selectChat(chatId)
-    onDone()
-  }
+  const handleScanResult = useCallback(
+    (chatId: number | null = null) => {
+      chatId && selectChat(chatId)
+      onDone()
+    },
+    [onDone, selectChat]
+  )
 
-  const qrImageReader = useRef<any>()
-
-  const handleScan = async (data: string) => {
-    if (data && processingQrCode.current === false) {
-      processingQrCode.current = true
-      try {
-        await processQr(accountId, data, handleScanResult)
-      } catch (err) {
+  const handleScan = useCallback(
+    async (data: string) => {
+      if (data && !processingQrCode.current) {
+        processingQrCode.current = true
+        try {
+          await processQr(accountId, data, handleScanResult)
+        } catch (error: any) {
+          handleError(error)
+        }
         processingQrCode.current = false
-        throw err
+      } else if (processingQrCode.current === true) {
+        log.debug('Already processing a qr code')
       }
-    } else if (processingQrCode.current === true) {
-      log.debug('Already processing a qr code')
-    }
-  }
+    },
+    [accountId, handleScanResult, processQr]
+  )
 
   const handleError = (err: string) => {
     log.error('QrReader error: ' + err)
   }
 
-  const openImageDialog = () => {
-    qrImageReader.current.openImageDialog()
-  }
-
-  const { userFeedback } = useContext(ScreenContext)
-
-  const openMenu = useContextMenu([
-    {
-      label: tx('load_qr_code_as_image'),
-      action: openImageDialog,
-    },
-    {
-      label: tx('paste_from_clipboard'),
-      action: async () => {
-        try {
-          const data = await runtime.readClipboardText()
-          if (data) {
-            handleScan(data)
-          } else {
-            throw 'not data in clipboard'
-          }
-        } catch (error) {
-          log.error('Reading qrcodedata from clipboard failed: ', error)
-          userFeedback({
-            type: 'error',
-            text: 'Reading qrcodedata from clipboard failed: ' + error,
-          })
-        }
-      },
-    },
-  ])
-
   return (
     <>
       <DialogBody>
-        <div className='import-qr-code-dialog'>
-          <div style={{ marginBottom: '-19px' }}>
-            <div>
-              <QrReader
-                delay={300}
-                onError={handleError}
-                onScan={handleScan}
-                style={{ width: '100%' }}
-                facingMode='user'
-              />
-            </div>
-          </div>
-          <div className='qr-image-loader'>
-            <QrReader
-              delay={300}
-              ref={qrImageReader}
-              onError={handleError}
-              onScan={handleScan}
-              style={{ width: '100%' }}
-              legacyMode
-            />
-          </div>
-          <div className='scan-qr-red-line' />
-          <p className='scan-qr-description'>{props.subtitle}</p>
-        </div>
+        <QrReader onScan={handleScan} onError={handleError} />
       </DialogBody>
       <DialogFooter>
-        <FooterActions align='spaceBetween'>
-          <FooterActionButton onClick={openMenu}>
-            {tx('menu_more_options')}
-          </FooterActionButton>
-          <FooterActionButton onClick={props.onClose}>
+        <FooterActions>
+          <FooterActionButton onClick={onClose}>
             {tx('close')}
           </FooterActionButton>
         </FooterActions>

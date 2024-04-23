@@ -7,7 +7,7 @@
 - add quick-key CtrlOrCmd+q for submenu quit #3758
 - add window titlebar for html_email- and help window #3770 #3778
 - add quick key `Cmd+W`/`Ctrl+W` to close webxdc-, html_email- and help-window #3770 #3778
-
+- Accept images from clipboard in QR reader #3762
 
 ### Changed
 - Update translations (2024-04-04) #3746
@@ -18,6 +18,7 @@
 - Improve security: restrict file protocol #3769
 - Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.137.3`
 - Change chatlist to use new chatlist changed event from core #3268
+- Refactor QR code reader #3762
 
 ### Fixed
 - fix chat audit dialog was going out of viewport on smaller screens #3736
@@ -31,6 +32,7 @@
 - fix translation keys in keybindings cheat sheet dialog #3779
 - fix random scroll position and missing redraws when opening "Archive" #3268
 - fix: clear notifications for a contact request when blocking it #3268
+- Unmount QR scanner and disable camera correctly on abort or exit #3762
 
 <a id="1_44_1"></a>
 

@@ -206,8 +206,20 @@ export async function init(cwd: string, logHandler: LogHandler) {
     shell.openExternal(url)
   )
   ipcMain.handle('electron.shell.openPath', (_ev, path) => shell.openPath(path))
-  ipcMain.handle('electron.clipboard.readText', _ev => {
+  ipcMain.handle('electron.clipboard.readText', () => {
     return clipboard.readText()
+  })
+  ipcMain.handle('electron.clipboard.readImage', () => {
+    const image = clipboard.readImage()
+
+    // Electron just returns an empty base64 string (for example
+    // 'data:image/png;base64,' when no image was in the clipboard),
+    // we check that here and more conveniently return null instead
+    if (image.isEmpty()) {
+      return null
+    }
+
+    return image.toDataURL()
   })
   ipcMain.handle('electron.clipboard.writeText', (_ev, text) => {
     return clipboard.writeText(text)
