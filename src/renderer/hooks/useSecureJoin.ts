@@ -4,8 +4,8 @@ import useConfirmationDialog from './dialog/useConfirmationDialog'
 import useTranslationFunction from './useTranslationFunction'
 import { BackendRemote } from '../backend-com'
 
-import type { QrWithUrl } from './useProcessQr'
 import type { FullChat } from '@deltachat/jsonrpc-client/dist/generated/types'
+import type { QrWithUrl } from '../backend/qr'
 
 export default function useSecureJoin() {
   const openConfirmationDialog = useConfirmationDialog()

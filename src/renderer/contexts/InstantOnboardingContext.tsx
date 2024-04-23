@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import type { PropsWithChildren } from 'react'
-import type { QrWithUrl } from '../hooks/useProcessQr'
+import type { QrWithUrl } from '../backend/qr'
 
 type InstantOnboardingContextValue = {
   setShowInstantOnboarding: (value: boolean) => void

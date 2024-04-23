@@ -6,8 +6,8 @@ import { BackendRemote } from '../backend-com'
 import { ConfigureProgressDialog } from '../components/LoginForm'
 import { InstantOnboardingContext } from '../contexts/InstantOnboardingContext'
 
-import type { QrWithUrl } from './useProcessQr'
 import type { T } from '@deltachat/jsonrpc-client'
+import type { QrWithUrl } from '../backend/qr'
 
 const DEFAULT_CHATMAIL_INSTANCE_URL =
   'https://nine.testrun.org/cgi-bin/newemail.py'
