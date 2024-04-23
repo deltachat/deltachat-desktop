@@ -48,8 +48,13 @@ export default function useInstantOnboarding() {
         }
       }
 
-      setWelcomeQr(qrWithUrl)
       setShowInstantOnboarding(true)
+
+      // Since a QR code can be scanned by the user in literally any situation,
+      // also when the user already has an existing account and is logged in, we
+      // can store it here temporarily, adjust the UI state and bring the user
+      // back to the QR code process again when everything is ready.
+      setWelcomeQr(qrWithUrl)
     },
     [setWelcomeQr, setShowInstantOnboarding]
   )
@@ -84,13 +89,10 @@ export default function useInstantOnboarding() {
           openDialog(ConfigureProgressDialog, {
             onSuccess: async () => {
               // 3. Additionally we set the `selfavatar` / profile picture
-              // and `displayname` configuration for this account
+              // and `displayname` configuration for this account.
               //
               // Note: We need to set these profile settings _after_
-              // calling `configure` to make the UI aware of them already.
-              //
-              // @TODO: Not sure why it doesn't work otherwise, the
-              // configuration seems to be set correctly in both cases?
+              // calling `configure` to make the UI aware of them already
               if (profilePicture) {
                 await BackendRemote.rpc.setConfig(
                   accountId,
@@ -104,8 +106,8 @@ export default function useInstantOnboarding() {
                 displayName
               )
 
-              // 4. If the user created a new account from trying to contact another user
-              // or joining the group we continue with this now
+              // 4. If the user created a new account from trying to contact
+              // another user or joining the group we continue with this now
               let chatId: number | null = null
               if (welcomeQr) {
                 if (welcomeQr.qr.kind === 'askVerifyContact') {
@@ -115,6 +117,7 @@ export default function useInstantOnboarding() {
                 }
               }
 
+              // Return optional id of chat here so the UI can switch to it
               resolve(chatId)
             },
           })
