@@ -145,7 +145,7 @@ export default function useProcessQR() {
         return
       }
 
-      let parsed: QrWithUrl | null = null
+      let parsed: QrWithUrl
       try {
         parsed = await processQr(accountId, url)
       } catch (err) {
