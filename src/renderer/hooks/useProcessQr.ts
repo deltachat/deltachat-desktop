@@ -14,13 +14,10 @@ import { ReceiveBackupDialog } from '../components/dialogs/SetupMultiDevice'
 import { ScreenContext } from '../contexts/ScreenContext'
 import { Screens } from '../ScreenController'
 import { getLogger } from '../../shared/logger'
+import { processQr } from '../backend/qr'
 
 import type { T } from '@deltachat/jsonrpc-client'
-
-export type QrWithUrl = {
-  qr: T.Qr
-  url: string
-}
+import type { QrWithUrl } from '../backend/qr'
 
 const ALLOWED_QR_CODES_ON_WELCOME_SCREEN: T.Qr['kind'][] = [
   'account',
@@ -34,19 +31,16 @@ const ALLOWED_QR_CODES_ON_WELCOME_SCREEN: T.Qr['kind'][] = [
 
 const log = getLogger('renderer/hooks/useProcessQr')
 
-async function processQr(accountId: number, url: string): Promise<QrWithUrl> {
-  const qr = await BackendRemote.rpc.checkQr(accountId, url)
-
-  if (!qr) {
-    throw new Error()
-  }
-
-  return {
-    qr,
-    url,
-  }
-}
-
+/**
+ * Processes an unchecked string which was scanned from a QR code.
+ *
+ * If the string represents a valid DeltaChat URI-scheme, it initiatives
+ * various secure join, instant onboarding or other actions based on it.
+ *
+ * See list of supported DeltaChat URI-schemes here:
+ * - https://github.com/deltachat/interface/blob/master/uri-schemes.md
+ * - https://c.delta.chat/classdc__context__t.html#a34a865a52127ed2cc8c2f016f085086c
+ */
 export default function useProcessQR() {
   const tx = useTranslationFunction()
   const { screen } = useContext(ScreenContext)
@@ -73,6 +67,13 @@ export default function useProcessQR() {
     [openAlertDialog]
   )
 
+  // Users can enter the "Instant Onboarding" flow by scanning a DCACCOUNT,
+  // DC_ASK_VERIFYGROUP, or DC_ASK_VERIFYCONTACT code which essentially creates
+  // a new "chatmail" profile for them and connects them with the regarding
+  // contact or group if given.
+  //
+  // We ask the user if they really want to proceed with this action and
+  // accordingly prepare the onboarding.
   const startInstantOnboarding = useCallback(
     async (accountId: number, qrWithUrl: QrWithUrl) => {
       const { qr } = qrWithUrl
@@ -121,8 +122,10 @@ export default function useProcessQR() {
         }
       }
 
+      // Start instant onboarding flow for user
       await switchToInstantOnboarding(qrWithUrl)
 
+      // Log-out user if they already have an account
       if (screen !== Screens.Welcome) {
         // Log out first by switching to an (temporary) blank account
         const blankAccount = await BackendRemote.rpc.addAccount()
@@ -140,11 +143,14 @@ export default function useProcessQR() {
       url: string,
       callback?: (chatId?: number) => void
     ) => {
+      // Scanned string is actually a link to an email address
       if (url.toLowerCase().startsWith('mailto:')) {
         await openMailtoLink(accountId, url, callback)
         return
       }
 
+      // Check if given string is a valid DeltaChat URI-Scheme and return
+      // parsed object, otherwise show an error to the user
       let parsed: QrWithUrl
       try {
         parsed = await processQr(accountId, url)
@@ -161,6 +167,8 @@ export default function useProcessQR() {
 
       const { qr } = parsed
 
+      // Some actions can only be executed when the user already has an account
+      // and is logged in
       if (
         !ALLOWED_QR_CODES_ON_WELCOME_SCREEN.includes(qr.kind) &&
         screen !== Screens.Main
@@ -172,21 +180,23 @@ export default function useProcessQR() {
         return
       }
 
-      // Ask the user if they want to login with given credentials
-      if (qr.kind === 'login') {
-        await startInstantOnboarding(accountId, parsed)
-        callback && callback()
-        return
-      }
-
-      // Ask the user if they want to create a profile on the given chatmail instance
+      // DCACCOUNT: Ask the user if they want to create a new profile on the
+      // given chatmail instance
       if (qr.kind === 'account') {
         await startInstantOnboarding(accountId, parsed)
         callback && callback()
         return
       }
 
-      // Ask whether to verify the contact; if so, start the protocol with secure join
+      // DCLOGIN: Ask the user if they want to login with given credentials
+      if (qr.kind === 'login') {
+        await startInstantOnboarding(accountId, parsed)
+        callback && callback()
+        return
+      }
+
+      // DC_ASK_VERIFYCONTACT: Ask whether to verify the contact; if so, start
+      // the protocol with secure join
       if (qr.kind === 'askVerifyContact') {
         if (screen === Screens.Welcome) {
           // Ask user to create a new account with instant onboarding flow before they
@@ -202,7 +212,8 @@ export default function useProcessQR() {
         return
       }
 
-      // Ask whether to join the group; if so, start the protocol with secure join
+      // DC_ASK_VERIFYGROUP: Ask whether to join the group; if so, start the
+      // protocol with secure join
       if (qr.kind === 'askVerifyGroup') {
         if (screen === Screens.Welcome) {
           // Ask user to create a new account with instant onboarding flow before they
@@ -218,6 +229,23 @@ export default function useProcessQR() {
         return
       }
 
+      // DCBACKUP: Ask the user if they want to set up a new device
+      if (qr.kind === 'backup') {
+        if (screen === Screens.Main) {
+          await openAlertDialog({
+            message: tx('Please logout first'),
+          })
+          callback && callback()
+        } else {
+          openDialog(ReceiveBackupDialog, {
+            QrWithToken: url,
+          })
+        }
+        callback && callback()
+        return
+      }
+
+      // DC_FPR_OK: Verify contact fingerprint
       if (qr.kind === 'fprOk') {
         const contact = await BackendRemote.rpc.getContact(
           accountId,
@@ -232,7 +260,11 @@ export default function useProcessQR() {
         if (userConfirmed) {
           callback && callback()
         }
-      } else if (qr.kind === 'withdrawVerifyContact') {
+        return
+      }
+
+      // DC_WITHDRAW_VERIFYCONTACT: Ask user to withdraw verified contact
+      if (qr.kind === 'withdrawVerifyContact') {
         const userConfirmed = await openConfirmationDialog({
           message: tx('withdraw_verifycontact_explain'),
           header: tx('withdraw_qr_code'),
@@ -244,7 +276,12 @@ export default function useProcessQR() {
         }
 
         callback && callback()
-      } else if (qr.kind === 'reviveVerifyContact') {
+        return
+      }
+
+      // DC_REVIVE_VERIFYCONTACT: Ask user to revive withdrawn contact
+      // verification
+      if (qr.kind === 'reviveVerifyContact') {
         const userConfirmed = await openConfirmationDialog({
           message: tx('revive_verifycontact_explain'),
           header: tx('revive_qr_code'),
@@ -256,7 +293,11 @@ export default function useProcessQR() {
         }
 
         callback && callback()
-      } else if (qr.kind === 'withdrawVerifyGroup') {
+        return
+      }
+
+      // DC_WITHDRAW_VERIFYGROUP: Ask user to withdraw verified group
+      if (qr.kind === 'withdrawVerifyGroup') {
         const userConfirmed = await openConfirmationDialog({
           message: tx('withdraw_verifygroup_explain', qr.grpname),
           header: tx('withdraw_qr_code'),
@@ -268,7 +309,12 @@ export default function useProcessQR() {
         }
 
         callback && callback()
-      } else if (qr.kind === 'reviveVerifyGroup') {
+        return
+      }
+
+      // DC_REVIVE_VERIFYGROUP: Ask user to revive from withdrawn verified
+      // group
+      if (qr.kind === 'reviveVerifyGroup') {
         const userConfirmed = await openConfirmationDialog({
           message: tx('revive_verifygroup_explain', qr.grpname),
           header: tx('revive_qr_code'),
@@ -280,29 +326,19 @@ export default function useProcessQR() {
         }
 
         callback && callback()
-      } else if (qr.kind === 'backup') {
-        if (screen === Screens.Main) {
-          await openAlertDialog({
-            message: tx('Please logout first'),
-          })
-          callback && callback()
-        } else {
-          openDialog(ReceiveBackupDialog, {
-            QrWithToken: url,
-          })
-        }
-        callback && callback()
         return
-      } else {
-        openDialog(CopyContentAlertDialog, {
-          message:
-            qr.kind === 'url'
-              ? tx('qrscan_contains_url', url)
-              : tx('qrscan_contains_text', url),
-          content: url,
-          cb: callback,
-        })
       }
+
+      // Just show the contents of the scanned QR code if it is correct but
+      // we don't know what to do with it ..
+      openDialog(CopyContentAlertDialog, {
+        message:
+          qr.kind === 'url'
+            ? tx('qrscan_contains_url', url)
+            : tx('qrscan_contains_text', url),
+        content: url,
+        cb: callback,
+      })
     },
     [
       openAlertDialog,
