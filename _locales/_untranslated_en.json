@@ -30,12 +30,6 @@
   "camera_access_failed": {
     "message": "Could not access video camera. You might want to check your video permissions or if the camera is used already by another program"
   },
-  "onboarding_title": {
-    "message": "Welcome to DeltaChat!"
-  },
-  "onboarding_subtitle": {
-    "message": "Chat over E-Mail"
-  },
   "onboarding_create_instant_account": {
     "message": "Let's get started!"
   },
