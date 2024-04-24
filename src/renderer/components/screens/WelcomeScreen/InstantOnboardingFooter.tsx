@@ -2,7 +2,6 @@ import React from 'react'
 
 import Callout from '../../Callout'
 import ClickableLink from '../../helpers/ClickableLink'
-import HelpButton from './HelpButton'
 import ImportQrCode from '../../dialogs/ImportQrCode'
 import useDialog from '../../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
@@ -20,7 +19,6 @@ export default function InstantOnboardingFooter() {
 
   return (
     <Callout className={styles.instantOnboardingCallout}>
-      <HelpButton />
       <p>
         <a onClick={onScanQRCode}>{tx('qrscan_title')}</a>
       </p>
