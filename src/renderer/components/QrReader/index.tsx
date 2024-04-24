@@ -7,9 +7,9 @@ import React, {
 } from 'react'
 import scanQrCode from 'jsqr'
 import classNames from 'classnames'
-import { Spinner } from '@blueprintjs/core'
 
 import Icon from '../Icon'
+import Spinner from '../Spinner'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import { ScreenContext } from '../../contexts/ScreenContext'
