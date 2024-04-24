@@ -3,7 +3,6 @@ import React from 'react'
 import AlertDialog from '../../dialogs/AlertDialog'
 import AlternativeSetupsDialog from './AlternativeSetupsDialog'
 import Button from '../../Button'
-import QrScanButton from './QrScanButton'
 import useDialog from '../../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { BackendRemote, EffectfulBackendActions } from '../../../backend-com'
@@ -59,9 +58,7 @@ export default function OnboardingScreen(props: Props) {
       <DialogHeader
         onClickBack={props.showBackButton ? onClickBackButton : undefined}
         title={tx('welcome_desktop')}
-      >
-        <QrScanButton />
-      </DialogHeader>
+      />
       <DialogBody>
         <DialogContent>
           <img

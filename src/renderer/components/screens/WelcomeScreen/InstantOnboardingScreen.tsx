@@ -15,7 +15,6 @@ import { ScreenContext } from '../../../contexts/ScreenContext'
 import { Screens } from '../../../ScreenController'
 
 import styles from './styles.module.scss'
-import QrScanButton from './QrScanButton'
 
 type Props = {
   onCancel: () => void
@@ -82,9 +81,7 @@ export default function InstantOnboardingScreen({
       <DialogHeader
         onClickBack={onCancel}
         title={tx('instant_onboarding_title')}
-      >
-        <QrScanButton />
-      </DialogHeader>
+      />
       <DialogBody className={styles.welcomeScreenBody}>
         <DialogContent paddingBottom>
           <ProfileImageSelector
