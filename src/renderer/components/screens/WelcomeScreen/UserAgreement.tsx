@@ -33,7 +33,7 @@ export default function UserAgreement({ onChange, checked }: Props) {
         {!isDefaultInstance && welcomeQr && welcomeQr.qr.kind === 'account' && (
           <>
             {tx('instant_onboarding_agree_instance')}{' '}
-            <ClickableLink href={welcomeQr.qr.domain}>
+            <ClickableLink href={`https://${welcomeQr.qr.domain}`}>
               {welcomeQr.qr.domain}
             </ClickableLink>
           </>
