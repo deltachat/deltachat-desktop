@@ -20,12 +20,11 @@ export default function InstantOnboardingFooter() {
   return (
     <Callout className={styles.instantOnboardingCallout}>
       <p>
-        <a onClick={onScanQRCode}>{tx('qrscan_title')}</a>
-      </p>
-      <p>
         <ClickableLink href={CHATMAIL_INSTANCES_LIST_URL}>
           {tx('instant_onboarding_show_more_instances')}
         </ClickableLink>
+        {' • '}
+        <a onClick={onScanQRCode}>{tx('qrscan_title')}</a>
       </p>
     </Callout>
   )
