@@ -44,10 +44,8 @@ export default function InstantOnboardingScreen({
     setDisplayName(event.target.value)
   }
 
-  const onUserAgreementChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setHasUserAgreement(event.target.checked)
+  const onUserAgreementChange = (value: boolean) => {
+    setHasUserAgreement(value)
   }
 
   const onConfirm = async () => {
