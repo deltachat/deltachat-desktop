@@ -231,10 +231,10 @@ export default class ScreenController extends Component {
     this.userFeedback({ type: 'success', text })
   }
 
-  renderScreen() {
+  renderScreen(key: React.Key | null | undefined) {
     switch (this.state.screen) {
       case Screens.Main:
-        return <MainScreen accountId={this.selectedAccountId} />
+        return <MainScreen accountId={this.selectedAccountId} key={key} />
       case Screens.Login:
         if (this.selectedAccountId === undefined) {
           throw new Error('Selected account not defined')
@@ -243,6 +243,7 @@ export default class ScreenController extends Component {
           <AccountSetupScreen
             selectAccount={this.selectAccount}
             accountId={this.selectedAccountId}
+            key={key}
           />
         )
       case Screens.Welcome:
@@ -254,6 +255,7 @@ export default class ScreenController extends Component {
             selectedAccountId={this.selectedAccountId}
             onUnSelectAccount={this.unSelectAccount}
             onExitWelcomeScreen={this.onExitWelcomeScreen}
+            key={key}
           />
         )
       case Screens.DeleteAccount:
@@ -264,6 +266,7 @@ export default class ScreenController extends Component {
           <AccountDeletionScreen
             selectedAccountId={this.selectedAccountId}
             onDeleteAccount={this.onDeleteAccount.bind(this)}
+            key={key}
           />
         )
       case Screens.NoAccountSelected:
@@ -292,14 +295,7 @@ export default class ScreenController extends Component {
           }}
         >
           <InstantOnboardingProvider>
-            {/*
-              The key attribute here forces a clean re-rendering when the
-              account changes. We needs this to reset the chat context state.
-            */}
-            <ChatProvider
-              key={this.selectedAccountId}
-              accountId={this.selectedAccountId}
-            >
+            <ChatProvider accountId={this.selectedAccountId}>
               <ContextMenuProvider>
                 <DialogContextProvider>
                   <RuntimeAdapter accountId={this.selectedAccountId} />
@@ -313,7 +309,7 @@ export default class ScreenController extends Component {
                           this
                         )}
                       />
-                      {this.renderScreen()}
+                      {this.renderScreen(this.selectedAccountId)}
                     </div>
                   </KeybindingsContextProvider>
                 </DialogContextProvider>
