@@ -37,9 +37,11 @@
 - Unmount QR scanner and disable camera correctly on abort or exit #3762
 - Close reactions bar on emoji selection #3788
 - fix Clicking notification does not bring Delta Chat to foreground on Windows #3793
+- Prevent re-rendering of account sidebar when switching account #3789
 
 ### Removed
 - remove disabled composer reason, now composer is just always hidden when `chat.canSend` is `false` #3791
+
 
 <a id="1_44_1"></a>
 
