@@ -13,11 +13,16 @@ import type { BaseEmoji } from 'emoji-mart/index'
 type Props = {
   messageId: number
   myReaction?: string
+  onClick: () => void
 }
 
 const DEFAULT_EMOJIS = ['👍', '👎', '❤️', '😂', '🙁']
 
-export default function ReactionsBar({ messageId, myReaction }: Props) {
+export default function ReactionsBar({
+  onClick,
+  messageId,
+  myReaction,
+}: Props) {
   const [showAllEmojis, setShowAllEmojis] = useState(false)
   const accountId = selectedAccountId()
 
@@ -27,6 +32,8 @@ export default function ReactionsBar({ messageId, myReaction }: Props) {
     } else {
       await BackendRemote.rpc.sendReaction(accountId, messageId, [emoji])
     }
+
+    onClick()
   }
 
   const handleShowAllEmojis = (
