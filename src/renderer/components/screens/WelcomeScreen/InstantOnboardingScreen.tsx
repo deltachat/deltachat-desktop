@@ -27,7 +27,7 @@ type Props = {
 // @TODO: Insert correct URL
 const INSTANCE_LIST_URL = 'https://delta.chat/'
 
-export default function InstantAccountScreen({
+export default function InstantOnboardingScreen({
   onCancel,
   selectedAccountId,
 }: Props) {

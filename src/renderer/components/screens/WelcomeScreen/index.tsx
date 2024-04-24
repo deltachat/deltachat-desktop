@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useState } from 'react'
 
 import Dialog from '../../Dialog'
 import ImageBackdrop from '../../ImageBackdrop'
-import InstantAccountScreen from './InstantAccountScreen'
+import InstantOnboardingScreen from './InstantOnboardingScreen'
 import OnboardingScreen from './OnboardingScreen'
 import useInstantOnboarding from '../../../hooks/useInstantOnboarding'
 import { BackendRemote } from '../../../backend-com'
@@ -49,7 +49,7 @@ export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
             {...props}
           />
         ) : (
-          <InstantAccountScreen
+          <InstantOnboardingScreen
             selectedAccountId={selectedAccountId}
             onCancel={() => resetInstantOnboarding()}
           />
