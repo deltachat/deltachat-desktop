@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { createRef } from 'react'
 import { Component } from 'react'
 import { DcEventType } from '@deltachat/jsonrpc-client'
 import { debounce } from 'debounce'
@@ -19,7 +19,7 @@ import SettingsStoreInstance from './stores/settings'
 import { NoAccountSelectedScreen } from './components/screens/NoAccountSelectedScreen/NoAccountSelectedScreen'
 import AccountDeletionScreen from './components/screens/AccountDeletionScreen/AccountDeletionScreen'
 import RuntimeAdapter from './components/RuntimeAdapter'
-import { ChatProvider } from './contexts/ChatContext'
+import { ChatProvider, UnselectChat } from './contexts/ChatContext'
 import { ContextMenuProvider } from './contexts/ContextMenuContext'
 import { InstantOnboardingProvider } from './contexts/InstantOnboardingContext'
 
@@ -43,6 +43,7 @@ export default class ScreenController extends Component {
   state: { message: userFeedback | false; screen: Screens }
   selectedAccountId: number | undefined
   lastAccountBeforeAddingNewAccount: number | null = null
+  unselectChatRef = createRef<UnselectChat>()
 
   constructor(public props: {}) {
     super(props)
@@ -130,6 +131,9 @@ export default class ScreenController extends Component {
     if (this.selectedAccountId === undefined) {
       return
     }
+
+    this.unselectChatRef.current?.()
+
     const previousAccountId = this.selectedAccountId
 
     SettingsStoreInstance.effect.clear()
@@ -295,7 +299,10 @@ export default class ScreenController extends Component {
           }}
         >
           <InstantOnboardingProvider>
-            <ChatProvider accountId={this.selectedAccountId}>
+            <ChatProvider
+              accountId={this.selectedAccountId}
+              unselectChatRef={this.unselectChatRef}
+            >
               <ContextMenuProvider>
                 <DialogContextProvider>
                   <RuntimeAdapter accountId={this.selectedAccountId} />

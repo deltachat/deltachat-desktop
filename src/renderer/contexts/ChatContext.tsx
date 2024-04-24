@@ -4,7 +4,7 @@ import { ActionEmitter, KeybindAction } from '../keybindings'
 import { markChatAsSeen, saveLastChatId } from '../backend/chat'
 import { BackendRemote } from '../backend-com'
 
-import type { PropsWithChildren } from 'react'
+import type { MutableRefObject, PropsWithChildren, Ref } from 'react'
 import type { T } from '@deltachat/jsonrpc-client'
 
 export enum ChatView {
@@ -30,6 +30,11 @@ export type ChatContextValue = {
 
 type Props = {
   accountId?: number
+  /** 
+   * the ref gives us a handle to reset the component without moving it up in the hierarchy.
+   * a class component would give us the option to call methods on the component,
+   * but we are using a functional component here so we need to pass this as a property instead*/
+  unselectChatRef: MutableRefObject<UnselectChat>
 }
 
 export const ChatContext = React.createContext<ChatContextValue | null>(null)
@@ -37,6 +42,7 @@ export const ChatContext = React.createContext<ChatContextValue | null>(null)
 export const ChatProvider = ({
   children,
   accountId,
+  unselectChatRef
 }: PropsWithChildren<Props>) => {
   const [activeView, setActiveView] = useState(ChatView.MessageList)
   const [chat, setChat] = useState<T.FullChat | undefined>()
@@ -99,6 +105,8 @@ export const ChatProvider = ({
     setChatId(undefined)
     setChat(undefined)
   }, [])
+
+  unselectChatRef.current = unselectChat
 
   // Subscribe to events coming from the core
   useEffect(() => {
