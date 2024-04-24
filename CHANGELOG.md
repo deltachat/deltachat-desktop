@@ -33,6 +33,7 @@
 - fix random scroll position and missing redraws when opening "Archive" #3268
 - fix: clear notifications for a contact request when blocking it #3268
 - Unmount QR scanner and disable camera correctly on abort or exit #3762
+- Prevent re-rendering of all components on account id change #3787 
 
 <a id="1_44_1"></a>
 
