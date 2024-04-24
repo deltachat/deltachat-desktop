@@ -158,7 +158,7 @@ function useSendToChatAction() {
       const chat = await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
       const draft = await BackendRemote.rpc.getDraft(accountId, chatId)
 
-      selectChat(chatId)
+      selectChat(accountId, chatId)
 
       if (draft) {
         // ask if the draft should be replaced

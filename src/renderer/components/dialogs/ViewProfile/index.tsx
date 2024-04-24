@@ -139,7 +139,7 @@ export function ViewProfileInner({
   const isSelfChat = contact.id === C.DC_CONTACT_ID_SELF
 
   const onChatClick = (chatId: number) => {
-    selectChat(chatId)
+    selectChat(accountId, chatId)
     onClose()
   }
   const onSendMessage = async () => {

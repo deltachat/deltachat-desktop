@@ -19,10 +19,21 @@ import SettingsStoreInstance from './stores/settings'
 import { NoAccountSelectedScreen } from './components/screens/NoAccountSelectedScreen/NoAccountSelectedScreen'
 import AccountDeletionScreen from './components/screens/AccountDeletionScreen/AccountDeletionScreen'
 import RuntimeAdapter from './components/RuntimeAdapter'
-import { ChatProvider } from './contexts/ChatContext'
 import { ContextMenuProvider } from './contexts/ContextMenuContext'
+import useChat from './hooks/chat/useChat'
+
+import type { UnselectChat } from './contexts/ChatContext'
 
 const log = getLogger('renderer/ScreenController')
+
+type Props = {
+  unselectChat: UnselectChat
+}
+
+type State = {
+  message: userFeedback | false
+  screen: Screens
+}
 
 export interface userFeedback {
   type: 'error' | 'success'
@@ -38,12 +49,11 @@ export enum Screens {
   NoAccountSelected = 'noAccountSelected',
 }
 
-export default class ScreenController extends Component {
-  state: { message: userFeedback | false; screen: Screens }
+class ScreenController extends Component<Props, State> {
   selectedAccountId: number | undefined
   lastAccountBeforeAddingNewAccount: number | null = null
 
-  constructor(public props: {}) {
+  constructor(props: Props) {
     super(props)
     this.state = {
       message: false,
@@ -129,6 +139,9 @@ export default class ScreenController extends Component {
     if (this.selectedAccountId === undefined) {
       return
     }
+
+    this.props.unselectChat()
+
     const previousAccountId = this.selectedAccountId
 
     SettingsStoreInstance.effect.clear()
@@ -290,38 +303,38 @@ export default class ScreenController extends Component {
             screen: this.state.screen,
           }}
         >
-          {/*
-            The key attribute here forces a clean re-rendering when the
-            account changes. We needs this to reset the chat context state.
-          */}
-          <ChatProvider
-            key={this.selectedAccountId}
-            accountId={this.selectedAccountId}
-          >
-            <ContextMenuProvider>
-              <DialogContextProvider>
-                <RuntimeAdapter accountId={this.selectedAccountId} />
-                <KeybindingsContextProvider>
-                  <div className='main-container'>
-                    <AccountListSidebar
-                      selectedAccountId={this.selectedAccountId}
-                      onAddAccount={this.addAndSelectAccount.bind(this)}
-                      onSelectAccount={this.selectAccount.bind(this)}
-                      openAccountDeletionScreen={this.openAccountDeletionScreen.bind(
-                        this
-                      )}
-                    />
-                    {this.renderScreen()}
-                  </div>
-                </KeybindingsContextProvider>
-              </DialogContextProvider>
-            </ContextMenuProvider>
-          </ChatProvider>
+          <ContextMenuProvider>
+            <DialogContextProvider>
+              <RuntimeAdapter accountId={this.selectedAccountId} />
+              <KeybindingsContextProvider>
+                <div className='main-container'>
+                  <AccountListSidebar
+                    selectedAccountId={this.selectedAccountId}
+                    onAddAccount={this.addAndSelectAccount.bind(this)}
+                    onSelectAccount={this.selectAccount.bind(this)}
+                    openAccountDeletionScreen={this.openAccountDeletionScreen.bind(
+                      this
+                    )}
+                  />
+                  {this.renderScreen()}
+                </div>
+              </KeybindingsContextProvider>
+            </DialogContextProvider>
+          </ContextMenuProvider>
         </ScreenContext.Provider>
       </div>
     )
   }
 }
+
+// Workaround to introduce `useChat` hook in classic, class-based React
+// component
+function WithUnselectChatHook() {
+  const { unselectChat } = useChat()
+  return <ScreenController unselectChat={unselectChat} />
+}
+
+export default WithUnselectChatHook
 
 export function selectedAccountId(): number {
   const selectedAccountId = window.__selectedAccountId

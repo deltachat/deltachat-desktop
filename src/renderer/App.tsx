@@ -2,15 +2,16 @@ import React, { useState, useEffect, useLayoutEffect } from 'react'
 import moment from 'moment'
 
 import ScreenController from './ScreenController'
-import { translate, LocaleData } from '../shared/localize'
-import { ThemeManager, ThemeContext } from './ThemeManager'
-import { CrashScreen } from './components/screens/CrashScreen'
-import { runtime } from './runtime'
-import { updateCoreStrings } from './stockStrings'
-import { getLogger } from '../shared/logger'
 import { BackendRemote } from './backend-com'
-import { runPostponedFunctions } from './onready'
+import { ChatProvider } from './contexts/ChatContext'
+import { CrashScreen } from './components/screens/CrashScreen'
 import { I18nContext } from './contexts/I18nContext'
+import { ThemeManager, ThemeContext } from './ThemeManager'
+import { getLogger } from '../shared/logger'
+import { runPostponedFunctions } from './onready'
+import { runtime } from './runtime'
+import { translate, LocaleData } from '../shared/localize'
+import { updateCoreStrings } from './stockStrings'
 
 export default function App(_props: any) {
   const [localeData, setLocaleData] = useState<LocaleData | null>(null)
@@ -75,7 +76,9 @@ export default function App(_props: any) {
     <CrashScreen>
       <ThemeContextWrapper>
         <I18nContext.Provider value={window.static_translate}>
-          <ScreenController />
+          <ChatProvider>
+            <ScreenController />
+          </ChatProvider>
         </I18nContext.Provider>
       </ThemeContextWrapper>
     </CrashScreen>

@@ -73,12 +73,16 @@ export default function MainScreen({ accountId }: Props) {
   })
 
   const onChatClick = (chatId: number) => {
+    if (!accountId) {
+      throw new Error('accountId must be set at this point')
+    }
+
     if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) {
       setArchivedChatsSelected(true)
       return
     }
 
-    selectChat(chatId)
+    selectChat(accountId, chatId)
   }
 
   const searchChats = (queryStr: string, chatId: number | null = null) => {

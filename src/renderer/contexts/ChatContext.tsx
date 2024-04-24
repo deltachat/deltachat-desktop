@@ -15,7 +15,7 @@ export enum ChatView {
 
 export type SetView = (nextView: ChatView) => void
 
-export type SelectChat = (chatId: number) => Promise<void>
+export type SelectChat = (accountId: number, chatId: number) => Promise<void>
 
 export type UnselectChat = () => void
 
@@ -28,16 +28,9 @@ export type ChatContextValue = {
   unselectChat: UnselectChat
 }
 
-type Props = {
-  accountId?: number
-}
-
 export const ChatContext = React.createContext<ChatContextValue | null>(null)
 
-export const ChatProvider = ({
-  children,
-  accountId,
-}: PropsWithChildren<Props>) => {
+export const ChatProvider = ({ children }: PropsWithChildren<{}>) => {
   const [activeView, setActiveView] = useState(ChatView.MessageList)
   const [chat, setChat] = useState<T.FullChat | undefined>()
   const [chatId, setChatId] = useState<number | undefined>()
@@ -47,11 +40,7 @@ export const ChatProvider = ({
   }, [])
 
   const selectChat = useCallback<SelectChat>(
-    async (nextChatId: number) => {
-      if (!accountId) {
-        throw new Error('can not select chat when no `accountId` is given')
-      }
-
+    async (accountId: number, nextChatId: number) => {
       // Jump to last message if user clicked chat twice
       // @TODO: We probably want this to be part of the UI logic instead
       if (nextChatId === chatId) {
@@ -83,16 +72,19 @@ export const ChatProvider = ({
           : KeybindAction.ChatList_SwitchToNormalView
       )
     },
-    [accountId, chatId]
+    [chatId]
   )
 
-  const refreshChat = useCallback(async () => {
-    if (!accountId || !chatId) {
-      return
-    }
+  const refreshChat = useCallback(
+    async (accountId: number) => {
+      if (!chatId) {
+        return
+      }
 
-    setChat(await BackendRemote.rpc.getFullChatById(accountId, chatId))
-  }, [accountId, chatId])
+      setChat(await BackendRemote.rpc.getFullChatById(accountId, chatId))
+    },
+    [chatId]
+  )
 
   const unselectChat = useCallback<UnselectChat>(() => {
     setActiveView(ChatView.MessageList)
@@ -106,7 +98,7 @@ export const ChatProvider = ({
       eventAccountId: number,
       { chatId: eventChatId }: { chatId: number }
     ) => {
-      if (eventAccountId !== accountId) {
+      if (eventAccountId !== window.__selectedAccountId) {
         return
       }
 
@@ -114,14 +106,14 @@ export const ChatProvider = ({
         return
       }
 
-      refreshChat()
+      refreshChat(eventAccountId)
     }
 
     const onContactsModified = (
       eventAccountId: number,
       { contactId }: { contactId: number | null }
     ) => {
-      if (eventAccountId !== accountId) {
+      if (eventAccountId !== window.__selectedAccountId) {
         return
       }
 
@@ -137,7 +129,7 @@ export const ChatProvider = ({
         return
       }
 
-      refreshChat()
+      refreshChat(eventAccountId)
     }
 
     BackendRemote.on('ChatModified', onChatModified)
@@ -149,7 +141,7 @@ export const ChatProvider = ({
       BackendRemote.off('ChatEphemeralTimerModified', onChatModified)
       BackendRemote.off('ContactsChanged', onContactsModified)
     }
-  }, [accountId, chat, chatId, refreshChat])
+  }, [chat, chatId, refreshChat])
 
   const value: ChatContextValue = {
     activeView,
