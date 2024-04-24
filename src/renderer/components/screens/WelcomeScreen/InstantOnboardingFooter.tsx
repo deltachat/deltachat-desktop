@@ -15,7 +15,7 @@ export default function InstantOnboardingFooter() {
   const { openDialog } = useDialog()
 
   const onScanQRCode = () => {
-    openDialog(ImportQrCode, { subtitle: tx('qrscan_hint') })
+    openDialog(ImportQrCode)
   }
 
   return (
