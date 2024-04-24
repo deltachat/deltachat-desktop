@@ -34,7 +34,6 @@ export default function InstantOnboardingScreen({
 
   const [displayName, setDisplayName] = useState('')
   const [profilePicture, setProfilePicture] = useState<string | undefined>()
-  const [hasUserAgreement, setHasUserAgreement] = useState(false)
 
   const onChangeProfileImage = (path: string) => {
     setProfilePicture(path)
@@ -42,10 +41,6 @@ export default function InstantOnboardingScreen({
 
   const onChangeDisplayName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDisplayName(event.target.value)
-  }
-
-  const onUserAgreementChange = (value: boolean) => {
-    setHasUserAgreement(value)
   }
 
   const onConfirm = async () => {
@@ -98,14 +93,11 @@ export default function InstantOnboardingScreen({
           <p>{tx('set_name_and_avatar_explain')}</p>
           <div className={styles.welcomeScreenButtonGroup}>
             <div className={styles.instantOnboardingAgreement}>
-              <UserAgreement
-                onChange={onUserAgreementChange}
-                checked={hasUserAgreement}
-              />
+              <UserAgreement />
             </div>
             <Button
               className={styles.welcomeScreenButton}
-              disabled={displayName.length === 0 || !hasUserAgreement}
+              disabled={displayName.length === 0}
               type='primary'
               onClick={onConfirm}
             >

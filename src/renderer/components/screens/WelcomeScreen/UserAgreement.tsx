@@ -1,7 +1,6 @@
 import React from 'react'
 
 import ClickableLink from '../../helpers/ClickableLink'
-import Switch from '../../Switch'
 import useInstantOnboarding from '../../../hooks/useInstantOnboarding'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import {
@@ -9,36 +8,45 @@ import {
   isQRWithDefaultInstance,
 } from './chatmailInstances'
 
-type Props = {
-  onChange: (value: boolean) => void
-  checked: boolean
+import type { QrWithUrl } from '../../../backend/qr'
+
+const URL_REGEX = /(https?:\/\/[^\s]+)/g
+
+function extractLinkFromQrCode(qrWithUrl: QrWithUrl) {
+  if (qrWithUrl.qr.kind !== 'account') {
+    throw new Error('QR needs to be of kind "account"')
+  }
+
+  const matches = qrWithUrl.url.match(URL_REGEX)
+  if (matches && matches.length > 0) {
+    const { origin } = new URL(matches[0])
+    return origin
+  }
+
+  return qrWithUrl.qr.domain
 }
 
-export default function UserAgreement({ onChange, checked }: Props) {
+export default function UserAgreement() {
   const tx = useTranslationFunction()
   const { welcomeQr } = useInstantOnboarding()
   const isDefaultInstance = isQRWithDefaultInstance(welcomeQr)
 
   return (
     <>
-      <Switch alignIndicator='left' onChange={onChange} checked={checked}>
-        {isDefaultInstance && (
-          <>
+      {isDefaultInstance && (
+        <>
+          <ClickableLink href={DEFAULT_INSTANCE_PRIVACY_POLICY_URL}>
             {tx('instant_onboarding_agree_default')}{' '}
-            <ClickableLink href={DEFAULT_INSTANCE_PRIVACY_POLICY_URL}>
-              {tx('instant_onboarding_agree_privacy_policy')}
-            </ClickableLink>
-          </>
-        )}
-        {!isDefaultInstance && welcomeQr && welcomeQr.qr.kind === 'account' && (
-          <>
-            {tx('instant_onboarding_agree_instance')}{' '}
-            <ClickableLink href={`https://${welcomeQr.qr.domain}`}>
-              {welcomeQr.qr.domain}
-            </ClickableLink>
-          </>
-        )}
-      </Switch>
+          </ClickableLink>
+        </>
+      )}
+      {!isDefaultInstance && welcomeQr && welcomeQr.qr.kind === 'account' && (
+        <>
+          <ClickableLink href={extractLinkFromQrCode(welcomeQr)}>
+            {tx('instant_onboarding_agree_instance', welcomeQr.qr.domain)}
+          </ClickableLink>
+        </>
+      )}
     </>
   )
 }
