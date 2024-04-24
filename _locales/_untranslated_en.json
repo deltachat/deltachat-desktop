@@ -45,14 +45,8 @@
   "instant_onboarding_create": {
     "message": "Create profile"
   },
-  "instant_onboarding_default_info": {
-    "message": "Your profile will be created on the default instance."
-  },
-  "instant_onboarding_instance_info": {
-    "message": "Your profile will be created on the following instance:"
-  },
   "instant_onboarding_show_more_instances": {
-    "message": "Show other instances"
+    "message": "Explore Other Options"
   },
   "instant_onboarding_group_info": {
     "message": "Create a profile to join the group \"%1\"."
@@ -62,6 +56,15 @@
   },
   "instant_onboarding_confirm_contact": {
     "message": "Do you want to create a new DeltaChat profile and start chatting with %1?"
+  },
+  "instant_onboarding_agree_default": {
+    "message": "I agree to the"
+  },
+  "instant_onboarding_agree_privacy_policy": {
+    "message": "Privacy Policy"
+  },
+  "instant_onboarding_agree_instance": {
+    "message": "I agree to create a profile on"
   },
   "instant_onboarding_confirm_group": {
     "message": "Do you want to create a new DeltaChat profile and join the \"%1\" chat group?"

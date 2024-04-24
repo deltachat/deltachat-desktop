@@ -3,7 +3,6 @@ import React from 'react'
 import AlertDialog from '../../dialogs/AlertDialog'
 import AlternativeSetupsDialog from './AlternativeSetupsDialog'
 import Button from '../../Button'
-import ImportQrCode from '../../dialogs/ImportQrCode'
 import useDialog from '../../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { BackendRemote, EffectfulBackendActions } from '../../../backend-com'
@@ -28,10 +27,6 @@ export default function OnboardingScreen(props: Props) {
 
   const onAlreadyHaveAccount = () => {
     openDialog(AlternativeSetupsDialog)
-  }
-
-  const onScanQRCode = () => {
-    openDialog(ImportQrCode, { subtitle: tx('qrscan_hint') })
   }
 
   const onClickBackButton = async () => {
@@ -80,13 +75,6 @@ export default function OnboardingScreen(props: Props) {
               onClick={props.onNextStep}
             >
               {tx('onboarding_create_instant_account')}
-            </Button>
-            <Button
-              className={styles.welcomeScreenButton}
-              type='secondary'
-              onClick={onScanQRCode}
-            >
-              {tx('qrscan_title')}
             </Button>
             <Button
               className={styles.welcomeScreenButton}

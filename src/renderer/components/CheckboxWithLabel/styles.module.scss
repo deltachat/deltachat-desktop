@@ -1,0 +1,18 @@
+.label {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+
+  &.disabled {
+    cursor: not-allowed;
+
+    .labelInner {
+      opacity: 0.5;
+    }
+  }
+}
+
+.labelInner {
+  font-size: 16px;
+  margin-left: 8px;
+}

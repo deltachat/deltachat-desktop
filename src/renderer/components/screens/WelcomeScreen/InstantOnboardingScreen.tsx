@@ -1,20 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 
+import AdditionalActionInfo from './AdditionalActionInfo'
 import Button from '../../Button'
-import Callout from '../../Callout'
-import ClickableLink from '../../helpers/ClickableLink'
-import Icon from '../../Icon'
+import InstantOnboardingFooter from './InstantOnboardingFooter'
 import ProfileImageSelector from '../../dialogs/EditProfileDialog/ProfileImageSelector'
+import UserAgreement from './UserAgreement'
 import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
 import useChat from '../../../hooks/chat/useChat'
 import useInstantOnboarding from '../../../hooks/useInstantOnboarding'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import { BackendRemote } from '../../../backend-com'
 import { DeltaInput } from '../../Login-Styles'
 import { DialogBody, DialogContent, DialogHeader } from '../../Dialog'
 import { ScreenContext } from '../../../contexts/ScreenContext'
 import { Screens } from '../../../ScreenController'
-import { runtime } from '../../../runtime'
 
 import styles from './styles.module.scss'
 
@@ -22,10 +20,6 @@ type Props = {
   onCancel: () => void
   selectedAccountId: number
 }
-
-// URL of page listing chatmail instances
-// @TODO: Insert correct URL
-const INSTANCE_LIST_URL = 'https://delta.chat/'
 
 export default function InstantOnboardingScreen({
   onCancel,
@@ -40,6 +34,7 @@ export default function InstantOnboardingScreen({
 
   const [displayName, setDisplayName] = useState('')
   const [profilePicture, setProfilePicture] = useState<string | undefined>()
+  const [hasUserAgreement, setHasUserAgreement] = useState(false)
 
   const onChangeProfileImage = (path: string) => {
     setProfilePicture(path)
@@ -47,6 +42,12 @@ export default function InstantOnboardingScreen({
 
   const onChangeDisplayName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDisplayName(event.target.value)
+  }
+
+  const onUserAgreementChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setHasUserAgreement(event.target.checked)
   }
 
   const onConfirm = async () => {
@@ -98,9 +99,15 @@ export default function InstantOnboardingScreen({
           <AdditionalActionInfo accountId={selectedAccountId} />
           <p>{tx('set_name_and_avatar_explain')}</p>
           <div className={styles.welcomeScreenButtonGroup}>
+            <div className={styles.instantOnboardingAgreement}>
+              <UserAgreement
+                onChange={onUserAgreementChange}
+                checked={hasUserAgreement}
+              />
+            </div>
             <Button
               className={styles.welcomeScreenButton}
-              disabled={displayName.length === 0}
+              disabled={displayName.length === 0 || !hasUserAgreement}
               type='primary'
               onClick={onConfirm}
             >
@@ -108,94 +115,8 @@ export default function InstantOnboardingScreen({
             </Button>
           </div>
         </DialogContent>
-        <ChatmailInstanceInfo />
+        <InstantOnboardingFooter />
       </DialogBody>
     </>
-  )
-}
-
-function AdditionalActionInfo(props: { accountId: number }) {
-  const tx = useTranslationFunction()
-  const { welcomeQr } = useInstantOnboarding()
-  const [contactAddress, setContactAddress] = useState('')
-
-  useEffect(() => {
-    const loadContactName = async () => {
-      if (!welcomeQr || welcomeQr.qr.kind !== 'askVerifyContact') {
-        setContactAddress('')
-        return
-      }
-
-      const contact = await BackendRemote.rpc.getContact(
-        props.accountId,
-        welcomeQr.qr.contact_id
-      )
-      setContactAddress(contact.address)
-    }
-
-    loadContactName()
-  }, [props.accountId, welcomeQr])
-
-  if (!welcomeQr) {
-    return null
-  }
-
-  if (welcomeQr.qr.kind === 'askVerifyGroup') {
-    return <p>{tx('instant_onboarding_group_info', welcomeQr.qr.grpname)}</p>
-  } else if (welcomeQr.qr.kind === 'askVerifyContact') {
-    return <p>{tx('instant_onboarding_contact_info', contactAddress)}</p>
-  }
-
-  return null
-}
-
-function ChatmailInstanceInfo() {
-  const tx = useTranslationFunction()
-  const { welcomeQr } = useInstantOnboarding()
-
-  return (
-    <Callout className={styles.instantOnboardingCallout}>
-      <HelpButton />
-      {/*
-        When no "account" QR code got scanned by the user we're creating an
-        account on the default chatmail instance, otherwise we're showing
-        the selected one.
-      */}
-      {welcomeQr && welcomeQr.qr.kind === 'account' ? (
-        <>
-          <p>{tx('instant_onboarding_instance_info')}</p>
-          <p>
-            <i>{welcomeQr.qr.domain}</i>
-          </p>
-        </>
-      ) : (
-        <p>{tx('instant_onboarding_default_info')}</p>
-      )}
-      {/*
-        Present a link to the user to choose alternative chatmail instances
-        from. As we can't currently set other instances in Secure Join QR codes
-        we do not display the link in these cases.
-      */}
-      {(!welcomeQr || welcomeQr.qr.kind === 'account') && (
-        <p>
-          <ClickableLink href={INSTANCE_LIST_URL}>
-            {tx('instant_onboarding_show_more_instances')}
-          </ClickableLink>
-        </p>
-      )}
-    </Callout>
-  )
-}
-
-function HelpButton() {
-  const handleClick = () => {
-    // @TODO: Specify anchor for instant onboarding help chapter
-    runtime.openHelpWindow()
-  }
-
-  return (
-    <button onClick={handleClick} className={styles.instantOnboardingHelp}>
-      <Icon className={styles.instantOnboardingHelpIcon} icon='info' />
-    </button>
   )
 }
