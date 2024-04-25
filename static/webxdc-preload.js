@@ -1,3 +1,43 @@
+/**
+ * @typedef {import('webxdc-types').RealtimeListener} RT
+ * @type {RT}
+ */
+class RealtimeListener {
+  constructor() {
+    this.listener = null
+    this.trashed = false
+  }
+
+  is_trashed() {
+    return this.trashed
+  }
+
+  receive(data) {
+    if (this.trashed) {
+      throw new Error('realtime listener is trashed and can no longer be used')
+    }
+    if (this.listener) {
+      this.listener(data)
+    }
+  }
+
+  setListener(listener) {
+    this.listener = listener
+  }
+
+  send(data) {
+    if ((!data) instanceof Uint8Array) {
+      throw new Error('realtime listener data must be a Uint8Array')
+    }
+    ipcRenderer.invoke('webxdc.sendRealtimeData', data)
+  }
+
+  leave() {
+    this.trashed = true
+    ipcRenderer.invoke('webxdc.leaveRealtimeChannel')
+  }
+}
+
 //@ts-check
 ;(() => {
   const { contextBridge, ipcRenderer } = require('electron')
@@ -7,7 +47,10 @@
    * @type {Parameters<import('webxdc-types').Webxdc["setUpdateListener"]>[0]|null}
    */
   let callback = null
-  let ephemeralCb = null
+  /**
+   * @type {RT | null}
+   */
+  let realtimeListener = null
   var last_serial = 0
   let setUpdateListenerPromise = null
   let is_running = false
@@ -47,8 +90,10 @@
     onStatusUpdate()
   })
 
-  ipcRenderer.on('webxdc.realtimeData', (ev_, payload) => {
-    ephemeralCb(payload)
+  ipcRenderer.on('webxdc.realtimeData', (ev_, data) => {
+    if (realtimeListener && !realtimeListener.is_trashed()) {
+      realtimeListener.receive(data)
+    }
   })
 
   /**
@@ -67,9 +112,16 @@
       onStatusUpdate()
       return promise
     },
-    setRealtimeListener: cb => {
-      ephemeralCb = cb
-      return ipcRenderer.invoke('webxdc.sendGossipAdvertisement')
+    joinRealtimeChannel: cb => {
+      if (realtimeListener && realtimeListener.is_trashed()) {
+        return
+      }
+
+      realtimeListener = new RealtimeListener()
+      console.log('joinRealtimeChannel', realtimeListener)
+      ipcRenderer.invoke('webxdc.sendGossipAdvertisement')
+      realtimeListener.fun = () => {}
+      return realtimeListener
     },
     getAllUpdates: () => {
       console.error(
@@ -83,8 +135,6 @@
         JSON.stringify(update),
         description
       ),
-    sendRealtimeData: payload =>
-      ipcRenderer.invoke('webxdc.sendRealtimeData', JSON.stringify(payload)),
     sendToChat: async content => {
       if (!content.file && !content.text) {
         return Promise.reject(

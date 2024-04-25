@@ -525,6 +525,20 @@ If you think that's a bug and you need that permission, then please open an issu
       await this.rpc.sendWebxdcGossipAdvertisement(accountId, msgId)
     })
 
+    ipcMain.handle('webxdc.leaveRealtimeChannel', async event => {
+      const key = Object.keys(open_apps).find(
+        key => open_apps[key].win.webContents === event.sender
+      )
+      if (!key) {
+        log.error(
+          'webxdc.leaveRealtimeChannel, app not found in list of open ones'
+        )
+        return
+      }
+      const { accountId, msgId } = open_apps[key]
+      this.rpc.leaveGossip(accountId, msgId)
+    })
+
     ipcMain.handle(
       'webxdc.sendToChat',
       (
@@ -592,7 +606,7 @@ If you think that's a bug and you need that permission, then please open an issu
         if (instance) {
           instance.win.webContents.send('webxdc.realtimeData', payload)
         } else {
-          await this.rpc.leaveGossip(accountId, instanceId)
+          this.rpc.leaveGossip(accountId, instanceId)
         }
       }
     )
