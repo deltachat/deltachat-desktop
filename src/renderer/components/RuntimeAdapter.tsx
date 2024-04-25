@@ -25,6 +25,9 @@ export default function RuntimeAdapter({
 }: PropsWithChildren<Props>) {
   const processQr = useProcessQr()
   const { jumpToMessage } = useMessage()
+  
+  const { closeDialog, openDialog, closeAllDialogs } = useDialog()
+  const openSendToDialogId = useRef<string | undefined>(undefined)
 
   useEffect(() => {
     runtime.onOpenQrUrl = (url: string) => {
@@ -38,6 +41,7 @@ export default function RuntimeAdapter({
     runtime.setNotificationCallback(
       async ({ accountId: notificationAccountId, msgId, chatId }) => {
         if (accountId !== notificationAccountId) {
+          closeAllDialogs()
           await window.__selectAccount(notificationAccountId)
         }
 
@@ -61,9 +65,6 @@ export default function RuntimeAdapter({
       }
     }
   }, [accountId, jumpToMessage, processQr])
-
-  const { closeDialog, openDialog } = useDialog()
-  const openSendToDialogId = useRef<string | undefined>(undefined)
 
   useEffect(() => {
     runtime.onWebxdcSendToChat = (file, text) => {
