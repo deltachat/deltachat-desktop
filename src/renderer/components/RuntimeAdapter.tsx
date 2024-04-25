@@ -25,7 +25,7 @@ export default function RuntimeAdapter({
 }: PropsWithChildren<Props>) {
   const processQr = useProcessQr()
   const { jumpToMessage } = useMessage()
-  
+
   const { closeDialog, openDialog, closeAllDialogs } = useDialog()
   const openSendToDialogId = useRef<string | undefined>(undefined)
 
@@ -64,7 +64,7 @@ export default function RuntimeAdapter({
         ActionEmitter.emitAction(KeybindAction.Settings_Open)
       }
     }
-  }, [accountId, jumpToMessage, processQr])
+  }, [accountId, jumpToMessage, processQr, closeAllDialogs])
 
   useEffect(() => {
     runtime.onWebxdcSendToChat = (file, text) => {
