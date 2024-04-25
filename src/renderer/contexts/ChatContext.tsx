@@ -57,7 +57,6 @@ export const ChatProvider = ({
 
   const selectChat = useCallback<SelectChat>(
     async (nextAccountId: number, nextChatId: number) => {
-
       if (!accountId) {
         throw new Error('can not select chat when no `accountId` is given')
       }
