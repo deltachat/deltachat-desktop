@@ -15,7 +15,10 @@ export enum ChatView {
 
 export type SetView = (nextView: ChatView) => void
 
-export type SelectChat = (chatId: number) => Promise<void>
+export type SelectChat = (
+  nextAccountId: number,
+  chatId: number
+) => Promise<void>
 
 export type UnselectChat = () => void
 
@@ -53,9 +56,16 @@ export const ChatProvider = ({
   }, [])
 
   const selectChat = useCallback<SelectChat>(
-    async (nextChatId: number) => {
+    async (nextAccountId: number, nextChatId: number) => {
+
       if (!accountId) {
         throw new Error('can not select chat when no `accountId` is given')
+      }
+
+      if (accountId !== nextAccountId) {
+        throw new Error(
+          'accountid of ChatProvider context is not equal to nextAccountId'
+        )
       }
 
       // Jump to last message if user clicked chat twice

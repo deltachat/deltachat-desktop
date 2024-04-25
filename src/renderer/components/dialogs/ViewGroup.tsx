@@ -181,7 +181,7 @@ function ViewGroupInner(
   const [profileContact, setProfileContact] = useState<T.Contact | null>(null)
 
   const onChatClick = (chatId: number) => {
-    selectChat(chatId)
+    selectChat(accountId, chatId)
     onClose()
   }
 

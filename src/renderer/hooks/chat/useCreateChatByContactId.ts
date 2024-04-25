@@ -17,7 +17,7 @@ export default function useCreateChatByContactId() {
         await BackendRemote.rpc.setChatVisibility(accountId, chatId, 'Normal')
       }
 
-      selectChat(chatId)
+      selectChat(accountId, chatId)
     },
     [selectChat]
   )
