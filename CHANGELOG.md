@@ -36,6 +36,9 @@
 - Unmount QR scanner and disable camera correctly on abort or exit #3762
 - Close reactions bar on emoji selection #3788
 
+### Removed
+- remove disabled composer reason, now composer is just always hidden when `chat.canSend` is `false` 
+
 <a id="1_44_1"></a>
 
 ## [1.44.1] - 2024-03-09

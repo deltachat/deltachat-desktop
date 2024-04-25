@@ -2,19 +2,6 @@
   background-color: var(--composerBg);
   border-left: 1px solid rgba(16, 22, 26, 0.1);
 
-  &.composer--disabled-message-input {
-    --composerHeight: 40px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    height: var(--composerHeight);
-    padding: 3px;
-    color: #999;
-    overflow: hidden;
-  }
-
   &.contact-request {
     display: flex;
     justify-content: space-around;
