@@ -37,7 +37,7 @@
 - Close reactions bar on emoji selection #3788
 
 ### Removed
-- remove disabled composer reason, now composer is just always hidden when `chat.canSend` is `false` 
+- remove disabled composer reason, now composer is just always hidden when `chat.canSend` is `false` #3791
 
 <a id="1_44_1"></a>
 
