@@ -31,8 +31,6 @@ import useDialog from '../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useMessage from '../../hooks/chat/useMessage'
 import useChat from '../../hooks/chat/useChat'
-import DisabledMessageInput from './DisabledMessageInput'
-import { DisabledChatReasons } from './useIsChatDisabled'
 
 import type { EmojiData, BaseEmoji } from 'emoji-mart/index'
 import type { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
@@ -66,8 +64,6 @@ const QuoteOrDraftRemoveButton = ({ onClick }: { onClick: () => void }) => {
 const Composer = forwardRef<
   any,
   {
-    isDisabled: boolean
-    disabledReason?: DisabledChatReasons
     isContactRequest: boolean
     isProtectionBroken: boolean
     selectedChat: Type.FullChat
@@ -81,8 +77,6 @@ const Composer = forwardRef<
   }
 >((props, ref) => {
   const {
-    isDisabled,
-    disabledReason,
     isContactRequest,
     isProtectionBroken,
     selectedChat,
@@ -332,8 +326,8 @@ const Composer = forwardRef<
         </div>
       </div>
     )
-  } else if (isDisabled) {
-    return <DisabledMessageInput reason={disabledReason} />
+  } else if (!selectedChat.canSend) {
+    return null
   } else {
     return (
       <div className='composer' ref={ref}>

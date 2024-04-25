@@ -13,7 +13,6 @@ import { useSettingsStore } from '../../stores/settings'
 import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
 import { ReactionsBarProvider } from '../ReactionsBar'
 import useDialog from '../../hooks/dialog/useDialog'
-import useIsChatDisabled from '../composer/useIsChatDisabled'
 import useMessage from '../../hooks/chat/useMessage'
 
 import type { T } from '@deltachat/jsonrpc-client'
@@ -220,8 +219,6 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     }
   }, [onMouseUp])
 
-  const [isDisabled, disabledReason] = useIsChatDisabled(chat)
-
   const settingsStore = useSettingsStore()[0]
   const style = settingsStore
     ? getBackgroundImageStyle(settingsStore.desktopSettings)
@@ -249,8 +246,6 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
       <Composer
         ref={refComposer}
         selectedChat={chat}
-        isDisabled={isDisabled}
-        disabledReason={disabledReason}
         isContactRequest={chat.isContactRequest}
         isProtectionBroken={chat.isProtectionBroken}
         messageInputRef={messageInputRef}
