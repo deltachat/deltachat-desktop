@@ -3,9 +3,10 @@
  * @type {RT}
  */
 class RealtimeListener {
-  constructor() {
+  constructor(ipc) {
     this.listener = null
     this.trashed = false
+    this.ipc = ipc
   }
 
   is_trashed() {
@@ -29,12 +30,15 @@ class RealtimeListener {
     if ((!data) instanceof Uint8Array) {
       throw new Error('realtime listener data must be a Uint8Array')
     }
-    ipcRenderer.invoke('webxdc.sendRealtimeData', data)
+    if (this.trashed) {
+      throw new Error('realtime listener is trashed and can no longer be used')
+    }
+    this.ipc.invoke('webxdc.sendRealtimeData', Array.from(data))
   }
 
   leave() {
     this.trashed = true
-    ipcRenderer.invoke('webxdc.leaveRealtimeChannel')
+    this.ipc.invoke('webxdc.leaveRealtimeChannel')
   }
 }
 
@@ -47,9 +51,7 @@ class RealtimeListener {
    * @type {Parameters<import('webxdc-types').Webxdc["setUpdateListener"]>[0]|null}
    */
   let callback = null
-  /**
-   * @type {RT | null}
-   */
+  /** @type {RT | null} */
   let realtimeListener = null
   var last_serial = 0
   let setUpdateListenerPromise = null
@@ -92,14 +94,13 @@ class RealtimeListener {
 
   ipcRenderer.on('webxdc.realtimeData', (ev_, data) => {
     if (realtimeListener && !realtimeListener.is_trashed()) {
-      realtimeListener.receive(data)
+      realtimeListener.receive(Uint8Array.from(data))
     }
   })
 
   /**
    * @type {import('webxdc-types').Webxdc}
    */
-
   const api = {
     selfAddr: '?Setup Missing?',
     selfName: '?Setup Missing?',
@@ -113,14 +114,19 @@ class RealtimeListener {
       return promise
     },
     joinRealtimeChannel: cb => {
-      if (realtimeListener && realtimeListener.is_trashed()) {
-        return
+      if (realtimeListener && !realtimeListener.is_trashed()) {
+        throw new Error('realtime listener already exists')
       }
 
-      realtimeListener = new RealtimeListener()
-      console.log('joinRealtimeChannel', realtimeListener)
+      realtimeListener = new RealtimeListener(ipcRenderer)
       ipcRenderer.invoke('webxdc.sendGossipAdvertisement')
-      realtimeListener.fun = () => {}
+      realtimeListener.setListener =
+        realtimeListener.setListener.bind(realtimeListener)
+      realtimeListener.send = realtimeListener.send.bind(realtimeListener)
+      realtimeListener.leave = realtimeListener.leave.bind(realtimeListener)
+      realtimeListener.is_trashed =
+        realtimeListener.is_trashed.bind(realtimeListener)
+
       return realtimeListener
     },
     getAllUpdates: () => {
