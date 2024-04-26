@@ -35,7 +35,7 @@
 - fix: clear notifications for a contact request when blocking it #3268
 - Unmount QR scanner and disable camera correctly on abort or exit #3762
 - Close reactions bar on emoji selection #3788
-- fix Clicking notification does not bring Delta Chat to foreground on Windows 
+- fix Clicking notification does not bring Delta Chat to foreground on Windows #3793
 
 ### Removed
 - remove disabled composer reason, now composer is just always hidden when `chat.canSend` is `false` #3791
