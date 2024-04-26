@@ -511,13 +511,13 @@ If you think that's a bug and you need that permission, then please open an issu
       }
     )
 
-    ipcMain.handle('webxdc.sendGossipAdvertisement', async event => {
+    ipcMain.handle('webxdc.sendRealtimeAdvertisement', async event => {
       const key = Object.keys(open_apps).find(
         key => open_apps[key].win.webContents === event.sender
       )
       if (!key) {
         log.error(
-          'webxdc.sendGossipAdvertisement failed, app not found in list of open ones'
+          'webxdc.sendRealtimeAdvertisement failed, app not found in list of open ones'
         )
         return
       }
@@ -536,7 +536,7 @@ If you think that's a bug and you need that permission, then please open an issu
         return
       }
       const { accountId, msgId } = open_apps[key]
-      this.rpc.leaveGossip(accountId, msgId)
+      this.rpc.leaveRealtime(accountId, msgId)
     })
 
     ipcMain.handle(
@@ -606,7 +606,7 @@ If you think that's a bug and you need that permission, then please open an issu
         if (instance) {
           instance.win.webContents.send('webxdc.realtimeData', payload)
         } else {
-          this.rpc.leaveGossip(accountId, instanceId)
+          this.rpc.leaveRealtime(accountId, instanceId)
         }
       }
     )
