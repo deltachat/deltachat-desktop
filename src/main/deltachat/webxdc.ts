@@ -522,7 +522,7 @@ If you think that's a bug and you need that permission, then please open an issu
         return
       }
       const { accountId, msgId } = open_apps[key]
-      await this.rpc.sendWebxdcGossipAdvertisement(accountId, msgId)
+      await this.rpc.sendWebxdcRealtimeAdvertisement(accountId, msgId)
     })
 
     ipcMain.handle('webxdc.leaveRealtimeChannel', async event => {
