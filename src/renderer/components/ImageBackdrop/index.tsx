@@ -6,7 +6,7 @@ import type { PropsWithChildren } from 'react'
 import styles from './styles.module.scss'
 
 type Props = {
-  variant: 'welcome'
+  variant: 'welcome' | 'deletion'
 }
 
 export default function ImageBackdrop({

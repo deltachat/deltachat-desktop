@@ -17,6 +17,7 @@ import { BackendRemote } from '../../../backend-com'
 import { Screens } from '../../../ScreenController'
 import { avatarInitial } from '../../Avatar'
 import { getLogger } from '../../../../shared/logger'
+import ImageBackdrop from '../../ImageBackdrop'
 
 const log = getLogger('AccountDeletionScreen')
 
@@ -48,7 +49,7 @@ export default function AccountDeletionScreen({
 
   return (
     <div className={styles.AccountDeletionScreen}>
-      <div className={styles.Background}>
+      <ImageBackdrop variant='deletion'>
         <Dialog
           canEscapeKeyClose={true}
           fixed={true}
@@ -120,7 +121,7 @@ export default function AccountDeletionScreen({
             </FooterActions>
           </DialogFooter>
         </Dialog>
-      </div>
+      </ImageBackdrop>
     </div>
   )
 }
