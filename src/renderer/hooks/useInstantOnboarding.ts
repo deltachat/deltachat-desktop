@@ -83,11 +83,11 @@ export default function useInstantOnboarding() {
       await BackendRemote.rpc.setConfigFromQr(accountId, instanceUrl)
 
       return new Promise((resolve, reject) => {
-        try {
-          // 2. Kick-off the actual account creation process by calling
-          // `configure`. This happens inside of this dialog
-          openDialog(ConfigureProgressDialog, {
-            onSuccess: async () => {
+        // 2. Kick-off the actual account creation process by calling
+        // `configure`. This happens inside of this dialog
+        openDialog(ConfigureProgressDialog, {
+          onSuccess: async () => {
+            try {
               // 3. Additionally we set the `selfavatar` / profile picture
               // and `displayname` configuration for this account.
               //
@@ -119,11 +119,11 @@ export default function useInstantOnboarding() {
 
               // Return optional id of chat here so the UI can switch to it
               resolve(chatId)
-            },
-          })
-        } catch (error: any) {
-          reject(error)
-        }
+            } catch (error: any) {
+              reject(error)
+            }
+          },
+        })
       })
     },
     [openDialog, secureJoinContact, secureJoinGroup, welcomeQr]
