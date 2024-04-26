@@ -48,6 +48,7 @@ function onClickNotification(
   mainWindow.send('ClickOnNotification', { accountId, chatId, msgId })
   mainWindow.show()
   app.focus()
+  mainWindow.window?.focus()
 }
 
 const notifications: { [key: number]: Notification[] } = {}
