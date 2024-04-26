@@ -119,7 +119,7 @@ class RealtimeListener {
       }
 
       realtimeListener = new RealtimeListener(ipcRenderer)
-      ipcRenderer.invoke('webxdc.sendGossipAdvertisement')
+      ipcRenderer.invoke('webxdc.sendRealtimeAdvertisement')
       realtimeListener.setListener =
         realtimeListener.setListener.bind(realtimeListener)
       realtimeListener.send = realtimeListener.send.bind(realtimeListener)
