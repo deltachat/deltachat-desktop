@@ -536,7 +536,7 @@ If you think that's a bug and you need that permission, then please open an issu
         return
       }
       const { accountId, msgId } = open_apps[key]
-      this.rpc.leaveRealtime(accountId, msgId)
+      this.rpc.leaveWebxdcRealtime(accountId, msgId)
     })
 
     ipcMain.handle(
@@ -606,7 +606,7 @@ If you think that's a bug and you need that permission, then please open an issu
         if (instance) {
           instance.win.webContents.send('webxdc.realtimeData', payload)
         } else {
-          this.rpc.leaveRealtime(accountId, instanceId)
+          this.rpc.leaveWebxdcRealtime(accountId, instanceId)
         }
       }
     )
