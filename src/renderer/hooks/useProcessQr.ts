@@ -213,9 +213,10 @@ export default function useProcessQR() {
 
       // Some actions can only be executed when the user already has an account
       // and is logged in
+      const isLoggedIn = await isAccountConfigured(accountId)
       if (
         !ALLOWED_QR_CODES_ON_WELCOME_SCREEN.includes(qr.kind) &&
-        screen !== Screens.Main
+        !isLoggedIn
       ) {
         await openAlertDialog({
           message: tx('Please login first'),
