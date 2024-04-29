@@ -80,29 +80,26 @@ export default function useInstantOnboarding() {
       // appropriate keys for login, e.g. `addr` and `mail_pw`
       await BackendRemote.rpc.setConfigFromQr(accountId, instanceUrl)
 
+      // 2. Additionally we set the `selfavatar` / profile picture
+      // and `displayname` configuration for this account
+      if (profilePicture) {
+        await BackendRemote.rpc.setConfig(
+          accountId,
+          'selfavatar',
+          profilePicture
+        )
+      }
+      await BackendRemote.rpc.setConfig(accountId, 'displayname', displayName)
+
       return new Promise((resolve, reject) => {
-        // 2. Kick-off the actual account creation process by calling
+        // 3. Kick-off the actual account creation process by calling
         // `configure`. This happens inside of this dialog
         openDialog(ConfigureProgressDialog, {
           onSuccess: async () => {
             try {
-              // 3. Additionally we set the `selfavatar` / profile picture
-              // and `displayname` configuration for this account.
-              //
-              // Note: We need to set these profile settings _after_
-              // calling `configure` to make the UI aware of them already
-              if (profilePicture) {
-                await BackendRemote.rpc.setConfig(
-                  accountId,
-                  'selfavatar',
-                  profilePicture
-                )
-              }
-              await BackendRemote.rpc.setConfig(
-                accountId,
-                'displayname',
-                displayName
-              )
+              // Hacky workaround to make the sidebar component aware of these
+              // recent profile changes
+              window.__updateAccountListSidebar?.()
 
               // 4. If the user created a new account from trying to contact
               // another user or joining the group we continue with this now
