@@ -4,13 +4,11 @@ import useDialog from '../hooks/dialog/useDialog'
 import useSecureJoin from './useSecureJoin'
 import { BackendRemote } from '../backend-com'
 import { ConfigureProgressDialog } from '../components/LoginForm'
+import { DEFAULT_CHATMAIL_QR_URL } from '../components/screens/WelcomeScreen/chatmailInstances'
 import { InstantOnboardingContext } from '../contexts/InstantOnboardingContext'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import type { QrWithUrl } from '../backend/qr'
-
-const DEFAULT_CHATMAIL_INSTANCE_URL =
-  'https://nine.testrun.org/cgi-bin/newemail.py'
 
 /*
  * Instant Onboarding allows users to create new email addresses from within the
@@ -65,7 +63,7 @@ export default function useInstantOnboarding() {
       displayName: string,
       profilePicture?: string
     ): Promise<T.FullChat['id'] | null> => {
-      let instanceUrl = `dcaccount:${DEFAULT_CHATMAIL_INSTANCE_URL}`
+      let instanceUrl = `dcaccount:${DEFAULT_CHATMAIL_QR_URL}`
 
       // Use custom chatmail instance if given by QR code
       if (welcomeQr && welcomeQr.qr.kind === 'account') {
