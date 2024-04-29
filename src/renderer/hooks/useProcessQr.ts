@@ -13,6 +13,7 @@ import { BackendRemote } from '../backend-com'
 import { ReceiveBackupDialog } from '../components/dialogs/SetupMultiDevice'
 import { ScreenContext } from '../contexts/ScreenContext'
 import { Screens } from '../ScreenController'
+import { getConfiguredAccounts, isAccountConfigured } from '../backend/account'
 import { getLogger } from '../../shared/logger'
 import { processQr } from '../backend/qr'
 
@@ -77,8 +78,7 @@ export default function useProcessQR() {
   const startInstantOnboarding = useCallback(
     async (accountId: number, qrWithUrl: QrWithUrl) => {
       const { qr } = qrWithUrl
-      const numberOfAccounts = (await BackendRemote.rpc.getAllAccountIds())
-        .length
+      const numberOfAccounts = (await getConfiguredAccounts()).length
 
       if (qr.kind === 'account' && numberOfAccounts > 0) {
         // Ask user to confirm creating a new account if they already have one
@@ -126,7 +126,8 @@ export default function useProcessQR() {
       await switchToInstantOnboarding(qrWithUrl)
 
       // Log-out user if they already have an account
-      if (screen !== Screens.Welcome) {
+      const isLoggedIn = await isAccountConfigured(accountId)
+      if (isLoggedIn) {
         // Log out first by switching to an (temporary) blank account
         const blankAccount = await BackendRemote.rpc.addAccount()
 
@@ -134,7 +135,7 @@ export default function useProcessQR() {
         await window.__selectAccount(blankAccount)
       }
     },
-    [openConfirmationDialog, screen, switchToInstantOnboarding, tx]
+    [openConfirmationDialog, switchToInstantOnboarding, tx]
   )
 
   return useCallback(

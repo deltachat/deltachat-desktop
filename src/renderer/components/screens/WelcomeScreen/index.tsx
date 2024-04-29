@@ -5,7 +5,7 @@ import ImageBackdrop from '../../ImageBackdrop'
 import InstantOnboardingScreen from './InstantOnboardingScreen'
 import OnboardingScreen from './OnboardingScreen'
 import useInstantOnboarding from '../../../hooks/useInstantOnboarding'
-import { BackendRemote } from '../../../backend-com'
+import { getConfiguredAccounts } from '../../../backend/account'
 
 type Props = {
   selectedAccountId: number
@@ -29,8 +29,8 @@ export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
     // Show back button when user has already created and configured accounts.
     // On a fresh DC start we will not have any yet.
     const checkAccounts = async () => {
-      const accounts = await BackendRemote.listAccounts()
-      if (accounts && accounts.length > 1) {
+      const accounts = await getConfiguredAccounts()
+      if (accounts.length > 0) {
         setShowBackButton(true)
       }
     }
