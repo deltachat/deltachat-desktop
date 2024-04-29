@@ -10,6 +10,7 @@ import useOpenMailtoLink from './useOpenMailtoLink'
 import useSecureJoin from './useSecureJoin'
 import useTranslationFunction from './useTranslationFunction'
 import { BackendRemote } from '../backend-com'
+import { ConfigureProgressDialog } from '../components/LoginForm'
 import { ReceiveBackupDialog } from '../components/dialogs/SetupMultiDevice'
 import { ScreenContext } from '../contexts/ScreenContext'
 import { Screens } from '../ScreenController'
@@ -44,7 +45,7 @@ const log = getLogger('renderer/hooks/useProcessQr')
  */
 export default function useProcessQR() {
   const tx = useTranslationFunction()
-  const { screen } = useContext(ScreenContext)
+  const { screen, changeScreen } = useContext(ScreenContext)
   const { openDialog } = useDialog()
   const openAlertDialog = useAlertDialog()
   const openConfirmationDialog = useConfirmationDialog()
@@ -138,6 +139,48 @@ export default function useProcessQR() {
     [openConfirmationDialog, switchToInstantOnboarding, tx]
   )
 
+  // Users can login with any given credentials from a scanned `DCLOGIN` QR
+  // code.
+  //
+  // We ask the user if they really want to proceed with this action and log
+  // them in automatically.
+  const startLogin = useCallback(
+    async (accountId: number, qrWithUrl: QrWithUrl) => {
+      const { qr, url } = qrWithUrl
+      if (qr.kind !== 'login') {
+        throw new Error('QR code needs to be of kind "login"')
+      }
+
+      const numberOfAccounts = (await getConfiguredAccounts()).length
+      const message =
+        numberOfAccounts === 0
+          ? 'qrlogin_ask_login'
+          : 'qrlogin_ask_login_another'
+      const userConfirmed = await openConfirmationDialog({
+        message: tx(message, qr.address),
+        confirmLabel: tx('login_title'),
+      })
+
+      if (!userConfirmed) {
+        return
+      }
+
+      try {
+        await BackendRemote.rpc.setConfigFromQr(accountId, url)
+        openDialog(ConfigureProgressDialog, {
+          onSuccess: () => {
+            changeScreen(Screens.Main)
+          },
+        })
+      } catch (err: any) {
+        openAlertDialog({
+          message: err.message || err.toString(),
+        })
+      }
+    },
+    [changeScreen, openAlertDialog, openConfirmationDialog, openDialog, tx]
+  )
+
   return useCallback(
     async (
       accountId: number,
@@ -191,7 +234,7 @@ export default function useProcessQR() {
 
       // DCLOGIN: Ask the user if they want to login with given credentials
       if (qr.kind === 'login') {
-        await startInstantOnboarding(accountId, parsed)
+        await startLogin(accountId, parsed)
         callback && callback()
         return
       }
@@ -351,6 +394,7 @@ export default function useProcessQR() {
       secureJoinGroup,
       setConfigFromQrCatchingErrorInAlert,
       startInstantOnboarding,
+      startLogin,
       tx,
     ]
   )
