@@ -58,7 +58,7 @@ export default function useMessage() {
       // Check if target message is in same chat, if not switch first
       const message = await BackendRemote.rpc.getMessage(accountId, msgId)
       if (message.chatId !== chatId) {
-        await selectChat(message.chatId)
+        await selectChat(accountId, message.chatId)
       }
       setChatView(ChatView.MessageList)
 

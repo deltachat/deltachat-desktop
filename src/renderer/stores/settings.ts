@@ -25,7 +25,6 @@ export interface SettingsStoreState {
     download_limit: string
     only_fetch_mvbox: string
     disable_idle: string
-    'ui.lastchatid': string
     media_quality: string
   }
   desktopSettings: DesktopSettingsType
@@ -48,7 +47,6 @@ const settingsKeys: Array<keyof SettingsStoreState['settings']> = [
   'download_limit',
   'only_fetch_mvbox',
   'disable_idle',
-  'ui.lastchatid',
   'media_quality',
 ]
 

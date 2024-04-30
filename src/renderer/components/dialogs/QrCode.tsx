@@ -216,10 +216,10 @@ export function QrCodeScanQrInner({
 
   const handleScanResult = useCallback(
     (chatId: number | null = null) => {
-      chatId && selectChat(chatId)
+      chatId && selectChat(accountId, chatId)
       onDone()
     },
-    [onDone, selectChat]
+    [onDone, selectChat, accountId]
   )
 
   const handleScan = useCallback(

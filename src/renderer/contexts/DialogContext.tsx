@@ -19,16 +19,20 @@ export type OpenDialog = <T extends { [key: string]: any }>(
 
 export type CloseDialog = (id: DialogId) => void
 
+export type CloseAllDialogs = () => void
+
 type DialogContextValue = {
   hasOpenDialogs: boolean
   openDialog: OpenDialog
   closeDialog: CloseDialog
+  closeAllDialogs: CloseAllDialogs
 }
 
 const initialValues: DialogContextValue = {
   hasOpenDialogs: false,
   openDialog: _ => '',
   closeDialog: _ => {},
+  closeAllDialogs: () => {},
 }
 
 export const DialogContext =
@@ -39,6 +43,10 @@ export const DialogContextProvider = ({ children }: PropsWithChildren<{}>) => {
 
   const closeDialog = useCallback((id: DialogId) => {
     setDialogs(({ [id]: _, ...rest }) => rest)
+  }, [])
+
+  const closeAllDialogs: CloseAllDialogs = useCallback(() => {
+    setDialogs({})
   }, [])
 
   const openDialog = useCallback<OpenDialog>(
@@ -77,6 +85,7 @@ export const DialogContextProvider = ({ children }: PropsWithChildren<{}>) => {
     hasOpenDialogs,
     openDialog,
     closeDialog,
+    closeAllDialogs,
   }
 
   return (

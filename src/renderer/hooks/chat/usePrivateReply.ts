@@ -32,7 +32,7 @@ export default function usePrivateReply() {
         'Text'
       )
 
-      selectChat(chatId)
+      selectChat(accountId, chatId)
     },
     [selectChat]
   )

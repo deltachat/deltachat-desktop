@@ -4,7 +4,7 @@ import { ActionEmitter, KeybindAction } from '../keybindings'
 import { markChatAsSeen, saveLastChatId } from '../backend/chat'
 import { BackendRemote } from '../backend-com'
 
-import type { PropsWithChildren } from 'react'
+import type { MutableRefObject, PropsWithChildren } from 'react'
 import type { T } from '@deltachat/jsonrpc-client'
 
 export enum ChatView {
@@ -15,7 +15,10 @@ export enum ChatView {
 
 export type SetView = (nextView: ChatView) => void
 
-export type SelectChat = (chatId: number) => Promise<void>
+export type SelectChat = (
+  nextAccountId: number,
+  chatId: number
+) => Promise<void>
 
 export type UnselectChat = () => void
 
@@ -30,6 +33,11 @@ export type ChatContextValue = {
 
 type Props = {
   accountId?: number
+  /**
+   * the ref gives us a handle to reset the component without moving it up in the hierarchy.
+   * a class component would give us the option to call methods on the component,
+   * but we are using a functional component here so we need to pass this as a property instead*/
+  unselectChatRef: MutableRefObject<UnselectChat | null>
 }
 
 export const ChatContext = React.createContext<ChatContextValue | null>(null)
@@ -37,6 +45,7 @@ export const ChatContext = React.createContext<ChatContextValue | null>(null)
 export const ChatProvider = ({
   children,
   accountId,
+  unselectChatRef,
 }: PropsWithChildren<Props>) => {
   const [activeView, setActiveView] = useState(ChatView.MessageList)
   const [chat, setChat] = useState<T.FullChat | undefined>()
@@ -47,9 +56,15 @@ export const ChatProvider = ({
   }, [])
 
   const selectChat = useCallback<SelectChat>(
-    async (nextChatId: number) => {
+    async (nextAccountId: number, nextChatId: number) => {
       if (!accountId) {
         throw new Error('can not select chat when no `accountId` is given')
+      }
+
+      if (accountId !== nextAccountId) {
+        throw new Error(
+          'accountid of ChatProvider context is not equal to nextAccountId'
+        )
       }
 
       // Jump to last message if user clicked chat twice
@@ -99,6 +114,8 @@ export const ChatProvider = ({
     setChatId(undefined)
     setChat(undefined)
   }, [])
+
+  unselectChatRef.current = unselectChat
 
   // Subscribe to events coming from the core
   useEffect(() => {

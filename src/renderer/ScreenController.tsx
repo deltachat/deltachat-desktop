@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { createRef } from 'react'
 import { Component } from 'react'
 import { DcEventType } from '@deltachat/jsonrpc-client'
 import { debounce } from 'debounce'
@@ -19,7 +19,7 @@ import SettingsStoreInstance from './stores/settings'
 import { NoAccountSelectedScreen } from './components/screens/NoAccountSelectedScreen/NoAccountSelectedScreen'
 import AccountDeletionScreen from './components/screens/AccountDeletionScreen/AccountDeletionScreen'
 import RuntimeAdapter from './components/RuntimeAdapter'
-import { ChatProvider } from './contexts/ChatContext'
+import { ChatProvider, UnselectChat } from './contexts/ChatContext'
 import { ContextMenuProvider } from './contexts/ContextMenuContext'
 import { InstantOnboardingProvider } from './contexts/InstantOnboardingContext'
 
@@ -43,6 +43,7 @@ export default class ScreenController extends Component {
   state: { message: userFeedback | false; screen: Screens }
   selectedAccountId: number | undefined
   lastAccountBeforeAddingNewAccount: number | null = null
+  unselectChatRef = createRef<UnselectChat>()
 
   constructor(public props: {}) {
     super(props)
@@ -130,6 +131,9 @@ export default class ScreenController extends Component {
     if (this.selectedAccountId === undefined) {
       return
     }
+
+    this.unselectChatRef.current?.()
+
     const previousAccountId = this.selectedAccountId
 
     SettingsStoreInstance.effect.clear()
@@ -231,10 +235,10 @@ export default class ScreenController extends Component {
     this.userFeedback({ type: 'success', text })
   }
 
-  renderScreen() {
+  renderScreen(key: React.Key | null | undefined) {
     switch (this.state.screen) {
       case Screens.Main:
-        return <MainScreen accountId={this.selectedAccountId} />
+        return <MainScreen accountId={this.selectedAccountId} key={key} />
       case Screens.Login:
         if (this.selectedAccountId === undefined) {
           throw new Error('Selected account not defined')
@@ -243,6 +247,7 @@ export default class ScreenController extends Component {
           <AccountSetupScreen
             selectAccount={this.selectAccount}
             accountId={this.selectedAccountId}
+            key={key}
           />
         )
       case Screens.Welcome:
@@ -254,6 +259,7 @@ export default class ScreenController extends Component {
             selectedAccountId={this.selectedAccountId}
             onUnSelectAccount={this.unSelectAccount}
             onExitWelcomeScreen={this.onExitWelcomeScreen}
+            key={key}
           />
         )
       case Screens.DeleteAccount:
@@ -264,6 +270,7 @@ export default class ScreenController extends Component {
           <AccountDeletionScreen
             selectedAccountId={this.selectedAccountId}
             onDeleteAccount={this.onDeleteAccount.bind(this)}
+            key={key}
           />
         )
       case Screens.NoAccountSelected:
@@ -292,13 +299,9 @@ export default class ScreenController extends Component {
           }}
         >
           <InstantOnboardingProvider>
-            {/*
-              The key attribute here forces a clean re-rendering when the
-              account changes. We needs this to reset the chat context state.
-            */}
             <ChatProvider
-              key={this.selectedAccountId}
               accountId={this.selectedAccountId}
+              unselectChatRef={this.unselectChatRef}
             >
               <ContextMenuProvider>
                 <DialogContextProvider>
@@ -313,7 +316,7 @@ export default class ScreenController extends Component {
                           this
                         )}
                       />
-                      {this.renderScreen()}
+                      {this.renderScreen(this.selectedAccountId)}
                     </div>
                   </KeybindingsContextProvider>
                 </DialogContextProvider>

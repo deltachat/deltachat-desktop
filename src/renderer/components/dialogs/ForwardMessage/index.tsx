@@ -45,7 +45,7 @@ export default function ForwardMessage(props: Props) {
     const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
     onClose()
     if (!chat.isSelfTalk) {
-      selectChat(chat.id)
+      selectChat(accountId, chat.id)
       const yes = await confirmForwardMessage(
         openDialog,
         accountId,
@@ -53,7 +53,7 @@ export default function ForwardMessage(props: Props) {
         chat
       )
       if (!yes) {
-        selectChat(message.chatId)
+        selectChat(accountId, message.chatId)
       }
     } else {
       await forwardMessage(accountId, message.id, chat.id)

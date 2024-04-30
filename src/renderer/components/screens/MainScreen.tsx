@@ -76,7 +76,7 @@ export default function MainScreen({ accountId }: Props) {
       return
     }
 
-    selectChat(chatId)
+    accountId && selectChat(accountId, chatId)
   }
 
   const searchChats = (queryStr: string, chatId: number | null = null) => {
