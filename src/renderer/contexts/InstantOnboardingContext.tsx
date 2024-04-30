@@ -25,7 +25,7 @@ export const InstantOnboardingContext =
 export const InstantOnboardingProvider = ({
   children,
 }: PropsWithChildren<{}>) => {
-  // Flag to display "Instant Onboarding" UI in welcome screen
+  // Flag for welcome screen to decide if it shows the "Instant Onboarding" UI or the "Welcome" UI
   const [showInstantOnboarding, setShowInstantOnboarding] = useState(false)
 
   // Some QR codes invite the user to create a new account on a chatmail
