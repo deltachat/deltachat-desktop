@@ -60,7 +60,7 @@ export default function InstantOnboardingScreen({
       // If the user scanned a QR code to join a contact or group, then
       // we redirect to the created chat after instant onboarding
       if (chatId !== null) {
-        selectChat(chatId)
+        selectChat(selectedAccountId, chatId)
       }
     } catch (error: any) {
       await openAlertDialog({
