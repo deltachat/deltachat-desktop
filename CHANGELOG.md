@@ -16,7 +16,7 @@
 - minor improvements to "add second device" dialog #3748
 - Remove deprecated translations #3756
 - Refactor chat store into React context #3725
-- Improve security: restrict file protocol #3769
+- Improve security: restrict file protocol #3769 #3798
 - Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.137.3`
 - Change chatlist to use new chatlist changed event from core #3268
 - Refactor QR code reader #3762
@@ -36,7 +36,6 @@
 - Unmount QR scanner and disable camera correctly on abort or exit #3762
 - Close reactions bar on emoji selection #3788
 - fix Clicking notification does not bring Delta Chat to foreground on Windows #3793
-- fix wrong handling of file:// urls on Windows
 
 ### Removed
 - remove disabled composer reason, now composer is just always hidden when `chat.canSend` is `false` #3791
