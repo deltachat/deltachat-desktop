@@ -17,11 +17,12 @@ import {
 } from '../application-constants'
 import { refreshTrayContextMenu } from '../tray'
 
-import { isAbsolute, join } from 'path'
+import { isAbsolute, join, sep } from 'path'
 import { DesktopSettings } from '../desktop_settings'
 import { Session } from 'electron/main'
 import { refresh as refreshTitleMenu } from '../menu'
 import { platform } from 'os'
+import { fileURLToPath } from 'url'
 
 const log = getLogger('main/mainWindow')
 
@@ -170,7 +171,9 @@ export function init(options: { hidden: boolean }) {
   window.webContents.session.webRequest.onBeforeRequest(
     { urls: ['file://*'] },
     (details, callback) => {
-      const pathname = decodeURIComponent(new URL(details.url).pathname)
+      const pathname = fileURLToPath(
+        decodeURIComponent(new URL(details.url).href)
+      )
 
       if (!isAbsolute(pathname) || pathname.includes('..')) {
         log.errorWithoutStackTrace('tried to access relative path', pathname)
@@ -179,7 +182,7 @@ export function init(options: { hidden: boolean }) {
       if (pathname.startsWith(getAccountsPath())) {
         const relativePathInAccounts = pathname.replace(getAccountsPath(), '')
         const relativePathInAccount = relativePathInAccounts.slice(
-          relativePathInAccounts.indexOf('/', 1) + 1
+          relativePathInAccounts.indexOf(sep, 1) + 1
         )
         if (
           ALLOWED_ACCOUNT_FOLDERS.find(allowedPath =>
