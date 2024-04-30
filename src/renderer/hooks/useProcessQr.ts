@@ -69,6 +69,18 @@ export default function useProcessQR() {
     [openAlertDialog]
   )
 
+  // Log user out if they already have an configured account
+  const makeSureToLogOut = useCallback(async (accountId: number) => {
+    const isLoggedIn = await isAccountConfigured(accountId)
+    if (isLoggedIn) {
+      // Log out first by switching to an (temporary) blank account
+      const blankAccount = await BackendRemote.rpc.addAccount()
+
+      // Select blank account, this will also switch the screen to `Welcome`
+      await window.__selectAccount(blankAccount)
+    }
+  }, [])
+
   // Users can enter the "Instant Onboarding" flow by scanning a DCACCOUNT,
   // DC_ASK_VERIFYGROUP, or DC_ASK_VERIFYCONTACT code which essentially creates
   // a new "chatmail" profile for them and connects them with the regarding
@@ -125,18 +137,9 @@ export default function useProcessQR() {
 
       // Start instant onboarding flow for user
       await switchToInstantOnboarding(qrWithUrl)
-
-      // Log-out user if they already have an account
-      const isLoggedIn = await isAccountConfigured(accountId)
-      if (isLoggedIn) {
-        // Log out first by switching to an (temporary) blank account
-        const blankAccount = await BackendRemote.rpc.addAccount()
-
-        // Select blank account, this will also switch the screen to `Welcome`
-        await window.__selectAccount(blankAccount)
-      }
+      await makeSureToLogOut(accountId)
     },
-    [openConfirmationDialog, switchToInstantOnboarding, tx]
+    [makeSureToLogOut, openConfirmationDialog, switchToInstantOnboarding, tx]
   )
 
   // Users can login with any given credentials from a scanned `DCLOGIN` QR
@@ -166,6 +169,8 @@ export default function useProcessQR() {
       }
 
       try {
+        await makeSureToLogOut(accountId)
+
         await BackendRemote.rpc.setConfigFromQr(accountId, url)
         openDialog(ConfigureProgressDialog, {
           onSuccess: () => {
@@ -178,7 +183,14 @@ export default function useProcessQR() {
         })
       }
     },
-    [changeScreen, openAlertDialog, openConfirmationDialog, openDialog, tx]
+    [
+      changeScreen,
+      makeSureToLogOut,
+      openAlertDialog,
+      openConfirmationDialog,
+      openDialog,
+      tx,
+    ]
   )
 
   return useCallback(
