@@ -11,11 +11,28 @@ import type { T } from '@deltachat/jsonrpc-client'
 import type { WelcomeQrWithUrl } from '../contexts/InstantOnboardingContext'
 import type { AccountQr } from '../backend/qr'
 
+type InstantOnboarding = {
+  createInstantAccount: (
+    accountId: number,
+    displayName: string,
+    profilePicture?: string
+  ) => Promise<T.FullChat['id'] | null>
+  /** Exit the instant onboarding flow */
+  resetInstantOnboarding: () => void
+  /** Whether instant onboarding is active */
+  showInstantOnboarding: boolean
+  /** Remember the qr code in the InstantOnboardingContext and set `showInstantOnboarding` to true
+   * The welcome screen will then pick up `showInstantOnboarding` and directly open the instant onboarding view
+   */
+  startInstantOnboardingFlow: (qrWithUrl?: WelcomeQrWithUrl) => Promise<void>
+  welcomeQr?: WelcomeQrWithUrl
+}
+
 /*
  * Instant Onboarding allows users to create new email addresses from within the
  * application, giving them a faster way to get a working profile.
  */
-export default function useInstantOnboarding() {
+export default function useInstantOnboarding(): InstantOnboarding {
   const context = useContext(InstantOnboardingContext)
   const { openDialog } = useDialog()
   const { secureJoinContact, secureJoinGroup } = useSecureJoin()
@@ -33,7 +50,7 @@ export default function useInstantOnboarding() {
     welcomeQr,
   } = context
 
-  const switchToInstantOnboarding = useCallback(
+  const startInstantOnboardingFlow = useCallback(
     async (qrWithUrl?: WelcomeQrWithUrl) => {
       if (qrWithUrl) {
         if (
@@ -145,7 +162,7 @@ export default function useInstantOnboarding() {
     createInstantAccount,
     resetInstantOnboarding,
     showInstantOnboarding,
-    switchToInstantOnboarding,
+    startInstantOnboardingFlow,
     welcomeQr,
   }
 }

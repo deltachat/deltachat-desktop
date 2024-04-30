@@ -52,7 +52,7 @@ export default function useProcessQR() {
   const openConfirmationDialog = useConfirmationDialog()
 
   const openMailtoLink = useOpenMailtoLink()
-  const { switchToInstantOnboarding } = useInstantOnboarding()
+  const { startInstantOnboardingFlow } = useInstantOnboarding()
   const { secureJoinGroup, secureJoinContact } = useSecureJoin()
 
   const setConfigFromQrCatchingErrorInAlert = useCallback(
@@ -70,7 +70,7 @@ export default function useProcessQR() {
     [openAlertDialog]
   )
 
-  // Log user out if they already have an configured account
+  /** Log user out if they already have an configured account */
   const makeSureToLogOut = useCallback(async (accountId: number) => {
     const isLoggedIn = await isAccountConfigured(accountId)
     if (isLoggedIn) {
@@ -136,11 +136,10 @@ export default function useProcessQR() {
         }
       }
 
-      // Start instant onboarding flow for user
-      await switchToInstantOnboarding(qrWithUrl)
+      await startInstantOnboardingFlow(qrWithUrl)
       await makeSureToLogOut(accountId)
     },
-    [makeSureToLogOut, openConfirmationDialog, switchToInstantOnboarding, tx]
+    [makeSureToLogOut, openConfirmationDialog, startInstantOnboardingFlow, tx]
   )
 
   // Users can login with any given credentials from a scanned `DCLOGIN` QR

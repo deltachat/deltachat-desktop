@@ -17,7 +17,7 @@ export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
   const {
     resetInstantOnboarding,
     showInstantOnboarding,
-    switchToInstantOnboarding,
+    startInstantOnboardingFlow,
   } = useInstantOnboarding()
   const [showBackButton, setShowBackButton] = useState(false)
 
@@ -43,7 +43,7 @@ export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
       <Dialog fixed onClose={onClose} width={400}>
         {!showInstantOnboarding ? (
           <OnboardingScreen
-            onNextStep={() => switchToInstantOnboarding()}
+            onNextStep={() => startInstantOnboardingFlow()}
             selectedAccountId={selectedAccountId}
             showBackButton={showBackButton}
             {...props}
