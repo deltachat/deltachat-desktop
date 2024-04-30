@@ -8,7 +8,7 @@ import { DEFAULT_CHATMAIL_QR_URL } from '../components/screens/WelcomeScreen/cha
 import { InstantOnboardingContext } from '../contexts/InstantOnboardingContext'
 
 import type { T } from '@deltachat/jsonrpc-client'
-import type { QrWithUrl } from '../backend/qr'
+import type { WelcomeQrWithUrl } from '../contexts/InstantOnboardingContext'
 
 /*
  * Instant Onboarding allows users to create new email addresses from within the
@@ -33,7 +33,7 @@ export default function useInstantOnboarding() {
   } = context
 
   const switchToInstantOnboarding = useCallback(
-    async (qrWithUrl?: QrWithUrl) => {
+    async (qrWithUrl?: WelcomeQrWithUrl) => {
       if (qrWithUrl) {
         if (
           !['account', 'askVerifyGroup', 'askVerifyContact'].includes(

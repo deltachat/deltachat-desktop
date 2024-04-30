@@ -1,13 +1,25 @@
 import React, { useState } from 'react'
 
 import type { PropsWithChildren } from 'react'
+import type { T } from '@deltachat/jsonrpc-client'
 import type { QrWithUrl } from '../backend/qr'
+
+export type WelcomeQr = Extract<
+  T.Qr,
+  | { kind: 'account' }
+  | { kind: 'askVerifyContact' }
+  | { kind: 'askVerifyGroup' }
+>
+
+export type WelcomeQrWithUrl = Pick<QrWithUrl, 'url'> & {
+  qr: WelcomeQr
+}
 
 type InstantOnboardingContextValue = {
   setShowInstantOnboarding: (value: boolean) => void
-  setWelcomeQr: (value?: QrWithUrl) => void
+  setWelcomeQr: (value?: WelcomeQrWithUrl) => void
   showInstantOnboarding: boolean
-  welcomeQr?: QrWithUrl
+  welcomeQr?: WelcomeQrWithUrl
 }
 
 export const InstantOnboardingContext =
@@ -26,7 +38,9 @@ export const InstantOnboardingProvider = ({
   // also when the user already has an existing account and is logged in, we
   // can store it here temporarily, adjust the UI state and bring the user
   // back to the QR code process again when everything is ready.
-  const [welcomeQr, setWelcomeQr] = useState<QrWithUrl | undefined>(undefined)
+  const [welcomeQr, setWelcomeQr] = useState<WelcomeQrWithUrl | undefined>(
+    undefined
+  )
 
   const value = {
     setShowInstantOnboarding,

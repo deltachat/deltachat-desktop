@@ -20,6 +20,7 @@ import { processQr } from '../backend/qr'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import type { QrWithUrl } from '../backend/qr'
+import type { WelcomeQrWithUrl } from '../contexts/InstantOnboardingContext'
 
 const ALLOWED_QR_CODES_ON_WELCOME_SCREEN: T.Qr['kind'][] = [
   'account',
@@ -89,7 +90,7 @@ export default function useProcessQR() {
   // We ask the user if they really want to proceed with this action and
   // accordingly prepare the onboarding.
   const startInstantOnboarding = useCallback(
-    async (accountId: number, qrWithUrl: QrWithUrl) => {
+    async (accountId: number, qrWithUrl: WelcomeQrWithUrl) => {
       const { qr } = qrWithUrl
       const numberOfAccounts = (await getConfiguredAccounts()).length
 
@@ -239,14 +240,14 @@ export default function useProcessQR() {
       // DCACCOUNT: Ask the user if they want to create a new profile on the
       // given chatmail instance
       if (qr.kind === 'account') {
-        await startInstantOnboarding(accountId, parsed)
+        await startInstantOnboarding(accountId, parsed as WelcomeQrWithUrl)
         callback && callback()
         return
       }
 
       // DCLOGIN: Ask the user if they want to login with given credentials
       if (qr.kind === 'login') {
-        await startLogin(accountId, parsed)
+        await startLogin(accountId, parsed as WelcomeQrWithUrl)
         callback && callback()
         return
       }
@@ -257,7 +258,7 @@ export default function useProcessQR() {
         if (screen === Screens.Welcome) {
           // Ask user to create a new account with instant onboarding flow before they
           // can start chatting with the given contact
-          await startInstantOnboarding(accountId, parsed)
+          await startInstantOnboarding(accountId, parsed as WelcomeQrWithUrl)
           callback && callback()
         } else {
           const chatId = await secureJoinContact(accountId, parsed)
@@ -274,7 +275,7 @@ export default function useProcessQR() {
         if (screen === Screens.Welcome) {
           // Ask user to create a new account with instant onboarding flow before they
           // can join the given group
-          await startInstantOnboarding(accountId, parsed)
+          await startInstantOnboarding(accountId, parsed as WelcomeQrWithUrl)
           callback && callback()
         } else {
           const chatId = await secureJoinGroup(accountId, parsed)
