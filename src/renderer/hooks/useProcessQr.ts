@@ -154,11 +154,10 @@ export default function useProcessQR() {
         throw new Error('QR code needs to be of kind "login"')
       }
 
-      const numberOfAccounts = (await getConfiguredAccounts()).length
-      const message =
-        numberOfAccounts === 0
-          ? 'qrlogin_ask_login'
-          : 'qrlogin_ask_login_another'
+      const hasConfiguredAccount = (await getConfiguredAccounts()).length > 0
+      const message = hasConfiguredAccount
+        ? 'qrlogin_ask_login_another'
+        : 'qrlogin_ask_login'
       const userConfirmed = await openConfirmationDialog({
         message: tx(message, qr.address),
         confirmLabel: tx('login_title'),
