@@ -21,6 +21,7 @@ import AccountDeletionScreen from './components/screens/AccountDeletionScreen/Ac
 import RuntimeAdapter from './components/RuntimeAdapter'
 import { ChatProvider } from './contexts/ChatContext'
 import { ContextMenuProvider } from './contexts/ContextMenuContext'
+import { InstantOnboardingProvider } from './contexts/InstantOnboardingContext'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -290,33 +291,35 @@ export default class ScreenController extends Component {
             screen: this.state.screen,
           }}
         >
-          {/*
-            The key attribute here forces a clean re-rendering when the
-            account changes. We needs this to reset the chat context state.
-          */}
-          <ChatProvider
-            key={this.selectedAccountId}
-            accountId={this.selectedAccountId}
-          >
-            <ContextMenuProvider>
-              <DialogContextProvider>
-                <RuntimeAdapter accountId={this.selectedAccountId} />
-                <KeybindingsContextProvider>
-                  <div className='main-container'>
-                    <AccountListSidebar
-                      selectedAccountId={this.selectedAccountId}
-                      onAddAccount={this.addAndSelectAccount.bind(this)}
-                      onSelectAccount={this.selectAccount.bind(this)}
-                      openAccountDeletionScreen={this.openAccountDeletionScreen.bind(
-                        this
-                      )}
-                    />
-                    {this.renderScreen()}
-                  </div>
-                </KeybindingsContextProvider>
-              </DialogContextProvider>
-            </ContextMenuProvider>
-          </ChatProvider>
+          <InstantOnboardingProvider>
+            {/*
+              The key attribute here forces a clean re-rendering when the
+              account changes. We needs this to reset the chat context state.
+            */}
+            <ChatProvider
+              key={this.selectedAccountId}
+              accountId={this.selectedAccountId}
+            >
+              <ContextMenuProvider>
+                <DialogContextProvider>
+                  <RuntimeAdapter accountId={this.selectedAccountId} />
+                  <KeybindingsContextProvider>
+                    <div className='main-container'>
+                      <AccountListSidebar
+                        selectedAccountId={this.selectedAccountId}
+                        onAddAccount={this.addAndSelectAccount.bind(this)}
+                        onSelectAccount={this.selectAccount.bind(this)}
+                        openAccountDeletionScreen={this.openAccountDeletionScreen.bind(
+                          this
+                        )}
+                      />
+                      {this.renderScreen()}
+                    </div>
+                  </KeybindingsContextProvider>
+                </DialogContextProvider>
+              </ContextMenuProvider>
+            </ChatProvider>
+          </InstantOnboardingProvider>
         </ScreenContext.Provider>
       </div>
     )

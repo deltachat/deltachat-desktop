@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 
 import { Credentials } from '../../../shared/shared-types'
+import ImageBackdrop from '../ImageBackdrop'
 import LoginForm, {
   defaultCredentials,
   ConfigureProgressDialog,
@@ -62,32 +63,30 @@ export default function AccountSetupScreen({
   }, [onKeyDown])
 
   return (
-    <div className='login-screen'>
-      <div className='window'>
-        <Dialog onClose={() => {}} fixed>
-          <DialogHeader title={tx('login_explain')} />
-          <DialogBody>
-            <DialogContent>
-              <div className='login'>
-                <LoginForm
-                  credentials={credentials}
-                  setCredentials={setCredentials}
-                />
-              </div>
-            </DialogContent>
-          </DialogBody>
-          <DialogFooter>
-            <FooterActions>
-              <FooterActionButton onClick={() => selectAccount(accountId)}>
-                {tx('cancel')}
-              </FooterActionButton>
-              <FooterActionButton onClick={onClickLogin}>
-                {tx('login_title')}
-              </FooterActionButton>
-            </FooterActions>
-          </DialogFooter>
-        </Dialog>
-      </div>
-    </div>
+    <ImageBackdrop variant='welcome'>
+      <Dialog onClose={() => {}} fixed>
+        <DialogHeader title={tx('login_explain')} />
+        <DialogBody>
+          <DialogContent>
+            <div className='login'>
+              <LoginForm
+                credentials={credentials}
+                setCredentials={setCredentials}
+              />
+            </div>
+          </DialogContent>
+        </DialogBody>
+        <DialogFooter>
+          <FooterActions>
+            <FooterActionButton onClick={() => selectAccount(accountId)}>
+              {tx('cancel')}
+            </FooterActionButton>
+            <FooterActionButton onClick={onClickLogin}>
+              {tx('login_title')}
+            </FooterActionButton>
+          </FooterActions>
+        </DialogFooter>
+      </Dialog>
+    </ImageBackdrop>
   )
 }

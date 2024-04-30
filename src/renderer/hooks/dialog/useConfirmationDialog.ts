@@ -19,7 +19,7 @@ export default function useConfirmationDialog() {
   const { openDialog } = useDialog()
 
   return useCallback(
-    (args: OpenConfirmationDialog) => {
+    (args: OpenConfirmationDialog): Promise<boolean> => {
       return new Promise(resolve => {
         const onUserResult = (confirmed: boolean) => {
           resolve(confirmed)

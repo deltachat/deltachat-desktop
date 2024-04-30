@@ -2,12 +2,19 @@ import React from 'react'
 import { Switch as BlueprintSwitch } from '@blueprintjs/core'
 
 import type { SwitchProps } from '@blueprintjs/core'
+import type { PropsWithChildren } from 'react'
 
-type Props = Pick<SwitchProps, 'label' | 'disabled' | 'checked'> & {
+type Props = Pick<
+  SwitchProps,
+  'alignIndicator' | 'label' | 'disabled' | 'checked'
+> & {
   onChange: (value: boolean) => void
 }
 
-export default function Switch(props: Props) {
+export default function Switch({
+  alignIndicator = 'right',
+  ...props
+}: PropsWithChildren<Props>) {
   return (
     <BlueprintSwitch
       label={props.label}
@@ -15,8 +22,10 @@ export default function Switch(props: Props) {
       onChange={event => {
         props.onChange(event.currentTarget.checked)
       }}
-      alignIndicator='right'
+      alignIndicator={alignIndicator}
       checked={props.checked}
-    />
+    >
+      {props.children}
+    </BlueprintSwitch>
   )
 }

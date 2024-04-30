@@ -70,55 +70,6 @@
   }
 }
 
-.login-screen {
-  flex-grow: 1;
-  li.login-item {
-    display: flex;
-    justify-content: space-between;
-
-    &:hover {
-      button.bp4-intent-danger {
-        display: inline-flex;
-      }
-    }
-
-    button.bp4-intent-danger {
-      display: none;
-    }
-
-    button.bp4-large {
-      width: 90%;
-    }
-  }
-
-  .window {
-    background-size: cover;
-    background-image: url('../images/backgrounds/petito-moreno.webp');
-    height: 100vh;
-    margin-top: 0px;
-  }
-
-  div.delta-blue-button {
-    -webkit-appearance: button-bevel;
-    background-color: transparent;
-    color: var(--loginButtonText);
-    font-size: 16px;
-    display: block;
-    width: 100%;
-    margin-top: 30px;
-    &:hover {
-      cursor: pointer;
-    }
-    p {
-      display: -webkit-inline-box;
-      position: relative;
-      font-size: 18px;
-      margin-bottom: 0px;
-      bottom: 3px;
-    }
-  }
-}
-
 div.delta-form-group {
   div.label {
     height: 13px;
@@ -226,36 +177,5 @@ div.delta-form-group {
     &:hover {
       outline: none;
     }
-  }
-}
-
-.welcome-deltachat {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
-  align-items: center;
-
-  .delta-icon {
-    width: 90%;
-    margin: 0 auto;
-    height: auto;
-    @media (max-height: 700px) {
-      display: none;
-    }
-  }
-
-  .f1 {
-    margin-top: 40px;
-    margin-bottom: 30px;
-    font-size: x-large;
-    color: var(--colorNone);
-  }
-
-  .f2 {
-    margin-top: 10px;
-    padding: 0px 20px;
-    color: var(--colorNone);
-    font-size: larger;
   }
 }

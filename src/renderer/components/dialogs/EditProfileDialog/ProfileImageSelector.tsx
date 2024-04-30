@@ -5,8 +5,8 @@ import { LastUsedSlot } from '../../../utils/lastUsedPaths'
 import { avatarInitial } from '../../Avatar'
 
 type Props = {
-  addr: string
-  color: string
+  addr?: string
+  color?: string
   displayName: string
   hideDeleteButton?: boolean
   profilePicture?: string

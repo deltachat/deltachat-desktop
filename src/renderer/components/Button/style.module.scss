@@ -1,47 +1,39 @@
 .button {
   align-items: center;
   background-color: transparent;
-  border-radius: 5px;
+  border-radius: 10px;
   border: 0;
-  color: var(--colorPrimary);
+  color: var(--buttonText);
   cursor: pointer;
   display: flex;
   font-size: 16px;
   font-weight: bold;
   justify-content: center;
-  padding: 10px 15px;
+  padding: 12px 15px;
   text-align: center;
   text-transform: uppercase;
 
   &:hover {
-    background-color: var(--chatListItemBgHover);
-  }
-
-  &:disabled {
-    background-color: rgba(206, 217, 224, 0.5);
-    border-color: rgba(206, 217, 224, 0.5);
-    color: var(--globalText);
-    cursor: not-allowed;
-
-    &:hover {
-      background-color: rgba(206, 217, 224, 0.5);
-    }
+    background-color: var(--buttonHover);
   }
 
   &.primary {
-    background-color: var(--bp4-input-focused);
-    color: white;
+    background-color: var(--buttonPrimaryBackground);
+    color: var(--buttonPrimaryText);
   }
 
   &.secondary {
-    background-color: var(--bp4ButtonBg);
-    border-color: var(--bp4ButtonText);
-    border-style: solid;
-    border-width: 1.5px;
-    color: var(--bp4ButtonText);
+    background-color: var(--buttonSecondaryBackground);
+    color: var(--buttonSecondaryText);
   }
 
   &.danger {
-    color: var(--colorDanger);
+    color: var(--buttonDangerText);
+  }
+
+  &:disabled {
+    background-color: var(--buttonDisabledBackground);
+    color: var(--buttonDisabledText);
+    cursor: not-allowed;
   }
 }

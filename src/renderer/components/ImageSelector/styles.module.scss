@@ -2,6 +2,11 @@
   position: relative;
 }
 
+.imageSelectorContainer {
+  display: flex;
+  justify-content: center;
+}
+
 .imageSelectorButton {
   align-items: center;
   border-radius: 50%;

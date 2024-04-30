@@ -6,12 +6,16 @@ import type { PropsWithChildren } from 'react'
 import styles from './styles.module.scss'
 
 type Props = {
-  className?: string
+  variant: 'welcome' | 'deletion'
 }
 
-export default function Callout({
+export default function ImageBackdrop({
   children,
-  className,
+  variant = 'welcome',
 }: PropsWithChildren<Props>) {
-  return <div className={classNames(styles.callout, className)}>{children}</div>
+  return (
+    <div className={classNames(styles.imageBackdrop, styles[variant])}>
+      {children}
+    </div>
+  )
 }
