@@ -9,6 +9,7 @@ import { InstantOnboardingContext } from '../contexts/InstantOnboardingContext'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import type { WelcomeQrWithUrl } from '../contexts/InstantOnboardingContext'
+import type { AccountQr } from '../backend/qr'
 
 /*
  * Instant Onboarding allows users to create new email addresses from within the
@@ -117,6 +118,9 @@ export default function useInstantOnboarding() {
                     { ...welcomeQr, qr: welcomeQr.qr },
                     true
                   )
+                } else {
+                  // Exhaustively check
+                  const _: AccountQr | never = welcomeQr.qr
                 }
               }
 
