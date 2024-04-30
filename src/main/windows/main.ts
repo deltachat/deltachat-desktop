@@ -26,7 +26,13 @@ import { fileURLToPath } from 'url'
 
 const log = getLogger('main/mainWindow')
 
-export let window: (BrowserWindow & { hidden?: boolean }) | null = null
+type ExtendedBrowserWindow = BrowserWindow & {
+  hidden?: boolean
+  /** whitelist of file paths that user selected that should the ui be able to also load via the file:/// scheme */
+  filePathWhiteList: string[]
+}
+
+export let window: ExtendedBrowserWindow | null = null
 
 export function init(options: { hidden: boolean }) {
   if (window) {
@@ -41,7 +47,7 @@ export function init(options: { hidden: boolean }) {
 
   const isMac = platform() === 'darwin'
 
-  const main_window = (window = <BrowserWindow & { hidden?: boolean }>(
+  const main_window = (window = <ExtendedBrowserWindow>(
     new electron.BrowserWindow({
       backgroundColor: '#282828',
       // backgroundThrottling: false, // do not throttle animations/timers when page is background
@@ -67,6 +73,7 @@ export function init(options: { hidden: boolean }) {
       titleBarOverlay: true,
     })
   ))
+  main_window.filePathWhiteList = []
 
   // disable network request to fetch dictionary
   // issue: https://github.com/electron/electron/issues/22995
@@ -198,6 +205,10 @@ export function init(options: { hidden: boolean }) {
           pathname.startsWith(allowedPath)
         )
       ) {
+        return callback({ cancel: false })
+      }
+
+      if (window?.filePathWhiteList.includes(pathname)) {
         return callback({ cancel: false })
       }
 

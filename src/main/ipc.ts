@@ -118,11 +118,13 @@ export async function init(cwd: string, logHandler: LogHandler) {
     ev.returnValue = app.getPath(arg)
   })
 
-  ipcMain.handle('fileChooser', (_ev, options) => {
+  ipcMain.handle('fileChooser', async (_ev, options) => {
     if (!mainWindow.window) {
       throw new Error('window does not exist, this should never happen')
     }
-    return dialog.showOpenDialog(mainWindow.window, options)
+    const returnValue = await dialog.showOpenDialog(mainWindow.window, options)
+    mainWindow.window.filePathWhiteList.push(...returnValue.filePaths)
+    return returnValue
   })
 
   let lastSaveDialogLocation: string | undefined = undefined
