@@ -19,7 +19,7 @@ import { getLogger } from '../../shared/logger'
 import { processQr } from '../backend/qr'
 
 import type { T } from '@deltachat/jsonrpc-client'
-import type { QrWithUrl } from '../backend/qr'
+import type { LoginQr, QrWithUrl } from '../backend/qr'
 import type { WelcomeQrWithUrl } from '../contexts/InstantOnboardingContext'
 
 const ALLOWED_QR_CODES_ON_WELCOME_SCREEN: T.Qr['kind'][] = [
@@ -149,7 +149,7 @@ export default function useProcessQR() {
   // We ask the user if they really want to proceed with this action and log
   // them in automatically.
   const startLogin = useCallback(
-    async (accountId: number, qrWithUrl: QrWithUrl) => {
+    async (accountId: number, qrWithUrl: QrWithUrl<LoginQr>) => {
       const { qr, url } = qrWithUrl
       if (qr.kind !== 'login') {
         throw new Error('QR code needs to be of kind "login"')
@@ -240,14 +240,14 @@ export default function useProcessQR() {
       // DCACCOUNT: Ask the user if they want to create a new profile on the
       // given chatmail instance
       if (qr.kind === 'account') {
-        await startInstantOnboarding(accountId, parsed as WelcomeQrWithUrl)
+        await startInstantOnboarding(accountId, { ...parsed, qr })
         callback && callback()
         return
       }
 
       // DCLOGIN: Ask the user if they want to login with given credentials
       if (qr.kind === 'login') {
-        await startLogin(accountId, parsed as WelcomeQrWithUrl)
+        await startLogin(accountId, { ...parsed, qr })
         callback && callback()
         return
       }
@@ -258,10 +258,10 @@ export default function useProcessQR() {
         if (screen === Screens.Welcome) {
           // Ask user to create a new account with instant onboarding flow before they
           // can start chatting with the given contact
-          await startInstantOnboarding(accountId, parsed as WelcomeQrWithUrl)
+          await startInstantOnboarding(accountId, { ...parsed, qr })
           callback && callback()
         } else {
-          const chatId = await secureJoinContact(accountId, parsed)
+          const chatId = await secureJoinContact(accountId, { ...parsed, qr })
           if (chatId) {
             callback && callback(chatId)
           }
@@ -275,10 +275,10 @@ export default function useProcessQR() {
         if (screen === Screens.Welcome) {
           // Ask user to create a new account with instant onboarding flow before they
           // can join the given group
-          await startInstantOnboarding(accountId, parsed as WelcomeQrWithUrl)
+          await startInstantOnboarding(accountId, { ...parsed, qr })
           callback && callback()
         } else {
-          const chatId = await secureJoinGroup(accountId, parsed)
+          const chatId = await secureJoinGroup(accountId, { ...parsed, qr })
           if (chatId) {
             callback && callback(chatId)
           }

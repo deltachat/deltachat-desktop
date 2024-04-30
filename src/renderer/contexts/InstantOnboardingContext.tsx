@@ -1,19 +1,16 @@
 import React, { useState } from 'react'
 
 import type { PropsWithChildren } from 'react'
-import type { T } from '@deltachat/jsonrpc-client'
-import type { QrWithUrl } from '../backend/qr'
+import type {
+  AccountQr,
+  QrWithUrl,
+  VerifyContactQr,
+  VerifyGroupQr,
+} from '../backend/qr'
 
-export type WelcomeQr = Extract<
-  T.Qr,
-  | { kind: 'account' }
-  | { kind: 'askVerifyContact' }
-  | { kind: 'askVerifyGroup' }
->
+export type WelcomeQr = VerifyGroupQr | VerifyContactQr | AccountQr
 
-export type WelcomeQrWithUrl = Pick<QrWithUrl, 'url'> & {
-  qr: WelcomeQr
-}
+export type WelcomeQrWithUrl = QrWithUrl<WelcomeQr>
 
 type InstantOnboardingContextValue = {
   setShowInstantOnboarding: (value: boolean) => void

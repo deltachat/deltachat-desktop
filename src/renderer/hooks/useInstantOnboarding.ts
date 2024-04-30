@@ -106,9 +106,17 @@ export default function useInstantOnboarding() {
               let chatId: number | null = null
               if (welcomeQr) {
                 if (welcomeQr.qr.kind === 'askVerifyContact') {
-                  chatId = await secureJoinContact(accountId, welcomeQr, true)
+                  chatId = await secureJoinContact(
+                    accountId,
+                    { ...welcomeQr, qr: welcomeQr.qr },
+                    true
+                  )
                 } else if (welcomeQr.qr.kind === 'askVerifyGroup') {
-                  chatId = await secureJoinGroup(accountId, welcomeQr, true)
+                  chatId = await secureJoinGroup(
+                    accountId,
+                    { ...welcomeQr, qr: welcomeQr.qr },
+                    true
+                  )
                 }
               }
 

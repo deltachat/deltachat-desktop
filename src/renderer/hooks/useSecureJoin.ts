@@ -5,14 +5,17 @@ import useTranslationFunction from './useTranslationFunction'
 import { BackendRemote } from '../backend-com'
 
 import type { FullChat } from '@deltachat/jsonrpc-client/dist/generated/types'
-import type { QrWithUrl } from '../backend/qr'
+import type { QrWithUrl, VerifyContactQr, VerifyGroupQr } from '../backend/qr'
 
 export default function useSecureJoin() {
   const openConfirmationDialog = useConfirmationDialog()
   const tx = useTranslationFunction()
 
   const confirmJoinContact = useCallback(
-    async (accountId: number, qrWithUrl: QrWithUrl): Promise<boolean> => {
+    async (
+      accountId: number,
+      qrWithUrl: QrWithUrl<VerifyContactQr>
+    ): Promise<boolean> => {
       const { qr } = qrWithUrl
       if (qr.kind !== 'askVerifyContact') {
         throw new Error(
@@ -53,7 +56,7 @@ export default function useSecureJoin() {
   const secureJoinContact = useCallback(
     async (
       accountId: number,
-      qrWithUrl: QrWithUrl,
+      qrWithUrl: QrWithUrl<VerifyContactQr>,
       skipUserConfirmation: boolean = false
     ): Promise<FullChat['id'] | null> => {
       const { qr, url } = qrWithUrl
@@ -79,7 +82,7 @@ export default function useSecureJoin() {
   const secureJoinGroup = useCallback(
     async (
       accountId: number,
-      qrWithUrl: QrWithUrl,
+      qrWithUrl: QrWithUrl<VerifyGroupQr>,
       skipUserConfirmation: boolean = false
     ): Promise<FullChat['id'] | null> => {
       const { qr, url } = qrWithUrl

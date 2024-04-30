@@ -8,11 +8,11 @@ import {
   isQRWithDefaultInstance,
 } from './chatmailInstances'
 
-import type { QrWithUrl } from '../../../backend/qr'
+import type { AccountQr, QrWithUrl } from '../../../backend/qr'
 
 const URL_REGEX = /(https?:\/\/[^\s]+)/g
 
-function extractLinkFromQrCode(qrWithUrl: QrWithUrl) {
+function extractLinkFromQrCode(qrWithUrl: QrWithUrl<AccountQr>) {
   if (qrWithUrl.qr.kind !== 'account') {
     throw new Error('QR needs to be of kind "account"')
   }
@@ -42,7 +42,9 @@ export default function UserAgreement() {
       )}
       {!isDefaultInstance && welcomeQr && welcomeQr.qr.kind === 'account' && (
         <>
-          <ClickableLink href={extractLinkFromQrCode(welcomeQr)}>
+          <ClickableLink
+            href={extractLinkFromQrCode({ ...welcomeQr, qr: welcomeQr.qr })}
+          >
             {tx('instant_onboarding_agree_instance', welcomeQr.qr.domain)}
           </ClickableLink>
         </>
