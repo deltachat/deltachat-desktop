@@ -12,7 +12,6 @@ import Dialog, {
   FooterActions,
 } from '../../Dialog'
 import FooterActionButton from '../../Dialog/FooterActionButton'
-import Icon from '../../Icon'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import useConfirmationDialog from '../../../hooks/dialog/useConfirmationDialog'
 
@@ -22,8 +21,6 @@ import type { DialogProps } from '../../../contexts/DialogContext'
 import styles from './styles.module.scss'
 
 const log = getLogger('renderer/send_backup')
-
-const TROUBLESHOOTING_URL = 'https://delta.chat/en/help#multiclient'
 
 export function SendBackupDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
