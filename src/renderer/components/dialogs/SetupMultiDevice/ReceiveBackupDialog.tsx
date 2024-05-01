@@ -26,7 +26,6 @@ export function ReceiveBackupDialog({ onClose }: Props & DialogProps) {
   )
 }
 
-
 function ReceiveBackupSteps() {
   const tx = useTranslationFunction()
 
