@@ -9,7 +9,7 @@
 - add quick key `Cmd+W`/`Ctrl+W` to close webxdc-, html_email- and help-window #3770 #3778
 - Accept images from clipboard in QR reader #3762
 - Introduce new `Spinner` component #3786
-- Instant Onboarding #3773
+- Instant Onboarding #3773 #3801
 
 ### Changed
 - Update translations (2024-04-04) #3746
