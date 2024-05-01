@@ -44,7 +44,7 @@ const log = getLogger('renderer/hooks/useProcessQr')
  */
 export default function useProcessQR() {
   const tx = useTranslationFunction()
-  const { screen, addAndSelectAccount } = useContext(ScreenContext)
+  const { addAndSelectAccount } = useContext(ScreenContext)
   const { openDialog } = useDialog()
   const openAlertDialog = useAlertDialog()
   const openConfirmationDialog = useConfirmationDialog()
@@ -352,12 +352,12 @@ export default function useProcessQR() {
       openConfirmationDialog,
       openDialog,
       openMailtoLink,
-      screen,
       secureJoinContact,
       secureJoinGroup,
       setConfigFromQrCatchingErrorInAlert,
       startInstantOnboarding,
       addAndSelectAccount,
+      selectChat,
       tx,
     ]
   )

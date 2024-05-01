@@ -96,9 +96,7 @@ export default function InstantOnboardingScreen({
             <div className={styles.instantOnboardingAgreement}>
               {welcomeQr?.qr.kind !== 'login' && <UserAgreement />}
               {welcomeQr?.qr.kind === 'login' && (
-                <>
-                  {tx('qrlogin_ask_login', welcomeQr.qr.address)}
-                </>
+                <>{tx('qrlogin_ask_login', welcomeQr.qr.address)}</>
               )}
             </div>
             <Button

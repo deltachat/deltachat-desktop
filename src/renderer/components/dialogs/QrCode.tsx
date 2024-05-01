@@ -20,7 +20,6 @@ import { BackendRemote } from '../../backend-com'
 import { getLogger } from '../../../shared/logger'
 import { runtime } from '../../runtime'
 import { ScreenContext } from '../../contexts/ScreenContext'
-import useChat from '../../hooks/chat/useChat'
 import useContextMenu from '../../hooks/useContextMenu'
 import useProcessQr from '../../hooks/useProcessQr'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
@@ -232,7 +231,7 @@ export function QrCodeScanQrInner({
         log.debug('Already processing a qr code')
       }
     },
-    [accountId, processQr]
+    [accountId, processQr, onDone, openAlertDialog]
   )
 
   const handleError = (err: string) => {
