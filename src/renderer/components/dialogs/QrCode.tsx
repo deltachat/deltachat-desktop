@@ -28,6 +28,7 @@ import { qrCodeToInviteUrl } from '../../utils/invite'
 import { selectedAccountId } from '../../ScreenController'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import useAlertDialog from '../../hooks/dialog/useAlertDialog'
 
 const log = getLogger('renderer/dialogs/QrCode')
 
@@ -206,37 +207,32 @@ export function QrCodeScanQrInner({
   const tx = useTranslationFunction()
   const accountId = selectedAccountId()
   const processQr = useProcessQr()
-  const { selectChat } = useChat()
   const processingQrCode = useRef(false)
+  const openAlertDialog = useAlertDialog()
 
   const onDone = useCallback(() => {
     onClose()
     processingQrCode.current = false
   }, [onClose])
 
-  const handleScanResult = useCallback(
-    (chatId: number | null = null) => {
-      chatId && selectChat(accountId, chatId)
-      onDone()
-    },
-    [onDone, selectChat, accountId]
-  )
-
   const handleScan = useCallback(
     async (data: string) => {
       if (data && !processingQrCode.current) {
         processingQrCode.current = true
         try {
-          await processQr(accountId, data, handleScanResult)
+          await processQr(accountId, data, onDone)
         } catch (error: any) {
-          handleError(error)
+          log.errorWithoutStackTrace('QrReader process error: ', error)
+          openAlertDialog({
+            message: error.message || error.toString(),
+          })
         }
         processingQrCode.current = false
       } else if (processingQrCode.current === true) {
         log.debug('Already processing a qr code')
       }
     },
-    [accountId, handleScanResult, processQr]
+    [accountId, processQr]
   )
 
   const handleError = (err: string) => {

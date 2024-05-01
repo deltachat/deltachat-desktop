@@ -3,12 +3,13 @@ import React, { useState } from 'react'
 import type { PropsWithChildren } from 'react'
 import type {
   AccountQr,
+  LoginQr,
   QrWithUrl,
   VerifyContactQr,
   VerifyGroupQr,
 } from '../backend/qr'
 
-export type WelcomeQr = VerifyGroupQr | VerifyContactQr | AccountQr
+export type WelcomeQr = VerifyGroupQr | VerifyContactQr | AccountQr | LoginQr
 
 export type WelcomeQrWithUrl = QrWithUrl<WelcomeQr>
 

@@ -9,7 +9,12 @@ import { InstantOnboardingContext } from '../contexts/InstantOnboardingContext'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import type { WelcomeQrWithUrl } from '../contexts/InstantOnboardingContext'
-import type { AccountQr } from '../backend/qr'
+import type {
+  AccountQr,
+  LoginQr,
+  VerifyContactQr,
+  VerifyGroupQr,
+} from '../backend/qr'
 
 type InstantOnboarding = {
   createInstantAccount: (
@@ -52,18 +57,6 @@ export default function useInstantOnboarding(): InstantOnboarding {
 
   const startInstantOnboardingFlow = useCallback(
     async (qrWithUrl?: WelcomeQrWithUrl) => {
-      if (qrWithUrl) {
-        if (
-          !['account', 'askVerifyGroup', 'askVerifyContact'].includes(
-            qrWithUrl.qr.kind
-          )
-        ) {
-          throw new Error(
-            'QR code needs to be of kind `account`, `askVerifyGroup` or `askVerifyContact` for instant onboarding flow'
-          )
-        }
-      }
-
       setShowInstantOnboarding(true)
 
       // Since a QR code can be scanned by the user in literally any situation,
@@ -83,20 +76,30 @@ export default function useInstantOnboarding(): InstantOnboarding {
     ): Promise<T.FullChat['id'] | null> => {
       let instanceUrl = `dcaccount:${DEFAULT_CHATMAIL_QR_URL}`
 
-      // Use custom chatmail instance if given by QR code
-      if (welcomeQr && welcomeQr.qr.kind === 'account') {
-        instanceUrl = welcomeQr.url
+      if (welcomeQr) {
+        // Use custom chatmail instance if given by QR code
+        if (welcomeQr.qr.kind === 'account') {
+          instanceUrl = welcomeQr.url
+          // 1. In this "Instant Onboarding" account creation flow the user is not
+          // asked to manually insert any mail server credentials.
+          //
+          // Internally, the function will call the chatmail instance URL via HTTP
+          // from which it'll receive the address and password as an JSON object.
+          //
+          // After parsing it'll automatically configure the account with the
+          // appropriate keys for login, e.g. `addr` and `mail_pw`
+          await BackendRemote.rpc.setConfigFromQr(accountId, instanceUrl)
+        } else if (welcomeQr.qr.kind === 'login') {
+          // 1. In this "Instant Onboarding" login flow the user is not
+          // asked to manually insert any mail server credentials.
+          //
+          // The credentails come from the scanned DCLOGIN qr code
+          await BackendRemote.rpc.setConfigFromQr(accountId, welcomeQr.url)
+        } else {
+          // Exhaustivity check
+          const _: VerifyContactQr | VerifyGroupQr | never = welcomeQr.qr
+        }
       }
-
-      // 1. In this "Instant Onboarding" account creation flow the user is not
-      // asked to manually insert any mail server credentials.
-      //
-      // Internally, the function will call the chatmail instance URL via HTTP
-      // from which it'll receive the address and password as an JSON object.
-      //
-      // After parsing it'll automatically configure the account with the
-      // appropriate keys for login, e.g. `addr` and `mail_pw`
-      await BackendRemote.rpc.setConfigFromQr(accountId, instanceUrl)
 
       // 2. Additionally we set the `selfavatar` / profile picture
       // and `displayname` configuration for this account
@@ -136,8 +139,8 @@ export default function useInstantOnboarding(): InstantOnboarding {
                     true
                   )
                 } else {
-                  // Exhaustively check
-                  const _: AccountQr | never = welcomeQr.qr
+                  // Exhaustivity check
+                  const _: AccountQr | LoginQr | never = welcomeQr.qr
                 }
               }
 

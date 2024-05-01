@@ -34,20 +34,16 @@ export default function UserAgreement() {
   return (
     <>
       {isDefaultInstance && (
-        <>
-          <ClickableLink href={DEFAULT_INSTANCE_PRIVACY_POLICY_URL}>
-            {tx('instant_onboarding_agree_default')}{' '}
-          </ClickableLink>
-        </>
+        <ClickableLink href={DEFAULT_INSTANCE_PRIVACY_POLICY_URL}>
+          {tx('instant_onboarding_agree_default')}{' '}
+        </ClickableLink>
       )}
       {!isDefaultInstance && welcomeQr && welcomeQr.qr.kind === 'account' && (
-        <>
-          <ClickableLink
-            href={extractLinkFromQrCode({ ...welcomeQr, qr: welcomeQr.qr })}
-          >
-            {tx('instant_onboarding_agree_instance', welcomeQr.qr.domain)}
-          </ClickableLink>
-        </>
+        <ClickableLink
+          href={extractLinkFromQrCode({ ...welcomeQr, qr: welcomeQr.qr })}
+        >
+          {tx('instant_onboarding_agree_instance', welcomeQr.qr.domain)}
+        </ClickableLink>
       )}
     </>
   )
