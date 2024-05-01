@@ -12,7 +12,7 @@
 - Instant Onboarding #3773
 
 ### Changed
-- Update translations (2024-04-04) #3746
+- Update translations (2024-05-01) #3746 #3802
 - The latest reaction is now shown in the chatlist, if it's newer than the last message #3749
 - minor improvements to "add second device" dialog #3748
 - Remove deprecated translations #3756
