@@ -29,9 +29,9 @@ const log = getLogger('main/mainWindow')
 type ExtendedBrowserWindow = BrowserWindow & {
   hidden?: boolean
   /**
-  * whitelist of file paths that user selected that the UI should be able to also load via the file:/// scheme
-  * example: when changing avatar, we need to display the selected image before it is uploaded to core
-  */
+   * whitelist of file paths that user selected that the UI should be able to also load via the file:/// scheme
+   * example: when changing avatar, we need to display the selected image before it is uploaded to core
+   */
   filePathWhiteList: string[]
 }
 
