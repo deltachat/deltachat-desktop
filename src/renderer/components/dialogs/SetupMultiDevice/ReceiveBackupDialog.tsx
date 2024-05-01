@@ -63,15 +63,17 @@ export function ReceiveBackupDialog({ onClose }: Props & DialogProps) {
       onClose={onClose}
     >
       <DialogBody>
-        <ReceiveBackupSteps />
+        <p className={styles.receiveSteps}>
+          {tx('multidevice_open_settings_on_other_device')}
+          <br />
+          {tx('multidevice_experimental_hint')}
+        </p>
         <QrReader onScan={handleScan} onError={handleError} />
       </DialogBody>
       <DialogFooter>
         <FooterActions align='spaceBetween'>
           <FooterActionButton
-            onClick={() =>
-              runtime.openHelpWindow('multiclient-troubleshooting')
-            }
+            onClick={() => runtime.openHelpWindow('multiclient')}
           >
             {tx('troubleshooting')}
           </FooterActionButton>
@@ -81,19 +83,5 @@ export function ReceiveBackupDialog({ onClose }: Props & DialogProps) {
         </FooterActions>
       </DialogFooter>
     </DialogWithHeader>
-  )
-}
-
-function ReceiveBackupSteps() {
-  const tx = useTranslationFunction()
-
-  return (
-    <div className={styles.sendBackupSteps}>
-      <ol className={styles.sendBackupStepsList}>
-        <li>{tx('multidevice_receiver_title')}</li>
-        <li>{tx('multidevice_open_settings_on_other_device')}</li>
-      </ol>
-      {tx('multidevice_experimental_hint')}
-    </div>
   )
 }

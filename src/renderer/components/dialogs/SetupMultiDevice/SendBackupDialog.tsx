@@ -179,9 +179,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
             <FooterActions align='spaceBetween'>
               <span className={styles.buttonGroup}>
                 <FooterActionButton
-                  onClick={() =>
-                    runtime.openHelpWindow('multiclient-troubleshooting')
-                  }
+                  onClick={() => runtime.openHelpWindow('multiclient')}
                 >
                   {tx('troubleshooting')}
                 </FooterActionButton>
