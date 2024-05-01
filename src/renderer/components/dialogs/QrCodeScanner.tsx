@@ -6,11 +6,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
-type Props = {
-  subtitle: string
-}
-
-export default function ImportQrCode({ onClose }: Props & DialogProps) {
+export default function QrCodeScanner({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
 
   return (

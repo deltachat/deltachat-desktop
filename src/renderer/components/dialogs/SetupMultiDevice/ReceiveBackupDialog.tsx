@@ -1,77 +1,42 @@
-import { Intent } from '@blueprintjs/core'
-import { DcEventType } from '@deltachat/jsonrpc-client'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
-import { getLogger } from '../../../../shared/logger'
-import { BackendRemote } from '../../../backend-com'
-import { selectedAccountId } from '../../../ScreenController'
-import { DeltaProgressBar } from '../../Login-Styles'
-import { DialogBody, DialogContent, DialogWithHeader } from '../../Dialog'
+import { QrCodeScanQrInner } from '../QrCode'
+import { DialogWithHeader } from '../../Dialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
+
+import styles from './styles.module.scss'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
 
-const log = getLogger('renderer/receive_backup')
-
 type Props = {
-  QrWithToken: string
+  subtitle: string
 }
 
-export function ReceiveBackupDialog({
-  onClose,
-  QrWithToken,
-}: Props & DialogProps) {
-  const [importProgress, setImportProgress] = useState(0.0)
-  const [error, setError] = useState<string | null>(null)
+export function ReceiveBackupDialog({ onClose }: Props & DialogProps) {
   const tx = useTranslationFunction()
-
-  const onImexProgress = ({ progress }: DcEventType<'ImexProgress'>) => {
-    setImportProgress(progress)
-  }
-
-  const accountId = selectedAccountId()
-
-  useEffect(() => {
-    ;(async () => {
-      try {
-        log.debug(`Starting remote backup import of ${QrWithToken}`)
-        await BackendRemote.rpc.getBackup(accountId, QrWithToken)
-      } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message)
-        }
-        return
-      }
-      onClose()
-      window.__selectAccount(accountId)
-      window.__updateAccountListSidebar?.()
-    })()
-
-    const emitter = BackendRemote.getContextEvents(accountId)
-    emitter.on('ImexProgress', onImexProgress)
-    return () => {
-      emitter.off('ImexProgress', onImexProgress)
-    }
-  }, [QrWithToken, onClose, accountId])
 
   return (
     <DialogWithHeader
-      onClose={onClose}
       title={tx('multidevice_receiver_title')}
+      onClose={onClose}
     >
-      <DialogBody>
-        <DialogContent>
-          {error && (
-            <p>
-              {tx('error')}: {error}
-            </p>
-          )}
-          <DeltaProgressBar
-            progress={importProgress}
-            intent={!error ? Intent.SUCCESS : Intent.DANGER}
-          />
-        </DialogContent>
-      </DialogBody>
+      <ReceiveBackupSteps />
+      <QrCodeScanQrInner onClose={onClose} />
     </DialogWithHeader>
+  )
+}
+
+
+function ReceiveBackupSteps() {
+  const tx = useTranslationFunction()
+
+  return (
+    <div className={styles.sendBackupSteps}>
+      <ol className={styles.sendBackupStepsList}>
+        <li>{tx('multidevice_receiver_title')}</li>
+        <li>{tx('multidevice_open_settings_on_other_device')}</li>
+      </ol>
+      {tx('multidevice_experimental_hint')}
+    </div>
   )
 }

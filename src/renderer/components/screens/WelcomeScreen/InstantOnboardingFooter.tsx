@@ -2,7 +2,7 @@ import React from 'react'
 
 import Callout from '../../Callout'
 import ClickableLink from '../../helpers/ClickableLink'
-import ImportQrCode from '../../dialogs/ImportQrCode'
+import QrCodeScanner from '../../dialogs/QrCodeScanner'
 import useDialog from '../../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { CHATMAIL_INSTANCES_LIST_URL } from './chatmailInstances'
@@ -14,7 +14,7 @@ export default function InstantOnboardingFooter() {
   const { openDialog } = useDialog()
 
   const onScanQRCode = () => {
-    openDialog(ImportQrCode)
+    openDialog(QrCodeScanner)
   }
 
   return (
