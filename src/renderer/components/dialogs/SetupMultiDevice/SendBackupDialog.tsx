@@ -182,10 +182,11 @@ export function SendBackupDialog({ onClose }: DialogProps) {
             <FooterActions align='spaceBetween'>
               <span className={styles.buttonGroup}>
                 <FooterActionButton
-                  onClick={() => runtime.openLink(TROUBLESHOOTING_URL)}
+                  onClick={() =>
+                    runtime.openHelpWindow('multiclient-troubleshooting')
+                  }
                 >
-                  {tx('troubleshooting')}&nbsp;
-                  <Icon icon='open_in_new' size={20} />
+                  {tx('troubleshooting')}
                 </FooterActionButton>
                 {stage === 'awaiting_scan' && svgUrl && qrContent && (
                   <FooterActionButton onClick={copyQrToClipboard}>
