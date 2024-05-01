@@ -17,7 +17,7 @@
 - minor improvements to "add second device" dialog #3748
 - Remove deprecated translations #3756
 - Refactor chat store into React context #3725
-- Improve security: restrict file protocol #3769 #3798
+- Improve security: restrict file protocol #3769 #3798 #3800
 - Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.137.3`
 - Change chatlist to use new chatlist changed event from core #3268
 - Refactor QR code reader #3762
