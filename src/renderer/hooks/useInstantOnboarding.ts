@@ -74,12 +74,11 @@ export default function useInstantOnboarding(): InstantOnboarding {
       displayName: string,
       profilePicture?: string
     ): Promise<T.FullChat['id'] | null> => {
-      let instanceUrl = `dcaccount:${DEFAULT_CHATMAIL_QR_URL}`
+      let configurationQR = `dcaccount:${DEFAULT_CHATMAIL_QR_URL}`
 
       if (welcomeQr) {
         // Use custom chatmail instance if given by QR code
         if (welcomeQr.qr.kind === 'account') {
-          instanceUrl = welcomeQr.url
           // 1. In this "Instant Onboarding" account creation flow the user is not
           // asked to manually insert any mail server credentials.
           //
@@ -88,18 +87,20 @@ export default function useInstantOnboarding(): InstantOnboarding {
           //
           // After parsing it'll automatically configure the account with the
           // appropriate keys for login, e.g. `addr` and `mail_pw`
-          await BackendRemote.rpc.setConfigFromQr(accountId, instanceUrl)
+          configurationQR = welcomeQr.url
         } else if (welcomeQr.qr.kind === 'login') {
           // 1. In this "Instant Onboarding" login flow the user is not
           // asked to manually insert any mail server credentials.
           //
           // The credentails come from the scanned DCLOGIN qr code
-          await BackendRemote.rpc.setConfigFromQr(accountId, welcomeQr.url)
+          configurationQR = welcomeQr.url
         } else {
           // Exhaustivity check
           const _: VerifyContactQr | VerifyGroupQr | never = welcomeQr.qr
         }
       }
+
+      await BackendRemote.rpc.setConfigFromQr(accountId, configurationQR)
 
       // 2. Additionally we set the `selfavatar` / profile picture
       // and `displayname` configuration for this account
