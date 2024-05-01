@@ -10,7 +10,7 @@ import useOpenMailtoLink from './useOpenMailtoLink'
 import useSecureJoin from './useSecureJoin'
 import useTranslationFunction from './useTranslationFunction'
 import { BackendRemote } from '../backend-com'
-import { ReceiveBackupDialog } from '../components/dialogs/SetupMultiDevice'
+import { ReceiveBackupDialog, ReceiveBackupProgressDialog } from '../components/dialogs/SetupMultiDevice'
 import { ScreenContext } from '../contexts/ScreenContext'
 import { getLogger } from '../../shared/logger'
 import { processQr } from '../backend/qr'
@@ -244,7 +244,7 @@ export default function useProcessQR() {
           })
           callback?.()
         } else {
-          openDialog(ReceiveBackupDialog, {
+          openDialog(ReceiveBackupProgressDialog, {
             QrWithToken: url,
           })
         }
