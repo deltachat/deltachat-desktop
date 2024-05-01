@@ -1,7 +1,6 @@
-import { app as rawApp, BrowserWindow, Menu, shell } from 'electron'
+import { BrowserWindow, Menu, shell } from 'electron'
 import { appIcon, htmlDistDir } from '../application-constants'
 import { getLogger } from '../../shared/logger'
-import { ExtendedAppMainProcess } from '../types'
 import { join } from 'path'
 import { stat } from 'fs/promises'
 import { platform } from 'os'
@@ -16,15 +15,16 @@ import {
 } from '../menu'
 
 const log = getLogger('main/help')
-const app = rawApp as ExtendedAppMainProcess
 
 async function getHelpFileForLang(locale: string) {
-  const appPath = app.getAppPath()
-
-  const contentFilePath = join(appPath, `/html-dist/help/${locale}/help.html`)
-  if ((await stat(contentFilePath)).isFile()) {
-    return join(htmlDistDir(), `help/${locale}/help.html`)
-  } else {
+  const contentFilePath = join(htmlDistDir(), `help/${locale}/help.html`)
+  try {
+    if (!(await stat(join(contentFilePath))).isFile()) {
+      log.warn('contentFilePath not a file')
+      throw new Error('contentFilePath not a file')
+    }
+    return contentFilePath
+  } catch (error) {
     log.warn(
       `Did not find help file for language ${locale}, falling back to english`
     )
