@@ -10,7 +10,7 @@
 - Accept images from clipboard in QR reader #3762
 - Introduce new `Spinner` component #3786
 - Instant Onboarding #3773 #3801
-- Add steps to add as second device qr code scan dialog #3801
+- Add instructions and troubleshooting button to "Add as Second Device" dialog #3801
 
 ### Changed
 - Update translations (2024-04-04) #3746
