@@ -10,17 +10,15 @@ import useOpenMailtoLink from './useOpenMailtoLink'
 import useSecureJoin from './useSecureJoin'
 import useTranslationFunction from './useTranslationFunction'
 import { BackendRemote } from '../backend-com'
-import { ConfigureProgressDialog } from '../components/LoginForm'
-import { ReceiveBackupDialog } from '../components/dialogs/SetupMultiDevice'
+import { ReceiveBackupProgressDialog } from '../components/dialogs/SetupMultiDevice'
 import { ScreenContext } from '../contexts/ScreenContext'
-import { Screens } from '../ScreenController'
-import { getConfiguredAccounts, isAccountConfigured } from '../backend/account'
 import { getLogger } from '../../shared/logger'
 import { processQr } from '../backend/qr'
 
 import type { T } from '@deltachat/jsonrpc-client'
-import type { LoginQr, QrWithUrl } from '../backend/qr'
+import type { QrWithUrl } from '../backend/qr'
 import type { WelcomeQrWithUrl } from '../contexts/InstantOnboardingContext'
+import useChat from './chat/useChat'
 
 const ALLOWED_QR_CODES_ON_WELCOME_SCREEN: T.Qr['kind'][] = [
   'account',
@@ -46,7 +44,7 @@ const log = getLogger('renderer/hooks/useProcessQr')
  */
 export default function useProcessQR() {
   const tx = useTranslationFunction()
-  const { screen, changeScreen } = useContext(ScreenContext)
+  const { addAndSelectAccount } = useContext(ScreenContext)
   const { openDialog } = useDialog()
   const openAlertDialog = useAlertDialog()
   const openConfirmationDialog = useConfirmationDialog()
@@ -54,6 +52,8 @@ export default function useProcessQR() {
   const openMailtoLink = useOpenMailtoLink()
   const { startInstantOnboardingFlow } = useInstantOnboarding()
   const { secureJoinGroup, secureJoinContact } = useSecureJoin()
+
+  const { selectChat } = useChat()
 
   const setConfigFromQrCatchingErrorInAlert = useCallback(
     async (accountId: number, qrContent: string) => {
@@ -70,19 +70,7 @@ export default function useProcessQR() {
     [openAlertDialog]
   )
 
-  /** Log user out if they already have an configured account */
-  const makeSureToLogOut = useCallback(async (accountId: number) => {
-    const isLoggedIn = await isAccountConfigured(accountId)
-    if (isLoggedIn) {
-      // Log out first by switching to an (temporary) blank account
-      const blankAccount = await BackendRemote.rpc.addAccount()
-
-      // Select blank account, this will also switch the screen to `Welcome`
-      await window.__selectAccount(blankAccount)
-    }
-  }, [])
-
-  // Users can enter the "Instant Onboarding" flow by scanning a DCACCOUNT,
+  // Users can enter the "Instant Onboarding" flow by scanning a DCACCOUNT, DCLOGIN
   // DC_ASK_VERIFYGROUP, or DC_ASK_VERIFYCONTACT code which essentially creates
   // a new "chatmail" profile for them and connects them with the regarding
   // contact or group if given.
@@ -92,23 +80,14 @@ export default function useProcessQR() {
   const startInstantOnboarding = useCallback(
     async (accountId: number, qrWithUrl: WelcomeQrWithUrl) => {
       const { qr } = qrWithUrl
-      const numberOfAccounts = (await getConfiguredAccounts()).length
 
-      if (qr.kind === 'account' && numberOfAccounts > 0) {
-        // Ask user to confirm creating a new account if they already have one
-        const message: string =
-          numberOfAccounts === 1
-            ? 'qraccount_ask_create_and_login'
-            : 'qraccount_ask_create_and_login_another'
-        const userConfirmed = await openConfirmationDialog({
-          message: tx(message, qr.domain),
-          confirmLabel: tx('login_title'),
-        })
+      if (await BackendRemote.rpc.isConfigured(accountId)) {
+        throw new Error(
+          'Instant onboarding can not be started on already configured account'
+        )
+      }
 
-        if (!userConfirmed) {
-          return
-        }
-      } else if (qr.kind === 'askVerifyGroup') {
+      if (qr.kind === 'askVerifyGroup') {
         // Ask the user if they want to create a new account and join the group
         const userConfirmed = await openConfirmationDialog({
           message: tx('instant_onboarding_confirm_group', qr.grpname),
@@ -137,67 +116,12 @@ export default function useProcessQR() {
       }
 
       await startInstantOnboardingFlow(qrWithUrl)
-      await makeSureToLogOut(accountId)
     },
-    [makeSureToLogOut, openConfirmationDialog, startInstantOnboardingFlow, tx]
-  )
-
-  // Users can login with any given credentials from a scanned `DCLOGIN` QR
-  // code.
-  //
-  // We ask the user if they really want to proceed with this action and log
-  // them in automatically.
-  const startLogin = useCallback(
-    async (accountId: number, qrWithUrl: QrWithUrl<LoginQr>) => {
-      const { qr, url } = qrWithUrl
-      if (qr.kind !== 'login') {
-        throw new Error('QR code needs to be of kind "login"')
-      }
-
-      const hasConfiguredAccount = (await getConfiguredAccounts()).length > 0
-      const message = hasConfiguredAccount
-        ? 'qrlogin_ask_login_another'
-        : 'qrlogin_ask_login'
-      const userConfirmed = await openConfirmationDialog({
-        message: tx(message, qr.address),
-        confirmLabel: tx('login_title'),
-      })
-
-      if (!userConfirmed) {
-        return
-      }
-
-      try {
-        await makeSureToLogOut(accountId)
-
-        await BackendRemote.rpc.setConfigFromQr(accountId, url)
-        openDialog(ConfigureProgressDialog, {
-          onSuccess: () => {
-            changeScreen(Screens.Main)
-          },
-        })
-      } catch (err: any) {
-        openAlertDialog({
-          message: err.message || err.toString(),
-        })
-      }
-    },
-    [
-      changeScreen,
-      makeSureToLogOut,
-      openAlertDialog,
-      openConfirmationDialog,
-      openDialog,
-      tx,
-    ]
+    [openConfirmationDialog, startInstantOnboardingFlow, tx]
   )
 
   return useCallback(
-    async (
-      accountId: number,
-      url: string,
-      callback?: (chatId?: number) => void
-    ) => {
+    async (accountId: number, url: string, callback?: () => void) => {
       // Scanned string is actually a link to an email address
       if (url.toLowerCase().startsWith('mailto:')) {
         await openMailtoLink(accountId, url, callback)
@@ -216,15 +140,14 @@ export default function useProcessQR() {
           message: QrErrorMessage({ url }),
         })
 
-        callback && callback()
-        return
+        return callback?.()
       }
 
       const { qr } = parsed
 
       // Some actions can only be executed when the user already has an account
       // and is logged in
-      const isLoggedIn = await isAccountConfigured(accountId)
+      const isLoggedIn = await BackendRemote.rpc.isConfigured(accountId)
       if (
         !ALLOWED_QR_CODES_ON_WELCOME_SCREEN.includes(qr.kind) &&
         !isLoggedIn
@@ -232,72 +155,100 @@ export default function useProcessQR() {
         await openAlertDialog({
           message: tx('Please login first'),
         })
-        callback && callback()
-        return
+        return callback?.()
       }
 
-      // DCACCOUNT: Ask the user if they want to create a new profile on the
-      // given chatmail instance
+      // DCACCOUNT:
+      // configured account: Ask the user if they want to create a new profile on the given chatmail instance
+      // unconfigured account: set instant onboarding chatmail instance
       if (qr.kind === 'account') {
-        await startInstantOnboarding(accountId, { ...parsed, qr })
-        callback && callback()
-        return
+        if (isLoggedIn) {
+          const userConfirmed = await openConfirmationDialog({
+            message: tx('qraccount_ask_create_and_login_another', qr.domain),
+            confirmLabel: tx('login_title'),
+          })
+
+          if (!userConfirmed) {
+            return callback?.()
+          }
+
+          const new_accountId = await addAndSelectAccount()
+          await startInstantOnboarding(new_accountId, { ...parsed, qr })
+        } else {
+          await startInstantOnboarding(accountId, { ...parsed, qr })
+        }
+
+        return callback?.()
       }
 
-      // DCLOGIN: Ask the user if they want to login with given credentials
+      // DCLOGIN:
+      // configured account: Ask the user if they want to login with given credentials
+      // unconfigured account: set instant onboarding credentials
       if (qr.kind === 'login') {
-        await startLogin(accountId, { ...parsed, qr })
-        callback && callback()
-        return
+        if (isLoggedIn) {
+          const userConfirmed = await openConfirmationDialog({
+            message: tx('qrlogin_ask_login_another', qr.address),
+            confirmLabel: tx('login_title'),
+          })
+
+          if (!userConfirmed) {
+            return callback?.()
+          }
+
+          const new_accountId = await addAndSelectAccount()
+          await startInstantOnboarding(new_accountId, { ...parsed, qr })
+        } else {
+          await startInstantOnboarding(accountId, { ...parsed, qr })
+        }
+
+        return callback?.()
       }
 
       // DC_ASK_VERIFYCONTACT: Ask whether to verify the contact; if so, start
       // the protocol with secure join
       if (qr.kind === 'askVerifyContact') {
-        if (screen === Screens.Welcome) {
+        if (!isLoggedIn) {
           // Ask user to create a new account with instant onboarding flow before they
           // can start chatting with the given contact
           await startInstantOnboarding(accountId, { ...parsed, qr })
-          callback && callback()
         } else {
           const chatId = await secureJoinContact(accountId, { ...parsed, qr })
           if (chatId) {
-            callback && callback(chatId)
+            selectChat(accountId, chatId)
           }
         }
-        return
+        return callback?.()
       }
 
       // DC_ASK_VERIFYGROUP: Ask whether to join the group; if so, start the
       // protocol with secure join
       if (qr.kind === 'askVerifyGroup') {
-        if (screen === Screens.Welcome) {
+        if (!isLoggedIn) {
           // Ask user to create a new account with instant onboarding flow before they
           // can join the given group
           await startInstantOnboarding(accountId, { ...parsed, qr })
-          callback && callback()
         } else {
           const chatId = await secureJoinGroup(accountId, { ...parsed, qr })
           if (chatId) {
-            callback && callback(chatId)
+            selectChat(accountId, chatId)
           }
         }
-        return
+        return callback?.()
       }
 
       // DCBACKUP: Ask the user if they want to set up a new device
       if (qr.kind === 'backup') {
-        if (screen === Screens.Main) {
+        if (isLoggedIn) {
           await openAlertDialog({
             message: tx('Please logout first'),
           })
-          callback && callback()
+          callback?.()
         } else {
-          openDialog(ReceiveBackupDialog, {
+          openDialog(ReceiveBackupProgressDialog, {
             QrWithToken: url,
           })
         }
-        callback && callback()
+        callback?.()
         return
       }
 
@@ -314,7 +265,7 @@ export default function useProcessQR() {
         })
 
         if (userConfirmed) {
-          callback && callback()
+          callback?.()
         }
         return
       }
@@ -331,7 +282,7 @@ export default function useProcessQR() {
           await setConfigFromQrCatchingErrorInAlert(accountId, url)
         }
 
-        callback && callback()
+        callback?.()
         return
       }
 
@@ -348,7 +299,7 @@ export default function useProcessQR() {
           await setConfigFromQrCatchingErrorInAlert(accountId, url)
         }
 
-        callback && callback()
+        callback?.()
         return
       }
 
@@ -364,7 +315,7 @@ export default function useProcessQR() {
           await setConfigFromQrCatchingErrorInAlert(accountId, url)
         }
 
-        callback && callback()
+        callback?.()
         return
       }
 
@@ -381,7 +332,7 @@ export default function useProcessQR() {
           await setConfigFromQrCatchingErrorInAlert(accountId, url)
         }
 
-        callback && callback()
+        callback?.()
         return
       }
 
@@ -401,12 +352,12 @@ export default function useProcessQR() {
       openConfirmationDialog,
       openDialog,
       openMailtoLink,
-      screen,
       secureJoinContact,
       secureJoinGroup,
       setConfigFromQrCatchingErrorInAlert,
       startInstantOnboarding,
-      startLogin,
+      addAndSelectAccount,
+      selectChat,
       tx,
     ]
   )

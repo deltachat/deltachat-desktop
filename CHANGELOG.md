@@ -9,7 +9,8 @@
 - add quick key `Cmd+W`/`Ctrl+W` to close webxdc-, html_email- and help-window #3770 #3778
 - Accept images from clipboard in QR reader #3762
 - Introduce new `Spinner` component #3786
-- Instant Onboarding #3773
+- Instant Onboarding #3773 #3801
+- Add instructions and troubleshooting button to "Add as Second Device" dialog #3801
 
 ### Changed
 - Update translations (2024-05-01) #3746 #3802
@@ -38,6 +39,7 @@
 - Close reactions bar on emoji selection #3788
 - fix Clicking notification does not bring Delta Chat to foreground on Windows #3793
 - Prevent re-rendering of account sidebar when switching account #3789
+- fix help not opening for languages that have no localized help
 
 ### Removed
 - remove disabled composer reason, now composer is just always hidden when `chat.canSend` is `false` #3791

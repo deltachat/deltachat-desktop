@@ -57,6 +57,7 @@ export default class ScreenController extends Component {
     this.userFeedback = this.userFeedback.bind(this)
     this.userFeedbackClick = this.userFeedbackClick.bind(this)
     this.changeScreen = this.changeScreen.bind(this)
+    this.addAndSelectAccount = this.addAndSelectAccount.bind(this)
     this.selectAccount = this.selectAccount.bind(this)
     this.unSelectAccount = this.unSelectAccount.bind(this)
     this.openAccountDeletionScreen = this.openAccountDeletionScreen.bind(this)
@@ -296,6 +297,7 @@ export default class ScreenController extends Component {
             userFeedback: this.userFeedback,
             changeScreen: this.changeScreen,
             screen: this.state.screen,
+            addAndSelectAccount: this.addAndSelectAccount,
           }}
         >
           <InstantOnboardingProvider>
@@ -310,7 +312,7 @@ export default class ScreenController extends Component {
                     <div className='main-container'>
                       <AccountListSidebar
                         selectedAccountId={this.selectedAccountId}
-                        onAddAccount={this.addAndSelectAccount.bind(this)}
+                        onAddAccount={this.addAndSelectAccount}
                         onSelectAccount={this.selectAccount.bind(this)}
                         openAccountDeletionScreen={this.openAccountDeletionScreen.bind(
                           this

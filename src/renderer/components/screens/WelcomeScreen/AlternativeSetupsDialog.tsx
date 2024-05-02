@@ -4,7 +4,7 @@ import { dirname } from 'path'
 import Button from '../../Button'
 import Dialog, { DialogBody, DialogContent, DialogHeader } from '../../Dialog'
 import ImportBackupProgressDialog from './ImportBackupProgressDialog'
-import ImportQrCode from '../../dialogs/ImportQrCode'
+
 import useDialog from '../../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import {
@@ -18,16 +18,14 @@ import { runtime } from '../../../runtime'
 import styles from './styles.module.scss'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
+import { ReceiveBackupDialog } from '../../dialogs/SetupMultiDevice'
 
 export default function AlternativeSetupsDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
   const { changeScreen } = useContext(ScreenContext)
 
-  const onClickSecondDevice = () =>
-    openDialog(ImportQrCode, {
-      subtitle: tx('multidevice_open_settings_on_other_device'),
-    })
+  const onClickSecondDevice = () => openDialog(ReceiveBackupDialog)
 
   async function onClickImportBackup() {
     const { defaultPath, setLastPath } = rememberLastUsedPath(
