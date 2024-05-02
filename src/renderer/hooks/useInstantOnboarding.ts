@@ -80,7 +80,7 @@ export default function useInstantOnboarding(): InstantOnboarding {
         // Use custom chatmail instance if given by QR code
         if (welcomeQr.qr.kind === 'account') {
           // 1. In this "Instant Onboarding" account creation flow the user is not
-          // asked to manually insert any mail server credentials.
+          // asked to manually enter any mail server credentials.
           //
           // Internally, the function will call the chatmail instance URL via HTTP
           // from which it'll receive the address and password as an JSON object.
