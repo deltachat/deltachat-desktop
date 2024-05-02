@@ -26,5 +26,14 @@
   },
   "camera_access_failed": {
     "message": "Could not access video camera. You might want to check your video permissions or if the camera is used already by another program"
+  },
+  "reset": {
+    "message": "Reset"
+  },
+  "crop_image": {
+    "message": "Crop Image"
+  },
+  "image_cropper_hint_desktop": {
+    "message": "Select an area on the image"
   }
 }

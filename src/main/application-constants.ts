@@ -87,6 +87,7 @@ export const ALLOWED_STATIC_FOLDERS = [
     join(AppFilesDir, folder)
   ),
   ...ALLOWED_CONFIG_FOLDERS.map(folder => join(getConfigPath(), folder)),
+  getDraftTempDir(),
 ]
 
 export const ALLOWED_ACCOUNT_FOLDERS = [

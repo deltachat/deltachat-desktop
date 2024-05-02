@@ -11,6 +11,7 @@
 - Introduce new `Spinner` component #3786
 - Instant Onboarding #3773 #3801
 - Add instructions and troubleshooting button to "Add as Second Device" dialog #3801
+- Add image cropper for profile image selector #1779
 
 ### Changed
 - Update translations (2024-05-01) #3746 #3802
