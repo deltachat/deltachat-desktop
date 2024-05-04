@@ -20,6 +20,8 @@ export class StdioServer {
       return 'deltachat-rpc-server-aarch64-macos'
     } else if (p === 'win32' && a === 'x64') {
       return 'deltachat-rpc-server-win64.exe'
+    } else if (p === 'linux' && a === 'x64') {
+      return 'deltachat-rpc-server-x86_64-linux'
     }
     throw new Error(`Unsupported platform: ${platform} arch: ${arch}`)
   }
@@ -39,7 +41,7 @@ export class StdioServer {
           buffer = buffer.slice(1)
         }
         if (pos_end_line !== -1 && buffer[pos_end_line - 1] !== '\\') {
-          let message = buffer.slice(0, pos_end_line)
+          const message = buffer.slice(0, pos_end_line)
           //   console.log(`${pos_end_line} Found message: ${message}`)
           this.on_data(message)
           buffer = buffer.slice(pos_end_line + 1)
