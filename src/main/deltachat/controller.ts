@@ -65,7 +65,6 @@ export default class DeltaChatController extends EventEmitter {
 
   async init() {
     log.debug('Initiating DeltaChatNode')
-    // const writable = !rc_config['multiple-instances']
 
     this._inner_account_manager = new StdioServer(response => {
       try {
@@ -112,9 +111,6 @@ export default class DeltaChatController extends EventEmitter {
     }, this.cwd)
 
     this.account_manager.start()
-    log.info("HI")
-
-    //todo? multiple instances, accounts is always writable
 
     const mainProcessTransport = new ElectronMainTransport(message => {
       message.id = `main-${message.id}`
