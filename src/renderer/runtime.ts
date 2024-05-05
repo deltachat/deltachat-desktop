@@ -85,6 +85,7 @@ interface Runtime {
   writeClipboardText(text: string): Promise<void>
   writeClipboardImage(path: string): Promise<void>
   getAppPath(name: Parameters<typeof app.getPath>[0]): string
+  openMapsWebxdc(accountId: number, chatId?: number): void
   openPath(path: string): Promise<string>
   getConfigPath(): string
 
@@ -146,6 +147,9 @@ interface Runtime {
 }
 
 class Browser implements Runtime {
+  openMapsWebxdc(accountId: number, chatId?: number | undefined): void {
+    throw new Error('Method not implemented.')
+  }
   onResumeFromSleep: (() => void) | undefined
   onChooseLanguage: ((locale: string) => Promise<void>) | undefined
   onThemeUpdate: (() => void) | undefined
@@ -462,6 +466,9 @@ class Electron implements Runtime {
   }
   openWebxdc(msgId: number, params: DcOpenWebxdcParameters): void {
     ipcBackend.invoke('open-webxdc', msgId, params)
+  }
+  openMapsWebxdc(accountId: number, chatId?: number): void {
+    ipcBackend.invoke('open-maps-webxdc', accountId, chatId)
   }
   openPath(path: string): Promise<string> {
     return ipcBackend.invoke('electron.shell.openPath', path)

@@ -30,6 +30,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { ChatView } from '../../contexts/ChatContext'
 import { KeybindAction } from '../../keybindings'
 import { selectedAccountId } from '../../ScreenController'
+import { openMapWebxdc } from '../../system-integration/webxdc'
 
 import type { T } from '@deltachat/jsonrpc-client'
 
@@ -351,7 +352,7 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
 
 function ChatNavButtons() {
   const tx = useTranslationFunction()
-  const { activeView, setChatView } = useChat()
+  const { activeView, setChatView, chatId } = useChat()
   const settingsStore = useSettingsStore()[0]
 
   return (
@@ -378,7 +379,7 @@ function ChatNavButtons() {
             minimal
             large
             icon='map'
-            onClick={() => setChatView(ChatView.Map)}
+            onClick={() => openMapWebxdc(chatId)}
             active={activeView === ChatView.Map}
             aria-label={tx('tab_map')}
           />

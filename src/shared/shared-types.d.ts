@@ -63,6 +63,8 @@ export interface DesktopSettingsType {
   enableRelatedChats: boolean
   /** gallery image & video - keep aspect ratio (true) or cover (false) */
   galleryImageKeepAspectRatio: boolean
+  /** holds the map webxdc message IDs for each account */
+  mapMsgIds?: { [accountId: number]: number }
 }
 
 export interface RC_Config {
