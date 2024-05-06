@@ -70,7 +70,7 @@ export default class DeltaChatController extends EventEmitter {
     log.debug('Initiating DeltaChatNode')
     // const writable = !rc_config['multiple-instances']
     const serverPath = await getRPCServerPath()
-    log.critical({serverPath})
+    log.info("using deltachat-rpc-server at", {serverPath})
 
     this._inner_account_manager = new StdioServer(
       response => {
