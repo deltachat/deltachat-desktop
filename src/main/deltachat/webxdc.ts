@@ -33,7 +33,6 @@ import {
 
 import { T } from '@deltachat/jsonrpc-client'
 
-
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const log = getLogger('main/deltachat/webxdc')

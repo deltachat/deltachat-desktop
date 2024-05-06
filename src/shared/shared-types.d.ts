@@ -82,7 +82,7 @@ export interface RC_Config {
   'allow-unsafe-core-replacement': boolean
 }
 
-import { T } from '@deltachat/jsonrpc-client'
+import type { T } from '@deltachat/jsonrpc-client'
 
 export type msgStatus =
   | 'error'

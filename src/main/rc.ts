@@ -15,7 +15,7 @@ const defaults: RC_Config = {
   v: false,
   help: false,
   h: false,
-  'allow-unsafe-core-replacement': false
+  'allow-unsafe-core-replacement': false,
 }
 
 const config = rc('DeltaChat', defaults) as RC_Config
