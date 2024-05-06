@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-
-const { copyFile, mkdir, readdir, stat } = require('fs/promises')
-const { join } = require('path')
-const chokidar = require('chokidar')
+//@ts-check
+import { copyFile, mkdir, readdir, stat } from 'fs/promises'
+import { join } from 'path'
+import { watch as _watch } from 'chokidar'
 
 async function copyRecursive(source, destination) {
   if ((await stat(source)).isDirectory()) {
@@ -43,7 +43,7 @@ async function copy(source, destination, watch = false) {
   let scheduled = undefined
 
   if (watch === true) {
-    const watcher = chokidar.watch(source)
+    const watcher = _watch(source)
     watcher.on('ready', () => {
       watcher.on('all', (event, path) => {
         console.log(`+ files changed in "${source}": ${path} ${event}`)
@@ -68,6 +68,7 @@ async function copy(source, destination, watch = false) {
 }
 
 function main() {
+  /** @type {any} TODO type? */
   let options = {
     showHelp: false,
     watch: false,

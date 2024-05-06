@@ -1,8 +1,7 @@
-const { readFileSync } = require('fs')
+import { readFileSync } from 'fs'
 
-const sha = JSON.parse(
-  readFileSync(process.env['GITHUB_EVENT_PATH'], 'utf8')
-).pull_request.head.sha
+const sha = JSON.parse(readFileSync(process.env['GITHUB_EVENT_PATH'], 'utf8'))
+  .pull_request.head.sha
 
 const base_url =
   'https://download.delta.chat/desktop/preview/deltachat-desktop-'
@@ -36,7 +35,7 @@ const STATUS_DATA = {
   target_url: platform_status.target_url,
 }
 
-const http = require('https')
+import { request } from 'https'
 
 const options = {
   method: 'POST',
@@ -47,12 +46,12 @@ const options = {
   },
 }
 
-const req = http.request(GITHUB_API_URL, options, function(res) {
+const req = request(GITHUB_API_URL, options, function (res) {
   var chunks = []
-  res.on('data', function(chunk) {
+  res.on('data', function (chunk) {
     chunks.push(chunk)
   })
-  res.on('end', function() {
+  res.on('end', function () {
     var body = Buffer.concat(chunks)
     console.log(body.toString())
   })

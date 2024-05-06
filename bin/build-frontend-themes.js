@@ -1,6 +1,11 @@
-const { readdir, readFile, writeFile, rm } = require('fs/promises')
-const sass = require('sass')
-const { join } = require('path')
+//@ts-check
+import { readdir, readFile, writeFile, rm } from 'fs/promises'
+import { render } from 'sass'
+import { join, dirname } from 'path'
+
+import { fileURLToPath } from 'url'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const dc_theme_dir = join(__dirname, '../themes')
 ;(async () => {
@@ -20,7 +25,7 @@ const dc_theme_dir = join(__dirname, '../themes')
         const theme_data = await readFile(join(dc_theme_dir, theme), 'utf-8')
 
         return new Promise((res, rej) => {
-          sass.render(
+          render(
             {
               outputStyle: 'compressed',
               data: theme_data,
