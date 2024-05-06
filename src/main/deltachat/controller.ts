@@ -10,7 +10,7 @@ import DCWebxdc from './webxdc.js'
 import { DesktopSettings } from '../desktop_settings.js'
 // import rc_config from '../rc.js'
 import { StdioServer } from './stdio_server.js'
-
+import rc_config from '../rc.js'
 
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat')
@@ -69,8 +69,12 @@ export default class DeltaChatController extends EventEmitter {
   async init() {
     log.debug('Initiating DeltaChatNode')
     // const writable = !rc_config['multiple-instances']
-    const serverPath = await getRPCServerPath()
-    log.info("using deltachat-rpc-server at", {serverPath})
+    const serverPath = await getRPCServerPath({
+      // desktop should only use prebuilds normally
+      skipSearchInPath: rc_config['allow-unsafe-core-replacement'],
+      disableEnvPath: rc_config['allow-unsafe-core-replacement'],
+    })
+    log.info('using deltachat-rpc-server at', { serverPath })
 
     this._inner_account_manager = new StdioServer(
       response => {
