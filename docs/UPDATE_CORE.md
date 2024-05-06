@@ -71,6 +71,6 @@ If you already have a core git checkout, you can skip the first step.
 2. go into your core checkout and run `git pull` to update it to the newest version, then create a branch for your changes
 3. run `python3 deltachat-rpc-server/npm-package/scripts/make_local_dev_version.py`
 4. run `npm i` and `npm run build` inside `../deltachat-core-rust/deltachat-jsonrpc/typescript/`
-5. go into your desktop repo and run `npm i --install-links ../deltachat-core-rust/deltachat-jsonrpc/typescript ../deltachat-core-rust/deltachat-rpc-server/npm-package`
+5. go into your desktop repo and run `npm i ../deltachat-core-rust/deltachat-jsonrpc/typescript ../deltachat-core-rust/deltachat-rpc-server/npm-package`
 
-Note that you need to run step 3, 4 and 5 again after each change to core sourcecode.
+Note that you need to run step 3 and 4 again after each change to core sourcecode.
