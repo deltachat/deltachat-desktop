@@ -70,6 +70,10 @@ export default function MainScreen({ accountId }: Props) {
     unselectChat()
     setAlternativeView('global-gallery')
   })
+  useKeyBindingAction(KeybindAction.GlobalMap_Open, () => {
+    unselectChat()
+    openMapWebxdc()
+  })
 
   const onChatClick = (chatId: number) => {
     if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) {

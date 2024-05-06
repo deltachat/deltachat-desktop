@@ -91,6 +91,16 @@ export default function AccountItem({
       },
     },
     {
+      label: tx('menu_global_map'),
+      action: async () => {
+        await onSelectAccount(account.id)
+        // set Timeout forces it to be run after react update
+        setTimeout(() => {
+          ActionEmitter.emitAction(KeybindAction.GlobalMap_Open)
+        }, 0)
+      },
+    },
+    {
       label: tx('menu_settings'),
       action: async () => {
         await onSelectAccount(account.id)

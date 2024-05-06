@@ -26,5 +26,14 @@
   },
   "camera_access_failed": {
     "message": "Could not access video camera. You might want to check your video permissions or if the camera is used already by another program"
+  },
+  "menu_global_map": {
+    "message": "Open global map"
+  },
+  "all_chats_map_title": {
+    "message": "Map for all chats (Account '%1')"
+  },
+  "chat_map_title": {
+    "message": "Map for chat '%1'"
   }
 }
