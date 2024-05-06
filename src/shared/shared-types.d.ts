@@ -79,6 +79,7 @@ export interface RC_Config {
   v: boolean
   help: boolean
   h: boolean
+  'allow-unsafe-core-replacement': boolean
 }
 
 import { T } from '@deltachat/jsonrpc-client'

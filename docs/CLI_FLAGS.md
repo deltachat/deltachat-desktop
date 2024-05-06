@@ -8,6 +8,7 @@ Options:
 | **Development Options** | |
 | `--translation-watch` | enable auto-reload for `_locales/_untranslated_en.json` |
 | `--devmode` | opens electron devtools and activates `--log-debug` & `--log-to-console` |
+| `--allow-unsafe-core-replacement` | allow changing core with `DELTA_CHAT_RPC_SERVER` and looking for it in `PATH` instead of forcing the use of the prebuilds |
 | **Theme** | |
 | `--theme <themeid>` | set a specific theme (see [THEMES.md](./THEMES.md)) |
 | `--theme-watch` | enable auto-reload for the active theme |
