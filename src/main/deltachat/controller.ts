@@ -70,7 +70,6 @@ export default class DeltaChatController extends EventEmitter {
 
   async init() {
     log.debug('Initiating DeltaChatNode')
-    // const writable = !rc_config['multiple-instances']
     const serverPath = await getRPCServerPath({
       // desktop should only use prebuilds normally
       skipSearchInPath: !rc_config['allow-unsafe-core-replacement'],

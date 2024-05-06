@@ -60,6 +60,7 @@
 
 ### Removed
 - remove disabled composer reason, now composer is just always hidden when `chat.canSend` is `false` #3791
+- remove `--multiple-instances` flag #3567
 
 
 <a id="1_44_1"></a>
