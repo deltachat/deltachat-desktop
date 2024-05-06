@@ -70,7 +70,7 @@ protocol.registerSchemesAsPrivileged([
 const app = rawApp as ExtendedAppMainProcess
 app.rc = rc
 
-if (rc['multiple-instances'] === false && !app.requestSingleInstanceLock()) {
+if (!app.requestSingleInstanceLock()) {
   /* ignore-console-log */
   console.error('Only one instance allowed. Quitting.')
   app.quit()

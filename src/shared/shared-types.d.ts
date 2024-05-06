@@ -69,7 +69,6 @@ export interface RC_Config {
   'log-debug': boolean
   'log-to-console': boolean
   'machine-readable-stacktrace': boolean
-  'multiple-instances': boolean
   theme: string | undefined
   'theme-watch': boolean
   devmode: boolean

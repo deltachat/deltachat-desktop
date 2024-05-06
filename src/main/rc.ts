@@ -5,7 +5,6 @@ const defaults: RC_Config = {
   'log-debug': false,
   'log-to-console': false,
   'machine-readable-stacktrace': false,
-  'multiple-instances': false,
   theme: undefined,
   devmode: false,
   'translation-watch': false,
