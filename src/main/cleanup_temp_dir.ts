@@ -1,8 +1,8 @@
 import { app } from 'electron'
 import { mkdir, readdir, rm, rmdir } from 'fs/promises'
 import { join } from 'path'
-import { getLogger } from '../shared/logger'
-import { getDraftTempDir } from './application-constants'
+import { getLogger } from '../shared/logger.js'
+import { getDraftTempDir } from './application-constants.js'
 
 const log = getLogger('main/cleanup_temp_dir')
 

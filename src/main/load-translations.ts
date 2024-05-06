@@ -1,17 +1,19 @@
-import path from 'path'
+import path, { dirname } from 'path'
 import fs from 'fs'
+import { ipcMain } from 'electron'
+import { fileURLToPath } from 'url'
 
-import { getLogger } from '../shared/logger'
-const log = getLogger('load-translations')
-
+import { getLogger } from '../shared/logger.js'
 import {
   getMessageFunction,
   LocaleData,
   translate as getTranslateFunction,
-} from '../shared/localize'
+} from '../shared/localize.js'
+import { refresh as refreshMenu } from './menu.js'
 
-import { refresh as refreshMenu } from './menu'
-import { ipcMain } from 'electron'
+const __dirname = dirname(fileURLToPath(import.meta.url))
+
+const log = getLogger('load-translations')
 
 let currentlocaleData: LocaleData | null = null
 

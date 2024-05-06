@@ -1,13 +1,16 @@
 import { app as rawApp, ipcMain } from 'electron'
 import { EventEmitter } from 'events'
-import { getLogger } from '../../shared/logger'
-import * as mainWindow from '../windows/main'
-import { ExtendedAppMainProcess } from '../types'
-import DCWebxdc from './webxdc'
-import { DesktopSettings } from '../desktop_settings'
 import { yerpc, BaseDeltaChat } from '@deltachat/jsonrpc-client'
-// import rc_config from '../rc'
-import { StdioServer } from './stdio_server'
+import getRPCServerPath from '@deltachat/stdio-rpc-server'
+
+import { getLogger } from '../../shared/logger.js'
+import * as mainWindow from '../windows/main.js'
+import { ExtendedAppMainProcess } from '../types.js'
+import DCWebxdc from './webxdc.js'
+import { DesktopSettings } from '../desktop_settings.js'
+// import rc_config from '../rc.js'
+import { StdioServer } from './stdio_server.js'
+
 
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat')
@@ -66,53 +69,59 @@ export default class DeltaChatController extends EventEmitter {
   async init() {
     log.debug('Initiating DeltaChatNode')
     // const writable = !rc_config['multiple-instances']
+    const serverPath = await getRPCServerPath()
+    log.critical({serverPath})
 
-    this._inner_account_manager = new StdioServer(response => {
-      try {
-        if (response.indexOf('"id":"main-') !== -1) {
-          const message = JSON.parse(response)
-          if (message.id.startsWith('main-')) {
-            message.id = Number(message.id.replace('main-', ''))
-            mainProcessTransport.onMessage(message)
-            return
-          }
-        }
-      } catch (error) {
-        log.error('jsonrpc-decode', error)
-      }
-      mainWindow.send('json-rpc-message', response)
-      if (response.indexOf('event') !== -1)
+    this._inner_account_manager = new StdioServer(
+      response => {
         try {
-          const { result } = JSON.parse(response)
-          const { contextId, event } = result
-          if (
-            contextId !== undefined &&
-            typeof event === 'object' &&
-            event.kind
-          ) {
-            if (event.kind === 'Warning') {
-              logCoreEvent.warn(contextId, event.msg)
-            } else if (event.kind === 'Info') {
-              logCoreEvent.info(contextId, event.msg)
-            } else if (event.kind.startsWith('Error')) {
-              logCoreEvent.error(contextId, event.msg)
-            } else if (app.rc['log-debug']) {
-              // in debug mode log all core events
-              const event_clone = Object.assign({}, event) as Partial<
-                typeof event
-              >
-              delete event_clone.kind
-              logCoreEvent.debug(event.kind, contextId, event)
+          if (response.indexOf('"id":"main-') !== -1) {
+            const message = JSON.parse(response)
+            if (message.id.startsWith('main-')) {
+              message.id = Number(message.id.replace('main-', ''))
+              mainProcessTransport.onMessage(message)
+              return
             }
           }
         } catch (error) {
-          // ignore json parse errors
-          return
+          log.error('jsonrpc-decode', error)
         }
-    }, this.cwd)
+        mainWindow.send('json-rpc-message', response)
+        if (response.indexOf('event') !== -1)
+          try {
+            const { result } = JSON.parse(response)
+            const { contextId, event } = result
+            if (
+              contextId !== undefined &&
+              typeof event === 'object' &&
+              event.kind
+            ) {
+              if (event.kind === 'Warning') {
+                logCoreEvent.warn(contextId, event.msg)
+              } else if (event.kind === 'Info') {
+                logCoreEvent.info(contextId, event.msg)
+              } else if (event.kind.startsWith('Error')) {
+                logCoreEvent.error(contextId, event.msg)
+              } else if (app.rc['log-debug']) {
+                // in debug mode log all core events
+                const event_clone = Object.assign({}, event) as Partial<
+                  typeof event
+                >
+                delete event_clone.kind
+                logCoreEvent.debug(event.kind, contextId, event)
+              }
+            }
+          } catch (error) {
+            // ignore json parse errors
+            return
+          }
+      },
+      this.cwd,
+      serverPath
+    )
 
     this.account_manager.start()
-    log.info("HI")
+    log.info('HI')
 
     //todo? multiple instances, accounts is always writable
 

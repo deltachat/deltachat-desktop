@@ -1,11 +1,15 @@
 import { app as rawApp, Menu, Tray, nativeImage, NativeImage } from 'electron'
 import { globalShortcut } from 'electron'
-import * as mainWindow from './windows/main'
-import { ExtendedAppMainProcess } from './types'
-import { getLogger } from '../shared/logger'
-import { join } from 'path'
-import { DesktopSettings } from './desktop_settings'
-import { tx } from './load-translations'
+import { join, dirname } from 'path'
+import { fileURLToPath } from 'url'
+
+import * as mainWindow from './windows/main.js'
+import { ExtendedAppMainProcess } from './types.js'
+import { getLogger } from '../shared/logger.js'
+import { DesktopSettings } from './desktop_settings.js'
+import { tx } from './load-translations.js'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 let tray: Tray | null = null
 let contextMenu: Menu | null = null

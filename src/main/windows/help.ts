@@ -1,18 +1,19 @@
 import { BrowserWindow, Menu, shell } from 'electron'
-import { appIcon, htmlDistDir } from '../application-constants'
-import { getLogger } from '../../shared/logger'
 import { join } from 'path'
 import { stat } from 'fs/promises'
 import { platform } from 'os'
-import { appWindowTitle } from '../../shared/constants'
-import { tx } from '../load-translations'
-import { window as main_window } from '../windows/main'
+
+import { appIcon, htmlDistDir } from '../application-constants.js'
+import { getLogger } from '../../shared/logger.js'
+import { appWindowTitle } from '../../shared/constants.js'
+import { tx } from '../load-translations.js'
+import { window as main_window } from '../windows/main.js'
 import {
   getAppMenu,
   getFileMenu,
   getHelpMenu,
   refresh as refreshTitleMenu,
-} from '../menu'
+} from '../menu.js'
 
 const log = getLogger('main/help')
 

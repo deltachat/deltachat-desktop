@@ -1,8 +1,12 @@
 import { describe } from 'mocha';
 import { expect, assert } from 'chai';
 import fs from 'fs';
-import path from 'path';
+import path, { dirname } from 'path';
 import { translate } from '../../../src/shared/localize'
+import { fileURLToPath } from 'url';
+
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 describe('/shared/localize', () => { // the tests container
   it('translation files should be valid json', () => { // the single test
