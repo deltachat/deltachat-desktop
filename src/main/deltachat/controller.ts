@@ -71,8 +71,8 @@ export default class DeltaChatController extends EventEmitter {
     // const writable = !rc_config['multiple-instances']
     const serverPath = await getRPCServerPath({
       // desktop should only use prebuilds normally
-      skipSearchInPath: rc_config['allow-unsafe-core-replacement'],
-      disableEnvPath: rc_config['allow-unsafe-core-replacement'],
+      skipSearchInPath: !rc_config['allow-unsafe-core-replacement'],
+      disableEnvPath: !rc_config['allow-unsafe-core-replacement'],
     })
     log.info('using deltachat-rpc-server at', { serverPath })
 
