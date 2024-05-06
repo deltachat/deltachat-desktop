@@ -111,6 +111,8 @@ ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
         { label: 'electron', value: versions.electron },
         { label: 'node', value: versions.node },
       ],
+      runningUnderARM64Translation: app.runningUnderARM64Translation,
+      rpcServerPath: dcController.rpcServerPath,
     }
     ev.returnValue = info
   })

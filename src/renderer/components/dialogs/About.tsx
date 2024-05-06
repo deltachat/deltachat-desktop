@@ -153,9 +153,43 @@ export default function About({ onClose }: DialogProps) {
                   <td style={{ userSelect: 'all' }}>{value}</td>
                 </tr>
               ))}
+              {runtime.getRuntimeInfo().runningUnderARM64Translation && (
+                <tr>
+                  <td>runningUnderARM64Translation</td>
+                  <td>
+                    {runtime.getRuntimeInfo().runningUnderARM64Translation}
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
           <DCInfo />
+          <h3>Additional information about the runtime</h3>
+          <table>
+            <tbody>
+              <tr>
+                <td>Runtime</td>
+                <td>{runtime.constructor.name}</td>
+              </tr>
+              {runtime.getRuntimeInfo().rpcServerPath && (
+                <tr>
+                  <td>Path to core</td>
+                  <td>{runtime.getRuntimeInfo().rpcServerPath}</td>
+                </tr>
+              )}
+              {runtime.getRuntimeInfo().runningUnderARM64Translation !==
+                undefined && (
+                <tr>
+                  <td>running under arm64 translation</td>
+                  <td>
+                    {runtime.getRuntimeInfo().runningUnderARM64Translation
+                      ? 'true'
+                      : 'false / native'}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </DialogContent>
       </DialogBody>
     </DialogWithHeader>

@@ -53,6 +53,8 @@ export default class DeltaChatController extends EventEmitter {
     }
     return this._inner_account_manager
   }
+  /** for runtime info */
+  rpcServerPath?:string
 
   constructor(public cwd: string) {
     super()
@@ -74,6 +76,7 @@ export default class DeltaChatController extends EventEmitter {
       skipSearchInPath: !rc_config['allow-unsafe-core-replacement'],
       disableEnvPath: !rc_config['allow-unsafe-core-replacement'],
     })
+    this.rpcServerPath = serverPath
     log.info('using deltachat-rpc-server at', { serverPath })
 
     this._inner_account_manager = new StdioServer(

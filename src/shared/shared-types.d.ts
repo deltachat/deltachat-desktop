@@ -112,6 +112,8 @@ export type RuntimeInfo = {
   /** runtime library versions, be it electron, node, tauri or whatever,
    *  used for showing to user in the About dialog */
   versions: { label: string; value: string }[]
+  runningUnderARM64Translation?: boolean
+  rpcServerPath?: string
 }
 
 export interface DcNotification {
