@@ -22,6 +22,15 @@
 - Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.137.3`
 - Change chatlist to use new chatlist changed event from core #3268
 - Refactor QR code reader #3762
+- update eslint dependency and its plugins:
+  - `eslint`: `8.54.0` -> `8.56.0`
+  - `eslint-config-prettier`: `9.0.0` -> `9.1.0`
+  - `eslint-plugin-prettier`: `5.0.1` -> `5.1.3`
+  - `eslint-plugin-react-hooks`: `4.6.0` -> `4.6.2`
+  - `@typescript-eslint/eslint-plugin`: `6.13.1` -> `7.8.0`
+  - `@typescript-eslint/parser`: `6.13.1` -> `7.8.0`
+- bump nodejs requirement to `>=18.18.0`
+
 
 ### Fixed
 - fix chat audit dialog was going out of viewport on smaller screens #3736
