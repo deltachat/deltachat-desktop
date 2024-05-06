@@ -1,4 +1,4 @@
-import DeltaChatController from './controller'
+import DeltaChatController from './controller.js'
 
 export default class SplitOut {
   private controller: DeltaChatController

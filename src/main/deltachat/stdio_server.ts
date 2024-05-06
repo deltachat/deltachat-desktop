@@ -1,32 +1,16 @@
 import { ChildProcessWithoutNullStreams, spawn } from 'child_process'
-import path from 'node:path'
-import { platform, arch } from 'os'
 
 export class StdioServer {
-  cmd_path: string
   server_process: ChildProcessWithoutNullStreams | null
   constructor(
     public on_data: (reponse: string) => void,
-    public accounts_path: string
+    public accounts_path: string,
+    private cmd_path: string
   ) {
-    this.cmd_path = path.join(__dirname, '../../../', this.binary_name())
     this.server_process = null
   }
 
-  binary_name() {
-    const p = platform()
-    const a = arch()
-    if (p === 'darwin' && a === 'arm64') {
-      return 'deltachat-rpc-server-aarch64-macos'
-    } else if (p === 'win32' && a === 'x64') {
-      return 'deltachat-rpc-server-win64.exe'
-    } else if (p === 'linux' && a === 'x64') {
-      return 'deltachat-rpc-server-x86_64-linux'
-    }
-    throw new Error(`Unsupported platform: ${platform} arch: ${arch}`)
-  }
-
-  start() {
+  async start() {
     this.server_process = spawn(this.cmd_path, {
       env: { DC_ACCOUNTS_PATH: this.accounts_path },
     })

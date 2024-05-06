@@ -1,6 +1,6 @@
 import errorStackParser from 'error-stack-parser'
 import StackFrame from 'stackframe'
-import { RC_Config } from './shared-types'
+import { RC_Config } from './shared-types.js'
 
 const startTime = Date.now()
 

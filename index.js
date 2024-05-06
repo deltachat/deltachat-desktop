@@ -1,4 +1,6 @@
-require('source-map-support').install();
+//@ts-check
+import sourceMap from 'source-map-support'
+sourceMap.install()
 
 if (process.env.NODE_ENV === 'test') {
   if(!process.env.TEST_DIR){
@@ -8,4 +10,4 @@ if (process.env.NODE_ENV === 'test') {
       process.env.TEST_DIR = mkdtempSync(join(tmpdir(), 'deltachat-'))
   }
 }
-require('./tsc-dist/main')
+import './tsc-dist/main/index.js';
