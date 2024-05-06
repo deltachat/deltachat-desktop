@@ -1,45 +1,42 @@
 // this file gets run BEFORE `npm i` so you CAN NOT use npm packages here
+//@ts-check
 
-const { join } = require('path')
-const fs = require('fs')
+import { join } from 'path'
+import { readFileSync, writeFileSync } from 'fs'
 
 const packageJSON = join(__dirname, '../../package.json')
 
-const p = JSON.parse(fs.readFileSync(packageJSON))
+const p = JSON.parse(readFileSync(packageJSON, { encoding: 'utf-8' }))
 
 p.name = 'deltachat-desktop-dev'
 p.productName = 'DeltaChat-DevBuild'
 p.version = p.version + '-DevBuild'
 
-fs.writeFileSync(packageJSON, JSON.stringify(p, null, 1))
+writeFileSync(packageJSON, JSON.stringify(p, null, 1))
 
 const packageLockJSON = join(__dirname, '../../package-lock.json')
 
-const pLock = JSON.parse(fs.readFileSync(packageLockJSON))
+const pLock = JSON.parse(readFileSync(packageLockJSON, { encoding: 'utf-8' }))
 pLock.version = p.version
-fs.writeFileSync(packageLockJSON, JSON.stringify(pLock, null, 1))
+writeFileSync(packageLockJSON, JSON.stringify(pLock, null, 1))
 
 const appConfig = join(__dirname, '../../src/main/application-config.ts')
 
-const fileContent = fs
-  .readFileSync(appConfig, 'utf-8')
-  .replace(
-    "const appConfig = applicationConfig('DeltaChat')",
-    "const appConfig = applicationConfig('DeltaChatDev')"
-  )
+const fileContent = readFileSync(appConfig, 'utf-8').replace(
+  "const appConfig = applicationConfig('DeltaChat')",
+  "const appConfig = applicationConfig('DeltaChatDev')"
+)
 
-fs.writeFileSync(appConfig, fileContent)
+writeFileSync(appConfig, fileContent)
 
 const electronBuilderConfig = join(
   __dirname,
   '../../build/gen-electron-builder-config.js'
 )
-fs.writeFileSync(
+writeFileSync(
   electronBuilderConfig,
-  fs
-    .readFileSync(electronBuilderConfig, 'utf-8')
-    .replace(
-      "build['appId'] = 'chat.delta.desktop.electron'",
-      "build['appId'] = 'chat.delta.desktop.electron.dev'"
-    )
+  readFileSync(electronBuilderConfig, 'utf-8').replace(
+    "build['appId'] = 'chat.delta.desktop.electron'",
+    "build['appId'] = 'chat.delta.desktop.electron.dev'"
+  )
 )

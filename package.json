@@ -3,6 +3,7 @@
   "version": "1.44.1",
   "description": "Desktop Application for delta.chat",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "preinstall": "node ./bin/check-nodejs-version.js",
     "test": "npm run check && npm run test-log-conventions && npm run test-unit && npm run test-misc",

@@ -1,7 +1,14 @@
-const { spawnSync } = require('child_process')
-const { writeFileSync } = require('fs')
-const { readFile } = require('fs/promises')
-const { join } = require('path')
+//@ts-check
+import { spawnSync } from 'child_process'
+import { writeFileSync } from 'fs'
+import { readFile } from 'fs/promises'
+import { join } from 'path'
+
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
 
 function gatherProcessStdout(cmd, args) {
   const { status, stdout, stderr } = spawnSync(cmd, args)
@@ -18,7 +25,7 @@ async function getGitRef() {
   try {
     git_describe = gatherProcessStdout('git', ['describe'])
     try {
-      git_symbolic_ref =
+      const git_symbolic_ref =
         process.env.GITHUB_HEAD_REF ||
         process.env.GITHUB_REF ||
         gatherProcessStdout('git', ['symbolic-ref', 'HEAD'])
@@ -41,9 +48,9 @@ async function getGitRef() {
 
 async function gatherBuildInfo() {
   const packageJSON = join(__dirname, '../package.json')
-  const package = JSON.parse(await readFile(packageJSON, 'utf8'))
+  const packageObject = JSON.parse(await readFile(packageJSON, 'utf8'))
   return {
-    VERSION: package.version,
+    VERSION: packageObject.version,
     BUILD_TIMESTAMP: Date.now(),
     GIT_REF: await getGitRef(),
   }

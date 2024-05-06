@@ -1,7 +1,11 @@
-const { copyFileSync } = require('fs')
-const { readdir, writeFile } = require('fs/promises')
-const { join } = require('path')
-module.exports = async context => {
+import { copyFileSync } from 'fs'
+import { readdir, writeFile } from 'fs/promises'
+import { join, dirname } from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
+
+export default async context => {
   if (context.electronPlatformName === 'win32') {
     // package msvc redist
     const base = join(__dirname, 'vcredist/')

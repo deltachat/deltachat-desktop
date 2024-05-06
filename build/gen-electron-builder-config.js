@@ -1,6 +1,11 @@
-const { writeFileSync, readFileSync } = require('fs')
-const { join } = require('path')
-const { isAppxSupportedLanguage } = require('./appx_languages')
+import { writeFileSync, readFileSync } from 'fs'
+import { join, dirname } from 'path'
+import { fileURLToPath } from 'url'
+
+import { isAppxSupportedLanguage } from './appx_languages'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
+
 const exclude_list = readFileSync(
   join(__dirname, 'packageignore_list'),
   'utf-8'
