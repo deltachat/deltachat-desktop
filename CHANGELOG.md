@@ -12,6 +12,7 @@
 - Instant Onboarding #3773 #3801
 - Add instructions and troubleshooting button to "Add as Second Device" dialog #3801
 - Add image cropper for profile image selector #1779
+- add more information to about screen (runtime, where the rpc server is and whether you run under arm translation) #3567
 
 ### Changed
 - Update translations (2024-05-01) #3746 #3802
@@ -20,7 +21,6 @@
 - Remove deprecated translations #3756
 - Refactor chat store into React context #3725
 - Improve security: restrict file protocol #3769 #3798 #3800
-- Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.137.3`
 - Change chatlist to use new chatlist changed event from core #3268
 - Refactor QR code reader #3762
 - update `@deltachat/message_parser_wasm` to `0.10.0` -> now parses internationalised Links and some minor bugfixes #3813
@@ -35,6 +35,7 @@
 - bump nodejs requirement to `>=18.18.0` #3808
 - reorganise some settings acording changes on android & ios #3812
 - reword password label to 'Existing Password' #3826
+- replace `deltachat-node` with `@deltachat/stdio-rpc-server` #3567
 
 ### Fixed
 - fix chat audit dialog was going out of viewport on smaller screens #3736
