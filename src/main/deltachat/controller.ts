@@ -1,7 +1,7 @@
 import { app as rawApp, ipcMain } from 'electron'
 import { EventEmitter } from 'events'
 import { yerpc, BaseDeltaChat } from '@deltachat/jsonrpc-client'
-import getRPCServerPath from '@deltachat/stdio-rpc-server'
+import { getRPCServerPath } from '@deltachat/stdio-rpc-server'
 
 import { getLogger } from '../../shared/logger.js'
 import * as mainWindow from '../windows/main.js'
@@ -54,7 +54,7 @@ export default class DeltaChatController extends EventEmitter {
     return this._inner_account_manager
   }
   /** for runtime info */
-  rpcServerPath?:string
+  rpcServerPath?: string
 
   constructor(public cwd: string) {
     super()
