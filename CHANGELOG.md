@@ -12,6 +12,9 @@
 - Instant Onboarding #3773 #3801
 - Add instructions and troubleshooting button to "Add as Second Device" dialog #3801
 - add more information to about screen (runtime, where the rpc server is and whether you run under arm translation) #3567
+- Use openstreetmap in map
+- Open map in a separate window
+- Add global map for all chats in account
 
 ### Changed
 - Update translations (2024-05-01) #3746 #3802
