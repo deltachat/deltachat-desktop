@@ -1,8 +1,4 @@
 import { app, BrowserWindow, protocol, ipcMain, session } from 'electron/main'
-import type DeltaChatController from './controller'
-import SplitOut from './splitout'
-import { getLogger } from '../../shared/logger'
-const log = getLogger('main/deltachat/webxdc')
 import Mime from 'mime-types'
 import {
   Menu,
@@ -13,23 +9,31 @@ import {
   clipboard,
   IpcMainInvokeEvent,
 } from 'electron'
-import { join } from 'path'
-import { readdir, stat, rmdir, writeFile, readFile } from 'fs/promises'
-import { getConfigPath, htmlDistDir } from '../application-constants'
-import { truncateText } from '../../shared/util'
+import { join, dirname } from 'path'
+import { fileURLToPath } from 'url'
 import { platform } from 'os'
-import { tx } from '../load-translations'
-import { Bounds, DcOpenWebxdcParameters } from '../../shared/shared-types'
-import { DesktopSettings } from '../desktop_settings'
-import { window as main_window } from '../windows/main'
-import { writeTempFileFromBase64 } from '../ipc'
+import { readdir, stat, rmdir, writeFile, readFile } from 'fs/promises'
+import type DeltaChatController from './controller.js'
+import SplitOut from './splitout.js'
+import { getLogger } from '../../shared/logger.js'
+import { getConfigPath, htmlDistDir } from '../application-constants.js'
+import { truncateText } from '../../shared/util.js'
+import { tx } from '../load-translations.js'
+import { Bounds, DcOpenWebxdcParameters } from '../../shared/shared-types.js'
+import { DesktopSettings } from '../desktop_settings.js'
+import { window as main_window } from '../windows/main.js'
+import { writeTempFileFromBase64 } from '../ipc.js'
 import {
   getAppMenu,
   getEditMenu,
   getFileMenu,
   refresh as refreshTitleMenu,
-} from '../menu'
+} from '../menu.js'
 import { T } from '@deltachat/jsonrpc-client'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
+
+const log = getLogger('main/deltachat/webxdc')
 
 const open_apps: {
   [instanceId: string]: {
@@ -64,6 +68,26 @@ export default class DCWebxdc extends SplitOut {
   constructor(controller: DeltaChatController) {
     super(controller)
 
+    // icon protocol
+    app.whenReady().then(() => {
+      protocol.handle('webxdc-icon', async request => {
+        const [a, m] = request.url.substr(12).split('.')
+        const [accountId, messageId] = [Number(a), Number(m)]
+        try {
+          const { icon } = await this.rpc.getWebxdcInfo(accountId, messageId)
+          const blob = Buffer.from(
+            await this.rpc.getWebxdcBlob(accountId, messageId, icon),
+            'base64'
+          )
+          return new Response(blob, {
+            headers: { 'content-type': Mime.lookup(icon) || '' },
+          })
+        } catch (error) {
+          log.error('failed to load webxdc icon for:', error)
+          return new Response('', { status: 404 })
+        }
+      })
+    })
     const openWebxdc = async (
       _ev: IpcMainInvokeEvent,
       msg_id: number,
@@ -405,27 +429,6 @@ If you think that's a bug and you need that permission, then please open an issu
         }
       })
     }
-
-    // icon protocol
-    app.whenReady().then(() => {
-      protocol.handle('webxdc-icon', async request => {
-        const [a, m] = request.url.substr(12).split('.')
-        const [accountId, messageId] = [Number(a), Number(m)]
-        try {
-          const { icon } = await this.rpc.getWebxdcInfo(accountId, messageId)
-          const blob = Buffer.from(
-            await this.rpc.getWebxdcBlob(accountId, messageId, icon),
-            'base64'
-          )
-          return new Response(blob, {
-            headers: { 'content-type': Mime.lookup(icon) || '' },
-          })
-        } catch (error) {
-          log.error('failed to load webxdc icon for:', error)
-          return new Response('', { status: 404 })
-        }
-      })
-    })
 
     // actual webxdc instances
     ipcMain.handle('open-webxdc', openWebxdc)

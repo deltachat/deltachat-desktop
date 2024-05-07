@@ -139,12 +139,10 @@ export default function MainScreen({ accountId }: Props) {
   const [threeDotMenuHidden, setthreeDotMenuHidden] = useState(false)
   const updatethreeDotMenuHidden = useCallback(() => {
     setthreeDotMenuHidden(
-      activeView === ChatView.Map ||
-        ((alternativeView === 'global-gallery' ||
-          activeView === ChatView.Media) &&
-          !['images', 'video'].includes(
-            galleryRef.current?.state.currentTab || ''
-          ))
+      (alternativeView === 'global-gallery' || activeView === ChatView.Media) &&
+        !['images', 'video'].includes(
+          galleryRef.current?.state.currentTab || ''
+        )
     )
   }, [activeView, alternativeView])
   useEffect(() => {
@@ -384,7 +382,7 @@ function ChatNavButtons() {
             large
             icon='map'
             onClick={() => openMapWebxdc(chatId)}
-            active={activeView === ChatView.Map}
+            active={activeView === ChatView.Media}
             aria-label={tx('tab_map')}
           />
         )}

@@ -8,7 +8,6 @@ import type { MutableRefObject, PropsWithChildren } from 'react'
 import type { T } from '@deltachat/jsonrpc-client'
 
 export enum ChatView {
-  Map,
   Media,
   MessageList,
 }
