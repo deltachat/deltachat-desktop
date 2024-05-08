@@ -19,19 +19,11 @@ export class StdioServer {
     this.server_process.stdout.on('data', data => {
       // console.log(`stdout: ${data}`)
       buffer += data.toString()
-      while (true) {
-        const pos_end_line = buffer.indexOf('\n')
-        if (pos_end_line === 0) {
-          buffer = buffer.slice(1)
-        }
-        if (pos_end_line !== -1 && buffer[pos_end_line - 1] !== '\\') {
-          const message = buffer.slice(0, pos_end_line)
-          //   console.log(`${pos_end_line} Found message: ${message}`)
-          this.on_data(message)
-          buffer = buffer.slice(pos_end_line + 1)
-        } else {
-          break
-        }
+      while (buffer.includes("\n")) {
+        const n = buffer.indexOf("\n");
+        const message = buffer.substring(0, n);
+        this.on_data(message);
+        buffer = buffer.substring(n + 1);
       }
     })
 
@@ -49,6 +41,6 @@ export class StdioServer {
   }
 
   send(message: string) {
-    this.server_process?.stdin.write(message + '\r\n')
+    this.server_process?.stdin.write(message + '\n')
   }
 }
