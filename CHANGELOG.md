@@ -34,6 +34,7 @@
 - bump nodejs requirement to `>=18.18.0` #3808
 - reorganise some settings acording changes on android & ios #3812
 - replace `deltachat-node` with `@deltachat/stdio-rpc-server` #3567
+- increase minimum nodejs version from `18` to `20`
 
 ### Fixed
 - fix chat audit dialog was going out of viewport on smaller screens #3736
