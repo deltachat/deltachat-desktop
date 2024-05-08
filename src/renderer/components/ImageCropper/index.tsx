@@ -264,7 +264,7 @@ export default function ProfileImageCropper({
   })
   return (
     <Dialog canEscapeKeyClose onClose={onClose} canOutsideClickClose={false}>
-      <DialogHeader>{tx('crop_image')}</DialogHeader>
+      <DialogHeader title={tx('crop_image')} />
       <DialogBody className={styles.imageCropperDialogBody}>
         <DialogContent className={styles.imageCropperDialogContent}>
           <div ref={container} className={styles.imageCropperContainer}>
