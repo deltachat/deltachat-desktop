@@ -22,6 +22,7 @@
 - Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.137.3`
 - Change chatlist to use new chatlist changed event from core #3268
 - Refactor QR code reader #3762
+- update `@deltachat/message_parser_wasm` to `0.10.0` -> now parses internationalised Links and some minor bugfixes
 
 ### Fixed
 - fix chat audit dialog was going out of viewport on smaller screens #3736

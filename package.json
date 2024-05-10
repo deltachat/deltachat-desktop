@@ -78,7 +78,7 @@
   "dependencies": {
     "@blueprintjs/core": "^4.1.2",
     "@deltachat/jsonrpc-client": "^1.137.3",
-    "@deltachat/message_parser_wasm": "^0.9.0",
+    "@deltachat/message_parser_wasm": "^0.10.0",
     "@emoji-mart/data": "1.1.2",
     "@emoji-mart/react": "1.1.1",
     "@mapbox/geojson-extent": "^1.0.0",
