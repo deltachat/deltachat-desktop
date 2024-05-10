@@ -78,9 +78,9 @@
   },
   "dependencies": {
     "@blueprintjs/core": "^4.1.2",
-    "@deltachat/jsonrpc-client": "file:../deltachat-core-rust/deltachat-jsonrpc/typescript",
+    "@deltachat/jsonrpc-client": "^1.137.4",
     "@deltachat/message_parser_wasm": "^0.10.0",
-    "@deltachat/stdio-rpc-server": "file:../deltachat-core-rust/deltachat-rpc-server/npm-package",
+    "@deltachat/stdio-rpc-server": "^1.137.4",
     "@emoji-mart/data": "1.1.2",
     "@emoji-mart/react": "1.1.1",
     "@mapbox/geojson-extent": "^1.0.0",
