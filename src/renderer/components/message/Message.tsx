@@ -750,7 +750,7 @@ export const Quote = ({
             </>
           )}
           <div className='quoted-text'>
-            <MessageBody text={quote.text || ''} />
+            <MessageBody text={quote.text || ''} disableJumbomoji />
           </div>
         </div>
         {hasMessage && quote.image && (

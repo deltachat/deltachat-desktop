@@ -52,11 +52,11 @@ const MAX_STRING_LENGTH_FOR_BIG_EMOJI =
 export function getSizeClass(str: string) {
   // if string is small enough and only contains emojis
   if (str.length > MAX_STRING_LENGTH_FOR_BIG_EMOJI) {
-    return ''
+    return undefined
   } else {
     const emojiCount = count_emojis_if_only_contains_emoji(str)
     if (emojiCount == null || emojiCount > 8) {
-      return ''
+      return undefined
     } else if (emojiCount > 6) {
       return 'small'
     } else if (emojiCount > 4) {

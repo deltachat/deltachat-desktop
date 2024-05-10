@@ -22,8 +22,8 @@
 - Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.137.3`
 - Change chatlist to use new chatlist changed event from core #3268
 - Refactor QR code reader #3762
-- update `@deltachat/message_parser_wasm` to `0.10.0` -> now parses internationalised Links and some minor bugfixes
-- replace emoji regex with message-parser function for counting emojis
+- update `@deltachat/message_parser_wasm` to `0.10.0` -> now parses internationalised Links and some minor bugfixes #3813
+- replace emoji regex with message-parser function for counting emojis #3813
 
 ### Fixed
 - fix chat audit dialog was going out of viewport on smaller screens #3736
@@ -41,7 +41,8 @@
 - Close reactions bar on emoji selection #3788
 - fix Clicking notification does not bring Delta Chat to foreground on Windows #3793
 - Prevent re-rendering of account sidebar when switching account #3789
-- fix help not opening for languages that have no localized help
+- fix help not opening for languages that have no localized help #3801
+- quoted messages with single emoji as text look too big #3813
 
 ### Removed
 - remove disabled composer reason, now composer is just always hidden when `chat.canSend` is `false` #3791
