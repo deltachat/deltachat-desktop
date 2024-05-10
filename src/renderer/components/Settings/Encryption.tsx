@@ -18,6 +18,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import ManageKeys from './ManageKeys'
 
 export default function Encryption() {
   const { openDialog } = useDialog()
@@ -29,6 +30,7 @@ export default function Encryption() {
         settingsKey='e2ee_enabled'
         label={tx('autocrypt_prefer_e2ee')}
       />
+      <ManageKeys />
       <SettingsButton
         highlight
         onClick={() => openDialog(SendAutocryptSetupMessage)}
