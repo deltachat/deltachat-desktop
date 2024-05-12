@@ -30,7 +30,7 @@
   - `@typescript-eslint/eslint-plugin`: `6.13.1` -> `7.8.0`
   - `@typescript-eslint/parser`: `6.13.1` -> `7.8.0`
 - bump nodejs requirement to `>=18.18.0` #3808
-
+- reorganise some settings acording changes on android & ios #3812
 
 ### Fixed
 - fix chat audit dialog was going out of viewport on smaller screens #3736
@@ -49,6 +49,7 @@
 - fix Clicking notification does not bring Delta Chat to foreground on Windows #3793
 - Prevent re-rendering of account sidebar when switching account #3789
 - fix help not opening for languages that have no localized help
+- fix problem of focus when opening create chat dialogue #3816
 
 ### Removed
 - remove disabled composer reason, now composer is just always hidden when `chat.canSend` is `false` #3791
