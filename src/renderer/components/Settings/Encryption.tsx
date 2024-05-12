@@ -32,12 +32,10 @@ export default function Encryption() {
       />
       <ManageKeys />
       <SettingsButton
-        highlight
         onClick={() => openDialog(SendAutocryptSetupMessage)}
       >
         {tx('autocrypt_send_asm_button')}
       </SettingsButton>
-      <Callout>{tx('autocrypt_explain')}</Callout>
     </>
   )
 }
