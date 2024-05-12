@@ -40,6 +40,7 @@
 - fix Clicking notification does not bring Delta Chat to foreground on Windows #3793
 - Prevent re-rendering of account sidebar when switching account #3789
 - fix help not opening for languages that have no localized help
+- fix the bug where reactions bar is closed after arriving new message
 
 ### Removed
 - remove disabled composer reason, now composer is just always hidden when `chat.canSend` is `false` #3791
