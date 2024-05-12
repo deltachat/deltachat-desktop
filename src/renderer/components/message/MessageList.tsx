@@ -120,7 +120,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
     fetchMoreBottom,
     fetchMoreTop,
   } = useMessageList(accountId, chat.id)
-  const { hideReactionsBar } = useReactionsBar()
+  const { hideReactionsBar, isReactionsBarShown } = useReactionsBar()
 
   const countUnreadMessages = useUnreadCount(
     accountId,
@@ -204,7 +204,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
   }, [jumpToMessage])
 
   const onScroll = useCallback(
-    (Event: React.UIEvent<HTMLDivElement> | null) => {
+    (evt: React.UIEvent<HTMLDivElement> | null) => {
       if (!messageListRef.current) {
         return
       }
@@ -212,7 +212,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         return
       }
 
-      hideReactionsBar()
+      if (evt) hideReactionsBar()
 
       const distanceToTop = messageListRef.current.scrollTop
       const distanceToBottom =
@@ -236,20 +236,20 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         log.debug('onScroll: Lets try loading messages from both ends')
         setTimeout(() => fetchMoreTop(), 0)
         setTimeout(() => fetchMoreBottom(), 0)
-        Event?.preventDefault()
-        Event?.stopPropagation()
+        evt?.preventDefault()
+        evt?.stopPropagation()
         return false
       } else if (distanceToTop < 200) {
         log.debug('onScroll: Scrolled to top, fetching more messages!')
         setTimeout(() => fetchMoreTop(), 0)
-        Event?.preventDefault()
-        Event?.stopPropagation()
+        evt?.preventDefault()
+        evt?.stopPropagation()
         return false
       } else if (distanceToBottom < 200) {
         log.debug('onScroll: Scrolled to bottom, fetching more messages!')
         setTimeout(() => fetchMoreBottom(), 0)
-        Event?.preventDefault()
-        Event?.stopPropagation()
+        evt?.preventDefault()
+        evt?.stopPropagation()
         return false
       }
     },
@@ -284,7 +284,9 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       'scrollTop:',
       messageListRef.current.scrollTop,
       'scrollHeight:',
-      messageListRef.current.scrollHeight
+      messageListRef.current.scrollHeight,
+      'reactionsBar:',
+      isReactionsBarShown
     )
     if (scrollTo.type === 'scrollToMessage') {
       log.debug('scrollTo: scrollToMessage: ' + scrollTo.msgId)
@@ -346,7 +348,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         'scrollTo type: scrollToPosition; scrollTop: ' + scrollTo.scrollTop
       )
       messageListRef.current.scrollTop = scrollTo.scrollTop
-    } else if (scrollTo.type === 'scrollToBottom') {
+    } else if (scrollTo.type === 'scrollToBottom' && !isReactionsBarShown) {
       if (scrollTo.ifClose === true) {
         const scrollHeight = lastKnownScrollHeight
         const { scrollTop, clientHeight } = messageListRef.current
@@ -386,6 +388,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
     viewState,
     viewState.lastKnownScrollHeight,
     viewState.scrollTo,
+    isReactionsBarShown,
   ])
 
   useLayoutEffect(() => {
