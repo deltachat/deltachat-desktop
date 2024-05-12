@@ -54,6 +54,14 @@ export function ExperimentalFeatures({ settingsStore }: Props) {
 
   return (
     <>
+      <SettingsSelector
+        onClick={onClickEdit.bind(null)}
+        currentValue={showVideochatInstance(
+          settingsStore.settings['webrtc_instance']
+        )}
+      >
+        {tx('videochat')}
+      </SettingsSelector>
       <DesktopSettingsSwitch
         settingsKey='enableBroadcastLists'
         label={tx('broadcast_lists')}
@@ -76,6 +84,12 @@ export function ExperimentalFeatures({ settingsStore }: Props) {
         settingsKey='experimentalEnableMarkdownInMessages'
         label='Render Markdown in Messages'
       />
+      <CoreSettingsSwitch
+        label={tx('disable_imap_idle')}
+        settingsKey='disable_idle'
+        description={tx('disable_imap_idle_explain')}
+      />
+      <SyncAllAccountsSwitch />
       <DesktopSettingsSwitch
         settingsKey='enableWebxdcDevTools'
         label='Enable Webxdc Devtools'
@@ -88,20 +102,6 @@ export function ExperimentalFeatures({ settingsStore }: Props) {
         // 853b584251a5dacf60ebc616f7fb10edffb5c5e5/src/main/index.ts#L12-L21
         description='Careful: opening developer tools on a malicious webxdc app could lead to the app getting access to the Internet'
       />
-      <CoreSettingsSwitch
-        label={tx('disable_imap_idle')}
-        settingsKey='disable_idle'
-        description={tx('disable_imap_idle_explain')}
-      />
-      <SettingsSelector
-        onClick={onClickEdit.bind(null)}
-        currentValue={showVideochatInstance(
-          settingsStore.settings['webrtc_instance']
-        )}
-      >
-        {tx('videochat')}
-      </SettingsSelector>
-      <SyncAllAccountsSwitch />
     </>
   )
 }
