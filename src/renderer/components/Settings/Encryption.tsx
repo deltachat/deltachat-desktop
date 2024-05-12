@@ -31,9 +31,7 @@ export default function Encryption() {
         label={tx('autocrypt_prefer_e2ee')}
       />
       <ManageKeys />
-      <SettingsButton
-        onClick={() => openDialog(SendAutocryptSetupMessage)}
-      >
+      <SettingsButton onClick={() => openDialog(SendAutocryptSetupMessage)}>
         {tx('autocrypt_send_asm_button')}
       </SettingsButton>
     </>
