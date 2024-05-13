@@ -14,7 +14,6 @@ import Advanced from './Advanced'
 import Profile from './Profile'
 import Dialog, { DialogBody, DialogHeader } from '../Dialog'
 import EditProfileDialog from '../dialogs/EditProfileDialog'
-import EditAccountAndPasswordDialog from '../dialogs/EditAccountAndPasswordDialog'
 import SettingsSeparator from './SettingsSeparator'
 import useDialog from '../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
@@ -63,16 +62,6 @@ export default function Settings({ onClose }: DialogProps) {
               }}
             >
               {tx('pref_edit_profile')}
-            </SettingsIconButton>
-            <SettingsIconButton
-              icon='list'
-              onClick={() => {
-                openDialog(EditAccountAndPasswordDialog, {
-                  settingsStore,
-                })
-              }}
-            >
-              {tx('pref_password_and_account_settings')}
             </SettingsIconButton>
             <SettingsSeparator />
             <SettingsIconButton
