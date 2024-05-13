@@ -60,22 +60,26 @@ export default function ProfileImageCropper({
   const initialZoom = useRef<number>(1.0)
 
   const onSubmit = () => {
+    if (!fullImage.current) {
+      return
+    }
+
     const canvas = document.createElement('canvas')
+    canvas.width = targetWidth
+    canvas.height = targetHeight
+
     const context = canvas.getContext('2d', {
       willReadFrequently: false,
     }) as CanvasRenderingContext2D
-    canvas.width = targetWidth
-    canvas.height = targetHeight
-    const imgW = fullImage.current?.clientWidth
-    const imgH = fullImage.current?.clientHeight
-    if (!imgW || !imgH) {
-      return
-    }
     context.imageSmoothingEnabled = false
+
+    const imgW = fullImage.current.clientWidth
+    const imgH = fullImage.current.clientHeight
+
     context.drawImage(
       fullImage.current as CanvasImageSource,
-      posX.current * zoom.current - (targetWidth / zoom.current - imgW) / 2,
-      posY.current * zoom.current - (targetHeight / zoom.current - imgH) / 2,
+      posX.current - (targetWidth / zoom.current - imgW) / 2,
+      posY.current - (targetHeight / zoom.current - imgH) / 2,
       targetWidth / zoom.current,
       targetHeight / zoom.current,
       0,
@@ -83,14 +87,13 @@ export default function ProfileImageCropper({
       targetWidth,
       targetHeight
     )
-
-    const tempfilename = 'tmp_profile_pic.png'
-
     ;(async () => {
+      const tempfilename = 'tmp_profile_pic.png'
       const tempfilepath = await runtime.writeTempFileFromBase64(
         tempfilename,
         canvas.toDataURL('image/png').split(';base64,')[1]
       )
+
       setLastPath(dirname(filepath))
       setProfilePicture(tempfilepath)
       onClose()
@@ -104,25 +107,21 @@ export default function ProfileImageCropper({
     moveImages(0, 0)
   }
 
-  const makeSelector = (
-    shape: string,
-    w: number,
-    h: number,
-    x: number,
-    y: number
-  ) => {
+  const makeSelector = (x: number, y: number) => {
+    const hw = targetWidth / zoom.current / 2
+    const hh = targetHeight / zoom.current / 2
     if (shape === 'circle') {
-      return 'circle(' + w / 2 + 'px at ' + x + 'px ' + y + 'px)'
+      return `circle(${hw}px at ${x}px ${y}px)`
     } else {
       return (
         'rect(' +
-        (y - h / 2) +
+        (y - hh) +
         'px ' +
-        (x + w / 2) +
+        (x + wh) +
         'px ' +
-        (y + h / 2) +
+        (y + hh) +
         'px ' +
-        (x - w / 2) +
+        (x - wh) +
         'px)'
       )
     }
@@ -161,34 +160,22 @@ export default function ProfileImageCropper({
     const ctxW = container.current.clientWidth
     const ctxH = container.current.clientHeight
 
-    // cut zoom on width
     zoom.current = Math.min(
       imgW / targetWidth,
-      Math.max(targetWidth / imgW, zoom.current)
-    )
-
-    // cut zoom on height
-    zoom.current = Math.min(
       imgH / targetHeight,
-      Math.max(targetHeight / imgH, zoom.current)
+      Math.max(targetWidth / imgW, targetHeight / imgH, zoom.current)
     )
 
     const nX = Math.max(
-      Math.min(imgW / 2 - targetWidth / zoom.current / 2, x),
-      targetWidth / zoom.current / 2 - imgW / 2
+      Math.min((imgW - targetWidth / zoom.current) / 2, x),
+      (targetWidth / zoom.current - imgW) / 2
     )
     const nY = Math.max(
-      Math.min(imgH / 2 - targetHeight / zoom.current / 2, y),
-      targetHeight / zoom.current / 2 - imgH / 2
+      Math.min((imgH - targetHeight / zoom.current) / 2, y),
+      (targetHeight / zoom.current - imgH) / 2
     )
 
-    cutImage.current.style.clipPath = makeSelector(
-      shape,
-      targetWidth / zoom.current,
-      targetHeight / zoom.current,
-      imgW / 2 + nX,
-      imgH / 2 + nY
-    )
+    cutImage.current.style.clipPath = makeSelector(imgW / 2 + nX, imgH / 2 + nY)
 
     const imgX = (ctxW - imgW) / 2 - nX * zoom.current
     const imgY = (ctxH - imgH) / 2 - nY * zoom.current
@@ -216,30 +203,33 @@ export default function ProfileImageCropper({
 
       dragging.current = false
 
-      posX.current -=
-        (ev.clientX - startX.current) *
-        Math.min(speedMultiplier / zoom.current, speedMultiplier)
-      posY.current -=
-        (ev.clientY - startY.current) *
-        Math.min(speedMultiplier / zoom.current, speedMultiplier)
-      const [x, y] = moveImages(posX.current, posY.current)
-      posX.current = x
-      posY.current = y
+      // we never go faster with zoom above 1, but we speed up zoomed-out (below 1) by inverting the zoom value
+      const zoomSpeed = Math.min(
+        speedMultiplier / zoom.current,
+        speedMultiplier
+      )
+
+      ;[posX.current, posY.current] = moveImages(
+        posX.current - (ev.clientX - startX.current) * zoomSpeed,
+        posY.current - (ev.clientY - startY.current) * zoomSpeed
+      )
     }
 
     const onMouseMove = (ev: MouseEvent) => {
       if (!dragging.current) {
         return
       }
-      // we never go faster with zoom above 1, but we speed up zoomed-out (below 1) by inverting the zoom value
-      const dX =
-        (ev.clientX - startX.current) *
-        Math.min(speedMultiplier / zoom.current, speedMultiplier)
-      const dY =
-        (ev.clientY - startY.current) *
-        Math.min(speedMultiplier / zoom.current, speedMultiplier)
 
-      moveImages(posX.current - dX, posY.current - dY)
+      // we never go faster with zoom above 1, but we speed up zoomed-out (below 1) by inverting the zoom value
+      const zoomSpeed = Math.min(
+        speedMultiplier / zoom.current,
+        speedMultiplier
+      )
+
+      moveImages(
+        posX.current - (ev.clientX - startX.current) * zoomSpeed,
+        posY.current - (ev.clientY - startY.current) * zoomSpeed
+      )
     }
 
     const onZoom = (ev: WheelEvent) => {
