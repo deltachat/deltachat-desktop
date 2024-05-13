@@ -204,7 +204,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
   }, [jumpToMessage])
 
   const onScroll = useCallback(
-    (evt: React.UIEvent<HTMLDivElement> | null) => {
+    (ev: React.UIEvent<HTMLDivElement> | null) => {
       if (!messageListRef.current) {
         return
       }
@@ -212,7 +212,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         return
       }
 
-      if (evt) hideReactionsBar()
+      if (ev) hideReactionsBar()
 
       const distanceToTop = messageListRef.current.scrollTop
       const distanceToBottom =
@@ -236,20 +236,20 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         log.debug('onScroll: Lets try loading messages from both ends')
         setTimeout(() => fetchMoreTop(), 0)
         setTimeout(() => fetchMoreBottom(), 0)
-        evt?.preventDefault()
-        evt?.stopPropagation()
+        ev?.preventDefault()
+        ev?.stopPropagation()
         return false
       } else if (distanceToTop < 200) {
         log.debug('onScroll: Scrolled to top, fetching more messages!')
         setTimeout(() => fetchMoreTop(), 0)
-        evt?.preventDefault()
-        evt?.stopPropagation()
+        ev?.preventDefault()
+        ev?.stopPropagation()
         return false
       } else if (distanceToBottom < 200) {
         log.debug('onScroll: Scrolled to bottom, fetching more messages!')
         setTimeout(() => fetchMoreBottom(), 0)
-        evt?.preventDefault()
-        evt?.stopPropagation()
+        ev?.preventDefault()
+        ev?.stopPropagation()
         return false
       }
     },
