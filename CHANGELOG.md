@@ -49,6 +49,7 @@
 - fix Clicking notification does not bring Delta Chat to foreground on Windows #3793
 - Prevent re-rendering of account sidebar when switching account #3789
 - fix help not opening for languages that have no localized help
+- fix the bug where reactions bar is closed after arriving new message #3760
 - fix problem of focus when opening create chat dialogue #3816
 
 ### Removed
