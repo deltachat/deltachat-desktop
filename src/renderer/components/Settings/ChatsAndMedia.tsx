@@ -6,7 +6,6 @@ import {
 } from '../KeyboardShortcutHint'
 import { DesktopSettingsType } from '../../../shared/shared-types'
 import { SettingsStoreState } from '../../stores/settings'
-import Communication from './Communication'
 import OutgoingMediaQuality from './OutgoingMediaQuality'
 import DownloadOnDemand from './DownloadOnDemand'
 import DesktopSettingsSwitch from './DesktopSettingsSwitch'
@@ -36,7 +35,6 @@ export default function ChatsAndMedia({
   return (
     <>
       <SettingsHeading>{tx('pref_chats')}</SettingsHeading>
-      <Communication settingsStore={settingsStore} />
       <SettingsButton onClick={() => openDialog(UnblockContacts)}>
         {tx('pref_blocked_contacts')}
       </SettingsButton>
