@@ -88,7 +88,7 @@ export default function ProfileImageCropper({
       targetHeight
     )
     ;(async () => {
-      const tempfilename = 'tmp_profile_pic.png'
+      const tempfilename = `profile_pic_${Date.now()}.png`
       const tempfilepath = await runtime.writeTempFileFromBase64(
         tempfilename,
         canvas.toDataURL('image/png').split(';base64,')[1]
@@ -233,8 +233,12 @@ export default function ProfileImageCropper({
     }
 
     const onZoom = (ev: WheelEvent) => {
-      // negate delta so when we wheel forward we zoom in
-      zoom.current *= Math.exp((ev.deltaY > 1 ? -1 : 1) * 0.05)
+      const absDelta = Math.abs(ev.deltaY)
+      // NOTE(maxph): I'm not sure about this, but there are many sources stating that 'wheel' delta on touchpad is smaller (somewhere like 50 vs 100 at maximum)
+      // so here we treat small delta as not a mouse wheel and zoom in different direction
+      const dir = absDelta < 50 ? 1 : -1
+      const normDelta = Math.min(8, absDelta)
+      zoom.current *= 1 + (dir * Math.sign(ev.deltaY) * normDelta) / 100
       const [x, y] = moveImages(posX.current, posY.current)
       posX.current = x
       posY.current = y
