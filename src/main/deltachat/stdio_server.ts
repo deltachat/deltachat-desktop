@@ -34,12 +34,20 @@ export class StdioServer {
       console.log(`stderr: ${data}`.trimEnd())
     })
 
-    this.server_process.on('close', code => {
-      console.log(`child process close all stdio with code ${code}`)
+    this.server_process.on('close', (code, signal) => {
+      if (code === null) {
+        console.log(`child process close all stdio with code ${code}`)
+      } else {
+        console.log(`child process close all stdio with signal ${signal}`)
+      }
     })
 
-    this.server_process.on('exit', code => {
-      console.log(`child process exited with code ${code}`)
+    this.server_process.on('exit', (code, signal) => {
+      if (code === null) {
+        console.log(`child process exited with code ${code}`)
+      } else {
+        console.log(`child process exited with signal ${signal}`)
+      }
     })
   }
 
