@@ -39,6 +39,7 @@
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `v1.138.5`
 - upgrade `electron` from `28.2.3` to `30.0.2`
 - increase minimum nodejs version from `18` to `20`
+- hide irrelevant advanced settings for chatmail users
 
 ### Fixed
 - fix chat audit dialog was going out of viewport on smaller screens #3736

@@ -19,17 +19,24 @@ import useDialog from '../../hooks/dialog/useDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 import ManageKeys from './ManageKeys'
+import { SettingsStoreState } from '../../stores/settings'
 
-export default function Encryption() {
+type Props = {
+  settingsStore: SettingsStoreState
+}
+
+export default function Encryption({ settingsStore }: Props) {
   const { openDialog } = useDialog()
   const tx = useTranslationFunction()
 
   return (
     <>
-      <CoreSettingsSwitch
-        settingsKey='e2ee_enabled'
-        label={tx('autocrypt_prefer_e2ee')}
-      />
+      {!settingsStore.settings.is_chatmail && (
+        <CoreSettingsSwitch
+          settingsKey='e2ee_enabled'
+          label={tx('autocrypt_prefer_e2ee')}
+        />
+      )}
       <ManageKeys />
       <SettingsButton onClick={() => openDialog(SendAutocryptSetupMessage)}>
         {tx('autocrypt_send_asm_button')}
