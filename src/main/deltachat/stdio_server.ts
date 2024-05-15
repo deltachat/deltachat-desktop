@@ -12,23 +12,26 @@ export class StdioServer {
 
   async start() {
     this.server_process = spawn(this.cmd_path, {
-      env: { DC_ACCOUNTS_PATH: this.accounts_path },
+      env: {
+        DC_ACCOUNTS_PATH: this.accounts_path,
+        RUST_LOG: process.env.RUST_LOG,
+      },
     })
 
     let buffer = ''
     this.server_process.stdout.on('data', data => {
       // console.log(`stdout: ${data}`)
       buffer += data.toString()
-      while (buffer.includes("\n")) {
-        const n = buffer.indexOf("\n");
-        const message = buffer.substring(0, n);
-        this.on_data(message);
-        buffer = buffer.substring(n + 1);
+      while (buffer.includes('\n')) {
+        const n = buffer.indexOf('\n')
+        const message = buffer.substring(0, n)
+        this.on_data(message)
+        buffer = buffer.substring(n + 1)
       }
     })
 
     this.server_process.stderr.on('data', data => {
-      console.log(`stderr: ${data}`)
+      console.log(`stderr: ${data}`.trimEnd())
     })
 
     this.server_process.on('close', code => {
