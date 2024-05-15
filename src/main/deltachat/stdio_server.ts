@@ -35,7 +35,7 @@ export class StdioServer {
     })
 
     this.server_process.on('close', (code, signal) => {
-      if (code === null) {
+      if (code !== null) {
         console.log(`child process close all stdio with code ${code}`)
       } else {
         console.log(`child process close all stdio with signal ${signal}`)
@@ -43,7 +43,7 @@ export class StdioServer {
     })
 
     this.server_process.on('exit', (code, signal) => {
-      if (code === null) {
+      if (code !== null) {
         console.log(`child process exited with code ${code}`)
       } else {
         console.log(`child process exited with signal ${signal}`)
