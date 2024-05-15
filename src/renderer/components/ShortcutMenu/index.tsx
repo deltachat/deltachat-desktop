@@ -18,20 +18,21 @@ type Props = {
 }
 
 export default function ShortcutMenu(props: Props) {
+  const { chat, direction, mesage, showContextMenu } = props
   return (
     <div
       className={classNames(styles.shortcutMenu, {
-        [styles.incoming]: props.direction === 'incoming',
-        [styles.outgoing]: props.direction === 'outgoing',
+        [styles.incoming]: direction === 'incoming',
+        [styles.outgoing]: direction === 'outgoing',
       })}
     >
-      {showReactionsUi(props.message, props.chat) && (
+      {showReactionsUi(message, chat) && (
         <ReactButton
-          messageId={props.message.id}
-          reactions={props.message.reactions}
+          messageId={message.id}
+          reactions={message.reactions}
         />
       )}
-      <ContextMenuButton onClick={props.showContextMenu} />
+      <ContextMenuButton onClick={showContextMenu} />
     </div>
   )
 }
@@ -47,7 +48,6 @@ function ReactButton(props: {
     // the reaction bar to directly hide again when switching to other
     // messages by clicking the "react" button
     event.stopPropagation()
-
     // Show reaction bar aligned centered with the "react" button
     const { x, y } = event.currentTarget.getBoundingClientRect()
 
