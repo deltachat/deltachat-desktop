@@ -57,7 +57,7 @@ export default function RuntimeAdapter({
 
     runtime.onShowDialog = kind => {
       if (kind === 'about') {
-        ActionEmitter.emitAction(KeybindAction.Settings_Open)
+        ActionEmitter.emitAction(KeybindAction.AboutDialog_Open)
       } else if (kind === 'keybindings') {
         ActionEmitter.emitAction(KeybindAction.KeybindingCheatSheet_Open)
       } else if (kind === 'settings') {
