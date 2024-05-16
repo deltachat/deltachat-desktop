@@ -55,7 +55,7 @@ export default function ProfileImageCropper({
   const posX = useRef<number>(0)
   const posY = useRef<number>(0)
 
-  const speedMultiplier = 2
+  const containerScale = useRef<number>(1.0)
   const zoom = useRef<number>(1.0)
   const initialZoom = useRef<number>(1.0)
 
@@ -117,11 +117,11 @@ export default function ProfileImageCropper({
         'rect(' +
         (y - hh) +
         'px ' +
-        (x + wh) +
+        (x + hw) +
         'px ' +
         (y + hh) +
         'px ' +
-        (x - wh) +
+        (x - hw) +
         'px)'
       )
     }
@@ -132,13 +132,12 @@ export default function ProfileImageCropper({
       return
     }
 
-    container.current.style.transform =
-      'scale(' +
-      Math.min(
-        container.current?.clientWidth / targetWidth,
-        container.current?.clientHeight / targetHeight
-      ) +
-      ')'
+    containerScale.current = Math.min(
+      container.current?.clientWidth / targetWidth,
+      container.current?.clientHeight / targetHeight
+    )
+
+    container.current.style.transform = `scale(${containerScale.current})`
     initialZoom.current = zoom.current = Math.min(
       targetWidth / fullImage.current.clientWidth,
       targetHeight / fullImage.current.clientHeight
@@ -175,8 +174,10 @@ export default function ProfileImageCropper({
       (targetHeight / zoom.current - imgH) / 2
     )
 
+    // we don't multiply nX and nY by zoom.current here since image scale does that for us
     cutImage.current.style.clipPath = makeSelector(imgW / 2 + nX, imgH / 2 + nY)
 
+    // here we are in absolute coordinates, we have to multiply image offset by zoom
     const imgX = (ctxW - imgW) / 2 - nX * zoom.current
     const imgY = (ctxH - imgH) / 2 - nY * zoom.current
 
@@ -202,16 +203,11 @@ export default function ProfileImageCropper({
       ev.preventDefault()
 
       dragging.current = false
-
-      // we never go faster with zoom above 1, but we speed up zoomed-out (below 1) by inverting the zoom value
-      const zoomSpeed = Math.min(
-        speedMultiplier / zoom.current,
-        speedMultiplier
-      )
-
       ;[posX.current, posY.current] = moveImages(
-        posX.current - (ev.clientX - startX.current) * zoomSpeed,
-        posY.current - (ev.clientY - startY.current) * zoomSpeed
+        posX.current -
+          (ev.clientX - startX.current) / zoom.current / containerScale.current,
+        posY.current -
+          (ev.clientY - startY.current) / zoom.current / containerScale.current
       )
     }
 
@@ -220,15 +216,11 @@ export default function ProfileImageCropper({
         return
       }
 
-      // we never go faster with zoom above 1, but we speed up zoomed-out (below 1) by inverting the zoom value
-      const zoomSpeed = Math.min(
-        speedMultiplier / zoom.current,
-        speedMultiplier
-      )
-
       moveImages(
-        posX.current - (ev.clientX - startX.current) * zoomSpeed,
-        posY.current - (ev.clientY - startY.current) * zoomSpeed
+        posX.current -
+          (ev.clientX - startX.current) / zoom.current / containerScale.current,
+        posY.current -
+          (ev.clientY - startY.current) / zoom.current / containerScale.current
       )
     }
 
