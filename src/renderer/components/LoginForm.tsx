@@ -170,7 +170,7 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
           <DeltaPasswordInput
             key='mail_pw'
             id='mail_pw'
-            placeholder={tx('password')}
+            placeholder={tx('existing_password')}
             password={mail_pw || ''}
             onChange={handleCredentialsChange}
           />

@@ -33,6 +33,7 @@
   - `@typescript-eslint/parser`: `6.13.1` -> `7.8.0`
 - bump nodejs requirement to `>=18.18.0` #3808
 - reorganise some settings acording changes on android & ios #3812
+- reword password label to 'Existing Password' #3826
 
 ### Fixed
 - fix chat audit dialog was going out of viewport on smaller screens #3736
