@@ -468,6 +468,7 @@
     <string name="multidevice_same_network_hint">Уверете се, че и двете устройства са свързани към една и съща Wi-Fi или друга мрежа</string>
     <string name="multidevice_this_creates_a_qr_code">Ще бъде създаден QR код, чрез сканиране на който другото устройство може да копира акаунта.</string>
     <string name="multidevice_install_dc_on_other_device">Инсталирайте Delta Chat на другото Ви устройство (https://get.delta.chat)</string>
+    <!-- "I Already Have a Login / Add as Second Device” should be the same text as defined by the keys onboarding_alternative_logins and multidevice_receiver_title -->
     <string name="multidevice_tap_scan_on_other_device">Стартирайте Delta Chat, докоснете \"Добавяне като допълнително устройство\" и сканирайте кода, показан тук</string>
     <!-- Shown inside a "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and/or address eg. "Scan to set up second device for Alice (alice@example.org)" -->
     <string name="multidevice_qr_subtitle">Сканирайте, за да установите допълнително устройство за %1$s</string>
@@ -723,7 +724,9 @@
     <string name="autodel_after_1_year">След 1 година</string>
 
     <!-- autocrypt -->
+    <!-- deprecated, used "Encryption" if a headline is needed -->
     <string name="autocrypt">Autocrypt</string>
+    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
     <string name="autocrypt_explain">Autocrypt е нова отворена спецификация за автоматично криптиране на електронна поща \"от край до край\".\n\n Вашата настройка за криптиране \"от край до край\" се създава автоматично, когато това е необходимо; можете да я пренасяте между различни устройства с помощта на съобщения за настройка на Autocrypt</string>
     <string name="autocrypt_send_asm_title">Изпращане на съобщение за настройка на Autocrypt</string>
     <string name="autocrypt_send_asm_explain_before">Съобщението за настройка на Autocrypt споделя по сигурен начин Вашата настройка за криптиране \"от край до край\" с други съвместими с Autorcypt приложения.\n\nНастройката се криптира с код, който се показва тук и трябва да бъде въведен на другото устройство.</string>

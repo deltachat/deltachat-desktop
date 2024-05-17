@@ -331,7 +331,7 @@
     <string name="videochat_tap_to_open">Tocca per Aprire</string>
     <string name="videochat_instance">Istanza Video Chat</string>
     <string name="videochat_instance_placeholder">La Tua Istanza Video Chat</string>
-    <string name="videochat_instance_example">Esempi: https://meet.jit.si/$ROOM o basicwebrtc:https://your-server</string>
+    <string name="videochat_instance_example">Esempi: https://your-server.org/$ROOM</string>
     <string name="videochat_instance_explain_2">Se la video chat è abilitata, è possibile avviare una video chat da ogni chat. Le video chat richiedono un\'applicazione compatibile o un browser compatibile da entrambe le parti.</string>
     <string name="videochat_instance_from_qr">Utilizzare \"%1$s\" per invitare altri alla video chat?\n\nUna volta impostato, è possibile avviare una video chat da ogni chat uno a uno. Ciò sostituirà l\'eventuale impostazione precedente per le video chat.</string>
     <string name="videochat_invitation">Invito alla video chat</string>
@@ -514,6 +514,7 @@
     <string name="multidevice_same_network_hint">Assicurati che entrambi i dispositivi siano sulla stessa rete o Wi-Fi.</string>
     <string name="multidevice_this_creates_a_qr_code">In questo modo si crea un codice QR che il secondo dispositivo può scansionare per copiare l\'account.</string>
     <string name="multidevice_install_dc_on_other_device">Installa Delta Chat sull\'altro dispositivo (https://get.delta.chat)</string>
+    <!-- "I Already Have a Login / Add as Second Device” should be the same text as defined by the keys onboarding_alternative_logins and multidevice_receiver_title -->
     <string name="multidevice_tap_scan_on_other_device">Avvia Delta Chat, tocca \"Aggiungi come secondo dispositivo\" e scansiona il codice qui mostrato</string>
     <!-- Shown inside a "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and/or address eg. "Scan to set up second device for Alice (alice@example.org)" -->
     <string name="multidevice_qr_subtitle">Scansiona per impostare un secondo dispositivo per %1$s</string>
@@ -558,6 +559,32 @@
     <!-- Used for describing resource usage, resulting string will be eg. "1.2 GiB of 3 GiB used" -->
     <string name="part_of_total_used">%1$s di %2$s usati</string>
 
+
+    <!-- welcome and login -->
+    <!-- Primary button on the welcome screen, allows to create an instant account -->
+    <string name="onboarding_create_instant_account">Iniziamo!</string>
+    <!-- Secondary button on the welcome screen, allows to "Add as Second Device", "Restore from Backup", "Manual Login"  -->
+    <string name="onboarding_alternative_logins">Ho Già un Account</string>
+    <!-- Button, allows to log in to existing email accounts, setting ports, passwords and so on -->
+    <string name="manual_account_setup_option">Accesso Manuale</string>
+    <!-- Instant onboarding title (there is not more to do than to set name and avatar) -->
+    <string name="instant_onboarding_title">Il Tuo Profilo</string>
+    <!-- This is a link to the default Privacy Policy -->
+    <string name="instant_onboarding_agree_default">Leggi l\'Informativa Riservatezza</string>
+    <!-- The placeholder will be replaced by instance name, the whole text will link to the instance page -->
+    <string name="instant_onboarding_agree_instance">Informazioni profili su %1$s</string>
+    <!-- Confirmation button on the instant onboarding screen -->
+    <string name="instant_onboarding_create">Accetto &amp; Crea Profilo</string>
+    <!-- Secondary, link-like button to open a page with other possible instances -->
+    <string name="instant_onboarding_show_more_instances">Esplora Altre Opzioni</string>
+    <!-- Hint about what happens when "Create Profile" button in pressed; the placeholder will be replaced by the group name -->
+    <string name="instant_onboarding_group_info">Crea un profilo per unirti al gruppo \"%1$s\".</string>
+    <!-- Hint about what happens when "Create Profile" button in pressed; the placeholder will be replaced by contact name and/or address -->
+    <string name="instant_onboarding_contact_info">Crea un profilo per chattare con %1$s.</string>
+    <!-- Question shown when another user's QR code is scanned from onboarding screen -->
+    <string name="instant_onboarding_confirm_contact">Vuoi creare un nuovo profilo e iniziare a chattare con %1$s?</string>
+    <!-- Question shown when group's QR code is scanned from onboarding screen -->
+    <string name="instant_onboarding_confirm_group">Vuoi creare un nuovo profilo e unirti al \"%1$s\" gruppo chat?</string>
 
     <string name="welcome_chat_over_email">Chat via E-mail.</string>
     <string name="scan_invitation_code">Scansiona Invito</string>
@@ -622,7 +649,7 @@
 
 
     <!-- preferences -->
-    <string name="pref_using_custom">Personalizzato in uso: %s</string>
+    <string name="pref_using_custom">Personalizzazione in uso: %s</string>
     <string name="pref_using_default">Predefinito in uso: %s</string>
     <string name="pref_profile_info_headline">Le tue Info Profilo</string>
     <string name="pref_profile_photo">Foto Profilo</string>
@@ -666,6 +693,8 @@
     <string name="pref_incognito_keyboard_explain">Richiedi alla tastiera di disattivare l\'apprendimento personalizzato</string>
     <string name="pref_read_receipts">Ricevute di Lettura</string>
     <string name="pref_read_receipts_explain">Se le tue ricevute di lettura sono disabilitate non potrai vedere quelle degli altri.</string>
+    <string name="pref_server">Server</string>
+    <string name="pref_encryption">Criptazione</string>
     <string name="pref_manage_keys">Gestisci Chiavi</string>
     <string name="pref_use_system_emoji">Usa Emoji di Sistema</string>
     <string name="pref_use_system_emoji_explain">Disabilita il supporto delle emoji integrato in Delta Chat</string>
@@ -791,7 +820,9 @@
     <string name="autodel_after_1_year">Dopo 1 anno</string>
 
     <!-- autocrypt -->
+    <!-- deprecated, used "Encryption" if a headline is needed -->
     <string name="autocrypt">Autocrypt</string>
+    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
     <string name="autocrypt_explain">Autocrypt è una nuova specifica aperta per la cifratura end-to-end delle email.\n\nLa tua configurazione end-to-end viene creata automaticamente quando necessario e puoi trasferirla tra dispositivi tramite i Messaggi di configurazione.</string>
     <string name="autocrypt_send_asm_title">Messaggio di Configurazione Autocrypt </string>
     <string name="autocrypt_send_asm_explain_before">Un \'Messaggio di configurazione Autocrypt\' condivide in sicurezza le tue impostazioni end-to-end con altre app compatibili. Le impostazioni sono criptate con un codice mostrato qui che deve essere inserito nell\'altro dispositivo.</string>
@@ -889,7 +920,7 @@
 
     <string name="devicemsg_self_deleted">Hai eliminato la chat \"Messaggi salvati\".\n\nℹ️ Per utilizzare nuovamente la funzione \"Messaggi salvati\", crea una nuova chat con te stesso.</string>
     <!-- %1$s will be replaced by the amount of storage already used, sth. as '500 MB'. If you want to use a percentage sign, type in two of them, eg. %1$s %% -->
-    <string name="devicemsg_storage_exceeding">⚠️ Lo spazio di archiviazione del tuo fornitore sta per essere superato, già %1$s%% vengono utilizzati.\n\nPotrebbe non essere possibile ricevere messaggi quando lo spazio di archiviazione è 100%% utilizzato.\n\n👉 Si prega di verificare se è possibile eliminare i vecchi dati nell\'interfaccia web del fornitore e considerare di abilitare \"Impostazioni / Elimina Vecchi Messaggi\". Puoi controllare l\'utilizzo corrente dello spazio di archiviazione in qualsiasi momento in \"Impostazioni / Connettività\".</string>
+    <string name="devicemsg_storage_exceeding">⚠️ Lo spazio di archiviazione del tuo provider sta per esaurirsi:%1$s%% sono già utilizzati.\n\nPotresti non essere in grado di ricevere messaggi se lo spazio di archiviazione è pieno.\n\n👉 Controlla se puoi eliminare i vecchi dati nell\'interfaccia web del provider e considera di abilitare \"Impostazioni/Chat e Media/Elimina Vecchi Messaggi\". Puoi controllare l\'utilizzo attuale dello spazio di archiviazione in qualsiasi momento in \"Impostazioni/Connettività\".</string>
     <!-- %1%s will be replaced by date and time in some human-readable format -->
     <string name="devicemsg_bad_time">⚠️ La data o l\'ora del tuo dispositivo sembrano imprecise (%1$s).\n\nRegola l\'orologio ⏰🔧 per assicurarti che i tuoi messaggi vengano ricevuti correttamente.</string>
     <string name="devicemsg_update_reminder">⚠️ La tua versione di Delta Chat potrebbe essere obsoleta.\n\nCiò potrebbe causare problemi perché i tuoi partner di chat utilizzano versioni più recenti - e ti mancano le funzionalità più recenti 😳\nControlla https://get.delta.chat o il tuo app store per gli aggiornamenti. </string>
@@ -919,7 +950,7 @@
     <string name="revive_verifygroup_explain">Questo codice QR potrebbe essere scansionato da altri per unirsi al gruppo \"%1$s\".\n\nIl codice QR non è attivo su questo dispositivo.</string>
     <string name="revive_qr_code">Attiva Codice QR </string>
     <string name="qrshow_title">Codice QR di Invito</string>
-    <string name="qrshow_x_joining">%1$s entra.</string>
+    <string name="qrshow_x_joining">%1$s si unisce.</string>
     <string name="qrshow_x_verified">%1$s verificato.</string>
     <string name="qrshow_x_has_joined_group">%1$s è entrato nel gruppo.</string>
     <string name="qrshow_join_group_title">Codice QR di Invito</string>
@@ -943,6 +974,8 @@
     <string name="secure_join_started">%1$s ti ha invitato ad unirti a questo gruppo.\n\nIn attesa che il dispositivo di %2$s risponda…</string>
     <!-- placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_replies">%1$s ha risposto, in attesa di essere aggiunto al gruppo…</string>
+    <string name="secure_join_wait">Creazione della crittografia end-to-end garantita, attendere...</string>
+    <string name="secure_join_wait_timeout">Non è ancora possibile stabilire la crittografia end-to-end garantita, ma potresti già inviare un messaggio.</string>
     <string name="contact_verified">%1$s verificato.</string>
     <string name="contact_not_verified">Impossibile verificare %1$s</string>
     <!-- Shown in contact profile. The placeholder will be replaced by the name of the contact that introduced the contact. -->
