@@ -1,9 +1,9 @@
 import { EventEmitter } from 'events'
 import { promisify } from 'util'
-import { getLogger } from '../shared/logger'
-import { DesktopSettingsType } from '../shared/shared-types'
-import { getDefaultState } from '../shared/state'
-import appConfig from './application-config'
+import { getLogger } from '../shared/logger.js'
+import { DesktopSettingsType } from '../shared/shared-types.js'
+import { getDefaultState } from '../shared/state.js'
+import appConfig from './application-config.js'
 import debounce from 'debounce'
 const log = getLogger('main/state')
 

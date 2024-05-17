@@ -1,11 +1,10 @@
 import rc from 'rc'
-import { RC_Config } from '../shared/shared-types'
+import type { RC_Config } from '../shared/shared-types.js'
 
 const defaults: RC_Config = {
   'log-debug': false,
   'log-to-console': false,
   'machine-readable-stacktrace': false,
-  'multiple-instances': false,
   theme: undefined,
   devmode: false,
   'translation-watch': false,
@@ -15,6 +14,7 @@ const defaults: RC_Config = {
   v: false,
   help: false,
   h: false,
+  'allow-unsafe-core-replacement': false,
 }
 
 const config = rc('DeltaChat', defaults) as RC_Config

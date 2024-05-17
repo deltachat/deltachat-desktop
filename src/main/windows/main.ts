@@ -5,8 +5,13 @@ import electron, {
   session,
   systemPreferences,
 } from 'electron'
-import { appWindowTitle } from '../../shared/constants'
-import { getLogger } from '../../shared/logger'
+import { isAbsolute, join, sep } from 'path'
+import { platform } from 'os'
+import { fileURLToPath } from 'url'
+import { Session } from 'electron/main'
+
+import { appWindowTitle } from '../../shared/constants.js'
+import { getLogger } from '../../shared/logger.js'
 import {
   appIcon,
   windowDefaults,
@@ -14,15 +19,10 @@ import {
   ALLOWED_STATIC_FOLDERS,
   getAccountsPath,
   ALLOWED_ACCOUNT_FOLDERS,
-} from '../application-constants'
-import { refreshTrayContextMenu } from '../tray'
-
-import { isAbsolute, join, sep } from 'path'
-import { DesktopSettings } from '../desktop_settings'
-import { Session } from 'electron/main'
-import { refresh as refreshTitleMenu } from '../menu'
-import { platform } from 'os'
-import { fileURLToPath } from 'url'
+} from '../application-constants.js'
+import { refreshTrayContextMenu } from '../tray.js'
+import { DesktopSettings } from '../desktop_settings.js'
+import { refresh as refreshTitleMenu } from '../menu.js'
 
 const log = getLogger('main/mainWindow')
 
@@ -233,8 +233,8 @@ export function send(channel: string, ...args: any[]) {
     log.warn("window not defined, can't send ipc to renderer")
     return
   }
-  if (window.webContents.isDestroyed()) {
-    log.warn('window.webContents is destroyed. not sending message')
+  if (window.isDestroyed()) {
+    log.warn('window is destroyed. not sending message', args)
     return
   }
   try {

@@ -4,8 +4,11 @@ import { ReactSelector } from 'testcafe-react-selectors'
 import { createTmpUser } from '../integration/fixtures/config'
 import { C, DeltaChat } from 'deltachat-node'
 import type { Context } from 'deltachat-node/node/dist/context'
-import { join } from 'path'
+import { dirname, join } from 'path'
 import { rmSync } from 'fs'
+import { fileURLToPath } from 'url'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 console.log('cleaning up test dir')
 try {

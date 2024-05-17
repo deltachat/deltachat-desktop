@@ -1,5 +1,5 @@
 import { App } from 'electron'
-import { RC_Config } from '../shared/shared-types'
+import type { RC_Config } from '../shared/shared-types.ts'
 
 export interface ExtendedAppMainProcess extends App {
   rc: RC_Config

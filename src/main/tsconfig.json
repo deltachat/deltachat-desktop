@@ -3,11 +3,12 @@
     "outDir": "../../tsc-dist/main",
     "sourceMap": true,
     "noImplicitAny": true,
-    "module": "commonjs",
+    "module": "NodeNext",
     "target": "es6",
     "rootDir": ".",
     "allowJs": false,
     "esModuleInterop": true,
+    "moduleResolution": "NodeNext",
     "strictNullChecks": true,
     "strict": true
   },

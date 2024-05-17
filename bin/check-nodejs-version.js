@@ -1,9 +1,10 @@
-const { versions } = require('process')
+//@ts-check
+import { versions } from 'process'
 
-const MIN_NODE_VERSION = 18
+const MIN_NODE_VERSION = 20
 
 const majorVersion = versions.node.split('.')[0]
-if (majorVersion < MIN_NODE_VERSION) {
+if (Number(majorVersion) < MIN_NODE_VERSION) {
   console.log(
     `ERROR:\n!!!\nThe oldest nodejs you may use is ${MIN_NODE_VERSION}, but you have ${majorVersion}\n!!!`
   )

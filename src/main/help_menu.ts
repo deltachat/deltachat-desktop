@@ -7,7 +7,6 @@ Flag
 -h, --help                      Print DeltaChat command line options (currently set).
 --minimized                     Start deltachat in minimized mode with trayicon (trayicon will be activated
                                 for this session regardless whether it's disabled)
---multiple-instances            [Possible unstable] allows you do open multiple deltachat instances*
 -v, --version                   Prints DeltaChat version.
 
 Development Options
@@ -24,8 +23,5 @@ Logging
 --machine-readable-stack        Enable JSON stack trace
 --no-color                      Disable colors in the output of main process
 
-For more info on logging see LOGGING.md.
-
-*--multiple-instances is possible unstable - to avoid risks don't open the same account in multiple windows at a time and disable sync all, 
-also you can not manage accounts with this option enabled (no account adding or removing)`)
+For more info on logging see LOGGING.md.)`)
 }

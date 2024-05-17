@@ -21,7 +21,7 @@ modifications:
 'use strict'
 import electron, { BrowserWindow, MenuItemConstructorOptions } from 'electron'
 import { Event } from 'electron/common'
-import { tx } from './load-translations'
+import { tx } from './load-translations.js'
 
 type todo = any
 

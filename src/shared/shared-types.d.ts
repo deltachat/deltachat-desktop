@@ -69,7 +69,6 @@ export interface RC_Config {
   'log-debug': boolean
   'log-to-console': boolean
   'machine-readable-stacktrace': boolean
-  'multiple-instances': boolean
   theme: string | undefined
   'theme-watch': boolean
   devmode: boolean
@@ -79,9 +78,10 @@ export interface RC_Config {
   v: boolean
   help: boolean
   h: boolean
+  'allow-unsafe-core-replacement': boolean
 }
 
-import { T } from '@deltachat/jsonrpc-client'
+import type { T } from '@deltachat/jsonrpc-client'
 
 export type msgStatus =
   | 'error'
@@ -111,6 +111,8 @@ export type RuntimeInfo = {
   /** runtime library versions, be it electron, node, tauri or whatever,
    *  used for showing to user in the About dialog */
   versions: { label: string; value: string }[]
+  runningUnderARM64Translation?: boolean
+  rpcServerPath?: string
 }
 
 export interface DcNotification {

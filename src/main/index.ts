@@ -2,13 +2,14 @@ console.time('init')
 
 import { mkdirSync, Stats, watchFile } from 'fs'
 import { app as rawApp, dialog, ipcMain, protocol } from 'electron'
-import rc from './rc'
-import { VERSION, GIT_REF, BUILD_TIMESTAMP } from '../shared/build-info'
+import rc from './rc.js'
+import { VERSION, GIT_REF, BUILD_TIMESTAMP } from '../shared/build-info.js'
+import contextMenu from './electron-context-menu.js'
+import { findOutIfWeAreRunningAsAppx } from './isAppx.js'
+import { getHelpMenu } from './help_menu.js'
+import { initialisePowerMonitor } from './resume_from_sleep.js'
+
 import type { EventEmitter } from 'events'
-import contextMenu from './electron-context-menu'
-import { findOutIfWeAreRunningAsAppx } from './isAppx'
-import { getHelpMenu } from './help_menu'
-import { initialisePowerMonitor } from './resume_from_sleep'
 
 // Hardening: prohibit all DNS queries, except for Mapbox
 // (see src/renderer/components/map/MapComponent.tsx)
@@ -69,7 +70,7 @@ protocol.registerSchemesAsPrivileged([
 const app = rawApp as ExtendedAppMainProcess
 app.rc = rc
 
-if (rc['multiple-instances'] === false && !app.requestSingleInstanceLock()) {
+if (!app.requestSingleInstanceLock()) {
   /* ignore-console-log */
   console.error('Only one instance allowed. Quitting.')
   app.quit()
@@ -82,15 +83,15 @@ import {
   getLogsPath,
   getAccountsPath,
   getCustomThemesPath,
-} from './application-constants'
+} from './application-constants.js'
 mkdirSync(getConfigPath(), { recursive: true })
 mkdirSync(getLogsPath(), { recursive: true })
 mkdirSync(getCustomThemesPath(), { recursive: true })
 
 // Setup Logger
-import { cleanupLogFolder, createLogHandler } from './log-handler'
+import { cleanupLogFolder, createLogHandler } from './log-handler.js'
 const logHandler = createLogHandler()
-import { getLogger, setLogHandler } from '../shared/logger'
+import { getLogger, setLogHandler } from '../shared/logger.js'
 const log = getLogger('main/index')
 setLogHandler(logHandler.log, rc)
 log.info(`Deltachat Version ${VERSION} ${GIT_REF} ${BUILD_TIMESTAMP}`)
@@ -112,17 +113,17 @@ process.on('uncaughtException', err => {
   )
 })
 
-import setLanguage, { getCurrentLocaleDate } from './load-translations'
-import * as ipc from './ipc'
-import { init as initMenu } from './menu'
-import { DesktopSettings } from './desktop_settings'
-import * as mainWindow from './windows/main'
-import { ExtendedAppMainProcess } from './types'
-import { updateTrayIcon, hideDeltaChat, showDeltaChat } from './tray'
-import './notifications'
-import { acceptThemeCLI } from './themes'
-import { webxdcStartUpCleanup } from './deltachat/webxdc'
-import { cleanupDraftTempDir } from './cleanup_temp_dir'
+import setLanguage, { getCurrentLocaleDate } from './load-translations.js'
+import * as ipc from './ipc.js'
+import { init as initMenu } from './menu.js'
+import { DesktopSettings } from './desktop_settings.js'
+import * as mainWindow from './windows/main.js'
+import { ExtendedAppMainProcess } from './types.js'
+import { updateTrayIcon, hideDeltaChat, showDeltaChat } from './tray.js'
+import './notifications.js'
+import { acceptThemeCLI } from './themes.js'
+import { webxdcStartUpCleanup } from './deltachat/webxdc.js'
+import { cleanupDraftTempDir } from './cleanup_temp_dir.js'
 
 app.ipcReady = false
 app.isQuitting = false
@@ -338,7 +339,7 @@ app.on('web-contents-created', (_ev, contents) => {
 
 contextMenu()
 
-import { openUrlsAndFilesFromArgv, open_url } from './open_url'
+import { openUrlsAndFilesFromArgv, open_url } from './open_url.js'
 openUrlsAndFilesFromArgv(process.argv)
 
 ipcMain.handle('restart_app', async _ev => {
