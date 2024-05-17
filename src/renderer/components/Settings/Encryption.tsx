@@ -31,7 +31,7 @@ export default function Encryption({ settingsStore }: Props) {
 
   return (
     <>
-      {!settingsStore.settings.is_chatmail && (
+      {settingsStore.settings.is_chatmail == "0" && (
         <CoreSettingsSwitch
           settingsKey='e2ee_enabled'
           label={tx('autocrypt_prefer_e2ee')}

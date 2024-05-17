@@ -43,7 +43,7 @@ export default function Advanced({ settingsStore }: Props) {
       >
         {tx('pref_password_and_account_settings')}
       </SettingsButton>
-      {!settingsStore.settings.is_chatmail && (
+      {settingsStore.settings.is_chatmail == "0" && (
         <ImapFolderHandling settingsStore={settingsStore} />
       )}
     </>
