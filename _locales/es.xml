@@ -514,6 +514,7 @@
     <string name="multidevice_same_network_hint">Asegúrate de que ambos dispositivos estén conectados en la misma red o Wi-Fi</string>
     <string name="multidevice_this_creates_a_qr_code">Esto crea un código QR que el otro dispositivo puede escanear para copiar la cuenta.</string>
     <string name="multidevice_install_dc_on_other_device">Instala Delta Chat en tu otro dispositivo (https://get.delta.chat)</string>
+    <!-- "I Already Have a Login / Add as Second Device” should be the same text as defined by the keys onboarding_alternative_logins and multidevice_receiver_title -->
     <string name="multidevice_tap_scan_on_other_device">Inicia Delta Chat, toca \"Añadir desde otro dispositivo\" y escanea el código mostrado aquí</string>
     <!-- Shown inside a "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and/or address eg. "Scan to set up second device for Alice (alice@example.org)" -->
     <string name="multidevice_qr_subtitle">Escanea para configurar otro dispositivo para %1$s</string>
@@ -786,7 +787,9 @@
     <string name="autodel_after_1_year">Luego de 1 año</string>
 
     <!-- autocrypt -->
+    <!-- deprecated, used "Encryption" if a headline is needed -->
     <string name="autocrypt">Autocrypt</string>
+    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
     <string name="autocrypt_explain">Autocrypt es una nueva especificación abierta para cifrado automático de correo electrónico de extremo a extremo. Su configuración de extremo a extremo es creada automáticamente cuando se necesita y puede transferirla entre dispositivos con los Mensajes de Configuración de Autocrypt.</string>
     <string name="autocrypt_send_asm_title">Enviar Mensaje de Configuración de Autocrypt</string>
     <string name="autocrypt_send_asm_explain_before">Un \"Mensaje de Configuración de Autocrypt\" comparte de forma segura su configuración de extremo a extremo con otras aplicaciones compatibles con Autocrypt.\n\nLa configuración se cifrará mediante un código de configuración que se muestra aquí y debe escribirse en el otro dispositivo.</string>

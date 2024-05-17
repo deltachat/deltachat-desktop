@@ -499,6 +499,7 @@
     <string name="multidevice_same_network_hint">Zorg er voor dat beide apparaten verbonden zijn met hezelfde (wifi)netwerk</string>
     <string name="multidevice_this_creates_a_qr_code">Hiermee wordt een QR-code samengesteld die door het tweede apparaat kan worden gescand om het account te kopiëren.</string>
     <string name="multidevice_install_dc_on_other_device">Installeer Delta Chat op je andere apparaat (https://get.delta.chat)</string>
+    <!-- "I Already Have a Login / Add as Second Device” should be the same text as defined by the keys onboarding_alternative_logins and multidevice_receiver_title -->
     <string name="multidevice_tap_scan_on_other_device">Start Delta Chat, druk op ‘Toevoegen als secundair apparaat’ en scan de hier getoonde code</string>
     <!-- Shown inside a "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and/or address eg. "Scan to set up second device for Alice (alice@example.org)" -->
     <string name="multidevice_qr_subtitle">Scan om een secundair apparaat voor %1$s in te stellen</string>
@@ -677,6 +678,8 @@
     <string name="pref_incognito_keyboard_explain">Verzoek het toetsenbord om geen persoonlijke woorden op te nemen</string>
     <string name="pref_read_receipts">Leesbevestigingen</string>
     <string name="pref_read_receipts_explain">Als je leesbevestigingen uitschakelt, dan zie je geen leesbevestigingen van anderen.</string>
+    <string name="pref_server">Server</string>
+    <string name="pref_encryption">Versleuteling</string>
     <string name="pref_manage_keys">Sleutels beheren</string>
     <string name="pref_use_system_emoji">Systeememoji gebruiken</string>
     <string name="pref_use_system_emoji_explain">Schakel Delta Chat\'s ingebouwde emoji-ondersteuning uit</string>
@@ -802,7 +805,9 @@
     <string name="autodel_after_1_year">Na 1 jaar</string>
 
     <!-- autocrypt -->
+    <!-- deprecated, used "Encryption" if a headline is needed -->
     <string name="autocrypt">Autocrypt</string>
+    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
     <string name="autocrypt_explain">Autocrypt is een nieuwe, open specificatie voor het automatisch instellen van eind-tot-eindversleuteling.\n\nJe instellingen worden, indien nodig, automatisch aangemaakt en kunnen worden overgezet naar andere apparaten middels instelberichten.</string>
     <string name="autocrypt_send_asm_title">Autocrypt-instelbericht versturen</string>
     <string name="autocrypt_send_asm_explain_before">Een ‘Autocrypt-instelbericht’ deelt je eind-tot-eindinstellingen veilig met andere Autocrypt-compatibele apps.\n\nDe instellingen zijn versleuteld middels een code die hier wordt getoond en moet worden overgetypt op het andere apparaat.</string>
@@ -954,6 +959,8 @@
     <string name="secure_join_started">%1$s heeft je uitgenodigd voor deze groep.\n\nEr wordt gewacht op antwoord van het apparaat van %2$s…</string>
     <!-- placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_replies">%1$s heeft geantwoord en wacht op toelating tot de groep…</string>
+    <string name="secure_join_wait">Bezig met opzetten van eind-tot-eindversleuteling…</string>
+    <string name="secure_join_wait_timeout">Er kan nog geen eind-tot-eindversleuteling worden gegarandeerd, maar je kunt wel alvast een bericht sturen.</string>
     <string name="contact_verified">%1$s is goedgekeurd.</string>
     <string name="contact_not_verified">Er kan geen eind-tot-eindversleuteling met %1$s worden gegarandeerd.</string>
     <!-- Shown in contact profile. The placeholder will be replaced by the name of the contact that introduced the contact. -->

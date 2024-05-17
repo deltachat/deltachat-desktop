@@ -488,6 +488,7 @@
     <string name="multidevice_same_network_hint">Certifique-se de que ambos os dispositivos estejam na mesma Wi-Fi ou na mesma rede</string>
     <string name="multidevice_this_creates_a_qr_code">Isso cria um código QR que outro dispositivo pode digitalizar para copiar a conta.</string>
     <string name="multidevice_install_dc_on_other_device">Instalar o Delta Chat em seu outro dispositivo (https://get.delta.chat)</string>
+    <!-- "I Already Have a Login / Add as Second Device” should be the same text as defined by the keys onboarding_alternative_logins and multidevice_receiver_title -->
     <string name="multidevice_tap_scan_on_other_device">Inicie o Delta Chat, clique em \"Adicionar como outro dispositivo\" e escaneie o código mostrado aqui</string>
     <!-- Shown inside a "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and/or address eg. "Scan to set up second device for Alice (alice@example.org)" -->
     <string name="multidevice_qr_subtitle">Escaneie para configurar outro dispositivo para %1$s</string>
@@ -743,7 +744,9 @@
     <string name="autodel_after_1_year">Após 1 ano</string>
 
     <!-- autocrypt -->
+    <!-- deprecated, used "Encryption" if a headline is needed -->
     <string name="autocrypt">Autocrypt</string>
+    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
     <string name="autocrypt_explain">A criptografia automática (Autocrypt) é um padrão novo e aberto para criptografia de e-mail de ponta a ponta. \n\n A sua configuração é feita automaticamente conforme necessário e pode ser compartilhada entre dispositivos diferentes com \"mensagens de configuração do Autocrypt\".</string>
     <string name="autocrypt_send_asm_title">Enviar \"mensagem de configuração do Autocrypt\"?</string>
     <string name="autocrypt_send_asm_explain_before">A \"mensagem de configuração do Autocrypt\" compartilha com segurança a sua configuração de ponta a ponta com outros aplicativos compatíveis. \n\nA configuração será criptografada por um código de configuração que será exibido aqui e deverá ser digitado no outro dispositivo.</string>

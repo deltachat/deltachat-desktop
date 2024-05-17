@@ -529,7 +529,8 @@
     <string name="multidevice_same_network_hint">Переконайтеся, що обидва пристрої підключено до однієї мережі Wi-Fi</string>
     <string name="multidevice_this_creates_a_qr_code">Це створить QR-код, який другий пристрій може сканувати, щоб скопіювати обліковий запис.</string>
     <string name="multidevice_install_dc_on_other_device">Установіть Delta Chat на Ваш інший пристрій (https://get.delta.chat)</string>
-    <string name="multidevice_tap_scan_on_other_device">Запустіть Delta Chat, натисніть «Додати як другий пристрій» і відскануйте показаний тут код</string>
+    <!-- "I Already Have a Login / Add as Second Device” should be the same text as defined by the keys onboarding_alternative_logins and multidevice_receiver_title -->
+    <string name="multidevice_tap_scan_on_other_device">Запустіть Delta Chat, торкніться \"У мене вже є логін / Додати як другий пристрій\" і відскануйте код, показаний тут</string>
     <!-- Shown inside a "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and/or address eg. "Scan to set up second device for Alice (alice@example.org)" -->
     <string name="multidevice_qr_subtitle">Скануйте, щоб налаштувати другий пристрій %1$s</string>
     <string name="multidevice_receiver_title">Додати як другий пристрій</string>
@@ -627,7 +628,7 @@
     <string name="login_socks5_user">Ім\'я користувача SOCKS5</string>
     <string name="login_socks5_password">Пароль SOCKS5</string>
     <string name="login_info_oauth2_title">Продовжити спрощене налаштування?</string>
-    <string name="login_info_oauth2_text">Введена адреса електронної пошти підтримує спрощене налаштування (OAuth2).\n\nНа наступному кроці дозвольте, будь ласка, Delta Chat виступати в якості Вашого додатку для чату за допомогою електронної пошти.\n\nУ Delta Chat немає серверів, Ваші дані залишаються на Вашому пристрої!</string>
+    <string name="login_info_oauth2_text">Введена адреса електронної пошти підтримує спрощене налаштування (OAuth 2.0).\n\nНа наступному кроці дозвольте, будь ласка, Delta Chat виступати в якості Вашого додатку для чату за допомогою електронної пошти.\n\nУ Delta Chat немає серверів, Ваші дані залишаються на Вашому пристрої!</string>
     <string name="login_certificate_checks">Перевірки сертифікатів</string>
     <string name="login_error_mail">Вкажіть дійсну адресу електронної пошти</string>
     <string name="login_error_server">Вкажіть дійсний сервер / IP-адресу</string>
@@ -707,6 +708,8 @@
     <string name="pref_incognito_keyboard_explain">Вимагати вимкнення персоналізації підказок клавіатури</string>
     <string name="pref_read_receipts">Отримувати сповіщення про прочитання</string>
     <string name="pref_read_receipts_explain">Якщо сповіщення про прочитання відключені, Ви не будете бачити підтвердження прочитання повідомлень іншими користувачами.</string>
+    <string name="pref_server">Сервер</string>
+    <string name="pref_encryption">Шифрування</string>
     <string name="pref_manage_keys">Управління ключами</string>
     <string name="pref_use_system_emoji">Використовувати системні емодзі</string>
     <string name="pref_use_system_emoji_explain">Вимкнути вбудовану підтримку емодзі</string>
@@ -832,7 +835,9 @@
     <string name="autodel_after_1_year">Через 1 рік</string>
 
     <!-- autocrypt -->
+    <!-- deprecated, used "Encryption" if a headline is needed -->
     <string name="autocrypt">Autocrypt</string>
+    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
     <string name="autocrypt_explain">Autocrypt – новий і відкритий протокол встановлення наскрізного шифрування для електронної пошти.\n\nНеобхідні параметри шифрування призначаються автоматично та їх можна передавати між своїми пристроями, використовуючи повідомлення з Autocrypt.</string>
     <string name="autocrypt_send_asm_title">Надіслати повідомлення з налаштуваннями Autocrypt</string>
     <string name="autocrypt_send_asm_explain_before">Повідомлення з налаштуваннямм Autocrypt слугує безпечній передачі параметрів наскрізного шифрування між власними додатками для роботи з електронною поштою, що підтримують протокол Autocrypt.\n\nЦі параметри шифруються з використанням спеціального інсталяційного коду, що показаний тут і має бути введений на іншому пристрої.</string>
@@ -984,6 +989,8 @@
     <string name="secure_join_started">%1$s запросив (-ла) Вас приєднатися до цієї групи.\n\nОчікуємо на відповідь від пристрою %2$s…</string>
     <!-- placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_replies">%1$s відповіли, очікуємо на додавання до групи…</string>
+    <string name="secure_join_wait">Встановлення гарантованого наскрізного шифрування, будь ласка, зачекайте...</string>
+    <string name="secure_join_wait_timeout">Ще не вдалося встановити гарантоване наскрізне шифрування, але ви вже можете надсилати повідомлення.</string>
     <string name="contact_verified">%1$s представив (-ла).</string>
     <string name="contact_not_verified">Не вдається встановити гарантоване наскрізне шифрування з %1$s</string>
     <!-- Shown in contact profile. The placeholder will be replaced by the name of the contact that introduced the contact. -->
