@@ -57,9 +57,9 @@ if (typeof env.NO_ASAR !== 'undefined' && env.NO_ASAR != 'false') {
 // platform specific
 
 const PREBUILD_FILTERS = {
-  NOT_LINUX: '!node_modules/deltachat-node/node/prebuilds/linux-x64/${/*}',
-  NOT_MAC: '!node_modules/deltachat-node/node/prebuilds/darwin-x64/${/*}',
-  NOT_WINDOWS: '!node_modules/deltachat-node/node/prebuilds/win32-x64/${/*}',
+  NOT_LINUX: '!node_modules/@deltachat/stdio-rpc-server-${platform}-${arch}',
+  NOT_MAC: '!node_modules/@deltachat/stdio-rpc-server-${platform}-${arch}',
+  NOT_WINDOWS: '!node_modules/@deltachat/stdio-rpc-server-${platform}-${arch}',
 }
 
 build['mac'] = {
