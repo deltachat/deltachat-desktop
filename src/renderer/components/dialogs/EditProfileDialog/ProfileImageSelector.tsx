@@ -40,7 +40,7 @@ export default function ProfileImageSelector({
           openDialog(ImageCropper, {
             filepath,
             shape: 'circle',
-            setProfilePicture,
+            onResult: setProfilePicture,
             onCancel: () => {},
             targetWidth: 256,
             targetHeight: 256,

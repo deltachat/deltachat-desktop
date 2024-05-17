@@ -18,18 +18,18 @@ import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 
 import styles from './styles.module.scss'
 
-export default function ProfileImageCropper({
-  setProfilePicture,
+export default function ImageCropper({
   filepath,
   shape,
+  onResult,
   onClose,
   onCancel,
   targetWidth,
   targetHeight = targetWidth,
 }: {
-  setProfilePicture: (path: string) => void
   filepath: string
   shape: string
+  onResult: (path: string) => void
   onClose: () => void
   onCancel: () => void
   targetWidth: number
@@ -95,7 +95,7 @@ export default function ProfileImageCropper({
       )
 
       setLastPath(dirname(filepath))
-      setProfilePicture(tempfilepath)
+      onResult(tempfilepath)
       onClose()
     })()
   }
