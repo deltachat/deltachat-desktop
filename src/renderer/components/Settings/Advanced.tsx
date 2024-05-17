@@ -30,7 +30,7 @@ export default function Advanced({ settingsStore }: Props) {
       <SettingsSeparator />
 
       <SettingsHeading>{tx('pref_encryption')}</SettingsHeading>
-      <Encryption />
+      <Encryption settingsStore={settingsStore} />
       <SettingsSeparator />
 
       <SettingsHeading>{tx('pref_server')}</SettingsHeading>
@@ -43,7 +43,9 @@ export default function Advanced({ settingsStore }: Props) {
       >
         {tx('pref_password_and_account_settings')}
       </SettingsButton>
-      <ImapFolderHandling settingsStore={settingsStore} />
+      {settingsStore.settings.is_chatmail == "0" && (
+        <ImapFolderHandling settingsStore={settingsStore} />
+      )}
     </>
   )
 }
