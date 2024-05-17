@@ -56,11 +56,11 @@ jobs:
     - name: MAC electron builder
       if: runner.os == 'macOS'
       run: |
-        echo "module.exports=()=>Promise.resolve()" > stub.js
+        echo "module.exports=()=>Promise.resolve()" > stub.cjs
         export CSC_IDENTITY_AUTO_DISCOVERY=false
         export DEBUG=electron-builder
         npm i dmg-license
-        npm exec -- electron-builder --publish never --mac mas dmg -c.mac.identity=null --config.afterSign="stub.js" || true
+        npm exec -- electron-builder --publish never --mac mas dmg -c.mac.identity=null --config.afterSign="stub.cjs" || true
     - name: MAC renaming / upload Preperation
       if: runner.os == 'macOS'
       run: |

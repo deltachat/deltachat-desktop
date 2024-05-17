@@ -47,8 +47,8 @@ build['fileAssociations'] = [{
 build['files'] = files
 build['asarUnpack'] = ['node_modules/deltachat-node/']
 
-build['afterPack'] = './build/afterPackHook.js'
-build['afterSign'] = './build/afterSignHook.js'
+build['afterPack'] = './build/afterPackHook.cjs'
+build['afterSign'] = './build/afterSignHook.cjs'
 
 if (typeof env.NO_ASAR !== 'undefined' && env.NO_ASAR != 'false') {
   build['asar'] = false
