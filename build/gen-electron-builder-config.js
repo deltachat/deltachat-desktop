@@ -1,3 +1,4 @@
+//@ts-check
 import { writeFileSync, readFileSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
@@ -37,12 +38,14 @@ build['protocols'] = [
   },
 ]
 
-build['fileAssociations'] = [{
-  ext: "xdc",
-  name: "Webxdc app",
-  // icon - default, which means build/ext\.(ico|icns)
-  mimeType: "application/x-webxdc"
-}]
+build['fileAssociations'] = [
+  {
+    ext: 'xdc',
+    name: 'Webxdc app',
+    // icon - default, which means build/ext\.(ico|icns)
+    mimeType: 'application/x-webxdc',
+  },
+]
 
 build['files'] = files
 build['asarUnpack'] = ['node_modules/deltachat-node/']
@@ -57,9 +60,9 @@ if (typeof env.NO_ASAR !== 'undefined' && env.NO_ASAR != 'false') {
 // platform specific
 
 const PREBUILD_FILTERS = {
-  NOT_LINUX: '!node_modules/@deltachat/stdio-rpc-server-${platform}-${arch}',
-  NOT_MAC: '!node_modules/@deltachat/stdio-rpc-server-${platform}-${arch}',
-  NOT_WINDOWS: '!node_modules/@deltachat/stdio-rpc-server-${platform}-${arch}',
+  NOT_LINUX: '!node_modules/@deltachat/stdio-rpc-server-linux-*${/*}',
+  NOT_MAC: '!node_modules/@deltachat/stdio-rpc-server-darwin-*${/*}',
+  NOT_WINDOWS: '!node_modules/@deltachat/stdio-rpc-server-win32-*${/*}',
 }
 
 build['mac'] = {
