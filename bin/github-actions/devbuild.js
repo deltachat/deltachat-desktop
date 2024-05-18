@@ -1,8 +1,11 @@
 // this file gets run BEFORE `npm i` so you CAN NOT use npm packages here
 //@ts-check
 
-import { join } from 'path'
+import { join, dirname } from 'path'
 import { readFileSync, writeFileSync } from 'fs'
+import { fileURLToPath } from 'url'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const packageJSON = join(__dirname, '../../package.json')
 

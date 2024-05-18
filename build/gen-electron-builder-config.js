@@ -1,8 +1,9 @@
+//@ts-check
 import { writeFileSync, readFileSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
-import { isAppxSupportedLanguage } from './appx_languages'
+import { isAppxSupportedLanguage } from './appx_languages.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -37,18 +38,20 @@ build['protocols'] = [
   },
 ]
 
-build['fileAssociations'] = [{
-  ext: "xdc",
-  name: "Webxdc app",
-  // icon - default, which means build/ext\.(ico|icns)
-  mimeType: "application/x-webxdc"
-}]
+build['fileAssociations'] = [
+  {
+    ext: 'xdc',
+    name: 'Webxdc app',
+    // icon - default, which means build/ext\.(ico|icns)
+    mimeType: 'application/x-webxdc',
+  },
+]
 
 build['files'] = files
 build['asarUnpack'] = ['node_modules/deltachat-node/']
 
-build['afterPack'] = './build/afterPackHook.js'
-build['afterSign'] = './build/afterSignHook.js'
+build['afterPack'] = './build/afterPackHook.cjs'
+build['afterSign'] = './build/afterSignHook.cjs'
 
 if (typeof env.NO_ASAR !== 'undefined' && env.NO_ASAR != 'false') {
   build['asar'] = false
@@ -57,9 +60,9 @@ if (typeof env.NO_ASAR !== 'undefined' && env.NO_ASAR != 'false') {
 // platform specific
 
 const PREBUILD_FILTERS = {
-  NOT_LINUX: '!node_modules/deltachat-node/node/prebuilds/linux-x64/${/*}',
-  NOT_MAC: '!node_modules/deltachat-node/node/prebuilds/darwin-x64/${/*}',
-  NOT_WINDOWS: '!node_modules/deltachat-node/node/prebuilds/win32-x64/${/*}',
+  NOT_LINUX: '!node_modules/@deltachat/stdio-rpc-server-linux-*${/*}',
+  NOT_MAC: '!node_modules/@deltachat/stdio-rpc-server-darwin-*${/*}',
+  NOT_WINDOWS: '!node_modules/@deltachat/stdio-rpc-server-win32-*${/*}',
 }
 
 build['mac'] = {
