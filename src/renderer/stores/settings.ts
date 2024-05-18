@@ -26,7 +26,7 @@ export interface SettingsStoreState {
     only_fetch_mvbox: string
     disable_idle: string
     media_quality: string
-    is_chatmail: "0" | "1"
+    is_chatmail: '0' | '1'
   }
   desktopSettings: DesktopSettingsType
   rc: RC_Config
