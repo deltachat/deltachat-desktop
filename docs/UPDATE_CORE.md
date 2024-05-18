@@ -4,28 +4,21 @@
 
 To update the desktop application to a new core you need to update the following dependencies:
 
-- `deltachat-node` - contains the core library, node bindings for the cffi and the node-gyp glue to make it work
+- `@deltachat/stdio-rpc-server` - contains the core in stdio rpc server form
 - `@deltachat/jsonrpc-client` - The types for communicating with the core using the JSON-RPC API are contained within this module.
 
 ## Update to a tagged/released core version
 
 Let's say the core version you want to upgrade to is `X.Y.Z`.
 
-1. `npm i deltachat-node@X.Y.Z @deltachat/jsonrpc-client@X.Y.Z`
+1. `npm i @deltachat/stdio-rpc-server@X.Y.Z @deltachat/jsonrpc-client@X.Y.Z`
 2. mention that you updated those dependencies in `CHANGELOG.md`
 
-If version `X.Y.Z` hasn't yet been published to `npm`, then you need to publish the files from our download server to `npm` via the following commands:
+If version `X.Y.Z` hasn't yet been published to `npm`, then ask another maintainer.
 
-```sh
-npm publish https://download.delta.chat/node/deltachat-node-vX.Y.Z.tar.gz --access=public
-npm publish https://download.delta.chat/node/deltachat-jsonrpc-client-vX.Y.Z.tar.gz --access=public
-```
+These files are automatically built by GitHub CI in the core repository and then uploaded to npm.
 
-These files are automatically built by GitHub CI in the core repository and then uploaded to https://download.delta.chat/node/.
-
-**NOTE** Publishing files to `npm` requires permission to do so. If you don't have the permissions to publish, ask someone else that does or ask to be added.
-
-> bash shortcut `TAG=1.131.3 npm i deltachat-node@$TAG @deltachat/jsonrpc-client@$TAG`
+> bash shortcut `TAG=1.139.2 npm i deltachat-node@$TAG @deltachat/jsonrpc-client@$TAG`
 
 ## Update to a development version
 
