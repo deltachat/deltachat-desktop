@@ -26,6 +26,12 @@ before(() => {
   }
 })
 
+/** the test data for these versions is broken, like only one account */
+const BROKEN_TEST_DATA = [
+  "DeltaChat-1.3.1.AppImage",
+  "DeltaChat-1.3.3.AppImage"
+]
+
 describe('/electron/main/account-migration', async () => {
   const zip = new AdmZip(
     join(__dirname, '../test_data/migration-test-data.zip')
@@ -43,6 +49,10 @@ describe('/electron/main/account-migration', async () => {
 
   for (const version of versions) {
     const versionPath = join(testEnvironment, version)
+
+    if(BROKEN_TEST_DATA.includes(version)){
+      continue
+    }
 
     it(`migration from ${version} works`, async () => {
       const targetFolder = join(versionPath, 'DeltaChat/accounts')
