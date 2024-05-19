@@ -41,6 +41,7 @@
 - increase minimum nodejs version from `18` to `20`
 - hide irrelevant advanced settings for chatmail users #3823
 - upgrade `electron-builder` from `24.6.4` to `24.13.3` #3828
+- upgrade `mocha` to `10.4.0`
 
 ### Fixed
 - fix chat audit dialog was going out of viewport on smaller screens #3736
