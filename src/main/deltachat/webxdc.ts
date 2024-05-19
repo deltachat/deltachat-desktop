@@ -505,7 +505,7 @@ If you think that's a bug and you need that permission, then please open an issu
         try {
           return await this.rpc.sendWebxdcRealtimeData(accountId, msgId, update)
         } catch (error) {
-          log.error('webxdc.sendRealtimeData failed:', error)
+          log.error('webxdc.sendWebxdcRealtimeData failed:', error)
           throw error
         }
       }
