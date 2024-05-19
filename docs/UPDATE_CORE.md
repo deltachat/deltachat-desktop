@@ -18,7 +18,7 @@ If version `X.Y.Z` hasn't yet been published to `npm`, then ask another maintain
 
 These files are automatically built by GitHub CI in the core repository and then uploaded to npm.
 
-> bash shortcut `TAG=1.139.2 npm i deltachat-node@$TAG @deltachat/jsonrpc-client@$TAG`
+> bash shortcut `TAG=1.139.2 npm i @deltachat/stdio-rpc-server@$TAG @deltachat/jsonrpc-client@$TAG`
 
 ## Update to a development version
 
