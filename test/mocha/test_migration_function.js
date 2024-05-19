@@ -28,8 +28,8 @@ before(() => {
 
 /** the test data for these versions is broken, like only one account */
 const BROKEN_TEST_DATA = [
-  "DeltaChat-1.3.1.AppImage",
-  "DeltaChat-1.3.3.AppImage"
+  'DeltaChat-1.3.1.AppImage',
+  'DeltaChat-1.3.3.AppImage',
 ]
 
 describe('/electron/main/account-migration', async () => {
@@ -50,7 +50,7 @@ describe('/electron/main/account-migration', async () => {
   for (const version of versions) {
     const versionPath = join(testEnvironment, version)
 
-    if(BROKEN_TEST_DATA.includes(version)){
+    if (BROKEN_TEST_DATA.includes(version)) {
       continue
     }
 
@@ -75,25 +75,31 @@ describe('/electron/main/account-migration', async () => {
 
       // test after migration if both accounts are there
       const eventLogger = (accountId, event) =>
-      log.debug('core-event', { accountId, ...event })
+        log.debug('core-event', { accountId, ...event })
       let tmpDC = await startDeltaChat(targetFolder, {
         skipSearchInPath: true,
         muteStdErr: false,
       })
       tmpDC.on('ALL', eventLogger)
+      after(() => {
+        tmpDC.off('ALL', eventLogger)
+        tmpDC.close()
+      })
 
       log.debug('test if migration worked')
 
       const accounts = await tmpDC.rpc.getAllAccounts()
-      const configured_accounts = accounts.filter(acc=>acc.kind === 'Configured')
+      const configured_accounts = accounts.filter(
+        acc => acc.kind === 'Configured'
+      )
       expect(configured_accounts).to.have.length(2)
 
-      // TODO: check if the account email addresses are correct
+      // check if the account email addresses are correct
+      expect(
+        configured_accounts.map(acc => acc.kind === 'Configured' && acc.addr)
+      ).to.have.members(['tmpy.mh3we@testrun.org', 'tmpy.3ftgt@testrun.org'])
 
       log.debug('test done')
-
-      tmpDC.off('ALL', eventLogger)
-      tmpDC.close()
     })
 
     // remove test environment
