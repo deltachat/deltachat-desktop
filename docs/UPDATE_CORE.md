@@ -16,7 +16,7 @@ Let's say the core version you want to upgrade to is `X.Y.Z`.
 
 If version `X.Y.Z` hasn't yet been published to `npm`, then ask another maintainer.
 
-These files are automatically built by GitHub CI in the core repository and then uploaded to npm.
+GitHub CI builds and publishes [stdio-rpc-server](https://github.com/deltachat/deltachat-core-rust/actions/workflows/deltachat-rpc-server.yml) and [jsonrpc-client](https://github.com/deltachat/deltachat-core-rust/actions/workflows/jsonrpc-client-npm-package.yml) to npm.
 
 > bash shortcut `TAG=1.139.2 npm i @deltachat/stdio-rpc-server@$TAG @deltachat/jsonrpc-client@$TAG`
 
