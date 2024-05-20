@@ -64,7 +64,7 @@ module.exports = async context => {
   console.log({ prebuilds_after_cleanup })
   if (
     prebuilds_after_cleanup.length !== 1 &&
-    context.electronPlatformName !== 'darwin'
+    !isMacBuild
   ) {
     throw new Error(
       "prebuilds were not cleared correctly or prebuild is missing, there should only be one (unless it's mac)"
