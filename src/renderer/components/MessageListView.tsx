@@ -4,7 +4,6 @@ import Gallery from './Gallery'
 import MessageListAndComposer from './message/MessageListAndComposer'
 import NoChatSelected from './NoChatSelected'
 import useChat from '../hooks/chat/useChat'
-import useMessage from '../hooks/chat/useMessage'
 import { ChatView } from '../contexts/ChatContext'
 import { RecoverableCrashScreen } from './screens/RecoverableCrashScreen'
 
@@ -24,7 +23,6 @@ export default function MessageListView({
   onUpdateGalleryView,
 }: Props) {
   const { activeView, chat } = useChat()
-  const { sendMessage } = useMessage()
 
   if (chat && accountId) {
     switch (activeView) {
