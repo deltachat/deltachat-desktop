@@ -25,12 +25,14 @@ function convertArch(arch) {
 module.exports = async context => {
   console.log({ context })
 
+  const isMacBuild = ['darwin', 'mas', 'dmg'].includes(
+    context.electronPlatformName
+  )
+
   const prebuild_dir = join(
     context.appOutDir,
     `${
-      ['darwin', 'mas', 'dmg'].includes(context.electronPlatformName)
-        ? 'DeltaChat.app/Contents/Resources'
-        : 'resources'
+      isMacBuild ? 'DeltaChat.app/Contents/Resources' : 'resources'
     }/app.asar.unpacked/node_modules/@deltachat`
   )
 
@@ -43,7 +45,7 @@ module.exports = async context => {
       return false
     } else if (
       // convertArch(context.arch) === 'universal' && does not work for some reason
-      context.electronPlatformName === 'darwin' &&
+      isMacBuild &&
       (architecture === 'arm64' || architecture === 'x64')
     ) {
       return false
