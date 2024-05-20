@@ -18,7 +18,7 @@ If version `X.Y.Z` hasn't yet been published to `npm`, then ask another maintain
 
 GitHub CI builds and publishes [stdio-rpc-server](https://github.com/deltachat/deltachat-core-rust/actions/workflows/deltachat-rpc-server.yml) and [jsonrpc-client](https://github.com/deltachat/deltachat-core-rust/actions/workflows/jsonrpc-client-npm-package.yml) to npm.
 
-> bash shortcut `TAG=1.139.2 npm i @deltachat/stdio-rpc-server@$TAG @deltachat/jsonrpc-client@$TAG`
+> bash shortcut `export TAG=1.139.3 && npm i @deltachat/stdio-rpc-server@$TAG @deltachat/jsonrpc-client@$TAG`
 
 ## Update to a development version
 
