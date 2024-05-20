@@ -50,15 +50,21 @@ export async function init(cwd: string, logHandler: LogHandler) {
   } catch (error) {
     log.critical(
       "Fatal: The DeltaChat Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!",
-      error
+      error, dcController.rpcServerPath
+    )
+    console.error(
+      "Fatal: The DeltaChat Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!",
+      error, dcController.rpcServerPath
     )
     dialog.showErrorBox(
       'Fatal Error',
       `The DeltaChat Module couldn't be loaded.
 Please check if all dependencies for deltachat-core are installed!
 The Log file is located in this folder: ${getLogsPath()}\n
+${dcController.rpcServerPath}\n
 ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
     )
+    rawApp.exit(1)
   }
 
   ipcMain.once('ipcReady', _e => {

@@ -25,12 +25,14 @@ function convertArch(arch) {
 module.exports = async context => {
   console.log({ context })
 
+  const isMacBuild = ['darwin', 'mas', 'dmg'].includes(
+    context.electronPlatformName
+  )
+
   const prebuild_dir = join(
     context.appOutDir,
     `${
-      ['darwin', 'mas', 'dmg'].includes(context.electronPlatformName)
-        ? 'DeltaChat.app/Contents/Resources'
-        : 'resources'
+      isMacBuild ? 'DeltaChat.app/Contents/Resources' : 'resources'
     }/app.asar.unpacked/node_modules/@deltachat`
   )
 
@@ -43,7 +45,7 @@ module.exports = async context => {
       return false
     } else if (
       // convertArch(context.arch) === 'universal' && does not work for some reason
-      context.electronPlatformName === 'darwin' &&
+      isMacBuild &&
       (architecture === 'arm64' || architecture === 'x64')
     ) {
       return false
@@ -60,10 +62,7 @@ module.exports = async context => {
 
   const prebuilds_after_cleanup = await readdir(prebuild_dir)
   console.log({ prebuilds_after_cleanup })
-  if (
-    prebuilds_after_cleanup.length !== 1 &&
-    context.electronPlatformName !== 'darwin'
-  ) {
+  if (prebuilds_after_cleanup.length !== 1 && !isMacBuild) {
     throw new Error(
       "prebuilds were not cleared correctly or prebuild is missing, there should only be one (unless it's mac)"
     )
