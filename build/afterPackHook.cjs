@@ -62,10 +62,7 @@ module.exports = async context => {
 
   const prebuilds_after_cleanup = await readdir(prebuild_dir)
   console.log({ prebuilds_after_cleanup })
-  if (
-    prebuilds_after_cleanup.length !== 1 &&
-    !isMacBuild
-  ) {
+  if (prebuilds_after_cleanup.length !== 1 && !isMacBuild) {
     throw new Error(
       "prebuilds were not cleared correctly or prebuild is missing, there should only be one (unless it's mac)"
     )
