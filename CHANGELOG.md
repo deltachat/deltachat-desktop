@@ -15,7 +15,7 @@
 - add more information to about screen (runtime, where the rpc server is and whether you run under arm translation) #3567
 
 ### Changed
-- Update translations (2024-05-17) #3746 #3802 #3827
+- Update translations (2024-05-20) #3746 #3802 #3827 #3837
 - The latest reaction is now shown in the chatlist, if it's newer than the last message #3749
 - minor improvements to "add second device" dialog #3748
 - Remove deprecated translations #3756
