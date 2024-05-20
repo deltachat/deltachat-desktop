@@ -35,5 +35,14 @@
   },
   "image_cropper_hint_desktop": {
     "message": "Select an area on the image"
+  },
+  "menu_global_map": {
+    "message": "Open global map"
+  },
+  "all_chats_map_title": {
+    "message": "Map for all chats (Account '%1')"
+  },
+  "chat_map_title": {
+    "message": "Map for chat '%1'"
   }
 }

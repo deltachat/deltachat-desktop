@@ -1,7 +1,6 @@
 import React from 'react'
 
 import Gallery from './Gallery'
-import MapComponent from './map/MapComponent'
 import MessageListAndComposer from './message/MessageListAndComposer'
 import NoChatSelected from './NoChatSelected'
 import useChat from '../hooks/chat/useChat'
@@ -37,8 +36,6 @@ export default function MessageListView({
             onUpdateView={onUpdateGalleryView}
           />
         )
-      case ChatView.Map:
-        return <MapComponent sendMessage={sendMessage} selectedChat={chat} />
       case ChatView.MessageList:
       default:
         return (
