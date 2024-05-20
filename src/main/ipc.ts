@@ -59,6 +59,7 @@ Please check if all dependencies for deltachat-core are installed!
 The Log file is located in this folder: ${getLogsPath()}\n
 ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
     )
+    rawApp.exit(1)
   }
 
   ipcMain.once('ipcReady', _e => {
