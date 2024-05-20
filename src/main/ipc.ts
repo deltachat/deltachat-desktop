@@ -52,8 +52,10 @@ export async function init(cwd: string, logHandler: LogHandler) {
       "Fatal: The DeltaChat Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!",
       error
     )
-    console.error("Fatal: The DeltaChat Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!",
-    error)
+    console.error(
+      "Fatal: The DeltaChat Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!",
+      error
+    )
     dialog.showErrorBox(
       'Fatal Error',
       `The DeltaChat Module couldn't be loaded.
