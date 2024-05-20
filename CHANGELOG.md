@@ -13,6 +13,10 @@
 - Add instructions and troubleshooting button to "Add as Second Device" dialog #3801
 - Add image cropper for profile image selector #1779
 - add more information to about screen (runtime, where the rpc server is and whether you run under arm translation) #3567
+- Use openstreetmap in map
+- Open map in a separate window
+- Add global map for all chats in account
+
 
 ### Changed
 - Update translations (2024-05-17) #3746 #3802 #3827
