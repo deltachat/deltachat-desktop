@@ -78,7 +78,7 @@ describe('/electron/main/account-migration', async () => {
         log.debug('core-event', { accountId, ...event })
       let tmpDC = await startDeltaChat(targetFolder, {
         skipSearchInPath: true,
-        muteStdErr: false,
+        muteStdErr: process.env['DEBUG'] === undefined || process.env['RUST_LOG'] === undefined,
       })
       tmpDC.on('ALL', eventLogger)
       after(() => {
