@@ -1,6 +1,6 @@
 import { startDeltaChat } from '@deltachat/stdio-rpc-server'
 import { existsSync, lstatSync } from 'fs'
-import { join, resolve } from 'path'
+import { join } from 'path'
 import { Logger } from '../../shared/logger.js'
 import { mkdir, readdir, rename, rm, rmdir, stat } from 'fs/promises'
 import { DcEvent } from '@deltachat/jsonrpc-client'
@@ -71,7 +71,6 @@ export async function migrateAccountsIfNeeded(
 
     // Next, create temporary account manager to migrate accounts
     tmpDC = await startDeltaChat(path_accounts, {
-      skipSearchInPath: true,
       muteStdErr: false,
     })
     tmpDC.on('ALL', eventLogger)
@@ -162,7 +161,9 @@ export async function migrateAccountsIfNeeded(
       try {
         try {
           await rm(join(oldFolder, '.DS_Store'))
-        } catch (error) {}
+        } catch (error) {
+          /* ignore */
+        }
         await rmdir(oldFolder)
       } catch (error) {
         log.error('Failed to cleanup old folder:', oldFolder, error)
