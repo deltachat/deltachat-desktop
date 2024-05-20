@@ -36,7 +36,7 @@
 - reorganise some settings acording changes on android & ios #3812
 - reword password label to 'Existing Password' #3826
 - replace `deltachat-node` with `@deltachat/stdio-rpc-server` #3567
-- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `v1.138.5`
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `v1.139.3`
 - upgrade `electron` from `28.2.3` to `30.0.2`
 - increase minimum nodejs version from `18` to `20`
 - hide irrelevant advanced settings for chatmail users #3823
