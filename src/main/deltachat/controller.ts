@@ -80,11 +80,16 @@ export default class DeltaChatController extends EventEmitter {
       })
     }
 
-    log.debug('Initiating DeltaChat')
-    const serverPath = await getRPCServerPath({
+    log.debug('Initiating DeltaChatNode')
+    let serverPath = await getRPCServerPath({
       // desktop should only use prebuilds normally
       disableEnvPath: !rc_config['allow-unsafe-core-replacement'],
     })
+    if (serverPath.includes("app.asar")){
+      // probably inside of electron build
+      serverPath = serverPath.replace("app.asar", "app.asar.unpacked")
+    }
+
     this.rpcServerPath = serverPath
     log.info('using deltachat-rpc-server at', { serverPath })
 
