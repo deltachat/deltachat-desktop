@@ -60,12 +60,14 @@ jobs:
         export CSC_IDENTITY_AUTO_DISCOVERY=false
         export DEBUG=electron-builder
         npm i dmg-license
-        npm exec -- electron-builder --publish never --mac mas dmg -c.mac.identity=null --config.afterSign="stub.cjs" || true
+        npm i --cpu x64 --os darwin
+        npm i --cpu x64 --os arm64
+        npm exec -- electron-builder --publish never --mac mas dmg -c.mac.identity=null --universal --config.afterSign="stub.cjs" || true
     - name: MAC renaming / upload Preperation
       if: runner.os == 'macOS'
       run: |
         mkdir -p dist/preview
-        zip -r dist/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip dist/mas
+        zip -r dist/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip dist/mas-universal
         cd dist
         mv *.dmg preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.dmg || true
         cd ..
