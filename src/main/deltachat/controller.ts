@@ -117,11 +117,13 @@ export default class DeltaChatController extends EventEmitter {
               typeof event === 'object' &&
               event.kind
             ) {
+              if (event.kind === 'WebxdcRealtimeData') {
+                return
+              }
               if (event.kind === 'Warning') {
                 logCoreEvent.warn(contextId, event.msg)
               } else if (event.kind === 'Info') {
                 logCoreEvent.info(contextId, event)
-                logCoreEvent.info(contextId, event.msg)
               } else if (event.kind.startsWith('Error')) {
                 logCoreEvent.error(contextId, event.msg)
               } else if (app.rc['log-debug']) {
