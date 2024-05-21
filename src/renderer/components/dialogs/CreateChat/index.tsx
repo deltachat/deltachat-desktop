@@ -112,6 +112,7 @@ function CreateChatMain(props: CreateChatMainProps) {
     onClose()
   }
   const settingsStore = useSettingsStore()[0]
+  const isChatmail = settingsStore?.settings.is_chatmail
 
   const needToRenderAddGroup = queryStr.length === 0
   const needToRenderAddBroadcastList =
@@ -179,7 +180,9 @@ function CreateChatMain(props: CreateChatMainProps) {
           className='search-input'
           onChange={onSearchChange}
           value={queryStr}
-          placeholder={tx('contacts_enter_name_or_email')}
+          placeholder={
+            isChatmail ? tx('search') : tx('contacts_enter_name_or_email')
+          }
           autoFocus
           spellCheck={false}
         />
