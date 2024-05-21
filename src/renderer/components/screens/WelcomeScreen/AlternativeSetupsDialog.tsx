@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { dirname } from 'path'
 
 import Button from '../../Button'
@@ -11,8 +11,6 @@ import {
   LastUsedSlot,
   rememberLastUsedPath,
 } from '../../../utils/lastUsedPaths'
-import { ScreenContext } from '../../../contexts/ScreenContext'
-import { Screens } from '../../../ScreenController'
 import { runtime } from '../../../runtime'
 
 import styles from './styles.module.scss'
@@ -23,7 +21,6 @@ import { ReceiveBackupDialog } from '../../dialogs/SetupMultiDevice'
 export default function AlternativeSetupsDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
-  const { changeScreen } = useContext(ScreenContext)
 
   const onClickSecondDevice = () => openDialog(ReceiveBackupDialog)
 
@@ -48,11 +45,6 @@ export default function AlternativeSetupsDialog({ onClose }: DialogProps) {
     }
   }
 
-  const onClickLogin = () => {
-    onClose()
-    changeScreen(Screens.Login)
-  }
-
   return (
     <Dialog onClose={onClose}>
       <DialogHeader
@@ -74,13 +66,6 @@ export default function AlternativeSetupsDialog({ onClose }: DialogProps) {
             onClick={onClickImportBackup}
           >
             {tx('import_backup_title')}
-          </Button>
-          <Button
-            type='secondary'
-            className={styles.welcomeScreenButton}
-            onClick={onClickLogin}
-          >
-            {tx('manual_account_setup_option')}
           </Button>
         </DialogContent>
       </DialogBody>
