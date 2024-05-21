@@ -50,11 +50,13 @@ export async function init(cwd: string, logHandler: LogHandler) {
   } catch (error) {
     log.critical(
       "Fatal: The DeltaChat Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!",
-      error, dcController.rpcServerPath
+      error,
+      dcController.rpcServerPath
     )
     console.error(
       "Fatal: The DeltaChat Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!",
-      error, dcController.rpcServerPath
+      error,
+      dcController.rpcServerPath
     )
     dialog.showErrorBox(
       'Fatal Error',
