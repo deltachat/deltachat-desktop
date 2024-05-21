@@ -117,22 +117,22 @@ function CreateChatMain(props: CreateChatMainProps) {
   const needToRenderAddBroadcastList =
     queryStr.length === 0 &&
     (settingsStore?.desktopSettings.enableBroadcastLists ?? false)
-  const needToRenderQRScan = queryStr.length === 0
+  const needToRenderAddContactQRScan = queryStr.length === 0
   const needToRenderAddContact = !(
     queryStr === '' ||
     (contacts.length === 1 &&
       contacts[0].address.toLowerCase() === queryStr.trim().toLowerCase())
   )
   const enum ExtraItemType {
-    ADD_GROUP = 1,
+    ADD_CONTACT_QR_SCAN = 1,
+    ADD_GROUP,
     ADD_BROADCAST_LIST,
-    QR_SCAN,
     ADD_CONTACT,
   }
   const contactsAndExtraItems = [
+    ...(needToRenderAddContactQRScan ? [ExtraItemType.ADD_CONTACT_QR_SCAN] : []),
     ...(needToRenderAddGroup ? [ExtraItemType.ADD_GROUP] : []),
     ...(needToRenderAddBroadcastList ? [ExtraItemType.ADD_BROADCAST_LIST] : []),
-    ...(needToRenderQRScan ? [ExtraItemType.QR_SCAN] : []),
     ...contacts,
     ...(needToRenderAddContact ? [ExtraItemType.ADD_CONTACT] : []),
   ]
@@ -229,13 +229,12 @@ function CreateChatMain(props: CreateChatMainProps) {
                           onClick={() => setViewMode('createBroadcastList')}
                         />
                       )
-                      break
                     }
-                    case ExtraItemType.QR_SCAN: {
+                    case ExtraItemType.ADD_CONTACT_QR_SCAN: {
                       return (
                         <PseudoListItem
                           id='showqrcode'
-                          text={tx('qrscan_title')}
+                          text={tx('menu_new_contact')}
                           onClick={openQRScan}
                         >
                           <QRAvatar />
