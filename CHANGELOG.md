@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- show VCard attachement as VCard in message list
+
 ### Changed
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `v1.139.6`
 - Always show `msg.overrideSenderName` even when the message is sent by yourself
