@@ -3,6 +3,7 @@ import React, { PropsWithChildren, CSSProperties } from 'react'
 import { PseudoContact } from '../contact/Contact'
 import { QRAvatar } from '../Avatar'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { useSettingsStore } from '../../stores/settings'
 
 export function PseudoListItem(
   props: PropsWithChildren<{
@@ -90,11 +91,17 @@ export const PseudoListItemAddContact = ({
   onClick: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
 }) => {
   const tx = window.static_translate // static_translate because the context method produced sometimes an 'Invalid hook call' crash
+
+  const settingsStore = useSettingsStore()[0]
+  const isChatmail = settingsStore?.settings.is_chatmail
+
   return (
     <PseudoListItem
       id='newcontact'
       cutoff='+'
-      text={tx('menu_new_contact')}
+      text={
+        isChatmail ? tx('menu_new_classic_contact') : tx('menu_new_contact')
+      }
       subText={
         queryStrIsEmail ? queryStr + ' ...' : tx('contacts_type_email_above')
       }
