@@ -66,13 +66,15 @@ export default function OnboardingScreen(props: Props) {
       />
       <DialogBody>
         <DialogContent>
-          <img
-            className={styles.welcomeScreenImage}
-            src='../images/intro1.png'
-          />
-          <p className={styles.welcomeScreenTitle}>
-            {tx('welcome_chat_over_email')}
-          </p>
+          <div className={styles.welcomeScreenSection}>
+            <img
+              className={styles.welcomeScreenImage}
+              src='../images/intro1.png'
+            />
+            <p className={styles.welcomeScreenTitle}>
+              {tx('welcome_chat_over_email')}
+            </p>
+          </div>
           <div className={styles.welcomeScreenButtonGroup}>
             <Button
               className={styles.welcomeScreenButton}
