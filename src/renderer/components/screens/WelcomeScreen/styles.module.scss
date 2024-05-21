@@ -2,20 +2,33 @@
   padding-bottom: 0;
 }
 
-.welcomeScreenImage {
-  width: 100%;
-
-  @media (max-height: 700px) {
-    display: none;
-  }
-}
-
-.welcomeScreenTitle {
-  color: var(--colorNone);
-  font-size: x-large;
+.welcomeScreenSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-bottom: 30px;
-  margin-top: 10px;
-  text-align: center;
+
+  .welcomeScreenImage {
+    width: 100%;
+  }
+
+  .welcomeScreenTitle {
+    color: var(--colorNone);
+    font-size: x-large;
+    margin-bottom: 0px;
+    margin-top: 10px;
+  }
+
+  @media (max-height: 720px) {
+    margin-bottom: 15px;
+
+    .welcomeScreenImage {
+      width: 30vh;
+    }
+    .welcomeScreenTitle {
+      margin-top: 8px;
+    }
+  }
 }
 
 .welcomeScreenButtonGroup {
@@ -23,6 +36,10 @@
   display: flex;
   flex-direction: column;
   margin-top: 40px;
+
+  @media (max-height: 720px) {
+    margin-top: 20px;
+  }
 }
 
 .welcomeScreenButton {
