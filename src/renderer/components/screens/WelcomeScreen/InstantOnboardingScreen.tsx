@@ -15,6 +15,8 @@ import { ScreenContext } from '../../../contexts/ScreenContext'
 import { Screens } from '../../../ScreenController'
 
 import styles from './styles.module.scss'
+import useDialog from '../../../hooks/dialog/useDialog'
+import UseOtherServerDialog from './UseOtherServerDialog'
 
 type Props = {
   onCancel: () => void
@@ -32,6 +34,7 @@ export default function InstantOnboardingScreen({
     useInstantOnboarding()
   const { selectChat } = useChat()
   const { welcomeQr } = useInstantOnboarding()
+  const { openDialog } = useDialog()
 
   const [displayName, setDisplayName] = useState('')
   const [profilePicture, setProfilePicture] = useState<string | undefined>()
@@ -69,6 +72,8 @@ export default function InstantOnboardingScreen({
       })
     }
   }
+
+  const showOtherOptions = () => openDialog(UseOtherServerDialog)
 
   return (
     <>
@@ -109,9 +114,18 @@ export default function InstantOnboardingScreen({
                 ? tx('login')
                 : tx('instant_onboarding_create')}
             </Button>
+            {!welcomeQr && (
+              <Button
+                className={styles.welcomeScreenButton}
+                type='secondary'
+                onClick={showOtherOptions}
+              >
+                {tx('instant_onboarding_show_more_instances')}
+              </Button>
+            )}
           </div>
         </DialogContent>
-        <InstantOnboardingFooter />
+        {/* <InstantOnboardingFooter /> */}
       </DialogBody>
     </>
   )
