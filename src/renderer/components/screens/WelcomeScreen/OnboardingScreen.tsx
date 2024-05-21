@@ -17,6 +17,7 @@ type Props = {
   onUnSelectAccount: () => Promise<void>
   selectedAccountId: number
   showBackButton: boolean
+  hasConfiguredAccounts: boolean
 }
 
 const log = getLogger('renderer/components/OnboardingScreen')
@@ -57,7 +58,11 @@ export default function OnboardingScreen(props: Props) {
     <>
       <DialogHeader
         onClickBack={props.showBackButton ? onClickBackButton : undefined}
-        title={tx('welcome_desktop')}
+        title={
+          props.hasConfiguredAccounts
+            ? tx('add_account')
+            : tx('welcome_desktop')
+        }
       />
       <DialogBody>
         <DialogContent>
