@@ -19,7 +19,8 @@ export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
     showInstantOnboarding,
     startInstantOnboardingFlow,
   } = useInstantOnboarding()
-  const [showBackButton, setShowBackButton] = useState(false)
+  const [hasConfiguredAccounts, setHasConfiguredAccounts] = useState(false)
+  const showBackButton = hasConfiguredAccounts
 
   const onClose = () => {
     // Prevent user from closing dialog
@@ -31,7 +32,7 @@ export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
     const checkAccounts = async () => {
       const accounts = await getConfiguredAccounts()
       if (accounts.length > 0) {
-        setShowBackButton(true)
+        setHasConfiguredAccounts(true)
       }
     }
 
@@ -46,6 +47,7 @@ export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
             onNextStep={() => startInstantOnboardingFlow()}
             selectedAccountId={selectedAccountId}
             showBackButton={showBackButton}
+            hasConfiguredAccounts={hasConfiguredAccounts}
             {...props}
           />
         ) : (
