@@ -112,7 +112,7 @@ function CreateChatMain(props: CreateChatMainProps) {
     onClose()
   }
   const settingsStore = useSettingsStore()[0]
-  const isChatmail = settingsStore?.settings.is_chatmail
+  const isChatmail = settingsStore?.settings.is_chatmail === '1'
 
   const needToRenderAddGroup = queryStr.length === 0
   const needToRenderAddBroadcastList =
