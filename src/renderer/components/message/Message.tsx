@@ -542,6 +542,36 @@ export default function Message(props: {
         </div>
       </div>
     )
+  } else if (message.vcardContact) {
+    const { profileImage, color, displayName, addr } = message.vcardContact
+    const codepoint = displayName && displayName.codePointAt(0)
+    const initial = codepoint
+      ? String.fromCodePoint(codepoint).toUpperCase()
+      : '#'
+    content = (
+      <div className={styles.vcard}>
+        <div
+          className={classNames('avatar', styles.avatar)}
+          aria-label={displayName}
+        >
+          {profileImage ? (
+            <img
+              alt={displayName}
+              className='content'
+              src={'data:image/jpeg;base64,' + profileImage}
+            />
+          ) : (
+            <div style={{ backgroundColor: color }} className='content'>
+              {initial}
+            </div>
+          )}
+        </div>
+        <div className={styles.contactInfo}>
+          <div className={styles.displayName}>{displayName}</div>
+          <div>{addr}</div>
+        </div>
+      </div>
+    )
   } else {
     content = (
       <div dir='auto' className='text'>
@@ -586,6 +616,11 @@ export default function Message(props: {
   const hasText = text !== null && text !== ''
   const fileMime = (!isSetupmessage && message.fileMime) || null
   const isWithoutText = isMediaWithoutText(fileMime, hasText, message.viewType)
+  const showAttachment = (message: T.Message) =>
+    message.file &&
+    !message.isSetupmessage &&
+    message.viewType !== 'Webxdc' &&
+    message.viewType !== 'Vcard'
 
   return (
     <div
@@ -639,7 +674,7 @@ export default function Message(props: {
           {message.quote !== null && (
             <Quote quote={message.quote} msgParentId={message.id} />
           )}
-          {message.file && !isSetupmessage && message.viewType !== 'Webxdc' && (
+          {showAttachment(message) && (
             <Attachment
               text={text || undefined}
               conversationType={conversationType}
