@@ -15,21 +15,21 @@ import {
   useContacts,
   ContactList,
   useContactsNew,
-} from '../contact/ContactList'
+} from '../../contact/ContactList'
 import {
   PseudoListItem,
   PseudoListItemAddMember,
   PseudoListItemAddContact,
-} from '../helpers/PseudoListItem'
-import GroupImage from '../GroupImage'
-import { runtime } from '../../runtime'
-import { Avatar, QRAvatar } from '../Avatar'
-import { AddMemberDialog } from './ViewGroup'
-import { ContactListItem } from '../contact/ContactListItem'
-import { useSettingsStore } from '../../stores/settings'
-import { BackendRemote, onDCEvent, Type } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
-import { InlineVerifiedIcon } from '../VerifiedIcon'
+} from '../../helpers/PseudoListItem'
+import GroupImage from '../../GroupImage'
+import { runtime } from '../../../runtime'
+import { Avatar, QRAvatar } from '../../Avatar'
+import { AddMemberDialog } from '../ViewGroup'
+import { ContactListItem } from '../../contact/ContactListItem'
+import { useSettingsStore } from '../../../stores/settings'
+import { BackendRemote, onDCEvent, Type } from '../../../backend-com'
+import { selectedAccountId } from '../../../ScreenController'
+import { InlineVerifiedIcon } from '../../VerifiedIcon'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -38,21 +38,24 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
   OkCancelFooterAction,
-} from '../Dialog'
-import { ScreenContext } from '../../contexts/ScreenContext'
-import useChat from '../../hooks/chat/useChat'
-import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
-import useCreateChatByContactId from '../../hooks/chat/useCreateChatByContactId'
-import useDialog from '../../hooks/dialog/useDialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { VerifiedContactsRequiredDialog } from './ProtectionStatusDialog'
-import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
+} from '../../Dialog'
+import { ScreenContext } from '../../../contexts/ScreenContext'
+import useChat from '../../../hooks/chat/useChat'
+import useConfirmationDialog from '../../../hooks/dialog/useConfirmationDialog'
+import useCreateChatByContactId from '../../../hooks/chat/useCreateChatByContactId'
+import useDialog from '../../../hooks/dialog/useDialog'
+import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import { VerifiedContactsRequiredDialog } from '../ProtectionStatusDialog'
+import {
+  LastUsedSlot,
+  rememberLastUsedPath,
+} from '../../../utils/lastUsedPaths'
 import { dirname } from 'path'
-import QrCode from './QrCode'
-import { areAllContactsVerified } from '../../backend/chat'
+import QrCode from '../QrCode'
+import { areAllContactsVerified } from '../../../backend/chat'
 
 import type { T } from '@deltachat/jsonrpc-client'
-import type { DialogProps } from '../../contexts/DialogContext'
+import type { DialogProps } from '../../../contexts/DialogContext'
 
 type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
 
