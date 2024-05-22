@@ -1,6 +1,5 @@
 import React, {
   ChangeEvent,
-  Fragment,
   useCallback,
   useContext,
   useEffect,
@@ -9,6 +8,8 @@ import React, {
   useRef,
   useState,
 } from 'react'
+import { FixedSizeList } from 'react-window'
+import AutoSizer from 'react-virtualized-auto-sizer'
 import { C } from '@deltachat/jsonrpc-client'
 
 import {
@@ -56,6 +57,8 @@ import { areAllContactsVerified } from '../../../backend/chat'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../../contexts/DialogContext'
+
+import styles from './styles.module.scss'
 
 type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
 
@@ -110,40 +113,35 @@ function CreateChatMain(props: CreateChatMainProps) {
   }
   const settingsStore = useSettingsStore()[0]
 
+  const needToRenderAddGroup = queryStr.length === 0
+  const needToRenderAddBroadcastList =
+    queryStr.length === 0 &&
+    (settingsStore?.desktopSettings.enableBroadcastLists ?? false)
+  const needToRenderQRScan = queryStr.length === 0
+  const needToRenderAddContact = !(
+    queryStr === '' ||
+    (contacts.length === 1 &&
+      contacts[0].address.toLowerCase() === queryStr.trim().toLowerCase())
+  )
+  const enum ExtraItemType {
+    ADD_GROUP = 1,
+    ADD_BROADCAST_LIST,
+    QR_SCAN,
+    ADD_CONTACT,
+  }
+  const contactsAndExtraItems = [
+    ...(needToRenderAddGroup ? [ExtraItemType.ADD_GROUP] : []),
+    ...(needToRenderAddBroadcastList ? [ExtraItemType.ADD_BROADCAST_LIST] : []),
+    ...(needToRenderQRScan ? [ExtraItemType.QR_SCAN] : []),
+    ...contacts,
+    ...(needToRenderAddContact ? [ExtraItemType.ADD_CONTACT] : []),
+  ]
+
   const openQRScan = async () => {
     const [qrCode, qrCodeSVG] =
       await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(accountId, null)
     openDialog(QrCode, { qrCode, qrCodeSVG, selectScan: true })
     onClose()
-  }
-
-  const renderAddGroupIfNeeded = () => {
-    if (queryStr !== '') return null
-    return (
-      <Fragment>
-        <PseudoListItem
-          id='newgroup'
-          cutoff='+'
-          text={tx('menu_new_group')}
-          onClick={() => setViewMode('createGroup')}
-        />
-        {settingsStore?.desktopSettings.enableBroadcastLists && (
-          <PseudoListItem
-            id='newbroadcastlist'
-            cutoff='+'
-            text={tx('new_broadcast_list')}
-            onClick={() => setViewMode('createBroadcastList')}
-          />
-        )}
-        <PseudoListItem
-          id='showqrcode'
-          text={tx('qrscan_title')}
-          onClick={openQRScan}
-        >
-          <QRAvatar />
-        </PseudoListItem>
-      </Fragment>
-    )
   }
 
   const addContactOnClick = async () => {
@@ -156,23 +154,6 @@ function CreateChatMain(props: CreateChatMainProps) {
     )
     await createChatByContactId(accountId, contactId)
     onClose()
-  }
-
-  const renderAddContactIfNeeded = () => {
-    if (
-      queryStr === '' ||
-      (contacts.length === 1 &&
-        contacts[0].address.toLowerCase() === queryStr.trim().toLowerCase())
-    ) {
-      return null
-    }
-    return (
-      <PseudoListItemAddContact
-        queryStr={queryStr.trim()}
-        queryStrIsEmail={queryStrIsValidEmail}
-        onClick={addContactOnClick}
-      />
-    )
   }
 
   const onContactContextMenu = useCallback(
@@ -203,14 +184,94 @@ function CreateChatMain(props: CreateChatMainProps) {
           spellCheck={false}
         />
       </DialogHeader>
-      <DialogBody>
-        {renderAddGroupIfNeeded()}
-        <ContactList
-          contacts={contacts}
-          onClick={chooseContact}
-          onContactContextMenu={onContactContextMenu}
-        />
-        {renderAddContactIfNeeded()}
+      <DialogBody className={styles.createChatDialogBody}>
+        <AutoSizer disableWidth>
+          {({ height }) => (
+            // Not using 'react-window' results in ~5 second rendering time
+            // if the user has 5000 contacts.
+            // (see https://github.com/deltachat/deltachat-desktop/issues/1830)
+            <FixedSizeList
+              itemCount={contactsAndExtraItems.length}
+              itemKey={index => {
+                const item = contactsAndExtraItems[index]
+                const isExtraItem = typeof item === 'number'
+                return isExtraItem ? `extraItem-${item}` : item.id
+              }}
+              height={height}
+              width='100%'
+              // TODO fix: The size of each item is determined
+              // by `--local-avatar-size` and `--local-avatar-vertical-margin`,
+              // which might be different, e.g. currently they're smaller for
+              // "Rocket Theme", which results in gaps between the elements.
+              itemSize={64}
+            >
+              {({ index, style }) => {
+                const item = contactsAndExtraItems[index]
+
+                const el = (() => {
+                  switch (item) {
+                    case ExtraItemType.ADD_GROUP: {
+                      return (
+                        <PseudoListItem
+                          id='newgroup'
+                          cutoff='+'
+                          text={tx('menu_new_group')}
+                          onClick={() => setViewMode('createGroup')}
+                        />
+                      )
+                    }
+                    case ExtraItemType.ADD_BROADCAST_LIST: {
+                      return (
+                        <PseudoListItem
+                          id='newbroadcastlist'
+                          cutoff='+'
+                          text={tx('new_broadcast_list')}
+                          onClick={() => setViewMode('createBroadcastList')}
+                        />
+                      )
+                      break
+                    }
+                    case ExtraItemType.QR_SCAN: {
+                      return (
+                        <PseudoListItem
+                          id='showqrcode'
+                          text={tx('qrscan_title')}
+                          onClick={openQRScan}
+                        >
+                          <QRAvatar />
+                        </PseudoListItem>
+                      )
+                    }
+                    case ExtraItemType.ADD_CONTACT: {
+                      return (
+                        <PseudoListItemAddContact
+                          queryStr={queryStr.trim()}
+                          queryStrIsEmail={queryStrIsValidEmail}
+                          onClick={addContactOnClick}
+                        />
+                      )
+                    }
+                    default: {
+                      const contact: Type.Contact = item
+                      return (
+                        <ContactListItem
+                          contact={contact}
+                          onClick={chooseContact}
+                          onContextMenu={() => onContactContextMenu(contact)}
+                          showCheckbox={false}
+                          checked={false}
+                          showRemove={false}
+                        />
+                      )
+                    }
+                  }
+                })()
+
+                return <div style={style}>{el}</div>
+              }}
+            </FixedSizeList>
+          )}
+        </AutoSizer>
       </DialogBody>
       <DialogFooter>
         <FooterActions>
@@ -642,10 +703,8 @@ export function AddMemberInnerDialog({
   useLayoutEffect(applyCSSHacks, [inputRef, contactIdsToAdd])
   useEffect(applyCSSHacks, [])
 
-  const renderAddContactIfNeeded = () => {
-    if (queryStr === '' || searchContacts.size !== 0) {
-      return null
-    }
+  const needToRenderAddContact = queryStr !== '' && searchContacts.size === 0
+  const renderAddContact = () => {
     if (queryStrIsValidEmail) {
       const pseudoContact: Type.Contact = {
         address: queryStr,
@@ -700,7 +759,7 @@ export function AddMemberInnerDialog({
       <DialogHeader
         title={!isBroadcast ? tx('group_add_members') : tx('add_recipients')}
       />
-      <DialogBody>
+      <DialogBody className={styles.addMemberDialogBody}>
         <div className='AddMemberChipsWrapper'>
           <div className='AddMemberChips'>
             {contactIdsToAdd.map(contact => {
@@ -723,21 +782,57 @@ export function AddMemberInnerDialog({
             />
           </div>
         </div>
-        <div className='group-member-contact-list-wrapper' ref={contactListRef}>
-          <ContactList
-            contacts={Array.from(searchContacts.values())}
-            onClick={() => {}}
-            showCheckbox
-            isChecked={contact => {
-              return (
-                contactIdsToAdd.findIndex(c => c.id === contact.id) !== -1 ||
-                contactIdsInGroup.indexOf(contact.id) !== -1
-              )
-            }}
-            disabledContacts={contactIdsInGroup.concat(C.DC_CONTACT_ID_SELF)}
-            onCheckboxClick={toggleMember}
-          />
-          {renderAddContactIfNeeded()}
+        <div className={styles.addMemberContactList} ref={contactListRef}>
+          <AutoSizer disableWidth>
+            {({ height }) => (
+              // Not using 'react-window' results in ~5 second rendering time
+              // if the user has 5000 contacts.
+              // (see https://github.com/deltachat/deltachat-desktop/issues/1830)
+              <FixedSizeList
+                itemData={Array.from(searchContacts.values())}
+                itemCount={
+                  searchContacts.size + (needToRenderAddContact ? 1 : 0)
+                }
+                itemKey={(index, contacts) =>
+                  contacts[index]?.id ?? 'addContact'
+                }
+                height={height}
+                width='100%'
+                // TODO fix: The size of each item is determined
+                // by `--local-avatar-size` and `--local-avatar-vertical-margin`,
+                // which might be different, e.g. currently they're smaller for
+                // "Rocket Theme", which results in gaps between the elements.
+                itemSize={64}
+              >
+                {({ index, style, data: contacts }) => {
+                  const isExtraItem = index >= contacts.length
+                  if (isExtraItem) {
+                    return renderAddContact()
+                  }
+
+                  const contact = contacts[index]
+                  return (
+                    <div style={style}>
+                      <ContactListItem
+                        contact={contact}
+                        showCheckbox
+                        checked={
+                          contactIdsToAdd.some(c => c.id === contact.id) ||
+                          contactIdsInGroup.includes(contact.id)
+                        }
+                        disabled={
+                          contactIdsInGroup.includes(contact.id) ||
+                          contact.id === C.DC_CONTACT_ID_SELF
+                        }
+                        onCheckboxClick={toggleMember}
+                        showRemove={false}
+                      />
+                    </div>
+                  )
+                }}
+              </FixedSizeList>
+            )}
+          </AutoSizer>
         </div>
       </DialogBody>
       <OkCancelFooterAction
