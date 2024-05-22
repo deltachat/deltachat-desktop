@@ -6,6 +6,13 @@ import { debounceWithInit } from '../chat/ChatListHelpers'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 
+/**
+ * Make sure not to render all of the user's contacts with this component.
+ * Some users might have thousands of contacts, which can result in
+ * this component taking seconds to render.
+ * Instead consider using 'react-window', like we do in the `CreateChat`
+ * component.
+ */
 export function ContactList(props: {
   contacts: Type.Contact[]
   onClick?: (contact: Type.Contact) => void
