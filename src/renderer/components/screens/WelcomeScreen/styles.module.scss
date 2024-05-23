@@ -2,6 +2,10 @@
   padding-bottom: 0;
 }
 
+.inputError {
+  color: var(--colorDanger);
+}
+
 .welcomeScreenSection {
   display: flex;
   flex-direction: column;
