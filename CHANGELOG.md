@@ -67,6 +67,7 @@
 - quoted messages with single emoji as text look too big #3813
 - fix the bug where reactions bar is closed after arriving new message #3760
 - fix problem of focus when opening create chat dialogue #3816
+- fix the bug where EditAccountAndPassword dialog does not close with OK button
 
 ### Removed
 - remove disabled composer reason, now composer is just always hidden when `chat.canSend` is `false` #3791
