@@ -34,7 +34,7 @@ export default function UseOtherServerDialog({ onClose }: DialogProps) {
   return (
     <Dialog onClose={onClose}>
       <DialogHeader
-        title={tx('onboarding_alternative_logins')}
+        title={tx('instant_onboarding_show_more_instances')}
         onClose={onClose}
       />
       <DialogBody>
