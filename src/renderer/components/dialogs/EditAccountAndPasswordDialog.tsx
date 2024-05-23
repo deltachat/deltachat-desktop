@@ -122,7 +122,7 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
   ])
 
   const onOk = useCallback(async () => {
-    let update = await onUpdate()
+    const update = await onUpdate()
     if (update) onClose()
   }, [onClose, onUpdate])
 
