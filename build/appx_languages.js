@@ -3,8 +3,6 @@ const ms_supported_codes = 'ar, ar-sa, ar-ae, ar-bh, ar-dz, ar-eg, ar-iq, ar-jo,
   .split(',')
   .map(s => s.trim())
 
-module.exports = {
-  isAppxSupportedLanguage: function (query) {
-    return ms_supported_codes.indexOf(query) !== -1
-  },
+export function isAppxSupportedLanguage(query) {
+  return ms_supported_codes.indexOf(query) !== -1
 }

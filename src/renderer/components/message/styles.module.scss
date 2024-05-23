@@ -1,7 +1,10 @@
+$reaction-transition-duration: 100ms;
+
 .message {
   &.withReactions {
     margin-bottom: 10px;
   }
+  transition: margin-bottom ease-out $reaction-transition-duration;
 }
 
 .messageFooter {
@@ -17,6 +20,7 @@
     right: 0;
   }
 
+  transition: margin-bottom ease-out $reaction-transition-duration;
   &.withReactionsNoText {
     margin-bottom: 10px;
   }

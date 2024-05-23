@@ -22,10 +22,10 @@ jobs:
     steps:
     # Preperation
     - uses: actions/checkout@v1
-    - name: Use Node.js 18.x
+    - name: Use Node.js 20.x
       uses: actions/setup-node@v1
       with:
-        node-version: 18.x
+        node-version: 20.x
     - name: Get Pullrequest ID
       id: prepare
       run: |
@@ -56,16 +56,18 @@ jobs:
     - name: MAC electron builder
       if: runner.os == 'macOS'
       run: |
-        echo "module.exports=()=>Promise.resolve()" > stub.js
+        echo "module.exports=()=>Promise.resolve()" > stub.cjs
         export CSC_IDENTITY_AUTO_DISCOVERY=false
         export DEBUG=electron-builder
         npm i dmg-license
-        npm exec -- electron-builder --publish never --mac mas dmg -c.mac.identity=null --config.afterSign="stub.js" || true
+        npm i --cpu x64 --os darwin
+        npm i --cpu x64 --os arm64
+        npm exec -- electron-builder --publish never --mac mas dmg -c.mac.identity=null --universal --config.afterSign="stub.cjs" || true
     - name: MAC renaming / upload Preperation
       if: runner.os == 'macOS'
       run: |
         mkdir -p dist/preview
-        zip -r dist/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip dist/mas
+        zip -r dist/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip dist/mas-universal
         cd dist
         mv *.dmg preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.dmg || true
         cd ..

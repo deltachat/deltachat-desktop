@@ -1,4 +1,4 @@
-import { getLogger } from './logger'
+import { getLogger } from './logger.js'
 const log = getLogger('localize')
 
 export interface LocaleData {

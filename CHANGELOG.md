@@ -9,19 +9,46 @@
 - add quick key `Cmd+W`/`Ctrl+W` to close webxdc-, html_email- and help-window #3770 #3778
 - Accept images from clipboard in QR reader #3762
 - Introduce new `Spinner` component #3786
-- Instant Onboarding #3773
+- Instant Onboarding #3773 #3801
+- Add instructions and troubleshooting button to "Add as Second Device" dialog #3801
+- Add image cropper for profile image selector #1779
+- add more information to about screen (runtime, where the rpc server is and whether you run under arm translation) #3567
+- Use openstreetmap in map
+- Open map in a separate window
+- Add global map for all chats in account
+
 
 ### Changed
-- Update translations (2024-04-04) #3746
+- Update translations (2024-05-20) #3746 #3802 #3827 #3837
 - The latest reaction is now shown in the chatlist, if it's newer than the last message #3749
 - minor improvements to "add second device" dialog #3748
 - Remove deprecated translations #3756
 - Refactor chat store into React context #3725
-- Improve security: restrict file protocol #3769 #3798
-- Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.137.3`
+- Improve security: restrict file protocol #3769 #3798 #3800
 - Change chatlist to use new chatlist changed event from core #3268
 - Refactor QR code reader #3762
 - add animations for message shortcuts menu #3759
+- reactions: add message height animation #3752
+- update `@deltachat/message_parser_wasm` to `0.10.0` -> now parses internationalised Links and some minor bugfixes #3813
+- replace emoji regex with message-parser function for counting emojis #3813
+- update eslint dependency and its plugins #3808:
+  - `eslint`: `8.54.0` -> `8.56.0`
+  - `eslint-config-prettier`: `9.0.0` -> `9.1.0`
+  - `eslint-plugin-prettier`: `5.0.1` -> `5.1.3`
+  - `eslint-plugin-react-hooks`: `4.6.0` -> `4.6.2`
+  - `@typescript-eslint/eslint-plugin`: `6.13.1` -> `7.8.0`
+  - `@typescript-eslint/parser`: `6.13.1` -> `7.8.0`
+- bump nodejs requirement to `>=18.18.0` #3808
+- reorganise some settings acording changes on android & ios #3812
+- reword password label to 'Existing Password' #3826
+- replace `deltachat-node` with `@deltachat/stdio-rpc-server` #3567
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `v1.139.3`
+- upgrade `electron` from `28.2.3` to `30.0.2`
+- increase minimum nodejs version from `18` to `20`
+- hide irrelevant advanced settings for chatmail users #3823
+- upgrade `electron-builder` from `24.6.4` to `24.13.3` #3828
+- upgrade `mocha` to `10.4.0`
+
 
 ### Fixed
 - fix chat audit dialog was going out of viewport on smaller screens #3736
@@ -39,9 +66,17 @@
 - Close reactions bar on emoji selection #3788
 - fix Clicking notification does not bring Delta Chat to foreground on Windows #3793
 - Prevent re-rendering of account sidebar when switching account #3789
+- fix help not opening for languages that have no localized help #3801
+- quoted messages with single emoji as text look too big #3813
+- fix the bug where reactions bar is closed after arriving new message #3760
+- fix problem of focus when opening create chat dialogue #3816
+- fix the bug where EditAccountAndPassword dialog does not close with OK button
+- fix the problem of pressing ENTER when logging in and prompting doing additioanl dialogs #3824
+
 
 ### Removed
 - remove disabled composer reason, now composer is just always hidden when `chat.canSend` is `false` #3791
+- remove `--multiple-instances` flag #3567
 
 
 <a id="1_44_1"></a>

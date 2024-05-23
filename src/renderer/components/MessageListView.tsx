@@ -1,11 +1,9 @@
 import React from 'react'
 
 import Gallery from './Gallery'
-import MapComponent from './map/MapComponent'
 import MessageListAndComposer from './message/MessageListAndComposer'
 import NoChatSelected from './NoChatSelected'
 import useChat from '../hooks/chat/useChat'
-import useMessage from '../hooks/chat/useMessage'
 import { ChatView } from '../contexts/ChatContext'
 import { RecoverableCrashScreen } from './screens/RecoverableCrashScreen'
 
@@ -25,7 +23,6 @@ export default function MessageListView({
   onUpdateGalleryView,
 }: Props) {
   const { activeView, chat } = useChat()
-  const { sendMessage } = useMessage()
 
   if (chat && accountId) {
     switch (activeView) {
@@ -37,8 +34,6 @@ export default function MessageListView({
             onUpdateView={onUpdateGalleryView}
           />
         )
-      case ChatView.Map:
-        return <MapComponent sendMessage={sendMessage} selectedChat={chat} />
       case ChatView.MessageList:
       default:
         return (

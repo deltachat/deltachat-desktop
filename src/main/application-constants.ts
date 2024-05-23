@@ -1,6 +1,9 @@
-import appConfig from './application-config'
+import appConfig from './application-config.js'
 import { dirname, join } from 'path'
 import { app, screen } from 'electron'
+import { fileURLToPath } from 'url'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const AppFilesDir = join(__dirname, '..', '..')
 
@@ -87,6 +90,7 @@ export const ALLOWED_STATIC_FOLDERS = [
     join(AppFilesDir, folder)
   ),
   ...ALLOWED_CONFIG_FOLDERS.map(folder => join(getConfigPath(), folder)),
+  getDraftTempDir(),
 ]
 
 export const ALLOWED_ACCOUNT_FOLDERS = [

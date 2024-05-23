@@ -1,6 +1,6 @@
 import { createWriteStream } from 'fs'
 import { join } from 'path'
-import { getLogsPath } from './application-constants'
+import { getLogsPath } from './application-constants.js'
 import { stdout, stderr } from 'process'
 
 stdout.on('error', () => {})
@@ -69,7 +69,7 @@ export function createLogHandler() {
 export type LogHandler = ReturnType<typeof createLogHandler>
 
 import { readdir, lstat, unlink } from 'fs/promises'
-import { getLogger, LogHandlerFunction } from '../shared/logger'
+import { getLogger, LogHandlerFunction } from '../shared/logger.js'
 
 export async function cleanupLogFolder() {
   const log = getLogger('logger/log-cleanup')

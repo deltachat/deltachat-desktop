@@ -24,46 +24,25 @@
   "pref_current_account": {
     "message": "Current Account"
   },
-  "qrscan_hint_desktop": {
-    "message": "Move the QR code to the camera"
-  },
   "camera_access_failed": {
     "message": "Could not access video camera. You might want to check your video permissions or if the camera is used already by another program"
   },
-  "onboarding_create_instant_account": {
-    "message": "Let's Get Started!"
+  "reset": {
+    "message": "Reset"
   },
-  "onboarding_alternative_logins": {
-    "message": "I Already Have a Login"
+  "crop_image": {
+    "message": "Crop Image"
   },
-  "manual_account_setup_option": {
-    "message": "Manual Login"
+  "image_cropper_hint_desktop": {
+    "message": "Select an area on the image"
   },
-  "instant_onboarding_title": {
-    "message": "Your Profile"
+  "menu_global_map": {
+    "message": "Open global map"
   },
-  "instant_onboarding_agree_default": {
-    "message": "Read the Privacy Policy"
+  "all_chats_map_title": {
+    "message": "Map for all chats (Account '%1')"
   },
-  "instant_onboarding_agree_instance": {
-    "message": "About profiles on %1$s"
-  },
-  "instant_onboarding_create": {
-    "message": "Agree & Create Profile"
-  },
-  "instant_onboarding_show_more_instances": {
-    "message": "Explore Other Options"
-  },
-  "instant_onboarding_group_info": {
-    "message": "Create a profile to join the group \"%1$s\"."
-  },
-  "instant_onboarding_contact_info": {
-    "message": "Create a profile to chat with %1$s."
-  },
-  "instant_onboarding_confirm_contact": {
-    "message": "Do you want to create a new DeltaChat profile and start chatting with %1?"
-  },
-  "instant_onboarding_confirm_group": {
-    "message": "Do you want to create a new DeltaChat profile and join the \"%1\" chat group?"
+  "chat_map_title": {
+    "message": "Map for chat '%1'"
   }
 }

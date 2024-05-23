@@ -85,7 +85,7 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
   }, [])
 
   const onUpdate = useCallback(async () => {
-    if (disableUpdate) return
+    if (disableUpdate) return true
     const onSuccess = () => onClose()
 
     const update = () => {
@@ -121,6 +121,11 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
     tx,
   ])
 
+  const onOk = useCallback(async () => {
+    const update = await onUpdate()
+    if (update) onClose()
+  }, [onClose, onUpdate])
+
   if (accountSettings === null) return null
   return (
     <>
@@ -134,7 +139,7 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
           )}
         </DialogContent>
       </DialogBody>
-      <OkCancelFooterAction onCancel={() => onClose()} onOk={onUpdate} />
+      <OkCancelFooterAction onCancel={() => onClose()} onOk={onOk} />
     </>
   )
 }

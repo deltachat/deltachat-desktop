@@ -1,4 +1,4 @@
-import { DesktopSettingsType } from './shared-types'
+import { DesktopSettingsType } from './shared-types.js'
 
 export function getDefaultState(): DesktopSettingsType {
   /**

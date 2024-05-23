@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- common strings without special context -->
     <string name="app_name">Delta Chat</string>
     <string name="ok">確定</string>
@@ -230,8 +230,6 @@
     <string name="device_talk">裝置訊息</string>
     <string name="device_talk_subtitle">本機產生的訊息</string>
     <string name="device_talk_explain">這個聊天室內的訊息是由 Delta Chat 軟體在本地產生的。開發者會在這裡發送軟體更新和使用幫助。</string>
-    <!-- deprecated, use device_talk_welcome_message2 instead -->
-    <string name="device_talk_welcome_message">歡迎使用 Delta Chat！Delta Chat 看起來就如同大部分的聊天軟體一樣，但並沒有集中式的控制，且不會追蹤或販賣你、或與你有關人士的資料給大公司。\n\n嚴格來說，Delta Chat 是一款擁有聊天界面的電子郵件軟體；簡單來說就是幫電子郵件穿上新衣啦👻\n\n使用 Delta Chat 來跟全世界的人溝通，全程只需要他們的電郵地址。對方不需要安裝 Delta Chat、造訪網頁或額外註冊帳號 - 但如果他們想要的話，你也可以透過這個連結來分享給他們 👉 https://get.delta.chat</string>
     <string name="edit_contact">編輯聯絡人</string>
     <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
     <string name="pin_chat">釘選聯絡人</string>
@@ -324,6 +322,7 @@
     <string name="chat_record_slide_to_cancel">滑動以取消</string>
     <string name="chat_record_explain">按住不放錄音，放開後傳送</string>
     <string name="chat_no_chats_yet_title">目前沒有對話\n請按 + 開始新的對話</string>
+    <!-- deprecated -->
     <string name="chat_no_chats_yet_hint">你可以和其它 Delta Chat 的使用者對話，也可以和任何 email 信箱對話。</string>
     <string name="chat_all_archived">已封存所有的對話\n請按 + 開始新的對話</string>
     <string name="chat_share_with_title">分享給...</string>
@@ -361,6 +360,7 @@
     <string name="tab_docs_empty_hint">本對話中共享的文件、音樂和其它檔案會顯示在這裡。</string>
     <string name="media_preview">媒體預覽</string>
     <string name="login_title">登入</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="login_header">登入你的伺服器</string>
     <string name="login_subheader">我們能自動處理大多數常見的郵件伺服器設定。有時候你需要在 web 界面上手動打開 IMAP 服務，請詢問郵件服務商或請朋友幫忙。</string>
     <string name="login_no_servers_hint">Delta Chat 沒有伺服器，你的資料只會存在你自己的裝置上!</string>
@@ -469,7 +469,9 @@
     <string name="pref_show_emails_accepted_contacts">顯示已接受的聯絡人</string>
     <string name="pref_show_emails_all">所有郵件</string>
     <!-- autocrypt -->
+    <!-- deprecated, used "Encryption" if a headline is needed -->
     <string name="autocrypt">Autocrypt</string>
+    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
     <string name="autocrypt_explain">AutoCrypt是一種新的 email 端到端自動加密的開放規格。\n\n你的端到端設定會按需求自動新增，並且可以轉移到其它可開啟AutoCrypt設定訊息(ASM)的設備。</string>
     <string name="autocrypt_send_asm_title">傳送AutoCrypt設定訊息</string>
     <string name="autocrypt_send_asm_explain_before">「AutoCrypt設定訊息」可以安全地和你使用的其它支援AutoCrypt的 app 共享端到端加密設定。\n\n本訊息含一組設定碼，請在其它支援的設備中輸入這組設定碼。</string>

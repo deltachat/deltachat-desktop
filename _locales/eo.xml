@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- common strings without special context -->
     <string name="app_name">Delta Chat</string>
     <string name="ok">Bone</string>
@@ -259,8 +259,6 @@
     <string name="device_talk">Aparataj mesaĝoj</string>
     <string name="device_talk_subtitle">Loke generitaj mesaĝoj</string>
     <string name="device_talk_explain">Mesaĝoj en tiu ĉi babilo estas surloke generataj de via Delta Chat apo. Ĝiaj kreintoj uzas ilin por informi pri apaj ĝisdatigoj kaj problemoj dum uzado.</string>
-    <!-- deprecated, use device_talk_welcome_message2 instead -->
-    <string name="device_talk_welcome_message">Bonvenon al Delta Chat! – Delta Chat aspektas kvazaŭ aliaj popularaj mesaĝiloj, sed al ĝi mankas centra regado, sekvado de kaj perfido al vi, viaj amikoj, kolegoj kaj familianoj je la servo de grandaj organizoj.\n\nVere, Delta Chat estas retpoŝta aplikaĵo kun moderna babila interfaco. Alivorte, retpoŝto kun novaj vestaĵoj 👻\n\nUzu Delta Chat-on kun iu ajn el miliardoj da homoj: simple uzu la retadreson. Ricevantoj ne devas instali Delta Chat-on, viziti retejojn aŭ registriĝi ie ajn - sed, kompreneble, se ili volas, vi povas atentigi ilin al 👉 https://get.delta.chat</string>
     <string name="edit_contact">Redakti kontakton</string>
     <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
     <string name="pin_chat">Alpingli babilon</string>
@@ -325,6 +323,7 @@
     </plurals>
     <string name="chat_record_slide_to_cancel">Gliti por nuligi</string>
     <string name="chat_record_explain">Tuŝadi por registri voĉan mesaĝon, maltuŝadi por sendi</string>
+    <!-- deprecated -->
     <string name="chat_no_chats_yet_hint">Vi povas babili kun aliaj uzantoj de Delta Chat kaj kun iu ajn retadreso.</string>
     <string name="chat_all_archived">Ĉiuj babiloj enarĥivigitaj.\nPremu \"+\" por komenci novan babilon.</string>
     <string name="chat_share_with_title">Kunhavigi kun</string>
@@ -361,6 +360,7 @@
     <string name="media_preview">Aŭdvida antaŭrigardo</string>
     <string name="send_message">Sendi mesaĝon</string>
     <string name="login_title">Ensaluti</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="login_header">Ensaluti al via servilo</string>
     <string name="login_inbox">Ricevujo</string>
     <string name="login_imap_login">IMAP salutnomo</string>
@@ -394,6 +394,7 @@
 
     <string name="pref_profile_photo">Profilbildo</string>
     <string name="pref_blocked_contacts">Blokitaj kontaktoj</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="pref_password_and_account_settings">Pasvorto kaj konto</string>
     <string name="pref_your_name">Via nomo</string>
     <string name="pref_enter_sends">La Eniga klavo kaŭzas sendon</string>

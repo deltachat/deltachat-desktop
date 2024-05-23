@@ -1,3 +1,4 @@
+//@ts-check
 import path from 'path'
 import { copyFile, readFile } from 'fs/promises'
 
@@ -30,7 +31,7 @@ function config(options) {
       'process.env.NODE_ENV': isProduction ? '"production"' : '"development"',
     },
     plugins,
-    external: ["*.jpg", "*.png", "*.webp", "*.svg"]
+    external: ['*.jpg', '*.png', '*.webp', '*.svg'],
   }
 }
 
@@ -44,7 +45,7 @@ const eslintPlugin = {
     const eslint = new ESLint()
     const filesToLint = []
 
-    build.onLoad({ filter: /\.(?:jsx?|tsx?)$/ }, (args) => {
+    build.onLoad({ filter: /\.(?:jsx?|tsx?)$/ }, args => {
       if (!args.path.includes('node_modules')) {
         filesToLint.push(args.path)
       }
@@ -59,11 +60,11 @@ const eslintPlugin = {
 
       const warnings = results.reduce(
         (count, result) => count + result.warningCount,
-        0,
+        0
       )
       const errors = results.reduce(
         (count, result) => count + result.errorCount,
-        0,
+        0
       )
 
       if (output.length > 0) {
@@ -88,7 +89,7 @@ const eslintPlugin = {
 const sassPlugin = {
   name: 'sass',
   setup(build) {
-    build.onLoad({ filter: /\.module\.scss$/ }, (args) => {
+    build.onLoad({ filter: /\.module\.scss$/ }, args => {
       const { css } = compile(args.path)
       return { contents: css, loader: 'local-css' }
     })
@@ -102,7 +103,7 @@ const wasmPlugin = {
   name: 'wasm',
   setup(build) {
     // Resolve ".wasm" files to a path with a namespace
-    build.onResolve({ filter: /\.wasm$/ }, (args) => {
+    build.onResolve({ filter: /\.wasm$/ }, args => {
       if (args.resolveDir === '') {
         return // Ignore unresolvable paths
       }
@@ -118,7 +119,7 @@ const wasmPlugin = {
     // of the WebAssembly file. This uses esbuild's built-in "binary" loader
     // instead of manually embedding the binary data inside JavaScript code
     // ourselves.
-    build.onLoad({ filter: /.*/, namespace: 'wasm-binary' }, async (args) => ({
+    build.onLoad({ filter: /.*/, namespace: 'wasm-binary' }, async args => ({
       contents: await readFile(args.path),
       loader: 'binary',
     }))
@@ -138,11 +139,11 @@ const reporterPlugin = {
       console.log('- Start esbuild ...')
     })
 
-    build.onEnd(async (args) => {
+    build.onEnd(async args => {
       const errors = args.errors.length
       const warnings = args.warnings.length
       console.log(
-        `- Finished esbuild with ${warnings} warnings and ${errors} errors`,
+        `- Finished esbuild with ${warnings} warnings and ${errors} errors`
       )
     })
   },
@@ -156,7 +157,7 @@ async function bundle(options) {
 
   await copyFile(
     'node_modules/@deltachat/message_parser_wasm/message_parser_wasm_bg.wasm',
-    'html-dist/message_parser_wasm_bg.wasm',
+    'html-dist/message_parser_wasm_bg.wasm'
   )
 }
 
@@ -187,7 +188,7 @@ const isWatch = process.argv.indexOf('-w') !== -1
 const isMinify = process.argv.indexOf('-m') !== -1
 const isProduction = process.env['NODE_ENV'] === 'production'
 
-main(isWatch, isProduction, isMinify).catch((err) => {
+main(isWatch, isProduction, isMinify).catch(err => {
   console.error(err)
   process.exitCode = 1
 })
