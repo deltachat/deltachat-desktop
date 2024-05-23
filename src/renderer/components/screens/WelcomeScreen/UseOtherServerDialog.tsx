@@ -31,6 +31,11 @@ export default function UseOtherServerDialog({ onClose }: DialogProps) {
     openDialog(QrCodeScanner)
   }
 
+  const onShowMoreInstances = () => {
+    runtime.openLink(CHATMAIL_INSTANCES_LIST_URL)
+    onClose()
+  }
+
   return (
     <Dialog onClose={onClose}>
       <DialogHeader
@@ -42,7 +47,7 @@ export default function UseOtherServerDialog({ onClose }: DialogProps) {
           <Button
             type='secondary'
             className={styles.welcomeScreenButton}
-            onClick={() => runtime.openLink(CHATMAIL_INSTANCES_LIST_URL)}
+            onClick={onShowMoreInstances}
           >
             {tx('instant_onboarding_other_server')}{' '}
             <Icon icon='open_in_new' className={styles.openExternalIcon} />
