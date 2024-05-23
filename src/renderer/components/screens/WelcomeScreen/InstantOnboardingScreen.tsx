@@ -113,15 +113,13 @@ export default function InstantOnboardingScreen({
                 ? tx('login')
                 : tx('instant_onboarding_create')}
             </Button>
-            {!welcomeQr && (
-              <Button
-                className={styles.welcomeScreenButton}
-                type='secondary'
-                onClick={showOtherOptions}
-              >
-                {tx('instant_onboarding_show_more_instances')}
-              </Button>
-            )}
+            <Button
+              className={styles.welcomeScreenButton}
+              type='secondary'
+              onClick={showOtherOptions}
+            >
+              {tx('instant_onboarding_show_more_instances')}
+            </Button>
           </div>
         </DialogContent>
       </DialogBody>
