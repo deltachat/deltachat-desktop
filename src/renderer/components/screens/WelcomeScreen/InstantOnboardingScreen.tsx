@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react'
 
 import AdditionalActionInfo from './AdditionalActionInfo'
 import Button from '../../Button'
-import InstantOnboardingFooter from './InstantOnboardingFooter'
 import ProfileImageSelector from '../../dialogs/EditProfileDialog/ProfileImageSelector'
 import UserAgreement from './UserAgreement'
 import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
@@ -125,7 +124,6 @@ export default function InstantOnboardingScreen({
             )}
           </div>
         </DialogContent>
-        {/* <InstantOnboardingFooter /> */}
       </DialogBody>
     </>
   )
