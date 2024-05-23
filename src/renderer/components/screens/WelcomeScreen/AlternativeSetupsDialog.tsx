@@ -17,14 +17,34 @@ import styles from './styles.module.scss'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
 import { ReceiveBackupDialog } from '../../dialogs/SetupMultiDevice'
+import { BackendRemote } from '../../../backend-com'
 
-export default function AlternativeSetupsDialog({ onClose }: DialogProps) {
+interface Props {
+  selectedAccountId: number
+}
+
+export default function AlternativeSetupsDialog({
+  onClose,
+  selectedAccountId,
+}: DialogProps & Props) {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
 
-  const onClickSecondDevice = () => openDialog(ReceiveBackupDialog)
+  /** remove configuration if user did set picture or displayname in the instant onboarding dialog already */
+  const resetAccount = () =>
+    BackendRemote.rpc.batchSetConfig(selectedAccountId, {
+      selfavatar: null,
+      displayname: null,
+    })
+
+  const onClickSecondDevice = () => {
+    resetAccount()
+    openDialog(ReceiveBackupDialog)
+  }
 
   async function onClickImportBackup() {
+    await resetAccount()
+
     const { defaultPath, setLastPath } = rememberLastUsedPath(
       LastUsedSlot.Backup
     )

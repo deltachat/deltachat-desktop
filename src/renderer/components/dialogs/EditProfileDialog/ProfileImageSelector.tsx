@@ -13,7 +13,7 @@ type Props = {
   displayName: string
   hideDeleteButton?: boolean
   profilePicture?: string
-  setProfilePicture: (path: string) => void
+  setProfilePicture: (path: string | null) => void
 }
 
 export default function ProfileImageSelector({
@@ -35,7 +35,7 @@ export default function ProfileImageSelector({
       lastUsedSlot={LastUsedSlot.ProfileImage}
       onChange={filepath => {
         if (!filepath) {
-          setProfilePicture('')
+          setProfilePicture(null)
         } else {
           openDialog(ImageCropper, {
             filepath,
