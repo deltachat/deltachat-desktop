@@ -1,77 +1,87 @@
-import { Intent } from '@blueprintjs/core'
-import { DcEventType } from '@deltachat/jsonrpc-client'
-import React, { useEffect, useState } from 'react'
+import React, { useRef, useCallback } from 'react'
 
-import { getLogger } from '../../../../shared/logger'
-import { BackendRemote } from '../../../backend-com'
+import { DialogBody, DialogFooter, FooterActions } from '../../Dialog'
+import FooterActionButton from '../../Dialog/FooterActionButton'
+import QrReader from '../../QrReader'
+import useProcessQr from '../../../hooks/useProcessQr'
 import { selectedAccountId } from '../../../ScreenController'
-import { DeltaProgressBar } from '../../Login-Styles'
-import { DialogBody, DialogContent, DialogWithHeader } from '../../Dialog'
+import { DialogWithHeader } from '../../Dialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import { getLogger } from '../../../../shared/logger'
+
+import styles from './styles.module.scss'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
+import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
+import { runtime } from '../../../runtime'
 
-const log = getLogger('renderer/receive_backup')
+const log = getLogger('renderer/dialogs/SetupMultiDevice/ReceiveBackup')
 
 type Props = {
-  QrWithToken: string
+  subtitle: string
 }
 
-export function ReceiveBackupDialog({
-  onClose,
-  QrWithToken,
-}: Props & DialogProps) {
-  const [importProgress, setImportProgress] = useState(0.0)
-  const [error, setError] = useState<string | null>(null)
+export function ReceiveBackupDialog({ onClose }: Props & DialogProps) {
   const tx = useTranslationFunction()
-
-  const onImexProgress = ({ progress }: DcEventType<'ImexProgress'>) => {
-    setImportProgress(progress)
-  }
-
   const accountId = selectedAccountId()
+  const processQr = useProcessQr()
+  const processingQrCode = useRef(false)
+  const openAlertDialog = useAlertDialog()
 
-  useEffect(() => {
-    ;(async () => {
-      try {
-        log.debug(`Starting remote backup import of ${QrWithToken}`)
-        await BackendRemote.rpc.getBackup(accountId, QrWithToken)
-      } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message)
+  const onDone = useCallback(() => {
+    onClose()
+    processingQrCode.current = false
+  }, [onClose])
+
+  const handleScan = useCallback(
+    async (data: string) => {
+      if (data && !processingQrCode.current) {
+        processingQrCode.current = true
+        try {
+          await processQr(accountId, data, onDone)
+        } catch (error: any) {
+          log.errorWithoutStackTrace('QrReader process error: ', error)
+          openAlertDialog({
+            message: error.message || error.toString(),
+          })
         }
-        return
+        processingQrCode.current = false
+      } else if (processingQrCode.current === true) {
+        log.debug('Already processing a qr code')
       }
-      onClose()
-      window.__selectAccount(accountId)
-      window.__updateAccountListSidebar?.()
-    })()
+    },
+    [accountId, processQr, onDone, openAlertDialog]
+  )
 
-    const emitter = BackendRemote.getContextEvents(accountId)
-    emitter.on('ImexProgress', onImexProgress)
-    return () => {
-      emitter.off('ImexProgress', onImexProgress)
-    }
-  }, [QrWithToken, onClose, accountId])
+  const handleError = (err: string) => {
+    log.error('QrReader error: ' + err)
+  }
 
   return (
     <DialogWithHeader
-      onClose={onClose}
       title={tx('multidevice_receiver_title')}
+      onClose={onClose}
     >
       <DialogBody>
-        <DialogContent>
-          {error && (
-            <p>
-              {tx('error')}: {error}
-            </p>
-          )}
-          <DeltaProgressBar
-            progress={importProgress}
-            intent={!error ? Intent.SUCCESS : Intent.DANGER}
-          />
-        </DialogContent>
+        <p className={styles.receiveSteps}>
+          {tx('multidevice_open_settings_on_other_device')}
+          <br />
+          {tx('multidevice_experimental_hint')}
+        </p>
+        <QrReader onScan={handleScan} onError={handleError} />
       </DialogBody>
+      <DialogFooter>
+        <FooterActions align='spaceBetween'>
+          <FooterActionButton
+            onClick={() => runtime.openHelpWindow('multiclient')}
+          >
+            {tx('troubleshooting')}
+          </FooterActionButton>
+          <FooterActionButton onClick={onClose}>
+            {tx('close')}
+          </FooterActionButton>
+        </FooterActions>
+      </DialogFooter>
     </DialogWithHeader>
   )
 }

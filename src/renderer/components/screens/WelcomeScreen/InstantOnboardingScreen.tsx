@@ -31,6 +31,7 @@ export default function InstantOnboardingScreen({
   const { createInstantAccount, resetInstantOnboarding } =
     useInstantOnboarding()
   const { selectChat } = useChat()
+  const { welcomeQr } = useInstantOnboarding()
 
   const [displayName, setDisplayName] = useState('')
   const [profilePicture, setProfilePicture] = useState<string | undefined>()
@@ -93,7 +94,10 @@ export default function InstantOnboardingScreen({
           <p>{tx('set_name_and_avatar_explain')}</p>
           <div className={styles.welcomeScreenButtonGroup}>
             <div className={styles.instantOnboardingAgreement}>
-              <UserAgreement />
+              {welcomeQr?.qr.kind !== 'login' && <UserAgreement />}
+              {welcomeQr?.qr.kind === 'login' && (
+                <>{tx('qrlogin_ask_login', welcomeQr.qr.address)}</>
+              )}
             </div>
             <Button
               className={styles.welcomeScreenButton}
@@ -101,7 +105,9 @@ export default function InstantOnboardingScreen({
               type='primary'
               onClick={onConfirm}
             >
-              {tx('instant_onboarding_create')}
+              {welcomeQr?.qr.kind === 'login'
+                ? tx('login')
+                : tx('instant_onboarding_create')}
             </Button>
           </div>
         </DialogContent>

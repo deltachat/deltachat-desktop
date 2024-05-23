@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- common strings without special context -->
     <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
@@ -294,8 +294,6 @@
     <string name="device_talk">Komunikaty urządzenia</string>
     <string name="device_talk_subtitle">Wiadomości generowane lokalnie</string>
     <string name="device_talk_explain">Wiadomości w tym czacie są generowane lokalnie przez twoją aplikację Delta Chat. Twórcy używają go do informowania o aktualizacjach aplikacji i problemach podczas użytkowania.</string>
-    <!-- deprecated, use device_talk_welcome_message2 instead -->
-    <string name="device_talk_welcome_message">Witamy w Delta Chat! - Delta Chat wygląda i działa podobnie jak inne popularne komunikatory, ale nie miesza się w scentralizowaną kontrolę, śledzenie ani sprzedaż ciebie, przyjaciół, kolegów lub rodziny dużym organizacjom.\n\nTechnicznie Delta Chat jest aplikacją e-mail z nowoczesnym interfejsem czatu. Jeśli chcesz, wyślij e-mail w nowym otoczeniu 👻.\n\nKorzystaj z Delta Chat z każdym spośród miliardów ludzi: po prostu użyj ich adresu e-mail. Odbiorcy nie muszą instalować Delta Chat, odwiedzać stron internetowych ani rejestrować się gdziekolwiek - oczywiście, jeśli im się spodoba, możesz ich skierować na 👉 https://get.delta.chat.</string>
     <string name="device_talk_welcome_message2">Skontaktuj się!\n\n🙌 Dotknij „Kod QR” na ekranie głównym obu urządzeń. Wybierz opcję „Zeskanuj kod QR” na jednym urządzeniu i skieruj go na drugie\n\n🌍 Jeśli nie znajdujesz się w tym samym pokoju, zeskanuj kod podczas rozmowy wideo lub udostępnij link z zaproszeniem w sekcji „Zeskanuj kod QR”\n\nNastępnie: korzystaj z komunikatora za pośrednictwem największej zdecentralizowanej sieci, jaka kiedykolwiek istniała: e-mail. W przeciwieństwie do innych popularnych aplikacji bez centralnej kontroli, śledzenia lub sprzedawania Ciebie, znajomych, współpracowników lub rodziny dużym organizacjom.</string>
     <string name="edit_contact">Edytuj kontakt</string>
     <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
@@ -423,6 +421,7 @@
     <string name="chat_record_slide_to_cancel">PRZESUŃ, BY ANULOWAĆ</string>
     <string name="chat_record_explain">Dotknij i przytrzymaj, aby nagrać wiadomość głosową, zwolnij, aby wysłać</string>
     <string name="chat_no_chats_yet_title">Pusta skrzynka odbiorcza.\nNaciśnij \"+\" aby rozpocząć nowy czat.</string>
+    <!-- deprecated -->
     <string name="chat_no_chats_yet_hint">Możesz rozmawiać z innymi użytkownikami Delta Chat i z dowolnym adresem e-mail.</string>
     <string name="chat_all_archived">Wszystkie czaty zarchiwizowane.\nNaciśnij „+” aby rozpocząć nowy czat.</string>
     <string name="chat_share_with_title">Udostępnij</string>
@@ -440,8 +439,6 @@
     <string name="retry_send">Spróbuj ponownie wysłać wiadomość</string>
     <!-- reasons for a disabled message composer -->
     <string name="messaging_disabled_not_in_group">Nie możesz pisać, ponieważ nie jesteś w tej grupie. Aby dołączyć, poproś innego członka.</string>
-    <!-- deprecated, the line is removed on desktop (was never used on other OS) -->
-    <string name="messaging_disabled_device_chat">Ten czat zawiera wiadomości generowane lokalnie dlatego nie możesz pisać żadnych wiadomości.</string>
     <string name="messaging_disabled_mailing_list">Wysyłanie wiadomości w listach mailingowych nie jest jeszcze obsługiwane</string>
     <string name="cannot_display_unsuported_file_type">Nie można wyświetlić tego typu pliku: %s</string>
     <string name="attachment_failed_to_load">Nie udało się załadować załącznika</string>
@@ -533,6 +530,7 @@
     <string name="multidevice_same_network_hint">Upewnij się, że oba urządzenia są połączone z tym samym Wi-Fi lub siecią</string>
     <string name="multidevice_this_creates_a_qr_code">Spowoduje to utworzenie kodu QR, który kolejne urządzenie może zeskanować w celu skopiowania konta.</string>
     <string name="multidevice_install_dc_on_other_device">Zainstaluj Delta Chat na swoim kolejnym urządzeniu (https://get.delta.chat)</string>
+    <!-- "I Already Have a Login / Add as Second Device” should be the same text as defined by the keys onboarding_alternative_logins and multidevice_receiver_title -->
     <string name="multidevice_tap_scan_on_other_device">Uruchom Delta Chat, dotknij „Dodaj jako kolejne urządzenie” i zeskanuj pokazany tutaj kod</string>
     <!-- Shown inside a "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and/or address eg. "Scan to set up second device for Alice (alice@example.org)" -->
     <string name="multidevice_qr_subtitle">Zeskanuj, aby skonfigurować kolejne urządzenie dla %1$s</string>
@@ -578,11 +576,11 @@
     <string name="part_of_total_used">%1$s z %2$s </string>
 
 
-    <!-- welcome and login -->
-    <string name="welcome_chat_over_email">Rozmawiaj przez e-mail.</string>
     <string name="scan_invitation_code">Zeskanuj kod zaproszenia</string>
     <string name="login_title">Zaloguj się</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="login_header">Zaloguj się na swoje konto e-mail</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="login_explain">Zaloguj się przy użyciu istniejącego konta e-mail</string>
     <string name="login_subheader">Dla znanych dostawców usług poczty elektronicznej poniższe ustawienia są ustawiane automatycznie. Czasami IMAP musi być włączony w interfejsie WWW. O pomoc należy zwrócić się do usługodawcy e-mail lub znajomych.</string>
     <string name="login_no_servers_hint">Nie ma serwerów Delta Chat, Twoje dane pozostają na Twoim urządzeniu!</string>
@@ -648,6 +646,7 @@
     <string name="pref_profile_photo">Zdjęcie profilowe</string>
     <string name="pref_blocked_contacts">Zablokowane kontakty</string>
     <string name="blocked_empty_hint">Zablokowane kontakty, zostaną pokazane tutaj.</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="pref_password_and_account_settings">Hasło i konto</string>
     <string name="pref_who_can_see_profile_explain">Twoje zdjęcie profilowe i nazwa będą wyświetlane wraz z wiadomościami podczas komunikacji z innymi użytkownikami. Już wysłanych informacji nie można skasować ani usunąć.</string>
     <string name="pref_your_name">Twoja nazwa</string>
@@ -705,9 +704,9 @@
     <string name="pref_backup">Kopia zapasowa</string>
     <string name="pref_backup_explain">Wykonaj kopię zapasową czatów na pamięci zewnętrznej</string>
     <string name="pref_backup_export_explain">Kopia zapasowa pomaga skonfigurować nową instalację na tym lub na innym urządzeniu.\n\nKopia zapasowa będzie zawierała wszystkie wiadomości, kontakty i czaty oraz pełną konfigurację  funkcji automatycznego szyfrowania typu end-to-end. Przechowuj plik kopii zapasowej w bezpiecznym miejscu lub usuń go jak najszybciej.</string>
-    <!-- the placeholder will be replaced by the name of the account's email address -->
+    <!-- the placeholder will be replaced by the name of the profile's email address -->
     <string name="pref_backup_export_x">Eksportuj %1$s</string>
-    <!-- the placeholder will be replaced by the number of accounts to export; the number is always larger than 1 -->
+    <!-- the placeholder will be replaced by the number of profiles to export; the number is always larger than 1 -->
     <string name="pref_backup_export_all">Eksportuj wszystkie %1$d konta</string>
     <string name="pref_backup_export_start_button">Utwórz kopię</string>
     <string name="pref_backup_written_to_x">Kopia zapasowa została pomyślnie zapisana do %1$s</string>
@@ -726,6 +725,7 @@
     <string name="pref_imap_folder_warn_disable_defaults">Jeśli wyłączysz tę opcję, upewnij się, że twój serwer i inni klienci są odpowiednio skonfigurowani.\n\nW przeciwnym razie wszystko może w ogóle nie działać.</string>
     <string name="pref_watch_sent_folder">Pokaż katalog Wysłane</string>
     <string name="pref_send_copy_to_self">Wyślij kopię do siebie</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="pref_send_copy_to_self_explain">Wymagane kiedy korzystasz z tego konta na wielu urządzeniach.</string>
     <string name="pref_auto_folder_moves">Automatyczne przenoszenie do folderu DeltaChat</string>
     <string name="pref_auto_folder_moves_explain">Rozmowy na czacie są przenoszone, aby nie zaśmiecać folderu Skrzynka odbiorcza</string>
@@ -781,9 +781,9 @@
     <string name="reactions">Reakcje</string>
     <!-- Verb, the action of adding a "Reaction" to a message. Used eg. in context menus, similar to "Reply" or "Forward" -->
     <string name="react">Zareaguj</string>
-    <!-- %1$s will be replaced by an emoji. %2$s will be replaced by message summary. Eg. 'You reacted 👍 to "Found my suitcase"'. Use less than 20 characters, otherwise the string will be truncated too soon and no summary will be shown. Do not try to translate "reacted to" too strict. Depending on the language, "added 👍 to" or "gave 👍 to" or just "👍 to" may be shorter and/or clearer and work as well. -->
+    <!-- %1$s will be replaced by an emoji. %2$s will be replaced by message summary (the summary is often long and whole string gets truncated; words after %2$s will often not being visible). Eg. 'You reacted 👍 to "Found my suitcase"'. Use less than 20 characters, otherwise the string will be truncated too soon and too few information are shown. Do not try to translate "reacted to" too strict. Depending on the language, "added 👍 to" or "gave 👍 to" or just "👍 to" may be shorter and/or clearer and work as well. -->
     <string name="reaction_by_you">Zareagowano %1$s na „%2$s”</string>
-    <!-- %1$s will be replaced a name. %2$s will be replaced by an emoji. %3$s will be replaced by message summary. Eg. 'Alice reacted 👍 to "Nice photos"'. Use less than 20 characters, otherwise the string will be truncated too soon and no summary will be shown. Do not try to translate "reacted to" too strict. Depending on the language, "added 👍 to" or "gave 👍 to" or just "👍 to" may be shorter and/or clearer work as well. -->
+    <!-- %1$s will be replaced a name. %2$s will be replaced by an emoji. %3$s will be replaced by message summary (the summary is often long and whole string gets truncated; words after %3$s will often not being visible). Eg. 'Alice reacted 👍 to "Nice photos"'. Use less than 20 characters, otherwise the string will be truncated too soon and too few information are shown. Do not try to translate "reacted to" too strict. Depending on the language, "added 👍 to" or "gave 👍 to" or just "👍 to" may be shorter and/or clearer work as well. -->
     <string name="reaction_by_other">Użytkownik %1$s zareagował %2$s na „%3$s”</string>
 
     <!-- automatically delete message -->
@@ -811,7 +811,9 @@
     <string name="autodel_after_1_year">Po 1 roku</string>
 
     <!-- autocrypt -->
+    <!-- deprecated, used "Encryption" if a headline is needed -->
     <string name="autocrypt">Autocrypt</string>
+    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
     <string name="autocrypt_explain">Autocrypt to nowa i otwarta specyfikacja szyfrowania e-maili typu end-to-end.\n\nTwoja konfiguracja end-to-end w razie potrzeby jest tworzona automatycznie i można ją przesłać między urządzeniami za pomocą Wiadomości konfiguracyjnej automatycznego szyfrowania.</string>
     <string name="autocrypt_send_asm_title">Wyślij wiadomość konfiguracyjną Autocrypt</string>
     <string name="autocrypt_send_asm_explain_before">Wiadomość konfiguracyjna automatycznego szyfrowania” bezpiecznie udostępnia twoją konfigurację end-to-end innym aplikacjom zgodnym z Autocrypt. Klucz zostanie zaszyfrowany za pomocą wyświetlonego tutaj kodu konfiguracyjnego, który należy wpisać na drugim urządzeniu.</string>
@@ -922,6 +924,7 @@
     <string name="load_qr_code_as_image">Załaduj kod QR jako obraz</string>
     <string name="qrscan_title">Skanuj kod QR</string>
     <string name="qrscan_hint">Umieść aparat nad kodem QR</string>
+    <string name="qrscan_hint_desktop">Przysuń kod QR do kamery</string>
     <string name="qrscan_failed">Nie udało się zdekodować kodu QR</string>
     <string name="qrscan_ask_join_group">Czy chcesz dołączyć do grupy „%1$s?</string>
     <string name="qrscan_fingerprint_mismatch">Zeskanowany odcisk palca nie pasuje do odcisku palca ostatnio widzianego u %1$s</string>
@@ -950,15 +953,14 @@
     <string name="qrshow_join_contact_no_connection_toast">Brak połączenia z Internetem, nie można przeprowadzić konfiguracji kodu QR.</string>
     <string name="qraccount_ask_create_and_login">Utworzyć nowy adres e-mail „%1$s” i się zalogować?</string>
     <string name="qraccount_ask_create_and_login_another">Utworzyć nowy adres e-mail „%1$s” i się zalogować?\n\nTwoje istniejące konto nie zostanie usunięte. Użyj opcji „Przełącz konto”, aby przełączać się między kontami.</string>
-    <!-- deprecated, use set_name_and_avatar_explain instead -->
-    <string name="qraccount_success_enter_name">Logowanie powiodło się – twój adres e-mail to %1$s\n\nJeśli chcesz, możesz teraz wprowadzić nazwę i zdjęcie profilowe, które będą wyświetlane osobom, do których piszesz.</string>
     <string name="set_name_and_avatar_explain">Ustaw nazwę, którą rozpoznają twoje kontakty. Możesz także ustawić zdjęcie profilowe.</string>
     <string name="please_enter_name">Wpisz nazwę.</string>
     <string name="qraccount_qr_code_cannot_be_used">Zeskanowanego kodu QR nie można użyć do założenia nowego konta.</string>
+    <!-- deprecated -->
     <string name="qraccount_use_on_new_install">Zeskanowany kod QR służy do zakładania nowego konta. Możesz zeskanować kod QR podczas konfigurowania nowej instalacji Delta Chat.</string>
-    <!-- the placeholder will be replaced by the e-mail address of the account -->
+    <!-- the placeholder will be replaced by the e-mail address of the profile -->
     <string name="qrlogin_ask_login">Zalogować się do „%1$s”?</string>
-    <!-- the placeholder will be replaced by the e-mail address of the account -->
+    <!-- the placeholder will be replaced by the e-mail address of the profile -->
     <string name="qrlogin_ask_login_another">Zalogować się do „%1$s”?\n\nTwoje istniejące konto nie zostanie usunięte. Użyj opcji „Przełącz konto”, aby przełączyć się między swoimi kontami.</string>
     <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">Użytkownik %1$s zaprosił cię do dołączenia do tej grupy.\n\nCzekam na odpowiedź urządzenia %2$s…</string>
@@ -1054,12 +1056,13 @@
     <string name="export_backup_desktop">Eksport kopii zapasowej</string>
     <string name="autocrypt_correct_desktop">Pomyślnie przetransferowano konfigurację Autocrypt!</string>
     <string name="forget_login_confirmation_desktop">Usunąć ten login? Wszystko zostanie usunięte, w tym kompletna konfiguracja end-to-end, kontakty, czaty, wiadomości i multimedia. Ta akcja jest ostateczna i nie można jej odwrócić.</string>
+    <!-- deprecated -->
     <string name="account_info_hover_tooltip_desktop2">E-mail: %1$s\nRozmiar: %2$s\nID konta: %3$s</string>
     <string name="message_detail_sent_desktop">wysłane</string>
     <string name="message_detail_received_desktop">odebrane</string>
     <string name="menu.view.developer.open.log.folder">Otwórz folder dziennika</string>
     <string name="menu.view.developer.open.current.log.file">Otwórz bieżący plik dziennika</string>
-    <string name="explain_desktop_minimized_disabled_tray_pref">Ikona w zasobniku nie może być wyłączona, ponieważ Delta Chat został uruchomiony z opcją --minimized.</string>
+    <string name="explain_desktop_minimized_disabled_tray_pref" tools:ignore="TypographyDashes">Ikona w zasobniku nie może być wyłączona, ponieważ Delta Chat został uruchomiony z opcją --minimized.</string>
     <string name="no_spellcheck_suggestions_found">Nie znaleziono propozycji pisowni.</string>
     <string name="show_window">Pokaż okno</string>
     <string name="login_socks5_experimental_warning">Obsługa SOCKS5 jest obecnie eksperymentalna. Proszę używać na własne ryzyko. Jeśli wpiszesz adres w polu e-mail, nastąpi wyszukiwanie DNS, które nie będzie tunelowane przez SOCKS5.</string>
@@ -1136,9 +1139,6 @@
 
 
     <!-- device messages for updates -->
-    <string name="update_1_42_common">Co nowego:\n\n💌 czaty indywidualne gwarantują szyfrowanie end-to-end dla kontaktów oznaczonych zielonym znacznikiem\n\n😌 dla ułatwienia dla wszystkich oznaczamy te czaty również zielonymi znacznikami wyboru\n\n👥 grupy są tworzone automatycznie z gwarantowanym kompleksowym szyfrowaniem, jeśli to możliwe\n\n🔄 Zaakceptowany/Zablokowany, Zarchiwizowany, Przypięty, Wyciszony są synchronizowane na wszystkich twoich urządzeniach</string>
-    <!-- placeholder will be replaced by the URL https://get.delta.chat/#changelogs -->
-    <string name="update_1_42_android">Zwróć uwagę na więcej ulepszeń w aparacie, wiadomościach głosowych, tworzeniu kopii zapasowych, czytniku ekranu, tapetach dla poszczególnych kont, opcji wybierz wszystkie w galerii, krajobrazie webxdc … lub przeczytaj o nich pod adresem %1$s</string>
     <string name="update_1_44_android">Co nowego:\n\n❤️ Tak! To było długo oczekiwane: naciśnij i przytrzymaj wiadomość, aby zareagować\n\n🔗 Jeśli nie możesz zeskanować kodów QR, udostępnij go jako linki z zaproszeniem\n\n🔵 Nieprzeczytane wiadomości ze wszystkich kont są teraz zliczane i wyświetlane w tytule\n\n … i MNÓSTWO poprawek błędów… %1$s\n\nPomóż w ulepszaniu aplikacji: użyj opcji „Ustawienia » Zaawansowane » Wyślij statystyki”, aby pomóc programistom w lepszej optymalizacji pod kątem rzeczywistego użytkowania. Możesz sprawdzić dane przed wysłaniem</string>
     <string name="update_1_44_ios">Co nowego:\n\n❤️ Tak! To było długo oczekiwane: naciśnij i przytrzymaj wiadomości, aby zareagować\n\n🫸 Powiadomienia PUSH, jeśli są obsługiwane przez dostawców, takich jak https://nine.testrun.org\n\n🔗 Jeśli nie możesz zeskanować kodów QR, udostępnij go jako linki z zaproszeniem \n\n… i MNÓSTWO poprawek błędów…%1$s</string>
 </resources>

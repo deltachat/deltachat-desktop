@@ -1,8 +1,11 @@
 import React from 'react'
 
 import ImageSelector from '../../ImageSelector'
+import ImageCropper from '../../ImageCropper'
+
 import { LastUsedSlot } from '../../../utils/lastUsedPaths'
 import { avatarInitial } from '../../Avatar'
+import useDialog from '../../../hooks/dialog/useDialog'
 
 type Props = {
   addr?: string
@@ -22,13 +25,28 @@ export default function ProfileImageSelector({
 }: Props) {
   const initials = avatarInitial(displayName, addr)
 
+  const { openDialog } = useDialog()
+
   return (
     <ImageSelector
       color={color}
       filePath={profilePicture}
       initials={initials}
       lastUsedSlot={LastUsedSlot.ProfileImage}
-      onChange={setProfilePicture}
+      onChange={filepath => {
+        if (!filepath) {
+          setProfilePicture('')
+        } else {
+          openDialog(ImageCropper, {
+            filepath,
+            shape: 'circle',
+            onResult: setProfilePicture,
+            onCancel: () => {},
+            targetWidth: 256,
+            targetHeight: 256,
+          })
+        }
+      }}
     />
   )
 }

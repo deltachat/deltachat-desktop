@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- common strings without special context -->
     <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
@@ -284,8 +284,6 @@
     <string name="device_talk">Messages de l\'appareil</string>
     <string name="device_talk_subtitle">Messages générés localement</string>
     <string name="device_talk_explain">Les messages dans cette discussion sont générés localement par votre application Delta Chat. Cela vous permet de recevoir des informations concernant les mises à jour et problèmes rencontrés à l\'utilisation.</string>
-    <!-- deprecated, use device_talk_welcome_message2 instead -->
-    <string name="device_talk_welcome_message">Bienvenue sur Delta Chat ! – Delta Chat ressemble à d\'autres applications de messagerie populaires, mais n\'implique pas un contrôle centralisé, le traçage ou la revente de vos données, de celles de vos amis, vos collègues ou votre famille à de grandes organisations.\n\nD\'un point de vue technique, Delta Chat est une application de courrier électronique avec une interface de discussion instantanée moderne. Un courriel retoiletté si vous voulez 👻\n\nUtilisez Delta Chat avec n\'importe qui parmi des milliards de personnes : vous avez seulement besoin de leur adresse de courriel. Les destinataires n\'ont pas besoin d\'installer Delta Chat, d\'accéder à des sites internet ni de s\'inscrire où que ce soit – mais s\'ils le souhaitent, vous pouvez évidemment les diriger vers 👉 https://get.delta.chat </string>
     <string name="edit_contact">Mettre à jour le contact</string>
     <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
     <string name="pin_chat">Épingler la discussion</string>
@@ -405,6 +403,7 @@
     <string name="chat_record_slide_to_cancel">Glisser pour annuler</string>
     <string name="chat_record_explain">Appuyer et maintenir pour enregistrer un message vocal, relâcher pour l’envoyer</string>
     <string name="chat_no_chats_yet_title">Boîte de réception vide. Appuyer sur \"+\" pour commencer une nouvelle discussion.</string>
+    <!-- deprecated -->
     <string name="chat_no_chats_yet_hint">Vous pouvez discuter avec d\'autres utilisateurs de Delta Chat et avec n\'importe quelle adresse de courriel.</string>
     <string name="chat_all_archived">Toutes les discussions sont archivées.\nAppuyer sur \"+\" pour commencer une nouvelle discussion.</string>
     <string name="chat_share_with_title">Partager avec</string>
@@ -422,8 +421,6 @@
     <string name="retry_send">Réessayer d\'envoyer le message</string>
     <!-- reasons for a disabled message composer -->
     <string name="messaging_disabled_not_in_group">Vous ne pouvez pas écrire car vous ne faites pas partie de ce groupe. Pour le rejoindre, demandez à un membre.</string>
-    <!-- deprecated, the line is removed on desktop (was never used on other OS) -->
-    <string name="messaging_disabled_device_chat">Cette discussion contient des messages générés localement. Par conséquent, l\'écriture est désactivée.</string>
     <string name="messaging_disabled_mailing_list">Envoyer des messages dans des listes de diffusion n\'est pas encore possible</string>
     <string name="cannot_display_unsuported_file_type">Impossible d\'afficher ce type de fichier : %s</string>
     <string name="attachment_failed_to_load">Échec du chargement de la pièce jointe</string>
@@ -515,6 +512,7 @@
     <string name="multidevice_same_network_hint">Vérifiez que les deux appareils sont bien connectés au même Wi-Fi ou réseau.</string>
     <string name="multidevice_this_creates_a_qr_code">Crée un code QR que vous pouvez scanner avec le deuxième appareil pour copier le compte.</string>
     <string name="multidevice_install_dc_on_other_device">Installer Delta Chat sur votre autre appareil (https://get.delta.chat)</string>
+    <!-- "I Already Have a Login / Add as Second Device” should be the same text as defined by the keys onboarding_alternative_logins and multidevice_receiver_title -->
     <string name="multidevice_tap_scan_on_other_device">Lancez Delta Chat, appuyez sur \"Ajouter comme deuxième appareil\" et scannez le code affiché ici.</string>
     <!-- Shown inside a "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and/or address eg. "Scan to set up second device for Alice (alice@example.org)" -->
     <string name="multidevice_qr_subtitle">Scanner pour configurer un deuxième appareil pour %1$s</string>
@@ -560,11 +558,11 @@
     <string name="part_of_total_used">%1$s sur %2$s utilisé</string>
 
 
-    <!-- welcome and login -->
-    <string name="welcome_chat_over_email">Messagerie instantanée par courriel.</string>
     <string name="scan_invitation_code">Scanner le code d\'invitation</string>
     <string name="login_title">Connexion</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="login_header">Se connecter au compte courriel</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="login_explain">Se connecter avec un compte de courriel existant.</string>
     <string name="login_subheader">Pour les fournisseurs de courriel connus, des paramètres supplémentaires sont automatiquement configurés. Parfois, IMAP doit être activé dans l\'interface Web. Consultez votre fournisseur de courriel ou vos amis pour obtenir de l\'aide.</string>
     <string name="login_no_servers_hint">Il n\'y a pas de serveur Delta Chat, vos données restent sur votre appareil !</string>
@@ -630,6 +628,7 @@
     <string name="pref_profile_photo">Photo de profil</string>
     <string name="pref_blocked_contacts">Contacts bloqués</string>
     <string name="blocked_empty_hint">Si vous bloquez des contacts, ils seront affichés ici.</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="pref_password_and_account_settings">Mot de passe et compte</string>
     <string name="pref_who_can_see_profile_explain">Votre image de profil, votre nom et votre signature seront envoyés avec vos messages lorsque vous communiquerez avec d\'autres utilisateurs.</string>
     <string name="pref_your_name">Votre nom</string>
@@ -685,9 +684,9 @@
     <string name="pref_backup">Sauvegarde</string>
     <string name="pref_backup_explain">Sauvegarder les discussions sur un stockage externe</string>
     <string name="pref_backup_export_explain">Une sauvegarde vous aide à configurer une nouvelle installation sur cet appareil ou sur un autre.\n\nLa sauvegarde contiendra tous vos messages, tous vos contacts et toutes vos discussions, ainsi que vos paramètres de chiffrement de bout en bout Autocrypt. Conservez le fichier de sauvegarde dans un endroit sûr, ou supprimez-le aussitôt utilisé.</string>
-    <!-- the placeholder will be replaced by the name of the account's email address -->
+    <!-- the placeholder will be replaced by the name of the profile's email address -->
     <string name="pref_backup_export_x">Exporter %1$s</string>
-    <!-- the placeholder will be replaced by the number of accounts to export; the number is always larger than 1 -->
+    <!-- the placeholder will be replaced by the number of profiles to export; the number is always larger than 1 -->
     <string name="pref_backup_export_all">Exporter les %1$d comptes</string>
     <string name="pref_backup_export_start_button">Démarrer la sauvegarde</string>
     <string name="pref_backup_written_to_x">Sauvegarde effectuée avec succès sur %1$s</string>
@@ -706,6 +705,7 @@
     <string name="pref_imap_folder_warn_disable_defaults">Si vous désactivez cette option, assurez-vous que votre serveur et vos autres clients sont configurés en conséquence.\n\nSinon des choses pourraient ne pas fonctionner du tout.</string>
     <string name="pref_watch_sent_folder">Regarder le dossier Messages envoyés</string>
     <string name="pref_send_copy_to_self">M\'envoyer une copie</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="pref_send_copy_to_self_explain">Obligatoire pour utiliser ce compte sur plusieurs appareils.</string>
     <string name="pref_auto_folder_moves">Déplacer automatiquement vers le dossier DeltaChat</string>
     <string name="pref_auto_folder_moves_explain">Les discussions sont déplacées pour éviter d\'encombrer le dossier Boîte de réception</string>
@@ -781,7 +781,9 @@
     <string name="autodel_after_1_year">Après 1 année</string>
 
     <!-- autocrypt -->
+    <!-- deprecated, used "Encryption" if a headline is needed -->
     <string name="autocrypt">Autocrypt</string>
+    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
     <string name="autocrypt_explain">Autocrypt est une nouvelle spécification ouverte pour le chiffrement automatique de bout en bout des courriels.\n\nVotre configuration de bout en bout est créée automatiquement si nécessaire et vous pouvez la transférer entre vos appareils grâce aux messages de configuration Autocrypt.</string>
     <string name="autocrypt_send_asm_title">Envoyer le message de configuration Autocrypt</string>
     <string name="autocrypt_send_asm_explain_before">Un \"Message de configuration d\'Autocrypt\" partages en toute sécurité vos paramètres de bout-en-bout avec les autres applications conformes à Autocrypt.\n\nLa configuration sera chiffrée par un code d\'installation affiché ici et doit être saisi sur l\'autre appareil.</string>
@@ -915,13 +917,12 @@
     <string name="qrshow_join_contact_no_connection_toast">Pas de connexion Internet, ne peut pas effectuer la configuration du QR code.</string>
     <string name="qraccount_ask_create_and_login">Créer une nouvelle adresse de courriel sur « %1$s » et se connecter ici ?</string>
     <string name="qraccount_ask_create_and_login_another">Créer une nouvelle adresse de courriel sur « %1$s » et s\'y connecter ?\n\nVotre compte existant ne sera pas supprimé. Utilisez l\'élément de menu « Changer de compte » pour passer d\'un compte à l\'autre.</string>
-    <!-- deprecated, use set_name_and_avatar_explain instead -->
-    <string name="qraccount_success_enter_name">Connexion réussie – votre adresse de courriel est %1$s\n\nSi vous le souhaitez, vous pouvez maintenant choisir un nom et une image de profil qui seront affichés aux personnes à qui vous écrivez.</string>
     <string name="qraccount_qr_code_cannot_be_used">Le code QR scanné ne peut pas être utilisé pour ouvrir un nouveau compte.</string>
+    <!-- deprecated -->
     <string name="qraccount_use_on_new_install">Le code QR scanné permet de configurer un nouveau compte. Vous pouvez scanner le code QR à la configuration d\'une nouvelle installation de Delta Chat.</string>
-    <!-- the placeholder will be replaced by the e-mail address of the account -->
+    <!-- the placeholder will be replaced by the e-mail address of the profile -->
     <string name="qrlogin_ask_login">Se connecter au compte « %1$s » ?</string>
-    <!-- the placeholder will be replaced by the e-mail address of the account -->
+    <!-- the placeholder will be replaced by the e-mail address of the profile -->
     <string name="qrlogin_ask_login_another">Se connecter à « %1$s » ?\n\nVotre compte existant ne sera pas supprimé. Utiliser l\'élément de menu « Changer de compte » pour passer d\'un compte à l\'autre.</string>
     <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">%1$s vous a invité à rejoindre ce groupe.\n\nEn attente de la réponse de l’appareil de %2$s…</string>
@@ -1015,12 +1016,13 @@
     <string name="export_backup_desktop">Exporter la sauvegarde</string>
     <string name="autocrypt_correct_desktop">Configuration Autocrypt transférée.</string>
     <string name="forget_login_confirmation_desktop">Supprimer cette connexion ? Tout sera effacé, y compris vos paramètres de chiffrement de bout en bout, vos contacts, discussions, messages et fichiers multimédia. Cette action est irrévocable.</string>
+    <!-- deprecated -->
     <string name="account_info_hover_tooltip_desktop2">Adresse: %1$s\nTaille: %2$s\nID du compte: %3$s</string>
     <string name="message_detail_sent_desktop">envoyé</string>
     <string name="message_detail_received_desktop">reçu</string>
     <string name="menu.view.developer.open.log.folder">Ouvrir le dossier Journal</string>
     <string name="menu.view.developer.open.current.log.file">Ouvrir le fichier Journal courant</string>
-    <string name="explain_desktop_minimized_disabled_tray_pref">L\'icône système ne peut pas être enlevé car Delta Chat a été démarré avec l\'option --minimized.</string>
+    <string name="explain_desktop_minimized_disabled_tray_pref" tools:ignore="TypographyDashes">L\'icône système ne peut pas être enlevé car Delta Chat a été démarré avec l\'option --minimized.</string>
     <string name="no_spellcheck_suggestions_found">Aucune propositions de correction trouvées.</string>
     <string name="show_window">Afficher la fenêtre</string>
     <string name="login_socks5_experimental_warning">Le support de SOCK5 est actuellement expérimental. Utilisez le à vos risques et périls. Si vous saisissez une adresse de courriel, une requête DNS sera effectuée sans passer par SOCK5.</string>
@@ -1096,8 +1098,4 @@
     <string name="perm_enable_bg_already_done">Vous avez déjà autorisé Delta Chat à recevoir des messages en arrière plan.\n\nSi vous ne les recevez toujours pas en arrière plan, vérifiez les paramètres de votre système.</string>
 
 
-    <!-- device messages for updates -->
-    <string name="update_1_42_common">Nouveautés :\n\n💌 Désormais, les discussions à deux garantissent le chiffrement de bout en bout avec les contacts connus.\n\n😌 Pour plus de simplicité, ces contacts et discussions sont marqués d\'un badge vert.\n\n👥 Lorsque cela est possible, les groupes créés sont automatiquement chiffrés de bout en bout.\n\n🔄 Vos listes Accepté/Bloqué, Archivé, Épinglé et Sourdine sont synchronisées sur chacun de vos appareils.</string>
-    <!-- placeholder will be replaced by the URL https://get.delta.chat/#changelogs -->
-    <string name="update_1_42_android">Encore plus d\'améliorations à suivre ! Appareil photo, messages vocaux, sauvegardes complètes, lecteur d\'écran, arrière-plan différencié pour chaque compte, option \"sélectionner tout\" dans la galerie, panorama de webxdc, etc. Sinon, retrouvez-les toutes sur : %1$s</string>
     </resources>

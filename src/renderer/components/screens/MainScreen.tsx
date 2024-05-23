@@ -30,6 +30,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { ChatView } from '../../contexts/ChatContext'
 import { KeybindAction } from '../../keybindings'
 import { selectedAccountId } from '../../ScreenController'
+import { openMapWebxdc } from '../../system-integration/webxdc'
 
 import type { T } from '@deltachat/jsonrpc-client'
 
@@ -68,6 +69,10 @@ export default function MainScreen({ accountId }: Props) {
   useKeyBindingAction(KeybindAction.GlobalGallery_Open, () => {
     unselectChat()
     setAlternativeView('global-gallery')
+  })
+  useKeyBindingAction(KeybindAction.GlobalMap_Open, () => {
+    unselectChat()
+    openMapWebxdc()
   })
 
   const onChatClick = (chatId: number) => {
@@ -134,12 +139,10 @@ export default function MainScreen({ accountId }: Props) {
   const [threeDotMenuHidden, setthreeDotMenuHidden] = useState(false)
   const updatethreeDotMenuHidden = useCallback(() => {
     setthreeDotMenuHidden(
-      activeView === ChatView.Map ||
-        ((alternativeView === 'global-gallery' ||
-          activeView === ChatView.Media) &&
-          !['images', 'video'].includes(
-            galleryRef.current?.state.currentTab || ''
-          ))
+      (alternativeView === 'global-gallery' || activeView === ChatView.Media) &&
+        !['images', 'video'].includes(
+          galleryRef.current?.state.currentTab || ''
+        )
     )
   }, [activeView, alternativeView])
   useEffect(() => {
@@ -351,7 +354,7 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
 
 function ChatNavButtons() {
   const tx = useTranslationFunction()
-  const { activeView, setChatView } = useChat()
+  const { activeView, setChatView, chatId } = useChat()
   const settingsStore = useSettingsStore()[0]
 
   return (
@@ -378,8 +381,8 @@ function ChatNavButtons() {
             minimal
             large
             icon='map'
-            onClick={() => setChatView(ChatView.Map)}
-            active={activeView === ChatView.Map}
+            onClick={() => openMapWebxdc(chatId)}
+            active={activeView === ChatView.Media}
             aria-label={tx('tab_map')}
           />
         )}

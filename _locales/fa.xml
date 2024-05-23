@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- common strings without special context -->
     <string name="app_name">دلتاچت</string>
     <string name="ok">تأیید</string>
@@ -270,9 +270,6 @@
     <string name="device_talk">پیام‌های دستگاه</string>
     <string name="device_talk_subtitle">پیام‌های  داخلی</string>
     <string name="device_talk_explain">پیام‌ها در این گپ به صورت داخلی و توسط نرم‌افزار دلتاچت تولید شده‌اند. سازنده‌ها از این محل برای اعلان به روز‌رسانی‌ها و مشکلات پیش آمده حین کار استفاده می‌کنند. </string>
-    <!-- deprecated, use device_talk_welcome_message2 instead -->
-    <string name="device_talk_welcome_message">به دلتاچت خوش آمدید! - دلتاچت حال و هوای دیگر پیام‌رسان‌ها را دارد ولی هیچ کنترل مرکزی‌ای در آن وجود ندارد و اطلاعات شما، دوستان و خانوادهٔ شما به سازمان‌های بزرگ فروخته نمی‌شود. \n\nدر واقع دلتاچت یک نرم‌افزار رایانامه با یک رابط گرافیکی نوین است. در واقع رایانامه در یک لباس جدید. \n\n می‌توانید دلتاچت را برای ارتباط با هر فرد از میلیاردها نفر استفاده کنید: فقط کافی است از نشانی رایانامهٔ آن‌ها استفاده کنید. مخاطب نیاز نیست نرم‌افزار دلتاچت را نصب کند، وارد وبگاه خاصی شود یا جایی نام‌نویسی کند؛ ولی اگر دوست داشتید می‌توانید آن‌ها را به این‌جا راهنمایی کنید
- https://get.delta.chat 👉</string>
     <string name="edit_contact">ویرایش مخاطب</string>
     <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
     <string name="pin_chat">سنجاق کردن گپ</string>
@@ -387,6 +384,7 @@ https://meet.jit.si/$ROOM
     <string name="chat_record_slide_to_cancel">برای لغو بکشید.</string>
     <string name="chat_record_explain">برای ضبط پیام صوتی فشار داده و نگهدارید، برای ارسال رها کنید. </string>
     <string name="chat_no_chats_yet_title">جعبهٔ ورودی خالی. \n برای شروع گپ جدید «+» را فشار دهید.</string>
+    <!-- deprecated -->
     <string name="chat_no_chats_yet_hint">می‌توانید با دیگر کاربران دلتاچت و هر نشانی رایانامه‌ای گپ بزنید.</string>
     <string name="chat_all_archived">تمام گپ‌ها بایگانی شده‌اند. /n برای شروع گپ جدید، «+» را فشار دهید. </string>
     <string name="chat_share_with_title">اشتراک گذاری با</string>
@@ -404,8 +402,6 @@ https://meet.jit.si/$ROOM
     <string name="retry_send">برای ارسال پیام دوباره تلاش کنید. </string>
     <!-- reasons for a disabled message composer -->
     <string name="messaging_disabled_not_in_group">نمی‌توانید بنویسید چرا که در این گروه نیستید. برای عضو شدن از یکی از اعضا درخواست کنید. </string>
-    <!-- deprecated, the line is removed on desktop (was never used on other OS) -->
-    <string name="messaging_disabled_device_chat">این گپ شامل پیام‌های تولید شده به صورت داخلی است. برای همین نمی‌توانید پیامی بنویسید. </string>
     <string name="messaging_disabled_mailing_list">ارسال پیام در فهرست‌های پستی فعلاً پشتیبانی نمی‌شود.</string>
     <string name="cannot_display_unsuported_file_type">امکان نمایش این نوع پرونده وجود ندارد: %s</string>
     <string name="attachment_failed_to_load">ناموفق در بارگیری ضمیمه</string>
@@ -493,6 +489,7 @@ https://meet.jit.si/$ROOM
     <string name="multidevice_same_network_hint">مطمئن شوید هر دو دستگاه در یک وای‌فای یا شبکه هستند</string>
     <string name="multidevice_this_creates_a_qr_code">این یک کد QR ایجاد می‌کند که دستگاه دوم می‌تواند برای کپی حساب اسکن کند.</string>
     <string name="multidevice_install_dc_on_other_device">دلتاچت را روی دستگاه دیگر خود نصب کنید (https://get.delta.chat)</string>
+    <!-- "I Already Have a Login / Add as Second Device” should be the same text as defined by the keys onboarding_alternative_logins and multidevice_receiver_title -->
     <string name="multidevice_tap_scan_on_other_device">دلتاچت را اجرا کنید، روی «افزودن به عنوان دستگاه دوم» بزنید و کد نشان داده شده در اینجا را پویش کنید</string>
     <!-- Shown inside a "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and/or address eg. "Scan to set up second device for Alice (alice@example.org)" -->
     <string name="multidevice_qr_subtitle">برای راه اندازی دستگاه دوم برای %1$s اسکن کنید</string>
@@ -538,11 +535,11 @@ https://meet.jit.si/$ROOM
     <string name="part_of_total_used">مقدار %1$s از %2$s استفاده شده است. </string>
 
 
-    <!-- welcome and login -->
-    <string name="welcome_chat_over_email">روی رایانامه گپ بزنید.</string>
     <string name="scan_invitation_code">اسکن کردن کد دعوت</string>
     <string name="login_title">ورود</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="login_header">به سرور خود وارد شوید</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="login_explain">ورود با یک رایانامه موجود</string>
     <string name="login_subheader">برای ارائه‌دهندگان شناخته شده تنظبمات اضافه به صورت خودکار انجام می‌شود. گاهی اوقات IMAP باید در تنظیمات رایانامهٔ شما فعال شود. از ارائه‌دهندهٔ رایانامه یا دوستانتان در این مورد کمک بگیرید.</string>
     <string name="login_no_servers_hint">دلتاچت هیچ سروری ندارد، داده‌های شما در دستگاه شما باقی می‌ماند.</string>
@@ -610,6 +607,7 @@ https://meet.jit.si/$ROOM
     <string name="pref_profile_photo">تصویر نمایه</string>
     <string name="pref_blocked_contacts">مخاطبین مسدود شده</string>
     <string name="blocked_empty_hint">اگر مخاطبی را مسدود کنید اینجا نمایش داده می‌شود</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="pref_password_and_account_settings">رمزعبور و حساب کاربری</string>
     <string name="pref_who_can_see_profile_explain">وقتی با دیگر کاربران گپ می‌زنید، تصویر نمایه، نام و امضایتان در کنار پیام‌هایتان فرستاده می‌شوند.</string>
     <string name="pref_your_name">اسم شما</string>
@@ -680,6 +678,7 @@ https://meet.jit.si/$ROOM
     <string name="pref_imap_folder_warn_disable_defaults">اگر این گزینه را غیر فعال می‌کنید از اینکه سرور شما و حساب‌هایتان هم بر این اساس تنظیم شده باشند.\n\n در غیر این صورت ممکن است هیچ چیز کار نکند. </string>
     <string name="pref_watch_sent_folder">پوشه ارسال شده‌ها را نگاه کن</string>
     <string name="pref_send_copy_to_self">ارسال رونوشت به خودم</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="pref_send_copy_to_self_explain">درصورت استفاده از این حساب در چند دستگاه مورد نیاز است. </string>
     <string name="pref_auto_folder_moves">انتقال خودکار به پوشه دلتاچت</string>
     <string name="pref_auto_folder_moves_explain">گپ‌ها برای جلوگیری از پر شدن صندوق ورودی جابه‌جا شدند</string>
@@ -753,7 +752,9 @@ https://meet.jit.si/$ROOM
     <string name="autodel_after_1_year">بعد از ۱ سال</string>
 
     <!-- autocrypt -->
+    <!-- deprecated, used "Encryption" if a headline is needed -->
     <string name="autocrypt">اتوکریپت</string>
+    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
     <string name="autocrypt_explain">اتوکریپت  یک ویژگی جدید و باز برای رمزگذاری سرتاسر خودکار رایانامه است.\n\n تنظیمات رمزگذاری سرتاسر در هنگام نیاز به صورت خودکار ایجاد می‌شود و می‌توانید آن را  با پیام‌های تنظیم اتوکریپت بین دستگاه‌ها انتقال دهید. </string>
     <string name="autocrypt_send_asm_title">ارسال پیام برپاسازی اتوکریپت</string>
     <string name="autocrypt_send_asm_explain_before">پیام برپاسازی اتوکریپت تنظیمات رمزگذاری سرتاسر شما را به شکلی امن با دیگر برنامه‌ها به اشتراک می‌گذارد.\n\n تنظیمات با یک کد برپاسازی که در اینجا نمایش داده می‌شود رمزگذاری می‌شوند و باید در دستگاه دیگر تایپ شود. </string>
@@ -887,13 +888,12 @@ https://meet.jit.si/$ROOM
     <string name="qraccount_ask_create_and_login">ایجاد رایانامهٔ جدید روی «%1$s» و ورود به آنجا؟</string>
     <string name="qraccount_ask_create_and_login_another">نشانی جدید رایانامه روی «%1$s» ایجاد شده  و به آن وارد شود؟
  حساب فعلی شما پاک نمی‌شود. از بخش «تغییر حساب کاربری» برای جابجایی بین حساب‌ها استفاده کنید</string>
-    <!-- deprecated, use set_name_and_avatar_explain instead -->
-    <string name="qraccount_success_enter_name">ورود موفق—نشانی رایانامهٔ شما %1$sاست.\n\n اگر دوست دارید می‌توانید اکنون یک نام وارد کرده و تصویر نمایه‌ای که هنگام نوشتن برای دیگران نشان داده می‌شود را انتخاب نمایید. </string>
     <string name="qraccount_qr_code_cannot_be_used">این کد کیوآر اسکن شده را نمی‌توان برای راه اندازی اکانت جدید استفاده کرد. </string>
+    <!-- deprecated -->
     <string name="qraccount_use_on_new_install">کد کیوآر اسکن شده برای راه اندازی یک اکانت جدید است. می‌توانید در حال تنظیم یک دلتاچت تازه نصب شده کیوآر  را اسکن کنید.</string>
-    <!-- the placeholder will be replaced by the e-mail address of the account -->
+    <!-- the placeholder will be replaced by the e-mail address of the profile -->
     <string name="qrlogin_ask_login">آیا به \"%1$s\" وارد شوید؟</string>
-    <!-- the placeholder will be replaced by the e-mail address of the account -->
+    <!-- the placeholder will be replaced by the e-mail address of the profile -->
     <string name="qrlogin_ask_login_another">آیا به \"%1$s\" وارد شوید؟\n\nحساب موجود شما حذف نخواهد شد. برای جابه‌جایی میان حساب‌هایتان از \"تغییر حساب\" استفاده کنید.</string>
     <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">کاربر %1$s شما را دعوت کرده است تا عضو این گروه شوید.
@@ -1002,6 +1002,7 @@ GNU GPL ورژن ۳
     <string name="export_backup_desktop">صادر کردن نسخه پشتیبان</string>
     <string name="autocrypt_correct_desktop">برپاسازی اتوکریپت انتقال یافت.</string>
     <string name="forget_login_confirmation_desktop">پاک کردن این ورود؟ همه‌چیز پاک می‌شود که شامل رمزگذاری سرتاسر، مخاطبین، گپ‌ها، پیام‌ها و رسانه می‌شود. این عملیات قابل بازگردانی نیست.</string>
+    <!-- deprecated -->
     <string name="account_info_hover_tooltip_desktop2">رایانامه: %1$s
 فضا: %2$s
 شناسه حساب:‌%3$s</string>
@@ -1009,7 +1010,7 @@ GNU GPL ورژن ۳
     <string name="message_detail_received_desktop">دریافت شد</string>
     <string name="menu.view.developer.open.log.folder">پوشه گزارش را باز کن</string>
     <string name="menu.view.developer.open.current.log.file">پوشه گزارش فعلی را باز کن</string>
-    <string name="explain_desktop_minimized_disabled_tray_pref">چون دلتاچت با تنظیمات --زیرصفحه شروع به کار کرده است نمی‌توان نمادک زیر صفحه را غیر فعال کرد. </string>
+    <string name="explain_desktop_minimized_disabled_tray_pref" tools:ignore="TypographyDashes">چون دلتاچت با تنظیمات --زیرصفحه شروع به کار کرده است نمی‌توان نمادک زیر صفحه را غیر فعال کرد. </string>
     <string name="no_spellcheck_suggestions_found">هیچ پیشنهادی برای املا پیدا نشد</string>
     <string name="show_window">نمایش پنجره</string>
     <string name="login_socks5_experimental_warning">پشتیبانی از قابلیت SOCKS5 هنوز آزمایشی است. لطفا در صورت استفاده،‌خطرات را بپذیرید. اگر یک آدرس را در بخش رایانامه وارد کنید همچنان  DNS lookup  رخ می‌دهد که ممکن است از طریق SOCKS5 صورت نگیرد. </string>

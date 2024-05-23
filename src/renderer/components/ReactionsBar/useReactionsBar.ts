@@ -6,7 +6,10 @@ import { ReactionsBarContext } from '.'
 import type { ShowReactionBar, ReactionsBarValue } from './ReactionsBarContext'
 import type { T } from '@deltachat/jsonrpc-client'
 
-type UseReactionsBar = Pick<ReactionsBarValue, 'hideReactionsBar'> & {
+type UseReactionsBar = Pick<
+  ReactionsBarValue,
+  'hideReactionsBar' | 'isReactionsBarShown'
+> & {
   showReactionsBar: (
     args: Pick<ShowReactionBar, 'messageId' | 'x' | 'y'> & {
       reactions: T.Message['reactions']

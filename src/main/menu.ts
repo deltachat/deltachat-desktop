@@ -1,19 +1,23 @@
 import { BrowserWindow, Menu, shell } from 'electron'
+import { readFileSync } from 'fs'
+import { basename, join, dirname } from 'path'
+import { fileURLToPath } from 'url'
+
 import {
   gitHubIssuesUrl,
   gitHubUrl,
   homePageUrl,
   appWindowTitle,
-} from '../shared/constants'
-import { getLogger } from '../shared/logger'
-import { getConfigPath, getLogsPath } from './application-constants'
-import { LogHandler } from './log-handler'
-import * as mainWindow from './windows/main'
-import { readFileSync } from 'fs'
-import { basename, join } from 'path'
-import { DesktopSettings } from './desktop_settings'
-import { getCurrentLocaleDate, tx } from './load-translations'
-import { appx, getAppxPath } from './isAppx'
+} from '../shared/constants.js'
+import { getLogger } from '../shared/logger.js'
+import { getConfigPath, getLogsPath } from './application-constants.js'
+import { LogHandler } from './log-handler.js'
+import * as mainWindow from './windows/main.js'
+import { DesktopSettings } from './desktop_settings.js'
+import { getCurrentLocaleDate, tx } from './load-translations.js'
+import { appx, getAppxPath } from './isAppx.js'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const log = getLogger('main/menu')
 

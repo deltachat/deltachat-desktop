@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- common strings without special context -->
     <string name="app_name">Delta Chat</string>
     <string name="ok">Souhlas</string>
@@ -280,8 +280,6 @@
     <string name="device_talk">Zprávy přístroje</string>
     <string name="device_talk_subtitle">Samovytvořené zprávy</string>
     <string name="device_talk_explain">Zprávy v tomto hovoru jsou vytvořeny aplikací Delta Chat. Její tvůrci tak informují o aktualizacích a potížích při používání.</string>
-    <!-- deprecated, use device_talk_welcome_message2 instead -->
-    <string name="device_talk_welcome_message">Vítej v Delta Chatu! – Delta Chat se chová jako všeobecně známé chatovací aplikace, ale bez centralizované kontroly, sledování. Neprodává zážitky tvých přátel, kolegů, rodiny ani tvé vlastní velkým organizacím.\n\nTechnicky je Delta Chat e-mailový program, ale s uživatelským rozhraním chatu. Převlečený e-mail, chceš-li. Delta Chat používej s kýmkoli z miliard lidí; prostě použij jejich e-mailovou adresu. Příjemce si nemusí Delta Chat instalovat, ani se přihlašovat přes nové webové stránky. Můžeš je však, budou-li chtít, odkázat na 👉 https://get.delta.chat</string>
     <string name="edit_contact">Uprav kontakt</string>
     <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
     <string name="pin_chat">Připíchni chat</string>
@@ -390,6 +388,7 @@
     <string name="chat_record_slide_to_cancel">Zrušit tahem</string>
     <string name="chat_record_explain">K nahrání hlasové zprávy stiskni a drž mikrofon, uvolni pro odeslání.</string>
     <string name="chat_no_chats_yet_title">Prázdná schránka.\nStiskem \"+\" založ nový chat.</string>
+    <!-- deprecated -->
     <string name="chat_no_chats_yet_hint">Založ chat s jakýmkoli uživatelem Delta Chatu a s jakýmkoli e-mailem.</string>
     <string name="chat_all_archived">Všechny chaty archivovány.\nStiskem \"+\" založ nový chat.</string>
     <string name="chat_share_with_title">Sdílet s</string>
@@ -405,8 +404,6 @@
     <string name="retry_send">Opakuj pokus o zaslání zprávy</string>
     <!-- reasons for a disabled message composer -->
     <string name="messaging_disabled_not_in_group">Nelze psát protože nejsi členem této skupiny. O přidání požádej jiného člena.</string>
-    <!-- deprecated, the line is removed on desktop (was never used on other OS) -->
-    <string name="messaging_disabled_device_chat">Tento chat obsahuje samočinně vytvořené zprávy. Proto nelze psát vlastní zprávy.</string>
     <string name="cannot_display_unsuported_file_type">Nelze zobrazit tento typ souboru: %s</string>
     <string name="attachment_failed_to_load">Nezdařilo se načíst přílohu</string>
     <!-- mailing lists -->
@@ -458,11 +455,12 @@
     <string name="media_preview">Náhled multimedia</string>
     <string name="send_message">Pošli zprávu</string>
     <string name="multidevice_install_dc_on_other_device">Nainstalujte si Delta Chat do druhého zařízení (https://get.delta.chat)</string>
+    <!-- "I Already Have a Login / Add as Second Device” should be the same text as defined by the keys onboarding_alternative_logins and multidevice_receiver_title -->
     <string name="multidevice_tap_scan_on_other_device">Spusťte Delta Chat, klepněte na „Přidat jako druhé zařízení“ a naskenujte zde zobrazený kód</string>
-    <!-- welcome and login -->
-    <string name="welcome_chat_over_email">Chat přes e-mail.</string>
     <string name="login_title">Přihlaš se</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="login_header">Přihlaš se na váš server</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="login_explain">Přihlásit se se stávajícím účtem pro e-mail.</string>
     <string name="login_subheader">Pro standardní poskytovatele jsou nastavení dopněna samočinně. Někdy je potřeba umožnit IMAP ve webovém rozhraní nastavení. Obraťte se na poskytovatele e-mailu nebo přátele.</string>
     <string name="login_no_servers_hint">Delta Chat nemá žádné vlastní servery, tvá data zůstávají na tvém přístroji.</string>
@@ -518,6 +516,7 @@
     <string name="pref_profile_photo">Obrázek profilu</string>
     <string name="pref_blocked_contacts">Blokované kontakty</string>
     <string name="blocked_empty_hint">Zablokované kontakty se zobrazí zde.</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="pref_password_and_account_settings">Heslo a účet</string>
     <string name="pref_who_can_see_profile_explain">Tvůj profilový obrázek a jméno budou zobrazeny vedle zpráv poslaných ostatním uživatelům. Data která jsou již jednou odeslaná nelze smazat ani odstranit. </string>
     <string name="pref_your_name">Tvé jméno</string>
@@ -645,7 +644,9 @@
     <string name="autodel_after_1_year">Po 1 roce</string>
 
     <!-- autocrypt -->
+    <!-- deprecated, used "Encryption" if a headline is needed -->
     <string name="autocrypt">Autocrypt</string>
+    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
     <string name="autocrypt_explain">Autocrypt je nový, otevřený technický popis samočinného end-to-end šifrování.\n\nNastavení šifrování se vytváří samočinně dle potřeby a mužeš si ho přenášet mezi zařízeními zasláním zprávy s Nastavením Autocryptu.</string>
     <string name="autocrypt_send_asm_title">Pošli Nastavení Autocryptu</string>
     <string name="autocrypt_send_asm_explain_before">Pomocí Nastavení Autocryptu lze bezpečně sdílet nastavení šifrování této aplikace s jinou, která také používá Autocrypt.\n\nNastavení je zašifrované zobrazeným kódem, který musí být vložen i na druhém zařízení.</string>
@@ -752,9 +753,8 @@
     <string name="qrshow_join_contact_no_connection_toast">Nejsi připojen k Internetu. Nastavení QR kódem nelze provést. </string>
     <string name="qraccount_ask_create_and_login">Vytvořit nový e-mail na \"%1$s\" a připojit se k němu?</string>
     <string name="qraccount_ask_create_and_login_another">Vytvořit nový e-mail na \"%1$s\" a připojit se k němu?\n\nTvůj původní ůčet nebude smazán. Použij \"Přepni účet\" k přepnutí na jiný účet.</string>
-    <!-- deprecated, use set_name_and_avatar_explain instead -->
-    <string name="qraccount_success_enter_name">Úspěšné přihlášení - tvůj e-mail je %1$s\n\nNyní můžeš zadat jméno a profilový obrázek. Ty se budou zobrazovat lidem, kterým budeš posílat zprávy.</string>
     <string name="qraccount_qr_code_cannot_be_used">Sejmutý QR kód neumožňuje nastavení nového účtu.</string>
+    <!-- deprecated -->
     <string name="qraccount_use_on_new_install">Sejmutý QR kód je k nastavení nového účtu. Tento QR kód můžeš použít když budeš provádět novou instalaci Delta Chatu.</string>
     <string name="contact_verified">%1$s ověřen.</string>
     <string name="contact_not_verified">Nelze ověřit %1$s.</string>
@@ -827,7 +827,7 @@
     <string name="message_detail_received_desktop">přijato</string>
     <string name="menu.view.developer.open.log.folder">Otevři složku se záznamem běhu</string>
     <string name="menu.view.developer.open.current.log.file">Otevři stávající záznam běhu</string>
-    <string name="explain_desktop_minimized_disabled_tray_pref">Ikonu na panelu nelze deaktivovat, protože Delta Chat byl spuštěn s možností --minimized.</string>
+    <string name="explain_desktop_minimized_disabled_tray_pref" tools:ignore="TypographyDashes">Ikonu na panelu nelze deaktivovat, protože Delta Chat byl spuštěn s možností --minimized.</string>
     <string name="switch_between_chats">Přepínání mezi chaty</string>
     <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">Stav doručení: Chyba</string>
@@ -865,6 +865,4 @@
     <string name="perm_enable_bg_already_done">Přijímání zpráv na pozadí je Delta Chatu již povoleno.\n\nV případě nepřicházení nových zpráv si prosím zkontroluj své systémové nastavení.</string>
 
 
-    <!-- device messages for updates -->
-    <string name="update_1_42_common">Co je nového:\n\n💌 individuální chaty zaručují end-to-end šifrování kontaktů se zeleným zaškrtnutím\n\n😌 pro jednoduchost všechny tyto chaty označujeme také zeleným zaškrtnutím\n\n👥 skupiny jsou vytvářeny automaticky se zaručeným end-to-end šifrováním, pokud je to možné\n\n🔄 Přijmout/Zablokovat, Archivováno, Připnuto, Ztlumit se synchronizuje na všech vašich zařízeních </string>
     </resources>

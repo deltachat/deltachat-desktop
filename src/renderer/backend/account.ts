@@ -8,8 +8,3 @@ export async function getConfiguredAccounts(): Promise<T.Account[]> {
     return account.kind === 'Configured'
   })
 }
-
-export async function isAccountConfigured(accountId: number): Promise<boolean> {
-  const account = await BackendRemote.rpc.getAccountInfo(accountId)
-  return account.kind === 'Configured'
-}

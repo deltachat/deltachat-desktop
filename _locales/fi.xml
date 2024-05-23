@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- common strings without special context -->
     <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
@@ -249,8 +249,6 @@
     <string name="device_talk">Laitteen viestit</string>
     <string name="device_talk_subtitle">Paikallisesti luodut viestit</string>
     <string name="device_talk_explain">Viestit tässä keskustelussa luodaan paikallisesti Delta Chat -sovelluksessa. Kehittäjät ilmoittavat niiden avulla sovelluksen päivityksistä ja mahdollisista ongelmista.</string>
-    <!-- deprecated, use device_talk_welcome_message2 instead -->
-    <string name="device_talk_welcome_message">Tervetuloa Delta Chatiin! – Delta Chat näyttää ja tuntuu samalta kuin suositut pikaviestintäsovellukset, kuitenkin ilman keskitettyä kontrollia, seurantaa tai käyttäjien tietojen myymistä isoille yrityksille.\n\nTeknisesti Delta Chat on sähköpostisovellus nykyaikaisella pikaviestikäyttöliittymällä. Sähköposti uusissa vaatteissa, jos niin voi sanoa 👻\n\nDelta Chat toimii miljardien ihmisten kanssa: lähetä vain viesti heidän sähköpostiosoitteeseensa. Viestien vastaanottajien ei tarvitse asentaa Delta Chatia, käydä nettisivustoilla tai liittyä mihinkään - paitsi jos he haluavat. Silloin voit ohjata heidät osoitteeseen 👉 https://get.delta.chat</string>
     <string name="edit_contact">Muokkaa yhteystietoa</string>
     <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
     <string name="pin_chat">Kiinnitä keskustelu</string>
@@ -360,6 +358,7 @@
     <string name="chat_record_slide_to_cancel">Pyyhkäise peruuttaaksesi</string>
     <string name="chat_record_explain">Pidä painettuna nauhoittaaksesi ääniviestin, irrota lähettääksesi</string>
     <string name="chat_no_chats_yet_title">Saapuneet-kansio on tyhjä\nPaina \"+\" aloittaaksesi uuden keskustelun.</string>
+    <!-- deprecated -->
     <string name="chat_no_chats_yet_hint">Voit keskustella Delta Chat -käyttäjien kanssa tai minkä tahansa sähköpostiosoitteen kanssa.</string>
     <string name="chat_all_archived">Kaikki keskustelut arkistoitu.\nPaina \"+\" aloittaaksesi uuden keskustelun.</string>
     <string name="chat_share_with_title">Jaa</string>
@@ -377,8 +376,6 @@
     <string name="retry_send">Yritä uudelleen lähettääksesi viestin</string>
     <!-- reasons for a disabled message composer -->
     <string name="messaging_disabled_not_in_group">Et voi kirjoittaa, koska et ole ryhmän jäsen. Liittyäksesi pyydä, että joku jäsen liittää sinut ryhmään.</string>
-    <!-- deprecated, the line is removed on desktop (was never used on other OS) -->
-    <string name="messaging_disabled_device_chat">Tämän keskustelun viestit on luotu paikallisesti. Et voi kirjoittaa viestejä tänne.</string>
     <string name="messaging_disabled_mailing_list">Sähköpostilistoille vastaamista ei vielä tueta</string>
     <string name="cannot_display_unsuported_file_type">Tiedostotyypin näyttäminen epäonnistui: %s</string>
     <string name="attachment_failed_to_load">Liitteiden lataaminen epäonnistui</string>
@@ -476,11 +473,11 @@
     <string name="part_of_total_used">%1$s / %2$s käytössä</string>
 
 
-    <!-- welcome and login -->
-    <string name="welcome_chat_over_email">Chattaa sähköpostilla.</string>
     <string name="scan_invitation_code">Skannaa kutsukoodi</string>
     <string name="login_title">Kirjaudu sisään</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="login_header">Kirjaudu palvelimellesi</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="login_explain">Kirjaudu olemassa olevalla sähköpostitilillä</string>
     <string name="login_subheader">Tunnetuille sähköpostipalveluntarjoajille muut asetukset luodaan automaattisesti. Joskus IMAP täytyy laittaa päälle verkkoasetuksissa. Kysy apua palveluntarjoajaltasi tai ystäviltäsi.</string>
     <string name="login_no_servers_hint">Delta Chatilla ei ole palvelimia, tietosi säilyvät sinun laitteellasi.</string>
@@ -546,6 +543,7 @@
     <string name="pref_profile_photo">Profiilikuva</string>
     <string name="pref_blocked_contacts">Estetyt yhteystiedot</string>
     <string name="blocked_empty_hint">Estämäsi yhteystiedot näkyvät tässä</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="pref_password_and_account_settings">Salasana ja tili</string>
     <string name="pref_who_can_see_profile_explain">Profiilikuvasi, nimesi ja allekirjoituksesi lähetetään yhdessä viestiesi kanssa muille käyttäjille.</string>
     <string name="pref_your_name">Nimesi</string>
@@ -616,6 +614,7 @@
     <string name="pref_imap_folder_warn_disable_defaults">Jos poistat tämän asetuksen käytöstä, varmista, että palvelimessasi ja muissa asiakasohjelmissasi on oikeat asetukset.\n\nMuuten ne eivät ehkä toimi ollenkaan.</string>
     <string name="pref_watch_sent_folder">Tarkkaile Lähetetyt-kansiota</string>
     <string name="pref_send_copy_to_self">Lähetä kopio itselle</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="pref_send_copy_to_self_explain">Vaaditaan käytettäessä tiliä usealla laitteella.</string>
     <string name="pref_auto_folder_moves">Siirrä automaattisesti DeltaChat-kansioon</string>
     <string name="pref_auto_folder_moves_explain">Pikaviestikeskustelut siirretään Saapuneet-kansion sotkemisen välttämiseksi</string>
@@ -687,7 +686,9 @@
     <string name="autodel_after_1_year">1 vuoden päästä</string>
 
     <!-- autocrypt -->
+    <!-- deprecated, used "Encryption" if a headline is needed -->
     <string name="autocrypt">Autocrypt</string>
+    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
     <string name="autocrypt_explain">Autocrypt on uusi ja avoin spesifikaatio sähköpostien automaattiselle päästä-päähän-salaukselle.\n\nPäästä-päähän-salauksen asetukset luodaan automaattisesti tarpeen mukaan ja ne voidaan siirtää laitteiden välillä Autocrypt-asetusviestien avulla.</string>
     <string name="autocrypt_send_asm_title">Lähetä Autocrypt-asetusviesti</string>
     <string name="autocrypt_send_asm_explain_before">Autocrypt-asetusviesti jakaa turvallisesti päästä-päähän-salauksen asetukset toisten Autocrypt-yhteensopivien sovellusten kanssa.\n\nAsetuksen salataan tässä näytettävällä asetuskoodilla, joka on syötettävä toiseen laitteeseen.</string>
@@ -813,13 +814,12 @@
     <string name="qrshow_join_contact_no_connection_toast">Ei internetyhteyttä, QR-koodin luominen ei onnistu.</string>
     <string name="qraccount_ask_create_and_login">Luo uusi sähköpostiosoite palvelimella \"%1$s\" ja kirjaudu sisään?</string>
     <string name="qraccount_ask_create_and_login_another">Luo uusi sähköpostiosoite palvelimella \"%1$s\" ja kirjaudu sisään?\n\nNykyistä tiliäsi ei poisteta. Käytä valintaa \"Vaihda tiliä\" vaihtaaksesi tilien välillä.</string>
-    <!-- deprecated, use set_name_and_avatar_explain instead -->
-    <string name="qraccount_success_enter_name">Kirjautuminen onnistui - sähköpostiosoitteesa on %1$s\n\nVoit nyt halutessasi antaa nimen ja profiilikuvan, jotka näytetään muille kirjoittaessasi heille.</string>
     <string name="qraccount_qr_code_cannot_be_used">Uutta tiliä ei voida luoda skannatulla QR-koodilla.</string>
+    <!-- deprecated -->
     <string name="qraccount_use_on_new_install">Skannattu QR-koodi on käytössä uuden tilin luomiseksi. Voit skannata QR-koodin uuden Delta Chat -asennuksen yhteydessä.</string>
-    <!-- the placeholder will be replaced by the e-mail address of the account -->
+    <!-- the placeholder will be replaced by the e-mail address of the profile -->
     <string name="qrlogin_ask_login">Haluatko kirjautua osoitteella \"%1$s\"?</string>
-    <!-- the placeholder will be replaced by the e-mail address of the account -->
+    <!-- the placeholder will be replaced by the e-mail address of the profile -->
     <string name="qrlogin_ask_login_another">Haluatko kirjautua osoitteella \"%1$s\"?\n\nNykyistä tiliäsi ei poisteta. Käytä \"Vaihda tiliä\" -kohtaa vaihtaaksesi tiliesi välillä.</string>
     <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">%1$s kutsui sinut tähän ryhmään.\n\nOdotetaan vastausta yhteystiedon %2$s laitteelta...</string>
@@ -902,12 +902,13 @@
     <string name="export_backup_desktop">Vie varmuuskopio</string>
     <string name="autocrypt_correct_desktop">Autocrypt-asetukset siirretty.</string>
     <string name="forget_login_confirmation_desktop">Poista tämä kirjautuminen? Kaikki tiedot poistetaan, mukaan lukien päästä-päähän-salauksen asetukset, yhteystiedot, keskustelut, viestit ja media. Tämä toiminto on peruuttamaton.</string>
+    <!-- deprecated -->
     <string name="account_info_hover_tooltip_desktop2">Sähköposti: %1$s\nKoko: %2$s\nTilin tunniste: %3$s</string>
     <string name="message_detail_sent_desktop">lähetetty</string>
     <string name="message_detail_received_desktop">vastaanotettu</string>
     <string name="menu.view.developer.open.log.folder">Avaa lokikansio</string>
     <string name="menu.view.developer.open.current.log.file">Avaa nykyinen lokitiedosto</string>
-    <string name="explain_desktop_minimized_disabled_tray_pref">Työkalupalkin kuvaketta ei voida poistaa, koska Delta Chat käynnistettiin \"Käynnistä pienennettynä\" -valinnalla.</string>
+    <string name="explain_desktop_minimized_disabled_tray_pref" tools:ignore="TypographyDashes">Työkalupalkin kuvaketta ei voida poistaa, koska Delta Chat käynnistettiin \"Käynnistä pienennettynä\" -valinnalla.</string>
     <string name="no_spellcheck_suggestions_found">Oikeinkirjoitusehdotusta ei löydy.</string>
     <string name="show_window">Näytä ikkuna</string>
     <string name="login_socks5_experimental_warning">SOCKS5-tuki on kokeellinen. Käytä omalla vastuulla. Jos annat osoitteen sähköpostikenttään, DNS-etsintää ei tunneloida SOCKS5 läpi.</string>

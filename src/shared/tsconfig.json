@@ -5,12 +5,12 @@
     "outDir": "../../tsc-dist/shared",
     "sourceMap": true,
     "noImplicitAny": true,
-    "module": "commonjs",
+    "module": "NodeNext",
     "target": "es6",
     "allowJs": false,
-    "esModuleInterop": true,
     "strictNullChecks": true,
-    "strict": true
+    "strict": true,
+    "moduleResolution": "NodeNext"
   },
   "include": ["./**/*.ts", "./**/*.js"]
 }

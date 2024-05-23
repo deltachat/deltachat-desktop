@@ -9,24 +9,26 @@ import electron, {
   shell,
   WebContents,
 } from 'electron'
-import { appIcon, htmlDistDir } from '../application-constants'
+import { clipboard } from 'electron/common'
 import { join } from 'path'
 import { platform } from 'os'
-import { DesktopSettings } from '../desktop_settings'
-import { isInviteLink, truncateText } from '../../shared/util'
-import { tx } from '../load-translations'
-import { open_url } from '../open_url'
-import { loadTheme } from '../themes'
-import { getDCJsonrpcClient } from '../ipc'
-import { getLogger } from '../../shared/logger'
-import { clipboard } from 'electron/common'
-import * as mainWindow from './main'
+
+import { appIcon, htmlDistDir } from '../application-constants.js'
+import { DesktopSettings } from '../desktop_settings.js'
+import { isInviteLink, truncateText } from '../../shared/util.js'
+import { tx } from '../load-translations.js'
+import { open_url } from '../open_url.js'
+import { loadTheme } from '../themes.js'
+import { getDCJsonrpcClient } from '../ipc.js'
+import { getLogger } from '../../shared/logger.js'
+
+import * as mainWindow from './main.js'
 import {
   getAppMenu,
   getFileMenu,
   getHelpMenu,
   refresh as refreshTitleMenu,
-} from '../menu'
+} from '../menu.js'
 
 const log = getLogger('html_email')
 

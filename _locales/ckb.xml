@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- common strings without special context -->
     <string name="app_name">دێڵتا چات</string>
     <string name="ok">باشە</string>
@@ -193,8 +193,6 @@
     <string name="device_talk">پەیامەکانی ئامێرەکە</string>
     <string name="device_talk_subtitle">پەیامە درووستکراوە ناوخۆییەکان</string>
     <string name="device_talk_explain">پەیامەکانی نێو ئەم وتووێژە بە شێوازی ناوخۆیی لەلایەن نەرمامێری دێڵتاچاتەکەتەوە درووست کراون. درووستکەرانی نەرمامێرەکە کەڵکی لێ دەگرن بۆ ئاگادار کردنەوەی بەکارهێنەران سەبارەت بە وەشانە نوێکانی نەرمامێرەکە و کێشە و گرفتەکانی.</string>
-    <!-- deprecated, use device_talk_welcome_message2 instead -->
-    <string name="device_talk_welcome_message">بەخێر بێن بۆ دێڵتا چات! ڕواڵەت و بەکارهێنانی دێڵتا چات هەر وەکوو نەرمامێرە پەیامنێرە باوەکانی دیکەیە، بەڵام کۆنترۆڵی ناوەندی لەسەر نییە، شوێنی ئێوە و هاوڕێ و هاوکار و بنەماڵەکانتان ناگرێت و زانیارییەکانتان نافرۆشێت بە ڕێکخراوەکان.\n\n لەڕاستیدا دێڵتاچات نەرمامێرێکی ئیمەیلییە بە ڕواڵەتێکی مۆدەڕنەوە. ئیمەیل بە جل و بەرگێکی نوێوە ئەگەر پێتان خۆش بێت\n\n👻 لە دێڵتا چات بۆ پێوەندی گرتن لەگەڵ هەرکەسێک کە دەتانەوێت کەڵک بگرن: بەس ئیمەلەکەیان بەکار بێنن. ئیدی وەرگرەکان پێویست ناکات دێڵتا چات دابمەرزێنن یان سەردانی ماڵپەڕێک بکەن یان لە شوێنێک ببن بە ئەندام-هەڵبەت ئەگەر پێیان خۆش بوو دەتوانن ئەم نەرمامێرەیان پێ بناسێنن👈https://get.delta.chat</string>
     <string name="edit_contact">دەستکاری بەردەنگ</string>
     <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
     <string name="pin_chat">دەرزیلەکردنی چات</string>
@@ -290,6 +288,7 @@
     <string name="chat_record_slide_to_cancel">بیخشێنە بۆ وازهێنان</string>
     <string name="chat_record_explain">کرتە بکە و دەست لەسەری ڕابگرە بۆ تۆمارکردنی پەیامێکی دەنگی، پاشان دەستبەردە بۆ هەناردنی.</string>
     <string name="chat_no_chats_yet_title">هاتنگە بەتاڵە. \n \"+\" لێبدە بۆ دەستپێکی وتووێژێکی نوێ.</string>
+    <!-- deprecated -->
     <string name="chat_no_chats_yet_hint">دەتوانیت لەگەڵ بەکارهێنەرانی دیکەی دێڵتاچات و هەروەها هەر ناونیشانێکی ئیمەیلدا وتووێژ بکەیت.</string>
     <string name="chat_all_archived">هەموو وتووێژەکان ئەرشیڤ کران. \n بۆ دەستپێکردنی وتووێژێکی نوێ، \"+\" لێبدە.</string>
     <string name="chat_share_with_title">هاوبەش کردن لەگەڵ</string>
@@ -304,8 +303,6 @@
     <string name="retry_send">دیسان هەوڵ بدەوە بۆ هەناردنی پەیامەکە</string>
     <!-- reasons for a disabled message composer -->
     <string name="messaging_disabled_not_in_group">تۆ ناتوانیت لێرە بنووسیت چونکە لەم کۆڕەدا بەشدار نیت. بۆ بەشدار بوون لە ئەندامێکی کۆڕەکە داوابکە بەشدارت بکات.</string>
-    <!-- deprecated, the line is removed on desktop (was never used on other OS) -->
-    <string name="messaging_disabled_device_chat">ئەم وتووێژە پەیامگەلێکی تێدایە کە بە شێوازی ناوخۆیی درووستکراون. ئیدی ناتوانیت لێرە هیچ بنووسیت.</string>
     <string name="cannot_display_unsuported_file_type">ئەم چەشنە پەڕگەیە پیشان نادرێت: %s</string>
     <string name="attachment_failed_to_load">پێوەلکاوەکە دانەگیرا</string>
     <!-- mailing lists -->
@@ -341,7 +338,9 @@
     <string name="media_preview">پێشدیتنی ڕەنگاڵە</string>
     <string name="send_message">پەیام بنێرە</string>
     <string name="login_title">بچۆ ژوورەوە</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="login_header">بچۆ ژوورەوە بۆ سێرڤێرەکەی خۆت</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="login_explain">بچۆ ژوورەوە بە ناونیشانی ئیمەیلێکەوە</string>
     <string name="login_subheader">بۆ دابینکەرە ناسراوەکانی ئیمەیلەکان، ڕێکخستنە زیادییەکان خۆکارانە ڕێکدەخرێن. هەندێجار دەبێت IMAP لەنێو ڕێکخستنەکانی وێبدا چالاک بکرێنەوە. بۆ ڕێنمایی وەرگرتن، لەگەڵ دابینکەری ئیمەیلەکەتان یان هاوڕێکانتان ڕاوێژ بکەن.</string>
     <string name="login_no_servers_hint">دێڵتاچات هیچ سێرڤەرێکی نییە، داتاکانتان لەسەر ئامرێکەتان دەمێنێتەوە.</string>
@@ -386,6 +385,7 @@
     <string name="pref_profile_photo">وێنەی لادیمەن</string>
     <string name="pref_blocked_contacts">هەژمارە ئاستەنگکراوەکان</string>
     <string name="blocked_empty_hint">ئەگەر هەژمارێک ئاستەنگ بکەیت، لێرەدا پیشان دەدرێت.</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="pref_password_and_account_settings">هەژمار و تێپەڕوشە</string>
     <string name="pref_your_name">ناو</string>
     <!-- Translators: Visible only to recipients who DO NOT use Delta Chat, so it's the last line in an E-mail and not a "Status". -->
@@ -491,7 +491,9 @@
     <string name="autodel_after_1_year">پاش 1 ساڵ</string>
 
     <!-- autocrypt -->
+    <!-- deprecated, used "Encryption" if a headline is needed -->
     <string name="autocrypt">ئۆتۆکریپت</string>
+    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
     <string name="autocrypt_explain">ئۆتۆکریپت شێوازێکی نوێ و خۆڕاییە بۆ شفرەکردنی خۆکاری ئیمەیل بە چەشنی ئەمسەر-ئەوسەر.\n\n ڕێکخستنی ئەمسەر-ئەوسەرەکە، بە چەشنی پێویست، خۆکارانە درووست دەبێت و تۆ دەتوانیت لەنێوان ئامێرەکاندا، کە پەیامی ڕێکخستنی ئۆتۆکریپتیان هەیە، بیانگوازیتەوە.</string>
     <string name="autocrypt_send_asm_title">هەناردنی پەیامی ڕێکخستنی ئۆتۆکریپت</string>
     <string name="autocrypt_prefer_e2ee">هەڵبژاردنی شفرەکردنی ئەمسەر-ئەوسەر</string>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- common strings without special context -->
     <string name="app_name">Delta Chat</string>
     <string name="ok">Oké</string>
@@ -199,6 +199,8 @@
 
     <!-- menu labels (or icon, buttons...) -->
     <string name="menu_new_contact">Nieuw contactpersoon</string>
+    <string name="menu_new_classic_contact">Contactpersoon handmatig toevoegen</string>
+    <string name="new_classic_contact_explain">Handmatig toegevoegde contactpersonen zijn bedoeld voor traditionele e-mailcommunicatie - eind-tot-endversleuteling is daarom niet gegarandeerd.</string>
     <string name="menu_new_chat">Nieuw gesprek</string>
     <string name="menu_new_group">Nieuwe groep</string>
     <string name="clone_chat">Gesprek klonen</string>
@@ -278,8 +280,6 @@
     <string name="device_talk">Berichten op apparaat</string>
     <string name="device_talk_subtitle">Lokaal gegenereerde berichten</string>
     <string name="device_talk_explain">Berichten in dit gesprek worden geplaatst door de app zelf. Zo blijf je op de hoogte van app-updates en gebruiksproblemen.</string>
-    <!-- deprecated, use device_talk_welcome_message2 instead -->
-    <string name="device_talk_welcome_message">Welkom bij Delta Chat! Delta Chat lijkt heel erg op andere chatapps, maar is toch écht anders! Zo is er geen centraal beheer, wordt je niet gevolgd en worden jouw gegevens of die van je vrienden/familie niet verkocht aan bedrijven.\n\nTechnisch gesproken is het een e-mailapp in een modern jasje (of moderne jurk 👻).\n\nGebruik Delta Chat om te communiceren met iedereen die een e-mailadres heeft. Ontvangers hoeven het niet te installeren, naar een website te gaan of ergens te registreren. Maar als ze dat willen, kun je ze natuurlijk altíjd doorverwijzen naar 👉 https://get.delta.chat</string>
     <string name="device_talk_welcome_message2">Kom in contact!\n\n🙌 Druk op beide apparaten op het hoofdscherm op ‘QR-code’. Kies vervolgens ‘QR-code scannen’ op het ene apparaat en houd hem boven het andere.\n\n🌍 Als jullie niet ter plaatse zijn, scan de code dan via een videogesprek of deel de code via een uitnodigingslink (‘QR-code delen’).\n\nDaarna kunnen jullie beide vertrouwen op het voeren van gesprekken via het grootste gedecentraliseerde netwerk ooit: e-mail. En in tegenstelling tot andere populaire apps, is er geen centraal beheer, word je niet gevolgd en worden de gegevens van jou, je vrienden, collega\'s en familieleden niet verkocht.</string>
     <string name="edit_contact">Contactpersoon bewerken</string>
     <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
@@ -391,8 +391,9 @@
     <string name="chat_new_broadcast_hint">Op een verzendlijst hebben ontvangers niet de mogelijkheid om te reageren op je berichten.</string>
     <string name="chat_new_group_hint">Stel het eerste bericht op zodat anderen binnen deze groep kunnen reageren.</string>
     <string name="chat_record_slide_to_cancel">Veeg opzij om te annuleren</string>
-    <string name="chat_record_explain">Houdt ingedrukt om een spraakbericht op te nemen; laat los om te versturen</string>
-    <string name="chat_no_chats_yet_title">Je postvak is leeg.\nDruk op ‘+’ om een gesprek te beginnen.</string>
+    <string name="chat_record_explain">Houd ingedrukt om een spraakbericht op te nemen; laat los om te versturen</string>
+    <string name="chat_no_chats_yet_title">Er zijn nog geen gesprekken.\nDruk op ‘+’ om een gesprek te beginnen.</string>
+    <!-- deprecated -->
     <string name="chat_no_chats_yet_hint">Je kunt een gesprek voeren met andere Delta Chat-gebruikers en via alle soorten e-mailadressen.</string>
     <string name="chat_all_archived">Alle gesprekken zijn gearchiveerd.\nDruk op ‘+’ om een gesprek te beginnen.</string>
     <string name="chat_share_with_title">Delen met</string>
@@ -410,8 +411,6 @@
     <string name="retry_send">Bericht opnieuw versturen</string>
     <!-- reasons for a disabled message composer -->
     <string name="messaging_disabled_not_in_group">Alleen leden kunnen berichten versturen aan deze groep. Vraag aan een lid om lid te worden.</string>
-    <!-- deprecated, the line is removed on desktop (was never used on other OS) -->
-    <string name="messaging_disabled_device_chat">Je kunt geen berichten versturen omdat dit gesprek alleen lokaal gegenereerde berichten bevat.</string>
     <string name="messaging_disabled_mailing_list">Het versturen van berichten naar mailinglijsten wordt nog niet ondersteund</string>
     <string name="cannot_display_unsuported_file_type">Het volgende bestandstype kan niet worden getoond: %s</string>
     <string name="attachment_failed_to_load">De bijlage kan niet worden geladen</string>
@@ -483,7 +482,7 @@
     <string name="tab_image_empty_hint">De in dit gesprek gedeelde afbeeldingen verschijnen hier.</string>
     <string name="tab_video_empty_hint">De in dit gesprek gedeelde video\'s verschijnen hier.</string>
     <string name="tab_audio_empty_hint">De in dit gesprek gedeelde audiobestanden en spraakberichten verschijnen hier.</string>
-    <string name="tab_webxdc_empty_hint">Privé-apps in dit gesprek worden hier getoond.</string>
+    <string name="tab_webxdc_empty_hint">Privéapps in dit gesprek worden hier getoond.</string>
     <string name="tab_all_media_empty_hint">De in gesprekken gedeelde media verschijnen hier.</string>
     <string name="media_preview">Mediavoorbeeld</string>
     <!-- option to show images in the gallery with the correct width/height aspect (instead of square); other gallery apps may be a source of inspiration for translation :) -->
@@ -500,9 +499,10 @@
     <!-- Multi Device -->
     <!-- "Second Device" can also be translated as "Another Device", if that is catchier in the destination language. However, make sure to use the term consistently. -->
     <string name="multidevice_title">Secundair apparaat toevoegen</string>
-    <string name="multidevice_same_network_hint">Zorg er voor dat beide apparaten verbonden zijn met hezelfde (wifi)netwerk</string>
+    <string name="multidevice_same_network_hint">Zorg ervoor dat beide apparaten verbonden zijn met hetzelfde (wifi)netwerk</string>
     <string name="multidevice_this_creates_a_qr_code">Hiermee wordt een QR-code samengesteld die door het tweede apparaat kan worden gescand om het account te kopiëren.</string>
     <string name="multidevice_install_dc_on_other_device">Installeer Delta Chat op je andere apparaat (https://get.delta.chat)</string>
+    <!-- "I Already Have a Login / Add as Second Device” should be the same text as defined by the keys onboarding_alternative_logins and multidevice_receiver_title -->
     <string name="multidevice_tap_scan_on_other_device">Start Delta Chat, druk op ‘Toevoegen als secundair apparaat’ en scan de hier getoonde code</string>
     <!-- Shown inside a "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and/or address eg. "Scan to set up second device for Alice (alice@example.org)" -->
     <string name="multidevice_qr_subtitle">Scan om een secundair apparaat voor %1$s in te stellen</string>
@@ -540,7 +540,7 @@
     <!-- Shown in the setting if the app is "Connected" -->
     <string name="connectivity_connected">Verbonden</string>
     <string name="sending">Bezig met versturen…</string>
-    <string name="last_msg_sent_successfully">Het laatste bericht is verstuurd.</string>
+    <string name="last_msg_sent_successfully">Het nieuwste bericht is verstuurd.</string>
     <string name="not_supported_by_provider">Wordt niet ondersteund door je provider.</string>
     <!-- Subtitle in quota context of "Connetivity" view. Should be be plural always, no number is prefixed. -->
     <string name="messages">Berichten</string>
@@ -549,10 +549,40 @@
 
 
     <!-- welcome and login -->
-    <string name="welcome_chat_over_email">Chatten via e-mail.</string>
+    <!-- Primary button on the welcome screen, allows to create an instant profile -->
+    <string name="onboarding_create_instant_account">Aan de slag!</string>
+    <!-- Secondary button on the welcome screen, allows to "Add as Second Device", "Restore from Backup"  -->
+    <string name="onboarding_alternative_logins">Ik heb al een account</string>
+    <!-- Button, allows to log in to existing email accounts, setting ports, passwords and so on -->
+    <string name="manual_account_setup_option">Inloggen met eigen e-mailadres</string>
+    <!-- Instant onboarding title (there is not more to do than to set name and avatar) -->
+    <string name="instant_onboarding_title">Mijn profiel</string>
+    <!-- deprecated -->
+    <string name="instant_onboarding_agree_default">Privacybeleid lezen</string>
+    <!-- The placeholder will be replaced by the default onboarding server -->
+    <string name="instant_onboarding_agree_default2">Privacybeleid van %1$s</string>
+    <!-- The placeholder will be replaced by instance name, the whole text will link to the instance page -->
+    <string name="instant_onboarding_agree_instance">Over profielen op %1$s</string>
+    <!-- Confirmation button on the instant onboarding screen -->
+    <string name="instant_onboarding_create">Akkoord gaan en profiel aanmaken</string>
+    <!-- Secondary, link-like button to open a page with other possible instances -->
+    <string name="instant_onboarding_show_more_instances">Andere server kiezen</string>
+    <string name="instant_onboarding_other_server">Lijst met chatmailservers tonen</string>
+    <!-- Hint about what happens when "Create Profile" button in pressed; the placeholder will be replaced by the group name -->
+    <string name="instant_onboarding_group_info">Maak een profiel aan om deel te nemen aan de groep ‘%1$s’.</string>
+    <!-- Hint about what happens when "Create Profile" button in pressed; the placeholder will be replaced by contact name and/or address -->
+    <string name="instant_onboarding_contact_info">Maak een profiel aan om een gesprek te voeren met ‘%1$s’.</string>
+    <!-- Question shown when another user's QR code is scanned from onboarding screen -->
+    <string name="instant_onboarding_confirm_contact">Wil je een nieuw profiel aanmaken en een gesprek beginnen met ‘%1$s’?</string>
+    <!-- Question shown when group's QR code is scanned from onboarding screen -->
+    <string name="instant_onboarding_confirm_group">Wil je een nieuw profiel aanmaken en deelnemen aan ‘%1$s’?</string>
+
+    <string name="welcome_chat_over_email">Veilige, gedecentraliseerde gesprekken</string>
     <string name="scan_invitation_code">Uitnodigingscode scannen</string>
     <string name="login_title">Inloggen</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="login_header">Inloggen op je server</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="login_explain">Log in met een bestaand e-mailaccount.</string>
     <string name="login_subheader">Bij bekende e-mailproviders gaat het instellen vrijwel geheel automatisch. Soms moet je imap inschakelen in de webversie van je e-mailclient. Vraag je e-mailprovider of vrienden om hulp.</string>
     <string name="login_no_servers_hint">Er is geen Delta Chat-server; jóuw gegevens blijven op jóuw apparaat.</string>
@@ -579,7 +609,7 @@
     <string name="login_info_oauth2_text">Het ingevoerde e-mailadres ondersteunt vereenvoudigd instellen (OAuth2).\n\nTijdens de volgende stap moet je Delta Chat toestaan te fungeren als je e-mailapp.\n\nDelta Chat heeft geen eigen servers; jóuw gegevens blijven op jóuw apparaat!</string>
     <string name="login_certificate_checks">Certificaatcontrole</string>
     <string name="login_error_mail">Voer een geldig e-mailadres in</string>
-    <string name="login_error_server">Voer een geldig(e) IP-adres/server in</string>
+    <string name="login_error_server">Voer een geldig(e) ip-adres/server in</string>
     <string name="login_error_port">Voer een geldig poortnummer in (1-65535)</string>
     <string name="login_error_required_fields">Voer een geldig e-mailadres en wachtwoord in</string>
     <string name="import_backup_title">Reservekopie importeren</string>
@@ -618,13 +648,14 @@
     <string name="pref_profile_photo">Profielfoto</string>
     <string name="pref_blocked_contacts">Geblokkeerde contactpersonen</string>
     <string name="blocked_empty_hint">Geblokkeerde contactpersonen worden hier getoond.</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="pref_password_and_account_settings">Wachtwoord en account</string>
-    <string name="pref_who_can_see_profile_explain">Je profielfoto, -naam en handtekening worden getoond in gesprekken, naast je berichten.</string>
+    <string name="pref_who_can_see_profile_explain">Je profielfoto, -naam en handtekening worden naast je gespreksberichten getoond.</string>
     <string name="pref_your_name">Je naam</string>
     <!-- Translators: Visible only to recipients who DO NOT use Delta Chat, so it's the last line in an E-mail and not a "Status". -->
     <string name="pref_default_status_label">Handtekeningtekst</string>
-    <string name="pref_enter_sends">Versturen met Enter-toets</string>
-    <string name="pref_enter_sends_explain">Druk op de Enter-toets om tekstberichten te versturen</string>
+    <string name="pref_enter_sends">Versturen met enter</string>
+    <string name="pref_enter_sends_explain">Druk op de entertoets om tekstberichten te versturen</string>
     <string name="pref_outgoing_media_quality">Kwaliteit van verstuurde media</string>
     <string name="pref_outgoing_balanced">Normaal</string>
     <string name="pref_outgoing_worse">Lagere kwaliteit, kleinere bestanden</string>
@@ -639,7 +670,7 @@
     <string name="pref_notifications_explain">Systeemmeldingen tonen bij nieuwe berichten</string>
     <string name="pref_show_notification_content">Berichtinhoud tonen op meldingen</string>
     <string name="pref_show_notification_content_explain">Toont de afzender en eerste regel van berichten op meldingen</string>
-    <string name="pref_led_color">LED-kleur</string>
+    <string name="pref_led_color">Ledkleur</string>
     <string name="pref_sound">Geluid</string>
     <string name="pref_silent">Stil</string>
     <string name="pref_privacy">Privacy</string>
@@ -651,19 +682,21 @@
     <string name="pref_appearance">Uiterlijk</string>
     <string name="pref_theme">Thema</string>
     <string name="pref_language">Taal</string>
-    <string name="pref_incognito_keyboard">Incognito-toetsenbord</string>
+    <string name="pref_incognito_keyboard">Privétoetsenbord</string>
     <!-- Translators: Must indicate that there is no guarantee as the system may not honor our request. -->
     <string name="pref_incognito_keyboard_explain">Verzoek het toetsenbord om geen persoonlijke woorden op te nemen</string>
     <string name="pref_read_receipts">Leesbevestigingen</string>
-    <string name="pref_read_receipts_explain">Als je leesbevestigingen uitschakelt, dan zie je geen leesbevestigingen van anderen.</string>
+    <string name="pref_read_receipts_explain">Als je leesbevestigingen uitschakelt, zie je geen leesbevestigingen van anderen.</string>
+    <string name="pref_server">Server</string>
+    <string name="pref_encryption">Versleuteling</string>
     <string name="pref_manage_keys">Sleutels beheren</string>
     <string name="pref_use_system_emoji">Systeememoji gebruiken</string>
-    <string name="pref_use_system_emoji_explain">Schakel Delta Chat\'s ingebouwde emoji-ondersteuning uit</string>
+    <string name="pref_use_system_emoji_explain">Schakel Delta Chats ingebouwde emojiondersteuning uit</string>
     <string name="pref_use_inapp_camera">Ingebouwde camera gebruiken</string>
     <string name="pref_use_inapp_camera_explain">Let op: de ingebouwde camera beschikt over minder functies dan de systeemcamera</string>
     <string name="pref_show_system_contacts">Adresboek uitlezen</string>
-    <string name="pref_show_system_contacts_explain">Bied aan om gesprekken te beginnen met contactpersonen die in het adresboek staan. Let op: voor sommige providers is hiervoor eind-tot-eindversleuteling benodigd.</string>
-    <string name="pref_app_access">App-toegang</string>
+    <string name="pref_show_system_contacts_explain">Bied aan om gesprekken te beginnen met contactpersonen uit het adresboek. Let op: voor sommige providers is eind-tot-eindversleuteling benodigd.</string>
+    <string name="pref_app_access">Apptoegang</string>
     <string name="pref_chats">Gesprekken</string>
     <string name="pref_in_chat_sounds">Gespreksgeluiden</string>
     <string name="pref_message_text_size">Tekstgrootte van berichten</string>
@@ -675,9 +708,9 @@
     <string name="pref_backup">Reservekopie</string>
     <string name="pref_backup_explain">Gesprekken bewaren op externe opslag</string>
     <string name="pref_backup_export_explain">Met een reservekopie kun je een nieuwe installatie instellen op dit of een ander apparaat.\n\nEen reservekopie bevat alle berichten, contactpersonen, gesprekken en je eind-tot-eindversleuteling. Bewaar het reservekopiebestand op een veilige plaats of verwijder het zo snel mogelijk.</string>
-    <!-- the placeholder will be replaced by the name of the account's email address -->
+    <!-- the placeholder will be replaced by the name of the profile's email address -->
     <string name="pref_backup_export_x">‘%1$s’ exporteren</string>
-    <!-- the placeholder will be replaced by the number of accounts to export; the number is always larger than 1 -->
+    <!-- the placeholder will be replaced by the number of profiles to export; the number is always larger than 1 -->
     <string name="pref_backup_export_all">%1$d accounts exporteren</string>
     <string name="pref_backup_export_start_button">Reservekopie maken</string>
     <string name="pref_backup_written_to_x">De reservekopie is opgeslagen in ‘%1$s’.</string>
@@ -696,6 +729,7 @@
     <string name="pref_imap_folder_warn_disable_defaults">Als je deze optie uitschakelt, zorg er dan voor dat je server en overige clients goed ingesteld zijn.\n\nAls dat niet zo is, dan werkt het misschien helemaal niet.</string>
     <string name="pref_watch_sent_folder">Map ‘Verzonden’ controleren op nieuwe berichten</string>
     <string name="pref_send_copy_to_self">Kopie versturen naar mijzelf</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="pref_send_copy_to_self_explain">Vereist bij gebruik van dit account op meerdere apparaten.</string>
     <string name="pref_auto_folder_moves">Automatisch verplaatsen naar DeltaChat-map</string>
     <string name="pref_auto_folder_moves_explain">Gesprekken worden verplaatst om je postvak netjes te houden</string>
@@ -751,9 +785,9 @@
     <string name="reactions">Reacties</string>
     <!-- Verb, the action of adding a "Reaction" to a message. Used eg. in context menus, similar to "Reply" or "Forward" -->
     <string name="react">Reageren</string>
-    <!-- %1$s will be replaced by an emoji. %2$s will be replaced by message summary. Eg. 'You reacted 👍 to "Found my suitcase"'. Use less than 20 characters, otherwise the string will be truncated too soon and no summary will be shown. Do not try to translate "reacted to" too strict. Depending on the language, "added 👍 to" or "gave 👍 to" or just "👍 to" may be shorter and/or clearer and work as well. -->
+    <!-- %1$s will be replaced by an emoji. %2$s will be replaced by message summary (the summary is often long and whole string gets truncated; words after %2$s will often not being visible). Eg. 'You reacted 👍 to "Found my suitcase"'. Use less than 20 characters, otherwise the string will be truncated too soon and too few information are shown. Do not try to translate "reacted to" too strict. Depending on the language, "added 👍 to" or "gave 👍 to" or just "👍 to" may be shorter and/or clearer and work as well. -->
     <string name="reaction_by_you">Je hebt met %1$s gereageerd op “%2$s”</string>
-    <!-- %1$s will be replaced a name. %2$s will be replaced by an emoji. %3$s will be replaced by message summary. Eg. 'Alice reacted 👍 to "Nice photos"'. Use less than 20 characters, otherwise the string will be truncated too soon and no summary will be shown. Do not try to translate "reacted to" too strict. Depending on the language, "added 👍 to" or "gave 👍 to" or just "👍 to" may be shorter and/or clearer work as well. -->
+    <!-- %1$s will be replaced a name. %2$s will be replaced by an emoji. %3$s will be replaced by message summary (the summary is often long and whole string gets truncated; words after %3$s will often not being visible). Eg. 'Alice reacted 👍 to "Nice photos"'. Use less than 20 characters, otherwise the string will be truncated too soon and too few information are shown. Do not try to translate "reacted to" too strict. Depending on the language, "added 👍 to" or "gave 👍 to" or just "👍 to" may be shorter and/or clearer work as well. -->
     <string name="reaction_by_other">%1$s heeft met %2$s gereageerd op “%3$s”</string>
 
     <!-- automatically delete message -->
@@ -781,7 +815,9 @@
     <string name="autodel_after_1_year">Na 1 jaar</string>
 
     <!-- autocrypt -->
+    <!-- deprecated, used "Encryption" if a headline is needed -->
     <string name="autocrypt">Autocrypt</string>
+    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
     <string name="autocrypt_explain">Autocrypt is een nieuwe, open specificatie voor het automatisch instellen van eind-tot-eindversleuteling.\n\nJe instellingen worden, indien nodig, automatisch aangemaakt en kunnen worden overgezet naar andere apparaten middels instelberichten.</string>
     <string name="autocrypt_send_asm_title">Autocrypt-instelbericht versturen</string>
     <string name="autocrypt_send_asm_explain_before">Een ‘Autocrypt-instelbericht’ deelt je eind-tot-eindinstellingen veilig met andere Autocrypt-compatibele apps.\n\nDe instellingen zijn versleuteld middels een code die hier wordt getoond en moet worden overgetypt op het andere apparaat.</string>
@@ -892,6 +928,7 @@
     <string name="load_qr_code_as_image">QR-code als afbeelding laden</string>
     <string name="qrscan_title">QR-code scannen</string>
     <string name="qrscan_hint">Houd je camera boven de QR-code</string>
+    <string name="qrscan_hint_desktop">Houd de QR-code voor de camera</string>
     <string name="qrscan_failed">De QR-code kan niet worden ontcijferd</string>
     <string name="qrscan_ask_join_group">Wil je deelnemen aan de groep ‘%1$s’?</string>
     <string name="qrscan_fingerprint_mismatch">De gescande vingerafdruk komt niet overeen met de vorige voor %1$s</string>
@@ -920,20 +957,21 @@
     <string name="qrshow_join_contact_no_connection_toast">Geen internetverbinding; kan QR-codes niet instellen.</string>
     <string name="qraccount_ask_create_and_login">Wil je een nieuw e-mailadres aanmaken op ‘%1$s’ en daarmee inloggen?</string>
     <string name="qraccount_ask_create_and_login_another">Wil je een nieuw e-mailadres aanmaken op ‘%1$s’ en daarmee inloggen?\n\nJe reeds aanwezige account wordt niet verwijderd. Druk op de knop ‘Ander account kiezen’ om tussen accounts te schakelen.</string>
-    <!-- deprecated, use set_name_and_avatar_explain instead -->
-    <string name="qraccount_success_enter_name">Het inloggen is gelukt - je e-mailadres is ‘%1$s’.\n\nAls je wilt kun je nu een naam en profielfoto instellen. Je naam en foto worden getoond aan de mensen waarmee je communiceert.</string>
     <string name="set_name_and_avatar_explain">Kies een naam die herkenbaar is voor je contactpersonen en, desgewenst, een profielfoto.</string>
     <string name="please_enter_name">Voer een naam in.</string>
     <string name="qraccount_qr_code_cannot_be_used">De gescande QR-code kan niet worden gebruikt om een nieuw account in te stellen.</string>
+    <!-- deprecated -->
     <string name="qraccount_use_on_new_install">De gescande QR-code is voor het instellen van een nieuw account. Je kunt deze direct scannen na het (opnieuw) installeren van Delta Chat.</string>
-    <!-- the placeholder will be replaced by the e-mail address of the account -->
+    <!-- the placeholder will be replaced by the e-mail address of the profile -->
     <string name="qrlogin_ask_login">Inloggen als ‘%1$s’?</string>
-    <!-- the placeholder will be replaced by the e-mail address of the account -->
+    <!-- the placeholder will be replaced by the e-mail address of the profile -->
     <string name="qrlogin_ask_login_another">Wil je inloggen als ‘%1$s’?\n\nJe reeds aanwezige account wordt niet verwijderd. Druk op de knop ‘Ander account kiezen’ om tussen accounts te schakelen.</string>
     <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">%1$s heeft je uitgenodigd voor deze groep.\n\nEr wordt gewacht op antwoord van het apparaat van %2$s…</string>
     <!-- placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_replies">%1$s heeft geantwoord en wacht op toelating tot de groep…</string>
+    <string name="secure_join_wait">Bezig met opzetten van eind-tot-eindversleuteling…</string>
+    <string name="secure_join_wait_timeout">Er kan nog geen eind-tot-eindversleuteling worden gegarandeerd, maar je kunt wel alvast een bericht sturen.</string>
     <string name="contact_verified">%1$s is goedgekeurd.</string>
     <string name="contact_not_verified">Er kan geen eind-tot-eindversleuteling met %1$s worden gegarandeerd.</string>
     <!-- Shown in contact profile. The placeholder will be replaced by the name of the contact that introduced the contact. -->
@@ -1024,12 +1062,13 @@
     <string name="export_backup_desktop">Reservekopie exporteren</string>
     <string name="autocrypt_correct_desktop">Autocrypt-instellingen overgedragen!</string>
     <string name="forget_login_confirmation_desktop">Wil je dit account verwijderen? Alles wordt verwijderd: je eind-tot-eindinstellingen, contactpersonen, gesprekken, berichten en media. Deze actie kan niet ongedaan worden gemaakt.</string>
+    <!-- deprecated -->
     <string name="account_info_hover_tooltip_desktop2">E-mail: %1$s\nGrootte: %2$s\nAccount-id: %3$s</string>
     <string name="message_detail_sent_desktop">verstuurd</string>
     <string name="message_detail_received_desktop">ontvangen</string>
     <string name="menu.view.developer.open.log.folder">Map met logbestanden openen</string>
     <string name="menu.view.developer.open.current.log.file">Huidig logbestand openen</string>
-    <string name="explain_desktop_minimized_disabled_tray_pref">Het systeemvakpictogram is uitgeschakeld omdat Delta Chat is gestart met de optie --minimized</string>
+    <string name="explain_desktop_minimized_disabled_tray_pref" tools:ignore="TypographyDashes">Het systeemvakpictogram is uitgeschakeld omdat Delta Chat is gestart met de optie --minimized</string>
     <string name="no_spellcheck_suggestions_found">Geen suggesties gevonden.</string>
     <string name="show_window">Venster tonen</string>
     <string name="login_socks5_experimental_warning">De SOCKS5-ondersteuning is momenteel nog experimenteel - gebruik hiervan is op eigen risico. Als je een e-mailadres invoert, dan vindt er een dns-opzoeking plaats die niet wordt doorgesluisd via SOCKS5.</string>
@@ -1106,9 +1145,6 @@
 
 
     <!-- device messages for updates -->
-    <string name="update_1_42_common">Wijzigingslog:\n\n💌 een-op-eengesprekken hebben voortaan gegarandeerd eind-tot-eindversleuteling bij gebruik van goedgekeurde contactpersonen\n\n😌 omwille van eenvoud worden zulke contactpersonen en gesprekken voorzien van groene vinkjes\n\n👥 groepen worden automatisch voorzien van gegarandeerde eind-tot-eindversleuteling (indien mogelijk)\n\n🔄 goedgekeurd, geblokkeerd, gearchiveerd, vastgemaakt en genegeerd wordt voortaan naar alle apparaten gesynchroniseerd</string>
-    <!-- placeholder will be replaced by the URL https://get.delta.chat/#changelogs -->
-    <string name="update_1_42_android">Binnenkort beschikbaar: verbeteringen aan de camera, spraakberichten, reservekopieën, schermlezer, achtergronden per account, galerijselectie, webxdc in horizontale modus… of lees alles op %1$s</string>
     <string name="update_1_44_android">Wijzigingslog:\n\n❤️ Jaaaa! Eindelijk een langverwachte functie toegevoegd: een bericht lang ingedrukt houden om te reageren\n\n🔗 Als je geen QR-codes kunt scannen, dan kun je ze voortaan delen als uitnodigingslinks\n\n🔵 Voortaan wordt het aantal ongelezen berichten van alle accounts in de titel getoond\n\n… en vele, vele bugs opgelost… %1$s\n\nHelp de app te verbeteren: via ‘Instellingen → Geavanceerd → Statistieken versturen’ kun je de ontwikkelaars helpen om inzicht te krijgen in het dagelijks gebruik. Je kunt alle te versturen gegevens vooraf inzien.</string>
     <string name="update_1_44_ios">Wijzigingslog:\n\n❤️ Jaaaa! Eindelijk een langverwachte functie toegevoegd: een bericht lang ingedrukt houden om te reageren\n\n🫸 PUSHmeldingen, indien ondersteund door diensten als https://nine.testrun.org\n\n🔗 Als je geen QR-codes kunt scannen, dan kun je ze voortaan delen als uitnodigingslinks\n\n🔵 Voortaan wordt het aantal ongelezen berichten van alle accounts in de titel getoond\n\n… en vele, vele bugs opgelost… %1$s</string>
 </resources>

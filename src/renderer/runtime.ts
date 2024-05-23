@@ -85,6 +85,7 @@ interface Runtime {
   writeClipboardText(text: string): Promise<void>
   writeClipboardImage(path: string): Promise<void>
   getAppPath(name: Parameters<typeof app.getPath>[0]): string
+  openMapsWebxdc(accountId: number, chatId?: number): void
   openPath(path: string): Promise<string>
   getConfigPath(): string
 
@@ -159,6 +160,10 @@ class Browser implements Runtime {
         text: string | null
       ) => void)
     | undefined
+
+  openMapsWebxdc(_accountId: number, _chatId?: number | undefined): void {
+    throw new Error('Method not implemented.')
+  }
 
   emitUIFullyReady(): void {
     throw new Error('Method not implemented.')
@@ -377,6 +382,9 @@ class Electron implements Runtime {
   }
   notifyWebxdcInstanceDeleted(accountId: number, instanceId: number): void {
     ipcBackend.invoke('webxdc:instance-deleted', accountId, instanceId)
+  }
+  openMapsWebxdc(accountId: number, chatId?: number | undefined): void {
+    ipcBackend.invoke('open-maps-webxdc', accountId, chatId)
   }
   saveBackgroundImage(
     file: string,

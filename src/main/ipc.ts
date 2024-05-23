@@ -7,45 +7,31 @@ import {
   nativeImage,
   shell,
 } from 'electron'
-import { getLogger } from '../shared/logger'
-import { getDraftTempDir, getLogsPath } from './application-constants'
-import { LogHandler } from './log-handler'
-import { ExtendedAppMainProcess } from './types'
-import * as mainWindow from './windows/main'
-import { openHelpWindow } from './windows/help'
-import path, { basename, extname, join, posix, sep } from 'path'
-import { DesktopSettings } from './desktop_settings'
-import { getConfigPath } from './application-constants'
+import path, { basename, extname, join, posix, sep, dirname } from 'path'
 import { inspect } from 'util'
-import { DesktopSettingsType, RuntimeInfo } from '../shared/shared-types'
 import { platform } from 'os'
 import { existsSync } from 'fs'
-import { set_has_unread, updateTrayIcon } from './tray'
 import mimeTypes from 'mime-types'
-import { openHtmlEmailWindow } from './windows/html_email'
-import { appx } from './isAppx'
 import { versions } from 'process'
+import { fileURLToPath } from 'url'
+
+import { getLogger } from '../shared/logger.js'
+import { getDraftTempDir, getLogsPath } from './application-constants.js'
+import { LogHandler } from './log-handler.js'
+import { ExtendedAppMainProcess } from './types.js'
+import * as mainWindow from './windows/main.js'
+import { openHelpWindow } from './windows/help.js'
+import { DesktopSettings } from './desktop_settings.js'
+import { getConfigPath } from './application-constants.js'
+import { DesktopSettingsType, RuntimeInfo } from '../shared/shared-types.js'
+import { set_has_unread, updateTrayIcon } from './tray.js'
+import { openHtmlEmailWindow } from './windows/html_email.js'
+import { appx } from './isAppx.js'
+import DeltaChatController from './deltachat/controller.js'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const log = getLogger('main/ipc')
-const DeltaChatController: typeof import('./deltachat/controller').default =
-  (() => {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      return require('./deltachat/controller').default
-    } catch (error) {
-      log.critical(
-        "Fatal: The DeltaChat Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!",
-        error
-      )
-      dialog.showErrorBox(
-        'Fatal Error',
-        `The DeltaChat Module couldn't be loaded.
- Please check if all dependencies for deltachat-core are installed!
- The Log file is located in this folder: ${getLogsPath()}\n
- ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
-      )
-    }
-  })()
 
 const app = rawApp as ExtendedAppMainProcess
 
@@ -58,7 +44,31 @@ export function getDCJsonrpcClient() {
 export async function init(cwd: string, logHandler: LogHandler) {
   const main = mainWindow
   dcController = new DeltaChatController(cwd)
-  await dcController.init()
+
+  try {
+    await dcController.init()
+  } catch (error) {
+    log.critical(
+      "Fatal: The DeltaChat Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!",
+      error,
+      dcController.rpcServerPath
+    )
+    /* ignore-console-log */
+    console.error(
+      "Fatal: The DeltaChat Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!",
+      error,
+      dcController.rpcServerPath
+    )
+    dialog.showErrorBox(
+      'Fatal Error',
+      `The DeltaChat Module couldn't be loaded.
+Please check if all dependencies for deltachat-core are installed!
+The Log file is located in this folder: ${getLogsPath()}\n
+${dcController.rpcServerPath}\n
+${error instanceof Error ? error.message : inspect(error, { depth: null })}`
+    )
+    rawApp.exit(1)
+  }
 
   ipcMain.once('ipcReady', _e => {
     app.ipcReady = true
@@ -110,6 +120,8 @@ export async function init(cwd: string, logHandler: LogHandler) {
         { label: 'electron', value: versions.electron },
         { label: 'node', value: versions.node },
       ],
+      runningUnderARM64Translation: app.runningUnderARM64Translation,
+      rpcServerPath: dcController.rpcServerPath,
     }
     ev.returnValue = info
   })
@@ -118,11 +130,13 @@ export async function init(cwd: string, logHandler: LogHandler) {
     ev.returnValue = app.getPath(arg)
   })
 
-  ipcMain.handle('fileChooser', (_ev, options) => {
+  ipcMain.handle('fileChooser', async (_ev, options) => {
     if (!mainWindow.window) {
       throw new Error('window does not exist, this should never happen')
     }
-    return dialog.showOpenDialog(mainWindow.window, options)
+    const returnValue = await dialog.showOpenDialog(mainWindow.window, options)
+    mainWindow.window.filePathWhiteList.push(...returnValue.filePaths)
+    return returnValue
   })
 
   let lastSaveDialogLocation: string | undefined = undefined
@@ -276,7 +290,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
 
   return () => {
     // the shutdown function
-    dcController._inner_account_manager?.stopIO()
+    dcController.jsonrpcRemote.rpc.stopIoForAllAccounts()
   }
 }
 

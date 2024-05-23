@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- common strings without special context -->
     <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
@@ -212,8 +212,6 @@
     <string name="device_talk">Enhedsbeskeder</string>
     <string name="device_talk_subtitle">Lokalt genererede beskeder</string>
     <string name="device_talk_explain">Beskederne i denne chat er blevet generated lokalt af din Delta Chat app. Skaberne af appen bruger dette til at informere om app-opdateringer og problemer under brug.</string>
-    <!-- deprecated, use device_talk_welcome_message2 instead -->
-    <string name="device_talk_welcome_message">Velkommen til Delta Chat! - Delta Chat ser ud og føles som andre populære messenger apps men kontrolleres ikke fra centralt hold, tracker ikke eller sælger ikke dine, dine venners, dine kollegaers og din families oplysninger til store organisationer.\n\nTeknisk set er Delta Chat en email-klient med et moderne chat interface. E-mail i nye klæder om man vil. 👻\n\nBrug Delta Chat med hvem som helst ud af milliarder af mennesker: brug blot deres email-adresse. Modtagerne behøver ikke at installere Delta Chat, besøge websider eller melde sig ind nogen steder - men, selvfølgelig, hvis du vil kan du henvise dem til 👉https://get.delta.chat</string>
     <string name="edit_contact">Rediger kontakt</string>
     <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
     <string name="pin_chat">Fastgør chat</string>
@@ -314,6 +312,7 @@
     <string name="chat_record_slide_to_cancel">Træk for at annullere</string>
     <string name="chat_record_explain">Tryk og hold for at optage talebesked, slip for at sende.</string>
     <string name="chat_no_chats_yet_title">Tom indbakke.\nTryk \"+\" for at starte ny samtale.</string>
+    <!-- deprecated -->
     <string name="chat_no_chats_yet_hint">Du kan have samtaler med andre Delta Chat brugere og med enhver e-mailadresse.</string>
     <string name="chat_all_archived">Alle samtaler er arkiveret.\nTryk \"+\" for at starte ny samtale.</string>
     <string name="chat_share_with_title">Del med</string>
@@ -328,8 +327,6 @@
     <string name="retry_send">Forsøg igen at sende besked</string>
     <!-- reasons for a disabled message composer -->
     <string name="messaging_disabled_not_in_group">Du kan ikke skrive, fordi du ikke er medlem af denne gruppe. For at tilslutte dig, spørg et andet medlem.</string>
-    <!-- deprecated, the line is removed on desktop (was never used on other OS) -->
-    <string name="messaging_disabled_device_chat">Denne chat indeholder lokalt generede beskeder. Derfor kan du ikke skrive nogen beskeder.</string>
     <string name="cannot_display_unsuported_file_type">Kan ikke vise denne filtype: 1%s</string>
     <string name="attachment_failed_to_load">Visning af vedhæftede fil mislykkedes</string>
     <!-- map -->
@@ -385,7 +382,9 @@
 
 
     <string name="login_title">Login</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="login_header">Login til server</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="login_explain">Login med en eksisterende e-mailkonto</string>
     <string name="login_subheader">For kendte e-mailudbydere opsættes yderligere indstillinger automatisk. Nogle gange skal IMAP aktiveres i brugerfladen. Kontakt din e-mailudbyder eller venner for at få hjælp.</string>
     <string name="login_no_servers_hint">Der er ingen Delta Chat server, data forbliver på enhed!</string>
@@ -449,6 +448,7 @@
     <string name="pref_profile_photo">Profilbillede</string>
     <string name="pref_blocked_contacts">Blokerede kontakter</string>
     <string name="blocked_empty_hint">Hvis du blokerer kontakter, bliver de vist her.</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="pref_password_and_account_settings">Adgangskode og konto</string>
     <string name="pref_who_can_see_profile_explain">Profilbillede og navn vises sammen med beskeder, når der kommunikeres med andre brugere. Allerede sendt information kan ikke slettes eller fjernes.</string>
     <string name="pref_your_name">Dit navn</string>
@@ -573,7 +573,9 @@
     <string name="autodel_after_1_year">Efter 1 år</string>
 
     <!-- autocrypt -->
+    <!-- deprecated, used "Encryption" if a headline is needed -->
     <string name="autocrypt">Autocrypt</string>
+    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
     <string name="autocrypt_explain">Autocrypt er en ny åben specifikation for automatisk end-to-end e-mail kryptering.\n\nEnd-to-end opsætning bliver oprettet automatisk efter behov og kan overføres mellem enheder med Autocrypt opsætning beskeder.</string>
     <string name="autocrypt_send_asm_title">Send Autocrypt opsætning besked</string>
     <string name="autocrypt_send_asm_explain_before">En \"Autocrypt opsætning besked\" deler sikkert end-to-end opsætning med andre Autocrypt kompatible programmer.\n\nOpsætning er krypteret med en kode som er vist her og skal indtastes på den anden enhed.</string>
@@ -676,9 +678,8 @@
     <string name="qrshow_join_contact_no_connection_toast">Ingen internet forbindelse, kan ikke udføre QR kode opsætning.</string>
     <string name="qraccount_ask_create_and_login">Opret ny e-mail adresse på \"%1$s\" og log ind der?</string>
     <string name="qraccount_ask_create_and_login_another">Opret ny e-mail adresse på \"%1$s\" og log ind der?\n\nDin eksisterende konto bliver ikke slettet. Brug \"Skift konto\" for at skifte imellem dine konti.</string>
-    <!-- deprecated, use set_name_and_avatar_explain instead -->
-    <string name="qraccount_success_enter_name">Login lykkedes - din e-mail adresse er %1$s\n\nHvis du vil kan du nu indtaste et navn og et profilbillede der bliver vist til folk to skriver til.</string>
     <string name="qraccount_qr_code_cannot_be_used">Den skannede QR-kode kan ikke bruges til at opsætte en ny konto.</string>
+    <!-- deprecated -->
     <string name="qraccount_use_on_new_install">Den skannede QR-kode er til at opsætte en ny konto. Du kan skanne QR-kode når du opsætter en ny Delta Chat installation.</string>
     <string name="contact_verified">%1$s bekræftet.</string>
     <string name="contact_not_verified">Kan ikke bekræfte %1$s</string>

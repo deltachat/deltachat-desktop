@@ -283,7 +283,7 @@ export function ViewProfileInner({
                   closeProfileDialog: onClose,
                 }}
               >
-                <MessageBody text={statusText} />
+                <MessageBody text={statusText} disableJumbomoji />
               </MessagesDisplayContext.Provider>
             </div>
           </>

@@ -12,7 +12,6 @@ import Dialog, {
   FooterActions,
 } from '../../Dialog'
 import FooterActionButton from '../../Dialog/FooterActionButton'
-import Icon from '../../Icon'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import useConfirmationDialog from '../../../hooks/dialog/useConfirmationDialog'
 
@@ -22,8 +21,6 @@ import type { DialogProps } from '../../../contexts/DialogContext'
 import styles from './styles.module.scss'
 
 const log = getLogger('renderer/send_backup')
-
-const TROUBLESHOOTING_URL = 'https://delta.chat/en/help#multiclient'
 
 export function SendBackupDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
@@ -182,10 +179,9 @@ export function SendBackupDialog({ onClose }: DialogProps) {
             <FooterActions align='spaceBetween'>
               <span className={styles.buttonGroup}>
                 <FooterActionButton
-                  onClick={() => runtime.openLink(TROUBLESHOOTING_URL)}
+                  onClick={() => runtime.openHelpWindow('multiclient')}
                 >
-                  {tx('troubleshooting')}&nbsp;
-                  <Icon icon='open_in_new' size={20} />
+                  {tx('troubleshooting')}
                 </FooterActionButton>
                 {stage === 'awaiting_scan' && svgUrl && qrContent && (
                   <FooterActionButton onClick={copyQrToClipboard}>

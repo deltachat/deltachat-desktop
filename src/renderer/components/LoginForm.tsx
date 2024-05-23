@@ -170,7 +170,7 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
           <DeltaPasswordInput
             key='mail_pw'
             id='mail_pw'
-            placeholder={tx('password')}
+            placeholder={tx('existing_password')}
             password={mail_pw || ''}
             onChange={handleCredentialsChange}
           />
@@ -364,21 +364,23 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
   )
 }
 
+interface ConfigureProgressDialogProps {
+  credentials?: Partial<Credentials>
+  onSuccess?: () => void
+  onUserCancellation?: () => void
+  onFail?: (error: string) => void
+}
+
 export function ConfigureProgressDialog({
   credentials = {},
   onSuccess,
   onUserCancellation,
+  onFail,
   ...dialogProps
-}: {
-  credentials?: Partial<Credentials>
-  onSuccess?: () => void
-  onUserCancellation?: () => void
-} & DialogProps) {
+}: ConfigureProgressDialogProps & DialogProps) {
   const { onClose } = dialogProps
   const [progress, setProgress] = useState(0)
   const [progressComment, setProgressComment] = useState('')
-  const [error, setError] = useState('')
-  const [configureFailed, setConfigureFailed] = useState(false)
   const accountId = selectedAccountId()
   const tx = useTranslationFunction()
 
@@ -401,10 +403,10 @@ export function ConfigureProgressDialog({
       await BackendRemote.rpc.stopOngoingProcess(window.__selectedAccountId)
     } catch (error: any) {
       log.error('failed to stopOngoingProcess', error)
-      setError(
-        'failed to stopOngoingProcess' + error.message || error.toString()
-      )
-      setConfigureFailed(true)
+      onFail &&
+        onFail(
+          'failed to stopOngoingProcess' + error.message || error.toString()
+        )
       // If it fails to cancel but is still successful, it should behave like normal.
       wasCanceled.current = false
     }
@@ -443,8 +445,8 @@ export function ConfigureProgressDialog({
           onSuccess && onSuccess()
         } catch (err: any) {
           log.error('configure error', err)
-          setError(err.message || err.toString())
-          setConfigureFailed(true)
+          onClose()
+          onFail && onFail(err.message || err.toString())
         }
       })()
     },
@@ -465,39 +467,19 @@ export function ConfigureProgressDialog({
       canEscapeKeyClose={false}
       canOutsideClickClose={false}
     >
-      {!configureFailed && (
-        <>
-          <DialogBody>
-            <DialogContent paddingTop>
-              <DeltaProgressBar progress={progress} />
-              <p>{progressComment}</p>
-            </DialogContent>
-          </DialogBody>
-          <DialogFooter>
-            <FooterActions>
-              <FooterActionButton danger onClick={onCancel}>
-                {tx('cancel')}
-              </FooterActionButton>
-            </FooterActions>
-          </DialogFooter>
-        </>
-      )}
-      {configureFailed && (
-        <>
-          <DialogBody>
-            <DialogContent paddingTop>
-              <p>{error}</p>
-            </DialogContent>
-          </DialogBody>
-          <DialogFooter>
-            <FooterActions>
-              <FooterActionButton onClick={onClose}>
-                {tx('ok')}
-              </FooterActionButton>
-            </FooterActions>
-          </DialogFooter>
-        </>
-      )}
+      <DialogBody>
+        <DialogContent paddingTop>
+          <DeltaProgressBar progress={progress} />
+          <p>{progressComment}</p>
+        </DialogContent>
+      </DialogBody>
+      <DialogFooter>
+        <FooterActions>
+          <FooterActionButton danger onClick={onCancel}>
+            {tx('cancel')}
+          </FooterActionButton>
+        </FooterActions>
+      </DialogFooter>
     </Dialog>
   )
 }

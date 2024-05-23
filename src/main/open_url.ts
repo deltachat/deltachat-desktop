@@ -2,11 +2,11 @@ import { app as rawApp, ipcMain } from 'electron'
 import type { EventEmitter } from 'events'
 import { readFile } from 'fs/promises'
 import { basename } from 'path'
-import { getLogger } from '../shared/logger'
-import { supportedURISchemes } from './application-constants'
-import { showDeltaChat } from './tray'
-import { ExtendedAppMainProcess } from './types'
-import { send, window } from './windows/main'
+import { getLogger } from '../shared/logger.js'
+import { supportedURISchemes } from './application-constants.js'
+import { showDeltaChat } from './tray.js'
+import { ExtendedAppMainProcess } from './types.js'
+import { send, window } from './windows/main.js'
 
 const log = getLogger('main/open_url')
 const app = rawApp as ExtendedAppMainProcess

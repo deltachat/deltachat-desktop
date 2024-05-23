@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- common strings without special context -->
     <string name="app_name">Delta Chat</string>
     <string name="ok">확인</string>
@@ -241,8 +241,6 @@
     <string name="device_talk">기기 메시지</string>
     <string name="device_talk_subtitle">로컬에서 생성된 메시지</string>
     <string name="device_talk_explain">이 채팅의 메시지는 델타 채팅 앱에서 로컬로 생성됩니다. 제작자는 이것을 앱 업데이트와 사용 중 발생하는 문제에 대해 알리기 위해 사용한다.</string>
-    <!-- deprecated, use device_talk_welcome_message2 instead -->
-    <string name="device_talk_welcome_message">Delta Chat에 오신 것을 환영합니다! – Delta Chat은 다른 인기 있는 메신저 앱처럼 보여지지만, 여러분, 친구, 동료 또는 가족을 중앙 집중식으로 관리하거나 대규모 조직에 판매하지는 않습니다.\n\n기술적으로, Delta Chat은 현대적인 채팅 인터페이스를 갖춘 이메일 애플리케이션입니다. 👻\n\n 수십 억 명 중 누구와도 델타 채팅을 사용하려면 새 드레스로 이메일을 보내십시오: 이메일 주소를 사용하십시오. 수신자는 Delta Chat을 설치하거나 웹 사이트를 방문하거나 아무 곳에서나 등록할 필요가 없습니다. 하지만 원하는 경우 👉 https://get.delta.chat 을 선택할 수 있습니다.</string>
     <string name="edit_contact">연락처 수정</string>
     <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
     <string name="pin_chat">채팅 고정</string>
@@ -344,6 +342,7 @@
     <string name="chat_record_slide_to_cancel">밀어서 취소</string>
     <string name="chat_record_explain">꾹 눌러 음성 메시지를 녹음하고, 떼서 보내시오</string>
     <string name="chat_no_chats_yet_title">받은 편지함을 비웁니다.\n새 채팅을 시작하려면 \"+\"를 누르시오.</string>
+    <!-- deprecated -->
     <string name="chat_no_chats_yet_hint">다른 Delta Chat 사용자 그리고 어떤 이메일 주소라도 채팅할 수 있습니다.</string>
     <string name="chat_all_archived">모든 대화가 보관되었습니다.\n새 채팅을 시작하려면 \"+\"를 누르시오.</string>
     <string name="chat_share_with_title">공유 대상</string>
@@ -361,8 +360,6 @@
     <string name="retry_send">메시지 전송 다시 시도</string>
     <!-- reasons for a disabled message composer -->
     <string name="messaging_disabled_not_in_group">이 그룹에 속해 있지 않기 때문에 쓸 수 없습니다. 가입하려면, 다른 구성원에게 문의하십시오.</string>
-    <!-- deprecated, the line is removed on desktop (was never used on other OS) -->
-    <string name="messaging_disabled_device_chat">이 대화는 로컬에서 생성된 메시지를 포함합니다. 따라서 메시지를 쓸 수 없습니다.</string>
     <string name="messaging_disabled_mailing_list">메일링 목록의 메시지 발송은 아직 지원되지 않습니다.</string>
     <string name="cannot_display_unsuported_file_type">파일 형식을 표시할 수 없습니다: %s</string>
     <string name="attachment_failed_to_load">첨부 파일을 불러오지 못했습니다.</string>
@@ -455,11 +452,11 @@
     <string name="part_of_total_used">%2$s중 %1$s 사용됨</string>
 
 
-    <!-- welcome and login -->
-    <string name="welcome_chat_over_email">이메일로 채팅.</string>
     <string name="scan_invitation_code">초대 코드 스캔</string>
     <string name="login_title">로그인</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="login_header">이메일 계정으로 로그인하시오</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="login_explain">존재하는 이메일 계정으로 로그인하시오</string>
     <string name="login_subheader">알려진 이메일 공급자의 경우 추가 설정이 자동으로 설정됩니다. 웹 설정에서 IMAP을 사용 가능으로 설정해야 하는 경우가 있습니다. 도움이 필요하면 전자 메일 공급자나 친구에게 문의하십시오.</string>
     <string name="login_no_servers_hint">Delta Chat은 서버가 없고, 당신의 데이터는 장치에 남아 있습니다.</string>
@@ -523,6 +520,7 @@
     <string name="pref_profile_photo">프로필 사진</string>
     <string name="pref_blocked_contacts">차단 목록</string>
     <string name="blocked_empty_hint">차단된 연락처가 여기에 나타납니다.</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="pref_password_and_account_settings">계정 설정</string>
     <string name="pref_who_can_see_profile_explain">다른 사용자와 통신할 때 프로필 이미지, 이름 및 서명이 메시지와 함께 전송됩니다.</string>
     <string name="pref_your_name">내 이름</string>
@@ -592,6 +590,7 @@
     <string name="pref_imap_folder_warn_disable_defaults">이 선택사항을 변경할 경우, 서버와 다른 클라이언트가 적절하게 구성되어 있는지 확인하십시오.\n\n그렇지 않으면 상황이 전혀 작동하지 않을 수 있습니다.</string>
     <string name="pref_watch_sent_folder">보낸 폴더 보기</string>
     <string name="pref_send_copy_to_self">복사본 내게 보내기</string>
+    <!-- for classic email, we use the classical term "Account" -->
     <string name="pref_send_copy_to_self_explain">여러 장치에서 이 계정을 사용할 때 필요합니다.</string>
     <string name="pref_auto_folder_moves">DeltaChat 폴더로 자동 이동</string>
     <string name="pref_auto_folder_moves_explain">받은 문서가 복잡해지지 않도록 대화 내용이 이동됩니다.</string>
@@ -653,7 +652,9 @@
     <string name="autodel_after_1_year">1년 후</string>
 
     <!-- autocrypt -->
+    <!-- deprecated, used "Encryption" if a headline is needed -->
     <string name="autocrypt">자동암호화</string>
+    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
     <string name="autocrypt_explain">자동 암호화는 자동 종단 간 전자 메일 암호화를 위한 새로운 공개 사양입니다.\n\n필요에 따라 종단 간 설정이 자동으로 생성되고 자동 암호화 설정 메시지를 사용하여 장치 간에 전송할 수 있습니다.</string>
     <string name="autocrypt_send_asm_title">자동 암호화 설정된 메시지 전송</string>
     <string name="autocrypt_send_asm_explain_before">자동 암호화 설치 메시지는 사용자의 설정을 다른 자동 암호화 호환 앱과 안전하게 공유합니다.\n\n설치는 여기에 표시된 설치 코드에 의해 암호화되며 다른 장치에 입력해야 합니다.</string>
@@ -775,13 +776,12 @@
     <string name="qrshow_join_contact_no_connection_toast">인터넷에 연결되어 있지 않아 QR 코드 설정을 수행할 수 없습니다.</string>
     <string name="qraccount_ask_create_and_login">\"%1$s\"에서 새 이메일 주소를 만들고 로그인하시겠습니까?</string>
     <string name="qraccount_ask_create_and_login_another">\"%1$s\"에서 새 이메일 주소를 만들고 로그인하시겠습니까?\n\n기존 계정은 삭제되지 않습니다. 계정 전환 항목을 사용하여 계정 간을 전환합니다.</string>
-    <!-- deprecated, use set_name_and_avatar_explain instead -->
-    <string name="qraccount_success_enter_name">로그인 성공—이메일 주소는 %1$s입니다 \n\n원하는 경우, 이제 다름 사람에게 표시할 이름과 프로필 이미지를 입력할 수 있습니다.</string>
     <string name="qraccount_qr_code_cannot_be_used">스캔한 QR 코드를 사용하여 새 계정을 설정할 수 없습니다.</string>
+    <!-- deprecated -->
     <string name="qraccount_use_on_new_install">스캔한 QR 코드는 새 계정을 설정하기 위한 것입니다. 새 델타 채팅 설치를 설정할 때 QR 코드를 스캔할 수 있습니다.</string>
-    <!-- the placeholder will be replaced by the e-mail address of the account -->
+    <!-- the placeholder will be replaced by the e-mail address of the profile -->
     <string name="qrlogin_ask_login">\"%1$s\"에 로그인하시겠습니까?</string>
-    <!-- the placeholder will be replaced by the e-mail address of the account -->
+    <!-- the placeholder will be replaced by the e-mail address of the profile -->
     <string name="qrlogin_ask_login_another">\"%1$s\"에 로그인하시겠습니까?\n\n기존 계정은 삭제되지 않습니다. 계정 전환 항목을 사용하여 계정 간을 전환합니다.</string>
     <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">%1$s이 그룹에 가입하도록 초대했습니다.\n\n%2$s의 장치가 응답하기를 기다리는 중입니다...</string>
@@ -862,6 +862,7 @@
     <string name="export_backup_desktop">백업 내보내기</string>
     <string name="autocrypt_correct_desktop">자동 암호화 설정이 전송되었습니다.</string>
     <string name="forget_login_confirmation_desktop">이 로그인을 삭제하시겠습니까? 모든 설정, 연락처, 채팅, 메시지 및 미디어를 포함한 모든 것이 삭제됩니다. 이 작업은 취소할 수 없습니다.</string>
+    <!-- deprecated -->
     <string name="account_info_hover_tooltip_desktop2">이메일: %1$s\n크기: %2$s\n계정 ID:%3$s</string>
     <string name="message_detail_sent_desktop">보냄</string>
     <string name="message_detail_received_desktop">받음</string>

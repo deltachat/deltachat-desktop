@@ -1,3 +1,4 @@
+//@ts-check
 const colorize = (light, code) => str =>
   '\x1B[' + light + ';' + code + 'm' + str + '\x1b[0m'
 const blue = colorize(1, 34)
@@ -22,16 +23,16 @@ ${blue('------------------------------------------------')}`
   )
 }
 
-const walk = require('walk')
-const fs = require('fs')
-const path = require('path')
-const walker = walk.walk('./src')
+import { walk as _walk } from 'walk'
+import { readFile } from 'fs'
+import { join } from 'path'
+const walker = _walk('./src')
 let found = 0
 
 walker.on('file', function(root, fileStats, next) {
   if (!fileStats.name.includes('.js')) next()
-  const filename = path.join(root, fileStats.name)
-  fs.readFile(filename, 'utf-8', function(err, data) {
+  const filename = join(root, fileStats.name)
+  readFile(filename, 'utf-8', function(err, data) {
     if (err) throw err
     const lines = data.split('\n')
     for (let i = 0; i < lines.length; i++) {
