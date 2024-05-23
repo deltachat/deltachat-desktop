@@ -1,7 +1,9 @@
 .message-wrapper {
   --shortcut-menu-visibility: hidden;
+  --shortcut-menu-multiplier: 0;
   &:hover {
     --shortcut-menu-visibility: visible;
+    --shortcut-menu-multiplier: 1;
   }
 }
 

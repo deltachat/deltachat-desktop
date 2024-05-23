@@ -27,6 +27,7 @@
 - Improve security: restrict file protocol #3769 #3798 #3800
 - Change chatlist to use new chatlist changed event from core #3268
 - Refactor QR code reader #3762
+- add animations for message shortcuts menu #3759
 - reactions: add message height animation #3752
 - update `@deltachat/message_parser_wasm` to `0.10.0` -> now parses internationalised Links and some minor bugfixes #3813
 - replace emoji regex with message-parser function for counting emojis #3813
