@@ -4,7 +4,7 @@ import type { JSXElementConstructor, PropsWithChildren } from 'react'
 
 import { generateRandomUUID } from '../utils/random'
 
-type DialogId = string
+export type DialogId = string
 
 export type DialogProps = {
   onClose: () => void
