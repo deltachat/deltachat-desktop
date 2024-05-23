@@ -131,7 +131,9 @@ function CreateChatMain(props: CreateChatMainProps) {
     ADD_CONTACT,
   }
   const contactsAndExtraItems = [
-    ...(needToRenderAddContactQRScan ? [ExtraItemType.ADD_CONTACT_QR_SCAN] : []),
+    ...(needToRenderAddContactQRScan
+      ? [ExtraItemType.ADD_CONTACT_QR_SCAN]
+      : []),
     ...(needToRenderAddGroup ? [ExtraItemType.ADD_GROUP] : []),
     ...(needToRenderAddBroadcastList ? [ExtraItemType.ADD_BROADCAST_LIST] : []),
     ...contacts,
