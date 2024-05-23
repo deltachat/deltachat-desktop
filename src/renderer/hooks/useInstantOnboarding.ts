@@ -17,11 +17,7 @@ import type {
 } from '../backend/qr'
 
 type InstantOnboarding = {
-  createInstantAccount: (
-    accountId: number,
-    displayName: string,
-    profilePicture?: string
-  ) => Promise<T.FullChat['id'] | null>
+  createInstantAccount: (accountId: number) => Promise<T.FullChat['id'] | null>
   /** Exit the instant onboarding flow */
   resetInstantOnboarding: () => void
   /** Whether instant onboarding is active */
@@ -69,11 +65,7 @@ export default function useInstantOnboarding(): InstantOnboarding {
   )
 
   const createInstantAccount = useCallback(
-    async (
-      accountId: number,
-      displayName: string,
-      profilePicture?: string
-    ): Promise<T.FullChat['id'] | null> => {
+    async (accountId: number): Promise<T.FullChat['id'] | null> => {
       let configurationQR = `dcaccount:${DEFAULT_CHATMAIL_QR_URL}`
 
       if (welcomeQr) {
@@ -102,16 +94,8 @@ export default function useInstantOnboarding(): InstantOnboarding {
 
       await BackendRemote.rpc.setConfigFromQr(accountId, configurationQR)
 
-      // 2. Additionally we set the `selfavatar` / profile picture
-      // and `displayname` configuration for this account
-      if (profilePicture) {
-        await BackendRemote.rpc.setConfig(
-          accountId,
-          'selfavatar',
-          profilePicture
-        )
-      }
-      await BackendRemote.rpc.setConfig(accountId, 'displayname', displayName)
+      // 2. ~~Additionally we set the `selfavatar` / profile picture~~
+      // ~~and `displayname` configuration for this account~~ -> this is now done before calling this method.
 
       return new Promise((resolve, reject) => {
         // 3. Kick-off the actual account creation process by calling

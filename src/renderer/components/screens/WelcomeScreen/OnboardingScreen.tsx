@@ -27,7 +27,9 @@ export default function OnboardingScreen(props: Props) {
   const { openDialog } = useDialog()
 
   const onAlreadyHaveAccount = () => {
-    openDialog(AlternativeSetupsDialog)
+    openDialog(AlternativeSetupsDialog, {
+      selectedAccountId: props.selectedAccountId,
+    })
   }
 
   const onClickBackButton = async () => {
