@@ -37,6 +37,7 @@ export default function InstantOnboardingScreen({
 
   const [displayName, setDisplayName] = useState('')
   const [profilePicture, setProfilePicture] = useState<string | undefined>()
+  const [showMissingNameError, setShowMissingNameError] = useState(false)
 
   const onChangeProfileImage = (path: string) => {
     setProfilePicture(path)
@@ -44,9 +45,17 @@ export default function InstantOnboardingScreen({
 
   const onChangeDisplayName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDisplayName(event.target.value)
+    if (showMissingNameError) {
+      setShowMissingNameError(false)
+    }
   }
 
   const onConfirm = async () => {
+    if (!displayName) {
+      setShowMissingNameError(true)
+      return
+    }
+
     try {
       // Automatically create a "chatmail" account
       const chatId = await createInstantAccount(
@@ -94,6 +103,9 @@ export default function InstantOnboardingScreen({
             value={displayName}
             onChange={onChangeDisplayName}
           />
+          {showMissingNameError && (
+            <p className={styles.inputError}>{tx('please_enter_name')}</p>
+          )}
           <AdditionalActionInfo accountId={selectedAccountId} />
           <p>{tx('set_name_and_avatar_explain')}</p>
           <div className={styles.welcomeScreenButtonGroup}>
@@ -105,7 +117,6 @@ export default function InstantOnboardingScreen({
             </div>
             <Button
               className={styles.welcomeScreenButton}
-              disabled={displayName.length === 0}
               type='primary'
               onClick={onConfirm}
             >
