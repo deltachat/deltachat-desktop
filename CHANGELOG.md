@@ -27,6 +27,7 @@
 - Improve security: restrict file protocol #3769 #3798 #3800
 - Change chatlist to use new chatlist changed event from core #3268
 - Refactor QR code reader #3762
+- reactions: add message height animation #3752
 - update `@deltachat/message_parser_wasm` to `0.10.0` -> now parses internationalised Links and some minor bugfixes #3813
 - replace emoji regex with message-parser function for counting emojis #3813
 - update eslint dependency and its plugins #3808:
@@ -46,6 +47,7 @@
 - hide irrelevant advanced settings for chatmail users #3823
 - upgrade `electron-builder` from `24.6.4` to `24.13.3` #3828
 - upgrade `mocha` to `10.4.0`
+
 
 ### Fixed
 - fix chat audit dialog was going out of viewport on smaller screens #3736
