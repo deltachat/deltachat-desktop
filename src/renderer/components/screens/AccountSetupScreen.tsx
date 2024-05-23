@@ -16,6 +16,8 @@ import Dialog, {
 } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
+import { DialogId } from '../../contexts/DialogContext'
+import AlertDialog from '../dialogs/AlertDialog'
 
 import type ScreenController from '../../ScreenController'
 
@@ -27,7 +29,8 @@ export default function AccountSetupScreen({
   accountId: number
 }) {
   const tx = useTranslationFunction()
-  const { openDialog } = useDialog()
+  const { openDialog, closeDialog, hasOpenDialogs } = useDialog()
+  const [promptDialogId, setPromptDialogId] = useState<null | DialogId>(null)
 
   const [credentials, setCredentials] =
     useState<Credentials>(defaultCredentials())
@@ -40,6 +43,13 @@ export default function AccountSetupScreen({
           selectAccount(accountId)
           window.__updateAccountListSidebar?.()
         },
+        onFail: (error: string) =>
+          setPromptDialogId(
+            openDialog(AlertDialog, {
+              message: error,
+              cb: () => setPromptDialogId(null),
+            })
+          ),
       }),
     [accountId, openDialog, selectAccount, credentials]
   )
@@ -47,12 +57,18 @@ export default function AccountSetupScreen({
   const onKeyDown = useCallback(
     (ev: KeyboardEvent) => {
       if (ev.code === 'Enter') {
-        onClickLogin()
         ev.stopPropagation()
         ev.preventDefault()
+        if (hasOpenDialogs) {
+          if (promptDialogId !== null) {
+            closeDialog(promptDialogId)
+          }
+        } else {
+          onClickLogin()
+        }
       }
     },
-    [onClickLogin]
+    [onClickLogin, hasOpenDialogs, closeDialog, promptDialogId]
   )
 
   useEffect(() => {
