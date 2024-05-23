@@ -52,6 +52,7 @@
 - hide irrelevant advanced settings for chatmail users #3823
 - upgrade `electron-builder` from `24.6.4` to `24.13.3` #3828
 - upgrade `mocha` to `10.4.0`
+- always show overrideSenderName if set on Messages
 
 
 ### Fixed
