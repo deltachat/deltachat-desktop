@@ -4,4 +4,16 @@
   -webkit-mask-position: center;
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-size: contain;
+
+  &.navbar {
+    background-color: var(--navBarText);
+  }
+
+  &.settings {
+    background-color: var(--settingsIconColor);
+  }
+
+  &.context-menu {
+    background-color: var(--contextMenuText);
+  }
 }

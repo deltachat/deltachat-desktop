@@ -7,6 +7,7 @@ type Props = React.PropsWithChildren<{
   'aria-label'?: string
   className?: string
   disabled?: boolean
+  active?: boolean
   id?: string
   onClick: any
   type?: 'primary' | 'secondary' | 'danger'
@@ -15,6 +16,7 @@ type Props = React.PropsWithChildren<{
 export default function Button({
   children,
   disabled = false,
+  active = false,
   id,
   onClick,
   type,
@@ -27,6 +29,7 @@ export default function Button({
       role='button'
       className={classNames(
         styles.button,
+        active && styles.active,
         type && styles[type],
         props.className
       )}
