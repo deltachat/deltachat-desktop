@@ -41,7 +41,7 @@ Themes are just css files with a header identifying them as a theme:
 }
 ```
 
-You can modify all classes and use all kind of css, but we recommend using the css variables set by [`themes/_themebase.scss`](https://github.com/deltachat/deltachat-desktop/blob/master/themes/_themebase.scss) as these are less likely to change between releases and thus a bit more stable, but in general there are no stability gurantees for theming, so expect to be required to update your theme when you update to a new deltachat desktop version comes out.
+You can modify all classes and use all kind of css, but we recommend using the css variables set by [`themes/_themebase.scss`](https://github.com/deltachat/deltachat-desktop/blob/main/themes/_themebase.scss) as these are less likely to change between releases and thus a bit more stable, but in general there are no stability gurantees for theming, so expect to be required to update your theme when you update to a new deltachat desktop version comes out.
 
 ## Setting a theme from CLI
 
@@ -67,7 +67,7 @@ We use SCSS to create themes, because it allows us to save work by using its col
 
 ### **Method A** - When you have a deltachat desktop checkout
 
-0. make sure deltachat desktop is up to date and checked out to the version you want to make your theme for, normally checking out master is sufficient for making themes for the newest version.
+0. make sure deltachat desktop is up to date and checked out to the version you want to make your theme for, normally checking out `main` is sufficient for making themes for the newest version.
 
 1. copy the light or dark theme and save it to your user deltachat folder `DeltaChat/custom-themes/my_theme.scss`
 
@@ -100,7 +100,7 @@ Read the comments in the theme files for additional information.
 
 0. install the sass compiler via `npm i -g node-sass` (if it says that npm was not found, then you need to install nodejs first)
 
-1. Download all files starting with `_` from https://github.com/deltachat/deltachat-desktop/tree/master/themes and put them in a `./themes/` folder in your working directory (or alternatively download the folder to your working directory).
+1. Download all files starting with `_` from https://github.com/deltachat/deltachat-desktop/tree/main/themes and put them in a `./themes/` folder in your working directory (or alternatively download the folder to your working directory).
 
 2. copy the light or dark theme and save it to your user deltachat folder `DeltaChat/custom-themes/my_theme.scss`
 

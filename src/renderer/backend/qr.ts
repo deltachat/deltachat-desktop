@@ -20,7 +20,7 @@ export type QrWithUrl<Q = T.Qr> = {
  * a parsed result when it was valid, throws an error if string is invalid.
  *
  * See list of supported DeltaChat URI-schemes here:
- * - https://github.com/deltachat/interface/blob/master/uri-schemes.md
+ * - https://github.com/deltachat/interface/blob/main/uri-schemes.md
  * - https://c.delta.chat/classdc__context__t.html#a34a865a52127ed2cc8c2f016f085086c
  */
 export async function processQr(

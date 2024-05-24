@@ -33,6 +33,6 @@ export async function updateDeviceChats(
 ⚙️ Improved settings dialog
 ✨ A whole bunch of refactorings, improvements and bugfixes
 
-Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1_44_0`,
+Full Changelog: https://github.com/deltachat/deltachat-desktop/blob/main/CHANGELOG.md#1_44_0`,
   })
 }

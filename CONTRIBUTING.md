@@ -96,10 +96,10 @@ For coding style of other files and other development topics refer to [docs/DEVE
 
 ### Merging Conventions
 
-PR are merged usually to the branch `master` from which [releases](./RELEASE.md) are done.
+PR are merged usually to the branch `main` from which [releases](./RELEASE.md) are done.
 
-As a default, do a `git rebase master` in case feature branches and `master` differ too much.
-(please do **not** merge `master` into your feature branch)
+As a default, do a `git rebase main` in case feature branches and `main` differ too much.
+(please do **not** merge `main` into your feature branch)
 
 Once a PR has an approval, unless stated otherwise, it can be merged by the author.
 A PR may be approved but postponed to be merged eg. because of an ongoing release.
@@ -114,7 +114,7 @@ To ensure the correct merge merge strategy, merging left up to the PR author:
 If you do not have write access to the repository,
 you may leave a note in the PR about the desired merge strategy.
 
-Project maintainers can also merge it, as long as they take on the responsibility (care for fixing `master` again if the pr broke it).
+Project maintainers can also merge it, as long as they take on the responsibility (care for fixing `main` again if the pr broke it).
 
 ## Translations
 
