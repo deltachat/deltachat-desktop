@@ -31,6 +31,10 @@
     color: var(--buttonDangerText);
   }
 
+  &.active {
+    background-color: var(--navBarButtonActive);
+  }
+
   &:disabled {
     background-color: var(--buttonDisabledBackground);
     color: var(--buttonDisabledText);

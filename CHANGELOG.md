@@ -2,6 +2,11 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- ContextMenuItem now can render icons
+- use our own ContextMenu for AttachmentMenu
+- replace BlueprintJS Button and Icon with our implementation in chat navbar and attachment menu
+
 <a id="1_45_0"></a>
 
 ## [v1.45.0] - 2024-05-24

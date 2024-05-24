@@ -27,9 +27,13 @@ $hover-contrast-change: 2%;
   --buttonDangerText: #{$colorDanger};
   --buttonDisabledBackground: #{$bgSecondary};
   --buttonDisabledText: #{changeContrast($textSecondary, 45%)};
+  /* Icons */
+  --iconBackground: #757575; /* color from emoji.png */
   /* NavBar */
   --navBarBackground: #{$bgNavBar};
   --navBarText: #{$textNavBar};
+  --navBarButtonHover: rgba(143, 153, 168, 0.15);
+  --navBarButtonActive: rgba(143, 153, 168, 0.3);
   --navBarSearchPlaceholder: #{changeContrast($textNavBar, 27%)};
   --navBarGroupSubtitle: #{changeContrast($textNavBar, 27%)};
   /* ChatView */

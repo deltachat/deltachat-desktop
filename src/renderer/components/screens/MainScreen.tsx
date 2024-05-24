@@ -2,11 +2,9 @@ import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 import {
   Alignment,
-  Classes,
   Navbar,
   NavbarGroup,
   NavbarHeading,
-  Button,
 } from '@blueprintjs/core'
 
 import Gallery from '../Gallery'
@@ -18,6 +16,8 @@ import MailingListProfile from '../dialogs/MessageListProfile'
 import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 import { Type } from '../../backend-com'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
+import Button from '../Button'
+import Icon from '../Icon'
 import SearchInput from '../SearchInput'
 import MessageListView from '../MessageListView'
 import useChat from '../../hooks/chat/useChat'
@@ -163,16 +163,14 @@ export default function MainScreen({ accountId }: Props) {
                   {tx('chat_archived_chats_title')}
                 </div>
                 <Button
-                  className={[
-                    Classes.MINIMAL,
-                    'icon-rotated',
-                    'archived-chats-return-button',
-                    'no-drag',
-                  ].join(' ')}
-                  icon='undo'
+                  className={['archived-chats-return-button', 'no-drag'].join(
+                    ' '
+                  )}
                   onClick={() => setArchivedChatsSelected(false)}
                   aria-label={tx('back')}
-                />
+                >
+                  <Icon coloring='context-menu' icon='undo' rotation={90} />
+                </Button>
               </>
             )}
             {!showArchivedChats && (
@@ -202,13 +200,13 @@ export default function MainScreen({ accountId }: Props) {
                 aria-disabled={threeDotMenuHidden}
               >
                 <Button
-                  className='icon-rotated'
-                  minimal
-                  icon='more'
                   id='three-dot-menu-button'
+                  className='navbar-button'
                   aria-label={tx('main_menu')}
                   onClick={onClickThreeDotMenu}
-                />
+                >
+                  <Icon coloring='navbar' icon='more' rotation={90} size={24} />
+                </Button>
               </span>
             )}
           </NavbarGroup>
@@ -362,29 +360,29 @@ function ChatNavButtons() {
       <span className='views no-drag'>
         <Button
           onClick={() => setChatView(ChatView.MessageList)}
-          minimal
-          large
           active={activeView === ChatView.MessageList}
-          icon={'chat'}
           aria-label={tx('chat')}
-        />
+          className='navbar-button'
+        >
+          <Icon coloring='navbar' icon='chats' size={18} />
+        </Button>
         <Button
           onClick={() => setChatView(ChatView.Media)}
-          minimal
-          large
           active={activeView === ChatView.Media}
-          icon={'media'}
           aria-label={tx('media')}
-        />
+          className='navbar-button'
+        >
+          <Icon coloring='navbar' icon='image' size={18} />
+        </Button>
         {settingsStore?.desktopSettings.enableOnDemandLocationStreaming && (
           <Button
-            minimal
-            large
-            icon='map'
             onClick={() => openMapWebxdc(chatId)}
             active={activeView === ChatView.Media}
             aria-label={tx('tab_map')}
-          />
+            className='navbar-button'
+          >
+            <Icon coloring='navbar' icon='map' size={18} />
+          </Button>
         )}
       </span>
     </>

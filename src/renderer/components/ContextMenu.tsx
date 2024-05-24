@@ -6,15 +6,19 @@ import React, {
   useCallback,
 } from 'react'
 import classNames from 'classnames'
+import Icon from './Icon'
+import type { IconName } from './Icon'
 
 import useContextMenu from '../hooks/useContextMenu'
 
 type ContextMenuItemActionable = {
+  icon?: IconName
   action: (event: React.MouseEvent<Element, MouseEvent>) => void
   subitems?: never
 }
 
 type ContextMenuItemExpandable = {
+  icon?: IconName
   action?: never
   subitems: (ContextMenuItem | undefined)[]
 }
@@ -344,6 +348,7 @@ export function ContextMenu(props: {
               key={index}
               {...(item.subitems && { 'data-expandable-index': index })}
             >
+              {item.icon && <Icon className='left-icon' icon={item.icon} />}
               {item.label}
               {item.subitems && <div className='right-icon'></div>}
             </div>
