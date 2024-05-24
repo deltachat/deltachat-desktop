@@ -39,7 +39,7 @@ const log = getLogger('renderer/hooks/useProcessQr')
  * various secure join, instant onboarding or other actions based on it.
  *
  * See list of supported DeltaChat URI-schemes here:
- * - https://github.com/deltachat/interface/blob/master/uri-schemes.md
+ * - https://github.com/deltachat/interface/blob/main/uri-schemes.md
  * - https://c.delta.chat/classdc__context__t.html#a34a865a52127ed2cc8c2f016f085086c
  */
 export default function useProcessQR() {

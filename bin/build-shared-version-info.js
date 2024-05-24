@@ -33,7 +33,7 @@ async function getGitRef() {
       console.log(git_symbolic_ref, git_branch)
     } catch (err) {
       console.log(err)
-      git_branch = 'master'
+      git_branch = 'main'
     }
   } catch (err) {
     console.log(err)
@@ -42,7 +42,7 @@ async function getGitRef() {
   }
 
   const git_ref =
-    git_describe + (git_branch === 'master' ? '' : '-' + git_branch)
+    git_describe + (git_branch === 'main' ? '' : '-' + git_branch)
   return git_ref
 }
 

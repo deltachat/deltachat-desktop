@@ -72,12 +72,12 @@
 4. Change `version` field in `package.json` to `X.Y.Z`
 5. Run `npm install` to update `package-lock.json`
 6. Open a PR for your branch and get it reviewed.
-7. As soon as your PR is approved merge it to `master`
-8. Checkout the latest version on `master` after merging. Tag the latest commit
+7. As soon as your PR is approved merge it to `main`
+8. Checkout the latest version on `main` after merging. Tag the latest commit
    with your version number:
    ```bash
    git tag <tagname> # for example v1.43.2
-   git push origin master --tags
+   git push origin main --tags
    ```
 9. After the PR is merged create a GitHub release for your tag:
    - Copy the relevant part of the `CHANGELOG.md` file into the description field
@@ -93,7 +93,7 @@
     them to: `https://download.delta.chat/desktop/[version_code]`. This process
     takes 2-3 hours.
 
-## What if the master branch changed in the meantime
+## What if the `main` branch changed in the meantime
 
 Rebase your PR and redo the steps as necessary. If you are unsure ask another
 contributor on how to proceed in your case.
