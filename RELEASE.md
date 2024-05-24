@@ -17,7 +17,7 @@
   and gathering feedback
 - Usually after a round of feedback and bug reports we do another test release
   and repeat, until the release stabilized
-- Optional: We can use flatpack for test releases as well (they have a
+- Optional: We can use flatpak for test releases as well (they have a
   "testing" branch users can opt-in)
 - Optional: Draft an in-app device message for the new version informing users
   of the release highlights and also thanking the testers for testing the app
@@ -26,7 +26,7 @@
 
 - Make sure the latest version number is reflected on the official DeltaChat
   website, adjust the constants in this file:
-  https://github.com/deltachat/deltachat-pages/blob/master/_includes/download-boxes.html
+  <https://github.com/deltachat/deltachat-pages/blob/master/_includes/download-boxes.html>
 - An in-app device message for the new official release should exist, if there
   is no highlight to mention we can say it's a release focused on stability and
   bug fixes
@@ -56,9 +56,11 @@
 ## Before Releasing
 
 1. Make sure no "blocking" bugs are in the issue tracker. If there's any, try
-   to solve them first
+   to solve them first:
+   <https://github.com/deltachat/deltachat-desktop/issues?q=is%3Aopen+is%3Aissue+label%3Ablocker>
 2. Pull translations via `npm run translations-update` in a separate PR
-3. Update the local help files if necessary in a separate PR
+3. Update the local help files if necessary in a separate PR:
+   <https://github.com/deltachat/deltachat-pages/blob/master/tools/create-local-help.py>
 4. If you've updated any translations or local help files, make sure that the
    date of your update is mentioned in the `CHANGELOG.md`
 
@@ -73,17 +75,18 @@
 5. Run `npm install` to update `package-lock.json`
 6. Open a PR for your branch and get it reviewed.
 7. As soon as your PR is approved merge it to `main`
-8. Checkout the latest version on `main` after merging. Tag the latest commit
+8. After the PR is merged, checkout the latest version on `main`. Tag the latest commit
    with your version number:
    ```bash
    git tag <tagname> # for example v1.43.2
    git push origin main --tags
    ```
-9. After the PR is merged create a GitHub release for your tag:
+9. Now create a GitHub release for your tag:
    - Copy the relevant part of the `CHANGELOG.md` file into the description field
      - for fresh releases this includes the changelog of the test releases
      - for patch releases the full changelog is not needed, the part that changed from the last release is enough
-   - Add a header `# Downloads` with a link to the download page and a link to the release progress issue.
+   - Add a header `# Downloads` with a link to the download page.
+     If it's an official release, add a link to the release progress issue.
    - for testing releases add a link to the testing forum topic:
      ```md
      > This release candidate is currently in the testing phase, to learn more read https://support.delta.chat/t/<rest of link>
