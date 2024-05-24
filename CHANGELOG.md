@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- Always show `msg.overrideSenderName` even when the message is sent by yourself
+
 <a id="1_45_0"></a>
 
 ## [v1.45.0] - 2024-05-24
