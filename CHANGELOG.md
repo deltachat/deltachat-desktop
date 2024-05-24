@@ -8,6 +8,9 @@
 - Secure notifications on linux: escape html, like signal does
 - Update translations (2024-05-27) #3871
 - adapt title of "Privacy Policy" link for default instance #3872
+- ContextMenuItem now can render icons
+- use our own ContextMenu for AttachmentMenu
+- replace BlueprintJS Button and Icon with our implementation in chat navbar and attachment menu
 
 
 ### Fixed
