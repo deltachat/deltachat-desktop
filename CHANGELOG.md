@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_45_0"></a>
+
+## [v1.45.0] - 2024-05-24
+
 ### Added
 - Remember last position & size of webxdc windows #3754 #3755
 - add quick-key CtrlOrCmd+q for submenu quit #3758
@@ -2565,7 +2569,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.44.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.0...HEAD
+
+[1.45.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.44.1...v1.45.0
 
 [1.44.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.44.0...v1.44.1
 
