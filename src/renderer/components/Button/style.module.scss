@@ -12,6 +12,11 @@
   padding: 12px 15px;
   text-align: center;
   text-transform: uppercase;
+  user-select: none;
+
+  & > span {
+    user-select: none;
+  }
 
   &:hover {
     background-color: var(--buttonHover);

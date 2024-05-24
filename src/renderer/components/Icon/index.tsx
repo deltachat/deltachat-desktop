@@ -9,6 +9,8 @@ export type IconName =
   | 'bell'
   | 'brightness-6'
   | 'chats'
+  | 'chevron-left'
+  | 'chevron-right'
   | 'code-tags'
   | 'cross'
   | 'devices'
@@ -20,6 +22,7 @@ export type IconName =
   | 'list'
   | 'map'
   | 'media'
+  | 'minus'
   | 'more'
   | 'open_in_new'
   | 'paperclip'
@@ -31,11 +34,13 @@ export type IconName =
   | 'reaction'
   | 'settings'
   | 'swap_vert'
+  | 'tint'
   | 'undo'
   | 'upload-file'
 
 type Props = {
   className?: string
+  onClick?: (ev: Event | React.SyntheticEvent<Element, Event>) => void
   icon: IconName
   coloring?: string
   size?: number
@@ -48,13 +53,15 @@ export default function Icon({
   rotation = 0,
   icon,
   className,
+  onClick,
 }: Props) {
   return (
     <span
       className={classNames(
         styles.icon,
         coloring && styles[coloring],
-        className
+        className,
+        onClick
       )}
       style={{
         transform: `rotate(${rotation}deg)`,
