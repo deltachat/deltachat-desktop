@@ -10,11 +10,14 @@
   "Release Candidates"
 - Test releases are published to supporters and the userbase through our
   community channels, but not through official app stores
-- Create a forum post to inform about the test release, mention what this
-  release is about and what should be tested, here is an
-  [example](https://support.delta.chat/t/help-testing-the-upcoming-1-41-x-release/2793)
-- The goal is to do more broad user testing, looking for issues which came up
-  and gathering feedback
+- Incite more broad user testing, look for issues which came up and gather feedback
+  - Create a forum post to inform about the test release, mention what this
+    release is about and what should be tested, here is an
+    [example](https://support.delta.chat/t/help-testing-the-upcoming-1-41-x-release/2793)
+  - Create a delta post in testing groups and channels, and the delta chat dev group
+  - toot on mastodon, from private account,
+    with `#deltachat` and `#deltachat_desktop` hashtag with release highlights
+    and pointing users to the forum post
 - Usually after a round of feedback and bug reports we do another test release
   and repeat, until the release stabilized
 - Optional: We can use flatpak for test releases as well (they have a
