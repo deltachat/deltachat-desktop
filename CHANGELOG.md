@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- fix that map tab is highlighted when you are in the media/gallery tab
+
 <a id="1_45_0"></a>
 
 ## [v1.45.0] - 2024-05-24
