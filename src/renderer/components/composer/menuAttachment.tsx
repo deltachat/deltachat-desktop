@@ -103,7 +103,7 @@ export default function MenuAttachment({
 
   // item array used to populate menu
   const menu: (ContextMenuItem | false)[] = [
-    settings?.settings.webrtc_instance !== undefined && {
+    !!settings?.settings.webrtc_instance && {
       icon: 'phone',
       label: tx('videochat'),
       action: onVideoChat,
