@@ -68,7 +68,6 @@ node_modules/@babel/
 
 ## remove frontend stuff that was already bundled by esbuild
 node_modules/@deltachat/message_parser_wasm
-node_modules/@mapbox
 node_modules/css-to-react-native
 node_modules/dom-helpers
 node_modules/emoji-js-clean
@@ -129,11 +128,9 @@ node_modules/napi-macros
 
 # need testing?
 node_modules/resize-observer-polyfill
-node_modules/mapbox-gl/dist/style-spec
 
 
 # should be bundled via esbuild already:
-node_modules/mapbox-gl/dist/mapbox-gl.js
 node_modules/geojson-vt
 node_modules/geojson-flatten
 node_modules/filesize
@@ -150,9 +147,6 @@ node_modules/moment
 
 # sourcemap we don't need
 
-## we don't want to add 3mb to debug mapbox in production
-node_modules/mapbox-gl/dist/mapbox-gl.js.map
-
 
 # re-add needed css stuff -> re-adding doesn't seem to work at this point in time
 
@@ -161,7 +155,6 @@ node_modules/mapbox-gl/dist/mapbox-gl.js.map
 # node_modules/@blueprintjs/icons/resources/icons/
 # node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css
 # node_modules/emoji-mart/css/emoji-mart.css
-# node_modules/mapbox-gl/dist/mapbox-gl.css
 
 ## because we can not re-add we need to cleanup those modules instead of marking them to be removed:
 
@@ -208,27 +201,6 @@ node_modules/csstype
 node_modules/warning
 node_modules/typed-styles
 node_modules/tslib
-
-### node_modules/mapbox-gl/
-node_modules/mapbox-gl/src
-node_modules/mapbox-gl/flow-typed
-node_modules/mapbox-gl/build
-node_modules/mapbox-gl/dist/*.flow
-node_modules/mapbox-gl/dist/mapbox-gl-dev.js
-node_modules/mapbox-gl/dist/mapbox-gl-unminified.js
-node_modules/mapbox-gl/dist/mapbox-gl-unminified.js.map
-node_modules/mapbox-gl/dist/mapbox-gl-csp.js.map
-node_modules/mapbox-gl/dist/mapbox-gl-csp-worker.js.map
-node_modules/mapbox-gl/dist/mapbox-gl-csp.js
-node_modules/mapbox-gl/dist/mapbox-gl-csp-worker.js
-
-# mapbox dependencies
-node_modules/mapbox-gl/node_modules
-node_modules/kdbush
-node_modules/csscolorparser
-node_modules/earcut
-node_modules/@mapbox/geojson-rewind # does not work?
-node_modules/geojson-flatten # does not work?
 
 # remove stuff from testing frameworks that we don't need
 node_modules/ajv

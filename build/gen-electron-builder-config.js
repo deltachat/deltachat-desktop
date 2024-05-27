@@ -48,7 +48,7 @@ build['fileAssociations'] = [
 ]
 
 build['files'] = files
-build['asarUnpack'] = []
+build['asarUnpack'] = ['html-dist/xdcs/']
 
 build['afterPack'] = './build/afterPackHook.cjs'
 build['afterSign'] = './build/afterSignHook.cjs'
