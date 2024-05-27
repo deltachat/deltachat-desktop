@@ -102,6 +102,11 @@ export function ExperimentalFeatures({ settingsStore }: Props) {
         // 853b584251a5dacf60ebc616f7fb10edffb5c5e5/src/main/index.ts#L12-L21
         description='Careful: opening developer tools on a malicious webxdc app could lead to the app getting access to the Internet'
       />
+      <CoreSettingsSwitch
+        label={tx('enable_realtime')}
+        settingsKey='enable_realtime'
+        description={tx('enable_realtime_explain')}
+      />
     </>
   )
 }

@@ -767,6 +767,8 @@
     <string name="pref_edit_profile">Edit Profile</string>
     <string name="disable_imap_idle">Disable IMAP IDLE</string>
     <string name="disable_imap_idle_explain">Do not use IMAP IDLE extension even if the server supports it. Enabling this option will delay message retrieval, enable it only for testing.</string>
+    <string name="enable_realtime">Enable Realtime APIs</string>
+    <string name="enable_realtime_explain"> Enable Webxdc realtime APIs which create direct connection between devices and leak IP addresses to each other.</string>
     <string name="send_stats_to_devs">Send statistics to Delta Chat\'s developers</string>
 
 
