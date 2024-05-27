@@ -1,12 +1,4 @@
-import React, { useCallback } from 'react'
-import {
-  Button,
-  Position,
-  Popover,
-  Menu,
-  MenuItem,
-  IconName,
-} from '@blueprintjs/core'
+import React, { useCallback, useContext } from 'react'
 import { dirname } from 'path'
 
 import { runtime } from '../../runtime'
@@ -18,6 +10,10 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useVideoChat from '../../hooks/useVideoChat'
 import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 import { selectedAccountId } from '../../ScreenController'
+import Icon from '../Icon'
+
+import { ContextMenuItem } from '../ContextMenu'
+import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 
 import type { T } from '@deltachat/jsonrpc-client'
 
@@ -26,18 +22,13 @@ type Props = {
   selectedChat: T.FullChat | null
 }
 
-type MenuAttachmentItemObject = {
-  id: number
-  icon: IconName
-  text: string
-  onClick: todo
-}
-
 // Main component that creates the menu and popover
 export default function MenuAttachment({
   addFileToDraft,
   selectedChat,
 }: Props) {
+  const { openContextMenu } = useContext(ContextMenuContext)
+
   const tx = useTranslationFunction()
   const openConfirmationDialog = useConfirmationDialog()
   const { sendVideoChatInvitation } = useVideoChat()
@@ -111,59 +102,48 @@ export default function MenuAttachment({
   ])
 
   // item array used to populate menu
-  const items: MenuAttachmentItemObject[] = [
-    settings?.settings.webrtc_instance && {
-      id: 0,
-      icon: 'phone' as IconName,
-      text: tx('videochat'),
-      onClick: onVideoChat,
+  const menu: (ContextMenuItem | false)[] = [
+    settings?.settings.webrtc_instance !== undefined && {
+      icon: 'phone',
+      label: tx('videochat'),
+      action: onVideoChat,
     },
     {
-      id: 1,
-      icon: 'media' as IconName,
-      text: tx('image'),
-      onClick: addFilenameMedia.bind(null),
+      icon: 'image',
+      label: tx('image'),
+      action: addFilenameMedia.bind(null),
     },
     {
-      id: 2,
-      icon: 'document' as IconName,
-      text: tx('file'),
-      onClick: addFilenameFile.bind(null),
+      icon: 'upload-file',
+      label: tx('file'),
+      action: addFilenameFile.bind(null),
     },
-  ].filter(item => !!item) as MenuAttachmentItemObject[]
+  ]
+
+  const onClickAttachmentMenu = (event: React.MouseEvent<any, MouseEvent>) => {
+    const threeDotButtonElement = document.querySelector(
+      '#attachment-menu-button'
+    ) as HTMLDivElement
+
+    const boundingBox = threeDotButtonElement.getBoundingClientRect()
+
+    const [cursorX, cursorY] = [boundingBox.x, boundingBox.y]
+    event.preventDefault() // prevent default runtime context menu from opening
+
+    openContextMenu({
+      cursorX,
+      cursorY,
+      items: menu,
+    })
+  }
 
   return (
-    <div className='attachment-button'>
-      <Popover
-        content={
-          <Menu>
-            <MenuAttachmentItems itemsArray={items} />
-          </Menu>
-        }
-        position={Position.TOP_LEFT}
-      >
-        <Button id='test-attachment-menu' minimal icon='paperclip' />
-      </Popover>
-    </div>
-  )
-}
-
-// Function to populate Menu
-const MenuAttachmentItems = ({
-  itemsArray,
-}: {
-  itemsArray: MenuAttachmentItemObject[]
-}) => {
-  return (
-    <>
-      {itemsArray.map((item: MenuAttachmentItemObject) => (
-        <MenuItem
-          key={item.id}
-          icon={item.icon}
-          text={item.text}
-          onClick={item.onClick}
-        />
-      ))}
-    </>
+    <button
+      id='attachment-menu-button'
+      className='attachment-button'
+      onClick={onClickAttachmentMenu}
+    >
+      <Icon coloring='context-menu' icon='paperclip' />
+    </button>
   )
 }

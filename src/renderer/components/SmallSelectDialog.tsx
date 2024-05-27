@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { RadioGroup, Radio } from '@blueprintjs/core'
 
 import Dialog, {
   DialogBody,
@@ -8,6 +7,8 @@ import Dialog, {
   DialogHeader,
   FooterActions,
 } from './Dialog'
+import Radio from './Radio'
+import RadioGroup from './RadioGroup'
 import FooterActionButton from './Dialog/FooterActionButton'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 
@@ -38,10 +39,9 @@ export default function SmallSelectDialog({
   const [actualSelectedValue, setActualSelectedValue] =
     useState<string>(selectedValue)
 
-  const onChange = (event: React.FormEvent<HTMLInputElement>) => {
-    const actualSelectedValue = String(event.currentTarget.value)
-    setActualSelectedValue(actualSelectedValue)
-    onSelect && onSelect(actualSelectedValue)
+  const onChange = (value: string) => {
+    setActualSelectedValue(value)
+    onSelect && onSelect(value)
   }
 
   const saveAndClose = () => {
@@ -49,12 +49,17 @@ export default function SmallSelectDialog({
     onClose()
   }
 
+  // FIXME(maxph): get a name for RadioGroup
   return (
     <Dialog onClose={onClose}>
       <DialogHeader title={title} />
       <DialogBody>
         <DialogContent>
-          <RadioGroup onChange={onChange} selectedValue={actualSelectedValue}>
+          <RadioGroup
+            onChange={onChange}
+            selectedValue={actualSelectedValue}
+            name='small-dialog-value'
+          >
             {values.map((element, index) => {
               const [value, label] = element
               return (

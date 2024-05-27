@@ -60,19 +60,20 @@
     display: flex;
     align-items: flex-end;
 
-    .attachment-button,
-    .emoji-button {
-      .bp4-button.bp4-minimal {
-        width: 40px;
-        height: 40px;
+    .attachment-button {
+      width: 40px;
+      height: 40px;
 
-        &:hover {
-          background: none;
-          cursor: pointer;
-        }
-        &:focus {
-          outline: none;
-        }
+      background: none;
+      box-shadow: none;
+      border: none;
+
+      &:hover {
+        background: none;
+        cursor: pointer;
+      }
+      &:focus {
+        outline: none;
       }
     }
 

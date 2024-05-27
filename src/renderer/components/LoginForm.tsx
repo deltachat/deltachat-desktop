@@ -2,7 +2,6 @@
 
 import { C, DcEventType } from '@deltachat/jsonrpc-client'
 import React, { useEffect, useRef, useState } from 'react'
-import { Collapse } from '@blueprintjs/core'
 import { useDebouncedCallback } from 'use-debounce/lib'
 
 import {
@@ -24,6 +23,7 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
 } from './Dialog'
+import Collapse from './Collapse'
 import { I18nContext } from '../contexts/I18nContext'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 import { getDeviceChatId, saveLastChatId } from '../backend/chat'

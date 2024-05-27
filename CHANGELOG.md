@@ -2,6 +2,11 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- ContextMenuItem now can render icons
+- use our own ContextMenu for AttachmentMenu
+- replace BlueprintJS Button, Icon, Radio, RadioGroup, Collapse with our implementation
+
 <a id="1_45_0"></a>
 
 ## [v1.45.0] - 2024-05-24

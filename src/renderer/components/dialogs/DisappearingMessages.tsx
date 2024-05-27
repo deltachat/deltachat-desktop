@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { RadioGroup, Radio } from '@blueprintjs/core'
 
 import { Timespans } from '../../../shared/constants'
 import { BackendRemote } from '../../backend-com'
@@ -12,6 +11,8 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
 } from '../Dialog'
+import Radio from '../Radio'
+import RadioGroup from '../RadioGroup'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
@@ -38,13 +39,13 @@ function SelectDisappearingMessageDuration({
 }) {
   const tx = useTranslationFunction()
 
-  const onChange = (ev: React.FormEvent<HTMLInputElement>) => {
-    const disappearingMessageDuration = Number(ev.currentTarget.value)
-    onSelectDisappearingMessageDuration(disappearingMessageDuration)
+  const onChange = (duration: string) => {
+    onSelectDisappearingMessageDuration(Number(duration))
   }
 
   return (
     <RadioGroup
+      name='disappearing-message-duration'
       onChange={onChange}
       selectedValue={String(disappearingMessageDuration)}
     >

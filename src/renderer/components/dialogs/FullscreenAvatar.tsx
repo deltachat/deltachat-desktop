@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { basename } from 'path'
-import { Icon, Overlay } from '@blueprintjs/core'
+import { Overlay } from '@blueprintjs/core'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 
 import { runtime } from '../../runtime'
@@ -8,6 +8,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useContextMenu from '../../hooks/useContextMenu'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import Icon from '../Icon'
 
 export default function FullscreenAvatar(
   props: { imagePath: string } & DialogProps
@@ -71,7 +72,7 @@ export default function FullscreenAvatar(
             onClick={onClose}
             icon='cross'
             size={32}
-            color={'grey'}
+            coloring='settings-menu'
             aria-label={tx('close')}
           />
         </div>

@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react'
-import { Icon, Overlay } from '@blueprintjs/core'
+import { Overlay } from '@blueprintjs/core'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 import debounce from 'debounce'
 
+import Icon from '../Icon'
 import { onDownload } from '../message/messageFunctions'
 import { runtime } from '../../runtime'
 import { isImage, isVideo, isAudio } from '../attachment/Attachment'
@@ -255,7 +256,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
               onClick={onClose}
               icon='cross'
               size={32}
-              color={'grey'}
+              coloring='settings-menu'
               aria-label={tx('close')}
             />
           </div>

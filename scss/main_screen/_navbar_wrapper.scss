@@ -44,12 +44,15 @@
     margin-left: auto;
     margin-right: 15px;
     display: flex;
+  }
 
-    .bp4-button {
-      margin: 0px;
-      position: relative;
-      height: 50px;
-      border-radius: 0px;
+  .navbar-button {
+    padding: 0;
+    width: 40px;
+    height: 50px;
+    border-radius: 0;
+    &:hover {
+      background-color: var(--navBarButtonHover);
     }
   }
 
@@ -66,7 +69,6 @@
   }
 
   #three-dot-menu-button {
-    width: 40px;
     height: 40px;
     border-radius: 100%;
   }

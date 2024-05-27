@@ -1,4 +1,3 @@
-$backgroundColorHover: rgba(143, 153, 168, 0.15);
 $borderRadius: 10px;
 $closeButtonSize: 30px;
 
@@ -38,7 +37,7 @@ $closeButtonSize: 30px;
   min-width: $closeButtonSize;
 
   &:hover {
-    background-color: $backgroundColorHover;
+    background-color: var(--navBarButtonHover);
   }
 }
 

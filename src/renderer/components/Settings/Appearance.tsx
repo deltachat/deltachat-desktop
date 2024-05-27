@@ -1,6 +1,5 @@
 import { join } from 'path'
 import React, { useEffect, useState } from 'react'
-import { Icon } from '@blueprintjs/core'
 
 import { ThemeManager } from '../../ThemeManager'
 import { runtime } from '../../runtime'
@@ -21,6 +20,7 @@ import { DialogContent } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
 import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
+import Icon from '../Icon'
 
 const log = getLogger('renderer/settings/appearance')
 
