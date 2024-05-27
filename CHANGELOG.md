@@ -4,7 +4,8 @@
 
 ### Changed
 - Always show `msg.overrideSenderName` even when the message is sent by yourself
-- Update translations (2024-05-27)
+- Update translations (2024-05-27) #3871
+- adapt title of "Privacy Policy" link for default instance
 
 ### Fixed
 - fix that map tab is highlighted when you are in the media/gallery tab #3867
