@@ -565,6 +565,7 @@
     <string name="instant_onboarding_create">Pranojeni &amp; Krijoni Profil</string>
     <!-- Secondary, link-like button to open a page with other possible instances -->
     <string name="instant_onboarding_show_more_instances">Përdor Shërbyes Tjetër</string>
+    <string name="instant_onboarding_other_server">Paraqit Shërbyes Chatmail</string>
     <!-- Hint about what happens when "Create Profile" button in pressed; the placeholder will be replaced by the group name -->
     <string name="instant_onboarding_group_info">Krijoni një profil, që të merrni pjesë te grupi “%1$s”.</string>
     <!-- Hint about what happens when "Create Profile" button in pressed; the placeholder will be replaced by contact name and/or address -->
@@ -1127,17 +1128,21 @@
 
 
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
-    <string name="pref_background_notifications">Njoftime Në Prapaskenë</string>
-    <string name="pref_background_notifications_explain">Përdor një lidhje në prapaskenë me shërbyesin tuaj dhe lyp shpërfillje optimizimesh baterie.</string>
+    <string name="pref_instant_delivery">Dërgim i Menjëhershëm</string>
+    <string name="pref_push_notifications">Përdor Shërbim Push</string>
+    <string name="pref_push_ask_disable">Të çaktivizohet përdorimi i Shërbimit Push?\n\nKjo mund të sjellë njoftime të vonuara.</string>
+    <string name="pref_background_notifications">Përdor Lidhje Në Prapaskenë</string>
+    <string name="pref_background_notifications_explain">Lyp shpërfillje optimizimesh baterie, përdoreni nëse Shërbimi Push është jashtë funksionimi</string>
+    <string name="pref_reliable_service">Detyro Lidhje Në Prapaskenë</string>
+    <string name="pref_reliable_service_explain">Shkakton një njoftim permanent</string>
+
     <string name="pref_background_notifications_rationale">Që të ruhet lidhja me shërbyesin tuaj të email-eve dhe të merren mesazhe në prapaskenë, në hapin pasues shpërfillini optimizimet për baterinë.\n\nDelta Chat-i përdor pak burime dhe kujdeset të mos e shterojë baterinë tuaj.</string>
     <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
-    <string name="pref_reliable_service">Lidhje e Qëndrueshme Në Prapaskenë</string>
-    <string name="pref_reliable_service_explain">Lyp një njoftim permanent</string>
     <string name="perm_enable_bg_reminder_title">Prekeni këtu që të merrni mesazhe, teksa Delta Chat rri në prapaskenë.</string>
     <string name="perm_enable_bg_already_done">E keni lejuar tashmë Delta Chat-in të marrë mesazhe në prapaskenë.\n\nNëse mesazhet prapë nuk mbërrijnë në prapaskenë, ju lutemi, kontrolloni edhe rregullimet e sistemit tuaj.</string>
-
 
     <!-- device messages for updates -->
     <string name="update_1_44_android">Ç’ka të re:\n\n❤️ Po! Kjo ka kohë që pritej: Prekni gjatë mbi një mesazh, për të reaguar\n\n🔗 Nëse nuk skanoni dot kode QR, jepini si lidhje ftesë\n\n🔵 Tashmë mesazhet e palexuar të krejt llogarive numërohen dhe numri shfaqet te titulli\n\n… dhe TONELATA ndreqje të metash … %1$s\n\nNdihmoni të përmirësohet aplikacioni: Përdorni “Rregullime / Të thelluara / Dërgo statistika”, për të ndihmuar zhvilluesit ta bëjnë më optimal për përdorim të përditshëm. Para se të dërgohen, të dhënat mund t’i shqyrtoni</string>
     <string name="update_1_44_ios">Ç’ka të re:\n\n❤️ Po! Kjo ka kohë që pritej: Prekni gjatë mbi një mesazh, për të reaguar\n\n🫸 Njoftime PUSH, nëse kjo mbulohet nga furnizuesit e shërbimeve internet, b.f., https://nine.testrun.org\n\n🔗 Nëse nuk skanoni dot kode QR, jepini si lidhje ftesë\n\n… dhe TONELATA ndreqje të metash … %1$s</string>
+    <string name="update_1_46_android">Hapa të Rinj Mirëseardhjeje 🐣 Etj.:\n\n⚡️ Regjistrohuni te shërbyes të siguruar, të shpejtë, chatmail-i (https://delta.chat/chatmail), ose përdorni shërbyes klasikë email-i\n\n👉 Njoftime PUSH për çfarëdo shërbyesi “chatmail”\n\n👤 Lidhuni me shokët tuaj në mënyrë të parrezik, përmes “Bashkëngjitni kontakte”\n\n🥰 Reagoni me çfarëdo emoxhi\n\n📌 Fiksoni fjalosje drejt e nga kërkimi … dhe PLOT të TJERA te %1$s</string>
 </resources>
