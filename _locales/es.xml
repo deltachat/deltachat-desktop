@@ -1149,17 +1149,22 @@
 
 
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
-    <string name="pref_background_notifications">Notificaciones en segundo plano</string>
-    <string name="pref_background_notifications_explain">Usar la conexión de segundo plano a tu servidor y requerir ignorar las optimizaciones de batería</string>
+    <string name="pref_instant_delivery">Entrega inmediata</string>
+    <string name="pref_push_notifications">Usar servicio Push</string>
+    <string name="pref_push_notifications_explain">Notificaciones Push estables para servidores de chatmail</string>
+    <string name="pref_push_ask_disable">¿Desactivar el uso del servicio Push?\n\nEsto puede provocar retrasos en las notificaciones.</string>
+    <string name="pref_background_notifications">Usar conexión en segundo plano</string>
+    <string name="pref_background_notifications_explain">Requiere desactivar las optimizaciones de batería, utilícelas si el servicio Push no está disponible</string>
+    <string name="pref_reliable_service">Forzar conexión en segundo plano</string>
+    <string name="pref_reliable_service_explain">Usando una notificación permanente</string>
+
     <string name="pref_background_notifications_rationale">Para mantener la conexión de tu servidor email y recibir mensajes en segundo plano, ignorar las optimizaciones en el próximo paso.\n\nDelta Chat usa pocos recursos y cuida no drenar tu batería</string>
     <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
-    <string name="pref_reliable_service">Conexión en segundo plano confiable</string>
-    <string name="pref_reliable_service_explain">Requiere notificación permanente</string>
     <string name="perm_enable_bg_reminder_title">Toque aquí para recibir mensajes mientras Delta Chat está en segundo plano.</string>
     <string name="perm_enable_bg_already_done">Ya has permitido que Delta Chat reciba mensajes en segundo plano.\n\nSi los mensajes aún no llegan en segundo plano, compruebe también la configuración de su sistema.</string>
-
 
     <!-- device messages for updates -->
     <string name="update_1_44_android">Novedades:\n\n❤️ ¡Sí! Esto era muy esperado: toque prolongadamente un mensaje para reaccionar\n\n🔗 Si no puede escanear códigos QR, compártalos como enlaces de invitación\n\n🔵 Los mensajes no leídos de todas las cuentas se cuentan y se muestran en el título ahora\n\n… y TONELADAS de correcciones de errores… %1$s\n\nAyuda a mejorar la aplicación: usa \"Configuración/Avanzado/Enviar estadísticas\" para ayudar a los desarrolladores a optimizar mejor el uso en el mundo real. Puedes revisar los datos antes de enviar</string>
     <string name="update_1_44_ios">Novedades:\n\n❤️ ¡Sí! Esto era muy esperado: toque prolongadamente un mensaje para reaccionar\n\n🫸 Notificaciones PUSH para proveedores que lo soporten, como https://nine.testrun.org\n\n🔗 Si no puede escanear códigos QR, compártalos como enlaces de invitación\n\n… y TONELADAS de correcciones de errores… %1$s</string>
+    <string name="update_1_46_android">Nueva pantalla de bienvenida 🐣 y más:\n\n⚡️ Regístrese en servidores de chatmail rápidos y seguros (https://delta.chat/chatmail) o use servidores de correo electrónico clásicos\n\n👉 Notificaciones PUSH para cualquier servidor de chatmail\n\n👤 Presenta un amigo a otro de forma segura usando \"Adjuntar Contacto\"\n\n🥰 Reacciona con cualquier emoji\n\n📌 Ancla chats directamente desde los resultados de la búsqueda... y MUCHO más en %1$s</string>
 </resources>
