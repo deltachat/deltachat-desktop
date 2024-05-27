@@ -4,6 +4,7 @@ import ClickableLink from '../../helpers/ClickableLink'
 import useInstantOnboarding from '../../../hooks/useInstantOnboarding'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import {
+  DEFAULT_CHATMAIL_HOSTNAME,
   DEFAULT_INSTANCE_PRIVACY_POLICY_URL,
   isQRWithDefaultInstance,
 } from './chatmailInstances'
@@ -35,7 +36,7 @@ export default function UserAgreement() {
     <>
       {isDefaultInstance && (
         <ClickableLink href={DEFAULT_INSTANCE_PRIVACY_POLICY_URL}>
-          {tx('instant_onboarding_agree_default')}{' '}
+          {tx('instant_onboarding_agree_default2', DEFAULT_CHATMAIL_HOSTNAME)}
         </ClickableLink>
       )}
       {!isDefaultInstance && welcomeQr && welcomeQr.qr.kind === 'account' && (
