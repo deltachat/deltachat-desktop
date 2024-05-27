@@ -382,7 +382,7 @@ function ChatNavButtons() {
             large
             icon='map'
             onClick={() => openMapWebxdc(chatId)}
-            active={activeView === ChatView.Media}
+            active={activeView === ChatView.Map}
             aria-label={tx('tab_map')}
           />
         )}
