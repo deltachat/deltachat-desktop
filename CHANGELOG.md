@@ -2,8 +2,12 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- Always show `msg.overrideSenderName` even when the message is sent by yourself
+
 ### Fixed
 - fix that map tab is highlighted when you are in the media/gallery tab #3867
+
 
 <a id="1_45_0"></a>
 

@@ -613,18 +613,20 @@ export default function Message(props: {
             onContactClick,
             direction,
             conversationType,
-            message?.overrideSenderName || undefined
+            message.overrideSenderName || undefined
           )}
         {!message.isForwarded && (
           <div
             className={classNames('author-wrapper', {
-              'can-hide': direction === 'outgoing' || !showAuthor,
+              'can-hide':
+                (!message.overrideSenderName && direction === 'outgoing') ||
+                !showAuthor,
             })}
           >
             {AuthorName(
               message.sender,
               onContactClick,
-              message?.overrideSenderName || undefined
+              message.overrideSenderName || undefined
             )}
           </div>
         )}
