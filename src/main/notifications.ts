@@ -25,8 +25,10 @@ function createNotification(data: DcNotification): Notification {
   }
 
   const notificationOptions: Electron.NotificationConstructorOptions = {
-    title: data.title,
-    body: data.body,
+    title:
+      platform() === 'linux' ? filterNotificationText(data.title) : data.title,
+    body:
+      platform() === 'linux' ? filterNotificationText(data.body) : data.body,
     icon,
     timeoutType: 'default',
   }
@@ -114,4 +116,14 @@ if (Notification.isSupported()) {
   ipcMain.handle('notifications.show', () => {})
   ipcMain.handle('notifications.clear', () => {})
   ipcMain.handle('notifications.clearAll', () => {})
+}
+
+// Thanks to Signal for this function
+// https://github.com/signalapp/Signal-Desktop/blob/ae9181a4b26264ce553c7d8379a3ee5a07de018b/ts/services/notifications.ts#L485
+// it is licensed AGPL-3.0-only
+function filterNotificationText(text: string) {
+  return (text || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
 }
