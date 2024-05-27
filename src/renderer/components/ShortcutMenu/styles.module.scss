@@ -35,8 +35,18 @@ $transitionDuration: 50ms;
   margin: 0;
   padding: 5px;
 
-  transform: scale(calc(0.75 + 0.25 * var(--shortcut-menu-multiplier)));
-  transition: transform ease-out $transitionDuration;
+  // Commented out because apparently messages that are below the message
+  // that is performing this transition seem to get moved to another
+  // "layer" (see https://dev.opera.com/articles/css-will-change-property#does-will-change-affect-the-element-it-is-applied-to-beyond-hinting-the-browser-about-the-changes-to-that-element)
+  // which turns off subpixel antialiasing making "wobble" as you move
+  // the cursor above the messages.
+  //
+  // For reference, we already had to deal with antialiasing shenanigans, see
+  // `willChange` of `id='message-list'`, this commit:
+  // https://github.com/deltachat/deltachat-desktop/commit/24a5107d440d9f2041d34f60f4bde16a0dba6be8
+  //
+  // transform: scale(calc(0.75 + 0.25 * var(--shortcut-menu-multiplier)));
+  // transition: transform ease-out $transitionDuration;
 }
 
 .shortcutMenuIcon {
