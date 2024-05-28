@@ -331,6 +331,20 @@ export default class ScreenController extends Component {
                   <RuntimeAdapter accountId={this.selectedAccountId} />
                   <KeybindingsContextProvider>
                     <div className='main-container-container'>
+                      {this.state.smallScreenMode &&
+                        runtime.getRuntimeInfo().isMac && (
+                          <div
+                            style={{
+                              height: '30px',
+                              textAlign: 'center',
+                              '-webkit-app-region': 'drag',
+                              flexShrink: 0,
+                              flexGrow: 0
+                            }}
+                          >
+                            Deltachat
+                          </div>
+                        )}
                       <div className='main-container'>
                         <AccountListSidebar
                           selectedAccountId={this.selectedAccountId}

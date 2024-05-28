@@ -119,7 +119,7 @@ export default function AccountListSidebar({
 
   return (
     <div className={styles.accountListSidebar}>
-      {runtime.getRuntimeInfo().isMac && (
+      {runtime.getRuntimeInfo().isMac && !smallScreenMode && (
         <div className={styles.macOSTrafficLightBackground} />
       )}
       <div className={styles.accountList} onScroll={updateHoverInfoPosition}>
