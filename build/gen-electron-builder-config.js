@@ -48,7 +48,7 @@ build['fileAssociations'] = [
 ]
 
 build['files'] = files
-build['asarUnpack'] = ['node_modules/deltachat-node/']
+build['asarUnpack'] = []
 
 build['afterPack'] = './build/afterPackHook.cjs'
 build['afterSign'] = './build/afterSignHook.cjs'

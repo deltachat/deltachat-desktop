@@ -34,7 +34,7 @@ jobs:
       run: |
         node ./bin/github-actions/devbuild.js
     # Building JS
-    - name: npm install, build, test
+    - name: npm install, build
       run: |
         npm install
         npm run build
@@ -61,8 +61,9 @@ jobs:
         export DEBUG=electron-builder
         npm i dmg-license
         npm i --cpu x64 --os darwin
-        npm i --cpu x64 --os arm64
-        npm exec -- electron-builder --publish never --mac mas dmg -c.mac.identity=null --universal --config.afterSign="stub.cjs" || true
+        npm i --cpu arm64 --os darwin
+        ls node_modules/@deltachat
+        npm exec -- electron-builder --publish never --mac mas dmg -c.mac.identity=null --universal --config.afterSign="stub.cjs"
     - name: MAC renaming / upload Preperation
       if: runner.os == 'macOS'
       run: |
