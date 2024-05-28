@@ -66,6 +66,7 @@ jobs:
     - name: MAC renaming / upload Preperation
       if: runner.os == 'macOS'
       run: |
+        ls -lah dist
         mkdir -p dist/preview
         zip -r dist/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip dist/mas-universal
         cd dist
