@@ -28,6 +28,7 @@
 
   .bp4-align-left {
     width: 30%;
+    min-width: 295px; /* don't forget to update .chat-list */
     padding: 0px 10px;
   }
 
