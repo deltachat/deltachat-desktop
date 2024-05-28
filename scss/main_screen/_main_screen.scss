@@ -3,6 +3,32 @@
   position: relative;
   overflow: hidden;
 
+  &.small-screen {
+    .message-list-and-composer,
+    .chat-list,
+    .media-view {
+      float: none;
+      width: unset;
+    }
+
+    .navbar-wrapper .bp4-align-right,
+    .navbar-wrapper .bp4-align-left {
+      width: 100%;
+    }
+
+    &.chat-view-open {
+      .chat-list {
+        display: none;
+      }
+    }
+
+    &:not(.chat-view-open) {
+      .message-list-and-composer {
+        display: none;
+      }
+    }
+  }
+
   .navbar-chat-name {
     font-size: medium;
     font-weight: bold;

@@ -39,8 +39,18 @@ export enum Screens {
   NoAccountSelected = 'noAccountSelected',
 }
 
+const BREAKPOINT_FOR_SMALLSCREEN_MODE = 600
+
+function isSmallScreenMode(): boolean {
+  return window.innerWidth <= BREAKPOINT_FOR_SMALLSCREEN_MODE
+}
+
 export default class ScreenController extends Component {
-  state: { message: userFeedback | false; screen: Screens }
+  state: {
+    message: userFeedback | false
+    screen: Screens
+    smallScreenMode: boolean
+  }
   selectedAccountId: number | undefined
   lastAccountBeforeAddingNewAccount: number | null = null
   unselectChatRef = createRef<UnselectChat>()
@@ -50,6 +60,7 @@ export default class ScreenController extends Component {
     this.state = {
       message: false,
       screen: Screens.Loading,
+      smallScreenMode: isSmallScreenMode(),
     }
 
     this.onError = this.onError.bind(this)
@@ -63,6 +74,7 @@ export default class ScreenController extends Component {
     this.openAccountDeletionScreen = this.openAccountDeletionScreen.bind(this)
     this.onDeleteAccount = this.onDeleteAccount.bind(this)
     this.onExitWelcomeScreen = this.onExitWelcomeScreen.bind(this)
+    this.updateSmallScreenMode = this.updateSmallScreenMode.bind(this)
 
     window.__userFeedback = this.userFeedback.bind(this)
     window.__changeScreen = this.changeScreen.bind(this)
@@ -202,6 +214,10 @@ export default class ScreenController extends Component {
     }
   }
 
+  updateSmallScreenMode() {
+    this.setState({ smallScreenMode: isSmallScreenMode() })
+  }
+
   componentDidMount() {
     BackendRemote.on('Error', this.onError)
 
@@ -216,10 +232,14 @@ export default class ScreenController extends Component {
     this.startup().then(() => {
       runtime.emitUIFullyReady()
     })
+
+    window.addEventListener('resize', this.updateSmallScreenMode)
   }
 
   componentWillUnmount() {
     BackendRemote.off('Error', this.onError)
+
+    window.removeEventListener('resize', this.updateSmallScreenMode)
   }
 
   onError(accountId: number, { msg }: DcEventType<'Error'>) {
@@ -298,6 +318,7 @@ export default class ScreenController extends Component {
             changeScreen: this.changeScreen,
             screen: this.state.screen,
             addAndSelectAccount: this.addAndSelectAccount,
+            smallScreenMode: this.state.smallScreenMode,
           }}
         >
           <InstantOnboardingProvider>

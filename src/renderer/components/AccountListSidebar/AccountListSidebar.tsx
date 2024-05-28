@@ -1,4 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { debounce } from 'debounce'
 
 import AccountHoverInfo from './AccountHoverInfo'
@@ -13,6 +20,8 @@ import { useAccountNotificationStore } from '../../stores/accountNotifications'
 import styles from './styles.module.scss'
 
 import type { T } from '@deltachat/jsonrpc-client'
+import { ScreenContext } from '../../contexts/ScreenContext'
+import useChat from '../../hooks/chat/useChat'
 
 type Props = {
   onAddAccount: () => Promise<number>
@@ -30,6 +39,11 @@ export default function AccountListSidebar({
   const { openDialog } = useDialog()
   const [accounts, setAccounts] = useState<T.Account[]>([])
   const [{ accounts: noficationSettings }] = useAccountNotificationStore()
+
+  const { smallScreenMode } = useContext(ScreenContext)
+  const { chatId } = useChat()
+
+  const shouldBeHidden = smallScreenMode && chatId !== undefined
 
   const selectAccount = async (accountId: number) => {
     if (selectedAccountId === accountId) {
@@ -98,6 +112,10 @@ export default function AccountListSidebar({
   }, [refresh])
 
   const openSettings = () => openDialog(Settings)
+
+  if (shouldBeHidden) {
+    return <div></div>
+  }
 
   return (
     <div className={styles.accountListSidebar}>

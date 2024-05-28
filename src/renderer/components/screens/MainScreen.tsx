@@ -1,4 +1,10 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useContext,
+} from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 import {
   Alignment,
@@ -27,13 +33,15 @@ import useOpenViewGroupDialog from '../../hooks/dialog/useOpenViewGroupDialog'
 import useOpenViewProfileDialog from '../../hooks/dialog/useOpenViewProfileDialog'
 import useSelectLastChat from '../../hooks/chat/useSelectLastChat'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { ChatView } from '../../contexts/ChatContext'
 import { KeybindAction } from '../../keybindings'
 import { selectedAccountId } from '../../ScreenController'
 import { openMapWebxdc } from '../../system-integration/webxdc'
+import SearchInputButton from '../SearchInput/SearchInputButton'
+import { ChatView } from '../../contexts/ChatContext'
+import { ScreenContext } from '../../contexts/ScreenContext'
 
 import type { T } from '@deltachat/jsonrpc-client'
-import SearchInputButton from '../SearchInput/SearchInputButton'
+
 
 export type AlternativeView = 'global-gallery' | null
 
@@ -51,6 +59,7 @@ export default function MainScreen({ accountId }: Props) {
   const [queryChatId, setQueryChatId] = useState<null | number>(null)
   const [archivedChatsSelected, setArchivedChatsSelected] = useState(false)
   const { activeView, chatId, chat, selectChat, unselectChat } = useChat()
+  const { smallScreenMode } = useContext(ScreenContext)
 
   // Small hack/misuse of keyBindingAction to setArchivedChatsSelected from
   // other components (especially ViewProfile when selecting a shared chat/group)
@@ -75,6 +84,16 @@ export default function MainScreen({ accountId }: Props) {
     unselectChat()
     openMapWebxdc()
   })
+
+  const chatListShouldBeHidden =
+    smallScreenMode && (chatId !== undefined || alternativeView !== null)
+  const messageSectionShouldBeHidden =
+    smallScreenMode && chatId === undefined && alternativeView === null
+
+  const onBackButton = () => {
+    unselectChat()
+    setAlternativeView(null)
+  }
 
   const onChatClick = (chatId: number) => {
     if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) {
@@ -154,12 +173,17 @@ export default function MainScreen({ accountId }: Props) {
   const showArchivedChats = !isSearchActive && archivedChatsSelected
 
   return (
-    <div className='main-screen'>
+    <div
+      className={`main-screen ${smallScreenMode ? 'small-screen' : ''} ${
+        !messageSectionShouldBeHidden ? 'chat-view-open' : ''
+      }`}
+    >
       <div className='navbar-wrapper'>
         <Navbar>
-          <NavbarGroup align={Alignment.LEFT}>
-            {showArchivedChats && (
-              <>
+          {!chatListShouldBeHidden && (
+            <NavbarGroup align={Alignment.LEFT}>
+              {showArchivedChats && (
+                <>
                 <div className='archived-chats-title no-drag'>
                   {tx('chat_archived_chats_title')}
                 </div>
@@ -171,34 +195,44 @@ export default function MainScreen({ accountId }: Props) {
                   icon='undo'
                 />
               </>
-            )}
-            {!showArchivedChats && (
-              <SearchInput
+              )}
+              {!showArchivedChats && (
+                <SearchInput
                 id='chat-list-search'
                 inputRef={searchRef}
                 onChange={handleSearchChange}
                 onClear={queryChatId ? () => handleSearchClear() : undefined}
                 value={queryStr}
               />
-            )}
-          </NavbarGroup>
-          <NavbarGroup align={Alignment.RIGHT}>
-            {alternativeView === 'global-gallery' && <GlobalGalleryHeading />}
-            {chat && <ChatHeading chat={chat} />}
-            {chat && <ChatNavButtons />}
-            {(chat || alternativeView === 'global-gallery') && (
-              <span
-                style={{
-                  marginLeft: 0,
-                  marginRight: '3px',
-                  ...(threeDotMenuHidden
-                    ? { opacity: 0.4, pointerEvents: 'none' }
-                    : {}),
-                }}
-                className='no-drag'
-                aria-disabled={threeDotMenuHidden}
-              >
-                <Button
+              )}
+            </NavbarGroup>
+          )}
+          {!messageSectionShouldBeHidden && (
+            <NavbarGroup align={Alignment.RIGHT}>
+              {smallScreenMode && (
+                <span className='no-drag'>
+                  <Button aria-label={tx('back')} onClick={onBackButton}>
+                    <Icon icon='arrow-left'></Icon>
+                    {tx('back')}
+                  </Button>
+                </span>
+              )}
+              {alternativeView === 'global-gallery' && <GlobalGalleryHeading />}
+              {chat && <ChatHeading chat={chat} />}
+              {chat && <ChatNavButtons />}
+              {(chat || alternativeView === 'global-gallery') && (
+                <span
+                  style={{
+                    marginLeft: 0,
+                    marginRight: '3px',
+                    ...(threeDotMenuHidden
+                      ? { opacity: 0.4, pointerEvents: 'none' }
+                      : {}),
+                  }}
+                  className='no-drag'
+                  aria-disabled={threeDotMenuHidden}
+                >
+                  <Button
                   id='three-dot-menu-button'
                   className='navbar-button'
                   aria-label={tx('main_menu')}
@@ -206,9 +240,10 @@ export default function MainScreen({ accountId }: Props) {
                 >
                   <Icon coloring='navbar' icon='more' rotation={90} size={24} />
                 </Button>
-              </span>
-            )}
-          </NavbarGroup>
+                </span>
+              )}
+            </NavbarGroup>
+          )}
         </Navbar>
       </div>
       <div>
