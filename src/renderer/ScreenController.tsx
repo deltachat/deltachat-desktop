@@ -39,7 +39,7 @@ export enum Screens {
   NoAccountSelected = 'noAccountSelected',
 }
 
-const BREAKPOINT_FOR_SMALLSCREEN_MODE = 600
+const BREAKPOINT_FOR_SMALLSCREEN_MODE = 635
 
 function isSmallScreenMode(): boolean {
   return window.innerWidth <= BREAKPOINT_FOR_SMALLSCREEN_MODE
