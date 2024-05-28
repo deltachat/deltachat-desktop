@@ -23,7 +23,7 @@ jobs:
     # Preperation
     - uses: actions/checkout@v1
     - name: Use Node.js 20.x
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v4
       with:
         node-version: 20.x
     - name: Get Pullrequest ID
@@ -34,7 +34,7 @@ jobs:
       run: |
         node ./bin/github-actions/devbuild.js
     # Building JS
-    - name: npm install, build, test
+    - name: npm install, build
       run: |
         npm install
         npm run build
@@ -61,11 +61,13 @@ jobs:
         export DEBUG=electron-builder
         npm i dmg-license
         npm i --cpu x64 --os darwin
-        npm i --cpu x64 --os arm64
-        npm exec -- electron-builder --publish never --mac mas dmg -c.mac.identity=null --universal --config.afterSign="stub.cjs" || true
+        npm i --cpu arm64 --os darwin
+        ls node_modules/@deltachat
+        npm exec -- electron-builder --publish never --mac mas dmg -c.mac.identity=null --universal --config.afterSign="stub.cjs"
     - name: MAC renaming / upload Preperation
       if: runner.os == 'macOS'
       run: |
+        ls -lah dist
         mkdir -p dist/preview
         zip -r dist/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip dist/mas-universal
         cd dist

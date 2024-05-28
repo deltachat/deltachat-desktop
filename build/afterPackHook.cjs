@@ -32,7 +32,9 @@ module.exports = async context => {
   const prebuild_dir = join(
     context.appOutDir,
     `${
-      isMacBuild ? 'DeltaChat.app/Contents/Resources' : 'resources'
+      isMacBuild
+        ? `${context.packager.appInfo.sanitizedProductName}.app/Contents/Resources`
+        : 'resources'
     }/app.asar.unpacked/node_modules/@deltachat`
   )
 
