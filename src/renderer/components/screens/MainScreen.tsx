@@ -246,7 +246,7 @@ export default function MainScreen({ accountId }: Props) {
           )}
         </Navbar>
       </div>
-      <div>
+      <div className='main-app-content'>
         <ChatList
           queryStr={queryStr}
           showArchivedChats={showArchivedChats}

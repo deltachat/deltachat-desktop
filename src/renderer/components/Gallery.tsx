@@ -232,7 +232,14 @@ export default class Gallery extends Component<
 
     return (
       <div className='media-view'>
-        <div style={{ minWidth: 200 }}>
+        <div
+          style={{
+            minWidth: 200,
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
           <ul
             className='bp4-tab-list .modifier'
             role='tablist'
@@ -268,7 +275,7 @@ export default class Gallery extends Component<
               </>
             )}
           </ul>
-          <div role='tabpanel'>
+          <div role='tabpanel' style={{ flexGrow: 1 }}>
             <div
               className={`gallery gallery-image-object-fit_${
                 galleryImageKeepAspectRatio ? 'contain' : 'cover'

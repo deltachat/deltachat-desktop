@@ -1,5 +1,7 @@
 .main-screen {
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
   position: relative;
   overflow: hidden;
 
@@ -9,6 +11,7 @@
     .media-view {
       float: none;
       width: unset;
+      flex-grow: 1;
     }
 
     .navbar-wrapper .bp4-align-right,
@@ -27,6 +30,11 @@
         display: none;
       }
     }
+  }
+
+  .main-app-content {
+    display: flex;
+    flex-grow: 1;
   }
 
   .navbar-chat-name {
@@ -77,8 +85,7 @@
 
   .no-chat-selected-screen {
     width: 70%;
-    float: right;
-    height: $content-height;
+    height: 100%;
     margin-top: 50px;
     text-align: center;
   }

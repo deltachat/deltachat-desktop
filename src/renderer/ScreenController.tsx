@@ -330,16 +330,18 @@ export default class ScreenController extends Component {
                 <DialogContextProvider>
                   <RuntimeAdapter accountId={this.selectedAccountId} />
                   <KeybindingsContextProvider>
-                    <div className='main-container'>
-                      <AccountListSidebar
-                        selectedAccountId={this.selectedAccountId}
-                        onAddAccount={this.addAndSelectAccount}
-                        onSelectAccount={this.selectAccount.bind(this)}
-                        openAccountDeletionScreen={this.openAccountDeletionScreen.bind(
-                          this
-                        )}
-                      />
-                      {this.renderScreen(this.selectedAccountId)}
+                    <div className='main-container-container'>
+                      <div className='main-container'>
+                        <AccountListSidebar
+                          selectedAccountId={this.selectedAccountId}
+                          onAddAccount={this.addAndSelectAccount}
+                          onSelectAccount={this.selectAccount.bind(this)}
+                          openAccountDeletionScreen={this.openAccountDeletionScreen.bind(
+                            this
+                          )}
+                        />
+                        {this.renderScreen(this.selectedAccountId)}
+                      </div>
                     </div>
                   </KeybindingsContextProvider>
                 </DialogContextProvider>

@@ -1,9 +1,8 @@
 .message-list-and-composer {
   width: 70%;
-  float: right;
   display: flex;
   flex-direction: column;
-  height: $content-height;
+  height: 100%;
   background-image: var(--chatViewBgImgPath);
   background-size: cover;
   background-color: var(--chatViewBg);
