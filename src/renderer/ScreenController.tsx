@@ -22,6 +22,7 @@ import RuntimeAdapter from './components/RuntimeAdapter'
 import { ChatProvider, UnselectChat } from './contexts/ChatContext'
 import { ContextMenuProvider } from './contexts/ContextMenuContext'
 import { InstantOnboardingProvider } from './contexts/InstantOnboardingContext'
+import { SmallScreenModeMacOSTitleBar } from './components/SmallScreenModeMacOSTitleBar'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -333,17 +334,7 @@ export default class ScreenController extends Component {
                     <div className='main-container-container'>
                       {this.state.smallScreenMode &&
                         runtime.getRuntimeInfo().isMac && (
-                          <div
-                            style={{
-                              height: '30px',
-                              textAlign: 'center',
-                              '-webkit-app-region': 'drag',
-                              flexShrink: 0,
-                              flexGrow: 0
-                            }}
-                          >
-                            Deltachat
-                          </div>
+                          <SmallScreenModeMacOSTitleBar />
                         )}
                       <div className='main-container'>
                         <AccountListSidebar
