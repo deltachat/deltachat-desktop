@@ -37,6 +37,7 @@ $reaction-transition-duration: 100ms;
 
 .vcard {
   display: flex;
+  cursor: pointer;
   .avatar {
     margin-bottom: 0;
   }

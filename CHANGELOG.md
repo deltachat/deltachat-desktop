@@ -42,7 +42,8 @@
 - Use openstreetmap in map
 - Open map in a separate window
 - Add global map for all chats in account
-
+- show VCard attachement as VCard in message list
+- add contact from VCard & start chat on click
 
 ### Changed
 - Update translations (2024-05-20) #3746 #3802 #3827 #3837

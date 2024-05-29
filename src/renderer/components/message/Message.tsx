@@ -35,6 +35,7 @@ import useMessage from '../../hooks/chat/useMessage'
 import useOpenViewProfileDialog from '../../hooks/dialog/useOpenViewProfileDialog'
 import usePrivateReply from '../../hooks/chat/usePrivateReply'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useCreateChatByEmail from '../../hooks/chat/useCreateChatByEmail'
 import useVideoChat from '../../hooks/useVideoChat'
 import { useReactionsBar, showReactionsUi } from '../ReactionsBar'
 import EnterAutocryptSetupMessage from '../dialogs/EnterAutocryptSetupMessage'
@@ -48,6 +49,7 @@ import styles from './styles.module.scss'
 
 import type { OpenDialog } from '../../contexts/DialogContext'
 import type { PrivateReply } from '../../hooks/chat/usePrivateReply'
+import useChat from '../../hooks/chat/useChat'
 
 const Avatar = (
   contact: T.Contact,
@@ -542,36 +544,6 @@ export default function Message(props: {
         </div>
       </div>
     )
-  } else if (message.vcardContact) {
-    const { profileImage, color, displayName, addr } = message.vcardContact
-    const codepoint = displayName && displayName.codePointAt(0)
-    const initial = codepoint
-      ? String.fromCodePoint(codepoint).toUpperCase()
-      : '#'
-    content = (
-      <div className={styles.vcard}>
-        <div
-          className={classNames('avatar', styles.avatar)}
-          aria-label={displayName}
-        >
-          {profileImage ? (
-            <img
-              alt={displayName}
-              className='content'
-              src={'data:image/jpeg;base64,' + profileImage}
-            />
-          ) : (
-            <div style={{ backgroundColor: color }} className='content'>
-              {initial}
-            </div>
-          )}
-        </div>
-        <div className={styles.contactInfo}>
-          <div className={styles.displayName}>{displayName}</div>
-          <div>{addr}</div>
-        </div>
-      </div>
-    )
   } else {
     content = (
       <div dir='auto' className='text'>
@@ -685,6 +657,7 @@ export default function Message(props: {
           {message.viewType === 'Webxdc' && (
             <WebxdcMessageContent message={message}></WebxdcMessageContent>
           )}
+          {message.viewType === 'Vcard' && VCardContent(message)}
           {content}
           {hasHtml && (
             <div
@@ -853,4 +826,49 @@ function WebxdcMessageContent({ message }: { message: T.Message }) {
       </Button>
     </div>
   )
+}
+
+function VCardContent(message: T.Message) {
+  const createChatByEmail = useCreateChatByEmail()
+  const { selectChat } = useChat()
+  const accountId = selectedAccountId()
+
+  if (message.vcardContact) {
+    const { profileImage, color, displayName, addr } = message.vcardContact
+    const startChatWithContact = async (addr: string) => {
+      const chatId = await createChatByEmail(accountId, addr)
+      if (chatId) {
+        await BackendRemote.rpc.createContact(accountId, addr, displayName)
+        await selectChat(selectedAccountId(), chatId)
+      }
+    }
+    const codepoint = displayName && displayName.codePointAt(0)
+    const initial = codepoint
+      ? String.fromCodePoint(codepoint).toUpperCase()
+      : '#'
+    return (
+      <div className={styles.vcard} onClick={() => startChatWithContact(addr)}>
+        <div
+          className={classNames('avatar', styles.avatar)}
+          aria-label={displayName}
+        >
+          {profileImage ? (
+            <img
+              alt={displayName}
+              className='content'
+              src={'data:image/jpeg;base64,' + profileImage}
+            />
+          ) : (
+            <div style={{ backgroundColor: color }} className='content'>
+              {initial}
+            </div>
+          )}
+        </div>
+        <div className={styles.contactInfo}>
+          <div className={styles.displayName}>{displayName}</div>
+          <div>{addr}</div>
+        </div>
+      </div>
+    )
+  }
 }
