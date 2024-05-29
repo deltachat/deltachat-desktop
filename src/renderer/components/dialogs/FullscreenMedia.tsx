@@ -244,7 +244,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
       <div className='render-media-wrapper' tabIndex={0}>
         <div className='attachment-view'>{elm}</div>
         {elm && (
-          <div className='btn-wrapper'>
+          <div className='btn-wrapper no-drag'>
             <div
               role='button'
               onClick={onDownload.bind(null, msg)}
