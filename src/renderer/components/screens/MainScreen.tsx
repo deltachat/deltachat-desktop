@@ -211,9 +211,12 @@ export default function MainScreen({ accountId }: Props) {
             <NavbarGroup align={Alignment.RIGHT}>
               {smallScreenMode && (
                 <span className='no-drag'>
-                  <Button aria-label={tx('back')} onClick={onBackButton}>
-                    <Icon icon='arrow-left'></Icon>
-                    {tx('back')}
+                  <Button
+                    aria-label={tx('back')}
+                    onClick={onBackButton}
+                    className='backButton'
+                  >
+                    <Icon icon='arrow-left' className='backButtonIcon'></Icon>
                   </Button>
                 </span>
               )}

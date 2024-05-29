@@ -18,6 +18,17 @@
     .navbar-wrapper .bp4-align-left {
       width: 100%;
     }
+    
+    .backButton {
+      $backBtnText: white;
+      .backButtonIcon {
+        background-color: $backBtnText;
+      }
+
+      &:hover {
+        background-color: rgba(143, 153, 168, 0.15);
+      }
+    }
 
     &.chat-view-open {
       .chat-list {
