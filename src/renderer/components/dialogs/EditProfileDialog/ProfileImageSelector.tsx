@@ -42,8 +42,8 @@ export default function ProfileImageSelector({
             shape: 'circle',
             onResult: setProfilePicture,
             onCancel: () => {},
-            targetWidth: 256,
-            targetHeight: 256,
+            desiredWidth: 256,
+            desiredHeight: 256,
           })
         }
       }}

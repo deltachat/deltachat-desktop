@@ -13,6 +13,7 @@
 - fix message text "wobbling" on hover #3862
 - fix: close alternative options dialog when setting up as a second device #3873
 - fix map not opening #3876
+- fix ImageCropper not working on smaller images
 
 
 <a id="1_45_0"></a>
