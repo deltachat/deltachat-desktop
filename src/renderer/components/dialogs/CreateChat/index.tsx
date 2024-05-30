@@ -275,8 +275,10 @@ function CreateChatMain(props: CreateChatMainProps) {
                         <ContactListItem
                           contact={contact}
                           onClick={chooseContact}
-                          onContextMenu={ev =>
-                            onContactContextMenu(contact, ev)
+                          onContextMenu={
+                            contact.id !== C.DC_CONTACT_ID_SELF
+                              ? ev => onContactContextMenu(contact, ev)
+                              : undefined
                           }
                           showCheckbox={false}
                           checked={false}
