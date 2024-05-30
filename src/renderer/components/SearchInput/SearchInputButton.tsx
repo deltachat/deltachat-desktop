@@ -12,18 +12,20 @@ type Props = {
   icon: IconName
   onClick: () => void
   size?: number
+  className?: string
 }
 
 export default function SearchInputButton({
   icon,
   onClick,
   size = 20,
+  className,
   ...props
 }: Props) {
   return (
     <button
       aria-label={props['aria-label']}
-      className={classNames(styles.searchInputButton, 'no-drag')}
+      className={classNames(styles.searchInputButton, 'no-drag', className)}
       onClick={onClick}
     >
       <Icon className={styles.searchInputButtonIcon} icon={icon} size={size} />
