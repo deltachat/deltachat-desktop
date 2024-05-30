@@ -1,5 +1,5 @@
 const { copyFileSync } = require('fs')
-const { readdir, writeFile, rm } = require('fs/promises')
+const { readdir, writeFile, rm, copyFile, cp, mkdir } = require('fs/promises')
 const { join } = require('path')
 
 const { Arch } = require('electron-builder')
@@ -23,22 +23,28 @@ function convertArch(arch) {
 }
 
 module.exports = async context => {
-  console.log({ context })
+  const source_dir = join(__dirname, '..')
+
+  console.log({ context, source_dir })
 
   const isMacBuild = ['darwin', 'mas', 'dmg'].includes(
     context.electronPlatformName
   )
 
-  const prebuild_dir = join(
+  const resources_dir = join(
     context.appOutDir,
-    `${
-      isMacBuild
-        ? `${context.packager.appInfo.sanitizedProductName}.app/Contents/Resources`
-        : 'resources'
-    }/app.asar.unpacked/node_modules/@deltachat`
+    isMacBuild
+      ? `${context.packager.appInfo.sanitizedProductName}.app/Contents/Resources`
+      : 'resources'
+  )
+
+  const prebuild_dir = join(
+    resources_dir,
+    '/app.asar.unpacked/node_modules/@deltachat'
   )
 
   // delete not needed prebuilds
+  // ---------------------------------------------------------------------------------
   const prebuilds = await readdir(prebuild_dir)
 
   const toDelete = prebuilds.filter(name => {
@@ -70,8 +76,9 @@ module.exports = async context => {
     )
   }
 
+  // package msvc redist
+  // ---------------------------------------------------------------------------------
   if (context.electronPlatformName === 'win32') {
-    // package msvc redist
     const base = join(__dirname, 'vcredist/')
     const dir = await readdir(base)
     dir.forEach(d => {
@@ -97,4 +104,14 @@ module.exports = async context => {
       })
     )
   }
+
+  // copy map xdc
+  // ---------------------------------------------------------------------------------
+  const destination = join(resources_dir, 'app.asar.unpacked', 'html-dist')
+  try {
+    await mkdir(destination, { recursive: true })
+  } catch (error) {
+    console.log('failed to create dir', destination, error)
+  }
+  await cp(join(source_dir, 'html-dist/xdcs'), destination, { recursive: true })
 }

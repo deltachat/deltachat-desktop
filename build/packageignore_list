@@ -40,6 +40,10 @@ package-lock.json
 
 html-dist/help/**/.keep-dir
 
+# electron builder has problems copying it over in the CI (see https://github.com/deltachat/deltachat-desktop/pull/3876),
+# so we'll do it "manually" in the after pack hook now  
+html-dist/xdcs/
+
 ## docs that are hidden in asar are useless
 docs/
 

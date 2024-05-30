@@ -49,7 +49,9 @@ build['fileAssociations'] = [
 ]
 
 build['files'] = files
-build['asarUnpack'] = ['html-dist/xdcs/']
+build['asarUnpack'] = []
+// 'html-dist/xdcs/' should be in 'asarUnpack', but that had "file already exists" errors in the ci
+// see https://github.com/deltachat/deltachat-desktop/pull/3876, so we now do it "manually" in the afterPackHook
 
 build['afterPack'] = './build/afterPackHook.cjs'
 build['afterSign'] = './build/afterSignHook.cjs'
