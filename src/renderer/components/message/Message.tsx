@@ -35,7 +35,6 @@ import useMessage from '../../hooks/chat/useMessage'
 import useOpenViewProfileDialog from '../../hooks/dialog/useOpenViewProfileDialog'
 import usePrivateReply from '../../hooks/chat/usePrivateReply'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useCreateChatByEmail from '../../hooks/chat/useCreateChatByEmail'
 import useVideoChat from '../../hooks/useVideoChat'
 import { useReactionsBar, showReactionsUi } from '../ReactionsBar'
 import EnterAutocryptSetupMessage from '../dialogs/EnterAutocryptSetupMessage'
@@ -50,6 +49,8 @@ import styles from './styles.module.scss'
 import type { OpenDialog } from '../../contexts/DialogContext'
 import type { PrivateReply } from '../../hooks/chat/usePrivateReply'
 import useChat from '../../hooks/chat/useChat'
+import ConfirmationDialog from '../dialogs/ConfirmationDialog'
+import { createChatByContactId } from '../../backend/chat'
 
 const Avatar = (
   contact: T.Contact,
@@ -828,15 +829,37 @@ function WebxdcMessageContent({ message }: { message: T.Message }) {
   )
 }
 
+/**
+ * displays a VCard attachement with avatar, mail & name
+ * onClick imports VCard and creates chat
+ * (only first if multiple contacts are included in VCard)
+ */
 function VCardContent(message: T.Message) {
-  const createChatByEmail = useCreateChatByEmail()
   const { selectChat } = useChat()
   const accountId = selectedAccountId()
-
+  const { openDialog } = useDialog()
+  const tx = useTranslationFunction()
   if (message.vcardContact) {
     const { profileImage, color, displayName, addr } = message.vcardContact
     const startChatWithContact = async (addr: string) => {
-      const chatId = await createChatByEmail(accountId, addr)
+      const continueProcess = await new Promise((resolve, _reject) => {
+        openDialog(ConfirmationDialog, {
+          message: tx('ask_start_chat_with', displayName),
+          confirmLabel: tx('ok'),
+          cb: resolve,
+        })
+      })
+
+      if (!continueProcess) {
+        return null
+      }
+
+      const contactIds = await BackendRemote.rpc.importVcard(
+        accountId,
+        message.file ?? '' // vCard messages always have a file property
+      )
+
+      const chatId = await createChatByContactId(accountId, contactIds[0])
       if (chatId) {
         await BackendRemote.rpc.createContact(accountId, addr, displayName)
         await selectChat(selectedAccountId(), chatId)
