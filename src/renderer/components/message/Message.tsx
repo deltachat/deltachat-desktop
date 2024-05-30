@@ -43,14 +43,12 @@ import Reactions from '../Reactions'
 import ShortcutMenu from '../ShortcutMenu'
 import InvalidUnencryptedMailDialog from '../dialogs/InvalidUnencryptedMail'
 import Button from '../Button'
+import VCardComponent from './VCard'
 
 import styles from './styles.module.scss'
 
 import type { OpenDialog } from '../../contexts/DialogContext'
 import type { PrivateReply } from '../../hooks/chat/usePrivateReply'
-import useChat from '../../hooks/chat/useChat'
-import ConfirmationDialog from '../dialogs/ConfirmationDialog'
-import { createChatByContactId } from '../../backend/chat'
 
 const Avatar = (
   contact: T.Contact,
@@ -658,7 +656,9 @@ export default function Message(props: {
           {message.viewType === 'Webxdc' && (
             <WebxdcMessageContent message={message}></WebxdcMessageContent>
           )}
-          {message.viewType === 'Vcard' && VCardContent(message)}
+          {message.viewType === 'Vcard' && (
+            <VCardComponent message={message}></VCardComponent>
+          )}
           {content}
           {hasHtml && (
             <div
@@ -827,71 +827,4 @@ function WebxdcMessageContent({ message }: { message: T.Message }) {
       </Button>
     </div>
   )
-}
-
-/**
- * displays a VCard attachement with avatar, mail & name
- * onClick imports VCard and creates chat
- * (only first if multiple contacts are included in VCard)
- */
-function VCardContent(message: T.Message) {
-  const { selectChat } = useChat()
-  const accountId = selectedAccountId()
-  const { openDialog } = useDialog()
-  const tx = useTranslationFunction()
-  if (message.vcardContact) {
-    const { profileImage, color, displayName, addr } = message.vcardContact
-    const startChatWithContact = async (addr: string) => {
-      const continueProcess = await new Promise((resolve, _reject) => {
-        openDialog(ConfirmationDialog, {
-          message: tx('ask_start_chat_with', displayName),
-          confirmLabel: tx('ok'),
-          cb: resolve,
-        })
-      })
-
-      if (!continueProcess) {
-        return null
-      }
-
-      const contactIds = await BackendRemote.rpc.importVcard(
-        accountId,
-        message.file ?? '' // vCard messages always have a file property
-      )
-
-      const chatId = await createChatByContactId(accountId, contactIds[0])
-      if (chatId) {
-        await BackendRemote.rpc.createContact(accountId, addr, displayName)
-        await selectChat(selectedAccountId(), chatId)
-      }
-    }
-    const codepoint = displayName && displayName.codePointAt(0)
-    const initial = codepoint
-      ? String.fromCodePoint(codepoint).toUpperCase()
-      : '#'
-    return (
-      <div className={styles.vcard} onClick={() => startChatWithContact(addr)}>
-        <div
-          className={classNames('avatar', styles.avatar)}
-          aria-label={displayName}
-        >
-          {profileImage ? (
-            <img
-              alt={displayName}
-              className='content'
-              src={'data:image/jpeg;base64,' + profileImage}
-            />
-          ) : (
-            <div style={{ backgroundColor: color }} className='content'>
-              {initial}
-            </div>
-          )}
-        </div>
-        <div className={styles.contactInfo}>
-          <div className={styles.displayName}>{displayName}</div>
-          <div>{addr}</div>
-        </div>
-      </div>
-    )
-  }
 }
