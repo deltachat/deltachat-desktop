@@ -11,6 +11,7 @@
 ### Fixed
 - fix that map tab is highlighted when you are in the media/gallery tab #3867
 - fix message text "wobbling" on hover #3862
+- fix map not opening #3876
 
 
 <a id="1_45_0"></a>
