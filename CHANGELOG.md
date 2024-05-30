@@ -3,13 +3,16 @@
 ## [Unreleased][unreleased]
 
 ### Changed
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `v1.139.6`
 - Always show `msg.overrideSenderName` even when the message is sent by yourself
-- Update translations (2024-05-27)
+- Update translations (2024-05-27) #3871
+- adapt title of "Privacy Policy" link for default instance #3872
 
 ### Fixed
 - fix that map tab is highlighted when you are in the media/gallery tab #3867
 - fix message text "wobbling" on hover #3862
 - fix: close alternative options dialog when setting up as a second device #3873
+- fix map not opening #3876
 
 
 <a id="1_45_0"></a>

@@ -589,9 +589,12 @@ If you think that's a bug and you need that permission, then please open an issu
           chatId ?? null
         )
         if (!msgId) {
+          // after packaging all files are in asar dir
+          // core needs real path
+          const path = htmlDistDir().replace('app.asar', 'app.asar.unpacked')
           await this.rpc.setWebxdcIntegration(
             accountId,
-            join(htmlDistDir(), '/xdcs/maps.xdc')
+            join(path, '/xdcs/maps.xdc')
           )
           msgId = await this.rpc.initWebxdcIntegration(
             accountId,
