@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { MouseEventHandler } from 'react'
 import Contact from './Contact'
 import { Icon } from '@blueprintjs/core'
 import classNames from 'classnames'
@@ -44,7 +44,7 @@ export function ContactListItem(props: {
   onCheckboxClick?: (contact: Type.Contact) => void
   onRemoveClick?: (contact: Type.Contact) => void
   disabled?: boolean
-  onContextMenu?: () => void
+  onContextMenu?: MouseEventHandler<HTMLDivElement>
 }) {
   const {
     contact,

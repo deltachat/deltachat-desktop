@@ -1,5 +1,6 @@
 import React, {
   ChangeEvent,
+  MouseEvent,
   useCallback,
   useContext,
   useEffect,
@@ -59,6 +60,8 @@ import type { T } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../../contexts/DialogContext'
 
 import styles from './styles.module.scss'
+import { makeContextMenu } from '../../ContextMenu'
+import { ContextMenuContext } from '../../../contexts/ContextMenuContext'
 
 type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
 
@@ -159,20 +162,31 @@ function CreateChatMain(props: CreateChatMainProps) {
     onClose()
   }
 
+  const { openContextMenu } = useContext(ContextMenuContext)
   const onContactContextMenu = useCallback(
-    async (contact: Type.Contact) => {
-      const confirmed = await openConfirmationDialog({
-        message: tx('ask_delete_contact', contact.address),
-        confirmLabel: tx('delete'),
-      })
+    async (contact: Type.Contact, ev: MouseEvent) => {
+      makeContextMenu(
+        [
+          {
+            label: tx('delete_contact'),
+            action: async () => {
+              const confirmed = await openConfirmationDialog({
+                message: tx('ask_delete_contact', contact.address),
+                confirmLabel: tx('delete'),
+              })
 
-      if (confirmed) {
-        BackendRemote.rpc
-          .deleteContact(accountId, contact.id)
-          .then(refreshContacts)
-      }
+              if (confirmed) {
+                BackendRemote.rpc
+                  .deleteContact(accountId, contact.id)
+                  .then(refreshContacts)
+              }
+            },
+          },
+        ],
+        openContextMenu
+      )(ev)
     },
-    [accountId, openConfirmationDialog, refreshContacts, tx]
+    [accountId, openConfirmationDialog, refreshContacts, tx, openContextMenu]
   )
 
   return (
@@ -261,7 +275,9 @@ function CreateChatMain(props: CreateChatMainProps) {
                         <ContactListItem
                           contact={contact}
                           onClick={chooseContact}
-                          onContextMenu={() => onContactContextMenu(contact)}
+                          onContextMenu={ev =>
+                            onContactContextMenu(contact, ev)
+                          }
                           showCheckbox={false}
                           checked={false}
                           showRemove={false}
