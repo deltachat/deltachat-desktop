@@ -121,11 +121,11 @@ export default function MenuAttachment({
   ]
 
   const onClickAttachmentMenu = (event: React.MouseEvent<any, MouseEvent>) => {
-    const threeDotButtonElement = document.querySelector(
+    const attachmentMenuButtonElement = document.querySelector(
       '#attachment-menu-button'
     ) as HTMLDivElement
 
-    const boundingBox = threeDotButtonElement.getBoundingClientRect()
+    const boundingBox = attachmentMenuButtonElement.getBoundingClientRect()
 
     const [cursorX, cursorY] = [boundingBox.x, boundingBox.y]
     event.preventDefault() // prevent default runtime context menu from opening
