@@ -11,6 +11,7 @@
 ### Fixed
 - fix that map tab is highlighted when you are in the media/gallery tab #3867
 - fix message text "wobbling" on hover #3862
+- fix: close alternative options dialog when setting up as a second device #3873
 - fix map not opening #3876
 
 

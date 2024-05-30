@@ -40,6 +40,7 @@ export default function AlternativeSetupsDialog({
   const onClickSecondDevice = () => {
     resetAccount()
     openDialog(ReceiveBackupDialog)
+    onClose()
   }
 
   async function onClickImportBackup() {
