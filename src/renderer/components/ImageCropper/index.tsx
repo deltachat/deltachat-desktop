@@ -24,16 +24,16 @@ export default function ImageCropper({
   onResult,
   onClose,
   onCancel,
-  targetWidth,
-  targetHeight = targetWidth,
+  desiredWidth,
+  desiredHeight = desiredWidth,
 }: {
   filepath: string
   shape: string
   onResult: (path: string) => void
   onClose: () => void
   onCancel: () => void
-  targetWidth: number
-  targetHeight: number
+  desiredWidth: number
+  desiredHeight: number
 }) {
   const tx = useTranslationFunction()
   const { setLastPath } = rememberLastUsedPath(LastUsedSlot.ProfileImage)
@@ -55,6 +55,9 @@ export default function ImageCropper({
   const posX = useRef<number>(0)
   const posY = useRef<number>(0)
 
+  const targetWidth = useRef<number>(desiredWidth)
+  const targetHeight = useRef<number>(desiredHeight)
+
   const containerScale = useRef<number>(1.0)
   const zoom = useRef<number>(1.0)
   const initialZoom = useRef<number>(1.0)
@@ -65,8 +68,8 @@ export default function ImageCropper({
     }
 
     const canvas = document.createElement('canvas')
-    canvas.width = targetWidth
-    canvas.height = targetHeight
+    canvas.width = targetWidth.current
+    canvas.height = targetHeight.current
 
     const context = canvas.getContext('2d', {
       willReadFrequently: false,
@@ -78,14 +81,14 @@ export default function ImageCropper({
 
     context.drawImage(
       fullImage.current as CanvasImageSource,
-      posX.current - (targetWidth / zoom.current - imgW) / 2,
-      posY.current - (targetHeight / zoom.current - imgH) / 2,
-      targetWidth / zoom.current,
-      targetHeight / zoom.current,
+      posX.current - (targetWidth.current / zoom.current - imgW) / 2,
+      posY.current - (targetHeight.current / zoom.current - imgH) / 2,
+      targetWidth.current / zoom.current,
+      targetHeight.current / zoom.current,
       0,
       0,
-      targetWidth,
-      targetHeight
+      targetWidth.current,
+      targetHeight.current
     )
     ;(async () => {
       const tempfilename = `profile_pic_${Date.now()}.png`
@@ -108,8 +111,8 @@ export default function ImageCropper({
   }
 
   const makeSelector = (x: number, y: number) => {
-    const hw = targetWidth / zoom.current / 2
-    const hh = targetHeight / zoom.current / 2
+    const hw = targetWidth.current / zoom.current / 2
+    const hh = targetHeight.current / zoom.current / 2
     if (shape === 'circle') {
       return `circle(${hw}px at ${x}px ${y}px)`
     } else {
@@ -132,15 +135,30 @@ export default function ImageCropper({
       return
     }
 
+    const imgW = fullImage.current.clientWidth
+    const imgH = fullImage.current.clientHeight
+
+    if (imgW < desiredWidth || imgH < desiredHeight) {
+      targetWidth.current = Math.min(imgW, desiredWidth)
+      targetHeight.current = Math.min(imgH, desiredHeight)
+
+      if (desiredWidth === desiredHeight) {
+        targetWidth.current = targetHeight.current = Math.min(
+          targetWidth.current,
+          targetHeight.current
+        )
+      }
+    }
+
     containerScale.current = Math.min(
-      container.current?.clientWidth / targetWidth,
-      container.current?.clientHeight / targetHeight
+      container.current?.clientWidth / targetWidth.current,
+      container.current?.clientHeight / targetHeight.current
     )
 
     container.current.style.transform = `scale(${containerScale.current})`
     initialZoom.current = zoom.current = Math.min(
-      targetWidth / fullImage.current.clientWidth,
-      targetHeight / fullImage.current.clientHeight
+      targetWidth.current / imgW,
+      targetHeight.current / imgH
     )
     posX.current = 0
     posY.current = 0
@@ -160,18 +178,22 @@ export default function ImageCropper({
     const ctxH = container.current.clientHeight
 
     zoom.current = Math.min(
-      imgW / targetWidth,
-      imgH / targetHeight,
-      Math.max(targetWidth / imgW, targetHeight / imgH, zoom.current)
+      imgW / targetWidth.current,
+      imgH / targetHeight.current,
+      Math.max(
+        targetWidth.current / imgW,
+        targetHeight.current / imgH,
+        zoom.current
+      )
     )
 
     const nX = Math.max(
-      Math.min((imgW - targetWidth / zoom.current) / 2, x),
-      (targetWidth / zoom.current - imgW) / 2
+      Math.min((imgW - targetWidth.current / zoom.current) / 2, x),
+      (targetWidth.current / zoom.current - imgW) / 2
     )
     const nY = Math.max(
-      Math.min((imgH - targetHeight / zoom.current) / 2, y),
-      (targetHeight / zoom.current - imgH) / 2
+      Math.min((imgH - targetHeight.current / zoom.current) / 2, y),
+      (targetHeight.current / zoom.current - imgH) / 2
     )
 
     // we don't multiply nX and nY by zoom.current here since image scale does that for us

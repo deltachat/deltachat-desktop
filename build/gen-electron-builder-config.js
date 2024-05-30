@@ -22,6 +22,7 @@ const files = [
 ]
 const env = process.env
 
+/** @type {import('./types').DeepWriteable<import('electron-builder').Configuration>} */
 const build = {}
 build['appId'] = 'chat.delta.desktop.electron'
 build['protocols'] = [
@@ -48,7 +49,9 @@ build['fileAssociations'] = [
 ]
 
 build['files'] = files
-build['asarUnpack'] = ['node_modules/deltachat-node/']
+build['asarUnpack'] = []
+// 'html-dist/xdcs/' should be in 'asarUnpack', but that had "file already exists" errors in the ci
+// see https://github.com/deltachat/deltachat-desktop/pull/3876, so we now do it "manually" in the afterPackHook
 
 build['afterPack'] = './build/afterPackHook.cjs'
 build['afterSign'] = './build/afterSignHook.cjs'
