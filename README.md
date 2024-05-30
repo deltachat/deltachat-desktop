@@ -48,23 +48,23 @@
 
 <details><summary>Click to expand</summary>
 
-- [deltachat-desktop](#deltachat-desktop)
-  - [Documentation Links](#docs)
+- [Delta Chat Desktop ](#delta-chat-desktop-)
+  - [Documentation Links ](#documentation-links-)
   - [Table of Contents](#table-of-contents)
-  - [Install](#install-)
-    - [Linux](#linux-)
-      - [Flatpak](#flatpak-)
-      - [Arch Linux](#arch-linux-)
-    - [MacOS](#mac-os-)
+  - [Install ](#install-)
+    - [Linux ](#linux-)
+      - [Flatpak ](#flatpak-)
+      - [Arch Linux ](#arch-linux-)
+    - [Mac OS ](#mac-os-)
       - [Homebrew](#homebrew)
       - [DMG](#dmg)
-    - [Windows](#windows)
-    - [From Source](#from-source-)
-    - [Troubleshooting](#troubleshooting-)
-  - [Configuration and Databases](#configuration-and-databases-)
-  - [How to Contribute](#how-to-contribute-)
-  - [Logging](#logging-)
-  - [License](#license-)
+    - [Windows ](#windows-)
+    - [From Source ](#from-source-)
+    - [Troubleshooting ](#troubleshooting-)
+  - [Configuration and Databases ](#configuration-and-databases-)
+  - [How to Contribute ](#how-to-contribute-)
+  - [Logging ](#logging-)
+  - [License ](#license-)
 
 </details>
 
@@ -167,7 +167,7 @@ Then try running `npm install` again.
 
 Make sure that your nodejs version is `20.0.0` or newer.
 
-If you still get errors look at the instructions in the [`deltachat-node`](https://github.com/deltachat/deltachat-core-rust/tree/master/node) and [`deltachat-core-rust`](https://github.com/deltachat/deltachat-core-rust) README files to set things up [`or write an issue`](https://github.com/deltachat/deltachat-desktop/issues/new/choose).
+If you still get errors look at the instructions in [UPDATE_CORE Readme](./docs/UPDATE_CORE.md) to set things up [`or write an issue`](https://github.com/deltachat/deltachat-desktop/issues/new/choose).
 
 ## Configuration and Databases <a id="config-and-db"></a>
 
