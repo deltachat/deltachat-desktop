@@ -33,6 +33,7 @@ import { selectedAccountId } from '../../ScreenController'
 import { openMapWebxdc } from '../../system-integration/webxdc'
 
 import type { T } from '@deltachat/jsonrpc-client'
+import SearchInputButton from '../SearchInput/SearchInputButton'
 
 export type AlternativeView = 'global-gallery' | null
 
@@ -162,15 +163,13 @@ export default function MainScreen({ accountId }: Props) {
                 <div className='archived-chats-title no-drag'>
                   {tx('chat_archived_chats_title')}
                 </div>
-                <Button
-                  className={['archived-chats-return-button', 'no-drag'].join(
-                    ' '
-                  )}
+                {/* reusing SearchInputButton here so that the button has the same style as the qr code button */}
+                <SearchInputButton
+                  className='no-drag'
                   onClick={() => setArchivedChatsSelected(false)}
                   aria-label={tx('back')}
-                >
-                  <Icon coloring='context-menu' icon='undo' rotation={90} />
-                </Button>
+                  icon='undo'
+                />
               </>
             )}
             {!showArchivedChats && (
