@@ -5,8 +5,10 @@
 ### Changed
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `v1.139.6`
 - Always show `msg.overrideSenderName` even when the message is sent by yourself
+- Secure notifications on linux: escape html, like signal does
 - Update translations (2024-05-27) #3871
 - adapt title of "Privacy Policy" link for default instance #3872
+
 
 ### Fixed
 - fix that map tab is highlighted when you are in the media/gallery tab #3867
