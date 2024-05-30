@@ -22,6 +22,7 @@ const files = [
 ]
 const env = process.env
 
+/** @type {import('./types').DeepWriteable<import('electron-builder').Configuration>} */
 const build = {}
 build['appId'] = 'chat.delta.desktop.electron'
 build['protocols'] = [
