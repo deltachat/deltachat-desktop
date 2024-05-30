@@ -37,13 +37,13 @@ export type IconName =
 type Props = {
   className?: string
   icon: IconName
-  coloring?: string
+  coloring?: keyof Omit<typeof styles, 'icon'>
   size?: number
   rotation?: number
 }
 
 export default function Icon({
-  coloring = 'primary',
+  coloring,
   size = 20,
   rotation = 0,
   icon,
