@@ -34,3 +34,23 @@ $reaction-transition-duration: 100ms;
   padding-right: 13px;
   padding-top: 7px;
 }
+
+.vcard {
+  display: flex;
+  cursor: pointer;
+  .avatar {
+    margin-bottom: 0;
+  }
+  .contactInfo {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    padding-left: 10px;
+  }
+  .displayName {
+    margin-bottom: 0;
+    margin-top: 10px;
+    font-weight: 200;
+    font-size: medium;
+  }
+}
