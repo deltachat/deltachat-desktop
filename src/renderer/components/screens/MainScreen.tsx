@@ -268,7 +268,7 @@ export default function MainScreen({ accountId }: Props) {
           onUpdateGalleryView={updatethreeDotMenuHidden}
         />
       </div>
-      <ConnectivityToast />
+      {!chatListShouldBeHidden && <ConnectivityToast />}
     </div>
   )
 }
