@@ -19,7 +19,7 @@
 - fix: close alternative options dialog when setting up as a second device #3873
 - fix map not opening #3876
 - fix ImageCropper not working on smaller images
-- fix update timestamps when language changes
+- fix update timestamps when language changes #3889
 
 
 <a id="1_45_0"></a>
