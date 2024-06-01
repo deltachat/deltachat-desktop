@@ -8,7 +8,7 @@ import React, {
   useMemo,
 } from 'react'
 import classNames from 'classnames'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 import { C } from '@deltachat/jsonrpc-client'
 import { debounce } from 'debounce'
 
@@ -28,6 +28,7 @@ import EmptyChatMessage from './EmptyChatMessage'
 const log = getLogger('render/components/message/MessageList')
 
 import type { T } from '@deltachat/jsonrpc-client'
+import { DayMarkerLabel } from '../conversations/formatRelativeTime'
 
 type ChatTypes =
   | C.DC_CHAT_TYPE_SINGLE
@@ -702,12 +703,7 @@ export function DayMarker(props: { timestamp: number }) {
   return (
     <div className='info-message daymarker'>
       <div className='bubble' style={{ textTransform: 'capitalize' }}>
-        {moment.unix(timestamp).calendar(null, {
-          sameDay: `[${tx('today')}]`,
-          lastDay: `[${tx('yesterday')}]`,
-          lastWeek: 'LL',
-          sameElse: 'LL',
-        })}
+        {DayMarkerLabel(tx, DateTime.fromSeconds(timestamp))}
       </div>
     </div>
   )

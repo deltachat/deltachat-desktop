@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import classNames from 'classnames'
-import moment from 'moment'
-import formatRelativeTime from './formatRelativeTime'
+import { DateTime } from 'luxon'
+import formatRelativeTime, { FULL_HUMAN_DATE_TIME } from './formatRelativeTime'
 import { getLogger } from '../../../shared/logger'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 const log = getLogger('renderer/Component/Timestamp')
 
@@ -55,7 +56,9 @@ const NonUpdatingTimestamp = function Timestamp(props: TimestampProps) {
         moduleName,
         direction ? `${moduleName}--${direction}` : null
       )}
-      title={moment(timestamp).format('llll')}
+      title={DateTime.fromMillis(timestamp).toLocaleString(
+        FULL_HUMAN_DATE_TIME
+      )}
     >
       {formatRelativeTime(timestamp, { extended })}
     </span>
@@ -94,7 +97,9 @@ const UpdatingTimestamp = (props: TimestampProps) => {
         moduleName,
         direction ? `${moduleName}--${direction}` : null
       )}
-      title={moment(timestamp).format('llll')}
+      title={DateTime.fromMillis(timestamp).toLocaleString(
+        FULL_HUMAN_DATE_TIME
+      )}
     >
       {relativeTime}
     </span>
@@ -104,6 +109,8 @@ const UpdatingTimestamp = (props: TimestampProps) => {
 const relativeTimeThreshold = 24 * 60 * 60 * 1000 // one day
 
 export default function Timestamp(props: TimestampProps) {
+  // make sure timestamps are re-rendered if translation changes
+  useTranslationFunction()
   // if older than one week we don't need to update timestamps
   if (props.timestamp < Date.now() - relativeTimeThreshold) {
     return <NonUpdatingTimestamp {...props} />

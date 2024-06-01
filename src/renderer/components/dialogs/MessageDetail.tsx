@@ -1,5 +1,5 @@
 import React from 'react'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 import { selectedAccountId } from '../../ScreenController'
 import { BackendRemote } from '../../backend-com'
@@ -74,7 +74,11 @@ class MessageInfo extends React.Component<
                   {tx('message_detail_sent_desktop')}
                 </td>
                 <td>
-                  {moment(sentAt).format('LLLL')}{' '}
+                  {sentAt &&
+                    DateTime.fromMillis(sentAt).toLocaleString({
+                      ...DateTime.DATETIME_HUGE,
+                      timeZoneName: undefined,
+                    })}{' '}
                   <span className='module-message-detail__unix-timestamp'>
                     ({sentAt})
                   </span>
@@ -86,7 +90,10 @@ class MessageInfo extends React.Component<
                     {tx('message_detail_received_desktop')}
                   </td>
                   <td>
-                    {moment(receivedAt).format('LLLL')}{' '}
+                    {DateTime.fromMillis(receivedAt).toLocaleString({
+                      ...DateTime.DATETIME_HUGE,
+                      timeZoneName: undefined,
+                    })}{' '}
                     <span className='module-message-detail__unix-timestamp'>
                       ({receivedAt})
                     </span>

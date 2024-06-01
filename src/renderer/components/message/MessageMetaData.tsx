@@ -56,7 +56,7 @@ export default function MessageMetaData(props: Props) {
       {hasLocation && <span className={'location-icon'} />}
       <Timestamp
         timestamp={timestamp}
-        extended
+        extended={true}
         direction={direction}
         module='date'
       />

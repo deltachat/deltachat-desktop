@@ -6,7 +6,7 @@ import React, {
   useCallback,
 } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
 import useDialog from '../../hooks/dialog/useDialog'
@@ -25,6 +25,7 @@ import { selectedAccountId } from '../../ScreenController'
 import type { DialogProps, OpenDialog } from '../../contexts/DialogContext'
 import type { JumpToMessage } from '../../hooks/chat/useMessage'
 import type { PrivateReply } from '../../hooks/chat/usePrivateReply'
+import { DayMarkerLabel } from '../conversations/formatRelativeTime'
 
 const log = getLogger('render/ChatAuditLog')
 
@@ -197,12 +198,10 @@ export default function ChatAuditLogDialog(
                     return (
                       <li key={key} className='time'>
                         <div>
-                          {moment.unix(entry.timestamp).calendar(null, {
-                            sameDay: `[${tx('today')}]`,
-                            lastDay: `[${tx('yesterday')}]`,
-                            lastWeek: 'LL',
-                            sameElse: 'LL',
-                          })}
+                          {DayMarkerLabel(
+                            tx,
+                            DateTime.fromSeconds(entry.timestamp)
+                          )}
                         </div>
                       </li>
                     )
@@ -236,7 +235,9 @@ export default function ChatAuditLogDialog(
                     >
                       <p>
                         <div className='timestamp'>
-                          {moment.unix(timestamp).format('LT')}
+                          {DateTime.fromSeconds(timestamp).toLocaleString(
+                            DateTime.TIME_SIMPLE
+                          )}
                         </div>
                         {systemMessageType == 'WebxdcInfoMessage' &&
                           parentId && (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react'
-import moment from 'moment'
+import { Settings as LuxonSettings, DateTime } from 'luxon'
 
 import ScreenController from './ScreenController'
 import { translate, LocaleData } from '../shared/localize'
@@ -11,6 +11,7 @@ import { getLogger } from '../shared/logger'
 import { BackendRemote } from './backend-com'
 import { runPostponedFunctions } from './onready'
 import { I18nContext } from './contexts/I18nContext'
+import { updateTimestamps } from './components/conversations/Timestamp'
 
 export default function App(_props: any) {
   const [localeData, setLocaleData] = useState<LocaleData | null>(null)
@@ -56,11 +57,26 @@ export default function App(_props: any) {
 
   async function reloadLocaleData(locale: string) {
     const localeData = await runtime.getLocaleData(locale)
+    const localeCode = localeData.locale.replace('_', '-')
+    try {
+      DateTime.now().setLocale(localeCode).toLocaleString()
+      // the language needs to be a https://en.wikipedia.org/wiki/IETF_language_tag
+      // also see https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry
+      LuxonSettings.defaultLocale = localeCode
+      log.info('Set Date formating locale to ' + localeCode)
+    } catch (error) {
+      log.errorWithoutStackTrace(
+        'Setting Luxon to locale did not work, falling back to system locale.',
+        { localeCode, error }
+      )
+      LuxonSettings.defaultLocale = 'system'
+    }
     window.localeData = localeData
     window.static_translate = translate(localeData.messages)
     setLocaleData(localeData)
-    moment.locale(localeData.locale)
     updateCoreStrings()
+    // make sure the string timestamps are updates as well.
+    setTimeout(() => updateTimestamps(), 0)
   }
 
   useEffect(() => {

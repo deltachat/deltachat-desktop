@@ -1,6 +1,6 @@
 import AutoSizer from 'react-virtualized-auto-sizer'
 import React, { useState, useEffect } from 'react'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 import { C } from '@deltachat/jsonrpc-client'
 
 import ChatListItem from '../../chat/ChatListItem'
@@ -43,11 +43,11 @@ function LastSeen({ timestamp }: { timestamp: number }) {
   if (timestamp == 0) {
     lastSeenString = tx('last_seen_unknown')
   } else {
-    const date = moment(timestamp * 1000).fromNow()
+    const date = DateTime.fromSeconds(timestamp).toRelative()
     lastSeenString = tx('last_seen_relative', date)
     lastSeenAbsolute = tx(
       'last_seen_at',
-      moment(timestamp * 1000).toLocaleString()
+      DateTime.fromSeconds(timestamp).toLocaleString()
     )
   }
 

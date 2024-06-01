@@ -1,7 +1,7 @@
 import React, { ChangeEvent, Component, createRef } from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { FixedSizeGrid, FixedSizeList } from 'react-window'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 import {
   AudioAttachment,
@@ -190,9 +190,9 @@ export default class Gallery extends Component<
   updateFirstVisibleMessage(message: Type.MessageLoadResult) {
     if (message.kind === 'message') {
       if (this.dateHeader.current)
-        this.dateHeader.current.innerText = moment(
-          message.timestamp * 1000
-        ).format('LL')
+        this.dateHeader.current.innerText = DateTime.fromSeconds(
+          message.timestamp
+        ).toLocaleString(DateTime.DATE_FULL)
     }
   }
 

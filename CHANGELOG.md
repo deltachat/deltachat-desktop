@@ -11,7 +11,7 @@
 - ContextMenuItem now can render icons #3811
 - use our own ContextMenu for AttachmentMenu #3811
 - replace BlueprintJS Button and Icon with our implementation in chat navbar and attachment menu #3811
-
+- replace `momentjs` with `luxon`, `luxon` makes use of the browser's Internationalization API
 
 ### Fixed
 - fix that map tab is highlighted when you are in the media/gallery tab #3867
@@ -19,6 +19,7 @@
 - fix: close alternative options dialog when setting up as a second device #3873
 - fix map not opening #3876
 - fix ImageCropper not working on smaller images
+- fix update timestamps when language changes
 
 
 <a id="1_45_0"></a>
