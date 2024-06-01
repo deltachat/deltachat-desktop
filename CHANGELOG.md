@@ -3,7 +3,8 @@
 ## [Unreleased][unreleased]
 
 ### Added
-- show VCard attachement as VCard in message list
+- show VCard attachement as VCard in message list #3840
+- add contact from VCard & start chat on click #3840
 
 ### Changed
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `v1.139.6`
@@ -42,8 +43,6 @@
 - Use openstreetmap in map
 - Open map in a separate window
 - Add global map for all chats in account
-- show VCard attachement as VCard in message list
-- add contact from VCard & start chat on click
 
 ### Changed
 - Update translations (2024-05-20) #3746 #3802 #3827 #3837
