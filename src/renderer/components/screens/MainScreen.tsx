@@ -42,7 +42,6 @@ import { ScreenContext } from '../../contexts/ScreenContext'
 
 import type { T } from '@deltachat/jsonrpc-client'
 
-
 export type AlternativeView = 'global-gallery' | null
 
 type Props = {
@@ -184,26 +183,26 @@ export default function MainScreen({ accountId }: Props) {
             <NavbarGroup align={Alignment.LEFT}>
               {showArchivedChats && (
                 <>
-                <div className='archived-chats-title no-drag'>
-                  {tx('chat_archived_chats_title')}
-                </div>
-                {/* reusing SearchInputButton here so that the button has the same style as the qr code button */}
-                <SearchInputButton
-                  className='no-drag'
-                  onClick={() => setArchivedChatsSelected(false)}
-                  aria-label={tx('back')}
-                  icon='undo'
-                />
-              </>
+                  <div className='archived-chats-title no-drag'>
+                    {tx('chat_archived_chats_title')}
+                  </div>
+                  {/* reusing SearchInputButton here so that the button has the same style as the qr code button */}
+                  <SearchInputButton
+                    className='no-drag'
+                    onClick={() => setArchivedChatsSelected(false)}
+                    aria-label={tx('back')}
+                    icon='undo'
+                  />
+                </>
               )}
               {!showArchivedChats && (
                 <SearchInput
-                id='chat-list-search'
-                inputRef={searchRef}
-                onChange={handleSearchChange}
-                onClear={queryChatId ? () => handleSearchClear() : undefined}
-                value={queryStr}
-              />
+                  id='chat-list-search'
+                  inputRef={searchRef}
+                  onChange={handleSearchChange}
+                  onClear={queryChatId ? () => handleSearchClear() : undefined}
+                  value={queryStr}
+                />
               )}
             </NavbarGroup>
           )}
@@ -236,13 +235,18 @@ export default function MainScreen({ accountId }: Props) {
                   aria-disabled={threeDotMenuHidden}
                 >
                   <Button
-                  id='three-dot-menu-button'
-                  className='navbar-button'
-                  aria-label={tx('main_menu')}
-                  onClick={onClickThreeDotMenu}
-                >
-                  <Icon coloring='navbar' icon='more' rotation={90} size={24} />
-                </Button>
+                    id='three-dot-menu-button'
+                    className='navbar-button'
+                    aria-label={tx('main_menu')}
+                    onClick={onClickThreeDotMenu}
+                  >
+                    <Icon
+                      coloring='navbar'
+                      icon='more'
+                      rotation={90}
+                      size={24}
+                    />
+                  </Button>
                 </span>
               )}
             </NavbarGroup>
