@@ -6,7 +6,7 @@
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `v1.139.6`
 - Always show `msg.overrideSenderName` even when the message is sent by yourself
 - Secure notifications on linux: escape html, like signal does
-- Update translations (2024-05-27) #3871
+- Update translations (2024-06-01) #3871 #3888
 - adapt title of "Privacy Policy" link for default instance #3872
 - ContextMenuItem now can render icons #3811
 - use our own ContextMenu for AttachmentMenu #3811
