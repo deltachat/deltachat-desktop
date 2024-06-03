@@ -1,4 +1,4 @@
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 import { getLogger } from '../../../shared/logger'
 import { runtime } from '../../runtime'
@@ -10,6 +10,7 @@ import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import MessageDetail from '../dialogs/MessageDetail'
 
 import type { OpenDialog } from '../../contexts/DialogContext'
+import { FULL_HUMAN_DATE_TIME } from '../conversations/formatRelativeTime'
 
 const log = getLogger('render/msgFunctions')
 
@@ -123,7 +124,8 @@ export async function openMessageHTML(messageId: number) {
     chatId,
     receivedTimestamp,
   } = await BackendRemote.rpc.getMessage(accountId, messageId)
-  const receiveTime = moment(receivedTimestamp * 1000).format('LLLL')
+  const receiveTime =
+    DateTime.fromSeconds(receivedTimestamp).toLocaleString(FULL_HUMAN_DATE_TIME)
   const { isContactRequest, isProtectionBroken } =
     await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
   runtime.openMessageHTML(

@@ -108,9 +108,6 @@ node_modules/emoji-mart/**
 ### node_modules/@emoji-mart/react
 node_modules/@emoji-mart/**
 
-# momentjs is currently only used by renderer process
-node_modules/moment
-
 # sourcemap we don't need
 
 
