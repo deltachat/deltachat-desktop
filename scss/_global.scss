@@ -19,16 +19,6 @@ body {
   cursor: default;
 }
 
-.window {
-  height: $content-height;
-  margin-top: $nav-bar-height;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow: auto;
-  padding: 10px 10px;
-}
-
 ul {
   list-style: none;
   padding-left: 0;
@@ -207,10 +197,16 @@ samp {
   font-family: monospace, $emojifonts;
 }
 
+.main-container-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
 .main-container {
   display: flex;
-  position: absolute;
-  width: 100%;
-  height: 100%;
+  flex-grow: 1;
   overflow: hidden;
 }

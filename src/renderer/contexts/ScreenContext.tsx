@@ -8,4 +8,5 @@ export const ScreenContext = createContext({
   screen: null as Screens | null,
   addAndSelectAccount: (() =>
     Promise.reject('screen context not defined')) as () => Promise<number>,
+  smallScreenMode: false as boolean,
 })

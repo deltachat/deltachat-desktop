@@ -4,8 +4,11 @@ $tab-height: 46px;
   width: calc(100% - var(--chat-list-width, 30%));
   background-color: var(--galleryBg);
   padding-left: 10px;
-  max-height: calc(100vh - 50px);
   overflow: hidden;
+  min-width: 200px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 
   .big-date {
     flex-grow: 1;
@@ -18,7 +21,7 @@ $tab-height: 46px;
   }
 
   & .gallery {
-    height: calc(100vh - #{$tab-height} - #{$nav-bar-height});
+    height: 100%;
 
     & > .empty-screen {
       display: flex;

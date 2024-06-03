@@ -232,167 +232,163 @@ export default class Gallery extends Component<
 
     return (
       <div className='media-view'>
-        <div style={{ minWidth: 200 }}>
-          <ul
-            className='bp4-tab-list .modifier'
-            role='tablist'
-            style={{ display: 'flex', alignItems: 'center' }}
+        <ul
+          className='bp4-tab-list .modifier'
+          role='tablist'
+          style={{ display: 'flex', alignItems: 'center' }}
+        >
+          {Object.keys(MediaTabs).map(realId => {
+            const tabId = realId as MediaTabKey
+            return (
+              <li
+                key={tabId}
+                className='bp4-tab'
+                role='tab'
+                aria-selected={currentTab === tabId}
+                onClick={() => this.onSelect(tabId)}
+              >
+                {tx(tabId)}
+              </li>
+            )
+          })}
+          {showDateHeader && (
+            <div className='big-date' ref={this.dateHeader}></div>
+          )}
+          {currentTab === 'files' && (
+            <>
+              <div style={{ flexGrow: 1 }}></div>
+              <div className='searchbar'>
+                <input
+                  type='search'
+                  placeholder={tx('search_files')}
+                  onChange={this.onChangeInput.bind(this)}
+                />
+              </div>
+            </>
+          )}
+        </ul>
+        <div role='tabpanel' style={{ flexGrow: 1 }}>
+          <div
+            className={`gallery gallery-image-object-fit_${
+              galleryImageKeepAspectRatio ? 'contain' : 'cover'
+            }`}
+            key={msgTypes.join('.') + String(this.props.chatId)}
           >
-            {Object.keys(MediaTabs).map(realId => {
-              const tabId = realId as MediaTabKey
-              return (
-                <li
-                  key={tabId}
-                  className='bp4-tab'
-                  role='tab'
-                  aria-selected={currentTab === tabId}
-                  onClick={() => this.onSelect(tabId)}
-                >
-                  {tx(tabId)}
-                </li>
-              )
-            })}
-            {showDateHeader && (
-              <div className='big-date' ref={this.dateHeader}></div>
+            {mediaMessageIds.length < 1 && !loading && (
+              <div className='empty-screen'>
+                {/* IDEA: when we have someone doing illustrations this would be a great place to add some */}
+                <p className='no-media-message'>{emptyTabMessage}</p>
+              </div>
             )}
+
             {currentTab === 'files' && (
               <>
-                <div style={{ flexGrow: 1 }}></div>
-                <div className='searchbar'>
-                  <input
-                    type='search'
-                    placeholder={tx('search_files')}
-                    onChange={this.onChangeInput.bind(this)}
-                  />
-                </div>
+                <AutoSizer>
+                  {({ width, height }) => (
+                    <FileTable
+                      width={width}
+                      height={height}
+                      mediaLoadResult={mediaLoadResult}
+                      mediaMessageIds={filteredMediaMessageIds}
+                      queryText={queryText}
+                    ></FileTable>
+                  )}
+                </AutoSizer>
+                {filteredMediaMessageIds.length === 0 && (
+                  <div className='empty-screen'>
+                    <p className='no-media-message'>
+                      {tx('search_no_result_for_x', queryText)}
+                    </p>
+                  </div>
+                )}
               </>
             )}
-          </ul>
-          <div role='tabpanel'>
-            <div
-              className={`gallery gallery-image-object-fit_${
-                galleryImageKeepAspectRatio ? 'contain' : 'cover'
-              }`}
-              key={msgTypes.join('.') + String(this.props.chatId)}
-            >
-              {mediaMessageIds.length < 1 && !loading && (
-                <div className='empty-screen'>
-                  {/* IDEA: when we have someone doing illustrations this would be a great place to add some */}
-                  <p className='no-media-message'>{emptyTabMessage}</p>
-                </div>
-              )}
 
-              {currentTab === 'files' && (
-                <>
-                  <AutoSizer>
-                    {({ width, height }) => (
-                      <FileTable
-                        width={width}
-                        height={height}
-                        mediaLoadResult={mediaLoadResult}
-                        mediaMessageIds={filteredMediaMessageIds}
-                        queryText={queryText}
-                      ></FileTable>
-                    )}
-                  </AutoSizer>
-                  {filteredMediaMessageIds.length === 0 && (
-                    <div className='empty-screen'>
-                      <p className='no-media-message'>
-                        {tx('search_no_result_for_x', queryText)}
-                      </p>
-                    </div>
-                  )}
-                </>
-              )}
+            {currentTab !== 'files' && (
+              <AutoSizer>
+                {({ width, height }) => {
+                  const widthWithoutScrollbar = width - 6
 
-              {currentTab !== 'files' && (
-                <AutoSizer>
-                  {({ width, height }) => {
-                    const widthWithoutScrollbar = width - 6
+                  let minWidth = 160
 
-                    let minWidth = 160
+                  if (currentTab === 'webxdc_apps') {
+                    minWidth = 265
+                  } else if (currentTab === 'audio') {
+                    minWidth = 322
+                  }
 
-                    if (currentTab === 'webxdc_apps') {
-                      minWidth = 265
-                    } else if (currentTab === 'audio') {
-                      minWidth = 322
-                    }
+                  const itemsPerRow = Math.max(
+                    Math.floor(widthWithoutScrollbar / minWidth),
+                    1
+                  )
 
-                    const itemsPerRow = Math.max(
-                      Math.floor(widthWithoutScrollbar / minWidth),
-                      1
-                    )
+                  const itemWidth = widthWithoutScrollbar / itemsPerRow
 
-                    const itemWidth = widthWithoutScrollbar / itemsPerRow
+                  const rowCount = Math.ceil(
+                    mediaMessageIds.length / itemsPerRow
+                  )
 
-                    const rowCount = Math.ceil(
-                      mediaMessageIds.length / itemsPerRow
-                    )
+                  let itemHeight = itemWidth
 
-                    let itemHeight = itemWidth
+                  if (currentTab === 'webxdc_apps') {
+                    itemHeight = 61
+                  } else if (currentTab === 'audio') {
+                    itemHeight = 94
+                  }
 
-                    if (currentTab === 'webxdc_apps') {
-                      itemHeight = 61
-                    } else if (currentTab === 'audio') {
-                      itemHeight = 94
-                    }
-
-                    return (
-                      <FixedSizeGrid
-                        width={width}
-                        height={height}
-                        columnWidth={itemWidth}
-                        rowHeight={itemHeight}
-                        columnCount={itemsPerRow}
-                        rowCount={rowCount}
-                        overscanRowCount={10}
-                        onItemsRendered={({
-                          visibleColumnStartIndex,
-                          visibleRowStartIndex,
-                        }) => {
-                          const msgId =
-                            mediaMessageIds[
-                              visibleRowStartIndex * itemsPerRow +
-                                visibleColumnStartIndex
-                            ]
-                          const message = mediaLoadResult[msgId]
-                          if (!message) {
-                            return
-                          }
-                          this.updateFirstVisibleMessage(message)
-                        }}
-                      >
-                        {({ columnIndex, rowIndex, style }) => {
-                          const msgId =
-                            mediaMessageIds[
-                              rowIndex * itemsPerRow + columnIndex
-                            ]
-                          const message = mediaLoadResult[msgId]
-                          if (!message) {
-                            return null
-                          }
-                          return (
-                            <div
-                              style={{ ...style }}
-                              className='item'
-                              key={msgId}
-                            >
-                              <this.state.element
-                                messageId={msgId}
-                                loadResult={message}
-                                openFullscreenMedia={this.openFullscreenMedia.bind(
-                                  this
-                                )}
-                              />
-                            </div>
-                          )
-                        }}
-                      </FixedSizeGrid>
-                    )
-                  }}
-                </AutoSizer>
-              )}
-            </div>
+                  return (
+                    <FixedSizeGrid
+                      width={width}
+                      height={height}
+                      columnWidth={itemWidth}
+                      rowHeight={itemHeight}
+                      columnCount={itemsPerRow}
+                      rowCount={rowCount}
+                      overscanRowCount={10}
+                      onItemsRendered={({
+                        visibleColumnStartIndex,
+                        visibleRowStartIndex,
+                      }) => {
+                        const msgId =
+                          mediaMessageIds[
+                            visibleRowStartIndex * itemsPerRow +
+                              visibleColumnStartIndex
+                          ]
+                        const message = mediaLoadResult[msgId]
+                        if (!message) {
+                          return
+                        }
+                        this.updateFirstVisibleMessage(message)
+                      }}
+                    >
+                      {({ columnIndex, rowIndex, style }) => {
+                        const msgId =
+                          mediaMessageIds[rowIndex * itemsPerRow + columnIndex]
+                        const message = mediaLoadResult[msgId]
+                        if (!message) {
+                          return null
+                        }
+                        return (
+                          <div
+                            style={{ ...style }}
+                            className='item'
+                            key={msgId}
+                          >
+                            <this.state.element
+                              messageId={msgId}
+                              loadResult={message}
+                              openFullscreenMedia={this.openFullscreenMedia.bind(
+                                this
+                              )}
+                            />
+                          </div>
+                        )
+                      }}
+                    </FixedSizeGrid>
+                  )
+                }}
+              </AutoSizer>
+            )}
           </div>
         </div>
       </div>

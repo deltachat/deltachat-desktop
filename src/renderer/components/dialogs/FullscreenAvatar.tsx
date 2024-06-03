@@ -60,7 +60,7 @@ export default function FullscreenAvatar(
             </TransformWrapper>
           </div>
         </div>
-        <div className='btn-wrapper'>
+        <div className='btn-wrapper no-drag'>
           <div
             role='button'
             onClick={saveAs}

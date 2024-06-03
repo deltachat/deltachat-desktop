@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- Added a Small Screen Mode, when you rezise the window to be small it will only show the chatlist with account sidebar or the Chat View with a back button.
 - show VCard attachement as VCard in message list #3840
 - add contact from VCard & start chat on click #3840
 
