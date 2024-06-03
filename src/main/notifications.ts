@@ -27,6 +27,13 @@ function createNotification(data: DcNotification): Notification {
   const notificationOptions: Electron.NotificationConstructorOptions = {
     title:
       platform() === 'linux' ? filterNotificationText(data.title) : data.title,
+    // https://www.electronjs.org/docs/latest/tutorial/notifications#linux
+    // says
+    // > Notifications are sent using libnotify, which can show notifications
+    // > on any desktop environment that follows
+    // > [Desktop Notifications Specification](https://web.archive.org/web/20240428012536/https://specifications.freedesktop.org/notification-spec/notification-spec-latest.html)
+    // Which says that the body supports limited markup
+    // So let's escape it.
     body:
       platform() === 'linux' ? filterNotificationText(data.body) : data.body,
     icon,
