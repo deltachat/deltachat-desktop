@@ -25,8 +25,7 @@ function createNotification(data: DcNotification): Notification {
   }
 
   const notificationOptions: Electron.NotificationConstructorOptions = {
-    title:
-      platform() === 'linux' ? filterNotificationText(data.title) : data.title,
+    title: data.title,
     // https://www.electronjs.org/docs/latest/tutorial/notifications#linux
     // says
     // > Notifications are sent using libnotify, which can show notifications
