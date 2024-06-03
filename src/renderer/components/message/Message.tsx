@@ -43,6 +43,7 @@ import Reactions from '../Reactions'
 import ShortcutMenu from '../ShortcutMenu'
 import InvalidUnencryptedMailDialog from '../dialogs/InvalidUnencryptedMail'
 import Button from '../Button'
+import VCardComponent from './VCard'
 
 import styles from './styles.module.scss'
 
@@ -586,6 +587,11 @@ export default function Message(props: {
   const hasText = text !== null && text !== ''
   const fileMime = (!isSetupmessage && message.fileMime) || null
   const isWithoutText = isMediaWithoutText(fileMime, hasText, message.viewType)
+  const showAttachment = (message: T.Message) =>
+    message.file &&
+    !message.isSetupmessage &&
+    message.viewType !== 'Webxdc' &&
+    message.viewType !== 'Vcard'
 
   return (
     <div
@@ -639,7 +645,7 @@ export default function Message(props: {
           {message.quote !== null && (
             <Quote quote={message.quote} msgParentId={message.id} />
           )}
-          {message.file && !isSetupmessage && message.viewType !== 'Webxdc' && (
+          {showAttachment(message) && (
             <Attachment
               text={text || undefined}
               conversationType={conversationType}
@@ -649,6 +655,9 @@ export default function Message(props: {
           )}
           {message.viewType === 'Webxdc' && (
             <WebxdcMessageContent message={message}></WebxdcMessageContent>
+          )}
+          {message.viewType === 'Vcard' && (
+            <VCardComponent message={message}></VCardComponent>
           )}
           {content}
           {hasHtml && (

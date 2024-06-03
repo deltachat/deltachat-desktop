@@ -4,11 +4,13 @@
 
 ### Added
 - Added a Small Screen Mode, when you rezise the window to be small it will only show the chatlist with account sidebar or the Chat View with a back button.
+- show VCard attachement as VCard in message list #3840
+- add contact from VCard & start chat on click #3840
 
 ### Changed
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `v1.139.6`
 - Always show `msg.overrideSenderName` even when the message is sent by yourself
-- Secure notifications on linux: escape html, like signal does
+- Secure notifications on linux: escape html, like signal does #3875, #3890
 - Update translations (2024-06-01) #3871 #3888
 - adapt title of "Privacy Policy" link for default instance #3872
 - ContextMenuItem now can render icons #3811
@@ -22,6 +24,7 @@
 - fix: close alternative options dialog when setting up as a second device #3873
 - fix map not opening #3876
 - fix ImageCropper not working on smaller images
+- fix: right click in ContactList should open a context menu #3884
 
 
 <a id="1_45_0"></a>
@@ -42,7 +45,6 @@
 - Use openstreetmap in map
 - Open map in a separate window
 - Add global map for all chats in account
-
 
 ### Changed
 - Update translations (2024-05-20) #3746 #3802 #3827 #3837
