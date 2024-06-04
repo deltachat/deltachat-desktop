@@ -95,3 +95,4 @@ pnpm-lock.yaml
 deltachat-rpc-server-aarch64-macos
 .direnv
 .envrc
+default.nix
