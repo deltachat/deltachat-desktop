@@ -64,7 +64,10 @@ const notifications: { [key: number]: Notification[] } = {}
 function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
   const chatId = data.chatId
 
-  log.debug('Creating notification:', data)
+  log.debug(
+    'Creating notification:',
+    Object.assign(data, { body: undefined, title: undefined })
+  )
 
   try {
     const notify = createNotification(data)
