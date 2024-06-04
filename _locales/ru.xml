@@ -108,7 +108,7 @@
     <plurals name="n_minutes">
         <item quantity="one">%d минуту</item>
         <item quantity="few">%d минуты</item>
-        <item quantity="many">%d минут </item>
+        <item quantity="many">%d минут</item>
         <item quantity="other">%d мин</item>
     </plurals>
     <!-- Shown beside messages that are "N hours old". Prefer short strings, or well-known abbreviations. -->
@@ -119,27 +119,27 @@
         <item quantity="other">%d часов</item>
     </plurals>
     <plurals name="n_chats">
-        <item quantity="one">%d  чатов</item>
-        <item quantity="few">%d  чатов</item>
-        <item quantity="many">%d  чатов</item>
+        <item quantity="one">%d чат</item>
+        <item quantity="few">%d чата</item>
+        <item quantity="many">%d чатов</item>
         <item quantity="other">%d чатов</item>
     </plurals>
     <plurals name="n_contacts">
-        <item quantity="one">%d </item>
-        <item quantity="few">%d contact</item>
-        <item quantity="many">%d  контактов</item>
+        <item quantity="one">%d контакт</item>
+        <item quantity="few">%d контакта</item>
+        <item quantity="many">%d контактов</item>
         <item quantity="other">%d контактов</item>
     </plurals>
     <plurals name="n_messages">
-        <item quantity="one">%d message</item>
-        <item quantity="few">%d messages</item>
-        <item quantity="many">%d messages</item>
+        <item quantity="one">%d сообщение</item>
+        <item quantity="few">%d сообщения</item>
+        <item quantity="many">%d сообщений</item>
         <item quantity="other">%d сообщений</item>
     </plurals>
     <plurals name="n_members">
-        <item quantity="one">%d  участников</item>
-        <item quantity="few">%d member</item>
-        <item quantity="many">%d member</item>
+        <item quantity="one">%d участник</item>
+        <item quantity="few">%d участника</item>
+        <item quantity="many">%d участников</item>
         <item quantity="other">%d участников</item>
     </plurals>
     <plurals name="n_recipients">
@@ -273,7 +273,7 @@
     <string name="menu_pause">Пауза</string>
     <string name="menu_scroll_to_bottom">Прокрутить вниз</string>
     <string name="menu_scroll_to_top">Прокрутить вверх</string>
-    <string name="menu_help">Помощь</string>
+    <string name="menu_help">Справка</string>
     <string name="what_is_webxdc">Что такое Webxdc?</string>
     <string name="privacy_policy">Политика конфиденциальности</string>
     <string name="menu_select_all">Выбрать всё</string>
@@ -358,9 +358,9 @@
     </plurals>
     <string name="ask_delete_message">Вы уверены, что хотите удалить это сообщение?</string>
     <plurals name="ask_delete_messages">
-        <item quantity="one">Delete %d message here and on the server?</item>
-        <item quantity="few">Удалить %d сообщений здесь и на сервере?</item>
-        <item quantity="many">Delete %d message here and on the server?</item>
+        <item quantity="one">Удалить %d сообщение здесь и на сервере?</item>
+        <item quantity="few">Удалить %d сообщения здесь и на сервере?</item>
+        <item quantity="many">Удалить %d сообщений здесь и на сервере?</item>
         <item quantity="other">Удалить %d сообщений здесь и на сервере?</item>
     </plurals>
     <plurals name="ask_delete_messages_simple">
@@ -395,14 +395,14 @@
 
     <!-- chatlist and chat view -->
     <plurals name="chat_archived">
-        <item quantity="one">%d chat archived</item>
-        <item quantity="few">%d chat archived</item>
-        <item quantity="many">%d чатов архивировано</item>
-        <item quantity="other">%d архивированных чатов</item>
+        <item quantity="one">%d чат заархивирован</item>
+        <item quantity="few">%d чата заархивировано</item>
+        <item quantity="many">%d чатов заархивировано</item>
+        <item quantity="other">%d чатов заархивировано</item>
     </plurals>
     <plurals name="chat_unarchived">
-        <item quantity="one">%d chat unarchived</item>
-        <item quantity="few">%d chat unarchived</item>
+        <item quantity="one">%d чат разархивирован</item>
+        <item quantity="few">%d чата разархивировано</item>
         <item quantity="many">%d чатов разархивировано</item>
         <item quantity="other">%d чатов разархивировано</item>
     </plurals>
@@ -485,7 +485,7 @@
     <string name="search_in_chat">Искать в чате</string>
     <string name="search_files">Искать файлы</string>
     <string name="search_explain">Поиск чатов, контактов и сообщений</string>
-    <string name="search_no_result_for_x">Ничего не найдено по запросу «%s» </string>
+    <string name="search_no_result_for_x">Ничего не найдено по запросу «%s»</string>
 
 
     <!-- create/edit groups, contact/group profile -->
@@ -608,7 +608,7 @@
 
     <string name="welcome_chat_over_email">Безопасный децентрализованный чат</string>
     <string name="scan_invitation_code">Сканировать код приглашения</string>
-    <string name="login_title">Логин</string>
+    <string name="login_title">Войти</string>
     <!-- for classic email, we use the classical term "Account" -->
     <string name="login_header">Войти в ваш имэйл-аккаунт</string>
     <!-- for classic email, we use the classical term "Account" -->
@@ -1061,14 +1061,14 @@
     <string name="global_menu_preferences_language_desktop">Выбор языка</string>
     <string name="global_menu_file_desktop">Файл</string>
     <string name="global_menu_file_quit_desktop">Выйти</string>
-    <string name="global_menu_edit_desktop">Редактировать</string>
+    <string name="global_menu_edit_desktop">Правка</string>
     <string name="global_menu_edit_undo_desktop">Отменить</string>
     <string name="global_menu_edit_redo_desktop">Повторить</string>
     <string name="global_menu_edit_cut_desktop">Вырезать</string>
     <string name="global_menu_edit_copy_desktop">Копировать</string>
     <string name="global_menu_edit_paste_desktop">Вставить</string>
-    <string name="global_menu_view_desktop">Просмотреть</string>
-    <string name="global_menu_view_floatontop_desktop">Показывать сверху</string>
+    <string name="global_menu_view_desktop">Вид</string>
+    <string name="global_menu_view_floatontop_desktop">Поверх всех окон</string>
     <string name="global_menu_view_developer_desktop">Разработчик</string>
     <string name="global_menu_view_developer_tools_desktop">Инструменты разработчика</string>
     <string name="global_menu_help_desktop">Помощь</string>
@@ -1103,7 +1103,7 @@
     <string name="login_socks5_experimental_warning">Поддержка SOCKS5 в настоящее время экспериментальная. Используйте на свой риск. Если вы введете адрес электронной почты, DNS-запросы, которые не туннелируются через SOCKS5, не будут произведены.</string>
 
     <!-- title of the "keybindings" dialog (for the keybindings names as such, where possible the normal command strings are used) -->
-    <string name="keybindings">Привязка кнопок</string>
+    <string name="keybindings">Горячие клавиши</string>
     <string name="switch_between_chats">Переключение между чатами</string>
     <string name="scroll_messages">Прокрутка сообщений</string>
     <!-- command to put the cursor to the search input field -->
