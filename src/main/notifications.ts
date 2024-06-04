@@ -66,7 +66,7 @@ function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
 
   log.debug(
     'Creating notification:',
-    Object.assign(data, { body: undefined, title: undefined })
+    Object.assign({}, data, { body: undefined, title: undefined })
   )
 
   try {
