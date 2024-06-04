@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_45_1"></a>
+
+## [v1.45.1] - 2024-06-04
+
 ### Added
 - Added a Small Screen Mode, when you rezise the window to be small it will only show the chatlist with account sidebar or the Chat View with a back button.
 - show VCard attachement as VCard in message list #3840
@@ -2598,7 +2602,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.1...HEAD
+
+[1.45.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.0...v1.45.1
 
 [1.45.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.44.1...v1.45.0
 
