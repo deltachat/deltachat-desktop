@@ -16,6 +16,9 @@
 - ContextMenuItem now can render icons #3811
 - use our own ContextMenu for AttachmentMenu #3811
 - replace BlueprintJS Button and Icon with our implementation in chat navbar and attachment menu #3811
+- update `@deltachat/message_parser_wasm` to `0.11.0` -> Bugfixes for link parsing:
+  - restrict what can be in a label for a labled link
+  - fix that false-positives in link detection
 
 
 ### Fixed
