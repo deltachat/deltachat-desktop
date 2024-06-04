@@ -3,10 +3,11 @@
  * @type {RT}
  */
 class RealtimeListener {
-  constructor(ipc) {
+  constructor(sendRealtime, leaveRealtime) {
     this.listener = null
     this.trashed = false
-    this.ipc = ipc
+    this.sendRealtime = sendRealtime
+    this.leaveRealtime = leaveRealtime
   }
 
   is_trashed() {
@@ -33,12 +34,12 @@ class RealtimeListener {
     if (this.trashed) {
       throw new Error('realtime listener is trashed and can no longer be used')
     }
-    this.ipc.invoke('webxdc.sendRealtimeData', Array.from(data))
+    this.sendRealtime(Array.from(data))
   }
 
   leave() {
     this.trashed = true
-    this.ipc.invoke('webxdc.leaveRealtimeChannel')
+    this.leaveRealtime()
   }
 }
 
@@ -118,7 +119,10 @@ class RealtimeListener {
         throw new Error('realtime listener already exists')
       }
 
-      realtimeListener = new RealtimeListener(ipcRenderer)
+      realtimeListener = new RealtimeListener(
+        arr => ipcRenderer.invoke('webxdc.sendRealtimeData', arr),
+        () => ipcRenderer.invoke('webxdc.leaveRealtimeChannel')
+      )
       ipcRenderer.invoke('webxdc.sendRealtimeAdvertisement')
       realtimeListener.setListener =
         realtimeListener.setListener.bind(realtimeListener)
@@ -126,7 +130,6 @@ class RealtimeListener {
       realtimeListener.leave = realtimeListener.leave.bind(realtimeListener)
       realtimeListener.is_trashed =
         realtimeListener.is_trashed.bind(realtimeListener)
-
       return realtimeListener
     },
     getAllUpdates: () => {
