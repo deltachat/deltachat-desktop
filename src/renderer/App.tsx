@@ -75,7 +75,7 @@ export default function App(_props: any) {
     window.static_translate = translate(localeData.messages)
     setLocaleData(localeData)
     updateCoreStrings()
-    // make sure the string timestamps are updates as well.
+    // make sure the string timestamps are updated as well.
     setTimeout(() => updateTimestamps(), 0)
   }
 
