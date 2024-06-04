@@ -3,7 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Fix
-- Fix notifications (was broken in 1.45.1)
+- Fix notifications (was broken in 1.45.1) #3898
 
 <a id="1_45_1"></a>
 
