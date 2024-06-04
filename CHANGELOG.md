@@ -8,7 +8,7 @@
 - add contact from VCard & start chat on click #3840
 
 ### Changed
-- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `v1.139.6`
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `v1.140.0`
 - Always show `msg.overrideSenderName` even when the message is sent by yourself
 - Secure notifications on linux: escape html, like signal does #3875, #3890
 - Update translations (2024-06-01) #3871 #3888
