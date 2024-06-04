@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fix
+- Fix notifications (was broken in 1.45.1)
+
 <a id="1_45_1"></a>
 
 ## [v1.45.1] - 2024-06-04
