@@ -27,7 +27,7 @@ export interface SettingsStoreState {
     disable_idle: string
     media_quality: string
     is_chatmail: '0' | '1'
-    enable_realtime: string
+    webxdc_realtime_enabled: string
   }
   desktopSettings: DesktopSettingsType
   rc: RC_Config
