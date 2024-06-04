@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_45_2"></a>
+
+## [v1.45.2] - 2024-06-04
+
 ### Fix
 - Fix notifications (was broken in 1.45.1) #3898
 
@@ -2605,7 +2609,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.2...HEAD
+
+[1.45.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.1...v1.45.2
 
 [1.45.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.0...v1.45.1
 
