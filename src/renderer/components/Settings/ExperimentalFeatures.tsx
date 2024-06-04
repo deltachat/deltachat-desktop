@@ -104,7 +104,7 @@ export function ExperimentalFeatures({ settingsStore }: Props) {
       />
       <CoreSettingsSwitch
         label={tx('enable_realtime')}
-        settingsKey='enable_realtime'
+        settingsKey='webxdc_realtime_enabled'
         description={tx('enable_realtime_explain')}
       />
     </>
