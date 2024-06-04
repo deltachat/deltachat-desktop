@@ -2,6 +2,13 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_45_3"></a>
+
+## [v1.45.3] - 2024-06-05
+
+### Fix
+- Fix map in packaged build #3900
+
 <a id="1_45_2"></a>
 
 ## [v1.45.2] - 2024-06-04
@@ -2609,7 +2616,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.2...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.3...HEAD
+
+[1.45.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.2...v1.45.3
 
 [1.45.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.1...v1.45.2
 
