@@ -107,7 +107,12 @@ module.exports = async context => {
 
   // copy map xdc
   // ---------------------------------------------------------------------------------
-  const destination = join(resources_dir, 'app.asar.unpacked', 'html-dist')
+  const destination = join(
+    resources_dir,
+    'app.asar.unpacked',
+    'html-dist',
+    'xdcs'
+  )
   try {
     await mkdir(destination, { recursive: true })
   } catch (error) {
