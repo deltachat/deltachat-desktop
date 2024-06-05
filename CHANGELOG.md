@@ -4,7 +4,7 @@
 
 ### Fixed
 
-- Show error to user if core process exits unexpectedly
+- Show error to user if core process exits unexpectedly #3904
 
 <a id="1_45_3"></a>
 
