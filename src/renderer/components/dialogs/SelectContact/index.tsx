@@ -51,7 +51,6 @@ export default function SelectContactDialog({
         />
       </DialogHeader>
       <DialogBody className={styles.selectContactDialogBody}>
-        {/* <AutoSizer> not working here ?? */}
         <div className={styles.selectContactList}>
           <AutoSizer disableWidth>
             {({ height }) => (
