@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+
+- Show error to user if core process exits unexpectedly
+
 <a id="1_45_3"></a>
 
 ## [v1.45.3] - 2024-06-05
