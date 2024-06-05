@@ -91,7 +91,7 @@ function EditProfileDialogInner({
               displayName={displayname}
               addr={settingsStore.selfContact.address}
               color={settingsStore.selfContact.color}
-              profilePicture={profilePicture ? profilePicture : undefined}
+              profilePicture={profilePicture}
               setProfilePicture={setProfilePicture}
             />
           </div>

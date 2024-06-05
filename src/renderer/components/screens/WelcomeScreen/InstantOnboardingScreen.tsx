@@ -37,7 +37,7 @@ export default function InstantOnboardingScreen({
   const { openDialog } = useDialog()
 
   const [displayName, setDisplayName] = useState('')
-  const [profilePicture, setProfilePicture] = useState<string | undefined>()
+  const [profilePicture, setProfilePicture] = useState<string | null>(null)
   const [showMissingNameError, setShowMissingNameError] = useState(false)
 
   useEffect(() => {
@@ -56,7 +56,7 @@ export default function InstantOnboardingScreen({
     try {
       if (!path) {
         await BackendRemote.rpc.setConfig(selectedAccountId, 'selfavatar', null)
-        setProfilePicture(undefined)
+        setProfilePicture(null)
         return
       }
       await BackendRemote.rpc.setConfig(selectedAccountId, 'selfavatar', path)

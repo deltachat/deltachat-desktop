@@ -34,6 +34,7 @@ import { modifyGroup } from '../../backend/group'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../contexts/DialogContext'
+import ImageCropper from '../ImageCropper'
 
 export default function ViewGroup(
   props: {
@@ -138,16 +139,15 @@ function ViewGroupInner(
   const onClickEdit = () => {
     openDialog(EditGroupNameDialog, {
       groupName,
-      groupImage: groupImage ? groupImage : undefined,
+      groupImage,
       groupColor: chat.color,
-      onOk: (groupName: string, groupImage?: string) => {
+      onOk: (groupName: string, groupImage: string | null) => {
+        //(treefit): TODO this check should be way earlier, you should not be able to "OK" the dialog if there is no group name
         if (groupName.length > 1) {
           setGroupName(groupName)
         }
 
-        if (groupImage) {
-          setGroupImage(groupImage)
-        }
+        setGroupImage(groupImage)
       },
       isBroadcast: isBroadcast,
     })
@@ -352,9 +352,9 @@ export function EditGroupNameDialog({
   groupColor,
   groupImage: initialGroupImage,
 }: {
-  onOk: (groupName: string, groupImage?: string) => void
+  onOk: (groupName: string, groupImage: string | null) => void
   groupName: string
-  groupImage?: string
+  groupImage: string | null
   groupColor: string
   isBroadcast?: boolean
 } & DialogProps) {
@@ -434,11 +434,12 @@ export function EditGroupNameDialog({
 export function GroupImageSelector(props: {
   groupName: string
   groupColor: string
-  groupImage?: string
-  setGroupImage: (groupImage: string) => void
+  groupImage: string | null
+  setGroupImage: (groupImage: string | null) => void
 }) {
   const tx = useTranslationFunction()
   const initials = avatarInitial(props.groupName, '')
+  const { openDialog } = useDialog()
 
   return (
     <ImageSelector
@@ -446,7 +447,20 @@ export function GroupImageSelector(props: {
       filePath={props.groupImage}
       initials={initials}
       lastUsedSlot={LastUsedSlot.GroupImage}
-      onChange={props.setGroupImage}
+      onChange={filepath => {
+        if (!filepath) {
+          props.setGroupImage(null)
+        } else {
+          openDialog(ImageCropper, {
+            filepath,
+            shape: 'circle',
+            onResult: props.setGroupImage,
+            onCancel: () => {},
+            desiredWidth: 256,
+            desiredHeight: 256,
+          })
+        }
+      }}
       removeLabel={tx('remove_group_image')}
       selectLabel={tx('change_group_image')}
     />

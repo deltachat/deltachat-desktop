@@ -12,7 +12,7 @@ type Props = {
   color?: string
   displayName: string
   hideDeleteButton?: boolean
-  profilePicture?: string
+  profilePicture: string | null
   setProfilePicture: (path: string | null) => void
 }
 
