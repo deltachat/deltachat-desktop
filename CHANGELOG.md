@@ -47,6 +47,7 @@
 - show VCard attachement as VCard in message list #3840
 - add contact from VCard & start chat on click #3840
 - Webxdc realtime support #3741
+- send contact as VCard form attachment context menu #3906
 
 ### Changed
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `v1.140.0`
