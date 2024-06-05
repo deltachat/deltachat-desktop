@@ -7,6 +7,8 @@ import SettingsStoreInstance from '../../stores/settings'
 import { IMAGE_EXTENSIONS } from '../../../shared/constants'
 import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useDialog from '../../hooks/dialog/useDialog'
+import SelectContactDialog from '../dialogs/SelectContact'
 import useVideoChat from '../../hooks/useVideoChat'
 import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 import { selectedAccountId } from '../../ScreenController'
@@ -16,6 +18,7 @@ import { ContextMenuItem } from '../ContextMenu'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 
 import type { T } from '@deltachat/jsonrpc-client'
+import { BackendRemote } from '../../backend-com'
 
 type Props = {
   addFileToDraft: (file: string, viewType: T.Viewtype) => void
@@ -32,6 +35,7 @@ export default function MenuAttachment({
   const tx = useTranslationFunction()
   const openConfirmationDialog = useConfirmationDialog()
   const { sendVideoChatInvitation } = useVideoChat()
+  const { openDialog, closeDialog } = useDialog()
   const [settings] = useStore(SettingsStoreInstance)
   const accountId = selectedAccountId()
 
@@ -101,6 +105,36 @@ export default function MenuAttachment({
     tx,
   ])
 
+  const selectContact = async () => {
+    const { setLastPath } = rememberLastUsedPath(LastUsedSlot.Attachment)
+    let dialogId = ''
+    /**
+     * TODO: reduce the overhead: just provide a vcardContact to draft/message
+     * and send it as a message. No need to get the vcard from core to create
+     * a tmp file to attach it as a file which is then converted into a vcardContact again
+     */
+    const addContactAsVcard = async (selectedContact: T.Contact) => {
+      if (selectedContact) {
+        const vCardContact = await BackendRemote.rpc.makeVcard(
+          selectedAccountId(),
+          [selectedContact.id]
+        )
+        const cleanDisplayname = selectedContact.displayName.replace(
+          /[^a-z_A-Z0-9]/gi,
+          ''
+        )
+        const tmp_file = await runtime.writeTempFileFromBase64(
+          `VCard-${cleanDisplayname}.vcf`,
+          btoa(vCardContact)
+        )
+        setLastPath(dirname(tmp_file))
+        addFileToDraft(tmp_file, 'Vcard')
+        closeDialog(dialogId)
+      }
+    }
+    dialogId = openDialog(SelectContactDialog, { onOk: addContactAsVcard })
+  }
+
   // item array used to populate menu
   const menu: (ContextMenuItem | false)[] = [
     !!settings?.settings.webrtc_instance && {
@@ -117,6 +151,11 @@ export default function MenuAttachment({
       icon: 'upload-file',
       label: tx('file'),
       action: addFilenameFile.bind(null),
+    },
+    {
+      icon: 'person',
+      label: tx('contact'),
+      action: selectContact.bind(null),
     },
   ]
 
