@@ -25,7 +25,7 @@ export async function cleanupDraftTempDir() {
         `found old ${files.length} temporary draft files, trying to delete them now`
       )
       const promises = []
-      for (const file in files) {
+      for (const file of files) {
         log.debug('delete', join(path, file))
         promises.push(rm(join(path, file)))
       }
