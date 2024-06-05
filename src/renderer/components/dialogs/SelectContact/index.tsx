@@ -63,7 +63,6 @@ export default function SelectContactDialog({
               >
                 {({ index, style }) => {
                   const item = Array.from(searchContacts)[index][1]
-                  console.log(item)
                   const el = (() => {
                     const contact: T.Contact = item
                     return (
