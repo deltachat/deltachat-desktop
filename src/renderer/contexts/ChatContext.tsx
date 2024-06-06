@@ -8,7 +8,7 @@ import { BackendRemote } from '../backend-com'
 import type { MutableRefObject, PropsWithChildren } from 'react'
 import type { T } from '@deltachat/jsonrpc-client'
 
-type AlternativeView = 'global-gallery' | null
+export type AlternativeView = 'global-gallery' | null
 
 export enum ChatView {
   Map,

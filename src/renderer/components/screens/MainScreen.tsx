@@ -55,7 +55,14 @@ export default function MainScreen({ accountId }: Props) {
   const [queryStr, setQueryStr] = useState('')
   const [queryChatId, setQueryChatId] = useState<null | number>(null)
   const [archivedChatsSelected, setArchivedChatsSelected] = useState(false)
-  const { activeView, chatId, chat, alternativeView, selectChat, unselectChat } = useChat()
+  const {
+    activeView,
+    chatId,
+    chat,
+    alternativeView,
+    selectChat,
+    unselectChat,
+  } = useChat()
   const { smallScreenMode } = useContext(ScreenContext)
 
   // Small hack/misuse of keyBindingAction to setArchivedChatsSelected from
