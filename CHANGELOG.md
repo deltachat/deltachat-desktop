@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_45_4"></a>
+
+## [v1.45.4] - 2024-06-06
+
 ### Added
 - Add image cropper to setting group avatars #3905
 
@@ -2630,7 +2634,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.3...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.4...HEAD
+
+[1.45.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.3...v1.45.4
 
 [1.45.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.2...v1.45.3
 
