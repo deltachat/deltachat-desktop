@@ -7,7 +7,7 @@ import useChat from '../hooks/chat/useChat'
 import { ChatView } from '../contexts/ChatContext'
 import { RecoverableCrashScreen } from './screens/RecoverableCrashScreen'
 
-import type { AlternativeView } from './screens/MainScreen'
+import type { AlternativeView } from '../contexts/ChatContext'
 
 type Props = {
   accountId?: number

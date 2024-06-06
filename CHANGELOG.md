@@ -13,9 +13,14 @@
 ### Added
 - Add image cropper to setting group avatars #3905
 
+### Changed
+- do not open last chat when switching accounts in small screen mode #3912
+- open last chat when exiting small screen mode #3912
+
 ### Fix
 - Fix map in packaged build #3900
 - Fix removing group avatars #3905
+- Do not unselect chat when opening global map #3912
 - Fix missing translation for broadcastlist name #3913
 
 <a id="1_45_2"></a>
