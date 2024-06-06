@@ -13,6 +13,10 @@
 ### Added
 - Add image cropper to setting group avatars #3905
 
+### Changed
+- do not open last chat when switching accounts in small screen mode
+- open last chat when exiting small screen mode
+
 ### Fix
 - Fix map in packaged build #3900
 - Fix removing group avatars #3905
