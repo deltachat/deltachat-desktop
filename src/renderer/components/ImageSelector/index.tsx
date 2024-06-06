@@ -11,10 +11,10 @@ import styles from './styles.module.scss'
 
 type Props = {
   color?: string
-  filePath?: string
+  filePath: string | null
   initials: string
   lastUsedSlot: LastUsedSlot
-  onChange: (path: string) => void
+  onChange: (path: string | null) => void
   removeLabel?: string
   selectLabel?: string
   titleLabel?: string
@@ -54,7 +54,7 @@ export default function ImageSelector({
     }
   }
 
-  const handleRemove = () => onChange('')
+  const handleRemove = () => onChange(null)
 
   return (
     <div className={styles.imageSelectorContainer}>

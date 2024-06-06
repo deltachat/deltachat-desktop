@@ -10,8 +10,12 @@
 
 ## [v1.45.3] - 2024-06-05
 
+### Added
+- Add image cropper to setting group avatars #3905
+
 ### Fix
 - Fix map in packaged build #3900
+- Fix removing group avatars #3905
 
 <a id="1_45_2"></a>
 
