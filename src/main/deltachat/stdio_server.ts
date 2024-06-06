@@ -33,11 +33,10 @@ export class StdioServer {
 
     // some kind of "buffer" that the text in the error dialog does not get too long
     let errorLog = ''
-    const ERROR_LOG_LENGTH = 200
+    const ERROR_LOG_LENGTH = 800
     this.server_process.stderr.on('data', data => {
       console.log(`stderr: ${data}`.trimEnd())
-      errorLog =
-        errorLog.slice(Math.max(errorLog.length - ERROR_LOG_LENGTH, 0)) + data
+      errorLog = (errorLog + data).slice(-ERROR_LOG_LENGTH)
     })
 
     this.server_process.on('close', (code, signal) => {
