@@ -79,10 +79,6 @@ export default function MainScreen({ accountId }: Props) {
     unselectChat()
     setAlternativeView('global-gallery')
   })
-  useKeyBindingAction(KeybindAction.GlobalMap_Open, () => {
-    unselectChat()
-    openMapWebxdc()
-  })
 
   const chatListShouldBeHidden =
     smallScreenMode && (chatId !== undefined || alternativeView !== null)
@@ -417,7 +413,7 @@ function ChatNavButtons() {
         </Button>
         {settingsStore?.desktopSettings.enableOnDemandLocationStreaming && (
           <Button
-            onClick={() => openMapWebxdc(chatId)}
+            onClick={() => openMapWebxdc(selectedAccountId(), chatId)}
             active={activeView === ChatView.Map}
             aria-label={tx('tab_map')}
             className='navbar-button'

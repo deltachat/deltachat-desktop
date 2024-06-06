@@ -14,6 +14,7 @@ import Icon from '../Icon'
 import styles from './styles.module.scss'
 
 import type { T } from '@deltachat/jsonrpc-client'
+import { openMapWebxdc } from '../../system-integration/webxdc'
 
 type Props = {
   account: T.Account
@@ -94,10 +95,7 @@ export default function AccountItem({
       label: tx('menu_global_map'),
       action: async () => {
         await onSelectAccount(account.id)
-        // set Timeout forces it to be run after react update
-        setTimeout(() => {
-          ActionEmitter.emitAction(KeybindAction.GlobalMap_Open)
-        }, 0)
+        openMapWebxdc(account.id)
       },
     },
     {

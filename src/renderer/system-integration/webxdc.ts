@@ -4,7 +4,6 @@
 
 import { BackendRemote } from '../backend-com'
 import { runtime } from '../runtime'
-import { selectedAccountId } from '../ScreenController'
 
 export function initWebxdc() {
   BackendRemote.on('WebxdcStatusUpdate', (accountId, { msgId }) => {
@@ -42,6 +41,6 @@ export async function internalOpenWebxdc(accountId: number, messageId: number) {
   })
 }
 
-export async function openMapWebxdc(chatId?: number) {
-  runtime.openMapsWebxdc(selectedAccountId(), chatId)
+export async function openMapWebxdc(accountId: number, chatId?: number) {
+  runtime.openMapsWebxdc(accountId, chatId)
 }

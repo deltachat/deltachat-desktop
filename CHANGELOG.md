@@ -16,6 +16,7 @@
 ### Fix
 - Fix map in packaged build #3900
 - Fix removing group avatars #3905
+- Do not unselect chat when opening global map
 
 <a id="1_45_2"></a>
 
