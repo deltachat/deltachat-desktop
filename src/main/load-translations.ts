@@ -37,7 +37,10 @@ export const tx: getMessageFunction = function (key, substitutions, raw_opts) {
 export default function setLanguage(locale: string) {
   const localeData = loadTranslations(locale)
   currentlocaleData = localeData
-  translateFunction = getTranslateFunction(localeData.messages)
+  translateFunction = getTranslateFunction(
+    localeData.locale,
+    localeData.messages
+  )
 }
 
 export function loadTranslations(locale: string) {
