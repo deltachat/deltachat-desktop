@@ -44,10 +44,10 @@
 
 ### Added
 - Added a Small Screen Mode, when you rezise the window to be small it will only show the chatlist with account sidebar or the Chat View with a back button.
-- show VCard attachement as VCard in message list #3840
+- show VCard attachment as VCard in message list #3840
 - add contact from VCard & start chat on click #3840
 - Webxdc realtime support #3741
-- send contact as VCard form attachment context menu #3906
+- send contact as VCard from attachment context menu #3830
 
 ### Changed
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `v1.140.0`
