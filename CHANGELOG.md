@@ -16,7 +16,7 @@
 ### Fix
 - Fix map in packaged build #3900
 - Fix removing group avatars #3905
-- Fix missing translation for broadcastlist name
+- Fix missing translation for broadcastlist name #3913
 
 <a id="1_45_2"></a>
 
