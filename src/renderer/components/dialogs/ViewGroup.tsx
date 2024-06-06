@@ -247,16 +247,12 @@ function ViewGroupInner(
             )}
             <div className='group-separator'>
               {!isBroadcast
-                ? tx(
-                    'n_members',
-                    groupMembers.length.toString(),
-                    groupMembers.length == 1 ? 'one' : 'other'
-                  )
-                : tx(
-                    'n_recipients',
-                    groupMembers.length.toString(),
-                    groupMembers.length == 1 ? 'one' : 'other'
-                  )}
+                ? tx('n_members', groupMembers.length.toString(), {
+                    quantity: groupMembers.length,
+                  })
+                : tx('n_recipients', groupMembers.length.toString(), {
+                    quantity: groupMembers.length,
+                  })}
             </div>
             <div className='group-member-contact-list-wrapper'>
               {!chatDisabled && (

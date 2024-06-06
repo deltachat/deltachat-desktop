@@ -64,6 +64,8 @@
 ### Fixed
 
 - Show error to user if core process exits unexpectedly #3904
+- Fix some strings not being translated on some locales (e.g. "1 minute" message age in Indonesian) #3910
+- Fix strings being incorrectly pluralized for many locales (such as "2 members" in Russian) #3910
 
 <a id="1_45_3"></a>
 

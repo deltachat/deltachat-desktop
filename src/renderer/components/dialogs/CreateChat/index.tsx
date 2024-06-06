@@ -363,11 +363,9 @@ function CreateGroup(props: CreateGroupProps) {
           />
         </DialogContent>
         <div className='group-separator'>
-          {tx(
-            'n_members',
-            groupMembers.length.toString(),
-            groupMembers.length <= 1 ? 'one' : 'other'
-          )}
+          {tx('n_members', groupMembers.length.toString(), {
+            quantity: groupMembers.length,
+          })}
         </div>
         <div className='group-member-contact-list-wrapper'>
           <PseudoListItemAddMember
@@ -471,11 +469,9 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
           <br />
           {broadcastRecipients.length > 0 && (
             <div className='group-separator'>
-              {tx(
-                'n_recipients',
-                broadcastRecipients.length.toString(),
-                broadcastRecipients.length == 1 ? 'one' : 'other'
-              )}
+              {tx('n_recipients', broadcastRecipients.length.toString(), {
+                quantity: broadcastRecipients.length,
+              })}
             </div>
           )}
           <div className='group-member-contact-list-wrapper'>

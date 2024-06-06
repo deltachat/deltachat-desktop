@@ -5,28 +5,48 @@ export interface LocaleData {
   locale: string
   messages: {
     [key: string]: {
+      [P in Intl.LDMLPluralRule]?: string
+    } & {
       message?: string
-      one?: string
-      other?: string
     }
   }
 }
 
-type getMessageOptions = { quantity?: 'one' | 'other' | number }
+// 'other' should exists for all languages (source?)
+// https://www.unicode.org/cldr/charts/43/supplemental/language_plural_rules.html
+type getMessageOptions = { quantity?: 'other' | number }
 
 export type getMessageFunction = (
   key: string,
   substitutions?: string | string[],
-  raw_opts?: 'one' | 'other' | getMessageOptions
+  raw_opts?: 'other' | getMessageOptions
 ) => string
 
 export function translate(
+  locale: string,
   messages: LocaleData['messages']
 ): getMessageFunction {
+  const localeBCP47 = locale.replace('_', '-')
+  let pluralRules: Intl.PluralRules
+  try {
+    pluralRules = new Intl.PluralRules(localeBCP47)
+  } catch (err) {
+    // Ideally we'd want a build-time check for this.
+    // But let's not crash for this silly reason and apply the rules that apply
+    // for many languages (see https://www.unicode.org/cldr/charts/43/supplemental/language_plural_rules.html#Cardinal-Integer)
+    // Although keep in mind that English only has 'one' and 'other'
+    // plural categorues, but some languages, such as Korean,
+    // do not have 'one': only 'other'.
+    // Before you ask, yes, _all_ languages have 'other' (source?)
+    log.errorWithoutStackTrace(err)
+
+    pluralRules = new Intl.PluralRules('en_US')
+  }
+
   function getMessage(
     key: string,
     substitutions?: string | string[],
-    raw_opts?: 'one' | 'other' | getMessageOptions
+    raw_opts?: 'other' | getMessageOptions
   ) {
     let opts: getMessageOptions = {}
     if (typeof raw_opts === 'string') opts = { quantity: raw_opts }
@@ -46,9 +66,25 @@ export function translate(
       } else if (typeof opts.quantity === 'number') {
         message =
           entry[opts.quantity as unknown as keyof LocaleData['messages'][0]] ||
-          opts.quantity === 1
-            ? entry['one']
-            : entry['other']
+          // TODO fix: simply using `pluralRules.select()` to index
+          // into the object is not quite right,
+          // because the string could be untranslated, and it'd fall back to
+          // English, with only 'one' and 'other' plural categories,
+          // in which case we must apply the English
+          // plural rules instead of the current locale's rules.
+          //
+          // Currently this is behaves incorrectly e.g. for untranslated
+          // Indonesian (id), which only has the 'other' plural category,
+          // so even when we have to use 'one' for English, we'd use 'other'.
+          //
+          // But currently we don't have a way to distinguish between translated
+          // and untranslated strings in this code.
+          // See https://github.com/deltachat/deltachat-desktop/blob/b342a1d47b505e68caaec71f79c381c3f304405a/src/main/load-translations.ts#L44-L64
+          entry[pluralRules.select(opts.quantity)] ||
+          // This also catches the case where we failed to construct
+          // `Intl.PluralRules` for the currentl locale, and fall back to
+          // English (see `try catch` above).
+          entry['other']
       } else {
         message = undefined
       }

@@ -45,13 +45,13 @@ export default function formatRelativeTime(
     const key = 'n_hours'
 
     return tx(key, String(diff.hours()), {
-      quantity: diff.hours() === 1 ? 'one' : 'other',
+      quantity: diff.hours(),
     })
   } else if (diff.minutes() >= 1) {
     const key = 'n_minutes'
 
     return tx(key, String(diff.minutes()), {
-      quantity: diff.minutes() === 1 ? 'one' : 'other',
+      quantity: diff.minutes(),
     })
   }
 

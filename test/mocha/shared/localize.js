@@ -79,7 +79,7 @@ describe('/shared/localize', () => { // the tests container
   })
 
   it('translations methods should work as expected', () => {
-    const tx = translate({
+    const tx = translate('ru', {
       test_a: {
         message: 'foo %1$s %2$s blubb',
       },
@@ -87,8 +87,14 @@ describe('/shared/localize', () => { // the tests container
         message: 'fo2o %s %d blu2bb',
       },
       test_c: {
-        other: '%n foo',
-        one: '1 foo',
+        one: '%n foo',
+        few: '%n few foos',
+        many: '%n many foos',
+        other: '%n other foos',
+      },
+      test_d: {
+        one: '%n foo',
+        other: '%n other foos',
       },
     })
 
@@ -96,6 +102,15 @@ describe('/shared/localize', () => { // the tests container
     expect(tx('test_b', ['asd', 'dsa'])).to.eq('fo2o asd dsa blu2bb')
     expect(tx('test_b')).to.eq('fo2o %s %d blu2bb')
 
+    expect(tx('test_c', ['1'], { quantity: 1 })).to.eq('1 foo')
+    expect(tx('test_c', ['2'], { quantity: 2 })).to.eq('2 few foos')
+    expect(tx('test_c', ['5'], { quantity: 5 })).to.eq('5 many foos')
+
+    // In case the string is untranslated, so it falls back to English
+    // which only has 'one' and 'other' plural categories.
+    // https://github.com/deltachat/deltachat-desktop/blob/b342a1d47b505e68caaec71f79c381c3f304405a/src/main/load-translations.ts#L67
+    expect(tx('test_d', ['1'], { quantity: 1 })).to.eq('1 foo')
+    expect(tx('test_d', ['5'], { quantity: 5 })).to.eq('5 other foos')
   })
 });
 

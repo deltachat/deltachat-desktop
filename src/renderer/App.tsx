@@ -57,7 +57,7 @@ export default function App(_props: any) {
   async function reloadLocaleData(locale: string) {
     const localeData = await runtime.getLocaleData(locale)
     window.localeData = localeData
-    window.static_translate = translate(localeData.messages)
+    window.static_translate = translate(localeData.locale, localeData.messages)
     setLocaleData(localeData)
     moment.locale(localeData.locale)
     updateCoreStrings()
