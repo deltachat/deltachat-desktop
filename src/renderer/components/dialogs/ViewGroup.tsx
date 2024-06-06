@@ -377,7 +377,7 @@ export function EditGroupNameDialog({
         title={
           !isBroadcast
             ? tx('menu_group_name_and_image')
-            : tx('menu_broadcast_list_name')
+            : tx('broadcast_list_name')
         }
       />
       <DialogBody>
@@ -399,7 +399,7 @@ export function EditGroupNameDialog({
             key='groupname'
             id='groupname'
             placeholder={
-              !isBroadcast ? tx('group_name') : tx('menu_broadcast_list_name')
+              !isBroadcast ? tx('group_name') : tx('broadcast_list_name')
             }
             value={groupName}
             onChange={(
