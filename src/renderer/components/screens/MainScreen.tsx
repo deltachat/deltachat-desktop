@@ -42,8 +42,6 @@ import { ScreenContext } from '../../contexts/ScreenContext'
 
 import type { T } from '@deltachat/jsonrpc-client'
 
-export type AlternativeView = 'global-gallery' | null
-
 type Props = {
   accountId?: number
 }
@@ -57,7 +55,7 @@ export default function MainScreen({ accountId }: Props) {
   const [queryStr, setQueryStr] = useState('')
   const [queryChatId, setQueryChatId] = useState<null | number>(null)
   const [archivedChatsSelected, setArchivedChatsSelected] = useState(false)
-  const { activeView, chatId, chat, selectChat, unselectChat } = useChat()
+  const { activeView, chatId, chat, alternativeView, selectChat, unselectChat } = useChat()
   const { smallScreenMode } = useContext(ScreenContext)
 
   // Small hack/misuse of keyBindingAction to setArchivedChatsSelected from
@@ -69,17 +67,6 @@ export default function MainScreen({ accountId }: Props) {
     setArchivedChatsSelected(false)
   )
 
-  const [alternativeView, setAlternativeView] = useState<AlternativeView>(null)
-  useEffect(() => {
-    if (chatId) {
-      setAlternativeView(null)
-    }
-  }, [chatId])
-  useKeyBindingAction(KeybindAction.GlobalGallery_Open, () => {
-    unselectChat()
-    setAlternativeView('global-gallery')
-  })
-
   const chatListShouldBeHidden =
     smallScreenMode && (chatId !== undefined || alternativeView !== null)
   const messageSectionShouldBeHidden =
@@ -87,7 +74,6 @@ export default function MainScreen({ accountId }: Props) {
 
   const onBackButton = () => {
     unselectChat()
-    setAlternativeView(null)
   }
 
   const onChatClick = (chatId: number) => {
