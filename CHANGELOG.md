@@ -6,7 +6,7 @@
 - send contact as VCard from attachment context menu #3830
 
 ### Changed
-- Update translations (2024-06-08)
+- Update translations (2024-06-08) #3923
 
 ### Fixed
 - Do not set min window dimensions on screens that are smaller than those min dimensions (such as linux phones) #3919
