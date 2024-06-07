@@ -62,6 +62,7 @@ import type { DialogProps } from '../../../contexts/DialogContext'
 import styles from './styles.module.scss'
 import { makeContextMenu } from '../../ContextMenu'
 import { ContextMenuContext } from '../../../contexts/ContextMenuContext'
+import ImageCropper from '../../ImageCropper'
 
 type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
 
@@ -318,7 +319,7 @@ function CreateGroup(props: CreateGroupProps) {
   const accountId = selectedAccountId()
 
   const [groupName, setGroupName] = useState('')
-  const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage()
+  const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage(null)
   const [groupMembers, removeGroupMember, addGroupMember] = useGroupMembers([
     C.DC_CONTACT_ID_SELF,
   ])
@@ -985,8 +986,9 @@ export function useContactSearch(
   ]
 }
 
-export function useGroupImage(image?: string | null) {
+export function useGroupImage(image: string | null) {
   const [groupImage, setGroupImage] = useState(image)
+  const { openDialog } = useDialog()
   const tx = window.static_translate
 
   const onSetGroupImage = async () => {
@@ -1000,8 +1002,17 @@ export function useGroupImage(image?: string | null) {
       defaultPath,
     })
     if (file) {
-      setGroupImage(file)
-      setLastPath(dirname(file))
+      openDialog(ImageCropper, {
+        filepath: file,
+        shape: 'circle',
+        onResult: (croppedImage => {
+          setGroupImage(croppedImage)
+          setLastPath(dirname(file))
+        }) as (path: string) => void /* typescript is weird and wants this */,
+        onCancel: () => {},
+        desiredWidth: 256,
+        desiredHeight: 256,
+      })
     }
   }
   const onUnsetGroupImage = () => setGroupImage('')
