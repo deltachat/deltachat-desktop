@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- packaging: respect `NO_ASAR` env var in `afterPackHook`
+
 <a id="1_45_4"></a>
 
 ## [v1.45.4] - 2024-06-06
