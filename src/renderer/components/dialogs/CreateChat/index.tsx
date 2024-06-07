@@ -1,12 +1,8 @@
 import React, {
-  ChangeEvent,
   MouseEvent,
   useCallback,
   useContext,
-  useEffect,
-  useLayoutEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react'
 import { FixedSizeList } from 'react-window'
@@ -25,13 +21,12 @@ import {
 } from '../../helpers/PseudoListItem'
 import GroupImage from '../../GroupImage'
 import { runtime } from '../../../runtime'
-import { Avatar, QRAvatar } from '../../Avatar'
-import { AddMemberDialog } from '../ViewGroup'
+import { QRAvatar } from '../../Avatar'
+import { AddMemberDialog } from '../AddMember/AddMemberDialog'
 import { ContactListItem } from '../../contact/ContactListItem'
 import { useSettingsStore } from '../../../stores/settings'
-import { BackendRemote, onDCEvent, Type } from '../../../backend-com'
+import { BackendRemote, Type } from '../../../backend-com'
 import { selectedAccountId } from '../../../ScreenController'
-import { InlineVerifiedIcon } from '../../VerifiedIcon'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -39,7 +34,6 @@ import Dialog, {
   DialogHeader,
   FooterActionButton,
   FooterActions,
-  OkCancelFooterAction,
 } from '../../Dialog'
 import { ScreenContext } from '../../../contexts/ScreenContext'
 import useChat from '../../../hooks/chat/useChat'
@@ -47,7 +41,6 @@ import useConfirmationDialog from '../../../hooks/dialog/useConfirmationDialog'
 import useCreateChatByContactId from '../../../hooks/chat/useCreateChatByContactId'
 import useDialog from '../../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import { VerifiedContactsRequiredDialog } from '../ProtectionStatusDialog'
 import {
   LastUsedSlot,
   rememberLastUsedPath,
@@ -590,305 +583,6 @@ export const ChatSettingsSetNameAndProfileImage = ({
         </div>
       </div>
     </>
-  )
-}
-
-export function AddMemberInnerDialog({
-  onCancel,
-  onOk,
-  onSearchChange,
-  queryStr,
-  searchContacts,
-  refreshContacts,
-  groupMembers,
-  isBroadcast = false,
-  isVerificationRequired = false,
-}: {
-  onOk: (addMembers: number[]) => void
-  onCancel: Parameters<typeof OkCancelFooterAction>[0]['onCancel']
-  onSearchChange: ReturnType<typeof useContactSearch>[1]
-  queryStr: string
-  searchContacts: Map<number, Type.Contact>
-  refreshContacts: () => void
-  groupMembers: number[]
-  isBroadcast: boolean
-  isVerificationRequired: boolean
-}) {
-  const tx = useTranslationFunction()
-  const { openDialog } = useDialog()
-  const accountId = selectedAccountId()
-
-  const contactIdsInGroup: number[] = [...searchContacts]
-    .filter(([contactId, _contact]) => groupMembers.indexOf(contactId) !== -1)
-    .map(([contactId, _contact]) => contactId)
-
-  const [contactIdsToAdd, setContactIdsToAdd] = useState<Type.Contact[]>([])
-  const [{ queryStrIsValidEmail }, updateContacts] = useContactsNew(
-    C.DC_GCL_ADD_SELF,
-    ''
-  )
-  const [_, onSearchChangeNewContact] = useContactSearch(updateContacts)
-
-  const onSearchChangeValidation = (query: ChangeEvent<HTMLInputElement>) => {
-    if (searchContacts.size === 0) {
-      onSearchChangeNewContact(query)
-    }
-    onSearchChange(query)
-  }
-
-  useEffect(
-    () =>
-      onDCEvent(accountId, 'ContactsChanged', () => {
-        refreshContacts()
-      }),
-    [accountId, refreshContacts]
-  )
-
-  const [contactsToDeleteOnCancel, setContactsToDeleteOnCancel] = useState<
-    number[]
-  >([])
-
-  const addMember = useCallback(
-    (contact: Type.Contact) => {
-      if (isVerificationRequired && !contact.isVerified) {
-        openDialog(VerifiedContactsRequiredDialog)
-        return
-      }
-
-      setContactIdsToAdd([...contactIdsToAdd, contact])
-    },
-    [contactIdsToAdd, isVerificationRequired, openDialog]
-  )
-
-  const removeMember = useCallback(
-    (contact: Type.Contact) => {
-      setContactIdsToAdd(contactIdsToAdd.filter(c => c.id !== contact.id))
-    },
-    [contactIdsToAdd]
-  )
-
-  const toggleMember = useCallback(
-    (contact: Type.Contact) => {
-      if (!contactIdsToAdd.find(c => c.id === contact.id)) {
-        addMember(contact)
-      } else {
-        removeMember(contact)
-      }
-    },
-    [addMember, contactIdsToAdd, removeMember]
-  )
-
-  const createNewContact = useCallback(async () => {
-    if (!queryStrIsValidEmail) return
-
-    const contactId = await BackendRemote.rpc.createContact(
-      accountId,
-      queryStr.trim(),
-      null
-    )
-    const contact = await BackendRemote.rpc.getContact(accountId, contactId)
-    toggleMember(contact)
-    setContactsToDeleteOnCancel(value => [...value, contactId])
-    onSearchChange({
-      target: { value: '' },
-    } as ChangeEvent<HTMLInputElement>)
-  }, [accountId, toggleMember, onSearchChange, queryStr, queryStrIsValidEmail])
-
-  const _onOk = () => {
-    if (contactIdsToAdd.length === 0) {
-      return
-    }
-
-    onOk(contactIdsToAdd.map(member => member.id))
-  }
-
-  const _onCancel = async () => {
-    for (const contactId of contactsToDeleteOnCancel) {
-      await BackendRemote.rpc.deleteContact(selectedAccountId(), contactId)
-    }
-    onCancel()
-  }
-
-  const inputRef = useRef<HTMLInputElement>(null)
-  const contactListRef = useRef<HTMLDivElement>(null)
-  const applyCSSHacks = () => {
-    setTimeout(() => inputRef.current?.focus(), 0)
-
-    const offsetHeight = document.querySelector('.AddMemberChipsWrapper') //@ts-ignore
-      ?.offsetHeight
-    if (!offsetHeight) return
-    contactListRef.current?.style.setProperty(
-      'max-height',
-      `calc(100% - ${offsetHeight}px)`
-    )
-  }
-
-  useLayoutEffect(applyCSSHacks, [inputRef, contactIdsToAdd])
-  useEffect(applyCSSHacks, [])
-
-  const needToRenderAddContact = queryStr !== '' && searchContacts.size === 0
-  const renderAddContact = () => {
-    if (queryStrIsValidEmail) {
-      const pseudoContact: Type.Contact = {
-        address: queryStr,
-        color: 'lightgrey',
-        authName: '',
-        status: '',
-        displayName: queryStr,
-        id: -1,
-        lastSeen: -1,
-        name: queryStr,
-        profileImage: '',
-        nameAndAddr: '',
-        isBlocked: false,
-        isVerified: false,
-        verifierId: null,
-        wasSeenRecently: false,
-        isProfileVerified: false,
-        isBot: false,
-      }
-      return (
-        <ContactListItem
-          contact={pseudoContact}
-          showCheckbox={true}
-          checked={false}
-          showRemove={false}
-          onCheckboxClick={createNewContact}
-        />
-      )
-    } else {
-      return (
-        <PseudoListItemAddContact
-          queryStr={queryStr}
-          queryStrIsEmail={false}
-          onClick={() => {}}
-        />
-      )
-    }
-  }
-
-  const addContactOnKeyDown = (ev: React.KeyboardEvent<HTMLInputElement>) => {
-    if (ev.key == 'Enter') {
-      ;(
-        document.querySelector<HTMLDivElement>(
-          '.delta-checkbox'
-        ) as HTMLDivElement
-      ).click()
-    }
-  }
-
-  return (
-    <>
-      <DialogHeader
-        title={!isBroadcast ? tx('group_add_members') : tx('add_recipients')}
-      />
-      <DialogBody className={styles.addMemberDialogBody}>
-        <div className='AddMemberChipsWrapper'>
-          <div className='AddMemberChips'>
-            {contactIdsToAdd.map(contact => {
-              return AddMemberChip({
-                contact,
-                onRemoveClick: toggleMember,
-              })
-            })}
-            <input
-              ref={inputRef}
-              className='search-input group-member-search'
-              onChange={onSearchChangeValidation}
-              onKeyDown={event => {
-                addContactOnKeyDown(event)
-              }}
-              value={queryStr}
-              placeholder={tx('search')}
-              autoFocus
-              spellCheck={false}
-            />
-          </div>
-        </div>
-        <div className={styles.addMemberContactList} ref={contactListRef}>
-          <AutoSizer disableWidth>
-            {({ height }) => (
-              // Not using 'react-window' results in ~5 second rendering time
-              // if the user has 5000 contacts.
-              // (see https://github.com/deltachat/deltachat-desktop/issues/1830)
-              <FixedSizeList
-                itemData={Array.from(searchContacts.values())}
-                itemCount={
-                  searchContacts.size + (needToRenderAddContact ? 1 : 0)
-                }
-                itemKey={(index, contacts) =>
-                  contacts[index]?.id ?? 'addContact'
-                }
-                height={height}
-                width='100%'
-                // TODO fix: The size of each item is determined
-                // by `--local-avatar-size` and `--local-avatar-vertical-margin`,
-                // which might be different, e.g. currently they're smaller for
-                // "Rocket Theme", which results in gaps between the elements.
-                itemSize={64}
-              >
-                {({ index, style, data: contacts }) => {
-                  const isExtraItem = index >= contacts.length
-                  if (isExtraItem) {
-                    return renderAddContact()
-                  }
-
-                  const contact = contacts[index]
-                  return (
-                    <div style={style}>
-                      <ContactListItem
-                        contact={contact}
-                        showCheckbox
-                        checked={
-                          contactIdsToAdd.some(c => c.id === contact.id) ||
-                          contactIdsInGroup.includes(contact.id)
-                        }
-                        disabled={
-                          contactIdsInGroup.includes(contact.id) ||
-                          contact.id === C.DC_CONTACT_ID_SELF
-                        }
-                        onCheckboxClick={toggleMember}
-                        showRemove={false}
-                      />
-                    </div>
-                  )
-                }}
-              </FixedSizeList>
-            )}
-          </AutoSizer>
-        </div>
-      </DialogBody>
-      <OkCancelFooterAction
-        onCancel={_onCancel}
-        onOk={_onOk}
-        disableOK={contactIdsToAdd.length === 0 ? true : false}
-      />
-    </>
-  )
-}
-
-const AddMemberChip = (props: {
-  contact: Type.Contact
-  onRemoveClick: (contact: Type.Contact) => void
-}) => {
-  const { contact, onRemoveClick } = props
-  return (
-    <div
-      key={contact.id}
-      className='AddMemberChip'
-      onClick={() => onRemoveClick(contact)}
-    >
-      <div className='Avatar'>
-        <Avatar
-          displayName={contact.displayName}
-          avatarPath={contact.profileImage}
-          color={contact.color}
-        />
-      </div>
-      <div className='DisplayName'>
-        {contact.displayName} {contact.isVerified && <InlineVerifiedIcon />}
-      </div>
-    </div>
   )
 }
 

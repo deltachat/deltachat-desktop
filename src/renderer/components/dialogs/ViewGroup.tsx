@@ -2,10 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
 import ChatListItem from '../chat/ChatListItem'
-import { useContactSearch, AddMemberInnerDialog } from './CreateChat'
 import { QrCodeShowQrInner } from './QrCode'
 import { useThemeCssVar } from '../../ThemeManager'
-import { ContactList, useContactsMap } from '../contact/ContactList'
+import { ContactList } from '../contact/ContactList'
 import { useLogicVirtualChatList, ChatListPart } from '../chat/ChatList'
 import {
   PseudoListItemShowQrCode,
@@ -35,6 +34,7 @@ import { modifyGroup } from '../../backend/group'
 import type { T } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../contexts/DialogContext'
 import ImageCropper from '../ImageCropper'
+import { AddMemberDialog } from './AddMember/AddMemberDialog'
 
 export default function ViewGroup(
   props: {
@@ -282,45 +282,6 @@ function ViewGroupInner(
         />
       )}
     </>
-  )
-}
-
-export function AddMemberDialog({
-  onClose,
-  onOk,
-  groupMembers,
-  listFlags,
-  isBroadcast = false,
-  isVerificationRequired = false,
-}: {
-  onOk: (members: number[]) => void
-  groupMembers: number[]
-  listFlags: number
-  isBroadcast?: boolean
-  isVerificationRequired?: boolean
-} & DialogProps) {
-  const [searchContacts, updateSearchContacts] = useContactsMap(listFlags, '')
-  const [queryStr, onSearchChange, _, refreshContacts] =
-    useContactSearch(updateSearchContacts)
-  return (
-    <Dialog canOutsideClickClose={false} fixed onClose={onClose}>
-      {AddMemberInnerDialog({
-        onOk: addMembers => {
-          onOk(addMembers)
-          onClose()
-        },
-        onCancel: () => {
-          onClose()
-        },
-        onSearchChange,
-        queryStr,
-        searchContacts,
-        refreshContacts,
-        groupMembers,
-        isBroadcast,
-        isVerificationRequired,
-      })}
-    </Dialog>
   )
 }
 
