@@ -93,7 +93,8 @@ export function openHtmlEmailWindow(
 
   const removeScreenChangeListeners = initMinWinDimensionHandling(
     window,
-    400,300
+    400,
+    300
   )
 
   const loadRemoteContentAtStart =
