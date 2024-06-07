@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- Do not set min window dimensions on screens that are smaller than those min dimensions (such as linux phones)
+
 <a id="1_45_4"></a>
 
 ## [v1.45.4] - 2024-06-06

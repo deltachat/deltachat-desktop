@@ -23,6 +23,7 @@ import {
 import { refreshTrayContextMenu } from '../tray.js'
 import { DesktopSettings } from '../desktop_settings.js'
 import { refresh as refreshTitleMenu } from '../menu.js'
+import { initMinWinDimensionHandling } from './helpers.js'
 
 const log = getLogger('main/mainWindow')
 
@@ -56,8 +57,6 @@ export function init(options: { hidden: boolean }) {
       // backgroundThrottling: false, // do not throttle animations/timers when page is background
       darkTheme: true, // Forces dark theme (GTK+3)
       icon: appIcon(),
-      minHeight: defaults.minHeight,
-      minWidth: defaults.minWidth,
       show: false,
       title: appWindowTitle,
       height: initialBounds.height,
@@ -77,6 +76,12 @@ export function init(options: { hidden: boolean }) {
     })
   ))
   main_window.filePathWhiteList = []
+
+  initMinWinDimensionHandling(
+    main_window,
+    defaults.minWidth,
+    defaults.minHeight
+  )
 
   // disable network request to fetch dictionary
   // issue: https://github.com/electron/electron/issues/22995

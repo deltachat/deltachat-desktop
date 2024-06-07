@@ -14,6 +14,7 @@ import {
   getHelpMenu,
   refresh as refreshTitleMenu,
 } from '../menu.js'
+import { initMinWinDimensionHandling } from './helpers.js'
 
 const log = getLogger('main/help')
 
@@ -63,8 +64,6 @@ export async function openHelpWindow(locale: string, anchor?: string) {
     darkTheme: true, // Forces dark theme (GTK+3)
 
     icon: appIcon(),
-    minHeight: defaults.minHeight,
-    minWidth: defaults.minWidth,
     show: false,
     title: appWindowTitle + ' - ' + tx('menu_help'),
     useContentSize: true, // Specify web page size without OS chrome
@@ -76,6 +75,12 @@ export async function openHelpWindow(locale: string, anchor?: string) {
     },
     alwaysOnTop: main_window?.isAlwaysOnTop(),
   }))
+
+  const removeScreenChangeListeners = initMinWinDimensionHandling(
+    help_window,
+    defaults.minWidth,
+    defaults.minHeight
+  )
 
   const url = await getHelpFileForLang(locale)
 
@@ -105,6 +110,7 @@ export async function openHelpWindow(locale: string, anchor?: string) {
 
   win.on('close', _e => {
     win = null
+    removeScreenChangeListeners()
   })
 
   win.setMenu(Menu.buildFromTemplate([{ role: 'viewMenu' }]))
