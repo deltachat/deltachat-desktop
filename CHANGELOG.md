@@ -6,8 +6,8 @@
 - send contact as VCard from attachment context menu #3830
 
 ### Fixed
-- Do not set min window dimensions on screens that are smaller than those min dimensions (such as linux phones)
-- packaging: respect `NO_ASAR` env var in `afterPackHook`
+- Do not set min window dimensions on screens that are smaller than those min dimensions (such as linux phones) #3919
+- packaging: respect `NO_ASAR` env var in `afterPackHook` #3916
 - fix image cropper is not started when creating a group #3920
 
 <a id="1_45_4"></a>
