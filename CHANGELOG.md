@@ -13,6 +13,9 @@
 - packaging: respect `NO_ASAR` env var in `afterPackHook` #3916
 - fix image cropper is not started when creating a group #3920
 
+### Changed
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.140.2`
+
 <a id="1_45_4"></a>
 
 ## [v1.45.4] - 2024-06-06
