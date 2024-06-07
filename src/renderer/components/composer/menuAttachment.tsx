@@ -106,12 +106,12 @@ export default function MenuAttachment({
   ])
 
   const selectContact = async () => {
-    const { setLastPath } = rememberLastUsedPath(LastUsedSlot.Attachment)
     let dialogId = ''
     /**
      * TODO: reduce the overhead: just provide a vcardContact to draft/message
      * and send it as a message. No need to get the vcard from core to create
      * a tmp file to attach it as a file which is then converted into a vcardContact again
+     * see https://github.com/deltachat/deltachat-core-rust/pull/5677
      */
     const addContactAsVcard = async (selectedContact: T.Contact) => {
       if (selectedContact) {
@@ -123,11 +123,10 @@ export default function MenuAttachment({
           /[^a-z_A-Z0-9]/gi,
           ''
         )
-        const tmp_file = await runtime.writeTempFileFromBase64(
+        const tmp_file = await runtime.writeTempFile(
           `VCard-${cleanDisplayname}.vcf`,
-          btoa(vCardContact)
+          vCardContact
         )
-        setLastPath(dirname(tmp_file))
         addFileToDraft(tmp_file, 'Vcard')
         closeDialog(dialogId)
       }

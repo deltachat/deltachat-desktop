@@ -214,6 +214,9 @@ ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
   ipcMain.handle('app.writeTempFileFromBase64', (_ev, name, content) =>
     writeTempFileFromBase64(name, content)
   )
+  ipcMain.handle('app.writeTempFile', (_ev, name, content) =>
+    writeTempFile(name, content)
+  )
   ipcMain.handle('app.removeTempFile', (_ev, path) => removeTempFile(path))
 
   ipcMain.handle('electron.shell.openExternal', (_ev, url) =>
@@ -322,6 +325,24 @@ export async function writeTempFileFromBase64(
   const pathToFile = join(getDraftTempDir(), basename(name))
   log.debug(`Writing base64 encoded file ${pathToFile}`)
   await writeFile(pathToFile, Buffer.from(content, 'base64'), 'binary')
+  return pathToFile
+}
+
+/**
+ * this function is only needed to temporarily
+ * save a VCard to attach it to a draft message
+ * should be removed once composer uses draft
+ * message id and set_draft_vcard can be used
+ * see https://github.com/deltachat/deltachat-core-rust/pull/5677
+ */
+export async function writeTempFile(
+  name: string,
+  content: string
+): Promise<string> {
+  await mkdir(getDraftTempDir(), { recursive: true })
+  const pathToFile = join(getDraftTempDir(), basename(name))
+  log.debug(`Writing tmp file ${pathToFile}`)
+  await writeFile(pathToFile, Buffer.from(content, 'utf8'), 'binary')
   return pathToFile
 }
 
