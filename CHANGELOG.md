@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- send contact as VCard from attachment context menu #3830
+
 ### Fixed
 - Do not set min window dimensions on screens that are smaller than those min dimensions (such as linux phones)
 - packaging: respect `NO_ASAR` env var in `afterPackHook`
@@ -47,7 +50,6 @@
 - show VCard attachment as VCard in message list #3840
 - add contact from VCard & start chat on click #3840
 - Webxdc realtime support #3741
-- send contact as VCard from attachment context menu #3830
 
 ### Changed
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `v1.140.0`
