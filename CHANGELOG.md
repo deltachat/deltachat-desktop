@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Fixed
+- Do not set min window dimensions on screens that are smaller than those min dimensions (such as linux phones)
 - packaging: respect `NO_ASAR` env var in `afterPackHook`
 
 <a id="1_45_4"></a>

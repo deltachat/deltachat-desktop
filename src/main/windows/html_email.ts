@@ -29,6 +29,7 @@ import {
   getHelpMenu,
   refresh as refreshTitleMenu,
 } from '../menu.js'
+import { initMinWinDimensionHandling } from './helpers.js'
 
 const log = getLogger('html_email')
 
@@ -69,8 +70,6 @@ export function openHtmlEmailWindow(
     // backgroundThrottling: false, // do not throttle animations/timers when page is background
     darkTheme: true, // Forces dark theme (GTK+3)
     icon: appIcon(),
-    minHeight: 300,
-    minWidth: 400,
     show: false,
     title: `${truncateText(subject, 42)} – ${truncateText(from, 40)}`,
     height: initialBounds.height,
@@ -91,6 +90,12 @@ export function openHtmlEmailWindow(
     alwaysOnTop: mainWindow?.isAlwaysOnTop(),
   }))
   window.webContents.setZoomFactor(DesktopSettings.state.zoomFactor)
+
+  const removeScreenChangeListeners = initMinWinDimensionHandling(
+    window,
+    400,
+    300
+  )
 
   const loadRemoteContentAtStart =
     DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent && !isContactRequest
@@ -132,6 +137,7 @@ export function openHtmlEmailWindow(
   window.on('close', () => {
     context_menu_handle?.()
     delete open_windows[window_id]
+    removeScreenChangeListeners()
   })
 
   const isMac = platform() === 'darwin'
