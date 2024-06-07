@@ -5,6 +5,9 @@
 ### Added
 - send contact as VCard from attachment context menu #3830
 
+### Changed
+- Update translations (2024-06-08)
+
 ### Fixed
 - Do not set min window dimensions on screens that are smaller than those min dimensions (such as linux phones) #3919
 - packaging: respect `NO_ASAR` env var in `afterPackHook` #3916
