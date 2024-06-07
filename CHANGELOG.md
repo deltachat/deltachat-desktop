@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- send contact as VCard from attachment context menu #3830
+
 ### Fixed
 - Do not set min window dimensions on screens that are smaller than those min dimensions (such as linux phones)
 - packaging: respect `NO_ASAR` env var in `afterPackHook`
@@ -44,7 +47,7 @@
 
 ### Added
 - Added a Small Screen Mode, when you rezise the window to be small it will only show the chatlist with account sidebar or the Chat View with a back button.
-- show VCard attachement as VCard in message list #3840
+- show VCard attachment as VCard in message list #3840
 - add contact from VCard & start chat on click #3840
 - Webxdc realtime support #3741
 
