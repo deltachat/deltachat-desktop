@@ -39,8 +39,8 @@ export async function updateDeviceChats(
     [Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/main/CHANGELOG.md#1_46_0)`,
   })
 
-  await addDeviceMessage('changelog-version-1.45.1', {
-    text: `Thanks for testing the 1.45.1 testrelease, this is the release candidate for the 1.46.0 release.
+  await addDeviceMessage('changelog-version-1.45.5', {
+    text: `Thanks for testing the 1.45.5 testrelease, this is the release candidate for the 1.46.0 release.
 Please report issues that you found on https://support.delta.chat/t/help-testing-the-upcoming-v1-45-x-release/3089`,
   })
 }
