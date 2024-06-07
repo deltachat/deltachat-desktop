@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_45_5"></a>
+
+## [v1.45.5] - 2024-06-08
+
 ### Added
 - send contact as VCard from attachment context menu #3830
 
@@ -2648,7 +2652,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.4...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.5...HEAD
+
+[1.45.5]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.4...v1.45.5
 
 [1.45.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.3...v1.45.4
 
