@@ -33,4 +33,6 @@ export async function modifyGroup(
       add.map(id => BackendRemote.rpc.addContactToChat(accountId, chatId, id))
     )
   }
+
+  return await BackendRemote.rpc.getFullChatById(accountId, chatId)
 }
