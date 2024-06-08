@@ -46,11 +46,9 @@ export function AddMemberInnerDialog({
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
   const accountId = selectedAccountId()
-  console.log('groupMembers inner:' + groupMembers.length)
   const contactIdsInGroup: number[] = [...searchContacts]
     .filter(([contactId, _contact]) => groupMembers.indexOf(contactId) !== -1)
     .map(([contactId, _contact]) => contactId)
-  console.log('contactIdsInGroup inner:' + contactIdsInGroup.length)
   const [contactIdsToAdd, setContactIdsToAdd] = useState<Type.Contact[]>([])
   const [{ queryStrIsValidEmail }, updateContacts] = useContactsNew(
     C.DC_GCL_ADD_SELF,
@@ -59,10 +57,10 @@ export function AddMemberInnerDialog({
   const [_, onSearchChangeNewContact] = useContactSearch(updateContacts)
 
   const onSearchChangeValidation = (query: ChangeEvent<HTMLInputElement>) => {
+    onSearchChange(query)
     if (searchContacts.size === 0) {
       onSearchChangeNewContact(query)
     }
-    onSearchChange(query)
   }
 
   useEffect(
