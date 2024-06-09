@@ -44,5 +44,8 @@
   },
   "chat_map_title": {
     "message": "Map for chat '%1'"
+  },
+  "menu_edit_broadcast_list": {
+    "message": "Edit Broadcast List"
   }
 }
